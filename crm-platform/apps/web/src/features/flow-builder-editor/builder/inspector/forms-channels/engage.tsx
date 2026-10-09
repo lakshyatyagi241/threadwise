@@ -1,9 +1,12 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Field, SelectInput } from '../kit';
 import type { FormComponent } from '../types';
 import { agentOptionLabel, flowOptionLabel, withSavedOption } from './helpers';
 import { ExtLink, PlusIcon } from './shared';
+
+const NS = 'flb.builder.formsChannels.engage';
 
 /**
  * Sub-flow and Chatbot forms (TW-FLB-046, 051). They register in `CHANNEL_FORMS`, which the registry spreads over
@@ -11,53 +14,52 @@ import { ExtLink, PlusIcon } from './shared';
  * and the agent option its `provider/model`, both read from the richer builder context.
  */
 export const SubflowForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  const th = useTranslations('flb.builder.formsChannels.helpers');
   const { flows } = p.env.ctx;
   const opts = withSavedOption(
     [
-      { v: '', l: p.env.loading ? 'Loading flows…' : '— pick flow —' },
+      { v: '', l: p.env.loading ? t('loadingFlows') : t('pickFlow') },
       // A flow cannot call itself (the saved flow being edited is skipped).
       ...flows
         .filter((f) => f.id !== p.env.flowId)
-        .map((f) => ({ v: f.id, l: flowOptionLabel(f.name, f.isPublished) })),
+        .map((f) => ({ v: f.id, l: flowOptionLabel(f.name, f.isPublished, th) })),
     ],
     p.data.flow,
-    (id) => `Flow ${id.slice(0, 8)} (not in workspace)`,
+    (id) => t('savedFlow', { id: id.slice(0, 8) }),
   );
   return (
-    <Field
-      label="Flow to run"
-      hint="Pick another saved flow. When this node fires, that flow runs end-to-end before control returns to the next node here."
-    >
+    <Field label={t('flowToRun')} hint={t('flowToRunHint')}>
       <SelectInput value={p.data.flow} onChange={(v) => p.set('flow', v)} options={opts} />
     </Field>
   );
 };
 
 export const ChatbotForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  const th = useTranslations('flb.builder.formsChannels.helpers');
   const { agents } = p.env.ctx;
   const opts = withSavedOption(
     [
       {
         v: '',
-        l: agents.length ? '— pick AI agent —' : 'No agents yet — add one in the team inbox',
+        l: agents.length ? t('pickAgent') : t('noAgents'),
       },
-      ...agents.map((a) => ({ v: a.id, l: agentOptionLabel(a.name, a.provider, a.model, a.id) })),
+      ...agents.map((a) => ({
+        v: a.id,
+        l: agentOptionLabel(a.name, a.provider, a.model, a.id, th),
+      })),
     ],
     p.data.bot,
-    (id) => `Agent ${id.slice(0, 8)} (not in workspace)`,
+    (id) => t('savedAgent', { id: id.slice(0, 8) }),
   );
   return (
     <Field
-      label="AI agent to trigger"
+      label={t('agentToTrigger')}
       hint={
-        agents.length ? (
-          <>Pick a saved AI agent — its system prompt + model run when this node fires.</>
-        ) : (
-          <>
-            Add your first AI agent in the <ExtLink href="/team-inbox">team inbox</ExtLink>, then
-            pick it here.
-          </>
-        )
+        agents.length
+          ? t('agentHint')
+          : t.rich('noAgentsHint', { link: (c) => <ExtLink href="/team-inbox">{c}</ExtLink> })
       }
     >
       <SelectInput value={p.data.bot} onChange={(v) => p.set('bot', v)} options={opts} />
@@ -66,16 +68,16 @@ export const ChatbotForm: FormComponent = (p) => {
       <button
         type="button"
         disabled
-        title="Creating an AI agent from the builder is not available yet. Add one in the team inbox."
+        title={t('createUnavailableTitle')}
         className="mt-2 inline-flex w-full cursor-not-allowed items-center justify-center gap-1.5 rounded-lg border border-dashed border-brand/50 bg-muted px-3 py-2 text-[12px] font-semibold text-brand opacity-40"
       >
         <PlusIcon />
-        Create new AI agent
+        {t('createAgent')}
       </button>
       <div className="mt-1.5 flex items-center justify-between text-[10.5px] text-muted-foreground">
-        <span>Creating agents from the builder is not available yet.</span>
+        <span>{t('createUnavailable')}</span>
         <button type="button" onClick={() => p.env.refresh()} className="text-brand underline">
-          Refresh list
+          {t('refresh')}
         </button>
       </div>
     </Field>

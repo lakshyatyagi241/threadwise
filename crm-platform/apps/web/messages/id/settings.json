@@ -1,0 +1,315 @@
+{
+  "settings": {
+    "title": "Pengaturan",
+    "breadcrumb": "Breadcrumb",
+    "backToSettings": "Kembali ke Pengaturan",
+    "sectionsLabel": "Bagian pengaturan",
+    "searchLabel": "Cari pengaturan",
+    "searchPlaceholder": "Cari pengaturan",
+    "searchHint": "Ketik untuk memfilter semua pengaturan berdasarkan nama atau kata kunci. Tekan Escape untuk menghapus, tombol panah bawah untuk pindah ke hasil.",
+    "clearSearch": "Hapus pencarian",
+    "results": {
+      "title": "{count, plural, other {# pengaturan cocok dengan “{query}”}}",
+      "status": "{count, plural, =0 {Tidak ada hasil} other {# hasil}}"
+    },
+    "noResults": {
+      "title": "Tidak ada pengaturan yang cocok dengan “{query}”",
+      "message": "Periksa ejaan atau coba kata yang lebih luas, seperti “pajak”, “tim”, atau “WhatsApp”."
+    },
+    "emptySection": {
+      "title": "Tidak ada yang perlu disiapkan di sini",
+      "message": "Tidak ada pengaturan di bagian ini yang tersedia untuk peran Anda."
+    },
+    "inSection": "Di {section}",
+    "soon": "Segera",
+    "upgrade": "Tingkatkan",
+    "comingSoon": "Segera hadir",
+    "sections": {
+      "channels": {
+        "title": "Saluran",
+        "description": "Hubungkan tempat pelanggan Anda mengirim pesan."
+      },
+      "data": {
+        "title": "Data dan kustomisasi",
+        "description": "Atur cara kontak, Deal, dan percakapan dideskripsikan."
+      },
+      "business": {
+        "title": "Bisnis dan penagihan",
+        "description": "Detail perusahaan, pajak, paket, dan pembayaran Anda."
+      },
+      "people": {
+        "title": "Tim dan izin",
+        "description": "Siapa yang boleh melakukan apa di workspace Anda."
+      },
+      "automation": {
+        "title": "Otomatisasi dan AI",
+        "description": "Balasan, pemesanan, widget situs web, dan AI."
+      },
+      "integrations": {
+        "title": "Integrasi dan developer",
+        "description": "Hubungkan alat lain dan perluas produk."
+      },
+      "security": {
+        "title": "Data dan keamanan",
+        "description": "Masuk, privasi, ekspor, dan jejak audit."
+      }
+    },
+    "tiles": {
+      "channels": {
+        "label": "Semua saluran",
+        "description": "Lihat semua saluran yang terhubung dan tambahkan yang baru.",
+        "keywords": "koneksi, inbox, nomor, akun"
+      },
+      "whatsapp": {
+        "label": "WhatsApp",
+        "description": "Hubungkan nomor WhatsApp Business Anda untuk chat dengan pelanggan.",
+        "keywords": "wa, whatsapp business, cloud api, nomor, qr"
+      },
+      "unofficial-whatsapp": {
+        "label": "API WhatsApp tidak resmi",
+        "description": "Tautkan nomor WhatsApp pribadi lewat kode QR dan panaskan agar pengiriman aman.",
+        "keywords": "whatsapp pribadi, qr, kode pairing, perangkat, baileys, warmer, pemanasan, tidak resmi"
+      },
+      "warmer": {
+        "label": "Pemanasan",
+        "description": "Panaskan nomor WhatsApp Anda agar pesan terjadwal terkirim dengan kecepatan aman.",
+        "keywords": "pemanasan, nomor, reputasi, batas pengiriman, antrean, kecepatan, terjadwal"
+      },
+      "facebook": {
+        "label": "Facebook Messenger",
+        "description": "Balas pesan yang dikirim ke halaman Facebook Anda.",
+        "keywords": "meta, messenger, halaman, fb"
+      },
+      "instagram": {
+        "label": "Instagram",
+        "description": "Balas pesan langsung yang dikirim ke akun Instagram Anda.",
+        "keywords": "meta, dm, insta, pesan langsung"
+      },
+      "telegram": {
+        "label": "Telegram",
+        "description": "Hubungkan bot Telegram untuk chat dengan pelanggan.",
+        "keywords": "bot, botfather, tg"
+      },
+      "tiktok": {
+        "label": "TikTok",
+        "description": "Balas pesan yang dikirim ke akun bisnis TikTok Anda.",
+        "keywords": "tik tok, dm, video"
+      },
+      "sms": {
+        "label": "SMS",
+        "description": "Kirim dan terima pesan teks dengan pengirim Anda sendiri.",
+        "keywords": "pesan teks, sender id, dlt, twilio, seluler"
+      },
+      "email": {
+        "label": "Email",
+        "description": "Hubungkan kotak surat untuk mengirim dan menerima email di Inbox.",
+        "keywords": "kotak surat, smtp, imap, gmail, outlook, pengirim"
+      },
+      "line": {
+        "label": "LINE",
+        "description": "Hubungkan akun resmi LINE Anda.",
+        "keywords": "akun resmi line, pesan"
+      },
+      "viber": {
+        "label": "Viber",
+        "description": "Hubungkan akun bisnis Viber Anda.",
+        "keywords": "bot viber, pesan"
+      },
+      "wechat": {
+        "label": "WeChat",
+        "description": "Hubungkan akun resmi WeChat Anda.",
+        "keywords": "weixin, akun resmi"
+      },
+      "wa-links": {
+        "label": "Tautan WhatsApp",
+        "description": "Buat tautan klik-untuk-chat dan kode QR yang membuka chat WhatsApp.",
+        "keywords": "klik untuk chat, kode qr, tautan pendek, wa.me"
+      },
+      "contact-stages": {
+        "label": "Tahap kontak",
+        "description": "Atur tahap dan status yang dilalui kontak.",
+        "keywords": "siklus hidup, status, lead, pelanggan, menang, kalah, funnel"
+      },
+      "contact-properties": {
+        "label": "Properti kontak",
+        "description": "Tambahkan kolom yang ingin Anda simpan di setiap kontak.",
+        "keywords": "kolom kustom, kolom, wajib, dropdown, kolom tabel, atribut, variabel, merge field"
+      },
+      "attributes": {
+        "label": "Atribut",
+        "description": "Tag dan label lain yang Anda pasang pada kontak.",
+        "keywords": "tag, label, sumber, atribut kustom"
+      },
+      "deal-pipelines": {
+        "label": "Pipeline dan tahap",
+        "description": "Edit pipeline Deal, tahap, dan alasan kalah.",
+        "keywords": "deal, tahap penjualan, board, alasan kalah, funnel"
+      },
+      "tags": {
+        "label": "Tag",
+        "description": "Buat dan atur tag yang dipakai di kontak dan chat.",
+        "keywords": "label, warna, color"
+      },
+      "saved-replies": {
+        "label": "Balasan tersimpan",
+        "description": "Tulis jawaban yang dapat dipakai ulang dan dikirim tim Anda dengan satu klik.",
+        "keywords": "balasan siap pakai, pintasan, cuplikan, template"
+      },
+      "business-profile": {
+        "label": "Profil bisnis",
+        "description": "Nama perusahaan, alamat, nomor pajak, dan logo untuk dokumen Anda.",
+        "keywords": "perusahaan, alamat, gst, vat, NPWP, logo, kop faktur"
+      },
+      "tax-rates": {
+        "label": "Tarif pajak",
+        "description": "Atur pajak yang ditambahkan ke faktur dan perkiraan Anda.",
+        "keywords": "vat, gst, pajak penjualan, persen, tarif, negara"
+      },
+      "plans": {
+        "label": "Paket",
+        "description": "Lihat paket dan penggunaan Anda, isinya, dan tingkatkan paket.",
+        "keywords": "langganan, tingkatkan, batas, harga, uji coba, penggunaan, paket dan penggunaan, meter"
+      },
+      "wallet": {
+        "label": "Dompet",
+        "description": "Isi saldo untuk membayar pesan.",
+        "keywords": "kredit, saldo, isi ulang, top up, dana"
+      },
+      "billing-orders": {
+        "label": "Riwayat pesanan",
+        "description": "Pembelian paket dan dompet Anda, beserta bukti pembayaran.",
+        "keywords": "pembayaran, bukti, faktur, pembelian, pesanan"
+      },
+      "account": {
+        "label": "Akun",
+        "description": "Nama, email, kata sandi, dan bahasa Anda.",
+        "keywords": "profil, saya, avatar, email, kata sandi, preferensi"
+      },
+      "branding": {
+        "label": "Footer pesan",
+        "description": "Baris yang ditambahkan di bagian bawah pesan yang dikirim dari otomatisasi, pengiriman terjadwal, dan balasan Inbox tim.",
+        "keywords": "branding, footer, tanda tangan, white label, hapus branding, dikirim via"
+      },
+      "team-members": {
+        "label": "Anggota tim",
+        "description": "Undang orang dan kelola siapa saja di workspace Anda.",
+        "keywords": "pengguna, staf, undang, agen, karyawan, kursi"
+      },
+      "roles": {
+        "label": "Peran dan izin",
+        "description": "Tentukan apa yang dapat dilihat dan dilakukan setiap peran.",
+        "keywords": "akses, admin, manajer, agen, rbac, izin"
+      },
+      "teams": {
+        "label": "Tim",
+        "description": "Kelompokkan orang ke dalam tim untuk routing dan pelaporan.",
+        "keywords": "grup, departemen, penugasan, routing"
+      },
+      "ai-keys": {
+        "label": "Kunci penyedia AI",
+        "description": "Tambahkan kunci penyedia AI Anda sendiri untuk fitur AI.",
+        "keywords": "openai, gemini, claude, api key, model, token"
+      },
+      "ai-training": {
+        "label": "Pelatihan AI",
+        "description": "Latih asisten chat dengan konten Anda sendiri untuk alur dan chat situs web.",
+        "keywords": "basis pengetahuan, asisten, Agen cerdas, faq, latih, sumber, meta business agent, responder"
+      },
+      "booking-types": {
+        "label": "Jenis pemesanan",
+        "description": "Layanan yang dapat dipesan pelanggan, beserta jam dan aturannya.",
+        "keywords": "janji temu, layanan, ketersediaan, slot, jadwal, kalender"
+      },
+      "appointment-settings": {
+        "label": "Pengaturan janji temu",
+        "description": "Aturan pemesanan, pengingat, dan halaman pemesanan publik.",
+        "keywords": "halaman pemesanan, pengingat, jeda, pemberitahuan, pembatalan"
+      },
+      "google-calendar": {
+        "label": "Google Calendar",
+        "description": "Hubungkan kalender Anda agar pemesanan dan jam sibuk tetap sinkron.",
+        "keywords": "google, kalender, meet, sinkron, sibuk, janji temu"
+      },
+      "chat-widget": {
+        "label": "Widget chat",
+        "description": "Tambahkan gelembung chat ke situs web Anda, yang juga disebut web chat.",
+        "keywords": "web chat, chat situs web, live chat, widget, embed, gelembung"
+      },
+      "auto-reply": {
+        "label": "Balasan otomatis",
+        "description": "Sapa pelanggan dan balas saat Anda sedang tidak ada.",
+        "keywords": "pesan tidak di tempat, selamat datang, sapaan, di luar kantor, kata kunci"
+      },
+      "lead-sources": {
+        "label": "Lead media sosial",
+        "description": "Bawa lead dari iklan dan landing page melalui webhook.",
+        "keywords": "lead ads, facebook leads, meta, linkedin, tiktok, google ads, webhook, zapier, tangkap, formulir"
+      },
+      "rest-api": {
+        "label": "REST API",
+        "description": "Kunci dan dokumentasi untuk membangun di atas produk ini.",
+        "keywords": "api keys, developer, token, docs, openapi"
+      },
+      "webhooks": {
+        "label": "Webhook",
+        "description": "Kirim event ke sistem Anda sendiri saat terjadi.",
+        "keywords": "callback, event, http, endpoint, beri tahu"
+      },
+      "addons": {
+        "label": "Add-on",
+        "description": "Aktifkan atau nonaktifkan fitur opsional untuk workspace Anda.",
+        "keywords": "ekstensi, modul, plugin, marketplace"
+      },
+      "shopify": {
+        "label": "Shopify",
+        "description": "Hubungkan toko Shopify Anda untuk menyinkronkan produk dan pesanan serta mengirim pesan ke pelanggan.",
+        "keywords": "toko, store, ecommerce, produk, pesanan, sinkron, keranjang terbengkalai"
+      },
+      "woocommerce": {
+        "label": "WooCommerce",
+        "description": "Hubungkan toko WooCommerce Anda untuk menyinkronkan produk dan pesanan serta mengirim pesan ke pelanggan.",
+        "keywords": "woo, wordpress, toko, store, ecommerce, produk, pesanan, sinkron"
+      },
+      "i18n-translation": {
+        "label": "Terjemahan",
+        "description": "Bahasa dan terjemahan otomatis untuk pesan.",
+        "keywords": "bahasa, languages, locale, terjemahkan, terjemahan otomatis"
+      },
+      "account-security": {
+        "label": "Kata sandi dan verifikasi dua langkah",
+        "description": "Ubah kata sandi Anda dan lindungi masuk dengan langkah kedua.",
+        "keywords": "mfa, 2fa, authenticator, sesi, perangkat, masuk, login"
+      },
+      "import-export": {
+        "label": "Impor dan ekspor",
+        "description": "Bawa data dari berkas atau ambil salinannya.",
+        "keywords": "csv, excel, unduh, cadangan, unggah, migrasi"
+      },
+      "activity-log": {
+        "label": "Log audit",
+        "description": "Catatan siapa mengubah apa, dan kapan.",
+        "keywords": "aktivitas, riwayat, perubahan, jejak audit, log keamanan"
+      },
+      "privacy": {
+        "label": "Privasi dan data",
+        "description": "Persetujuan, retensi, dan permintaan penghapusan data.",
+        "keywords": "gdpr, persetujuan, retensi, hapus data, dpa, data pribadi"
+      },
+      "whatsapp-customers": {
+        "label": "Pelanggan tersimpan",
+        "description": "Atur sebelumnya nama dan alamat pengiriman pelanggan untuk pesanan WhatsApp.",
+        "keywords": "pelanggan, alamat, pengiriman, pesanan, toko"
+      },
+      "geta-publishing": {
+        "label": "Publikasi Geta",
+        "description": "Publikasikan alur secara langsung di konsol Geta.",
+        "keywords": "geta, publikasi, bot, konsol, tayang, chatbot"
+      },
+      "auto-assignment": {
+        "label": "Penugasan otomatis",
+        "description": "Berikan percakapan baru ke agen yang tepat secara otomatis, bergiliran atau berdasarkan aturan.",
+        "keywords": "routing, round robin, tetapkan, agen, aturan inbox, distribusikan, pemilik"
+      }
+    }
+  }
+}

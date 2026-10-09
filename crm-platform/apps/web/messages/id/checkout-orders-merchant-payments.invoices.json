@@ -1,0 +1,48 @@
+{
+  "checkout-orders-merchant-payments": {
+    "invoices": {
+      "eyebrow": "Toko / Faktur",
+      "title": "Faktur",
+      "subtitle": "Faktur yang dibuat dari pesanan toko. Kelola di Penjualan.",
+      "allInvoices": "Semua faktur",
+      "loading": "Memuat faktur",
+      "searching": "Mencari faktur toko lainnya...",
+      "search": {
+        "label": "Cari faktur",
+        "placeholder": "Cari berdasarkan nomor, pembeli, atau referensi..."
+      },
+      "status": {
+        "label": "Status",
+        "all": "Semua status"
+      },
+      "columns": {
+        "number": "Faktur",
+        "buyer": "Pembeli",
+        "status": "Status",
+        "total": "Total",
+        "issued": "Diterbitkan",
+        "due": "Jatuh tempo",
+        "actions": "Tindakan"
+      },
+      "row": {
+        "draft": "Draf",
+        "openInSales": "Buka di Penjualan",
+        "openAria": "Buka faktur {number} di Penjualan"
+      },
+      "empty": {
+        "title": "Belum ada faktur dari pesanan toko",
+        "message": "Buka pesanan dan pilih Buat faktur.",
+        "action": "Ke pesanan"
+      },
+      "noMatch": {
+        "title": "Tidak ada faktur toko yang cocok",
+        "message": "Ubah pencarian atau status untuk melihat lebih banyak."
+      },
+      "capped": {
+        "title": "Tidak ditemukan di faktur terbaru",
+        "message": "Faktur terbaru di Penjualan telah diperiksa dan tidak ada yang berasal dari pesanan toko. Muat lebih banyak untuk mencari lebih jauh ke belakang.",
+        "note": "Hanya faktur terbaru yang telah diperiksa. Muat lebih banyak untuk mencari lebih jauh ke belakang."
+      }
+    }
+  }
+}

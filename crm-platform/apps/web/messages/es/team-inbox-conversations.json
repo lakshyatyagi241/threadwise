@@ -1,0 +1,446 @@
+{
+  "team-inbox-conversations": {
+    "nav": {
+      "inbox": "Bandeja de entrada"
+    },
+    "common": {
+      "dismiss": "Descartar"
+    },
+    "screen": {
+      "listRegion": "Conversaciones",
+      "panelRegion": "Contacto y notas",
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "conflict": "Otra persona cambió antes esta conversación. Se ha recargado; inténtalo de nuevo.",
+      "assigned": "Conversación asignada.",
+      "assignedToYou": "Asignada a ti.",
+      "unassigned": "Conversación desasignada.",
+      "resolved": "Conversación resuelta.",
+      "reopened": "Conversación reabierta.",
+      "deleteNoteTitle": "¿Eliminar esta nota?",
+      "deleteNoteMessage": "La nota se eliminará para todo tu equipo. Esta acción no se puede deshacer.",
+      "deleteNoteConfirm": "Eliminar nota",
+      "pickTitle": "Elige una conversación",
+      "pickMessage": "Elige una conversación de la lista para leerla y responder. Los mensajes nuevos aparecen aquí solos.",
+      "shortcuts": "Atajos: j y k recorren la lista, e resuelve, / busca.",
+      "teamChanged": "Equipo actualizado."
+    },
+    "list": {
+      "title": "Bandeja de entrada",
+      "refresh": "Actualizar la lista",
+      "openSimulator": "Abrir el simulador de clientes",
+      "search": "Buscar conversaciones",
+      "searchPlaceholder": "Buscar por nombre o número",
+      "tabsLabel": "Vistas de conversaciones",
+      "tabs": {
+        "all": "Todas",
+        "mine": "Mías",
+        "unassigned": "Sin asignar",
+        "unread": "No leídas"
+      },
+      "statusFilter": "Estado",
+      "statusOpen": "Abierta",
+      "statusAll": "Todos los estados",
+      "status": {
+        "open": "Abierta",
+        "pending": "Pendiente",
+        "snoozed": "Pospuesta",
+        "resolved": "Resuelta",
+        "closed": "Resuelta",
+        "spam": "Spam"
+      },
+      "priority": {
+        "low": "Baja",
+        "normal": "Normal",
+        "high": "Alta",
+        "urgent": "Urgente"
+      },
+      "channelFilter": "Canal",
+      "allChannels": "Todos los canales",
+      "archived": "Archivadas",
+      "backToInbox": "Volver a la bandeja de entrada",
+      "loading": "Cargando conversaciones",
+      "retry": "Reintentar",
+      "listLabel": "Conversaciones",
+      "loadMore": "Cargar más",
+      "moreFailed": "No se pudieron cargar más conversaciones.",
+      "unreadCount": "{count, plural, one {# mensaje no leído} other {# mensajes no leídos}}",
+      "you": "Tú:",
+      "noMessages": "Aún no hay mensajes",
+      "windowClosed": "Ventana cerrada",
+      "windowLeftHours": "Quedan {hours} h {minutes} min",
+      "windowLeftMinutes": "Quedan {minutes} min",
+      "unassigned": "Sin asignar",
+      "needsContact": "Sin ficha de contacto",
+      "gettingStarted": {
+        "title": "Conecta un canal para empezar",
+        "message": "Tu bandeja se llena cuando los clientes escriben a un canal conectado. Conecta uno y todas las conversaciones llegarán aquí.",
+        "connect": "Conectar un canal"
+      },
+      "emptyFiltered": {
+        "title": "No hay conversaciones que coincidan",
+        "message": "Ningún resultado cumple estos filtros. Quítalos para ver todas las conversaciones de nuevo.",
+        "clear": "Quitar filtros"
+      },
+      "empty": {
+        "all": {
+          "title": "Aún no hay conversaciones",
+          "message": "Cuando un cliente escriba a uno de tus canales, la conversación aparecerá aquí."
+        },
+        "mine": {
+          "title": "Nada asignado a ti",
+          "message": "Aquí aparecen las conversaciones asignadas a ti. Abre una desde Todas y asígnatela."
+        },
+        "unassigned": {
+          "title": "Todas las conversaciones tienen un responsable",
+          "message": "Aquí aparecen las conversaciones nuevas que aún nadie ha atendido."
+        },
+        "unread": {
+          "title": "Estás al día",
+          "message": "Aquí aparecen las conversaciones con mensajes nuevos de clientes."
+        }
+      }
+    },
+    "status": {
+      "received": "Recibido",
+      "queued": "Enviando",
+      "sent": "Enviado",
+      "delivered": "Entregado",
+      "read": "Leído",
+      "failed": "No enviado"
+    },
+    "errors": {
+      "conflict": "Otra persona cambió esto antes. Se ha recargado; inténtalo de nuevo.",
+      "windowClosed": "La ventana de respuesta de 24 horas ha cerrado, así que no se puede enviar un mensaje libre.",
+      "planLimit": "Has alcanzado el límite mensual de mensajes de tu plan.",
+      "channelDisconnected": "Este canal está desconectado. Vuelve a conectarlo para enviar mensajes.",
+      "sendHalted": "El envío está pausado para toda la plataforma en este momento. Inténtalo más tarde.",
+      "notFound": "Esta conversación ya no existe o no puedes verla.",
+      "notRetryable": "Solo se puede reenviar un mensaje que ha fallado.",
+      "mediaNotFound": "El adjunto ha caducado o se ha quitado. Adjúntalo de nuevo.",
+      "statusInvalid": "No se permite ese cambio desde el estado actual de la conversación.",
+      "assigneeInvalid": "No se puede asignar esta conversación a esa persona.",
+      "forbidden": "No tienes permiso para hacer eso.",
+      "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+      "simulatorDisabled": "El simulador de canales está desactivado en este servidor.",
+      "channelInUse": "Este canal aún tiene conversaciones. Desconéctalo en lugar de eliminarlo.",
+      "validation": "Parte de lo que has escrito no es válido.",
+      "tooLarge": "El archivo es demasiado grande.",
+      "unsupported": "Este canal no puede enviar ese tipo de mensaje o archivo.",
+      "network": "No se pudo contactar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "generic": "Algo salió mal. Inténtalo de nuevo.",
+      "genericWithId": "Algo salió mal. Inténtalo de nuevo. Referencia: {id}",
+      "templateNotSendable": "Esa plantilla no se puede enviar en esta conversación. Elige otra.",
+      "groupSendUnavailable": "El envío a grupos de WhatsApp todavía no está disponible. Responde desde la app WhatsApp Business."
+    },
+    "bubble": {
+      "kind": {
+        "image": "Foto",
+        "text": "Mensaje",
+        "attachment": "Adjunto"
+      },
+      "template": "Mensaje de plantilla: {name}",
+      "unavailable": "Mensaje no disponible",
+      "sentIn": "Enviado en {lang}. Mostrar el texto que escribiste",
+      "translatedFrom": "Traducido del {lang}. Mostrar el original",
+      "bot": "Bot",
+      "broadcast": "Difusión",
+      "reacted": "Reacción {emoji}",
+      "edited": "Editado",
+      "failed": "Este mensaje no se entregó.",
+      "retry": "Reintentar",
+      "sending": "Enviando",
+      "dismiss": "Descartar",
+      "noteLabel": "Nota interna",
+      "unknownAuthor": "Un compañero",
+      "deleteNote": "Eliminar esta nota",
+      "templateHeader": {
+        "image": "Imagen",
+        "video": "Vídeo",
+        "document": "Documento",
+        "location": "Ubicación"
+      },
+      "templateCopyCode": "Copiar código",
+      "templateButtonUnnamed": "Botón",
+      "templateButtonPrefix": "Botón: "
+    },
+    "media": {
+      "openImage": "Abrir imagen {name}",
+      "video": "Vídeo",
+      "voice": "Mensaje de voz",
+      "audio": "Audio",
+      "document": "Documento",
+      "download": "Descargar {name}",
+      "location": "Ubicación compartida",
+      "openMap": "Abrir en OpenStreetMap"
+    },
+    "thread": {
+      "title": "Conversación",
+      "back": "Volver a la lista de conversaciones",
+      "loading": "Cargando la conversación",
+      "retry": "Reintentar",
+      "notFound": {
+        "title": "Conversación no encontrada",
+        "message": "Se ha eliminado o no puedes verla. Elige otra de la lista."
+      },
+      "status": {
+        "resolved": "Resuelta",
+        "closed": "Cerrada",
+        "spam": "Spam",
+        "snoozed": "Pospuesta"
+      },
+      "assignToMe": "Asignármela",
+      "resolve": "Resolver",
+      "reopen": "Reabrir",
+      "resolveShortcut": "Resolver o reabrir (e)",
+      "showPanel": "Mostrar contacto y notas",
+      "hidePanel": "Ocultar contacto y notas",
+      "window": {
+        "closed": "Ventana cerrada",
+        "closesInHours": "Se cierra en {hours} h {minutes} min",
+        "closesInMinutes": "Se cierra en {minutes} min"
+      },
+      "windowBanner": {
+        "title": "La ventana de respuesta de 24 horas ha cerrado.",
+        "message": "Este canal solo permite una plantilla aprobada más de 24 horas después del último mensaje del cliente. Aún puedes añadir notas internas. Un nuevo mensaje del cliente reabre la ventana.",
+        "sendTemplate": "Enviar una plantilla"
+      },
+      "readOnly": "Puedes leer esta conversación, pero no tienes permiso para responder.",
+      "typing": "{count, plural, one {Un compañero está escribiendo} other {# compañeros están escribiendo}}",
+      "messagesLabel": "Mensajes",
+      "loadOlder": "Cargar mensajes anteriores",
+      "empty": "Aún no hay mensajes en esta conversación.",
+      "newMessageAnnounce": "Mensaje nuevo: {text}",
+      "attachment": "un adjunto",
+      "jumpLatest": "Ir al más reciente",
+      "jumpLatestNew": "{count, plural, one {# mensaje nuevo} other {# mensajes nuevos}}"
+    },
+    "composer": {
+      "modeLabel": "Tipo de mensaje",
+      "mode": {
+        "reply": "Respuesta",
+        "note": "Nota interna"
+      },
+      "attach": "Adjuntar un archivo",
+      "removeAttachment": "Quitar el adjunto",
+      "replyLabel": "Responder al cliente",
+      "noteLabel": "Nota interna",
+      "replyPlaceholder": "Escribe un mensaje",
+      "notePlaceholder": "Escribe una nota que solo pueda ver tu equipo",
+      "replyDisabledPlaceholder": "Las respuestas están desactivadas en esta conversación",
+      "send": "Enviar",
+      "addNote": "Añadir nota",
+      "hint": "Intro envía. Mayús+Intro añade una línea nueva.",
+      "template": "Enviar una plantilla",
+      "groupSendUnavailable": "El envío a grupos de WhatsApp todavía no está disponible. Responde desde la app WhatsApp Business."
+    },
+    "panel": {
+      "tabsLabel": "Notas y cronología",
+      "contact": "Contacto",
+      "openContact": "Abrir contacto",
+      "needsContact": "Este número no tiene ficha de contacto porque has alcanzado tu límite de contactos.",
+      "noContact": "Esta conversación no está vinculada a ningún contacto.",
+      "email": "Correo electrónico",
+      "stage": "Etapa",
+      "status": "Estado",
+      "source": "Origen",
+      "since": "Contacto desde",
+      "optedOut": "Se ha dado de baja del marketing",
+      "resolve": "Resolver",
+      "reopen": "Reabrir",
+      "assignee": {
+        "title": "Asignada a",
+        "unknown": "Compañero desconocido",
+        "none": "Nadie tiene esta conversación",
+        "team": "Equipo: {name}",
+        "pick": "Elige quién tiene esta conversación",
+        "unassigned": "Sin asignar",
+        "you": "tú",
+        "loadFailed": "No se pudo cargar la lista de compañeros.",
+        "assignToMe": "Asignármela",
+        "unassign": "Desasignar",
+        "open": "{count} abiertas",
+        "pickTeam": "Elige un equipo para esta conversación",
+        "noTeam": "Sin equipo"
+      },
+      "presence": {
+        "online": "En línea",
+        "away": "Ausente",
+        "busy": "Ocupado",
+        "offline": "Sin conexión"
+      },
+      "notes": {
+        "tab": "Notas",
+        "label": "Nueva nota interna",
+        "placeholder": "Escribe una nota que solo pueda ver tu equipo",
+        "hint": "Ctrl+Intro añade la nota.",
+        "add": "Añadir nota",
+        "addFailed": "No se pudo guardar la nota.",
+        "loading": "Cargando notas",
+        "empty": "Aún no hay notas.",
+        "unknownAuthor": "Un compañero",
+        "delete": "Eliminar esta nota"
+      },
+      "timeline": {
+        "tab": "Cronología",
+        "loading": "Cargando la cronología",
+        "failed": "No se pudo cargar la cronología.",
+        "retry": "Reintentar",
+        "empty": "Aún no ha pasado nada en esta conversación.",
+        "events": {
+          "created": "Conversación iniciada",
+          "assigned": "Asignada por {actor}",
+          "reassigned": "Reasignada por {actor}",
+          "unassigned": "Desasignada por {actor}",
+          "ai_handoff": "Derivada a una persona por {actor}",
+          "resolved": "Resuelta por {actor}",
+          "closed": "Cerrada por {actor}",
+          "reopened": "Reabierta por {actor}",
+          "status_changed": "Estado cambiado por {actor}",
+          "note_added": "Nota añadida por {actor}",
+          "snoozed": "Pospuesta por {actor}",
+          "auto_unsnoozed": "Aplazamiento terminado",
+          "priority_changed": "Prioridad cambiada por {actor}",
+          "tag_added": "Etiqueta añadida por {actor}",
+          "tag_removed": "Etiqueta quitada por {actor}",
+          "first_response": "Primera respuesta enviada",
+          "sla_breach": "Plazo de respuesta incumplido",
+          "unknown": "{what} por {actor}"
+        },
+        "actors": {
+          "user": "Un compañero",
+          "system": "El sistema",
+          "bot": "Un bot",
+          "flow": "Una automatización",
+          "ai": "El asistente de IA"
+        }
+      },
+      "owner": "Responsable",
+      "past": {
+        "title": "Conversaciones anteriores",
+        "noMessages": "Sin mensajes",
+        "status": {
+          "open": "Abierta",
+          "pending": "Pendiente",
+          "snoozed": "Pospuesta",
+          "resolved": "Resuelta",
+          "closed": "Cerrada",
+          "spam": "Spam"
+        }
+      }
+    },
+    "simulator": {
+      "title": "Simulador de clientes",
+      "close": "Cerrar el simulador",
+      "devOnly": "Solo para desarrollo. Simula ser un cliente en un canal simulado; nada llega a un teléfono real.",
+      "noChannel": "Todavía no hay ningún canal de simulación.",
+      "createChannel": "Crear el canal de simulación",
+      "disabled": "El simulador está desactivado en este servidor.",
+      "channel": "Canal de simulación",
+      "customer": "El cliente",
+      "name": "Nombre",
+      "number": "Número",
+      "numberHint": "Solo dígitos, de 5 a 15.",
+      "kind": "Tipo de mensaje",
+      "kinds": {
+        "text": "Texto",
+        "image": "Imagen",
+        "document": "Documento",
+        "audio": "Audio",
+        "video": "Vídeo",
+        "location": "Ubicación"
+      },
+      "file": "Archivo",
+      "fileHint": "Opcional. Se usan su nombre y tipo; si no, se envía un archivo de ejemplo.",
+      "message": "Mensaje",
+      "caption": "Pie de foto",
+      "placeName": "Nombre del lugar",
+      "send": "Enviar como cliente",
+      "sent": "{count, plural, one {Enviado una vez.} other {Entregado # veces, guardado una sola vez.}}",
+      "duplicate": "Entrega duplicada",
+      "duplicateHint": "Entrega el mismo mensaje tres veces, para comprobar que se guarda una sola vez.",
+      "nextSend": "Tu próxima respuesta",
+      "nextSendHint": "Se aplica al siguiente mensaje que envíes desde el redactor y después vuelve a la normalidad.",
+      "faults": {
+        "none": "Normal",
+        "fail": "Falla",
+        "flaky": "Falla dos veces y luego funciona",
+        "slow": "Lento (10 s)",
+        "ooo": "Confirmaciones desordenadas"
+      },
+      "window": "Ventana de 24 horas",
+      "windows": {
+        "auto": "Automática",
+        "open": "Forzar abierta",
+        "closed": "Forzar cerrada"
+      },
+      "windowHint": "Cerrada muestra cómo se comporta el redactor cuando solo se puede enviar una plantilla."
+    },
+    "channels": {
+      "title": "Canales",
+      "intro": "Las cuentas por las que te escriben los clientes. Cada una alimenta la bandeja de entrada.",
+      "backToInbox": "Volver a la bandeja de entrada",
+      "simulatorNote": "Desarrollo: añade un canal simulado para probar la bandeja sin una cuenta real.",
+      "addSimulator": "Añadir canal de simulación",
+      "simulatorAdded": "Canal de simulación añadido.",
+      "simulatorDisabled": "El simulador está desactivado en este servidor.",
+      "loading": "Cargando canales",
+      "loadFailed": "No se pudieron cargar los canales.",
+      "retry": "Reintentar",
+      "empty": {
+        "title": "No hay canales conectados",
+        "message": "Conecta un canal y los mensajes de los clientes empezarán a llegar a la bandeja."
+      },
+      "listLabel": "Canales conectados",
+      "status": {
+        "connected": "Conectado",
+        "disconnected": "Desconectado",
+        "error": "Error"
+      },
+      "capWindow": "Ventana de respuesta de {hours} h",
+      "capTemplates": "Plantillas",
+      "capMedia": "Multimedia",
+      "capReceipts": "Confirmaciones de entrega",
+      "lastEvent": "Última actividad: {when}",
+      "noEvents": "Aún no hay actividad",
+      "remove": "Quitar",
+      "removeTitle": "¿Quitar este canal?",
+      "removeMessage": "{name} se eliminará. Un canal que aún tiene conversaciones no se puede eliminar; desconéctalo en su lugar.",
+      "removeConfirm": "Quitar canal",
+      "cancel": "Cancelar"
+    },
+    "templates": {
+      "eyebrow": "WhatsApp",
+      "title": "Enviar una plantilla",
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "back": "Volver a las plantillas",
+      "search": "Buscar por nombre o texto",
+      "searchLabel": "Buscar plantillas",
+      "loading": "Cargando plantillas",
+      "loadError": "No se pudieron cargar las plantillas.",
+      "retry": "Reintentar",
+      "empty": "Aún no hay plantillas aprobadas para este número de WhatsApp. Crea una en Plantillas y espera a que Meta la apruebe.",
+      "noResults": "Ninguna plantilla coincide con tu búsqueda.",
+      "windowHint": "Una plantilla funciona aunque la ventana de respuesta de 24 horas se haya cerrado.",
+      "variables": "Rellena las variables",
+      "preview": "Lo que leerá el cliente",
+      "send": "Enviar plantilla",
+      "sending": "Enviando",
+      "sent": "Plantilla enviada",
+      "problem": {
+        "required": "{label} es obligatorio.",
+        "format": "{label} no puede contener un salto de línea, un tabulador ni cuatro espacios seguidos."
+      },
+      "reason": {
+        "paused": "Pausada por WhatsApp. Se podrá enviar de nuevo cuando termine la pausa.",
+        "media_header": "Tiene una cabecera de imagen, vídeo o documento, que todavía no se puede enviar desde la bandeja.",
+        "header_variable": "Tiene una variable en la cabecera, que todavía no se puede rellenar desde la bandeja.",
+        "dynamic_button": "Tiene un enlace en un botón con una variable, que todavía no se puede rellenar desde la bandeja.",
+        "authentication": "Las plantillas de contraseña de un solo uso las envía el sistema, no la bandeja.",
+        "named_variables": "Usa variables con nombre, que la bandeja todavía no admite."
+      },
+      "hasMore": "Mostrando las primeras {count} plantillas. Busca por nombre o texto para encontrar las demás."
+    }
+  }
+}

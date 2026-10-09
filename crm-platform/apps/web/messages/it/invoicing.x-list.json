@@ -1,0 +1,268 @@
+{
+  "invoicing": {
+    "method": {
+      "bank": "Bonifico bancario",
+      "manual": "Manuale",
+      "wa_pay": "WhatsApp Pay",
+      "storefront": "Negozio online"
+    },
+    "toolbar": {
+      "currency": "Valuta",
+      "currencyPlaceholder": "USD",
+      "issued": "Emessa",
+      "issuedWindow": "Intervallo data di emissione",
+      "due": "Scadenza",
+      "dueWindow": "Intervallo data di scadenza",
+      "dueFrom": "Scadenza dal",
+      "dueTo": "Scadenza al",
+      "docType": "Tipo di documento",
+      "anyDocType": "Tutti i tipi",
+      "mine": "Le mie fatture",
+      "docTypes": {
+        "tax_invoice": "Fattura",
+        "proforma": "Proforma",
+        "receipt": "Ricevuta"
+      }
+    },
+    "strip": {
+      "label": "Denaro ancora dovuto",
+      "outstanding": "Da incassare ({currency})",
+      "overdue": "Di cui scadute"
+    },
+    "row": {
+      "creditNote": "Crea nota di credito",
+      "downloadPdf": "Scarica PDF"
+    },
+    "bulk": {
+      "sendLink": "Segna il link come inviato",
+      "someSkipped": "{count, plural, one {# fattura selezionata saltata perché non accetta questa azione.} other {# fatture selezionate saltate perché non accettano questa azione.}}",
+      "done": {
+        "send": "{count, plural, one {# fattura segnata come inviata.} other {# fatture segnate come inviate.}}"
+      },
+      "confirm": {
+        "delete": {
+          "message": "{count, plural, one {# bozza sarà eliminata definitivamente. Le fatture che non sono bozze restano invariate.} other {# bozze saranno eliminate definitivamente. Le fatture che non sono bozze restano invariate.}}"
+        }
+      },
+      "voidDialog": {
+        "title": "Annulla fatture selezionate",
+        "close": "Chiudi",
+        "keep": "Mantieni fatture",
+        "confirm": "{count, plural, one {Annulla # fattura} other {Annulla # fatture}}",
+        "warning": "{count, plural, one {# fattura sarà annullata. Mantiene il suo numero ma non potrà più essere pagata o modificata.} other {# fatture saranno annullate. Mantengono i loro numeri ma non potranno più essere pagate o modificate.}}",
+        "skipped": "{count, plural, one {# fattura selezionata saltata: si possono annullare solo le fatture emesse senza pagamenti né note di credito.} other {# fatture selezionate saltate: si possono annullare solo le fatture emesse senza pagamenti né note di credito.}}",
+        "reason": "Motivo (riportato su ogni fattura)",
+        "reasonRequired": "Spiega perché queste fatture vengono annullate."
+      }
+    },
+    "actions": {
+      "sentVia": {
+        "link": "Registrata come inviata con il link.",
+        "email": "Fattura inviata via email.",
+        "whatsapp": "Fattura inviata su WhatsApp."
+      },
+      "markedPaid": "Segnata come pagata.",
+      "linkRegenerated": "Nuovo link creato. Quello precedente non funziona più.",
+      "linkRevoked": "Link disattivato.",
+      "linkUnavailable": "Questa fattura non ha un link attivo. Apri la fattura per crearne uno nuovo."
+    },
+    "voidDialog": {
+      "reasonHint": "Obbligatorio. Viene conservato nella cronologia della fattura.",
+      "reasonRequired": "Spiega perché la fattura viene annullata.",
+      "refundFirst": "Questa fattura ha ricevuto pagamenti. Prima rimborsali (dall’elenco Pagamenti della fattura), poi annulla la fattura.",
+      "creditsFirst": "Questa fattura ha note di credito collegate. Prima annulla le note di credito, poi la fattura."
+    },
+    "sendDialog": {
+      "loading": "Caricamento fattura",
+      "channel": "Come vuoi inviarla?",
+      "channels": {
+        "link": "Condivido io il link",
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "action": {
+        "link": "Segna come inviata",
+        "email": "Invia email",
+        "whatsapp": "Invia su WhatsApp"
+      },
+      "linkOff": "Questa fattura non ha un link attivo. Creane uno nuovo dalla scheda del link sulla fattura, poi condividilo.",
+      "linkRecords": "Se condividi tu il link, viene solo registrato come inviato.",
+      "noEmail": "Nessun indirizzo email su questa fattura",
+      "noPhone": "Nessun numero di telefono su questa fattura",
+      "noEmailHelp": "Questa fattura non ha un’email del cliente. Chiudi questa finestra, usa Modifica dettagli per aggiungerla e riprova.",
+      "noPhoneHelp": "Questa fattura non ha un numero di telefono del cliente. Chiudi questa finestra, usa Modifica dettagli per aggiungerlo e riprova.",
+      "message": "Messaggio",
+      "messageHint": "Facoltativo. Aggiunto al messaggio che accompagna la fattura.",
+      "deliveryNote": "La fattura è in coda per la consegna al cliente. La cronologia mostra quando è stata inviata."
+    },
+    "editDialog": {
+      "title": "Modifica dettagli",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "save": "Salva modifiche",
+      "saved": "Dettagli fattura salvati.",
+      "reload": "Ricarica la fattura",
+      "conflict": "Qualcun altro ha modificato questa fattura mentre la stavi modificando. Ricaricala per vedere la versione più recente, poi ripeti la modifica.",
+      "intro": "Una fattura emessa mantiene righe, importi e numerazione. Questi dettagli possono comunque cambiare.",
+      "email": "Email del cliente",
+      "phone": "Telefono del cliente",
+      "phoneHint": "Con il prefisso internazionale, ad esempio +14155550123",
+      "contact": "Contatto",
+      "owner": "Responsabile",
+      "dueDate": "Data di scadenza",
+      "dueHint": "Allunga o accorcia i termini di pagamento.",
+      "reference": "Riferimento",
+      "notes": "Note",
+      "terms": "Condizioni"
+    },
+    "payDialog": {
+      "overpayNote": "È {extra} in più del saldo. Ti verrà chiesta conferma prima di registrarlo come credito.",
+      "overpayConfirm": "{extra} in più del saldo verrà registrato e mostrato come credito sulla fattura. Premi di nuovo il pulsante per confermare.",
+      "problems": {
+        "tooMuch": "Supera quanto la fattura deve ancora."
+      }
+    },
+    "markPaidDialog": {
+      "title": "Segna come pagata",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "confirm": "Registra pagamento",
+      "message": "Registrare come incassato oggi l’intero saldo di {amount}?",
+      "method": "Ricevuto da"
+    },
+    "refundDialog": {
+      "problems": {
+        "dateFuture": "La data del rimborso non può essere futura."
+      }
+    },
+    "paymentsSection": {
+      "refundChip": "Rimborso",
+      "receipt": "Ricevuta",
+      "refundOf": "restituisce {receipt}",
+      "refundedSoFar": "{amount} rimborsati finora"
+    },
+    "activity": {
+      "none": "Non è ancora successo nulla.",
+      "actors": {
+        "buyer": "Il cliente",
+        "gateway": "Gateway di pagamento",
+        "system": "Sistema"
+      },
+      "events": {
+        "sent": "Inviata al cliente",
+        "overdue": "Diventata scaduta",
+        "partially_paid": "Parzialmente pagata",
+        "link_regenerated": "Link pubblico sostituito",
+        "link_revoked": "Link pubblico disattivato",
+        "pay_attempt": "Tentativo di pagamento online",
+        "credit_note_issued": "Nota di credito"
+      }
+    },
+    "linked": {
+      "invoiced": "Fatturata",
+      "paid": "Pagato",
+      "outstanding": "Dovuto",
+      "overdue": "Scaduta",
+      "latest": "{count, plural, one {Mostra l’ultima fattura.} other {Mostra le ultime # fatture.}}"
+    },
+    "detail": {
+      "editDetails": "Modifica dettagli",
+      "downloadPdf": "PDF",
+      "createCreditNote": "Crea nota di credito",
+      "linkOffBanner": "Il link del cliente è disattivato, quindi il cliente non può aprire questa fattura. Crea un nuovo link nella scheda del link.",
+      "refunded": "Rimborsato",
+      "credited": "Accreditato",
+      "credit": "Credito",
+      "detailsLabel": "Dettagli fattura",
+      "contact": "Contatto",
+      "company": "Azienda",
+      "quote": "Preventivo",
+      "salesOrder": "Ordine di vendita",
+      "recurring": "Pianificazione ricorrente",
+      "makeRecurring": "Rendi ricorrente",
+      "reference": "Riferimento",
+      "owner": "Responsabile",
+      "createdBy": "Creata da",
+      "overpaid": "È stato ricevuto o accreditato più di quanto richiesto da questa fattura. L’eccedenza viene mostrata come credito.",
+      "voidNeedsRefund": "Per annullare questa fattura, prima rimborsa i pagamenti. Non deve avere note di credito.",
+      "sources": {
+        "manual": "Creata a mano",
+        "quote": "Da un preventivo",
+        "order": "Da un ordine",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Negozio online",
+        "api": "API",
+        "ai": "Assistente AI",
+        "recurring": "Fattura ricorrente",
+        "sales_order": "Ordine di vendita"
+      },
+      "creditNotes": {
+        "title": "Note di credito",
+        "create": "Crea nota di credito",
+        "loading": "Caricamento note di credito",
+        "none": "Nessuna nota di credito su questa fattura.",
+        "draft": "Bozza",
+        "status": {
+          "draft": "Bozza",
+          "issued": "Emessa",
+          "void": "Annulla"
+        }
+      }
+    },
+    "linkCard": {
+      "title": "Link pubblico",
+      "address": "Indirizzo del link",
+      "state": {
+        "active": "Attivo",
+        "revoked": "Disattivato",
+        "expired": "Scaduto"
+      },
+      "off": {
+        "revoked": "Il link è stato disattivato. Il cliente vede una pagina che indica che la fattura non è disponibile.",
+        "expired": "Il link è scaduto. Il cliente vede una pagina che indica che la fattura non è disponibile."
+      },
+      "copy": "Copia",
+      "copied": "Copiato",
+      "expires": "Scade",
+      "revokedAt": "Disattivato",
+      "views": "Aperture",
+      "firstViewed": "Prima apertura",
+      "lastViewed": "Ultima apertura",
+      "open": "Apri la pagina del cliente",
+      "regenerate": "Nuovo link",
+      "revoke": "Disattiva",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "regenerateTitle": "Crea un nuovo link",
+      "regenerateWarning": "Il link attuale smette di funzionare subito. Chi lo ha vedrà che la fattura non è disponibile.",
+      "regenerateConfirm": "Crea nuovo link",
+      "expiry": "Il nuovo link è valido per",
+      "expiryNever": "Nessuna scadenza",
+      "expiryDays": "{count, plural, one {# giorno} other {# giorni}}",
+      "revokeTitle": "Disattivare il link?",
+      "revokeMessage": "Il cliente non potrà più aprire o pagare questa fattura dal link. Potrai creare un nuovo link in seguito.",
+      "revokeConfirm": "Disattiva link"
+    },
+    "errors": {
+      "codes": {
+        "INV_NOT_DRAFT": "Questa fattura è già emessa, quindi le sue righe e i suoi importi non possono più cambiare.",
+        "INV_NOT_ISSUED": "Solo una fattura emessa può farlo. Emetti prima la bozza.",
+        "INV_ALREADY_VOID": "Questa fattura è già annullata.",
+        "INV_HAS_PAYMENTS": "Questa fattura ha ancora pagamenti. Rimborsali prima, poi annulla la fattura.",
+        "INV_HAS_CREDITS": "Questa fattura ha note di credito collegate. Annulla prima le note di credito, poi la fattura.",
+        "INV_NOT_DELETABLE": "Si può eliminare solo una bozza. Annulla invece questa fattura.",
+        "INV_NO_RECIPIENT": "La fattura non ha un indirizzo email o un numero di telefono per quel canale. Aggiungine uno con Modifica dettagli e riprova.",
+        "INV_LINK_UNAVAILABLE": "Questa fattura non ha un link attivo. Creane uno nuovo dalla scheda del link.",
+        "INV_OWNER_INVALID": "Questa persona non è un membro attivo dello spazio di lavoro. Scegli un altro responsabile.",
+        "PAY_OVERPAYMENT": "È più di quanto la fattura deve ancora. Riduci l'importo oppure conferma che stai registrando un credito.",
+        "PAY_FUTURE_DATE": "La data del pagamento non può essere futura.",
+        "PAY_CURRENCY_MISMATCH": "Il pagamento deve essere nella stessa valuta della fattura.",
+        "PAY_REFUND_EXCEEDS": "È più di quanto può ancora essere rimborsato su questo pagamento.",
+        "PAY_NOT_REFUNDABLE": "Questa voce non può essere rimborsata. Può essere rimborsato solo un pagamento con un importo residuo.",
+        "PAY_NOTHING_TO_PAY": "Questa fattura non ha più nulla da pagare.",
+        "ROW_VERSION_CONFLICT": "Qualcun altro ha appena modificato questa fattura. Ricarica per vedere l'ultima versione, poi riprova."
+      }
+    }
+  }
+}

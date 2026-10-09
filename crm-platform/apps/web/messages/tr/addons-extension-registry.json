@@ -1,0 +1,311 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "Eklentiler ve modüller",
+      "packs": "Eklentiler (faturalama)",
+      "extensions": "Eklentiler (kod)",
+      "workspace": "Eklentiler"
+    },
+    "common": {
+      "loading": "Yükleniyor",
+      "retry": "Tekrar dene",
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "saving": "Kaydediliyor",
+      "close": "Kapat",
+      "dismiss": "Gizle",
+      "admin": "Yönetici",
+      "settings": "Ayarlar",
+      "optional": "isteğe bağlı",
+      "required": "zorunlu",
+      "readOnly": "Bu sayfayı görüntüleyebilirsiniz ancak yalnızca süper yönetici değiştirebilir.",
+      "requestId": "İstek kimliği",
+      "errors": {
+        "forbidden": "Bu sayfaya erişiminiz yok.",
+        "request": "İstek tamamlanamadı.",
+        "unexpected": "Bir şeyler ters gitti. Birazdan tekrar deneyin.",
+        "conflict": "Başka biri bunu az önce değiştirdi. Sayfayı yenileyip tekrar deneyin."
+      }
+    },
+    "packs": {
+      "crumbHere": "Eklentiler",
+      "eyebrow": "Yönetici · Faturalama ve planlar · Eklentiler",
+      "titleLead": "Ek",
+      "titleAccent": "lentiler",
+      "title": "Eklentiler",
+      "description": "Müşterinin planına ek olarak satın aldığı, \"Kampanyalar eklentisi\" veya \"+1 WhatsApp numarası\" gibi à la carte özellik paketleri. Her eklenti, üzerinde belirlediğiniz özellik anahtarlarını ve limitleri müşterinin planına ekleyerek verir. Müşteri etkin bir plana geçtikten sonra Hesap sayfasında görünür.",
+      "new": "Yeni eklenti",
+      "empty": {
+        "title": "Henüz eklenti yok.",
+        "action": "İlk eklentinizi oluşturun"
+      },
+      "table": {
+        "label": "Eklentiler",
+        "name": "Ad",
+        "price": "Fiyat",
+        "period": "Dönem",
+        "grants": "Sağladıkları",
+        "status": "Durum",
+        "actions": "İşlemler"
+      },
+      "price": {
+        "free": "Ücretsiz",
+        "lifetime": "tek seferlik"
+      },
+      "period": {
+        "days": "{count} gün",
+        "weeks": "{count} hafta",
+        "months": "{count} ay",
+        "years": "{count} yıl"
+      },
+      "grants": {
+        "none": "ayarlanmadı",
+        "unlimited": "Sınırsız {name}",
+        "add": "+{amount} {name}",
+        "more": "+{count}"
+      },
+      "status": {
+        "active": "Etkin",
+        "off": "Kapalı"
+      },
+      "actions": {
+        "edit": "Düzenle",
+        "enable": "Etkinleştir",
+        "disable": "Devre dışı bırak",
+        "delete": "Sil"
+      },
+      "toasts": {
+        "created": "Eklenti oluşturuldu.",
+        "updated": "Eklenti güncellendi.",
+        "activated": "{name} etkinleştirildi",
+        "deactivated": "{name} devre dışı bırakıldı",
+        "deleted": "{name} silindi"
+      },
+      "delete": {
+        "title": "{name} silinsin mi?",
+        "body": "Bu eklenti silinsin mi? Eklentiyi satın alan çalışma alanları, süresi dolana kadar kullanmaya devam eder.",
+        "confirm": "Sil",
+        "inUse": "{count, plural, one {# çalışma alanı bu eklentiye sahip olduğu için silinemez. Bunun yerine devre dışı bırakın; sahipler eklentiyi süresi bitene kadar korur.} other {# çalışma alanı bu eklentiye sahip olduğu için silinemez. Bunun yerine devre dışı bırakın; sahipler eklentiyi süresi bitene kadar korur.}}"
+      },
+      "errors": {
+        "generic": "Eklenti kaydedilemedi.",
+        "forbidden": "Eklentileri yalnızca süper yönetici değiştirebilir.",
+        "notFound": "Bu eklenti artık mevcut değil."
+      },
+      "editor": {
+        "crumbHere": "Eklentiler",
+        "crumbNew": "Yeni",
+        "crumbEdit": "Düzenle",
+        "eyebrowNew": "Yönetici · Eklentiler · Yeni",
+        "eyebrowEdit": "Yönetici · Eklentiler · Düzenle",
+        "titleNewLead": "Eklenti",
+        "titleEditLead": "Eklentiyi",
+        "titleAccent": "oluştur",
+        "intro": "Bir eklenti yalnızca açtığınız özellikleri sağlar, başka hiçbir şey vermez. Boş bırakılan limite dokunulmaz, bu yüzden yanlışlıkla \"sınırsız\" olmaz.",
+        "fixTitle": "Lütfen şunları düzeltin:",
+        "cancel": "İptal",
+        "create": "Eklenti oluştur",
+        "saveChanges": "Değişiklikleri kaydet",
+        "basics": "Eklenti temel bilgileri",
+        "features": "Bu eklentinin açtığı özellikler",
+        "featuresHint": "Yalnızca bu eklentinin sağladıklarını işaretleyin. İşaretlenmeyen her şey müşterinin planına göre yönetilir.",
+        "coreFeature": "tüm planlarda",
+        "limits": "Limit artışları",
+        "limitsHint": "Boş = eklenti bu limite dokunmaz. Plana EKLEMEK için bir sayı girin (örneğin +2 cihaz). Sınırsız için -1 kullanın.",
+        "fields": {
+          "name": "Ad",
+          "namePlaceholder": "Kampanyalar eklentisi",
+          "subtitle": "Alt başlık",
+          "subtitlePlaceholder": "Kampanyaların kilidini aç",
+          "amount": "Fiyat",
+          "offerAmount": "İndirimli fiyat (isteğe bağlı)",
+          "currency": "Para birimi",
+          "billingDuration": "Süre",
+          "billingUnit": "Birim",
+          "billingMode": "Faturalama",
+          "sortOrder": "Sıralama",
+          "isActive": "Etkin",
+          "isLifetime": "Ömür boyu (tek seferlik)"
+        },
+        "modes": {
+          "one_time": "Tek seferlik (bittikten sonra tekrar satın alınır)",
+          "recurring": "Yinelenen (otomatik ödemeyle yenilenir)"
+        },
+        "units": {
+          "days": "Gün",
+          "weeks": "Hafta",
+          "months": "Ay",
+          "years": "Yıl"
+        },
+        "problems": {
+          "name": "Bir ad girin.",
+          "amount": "19 veya 19,99 gibi bir tutar girin.",
+          "offerAmount": "İndirimli fiyat, fiyattan düşük olmalıdır.",
+          "currency": "Üç harfli bir para birimi kodu kullanın.",
+          "billingDuration": "1 veya daha büyük bir tam sayı girin.",
+          "sortOrder": "Bir tam sayı girin.",
+          "limits": "Limitler tam sayı olmalıdır; sınırsız için -1 girin.",
+          "form": "Vurgulanan alanları kontrol edin."
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "Eklentiler",
+      "eyebrow": "Yönetici · Eklentiler",
+      "titleLead": "Eklenti",
+      "titleAccent": "yükle",
+      "title": "Eklentiler",
+      "description": "Eklentiler, bu kuruluma ek özellikler katar. İlki Instagram'dır. Satın alma kodunuzu doğrulayın, paketi yükleyin; yerinde kurulur. Verileriniz ve ayarlarınız etkilenmez.",
+      "coreVersion": "Çekirdek",
+      "packsLead": "Müşterilerin plana ek olarak satın aldığı ücretli özellik paketlerini mi arıyorsunuz?",
+      "packsLink": "Bunlar plan eklentileridir (faturalama)",
+      "packsTail": ". Bu sayfa kod yükler.",
+      "installed": {
+        "title": "Yüklü eklentiler",
+        "empty": "Henüz yüklü eklenti yok. Yukarıda satın alma kodunuzu doğrulayın, ardından bir paket yükleyin.",
+        "version": "v{version}",
+        "files": "{count, plural, one {# dosya} other {# dosya}}",
+        "inPlace": "Yerinde modül",
+        "filesKept": "dosya diskte tutuluyor",
+        "active": "Etkin",
+        "disabled": "Devre dışı",
+        "inactive": "Pasif",
+        "enable": "Etkinleştir",
+        "disable": "Devre dışı bırak",
+        "remove": "Kaldır",
+        "reactivate": "Yeniden etkinleştir",
+        "footnote": "Bir eklentiyi kaldırmak, yalnızca eklendiği andan itibaren izlenen kendi yüklediği dosyaları siler; çekirdek dosyalara asla dokunulmaz. Veriler veritabanında kalır."
+      },
+      "verify": {
+        "title": "Satın alma kodunuzu doğrulayın",
+        "body": "Güncellemelerin kilidini açan aynı {brand} lisansı. Eklentiler buna bağlıdır.",
+        "placeholder": "örn. 8f2c1a44-...",
+        "label": "Satın alma kodu",
+        "action": "Doğrula",
+        "checking": "Doğrulanıyor…",
+        "empty": "Önce satın alma kodunuzu girin.",
+        "failed": "Doğrulama başarısız oldu."
+      },
+      "upload": {
+        "title": "Eklenti paketini yükleyin",
+        "body": "ZIP dosyası, herhangi bir şey yazılmadan önce incelenir. Hatalı veya uyumsuz paket reddedilir ve kurulumunuz değişmez.",
+        "choose": "Bir eklenti .zip dosyası seçin",
+        "max": "En fazla 100 MB",
+        "action": "Yükle",
+        "installing": "Yükleniyor…",
+        "progress": "Yükleniyor ve birleştiriliyor. Bu sekmeyi kapatmayın."
+      },
+      "confirm": {
+        "removeTitle": "{name} kaldırılsın mı?",
+        "removeBody": "Bu işlem yüklediği dosyaları siler. Verileri veritabanında kalır.",
+        "remove": "Kaldır",
+        "moduleOffTitle": "{name} kaldırılsın mı?",
+        "moduleOffBody": "Bu işlem eklentiyi devre dışı bırakır; sayfaları ve otomasyonları çalışmayı durdurur. Dosyalar korunur, böylece istediğiniz zaman yeniden etkinleştirebilirsiniz. Hiçbir şey silinmez ve verileri veritabanında kalır.",
+        "moduleOnTitle": "{name} yeniden etkinleştirilsin mi?",
+        "moduleOnBody": "Bu işlem eklentiyi tekrar açar. Dosyaları hâlâ diskte olduğundan hemen çalışmaya başlar.",
+        "reactivate": "Yeniden etkinleştir"
+      },
+      "engines": {
+        "connected": "Bağlı",
+        "notConnected": "Bağlı değil",
+        "connect": "Bağlan",
+        "manage": "Yönet",
+        "disconnect": "Bağlantıyı kes",
+        "disconnectYes": "Evet, bağlantıyı kes",
+        "save": "Kaydet ve bağlan",
+        "testing": "Bağlanıyor…",
+        "displayName": "Görünen ad",
+        "secret": "Paylaşılan gizli anahtar",
+        "secretSaved": "•••••••• kayıtlı, korumak için boş bırakın",
+        "secretNew": "paylaşılan gizli anahtarı yapıştırın",
+        "lastChecked": "Son kontrol",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "Ayrı bir {brand} dağıtımı olarak çalışır. URL + gizli anahtarla bağlanın, yükleme yok.",
+          "blocked": "Engellendi: yerel eklenti etkin",
+          "blockedNote": "Yerel Instagram eklentisi yüklü. Uzak bir {brand} bağlamak için aşağıdan kaldırın.",
+          "modalTitle": "Instagram'ı bağla",
+          "modalBody": "{brand} dağıtım URL'nizi ve paylaşılan gizli anahtarı yapıştırın. {app} bağlantıyı API üzerinden doğrular. Hiçbir şey yüklenmez.",
+          "url": "{brand} URL'si",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "Uygulamadaki her \"… kaynağından eşitle\", \"… üzerinde yönet\" ve \"… URL'si\" etiketinde gösterilir.",
+          "disconnectTitle": "Instagram bağlantısı kesilsin mi?",
+          "disconnectBody": "Bu işlem Instagram'ın {app} ile bağlantısını keser. Instagram, her çalışma alanı için kontrol panelinden, analizlerden, gelen kutusundan, akışlardan, şablonlardan ve otomatik yanıtlardan anında kaybolur ve yeniden bağlanana kadar hiçbiri kullanılamaz. Devam edilsin mi?"
+        },
+        "email": {
+          "title": "E-posta",
+          "body": "Bağlanmak, {brand} e-posta platformunu bağlar; böylece postalar URL + gizli anahtarla, yükleme olmadan ekip gelen kutusuna düşer.",
+          "modalTitle": "E-postayı bağla",
+          "modalBody": "{brand} dağıtım URL'nizi ve paylaşılan gizli anahtarı yapıştırın. {app} bağlantıyı API üzerinden doğrular. Hiçbir şey yüklenmez.",
+          "url": "{brand} URL'si",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "Uygulamadaki her e-posta etiketinde gösterilir.",
+          "disconnectTitle": "E-posta bağlantısı kesilsin mi?",
+          "disconnectBody": "Bu işlem e-posta platformunun {app} ile bağlantısını keser. Yeniden bağlanana kadar her çalışma alanında postalar ekip gelen kutusuna düşmez. Devam edilsin mi?"
+        }
+      },
+      "errors": {
+        "generic": "Bu işe yaramadı.",
+        "forbidden": "Modülleri yalnızca süper yönetici değiştirebilir.",
+        "invalidPackage": "Paket geçerli değil.",
+        "tooLarge": "Paket çok büyük.",
+        "coreTooOld": "Bu paket daha yeni bir çekirdek sürümü gerektiriyor.",
+        "engineConflict": "Instagram aynı anda yalnızca bir altyapıyla çalışır. Önce diğerinin bağlantısını kesin."
+      }
+    },
+    "workspace": {
+      "title": "Eklentiler",
+      "description": "Aboneliğinize ek olarak satın aldığınız özellik paketleri.",
+      "needPlanTitle": "Eklentiler için etkin bir plan gerekir",
+      "needPlanBody": "Eklentiler, aboneliğinize ek olarak satın aldığınız özellik paketleridir. Önce bir plan seçin, ardından özellik eklemek için buraya dönün.",
+      "viewPlans": "Planları gör",
+      "noneTitle": "Kullanılabilir eklenti yok",
+      "noneBody": "Şu anda sunulan eklenti yok. Daha sonra tekrar kontrol edin.",
+      "ownedTitle": "Eklentileriniz",
+      "ownedBody": "Mevcut planınıza eklenen etkin paketler.",
+      "ends": "Bitiş: {date}",
+      "lifetime": "Ömür boyu",
+      "autoRenews": "Otomatik yenilenir",
+      "renewal": {
+        "cancel": "Yenilemeyi iptal et",
+        "confirmTitle": "Yenileme iptal edilsin mi?",
+        "confirmBody": "Bu eklenti, ödemesini yaptığınız dönemin sonuna kadar etkin kalır, sonra yenilenmez.",
+        "confirm": "Yenilemeyi iptal et",
+        "keep": "Yenilemeye devam et",
+        "forbidden": "Planı değiştirme izniniz yok.",
+        "none": "İptal edilecek etkin bir abonelik yok.",
+        "failed": "Yenilemeyi iptal edemedik. Lütfen tekrar deneyin."
+      },
+      "active": "Etkin",
+      "cardEyebrow": "Eklenti",
+      "catalogTitle": "Eklentiler",
+      "catalogBody": "Mevcut planınızın üzerine ek özelliklerin kilidini açın. Plan değişikliği gerekmez.",
+      "count": "{count, plural, one {# eklenti} other {# eklenti}}",
+      "free": "Ücretsiz",
+      "lifetimePrice": "tek seferlik",
+      "per": "/ {unit}",
+      "units": {
+        "days": "gün",
+        "weeks": "hafta",
+        "months": "ay",
+        "years": "yıl"
+      },
+      "buy": "Plana ekle",
+      "buyAgain": "Tekrar satın al",
+      "owned": "Sahip olunan: ×{count} · tekrar satın almak daha fazlasını ekler",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "Sınırsız {name}",
+        "add": "+{amount} {name}"
+      },
+      "error": "Eklentiler yüklenemedi."
+    },
+    "planFields": {
+      "fromModule": "yüklü bir modülden",
+      "unlimited": "Sınırsız"
+    }
+  }
+}

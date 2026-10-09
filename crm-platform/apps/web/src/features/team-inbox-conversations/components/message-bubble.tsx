@@ -79,12 +79,58 @@ function MessageBody({
     }
   }
 
+  const referral = m.referral && (m.referral.headline || m.referral.body || m.referral.sourceUrl) ? m.referral : null;
+  const referralCard = referral ? (
+    <div
+      data-testid="inbox-referral"
+      className="mb-1.5 rounded-md border border-border bg-muted/50 px-2 py-1 text-xs"
+    >
+      <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{t('referral')}</p>
+      {referral.headline && (
+        <p dir="auto" className="font-medium break-words">
+          {referral.headline}
+        </p>
+      )}
+      {referral.body && (
+        <p dir="auto" className="text-muted-foreground break-words">
+          {referral.body}
+        </p>
+      )}
+      {referral.sourceUrl && /^https?:\/\//i.test(referral.sourceUrl) && (
+        <a
+          href={referral.sourceUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary underline-offset-2 hover:underline break-all"
+        >
+          {referral.sourceUrl}
+        </a>
+      )}
+    </div>
+  ) : null;
+
   if (m.kind === 'reaction') {
     return <span className="text-2xl leading-none">{m.reaction ?? m.body}</span>;
   }
 
   if (m.kind === 'interactive' && (m.interactive || caption)) {
-    return <InteractiveChip kind={m.kind} body={m.body} interactive={m.interactive} />;
+    // A Flow answer has no chip, only its text lines: show those as they are, with their line breaks.
+    if (!m.interactive && caption && caption.includes('\n')) {
+      return (
+        <div className="space-y-1">
+          {referralCard}
+          <p dir="auto" className="whitespace-pre-wrap break-words">
+            {caption}
+          </p>
+        </div>
+      );
+    }
+    return (
+      <div>
+        {referralCard}
+        <InteractiveChip kind={m.kind} body={m.body} interactive={m.interactive} />
+      </div>
+    );
   }
 
   if (m.kind === 'contact' && (m.contacts?.length || caption)) {
@@ -95,8 +141,21 @@ function MessageBody({
     return <TemplateMessage template={m.template} text={caption} />;
   }
 
+  if (m.unsupported) {
+    return (
+      <div data-testid="inbox-unsupported" className="space-y-1">
+        {referralCard}
+        <p dir="auto" className="flex items-start gap-1.5 text-sm italic text-muted-foreground">
+          <AlertIcon width={14} height={14} className="mt-0.5 shrink-0" />
+          <span className="break-words">{caption ?? t('unsupported')}</span>
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-1.5">
+      {referralCard}
       {visual}
       {caption ? (
         <p dir="auto" className="whitespace-pre-wrap break-words">
@@ -196,6 +255,11 @@ export const MessageBubble = memo(function MessageBubble({
         >
           {out && sender && (
             <p className="mb-0.5 text-[11px] font-medium text-muted-foreground">{sender}</p>
+          )}
+          {m.forwarded && (
+            <p data-testid="inbox-forwarded" className="mb-0.5 text-[11px] italic text-muted-foreground">
+              {t('forwarded')}
+            </p>
           )}
           {quoted && (
             <p

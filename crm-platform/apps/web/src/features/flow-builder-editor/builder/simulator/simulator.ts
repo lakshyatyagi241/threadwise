@@ -1,17 +1,17 @@
 import {
   flbAskFileAccepts,
   flbCleanAskFileExtensions,
-  flbCondSummary,
   flbIsCondGroup,
   flbSanitizeConditionGroup,
   type FlbCondGroup,
-  flbListOption,
   type FlowEdge,
   type FlowNode,
   type FlbTemplateButtonRef,
   type FlbTestWebhookRequest,
   type FlbTestWebhookResponse,
 } from '@crm/contracts';
+import { condSummary, listOption, nodeLabel } from '../../lib/contract-text';
+import { type Translate } from '../../lib/msg';
 
 /**
  * The Test runner engine (TW-FLB-024): walks the canvas graph in memory, no messages are sent. Framework-free: every side
@@ -68,6 +68,8 @@ const MEDIA_KIND_OF_MIME = (mime: string): string => {
 };
 
 export interface SimulatorOptions {
+  /** The `flb` translator: the log lines are catalogue messages (`simulator.*`). */
+  t: Translate;
   nodes: FlowNode[];
   edges: FlowEdge[];
   /** Quick-reply buttons of the template a Send-template node points at (resolved by the web from the template list). */
@@ -143,6 +145,12 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
   const { nodes, edges } = opts;
   const schedule = opts.schedule ?? ((fn: () => void, ms: number) => void setTimeout(fn, ms));
   const random = opts.random ?? Math.random;
+  const tx = (key: string, values?: Record<string, string | number>) =>
+    opts.t(`simulator.${key}`, values);
+  const unitText = (unit: string) =>
+    ['sec', 'min', 'hour', 'day'].includes(unit)
+      ? opts.t(`builder.simple.editors.delay.${unit}`)
+      : unit;
 
   let runId = 0;
   let vars: Vars = {};
@@ -173,7 +181,7 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
 
   const stepTest = (node: FlowNode | null): void => {
     if (!node) {
-      sys('Flow ended.');
+      sys(tx('flowEnded'));
       stop();
       return;
     }
@@ -182,8 +190,7 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       const e = edges.find((x) => x.source === node.id && x.sourceHandle === sourceHandle);
       const next = e ? findNode(e.target) : null;
       if (!next) {
-        const portLabel = sourceHandle !== 'out' ? ` (port "${sourceHandle}")` : '';
-        sys(`No path forward${portLabel} — stop.`);
+        sys(sourceHandle !== 'out' ? tx('noPathPort', { port: sourceHandle }) : tx('noPath'));
         stop();
         return;
       }
@@ -198,21 +205,21 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         bot(interp(d.text, v));
         return advance('out');
       case 'notify_number': {
-        const num = interp(d.copyNumber, v) || '(no number set)';
+        const num = interp(d.copyNumber, v) || tx('noNumber');
         const what =
           d.kind && d.kind !== 'text' ? `[${str(d.kind)}] ${interp(d.url, v)}` : interp(d.text, v);
-        sys(`Copy sent to ${num}: ${what}`);
+        sys(tx('copySent', { number: num, what }));
         return advance('out');
       }
       case 'wa_to_instagram': {
-        const u = str(d.igUsername).replace(/^@/, '') || '(no username)';
+        const u = str(d.igUsername).replace(/^@/, '') || tx('noUsername');
         bot(`${interp(d.introText, v)}\nhttps://ig.me/m/${u}`);
         return advance('out');
       }
       case 'sequence': {
         const reps = arr(d.replies);
         if (reps.length === 0) {
-          bot('(empty sequence)');
+          bot(tx('sequenceEmpty'));
           return advance('out');
         }
         for (const raw of reps) {
@@ -235,10 +242,10 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
           sys(`⚠ ${msg}`);
         }
         const qr = opts.templateButtons?.(node) ?? [];
-        const head = `[template: ${str(d.tpl) || '?'}]\n${interp(d.preview, v)}`;
+        const head = tx('templateHead', { name: str(d.tpl) || '?', preview: interp(d.preview, v) });
         if (qr.length) {
           bot(
-            `${head}\n${qr.map((b, i) => `  ${i + 1}. ${b.label || `Button ${i + 1}`}`).join('\n')}`,
+            `${head}\n${qr.map((b, i) => `  ${i + 1}. ${b.label || opts.t('contracts.ports.button', { n: i + 1 })}`).join('\n')}`,
           );
           opts.onAwaiting(true);
           return;
@@ -265,13 +272,13 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         const lines = arr(d.options)
           .map((o, i) => {
             if (typeof o === 'string') return `  ${i + 1}. ${o}`;
-            const it = flbListOption(o, i);
+            const it = listOption(opts.t, o, i);
             return `  ${i + 1}. ${it.title}${it.description ? ` — ${it.description}` : ''}${it.section ? `   [${it.section}]` : ''}`;
           })
           .join('\n');
         const prompt = interp(d.prompt || d.question, v);
         const labels = arr(d.options).map((o, i) =>
-          typeof o === 'string' ? o : flbListOption(o, i).title,
+          typeof o === 'string' ? o : listOption(opts.t, o, i).title,
         );
         const header = rec(d.header);
         const headerMedia =
@@ -295,20 +302,16 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         askAttempts = 0;
         bot(interp(d.prompt, v));
         sys(
-          `(waiting for a file: ${
-            flbCleanAskFileExtensions(d.extensions).join(', ') || 'any type'
-          } — use the attach button)`,
+          tx('waitingFile', {
+            types: flbCleanAskFileExtensions(d.extensions).join(', ') || tx('anyType'),
+          }),
         );
         opts.onAwaiting(true);
         return;
       case 'ask_location':
         askAttempts = 0;
         bot(interp(d.prompt, v));
-        sys(
-          d.interactive === false
-            ? '(waiting for a shared location)'
-            : '(a "Send location" button is shown — use the location button)',
-        );
+        sys(d.interactive === false ? tx('waitingLocation') : tx('locationButton'));
         opts.onAwaiting(true);
         return;
       case 'condition': {
@@ -327,7 +330,7 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
             return g.op === 'or' ? g.items.some(test) : g.items.every(test);
           };
           ok = walk(tree);
-          sys(`if ${flbCondSummary(tree)} → ${ok ? 'YES' : 'NO'}`);
+          sys(tx(ok ? 'ifYes' : 'ifNo', { summary: condSummary(opts.t, tree) }));
           return advance(ok ? 'yes' : 'no');
         }
         if (conds.length > 0) {
@@ -342,25 +345,25 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         const summary = conds
           .map(
             (c, i) =>
-              `${i ? ` ${str(ops[i - 1]) || 'AND'} ` : ''}${str(c.variable)} ${str(c.operator)} ${str(c.value)}`,
+              `${i ? ` ${opts.t(str(ops[i - 1]).toUpperCase() === 'OR' ? 'contracts.cond.or' : 'contracts.cond.and')} ` : ''}${str(c.variable)} ${str(c.operator)} ${str(c.value)}`,
           )
           .join('');
-        sys(`if ${summary} → ${ok ? 'YES' : 'NO'}`);
+        sys(tx(ok ? 'ifYes' : 'ifNo', { summary }));
         return advance(ok ? 'yes' : 'no');
       }
       case 'delay':
-        sys(`wait ${str(d.amount)} ${str(d.unit)} (skipped in test)`);
+        sys(tx('waitSkipped', { amount: str(d.amount), unit: unitText(str(d.unit)) }));
         return advance('out');
       case 'webhook': {
         // The one real call: fired server-side (SSRF-guarded) so the operator can confirm the endpoint; the response is
         // saved to {{save}} and flattened to {{save.field}} for the nodes downstream.
         const wUrl = interp(d.url, v);
         if (!wUrl.trim()) {
-          sys('webhook has no URL — skipped');
+          sys(tx('webhookNoUrl'));
           return advance('out');
         }
         const saveAs = str(d.save || d.variable) || 'response';
-        sys(`Calling ${str(d.method) || 'POST'} ${wUrl} …`);
+        sys(tx('calling', { method: str(d.method) || 'POST', url: wUrl }));
         const id = runId;
         const req: FlbTestWebhookRequest = {
           url: str(d.url),
@@ -382,16 +385,18 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
                 for (const [k, val] of Object.entries(j.json))
                   v[`${saveAs}.${k}`] = typeof val === 'object' ? JSON.stringify(val) : String(val);
               }
-              sys(`← HTTP ${j.status}${j.success ? '' : ' (non-2xx)'} · saved to {{${saveAs}}}`);
+              sys(
+                tx(j.success ? 'httpOk' : 'httpNon2xx', { status: j.status, ref: `{{${saveAs}}}` }),
+              );
             } else {
               v[saveAs] = '';
-              sys(`webhook failed: ${j.error || 'no response'}`);
+              sys(tx('webhookFailed', { error: j.error || tx('noResponse') }));
             }
           })
           .catch((e: unknown) => {
             if (id !== runId) return;
             v[saveAs] = '';
-            sys(`webhook error: ${e instanceof Error ? e.message : str(e)}`);
+            sys(tx('webhookError', { error: e instanceof Error ? e.message : str(e) }));
           })
           .then(() => {
             // Only continue if this run was not restarted mid-flight.
@@ -400,23 +405,31 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         return; // async: advance happens once the request settles
       }
       case 'code':
-        sys(`run JS → {{${str(d.save) || 'result'}}} (mocked — runs live only)`);
+        sys(tx('runJs', { ref: `{{${str(d.save) || 'result'}}}` }));
         return advance('out');
       case 'mysql':
-        sys(`query ${str(d.database) || 'db'}: ${str(d.sql).slice(0, 48)}… (mocked)`);
+        sys(tx('query', { database: str(d.database) || 'db', sql: str(d.sql).slice(0, 48) }));
         return advance('out');
       case 'ai':
-        bot(`[${str(d.model) || 'AI'}] (simulated reply)`);
+        bot(tx('aiReply', { model: str(d.model) || 'AI' }));
         return advance('out');
       case 'tag':
-        sys(`${str(d.action) || 'add'} tag "${str(d.tag || d.tagId) || '?'}"`);
+        sys(
+          tx(str(d.action) === 'remove' ? 'tagRemove' : 'tagAdd', {
+            tag: str(d.tag || d.tagId) || '?',
+          }),
+        );
         return advance('out');
       case 'assign':
-        sys(`assigned to team "${str(d.team) || '?'}"${d.userId ? ` user ${str(d.userId)}` : ''}`);
+        sys(
+          d.userId
+            ? tx('assignedUser', { team: str(d.team) || '?', user: str(d.userId) })
+            : tx('assigned', { team: str(d.team) || '?' }),
+        );
         return advance('out');
       case 'subflow': {
         const fid = str(d.flow);
-        sys(`run sub-flow "${opts.flowName?.(fid) ?? `#${fid || '?'}`}" (skipped in test)`);
+        sys(tx('subflow', { name: opts.flowName?.(fid) ?? `#${fid || '?'}` }));
         return advance('out');
       }
       case 'cta': {
@@ -426,23 +439,30 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
               .map((a) => `[${str(a.type) || 'url'}] ${str(a.label)} → ${str(a.value)}`)
               .join('\n')
           : `[${str(d.kind) || 'url'}] ${str(d.label)} → ${str(d.url || d.phone || d.code)}`;
-        bot(`(CTA)\n${lines}`);
+        bot(tx('cta', { lines }));
         return advance('out');
       }
       case 'location':
         bot(
-          `(location) ${str(d.name)}\n${str(d.address)}${d.lat && d.lng ? `\nlat ${str(d.lat)}, lng ${str(d.lng)}` : ''}`,
+          d.lat && d.lng
+            ? tx('locationCoords', {
+                name: str(d.name),
+                address: str(d.address),
+                lat: str(d.lat),
+                lng: str(d.lng),
+              })
+            : tx('location', { name: str(d.name), address: str(d.address) }),
         );
         return advance('out');
       case 'chatbot':
-        bot(`[chatbot: ${str(d.bot) || '?'}] (simulated)`);
+        bot(tx('chatbot', { bot: str(d.bot) || '?' }));
         return advance('out');
       case 'whatsapp_shop':
       case 'woocommerce':
       case 'shopify': {
         const items = arr(d.productItems).map(rec);
         if (items.length === 0) {
-          sys('No products on commerce node — taking abandoned port.');
+          sys(tx('noProducts'));
           return advance('abandoned');
         }
         const list = items
@@ -452,44 +472,47 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
           })
           .join('\n');
         bot(
-          `[${node.type}] ${interp(d.bodyText || 'Pick a product:', v)}\n${list}\n(Reply with a number to simulate purchase, or wait — abandon timer not run in test)`,
+          tx('commerce', {
+            type: node.type,
+            body: interp(d.bodyText || tx('pickProduct'), v),
+            list,
+          }),
         );
         opts.onAwaiting(true);
         return;
       }
       case 'book_appointment': {
-        const sample = [
-          'Mon 20 May · 10:00 AM',
-          'Mon 20 May · 11:30 AM',
-          'Tue 21 May · 9:00 AM',
-          'Tue 21 May · 4:00 PM',
-          'Wed 22 May · 2:30 PM',
-        ];
+        const sample = [1, 2, 3, 4, 5].map((n) => tx(`slot${n}`));
         const slots = sample.slice(0, Math.max(1, Math.min(10, Number(d.slotCount) || 5)));
         bot(
-          `${str(d.prompt) || 'Pick a time:'}\n${slots.map((s, i) => `  ${i + 1}. ${s}`).join('\n')}`,
+          `${str(d.prompt) || tx('pickTime')}\n${slots.map((s, i) => `  ${i + 1}. ${s}`).join('\n')}`,
         );
-        sys('(simulated) customer picks slot 1 → booked');
+        sys(tx('slotPicked'));
         return advance('booked');
       }
       case 'google_sheets': {
-        const sheet = d.sheetId ? `${str(d.sheetId).slice(0, 10)}…` : '(no sheet)';
+        const sheet = d.sheetId ? `${str(d.sheetId).slice(0, 10)}…` : tx('noSheet');
         const summary =
           d.mode === 'read'
-            ? `Lookup row where ${str(d.matchColumn) || '?'}="${interp(d.matchValue, v)}" in ${sheet}`
-            : `Append row to ${sheet} — ${arr(d.columns).length} columns`;
-        sys(
-          `[Google Sheets · ${(str(d.mode) || 'write').toUpperCase()}] ${summary} (skipped in test)`,
-        );
+            ? tx('sheetsLookup', {
+                column: str(d.matchColumn) || '?',
+                value: interp(d.matchValue, v),
+                sheet,
+              })
+            : tx('sheetsAppend', { sheet, count: arr(d.columns).length });
+        sys(tx('sheetsLine', { mode: (str(d.mode) || 'write').toUpperCase(), summary }));
         return advance('out');
       }
       case 'google_docs': {
         sys(
-          `[Google Docs] copy template ${d.templateId ? `${str(d.templateId).slice(0, 10)}…` : '(no template)'} → "${interp(d.newTitle, v)}" (mocked URL)`,
+          tx('docsLine', {
+            template: d.templateId ? `${str(d.templateId).slice(0, 10)}…` : tx('noTemplate'),
+            title: interp(d.newTitle, v),
+          }),
         );
         const mockUrl = 'https://docs.google.com/document/d/MOCKED/edit';
         bot(
-          interp(d.messageTemplate || "Here's your document: {{doc_url}}", {
+          interp(d.messageTemplate || tx('docMessage', { url: mockUrl }), {
             ...v,
             doc_url: mockUrl,
           }),
@@ -498,29 +521,43 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       }
       case 'google_form': {
         const mockUrl = `https://docs.google.com/forms/d/${str(d.formId) || 'MOCKED'}/viewform`;
-        bot(`${interp(d.bodyText || 'Please fill out this short form:', v)}\n\n${mockUrl}`);
-        sys('(simulated) form submitted → submitted port');
+        bot(`${interp(d.bodyText || tx('formPrompt'), v)}\n\n${mockUrl}`);
+        sys(tx('formSubmitted'));
         return advance('submitted');
       }
       case 'deal': {
-        const act = d.action === 'move' ? 'move contact deal to' : 'create deal in';
         sys(
-          `[CRM] ${act} stage ${str(d.stageId) || '(none)'} — "${interp(d.dealName || 'deal', v)}"${d.value ? ` · ${interp(d.value, v)}` : ''} (skipped in test)`,
+          tx(d.action === 'move' ? 'dealMove' : 'dealCreate', {
+            stage: str(d.stageId) || tx('noStage'),
+            name: interp(d.dealName || tx('dealName'), v),
+            hasValue: d.value ? 'yes' : 'no',
+            value: d.value ? interp(d.value, v) : '',
+          }),
         );
         return advance('created');
       }
       case 'wa_form':
-        bot(interp(d.bodyText || d.body || 'Please complete this form:', v));
+        bot(interp(d.bodyText || d.body || tx('waFormPrompt'), v));
         sys(
-          `(simulated) published Meta form ${str(d.formId || d.formTitle || d.metaFlowId) || '(select a form)'} sent → out`,
+          tx('waFormLine', {
+            form: str(d.formId || d.formTitle || d.metaFlowId) || tx('selectForm'),
+          }),
         );
         return advance('out');
+      case 'api_library': {
+        // The call itself needs the workspace's saved API and a contact; the test chat does not run it.
+        const saveAs = str(d.save) || 'api_response';
+        sys(
+          `call saved API "${str(d.apiName) || '(none picked)'}" → {{${saveAs}}} (skipped in test, leaves by success)`,
+        );
+        return advance('success');
+      }
       case 'end':
-        sys('Flow ended.');
+        sys(tx('flowEnded'));
         stop();
         return;
       default:
-        sys(`(unknown node type "${node.type}" — skipping)`);
+        sys(tx('unknownNode', { type: node.type }));
         return advance('out');
     }
   };
@@ -552,7 +589,7 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     const first =
       nodes.find((n) => n.isStart) ?? nodes.find((n) => n.type === 'trigger') ?? nodes[0];
     if (!first) {
-      sys('Canvas is empty. Add a trigger and at least one node, then click Restart.');
+      sys(tx('canvasEmpty'));
       opts.onAwaiting(false);
       return;
     }
@@ -566,8 +603,8 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     pendingStart = first;
     sys(
       expectedKeywords.length
-        ? `Type "${expectedKeywords[0]}" (or any keyword: ${expectedKeywords.join(', ')}) to start the flow.`
-        : 'Type any message to start the flow.',
+        ? tx('typeKeyword', { first: expectedKeywords[0]!, list: expectedKeywords.join(', ') })
+        : tx('typeAny'),
     );
     opts.onAwaiting(true);
   };
@@ -592,12 +629,12 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     };
     const finish = () => {
       opts.onAwaiting(false);
-      route(node, 'out', `Nothing connected after ${node.type} — stop.`);
+      route(node, 'out', tx('nothingAfter', { type: nodeLabel(opts.t, node.type) }));
     };
     const skip = str(d.skipKeyword).trim().toLowerCase();
     if (reply.kind === 'text' && skip !== '' && reply.text.trim().toLowerCase() === skip) {
       setEmpty('skipped');
-      sys('Skipped by the customer.');
+      sys(tx('skippedByCustomer'));
       return finish();
     }
     if (isFile && reply.kind === 'file') {
@@ -611,7 +648,7 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         vars[`${name}_mime`] = f.mime;
         vars[`${name}_caption`] = f.caption ?? '';
         vars[`${name}_status`] = 'received';
-        sys(`File saved to {{${name}}}.`);
+        sys(tx('fileSaved', { ref: `{{${name}}}` }));
         return finish();
       }
     }
@@ -625,37 +662,36 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       vars[`${name}_name`] = l.name ?? '';
       vars[`${name}_address`] = l.address ?? '';
       vars[`${name}_status`] = 'received';
-      sys(`Location saved to {{${name}}} (maps link).`);
+      sys(tx('locationSaved', { ref: `{{${name}}}` }));
       return finish();
     }
     // Not what was asked for.
     askAttempts += 1;
     if (askAttempts <= askRetries(d)) {
-      bot(
-        interp(
-          d.wrongReply ||
-            (isFile
-              ? 'That is not a file we can accept. Please send it as an attachment.'
-              : 'Please share your location with the attachment (+) menu, then Location.'),
-          vars,
-        ),
-      );
+      bot(interp(d.wrongReply || (isFile ? tx('wrongFile') : tx('wrongLocation')), vars));
       return;
     }
     if (d.onFail === 'end') {
-      sys('Retries used up — the flow ends here.');
+      sys(tx('retriesEnd'));
       stop();
       return;
     }
     setEmpty('failed');
-    sys('Retries used up — moving on without an answer.');
+    sys(tx('retriesMove'));
     finish();
   };
 
   const sendFile = (file: SimFile): void => {
     const node = current;
     if (!node || node.type !== 'ask_file') return;
-    log('user', `📎 ${file.name} (${file.mime})${file.caption ? `\n${file.caption}` : ''}`);
+    log(
+      'user',
+      tx(file.caption ? 'userFileCaption' : 'userFile', {
+        name: file.name,
+        mime: file.mime,
+        caption: file.caption ?? '',
+      }),
+    );
     answerAsk(node, { kind: 'file', file });
   };
 
@@ -664,7 +700,14 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     if (!node || node.type !== 'ask_location') return;
     log(
       'user',
-      `📍 ${loc.name ? `${loc.name} · ` : ''}${loc.latitude}, ${loc.longitude}${loc.address ? `\n${loc.address}` : ''}`,
+      tx('userLocation', {
+        hasName: loc.name ? 'yes' : 'no',
+        name: loc.name ?? '',
+        lat: loc.latitude,
+        lng: loc.longitude,
+        hasAddress: loc.address ? 'yes' : 'no',
+        address: loc.address ?? '',
+      }),
     );
     answerAsk(node, { kind: 'location', loc });
   };
@@ -676,8 +719,7 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       const first = pendingStart;
       if (expectedKeywords.length > 0) {
         const lc = value.toLowerCase();
-        if (!expectedKeywords.some((k) => lc.includes(k.toLowerCase())))
-          sys("(message didn't match any keyword — running anyway for testing)");
+        if (!expectedKeywords.some((k) => lc.includes(k.toLowerCase()))) sys(tx('keywordMiss'));
       }
       vars.user_message = value;
       pendingStart = null;
@@ -707,19 +749,19 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       );
       const next = e ? findNode(e.target) : null;
       if (next) later(STEP_DELAY_MS, () => stepTest(next));
-      else if (handle) sys(`Port "${handle}" not connected — stop.`);
-      else sys('Nothing connected after ask — stop.');
+      else if (handle) sys(tx('portNotConnected', { port: handle }));
+      else sys(tx('nothingAfterAsk'));
     } else if (node.type === 'buttons' || node.type === 'list' || node.type === 'poll') {
       // List items are objects: match and save their title, never the object ("[object Object]").
       const raw = arr(d.options);
       const titles =
         node.type === 'list'
-          ? raw.map((o, i) => flbListOption(o, i).title)
+          ? raw.map((o, i) => listOption(opts.t, o, i).title)
           : raw.map((o) => str(o));
       const idx = pickIndex(titles, value);
       vars[str(d.var) || 'choice'] = titles[idx] || value;
       opts.onAwaiting(false);
-      route(node, `p${idx}`, `Port "p${idx}" (option ${idx + 1}) not connected — stop.`);
+      route(node, `p${idx}`, tx('optionNotConnected', { port: `p${idx}`, n: idx + 1 }));
     } else if (node.type === 'template') {
       const qr = opts.templateButtons?.(node) ?? [];
       const idx = pickIndex(
@@ -727,7 +769,7 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         value,
       );
       opts.onAwaiting(false);
-      route(node, `p${idx}`, `Button "${qr[idx]?.label || `p${idx}`}" not connected — stop.`);
+      route(node, `p${idx}`, tx('buttonNotConnected', { label: qr[idx]?.label || `p${idx}` }));
     } else if (
       node.type === 'whatsapp_shop' ||
       node.type === 'woocommerce' ||
@@ -744,12 +786,12 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         vars.order_total = String(Number(picked.price_minor ?? picked.priceMinor ?? 0) / 100);
         vars.order_currency = str(picked.currency);
         sys(
-          `Simulated purchase: ${str(picked.name || picked.retailer_id || picked.retailerId)} → port "purchased"`,
+          tx('simPurchase', { name: str(picked.name || picked.retailer_id || picked.retailerId) }),
         );
-        route(node, 'purchased', 'Port "purchased" not connected — stop.');
+        route(node, 'purchased', tx('portNotConnected', { port: 'purchased' }));
       } else {
-        sys('Simulated abandon → port "abandoned"');
-        route(node, 'abandoned', 'Port "abandoned" not connected — stop.');
+        sys(tx('simAbandon'));
+        route(node, 'abandoned', tx('portNotConnected', { port: 'abandoned' }));
       }
     }
   };

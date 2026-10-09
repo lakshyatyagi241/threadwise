@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "Mağaza / Siparişler",
+      "title": "Tüm siparişler",
+      "subtitle": "Tüm kanallardan gelen her sipariş: WhatsApp, mağaza vitrini, Twilio ve manuel.",
+      "loading": "Siparişler yükleniyor",
+      "statusTabs": "Sipariş durumu",
+      "searchLabel": "Siparişlerde ara",
+      "searchPlaceholder": "Telefona, ada veya sipariş numarasına göre ara",
+      "sourceLabel": "Kaynak",
+      "allSources": "Tüm kaynaklar",
+      "paymentLabel": "Ödeme",
+      "allPayments": "Tüm ödemeler",
+      "fromLabel": "Başlangıç",
+      "toLabel": "Bitiş",
+      "shopLabel": "Mağaza",
+      "invertedRange": "Başlangıç tarihi bitiş tarihinden sonra, bu yüzden hiçbir sipariş eşleşemez.",
+      "clearFilters": "Filtreleri temizle",
+      "cols": {
+        "order": "Sipariş",
+        "customer": "Müşteri",
+        "items": "Ürünler",
+        "total": "Toplam",
+        "payment": "Ödeme",
+        "status": "Durum",
+        "source": "Kaynak",
+        "created": "Oluşturulma",
+        "actions": "İşlemler"
+      },
+      "itemsCount": "{count, plural, one {# ürün} other {# ürün}}",
+      "anonymous": "Anonim",
+      "openOrder": "#{no} numaralı siparişi aç",
+      "changeStatus": "#{no} numaralı siparişin durumunu değiştir",
+      "deleteOrder": "#{no} numaralı siparişi sil",
+      "deleteTitle": "#{no} numaralı sipariş silinsin mi?",
+      "deleteMessage": "Sipariş ve ürünleri kalıcı olarak kaldırılır. Bu işlem geri alınamaz.",
+      "deleteConfirm": "Siparişi sil",
+      "deleted": "#{no} numaralı sipariş silindi.",
+      "statusChanged": "#{no} numaralı sipariş artık: {status}.",
+      "buyerNotified": "Alıcıya mesaj gönderildi.",
+      "confirmStatusTitle": "#{no} numaralı sipariş {status} olarak işaretlensin mi?",
+      "confirmStatusMessage": "Alıcıya yeni durum bildirilir. Siparişi daha sonra başka bir duruma taşıyabilirsiniz.",
+      "confirmStatusConfirm": "Durumu güncelle",
+      "emptyTitle": "Henüz sipariş yok",
+      "emptyMessage": "Müşteriler mağaza vitrininizden veya WhatsApp'tan sipariş verdiğinde burada görünür. İlk siparişi almak için mağaza bağlantınızı paylaşın.",
+      "emptyAction": "Mağaza genel görünümünü aç",
+      "noMatchTitle": "Bu filtrelerle eşleşen sipariş yok",
+      "noMatchMessage": "Farklı bir arama, durum veya tarih aralığı deneyin ya da tüm siparişleri görmek için filtreleri temizleyin."
+    },
+    "orderDetail": {
+      "back": "Siparişlere dön",
+      "title": "Sipariş #{no}",
+      "placed": "Verilme: {when}",
+      "loading": "Sipariş yükleniyor",
+      "readOnly": "Bu siparişi görüntüleyebilir ancak değiştiremezsiniz.",
+      "items": {
+        "title": "Ürünler",
+        "empty": "Bu siparişte ürün yok.",
+        "qty": "Adet {qty}",
+        "retailerId": "Kimlik {id}",
+        "unit": "tanesi {price}"
+      },
+      "totals": {
+        "title": "Toplamlar",
+        "subtotal": "Ara toplam",
+        "shipping": "Kargo",
+        "tax": "Vergi",
+        "taxInclusive": "Fiyatlara dahil",
+        "discount": "İndirim",
+        "discountCoupon": "İndirim ({code})",
+        "total": "Toplam"
+      },
+      "customer": {
+        "title": "Müşteri",
+        "anonymous": "Anonim",
+        "phone": "Telefon",
+        "email": "E-posta",
+        "address": "Teslimat adresi",
+        "noAddress": "Bu sipariş için adres alınmadı.",
+        "notes": "Notlar"
+      },
+      "meta": {
+        "title": "Sipariş ayrıntıları",
+        "orderId": "Sipariş kimliği",
+        "source": "Kaynak",
+        "shop": "Mağaza",
+        "paymentMethod": "Ödeme yöntemi",
+        "updated": "Son güncelleme"
+      },
+      "rto": {
+        "title": "Kargo iade riski",
+        "summary": "{band} ({score})",
+        "low": "Düşük",
+        "medium": "Orta",
+        "high": "Yüksek"
+      },
+      "timeline": {
+        "title": "Zaman çizelgesi",
+        "empty": "Bu siparişte henüz hiçbir şey olmadı.",
+        "kind": {
+          "created": "Sipariş verildi",
+          "status_changed": "Durum değişti",
+          "payment_link": "Ödeme bağlantısı",
+          "paid": "Ödeme alındı",
+          "invoice": "Fatura",
+          "note": "Not",
+          "updated": "Sipariş güncellendi"
+        },
+        "actor": {
+          "user": "Bir ekip üyesi tarafından",
+          "system": "Otomatik",
+          "customer": "Müşteri tarafından"
+        }
+      },
+      "payments": {
+        "title": "Ödemeler",
+        "empty": "Bu sipariş için kayıtlı ödeme yok.",
+        "kind": {
+          "gateway": "Çevrimiçi ödeme",
+          "payment_link": "Ödeme bağlantısı",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "Kapıda ödeme",
+          "manual": "Elle kaydedildi"
+        },
+        "reference": "Referans {ref}",
+        "openLink": "Bağlantıyı aç"
+      },
+      "form": {
+        "title": "Durumu güncelle",
+        "status": "Durum",
+        "suggestion": "Olağan sonraki adım: {status}",
+        "notes": "Notlar",
+        "paymentLink": "Ödeme bağlantısı",
+        "optional": "isteğe bağlı",
+        "paymentLinkHint": "Güncellemeyle birlikte alıcıya yeni bir bağlantı gönderilir.",
+        "invalidLink": "http:// veya https:// ile başlayan bir web bağlantısı girin.",
+        "save": "Değişiklikleri kaydet",
+        "saving": "Kaydediliyor",
+        "saved": "#{no} numaralı sipariş güncellendi.",
+        "notified": "Alıcıya mesaj gönderildi.",
+        "notNotified": "Alıcıya mesaj gönderilmedi.",
+        "reload": "Siparişi yeniden yükle"
+      },
+      "pay": {
+        "title": "Ödeme bağlantısı",
+        "current": "Geçerli ödeme bağlantısı",
+        "sendTitle": "Elinizdeki bir bağlantıyı gönderin",
+        "sendLabel": "Ödeme bağlantısı URL'si",
+        "sendButton": "Ödeme bağlantısını gönder",
+        "sent": "Ödeme bağlantısı alıcıya gönderildi.",
+        "savedNotSent": "Bağlantı kaydedildi ancak alıcıya gönderilemedi.",
+        "generateTitle": "Ödeme bağlantısı oluştur",
+        "generateHint": "Ödeme ağ geçidinizde barındırılan bir ödeme bağlantısı oluşturur ve alıcıya WhatsApp'tan gönderir.",
+        "gatewayLabel": "Ağ geçidi",
+        "generateButton": "Bağlantı oluştur ve gönder",
+        "noGatewayTitle": "Ödeme ağ geçidi kurulmadı",
+        "noGatewayMessage": "Ödeme bağlantısı oluşturmadan önce bir ödeme ağ geçidi kurulmalıdır.",
+        "noGatewayAction": "Ağ geçidi kur",
+        "resultTitle": "Ödeme bağlantısı hazır",
+        "copyLink": "Bağlantıyı kopyala",
+        "resultSent": "Alıcıya WhatsApp'tan gönderildi.",
+        "resultNotSent": "Siparişe kaydedildi ancak alıcıya gönderilemedi. Kendiniz paylaşın."
+      },
+      "invoice": {
+        "title": "Fatura",
+        "description": "Bu siparişi Satış'ta bir faturaya ve satış siparişine dönüştürün.",
+        "create": "Fatura oluştur",
+        "creating": "Oluşturuluyor",
+        "created": "{number} numaralı fatura oluşturuldu.",
+        "createdNoNumber": "Fatura oluşturuldu.",
+        "existing": "Bu sipariş için zaten fatura kesildi.",
+        "viewInvoice": "Fatura",
+        "viewSalesOrder": "Satış siparişi"
+      },
+      "delete": {
+        "title": "#{no} numaralı sipariş silinsin mi?",
+        "message": "Sipariş ve ürünleri kalıcı olarak kaldırılır. Bu işlem geri alınamaz.",
+        "confirm": "Siparişi sil",
+        "deleted": "#{no} numaralı sipariş silindi."
+      }
+    }
+  }
+}

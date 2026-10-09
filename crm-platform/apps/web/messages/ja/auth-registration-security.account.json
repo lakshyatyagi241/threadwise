@@ -1,0 +1,571 @@
+{
+  "auth-registration-security": {
+    "account": {
+      "nav": {
+        "title": "アカウント"
+      },
+      "common": {
+        "cancel": "キャンセル",
+        "loading": "読み込み中",
+        "reset": "リセット",
+        "retry": "再試行",
+        "save": "変更を保存",
+        "saving": "保存中",
+        "showPassword": "パスワードを表示",
+        "hidePassword": "パスワードを非表示",
+        "signOut": "サインアウト"
+      },
+      "errors": {
+        "unexpected": "当社側で問題が発生しました。もう一度お試しください。",
+        "network": "サーバーに接続できませんでした。接続を確認してもう一度お試しください。",
+        "forbidden": "その操作を行う権限がありません。",
+        "signedOut": "セッションが終了しました。もう一度サインインしてください。",
+        "rateLimited": "試行回数が多すぎます。しばらく待ってからもう一度お試しください。",
+        "rateLimitedWait": "試行回数が多すぎます。{seconds, plural, other {# 秒}}後にもう一度お試しください。",
+        "requestId": "リクエストID",
+        "locked": "失敗が続いています。しばらく待ってからもう一度お試しください。",
+        "lockedWait": "失敗が続いています。{minutes, plural, other {# 分}}後にもう一度お試しください。"
+      },
+      "hub": {
+        "railLabel": "アカウント",
+        "menuLabel": "アカウントのセクション",
+        "groups": {
+          "account": "アカウント",
+          "security": "セキュリティ"
+        },
+        "tabs": {
+          "profile": "プロフィール",
+          "security": "パスワードとセキュリティ",
+          "delete": "アカウントを削除",
+          "plan": "プラン"
+        },
+        "pages": {
+          "profile": {
+            "title": "プロフィール",
+            "description": "写真、名前、連絡先を更新します。"
+          },
+          "security": {
+            "title": "パスワードとセキュリティ",
+            "description": "パスワードの変更、2要素認証の有効化、ログイン中の端末の確認ができます。"
+          },
+          "delete": {
+            "title": "アカウントを削除",
+            "description": "このワークスペースからアカウントを完全に削除します。"
+          }
+        },
+        "breadcrumbLabel": "パンくずリスト",
+        "breadcrumbRoot": "アカウント",
+        "planBadge": "{plan}プラン",
+        "planFree": "無料",
+        "upgrade": {
+          "title": "もっと必要ですか？",
+          "body": "上位プランで、キャンペーン、デバイス、AIサポートをさらに利用できます。",
+          "cta": "プランを見る"
+        },
+        "lockedHint": "先にこのアカウントのセキュリティ手順を完了してください。"
+      },
+      "avatar": {
+        "alt": "{name}の写真",
+        "change": "写真を変更",
+        "remove": "写真を削除",
+        "uploading": "写真をアップロード中",
+        "removing": "写真を削除中",
+        "updated": "写真を更新しました。",
+        "removed": "写真を削除しました。",
+        "errors": {
+          "type": "JPG、PNG、WebP、GIFのいずれかの画像を選択してください。",
+          "too-large": "縮小しても画像が{size}の上限を超えています。より小さい画像をお試しください。",
+          "decode": "画像を読み込めませんでした。別のファイルをお試しください。",
+          "encode": "画像を処理できませんでした。別のファイルをお試しください。",
+          "rejected": "このファイルは受け付けられませんでした。JPG、PNG、WebP、GIFのいずれかの画像を使用してください。",
+          "source-too-large": "画像が大きすぎて開けません。20 MB以下の画像を選択してください。",
+          "forbidden": "このアカウントの写真を変更する権限がありません。",
+          "expired": "セッションが終了しました。ページを再読み込みし、再度ログインしてやり直してください。"
+        },
+        "hint": "JPG、PNG、WebP、GIF。{size}に収まるよう縮小されます。"
+      },
+      "timezone": {
+        "label": "タイムゾーン",
+        "placeholder": "タイムゾーンを検索（例：Kolkata、UTC+05:30）",
+        "empty": "検索に一致するタイムゾーンがありません。"
+      },
+      "phone": {
+        "country": "国",
+        "countryPlaceholder": "国を検索",
+        "countryEmpty": "検索に一致する国がありません。",
+        "number": "電話番号",
+        "numberPlaceholder": "電話番号"
+      },
+      "profile": {
+        "personalInfo": "個人情報",
+        "fullName": "氏名",
+        "displayName": "表示名",
+        "displayNameHint": "チームメンバーに表示される名前です。初期値は名前（名）です。",
+        "email": "メール",
+        "changeEmail": "メールを変更",
+        "verified": "確認済み",
+        "unverified": "未確認",
+        "pendingEmail": "{email}に確認リンクを送信しました。リンクを開くとログイン用メールが変更されます。",
+        "phone": "電話",
+        "phoneHint": "任意です。国を選択してから番号を入力してください。",
+        "language": "言語",
+        "languageHint": "あなたが使用するアプリの言語です。",
+        "languageDefault": "デフォルトを使用",
+        "theme": "テーマ",
+        "themes": {
+          "paper": "ペーパー",
+          "bright": "ライト",
+          "dark": "ダーク"
+        },
+        "workspaceTimezone": "タイムゾーン",
+        "workspaceTimezoneHint": "{workspace}に適用されます。変更できるのはオーナーと管理者のみです。",
+        "saved": "プロフィールを保存しました。",
+        "errors": {
+          "fullNameRequired": "氏名を入力してください。",
+          "phoneInvalid": "選択した国に対応する有効な電話番号を入力してください。",
+          "invalid": "この値は無効です。",
+          "timezoneInvalid": "一覧からタイムゾーンを選択してください。",
+          "timezoneForbidden": "ワークスペースのタイムゾーンを変更できるのはオーナーと管理者のみです。"
+        },
+        "workspaceTag": "（ワークスペース）"
+      },
+      "emailChange": {
+        "title": "メールを変更",
+        "intro": "新しいアドレスと現在のパスワードを入力してください。新しいアドレスに確認リンクを送信します。リンクを開くまでログイン用メールは変更されません。",
+        "newEmail": "新しいメールアドレス",
+        "password": "現在のパスワード",
+        "passwordHint": "新しいアドレスがログインIDになるため、パスワードの入力が必要です。",
+        "showPassword": "パスワードを表示",
+        "hidePassword": "パスワードを非表示",
+        "cancel": "キャンセル",
+        "submit": "確認リンクを送信",
+        "sending": "送信中",
+        "errors": {
+          "invalidEmail": "有効なメールアドレスを入力してください。",
+          "same": "すでにあなたのメールアドレスです。",
+          "taken": "このメールアドレスはこのワークスペースですでに使用されています。",
+          "passwordRequired": "現在のパスワードを入力してください。",
+          "passwordWrong": "パスワードが正しくありません。"
+        }
+      },
+      "messageFooterPage": {
+        "title": "メッセージフッター",
+        "titleLead": "メッセージ",
+        "titleAccent": "フッター",
+        "description": "自動化、予約送信、チーム受信トレイの返信としてワークスペースから送信されるメッセージの末尾に付く行です。"
+      },
+      "branding": {
+        "title": "メッセージフッター",
+        "description": "自動化、予約送信、チーム受信トレイの返信から送信されるテキストおよびインタラクティブメッセージの末尾に追加される行です。承認済みテンプレートには独自のテキストがあるため適用されません。",
+        "label": "カスタムフッター（最大{max}文字）",
+        "hint": "空欄にすると、フッターなしでメッセージが送信されます。",
+        "preview": "プレビュー",
+        "sampleMessage": "こんにちは！ご依頼の情報をお送りします。",
+        "noFooter": "（フッターなし）",
+        "save": "フッターを保存",
+        "saving": "保存中",
+        "saved": "フッターを更新しました。次回の送信から適用されます。",
+        "tooLong": "フッターは最大{max}文字です。",
+        "forbidden": "フッターを変更する権限がありません。",
+        "current": "現在のフッター",
+        "currentDefault": "現在のフッター（プラットフォームのデフォルト）",
+        "planLocked": "ご利用のプランでは、送信メッセージにプラットフォームのデフォルトフッターが使われます。上位プランではカスタムフッターまたはフッターなしを選べます。",
+        "permissionLocked": "フッターを変更できるのはワークスペース管理者のみです。ここでは表示のみで、編集はできません。",
+        "upgrade": "プランを見る",
+        "upgradeTitle": "アップグレードするとプラットフォームのフッターを削除できます。",
+        "placeholder": "{name}から送信",
+        "remove": "フッターを削除",
+        "removed": "フッターを削除しました。次回の送信からフッターなしでメッセージが送信されます。"
+      },
+      "password": {
+        "title": "パスワードを変更",
+        "subtitle": "他で使用していない、強力なパスワードを設定してください。",
+        "current": "現在のパスワード",
+        "new": "新しいパスワード",
+        "newHint": "{count}文字以上。",
+        "confirm": "新しいパスワード（確認）",
+        "submit": "パスワードを更新",
+        "updating": "更新中",
+        "forcedBanner": "続行するには新しいパスワードの設定が必要です。以下から設定してください。",
+        "forcedDone": "パスワードを更新しました。おかえりなさい。",
+        "success": "パスワードを更新しました。{count, plural, =0 {この端末のログイン状態は維持されます。} other {他の#台の端末からログアウトしました。}}",
+        "errors": {
+          "currentRequired": "現在のパスワードを入力してください。",
+          "currentWrong": "パスワードが正しくありません。",
+          "tooShort": "{count}文字以上で入力してください。",
+          "tooLong": "256文字以内で入力してください。",
+          "sameAsCurrent": "現在のパスワードとは異なるパスワードを選択してください。",
+          "mismatch": "2つのパスワードが一致しません。",
+          "policy": "このパスワードはワークスペースのルールを満たしていません："
+        },
+        "rules": {
+          "min_length": "{count}文字以上で入力してください。",
+          "upper_lower": "大文字と小文字を混在させてください。",
+          "number": "数字を1つ以上含めてください。",
+          "symbol": "記号を1つ以上含めてください。",
+          "common": "このパスワードは推測されやすすぎます。"
+        },
+        "currentPlaceholder": "現在のパスワードを入力",
+        "newPlaceholder": "{count}文字以上",
+        "confirmPlaceholder": "もう一度入力",
+        "tips": {
+          "title": "パスワードのヒント",
+          "mix": "大文字・小文字、数字、記号を組み合わせてください。",
+          "reuse": "他のサイトと同じパスワードを使い回さないでください。",
+          "manager": "パスワードマネージャーの利用をおすすめします。"
+        },
+        "newHintRequires": "{rules}を含める必要があります。",
+        "requirement": {
+          "mixedCase": "大文字と小文字",
+          "number": "数字",
+          "symbol": "記号"
+        },
+        "resetLink": {
+          "title": "現在のパスワードを入力できませんか？",
+          "body": "GoogleまたはFacebookでログインした場合や、パスワードを忘れた場合は、{email}にリンクをメールで送信しますので、現在のパスワードなしで新しいパスワードを設定できます。",
+          "send": "リセットリンクをメールで送る",
+          "sending": "送信中",
+          "sent": "{email}がメールを受信できる場合、リセットリンクを送信しました。リンクを開いて新しいパスワードを設定してください。すべての端末からログアウトされ、新しいパスワードで再度ログインできます。",
+          "captchaFailed": "CAPTCHA認証を完了してから、もう一度お試しください。"
+        }
+      },
+      "passwordConfirm": {
+        "password": "現在のパスワード",
+        "required": "現在のパスワードを入力してください。",
+        "wrong": "パスワードが正しくありません。",
+        "show": "パスワードを表示",
+        "hide": "パスワードを非表示",
+        "cancel": "キャンセル",
+        "working": "処理中"
+      },
+      "mfa": {
+        "title": "2要素認証",
+        "subtitle": "ログインのたびに認証アプリのコードを求めます。",
+        "forcedBanner": "組織で2要素認証が必須になっています。引き続きアプリを使用するには設定してください。",
+        "forcedDone": "2要素認証が有効になりました。おかえりなさい。",
+        "offDescription": "2要素認証はオフです。オンにすると、パスワードが漏えいしてもアカウントを守れます。",
+        "starting": "設定を準備中",
+        "step1": "スマートフォンで認証アプリ（Google Authenticator、Microsoft Authenticator、1Passwordなど）を開きます。",
+        "step2": "QRコードをスキャンするか、セットアップキーを手入力してください。",
+        "step3": "アプリに表示される6桁のコードを入力して完了します。",
+        "qrLabel": "認証アプリ用のQRコード",
+        "manualKey": "セットアップキー",
+        "manualKeyHint": "コードをスキャンできない場合に使用します。他人に見せないでください。",
+        "copy": "コピー",
+        "copied": "コピーしました",
+        "codeLabel": "6桁のコード",
+        "codeHint": "コードは30秒ごとに変わります。",
+        "codeInvalid": "アプリに表示された6桁を入力してください。",
+        "codeWrong": "コードが正しくないか、有効期限が切れています。新しいコードが表示されるまで待って、もう一度お試しください。",
+        "enable": "オンにする",
+        "enabling": "オンにしています",
+        "expired": "この設定は期限切れです。最初からやり直して新しいコードを取得してください。",
+        "restart": "最初からやり直す",
+        "on": "オン",
+        "since": "{date}から",
+        "onDescription": "ログインのたびに、認証アプリのコードを求められます。",
+        "remaining": "{count, plural, =0 {リカバリーコードが残っていません。} other {リカバリーコードが残り#個です。}}",
+        "remainingLow": "早めに新しいコードを生成してください。",
+        "regenerate": "リカバリーコードを再生成",
+        "regenerateTitle": "リカバリーコードを再生成",
+        "regenerateDescription": "新しいコードを10個作成し、古いコードは使用できなくなります。続行するにはパスワードを入力してください。",
+        "regenerateConfirm": "コードを再生成",
+        "disable": "オフにする",
+        "disableTitle": "2要素認証をオフにする",
+        "disableDescription": "アカウントはパスワードのみで保護されます。確認のためパスワードを入力してください。",
+        "disableConfirm": "オフにする",
+        "disabledDone": "2要素認証はオフです。",
+        "codesTitleEnabled": "2要素認証が有効になりました。リカバリーコードを保存してください。",
+        "codesTitleRegenerated": "新しいリカバリーコード",
+        "scanTitle": "このQRコードをスキャン"
+      },
+      "recovery": {
+        "intro": "スマートフォンを紛失した場合、これらのコードはそれぞれ1回ずつログインに使用できます。",
+        "onlyOnce": "これらのコードは一度しか表示されません。パスワードマネージャーなど、安全な場所に保管してください。",
+        "listLabel": "リカバリーコード",
+        "copy": "コードをコピー",
+        "copied": "コピーしました",
+        "copyFailed": "ブラウザーでコピーが許可されませんでした。コードを選択して手動でコピーするか、ダウンロードしてください。",
+        "download": "ダウンロード",
+        "fileHeader": "リカバリーコード。各コードは1回のみ使用できます。",
+        "confirmSaved": "これらのコードを安全な場所に保存しました。",
+        "done": "保存しました"
+      },
+      "sessions": {
+        "title": "ログイン中の端末",
+        "subtitle": "アカウントにログインしている端末です。心当たりのない端末は取り消してください。",
+        "thisDevice": "この端末",
+        "remembered": "ログインを維持",
+        "ipUnknown": "アドレス不明",
+        "signOutOthers": "他のすべてからログアウト",
+        "signingOut": "ログアウト中",
+        "empty": "有効なセッションはありません。",
+        "confirmOneTitle": "この端末からログアウトしますか？",
+        "confirmOneBody": "{device}からログアウトされ、再度ログインするにはパスワードが必要になります。",
+        "confirmOthersTitle": "他のすべての端末からログアウトしますか？",
+        "confirmOthersBody": "他の{count, plural, other {#台の端末}}からログアウトされます。この端末はログインしたままです。",
+        "revoked": "{device}からログアウトしました。",
+        "revokedOthers": "{count, plural, =0 {ログイン中の他の端末はありませんでした。} other {#台の端末からログアウトしました。}}",
+        "columns": {
+          "device": "端末",
+          "ip": "IPアドレス",
+          "lastActive": "最終アクティブ",
+          "actions": "操作"
+        },
+        "revoke": "取り消す",
+        "showing": "{total}件中{from}～{to}件を表示",
+        "prev": "前へ",
+        "next": "次へ",
+        "lifetimes": "ログインは{session}後、または「ログインを維持」を選択した場合は{remembered}後に自動的に終了します。",
+        "idle": "選択しなかった場合は、{idle}操作がないときも終了します。"
+      },
+      "delete": {
+        "title": "アカウントを削除",
+        "warning": "ログイン情報、プロフィール、写真、端末を含むアカウントが完全に削除されます。",
+        "irreversible": "この操作は元に戻せません。",
+        "consequencesTitle": "削除後の動作",
+        "consequence1": "すべての端末からログアウトされ、このアカウントで再度ログインすることはできません。",
+        "consequence2": "ワークスペースと他のメンバーは残ります。あなたが行った作業はワークスペースに残ります。",
+        "consequence3": "アカウントが削除されたことを示す記録は監査用に保持されます。",
+        "blocked": {
+          "sole_member": {
+            "title": "あなたはこのワークスペースの唯一のメンバーです。",
+            "body": "アカウントのみを削除することはできません。ワークスペースの閉鎖はプラットフォームチームにご依頼ください。"
+          },
+          "sole_admin": {
+            "title": "あなたは唯一の管理者です。",
+            "body": "先に別のメンバーを管理者に設定してから、アカウントを削除してください。"
+          }
+        },
+        "phraseLabel": "確認のため{phrase}と入力してください",
+        "phraseHint": "大文字・小文字を含め、表示のとおりに入力してください。",
+        "password": "現在のパスワード",
+        "showPassword": "パスワードを表示",
+        "hidePassword": "パスワードを非表示",
+        "cancel": "キャンセル",
+        "submit": "アカウントを完全に削除",
+        "deleting": "削除中",
+        "errors": {
+          "phrase": "表示されているとおりに入力してください。",
+          "passwordRequired": "現在のパスワードを入力してください。",
+          "passwordWrong": "パスワードが正しくありません。"
+        },
+        "considerTitle": "削除する前にご検討ください",
+        "considerPlanLink": "無料プランにダウングレード",
+        "considerPlanRest": "して削除せずに利用を続ける方法もあります。",
+        "considerSupportLink": "サポートに問い合わせる",
+        "considerSupportRest": "問題が原因で退会をお考えの場合は、解決できるかもしれません。",
+        "reasonLabel": "退会の理由をお聞かせください（任意）",
+        "reasonHint": "この内容はこのフォーム内にとどまり、どこにも送信されません。",
+        "reasonPlaceholder": "改善点があればお聞かせください"
+      },
+      "switcher": {
+        "heading": "ワークスペース",
+        "label": "ワークスペース：{name}。ワークスペースを切り替え",
+        "switching": "ワークスペースを切り替え中",
+        "switched": "{name}に切り替えました",
+        "failed": "ワークスペースを切り替えられませんでした。もう一度お試しください。",
+        "notAvailable": "そのワークスペースには切り替えられません。",
+        "rateLimited": "試行回数が多すぎます。しばらくしてからもう一度お試しください。",
+        "rateLimitedWait": "試行回数が多すぎます。{seconds, plural, other {#秒}}後にもう一度お試しください。"
+      },
+      "mfaChallenge": {
+        "title": "本人確認",
+        "intro": "{name}では2要素認証を使用しています。切り替えるには認証アプリのコードを入力してください。",
+        "codeLabel": "6桁のコード",
+        "codeHint": "コードは30秒ごとに変わります。",
+        "codeInvalid": "アプリに表示された6桁を入力してください。",
+        "codeWrong": "コードが正しくないか、有効期限が切れています。次のコードをお試しください。",
+        "recoveryLabel": "リカバリーコード",
+        "recoveryHint": "各リカバリーコードは1回のみ使用できます。",
+        "recoveryInvalid": "リカバリーコードを入力してください。",
+        "recoveryWrong": "このリカバリーコードは無効です。",
+        "expired": "このログイン手順は期限切れです。このウィンドウを閉じて、もう一度ワークスペースを選択してください。",
+        "useRecovery": "リカバリーコードを使用する",
+        "useCode": "認証アプリのコードを使用する",
+        "cancel": "キャンセル",
+        "confirm": "確認",
+        "verifying": "確認中"
+      },
+      "banners": {
+        "dismiss": "閉じる",
+        "verifyMessage": "メールアドレス（{email}）を確認してください。登録時にリンクを送信しています。",
+        "resend": "メールを再送信",
+        "resendIn": "{seconds}秒後に再送信",
+        "resendWait": "しばらくすると再度メールをリクエストできます。",
+        "sending": "送信中",
+        "sent": "メールを送信しました。",
+        "notSent": "現在メールを送信できませんでした。",
+        "throttled": "しばらく待ってからもう一度お試しください。",
+        "alreadyVerified": "メールアドレスはすでに確認済みです。"
+      },
+      "suspended": {
+        "title": "アカウントは停止されています",
+        "greeting": "{name}さん、管理者がこのアカウントを停止しました。ログインはできますが、再開されるまでアプリのその他の機能は使用できません。",
+        "support": "誤りだと思われる場合は、ワークスペースのオーナーまたは管理者にアカウントの再開を依頼してください。",
+        "signOut": "ログアウト",
+        "checking": "確認中"
+      },
+      "verifyRequired": {
+        "title": "メールアドレスを確認してください",
+        "body": "下記のアドレスに確認リンクを送信しました。リンクを開くとワークスペースが利用可能になります。",
+        "resend": "確認メールを再送信",
+        "resendIn": "{seconds}秒後に再送信",
+        "sending": "送信中",
+        "sent": "{email}に新しいリンクを送信しました。",
+        "notSent": "現在メールを送信できませんでした。",
+        "throttled": "先ほどリンクを送信しました。しばらく待ってからもう一度お試しください。",
+        "alreadyVerified": "メールアドレスはすでに確認済みです。移動します。",
+        "signOut": "ログアウト",
+        "help": "届かない場合は、迷惑メールフォルダを確認してください。別の端末でリンクを開いた場合は、このタブに戻ると自動的に反映されます。"
+      },
+      "onboarding": {
+        "metaTitle": "ワークスペースを設定",
+        "notAllowed": {
+          "title": "設定が完了していません",
+          "body": "ワークスペースはまだ設定中です。続行するには管理者が設定を完了する必要があります。"
+        },
+        "stepper": {
+          "label": "ステップ{current}/{total}：{name}",
+          "progress": "設定の進行状況",
+          "account": "アカウント",
+          "workspace": "ワークスペース",
+          "plan": "プラン"
+        },
+        "workspace": {
+          "title": "ワークスペースを設定",
+          "subtitle": "チームに合わせてアプリを設定するための情報です。",
+          "name": "ワークスペース名",
+          "nameHint": "アプリ上部にチームに表示される、わかりやすい名前です。",
+          "namePlaceholder": "例：Bloomly Marketing",
+          "industry": "業種",
+          "industryPlaceholder": "業種を選択",
+          "industries": {
+            "ecommerce": "Eコマース",
+            "saas": "SaaS",
+            "agency": "代理店",
+            "education": "教育",
+            "healthcare": "医療",
+            "finance": "金融",
+            "travel": "旅行",
+            "hospitality": "ホスピタリティ",
+            "other": "その他"
+          },
+          "size": "チーム規模",
+          "sizePlaceholder": "チーム規模を選択",
+          "timezone": "タイムゾーン",
+          "timezoneHint": "入力して任意のタイムゾーンを検索できます。スケジュールとレポートで使用されます。",
+          "currency": "通貨",
+          "currencyHint": "メッセージウォレットの請求通貨です。インドの場合は既定でINR、その他の国はUSDです。ウォレットを使用した後は変更できません。",
+          "currencyNone": "未設定",
+          "currencyPlaceholder": "通貨を検索",
+          "currencyEmpty": "検索に一致する通貨がありません。",
+          "phone": "携帯電話番号",
+          "phoneHint": "アカウントや重要なお知らせのご連絡に使用します。",
+          "continue": "続行",
+          "saving": "保存中",
+          "errors": {
+            "nameInvalid": "ワークスペース名は2～120文字で入力してください。",
+            "timezoneRequired": "タイムゾーンを選択してください。",
+            "timezoneInvalid": "一覧からタイムゾーンを選択してください。",
+            "phoneRequired": "携帯電話番号を入力してください。",
+            "phoneInvalid": "選択した国に対応する有効な電話番号を入力してください。",
+            "invalid": "この値は無効です。",
+            "forbidden": "ワークスペースを設定できるのはワークスペース管理者のみです。",
+            "countryRequired": "国を選択してください。",
+            "countryInvalid": "一覧から国を選択してください。",
+            "currencyInvalid": "この通貨は利用できないか、請求通貨がすでに使用されています。変更するにはサポートにお問い合わせください。"
+          },
+          "country": "国",
+          "countryHint": "事業の所在地です。",
+          "countryPlaceholder": "国を検索",
+          "countryEmpty": "検索に一致する国がありません。"
+        },
+        "plan": {
+          "title": "プランを選択",
+          "intro": "各プランには月間メッセージ枠が含まれます。無料で開始するか、プランを選んでさらに多くの機能を利用できます。後から変更できます。",
+          "empty": "プランがまだ設定されていません。今は無料で開始し、後でプランを選択できます。",
+          "listLabel": "利用可能なプラン",
+          "free": "無料",
+          "back": "戻る",
+          "startFree": "無料で開始／今はスキップ",
+          "finishing": "完了処理中",
+          "welcome": "準備が整いました。ようこそ！"
+        }
+      },
+      "plans": {
+        "title": "プラン",
+        "description": "ワークスペースで利用できる機能の範囲を選択します。",
+        "currentPlan": "ご利用中のプラン",
+        "noPlan": "プランなし",
+        "trialEnds": "無料トライアルは{date}に終了",
+        "comingSoon": "プランの選択とお支払いは請求機能で提供予定ですが、今回のリリースには含まれていません。それまでは、サポートにご連絡いただければ、必要なプランにワークスペースを移行します。",
+        "contactSupport": "サポートに問い合わせる",
+        "back": "アカウントに戻る",
+        "card": {
+          "popular": "一番人気",
+          "current": "現在のプラン",
+          "free": "無料",
+          "custom": "カスタム",
+          "lifetime": "一回限り",
+          "messagesUnlimited": "メッセージ無制限",
+          "messagesLimited": "{count, number}メッセージ／月",
+          "chipsLabel": "含まれる機能",
+          "period": {
+            "days": "{count, plural, other {/ #日}}",
+            "weeks": "{count, plural, other {/ #週間}}",
+            "months": "{count, plural, other {/ #か月}}",
+            "years": "{count, plural, other {/ #年}}"
+          },
+          "chips": {
+            "analytics": "分析",
+            "automation": "自動化",
+            "ai_assistants": "AIアシスタント",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "calling": "WhatsApp通話",
+            "remove_branding": "ホワイトラベル",
+            "sales_pipeline": "営業パイプライン",
+            "appointment_booking": "予約",
+            "chatbot_widgets": "チャットボットウィジェット",
+            "wa_storefront": "WhatsAppカタログ",
+            "inbox_sla": "受信トレイSLA",
+            "inbox_routing": "受信トレイのルーティング",
+            "waba_calling": "WhatsApp通話",
+            "inbox_kanban": "受信トレイのカンバン",
+            "team_performance": "チームのパフォーマンス",
+            "scheduled_messages": "予約メッセージ",
+            "whatsapp_warmer": "WhatsAppウォーマー",
+            "marketplace": "マーケットプレイス",
+            "lead_sources": "リードソース",
+            "team_chat": "チームチャット",
+            "public_api": "公開API",
+            "outbound_webhooks": "送信Webhook",
+            "storefront_builder": "ストアフロントビルダー",
+            "invoicing": "請求書発行",
+            "forms_and_links": "フォームとリンク",
+            "extra_channels": "Telegram、Facebook、Instagram",
+            "form_builder": "フォーム",
+            "waba_groups": "WhatsAppグループ"
+          },
+          "cta": {
+            "continueFree": "無料で続ける",
+            "talkToSales": "営業に問い合わせる",
+            "upgrade": "{name}にアップグレード",
+            "downgradeUnavailable": "ダウングレードはできません",
+            "downgradeHint": "オンラインでのダウングレードはできません。下位プランへの変更はサポートにお問い合わせください。",
+            "working": "処理中"
+          }
+        }
+      },
+      "mailFailure": {
+        "not_configured": "このプラットフォームではまだメール送信が設定されていません。管理者にお問い合わせください。",
+        "auth_failed": "メールサーバーにログインを拒否されました。管理者にメール設定の確認を依頼してください。",
+        "connection_refused": "メールサーバーが接続を受け付けませんでした。後でもう一度お試しいただくか、管理者にお問い合わせください。",
+        "timeout": "メールサーバーの応答に時間がかかりすぎました。すぐにもう一度お試しいただけます。",
+        "transport_error": "メールをメールサーバーに渡せませんでした。すぐにもう一度お試しいただけます。",
+        "unknown": "原因不明の理由でメールを送信できませんでした。すぐにもう一度お試しいただけます。"
+      }
+    }
+  }
+}

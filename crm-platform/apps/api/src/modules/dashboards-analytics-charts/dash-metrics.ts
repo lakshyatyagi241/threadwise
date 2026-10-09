@@ -92,8 +92,8 @@ export function funnelOf(t: DashTotals, previous?: DashTotals): DashFunnel {
     },
     activity: {
       inbound: t.replies,
-      respondingContacts: t.contactsReplied,
-      repliesPerContact: repliesPerContact(t.replies, t.contactsReplied),
+      respondingContacts: t.repliers,
+      repliesPerContact: repliesPerContact(t.replies, t.repliers),
     },
     replyRate: contactReplyRate(t),
     comparison: replyRateComparison(t, previous),

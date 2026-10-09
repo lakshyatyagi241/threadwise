@@ -253,7 +253,8 @@
         "on": "On",
         "off": "Off",
         "none": "None"
-      }
+      },
+      "colorSwatch": "{label} (swatch)"
     },
     "whatsappBuilder": {
       "crumb": "WhatsApp Widget",

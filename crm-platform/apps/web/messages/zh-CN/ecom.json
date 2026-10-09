@@ -1,0 +1,574 @@
+{
+  "ecom": {
+    "nav": {
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce"
+    },
+    "common": {
+      "dismiss": "忽略",
+      "integrations": "集成",
+      "back": "返回",
+      "docs": "查看文档",
+      "loadError": "无法加载此页面。请重试。",
+      "support": "联系支持",
+      "integration": "集成",
+      "notConnected": "未连接",
+      "setupSteps": "设置步骤",
+      "needHelp": "需要帮助？",
+      "none": "无",
+      "optional": "可选",
+      "yes": "是"
+    },
+    "connect": {
+      "shopify": {
+        "title": "连接",
+        "accent": "Shopify",
+        "intro": "连接您的 Shopify 商店，订单、履约、退款和购物车事件将自动触发 WhatsApp 消息，仪表盘也会显示您的订单、商品和客户数量。",
+        "step1": "管理员启用 Shopify 应用",
+        "step2": "输入您的商店域名",
+        "step3": "在 Shopify 上批准权限范围",
+        "step4": "将事件映射到 WhatsApp 模板",
+        "help": "连接后 Webhook 会自动安装，无需手动操作。凭据卡住了？",
+        "disabledTitle": "Shopify 尚未启用",
+        "disabledBody": "管理员需要先添加 Shopify 应用凭据，任何工作区才能连接商店。完成后，下方表单将可用。",
+        "formStep": "步骤 2",
+        "formTitle": "商店域名",
+        "urlLabel": "Shopify 商店 URL",
+        "urlPlaceholder": "my-store",
+        "urlSuffix": ".myshopify.com",
+        "urlHint": "只需填写店铺标识，或粘贴完整网址，我们会自动规范化。",
+        "webhookLabel": "Webhook URL · 连接后自动配置",
+        "cancel": "取消",
+        "continue": "继续前往 Shopify",
+        "continuing": "正在跳转…",
+        "guideKicker": "设置指南",
+        "guideTitle": "接下来会发生什么",
+        "guide1": "我们会将您重定向到 Shopify，以授权所请求的权限范围。",
+        "guide2": "Shopify 会将带有 HMAC 签名的永久访问令牌返回给我们。",
+        "guide3": "将自动为您的店铺注册 {count} 个事件的 Webhook。",
+        "guide4": "您将返回此处，把每个事件映射到 WhatsApp 模板。",
+        "scopes": "请求的权限范围",
+        "failed": "无法启动与 Shopify 的连接。",
+        "connected": "Shopify 已连接。",
+        "returnedError": "Shopify 未能连接。"
+      },
+      "woocommerce": {
+        "title": "连接",
+        "accent": "WooCommerce",
+        "intro": "将 WooCommerce 订单、退款、商品和客户事件拉取到聊天会话中。无需离开 CRM，即可在 WhatsApp 上确认订单、推送发货动态并挽回购物车。",
+        "step1": "管理员启用 WooCommerce",
+        "step2": "在 WC 后台生成 API 密钥",
+        "step3": "在下方粘贴店铺网址和密钥",
+        "step4": "将事件映射到 WhatsApp 模板",
+        "help": "连接后 Webhook 会自动安装，无需在 WC 中手动操作。密钥遇到问题？",
+        "disabledTitle": "尚未启用 WooCommerce",
+        "disabledBody": "管理员必须先启用 WooCommerce 集成，工作区才能连接店铺。",
+        "formStep": "第 2 步",
+        "formTitle": "店铺凭据",
+        "urlLabel": "店铺网址",
+        "urlHint": "基本认证需要 HTTPS。我们会自动检测 WP REST。",
+        "keyLabel": "Consumer Key",
+        "secretLabel": "Consumer Secret",
+        "secretHint": "加密存储，仅用于调用您店铺的 REST API。",
+        "webhookLabel": "Webhook URL · 连接后自动配置",
+        "test": "测试连接",
+        "testing": "正在测试…",
+        "connect": "连接店铺",
+        "connecting": "正在连接…",
+        "guideKicker": "如何生成密钥",
+        "guideTitle": "在您的 WooCommerce 后台",
+        "g1": "打开 WooCommerce → 设置 → 高级 → REST API。",
+        "g2": "点击“添加密钥”，填写类似“CRM”的描述。",
+        "g3": "选择一个用户（管理员即可），并将权限设为读/写。",
+        "g4": "点击“生成 API 密钥”。请复制两个密钥，密钥只会显示一次。",
+        "g5": "将它们粘贴到左侧表单，然后点击“测试连接”。",
+        "httpsTitle": "仅限 HTTPS",
+        "httpsBody": "基本认证需要 HTTPS。如果您的店铺仅支持 HTTP，请先安装 SSL 证书（Let's Encrypt 免费）。",
+        "connected": "WooCommerce 已连接。",
+        "failed": "连接失败。",
+        "networkError": "网络错误。"
+      }
+    },
+    "shell": {
+      "status": {
+        "active": "已启用",
+        "error": "错误",
+        "other": "{status}"
+      },
+      "plan": "套餐：",
+      "store": "店铺",
+      "related": "相关",
+      "allIntegrations": "全部集成",
+      "disconnect": "断开连接",
+      "disconnectTitle": "断开 {name}？",
+      "disconnectShopify": "这将删除已注册的 Webhook，但会保留您的设置。",
+      "disconnectWoo": "这将移除已注册的 Webhook。",
+      "disconnectDone": "店铺已断开连接。",
+      "healthy": "Webhook 正常",
+      "noRecent": "暂无最近事件",
+      "lastEvent": "最近事件：",
+      "triggerShopify": "在 Shopify 中触发一个操作，它就会显示在这里。",
+      "triggerWoo": "在 WooCommerce 中触发一个订单，它就会显示在这里。",
+      "sync": "立即同步",
+      "syncing": "同步中…",
+      "syncQueued": "同步已开始，新数据稍后显示。",
+      "syncFailed": "同步失败。",
+      "tabs": {
+        "overview": "概览",
+        "orders": "订单",
+        "products": "商品",
+        "offers": "发送优惠",
+        "customers": "客户",
+        "events": "自动化",
+        "analytics": "分析",
+        "invoices": "发票",
+        "logs": "动态",
+        "settings": "设置"
+      },
+      "offersWoo": "优惠",
+      "desc": {
+        "shopify": {
+          "overview": "店铺实时快照，数据同步自 Shopify。",
+          "orders": "同步自 Shopify 的订单。",
+          "products": "浏览已同步的商品目录，可通过 WhatsApp 发送任意商品或推送优惠。",
+          "offers": "选择商品和优惠券，选定客户细分，并通过 WhatsApp 群发优惠。",
+          "customers": "从 Shopify 同步到您联系人中的客户。",
+          "events": "营销自动化：开启一项，选择模板，即可在对应的店铺事件发生时自动触发。",
+          "analytics": "此店铺的收入、订单趋势和消息表现。",
+          "logs": "此店铺的 Webhook 投递日志。",
+          "settings": "管理连接：重新同步、查看权限范围或断开连接。",
+          "invoices": "为您的 Shopify 订单开具的发票。"
+        },
+        "woocommerce": {
+          "overview": "从您的 WooCommerce REST API 拉取的实时快照。",
+          "orders": "从店铺获取的最近 10 个订单。",
+          "products": "目录中最新的商品。",
+          "offers": "群发商品优惠，或挽回流失客户。",
+          "customers": "按最近下单时间排序的客户账户。",
+          "events": "开启或关闭订单、COD、购物车和库存自动化。",
+          "analytics": "此店铺的收入、消息量和 COD 影响。",
+          "logs": "此店铺的 Webhook 投递日志。",
+          "settings": "连接详情：重新验证或断开连接。",
+          "invoices": "为您的 WooCommerce 订单开具的发票。"
+        }
+      },
+      "loading": "正在加载店铺…",
+      "flash": {
+        "success": "完成。",
+        "error": "出了点问题。"
+      },
+      "cancel": "取消"
+    },
+    "overview": {
+      "revenueRecent": "收入（近期）",
+      "revenueRecentHint": "来自近期已同步的订单",
+      "ordersTotal": "订单总数",
+      "ordersMirrorHint": "已同步到 CRM",
+      "products": "商品",
+      "productsHint": "已同步的目录规模",
+      "customers": "客户",
+      "activeAutomations": "{count} 个已启用的自动化",
+      "revenue30": "收入 · 30 天",
+      "revenue30Hint": "来自 WC 销售报告",
+      "orders30": "订单 · 30 天",
+      "ordersAllTime": "历史累计共 {count} 个",
+      "customersNew": "30 天内新增 {count} 个",
+      "itemsSold": "售出商品 · 30 天",
+      "recentOrders": "最近订单",
+      "viewAll": "查看全部 →",
+      "noOrders": "暂无订单。请点击“立即同步”。",
+      "recentActivity": "最近的 Webhook 动态",
+      "noActivity": "尚未收到任何 Webhook 事件。"
+    },
+    "orders": {
+      "order": "订单",
+      "customer": "客户",
+      "status": "状态",
+      "total": "总计",
+      "placed": "下单时间",
+      "none": "未找到订单。"
+    },
+    "products": {
+      "search": "搜索商品…",
+      "offers": "特别优惠",
+      "catalog": "发送商品目录 →",
+      "newArrivals": "新品上架",
+      "all": "全部商品",
+      "none": "暂无商品。请连接店铺或点击“立即同步”。",
+      "noImage": "无图片",
+      "save": "立省 {pct}%",
+      "send": "发送",
+      "offer": "优惠",
+      "noMatch": "没有匹配的商品。",
+      "wooNone": "未找到商品。",
+      "inStock": "有货",
+      "outOfStock": "缺货"
+    },
+    "offers": {
+      "choose": "选择商品",
+      "selected": "已选 {count} 个",
+      "noProducts": "尚未同步任何商品。",
+      "template": "消息模板",
+      "pickTemplate": "选择模板",
+      "tokens": "可用变量：",
+      "segment": "发送给细分",
+      "pickGroup": "选择联系人分组",
+      "coupon": "优惠券（可选）",
+      "noCoupon": "无优惠券",
+      "couponPercent": "{amount}%",
+      "send": "发送优惠",
+      "sending": "发送中…",
+      "pickTemplateFirst": "请先选择模板。",
+      "pickSegmentFirst": "请先选择细分。",
+      "note": "仅会向细分中已订阅的联系人发送消息。WABA 发送需要已审核通过的模板；非官方 API 会将其渲染为文本加按钮。",
+      "queued": "已为 {total} 位联系人排队。完成后数量将显示在“动态”标签页。",
+      "failed": "发送失败。",
+      "wooTitle": "商品优惠群发",
+      "wooIntro": "向细分中每位已订阅的联系人发送已审核通过的模板，并插入商品和优惠券。",
+      "wooTemplate": "模板",
+      "choose2": "选择",
+      "wooSegment": "细分（联系人分组）",
+      "wooProduct": "主推商品",
+      "wooCoupon": "优惠券代码",
+      "wooCouponPlaceholder": "SAVE10",
+      "winTitle": "智能细分群发",
+      "winIntro": "按订单历史定位客户：最近下单时间（召回）、订单数和总消费（VIP）。会跳过已退订的联系人。",
+      "winLast": "最近一次下单",
+      "winAny": "不限时间",
+      "winDays": "> {days} 天前",
+      "winMonths": "> 6 个月",
+      "winYear": "> 1 年",
+      "winMinOrders": "最少订单数",
+      "winAnyOrders": "不限",
+      "winMinSpend": "最低消费（{currency}）",
+      "winTemplate": "模板",
+      "winPick": "选择",
+      "winCoupon": "优惠券",
+      "winNone": "无",
+      "winSend": "发送召回",
+      "winConfirm": "确定向细分中的所有人发送此群发吗？",
+      "winQueued": "已为 {total} 位流失客户排队。完成后数量将显示在“动态”标签页。",
+      "wooWinTitle": "智能细分群发",
+      "wooWinIntro": "按订单历史定位：召回流失买家，或回馈最优质的客户。",
+      "wooLapsed": "流失天数 >",
+      "wooWinNote": "天数为 0 表示不限时间（纯细分）。消费金额按店铺币种计算。已退订的联系人始终会被跳过。",
+      "wooCouponPlaceholder2": "COMEBACK15",
+      "wooWinSend": "发送群发",
+      "optional": "可选",
+      "none": "无",
+      "cancel": "取消"
+    },
+    "customers": {
+      "name": "姓名",
+      "email": "邮箱",
+      "phone": "电话",
+      "orders": "订单",
+      "spent": "消费",
+      "none": "尚未获取任何客户。",
+      "noneWoo": "暂无客户。"
+    },
+    "events": {
+      "noTemplates": "您还没有已审核通过的 WhatsApp 模板。请先在“模板”中创建一个，才能开启自动化。",
+      "templatesLink": "模板",
+      "sendFrom": "发送号码",
+      "sendFromHint": "由哪个已连接的号码发送这些自动化消息。",
+      "auto": "自动：任意已连接号码",
+      "fired": "已触发 {count} 次",
+      "logged": "已记录 {count} 次",
+      "template": "模板",
+      "pickTemplate": "选择模板",
+      "noneOption": "无",
+      "sendTo": "发送给",
+      "customer": "客户",
+      "admin": "仅管理员",
+      "both": "两者",
+      "adminNumber": "管理员号码",
+      "delay": "延迟",
+      "on": "开",
+      "immediate": "立即",
+      "min": "{n} 分钟",
+      "hour": "{n} 小时",
+      "day": "{n, plural, other {# 天}}",
+      "mapTitle": "将模板变量映射到订单字段",
+      "param": "参数 {n}",
+      "blank": "— 留空 —",
+      "field": {
+        "name": "客户姓名",
+        "first_name": "名字",
+        "order_name": "订单号（如 #1001）",
+        "order_number": "订单编号",
+        "total": "总额加币种",
+        "total_price": "总额（仅金额）",
+        "currency": "币种",
+        "email": "客户邮箱",
+        "store_name": "店铺名称",
+        "financial_status": "支付状态",
+        "fulfillment_status": "履约状态"
+      },
+      "advanced": "高级 · 变量顺序",
+      "advancedHint": "以逗号分隔的字段，会按顺序映射到模板中带编号的占位符。留空则使用智能默认值：姓名、订单、总额。",
+      "advancedPlaceholder": "name, first_name, order_number, order_name, total, currency, order_url, tracking_number, tracking_url",
+      "save": "保存自动化",
+      "saving": "保存中…",
+      "saved": "✓ 已保存",
+      "saveFailed": "保存失败",
+      "needTemplate": "请为每个开启的自动化选择模板。"
+    },
+    "autoGroups": {
+      "lifecycle": {
+        "name": "订单生命周期",
+        "desc": "事务性通知，在店铺事件发生时自动触发。"
+      },
+      "recovery": {
+        "name": "收入挽回",
+        "desc": "挽回流失的销售。"
+      },
+      "marketing": {
+        "name": "生命周期营销",
+        "desc": "拓展并留住客户。"
+      }
+    },
+    "auto": {
+      "shopify": {
+        "orders_create": {
+          "name": "订单确认",
+          "desc": "客户下单的那一刻向其致谢。"
+        },
+        "orders_paid": {
+          "name": "已收款",
+          "desc": "付款完成后发送确认。"
+        },
+        "orders_fulfilled": {
+          "name": "已发货 / 派送中",
+          "desc": "发送发货通知，使用 '{{'tracking_url'}}' 可附上实时物流追踪链接。"
+        },
+        "order_delivered": {
+          "name": "已送达",
+          "desc": "确认送达（如果模板包含，则会邀请评价）。快递标记为已送达时触发。"
+        },
+        "orders_cancelled": {
+          "name": "订单已取消",
+          "desc": "告知客户订单已被取消。"
+        },
+        "refunds_create": {
+          "name": "已退款",
+          "desc": "确认退款已处理。"
+        },
+        "orders_updated": {
+          "name": "订单已更新",
+          "desc": "现有订单发生任何变更时触发。"
+        },
+        "checkouts_create": {
+          "name": "弃购购物车 · 第 1 步",
+          "desc": "结账被放弃后立即触发，可加入 '{{'checkout_url'}}' 引导客户回来。"
+        },
+        "cart_step2": {
+          "name": "弃购购物车 · 第 2 步",
+          "desc": "定时跟进（设置延迟，例如 1 小时）。客户购买后自动取消。"
+        },
+        "cart_step3": {
+          "name": "弃购购物车 · 第 3 步",
+          "desc": "最后一次提醒（例如 24 小时后），在模板中加入优惠券以促成成交。"
+        },
+        "cod_confirm": {
+          "name": "COD 订单确认",
+          "desc": "请货到付款的客户回复“是/否”确认，减少虚假订单和退货（RTO）。"
+        },
+        "cod_prepaid": {
+          "name": "COD 转预付优惠",
+          "desc": "引导 COD 客户立即在线支付（在模板中使用 '{{'order_url'}}' 并附折扣），减少退货、加快回款。"
+        },
+        "stock_back": {
+          "name": "到货提醒",
+          "desc": "咨询过售罄商品的客户，会在该商品补货时自动收到通知。"
+        },
+        "customers_create": {
+          "name": "欢迎新客户",
+          "desc": "热情问候首次购买的客户。"
+        },
+        "customers_update": {
+          "name": "客户已更新",
+          "desc": "客户资料发生变更时触发。"
+        },
+        "products_update": {
+          "name": "商品已更新",
+          "desc": "价格或库存变动时的内部触发。"
+        }
+      },
+      "woocommerce": {
+        "order_created": {
+          "name": "订单已下达",
+          "desc": "新订单进来的那一刻发送。"
+        },
+        "order_processing": {
+          "name": "订单已确认",
+          "desc": "已收到付款，订单正在备货。"
+        },
+        "order_completed": {
+          "name": "订单已送达",
+          "desc": "订单在 WooCommerce 中被标记为完成。"
+        },
+        "order_on_hold": {
+          "name": "订单挂起",
+          "desc": "等待付款或库存，请随时告知买家。"
+        },
+        "order_cancelled": {
+          "name": "订单已取消",
+          "desc": "订单已被取消。"
+        },
+        "order_refunded": {
+          "name": "订单已退款",
+          "desc": "已发起退款。"
+        },
+        "cod_confirm": {
+          "name": "COD 二次确认",
+          "desc": "发货前请货到付款买家回复“是/否”确认，这是降低 RTO 的第一要招。"
+        },
+        "cod_prepaid": {
+          "name": "COD 转预付提醒",
+          "desc": "向 COD 买家提供在线支付链接（模板可携带 '{{'order_url'}}' 和优惠激励）。"
+        },
+        "checkout_created": {
+          "name": "弃购购物车 · 第 1 步",
+          "desc": "开始结账但未下单时的第一次提醒。需要配套的 WooCommerce 插件。"
+        },
+        "cart_step2": {
+          "name": "弃购购物车 · 第 2 步",
+          "desc": "在下方延迟之后的定时跟进。"
+        },
+        "cart_step3": {
+          "name": "弃购购物车 · 第 3 步",
+          "desc": "最后提醒，在模板中加入折扣。"
+        },
+        "stock_back": {
+          "name": "到货通知",
+          "desc": "售罄商品补货时，通知候补名单上的所有人。"
+        },
+        "subscription_payment_failed": {
+          "name": "订阅扣款催缴",
+          "desc": "订阅续费扣款失败时，发送一键“更新支付方式”链接。需要配套的 WooCommerce 插件。"
+        },
+        "customer_created": {
+          "name": "欢迎新客户",
+          "desc": "客户首次在店铺注册时向其问候。"
+        },
+        "review_reward": {
+          "name": "评价解锁优惠券",
+          "desc": "当近期买家回复正面评分（4–5 分或“很棒”）时，自动发送此奖励模板，请在其中放入优惠券。可搭配请买家评分的“订单已送达”模板使用。"
+        }
+      }
+    },
+    "analytics": {
+      "revenue": "收入",
+      "orders": "订单",
+      "avgOrder": "平均订单额",
+      "messagesSent": "已发送消息",
+      "offersSent": "已发送优惠",
+      "codProtected": "已保住的 COD 收入",
+      "codConfirmed": "已确认 {count} 个 COD 订单",
+      "rtoAvoided": "已避免的 RTO",
+      "codCancelled": "已拦截 {count} 个虚假/COD 订单",
+      "recovery": "挽回消息",
+      "recoveryHint": "购物车 / 优惠 / 召回 / 库存",
+      "avgValue": "平均订单价值",
+      "trend": "收入 · 近 14 天",
+      "perf": "自动化表现",
+      "event": "事件",
+      "fired": "已触发",
+      "noActivity": "暂无自动化动态。",
+      "revenueMirrored": "收入 · 镜像",
+      "ordersSynced": "已同步 {count} 个订单",
+      "perOrder": "每单",
+      "offerBroadcasts": "{count} 次优惠群发",
+      "recoverySends": "挽回发送",
+      "recoverySendsHint": "COD / 购物车 / 库存 / 优惠",
+      "wouldBeRto": "提前取消的潜在 RTO",
+      "activeAutomations": "已启用的自动化",
+      "firingOn": "在店铺事件发生时触发"
+    },
+    "logs": {
+      "processed": "已处理",
+      "sent": "已发送",
+      "skipped": "已跳过",
+      "failed": "失败",
+      "event": "事件",
+      "recipient": "接收人",
+      "status": "状态",
+      "when": "时间",
+      "none": "此店铺尚未收到任何 Webhook 事件。"
+    },
+    "settings": {
+      "storeUrl": "店铺网址",
+      "connectedAt": "连接时间",
+      "lastVerified": "最近验证",
+      "scopes": "已授予的权限范围",
+      "wooVersion": "WooCommerce 版本",
+      "webhookUrl": "Webhook URL",
+      "registered": "已注册的 Webhook",
+      "registeredCount": "{count, plural, other {# 个有效订阅}}",
+      "copy": "复制",
+      "copied": "已复制",
+      "plugin": {
+        "title": "WordPress 插件",
+        "body": "在您的店铺安装这个小插件，即可在订单生成前挽回弃购购物车，并处理订阅付款失败和自定义订单状态。",
+        "step1": "请在下方下载插件，它是专为此店铺生成的。",
+        "step2": "在 WordPress 中依次打开“插件”“安装插件”“上传插件”，选择 zip 文件并启用。",
+        "step3": "请确保您的网站运行 WP-Cron。插件每 5 分钟检查一次闲置购物车。",
+        "download": "下载插件（.zip）",
+        "preparing": "正在准备插件…",
+        "started": "插件已下载。",
+        "secretNote": "该文件包含此店铺的密钥，请妥善保密。",
+        "forbidden": "您没有下载插件的权限。",
+        "failed": "无法下载插件，请重试。"
+      }
+    },
+    "embedded": {
+      "title": "Shopify",
+      "connected": "已连接",
+      "notConnected": "未连接",
+      "store": "店铺",
+      "plan": "Shopify 套餐",
+      "lastVerified": "最近验证",
+      "openApp": "打开应用",
+      "openToConnect": "打开应用以连接",
+      "invalid": "Shopify 会话无效。请从 Shopify 后台重新加载应用。",
+      "off": "此安装未启用 Shopify 集成。请联系支持人员。",
+      "error": "出了点问题。请从 Shopify 后台重新加载应用。"
+    },
+    "invoices": {
+      "policyTitle": "自动发票",
+      "autoInvoice": "自动为此店铺的订单开具发票",
+      "autoInvoiceHint": "每张发票会通过 WhatsApp 排队发送给买家；没有电话号码时则通过邮件发送。默认关闭，需手动开启。",
+      "trigger": "订单达到以下状态时开票",
+      "on_placed": "已下单",
+      "on_paid": "已付款",
+      "on_fulfilled": "已履约",
+      "saved": "发票设置已保存。",
+      "saveFailed": "无法保存发票设置。",
+      "policyLoadFailed": "无法加载发票设置。",
+      "listTitle": "此店铺的发票",
+      "number": "编号",
+      "buyer": "买家",
+      "type": "类型",
+      "status": "状态",
+      "total": "总计",
+      "issued": "开具时间",
+      "draft": "草稿",
+      "tax_invoice": "税务发票",
+      "receipt": "收据",
+      "proforma": "形式发票",
+      "status_draft": "草稿",
+      "status_issued": "已开具",
+      "status_partially_paid": "部分付款",
+      "status_paid": "已付款",
+      "status_overdue": "已逾期",
+      "status_void": "已作废",
+      "loading": "正在加载发票…",
+      "none": "此店铺暂无发票。开启上方的自动发票后，下一个已付款订单将自动开票。",
+      "error": "无法加载发票。",
+      "retry": "重试",
+      "forbidden": "您无权访问发票。",
+      "viewAll": "打开全部发票"
+    }
+  }
+}

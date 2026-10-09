@@ -1,0 +1,316 @@
+{
+  "aiTraining": {
+    "nav": {
+      "title": "Entraînement IA"
+    },
+    "common": {
+      "dismiss": "Ignorer"
+    },
+    "paywall": {
+      "kicker": "Forfait",
+      "title": "L’entraînement IA n’est pas inclus dans votre forfait",
+      "body": "Votre forfait n’inclut pas les assistants IA. Passez à un forfait supérieur pour débloquer cette fonctionnalité.",
+      "upgrade": "Voir les forfaits"
+    },
+    "responder": {
+      "title": "Qui répond sur votre WhatsApp ?",
+      "body": "Si vous activez le Business Agent de Meta, notre IA et les réponses automatiques par mot-clé se mettent en retrait pour cet espace de travail, afin que votre client ne reçoive jamais deux réponses au même message.",
+      "metaCheck": "J’utilise Meta Business Agent",
+      "mode": {
+        "threadwise_only": {
+          "label": "Notre IA répond",
+          "desc": "Notre IA et les réponses automatiques par mot-clé gèrent les chats (par défaut)."
+        },
+        "meta_agent_only": {
+          "label": "L’agent Meta répond",
+          "desc": "Le Business Agent de Meta répond. Nous enregistrons seulement la conversation, notre IA reste silencieuse."
+        },
+        "meta_agent_then_handoff": {
+          "label": "Agent Meta, puis transfert",
+          "desc": "Meta gère les premières questions. S’il escalade, le chat arrive dans votre boîte de réception d’équipe pour une personne. Notre IA automatique reste silencieuse."
+        }
+      },
+      "save": "Enregistrer",
+      "hint": "L’agent de Meta nécessite un numéro WhatsApp Business (Cloud API). Les numéros sur le moteur non officiel utilisent toujours notre IA.",
+      "readOnly": "Vous pouvez voir ce paramètre mais pas le modifier.",
+      "saved": "Mode de réponse IA enregistré.",
+      "saveFailed": "Impossible d’enregistrer le mode de réponse.",
+      "loadError": "Impossible de charger le mode de réponse.",
+      "retry": "Réessayer",
+      "loading": "Chargement du mode de réponse"
+    },
+    "list": {
+      "tip": "Astuce",
+      "tipBody": "Les agents intelligents alimentent vos <link>widgets de chatbot</link> et l’étape IA de vos flux. Le créateur en cinq étapes vous guide à travers l’identité, la personnalité, le cerveau, la sécurité et les connaissances.",
+      "statusViews": "Statut de l’agent",
+      "view": {
+        "all": "Tous les agents",
+        "active": "Actif",
+        "paused": "En pause"
+      },
+      "status": {
+        "all": "Tous",
+        "active": "Actifs",
+        "paused": "En pause"
+      },
+      "knowledgeTip": "Astuce connaissances",
+      "knowledgeTipBody": "Une seule question-réponse de FAQ suffit souvent. Quelques URL de pages d’aide couvrent la plupart des questions de support, inutile de charger tout votre site.",
+      "workspace": "Espace de travail",
+      "title": "Entraînement",
+      "titleAccent": "IA",
+      "intro": "Créez des agents intelligents qui parlent avec la voix de votre marque. Entraînez-les avec des URL, du texte, des paires question-réponse et des fichiers.",
+      "activePill": "{count} actifs",
+      "newAgent": "Nouvel agent intelligent",
+      "card": {
+        "total": "Total des agents",
+        "knowledge": "Entrées de connaissances",
+        "avg": "Moy. / agent",
+        "health": "État",
+        "activeHint": "{count} actifs",
+        "indexedHint": "{count} indexées",
+        "entriesUnit": "entrées"
+      },
+      "health": {
+        "healthy": "en bonne santé",
+        "empty": "vide",
+        "attention": "attention"
+      },
+      "col": {
+        "agent": "Agent",
+        "provider": "Fournisseur",
+        "knowledge": "Connaissances",
+        "tone": "Ton",
+        "updated": "Mis à jour",
+        "actions": "Actions"
+      },
+      "search": "Rechercher par nom ou slug…",
+      "loading": "Chargement des agents",
+      "loadError": "Impossible de charger les agents",
+      "retry": "Réessayer",
+      "emptyTitle": "Aucun agent intelligent pour le moment",
+      "emptyBody": "Créez votre premier agent. Le créateur en cinq étapes vous guide à travers l’identité, la personnalité, le cerveau, la sécurité et les connaissances dont il a besoin.",
+      "buildAgent": "Créer un agent intelligent",
+      "noMatch": "Aucun agent ne correspond à votre recherche ou à votre filtre de statut.",
+      "entries": "{count, plural, one {# entrée} other {# entrées}}",
+      "edit": "Modifier l’agent",
+      "editNamed": "Modifier {name}",
+      "duplicate": "Dupliquer l’agent",
+      "duplicateNamed": "Dupliquer {name}",
+      "deleteAgent": "Supprimer l’agent",
+      "deleteNamed": "Supprimer {name}",
+      "deleteTitle": "Supprimer « {name} » ?",
+      "deleteBody": "L’agent et ses entrées de connaissances seront supprimés. Les widgets et flux qui l’utilisent cesseront de répondre avec cet agent jusqu’à ce que vous en choisissiez un autre.",
+      "delete": "Supprimer l’agent",
+      "keep": "Conserver",
+      "deleted": "Agent supprimé.",
+      "deleteFailed": "Échec de la suppression : {reason}",
+      "duplicateFailed": "Impossible de dupliquer l’agent.",
+      "networkError": "erreur réseau",
+      "showing": "Affichage de",
+      "of": "sur",
+      "agentsCount": "{count, plural, one {# agent} other {# agents}}",
+      "loadMore": "Charger plus"
+    },
+    "builder": {
+      "back": "Retour à l’entraînement IA",
+      "crumb": "Entraînement IA",
+      "crumbNew": "Nouveau",
+      "crumbEdit": "Modifier",
+      "titleNew": "Créer un agent",
+      "titleEdit": "Modifier l’agent",
+      "titleAccent": "intelligent",
+      "stateSaved": "Enregistré",
+      "stateDraft": "Brouillon / non enregistré",
+      "saveDraft": "Enregistrer le brouillon",
+      "stepper": "Étapes du créateur",
+      "steps": {
+        "identity": "Identité",
+        "persona": "Personnalité",
+        "brain": "Cerveau",
+        "safety": "Sécurité",
+        "knowledge": "Connaissances"
+      },
+      "stepOf": "Étape {n} sur {total}",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "finish": "Terminer et fermer",
+      "loading": "Chargement de l’agent",
+      "loadError": "Impossible de charger l’agent",
+      "notFoundTitle": "Agent introuvable",
+      "notFoundBody": "Cet agent n’existe pas dans votre espace de travail, ou il a été supprimé.",
+      "backToList": "Retour à l’entraînement IA",
+      "saved": "Agent enregistré.",
+      "saveFailed": "Échec de l’enregistrement. Vérifiez les champs et réessayez.",
+      "conflict": "Cet agent a été modifié ailleurs. Rechargez la page pour obtenir la dernière version, puis enregistrez à nouveau.",
+      "problem": {
+        "name": "Donnez un nom à votre assistant.",
+        "greeting": "Rédigez une phrase d’accroche.",
+        "model": "Choisissez un modèle.",
+        "tokens": "La longueur de réponse doit être comprise entre 50 et 4000 jetons.",
+        "temperature": "La créativité doit être comprise entre 0 et 2."
+      },
+      "identity": {
+        "title": "Identité de l’agent",
+        "required": "obligatoire",
+        "name": "Nom d’affichage de l’agent",
+        "namePlaceholder": "ex. Concierge tarifs",
+        "nameHint": "Pour vos dossiers. Les visiteurs ne voient pas ce libellé.",
+        "status": "Statut de déploiement",
+        "statusActive": "Actif : choisissez cet agent dans les widgets et les flux",
+        "statusPaused": "En pause : masqué dans les sélecteurs",
+        "statusHint": "Les agents en pause restent dans la liste mais ne peuvent pas être associés à de nouveaux widgets.",
+        "language": "Langue préférée",
+        "languageHint": "Code ISO 639-1. S’adapte à la langue du visiteur lorsqu’elle diffère.",
+        "tone": "Ton de conversation",
+        "toneHint": "Définit le style d’écriture, indépendamment de la description de la personnalité.",
+        "tones": {
+          "helpful": "Serviable · calme et précis",
+          "friendly": "Amical · chaleureux et décontracté",
+          "formal": "Formel · neutre et rigoureux",
+          "playful": "Enjoué · léger et spirituel"
+        }
+      },
+      "persona": {
+        "title": "Personnalité et phrase d’accroche",
+        "tag": "contenu",
+        "greeting": "Phrase d’accroche",
+        "greetingPlaceholder": "Bonjour ! Je suis là pour vous aider. Posez-moi vos questions sur les tarifs ou les forfaits.",
+        "greetingHint": "Visible par les visiteurs. Affichée comme première bulle à l’ouverture du chat.",
+        "brief": "Description du caractère (instructions système)",
+        "briefPlaceholder": "Vous êtes l’agent de support sympathique d’Acme Inc. Répondez toujours en phrases courtes et passez la main à une personne pour tout ce qui concerne les remboursements.",
+        "briefHint": "Interne, jamais affiché aux visiteurs. Incluez les choses à faire, à ne pas faire et les règles d’escalade."
+      },
+      "brain": {
+        "title": "Modèle et contrôles de réponse",
+        "tag": "cerveau",
+        "provider": "Fournisseur du modèle",
+        "providerHint": "Votre admin configure les clés des fournisseurs. Les fournisseurs pour lesquels vous avez ajouté votre propre clé s’affichent aussi, sur les forfaits qui le permettent.",
+        "notEnabled": "{name} (non activé)",
+        "model": "Nom du modèle",
+        "modelHint": "Choisissez l’un des modèles activés pour vous, ou saisissez un autre identifiant de modèle.",
+        "noModels": "Aucun modèle IA n’est encore activé pour votre espace de travail. Demandez à votre admin d’en activer un, ou ajoutez votre propre clé dans Paramètres, Clés IA.",
+        "tokens": "Budget de longueur de réponse (jetons)",
+        "tokensHint": "Environ 1 jeton correspond à 4 caractères. 400 suffisent pour un paragraphe.",
+        "temperature": "Créativité (0 = strict, 2 = débridé)",
+        "temperatureHint": "Une valeur basse donne des réponses cohérentes et factuelles. Une valeur haute donne des formulations variées."
+      },
+      "safety": {
+        "title": "Réponse de secours et transfert à un humain",
+        "tag": "sécurité",
+        "fallback": "Réponse de secours (utilisée en cas d’erreur du modèle)",
+        "fallbackPlaceholder": "Un membre de l’équipe vous répondra sous peu. Merci de votre patience.",
+        "fallbackHint": "Envoyée telle quelle si le modèle ne renvoie rien ou si l’appel échoue.",
+        "handoff": "Activer le transfert vers une personne",
+        "handoffHint": "Le visiteur saisit l’expression déclencheuse, l’agent cesse de répondre et votre boîte de réception d’équipe s’illumine.",
+        "keyword": "Expression déclencheuse",
+        "keywordPlaceholder": "parler à un humain",
+        "keywordHint": "Lorsqu’un visiteur saisit ceci n’importe où dans un message, le transfert se déclenche.",
+        "ack": "Confirmation du transfert",
+        "ackPlaceholder": "Bien sûr, j’appelle un membre de l’équipe. Restez en ligne.",
+        "ackHint": "Le dernier message avant que l’agent ne se taise."
+      }
+    },
+    "knowledge": {
+      "title": "Entraîner l’agent",
+      "tag": "connaissances",
+      "saveFirst": "Enregistrez d’abord l’agent. Les entrées de connaissances s’associent à un agent enregistré.",
+      "addLabel": "Ajouter des connaissances",
+      "add": {
+        "url": {
+          "title": "URL en direct",
+          "body": "Récupérer une page publique et conserver son texte."
+        },
+        "text": {
+          "title": "Texte libre",
+          "body": "Collez un extrait d’aide ou une politique."
+        },
+        "qa": {
+          "title": "Paire question-réponse",
+          "body": "Une question avec sa réponse de référence."
+        },
+        "file": {
+          "title": "PDF, DOCX, TXT et plus",
+          "body": "Importez un fichier. Le texte est extrait pour vous."
+        }
+      },
+      "panel": {
+        "url": "Récupérer une URL publique",
+        "text": "Coller du texte brut",
+        "qa": "Question-réponse unique",
+        "file": "Importer un fichier de connaissances"
+      },
+      "label": "Libellé",
+      "url": "URL",
+      "content": "Texte",
+      "question": "Question",
+      "answer": "Réponse",
+      "file": "Fichier",
+      "placeholder": {
+        "label": {
+          "url": "Libellé (ex. Page des tarifs)",
+          "text": "Libellé (ex. Résumé de la politique de remboursement)",
+          "qa": "Libellé (ex. Délai de remboursement)",
+          "file": "Libellé (ex. Manuel produit)"
+        },
+        "content": "Collez tout texte que l’agent doit connaître…",
+        "question": "Question, ex. Combien de temps prennent les remboursements ?",
+        "answer": "Réponse, ex. Les remboursements sont réglés sous 3 à 5 jours ouvrés."
+      },
+      "urlHint": "Seules les pages publiques http et https sont lues. La page est récupérée en arrière-plan, l’entrée affiche donc Traitement un instant.",
+      "fileHint": "PDF, DOCX, TXT, Markdown, CSV ou HTML, jusqu’à 10 Mo. Le texte est extrait automatiquement.",
+      "uploading": "Progression de l’importation",
+      "submit": {
+        "url": "Récupérer et entraîner",
+        "text": "Enregistrer le texte",
+        "qa": "Enregistrer la paire",
+        "file": "Importer"
+      },
+      "cancel": "Annuler",
+      "added": "Connaissances ajoutées.",
+      "addFailed": "Impossible d’ajouter l’entrée.",
+      "problem": {
+        "label": "Ajoutez un libellé pour retrouver cette entrée plus tard.",
+        "url": "Ajoutez l’adresse de la page.",
+        "content": "Collez d’abord du texte.",
+        "question": "Ajoutez la question.",
+        "answer": "Ajoutez la réponse.",
+        "file": "Choisissez un fichier (PDF, DOCX, TXT, Markdown, CSV ou HTML).",
+        "file_type": "Types de fichiers acceptés : TXT, Markdown, CSV, HTML, PDF, DOCX. Pour tout autre format, collez le texte dans une entrée Texte.",
+        "file_legacyDoc": "Les anciens fichiers .doc ne sont pas pris en charge. Enregistrez-les à nouveau en .docx (ou exportez en .pdf) puis réimportez.",
+        "file_size": "Ce fichier dépasse 10 Mo.",
+        "file_empty": "Ce fichier est vide.",
+        "tooLarge": "Ce texte est trop long pour un seul collage. Importez-le plutôt comme fichier."
+      },
+      "col": {
+        "kind": "Type",
+        "label": "Libellé",
+        "state": "État",
+        "actions": "Actions"
+      },
+      "kind": {
+        "url": "url",
+        "text": "texte",
+        "qa": "q&r",
+        "file": "fichier"
+      },
+      "state": {
+        "ready": "prêt",
+        "processing": "en cours de traitement",
+        "failed": "échec"
+      },
+      "tokens": "environ {count} jetons",
+      "workspaceWide": "à l’échelle de l’espace de travail",
+      "loading": "Chargement des entrées",
+      "loadError": "Impossible de charger les entrées.",
+      "retry": "Réessayer",
+      "empty": "Aucune connaissance pour le moment. Choisissez un type ci-dessus pour ajouter la première entrée.",
+      "remove": "Retirer",
+      "removeNamed": "Retirer {label}",
+      "removeTitle": "Retirer cette entrée de connaissances ?",
+      "removeBody": "L’agent cessera de l’utiliser pour les nouvelles réponses. Les conversations plus anciennes restent inchangées.",
+      "keep": "Conserver",
+      "removed": "Retirée.",
+      "removeFailed": "Échec du retrait."
+    }
+  }
+}

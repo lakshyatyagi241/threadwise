@@ -1,0 +1,18 @@
+{
+  "common": {
+    "appName": "CRM",
+    "loadMore": "Mehr laden",
+    "loading": "Wird geladen",
+    "empty": "Noch nichts vorhanden",
+    "retry": "Erneut versuchen",
+    "requestId": "Anfrage-ID",
+    "search": "Suchen",
+    "unexpected": "Etwas ist schiefgelaufen",
+    "fatal": {
+      "title": "Etwas ist schiefgelaufen",
+      "body": "Die Seite konnte nicht geladen werden. Der Fehler wurde gemeldet. Versuchen Sie es erneut, und wenn das Problem bestehen bleibt, wenden Sie sich an den Support.",
+      "bodyWithDigest": "Die Seite konnte nicht geladen werden. Der Fehler wurde gemeldet. Versuchen Sie es erneut, und wenn das Problem bestehen bleibt, wenden Sie sich an den Support und nennen Sie {digest}.",
+      "home": "Zurück zum Start"
+    }
+  }
+}

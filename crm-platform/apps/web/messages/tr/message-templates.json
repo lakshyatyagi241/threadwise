@@ -1,0 +1,361 @@
+{
+  "message-templates": {
+    "nav": {
+      "title": "Şablonlar"
+    },
+    "common": {
+      "dismiss": "Kapat",
+      "requestId": "İstek kimliği"
+    },
+    "status": {
+      "draft": "Taslak",
+      "pending": "İncelemede",
+      "approved": "Onaylandı",
+      "rejected": "Reddedildi",
+      "paused": "Duraklatıldı",
+      "disabled": "Devre dışı",
+      "deleted": "Meta'da yok"
+    },
+    "category": {
+      "MARKETING": "Pazarlama",
+      "UTILITY": "Hizmet",
+      "AUTHENTICATION": "Kimlik doğrulama"
+    },
+    "quality": {
+      "GREEN": "Yüksek kalite",
+      "YELLOW": "Orta kalite",
+      "RED": "Düşük kalite",
+      "UNKNOWN": "Kalite beklemede"
+    },
+    "errors": {
+      "generic": "Bir sorun oluştu. Tekrar deneyin; sorun devam ederse istek kimliğini belirtin.",
+      "TPL_NOT_FOUND": "Bu şablon artık yok.",
+      "TPL_NAME_TAKEN": "Bu numarada bu ad ve dilde bir şablon zaten var. Başka bir ad veya dil seçin.",
+      "TPL_LINT_FAILED": "Kontroller, Meta'nın reddedeceği sorunlar buldu. Hiçbir şey gönderilmedi. Sağdaki listelenen hataları düzeltin.",
+      "TPL_META_REJECTED": "Meta şablonu reddetti. Nedeni aşağıda; şablonu düzeltip yeniden deneyebilmeniz için taslak olarak saklandı.",
+      "TPL_NO_CONNECTION": "Bu şablonun gönderileceği bağlı bir WhatsApp numarası yok. Önce bir numara bağlayın.",
+      "TPL_IN_USE": "Bu şablon, çalışan veya zamanlanmış bir toplu gönderim tarafından kullanıldığı için silinemez.",
+      "TPL_NOT_EDITABLE": "Yalnızca Meta'nın henüz onaylamadığı veya reddettiği şablonlar düzenlenebilir.",
+      "ROW_VERSION_CONFLICT": "Düzenlerken bu şablonu biri değiştirdi. En son sürümü görmek için yenileyin, ardından değişikliğinizi yeniden uygulayın.",
+      "VALIDATION_FAILED": "Bazı alanlar geçerli değil. Aşağıdaki alanları kontrol edin.",
+      "INTERNAL": "Sunucu bu isteği işleyemedi. Kısa süre sonra tekrar deneyin."
+    },
+    "preview": {
+      "title": "Önizleme",
+      "headerImageAlt": "Üst bilgi görseli örneği",
+      "header": {
+        "image": "Görsel",
+        "video": "Video",
+        "document": "Belge",
+        "location": "Konum"
+      },
+      "authBody": "doğrulama kodunuzdur.",
+      "authExpiry": "{count, plural, other {Bu kodun süresi # dakika içinde dolar.}}",
+      "bodyEmpty": "Mesaj metniniz burada görünür.",
+      "time": "10:30",
+      "copyCode": "Kodu kopyala",
+      "buttonUnnamed": "Düğme",
+      "moreButtons": "{count, plural, other {+# düğme daha}}"
+    },
+    "card": {
+      "rejected": "Reddedildi: {reason}",
+      "view": "Görüntüle",
+      "edit": "Düzenle",
+      "delete": "Sil"
+    },
+    "library": {
+      "title": "Şablon kütüphanesi",
+      "intro": "WhatsApp mesaj şablonları: yazın, Meta incelemesine gönderin ve durumlarını buradan takip edin.",
+      "sync": "Meta'dan eşitle",
+      "syncing": "Eşitleniyor...",
+      "syncHint": "Şablonlarınızı Meta'dan getirin",
+      "syncDone": "Meta'dan eşitlendi: {created} yeni, {updated} güncellendi, {missing} artık Meta'da yok.",
+      "syncNone": "Bu WhatsApp Business hesabında henüz şablon bulunamadı.",
+      "syncFailed": "Meta'dan eşitleme başarısız oldu. Numaranın bağlantısını kontrol edip tekrar deneyin.",
+      "syncPartial": "{count, plural, other {# numara eşitlenemedi.}}",
+      "new": "Yeni şablon",
+      "filters": "Şablonları filtrele",
+      "search": "Ara",
+      "searchPlaceholder": "Şablon adı",
+      "status": "Durum",
+      "allStatuses": "Tüm durumlar",
+      "category": "Kategori",
+      "allCategories": "Tüm kategoriler",
+      "connection": "WhatsApp numarası",
+      "allConnections": "Tüm numaralar",
+      "loading": "Şablonlar yükleniyor",
+      "retry": "Tekrar dene",
+      "emptyTitle": "Henüz şablon yok",
+      "emptyBody": "Bir şablon oluşturun ve Meta'ya gönderin ya da Meta Business Manager'da zaten olanları eşitleyin.",
+      "emptyFilteredTitle": "Eşleşen şablon yok",
+      "emptyFilteredBody": "Daha fazla şablon görmek için filtreleri değiştirin veya temizleyin.",
+      "clearFilters": "Filtreleri temizle",
+      "loadMore": "Daha fazla yükle"
+    },
+    "delete": {
+      "title": "Şablonu sil",
+      "message": "\"{name}\" silinsin mi? Burada ve Meta'da kaldırılır; artık gönderilemez.",
+      "confirm": "Şablonu sil",
+      "cancel": "İptal",
+      "done": "\"{name}\" silindi.",
+      "inUseHelp": "Bu şablonu kullanan toplu gönderimi açın ve iptal edin ya da başka bir şablon seçin; ardından bunu silin."
+    },
+    "lint": {
+      "title": "Gönderim öncesi kontroller",
+      "checking": "Kontrol ediliyor",
+      "unavailable": "Kontroller şu anda çalıştırılamadı. Meta incelemesi yine geçerlidir ve sunucu gönderimde yeniden kontrol eder.",
+      "clean": "Sorun bulunmadı.",
+      "summary": "{errors, plural, other {# hata}}, {warnings, plural, other {# uyarı}}",
+      "severity": {
+        "error": "Hata",
+        "warning": "Uyarı"
+      },
+      "field": {
+        "name": "Ad",
+        "language": "Dil",
+        "header": "Üst bilgi",
+        "body": "Gövde",
+        "footer": "Alt bilgi",
+        "buttons": "Düğmeler",
+        "template": "Şablon"
+      }
+    },
+    "form": {
+      "loading": "Yükleniyor",
+      "retry": "Tekrar dene",
+      "backToLibrary": "Kütüphaneye dön",
+      "noPermission": "Şablon oluşturma veya düzenleme izniniz yok.",
+      "notEditableTitle": "Bu şablon artık düzenlenemez",
+      "notEditableBody": "Yalnızca Meta'nın henüz onaylamadığı veya reddettiği şablonlar düzenlenebilir. Onaylanmış bir şablonu değiştirmek için yeni bir şablon oluşturun.",
+      "viewTemplate": "Şablonu görüntüle",
+      "breadcrumb": "Gezinti yolu",
+      "breadcrumbLibrary": "Şablonlar",
+      "breadcrumbNew": "Yeni",
+      "breadcrumbEdit": "Düzenle",
+      "titleNew": "Yeni şablon",
+      "titleEdit": "{name} düzenle",
+      "saveDraft": "Taslağı kaydet",
+      "submit": "Meta'ya gönder",
+      "reload": "Şablonu yenile",
+      "aside": "Önizleme ve kontroller",
+      "why": {
+        "connection": "Gönderim yapılacak bir WhatsApp numarası seçin.",
+        "name": "Bir şablon adı girin.",
+        "fields": "Bazı alanlar geçerli değil.",
+        "errors": "Göndermeden önce hataları düzeltin.",
+        "checking": "Şablon kontrol ediliyor."
+      },
+      "toast": {
+        "submitted": "Şablon, inceleme için Meta'ya gönderildi.",
+        "saved": "Şablon taslak olarak kaydedildi."
+      },
+      "errors": {
+        "name": "Bir şablon adı girin.",
+        "header": "Üst bilgi en fazla 60 karakter olabilir.",
+        "body": "Gövde en fazla {max} karakter olabilir.",
+        "footer": "Alt bilgi en fazla 60 karakter olabilir."
+      },
+      "identity": {
+        "title": "Kimlik",
+        "connection": "WhatsApp numarası",
+        "connectionHint": "Medya ve gönderim aynı numarayı kullanmalıdır; aksi halde Meta şablonu reddeder.",
+        "connectionUnknown": "Numara artık kullanılamıyor",
+        "noConnection": "Gönderim yapılacak bağlı bir WhatsApp numarası yok.",
+        "connectNumber": "Bir numara bağla",
+        "category": "Kategori",
+        "categoryHint": "Meta, şablonu kategorisine göre inceler ve fiyatlandırır.",
+        "categories": {
+          "MARKETING": "Pazarlama",
+          "UTILITY": "Hizmet",
+          "AUTHENTICATION": "Kimlik doğrulama"
+        },
+        "name": "Şablon adı",
+        "nameHint": "Yalnızca a-z, 0-9 ve _; en fazla 60 karakter.",
+        "nameTaken": "Bu ad, bu numarada bu dil için zaten kullanılıyor.",
+        "language": "Dil"
+      },
+      "auth": {
+        "title": "Tek kullanımlık şifre",
+        "hint": "Bir kimlik doğrulama şablonunun mesajını ve Kodu kopyala düğmesini Meta yazar.",
+        "expiry": "Kodun geçerlilik süresi (dakika)",
+        "expiryHint": "İsteğe bağlı. {min} ile {max} dakika arası.",
+        "expiryInvalid": "{min} ile {max} arasında tam bir sayı girin.",
+        "fixedBody": "Mesaj şöyle okunur: bir kod, ardından \"doğrulama kodunuzdur\" ve bir güvenlik uyarısı. Bunu değiştiremezsiniz."
+      },
+      "header": {
+        "title": "Üst bilgi",
+        "hint": "İsteğe bağlı. Metin ya da tek bir görsel, video, belge veya konum.",
+        "type": "Üst bilgi türü",
+        "kind": {
+          "none": "Yok",
+          "text": "Metin",
+          "image": "Görsel",
+          "video": "Video",
+          "document": "Belge",
+          "location": "Konum"
+        },
+        "text": "Üst bilgi metni",
+        "textHint": "{used}/{max}. En fazla bir değişken.",
+        "sample": "Örnek dosya",
+        "uploading": "Yükleniyor",
+        "keptSample": "Kayıtlı örnek korunur. Değiştirmek için bir dosya seçin.",
+        "noFile": "Dosya seçilmedi",
+        "limits": "Görsel en fazla 5 MB, video en fazla 16 MB, PDF en fazla 100 MB.",
+        "replace": "Dosyayı değiştir",
+        "choose": "Örnek dosya seç",
+        "tooBig": "Bu {kind} {size} MB. WhatsApp en fazla {max} MB kabul eder. Daha küçük bir dosya seçin.",
+        "wrongType": "Bu dosya türü bu üst bilgi için kabul edilmiyor.",
+        "emptyFile": "Bu dosya boş.",
+        "locationHelp": "Konum, mesaj gönderildiğinde doldurulur. Meta yalnızca üst bilginin bir konum olduğunu bilmek ister."
+      },
+      "body": {
+        "title": "Gövde",
+        "hint": "Mesaj metni. '{{name}}' biçimindeki değişkenleri kullanın; kaydettiğinizde Meta için numaralandırılırlar.",
+        "toolbar": "Metin biçimlendirme",
+        "format": {
+          "bold": "Kalın",
+          "italic": "İtalik",
+          "strike": "Üstü çizili",
+          "code": "Kod"
+        },
+        "variable": "Değişken ekle",
+        "label": "Gövde metni",
+        "counter": "{used}/{max}",
+        "wrapSample": "metin"
+      },
+      "variables": {
+        "title": "Değişken eşlemesi",
+        "empty": "Henüz değişken yok. Gövdeye '{{name}}' gibi bir yer tutucu yazın veya Değişken ekle'yi kullanın.",
+        "help": "Her değişken için, gönderirken onu dolduracak kişi özniteliğinin adını verin ve Meta incelemesi için bir örnek değer girin.",
+        "attribute": "Kişi özniteliği",
+        "sample": "Örnek değer",
+        "header": "üst bilgi",
+        "body": "gövde"
+      },
+      "footer": {
+        "title": "Alt bilgi",
+        "label": "Alt bilgi metni",
+        "hint": "İsteğe bağlı. {used}/{max}. Değişken yok."
+      },
+      "buttons": {
+        "title": "Düğmeler",
+        "hint": "İsteğe bağlı. Hızlı yanıtlar başta veya sonda birlikte durmalıdır.",
+        "add": {
+          "quick_reply": "Hızlı yanıt",
+          "url": "Web sitesini ziyaret et",
+          "phone": "Telefonu ara",
+          "copy_code": "Kodu kopyala"
+        },
+        "kind": {
+          "quick_reply": "Hızlı yanıt",
+          "url": "Web sitesini ziyaret et",
+          "phone": "Telefonu ara",
+          "copy_code": "Kodu kopyala",
+          "other": "Diğer"
+        },
+        "count": "{used}/{max} düğme",
+        "limitReached": "Bu türden en fazla {max} tane.",
+        "empty": "Düğme yok. Yukarıdaki düğmelerle bir tane ekleyin.",
+        "moveUp": "{n}. düğmeyi yukarı taşı",
+        "moveDown": "{n}. düğmeyi aşağı taşı",
+        "remove": "{n}. düğmeyi kaldır",
+        "keptAsIs": "\"{text}\" olduğu gibi korunur. Bu düzenleyici bunu değiştirmez.",
+        "text": "Düğme metni",
+        "textHint": "{used}/25",
+        "url": "Web sitesi URL'si",
+        "urlHint": "Dinamik bir bölüm için sona '{{1}}' ekleyin.",
+        "urlExample": "Değişken için örnek",
+        "phone": "Telefon numarası",
+        "phoneHint": "Ülke koduyla birlikte.",
+        "code": "Örnek kod",
+        "codeHint": "Örneğin PROMO50.",
+        "limits": "Meta en fazla {quick} hızlı yanıt, {url} web sitesi düğmesi, {phone} telefon düğmesi ve {copy} kodu kopyala düğmesine izin verir.",
+        "allUsed": "Her düğme türü sınırında.",
+        "issue": {
+          "textRequired": "Düğme metnini girin.",
+          "textTooLong": "En fazla {max} karakter.",
+          "urlRequired": "URL'yi girin.",
+          "urlInvalid": "URL, http:// veya https:// ile başlamalıdır.",
+          "phoneRequired": "Telefon numarasını girin.",
+          "codeRequired": "Bir örnek kod girin.",
+          "quickReplyVariable": "Hızlı yanıt bir değişken içeremez.",
+          "urlExampleRequired": "URL değişkeni için bir örnek değer girin.",
+          "quickReplyPosition": "Hızlı yanıtlar birlikte, düğmelerin başında veya sonunda olmalıdır."
+        }
+      },
+      "result": {
+        "metaRefused": "Kaydedildi, ancak Meta şablonu reddetti.",
+        "metaRefusedHelp": "Şablon taslak olarak saklanır. Meta'nın belirttiği sorunu düzeltip yeniden gönderin. Formunuz değişmedi.",
+        "submitted": "İnceleme için Meta'ya gönderildi.",
+        "saved": "Taslak olarak kaydedildi.",
+        "warnings": "Meta incelemeden önce bakmaya değer:",
+        "open": "Şablonu aç"
+      }
+    },
+    "detail": {
+      "loading": "Şablon yükleniyor",
+      "retry": "Tekrar dene",
+      "back": "Kütüphaneye dön",
+      "breadcrumb": "Gezinti yolu",
+      "refresh": "Durumu yenile",
+      "retrySubmit": "Meta'ya gönder",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "refreshed": "Durum Meta'dan yenilendi.",
+      "submittedToast": "Şablon, inceleme için Meta'ya gönderildi.",
+      "never": "Hiçbir zaman",
+      "none": "Yok",
+      "banner": {
+        "metaFailed": "Meta şablonu reddetti",
+        "draft": "Bu şablon henüz Meta'ya gönderilmedi. İncelemeyi başlatmak için gönderin.",
+        "pending": "Meta incelemesi için gönderildi. Bu sayfa her 15 saniyede bir yanıt olup olmadığını kontrol eder.",
+        "pendingMeta": "{submitted} gönderildi. Son kontrol: {checked}.",
+        "polling": "Bu sayfayı açık bırakabilir veya daha sonra geri dönebilirsiniz.",
+        "rejected": "Meta tarafından reddedildi",
+        "rejectedHelp": "Nedeni gidermek için şablonu düzenleyin, ardından yeniden gönderin.",
+        "paused": "Meta tarafından duraklatıldı. Meta duraklatmayı kaldırana kadar gönderilemez.",
+        "pausedUntil": "Meta tarafından {when} tarihine kadar duraklatıldı.",
+        "disabled": "Meta tarafından devre dışı bırakıldı. Gönderilemez.",
+        "deleted": "Meta bu şablonu artık listelemiyor. Burada saklanıyor; yeniden eşitleyin veya silin."
+      },
+      "facts": {
+        "title": "Meta eşitlemesi",
+        "status": "Meta durumu",
+        "quality": "Kalite",
+        "category": "Meta kategorisi",
+        "metaId": "Şablon kimliği",
+        "number": "WhatsApp numarası",
+        "numberUnknown": "Numara artık kullanılamıyor",
+        "submitted": "Gönderildi",
+        "approved": "Onaylandı",
+        "synced": "Son eşitleme"
+      },
+      "components": {
+        "title": "Bileşenler",
+        "header": "Üst bilgi",
+        "media": "Üst bilgi medyası",
+        "body": "Gövde",
+        "footer": "Alt bilgi",
+        "buttons": "Düğmeler",
+        "expiry": "Kod geçerlilik süresi",
+        "expiryValue": "{count, plural, other {# dakika}}"
+      },
+      "attachment": {
+        "none": "Yok",
+        "image": "Görsel",
+        "video": "Video",
+        "document": "Belge",
+        "location": "Konum"
+      },
+      "lint": {
+        "title": "Kontroller",
+        "clean": "Sorun bulunmadı."
+      },
+      "payload": {
+        "title": "Meta yükü",
+        "hint": "İnceleme için Meta'ya gönderilen, oluşturulduğu haliyle tam içerik.",
+        "empty": "Henüz bir şey oluşturulmadı."
+      }
+    }
+  }
+}

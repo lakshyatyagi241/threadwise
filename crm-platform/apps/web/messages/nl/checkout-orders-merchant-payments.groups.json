@@ -1,0 +1,54 @@
+{
+  "checkout-orders-merchant-payments": {
+    "groups": {
+      "eyebrow": "Winkel / Groepen",
+      "title": "WhatsApp-groepen",
+      "subtitle": "Groepen waar je gekoppelde nummer bij hoort. Wanneer een bestelling is bevestigd, wordt die in de groep van de klant geplaatst en wordt de klant met @ genoemd. Geef een groep een bestelcode zodat klanten erin kunnen bestellen.",
+      "loading": "Groepen laden",
+      "summary": {
+        "groups": "Gesynchroniseerde groepen",
+        "coded": "Met bestelcode",
+        "bot": "Botnummer",
+        "noBot": "Er is geen WhatsApp-nummer gekoppeld.",
+        "connect": "Koppel een nummer in Kanalen",
+        "copyNumber": "Nummer kopiëren"
+      },
+      "search": {
+        "label": "Groepen zoeken",
+        "placeholder": "Zoek groepsnaam..."
+      },
+      "columns": {
+        "group": "Groep",
+        "members": "Leden",
+        "device": "Botapparaat",
+        "synced": "Gesynchroniseerd",
+        "code": "Bestelcode"
+      },
+      "row": {
+        "unnamed": "(naamloze groep)",
+        "noCode": "Geen code",
+        "placeholder": "bijv. ACME",
+        "label": "Bestelcode voor {name}",
+        "copyLink": "Bestellink kopiëren",
+        "saved": "Bestelcode opgeslagen.",
+        "cleared": "Bestelcode gewist.",
+        "tooLong": "Gebruik maximaal {max} tekens.",
+        "badChars": "Gebruik alleen letters, cijfers, punten, streepjes en underscores.",
+        "taken": "Een andere groep gebruikt deze code al."
+      },
+      "empty": {
+        "title": "Nog geen groepen",
+        "message": "De groepslijst wordt gekopieerd uit je gekoppelde WhatsApp-sessie. Groepen verschijnen hier zodra die sessie ze heeft gesynchroniseerd; er is nog geen tijdsduur beloofd.",
+        "action": "Kanalen openen"
+      },
+      "noMatch": {
+        "title": "Geen groepen komen overeen met je zoekopdracht",
+        "message": "Probeer een ander deel van de groepsnaam, of wis de zoekopdracht."
+      },
+      "how": {
+        "title": "Hoe bestelcodes werken",
+        "body": "Geef een groep een korte code (bijvoorbeeld ACME) en deel de bestellink. Wanneer een klant erop tikt en een bestelling bevestigt, wordt de bestelling direct in precies die groep geplaatst en wordt de klant met @ genoemd, ook als die in meerdere groepen zit."
+      }
+    }
+  }
+}

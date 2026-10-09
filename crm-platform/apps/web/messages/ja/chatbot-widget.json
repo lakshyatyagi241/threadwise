@@ -1,0 +1,350 @@
+{
+  "chatbotWidget": {
+    "nav": {
+      "title": "チャットウィジェット"
+    },
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "paywall": {
+      "kicker": "プラン",
+      "title": "チャットボットウィジェットはお使いのプランに含まれていません",
+      "body": "お使いのプランにはチャットボットウィジェットが含まれていません。この機能を使うにはアップグレードしてください。",
+      "upgrade": "プランを見る"
+    },
+    "list": {
+      "tip": "ヒント",
+      "tipBody": "1行のスニペットをサイトに貼り付けるだけで、フローティングチャットバブルを表示できます。各ウィジェットはスマートエージェントで動かすことも、WhatsAppに誘導することも、その両方も可能です。訪問者との会話はチームの受信トレイに届きます。",
+      "statusViews": "ウィジェットのステータス",
+      "view": {
+        "all": "すべてのウィジェット",
+        "active": "有効",
+        "paused": "一時停止中"
+      },
+      "status": {
+        "all": "すべて",
+        "active": "有効",
+        "paused": "一時停止中"
+      },
+      "trainFirst": "まず学習させる",
+      "trainBody": "<link>AIトレーニング</link>でスマートエージェントを作成してナレッジを追加し、ここに紐付けると、ウィジェットがあなたの言葉で回答します。",
+      "workspace": "ワークスペース",
+      "title": "チャットボット",
+      "titleAccent": "ウィジェット",
+      "intro": "フローティングチャットバブルを任意のページに埋め込めます。スマートエージェントがブラウザ内で返信し、必要に応じて統合受信トレイに引き継ぎます。",
+      "activePill": "{count}件が有効",
+      "newWidget": "新規ウィジェット",
+      "card": {
+        "total": "ウィジェット合計",
+        "visitors": "訪問者",
+        "avg": "ウィジェットあたりの平均",
+        "health": "状態",
+        "activeHint": "{count}件が有効",
+        "allTime": "累計",
+        "visitorsUnit": "訪問者"
+      },
+      "health": {
+        "healthy": "正常",
+        "empty": "空",
+        "attention": "要確認"
+      },
+      "search": "名前またはスラッグで検索…",
+      "col": {
+        "widget": "ウィジェット",
+        "engine": "エンジン",
+        "agent": "スマートエージェント",
+        "visitors": "訪問者",
+        "updated": "更新日時",
+        "actions": "操作"
+      },
+      "loading": "ウィジェットを読み込み中",
+      "loadError": "ウィジェットを読み込めませんでした。",
+      "retry": "再試行",
+      "emptyTitle": "ウィジェットはまだありません",
+      "emptyBody": "最初のチャットウィジェットを作成しましょう。埋め込んだページにフローティングバブルとして表示されます。",
+      "createWidget": "ウィジェットを作成",
+      "noMatch": "このページに検索条件に一致するウィジェットはありません。",
+      "showing": "表示中",
+      "of": "/",
+      "widgetsCount": "{count}件のウィジェット",
+      "loadMore": "さらに読み込む",
+      "pill": {
+        "active": "有効",
+        "paused": "一時停止中"
+      },
+      "action": {
+        "preview": "単独プレビューを開く",
+        "copy": "埋め込みスニペットをコピー",
+        "edit": "ウィジェットを編集",
+        "rotate": "埋め込みトークンを再発行",
+        "duplicate": "ウィジェットを複製",
+        "delete": "ウィジェットを削除"
+      },
+      "copied": "スニペットをコピーしました。サイトの{tag}の直前に貼り付けてください。",
+      "duplicateFailed": "ウィジェットを複製できませんでした。",
+      "rotated": "トークンを再発行しました。新しいスニペットをコピーしてください。",
+      "rotateFailed": "再発行に失敗しました: {reason}",
+      "networkError": "ネットワークエラー",
+      "deleted": "ウィジェットを削除しました。",
+      "deleteFailed": "削除に失敗しました: {reason}",
+      "rotateTitle": "このウィジェットの埋め込みトークンを再発行しますか?",
+      "rotateBody": "サイト上の現在のスニペットはすぐに動作しなくなります。新しいスニペットをコピーして貼り付け直す必要があります。",
+      "rotate": "再発行",
+      "cancel": "キャンセル",
+      "deleteTitle": "「{name}」を削除しますか?",
+      "deleteBody": "サイト上の埋め込みスニペットはすぐに動作しなくなります。過去の会話はチームの受信トレイに残ります。",
+      "delete": "ウィジェットを削除",
+      "keep": "残す",
+      "copyManuallyTitle": "手動でコピーしてください",
+      "gotIt": "了解",
+      "close": "閉じる"
+    },
+    "builder": {
+      "loading": "ウィジェットを読み込み中",
+      "notFoundTitle": "ウィジェットが見つかりません",
+      "notFoundBody": "このウィジェットはワークスペースに存在しません。",
+      "loadError": "ウィジェットを読み込めませんでした。",
+      "backToWidgets": "ウィジェット一覧に戻る",
+      "back": "ウィジェット一覧に戻る",
+      "crumb": "チャットボットウィジェット",
+      "crumbEdit": "編集",
+      "crumbNew": "新規",
+      "titleNew": "チャットボットを作成",
+      "titleEdit": "チャットボットを編集",
+      "titleAccent": "ウィジェット",
+      "stateSaved": "保存済み",
+      "stateDraft": "下書き / 未保存",
+      "saveDraft": "下書きを保存",
+      "stepper": "ビルダーのステップ",
+      "steps": {
+        "setup": "設定",
+        "look": "デザイン",
+        "voice": "トーン",
+        "launch": "公開"
+      },
+      "previous": "前へ",
+      "next": "次へ",
+      "stepOf": "ステップ {n} / {total}",
+      "launchWidget": "ウィジェットを公開",
+      "draftSaved": "下書きを保存しました。",
+      "savedEmbed": "保存しました。埋め込みコードをコピーできます。",
+      "saveFailed": "保存に失敗しました。強調表示されているステップを確認してください。",
+      "snippetCopied": "スニペットをコピーしました。",
+      "clipboardBlocked": "クリップボードがブロックされました。スニペットを手動で選択してください。",
+      "problem": {
+        "name": "ウィジェットに名前を付けてください。",
+        "assistant": "スマートエージェントを紐付けるか、エンジンをWhatsAppディープリンクに切り替えてください。",
+        "whatsapp": "国番号を含む完全なWhatsApp番号を入力してください。",
+        "launcherColour": "ランチャーの塗りつぶしは16進数のカラー(例: #075E54)で指定してください。",
+        "headerTitle": "チャットウィンドウのタイトルを入力してください。",
+        "welcome": "最初のメッセージを入力してください。",
+        "bgImage": "背景画像のURLを追加するか、単色に切り替えてください。"
+      },
+      "setup": {
+        "title": "ウィジェットの設定",
+        "required": "必須",
+        "name": "内部名",
+        "namePlaceholder": "例: 料金ページのウィジェット",
+        "nameHint": "チーム用の名前です。訪問者には表示されません。",
+        "position": "ランチャーの位置",
+        "bottomRight": "右下",
+        "bottomLeft": "左下",
+        "positionHint": "丸いチャットバブルをサイト上のどこに表示するかを選びます。",
+        "engine": "会話エンジン",
+        "mode": {
+          "ai": {
+            "title": "スマートエージェント",
+            "body": "学習済みのAIがブラウザ内で回答します。"
+          },
+          "whatsapp": {
+            "title": "WhatsAppディープリンク",
+            "body": "訪問者をWhatsAppアプリに誘導してチャットします。"
+          },
+          "both": {
+            "title": "スマート + WhatsApp",
+            "body": "訪問者が、ここでチャットするかWhatsAppを開くかを選びます。"
+          }
+        },
+        "agent": "スマートエージェント(頭脳)",
+        "agentPlaceholder": "— 保存済みのスマートエージェントを選択 —",
+        "agentHintBefore": "見つかりませんか?",
+        "agentBuild": "スマートエージェントを作成",
+        "agentHintAfter": "してください。",
+        "whatsapp": "WhatsApp番号",
+        "country": "国",
+        "phonePlaceholder": "国番号を除いた番号",
+        "whatsappHint": "国旗を選ぶと、国番号が自動的に追加されます。",
+        "prefilled": "事前入力メッセージ(WhatsAppに入力済みで表示)",
+        "prefilledPlaceholder": "こんにちは、料金について詳しく知りたいです。",
+        "prefilledHint": "訪問者はこのメッセージが入力済みの状態でWhatsAppに移動します。"
+      },
+      "look": {
+        "title": "ランチャーとウィンドウのスタイル",
+        "tag": "ブランド",
+        "launcherFill": "ランチャーの塗りつぶし",
+        "launcherFillHint": "丸いバブルの背景色。",
+        "headerTint": "ウィンドウヘッダーの色",
+        "headerTintHint": "チャットウィンドウの上部の帯。",
+        "headerInk": "ヘッダーの文字色",
+        "headerInkHint": "ヘッダーのテキストとアイコンの色。",
+        "windowTitle": "ウィンドウタイトル(ヘッダーに表示)",
+        "windowTitlePlaceholder": "チームとチャット",
+        "windowTitleHint": "30文字程度に収めてください。",
+        "icon": "カスタムランチャーアイコンのURL",
+        "optional": "任意",
+        "iconHint": "PNG / SVG · 推奨サイズ80×80px · 背景透過。"
+      },
+      "voice": {
+        "title": "最初のメッセージとチャット画面",
+        "tag": "コンテンツ",
+        "opening": "最初のメッセージ",
+        "openingPlaceholder": "こんにちは!ご用件をお聞かせください。",
+        "openingHint": "チャットを開いたときに最初に表示される吹き出しです。",
+        "bubbleFill": "受信吹き出しの塗りつぶし",
+        "bubbleFillHint": "こちら側の吹き出しの色。",
+        "bubbleInk": "受信吹き出しの文字色",
+        "bubbleInkHint": "吹き出し内のテキストの色。",
+        "canvas": "ウィンドウの背景",
+        "canvasKind": {
+          "color": "単色",
+          "image": "タイル画像"
+        },
+        "canvasColour": "ウィンドウの背景色",
+        "canvasImage": "ウィンドウの背景画像のURL",
+        "canvasImageHint": "繰り返し可能なPNGが最適です。",
+        "autoOpen": "自動的に開く",
+        "autoOpenHint": "ページの読み込みから約1.2秒後にチャットを開きます。",
+        "intake": "訪問者情報の入力",
+        "intakeHint": "チャット開始前に表示する入力項目です。匿名でチャットする場合はすべてスキップしてください。",
+        "intakeField": {
+          "name": "表示名",
+          "email": "メールアドレス",
+          "phone": "電話番号"
+        }
+      },
+      "launch": {
+        "title": "送信ボタンと埋め込みスニペット",
+        "tag": "公開",
+        "label": "送信ボタンのラベル",
+        "labelPlaceholder": "メッセージを送信",
+        "labelHint": "「送信」は避けましょう。「メッセージを送る」や「チームに質問する」がおすすめです。",
+        "fill": "送信ボタンの塗りつぶし",
+        "ink": "送信ボタンの文字色",
+        "ready": "準備完了です。ウィジェットを表示したいページの<code>{tag}</code>の直前に貼り付けてください。",
+        "copy": "クリップボードにコピー",
+        "preview": "単独プレビューを開く"
+      },
+      "preview": {
+        "title": "ライブプレビュー",
+        "chat": "チャット",
+        "hi": "こんにちは!",
+        "send": "送信",
+        "engine": {
+          "ai": "スマートエージェント",
+          "whatsapp": "WhatsApp",
+          "both": "AI + WhatsApp"
+        },
+        "metaEngine": "エンジン",
+        "metaPlacement": "位置",
+        "metaAutoOpen": "自動オープン",
+        "metaIntake": "入力項目",
+        "left": "左",
+        "right": "右",
+        "on": "オン",
+        "off": "オフ",
+        "none": "なし"
+      },
+      "colorSwatch": "{label}(色見本)"
+    },
+    "whatsappBuilder": {
+      "crumb": "WhatsAppウィジェット",
+      "title": "WhatsAppウィジェット",
+      "titleAccent": "インストールとカスタマイズ",
+      "type": "ウィジェットの種類",
+      "nameHint": "この名前はあなただけに表示されます。メッセンジャーに表示されるビジネス名にもなります。",
+      "save": "変更を保存",
+      "saved": "変更を保存しました。ウィジェットは公開中です。",
+      "card": {
+        "1": {
+          "title": "WhatsAppチャットボタンのスタイル",
+          "subtitle": "ウェブサイトに合う、すてきなチャットボタンのデザインを選びましょう",
+          "buttonType": "ボタンの種類",
+          "type": {
+            "pill": "「チャットする」ボタン",
+            "icon": "アイコンのみの丸いボタン"
+          },
+          "iconOnly": "アイコンのみ",
+          "buttonColor": "ボタンの色",
+          "pickCustom": "カスタムカラーを選択",
+          "custom": "カスタム {hex}"
+        },
+        "2": {
+          "title": "メッセンジャーのデザイン",
+          "subtitle": "メッセンジャー用のすてきな画像を選びましょう",
+          "image": "メッセンジャーの画像",
+          "names": {
+            "support": "サポート",
+            "store": "ストア",
+            "chat": "チャット",
+            "person": "人物"
+          },
+          "url": "または、自分の画像のアドレスを使用",
+          "urlHint": "正方形の画像のアドレス(https://...)を貼り付けてください。ファイルのアップロードはまだ利用できません。"
+        },
+        "3": {
+          "title": "ウェルカムメッセージを設定",
+          "subtitle": "お客様を歓迎する",
+          "greeting": "あいさつ",
+          "greetingHint": "メッセンジャーを開いたお客様にあいさつします",
+          "intro": "紹介メッセージ",
+          "introHint": "ビジネスを紹介し、どのようにサポートできるかをお客様に伝えます"
+        },
+        "4": {
+          "title": "チャットボタンの位置を設定",
+          "subtitle": "パソコンとモバイルでのボタンの位置を調整します",
+          "preview": "チャットボタンのプレビュー",
+          "desktopPreview": "デスクトッププレビュー",
+          "mobilePreview": "モバイルプレビュー",
+          "desktopPosition": "デスクトップのランチャー位置",
+          "mobilePosition": "モバイルのランチャー位置",
+          "left": "左",
+          "right": "右",
+          "desktopSideSpacing": "デスクトップの横余白",
+          "desktopBottomSpacing": "デスクトップの下余白",
+          "mobileSideSpacing": "モバイルの横余白",
+          "mobileBottomSpacing": "モバイルの下余白",
+          "px": "px"
+        },
+        "5": {
+          "title": "WhatsApp番号を設定",
+          "subtitle": "WhatsApp番号をメッセンジャーに接続します",
+          "number": "WhatsApp番号",
+          "numberHint": "メッセンジャーはお客様をこのWhatsApp番号に誘導します",
+          "prefilled": "事前入力メッセージ",
+          "prefilledHint": "最初に入力済みで表示されるメッセージです"
+        }
+      },
+      "install": {
+        "title": "ウェブサイトにインストール",
+        "body": "ウィジェットを表示したいすべてのページで、閉じるbodyタグの直前にこのタグを貼り付けてください。",
+        "copy": "コードをコピー"
+      },
+      "problem": {
+        "name": "ウィジェットに名前を付けてください。",
+        "avatar": "組み込みの画像、またはhttp(s)の画像アドレスを使用してください。",
+        "greeting": "あいさつを入力してください。",
+        "intro": "紹介メッセージを入力してください。",
+        "spacing": "余白は0〜500の整数のピクセル値で指定してください。",
+        "whatsapp": "国番号を含む完全なWhatsApp番号を入力してください。"
+      },
+      "preview": {
+        "title": "ライブプレビュー",
+        "desktop": "デスクトップ",
+        "mobile": "モバイル",
+        "frameTitle": "WhatsAppウィジェットのライブプレビュー",
+        "hint": "丸いボタンでパネルを閉じ、ランチャーからもう一度開いて、「会話を開始」を試してみてください。",
+        "businessName": "あなたのビジネス"
+      }
+    }
+  }
+}

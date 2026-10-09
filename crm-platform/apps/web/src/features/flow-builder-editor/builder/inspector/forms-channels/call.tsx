@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Check, Field, KnowledgeBaseActions, NumberInput } from '../kit';
 import type { FormComponent } from '../types';
 import {
@@ -15,26 +16,27 @@ import {
   voiceAssistantOptions,
 } from './shared';
 
-export const CfSayForm: FormComponent = (p) => (
-  <Field label="Say to caller" hint="Spoken aloud (text-to-speech). {{variables}} are substituted.">
-    {Ta(p, 'text', 'Hello! Thanks for calling.', 3)}
-  </Field>
-);
+const NS = 'flb.builder.formsChannels.call';
+const SHARED = 'flb.builder.formsChannels.shared';
+
+export const CfSayForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  return (
+    <Field label={t('sayLabel')} hint={t('sayHint')}>
+      {Ta(p, 'text', t('sayPlaceholder'), 3)}
+    </Field>
+  );
+};
 
 export const CfListenForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
   const save = String(p.data.save || 'caller_said');
   return (
     <>
-      <Field
-        label="Save what they say to"
-        hint={`The caller's words are transcribed and stored here, e.g. {{${save}}}.`}
-      >
+      <Field label={t('listenSave')} hint={t('listenSaveHint', { token: `{{${save}}}` })}>
         {Txt(p, 'save', 'caller_said')}
       </Field>
-      <Field
-        label="Stop after silence (seconds)"
-        hint="How long to wait for them to finish talking before moving on."
-      >
+      <Field label={t('silenceLabel')} hint={t('silenceHint')}>
         <NumberInput
           value={p.data.silenceTimeout ?? 6}
           min={1}
@@ -46,48 +48,46 @@ export const CfListenForm: FormComponent = (p) => {
   );
 };
 
-export const CfAiForm: FormComponent = (p) => (
-  <>
-    <Field label="Model">{Sel(p, 'model', aiModelOptions(p))}</Field>
-    <Field label="Instructions (system prompt)">
-      {Ta(p, 'prompt', 'You are a helpful phone assistant. Keep answers short and natural.', 4)}
-    </Field>
-    <Field
-      label="Knowledge base (optional)"
-      hint="Attach a trained assistant from AI Training to answer from your content."
-    >
-      {Sel(p, 'assistant', knowledgeBaseOptions(p))}
-      <KnowledgeBaseActions refresh={() => p.env.refresh()} />
-    </Field>
-    <Field label="Save spoken reply to">{Txt(p, 'save', 'ai_reply')}</Field>
-    <Check checked={!!p.data.endOnGoodbye} onChange={(v) => p.set('endOnGoodbye', v)}>
-      End the call when the caller says goodbye
-    </Check>
-  </>
-);
+export const CfAiForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  const ts = useTranslations(SHARED);
+  return (
+    <>
+      <Field label={t('model')}>{Sel(p, 'model', aiModelOptions(p, ts))}</Field>
+      <Field label={t('instructions')}>{Ta(p, 'prompt', t('aiPromptPlaceholder'), 4)}</Field>
+      <Field label={t('knowledgeBase')} hint={t('knowledgeBaseHint')}>
+        {Sel(p, 'assistant', knowledgeBaseOptions(p, ts))}
+        <KnowledgeBaseActions refresh={() => p.env.refresh()} />
+      </Field>
+      <Field label={t('saveSpoken')}>{Txt(p, 'save', 'ai_reply')}</Field>
+      <Check checked={!!p.data.endOnGoodbye} onChange={(v) => p.set('endOnGoodbye', v)}>
+        {t('endOnGoodbye')}
+      </Check>
+    </>
+  );
+};
 
-export const CfAssistantForm: FormComponent = (p) => (
-  <>
-    <Field
-      label="Voice assistant"
-      hint="The AI voice agent that answers this turn — its own persona + model reply, spoken back. Put a Listen node before it to make it conversational."
-    >
-      {Sel(p, 'assistant', voiceAssistantOptions(p, 'assistant', '— pick a voice assistant —'))}
-    </Field>
-    <Field
-      label="Extra instructions (optional)"
-      hint="Appended to the assistant persona for this node only."
-    >
-      {Ta(p, 'prompt', '', 3)}
-    </Field>
-    <Field label="Save spoken reply to">{Txt(p, 'save', 'assistant_reply')}</Field>
-    <Check checked={!!p.data.endOnGoodbye} onChange={(v) => p.set('endOnGoodbye', v)}>
-      End the call when the caller says goodbye
-    </Check>
-  </>
-);
+export const CfAssistantForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  const ts = useTranslations(SHARED);
+  return (
+    <>
+      <Field label={t('voiceAssistant')} hint={t('voiceAssistantHint')}>
+        {Sel(p, 'assistant', voiceAssistantOptions(p, 'assistant', t('pickVoiceAssistant'), ts))}
+      </Field>
+      <Field label={t('extraInstructions')} hint={t('extraInstructionsHint')}>
+        {Ta(p, 'prompt', '', 3)}
+      </Field>
+      <Field label={t('saveSpoken')}>{Txt(p, 'save', 'assistant_reply')}</Field>
+      <Check checked={!!p.data.endOnGoodbye} onChange={(v) => p.set('endOnGoodbye', v)}>
+        {t('endOnGoodbye')}
+      </Check>
+    </>
+  );
+};
 
 export const CfMenuForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
   const opts = readRows(p.data.options);
   const setOpt = (i: number, k: string, val: string) =>
     p.set(
@@ -96,17 +96,14 @@ export const CfMenuForm: FormComponent = (p) => {
     );
   return (
     <>
-      <Field label="Route by">
+      <Field label={t('routeBy')}>
         {Sel(p, 'mode', [
-          { v: 'intent', l: 'What the caller says (AI intent)' },
-          { v: 'keyword', l: 'Keyword match' },
-          { v: 'digit', l: 'Key press (1,2,3…)' },
+          { v: 'intent', l: t('routeIntent') },
+          { v: 'keyword', l: t('routeKeyword') },
+          { v: 'digit', l: t('routeDigit') },
         ])}
       </Field>
-      <Field
-        label="Branches"
-        hint={'Each branch becomes an output port. Unmatched calls take the "no match" port.'}
-      >
+      <Field label={t('branches')} hint={t('branchesHint')}>
         {opts.map((o, i) => (
           <div key={i} className="mb-1.5 flex items-center gap-2">
             <RowInput
@@ -118,7 +115,7 @@ export const CfMenuForm: FormComponent = (p) => {
             <RowInput
               value={o.label}
               onChange={(v) => setOpt(i, 'label', v)}
-              placeholder="Branch label"
+              placeholder={t('branchLabel')}
               className="flex-1"
             />
             <RemoveButton
@@ -132,7 +129,7 @@ export const CfMenuForm: FormComponent = (p) => {
           </div>
         ))}
         <AddLink onClick={() => p.set('options', opts.concat([{ match: '', label: '' }]))}>
-          Add branch
+          {t('addBranch')}
         </AddLink>
       </Field>
     </>
@@ -140,44 +137,40 @@ export const CfMenuForm: FormComponent = (p) => {
 };
 
 export const CfSearchForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
   const save = String(p.data.save || 'search');
   return (
     <>
-      <Field label="Search query" hint="What to look up. Use {{variables}} from earlier nodes.">
+      <Field label={t('searchQuery')} hint={t('searchQueryHint')}>
         {Txt(p, 'query', '{{caller_said}}')}
       </Field>
-      <Field
-        label="Save results to"
-        hint={`Usually fed into the next AI Respond node via {{${save}}}.`}
-      >
+      <Field label={t('saveResults')} hint={t('saveResultsHint', { token: `{{${save}}}` })}>
         {Txt(p, 'save', 'search')}
       </Field>
-      <Field
-        label="Say while searching"
-        hint="Spoken immediately so the caller never hears silence while the lookup runs."
-      >
-        {Txt(p, 'filler', 'One moment, let me check that…')}
+      <Field label={t('sayWhileSearching')} hint={t('sayWhileSearchingHint')}>
+        {Txt(p, 'filler', t('fillerPlaceholder'))}
       </Field>
     </>
   );
 };
 
-export const CfTransferForm: FormComponent = (p) => (
-  <>
-    <Field label="Transfer to number" hint="The call is bridged to this number (agent / queue).">
-      {Txt(p, 'number', '+1555…')}
-    </Field>
-    <Field label="Say before transferring">
-      {Txt(p, 'message', 'Connecting you to an agent now.')}
-    </Field>
-  </>
-);
+export const CfTransferForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  return (
+    <>
+      <Field label={t('transferTo')} hint={t('transferToHint')}>
+        {Txt(p, 'number', '+1555…')}
+      </Field>
+      <Field label={t('sayBeforeTransfer')}>{Txt(p, 'message', t('transferPlaceholder'))}</Field>
+    </>
+  );
+};
 
-export const CfHangupForm: FormComponent = (p) => (
-  <Field
-    label="Goodbye message"
-    hint="Spoken just before the call ends. Leave blank to hang up silently."
-  >
-    {Txt(p, 'goodbye', 'Thanks for calling. Goodbye!')}
-  </Field>
-);
+export const CfHangupForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  return (
+    <Field label={t('goodbye')} hint={t('goodbyeHint')}>
+      {Txt(p, 'goodbye', t('goodbyePlaceholder'))}
+    </Field>
+  );
+};

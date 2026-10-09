@@ -36,8 +36,8 @@ const readOf = (type: string, save: Rec = {}): Rec => {
 };
 
 describe('compileGraph with the FLB hook: every catalogue type', () => {
-  it('covers 67 types', () => {
-    expect(FLB_NODE_TYPE_LIST).toHaveLength(67);
+  it('covers 68 types', () => {
+    expect(FLB_NODE_TYPE_LIST).toHaveLength(68);
   });
 
   it.each(FLB_NODE_TYPE_LIST.map((d) => d.id))(

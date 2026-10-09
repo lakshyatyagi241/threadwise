@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "ヘルプセンター",
+    "searchLabel": "ヘルプを検索",
+    "searchPlaceholder": "ガイドを検索",
+    "resultsStatus": "{count, plural, =0 {ガイドが見つかりません} other {# 件のガイド}}",
+    "none": {
+      "title": "ガイドはまだありません",
+      "message": "ご利用のプランの機能に関するガイドがここに表示されます。"
+    },
+    "noResults": {
+      "title": "検索に一致するガイドはありません",
+      "message": "別の言葉で検索するか、検索をクリアしてすべてのガイドを表示してください。"
+    },
+    "areas": {
+      "overview": "プラットフォーム",
+      "inbox": "受信トレイとチャット",
+      "audience": "CRM",
+      "sales": "営業",
+      "campaigns": "キャンペーン",
+      "automation": "自動化",
+      "store": "ストア",
+      "apps": "マーケットプレイス",
+      "settings": "設定",
+      "account": "アカウント",
+      "getting-started": "はじめに",
+      "troubleshooting": "トラブルシューティング"
+    },
+    "allHelp": "ヘルプに戻る",
+    "onThisPage": "このページの内容",
+    "openScreen": "この画面を開く",
+    "shownInEnglish": "このガイドはまだ日本語に翻訳されていないため、英語で表示しています。",
+    "tip": {
+      "label": "ヘルプ: {title}",
+      "readMore": "ガイドを読む"
+    },
+    "guideCount": "{count, plural, =0 {ガイドはありません} other {# 件のガイド}}",
+    "crumb": "その他 / ヘルプ",
+    "heading": "ヘルプ",
+    "headingRest": "とガイド",
+    "back": "戻る",
+    "askSupport": "見つかりませんか?サポートにお問い合わせください",
+    "askSupportShort": "サポート",
+    "categories": "カテゴリ",
+    "allGuides": "すべてのガイド",
+    "needHuman": "担当者に相談しますか?",
+    "contactSupport": "サポートに問い合わせる",
+    "popular": "人気",
+    "searchResults": "検索結果",
+    "read": "ガイドを読む",
+    "readMinutes": "{count, plural, other {約 # 分で読めます}}",
+    "moreInArea": "{area} のその他"
+  }
+}

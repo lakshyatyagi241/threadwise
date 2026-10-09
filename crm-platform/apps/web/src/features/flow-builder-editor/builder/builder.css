@@ -9,23 +9,23 @@
    * The builder sits on Reference's warm "paper" palette, not the platform's cool slate, so it is re-mapped here for this
    * screen only: page / toolbar / palette = paper-0, canvas and hover = paper-50, rules = paper-200, text = ink.
    */
-  --background: #fbfaf6;
-  --foreground: #0b1f1c;
-  --muted: #f5f3ec;
-  --muted-foreground: #6b807c;
-  --border: #e5dfd0;
+  --background: #ffffff;
+  --foreground: #0d0b2e;
+  --muted: #f7f6ff;
+  --muted-foreground: #6b6a8f;
+  --border: #e2e0fa;
   /* WhatsApp's own colours: the mint chip, the outgoing bubble and the bright green of the minimap. */
-  --flb-mint: #dcf8c6;
-  --flb-bubble: #e7ffdb;
+  --flb-mint: #e4e2ff;
+  --flb-bubble: #ede9fe;
   --flb-bubble-border: #c6e8b5;
-  --flb-green: #25d366;
+  --flb-green: #7c3aed;
   --flb-plum: #5b3d8a;
   --flb-coral: #e87a5d;
-  --flb-ink-600: #3a5a55;
+  --flb-ink-600: #4a477f;
   --flb-yes: var(--brand);
-  --flb-ink-700: #1f4540;
-  --flb-rule: #efebe0;
-  --flb-card: #fbfaf6;
+  --flb-ink-700: #2e2a6b;
+  --flb-rule: #f0efff;
+  --flb-card: #ffffff;
   --flb-edge: #b5bab6;
   --flb-shadow: 11 31 28;
   --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -34,21 +34,21 @@
   font-family: var(--font-sans);
 }
 [data-theme='dark'] .flb-root {
-  --background: #1f4540;
+  --background: #2e2a6b;
   --foreground: #f0ebe0;
   --muted: #0f2723;
-  --muted-foreground: #9aa8a4;
+  --muted-foreground: #9a99b8;
   --border: #2d5a53;
-  --flb-mint: #dcf8c6;
+  --flb-mint: #e4e2ff;
   --flb-bubble: color-mix(in srgb, var(--flb-green) 20%, transparent);
   --flb-bubble-border: color-mix(in srgb, var(--flb-green) 45%, transparent);
-  --flb-ink-600: #9aa8a4;
-  --flb-ink-700: #e5dfd0;
+  --flb-ink-600: #9a99b8;
+  --flb-ink-700: #e2e0fa;
   --flb-rule: #2d5a53;
-  --flb-card: #13312d;
-  --flb-edge: #6b807c;
+  --flb-card: #1e1b4b;
+  --flb-edge: #6b6a8f;
   --flb-shadow: 0 0 0;
-  --flb-popup: #13312d;
+  --flb-popup: #1e1b4b;
   --flb-yes: var(--flb-green);
 }
 
@@ -105,7 +105,7 @@
   height: 14px;
   border-radius: 50%;
   background: var(--background);
-  border: 2px solid #6b807c;
+  border: 2px solid #6b6a8f;
   transition:
     transform 0.12s ease,
     box-shadow 0.12s ease,
@@ -115,7 +115,7 @@
 [data-theme='dark'] .flb-root .port,
 [data-theme='dark'] .flb-root .port.is-yes,
 [data-theme='dark'] .flb-root .port.is-no {
-  background: #1f4540;
+  background: #2e2a6b;
 }
 .flb-root .port.is-yes {
   background: var(--flb-mint);

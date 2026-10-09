@@ -1,0 +1,402 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "התראות",
+      "labelUnread": "התראות, {count} שלא נקראו",
+      "title": "התראות",
+      "markAll": "סמן הכול כנקרא",
+      "empty": "אין התראות עדיין.",
+      "loading": "טוען התראות",
+      "failed": "לא ניתן לטעון התראות.",
+      "retry": "נסה שוב",
+      "unread": "לא נקרא",
+      "settings": "הגדרות התראות",
+      "sound": "הפעל צליל לצ׳אטים ולהודעות חדשים",
+      "soundOn": "צליל: פועל",
+      "soundOff": "צליל: כבוי",
+      "desktopEnable": "הפעל התראות שולחן עבודה",
+      "desktopOn": "התראות שולחן עבודה: פועלות",
+      "desktopOff": "התראות שולחן עבודה: כבויות",
+      "desktopBlocked": "התראות שולחן העבודה חסומות בהגדרות הדפדפן שלך.",
+      "desktopHint": "מציג את שם איש הקשר רק כשהלשונית הזו ברקע.",
+      "preferences": "הגדרות התראות"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "משימה שהוקצתה לך",
+        "body": "{actor} הקצה לך: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "משימה מועדת",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "משימה הושלמה",
+        "body": "{actor} השלים: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "ליד חדש",
+        "titleReturning": "ליד הגיע שוב",
+        "body": "{name} הגיע מ־{platform}",
+        "bodyReturning": "{name} שלח ליד נוסף מ־{platform}",
+        "bodyNoActor": "{name} הגיע"
+      },
+      "new_chat": {
+        "title": "צ׳אט חדש מ־{name}",
+        "titleNoName": "צ׳אט חדש",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, one {הודעה חדשה מ־{name}} two {# הודעות חדשות מ־{name}} other {# הודעות חדשות מ־{name}}}",
+        "titleNoName": "{count, plural, one {הודעה חדשה} two {# הודעות חדשות} other {# הודעות חדשות}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "chat_waiting": {
+        "title": "עדיין אף אחד לא ענה ל־{name}",
+        "titleNoName": "צ׳אט עדיין ממתין לתגובה",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "{name} הוקצה לך",
+        "titleNoName": "צ׳אט הוקצה לך",
+        "titleTeam": "{name} הוקצה לצוות שלך",
+        "titleTeamNoName": "צ׳אט הוקצה לצוות שלך",
+        "body": "הוקצה על ידי {actor}",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "{actor} תייג אותך",
+        "titleNoName": "תויגת בהערה",
+        "body": "{name}: {preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "device_connected": {
+        "title": "{name} מחובר",
+        "titleNoName": "מספר ה־WhatsApp שלך מחובר"
+      },
+      "device_disconnected": {
+        "title": "{name} התנתק",
+        "titleNoName": "מספר WhatsApp התנתק",
+        "body": "פתח את המכשיר כדי להתחבר מחדש."
+      },
+      "device_logged_out": {
+        "title": "{name} התנתק מהחשבון",
+        "titleNoName": "מספר WhatsApp התנתק מהחשבון",
+        "body": "סרוק שוב את קוד ה־QR כדי להתחבר מחדש."
+      },
+      "broadcast_completed": {
+        "title": "השידור “{name}” הסתיים",
+        "titleNoName": "שידור הסתיים",
+        "bodySent": "{sent, plural, one {# הודעה נשלחה} two {# הודעות נשלחו} other {# הודעות נשלחו}}",
+        "bodySentFailed": "{sent, plural, one {# הודעה נשלחה} two {# הודעות נשלחו} other {# הודעות נשלחו}}, {failed, plural, one {# נכשלה} two {# נכשלו} other {# נכשלו}}"
+      },
+      "broadcast_failed": {
+        "title": "השידור “{name}” נכשל",
+        "titleNoName": "שידור נכשל",
+        "body": "{reason}",
+        "bodyNoReason": "פתח כדי לראות מה השתבש."
+      },
+      "campaign_completed": {
+        "title": "הקמפיין “{name}” הסתיים",
+        "titleNoName": "קמפיין הסתיים",
+        "bodySent": "{sent, plural, one {# הודעה נשלחה} two {# הודעות נשלחו} other {# הודעות נשלחו}}",
+        "bodySentFailed": "{sent, plural, one {# הודעה נשלחה} two {# הודעות נשלחו} other {# הודעות נשלחו}}, {failed, plural, one {# נכשלה} two {# נכשלו} other {# נכשלו}}"
+      },
+      "campaign_failed": {
+        "title": "הקמפיין “{name}” נכשל",
+        "titleNoName": "קמפיין נכשל",
+        "body": "{reason}",
+        "bodyNoReason": "פתח כדי לראות מה השתבש."
+      },
+      "scheduled_completed": {
+        "title": "השליחה המתוזמנת “{name}” יצאה",
+        "titleNoName": "שליחה מתוזמנת יצאה",
+        "bodySent": "{sent, plural, one {# הודעה נשלחה} two {# הודעות נשלחו} other {# הודעות נשלחו}}",
+        "bodySentFailed": "{sent, plural, one {# הודעה נשלחה} two {# הודעות נשלחו} other {# הודעות נשלחו}}, {failed, plural, one {# נכשלה} two {# נכשלו} other {# נכשלו}}"
+      },
+      "scheduled_failed": {
+        "title": "השליחה המתוזמנת “{name}” נכשלה",
+        "titleNoName": "שליחה מתוזמנת נכשלה",
+        "body": "{reason}",
+        "bodyNoReason": "פתח כדי לראות מה השתבש."
+      },
+      "teamchat_mention": {
+        "title": "{author} תייג אותך ב־{channel}",
+        "titleNoChannel": "{author} תייג אותך בצ׳אט הצוות",
+        "titleNoName": "תויגת בצ׳אט הצוות"
+      },
+      "teamchat_message": {
+        "title": "{count, plural, one {הודעה חדשה מ־{author}} two {# הודעות חדשות מ־{author}} other {# הודעות חדשות מ־{author}}}",
+        "titleNoName": "{count, plural, one {הודעה פרטית חדשה} two {# הודעות פרטיות חדשות} other {# הודעות פרטיות חדשות}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {מישהו רוצה להצטרף ל-{name}} two {# אנשים רוצים להצטרף ל-{name}} other {# אנשים רוצים להצטרף ל-{name}}}",
+        "titleNoName": "{count, plural, one {מישהו רוצה להצטרף לקבוצת WhatsApp} two {# אנשים רוצים להצטרף לקבוצות WhatsApp} other {# אנשים רוצים להצטרף לקבוצות WhatsApp}}",
+        "body": "פתחו את הקבוצות כדי לאשר או לדחות."
+      },
+      "waba_group_suspended": {
+        "title": "{name} הושעתה",
+        "titleNoName": "קבוצת WhatsApp הושעתה",
+        "body": "WhatsApp השעתה את הקבוצה הזו. אי אפשר לשלוח לה הודעות עד שתשוחזר."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} פעילה שוב",
+        "titleNoName": "קבוצת WhatsApp פעילה שוב",
+        "body": "WhatsApp שחזרה את הקבוצה הזו. אפשר לשלוח לה הודעות שוב."
+      }
+    },
+    "live": {
+      "open": "פתח",
+      "dismiss": "סגור",
+      "toastRegion": "התראות",
+      "summary": "{count} התראות חדשות",
+      "announceMany": "{count} התראות חדשות",
+      "desktop": {
+        "new_chat": "צ׳אט חדש",
+        "new_message": "הודעה חדשה",
+        "chat_waiting": "ממתין לתגובה",
+        "conversation_assigned": "הוקצה לך",
+        "mention": "תייג אותך",
+        "fallbackTitle": "התראה חדשה",
+        "device_connected": "מספר WhatsApp מחובר",
+        "device_disconnected": "מספר WhatsApp התנתק",
+        "device_logged_out": "מספר WhatsApp התנתק מהחשבון",
+        "broadcast_completed": "השידור הסתיים",
+        "broadcast_failed": "השידור נכשל",
+        "campaign_completed": "הקמפיין הסתיים",
+        "campaign_failed": "הקמפיין נכשל",
+        "scheduled_completed": "שליחה מתוזמנת יצאה",
+        "scheduled_failed": "שליחה מתוזמנת נכשלה",
+        "teamchat_mention": "תייג אותך בצ׳אט הצוות",
+        "teamchat_message": "הודעה פרטית חדשה",
+        "waba_group_join_request": "בקשה להצטרף לקבוצה",
+        "waba_group_suspended": "קבוצת WhatsApp הושעתה",
+        "waba_group_suspension_cleared": "קבוצת WhatsApp פעילה שוב"
+      }
+    },
+    "prefs": {
+      "title": "העדפות התראות",
+      "description": "בחר איך כל אירוע מגיע אליך. הבחירות האלה שלך בלבד; סביבת העבודה שלך קובעת אילו אירועים מופעלים מלכתחילה.",
+      "columns": {
+        "event": "אירוע",
+        "bell": "פעמון",
+        "toast": "חלון קופץ",
+        "sound": "צליל",
+        "push": "דחיפה"
+      },
+      "groups": {
+        "conversations": "צ׳אטים",
+        "tasks": "משימות",
+        "leads": "לידים וטפסים",
+        "documents": "מסמכי מכירה",
+        "wallet": "ארנק",
+        "devices": "מספרי WhatsApp",
+        "broadcasts": "שידורים וקמפיינים",
+        "team_chat": "צ׳אט צוות",
+        "whatsapp_groups": "קבוצות WhatsApp"
+      },
+      "types": {
+        "new_chat": {
+          "label": "צ׳אט חדש",
+          "hint": "לשיחה שאף אחד לא שייך אליה עדיין מגיעה ההודעה הראשונה."
+        },
+        "new_message": {
+          "label": "הודעה חדשה בצ׳אט שלי",
+          "hint": "לקוח כותב בצ׳אט שהוקצה לך."
+        },
+        "chat_waiting": {
+          "label": "צ׳אט עדיין ממתין לתגובה",
+          "hint": "בצ׳אט שאף אחד לא שייך אליו הודעת לקוח לא נענתה כבר כמה דקות. תקבל על כך התראה פעם אחת."
+        },
+        "conversation_assigned": {
+          "label": "צ׳אט שהוקצה לי",
+          "hint": "צ׳אט הוקצה לך או לצוות שלך."
+        },
+        "mention": {
+          "label": "תויגת בהערה",
+          "hint": "עמית מתייג אותך בהערת שיחה."
+        },
+        "teamchat_mention": {
+          "label": "תויגת בצ׳אט צוות",
+          "hint": "עמית מתייג אותך בערוץ צ׳אט צוות."
+        },
+        "teamchat_message": {
+          "label": "הודעה פרטית",
+          "hint": "עמית כותב לך בצ׳אט צוות."
+        },
+        "device_connected": {
+          "label": "מספר מחובר",
+          "hint": "מספר WhatsApp אישי סיים להתחבר."
+        },
+        "device_disconnected": {
+          "label": "מספר התנתק",
+          "hint": "מספר WhatsApp אישי איבד את החיבור."
+        },
+        "device_logged_out": {
+          "label": "מספר התנתק מהחשבון",
+          "hint": "מספר WhatsApp אישי התנתק מהחשבון בטלפון."
+        },
+        "broadcast_completed": {
+          "label": "השידור הסתיים",
+          "hint": "שידור שהתחלת יצא."
+        },
+        "broadcast_failed": {
+          "label": "השידור נכשל",
+          "hint": "שידור שהתחלת נכשל."
+        },
+        "campaign_completed": {
+          "label": "הקמפיין הסתיים",
+          "hint": "קמפיין שהתחלת יצא."
+        },
+        "campaign_failed": {
+          "label": "הקמפיין נכשל",
+          "hint": "קמפיין שהתחלת נכשל."
+        },
+        "scheduled_completed": {
+          "label": "שליחה מתוזמנת יצאה",
+          "hint": "שליחה מתוזמנת שהגדרת נשלחה."
+        },
+        "scheduled_failed": {
+          "label": "שליחה מתוזמנת נכשלה",
+          "hint": "שליחה מתוזמנת שהגדרת נכשלה."
+        },
+        "task_assigned": {
+          "label": "משימה שהוקצתה לי",
+          "hint": "משימה הוקצתה לך."
+        },
+        "task_due": {
+          "label": "משימה מועדת",
+          "hint": "משימה שלך מועדת."
+        },
+        "task_completed": {
+          "label": "משימה הושלמה",
+          "hint": "משימה שיצרת הושלמה."
+        },
+        "new_lead": {
+          "label": "ליד חדש",
+          "hint": "ליד הגיע ממקור לידים."
+        },
+        "form_submission": {
+          "label": "טופס נשלח",
+          "hint": "מישהו שלח אחד מהטפסים שלך."
+        },
+        "form_needs_review": {
+          "label": "הטופס דורש בדיקה",
+          "hint": "הגשה דורשת בדיקה."
+        },
+        "wallet_low_balance": {
+          "label": "יתרת הארנק נמוכה",
+          "hint": "הארנק של סביבת העבודה עומד להתרוקן."
+        },
+        "sales_doc_decided": {
+          "label": "מסמך מכירה הוכרע",
+          "hint": "הצעת מחיר או חשבונית אושרה או נדחתה."
+        },
+        "wallet_credited": {
+          "label": "הארנק מולא",
+          "hint": "זוכה הארנק של סביבת העבודה."
+        },
+        "waba_group_join_request": {
+          "label": "בקשה להצטרף לקבוצה",
+          "hint": "אנשים מבקשים להצטרף לקבוצת WhatsApp של מספר העסק שלכם. עשר בקשות מופיעות כשורה אחת."
+        },
+        "waba_group_suspended": {
+          "label": "הקבוצה הושעתה",
+          "hint": "WhatsApp השעתה אחת מהקבוצות שלכם."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "הקבוצה פעילה שוב",
+          "hint": "WhatsApp שחזרה קבוצה שהושעתה. מוצג רק אם קיבלתם הודעה על ההשעיה."
+        }
+      },
+      "loading": "טוען את ההעדפות שלך",
+      "failed": "לא ניתן לטעון את ההעדפות שלך.",
+      "retry": "נסה שוב",
+      "saveFailed": "לא ניתן לשמור את השינוי. הוא בוטל.",
+      "saved": "נשמר",
+      "dismiss": "סגור",
+      "resetRow": "איפוס לברירת מחדל",
+      "resetRowFor": "איפוס {event} לברירת מחדל",
+      "resetAll": "איפוס הכול לברירת מחדל",
+      "resetAllDone": "כל ההעדפות חזרו לברירות המחדל.",
+      "customised": "שונה",
+      "usingDefault": "ברירת מחדל",
+      "toggleLabel": "{event}: {channel}",
+      "workspaceOff": "כובה על ידי סביבת העבודה שלך",
+      "workspaceOffHelp": "סביבת העבודה שלך כיבתה את זה; הבחירה שלך עדיין חלה עליך.",
+      "bellOffHelp": "הפעל את הפעמון כדי לבחור חלון קופץ, צליל או דחיפה.",
+      "notAvailable": "לא זמין",
+      "defaultSummary": "ברירת מחדל: {bell}, {toast}, {sound}",
+      "on": "פועל",
+      "off": "כבוי",
+      "channelNames": {
+        "bell": "פעמון",
+        "toast": "חלון קופץ",
+        "sound": "צליל",
+        "push": "דחיפה"
+      },
+      "browser": {
+        "title": "הדפדפן הזה",
+        "description": "צליל והתראות שולחן עבודה מוגדרים לכל דפדפן, לא לכל חשבון."
+      },
+      "empty": "עדיין אין סוגי התראות להגדרה.",
+      "defaultSummaryPush": "ברירת מחדל: {bell}, {toast}, {sound}, {push}",
+      "push": {
+        "title": "התראות דפדפן",
+        "description": "קבל התראה מהדפדפן על האירועים שמגיעים לפעמון שלך, גם כש־CRM סגור. אתה בוחר אילו אירועים בעמודת הדחיפה שלמטה.",
+        "state": {
+          "on": "פועל למכשיר הזה",
+          "off": "כבוי",
+          "blocked": "חסום",
+          "unavailable": "לא זמין"
+        },
+        "checking": "בודק את הדפדפן הזה",
+        "unsupported": "הדפדפן הזה לא יכול להציג התראות כש־CRM סגור. נסה Chrome, Edge, Firefox או Safari מעודכנים, בדף מאובטח (https).",
+        "needsInstall": "ב־iPhone וב־iPad, התראות דפדפן פועלות רק עבור אפליקציה שנוספה למסך הבית.",
+        "needsInstallSteps": "פתח את הדף הזה ב־Safari, הקש על שיתוף, בחר “הוספה למסך הבית”, ולאחר מכן פתח את ה־CRM מהסמל החדש וחזור לכאן. נדרש iOS או iPadOS 16.4 ומעלה.",
+        "blocked": "ההתראות חסומות לאתר הזה בדפדפן שלך.",
+        "blockedHelp": "רק הדפדפן שלך יכול לבטל זאת: פתח את הגדרות האתר (הסמל ליד הכתובת), הגדר התראות ל“אפשר”, ולאחר מכן חזור לדף הזה.",
+        "offHelp": "לא מופעל במכשיר הזה. הדפדפן ישאל על הרשאה כשתלחץ על הפעלה.",
+        "enable": "הפעל במכשיר הזה",
+        "enabling": "מפעיל...",
+        "onHelp": "המכשיר הזה מקבל התראת דפדפן על האירועים שהפעלת למטה, כשאינך מסתכל על ה־CRM.",
+        "howItWorks": "לא תקבל התראה כש־CRM פתוח ומול עיניך (הפעמון וחלונות הקופץ מכסים זאת). ההתראה מציגה מי ואיזה סוג אירוע, לעולם לא את טקסט ההודעה.",
+        "test": "שליחת התראת בדיקה",
+        "testing": "שולח...",
+        "disable": "כבה במכשיר הזה",
+        "disabling": "מכבה...",
+        "testResult": {
+          "sent": "נשלח. ההתראה אמורה להופיע במכשירים שלך בעוד רגע, גם אם ה־CRM סגור.",
+          "none_reachable": "לא ניתן היה להגיע לדפדפן שלך או לשירות הדחיפה שלו כרגע. נסה שוב בעוד רגע; מכשיר שאינו קיים יותר יוסר אוטומטית.",
+          "no_device": "אין מכשיר לשלוח אליו. הפעל קודם התראות במכשיר הזה.",
+          "wait": "בדיקה נשלחה זה עתה. המתן כמה שניות לפני שליחת בדיקה נוספת."
+        },
+        "problem": {
+          "enable_failed": "לא ניתן להפעיל התראות במכשיר הזה. נסה שוב.",
+          "disable_failed": "לא ניתן לכבות התראות במכשיר הזה. נסה שוב.",
+          "remove_failed": "לא ניתן להסיר את המכשיר הזה. נסה שוב.",
+          "test_failed": "לא ניתן לשלוח את הבדיקה. נסה שוב."
+        },
+        "devicesFailed": "לא ניתן לטעון את המכשירים שלך.",
+        "devices": {
+          "title": "המכשירים שלך",
+          "thisDevice": "המכשיר הזה",
+          "added": "נוסף {date}",
+          "lastUsed": "התראה אחרונה {date}",
+          "neverUsed": "עדיין לא נשלחה התראה",
+          "remove": "הסרה",
+          "removeFor": "הסרת {device}"
+        }
+      }
+    },
+    "nav": {
+      "preferences": "התראות"
+    }
+  }
+}

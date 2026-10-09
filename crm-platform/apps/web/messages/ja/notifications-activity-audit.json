@@ -1,0 +1,402 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "通知",
+      "labelUnread": "通知、未読 {count} 件",
+      "title": "通知",
+      "markAll": "すべて既読にする",
+      "empty": "通知はまだありません。",
+      "loading": "通知を読み込み中",
+      "failed": "通知を読み込めませんでした。",
+      "retry": "再試行",
+      "unread": "未読",
+      "settings": "アラート設定",
+      "sound": "新しいチャットとメッセージで音を鳴らす",
+      "soundOn": "音：オン",
+      "soundOff": "音：オフ",
+      "desktopEnable": "デスクトップアラートを有効にする",
+      "desktopOn": "デスクトップアラート：オン",
+      "desktopOff": "デスクトップアラート：オフ",
+      "desktopBlocked": "デスクトップアラートはブラウザの設定でブロックされています。",
+      "desktopHint": "このタブがバックグラウンドにある場合にのみ、連絡先名を表示します。",
+      "preferences": "通知設定"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "タスクが割り当てられました",
+        "body": "{actor}があなたにタスクを割り当てました：{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "タスクの期限",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "タスクが完了しました",
+        "body": "{actor}が完了しました：{task}",
+        "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "新規リード",
+        "titleReturning": "リードが再度届きました",
+        "body": "{name}が{platform}から届きました",
+        "bodyReturning": "{name}が{platform}から別のリードを送信しました",
+        "bodyNoActor": "{name}が届きました"
+      },
+      "new_chat": {
+        "title": "{name}からの新しいチャット",
+        "titleNoName": "新しいチャット",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, other {{name}からの新着メッセージ #件}}",
+        "titleNoName": "{count, plural, other {新着メッセージ #件}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "chat_waiting": {
+        "title": "まだ{name}に返信した人はいません",
+        "titleNoName": "返信待ちのチャットがあります",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "{name}があなたに割り当てられました",
+        "titleNoName": "チャットがあなたに割り当てられました",
+        "titleTeam": "{name}があなたのチームに割り当てられました",
+        "titleTeamNoName": "チャットがあなたのチームに割り当てられました",
+        "body": "{actor}が割り当て",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "{actor}があなたをメンションしました",
+        "titleNoName": "メモ内であなたがメンションされました",
+        "body": "{name}：{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "device_connected": {
+        "title": "{name}が連携されました",
+        "titleNoName": "WhatsApp番号が連携されました"
+      },
+      "device_disconnected": {
+        "title": "{name}の連携が解除されました",
+        "titleNoName": "WhatsApp番号の連携が解除されました",
+        "body": "デバイスを開いて再連携してください。"
+      },
+      "device_logged_out": {
+        "title": "{name}がログアウトされました",
+        "titleNoName": "WhatsApp番号がログアウトされました",
+        "body": "QRコードを再度スキャンして再連携してください。"
+      },
+      "broadcast_completed": {
+        "title": "一斉送信「{name}」が完了しました",
+        "titleNoName": "一斉送信が完了しました",
+        "bodySent": "{sent, plural, other {# 件のメッセージを送信}}",
+        "bodySentFailed": "{sent, plural, other {# 件のメッセージを送信}}、{failed, plural, other {# 件失敗}}"
+      },
+      "broadcast_failed": {
+        "title": "一斉送信「{name}」が失敗しました",
+        "titleNoName": "一斉送信が失敗しました",
+        "body": "{reason}",
+        "bodyNoReason": "開いて問題の詳細を確認してください。"
+      },
+      "campaign_completed": {
+        "title": "キャンペーン「{name}」が完了しました",
+        "titleNoName": "キャンペーンが完了しました",
+        "bodySent": "{sent, plural, other {# 件のメッセージを送信}}",
+        "bodySentFailed": "{sent, plural, other {# 件のメッセージを送信}}、{failed, plural, other {# 件失敗}}"
+      },
+      "campaign_failed": {
+        "title": "キャンペーン「{name}」が失敗しました",
+        "titleNoName": "キャンペーンが失敗しました",
+        "body": "{reason}",
+        "bodyNoReason": "開いて問題の詳細を確認してください。"
+      },
+      "scheduled_completed": {
+        "title": "予約送信「{name}」が送信されました",
+        "titleNoName": "予約送信が送信されました",
+        "bodySent": "{sent, plural, other {# 件のメッセージを送信}}",
+        "bodySentFailed": "{sent, plural, other {# 件のメッセージを送信}}、{failed, plural, other {# 件失敗}}"
+      },
+      "scheduled_failed": {
+        "title": "予約送信「{name}」が失敗しました",
+        "titleNoName": "予約送信が失敗しました",
+        "body": "{reason}",
+        "bodyNoReason": "開いて問題の詳細を確認してください。"
+      },
+      "teamchat_mention": {
+        "title": "{author}が{channel}であなたをメンションしました",
+        "titleNoChannel": "{author}がチームチャットであなたをメンションしました",
+        "titleNoName": "チームチャットであなたがメンションされました"
+      },
+      "teamchat_message": {
+        "title": "{count, plural, other {{author}からの新着メッセージ #件}}",
+        "titleNoName": "{count, plural, other {新しいダイレクトメッセージ #件}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {{name}に参加したい人がいます} other {#人が{name}に参加したいと考えています}}",
+        "titleNoName": "{count, plural, one {WhatsAppグループへの参加を希望する人がいます} other {#人がWhatsAppグループへの参加を希望しています}}",
+        "body": "グループを開いて承認または却下してください。"
+      },
+      "waba_group_suspended": {
+        "title": "{name}は停止されました",
+        "titleNoName": "WhatsAppグループが停止されました",
+        "body": "WhatsAppによってこのグループは停止されました。復旧されるまでメッセージを送信できません。"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name}が再び有効になりました",
+        "titleNoName": "WhatsAppグループが再び有効になりました",
+        "body": "WhatsAppによってこのグループが復旧されました。再びメッセージを送信できます。"
+      }
+    },
+    "live": {
+      "open": "開く",
+      "dismiss": "閉じる",
+      "toastRegion": "通知",
+      "summary": "新しい通知 {count} 件",
+      "announceMany": "新しい通知 {count} 件",
+      "desktop": {
+        "new_chat": "新しいチャット",
+        "new_message": "新着メッセージ",
+        "chat_waiting": "返信待ち",
+        "conversation_assigned": "あなたに割り当て",
+        "mention": "メンションされました",
+        "fallbackTitle": "新しい通知",
+        "device_connected": "WhatsApp番号が連携されました",
+        "device_disconnected": "WhatsApp番号の連携が解除されました",
+        "device_logged_out": "WhatsApp番号がログアウトされました",
+        "broadcast_completed": "一斉送信完了",
+        "broadcast_failed": "一斉送信失敗",
+        "campaign_completed": "キャンペーン完了",
+        "campaign_failed": "キャンペーン失敗",
+        "scheduled_completed": "予約送信済み",
+        "scheduled_failed": "予約送信失敗",
+        "teamchat_mention": "チームチャットでメンションされました",
+        "teamchat_message": "新しいダイレクトメッセージ",
+        "waba_group_join_request": "グループへの参加リクエスト",
+        "waba_group_suspended": "WhatsAppグループ停止",
+        "waba_group_suspension_cleared": "WhatsAppグループ再開"
+      }
+    },
+    "prefs": {
+      "title": "通知の設定",
+      "description": "各イベントの通知方法を選択してください。この設定は個人ごとのものです。どのイベントを初期状態でオンにするかは、ワークスペースで設定されています。",
+      "columns": {
+        "event": "イベント",
+        "bell": "ベル",
+        "toast": "ポップアップ",
+        "sound": "音",
+        "push": "プッシュ"
+      },
+      "groups": {
+        "conversations": "チャット",
+        "tasks": "タスク",
+        "leads": "リードとフォーム",
+        "documents": "販売書類",
+        "wallet": "ウォレット",
+        "devices": "WhatsApp番号",
+        "broadcasts": "一斉送信とキャンペーン",
+        "team_chat": "チームチャット",
+        "whatsapp_groups": "WhatsAppグループ"
+      },
+      "types": {
+        "new_chat": {
+          "label": "新しいチャット",
+          "hint": "まだ担当者がいない会話に最初のメッセージが届いたとき。"
+        },
+        "new_message": {
+          "label": "自分のチャットに新着メッセージ",
+          "hint": "あなたに割り当てられたチャットに顧客がメッセージを送ったとき。"
+        },
+        "chat_waiting": {
+          "label": "返信待ちのチャット",
+          "hint": "担当者のいないチャットで、顧客のメッセージが数分間未返信のままの場合。通知は1回のみ届きます。"
+        },
+        "conversation_assigned": {
+          "label": "自分に割り当てられたチャット",
+          "hint": "あなたまたはあなたのチームにチャットが割り当てられたとき。"
+        },
+        "mention": {
+          "label": "メモでメンションされた",
+          "hint": "同僚が会話のメモであなたをメンションしたとき。"
+        },
+        "teamchat_mention": {
+          "label": "チームチャットでメンションされた",
+          "hint": "同僚がチームチャットのチャンネルであなたをメンションしたとき。"
+        },
+        "teamchat_message": {
+          "label": "ダイレクトメッセージ",
+          "hint": "同僚がチームチャットであなたにメッセージを送ったとき。"
+        },
+        "device_connected": {
+          "label": "番号の連携",
+          "hint": "個人のWhatsApp番号の連携が完了したとき。"
+        },
+        "device_disconnected": {
+          "label": "番号の連携解除",
+          "hint": "個人のWhatsApp番号の接続が切れたとき。"
+        },
+        "device_logged_out": {
+          "label": "番号のログアウト",
+          "hint": "スマートフォンから個人のWhatsApp番号がログアウトされたとき。"
+        },
+        "broadcast_completed": {
+          "label": "一斉送信完了",
+          "hint": "あなたが開始した一斉送信が送信されたとき。"
+        },
+        "broadcast_failed": {
+          "label": "一斉送信失敗",
+          "hint": "あなたが開始した一斉送信が失敗したとき。"
+        },
+        "campaign_completed": {
+          "label": "キャンペーン完了",
+          "hint": "あなたが開始したキャンペーンが送信されたとき。"
+        },
+        "campaign_failed": {
+          "label": "キャンペーン失敗",
+          "hint": "あなたが開始したキャンペーンが失敗したとき。"
+        },
+        "scheduled_completed": {
+          "label": "予約送信済み",
+          "hint": "あなたが設定した予約送信が送信されたとき。"
+        },
+        "scheduled_failed": {
+          "label": "予約送信失敗",
+          "hint": "あなたが設定した予約送信が失敗したとき。"
+        },
+        "task_assigned": {
+          "label": "自分に割り当てられたタスク",
+          "hint": "あなたにタスクが割り当てられたとき。"
+        },
+        "task_due": {
+          "label": "タスクの期限",
+          "hint": "あなたのタスクの期限が来たとき。"
+        },
+        "task_completed": {
+          "label": "タスク完了",
+          "hint": "あなたが作成したタスクが完了したとき。"
+        },
+        "new_lead": {
+          "label": "新規リード",
+          "hint": "リードソースからリードが届いたとき。"
+        },
+        "form_submission": {
+          "label": "フォームが送信されました",
+          "hint": "誰かがあなたのフォームを送信したとき。"
+        },
+        "form_needs_review": {
+          "label": "フォームの確認が必要",
+          "hint": "送信内容の確認が必要なとき。"
+        },
+        "wallet_low_balance": {
+          "label": "ウォレット残高が少ない",
+          "hint": "ワークスペースのウォレット残高が少なくなったとき。"
+        },
+        "sales_doc_decided": {
+          "label": "販売書類の結果が決定",
+          "hint": "見積書または請求書が承認または辞退されたとき。"
+        },
+        "wallet_credited": {
+          "label": "ウォレットにチャージ",
+          "hint": "ワークスペースのウォレットに入金されたとき。"
+        },
+        "waba_group_join_request": {
+          "label": "グループへの参加リクエスト",
+          "hint": "お客様の事業用番号のWhatsAppグループへの参加を希望する人がいます。10件のリクエストが1行にまとめられます。"
+        },
+        "waba_group_suspended": {
+          "label": "グループ停止",
+          "hint": "WhatsAppによってお客様のグループの1つが停止されました。"
+        },
+        "waba_group_suspension_cleared": {
+          "label": "グループ再開",
+          "hint": "WhatsAppが停止していたグループを復旧しました。停止の通知を受け取っていた場合のみ表示されます。"
+        }
+      },
+      "loading": "設定を読み込み中",
+      "failed": "設定を読み込めませんでした。",
+      "retry": "再試行",
+      "saveFailed": "変更を保存できませんでした。変更は元に戻されました。",
+      "saved": "保存しました",
+      "dismiss": "閉じる",
+      "resetRow": "初期値に戻す",
+      "resetRowFor": "{event}を初期値に戻す",
+      "resetAll": "すべてを初期値に戻す",
+      "resetAllDone": "すべての設定が初期値に戻りました。",
+      "customised": "変更済み",
+      "usingDefault": "初期値",
+      "toggleLabel": "{event}：{channel}",
+      "workspaceOff": "ワークスペースによりオフにされています",
+      "workspaceOffHelp": "ワークスペースではこの設定がオフになっています。ただし、あなたの選択は引き続きあなたに適用されます。",
+      "bellOffHelp": "ポップアップ、音、プッシュを選択するには、ベルをオンにしてください。",
+      "notAvailable": "利用不可",
+      "defaultSummary": "初期値：{bell}、{toast}、{sound}",
+      "on": "オン",
+      "off": "オフ",
+      "channelNames": {
+        "bell": "ベル",
+        "toast": "ポップアップ",
+        "sound": "音",
+        "push": "プッシュ"
+      },
+      "browser": {
+        "title": "このブラウザ",
+        "description": "音とデスクトップアラートはアカウントごとではなく、ブラウザごとに設定されます。"
+      },
+      "empty": "設定できる通知の種類はまだありません。",
+      "defaultSummaryPush": "初期値：{bell}、{toast}、{sound}、{push}",
+      "push": {
+        "title": "ブラウザ通知",
+        "description": "CRMが閉じている場合でも、ベルに届くイベントについてブラウザから通知を受け取ります。通知するイベントは、下のプッシュ列で選択してください。",
+        "state": {
+          "on": "このデバイスでオン",
+          "off": "オフ",
+          "blocked": "ブロック中",
+          "unavailable": "利用不可"
+        },
+        "checking": "このブラウザを確認中",
+        "unsupported": "このブラウザでは、CRMが閉じている間は通知を表示できません。最新のChrome、Edge、Firefox、またはSafariを、安全な（https）ページでお試しください。",
+        "needsInstall": "iPhoneおよびiPadでは、ブラウザ通知はホーム画面に追加されたアプリでのみ機能します。",
+        "needsInstallSteps": "このページをSafariで開き、「共有」をタップして「ホーム画面に追加」を選択してください。その後、新しいアイコンからCRMを開き、このページに戻ってください。iOSまたはiPadOS 16.4以降が必要です。",
+        "blocked": "このサイトの通知はブラウザでブロックされています。",
+        "blockedHelp": "この設定を元に戻せるのはブラウザのみです。サイトの設定（アドレスバー横のアイコン）を開き、「通知」を「許可」に変更してから、このページに戻ってください。",
+        "offHelp": "このデバイスでは有効になっていません。「有効にする」を押すと、ブラウザが許可を求めます。",
+        "enable": "このデバイスで有効にする",
+        "enabling": "有効にしています...",
+        "onHelp": "CRMを見ていないときに、このデバイスは下でオンにしたイベントについてブラウザ通知を受け取ります。",
+        "howItWorks": "CRMを開いて表示している間は通知されません（その場合はベルとポップアップで確認できます）。通知には誰からのどの種類のイベントかが表示されますが、メッセージ本文は表示されません。",
+        "test": "テスト通知を送信",
+        "testing": "送信中...",
+        "disable": "このデバイスでオフにする",
+        "disabling": "オフにしています...",
+        "testResult": {
+          "sent": "送信しました。CRMが閉じていても、まもなくお使いのデバイスに表示されるはずです。",
+          "none_reachable": "現在、ブラウザまたはそのプッシュサービスに接続できませんでした。しばらくしてから再度お試しください。利用できなくなったデバイスは自動的に削除されます。",
+          "no_device": "送信先のデバイスがありません。先にこのデバイスで通知を有効にしてください。",
+          "wait": "テストを送信したばかりです。もう一度送信するには数秒お待ちください。"
+        },
+        "problem": {
+          "enable_failed": "このデバイスで通知を有効にできませんでした。再度お試しください。",
+          "disable_failed": "このデバイスで通知をオフにできませんでした。再度お試しください。",
+          "remove_failed": "そのデバイスを削除できませんでした。再度お試しください。",
+          "test_failed": "テストを送信できませんでした。再度お試しください。"
+        },
+        "devicesFailed": "デバイスを読み込めませんでした。",
+        "devices": {
+          "title": "お使いのデバイス",
+          "thisDevice": "このデバイス",
+          "added": "追加日 {date}",
+          "lastUsed": "最終通知 {date}",
+          "neverUsed": "まだ通知されていません",
+          "remove": "削除",
+          "removeFor": "{device}を削除"
+        }
+      }
+    },
+    "nav": {
+      "preferences": "通知"
+    }
+  }
+}

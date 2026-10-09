@@ -1,0 +1,361 @@
+{
+  "message-templates": {
+    "nav": {
+      "title": "Sjablonen"
+    },
+    "common": {
+      "dismiss": "Negeren",
+      "requestId": "Verzoek-ID"
+    },
+    "status": {
+      "draft": "Concept",
+      "pending": "In beoordeling",
+      "approved": "Goedgekeurd",
+      "rejected": "Afgewezen",
+      "paused": "Gepauzeerd",
+      "disabled": "Uitgeschakeld",
+      "deleted": "Ontbreekt bij Meta"
+    },
+    "category": {
+      "MARKETING": "Marketing",
+      "UTILITY": "Utility",
+      "AUTHENTICATION": "Authenticatie"
+    },
+    "quality": {
+      "GREEN": "Hoge kwaliteit",
+      "YELLOW": "Gemiddelde kwaliteit",
+      "RED": "Lage kwaliteit",
+      "UNKNOWN": "Kwaliteit in afwachting"
+    },
+    "errors": {
+      "generic": "Er ging iets mis. Probeer het opnieuw en vermeld het verzoek-ID als het blijft gebeuren.",
+      "TPL_NOT_FOUND": "Dit sjabloon bestaat niet meer.",
+      "TPL_NAME_TAKEN": "Er bestaat al een sjabloon met deze naam en taal op dit nummer. Kies een andere naam of taal.",
+      "TPL_LINT_FAILED": "De controles hebben problemen gevonden die Meta zou afwijzen. Er is niets verzonden. Los de fouten rechts op.",
+      "TPL_META_REJECTED": "Meta heeft het sjabloon geweigerd. De reden staat hieronder; het sjabloon blijft bewaard als concept zodat je het kunt aanpassen en opnieuw kunt proberen.",
+      "TPL_NO_CONNECTION": "Aan dit sjabloon is geen WhatsApp-nummer gekoppeld om het mee in te dienen. Koppel eerst een nummer.",
+      "TPL_IN_USE": "Dit sjabloon kan niet worden verwijderd omdat een lopende of geplande broadcast het gebruikt.",
+      "TPL_NOT_EDITABLE": "Alleen een sjabloon dat Meta nog niet heeft goedgekeurd, of een dat is afgewezen, kan worden bewerkt.",
+      "ROW_VERSION_CONFLICT": "Iemand heeft dit sjabloon gewijzigd terwijl jij het bewerkte. Laad de pagina opnieuw om de nieuwste versie te zien en pas daarna je wijziging opnieuw toe.",
+      "VALIDATION_FAILED": "Sommige velden zijn ongeldig. Controleer de velden hieronder.",
+      "INTERNAL": "De server kon dit verzoek niet verwerken. Probeer het zo dadelijk opnieuw."
+    },
+    "preview": {
+      "title": "Voorbeeld",
+      "headerImageAlt": "Voorbeeld van headerafbeelding",
+      "header": {
+        "image": "Afbeelding",
+        "video": "Video",
+        "document": "Document",
+        "location": "Locatie"
+      },
+      "authBody": "is je verificatiecode.",
+      "authExpiry": "{count, plural, one {Deze code verloopt over # minuut.} other {Deze code verloopt over # minuten.}}",
+      "bodyEmpty": "Je berichttekst verschijnt hier.",
+      "time": "10:30",
+      "copyCode": "Code kopiëren",
+      "buttonUnnamed": "Knop",
+      "moreButtons": "{count, plural, one {+# knop meer} other {+# knoppen meer}}"
+    },
+    "card": {
+      "rejected": "Afgewezen: {reason}",
+      "view": "Bekijken",
+      "edit": "Bewerken",
+      "delete": "Verwijderen"
+    },
+    "library": {
+      "title": "Sjabloonbibliotheek",
+      "intro": "WhatsApp-berichtsjablonen: schrijf ze, stuur ze naar Meta voor beoordeling en volg hier hun status.",
+      "sync": "Synchroniseren vanuit Meta",
+      "syncing": "Synchroniseren...",
+      "syncHint": "Haal je sjablonen op uit Meta",
+      "syncDone": "Gesynchroniseerd vanuit Meta: {created} nieuw, {updated} bijgewerkt, {missing} niet meer bij Meta.",
+      "syncNone": "Nog geen sjablonen gevonden op dit WhatsApp Business-account.",
+      "syncFailed": "Synchroniseren vanuit Meta mislukt. Controleer de verbinding van het nummer en probeer opnieuw.",
+      "syncPartial": "{count, plural, one {# nummer kon niet worden gesynchroniseerd.} other {# nummers konden niet worden gesynchroniseerd.}}",
+      "new": "Nieuw sjabloon",
+      "filters": "Sjablonen filteren",
+      "search": "Zoeken",
+      "searchPlaceholder": "Naam van het sjabloon",
+      "status": "Status",
+      "allStatuses": "Alle statussen",
+      "category": "Categorie",
+      "allCategories": "Alle categorieën",
+      "connection": "WhatsApp-nummer",
+      "allConnections": "Alle nummers",
+      "loading": "Sjablonen laden",
+      "retry": "Opnieuw proberen",
+      "emptyTitle": "Nog geen sjablonen",
+      "emptyBody": "Maak een sjabloon en dien het in bij Meta, of synchroniseer de sjablonen die je al hebt in Meta Business Manager.",
+      "emptyFilteredTitle": "Geen sjablonen gevonden",
+      "emptyFilteredBody": "Wijzig of wis de filters om meer sjablonen te zien.",
+      "clearFilters": "Filters wissen",
+      "loadMore": "Meer laden"
+    },
+    "delete": {
+      "title": "Sjabloon verwijderen",
+      "message": "\"{name}\" verwijderen? Het wordt hier en bij Meta verwijderd, en het kan niet meer worden verzonden.",
+      "confirm": "Sjabloon verwijderen",
+      "cancel": "Annuleren",
+      "done": "\"{name}\" verwijderd.",
+      "inUseHelp": "Open de broadcast die dit sjabloon gebruikt en annuleer die of kies een ander sjabloon, en verwijder daarna dit sjabloon."
+    },
+    "lint": {
+      "title": "Controles vóór indienen",
+      "checking": "Controleren",
+      "unavailable": "De controles konden nu niet worden uitgevoerd. De beoordeling door Meta geldt nog steeds, en de server controleert opnieuw bij het indienen.",
+      "clean": "Geen problemen gevonden.",
+      "summary": "{errors, plural, one {# fout} other {# fouten}}, {warnings, plural, one {# waarschuwing} other {# waarschuwingen}}",
+      "severity": {
+        "error": "Fout",
+        "warning": "Waarschuwing"
+      },
+      "field": {
+        "name": "Naam",
+        "language": "Taal",
+        "header": "Header",
+        "body": "Hoofdtekst",
+        "footer": "Footer",
+        "buttons": "Knoppen",
+        "template": "Sjabloon"
+      }
+    },
+    "form": {
+      "loading": "Laden",
+      "retry": "Opnieuw proberen",
+      "backToLibrary": "Terug naar de bibliotheek",
+      "noPermission": "Je hebt geen toestemming om sjablonen te maken of te bewerken.",
+      "notEditableTitle": "Dit sjabloon kan niet meer worden bewerkt",
+      "notEditableBody": "Alleen een sjabloon dat Meta nog niet heeft goedgekeurd, of een dat is afgewezen, kan worden bewerkt. Maak een nieuw sjabloon om een goedgekeurd sjabloon te wijzigen.",
+      "viewTemplate": "Sjabloon bekijken",
+      "breadcrumb": "Broodkruimelpad",
+      "breadcrumbLibrary": "Sjablonen",
+      "breadcrumbNew": "Nieuw",
+      "breadcrumbEdit": "Bewerken",
+      "titleNew": "Nieuw sjabloon",
+      "titleEdit": "{name} bewerken",
+      "saveDraft": "Concept opslaan",
+      "submit": "Indienen bij Meta",
+      "reload": "Sjabloon opnieuw laden",
+      "aside": "Voorbeeld en controles",
+      "why": {
+        "connection": "Kies een WhatsApp-nummer om mee in te dienen.",
+        "name": "Voer een sjabloonnaam in.",
+        "fields": "Sommige velden zijn ongeldig.",
+        "errors": "Los de fouten op voordat je indient.",
+        "checking": "Het sjabloon wordt gecontroleerd."
+      },
+      "toast": {
+        "submitted": "Sjabloon ingediend bij Meta voor beoordeling.",
+        "saved": "Sjabloon opgeslagen als concept."
+      },
+      "errors": {
+        "name": "Voer een sjabloonnaam in.",
+        "header": "De header mag maximaal 60 tekens bevatten.",
+        "body": "De hoofdtekst mag maximaal {max} tekens bevatten.",
+        "footer": "De footer mag maximaal 60 tekens bevatten."
+      },
+      "identity": {
+        "title": "Identiteit",
+        "connection": "WhatsApp-nummer",
+        "connectionHint": "Media en de indiening moeten hetzelfde nummer gebruiken, anders wijst Meta het sjabloon af.",
+        "connectionUnknown": "Nummer niet meer beschikbaar",
+        "noConnection": "Geen gekoppeld WhatsApp-nummer om mee in te dienen.",
+        "connectNumber": "Een nummer koppelen",
+        "category": "Categorie",
+        "categoryHint": "Meta beoordeelt en prijst het sjabloon op basis van zijn categorie.",
+        "categories": {
+          "MARKETING": "Marketing",
+          "UTILITY": "Utility",
+          "AUTHENTICATION": "Authenticatie"
+        },
+        "name": "Naam van het sjabloon",
+        "nameHint": "Alleen a-z, 0-9 en _, maximaal 60 tekens.",
+        "nameTaken": "Deze naam is al in gebruik voor deze taal op dit nummer.",
+        "language": "Taal"
+      },
+      "auth": {
+        "title": "Eenmalige toegangscode",
+        "hint": "Meta schrijft het bericht en de knop Code kopiëren van een authenticatiesjabloon.",
+        "expiry": "Code verloopt na (minuten)",
+        "expiryHint": "Optioneel. Van {min} tot {max} minuten.",
+        "expiryInvalid": "Voer een geheel getal in van {min} tot {max}.",
+        "fixedBody": "Het bericht luidt: een code, gevolgd door \"is je verificatiecode\" en een beveiligingsherinnering. Dit kun je niet wijzigen."
+      },
+      "header": {
+        "title": "Header",
+        "hint": "Optioneel. Tekst, of één afbeelding, video, document of locatie.",
+        "type": "Type header",
+        "kind": {
+          "none": "Geen",
+          "text": "Tekst",
+          "image": "Afbeelding",
+          "video": "Video",
+          "document": "Document",
+          "location": "Locatie"
+        },
+        "text": "Tekst van de header",
+        "textHint": "{used}/{max}. Maximaal één variabele.",
+        "sample": "Voorbeeldbestand",
+        "uploading": "Uploaden",
+        "keptSample": "Het opgeslagen voorbeeld blijft behouden. Kies een bestand om het te vervangen.",
+        "noFile": "Geen bestand gekozen",
+        "limits": "Afbeelding tot 5 MB, video tot 16 MB, pdf tot 100 MB.",
+        "replace": "Bestand vervangen",
+        "choose": "Voorbeeldbestand kiezen",
+        "tooBig": "Deze {kind} is {size} MB. WhatsApp accepteert maximaal {max} MB. Kies een kleiner bestand.",
+        "wrongType": "Dit bestandstype wordt niet geaccepteerd voor deze header.",
+        "emptyFile": "Dit bestand is leeg.",
+        "locationHelp": "De locatie wordt ingevuld wanneer het bericht wordt verzonden. Meta hoeft alleen te weten dat de header een locatie is."
+      },
+      "body": {
+        "title": "Hoofdtekst",
+        "hint": "De berichttekst. Gebruik variabelen in de stijl '{{name}}'; ze worden bij het opslaan voor Meta genummerd.",
+        "toolbar": "Tekstopmaak",
+        "format": {
+          "bold": "Vet",
+          "italic": "Cursief",
+          "strike": "Doorhalen",
+          "code": "Code"
+        },
+        "variable": "Variabele toevoegen",
+        "label": "Hoofdtekst",
+        "counter": "{used}/{max}",
+        "wrapSample": "tekst"
+      },
+      "variables": {
+        "title": "Koppeling van variabelen",
+        "empty": "Nog geen variabelen. Typ een tijdelijke aanduiding zoals '{{name}}' in de hoofdtekst, of gebruik Variabele toevoegen.",
+        "help": "Geef voor elke variabele het contactkenmerk op dat hem bij het verzenden invult, en geef een voorbeeldwaarde voor de beoordeling door Meta.",
+        "attribute": "Contactkenmerk",
+        "sample": "Voorbeeldwaarde",
+        "header": "header",
+        "body": "hoofdtekst"
+      },
+      "footer": {
+        "title": "Footer",
+        "label": "Tekst van de footer",
+        "hint": "Optioneel. {used}/{max}. Geen variabelen."
+      },
+      "buttons": {
+        "title": "Knoppen",
+        "hint": "Optioneel. Snelle antwoorden moeten samen staan, aan het begin of aan het eind.",
+        "add": {
+          "quick_reply": "Snel antwoord",
+          "url": "Website bezoeken",
+          "phone": "Telefoon bellen",
+          "copy_code": "Code kopiëren"
+        },
+        "kind": {
+          "quick_reply": "Snel antwoord",
+          "url": "Website bezoeken",
+          "phone": "Telefoon bellen",
+          "copy_code": "Code kopiëren",
+          "other": "Overig"
+        },
+        "count": "{used}/{max} knoppen",
+        "limitReached": "Maximaal {max} van dit type.",
+        "empty": "Geen knoppen. Voeg er een toe met de knoppen hierboven.",
+        "moveUp": "Knop {n} omhoog verplaatsen",
+        "moveDown": "Knop {n} omlaag verplaatsen",
+        "remove": "Knop {n} verwijderen",
+        "keptAsIs": "\"{text}\" blijft zoals het is. Deze editor wijzigt het niet.",
+        "text": "Knoptekst",
+        "textHint": "{used}/25",
+        "url": "Website-URL",
+        "urlHint": "Voeg '{{1}}' aan het eind toe voor een dynamisch deel.",
+        "urlExample": "Voorbeeld voor de variabele",
+        "phone": "Telefoonnummer",
+        "phoneHint": "Met het landnummer.",
+        "code": "Voorbeeldcode",
+        "codeHint": "Bijvoorbeeld PROMO50.",
+        "limits": "Meta staat maximaal {quick} snelle antwoorden toe, {url} websiteknoppen, {phone} telefoonknop en {copy} knop voor code kopiëren.",
+        "allUsed": "Elk type knop heeft zijn limiet bereikt.",
+        "issue": {
+          "textRequired": "Voer de knoptekst in.",
+          "textTooLong": "Maximaal {max} tekens.",
+          "urlRequired": "Voer de URL in.",
+          "urlInvalid": "De URL moet beginnen met http:// of https://.",
+          "phoneRequired": "Voer het telefoonnummer in.",
+          "codeRequired": "Voer een voorbeeldcode in.",
+          "quickReplyVariable": "Een snel antwoord kan geen variabele bevatten.",
+          "urlExampleRequired": "Geef een voorbeeldwaarde op voor de URL-variabele.",
+          "quickReplyPosition": "Snelle antwoorden moeten samen staan, aan het begin of aan het eind van de knoppen."
+        }
+      },
+      "result": {
+        "metaRefused": "Opgeslagen, maar Meta heeft het sjabloon geweigerd.",
+        "metaRefusedHelp": "Het sjabloon blijft bewaard als concept. Los op wat Meta aangeeft en dien daarna opnieuw in. Je formulier is niet gewijzigd.",
+        "submitted": "Ingediend bij Meta voor beoordeling.",
+        "saved": "Opgeslagen als concept.",
+        "warnings": "De moeite waard om te bekijken voordat Meta het beoordeelt:",
+        "open": "Het sjabloon openen"
+      }
+    },
+    "detail": {
+      "loading": "Sjabloon laden",
+      "retry": "Opnieuw proberen",
+      "back": "Terug naar de bibliotheek",
+      "breadcrumb": "Broodkruimelpad",
+      "refresh": "Status vernieuwen",
+      "retrySubmit": "Indienen bij Meta",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "refreshed": "Status vernieuwd vanuit Meta.",
+      "submittedToast": "Sjabloon ingediend bij Meta voor beoordeling.",
+      "never": "Nooit",
+      "none": "Geen",
+      "banner": {
+        "metaFailed": "Meta heeft het sjabloon geweigerd",
+        "draft": "Dit sjabloon is nog niet bij Meta ingediend. Dien het in om de beoordeling te starten.",
+        "pending": "Ingediend voor beoordeling door Meta. Deze pagina controleert elke 15 seconden op een antwoord.",
+        "pendingMeta": "Ingediend {submitted}. Laatst gecontroleerd {checked}.",
+        "polling": "Je kunt deze pagina open laten staan of later terugkomen.",
+        "rejected": "Afgewezen door Meta",
+        "rejectedHelp": "Bewerk het sjabloon om de reden aan te pakken en dien het daarna opnieuw in.",
+        "paused": "Gepauzeerd door Meta. Het kan niet worden verzonden totdat Meta de pauze opheft.",
+        "pausedUntil": "Gepauzeerd door Meta tot {when}.",
+        "disabled": "Uitgeschakeld door Meta. Het kan niet worden verzonden.",
+        "deleted": "Meta vermeldt dit sjabloon niet meer. Het blijft hier bewaard; synchroniseer opnieuw of verwijder het."
+      },
+      "facts": {
+        "title": "Synchronisatie met Meta",
+        "status": "Status bij Meta",
+        "quality": "Kwaliteit",
+        "category": "Categorie bij Meta",
+        "metaId": "Sjabloon-ID",
+        "number": "WhatsApp-nummer",
+        "numberUnknown": "Nummer niet meer beschikbaar",
+        "submitted": "Ingediend",
+        "approved": "Goedgekeurd",
+        "synced": "Laatst gesynchroniseerd"
+      },
+      "components": {
+        "title": "Onderdelen",
+        "header": "Header",
+        "media": "Mediabestand in header",
+        "body": "Hoofdtekst",
+        "footer": "Footer",
+        "buttons": "Knoppen",
+        "expiry": "Vervaldatum code",
+        "expiryValue": "{count, plural, one {# minuut} other {# minuten}}"
+      },
+      "attachment": {
+        "none": "Geen",
+        "image": "Afbeelding",
+        "video": "Video",
+        "document": "Document",
+        "location": "Locatie"
+      },
+      "lint": {
+        "title": "Controles",
+        "clean": "Geen problemen gevonden."
+      },
+      "payload": {
+        "title": "Meta-payload",
+        "hint": "Wat er voor de beoordeling naar Meta wordt gestuurd, precies zoals het is opgebouwd.",
+        "empty": "Nog niets opgebouwd."
+      }
+    }
+  }
+}

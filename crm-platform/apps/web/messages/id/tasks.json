@@ -1,0 +1,330 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "Tugas"
+    },
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "hub": {
+      "title": "Tugas",
+      "subtitle": "Tindak lanjut dan daftar tugas. Tetapkan penanggung jawab, atur prioritas dan tenggat, lalu centang saat selesai.",
+      "newTask": "Tugas baru",
+      "tableLabel": "Tugas",
+      "loading": "Memuat tugas",
+      "useSampleData": "Gunakan data contoh (pengembangan)",
+      "emptyFilteredTitle": "Tidak ada tugas yang cocok",
+      "emptyFiltered": "Coba pencarian lain atau hapus filter.",
+      "resetFilters": "Hapus filter",
+      "empty": {
+        "mine": {
+          "title": "Tidak ada tugas untuk Anda",
+          "message": "Tugas yang ditetapkan kepada Anda akan muncul di sini. Tambahkan di atas, atau lihat Semua tugas."
+        },
+        "all": {
+          "title": "Belum ada tugas",
+          "message": "Tambahkan tindak lanjut atau tugas dengan kotak di atas dan akan muncul di sini."
+        },
+        "overdue": {
+          "title": "Tidak ada yang terlambat",
+          "message": "Semua tugas terbuka tepat waktu."
+        },
+        "today": {
+          "title": "Tidak ada yang jatuh tempo hari ini",
+          "message": "Tidak ada tugas terbuka yang jatuh tempo sisa hari ini."
+        },
+        "upcoming": {
+          "title": "Tidak ada yang akan datang",
+          "message": "Tugas terbuka yang jatuh tempo di hari lain akan muncul di sini."
+        },
+        "completed": {
+          "title": "Belum ada tugas yang selesai",
+          "message": "Tugas yang Anda centang akan muncul di sini, terbaru di atas."
+        }
+      },
+      "showing": "{count, plural, other {# tugas dimuat}}",
+      "loadMore": "Muat lebih banyak",
+      "allLoaded": "Semua tugas sudah dimuat",
+      "deleteTitle": "Hapus tugas ini?",
+      "deleteMessage": "\"{title}\" akan dihapus untuk semua orang. Tindakan ini tidak dapat dibatalkan.",
+      "delete": "Hapus",
+      "keep": "Pertahankan"
+    },
+    "tabs": {
+      "label": "Daftar tugas",
+      "mine": "Tugas saya",
+      "all": "Semua tugas",
+      "overdue": "Terlambat",
+      "today": "Hari ini",
+      "upcoming": "Mendatang",
+      "completed": "Selesai",
+      "count": "{count, plural, other {# tugas}}"
+    },
+    "toolbar": {
+      "label": "Filter tugas",
+      "search": "Cari tugas",
+      "status": "Status",
+      "statusOpen": "Terbuka",
+      "statusDone": "Selesai",
+      "statusAll": "Terbuka dan selesai",
+      "priority": "Prioritas",
+      "allPriorities": "Semua prioritas",
+      "priorities": {
+        "high": "Tinggi",
+        "medium": "Sedang",
+        "low": "Rendah"
+      },
+      "assignee": "Penanggung jawab",
+      "allAssignees": "Semua penanggung jawab",
+      "unassigned": "Belum ditetapkan",
+      "linked": "Terkait dengan",
+      "anyLink": "Semua data",
+      "linkContact": "Sebuah kontak",
+      "linkDeal": "Sebuah Deal",
+      "clear": "Hapus",
+      "modifyColumns": "Ubah kolom",
+      "resetColumns": "Atur ulang kolom",
+      "columns": {
+        "title": "Tugas",
+        "priority": "Prioritas",
+        "due": "Tenggat",
+        "assignee": "Penanggung jawab",
+        "contact": "Kontak",
+        "deal": "Deal",
+        "created": "Dibuat",
+        "completed": "Selesai pada"
+      },
+      "refresh": "Segarkan",
+      "shortcuts": "Pintasan keyboard",
+      "view": "Tata letak",
+      "views": {
+        "list": "Daftar",
+        "board": "Board menurut tenggat"
+      }
+    },
+    "table": {
+      "scrollArea": "Tabel tugas",
+      "selectAll": "Pilih semua tugas yang dimuat",
+      "selectRow": "Pilih {title}",
+      "columns": {
+        "title": "Tugas",
+        "priority": "Prioritas",
+        "due": "Tenggat",
+        "assignee": "Penanggung jawab",
+        "contact": "Kontak",
+        "deal": "Deal",
+        "created": "Dibuat",
+        "completed": "Selesai pada"
+      }
+    },
+    "row": {
+      "complete": "Tandai selesai",
+      "reopen": "Buka kembali",
+      "completeNamed": "Tandai \"{title}\" selesai",
+      "reopenNamed": "Buka kembali \"{title}\"",
+      "moreFor": "Tindakan lainnya untuk {title}",
+      "open": "Buka",
+      "edit": "Edit",
+      "delete": "Hapus",
+      "unassigned": "Belum ditetapkan"
+    },
+    "bulk": {
+      "label": "Tindakan untuk tugas yang dipilih",
+      "selected": "{count, plural, other {# tugas dipilih}}",
+      "working": "Diproses",
+      "complete": "Selesaikan",
+      "assign": "Tetapkan",
+      "assignTo": "Tetapkan ke",
+      "me": "{name} (saya)",
+      "unassign": "Batalkan penetapan",
+      "delete": "Hapus",
+      "clear": "Hapus pilihan",
+      "failed": "Itu tidak berhasil.",
+      "someFailed": "{count, plural, other {# tugas tidak dapat diubah.}}",
+      "completed": "{count, plural, other {# tugas diselesaikan.}}",
+      "assigned": "{count, plural, other {# tugas ditetapkan ke {name}.}}",
+      "unassigned": "{count, plural, other {# tugas dibatalkan penetapannya.}}",
+      "deleted": "{count, plural, other {# tugas dihapus.}}",
+      "deleteTitle": "Hapus tugas yang dipilih?",
+      "deleteMessage": "{count, plural, other {# tugas akan dihapus untuk semua orang. Tindakan ini tidak dapat dibatalkan.}}",
+      "keep": "Pertahankan"
+    },
+    "quick": {
+      "label": "Tambah tugas",
+      "placeholder": "Tambah tugas dan tekan Enter",
+      "priority": "Prioritas",
+      "priorities": {
+        "high": "Tinggi",
+        "medium": "Sedang",
+        "low": "Rendah"
+      },
+      "due": "Tanggal dan waktu tenggat",
+      "add": "Tambah",
+      "dueRequired": "Pilih tanggal dan waktu tenggat.",
+      "titleRequired": "Ketik apa yang perlu dikerjakan.",
+      "options": "Opsi lainnya (prioritas dan tenggat)"
+    },
+    "form": {
+      "eyebrow": "Tugas",
+      "newTitle": "Tugas baru",
+      "editTitle": "Edit tugas",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "create": "Buat tugas",
+      "save": "Simpan perubahan",
+      "title": "Tugas",
+      "titlePlaceholder": "mis. Telepon Acme tentang perpanjangan",
+      "priority": "Prioritas",
+      "priorities": {
+        "high": "Tinggi",
+        "medium": "Sedang",
+        "low": "Rendah"
+      },
+      "assignee": "Tetapkan ke",
+      "unassigned": "Tidak ada",
+      "me": "{name} (saya)",
+      "due": "Tenggat",
+      "presets": {
+        "today": "Hari ini",
+        "tomorrow": "Besok",
+        "nextWeek": "Minggu depan"
+      },
+      "clearDue": "Hapus tanggal",
+      "contact": "Kontak",
+      "deal": "Deal",
+      "notes": "Catatan",
+      "reminderHint": "Penanggung jawab akan menerima pengingat saat tugas jatuh tempo.",
+      "assigneePick": "Pilih siapa yang bertanggung jawab atas tugas ini.",
+      "problems": {
+        "dueRequired": "Pilih tanggal dan waktu tenggat.",
+        "priorityRequired": "Pilih prioritas.",
+        "assigneeRequired": "Pilih untuk siapa tugas ini.",
+        "titleRequired": "Ketik apa yang perlu dikerjakan.",
+        "titleTooLong": "Tugas terlalu panjang (maksimal 255 karakter).",
+        "notesTooLong": "Catatan terlalu panjang (maksimal 5000 karakter).",
+        "dueInvalid": "Tanggal tersebut tidak valid.",
+        "assigneeInvalid": "Orang tersebut bukan anggota aktif workspace ini."
+      }
+    },
+    "drawer": {
+      "loading": "Memuat tugas",
+      "close": "Tutup",
+      "eyebrow": "Tugas",
+      "name": "Nama tugas",
+      "titleRequired": "Tugas memerlukan nama.",
+      "statusOpen": "Buka",
+      "statusDone": "Selesai",
+      "complete": "Tandai selesai",
+      "reopen": "Buka kembali",
+      "edit": "Edit",
+      "delete": "Hapus",
+      "details": "Detail",
+      "notes": "Catatan",
+      "notesPlaceholder": "Tambahkan konteks untuk siapa pun yang mengerjakan ini",
+      "linked": "Rekaman tertaut",
+      "company": "Perusahaan",
+      "noLinks": "Tidak ditautkan ke kontak atau deal.",
+      "activity": "Aktivitas",
+      "events": {
+        "created": "Tugas dibuat",
+        "createdBy": "Dibuat oleh {name}",
+        "reminded": "Pengingat tenggat terkirim",
+        "completed": "Ditandai selesai"
+      },
+      "deleteTitle": "Hapus tugas ini?",
+      "deleteMessage": "“{title}” akan dihapus untuk semua orang. Tindakan ini tidak dapat dibatalkan.",
+      "cancel": "Pertahankan"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "Terlambat",
+        "today": "Hari ini",
+        "upcoming": "Mendatang",
+        "no_date": "Tanpa tanggal"
+      },
+      "empty": "Belum ada apa-apa di sini."
+    },
+    "due": {
+      "none": "Tanpa tanggal",
+      "overdue": "Terlambat",
+      "today": "Hari ini, {time}",
+      "tomorrow": "Besok, {time}",
+      "yesterday": "Kemarin, {time}",
+      "date": "{date}, {time}"
+    },
+    "priority": {
+      "high": "Tinggi",
+      "medium": "Sedang",
+      "low": "Rendah"
+    },
+    "link": {
+      "unnamedContact": "Kontak tanpa nama",
+      "unnamedDeal": "Deal"
+    },
+    "picker": {
+      "searchContact": "Cari kontak",
+      "searchDeal": "Cari deal",
+      "results": "Hasil pencarian",
+      "searching": "Mencari",
+      "unavailable": "Pencarian tidak tersedia saat ini.",
+      "none": "Tidak ada yang cocok.",
+      "unlink": "Hapus tautan"
+    },
+    "errors": {
+      "network": "Kami tidak dapat terhubung ke server. Periksa koneksi Anda lalu coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukan itu.",
+      "signedOut": "Sesi Anda telah berakhir. Masuk lagi untuk melanjutkan.",
+      "conflict": "Tugas ini telah diubah orang lain. Muat ulang lalu coba lagi.",
+      "validation": "Beberapa detail tidak valid.",
+      "unavailable": "Layanan tugas belum tersedia di server ini.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "notFound": "Tugas tersebut tidak ditemukan. Mungkin sudah dihapus.",
+      "planDisabled": "Paket Anda tidak mencakup tugas. Tingkatkan paket untuk membukanya.",
+      "assigneeInvalid": "Orang tersebut bukan anggota aktif workspace ini.",
+      "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi.",
+      "requestId": "ID permintaan",
+      "retry": "Coba lagi"
+    },
+    "toast": {
+      "completed": "Tugas selesai.",
+      "reopened": "Tugas dibuka kembali.",
+      "created": "Tugas dibuat.",
+      "saved": "Tugas disimpan.",
+      "deleted": "Tugas dihapus.",
+      "conflict": "Tugas ini telah diubah orang lain. Daftar dimuat ulang; coba lagi.",
+      "failed": "Tidak dapat memperbarui tugas.",
+      "saveFailed": "Tidak dapat menyimpan tugas.",
+      "deleteFailed": "Tidak dapat menghapus tugas.",
+      "createFailed": "Tidak dapat membuat tugas."
+    },
+    "shortcuts": {
+      "title": "Pintasan keyboard",
+      "close": "Tutup",
+      "intro": "Kerjakan daftar tanpa mouse. Pintasan dijeda saat Anda mengetik di kolom.",
+      "actions": {
+        "next": "Tugas berikutnya",
+        "prev": "Tugas sebelumnya",
+        "open": "Buka tugas",
+        "toggleComplete": "Selesaikan atau buka kembali",
+        "toggleSelect": "Pilih atau batalkan pilihan",
+        "newTask": "Tugas baru",
+        "focusSearch": "Cari",
+        "clearSelection": "Hapus pilihan",
+        "help": "Tampilkan daftar ini"
+      }
+    },
+    "linked": {
+      "title": "Tugas",
+      "addPlaceholder": "Ketik judul tugas, lalu Tambahkan untuk mengisi detailnya",
+      "viewAll": "Lihat semua",
+      "loading": "Memuat tugas",
+      "unavailableTitle": "Tugas belum tersedia",
+      "unavailable": "Layanan tugas belum tersedia di server ini.",
+      "empty": "Tidak ada tugas terbuka.",
+      "loadMore": "Muat lainnya",
+      "loadMoreDone": "Muat lebih banyak yang selesai",
+      "showDone": "Tampilkan yang selesai",
+      "hideDone": "Sembunyikan yang selesai"
+    }
+  }
+}

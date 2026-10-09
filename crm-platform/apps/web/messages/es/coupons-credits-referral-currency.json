@@ -1,0 +1,412 @@
+{
+  "coupons-credits-referral-currency": {
+    "nav": {
+      "group": "Facturación y planes",
+      "coupons": "Cupones",
+      "currencies": "Monedas",
+      "currenciesGroup": "Localización",
+      "affiliate": "Afiliados"
+    },
+    "common": {
+      "loading": "Cargando",
+      "retry": "Reintentar",
+      "cancel": "Cancelar",
+      "dismiss": "Descartar",
+      "admin": "Administración",
+      "readOnly": "Puedes ver esta página, pero solo un superadministrador puede modificarla.",
+      "requestId": "ID de solicitud",
+      "errors": {
+        "forbidden": "No tienes acceso a esta página.",
+        "request": "No se pudo completar la solicitud.",
+        "unexpected": "Algo salió mal. Inténtalo de nuevo en un momento."
+      },
+      "pager": {
+        "label": "Paginación",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "page": "Página {n}"
+      }
+    },
+    "errors": {
+      "generic": "Algo salió mal. Inténtalo de nuevo en un momento.",
+      "forbidden": "Solo un superadministrador puede cambiar esto.",
+      "notFound": "Este elemento ya no existe. Puede que se haya eliminado.",
+      "conflict": "Otra persona acaba de cambiar esto. Recarga la página e inténtalo de nuevo.",
+      "validation": "Algunos valores no son válidos. Revisa el formulario e inténtalo de nuevo.",
+      "codeTaken": "Otro cupón ya usa este código.",
+      "planUnknown": "Uno o más de los planes seleccionados ya no existen.",
+      "currencyUnknown": "Elige una de las monedas activas.",
+      "currencyTaken": "Ya existe una moneda con este código.",
+      "defaultProtected": "Esta es la moneda predeterminada del sistema. Elige otra como predeterminada primero.",
+      "inUse": "Esta moneda aún la usa {used}. Desactívala en su lugar.",
+      "ratesFailed": "No se pudo contactar con el proveedor de tipos de cambio o no devolvió tasas. No se cambió ninguna tasa."
+    },
+    "coupons": {
+      "title": "Cupones de descuento",
+      "titleLead": "Cupones de",
+      "titleAccent": "descuento",
+      "crumbHere": "Cupones",
+      "eyebrow": "Administración · Facturación · Códigos de cupón",
+      "description": "Códigos promocionales que los clientes introducen al pagar. Elige un porcentaje o un importe fijo, define un periodo de validez, límitalos a ciertos planes y fija un tope de canjes totales.",
+      "new": "Nuevo cupón",
+      "kpi": {
+        "total": "Cupones totales",
+        "totalHint": "en el catálogo",
+        "active": "Activos",
+        "activeHint": "aceptan canjes",
+        "expired": "Vencidos",
+        "expiredHint": "pasada la fecha de caducidad",
+        "redeemed": "Canjes totales",
+        "redeemedHint": "usos históricos"
+      },
+      "filters": {
+        "label": "Filtrar cupones",
+        "all": "Todos",
+        "active": "Activos",
+        "disabled": "Desactivados",
+        "expired": "Vencidos",
+        "search": "Buscar por código o descripción…",
+        "searchLabel": "Buscar cupones"
+      },
+      "table": {
+        "label": "Cupones",
+        "code": "Código",
+        "discount": "Descuento",
+        "uses": "Usos",
+        "validity": "Validez",
+        "status": "Estado",
+        "actions": "Acciones"
+      },
+      "validity": {
+        "forever": "para siempre",
+        "now": "ahora",
+        "range": "{from} → {to}"
+      },
+      "empty": {
+        "title": "Ningún cupón coincide.",
+        "hint": "Ajusta o restablece los filtros, o",
+        "create": "crea el primero"
+      },
+      "footer": "Mostrando {from}–{to} de {total} cupones",
+      "pager": {
+        "label": "Paginación",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "page": "Página {n}"
+      },
+      "actions": {
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "menu": "Acciones",
+        "toggle": "Activar o desactivar {code}"
+      },
+      "toasts": {
+        "created": "Cupón creado.",
+        "updated": "Cupón actualizado.",
+        "activated": "Activado.",
+        "deactivated": "Desactivado.",
+        "deleted": "Cupón eliminado."
+      },
+      "delete": {
+        "title": "Eliminar cupón",
+        "body": "¿Eliminar el cupón {code}? Los espacios de trabajo que ya lo canjearon conservan su descuento.",
+        "confirm": "Sí, eliminar"
+      },
+      "editor": {
+        "notFoundTitle": "Cupón no encontrado",
+        "notFoundBody": "No existe ningún cupón con esta dirección. Puede que se haya eliminado o que el enlace sea incorrecto.",
+        "backToList": "Volver a cupones",
+        "crumbNew": "Nuevo",
+        "eyebrowNew": "Administración · Facturación · Códigos de cupón · Crear",
+        "eyebrowEdit": "Administración · Facturación · Códigos de cupón · Modificar",
+        "titleLead": "Nuevo",
+        "titleAccent": "cupón",
+        "descriptionNew": "Códigos promocionales que se canjean durante /checkout. Elige un porcentaje o un importe fijo, vincúlalo a un plan o a todos y, si quieres, dale un periodo de validez.",
+        "redeemed": "Canjeado {used}{max} veces",
+        "redeemedMax": " / {max}",
+        "expires": "caduca {when}",
+        "active": "Activo",
+        "disabled": "Desactivado",
+        "create": "Crear cupón",
+        "saveChanges": "Guardar cambios",
+        "saving": "Guardando",
+        "cancel": "Cancelar",
+        "problemsTitle": "Algunos campos requieren atención:",
+        "problems": {
+          "code": "Código: introduce un código de hasta 64 caracteres.",
+          "description": "Descripción: 255 caracteres como máximo.",
+          "adminNote": "Nota del administrador: 1000 caracteres como máximo.",
+          "type": "Tipo: elige porcentaje o importe fijo.",
+          "amount": "Importe: introduce un número como 10 o 12.5.",
+          "maxDiscountAmount": "Tope de descuento máximo: introduce un número o déjalo en blanco.",
+          "currencyCode": "Bloqueo de moneda: 8 caracteres como máximo.",
+          "minOrderAmount": "Importe mínimo del pedido: introduce un número o déjalo en blanco.",
+          "applicablePlans": "Planes aplicables: elige planes de la lista.",
+          "startsAt": "Comienza el: introduce una fecha y hora válidas.",
+          "expiresAt": "Caduca el: introduce una fecha y hora válidas que no sean anteriores al inicio.",
+          "maxUses": "Canjes totales máximos: un número entero de 1 o más, o en blanco.",
+          "perUserLimit": "Límite por usuario: un número entero de 1 o más, o en blanco."
+        },
+        "sections": {
+          "identity": "Identidad",
+          "discount": "Descuento",
+          "eligibility": "Elegibilidad",
+          "limits": "Límites y comportamiento"
+        },
+        "fields": {
+          "code": "Código",
+          "codeHint": "Se guarda en mayúsculas. Los clientes introducen este código exacto al pagar.",
+          "codePlaceholder": "WELCOME10",
+          "description": "Descripción",
+          "descriptionNote": "(se muestra al cliente)",
+          "descriptionPlaceholder": "Oferta de bienvenida: 10 % de descuento el primer mes",
+          "adminNote": "Nota del administrador",
+          "adminNoteNote": "(interna, no se muestra)",
+          "adminNotePlaceholder": "Lote de rebajas navideñas · Slack #marketing · termina con la campaña",
+          "activeTitle": "Activo",
+          "activeHint": "Los clientes pueden aplicarlo al pagar",
+          "type": "Tipo",
+          "typePercent": "Porcentaje (%)",
+          "typeFixed": "Importe fijo",
+          "amount": "Importe",
+          "amountHint": "En los cupones de porcentaje, 10 significa 10 %. En los de importe fijo, 10 significa 10 unidades de moneda.",
+          "maxDiscount": "Tope de descuento máximo",
+          "maxDiscountNote": "(solo tipo %)",
+          "maxDiscountPlaceholder": "en blanco = sin tope",
+          "maxDiscountHint": "Por ejemplo, 20 % de descuento con un máximo de $50.",
+          "currency": "Bloqueo de moneda",
+          "currencyAny": "Cualquier moneda",
+          "currencyHint": "Limita el canje a una sola moneda (se aplica a los cupones de importe fijo).",
+          "minOrder": "Importe mínimo del pedido",
+          "minOrderPlaceholder": "0 = sin mínimo",
+          "plans": "Planes aplicables",
+          "plansNote": "(vacío = cualquier plan)",
+          "plansPlaceholder": "Elige uno o más planes (vacío = cualquier plan)...",
+          "plansHint": "Empieza a escribir para acotar la lista, selecciona para añadir y usa la × de la etiqueta para quitar uno.",
+          "plansEmpty": "No hay más planes para elegir.",
+          "plansRemove": "Quitar {name}",
+          "plansClear": "Quitar todos los planes",
+          "startsAt": "Comienza el",
+          "startsAtHint": "En blanco = disponible ahora.",
+          "expiresAt": "Caduca el",
+          "expiresAtHint": "En blanco = no caduca nunca.",
+          "maxUses": "Canjes totales máximos",
+          "unlimitedPlaceholder": "en blanco = ilimitado",
+          "maxUsesHint": "Entre todos los clientes.",
+          "perUser": "Límite por usuario",
+          "perUserHint": "Número de canjes permitidos para cada cliente.",
+          "firstPurchaseTitle": "Solo primera compra",
+          "firstPurchaseHint": "Solo espacios de trabajo que no han hecho un pedido de pago",
+          "stackableTitle": "Se puede combinar con otros cupones",
+          "stackableHint": "Permite usarlo junto con otro código activo al pagar"
+        }
+      }
+    },
+    "currencies": {
+      "title": "Monedas de la plataforma",
+      "titleLead": "Monedas de la",
+      "titleAccent": "plataforma",
+      "crumbGroup": "Sistema",
+      "crumbGroup2": "Localización",
+      "crumbHere": "Monedas",
+      "eyebrow": "Administración · Plataforma · Localización",
+      "description": "Administra las monedas que pueden elegir los espacios de trabajo. Los tipos de cambio se guardan en relación con USD. Cambiar la predeterminada se refleja en todos los paneles de usuario, facturas y monederos.",
+      "fetchRates": "Obtener tipos de cambio en vivo",
+      "fetching": "Obteniendo",
+      "add": "Añadir moneda",
+      "kpi": {
+        "total": "Total",
+        "totalHint": "monedas configuradas",
+        "active": "Activas",
+        "activeHint": "visibles para los espacios de trabajo",
+        "default": "Predeterminada del sistema",
+        "defaultHint": "se usa en los espacios de trabajo nuevos",
+        "inactive": "Inactivas",
+        "inactiveHint": "no se ofrecen en los ajustes del espacio de trabajo"
+      },
+      "defaultCard": {
+        "eyebrow": "Predeterminada del sistema",
+        "title": "Moneda de respaldo de toda la plataforma",
+        "body": "Cualquier espacio de trabajo que no haya elegido moneda usa esta. Al guardar se borra la caché de inmediato, así que el cambio se verá en la siguiente carga de página en toda la aplicación.",
+        "select": "Moneda predeterminada",
+        "set": "Establecer como predeterminada",
+        "setting": "Guardando"
+      },
+      "search": "Código, nombre o símbolo…",
+      "searchLabel": "Buscar monedas",
+      "searchButton": "Buscar",
+      "table": {
+        "label": "Monedas",
+        "code": "Código",
+        "name": "Nombre",
+        "symbol": "Símbolo",
+        "rate": "Tasa (1 USD →)",
+        "decimals": "Decimales",
+        "active": "Activa",
+        "actions": "Acciones"
+      },
+      "defaultBadge": "Predeterminada",
+      "rate": "1 USD → {rate}",
+      "on": "Sí",
+      "off": "No",
+      "empty": {
+        "none": "Aún no hay monedas.",
+        "noMatch": "Sin coincidencias para “{q}”."
+      },
+      "footer": "Mostrando {from}–{to} de {total} monedas",
+      "actions": {
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "toggle": "Activar o desactivar {code}"
+      },
+      "toasts": {
+        "added": "Moneda añadida.",
+        "updated": "Moneda actualizada.",
+        "activated": "Activada.",
+        "deactivated": "Desactivada.",
+        "deleted": "Moneda eliminada.",
+        "defaultSet": "Moneda predeterminada establecida en {code}.",
+        "ratesUpdated": "Se actualizaron {count} monedas desde {provider}."
+      },
+      "delete": {
+        "title": "Eliminar moneda",
+        "body": "¿Eliminar {code}? Los precios guardados en esta moneda quedarán huérfanos.",
+        "confirm": "Sí, eliminar"
+      },
+      "form": {
+        "addTitle": "Añadir una moneda",
+        "editTitle": "Editar {code}",
+        "name": "Nombre *",
+        "namePlaceholder": "Franco suizo",
+        "code": "Código ISO *",
+        "codePlaceholder": "CHF",
+        "codeLocked": "El código no cambia una vez que existe la moneda.",
+        "symbol": "Símbolo",
+        "symbolPlaceholder": "Fr",
+        "precision": "Decimales *",
+        "rate": "Tasa de conversión (1 USD = ?) *",
+        "active": "Activar de inmediato",
+        "save": "Añadir moneda",
+        "saveChanges": "Guardar cambios",
+        "cancel": "Cancelar",
+        "problemsTitle": "Algunos campos requieren atención:",
+        "problems": {
+          "name": "Nombre: introduce un nombre de hasta 120 caracteres.",
+          "code": "Código ISO: tres letras, como CHF.",
+          "symbol": "Símbolo: 20 caracteres como máximo.",
+          "precision": "Decimales: un número entero de 0 a 6.",
+          "exchangeRate": "Tipo de cambio: un número de al menos 0.000001."
+        },
+        "eyebrow": "Nueva entrada",
+        "rateHint": "Usa “Obtener tipos de cambio en vivo” arriba para rellenar los valores desde open.er-api.com.",
+        "editEyebrow": "Editar entrada"
+      },
+      "catalog": {
+        "eyebrow": "Catálogo",
+        "title": "Todas las monedas"
+      }
+    },
+    "affiliate": {
+      "title": "Afiliados",
+      "subtitle": "Comparte tu enlace y sigue a los espacios de trabajo que traigas.",
+      "common": {
+        "dismiss": "Descartar"
+      },
+      "states": {
+        "loading": "Cargando tus datos de afiliado"
+      },
+      "header": {
+        "codeLabel": "Tu código de referido",
+        "noCode": "Aún no hay código",
+        "linkLabel": "Tu enlace de referido",
+        "copyLink": "Copiar enlace",
+        "copied": "Enlace copiado.",
+        "copyFailed": "No se pudo copiar el enlace. Selecciónalo y cópialo manualmente.",
+        "reward": "Cada espacio de trabajo referido que hace un primer pago te da {amount}.",
+        "rewardMessages": "Eso cubre {count, plural, one {# mensaje} other {# mensajes}}.",
+        "rewardNone": "Por ahora el programa no paga nada por nuevos referidos. Tu código y tu historial se conservan aquí."
+      },
+      "filters": {
+        "label": "Rango y exportación",
+        "range": "Rango",
+        "ranges": {
+          "7d": "Últimos 7 días",
+          "30d": "Últimos 30 días",
+          "90d": "Últimos 90 días",
+          "all": "Todo el tiempo"
+        },
+        "search": "Buscar referidos",
+        "searchPlaceholder": "Nombre, correo o código",
+        "reset": "Restablecer",
+        "export": "Exportar CSV",
+        "exporting": "Preparando el archivo",
+        "exported": "Se descargó {fileName}."
+      },
+      "kpi": {
+        "inRange": "Referidos en el rango",
+        "vsPrevious": "{delta} frente al periodo anterior",
+        "earned": "Ganado, total histórico",
+        "last30": "Referidos, últimos 30 días",
+        "last30Earned": "{amount} ganados en los últimos 30 días",
+        "average": "Promedio por referido"
+      },
+      "chart": {
+        "title": "Referidos a lo largo del tiempo",
+        "label": "Referidos como barras y créditos ganados como línea, por periodo",
+        "buckets": {
+          "daily": "Diario",
+          "weekly": "Semanal",
+          "monthly": "Mensual"
+        },
+        "signups": "Referidos",
+        "credits": "Créditos ganados",
+        "bucket": "Periodo",
+        "empty": "Aún no hay referidos en este rango."
+      },
+      "topCodes": {
+        "title": "Códigos principales",
+        "referrals": "{count, plural, one {# referido} other {# referidos}}",
+        "empty": "No se usó ningún código en este rango."
+      },
+      "payouts": {
+        "title": "Pagos recientes",
+        "balanceAfter": "Saldo tras {amount}",
+        "empty": "Aún no hay pagos. La recompensa llega a tu monedero cuando un espacio de trabajo referido hace su primer pago."
+      },
+      "table": {
+        "title": "Referidos",
+        "label": "Referidos en el rango seleccionado",
+        "when": "Cuándo",
+        "referee": "Persona referida",
+        "code": "Código usado",
+        "credits": "Créditos ganados",
+        "status": "Estado",
+        "transaction": "Transacción del monedero",
+        "noName": "Usuario sin nombre",
+        "paid": "Pagado",
+        "pending": "Pendiente",
+        "noTransaction": "Sin transacción en el monedero",
+        "pagination": "Páginas de referidos",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "showing": "Mostrando {from}-{to} de {total}"
+      },
+      "empty": {
+        "noneTitle": "Aún no hay referidos",
+        "noneBody": "Comparte tu enlace. Las personas que se registren con él aparecerán aquí.",
+        "filteredTitle": "Ningún referido coincide",
+        "filteredBody": "Prueba con otro rango o borra la búsqueda."
+      },
+      "errors": {
+        "unauthenticated": "Tu sesión terminó. Inicia sesión de nuevo para ver tus datos de afiliado.",
+        "forbidden": "No tienes acceso a esta página.",
+        "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+        "validation": "No se pudieron aplicar esos filtros. Restablécelos e inténtalo de nuevo.",
+        "network": "No se pudo contactar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+        "generic": "Algo salió mal. Inténtalo de nuevo en un momento.",
+        "requestId": "ID de solicitud",
+        "retry": "Reintentar"
+      }
+    }
+  }
+}

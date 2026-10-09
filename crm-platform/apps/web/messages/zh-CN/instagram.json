@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "Instagram 群发"
+    },
+    "common": {
+      "dismiss": "关闭"
+    },
+    "hub": {
+      "kicker": "渠道 · Instagram",
+      "title": "Instagram",
+      "titleAccent": "个账号",
+      "intro": "绑定一次您的 Instagram 商务或创作者账号。之后其消息将进入团队收件箱，您可在此回复、运行流程，并向已给您发过消息的用户发送消息。",
+      "teamInbox": "团队收件箱",
+      "broadcasts": "仅回复式群发",
+      "loadError": "无法加载已绑定的 Instagram 账号，请重试。",
+      "loadErrorDetail": "无法加载已绑定的 Instagram 账号（错误 {status}{code}），请重试。",
+      "engineOff": "{engine} 未连接。管理员需先在“管理 → 附加组件”中完成连接，才能绑定 Instagram 账号。",
+      "connectedCount": "{count, plural, other {已绑定 # 个账号}}",
+      "notConnected": "未连接",
+      "cardTitle": "添加 Instagram 账号",
+      "cardBody": "连接商务或创作者账号。您的 Instagram 只需连接一次即会显示在此处，会话、流程和自动回复均可在此工作区中使用。",
+      "add": "添加 Instagram 账号",
+      "linkedAccounts": "已绑定账号",
+      "linked": "Instagram 账号已绑定。",
+      "linkFailed": "无法绑定该账号。"
+    },
+    "dialog": {
+      "close": "关闭",
+      "kicker": "Instagram",
+      "title": "添加 Instagram 账号",
+      "note": "您的 Instagram 通过 {engine} 连接一次（登录与 Webhook 由其保管）。此工作区与之绑定，并在此显示其收件箱、流程和广告。始终只有一个账号，而非两个。",
+      "connect": "连接 Instagram",
+      "checking": "检查中…",
+      "hint": "若您已在 {engine} 上连接，将立即绑定；否则会弹出快速登录窗口。",
+      "pick": "选择要绑定的账号",
+      "link": "绑定",
+      "connectDifferent": "连接其他账号",
+      "linkFailed": "无法绑定该账号。",
+      "startFailed": "无法启动 Instagram 连接。"
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "已连接",
+      "needsReauth": "需要重新授权",
+      "live": "在线",
+      "manage": "在 {engine} 上管理",
+      "refresh": "从 {engine} 刷新资料",
+      "unlink": "解除绑定",
+      "unlinkConfirm": "断开此 Instagram 账号？其会话和收件箱数据将被删除，Instagram 将从仪表盘、收件箱、流程、模板和自动回复中消失，直至您重新连接账号。该账号本身仍保留在 {engine} 上，您之后可重新绑定。",
+      "cancel": "取消",
+      "updated": "Instagram 账号 {handle} 已更新。",
+      "unlinked": "Instagram 账号已断开连接，其数据已删除。",
+      "failed": "操作未成功，请重试。"
+    },
+    "broadcast": {
+      "kicker": "Instagram · 仅回复",
+      "title": "Instagram",
+      "titleAccent": "群发",
+      "intro": "Instagram 仅允许您向已给您发过消息的用户发送消息，因此请从现有会话中选择。Instagram 会在每条消息发送时应用其 24 小时时间窗口规则。",
+      "accounts": "Instagram 账号",
+      "loadError": "无法加载会话，请重试。",
+      "failed": "操作未成功，请重试。",
+      "noAccounts": "尚未绑定并连接任何 Instagram 账号。",
+      "name": "群发名称",
+      "namePlaceholder": "秋季优惠",
+      "account": "Instagram 账号",
+      "template": "模板",
+      "templateHint": "可选。消息为空时自动填充。",
+      "templateNone": "无模板",
+      "message": "消息",
+      "messageHint": "使用 {token} 代表对方姓名。最多 {max} 个字符。",
+      "messagePlaceholder": "您好 {token}，…",
+      "send": "{count, plural, =0 {发送} other {发送给 # 个会话}}",
+      "sending": "发送中…",
+      "recipients": "收件人",
+      "windowOpenCount": "{open}/{total} 个会话处于 24 小时时间窗口内",
+      "search": "搜索会话",
+      "selectAll": "全选",
+      "clear": "清除",
+      "capNote": "单次发送最多覆盖 {max} 个会话；全选将选取前 {max} 个。",
+      "empty": "暂无会话。用户给您的账号发消息后将显示在此处。",
+      "inWindow": "时间窗口内",
+      "outsideWindow": "超出 24 小时",
+      "selected": "{count, plural, other {已选择 #}}",
+      "sent": "Instagram 群发已发送，{sent} 条已送达{failed, plural, =0 {} other {，# 条失败}}。",
+      "sentNone": "无法发送给任何收件人，请检查 Instagram 连接。"
+    }
+  }
+}

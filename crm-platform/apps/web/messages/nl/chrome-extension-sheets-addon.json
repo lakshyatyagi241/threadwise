@@ -1,0 +1,139 @@
+{
+  "settings": {
+    "tiles": {
+      "google-sheets-addon": {
+        "label": "Google Sheets-add-on",
+        "description": "Maak je sleutel, download de add-onbestanden en synchroniseer contacten en producten vanuit een spreadsheet.",
+        "keywords": "google sheets, spreadsheet, add-on, apps script, contacten importeren, producten synchroniseren, sleutel"
+      }
+    }
+  },
+  "chrome-extension-sheets-addon": {
+    "common": {
+      "dismiss": "Sluiten",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "copyFailed": "Kopiëren mislukt. Selecteer de sleutel en kopieer hem handmatig.",
+      "reference": "Referentie voor support: {id}",
+      "back": "Terug naar integraties"
+    },
+    "page": {
+      "title": "Google Sheets-add-on",
+      "subtitle": "Haal contacten op en push ze, en synchroniseer producten tussen een spreadsheet en je workspace.",
+      "loading": "De add-oninstellingen laden",
+      "retry": "Opnieuw proberen",
+      "status": {
+        "connected": "Sleutel actief",
+        "noKey": "Nog geen sleutel",
+        "notInstalled": "Niet geïnstalleerd"
+      },
+      "forbidden": {
+        "title": "Je kunt de Google Sheets-add-on niet gebruiken",
+        "body": "Je rol bevat de Google Sheets-add-on niet. Vraag een beheerder om je rol toegang te geven."
+      },
+      "loadFailed": {
+        "title": "Kan de add-oninstellingen niet laden.",
+        "notInstalled": "De add-on is niet geïnstalleerd in deze workspace.",
+        "forbidden": "Je rol mag deze pagina niet zien.",
+        "planLocked": "Je abonnement bevat de Marketplace niet.",
+        "suspended": "Dit account of deze workspace is geblokkeerd.",
+        "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+        "network": "We konden de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+        "unexpected": "Er is iets misgegaan aan onze kant. Probeer het opnieuw."
+      }
+    },
+    "install": {
+      "title": "Installeer eerst de add-on",
+      "body": "De Google Sheets-add-on is niet geïnstalleerd in deze workspace, dus sleutels en de add-on werken nog niet. Een beheerder installeert hem eenmalig vanuit de Marketplace.",
+      "marketplace": "Installeren vanuit de Marketplace",
+      "google": "De vermelding in de Google Workspace Marketplace openen",
+      "keyKept": "Je hebt nog een sleutel. Je kunt die hieronder uitschakelen."
+    },
+    "key": {
+      "title": "Je sleutel",
+      "intro": "De add-on gebruikt je persoonlijke sleutel om als jou te handelen. Hij ziet alleen wat je rol toestaat.",
+      "none": "Je hebt nog geen sleutel.",
+      "generate": "Sleutel genereren",
+      "rotate": "Een nieuwe sleutel genereren",
+      "revoke": "Sleutel intrekken",
+      "working": "Bezig...",
+      "active": "Sleutel",
+      "created": "Gemaakt {when}",
+      "lastUsed": "Laatst gebruikt {when}",
+      "neverUsed": "Nooit gebruikt",
+      "newTitle": "Je nieuwe sleutel",
+      "newWarning": "Kopieer hem nu. Hij wordt maar één keer getoond en kan niet opnieuw worden getoond. Iedereen met deze sleutel kan in de add-on als jou handelen.",
+      "rotatedNote": "Je vorige sleutel werkt niet meer.",
+      "keyLabel": "Nieuwe sleutel",
+      "confirmRotate": {
+        "title": "Je sleutel vervangen?",
+        "message": "De sleutel die je nu gebruikt werkt meteen niet meer. Plak de nieuwe sleutel in de add-on om hem te blijven gebruiken.",
+        "confirm": "Sleutel vervangen"
+      },
+      "confirmRevoke": {
+        "title": "Je sleutel intrekken?",
+        "message": "De add-on werkt niet meer totdat je een nieuwe sleutel maakt en plakt.",
+        "confirm": "Sleutel intrekken"
+      },
+      "cancel": "Annuleren",
+      "revoked": "Je sleutel is ingetrokken.",
+      "generated": "Je sleutel is gemaakt. Kopieer hem nu.",
+      "errors": {
+        "notInstalled": "De add-on is niet geïnstalleerd in deze workspace. Vraag een beheerder hem te installeren.",
+        "forbidden": "Je rol mag dit niet doen.",
+        "planLocked": "Je abonnement bevat de Marketplace niet.",
+        "suspended": "Dit account of deze workspace is geblokkeerd.",
+        "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+        "network": "We konden de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+        "unexpected": "Er is iets misgegaan aan onze kant. Probeer het opnieuw."
+      }
+    },
+    "can": {
+      "title": "Wat je sleutel kan doen",
+      "intro": "Dit is je rol in combinatie met wat de installatie toestaat.",
+      "allowed": "Toegestaan",
+      "notAllowed": "Niet toegestaan",
+      "readContacts": "Contacten in een sheet ophalen",
+      "writeContacts": "Contacten vanuit een sheet pushen",
+      "readCatalog": "Winkels en producten bekijken",
+      "writeCatalog": "Producten naar een winkel synchroniseren"
+    },
+    "files": {
+      "title": "Add-onbestanden",
+      "intro": "Zes bestanden vormen het Apps Script-project. Code.gs verwijst al naar deze workspace.",
+      "download": "Downloaden",
+      "downloadFile": "{name} downloaden",
+      "downloaded": "{name} gedownload.",
+      "notAvailable": "Nog niet beschikbaar op deze server",
+      "failed": "Kan {name} niet downloaden. Probeer het opnieuw."
+    },
+    "steps": {
+      "title": "Stel het in een spreadsheet in",
+      "one": "Open een spreadsheet, dan Extensies, dan Apps Script.",
+      "two": "Download de zes bestanden hierboven. Toon in Projectinstellingen het bestand appsscript.json en plak appsscript.json en Code.gs over de bestanden in de editor.",
+      "three": "Voeg drie HTML-bestanden toe met de namen Dialog, Settings en Help en plak de gedownloade bestanden erin.",
+      "four": "Sla op en laad de spreadsheet opnieuw. Er verschijnt een CRM-menu. Sta de drie machtigingen toe waar Google om vraagt.",
+      "five": "Kies CRM, dan Instellingen, plak je sleutel en kies Opslaan en controleren.",
+      "six": "Rij 1 van je sheet bevat de kolomnamen. Gebruik daarna Contacten ophalen, Contacten pushen of Producten synchroniseren in het CRM-menu."
+    },
+    "columns": {
+      "title": "Kolommen die de add-on leest",
+      "contacts": "Contacten",
+      "products": "Producten",
+      "contactsHint": "e-mail of telefoon is verplicht. Een kolom met de naam attr:city vult de aangepaste eigenschap city. Een lege cel wist nooit een opgeslagen waarde.",
+      "productsHint": "name en price zijn verplicht. Producten worden gekoppeld op SKU, daarna op naam. Een lege voorraad betekent onbeperkt."
+    },
+    "shops": {
+      "title": "Winkels",
+      "empty": "Nog geen winkels. Je eerste productsynchronisatie maakt er een.",
+      "disabled": "Uit",
+      "open": "{name} openen",
+      "updated": "Bijgewerkt {when}"
+    },
+    "products": {
+      "title": "Recente producten",
+      "empty": "Nog geen producten. Synchroniseer een sheet om er toe te voegen.",
+      "count": "{count, plural, one {# product in je workspace} other {# producten in je workspace}}"
+    }
+  }
+}

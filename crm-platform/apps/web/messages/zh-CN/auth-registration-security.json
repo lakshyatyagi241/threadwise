@@ -1,0 +1,484 @@
+{
+  "auth-registration-security": {
+    "guest": {
+      "shell": {
+        "appNameFallback": "CRM",
+        "header": {
+          "login": {
+            "eyebrow": "登录",
+            "title": "欢迎",
+            "accent": "回来",
+            "subtitle": "输入你的信息，重新进入你的工作区。"
+          },
+          "register": {
+            "eyebrow": "第 1 步，共 3 步 / 创建账户",
+            "title": "创建你的",
+            "accent": "账户",
+            "subtitle": "填写几项信息，你的工作区就准备好了。"
+          },
+          "forgot": {
+            "eyebrow": "忘记密码",
+            "title": "重置你的",
+            "accent": "密码",
+            "subtitle": "告诉我们你的登录位置，我们会发送一次性链接。"
+          }
+        },
+        "defaults": {
+          "login": {
+            "hero_title": "一切尽在一处",
+            "hero_desc": "聊天、营销活动和联系人汇聚一处，无需四处寻找上下文。",
+            "stat1_num": "全天候",
+            "stat1_label": "共享团队收件箱",
+            "stat2_num": "5 分钟",
+            "stat2_label": "典型设置时长",
+            "stat3_num": "1 个地方",
+            "stat3_label": "管理聊天和联系人",
+            "feat1_title": "共享收件箱",
+            "feat1_desc": "分配、回复和转交聊天，不丢失对话脉络。",
+            "feat2_title": "群发",
+            "feat2_desc": "按节奏一次触达大量联系人，并追踪送达情况。",
+            "feat3_title": "自动化",
+            "feat3_desc": "通过你自己设计的流程完成路由、回复和跟进。",
+            "feat4_title": "团队管控",
+            "feat4_desc": "角色、权限和审计日志让每个工作区井然有序。",
+            "inside_heading": "你的工作区内",
+            "chip1": "收件箱",
+            "chip2": "群发",
+            "chip3": "流程",
+            "chip4": "联系人",
+            "chip5": "报表",
+            "chip6": "模板"
+          },
+          "register": {
+            "hero_title": "免费开始",
+            "hero_desc": "先设置工作区，准备好后再选择套餐。",
+            "stat1_num": "3 个步骤",
+            "stat1_label": "即可拥有可用的工作区",
+            "stat2_num": "5 分钟",
+            "stat2_label": "典型设置时长",
+            "stat3_num": "第 1 天",
+            "stat3_label": "邀请你的团队",
+            "feat1_title": "快速设置",
+            "feat1_desc": "为工作区命名，设置时区，即可进入。",
+            "feat2_title": "邀请你的团队",
+            "feat2_desc": "邀请同事，并为每个人授予恰好所需的权限。",
+            "feat3_title": "连接渠道",
+            "feat3_desc": "关联你的消息号码，开始与客户交流。",
+            "feat4_title": "掌控全局",
+            "feat4_desc": "双重验证登录和会话控制保护每个账户。",
+            "inside_heading": "你将获得",
+            "chip1": "共享收件箱",
+            "chip2": "群发",
+            "chip3": "流程",
+            "chip4": "联系人",
+            "chip5": "报表",
+            "chip6": "团队角色"
+          },
+          "forgot": {
+            "hero_title": "全新链接，仅可使用一次",
+            "hero_desc": "我们会通过邮件发送一个安全链接，该链接仅可使用一次，且很快过期。"
+          }
+        },
+        "contentDefaults": {
+          "login": {
+            "eyebrow": "WhatsApp 团队收件箱",
+            "heading": "每一场客户聊天，",
+            "headingAccent": "尽在一个从容的工作区",
+            "subheading": "为响应迅速的团队打造的群发、自动化和共享收件箱。"
+          },
+          "register": {
+            "eyebrow": "几分钟即可开始",
+            "heading": "设置你的",
+            "headingAccent": "工作区",
+            "subheading": "创建你的工作区，然后邀请团队并接入第一个渠道。"
+          },
+          "forgot": {
+            "eyebrow": "账户恢复",
+            "heading": "一分钟后",
+            "headingAccent": "重新进入",
+            "subheading": "输入你的邮箱，我们会发送安全链接供你设置新密码。"
+          }
+        }
+      },
+      "toolbar": {
+        "language": "语言",
+        "theme": "切换主题",
+        "themeToLight": "浅色",
+        "themeToDark": "深色"
+      },
+      "pages": {
+        "login": {
+          "title": "登录"
+        },
+        "signup": {
+          "title": "创建你的账户"
+        },
+        "verifyOtp": {
+          "title": "验证你的号码",
+          "eyebrow": "验证你的号码",
+          "heading": "查看你的",
+          "accent": "WhatsApp",
+          "subtitle": "输入我们发送的一次性验证码，完成工作区创建。"
+        },
+        "forgot": {
+          "title": "重置你的密码"
+        },
+        "reset": {
+          "title": "设置新密码",
+          "eyebrow": "重置密码",
+          "heading": "设置新的",
+          "accent": "密码",
+          "subtitle": "请选择一个强密码。设置后你将立即用它登录。",
+          "panel": {
+            "heroTitle": "全新的密码",
+            "heroDesc": "请选择一个你能记住的密码。你的工作区可能要求最小长度。",
+            "eyebrow": "账户恢复",
+            "heading": "全新的",
+            "accent": "开始",
+            "subheading": "保存新密码后，你可以立即使用它登录。"
+          }
+        },
+        "verifyEmail": {
+          "title": "确认你的邮箱",
+          "eyebrow": "邮箱确认",
+          "heading": "确认你的",
+          "accent": "邮箱",
+          "subtitle": "此页面会检查你从收件箱中打开的链接。",
+          "panel": {
+            "heroTitle": "确认你的地址",
+            "heroDesc": "只需点击一下，即可证明此邮箱属于你。",
+            "eyebrow": "邮箱确认",
+            "heading": "正在检查你的",
+            "accent": "链接",
+            "subheading": "我们正在确认你所打开邮件中的地址。"
+          }
+        },
+        "findWorkspace": {
+          "title": "查找我的工作区",
+          "eyebrow": "查找我的工作区",
+          "heading": "查找你的",
+          "accent": "工作区",
+          "subtitle": "输入你的邮箱，我们会将你可登录的工作区地址发送给你。"
+        },
+        "confirmEmailChange": {
+          "title": "确认你的新邮箱",
+          "eyebrow": "邮箱更改",
+          "heading": "确认你的",
+          "accent": "新邮箱",
+          "subtitle": "此页面会检查你从收件箱中打开的链接。",
+          "panel": {
+            "heroTitle": "新的登录邮箱",
+            "heroDesc": "确认后，你的地址将立即更改。",
+            "eyebrow": "邮箱更改",
+            "heading": "正在确认你的",
+            "accent": "新邮箱",
+            "subheading": "我们正在检查你所打开邮件中的链接。"
+          }
+        },
+        "socialCallback": {
+          "title": "正在为你登录",
+          "eyebrow": "社交账号登录",
+          "heading": "正在为你",
+          "accent": "登录",
+          "subtitle": "正在完成登录。"
+        }
+      },
+      "errors": {
+        "invalidCredentials": "信息不匹配。请检查工作区、邮箱和密码。",
+        "locked": "失败次数过多。请在 {minutes, plural, other {# 分钟}}后重试。",
+        "rateLimited": "尝试次数过多，请稍候再试。",
+        "rateLimitedWait": "尝试次数过多。请在 {seconds, plural, other {# 秒}}后重试。",
+        "suspended": "此账户已被停用。请联系你的工作区管理员。",
+        "captcha": "请完成验证码校验后重试。",
+        "signupClosed": "注册已关闭。请向管理员索取邀请。",
+        "slugTaken": "该工作区地址已被占用。",
+        "emailTaken": "该邮箱已在此工作区中使用。",
+        "passwordPolicy": "该密码不符合安全策略：",
+        "tokenInvalid": "此链接无效或已过期。",
+        "emailUnverified": "请先确认你的邮箱地址。",
+        "mfaInvalid": "验证码无效。请检查后重试。",
+        "mfaExpired": "你的验证已过期。请重新登录。",
+        "otpInvalid": "验证码不正确，请重试。",
+        "otpExpired": "验证码已过期，请重新获取。",
+        "otpTooMany": "尝试次数过多。请重新获取验证码。",
+        "otpCooldown": "请稍候再获取新的验证码。",
+        "otpSendFailed": "无法发送验证码。请检查号码后重试。",
+        "socialUnavailable": "该登录方式不可用。",
+        "socialExpired": "登录已过期，请重试。",
+        "socialFailed": "无法完成 {provider} 登录，请重试。",
+        "socialNoEmail": "该账户未提供邮箱地址。请改用邮箱和密码登录。",
+        "ipBlocked": "不允许从此网络登录。",
+        "workspaceUnavailable": "该工作区不可用。",
+        "workspaceRequired": "此邮箱用于多个工作区。请输入你的工作区以继续。",
+        "validation": "请检查高亮显示的字段。",
+        "sessionExpired": "出于安全考虑，你的会话已过期，请重试。",
+        "network": "无法连接服务器。请检查网络连接后重试。",
+        "unexpected": "我们这边出了点问题，请重试。",
+        "requestId": "请求 ID",
+        "signupExpired": "请重新开始注册。",
+        "policyRules": {
+          "min_length": "请至少使用 {min, plural, other {# 个字符}}。",
+          "upper_lower": "请混合使用大小写字母。",
+          "number": "请至少包含一个数字。",
+          "symbol": "请至少包含一个符号。",
+          "common": "该密码过于简单，容易被猜到。"
+        },
+        "socialNoAccount": "没有与该 {provider} 登录匹配的账户。请使用邮箱和密码登录，或创建账户。",
+        "forbidden": "请求被拒绝。请刷新页面后重试。"
+      },
+      "validation": {
+        "orgSlug": "请输入你的工作区地址（字母、数字、短横线或下划线）。",
+        "orgSlugForSocial": "请先输入你的工作区地址，以便我们知道让你登录到哪里。",
+        "email": "请输入有效的邮箱地址。",
+        "password": "请输入符合所示要求的密码。",
+        "passwordRequired": "请输入密码。",
+        "fullName": "请输入你的姓名。",
+        "orgName": "请为工作区命名（至少 2 个字符）。",
+        "orgNameForSocial": "请先为工作区命名，再继续使用 Google 或 Facebook。",
+        "phoneRequired": "请输入你的手机号码。",
+        "phone": "请输入与所选国家/地区相符的有效手机号码。",
+        "newPassword": "请至少使用 {min, plural, other {# 个字符}}。",
+        "confirmPassword": "两次输入的密码不一致。",
+        "acceptTerms": "你必须接受条款才能继续。",
+        "referralCode": "推荐码只能包含字母和数字。",
+        "code": "请输入 {length} 位验证码。"
+      },
+      "legal": {
+        "login": "登录即表示你同意我们的<terms>条款</terms>和<privacy>隐私政策</privacy>。",
+        "signup": "我同意<terms>条款</terms>和<privacy>隐私政策</privacy>。",
+        "cookies": "<cookies>Cookie 政策</cookies>"
+      },
+      "captcha": {
+        "protected": "本网站受 reCAPTCHA 保护，适用 Google <privacy>隐私政策</privacy>和<terms>服务条款</terms>。"
+      },
+      "social": {
+        "divider": "或使用邮箱",
+        "redirecting": "正在打开服务商页面",
+        "login": {
+          "google": "使用 Google 继续",
+          "facebook": "使用 Facebook 继续"
+        },
+        "signup": {
+          "google": "使用 Google 注册",
+          "facebook": "使用 Facebook 注册"
+        },
+        "google": "Google",
+        "facebook": "Facebook"
+      },
+      "login": {
+        "workspace": "工作区",
+        "workspaceHint": "你的团队使用的地址，例如 acme。",
+        "chooseTitle": "选择工作区",
+        "chooseSubtitle": "你的邮箱属于多个工作区。请选择要打开的工作区。",
+        "chooseMembers": "{count, plural, other {# 名成员}}",
+        "chooseOpen": "打开",
+        "chooseBack": "使用其他账户",
+        "chooseExpired": "耗时过长。请重新登录。",
+        "workspacePlaceholder": "your-workspace",
+        "email": "邮箱",
+        "emailPlaceholder": "you@company.com",
+        "password": "密码",
+        "forgot": "忘记密码？",
+        "showPassword": "显示密码",
+        "hidePassword": "隐藏密码",
+        "remember": "30 天内保持登录",
+        "submit": "登录",
+        "submitting": "正在登录",
+        "newHere": "初次使用？",
+        "createAccount": "创建账户",
+        "lostWorkspace": "不确定你的工作区地址？",
+        "findWorkspace": "查找我的工作区",
+        "loggedOut": "你已退出登录。",
+        "flashReset": "密码已重置。请使用新密码登录。",
+        "flashExpired": "你的会话已过期，请重新登录。",
+        "flashIdle": "你因 {minutes, plural, other {# 分钟}}未操作而被退出登录。请重新登录以继续。",
+        "mfaExpired": "你的验证耗时过长。请重新登录。",
+        "flashDeleted": "你的账户已被删除。"
+      },
+      "mfa": {
+        "title": "两步验证",
+        "descriptionCode": "输入验证器应用中的 6 位验证码。",
+        "descriptionRecovery": "输入你的一个一次性恢复码。",
+        "codeLabel": "验证器验证码",
+        "recoveryLabel": "恢复码",
+        "recoveryHint": "每个恢复码仅可使用一次。",
+        "invalidCode": "请输入 6 位验证码。",
+        "invalidRecovery": "请输入恢复码（8 到 32 个字符）。",
+        "verify": "验证",
+        "verifying": "正在验证",
+        "useRecovery": "改用恢复码",
+        "useApp": "改用验证器验证码",
+        "back": "返回登录",
+        "expiresIn": "验证将在 {time} 后过期"
+      },
+      "signup": {
+        "steps": {
+          "label": "注册进度",
+          "account": "账户",
+          "workspace": "工作区",
+          "plan": "套餐"
+        },
+        "fullName": "姓名",
+        "fullNamePlaceholder": "你的姓名",
+        "email": "工作邮箱",
+        "orgName": "工作区名称",
+        "orgNamePlaceholder": "Acme Inc.",
+        "orgNameHint": "你的团队使用地址 {slug} 登录。",
+        "orgNameHintEmpty": "这是你的团队看到的名称。",
+        "customiseSlug": "选择自定义工作区地址",
+        "orgSlug": "工作区地址",
+        "orgSlugHint": "字母、数字、短横线或下划线。你的团队登录时需要输入它。",
+        "orgSlugPlaceholder": "your-workspace",
+        "phone": "手机号码",
+        "phoneHint": "我们用它来验证你的账户并发送重要更新。",
+        "phonePlaceholder": "不含国家/地区代码的号码",
+        "country": "国家/地区",
+        "referral": "推荐码",
+        "optional": "选填",
+        "referralPlaceholder": "有朋友的推荐码吗？",
+        "password": "密码",
+        "confirmPassword": "确认密码",
+        "submit": "继续",
+        "submitting": "正在创建你的账户",
+        "haveAccount": "已有账户？",
+        "signIn": "登录",
+        "closedBody": "注册已关闭。请向管理员索取邀请。",
+        "closedBack": "返回登录",
+        "restart": "请重新开始注册。",
+        "countryButton": "国家/地区区号 +{dial}",
+        "countrySearch": "搜索国家/地区",
+        "countryEmpty": "没有匹配的国家/地区"
+      },
+      "otp": {
+        "sentTo": "我们已发送验证码至",
+        "code": "验证码",
+        "expiresIn": "验证码将在 {time} 后过期。",
+        "expired": "此验证码已过期，请重新获取。",
+        "verify": "验证并继续",
+        "verifying": "正在验证",
+        "resend": "重新发送验证码",
+        "resendIn": "{time} 后可重新发送验证码",
+        "resending": "正在发送",
+        "resent": "新的验证码已发送至你的 WhatsApp。",
+        "wrongNumber": "号码填错了？",
+        "goBack": "返回",
+        "addressTakenHint": "你在验证期间，该工作区地址已被他人占用。请选择其他地址，我们会向你发送新的验证码。",
+        "chooseAnotherAddress": "选择其他地址"
+      },
+      "forgot": {
+        "submit": "发送重置链接",
+        "submitting": "正在发送",
+        "remembered": "想起来了？",
+        "back": "返回登录",
+        "doneTitle": "请查收邮件",
+        "doneBody": "如果该邮箱属于该工作区中的某个账户，重置链接已在路上。链接仅可使用一次，且很快过期。",
+        "doneHint": "还没收到？请检查垃圾邮件文件夹，或一分钟后重试。",
+        "tryAnother": "使用其他邮箱"
+      },
+      "reset": {
+        "password": "新密码",
+        "confirmPassword": "确认新密码",
+        "submit": "保存新密码",
+        "submitting": "正在保存",
+        "back": "返回登录",
+        "invalidTitle": "此链接已失效",
+        "invalidBody": "重置链接仅可使用一次，且很快过期。请重新获取以继续。",
+        "requestNew": "获取新链接"
+      },
+      "verifyEmail": {
+        "working": "正在确认你的邮箱",
+        "doneTitle": "邮箱已确认",
+        "doneBody": "谢谢，你的地址已验证。请登录以继续。",
+        "failedTitle": "无法确认你的邮箱",
+        "failedHint": "请登录，然后通过应用顶部的横幅重新获取验证邮件。",
+        "signIn": "前往登录"
+      },
+      "confirmEmailChange": {
+        "working": "正在确认你的新邮箱",
+        "doneTitle": "邮箱地址已更新",
+        "doneBody": "下次登录时请使用你的新地址。",
+        "failedTitle": "无法确认此更改",
+        "failedHint": "请登录，然后在账户页面重新发起邮箱更改。",
+        "signIn": "前往登录"
+      },
+      "findWorkspace": {
+        "submit": "给我发送我的工作区",
+        "submitting": "正在发送",
+        "back": "返回登录",
+        "doneTitle": "请查收邮件",
+        "doneBody": "如果该地址属于已验证的账户，我们已通过邮件把你可登录的工作区地址发给你。",
+        "doneHint": "还没收到？请检查垃圾邮件文件夹，或尝试其他邮箱。",
+        "tryAnother": "使用其他邮箱"
+      },
+      "callback": {
+        "working": "正在完成登录",
+        "failedTitle": "登录未完成",
+        "cancelled": "登录已取消。",
+        "backToSignIn": "返回登录",
+        "createAccount": "改为创建账户"
+      },
+      "layout": {
+        "noscript": "此浏览器已关闭 JavaScript。请开启后再登录或创建账户。"
+      },
+      "consent": {
+        "label": "Cookie 通知",
+        "title": "我们使用 Cookie",
+        "message": "我们使用 Cookie 来保持你的登录状态，并了解本网站的使用情况。你可以全部接受、拒绝可选项，或自行选择允许的内容。",
+        "learnMore": "了解更多",
+        "decline": "拒绝",
+        "customize": "自定义",
+        "acceptAll": "全部接受",
+        "prefsTitle": "你的隐私选择",
+        "necessary": "严格必要",
+        "necessaryHint": "登录和安全所必需。始终开启。",
+        "analytics": "分析",
+        "analyticsHint": "帮助我们了解哪些页面有效，哪些无效。",
+        "marketing": "营销",
+        "marketingHint": "用于在其他网站上展示相关优惠。",
+        "rejectAll": "全部拒绝",
+        "save": "保存选择"
+      },
+      "policy": {
+        "minLength": "至少 {min, plural, other {# 个字符}}。",
+        "mixedCase": "请混合使用大小写字母。",
+        "number": "请包含数字。",
+        "symbol": "请包含符号。",
+        "placeholder": "至少 {min, plural, other {# 个字符}}"
+      }
+    },
+    "gate": {
+      "suspended": {
+        "titleLead": "你的账户已被",
+        "titleAccent": "停用"
+      },
+      "verify": {
+        "titleLead": "请",
+        "titleAccent": "验证你的邮箱"
+      },
+      "onboarding": {
+        "header": {
+          "step2": {
+            "eyebrow": "第 2 步，共 3 步 / 工作区",
+            "title": "创建你的",
+            "accent": "工作区"
+          },
+          "step3": {
+            "eyebrow": "第 3 步，共 3 步 / 套餐",
+            "title": "选择",
+            "accent": "套餐",
+            "subtitle": "每个套餐都包含每月消息额度。可从免费套餐开始，也可选择额度更多的套餐。"
+          }
+        },
+        "timezonePlaceholder": "搜索时区...",
+        "timezoneEmpty": "没有匹配的时区。",
+        "timezoneLabel": "时区",
+        "phonePlaceholder": "不含国家/地区代码的号码",
+        "plan": {
+          "credits": "你的套餐每月包含固定数量的消息。套餐有效期内若额度用完，额外发送将消耗钱包积分，<rate>每条消息 {credits, plural, other {# 积分}}</rate>。套餐到期后，发送将暂停，直至你续订。",
+          "topUpPrompt": "额度快用完了？",
+          "topUp": "充值消息积分"
+        }
+      }
+    }
+  }
+}

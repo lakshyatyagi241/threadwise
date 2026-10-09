@@ -1,0 +1,18 @@
+{
+  "common": {
+    "appName": "CRM",
+    "loadMore": "Charger plus",
+    "loading": "Chargement",
+    "empty": "Rien ici pour l’instant",
+    "retry": "Réessayer",
+    "requestId": "ID de requête",
+    "search": "Rechercher",
+    "unexpected": "Un problème est survenu",
+    "fatal": {
+      "title": "Un problème est survenu",
+      "body": "La page n’a pas pu se charger. Le problème a été signalé. Réessayez, et s’il persiste, contactez l’assistance.",
+      "bodyWithDigest": "La page n’a pas pu se charger. Le problème a été signalé. Réessayez, et s’il persiste, contactez l’assistance en indiquant {digest}.",
+      "home": "Retour à l’accueil"
+    }
+  }
+}

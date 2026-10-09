@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "Impersoneren",
+      "viewing": "{workspace} bekijken als {owner}",
+      "reason": "Reden: {reason}",
+      "readOnly": "Alleen-lezen",
+      "timeLeft": "{minutes, plural, one {# minuut over} other {# minuten over}}",
+      "endsSoon": "Minder dan een minuut over",
+      "stop": "Stoppen met impersoneren",
+      "stopping": "Stoppen",
+      "stopFailed": "De sessie kon niet worden gestopt. Probeer het opnieuw.",
+      "readOnlyRefused": "Deze sessie is alleen-lezen, dus wijzigingen zijn niet toegestaan.",
+      "forbiddenRefused": "Dit is niet beschikbaar terwijl je de workspace als eigenaar bekijkt.",
+      "ended": {
+        "title": "Deze impersonatiesessie is beëindigd",
+        "expired": "De link is al gebruikt of is verlopen. Begin opnieuw vanuit de console.",
+        "body": "Vanaf hier kan er niets meer in de workspace worden gedaan. Ga terug naar de console om een nieuwe sessie te starten.",
+        "back": "Terug naar de console"
+      }
+    }
+  }
+}

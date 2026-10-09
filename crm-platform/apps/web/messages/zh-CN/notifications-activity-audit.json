@@ -1,0 +1,402 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "通知",
+      "labelUnread": "通知,{count} 条未读",
+      "title": "通知",
+      "markAll": "全部标为已读",
+      "empty": "暂无通知。",
+      "loading": "正在加载通知",
+      "failed": "无法加载通知。",
+      "retry": "重试",
+      "unread": "未读",
+      "settings": "提醒设置",
+      "sound": "收到新聊天和消息时播放提示音",
+      "soundOn": "声音:开",
+      "soundOff": "声音:关",
+      "desktopEnable": "启用桌面提醒",
+      "desktopOn": "桌面提醒:开",
+      "desktopOff": "桌面提醒:关",
+      "desktopBlocked": "桌面提醒已在浏览器设置中被阻止。",
+      "desktopHint": "仅当此标签页在后台时才显示联系人名称。",
+      "preferences": "通知设置"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "任务已分配给你",
+        "body": "{actor} 为你分配了任务:{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "任务到期",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "任务已完成",
+        "body": "{actor} 已完成:{task}",
+        "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "新线索",
+        "titleReturning": "线索再次到达",
+        "body": "{name} 来自 {platform}",
+        "bodyReturning": "{name} 从 {platform} 再次发来线索",
+        "bodyNoActor": "{name} 已到达"
+      },
+      "new_chat": {
+        "title": "来自 {name} 的新聊天",
+        "titleNoName": "新聊天",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, other {来自 {name} 的 # 条新消息}}",
+        "titleNoName": "{count, plural, other {# 条新消息}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "chat_waiting": {
+        "title": "尚无人回复 {name}",
+        "titleNoName": "有一个聊天仍在等待回复",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "{name} 已分配给你",
+        "titleNoName": "有一个聊天已分配给你",
+        "titleTeam": "{name} 已分配给你的团队",
+        "titleTeamNoName": "有一个聊天已分配给你的团队",
+        "body": "由 {actor} 分配",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "{actor} 提到了你",
+        "titleNoName": "你在备注中被提及",
+        "body": "{name}:{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "device_connected": {
+        "title": "{name} 已连接",
+        "titleNoName": "你的 WhatsApp 号码已连接"
+      },
+      "device_disconnected": {
+        "title": "{name} 已断开连接",
+        "titleNoName": "一个 WhatsApp 号码已断开连接",
+        "body": "请打开设备以重新连接。"
+      },
+      "device_logged_out": {
+        "title": "{name} 已退出登录",
+        "titleNoName": "一个 WhatsApp 号码已退出登录",
+        "body": "请重新扫描二维码以重新连接。"
+      },
+      "broadcast_completed": {
+        "title": "群发“{name}”已完成",
+        "titleNoName": "一次群发已完成",
+        "bodySent": "{sent, plural, other {已发送 # 条消息}}",
+        "bodySentFailed": "{sent, plural, other {已发送 # 条消息}},{failed, plural, other {# 条失败}}"
+      },
+      "broadcast_failed": {
+        "title": "群发“{name}”失败",
+        "titleNoName": "一次群发失败",
+        "body": "{reason}",
+        "bodyNoReason": "打开以查看问题所在。"
+      },
+      "campaign_completed": {
+        "title": "营销活动“{name}”已完成",
+        "titleNoName": "一个营销活动已完成",
+        "bodySent": "{sent, plural, other {已发送 # 条消息}}",
+        "bodySentFailed": "{sent, plural, other {已发送 # 条消息}},{failed, plural, other {# 条失败}}"
+      },
+      "campaign_failed": {
+        "title": "营销活动“{name}”失败",
+        "titleNoName": "一个营销活动失败",
+        "body": "{reason}",
+        "bodyNoReason": "打开以查看问题所在。"
+      },
+      "scheduled_completed": {
+        "title": "定时发送“{name}”已发出",
+        "titleNoName": "一条定时发送已发出",
+        "bodySent": "{sent, plural, other {已发送 # 条消息}}",
+        "bodySentFailed": "{sent, plural, other {已发送 # 条消息}},{failed, plural, other {# 条失败}}"
+      },
+      "scheduled_failed": {
+        "title": "定时发送“{name}”失败",
+        "titleNoName": "一条定时发送失败",
+        "body": "{reason}",
+        "bodyNoReason": "打开以查看问题所在。"
+      },
+      "teamchat_mention": {
+        "title": "{author} 在 {channel} 中提到了你",
+        "titleNoChannel": "{author} 在团队聊天中提到了你",
+        "titleNoName": "你在团队聊天中被提及"
+      },
+      "teamchat_message": {
+        "title": "{count, plural, other {来自 {author} 的 # 条新消息}}",
+        "titleNoName": "{count, plural, other {# 条新私信}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, =1 {有人想加入 {name}} other {# 人想加入 {name}}}",
+        "titleNoName": "{count, plural, =1 {有人想加入 WhatsApp 群组} other {# 人想加入 WhatsApp 群组}}",
+        "body": "打开群组以批准或拒绝。"
+      },
+      "waba_group_suspended": {
+        "title": "{name} 已被暂停",
+        "titleNoName": "一个 WhatsApp 群组已被暂停",
+        "body": "WhatsApp 已暂停此群组。在其恢复之前，你无法向该群组发送消息。"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} 已恢复正常",
+        "titleNoName": "一个 WhatsApp 群组已恢复正常",
+        "body": "WhatsApp 已恢复此群组。你可以再次向其发送消息。"
+      }
+    },
+    "live": {
+      "open": "打开",
+      "dismiss": "关闭",
+      "toastRegion": "通知",
+      "summary": "{count} 条新通知",
+      "announceMany": "{count} 条新通知",
+      "desktop": {
+        "new_chat": "新聊天",
+        "new_message": "新消息",
+        "chat_waiting": "等待回复",
+        "conversation_assigned": "分配给你",
+        "mention": "提到了你",
+        "fallbackTitle": "新通知",
+        "device_connected": "WhatsApp 号码已连接",
+        "device_disconnected": "WhatsApp 号码已断开",
+        "device_logged_out": "WhatsApp 号码已退出登录",
+        "broadcast_completed": "群发已完成",
+        "broadcast_failed": "群发失败",
+        "campaign_completed": "营销活动已完成",
+        "campaign_failed": "营销活动失败",
+        "scheduled_completed": "定时发送已发出",
+        "scheduled_failed": "定时发送失败",
+        "teamchat_mention": "在团队聊天中提到了你",
+        "teamchat_message": "新私信",
+        "waba_group_join_request": "加入群组请求",
+        "waba_group_suspended": "WhatsApp 群组已暂停",
+        "waba_group_suspension_cleared": "WhatsApp 群组已恢复正常"
+      }
+    },
+    "prefs": {
+      "title": "通知偏好",
+      "description": "选择每个事件通知你的方式。这些选择仅属于你个人;工作区决定哪些事件默认开启。",
+      "columns": {
+        "event": "事件",
+        "bell": "铃铛",
+        "toast": "弹窗",
+        "sound": "声音",
+        "push": "推送"
+      },
+      "groups": {
+        "conversations": "聊天",
+        "tasks": "任务",
+        "leads": "线索与表单",
+        "documents": "销售单据",
+        "wallet": "钱包",
+        "devices": "WhatsApp 号码",
+        "broadcasts": "群发与营销活动",
+        "team_chat": "团队聊天",
+        "whatsapp_groups": "WhatsApp 群组"
+      },
+      "types": {
+        "new_chat": {
+          "label": "新聊天",
+          "hint": "尚无人负责的会话收到第一条消息时。"
+        },
+        "new_message": {
+          "label": "我的聊天有新消息",
+          "hint": "客户在分配给你的聊天中发来消息。"
+        },
+        "chat_waiting": {
+          "label": "聊天仍在等待回复",
+          "hint": "无人负责的聊天中,客户消息已有几分钟未回复。你只会收到一次提醒。"
+        },
+        "conversation_assigned": {
+          "label": "分配给我的聊天",
+          "hint": "聊天分配给你或你的团队时。"
+        },
+        "mention": {
+          "label": "在备注中被提及",
+          "hint": "同事在会话备注中提到你时。"
+        },
+        "teamchat_mention": {
+          "label": "在团队聊天中被提及",
+          "hint": "同事在团队聊天频道中提到你时。"
+        },
+        "teamchat_message": {
+          "label": "私信",
+          "hint": "同事在团队聊天中给你发消息时。"
+        },
+        "device_connected": {
+          "label": "号码已连接",
+          "hint": "个人 WhatsApp 号码完成连接时。"
+        },
+        "device_disconnected": {
+          "label": "号码已断开",
+          "hint": "个人 WhatsApp 号码失去连接时。"
+        },
+        "device_logged_out": {
+          "label": "号码已退出登录",
+          "hint": "个人 WhatsApp 号码在手机上被退出登录时。"
+        },
+        "broadcast_completed": {
+          "label": "群发已完成",
+          "hint": "你发起的群发已发出时。"
+        },
+        "broadcast_failed": {
+          "label": "群发失败",
+          "hint": "你发起的群发失败时。"
+        },
+        "campaign_completed": {
+          "label": "营销活动已完成",
+          "hint": "你发起的营销活动已发出时。"
+        },
+        "campaign_failed": {
+          "label": "营销活动失败",
+          "hint": "你发起的营销活动失败时。"
+        },
+        "scheduled_completed": {
+          "label": "定时发送已发出",
+          "hint": "你设置的定时发送已发出时。"
+        },
+        "scheduled_failed": {
+          "label": "定时发送失败",
+          "hint": "你设置的定时发送失败时。"
+        },
+        "task_assigned": {
+          "label": "分配给我的任务",
+          "hint": "任务分配给你时。"
+        },
+        "task_due": {
+          "label": "任务到期",
+          "hint": "你的任务到期时。"
+        },
+        "task_completed": {
+          "label": "任务已完成",
+          "hint": "你创建的任务已完成时。"
+        },
+        "new_lead": {
+          "label": "新线索",
+          "hint": "线索来源有新线索到达时。"
+        },
+        "form_submission": {
+          "label": "表单已提交",
+          "hint": "有人提交了你的表单时。"
+        },
+        "form_needs_review": {
+          "label": "表单需要审核",
+          "hint": "有提交内容需要查看时。"
+        },
+        "wallet_low_balance": {
+          "label": "钱包余额不足",
+          "hint": "工作区钱包余额即将用完时。"
+        },
+        "sales_doc_decided": {
+          "label": "销售单据已处理",
+          "hint": "报价单或发票被接受或拒绝时。"
+        },
+        "wallet_credited": {
+          "label": "钱包已充值",
+          "hint": "工作区钱包已入账时。"
+        },
+        "waba_group_join_request": {
+          "label": "加入群组请求",
+          "hint": "有人申请加入你商务号码下的 WhatsApp 群组。每十条请求合并为一行。"
+        },
+        "waba_group_suspended": {
+          "label": "群组已暂停",
+          "hint": "WhatsApp 已暂停你的一个群组。"
+        },
+        "waba_group_suspension_cleared": {
+          "label": "群组已恢复正常",
+          "hint": "WhatsApp 已恢复一个此前被暂停的群组。仅当你曾收到暂停通知时才会显示。"
+        }
+      },
+      "loading": "正在加载你的偏好设置",
+      "failed": "无法加载你的偏好设置。",
+      "retry": "重试",
+      "saveFailed": "无法保存此更改。已撤销。",
+      "saved": "已保存",
+      "dismiss": "关闭",
+      "resetRow": "恢复默认",
+      "resetRowFor": "将 {event} 恢复为默认",
+      "resetAll": "全部恢复为默认",
+      "resetAllDone": "所有偏好已恢复为默认值。",
+      "customised": "已更改",
+      "usingDefault": "默认",
+      "toggleLabel": "{event}:{channel}",
+      "workspaceOff": "已被你的工作区关闭",
+      "workspaceOffHelp": "你的工作区已关闭此项;你的选择对你仍然有效。",
+      "bellOffHelp": "开启铃铛后才能选择弹窗、声音或推送。",
+      "notAvailable": "不可用",
+      "defaultSummary": "默认:{bell}、{toast}、{sound}",
+      "on": "开",
+      "off": "关",
+      "channelNames": {
+        "bell": "铃铛",
+        "toast": "弹窗",
+        "sound": "声音",
+        "push": "推送"
+      },
+      "browser": {
+        "title": "此浏览器",
+        "description": "声音和桌面提醒按浏览器设置,而非按账户设置。"
+      },
+      "empty": "暂无可设置的通知类型。",
+      "defaultSummaryPush": "默认:{bell}、{toast}、{sound}、{push}",
+      "push": {
+        "title": "浏览器通知",
+        "description": "即使 CRM 已关闭,也会为会显示在铃铛中的事件发送浏览器通知。你可以在下方的“推送”列中选择具体事件。",
+        "state": {
+          "on": "已在此设备开启",
+          "off": "关闭",
+          "blocked": "已阻止",
+          "unavailable": "不可用"
+        },
+        "checking": "正在检查此浏览器",
+        "unsupported": "此浏览器无法在 CRM 关闭时显示通知。请在安全(https)页面上使用最新版本的 Chrome、Edge、Firefox 或 Safari。",
+        "needsInstall": "在 iPhone 和 iPad 上,浏览器通知仅适用于已添加到主屏幕的应用。",
+        "needsInstallSteps": "请在 Safari 中打开此页面,点按“分享”,选择“添加到主屏幕”,然后从新图标打开 CRM 并返回此处。需要 iOS 或 iPadOS 16.4 或更高版本。",
+        "blocked": "你的浏览器已阻止此网站的通知。",
+        "blockedHelp": "只有你的浏览器可以撤销此设置:请打开网站设置(地址栏旁的图标),将“通知”设为“允许”,然后返回此页面。",
+        "offHelp": "此设备尚未启用。点击“启用”后,浏览器将请求授权。",
+        "enable": "在此设备上启用",
+        "enabling": "启用中...",
+        "onHelp": "当你未查看 CRM 时,此设备将为你在下方开启的事件接收浏览器通知。",
+        "howItWorks": "当 CRM 已打开且位于前台时,不会发送通知(由铃铛和弹窗负责)。通知仅显示事件的发起人和类型,不显示消息内容。",
+        "test": "发送测试通知",
+        "testing": "发送中...",
+        "disable": "在此设备上关闭",
+        "disabling": "关闭中...",
+        "testResult": {
+          "sent": "已发送。即使 CRM 已关闭,通知也应很快出现在你的设备上。",
+          "none_reachable": "暂时无法连接你的浏览器或其推送服务。请稍后重试;已不存在的设备会被自动移除。",
+          "no_device": "没有可发送的设备。请先在此设备上启用通知。",
+          "wait": "刚刚已发送测试。请等待几秒后再发送。"
+        },
+        "problem": {
+          "enable_failed": "无法在此设备上启用通知。请重试。",
+          "disable_failed": "无法在此设备上关闭通知。请重试。",
+          "remove_failed": "无法移除该设备。请重试。",
+          "test_failed": "无法发送测试。请重试。"
+        },
+        "devicesFailed": "无法加载你的设备。",
+        "devices": {
+          "title": "你的设备",
+          "thisDevice": "此设备",
+          "added": "添加于 {date}",
+          "lastUsed": "上次通知于 {date}",
+          "neverUsed": "尚未通知",
+          "remove": "移除",
+          "removeFor": "移除 {device}"
+        }
+      }
+    },
+    "nav": {
+      "preferences": "通知"
+    }
+  }
+}

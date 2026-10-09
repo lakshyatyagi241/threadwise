@@ -1,0 +1,350 @@
+{
+  "chatbotWidget": {
+    "nav": {
+      "title": "Sohbet widget'ı"
+    },
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "paywall": {
+      "kicker": "Plan",
+      "title": "Sohbet botu widget'ları planınızda yok",
+      "body": "Planınız sohbet botu widget'larını içermiyor. Bu özelliğin kilidini açmak için yükseltin.",
+      "upgrade": "Planları gör"
+    },
+    "list": {
+      "tip": "İpucu",
+      "tipBody": "Herhangi bir siteye tek satırlık bir kod parçası ekleyerek kayan bir sohbet balonu başlatın. Her widget akıllı bir ajanla çalışabilir, WhatsApp'a yönlendirebilir veya ikisini birden yapabilir; ziyaretçi görüşmeleri ekip gelen kutunuza düşer.",
+      "statusViews": "Widget durumu",
+      "view": {
+        "all": "Tüm widget'lar",
+        "active": "Etkin",
+        "paused": "Duraklatıldı"
+      },
+      "status": {
+        "all": "Tümü",
+        "active": "Etkin",
+        "paused": "Duraklatıldı"
+      },
+      "trainFirst": "Önce eğitin",
+      "trainBody": "<link>Yapay Zeka Eğitimi</link> bölümünde bir akıllı ajan oluşturup bilgi ekleyin, ardından widget'ınızın sizin sesinizle yanıt vermesi için buraya bağlayın.",
+      "workspace": "Çalışma alanı",
+      "title": "Sohbet botu",
+      "titleAccent": "widget'ları",
+      "intro": "Herhangi bir sayfaya kayan sohbet balonu ekleyin. Akıllı ajan tarayıcı içinde yanıt verir, gerektiğinde Birleşik Gelen Kutusu'na devreder.",
+      "activePill": "{count} etkin",
+      "newWidget": "Yeni widget",
+      "card": {
+        "total": "Toplam widget",
+        "visitors": "Ziyaretçiler",
+        "avg": "Widget başına ort.",
+        "health": "Sağlık",
+        "activeHint": "{count} etkin",
+        "allTime": "tüm zamanlar",
+        "visitorsUnit": "ziyaretçi"
+      },
+      "health": {
+        "healthy": "sağlıklı",
+        "empty": "boş",
+        "attention": "dikkat"
+      },
+      "search": "Ada veya kısa ada göre ara…",
+      "col": {
+        "widget": "Widget",
+        "engine": "Motor",
+        "agent": "Akıllı ajan",
+        "visitors": "Ziyaretçiler",
+        "updated": "Güncellendi",
+        "actions": "İşlemler"
+      },
+      "loading": "Widget'lar yükleniyor",
+      "loadError": "Widget'lar yüklenemedi.",
+      "retry": "Tekrar dene",
+      "emptyTitle": "Henüz widget yok",
+      "emptyBody": "İlk sohbet widget'ınızı oluşturun; yerleştirdiğiniz sayfada kayan bir balon olarak yer alır.",
+      "createWidget": "Widget oluştur",
+      "noMatch": "Bu sayfada aramanızla eşleşen widget yok.",
+      "showing": "Gösterilen",
+      "of": "/",
+      "widgetsCount": "{count} widget",
+      "loadMore": "Daha fazla yükle",
+      "pill": {
+        "active": "Etkin",
+        "paused": "Duraklatıldı"
+      },
+      "action": {
+        "preview": "Bağımsız önizlemeyi aç",
+        "copy": "Yerleştirme kodunu kopyala",
+        "edit": "Widget'ı düzenle",
+        "rotate": "Yerleştirme belirtecini yenile",
+        "duplicate": "Widget'ı çoğalt",
+        "delete": "Widget'ı sil"
+      },
+      "copied": "Kod parçası kopyalandı; sitenizde {tag} öncesine yapıştırın.",
+      "duplicateFailed": "Widget çoğaltılamadı.",
+      "rotated": "Belirteç yenilendi; yeni kod parçasını kopyalayın.",
+      "rotateFailed": "Yenileme başarısız: {reason}",
+      "networkError": "ağ hatası",
+      "deleted": "Widget silindi.",
+      "deleteFailed": "Silme başarısız: {reason}",
+      "rotateTitle": "Bu widget'ın yerleştirme belirteci yenilensin mi?",
+      "rotateBody": "Sitenizdeki mevcut kod parçası hemen çalışmayı bırakır. Yeni kod parçasını kopyalayıp yapıştırmanız gerekir.",
+      "rotate": "Yenile",
+      "cancel": "İptal",
+      "deleteTitle": "\"{name}\" silinsin mi?",
+      "deleteBody": "Sitenizdeki yerleştirme kodu hemen çalışmayı bırakır. Geçmiş görüşmeler ekip gelen kutunuzda kalır.",
+      "delete": "Widget'ı sil",
+      "keep": "Koru",
+      "copyManuallyTitle": "Bunu elle kopyalayın",
+      "gotIt": "Anladım",
+      "close": "Kapat"
+    },
+    "builder": {
+      "loading": "Widget yükleniyor",
+      "notFoundTitle": "Widget bulunamadı",
+      "notFoundBody": "Bu widget çalışma alanınızda yok.",
+      "loadError": "Widget yüklenemedi.",
+      "backToWidgets": "Widget'lara dön",
+      "back": "Widget'lara dön",
+      "crumb": "Sohbet botu widget'ları",
+      "crumbEdit": "Düzenle",
+      "crumbNew": "Yeni",
+      "titleNew": "Sohbet botu oluştur",
+      "titleEdit": "Sohbet botunu düzenle",
+      "titleAccent": "widget",
+      "stateSaved": "Kaydedildi",
+      "stateDraft": "Taslak / kaydedilmedi",
+      "saveDraft": "Taslağı kaydet",
+      "stepper": "Oluşturucu adımları",
+      "steps": {
+        "setup": "Kurulum",
+        "look": "Görünüm",
+        "voice": "Ses",
+        "launch": "Yayın"
+      },
+      "previous": "Önceki",
+      "next": "Sonraki",
+      "stepOf": "Adım {n} / {total}",
+      "launchWidget": "Widget'ı yayınla",
+      "draftSaved": "Taslak kaydedildi.",
+      "savedEmbed": "Kaydedildi; yerleştirme kodu kopyalanmaya hazır.",
+      "saveFailed": "Kaydetme başarısız; vurgulanan adımı kontrol edin.",
+      "snippetCopied": "Kod parçası kopyalandı.",
+      "clipboardBlocked": "Pano engellendi; kod parçasını elle seçin.",
+      "problem": {
+        "name": "Widget'ınıza bir ad verin.",
+        "assistant": "Bir akıllı ajan bağlayın veya motoru WhatsApp derin bağlantısına geçirin.",
+        "whatsapp": "Tam bir WhatsApp numarası ekleyin: ülke kodu ve rakamlar.",
+        "launcherColour": "Başlatıcı rengi onaltılık bir renk olmalıdır (ör. #075E54).",
+        "headerTitle": "Sohbet penceresine bir başlık verin.",
+        "welcome": "Bir açılış cümlesi yazın.",
+        "bgImage": "Bir arka plan görseli URL'si ekleyin veya düz renge geçin."
+      },
+      "setup": {
+        "title": "Widget kurulumu",
+        "required": "zorunlu",
+        "name": "Dahili ad",
+        "namePlaceholder": "ör. Fiyatlandırma sayfası widget'ı",
+        "nameHint": "Ekibiniz için. Ziyaretçiler bu etiketi görmez.",
+        "position": "Başlatıcı konumu",
+        "bottomRight": "Sağ alt köşe",
+        "bottomLeft": "Sol alt köşe",
+        "positionHint": "Yuvarlak sohbet balonunun sitenizde nerede duracağı.",
+        "engine": "Görüşme motoru",
+        "mode": {
+          "ai": {
+            "title": "Akıllı ajan",
+            "body": "Eğitilmiş yapay zeka doğrudan tarayıcıda yanıt verir."
+          },
+          "whatsapp": {
+            "title": "WhatsApp derin bağlantısı",
+            "body": "Ziyaretçiyi sohbet etmek üzere WhatsApp uygulamasına yönlendirin."
+          },
+          "both": {
+            "title": "Akıllı + WhatsApp",
+            "body": "Ziyaretçi seçer: burada sohbet eder veya WhatsApp'ı açar."
+          }
+        },
+        "agent": "Akıllı ajan (beyin)",
+        "agentPlaceholder": "— Kayıtlı bir akıllı ajan seçin —",
+        "agentHintBefore": "Göremiyor musunuz?",
+        "agentBuild": "Önce bir akıllı ajan oluşturun",
+        "agentHintAfter": ".",
+        "whatsapp": "WhatsApp numarası",
+        "country": "Ülke",
+        "phonePlaceholder": "Ülke kodu olmadan numaranız",
+        "whatsappHint": "Ülke bayrağını seçin; arama kodu otomatik eklenir.",
+        "prefilled": "Önceden yazılmış mesaj (WhatsApp'ta görünür)",
+        "prefilledPlaceholder": "Merhaba, fiyatlandırma hakkında daha fazla bilgi almak istiyorum.",
+        "prefilledHint": "Ziyaretçi bu mesaj önceden yazılmış olarak WhatsApp'a gelir."
+      },
+      "look": {
+        "title": "Başlatıcı ve pencere stili",
+        "tag": "marka",
+        "launcherFill": "Başlatıcı dolgusu",
+        "launcherFillHint": "Yuvarlak balonun arka planı.",
+        "headerTint": "Pencere başlığı tonu",
+        "headerTintHint": "Sohbet penceresinin üst şeridi.",
+        "headerInk": "Başlık yazı rengi",
+        "headerInkHint": "Başlık için metin/simge rengi.",
+        "windowTitle": "Pencere başlığı (başlıkta gösterilir)",
+        "windowTitlePlaceholder": "Ekibimizle sohbet edin",
+        "windowTitleHint": "~30 karakterin altında tutun.",
+        "icon": "Özel başlatıcı simgesi URL'si",
+        "optional": "isteğe bağlı",
+        "iconHint": "PNG / SVG · önerilen 80×80 px · şeffaf arka plan."
+      },
+      "voice": {
+        "title": "Açılış mesajı ve sohbet yüzeyi",
+        "tag": "içerik",
+        "opening": "Açılış cümlesi",
+        "openingPlaceholder": "Merhaba! Bugün size nasıl yardımcı olabiliriz?",
+        "openingHint": "Sohbet açıldığında gösterilen ilk balon.",
+        "bubbleFill": "Gelen balon dolgusu",
+        "bubbleFillHint": "Sizin tarafınızdaki balonların rengi.",
+        "bubbleInk": "Gelen balon yazı rengi",
+        "bubbleInkHint": "Balonların içindeki metin rengi.",
+        "canvas": "Pencere zemini",
+        "canvasKind": {
+          "color": "Düz renk",
+          "image": "Döşeme görseli"
+        },
+        "canvasColour": "Pencere zemin rengi",
+        "canvasImage": "Pencere zemin görseli URL'si",
+        "canvasImageHint": "Döşenebilir bir PNG en iyi sonucu verir.",
+        "autoOpen": "Otomatik aç",
+        "autoOpenHint": "Sayfa yüklendikten yaklaşık 1,2 sn sonra sohbeti açar.",
+        "intake": "Ziyaretçi bilgileri",
+        "intakeHint": "Sohbet başlamadan önce gösterilen alanlar. Anonim sohbet için hepsini atlayın.",
+        "intakeField": {
+          "name": "Görünen ad",
+          "email": "E-posta adresi",
+          "phone": "Telefon numarası"
+        }
+      },
+      "launch": {
+        "title": "Gönder düğmesi ve yerleştirme kodu",
+        "tag": "yayın",
+        "label": "Gönder düğmesi etiketi",
+        "labelPlaceholder": "Mesaj gönder",
+        "labelHint": "\"Submit\" kullanmaktan kaçının. \"Mesaj gönder\" veya \"Ekibe sor\" deneyin.",
+        "fill": "Gönder düğmesi dolgusu",
+        "ink": "Gönder düğmesi yazı rengi",
+        "ready": "Hazır. Bunu widget'ın görünmesini istediğiniz sayfada <code>{tag}</code> öncesine yapıştırın.",
+        "copy": "Panoya kopyala",
+        "preview": "Bağımsız önizlemeyi aç"
+      },
+      "preview": {
+        "title": "Canlı önizleme",
+        "chat": "Sohbet",
+        "hi": "Merhaba!",
+        "send": "Gönder",
+        "engine": {
+          "ai": "Akıllı ajan",
+          "whatsapp": "WhatsApp",
+          "both": "YZ + WhatsApp"
+        },
+        "metaEngine": "Motor",
+        "metaPlacement": "Konum",
+        "metaAutoOpen": "Otomatik açma",
+        "metaIntake": "Bilgi alma",
+        "left": "Sol",
+        "right": "Sağ",
+        "on": "Açık",
+        "off": "Kapalı",
+        "none": "Yok"
+      },
+      "colorSwatch": "{label} (renk örneği)"
+    },
+    "whatsappBuilder": {
+      "crumb": "WhatsApp widget'ı",
+      "title": "WhatsApp widget'ı",
+      "titleAccent": "Kur ve özelleştir",
+      "type": "Widget türü",
+      "nameHint": "Bu adı yalnızca siz görürsünüz. Aynı zamanda mesajlaşma penceresinde gösterilen işletme adıdır.",
+      "save": "Değişiklikleri kaydet",
+      "saved": "Değişiklikler kaydedildi. Widget'ınız yayında.",
+      "card": {
+        "1": {
+          "title": "WhatsApp sohbet düğmenizi biçimlendirin",
+          "subtitle": "Web sitenize en uygun güzel bir sohbet düğmesi tasarımı seçin",
+          "buttonType": "Düğme türü",
+          "type": {
+            "pill": "Bizimle sohbet edin düğmesi",
+            "icon": "Yalnızca simgeli yuvarlak düğme"
+          },
+          "iconOnly": "Yalnızca simge",
+          "buttonColor": "Düğme rengi",
+          "pickCustom": "Özel bir renk seçin",
+          "custom": "Özel {hex}"
+        },
+        "2": {
+          "title": "Mesajlaşma penceresini tasarlayın",
+          "subtitle": "Mesajlaşma pencereniz için güzel bir görsel seçin",
+          "image": "Mesajlaşma görseli",
+          "names": {
+            "support": "Destek",
+            "store": "Mağaza",
+            "chat": "Sohbet",
+            "person": "Kişi"
+          },
+          "url": "Veya kendi görsel adresinizi kullanın",
+          "urlHint": "Kare bir görselin adresini yapıştırın (https://...). Dosya yükleme henüz kullanılamıyor."
+        },
+        "3": {
+          "title": "Karşılama mesajınızı ayarlayın",
+          "subtitle": "Müşterilerinizi karşılayın",
+          "greeting": "Selamlama",
+          "greetingHint": "Müşteriler mesajlaşma penceresini açtığında onlara merhaba deyin",
+          "intro": "Tanıtım mesajı",
+          "introHint": "İşletmenizi tanıtın ve müşterilere nasıl yardımcı olabileceğinizi söyleyin"
+        },
+        "4": {
+          "title": "Sohbet düğmesi konumunu ayarlayın",
+          "subtitle": "Düğme konumunu bilgisayarlarda ve mobilde ayarlayın",
+          "preview": "Sohbet düğmesi önizlemesi",
+          "desktopPreview": "Masaüstü önizlemesi",
+          "mobilePreview": "Mobil önizleme",
+          "desktopPosition": "Masaüstü başlatıcı konumu",
+          "mobilePosition": "Mobil başlatıcı konumu",
+          "left": "Sol",
+          "right": "Sağ",
+          "desktopSideSpacing": "Masaüstü yan boşluk",
+          "desktopBottomSpacing": "Masaüstü alt boşluk",
+          "mobileSideSpacing": "Mobil yan boşluk",
+          "mobileBottomSpacing": "Mobil alt boşluk",
+          "px": "px"
+        },
+        "5": {
+          "title": "WhatsApp numaranızı yapılandırın",
+          "subtitle": "WhatsApp numarasını mesajlaşma penceresine bağlayın",
+          "number": "WhatsApp numarası",
+          "numberHint": "Mesajlaşma penceresi müşterilerinizi bu WhatsApp numarasına yönlendirir",
+          "prefilled": "Önceden doldurulmuş mesaj",
+          "prefilledHint": "Bu, varsayılan ilk mesaj metni olacak"
+        }
+      },
+      "install": {
+        "title": "Web sitenize yükleyin",
+        "body": "Bu etiketi widget'ın görünmesi gereken her sayfanın kapanış body etiketinden hemen önce yapıştırın.",
+        "copy": "Kodu kopyala"
+      },
+      "problem": {
+        "name": "Widget'ınıza bir ad verin.",
+        "avatar": "Yerleşik bir görsel veya http(s) görsel adresi kullanın.",
+        "greeting": "Bir selamlama ekleyin.",
+        "intro": "Bir tanıtım mesajı ekleyin.",
+        "spacing": "Boşluk, 0 ile 500 arasında tam sayı piksel olmalıdır.",
+        "whatsapp": "Tam bir WhatsApp numarası ekleyin: ülke kodu ve rakamlar."
+      },
+      "preview": {
+        "title": "Canlı önizleme",
+        "desktop": "Masaüstü",
+        "mobile": "Mobil",
+        "frameTitle": "WhatsApp widget'ınızın canlı önizlemesi",
+        "hint": "Paneli yuvarlak düğmeyle daraltın, başlatıcıdan yeniden açın ve Görüşmeyi başlat'ı deneyin.",
+        "businessName": "İşletmeniz"
+      }
+    }
+  }
+}

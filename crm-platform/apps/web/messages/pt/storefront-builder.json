@@ -1,0 +1,439 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "Loja"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "Dispensar"
+      },
+      "errors": {
+        "requestId": "ID da solicitação",
+        "retry": "Tentar novamente",
+        "network": {
+          "title": "Não foi possível acessar o servidor",
+          "message": "Verifique sua conexão e tente novamente."
+        },
+        "forbidden": {
+          "title": "Sem acesso",
+          "message": "Sua função não permite isto."
+        },
+        "signedOut": {
+          "title": "Você saiu da conta",
+          "message": "Entre novamente para continuar."
+        },
+        "conflict": {
+          "title": "Alterado em outro lugar",
+          "message": "Alguém alterou isto enquanto você editava. Recarregue para ver a versão mais recente."
+        },
+        "validation": {
+          "title": "Verifique o formulário",
+          "message": "Alguns campos precisam de atenção."
+        },
+        "unavailable": {
+          "title": "Ainda não disponível",
+          "message": "O serviço de loja não está disponível neste servidor."
+        },
+        "rateLimited": {
+          "title": "Muitas solicitações",
+          "message": "Aguarde um momento e tente novamente."
+        },
+        "notFound": {
+          "title": "Não encontrado",
+          "message": "Essa loja não existe neste espaço de trabalho."
+        },
+        "noShop": {
+          "title": "Nenhuma loja ainda",
+          "message": "Configure sua loja primeiro."
+        },
+        "slugTaken": {
+          "title": "Endereço em uso",
+          "message": "Esse endereço de loja já está em uso."
+        },
+        "deviceInvalid": {
+          "title": "Escolha um dispositivo conectado",
+          "message": "Escolha um dos seus dispositivos conectados."
+        },
+        "noSender": {
+          "title": "Conecte o WhatsApp primeiro",
+          "message": "Uma loja precisa de um número do WhatsApp conectado. Conecte um e tente novamente."
+        },
+        "resetNotConfirmed": {
+          "title": "Não confirmado",
+          "message": "Redefinição não confirmada."
+        },
+        "domainNotSet": {
+          "title": "Sem domínio personalizado",
+          "message": "Nenhum domínio personalizado definido."
+        },
+        "unexpected": {
+          "title": "Algo deu errado",
+          "message": "Algo deu errado. Tente novamente em instantes."
+        }
+      },
+      "sidebar": {
+        "label": "Loja",
+        "navLabel": "Seções da loja",
+        "section": "Loja",
+        "settings": "Configurações",
+        "items": {
+          "overview": "Visão geral",
+          "orders": "Pedidos",
+          "products": "Produtos",
+          "groups": "Grupos",
+          "storefront": "Vitrine",
+          "coupons": "Cupons",
+          "reviews": "Avaliações",
+          "payments": "Pagamentos",
+          "gateways": "Gateways de checkout",
+          "customers": "Clientes",
+          "invoices": "Faturas",
+          "connection": "Conexão"
+        },
+        "comingSoon": "Em breve",
+        "comingSoonHint": "Em breve",
+        "noShopTitle": "Nenhuma loja ainda",
+        "noShopMessage": "Crie sua primeira loja para usar as ferramentas da loja.",
+        "noShopAction": "Configure sua loja",
+        "live": "Ao vivo",
+        "setup": "Configuração",
+        "yourStore": "Sua loja",
+        "notConnected": "Não conectado",
+        "unofficialApi": "API não oficial",
+        "deviceConnected": "Dispositivo conectado · /channels",
+        "switchShop": "Trocar de loja",
+        "shopFallback": "Loja",
+        "manageShops": "Gerenciar todas as lojas →",
+        "publicUrl": "URL pública",
+        "open": "Abrir",
+        "copy": "Copiar",
+        "copied": "Copiado!",
+        "providerLive": "Provedor ativo",
+        "sendingFrom": "Enviando de",
+        "noDevice": "Nenhum dispositivo conectado.",
+        "connectOne": "Conecte um",
+        "thenBind": "e depois vincule-o a esta loja em",
+        "connectWizard": "assistente de conexão"
+      },
+      "dashboard": {
+        "eyebrow": "Loja / Visão geral",
+        "title": "Visão geral de vendas",
+        "subtitle": "Últimos 30 dias. Os pedidos são unificados de todos os canais — WABA, vitrine, Twilio.",
+        "addProduct": "Adicionar produto",
+        "loading": "Carregando a visão geral da loja",
+        "kpi": {
+          "revenue": "Receita (30 d)",
+          "orders": "Pedidos (30 d)",
+          "aov": "Ticket médio",
+          "products": "Produtos",
+          "visits": "Visitas (30 d)"
+        },
+        "trend": {
+          "eyebrow": "Tendência de vendas",
+          "title": "Receita ao longo do tempo"
+        },
+        "legendRevenue": "Receita ({symbol})",
+        "legendOrders": "Pedidos",
+        "dayReadout": "{day}: {revenue}, {orders, plural, one {# pedido} other {# pedidos}}",
+        "chartLabel": "Receita e pedidos por dia, últimos 30 dias",
+        "tableDay": "Dia",
+        "tableRevenue": "Receita ({symbol})",
+        "tableOrders": "Pedidos",
+        "top": {
+          "eyebrow": "Produtos mais vendidos (30 d)",
+          "title": "Mais vendidos",
+          "empty": "Nenhuma venda ainda — compartilhe o link da sua loja."
+        },
+        "recent": {
+          "title": "Pedidos recentes",
+          "viewAll": "Ver todos",
+          "open": "Abrir",
+          "columns": {
+            "when": "Quando",
+            "customer": "Cliente",
+            "source": "Origem",
+            "items": "Itens",
+            "total": "Total",
+            "status": "Status",
+            "open": "Abrir"
+          },
+          "itemsCount": "{count, plural, one {# item} other {# itens}}",
+          "emptyTitle": "Nenhum pedido ainda",
+          "emptyMessage": "Quando clientes fizerem pedidos pela sua vitrine ou pelo WhatsApp, eles aparecerão aqui."
+        }
+      },
+      "settings": {
+        "eyebrow": "Loja / Vitrine",
+        "title": "Design da vitrine",
+        "viewLive": "Ver ao vivo",
+        "noAccess": "Sua função não tem acesso às configurações da vitrine.",
+        "loading": "Carregando as configurações da vitrine",
+        "saved": "Vitrine atualizada.",
+        "conflict": "Esta vitrine foi alterada em outro lugar enquanto você editava. Recarregue para obter as configurações mais recentes e refaça suas alterações.",
+        "reload": "Recarregar",
+        "fixErrors": "Corrija os campos destacados e salve novamente.",
+        "optional": "(opcional)",
+        "save": "Salvar",
+        "readOnly": "Você pode ver estas configurações, mas não alterá-las.",
+        "live": "Vitrine ativa (desmarcar a deixa offline)",
+        "theme": {
+          "title": "Tema"
+        },
+        "slug": {
+          "label": "Slug da vitrine",
+          "hint": "Sua loja ficará em"
+        },
+        "domain": {
+          "label": "Domínio personalizado",
+          "placeholder": "loja.suaempresa.com",
+          "verifiedLive": "Verificado — seu domínio está ativo",
+          "addCname": "Adicione este CNAME no seu provedor de DNS:",
+          "cname": "CNAME",
+          "verify": "Verificar agora",
+          "verified": "Domínio verificado ✓",
+          "notPointing": "CNAME não aponta para {expected}",
+          "notSet": "Nenhum domínio personalizado definido.",
+          "verifyFailed": "Não foi possível verificar o domínio. Tente novamente."
+        },
+        "brand": {
+          "logoUrl": "URL do logo",
+          "color": "Cor da marca (hex)",
+          "colorPicker": "Escolha a cor da marca",
+          "heroText": "Texto de destaque",
+          "heroPlaceholder": "Bem-vindo à nossa loja",
+          "footerText": "Texto do rodapé",
+          "footerPlaceholder": "© 2026 Sua loja"
+        },
+        "currency": {
+          "title": "Moeda",
+          "label": "Moeda",
+          "hint": "Padrão para novos produtos e o símbolo exibido no carrinho."
+        },
+        "shipping": {
+          "title": "Frete",
+          "flat": "Taxa de frete fixa",
+          "flatHint": "Aplicada a todos os pedidos. Vazio ou 0 = grátis.",
+          "freeAbove": "Frete grátis acima de",
+          "freeAboveHint": "Carrinhos acima deste valor têm frete grátis.",
+          "note": "Observação de frete",
+          "noteHint": "Exibida no carrinho e na página do produto.",
+          "notePlaceholder": "2–5 dias úteis · Com rastreamento"
+        },
+        "payment": {
+          "title": "Link de pagamento",
+          "intro": "Escolha um provedor de pagamento e anexaremos o link de pagamento a cada mensagem de pedido no WhatsApp. O comprador paga pelo link e você confirma no chat. Não há fluxo de checkout integrado à vitrine.",
+          "provider": "Provedor",
+          "providers": {
+            "none": "Nenhum · pagamento na entrega",
+            "upi": "UPI (Índia) — VPA + nome",
+            "razorpay_link": "Link de pagamento do Razorpay (colar link estático)",
+            "razorpay_api": "Razorpay (gerar links automaticamente + confirmar automaticamente)",
+            "stripe_link": "Link de pagamento do Stripe",
+            "paypal_me": "Identificador do PayPal.me",
+            "bank_transfer": "Instruções de transferência bancária"
+          },
+          "handle": "Detalhe do pagamento",
+          "handleHint": "VPA do UPI, URL do link de pagamento, identificador do PayPal.me ou conta bancária.",
+          "handlePlaceholder": "ex.: loja@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "API do Razorpay (links automáticos)",
+            "keyId": "ID da chave",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "Segredo da chave",
+            "webhookSecret": "Segredo do webhook",
+            "stored": "salvo — deixe em branco para manter",
+            "show": "Mostrar segredo",
+            "hide": "Ocultar segredo",
+            "webhookHelp": "No painel do Razorpay, defina a URL do webhook como",
+            "webhookEvent": "para o evento payment_link.paid."
+          }
+        },
+        "recovery": {
+          "title": "Recuperação de carrinho abandonado",
+          "enable": "Envie um lembrete pelo WhatsApp para clientes que iniciam o checkout mas não finalizam",
+          "enableHint": "Captura o telefone no checkout; o lembrete é cancelado automaticamente se o cliente fizer o pedido. Requer um dispositivo conectado.",
+          "delay": "Atraso (minutos)",
+          "message": "Mensagem",
+          "messageHint": "(vazio = padrão; '{name}' '{shop}' '{url}' '{total}')",
+          "messagePlaceholder": "Oi '{name}'! Você deixou itens no carrinho em '{shop}'. Finalize aqui: '{url}'"
+        },
+        "problems": {
+          "required": "Este campo é obrigatório.",
+          "tooLong": "No máximo {max} caracteres.",
+          "slugPattern": "Use apenas letras minúsculas, números e hífens.",
+          "domainInvalid": "Isso não parece um domínio válido (ex.: loja.suaempresa.com).",
+          "urlInvalid": "Digite um endereço completo começando com http:// ou https://.",
+          "colorInvalid": "Use uma cor hex como #075E54.",
+          "amountInvalid": "Digite um número, zero ou mais.",
+          "amountTooBig": "No máximo {max}.",
+          "delayRange": "Digite um número inteiro de {min} a {max}.",
+          "themeInvalid": "Escolha um dos temas.",
+          "currencyInvalid": "Escolha uma das moedas da lista.",
+          "providerInvalid": "Escolha um dos provedores da lista.",
+          "slugTaken": "Esse slug já está em uso. Escolha outro."
+        }
+      },
+      "share": {
+        "message": "Confira minha loja: {name}",
+        "subject": "Confira minha loja · {name}",
+        "eyebrow": "Compartilhe sua loja",
+        "fallbackName": "Minha loja",
+        "close": "Fechar",
+        "link": "Link da loja",
+        "copy": "Copiar",
+        "copied": "Copiado ✓",
+        "copiedShort": "Copiado",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "Enviar para um chat",
+        "email": "E-mail",
+        "emailHint": "Abrir app de e-mail",
+        "telegram": "Telegram",
+        "telegramHint": "Compartilhar em canal",
+        "more": "Mais…",
+        "moreHint": "Menu de compartilhamento do celular",
+        "nativeUnsupported": "Não compatível com este navegador",
+        "showQr": "Mostrar QR code",
+        "qrAlt": "QR code",
+        "qrCaption": "Escaneie para abrir a loja"
+      },
+      "wizard": {
+        "loading": "Carregando suas lojas",
+        "back": "Voltar",
+        "breadcrumb": "Conexões / Loja do WhatsApp",
+        "manageConnections": "Gerenciar todas as conexões →",
+        "titles": {
+          "list": "Suas lojas",
+          "add": "Configure sua loja",
+          "edit": "Editar {name}",
+          "shopFallback": "loja"
+        },
+        "gate": {
+          "step": "Passo 1 de 3",
+          "title": "Conecte o WhatsApp primeiro",
+          "message": "Sua loja precisa de um número do WhatsApp conectado para enviar confirmações de pedido e permitir que clientes conversem. Vá até seus canais para parear um — leva 30 segundos.",
+          "action": "Ir para dispositivos"
+        },
+        "list": {
+          "headline": "{count, plural, one {# loja} other {# lojas}} em {workspace}",
+          "intro": "Cada loja tem sua própria URL pública, tema e dispositivo de envio. Adicione quantas precisar — marcas, idiomas ou regiões diferentes.",
+          "add": "Adicionar loja",
+          "addAnother": "Adicionar outra loja",
+          "addAnotherHint": "Tenha uma vitrine separada com URL, tema e número do WhatsApp próprios."
+        },
+        "share": {
+          "fallbackName": "Minha loja"
+        },
+        "noAccess": {
+          "title": "Você não pode alterar as lojas",
+          "message": "Sua função pode ver as lojas, mas não criá-las ou editá-las.",
+          "action": "Voltar às lojas"
+        },
+        "delete": {
+          "title": "Excluir {name}?",
+          "message": "Isto exclui permanentemente a vitrine e os pedidos dela. Os produtos do seu espaço de trabalho não são afetados. Não há como desfazer.",
+          "confirm": "Sim, excluir",
+          "cancel": "Cancelar",
+          "done": "Loja excluída.",
+          "thisShop": "esta loja"
+        },
+        "reset": {
+          "open": "Limpar todos os dados da loja",
+          "title": "Limpar todos os dados da loja?",
+          "message": "Isto exclui permanentemente todas as lojas, pedidos e produtos deste espaço de trabalho. Não há como desfazer.",
+          "confirm": "Sim, limpar tudo",
+          "done": "Todos os dados da loja foram limpos neste espaço de trabalho.",
+          "notConfirmed": "Redefinição não confirmada."
+        },
+        "card": {
+          "live": "Ao vivo",
+          "disabled": "Desativado",
+          "theme": "Tema {theme}",
+          "untitled": "Loja sem título",
+          "sendingFrom": "Enviando de",
+          "noDevice": "Sem dispositivo",
+          "domain": "Domínio",
+          "pending": "pendente",
+          "builtIn": "URL integrada",
+          "manage": "Gerenciar",
+          "manageTitle": "Abrir painel administrativo",
+          "preview": "Visualizar",
+          "previewTitle": "Abrir a vitrine pública em uma nova aba",
+          "edit": "Editar",
+          "editTitle": "Editar configurações da loja",
+          "share": "Compartilhar",
+          "shareAria": "Compartilhar {name}",
+          "delete": "Excluir loja",
+          "deleteAria": "Excluir {name}"
+        },
+        "form": {
+          "backToShops": "Voltar às lojas",
+          "creatingShop": "Criando loja nº {n}",
+          "progress": "Etapas",
+          "steps": {
+            "details": "Detalhes da loja",
+            "url": "URL pública",
+            "device": "Dispositivo de envio"
+          },
+          "optional": "(opcional)",
+          "details": {
+            "title": "Detalhes da loja",
+            "hint": "Nome voltado ao cliente e o slug da URL em que os produtos ficarão.",
+            "name": "Nome da loja",
+            "nameHint": "Exibido no cabeçalho da vitrine e nas confirmações de pedido.",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "ex.: {workspace} · Mumbai",
+            "slug": "Slug da vitrine",
+            "auto": "(automático)",
+            "slugLocked": "Bloqueado depois que a loja está ativa para que os links compartilhados continuem funcionando.",
+            "slugAuto": "Gerado a partir do nome da sua loja — finalizado ao salvar."
+          },
+          "url": {
+            "title": "URL pública",
+            "hint": "Escolha como os compradores chegam à sua loja — a URL integrada é grátis, um domínio personalizado tem aparência mais profissional.",
+            "builtIn": "URL integrada · grátis",
+            "pathMode": "Funciona assim que você salvar. URL baseada em caminho porque nenhum host de vitrine pública está configurado.",
+            "subdomainMode": "Funciona assim que você salvar. Hospedada no domínio de vitrine da plataforma.",
+            "domain": "Domínio personalizado",
+            "domainHint": "Você adicionará um CNAME no seu provedor de DNS e verificará na página de configurações da vitrine após salvar. Deixe em branco para usar a URL integrada.",
+            "domainPlaceholder": "loja.suaempresa.com",
+            "verified": "{domain} está verificado.",
+            "pending": "{domain} aguardando verificação de DNS."
+          },
+          "device": {
+            "title": "Dispositivo de envio",
+            "hint": "Qual número do WhatsApp envia as confirmações de pedido e as respostas aos compradores.",
+            "none": "Nenhum dispositivo conectado nesta conta.",
+            "pair": "Pareie um nos seus canais →",
+            "official": "API oficial · Meta (WABA)",
+            "officialDetail": "Número comercial do WhatsApp Business do espaço de trabalho",
+            "fallback": "Dispositivo",
+            "noNumber": "Sem número",
+            "connected": "conectado"
+          },
+          "cancel": "Cancelar",
+          "deleteThis": "Excluir esta loja",
+          "saveChanges": "Salvar alterações",
+          "create": "Criar loja →",
+          "created": "Loja \"{name}\" criada.",
+          "updated": "Loja \"{name}\" atualizada.",
+          "problems": {
+            "nameRequired": "Digite um nome para a loja.",
+            "nameTooLong": "No máximo 191 caracteres.",
+            "domainInvalid": "Isso não parece um domínio válido (ex.: loja.suaempresa.com).",
+            "domainTooLong": "No máximo 191 caracteres.",
+            "deviceInvalid": "Escolha um dos seus dispositivos conectados.",
+            "slugTaken": "Esse nome de loja gera um endereço que já está em uso. Altere um pouco o nome."
+          },
+          "live": {
+            "eyebrow": "Esta loja está ativa",
+            "fallbackName": "Sua loja",
+            "hint": "Adicione produtos, escolha um tema, veja pedidos e compartilhe seu link.",
+            "view": "Ver loja",
+            "share": "Compartilhar loja",
+            "dashboard": "Abrir painel"
+          }
+        }
+      }
+    }
+  }
+}

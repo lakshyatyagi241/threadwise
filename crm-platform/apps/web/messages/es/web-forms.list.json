@@ -1,0 +1,132 @@
+{
+  "web-forms": {
+    "list": {
+      "title": "Formularios",
+      "subtitle": "Crea formularios, colócalos en tu web o comparte un enlace, y cada respuesta llegará a tu CRM como contacto.",
+      "templates": "Plantillas",
+      "newForm": "Nuevo formulario",
+      "statsLabel": "Totales de los formularios mostrados",
+      "stats": {
+        "forms": "Formularios",
+        "published": "Publicados",
+        "submissions": "Envíos",
+        "needsReview": "Requieren atención"
+      },
+      "views": {
+        "label": "Mostrar",
+        "all": "Todos",
+        "published": "Publicados",
+        "draft": "Borradores",
+        "paused": "Pausados",
+        "archived": "Archivados"
+      },
+      "search": "Buscar formularios",
+      "loading": "Cargando formularios",
+      "loadFailed": "No se pudieron cargar los formularios.",
+      "retry": "Reintentar",
+      "empty": {
+        "title": "Todavía no hay formularios",
+        "message": "Empieza desde una plantilla o un formulario en blanco, publícalo y comparte el enlace o pega el código de inserción en tu web.",
+        "fromTemplate": "Empezar desde una plantilla",
+        "blank": "Formulario en blanco"
+      },
+      "noMatch": {
+        "title": "Ningún formulario coincide",
+        "message": "Prueba otra búsqueda o vista.",
+        "clear": "Quitar filtros"
+      },
+      "col": {
+        "name": "Formulario",
+        "status": "Estado",
+        "submissions": "Envíos",
+        "views": "Visualizaciones",
+        "conversion": "Conversión",
+        "last": "Último envío"
+      },
+      "unpublished": "Cambios sin publicar",
+      "version": "Versión {n}",
+      "needsReview": "{count, plural, one {# requiere atención} other {# requieren atención}}",
+      "status": {
+        "draft": "Borrador",
+        "published": "Publicado",
+        "paused": "Pausado",
+        "archived": "Archivado"
+      },
+      "noRate": "-",
+      "never": "Nunca",
+      "actionsFor": "Acciones para {name}",
+      "action": {
+        "edit": "Editar",
+        "submissions": "Envíos",
+        "copyLink": "Copiar enlace",
+        "embed": "Insertar en un sitio",
+        "duplicate": "Duplicar",
+        "pause": "Pausar",
+        "resume": "Reanudar",
+        "archive": "Archivar",
+        "delete": "Eliminar",
+        "restore": "Restaurar"
+      },
+      "loadMore": "Cargar más",
+      "copied": "Enlace copiado",
+      "copyBlocked": "El navegador bloquea copiar. El enlace es {url}",
+      "paused": "Formulario pausado. Los visitantes verán que está cerrado.",
+      "resumed": "Formulario reanudado",
+      "archived": "Formulario archivado",
+      "deleted": "Formulario eliminado",
+      "cancel": "Cancelar",
+      "archive": {
+        "title": "¿Archivar este formulario?",
+        "message": "El enlace público y las inserciones de \"{name}\" dejarán de funcionar. Sus envíos se conservan y aún puedes leerlos.",
+        "confirm": "Archivar"
+      },
+      "delete": {
+        "title": "¿Eliminar este formulario?",
+        "message": "\"{name}\" se elimina para siempre. Los contactos que creó se mantienen en tu CRM.",
+        "confirm": "Eliminar"
+      },
+      "restored": "Formulario restaurado"
+    },
+    "newForm": {
+      "eyebrow": "Formularios",
+      "title": "Nuevo formulario",
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "create": "Crear formulario",
+      "startFrom": "Empezar desde",
+      "mode": {
+        "template": "Una plantilla",
+        "blank": "En blanco"
+      },
+      "loadingTemplates": "Cargando plantillas",
+      "templatesFailed": "No se pudieron cargar las plantillas. Aun así puedes empezar con un formulario en blanco.",
+      "templates": "Plantillas",
+      "fieldCount": "{count, plural, one {# campo} other {# campos}}",
+      "pickTemplate": "Elige una plantilla para continuar.",
+      "name": "Nombre del formulario",
+      "nameHint": "Solo tu equipo ve este nombre.",
+      "nameRequired": "Introduce un nombre para el formulario."
+    },
+    "templates": {
+      "breadcrumb": "Ruta de navegación",
+      "back": "Volver a formularios",
+      "title": "Plantillas de formularios",
+      "subtitle": "Empieza con un formulario ya hecho y cambia lo que quieras.",
+      "blank": "Formulario en blanco",
+      "loading": "Cargando plantillas",
+      "loadFailed": "No se pudieron cargar las plantillas.",
+      "retry": "Reintentar",
+      "empty": "No hay plantillas disponibles.",
+      "category": {
+        "lead": "Captación de contactos",
+        "contact": "Contacto",
+        "event": "Evento",
+        "order": "Pedido",
+        "survey": "Encuesta"
+      },
+      "fields": "Campos de esta plantilla",
+      "more": "+{count} más",
+      "use": "Usar esta plantilla"
+    }
+  }
+}

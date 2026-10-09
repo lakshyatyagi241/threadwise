@@ -1,0 +1,560 @@
+{
+  "lead-sources": {
+    "common": {
+      "dismiss": "Dispensar",
+      "loading": "Carregando",
+      "retry": "Tentar novamente",
+      "copied": "Copiado",
+      "copyFailed": "Não foi possível copiar: selecione o texto e copie manualmente",
+      "requestId": "Referência: {id}"
+    },
+    "states": {
+      "noAccessTitle": "Você não tem acesso a Leads sociais",
+      "noAccessBody": "A sua função não inclui a permissão que esta tela precisa ({permission}). Peça a um administrador do espaço de trabalho para adicioná-la à sua função.",
+      "lockedTitle": "Leads sociais não fazem parte do seu plano",
+      "lockedBody": "Seu plano atual não inclui fontes de leads, então você não pode vê-las nem criá-las. Faça upgrade para trazer leads de anúncios e páginas de destino para seus contatos.",
+      "upgrade": "Fazer upgrade do plano",
+      "manageNeeded": "Você pode consultar, mas não alterar nada aqui: alterar fontes exige a permissão {permission}."
+    },
+    "errors": {
+      "conflict": "Outra pessoa alterou esta fonte enquanto você a editava. Recarregue para ver a versão dela; suas edições não salvas seriam perdidas.",
+      "noAccess": "Sua função não permite esta ação.",
+      "signedOut": "Sua sessão terminou. Entre novamente para continuar.",
+      "planLocked": "Seu plano não inclui Leads sociais. Faça upgrade para usá-lo.",
+      "planLimit": "O limite de fontes de leads do seu plano foi atingido. Faça upgrade do plano ou exclua uma fonte que você não usa mais.",
+      "nameTaken": "Outra fonte já tem este nome. Escolha um nome diferente.",
+      "mappingInvalid": "O mapeamento aponta para propriedades de contato que não podem ser preenchidas a partir de um lead.",
+      "defaultsInvalid": "Algo nas regras não faz parte deste espaço de trabalho (um usuário, funil, etapa ou etapa do ciclo de vida).",
+      "notRetryable": "Só leads que precisam de revisão ou falharam podem ser reprocessados. Este já foi concluído ou está em processamento.",
+      "payloadPurged": "O lead armazenado foi excluído após o período de retenção, então não há o que reprocessar.",
+      "sourcePaused": "Esta fonte está pausada. Retome-a para enviar um lead de teste ou reprocessar um lead.",
+      "notFound": "Não encontramos. Pode ter sido excluído.",
+      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
+      "rateLimitedWait": "Muitas solicitações. Tente novamente em {seconds} segundos.",
+      "validation": "Parte do que você digitou não é válida. Confira os campos destacados.",
+      "validationField": "{message}",
+      "detailVerbatim": "{message}",
+      "badResponse": "O servidor respondeu de uma forma que esta página não entende. Recarregue a página; se continuar acontecendo, entre em contato com o suporte.",
+      "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
+      "unexpected": "Algo deu errado do nosso lado. Tente novamente em instantes.",
+      "request": "A solicitação não foi aceita. Confira o que você digitou e tente novamente.",
+      "details": {
+        "unknown_property": "Esta propriedade de contato não existe ou está desativada.",
+        "not_mappable": "Esta propriedade é calculada ou aponta para outro registro, então um lead não pode preenchê-la.",
+        "unknown_pipeline": "Este funil não está no seu espaço de trabalho.",
+        "unknown_stage": "Esta etapa de negócio não está no seu espaço de trabalho.",
+        "stage_not_in_pipeline": "Esta etapa pertence a outro funil.",
+        "pipeline_required": "Escolha o funil ao qual esta etapa pertence.",
+        "unknown_or_lost_stage": "Esta etapa do ciclo de vida não existe ou é uma etapa de perda.",
+        "unknown_or_inactive_user": "Uma das pessoas selecionadas não é membro ativo deste espaço de trabalho."
+      }
+    },
+    "problems": {
+      "nameRequired": "Dê um nome à fonte.",
+      "nameLength": "Use no máximo {max} caracteres.",
+      "platformLength": "Use no máximo {max} caracteres.",
+      "secretLength": "Um segredo compartilhado tem de {min} a {max} caracteres.",
+      "pathLength": "Um caminho tem no máximo {max} caracteres.",
+      "pathCharacters": "Um caminho não pode conter caracteres de controle.",
+      "retentionRange": "Digite um número inteiro de dias de 1 a {max}.",
+      "countryCode": "Digite um código DDI de 1 a 4 dígitos, como 55 ou 44.",
+      "textLength": "Use no máximo {max} caracteres.",
+      "ownerFixed": "Escolha exatamente uma pessoa.",
+      "ownerRoundRobin": "Escolha pelo menos duas pessoas para revezar.",
+      "ownerTooMany": "Escolha no máximo {max} pessoas.",
+      "notifyTooMany": "Escolha no máximo {max} pessoas.",
+      "dealTitleLength": "O título do negócio tem no máximo {max} caracteres.",
+      "propertyRequired": "Escolha a propriedade de contato a preencher.",
+      "propertyKey": "Uma chave de propriedade começa com uma letra e usa letras minúsculas, dígitos e sublinhados.",
+      "propertyDuplicate": "Esta propriedade está mapeada duas vezes.",
+      "pathRequired": "Informe onde no payload está o valor.",
+      "customFieldsTooMany": "Mapeie no máximo {max} propriedades personalizadas.",
+      "contract": "{message}"
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Formulários de lead do Meta",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Conexão do Marketplace"
+    },
+    "sourceStatus": {
+      "active": "Ativo",
+      "paused": "Pausado"
+    },
+    "eventStatus": {
+      "received": "Recebido",
+      "created": "Contato criado",
+      "updated": "Contato atualizado",
+      "duplicate": "Duplicado",
+      "needs_review": "Precisa de revisão",
+      "failed": "Falhou"
+    },
+    "reasons": {
+      "no_contact_point": "Sem e-mail ou telefone",
+      "invalid_phone": "Não foi possível ler o telefone",
+      "plan_limit_reached": "Limite de contatos atingido",
+      "source_paused": "A fonte foi pausada",
+      "internal_error": "Erro de processamento",
+      "identity_conflict": "E-mail ou telefone pertence a outro contato"
+    },
+    "guidance": {
+      "noContactPoint": "O lead não tinha um e-mail utilizável nem um número de telefone. Corrija o mapeamento ou o código de país padrão e tente novamente.",
+      "invalidPhone": "Um número de telefone foi enviado, mas não pôde ser lido como tal, e não havia e-mail. Confira o mapeamento do telefone e o código de país padrão e tente novamente.",
+      "planLimit": "O limite de contatos do seu plano foi atingido, então este lead não pôde virar contato. Faça upgrade do plano e tente novamente.",
+      "sourcePaused": "A fonte foi pausada. Retome-a e tente novamente.",
+      "internalError": "Algo deu errado ao processar este lead. Tente novamente; se falhar de novo, informe a referência do erro ao suporte.",
+      "identityConflict": "O lead foi vinculado a um contato existente, mas o e-mail ou telefone dele já pertence a outro contato, então esse dado não foi movido.",
+      "generic": "Este lead precisa de atenção. Confira o motivo e o erro, corrija o mapeamento ou os padrões se necessário e tente novamente.",
+      "upgrade": "Fazer upgrade do plano"
+    },
+    "eventFilters": {
+      "all": "Todos os leads",
+      "attention": "Precisa de atenção",
+      "needs_review": "Precisa de revisão",
+      "failed": "Falhou",
+      "created": "Contato criado",
+      "updated": "Contato atualizado",
+      "duplicate": "Duplicado",
+      "received": "Em processamento"
+    },
+    "testFilters": {
+      "all": "Leads reais e de teste",
+      "only": "Somente leads de teste",
+      "hide": "Ocultar leads de teste"
+    },
+    "page": {
+      "title": "Leads sociais",
+      "description": "Traga leads dos seus anúncios e páginas de destino para seus contatos, com o responsável, a tag e o negócio que você escolher.",
+      "newSource": "Nova fonte",
+      "loading": "Carregando fontes de leads",
+      "tabs": {
+        "ads": "Anúncios",
+        "webhook": "Webhook",
+        "attention": "{count, plural, one {# lead precisa de atenção} other {# leads precisam de atenção}}"
+      }
+    },
+    "ads": {
+      "intro": "Escolha de onde vêm seus leads. Todas as fontes terminam no mesmo lugar: um contato com a fonte registrada, um responsável, um negócio opcional e uma notificação.",
+      "available": "Disponível",
+      "comingSoon": "Em breve",
+      "untilThen": "Até lá, envie esses leads pelo Webhook com Zapier ou Make.",
+      "sourceCount": "{count, plural, =0 {Nenhuma fonte ainda} one {# fonte} other {# fontes}}",
+      "setUpWebhook": "Configurar um webhook",
+      "openSources": "Abrir fontes",
+      "providers": {
+        "webhook": {
+          "name": "Webhook",
+          "body": "Envie leads de qualquer ferramenta que possa fazer uma requisição web: Zapier, Make, um construtor de páginas de destino ou seu próprio formulário. Também recebe leads do LinkedIn, TikTok e Google Ads."
+        },
+        "meta": {
+          "name": "Formulários de lead do Meta",
+          "body": "Anúncios de lead do Facebook e do Instagram, direto da sua Página."
+        },
+        "linkedin": {
+          "name": "LinkedIn",
+          "body": "Formulários de geração de leads do LinkedIn."
+        },
+        "tiktok": {
+          "name": "TikTok",
+          "body": "Formulários de geração de leads do TikTok."
+        },
+        "google": {
+          "name": "Google Ads",
+          "body": "Extensões de formulário de lead do Google Ads."
+        }
+      }
+    },
+    "sources": {
+      "emptyTitle": "Nenhuma fonte ainda",
+      "empty": "Crie uma fonte webhook para obter uma URL que você pode colar no Zapier, no Make ou na sua ferramenta de formulário. Os leads enviados para ela viram contatos.",
+      "emptyNoManage": "Nenhuma fonte de lead foi criada ainda. Peça a alguém que possa gerenciar fontes de leads para criar uma.",
+      "create": "Nova fonte",
+      "caption": "Fontes de leads",
+      "col": {
+        "name": "Nome",
+        "kind": "Tipo",
+        "status": "Status",
+        "token": "URL",
+        "lastEvent": "Último lead",
+        "attention": "Precisa de atenção"
+      },
+      "connector": "Pelo Marketplace",
+      "endsIn": "Termina em {hint}",
+      "noEvents": "Nenhum lead ainda",
+      "needsAttention": "{count, plural, one {# lead} other {# leads}}"
+    },
+    "wizard": {
+      "title": "Nova fonte de lead",
+      "description": "Configure um webhook que transforma os leads recebidos em contatos.",
+      "back": "Voltar para Leads sociais",
+      "stepsLabel": "Passos para criar uma fonte de lead",
+      "steps": {
+        "basics": "Básico",
+        "rules": "O que acontece com um lead",
+        "connect": "Conecte seu remetente",
+        "mapping": "Mapeie os campos"
+      },
+      "stepTitle": {
+        "basics": "Dê um nome à fonte",
+        "rules": "O que acontece com um lead",
+        "connect": "Conecte seu remetente",
+        "mapping": "Mapeie os campos"
+      },
+      "stepHelp": {
+        "basics": "Diga como esta fonte se chama e por quanto tempo os dados brutos do lead são mantidos.",
+        "rules": "Escolha o responsável, a tag, o negócio e a notificação de cada lead que chegar.",
+        "connect": "Sua fonte foi criada. Copie a URL e o token agora: eles são mostrados apenas uma vez.",
+        "mapping": "Diga-nos onde cada valor está nos dados que sua ferramenta envia. A prévia mostra o resultado enquanto você digita."
+      },
+      "previous": "Voltar",
+      "next": "Próximo",
+      "cancel": "Cancelar",
+      "create": "Criar fonte",
+      "created": "Fonte {name} criada",
+      "mappingSaved": "Mapeamento salvo",
+      "planLimit": "O limite de fontes de leads do seu plano foi atingido, então nenhuma nova fonte pode ser criada.",
+      "planLocked": "Seu plano não inclui Leads sociais.",
+      "upgrade": "Fazer upgrade do plano",
+      "skipMapping": "Pular por enquanto",
+      "finish": "Salvar e concluir",
+      "revealGone": "A URL e o token não são mais exibidos. Se você não os guardou, abra a origem e gere um novo token para obter uma nova URL.",
+      "toMapping": "Continuar para o mapeamento"
+    },
+    "form": {
+      "name": "Nome da origem",
+      "nameHint": "Por exemplo, Zapier: anúncios de lead do Facebook. Os nomes são exclusivos.",
+      "platform": "Rótulo da plataforma",
+      "platformHint": "O que seus contatos mostram como origem, por exemplo Facebook ou IndiaMART. Até {max} caracteres.",
+      "platformPlaceholder": "Facebook",
+      "secret": {
+        "label": "Segredo compartilhado",
+        "isSet": "Um segredo compartilhado está definido. Quem envia deve enviá-lo no cabeçalho X-Webhook-Secret.",
+        "notSet": "Nenhum segredo compartilhado. Qualquer pessoa com a URL pode enviar leads.",
+        "willRemove": "O segredo compartilhado será removido ao salvar.",
+        "willReplace": "O segredo compartilhado será substituído ao salvar.",
+        "willSet": "Um segredo compartilhado será definido ao salvar.",
+        "newValue": "Novo segredo compartilhado",
+        "hint": "Opcional. De {min} a {max} caracteres. Não é exibido novamente após salvar.",
+        "show": "Mostrar o segredo",
+        "hide": "Ocultar o segredo",
+        "replace": "Substituir",
+        "remove": "Remover",
+        "keep": "Manter o segredo atual"
+      },
+      "externalIdPath": "Caminho do ID do lead",
+      "externalIdPathHint": "Onde está, nos dados, o ID do lead definido por quem envia, como lead.id. Evita que o mesmo lead seja adicionado duas vezes. Opcional.",
+      "retention": "Manter dados brutos do lead por (dias)",
+      "retentionHint": "Depois disso os dados armazenados são excluídos; o contato permanece. De 1 a {max} dias.",
+      "sections": {
+        "contact": "O contato",
+        "owner": "Responsável",
+        "deal": "Negócio",
+        "notify": "Notificações"
+      },
+      "membersFailed": "Não foi possível carregar sua equipe, então não é possível escolher pessoas agora. Recarregue a página para tentar novamente.",
+      "countryCode": "Código de país padrão",
+      "countryCodeHint": "Adicionado a números de telefone enviados sem código, por exemplo 91. Sem ele, o número deve vir com o próprio código de país.",
+      "lifecycleStage": "Etapa inicial do ciclo de vida",
+      "lifecycleStageHint": "A etapa em que começa um novo contato desta origem.",
+      "lifecycleDefault": "Padrão do espaço de trabalho",
+      "tag": "Tag",
+      "tagHint": "Aplicada a todo contato que esta origem trouxer. Deixe vazio para não aplicar tag.",
+      "ownerMode": "Quem é o responsável pelo contato",
+      "ownerModeHint": "Vale apenas para contatos que ainda não têm responsável.",
+      "ownerModes": {
+        "unassigned": "Ninguém (sem atribuição)",
+        "fixed": "Uma pessoa",
+        "round_robin": "Revezar entre pessoas"
+      },
+      "ownerFixed": "Responsável",
+      "ownerChoose": "Escolha uma pessoa",
+      "unknownMember": "Uma pessoa que não está mais disponível",
+      "ownerRoundRobin": "Pessoas que revezam",
+      "ownerRoundRobinHint": "Escolha pelo menos duas. Os leads são distribuídos em sequência; pessoas que não estão mais ativas são ignoradas.",
+      "pickMembers": "Escolher pessoas",
+      "noMembers": "Não há mais ninguém para escolher",
+      "removeMember": "Remover {name}",
+      "dealEnabled": "Criar um negócio para cada novo contato",
+      "dealEnabledHint": "Desativado até você ligar. Um contato que já tem um negócio aberto não recebe outro.",
+      "pipelinesFailed": "Não foi possível carregar seus funis. Funil e etapa não podem ser escolhidos agora.",
+      "pipeline": "Funil",
+      "pipelineDefault": "Funil padrão do espaço de trabalho",
+      "dealStage": "Etapa",
+      "dealStageNeedsPipeline": "Escolha primeiro um funil para selecionar uma etapa.",
+      "dealStageFirst": "Primeira etapa do funil",
+      "dealTitle": "Título do negócio",
+      "dealTitleHint": "Estes campos são preenchidos a partir do lead: {tokens}.",
+      "notifyOwner": "Avisar o responsável pelo contato",
+      "notifyOwnerHint": "Uma notificação no aplicativo quando chega um novo lead. Leads de teste nunca notificam.",
+      "notifyUsers": "Avisar também",
+      "notifyUsersHint": "Por exemplo, seu gerente de vendas. Até 20 pessoas."
+    },
+    "mapping": {
+      "contact": "Campos do contato",
+      "contactHelp": "Digite uma chave (phone_number) ou um caminho (lead.contact.phone, answers[0].value). Deixe um campo vazio para procurar pelos nomes comuns.",
+      "fields": {
+        "name": "Nome completo",
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
+        "email": "E-mail",
+        "phone": "Telefone"
+      },
+      "defaults": {
+        "name": "Procura por full_name, name, contact_name",
+        "firstName": "Procura por first_name, firstname",
+        "lastName": "Procura por last_name, lastname",
+        "email": "Procura por email, email_address, mail",
+        "phone": "Procura por phone, mobile, phone_number, whatsapp"
+      },
+      "custom": "Propriedades personalizadas",
+      "customHelp": "Preencha suas próprias propriedades de contato com os dados que sua ferramenta envia.",
+      "propertiesFailed": "Não foi possível carregar suas propriedades de contato; digite a chave da propriedade.",
+      "property": "Propriedade do contato",
+      "propertyChoose": "Escolha uma propriedade",
+      "path": "Caminho no payload",
+      "removeRow": "Remover propriedade personalizada {number}",
+      "remove": "Remover",
+      "addRow": "Adicionar propriedade personalizada",
+      "attribution": "Atribuição",
+      "attributionHelp": "Onde estão os detalhes da campanha. O que ficar vazio será procurado pelo próprio nome.",
+      "attributionFields": {
+        "platform": "Plataforma",
+        "campaign": "Campanha",
+        "adset": "Conjunto de anúncios",
+        "ad": "Anúncio",
+        "form": "Formulário"
+      },
+      "attributionDefaults": {
+        "platform": "Procura por platform, utm_source",
+        "campaign": "Procura por campaign, utm_campaign",
+        "adset": "Procura por adset, adgroup",
+        "ad": "Procura por ad",
+        "form": "Procura por form"
+      }
+    },
+    "preview": {
+      "title": "Pré-visualização ao vivo",
+      "updating": "Atualizando",
+      "help": "O que o mapeamento acima faz com um lead. A pré-visualização não salva nem cria nada.",
+      "paste": "Cole um lead de exemplo (JSON)",
+      "pasteHint": "Um objeto, de até 64 KB.",
+      "pasteProblems": {
+        "empty": "Cole o JSON que sua ferramenta envia.",
+        "invalidJson": "Isso não é um JSON válido. Verifique se falta alguma aspa, vírgula ou colchete.",
+        "notObject": "Um lead deve ser um objeto JSON: um conjunto de chaves e valores entre chaves.",
+        "tooLarge": "Isso é maior que 64 KB."
+      },
+      "useLast": "Usar o último lead recebido",
+      "pickStored": "Ou escolha um lead armazenado",
+      "storedOption": "{id} ({status})",
+      "auditNote": "Ler um lead armazenado é registrado no log de auditoria. Um exemplo colado não é.",
+      "fixDraft": "Corrija os campos de mapeamento destacados para ver a pré-visualização.",
+      "choose": "Cole um exemplo ou use o último lead recebido para ver o resultado.",
+      "loading": "Lendo o lead",
+      "none": "Nenhum lead recebido ainda: cole um exemplo.",
+      "usable": "Este lead seria processado",
+      "notUsable": "Este lead precisaria de revisão",
+      "basedOnEvent": "De um lead armazenado",
+      "basedOnPayload": "Do seu exemplo",
+      "externalId": "id {id}",
+      "reasonsLabel": "Motivo",
+      "reasons": {
+        "no_payload": "Ainda não há lead para ler.",
+        "no_contact_point": "Nenhum e-mail e nenhum telefone foram encontrados.",
+        "invalid_phone": "Um telefone foi encontrado, mas não pode ser lido como número, e não há e-mail.",
+        "phone_unreadable": "O telefone não pode ser lido como número; o e-mail será usado.",
+        "email_invalid": "O e-mail não é um endereço válido e será ignorado."
+      },
+      "contact": {
+        "name": "Nome",
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
+        "email": "E-mail",
+        "phone": "Telefone"
+      },
+      "empty": "Nada encontrado",
+      "phoneUnreadable": "Não pôde ser lido como número",
+      "attribution": {
+        "platform": "Plataforma",
+        "campaign": "Campanha",
+        "adset": "Conjunto de anúncios",
+        "ad": "Anúncio",
+        "form": "Formulário"
+      },
+      "paths": "Campos neste lead",
+      "pathsPick": "Clique para preencher: {field}",
+      "pathsFocusFirst": "Clique primeiro em uma caixa de mapeamento e depois em um campo para preenchê-la.",
+      "pathsMore": "{count, plural, one {# campo a mais} other {# campos a mais}}"
+    },
+    "reveal": {
+      "titleCreated": "Copie agora sua URL e seu token",
+      "titleRotated": "Sua nova URL e seu novo token",
+      "bodyCreated": "Esta é a única vez em que são exibidos. Guardamos apenas uma impressão digital, por isso não podemos exibi-los novamente.",
+      "bodyRotated": "A URL antiga deixou de funcionar imediatamente. Esta nova é exibida somente desta vez.",
+      "url": "URL do webhook",
+      "copyUrl": "Copiar URL",
+      "noOrigin": "Coloque o endereço da sua API antes deste caminho para obter a URL completa.",
+      "token": "Token",
+      "copyToken": "Copiar token",
+      "secretHint": "Esta origem também precisa de um segredo compartilhado: quem envia deve enviá-lo no cabeçalho {header}.",
+      "sample": "Teste a partir de um terminal",
+      "sampleHelp": "No Zapier ou no Make, use uma ação de Webhooks que envie JSON para a URL. Este comando envia um lead de exemplo.",
+      "copied": "Copiei a URL e o token e os guardei em um lugar seguro",
+      "done": "Copiei, continuar",
+      "doneHint": "Marque a caixa primeiro. Depois disso, o token não poderá ser exibido novamente."
+    },
+    "test": {
+      "title": "Enviar um lead de teste",
+      "help": "Envia um lead de exemplo pelo fluxo real, marcado como teste. Cria um contato real que você pode excluir, e ninguém é notificado.",
+      "paused": "Esta origem está pausada. Retome-a para enviar um lead de teste.",
+      "useSample": "Usar o lead de exemplo",
+      "useOwn": "Enviar meu próprio payload",
+      "payload": "Payload (JSON)",
+      "payloadHint": "Um objeto, de até 64 KB.",
+      "payloadProblems": {
+        "empty": "Cole o JSON a enviar ou use o lead de exemplo.",
+        "invalidJson": "Isso não é um JSON válido. Verifique se falta alguma aspa, vírgula ou colchete.",
+        "notObject": "Um lead deve ser um objeto JSON: um conjunto de chaves e valores entre chaves.",
+        "tooLarge": "Isso é maior que 64 KB."
+      },
+      "send": "Enviar lead de teste",
+      "needsManage": "Enviar um lead de teste requer a permissão leads.sources.manage.",
+      "result": "Resultado",
+      "flag": "Teste",
+      "openContact": "Abrir o contato"
+    },
+    "watch": {
+      "waiting": "Aguardando o primeiro lead. Cole a URL na sua ferramenta e envie um.",
+      "received": "Primeiro lead recebido:",
+      "error": "Não foi possível verificar os leads agora."
+    },
+    "detail": {
+      "loading": "Carregando a origem",
+      "backToList": "Voltar para as origens",
+      "pageTitle": "Origem de leads",
+      "needsAttention": "{count, plural, one {# lead precisa de atenção} other {# leads precisam de atenção}}",
+      "lastEvent": "Último lead",
+      "noEvents": "nenhum ainda",
+      "pause": "Pausar",
+      "resume": "Retomar",
+      "rotate": "Gerar novo token",
+      "delete": "Excluir",
+      "conflict": "Outra pessoa alterou esta origem. Recarregue para ver a versão dela; suas edições não salvas serão perdidas.",
+      "reload": "Recarregar",
+      "connection": "Conexão",
+      "connector": "Conectada pelo Marketplace. Não tem URL nem token próprios; os leads chegam pelo aplicativo instalado.",
+      "connectorLink": "Abrir aplicativos instalados",
+      "endsIn": "O token da URL termina em {hint}",
+      "noHint": "Nenhum token registrado.",
+      "urlOnce": "A URL completa foi exibida uma vez quando a origem foi criada. Para obter uma nova, gere um novo token.",
+      "secretYes": "Um segredo compartilhado está definido: quem envia deve enviá-lo no cabeçalho X-Webhook-Secret.",
+      "secretNo": "Nenhum segredo compartilhado está definido.",
+      "pausedNote": "Esta origem está pausada: a URL responde 404, então quem envia verá um erro até que você a retome.",
+      "settings": "Configurações",
+      "settingsHelp": "As alterações valem para os leads que chegarem depois de salvar. Tentar novamente um lead antigo usa as configurações atuais.",
+      "basics": "Básico",
+      "rules": "O que acontece com um lead",
+      "mapping": "Mapeamento de campos",
+      "unsaved": "Você tem alterações não salvas",
+      "discard": "Descartar alterações",
+      "save": "Salvar alterações",
+      "saved": "Alterações salvas",
+      "pausedToast": "Origem pausada",
+      "resumedToast": "Origem retomada",
+      "deletedToast": "Origem {name} excluída",
+      "confirm": {
+        "cancel": "Cancelar",
+        "pause": {
+          "title": "Pausar esta origem?",
+          "body": "Enquanto estiver pausada, a URL responde 404 e os leads enviados para ela não são recebidos. Retome-a a qualquer momento.",
+          "action": "Pausar origem"
+        },
+        "rotate": {
+          "title": "Gerar um novo token?",
+          "body": "A URL atual deixa de funcionar imediatamente; atualize sua ferramenta com a nova. A nova URL é exibida apenas uma vez.",
+          "action": "Gerar novo token"
+        },
+        "delete": {
+          "title": "Excluir {name}?",
+          "body": "A URL deixa de funcionar e os leads armazenados por ela são excluídos junto. Os contatos já criados permanecem. Esta ação não pode ser desfeita.",
+          "action": "Excluir origem"
+        }
+      }
+    },
+    "events": {
+      "title": "Leads recebidos",
+      "help": "Todos os leads que chegaram a esta origem e o que aconteceu com cada um. Mais recentes primeiro.",
+      "filterStatus": "Mostrar",
+      "filterTests": "Testes",
+      "attentionTitle": "{count, plural, one {# lead precisa de atenção} other {# leads precisam de atenção}}",
+      "attentionGroup": "{count, plural, one {# lead:} other {# leads:}}",
+      "showAttention": "Mostrar apenas estes leads",
+      "loading": "Carregando leads",
+      "emptyTitle": "Nenhum lead ainda",
+      "empty": "Envie um lead de teste ou cole a URL na sua ferramenta.",
+      "emptyFilteredTitle": "Nenhum lead corresponde",
+      "emptyFiltered": "Nenhum lead corresponde a estes filtros.",
+      "clearFilters": "Limpar filtros",
+      "col": {
+        "status": "Status",
+        "lead": "Lead",
+        "result": "O que aconteceu",
+        "links": "Tornou-se",
+        "received": "Recebido",
+        "actions": "Ações"
+      },
+      "loadMore": "Carregar mais",
+      "test": "Teste",
+      "attempts": "{count, plural, one {# tentativa} other {# tentativas}}",
+      "deliveredAgain": "{count, plural, one {Reenviado uma vez} other {Reenviado # vezes}}",
+      "contact": "Contato",
+      "deal": "Negócio",
+      "retry": "Tentar novamente",
+      "open": "Abrir",
+      "retriedToast": "Tentado novamente: agora {status}"
+    },
+    "event": {
+      "title": "Detalhes do lead",
+      "close": "Fechar",
+      "retry": "Tentar novamente este lead",
+      "auditNote": "Abrir o payload é registrado no log de auditoria.",
+      "externalId": "ID do lead",
+      "test": "Teste",
+      "received": "Recebido",
+      "processed": "Processado",
+      "notProcessed": "ainda não",
+      "attempts": "Tentativas",
+      "duplicates": "Entregas repetidas",
+      "deliveredAgain": "{count, plural, one {Reenviado uma vez} other {Reenviado # vezes}}",
+      "reason": "Motivo",
+      "contact": "Contato",
+      "openContact": "Abrir o contato",
+      "deal": "Negócio",
+      "openDeal": "Abrir o negócio",
+      "error": "Erro",
+      "retried": "Tentado novamente. O lead agora está",
+      "payload": "Payload armazenado",
+      "loadingPayload": "Abrindo o payload",
+      "purged": "O payload bruto foi apagado após {days} dias. O lead e seu contato permanecem."
+    },
+    "attribution": {
+      "title": "Atribuição do lead",
+      "first": "Primeiro contato",
+      "latest": "Último contato",
+      "firstAndLatest": "Primeiro e último contato",
+      "total": "{count} contatos no total",
+      "platform": "Plataforma",
+      "source": "Origem",
+      "fields": {
+        "campaign": "Campanha",
+        "adset": "Conjunto de anúncios",
+        "ad": "Anúncio",
+        "form": "Formulário"
+      },
+      "capturedAt": "Capturado",
+      "openSource": "Abrir a origem do lead"
+    }
+  }
+}

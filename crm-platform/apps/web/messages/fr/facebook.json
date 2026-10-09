@@ -1,0 +1,491 @@
+{
+  "facebook": {
+    "nav": {
+      "hub": "Facebook",
+      "posts": "Publications Facebook",
+      "setup": "Configuration de Messenger",
+      "broadcasts": "Diffusions Messenger"
+    },
+    "common": {
+      "dismiss": "Ignorer",
+      "cancel": "Annuler"
+    },
+    "hub": {
+      "kicker": "Canal · Facebook",
+      "title": "Facebook",
+      "titleAccent": "Pages",
+      "intro": "Connectez-vous une fois avec Facebook et toutes les Pages gérées par votre compte sont ajoutées. Publiez ensuite des posts, répondez aux commentaires et gérez Messenger depuis votre boîte de réception.",
+      "teamInbox": "Boîte de réception d’équipe",
+      "posts": "Publications",
+      "setup": "Configuration de Messenger",
+      "broadcasts": "Diffusions Messenger",
+      "loadError": "Impossible de charger les Pages connectées. Réessayez.",
+      "notConfigured": "Facebook n’est pas encore configuré sur cette installation : un administrateur doit ajouter l’application Meta avant de pouvoir connecter une Page.",
+      "connectedCount": "{count, plural, one {# Page connectée} other {# Pages connectées}}",
+      "notConnected": "Non connecté",
+      "cardTitle": "Connectez votre compte Facebook",
+      "cardBody": "Connectez-vous une fois avec Facebook : toutes les Pages gérées par votre compte sont ajoutées automatiquement, chacune avec son propre accès. Vous pouvez aussi ajouter une seule Page avec son jeton d’accès.",
+      "connect": "Connecter une Page",
+      "connectAnother": "Connecter un autre compte",
+      "connectedPages": "Pages connectées",
+      "webhookTitle": "Adresse du webhook",
+      "webhookBody": "Collez cette adresse dans les réglages de webhook de votre application Meta (URL de rappel) pour que les messages et commentaires Messenger arrivent dans votre boîte de réception. Elle utilise le même jeton de vérification que WhatsApp, sauf si un jeton Facebook est défini."
+    },
+    "connect": {
+      "close": "Fermer",
+      "kicker": "Facebook",
+      "title": "Connectez votre compte Facebook",
+      "intro": "Connectez-vous une fois avec Facebook : toutes les Pages gérées par votre compte sont ajoutées automatiquement. Vous pouvez ensuite publier des posts, répondre aux commentaires et gérer Messenger depuis votre boîte de réception.",
+      "continue": "Continuer avec Facebook",
+      "or": "ou",
+      "manualToggle": "Ajouter une Page manuellement avec un jeton d’accès",
+      "tokenLabel": "Jeton d’accès de la Page",
+      "tokenHint": "Depuis Meta → Paramètres de l’entreprise → Utilisateurs système, ou depuis l’explorateur de l’API Graph. Nous identifions la Page à partir du jeton.",
+      "connectPage": "Connecter la Page",
+      "tokenShape": "Ceci ne ressemble pas à un jeton d’accès de Page.",
+      "failed": "Connexion impossible. Réessayez.",
+      "footerLeft": "Arrive instantanément dans votre boîte de réception",
+      "footerRight": "chiffré"
+    },
+    "page": {
+      "facebookPage": "Page Facebook",
+      "failed": "Échec de l’opération. Réessayez.",
+      "live": "En direct",
+      "reconnect": "Reconnecter",
+      "followers": "{count} abonnés",
+      "liveNoCount": "en direct",
+      "dataAccess": "L’accès de Meta aux données prend fin {when}",
+      "refresh": "Actualiser le profil",
+      "refreshed": "Page Facebook actualisée.",
+      "inboundFixed": "Webhooks Facebook réabonnés pour cette Page.",
+      "fixInbound": "Réparer l’entrant",
+      "remove": "Déconnecter",
+      "removeConfirm": "Déconnecter cette Page Facebook ? Ses conversations de la boîte de réception sont conservées, mais l’envoi s’arrête jusqu’à la reconnexion.",
+      "cancel": "Annuler",
+      "removed": "Page Facebook déconnectée."
+    },
+    "broadcasts": {
+      "kicker": "Facebook · Diffusions",
+      "title": "Messenger",
+      "titleAccent": "diffusions",
+      "intro": "Écrivez aux personnes qui ont récemment discuté avec votre Page. Meta n’autorise une Page à écrire à quelqu’un que dans les 24 heures suivant son dernier message : la liste ci-dessous est votre audience joignable en ce moment.",
+      "inbox": "Boîte de réception",
+      "loadError": "Impossible de charger les diffusions. Réessayez.",
+      "connectFirst": "Connectez d’abord une Page Facebook.",
+      "connectPage": "Connecter une Page",
+      "none": "Aucune diffusion pour l’instant. Rédigez-en une à droite.",
+      "recipients": "{count, plural, one {# destinataire} other {# destinataires}}",
+      "status": {
+        "sending": "Envoi en cours",
+        "done": "Terminée",
+        "failed": "Échouée",
+        "draft": "Brouillon"
+      },
+      "counts": "{sent} envoyés · {failed} échoués · {blocked} bloqués",
+      "start": "Lancer l’envoi",
+      "started": "Envoi lancé. Il continue même si vous quittez cette page.",
+      "pause": "Mettre en pause",
+      "paused": "En pause. Les destinataires restants sont toujours en file d’attente.",
+      "retry": "Réessayer les échecs",
+      "retried": "{count, plural, one {# destinataire remis} other {# destinataires remis}} en file. Cliquez sur Lancer l’envoi.",
+      "delete": "Supprimer",
+      "deleted": "Diffusion supprimée.",
+      "deleteConfirm": "Supprimer cette diffusion ?",
+      "cancel": "Annuler",
+      "newBroadcast": "Nouvelle diffusion",
+      "name": "Nom",
+      "namePlaceholder": "p. ex. Soldes du week-end",
+      "page": "Page",
+      "template": "Modèle (facultatif)",
+      "templateHint": "Préremplit le message et envoie les boutons du modèle.",
+      "templateNone": "— aucun (rédigez le vôtre) —",
+      "buttons": "{count, plural, one {# bouton} other {# boutons}}",
+      "message": "Message",
+      "messageHint": "Utilisez '{name}' pour personnaliser.",
+      "messagePlaceholder": "Bonjour '{name}' ! …",
+      "recipientsLabel": "Destinataires",
+      "within24": "(dans les 24 h)",
+      "selectAll": "Tout sélectionner",
+      "noAudience": "Personne n’est dans la fenêtre de 24 heures pour le moment : quelqu’un doit d’abord écrire à cette Page.",
+      "messengerUser": "Utilisateur Messenger",
+      "selected": "{count} sélectionnés",
+      "create": "Créer la diffusion",
+      "created": "Diffusion créée avec {count, plural, one {# destinataire} other {# destinataires}}. Cliquez sur Lancer l’envoi quand vous êtes prêt.",
+      "failed": "Échec de l’opération. Réessayez."
+    },
+    "setup": {
+      "kicker": "Facebook · Messenger",
+      "title": "Messenger",
+      "titleAccent": "configuration",
+      "intro": "Configurez la façon dont votre chat Messenger accueille et guide les clients : le bouton Démarrer, un message d’accueil, un menu permanent et des FAQ cliquables. Choisissez une fonctionnalité, lisez son rôle, puis remplissez-la. Les modifications sont enregistrées directement sur Facebook.",
+      "pagePicker": "Page",
+      "composer": "Zone de saisie",
+      "loadError": "Impossible de charger le profil Messenger. Réessayez.",
+      "noPage": "Aucune Page Facebook connectée pour l’instant.",
+      "connect": "Connecter un compte Facebook",
+      "profile": "Profil Messenger",
+      "tabs": {
+        "getstarted": "Bouton Démarrer",
+        "greeting": "Message d’accueil",
+        "menu": "Menu permanent",
+        "icebreakers": "Questions suggérées"
+      },
+      "isSet": "Configurée",
+      "notSet": "Non configurée",
+      "failed": "Échec de l’opération. Réessayez.",
+      "footnote": "Ces réglages sont écrits dans le profil Facebook Messenger via l’API Graph et s’appliquent aux nouvelles conversations. Meta peut mettre un moment à propager les changements.",
+      "frame": {
+        "preview": "Aperçu",
+        "yourPage": "Votre Page",
+        "activeNow": "Actif maintenant"
+      },
+      "explainer": {
+        "what": "De quoi s’agit-il",
+        "customer": "Comment vos clients l’utilisent",
+        "how": "Comment le configurer"
+      },
+      "getstarted": {
+        "title": "Bouton Démarrer",
+        "subtitle": "Le bouton sur lequel un tout nouveau client appuie pour commencer le chat.",
+        "what": "C’est la toute première chose qu’une personne voit en ouvrant votre Messenger : un seul bouton « Démarrer » sur l’écran d’accueil.",
+        "customer": "Elle appuie une fois dessus et la conversation commence. Il n’apparaît qu’avant le premier message.",
+        "how": "Donnez-lui un payload (un mot-clé comme GET_STARTED). Puis, dans Flux, ajoutez un déclencheur qui écoute ce payload pour qu’un flux de bienvenue s’exécute dès l’appui.",
+        "payload": "Payload",
+        "payloadHint": "Ce mot vous est envoyé quand le bouton est touché. Associez-le à un déclencheur de flux pour lancer l’automatisation.",
+        "remove": "Supprimer",
+        "removeConfirm": "Supprimer le bouton Démarrer ?",
+        "save": "Enregistrer",
+        "yourPage": "Votre Page",
+        "typically": "Répond généralement instantanément",
+        "button": "Démarrer"
+      },
+      "greeting": {
+        "title": "Message d’accueil",
+        "subtitle": "La phrase d’accueil sympathique affichée avant que quiconque n’écrive.",
+        "what": "Un court message de bienvenue sur le tout premier écran de votre chat, juste sous le nom de votre Page.",
+        "customer": "Ils le lisent dès l’ouverture de votre Messenger : il donne le ton et indique en quoi vous pouvez aider.",
+        "how": "Limitez-vous à une phrase chaleureuse (160 caractères max.). Astuce : ajoutez une balise de prénom et Messenger salue chaque client par son nom.",
+        "welcomeText": "Texte d’accueil",
+        "placeholder": "Bonjour ! Comment pouvons-nous vous aider aujourd’hui ?",
+        "remove": "Supprimer",
+        "removeConfirm": "Supprimer le message d’accueil ?",
+        "save": "Enregistrer",
+        "yourPage": "Votre Page",
+        "sample": "Bonjour ! Comment pouvons-nous vous aider aujourd’hui ?"
+      },
+      "menu": {
+        "title": "Menu permanent",
+        "subtitle": "Le menu de raccourcis toujours présent dans la barre de message.",
+        "what": "Un menu (l’icône ☰ à côté de la zone de texte) qui reste disponible pendant tout le chat : jusqu’à 3 raccourcis.",
+        "customer": "Ils touchent ☰ à tout moment pour accéder directement à ce dont ils ont besoin : « Parler à un humain », « Suivre ma commande », « Visiter la boutique ».",
+        "how": "Ajoutez jusqu’à 3 éléments. Chacun lance un flux (envoie un payload) ou ouvre un lien (URL). Vous pouvez masquer la zone de texte pour que les gens n’utilisent que le menu.",
+        "sample1": "Nous contacter",
+        "sample2": "Suivre ma commande",
+        "sample3": "Visiter la boutique",
+        "menuLabel": "Menu",
+        "menuItem": "Élément du menu",
+        "titleLabel": "Titre",
+        "titlePlaceholder": "Nous contacter",
+        "action": "Action",
+        "actionFlow": "Lancer un flux (envoyer un payload)",
+        "actionLink": "Ouvrir un lien (URL)",
+        "url": "URL",
+        "payload": "Payload",
+        "removeItem": "Supprimer l’élément",
+        "add": "Ajouter un élément de menu",
+        "hideComposer": "Masquer la zone de texte (menu uniquement)",
+        "remove": "Supprimer le menu",
+        "removeConfirm": "Supprimer le menu permanent ?",
+        "save": "Enregistrer le menu"
+      },
+      "ice": {
+        "title": "Questions suggérées",
+        "subtitle": "Questions suggérées affichées avant le premier message.",
+        "what": "Jusqu’à 4 questions cliquables sur l’écran d’accueil : les demandes courantes, prêtes à toucher au lieu d’être saisies.",
+        "customer": "Au lieu de chercher quoi écrire, ils touchent une question comme « Quels sont vos horaires ? » et obtiennent une réponse immédiate.",
+        "how": "Ajoutez vos principales FAQ. Chaque appui envoie son payload : associez ce payload à un déclencheur de flux pour répondre automatiquement.",
+        "sample1": "Quels sont vos horaires ?",
+        "sample2": "Où livrez-vous ?",
+        "sample3": "Parler à un humain",
+        "yourPage": "Votre Page",
+        "question": "Question",
+        "questionLabel": "Question",
+        "questionPlaceholder": "Quels sont vos horaires ?",
+        "payload": "Payload",
+        "removeItem": "Supprimer la question suggérée",
+        "add": "Ajouter une question suggérée",
+        "remove": "Tout supprimer",
+        "removeConfirm": "Supprimer toutes les questions suggérées ?",
+        "save": "Enregistrer les questions suggérées"
+      }
+    },
+    "posts": {
+      "kicker": "Facebook · Publications",
+      "title": "Facebook",
+      "titleAccent": "publications",
+      "intro": "Tout ce que vous avez créé, programmé ou publié d’ici : suivez le statut, relancez les échecs et gérez votre file d’attente.",
+      "allPages": "Toutes les Pages",
+      "pagePicker": "Page",
+      "myPosts": "Mes publications",
+      "insights": "Statistiques",
+      "create": "Créer une publication",
+      "loadError": "Impossible de charger les publications. Réessayez.",
+      "noPage": "Aucune Page Facebook connectée pour l’instant",
+      "noPageHint": "Connectez un compte Facebook pour publier et programmer des posts de Page.",
+      "connect": "Connecter un compte Facebook",
+      "kpi": {
+        "total": "Total des publications",
+        "scheduled": "Programmées",
+        "published": "Publiées",
+        "failed": "Échouées"
+      },
+      "tabs": {
+        "all": "Toutes",
+        "scheduled": "Programmées",
+        "published": "Publiées",
+        "failed": "Échouées"
+      },
+      "ranges": {
+        "all": "Depuis toujours",
+        "7d": "7 j",
+        "30d": "30 j",
+        "90d": "90 j"
+      },
+      "search": "Rechercher des publications…",
+      "cols": {
+        "post": "Publication",
+        "page": "Page",
+        "type": "Type",
+        "status": "Statut",
+        "when": "Date",
+        "actions": "Actions"
+      },
+      "status": {
+        "scheduled": "Programmée",
+        "published": "Publiée",
+        "failed": "Échouée",
+        "draft": "Brouillon"
+      },
+      "publishNow": "Publier maintenant",
+      "delete": "Supprimer",
+      "noMatch": "Aucune publication ne correspond à ces filtres",
+      "none": "Aucune publication pour l’instant",
+      "noneHint": "Rédigez votre première publication : publiez-la maintenant ou programmez-la.",
+      "pageOf": "Page {page} sur {last}",
+      "prev": "Précédent",
+      "next": "Suivant",
+      "deleteTitle": "Supprimer la publication",
+      "deleteLive": "Cela supprime aussi la publication de Facebook et ne peut pas être annulé.",
+      "deleteLocal": "Supprimer cette publication ?",
+      "deleteYes": "Oui, supprimer",
+      "cancel": "Annuler",
+      "rejected": "Facebook a rejeté la publication : {error}",
+      "published": "Publication mise en ligne sur Facebook.",
+      "removed": "Publication supprimée.",
+      "failed": "Échec de l’opération. Réessayez."
+    },
+    "compose": {
+      "kicker": "Facebook · Créer",
+      "title": "Créer une",
+      "titleAccent": "publication",
+      "intro": "Composez des photos, albums, liens, vidéos et reels : publiez-les maintenant ou programmez-les directement sur vos Pages connectées. Suivez la construction dans l’aperçu en direct.",
+      "posts": "Publications",
+      "myPosts": "Mes publications",
+      "insights": "Statistiques",
+      "loadError": "Impossible de charger les Pages. Réessayez.",
+      "noPage": "Aucune Page Facebook connectée pour l’instant",
+      "noPageHint": "Connectez un compte Facebook pour publier et programmer des posts de Page.",
+      "noAccess": "Vous ne pouvez pas créer de publications",
+      "noAccessHint": "Demandez à un administrateur l’autorisation de rédiger des publications Facebook.",
+      "connect": "Connecter un compte Facebook",
+      "required": "obligatoire",
+      "steps": {
+        "page": "Page",
+        "type": "Type de publication",
+        "media": "Média",
+        "message": "Message",
+        "when": "Quand publier"
+      },
+      "types": {
+        "photo": {
+          "label": "Photo",
+          "hint": "Une publication avec une seule photo."
+        },
+        "multi_photo": {
+          "label": "Album",
+          "hint": "2 à 10 photos dans une publication."
+        },
+        "link": {
+          "label": "Lien",
+          "hint": "Partagez un lien avec aperçu."
+        },
+        "video": {
+          "label": "Vidéo",
+          "hint": "Une vidéo du fil (MP4 / MOV)."
+        },
+        "reel": {
+          "label": "Reel",
+          "hint": "Un reel : courte vidéo verticale."
+        }
+      },
+      "photoUrls": "Collez des URL d’images publiques",
+      "photoHint": "Une par ligne, jusqu’à 10. L’envoi d’un fichier nécessite le service de stockage, qui n’est pas encore connecté : utilisez donc des adresses d’images publiques.",
+      "linkUrl": "URL du lien",
+      "linkHint": "Facebook génère une carte d’aperçu à partir du lien. Une publication peut contenir un lien ou des photos, pas les deux.",
+      "videoUrl": "Collez une URL vidéo HTTPS publique",
+      "reelNote": "Les reels sont de courtes vidéos verticales. Le message ci-dessous sert de description du reel.",
+      "videoNote": "Meta récupère le fichier via HTTPS public. Le message ci-dessous sert de description de la vidéo.",
+      "messagePlaceholder": "Rédigez votre publication…",
+      "ai": {
+        "title": "Outils de rédaction IA",
+        "caption": "Légende",
+        "repurpose": "Réutiliser",
+        "review": "Relire",
+        "bestTime": "Meilleur moment",
+        "image": "Image",
+        "unavailable": "Les outils IA ne sont pas encore disponibles : ils attendent la configuration du fournisseur d’IA."
+      },
+      "when": {
+        "now": "Publier maintenant",
+        "later": "Programmer pour plus tard",
+        "label": "Date et heure d’envoi",
+        "hint": "Entre 10 minutes et 75 jours à partir de maintenant, dans votre fuseau horaire ({tz}). Facebook la met en file et la publie à l’échéance."
+      },
+      "submit": {
+        "publish": "Publier",
+        "schedule": "Programmer"
+      },
+      "preview": {
+        "live": "Aperçu en direct",
+        "facebook": "Facebook",
+        "yourPage": "Votre Page",
+        "justNow": "À l’instant",
+        "empty": "Le texte de votre publication apparaîtra ici…",
+        "reel": "Reel",
+        "video": "Vidéo",
+        "like": "J’aime",
+        "comment": "Commenter",
+        "share": "Partager",
+        "note": "Aperçu en direct : la vraie publication peut différer légèrement sur Facebook."
+      },
+      "help": {
+        "label": "Aide - {n}",
+        "help1": {
+          "title": "Que puis-je publier ?",
+          "body": "Les photos, albums, liens, vidéos du fil et reels sont publiés directement sur votre Page connectée via l’API Graph."
+        },
+        "help2": {
+          "title": "Comment fonctionne la programmation ?",
+          "body": "Choisissez une heure entre 10 minutes et 75 jours à venir et Facebook la met en file : elle est publiée automatiquement à l’échéance. Ou publiez maintenant."
+        },
+        "help3": {
+          "title": "Une publication a échoué : pourquoi ?",
+          "body": "En général, l’URL du média n’était pas en HTTPS public, ou la Page a été reconnectée. Lisez l’erreur sur la ligne, puis réessayez avec Publier maintenant."
+        }
+      },
+      "problem": {
+        "noPage": "Choisissez une Page Facebook connectée.",
+        "scheduleMissing": "Choisissez une date et une heure pour programmer la publication.",
+        "scheduleInvalid": "Cette date et cette heure sont illisibles."
+      },
+      "rejected": "Facebook a rejeté la publication : {error}",
+      "scheduled": "Publication programmée.",
+      "published": "Publication mise en ligne sur Facebook.",
+      "failed": "Échec de l’opération. Réessayez."
+    },
+    "grid": {
+      "kicker": "Facebook · Mes publications",
+      "title": "Votre",
+      "titleAccent": "grille",
+      "intro": "Les publications récentes de votre Page, en direct de Facebook. Touchez une publication pour la prévisualiser.",
+      "posts": "Publications",
+      "newPost": "Nouvelle publication",
+      "pagePicker": "Page",
+      "loadError": "Impossible de charger les publications. Réessayez.",
+      "noPage": "Aucune Page Facebook connectée",
+      "noPageHint": "Connectez-en une pour voir votre grille ici.",
+      "goHub": "Aller sur Facebook",
+      "empty": "Rien ici pour l’instant",
+      "emptyHint": "Les publications que vous mettez en ligne apparaîtront ici.",
+      "firstPost": "Créez votre première publication",
+      "noCaption": "(sans légende)",
+      "view": "Voir la publication",
+      "close": "Fermer",
+      "postTitle": "Publication",
+      "noImage": "Aucune image",
+      "viewOnFacebook": "Voir sur Facebook"
+    },
+    "insights": {
+      "kicker": "Facebook · Analyses",
+      "title": "Page",
+      "titleAccent": "statistiques",
+      "intro": "Portée et engagement (28 jours, en direct de Facebook) combinés à votre activité Messenger et aux publications mises en ligne d’ici.",
+      "create": "Créer une publication",
+      "myPosts": "Mes publications",
+      "loadError": "Impossible de charger les statistiques. Réessayez.",
+      "noPage": "Aucune Page Facebook connectée pour l’instant.",
+      "connect": "Connecter un compte Facebook",
+      "connected": "Connecté",
+      "viewing": "Compte consulté",
+      "cards": {
+        "followers": "Abonnés",
+        "followersSub": "audience totale",
+        "reach": "Portée · 28 j",
+        "reachSub": "personnes touchées",
+        "impressions": "Impressions · 28 j",
+        "impressionsSub": "affichages",
+        "engagements": "Engagements · 28 j",
+        "engagementsSub": "interactions",
+        "convos": "Conversations",
+        "convosSub": "{n} ouvertes",
+        "messagesIn": "Messages reçus · 28 j",
+        "messagesInSub": "{n} renvoyés",
+        "published": "Publications mises en ligne",
+        "publishedSub": "{n} programmées",
+        "rate": "Taux d’engagement",
+        "rateSub": "eng ÷ portée"
+      },
+      "liveFromFacebook": "En direct de Facebook",
+      "fromHere": "Depuis cet espace de travail",
+      "activity": "Activité Messenger · 14 derniers jours",
+      "received": "Reçus",
+      "sent": "Envoyés",
+      "mix": {
+        "title": "Répartition des contenus",
+        "posts": "{n} publications",
+        "none": "Aucune publication mise en ligne d’ici pour l’instant.",
+        "first": "Créez votre première publication"
+      },
+      "types": {
+        "photo": "Photo",
+        "multi_photo": "Album",
+        "link": "Lien",
+        "video": "Vidéo",
+        "reel": "Reel"
+      },
+      "convos": {
+        "title": "Conversations",
+        "total": "{n} au total",
+        "open": "Ouvrir la boîte de réception d’équipe",
+        "none": "Aucune conversation Facebook pour l’instant. Elles apparaissent ici dès que des personnes écrivent à votre Page."
+      },
+      "status": {
+        "open": "Ouvertes",
+        "pending": "En attente",
+        "resolved": "Résolues",
+        "closed": "Fermées",
+        "snoozed": "Reportées"
+      },
+      "recent": {
+        "title": "Publications récentes",
+        "none": "Aucune publication pour l’instant, ou les statistiques sont encore en cours de calcul.",
+        "noCaption": "(sans légende)",
+        "impressions": "impressions",
+        "engaged": "engagés",
+        "view": "Voir"
+      },
+      "legendLive": "En direct de Facebook : les métriques obsolètes peuvent s’afficher sous la forme —.",
+      "legendHere": "Depuis cet espace de travail : Messenger et publications mises en ligne."
+    }
+  }
+}

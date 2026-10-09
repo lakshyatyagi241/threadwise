@@ -1,0 +1,139 @@
+{
+  "settings": {
+    "tiles": {
+      "google-sheets-addon": {
+        "label": "Complemento do Google Sheets",
+        "description": "Crie sua chave, baixe os arquivos do complemento e sincronize contatos e produtos a partir de uma planilha.",
+        "keywords": "google sheets, planilha, complemento, apps script, importar contatos, sincronizar produtos, chave"
+      }
+    }
+  },
+  "chrome-extension-sheets-addon": {
+    "common": {
+      "dismiss": "Dispensar",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "copyFailed": "Não foi possível copiar. Selecione a chave e copie manualmente.",
+      "reference": "Referência para o suporte: {id}",
+      "back": "Voltar para integrações"
+    },
+    "page": {
+      "title": "Complemento do Google Sheets",
+      "subtitle": "Importe e envie contatos e sincronize produtos entre uma planilha e seu espaço de trabalho.",
+      "loading": "Carregando a configuração do complemento",
+      "retry": "Tentar novamente",
+      "status": {
+        "connected": "Chave ativa",
+        "noKey": "Ainda sem chave",
+        "notInstalled": "Não instalado"
+      },
+      "forbidden": {
+        "title": "Você não pode usar o complemento do Google Sheets",
+        "body": "Seu perfil não inclui o complemento do Google Sheets. Peça a um administrador para dar acesso ao seu perfil."
+      },
+      "loadFailed": {
+        "title": "Não foi possível carregar a configuração do complemento.",
+        "notInstalled": "O complemento não está instalado neste espaço de trabalho.",
+        "forbidden": "Seu perfil não tem permissão para ver esta página.",
+        "planLocked": "Seu plano não inclui o Marketplace.",
+        "suspended": "Esta conta ou espaço de trabalho está suspenso.",
+        "rateLimited": "Muitas requisições. Aguarde um momento e tente novamente.",
+        "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
+        "unexpected": "Algo deu errado do nosso lado. Tente novamente."
+      }
+    },
+    "install": {
+      "title": "Instale primeiro o complemento",
+      "body": "O complemento do Google Sheets não está instalado neste espaço de trabalho, então as chaves e o complemento ainda não funcionam. Um administrador o instala uma vez pelo Marketplace.",
+      "marketplace": "Instalar pelo Marketplace",
+      "google": "Abrir a página do Google Workspace Marketplace",
+      "keyKept": "Você ainda tem uma chave. Pode desativá-la abaixo."
+    },
+    "key": {
+      "title": "Sua chave",
+      "intro": "O complemento usa sua chave pessoal para agir em seu nome. Ele vê apenas o que seu perfil permite.",
+      "none": "Você ainda não tem uma chave.",
+      "generate": "Gerar chave",
+      "rotate": "Gerar uma nova chave",
+      "revoke": "Revogar chave",
+      "working": "Processando...",
+      "active": "Chave",
+      "created": "Criada {when}",
+      "lastUsed": "Último uso {when}",
+      "neverUsed": "Nunca usada",
+      "newTitle": "Sua nova chave",
+      "newWarning": "Copie agora. Ela é exibida só uma vez e não pode ser mostrada novamente. Qualquer pessoa com esta chave pode agir como você no complemento.",
+      "rotatedNote": "Sua chave anterior deixou de funcionar.",
+      "keyLabel": "Nova chave",
+      "confirmRotate": {
+        "title": "Substituir sua chave?",
+        "message": "A chave que você usa agora deixa de funcionar imediatamente. Cole a nova chave no complemento para continuar usando.",
+        "confirm": "Substituir chave"
+      },
+      "confirmRevoke": {
+        "title": "Revogar sua chave?",
+        "message": "O complemento deixa de funcionar até você criar e colar uma nova chave.",
+        "confirm": "Revogar chave"
+      },
+      "cancel": "Cancelar",
+      "revoked": "Sua chave foi revogada.",
+      "generated": "Sua chave foi criada. Copie agora.",
+      "errors": {
+        "notInstalled": "O complemento não está instalado neste espaço de trabalho. Peça a um administrador para instalá-lo.",
+        "forbidden": "Seu perfil não tem permissão para fazer isto.",
+        "planLocked": "Seu plano não inclui o Marketplace.",
+        "suspended": "Esta conta ou espaço de trabalho está suspenso.",
+        "rateLimited": "Muitas requisições. Aguarde um momento e tente novamente.",
+        "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
+        "unexpected": "Algo deu errado do nosso lado. Tente novamente."
+      }
+    },
+    "can": {
+      "title": "O que sua chave pode fazer",
+      "intro": "É a interseção entre seu perfil e o que a instalação permite.",
+      "allowed": "Permitido",
+      "notAllowed": "Não permitido",
+      "readContacts": "Importar contatos para uma planilha",
+      "writeContacts": "Enviar contatos de uma planilha",
+      "readCatalog": "Ver lojas e produtos",
+      "writeCatalog": "Sincronizar produtos com uma loja"
+    },
+    "files": {
+      "title": "Arquivos do complemento",
+      "intro": "Seis arquivos formam o projeto do Apps Script. O Code.gs já aponta para este espaço de trabalho.",
+      "download": "Baixar",
+      "downloadFile": "Baixar {name}",
+      "downloaded": "{name} baixado.",
+      "notAvailable": "Ainda não disponível neste servidor",
+      "failed": "Não foi possível baixar {name}. Tente novamente."
+    },
+    "steps": {
+      "title": "Configure em uma planilha",
+      "one": "Abra uma planilha, depois Extensões e Apps Script.",
+      "two": "Baixe os seis arquivos acima. Em Configurações do projeto, mostre o arquivo appsscript.json e cole appsscript.json e Code.gs sobre os do editor.",
+      "three": "Adicione três arquivos HTML chamados Dialog, Settings e Help e cole neles os arquivos baixados.",
+      "four": "Salve e recarregue a planilha. Um menu CRM aparece. Permita as três permissões que o Google solicitar.",
+      "five": "Escolha CRM, depois Configurações, cole sua chave e selecione Salvar e verificar.",
+      "six": "A linha 1 da sua planilha contém os nomes das colunas. Depois use Importar contatos, Enviar contatos ou Sincronizar produtos no menu CRM."
+    },
+    "columns": {
+      "title": "Colunas que o complemento lê",
+      "contacts": "Contatos",
+      "products": "Produtos",
+      "contactsHint": "e-mail ou telefone é obrigatório. Uma coluna chamada attr:city preenche a propriedade personalizada city. Uma célula em branco nunca apaga um valor armazenado.",
+      "productsHint": "name e price são obrigatórios. Os produtos são identificados pelo SKU e, depois, pelo nome. Estoque em branco significa ilimitado."
+    },
+    "shops": {
+      "title": "Lojas",
+      "empty": "Nenhuma loja ainda. Sua primeira sincronização de produtos cria uma.",
+      "disabled": "Desativada",
+      "open": "Abrir {name}",
+      "updated": "Atualizado {when}"
+    },
+    "products": {
+      "title": "Produtos recentes",
+      "empty": "Nenhum produto ainda. Sincronize uma planilha para adicionar.",
+      "count": "{count, plural, one {# produto no seu espaço de trabalho} other {# produtos no seu espaço de trabalho}}"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "checkout-orders-merchant-payments": {
+    "invoices": {
+      "eyebrow": "Tienda / Facturas",
+      "title": "Facturas",
+      "subtitle": "Facturas creadas a partir de pedidos de la tienda. Gestiónalas en Ventas.",
+      "allInvoices": "Todas las facturas",
+      "loading": "Cargando facturas",
+      "searching": "Buscando más facturas de la tienda...",
+      "search": {
+        "label": "Buscar facturas",
+        "placeholder": "Buscar por número, comprador o referencia..."
+      },
+      "status": {
+        "label": "Estado",
+        "all": "Todos los estados"
+      },
+      "columns": {
+        "number": "Factura",
+        "buyer": "Comprador",
+        "status": "Estado",
+        "total": "Total",
+        "issued": "Emitida",
+        "due": "Vence",
+        "actions": "Acciones"
+      },
+      "row": {
+        "draft": "Borrador",
+        "openInSales": "Abrir en Ventas",
+        "openAria": "Abrir la factura {number} en Ventas"
+      },
+      "empty": {
+        "title": "Aún no hay facturas de pedidos de la tienda",
+        "message": "Abre un pedido y selecciona Crear factura.",
+        "action": "Ir a pedidos"
+      },
+      "noMatch": {
+        "title": "Ninguna factura de la tienda coincide",
+        "message": "Cambia la búsqueda o el estado para ver más."
+      },
+      "capped": {
+        "title": "No se encontró ninguna en las facturas más recientes",
+        "message": "Se revisaron las facturas más recientes de Ventas y ninguna procede de un pedido de la tienda. Carga más para buscar más atrás.",
+        "note": "Solo se han revisado las facturas más recientes. Carga más para buscar más atrás."
+      }
+    }
+  }
+}

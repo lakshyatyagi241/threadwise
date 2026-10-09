@@ -146,6 +146,10 @@ export const messageResponseSchema = z.object({
   contacts: z.array(messageContactCardSchema).nullable().optional(),
   interactive: messageInteractiveSchema.nullable().optional(),
   referral: messageReferralSchema.nullable().optional(),
+  /** The customer sent something the channel cannot show (a poll, an unknown type): the body says so, the bubble marks it. */
+  unsupported: z.boolean().optional(),
+  /** The customer forwarded this message from another chat. */
+  forwarded: z.boolean().optional(),
   /** Set for an inbound media message: whether its file could be stored. */
   mediaState: messageMediaStateSchema.nullable().optional(),
   /** Present while `mediaState` is `failed`: a stable code (`MEDIA_EXPIRED`, `MEDIA_TOO_LARGE`, ...) and a reason an agent can read. */

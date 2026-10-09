@@ -4,7 +4,10 @@ import {
   addableKinds,
   buttonIssues,
   buttonToRow,
+  EDITOR_BUTTON_MAX,
+  MODE_KINDS,
   canAdd,
+  modeOf,
   moveRow,
   newRow,
   rowToButton,
@@ -108,5 +111,28 @@ describe('button issues', () => {
     expect(codes([q(1), u, q(2)])).toContain('quickReplyPosition');
     const p = row('phone', { text: 'p', phone: '+1555' });
     expect(codes([u, q(1), p])).toContain('quickReplyPosition');
+  });
+});
+
+describe("Reference's three-button editor", () => {
+  it('stops at three rows however Meta would allow more', () => {
+    const rows = [row('quick_reply'), row('quick_reply'), row('quick_reply')];
+    expect(EDITOR_BUTTON_MAX).toBe(3);
+    expect(canAdd(rows, 'quick_reply')).toBe(true);
+    expect(canAdd(rows, 'quick_reply', EDITOR_BUTTON_MAX)).toBe(false);
+    expect(canAdd([row('quick_reply')], 'quick_reply', EDITOR_BUTTON_MAX)).toBe(true);
+  });
+
+  it('reads a saved set as a call to action, quick reply or mixed set', () => {
+    expect(modeOf([])).toBe('cta');
+    expect(modeOf([row('url'), row('phone')])).toBe('cta');
+    expect(modeOf([row('quick_reply'), row('quick_reply')])).toBe('reply');
+    expect(modeOf([row('quick_reply'), row('url')])).toBe('mix');
+  });
+
+  it('offers each mode only its kinds', () => {
+    expect(MODE_KINDS.reply).toEqual(['quick_reply']);
+    expect(MODE_KINDS.cta).not.toContain('quick_reply');
+    expect(MODE_KINDS.mix).toContain('quick_reply');
   });
 });

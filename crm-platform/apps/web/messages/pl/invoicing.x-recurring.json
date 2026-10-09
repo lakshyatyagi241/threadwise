@@ -1,0 +1,370 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "REC_ENDED": "Ten harmonogram się zakończył, więc nie ma już nic do zmiany ani uruchomienia.",
+        "REC_NOT_ACTIVE": "Ten harmonogram jest nieaktywny. Najpierw go wznów.",
+        "REC_START_TOO_OLD": "Data początkowa jest zbyt odległa w przeszłości. Tworzonych jest co najwyżej 12 minionych okresów, więc zacznij od późniejszej daty.",
+        "INV_RECURRING_INVALID": "Nie udało się utworzyć faktury z szablonu. Sprawdź kupującego, pozycje i podatek, a następnie zapisz ponownie."
+      }
+    },
+    "recurring": {
+      "title": "Faktury cykliczne",
+      "subtitle": "Harmonogramy, które same tworzą faktury w wybranych przez Ciebie terminach.",
+      "new": "Nowy harmonogram",
+      "invoices": "Faktury",
+      "tabsLabel": "Status harmonogramu",
+      "tabs": {
+        "all": "Wszystkie",
+        "active": "Aktywne",
+        "paused": "Wstrzymane",
+        "ended": "Zakończone"
+      },
+      "search": "Szukaj wśród wczytanych harmonogramów",
+      "refresh": "Odśwież",
+      "tableLabel": "Harmonogramy faktur cyklicznych",
+      "scrollArea": "Tabela harmonogramów, przewijana w poziomie",
+      "loading": "Wczytywanie harmonogramów",
+      "empty": {
+        "all": {
+          "title": "Brak faktur cyklicznych",
+          "message": "Ustaw harmonogram raz, a faktura będzie tworzona za Ciebie co tydzień, miesiąc lub rok."
+        },
+        "active": {
+          "title": "Nic nie jest uruchomione",
+          "message": "Tutaj pojawią się aktywne harmonogramy, które utworzą kolejną fakturę w terminie."
+        },
+        "paused": {
+          "title": "Brak wstrzymanych harmonogramów",
+          "message": "Wstrzymany harmonogram przestaje tworzyć faktury, dopóki go nie wznowisz."
+        },
+        "ended": {
+          "title": "Brak zakończonych harmonogramów",
+          "message": "Harmonogram kończy się po ostatnim uruchomieniu lub w dniu końca."
+        }
+      },
+      "emptySearchTitle": "Brak pasujących harmonogramów",
+      "emptySearch": "Żaden z wczytanych wierszy nie pasuje. Wyczyść wyszukiwanie lub wczytaj więcej.",
+      "clearSearch": "Wyczyść wyszukiwanie",
+      "showing": "{count, plural, one {Wyświetlono 1 harmonogram} few {Wyświetlono # harmonogramy} many {Wyświetlono # harmonogramów} other {Wyświetlono # harmonogramu}}",
+      "showingMatches": "Pasuje {count} z {loaded} wczytanych harmonogramów",
+      "loadMore": "Wczytaj więcej",
+      "allLoaded": "Wczytano wszystkie harmonogramy",
+      "searchLoadedOnly": "Wyszukiwanie obejmuje tylko wczytane harmonogramy. Wczytaj więcej, aby szukać dalej.",
+      "columns": {
+        "name": "Harmonogram",
+        "buyer": "Kupujący",
+        "every": "Powtarzanie",
+        "next": "Następne uruchomienie",
+        "last": "Ostatnie uruchomienie",
+        "runs": "Uruchomienia",
+        "failures": "Błędy",
+        "amount": "Na fakturę",
+        "mode": "Każda faktura jest",
+        "status": "Status",
+        "actions": "Działania"
+      },
+      "lineCount": "{count, plural, one {1 pozycja} few {# pozycje} many {# pozycji} other {# pozycji}}",
+      "onHold": "Wstrzymana",
+      "runsOf": "{done} z {max}",
+      "failuresTitle": "{count, plural, one {1 okres zakończył się błędem. Otwórz historię.} few {# okresy zakończyły się błędem. Otwórz historię.} many {# okresów zakończyło się błędem. Otwórz historię.} other {# okresu zakończyło się błędem. Otwórz historię.}}",
+      "channel": {
+        "link": "Link",
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "moreFor": "Więcej działań dla: {name}",
+      "open": "Otwórz",
+      "edit": "Edytuj",
+      "pause": "Wstrzymaj",
+      "resume": "Wznów",
+      "cancel": "Anuluj",
+      "runNow": {
+        "action": "Uruchom teraz",
+        "title": "Uruchomić {name} teraz?",
+        "confirm": "Uruchom teraz",
+        "message": {
+          "draft": "Teraz zostanie utworzona faktura za {date} jako wersja robocza do sprawdzenia, a harmonogram przejdzie do następnego okresu.",
+          "issue": "Teraz zostanie utworzona i wystawiona faktura za {date} (od razu dostanie numer). Harmonogram przejdzie do następnego okresu.",
+          "issue_send": "Teraz zostanie utworzona, wystawiona i wysłana do kupującego faktura za {date}. Harmonogram przejdzie do następnego okresu."
+        }
+      },
+      "delete": {
+        "action": "Usuń",
+        "title": "Usunąć {name}?",
+        "message": "{name} przestanie tworzyć faktury. Faktury, które już utworzył, pozostaną na Twojej liście.",
+        "confirm": "Usuń harmonogram",
+        "keep": "Zachowaj"
+      },
+      "toast": {
+        "paused": "{name} jest wstrzymany.",
+        "resumed": "{name} działa ponownie. Następna faktura: {date}.",
+        "resumedEnded": "{name} nie ma już okresów, więc się zakończył.",
+        "ran": "Utworzono fakturę z: {name}.",
+        "runFailed": "Uruchomienie dla {name} nie powiodło się i zostało zapisane. Otwórz historię, aby zobaczyć przyczynę.",
+        "deleted": "{name} został usunięty."
+      },
+      "every": {
+        "day": "{interval, plural, one {Co dzień} few {Co # dni} many {Co # dni} other {Co # dnia}}",
+        "week": "{interval, plural, one {Co tydzień} few {Co # tygodnie} many {Co # tygodni} other {Co # tygodnia}}",
+        "month": "{interval, plural, one {Co miesiąc} few {Co # miesiące} many {Co # miesięcy} other {Co # miesiąca}}",
+        "year": "{interval, plural, one {Co rok} few {Co # lata} many {Co # lat} other {Co # roku}}"
+      },
+      "status": {
+        "active": "Aktywny",
+        "paused": "Wstrzymany",
+        "ended": "Zakończony"
+      },
+      "runStatus": {
+        "created": "Utworzono",
+        "failed": "Nieudane"
+      },
+      "modeShort": {
+        "draft": "Wersja robocza",
+        "issue": "Wystawiona",
+        "issue_send": "Wystawiona i wysłana"
+      },
+      "modeSent": {
+        "email": "Wystawiona i wysłana e-mailem",
+        "link": "Wystawiona, udostępniona linkiem",
+        "whatsapp": "Wystawiona i wysłana przez WhatsApp"
+      },
+      "frequency": {
+        "day": "Dni",
+        "week": "Tygodnie",
+        "month": "Miesiące",
+        "year": "Lata"
+      },
+      "modeCards": {
+        "draft": {
+          "title": "Zostaw jako wersję roboczą",
+          "hint": "Każda faktura czeka na Twoją weryfikację przed wystawieniem."
+        },
+        "issue": {
+          "title": "Wystaw",
+          "hint": "Każda faktura dostaje numer i jest gotowa w dniu swojego terminu."
+        },
+        "issue_send": {
+          "title": "Wystaw i wyślij",
+          "hint": "Każda faktura jest wystawiana i wysyłana do kupującego automatycznie."
+        }
+      },
+      "warnings": {
+        "noBuyerEmail": "Szablon nie zawiera e-maila kupującego, więc wysyłka e-mailem się nie powiedzie. Dodaj e-mail albo wyślij przez link."
+      },
+      "preview": {
+        "title": "Następne uruchomienia",
+        "incomplete": "Uzupełnij harmonogram, aby zobaczyć, kiedy będą tworzone faktury.",
+        "sentence": "{every} od {start}{limit}. {outcome}",
+        "sentenceLimit": "{kind, select, runs {, {count, plural, one {1 faktura} few {# faktury} many {# faktur} other {# faktury}}} end {, do {end}} both {, {count, plural, one {1 faktura} few {# faktury} many {# faktur} other {# faktury}}, do {end}} other {}}",
+        "outcome": {
+          "draft": "Każda faktura zostaje jako wersja robocza do sprawdzenia.",
+          "issue": "Każda faktura jest wystawiana automatycznie.",
+          "issue_email": "Każda faktura jest wystawiana i wysyłana e-mailem do kupującego.",
+          "issue_link": "Każda faktura jest wystawiana i zapisywana jako udostępniona linkiem.",
+          "issue_whatsapp": "Każda faktura jest wystawiana i wysyłana przez WhatsApp."
+        },
+        "eachInvoice": "Każda faktura wynosi około",
+        "lastDay": "Ostatni dzień miesiąca",
+        "noRuns": "Żadne uruchomienie nie przypada w tym harmonogramie.",
+        "endsMaxRuns": "{count, plural, one {Zatrzymuje się po 1 fakturze.} few {Zatrzymuje się po # fakturach.} many {Zatrzymuje się po # fakturach.} other {Zatrzymuje się po # faktury.}}",
+        "endsEndDate": "{count, plural, one {Po {date} nic się nie uruchomi: łącznie 1 faktura.} few {Po {date} nic się nie uruchomi: łącznie # faktury.} many {Po {date} nic się nie uruchomi: łącznie # faktur.} other {Po {date} nic się nie uruchomi: łącznie # faktury.}}",
+        "moreBounded": "{count, plural, one {Łącznie 1 faktura.} few {Łącznie # faktury, pozostałe według tego samego rytmu.} many {Łącznie # faktur, pozostałe według tego samego rytmu.} other {Łącznie # faktury, pozostałe według tego samego rytmu.}}",
+        "moreForever": "Będzie działać, dopóki go nie wstrzymasz lub nie usuniesz.",
+        "clampNote": "Ten harmonogram startuje w dniu {day} miesiąca. Miesiąc bez dnia {day} uruchamia się w jego ostatnim dniu, a następny miesiąc wraca do dnia {day}.",
+        "catchUp": "{count, plural, one {1 okres już minął: jego faktura zostanie utworzona od razu.} few {# okresy już minęły: ich faktury zostaną utworzone od razu, po jednej dla każdego.} many {# okresów już minęło: ich faktury zostaną utworzone od razu, po jednej dla każdego.} other {# okresu już minęło: ich faktury zostaną utworzone od razu, po jednej dla każdego.}}",
+        "catchUpTooOld": "{count} okresów już minęło, a tworzonych jest co najwyżej {max}. Zacznij od późniejszej daty."
+      },
+      "builder": {
+        "loading": "Wczytywanie",
+        "endedNoEdit": "Ten harmonogram się zakończył, więc nie można go już edytować.",
+        "openSchedule": "Otwórz harmonogram",
+        "back": "Wstecz",
+        "newTitle": "Nowa faktura cykliczna",
+        "editTitle": "Edytuj: {name}",
+        "newSubtitle": "Ustaw rytm i fakturę, którą ma tworzyć. Następne uruchomienia są widoczne z boku.",
+        "editSubtitle": "Zmień rytm lub fakturę dla okresów, które dopiero nadejdą.",
+        "cancel": "Anuluj",
+        "save": "Zapisz zmiany",
+        "create": "Utwórz harmonogram",
+        "conflict": "Ktoś inny zmienił ten harmonogram, gdy go edytowałeś. Odśwież stronę, aby zobaczyć jego wersję. Twoje zmiany zostaną utracone.",
+        "reload": "Odśwież",
+        "fixProblems": "Najpierw popraw zaznaczone pola.",
+        "nothingToSave": "Nic nie zmieniono.",
+        "saved": "Harmonogram zapisany.",
+        "created": "{name} będzie teraz tworzyć faktury zgodnie z harmonogramem.",
+        "schedule": "Harmonogram",
+        "name": "Nazwa",
+        "nameHint": "Widoczna tylko dla Ciebie, na przykład Miesięczny abonament.",
+        "every": "Powtarzaj co",
+        "frequency": "Jednostka",
+        "startDate": "Pierwsza faktura w dniu",
+        "startFixed": "Daty początkowej nie można zmienić. Utwórz nowy harmonogram, aby zacząć od innej daty.",
+        "startHint": "Data z przeszłości powoduje, że okresy, które już minęły, są realizowane od razu, do 12.",
+        "endDate": "Zakończ po (opcjonalnie)",
+        "endHint": "Po tej dacie nie jest tworzona żadna faktura.",
+        "maxRuns": "Liczba faktur (opcjonalnie)",
+        "maxRunsHint": "Harmonogram kończy się po tylu fakturach.",
+        "noLimit": "Bez limitu",
+        "scheduleEditNote": "Zmieniony rytm obowiązuje od dzisiaj i nigdy nie powtarza okresu, który już się odbył.",
+        "mode": "Co dzieje się z każdą fakturą",
+        "sendChannel": "Wyślij przez",
+        "sendChannelHint": "Link oznacza, że sam udostępniasz link. E-mail i WhatsApp wysyłają go za Ciebie.",
+        "templateTitle": "Szablon faktury",
+        "templateFuture": "Nowy szablon dotyczy nadchodzących faktur. Faktury już utworzone nie zmieniają się.",
+        "replaceTemplate": "Zastąp szablon",
+        "keepTemplate": "Zachowaj obecny szablon"
+      },
+      "template": {
+        "title": "Szablon faktury",
+        "hint": "Każdy okres otrzymuje nową fakturę utworzoną na podstawie tej, z datą przypadającą na ten okres.",
+        "hintEdit": "Zbuduj tutaj nowy szablon. Zastąpi on obecny przy kolejnych fakturach.",
+        "sourceLabel": "Skąd pochodzi szablon",
+        "source": {
+          "invoice": {
+            "title": "Skopiuj fakturę",
+            "hint": "Użyj kupującego i pozycji z już utworzonej faktury."
+          },
+          "build": {
+            "title": "Utwórz szablon",
+            "hint": "Wypełnij tutaj kupującego i pozycje."
+          }
+        },
+        "draftInvoice": "Faktura w wersji roboczej",
+        "copyOf": "Kopia tej faktury o łącznej wartości",
+        "change": "Zmień",
+        "choose": "Wybierz fakturę",
+        "copyNote": "Kupujący, pozycje, podatek i uwagi są kopiowane przy zapisie. Późniejsze zmiany w oryginale nie trafią do harmonogramu.",
+        "startFromInvoice": "Zacznij od faktury",
+        "startFromInvoiceHint": "Wczytuje tutaj kupującego i pozycje, abyś mógł je dostosować.",
+        "billTo": "Dane nabywcy",
+        "contact": "Kontakt",
+        "contactHint": "Wybierz kontakt, aby powiązać z nim każdą fakturę, lub wpisz kupującego poniżej.",
+        "buyerName": "Nazwa na fakturze",
+        "buyerEmail": "E-mail",
+        "buyerPhone": "Telefon",
+        "buyerCountry": "Kraj",
+        "buyerCountryHint": "Dwie litery, na przykład IN lub DE.",
+        "buyerTaxId": "Numer podatkowy",
+        "buyerAddress": "Adres do faktury",
+        "details": "Waluta i podatek",
+        "currency": "Waluta",
+        "docType": "Dokument",
+        "docTypes": {
+          "tax_invoice": "Faktura podatkowa",
+          "proforma": "Faktura proforma"
+        },
+        "taxMode": "Podatek",
+        "taxModes": {
+          "rates": "Według stawki podatku",
+          "auto": "Automatyczny"
+        },
+        "taxModeAutoHint": "Silnik podatkowy ustala podatki na podstawie krajów sprzedawcy i kupującego.",
+        "supplyType": "Rodzaj dostawy",
+        "supply": {
+          "goods": "Towary",
+          "services": "Usługi",
+          "digital": "Usługi cyfrowe"
+        },
+        "paymentTerms": "Termin płatności",
+        "paymentTermsHint": "Liczony od dnia wystawienia każdej faktury.",
+        "termsDefault": "Domyślne dla przestrzeni roboczej",
+        "termsOnReceipt": "Płatne po otrzymaniu",
+        "termsNet": "Netto {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}",
+        "lines": "Pozycje",
+        "adjustments": "Rabat i wysyłka",
+        "discountKind": "Rabat na całą fakturę",
+        "discountNone": "Bez rabatu",
+        "discountPercent": "Procent",
+        "discountAmount": "Kwota stała ({currency})",
+        "discountValue": "Wartość rabatu",
+        "shipping": "Wysyłka ({currency})",
+        "notes": "Uwaga dla klienta",
+        "notesHint": "Drukowana na każdej fakturze.",
+        "termsText": "Warunki",
+        "termsTextHint": "Drukowane na dole każdej faktury.",
+        "kept": "{count, plural, one {Szablon ma 1 pozycję, rozliczaną na rzecz} few {Szablon ma # pozycje, rozliczane na rzecz} many {Szablon ma # pozycji, rozliczanych na rzecz} other {Szablon ma # pozycji, rozliczanych na rzecz}}"
+      },
+      "problems": {
+        "generic": "Sprawdź to pole.",
+        "nameRequired": "Nadaj harmonogramowi nazwę.",
+        "nameTooLong": "Użyj co najwyżej 120 znaków.",
+        "intervalInvalid": "Wpisz liczbę całkowitą od 1 do 365.",
+        "startInvalid": "Wpisz prawidłową datę początkową.",
+        "startTooOld": "Ta data początkowa jest {count} okresów wstecz, a tworzonych jest co najwyżej {max} minionych okresów. Wybierz późniejszą datę.",
+        "endInvalid": "Wpisz prawidłową datę końcową.",
+        "endBeforeStart": "Data końcowa jest wcześniejsza niż początkowa.",
+        "maxRunsInvalid": "Wpisz liczbę całkowitą od 1 do 1000 lub pozostaw pole puste.",
+        "invoiceRequired": "Wybierz fakturę do skopiowania.",
+        "termsInvalid": "Wpisz od 0 do 365 dni.",
+        "descriptionRequired": "Opisz tę pozycję.",
+        "qtyInvalid": "Wpisz ilość większą od zera.",
+        "priceInvalid": "Wpisz prawidłową cenę.",
+        "lineDiscountInvalid": "Wpisz procent od 0 do 100.",
+        "hsnRequired": "Wpisz kod HSN lub SAC.",
+        "hsnInvalid": "Kod HSN lub SAC ma od 2 do 12 liter lub cyfr.",
+        "taxRateRemoved": "Ta stawka podatku już nie istnieje. Wybierz inną.",
+        "currencyInvalid": "Wpisz trzyliterowy kod waluty.",
+        "noLines": "Dodaj co najmniej jedną pozycję.",
+        "discountInvalid": "Wpisz prawidłowy rabat.",
+        "shippingInvalid": "Wpisz prawidłową kwotę.",
+        "emailInvalid": "Wpisz prawidłowy adres e-mail.",
+        "amountZero": "Suma faktury musi być większa od zera.",
+        "amountInvalid": "Ta kwota jest nieprawidłowa.",
+        "contactRequired": "Wybierz kontakt lub wpisz nazwę kupującego. Faktury wystawiane automatycznie wymagają kupującego.",
+        "countryInvalid": "Użyj dwuliterowego kodu kraju.",
+        "regionInvalid": "Wpisz prawidłowy kod stanu lub regionu.",
+        "autoNeedsSellerCountry": "Automatyczny podatek wymaga kraju w ustawieniach fakturowania."
+      },
+      "detail": {
+        "loading": "Wczytywanie harmonogramu",
+        "backToList": "Wróć do faktur cyklicznych",
+        "back": "Wróć do faktur cyklicznych",
+        "failures": "{count, plural, one {1 okres nie utworzył faktury.} few {# okresy nie utworzyły faktur.} many {# okresów nie utworzyło faktur.} other {# okresu nie utworzyło faktur.}}",
+        "seeHistory": "Zobacz przyczynę",
+        "pausedNote": "Ten harmonogram jest wstrzymany. Okresy przypadające podczas wstrzymania są pomijane: po wznowieniu kolejna faktura będzie na dziś lub późniejszą datę.",
+        "endedNote": "Ten harmonogram się zakończył. Nie będą już tworzone nowe faktury i nie można go edytować.",
+        "nextRun": "Następne uruchomienie",
+        "lastRun": "Ostatnie uruchomienie",
+        "runs": "Utworzone faktury",
+        "failedCount": "{count, plural, one {1 błąd} few {# błędy} many {# błędów} other {# błędu}}",
+        "amount": "Na fakturę",
+        "amountNote": "Ile wynosi szablon dzisiaj",
+        "upcoming": "Nadchodzące terminy",
+        "noUpcoming": "Brak kolejnych uruchomień.",
+        "template": "Szablon",
+        "buyer": "Kupujący",
+        "lines": "Pozycje",
+        "currency": "Waluta",
+        "mode": "Każda faktura jest",
+        "starts": "Rozpoczęto",
+        "ends": "Kończy się",
+        "never": "Bez daty końcowej",
+        "limit": "Limit",
+        "noLimit": "Bez limitu",
+        "invoicesCount": "{count, plural, one {1 faktura} few {# faktury} many {# faktur} other {# faktury}}",
+        "templateNote": "Edycja szablonu zmienia tylko przyszłe faktury, nigdy już utworzone."
+      },
+      "runs": {
+        "title": "Historia uruchomień",
+        "subtitle": "Jeden wiersz na okres, od najnowszego.",
+        "loading": "Wczytywanie historii",
+        "scrollArea": "Tabela historii uruchomień, przewijana w poziomie",
+        "emptyTitle": "Brak uruchomień",
+        "emptyMessage": "Pierwsza faktura zostanie utworzona w następnym terminie uruchomienia.",
+        "period": "Okres {n}",
+        "draftInvoice": "Wersja robocza",
+        "showing": "{count, plural, one {Wyświetlono 1 uruchomienie} few {Wyświetlono # uruchomienia} many {Wyświetlono # uruchomień} other {Wyświetlono # uruchomienia}}",
+        "loadMore": "Wczytaj więcej",
+        "allLoaded": "Wyświetlono całą historię",
+        "columns": {
+          "period": "Data okresu",
+          "status": "Wynik",
+          "invoice": "Faktura",
+          "error": "Przyczyna błędu",
+          "at": "Utworzono"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "Dispensar"
+    },
+    "events": {
+      "contact_created": "Contato criado",
+      "contact_updated": "Contato atualizado",
+      "contact_deleted": "Contato excluído",
+      "contact_tag_added": "Tag adicionada a um contato",
+      "contact_opted_in": "Contato aceitou receber mensagens",
+      "deal_stage_changed": "Negócio movido para outra etapa",
+      "task_created": "Tarefa criada",
+      "task_assigned": "Tarefa atribuída",
+      "template_status_changed": "Status do modelo alterado",
+      "device_status_changed": "Status do dispositivo alterado",
+      "conversation_reopened": "Conversa reaberta"
+    },
+    "page": {
+      "title": "Webhooks",
+      "subtitle": "Envie os eventos deste espaço de trabalho para os seus próprios sistemas conforme acontecem. Cada entrega é um POST JSON assinado, reenviado quando o seu servidor não responde.",
+      "back": "Integrações e desenvolvedor",
+      "add": "Adicionar webhook",
+      "list": "Webhooks",
+      "emptyTitle": "Ainda não há webhooks",
+      "empty": "Adicione um endpoint para receber eventos, como um novo contato ou um negócio mudando de etapa.",
+      "noAccess": "Você não tem acesso aos webhooks.",
+      "loadFailed": "Não foi possível carregar os webhooks.",
+      "retry": "Tentar novamente",
+      "allEvents": "Todos os eventos",
+      "signed": "Assinado",
+      "health": {
+        "off": "Desligado",
+        "failing": "Com falhas",
+        "healthy": "Saudável",
+        "idle": "Ainda sem entregas"
+      },
+      "activeFor": "Ativo: {name}",
+      "lastDelivery": "Última entrega {when}, resposta {status}",
+      "noDeliveries": "Nada entregue ainda",
+      "noAnswer": "sem resposta",
+      "counts": "{ok} entregues, {failed} com falha",
+      "lastError": "Último erro: {error}",
+      "deliveries": "Entregas",
+      "test": "Enviar teste",
+      "edit": "Editar",
+      "delete": "Excluir",
+      "cancel": "Cancelar",
+      "deleteTitle": "Excluir este webhook?",
+      "deleteMessage": "{name} deixa de receber eventos e o seu registro de entregas é removido. Isto não pode ser desfeito.",
+      "created": "Webhook adicionado.",
+      "saved": "Webhook salvo.",
+      "deleted": "Webhook excluído.",
+      "deleteFailed": "Não foi possível excluir o webhook. Tente novamente.",
+      "toggleFailed": "Não foi possível salvar a alteração. Tente novamente.",
+      "testOk": "O teste foi entregue (resposta {status}).",
+      "testFailed": "O teste falhou: {reason}",
+      "testError": "Não foi possível enviar o teste. Tente novamente."
+    },
+    "dialog": {
+      "addTitle": "Adicionar um webhook",
+      "editTitle": "Editar webhook",
+      "close": "Fechar",
+      "name": "Nome",
+      "nameHint": "Opcional: um rótulo para você, como o sistema que o recebe.",
+      "url": "URL do endpoint",
+      "urlHint": "Um endereço https acessível pela internet. Endereços privados e internos são recusados.",
+      "urlProblem": {
+        "empty": "Digite a URL do endpoint.",
+        "tooLong": "A URL é longa demais.",
+        "notHttps": "A URL deve começar com https://.",
+        "invalid": "Esta URL não é válida."
+      },
+      "secret": "Segredo de assinatura",
+      "secretHint": "Opcional. Quando definido, cada entrega traz uma assinatura que o seu servidor pode verificar. Nunca é mostrado novamente.",
+      "secretSetHint": "Um segredo está definido. Deixe vazio para mantê-lo, ou digite um novo para substituí-lo.",
+      "secretKeep": "Sem alteração",
+      "removeSecret": "Remover o segredo de assinatura (as entregas não serão assinadas)",
+      "events": "Eventos",
+      "allEvents": "Todos os eventos",
+      "pickEvents": "Escolha pelo menos um evento, ou escolha todos os eventos.",
+      "active": "Ativo",
+      "cancel": "Cancelar",
+      "create": "Adicionar webhook",
+      "save": "Salvar alterações",
+      "failed": "Não foi possível salvar o webhook. Tente novamente."
+    },
+    "deliveries": {
+      "title": "Entregas: {name}",
+      "close": "Fechar",
+      "empty": "Ainda não há entregas. Use Enviar teste para criar uma.",
+      "failed": "Não foi possível carregar as entregas.",
+      "when": "Quando",
+      "event": "Evento",
+      "result": "Resposta",
+      "time": "Hora",
+      "attempt": "Tentativa",
+      "test": "Teste",
+      "noAnswer": "Sem resposta"
+    }
+  }
+}

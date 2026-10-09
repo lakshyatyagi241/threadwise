@@ -1,0 +1,662 @@
+{
+  "invoicing": {
+    "nav": {
+      "invoices": "청구서",
+      "payments": "결제",
+      "taxRates": "세율",
+      "recurring": "반복 청구서",
+      "salesOrders": "판매 주문"
+    },
+    "common": {
+      "unnamedContact": "이름 없는 연락처",
+      "dismiss": "닫기"
+    },
+    "status": {
+      "draft": "초안",
+      "issued": "발행됨",
+      "partially_paid": "일부 결제됨",
+      "overdue": "연체",
+      "paid": "결제 완료",
+      "void": "무효"
+    },
+    "method": {
+      "bank_transfer": "계좌 이체",
+      "cash": "현금",
+      "card": "카드",
+      "upi": "UPI",
+      "cheque": "수표",
+      "gateway": "온라인",
+      "other": "기타"
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없습니다. 연결을 확인한 후 다시 시도하세요.",
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "signedOut": "세션이 종료되었습니다. 다시 로그인하세요.",
+      "conflict": "방금 다른 사용자가 이 항목을 변경했습니다. 페이지를 새로 고쳐 최신 버전을 확인하세요.",
+      "validation": "일부 정보가 올바르지 않습니다. 강조 표시된 필드를 확인하세요.",
+      "unavailable": "이 서버에서는 아직 청구서 발행 기능을 사용할 수 없습니다.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+      "notFound": "이 청구서는 더 이상 존재하지 않습니다.",
+      "planDisabled": "현재 요금제에는 청구서 발행이 포함되어 있지 않습니다.",
+      "invalidState": "청구서의 현재 상태에서는 이 작업을 할 수 없습니다. 새로 고쳐 상태를 확인하세요.",
+      "unexpected": "당사 측에서 문제가 발생했습니다. 다시 시도하세요.",
+      "requestId": "요청 ID",
+      "retry": "다시 시도"
+    },
+    "picker": {
+      "unlink": "연락처 제거",
+      "searchContact": "이름으로 연락처 검색",
+      "results": "일치하는 연락처",
+      "searching": "검색 중...",
+      "unavailable": "연락처를 불러올 수 없습니다.",
+      "none": "연락처가 없습니다."
+    },
+    "actions": {
+      "failed": "작업이 실패했습니다.",
+      "issued": "청구서 {number}가 발행되었습니다.",
+      "sent": "발송됨으로 표시했습니다.",
+      "voided": "청구서 {number}가 무효 처리되었습니다.",
+      "duplicated": "사본이 초안으로 만들어졌습니다.",
+      "deleted": "초안을 삭제했습니다.",
+      "linkCopied": "링크를 복사했습니다.",
+      "linkCopyFailed": "브라우저가 복사를 차단했습니다. 링크를 선택해 직접 복사하세요."
+    },
+    "payDialog": {
+      "title": "결제 기록",
+      "forInvoice": "청구서 {number}",
+      "close": "닫기",
+      "cancel": "취소",
+      "record": "결제 기록",
+      "markPaid": "기록하고 결제 완료로 표시",
+      "recordAnyway": "그래도 기록",
+      "balance": "미결제 잔액",
+      "amount": "금액({currency})",
+      "method": "방법",
+      "paidOn": "결제일",
+      "reference": "참조",
+      "referenceHint": "거래 ID 또는 수표 번호",
+      "note": "메모",
+      "recorded": "{amount} 결제가 기록되었습니다.",
+      "partialNote": "일부 결제입니다. {left}이(가) 아직 남아 있습니다.",
+      "overpayNote": "잔액보다 {extra} 더 많습니다. 기록하기 전에 금액을 확인하세요.",
+      "problems": {
+        "amountInvalid": "금액을 입력하세요. 예: 125.50",
+        "amountZero": "금액은 0보다 커야 합니다.",
+        "dateInvalid": "올바른 날짜를 입력하세요.",
+        "dateFuture": "결제일은 미래일 수 없습니다.",
+        "tooMuch": "환불 가능한 금액을 초과합니다.",
+        "referenceTooLong": "참조가 너무 깁니다(최대 191자).",
+        "noteTooLong": "메모가 너무 깁니다(최대 2000자)."
+      }
+    },
+    "refundDialog": {
+      "title": "결제 환불",
+      "close": "닫기",
+      "cancel": "취소",
+      "refund": "환불",
+      "available": "최대 {amount}까지 환불할 수 있습니다.",
+      "amount": "금액({currency})",
+      "date": "환불일",
+      "reason": "사유",
+      "effect": "청구서에는 환불된 금액만큼 다시 미결제 금액이 남습니다.",
+      "refunded": "{amount} 환불했습니다.",
+      "problems": {
+        "amountInvalid": "금액을 입력하세요. 예: 125.50",
+        "amountZero": "금액은 0보다 커야 합니다.",
+        "tooMuch": "환불 가능한 금액을 초과합니다."
+      }
+    },
+    "voidDialog": {
+      "title": "청구서 무효화",
+      "close": "닫기",
+      "keep": "청구서 유지",
+      "void": "청구서 무효화",
+      "warning": "무효화된 청구서는 번호가 유지되지만 더 이상 결제, 편집 또는 재개할 수 없습니다. 구매자의 링크에는 취소된 것으로 표시됩니다.",
+      "reason": "사유",
+      "reasonHint": "선택 사항. 청구서 활동 기록에 남습니다."
+    },
+    "sendDialog": {
+      "title": "청구서 공유",
+      "issueTitle": "청구서 발행",
+      "close": "닫기",
+      "cancel": "취소",
+      "issue": "청구서 발행",
+      "done": "완료",
+      "issueIntro": "발행하면 이 청구서가 정식 문서가 됩니다:",
+      "issueNumber": "다음 청구서 번호가 부여됩니다.",
+      "issueFrozen": "항목, 가격, 세금을 더 이상 편집할 수 없습니다.",
+      "issueLink": "고객용 링크를 사용할 수 있게 됩니다.",
+      "link": "고객용 링크",
+      "linkHint": "이 링크를 가진 사람은 누구나 청구서와 결제 방법을 확인할 수 있습니다.",
+      "copy": "복사",
+      "copied": "복사됨",
+      "copyFailed": "브라우저가 복사를 차단했습니다. 링크를 선택해 직접 복사하세요.",
+      "open": "고객 페이지 열기",
+      "email": "이메일 발송 대상",
+      "emailHint": "선택 사항. 비워 두면 링크를 직접 공유하고 청구서를 발송됨으로만 표시합니다.",
+      "alreadySent": "이 청구서는 이미 발송됨으로 표시되었습니다."
+    },
+    "deleteDialog": {
+      "title": "초안을 삭제할까요?",
+      "message": "{name}이(가) 영구적으로 삭제됩니다. 초안만 삭제할 수 있습니다.",
+      "delete": "초안 삭제",
+      "keep": "유지"
+    },
+    "row": {
+      "moreFor": "{name}의 작업",
+      "draft": "초안",
+      "open": "열기",
+      "edit": "편집",
+      "issue": "발행 및 발송",
+      "send": "공유 링크 / 발송됨 표시",
+      "copyLink": "링크 복사",
+      "recordPayment": "결제 기록",
+      "markPaid": "결제 완료로 표시",
+      "duplicate": "복제",
+      "print": "다운로드 / 인쇄",
+      "void": "무효화",
+      "delete": "초안 삭제"
+    },
+    "table": {
+      "columns": {
+        "number": "청구서",
+        "contact": "고객",
+        "issued": "발행일",
+        "due": "기한",
+        "total": "합계",
+        "paid": "결제액",
+        "balance": "잔액",
+        "status": "상태"
+      },
+      "draft": "초안",
+      "daysLate": "{count, plural, other {#일 연체}}",
+      "selectAll": "불러온 청구서 모두 선택",
+      "selectRow": "{name} 선택",
+      "scrollArea": "청구서 표"
+    },
+    "tabs": {
+      "label": "청구서 상태",
+      "all": "전체",
+      "draft": "초안",
+      "issued": "발행됨",
+      "partially_paid": "일부 결제됨",
+      "overdue": "연체",
+      "paid": "결제 완료",
+      "void": "무효",
+      "count": "{count, plural, other {청구서 #건}}"
+    },
+    "toolbar": {
+      "search": "번호 또는 고객으로 검색",
+      "contactLoading": "고객",
+      "from": "시작",
+      "to": "종료",
+      "issuedFrom": "발행 시작일",
+      "issuedTo": "발행 종료일",
+      "sort": "청구서 정렬",
+      "sorts": {
+        "newest": "최신순",
+        "oldest": "오래된순",
+        "due": "기한일",
+        "amount": "금액 높은 순"
+      },
+      "reset": "필터 지우기",
+      "refresh": "새로 고침"
+    },
+    "bulk": {
+      "label": "일괄 작업",
+      "selected": "{count, plural, other {청구서 #건 선택됨}}",
+      "working": "처리 중...",
+      "issue": "초안 발행",
+      "void": "무효화",
+      "delete": "초안 삭제",
+      "clear": "선택 지우기",
+      "failed": "작업이 실패했습니다.",
+      "keep": "유지",
+      "someFailed": "{count, plural, other {청구서 #건은 변경할 수 없습니다.}}",
+      "done": {
+        "issue": "{count, plural, other {초안 #건을 발행했습니다.}}",
+        "void": "{count, plural, other {청구서 #건을 무효화했습니다.}}",
+        "delete": "{count, plural, other {초안 #건을 삭제했습니다.}}"
+      },
+      "confirm": {
+        "void": {
+          "title": "선택한 청구서를 무효화할까요?",
+          "message": "{count, plural, other {선택한 청구서 #건이 무효화됩니다. 결제 내역이 있는 청구서는 건너뜁니다.}}",
+          "confirm": "청구서 무효화"
+        },
+        "delete": {
+          "title": "선택한 초안을 삭제할까요?",
+          "message": "{count, plural, other {선택한 청구서 #건을 대상으로 합니다. 초안만 영구 삭제됩니다.}}",
+          "confirm": "초안 삭제"
+        }
+      }
+    },
+    "list": {
+      "title": "청구서",
+      "subtitle": "고객에게 청구하고 결제 여부와 연체 상태를 확인하세요.",
+      "payments": "결제",
+      "newInvoice": "새 청구서",
+      "tableLabel": "청구서 목록",
+      "empty": {
+        "all": {
+          "title": "아직 청구서가 없습니다",
+          "message": "첫 청구서를 만들거나 수락된 제안서 또는 견적서에서 시작하세요."
+        },
+        "draft": {
+          "title": "초안이 없습니다",
+          "message": "아직 작성 중인 청구서가 여기에 표시됩니다."
+        },
+        "issued": {
+          "title": "결제 대기 중인 항목이 없습니다",
+          "message": "결제가 아직 없는 발행된 청구서가 여기에 표시됩니다."
+        },
+        "partially_paid": {
+          "title": "일부 결제된 청구서가 없습니다",
+          "message": "결제는 있지만 잔액이 남은 청구서가 여기에 표시됩니다."
+        },
+        "overdue": {
+          "title": "연체된 항목이 없습니다",
+          "message": "기한이 지나고 잔액이 남은 청구서가 여기에 표시됩니다."
+        },
+        "paid": {
+          "title": "아직 결제 완료된 청구서가 없습니다",
+          "message": "전액 결제된 청구서가 여기에 표시됩니다."
+        },
+        "void": {
+          "title": "무효화된 청구서가 없습니다",
+          "message": "취소된 청구서가 번호와 함께 여기에 표시됩니다."
+        }
+      },
+      "emptyFilteredTitle": "일치하는 청구서가 없습니다",
+      "emptyFiltered": "다른 검색어를 입력하거나 필터를 지우세요.",
+      "resetFilters": "필터 지우기",
+      "loading": "청구서 불러오는 중",
+      "showing": "{count, plural, other {청구서 #건을 불러왔습니다}}",
+      "loadMore": "더 불러오기",
+      "allLoaded": "모두 불러왔습니다"
+    },
+    "lines": {
+      "lineN": "항목 {n}",
+      "description": "설명",
+      "descriptionPlaceholder": "무엇을 청구하나요?",
+      "removeLine": "항목 {n} 제거",
+      "qty": "수량",
+      "price": "단가({currency})",
+      "discount": "할인 %",
+      "tax": "세금",
+      "noTax": "세금 없음",
+      "inclusive": "포함",
+      "removedRate": "세율이 제거되었습니다",
+      "inactive": "비활성",
+      "amount": "금액",
+      "addLine": "항목 추가",
+      "problems": {
+        "descriptionRequired": "이 항목을 설명하세요.",
+        "qtyInvalid": "수량은 0보다 커야 합니다.",
+        "priceInvalid": "가격을 입력하세요. 예: 49.90",
+        "lineDiscountInvalid": "0~100 사이의 백분율을 입력하세요.",
+        "noLines": "발행하기 전에 항목을 하나 이상 추가하세요.",
+        "amountZero": "청구서 합계는 0보다 커야 합니다."
+      }
+    },
+    "totals": {
+      "label": "청구서 합계",
+      "title": "합계",
+      "subtotal": "소계",
+      "discount": "할인",
+      "total": "합계"
+    },
+    "builder": {
+      "creatingFromDocument": "문서에서 청구서를 만드는 중...",
+      "loading": "불러오는 중",
+      "notEditable": "이 청구서는 이미 발행되어 더 이상 편집할 수 없습니다. 복제하여 수정본을 만드세요.",
+      "openInvoice": "청구서 열기",
+      "newTitle": "새 청구서",
+      "editTitle": "초안 편집",
+      "back": "뒤로",
+      "unsaved": "저장되지 않은 변경 사항",
+      "cancel": "취소",
+      "saveDraft": "초안 저장",
+      "saveAndIssue": "저장 후 발행",
+      "conflict": "편집 중에 다른 사용자가 이 초안을 변경했습니다. 새로 고쳐 그 버전을 확인하세요. 여기서 편집한 내용은 사라집니다.",
+      "reload": "새로 고침",
+      "viewLabel": "빌더 보기",
+      "views": {
+        "edit": "편집",
+        "preview": "미리 보기"
+      },
+      "billTo": "청구 대상",
+      "contact": "연락처",
+      "contactHint": "청구서를 연결할 연락처를 선택하거나 아래에 구매자 이름을 입력하세요.",
+      "buyerName": "청구서에 표시될 이름",
+      "buyerEmail": "이메일",
+      "buyerPhone": "전화",
+      "buyerAddress": "청구지 주소",
+      "details": "날짜 및 통화",
+      "currency": "통화",
+      "currencyHint": "USD 또는 KWD처럼 세 글자 코드입니다. 소수점 자리는 통화를 따릅니다.",
+      "issueDate": "발행일",
+      "terms": "결제 조건",
+      "noDueDate": "기한 없음",
+      "dueDate": "기한일",
+      "lineItems": "항목",
+      "orderLinkedNote": "판매 주문으로 만든 청구서의 항목은 고정되어 있습니다. 항목을 바꾸려면 이 청구서를 무효화하거나 삭제한 후 주문을 다시 청구하세요.",
+      "adjustments": "할인",
+      "discountKind": "청구서 전체 할인",
+      "discountNone": "할인 없음",
+      "discountPercent": "백분율",
+      "discountAmount": "정액({currency})",
+      "discountValue": "할인 값",
+      "notesAndTerms": "메모 및 약관",
+      "notes": "고객에게 보내는 메모",
+      "notesHint": "청구서에 표시됩니다.",
+      "termsText": "이용 약관",
+      "termsHint": "청구서 하단에 표시됩니다.",
+      "preview": "미리 보기",
+      "saved": "초안이 저장되었습니다.",
+      "fixProblems": "강조 표시된 필드를 먼저 수정하세요.",
+      "serverRejected": "서버가 일부 값을 허용하지 않았습니다. 필드를 확인한 후 다시 시도하세요.",
+      "problems": {
+        "contactRequired": "연락처를 선택하거나 구매자 이름을 입력하세요.",
+        "currencyInvalid": "세 글자 통화 코드를 입력하세요.",
+        "issueDateInvalid": "올바른 발행일을 입력하세요.",
+        "dueBeforeIssue": "기한일은 발행일보다 앞설 수 없습니다.",
+        "dueInvalid": "올바른 기한일을 입력하세요.",
+        "noLines": "발행하기 전에 항목을 하나 이상 추가하세요.",
+        "discountInvalid": "올바른 할인 값을 입력하세요.",
+        "emailInvalid": "올바른 이메일 주소를 입력하세요.",
+        "amountZero": "청구서 합계는 0보다 커야 합니다.",
+        "descriptionRequired": "이 항목을 설명하세요.",
+        "priceInvalid": "올바른 가격을 입력하세요.",
+        "qtyInvalid": "수량은 0보다 커야 합니다.",
+        "lineDiscountInvalid": "0~100 사이의 백분율을 입력하세요."
+      }
+    },
+    "terms": {
+      "onReceipt": "수령 시 지급",
+      "net": "{days}일 이내 지급",
+      "custom": "직접 날짜 지정"
+    },
+    "paper": {
+      "label": "청구서 {number}",
+      "labelDraft": "청구서 초안 미리 보기",
+      "sellerFallback": "사업자 이름",
+      "title": "청구서",
+      "draftNumber": "초안",
+      "billedTo": "청구 대상",
+      "buyerFallback": "고객",
+      "issued": "발행일",
+      "due": "기한",
+      "onReceipt": "수령 시",
+      "item": "품목",
+      "qty": "수량",
+      "price": "가격",
+      "tax": "세금",
+      "amount": "금액",
+      "noLines": "항목이 아직 없습니다",
+      "noDescription": "설명 없음",
+      "lineDiscount": "{percent}% 할인",
+      "subtotal": "소계",
+      "discount": "할인",
+      "discountPercent": "할인({percent}%)",
+      "total": "합계",
+      "includesTax": "세금이 가격에 포함됨",
+      "paid": "결제액",
+      "balanceDue": "미결제 잔액",
+      "notes": "메모",
+      "terms": "약관"
+    },
+    "detail": {
+      "loading": "청구서 불러오는 중",
+      "backToList": "청구서 목록으로 돌아가기",
+      "draftTitle": "청구서 초안",
+      "edit": "편집",
+      "issueAndSend": "발행 및 발송",
+      "shareAgain": "다시 공유",
+      "send": "공유 및 발송",
+      "recordPayment": "결제 기록",
+      "markPaid": "결제 완료로 표시",
+      "copyLink": "링크 복사",
+      "print": "다운로드 / 인쇄",
+      "duplicate": "복제",
+      "void": "무효화",
+      "delete": "초안 삭제",
+      "voidedBanner": "이 청구서는 {date}에 무효화되었습니다. 번호는 유지되지만 더 이상 결제할 수 없습니다.",
+      "voidNeedsRefund": "이 청구서를 무효화하려면 먼저 결제를 환불하세요.",
+      "overpaid": "청구서 금액보다 더 많이 결제되었습니다.",
+      "amountsLabel": "금액",
+      "total": "합계",
+      "paid": "결제액",
+      "balance": "미결제 잔액",
+      "issued": "발행일",
+      "due": "기한",
+      "noDue": "기한 없음",
+      "daysLate": "{count, plural, other {#일 연체}}",
+      "sentAt": "발송됨",
+      "paidAt": "전액 결제됨",
+      "source": "다음에서 생성됨",
+      "sourceKind": {
+        "proposal": "제안서",
+        "estimate": "견적서"
+      },
+      "deal": "딜",
+      "dealFallback": "열린 딜"
+    },
+    "paymentsSection": {
+      "title": "결제",
+      "loading": "결제 불러오는 중",
+      "none": "기록된 결제가 없습니다.",
+      "refund": "환불"
+    },
+    "activity": {
+      "title": "활동",
+      "loading": "활동을 불러오는 중",
+      "events": {
+        "created": "초안 생성됨",
+        "edited": "초안 수정됨",
+        "issued": "인보이스 발행됨",
+        "sent": "발송으로 표시됨",
+        "viewed": "고객이 열람함",
+        "payment_recorded": "결제 기록됨",
+        "payment_refunded": "결제 환불됨",
+        "paid": "전액 결제됨",
+        "reminder_sent": "알림 발송됨",
+        "voided": "인보이스 무효화됨"
+      }
+    },
+    "pickInvoice": {
+      "title": "어떤 인보이스가 결제되었나요?",
+      "close": "닫기",
+      "cancel": "취소",
+      "search": "번호 또는 고객으로 검색",
+      "loading": "인보이스를 불러오는 중",
+      "noMatch": "일치하는 미결제 인보이스가 없습니다.",
+      "nothingOwed": "현재 미수금이 없습니다.",
+      "balance": "잔액",
+      "more": "더 보기"
+    },
+    "aging": {
+      "loading": "연체 보고서를 불러오는 중",
+      "emptyTitle": "미수금 없음",
+      "emptyMessage": "발행된 모든 인보이스가 결제되었습니다. 미결제 인보이스는 연체 기간별로 묶여 여기에 표시됩니다.",
+      "asOf": "{date} 기준. 연체 일수는 지급 기한부터 계산합니다.",
+      "currencyLabel": "{currency} 미수금",
+      "outstanding": "미수금",
+      "invoices": "{count, plural, other {인보이스 #건}}",
+      "barLabel": "연체 기간별 미수금 비중",
+      "buckets": {
+        "current": "기한 전",
+        "d1_30": "1~30일 연체",
+        "d31_60": "31~60일 연체",
+        "d61_90": "61~90일 연체",
+        "d90_plus": "90일 초과 연체"
+      },
+      "total": "합계",
+      "unnamed": "이름 없는 연락처",
+      "noContact": "연락처 없음"
+    },
+    "payments": {
+      "title": "결제",
+      "subtitle": "인보이스에 대해 받은 금액과 남은 미수금입니다.",
+      "invoices": "인보이스",
+      "record": "결제 기록",
+      "viewLabel": "결제 보기",
+      "views": {
+        "ledger": "원장",
+        "aging": "연체 현황"
+      },
+      "tableLabel": "결제 원장",
+      "loading": "결제를 불러오는 중",
+      "emptyFilteredTitle": "일치하는 결제가 없습니다",
+      "emptyFiltered": "다른 검색어를 입력하거나 필터를 지워 보세요.",
+      "emptyTitle": "아직 결제가 없습니다",
+      "emptyMessage": "고객이 인보이스를 결제하면 여기 또는 인보이스에서 기록하세요.",
+      "resetFilters": "필터 지우기",
+      "showing": "{count, plural, other {결제 #건 불러옴}}",
+      "loadMore": "더 불러오기",
+      "allLoaded": "모두 불러왔습니다",
+      "strip": {
+        "loading": "합계를 불러오는 중",
+        "label": "결제 합계",
+        "window": "{from} ~ {to}",
+        "none": "이 기간에는 결제가 없습니다.",
+        "collected": "수금액 ({currency})",
+        "count": "결제",
+        "refunded": "환불됨"
+      },
+      "toolbar": {
+        "search": "참조번호, 인보이스 또는 고객 검색",
+        "method": "결제 수단",
+        "allMethods": "모든 결제 수단",
+        "from": "시작",
+        "to": "종료",
+        "paidFrom": "결제 출처",
+        "paidTo": "결제 대상",
+        "reset": "필터 지우기",
+        "refresh": "새로고침"
+      },
+      "table": {
+        "scrollArea": "결제 표",
+        "columns": {
+          "date": "날짜",
+          "invoice": "인보이스",
+          "contact": "고객",
+          "method": "결제 수단",
+          "reference": "참조번호",
+          "amount": "금액",
+          "refunded": "환불됨",
+          "recordedBy": "기록한 사람",
+          "actions": "작업"
+        },
+        "moreFor": "{date} 결제 작업",
+        "openInvoice": "인보이스 열기",
+        "refund": "환불"
+      }
+    },
+    "taxRates": {
+      "title": "세율",
+      "subtitle": "인보이스 항목에 추가하는 세금입니다. 하나를 새 항목의 기본값으로 지정할 수 있습니다.",
+      "new": "새 세율",
+      "tableLabel": "세율",
+      "loading": "세율을 불러오는 중",
+      "emptyTitle": "아직 세율이 없습니다",
+      "emptyMessage": "부가세 등 청구할 세금을 추가하면 인보이스 항목에서 선택할 수 있습니다.",
+      "scrollArea": "세율 표",
+      "columns": {
+        "name": "이름",
+        "rate": "세율",
+        "type": "유형",
+        "status": "상태",
+        "effective": "적용 시작일",
+        "used": "항목",
+        "actions": "작업"
+      },
+      "default": "기본",
+      "inclusive": "포함",
+      "exclusive": "별도",
+      "active": "사용 중",
+      "inactive": "사용 안 함",
+      "always": "항상",
+      "moreFor": "{name} 작업",
+      "edit": "편집",
+      "makeDefault": "기본으로 설정",
+      "madeDefault": "{name}이(가) 기본 세율이 되었습니다.",
+      "deactivate": "사용 중지",
+      "activate": "사용",
+      "deactivated": "{name} 사용을 중지했습니다.",
+      "activated": "{name}을(를) 사용하도록 설정했습니다.",
+      "delete": "삭제",
+      "deleteTitle": "이 세율을 삭제할까요?",
+      "keep": "유지",
+      "deleted": "{name}을(를) 삭제했습니다.",
+      "count": "{count, plural, other {세율 #개}}",
+      "hint": "세율을 바꿔도 이미 발행된 인보이스는 바뀌지 않습니다. 각 인보이스는 작성 당시의 세율을 유지합니다.",
+      "errors": {
+        "isDefault": "기본 세율입니다. 먼저 다른 세율을 기본으로 지정하세요."
+      },
+      "form": {
+        "eyebrow": "세율",
+        "editTitle": "세율 편집",
+        "newTitle": "새 세율",
+        "close": "닫기",
+        "cancel": "취소",
+        "save": "저장",
+        "name": "이름",
+        "namePlaceholder": "예: 부가세, GST, 판매세",
+        "rate": "세율",
+        "type": "적용 방식",
+        "exclusive": "별도: 가격에 추가",
+        "inclusive": "포함: 가격에 이미 포함",
+        "typeHint": {
+          "exclusive": "고객은 가격에 세금을 더해 지불합니다.",
+          "inclusive": "가격에 이미 세금이 포함되어 있으며, 인보이스에는 그 중 세금 금액이 표시됩니다."
+        },
+        "effectiveFrom": "적용 시작일",
+        "effectiveHint": "선택 사항입니다. 특정 날짜부터 바뀌는 세율에 사용하세요.",
+        "description": "설명",
+        "makeDefault": "새 항목 기본값",
+        "defaultHint": "새 인보이스 항목은 이 세율로 시작합니다.",
+        "active": "사용 중",
+        "activeHint": "사용 안 함 상태의 세율은 새 항목에서 선택할 수 없습니다.",
+        "saved": "{name}을(를) 저장했습니다.",
+        "created": "{name}을(를) 추가했습니다.",
+        "problems": {
+          "nameRequired": "이름을 입력하세요.",
+          "nameTaken": "같은 이름의 세율이 이미 있습니다.",
+          "rateInvalid": "0~100 사이의 백분율을 입력하세요.",
+          "dateInvalid": "올바른 날짜를 입력하세요.",
+          "conflict": "다른 사용자가 이 세율을 변경했습니다. 닫았다가 다시 여세요."
+        }
+      }
+    },
+    "public": {
+      "loading": "인보이스를 불러오는 중",
+      "errorTitle": "이 인보이스를 불러올 수 없습니다",
+      "errorMessage": "연결을 확인한 후 다시 시도하세요.",
+      "retry": "다시 시도",
+      "title": "{seller}의 인보이스",
+      "dueOn": "기한 {date}",
+      "print": "인쇄",
+      "download": "PDF 다운로드",
+      "paidBanner": "이 인보이스는 전액 결제되었습니다. 감사합니다.",
+      "voidBanner": "이 인보이스는 취소되어 결제하지 않으셔도 됩니다.",
+      "payNow": "결제 방법",
+      "amountDue": "결제 금액:",
+      "bankIntro": "계좌이체로 결제하시고 입금자명(참조번호)으로 {number}을(를) 사용하세요.",
+      "copied": "복사됨",
+      "payButton": "{amount} 결제",
+      "gatewayNote": "판매자의 결제 대행사 결제 페이지로 이동합니다.",
+      "questions": "이 인보이스에 대해 문의사항이 있으신가요?",
+      "metaTitle": "인보이스"
+    },
+    "linked": {
+      "title": "인보이스",
+      "new": "새 인보이스",
+      "viewAll": "전체 보기",
+      "loading": "인보이스를 불러오는 중",
+      "none": "아직 인보이스가 없습니다.",
+      "draft": "초안",
+      "owes": "미수"
+    }
+  }
+}

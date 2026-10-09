@@ -1,12 +1,15 @@
 import {
   lintTemplateResultSchema,
   syncTemplatesResultSchema,
+  templateCountsSchema,
   templateDetailSchema,
   templateSubmitResultSchema,
   wabaConnectionListSchema,
   type CreateTemplateInput,
   type LintTemplateInput,
+  type SubmitTemplateInput,
   type SyncTemplatesInput,
+  type TemplateCountsQuery,
   type UpdateTemplateInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -32,8 +35,24 @@ export const templatesApi = {
       idempotencyKey,
     }),
   remove: (id: string) => apiFetch(`${base}/${id}`, { method: 'DELETE' }),
-  submit: (id: string) =>
-    apiFetch(`${base}/${id}/submit`, { method: 'POST', schema: templateSubmitResultSchema }),
+  submit: (id: string, input: SubmitTemplateInput = {}) =>
+    apiFetch(`${base}/${id}/submit`, {
+      method: 'POST',
+      body: input,
+      schema: templateSubmitResultSchema,
+    }),
+  counts: (query: TemplateCountsQuery, signal?: AbortSignal) =>
+    apiFetch(`${base}/counts`, {
+      query: {
+        status: query.status,
+        statusGroup: query.statusGroup,
+        category: query.category,
+        connectionId: query.connectionId,
+        q: query.q || undefined,
+      },
+      schema: templateCountsSchema,
+      signal,
+    }),
   refresh: (id: string) =>
     apiFetch(`${base}/${id}/refresh`, { method: 'POST', schema: templateSubmitResultSchema }),
   sync: (input: SyncTemplatesInput) =>

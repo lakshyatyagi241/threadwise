@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "닫기"
+    },
+    "events": {
+      "contact_created": "연락처 생성됨",
+      "contact_updated": "연락처 업데이트됨",
+      "contact_deleted": "연락처 삭제됨",
+      "contact_tag_added": "연락처에 태그 추가됨",
+      "contact_opted_in": "연락처 수신 동의",
+      "deal_stage_changed": "거래가 다른 단계로 이동함",
+      "task_created": "작업 생성됨",
+      "task_assigned": "작업 할당됨",
+      "template_status_changed": "템플릿 상태 변경됨",
+      "device_status_changed": "기기 상태 변경됨",
+      "conversation_reopened": "대화 다시 열림"
+    },
+    "page": {
+      "title": "웹훅",
+      "subtitle": "이 워크스페이스의 이벤트를 발생 즉시 귀사의 시스템으로 보냅니다. 각 전송은 서명된 JSON POST이며, 서버가 응답하지 않으면 다시 시도합니다.",
+      "back": "연동 및 개발자",
+      "add": "웹훅 추가",
+      "list": "웹훅",
+      "emptyTitle": "아직 웹훅이 없습니다",
+      "empty": "새 연락처 또는 거래 단계 변경과 같은 이벤트를 받을 엔드포인트를 추가하세요.",
+      "noAccess": "웹훅에 접근할 권한이 없습니다.",
+      "loadFailed": "웹훅을 불러올 수 없습니다.",
+      "retry": "다시 시도",
+      "allEvents": "모든 이벤트",
+      "signed": "서명됨",
+      "health": {
+        "off": "꺼짐",
+        "failing": "실패 중",
+        "healthy": "정상",
+        "idle": "아직 전송 기록이 없습니다"
+      },
+      "activeFor": "활성: {name}",
+      "lastDelivery": "마지막 전송 {when}, 응답 {status}",
+      "noDeliveries": "아직 전송된 항목이 없습니다",
+      "noAnswer": "응답 없음",
+      "counts": "전송 {ok}건, 실패 {failed}건",
+      "lastError": "마지막 오류: {error}",
+      "deliveries": "전송 기록",
+      "test": "테스트 보내기",
+      "edit": "편집",
+      "delete": "삭제",
+      "cancel": "취소",
+      "deleteTitle": "이 웹훅을 삭제하시겠습니까?",
+      "deleteMessage": "{name}은(는) 이벤트를 더 이상 받지 않으며 전송 기록도 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+      "created": "웹훅을 추가했습니다.",
+      "saved": "웹훅을 저장했습니다.",
+      "deleted": "웹훅을 삭제했습니다.",
+      "deleteFailed": "웹훅을 삭제할 수 없습니다. 다시 시도하세요.",
+      "toggleFailed": "변경 사항을 저장할 수 없습니다. 다시 시도하세요.",
+      "testOk": "테스트가 전송되었습니다(응답 {status}).",
+      "testFailed": "테스트에 실패했습니다: {reason}",
+      "testError": "테스트를 보낼 수 없습니다. 다시 시도하세요."
+    },
+    "dialog": {
+      "addTitle": "웹훅 추가",
+      "editTitle": "웹훅 편집",
+      "close": "닫기",
+      "name": "이름",
+      "nameHint": "선택 사항: 수신 시스템 등 나만 알아볼 수 있는 이름입니다.",
+      "url": "엔드포인트 URL",
+      "urlHint": "인터넷에서 접근 가능한 https 주소입니다. 개인 및 내부 주소는 허용되지 않습니다.",
+      "urlProblem": {
+        "empty": "엔드포인트 URL을 입력하세요.",
+        "tooLong": "URL이 너무 깁니다.",
+        "notHttps": "URL은 https://로 시작해야 합니다.",
+        "invalid": "올바른 URL이 아닙니다."
+      },
+      "secret": "서명 비밀값",
+      "secretHint": "선택 사항. 설정하면 각 전송에 서버에서 검증할 수 있는 서명이 포함됩니다. 다시 표시되지 않습니다.",
+      "secretSetHint": "비밀값이 설정되어 있습니다. 유지하려면 비워 두고, 교체하려면 새 값을 입력하세요.",
+      "secretKeep": "변경 없음",
+      "removeSecret": "서명 비밀값 제거 (전송에 서명이 포함되지 않습니다)",
+      "events": "이벤트",
+      "allEvents": "모든 이벤트",
+      "pickEvents": "이벤트를 하나 이상 선택하거나 모든 이벤트를 선택하세요.",
+      "active": "활성",
+      "cancel": "취소",
+      "create": "웹훅 추가",
+      "save": "변경 사항 저장",
+      "failed": "웹훅을 저장하지 못했습니다. 다시 시도하세요."
+    },
+    "deliveries": {
+      "title": "전송 기록: {name}",
+      "close": "닫기",
+      "empty": "아직 전송 기록이 없습니다. 테스트 전송으로 만들어 보세요.",
+      "failed": "전송 기록을 불러오지 못했습니다.",
+      "when": "시각",
+      "event": "이벤트",
+      "result": "응답",
+      "time": "시간",
+      "attempt": "시도",
+      "test": "테스트",
+      "noAnswer": "응답 없음"
+    }
+  }
+}

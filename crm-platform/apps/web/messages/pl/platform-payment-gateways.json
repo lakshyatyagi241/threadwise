@@ -1,0 +1,716 @@
+{
+  "platform-payment-gateways": {
+    "nav": {
+      "gateways": "Bramki płatności",
+      "group": "Rozliczenia",
+      "orders": "Historia zamówień",
+      "billingHistory": "Historia rozliczeń",
+      "invoices": "Faktury",
+      "billingSettings": "Ustawienia rozliczeń"
+    },
+    "admin": {
+      "title": "Bramki płatności",
+      "description": "Bramek: {count}. Dane logowania są szyfrowane w spoczynku i nie są ponownie pokazywane po zapisaniu.",
+      "kpi": {
+        "total": "Bramki",
+        "active": "Aktywne",
+        "india": "Indie",
+        "crypto": "Krypto",
+        "totalHint": "dostępnych sterowników",
+        "activeHint": "przyjmujących płatności",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "rozliczenie on-chain"
+      },
+      "tabsLabel": "Filtruj według regionu",
+      "all": "Wszystkie",
+      "search": "Filtruj po nazwie lub slugu",
+      "emptyTitle": "Brak bramek",
+      "emptyMessage": "Nic nie pasuje do tego regionu i wyszukiwania. Wybierz inną kartę lub wyczyść wyszukiwanie.",
+      "regions": {
+        "popular": "Popularne",
+        "india": "Indie",
+        "asia": "Azja",
+        "mena": "MENA",
+        "europe": "Europa",
+        "us": "USA i Kanada",
+        "africa": "Afryka",
+        "latam": "Ameryka Łacińska",
+        "crypto": "Krypto",
+        "offline": "Offline",
+        "other": "Inne"
+      },
+      "card": {
+        "active": "Aktywna",
+        "disabled": "Wyłączona",
+        "mode": {
+          "sandbox": "Sandbox",
+          "live": "Produkcja"
+        },
+        "keysSaved": "Klucze zapisane",
+        "noDriverBadge": "Sterownik jeszcze niedostępny",
+        "activate": "Aktywuj",
+        "disable": "Wyłącz",
+        "savedPlaceholder": "Zapisano. Pozostaw puste, aby zachować.",
+        "clear": "Usuń zapisaną wartość",
+        "undoClear": "Zachowaj zapisaną wartość",
+        "modeLabel": "Tryb",
+        "sortOrder": "Kolejność",
+        "currencies": "Obsługiwane waluty",
+        "currenciesAll": "Nie wybrano: akceptowane są wszystkie waluty",
+        "currenciesSelected": "{count, plural, one {# wybrana} few {# wybrane} many {# wybranych} other {# wybranej}}",
+        "currenciesHint": "Kupujący widzi tę bramkę tylko w zaznaczonych walutach. Pozostaw wszystkie niezaznaczone, aby akceptować dowolną walutę.",
+        "webhookUrl": "Adres URL webhooka",
+        "webhookHint": "Wklej to do panelu dostawcy, aby mógł informować nas o płatnościach.",
+        "saving": "Zapisywanie",
+        "readOnly": "Tylko superadministrator może zmieniać bramki.",
+        "saved": "Zapisano ustawienia: {name}.",
+        "activated": "Aktywowano: {name}.",
+        "deactivated": "Dezaktywowano: {name}.",
+        "noCredentials": "Nie są wymagane dane logowania — bramka używa ręcznego potwierdzenia poza systemem.",
+        "save": "Zapisz {name}"
+      },
+      "errors": {
+        "conflict": "Ktoś inny zmienił tę bramkę. Została wczytana ponownie; sprawdź ją i zapisz jeszcze raz.",
+        "notConfigured": "Najpierw uzupełnij wymagane pola: {fields}",
+        "noDriver": "Ta bramka nie ma jeszcze sterownika w tej wersji, więc można ją skonfigurować, ale nie aktywować.",
+        "forbidden": "Tylko superadministrator może zmieniać bramki.",
+        "generic": "Coś poszło nie tak. Spróbuj ponownie."
+      },
+      "eyebrow": "Admin · Rozliczenia · Bramki",
+      "titleFirst": "Płatność",
+      "titleSecond": "bramki"
+    },
+    "checkout": {
+      "title": "Dokończ zamówienie",
+      "walletTitle": "Dodaj środki do portfela",
+      "subtitle": "Sprawdź cenę, podaj, kto płaci, i wybierz sposób płatności.",
+      "loading": "Wczytywanie płatności",
+      "account": "Konto",
+      "name": "Imię i nazwisko",
+      "email": "E-mail",
+      "billingAddress": "Adres rozliczeniowy",
+      "company": "Firma",
+      "taxId": "NIP / numer podatkowy",
+      "taxIdHint": "GSTIN, VAT lub EIN, jeśli go posiadasz.",
+      "address": "Adres",
+      "city": "Miasto",
+      "postal": "Kod pocztowy",
+      "country": "Kraj",
+      "currency": "Waluta",
+      "period": "Okres rozliczeniowy",
+      "periods": {
+        "monthly": "Miesięcznie",
+        "yearly": "Rocznie"
+      },
+      "paymentMethod": "Metoda płatności",
+      "noGateway": "Nie skonfigurowano jeszcze bramki płatności dla {currency}. Poproś administratora o aktywację.",
+      "noGatewayButton": "Brak skonfigurowanej bramki",
+      "sandbox": "sandbox",
+      "pay": "Zapłać {amount}",
+      "processing": "Rozpoczynanie płatności",
+      "summary": "Podsumowanie zamówienia",
+      "billed": {
+        "monthly": "Rozliczane za jeden okres",
+        "yearly": "Rozliczane za 12 miesięcy"
+      },
+      "subtotal": "Suma częściowa",
+      "tax": "{label} ({rate}%)",
+      "total": "Razem dziś",
+      "updating": "Aktualizacja ceny",
+      "errors": {
+        "gatewayUnavailable": "Ta bramka jest obecnie niedostępna.",
+        "currencyUnsupported": "Ta bramka nie akceptuje tej waluty. Wybierz inną bramkę lub walutę.",
+        "providerError": "Błąd dostawcy płatności. Spróbuj ponownie lub wybierz inną bramkę.",
+        "notPurchasable": "Tego planu nie można kupić online.",
+        "downgrade": "Zmiana na niższy plan nie jest dostępna online. Skontaktuj się z pomocą techniczną, aby przejść na niższy plan.",
+        "amountTooLow": "Wpisz wyższą kwotę do dodania do portfela.",
+        "couponUnavailable": "Kupony nie są jeszcze dostępne.",
+        "forbidden": "Nie masz uprawnień do zakupu.",
+        "notFound": "Nie znaleźliśmy tego planu.",
+        "widgetBlocked": "Nie udało się otworzyć okna płatności. Sprawdź, czy przeglądarka na to zezwala, i spróbuj ponownie.",
+        "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+        "couponRejected": "Tego kuponu nie można użyć."
+      },
+      "coupon": "Kod kuponu",
+      "couponApply": "Zastosuj",
+      "couponApplied": "Zastosowano kupon {code}: zniżka {amount}.",
+      "couponRemove": "Usuń",
+      "couponDiscount": "Zniżka ({code})",
+      "refundGuarantee": "Gwarancja zwrotu pieniędzy przez {days} dni",
+      "countryPlaceholder": "Wybierz kraj",
+      "autoRenew": "Odnawia się automatycznie co okres. Możesz anulować w dowolnym momencie.",
+      "addonRenews": "Ten dodatek odnawia się automatycznie co okres. Możesz go anulować w dowolnym momencie i zachować do końca opłaconego okresu.",
+      "cardTitle": "Zapłać kartą",
+      "payNow": "Zapłać teraz",
+      "titleFirst": "Dokończ swoje",
+      "titleSecond": "zamówienie",
+      "subtitleRefund": "{days}-dniowa gwarancja zwrotu pieniędzy. Anuluj w dowolnym momencie. Akceptujemy karty, UPI, przelewy internetowe i portfele.",
+      "steps": {
+        "plan": "Wybierz plan",
+        "checkout": "Płatność",
+        "confirmation": "Potwierdzenie"
+      },
+      "step": "Krok {n}",
+      "taxIdPlaceholder": "NIP / VAT / EIN",
+      "addressPlaceholder": "Ulica i numer domu",
+      "cityPlaceholder": "Warszawa",
+      "currencyTitle": "Płać w swojej walucie",
+      "currencyHint": "Ceny przeliczają się od razu. Pokazujemy tylko waluty akceptowane przez dostępne metody płatności.",
+      "couponPlaceholder": "Masz kod rabatowy?",
+      "live": "na żywo",
+      "tlsNote": "Płatności są przetwarzane przez połączenie TLS 256-bitowe. Nigdy nie widzimy danych Twojej karty.",
+      "change": "Zmień",
+      "terms": "Płacąc, akceptujesz nasze <terms>Warunki</terms> oraz <privacy>Politykę prywatności</privacy>.",
+      "refundNote": "Nie jesteś zadowolony? Napisz do nas w ciągu {days} dni, a zwrócimy pełną kwotę — bez pytań i formularzy.",
+      "autoRenewTitle": "Automatycznie odnawiaj ten plan"
+    },
+    "orders": {
+      "title": "Historia zamówień",
+      "lifetime": "Łączne wydatki: {total}",
+      "loading": "Wczytywanie zamówień",
+      "loadFailed": "Nie udało się wczytać zamówień. Odśwież stronę, aby spróbować ponownie.",
+      "emptyTitle": "Brak zamówień",
+      "emptyMessage": "Twoje zakupy pojawią się tutaj.",
+      "browsePlans": "Przeglądaj plany",
+      "loadMore": "Wczytaj więcej",
+      "outcome": {
+        "success": "Otrzymano płatność. Dziękujemy.",
+        "failed": "Płatność nie została zakończona. Spróbuj ponownie lub wybierz inną bramkę.",
+        "cancelled": "Anulowano płatność.",
+        "pending": "Czekamy, aż dostawca płatności potwierdzi płatność. Ta strona zaktualizuje się po potwierdzeniu.",
+        "notfound": "Nie znaleźliśmy tego zamówienia.",
+        "proof": "Przesłano dowód płatności. Wkrótce go zweryfikujemy i aktywujemy Twój plan."
+      },
+      "col": {
+        "order": "Zamówienie",
+        "item": "Pozycja",
+        "date": "Data",
+        "amount": "Kwota",
+        "status": "Status",
+        "actions": "Akcje"
+      },
+      "status": {
+        "pending": "Oczekujące",
+        "awaiting_approval": "Oczekuje na zatwierdzenie",
+        "paid": "Opłacone",
+        "failed": "Nieudane",
+        "cancelled": "Anulowane",
+        "refunded": "Zwrócone"
+      },
+      "uploadProof": "Dowód płatności",
+      "invoice": "Faktura"
+    },
+    "billing": {
+      "common": {
+        "admin": "Administracja",
+        "breadcrumb": "Ścieżka nawigacji",
+        "billingHistory": "Historia rozliczeń",
+        "analytics": "Analityka",
+        "exportCsv": "Eksportuj CSV",
+        "exportTruncated": "Eksport zatrzymał się na {rows} wierszach. Zawęź filtry, aby wyeksportować resztę.",
+        "exportFailed": "Nie udało się utworzyć eksportu. Spróbuj ponownie.",
+        "actionFailed": "Nie udało się. Odśwież stronę i spróbuj ponownie.",
+        "cancel": "Anuluj",
+        "back": "Zachowaj",
+        "close": "Zamknij",
+        "openWorkspace": "Otwórz przestrzeń roboczą",
+        "showing": "Wyświetlono {from}–{to} z {total} {noun}",
+        "pager": "Strony",
+        "previous": "Poprzednia",
+        "next": "Następna",
+        "chartEmpty": "Brak danych w tym okresie.",
+        "periods": {
+          "monthly": "miesięcznie",
+          "yearly": "rocznie"
+        },
+        "status": {
+          "pending": "oczekujące",
+          "awaiting_approval": "oczekuje na zatwierdzenie",
+          "paid": "opłacone",
+          "failed": "nieudane",
+          "cancelled": "anulowane",
+          "refunded": "zwrócone"
+        },
+        "windows": {
+          "7d": "Ostatnie 7 dni",
+          "30d": "Ostatnie 30 dni",
+          "90d": "Ostatnie 90 dni",
+          "1y": "Ostatni rok",
+          "all": "Cały czas"
+        }
+      },
+      "orders": {
+        "title": "Historia zamówień",
+        "eyebrow": "Administracja · Rozliczenia i plany · Historia zamówień",
+        "titleFirst": "Zamówienia",
+        "titleSecond": "historia",
+        "description": "Zamówienia subskrypcji, zmiany planów na wyższe i niższe, zakupy dodatków i jednorazowe doładowania: każda decyzja handlowa podjęta przez przestrzeń roboczą.",
+        "window": "Okres",
+        "windows": {
+          "90d": "Ostatnie 90 dni",
+          "this_year": "Ten rok",
+          "all": "Cały czas"
+        },
+        "kpi": {
+          "total": "Łączna liczba zamówień",
+          "vsPrevious": "vs poprzedni okres",
+          "upgrades": "Zmiany na wyższe",
+          "mrrAdded": "+{amount} MRR dodane",
+          "downgrades": "Zmiany na niższe",
+          "mrrLowered": "{amount} na niższych planach",
+          "addons": "Pakiety dodatków",
+          "attached": "{amount} dołączone",
+          "cancellations": "Anulowania",
+          "mrrLost": "-{amount} MRR utracone"
+        },
+        "typeFilter": "Filtruj według typu zamówienia",
+        "types": {
+          "all": "Wszystkie",
+          "new": "Nowa subskrypcja",
+          "upgrade": "Zmiana na wyższy",
+          "downgrade": "Zmiana na niższy",
+          "addon": "Dodatek",
+          "cancel": "Anulowanie"
+        },
+        "rowTypes": {
+          "new": "Nowe",
+          "renewal": "Odnowienie",
+          "upgrade": "Zmiana na wyższy",
+          "downgrade": "Zmiana na niższy",
+          "addon": "Dodatek",
+          "wallet_topup": "Doładowanie portfela",
+          "manual": "Ręczne"
+        },
+        "search": "Szukaj po numerze zamówienia, przestrzeni roboczej, planie…",
+        "noun": "zamówienia",
+        "col": {
+          "order": "Nr zamówienia",
+          "date": "Data",
+          "workspace": "Przestrzeń robocza",
+          "type": "Typ",
+          "item": "Plan / pozycja",
+          "mrr": "Zmiana MRR",
+          "total": "Razem",
+          "status": "Status"
+        },
+        "empty": "Brak zamówień w tym okresie.",
+        "awaitingApproval": "oczekuje na zatwierdzenie",
+        "actions": {
+          "markPaid": "Oznacz jako opłacone",
+          "cancelOrder": "Anuluj",
+          "approve": "Zatwierdź",
+          "reject": "Odrzuć"
+        },
+        "confirm": {
+          "approveTitle": "Oznaczyć to zamówienie jako opłacone?",
+          "approve": "Oznaczyć to zamówienie jako opłacone i aktywować plan?",
+          "cancelTitle": "Anulować to zamówienie?",
+          "cancel": "Anulować to oczekujące zamówienie? Zostanie oznaczone jako anulowane i zniknie z należności."
+        },
+        "reject": {
+          "title": "Odrzuć {order}",
+          "reason": "Powód (opcjonalnie)"
+        },
+        "awaiting": {
+          "title": "Oczekuje na zatwierdzenie",
+          "ref": "Nr ref.:",
+          "proofAttached": "Załączono dowód płatności"
+        }
+      },
+      "orderAnalytics": {
+        "title": "Analityka zamówień",
+        "eyebrow": "Administracja · Rozliczenia i plany · Analityka zamówień",
+        "titleFirst": "Zamówienia",
+        "titleSecond": "analityka",
+        "description": "Subskrypcje, zmiany na wyższe i niższe plany, dodatki i anulowania: co napędza ruch netto przychodu na całej platformie.",
+        "window": "Okres",
+        "viewLedger": "Zobacz rejestr",
+        "kpi": {
+          "total": "Łączna liczba zamówień",
+          "newMrr": "Netto nowy MRR",
+          "paid": "{count} opłaconych",
+          "lostMrr": "Utracony MRR",
+          "cancels": "{count} anulowań",
+          "aov": "Średnia wartość zamówienia",
+          "paidOrders": "opłacone zamówienia",
+          "attach": "Dołączenie dodatków",
+          "attachLabel": "{addons} dodatków / {total}",
+          "conversion": "Współczynnik konwersji",
+          "conversionHint": "opłacone zamówienia z {signups} rejestracji"
+        },
+        "motion": {
+          "kicker": "Ruch zamówień",
+          "title": "Opłacone zamówienia i anulowania",
+          "paid": "Opłacone",
+          "cancelled": "Anulowane lub nieudane"
+        },
+        "typeMix": {
+          "kicker": "Struktura typów zamówień",
+          "title": "Wg typu"
+        },
+        "addons": {
+          "kicker": "Sprzedane dodatki",
+          "title": "Najlepsze wyniki",
+          "empty": "Brak zamówień dodatków w tym okresie."
+        },
+        "funnel": {
+          "kicker": "Lejek konwersji",
+          "title": "Od rejestracji do płatności",
+          "note": "Pokazano tylko liczone etapy."
+        },
+        "countries": {
+          "kicker": "Wg kraju",
+          "title": "Najważniejsze rynki",
+          "empty": "Nie wprowadzono jeszcze kraju rozliczeniowego."
+        },
+        "cohorts": {
+          "kicker": "Retencja kohort",
+          "title": "% przestrzeni roboczych nadal aktywnych po N miesiącach",
+          "last": "ostatnie 6 kohort",
+          "emptyTitle": "Brak rejestracji przestrzeni roboczych",
+          "empty": "Kohorty pojawią się, gdy przestrzenie robocze się zarejestrują."
+        }
+      },
+      "history": {
+        "title": "Historia rozliczeń",
+        "eyebrow": "Administracja · Rozliczenia i plany · Historia rozliczeń",
+        "titleFirst": "Rozliczenia",
+        "titleSecond": "historia",
+        "description": "Wszystkie zdarzenia płatności przetworzone przez platformę — obciążenia, zwroty i ponowienia we wszystkich przestrzeniach roboczych.",
+        "window": "Okres",
+        "kpi": {
+          "gross": "Przychód brutto",
+          "vsPrev": "vs poprzedni okres",
+          "charges": "Udane obciążenia",
+          "successRate": "{pct}% skuteczności",
+          "failed": "Nieudane",
+          "dunning": "do ponowienia / windykacji",
+          "refunds": "Wystawione zwroty",
+          "refundsTotal": "{amount} łącznie",
+          "chargebacks": "Chargebacki",
+          "disputed": "{amount} w sporze"
+        },
+        "trend": {
+          "kicker": "Trend",
+          "title": "Dzienne obciążenia i zwroty",
+          "charges": "Obciążenia",
+          "refunds": "Zwroty"
+        },
+        "statusFilter": "Filtruj według statusu płatności",
+        "statuses": {
+          "all": "Wszystkie",
+          "paid": "Udane",
+          "failed": "Nieudane",
+          "refunded": "Zwrócone",
+          "pending": "Oczekujące"
+        },
+        "gateway": "Bramka",
+        "allGateways": "Wszystkie bramki",
+        "search": "Szukaj po numerze zamówienia, przestrzeni roboczej, kliencie…",
+        "noun": "zdarzenia",
+        "col": {
+          "date": "Data",
+          "order": "Nr zamówienia",
+          "workspace": "Przestrzeń robocza",
+          "gateway": "Bramka",
+          "plan": "Plan",
+          "amount": "Kwota",
+          "status": "Status",
+          "actions": "Akcje"
+        },
+        "empty": "Brak pasujących zdarzeń płatności."
+      },
+      "billingAnalytics": {
+        "title": "Analityka rozliczeń",
+        "eyebrow": "Administracja · Rozliczenia i plany · Analityka rozliczeń",
+        "titleFirst": "Rozliczenia",
+        "titleSecond": "analityka",
+        "description": "Przepływy pieniężne, skuteczność płatności, podział na bramki i trendy zwrotów na całej platformie.",
+        "window": "Okres",
+        "viewLedger": "Zobacz rejestr",
+        "kpi": {
+          "gross": "Przychód brutto",
+          "net": "Przychód netto",
+          "netPct": "{pct}% netto",
+          "success": "Skuteczność autoryzacji",
+          "failed": "Nieudane",
+          "events": "{count, plural, one {# zdarzenie} few {# zdarzenia} many {# zdarzeń} other {# zdarzenia}}",
+          "refunds": "Zwroty",
+          "chargebacks": "Chargebacki",
+          "disputes": "{count, plural, one {# spór} few {# spory} many {# sporów} other {# sporu}}"
+        },
+        "cashFlow": {
+          "kicker": "Przepływ środków",
+          "title": "Obciążenia, zwroty i błędy",
+          "charges": "Obciążenia",
+          "refunds": "Zwroty",
+          "failed": "Nieudane"
+        },
+        "gatewayShare": {
+          "title": "Udział bramek",
+          "hint": "Przychód z płatności wg dostawcy"
+        },
+        "topPayers": {
+          "title": "Przestrzenie robocze z najwyższymi płatnościami",
+          "hint": "Najwyższe wydatki w okresie",
+          "all": "Wszystkie przestrzenie robocze",
+          "workspace": "Przestrzeń robocza",
+          "orders": "Zamówienia",
+          "total": "Razem",
+          "empty": "Brak opłaconych zamówień w tym okresie.",
+          "unknown": "Usunięta przestrzeń robocza"
+        },
+        "statusMix": {
+          "title": "Struktura statusów zamówień",
+          "hint": "Liczba wg etapu cyklu życia"
+        }
+      },
+      "invoices": {
+        "title": "Faktury",
+        "eyebrow": "Administracja · Rozliczenia i plany · Faktury",
+        "titleFirst": "Wszystkie",
+        "titleSecond": "faktury",
+        "description": "Każde zamówienie jako dokument rozliczeniowy. Filtruj według statusu, otwieraj i drukuj fakturę, oznaczaj jako opłaconą, anuluj lub wystaw ręcznie.",
+        "window": "Okres",
+        "windows": {
+          "all": "Cały czas",
+          "this_month": "Ten miesiąc",
+          "last_month": "Poprzedni miesiąc",
+          "this_quarter": "Ten kwartał",
+          "this_year": "Ten rok"
+        },
+        "kpi": {
+          "total": "Łączna liczba faktur",
+          "allTime": "cały czas",
+          "paid": "Opłacone",
+          "outstanding": "Należności",
+          "due": "{amount} do zapłaty",
+          "overdue": "Przeterminowane",
+          "overdueHint": "ponad 15 dni po terminie",
+          "thisMonth": "Ten miesiąc",
+          "mom": "MoM"
+        },
+        "statusFilter": "Filtruj według statusu faktury",
+        "statuses": {
+          "all": "Wszystkie",
+          "paid": "Opłacone",
+          "outstanding": "Należności",
+          "overdue": "Przeterminowane",
+          "refunded": "Zwrócone",
+          "void": "Anulowane"
+        },
+        "badges": {
+          "paid": "opłacone",
+          "outstanding": "należności",
+          "overdue": "przeterminowane",
+          "refunded": "zwrócone",
+          "void": "anulowane"
+        },
+        "search": "Szukaj po numerze faktury, przestrzeni roboczej, właścicielu…",
+        "noun": "faktury",
+        "col": {
+          "number": "Nr faktury",
+          "issued": "Data wystawienia",
+          "due": "Termin płatności",
+          "workspace": "Przestrzeń robocza",
+          "item": "Pozycja",
+          "amount": "Kwota",
+          "status": "Status",
+          "view": "Podgląd",
+          "actions": "Akcje"
+        },
+        "daysLate": "{days} dni po terminie",
+        "refunded": "zwrócone",
+        "viewInvoice": "Zobacz fakturę",
+        "rowMenu": "Akcje dla {number}",
+        "empty": "Brak faktur w tym okresie.",
+        "actions": {
+          "view": "Podgląd",
+          "markPaid": "Oznacz jako opłaconą",
+          "void": "Anuluj fakturę",
+          "delete": "Usuń"
+        },
+        "confirm": {
+          "markPaidTitle": "Oznaczyć tę fakturę jako opłaconą?",
+          "markPaid": "Oznaczyć tę fakturę jako opłaconą? Zastosowany zostanie także plan, dodatek lub kredyt portfela, za który została wystawiona.",
+          "markPaidManual": "Oznaczyć tę ręczną fakturę jako opłaconą? Zapisana zostanie tylko płatność.",
+          "voidTitle": "Anulować tę fakturę?",
+          "void": "Anulować tę fakturę? Pozostanie w rejestrze, ale zostanie anulowana.",
+          "deleteTitle": "Usunąć tę fakturę?",
+          "delete": "Trwale usunąć tę fakturę? Tej operacji nie można cofnąć."
+        },
+        "manual": {
+          "tag": "ręczna",
+          "open": "Faktura ręczna",
+          "eyebrow": "Faktury",
+          "title": "Faktura ręczna",
+          "workspace": "Przestrzeń robocza",
+          "chooseWorkspace": "Wybierz przestrzeń roboczą",
+          "customerName": "Nazwa klienta",
+          "customerNameHint": "Domyślnie nazwa przestrzeni roboczej.",
+          "customerEmail": "E-mail klienta",
+          "description": "Opis",
+          "amount": "Kwota",
+          "currency": "Waluta",
+          "status": "Status",
+          "statuses": {
+            "pending": "Oczekująca",
+            "paid": "Opłacona"
+          },
+          "issuedAt": "Data wystawienia",
+          "issuedAtHint": "Pozostaw puste dla dzisiejszej daty. Data z przeszłości wystawia fakturę wstecz.",
+          "submit": "Utwórz fakturę",
+          "created": "Utworzono fakturę ręczną {number}."
+        }
+      },
+      "invoice": {
+        "title": "Faktura",
+        "print": "Drukuj",
+        "downloadPdf": "Pobierz PDF",
+        "banner": {
+          "invoice": "Faktura nr {number}",
+          "issued": "Wystawiona {date}",
+          "settled": "rozliczona {date}",
+          "paidInFull": "opłacona w całości"
+        },
+        "taxInvoice": "Faktura podatkowa",
+        "invoiceWord": "FAKTURA",
+        "taxIdLabel": "GSTIN/VAT",
+        "number": "Nr faktury",
+        "issueDate": "Data wystawienia",
+        "paidDate": "Data płatności",
+        "status": "Status",
+        "billTo": "Odbiorca",
+        "payment": "Płatność",
+        "method": "Metoda",
+        "txn": "ID transakcji",
+        "captured": "Zaksięgowano",
+        "currency": "Waluta",
+        "coupon": "Kupon",
+        "description": "Opis",
+        "qty": "Ilość",
+        "unit": "Cena jedn.",
+        "total": "Razem",
+        "discount": "Zniżka",
+        "code": "kod",
+        "subtotal": "Suma częściowa",
+        "amountPaid": "Zapłacono",
+        "balanceDue": "Do zapłaty",
+        "notes": "Uwagi",
+        "notesText": "Dziękujemy za współpracę. Ta faktura dotyczy wskazanego powyżej zamówienia. W sprawach rozliczeniowych podaj numer faktury.",
+        "help": "Potrzebujesz pomocy?",
+        "helpFallback": "Skontaktuj się z administratorem platformy.",
+        "refundNote": "W sprawie wsparcia lub zwrotów napisz do nas w ciągu {days} dni od płatności.",
+        "regNo": "Nr rej.",
+        "computerGenerated": "To faktura wygenerowana komputerowo, bez podpisu."
+      },
+      "settings": {
+        "title": "Ustawienia rozliczeń",
+        "eyebrow": "Administracja · Rozliczenia i plany · Ustawienia",
+        "titleFirst": "Rozliczenia",
+        "titleSecond": "ustawienia",
+        "description": "Wszystko, co odczytują strony cennika i płatności: podatek, okno zwrotu, zniżka roczna, automatyczne odnawianie, dane Twojej faktury i lista krajów. Zmiany obowiązują po następnym załadowaniu strony.",
+        "previewPlans": "Podgląd strony planów",
+        "readOnly": "Tylko superadministrator może zmieniać ustawienia rozliczeń.",
+        "conflict": "Ktoś inny zmienił te ustawienia. Zostały wczytane ponownie; sprawdź je i zapisz jeszcze raz.",
+        "saved": "Zapisano ustawienia rozliczeń.",
+        "save": "Zapisz ustawienia",
+        "tax": {
+          "title": "Podatek",
+          "hint": "Stosowany do każdej sumy częściowej płatności. Wyłącz, jeśli wyświetlane ceny zawierają podatek.",
+          "rate": "Stawka (%)",
+          "label": "Etykieta",
+          "labelPlaceholder": "GST / VAT / podatek od sprzedaży"
+        },
+        "company": {
+          "title": "Dane firmy i rozliczeniowe",
+          "hint": "Dane prawne Twojej firmy. Pojawiają się na każdej fakturze: blok „wystawca”, numer podatkowy i stopka.",
+          "name": "Pełna nazwa firmy",
+          "taxId": "Numer podatkowy (GSTIN / VAT)",
+          "address": "Adres siedziby",
+          "regNo": "Nr rejestracyjny / CIN",
+          "email": "E-mail do rozliczeń",
+          "phone": "Telefon wsparcia"
+        },
+        "logo": {
+          "title": "Logo na fakturze",
+          "hint": "Wyświetlane u góry każdej faktury i paragonu. PNG, JPG, SVG lub WebP, do {kb} KB. Pozostaw puste, aby użyć logo strony.",
+          "none": "Brak logo",
+          "choose": "Wybierz plik logo",
+          "remove": "Usuń obecne logo (użyj logo strony)",
+          "fallback": "Obecnie jako zastępcze używane jest logo marki strony.",
+          "tooBig": "Logo może mieć maksymalnie {kb} KB."
+        },
+        "refund": {
+          "title": "Gwarancja zwrotu pieniędzy",
+          "hint": "Gdy włączone, płatność pokazuje okres gwarancji pod podsumowaniem zamówienia. Wyłącz, aby ukryć wszędzie.",
+          "days": "Okres (dni)"
+        },
+        "yearly": {
+          "title": "Przełącznik rozliczenia rocznego",
+          "hint": "Pokazuje przełącznik Miesięcznie / Rocznie na stronie cennika. Ukryj go całkowicie, jeśli każdy plan jest tylko miesięczny.",
+          "discount": "Zniżka roczna (%)",
+          "formula": "Cena roczna = miesięczna × 12 × (1 − zniżka%)."
+        },
+        "recurring": {
+          "title": "Subskrypcje z automatycznym odnawianiem",
+          "hint": "Gdy włączone, płatne plany czasowe (miesięczne lub roczne) odnawiają się automatycznie: bramka obciąża kartę w każdym cyklu, a ważność planu przedłuża się sama. Plany bezpłatne, dożywotnie i na indywidualną wycenę nigdy się nie odnawiają, a bramka bez obsługi cykliczności pozostaje przy jednorazowej płatności. Wyłącz, aby obciążać każdy zakup jednorazowo.",
+          "graceDays": "Okres karencji (dni)",
+          "graceHint": "Gdy obciążenie przy automatycznym odnowieniu się nie powiedzie, plan lub dodatek pozostaje aktywny przez tyle dni po końcu okresu, podczas gdy bramka ponawia próbę. 0 wyłącza okres karencji.",
+          "gateways": "Bramki obsługujące automatyczne odnawianie",
+          "note": "Braintree odnawia automatycznie dopiero po ustawieniu Plan ID w danych logowania bramki. Square rozlicza każdy cykl, wysyłając klientowi fakturę e-mailem (bez cichego obciążenia karty). Każde odnowienie wymaga ustawienia adresu URL webhooka bramki w panelu dostawcy."
+        },
+        "countries": {
+          "title": "Lista krajów w płatności",
+          "hint": "Opcje w polu wyboru kraju w formularzu rozliczeniowym płatności, używane w adresie na fakturze. Jeden kraj w wierszu; kolejność jest zachowana."
+        },
+        "links": {
+          "coupons": "Kupony",
+          "couponsTitle": "Zarządzaj kodami rabatowymi",
+          "couponsHint": "Dodawaj, edytuj lub wyłączaj kupony.",
+          "faqs": "Pytania",
+          "faqsTitle": "Edytuj pytania ze strony cennika",
+          "faqsHint": "Elementy akordeonu wyświetlane pod planami.",
+          "configured": "Skonfigurowano: {count}."
+        }
+      }
+    },
+    "offline": {
+      "eyebrow": {
+        "bank_transfer": "Płatność / Przelew bankowy",
+        "offline": "Płatność / offline"
+      },
+      "title": {
+        "bank_transfer": "Zrealizuj przelew",
+        "offline": "Skontaktuj się z nami, aby sfinalizować to zamówienie"
+      },
+      "intro": {
+        "bank_transfer": "Wyślij <strong>{amount}</strong> na poniższe konto. Jako tytuł przelewu podaj <mono>{ref}</mono>, abyśmy mogli przypisać wpłatę do Twojego zamówienia.",
+        "offline": "Zamówienie <mono>{ref}</mono> · <strong>{amount}</strong> · rozliczane w walucie {currency}"
+      },
+      "instructions": "Instrukcja",
+      "referenceNote": "<strong>Tytuł przelewu:</strong> podaj <mono>{ref}</mono> w przelewie, a następnie prześlij poniżej potwierdzenie płatności. Plan zostanie aktywowany po zweryfikowaniu wpłaty przez nasz zespół.",
+      "proofTitle": "Prześlij potwierdzenie płatności",
+      "proofHelp": "Już zapłacono? Prześlij potwierdzenie i numer referencyjny, abyśmy mogli zweryfikować płatność i aktywować plan.",
+      "later": {
+        "bank_transfer": "Wysłano płatność — potwierdzenie prześlę później",
+        "offline": "Rozumiem — prześlę potwierdzenie później"
+      }
+    },
+    "proof": {
+      "file": "Zrzut ekranu płatności / potwierdzenie",
+      "fileHint": "JPG, PNG, WEBP lub PDF · do 4 MB",
+      "reference": "Numer referencyjny / UTR",
+      "referencePlaceholder": "np. UTR / identyfikator transakcji",
+      "note": "Uwaga (opcjonalnie)",
+      "notePlaceholder": "Wszystko, o czym powinniśmy wiedzieć w związku z tą płatnością",
+      "submit": "Prześlij potwierdzenie płatności",
+      "sending": "Przesyłanie",
+      "chooseFile": "Wybierz potwierdzenie do przesłania.",
+      "tooLarge": "Ten plik jest większy niż 4 MB.",
+      "rejected": "Ten typ pliku jest niedozwolony. Użyj pliku JPG, PNG, WEBP lub PDF.",
+      "closed": "Potwierdzenia płatności nie można już przesłać dla tego zamówienia.",
+      "failed": "Nie udało się przesłać pliku. Spróbuj ponownie."
+    }
+  }
+}

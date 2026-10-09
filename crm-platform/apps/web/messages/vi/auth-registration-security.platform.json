@@ -1,0 +1,1809 @@
+{
+  "auth-registration-security": {
+    "platform": {
+      "shell": {
+        "brand": "CRM",
+        "title": "Bảng điều khiển nền tảng",
+        "skipToContent": "Chuyển đến nội dung",
+        "navLabel": "Điều hướng bảng điều khiển",
+        "openMenu": "Mở menu",
+        "closeMenu": "Đóng menu",
+        "language": "Ngôn ngữ",
+        "themeToLight": "Chuyển sang giao diện sáng",
+        "themeToDark": "Chuyển sang giao diện tối",
+        "accountLink": "Tài khoản và bảo mật ({email})",
+        "signOut": "Đăng xuất",
+        "signingOut": "Đang đăng xuất",
+        "redirecting": "Đang mở thiết lập hai yếu tố",
+        "roles": {
+          "super_admin": "Siêu quản trị viên",
+          "support": "Hỗ trợ",
+          "auditor": "Kiểm toán viên"
+        },
+        "mfaRequired": {
+          "title": "Yêu cầu xác thực hai yếu tố",
+          "body": "Siêu quản trị viên phải bật ứng dụng xác thực trước khi dùng bảng điều khiển. Hoàn tất thiết lập bên dưới để mở khóa mọi trang."
+        }
+      },
+      "nav": {
+        "securityCenter": "Trung tâm bảo mật",
+        "securityEvents": "Sự kiện bảo mật",
+        "registration": "Chính sách đăng ký",
+        "socialLogin": "Đăng nhập mạng xã hội và captcha",
+        "authPages": "Trang xác thực",
+        "plans": "Gói",
+        "account": "Tài khoản và hai yếu tố",
+        "groups": {
+          "security": "Bảo mật",
+          "guestPages": "Đăng nhập và đăng ký",
+          "plans": "Gói",
+          "account": "Tài khoản của bạn"
+        }
+      },
+      "common": {
+        "copy": "Sao chép",
+        "copied": "Đã sao chép",
+        "copyFailed": "Không thể sao chép",
+        "loading": "Đang tải",
+        "retry": "Thử lại",
+        "requestId": "Mã yêu cầu",
+        "errors": {
+          "forbidden": "Vai trò của bạn không được phép thực hiện việc này.",
+          "request": "Yêu cầu bị từ chối. Hãy tải lại trang và thử lại.",
+          "unexpected": "Đã xảy ra lỗi ở phía chúng tôi. Hãy thử lại sau giây lát."
+        },
+        "readOnly": {
+          "superAdmin": "Chỉ siêu quản trị viên mới có thể thay đổi các cài đặt này. Vai trò của bạn ({role}) chỉ có thể xem.",
+          "superAdminSupport": "Chỉ siêu quản trị viên và bộ phận hỗ trợ mới có thể thay đổi các cài đặt này. Vai trò của bạn ({role}) chỉ có thể xem."
+        },
+        "copyWhat": "Sao chép {what}"
+      },
+      "login": {
+        "title": "Đăng nhập nhà điều hành",
+        "intro": "Bảng điều khiển này dành cho những người vận hành nền tảng. Người dùng không gian làm việc đăng nhập ở trang đăng nhập chính.",
+        "requestId": "Mã yêu cầu",
+        "submit": "Đăng nhập",
+        "submitting": "Đang đăng nhập",
+        "fields": {
+          "email": "Email",
+          "emailPlaceholder": "you@company.com",
+          "password": "Mật khẩu",
+          "showPassword": "Hiện mật khẩu",
+          "hidePassword": "Ẩn mật khẩu"
+        },
+        "errors": {
+          "email": "Nhập địa chỉ email hợp lệ.",
+          "passwordRequired": "Nhập mật khẩu của bạn.",
+          "captchaRequired": "Đánh dấu vào ô để cho thấy bạn không phải người máy.",
+          "codeFormat": "Nhập 6 chữ số từ ứng dụng xác thực của bạn.",
+          "recoveryFormat": "Mã khôi phục gồm 8 đến 32 chữ cái, chữ số hoặc dấu gạch ngang."
+        },
+        "notices": {
+          "expired": "Phiên của bạn đã kết thúc. Hãy đăng nhập lại để tiếp tục.",
+          "idle": "Bạn đã bị đăng xuất sau {minutes, plural, other {# phút}} không hoạt động. Hãy đăng nhập lại để tiếp tục."
+        },
+        "problems": {
+          "invalid": "Thông tin đăng nhập không khớp.",
+          "invalidCode": "Mã không hợp lệ. Hãy kiểm tra mã rồi thử lại.",
+          "locked": "Quá nhiều lần thất bại. Đăng nhập tạm dừng một thời gian.",
+          "tryAgainIn": "Hãy thử lại sau {time}",
+          "ipBlocked": "Không cho phép truy cập từ {ip}.",
+          "ipBlockedUnknown": "Không cho phép truy cập từ địa chỉ này.",
+          "ipBlockedHelp": "Danh sách cho phép của nhà điều hành không có địa chỉ này. Hãy nhờ siêu quản trị viên thêm vào.",
+          "captcha": "Kiểm tra captcha không thành công. Hãy hoàn tất rồi thử lại.",
+          "challengeExpired": "Phiên đăng nhập đó đã hết hạn. Hãy nhập lại mật khẩu.",
+          "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+          "unexpected": "Không thể đăng nhập cho bạn. Hãy thử lại sau giây lát.",
+          "lockedWait": "Quá nhiều lần thất bại. Hãy thử lại sau {minutes, plural, other {# phút}}."
+        },
+        "captcha": {
+          "loadFailed": "Không thể tải captcha. Hãy kiểm tra kết nối hoặc trình chặn nội dung, rồi thử lại.",
+          "retry": "Thử lại captcha",
+          "v3Notice": "Trang này được bảo vệ bằng kiểm tra captcha ẩn."
+        },
+        "mfa": {
+          "title": "Kiểm tra hai yếu tố",
+          "intro": "Nhập mã 6 chữ số từ ứng dụng xác thực của bạn.",
+          "recoveryIntro": "Nhập một trong các mã khôi phục của bạn. Mỗi mã chỉ dùng một lần.",
+          "codeLabel": "Mã xác thực",
+          "codeHint": "Mã thay đổi sau mỗi 30 giây.",
+          "recoveryLabel": "Mã khôi phục",
+          "recoveryHint": "Chữ cái, chữ số và dấu gạch ngang, đúng như đã lưu.",
+          "windowLeft": "Phiên đăng nhập này mở trong {time}.",
+          "windowClosed": "Cửa sổ đăng nhập này đã đóng. Hãy quay lại và nhập lại mật khẩu.",
+          "verify": "Xác minh và đăng nhập",
+          "verifying": "Đang kiểm tra",
+          "useRecovery": "Dùng mã khôi phục",
+          "useAuthenticator": "Dùng ứng dụng xác thực",
+          "back": "Quay lại đăng nhập"
+        }
+      },
+      "mfa": {
+        "eyebrow": "Tài khoản của bạn",
+        "title": "Xác thực hai yếu tố",
+        "description": "Bảo vệ {email} bằng ứng dụng xác thực. Tài khoản nhà điều hành là tài khoản có độ tin cậy cao nhất trên nền tảng.",
+        "requestId": "Mã yêu cầu",
+        "status": {
+          "title": "Ứng dụng xác thực",
+          "on": "Bật",
+          "body": "Xác thực hai yếu tố đang bật cho tài khoản này. Bạn sẽ được yêu cầu nhập mã mỗi lần đăng nhập. Mã khôi phục đã hiển thị một lần khi bạn bật tính năng này."
+        },
+        "intro": {
+          "title": "Thiết lập ứng dụng xác thực",
+          "step1": "Cài đặt ứng dụng xác thực như Google Authenticator, Microsoft Authenticator hoặc 1Password.",
+          "step2": "Quét mã QR chúng tôi hiển thị, hoặc nhập khóa thiết lập thủ công.",
+          "step3": "Nhập mã 6 chữ số mà ứng dụng hiển thị để xác nhận. Sau đó bạn sẽ nhận mã khôi phục.",
+          "begin": "Bắt đầu thiết lập",
+          "starting": "Đang chuẩn bị"
+        },
+        "setup": {
+          "qrLabel": "Mã QR cho ứng dụng xác thực của bạn",
+          "title": "Quét rồi xác nhận",
+          "scan": "Mở ứng dụng xác thực, thêm tài khoản và quét mã này. Mã được vẽ trong trình duyệt của bạn và không bao giờ gửi tới trang khác.",
+          "manualTitle": "Không quét được?",
+          "manualHint": "Hãy nhập khóa thiết lập này vào ứng dụng. Theo thời gian, 6 chữ số.",
+          "codeLabel": "Mã 6 chữ số",
+          "codeHint": "Nhập mã mà ứng dụng đang hiển thị.",
+          "enable": "Bật xác thực hai yếu tố",
+          "enabling": "Đang bật",
+          "cancel": "Hủy thiết lập"
+        },
+        "codes": {
+          "enabled": "Đã bật xác thực hai yếu tố.",
+          "title": "Lưu mã khôi phục của bạn",
+          "body": "Nếu bạn mất điện thoại, mỗi mã này cho phép bạn đăng nhập một lần. Chúng chỉ hiển thị lúc này. Hãy lưu ở nơi an toàn, tách biệt với mật khẩu.",
+          "copyAll": "Sao chép tất cả",
+          "download": "Tải xuống dạng tệp văn bản",
+          "saved": "Tôi đã lưu các mã khôi phục này an toàn.",
+          "continue": "Tiếp tục đến bảng điều khiển",
+          "fileHeader": "Mã khôi phục bảng điều khiển nền tảng cho {email}. Mỗi mã chỉ dùng một lần."
+        },
+        "errors": {
+          "unexpected": "Không thể hoàn tất bước đó. Hãy thử lại sau giây lát.",
+          "codeFormat": "Nhập 6 chữ số hiển thị trong ứng dụng của bạn.",
+          "codeInvalid": "Mã không hợp lệ. Hãy kiểm tra đồng hồ trên điện thoại và thử mã tiếp theo.",
+          "setupExpired": "Phiên thiết lập đã hết hạn. Hãy bắt đầu lại.",
+          "locked": "Quá nhiều lần thất bại. Hãy đợi một lúc rồi thử lại.",
+          "lockedWait": "Quá nhiều lần thất bại. Hãy thử lại sau {minutes, plural, other {# phút}}."
+        }
+      },
+      "security": {
+        "kicker": "Trung tâm bảo mật",
+        "title": "Bảo mật và tuân thủ",
+        "description": "Bảo vệ quyền truy cập của nhà điều hành, việc gửi WhatsApp, thiết bị và webhook. Mỗi thay đổi được lưu thành một bản cập nhật và ghi vào nhật ký sự kiện bảo mật.",
+        "viewEvents": "Xem sự kiện bảo mật",
+        "save": "Lưu cài đặt",
+        "saving": "Đang lưu",
+        "saved": "{count, plural, other {Đã lưu # cài đặt}}",
+        "rejected": "Chưa lưu gì. {count, plural, other {# trường bị từ chối}}.",
+        "requestId": "Mã yêu cầu",
+        "unsaved": "{count, plural, other {# thay đổi chưa lưu}}",
+        "discard": "Hủy thay đổi",
+        "errors": {
+          "forbidden": "Vai trò của bạn không được phép thay đổi các cài đặt này.",
+          "unexpected": "Không thể lưu cài đặt. Hãy thử lại sau giây lát."
+        },
+        "tabs": {
+          "summary": "Tóm tắt",
+          "login": "Đăng nhập và MFA",
+          "whatsapp": "Rào chắn WhatsApp",
+          "abuse": "Bộ lọc lạm dụng",
+          "api": "API và webhook",
+          "devices": "Thiết bị",
+          "danger": "Vùng nguy hiểm"
+        },
+        "common": {
+          "range": "Cho phép: từ {min} đến {max}.",
+          "rangeWithZero": "Cho phép: 0 (tắt), hoặc từ {min} đến {max}.",
+          "blankKeeps": "Để trống để giữ giá trị đã lưu."
+        },
+        "problems": {
+          "range": "Nhập số nguyên từ {min} đến {max}.",
+          "rangeWithZero": "Nhập 0, hoặc số nguyên từ {min} đến {max}.",
+          "tooMany": "Tối đa {max} mục.",
+          "tooLong": "Mỗi mục tối đa {max} ký tự.",
+          "invalidEntry": "{entry} không phải địa chỉ hoặc dải hợp lệ.",
+          "totalTooLong": "Giữ danh sách dưới {max} ký tự tổng cộng."
+        },
+        "kpis": {
+          "score": {
+            "label": "Điểm bảo mật",
+            "strong": "kiểm soát mạnh đang hoạt động",
+            "attention": "cần chú ý"
+          },
+          "openRisks": {
+            "label": "Rủi ro đang mở",
+            "note": "{count} ưu tiên cao"
+          },
+          "blocked": {
+            "label": "Lượt bị chặn"
+          },
+          "last24h": "24 giờ qua",
+          "warnings": {
+            "label": "Cảnh báo"
+          },
+          "mfa": {
+            "label": "Phạm vi MFA của nhà điều hành",
+            "note": "{enrolled}/{total} nhà điều hành đã đăng ký"
+          },
+          "webhooks": {
+            "label": "Webhook lỗi",
+            "normal": "bình thường",
+            "review": "cần xem xét"
+          }
+        },
+        "risks": {
+          "kicker": "Hàng đợi ưu tiên",
+          "title": "Mục rủi ro cần xem xét",
+          "seeAll": "Xem tất cả lỗi",
+          "empty": "Mọi thứ ổn. Không có lỗi hay cảnh báo nào trong 7 ngày qua.",
+          "columns": {
+            "severity": "Mức độ",
+            "signal": "Tín hiệu",
+            "workspace": "Không gian làm việc",
+            "owner": "Chủ sở hữu",
+            "action": "Hành động"
+          },
+          "severity": {
+            "high": "Cao",
+            "medium": "Trung bình",
+            "watch": "Theo dõi"
+          },
+          "platform": "Nền tảng",
+          "inspect": "Kiểm tra",
+          "platformOf": "Nền tảng {app}",
+          "owner": {
+            "system": "Hệ thống",
+            "types": {
+              "user": "Người dùng",
+              "platform_operator": "Nhà điều hành nền tảng"
+            }
+          },
+          "noWorkspace": "Không có không gian làm việc"
+        },
+        "coverage": {
+          "kicker": "Phạm vi bao phủ",
+          "title": "Kiểm soát đã bật",
+          "buckets": {
+            "admin_access": "Quyền truy cập quản trị",
+            "send_abuse": "Ngăn chặn lạm dụng WhatsApp",
+            "api_hardening": "Tăng cường bảo mật API",
+            "incident_readiness": "Sẵn sàng ứng phó sự cố"
+          }
+        },
+        "quickActions": {
+          "kicker": "Thao tác nhanh",
+          "rotate": "Xoay vòng khóa bí mật webhook",
+          "forceReset": "Buộc đặt lại mật khẩu",
+          "resume": "Tiếp tục gửi",
+          "halt": "Dừng gửi khẩn cấp",
+          "scopeAll": "tất cả",
+          "scopeUsers": "tất cả người dùng",
+          "scopeGlobal": "toàn cục",
+          "halted": "đang bị dừng",
+          "superAdminOnly": "Chỉ siêu quản trị viên mới có thể chạy các thao tác này."
+        },
+        "enforcement": {
+          "kicker": "Kiểm soát trung thực",
+          "title": "Mỗi kiểm soát hiện làm gì",
+          "description": "Lưu một cài đặt không có nghĩa là nền tảng đã thực thi nó. Đã thực thi nghĩa là hiện có thứ kiểm tra nó, một phần nghĩa là chỉ một số luồng kiểm tra, dự trữ nghĩa là được lưu để dùng sau.",
+          "show": "Hiện",
+          "hide": "Ẩn",
+          "columns": {
+            "control": "Kiểm soát",
+            "consumer": "Nơi sử dụng",
+            "status": "Trạng thái"
+          },
+          "enforced": "Đã thực thi",
+          "partial": "Một phần",
+          "reserved": "Dự trữ"
+        },
+        "controls": {
+          "requireMfaForAll": {
+            "label": "Bắt buộc 2FA cho mọi người dùng",
+            "hint": "Mọi người dùng không gian làm việc phải thiết lập ứng dụng xác thực trước khi tiếp tục."
+          },
+          "requireMfaForAdmins": {
+            "label": "Bắt buộc 2FA cho quản trị viên",
+            "hint": "Người dùng có vai trò Quản trị viên ở bất kỳ không gian làm việc nào phải thiết lập ứng dụng xác thực."
+          },
+          "requireMfaForSuperAdmins": {
+            "label": "Bắt buộc 2FA cho siêu quản trị viên",
+            "hint": "Khi tắt, siêu quản trị viên nền tảng đăng nhập chỉ bằng mật khẩu. Khi bật, họ phải đăng ký và dùng ứng dụng xác thực."
+          },
+          "requireMfaForOwners": {
+            "label": "Bắt buộc 2FA cho chủ sở hữu không gian làm việc",
+            "hint": "Chủ sở hữu của mỗi không gian làm việc phải thiết lập ứng dụng xác thực."
+          },
+          "allowedMfaMethods": {
+            "label": "Phương thức 2FA được phép",
+            "hint": "Phải giữ chọn ít nhất một: nếu bỏ chọn hết, danh sách đã lưu được giữ nguyên. Hiện chỉ có ứng dụng xác thực.",
+            "methods": {
+              "totp": "Ứng dụng xác thực",
+              "email": "Mã qua email",
+              "telegram": "Bot Telegram"
+            }
+          },
+          "sessionTimeoutMinutes": {
+            "label": "Thời gian chờ phiên (phút)",
+            "hint": "Thời gian nhàn rỗi trước khi phiên đăng nhập trên trình duyệt kết thúc. Phiên giữ 30 ngày được miễn."
+          },
+          "maxConcurrentSessions": {
+            "label": "Số phiên đồng thời tối đa mỗi người dùng",
+            "hint": "Khi vượt quá, phiên cũ nhất sẽ bị đăng xuất."
+          },
+          "rememberMeEnabled": {
+            "label": "Cho phép giữ tôi đăng nhập",
+            "hint": "Tắt nghĩa là mọi phiên kết thúc khi đóng trình duyệt."
+          },
+          "lockoutAfterFailures": {
+            "label": "Số lần đăng nhập tối đa",
+            "hint": "Số lần đăng nhập thất bại trong khoảng thời gian này trước khi tài khoản bị tạm dừng."
+          },
+          "lockoutWindowMinutes": {
+            "label": "Khoảng thời gian khóa (phút)",
+            "hint": "Thời gian đếm các lần thất bại và thời gian tạm dừng kéo dài."
+          },
+          "passwordMinLength": {
+            "label": "Độ dài tối thiểu"
+          },
+          "passwordRequireUpper": {
+            "label": "Yêu cầu chữ hoa",
+            "short": "Chữ hoa"
+          },
+          "passwordRequireNumber": {
+            "label": "Yêu cầu chữ số",
+            "short": "Chữ số"
+          },
+          "passwordRequireSymbol": {
+            "label": "Yêu cầu ký hiệu",
+            "short": "Ký hiệu"
+          },
+          "passwordMaxAgeDays": {
+            "label": "Giới hạn tuổi mật khẩu (ngày)",
+            "hint": "0 nghĩa là mật khẩu không bao giờ hết hạn."
+          },
+          "waGuardrailsMode": {
+            "label": "Chế độ",
+            "options": {
+              "off": "Tắt (không kiểm tra)",
+              "monitor": "Giám sát (chỉ ghi nhật ký)",
+              "enforce": "Thực thi (chặn)"
+            },
+            "explain": {
+              "off": "Không chạy kiểm tra nào. Các giới hạn và bộ lọc trên các tab này không có tác dụng.",
+              "monitor": "Kiểm tra chạy và các kết quả khớp được ghi vào nhật ký sự kiện, nhưng không tin nhắn nào bị dừng. Dùng chế độ này để xác nhận quy tắc trước khi thực thi.",
+              "enforce": "Các tin nhắn khớp bị chặn trước khi gửi."
+            }
+          },
+          "waMaxSendsPerMinute": {
+            "label": "Số tin gửi tối đa mỗi phút",
+            "hint": "Theo từng không gian làm việc. 0 nghĩa là không giới hạn."
+          },
+          "waMaxSendsPerDay": {
+            "label": "Số tin gửi tối đa mỗi ngày",
+            "hint": "Theo từng không gian làm việc. 0 nghĩa là không giới hạn."
+          },
+          "waHoldOnLinksCount": {
+            "label": "Giữ lại nếu số liên kết vượt quá",
+            "hint": "Tin nhắn có nhiều liên kết hơn mức này sẽ bị giữ lại. 0 nghĩa là không giới hạn."
+          },
+          "waHoldOnScamPattern": {
+            "label": "Giữ lại tin gửi khớp mẫu lừa đảo",
+            "hint": "Cách diễn đạt về giải thưởng, tài khoản khẩn cấp và bẫy xác minh."
+          },
+          "waRequireTemplateReview": {
+            "label": "Bắt buộc duyệt mẫu trước khi gửi",
+            "hint": "Chỉ tính vào điểm bảo mật; hiện chưa có gì kiểm tra."
+          },
+          "abuseBlockFinanceTerms": {
+            "label": "Chặn các từ về tài chính và làm giàu nhanh",
+            "hint": "Mẫu đầu tư giả, cam kết lợi nhuận và chuyển hướng thanh toán."
+          },
+          "abuseBlockShortLinks": {
+            "label": "Chặn liên kết rút gọn và đáng ngờ",
+            "hint": "Các trình rút gọn liên kết che giấu nơi tin nhắn dẫn tới."
+          },
+          "abuseBlockKeywordList": {
+            "label": "Danh sách chặn từ khóa tùy chỉnh",
+            "hint": "Mỗi dòng một từ, hoặc cách nhau bằng dấu phẩy. Tổng tối đa 5.000 ký tự. Không phân biệt chữ hoa chữ thường. Tin nhắn khớp sẽ bị gắn cờ hoặc chặn tùy theo chế độ rào chắn.",
+            "placeholder": "forex\nkiếm tiền nhanh\ncam kết lợi nhuận"
+          },
+          "apiRateLimitPerMinute": {
+            "label": "Số yêu cầu API mỗi phút",
+            "hint": "Số yêu cầu tối đa mỗi phút mà một khóa API của không gian làm việc có thể gửi. Mỗi khóa có thể có giới hạn thấp hơn riêng, không bao giờ cao hơn."
+          },
+          "webhookSignatureRequired": {
+            "label": "Bắt buộc chữ ký HMAC",
+            "hint": "Không thể tạo điểm cuối webhook nếu không có khóa bí mật ký."
+          },
+          "webhookReplayWindowSec": {
+            "label": "Khoảng phát lại webhook (giây)",
+            "hint": "Được lưu để dùng sau; webhook đến từ nhà cung cấp đã được kiểm tra chữ ký."
+          },
+          "deviceTrustRequired": {
+            "label": "Bắt buộc trình duyệt tin cậy",
+            "hint": "Được lưu để dùng sau; hiện chưa có luồng tin cậy thiết bị."
+          },
+          "deviceLogoutOnInactiveDays": {
+            "label": "Tự động đăng xuất khi không hoạt động (ngày)",
+            "hint": "Thiết bị WhatsApp đã liên kết không thấy hoạt động trong khoảng này sẽ được đánh dấu ngắt kết nối. 0 nghĩa là không bao giờ."
+          },
+          "ipAllowlistEnabled": {
+            "label": "Bật danh sách cho phép",
+            "hint": "Chỉ các địa chỉ bên dưới mới truy cập được bảng điều khiển này."
+          },
+          "ipAllowlistCidrs": {
+            "label": "Địa chỉ được phép"
+          },
+          "alertOnNewDevice": {
+            "label": "Cảnh báo thiết bị mới",
+            "hint": "Gửi email cho người dùng khi có đăng nhập từ thiết bị chưa từng thấy."
+          },
+          "alertOnNewCountry": {
+            "label": "Cảnh báo đổi mạng",
+            "hint": "Gửi email cho người dùng khi có đăng nhập từ mạng khác thường lệ."
+          },
+          "alertChannel": {
+            "label": "Nơi gửi cảnh báo đăng nhập",
+            "hint": "Hiện chỉ gửi email; kênh WhatsApp được ghi nhận để dùng sau.",
+            "options": {
+              "email": "Email",
+              "whatsapp": "WhatsApp",
+              "both": "Email và WhatsApp"
+            }
+          },
+          "auditLogRetentionDays": {
+            "label": "Giữ sự kiện bảo mật trong (ngày)",
+            "hint": "0 nghĩa là giữ vĩnh viễn."
+          }
+        },
+        "panels": {
+          "login": {
+            "lockout": {
+              "kicker": "Bảo vệ đăng nhập",
+              "title": "Quy tắc khóa tài khoản"
+            },
+            "password": {
+              "title": "Quy tắc mật khẩu mới",
+              "note": "Áp dụng khi mật khẩu được tạo hoặc đổi, không bao giờ áp dụng cho đăng nhập hiện có, nên siết chặt không làm ai bị khóa."
+            },
+            "mfa": {
+              "kicker": "Xác thực đa yếu tố",
+              "title": "Thực thi 2FA",
+              "description": "Áp dụng cho người dùng không gian làm việc. Nhà điều hành nền tảng là siêu quản trị viên luôn cần 2FA."
+            }
+          },
+          "whatsapp": {
+            "master": {
+              "kicker": "Công tắc chính",
+              "title": "Thực thi rào chắn",
+              "description": "Các giới hạn và bộ lọc trên các tab này chỉ hoạt động theo chế độ này. Hãy chọn chế độ và đọc mô tả của nó."
+            },
+            "caps": {
+              "kicker": "Tốc độ gửi",
+              "title": "Giới hạn cứng"
+            },
+            "spam": {
+              "kicker": "Quy tắc nội dung",
+              "title": "Kiểm soát chống spam"
+            },
+            "health": {
+              "kicker": "Chất lượng tin cậy",
+              "title": "Tình trạng không gian làm việc",
+              "body": "Số lượng chặn và gắn cờ theo từng không gian làm việc sẽ xuất hiện ở đây khi các luồng gửi báo cáo. Cho đến lúc đó, hãy dùng nhật ký sự kiện bảo mật để xem rào chắn đã bắt được gì.",
+              "link": "Xem các không gian làm việc"
+            }
+          },
+          "abuse": {
+            "kicker": "Bộ lọc lạm dụng",
+            "title": "Ngăn chặn sử dụng bất hợp pháp",
+            "aside": {
+              "title": "Giữ chính sách này nghiêm ngặt",
+              "body": "Các bộ lọc này ngăn lừa đảo, phishing và quấy rối khỏi các kênh khách hàng của bạn sử dụng. Chúng theo chế độ rào chắn đặt trên tab Rào chắn WhatsApp."
+            }
+          },
+          "api": {
+            "traffic": {
+              "kicker": "Kiểm soát lưu lượng",
+              "title": "Giới hạn tốc độ"
+            },
+            "integrity": {
+              "kicker": "Phòng thủ webhook",
+              "title": "Tính toàn vẹn"
+            },
+            "allowlist": {
+              "kicker": "Danh sách IP cho phép",
+              "title": "Truy cập bảng điều khiển",
+              "description": "Chỉ giới hạn bảng điều khiển nhà điều hành này. Người dùng không gian làm việc, API công khai và webhook không bị ảnh hưởng. Danh sách trống cho phép mọi người vào, nên không bao giờ khóa hết nhà điều hành.",
+              "cidrs": "Địa chỉ được phép",
+              "cidrsHint": "Mỗi dòng một địa chỉ hoặc dải, ví dụ 203.0.113.9 hoặc 203.0.113.0/24. Cũng có thể dùng dấu phẩy.",
+              "placeholder": "203.0.113.0/24\n2001:db8::/32",
+              "yourIp": "Địa chỉ của bạn theo API:",
+              "yourIpUnknown": "Không thể phát hiện địa chỉ của bạn, nên chúng tôi không thể cảnh báo bạn về việc tự khóa mình.",
+              "addMine": "Thêm IP của tôi",
+              "alreadyListed": "Đã có trong danh sách",
+              "lockoutWarning": "Địa chỉ {ip} của bạn không có trong danh sách này. Lưu sẽ khóa bạn ra ngoài nên máy chủ sẽ từ chối. Hãy thêm địa chỉ của bạn trước."
+            }
+          },
+          "devices": {
+            "trust": {
+              "kicker": "Tính toàn vẹn thiết bị",
+              "title": "Chính sách tin cậy và phiên"
+            },
+            "alerts": {
+              "kicker": "Kênh cảnh báo đăng nhập",
+              "title": "Nơi gửi cảnh báo"
+            },
+            "audit": {
+              "kicker": "Nhật ký kiểm toán",
+              "title": "Lưu giữ",
+              "description": "Sự kiện bảo mật cũ hơn mức này sẽ bị dọn khi tác vụ dọn dẹp được tạo.",
+              "link": "Mở nhật ký sự kiện bảo mật"
+            }
+          }
+        },
+        "danger": {
+          "kicker": "Vùng nguy hiểm",
+          "title": "Hành động không thể hoàn tác trên toàn nền tảng",
+          "description": "Mỗi hành động yêu cầu bạn nhập tên của nó trước khi thực hiện, và mỗi hành động được ghi vào nhật ký sự kiện bảo mật.",
+          "superAdminOnly": "Các hành động này chỉ dành cho siêu quản trị viên. Vai trò của bạn là {role}.",
+          "haltState": "Tin gửi đi:",
+          "haltOn": "Đã dừng",
+          "haltOff": "Đang chạy",
+          "revoke": {
+            "title": "Thu hồi tất cả phiên",
+            "detail": "đăng xuất mọi người"
+          },
+          "forceReset": {
+            "title": "Buộc đặt lại mật khẩu cho mọi người dùng",
+            "detail": "gắn cờ mọi người dùng"
+          },
+          "rotate": {
+            "title": "Xoay vòng tất cả khóa bí mật webhook",
+            "detail": "các tích hợp hiện có sẽ ngừng hoạt động",
+            "note": "Khóa bí mật ký webhook thuộc khu vực tích hợp, hiện chưa có, nên hiện tại chỉ báo cáo 0 khóa được xoay vòng."
+          },
+          "halt": {
+            "title": "Dừng khẩn cấp mọi tin gửi",
+            "detail": "công tắc ngắt toàn nền tảng"
+          },
+          "resume": {
+            "title": "Tiếp tục gửi",
+            "detail": "đang bị dừng"
+          },
+          "logged": {
+            "kicker": "Những gì được ghi nhật ký",
+            "title": "Mỗi hành động ghi một sự kiện",
+            "events": {
+              "revoke": "platform.security.sessions_revoked",
+              "forceReset": "platform.security.force_password_reset_all",
+              "rotate": "platform.security.webhook_secrets_rotated",
+              "halt": "platform.security.emergency_halt_engaged",
+              "policy": "platform.security.policy_updated"
+            },
+            "notes": {
+              "revoke": "Khi mọi phiên bị kết thúc, kể cả của bạn.",
+              "forceReset": "Khi mọi người dùng được yêu cầu chọn mật khẩu mới.",
+              "rotate": "Khi các khóa bí mật được xoay vòng, kèm số lượng.",
+              "halt": "Khi lệnh dừng được kích hoạt, và lại khi việc gửi tiếp tục.",
+              "policy": "Ở bất kỳ thay đổi cài đặt nào ở trên, kèm giá trị cũ và mới."
+            },
+            "trail": "Xem nhật ký kiểm toán bảo mật"
+          },
+          "halted": {
+            "title": "Dừng khẩn cấp đang bật",
+            "body": "Mọi tin nhắn gửi đi bị chặn trên toàn nền tảng cho đến khi tiếp tục gửi.",
+            "resume": "Tiếp tục gửi"
+          },
+          "dialog": {
+            "revoke_sessions": {
+              "title": "Thu hồi tất cả phiên",
+              "body": "Mọi người đang đăng nhập vào không gian làm việc hoặc bảng điều khiển này đều bị đăng xuất, kể cả bạn.",
+              "effect1": "Mỗi người phải đăng nhập lại, kèm hai yếu tố nếu đang bật.",
+              "effect2": "Công việc chưa lưu trong trình duyệt có thể bị mất.",
+              "confirm": "Thu hồi tất cả phiên",
+              "done": "{count, plural, =0 {Không có phiên nào đang hoạt động.} other {Đã thu hồi # phiên.}}",
+              "signedOut": "Bạn cũng đã bị đăng xuất. Hãy đăng nhập lại để tiếp tục."
+            },
+            "force_password_reset": {
+              "title": "Buộc đặt lại mật khẩu cho mọi người dùng",
+              "body": "Mọi người dùng không gian làm việc sẽ được yêu cầu chọn mật khẩu mới vào lần tiếp theo dùng ứng dụng.",
+              "effect1": "Hiện không ai bị đăng xuất; lời nhắc xuất hiện ở yêu cầu tiếp theo của họ.",
+              "effect2": "Người bỏ qua lời nhắc không thể dùng ứng dụng cho đến khi đổi mật khẩu.",
+              "confirm": "Buộc đặt lại",
+              "done": "{count, plural, =0 {Không có người dùng nào bị gắn cờ.} other {# người dùng phải chọn mật khẩu mới.}}"
+            },
+            "rotate_webhook_secrets": {
+              "title": "Xoay vòng tất cả khóa bí mật webhook",
+              "body": "Mọi khóa bí mật ký webhook được thay bằng khóa mới.",
+              "effect1": "Các tích hợp xác minh chữ ký sẽ ngừng hoạt động cho đến khi dùng khóa bí mật mới.",
+              "effect2": "Không có cách nào khôi phục các khóa bí mật cũ.",
+              "confirm": "Xoay vòng khóa bí mật",
+              "done": "{count, plural, =0 {Đã xoay vòng 0 khóa bí mật.} other {Đã xoay vòng # khóa bí mật.}}",
+              "noneRotated": "Không có gì được xoay vòng vì khu vực tích hợp chưa lưu khóa bí mật webhook."
+            },
+            "halt_sends": {
+              "title": "Dừng khẩn cấp mọi tin gửi",
+              "body": "Mọi tin nhắn gửi đi trên tất cả không gian làm việc bị từ chối cho đến khi bạn tiếp tục gửi.",
+              "effect1": "Khách hàng không nhận được gì, kể cả phản hồi, chiến dịch và tự động hóa.",
+              "effect2": "Dùng tiếp tục gửi để bật lại nhắn tin.",
+              "confirm": "Dừng mọi tin gửi",
+              "done": "Dừng khẩn cấp đang bật. Mọi tin gửi đi đều bị chặn."
+            },
+            "resume_sends": {
+              "title": "Tiếp tục gửi",
+              "body": "Nhắn tin gửi đi được bật lại cho mọi không gian làm việc.",
+              "effect1": "Tin nhắn bị từ chối trong thời gian dừng sẽ không tự động được gửi.",
+              "effect2": "Hãy kiểm tra nhật ký sự kiện trước nếu bạn dừng gửi vì một sự cố.",
+              "confirm": "Tiếp tục gửi",
+              "done": "Việc gửi đã tiếp tục."
+            },
+            "typeToConfirm": "Nhập <code>{phrase}</code> để xác nhận",
+            "phraseHint": "Chữ hoa và khoảng trắng thừa được bỏ qua.",
+            "cancel": "Hủy",
+            "working": "Đang xử lý",
+            "close": "Đóng",
+            "signInAgain": "Đăng nhập lại",
+            "requestId": "Mã yêu cầu",
+            "errors": {
+              "forbidden": "Chỉ siêu quản trị viên mới có thể thực hiện hành động này.",
+              "unexpected": "Hành động chưa hoàn tất. Hãy kiểm tra nhật ký sự kiện trước khi thử lại."
+            }
+          }
+        },
+        "tabsLabel": "Các mục Trung tâm bảo mật",
+        "search": {
+          "label": "Tìm quy tắc bảo mật, IP và người thực hiện",
+          "placeholder": "Tìm quy tắc bảo mật, IP, người thực hiện…",
+          "shortcut": "Cmd K"
+        }
+      },
+      "events": {
+        "kicker": "Trung tâm bảo mật",
+        "title": "Sự kiện bảo mật",
+        "description": "Đăng nhập, khóa tài khoản, thay đổi chính sách và hành động nguy hiểm, mới nhất trước.",
+        "refresh": "Làm mới",
+        "refreshing": "Đang làm mới",
+        "filters": {
+          "label": "Lọc sự kiện",
+          "event": "Tên sự kiện",
+          "eventHint": "Tên chính xác, ví dụ auth.failed. Chọn gợi ý hoặc tự nhập.",
+          "status": "Trạng thái",
+          "anyStatus": "Mọi trạng thái",
+          "apply": "Áp dụng",
+          "clear": "Xóa bộ lọc",
+          "q": "Văn bản tìm kiếm",
+          "qHint": "Tìm sự kiện có tên chứa văn bản này, không phân biệt chữ hoa chữ thường."
+        },
+        "status": {
+          "success": "Thành công",
+          "failure": "Thất bại",
+          "warning": "Cảnh báo",
+          "info": "Thông tin"
+        },
+        "empty": "Chưa có sự kiện bảo mật nào được ghi lại.",
+        "emptyFiltered": "Không có sự kiện nào khớp với các bộ lọc này.",
+        "listLabel": "Sự kiện bảo mật",
+        "ip": "IP",
+        "showPayload": "Hiện chi tiết",
+        "hidePayload": "Ẩn chi tiết",
+        "noPayload": "Sự kiện này không có chi tiết bổ sung.",
+        "payloadLabel": "Chi tiết của {event}",
+        "loadMore": "Tải thêm",
+        "loading": "Đang tải",
+        "end": "{count, plural, other {Hiển thị tất cả # sự kiện.}}",
+        "export": "Xuất CSV",
+        "exported": "{count, plural, other {Đã lưu # sự kiện đã tải vào tệp CSV.}}",
+        "actorLabel": "Người thực hiện",
+        "actorTypes": {
+          "user": "Người dùng",
+          "platform_operator": "Nhà điều hành nền tảng",
+          "system": "Hệ thống"
+        },
+        "workspaceLabel": "Không gian làm việc",
+        "requestIdLabel": "Mã yêu cầu",
+        "userAgentLabel": "Trình duyệt",
+        "copyNames": {
+          "actorId": "id người thực hiện",
+          "orgId": "id không gian làm việc",
+          "requestId": "id yêu cầu"
+        }
+      },
+      "registration": {
+        "kicker": "Trang dành cho khách",
+        "title": "Chính sách đăng ký",
+        "description": "Quyết định ai có thể đăng ký, cách xác minh email, gói mà không gian làm việc mới bắt đầu và cách mã đăng ký hoạt động.",
+        "save": "Lưu cài đặt",
+        "saving": "Đang lưu",
+        "saved": "{count, plural, other {Đã lưu # cài đặt}}",
+        "rejected": "Chưa lưu gì. {count, plural, other {# trường bị từ chối}}.",
+        "requestId": "Mã yêu cầu",
+        "unsaved": "{count, plural, other {# thay đổi chưa lưu}}",
+        "discard": "Hủy thay đổi",
+        "errors": {
+          "unexpected": "Không thể lưu cài đặt. Hãy thử lại sau giây lát."
+        },
+        "problems": {
+          "range": "Nhập số nguyên từ {min} đến {max}.",
+          "tooLong": "Tối đa {max} ký tự.",
+          "required": "Trường này là bắt buộc.",
+          "link": "Dùng đường dẫn của trang như /legal/terms, hoặc địa chỉ http hay https đầy đủ.",
+          "senderFormat": "Chọn một trong các người gửi trong danh sách.",
+          "countryFormat": "Dùng mã quốc gia hai chữ cái.",
+          "senderRequired": "Chọn kênh người gửi trước khi tạo mẫu."
+        },
+        "policy": {
+          "kicker": "Đăng ký",
+          "title": "Ai có thể đăng ký",
+          "description": "Các cài đặt này áp dụng cho lượt đăng ký mới, kể cả đăng ký bằng mạng xã hội."
+        },
+        "fields": {
+          "publicRegistration": {
+            "label": "Đăng ký công khai",
+            "hintOn": "Bất kỳ ai cũng có thể tạo không gian làm việc từ trang đăng ký.",
+            "hintOff": "Trang đăng ký hiển thị thông báo đã đóng đăng ký. Người dùng hiện có không bị ảnh hưởng."
+          },
+          "emailVerification": {
+            "label": "Xác minh email",
+            "options": {
+              "off": "Tắt: tài khoản được xác minh tự động",
+              "banner": "Biểu ngữ: cho phép, kèm lời nhắc",
+              "block": "Chặn: xác minh trước khi tiếp tục"
+            },
+            "explain": {
+              "off": "Tài khoản mới được tính là đã xác minh ngay. Không cần email xác minh.",
+              "banner": "Mọi người có thể dùng ứng dụng ngay và thấy lời nhắc cho đến khi xác minh.",
+              "block": "Mọi người phải xác minh email trước khi dùng bất cứ thứ gì khác."
+            }
+          },
+          "defaultPlanId": {
+            "label": "Gói mặc định",
+            "hint": "Gói mà không gian làm việc mới bắt đầu. Tự động dùng gói được đánh dấu là mặc định khi đăng ký, nếu không thì dùng gói miễn phí đang hoạt động đầu tiên.",
+            "placeholder": "slug của gói",
+            "auto": "Tự động",
+            "unavailable": "{slug} (không phải gói đang hoạt động)",
+            "loadFailed": "Không thể tải danh sách gói.",
+            "kinds": {
+              "free": "Miễn phí",
+              "paid": "Trả phí",
+              "custom_quote": "Báo giá tùy chỉnh"
+            }
+          },
+          "trialDays": {
+            "label": "Dùng thử miễn phí (ngày)",
+            "hint": "Số nguyên từ {min} đến {max}. 0 nghĩa là không dùng thử. Để trống để giữ giá trị đã lưu."
+          },
+          "defaultTimezone": {
+            "label": "Múi giờ mặc định",
+            "hint": "Dùng cho không gian làm việc mới cho đến khi họ chọn múi giờ riêng."
+          },
+          "defaultCountryIso": {
+            "label": "Quốc gia mặc định",
+            "hint": "Chọn sẵn quốc gia của số điện thoại khi đăng ký.",
+            "none": "Không có mặc định"
+          },
+          "termsUrl": {
+            "label": "Liên kết điều khoản",
+            "hint": "Đường dẫn của trang hoặc địa chỉ đầy đủ, hiển thị trên trang đăng ký và đăng nhập."
+          },
+          "privacyUrl": {
+            "label": "Liên kết quyền riêng tư"
+          },
+          "cookiesUrl": {
+            "label": "Liên kết cookie",
+            "hint": "Không bắt buộc. Để trống để ẩn."
+          },
+          "otpEnabled": {
+            "label": "Mã đăng ký qua WhatsApp",
+            "hint": "Tài khoản mới phải xác nhận số điện thoại bằng mã dùng một lần trước khi không gian làm việc được tạo."
+          },
+          "otpSender": {
+            "label": "Người gửi",
+            "hint": "Số đã kết nối dùng để gửi mã. Thêm số bằng Quản lý người gửi."
+          },
+          "ttlMinutes": {
+            "label": "Thời hạn mã (phút)"
+          },
+          "length": {
+            "label": "Độ dài mã (chữ số)"
+          },
+          "resendCooldownSec": {
+            "label": "Thời gian chờ gửi lại (giây)"
+          },
+          "maxAttempts": {
+            "label": "Số lần thử tối đa"
+          }
+        },
+        "otp": {
+          "kicker": "Xác minh",
+          "title": "Mã đăng ký",
+          "description": "Cài đặt cho mã dùng một lần được gửi khi có người đăng ký.",
+          "knobHint": "{min} đến {max}. Để trống dùng {default}.",
+          "status": {
+            "on": "Đang chạy",
+            "off": "Không chạy",
+            "unsavedNote": "Phần này hiển thị cài đặt đã lưu. Hãy lưu thay đổi để xem cách chúng áp dụng.",
+            "reason": {
+              "active": "Người đăng ký mới phải xác nhận số điện thoại bằng mã.",
+              "disabled": "Công tắc đang tắt, nên đăng ký không yêu cầu mã.",
+              "no_sender": "Chưa chọn người gửi, nên đăng ký bỏ qua bước mã.",
+              "sender_missing": "Người gửi đã chọn không còn tồn tại, nên đăng ký bỏ qua bước mã.",
+              "sender_incomplete": "Người gửi đã chọn thiếu thông tin xác thực, nên đăng ký bỏ qua bước mã.",
+              "dev_in_production": "Người gửi nhật ký không thể chạy trên môi trường production, nên đăng ký bỏ qua bước mã.",
+              "template_missing": "Người gửi WhatsApp Business cần một mẫu đã được duyệt. Hãy tạo và gửi một mẫu bên dưới; cho đến lúc đó đăng ký bỏ qua bước mã.",
+              "template_pending": "Meta vẫn đang xem xét mẫu, nên đăng ký bỏ qua bước mã cho đến khi được duyệt.",
+              "template_rejected": "Meta đã từ chối mẫu, nên đăng ký bỏ qua bước mã. Hãy sửa và gửi lại."
+            }
+          },
+          "sender": {
+            "none": "Không có người gửi",
+            "option": "{label} ({kind})",
+            "unknown": "Người gửi không xác định ({ref})",
+            "manage": "Quản lý người gửi",
+            "empty": "Chưa có người gửi. Thêm bằng Quản lý người gửi.",
+            "kinds": {
+              "waba": "WhatsApp Business",
+              "twilio": "Twilio",
+              "device": "Phiên không chính thức",
+              "dev": "Chỉ ghi nhật ký"
+            },
+            "noneConnected": "Chưa có người gửi nào được kết nối. Hãy hoàn tất một người gửi trong Quản lý người gửi; chỉ người gửi đã kết nối mới chọn được.",
+            "unfinished": "{label} ({kind}, chưa hoàn tất)"
+          },
+          "template": {
+            "title": "Mẫu tin nhắn",
+            "states": {
+              "none": "Chưa tạo",
+              "pending": "Đang chờ Meta",
+              "approved": "Đã duyệt",
+              "rejected": "Bị từ chối",
+              "local": "Sẵn sàng"
+            },
+            "explain": {
+              "none": "Hãy tạo tin nhắn khi người gửi và cài đặt mã ở trên đã đúng. WhatsApp Business cần Meta duyệt; các kênh khác dùng tin nhắn ngay.",
+              "waba": "Đã gửi cho Meta dưới dạng mẫu xác thực. Bước mã tự bật khi Meta duyệt, thường trong vài phút.",
+              "local": "Đã lưu dạng văn bản thuần cho kênh này. Không cần duyệt nên đang được dùng ngay."
+            },
+            "name": "Tên",
+            "metaId": "Id mẫu Meta",
+            "validFor": "Mã có hiệu lực",
+            "minutes": "{count, plural, other {# phút}}",
+            "submitted": "Đã tạo",
+            "checked": "Kiểm tra lần cuối",
+            "never": "Chưa",
+            "reason": "Lý do",
+            "stale": "Mẫu này được tạo cho mã có hiệu lực {count, plural, other {# phút}}. Hãy tạo và gửi lại để khớp với thời hạn ở trên.",
+            "create": "Tạo và gửi mẫu OTP",
+            "creating": "Đang xử lý",
+            "refresh": "Làm mới trạng thái",
+            "refreshing": "Đang kiểm tra",
+            "outcome": {
+              "submitted": "Mẫu đã được gửi cho Meta để xem xét. Bước mã tự bật khi Meta duyệt.",
+              "resubmitted": "Mẫu đã được gửi lại cho Meta để xem xét. Bước mã vẫn tắt cho đến khi được duyệt.",
+              "local_ready": "Tin nhắn đã được lưu và đang được dùng. Kênh này không cần duyệt.",
+              "already_pending": "Mẫu đã ở chỗ Meta để xem xét. Dùng Làm mới trạng thái để kiểm tra.",
+              "already_approved": "Mẫu đã được duyệt. Không cần gửi gì.",
+              "refreshed": "Đã kiểm tra trạng thái.",
+              "approvedNow": "Meta đã duyệt mẫu ngay lập tức. Bước mã đã sẵn sàng.",
+              "rejectedNow": "Meta đã từ chối mẫu. Lý do hiển thị bên dưới; hãy sửa và gửi lại."
+            },
+            "refreshed": {
+              "pending": "Meta vẫn đang xem xét mẫu.",
+              "approved": "Meta đã duyệt mẫu. Bước mã đã sẵn sàng.",
+              "rejected": "Meta đã từ chối mẫu.",
+              "local": "Mẫu này không cần duyệt."
+            },
+            "errors": {
+              "submit": "Meta không nhận mẫu. Các cài đặt mã khác của bạn đã được lưu.",
+              "check": "Không thể đọc trạng thái từ Meta.",
+              "rejected": "Không thể tạo mẫu.",
+              "unexpected": "Đã xảy ra lỗi. Hãy thử lại sau giây lát."
+            },
+            "createHint": "Tạo tin nhắn đăng ký cho người gửi đã chọn. WhatsApp Business được gửi cho Meta xem xét; các kênh khác sẵn sàng ngay.",
+            "picker": {
+              "label": "Mẫu WhatsApp Business",
+              "hint": "Đăng ký gửi mẫu được tạo bằng nút bên dưới. Các mẫu xác thực đã duyệt khác của người gửi này được liệt kê để bạn xem; hiện chưa thể chọn ở đây.",
+              "none": "Chưa có (tạo bên dưới)",
+              "loading": "Đang tải mẫu",
+              "option": "{name} ({language}), {status}",
+              "otherSender": "Hãy lưu người gửi để xem các mẫu của nó.",
+              "failed": "Không thể tải danh sách mẫu.",
+              "unavailable": "Không thể đọc danh sách mẫu của Meta: {reason}"
+            }
+          },
+          "test": {
+            "about": "Gửi mã thật tới một điện thoại để kiểm tra người gửi hoạt động trước khi việc đăng ký phụ thuộc vào nó.",
+            "button": "Gửi mã thử",
+            "title": "Gửi mã thử",
+            "intro": "Một mã thật sẽ được gửi tới số bạn nhập, qua người gửi bên dưới. Mã dùng cài đặt mã và mẫu đã lưu. Bạn có thể gửi 5 lần mỗi giờ.",
+            "to": "Số điện thoại",
+            "toHint": "Kèm mã quốc gia, ví dụ +91 98765 43221.",
+            "sender": "Người gửi",
+            "senderHint": "Để nguyên người gửi đã lưu, hoặc thử người khác trong danh sách.",
+            "savedSender": "Người gửi đã lưu",
+            "send": "Gửi mã",
+            "sending": "Đang gửi",
+            "close": "Đóng",
+            "sent": "Đã gửi mã thử tới {to}.",
+            "remaining": "{count, plural, other {Còn # lần thử trong giờ này.}}",
+            "notShown": "Mã không hiển thị ở đây; hãy đọc trên điện thoại.",
+            "requestId": "Mã yêu cầu",
+            "errors": {
+              "invalidNumber": "Nhập số kèm mã quốc gia, ví dụ +91 98765 43221.",
+              "rateLimited": "Quá nhiều mã thử trong giờ này. Hãy thử lại sau {minutes, plural, other {# phút}}.",
+              "failed": "Không thể gửi mã.",
+              "rejected": "Mã thử chưa được gửi.",
+              "unexpected": "Đã xảy ra lỗi. Hãy thử lại sau giây lát."
+            },
+            "reasons": {
+              "not_configured": "Người gửi bị thiếu hoặc chưa đầy đủ.",
+              "template_not_approved": "Mẫu chưa được duyệt.",
+              "invalid_number": "Số đó không hợp lệ.",
+              "auth_failed": "Nhà cung cấp từ chối thông tin xác thực. Hãy kiểm tra khóa bí mật trong Quản lý người gửi.",
+              "rejected": "Nhà cung cấp từ chối tin nhắn.",
+              "provider_error": "Nhà cung cấp gặp sự cố. Hãy thử lại sau ít phút.",
+              "connection_refused": "Địa chỉ của nhà cung cấp từ chối kết nối.",
+              "timeout": "Nhà cung cấp không phản hồi kịp thời.",
+              "transport_error": "Không thể kết nối tới nhà cung cấp."
+            }
+          }
+        },
+        "senders": {
+          "title": "Quản lý người gửi",
+          "intro": "Các kết nối có thể gửi mã đăng ký. Khóa bí mật được lưu mã hóa và không bao giờ hiển thị lại.",
+          "loading": "Đang tải",
+          "working": "Đang xử lý",
+          "empty": "Chưa có người gửi.",
+          "add": "Thêm người gửi",
+          "edit": "Sửa",
+          "remove": "Xóa",
+          "close": "Đóng",
+          "cancel": "Hủy",
+          "save": "Lưu người gửi",
+          "keep": "Giữ",
+          "addTitle": "Người gửi mới",
+          "editTitle": "Sửa {label}",
+          "kind": "Loại",
+          "kinds": {
+            "waba": "WhatsApp Business (Meta Cloud API)",
+            "twilio": "Twilio WhatsApp",
+            "device": "Phiên không chính thức (Node bridge)",
+            "dev": "Chỉ ghi nhật ký (phát triển)"
+          },
+          "kindHint": {
+            "waba": "Gửi mẫu xác thực đã duyệt qua Meta. Cần Meta duyệt mẫu.",
+            "twilio": "Gửi tin nhắn WhatsApp qua Twilio. Không cần duyệt mẫu.",
+            "device": "Gửi qua phiên ghép QR trên Node bridge của bạn. Không cần duyệt mẫu.",
+            "dev": "Ghi mã vào nhật ký máy chủ thay vì gửi. Không bao giờ khả dụng trên production."
+          },
+          "fields": {
+            "label": "Tên",
+            "phoneNumberId": "Id số điện thoại",
+            "wabaId": "Id tài khoản WhatsApp Business",
+            "graphBaseUrl": "Địa chỉ Graph API",
+            "accountSid": "Account SID",
+            "fromNumber": "Số WhatsApp (From)",
+            "apiBaseUrl": "Địa chỉ API Twilio",
+            "bridgeUrl": "Địa chỉ bridge",
+            "senderNumber": "Số của phiên"
+          },
+          "hints": {
+            "waba": {
+              "phoneNumberId": "Lấy từ Meta, trong phần thiết lập API của số WhatsApp.",
+              "wabaId": "Cần để gửi mẫu cho Meta.",
+              "graphBaseUrl": "Để trống để dùng địa chỉ của Meta."
+            },
+            "twilio": {
+              "accountSid": "Lấy từ bảng điều khiển Twilio.",
+              "fromNumber": "Số đã bật WhatsApp, kèm mã quốc gia.",
+              "apiBaseUrl": "Để trống để dùng địa chỉ của Twilio."
+            },
+            "device": {
+              "bridgeUrl": "Nơi Node bridge của bạn lắng nghe, ví dụ http://127.0.0.1:3003.",
+              "senderNumber": "Số đã ghép mà bridge gửi từ đó, kèm mã quốc gia."
+            }
+          },
+          "defaults": {
+            "graphBaseUrl": "https://graph.facebook.com/v23.0",
+            "apiBaseUrl": "https://api.twilio.com"
+          },
+          "secretLabel": {
+            "waba": "Access token",
+            "twilio": "Auth token",
+            "device": "Bridge token",
+            "dev": "Khóa bí mật"
+          },
+          "secretHint": "Được lưu mã hóa và không bao giờ hiển thị lại.",
+          "secretHintSaved": "Được lưu mã hóa. Để trống để giữ khóa đã lưu.",
+          "secretSaved": "đã lưu, để trống để giữ",
+          "showSecret": "Hiện khóa bí mật",
+          "hideSecret": "Ẩn khóa bí mật",
+          "removeSecret": "Xóa khóa bí mật đã lưu",
+          "removeSecretBody": "Người gửi ngừng hoạt động cho đến khi lưu khóa bí mật mới.",
+          "removeSecretConfirm": "Xóa khóa bí mật",
+          "hasSecret": "Đã lưu khóa bí mật",
+          "noSecret": "Không có khóa bí mật",
+          "inUse": "Dùng cho đăng ký",
+          "removeBody": "Xóa {label}? Khóa bí mật đã lưu của nó cũng bị xóa.",
+          "removeBodyInUse": "Xóa {label}? Đăng ký đang dùng nó nên bước mã sẽ tắt. Khóa bí mật đã lưu của nó cũng bị xóa.",
+          "removeConfirm": "Xóa người gửi",
+          "added": "Đã thêm người gửi",
+          "saved": "Đã lưu người gửi",
+          "removed": "Đã xóa người gửi",
+          "secretRemoved": "Đã xóa khóa bí mật đã lưu",
+          "requestId": "Mã yêu cầu",
+          "problems": {
+            "required": "Trường này là bắt buộc.",
+            "tooLong": "Tối đa {max} ký tự.",
+            "digits": "Chỉ chữ số, từ 5 đến 24.",
+            "url": "Dùng địa chỉ http hoặc https đầy đủ, không có tên người dùng hoặc mật khẩu.",
+            "accountSid": "Account SID bắt đầu bằng AC và có 34 ký tự.",
+            "phone": "Nhập số kèm mã quốc gia, 7 đến 15 chữ số."
+          },
+          "errors": {
+            "unexpected": "Không thể lưu người gửi. Hãy thử lại sau giây lát."
+          }
+        },
+        "footer": {
+          "kicker": "Tin nhắn gửi đi",
+          "title": "Chân tin nhắn của nền tảng",
+          "description": "Được thêm vào cuối các tin nhắn văn bản thuần và tương tác gửi từ các không gian làm việc có gói không thể gỡ thương hiệu. Mẫu có nội dung riêng và bỏ qua dòng này. Không gian làm việc có gói gỡ được thương hiệu sẽ đặt chân tin nhắn riêng, hoặc không có, trong tài khoản của họ.",
+          "builtIn": "Văn bản tích hợp sẵn",
+          "label": "Văn bản chân tin nhắn",
+          "hint": "Tối đa {max} ký tự. Để trống để không gửi chân tin nhắn.",
+          "count": "{used}/{max}",
+          "preview": "Xem trước",
+          "noFooter": "(không có chân tin nhắn)",
+          "save": "Lưu chân tin nhắn",
+          "saving": "Đang lưu",
+          "clear": "Xóa",
+          "saved": "Đã lưu chân tin nhắn nền tảng. Áp dụng từ tin nhắn tiếp theo.",
+          "savedNone": "Đã xóa chân tin nhắn nền tảng. Tin nhắn được gửi mà không có chân tin nhắn.",
+          "errors": {
+            "invalid": "Chân tin nhắn đó không được chấp nhận.",
+            "unexpected": "Không thể lưu chân tin nhắn. Hãy thử lại sau giây lát."
+          },
+          "requestId": "Mã yêu cầu"
+        }
+      },
+      "social": {
+        "kicker": "Trang dành cho khách",
+        "title": "Đăng nhập mạng xã hội và captcha",
+        "description": "Cho phép mọi người đăng nhập bằng Google hoặc Facebook và bảo vệ các trang đăng nhập, đăng ký bằng reCAPTCHA. Mỗi mục chỉ xuất hiện khi được bật và đã lưu khóa.",
+        "save": "Lưu thay đổi",
+        "saving": "Đang lưu",
+        "saved": "{count, plural, other {Đã lưu # cài đặt}}",
+        "rejected": "Chưa lưu gì. {count, plural, other {# trường bị từ chối}}.",
+        "requestId": "Mã yêu cầu",
+        "unsaved": "{count, plural, other {# thay đổi chưa lưu}}",
+        "discard": "Hủy thay đổi",
+        "errors": {
+          "unexpected": "Không thể lưu cài đặt. Hãy thử lại sau giây lát."
+        },
+        "problems": {
+          "tooLong": "Tối đa {max} ký tự.",
+          "threshold": "Nhập số từ 0 đến 1."
+        },
+        "labels": {
+          "google": {
+            "clientId": "Client id Google",
+            "clientSecret": "Client secret Google",
+            "enabled": "Đăng nhập Google"
+          },
+          "facebook": {
+            "clientId": "App id Facebook",
+            "clientSecret": "App secret Facebook",
+            "enabled": "Đăng nhập Facebook"
+          },
+          "recaptcha": {
+            "siteKey": "Site key reCAPTCHA",
+            "secret": "Secret key reCAPTCHA",
+            "v3Threshold": "Ngưỡng điểm reCAPTCHA",
+            "version": "Phiên bản reCAPTCHA",
+            "enabled": "reCAPTCHA"
+          }
+        },
+        "enable": "Bật",
+        "secretSaved": "đã lưu, để trống để giữ",
+        "secretHint": "Được lưu mã hóa và không bao giờ hiển thị lại. Để trống để giữ khóa đã lưu.",
+        "showSecret": "Hiện khóa bí mật",
+        "hideSecret": "Ẩn khóa bí mật",
+        "google": {
+          "kicker": "OAuth 2.0 với Google Cloud",
+          "title": "Đăng nhập Google",
+          "idLabel": "Client id",
+          "idHint": "Lấy từ Google Cloud, trong phần thông tin xác thực, OAuth client loại ứng dụng web.",
+          "idPlaceholder": "000000000000-xxxx.apps.googleusercontent.com",
+          "secretLabel": "Client secret",
+          "secretPlaceholder": "client secret",
+          "redirectLabel": "URI chuyển hướng được ủy quyền",
+          "redirectHint": "Dán chính xác nội dung này vào OAuth client, nếu không Google sẽ từ chối đăng nhập vì chuyển hướng không khớp."
+        },
+        "facebook": {
+          "kicker": "Facebook Login với Meta for Developers",
+          "title": "Đăng nhập Facebook",
+          "idLabel": "App id",
+          "idHint": "Lấy từ cài đặt ứng dụng, mục cơ bản, là app id.",
+          "idPlaceholder": "0000000000000000",
+          "secretLabel": "App secret",
+          "secretPlaceholder": "App secret gồm 32 ký tự",
+          "redirectLabel": "URI chuyển hướng OAuth hợp lệ",
+          "redirectHint": "Thêm vào cài đặt Facebook Login. Ứng dụng cần quyền email và hồ sơ công khai."
+        },
+        "recaptcha": {
+          "kicker": "Chống bot bằng Google reCAPTCHA",
+          "title": "reCAPTCHA",
+          "versionLabel": "Phiên bản",
+          "versionHint": "v2 hiển thị hộp kiểm. v3 vô hình và chấm điểm từng yêu cầu.",
+          "versions": {
+            "v2": "v2: hộp kiểm Tôi không phải người máy",
+            "v3": "v3: điểm vô hình"
+          },
+          "thresholdLabel": "Ngưỡng điểm v3",
+          "thresholdHint": "Chỉ v3. 0 gần như chắc chắn là bot, 1 gần như chắc chắn là người. Để trống dùng 0,5.",
+          "siteKeyLabel": "Site key",
+          "siteKeyHint": "Khóa công khai gửi tới trình duyệt, lấy từ bảng điều khiển reCAPTCHA.",
+          "secretLabel": "Secret key"
+        },
+        "live": {
+          "kicker": "Trạng thái",
+          "title": "Những gì đang hoạt động",
+          "google": "Google đang hoạt động",
+          "facebook": "Facebook đang hoạt động",
+          "recaptcha": "reCAPTCHA đang hoạt động",
+          "yes": "đang hoạt động",
+          "no": "không hoạt động",
+          "note": "Một nhà cung cấp chỉ hoạt động khi được bật và đã lưu cả hai khóa. Phần này hiển thị những gì đã lưu, không phải các chỉnh sửa chưa lưu."
+        },
+        "guide": {
+          "kicker": "Thiết lập nhanh",
+          "google": {
+            "title": "Google trong bốn bước",
+            "step1": "Mở bảng điều khiển Google Cloud và chọn hoặc tạo dự án.",
+            "step2": "Thiết lập màn hình đồng ý OAuth là ứng dụng bên ngoài kèm email hỗ trợ của bạn.",
+            "step3": "Tạo thông tin xác thực, chọn OAuth client id, rồi Ứng dụng web.",
+            "step4": "Thêm URI chuyển hướng từ biểu mẫu, rồi dán client id và secret vào đây.",
+            "link": "Mở thông tin xác thực Google Cloud"
+          },
+          "facebook": {
+            "title": "Facebook trong bốn bước",
+            "step1": "Mở Meta for Developers và tạo ứng dụng để xác thực người dùng.",
+            "step2": "Thêm sản phẩm Facebook Login vào ứng dụng.",
+            "step3": "Trong cài đặt của nó, thêm URI chuyển hướng từ biểu mẫu.",
+            "step4": "Sao chép app id và secret từ cài đặt cơ bản, dán vào đây, rồi đặt ứng dụng ở chế độ hoạt động.",
+            "link": "Mở Meta for Developers"
+          },
+          "recaptcha": {
+            "title": "Khóa reCAPTCHA",
+            "body": "Đăng ký trang của bạn trong bảng điều khiển reCAPTCHA, chọn v2 hoặc v3, rồi dán site key và secret key vào đây.",
+            "link": "Mở bảng điều khiển reCAPTCHA"
+          },
+          "noSdk": {
+            "badge": "Cần biết",
+            "body": "Đăng nhập dùng trực tiếp các địa chỉ OAuth chuẩn nên không cần cài đặt gì. Dán khóa và bật lên."
+          }
+        },
+        "removeSecret": {
+          "action": "Xóa khóa bí mật đã lưu",
+          "title": "Xóa khóa bí mật {name} đã lưu",
+          "body": "Khóa bí mật đã lưu của {name} bị xóa khỏi máy chủ và không thể hiển thị hay khôi phục. Để dùng lại {name}, bạn phải lưu khóa bí mật mới.",
+          "liveWarning": "{name} đang hoạt động. Xóa khóa bí mật sẽ tắt nó cho đến khi lưu khóa mới.",
+          "confirm": "Xóa khóa bí mật",
+          "cancel": "Hủy",
+          "working": "Đang xóa",
+          "error": "Không thể xóa khóa bí mật. Hãy thử lại sau giây lát.",
+          "requestId": "Mã yêu cầu",
+          "done": "Đã xóa khóa bí mật {name} đã lưu.",
+          "names": {
+            "google": "Google",
+            "facebook": "Facebook",
+            "recaptcha": "reCAPTCHA"
+          }
+        },
+        "docs": {
+          "kicker": "Tham khảo",
+          "title": "Tài liệu chính thức",
+          "opensNewTab": "(mở trong tab mới)",
+          "links": {
+            "google": "Thiết lập Google OAuth",
+            "facebook": "Thiết lập Facebook Login",
+            "recaptchaAdmin": "Bảng quản trị reCAPTCHA",
+            "recaptchaDocs": "Tài liệu reCAPTCHA"
+          }
+        }
+      },
+      "plans": {
+        "eyebrow": "Gói",
+        "title": "Gói",
+        "description": "Danh mục mà các không gian làm việc chọn. Lượt đăng ký mới vào gói mặc định; thanh toán gói sẽ đi kèm tính năng thanh toán.",
+        "new": "Gói mới",
+        "kpi": {
+          "label": "Tóm tắt danh mục",
+          "total": "Tổng số gói",
+          "active": "Đang hoạt động",
+          "free": "Miễn phí",
+          "paid": "Trả phí"
+        },
+        "empty": {
+          "title": "Chưa có gói nào",
+          "body": "Hãy tạo gói đầu tiên. Cho đến khi có gói, không gian làm việc mới bắt đầu với gói tên starter không giới hạn gì.",
+          "action": "Tạo gói đầu tiên"
+        },
+        "table": {
+          "label": "Gói",
+          "plan": "Gói",
+          "price": "Giá",
+          "messages": "Tin nhắn",
+          "workspaces": "Không gian làm việc",
+          "entitlements": "Bao gồm",
+          "features": "Tính năng",
+          "limits": "Giới hạn",
+          "addons": "Tiện ích bổ sung",
+          "status": "Trạng thái",
+          "actions": "Thao tác"
+        },
+        "counts": {
+          "ratio": "{count}/{total}",
+          "features": "{count} trên {total} tính năng đang bật",
+          "limits": "{count} trên {total} giới hạn đã đặt",
+          "addons": "{count, plural, other {# tiện ích bổ sung hiển thị}}"
+        },
+        "badges": {
+          "popular": "Phổ biến",
+          "signupDefault": "Mặc định khi đăng ký"
+        },
+        "price": {
+          "free": "Miễn phí",
+          "custom": "Báo giá tùy chỉnh",
+          "lifetime": "một lần"
+        },
+        "period": {
+          "days": "{count, plural, other {/ # ngày}}",
+          "weeks": "{count, plural, other {/ # tuần}}",
+          "months": "{count, plural, other {/ # tháng}}",
+          "years": "{count, plural, other {/ # năm}}"
+        },
+        "messages": {
+          "unlimited": "Không giới hạn",
+          "limited": "{count, number} / tháng"
+        },
+        "active": {
+          "on": "Đang hoạt động",
+          "off": "Không hoạt động",
+          "toggle": "Đang hoạt động: {name}"
+        },
+        "actions": {
+          "edit": "Sửa",
+          "delete": "Xóa",
+          "editName": "Sửa {name}",
+          "deleteName": "Xóa {name}"
+        },
+        "toasts": {
+          "created": "Đã tạo gói {name}.",
+          "updated": "Đã lưu gói {name}.",
+          "activated": "{name} hiện đang hoạt động.",
+          "deactivated": "{name} hiện không hoạt động.",
+          "deleted": "Đã xóa gói {name}."
+        },
+        "delete": {
+          "title": "Xóa {name}?",
+          "body": "Không thể hoàn tác. Thay vào đó, ngừng kích hoạt gói sẽ ẩn nó khỏi người mua và giữ nguyên các không gian làm việc đang dùng gói.",
+          "inUseHint": "{count, plural, other {# không gian làm việc đang dùng gói này.}} Việc xóa bị từ chối cho đến khi họ được chuyển đi.",
+          "confirm": "Xóa gói",
+          "cancel": "Hủy",
+          "deleting": "Đang xóa"
+        },
+        "errors": {
+          "inUse": "{count, plural, other {Không thể xóa: # không gian làm việc hiện đang dùng gói này.}} Hãy chuyển họ sang gói khác, hoặc ngừng kích hoạt gói này.",
+          "defaultProtected": "Gói này là mặc định khi đăng ký nên không thể ngừng kích hoạt hoặc xóa. Hãy chọn gói mặc định khác trước.",
+          "notFound": "Gói này không còn tồn tại. Hãy tải lại danh sách.",
+          "forbidden": "Chỉ siêu quản trị viên mới có thể thay đổi gói.",
+          "generic": "Đã xảy ra lỗi. Hãy thử lại."
+        },
+        "editor": {
+          "createTitle": "Gói mới",
+          "editTitle": "Sửa {name}",
+          "slugLabel": "Slug:",
+          "slugNote": "Được đặt khi tạo gói và không bao giờ thay đổi.",
+          "save": "Lưu thay đổi",
+          "create": "Tạo gói",
+          "saving": "Đang lưu",
+          "cancel": "Hủy",
+          "discard": "Hủy các thay đổi của bạn?",
+          "failed": "Không thể lưu gói. Hãy thử lại.",
+          "unlimited": "Không giới hạn",
+          "errorsBanner": "Một số trường cần chú ý. Các tab có chấm đánh dấu có lỗi.",
+          "tabs": {
+            "label": "Các mục của gói",
+            "details": "Chi tiết và giá",
+            "features": "Tính năng",
+            "limits": "Giới hạn",
+            "addons": "Tiện ích bổ sung"
+          },
+          "tabSummary": {
+            "features": "{count} trên {total} tính năng đang bật",
+            "limits": "{count} trên {total} giới hạn đã đặt",
+            "addons": "Đã chọn {count} tiện ích bổ sung",
+            "error": "Có lỗi cần sửa"
+          },
+          "featuresUi": {
+            "intro": "Tắt những gì gói này không bao gồm. Không gian làm việc dùng gói không thể mở khu vực có tính năng đang tắt.",
+            "search": "Tìm tính năng",
+            "searchPlaceholder": "Tìm tính năng",
+            "enableAll": "Bật tất cả",
+            "disableAll": "Tắt tất cả",
+            "noMatch": "Không có tính năng nào khớp với tìm kiếm.",
+            "groupCount": "Bật {count} trên {total}"
+          },
+          "limitsUi": {
+            "intro": "Giới hạn sẽ chặn hành động khi không gian làm việc đạt tới. Chọn Không giới hạn để bỏ giới hạn.",
+            "search": "Tìm giới hạn",
+            "searchPlaceholder": "Tìm giới hạn",
+            "noMatch": "Không có giới hạn nào khớp với tìm kiếm.",
+            "unlimited": "Không giới hạn",
+            "platformDefault": "Mặc định của nền tảng",
+            "groupCount": "{count} trên {total} có giới hạn",
+            "valueFor": "Giới hạn cho {name}",
+            "unofficialOff": "Chỉ áp dụng khi nền tảng bật WhatsApp không chính thức (hiện đang tắt)."
+          },
+          "limitUnits": {
+            "perMonth": "mỗi tháng",
+            "perBroadcast": "mỗi lần phát tin",
+            "perMinute": "mỗi phút",
+            "perPlanPeriod": "mỗi kỳ gói",
+            "total": "tổng cộng"
+          },
+          "addons": {
+            "intro": "Các tiện ích bổ sung được bật sẽ hiển thị cho các không gian làm việc dùng gói này trong Marketplace; chỉ dùng được sau khi không gian làm việc mua.",
+            "search": "Tìm tiện ích bổ sung",
+            "searchPlaceholder": "Tìm tiện ích bổ sung hoặc ứng dụng",
+            "selectAll": "Chọn tất cả",
+            "clear": "Xóa",
+            "selected": "Đã chọn {count} trên {total}",
+            "loading": "Đang tải tiện ích bổ sung",
+            "empty": "Chưa có tiện ích bổ sung trả phí nào",
+            "emptyHint": "Tiện ích bổ sung được tạo trong danh mục Marketplace của bảng điều khiển nhà điều hành. Khi một ứng dụng có gói trả phí, nó được liệt kê ở đây.",
+            "loadFailed": "Không thể tải các tiện ích bổ sung.",
+            "loadFailedKept": "Không thể tải các tiện ích bổ sung, nên lựa chọn hiện tại được giữ nguyên trừ khi bạn thay đổi ở đây.",
+            "retry": "Thử lại",
+            "noMatch": "Không có tiện ích bổ sung nào khớp với tìm kiếm.",
+            "unknown": "Tiện ích bổ sung không xác định",
+            "unknownHint": "Tiện ích bổ sung này không còn tồn tại. Bỏ chọn để gỡ khỏi gói.",
+            "notOnSale": "Không bán",
+            "packInactive": "Gói tiện ích bổ sung đang tắt nên không ai mua được.",
+            "appUnpublished": "Ứng dụng chưa được xuất bản nên các không gian làm việc chưa thấy được.",
+            "appLabel": "Ứng dụng: {name}",
+            "price": "{price} {period}"
+          },
+          "featureHints": {
+            "automation": "Trình tạo luồng và tự động hóa để phản hồi và xử lý các cuộc trò chuyện.",
+            "ai_assistants": "Trợ lý AI, gồm chế độ AI trong widget chatbot trên website.",
+            "calling": "Mục gọi điện: cuộc gọi thoại và cài đặt cuộc gọi.",
+            "woocommerce": "Kết nối cửa hàng WooCommerce để gửi tin đơn hàng, khôi phục giỏ hàng và phát tin cho cửa hàng.",
+            "shopify": "Kết nối cửa hàng Shopify để gửi tin đơn hàng, khôi phục giỏ hàng và phát tin cho cửa hàng.",
+            "analytics": "Bảng điều khiển phân tích và báo cáo.",
+            "remove_branding": "White-label: không gian làm việc có thể ẩn thương hiệu nền tảng ở chân trang.",
+            "sales_pipeline": "Giao dịch, công việc và quy trình bán hàng, cùng số liệu quy trình trên bảng điều khiển.",
+            "appointment_booking": "Loại lịch hẹn, cuộc hẹn và trang đặt lịch công khai. Ứng dụng Lịch hẹn trả phí nắm công tắc này.",
+            "chatbot_widgets": "Trình tạo widget chatbot trên website.",
+            "wa_storefront": "Khu vực danh mục và cửa hàng WhatsApp.",
+            "inbox_sla": "Chính sách SLA và thời hạn trong hộp thư nhóm.",
+            "inbox_routing": "Quy tắc định tuyến tự động phân công cuộc trò chuyện trong hộp thư.",
+            "waba_calling": "Gọi điện WhatsApp từ hộp thư: số gọi, quyền gọi, thực hiện và nhận cuộc gọi.",
+            "inbox_kanban": "Chế độ xem bảng Kanban của hộp thư nhóm.",
+            "team_performance": "Báo cáo hiệu suất nhóm.",
+            "scheduled_messages": "Hẹn giờ gửi tin nhắn sau.",
+            "whatsapp_warmer": "Công cụ làm nóng số WhatsApp.",
+            "marketplace": "Marketplace gồm các ứng dụng nhỏ và tích hợp.",
+            "lead_sources": "Nguồn khách hàng tiềm năng: các cổng webhook và trình kết nối biến khách từ quảng cáo và cổng thông tin thành liên hệ và giao dịch.",
+            "team_chat": "Kênh trò chuyện nhóm nội bộ và tin nhắn trực tiếp.",
+            "public_api": "REST API công khai và các khóa API.",
+            "outbound_webhooks": "Điểm cuối webhook gửi đi báo cho hệ thống khác về các sự kiện.",
+            "storefront_builder": "Trình tạo cửa hàng trực tuyến.",
+            "invoicing": "Hóa đơn, phiếu ghi có, thanh toán, đơn bán hàng và thuế suất.",
+            "forms_and_links": "Biểu mẫu thu thập khách hàng tiềm năng và liên kết chia sẻ.",
+            "extra_channels": "Các kênh Telegram, Facebook và Instagram.",
+            "form_builder": "Biểu mẫu web được lưu trữ và nhúng tạo liên hệ trong CRM. Ứng dụng Biểu mẫu trả phí nắm công tắc này.",
+            "waba_groups": "Tạo và quản lý nhóm WhatsApp từ số Cloud API: liên kết mời, yêu cầu tham gia, thành viên. Số phải là Official Business Account."
+          },
+          "units": {
+            "days": "Ngày",
+            "weeks": "Tuần",
+            "months": "Tháng",
+            "years": "Năm"
+          },
+          "sections": {
+            "identity": {
+              "title": "Nhận dạng",
+              "description": "Cách đặt tên và hiển thị gói."
+            },
+            "pricing": {
+              "title": "Giá",
+              "description": "Chi phí và tần suất thanh toán."
+            },
+            "limits": {
+              "title": "Giới hạn",
+              "description": "Để trống giới hạn để không giới hạn."
+            },
+            "features": {
+              "title": "Tính năng",
+              "description": "Tắt những gì gói không bao gồm."
+            }
+          },
+          "fields": {
+            "name": {
+              "label": "Tên gói"
+            },
+            "subtitle": {
+              "label": "Phụ đề",
+              "hint": "Một dòng ngắn dưới tên (tối đa {max} ký tự)."
+            },
+            "detail": {
+              "label": "Mô tả",
+              "hint": "Hiển thị trên trang bảng giá (tối đa {max} ký tự)."
+            },
+            "ctaLabel": {
+              "label": "Nhãn nút",
+              "hint": "Tối đa {max} ký tự."
+            },
+            "sortOrder": {
+              "label": "Thứ tự sắp xếp",
+              "hint": "Số nhỏ hơn xếp trước."
+            },
+            "currency": {
+              "label": "Tiền tệ",
+              "placeholder": "Tìm tiền tệ",
+              "empty": "Không có tiền tệ nào khớp với tìm kiếm."
+            },
+            "amount": {
+              "label": "Giá",
+              "hint": "Ví dụ 19 hoặc 19.99.",
+              "locked": "Gói miễn phí và báo giá tùy chỉnh không có giá.",
+              "none": "không"
+            },
+            "offerAmount": {
+              "label": "Giá ưu đãi",
+              "hint": "Không bắt buộc. Phải thấp hơn giá."
+            },
+            "billingDuration": {
+              "label": "Chu kỳ thanh toán",
+              "hint": "Từ {min} đến {max}."
+            },
+            "billingUnit": {
+              "label": "Đơn vị"
+            },
+            "dataRetentionDays": {
+              "label": "Lưu giữ dữ liệu (số ngày sau khi hết hạn)",
+              "hint": "Số ngày sau khi gói trả phí hết hạn trước khi dữ liệu của không gian làm việc bị xóa. 0 = không bao giờ. Việc xóa là vĩnh viễn."
+            }
+          },
+          "flags": {
+            "isActive": {
+              "label": "Hoạt động",
+              "hint": "Gói không hoạt động bị ẩn khỏi người mua; các không gian làm việc đang dùng vẫn giữ gói."
+            },
+            "isDefault": {
+              "label": "Mặc định cho đăng ký",
+              "hint": "Không gian làm việc mới bắt đầu ở đây trừ khi chính sách đăng ký chỉ định gói khác. Chỉ một gói có thể là mặc định."
+            },
+            "isHighlighted": {
+              "label": "Nổi bật là phổ biến",
+              "hint": "Hiển thị huy hiệu Phổ biến nhất."
+            },
+            "isFree": {
+              "label": "Gói miễn phí",
+              "hint": "Không có giá. Không gian làm việc mới dùng gói miễn phí được dùng thử miễn phí."
+            },
+            "isCustomQuote": {
+              "label": "Báo giá tùy chỉnh",
+              "hint": "Không hiển thị giá. Người mua được dẫn tới trao đổi với bộ phận bán hàng."
+            },
+            "isLifetime": {
+              "label": "Giá một lần",
+              "hint": "Tính phí một lần, không theo từng chu kỳ thanh toán."
+            }
+          },
+          "limitGroups": {
+            "messaging": "Nhắn tin",
+            "workspace": "Không gian làm việc",
+            "content": "Nội dung",
+            "sales": "Bán hàng và thanh toán",
+            "integrations": "Tích hợp",
+            "ai": "AI"
+          },
+          "limitKeys": {
+            "monthly_messages": "Tin nhắn mỗi tháng",
+            "broadcasts": "Phát tin",
+            "devices": "Số đã kết nối",
+            "users": "Chỗ ngồi của nhóm",
+            "contacts": "Liên hệ",
+            "tags": "Thẻ",
+            "pipelines": "Quy trình bán hàng",
+            "appointments": "Lịch hẹn mỗi tháng",
+            "saved_replies": "Câu trả lời đã lưu",
+            "routing_rules": "Quy tắc định tuyến",
+            "templates": "Mẫu tin nhắn",
+            "flows": "Luồng",
+            "autoreplies": "Tự động trả lời theo từ khóa",
+            "total_campaigns": "Chiến dịch đã tạo (xóa không giải phóng chỗ)",
+            "api_rate_limit_per_minute": "Yêu cầu API mỗi phút (0 = mặc định của nền tảng)",
+            "installed_apps": "Ứng dụng và tích hợp Marketplace đã cài",
+            "scheduled_messages": "Tin hẹn giờ đang giữ",
+            "lead_sources": "Nguồn khách hàng tiềm năng",
+            "broadcast_recipients": "Người nhận trong một lần phát tin",
+            "segments": "Phân khúc đã lưu",
+            "custom_fields": "Trường tùy chỉnh",
+            "team_chat_channels": "Kênh trò chuyện nhóm",
+            "sla_policies": "Chính sách SLA hộp thư",
+            "booking_types": "Loại lịch hẹn",
+            "chatbot_widgets": "Widget chatbot trên website",
+            "catalog_products": "Sản phẩm trong danh mục",
+            "invoices_monthly": "Hóa đơn mỗi tháng",
+            "recurring_invoices": "Hóa đơn định kỳ",
+            "api_keys": "Khóa API",
+            "webhooks": "Webhook gửi đi",
+            "ai_token_limit_monthly": "Token AI mỗi tháng (khóa của nền tảng)",
+            "forms": "Biểu mẫu web",
+            "form_submissions_monthly": "Lượt gửi biểu mẫu mỗi tháng",
+            "ai_form_generations_monthly": "Lượt tạo bằng trình tạo biểu mẫu AI mỗi tháng"
+          },
+          "featureGroups": {
+            "messaging": "Nhắn tin",
+            "aiCalling": "AI và gọi điện",
+            "integrations": "Tích hợp",
+            "advanced": "Nâng cao"
+          },
+          "featureKeys": {
+            "automation": "Tự động hóa",
+            "ai_assistants": "Trợ lý AI",
+            "calling": "Gọi điện WhatsApp",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "analytics": "Phân tích",
+            "remove_branding": "White-label (gỡ thương hiệu nền tảng)",
+            "sales_pipeline": "Quy trình bán hàng (giao dịch và công việc)",
+            "appointment_booking": "Lịch hẹn và trang đặt lịch",
+            "chatbot_widgets": "Widget chatbot trên website",
+            "wa_storefront": "Cửa hàng và danh mục WhatsApp",
+            "inbox_sla": "Chính sách SLA hộp thư",
+            "inbox_routing": "Quy tắc định tuyến hộp thư và giờ làm việc",
+            "waba_calling": "Thực hiện và nhận cuộc gọi WhatsApp từ hộp thư",
+            "inbox_kanban": "Bảng Kanban hộp thư",
+            "team_performance": "Báo cáo hiệu suất nhóm",
+            "scheduled_messages": "Tin nhắn hẹn giờ",
+            "whatsapp_warmer": "Công cụ làm nóng số WhatsApp",
+            "marketplace": "Marketplace (ứng dụng nhỏ và tích hợp)",
+            "lead_sources": "Nguồn khách hàng tiềm năng (cổng webhook và trình kết nối tạo liên hệ)",
+            "team_chat": "Trò chuyện nhóm (kênh nội bộ và tin nhắn trực tiếp)",
+            "public_api": "REST API công khai và khóa API",
+            "outbound_webhooks": "Webhook gửi đi",
+            "storefront_builder": "Trình tạo cửa hàng và website",
+            "invoicing": "Lập hóa đơn (hóa đơn, phiếu ghi có, hóa đơn định kỳ)",
+            "forms_and_links": "Biểu mẫu, liên kết nhấp để trò chuyện và nhóm",
+            "extra_channels": "Kênh Telegram, Facebook và Instagram",
+            "form_builder": "Biểu mẫu (trình tạo biểu mẫu web)",
+            "waba_groups": "Nhóm WhatsApp (Cloud API)"
+          },
+          "problems": {
+            "required": "Trường này là bắt buộc.",
+            "tooLong": "Tối đa {max} ký tự.",
+            "money": "Nhập số tiền như 19 hoặc 19.99.",
+            "range": "Nhập số nguyên từ {min} đến {max}.",
+            "whole": "Nhập số nguyên, hoặc để trống để không giới hạn.",
+            "server": "Máy chủ từ chối giá trị này.",
+            "unknownAddon": "Số tiện ích bổ sung đã chọn không còn tồn tại: {count}. Hãy bỏ chọn và lưu lại.",
+            "free_needs_zero_price": "Gói miễn phí phải có giá 0.",
+            "free_no_offer": "Gói miễn phí không thể có giá ưu đãi.",
+            "custom_no_price": "Gói báo giá tùy chỉnh không hiển thị giá: hãy để trống giá và ưu đãi.",
+            "custom_not_free": "Một gói không thể vừa miễn phí vừa báo giá tùy chỉnh.",
+            "paid_needs_price": "Đặt giá lớn hơn 0, hoặc đánh dấu gói là miễn phí.",
+            "offer_not_lower": "Giá ưu đãi phải thấp hơn giá của gói.",
+            "default_needs_active": "Gói mặc định khi đăng ký phải đang hoạt động."
+          },
+          "limitHints": {
+            "monthly_messages": "Tin nhắn gửi đi trong tháng dương lịch. Vượt hạn mức sẽ trừ vào ví.",
+            "broadcasts": "Các lần phát tin chưa lưu trữ.",
+            "scheduled_messages": "Tin hẹn giờ mà không gian làm việc đang giữ, ở mọi trạng thái. Xóa một tin sẽ giải phóng chỗ.",
+            "total_campaigns": "Chiến dịch được tạo trong kỳ gói. Xóa chiến dịch không trả lại chỗ.",
+            "devices": "Số WhatsApp đã kết nối. Gỡ một số sẽ giải phóng chỗ.",
+            "users": "Thành viên nhóm chưa bị vô hiệu hóa.",
+            "contacts": "Liên hệ trong không gian làm việc.",
+            "tags": "Thẻ liên hệ.",
+            "pipelines": "Quy trình bán hàng.",
+            "appointments": "Lịch hẹn đặt trong tháng dương lịch (đang chờ, đã xác nhận hoặc hoàn tất), theo giờ bắt đầu.",
+            "saved_replies": "Câu trả lời đã lưu (trả lời nhanh) của hộp thư nhóm.",
+            "routing_rules": "Quy tắc định tuyến của hộp thư nhóm.",
+            "templates": "Mẫu tin nhắn WhatsApp.",
+            "flows": "Luồng trong trình tạo.",
+            "autoreplies": "Tự động trả lời theo từ khóa.",
+            "api_rate_limit_per_minute": "Số yêu cầu mỗi phút cho từng khóa API. 0 dùng mặc định của nền tảng thay vì không giới hạn.",
+            "installed_apps": "Ứng dụng và tích hợp Marketplace đang cài. Gỡ cài đặt sẽ giải phóng chỗ.",
+            "lead_sources": "Nguồn khách hàng tiềm năng (cổng webhook và trình kết nối). Xóa một nguồn sẽ giải phóng chỗ.",
+            "broadcast_recipients": "Số người nhận lớn nhất mà một lần phát tin có thể gửi tới, kiểm tra khi tạo hoặc sửa lần phát tin.",
+            "segments": "Phân khúc liên hệ đã lưu. Xóa một phân khúc sẽ giải phóng chỗ.",
+            "custom_fields": "Trường tùy chỉnh thêm vào bất kỳ mô-đun nào. Các trường hệ thống tích hợp sẵn không được tính.",
+            "team_chat_channels": "Kênh trò chuyện nhóm, công khai và riêng tư. Xóa một kênh sẽ giải phóng chỗ.",
+            "sla_policies": "Chính sách SLA của hộp thư nhóm.",
+            "booking_types": "Loại lịch hẹn đằng sau các trang đặt lịch công khai.",
+            "chatbot_widgets": "Widget chatbot trên website.",
+            "catalog_products": "Sản phẩm trong danh mục WhatsApp. Xóa một sản phẩm sẽ giải phóng chỗ.",
+            "invoices_monthly": "Hóa đơn tạo trong tháng dương lịch, ở mọi trạng thái. Hủy hoặc xóa một hóa đơn không trả lại chỗ của tháng.",
+            "recurring_invoices": "Lịch hóa đơn định kỳ, ở mọi trạng thái.",
+            "api_keys": "Khóa API đang hoạt động. Thu hồi một khóa sẽ giải phóng chỗ.",
+            "webhooks": "Điểm cuối webhook gửi đi (webhook hộp thư và webhook API cộng lại).",
+            "ai_token_limit_monthly": "Số token mà trợ lý AI dùng trong tháng dương lịch trên khóa của nền tảng. Không gian làm việc dùng khóa riêng không bị giới hạn.",
+            "forms": "Biểu mẫu web đang hoạt động (ứng dụng Biểu mẫu). Lưu trữ một biểu mẫu sẽ giải phóng chỗ. 0 = không giới hạn.",
+            "form_submissions_monthly": "Lượt gửi biểu mẫu được chấp nhận trong tháng dương lịch, không tính spam. Vượt giới hạn, lượt gửi vẫn được lưu để xem xét, không bị bỏ. 0 = không giới hạn.",
+            "ai_form_generations_monthly": "Lượt tạo bằng trình tạo biểu mẫu AI trong tháng dương lịch, gồm cả lần thử sửa lại. 0 = không giới hạn."
+          }
+        }
+      },
+      "authPages": {
+        "kicker": "Trang dành cho khách",
+        "title": "Trang xác thực",
+        "description": "Chọn thiết kế cho các trang đăng nhập, đăng ký và quên mật khẩu, rồi chỉnh chữ và màu của từng trang. Bản xem trước hiển thị các thay đổi chưa lưu như khách truy cập sẽ thấy. Liên kết Điều khoản và Quyền riêng tư trên các trang này được đặt trong <link>Chính sách đăng ký</link>.",
+        "save": "Lưu thay đổi",
+        "saving": "Đang lưu",
+        "saved": "{count, plural, other {Đã lưu # cài đặt}}",
+        "rejected": "Chưa lưu gì. {count, plural, other {# trường bị từ chối}}.",
+        "requestId": "Mã yêu cầu",
+        "unsaved": "{count, plural, other {# thay đổi chưa lưu}}",
+        "discard": "Hủy thay đổi",
+        "errors": {
+          "unexpected": "Không thể lưu cài đặt. Hãy thử lại sau giây lát."
+        },
+        "problems": {
+          "accent": "Dùng màu theo dạng #rrggbb.",
+          "mediaUrl": "Dùng địa chỉ https đầy đủ."
+        },
+        "pages": {
+          "login": "Đăng nhập",
+          "register": "Đăng ký",
+          "forgot": "Quên mật khẩu"
+        },
+        "designs": {
+          "legend": "Mẫu thiết kế",
+          "legendNote": "Một lựa chọn cho cả ba trang",
+          "split": {
+            "name": "Trưng bày chia đôi",
+            "description": "Bảng tiếp thị một bên, biểu mẫu bên kia."
+          },
+          "cinematic": {
+            "name": "Điện ảnh",
+            "description": "Ảnh hoặc video toàn màn hình phía sau thẻ ở giữa."
+          },
+          "minimal": {
+            "name": "Tối giản",
+            "description": "Thẻ đơn giản ở giữa, không có hình minh họa."
+          },
+          "spotlight": {
+            "name": "Tiêu điểm thương hiệu",
+            "description": "Bảng nổi bật màu nhấn cạnh biểu mẫu."
+          },
+          "aurora": {
+            "name": "Cực quang",
+            "description": "Màu phát sáng mềm phía sau thẻ mờ."
+          }
+        },
+        "fields": {
+          "accent": "Màu nhấn",
+          "accentHint": "Màu hex sáu chữ số như #0f766e. Không chấp nhận dạng ngắn (#fff), tám chữ số hoặc tên màu. Dùng cho từ nổi bật, nút và bảng thương hiệu. Đặt lại sẽ về màu mặc định.",
+          "accentPicker": "Chọn màu nhấn",
+          "accentHex": "Màu nhấn dạng hex",
+          "accentReset": "Đặt lại mặc định",
+          "mediaUrl": "Địa chỉ phương tiện",
+          "mediaType": "Loại phương tiện",
+          "eyebrow": "Dòng mở đầu",
+          "heading": "Tiêu đề",
+          "headingAccent": "Từ nhấn trong tiêu đề",
+          "subheading": "Văn bản phụ",
+          "emptyHint": "Tối đa {max} ký tự. Để trống để dùng văn bản mặc định hiển thị màu xám."
+        },
+        "media": {
+          "title": "Phương tiện bên cạnh",
+          "description": "Ảnh, GIF hoặc video lặp cho bảng thiết kế. Hiện bạn tự lưu trữ: dán địa chỉ https công khai.",
+          "url": "Địa chỉ phương tiện",
+          "urlHint": "Phải bắt đầu bằng https. Để trống nếu không dùng phương tiện.",
+          "type": "Loại phương tiện",
+          "types": {
+            "image": "Hình ảnh",
+            "gif": "GIF động",
+            "video": "Video lặp"
+          },
+          "clear": "Xóa phương tiện"
+        },
+        "showcase": {
+          "title": "Văn bản bảng giới thiệu",
+          "description": "Hiển thị trong thiết kế Split showcase. Các trường để trống sẽ giữ văn bản mặc định.",
+          "groups": {
+            "hero": "Thẻ nổi bật",
+            "stats": "Thống kê",
+            "features": "Thẻ tính năng",
+            "chips": "Nhãn nhanh",
+            "footer": "Dòng chân trang"
+          },
+          "keys": {
+            "hero_title": "Tiêu đề nổi bật",
+            "hero_desc": "Nội dung nổi bật",
+            "stat1_num": "Giá trị thống kê 1",
+            "stat1_label": "Nhãn thống kê 1",
+            "stat2_num": "Giá trị thống kê 2",
+            "stat2_label": "Nhãn thống kê 2",
+            "stat3_num": "Giá trị thống kê 3",
+            "stat3_label": "Nhãn thống kê 3",
+            "feat1_title": "Tiêu đề tính năng 1",
+            "feat1_desc": "Nội dung tính năng 1",
+            "feat2_title": "Tiêu đề tính năng 2",
+            "feat2_desc": "Nội dung tính năng 2",
+            "feat3_title": "Tiêu đề tính năng 3",
+            "feat3_desc": "Nội dung tính năng 3",
+            "feat4_title": "Tiêu đề tính năng 4",
+            "feat4_desc": "Nội dung tính năng 4",
+            "inside_heading": "Tiêu đề nhãn nhanh",
+            "chip1": "Nhãn 1",
+            "chip2": "Nhãn 2",
+            "chip3": "Nhãn 3",
+            "chip4": "Nhãn 4",
+            "chip5": "Nhãn 5",
+            "chip6": "Nhãn 6",
+            "footer": "Văn bản chân trang"
+          }
+        },
+        "preview": {
+          "title": "Xem trước trực tiếp",
+          "note": "Đang hiển thị trang {page} với các thay đổi chưa lưu của bạn.",
+          "showcaseNote": "Chỉ thiết kế Split showcase mới hiển thị văn bản bảng giới thiệu.",
+          "device": "Kích thước xem trước",
+          "devices": {
+            "desktop": "Máy tính",
+            "mobile": "Điện thoại"
+          },
+          "frameLabel": "Xem trước trang",
+          "frameTitle": "Xem trước trang {page}",
+          "form": {
+            "org": "Tên không gian làm việc",
+            "name": "Tên của bạn",
+            "email": "Email",
+            "password": "Mật khẩu",
+            "remember": "Duy trì đăng nhập trong 30 ngày",
+            "submit": {
+              "login": "Đăng nhập",
+              "register": "Tạo không gian làm việc",
+              "forgot": "Gửi liên kết đặt lại"
+            },
+            "workspace": "Địa chỉ không gian làm việc",
+            "forgotLink": "Quên mật khẩu?",
+            "newHere": "Bạn mới đến?",
+            "createAccount": "Tạo không gian làm việc",
+            "haveAccount": "Đã có tài khoản?",
+            "signInLink": "Đăng nhập",
+            "backToSignIn": "Quay lại đăng nhập",
+            "captchaV3": "Trang này được bảo vệ bởi reCAPTCHA.",
+            "captchaV2": "Tôi không phải người máy",
+            "captchaBrand": "reCAPTCHA"
+          },
+          "enlarge": "Phóng to bản xem trước",
+          "shrink": "Cạnh nhau",
+          "openReal": "Mở trang thật",
+          "openRealNote": "Mở phiên bản đã lưu trong tab mới. Các thay đổi chưa lưu chỉ hiển thị trong bản xem trước này.",
+          "opensNewTab": "(mở trong tab mới)"
+        },
+        "pagesLabel": "Trang cần chỉnh sửa"
+      },
+      "ipBlocked": {
+        "kicker": "Truy cập bị chặn",
+        "title": "Địa chỉ này không được phép",
+        "body": "Bảng điều khiển vận hành chỉ chấp nhận yêu cầu từ các địa chỉ nằm trong danh sách cho phép. Địa chỉ gửi các yêu cầu này không có trong danh sách nên bảng điều khiển đã từ chối.",
+        "addressLabel": "Địa chỉ bị chặn",
+        "addressUnknown": "Máy chủ không thể đọc địa chỉ của bạn.",
+        "fixTitle": "Cách để được truy cập",
+        "fixBody": "Một quản trị viên cấp cao vẫn truy cập được bảng điều khiển sẽ thêm địa chỉ này vào danh sách IP cho phép. Không có gì khác về tài khoản của bạn thay đổi.",
+        "fixPath": "Trung tâm bảo mật › API và webhook › Danh sách IP cho phép",
+        "dashboard": "Đến trang tổng quan",
+        "signOut": "Đăng xuất",
+        "signingOut": "Đang đăng xuất"
+      }
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "developer-rest-api-v1-docs": {
+    "metaTitle": "Tài liệu tham khảo API {brand}",
+    "metaDescription": "Tài liệu tham khảo REST API của {brand}: xác thực, giới hạn tốc độ và mọi endpoint kèm ví dụ yêu cầu và phản hồi.",
+    "common": {
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "copyFailed": "Không thể sao chép. Hãy chọn văn bản và sao chép thủ công."
+    },
+    "topbar": {
+      "home": "Trang chủ {brand}",
+      "apiWord": "API",
+      "version": "v1",
+      "spec": "Đặc tả OpenAPI",
+      "getKey": "Lấy khóa API"
+    },
+    "sidebar": {
+      "label": "Điều hướng tài liệu tham khảo",
+      "filterLabel": "Lọc endpoint",
+      "filterPlaceholder": "Lọc endpoint…",
+      "startHere": "Bắt đầu tại đây",
+      "intro": "Giới thiệu",
+      "auth": "Xác thực",
+      "webhooks": "Webhook"
+    },
+    "hero": {
+      "eyebrow": "Tài liệu dành cho nhà phát triển",
+      "title": "<em>REST API</em> của {brand}",
+      "lead": "Một REST API duy nhất để gửi tin nhắn WhatsApp, chạy chiến dịch gửi hàng loạt và chiến dịch, quản lý liên hệ và mẫu, kích hoạt luồng tự động hóa và đọc tài khoản của bạn, mọi thứ CRM, nền tảng tự động hóa hay ứng dụng của bạn cần.",
+      "baseUrl": "URL gốc",
+      "copyBaseUrl": "Sao chép URL gốc"
+    },
+    "capabilities": {
+      "title": "Bạn có thể làm gì",
+      "send": {
+        "title": "Gửi tin nhắn",
+        "body": "Gửi đơn lẻ, gửi hàng loạt, chiến dịch và gửi theo lịch"
+      },
+      "receive": {
+        "title": "Nhận tin nhắn",
+        "body": "Đọc các hội thoại đến và tin nhắn của chúng"
+      },
+      "contacts": {
+        "title": "Liên hệ và khách hàng tiềm năng",
+        "body": "Đầy đủ tạo, đọc, cập nhật và xóa, nhóm và thuộc tính tùy chỉnh"
+      },
+      "templates": {
+        "title": "Mẫu",
+        "body": "Tạo, cập nhật và liệt kê các mẫu WhatsApp"
+      },
+      "flows": {
+        "title": "Luồng tự động hóa",
+        "body": "Đăng ký một liên hệ vào luồng qua API"
+      },
+      "status": {
+        "title": "Trạng thái gửi",
+        "body": "Từng tin nhắn: đã gửi, đã gửi đến, đã đọc và thất bại"
+      },
+      "devices": {
+        "title": "Thiết bị",
+        "body": "Liệt kê các số đã kết nối và trạng thái của chúng"
+      },
+      "account": {
+        "title": "Tài khoản và mức sử dụng",
+        "body": "Gói, giới hạn và tín dụng tin nhắn"
+      }
+    },
+    "auth": {
+      "title": "Xác thực",
+      "intro": "Mọi yêu cầu đều được xác thực bằng <strong>khóa API</strong> của không gian làm việc. Tạo khóa trong bảng điều khiển tại <strong>Cài đặt, REST API</strong>. Gửi khóa dưới dạng Bearer token:",
+      "copyHeader": "Sao chép header",
+      "alt": "Hoặc truyền khóa trong header <code>X-Api-Key</code>. Khóa thuộc về một không gian làm việc duy nhất và chỉ mã băm của khóa được lưu, nên hãy sao chép khóa khi nó được tạo: khóa không thể hiển thị lại. Khóa có thể bị thu hồi bất cứ lúc nào và ngừng hoạt động ngay lập tức."
+    },
+    "webhooks": {
+      "title": "Webhook và sự kiện thời gian thực",
+      "comingTitle": "Tính năng gửi webhook sắp ra mắt",
+      "comingBody": "Chưa thể đăng ký webhook và nhận sự kiện tại URL của riêng bạn. Hiện chưa có sự kiện nào được gửi đến máy chủ của bạn, nên chưa có gì để đăng ký. Thẻ này sẽ liệt kê các sự kiện và header chữ ký khi tính năng gửi chính thức hoạt động.",
+      "rateLabel": "Giới hạn tốc độ",
+      "rate": "Mỗi khóa bị giới hạn theo mức mỗi phút của gói không gian làm việc; khi gói không đặt mức nào, áp dụng mặc định của nền tảng là {limit} yêu cầu mỗi phút. Mọi phản hồi đều có <code>X-RateLimit-Limit</code> và <code>X-RateLimit-Remaining</code>, và yêu cầu vượt giới hạn sẽ nhận HTTP 429 cùng header <code>Retry-After</code>. Các tin gửi đi cũng trừ vào tín dụng tin nhắn của gói."
+    },
+    "reference": {
+      "title": "Endpoint",
+      "count": "{count, plural, other {# endpoint}}",
+      "noMatch": "Không có endpoint nào khớp với “{query}”.",
+      "clearFilter": "Xóa bộ lọc",
+      "empty": "Chưa có endpoint nào được công bố. Hãy quay lại sau.",
+      "unavailableTitle": "Không thể tải tài liệu endpoint",
+      "unavailableBody": "Hiện không thể truy cập đặc tả API. Phần giới thiệu ở trên vẫn áp dụng. Hãy thử lại sau giây lát.",
+      "retry": "Thử lại",
+      "general": "Chung",
+      "toggle": "Hiện hoặc ẩn chi tiết của {method} {path}",
+      "parameters": "Tham số",
+      "bodyParameters": "Tham số body",
+      "name": "Tên",
+      "field": "Trường",
+      "description": "Mô tả",
+      "required": "bắt buộc",
+      "exampleRequest": "Ví dụ yêu cầu",
+      "requestBody": "Body yêu cầu",
+      "responses": "Phản hồi",
+      "copyCurl": "Sao chép yêu cầu",
+      "copyJson": "Sao chép JSON",
+      "noExample": "Đặc tả không đưa ra ví dụ cho phản hồi này."
+    },
+    "footer": "REST API {brand} · v1 · tạo từ đặc tả OpenAPI trực tiếp"
+  }
+}

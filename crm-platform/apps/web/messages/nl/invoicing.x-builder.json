@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "Een bedrag, aantal of tarief op de factuur kan niet worden gebruikt. Controleer de gemarkeerde velden.",
+        "INV_TAX_RATE_INVALID": "Een van de belastingtarieven kan vandaag niet worden gebruikt: het is inactief of valt buiten de geldigheidsdatum. Kies een ander tarief.",
+        "INV_NOT_DRAFT": "Deze factuur is uitgegeven en kan niet meer worden bewerkt. Dupliceer hem om een gecorrigeerde te maken.",
+        "INV_ORDER_LINKED": "Deze factuur hoort bij een verkooporder, dus die order moet worden gewijzigd.",
+        "SALESDOC_INVALID_TRANSITION": "Het voorstel of de offerte is nog niet geaccepteerd, dus er kan geen factuur van worden gemaakt.",
+        "SALESDOC_ALREADY_CONVERTED": "Dit document is al omgezet in een factuur.",
+        "SALESDOC_INVOICING_UNAVAILABLE": "Facturatie is op deze server nog niet beschikbaar.",
+        "INV_LINK_UNAVAILABLE": "Deze factuurlink is niet meer beschikbaar."
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "Concept maken van het geaccepteerde document...",
+      "duplicating": "Factuur kopiëren naar een nieuw concept...",
+      "openExisting": "Open de factuur die al is aangemaakt",
+      "backToInvoices": "Terug naar facturen",
+      "backToInvoice": "Terug naar de factuur",
+      "issued": "Factuur uitgegeven.",
+      "savedNotIssued": "Het concept is opgeslagen, maar kon niet worden uitgegeven: {reason}",
+      "buyerCountry": "Land",
+      "buyerCountryHint": "Twee letters, zoals NL of BE. Bepaalt het formaat van het btw-nummer en, in de automatische modus, de belasting.",
+      "buyerTaxId": "Belastingnummer",
+      "buyerTaxIdNamed": "Belastingnummer ({label})",
+      "taxIdHint": "GSTIN, btw-nummer, EIN... Wordt gecontroleerd terwijl je typt.",
+      "taxIdExpected": "Verwacht: {label}, bijvoorbeeld {example}.",
+      "taxIdUnchecked": "Voor dit land is geen formaat bekend, dus het nummer wordt opgeslagen zoals je het invoert.",
+      "taxIdValid": "{label} ziet er goed uit ({level, select, checksum {formaat en controlecijfers gecontroleerd} other {alleen het formaat gecontroleerd}}). Dat bewijst niet dat het geregistreerd is.",
+      "taxIdInvalid": "{label} ziet er verkeerd uit ({level, select, checksum {formaat en controlecijfers gecontroleerd} other {alleen het formaat gecontroleerd}}).",
+      "taxIdStillSave": "Je kunt het nog steeds opslaan.",
+      "docType": "Document",
+      "docTypes": {
+        "tax_invoice": "Btw-factuur",
+        "proforma": "Proforma-factuur"
+      },
+      "noDueDate": "Standaard betaaltermijn",
+      "reference": "Referentie",
+      "referenceHint": "Het ordernummer van de koper of een andere referentie om af te drukken.",
+      "tax": "Belasting",
+      "taxMode": "Hoe de belasting wordt berekend",
+      "taxModes": {
+        "rates": "Belastingtarieven",
+        "auto": "Automatisch"
+      },
+      "taxModeHint": {
+        "rates": "Kies per regel een belastingtarief. Een regel die op de standaard blijft, gebruikt het standaardtarief van je workspace.",
+        "auto": "De belastingberekening bepaalt per regel de belasting op basis van je land, het land en het belastingnummer van de koper, de levering en de plaats van levering. Het antwoord van de server wordt opgeslagen."
+      },
+      "sellerCountry": "Je land (uit het factuurprofiel)",
+      "sellerCountryMissing": "Automatische belasting heeft je land nodig in het factuurprofiel (een land met een belastingvoorinstelling). Stel het daar eerst in.",
+      "supplyType": "Levering",
+      "supplyTypes": {
+        "goods": "Goederen",
+        "services": "Diensten",
+        "digital": "Digitale diensten"
+      },
+      "placeOfSupply": "Plaats van levering",
+      "placeOfSupplyHint": "Een staat of provincie van {country}; laat op de eerste keuze staan voor het hele land.",
+      "placeSameCountry": "Heel land",
+      "placeRegionPlaceholder": "Regiocode, optioneel",
+      "reverseCharge": "BTW verlegd",
+      "reverseChargeHint": "De koper boekt de belasting zelf, dus er wordt op deze factuur geen belasting berekend.",
+      "shipping": "Verzendkosten ({currency})",
+      "shippingHint": "Krijgt nooit korting en wordt nooit belast.",
+      "legalNotes": "Juridische opmerkingen",
+      "legalNotesHint": "Verplichte tekst op het document, zoals een verklaring van verlegging. De automatische modus vult deze in wanneer de wet dat vereist.",
+      "problems": {
+        "contactRequired": "Kies een contact of typ de naam van de koper.",
+        "currencyInvalid": "Vul een valutacode van drie letters in.",
+        "issueDateInvalid": "Vul een geldige uitgiftedatum in.",
+        "dueBeforeIssue": "De vervaldatum kan niet voor de uitgiftedatum liggen.",
+        "dueInvalid": "Vul een geldige vervaldatum in.",
+        "noLines": "Voeg minstens één regel toe voordat je uitgeeft.",
+        "discountInvalid": "Vul een geldige korting in (een percentage van 0 tot 100, of een bedrag).",
+        "shippingInvalid": "Vul een geldig bedrag voor verzendkosten in.",
+        "emailInvalid": "Vul een geldig e-mailadres in.",
+        "amountZero": "Het factuurtotaal moet groter zijn dan nul.",
+        "amountInvalid": "Een bedrag is te groot of heeft te veel decimalen voor deze valuta.",
+        "countryInvalid": "Gebruik een landcode van twee letters.",
+        "regionInvalid": "Gebruik een korte regiocode, maximaal drie letters of cijfers.",
+        "autoNeedsSellerCountry": "Stel je land in het factuurprofiel in om automatische belasting te gebruiken.",
+        "descriptionRequired": "Beschrijf deze regel.",
+        "qtyInvalid": "Vul een aantal boven nul in, met maximaal 4 decimalen.",
+        "priceInvalid": "Vul een geldige prijs in met het aantal decimalen dat deze valuta toestaat.",
+        "lineDiscountInvalid": "Vul een geldige korting voor deze regel in.",
+        "hsnRequired": "Vul de HSN/SAC-code in. Je land vraagt die op elke regel.",
+        "hsnInvalid": "Een HSN/SAC-code bestaat uit 2 tot 12 letters of cijfers.",
+        "taxRateRemoved": "Het belastingtarief van deze regel is verwijderd. Kies een actueel tarief."
+      }
+    },
+    "lines": {
+      "discount": "Korting",
+      "discountKind": "Kortingstype",
+      "taxAuto": "Automatisch",
+      "taxDefault": "Standaard ({rate})",
+      "taxDefaultNone": "Standaard (geen belasting)",
+      "removedRateOption": "{rate}, verwijderd",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "Code"
+    },
+    "totals": {
+      "shipping": "Verzending",
+      "taxIncluded": "{name}, inbegrepen",
+      "taxOn": "over {base}",
+      "reverseCharge": "Verlegging: er wordt geen belasting berekend.",
+      "includesTotal": "Belasting inbegrepen in prijzen"
+    },
+    "taxWhy": {
+      "title": "Waarom deze belasting?",
+      "preview": "Voorbeeld",
+      "previewNote": "Wordt in je browser berekend terwijl je bewerkt. Wat de server bij opslaan beslist, telt.",
+      "taxFree": "Over deze levering wordt geen belasting berekend",
+      "warnings": "Controleer dit nog eens",
+      "placeOfSupply": "Plaats van levering",
+      "reverseCharge": "Verlegging",
+      "reverseChargeNote": "De koper boekt de belasting zelf, dus er wordt geen belasting berekend.",
+      "documentNotes": "Afgedrukt op het document",
+      "disclaimer": "Tarieven en regels zijn standaardwaarden die je met je accountant of de belastingdienst moet controleren. Dit is geen juridisch of fiscaal advies."
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "Btw-factuur",
+        "proforma": "Proforma-factuur",
+        "receipt": "Ontvangstbewijs"
+      },
+      "sellerTaxId": "Belastingnummer",
+      "registrationNo": "Reg.nr.",
+      "buyerTaxId": "Belastingnummer",
+      "reference": "Referentie",
+      "placeOfSupply": "Plaats van levering",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "{amount} korting",
+      "shipping": "Verzending",
+      "credited": "Gecrediteerd",
+      "taxSummary": "Belastingoverzicht",
+      "taxName": "Belasting",
+      "taxBase": "Belastbaar bedrag",
+      "taxAmount": "Belasting",
+      "taxInclusive": "inbegrepen",
+      "reverseCharge": "Verlegging: de koper boekt de belasting zelf.",
+      "paymentsReceived": "Ontvangen betalingen",
+      "refund": "terugbetaling",
+      "bankDetails": "Bankgegevens",
+      "voidReason": "Geannuleerd: {reason}"
+    },
+    "public": {
+      "notFoundTitle": "Link niet gevonden",
+      "notFoundMessage": "Deze factuurlink bestaat niet. Controleer of je hem helemaal hebt gekopieerd, of vraag de afzender om de link opnieuw.",
+      "unavailableTitle": "Deze link is niet beschikbaar",
+      "unavailableMessage": "De factuurlink is ingetrokken of verlopen. Vraag de afzender om een nieuwe link.",
+      "voidReason": "Reden: {reason}",
+      "printable": "Open de pagina om af te drukken",
+      "amountDueFooter": "Te betalen: {amount}",
+      "noPayOptions": "De verkoper heeft nog geen online betaalmogelijkheid ingesteld. Neem contact op om de betaling te regelen.",
+      "payAmount": "Te betalen bedrag ({currency})",
+      "payAmountHint": "Het volledige saldo is ingevuld. Vul een lager bedrag in om een deel te betalen.",
+      "amountErrors": {
+        "invalid": "Vul een bedrag boven nul in.",
+        "tooMuch": "Het bedrag kan niet hoger zijn dan wat verschuldigd is."
+      },
+      "linkUnavailable": "Deze factuurlink is niet meer beschikbaar, dus hier kan niet worden betaald.",
+      "payFailed": "We konden de betaling niet starten. Probeer het zo meer.",
+      "payUnavailable": "Online betalen is voor deze factuur nu niet beschikbaar.",
+      "redirecting": "We brengen je naar de betaalpagina...",
+      "payInstructions": "Betaal zoals hieronder beschreven.",
+      "bankTransfer": "Bankoverschrijving",
+      "copyInstructions": "De instructies kopiëren",
+      "copyValue": "{label} kopiëren"
+    }
+  }
+}

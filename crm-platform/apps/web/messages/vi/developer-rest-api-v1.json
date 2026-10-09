@@ -1,0 +1,93 @@
+{
+  "developer-rest-api-v1": {
+    "common": {
+      "dismiss": "Bỏ qua",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "copyFailed": "Không thể sao chép. Hãy chọn văn bản và sao chép thủ công."
+    },
+    "rail": {
+      "name": "API dành cho nhà phát triển",
+      "tagline": "REST · /api/v1",
+      "keyActive": "Khóa đang hoạt động",
+      "noKey": "Chưa có khóa",
+      "baseUrl": "URL gốc",
+      "authHeader": "Header xác thực",
+      "help": {
+        "title": "Cần trợ giúp?",
+        "body": "Tài liệu yêu cầu và phản hồi đầy đủ, kèm ví dụ có thể sao chép cho mọi endpoint.",
+        "link": "Đọc tài liệu"
+      }
+    },
+    "page": {
+      "crumbLabel": "Đường dẫn điều hướng",
+      "crumbSettings": "Cài đặt",
+      "crumbHere": "Nhà phát triển",
+      "title": "Nhà phát triển",
+      "titleAccent": "Khóa API",
+      "lead": "Tạo khóa để gọi REST API từ ứng dụng, CRM hoặc hệ thống tự động hóa của bạn: gửi tin nhắn, quản lý liên hệ, mẫu, chiến dịch gửi hàng loạt và hơn thế. Mỗi không gian làm việc một khóa.",
+      "back": "Quay lại",
+      "openDocs": "Mở tài liệu",
+      "loading": "Đang tải khóa API của bạn",
+      "forbidden": {
+        "title": "Bạn không thể xem khóa API",
+        "body": "Vai trò của bạn không có quyền truy cập khóa API. Hãy nhờ quản trị viên không gian làm việc cấp quyền khóa API cho bạn."
+      }
+    },
+    "banner": {
+      "title": "Khóa API mới của bạn",
+      "warning": "Hãy sao chép ngay và lưu giữ an toàn. Vì bảo mật, chúng tôi chỉ lưu mã băm nên khóa sẽ không bao giờ hiển thị lại."
+    },
+    "key": {
+      "title": "Khóa API của bạn",
+      "active": "Đang hoạt động",
+      "untitled": "Khóa chưa đặt tên",
+      "created": "Tạo ngày {date}",
+      "lastUsed": "Dùng lần cuối {when}",
+      "never": "chưa bao giờ",
+      "revoke": "Thu hồi",
+      "noRevoke": "Vai trò của bạn không thể thu hồi khóa API.",
+      "revoked": "Đã thu hồi khóa API. Mọi ứng dụng đang dùng nó sẽ ngừng hoạt động ngay lập tức.",
+      "footer": "Mỗi không gian làm việc chỉ được một khóa. Hãy thu hồi khóa này để cấp khóa mới.",
+      "confirm": {
+        "title": "Thu hồi khóa này?",
+        "message": "Mọi ứng dụng hoặc tích hợp đang dùng khóa này sẽ ngừng hoạt động ngay lập tức. Không thể hoàn tác. Sau đó bạn có thể tạo khóa mới.",
+        "accept": "Thu hồi",
+        "cancel": "Hủy"
+      }
+    },
+    "create": {
+      "title": "Tạo khóa của bạn",
+      "help": "Hãy đặt tên cho khóa để nhớ nơi nó được dùng. Khóa chỉ hiển thị một lần khi tạo.",
+      "name": "Tên khóa",
+      "placeholder": "VD: Backend sản xuất",
+      "submit": "Tạo khóa",
+      "submitting": "Đang tạo khóa…",
+      "created": "Đã tạo khóa API. Hãy sao chép ngay - khóa sẽ không hiển thị lại.",
+      "noCreate": "Vai trò của bạn không thể tạo khóa API. Hãy nhờ quản trị viên không gian làm việc.",
+      "planLocked": "Gói của bạn không bao gồm REST API.",
+      "errors": {
+        "required": "Nhập tên cho khóa.",
+        "tooLong": "Tên tối đa 120 ký tự."
+      }
+    },
+    "quickstart": {
+      "title": "Bắt đầu nhanh",
+      "reference": "Tài liệu đầy đủ",
+      "intro": "Gửi tin nhắn đầu tiên của bạn. Hãy thay khóa và người nhận:"
+    },
+    "errors": {
+      "planLimit": "Bạn đã có một khóa API đang hoạt động. Hãy thu hồi nó trước khi tạo khóa mới - mỗi không gian làm việc chỉ được một khóa.",
+      "planLocked": "Gói của bạn không bao gồm REST API. Hãy nâng cấp để tạo khóa API.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác đó.",
+      "validation": "Tên khóa không hợp lệ. Hãy kiểm tra và thử lại.",
+      "notFound": "Khóa đó không còn tồn tại. Danh sách đã được làm mới.",
+      "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "unexpected": "Đã xảy ra lỗi từ phía chúng tôi. Hãy thử lại sau giây lát.",
+      "loadFailed": "Không thể tải khóa API của bạn.",
+      "retry": "Thử lại",
+      "upgrade": "Xem các gói",
+      "requestId": "Mã yêu cầu: {id}"
+    }
+  }
+}

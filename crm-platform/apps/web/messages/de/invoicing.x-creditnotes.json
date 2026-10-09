@@ -1,0 +1,326 @@
+{
+  "invoicing": {
+    "nav": {
+      "creditNotes": "Gutschriften"
+    },
+    "errors": {
+      "codes": {
+        "CN_EXCEEDS_INVOICE": "Gutschriften dürfen zusammen nicht höher sein als die Rechnung. Verringern Sie die Beträge oder schreiben Sie nur noch den verbleibenden Betrag gut.",
+        "CN_NOT_DRAFT": "Nur eine Gutschrift im Entwurf kann bearbeitet oder gelöscht werden. Laden Sie neu, um den aktuellen Stand zu sehen.",
+        "CN_ALREADY_VOID": "Diese Gutschrift ist bereits storniert.",
+        "CN_HAS_REFUND": "Für diese Gutschrift wurde Geld zurückgegeben, daher kann sie nicht storniert werden. Die Erstattung bleibt im Zahlungsjournal.",
+        "CN_NOTHING_TO_CREDIT": "Hier ist nichts mehr gutzuschreiben. Wählen Sie eine Position mit einem Restbetrag oder geben Sie einen Betrag ein.",
+        "CN_LINE_INVALID": "Eine gutgeschriebene Position ist ungültig: Die Menge ist größer als der Restbetrag oder ein Betrag ist falsch. Prüfen Sie die markierten Positionen.",
+        "INV_NOT_ISSUED": "Eine Gutschrift kann nur zu einer ausgestellten Rechnung erstellt werden."
+      }
+    },
+    "creditNotes": {
+      "status": {
+        "draft": "Entwurf",
+        "issued": "Ausgestellt",
+        "void": "Storniert"
+      },
+      "reasons": {
+        "return": "Retoure",
+        "price_adjustment": "Preisanpassung",
+        "billing_error": "Abrechnungsfehler",
+        "cancellation": "Stornierung",
+        "goodwill": "Kulanz",
+        "other": "Sonstiges"
+      },
+      "settlements": {
+        "balance": "Auf Saldo angerechnet",
+        "refund": "Barerstattung"
+      },
+      "tabs": {
+        "label": "Status der Gutschrift",
+        "all": "Alle",
+        "draft": "Entwurf",
+        "issued": "Ausgestellt",
+        "void": "Storniert"
+      },
+      "list": {
+        "title": "Gutschriften",
+        "subtitle": "Dokumente, die den Betrag mindern, den ein Käufer für eine ausgestellte Rechnung schuldet.",
+        "invoices": "Rechnungen",
+        "newCreditNote": "Neue Gutschrift",
+        "search": "Nach Nummer oder Käufer suchen",
+        "reset": "Filter zurücksetzen",
+        "refresh": "Aktualisieren",
+        "tableLabel": "Gutschriften",
+        "noAccessTitle": "Kein Zugriff",
+        "noAccess": "Sie haben keine Berechtigung, Gutschriften einzusehen.",
+        "emptyFilteredTitle": "Keine Gutschriften entsprechen der Suche",
+        "emptyFiltered": "Versuchen Sie eine andere Suche oder setzen Sie die Filter zurück.",
+        "resetFilters": "Filter zurücksetzen",
+        "empty": {
+          "all": {
+            "title": "Noch keine Gutschriften",
+            "message": "Schreiben Sie eine ausgestellte Rechnung gut, wenn Waren zurückkommen, ein Preis falsch war oder Sie dem Kunden etwas zurückgeben möchten."
+          },
+          "draft": {
+            "title": "Keine Entwürfe",
+            "message": "Gutschriften, die Sie noch vorbereiten, werden hier angezeigt."
+          },
+          "issued": {
+            "title": "Nichts ausgestellt",
+            "message": "Ausgestellte Gutschriften haben eine Nummer und haben die Rechnung bereits verändert."
+          },
+          "void": {
+            "title": "Nichts storniert",
+            "message": "Stornierte Gutschriften werden hier aufbewahrt."
+          }
+        },
+        "showing": "{count, plural, one {# Gutschrift} other {# Gutschriften}} geladen",
+        "loadMore": "Mehr laden",
+        "allLoaded": "Alle geladen",
+        "loading": "Gutschriften werden geladen",
+        "contactLoading": "...",
+        "invoiceChip": "Rechnung {number}",
+        "clearInvoice": "Gutschriften aller Rechnungen anzeigen"
+      },
+      "table": {
+        "draft": "Entwurf",
+        "scrollArea": "Tabelle der Gutschriften, seitlich scrollbar",
+        "columns": {
+          "number": "Gutschrift",
+          "invoice": "Rechnung",
+          "buyer": "Käufer",
+          "reason": "Grund",
+          "settlement": "Abrechnung",
+          "total": "Gesamt",
+          "applied": "Auf Saldo angerechnet",
+          "refunded": "Bar erstattet",
+          "issued": "Ausstellungsdatum",
+          "status": "Status"
+        }
+      },
+      "row": {
+        "moreFor": "Weitere Aktionen für {name}",
+        "draft": "Entwurf",
+        "open": "Öffnen",
+        "edit": "Entwurf bearbeiten",
+        "issue": "Ausstellen",
+        "pdf": "PDF herunterladen",
+        "print": "Drucken",
+        "void": "Stornieren",
+        "delete": "Entwurf löschen"
+      },
+      "dialogs": {
+        "draftName": "diesen Entwurf",
+        "close": "Schließen",
+        "keep": "Behalten",
+        "done": {
+          "issue": "Gutschrift {name} ausgestellt.",
+          "void": "Gutschrift {name} storniert.",
+          "delete": "Entwurf gelöscht."
+        },
+        "issue": {
+          "title": "Diese Gutschrift ausstellen?",
+          "message": "Sie erhält ihre Nummer und verringert den Betrag, den der Käufer für die Rechnung schuldet. Bei einer Barerstattung wird das Geld über das Zahlungsjournal zurückgegeben. Danach kann sie nicht mehr bearbeitet werden.",
+          "confirm": "Gutschrift ausstellen"
+        },
+        "void": {
+          "title": "Diese Gutschrift stornieren?",
+          "warning": "Die Gutschrift zählt nicht mehr: Die Rechnung kehrt zu dem Stand zurück, den sie vor dieser Gutschrift hatte.",
+          "reason": "Warum wird sie storniert?",
+          "reasonHint": "Pflichtfeld. Wird auf der Gutschrift gespeichert.",
+          "confirm": "Gutschrift stornieren"
+        },
+        "delete": {
+          "title": "Diesen Entwurf löschen?",
+          "message": "Der Entwurf wird endgültig entfernt. Es wurde nichts ausgestellt, daher ändert sich die Rechnung nicht.",
+          "confirm": "Entwurf löschen"
+        }
+      },
+      "picker": {
+        "total": "Rechnungsbetrag",
+        "paid": "Bezahlt",
+        "credited": "Bisher gutgeschrieben",
+        "balance": "Offener Betrag",
+        "loading": "Rechnung wird geladen",
+        "change": "Rechnung ändern",
+        "search": "Ausgestellte Rechnungen nach Nummer oder Käufer suchen",
+        "results": "Rechnungen, die gutgeschrieben werden können",
+        "searching": "Suche läuft ...",
+        "none": "Keine ausgestellte Rechnung gefunden.",
+        "more": "Mehr anzeigen",
+        "totalShort": "Gesamt",
+        "notCreditable": "Eine Gutschrift kann nur zu einer ausgestellten Rechnung erstellt werden (ausgestellt, teilweise bezahlt, überfällig oder bezahlt). Wählen Sie eine andere Rechnung."
+      },
+      "lines": {
+        "invoiceLines": "Positionen der Rechnung",
+        "creditLine": "{name} gutschreiben",
+        "lineFacts": "{qty} für {amount} vor Steuer berechnet",
+        "tax": "Steuer",
+        "taxIncluded": "{name} {rate} % im Preis enthalten",
+        "taxAdded": "{name} {rate} % zuzüglich",
+        "alreadyCredited": "{qty} bereits gutgeschrieben, {left} übrig",
+        "fullyCredited": "Bereits vollständig gutgeschrieben",
+        "qtyToCredit": "Zu gutschreibende Menge",
+        "freeTitle": "Freie Positionen",
+        "freeHint": "Ein Kulanzbetrag oder eine Anpassung, die keiner Position zugeordnet ist. Der Betrag gilt vor Steuer.",
+        "description": "Beschreibung",
+        "amount": "Betrag vor Steuer",
+        "taxRate": "Steuersatz",
+        "noTax": "Keine Steuer",
+        "inclusive": "inklusive",
+        "removeFree": "Diese Position entfernen",
+        "addFree": "Freie Position hinzufügen"
+      },
+      "problems": {
+        "noInvoice": "Wählen Sie die Rechnung, die gutgeschrieben werden soll.",
+        "nothing": "Wählen Sie etwas zum Gutschreiben aus: eine Position oder einen freien Betrag.",
+        "qtyInvalid": "Geben Sie eine Menge größer als 0 mit höchstens 4 Nachkommastellen ein.",
+        "qtyExceeds": "Auf dieser Position können noch höchstens {max} gutgeschrieben werden.",
+        "descriptionRequired": "Beschreiben Sie, was gutgeschrieben wird.",
+        "amountInvalid": "Geben Sie einen Betrag größer als 0 ein.",
+        "noteTooLong": "Die Notiz ist länger als 2000 Zeichen."
+      },
+      "estimate": {
+        "title": "Geschätzte Gutschrift",
+        "disclaimer": "Eine Schätzung auf Basis der Rechnungspreise und Steuern. Maßgeblich sind die Werte, die der Server speichert.",
+        "empty": "Noch nichts zum Gutschreiben. Wählen Sie die ganze Rechnung oder markieren Sie Positionen.",
+        "lineQty": "Menge {qty}",
+        "taxSummary": "Steuerübersicht",
+        "included": "inklusive",
+        "taxOn": "{tax} auf {base}",
+        "subtotal": "Vor Steuer",
+        "tax": "Steuer",
+        "total": "Gutschrift gesamt",
+        "exceeds": "Dies ist mehr, als für die Rechnung noch gutgeschrieben werden kann ({max}). Der Server lehnt dies ab.",
+        "money": "Was mit dem Geld passiert",
+        "balanceBefore": "Derzeit offener Betrag",
+        "balanceAfter": "Offener Betrag danach",
+        "applied": "Auf die Rechnung angerechnet",
+        "refunded": "Bar erstattet",
+        "refundNote": "Barerstattung: Geld, das der Käufer über den noch offenen Betrag hinaus gezahlt hat, wird beim Ausstellen über das Zahlungsjournal zurückgegeben.",
+        "balanceNote": "Auf Saldo angerechnet: Es wird kein Geld ausgezahlt. Die Gutschrift verringert nur den offenen Betrag des Käufers."
+      },
+      "builder": {
+        "noAccess": "Sie haben keine Berechtigung, Gutschriften zu erstellen.",
+        "backToList": "Zurück zu den Gutschriften",
+        "loading": "Gutschrift wird geladen",
+        "notDraft": "Nur eine Gutschrift im Entwurf kann bearbeitet werden.",
+        "openIt": "Gutschrift öffnen",
+        "back": "Zurück",
+        "newTitle": "Neue Gutschrift",
+        "editTitle": "Gutschriftentwurf bearbeiten",
+        "conflict": "Diese Gutschrift wurde während Ihrer Bearbeitung von einer anderen Person geändert. Laden Sie neu, um die neueste Version zu sehen. Ihre Änderungen hier gehen dann verloren.",
+        "reload": "Neu laden",
+        "invoice": {
+          "title": "Zu gutschreibende Rechnung",
+          "hint": "Eine Gutschrift gehört zu genau einer ausgestellten Rechnung."
+        },
+        "details": {
+          "title": "Details",
+          "reason": "Grund",
+          "issueDate": "Ausstellungsdatum",
+          "issueDateHint": "Leer lassen, um den Tag der Ausstellung zu verwenden (heute ist {today}).",
+          "note": "Notiz",
+          "noteHint": "Wird auf der Gutschrift gedruckt. Optional."
+        },
+        "settlement": {
+          "title": "Was mit dem Geld passiert",
+          "hint": "Jetzt festgelegt, beim Ausstellen der Gutschrift angewendet.",
+          "balance": {
+            "title": "Auf den offenen Betrag der Rechnung anrechnen",
+            "body": "Die Rechnung wird geringer. Es wird kein Geld bewegt. Verwenden Sie dies, wenn der Käufer noch nicht bezahlt hat oder das Guthaben behält."
+          },
+          "refund": {
+            "title": "Barerstattung",
+            "body": "Was der Käufer bereits über den jetzt offenen Betrag hinaus bezahlt hat, wird als Erstattung über das Zahlungsjournal zurückgegeben."
+          }
+        },
+        "what": {
+          "title": "Was gutgeschrieben wird",
+          "pickFirst": "Wählen Sie zuerst die Rechnung aus.",
+          "loadingCredits": "Frühere Gutschriften dieser Rechnung werden geprüft",
+          "full": {
+            "title": "Die gesamte restliche Rechnung",
+            "body": "Schreibt jede Position gut sowie den Versand mit der ersten Gutschrift. Noch gutschreibbar:"
+          },
+          "lines": {
+            "title": "Einige Positionen oder Beträge",
+            "body": "Markieren Sie die Positionen und Mengen zum Gutschreiben oder fügen Sie einen freien Betrag hinzu."
+          }
+        },
+        "saveDraft": "Entwurf speichern",
+        "saveAndIssue": "Speichern und ausstellen",
+        "cancel": "Abbrechen",
+        "estimateWaiting": "Wählen Sie eine Rechnung, um die geschätzte Gutschrift zu sehen.",
+        "savedToast": "Gutschrift als Entwurf gespeichert.",
+        "issuedToast": "Gutschrift {number} ausgestellt.",
+        "savedNotIssued": "Als Entwurf gespeichert, konnte aber nicht ausgestellt werden: {reason}"
+      },
+      "detail": {
+        "noAccess": "Sie haben keine Berechtigung, Gutschriften einzusehen.",
+        "loading": "Gutschrift wird geladen",
+        "back": "Zurück zu den Gutschriften",
+        "backToList": "Zurück zu den Gutschriften",
+        "draft": "Entwurf",
+        "againstInvoice": "Zu Rechnung",
+        "edit": "Bearbeiten",
+        "issue": "Ausstellen",
+        "pdf": "PDF",
+        "print": "Drucken",
+        "void": "Stornieren",
+        "delete": "Löschen",
+        "cannotVoidRefunded": "Für diese Gutschrift wurde Geld zurückgegeben, daher kann sie nicht storniert werden. Die Erstattung bleibt im Zahlungsjournal.",
+        "voidedOn": "Storniert am {date}",
+        "voided": "Diese Gutschrift wurde storniert.",
+        "voidReason": "Grund"
+      },
+      "money": {
+        "title": "Was mit dem Geld passiert ist",
+        "titleDraft": "Was mit dem Geld passieren wird",
+        "total": "Gutschriftsbetrag",
+        "applied": "Auf die Rechnung angerechnet",
+        "refunded": "Bar erstattet",
+        "voidNote": "Diese Gutschrift wurde storniert und mindert die Rechnung nicht mehr.",
+        "draftNote": "Wenn Sie sie jetzt so ausstellen:",
+        "estimate": "Eine Schätzung bis zur Ausstellung.",
+        "balanceBody": "Abrechnung: auf Saldo angerechnet. Es wird kein Geld ausgezahlt.",
+        "refundBody": "Abrechnung: Barerstattung. Geld, das über den offenen Betrag hinaus gezahlt wurde, geht über das Zahlungsjournal an den Käufer zurück."
+      },
+      "after": {
+        "title": "Die Rechnung nach dieser Gutschrift",
+        "titleNow": "Die Rechnung jetzt",
+        "total": "Rechnungsbetrag",
+        "paid": "Bezahlt",
+        "credited": "Gutgeschrieben",
+        "balance": "Offener Betrag",
+        "credit": "Guthaben zugunsten des Käufers"
+      },
+      "paper": {
+        "label": "Gutschrift {number}",
+        "labelDraft": "Gutschriftentwurf",
+        "void": "Storniert",
+        "sellerFallback": "Ihr Unternehmen",
+        "title": "Gutschrift",
+        "draftNumber": "Entwurf",
+        "creditedTo": "Gutgeschrieben an",
+        "buyerFallback": "Käufer",
+        "issued": "Ausgestellt",
+        "invoice": "Rechnung",
+        "item": "Artikel",
+        "qty": "Menge",
+        "unit": "Einzelpreis",
+        "tax": "Steuer",
+        "net": "Netto",
+        "taxAmount": "Steuerbetrag",
+        "total": "Gesamt",
+        "taxFallback": "Steuer",
+        "taxSummary": "Steuerübersicht",
+        "taxRate": "Satz",
+        "taxBase": "Steuerbemessungsgrundlage",
+        "included": "inklusive",
+        "subtotal": "Vor Steuer",
+        "taxTotal": "Steuer",
+        "totalCredit": "Gutschrift gesamt",
+        "reason": "Grund",
+        "note": "Notiz"
+      }
+    }
+  }
+}

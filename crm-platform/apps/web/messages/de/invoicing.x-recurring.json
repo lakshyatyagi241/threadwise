@@ -1,0 +1,370 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "REC_ENDED": "Dieser Zeitplan ist beendet, daher gibt es nichts mehr zu ändern oder auszuführen.",
+        "REC_NOT_ACTIVE": "Dieser Zeitplan ist nicht aktiv. Setzen Sie ihn zuerst fort.",
+        "REC_START_TOO_OLD": "Das Startdatum liegt zu weit in der Vergangenheit. Es werden höchstens 12 vergangene Zeiträume erstellt, daher beginnen Sie mit einem späteren Datum.",
+        "INV_RECURRING_INVALID": "Die Vorlage konnte nicht für eine Rechnung verwendet werden. Prüfen Sie Käufer, Positionen und Steuer und speichern Sie erneut."
+      }
+    },
+    "recurring": {
+      "title": "Wiederkehrende Rechnungen",
+      "subtitle": "Zeitpläne, die Rechnungen selbstständig zu den von Ihnen festgelegten Terminen erstellen.",
+      "new": "Neuer Zeitplan",
+      "invoices": "Rechnungen",
+      "tabsLabel": "Status des Zeitplans",
+      "tabs": {
+        "all": "Alle",
+        "active": "Aktiv",
+        "paused": "Pausiert",
+        "ended": "Beendet"
+      },
+      "search": "Geladene Zeitpläne durchsuchen",
+      "refresh": "Aktualisieren",
+      "tableLabel": "Zeitpläne für wiederkehrende Rechnungen",
+      "scrollArea": "Tabelle der Zeitpläne, horizontal scrollbar",
+      "loading": "Zeitpläne werden geladen",
+      "empty": {
+        "all": {
+          "title": "Noch keine wiederkehrenden Rechnungen",
+          "message": "Legen Sie einen Zeitplan fest, dann wird die Rechnung jede Woche, jeden Monat oder jedes Jahr für Sie erstellt."
+        },
+        "active": {
+          "title": "Nichts läuft",
+          "message": "Aktive Zeitpläne, die ihre nächste Rechnung termingerecht erstellen, werden hier angezeigt."
+        },
+        "paused": {
+          "title": "Keine pausierten Zeitpläne",
+          "message": "Ein pausierter Zeitplan erstellt keine Rechnungen, bis Sie ihn fortsetzen."
+        },
+        "ended": {
+          "title": "Keine beendeten Zeitpläne",
+          "message": "Ein Zeitplan endet nach seinem letzten Durchlauf oder seinem Enddatum."
+        }
+      },
+      "emptySearchTitle": "Kein Zeitplan passt",
+      "emptySearch": "In den geladenen Zeilen passt nichts. Leeren Sie die Suche oder laden Sie mehr.",
+      "clearSearch": "Suche leeren",
+      "showing": "{count, plural, one {1 Zeitplan wird angezeigt} other {# Zeitpläne werden angezeigt}}",
+      "showingMatches": "{count} von {loaded} geladenen Zeitplänen passen",
+      "loadMore": "Mehr laden",
+      "allLoaded": "Alle Zeitpläne geladen",
+      "searchLoadedOnly": "Die Suche berücksichtigt nur die bereits geladenen Zeitpläne. Laden Sie mehr, um weiter zu suchen.",
+      "columns": {
+        "name": "Zeitplan",
+        "buyer": "Käufer",
+        "every": "Wiederholung",
+        "next": "Nächster Durchlauf",
+        "last": "Letzter Durchlauf",
+        "runs": "Durchläufe",
+        "failures": "Fehler",
+        "amount": "Pro Rechnung",
+        "mode": "Jede Rechnung beträgt",
+        "status": "Status",
+        "actions": "Aktionen"
+      },
+      "lineCount": "{count, plural, one {1 Position} other {# Positionen}}",
+      "onHold": "Angehalten",
+      "runsOf": "{done} von {max}",
+      "failuresTitle": "{count, plural, one {1 Zeitraum ist fehlgeschlagen. Verlauf öffnen.} other {# Zeiträume sind fehlgeschlagen. Verlauf öffnen.}}",
+      "channel": {
+        "link": "Link",
+        "email": "E-Mail",
+        "whatsapp": "WhatsApp"
+      },
+      "moreFor": "Weitere Aktionen für {name}",
+      "open": "Öffnen",
+      "edit": "Bearbeiten",
+      "pause": "Pausieren",
+      "resume": "Fortsetzen",
+      "cancel": "Abbrechen",
+      "runNow": {
+        "action": "Jetzt ausführen",
+        "title": "{name} jetzt ausführen?",
+        "confirm": "Jetzt ausführen",
+        "message": {
+          "draft": "Dadurch wird die Rechnung für {date} jetzt als Entwurf erstellt, den Sie prüfen können. Der Zeitplan rückt auf den nächsten Zeitraum vor.",
+          "issue": "Dadurch wird die Rechnung für {date} jetzt erstellt und ausgestellt (sie erhält sofort ihre Nummer). Der Zeitplan rückt auf den nächsten Zeitraum vor.",
+          "issue_send": "Dadurch wird die Rechnung für {date} jetzt erstellt, ausgestellt und an den Käufer gesendet. Der Zeitplan rückt auf den nächsten Zeitraum vor."
+        }
+      },
+      "delete": {
+        "action": "Löschen",
+        "title": "{name} löschen?",
+        "message": "{name} erstellt keine Rechnungen mehr. Bereits erstellte Rechnungen bleiben in Ihrer Liste.",
+        "confirm": "Zeitplan löschen",
+        "keep": "Behalten"
+      },
+      "toast": {
+        "paused": "{name} ist pausiert.",
+        "resumed": "{name} läuft wieder. Nächste Rechnung: {date}.",
+        "resumedEnded": "{name} hatte keine Zeiträume mehr und ist daher beendet.",
+        "ran": "Aus {name} wurde eine Rechnung erstellt.",
+        "runFailed": "Der Durchlauf für {name} ist fehlgeschlagen und wurde erfasst. Öffnen Sie den Verlauf, um die Ursache zu sehen.",
+        "deleted": "{name} wurde gelöscht."
+      },
+      "every": {
+        "day": "{interval, plural, one {Täglich} other {Alle # Tage}}",
+        "week": "{interval, plural, one {Wöchentlich} other {Alle # Wochen}}",
+        "month": "{interval, plural, one {Monatlich} other {Alle # Monate}}",
+        "year": "{interval, plural, one {Jährlich} other {Alle # Jahre}}"
+      },
+      "status": {
+        "active": "Aktiv",
+        "paused": "Pausiert",
+        "ended": "Beendet"
+      },
+      "runStatus": {
+        "created": "Erstellt",
+        "failed": "Fehlgeschlagen"
+      },
+      "modeShort": {
+        "draft": "Ein Entwurf",
+        "issue": "Ausgestellt",
+        "issue_send": "Ausgestellt und gesendet"
+      },
+      "modeSent": {
+        "email": "Ausgestellt und per E-Mail gesendet",
+        "link": "Ausgestellt, per Link geteilt",
+        "whatsapp": "Ausgestellt und per WhatsApp gesendet"
+      },
+      "frequency": {
+        "day": "Tage",
+        "week": "Wochen",
+        "month": "Monate",
+        "year": "Jahre"
+      },
+      "modeCards": {
+        "draft": {
+          "title": "Als Entwurf belassen",
+          "hint": "Jede Rechnung wartet auf Ihre Prüfung, bevor sie ausgestellt wird."
+        },
+        "issue": {
+          "title": "Ausstellen",
+          "hint": "Jede Rechnung erhält eine Nummer und ist am Fälligkeitstag bereit."
+        },
+        "issue_send": {
+          "title": "Ausstellen und senden",
+          "hint": "Jede Rechnung wird selbstständig ausgestellt und an den Käufer gesendet."
+        }
+      },
+      "warnings": {
+        "noBuyerEmail": "In der Vorlage gibt es keine E-Mail-Adresse des Käufers, daher schlägt der E-Mail-Versand fehl. Fügen Sie eine E-Mail-Adresse hinzu oder senden Sie per Link."
+      },
+      "preview": {
+        "title": "Nächste Durchläufe",
+        "incomplete": "Füllen Sie den Zeitplan aus, um zu sehen, wann Rechnungen erstellt werden.",
+        "sentence": "{every} ab {start}{limit}. {outcome}",
+        "sentenceLimit": "{kind, select, runs {, {count, plural, one {1 Rechnung} other {# Rechnungen}}} end {, bis {end}} both {, {count, plural, one {1 Rechnung} other {# Rechnungen}}, bis {end}} other {}}",
+        "outcome": {
+          "draft": "Jede Rechnung bleibt als Entwurf zur Prüfung erhalten.",
+          "issue": "Jede Rechnung wird automatisch ausgestellt.",
+          "issue_email": "Jede Rechnung wird ausgestellt und dem Käufer per E-Mail gesendet.",
+          "issue_link": "Jede Rechnung wird ausgestellt und als per Link geteilt erfasst.",
+          "issue_whatsapp": "Jede Rechnung wird ausgestellt und per WhatsApp gesendet."
+        },
+        "eachInvoice": "Jede Rechnung beläuft sich auf etwa",
+        "lastDay": "Letzter Tag des Monats",
+        "noRuns": "In diesen Zeitplan fällt kein Durchlauf.",
+        "endsMaxRuns": "{count, plural, one {Er endet nach 1 Rechnung.} other {Er endet nach # Rechnungen.}}",
+        "endsEndDate": "{count, plural, one {Nach {date} läuft nichts mehr: insgesamt 1 Rechnung.} other {Nach {date} läuft nichts mehr: insgesamt # Rechnungen.}}",
+        "moreBounded": "{count, plural, one {Insgesamt 1 Rechnung.} other {Insgesamt # Rechnungen, die übrigen folgen demselben Rhythmus.}}",
+        "moreForever": "Er läuft weiter, bis Sie ihn pausieren oder löschen.",
+        "clampNote": "Dieser Zeitplan beginnt am Tag {day}. In einem Monat ohne Tag {day} läuft er stattdessen am letzten Tag, und im nächsten Monat springt er zurück auf Tag {day}.",
+        "catchUp": "{count, plural, one {1 Zeitraum liegt bereits zurück: Seine Rechnung wird sofort erstellt.} other {# Zeiträume liegen bereits zurück: Ihre Rechnungen werden sofort erstellt, jeweils eine.}}",
+        "catchUpTooOld": "{count} Zeiträume liegen bereits zurück, und höchstens {max} werden erstellt. Beginnen Sie mit einem späteren Datum."
+      },
+      "builder": {
+        "loading": "Wird geladen",
+        "endedNoEdit": "Dieser Zeitplan ist beendet und kann nicht mehr bearbeitet werden.",
+        "openSchedule": "Zeitplan öffnen",
+        "back": "Zurück",
+        "newTitle": "Neue wiederkehrende Rechnung",
+        "editTitle": "{name} bearbeiten",
+        "newSubtitle": "Legen Sie den Rhythmus und die daraus erstellte Rechnung fest. Die nächsten Durchläufe werden seitlich angezeigt.",
+        "editSubtitle": "Ändern Sie den Rhythmus oder die Rechnung für die noch kommenden Zeiträume.",
+        "cancel": "Abbrechen",
+        "save": "Änderungen speichern",
+        "create": "Zeitplan erstellen",
+        "conflict": "Während Sie bearbeitet haben, hat eine andere Person diesen Zeitplan geändert. Laden Sie neu, um deren Version zu sehen. Ihre Änderungen hier gehen verloren.",
+        "reload": "Neu laden",
+        "fixProblems": "Korrigieren Sie zuerst die markierten Felder.",
+        "nothingToSave": "Nichts wurde geändert.",
+        "saved": "Zeitplan gespeichert.",
+        "created": "{name} erstellt jetzt Rechnungen nach Zeitplan.",
+        "schedule": "Zeitplan",
+        "name": "Name",
+        "nameHint": "Nur Sie sehen ihn, z. B. Monatliche Pauschale.",
+        "every": "Wiederholen alle",
+        "frequency": "Einheit",
+        "startDate": "Erste Rechnung am",
+        "startFixed": "Das Startdatum kann nicht geändert werden. Erstellen Sie einen neuen Zeitplan, um mit einem anderen Datum zu beginnen.",
+        "startHint": "Ein Datum in der Vergangenheit macht die bereits fälligen Zeiträume sofort fällig, bis zu 12.",
+        "endDate": "Enden nach (optional)",
+        "endHint": "Nach diesem Datum wird keine Rechnung erstellt.",
+        "maxRuns": "Anzahl der Rechnungen (optional)",
+        "maxRunsHint": "Der Zeitplan endet nach dieser Anzahl von Rechnungen.",
+        "noLimit": "Kein Limit",
+        "scheduleEditNote": "Ein geänderter Rhythmus gilt ab heute und wiederholt nie einen bereits gelaufenen Zeitraum.",
+        "mode": "Was mit jeder Rechnung geschieht",
+        "sendChannel": "Versenden per",
+        "sendChannelHint": "Link erfasst, dass Sie den Link selbst teilen. E-Mail und WhatsApp versenden ihn für Sie.",
+        "templateTitle": "Rechnungsvorlage",
+        "templateFuture": "Eine neue Vorlage gilt für die noch kommenden Rechnungen. Bereits erstellte Rechnungen bleiben unverändert.",
+        "replaceTemplate": "Vorlage ersetzen",
+        "keepTemplate": "Aktuelle Vorlage behalten"
+      },
+      "template": {
+        "title": "Rechnungsvorlage",
+        "hint": "Für jeden Zeitraum wird aus dieser Vorlage eine neue Rechnung mit dem Datum dieses Zeitraums erstellt.",
+        "hintEdit": "Erstellen Sie hier die neue Vorlage. Sie ersetzt die aktuelle für künftige Rechnungen.",
+        "sourceLabel": "Woher die Vorlage stammt",
+        "source": {
+          "invoice": {
+            "title": "Rechnung kopieren",
+            "hint": "Verwenden Sie Käufer und Positionen einer bereits erstellten Rechnung."
+          },
+          "build": {
+            "title": "Vorlage erstellen",
+            "hint": "Füllen Sie hier Käufer und Positionen aus."
+          }
+        },
+        "draftInvoice": "Rechnungsentwurf",
+        "copyOf": "Eine Kopie dieser Rechnung mit einer Summe von",
+        "change": "Ändern",
+        "choose": "Rechnung auswählen",
+        "copyNote": "Käufer, Positionen, Steuer und Notizen werden beim Speichern kopiert. Spätere Änderungen am Original wirken sich nicht auf den Zeitplan aus.",
+        "startFromInvoice": "Von einer Rechnung ausgehen",
+        "startFromInvoiceHint": "Lädt hier Käufer und Positionen, damit Sie sie anpassen können.",
+        "billTo": "Rechnungsempfänger",
+        "contact": "Kontakt",
+        "contactHint": "Wählen Sie einen Kontakt, um jede Rechnung mit ihm zu verknüpfen, oder geben Sie unten den Käufer ein.",
+        "buyerName": "Name auf der Rechnung",
+        "buyerEmail": "E-Mail",
+        "buyerPhone": "Telefon",
+        "buyerCountry": "Land",
+        "buyerCountryHint": "Zwei Buchstaben, z. B. IN oder DE.",
+        "buyerTaxId": "Steuer-ID",
+        "buyerAddress": "Rechnungsadresse",
+        "details": "Währung und Steuer",
+        "currency": "Währung",
+        "docType": "Dokument",
+        "docTypes": {
+          "tax_invoice": "Steuerrechnung",
+          "proforma": "Proforma-Rechnung"
+        },
+        "taxMode": "Steuer",
+        "taxModes": {
+          "rates": "Nach Steuersatz",
+          "auto": "Automatisch"
+        },
+        "taxModeAutoHint": "Die Steuer-Engine ermittelt die Steuern anhand der Länder von Verkäufer und Käufer.",
+        "supplyType": "Lieferung",
+        "supply": {
+          "goods": "Waren",
+          "services": "Dienstleistungen",
+          "digital": "Digitale Dienstleistungen"
+        },
+        "paymentTerms": "Zahlungsbedingungen",
+        "paymentTermsHint": "Berechnet ab dem Ausstellungstag jeder Rechnung.",
+        "termsDefault": "Workspace-Standard",
+        "termsOnReceipt": "Sofort fällig",
+        "termsNet": "Netto {days}",
+        "lines": "Positionen",
+        "adjustments": "Rabatt und Versand",
+        "discountKind": "Rabatt auf die gesamte Rechnung",
+        "discountNone": "Kein Rabatt",
+        "discountPercent": "Prozent",
+        "discountAmount": "Festbetrag ({currency})",
+        "discountValue": "Rabattwert",
+        "shipping": "Versand ({currency})",
+        "notes": "Hinweis an den Kunden",
+        "notesHint": "Wird auf jeder Rechnung gedruckt.",
+        "termsText": "Allgemeine Geschäftsbedingungen",
+        "termsTextHint": "Wird unten auf jeder Rechnung gedruckt.",
+        "kept": "{count, plural, one {Die Vorlage hat 1 Position, abgerechnet an} other {Die Vorlage hat # Positionen, abgerechnet an}}"
+      },
+      "problems": {
+        "generic": "Prüfen Sie dieses Feld.",
+        "nameRequired": "Geben Sie dem Zeitplan einen Namen.",
+        "nameTooLong": "Verwenden Sie höchstens 120 Zeichen.",
+        "intervalInvalid": "Geben Sie eine ganze Zahl von 1 bis 365 ein.",
+        "startInvalid": "Geben Sie ein gültiges Startdatum ein.",
+        "startTooOld": "Dieses Startdatum liegt {count} Zeiträume zurück, und höchstens {max} vergangene Zeiträume werden erstellt. Wählen Sie ein späteres Datum.",
+        "endInvalid": "Geben Sie ein gültiges Enddatum ein.",
+        "endBeforeStart": "Das Enddatum liegt vor dem Startdatum.",
+        "maxRunsInvalid": "Geben Sie eine ganze Zahl von 1 bis 1000 ein oder lassen Sie das Feld leer.",
+        "invoiceRequired": "Wählen Sie die Rechnung zum Kopieren aus.",
+        "termsInvalid": "Geben Sie 0 bis 365 Tage ein.",
+        "descriptionRequired": "Beschreiben Sie diese Position.",
+        "qtyInvalid": "Geben Sie eine Menge größer als null ein.",
+        "priceInvalid": "Geben Sie einen gültigen Preis ein.",
+        "lineDiscountInvalid": "Geben Sie einen Prozentsatz von 0 bis 100 ein.",
+        "hsnRequired": "Geben Sie den HSN- oder SAC-Code ein.",
+        "hsnInvalid": "Ein HSN- oder SAC-Code besteht aus 2 bis 12 Buchstaben oder Ziffern.",
+        "taxRateRemoved": "Dieser Steuersatz existiert nicht mehr. Wählen Sie einen anderen.",
+        "currencyInvalid": "Geben Sie einen dreistelligen Währungscode ein.",
+        "noLines": "Fügen Sie mindestens eine Position hinzu.",
+        "discountInvalid": "Geben Sie einen gültigen Rabatt ein.",
+        "shippingInvalid": "Geben Sie einen gültigen Betrag ein.",
+        "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+        "amountZero": "Die Rechnungssumme muss größer als null sein.",
+        "amountInvalid": "Dieser Betrag ist nicht gültig.",
+        "contactRequired": "Wählen Sie einen Kontakt oder geben Sie den Namen des Käufers ein. Selbstständig ausgestellte Rechnungen benötigen einen Käufer.",
+        "countryInvalid": "Verwenden Sie einen zweistelligen Ländercode.",
+        "regionInvalid": "Geben Sie einen gültigen Code für Bundesland oder Region ein.",
+        "autoNeedsSellerCountry": "Die automatische Steuer benötigt Ihr Land in den Rechnungseinstellungen."
+      },
+      "detail": {
+        "loading": "Zeitplan wird geladen",
+        "backToList": "Zurück zu wiederkehrenden Rechnungen",
+        "back": "Zurück zu wiederkehrenden Rechnungen",
+        "failures": "{count, plural, one {1 Zeitraum konnte seine Rechnung nicht erstellen.} other {# Zeiträume konnten ihre Rechnung nicht erstellen.}}",
+        "seeHistory": "Ursache ansehen",
+        "pausedNote": "Dieser Zeitplan ist pausiert. Zeiträume, die in die Pause fallen, werden übersprungen: Beim Fortsetzen ist die nächste Rechnung auf heute oder später datiert.",
+        "endedNote": "Dieser Zeitplan ist beendet. Es werden keine weiteren Rechnungen erstellt, und er kann nicht mehr bearbeitet werden.",
+        "nextRun": "Nächster Durchlauf",
+        "lastRun": "Letzter Durchlauf",
+        "runs": "Erstellte Rechnungen",
+        "failedCount": "{count, plural, one {1 Fehler} other {# Fehler}}",
+        "amount": "Pro Rechnung",
+        "amountNote": "Was die Vorlage heute ergibt",
+        "upcoming": "Kommende Termine",
+        "noUpcoming": "Keine weiteren Durchläufe fällig.",
+        "template": "Vorlage",
+        "buyer": "Käufer",
+        "lines": "Positionen",
+        "currency": "Währung",
+        "mode": "Jede Rechnung beträgt",
+        "starts": "Gestartet",
+        "ends": "Endet",
+        "never": "Kein Enddatum",
+        "limit": "Limit",
+        "noLimit": "Kein Limit",
+        "invoicesCount": "{count, plural, one {1 Rechnung} other {# Rechnungen}}",
+        "templateNote": "Das Bearbeiten der Vorlage ändert die noch kommenden Rechnungen, niemals die bereits erstellten."
+      },
+      "runs": {
+        "title": "Durchlaufverlauf",
+        "subtitle": "Eine Zeile pro Zeitraum, neueste zuerst.",
+        "loading": "Verlauf wird geladen",
+        "scrollArea": "Tabelle des Durchlaufverlaufs, horizontal scrollbar",
+        "emptyTitle": "Noch keine Durchläufe",
+        "emptyMessage": "Die erste Rechnung wird am nächsten Durchlauftermin erstellt.",
+        "period": "Zeitraum {n}",
+        "draftInvoice": "Entwurf",
+        "showing": "{count, plural, one {1 Durchlauf wird angezeigt} other {# Durchläufe werden angezeigt}}",
+        "loadMore": "Mehr laden",
+        "allLoaded": "Gesamter Verlauf wird angezeigt",
+        "columns": {
+          "period": "Zeitraumdatum",
+          "status": "Ergebnis",
+          "invoice": "Rechnung",
+          "error": "Fehlerursache",
+          "at": "Erstellt am"
+        }
+      }
+    }
+  }
+}

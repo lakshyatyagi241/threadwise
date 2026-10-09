@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "Faturadaki bir tutar, miktar veya oran kullanılamıyor. Vurgulanan alanları kontrol edin.",
+        "INV_TAX_RATE_INVALID": "Vergi oranlarından biri bugün kullanılamıyor: pasif veya tarih aralığının dışında. Başka bir oran seçin.",
+        "INV_NOT_DRAFT": "Bu fatura kesildiği için artık düzenlenemez. Düzeltilmiş bir fatura için kopyasını oluşturun.",
+        "INV_ORDER_LINKED": "Bu fatura bir satış siparişine bağlı; bunun yerine o sipariş değiştirilmelidir.",
+        "SALESDOC_INVALID_TRANSITION": "Teklif henüz kabul edilmediği için faturaya dönüştürülemez.",
+        "SALESDOC_ALREADY_CONVERTED": "Bu belge zaten faturaya dönüştürüldü.",
+        "SALESDOC_INVOICING_UNAVAILABLE": "Faturalama bu sunucuda henüz kullanılamıyor.",
+        "INV_LINK_UNAVAILABLE": "Bu fatura bağlantısı artık kullanılamıyor."
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "Kabul edilen belgeden taslak oluşturuluyor...",
+      "duplicating": "Fatura yeni bir taslağa kopyalanıyor...",
+      "openExisting": "Daha önce oluşturulan faturayı aç",
+      "backToInvoices": "Faturalara dön",
+      "backToInvoice": "Faturaya dön",
+      "issued": "Fatura kesildi.",
+      "savedNotIssued": "Taslak kaydedildi, ancak kesilemedi: {reason}",
+      "buyerCountry": "Ülke",
+      "buyerCountryHint": "IN veya GB gibi iki harf. Vergi numarası biçimini ve otomatik modda vergiyi belirler.",
+      "buyerTaxId": "Vergi numarası",
+      "buyerTaxIdNamed": "Vergi numarası ({label})",
+      "taxIdHint": "GSTIN, KDV numarası, EIN... Yazarken kontrol edilir.",
+      "taxIdExpected": "Beklenen: {label}, örneğin {example}.",
+      "taxIdUnchecked": "Bu ülke için bilinen bir biçim yok, bu nedenle numara yazıldığı gibi kaydedilir.",
+      "taxIdValid": "{label} doğru görünüyor ({level, select, checksum {biçim ve kontrol basamakları denetlendi} other {yalnızca biçim denetlendi}}). Bu, kayıtlı olduğunu kanıtlamaz.",
+      "taxIdInvalid": "Bu {label} hatalı görünüyor ({level, select, checksum {biçim ve kontrol basamakları denetlendi} other {yalnızca biçim denetlendi}}).",
+      "taxIdStillSave": "Yine de kaydedebilirsiniz.",
+      "docType": "Belge",
+      "docTypes": {
+        "tax_invoice": "Vergi faturası",
+        "proforma": "Proforma fatura"
+      },
+      "noDueDate": "Varsayılan ödeme koşulları",
+      "reference": "Referans",
+      "referenceHint": "Alıcının satın alma sipariş numarası veya yazdırılacak herhangi bir referans.",
+      "tax": "Vergi",
+      "taxMode": "Vergi nasıl hesaplanır",
+      "taxModes": {
+        "rates": "Vergi oranları",
+        "auto": "Otomatik"
+      },
+      "taxModeHint": {
+        "rates": "Her kalem için bir vergi oranı seçin. Varsayılanda bırakılan kalem, çalışma alanınızın varsayılan oranını kullanır.",
+        "auto": "Vergi motoru, her kalemin vergisini ülkenize, alıcının ülkesine ve vergi numarasına, tedarik türüne ve tedarik yerine göre belirler. Kaydedilen, sunucunun yanıtıdır."
+      },
+      "sellerCountry": "Ülkeniz (faturalama profilinden)",
+      "sellerCountryMissing": "Otomatik vergi için faturalama profilinizde ülkeniz olmalıdır (vergi ön ayarı olan bir ülke). Önce orada ayarlayın.",
+      "supplyType": "Tedarik",
+      "supplyTypes": {
+        "goods": "Mal",
+        "services": "Hizmetler",
+        "digital": "Dijital hizmetler"
+      },
+      "placeOfSupply": "Tedarik yeri",
+      "placeOfSupplyHint": "{country} içindeki bir eyalet veya il; tüm ülke için ilk seçenekte bırakın.",
+      "placeSameCountry": "Tüm ülke",
+      "placeRegionPlaceholder": "Bölge kodu, isteğe bağlı",
+      "reverseCharge": "Ters vergilendirme",
+      "reverseChargeHint": "Vergiyi alıcı beyan eder; bu nedenle bu faturada vergi alınmaz.",
+      "shipping": "Kargo ({currency})",
+      "shippingHint": "Asla indirim uygulanmaz veya vergilendirilmez.",
+      "legalNotes": "Yasal notlar",
+      "legalNotesHint": "Ters vergilendirme beyanı gibi belgede gerekli ifadeler. Otomatik mod, yasa gerektirdiğinde bunu doldurur.",
+      "problems": {
+        "contactRequired": "Bir kişi seçin veya alıcının adını yazın.",
+        "currencyInvalid": "Üç harfli bir para birimi kodu girin.",
+        "issueDateInvalid": "Geçerli bir düzenleme tarihi girin.",
+        "dueBeforeIssue": "Vade tarihi, düzenleme tarihinden önce olamaz.",
+        "dueInvalid": "Geçerli bir vade tarihi girin.",
+        "noLines": "Kesmeden önce en az bir kalem ekleyin.",
+        "discountInvalid": "Geçerli bir indirim girin (0 ile 100 arasında yüzde veya tutar).",
+        "shippingInvalid": "Geçerli bir kargo tutarı girin.",
+        "emailInvalid": "Geçerli bir e-posta adresi girin.",
+        "amountZero": "Fatura toplamı sıfırdan büyük olmalıdır.",
+        "amountInvalid": "Tutar çok büyük veya bu para birimi için çok fazla ondalık basamak içeriyor.",
+        "countryInvalid": "İki harfli bir ülke kodu kullanın.",
+        "regionInvalid": "En fazla üç harf veya rakamdan oluşan kısa bir bölge kodu kullanın.",
+        "autoNeedsSellerCountry": "Otomatik vergiyi kullanmak için faturalama profilinizde ülkenizi ayarlayın.",
+        "descriptionRequired": "Bu kalemi açıklayın.",
+        "qtyInvalid": "En fazla 4 ondalık basamaklı, sıfırdan büyük bir miktar girin.",
+        "priceInvalid": "Bu para biriminin izin verdiği ondalık basamaklarla geçerli bir fiyat girin.",
+        "lineDiscountInvalid": "Geçerli bir kalem indirimi girin.",
+        "hsnRequired": "HSN/SAC kodunu girin. Ülkeniz her kalemde bunu ister.",
+        "hsnInvalid": "HSN/SAC kodu 2 ila 12 harf veya rakamdan oluşur.",
+        "taxRateRemoved": "Bu kalemin vergi oranı kaldırıldı. Güncel bir oran seçin."
+      }
+    },
+    "lines": {
+      "discount": "İndirim",
+      "discountKind": "İndirim türü",
+      "taxAuto": "Otomatik",
+      "taxDefault": "Varsayılan ({rate})",
+      "taxDefaultNone": "Varsayılan (vergisiz)",
+      "removedRateOption": "{rate}, kaldırıldı",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "Kod"
+    },
+    "totals": {
+      "shipping": "Kargo",
+      "taxIncluded": "{name}, dahil",
+      "taxOn": "{base} üzerinden",
+      "reverseCharge": "Ters vergilendirme: vergi alınmaz.",
+      "includesTotal": "Vergi fiyatlara dahil"
+    },
+    "taxWhy": {
+      "title": "Neden bu vergi?",
+      "preview": "Önizleme",
+      "previewNote": "Düzenlerken tarayıcınızda hesaplanır. Kaydettiğinizde sunucunun belirlediği geçerlidir.",
+      "taxFree": "Bu tedarikte vergi alınmaz",
+      "warnings": "Tekrar kontrol edin",
+      "placeOfSupply": "Tedarik yeri",
+      "reverseCharge": "Ters vergilendirme",
+      "reverseChargeNote": "Vergiyi alıcı beyan eder; bu nedenle vergi alınmaz.",
+      "documentNotes": "Belgede yazdırılır",
+      "disclaimer": "Oranlar ve kurallar, mali müşavirinizle veya vergi idaresiyle doğrulanması gereken varsayılanlardır. Bu hukuki veya vergisel danışmanlık değildir."
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "Vergi faturası",
+        "proforma": "Proforma fatura",
+        "receipt": "Makbuz"
+      },
+      "sellerTaxId": "Vergi numarası",
+      "registrationNo": "Sicil no.",
+      "buyerTaxId": "Vergi numarası",
+      "reference": "Referans",
+      "placeOfSupply": "Tedarik yeri",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "{amount} indirim",
+      "shipping": "Kargo",
+      "credited": "Alacaklandırıldı",
+      "taxSummary": "Vergi özeti",
+      "taxName": "Vergi",
+      "taxBase": "Vergilendirilebilir tutar",
+      "taxAmount": "Vergi",
+      "taxInclusive": "dahil",
+      "reverseCharge": "Ters vergilendirme: vergiyi alıcı beyan eder.",
+      "paymentsReceived": "Alınan ödemeler",
+      "refund": "iade",
+      "bankDetails": "Banka bilgileri",
+      "voidReason": "İptal edildi: {reason}"
+    },
+    "public": {
+      "notFoundTitle": "Bağlantı bulunamadı",
+      "notFoundMessage": "Bu fatura bağlantısı mevcut değil. Tamamını kopyaladığınızdan emin olun veya göndericiden bağlantıyı yeniden isteyin.",
+      "unavailableTitle": "Bu bağlantı kullanılamıyor",
+      "unavailableMessage": "Fatura bağlantısı geri çekildi veya süresi doldu. Göndericiden yeni bir bağlantı isteyin.",
+      "voidReason": "Neden: {reason}",
+      "printable": "Yazdırılabilir sayfayı aç",
+      "amountDueFooter": "Ödenecek tutar: {amount}",
+      "noPayOptions": "Satıcı çevrimiçi bir ödeme yöntemi ayarlamamış. Ödeme için lütfen onunla iletişime geçin.",
+      "payAmount": "Ödenecek tutar ({currency})",
+      "payAmountHint": "Tüm bakiye dolduruldu. Bir kısmını ödemek için daha küçük bir tutar girin.",
+      "amountErrors": {
+        "invalid": "Sıfırdan büyük bir tutar girin.",
+        "tooMuch": "Tutar, ödenmesi gerekenden fazla olamaz."
+      },
+      "linkUnavailable": "Bu fatura bağlantısı artık kullanılamıyor, bu nedenle buradan ödenemez.",
+      "payFailed": "Ödeme başlatılamadı. Biraz sonra yeniden deneyin.",
+      "payUnavailable": "Bu fatura için şu anda çevrimiçi ödeme kullanılamıyor.",
+      "redirecting": "Ödeme sayfasına yönlendiriliyorsunuz...",
+      "payInstructions": "Aşağıda açıklandığı şekilde ödeyin.",
+      "bankTransfer": "Banka havalesi",
+      "copyInstructions": "Talimatları kopyala",
+      "copyValue": "{label} kopyala"
+    }
+  }
+}

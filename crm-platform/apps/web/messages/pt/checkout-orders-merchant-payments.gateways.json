@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "Loja / Gateways de pagamento",
+      "title": "Gateways de pagamento",
+      "subtitle": "Adicione suas próprias chaves de gateway para que os pagamentos caiam na sua conta. Cole as chaves indicadas no painel do gateway.",
+      "banner": "Uma única configuração de gateway é usada pelo checkout da sua loja e pelas faturas de Vendas.",
+      "viewOnly": "Você pode ver a configuração do gateway, mas não alterá-la. Peça a um administrador do espaço de trabalho permissão para gerenciar gateways.",
+      "scope": {
+        "label": "Onde estas configurações se aplicam",
+        "workspace": "Espaço de trabalho (todas as lojas)",
+        "workspaceHint": "Usada por todas as lojas e pelas faturas de Vendas, a menos que uma loja tenha sua própria substituição.",
+        "store": "Somente esta loja (substituição)",
+        "storeHint": "Usada apenas no checkout de {shop}. Prevalece sobre a configuração do espaço de trabalho.",
+        "storeNamed": "Loja: {shop}",
+        "noShop": "Crie uma loja primeiro para configurar uma substituição.",
+        "shop": "Loja"
+      },
+      "resolved": {
+        "used": "Em uso: {name} (origem: {source})",
+        "none": "Nenhum gateway configurado ainda",
+        "noneHint": "Configure um gateway abaixo e ative-o. Até lá, os compradores não podem pagar online e as faturas não têm botão de pagamento.",
+        "source": {
+          "store_override": "substituição da loja",
+          "workspace_default": "padrão do espaço de trabalho",
+          "legacy_storefront": "chaves da loja"
+        }
+      },
+      "mode": {
+        "live": "Produção",
+        "test": "Teste"
+      },
+      "catalogue": {
+        "title": "Gateways",
+        "count": "{count, plural, one {# gateway} other {# gateways}}",
+        "search": "Buscar gateways",
+        "searchPlaceholder": "Buscar por nome, país ou moeda",
+        "loading": "Carregando gateways",
+        "noDriversTitle": "Nenhum gateway disponível",
+        "noDriversMessage": "Este servidor ainda não tem gateways de pagamento para configurar.",
+        "noMatchTitle": "Nenhum gateway corresponde",
+        "noMatchMessage": "Tente outro nome, país ou código de moeda.",
+        "clearSearch": "Limpar busca"
+      },
+      "card": {
+        "available": "Disponíveis",
+        "unavailable": "Ainda não disponíveis",
+        "paymentLinks": "Links de pagamento",
+        "unavailableNote": "Este gateway está listado, mas ainda não pode receber pagamentos nesta versão.",
+        "active": "Ativo",
+        "off": "Desativado",
+        "incomplete": "Chaves incompletas",
+        "default": "Padrão",
+        "migrated": "Migrado das chaves da sua vitrine. Salve uma vez aqui para mantê-las na nova configuração.",
+        "webhookMissing": "Falta o segredo do webhook: as notificações de pagamento deste gateway são recusadas até você adicionar um.",
+        "notSetUp": "Ainda não configurado para este escopo.",
+        "configure": "Configurar",
+        "edit": "Editar",
+        "test": "Testar conexão",
+        "testing": "Testando",
+        "setDefault": "Definir como padrão",
+        "activeSwitch": "{name} está ativado",
+        "remove": "Remover",
+        "removeTitle": "Remover {name}?",
+        "removeMessage": "As chaves salvas dele são excluídas para este escopo ({scope}). Os compradores não poderão mais pagar por ele e pagamentos já em andamento podem não ser confirmados.",
+        "removeConfirm": "Remover gateway"
+      },
+      "toast": {
+        "saved": "Gateway salvo",
+        "switchedOn": "{name} ativado",
+        "switchedOff": "{name} desativado",
+        "defaultSet": "{name} agora é o padrão",
+        "removed": "{name} removido"
+      },
+      "test": {
+        "verified": "O provedor aceitou as chaves.",
+        "fieldsTitle": "Os campos obrigatórios estão preenchidos",
+        "fieldsOnly": "Apenas os campos obrigatórios foram verificados: este gateway não tem uma chamada de verificação simples, então um pagamento é o teste real.",
+        "missingTitle": "As chaves estão incompletas",
+        "missing": "Estes campos obrigatórios estão vazios: {fields}.",
+        "rejected": "O provedor não aceitou as chaves.",
+        "providerSaid": "O provedor disse: {message}"
+      },
+      "drawer": {
+        "eyebrow": "Configurar gateway",
+        "save": "Salvar gateway",
+        "appliesTo": "Aplica-se a: {scope}",
+        "credentials": "Credenciais",
+        "noFields": "Este gateway não precisa de chaves.",
+        "secretsNote": "As chaves salvas nunca são exibidas novamente. Apenas o final de cada uma é mostrado como lembrete.",
+        "requiredField": "{field} é obrigatório.",
+        "invalidOption": "Escolha uma das opções listadas para {field}.",
+        "mode": "Modo",
+        "modeHint": "Use Teste enquanto experimenta o gateway com as chaves de teste e Produção para receber pagamentos reais.",
+        "active": "Ativo",
+        "activeHint": "Um gateway desativado nunca é usado pelo checkout nem pelas faturas.",
+        "webhookTitle": "Endereço do webhook",
+        "webhookHint": "Cole isto no painel do {name} para que os pagamentos sejam confirmados automaticamente.",
+        "webhookAfterSave": "O endereço do webhook aparece aqui após o primeiro salvamento.",
+        "willClear": "O valor salvo será removido quando você salvar.",
+        "keepBlank": "Deixe em branco para manter o valor salvo.",
+        "requiredMark": "(obrigatório)",
+        "stored": "Salvo: {mask}",
+        "keepOption": "Manter o valor salvo",
+        "chooseOption": "Escolha uma opção",
+        "clear": "Limpar o valor salvo",
+        "show": "Mostrar valor",
+        "hide": "Ocultar valor"
+      }
+    }
+  }
+}

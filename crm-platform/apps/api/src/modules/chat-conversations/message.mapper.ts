@@ -64,6 +64,48 @@ function referralOf(row: MessageRow): MessageResponse['referral'] {
   };
 }
 
+
+const humanType = (t: string): string => {
+  const s = t.replace(/_/g, ' ');
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+/** A Flow answer as `label: value` lines (rows stored before the adapter did this still carry the raw JSON). */
+function flowLines(raw: unknown): string | null {
+  if (typeof raw !== 'string') return null;
+  try {
+    const v: unknown = JSON.parse(raw);
+    if (!v || typeof v !== 'object' || Array.isArray(v)) return null;
+    const lines = Object.entries(v as Record<string, unknown>)
+      .filter(([k, x]) => k !== 'flow_token' && x !== null && x !== undefined && x !== '')
+      .map(([k, x]) => `${k.replace(/_/g, ' ')}: ${typeof x === 'object' ? JSON.stringify(x) : String(x)}`);
+    return lines.length ? lines.join('\n').slice(0, 1000) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Rows stored before the adapter understood a type hold a placeholder ("[Interactive · call_permission_reply]"). They are read as
+ * what they are now, so old threads match new ones without a data migration.
+ */
+function legacyView(row: MessageRow): { kind: MessageRow['kind']; body: string | null; interactive: MessageResponse['interactive'] } | null {
+  const m = row.meta;
+  if (row.direction !== 'in') return null;
+  if (m.interactiveType === 'call_permission_reply' && row.kind === 'text') {
+    const title = 'Call permission reply';
+    return { kind: 'interactive', body: title, interactive: { type: 'button_reply', id: null, title, description: null } };
+  }
+  if (row.kind === 'interactive' && m.flowResponse !== undefined && !m.interactive) {
+    const lines = flowLines(m.flowResponse);
+    if (lines) return { kind: row.kind, body: lines, interactive: null };
+  }
+  if (row.kind === 'text' && m.unsupported === true && typeof m.rawType === 'string' && /^\[[A-Za-z]+_[a-z_]+ message\]$/.test(row.body ?? '')) {
+    return { kind: row.kind, body: `[${humanType(m.rawType)} message]`, interactive: null };
+  }
+  return null;
+}
+
 /**
  * The only place a message row becomes its wire shape (internal ids never leave: every reference is a uuid; the storage key never
  * leaves: the file is a link minted per reader).
@@ -80,14 +122,15 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
       : {};
 
   const mediaState = mediaStateOf(row);
+  const legacy = legacyView(row);
   return {
     id: row.uuid,
     conversationId: row.conversationUuid,
     seq: row.seq,
     direction: row.direction,
-    kind: row.kind,
+    kind: legacy?.kind ?? row.kind,
     sender: { kind: row.senderKind, userId: row.senderUserUuid, name: row.senderName },
-    body: row.body,
+    body: legacy ? legacy.body : row.body,
     media: row.mediaKey
       ? {
           url: url ?? '',
@@ -107,8 +150,13 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
         : null,
     mediaState,
     contacts: contactsOf(row),
-    interactive: interactiveOf(row),
+    interactive: legacy?.interactive ?? interactiveOf(row),
+    forwarded: row.meta.forwarded === true ? true : undefined,
     referral: referralOf(row),
+    unsupported:
+      row.meta.unsupported === true && row.meta.rawType !== 'order' && !(legacy && legacy.kind === 'interactive')
+        ? true
+        : undefined,
     mediaFailure: mediaState === 'failed' ? mediaFailureOf(row) : null,
     template:
       row.kind === 'template'

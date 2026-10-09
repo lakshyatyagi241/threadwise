@@ -1,0 +1,647 @@
+{
+  "sales-docs": {
+    "common": {
+      "dismiss": "Dispensar"
+    },
+    "nav": {
+      "proposals": "Propostas",
+      "estimates": "Orçamentos"
+    },
+    "kind": {
+      "proposal": {
+        "singular": "Proposta",
+        "plural": "propostas"
+      },
+      "estimate": {
+        "singular": "Orçamento",
+        "plural": "orçamentos"
+      }
+    },
+    "status": {
+      "draft": "Rascunho",
+      "sent": "Enviado",
+      "viewed": "Visualizado",
+      "accepted": "Aceito",
+      "declined": "Recusado",
+      "expired": "Expirado",
+      "converted": "Convertido"
+    },
+    "tabs": {
+      "label": "Status",
+      "all": "Todos",
+      "draft": "Rascunho",
+      "sent": "Enviados",
+      "viewed": "Visualizados",
+      "accepted": "Aceitos",
+      "declined": "Recusados",
+      "expired": "Expirados",
+      "converted": "Convertidos",
+      "count": "{count, plural, one {# documento} other {# documentos}}"
+    },
+    "list": {
+      "proposal": {
+        "title": "Propostas",
+        "subtitle": "Apresente escopo e preço, acompanhe as ações do comprador e transforme a proposta aceita em fatura.",
+        "new": "Nova proposta",
+        "emptyTitle": "Nenhuma proposta ainda",
+        "emptyMessage": "Crie sua primeira proposta, envie o link ao comprador e acompanhe-a de enviada até aceita."
+      },
+      "estimate": {
+        "title": "Orçamentos",
+        "subtitle": "Cote um preço antes de faturar. Envie, aguarde o aceite e converta com um clique.",
+        "new": "Novo orçamento",
+        "emptyTitle": "Nenhum orçamento ainda",
+        "emptyMessage": "Crie seu primeiro orçamento, envie o link ao comprador e converta-o em fatura após o aceite."
+      },
+      "openValue": "Valor em aberto",
+      "tableLabel": "Documentos",
+      "loading": "Carregando",
+      "showing": "{count, plural, one {Mostrando # documento} other {Mostrando # documentos}}",
+      "loadMore": "Carregar mais",
+      "allLoaded": "Tudo carregado",
+      "useSampleData": "Usar dados de exemplo",
+      "emptyFilteredTitle": "Nada corresponde",
+      "emptyFiltered": "Nenhum documento corresponde à pesquisa e aos filtros. Tente menos filtros ou outra palavra.",
+      "resetFilters": "Limpar filtros",
+      "emptyTabTitle": "Nenhum documento {status}",
+      "emptyTab": "Quando algum dos seus {kind} chegar a este status, ele aparecerá aqui.",
+      "statusWord": {
+        "all": "todos",
+        "draft": "rascunho",
+        "sent": "enviado",
+        "viewed": "visualizado",
+        "accepted": "aceito",
+        "declined": "recusado",
+        "expired": "expirado",
+        "converted": "convertido"
+      }
+    },
+    "toolbar": {
+      "label": "Filtros",
+      "search": "Pesquisar número, título ou comprador",
+      "owner": "Responsável",
+      "allOwners": "Todos os responsáveis",
+      "validity": "Válido até",
+      "anyValidity": "Qualquer data",
+      "validWeek": "Expira em 7 dias",
+      "validLapsed": "Data já passou",
+      "clear": "Limpar",
+      "refresh": "Atualizar",
+      "shortcuts": "Atalhos de teclado",
+      "contactFilter": "Contato",
+      "dealFilter": "Negociação",
+      "removeFilter": "Remover este filtro",
+      "mine": "Meus"
+    },
+    "table": {
+      "scrollArea": "Tabela de documentos",
+      "selectAll": "Selecionar todos os documentos carregados",
+      "selectRow": "Selecionar {number}",
+      "columns": {
+        "number": "Número",
+        "title": "Título / Comprador",
+        "contact": "Contato",
+        "amount": "Valor",
+        "status": "Status",
+        "validUntil": "Válido até",
+        "owner": "Responsável",
+        "created": "Criado em"
+      }
+    },
+    "row": {
+      "moreFor": "Ações para {number}",
+      "untitled": "Sem título",
+      "noBuyer": "Ainda sem comprador",
+      "unowned": "Sem responsável"
+    },
+    "bulk": {
+      "label": "Ações em massa",
+      "selected": "{count, plural, one {# selecionado} other {# selecionados}}",
+      "working": "Processando",
+      "delete": "Excluir",
+      "clear": "Limpar seleção",
+      "deleteTitle": "Excluir os documentos selecionados?",
+      "deleteMessage": "{count, plural, one {# documento será excluído definitivamente. O link público deixará de funcionar.} other {# documentos serão excluídos definitivamente. Os links públicos deixarão de funcionar.}} Documentos convertidos são mantidos.",
+      "deleteConfirm": "Excluir",
+      "keep": "Manter",
+      "deleted": "{count, plural, one {# documento excluído} other {# documentos excluídos}}",
+      "someFailed": "{count, plural, one {# documento não pôde ser excluído} other {# documentos não puderam ser excluídos}}",
+      "failed": "Falha ao excluir."
+    },
+    "shortcuts": {
+      "title": "Atalhos de teclado",
+      "close": "Fechar",
+      "list": "Na lista",
+      "builder": "No editor",
+      "actions": {
+        "next": "Próxima linha",
+        "prev": "Linha anterior",
+        "open": "Abrir a linha",
+        "toggleSelect": "Marcar ou desmarcar a linha",
+        "newDoc": "Novo documento",
+        "focusSearch": "Pesquisar",
+        "clearSelection": "Limpar seleção",
+        "help": "Mostrar esta lista",
+        "save": "Salvar rascunho",
+        "send": "Enviar",
+        "addRow": "Adicionar um item"
+      }
+    },
+    "actions": {
+      "open": "Abrir",
+      "edit": "Editar",
+      "send": "Enviar",
+      "copyLink": "Copiar link público",
+      "markSent": "Marcar como enviado",
+      "convertInvoice": "Converter em fatura",
+      "createSalesOrder": "Criar pedido de venda",
+      "convertDeal": "Criar uma negociação",
+      "duplicate": "Duplicar",
+      "print": "Imprimir / PDF",
+      "activity": "Atividade",
+      "delete": "Excluir",
+      "accept": "Registrar como aceito",
+      "decline": "Registrar como recusado",
+      "revise": "Revisar (voltar a rascunho)",
+      "extend": "Estender validade"
+    },
+    "confirm": {
+      "cancel": "Cancelar",
+      "linkCopied": "Link copiado",
+      "copyFailed": "Não foi possível copiar o link. Selecione-o e copie manualmente.",
+      "markSent": {
+        "title": "Marcar {number} como enviado?",
+        "message": "Isto registra que o {kind} foi compartilhado com o comprador manualmente (o link foi copiado). Não envia nada; para enviar, use Enviar.",
+        "confirm": "Marcar como enviado"
+      },
+      "convertInvoice": {
+        "title": "Converter {number} em fatura?",
+        "message": "Um rascunho de fatura será criado com os mesmos itens e totais, e este {kind} será bloqueado como convertido. Esta ação não pode ser desfeita.",
+        "confirm": "Converter em fatura"
+      },
+      "convertDeal": {
+        "title": "Criar uma negociação a partir de {number}?",
+        "message": "Uma negociação será criada com o total e o contato deste {kind} e vinculada a ele.",
+        "confirm": "Criar negociação"
+      },
+      "delete": {
+        "title": "Excluir {number}?",
+        "message": "O {kind} será excluído definitivamente e seu link público deixará de funcionar. O número nunca será reutilizado.",
+        "confirm": "Excluir"
+      },
+      "close": "Fechar",
+      "theBuyer": "o comprador",
+      "linkCopiedInactive": "Link copiado. O comprador não poderá abri-lo até que o documento seja enviado.",
+      "accept": {
+        "title": "Registrar {number} como aceito?",
+        "message": "Use isto quando {name} tiver concordado fora do link, por telefone ou com uma cópia assinada. Fica registrado na atividade como inserido por você, e não como assinatura do próprio comprador.",
+        "confirm": "Registrar como aceito"
+      },
+      "decline": {
+        "title": "Registrar {number} como recusado?",
+        "message": "Use isto quando {name} tiver recusado fora do link. O {kind} será encerrado como recusado; depois você pode revisá-lo e transformá-lo em um novo rascunho.",
+        "confirm": "Registrar como recusado"
+      },
+      "extend": {
+        "title": "Estender {number}",
+        "message": "Defina uma nova data de validade para este {kind}. Um documento expirado volta a ficar disponível para {name}.",
+        "confirm": "Estender",
+        "date": "Nova data de validade",
+        "past": "A data não pode estar no passado."
+      },
+      "revise": {
+        "title": "Revisar {number}?",
+        "message": "O {kind} volta a ser rascunho para que você possa alterá-lo (o número da revisão aumenta e o conteúdo antigo é mantido). Depois da alteração, o comprador não poderá aceitar a versão antiga.",
+        "confirm": "Revisar"
+      },
+      "note": "Observação (opcional)",
+      "noteHint": "Registrada na atividade junto com esta decisão."
+    },
+    "toast": {
+      "created": "{number} criado",
+      "saved": "{number} salvo",
+      "duplicated": "Rascunho {number} criado",
+      "convertedInvoice": "{number} convertido em fatura",
+      "convertedDeal": "Negociação {deal} criada a partir de {number}",
+      "deleted": "{number} excluído",
+      "accepted": "{number} registrado como aceito",
+      "declined": "{number} registrado como recusado",
+      "revised": "{number} voltou a ser rascunho (revisão {revision})",
+      "extended": "{number} estendido",
+      "delivery": {
+        "sent": "{number} enviado por e-mail ao comprador",
+        "queued": "{number} na fila para envio pelo WhatsApp",
+        "shared": "{number} marcado como enviado"
+      }
+    },
+    "errors": {
+      "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+      "forbidden": "Você não tem permissão para fazer isso.",
+      "signedOut": "Sua sessão terminou. Entre novamente.",
+      "conflict": "Outra pessoa alterou este documento. Ele foi recarregado; revise e tente novamente.",
+      "validation": "Alguns valores não foram aceitos. Verifique os campos destacados.",
+      "unavailable": "Propostas e orçamentos ainda não estão disponíveis neste servidor.",
+      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
+      "notFound": "Este documento não foi encontrado. Pode ter sido excluído.",
+      "planDisabled": "Seu plano não inclui propostas e orçamentos.",
+      "invalidTransition": "Esta alteração não é permitida no status atual do documento. Ele foi recarregado.",
+      "notEditable": "Somente um rascunho pode ser editado. Revise o documento para voltar a rascunho.",
+      "notDeletable": "Documentos aceitos e convertidos são mantidos como registro e não podem ser excluídos.",
+      "alreadyDecided": "Este documento já teve uma decisão. Ele foi recarregado.",
+      "alreadyConverted": "Este documento já foi convertido em fatura.",
+      "alreadyLinkedDeal": "Este documento já tem uma negociação vinculada.",
+      "linkUnavailable": "O link público foi revogado ou expirou. Crie um novo link primeiro.",
+      "noRecipient": "Adicione primeiro o e-mail ou telefone do comprador e depois envie.",
+      "sendFailed": "A mensagem não pôde ser entregue, então o documento não foi marcado como enviado. Tente novamente.",
+      "expired": "Este documento passou da data de validade. Estenda-a primeiro.",
+      "ownerInvalid": "O responsável deve ser um membro ativo do espaço de trabalho.",
+      "invoicingUnavailable": "O faturamento ainda não está disponível, por isso este documento não pode ser convertido.",
+      "unexpected": "Algo deu errado. Tente novamente.",
+      "requestId": "ID da solicitação",
+      "retry": "Tentar novamente"
+    },
+    "link": {
+      "unnamedContact": "Contato sem nome"
+    },
+    "picker": {
+      "unnamed": "Sem nome",
+      "unlinkContact": "Desvincular o contato",
+      "unlinkDeal": "Desvincular a negociação",
+      "searchContact": "Pesquisar contatos por nome, e-mail ou telefone",
+      "searchDeal": "Pesquisar negociações",
+      "results": "Resultados",
+      "searching": "Pesquisando",
+      "unavailable": "Não foi possível carregar a lista.",
+      "none": "Nenhum resultado.",
+      "create": "Criar um contato",
+      "createNamed": "Criar contato “{name}”",
+      "createTitle": "Criar um contato",
+      "createEyebrow": "Novo contato",
+      "close": "Fechar",
+      "cancel": "Cancelar",
+      "createConfirm": "Criar e vincular",
+      "nameLabel": "Nome",
+      "emailLabel": "E-mail",
+      "phoneLabel": "Telefone",
+      "phoneHint": "Com o código do país, por exemplo +55 11 91234-5678.",
+      "nameInvalid": "Insira um nome.",
+      "emailInvalid": "Insira um e-mail válido.",
+      "phoneInvalid": "Insira um número de telefone válido.",
+      "forbidden": "Você não tem permissão para criar contatos.",
+      "createFailed": "Não foi possível criar o contato. Tente novamente.",
+      "contactCreated": "Contato {name} criado"
+    },
+    "send": {
+      "eyebrow": "Enviar ao comprador",
+      "title": "Enviar {number}",
+      "close": "Fechar",
+      "done": "Concluir",
+      "channels": "Como enviar",
+      "tabs": {
+        "link": "Link",
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "linkLabel": "Link público",
+      "linkHint": "Qualquer pessoa com este link pode ver o documento e aceitá-lo ou recusá-lo. Compartilhe-o somente com o comprador.",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "copiedToast": "Link copiado",
+      "copyFailed": "Não foi possível copiar o link. Selecione-o e copie manualmente.",
+      "to": "Para",
+      "emailInvalid": "Insira um endereço de e-mail válido.",
+      "noEmail": "Este documento não tem e-mail do comprador. Digite um aqui.",
+      "message": "Mensagem",
+      "messageDefault": "Olá {name}, segue nosso documento. Ele mostra o escopo e o preço, e você pode aceitá-lo online.",
+      "messageHint": "O link do documento é adicionado abaixo da sua mensagem.",
+      "sendEmail": "Enviar e-mail",
+      "waTo": "Enviar para",
+      "noPhone": "Este documento não tem telefone do comprador. Adicione um nos detalhes do comprador primeiro.",
+      "waPreview": "Mensagem",
+      "waTotal": "Total",
+      "waView": "Ver e aceitar",
+      "sendWhatsapp": "Enviar pelo WhatsApp",
+      "openWhatsapp": "Abrir no WhatsApp",
+      "markSent": "Eu compartilhei: marcar como enviado",
+      "linkLoading": "Carregando o link",
+      "linkUnavailable": "O link ainda não está disponível neste servidor.",
+      "stateDraft": "O link abre quando o documento for enviado. Até lá, o comprador não vê nada.",
+      "stateRevoked": "Este link foi revogado: o comprador não pode abri-lo. Crie um novo para compartilhar novamente.",
+      "stateActive": "{views, plural, =0 {Ainda não foi aberto.} one {Aberto uma vez.} other {Aberto # vezes.}}",
+      "stateInactive": "Este link expirou e o comprador não pode abri-lo. Crie um novo.",
+      "regenerate": "Criar novo link",
+      "revoke": "Revogar link",
+      "regenerateWarning": "O link antigo deixa de funcionar imediatamente. Quem o tiver verá que ele não está mais disponível.",
+      "keepLink": "Manter o link atual",
+      "regenerateConfirm": "Criar novo link",
+      "regenerated": "Novo link criado",
+      "revoked": "Link revogado",
+      "waHint": "Enviar coloca a mensagem na fila do seu WhatsApp conectado e marca o documento como enviado. Abrir no WhatsApp permite enviá-lo por conta própria; depois use a aba Link para marcá-lo como enviado."
+    },
+    "activity": {
+      "title": "Atividade de {number}",
+      "subtitle": "Tudo o que aconteceu com este documento, do mais recente para o mais antigo.",
+      "close": "Fechar",
+      "loading": "Carregando",
+      "unavailable": "O histórico de atividades ainda não está disponível neste servidor.",
+      "empty": "Nada aconteceu com este documento ainda.",
+      "buyer": "o comprador",
+      "system": "o sistema",
+      "someone": "Alguém",
+      "via": "Enviado por {channel}",
+      "signedBy": "Assinado por {name}",
+      "reason": "Motivo: {reason}",
+      "channels": {
+        "link": "link",
+        "email": "e-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "events": {
+        "created": "Criado por {who}",
+        "edited": "Editado por {who}",
+        "sent": "Enviado por {who}",
+        "viewed": "Visualizado por {who}",
+        "accepted": "Aceito por {who}",
+        "declined": "Recusado por {who}",
+        "expired": "Expirado",
+        "duplicated": "Duplicado por {who}",
+        "revised": "Revisado por {who}",
+        "extended": "Validade estendida por {who}",
+        "converted_invoice": "Convertido em fatura por {who}",
+        "converted_deal": "Negociação criada por {who}",
+        "link_regenerated": "Novo link criado por {who}",
+        "link_revoked": "Link revogado por {who}"
+      },
+      "withSignature": "Uma assinatura desenhada foi registrada",
+      "recordedByStaff": "Registrada por um membro da equipe em nome do comprador",
+      "note": "Observação: {note}",
+      "revision": "Revisão {revision}",
+      "fromAddress": "Do endereço de rede {ip}"
+    },
+    "paper": {
+      "label": "{kind} {number}",
+      "sellerFallback": "Sua empresa",
+      "numberPending": "Número atribuído ao salvar",
+      "untitled": "{kind} sem título",
+      "preparedFor": "Preparado para",
+      "noBuyer": "Nenhum comprador ainda",
+      "issued": "Emitido",
+      "validUntil": "Válido até",
+      "description": "Descrição",
+      "qty": "Qtd.",
+      "unit": "Preço unitário",
+      "discount": "Desc.",
+      "tax": "Imposto",
+      "amount": "Valor",
+      "noItems": "Nenhum item.",
+      "subtotal": "Subtotal",
+      "discountPercent": "Desconto ({percent}%)",
+      "discountRow": "Desconto",
+      "taxRow": "Imposto ({percent}%)",
+      "total": "Total",
+      "notes": "Observações",
+      "terms": "Termos"
+    },
+    "builder": {
+      "loading": "Carregando",
+      "notFoundTitle": "Documento não encontrado",
+      "notFound": "Este documento não existe ou foi excluído.",
+      "back": {
+        "proposal": "Todas as propostas",
+        "estimate": "Todos os orçamentos"
+      },
+      "formLabel": "Detalhes do documento",
+      "newTitle": {
+        "proposal": "Nova proposta",
+        "estimate": "Novo orçamento"
+      },
+      "newSubtitle": "Preencha o comprador e os itens. O número é atribuído quando você salvar este {kind}.",
+      "untitledSub": "Sem título",
+      "unsaved": "Alterações não salvas",
+      "leaveTitle": "Sair sem salvar?",
+      "leaveMessage": "Esta página tem alterações não salvas. Se você sair agora, elas serão perdidas.",
+      "leave": "Sair sem salvar",
+      "keepEditing": "Continuar editando",
+      "save": "Salvar rascunho",
+      "send": "Enviar",
+      "more": "Mais ações",
+      "fixErrors": "Alguns campos precisam de atenção antes de salvar.",
+      "panes": "Formulário ou visualização",
+      "pane": {
+        "edit": "Editar",
+        "preview": "Visualizar"
+      },
+      "locked": {
+        "sent": "Este documento está com o comprador, por isso não pode ser editado. Revise-o para voltar a rascunho ou duplique-o para criar um novo.",
+        "accepted": "Este documento foi aceito e é mantido como registro. Converta-o em fatura ou duplique-o para criar um novo.",
+        "converted": "Este documento foi convertido em fatura e está bloqueado.",
+        "openInvoice": "Abrir a fatura",
+        "revise": "Revisar",
+        "duplicate": "Duplicar como rascunho"
+      },
+      "buyer": {
+        "title": "Comprador",
+        "hint": "Escolha um contato ou digite os dados do comprador. O e-mail e o telefone dele são usados para enviar.",
+        "contact": "Contato",
+        "name": "Nome do comprador",
+        "email": "E-mail do comprador",
+        "phone": "Telefone do comprador",
+        "phoneHint": "Com o código do país. Necessário para enviar pelo WhatsApp."
+      },
+      "details": {
+        "title": "Detalhes",
+        "docTitle": "Título",
+        "titlePlaceholder": {
+          "proposal": "ex.: Redesenho do site, fase 1",
+          "estimate": "ex.: Orçamento rápido de reforma de cozinha"
+        },
+        "deal": "Negócio",
+        "currency": "Moeda",
+        "validUntil": "Válido até",
+        "plusDays": "+{days} dias",
+        "noExpiry": "Sem validade"
+      },
+      "items": {
+        "title": "Itens",
+        "hint": "As quantidades podem ter decimais. O desconto é uma porcentagem ou um valor (toque no sinal na caixa para alternar). Um imposto em branco usa a alíquota do documento.",
+        "description": "Descrição",
+        "qty": "Qtd.",
+        "unit": "Preço unitário",
+        "discount": "Desc. %",
+        "tax": "Imposto %",
+        "amount": "Valor",
+        "drag": "Arraste para reordenar",
+        "row": "Linha {n}",
+        "descriptionPlaceholder": "O que você está cobrando",
+        "descriptionFor": "Descrição da linha {n}",
+        "qtyFor": "Quantidade da linha {n}",
+        "unitFor": "Preço unitário da linha {n}",
+        "discountFor": "Porcentagem de desconto da linha {n}",
+        "taxFor": "Porcentagem de imposto da linha {n}",
+        "amountFor": "Valor da linha {n}",
+        "moveUp": "Mover a linha {n} para cima",
+        "moveDown": "Mover a linha {n} para baixo",
+        "duplicate": "Duplicar a linha {n}",
+        "remove": "Remover a linha {n}",
+        "add": "Adicionar linha",
+        "discountToAmount": "Linha {n}: o desconto é uma porcentagem; mude para valor",
+        "discountToPercent": "Linha {n}: o desconto é um valor; mude para porcentagem"
+      },
+      "problems": {
+        "noItems": "Adicione pelo menos um item com descrição e preço.",
+        "descriptionRequired": "Digite uma descrição.",
+        "descriptionTooLong": "A descrição é muito longa (no máximo 500 caracteres).",
+        "qtyInvalid": "A quantidade deve ser um número igual ou maior que 0, com até 4 casas decimais.",
+        "priceInvalid": "Digite o preço unitário como um número igual ou maior que 0.",
+        "discountInvalid": "O desconto deve ser uma porcentagem de 0 a 100.",
+        "taxInvalid": "O imposto deve ser uma porcentagem de 0 a 100.",
+        "docDiscountInvalid": "Digite o desconto como um número igual ou maior que 0.",
+        "docTaxInvalid": "O imposto deve ser uma porcentagem de 0 a 100.",
+        "emailInvalid": "Digite um e-mail válido.",
+        "phoneInvalid": "Digite o telefone com o código do país, por exemplo +971 50 123 4567.",
+        "titleTooLong": "O título é muito longo (no máximo 255 caracteres).",
+        "notesTooLong": "As observações são muito longas (no máximo 5.000 caracteres).",
+        "termsTooLong": "Os termos são muito longos (no máximo 10.000 caracteres).",
+        "dateInvalid": "Digite uma data válida.",
+        "tooLarge": "Um valor está muito alto. Reduza uma quantidade ou um preço."
+      },
+      "totals": {
+        "defaultTax": "Alíquota de imposto",
+        "defaultTaxHint": "Aplicada a cada linha que não tenha imposto próprio.",
+        "discount": "Desconto sobre o documento inteiro",
+        "discountKind": "Tipo de desconto",
+        "subtotal": "Subtotal",
+        "discountRow": "Desconto",
+        "taxRow": "Imposto ({percent}%)",
+        "total": "Total"
+      },
+      "notes": {
+        "title": "Observações e termos",
+        "notes": "Observações para o comprador",
+        "terms": "Termos",
+        "insertTemplate": "Usar um modelo",
+        "count": "{count} / {max}"
+      },
+      "preview": {
+        "title": "Visualizar",
+        "print": "Imprimir / PDF",
+        "hint": "É o que o comprador vê e o que é impresso. Os totais usam o mesmo arredondamento do documento salvo."
+      }
+    },
+    "templates": {
+      "notes": {
+        "thanks": {
+          "label": "Obrigado",
+          "text": "Obrigado pela oportunidade de trabalhar com você. Esperamos começar em breve."
+        },
+        "scope": {
+          "label": "Lembrete de escopo",
+          "text": "Este documento cobre apenas os itens listados acima. Qualquer coisa fora desse escopo será orçada separadamente."
+        },
+        "followUp": {
+          "label": "Próximos passos",
+          "text": "Para prosseguir, aceite este documento online. Confirmaremos a data de início em até um dia útil."
+        }
+      },
+      "terms": {
+        "net14": {
+          "label": "Pagamento em 14 dias",
+          "text": "O pagamento vence em até 14 dias a partir da data da fatura."
+        },
+        "net30": {
+          "label": "Pagamento em 30 dias",
+          "text": "O pagamento vence em até 30 dias a partir da data da fatura."
+        },
+        "deposit50": {
+          "label": "Entrada de 50%",
+          "text": "Uma entrada de 50% é devida na aceitação. O saldo é devido na conclusão."
+        },
+        "warranty": {
+          "label": "Garantia",
+          "text": "O trabalho tem garantia de 90 dias a partir da entrega contra defeitos de execução."
+        }
+      }
+    },
+    "linked": {
+      "title": "Propostas e orçamentos",
+      "newProposal": "Proposta",
+      "newEstimate": "Orçamento",
+      "loading": "Carregando",
+      "unavailableTitle": "Ainda não disponível",
+      "unavailable": "Propostas e orçamentos ainda não estão disponíveis neste servidor.",
+      "empty": "Nenhuma proposta ou orçamento ainda.",
+      "kind": {
+        "proposal": "Proposta",
+        "estimate": "Orçamento"
+      },
+      "viewProposals": "Todas as propostas",
+      "viewEstimates": "Todos os orçamentos"
+    },
+    "signature": {
+      "area": "Área de assinatura: desenhe sua assinatura com o dedo, a caneta ou o mouse",
+      "placeholder": "Assine aqui",
+      "clear": "Limpar assinatura"
+    },
+    "public": {
+      "loading": "Carregando o documento",
+      "brandFallback": "Seu fornecedor",
+      "language": "Idioma",
+      "print": "Imprimir / PDF",
+      "invalid": {
+        "title": "Este link não é válido",
+        "message": "O documento pode ter sido removido ou o link está incompleto. Peça um novo link ao remetente."
+      },
+      "error": {
+        "title": "Não foi possível carregar o documento",
+        "message": "Verifique sua conexão e tente novamente. Se continuar acontecendo, entre em contato com o remetente.",
+        "retry": "Tentar novamente"
+      },
+      "banner": {
+        "accepted": "Você aceitou este {kind}. {seller} foi notificado e vai entrar em contato.",
+        "signedBy": "Assinado por {name}",
+        "declined": "Este {kind} foi recusado.",
+        "declinedHint": "Se foi um engano, entre em contato com {seller}.",
+        "converted": "Aceito. Uma fatura foi emitida para este {kind}.",
+        "expired": "Este {kind} expirou em {date}.",
+        "expiredHint": "Ele não pode mais ser aceito. Entre em contato com {seller} para pedir um novo."
+      },
+      "footer": "Este {kind} foi gerado por {seller}.",
+      "decision": {
+        "title": "Sua decisão",
+        "intro": "Ao aceitar este {kind} por {total}, você confirma o escopo e os preços acima com {seller}.",
+        "name": "Seu nome completo",
+        "nameHint": "Digitado como seu nome no registro (no mínimo 2 caracteres).",
+        "nameRequired": "Digite seu nome completo.",
+        "signature": "Assinatura",
+        "typedPlaceholder": "Seu nome aparece aqui",
+        "useTyped": "Assinar com meu nome digitado em vez de desenhar",
+        "signatureRequired": "Desenhe sua assinatura ou escolha assinar com seu nome digitado.",
+        "agree": "Li este {kind} e aceito o escopo, o preço e os termos.",
+        "agreeRequired": "Marque a caixa para confirmar.",
+        "accept": "Aceitar este {kind}",
+        "decline": "Recusar",
+        "note": "Seu nome, sua assinatura, a data e a hora e o seu endereço de rede são registrados com a sua decisão.",
+        "declineTitle": "Recusar este {kind}?",
+        "declineMessage": "{seller} será informado de que você recusou. Depois, não será possível mudar isso.",
+        "reason": "Motivo (opcional)",
+        "reasonHint": "Uma breve observação ajuda {seller} a entender o que ajustar.",
+        "keep": "Voltar",
+        "declineConfirm": "Recusar",
+        "close": "Fechar",
+        "problem": {
+          "expired": "Este documento expirou e não pode mais ser aceito.",
+          "closed": "Este documento já foi decidido. A página foi atualizada.",
+          "rateLimited": "Muitas tentativas. Aguarde um minuto e tente novamente.",
+          "validation": "Alguns dos seus dados não foram aceitos. Verifique seu nome e tente novamente.",
+          "generic": "Não foi possível registrar sua decisão. Verifique sua conexão e tente novamente.",
+          "gone": "Este link não está mais ativo."
+        }
+      },
+      "gone": {
+        "title": "Este link não está mais ativo",
+        "message": "O remetente desativou este link ou ele expirou. Peça um novo link."
+      },
+      "metaTitle": "Cotação"
+    }
+  }
+}

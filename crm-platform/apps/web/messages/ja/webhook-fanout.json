@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhook",
+      "forwarding": "Webhook 転送"
+    },
+    "common": {
+      "loading": "読み込み中",
+      "retry": "再試行",
+      "requestId": "リクエスト ID",
+      "dash": "-",
+      "errors": {
+        "forbidden": "この操作を行う権限がありません。",
+        "request": "リクエストを完了できませんでした。",
+        "unexpected": "当方側で問題が発生しました。しばらくしてから再試行してください。",
+        "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+        "conflict": "他のユーザーがこの転送先を変更しました。一覧を再読み込みしたので、変更をもう一度適用してください。",
+        "validation": "一部の値が正しくありません。強調表示された項目を確認してください。",
+        "notFound": "この項目は存在しなくなりました。",
+        "urlRejected": "この URL は許可されていません。インターネットからアクセスできる https のアドレスを使用してください。"
+      }
+    },
+    "page": {
+      "eyebrow": "管理者 / システム / Webhook",
+      "title": "Webhook 転送",
+      "description": "プラットフォーム運営者が管理する、すべての Meta Webhook のコピーを受け取るサービスの一覧です。",
+      "banner": "Meta は 1 つのコールバック URL のみ許可します。当方はそれを一度受信して検証し、元のシグネチャを付けたまま、生のボディを有効なすべての転送先に変更せずに転送します。",
+      "superOnly": "Webhook 転送を管理できるのはスーパー管理者のみです。",
+      "add": "転送先を追加",
+      "tabs": {
+        "targets": "転送先",
+        "failures": "失敗した配信"
+      }
+    },
+    "targets": {
+      "empty": "転送先はまだありません",
+      "emptyBody": "転送先を追加すると、Meta の Webhook を別のサービスに転送できます。",
+      "columns": {
+        "target": "転送先",
+        "active": "有効",
+        "fields": "項目",
+        "deliveries": "配信",
+        "last": "最終配信",
+        "actions": "操作"
+      },
+      "allFields": "すべての項目",
+      "success": "{count, number} 件成功",
+      "failure": "{count, number} 件失敗",
+      "pending": "{count, number} 件保留中",
+      "pendingLabel": "再送信待ちの失敗した配信が {count, number} 件あります",
+      "neverDelivered": "まだ配信されていません",
+      "lastStatus": "ステータス {status}",
+      "lastError": "エラー: {error}",
+      "lastAt": "{time}",
+      "activeSwitch": "{name} に転送",
+      "on": "転送先: オン",
+      "off": "転送先: オフ",
+      "edit": "編集",
+      "test": "テスト",
+      "testing": "テスト中",
+      "testOk": "テスト成功: ステータス {status}、{ms, number} ミリ秒",
+      "testFailed": "テスト失敗: {reason}（{ms, number} ミリ秒）",
+      "testNoStatus": "応答なし",
+      "testStatus": "ステータス {status}",
+      "delete": "削除",
+      "deleteTitle": "{name} を削除しますか？",
+      "deleteBody": "転送先は Webhook を受信しなくなり、保持されている失敗した配信も削除されます。この操作は取り消せません。",
+      "deleteConfirm": "転送先を削除",
+      "cancel": "キャンセル",
+      "toasts": {
+        "created": "{name} を追加しました",
+        "saved": "{name} を保存しました",
+        "on": "{name} はオンです",
+        "off": "{name} はオフです",
+        "deleted": "{name} を削除しました"
+      }
+    },
+    "dialog": {
+      "createTitle": "転送先を追加",
+      "editTitle": "{name} を編集",
+      "close": "閉じる",
+      "name": "名前",
+      "namePlaceholder": "分析サービス",
+      "url": "URL",
+      "urlHint": "https のみ。プライベートネットワーク上のアドレスは拒否されます。",
+      "headerName": "ヘッダー名（任意）",
+      "headerNameHint": "すべての配信に付与されます。例: Authorization",
+      "headerValue": "ヘッダーの値",
+      "headerValueSaved": "保存済み。末尾 ••••{last4}。変更しない場合は空欄のままにしてください。",
+      "headerValueSavedNoLast4": "保存済み。変更しない場合は空欄のままにしてください。",
+      "headerValueHint": "書き込み専用です。保存後は再表示されません。",
+      "removeHeader": "保存済みのヘッダーを削除",
+      "fieldFilter": "項目フィルター",
+      "fieldFilterHint": "空欄にすると、すべての項目を転送します。項目名を入力して Enter を押してください。例: messages、message_template_status_update",
+      "fieldFilterPlaceholder": "項目を追加",
+      "fieldRemove": "{field} を削除",
+      "timeout": "タイムアウト（秒）",
+      "timeoutHint": "1〜30",
+      "maxAttempts": "最大試行回数",
+      "maxAttemptsHint": "1〜10",
+      "active": "この転送先に転送する",
+      "save": "保存",
+      "saving": "保存中",
+      "cancel": "キャンセル",
+      "errors": {
+        "nameRequired": "名前を入力してください。",
+        "urlRequired": "URL を入力してください。",
+        "urlHttps": "URL は https:// で始まる必要があります。",
+        "headerNameInvalid": "使用できるのは英字、数字、ハイフンのみです。",
+        "headerValueRequired": "ヘッダーには名前と値の両方が必要です。",
+        "headerNameRequired": "ヘッダー名も入力してください。",
+        "timeout": "1〜30 の整数を入力してください。",
+        "maxAttempts": "1〜10 の整数を入力してください。"
+      }
+    },
+    "failures": {
+      "empty": "失敗した配信はありません",
+      "emptyBody": "再試行の上限に達した配信は、14 日間ここに保持され、再送信できます。",
+      "filterAll": "すべての転送先",
+      "filterLabel": "転送先",
+      "columns": {
+        "target": "転送先",
+        "when": "失敗日時",
+        "attempts": "試行回数",
+        "reason": "理由",
+        "size": "サイズ",
+        "actions": "操作"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} バイト",
+      "replay": "再送信",
+      "replaying": "再送信中",
+      "replayed": "{time} に再送信しました",
+      "replayOk": "配信済み: ステータス {status}、{ms, number} ミリ秒",
+      "replayFailed": "未配信: {reason}（{ms, number} ミリ秒）",
+      "reasonStatus": "ステータス {status}",
+      "reasonNone": "応答なし"
+    }
+  }
+}

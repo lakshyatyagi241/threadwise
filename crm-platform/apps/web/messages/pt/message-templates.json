@@ -1,0 +1,361 @@
+{
+  "message-templates": {
+    "nav": {
+      "title": "Modelos"
+    },
+    "common": {
+      "dismiss": "Dispensar",
+      "requestId": "ID da solicitação"
+    },
+    "status": {
+      "draft": "Rascunho",
+      "pending": "Em análise",
+      "approved": "Aprovado",
+      "rejected": "Rejeitado",
+      "paused": "Pausado",
+      "disabled": "Desativado",
+      "deleted": "Ausente na Meta"
+    },
+    "category": {
+      "MARKETING": "Marketing",
+      "UTILITY": "Utilidade",
+      "AUTHENTICATION": "Autenticação"
+    },
+    "quality": {
+      "GREEN": "Qualidade alta",
+      "YELLOW": "Qualidade média",
+      "RED": "Qualidade baixa",
+      "UNKNOWN": "Qualidade pendente"
+    },
+    "errors": {
+      "generic": "Algo deu errado. Tente novamente e informe o ID da solicitação se o problema continuar.",
+      "TPL_NOT_FOUND": "Este modelo não existe mais.",
+      "TPL_NAME_TAKEN": "Já existe um modelo com este nome e idioma neste número. Escolha outro nome ou idioma.",
+      "TPL_LINT_FAILED": "As verificações encontraram problemas que a Meta rejeitaria. Nada foi enviado. Corrija os erros listados à direita.",
+      "TPL_META_REJECTED": "A Meta recusou o modelo. O motivo está abaixo; o modelo foi mantido como rascunho para você corrigi-lo e tentar novamente.",
+      "TPL_NO_CONNECTION": "Este modelo não tem um número de WhatsApp conectado para envio. Conecte um número primeiro.",
+      "TPL_IN_USE": "Este modelo não pode ser excluído porque uma transmissão em andamento ou agendada o utiliza.",
+      "TPL_NOT_EDITABLE": "Somente um modelo que a Meta ainda não aprovou, ou que rejeitou, pode ser editado.",
+      "ROW_VERSION_CONFLICT": "Outra pessoa alterou este modelo enquanto você editava. Recarregue para ver a versão mais recente e aplique sua alteração novamente.",
+      "VALIDATION_FAILED": "Alguns campos são inválidos. Verifique os campos abaixo.",
+      "INTERNAL": "O servidor não conseguiu processar esta solicitação. Tente novamente em instantes."
+    },
+    "preview": {
+      "title": "Pré-visualização",
+      "headerImageAlt": "Exemplo de imagem do cabeçalho",
+      "header": {
+        "image": "Imagem",
+        "video": "Vídeo",
+        "document": "Documento",
+        "location": "Localização"
+      },
+      "authBody": "é o seu código de verificação.",
+      "authExpiry": "{count, plural, one {Este código expira em # minuto.} other {Este código expira em # minutos.}}",
+      "bodyEmpty": "O texto da sua mensagem aparece aqui.",
+      "time": "10:30",
+      "copyCode": "Copiar código",
+      "buttonUnnamed": "Botão",
+      "moreButtons": "{count, plural, one {+# botão a mais} other {+# botões a mais}}"
+    },
+    "card": {
+      "rejected": "Rejeitado: {reason}",
+      "view": "Ver",
+      "edit": "Editar",
+      "delete": "Excluir"
+    },
+    "library": {
+      "title": "Biblioteca de modelos",
+      "intro": "Modelos de mensagem do WhatsApp: escreva, envie para análise da Meta e acompanhe o status aqui.",
+      "sync": "Sincronizar com a Meta",
+      "syncing": "Sincronizando...",
+      "syncHint": "Buscar seus modelos na Meta",
+      "syncDone": "Sincronizado com a Meta: {created} novos, {updated} atualizados, {missing} não estão mais na Meta.",
+      "syncNone": "Nenhum modelo encontrado nesta conta do WhatsApp Business ainda.",
+      "syncFailed": "A sincronização com a Meta falhou. Verifique a conexão do número e tente novamente.",
+      "syncPartial": "{count, plural, one {# número não pôde ser sincronizado.} other {# números não puderam ser sincronizados.}}",
+      "new": "Novo modelo",
+      "filters": "Filtrar modelos",
+      "search": "Pesquisar",
+      "searchPlaceholder": "Nome do modelo",
+      "status": "Status",
+      "allStatuses": "Todos os status",
+      "category": "Categoria",
+      "allCategories": "Todas as categorias",
+      "connection": "Número do WhatsApp",
+      "allConnections": "Todos os números",
+      "loading": "Carregando modelos",
+      "retry": "Tentar novamente",
+      "emptyTitle": "Nenhum modelo ainda",
+      "emptyBody": "Crie um modelo e envie-o para a Meta, ou sincronize os que você já tem no Meta Business Manager.",
+      "emptyFilteredTitle": "Nenhum modelo corresponde",
+      "emptyFilteredBody": "Altere ou limpe os filtros para ver mais modelos.",
+      "clearFilters": "Limpar filtros",
+      "loadMore": "Carregar mais"
+    },
+    "delete": {
+      "title": "Excluir modelo",
+      "message": "Excluir “{name}”? Ele será removido aqui e na Meta, e não poderá mais ser enviado.",
+      "confirm": "Excluir modelo",
+      "cancel": "Cancelar",
+      "done": "“{name}” excluído.",
+      "inUseHelp": "Abra a transmissão que usa este modelo e cancele-a ou escolha outro modelo; depois exclua este."
+    },
+    "lint": {
+      "title": "Verificações antes do envio",
+      "checking": "Verificando",
+      "unavailable": "As verificações não puderam ser executadas agora. A análise da Meta ainda se aplica, e o servidor verifica de novo no envio.",
+      "clean": "Nenhum problema encontrado.",
+      "summary": "{errors, plural, one {# erro} other {# erros}}, {warnings, plural, one {# aviso} other {# avisos}}",
+      "severity": {
+        "error": "Erro",
+        "warning": "Aviso"
+      },
+      "field": {
+        "name": "Nome",
+        "language": "Idioma",
+        "header": "Cabeçalho",
+        "body": "Corpo",
+        "footer": "Rodapé",
+        "buttons": "Botões",
+        "template": "Modelo"
+      }
+    },
+    "form": {
+      "loading": "Carregando",
+      "retry": "Tentar novamente",
+      "backToLibrary": "Voltar para a biblioteca",
+      "noPermission": "Você não tem permissão para criar ou editar modelos.",
+      "notEditableTitle": "Este modelo não pode mais ser editado",
+      "notEditableBody": "Somente um modelo que a Meta ainda não aprovou, ou que rejeitou, pode ser editado. Crie um novo modelo para alterar um aprovado.",
+      "viewTemplate": "Ver modelo",
+      "breadcrumb": "Caminho de navegação",
+      "breadcrumbLibrary": "Modelos",
+      "breadcrumbNew": "Novo",
+      "breadcrumbEdit": "Editar",
+      "titleNew": "Novo modelo",
+      "titleEdit": "Editar {name}",
+      "saveDraft": "Salvar rascunho",
+      "submit": "Enviar para a Meta",
+      "reload": "Recarregar o modelo",
+      "aside": "Pré-visualização e verificações",
+      "why": {
+        "connection": "Escolha um número do WhatsApp para enviar.",
+        "name": "Digite um nome para o modelo.",
+        "fields": "Alguns campos são inválidos.",
+        "errors": "Corrija os erros antes de enviar.",
+        "checking": "Verificando o modelo."
+      },
+      "toast": {
+        "submitted": "Modelo enviado para análise da Meta.",
+        "saved": "Modelo salvo como rascunho."
+      },
+      "errors": {
+        "name": "Digite um nome para o modelo.",
+        "header": "O cabeçalho pode ter no máximo 60 caracteres.",
+        "body": "O corpo pode ter no máximo {max} caracteres.",
+        "footer": "O rodapé pode ter no máximo 60 caracteres."
+      },
+      "identity": {
+        "title": "Identidade",
+        "connection": "Número do WhatsApp",
+        "connectionHint": "A mídia e o envio devem usar o mesmo número, ou a Meta rejeita o modelo.",
+        "connectionUnknown": "Número não disponível",
+        "noConnection": "Nenhum número do WhatsApp conectado para enviar.",
+        "connectNumber": "Conectar um número",
+        "category": "Categoria",
+        "categoryHint": "A Meta analisa e precifica o modelo pela categoria.",
+        "categories": {
+          "MARKETING": "Marketing",
+          "UTILITY": "Utilidade",
+          "AUTHENTICATION": "Autenticação"
+        },
+        "name": "Nome do modelo",
+        "nameHint": "Somente a-z, 0-9 e _, até 60 caracteres.",
+        "nameTaken": "Este nome já é usado para este idioma neste número.",
+        "language": "Idioma"
+      },
+      "auth": {
+        "title": "Senha de uso único",
+        "hint": "A Meta escreve a mensagem e o botão Copiar código de um modelo de autenticação.",
+        "expiry": "O código expira após (minutos)",
+        "expiryHint": "Opcional. De {min} a {max} minutos.",
+        "expiryInvalid": "Digite um número inteiro de {min} a {max}.",
+        "fixedBody": "A mensagem diz: um código, seguido de “é o seu código de verificação” e um aviso de segurança. Não é possível alterar."
+      },
+      "header": {
+        "title": "Cabeçalho",
+        "hint": "Opcional. Texto, ou uma imagem, vídeo, documento ou localização.",
+        "type": "Tipo de cabeçalho",
+        "kind": {
+          "none": "Nenhum",
+          "text": "Texto",
+          "image": "Imagem",
+          "video": "Vídeo",
+          "document": "Documento",
+          "location": "Localização"
+        },
+        "text": "Texto do cabeçalho",
+        "textHint": "{used}/{max}. No máximo uma variável.",
+        "sample": "Arquivo de exemplo",
+        "uploading": "Enviando",
+        "keptSample": "O exemplo salvo é mantido. Escolha um arquivo para substituí-lo.",
+        "noFile": "Nenhum arquivo escolhido",
+        "limits": "Imagem até 5 MB, vídeo até 16 MB, PDF até 100 MB.",
+        "replace": "Substituir arquivo",
+        "choose": "Escolher arquivo de exemplo",
+        "tooBig": "Este {kind} tem {size} MB. O WhatsApp aceita até {max} MB. Escolha um arquivo menor.",
+        "wrongType": "Este tipo de arquivo não é aceito para este cabeçalho.",
+        "emptyFile": "Este arquivo está vazio.",
+        "locationHelp": "A localização é preenchida quando a mensagem é enviada. A Meta só precisa saber que o cabeçalho é uma localização."
+      },
+      "body": {
+        "title": "Corpo",
+        "hint": "O texto da mensagem. Use variáveis no estilo '{{name}}'; elas são numeradas para a Meta quando você salva.",
+        "toolbar": "Formatação do texto",
+        "format": {
+          "bold": "Negrito",
+          "italic": "Itálico",
+          "strike": "Tachado",
+          "code": "Código"
+        },
+        "variable": "Adicionar variável",
+        "label": "Texto do corpo",
+        "counter": "{used}/{max}",
+        "wrapSample": "texto"
+      },
+      "variables": {
+        "title": "Mapeamento de variáveis",
+        "empty": "Ainda não há variáveis. Digite um marcador como '{{name}}' no corpo, ou use Adicionar variável.",
+        "help": "Para cada variável, informe o atributo do contato que a preenche no envio, e dê um valor de exemplo para a análise da Meta.",
+        "attribute": "Atributo do contato",
+        "sample": "Valor de exemplo",
+        "header": "cabeçalho",
+        "body": "corpo"
+      },
+      "footer": {
+        "title": "Rodapé",
+        "label": "Texto do rodapé",
+        "hint": "Opcional. {used}/{max}. Sem variáveis."
+      },
+      "buttons": {
+        "title": "Botões",
+        "hint": "Opcional. As respostas rápidas devem ficar juntas no início ou no fim.",
+        "add": {
+          "quick_reply": "Resposta rápida",
+          "url": "Visitar site",
+          "phone": "Ligar",
+          "copy_code": "Copiar código"
+        },
+        "kind": {
+          "quick_reply": "Resposta rápida",
+          "url": "Visitar site",
+          "phone": "Ligar",
+          "copy_code": "Copiar código",
+          "other": "Outro"
+        },
+        "count": "{used}/{max} botões",
+        "limitReached": "No máximo {max} deste tipo.",
+        "empty": "Nenhum botão. Adicione um com os botões acima.",
+        "moveUp": "Mover botão {n} para cima",
+        "moveDown": "Mover botão {n} para baixo",
+        "remove": "Remover botão {n}",
+        "keptAsIs": "\"{text}\" é mantido como está. Este editor não o altera.",
+        "text": "Texto do botão",
+        "textHint": "{used}/25",
+        "url": "URL do site",
+        "urlHint": "Adicione '{{1}}' no fim para uma parte dinâmica.",
+        "urlExample": "Exemplo para a variável",
+        "phone": "Número de telefone",
+        "phoneHint": "Com o código do país.",
+        "code": "Código de exemplo",
+        "codeHint": "Por exemplo PROMO50.",
+        "limits": "A Meta permite até {quick} respostas rápidas, {url} botões de site, {phone} botão de telefone e {copy} botão de copiar código.",
+        "allUsed": "Todos os tipos de botão estão no limite.",
+        "issue": {
+          "textRequired": "Digite o texto do botão.",
+          "textTooLong": "No máximo {max} caracteres.",
+          "urlRequired": "Digite a URL.",
+          "urlInvalid": "A URL deve começar com http:// ou https://.",
+          "phoneRequired": "Digite o número de telefone.",
+          "codeRequired": "Digite um código de exemplo.",
+          "quickReplyVariable": "Uma resposta rápida não pode conter variável.",
+          "urlExampleRequired": "Informe um valor de exemplo para a variável da URL.",
+          "quickReplyPosition": "As respostas rápidas devem ficar juntas, no início ou no fim dos botões."
+        }
+      },
+      "result": {
+        "metaRefused": "Salvo, mas a Meta recusou o modelo.",
+        "metaRefusedHelp": "O modelo foi mantido como rascunho. Corrija o que a Meta indicou e envie novamente. Seu formulário não foi alterado.",
+        "submitted": "Enviado para análise da Meta.",
+        "saved": "Salvo como rascunho.",
+        "warnings": "Vale uma olhada antes da análise da Meta:",
+        "open": "Abrir o modelo"
+      }
+    },
+    "detail": {
+      "loading": "Carregando modelo",
+      "retry": "Tentar novamente",
+      "back": "Voltar para a biblioteca",
+      "breadcrumb": "Caminho de navegação",
+      "refresh": "Atualizar status",
+      "retrySubmit": "Enviar para a Meta",
+      "edit": "Editar",
+      "delete": "Excluir",
+      "refreshed": "Status atualizado pela Meta.",
+      "submittedToast": "Modelo enviado para análise da Meta.",
+      "never": "Nunca",
+      "none": "Nenhum",
+      "banner": {
+        "metaFailed": "A Meta recusou o modelo",
+        "draft": "Este modelo ainda não foi enviado para a Meta. Envie-o para iniciar a análise.",
+        "pending": "Enviado para análise da Meta. Esta página verifica uma resposta a cada 15 segundos.",
+        "pendingMeta": "Enviado em {submitted}. Última verificação em {checked}.",
+        "polling": "Você pode deixar esta página aberta ou voltar mais tarde.",
+        "rejected": "Rejeitado pela Meta",
+        "rejectedHelp": "Edite o modelo para resolver o motivo e envie-o novamente.",
+        "paused": "Pausado pela Meta. Não pode ser enviado até a Meta remover a pausa.",
+        "pausedUntil": "Pausado pela Meta até {when}.",
+        "disabled": "Desativado pela Meta. Não pode ser enviado.",
+        "deleted": "A Meta não lista mais este modelo. Ele é mantido aqui; sincronize de novo ou exclua-o."
+      },
+      "facts": {
+        "title": "Sincronização com a Meta",
+        "status": "Status na Meta",
+        "quality": "Qualidade",
+        "category": "Categoria na Meta",
+        "metaId": "ID do modelo",
+        "number": "Número do WhatsApp",
+        "numberUnknown": "Número não disponível",
+        "submitted": "Enviado",
+        "approved": "Aprovado",
+        "synced": "Última sincronização"
+      },
+      "components": {
+        "title": "Componentes",
+        "header": "Cabeçalho",
+        "media": "Mídia do cabeçalho",
+        "body": "Corpo",
+        "footer": "Rodapé",
+        "buttons": "Botões",
+        "expiry": "Validade do código",
+        "expiryValue": "{count, plural, one {# minuto} other {# minutos}}"
+      },
+      "attachment": {
+        "none": "Nenhum",
+        "image": "Imagem",
+        "video": "Vídeo",
+        "document": "Documento",
+        "location": "Localização"
+      },
+      "lint": {
+        "title": "Verificações",
+        "clean": "Nenhum problema encontrado."
+      },
+      "payload": {
+        "title": "Payload enviado à Meta",
+        "hint": "O que é enviado à Meta para análise, exatamente como foi montado.",
+        "empty": "Nada montado ainda."
+      }
+    }
+  }
+}

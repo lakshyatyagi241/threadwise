@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "Central de ajuda",
+    "searchLabel": "Pesquisar ajuda",
+    "searchPlaceholder": "Pesquisar guias",
+    "resultsStatus": "{count, plural, =0 {Nenhum guia encontrado} one {# guia} other {# guias}}",
+    "none": {
+      "title": "Ainda não há guias",
+      "message": "Os guias dos recursos do seu plano aparecerão aqui."
+    },
+    "noResults": {
+      "title": "Nenhum guia corresponde à sua pesquisa",
+      "message": "Tente outras palavras ou limpe a pesquisa para ver todos os guias."
+    },
+    "areas": {
+      "overview": "Plataforma",
+      "inbox": "Caixa de entrada e chat",
+      "audience": "CRM",
+      "sales": "Vendas",
+      "campaigns": "Campanhas",
+      "automation": "Automação",
+      "store": "Loja",
+      "apps": "Marketplace",
+      "settings": "Configurações",
+      "account": "Conta",
+      "getting-started": "Primeiros passos",
+      "troubleshooting": "Solução de problemas"
+    },
+    "allHelp": "Voltar à ajuda",
+    "onThisPage": "Nesta página",
+    "openScreen": "Abrir esta tela",
+    "shownInEnglish": "Este guia ainda não foi traduzido para o seu idioma, por isso é exibido em inglês.",
+    "tip": {
+      "label": "Ajuda: {title}",
+      "readMore": "Ler o guia"
+    },
+    "guideCount": "{count, plural, =0 {Nenhum guia} one {# guia} other {# guias}}",
+    "crumb": "Mais / Ajuda",
+    "heading": "Ajuda",
+    "headingRest": "e guias",
+    "back": "Voltar",
+    "askSupport": "Não encontrou? Fale com o suporte",
+    "askSupportShort": "Suporte",
+    "categories": "Categorias",
+    "allGuides": "Todos os guias",
+    "needHuman": "Precisa de uma pessoa?",
+    "contactSupport": "Falar com o suporte",
+    "popular": "Populares",
+    "searchResults": "Resultados da pesquisa",
+    "read": "Ler guia",
+    "readMinutes": "{count, plural, one {# min de leitura} other {# min de leitura}}",
+    "moreInArea": "Mais em {area}"
+  }
+}

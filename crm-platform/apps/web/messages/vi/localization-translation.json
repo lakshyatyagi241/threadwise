@@ -1,0 +1,201 @@
+{
+  "localization-translation": {
+    "nav": {
+      "languages": "Ngôn ngữ",
+      "providers": "Nhà cung cấp dịch thuật",
+      "usage": "Mức sử dụng dịch thuật",
+      "group": "Bản địa hóa"
+    },
+    "errors": {
+      "unexpected": "Đã có lỗi xảy ra. Hãy thử lại.",
+      "conflict": "Người khác vừa thay đổi nội dung này. Danh sách đã được tải lại, hãy kiểm tra và thử lại.",
+      "languageIsDefault": "Không thể tắt hoặc xóa ngôn ngữ mặc định. Hãy đặt một ngôn ngữ khác làm mặc định trước.",
+      "languageInactive": "Hãy kích hoạt ngôn ngữ trước khi đặt làm mặc định.",
+      "credentialsMissing": "Hãy điền các thông tin xác thực bắt buộc trước.",
+      "providerInactive": "Chỉ nhà cung cấp đang hoạt động mới có thể làm mặc định.",
+      "lockdownNoOfficial": "Hãy kích hoạt và cấu hình ít nhất một nhà cung cấp trả phí chính thức (DeepL hoặc Google Cloud) trước khi bật khóa bảo mật.",
+      "planGate": "Gói của bạn không bao gồm dịch thuật."
+    },
+    "switcher": {
+      "label": "Đổi ngôn ngữ",
+      "menu": "Ngôn ngữ",
+      "failed": "Không thể đổi ngôn ngữ. Hãy thử lại."
+    },
+    "languages": {
+      "kicker": "Quản trị · Hệ thống · Ngôn ngữ",
+      "titleLead": "Nền tảng",
+      "titleEm": "ngôn ngữ",
+      "description": "Quản lý các ngôn ngữ mà người dùng và không gian làm việc mới có thể chọn. Ngôn ngữ \"mặc định\" là phương án dự phòng cho mọi tài khoản mới.",
+      "loading": "Đang tải ngôn ngữ",
+      "stats": {
+        "total": "Tổng",
+        "totalHint": "đã cấu hình",
+        "active": "Đang hoạt động",
+        "activeHint": "hiển thị với người dùng",
+        "default": "Mặc định",
+        "defaultHint": "dự phòng cho tài khoản mới"
+      },
+      "catalog": "Danh mục",
+      "allLanguages": "Tất cả ngôn ngữ",
+      "columns": {
+        "name": "Tên",
+        "code": "Mã",
+        "dir": "Hướng",
+        "active": "Hoạt động",
+        "default": "Mặc định",
+        "actions": "Thao tác"
+      },
+      "on": "Bật",
+      "off": "Tắt",
+      "defaultBadge": "Mặc định",
+      "set": "Đặt",
+      "toggleLabel": "Bật hoặc tắt {name}",
+      "delete": "Xóa",
+      "cancel": "Hủy",
+      "empty": "Chưa có ngôn ngữ nào.",
+      "flash": {
+        "activated": "Đã kích hoạt {name}.",
+        "disabled": "Đã tắt {name}.",
+        "nowDefault": "{name} hiện là ngôn ngữ mặc định.",
+        "removed": "Đã xóa ngôn ngữ."
+      },
+      "confirmDelete": {
+        "title": "Xóa ngôn ngữ",
+        "message": "Xóa {name}?"
+      },
+      "pack": {
+        "kicker": "Gói ngôn ngữ",
+        "title": "Cố định ở {count} ngôn ngữ",
+        "body": "Mỗi ngôn ngữ đang hoạt động được hỗ trợ bởi một tệp JSON dịch đi kèm nền tảng. Các ô ngôn ngữ mới sẽ xuất hiện ở đây khi gói dịch được mở rộng.",
+        "note": "Bạn vẫn có thể bật/tắt trạng thái hoạt động, sửa tên gốc và hướng hiển thị, và chọn mặc định của nền tảng từ bảng bên trái."
+      },
+      "usedFor": {
+        "title": "Cách sử dụng",
+        "body": "Ngôn ngữ đang hoạt động sẽ hiển thị trong bộ chọn ngôn ngữ hồ sơ người dùng và trong các bộ chọn mẫu / trả lời tự động. Mặc định áp dụng cho các tài khoản mới chưa chọn ngôn ngữ."
+      }
+    },
+    "providers": {
+      "kicker": "Quản trị · Hệ thống",
+      "title": "Nhà cung cấp dịch thuật",
+      "description": "Trả lời tự động đa ngôn ngữ dùng một trong các nhà cung cấp này để dịch tin nhắn đến và soạn trả lời bằng ngôn ngữ của khách hàng. MyMemory đang hoạt động sẵn (miễn phí, không cần khóa). Hãy kết nối DeepL / Google Cloud / LibreTranslate để có chất lượng cao hơn hoặc quyền riêng tư khi tự lưu trữ.",
+      "loading": "Đang tải nhà cung cấp",
+      "on": "Bật",
+      "off": "Tắt",
+      "cancel": "Hủy",
+      "lockdown": {
+        "title": "Khóa bảo mật tuân thủ",
+        "description": "Khi bật, chuỗi dự phòng sẽ bỏ qua <mono>{slugs}</mono> và chỉ dịch trả lời tự động qua các API trả phí chính thức (DeepL, Google Cloud). Một số chính sách bảo mật doanh nghiệp yêu cầu điều này vì cấm các điểm cuối bên thứ ba không chính thức.",
+        "enable": "Bật khóa bảo mật",
+        "disable": "Tắt khóa bảo mật",
+        "confirmOn": "Bật khóa bảo mật? Các trình điều khiển miễn phí sẽ bị bỏ qua, chỉ API trả phí mới dịch.",
+        "confirmOff": "Tắt khóa bảo mật? Các trình điều khiển miễn phí sẽ quay lại chuỗi dự phòng."
+      },
+      "flash": {
+        "activated": "Đã kích hoạt {name}.",
+        "disabled": "Đã tắt {name}.",
+        "nowDefault": "{name} hiện là nhà cung cấp mặc định.",
+        "saved": "Đã lưu {name}.",
+        "lockdownOn": "Khóa bảo mật tuân thủ đang bật.",
+        "lockdownOff": "Khóa bảo mật tuân thủ đang tắt."
+      },
+      "empty": {
+        "title": "Chưa cấu hình nhà cung cấp dịch thuật nào",
+        "body": "Chạy seed nhà cung cấp dịch thuật để điền danh sách này."
+      },
+      "active": "Đang hoạt động",
+      "disabled": "Đã tắt",
+      "defaultBadge": "Mặc định",
+      "skipped": "Khóa bảo mật · đã bỏ qua",
+      "skippedTitle": "Đã bỏ qua vì khóa bảo mật tuân thủ đang bật.",
+      "slug": "slug: {slug}",
+      "makeDefault": "Đặt làm mặc định",
+      "activate": "Kích hoạt",
+      "disable": "Tắt",
+      "keepSecret": "••••••• (để trống để giữ nguyên)",
+      "noCredentials": "Không cần thông tin xác thực. Nhà cung cấp này hoạt động ngay.",
+      "sortOrder": "Thứ tự sắp xếp",
+      "sortOrderHint": "Số nhỏ hơn nghĩa là ưu tiên cao hơn trong chuỗi dự phòng.",
+      "save": "Lưu {name}"
+    },
+    "usage": {
+      "kicker": "Quản trị · Hệ thống",
+      "title": "Mức sử dụng dịch thuật",
+      "description": "Khối lượng và chi phí ước tính của mọi bản dịch trả lời tự động. Các lượt tra từ điển đi kèm và bộ nhớ đệm 24 giờ không tính phí và không hiển thị ở đây. Đây chỉ là các lượt gọi thực tế.",
+      "from": "Từ",
+      "to": "Đến",
+      "apply": "Áp dụng",
+      "badRange": "Ngày bắt đầu không được sau ngày kết thúc.",
+      "loading": "Đang tải mức sử dụng",
+      "failed": "Không tải được mức sử dụng.",
+      "totals": {
+        "calls": "Lượt gọi thực tế",
+        "chars": "Ký tự đã dịch",
+        "charsOut": "ra: {count}",
+        "cost": "Chi phí ước tính",
+        "costHint": "dựa trên đơn giá công bố theo ký tự",
+        "fallbackHits": "Lượt dự phòng",
+        "fallbackHint": "trình điều khiển chính lỗi, chuỗi đã bắt được"
+      },
+      "byProvider": "Theo nhà cung cấp",
+      "emptyProvider": "Không có lượt gọi dịch nào trong khoảng này. Gửi một tin nhắn không phải tiếng Anh tới thiết bị có trả lời tự động, rồi làm mới.",
+      "free": "miễn phí",
+      "last30": "30 ngày qua",
+      "timelineHint": "rê chuột vào từng cột để xem ngày, ký tự và chi phí",
+      "topWorkspaces": "Không gian làm việc chi tiêu nhiều nhất",
+      "emptyWorkspaces": "Không có bản dịch gói trả phí nào trong khoảng này.",
+      "cols": {
+        "provider": "Nhà cung cấp",
+        "workspace": "Không gian làm việc",
+        "calls": "Lượt gọi",
+        "charsIn": "Ký tự vào",
+        "chars": "Ký tự",
+        "cost": "Chi phí",
+        "rate": "Đơn giá / 1 triệu ký tự"
+      }
+    },
+    "settings": {
+      "title": "Dịch thời gian thực",
+      "description": "Trò chuyện với khách hàng bằng bất kỳ ngôn ngữ nào. Mỗi bên đọc bằng ngôn ngữ của mình, tự động.",
+      "loading": "Đang tải cài đặt dịch",
+      "failed": "Không tải được cài đặt dịch.",
+      "saved": "Đã lưu cài đặt dịch.",
+      "steps": {
+        "1": {
+          "title": "Khách hàng viết (mọi ngôn ngữ)",
+          "body": "Tin nhắn của họ được tự động dịch SANG ngôn ngữ nhóm của bạn và hiển thị cho nhân viên, bản gốc chỉ cách một lần nhấn."
+        },
+        "2": {
+          "title": "Nhân viên trả lời (ngôn ngữ của bạn)",
+          "body": "Trả lời của bạn được dịch SANG ngôn ngữ của khách hàng ngay trước khi gửi qua WhatsApp."
+        },
+        "3": {
+          "title": "AI và widget cũng vậy",
+          "body": "Tác nhân AI và widget chat trên website trả lời trực tiếp bằng ngôn ngữ của khách hàng."
+        }
+      },
+      "engine": {
+        "kicker": "Công cụ dịch",
+        "free": "MyMemory (miễn phí)",
+        "body": "Bạn KHÔNG nhập khóa API nào ở đây. Dịch được cấu hình một lần cho toàn nền tảng và hoạt động tự động ngay. Công cụ miễn phí được bật mặc định; nền tảng có thể được thiết lập để dùng DeepL / Google Translate cho chất lượng cao hơn."
+      },
+      "usage": {
+        "kicker": "Tháng này",
+        "line": "ký tự đã dịch · {count} tin nhắn"
+      },
+      "enabled": {
+        "title": "Tự động dịch cuộc trò chuyện",
+        "hint": "Bật hoặc tắt toàn bộ tính năng cho không gian làm việc này."
+      },
+      "teamLanguage": {
+        "label": "Ngôn ngữ nhóm của bạn",
+        "hint": "Ngôn ngữ mà nhân viên CỦA BẠN đọc và viết. Tin nhắn khách hàng được dịch sang ngôn ngữ này; trả lời của bạn được dịch ra từ ngôn ngữ này."
+      },
+      "save": "Lưu cài đặt dịch",
+      "upgrade": {
+        "title": "Nâng cấp để mở khóa dịch thời gian thực.",
+        "body": "Tự động dịch cuộc trò chuyện WhatsApp giữa ngôn ngữ nhóm và ngôn ngữ của khách hàng.",
+        "link": "Xem các gói →"
+      }
+    }
+  }
+}

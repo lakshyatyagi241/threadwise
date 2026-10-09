@@ -1,0 +1,312 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "devices": "Kişisel WhatsApp"
+    },
+    "area": {
+      "title": "Resmi olmayan WhatsApp API",
+      "numbers": "Numaralar",
+      "warmer": "Daha ılık"
+    },
+    "common": {
+      "dismiss": "Kapat",
+      "requestId": "İstek {id}",
+      "unofficial": "Resmi değil",
+      "reminder": "Resmi olmayan bağlantı. WhatsApp bu numarayı kısıtlayabilir.",
+      "readGuide": "Rehberi oku",
+      "close": "Kapat",
+      "cancel": "Vazgeç",
+      "back": "Geri"
+    },
+    "list": {
+      "title": "Kişisel WhatsApp numaraları",
+      "subtitle": "QR kodu veya eşleştirme kodu ile bir WhatsApp numarası bağlayın. Bu numaradaki sohbetler ortak gelen kutusunda görünür.",
+      "connect": "Numara bağla",
+      "capCount": "{used} / {limit} numara",
+      "capUnlimited": "{used, plural, other {# numara}}",
+      "capFull": "Çalışma alanınız bu motorda {limit, plural, other {# numaraya}} sahip olabilir. Başka birini bağlamak için bir tanesini silin.",
+      "capLabel": "Kullanımdaki numaralar",
+      "loading": "Numaralarınız yükleniyor...",
+      "retry": "Yeniden dene",
+      "searchLabel": "Ad veya numaraya göre ara",
+      "searchPlaceholder": "Ad veya numara ara",
+      "tabs": {
+        "all": "Tümü",
+        "connected": "Bağlı",
+        "disconnected": "Bağlantı kesildi"
+      },
+      "noMatch": "Eşleşen numara yok. Aramayı temizleyin veya başka bir sekme seçin.",
+      "empty": {
+        "title": "Henüz bağlı kişisel numara yok",
+        "message": "Zaten kullandığınız WhatsApp numarasını bağlayın. WhatsApp Web gibi çalışır; bu, WhatsApp'ı otomatikleştirmek için onaylı bir yol değildir ve WhatsApp numarayı kısıtlayabilir. Ciddi veya uzun vadeli kullanım için resmi WhatsApp İşletme yolu daha düşük risklidir.",
+        "action": "Numara bağla",
+        "noPermission": "Bir numara bağlamak için çalışma alanı yöneticisinden isteyin."
+      },
+      "columns": {
+        "name": "Ad",
+        "lastSeen": "Son görülme"
+      },
+      "lastSeenNever": "Hiçbir zaman",
+      "assignedTo": "İlgilenen: {name}",
+      "noticeChanged": {
+        "title": "Bildirimimiz değişti",
+        "body": "Kişisel numaralar için risk bildirimi güncellendi. Bağlı numaralarınız çalışmaya devam eder. Bir tane bağladığınızda bir sonraki sefer bunu tekrar okumanız istenecek.",
+        "action": "Bildirimi oku"
+      },
+      "action": {
+        "link": "Bağla",
+        "reconnect": "Yeniden bağla",
+        "relink": "Yeniden bağla",
+        "retry": "Yeniden dene",
+        "details": "Ayrıntılar",
+        "disconnect": "Bağlantıyı kes",
+        "rename": "Yeniden adlandır",
+        "delete": "Sil"
+      },
+      "sendingToggle": "{name} numarasını gönderim için kullan",
+      "sendingOn": "Gönderim için kullanılıyor",
+      "sendingOff": "Gönderim için kullanılmıyor",
+      "done": {
+        "disconnected": "{name} bağlantısı kesildi.",
+        "disconnectedNotUnlinked": "{name} burada bağlantısı kesildi. WhatsApp'ta Bağlı cihazlar altından bu cihazı da kaldırın.",
+        "deleted": "{name} silindi. Sohbetleri gelen kutusunda kalır.",
+        "renamed": "{name} olarak yeniden adlandırıldı.",
+        "sendingSaved": "Kaydedildi."
+      },
+      "workerDown": "Bağlantı hizmeti çalışmıyor. Hizmet geri gelene kadar numaralar bağlanamaz."
+    },
+    "state": {
+      "created": "Henüz bağlanmadı",
+      "awaiting_qr": "Tarama bekleniyor",
+      "awaiting_pairing_code": "Kod bekleniyor",
+      "connecting": "Bağlanıyor",
+      "connected": "Bağlı",
+      "disconnected": "Bağlantı kesildi",
+      "logged_out": "Bağlantı WhatsApp tarafından sonlandırıldı",
+      "error": "Bağlanılamadı",
+      "unknown": "Bilinmiyor"
+    },
+    "reason": {
+      "unlinked_on_phone": "WhatsApp bu numaranın bağlantısını sonlandırdı. Bu, cihaz WhatsApp'ta Bağlı cihazlar altından kaldırıldığında ve WhatsApp bir numarayı kısıtladığında olur. Buradaki sohbetleriniz korunur. Yeniden bağlayabilirsiniz.",
+      "forbidden": "WhatsApp bağlantıyı reddetti. Bu, numaranın kısıtlanmış olabileceği anlamına gelebilir. Buradaki sohbetleriniz korunur.",
+      "qr_timeout": "Kod zamanında taranmadı.",
+      "pair_failed": "WhatsApp bu numarayı bağlamayı tamamlayamadı.",
+      "code_failed": "Eşleştirme kodu kabul edilmedi.",
+      "mismatch": "Tarama yapan telefon girdiğiniz numaraya ait değil. Numarayı kontrol edip yeniden deneyin.",
+      "proxy_unreachable": "Proxy yanıt vermedi. Çalışana kadar numara çevrimdışı kalır.",
+      "session_conflict": "Aynı numara başka bir yerde bağlı ve ikisi birbirinin yerine geçiyor. Diğer bağlantıyı kaldırın, ardından yeniden bağlanın.",
+      "device_limit_reached": "WhatsApp 4 bağlı cihaza izin verir. WhatsApp'ta Bağlı cihazlar altından birini kaldırın ve yeniden deneyin.",
+      "worker_unavailable": "Bağlantı hizmeti kullanılamıyor. Birkaç dakika sonra yeniden deneyin.",
+      "worker_silent": "Bu numara için bağlantı hizmeti yanıt vermeyi bıraktı. Hizmet geri geldiğinde kendiliğinden yeniden bağlanır.",
+      "user": "Bu çalışma alanıyla bağlantı kesildi.",
+      "session_incomplete": "Kayıtlı oturum tamamlanmadı. Numarayı yeniden bağlayın."
+    },
+    "notice": {
+      "title": "Bağlamadan önce",
+      "intro": "Bunu okuyun. Kısa ve doğrudur.",
+      "listLabel": "Lütfen her maddeyi onaylayın",
+      "notesTitle": "Bilmekte fayda var",
+      "version": "Bildirim sürümü {version}",
+      "accept": "Kabul ediyorum ve devam ediyorum",
+      "accepting": "Kaydediliyor...",
+      "mustTick": "Devam etmek için üç kutucuğun tümünü işaretleyin.",
+      "pageTitle": "Kişisel numaralar için risk bildirimi",
+      "pageIntro": "Kişisel bir WhatsApp numarası bağlamadan önce kabul ettiğiniz bildirim budur.",
+      "acceptedOn": "{version} sürümünü {date} tarihinde kabul ettiniz.",
+      "notAccepted": "Henüz geçerli sürümü kabul etmediniz. Bir numara bağladığınızda sizden istenecek.",
+      "backToList": "Numaralara dön",
+      "texts": {
+        "v2026_10_07_1": {
+          "items": {
+            "not_approved_ban_risk": "Bunun WhatsApp Web gibi WhatsApp'ımı bağladığını anlıyorum. Bu, WhatsApp'ı otomatikleştirmek için onaylı bir yol değildir ve WhatsApp'ın kullanım koşullarına aykırıdır. WhatsApp bu numarayı, normal kullanım dahil, istediği zaman kısıtlayabilir veya kalıcı olarak yasaklayabilir; bunu engelleyemeyiz ve numarayı geri alamayız.",
+            "own_number_expected_contacts": "Yalnızca sahibi olduğum veya bağlamak için sahibinden izin aldığım bir numarayı bağlayacağım ve bunu kaybetmeyi göze alabilirim. Yalnızca benden haber beklemesi olan kişilere mesaj göndereceğim.",
+            "shared_inbox_disclosure": "Bu numara bağlandığı andan itibaren, bu numaradaki her özel sohbetin (yalnızca iş sohbetleri değil) gelen kutusunu okuyabilen bu çalışma alanının üyeleri için ortak gelen kutusunda göründüğünü anlıyorum; telefonumda yazdığım mesajlar da oraya kopyalanır."
+          },
+          "notes": {
+            "official_route_lower_risk": "Ciddi veya uzun vadeli kullanım için resmi WhatsApp İşletme yolu daha düşük risklidir.",
+            "warm_up": "Numarayı yavaşça ısıtın ve hacmi düşük tutun.",
+            "no_ban_support": "Kısıtlanmış veya yasaklanmış bir numara destek kapsamında değildir: bunu incelemeyiz, geri yüklemeyiz veya ücret iadesi yapmayız.",
+            "shared_addresses": "Bu pilot sürümde numaralar sunucularımızın paylaşılan adreslerinden bağlanır (proxy yok); bu nedenle bir numaradaki kısıtlama diğerlerine de bağlanabilir.",
+            "disconnect_keeps_chats": "Buradan bağlantıyı kesmek bağlantıyı ve kayıtlı oturumu kaldırır, ancak sohbetleri gelen kutusundan silmez."
+          }
+        }
+      }
+    },
+    "wizard": {
+      "title": "Numara bağla",
+      "relinkTitle": "{name} bağla",
+      "stepOf": "Adım {step} / {total}",
+      "continue": "Devam et",
+      "creating": "Kaydediliyor...",
+      "number": {
+        "title": "Hangi numara?",
+        "name": "Ad",
+        "namePlaceholder": "Örneğin Satış hattı",
+        "nameHelp": "Bu adı yalnızca ekibiniz görür.",
+        "phone": "WhatsApp numarası",
+        "phoneHelp": "Bağlayacağınız numarayı ülke koduyla birlikte yazın. Kodu tarayacak veya girecek telefonun numarası olmalı.",
+        "activate": "Bağladıktan sonra gönderim için kullan",
+        "activateHelp": "Bağlandığında kampanyalar, zamanlanmış mesajlar ve akışlar bu numarayı kullanabilir.",
+        "nameError": {
+          "required": "Bir ad girin.",
+          "short": "Ad en az 2 karakter olmalı.",
+          "long": "Ad çok uzun (en fazla 191 karakter)."
+        },
+        "phoneError": {
+          "empty": "Numarayı girin.",
+          "invalid": "Bu numara seçilen ülke için geçerli değil."
+        },
+        "openExisting": "Mevcut numarayı aç"
+      },
+      "link": {
+        "title": "Telefonu bağlayın",
+        "choose": "Nasıl bağlamak istersiniz?",
+        "methodLabel": "Bağlama yöntemi",
+        "qr": "QR kodu tarayın",
+        "qrHelp": "Bu numaraya sahip telefonla tarayın.",
+        "code": "Eşleştirme kodu kullanın",
+        "codeHelp": "Telefonda 8 karakterlik bir kod yazın. Tarayamadığınızda kullanışlıdır.",
+        "numberLine": "Numara: {phone}",
+        "startQr": "QR kodunu göster",
+        "startCode": "Eşleştirme kodu al",
+        "starting": "Başlatılıyor...",
+        "needCountryCode": "Eşleştirme kodunu kullanmak için ülke kodunu ekleyin.",
+        "someoneElse": "Bu kodu yalnızca bağladığınız numaranın telefonunda girin. Kimseyle paylaşmayın. Başka birinin telefonunda girilen bir eşleştirme kodu, o kişinin tüm WhatsApp hesabını bu çalışma alanına bağlar.",
+        "qrSteps": {
+          "one": "Telefonda WhatsApp'ı açın.",
+          "two": "Bağlı cihazlar'a, ardından Cihaz bağla'ya gidin.",
+          "three": "Kamerayı bu koda doğrultun."
+        },
+        "codeSteps": {
+          "one": "Telefonda WhatsApp'ı açın.",
+          "two": "Bağlı cihazlar'a, ardından Cihaz bağla'ya ve yerine Telefon numarasıyla bağla'ya gidin.",
+          "three": "Bu kodu yazın."
+        },
+        "qrAlt": "Numarayı bağlamak için QR kodu",
+        "qrRefresh": "{seconds} sn içinde yeni kod",
+        "qrExpires": "{time} içinde sona erer",
+        "codeValid": "Kod yaklaşık 3 dakika geçerlidir.",
+        "codeExpires": "{time} geçerli",
+        "codeLabel": "Eşleştirme kodu",
+        "copy": "Kodu kopyala",
+        "copied": "Kopyalandı",
+        "copyFailed": "Kopyalanamadı. Kodu seçip kopyalayın.",
+        "strip": {
+          "shown": "Kod gösterildi",
+          "scanned": "Tarandı",
+          "ready": "Hazır"
+        },
+        "stripLabel": "İlerleme",
+        "linking": "Bağlanıyor. WhatsApp eşitleniyor, bu biraz sürebilir.",
+        "cancelAttempt": "Bağlamayı durdur ve başka bir yol seç",
+        "reading": "İlk kod bekleniyor...",
+        "relinkAction": "Kayıtlı oturumu unut ve yeniden bağla"
+      },
+      "result": {
+        "connectedTitle": "Bağlandı",
+        "connectedBody": "{phone} bağlandı. Bu numaradaki sohbetler artık ortak gelen kutusunda görünür.",
+        "warmer": "Isınmayı ayarla",
+        "inbox": "Gelen kutusunu aç",
+        "list": "Numaralara dön",
+        "timedOutTitle": "Kod zamanında taranmadı",
+        "timedOutBody": "Hiçbir şey bağlanmadı. Telefon çevrimdışıysa veya kilitliyse çevrimiçi yapıp yeniden başlatın.",
+        "phoneOfflineTitle": "Telefona ulaşılamadı",
+        "phoneOfflineBody": "Telefonun çevrimiçi olduğunu kontrol edip yeniden başlatın.",
+        "loggedOutTitle": "WhatsApp bağlantıyı sonlandırdı",
+        "loggedOutBody": "Bu, cihaz WhatsApp'ta Bağlı cihazlar altından kaldırıldığında ve WhatsApp bir numarayı kısıtladığında olur. Buradaki sohbetleriniz korunur. Numarayı yeniden bağlayabilirsiniz.",
+        "replacedTitle": "Başka bir oturum bunun yerine geçti",
+        "replacedBody": "Aynı numara başka bir yerde bağlı. Diğer bağlantıyı kaldırıp yeniden bağlanın.",
+        "mismatchTitle": "Girdiğiniz numara bu değil",
+        "mismatchBody": "Tarama yapan telefon girdiğiniz numaraya ait değil. Numarayı kontrol edip yeniden deneyin.",
+        "limitTitle": "Telefonda çok fazla bağlı cihaz var",
+        "limitBody": "WhatsApp en fazla 4 bağlı cihaza izin verir. WhatsApp'ta Bağlı cihazlar altından birini kaldırıp yeniden deneyin.",
+        "proxyTitle": "Proxy yanıt vermedi",
+        "proxyBody": "Proxy çalışana kadar numara çevrimdışı kalır.",
+        "serviceTitle": "Bağlantı hizmeti kullanılamıyor",
+        "serviceBody": "Birkaç dakika sonra yeniden deneyin.",
+        "failedTitle": "Numara bağlanamadı",
+        "failedBody": "WhatsApp bağlantıyı tamamlayamadı. Hiçbir şey bağlanmadı. Yeniden deneyin.",
+        "tryAgain": "Yeniden dene"
+      },
+      "discard": {
+        "title": "Bağlanmayı durdurulsun mu?",
+        "message": "Henüz bitirmediniz. Şimdi ayrılırsanız yazdıklarınız kaybolur ve devam eden bağlantı kesilir.",
+        "stay": "Devam et",
+        "leave": "Ayrıl"
+      }
+    },
+    "detail": {
+      "back": "Tüm numaralar",
+      "loading": "Numara yükleniyor...",
+      "notFound": "Bu numara yok veya silinmiş.",
+      "status": "Durum",
+      "lastSeen": "Son görülme",
+      "linkedSince": "Bu durumda olduğu tarih",
+      "number": "Numara",
+      "numberLocked": "Bağlantı varken numara değiştirilemez. Önce bağlantıyı kesin.",
+      "assignedTo": "İlgilenen",
+      "createdBy": "Ekleyen",
+      "sending": "Gönderim için kullan",
+      "editTitle": "Düzenle",
+      "name": "Ad",
+      "save": "Kaydet",
+      "saving": "Kaydediliyor...",
+      "saved": "Kaydedildi.",
+      "dangerTitle": "Bağlantıyı kes veya sil",
+      "disconnectHelp": "Numaranın bağlantısını keser ve kayıtlı oturumunu siler. Daha sonra yeniden bağlayabilirsiniz.",
+      "deleteHelp": "Numarayı bu çalışma alanından kaldırır. Sohbetler gelen kutusunda kalır.",
+      "warmerLink": "Bu numara için ısınmayı ayarla"
+    },
+    "dialog": {
+      "disconnect": {
+        "title": "{name} bağlantısı kesilsin mi?",
+        "message": "Bu işlem numaranın bağlantısını keser ve kayıtlı oturumunu siler. Sohbetler okunabilir kalır ancak numarayı yeniden bağlayana kadar bu numaradan yanıt verilemez.",
+        "confirm": "Bağlantıyı kes"
+      },
+      "delete": {
+        "title": "{name} silinsin mi?",
+        "message": "Bu işlem numaranın bağlantısını keser ve kayıtlı oturumunu siler. Sohbetler gelen kutusunda okunabilir kalır ancak bu numaradan artık yanıt verilemez. Bu işlem geri alınamaz.",
+        "confirm": "Numarayı sil"
+      },
+      "rename": {
+        "title": "Numarayı yeniden adlandır",
+        "label": "Ad",
+        "confirm": "Kaydet"
+      },
+      "cancel": "İptal"
+    },
+    "errors": {
+      "generic": "Bir sorun oluştu. Yeniden deneyin.",
+      "FORBIDDEN": "Bunu yapmak için izniniz yok.",
+      "UNAUTHENTICATED": "Oturumunuz sona erdi. Yeniden giriş yapın.",
+      "NOT_FOUND": "Bu numara yok veya silinmiş.",
+      "VALIDATION_FAILED": "Bazı alanların düzeltilmesi gerekiyor.",
+      "ROW_VERSION_CONFLICT": "Bu numarayı birisi değiştirdi. Sayfayı yenileyip yeniden deneyin.",
+      "WA_UNOFFICIAL_DISABLED": "Bu özellik artık çalışma alanınız için etkin değil.",
+      "PLAN_FEATURE_LOCKED": "Planınız bu özelliği içermiyor.",
+      "PLAN_LIMIT_REACHED": "Planınız burada en fazla {limit, plural, other {# WhatsApp numarası}} izin veriyor. Birini silin veya yenisini eklemek için planınızı yükseltin.",
+      "PLAN_LIMIT_REACHED_GENERIC": "Planınız burada başka numaraya izin vermiyor. Birini silin veya yenisini eklemek için planınızı yükseltin.",
+      "DEVICE_ALREADY_EXISTS": "Bu telefon numarasına sahip bir cihaz bu çalışma alanında zaten var.",
+      "DEVICE_PHONE_INVALID": "Eşleştirme kodu kullanmak için ülke kodunu ekleyin.",
+      "PERSONAL_WA_NOTICE_REQUIRED": "Önce bildirimi okuyup kabul edin.",
+      "DEVICE_PAIRING_RATE_LIMITED": "Bu numara için çok fazla deneme yapıldı. Daha sonra yeniden deneyin.",
+      "DEVICE_PAIRING_RATE_LIMITED_WAIT": "Bu numara için çok fazla deneme yapıldı. {minutes, plural, other {# dakika}} sonra yeniden deneyin.",
+      "DEVICE_PAIRING_IN_PROGRESS": "Birisi az önce bağlantı başlattı. Bitmesini veya sona ermesini bekleyin.",
+      "DEVICE_NOT_PAIRABLE": "Bu numara şu anda bağlanamaz. Önce bağlantısını kesin.",
+      "WA_WORKER_UNAVAILABLE": "Bağlantı hizmeti kullanılamıyor. Birkaç dakika içinde yeniden deneyin.",
+      "RATE_LIMITED": "Çok fazla istek. Lütfen biraz bekleyin.",
+      "upgrade": "Planları gör ve yükselt",
+      "requestId": "İstek {id}",
+      "DEVICE_PILOT_CAP_REACHED": "Çalışma alanınız, pilot sürecinde izin verilen kişisel WhatsApp numarası sayısına ulaştı. Başka birini bağlamak için birini silin.",
+      "DEVICE_CREATE_RATE_LIMITED": "Son bir saatte çok fazla numara eklendi. Daha sonra yeniden deneyin.",
+      "DEVICE_CREATE_RATE_LIMITED_WAIT": "Son bir saatte çok fazla numara eklendi. {minutes, plural, other {# dakika}} sonra yeniden deneyin.",
+      "DEVICE_PAIRING_IN_PROGRESS_BY": "{name} az önce bağlantı başlattı. Bitmesini bekleyin.",
+      "DEVICE_NO_PAIRING": "Bu bağlantı denemesi sona erdi. Yeniden başlatın.",
+      "DEVICE_NUMBER_LOCKED": "Bağlantı varken numara değiştirilemez. Önce bağlantısını kesin.",
+      "DEVICE_PAIRING_TIMEOUT": "WhatsApp zamanında yanıt vermedi. Yeniden deneyin.",
+      "DEVICE_NOT_PAIRABLE_CONNECTED": "Bu numara zaten bağlı. Önce bağlantısını kesip sonra yeniden bağlayın.",
+      "DEVICE_NOT_PAIRABLE_SESSION": "Bu numaranın hâlâ kayıtlı bir WhatsApp oturumu var. Kayıtlı oturumu unutmak ve baştan başlamak için numarayı sıfırdan yeniden bağlayın.",
+      "DEVICE_NOT_PAIRABLE_LIVE": "Bu numara için zaten devam eden bir bağlantı var. Baştan başlamak için numarayı sıfırdan yeniden bağlayın."
+    }
+  }
+}

@@ -1,0 +1,315 @@
+{
+  "settings": {
+    "title": "Configurações",
+    "breadcrumb": "Trilha de navegação",
+    "backToSettings": "Voltar para Configurações",
+    "sectionsLabel": "Seções de configurações",
+    "searchLabel": "Pesquisar configurações",
+    "searchPlaceholder": "Pesquisar configurações",
+    "searchHint": "Digite para filtrar todas as configurações por nome ou palavra-chave. Pressione Esc para limpar e a seta para baixo para ir aos resultados.",
+    "clearSearch": "Limpar pesquisa",
+    "results": {
+      "title": "{count, plural, one {# configuração corresponde a “{query}”} other {# configurações correspondem a “{query}”}}",
+      "status": "{count, plural, =0 {Nenhum resultado} one {# resultado} other {# resultados}}"
+    },
+    "noResults": {
+      "title": "Nenhuma configuração corresponde a “{query}”",
+      "message": "Confira a grafia ou tente uma palavra mais ampla, como “imposto”, “equipe” ou “WhatsApp”."
+    },
+    "emptySection": {
+      "title": "Nada para configurar aqui",
+      "message": "Nenhuma das configurações desta seção está disponível para o seu perfil."
+    },
+    "inSection": "Em {section}",
+    "soon": "Em breve",
+    "upgrade": "Fazer upgrade",
+    "comingSoon": "Em breve",
+    "sections": {
+      "channels": {
+        "title": "Canais",
+        "description": "Conecte os lugares onde seus clientes enviam mensagens para você."
+      },
+      "data": {
+        "title": "Dados e personalização",
+        "description": "Defina como contatos, negócios e conversas são descritos."
+      },
+      "business": {
+        "title": "Empresa e cobrança",
+        "description": "Os dados da sua empresa, impostos, plano e pagamentos."
+      },
+      "people": {
+        "title": "Equipe e permissões",
+        "description": "Quem pode fazer o quê no seu espaço de trabalho."
+      },
+      "automation": {
+        "title": "Automação e IA",
+        "description": "Respostas, reservas, o widget do site e a IA."
+      },
+      "integrations": {
+        "title": "Integrações e desenvolvedores",
+        "description": "Conecte outras ferramentas e amplie o produto."
+      },
+      "security": {
+        "title": "Dados e segurança",
+        "description": "Login, privacidade, exportação e o histórico de auditoria."
+      }
+    },
+    "tiles": {
+      "channels": {
+        "label": "Todos os canais",
+        "description": "Veja todos os canais conectados e adicione um novo.",
+        "keywords": "conexões, caixas de entrada, números, contas"
+      },
+      "whatsapp": {
+        "label": "WhatsApp",
+        "description": "Conecte seu número do WhatsApp Business para conversar com clientes.",
+        "keywords": "wa, whatsapp business, cloud api, número, qr"
+      },
+      "unofficial-whatsapp": {
+        "label": "API não oficial do WhatsApp",
+        "description": "Vincule um número pessoal do WhatsApp por QR code e aqueça-o para envios seguros.",
+        "keywords": "whatsapp pessoal, qr, código de pareamento, dispositivos, baileys, aquecimento, não oficial"
+      },
+      "warmer": {
+        "label": "Aquecedor",
+        "description": "Aqueça seus números do WhatsApp para que as mensagens agendadas sejam enviadas em um ritmo seguro.",
+        "keywords": "aquecimento, número, reputação, limite de envio, fila, ritmo, agendadas"
+      },
+      "facebook": {
+        "label": "Facebook Messenger",
+        "description": "Responda às mensagens enviadas para sua página do Facebook.",
+        "keywords": "meta, messenger, página, fb"
+      },
+      "instagram": {
+        "label": "Instagram",
+        "description": "Responda às mensagens diretas enviadas para sua conta do Instagram.",
+        "keywords": "meta, dm, insta, mensagens diretas"
+      },
+      "telegram": {
+        "label": "Telegram",
+        "description": "Conecte um bot do Telegram para conversar com clientes.",
+        "keywords": "bot, botfather, tg"
+      },
+      "tiktok": {
+        "label": "TikTok",
+        "description": "Responda às mensagens enviadas para sua conta comercial do TikTok.",
+        "keywords": "tik tok, dm, vídeo"
+      },
+      "sms": {
+        "label": "SMS",
+        "description": "Envie e receba mensagens de texto com seu próprio remetente.",
+        "keywords": "mensagem de texto, id do remetente, dlt, twilio, celular"
+      },
+      "email": {
+        "label": "E-mail",
+        "description": "Conecte uma caixa de e-mail para enviar e receber e-mails na caixa de entrada.",
+        "keywords": "caixa de e-mail, smtp, imap, gmail, outlook, remetente"
+      },
+      "line": {
+        "label": "LINE",
+        "description": "Conecte sua conta oficial do LINE.",
+        "keywords": "conta oficial line, mensagens"
+      },
+      "viber": {
+        "label": "Viber",
+        "description": "Conecte sua conta comercial do Viber.",
+        "keywords": "bot do viber, mensagens"
+      },
+      "wechat": {
+        "label": "WeChat",
+        "description": "Conecte sua conta oficial do WeChat.",
+        "keywords": "weixin, conta oficial"
+      },
+      "wa-links": {
+        "label": "Links do WhatsApp",
+        "description": "Crie links de clique para conversar e QR codes que abrem um chat do WhatsApp.",
+        "keywords": "clique para conversar, qr code, link curto, wa.me"
+      },
+      "contact-stages": {
+        "label": "Etapas do contato",
+        "description": "Defina as etapas e os status pelos quais um contato passa.",
+        "keywords": "ciclo de vida, status, lead, cliente, ganho, perdido, funil"
+      },
+      "contact-properties": {
+        "label": "Propriedades do contato",
+        "description": "Adicione os campos que você quer manter em cada contato.",
+        "keywords": "campos personalizados, campos, obrigatório, lista suspensa, colunas, atributos, variáveis, campos de mesclagem"
+      },
+      "attributes": {
+        "label": "Atributos",
+        "description": "Tags e outros rótulos que você adiciona aos contatos.",
+        "keywords": "tags, rótulos, origens, atributos personalizados"
+      },
+      "deal-pipelines": {
+        "label": "Funis e etapas",
+        "description": "Edite seus funis de vendas, etapas e motivos de perda.",
+        "keywords": "negócios, etapas de venda, quadro, motivo de perda, funil"
+      },
+      "tags": {
+        "label": "Tags",
+        "description": "Crie e organize as tags usadas em contatos e conversas.",
+        "keywords": "rótulos, cor, color"
+      },
+      "saved-replies": {
+        "label": "Respostas salvas",
+        "description": "Escreva respostas reutilizáveis que sua equipe pode enviar com um clique.",
+        "keywords": "respostas prontas, atalhos, trechos, modelos"
+      },
+      "business-profile": {
+        "label": "Perfil da empresa",
+        "description": "Nome, endereço, número fiscal e logo da sua empresa para documentos.",
+        "keywords": "empresa, endereço, gst, vat, ID fiscal, logo, cabeçalho da fatura"
+      },
+      "tax-rates": {
+        "label": "Alíquotas de imposto",
+        "description": "Defina os impostos adicionados às suas faturas e orçamentos.",
+        "keywords": "vat, gst, imposto sobre vendas, percentual, alíquotas, país"
+      },
+      "plans": {
+        "label": "Planos",
+        "description": "Veja seu plano e uso, o que ele inclui e faça upgrade.",
+        "keywords": "assinatura, upgrade, limites, preços, teste, uso, plano e uso, medidores"
+      },
+      "wallet": {
+        "label": "Carteira",
+        "description": "Recarregue o saldo que paga as mensagens.",
+        "keywords": "crédito, saldo, recarregar, recarga, fundos"
+      },
+      "billing-orders": {
+        "label": "Histórico de pedidos",
+        "description": "Suas compras de plano e carteira, com recibos.",
+        "keywords": "pagamentos, recibos, faturas, compras, pedidos"
+      },
+      "account": {
+        "label": "Conta",
+        "description": "Seu nome, e-mail, senha e idioma.",
+        "keywords": "perfil, eu, avatar, e-mail, senha, preferências"
+      },
+      "branding": {
+        "label": "Rodapé da mensagem",
+        "description": "A linha adicionada na parte inferior das mensagens enviadas por automações, envios agendados e respostas da caixa de entrada da equipe.",
+        "keywords": "marca, rodapé, assinatura, marca branca, remover marca, enviado via"
+      },
+      "team-members": {
+        "label": "Membros da equipe",
+        "description": "Convide pessoas e gerencie quem está no seu espaço de trabalho.",
+        "keywords": "usuários, equipe, convidar, atendentes, funcionários, licenças"
+      },
+      "roles": {
+        "label": "Funções e permissões",
+        "description": "Defina o que cada função pode ver e fazer.",
+        "keywords": "acesso, admin, gerente, atendente, rbac, permissões"
+      },
+      "teams": {
+        "label": "Equipes",
+        "description": "Agrupe pessoas em equipes para roteamento e relatórios.",
+        "keywords": "grupos, departamentos, atribuição, roteamento"
+      },
+      "ai-keys": {
+        "label": "Chaves de provedores de IA",
+        "description": "Adicione sua própria chave de provedor de IA para alimentar os recursos de IA.",
+        "keywords": "openai, gemini, claude, chave de API, modelo, token"
+      },
+      "ai-training": {
+        "label": "Treinamento de IA",
+        "description": "Treine assistentes de chat com seu próprio conteúdo para fluxos e o chat do site.",
+        "keywords": "base de conhecimento, assistente, agente inteligente, perguntas frequentes, treinar, fontes, agente do Meta Business, respondedor"
+      },
+      "booking-types": {
+        "label": "Tipos de reserva",
+        "description": "Os serviços que os clientes podem reservar, com horários e regras.",
+        "keywords": "agendamentos, serviços, disponibilidade, horários, programação, calendário"
+      },
+      "appointment-settings": {
+        "label": "Configurações de agendamento",
+        "description": "Regras de reserva, lembretes e a página pública de reservas.",
+        "keywords": "página de reservas, lembretes, intervalo, aviso prévio, cancelamento"
+      },
+      "google-calendar": {
+        "label": "Google Agenda",
+        "description": "Conecte seu calendário para que reservas e horários ocupados fiquem em sintonia.",
+        "keywords": "google, agenda, meet, sincronização, ocupado, agendamentos"
+      },
+      "chat-widget": {
+        "label": "Widget de chat",
+        "description": "Adicione um balão de chat ao seu site, também chamado de chat na web.",
+        "keywords": "chat na web, chat do site, chat ao vivo, widget, incorporar, balão"
+      },
+      "auto-reply": {
+        "label": "Resposta automática",
+        "description": "Cumprimente os clientes e responda quando você estiver ausente.",
+        "keywords": "mensagem de ausência, boas-vindas, saudação, fora do escritório, palavras-chave"
+      },
+      "lead-sources": {
+        "label": "Leads de redes sociais",
+        "description": "Traga leads de anúncios e páginas de destino por meio de um webhook.",
+        "keywords": "anúncios de lead, leads do facebook, meta, linkedin, tiktok, google ads, webhook, zapier, captura, formulários"
+      },
+      "rest-api": {
+        "label": "API REST",
+        "description": "Chaves e documentação para criar sobre o produto.",
+        "keywords": "chaves de API, desenvolvedores, tokens, docs, openapi"
+      },
+      "webhooks": {
+        "label": "Webhooks",
+        "description": "Envie eventos para seus próprios sistemas conforme acontecem.",
+        "keywords": "callbacks, eventos, http, endpoint, notificar"
+      },
+      "addons": {
+        "label": "Complementos",
+        "description": "Ative ou desative recursos opcionais para seu espaço de trabalho.",
+        "keywords": "extensões, módulos, plugins, marketplace"
+      },
+      "shopify": {
+        "label": "Shopify",
+        "description": "Conecte sua loja Shopify para sincronizar produtos e pedidos e enviar mensagens aos seus clientes.",
+        "keywords": "loja, e-commerce, produtos, pedidos, sincronização, carrinho abandonado"
+      },
+      "woocommerce": {
+        "label": "WooCommerce",
+        "description": "Conecte sua loja WooCommerce para sincronizar produtos e pedidos e enviar mensagens aos seus clientes.",
+        "keywords": "woo, wordpress, loja, e-commerce, produtos, pedidos, sincronização"
+      },
+      "i18n-translation": {
+        "label": "Tradução",
+        "description": "Idiomas e tradução automática de mensagens.",
+        "keywords": "idioma, idiomas, locale, traduzir, tradução automática"
+      },
+      "account-security": {
+        "label": "Senha e login em duas etapas",
+        "description": "Altere sua senha e proteja o login com uma segunda etapa.",
+        "keywords": "mfa, 2fa, autenticador, sessões, dispositivos, entrar, login"
+      },
+      "import-export": {
+        "label": "Importar e exportar",
+        "description": "Traga dados de um arquivo ou leve uma cópia para fora.",
+        "keywords": "csv, excel, download, backup, upload, migrar"
+      },
+      "activity-log": {
+        "label": "Registro de auditoria",
+        "description": "Um registro de quem alterou o quê e quando.",
+        "keywords": "atividade, histórico, alterações, trilha de auditoria, registro de segurança"
+      },
+      "privacy": {
+        "label": "Privacidade e dados",
+        "description": "Consentimento, retenção e solicitações de exclusão de dados.",
+        "keywords": "lgpd, gdpr, consentimento, retenção, excluir dados, dpa, dados pessoais"
+      },
+      "whatsapp-customers": {
+        "label": "Clientes salvos",
+        "description": "Pré-defina o nome e o endereço de entrega de um cliente para pedidos pelo WhatsApp.",
+        "keywords": "clientes, endereço, entrega, pedido, loja"
+      },
+      "geta-publishing": {
+        "label": "Publicação na Geta",
+        "description": "Publique os fluxos no console da Geta.",
+        "keywords": "geta, publicar, bot, console, colocar no ar, chatbot"
+      },
+      "auto-assignment": {
+        "label": "Atribuição automática",
+        "description": "Atribua novas conversas ao agente certo automaticamente, em rodízio ou por regras.",
+        "keywords": "roteamento, rodízio, atribuir, agentes, regras da caixa de entrada, distribuir, responsável"
+      }
+    }
+  }
+}

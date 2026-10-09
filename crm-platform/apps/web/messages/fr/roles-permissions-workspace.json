@@ -1,0 +1,246 @@
+{
+  "roles-permissions-workspace": {
+    "nav": {
+      "team": "Membres de l’équipe",
+      "roles": "Rôles"
+    },
+    "common": {
+      "settings": "Paramètres",
+      "breadcrumb": "Fil d’Ariane",
+      "loading": "Chargement…",
+      "retry": "Réessayer",
+      "requestId": "ID de la requête",
+      "cancel": "Annuler",
+      "close": "Fermer",
+      "dismiss": "Ignorer",
+      "required": "Ce champ est obligatoire.",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe",
+      "noAccess": {
+        "title": "Vous n’avez pas accès",
+        "body": "Vos rôles n’incluent pas l’autorisation requise par cet écran. Demandez à un propriétaire ou à un administrateur de l’espace de travail de vous l’accorder.",
+        "bodyWithKey": "Cet écran nécessite l’autorisation {permission}. Demandez à un propriétaire ou à un administrateur de l’espace de travail de l’ajouter à l’un de vos rôles.",
+        "back": "Retour à l’espace de travail"
+      }
+    },
+    "blurb": {
+      "owner": "Propriétaire : tout, y compris la facturation.",
+      "admin": "Administrateur : accès complet à l’espace de travail, sans facturation.",
+      "manager": "Responsable : voit tout, peut assigner et résoudre.",
+      "agent": "Agent : traite les conversations qui lui sont assignées.",
+      "viewer": "Lecteur : lecture seule."
+    },
+    "errors": {
+      "unexpected": "Une erreur est survenue de notre côté. Réessayez ; si le problème persiste, indiquez l’ID de la requête.",
+      "request": "La demande n’a pas pu aboutir.",
+      "validation": "Vérifiez le formulaire et réessayez.",
+      "passwordPolicy": "Ce mot de passe ne respecte pas la politique de mot de passe de l’espace de travail :",
+      "validationField": "Vérifiez ce champ et réessayez.",
+      "forbidden": "Vous n’avez pas l’autorisation de faire cela.",
+      "conflict": "Quelqu’un d’autre a modifié ceci pendant votre édition. Rechargez la page pour voir sa version, puis réappliquez vos modifications.",
+      "grantRole": "Action impossible : ce rôle (ou le rôle actuel du membre) est supérieur au vôtre. Seul un propriétaire peut attribuer, modifier ou désactiver les propriétaires et les administrateurs.",
+      "grantPermission": "Vous ne pouvez pas accorder {permission} : vous ne la détenez pas vous-même.",
+      "selfRoleChange": "Vous ne pouvez pas modifier votre propre rôle.",
+      "lastOwner": "L’espace de travail doit conserver au moins un propriétaire. Désignez d’abord un autre propriétaire.",
+      "selfDeactivate": "Vous ne pouvez pas désactiver votre propre compte.",
+      "presetRole": "Propriétaire, Administrateur, Responsable, Agent et Lecteur sont des rôles prédéfinis : ils ne peuvent être ni renommés ni supprimés.",
+      "roleInUse": "Des membres ont encore ce rôle. Attribuez-leur d’abord un autre rôle, puis supprimez-le.",
+      "nameTaken": "Un rôle portant ce nom existe déjà.",
+      "nameRequired": "Le nom du rôle est obligatoire.",
+      "nameTooLong": "Le nom du rôle ne peut pas dépasser {max} caractères.",
+      "notFound": "Cet élément n’existe plus. Il a peut-être été supprimé."
+    },
+    "team": {
+      "crumb": "Membres de l’équipe",
+      "eyebrow": "Paramètres · Équipe",
+      "titleLead": "Équipe",
+      "titleAccent": "membres",
+      "description": "Ajoutez des personnes à cet espace de travail, choisissez ce que chacune peut faire et désactivez l’accès lorsqu’une personne quitte l’équipe.",
+      "addMember": "Ajouter un membre",
+      "reload": "Recharger",
+      "you": "Vous",
+      "noRole": "Aucun rôle",
+      "changeRoleAction": "Modifier le rôle",
+      "reactivate": "Réactiver",
+      "selfRoleHint": "Vous ne pouvez pas modifier votre propre rôle.",
+      "roleLockedHint": "Vous ne pouvez pas modifier le rôle de ce membre : il est supérieur au vôtre, ou vous n’êtes pas autorisé à attribuer des rôles.",
+      "selfDeactivateHint": "Vous ne pouvez pas désactiver votre propre compte.",
+      "rolesUnavailable": "Les rôles n’ont pas pu être chargés : l’ajout de membres et la modification des rôles sont indisponibles. Les étiquettes de rôle sont générées à partir des membres affichés.",
+      "footer": "{shown} sur {total} affichés",
+      "status": {
+        "active": "Actifs",
+        "inactive": "Inactifs"
+      },
+      "filter": {
+        "label": "Filtrer les membres par rôle",
+        "all": "Tous",
+        "preset": {
+          "owner": "Propriétaires",
+          "admin": "Administrateurs",
+          "manager": "Managers",
+          "agent": "Agents",
+          "viewer": "Lecteurs"
+        }
+      },
+      "search": {
+        "label": "Rechercher des membres",
+        "placeholder": "Rechercher un nom ou un e-mail…"
+      },
+      "table": {
+        "caption": "Membres de l’espace de travail",
+        "member": "Membre",
+        "roles": "Rôles",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "empty": {
+        "none": "Il n’y a pas encore de membres.",
+        "noMatch": "Aucun membre ne correspond à ce filtre.",
+        "clear": "Effacer les filtres"
+      },
+      "toasts": {
+        "added": "{name} a été ajouté à l’espace de travail.",
+        "rolesUpdated": "Rôles de {name} mis à jour.",
+        "deactivated": "{name} a été désactivé.",
+        "reactivated": "{name} a été réactivé."
+      },
+      "deactivate": {
+        "action": "Désactiver",
+        "title": "Désactiver le membre",
+        "message": "{name} ne pourra plus se connecter. Vous pouvez le réactiver à tout moment.",
+        "confirm": "Désactiver",
+        "cancel": "Annuler"
+      },
+      "add": {
+        "eyebrow": "Équipe",
+        "title": "Ajouter un membre",
+        "fullName": "Nom complet",
+        "email": "E-mail",
+        "emailInvalid": "Saisissez une adresse e-mail valide.",
+        "password": "Mot de passe",
+        "passwordHint": "8 caractères minimum. Communiquez-le à la personne ; elle pourra le modifier après s’être connectée.",
+        "passwordGenerated": "Mot de passe généré : affichez-le avec le bouton œil et copiez-le avant d’enregistrer.",
+        "passwordShort": "Le mot de passe doit comporter au moins 8 caractères.",
+        "generate": "Générer",
+        "role": "Rôle",
+        "submit": "Ajouter un membre"
+      },
+      "changeRole": {
+        "title": "Modifier les rôles de {name}",
+        "legend": "Rôles",
+        "keptRole": "{name} reste attribué : vous ne pouvez ni l’accorder ni le retirer.",
+        "atLeastOne": "Sélectionnez au moins un rôle.",
+        "save": "Enregistrer les rôles",
+        "reload": "Recharger"
+      }
+    },
+    "list": {
+      "crumb": "Rôles",
+      "eyebrow": "Paramètres · Équipe · Rôles",
+      "titleLead": "Rôles et",
+      "titleAccent": "autorisations",
+      "description": "Les rôles définissent ce que peuvent faire les membres. Choisissez un modèle prédéfini ou créez un rôle personnalisé dans la matrice des autorisations.",
+      "teamLink": "Membres de l’équipe",
+      "addRole": "Ajouter un rôle",
+      "empty": "Il n’y a pas encore de rôles.",
+      "preset": "Prédéfini",
+      "custom": "Personnalisé",
+      "locked": "Verrouillé",
+      "footer": "{count} rôles",
+      "membersLink": "{count} membres ont le rôle {name}",
+      "table": {
+        "caption": "Rôles de l’espace de travail",
+        "name": "Rôle",
+        "type": "Type",
+        "members": "Membres",
+        "permissions": "Autorisations",
+        "lastEdited": "Dernière modification",
+        "actions": "Actions"
+      },
+      "row": {
+        "menu": "Actions pour {name}",
+        "edit": "Modifier le rôle",
+        "view": "Voir le rôle",
+        "delete": "Supprimer le rôle"
+      },
+      "toasts": {
+        "deleted": "Rôle « {name} » supprimé."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Rôles",
+      "crumbNew": "Nouveau rôle",
+      "eyebrowNew": "Paramètres · Rôles · Nouveau",
+      "eyebrowEdit": "Paramètres · Rôles · Modifier",
+      "titleLead": "Créer",
+      "titleAccent": "rôle",
+      "description": "Nommez le rôle et choisissez ce qu’il peut faire.",
+      "summary": "{count, plural, =0 {Aucun membre n’a ce rôle.} one {1 membre a ce rôle.} other {# membres ont ce rôle.}}",
+      "notFoundTitle": "Rôle introuvable",
+      "notFoundBody": "Ce rôle n’existe plus. Il a peut-être été supprimé.",
+      "backToRoles": "Retour aux rôles",
+      "back": "Retour",
+      "save": "Enregistrer les modifications",
+      "create": "Créer le rôle",
+      "saving": "Enregistrement…",
+      "reload": "Recharger",
+      "discard": "Vous avez des modifications non enregistrées. Quitter sans enregistrer ?",
+      "lockedNotice": "Le rôle Propriétaire détient toutes les autorisations et ne peut être ni modifié ni supprimé",
+      "adminNotice": "Seul un propriétaire peut modifier les autorisations du rôle Administrateur.",
+      "readOnlyNotice": "Vous ne pouvez pas modifier les autorisations de ce rôle.",
+      "details": "Détails du rôle",
+      "name": "Nom du rôle",
+      "namePlaceholder": "ex. : Responsable support",
+      "presetNameHint": "Les rôles prédéfinis conservent leur nom.",
+      "template": "Partir d’un rôle",
+      "templateHint": "Copie les autorisations d’un autre rôle dans la matrice ci-dessous.",
+      "templateBlank": "Vide (aucune autorisation)",
+      "templateOption": "{name} ({count} autorisations)",
+      "danger": {
+        "title": "Supprimer ce rôle",
+        "hint": "Personne n’a ce rôle : il peut être supprimé.",
+        "inUse": "{count, plural, one {1 membre a encore ce rôle.} other {# membres ont encore ce rôle.}} Attribuez-leur d’abord un autre rôle.",
+        "action": "Supprimer le rôle"
+      },
+      "toasts": {
+        "created": "Rôle « {name} » créé.",
+        "updated": "Rôle « {name} » mis à jour.",
+        "deleted": "Rôle « {name} » supprimé."
+      }
+    },
+    "matrix": {
+      "title": "Autorisations",
+      "counter": "{count} / {total} sélectionnées",
+      "deniedCount": "{count} refusées",
+      "selectAll": "Tout sélectionner",
+      "selectAllCategory": "Tout sélectionner",
+      "selectAllOf": "Tout sélectionner dans {category}",
+      "search": "Rechercher des autorisations…",
+      "searchLabel": "Rechercher des autorisations",
+      "denyHint": "Le refus prime sur l’autorisation : une autorisation refusée est bloquée même si un autre rôle du membre l’accorde.",
+      "emptyCatalogue": "Aucune autorisation n’est disponible.",
+      "noMatch": "Aucune autorisation ne correspond à « {query} ».",
+      "allow": "Autoriser",
+      "deny": "Refuser",
+      "effectLabel": "Autoriser ou refuser : {label}",
+      "scopeLabel": "Portée des enregistrements : {label}",
+      "needsPlan": "Nécessite le forfait {feature}",
+      "needsApp": "Nécessite l’installation de l’application {app}",
+      "lockedHint": "Cette autorisation n’est pas encore disponible pour cet espace de travail. Elle se débloque lorsque la fonctionnalité du forfait est activée ou que l’application est installée.",
+      "scope": {
+        "all": "Tous les enregistrements",
+        "team": "Enregistrements de l’équipe",
+        "own": "Ses propres enregistrements"
+      }
+    },
+    "delete": {
+      "title": "Supprimer le rôle",
+      "message": "Supprimer le rôle « {name} » ? Cette action est irréversible.",
+      "confirm": "Supprimer le rôle",
+      "cancel": "Annuler",
+      "inUseTitle": "« {name} » est encore utilisé",
+      "inUse": "{count, plural, =0 {Des membres ont encore ce rôle.} one {1 membre a encore ce rôle.} other {# membres ont encore ce rôle.}} Attribuez-leur d’abord un autre rôle, puis supprimez-le.",
+      "viewMembers": "Voir les membres ayant ce rôle"
+    }
+  }
+}

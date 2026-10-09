@@ -1,0 +1,1742 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "Pengaturan platform",
+      "hub": "Pusat pengaturan",
+      "general": "Umum",
+      "appearance": "Tampilan dan warna",
+      "siteInfo": "Info situs",
+      "footer": "Footer",
+      "mail": "Email",
+      "seo": "SEO",
+      "privacy": "Privasi, GDPR dan ADA",
+      "analytics": "Analitik",
+      "custom": "Kode kustom",
+      "pwa": "PWA",
+      "storage": "Penyimpanan cloud",
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "Kampanye",
+      "googleCalendar": "Google Calendar",
+      "flowBuilder": "Pembuat alur"
+    },
+    "hub": {
+      "kicker": "Admin - Pengaturan proyek",
+      "title": "Pengaturan proyek",
+      "description": "Atur identitas aplikasi, penyedia pesan, email, integrasi e-commerce, metadata toko, konten footer, PWA, SEO, dan kode kustom.",
+      "export": "Ekspor konfigurasi",
+      "exporting": "Mengekspor",
+      "exportHint": "Mengunduh semua pengaturan yang tersimpan. Rahasia dan ID akun akan diganti.",
+      "tiles": {
+        "saved": "Pengaturan tersimpan",
+        "savedHint": "grup dari {total} tersimpan",
+        "healthy": "Sehat",
+        "healthyHint": "dengan nilai terisi",
+        "needsTest": "Perlu diuji",
+        "needsTestNone": "semua terverifikasi",
+        "secrets": "Kolom rahasia",
+        "secretsHint": "terenkripsi / disamarkan",
+        "lastUpdated": "Terakhir diperbarui",
+        "lastUpdatedNone": "belum ada perubahan",
+        "lastUpdatedHint": "penyimpanan terbaru"
+      },
+      "card": {
+        "saved": "Tersimpan",
+        "defaults": "Default",
+        "needsTest": "Perlu diuji",
+        "updated": "Diperbarui {when}",
+        "open": "Buka"
+      },
+      "others": "Pengaturan mata uang, katalog, Shopify, WooCommerce, HubSpot, Google, Slack, push seluler, dan Trello akan muncul di sini saat modulnya dipasang.",
+      "actions": {
+        "addons": "Add-on",
+        "updater": "Pembaruan",
+        "legal": "Halaman hukum",
+        "general": "Buka umum"
+      }
+    },
+    "common": {
+      "save": "Simpan perubahan",
+      "saving": "Menyimpan",
+      "saved": "{count, plural, other {# perubahan disimpan.}}",
+      "rejected": "{count, plural, other {# kolom perlu perhatian}}",
+      "conflict": "Orang lain menyimpan pengaturan ini setelah Anda membukanya. Muat ulang untuk melihat perubahan mereka, lalu terapkan perubahan Anda lagi.",
+      "reload": "Muat ulang pengaturan",
+      "unexpected": "Terjadi kesalahan dan tidak ada yang disimpan.",
+      "requestId": "ID permintaan",
+      "readOnly": "Anda dapat membaca pengaturan ini, tetapi hanya super admin yang dapat mengubahnya.",
+      "secretSet": "Tersimpan. Kosongkan untuk tetap menggunakannya.",
+      "secretUnset": "Belum diatur.",
+      "secretClear": "Hapus nilai tersimpan",
+      "secretShow": "Tampilkan",
+      "secretHide": "Sembunyikan",
+      "numberRequired": "Masukkan bilangan bulat.",
+      "numberInteger": "Gunakan bilangan bulat.",
+      "updated": "Terakhir disimpan {when}",
+      "neverSaved": "Belum pernah disimpan: menampilkan default.",
+      "back": "Semua pengaturan",
+      "invalidGroup": "Halaman pengaturan itu tidak ada.",
+      "eyebrow": "Admin - Pengaturan proyek",
+      "guide": "Panduan singkat",
+      "resetDraft": "Atur ulang draf",
+      "cancel": "Batal",
+      "applyAfterSave": "Perubahan berlaku setelah Anda menyimpan.",
+      "saveAndTest": "Simpan & uji koneksi",
+      "custom": "kustom",
+      "manageLanguages": "Kelola bahasa"
+    },
+    "test": {
+      "title": "Kirim email uji",
+      "saveFirst": "Simpan perubahan terlebih dahulu: pemeriksaan menggunakan pengaturan yang tersimpan.",
+      "mailTo": "Kirim email uji ke",
+      "mailRun": "Kirim email uji",
+      "run": "Uji koneksi",
+      "running": "Menguji",
+      "ok": "Lulus",
+      "failed": "Gagal",
+      "lastOk": "Pemeriksaan berhasil terakhir {when}",
+      "neverTested": "Belum diperiksa."
+    },
+    "groups": {
+      "general": {
+        "title": "Pengaturan umum",
+        "description": "Identitas aplikasi, default platform, dan sakelar pemeliharaan.",
+        "sections": {
+          "identity": {
+            "title": "Identitas aplikasi"
+          },
+          "defaults": {
+            "title": "Default platform"
+          },
+          "platform": {
+            "title": "Sakelar platform"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "Nama aplikasi",
+            "hint": "Ditampilkan di judul halaman, email, dan tab browser."
+          },
+          "appUrl": {
+            "label": "URL aplikasi"
+          },
+          "supportEmail": {
+            "label": "Email dukungan",
+            "placeholder": "support@…"
+          },
+          "fromEmail": {
+            "label": "Email pengirim",
+            "placeholder": "hello@…"
+          },
+          "contactNumber": {
+            "label": "Nomor kontak",
+            "placeholder": "+91 …"
+          },
+          "address": {
+            "label": "Alamat"
+          },
+          "mapIframeUrl": {
+            "label": "URL iframe peta",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
+          },
+          "platformFooter": {
+            "label": "Footer platform",
+            "hint": "Ditambahkan ke pesan keluar platform. Kosongkan jika tidak ada."
+          },
+          "defaultTimezone": {
+            "label": "Zona waktu default",
+            "hint": "Digunakan saat workspace atau pengguna belum memilih."
+          },
+          "defaultLanguage": {
+            "label": "Bahasa default"
+          },
+          "defaultCurrency": {
+            "label": "Mata uang default"
+          },
+          "defaultCountryCode": {
+            "label": "Kode negara default",
+            "hint": "Kode telepon dengan tanda plus, misalnya +91."
+          },
+          "defaultCountryIso": {
+            "label": "Negara default (pemilih telepon)",
+            "hint": "Berlaku untuk semua pemilih nomor telepon di platform."
+          },
+          "fontFamily": {
+            "label": "Keluarga font"
+          },
+          "maintenanceMode": {
+            "label": "Mode pemeliharaan",
+            "hint": "Membuat aplikasi pelanggan offline dengan 503. Operator, masuk, dan callback mesin tetap berfungsi."
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "Tema default"
+          }
+        }
+      },
+      "branding": {
+        "title": "Branding dan tampilan",
+        "description": "Favicon, logo per tema, token warna, dan ukuran antarmuka.",
+        "sections": {
+          "assets": {
+            "title": "Aset brand"
+          },
+          "colors": {
+            "title": "Token warna"
+          },
+          "interface": {
+            "title": "Antarmuka"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "URL favicon"
+          },
+          "logos": {
+            "paper": {
+              "label": "Paper"
+            },
+            "bright": {
+              "label": "Terang"
+            },
+            "dark": {
+              "label": "Gelap"
+            },
+            "doodle": {
+              "label": "Doodle"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "Utama",
+              "hint": "Mengatur warna utama juga mengubah warna teal, hijau, mint, dan bubble, kecuali Anda mengatur warna-warna itu juga."
+            },
+            "wa-teal": {
+              "label": "Utama (hover)"
+            },
+            "wa-green": {
+              "label": "Aksen / sukses"
+            },
+            "wa-mint": {
+              "label": "Isian aksen lembut"
+            },
+            "wa-bubble": {
+              "label": "Bubble chat"
+            },
+            "paper-0": {
+              "label": "Latar halaman"
+            },
+            "paper-50": {
+              "label": "Latar kartu / redup"
+            },
+            "paper-100": {
+              "label": "Latar hover"
+            },
+            "paper-200": {
+              "label": "Garis tepi"
+            },
+            "ink-500": {
+              "label": "Teks redup"
+            },
+            "ink-700": {
+              "label": "Teks isi"
+            },
+            "ink-900": {
+              "label": "Judul"
+            },
+            "accent-coral": {
+              "label": "Aksen - koral"
+            },
+            "accent-amber": {
+              "label": "Aksen - amber"
+            },
+            "accent-plum": {
+              "label": "Aksen - plum"
+            },
+            "accent-sky": {
+              "label": "Aksen - biru langit"
+            }
+          },
+          "fontScale": {
+            "label": "Ukuran font",
+            "hint": "Ukuran teks seluruh antarmuka dalam persen, 80 sampai 130."
+          },
+          "uiOpacity": {
+            "label": "Opasitas",
+            "hint": "Opasitas seluruh antarmuka dalam persen, 55 sampai 100."
+          },
+          "dashboardLayout": {
+            "label": "Tata letak navigasi"
+          },
+          "sidebarColor": {
+            "label": "Latar"
+          },
+          "sidebarTextColor": {
+            "label": "Warna teks"
+          },
+          "sidebarAccentColor": {
+            "label": "Warna aksen"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "Bilah atas",
+            "sidebar": "Sidebar"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "Saat ini: menu di bagian atas plus halaman Lainnya untuk item tambahan.",
+            "sidebar": "Rel kiri gaya admin dengan semua fitur dikelompokkan. Tanpa menu atas."
+          }
+        }
+      },
+      "site": {
+        "title": "Informasi situs",
+        "description": "Detail perusahaan, alamat kontak, profil sosial, dan footer publik.",
+        "sections": {
+          "company": {
+            "title": "Perusahaan"
+          },
+          "contact": {
+            "title": "Alamat kontak"
+          },
+          "social": {
+            "title": "Profil sosial"
+          },
+          "footer": {
+            "title": "Footer publik"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "Nama perusahaan"
+          },
+          "tagline": {
+            "label": "Tagline"
+          },
+          "foundedYear": {
+            "label": "Tahun berdiri"
+          },
+          "address": {
+            "label": "Alamat"
+          },
+          "cityCountry": {
+            "label": "Kota negara"
+          },
+          "emailGeneral": {
+            "label": "Email umum"
+          },
+          "emailSupport": {
+            "label": "Email dukungan"
+          },
+          "emailSales": {
+            "label": "Email penjualan"
+          },
+          "emailSecurity": {
+            "label": "Email keamanan"
+          },
+          "emailCareers": {
+            "label": "Email karier"
+          },
+          "phone": {
+            "label": "Telepon"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "Sosial X"
+          },
+          "socialLinkedin": {
+            "label": "Sosial LinkedIn"
+          },
+          "socialInstagram": {
+            "label": "Sosial Instagram"
+          },
+          "socialYoutube": {
+            "label": "Sosial YouTube"
+          },
+          "socialFacebook": {
+            "label": "Sosial Facebook"
+          },
+          "socialGithub": {
+            "label": "Sosial GitHub"
+          },
+          "footerTitle": {
+            "label": "Judul footer"
+          },
+          "footerDescription": {
+            "label": "Deskripsi footer"
+          },
+          "footerCopyright": {
+            "label": "Hak cipta footer"
+          }
+        }
+      },
+      "mail": {
+        "title": "Pengaturan email",
+        "description": "Email keluar. Nilai yang tersimpan menggantikan default server pada setiap pengiriman.",
+        "sections": {
+          "sender": {
+            "title": "Pengirim"
+          },
+          "smtp": {
+            "title": "Server email"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "Nama pengirim",
+            "placeholder": "Acme Inc.",
+            "hint": "Ditampilkan kepada penerima sebagai nama \"Dari\"."
+          },
+          "fromAddress": {
+            "label": "Alamat pengirim",
+            "placeholder": "hello@yourdomain.com",
+            "hint": "Domain harus memiliki SPF + DKIM yang valid, jika tidak email akan masuk ke spam."
+          },
+          "mailer": {
+            "label": "Mailer",
+            "hint": "SMTP dan log mailer sudah berfungsi; mailer berbasis API belum terhubung."
+          },
+          "host": {
+            "label": "Host",
+            "placeholder": "smtp.mailgun.org",
+            "hint": "Kosongkan untuk tetap menggunakan default server."
+          },
+          "port": {
+            "label": "Port",
+            "hint": "587 untuk TLS, 465 untuk SSL, 25 (hindari)."
+          },
+          "encryption": {
+            "label": "Enkripsi",
+            "hint": "ssl berarti TLS implisit (biasanya port 465); tls dan starttls ditingkatkan pada port 587."
+          },
+          "username": {
+            "label": "Nama pengguna",
+            "placeholder": "postmaster@mg.example.com"
+          },
+          "password": {
+            "label": "Kata sandi",
+            "placeholder": "Masukkan kata sandi SMTP",
+            "hint": "Disimpan terenkripsi dan tidak akan ditampilkan lagi."
+          }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls (port 587)",
+            "ssl": "ssl (port 465)",
+            "starttls": "starttls",
+            "none": "tidak ada"
+          }
+        }
+      },
+      "seo": {
+        "title": "Pengaturan SEO",
+        "description": "Tag pencarian dan berbagi sosial untuk situs publik.",
+        "sections": {
+          "search": {
+            "title": "Hasil pencarian"
+          },
+          "social": {
+            "title": "Berbagi sosial"
+          },
+          "verification": {
+            "title": "Verifikasi situs"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "Judul meta",
+            "hint": "Awali dengan nama brand."
+          },
+          "metaDescription": {
+            "label": "Deskripsi meta",
+            "hint": "Ditampilkan di bawah judul di Google.",
+            "placeholder": "Pitch 1–2 kalimat yang ditampilkan di bawah judul di Google."
+          },
+          "metaKeywords": {
+            "label": "Kata kunci meta",
+            "placeholder": "whatsapp marketing, whatsapp crm, kampanye, otomatisasi, inbox"
+          },
+          "robots": {
+            "label": "Direktif robots",
+            "hint": "Beri tahu crawler pencarian apakah akan mencantumkan dan mengikuti tautan."
+          },
+          "canonical": {
+            "label": "Canonical",
+            "placeholder": "https://app.example.com"
+          },
+          "author": {
+            "label": "Penulis"
+          },
+          "ogTitle": {
+            "label": "Judul Open Graph",
+            "placeholder": "Default ke judul meta"
+          },
+          "ogDescription": {
+            "label": "Deskripsi Open Graph",
+            "placeholder": "Default ke deskripsi meta"
+          },
+          "ogType": {
+            "label": "Tipe Open Graph"
+          },
+          "ogUrl": {
+            "label": "URL Open Graph",
+            "placeholder": "https://app.example.com"
+          },
+          "ogImage": {
+            "label": "Gambar Open Graph",
+            "hint": "Disarankan 1200x630. Digunakan oleh Slack, X, WhatsApp, Discord.",
+            "placeholder": "https://app.example.com/og.png"
+          },
+          "twitterCard": {
+            "label": "Kartu Twitter"
+          },
+          "twitterSite": {
+            "label": "Situs Twitter",
+            "placeholder": "@yourbrand"
+          },
+          "twitterCreator": {
+            "label": "Kreator Twitter",
+            "placeholder": "@author"
+          },
+          "googleVerification": {
+            "label": "Verifikasi Google",
+            "placeholder": "google-site-verification=…"
+          },
+          "bingVerification": {
+            "label": "Verifikasi Bing",
+            "placeholder": "msvalidate.01=…"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "Index, follow — situs publik",
+            "index, nofollow": "Index, nofollow",
+            "noindex, follow": "Noindex, follow",
+            "noindex, nofollow": "Noindex, nofollow — sembunyikan dari pencarian"
+          }
+        }
+      },
+      "privacy": {
+        "title": "Privasi dan cookie",
+        "description": "Banner persetujuan cookie, tautan hukum, dan penanda kepatuhan.",
+        "sections": {
+          "banner": {
+            "title": "Banner cookie"
+          },
+          "links": {
+            "title": "Tautan hukum"
+          },
+          "compliance": {
+            "title": "Penanda kepatuhan"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "Banner aktif"
+          },
+          "cookieBannerStyle": {
+            "label": "Gaya banner"
+          },
+          "cookieMessage": {
+            "label": "Pesan persetujuan"
+          },
+          "respectDoNotTrack": {
+            "label": "Hormati Do-Not-Track",
+            "hint": "Browser mengirim DNT=1 → tolak semua"
+          },
+          "policyUrl": {
+            "label": "URL kebijakan privasi",
+            "placeholder": "https://example.com/privacy"
+          },
+          "termsUrl": {
+            "label": "URL ketentuan layanan",
+            "placeholder": "https://example.com/terms"
+          },
+          "cookiesPolicyUrl": {
+            "label": "URL kebijakan cookie (Pelajari selengkapnya)",
+            "placeholder": "https://example.com/cookies"
+          },
+          "gdprCompliance": {
+            "label": "Kepatuhan GDPR (UE)",
+            "hint": "Disimpan untuk catatan Anda. Belum mengubah perilaku."
+          },
+          "ccpaCompliance": {
+            "label": "Kepatuhan CCPA (California)",
+            "hint": "Disimpan untuk catatan Anda. Belum mengubah perilaku."
+          },
+          "adaSkipLink": {
+            "label": "Tautan lewati ke konten",
+            "hint": "Disimpan untuk catatan Anda. Belum mengubah perilaku."
+          },
+          "adaHighContrast": {
+            "label": "Tawarkan mode kontras tinggi",
+            "hint": "Disimpan untuk catatan Anda. Belum mengubah perilaku."
+          },
+          "adaLargeText": {
+            "label": "Tawarkan mode teks besar",
+            "hint": "Disimpan untuk catatan Anda. Belum mengubah perilaku."
+          },
+          "adaReducedMotion": {
+            "label": "Hormati prefers-reduced-motion",
+            "hint": "Disimpan untuk catatan Anda. Belum mengubah perilaku."
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "Bilah lengket bawah — disarankan",
+            "top-bar": "Bilah lengket atas",
+            "modal": "Modal di tengah"
+          }
+        }
+      },
+      "analytics": {
+        "title": "Analitik",
+        "description": "ID pelacak. Pelacak hanya dimuat setelah pengunjung menyetujui.",
+        "sections": {
+          "trackers": {
+            "title": "ID pelacak"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "Pixel Meta"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft Clarity"
+          },
+          "tiktokPixel": {
+            "label": "Pixel TikTok"
+          },
+          "linkedinPartner": {
+            "label": "Mitra LinkedIn"
+          },
+          "twitterPixel": {
+            "label": "Pixel Twitter"
+          },
+          "plausibleDomain": {
+            "label": "Domain Plausible"
+          },
+          "posthogKey": {
+            "label": "Kunci PostHog"
+          },
+          "mixpanelToken": {
+            "label": "Token Mixpanel"
+          },
+          "hotjarSiteId": {
+            "label": "ID situs Hotjar"
+          },
+          "posthogHost": {
+            "label": "Host PostHog"
+          }
+        }
+      },
+      "customCode": {
+        "title": "Kode kustom",
+        "description": "CSS dan JavaScript yang disisipkan ke situs publik.",
+        "sections": {
+          "code": {
+            "title": "Kode kustom"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Sisipkan di produksi",
+            "hint": "Tidak ada yang di bawah ini berjalan di situs publik sebelum ini diaktifkan."
+          },
+          "css": {
+            "label": "CSS kustom"
+          },
+          "js": {
+            "label": "JS kustom",
+            "hint": "Berjalan untuk setiap pengunjung. Tempel hanya kode yang Anda percaya."
+          }
+        }
+      },
+      "pwa": {
+        "title": "Aplikasi yang dapat dipasang",
+        "description": "Manifest aplikasi web dan perilaku pemasangan.",
+        "sections": {
+          "app": {
+            "title": "Aplikasi yang dapat dipasang"
+          },
+          "look": {
+            "title": "Tampilan dan perilaku"
+          },
+          "install": {
+            "title": "Pemasangan dan offline"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Aktif"
+          },
+          "appName": {
+            "label": "Nama aplikasi"
+          },
+          "shortName": {
+            "label": "Nama pendek"
+          },
+          "description": {
+            "label": "Deskripsi"
+          },
+          "startUrl": {
+            "label": "Start URL"
+          },
+          "scope": {
+            "label": "Scope"
+          },
+          "display": {
+            "label": "Tampilan"
+          },
+          "orientation": {
+            "label": "Orientasi"
+          },
+          "themeColor": {
+            "label": "Warna tema"
+          },
+          "backgroundColor": {
+            "label": "Warna latar"
+          },
+          "icon192": {
+            "label": "Ikon 192"
+          },
+          "icon512": {
+            "label": "Ikon 512"
+          },
+          "installPrompt": {
+            "label": "Permintaan pemasangan"
+          },
+          "offlineEnabled": {
+            "label": "Offline aktif"
+          }
+        }
+      },
+      "storage": {
+        "title": "Penyimpanan cloud",
+        "description": "Bucket kompatibel S3 untuk media. Uji koneksi sebelum mengaktifkannya.",
+        "sections": {
+          "provider": {
+            "title": "Penyedia"
+          },
+          "credentials": {
+            "title": "Kredensial bucket"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Aktif"
+          },
+          "provider": {
+            "label": "Penyedia"
+          },
+          "visibility": {
+            "label": "Visibilitas file",
+            "hint": "Objek privat memerlukan tautan bertanda tangan; gunakan URL publik atau CDN untuk media yang dibuka langsung."
+          },
+          "basePath": {
+            "label": "Jalur folder dasar (opsional)",
+            "hint": "Awalan untuk objek uji. Unggahan akan menggunakannya setelah modul file tersedia."
+          },
+          "accessKeyId": {
+            "label": "ID kunci akses *"
+          },
+          "secret": {
+            "label": "Kunci akses rahasia *",
+            "hint": "Disimpan terenkripsi dan tidak akan ditampilkan lagi.",
+            "placeholder": "tempel rahasia"
+          },
+          "region": {
+            "label": "Wilayah",
+            "placeholder": "us-east-1"
+          },
+          "bucket": {
+            "label": "Bucket *"
+          },
+          "endpoint": {
+            "label": "Endpoint",
+            "hint": "Wajib untuk Spaces, R2, dan MinIO. /bucket di akhir akan dihapus.",
+            "placeholder": "https://… (wajib untuk Spaces / R2 / MinIO; otomatis untuk Wasabi & Bunny)"
+          },
+          "cdnUrl": {
+            "label": "URL publik / CDN (opsional)",
+            "placeholder": "https://cdn.example.com"
+          },
+          "pathStyle": {
+            "label": "Gunakan endpoint gaya path (MinIO / sebagian penyimpanan kompatibel S3)"
+          },
+          "storageZone": {
+            "label": "Zona penyimpanan",
+            "hint": "Khusus Bunny."
+          },
+          "storagePassword": {
+            "label": "Kata sandi penyimpanan (kunci akses)",
+            "hint": "Khusus Bunny: kata sandi zona penyimpanan. Disimpan terenkripsi.",
+            "placeholder": "tempel kata sandi"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net Storage",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO / kompatibel S3"
+          },
+          "visibility": {
+            "private": "Privat (URL bertanda tangan)",
+            "public": "Publik"
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "Pengaturan WhatsApp",
+        "description": "Aplikasi Meta dan mitra Interakt yang digunakan untuk onboarding nomor WhatsApp.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)"
+          },
+          "interakt": {
+            "title": "Rute Interakt"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "Meta App ID",
+            "hint": "Jika kosong, akan menggunakan environment server."
+          },
+          "appSecret": {
+            "label": "App Secret",
+            "hint": "Disimpan terenkripsi, tidak akan ditampilkan lagi. Kosongkan untuk tetap menggunakan rahasia yang tersimpan."
+          },
+          "configId": {
+            "label": "ID Konfigurasi Embedded Signup",
+            "hint": "Kosong berarti workspace menempelkan token secara manual."
+          },
+          "graphVersion": {
+            "label": "Versi Graph API",
+            "hint": "Contoh v25.0. Kosong berarti menggunakan default server."
+          },
+          "coexistence": {
+            "label": "Coexistence",
+            "hint": "Tawarkan \"Hubungkan nomor Business App saya yang ada\" di Embedded Signup."
+          },
+          "defaultProvider": {
+            "label": "Rute default",
+            "hint": "API yang digunakan oleh nomor yang baru terhubung."
+          },
+          "solutionId": {
+            "label": "ID solusi Interakt",
+            "hint": "Dikirim ke Meta sebagai extras.setup.solutionID dan ke Interakt saat pendaftaran."
+          },
+          "partnerAuthKey": {
+            "label": "Kunci mitra Interakt",
+            "hint": "Kunci tech-partner bersama. Disimpan terenkripsi."
+          },
+          "systemUserId": {
+            "label": "ID pengguna sistem",
+            "hint": "Ditetapkan ke setiap WABA yang terhubung dengan tugas MANAGE."
+          },
+          "systemUserToken": {
+            "label": "Token pengguna sistem",
+            "hint": "Digunakan untuk memeriksa token dan menetapkan pengguna sistem. Disimpan terenkripsi."
+          },
+          "businessId": {
+            "label": "Business ID",
+            "hint": "Cadangan untuk mencari WABA saat token tidak mencantumkannya."
+          },
+          "verifyToken": {
+            "label": "Token verifikasi webhook",
+            "hint": "String acak apa pun. Kosongkan untuk menggunakan yang dibuat di atas."
+          },
+          "requireSignature": {
+            "label": "Wajibkan tanda tangan pada setiap webhook",
+            "hint": "Menolak event yang diteruskan Interakt tanpa tanda tangan Meta yang valid. Aktifkan hanya jika Interakt menandatanganinya."
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt (proxy Meta)",
+            "meta": "Meta (langsung)"
+          }
+        }
+      },
+      "campaigns": {
+        "title": "Kampanye",
+        "description": "Cara kampanye mencoba ulang pesan yang gagal dan kapan kampanye yang belum selesai berakhir.",
+        "sections": {
+          "retry": {
+            "title": "Percobaan ulang"
+          },
+          "expiry": {
+            "title": "Akhiri otomatis"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "Jumlah percobaan ulang",
+            "hint": "Percobaan per penerima sebelum ditandai gagal (0 sampai 10)."
+          },
+          "retryBackoffSec": {
+            "label": "Jeda percobaan ulang (detik)",
+            "hint": "Jeda sebelum percobaan berikutnya; jeda ini bertambah setiap kali."
+          },
+          "autoExpiryEnabled": {
+            "label": "Akhiri kampanye yang belum selesai",
+            "hint": "Mengakhiri kampanye yang masih berjalan setelah jam di bawah."
+          },
+          "defaultExpiryHours": {
+            "label": "Akhiri setelah (jam)"
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "Klien OAuth Google yang digunakan setiap workspace untuk menghubungkan kalendernya.",
+        "sections": {
+          "oauth": {
+            "title": "Klien OAuth Google"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Izinkan workspace menghubungkan Google Calendar",
+            "hint": "Nonaktif: tidak ada workspace yang dapat terhubung, dan tidak ada yang ditulis atau dibaca dari kalender."
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "Dari Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). Kosong akan menggunakan GOOGLE_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "Disimpan terenkripsi dan tidak akan ditampilkan lagi. Kosong berarti tetap menggunakan yang tersimpan; GOOGLE_CALENDAR_CLIENT_SECRET sebagai cadangan."
+          },
+          "redirectUri": {
+            "label": "Penggantian Redirect URI",
+            "hint": "Kosongkan untuk menggunakan alamat di atas. Harus sama persis dengan Authorised redirect URI pada klien."
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Pembuat alur",
+        "description": "Pembuat alur mana yang ditawarkan kepada workspace.",
+        "sections": {
+          "mode": {
+            "title": "Pembuat"
+          }
+        },
+        "fields": {
+          "mode": {
+            "label": "Pembuat default untuk workspace",
+            "hint": "Simple adalah pembuat daftar langkah demi langkah, Advanced adalah pembuat kanvas. Workspace dapat mengganti ini di halaman Flows-nya."
+          }
+        },
+        "options": {
+          "mode": {
+            "simple": "Hanya Simple",
+            "advanced": "Hanya Advanced"
+          }
+        }
+      }
+    },
+    "cards": {
+      "appearance": {
+        "title": "Tampilan & warna",
+        "description": "Ubah warna setiap halaman dasbor pengguna dan admin: brand, permukaan, teks, dan aksen. Berlaku langsung.",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "Pengaturan umum",
+        "description": "Nama aplikasi, detail kontak, logo, URL, alamat, dan sakelar layanan global.",
+        "tags": "APP_NAME / APP_URL / logo"
+      },
+      "paymentGateways": {
+        "title": "Gerbang pembayaran",
+        "description": "Stripe, Razorpay, PayPal, Paystack, Flutterwave, dan lainnya: kunci, mata uang, dan sakelar live.",
+        "tags": "Live / sandbox - kunci per gerbang"
+      },
+      "aiKeys": {
+        "title": "Kunci AI / API",
+        "description": "Kredensial penyedia untuk OpenAI, Anthropic, Google, dan lainnya. Menggerakkan setiap fitur AI di platform.",
+        "tags": "BYOK / model default"
+      },
+      "mail": {
+        "title": "Pengaturan email",
+        "description": "Driver SMTP, host, port, nama pengirim, enkripsi, dan kirim uji.",
+        "tags": "SMTP / verifikasi / selamat datang"
+      },
+      "auditLog": {
+        "title": "Log audit",
+        "description": "Riwayat yang dapat dicari dari setiap tindakan admin: perubahan workspace, perubahan pengguna, peristiwa penagihan, insiden keamanan, pembaruan pengaturan.",
+        "tags": "Filter / detail / ekspor CSV"
+      },
+      "privacy": {
+        "title": "Privasi, GDPR & ADA",
+        "description": "Banner persetujuan cookie, kepatuhan GDPR / CCPA, sakelar aksesibilitas ADA / WCAG, dan URL kebijakan.",
+        "tags": "Persetujuan / kebijakan / aksesibilitas"
+      },
+      "menuOrder": {
+        "title": "Urutan menu",
+        "description": "Atur urutan item navigasi atas yang ditampilkan di setiap workspace pengguna.",
+        "tags": "Atur ulang urutan"
+      },
+      "authPages": {
+        "title": "Halaman autentikasi",
+        "description": "Edit halaman masuk, daftar, dan lupa kata sandi: judul, teks pendukung, warna aksen, dan gambar atau video samping. Pratinjau langsung.",
+        "tags": "Masuk / daftar / lupa"
+      },
+      "analytics": {
+        "title": "Integrasi analitik",
+        "description": "Google Analytics, GTM, Meta Pixel, Clarity, Plausible, PostHog, Hotjar, TikTok, LinkedIn, X: tempel ID-nya, kami yang merender skripnya.",
+        "tags": "GA4 / Pixel / Clarity / GTM"
+      },
+      "seo": {
+        "title": "Pengaturan SEO",
+        "description": "Judul meta, deskripsi, OpenGraph, kartu Twitter, robots, canonical, dan verifikasi situs Google + Bing.",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "Bahasa",
+        "description": "Locale yang tersedia, bahasa default, penanda RTL, dan sakelar aktif per bahasa. Menggerakkan pemilih bahasa.",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "Pengaturan PWA",
+        "description": "Nama aplikasi, ikon pemasangan, warna tema, warna latar, mode tampilan, dan sakelar aktif PWA.",
+        "tags": "Ikon / warna / pemasangan"
+      },
+      "footer": {
+        "title": "Pengaturan footer",
+        "description": "Judul footer, tautan sosial, teks hak cipta, dan deskripsi footer publik.",
+        "tags": "Logo / sosial / hak cipta"
+      },
+      "siteInfo": {
+        "title": "Info situs",
+        "description": "Email kontak, telepon, WhatsApp, alamat, dan tautan sosial yang dibagikan di footer publik, halaman kontak, dan tentang.",
+        "tags": "email / telepon / sosial"
+      },
+      "socialLogin": {
+        "title": "Masuk sosial & captcha",
+        "description": "Aktifkan masuk Google dan Facebook di halaman masuk dan daftar, tempel kunci OAuth, dan aktifkan reCAPTCHA.",
+        "tags": "belum dikonfigurasi"
+      },
+      "registration": {
+        "title": "Pendaftaran",
+        "description": "Pendaftaran publik, verifikasi email, paket default, dan lama uji coba untuk workspace baru.",
+        "tags": "Pendaftaran / uji coba / paket"
+      },
+      "custom": {
+        "title": "Kode kustom",
+        "description": "CSS dan JavaScript produksi yang disisipkan ke halaman publik saat sakelar aktif.",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "Penyimpanan cloud",
+        "description": "Kirim media klien ke bucket Anda sendiri: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2, atau MinIO.",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "Aplikasi Meta yang digunakan setiap workspace untuk menghubungkan nomor WhatsApp-nya: app id dan secret, Embedded Signup, webhook, dan rute Interakt.",
+        "tags": "Meta / Embedded Signup / Interakt"
+      },
+      "campaigns": {
+        "title": "Kampanye",
+        "description": "Percobaan ulang dan pengakhiran otomatis kampanye yang tidak pernah selesai.",
+        "tags": "Percobaan ulang / kedaluwarsa"
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "Klien OAuth Google yang digunakan workspace untuk menghubungkan kalender mereka untuk pemesanan dan jadwal sibuk.",
+        "tags": "Google / OAuth / Calendar"
+      },
+      "flowBuilder": {
+        "title": "Pembuat alur",
+        "description": "Pembuat alur default untuk setiap workspace: Simple langkah demi langkah atau kanvas Advanced. Workspace dapat menggantinya.",
+        "tags": "Simple / Advanced / Otomatisasi"
+      }
+    },
+    "signup": {
+      "body": "Pendaftaran publik, verifikasi email otomatis, paket default untuk pendaftar baru, dan lama uji coba gratis diedit di halaman Pendaftaran.",
+      "link": "Buka pengaturan pendaftaran"
+    },
+    "brandAssets": {
+      "intro": "Favicon dibagikan ke semua tema. Logo per tema: unggah varian terbalik atau terang untuk mode gelap, varian yang cocok untuk tema doodle.",
+      "favicon": {
+        "title": "Favicon",
+        "note": "Ditampilkan di tab browser dan bookmark. Disarankan 35x35 px. PNG, ICO, JPG, SVG, atau WebP, maks. 512 KB. Mengunggah akan menggantinya."
+      },
+      "logos": {
+        "title": "Logo per tema",
+        "note": "Setiap tema menggunakan logonya sendiri. Akan kembali ke Paper jika tidak ada logo khusus tema yang diunggah."
+      },
+      "themes": {
+        "paper": {
+          "label": "Paper (default)",
+          "note": "Terang, putih gading. Tampilan default."
+        },
+        "bright": {
+          "label": "Putih terang",
+          "note": "Latar putih dengan kontras lebih tinggi."
+        },
+        "dark": {
+          "label": "Gelap (beta)",
+          "note": "Gunakan versi terang atau terbalik dari logo Anda."
+        },
+        "doodle": {
+          "label": "Doodle (mewah)",
+          "note": "Latar mint pastel."
+        }
+      },
+      "noFile": "Tidak ada file",
+      "upload": "Unggah",
+      "uploading": "Mengunggah",
+      "remove": "Hapus",
+      "loading": "Memuat",
+      "loadFailed": "File brand tidak dapat dimuat.",
+      "failed": "Unggahan gagal.",
+      "tooLarge": "File ini lebih dari {kb} KB.",
+      "wrongType": "Jenis file ini tidak diizinkan di sini."
+    },
+    "teamInbox": {
+      "intro": "Aplikasi terpisah yang dapat dipasang dan dibatasi untuk Team Inbox. Agen membuka tautan, menambahkannya ke layar utama, dan menerima notifikasi push untuk pesan baru meskipun aplikasi ditutup.",
+      "enabled": {
+        "label": "Aktifkan aplikasi Team Inbox",
+        "hint": "Mengaktifkan manifest terpisah, permintaan pemasangan, dan notifikasi di /team-inbox."
+      },
+      "name": {
+        "label": "Nama aplikasi"
+      },
+      "shortName": {
+        "label": "Nama pendek",
+        "hint": "Maksimal 12 karakter."
+      },
+      "icon192": {
+        "label": "Ikon aplikasi (PNG 192x192)",
+        "note": "Menggunakan ikon aplikasi jika kosong. Ikon layar utama untuk aplikasi inbox."
+      },
+      "icon512": {
+        "label": "Ikon besar / splash (PNG 512x512)",
+        "note": "Menggunakan ikon aplikasi jika kosong. Splash pemasangan dan layar DPI tinggi."
+      },
+      "push": {
+        "ready": {
+          "title": "Notifikasi push: siap",
+          "body": "Kunci telah dibuat. Agen dapat mengaktifkan notifikasi dari inbox."
+        },
+        "todo": {
+          "title": "Notifikasi push: tersisa satu langkah",
+          "body": "Klik Buat kunci untuk menyiapkan push. Tidak perlu akses server."
+        },
+        "generate": "Buat kunci",
+        "generating": "Membuat",
+        "generated": "Kunci push berhasil dibuat."
+      },
+      "manifestLink": "Manifest Team Inbox",
+      "save": "Simpan aplikasi Team Inbox",
+      "saving": "Menyimpan",
+      "saved": "Aplikasi Team Inbox disimpan.",
+      "conflict": "Orang lain menyimpan ini setelah Anda membukanya. Muat ulang halaman dan coba lagi.",
+      "failed": "Terjadi kesalahan dan tidak ada yang disimpan.",
+      "loading": "Memuat",
+      "loadFailed": "Pengaturan aplikasi Team Inbox tidak dapat dimuat."
+    },
+    "seoPreview": {
+      "google": "Hasil Google",
+      "noDescription": "Belum ada deskripsi meta.",
+      "noImage": "Belum ada gambar OG",
+      "sitemapKicker": "Sitemap & robots",
+      "sitemapTitle": "File crawler",
+      "sitemapFile": "Dibuat otomatis dari halaman publik dan postingan blog yang dipublikasikan. Kirim /sitemap.xml ke Google Search Console.",
+      "download": "Unduh sitemap.xml"
+    },
+    "pages": {
+      "general": {
+        "title": "Pengaturan umum",
+        "description": "Identitas inti aplikasi, informasi kontak, locale dan mata uang default, dan sakelar layanan tingkat platform.",
+        "sections": {
+          "identity": {
+            "title": "Identitas aplikasi"
+          },
+          "brandAssets": {
+            "title": "Aset brand"
+          },
+          "platform": {
+            "title": "Sakelar platform"
+          },
+          "signup": {
+            "title": "Pendaftaran & uji coba gratis"
+          }
+        },
+        "guide": {
+          "title": "Ke mana setiap hal dikirim",
+          "items": {
+            "appName": {
+              "title": "Nama aplikasi",
+              "body": "Digunakan di judul halaman, email, dan brand dalam aplikasi. Buat singkat: idealnya satu atau dua kata."
+            },
+            "appUrl": {
+              "title": "URL aplikasi",
+              "body": "Alamat kanonis. Semua callback, email, dan redirect OAuth berasal darinya."
+            },
+            "language": {
+              "title": "Bahasa default",
+              "body": "Diterapkan ke akun baru. Pengguna yang sudah ada tetap menggunakan pilihan mereka."
+            },
+            "currency": {
+              "title": "Mata uang default",
+              "body": "Digunakan untuk faktur dan dompet tanpa penggantian eksplisit."
+            },
+            "maintenance": {
+              "title": "Mode pemeliharaan",
+              "body": "Saat AKTIF, setiap rute non-admin menampilkan placeholder. Admin tetap dapat mengakses konsol."
+            }
+          }
+        },
+        "tip": {
+          "title": "Aturan produksi",
+          "body": "Simpan hanya setelah menguji alur pengguna yang terdampak. Perubahan identitas akan berpengaruh ke faktur dan email keluar."
+        }
+      },
+      "appearance": {
+        "title": "Warna dasbor",
+        "description": "Ubah warna seluruh aplikasi, setiap halaman dasbor pengguna dan panel admin, dengan mengubah warna tema ini. Menyimpan langsung berlaku untuk semua orang; biarkan warna pada default untuk mempertahankan tampilan bawaan.",
+        "sections": {
+          "layout": {
+            "title": "Tata letak navigasi",
+            "description": "Pilih tata letak dasbor pengguna. Sidebar memindahkan setiap menu ke rel kiri (tanpa header atas, tanpa halaman Lainnya)."
+          },
+          "sidebar": {
+            "title": "Warna sidebar",
+            "description": "Latar rel kiri gelap (hanya tata letak sidebar). Biarkan default untuk hitam pekat bawaan."
+          },
+          "interface": {
+            "title": "Antarmuka"
+          },
+          "brand": {
+            "title": "Brand"
+          },
+          "surfaces": {
+            "title": "Permukaan"
+          },
+          "text": {
+            "title": "Teks"
+          },
+          "accents": {
+            "title": "Aksen"
+          }
+        },
+        "guide": {
+          "title": "Cara kerja warna",
+          "items": {
+            "how": {
+              "title": "Berlaku langsung",
+              "body": "Menyimpan menulis ulang token tema langsung untuk semua orang."
+            },
+            "tokens": {
+              "title": "Satu token, satu fungsi",
+              "body": "Setiap swatch dipetakan ke satu variabel CSS yang digunakan di dasbor pengguna dan panel admin."
+            },
+            "primary": {
+              "title": "Ubah Utama, sisanya mengikuti",
+              "body": "Utama (hover), aksen, isian lembut, dan bubble chat diturunkan dari Utama kecuali Anda mengaturnya sendiri."
+            },
+            "defaults": {
+              "title": "Biarkan default",
+              "body": "Warna apa pun yang dibiarkan pada nilai bawaan mempertahankan tampilan asli; hanya token yang diubah yang ditimpa."
+            }
+          }
+        },
+        "tip": {
+          "title": "Tips",
+          "body": "Periksa kontras setelah perubahan besar. Warna teks dan latar sama-sama berasal dari token ini."
+        },
+        "eyebrow": "Admin - Tampilan"
+      },
+      "siteInfo": {
+        "title": "Info situs",
+        "description": "Detail kontak dan tautan sosial yang dibagikan di footer, halaman kontak, dan tentang. Edit sekali, akan diperbarui di mana-mana.",
+        "sections": {
+          "company": {
+            "title": "Perusahaan"
+          },
+          "contact": {
+            "title": "Email kontak"
+          },
+          "phone": {
+            "title": "Telepon & WhatsApp"
+          },
+          "social": {
+            "title": "Tautan sosial"
+          }
+        },
+        "guide": {
+          "title": "Apa yang ditampilkan di mana",
+          "items": {
+            "shared": {
+              "title": "Dibagikan di mana-mana",
+              "body": "Nilai-nilai ini dipakai di footer publik, halaman kontak, dan halaman hukum."
+            },
+            "frontend": {
+              "title": "Teks dan warna halaman",
+              "body": "Diedit di editor Frontend, bukan di sini."
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "Pengaturan footer",
+        "description": "Judul footer, tautan sosial, teks hak cipta, dan deskripsi footer publik.",
+        "sections": {
+          "footer": {
+            "title": "Footer publik"
+          }
+        },
+        "guide": {
+          "title": "Apa yang ditampilkan di mana",
+          "items": {
+            "what": {
+              "title": "Judul footer dan hak cipta",
+              "body": "Judul kosong menggunakan nama platform. Teks hak cipta kosong dibuat dari tahun dan brand."
+            },
+            "social": {
+              "title": "URL sosial",
+              "body": "Kolom kosong menyembunyikan ikon. Ini berbagi tautan sosial Info situs: mengeditnya di sini akan memperbaruinya di mana-mana."
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "Pengaturan email",
+        "description": "Host SMTP, port, enkripsi, dan kredensial. Nilai yang tersimpan diterapkan pada setiap pengiriman, sehingga email selamat datang, verifikasi, struk, dan dukungan menggunakannya tanpa perlu restart.",
+        "sections": {
+          "smtp": {
+            "title": "Kredensial SMTP"
+          }
+        },
+        "guide": {
+          "title": "Host penyedia umum",
+          "items": {
+            "hosts": {
+              "title": "Pengaturan umum",
+              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.REGION.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls dengan kata sandi aplikasi."
+            },
+            "used": {
+              "title": "Email sistem yang dapat dikirim",
+              "body": "Email selamat datang dan verifikasi, reset kata sandi, faktur dan struk, balasan dukungan, peringatan keamanan, dan undangan workspace."
+            }
+          }
+        },
+        "tip": {
+          "title": "Tips",
+          "body": "Selalu kirim email uji setelah mengedit. Satu salah ketik pada host atau port diam-diam merusak semua email transaksional di platform."
+        }
+      },
+      "seo": {
+        "title": "Pengaturan SEO",
+        "description": "Tag meta default untuk seluruh situs: judul, deskripsi, OpenGraph, kartu Twitter, robots, canonical, dan verifikasi mesin pencari.",
+        "sections": {
+          "search": {
+            "title": "Tag meta"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "Kartu Twitter"
+          },
+          "verification": {
+            "title": "Verifikasi situs"
+          },
+          "preview": {
+            "title": "Pratinjau langsung"
+          }
+        },
+        "guide": {
+          "title": "Dasar SEO",
+          "items": {
+            "basics": {
+              "title": "Judul dan deskripsi",
+              "body": "Judul meta: awali dengan brand dan satu deskriptor kuat, 50-60 karakter. Deskripsi meta: pitch 1-2 kalimat, 140-160 karakter."
+            },
+            "where": {
+              "title": "Tampil di mana",
+              "body": "Halaman admin, halaman yang sudah masuk, halaman publik, dan pratinjau tautan (WhatsApp, Slack, Discord, X). Robots: gunakan noindex untuk staging atau deployment privat."
+            },
+            "sitemap": {
+              "title": "Validasi",
+              "body": "opengraph.xyz, uji Google Rich Results, dan validator Twitter Card."
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "Privasi, GDPR & ADA",
+        "eyebrow": "Admin - Kepatuhan",
+        "description": "Banner persetujuan cookie, URL kebijakan, kepatuhan GDPR/CCPA, dan sakelar aksesibilitas WCAG. Pengaturan yang sama memasok UI persetujuan dan mengontrol setiap integrasi analitik.",
+        "sections": {
+          "banner": {
+            "title": "Banner & kebijakan"
+          },
+          "compliance": {
+            "title": "GDPR & CCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG",
+            "description": "Fitur aksesibilitas tingkat US Americans-with-Disabilities-Act + WCAG 2.1 AA yang dapat diaktifkan pengunjung."
+          }
+        },
+        "guide": {
+          "title": "Cara kerja persetujuan",
+          "items": {
+            "order": {
+              "title": "Urutan langkah",
+              "body": "1. Pengunjung datang dan banner cookie terbuka (dilewati jika Do-Not-Track dihormati). 2. Pilihan disimpan di cookie crm_cookie_consent selama satu tahun. 3. Hanya pelacak yang diizinkan yang dimuat. 4. Pengunjung dapat membuka kembali pemilih dari elemen apa pun dengan data-cookie-prefs-open."
+            },
+            "linked": {
+              "title": "Pengaturan terkait",
+              "body": "Integrasi analitik (GA4, GTM, Pixel, Clarity, dan lainnya) dan pengaturan PWA."
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "Integrasi analitik",
+        "eyebrow": "Admin - Pelacakan",
+        "description": "Tempel ID setiap penyedia sekali. Cuplikan resmi vendor dirender di setiap halaman publik, tetapi hanya setelah pengunjung menyetujui kategori cookie yang sesuai.",
+        "sections": {
+          "site": {
+            "title": "Analitik situs"
+          },
+          "marketing": {
+            "title": "Pixel iklan"
+          }
+        },
+        "guide": {
+          "title": "Pelacak -> kategori",
+          "items": {
+            "categories": {
+              "title": "Kapan setiap pelacak aktif",
+              "body": "Analitik: GA4, GTM, Clarity, Plausible, PostHog, Hotjar, Mixpanel. Pemasaran: Meta Pixel, TikTok, LinkedIn, X Pixel. Skrip container GTM dapat menyertakan pelacak lain; jeda dengan pemicu kategori di dalam GTM."
+            },
+            "where": {
+              "title": "Tempat dimuat",
+              "body": "Halaman publik dan halaman masuk. Halaman admin sengaja dinonaktifkan."
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "Kode kustom",
+        "description": "Gaya dan skrip kustom produksi untuk branding dan perilaku lanjutan. Disisipkan ke halaman publik saat diaktifkan.",
+        "sections": {
+          "code": {
+            "title": "Kode kustom"
+          }
+        },
+        "guide": {
+          "title": "Aturan praktis",
+          "items": {
+            "scope": {
+              "title": "Batasi cakupan CSS Anda",
+              "body": "Bungkus aturan dengan class brand. Hindari menyentuh body, *, atau class utilitas framework."
+            },
+            "block": {
+              "title": "Jangan memblokir",
+              "body": "Bungkus JS dalam DOMContentLoaded. Jangan lakukan panggilan jaringan sinkron."
+            },
+            "dark": {
+              "title": "Uji mode gelap",
+              "body": "Ganti tema dan periksa selector html[data-theme=\"dark\"] sebelum menyimpan."
+            },
+            "sensitive": {
+              "title": "Sensitif produksi",
+              "body": "Penyimpanan yang keliru langsung memengaruhi setiap halaman publik. Minta rekan meninjau perubahan besar."
+            }
+          }
+        },
+        "tip": {
+          "title": "Hati-hati",
+          "body": "Kode kustom berjalan di setiap halaman publik dan tidak dapat di-sandbox. Hanya super admin yang dapat mengubahnya."
+        }
+      },
+      "pwa": {
+        "title": "Pengaturan PWA",
+        "description": "Manifest aplikasi yang dapat dipasang: nama, ikon, warna, dan mode tampilan. Menggerakkan manifest dan permintaan pemasangan.",
+        "sections": {
+          "app": {
+            "title": "PWA manifest"
+          },
+          "teamInbox": {
+            "title": "Team Inbox PWA"
+          }
+        },
+        "guide": {
+          "title": "Aplikasi yang dapat dipasang",
+          "items": {
+            "manifest": {
+              "title": "Manifest langsung",
+              "body": "Manifest disajikan di /api/v2/public/manifest.webmanifest dan hanya ada saat sakelar aktif."
+            },
+            "install": {
+              "title": "Ikon",
+              "body": "Unggah ikon PNG persegi di halaman Tampilan atau tempel URL yang dihosting. 192 px untuk layar utama, 512 px untuk splash."
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "Penyimpanan cloud",
+        "eyebrow": "Admin - Penyimpanan media",
+        "description": "Kirim semua lampiran media klien ke bucket Anda sendiri — Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2, atau penyimpanan kompatibel S3 lainnya — alih-alih ke server aplikasi. Saat nonaktif, media tetap di disk lokal, sehingga tidak ada yang rusak sampai Anda mengaktifkannya.",
+        "status": {
+          "active": "Aktif: {provider}. Unggahan baru masuk ke bucket Anda.",
+          "configured": "Sudah dikonfigurasi tetapi nonaktif. Media tetap di disk lokal. Uji, lalu aktifkan.",
+          "local": "Disk lokal (belum ada penyedia cloud yang disiapkan).",
+          "enabled": "Aktif",
+          "disabled": "Nonaktif"
+        },
+        "sections": {
+          "provider": {
+            "title": "Perutean media cloud"
+          },
+          "credentials": {
+            "title": "Koneksi bucket"
+          }
+        },
+        "guide": {
+          "title": "Siapkan",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "Kunci akses + secret + wilayah + bucket. Endpoint Wasabi diturunkan dari wilayah."
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "Gunakan kolom Bunny: zona penyimpanan dan kata sandi. Wilayah adalah wilayah zona (de, ny, la...)."
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "Isi kolom S3 dan tempel URL Endpoint. Centang path-style untuk MinIO."
+            },
+            "test": {
+              "title": "Selalu uji terlebih dahulu",
+              "body": "\"Simpan & uji koneksi\" menulis dan menghapus file uji sebelum Anda mengaktifkan Aktif."
+            }
+          }
+        },
+        "tip": {
+          "title": "Aman secara default",
+          "body": "File yang sudah ada tetap di tempatnya. Hanya unggahan baru yang masuk ke bucket; tidak ada yang dimigrasi atau dihapus."
+        }
+      },
+      "whatsapp": {
+        "title": "Pengaturan WhatsApp",
+        "eyebrow": "Admin - Pengaturan - Saluran - WhatsApp",
+        "description": "Satu aplikasi Meta (dan mitra Interakt) tempat semua nomor WhatsApp workspace di-onboard. Tanpa app id dan secret, Embedded Signup dan pembaruan token tidak berfungsi; tanpa config id, workspace menempelkan token secara manual. Nilai yang tersimpan menggantikan default server dalam hitungan detik, di setiap proses.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)",
+            "description": "Cloud API resmi Meta. Diperlukan untuk trafik volume tinggi, pesan templat, dan profil bisnis terverifikasi. Mendukung tempel token manual dan Embedded Signup (masuk WhatsApp)."
+          },
+          "interakt": {
+            "title": "Rute Interakt",
+            "description": "Nomor yang terhubung melalui Embedded Signup dikirim dan diterima melalui proxy Meta Interakt secara default. Beralih ke Meta (langsung) untuk melewati Interakt. Nomor yang sudah ada tetap menggunakan rute saat terhubung."
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "Business API (WABA)",
+          "items": {
+            "api": {
+              "title": "Meta Cloud API",
+              "body": "Cloud API resmi Meta. Diperlukan untuk trafik volume tinggi, pesan templat, dan profil bisnis terverifikasi. Mendukung tempel token manual dan Embedded Signup (masuk WhatsApp)."
+            },
+            "app": {
+              "title": "ID aplikasi Facebook + secret",
+              "body": "developers.facebook.com/apps, Pengaturan dasar. Mengubah aplikasi membatalkan token yang diterbitkan oleh aplikasi lama, sehingga workspace harus terhubung ulang."
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "App dashboard, WhatsApp, Configuration: tempel Callback URL dan Verify token dari halaman ini, lalu berlangganan ke messages dan message_template_status_update."
+            },
+            "perWorkspace": {
+              "title": "Per workspace",
+              "body": "Setiap workspace menghubungkan nomornya sendiri dari Saluran, nomor WhatsApp. Phone number ID dan token permanen dikumpulkan di sana."
+            },
+            "login": {
+              "title": "Masuk WABA (opsional)",
+              "body": "Isi Embedded Signup Config ID untuk mengaktifkan Masuk dengan Meta sekali klik. Memerlukan peran Tech Provider pada aplikasi. Kosongkan untuk hanya menggunakan tempel manual."
+            }
+          }
+        },
+        "tip": {
+          "title": "Tips",
+          "body": "Mengganti rute default atau aplikasi saat trafik berjalan hanya memengaruhi nomor yang terhubung setelahnya. Jeda kampanye sebelum mengubah aplikasi Meta."
+        }
+      },
+      "campaigns": {
+        "title": "Pengiriman kampanye",
+        "eyebrow": "Admin - Kampanye",
+        "description": "Aturan tingkat platform untuk kampanye setiap workspace: seberapa sering pesan yang gagal dicoba ulang dan kapan kampanye yang belum selesai diakhiri.",
+        "sections": {
+          "retry": {
+            "title": "Percobaan ulang"
+          },
+          "expiry": {
+            "title": "Akhiri otomatis"
+          }
+        },
+        "guide": {
+          "title": "Cara kerjanya",
+          "items": {
+            "retry": {
+              "title": "Percobaan ulang",
+              "body": "Penerima yang pengirimannya gagal dicoba lagi setelah jeda, hingga jumlah percobaan yang diatur di sini."
+            },
+            "expiry": {
+              "title": "Akhiri otomatis",
+              "body": "Kampanye yang masih berjalan setelah jam yang diatur di sini akan diakhiri agar tidak menahan pengirim selamanya."
+            }
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "eyebrow": "Admin - Janji temu",
+        "description": "Satu klien OAuth Google Cloud untuk seluruh platform. Setiap workspace kemudian menghubungkan akun Google-nya sendiri dari Janji temu, Pengaturan; workspace tidak pernah melihat client id atau secret.",
+        "sections": {
+          "oauth": {
+            "title": "Klien OAuth Google",
+            "description": "Tanpa client id dan secret, workspace melihat Google Calendar sebagai tidak tersedia dan pemesanan tetap berjalan tanpa kalender."
+          }
+        },
+        "guide": {
+          "title": "Siapkan di Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Proyek dan API",
+              "body": "Di Google Cloud Console, buat proyek dan aktifkan Google Calendar API."
+            },
+            "redirect": {
+              "title": "2. Klien OAuth",
+              "body": "Buat OAuth 2.0 Client ID bertipe Web application dan tambahkan redirect URI yang ditampilkan di halaman ini di bawah Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Layar persetujuan",
+              "body": "Tambahkan scope calendar.events, calendar.freebusy, dan calendar.calendarlist.readonly, lalu publikasikan aplikasi: dalam mode Testing, Google mengakhiri setiap izin setelah 7 hari dan workspace harus terhubung ulang."
+            },
+            "workspaces": {
+              "title": "4. Workspace terhubung",
+              "body": "Tempel client id dan secret di sini lalu simpan. Admin kemudian terhubung dari Janji temu, Pengaturan, Google Calendar."
+            }
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Pembuat alur",
+        "eyebrow": "Admin - Otomatisasi",
+        "description": "Pilih pembuat alur default untuk setiap workspace: pembuat Simple langkah demi langkah atau pembuat kanvas Advanced. Workspace dapat menggantinya di halaman Flows-nya.",
+        "sections": {
+          "mode": {
+            "title": "Pembuat"
+          }
+        },
+        "guide": {
+          "title": "Cara kerjanya",
+          "items": {
+            "modes": {
+              "title": "Kedua pembuat",
+              "body": "Simple menampilkan alur sebagai langkah-langkah yang tersusun ke bawah, dengan tanda plus di antara langkah. Advanced adalah kanvas dengan node dan kabel. Keduanya menyimpan alur yang sama, sehingga alur berjalan dengan cara yang sama."
+            },
+            "existing": {
+              "title": "Alur yang sudah ada",
+              "body": "Mengubah pengaturan ini tidak pernah mengubah atau menghapus alur. Alur tetap berfungsi; alur hanya dibuka di pembuat yang aktif. Workspace yang memilih pembuatnya sendiri tetap menggunakannya hingga memilih default platform lagi."
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "Kami menggunakan cookie",
+      "learnMore": "Pelajari selengkapnya",
+      "decline": "Tolak",
+      "customize": "Sesuaikan",
+      "acceptAll": "Terima semua",
+      "rejectAll": "Tolak semua",
+      "save": "Simpan preferensi",
+      "preferences": "Preferensi cookie",
+      "categories": {
+        "necessary": {
+          "title": "Wajib",
+          "body": "Diperlukan agar situs berfungsi: masuk, keamanan, dan pilihan Anda. Selalu aktif."
+        },
+        "analytics": {
+          "title": "Cookie analitik",
+          "body": "Bantu kami memahami cara situs digunakan agar kami dapat meningkatkannya."
+        },
+        "marketing": {
+          "title": "Cookie pemasaran",
+          "body": "Digunakan untuk mengukur iklan dan menampilkan kampanye yang relevan di tempat lain."
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "Pratinjau langsung",
+      "previewTitle": "Sebelum Anda menyimpan",
+      "previewNote": "Warna, ukuran, dan opasitas diperbarui saat Anda menyeret. Tidak ada yang diterapkan ke siapa pun sebelum Anda menyimpan.",
+      "resetTitle": "Atur ulang ke default",
+      "resetBody": "Menghapus semua penggantian dan memulihkan palet asli.",
+      "reset": "Atur ulang semua warna",
+      "tokens": "{count} token",
+      "controls": "{count} kontrol",
+      "primary": "Utama",
+      "cancel": "Batal",
+      "active": "Aktif"
+    },
+    "wabaCallback": {
+      "loading": "Memuat detail webhook…",
+      "unavailable": "Detail webhook hanya ditampilkan untuk super admin.",
+      "webhookUrl": "Webhook URL",
+      "noUrl": "Atur APP_URL atau WABA_WEBHOOK_PUBLIC_URL",
+      "webhookHint": "Tempel ke aplikasi Meta (WhatsApp, Configuration, Callback URL). Berlangganan ke: {fields}.",
+      "verifyToken": "Verify token",
+      "verifyHint": "Tempel di layar yang sama dengan Verify token.",
+      "copy": "Salin",
+      "copied": "Disalin",
+      "connected": "WABA terhubung (semua workspace)",
+      "fieldsTitle": "Kolom webhook (coexistence dan Grup)",
+      "fieldsHint": "Coexistence memerlukan aplikasi Meta yang berlangganan ke messages, smb_message_echoes, smb_app_state_sync, dan history. WhatsApp Groups memerlukan group_lifecycle_update, group_participants_update, group_settings_update, dan group_status_update.",
+      "fieldsCheck": "Periksa kolom webhook",
+      "fieldsChecking": "Menanyakan ke Meta…",
+      "fieldsOk": "Semua kolom sudah berlangganan: balasan yang diketik di ponsel akan disinkronkan dan event grup WhatsApp akan diterima.",
+      "fieldsMissing": "Beberapa kolom belum berlangganan.",
+      "fieldsSubscribed": "Berlangganan. Balasan yang diketik di ponsel sekarang akan disinkronkan dan event grup WhatsApp akan diterima.",
+      "fieldsMissingTag": "BELUM ADA",
+      "fieldsGroupTag": "Grup",
+      "fieldsSubscribe": "Berlangganan kolom yang belum ada",
+      "fieldsSubscribing": "Berlangganan…"
+    },
+    "googleCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "Daftarkan alamat ini persis sebagai Authorised redirect URI pada klien OAuth. Di sinilah Google mengirim browser setelah admin workspace menyetujui.",
+      "copy": "Salin",
+      "copied": "Disalin"
+    }
+  }
+}

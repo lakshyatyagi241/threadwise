@@ -1,0 +1,18 @@
+{
+  "common": {
+    "appName": "CRM",
+    "loadMore": "加载更多",
+    "loading": "加载中",
+    "empty": "这里还没有内容",
+    "retry": "重试",
+    "requestId": "请求 ID",
+    "search": "搜索",
+    "unexpected": "出了点问题",
+    "fatal": {
+      "title": "出了点问题",
+      "body": "页面加载失败。已上报此问题。请重试，如果问题持续出现，请联系支持团队。",
+      "bodyWithDigest": "页面加载失败。已上报此问题。请重试，如果问题持续出现，请联系支持团队并提供 {digest}。",
+      "home": "返回起始页"
+    }
+  }
+}

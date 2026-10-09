@@ -1,0 +1,870 @@
+{
+  "marketplace": {
+    "nav": {
+      "marketplace": "Marketplace"
+    },
+    "meta": {
+      "apps": "Mini-Apps · Marketplace",
+      "integrations": "Integrationen · Marketplace",
+      "app": "App · Marketplace",
+      "install": "Installieren · Marketplace",
+      "installed": "Installiert · Marketplace",
+      "manage": "App verwalten · Marketplace",
+      "requests": "Anfragen · Marketplace"
+    },
+    "common": {
+      "dismiss": "Schließen",
+      "loading": "Wird geladen",
+      "errorTitle": "Dies konnte nicht geladen werden",
+      "requestId": "Anfrage-ID",
+      "retry": "Erneut versuchen",
+      "upgrade": "Tarife ansehen und upgraden",
+      "opensNewTab": "(öffnet in einem neuen Tab)",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "copyFailed": "Konnte nicht kopiert werden. Markieren Sie den Text und kopieren Sie ihn manuell.",
+      "needsPermission": "Sie benötigen die Berechtigung {permission}, um dies zu tun. Bitten Sie einen Arbeitsbereichs-Admin."
+    },
+    "errors": {
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Sie haben keine Berechtigung, dies zu tun.",
+      "signedOut": "Ihre Sitzung ist abgelaufen. Melden Sie sich erneut an.",
+      "conflict": "Jemand anderes hat dies zuerst geändert. Laden Sie neu, um die aktuelle Version zu sehen.",
+      "validation": "Einige Werte sind ungültig. Prüfen Sie die Felder und versuchen Sie es erneut.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "rateLimitedWait": "Zu viele Anfragen. Versuchen Sie es in {seconds, plural, one {# Sekunde} other {# Sekunden}} erneut.",
+      "unavailable": "Der Marketplace ist auf diesem Server noch nicht verfügbar.",
+      "notFound": "Dieses Element existiert nicht mehr.",
+      "appNotFound": "Diese App existiert nicht oder ist für Ihren Arbeitsbereich nicht verfügbar.",
+      "notInstalled": "Diese App ist in Ihrem Arbeitsbereich nicht installiert.",
+      "alreadyInstalled": "Diese App ist in Ihrem Arbeitsbereich bereits installiert.",
+      "appUnavailable": "Diese App wird derzeit nicht angeboten.",
+      "appLockedPlan": "Ihr Tarif enthält diese App nicht. Upgraden Sie, um sie freizuschalten.",
+      "appLockedModule": "Diese App ist in dieser Installation des Produkts nicht verfügbar.",
+      "planLocked": "Der Marketplace ist nicht Teil Ihres Tarifs. Upgraden Sie, um ihn zu nutzen.",
+      "planLimitInstalled": "Sie haben das Limit an installierbaren Apps Ihres Tarifs erreicht, daher wurde nichts installiert. Deinstallieren Sie eine App oder upgraden Sie Ihren Tarif.",
+      "planLimitInstalledCounts": "Sie haben {used} von {cap} Apps installiert, die Ihr Tarif erlaubt, daher wurde nichts installiert. Deinstallieren Sie eine App oder upgraden Sie Ihren Tarif.",
+      "planLimitLeadSources": "Sie haben das Limit an Lead-Quellen Ihres Tarifs erreicht, daher wurde nichts installiert. Entfernen Sie eine Lead-Quelle oder upgraden Sie Ihren Tarif.",
+      "planLimitLeadSourcesCounts": "Sie haben {used} von {cap} Lead-Quellen, die Ihr Tarif erlaubt, daher wurde nichts installiert. Entfernen Sie eine oder upgraden Sie Ihren Tarif.",
+      "planLimit": "Sie haben ein Limit Ihres Tarifs erreicht, daher wurde nichts installiert. Upgraden Sie Ihren Tarif, um fortzufahren.",
+      "planLimitCounts": "Sie haben {used} von {cap} verwendet, die Ihr Tarif erlaubt, daher wurde nichts installiert. Upgraden Sie Ihren Tarif, um fortzufahren.",
+      "consentRequired": "Die Berechtigungen haben sich geändert. Prüfen Sie sie erneut, bevor Sie installieren.",
+      "reconsentRequired": "Die neue Version verlangt mehr Berechtigungen. Prüfen und akzeptieren Sie diese zuerst.",
+      "scopeExceeds": "Sie können keine Berechtigungen erteilen, die Sie selbst nicht besitzen. Fehlend: {permissions}.",
+      "installationKilled": "Die Plattform hat diese App gestoppt. Sie kann nur deinstalliert werden.",
+      "installationDisabled": "Diese App ist pausiert. Setzen Sie sie zuerst fort.",
+      "credentialMissing": "Füllen Sie die Pflichtfelder aus.",
+      "noConnection": "Diese Installation hat keine Verbindung, die das kann.",
+      "leadPipeline": "Der Lead-Dienst ist derzeit nicht verfügbar. Nichts wurde gespeichert. Versuchen Sie es gleich noch einmal.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "subscriptionRequired": "Dies ist eine kostenpflichtige App. Abonnieren Sie sie, um sie zu installieren.",
+      "notForSale": "Diese App wird derzeit nicht an neue Abonnenten verkauft.",
+      "trialUnavailable": "Die kostenlose Testphase ist für diese App in Ihrem Arbeitsbereich nicht verfügbar.",
+      "subscriptionNotFound": "Ihr Arbeitsbereich hat kein Abonnement für diese App.",
+      "subscriptionState": "Das passt nicht zum aktuellen Stand des Abonnements. Laden Sie neu, um den neuesten Stand zu sehen."
+    },
+    "chips": {
+      "installed": "Installiert",
+      "paused": "Pausiert",
+      "killed": "Von der Plattform gestoppt",
+      "healthy": "Gesund",
+      "degraded": "Beeinträchtigt",
+      "error": "Fehler",
+      "needs_reauth": "Erneute Anmeldung erforderlich",
+      "unknown": "Noch nicht geprüft",
+      "needsConsent": "Neue Berechtigungen zu prüfen",
+      "subscribed": "Abonniert",
+      "trialing": "Kostenlose Testphase",
+      "comped": "Kostenlos bereitgestellt",
+      "canceling": "Keine Verlängerung",
+      "subscriptionEnded": "Abonnement beendet"
+    },
+    "lock": {
+      "planFeature": {
+        "chip": "Nicht in Ihrem Tarif enthalten",
+        "message": "Ihr Tarif enthält diese App nicht. Sie können hier mehr darüber erfahren, für die Installation ist jedoch ein Upgrade erforderlich."
+      },
+      "moduleDisabled": {
+        "chip": "Nicht verfügbar",
+        "message": "Diese App benötigt ein Modul, das in dieser Installation des Produkts deaktiviert ist."
+      },
+      "limitReached": {
+        "chip": "Tarif-Limit erreicht",
+        "message": "Sie haben so viele Apps installiert, wie Ihr Tarif erlaubt. Deinstallieren Sie eine App oder wechseln Sie in einen höheren Tarif."
+      }
+    },
+    "scopes": {
+      "risk": {
+        "low": "Geringes Risiko",
+        "medium": "Mittleres Risiko",
+        "high": "Hohes Risiko"
+      },
+      "none": "Diese App fordert keine Berechtigungen an.",
+      "new": "Neu",
+      "overall": {
+        "low": {
+          "title": "Insgesamt geringes Risiko",
+          "message": "Diese App darf nur Daten lesen."
+        },
+        "medium": {
+          "title": "Insgesamt mittleres Risiko",
+          "message": "Diese App kann Daten in Ihrem Workspace lesen und ändern."
+        },
+        "high": {
+          "title": "Insgesamt hohes Risiko",
+          "message": "Diese App kann in Ihrem Namen handeln, zum Beispiel Nachrichten senden oder Integrationen verwalten. Installieren Sie sie nur, wenn Sie dem Entwickler vertrauen."
+        }
+      },
+      "counts": "{high} hoch, {medium} mittel, {low} gering"
+    },
+    "header": {
+      "title": "Marketplace",
+      "subtitle": "Fügen Sie Ihrem Workspace Mini-Apps hinzu und verbinden Sie externe Dienste.",
+      "tabsLabel": "Marketplace-Bereiche",
+      "moreLabel": "Installiert und Anfragen",
+      "tabs": {
+        "mini_app": "Mini-Apps",
+        "integration": "Integrationen"
+      },
+      "installed": "Installiert",
+      "installedLimit": "Installiert ({installed} von {limit})",
+      "installedUnlimited": "Installiert ({installed})",
+      "request": "Integration anfragen"
+    },
+    "card": {
+      "firstParty": "Von uns entwickelt",
+      "pricing": {
+        "free": "Kostenlos",
+        "included": "In Ihrem Tarif enthalten",
+        "monthly": "{price} / Monat",
+        "subscribed": "Abonniert",
+        "notForSale": "Nicht erhältlich",
+        "paid": "Kostenpflichtige App",
+        "addOn": "Add-on",
+        "trial": "{days}-tägige kostenlose Testphase"
+      },
+      "installs": "{count, plural, one {# Installation} other {# Installationen}}",
+      "version": "Version {version}",
+      "cta": {
+        "install": "Installieren",
+        "manage": "Verwalten",
+        "review": "Berechtigungen prüfen",
+        "killed": "Verwalten",
+        "locked": "Details anzeigen",
+        "view": "Details anzeigen",
+        "subscribe": "Abonnieren"
+      }
+    },
+    "browse": {
+      "categoriesLabel": "Kategorien",
+      "all": "Alle",
+      "shelves": {
+        "featured": "Empfohlen",
+        "popular": "Beliebt",
+        "new": "Neu"
+      },
+      "searchLabel": "Marketplace durchsuchen",
+      "searchPlaceholder": {
+        "mini_app": "Mini-Apps durchsuchen",
+        "integration": "Integrationen durchsuchen"
+      },
+      "availability": {
+        "label": "Anzeigen",
+        "all": "Alle",
+        "addons": "Verfügbare Add-ons",
+        "installed": "Installiert"
+      },
+      "sortLabel": "Sortieren nach",
+      "sort": {
+        "featured": "Empfohlen",
+        "popular": "Am häufigsten installiert",
+        "new": "Neueste",
+        "name": "Name"
+      },
+      "unknownCategory": "Diese Kategorie gibt es in diesem Tab nicht.",
+      "showAll": "Alles anzeigen",
+      "resultsAll": "Alle Apps",
+      "resultsFiltered": "Ergebnisse",
+      "loadedCount": "{count, plural, one {# App angezeigt} other {# Apps angezeigt}}",
+      "loadMore": "Mehr laden",
+      "clearFilters": "Filter zurücksetzen",
+      "empty": {
+        "search": {
+          "title": "Keine Treffer für Ihre Suche",
+          "message": "Versuchen Sie einen kürzeren Namen oder setzen Sie die Filter zurück. Falls die App nicht aufgeführt ist, können Sie sie unten anfragen."
+        },
+        "addons": {
+          "title": "Hier gibt es keine Add-ons zum Kauf",
+          "message": "Add-ons, die Ihr Tarif auflistet, aber die Sie nicht gekauft haben, werden hier angezeigt. Wählen Sie Alle, um alles zu sehen."
+        },
+        "installed": {
+          "title": "Hier ist noch nichts installiert",
+          "message": "Installierte Apps werden hier angezeigt. Wählen Sie Alle, um alles zu durchsuchen."
+        },
+        "category": {
+          "title": "In dieser Kategorie gibt es noch nichts",
+          "message": "Wählen Sie eine andere Kategorie oder fragen Sie unten an, was Sie benötigen."
+        },
+        "none": {
+          "title": "Hier ist noch nichts aufgeführt",
+          "message": "Neue Apps erscheinen hier, sobald sie veröffentlicht sind. Unten können Sie eine anfragen."
+        }
+      }
+    },
+    "requestBox": {
+      "title": {
+        "mini_app": "Fehlt eine Mini-App?",
+        "integration": "Fehlt eine Integration?"
+      },
+      "message": "Sagen Sie uns, was Sie benötigen. Anfragen werden gezählt, und die meistgewünschten werden zuerst umgesetzt.",
+      "action": {
+        "mini_app": "Mini-App anfragen",
+        "integration": "Integration anfragen"
+      }
+    },
+    "detail": {
+      "backToMarketplace": "Zurück zum Marketplace",
+      "backToApps": "Zurück zu Mini-Apps",
+      "backToIntegrations": "Zurück zu Integrationen",
+      "notFound": {
+        "title": "App nicht gefunden",
+        "message": "Diese App existiert nicht oder ist für Ihren Workspace nicht verfügbar.",
+        "integrations": "Integrationen durchsuchen",
+        "apps": "Mini-Apps durchsuchen"
+      },
+      "kind": {
+        "mini_app": "Mini-App",
+        "integration": "Integration"
+      },
+      "firstParty": "Von uns entwickelt",
+      "install": "Installieren",
+      "manage": "Verwalten",
+      "killed": "Die Plattform hat diese App angehalten. Sie kann nur deinstalliert werden.",
+      "about": "Über diese App",
+      "screenshots": "Screenshots",
+      "screenshotAlt": "Screenshot {n} von {name}",
+      "permissions": {
+        "title": "Worauf sie zugreifen kann",
+        "intro": "Sie sehen diese Punkte erneut und bestätigen sie, bevor etwas installiert wird."
+      },
+      "setup": {
+        "title": "Was Sie zur Einrichtung benötigen",
+        "intro": {
+          "oauth": "Sie melden sich beim Dienst an, um ihn zu verbinden.",
+          "push": "Der Dienst sendet Daten mit einem Schlüssel an Ihren Workspace, den Sie hier eingeben.",
+          "pull": "Wir rufen Daten vom Dienst mit einem Schlüssel ab, den Sie hier eingeben.",
+          "email_parse": "Wir lesen Benachrichtigungs-E-Mails, die der Dienst sendet.",
+          "webhook_relay": "Sie erhalten eine Web-Adresse und ein Geheimnis, das Sie in das Tool einfügen, das die Daten sendet.",
+          "client": "Sie installieren sie dort, wo Sie arbeiten, und melden sich mit Ihrem eigenen Konto an."
+        },
+        "required": "Erforderlich",
+        "optional": "Optional",
+        "kind": {
+          "secret": "geheim gehalten",
+          "text": "Text",
+          "select": "Auswahl"
+        },
+        "noFields": "Nichts auszufüllen. Die Verbindungsdaten erhalten Sie nach der Installation.",
+        "hasSample": "Nach der Installation können Sie einen Beispiel-Lead senden, um die Verbindung zu prüfen."
+      },
+      "data": {
+        "title": "Ihre Daten",
+        "intro": "Was diese App speichert, wo und wie es gelöscht wird.",
+        "summary": "Was gespeichert wird",
+        "regions": "Speicherort",
+        "deletion": "Wie gelöscht wird"
+      },
+      "changelog": {
+        "title": "Was sich geändert hat",
+        "version": "Version {version}"
+      },
+      "facts": {
+        "title": "Details",
+        "version": "Version",
+        "connector": "So wird die Verbindung hergestellt",
+        "connectors": {
+          "oauth": "Anmeldung",
+          "push": "Sie sendet Daten an Sie",
+          "pull": "Wir rufen ihre Daten ab",
+          "email_parse": "Benachrichtigungs-E-Mails",
+          "webhook_relay": "Web-Adresse und Geheimnis",
+          "client": "Von jedem Mitglied installiert"
+        },
+        "installs": "Installationen",
+        "developer": "Entwickler"
+      },
+      "support": {
+        "title": "Support und Rechtliches",
+        "website": "Website",
+        "docs": "Dokumentation",
+        "privacy": "Datenschutzerklärung",
+        "terms": "Nutzungsbedingungen",
+        "status": "Statusseite",
+        "email": "E-Mail-Support"
+      }
+    },
+    "install": {
+      "backToMarketplace": "Zurück zum Marketplace",
+      "backToApp": "Zurück zu {name}",
+      "notFound": {
+        "title": "App nicht gefunden",
+        "message": "Diese App existiert nicht oder ist für Ihren Workspace nicht verfügbar."
+      },
+      "alreadyTitle": "Bereits installiert",
+      "alreadyMessage": "{name} ist bereits in Ihrem Workspace installiert.",
+      "openManage": "Öffnen",
+      "lockedTitle": "{name} ist gesperrt",
+      "noPermissionTitle": "Sie können keine Apps installieren",
+      "noPermissionMessage": "Für die Installation von Apps benötigen Sie eine Berechtigung, die Ihre Rolle nicht hat.",
+      "title": "{name} installieren",
+      "stepsLabel": "Installationsschritte",
+      "steps": {
+        "permissions": "Berechtigungen",
+        "setup": "Einrichten",
+        "done": "Fertig"
+      },
+      "permissions": {
+        "title": "Berechtigungen prüfen",
+        "intro": "{name} fordert die folgenden Berechtigungen an. Bei der Installation erhält sie genau diese, bis Sie sie deinstallieren.",
+        "diffSummary": "{missing, plural, one {# Berechtigung} other {# Berechtigungen}} ausgelassen und {unexpected, plural, one {# Berechtigung} other {# Berechtigungen}} nicht angezeigt.",
+        "consent": "Ich habe verstanden und erlaube dieser App, diese Berechtigungen in meinem Workspace zu verwenden.",
+        "consentNone": "Ich habe verstanden, dass {name} keine Berechtigungen anfordert, und möchte sie installieren.",
+        "continue": "Weiter"
+      },
+      "cancel": "Abbrechen",
+      "install": "Installieren",
+      "back": "Zurück",
+      "setup": {
+        "title": "Einrichten",
+        "intro": "Füllen Sie aus, was diese App für die Verbindung benötigt. Schlüssel werden verschlüsselt gespeichert und können nicht wieder angezeigt werden."
+      },
+      "installing": "Wird installiert",
+      "missingPermissions": "Ihnen fehlen diese Berechtigungen:",
+      "seeInstalled": "Installierte Apps anzeigen",
+      "changed": {
+        "title": "Die Berechtigungen haben sich inzwischen geändert",
+        "message": "Prüfen Sie die Liste unten erneut. Es wurde nichts installiert.",
+        "added": "Fordert nun außerdem an:",
+        "removed": "Wird nicht mehr angefordert:",
+        "edited": "Der Wortlaut oder das Risiko einiger Berechtigungen hat sich geändert."
+      },
+      "gaps": {
+        "title": "Sie können nicht alle diese Berechtigungen erteilen",
+        "message": "Durch die Installation erhält niemand mehr Zugriff, als die installierende Person selbst hat. Ihnen scheinen folgende Berechtigungen zu fehlen:"
+      },
+      "done": {
+        "title": "{name} ist installiert",
+        "message": "Version {version} ist jetzt in Ihrem Workspace aktiv.",
+        "saved": "Ich habe es gespeichert, weiter",
+        "manage": "Einstellungen öffnen",
+        "browse": "Zurück zum Marketplace"
+      },
+      "subscribeTitle": "{name} ist eine kostenpflichtige App",
+      "subscribeIntro": "Abonnieren Sie die App, um sie zu installieren. Zur Zahlung des ersten Monats gelangen Sie zum Checkout. Wird eine Testphase angeboten, können Sie sie zuvor kostenlos testen. Sie prüfen und bestätigen die Berechtigungen, bevor etwas installiert wird.",
+      "notForSaleTitle": "{name} ist nicht erhältlich",
+      "goToCheckout": "Zum Checkout"
+    },
+    "setup": {
+      "optionalLabel": "{label} (optional)",
+      "stored": {
+        "notSet": "Nicht festgelegt",
+        "endsIn": "Gespeichert, endet auf {last}",
+        "value": "Ein Wert ist gespeichert",
+        "set": "Gespeichert"
+      },
+      "keepBlank": "Leer lassen, um den gespeicherten Wert zu behalten. Geben Sie einen neuen Wert ein, um ihn zu ersetzen.",
+      "show": "Wert anzeigen",
+      "hide": "Wert ausblenden",
+      "choose": "Auswählen",
+      "clear": "{label} leeren",
+      "problems": {
+        "required": "{label} ist erforderlich.",
+        "pattern": "{label} scheint nicht korrekt zu sein.",
+        "option": "Wählen Sie eine der Optionen für {label}.",
+        "server": "{label} wurde nicht akzeptiert. Prüfen Sie den Wert."
+      }
+    },
+    "reveal": {
+      "title": "Speichern Sie Ihr Verbindungsgeheimnis",
+      "warning": "Dieses Geheimnis wird Ihnen nicht erneut angezeigt. Kopieren Sie es jetzt und bewahren Sie es sicher auf. Falls Sie es verlieren, erneuern Sie das Geheimnis, um ein neues zu erhalten.",
+      "address": "Web-Adresse für den Versand",
+      "secret": "Geheimnis",
+      "copyAddress": "Web-Adresse kopieren",
+      "copySecret": "Geheimnis kopieren",
+      "saved": "Ich habe das Geheimnis und die Adresse gespeichert.",
+      "doneHint": "Aktivieren Sie das Kästchen, um fortzufahren.",
+      "send": {
+        "title": "So senden Sie",
+        "post": "Senden Sie eine POST-Anfrage mit einem JSON-Body an die Adresse.",
+        "token": "Fügen Sie das Geheimnis im Header {header} ein.",
+        "signature": "Alternativ signieren Sie den Body mit HMAC-SHA256 und dem Geheimnis und senden im Header {header} sha256= gefolgt vom Hex-Digest."
+      },
+      "leaveConfirm": "Sie haben nicht bestätigt, dass Sie das Geheimnis gespeichert haben. Wenn Sie jetzt gehen, wird es Ihnen nicht erneut angezeigt. Trotzdem verlassen?"
+    },
+    "portals": {
+      "maturity": {
+        "beta": "Beta",
+        "needsPortalSetup": "Portal-Einrichtung erforderlich",
+        "betaHint": "Auf Basis der teilweisen Dokumentation des Portals erstellt. Sie funktioniert, benötigt nach dem ersten echten Lead aber möglicherweise eine Anpassung.",
+        "needsPortalSetupHint": "Es kommt nichts an, bis das eigene Team des Portals es für Sie aktiviert."
+      },
+      "reveal": {
+        "title": "Speichern Sie Ihre private Adresse",
+        "warning": "Diese Adresse wird Ihnen nicht erneut angezeigt. Sie ist zugleich das Passwort der Verbindung: Wer sie besitzt, kann Leads in Ihren Workspace senden. Kopieren Sie sie jetzt und bewahren Sie sie sicher auf. Falls Sie sie verlieren, erstellen Sie eine neue Adresse; die alte funktioniert dann nicht mehr.",
+        "address": "Ihre private Adresse",
+        "copyAddress": "Private Adresse kopieren",
+        "saved": "Ich habe die Adresse gespeichert.",
+        "sendTitle": "Was der Absender benötigt",
+        "method": "Methode: {methods}",
+        "formats": "Akzeptierte Formate: {formats}",
+        "noHeader": "Mehr wird nicht benötigt: kein Header und keine Signatur. Der letzte Teil der Adresse ist das Passwort.",
+        "managerTitle": "An den Account Manager des Portals senden",
+        "managerIntro": "Das eigene Team von {portal} aktiviert dies, nicht Sie. Kopieren Sie eine fertige Nachricht und senden Sie sie an Ihren dortigen Account Manager.",
+        "copyMessage": "Nachricht für den Account Manager Ihres Portals kopieren",
+        "messageCopied": "Nachricht kopiert",
+        "portalFallback": "das Portal"
+      },
+      "formats": {
+        "json": "JSON",
+        "form": "Formularfelder",
+        "xml": "XML",
+        "query": "Query-String-Parameter"
+      },
+      "message": {
+        "subjectLine": "Betreff: Lead-Zustelladresse für unser {portal}-Konto",
+        "body": "Guten Tag,\n\nbitte beginnen Sie, die Leads unseres {portal}-Kontos an diese private Adresse zu senden:\n\n{address}\n\nBitte senden Sie jeden Lead mit {methods}. Wir akzeptieren die Angaben als {formats}. Die Adresse identifiziert unser Konto bereits, daher sind kein Header, kein Passwort und keine Signatur erforderlich. Bitte behandeln Sie sie vertraulich.\n\nBitte senden Sie uns einen Test-Lead, sobald die Übermittlung aktiviert ist, damit wir bestätigen können, dass er ankommt.\n\nVielen Dank."
+      },
+      "connection": {
+        "nextPoll": "Nächste Prüfung",
+        "notScheduled": "Nicht geplant",
+        "syncedThrough": "Leads abgerufen bis",
+        "syncedNever": "Noch nichts abgerufen",
+        "errorHint": "Geben Sie den Schlüssel unter Zugangsdaten erneut ein oder klicken Sie auf Jetzt synchronisieren.",
+        "errorHintNoSync": "Geben Sie den Schlüssel unter Zugangsdaten erneut ein.",
+        "rotatePath": "Neue Adresse erstellen",
+        "rotatePathConfirm": {
+          "title": "Neue Adresse erstellen?",
+          "message": "Es wird eine neue private Adresse erstellt, und die alte funktioniert sofort nicht mehr. Alles, was noch an die alte Adresse sendet, wird abgelehnt, bis das Team des Portals die neue erhält. Die neue Adresse wird Ihnen nur einmal angezeigt.",
+          "confirm": "Neue Adresse erstellen"
+        },
+        "waiting": {
+          "title": "Warten auf den ersten Lead von {portal}",
+          "message": "Das eigene Team von {portal} muss dies aktivieren. Es kommt nichts an, bis an die Adresse Ihrer Verbindung gesendet wird. Stellen Sie sicher, dass Ihr dortiger Account Manager die Adresse hat, und bitten Sie um einen Test-Lead."
+        },
+        "path": {
+          "address": "Private Adresse",
+          "maskedNote": "Der letzte Teil der Adresse ist ihr Passwort. Es wird einmal angezeigt, wenn Sie installieren oder eine neue Adresse erstellen. Daher wird hier nur das Ende angezeigt.",
+          "method": "Methode: {methods}",
+          "formats": "Akzeptierte Formate: {formats}",
+          "noHeader": "Kein Header und keine Signatur erforderlich. Die Adresse ist das Passwort: Bewahren Sie sie vertraulich auf.",
+          "newAddressHint": "Adresse verloren oder möchten Sie verhindern, dass sie weiter genutzt wird? Erstellen Sie unten eine neue Adresse. Die alte funktioniert sofort nicht mehr, und das Team des Portals muss die neue erhalten."
+        }
+      },
+      "sync": {
+        "button": "Jetzt synchronisieren",
+        "needsActive": "Nehmen Sie die App wieder in Betrieb, um jetzt zu synchronisieren.",
+        "scheduledNow": "Synchronisierung geplant. Sie beginnt sofort.",
+        "scheduled": "Synchronisierung geplant für {time}.",
+        "waits": "Das Portal erlaubt eine Anfrage alle {interval}, daher muss diese Synchronisierung bis dahin warten.",
+        "duration": {
+          "seconds": "{count, plural, one {# Sekunde} other {# Sekunden}}",
+          "minutes": "{count, plural, one {# Minute} other {# Minuten}}",
+          "hours": "{count, plural, one {# Stunde} other {# Stunden}}"
+        }
+      }
+    },
+    "installed": {
+      "title": "Installiert",
+      "filters": {
+        "kind": "Typ",
+        "status": "Status",
+        "all": "Alle"
+      },
+      "kind": {
+        "mini_app": "Mini-App",
+        "integration": "Integration"
+      },
+      "status": {
+        "active": "Installiert",
+        "disabled": "Pausiert",
+        "killed": "Von der Plattform angehalten"
+      },
+      "listLabel": "Installierte Apps",
+      "emptyFiltered": {
+        "title": "Keine Treffer für diese Filter",
+        "message": "Ändern Sie die Filter, um Ihre übrigen installierten Apps zu sehen."
+      },
+      "empty": {
+        "title": "Noch nichts installiert",
+        "message": "Durchsuchen Sie den Marketplace, um eine Mini-App hinzuzufügen oder einen Dienst zu verbinden.",
+        "integrations": "Integrationen durchsuchen",
+        "apps": "Mini-Apps durchsuchen"
+      },
+      "usage": {
+        "unlimited": "{installed} installiert. Ihr Tarif hat kein Limit.",
+        "of": "{installed} von {limit} installiert",
+        "remaining": "{count, plural, one {# Platz frei} other {# Plätze frei}}",
+        "atCap": "Sie haben das Limit Ihres Tarifs erreicht. Deinstallieren Sie eine App oder wechseln Sie in einen höheren Tarif, um eine weitere zu installieren.",
+        "upgrade": "Tarife ansehen und wechseln",
+        "nearCap": "Sie nähern sich dem Limit Ihres Tarifs."
+      },
+      "version": "Version {version}",
+      "killReason": "Grund: {reason}",
+      "lastError": "Letzter Fehler: {error}",
+      "pending": "Version {version} wartet darauf, dass Sie ihre neuen Berechtigungen akzeptieren.",
+      "installedOn": "Installiert am {date}",
+      "review": "Prüfen",
+      "manage": "Verwalten",
+      "subscriptions": {
+        "title": "Abonnements",
+        "intro": "Ihre kostenpflichtigen Apps und Testphasen, einschließlich deinstallierter Apps, deren bezahlter Zeitraum noch läuft.",
+        "listLabel": "Abonnements",
+        "manage": "Verwalten",
+        "viewApp": "App anzeigen"
+      }
+    },
+    "manage": {
+      "backToInstalled": "Zurück zu Installiert",
+      "notFound": {
+        "title": "Installation nicht gefunden",
+        "message": "Diese App ist in Ihrem Workspace nicht installiert oder wurde deinstalliert."
+      },
+      "version": "Version {version}",
+      "checkedAt": "Zuletzt geprüft am {date}",
+      "notChecked": "Noch nicht geprüft. Verwenden Sie Verbindung testen, um zu prüfen.",
+      "lastError": "Letzter Fehler: {error}",
+      "viewListing": "Eintrag anzeigen",
+      "resume": "Fortsetzen",
+      "pause": "Pausieren",
+      "toast": {
+        "resumed": "App fortgesetzt.",
+        "paused": "App pausiert.",
+        "consented": "Neue Berechtigungen akzeptiert. Jetzt auf Version {version}.",
+        "uninstalled": "{name} wurde deinstalliert."
+      },
+      "killed": {
+        "title": "Von der Plattform angehalten",
+        "message": "Diese App wurde für alle deaktiviert. Sie können sie nur deinstallieren.",
+        "reason": "Grund: {reason}"
+      },
+      "paused": {
+        "title": "Pausiert",
+        "message": "Eine pausierte App tut nichts, und ihre Web-Adresse nimmt keine Zustellungen an, bis Sie sie fortsetzen."
+      },
+      "permissions": {
+        "title": "Erteilte Berechtigungen",
+        "intro": "Was diese App derzeit in Ihrem Workspace tun kann."
+      },
+      "reconsent": {
+        "title": "Version {version} fordert neue Berechtigungen an",
+        "message": "Diese App läuft weiter auf Version {current}, bis Sie die Berechtigungen von Version {version} akzeptieren.",
+        "newScopes": "Neue Berechtigungen",
+        "fullList": "Die vollständige Liste für die neue Version",
+        "accept": "Neue Berechtigungen akzeptieren"
+      },
+      "problem": {
+        "conflictTitle": "Zwischenzeitlich geändert",
+        "conflictMessage": "Jemand anderes hat diese App geändert. Laden Sie neu, um den aktuellen Stand zu sehen, und nehmen Sie Ihre Änderung dann erneut vor.",
+        "reload": "Neu laden",
+        "consentTitle": "Die Berechtigungen haben sich geändert",
+        "consentMessage": "Die Berechtigungsliste hat sich seit dem Öffnen dieser Seite geändert. Laden Sie neu, um die aktuelle Liste zu sehen."
+      },
+      "credentials": {
+        "title": "Zugangsdaten und Einstellungen",
+        "intro": "Eine Eingabe ersetzt einen gespeicherten Wert. Lassen Sie ein Feld leer, um den gespeicherten Wert zu behalten. Gespeicherte Schlüssel werden nie erneut angezeigt.",
+        "readOnly": "Was für diese App gespeichert ist. Schlüssel werden nie angezeigt.",
+        "saved": "Einstellungen gespeichert.",
+        "nothingToSave": "Noch nichts zu speichern.",
+        "save": "Änderungen speichern",
+        "missing": "Füllen Sie die Pflichtfelder aus.",
+        "invalid": "Einige Werte wurden nicht akzeptiert."
+      },
+      "connection": {
+        "title": "Verbindung",
+        "intro": "Wie diese App mit Ihrem Workspace kommuniziert und wie es ihr geht.",
+        "type": "Typ",
+        "types": {
+          "oauth": "Anmeldung",
+          "push": "Sendet Daten an Sie",
+          "pull": "Wir rufen ihre Daten ab",
+          "email_parse": "Benachrichtigungs-E-Mails",
+          "webhook_relay": "Web-Adresse und Geheimnis",
+          "client": "Von jedem Mitglied installiert"
+        },
+        "status": "Verbindungsstatus",
+        "statuses": {
+          "active": "Aktiv",
+          "paused": "Pausiert",
+          "error": "Fehler",
+          "disabled": "Deaktiviert"
+        },
+        "pollEvery": "Prüft alle",
+        "seconds": "{count, plural, one {# Sekunde} other {# Sekunden}}",
+        "lastEvent": "Letzte Zustellung",
+        "lastSuccess": "Letzter Erfolg",
+        "lastError": "Letzter Fehler",
+        "never": "Nie",
+        "counters": {
+          "received": "Empfangen",
+          "accepted": "Akzeptiert",
+          "duplicates": "Duplikate",
+          "failed": "Fehlgeschlagen"
+        },
+        "inbound": {
+          "address": "Web-Adresse für den Versand",
+          "copyAddress": "Web-Adresse kopieren",
+          "method": "Senden Sie eine POST-Anfrage mit einem JSON-Body.",
+          "token": "Fügen Sie das Geheimnis im Header {header} ein.",
+          "signature": "Alternativ signieren Sie den Body mit HMAC-SHA256 und senden im Header {header} sha256= gefolgt vom Hex-Digest.",
+          "secretEndsIn": "Das Geheimnis endet auf {last}. Es kann nicht erneut angezeigt werden.",
+          "secretSet": "Ein Geheimnis ist gesetzt. Es kann nicht erneut angezeigt werden."
+        },
+        "actions": {
+          "test": "Verbindung testen",
+          "sample": "Beispiel-Lead senden",
+          "rotate": "Geheimnis erneuern",
+          "sampleNeedsActive": "Nehmen Sie die App wieder in Betrieb, um einen Beispiel-Lead zu senden.",
+          "testOk": "Die Verbindung funktioniert.",
+          "testFailed": "Der Verbindungstest ist fehlgeschlagen.",
+          "latency": "{ms} ms",
+          "sampleAccepted": "Beispiel-Lead akzeptiert. Er existiert nun als echter Lead.",
+          "sampleDuplicate": "Dieser Beispiel-Lead wurde bereits empfangen.",
+          "rotatedDone": "Ich habe es gespeichert, weiter",
+          "rotateNotApplicable": "Das Geheimnis dieser Verbindung ist ein Schlüssel des anderen Dienstes. Ändern Sie ihn stattdessen unter Zugangsdaten und Einstellungen.",
+          "rotateConfirm": {
+            "title": "Verbindungsgeheimnis erneuern?",
+            "message": "Ein neues Geheimnis wird erstellt, und das alte funktioniert sofort nicht mehr. Alles, was noch mit dem alten Geheimnis sendet, wird abgelehnt, bis Sie ihm das neue geben. Das neue Geheimnis wird Ihnen nur einmal angezeigt.",
+            "confirm": "Geheimnis erneuern",
+            "cancel": "Abbrechen"
+          }
+        }
+      },
+      "events": {
+        "title": "Letzte Zustellungen",
+        "intro": "Die zuletzt von dieser Verbindung empfangenen Ereignisse, neueste zuerst.",
+        "refresh": "Aktualisieren",
+        "empty": {
+          "title": "Noch keine Zustellungen",
+          "message": "Sobald der andere Dienst etwas sendet oder Sie einen Beispiel-Lead senden, wird es hier angezeigt."
+        },
+        "columns": {
+          "received": "Empfangen",
+          "status": "Ergebnis",
+          "externalId": "Zustellungs-ID",
+          "error": "Grund"
+        },
+        "status": {
+          "accepted": "Akzeptiert",
+          "duplicate": "Duplikat",
+          "rejected": "Abgelehnt",
+          "failed": "Fehlgeschlagen"
+        },
+        "loadMore": "Mehr laden"
+      },
+      "pauseConfirm": {
+        "title": "{name} pausieren?",
+        "message": "Sie funktioniert erst wieder, wenn Sie sie fortsetzen. Ihre Web-Adresse nimmt in der Zwischenzeit keine Zustellungen an.",
+        "confirm": "Pausieren",
+        "cancel": "Abbrechen"
+      },
+      "uninstall": {
+        "section": "Deinstallieren",
+        "sectionIntro": "Diese App aus Ihrem Workspace entfernen.",
+        "open": "Deinstallieren",
+        "title": "{name} deinstallieren?",
+        "confirm": "Deinstallieren",
+        "cancel": "Abbrechen",
+        "effect": "Ihr Zugriff endet sofort.",
+        "effectConnection": "Ihr Zugriff endet sofort, und ihre Web-Adresse antwortet nicht mehr.",
+        "dataLegend": "Was soll mit den von ihr erstellten Daten geschehen?",
+        "choices": {
+          "keep": {
+            "label": "Von ihr erstellte Daten behalten",
+            "help": "Von ihr hinzugefügte Kontakte und Datensätze bleiben in Ihrem Workspace."
+          },
+          "delete": {
+            "label": "Von ihr erstellte Daten löschen",
+            "help": "Wir protokollieren Ihre Anfrage und informieren die Bereiche des Produkts, die diese Daten verwalten."
+          }
+        },
+        "honestNote": "Derzeit bleiben Kontakte, die diese App bereits erstellt hat, unabhängig von Ihrer Wahl in Ihrem Workspace. Ihre Auswahl wird für die Bereiche erfasst, die Daten löschen werden.",
+        "irreversible": "Dies kann nicht rückgängig gemacht werden. Um die App erneut zu nutzen, installieren Sie sie erneut.",
+        "renewal": {
+          "title": "Diese App hat ein kostenpflichtiges Abonnement",
+          "message": "Mit der Deinstallation wird die Verlängerung beendet, sodass keine weiteren Kosten anfallen. Der bereits bezahlte Zeitraum bleibt Ihnen erhalten, daher können Sie die App vor dessen Ende kostenlos erneut installieren.",
+          "messageUntil": "Mit der Deinstallation wird die Verlängerung beendet, sodass keine weiteren Kosten anfallen. Der bereits bezahlte Zeitraum bleibt Ihnen bis {date} erhalten, daher können Sie die App bis dahin kostenlos erneut installieren."
+        }
+      },
+      "subscription": {
+        "title": "Abonnement",
+        "subscribeTitle": "Abonnieren Sie, um {name} weiter zu nutzen",
+        "subscribeIntro": "Dies ist eine kostenpflichtige App, und für Ihren Workspace besteht noch kein Abonnement dafür.",
+        "included": "Ihr Tarif enthält diese App, daher fallen keine Kosten an."
+      },
+      "subscriptionEnded": {
+        "title": "Abonnement beendet",
+        "message": {
+          "resubscribe": "{name} ist pausiert, da das Abonnement beendet wurde. Ihre Daten und Einstellungen bleiben erhalten. Abonnieren Sie erneut, um die App wieder zu aktivieren.",
+          "notForSale": "{name} ist pausiert, da das Abonnement beendet wurde, und wird nicht mehr verkauft, daher kann sie nicht wieder aktiviert werden. Ihre Daten und Einstellungen bleiben erhalten.",
+          "resumable": "{name} ist pausiert, da das Abonnement beendet wurde, Ihr Workspace hat jedoch wieder Zugriff darauf. Setzen Sie die App fort, um sie wieder zu aktivieren."
+        },
+        "resubscribe": "Erneut abonnieren",
+        "resume": "Fortsetzen",
+        "noCheckout": "Der Checkout ist derzeit nicht verfügbar. Versuchen Sie es in einem Moment erneut."
+      }
+    },
+    "requests": {
+      "title": "Anfragen",
+      "form": {
+        "title": "Etwas anfragen",
+        "intro": "Nicht aufgeführt? Sagen Sie uns, was Sie benötigen. Wenn jemand bereits danach gefragt hat, zählt Ihre Anfrage als Stimme.",
+        "name": "Name",
+        "namePlaceholder": "Zum Beispiel der Name eines Dienstes",
+        "kind": "Typ",
+        "kinds": {
+          "mini_app": "Mini-App",
+          "integration": "Integration"
+        },
+        "category": "Kategorie",
+        "categoryHint": "Optional.",
+        "anyCategory": "Nicht sicher",
+        "website": "Website",
+        "websiteHint": "Optional. Vollständige https://-Adresse.",
+        "note": "Wofür benötigen Sie es?",
+        "noteHint": "Nur für das Plattform-Team sichtbar",
+        "problems": {
+          "nameShort": "Geben Sie mindestens 2 Zeichen ein.",
+          "nameLong": "Verwenden Sie höchstens 80 Zeichen.",
+          "websiteInvalid": "Geben Sie eine vollständige https://-Adresse ein.",
+          "noteLong": "Verwenden Sie höchstens 500 Zeichen.",
+          "server": "Dies wurde nicht akzeptiert. Prüfen Sie den Wert."
+        },
+        "result": {
+          "created": {
+            "title": "Anfrage hinzugefügt: {name}",
+            "message": "Vielen Dank. Andere Workspaces können nun dafür abstimmen."
+          },
+          "counted": {
+            "title": "{name} wurde bereits angefragt",
+            "message": "Ihre Anfrage wurde als Stimme dafür gezählt."
+          }
+        },
+        "submit": "Anfrage senden"
+      },
+      "list": {
+        "title": "Was andere angefragt haben",
+        "intro": "Stimmen Sie für das ab, was Sie möchten. Die meistgewünschten werden zuerst umgesetzt.",
+        "searchLabel": "Anfragen durchsuchen",
+        "searchPlaceholder": "Anfragen durchsuchen",
+        "kind": "Typ",
+        "allKinds": "Alle Typen",
+        "kinds": {
+          "mini_app": "Mini-App",
+          "integration": "Integration"
+        },
+        "status": "Status",
+        "allStatuses": "Alle Status",
+        "statuses": {
+          "open": "Offen",
+          "planned": "Geplant",
+          "building": "In Entwicklung",
+          "shipped": "Veröffentlicht",
+          "declined": "Abgelehnt"
+        },
+        "sort": "Sortieren nach",
+        "sorts": {
+          "votes": "Meiste Stimmen",
+          "new": "Neueste"
+        },
+        "emptyFiltered": {
+          "title": "Keine passenden Anfragen",
+          "message": "Ändern Sie die Filter oder stellen Sie die Anfrage selbst."
+        },
+        "empty": {
+          "title": "Noch keine Anfragen",
+          "message": "Stellen Sie die erste Anfrage."
+        },
+        "loadMore": "Mehr laden",
+        "votes": "{count, plural, one {# Stimme} other {# Stimmen}}",
+        "voted": "Abgestimmt",
+        "vote": "Abstimmen"
+      }
+    },
+    "pricing": {
+      "title": "Preise",
+      "freeNote": "Keine Kosten für Installation oder Nutzung.",
+      "included": {
+        "planFeature": "Ihr Tarif enthält diese App, daher fallen keine Kosten an.",
+        "minPlan": "Ihr Tarif oder ein höherer Tarif enthält diese App, daher fallen keine Kosten an.",
+        "plan": "Ihr Tarif enthält diese App, daher fallen keine Kosten an."
+      },
+      "needsPurchase": "Im Katalog Ihres Tarifs enthalten. Zur Nutzung müssen Sie sie kaufen.",
+      "subscribedNote": "Ihr Workspace hat ein Abonnement für diese App.",
+      "trialOffer": "Testen Sie sie {days, plural, one {# Tag} other {# Tage}} kostenlos. Es fallen keine Kosten an, bis Sie sich entscheiden, ein Abonnement abzuschließen.",
+      "prepaidNote": "Die Abrechnung erfolgt monatlich über die Abrechnung Ihres Workspace. Jede Zahlung deckt einen Monat ab und wird nicht automatisch belastet: Zahlen Sie vor dem angezeigten Datum erneut, damit die App weiterläuft.",
+      "notForSale": {
+        "title": "Nicht erhältlich",
+        "message": "Diese App wird derzeit nicht an neue Abonnenten verkauft."
+      }
+    },
+    "subscribe": {
+      "subscribe": "Abonnieren",
+      "startTrial": "{days}-tägige kostenlose Testphase starten",
+      "hintPrice": "{price} pro Monat, zahlbar im Checkout. Jede Zahlung deckt einen Monat ab.",
+      "hint": "Im Checkout zahlen Sie jeweils für einen Monat.",
+      "working": "Wird verarbeitet",
+      "noCheckout": "Der Checkout ist für diese App derzeit nicht verfügbar. Versuchen Sie es in einem Moment erneut.",
+      "toast": {
+        "trial_started": "Kostenlose Testphase von {name} gestartet.",
+        "included": "{name} ist in Ihrem Tarif enthalten.",
+        "already_entitled": "Ihr Workspace hat bereits Zugriff auf {name}.",
+        "free": "{name} ist kostenlos."
+      }
+    },
+    "subscription": {
+      "title": "Abonnement",
+      "status": {
+        "active": "Aktiv",
+        "trialing": "Kostenlose Testphase",
+        "comped": "Kostenlos bereitgestellt",
+        "canceling": "Keine Verlängerung",
+        "ended": "Beendet"
+      },
+      "date": {
+        "paidUntil": "Bezahlt bis {date}",
+        "trialEnds": "Kostenlose Testphase endet am {date}",
+        "compUntil": "Kostenloser Zugang bis {date}",
+        "compOpen": "Kostenloser Zugang ohne Enddatum",
+        "cancelingUntil": "Keine Verlängerung. Aktiv bis {date}",
+        "endedOn": "Abonnement beendet am {date}",
+        "endedNoDate": "Abonnement beendet"
+      },
+      "lastPayment": "Letzte Zahlung: {price} pro Monat",
+      "nextPayment": "Der Preis dieser App hat sich geändert. Ihre nächste Zahlung beträgt {price} pro Monat.",
+      "compNote": "Das Plattform-Team hat Ihnen diesen Zugang gewährt. Er kann hier nicht gekündigt werden.",
+      "renewHint": "Ein bezahlter Monat wird nicht automatisch verlängert. Verlängern Sie vor dem angezeigten Datum, damit die App ohne Unterbrechung weiterläuft.",
+      "actions": {
+        "renew": "Jetzt verlängern",
+        "resubscribe": "Erneut abonnieren",
+        "subscribe": "Jetzt abonnieren",
+        "resume": "Abonnement fortsetzen",
+        "cancel": "Abonnement kündigen"
+      },
+      "cancelConfirm": {
+        "title": "Abonnement für {name} kündigen?",
+        "message": "{name} bleibt bis {date} aktiv und wird danach pausiert. Ihre Daten und Einstellungen bleiben erhalten.",
+        "messageNoDate": "{name} bleibt bis zum Ende des bezahlten Zeitraums aktiv und wird danach pausiert. Ihre Daten und Einstellungen bleiben erhalten.",
+        "afterwards": "Es fallen keine weiteren Kosten an, und Sie können jederzeit erneut abonnieren.",
+        "confirm": "Abonnement kündigen",
+        "keep": "Abonnement behalten"
+      },
+      "toast": {
+        "canceled": "Abonnement gekündigt. Es bleibt bis {date} aktiv.",
+        "canceledNoDate": "Abonnement gekündigt. Es bleibt bis zum Ende des bezahlten Zeitraums aktiv.",
+        "resumed": "Abonnement fortgesetzt."
+      },
+      "working": "Wird verarbeitet",
+      "noCheckout": "Der Checkout ist für diese App derzeit nicht verfügbar. Versuchen Sie es in einem Moment erneut."
+    }
+  }
+}

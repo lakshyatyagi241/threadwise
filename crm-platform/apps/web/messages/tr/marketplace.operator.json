@@ -1,0 +1,924 @@
+{
+  "marketplace": {
+    "operator": {
+      "nav": {
+        "group": "Pazar yeri",
+        "catalogue": "Katalog",
+        "categories": "Kategoriler",
+        "requests": "Talepler",
+        "usage": "Kullanım"
+      },
+      "common": {
+        "loading": "Yükleniyor...",
+        "requestId": "Talep kimliği",
+        "retry": "Tekrar dene",
+        "noPermissions": "İzin yok"
+      },
+      "enums": {
+        "kind": {
+          "mini_app": "Mini uygulama",
+          "integration": "Entegrasyon"
+        },
+        "appStatus": {
+          "draft": "Taslak",
+          "in_review": "İncelemede",
+          "published": "Yayımlandı",
+          "hidden": "Gizli",
+          "killed": "Öldürüldü"
+        },
+        "versionStatus": {
+          "draft": "Taslak",
+          "in_review": "İncelemede",
+          "approved": "Onaylandı",
+          "rejected": "Reddedildi",
+          "published": "Yayımlandı",
+          "retired": "Emekliye ayrıldı"
+        },
+        "requestStatus": {
+          "open": "Açık",
+          "planned": "Planlandı",
+          "building": "Geliştiriliyor",
+          "shipped": "Yayımlandı",
+          "declined": "Reddedildi"
+        },
+        "connector": {
+          "oauth": "OAuth ile oturum açma",
+          "push": "Push (portal bize gönderir)",
+          "pull": "Pull (portalı biz sorgularız)",
+          "email_parse": "E-posta ayrıştırma",
+          "webhook_relay": "Webhook aktarımı",
+          "client": "İstemci (üyeler tarafından kurulur)"
+        },
+        "risk": {
+          "low": "Düşük risk",
+          "medium": "Orta risk",
+          "high": "Yüksek risk"
+        },
+        "subscriptionStatus": {
+          "active": "Ödeyen",
+          "trialing": "Denemede",
+          "comped": "Ücretsiz erişim",
+          "canceling": "Sona eriyor",
+          "ended": "Sona erdi"
+        },
+        "subscriptionSource": {
+          "purchase": "Satın alma",
+          "trial": "Deneme",
+          "comp": "Ücretsiz erişim"
+        }
+      },
+      "errors": {
+        "conflict": "Bunlara bakarken başkası bunu değiştirdi. Onların sürümünü görmek için yenileyin, ardından değişikliğinizi tekrar yapın.",
+        "noAccess": "Bunun için {permission} platform iznine ihtiyacınız var.",
+        "manifestInvalid": "Manifest, manifest v1 biçimine uymuyor. Her sorun yoluyla birlikte listelenir.",
+        "recipeInvalid": "Tarif, tarif biçimine uymuyor veya manifestle eşleşmiyor. Her sorun yoluyla birlikte listelenir.",
+        "urlRefused": "Tarifteki bir adres reddedildi: {detail}.",
+        "urlRefusedPlain": "Tarifteki bir adres reddedildi. Adresler https olmalı, herkese açık bir DNS adı olmalı, varsayılan bağlantı noktasında olmalı ve kimlik bilgisi içermemelidir.",
+        "connectorNotAvailable": "{type} bağlayıcı türü henüz uygulanmadı, bu yüzden bu listeleme yayımlanamaz. Çalışmayan hiçbir şey bir çalışma alanına ulaşmaz.",
+        "slugTaken": "Başka bir listeleme veya kategori bu kimliği zaten kullanıyor. Farklı bir kimlik seçin.",
+        "categoryGone": "Bu kategori artık yok. Listeyi yenileyin.",
+        "categoryUnknown": "Manifestte belirtilen kategori bu uygulama türü için yok veya kapalı. Kategoriler sayfasından birini seçin.",
+        "categoryInUse": "Bu kategoride uygulamalar listelenmiş. Önce bunları başka bir kategoriye taşıyın veya çalışma alanlarından gizlemek için kategoriyi kapatın.",
+        "versionState": "Listeleme veya sürüm {status} durumundayken buna izin verilmez. Güncel durumunu görmek için yenileyin.",
+        "versionStatePlain": "Listelemenin veya sürümün mevcut durumunda buna izin verilmez. Güncel durumunu görmek için yenileyin.",
+        "versionExists": "Sürüm numarası, şimdiye kadarki en yüksek sürüm olan {newest} değerinden büyük olmalı.",
+        "versionExistsPlain": "Bu sürüm numarası zaten var. Daha yüksek bir numara kullanın.",
+        "appUnavailable": "Kapatılmış bir listeleme yayımlanamaz. Önce geri yükleyin, sonra yayımlayın.",
+        "appNotFound": "Bu listeleme yok. Silinmiş olabilir.",
+        "notFound": "Bu öğe bulunamadı. Silinmiş olabilir.",
+        "rateLimited": "Çok fazla istek. {seconds} saniye bekleyip tekrar deneyin.",
+        "rateLimitedPlain": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+        "validationFields": "Bazı alanlar geçerli değil. Her sorun alanıyla birlikte listelenir.",
+        "validation": "İstek geçerli değildi.",
+        "request": "İstek tamamlanamadı.",
+        "unexpected": "Tarafımızda bir sorun oluştu. Tekrar deneyin; devam ederse istek kimliğini belirtin.",
+        "subscriptionState": "Aboneliğin mevcut durumunda bu mümkün değil. Zaten ödeyen bir çalışma alanına ücretsiz erişim verilemez (önce aboneliğini iptal edin), ücretsiz bir uygulamanın verilecek bir şeyi yoktur ve sona ermiş bir abonelik tekrar iptal edilemez.",
+        "subscriptionNotFound": "Bu abonelik bulunamadı. Kaldırılmış olabilir. Listeyi yenileyin."
+      },
+      "list": {
+        "title": "Pazar yeri kataloğu",
+        "description": "Tüm durumlardaki her listeleme: mini uygulamalar ve entegrasyonlar, sürümleri ve kaç çalışma alanına kurulu olduklarını gösterir.",
+        "new": "Yeni listeleme",
+        "subscriptionsLink": "Abonelikler ve gelir",
+        "kpi": {
+          "label": "Duruma göre listelemeler",
+          "loaded": "Yüklendi",
+          "published": "Yayımlandı",
+          "inReview": "İncelemede",
+          "hidden": "Gizli",
+          "killed": "Öldürüldü",
+          "note": "Sayılar yalnızca şimdiye kadar yüklenen {count} listelemeyi kapsar, tüm kataloğu değil.",
+          "noteMore": "Daha fazlası mevcut: Daha fazla yükle'yi kullanın."
+        },
+        "filters": {
+          "label": "Filtreler",
+          "search": "Ara",
+          "searchPlaceholder": "Ad veya kimlik",
+          "kind": "Tür",
+          "allKinds": "Tüm türler",
+          "status": "Durum",
+          "allStatuses": "Tüm durumlar",
+          "category": "Kategori",
+          "allCategories": "Tüm kategoriler",
+          "categoryNote": "Yalnızca zaten yüklenmiş listelemeleri filtreler: API'nin kategori filtresi yok.",
+          "pricing": "Fiyatlandırma",
+          "allPricing": "Tüm fiyatlandırmalar",
+          "free": "Ücretsiz",
+          "paid": "Ücretli"
+        },
+        "cols": {
+          "app": "Uygulama",
+          "kind": "Tür",
+          "category": "Kategori",
+          "status": "Durum",
+          "versions": "Sürümler",
+          "installs": "Kurulumlar",
+          "planFeature": "Plan özelliği",
+          "pricing": "Fiyatlandırma",
+          "subscriptions": "Etkin abonelikler"
+        },
+        "badges": {
+          "firstParty": "Birinci taraf",
+          "featured": "Öne çıkan"
+        },
+        "versionPublished": "Yayımlandı",
+        "versionLatest": "En son",
+        "dash": "-",
+        "everyPlan": "Tüm planlar",
+        "killedReason": "Kapatıldı: {reason}",
+        "loadMore": "Daha fazla yükle",
+        "clearFilters": "Filtreleri temizle",
+        "emptyTitle": "Henüz listeleme yok",
+        "emptyMessage": "Kataloğu başlatmak için ilk listelemeyi oluşturun.",
+        "noMatchTitle": "Hiçbir listeleme eşleşmiyor",
+        "noMatchMessage": "Bu filtrelerle eşleşen bir şey yok. Farklı filtreler deneyin.",
+        "noMatchMoreMessage": "Şimdiye kadar yüklenen listelemelerin hiçbiri eşleşmiyor. Daha fazlası mevcut: yükleyin veya filtreleri değiştirin.",
+        "tableCaption": "Pazar yeri listelemeleri",
+        "viewSubscriptions": "{name} abonelikleri"
+      },
+      "new": {
+        "title": "Yeni listeleme",
+        "description": "İlk sürümüyle birlikte taslak bir listeleme oluşturun. Bir inceleyici onaylayıp yayımlayana kadar hiçbir şey çalışma alanına ulaşmaz.",
+        "back": "Kataloğa dön",
+        "sections": {
+          "docs": "Manifest ve tarif",
+          "docsHelp": "Manifest, uygulamanın kim olduğunu, neler yapabileceğini ve hangi bağlayıcıyı kullandığını belirtir. Bir entegrasyonun ayrıca bir tarife ihtiyacı vardır. Her ikisi de siz yazarken, sunucunun uyguladığı kurallarla kontrol edilir.",
+          "changelog": "İlk sürüm notları",
+          "changelogHelp": "Yöneticilere ilk sürümün neler içerdiği olarak gösterilir."
+        },
+        "changelog": "Değişiklik günlüğü",
+        "changelogHint": "İsteğe bağlı, en fazla {max} karakter. Boş bırakılırsa İlk sürüm olarak yazılır.",
+        "save": "Listeleme oluştur",
+        "saving": "Oluşturuluyor...",
+        "cancel": "Vazgeç",
+        "created": "{name} listelemesi taslak olarak oluşturuldu.",
+        "draftNote": "Listeleme taslak olarak başlar. Sürümünü listeleme sayfasından incelemeye gönderin."
+      },
+      "editor": {
+        "cancel": "Vazgeç",
+        "format": "Biçim",
+        "problemCount": "{count, plural, other {# düzeltilecek sorun}}",
+        "valid": {
+          "manifest": "Geçerli manifest v1.",
+          "recipe": "Geçerli tarif."
+        },
+        "manifest": {
+          "label": "Manifest (JSON)",
+          "hint": "Manifest v1: id, name, kind, category, version, description, scopes, pricing, support, connector."
+        },
+        "recipe": {
+          "label": "Tarif (JSON)",
+          "hint": "Bir entegrasyonun bağlayıcı tarifi: connector, authFields, mapping, rateLimits, errorMapping, setupInstructions, testPayloads.",
+          "insertStarter": "Başlangıç tarifi ekle"
+        },
+        "scopes": {
+          "title": "Bu sürümün istediği izinler",
+          "help": "Bir yönetici sizden bunları düz bir dille kabul etmesini ister. Çalışan en az sayıda izin isteyin."
+        },
+        "templates": {
+          "title": "Bir şablondan başlayın",
+          "help": "Her iki düzenleyiciyi de, sonra düzenleyeceğiniz geçerli bir başlangıç noktasıyla doldurur.",
+          "mini_app": "Mini uygulama",
+          "webhook_relay": "Entegrasyon: webhook aktarımı",
+          "push": "Entegrasyon: push",
+          "replaceTitle": "Düzenleyicilerdeki içerik değiştirilsin mi?",
+          "replaceBody": "Yazdığınız manifest ve tarif şablonla değiştirilecek.",
+          "replaceAction": "Değiştir"
+        },
+        "problems": {
+          "listLabel": "Sorunlar",
+          "errorLabel": "Hata:",
+          "warningLabel": "Uyarı:",
+          "syntax": "Geçerli JSON değil.",
+          "syntaxAt": "Geçerli JSON değil, {line}. satır, {column}. sütun yakınında.",
+          "empty": "Bu belge boş.",
+          "recipeNotAllowed": "Mini uygulamanın tarifi yok: bu düzenleyiciyi temizleyin.",
+          "recipeMissing": "Bir entegrasyonun incelemeye gönderilmeden önce tarifine ihtiyacı var.",
+          "recipeKeyMismatch": "Manifest kimliğiyle aynı olmalı: {expected}.",
+          "recipeCategoryMismatch": "Manifest kategorisiyle aynı olmalı: {expected}.",
+          "recipeConnectorMismatch": "Manifest bağlayıcı türüyle aynı olmalı: {expected}.",
+          "idChanged": "Mevcut bir listelemenin kimliği değiştirilemez: {expected} olarak kalmalı.",
+          "kindChanged": "Mevcut bir listelemenin türü değiştirilemez: {expected} olarak kalmalı.",
+          "versionNotHigher": "Sürüm, şimdiye kadarki en yüksek sürüm olan {newest} değerinden büyük olmalı.",
+          "versionTaken": "Bu listelemenin başka bir sürümü zaten {version} kullanıyor.",
+          "categoryUnknown": "Etkin {kind} kategorisi {category} yok. Kategoriler sayfasını kontrol edin.",
+          "categoryRefused": "Sunucu bu kategoriyi reddetti: bu tür için yok veya kapalı.",
+          "recipeRequired": "Bir entegrasyonun tarifi olmalı.",
+          "slugTaken": "Başka bir listeleme bu kimliği zaten kullanıyor."
+        }
+      },
+      "fields": {
+        "sections": {
+          "page": "Listeleme sayfası",
+          "pageHelp": "Yönetici uygulama sayfasında ne okur.",
+          "screenshots": "Ekran görüntüleri",
+          "screenshotsHelp": "Uygulama sayfasında en fazla {max} görsel gösterilir. Yalnızca https bağlantıları.",
+          "data": "Veri işleme bildirimi",
+          "dataHelp": "Uygulamanın neyi, nerede sakladığı ve nasıl silindiği: uygulama sayfasında gösterilen açıklama.",
+          "placement": "Sıralama ve erişim",
+          "placementHelp": "Nasıl sıralandığı ve hangi planın kurabileceği."
+        },
+        "tagline": "Slogan",
+        "taglineHint": "{count} / {max} karakter (en az 5).",
+        "logo": "Logo adresi",
+        "logoHint": "Bir https görsel bağlantısı. Olmayan bir entegrasyon, tarifindeki logoyu kullanır.",
+        "longDescription": "Uzun açıklama",
+        "longDescriptionHint": "Düz metin; boş satırlar paragrafları ayırır. En fazla {max} karakter.",
+        "highlights": "Öne çıkanlar",
+        "highlightsHint": "Satır başına bir tane: en fazla {max}, her biri en fazla {length} karakter.",
+        "screenshotUrl": "Ekran görüntüsü {n} adresi",
+        "screenshotCaption": "Ekran görüntüsü {n} açıklaması",
+        "screenshotRemove": "Ekran görüntüsü {n} kaldır",
+        "screenshotAdd": "Ekran görüntüsü ekle",
+        "screenshotsNone": "Ekran görüntüsü yok.",
+        "dataSummary": "Ne saklar",
+        "dataSummaryHint": "En fazla {max} karakter.",
+        "dataRegions": "Bölgeler",
+        "dataRegionsHint": "Virgülle ayrılmış, en fazla {max}, örneğin India, EU.",
+        "dataDeletion": "Veriler nasıl silinir",
+        "dataDeletionHint": "En fazla {max} karakter.",
+        "firstParty": "Birinci taraf",
+        "firstPartyHint": "Bizim tarafımızdan geliştirilip çalıştırılır: birinci taraf rozetiyle gösterilir.",
+        "featured": "Öne çıkan",
+        "featuredHint": "Öne çıkanlar rafında gösterilir.",
+        "planFeature": "Plan özelliği",
+        "planFeatureHint": "Bir çalışma alanının uygulamayı kurabilmesi için planında bu özelliğin olması veya bir ek paket üzerinden erişmesi gerekir. Etiketler planlar kataloğundan gelir.",
+        "planFeatureNone": "Tüm planlar",
+        "sortOrder": "Sıralama",
+        "sortOrderHint": "0 ile {max} arasında bir tam sayı; düşük değer önce gösterilir.",
+        "problems": {
+          "required": "Bu zorunlu.",
+          "tooShort": "En az {min} karakter.",
+          "tooLong": "En fazla {max} karakter.",
+          "https": "Tam bir https:// adresi kullanın.",
+          "tooMany": "En fazla {max} girdi.",
+          "number": "0 ile {max} arasında bir tam sayı kullanın.",
+          "unknownFeature": "Küçük harf, rakam ve alt çizgi kullanın; bir harfle başlayın.",
+          "slug": "2 ile 48 arasında küçük harf, rakam veya tire kullanın; bir harfle başlayın.",
+          "icon": "1 ile 32 arasında küçük harf, rakam veya tire kullanın."
+        }
+      },
+      "summary": {
+        "title": "Kaydetmeden önce bunları düzeltin",
+        "sentTitle": "Sunucu bunu kaydetmedi",
+        "manifest": "{count, plural, other {manifestte # sorun}}",
+        "recipe": "{count, plural, other {tarifte # sorun}}",
+        "fields": "{count, plural, other {listeleme alanlarında # sorun}}"
+      },
+      "detail": {
+        "title": "Listeleme",
+        "back": "Kataloğa dön",
+        "firstParty": "Birinci taraf",
+        "featured": "Öne çıkan",
+        "none": "Yok",
+        "everyPlan": "Tüm planlar",
+        "kpi": {
+          "installs": "Kurulumlar",
+          "published": "Yayımlanan sürüm",
+          "latest": "Son sürüm",
+          "versions": "Sürümler"
+        },
+        "facts": {
+          "kind": "Tür",
+          "category": "Kategori",
+          "connector": "Bağlayıcı",
+          "planFeature": "Plan özelliği"
+        },
+        "tabs": {
+          "overview": "Listeleme",
+          "versions": "Sürümler ({count})"
+        },
+        "operate": {
+          "title": "İşletim",
+          "description": "Listelemeyi gizleyin, kapatın, geri yükleyin veya silin. Her biri onay ister.",
+          "lacking": "Rolleriniz {permission} içermediği için bazı işlemler gizli."
+        },
+        "killed": {
+          "title": "Bu listeleme kapatıldı",
+          "reason": "Neden",
+          "effect": "Her kurulum durdurulur ve her teslimat adresi 410 yanıtı verir. Çalışma alanları yalnızca kaldırabilir."
+        },
+        "notice": {
+          "killedTitle": "{name} kapatıldı",
+          "killedBody": "{count, plural, other {# kurulum kapatıldı.}}",
+          "publishedTitle": "{name} {version} yayımlandı",
+          "publishedUpgraded": "{count, plural, other {# kurulum hemen ona geçti.}}",
+          "publishedWaiting": "{count, plural, other {# kurulum, yöneticisi yeni izinleri kabul edene kadar mevcut sürümünü korur.}}",
+          "dismiss": "Kapat"
+        }
+      },
+      "edit": {
+        "readOnly": "Salt okunur. Listelemeyi düzenlemek {permission} platform iznini gerektirir.",
+        "conflict": "Siz düzenlerken başkası bu listelemeyi kaydetti. Onların sürümünü görmek için yenileyin, sonra değişikliğinizi tekrar yapın.",
+        "reload": "Yenile",
+        "save": "Değişiklikleri kaydet",
+        "saving": "Kaydediliyor...",
+        "discard": "Değişiklikleri at",
+        "nothingToSave": "Henüz değişiklik yok.",
+        "saved": "{name} kaydedildi."
+      },
+      "actions": {
+        "cancel": "Vazgeç",
+        "hide": "Gizle",
+        "unhide": "Tekrar göster",
+        "unkill": "Geri yükle",
+        "delete": "Sil",
+        "kill": "Acil durdurma",
+        "confirm": {
+          "hide": {
+            "title": "{name} gizlensin mi?",
+            "body": "{name} gözatma ve aramadan çıkar, bu yüzden yeni çalışma alanları onu bulamaz. Mevcut kurulumlar çalışmaya devam eder.",
+            "action": "Gizle"
+          },
+          "unhide": {
+            "title": "{name} tekrar gösterilsin mi?",
+            "body": "{name}, yayımlanmış sürümüyle gözatma ve aramada yeniden görünür.",
+            "action": "Tekrar göster"
+          },
+          "unkill": {
+            "title": "{name} geri yüklensin mi?",
+            "body": "{name} düzeltilip yeniden yayımlanabilmesi için gizli olur. Kapatılmış kurulumlar kapalı kalır: çalışma alanlarının onu yeniden kurması gerekir.",
+            "action": "Geri yükle"
+          },
+          "delete": {
+            "title": "{name} silinsin mi?",
+            "body": "Bu, taslak listelemeyi ve sürümlerini kalıcı olarak siler. Yayımlanmış veya kurulmuş bir listeleme silinemez: bunun yerine gizleyin.",
+            "action": "Listelemeyi sil"
+          }
+        },
+        "done": {
+          "hide": "{name} gizli.",
+          "unhide": "{name} yeniden görünür.",
+          "unkill": "{name}, gizli olarak geri yüklendi.",
+          "kill": "{name} kapatıldı.",
+          "delete": "{name} silindi."
+        }
+      },
+      "killDialog": {
+        "eyebrow": "Acil durdurma",
+        "title": "{name} kapatılsın mı?",
+        "close": "Kapat",
+        "cancel": "Vazgeç",
+        "confirm": "{name} uygulamasını kapat",
+        "installs": "{name}, {count, plural, other {# çalışma alanında}} kurulu.",
+        "effects": {
+          "stop": "Her kurulum hemen çalışmayı durdurur.",
+          "connections": "Her bağlantı devre dışı bırakılır.",
+          "address": "Teslimat adresi, bir sonraki istekten itibaren 410 Gone yanıtı verir.",
+          "uninstall": "Çalışma alanları yalnızca kaldırabilir."
+        },
+        "undo": "Listelemeyi daha sonra geri yüklemek onu gizli yapar. Kapatılmış kurulumlar kapalı kalır ve çalışma alanlarının onu yeniden kurması gerekir.",
+        "reason": "Neden",
+        "reasonHint": "{min} ile {max} karakter arası. Denetim kaydında tutulur ve her çalışma alanına gösterilir.",
+        "count": "{count} / {max} karakter (en az {min}).",
+        "typeSlug": "Onaylamak için {slug} yazın",
+        "typeSlugHint": "Listelemenin kimliği, gösterildiği gibi aynen."
+      },
+      "versions": {
+        "title": "Sürümler",
+        "description": "Bu listelemenin her sürümü. Manifestini, tarifini ve işlemlerini görmek için birini seçin.",
+        "newVersion": "Yeni sürüm",
+        "newVersionHint": "Yeni bir sürüm, baktığınız sürümden ({version}) başlar ve numarası yükseltilir. Önceki tüm sürümlerden büyük olmalıdır.",
+        "tableCaption": "Bu listelemenin sürümleri",
+        "cols": {
+          "version": "Sürüm",
+          "status": "Durum",
+          "changelog": "Değişiklik günlüğü",
+          "scopes": "İzinler",
+          "reviewNote": "İnceleme notu",
+          "dates": "Tarihler"
+        },
+        "viewing": "Görüntüleniyor",
+        "none": "-",
+        "dates": {
+          "created": "Oluşturuldu",
+          "submitted": "Gönderildi",
+          "reviewed": "İncelendi",
+          "published": "Yayımlandı"
+        },
+        "selectedTitle": "Sürüm {version}",
+        "selectedHelp": "İzinleri, manifesti ve tarifi kayıtlı haliyle. İşlemler sürümün durumunu ve izinlerinizi izler.",
+        "edit": "Düzenle",
+        "newFrom": "Bundan yeni sürüm",
+        "submit": "İncelemeye gönder",
+        "approve": "Onayla",
+        "reject": "Reddet",
+        "publish": "Yayımla",
+        "rejectedNote": "İnceleyicinin nedeni (geliştiriciye gösterilir)",
+        "recipeMissing": "Bu entegrasyonun henüz tarifi yok. İncelemeye göndermeden önce bir tane ekleyin.",
+        "permissions": "İzinler",
+        "manifest": "Manifest",
+        "recipe": "Tarif",
+        "noRecipeIntegration": "Bu sürüm için kayıtlı tarif yok.",
+        "noRecipeMiniApp": "Mini uygulamanın tarifi yok.",
+        "done": {
+          "submit": "Sürüm {version} incelemeye gönderildi.",
+          "approve": "Sürüm {version} onaylandı.",
+          "reject": "Sürüm {version} reddedildi.",
+          "publish": "Sürüm {version} yayımlandı.",
+          "created": "Sürüm {version} taslak olarak kaydedildi.",
+          "updated": "Sürüm {version} güncellendi."
+        }
+      },
+      "versionEditor": {
+        "newTitle": "Yeni sürüm",
+        "newHelp": "Baktığınız sürümden, numarası yükseltilmiş olarak başlar. Manifesti ve tarifi değiştirin, ardından neyin değiştiğini açıklayın.",
+        "editTitle": "Sürümü düzenle",
+        "editHelp": "Bu sürümün manifestini ve tarifini değiştirir. Reddedilmiş bir sürüm kaydedildiğinde taslağa döner.",
+        "changelog": "Değişiklik günlüğü",
+        "changelogHint": "Bu sürümde neyin değiştiği. Yöneticiler bunu okur. En fazla {max} karakter.",
+        "saveNew": "Yeni sürümü kaydet",
+        "saveEdit": "Değişiklikleri kaydet",
+        "saving": "Kaydediliyor...",
+        "cancel": "Vazgeç"
+      },
+      "versionDialogs": {
+        "approve": {
+          "title": "{name} {version} onaylansın mı?",
+          "close": "Kapat",
+          "cancel": "Vazgeç",
+          "confirm": "Onayla",
+          "body": "Onaylanmış bir sürüm daha sonra yayımlanabilir. Onaylamak, çalışma alanlarının gördüğünü değiştirmez.",
+          "note": "Not (isteğe bağlı)",
+          "noteHint": "Sürümle birlikte saklanır. En fazla {max} karakter."
+        },
+        "reject": {
+          "title": "{name} {version} reddedilsin mi?",
+          "close": "Kapat",
+          "cancel": "Vazgeç",
+          "confirm": "Sürümü reddet",
+          "body": "Neden geliştiriciye gösterilir. Sürümü düzenler ve yeniden gönderir.",
+          "note": "Neden",
+          "noteHint": "En az {min}, en fazla {max} karakter.",
+          "count": "{count} / {max} karakter (en az {min})."
+        },
+        "publish": {
+          "title": "{name} {version} yayımlansın mı?",
+          "cancel": "Vazgeç",
+          "confirm": "{version} yayımla",
+          "body": "{name} {version}, her yeni kurulumun alacağı sürüm olur.",
+          "effects": {
+            "retire": "Önceden yayımlanmış sürüm emekliye ayrılır.",
+            "moveSame": "Verilen izinleri bu sürümü zaten karşılayan kurulumlar hemen buna geçer.",
+            "moveMore": "Daha fazla izin isteyen kurulumlar, yöneticileri yeni izin listesini kabul edene kadar mevcut sürümlerinde çalışmaya devam eder.",
+            "killed": "Kapatılmış kurulumlara dokunulmaz."
+          },
+          "installs": "{count, plural, other {# kurulum etkilenir.}}",
+          "first": "Bu, yayımlanan ilk sürümdür.",
+          "addedScopes": "{count, plural, other {Yayımlanmış sürümün istemediği # izin istiyor:}}"
+        }
+      },
+      "categories": {
+        "title": "Kategoriler",
+        "description": "Her iki Pazar yeri sekmesinin kategorileri. Kapatılan bir kategori çalışma alanlarından gizlenir; içinde uygulama olan kategori silinemez.",
+        "new": "Yeni kategori",
+        "emptyTitle": "Kategori yok",
+        "emptyMessage": "Listeleme oluşturmadan önce bir kategori ekleyin: her listeleme bir kategoriye aittir.",
+        "groupCount": "{count, plural, other {# kategori}}",
+        "groupEmpty": "Bu tür için henüz kategori yok.",
+        "tableCaption": "Kategoriler",
+        "cols": {
+          "name": "Ad",
+          "slug": "Kimlik",
+          "icon": "Simge",
+          "order": "Sıra",
+          "apps": "Uygulamalar",
+          "status": "Durum",
+          "actions": "İşlemler"
+        },
+        "dash": "-",
+        "active": "Etkin",
+        "inactive": "Çalışma alanlarından gizli",
+        "edit": "Düzenle",
+        "delete": "Sil",
+        "inUse": "Uygulaması var",
+        "form": {
+          "createTitle": "Yeni kategori",
+          "editTitle": "{name} düzenle",
+          "close": "Kapat",
+          "cancel": "Vazgeç",
+          "create": "Kategori oluştur",
+          "save": "Değişiklikleri kaydet",
+          "kind": "Tür",
+          "kinds": {
+            "mini_app": "Mini uygulama",
+            "integration": "Entegrasyon"
+          },
+          "kindLocked": "Tür değiştirilemez.",
+          "slug": "Kimlik (slug)",
+          "slugHint": "2 ile 48 arasında küçük harf, rakam veya tire; bir harfle başlar. Sonradan değiştirilemez.",
+          "slugLocked": "Kimlik oluşturulduktan sonra değiştirilemez.",
+          "name": "Ad",
+          "nameHint": "{min} ile {max} karakter.",
+          "descriptionField": "Açıklama",
+          "descriptionHint": "İsteğe bağlı, en fazla {max} karakter.",
+          "icon": "Simge",
+          "iconHint": "İsteğe bağlı simge adı: küçük harf, rakam ve tire.",
+          "sortOrder": "Sıra",
+          "sortOrderHint": "0 ile {max} arasında bir tam sayı; düşük değer önce gösterilir.",
+          "active": "Etkin",
+          "activeHint": "Kapalı, kategori çalışma alanlarından gizlenir. Uygulamaları ona bağlı kalır.",
+          "conflict": "Bu kategoriyi başkası değiştirdi. Onların sürümünü görmek için yenileyin, sonra değişikliğinizi tekrar yapın.",
+          "reload": "Yenile",
+          "created": "{name} kategorisi oluşturuldu.",
+          "saved": "{name} kategorisi kaydedildi."
+        },
+        "deleteDialog": {
+          "title": "{name} silinsin mi?",
+          "body": "{name} kategorisinde uygulama yok. Silmek onu kalıcı olarak kaldırır.",
+          "action": "Kategoriyi sil",
+          "cancel": "Vazgeç",
+          "done": "{name} kategorisi silindi."
+        }
+      },
+      "requests": {
+        "title": "Talepler",
+        "description": "Çalışma alanlarının istediği şeyler, en çok oy alan önce. Geliştirme sırası bu listeyi izler.",
+        "readOnly": "Salt okunur. Değerlendirme {permission} platform iznini gerektirir.",
+        "filters": {
+          "label": "Filtreler",
+          "search": "Ara",
+          "searchPlaceholder": "Ad",
+          "kind": "Tür",
+          "allKinds": "Tüm türler",
+          "status": "Durum",
+          "allStatuses": "Tüm durumlar"
+        },
+        "clearFilters": "Filtreleri temizle",
+        "emptyTitle": "Henüz talep yok",
+        "emptyMessage": "Bir çalışma alanı entegrasyon talep ettiğinde, oylarıyla birlikte burada görünür.",
+        "noMatchTitle": "Hiçbir talep eşleşmiyor",
+        "noMatchMessage": "Bu filtrelerle eşleşen bir şey yok.",
+        "loadMore": "Daha fazla yükle",
+        "tableCaption": "Oylara göre istekler",
+        "cols": {
+          "votes": "Oylar",
+          "request": "İstek",
+          "notes": "Çalışma alanı notları",
+          "firstWorkspace": "İlk soran",
+          "status": "Durum",
+          "actions": "İşlemler"
+        },
+        "votes": "{count, plural, other {# oy}}",
+        "noNotes": "Not yok.",
+        "dash": "-",
+        "operatorNote": "Notunuz: {note}",
+        "triageAction": "Triyaj",
+        "triage": {
+          "title": "{name} triyajı",
+          "close": "Kapat",
+          "cancel": "İptal",
+          "save": "Kaydet",
+          "saved": "{name} kaydedildi.",
+          "votes": "{count, plural, other {# oy}}",
+          "status": "Durum",
+          "note": "Operatör notu",
+          "noteHint": "İsteğe bağlı, en fazla {max} karakter. Yalnızca operatörler görür.",
+          "noteTooLong": "En fazla {max} karakter.",
+          "conflict": "Bu isteği başka biri güncelledi. Onların sürümünü görmek için sayfayı yenileyin, ardından değişikliğinizi yeniden yapın.",
+          "reload": "Yenile"
+        }
+      },
+      "usage": {
+        "title": "Kullanım ve sağlık",
+        "description": "Uygulama başına: durum ve sağlığa göre kurulumlar; son 24 saat ve 7 gün içinde kabul edilen, tekrarlanan, reddedilen ve başarısız olan teslimatlar.",
+        "kpi": {
+          "apps": "Uygulamalar",
+          "installs": "Kurulumlar",
+          "activeHint": "{count} etkin",
+          "needsLook": "İncelenmesi gerekiyor",
+          "failed7d": "Başarısız teslimatlar (7 gün)"
+        },
+        "sort": {
+          "label": "Sırala",
+          "failed": "En çok başarısız teslimat",
+          "installs": "En çok kurulum",
+          "name": "Ad"
+        },
+        "emptyTitle": "Henüz kullanım yok",
+        "emptyMessage": "Uygulamalar kataloğa eklendiğinde burada görünür.",
+        "tableCaption": "Uygulama başına kullanım",
+        "cols": {
+          "app": "Uygulama",
+          "installs": "Kurulumlar",
+          "health": "Sağlık",
+          "events24h": "Teslimatlar, 24 saat",
+          "events7d": "Teslimatlar, 7 gün",
+          "attention": "Dikkat"
+        },
+        "installs": {
+          "active": "{count} etkin",
+          "disabled": "{count} duraklatıldı",
+          "killed": "{count} sonlandırıldı"
+        },
+        "health": {
+          "healthy": "{count} sağlıklı",
+          "degraded": "{count} bozulmuş",
+          "error": "{count} hatalı",
+          "needsReauth": "{count} yeniden oturum açmalı",
+          "unknown": "{count} bilinmiyor"
+        },
+        "events": {
+          "accepted": "{count} kabul edildi",
+          "duplicate": "{count} tekrarlandı",
+          "rejected": "{count} reddedildi",
+          "failed": "{count} başarısız"
+        },
+        "needsLook": "İncelenmeli",
+        "reasons": {
+          "installErrors": "Hatalı kurulumlar",
+          "needsReauth": "Yeniden oturum açması gereken kurulumlar",
+          "failed24h": "Son 24 saatteki başarısız teslimatlar",
+          "failed7d": "Son 7 gündeki başarısız teslimatlar"
+        },
+        "recipeHint": "Tarif bozulmuş olabilir: bir portal biçimini değiştirmiş ya da bir anahtarın süresi dolmuş olabilir. Tarifin yeni bir sürümüyle düzeltin.",
+        "fine": "Sorun görülmedi",
+        "runbookNote": "Hatalı veya yeniden oturum açması gereken çok sayıda kurulumu olan ya da başarısız sayısı artan bir entegrasyon bozuluyor. Tarifini yeni bir sürümde düzeltin (runbook, 8. bölüm)."
+      },
+      "price": {
+        "free": "Ücretsiz",
+        "perMonth": "/ ay",
+        "trial": "{count, plural, other {# günlük deneme}}",
+        "notOnSale": "Satışta değil"
+      },
+      "pricing": {
+        "title": "Fiyatlandırma",
+        "description": "Bu uygulamanın ücretsiz mi ücretli mi olacağına ve ne kadara satılacağına karar verin. Geçerli olan sizin fiyatınızdır; geliştiricinin manifesti yalnızca bir öneri sunar.",
+        "billing": "Ücretli bir uygulama, aylık önceden ödemeli bir dönem olarak satılır: normal ödeme akışıyla satın alınan bir faturalandırma eklentisi. Henüz otomatik kart yenilemesi yok; bu yüzden bir çalışma alanı, ayı bitmek üzereyken yeniden öder. Fiyat değişikliği yeni aboneliklere ve her abonenin bir sonraki ödemesine uygulanır; zaten ödenmiş bir dönem hiçbir zaman değiştirilmez.",
+        "readOnly": "Salt okunur. Fiyatlandırmayı değiştirmek için {permission} platform izni gerekir.",
+        "visibility": {
+          "label": "Listeleme durumu",
+          "note": "Listelemeyi yukarıdaki İşletim bölümünden gizleyin, yeniden gösterin veya sonlandırın. Bu panel bunu değiştirmez."
+        },
+        "subscribers": {
+          "label": "Abonelikler",
+          "count": "{count, plural, other {# etkin abonelik}}",
+          "view": "Abonelikleri görüntüle",
+          "hint": "Yürürlükteki ücretli, deneme ve ücretsiz erişimli abonelikler. Sona ermekte olan veya sona ermiş olanlar sayılmaz."
+        },
+        "changed": "Fiyat en son değiştirildi",
+        "conflict": "Fiyatlandırmayı düzenlerken bu listeyi başka biri kaydetti. Onların sürümünü görmek için yenileyin, ardından değişikliğinizi yeniden yapın.",
+        "reload": "Yenile",
+        "model": {
+          "legend": "Fiyat",
+          "free": "Ücretsiz",
+          "freeHint": "Ücret yok. Her çalışma alanı kurabilir.",
+          "paid": "Ücretli, aylık",
+          "paidHint": "Çalışma alanları ödeme akışından abone olur ve ay ay öder."
+        },
+        "fields": {
+          "amount": "Aylık fiyat",
+          "amountHint": "Çalışma alanı başına, aylık: 9 veya 9.99.",
+          "currency": "Para birimi",
+          "currencyHint": "USD gibi üç harfli bir kod. Platform, etkinleştirmediği bir para birimini kabul etmez.",
+          "trialDays": "Ücretsiz deneme (gün)",
+          "trialDaysHint": "Deneme yoksa 0, en fazla {max}. Bir çalışma alanı uygulama başına bir deneme alır.",
+          "annualAmount": "Yıllık fiyat (isteğe bağlı)",
+          "annualAmountHint": "Sonra kullanılmak üzere saklanır. Yıllık faturalandırma henüz yapılmadı, bu yüzden çalışma alanları bugün yıllık ödeme yapamaz.",
+          "purchasable": "Satışta",
+          "purchasableHint": "Kapalıyken yeni çalışma alanı abone olamaz. Zaten abone olan çalışma alanları yenilemeye devam edebilir."
+        },
+        "included": {
+          "title": "Planlara dahil",
+          "help": "İsteğe bağlı. Kurallardan birine uyan çalışma alanı uygulamayı ücretsiz alır. Her çalışma alanından ücret almak için ikisini de boş bırakın.",
+          "feature": "Plan özelliği",
+          "featureHint": "Planında (eklentiler dahil) bu özellik olan çalışma alanları. Bir öneri seçin ya da bir özellik anahtarı yazın.",
+          "plan": "Asgari plan",
+          "planHint": "Bu planda veya bunun üstündeki herhangi bir planda olan çalışma alanları. Planlar en düşükten başlayarak listelenir.",
+          "planNone": "Plan kuralı yok",
+          "planTyped": "Plan listesi yüklenemedi. Bir plan kimliği yazın."
+        },
+        "grants": {
+          "title": "Plan özelliklerini verir",
+          "help": "İsteğe bağlı. Bu uygulamaya abonelik, plan özelliklerini açar; böylece bir özellik, mevcut erişim kapıları çalışmaya devam ederken uygulama olarak satılabilir. Yalnızca varsayılan olarak kapalı olan özellikler verilebilir.",
+          "thirdParty": "Yalnızca birinci taraf uygulamalar plan özelliği verebilir. Bunu kullanmak için Listeleme sekmesinde listelemeyi birinci taraf olarak işaretleyin.",
+          "grandfather": "Mevcut kullanıcıları koru",
+          "grandfatherHint": "Halihazırda verilmiş bir özelliğe sahip çalışma alanlarına ücretsiz erişim tanımlamanızı sağlar; böylece kimse bunu kaybetmez. Kaydedin, ardından aşağıdaki Mevcut kullanıcılara ücretsiz erişim ver seçeneğini kullanın. Bunu, özellik planlarda kapatılmadan önce yapın.",
+          "compExisting": "Mevcut kullanıcılara ücretsiz erişim ver",
+          "compExistingHint": "Planları üzerinden verilmiş bir özelliğe sahip ve henüz aboneliği olmayan çalışma alanları bu uygulamayı ücretsiz alır. Önce kimlerin olduğunu görürsünüz.",
+          "compExistingAction": "Mevcut kullanıcılara ücretsiz erişim ver..."
+        },
+        "proposal": {
+          "title": "Geliştiricinin önerisi",
+          "intro": "{version} sürümünün manifestinden. Yalnızca bir öneridir ve hiçbir şeyi değiştirmez: çalışma alanlarının gördüğü, yukarıdaki fiyatlandırmadır.",
+          "note": "Not: {note}",
+          "models": {
+            "free": "Ücretsiz",
+            "included": "Plana dahil",
+            "addon": "Ücretli eklenti"
+          }
+        },
+        "save": "Fiyatlandırmayı kaydet",
+        "saving": "Kaydediliyor...",
+        "discard": "Değişiklikleri at",
+        "nothingToSave": "Henüz değişiklik yok.",
+        "saved": "{name} fiyatlandırması kaydedildi.",
+        "problems": {
+          "priceRequired": "Aylık bir fiyat belirleyin.",
+          "priceFormat": "9 veya 9.99 gibi bir sayı kullanın (en fazla iki ondalık basamak).",
+          "pricePositive": "Fiyat sıfırdan büyük olmalı.",
+          "currencyRequired": "Bir para birimi seçin.",
+          "currencyFormat": "Üç harfli bir para birimi kodu kullanın.",
+          "yearlyFormat": "90 veya 89.99 gibi bir sayı kullanın ya da boş bırakın.",
+          "yearlyPositive": "Yıllık fiyat sıfırdan büyük olmalı ya da boş olmalı.",
+          "trialRange": "0 ile {max} arasında tam gün sayısı kullanın.",
+          "featureFormat": "Küçük harf, rakam ve alt çizgi kullanın; bir harfle başlayın.",
+          "planFormat": "Bir plan kimliği kullanın: küçük harf, rakam ve alt çizgi.",
+          "grantsInvalid": "Her plan özelliğini bir kez seçin; en fazla 10 özellik.",
+          "grandfatherNeedsGrants": "Önce uygulamanın verdiği en az bir plan özelliği seçin.",
+          "includedGranted": "Uygulamanın verdiği bir özellik, aynı zamanda onu içeren şey olamaz."
+        },
+        "confirm": {
+          "cancel": "Düzenlemeye devam et",
+          "priceChange": {
+            "title": "{name} fiyatı değiştirilsin mi?",
+            "body": "{count, plural, other {# çalışma alanı şu anda abone.}} Aylık fiyat {from} değerinden {to} değerine değişiyor.",
+            "next": "Yeni fiyat, yeni aboneliklere ve abonenin bir sonraki ödemesine uygulanır.",
+            "paid": "Bir çalışma alanının zaten ödediği dönem hiçbir zaman değiştirilmez, iade edilmez veya yeniden fiyatlandırılmaz.",
+            "action": "Fiyatı değiştir"
+          },
+          "toFree": {
+            "title": "{name} ücretsiz yapılsın mı?",
+            "body": "{count, plural, other {# çalışma alanı şu anda abone.}}",
+            "free": "Bundan sonra her çalışma alanı uygulamayı ödeme yapmadan kullanabilir ve kimseden bir daha ücret alınmaz.",
+            "paid": "Aboneler, zaten ödedikleri süreyi korur. Bu süre iade edilmez.",
+            "action": "Ücretsiz yap"
+          }
+        }
+      },
+      "grandfather": {
+        "eyebrow": "Mevcut kullanıcılar",
+        "title": "{name} uygulamasının mevcut kullanıcılarına ücretsiz erişim ver",
+        "close": "Kapat",
+        "cancel": "İptal",
+        "change": "Değiştir",
+        "run": "{count, plural, other {# çalışma alanına ücretsiz erişim ver}}",
+        "preview": "Uygunları kontrol et",
+        "intro": "Planı veya geçersiz kılmaları yoluyla {name} uygulamasının verdiği bir plan özelliğine zaten sahip olan ve henüz buna dair aboneliği olmayan her çalışma alanına ücretsiz erişim verin. Önce kimlerin ücretsiz erişim alacağını görürsünüz; onaylayana kadar hiçbir şey değişmez.",
+        "timing": "Bunu, özellik planlarda kapatılmadan veya varsayılanı değişmeden önce yapın: her çalışma alanında şu anda ne olduğunu okur.",
+        "note": "Not",
+        "matched": "{count, plural, =0 {Hiçbir çalışma alanı uygun değil} other {# çalışma alanı uygun}}",
+        "nobody": "Aboneliği olmadan verilmiş bir özelliğe sahip kimse yok, bu yüzden verilecek bir şey yok.",
+        "sample": "Bunlardan bazıları:",
+        "more": "ve {count} tane daha",
+        "confirm": "Listeyi kontrol edin, ardından onaylayarak bunlara ücretsiz erişim verin. Bu, denetim kaydına işlenir ve tek adımda geri alınamaz: ücretsiz erişimi sonlandırmak için her aboneliği iptal edin.",
+        "refused": "Bu yalnızca plan özellikleri veren ve Mevcut kullanıcıları koru seçeneği açık kaydedilmiş ücretli bir listeleme için mümkündür. Fiyatlandırmasını kontrol edin.",
+        "done": "{count, plural, other {{name} üzerinde # çalışma alanına ücretsiz erişim verildi.}}"
+      },
+      "compFields": {
+        "duration": "Ne kadar süreyle?",
+        "months": "Belirli sayıda ay için",
+        "monthsLabel": "Ay",
+        "monthsHint": "1 ile {max} arasında tam ay.",
+        "monthsInvalid": "1 ile {max} arasında tam ay kullanın.",
+        "open": "Ben sonlandırana kadar",
+        "noteHint": "{min} ile {max} karakter arası. Denetim kaydında tutulur.",
+        "count": "{max} karakterin {count} tanesi (en az {min})."
+      },
+      "cancelDialog": {
+        "eyebrow": "Abonelik",
+        "title": "{workspace} çalışma alanının aboneliği iptal edilsin mi?",
+        "close": "Kapat",
+        "back": "Vazgeç",
+        "summary": "{workspace} çalışma alanında {app} var.",
+        "when": "Ne zaman sona ersin?",
+        "periodEnd": {
+          "label": "Ücretli dönemin sonunda",
+          "detail": "Yenileme durur. {workspace} çalışma alanı {app} uygulamasını {date} tarihine kadar kullanmaya devam eder; ardından kurulum duraklatılır ve verileri saklanır."
+        },
+        "now": {
+          "label": "Hemen",
+          "detail": "Erişim hemen sona erer. Kurulum duraklatılır ve verileri saklanır. Zaten ödenmiş süre iade edilmez."
+        },
+        "noEnd": "Bu aboneliğin bitiş tarihi yok, bu yüzden yalnızca hemen sonlandırılabilir.",
+        "ending": "Zaten {date} tarihinde sona erecek şekilde ayarlı. Yine de hemen sonlandırabilirsiniz.",
+        "reason": "Neden",
+        "confirmPeriod": "Yenilemeyi durdur",
+        "confirmNow": "Şimdi sonlandır",
+        "done": {
+          "periodEnd": "{workspace} için yenileme durduruldu. Erişim, ücretli dönemin sonuna kadar sürer.",
+          "now": "{workspace} artık {app} uygulamasına sahip değil."
+        }
+      },
+      "compDialog": {
+        "eyebrow": "Ücretsiz erişim",
+        "title": "Bir çalışma alanına ücretsiz erişim ver",
+        "close": "Kapat",
+        "cancel": "İptal",
+        "submit": "Çalışma alanına ücretsiz erişim ver",
+        "intro": "Bir çalışma alanına ücretli bir uygulamayı ücretsiz verin. Notunuzla birlikte denetim kaydına işlenir. Çalışma alanı uygulama için ödeme yaparken reddedilir: önce o aboneliği iptal edin.",
+        "app": "Uygulama",
+        "appPlaceholder": "Ücretli bir uygulama seçin",
+        "noPaidApps": "Henüz ücretsiz erişim verilecek ücretli bir uygulama yok. Önce bir listelemeye fiyat belirleyin.",
+        "workspaceSearch": "Bir çalışma alanı bulun",
+        "workspaceSearchPlaceholder": "Çalışma alanı adı",
+        "workspaceHint": "En fazla {count} eşleşme gösteriliyor. Listeyi daraltmak için yazın.",
+        "workspaceChosen": "Seçilen: {name}",
+        "workspaceNone": "Eşleşen çalışma alanı yok.",
+        "workspaceResults": "Eşleşen çalışma alanları",
+        "workspacePlan": "Plan: {plan}",
+        "workspaceLoading": "Çalışma alanları yükleniyor...",
+        "note": "Not",
+        "effectMonths": "{count, plural, other {Çalışma alanı, uygulamayı # ay boyunca ücretsiz alır.}}",
+        "effectOpen": "Çalışma alanı, aboneliğini iptal ederek sonlandırana kadar uygulamayı ücretsiz alır.",
+        "done": "{workspace} artık {app} uygulamasını ücretsiz kullanıyor."
+      },
+      "subscriptions": {
+        "title": "Abonelikler",
+        "description": "Hangi ücretli uygulamanın kim tarafından ödendiği, her çalışma alanının neye sahip olduğu ve getirdiği aylık gelir. Rakamlar liste fiyatlarıdır: vergi, kupon veya deneme dahil değildir.",
+        "readOnly": "Salt okunur. Bir çalışma alanına ücretsiz erişim vermek ve bir aboneliği iptal etmek {permission} platform iznini gerektirir.",
+        "comp": "Bir çalışma alanına ücretsiz erişim ver",
+        "kpi": {
+          "label": "Duruma göre abonelikler",
+          "active": "Ödeyen",
+          "trialing": "Denemede",
+          "comped": "Ücretsiz erişimli",
+          "canceling": "Sona eriyor",
+          "ended": "Sona erdi",
+          "mrr": "Aylık gelir",
+          "mrrNone": "Henüz ödeyen abone yok",
+          "mrrCurrency": "Aylık gelir, {currency}"
+        },
+        "summary": {
+          "emptyTitle": "Henüz ücretli uygulama yok",
+          "emptyMessage": "Satmaya başlamak için bir listelemeye fiyat belirleyin. Burada abonelerle birlikte görünür.",
+          "caption": "Uygulama başına duruma göre abonelikler",
+          "cols": {
+            "app": "Uygulama",
+            "price": "Fiyat",
+            "active": "Ödeyen",
+            "trialing": "Denemede",
+            "comped": "Ücretsiz erişimli",
+            "canceling": "Sona eriyor",
+            "ended": "Sona erdi",
+            "total": "Toplam",
+            "mrr": "Aylık gelir"
+          },
+          "free": "Ücretsiz",
+          "totals": "Tüm uygulamalar",
+          "note": "Aylık gelir, her ödeyen aboneliğin kendi para biriminde liste fiyatıdır. Denemeler, ücretsiz erişimler ve sona ermiş abonelikler sayılmaz; para birimleri asla toplanmaz."
+        },
+        "filters": {
+          "label": "Filtreler",
+          "app": "Uygulama",
+          "allApps": "Tüm uygulamalar",
+          "status": "Durum",
+          "allStatuses": "Tüm durumlar",
+          "source": "Kaynak",
+          "allSources": "Tüm kaynaklar",
+          "search": "Çalışma alanı",
+          "searchPlaceholder": "Çalışma alanı adı"
+        },
+        "cols": {
+          "workspace": "Çalışma alanı",
+          "app": "Uygulama",
+          "status": "Durum",
+          "source": "Kaynak",
+          "started": "Başlangıç",
+          "period": "Dönem",
+          "amount": "Tutar",
+          "actions": "İşlemler"
+        },
+        "period": {
+          "paidUntil": "{date} tarihine kadar ödendi",
+          "trialEnds": "Deneme {date} tarihinde bitiyor",
+          "endsOn": "{date} tarihinde bitiyor",
+          "compUntil": "{date} tarihine kadar ücretsiz",
+          "compOpen": "Siz sonlandırana kadar ücretsiz",
+          "endedOn": "{date} tarihinde sona erdi",
+          "none": "Bitiş tarihi yok"
+        },
+        "noCharge": "Ücret yok",
+        "compBy": "{operator} tarafından ücretsiz erişim verildi: {note}",
+        "cancel": "İptal et...",
+        "tableCaption": "Abonelikler",
+        "emptyTitle": "Henüz abonelik yok",
+        "emptyMessage": "Bir çalışma alanı abone olduğunda, deneme başlattığında veya ücretsiz erişim aldığında burada görünür.",
+        "noMatchTitle": "Eşleşen abonelik yok",
+        "noMatchMessage": "Bu filtrelerle eşleşen bir şey yok. Farklı filtreler deneyin.",
+        "clearFilters": "Filtreleri temizle",
+        "loadMore": "Daha fazla yükle"
+      }
+    }
+  }
+}

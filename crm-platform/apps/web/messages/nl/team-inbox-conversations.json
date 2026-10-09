@@ -1,0 +1,446 @@
+{
+  "team-inbox-conversations": {
+    "nav": {
+      "inbox": "Inbox"
+    },
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "screen": {
+      "listRegion": "Gesprekken",
+      "panelRegion": "Contact en notities",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "conflict": "Iemand anders heeft dit gesprek eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
+      "assigned": "Gesprek toegewezen.",
+      "assignedToYou": "Aan jou toegewezen.",
+      "unassigned": "Toewijzing van gesprek ongedaan gemaakt.",
+      "resolved": "Gesprek opgelost.",
+      "reopened": "Gesprek heropend.",
+      "deleteNoteTitle": "Deze notitie verwijderen?",
+      "deleteNoteMessage": "De notitie wordt voor iedereen in je team verwijderd. Dit kan niet ongedaan worden gemaakt.",
+      "deleteNoteConfirm": "Notitie verwijderen",
+      "pickTitle": "Kies een gesprek",
+      "pickMessage": "Kies een gesprek uit de lijst om het te lezen en te beantwoorden. Nieuwe berichten verschijnen hier vanzelf.",
+      "shortcuts": "Sneltoetsen: j en k bewegen door de lijst, e lost op, / zoekt.",
+      "teamChanged": "Team bijgewerkt."
+    },
+    "list": {
+      "title": "Inbox",
+      "refresh": "Lijst vernieuwen",
+      "openSimulator": "De klantsimulator openen",
+      "search": "Gesprekken zoeken",
+      "searchPlaceholder": "Naam of nummer zoeken",
+      "tabsLabel": "Gespreksweergaven",
+      "tabs": {
+        "all": "Alle",
+        "mine": "Van mij",
+        "unassigned": "Niet toegewezen",
+        "unread": "Ongelezen"
+      },
+      "statusFilter": "Status",
+      "statusOpen": "Open",
+      "statusAll": "Alle statussen",
+      "status": {
+        "open": "Open",
+        "pending": "In behandeling",
+        "snoozed": "Gesnoozed",
+        "resolved": "Opgelost",
+        "closed": "Opgelost",
+        "spam": "Spam"
+      },
+      "priority": {
+        "low": "Laag",
+        "normal": "Normaal",
+        "high": "Hoog",
+        "urgent": "Urgent"
+      },
+      "channelFilter": "Kanaal",
+      "allChannels": "Alle kanalen",
+      "archived": "Gearchiveerd",
+      "backToInbox": "Terug naar de inbox",
+      "loading": "Gesprekken laden",
+      "retry": "Opnieuw proberen",
+      "listLabel": "Gesprekken",
+      "loadMore": "Meer laden",
+      "moreFailed": "Meer gesprekken konden niet worden geladen.",
+      "unreadCount": "{count, plural, one {# ongelezen bericht} other {# ongelezen berichten}}",
+      "you": "Jij:",
+      "noMessages": "Nog geen berichten",
+      "windowClosed": "Venster gesloten",
+      "windowLeftHours": "Nog {hours}u {minutes}m",
+      "windowLeftMinutes": "Nog {minutes}m",
+      "unassigned": "Niet toegewezen",
+      "needsContact": "Geen contactgegevens",
+      "gettingStarted": {
+        "title": "Koppel een kanaal om te beginnen",
+        "message": "Je inbox vult zich wanneer klanten schrijven naar een gekoppeld kanaal. Koppel er een en elk gesprek komt hier terecht.",
+        "connect": "Een kanaal koppelen"
+      },
+      "emptyFiltered": {
+        "title": "Geen gesprekken gevonden",
+        "message": "Niets past bij deze filters. Wis ze om alle gesprekken weer te zien.",
+        "clear": "Filters wissen"
+      },
+      "empty": {
+        "all": {
+          "title": "Nog geen gesprekken",
+          "message": "Wanneer een klant naar een van je kanalen schrijft, verschijnt het gesprek hier."
+        },
+        "mine": {
+          "title": "Niets aan jou toegewezen",
+          "message": "Gesprekken die aan jou zijn toegewezen, verschijnen hier. Open er een via Alle en wijs hem aan jezelf toe."
+        },
+        "unassigned": {
+          "title": "Elk gesprek heeft een eigenaar",
+          "message": "Nieuwe gesprekken die nog niemand heeft opgepakt, staan hier."
+        },
+        "unread": {
+          "title": "Je bent helemaal bij",
+          "message": "Gesprekken met nieuwe berichten van klanten staan hier."
+        }
+      }
+    },
+    "status": {
+      "received": "Ontvangen",
+      "queued": "Verzenden",
+      "sent": "Verzonden",
+      "delivered": "Bezorgd",
+      "read": "Gelezen",
+      "failed": "Niet verzonden"
+    },
+    "errors": {
+      "conflict": "Iemand anders heeft dit eerst gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
+      "windowClosed": "Het antwoordvenster van 24 uur is gesloten, dus een vrij bericht kan niet worden verzonden.",
+      "planLimit": "De maandelijkse berichtlimiet van je abonnement is bereikt.",
+      "channelDisconnected": "Dit kanaal is losgekoppeld. Koppel het opnieuw om berichten te verzenden.",
+      "sendHalted": "Verzenden is nu voor het hele platform gepauzeerd. Probeer het later opnieuw.",
+      "notFound": "Dit gesprek bestaat niet meer of je kunt het niet zien.",
+      "notRetryable": "Alleen een bericht dat mislukt is, kan opnieuw worden verzonden.",
+      "mediaNotFound": "De bijlage is verlopen of verwijderd. Voeg hem opnieuw toe.",
+      "statusInvalid": "Die wijziging is niet toegestaan vanuit de huidige status van het gesprek.",
+      "assigneeInvalid": "Dit gesprek kan niet aan die persoon worden toegewezen.",
+      "forbidden": "Je hebt geen toestemming om dit te doen.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "simulatorDisabled": "De kanaalsimulator is op deze server uitgeschakeld.",
+      "channelInUse": "Dit kanaal heeft nog gesprekken. Koppel het los in plaats van het te verwijderen.",
+      "validation": "Een deel van wat je hebt ingevoerd is niet geldig.",
+      "tooLarge": "Dat bestand is te groot.",
+      "unsupported": "Dit kanaal kan dat type bericht of bestand niet verzenden.",
+      "network": "De server kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
+      "generic": "Er ging iets mis. Probeer het opnieuw.",
+      "genericWithId": "Er ging iets mis. Probeer het opnieuw. Referentie: {id}",
+      "templateNotSendable": "Dat sjabloon kan niet in dit gesprek worden verzonden. Kies een ander.",
+      "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app."
+    },
+    "bubble": {
+      "kind": {
+        "image": "Foto",
+        "text": "Bericht",
+        "attachment": "Bijlage"
+      },
+      "template": "Sjabloonbericht: {name}",
+      "unavailable": "Bericht niet beschikbaar",
+      "sentIn": "Verzonden in {lang}. Toon de tekst die je schreef",
+      "translatedFrom": "Vertaald uit {lang}. Toon het origineel",
+      "bot": "Bot",
+      "broadcast": "Broadcast",
+      "reacted": "Reactie {emoji}",
+      "edited": "Bewerkt",
+      "failed": "Dit bericht is niet bezorgd.",
+      "retry": "Opnieuw proberen",
+      "sending": "Verzenden",
+      "dismiss": "Sluiten",
+      "noteLabel": "Interne notitie",
+      "unknownAuthor": "Een teamgenoot",
+      "deleteNote": "Deze notitie verwijderen",
+      "templateHeader": {
+        "image": "Afbeelding",
+        "video": "Video",
+        "document": "Document",
+        "location": "Locatie"
+      },
+      "templateCopyCode": "Code kopiëren",
+      "templateButtonUnnamed": "Knop",
+      "templateButtonPrefix": "Knop: "
+    },
+    "media": {
+      "openImage": "Afbeelding {name} openen",
+      "video": "Video",
+      "voice": "Spraakbericht",
+      "audio": "Audio",
+      "document": "Document",
+      "download": "{name} downloaden",
+      "location": "Gedeelde locatie",
+      "openMap": "Openen in OpenStreetMap"
+    },
+    "thread": {
+      "title": "Gesprek",
+      "back": "Terug naar de gesprekkenlijst",
+      "loading": "Gesprek laden",
+      "retry": "Opnieuw proberen",
+      "notFound": {
+        "title": "Gesprek niet gevonden",
+        "message": "Het is verwijderd of je kunt het niet zien. Kies een ander uit de lijst."
+      },
+      "status": {
+        "resolved": "Opgelost",
+        "closed": "Gesloten",
+        "spam": "Spam",
+        "snoozed": "Gesnoozed"
+      },
+      "assignToMe": "Aan mij toewijzen",
+      "resolve": "Oplossen",
+      "reopen": "Heropenen",
+      "resolveShortcut": "Oplossen of heropenen (e)",
+      "showPanel": "Contact en notities tonen",
+      "hidePanel": "Contact en notities verbergen",
+      "window": {
+        "closed": "Venster gesloten",
+        "closesInHours": "Sluit over {hours}u {minutes}m",
+        "closesInMinutes": "Sluit over {minutes}m"
+      },
+      "windowBanner": {
+        "title": "Het antwoordvenster van 24 uur is gesloten.",
+        "message": "Dit kanaal staat alleen een goedgekeurd sjabloonbericht toe, meer dan 24 uur na het laatste bericht van de klant. Je kunt nog steeds interne notities toevoegen. Een nieuw bericht van de klant opent het venster weer.",
+        "sendTemplate": "Een sjabloon verzenden"
+      },
+      "readOnly": "Je kunt dit gesprek lezen, maar je hebt geen toestemming om te antwoorden.",
+      "typing": "{count, plural, one {Een teamgenoot is aan het typen} other {# teamgenoten zijn aan het typen}}",
+      "messagesLabel": "Berichten",
+      "loadOlder": "Eerdere berichten laden",
+      "empty": "Nog geen berichten in dit gesprek.",
+      "newMessageAnnounce": "Nieuw bericht: {text}",
+      "attachment": "een bijlage",
+      "jumpLatest": "Naar het laatste bericht",
+      "jumpLatestNew": "{count, plural, one {# nieuw bericht} other {# nieuwe berichten}}"
+    },
+    "composer": {
+      "modeLabel": "Berichttype",
+      "mode": {
+        "reply": "Antwoord",
+        "note": "Interne notitie"
+      },
+      "attach": "Een bestand bijvoegen",
+      "removeAttachment": "Bijlage verwijderen",
+      "replyLabel": "Antwoord aan de klant",
+      "noteLabel": "Interne notitie",
+      "replyPlaceholder": "Typ een bericht",
+      "notePlaceholder": "Schrijf een notitie die alleen je team kan zien",
+      "replyDisabledPlaceholder": "Antwoorden zijn uitgeschakeld voor dit gesprek",
+      "send": "Verzenden",
+      "addNote": "Notitie toevoegen",
+      "hint": "Enter verzendt. Shift+Enter voegt een nieuwe regel toe.",
+      "template": "Een sjabloon verzenden",
+      "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app."
+    },
+    "panel": {
+      "tabsLabel": "Notities en tijdlijn",
+      "contact": "Contact",
+      "openContact": "Contact openen",
+      "needsContact": "Dit nummer heeft geen contactgegevens omdat je contactlimiet is bereikt.",
+      "noContact": "Dit gesprek is niet aan een contact gekoppeld.",
+      "email": "E-mail",
+      "stage": "Fase",
+      "status": "Status",
+      "source": "Bron",
+      "since": "Contact sinds",
+      "optedOut": "Afgemeld voor marketing",
+      "resolve": "Oplossen",
+      "reopen": "Heropenen",
+      "assignee": {
+        "title": "Toegewezen aan",
+        "unknown": "Onbekende teamgenoot",
+        "none": "Niemand heeft dit gesprek",
+        "team": "Team: {name}",
+        "pick": "Kies wie dit gesprek heeft",
+        "unassigned": "Niet toegewezen",
+        "you": "jij",
+        "loadFailed": "De lijst met teamgenoten kon niet worden geladen.",
+        "assignToMe": "Aan mij toewijzen",
+        "unassign": "Toewijzing ongedaan maken",
+        "open": "{count} open",
+        "pickTeam": "Kies een team voor dit gesprek",
+        "noTeam": "Geen team"
+      },
+      "presence": {
+        "online": "Online",
+        "away": "Afwezig",
+        "busy": "Bezig",
+        "offline": "Offline"
+      },
+      "notes": {
+        "tab": "Notities",
+        "label": "Nieuwe interne notitie",
+        "placeholder": "Schrijf een notitie die alleen je team kan zien",
+        "hint": "Ctrl+Enter voegt de notitie toe.",
+        "add": "Notitie toevoegen",
+        "addFailed": "De notitie kon niet worden opgeslagen.",
+        "loading": "Notities laden",
+        "empty": "Nog geen notities.",
+        "unknownAuthor": "Een teamgenoot",
+        "delete": "Deze notitie verwijderen"
+      },
+      "timeline": {
+        "tab": "Tijdlijn",
+        "loading": "Tijdlijn laden",
+        "failed": "De tijdlijn kon niet worden geladen.",
+        "retry": "Opnieuw proberen",
+        "empty": "Er is nog niets gebeurd in dit gesprek.",
+        "events": {
+          "created": "Gesprek gestart",
+          "assigned": "Toegewezen door {actor}",
+          "reassigned": "Opnieuw toegewezen door {actor}",
+          "unassigned": "Toewijzing ongedaan gemaakt door {actor}",
+          "ai_handoff": "Overgedragen aan een persoon door {actor}",
+          "resolved": "Opgelost door {actor}",
+          "closed": "Gesloten door {actor}",
+          "reopened": "Heropend door {actor}",
+          "status_changed": "Status gewijzigd door {actor}",
+          "note_added": "Notitie toegevoegd door {actor}",
+          "snoozed": "Gesnoozed door {actor}",
+          "auto_unsnoozed": "Snooze beëindigd",
+          "priority_changed": "Prioriteit gewijzigd door {actor}",
+          "tag_added": "Label toegevoegd door {actor}",
+          "tag_removed": "Label verwijderd door {actor}",
+          "first_response": "Eerste antwoord verzonden",
+          "sla_breach": "Reactietermijn verlopen",
+          "unknown": "{what} door {actor}"
+        },
+        "actors": {
+          "user": "Een teamgenoot",
+          "system": "Het systeem",
+          "bot": "Een bot",
+          "flow": "Een automatisering",
+          "ai": "De AI-assistent"
+        }
+      },
+      "owner": "Eigenaar",
+      "past": {
+        "title": "Eerdere gesprekken",
+        "noMessages": "Geen berichten",
+        "status": {
+          "open": "Open",
+          "pending": "In behandeling",
+          "snoozed": "Gesnoozed",
+          "resolved": "Opgelost",
+          "closed": "Gesloten",
+          "spam": "Spam"
+        }
+      }
+    },
+    "simulator": {
+      "title": "Klantsimulator",
+      "close": "De simulator sluiten",
+      "devOnly": "Alleen voor ontwikkeling. Dit doet alsof het een klant is via een gesimuleerd kanaal; er wordt niets naar een echte telefoon gestuurd.",
+      "noChannel": "Er is nog geen simulatorkanaal.",
+      "createChannel": "Het simulatorkanaal aanmaken",
+      "disabled": "De simulator is op deze server uitgeschakeld.",
+      "channel": "Simulatorkanaal",
+      "customer": "De klant",
+      "name": "Naam",
+      "number": "Nummer",
+      "numberHint": "Alleen cijfers, 5 tot 15.",
+      "kind": "Berichttype",
+      "kinds": {
+        "text": "Tekst",
+        "image": "Afbeelding",
+        "document": "Document",
+        "audio": "Audio",
+        "video": "Video",
+        "location": "Locatie"
+      },
+      "file": "Bestand",
+      "fileHint": "Optioneel. De naam en het type worden gebruikt; anders wordt een voorbeeldbestand verzonden.",
+      "message": "Bericht",
+      "caption": "Onderschrift",
+      "placeName": "Plaatsnaam",
+      "send": "Verzenden als klant",
+      "sent": "{count, plural, one {Eén keer verzonden.} other {# keer bezorgd, één keer opgeslagen.}}",
+      "duplicate": "Dubbele bezorging",
+      "duplicateHint": "Bezorgt hetzelfde bericht drie keer, om te bewijzen dat het één keer wordt opgeslagen.",
+      "nextSend": "Je volgende antwoord",
+      "nextSendHint": "Geldt voor het volgende bericht dat je vanuit de editor verstuurt en schakelt daarna weer terug naar normaal.",
+      "faults": {
+        "none": "Normaal",
+        "fail": "Mislukt",
+        "flaky": "Mislukt twee keer, daarna werkt het",
+        "slow": "Traag (10 s)",
+        "ooo": "Ontvangstbevestigingen door elkaar"
+      },
+      "window": "24-uursvenster",
+      "windows": {
+        "auto": "Automatisch",
+        "open": "Geforceerd open",
+        "closed": "Geforceerd gesloten"
+      },
+      "windowHint": "Gesloten toont hoe de editor zich gedraagt wanneer alleen een sjabloon mag worden verzonden."
+    },
+    "channels": {
+      "title": "Kanalen",
+      "intro": "De accounts waarop klanten je bereiken. Elk kanaal voedt de inbox.",
+      "backToInbox": "Terug naar de inbox",
+      "simulatorNote": "Ontwikkeling: voeg een gesimuleerd kanaal toe om de inbox te proberen zonder echt account.",
+      "addSimulator": "Simulatorkanaal toevoegen",
+      "simulatorAdded": "Simulatorkanaal toegevoegd.",
+      "simulatorDisabled": "De simulator is op deze server uitgeschakeld.",
+      "loading": "Kanalen laden",
+      "loadFailed": "Kanalen konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "empty": {
+        "title": "Geen kanalen gekoppeld",
+        "message": "Koppel een kanaal en berichten van klanten komen in de inbox terecht."
+      },
+      "listLabel": "Gekoppelde kanalen",
+      "status": {
+        "connected": "Gekoppeld",
+        "disconnected": "Losgekoppeld",
+        "error": "Fout"
+      },
+      "capWindow": "Antwoordvenster van {hours} uur",
+      "capTemplates": "Sjablonen",
+      "capMedia": "Media",
+      "capReceipts": "Bezorgbevestigingen",
+      "lastEvent": "Laatste activiteit {when}",
+      "noEvents": "Nog geen activiteit",
+      "remove": "Verwijderen",
+      "removeTitle": "Dit kanaal verwijderen?",
+      "removeMessage": "{name} wordt verwijderd. Een kanaal dat nog gesprekken heeft, kan niet worden verwijderd; koppel het los.",
+      "removeConfirm": "Kanaal verwijderen",
+      "cancel": "Annuleren"
+    },
+    "templates": {
+      "eyebrow": "WhatsApp",
+      "title": "Een sjabloon verzenden",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "back": "Terug naar sjablonen",
+      "search": "Zoeken op naam of tekst",
+      "searchLabel": "Sjablonen zoeken",
+      "loading": "Sjablonen laden",
+      "loadError": "De sjablonen konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "empty": "Er zijn nog geen goedgekeurde sjablonen voor dit WhatsApp-nummer. Maak er een aan bij Sjablonen en wacht tot Meta het goedkeurt.",
+      "noResults": "Geen sjabloon past bij je zoekopdracht.",
+      "windowHint": "Een sjabloon werkt ook als het antwoordvenster van 24 uur is gesloten.",
+      "variables": "Vul de variabelen in",
+      "preview": "Wat de klant zal lezen",
+      "send": "Sjabloon verzenden",
+      "sending": "Verzenden",
+      "sent": "Sjabloon verzonden",
+      "problem": {
+        "required": "{label} is verplicht.",
+        "format": "{label} mag geen regeleinde, tab of vier spaties op rij bevatten."
+      },
+      "reason": {
+        "paused": "Gepauzeerd door WhatsApp. Het kan opnieuw worden verzonden zodra de pauze voorbij is.",
+        "media_header": "Heeft een koptekst met afbeelding, video of document, die nog niet vanuit de inbox kan worden verzonden.",
+        "header_variable": "Heeft een variabele in de koptekst, die nog niet vanuit de inbox kan worden ingevuld.",
+        "dynamic_button": "Heeft een knoppenlink met een variabele, die nog niet vanuit de inbox kan worden ingevuld.",
+        "authentication": "Sjablonen met een eenmalige code worden door het systeem verzonden, niet vanuit de inbox.",
+        "named_variables": "Gebruikt benoemde variabelen, die de inbox nog niet ondersteunt."
+      },
+      "hasMore": "De eerste {count} sjablonen worden getoond. Zoek op naam of tekst om de andere te vinden."
+    }
+  }
+}

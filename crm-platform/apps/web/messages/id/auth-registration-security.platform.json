@@ -1,0 +1,1809 @@
+{
+  "auth-registration-security": {
+    "platform": {
+      "shell": {
+        "brand": "CRM",
+        "title": "Konsol platform",
+        "skipToContent": "Lewati ke konten",
+        "navLabel": "Navigasi konsol",
+        "openMenu": "Buka menu",
+        "closeMenu": "Tutup menu",
+        "language": "Bahasa",
+        "themeToLight": "Beralih ke tema terang",
+        "themeToDark": "Beralih ke tema gelap",
+        "accountLink": "Akun dan keamanan ({email})",
+        "signOut": "Keluar",
+        "signingOut": "Keluar",
+        "redirecting": "Membuka penyiapan dua faktor",
+        "roles": {
+          "super_admin": "Super admin",
+          "support": "Dukungan",
+          "auditor": "Auditor"
+        },
+        "mfaRequired": {
+          "title": "Autentikasi dua faktor diwajibkan",
+          "body": "Super admin harus mengaktifkan aplikasi autentikator sebelum memakai konsol. Selesaikan penyiapan di bawah untuk membuka semua halaman."
+        }
+      },
+      "nav": {
+        "securityCenter": "Pusat Keamanan",
+        "securityEvents": "Peristiwa keamanan",
+        "registration": "Kebijakan pendaftaran",
+        "socialLogin": "Login sosial dan captcha",
+        "authPages": "Halaman autentikasi",
+        "plans": "Paket",
+        "account": "Akun dan dua faktor",
+        "groups": {
+          "security": "Keamanan",
+          "guestPages": "Masuk dan daftar",
+          "plans": "Paket",
+          "account": "Akun Anda"
+        }
+      },
+      "common": {
+        "copy": "Salin",
+        "copied": "Tersalin",
+        "copyFailed": "Tidak dapat menyalin",
+        "loading": "Memuat",
+        "retry": "Coba lagi",
+        "requestId": "ID permintaan",
+        "errors": {
+          "forbidden": "Peran Anda tidak mengizinkan ini.",
+          "request": "Permintaan ditolak. Muat ulang halaman lalu coba lagi.",
+          "unexpected": "Terjadi kesalahan di pihak kami. Coba lagi sebentar lagi."
+        },
+        "readOnly": {
+          "superAdmin": "Hanya super admin yang dapat mengubah pengaturan ini. Peran Anda ({role}) dapat melihatnya.",
+          "superAdminSupport": "Hanya super admin dan dukungan yang dapat mengubah pengaturan ini. Peran Anda ({role}) dapat melihatnya."
+        },
+        "copyWhat": "Salin {what}"
+      },
+      "login": {
+        "title": "Masuk operator",
+        "intro": "Konsol ini untuk orang yang menjalankan platform. Pengguna ruang kerja masuk di halaman masuk utama.",
+        "requestId": "ID permintaan",
+        "submit": "Masuk",
+        "submitting": "Sedang masuk",
+        "fields": {
+          "email": "Email",
+          "emailPlaceholder": "anda@perusahaan.com",
+          "password": "Kata sandi",
+          "showPassword": "Tampilkan kata sandi",
+          "hidePassword": "Sembunyikan kata sandi"
+        },
+        "errors": {
+          "email": "Masukkan alamat email yang valid.",
+          "passwordRequired": "Masukkan kata sandi Anda.",
+          "captchaRequired": "Centang kotak untuk menunjukkan bahwa Anda bukan robot.",
+          "codeFormat": "Masukkan 6 digit dari aplikasi autentikator Anda.",
+          "recoveryFormat": "Kode pemulihan terdiri dari 8 sampai 32 huruf, angka, atau tanda hubung."
+        },
+        "notices": {
+          "expired": "Sesi Anda berakhir. Masuk lagi untuk melanjutkan.",
+          "idle": "Anda dikeluarkan setelah {minutes, plural, other {# menit}} tanpa aktivitas. Masuk lagi untuk melanjutkan."
+        },
+        "problems": {
+          "invalid": "Kredensial itu tidak cocok.",
+          "invalidCode": "Kode itu tidak valid. Periksa kodenya lalu coba lagi.",
+          "locked": "Terlalu banyak percobaan gagal. Proses masuk dijeda untuk sementara.",
+          "tryAgainIn": "Coba lagi dalam {time}",
+          "ipBlocked": "Akses dari {ip} tidak diizinkan.",
+          "ipBlockedUnknown": "Akses dari alamat ini tidak diizinkan.",
+          "ipBlockedHelp": "Daftar izin operator tidak menyertakan alamat ini. Minta super admin untuk menambahkannya.",
+          "captcha": "Pemeriksaan captcha gagal. Selesaikan lalu coba lagi.",
+          "challengeExpired": "Sesi masuk itu kedaluwarsa. Masukkan kata sandi Anda lagi.",
+          "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+          "unexpected": "Kami tidak dapat memasukkan Anda. Coba lagi sebentar lagi.",
+          "lockedWait": "Terlalu banyak percobaan gagal. Coba lagi dalam {minutes, plural, other {# menit}}."
+        },
+        "captcha": {
+          "loadFailed": "Captcha tidak dapat dimuat. Periksa koneksi atau pemblokir konten Anda, lalu coba lagi.",
+          "retry": "Coba captcha lagi",
+          "v3Notice": "Halaman ini dilindungi oleh pemeriksaan captcha tak terlihat."
+        },
+        "mfa": {
+          "title": "Pemeriksaan dua faktor",
+          "intro": "Masukkan kode 6 digit dari aplikasi autentikator Anda.",
+          "recoveryIntro": "Masukkan salah satu kode pemulihan Anda. Setiap kode hanya berlaku sekali.",
+          "codeLabel": "Kode autentikasi",
+          "codeHint": "Kode berubah setiap 30 detik.",
+          "recoveryLabel": "Kode pemulihan",
+          "recoveryHint": "Huruf, angka, dan tanda hubung, persis seperti yang disimpan.",
+          "windowLeft": "Sesi masuk ini tetap terbuka selama {time}.",
+          "windowClosed": "Jendela masuk ini sudah ditutup. Kembali dan masukkan kata sandi Anda lagi.",
+          "verify": "Verifikasi dan masuk",
+          "verifying": "Memeriksa",
+          "useRecovery": "Gunakan kode pemulihan",
+          "useAuthenticator": "Gunakan aplikasi autentikator",
+          "back": "Kembali ke halaman masuk"
+        }
+      },
+      "mfa": {
+        "eyebrow": "Akun Anda",
+        "title": "Autentikasi dua faktor",
+        "description": "Lindungi {email} dengan aplikasi autentikator. Akun operator adalah akun dengan tingkat kepercayaan tertinggi di platform.",
+        "requestId": "ID permintaan",
+        "status": {
+          "title": "Aplikasi autentikator",
+          "on": "Aktif",
+          "body": "Autentikasi dua faktor aktif untuk akun ini. Anda akan diminta kode setiap kali masuk. Kode pemulihan ditampilkan sekali saat Anda mengaktifkannya."
+        },
+        "intro": {
+          "title": "Siapkan aplikasi autentikator",
+          "step1": "Pasang aplikasi autentikator seperti Google Authenticator, Microsoft Authenticator, atau 1Password.",
+          "step2": "Pindai kode QR yang kami tampilkan, atau ketik kunci penyiapan secara manual.",
+          "step3": "Masukkan kode 6 digit yang ditampilkan aplikasi untuk mengonfirmasi. Anda kemudian menerima kode pemulihan.",
+          "begin": "Mulai penyiapan",
+          "starting": "Menyiapkan"
+        },
+        "setup": {
+          "qrLabel": "Kode QR untuk aplikasi autentikator Anda",
+          "title": "Pindai, lalu konfirmasi",
+          "scan": "Buka aplikasi autentikator Anda, tambahkan akun, dan pindai kode ini. Kode digambar di browser Anda dan tidak pernah dikirim ke situs lain.",
+          "manualTitle": "Tidak bisa memindai?",
+          "manualHint": "Masukkan kunci penyiapan ini di aplikasi. Berbasis waktu, 6 digit.",
+          "codeLabel": "Kode 6 digit",
+          "codeHint": "Masukkan kode yang ditampilkan aplikasi saat ini.",
+          "enable": "Aktifkan dua faktor",
+          "enabling": "Mengaktifkan",
+          "cancel": "Batalkan penyiapan"
+        },
+        "codes": {
+          "enabled": "Autentikasi dua faktor aktif.",
+          "title": "Simpan kode pemulihan Anda",
+          "body": "Jika ponsel Anda hilang, setiap kode ini memungkinkan Anda masuk satu kali. Kode hanya ditampilkan sekarang. Simpan di tempat aman, terpisah dari kata sandi Anda.",
+          "copyAll": "Salin semua",
+          "download": "Unduh sebagai file teks",
+          "saved": "Saya telah menyimpan kode pemulihan ini dengan aman.",
+          "continue": "Lanjut ke konsol",
+          "fileHeader": "Kode pemulihan konsol platform untuk {email}. Setiap kode hanya berlaku sekali."
+        },
+        "errors": {
+          "unexpected": "Kami tidak dapat menyelesaikan langkah itu. Coba lagi sebentar lagi.",
+          "codeFormat": "Masukkan 6 digit yang ditampilkan di aplikasi Anda.",
+          "codeInvalid": "Kode itu tidak valid. Periksa jam di ponsel Anda dan coba kode berikutnya.",
+          "setupExpired": "Penyiapan kedaluwarsa. Mulai lagi.",
+          "locked": "Terlalu banyak percobaan gagal. Tunggu beberapa saat sebelum mencoba lagi.",
+          "lockedWait": "Terlalu banyak percobaan gagal. Coba lagi dalam {minutes, plural, other {# menit}}."
+        }
+      },
+      "security": {
+        "kicker": "Pusat Keamanan",
+        "title": "Keamanan dan kepatuhan",
+        "description": "Lindungi akses operator, pengiriman WhatsApp, perangkat, dan webhook. Setiap perubahan disimpan sebagai satu pembaruan dan dicatat di log peristiwa keamanan.",
+        "viewEvents": "Lihat peristiwa keamanan",
+        "save": "Simpan pengaturan",
+        "saving": "Menyimpan",
+        "saved": "{count, plural, other {# pengaturan disimpan}}",
+        "rejected": "Tidak ada yang disimpan. {count, plural, other {# kolom ditolak}}.",
+        "requestId": "ID permintaan",
+        "unsaved": "{count, plural, other {# perubahan belum disimpan}}",
+        "discard": "Buang perubahan",
+        "errors": {
+          "forbidden": "Peran Anda tidak diizinkan mengubah pengaturan ini.",
+          "unexpected": "Pengaturan tidak dapat disimpan. Coba lagi sebentar lagi."
+        },
+        "tabs": {
+          "summary": "Ringkasan",
+          "login": "Login dan MFA",
+          "whatsapp": "Pagar pengaman WhatsApp",
+          "abuse": "Filter penyalahgunaan",
+          "api": "API dan webhook",
+          "devices": "Perangkat",
+          "danger": "Zona bahaya"
+        },
+        "common": {
+          "range": "Diizinkan: {min} sampai {max}.",
+          "rangeWithZero": "Diizinkan: 0 (nonaktif), atau {min} sampai {max}.",
+          "blankKeeps": "Biarkan kosong untuk mempertahankan nilai tersimpan."
+        },
+        "problems": {
+          "range": "Masukkan bilangan bulat dari {min} sampai {max}.",
+          "rangeWithZero": "Masukkan 0, atau bilangan bulat dari {min} sampai {max}.",
+          "tooMany": "Maksimal {max} entri.",
+          "tooLong": "Setiap entri maksimal {max} karakter.",
+          "invalidEntry": "{entry} bukan alamat atau rentang yang valid.",
+          "totalTooLong": "Jaga daftar di bawah {max} karakter secara total."
+        },
+        "kpis": {
+          "score": {
+            "label": "Skor keamanan",
+            "strong": "kontrol kuat aktif",
+            "attention": "perlu perhatian"
+          },
+          "openRisks": {
+            "label": "Risiko terbuka",
+            "note": "{count} prioritas tinggi"
+          },
+          "blocked": {
+            "label": "Percobaan diblokir"
+          },
+          "last24h": "24 jam terakhir",
+          "warnings": {
+            "label": "Peringatan"
+          },
+          "mfa": {
+            "label": "Cakupan MFA operator",
+            "note": "{enrolled}/{total} operator terdaftar"
+          },
+          "webhooks": {
+            "label": "Kegagalan webhook",
+            "normal": "normal",
+            "review": "tinjau"
+          }
+        },
+        "risks": {
+          "kicker": "Antrean prioritas",
+          "title": "Item risiko untuk ditinjau",
+          "seeAll": "Lihat semua kegagalan",
+          "empty": "Semua aman. Tidak ada kegagalan atau peringatan dalam 7 hari terakhir.",
+          "columns": {
+            "severity": "Tingkat keparahan",
+            "signal": "Sinyal",
+            "workspace": "Ruang kerja",
+            "owner": "Pemilik",
+            "action": "Tindakan"
+          },
+          "severity": {
+            "high": "Tinggi",
+            "medium": "Sedang",
+            "watch": "Pantau"
+          },
+          "platform": "Platform",
+          "inspect": "Periksa",
+          "platformOf": "Platform {app}",
+          "owner": {
+            "system": "Sistem",
+            "types": {
+              "user": "Pengguna",
+              "platform_operator": "Operator platform"
+            }
+          },
+          "noWorkspace": "Tanpa ruang kerja"
+        },
+        "coverage": {
+          "kicker": "Cakupan",
+          "title": "Kontrol aktif",
+          "buckets": {
+            "admin_access": "Akses admin",
+            "send_abuse": "Pencegahan penyalahgunaan WhatsApp",
+            "api_hardening": "Penguatan API",
+            "incident_readiness": "Kesiapan insiden"
+          }
+        },
+        "quickActions": {
+          "kicker": "Tindakan cepat",
+          "rotate": "Rotasi rahasia webhook",
+          "forceReset": "Paksa reset kata sandi",
+          "resume": "Lanjutkan pengiriman",
+          "halt": "Hentikan darurat pengiriman",
+          "scopeAll": "semua",
+          "scopeUsers": "semua pengguna",
+          "scopeGlobal": "global",
+          "halted": "sedang dihentikan",
+          "superAdminOnly": "Hanya super admin yang dapat menjalankan tindakan ini."
+        },
+        "enforcement": {
+          "kicker": "Kontrol yang jujur",
+          "title": "Apa yang dilakukan setiap kontrol saat ini",
+          "description": "Menyimpan pengaturan tidak sama dengan platform menjalankannya. Diberlakukan berarti ada yang memeriksanya sekarang, sebagian berarti hanya beberapa jalur yang memeriksa, dicadangkan berarti disimpan untuk nanti.",
+          "show": "Tampilkan",
+          "hide": "Sembunyikan",
+          "columns": {
+            "control": "Kontrol",
+            "consumer": "Yang memakainya",
+            "status": "Status"
+          },
+          "enforced": "Diberlakukan",
+          "partial": "Sebagian",
+          "reserved": "Dicadangkan"
+        },
+        "controls": {
+          "requireMfaForAll": {
+            "label": "Wajibkan 2FA untuk semua pengguna",
+            "hint": "Setiap pengguna ruang kerja harus menyiapkan aplikasi autentikator sebelum melanjutkan."
+          },
+          "requireMfaForAdmins": {
+            "label": "Wajibkan 2FA untuk admin",
+            "hint": "Pengguna dengan peran Admin di ruang kerja mana pun harus menyiapkan aplikasi autentikator."
+          },
+          "requireMfaForSuperAdmins": {
+            "label": "Wajibkan 2FA untuk super admin",
+            "hint": "Super admin platform masuk hanya dengan kata sandi selama ini nonaktif. Mengaktifkannya membuat mereka mendaftar dan memakai aplikasi autentikator."
+          },
+          "requireMfaForOwners": {
+            "label": "Wajibkan 2FA untuk pemilik ruang kerja",
+            "hint": "Pemilik setiap ruang kerja harus menyiapkan aplikasi autentikator."
+          },
+          "allowedMfaMethods": {
+            "label": "Metode 2FA yang diizinkan",
+            "hint": "Setidaknya satu tetap dipilih: jika tidak ada yang dicentang, daftar tersimpan dipertahankan. Saat ini hanya ada aplikasi autentikator.",
+            "methods": {
+              "totp": "Aplikasi autentikator",
+              "email": "Kode email",
+              "telegram": "Bot Telegram"
+            }
+          },
+          "sessionTimeoutMinutes": {
+            "label": "Batas waktu sesi (menit)",
+            "hint": "Waktu tidak aktif sebelum sesi masuk browser berakhir. Sesi yang dipertahankan 30 hari dikecualikan."
+          },
+          "maxConcurrentSessions": {
+            "label": "Maks. sesi bersamaan per pengguna",
+            "hint": "Jika terlampaui, sesi terlama dikeluarkan."
+          },
+          "rememberMeEnabled": {
+            "label": "Izinkan tetap masuk",
+            "hint": "Nonaktif berarti setiap sesi berakhir saat browser ditutup."
+          },
+          "lockoutAfterFailures": {
+            "label": "Maks. percobaan login",
+            "hint": "Percobaan masuk gagal dalam jangka waktu sebelum akun dijeda."
+          },
+          "lockoutWindowMinutes": {
+            "label": "Jangka waktu penguncian (menit)",
+            "hint": "Berapa lama kegagalan dihitung dan berapa lama jeda berlangsung."
+          },
+          "passwordMinLength": {
+            "label": "Panjang minimum"
+          },
+          "passwordRequireUpper": {
+            "label": "Wajibkan huruf kapital",
+            "short": "Huruf kapital"
+          },
+          "passwordRequireNumber": {
+            "label": "Wajibkan angka",
+            "short": "Angka"
+          },
+          "passwordRequireSymbol": {
+            "label": "Wajibkan simbol",
+            "short": "Simbol"
+          },
+          "passwordMaxAgeDays": {
+            "label": "Batas usia kata sandi (hari)",
+            "hint": "0 berarti kata sandi tidak pernah kedaluwarsa."
+          },
+          "waGuardrailsMode": {
+            "label": "Mode",
+            "options": {
+              "off": "Nonaktif (tanpa pemeriksaan)",
+              "monitor": "Pantau (hanya catat log)",
+              "enforce": "Terapkan (blokir)"
+            },
+            "explain": {
+              "off": "Tidak ada pemeriksaan yang berjalan. Batas dan filter di tab ini tidak berpengaruh.",
+              "monitor": "Pemeriksaan berjalan dan kecocokan dicatat di log peristiwa, tetapi tidak ada pesan yang dihentikan. Gunakan ini untuk memastikan aturan sebelum menerapkannya.",
+              "enforce": "Pesan yang cocok diblokir sebelum dikirim."
+            }
+          },
+          "waMaxSendsPerMinute": {
+            "label": "Maks. pengiriman per menit",
+            "hint": "Per ruang kerja. 0 berarti tanpa batas."
+          },
+          "waMaxSendsPerDay": {
+            "label": "Maks. pengiriman per hari",
+            "hint": "Per ruang kerja. 0 berarti tanpa batas."
+          },
+          "waHoldOnLinksCount": {
+            "label": "Tahan jika tautan melebihi",
+            "hint": "Pesan dengan tautan lebih banyak dari ini akan ditahan. 0 berarti tanpa batas."
+          },
+          "waHoldOnScamPattern": {
+            "label": "Tahan pengiriman yang cocok dengan pola penipuan",
+            "hint": "Frasa hadiah, akun mendesak, dan jebakan verifikasi."
+          },
+          "waRequireTemplateReview": {
+            "label": "Wajibkan peninjauan templat sebelum kirim",
+            "hint": "Hanya dihitung dalam skor keamanan; belum ada yang memeriksanya."
+          },
+          "abuseBlockFinanceTerms": {
+            "label": "Blokir istilah keuangan dan cepat kaya",
+            "hint": "Pola investasi palsu, keuntungan terjamin, dan pengalihan pembayaran."
+          },
+          "abuseBlockShortLinks": {
+            "label": "Blokir tautan pendek dan mencurigakan",
+            "hint": "Pemendek tautan yang menyembunyikan tujuan sebuah pesan."
+          },
+          "abuseBlockKeywordList": {
+            "label": "Daftar blokir kata kunci kustom",
+            "hint": "Satu per baris, atau dipisahkan koma. Hingga 5.000 karakter secara total. Pencocokan tidak membedakan huruf besar kecil. Pesan yang cocok ditandai atau diblokir sesuai mode pagar pengaman.",
+            "placeholder": "forex\nuang cepat\nkeuntungan terjamin"
+          },
+          "apiRateLimitPerMinute": {
+            "label": "Permintaan API per menit",
+            "hint": "Permintaan per menit terbanyak yang dapat dibuat satu kunci API ruang kerja. Sebuah kunci dapat memiliki batas sendiri yang lebih rendah, tidak pernah lebih tinggi."
+          },
+          "webhookSignatureRequired": {
+            "label": "Wajibkan tanda tangan HMAC",
+            "hint": "Endpoint webhook tidak dapat dibuat tanpa rahasia penandatanganan."
+          },
+          "webhookReplayWindowSec": {
+            "label": "Jendela replay webhook (detik)",
+            "hint": "Disimpan untuk nanti; webhook penyedia yang masuk sudah diperiksa tanda tangannya."
+          },
+          "deviceTrustRequired": {
+            "label": "Wajibkan browser tepercaya",
+            "hint": "Disimpan untuk nanti; belum ada alur kepercayaan perangkat."
+          },
+          "deviceLogoutOnInactiveDays": {
+            "label": "Keluar otomatis saat tidak aktif (hari)",
+            "hint": "Perangkat WhatsApp tertaut yang tidak terlihat selama ini ditandai terputus. 0 berarti tidak pernah."
+          },
+          "ipAllowlistEnabled": {
+            "label": "Aktifkan daftar izin",
+            "hint": "Hanya alamat di bawah yang dapat mengakses konsol ini."
+          },
+          "ipAllowlistCidrs": {
+            "label": "Alamat yang diizinkan"
+          },
+          "alertOnNewDevice": {
+            "label": "Peringatan perangkat baru",
+            "hint": "Kirim email ke pengguna saat login berasal dari perangkat yang belum pernah terlihat."
+          },
+          "alertOnNewCountry": {
+            "label": "Peringatan perubahan jaringan",
+            "hint": "Kirim email ke pengguna saat login berasal dari jaringan yang berbeda dari biasanya."
+          },
+          "alertChannel": {
+            "label": "Tujuan peringatan login",
+            "hint": "Saat ini hanya email yang dikirim; kanal WhatsApp dicatat untuk nanti.",
+            "options": {
+              "email": "Email",
+              "whatsapp": "WhatsApp",
+              "both": "Email dan WhatsApp"
+            }
+          },
+          "auditLogRetentionDays": {
+            "label": "Simpan peristiwa keamanan selama (hari)",
+            "hint": "0 berarti disimpan selamanya."
+          }
+        },
+        "panels": {
+          "login": {
+            "lockout": {
+              "kicker": "Perlindungan login",
+              "title": "Aturan penguncian akun"
+            },
+            "password": {
+              "title": "Aturan kata sandi baru",
+              "note": "Berlaku saat kata sandi dibuat atau diubah, tidak pernah untuk login yang sudah ada, jadi memperketatnya tidak akan mengunci siapa pun."
+            },
+            "mfa": {
+              "kicker": "Autentikasi multifaktor",
+              "title": "Penerapan 2FA",
+              "description": "Berlaku untuk pengguna ruang kerja. Operator platform yang menjadi super admin selalu memerlukan 2FA."
+            }
+          },
+          "whatsapp": {
+            "master": {
+              "kicker": "Sakelar utama",
+              "title": "Penerapan pagar pengaman",
+              "description": "Batas dan filter di tab ini hanya bertindak sesuai mode ini. Pilih mode dan baca fungsinya."
+            },
+            "caps": {
+              "kicker": "Laju pengiriman",
+              "title": "Batas keras"
+            },
+            "spam": {
+              "kicker": "Aturan konten",
+              "title": "Kontrol anti-spam"
+            },
+            "health": {
+              "kicker": "Kualitas kepercayaan",
+              "title": "Kesehatan ruang kerja",
+              "body": "Jumlah blokir dan penandaan per ruang kerja muncul di sini setelah pipeline pengiriman melaporkannya. Sampai saat itu, gunakan log peristiwa keamanan untuk melihat apa yang ditangkap pagar pengaman.",
+              "link": "Lihat ruang kerja"
+            }
+          },
+          "abuse": {
+            "kicker": "Filter penyalahgunaan",
+            "title": "Pencegahan penggunaan ilegal",
+            "aside": {
+              "title": "Jaga kebijakan ini tetap ketat",
+              "body": "Filter ini menjauhkan penipuan, phishing, dan pelecehan dari kanal yang dipakai pelanggan Anda. Filter mengikuti mode pagar pengaman yang diatur di tab pagar pengaman WhatsApp."
+            }
+          },
+          "api": {
+            "traffic": {
+              "kicker": "Kontrol lalu lintas",
+              "title": "Batas laju"
+            },
+            "integrity": {
+              "kicker": "Pertahanan webhook",
+              "title": "Integritas"
+            },
+            "allowlist": {
+              "kicker": "Daftar izin IP",
+              "title": "Akses konsol",
+              "description": "Hanya membatasi konsol operator ini. Pengguna ruang kerja, API publik, dan webhook tidak terpengaruh. Daftar kosong mengizinkan semua orang, sehingga tidak akan pernah mengunci semua operator.",
+              "cidrs": "Alamat yang diizinkan",
+              "cidrsHint": "Satu alamat atau rentang per baris, misalnya 203.0.113.9 atau 203.0.113.0/24. Koma juga dapat dipakai.",
+              "placeholder": "203.0.113.0/24\n2001:db8::/32",
+              "yourIp": "Alamat Anda seperti yang dilihat API:",
+              "yourIpUnknown": "Kami tidak dapat mendeteksi alamat Anda, sehingga tidak bisa memperingatkan Anda soal mengunci diri sendiri.",
+              "addMine": "Tambahkan IP saya",
+              "alreadyListed": "Sudah terdaftar",
+              "lockoutWarning": "Alamat Anda {ip} tidak ada di daftar ini. Menyimpan akan mengunci Anda, jadi server akan menolaknya. Tambahkan alamat Anda terlebih dahulu."
+            }
+          },
+          "devices": {
+            "trust": {
+              "kicker": "Integritas perangkat",
+              "title": "Kebijakan kepercayaan dan sesi"
+            },
+            "alerts": {
+              "kicker": "Kanal peringatan login",
+              "title": "Tujuan peringatan"
+            },
+            "audit": {
+              "kicker": "Jejak audit",
+              "title": "Retensi",
+              "description": "Peristiwa keamanan yang lebih lama dari ini dibersihkan setelah tugas pembersihan tersedia.",
+              "link": "Buka log peristiwa keamanan"
+            }
+          }
+        },
+        "danger": {
+          "kicker": "Zona bahaya",
+          "title": "Tindakan tak dapat dibatalkan di seluruh platform",
+          "description": "Setiap tindakan meminta Anda mengetik namanya sebelum apa pun terjadi, dan setiap tindakan dicatat di log peristiwa keamanan.",
+          "superAdminOnly": "Tindakan ini hanya untuk super admin. Peran Anda adalah {role}.",
+          "haltState": "Pengiriman keluar:",
+          "haltOn": "Dihentikan",
+          "haltOff": "Berjalan",
+          "revoke": {
+            "title": "Cabut semua sesi",
+            "detail": "mengeluarkan semua orang"
+          },
+          "forceReset": {
+            "title": "Paksa reset kata sandi untuk semua pengguna",
+            "detail": "menandai setiap pengguna"
+          },
+          "rotate": {
+            "title": "Rotasi semua rahasia webhook",
+            "detail": "integrasi yang ada akan rusak",
+            "note": "Rahasia penandatanganan webhook berada di area integrasi, yang belum ada, jadi ini melaporkan 0 yang dirotasi untuk sementara."
+          },
+          "halt": {
+            "title": "Hentikan darurat semua pengiriman",
+            "detail": "sakelar mati di seluruh platform"
+          },
+          "resume": {
+            "title": "Lanjutkan pengiriman",
+            "detail": "sedang dihentikan"
+          },
+          "logged": {
+            "kicker": "Yang dicatat",
+            "title": "Setiap tindakan menulis sebuah peristiwa",
+            "events": {
+              "revoke": "platform.security.sessions_revoked",
+              "forceReset": "platform.security.force_password_reset_all",
+              "rotate": "platform.security.webhook_secrets_rotated",
+              "halt": "platform.security.emergency_halt_engaged",
+              "policy": "platform.security.policy_updated"
+            },
+            "notes": {
+              "revoke": "Saat semua sesi diakhiri, termasuk sesi Anda.",
+              "forceReset": "Saat setiap pengguna diminta memilih kata sandi baru.",
+              "rotate": "Saat rahasia dirotasi, beserta jumlahnya.",
+              "halt": "Saat penghentian diaktifkan, dan lagi saat pengiriman dilanjutkan.",
+              "policy": "Pada setiap perubahan pengaturan di atas, dengan nilai lama dan baru."
+            },
+            "trail": "Lihat jejak audit keamanan"
+          },
+          "halted": {
+            "title": "Penghentian darurat aktif",
+            "body": "Setiap pesan keluar diblokir di seluruh platform sampai pengiriman dilanjutkan.",
+            "resume": "Lanjutkan pengiriman"
+          },
+          "dialog": {
+            "revoke_sessions": {
+              "title": "Cabut semua sesi",
+              "body": "Semua orang yang masuk ke ruang kerja atau konsol ini dikeluarkan, termasuk Anda.",
+              "effect1": "Setiap orang harus masuk lagi, dengan dua faktor jika aktif.",
+              "effect2": "Pekerjaan yang belum disimpan di browser mungkin hilang.",
+              "confirm": "Cabut semua sesi",
+              "done": "{count, plural, =0 {Tidak ada sesi yang aktif.} other {# sesi dicabut.}}",
+              "signedOut": "Anda juga telah dikeluarkan. Masuk lagi untuk melanjutkan."
+            },
+            "force_password_reset": {
+              "title": "Paksa reset kata sandi untuk semua pengguna",
+              "body": "Setiap pengguna ruang kerja akan diminta memilih kata sandi baru saat berikutnya memakai aplikasi.",
+              "effect1": "Tidak ada yang dikeluarkan sekarang; permintaan muncul pada permintaan berikutnya.",
+              "effect2": "Orang yang mengabaikan permintaan tidak dapat memakai aplikasi sampai mengubahnya.",
+              "confirm": "Paksa reset",
+              "done": "{count, plural, =0 {Tidak ada pengguna yang ditandai.} other {# pengguna harus memilih kata sandi baru.}}"
+            },
+            "rotate_webhook_secrets": {
+              "title": "Rotasi semua rahasia webhook",
+              "body": "Setiap rahasia penandatanganan webhook diganti dengan yang baru.",
+              "effect1": "Integrasi yang memverifikasi tanda tangan berhenti berfungsi sampai memakai rahasia baru.",
+              "effect2": "Tidak ada cara untuk mengembalikan rahasia lama.",
+              "confirm": "Rotasi rahasia",
+              "done": "{count, plural, =0 {0 rahasia dirotasi.} other {# rahasia dirotasi.}}",
+              "noneRotated": "Tidak ada yang dirotasi karena area integrasi belum menyimpan rahasia webhook."
+            },
+            "halt_sends": {
+              "title": "Hentikan darurat semua pengiriman",
+              "body": "Setiap pesan keluar di semua ruang kerja ditolak sampai Anda melanjutkan pengiriman.",
+              "effect1": "Pelanggan tidak menerima apa pun, termasuk balasan, kampanye, dan otomatisasi.",
+              "effect2": "Gunakan lanjutkan pengiriman untuk mengaktifkan kembali pesan.",
+              "confirm": "Hentikan semua pengiriman",
+              "done": "Penghentian darurat aktif. Semua pengiriman keluar diblokir."
+            },
+            "resume_sends": {
+              "title": "Lanjutkan pengiriman",
+              "body": "Pesan keluar diaktifkan kembali untuk setiap ruang kerja.",
+              "effect1": "Pesan yang ditolak selama penghentian tidak dikirim otomatis.",
+              "effect2": "Periksa log peristiwa terlebih dahulu jika Anda menghentikan pengiriman karena insiden.",
+              "confirm": "Lanjutkan pengiriman",
+              "done": "Pengiriman telah dilanjutkan."
+            },
+            "typeToConfirm": "Ketik <code>{phrase}</code> untuk mengonfirmasi",
+            "phraseHint": "Huruf kapital dan spasi tambahan diabaikan.",
+            "cancel": "Batal",
+            "working": "Memproses",
+            "close": "Tutup",
+            "signInAgain": "Masuk lagi",
+            "requestId": "ID permintaan",
+            "errors": {
+              "forbidden": "Hanya super admin yang dapat menjalankan tindakan ini.",
+              "unexpected": "Tindakan tidak selesai. Periksa log peristiwa sebelum mencoba lagi."
+            }
+          }
+        },
+        "tabsLabel": "Bagian Pusat Keamanan",
+        "search": {
+          "label": "Cari aturan keamanan, IP, dan pelaku",
+          "placeholder": "Cari aturan keamanan, IP, pelaku…",
+          "shortcut": "Cmd K"
+        }
+      },
+      "events": {
+        "kicker": "Pusat Keamanan",
+        "title": "Peristiwa keamanan",
+        "description": "Login, penguncian, perubahan kebijakan, dan tindakan berbahaya, terbaru lebih dulu.",
+        "refresh": "Segarkan",
+        "refreshing": "Menyegarkan",
+        "filters": {
+          "label": "Filter peristiwa",
+          "event": "Nama peristiwa",
+          "eventHint": "Nama persis, misalnya auth.failed. Pilih saran atau ketik sendiri.",
+          "status": "Status",
+          "anyStatus": "Status apa pun",
+          "apply": "Terapkan",
+          "clear": "Hapus filter",
+          "q": "Cari teks",
+          "qHint": "Menemukan peristiwa yang namanya mengandung teks ini, tanpa membedakan huruf besar kecil."
+        },
+        "status": {
+          "success": "Berhasil",
+          "failure": "Gagal",
+          "warning": "Peringatan",
+          "info": "Info"
+        },
+        "empty": "Belum ada peristiwa keamanan yang tercatat.",
+        "emptyFiltered": "Tidak ada peristiwa yang cocok dengan filter ini.",
+        "listLabel": "Peristiwa keamanan",
+        "ip": "IP",
+        "showPayload": "Tampilkan detail",
+        "hidePayload": "Sembunyikan detail",
+        "noPayload": "Peristiwa ini tidak memiliki detail tambahan.",
+        "payloadLabel": "Detail {event}",
+        "loadMore": "Muat lebih banyak",
+        "loading": "Memuat",
+        "end": "{count, plural, other {Menampilkan semua # peristiwa.}}",
+        "export": "Ekspor CSV",
+        "exported": "{count, plural, other {# peristiwa yang dimuat disimpan ke file CSV.}}",
+        "actorLabel": "Pelaku",
+        "actorTypes": {
+          "user": "Pengguna",
+          "platform_operator": "Operator platform",
+          "system": "Sistem"
+        },
+        "workspaceLabel": "Ruang kerja",
+        "requestIdLabel": "ID permintaan",
+        "userAgentLabel": "Browser",
+        "copyNames": {
+          "actorId": "ID pelaku",
+          "orgId": "ID ruang kerja",
+          "requestId": "ID permintaan"
+        }
+      },
+      "registration": {
+        "kicker": "Halaman tamu",
+        "title": "Kebijakan pendaftaran",
+        "description": "Tentukan siapa yang dapat mendaftar, cara email diverifikasi, paket awal ruang kerja baru, dan cara kerja kode pendaftaran.",
+        "save": "Simpan pengaturan",
+        "saving": "Menyimpan",
+        "saved": "{count, plural, other {# pengaturan disimpan}}",
+        "rejected": "Tidak ada yang disimpan. {count, plural, other {# kolom ditolak}}.",
+        "requestId": "ID permintaan",
+        "unsaved": "{count, plural, other {# perubahan belum disimpan}}",
+        "discard": "Buang perubahan",
+        "errors": {
+          "unexpected": "Pengaturan tidak dapat disimpan. Coba lagi sebentar lagi."
+        },
+        "problems": {
+          "range": "Masukkan bilangan bulat dari {min} sampai {max}.",
+          "tooLong": "Maksimal {max} karakter.",
+          "required": "Kolom ini wajib diisi.",
+          "link": "Gunakan path situs seperti /legal/terms, atau alamat http atau https lengkap.",
+          "senderFormat": "Pilih salah satu pengirim dari daftar.",
+          "countryFormat": "Gunakan kode negara dua huruf.",
+          "senderRequired": "Pilih kanal pengirim sebelum membuat templat."
+        },
+        "policy": {
+          "kicker": "Pendaftaran",
+          "title": "Siapa yang dapat mendaftar",
+          "description": "Pengaturan ini berlaku untuk pendaftaran baru, termasuk pendaftaran sosial."
+        },
+        "fields": {
+          "publicRegistration": {
+            "label": "Pendaftaran publik",
+            "hintOn": "Siapa saja dapat membuat ruang kerja dari halaman pendaftaran.",
+            "hintOff": "Halaman pendaftaran menampilkan pesan pendaftaran ditutup. Pengguna yang ada tidak terpengaruh."
+          },
+          "emailVerification": {
+            "label": "Verifikasi email",
+            "options": {
+              "off": "Nonaktif: akun diverifikasi otomatis",
+              "banner": "Banner: diizinkan, dengan pengingat",
+              "block": "Blokir: verifikasi sebelum melanjutkan"
+            },
+            "explain": {
+              "off": "Akun baru langsung dianggap terverifikasi. Tidak perlu email verifikasi.",
+              "banner": "Orang dapat langsung memakai aplikasi dan melihat pengingat sampai mereka memverifikasi.",
+              "block": "Orang harus memverifikasi email sebelum dapat memakai hal lain."
+            }
+          },
+          "defaultPlanId": {
+            "label": "Paket default",
+            "hint": "Paket awal ruang kerja baru. Otomatis memakai paket yang ditandai sebagai default pendaftaran, atau paket gratis aktif pertama.",
+            "placeholder": "slug paket",
+            "auto": "Otomatis",
+            "unavailable": "{slug} (bukan paket aktif)",
+            "loadFailed": "Daftar paket tidak dapat dimuat.",
+            "kinds": {
+              "free": "Gratis",
+              "paid": "Berbayar",
+              "custom_quote": "Penawaran kustom"
+            }
+          },
+          "trialDays": {
+            "label": "Uji coba gratis (hari)",
+            "hint": "Bilangan bulat dari {min} sampai {max}. 0 berarti tanpa uji coba. Biarkan kosong untuk mempertahankan nilai tersimpan."
+          },
+          "defaultTimezone": {
+            "label": "Zona waktu default",
+            "hint": "Dipakai untuk ruang kerja baru sampai mereka memilih sendiri."
+          },
+          "defaultCountryIso": {
+            "label": "Negara default",
+            "hint": "Memilih otomatis negara telepon saat pendaftaran.",
+            "none": "Tanpa default"
+          },
+          "termsUrl": {
+            "label": "Tautan ketentuan",
+            "hint": "Path situs atau alamat lengkap, ditampilkan di halaman pendaftaran dan masuk."
+          },
+          "privacyUrl": {
+            "label": "Tautan privasi"
+          },
+          "cookiesUrl": {
+            "label": "Tautan cookie",
+            "hint": "Opsional. Kosongkan untuk menyembunyikannya."
+          },
+          "otpEnabled": {
+            "label": "Kode pendaftaran lewat WhatsApp",
+            "hint": "Akun baru harus mengonfirmasi nomor telepon dengan kode sekali pakai sebelum ruang kerja dibuat."
+          },
+          "otpSender": {
+            "label": "Pengirim",
+            "hint": "Nomor terhubung yang mengirim kode. Tambahkan lewat Kelola pengirim."
+          },
+          "ttlMinutes": {
+            "label": "Masa berlaku kode (menit)"
+          },
+          "length": {
+            "label": "Panjang kode (digit)"
+          },
+          "resendCooldownSec": {
+            "label": "Jeda kirim ulang (detik)"
+          },
+          "maxAttempts": {
+            "label": "Maks. percobaan"
+          }
+        },
+        "otp": {
+          "kicker": "Verifikasi",
+          "title": "Kode pendaftaran",
+          "description": "Pengaturan kode sekali pakai yang dikirim saat seseorang mendaftar.",
+          "knobHint": "{min} sampai {max}. Kosong memakai {default}.",
+          "status": {
+            "on": "Berjalan",
+            "off": "Tidak berjalan",
+            "unsavedNote": "Ini menampilkan pengaturan tersimpan. Simpan perubahan Anda untuk melihat penerapannya.",
+            "reason": {
+              "active": "Pendaftar baru harus mengonfirmasi nomor telepon dengan kode.",
+              "disabled": "Sakelar nonaktif, jadi pendaftaran tidak meminta kode.",
+              "no_sender": "Tidak ada pengirim yang dipilih, jadi pendaftaran melewati langkah kode.",
+              "sender_missing": "Pengirim yang dipilih sudah tidak ada, jadi pendaftaran melewati langkah kode.",
+              "sender_incomplete": "Pengirim yang dipilih tidak memiliki kredensial, jadi pendaftaran melewati langkah kode.",
+              "dev_in_production": "Pengirim log tidak dapat berjalan di produksi, jadi pendaftaran melewati langkah kode.",
+              "template_missing": "Pengirim WhatsApp Business memerlukan templat yang disetujui. Buat dan ajukan satu di bawah; sampai saat itu pendaftaran melewati langkah kode.",
+              "template_pending": "Meta masih meninjau templat, jadi pendaftaran melewati langkah kode sampai disetujui.",
+              "template_rejected": "Meta menolak templat, jadi pendaftaran melewati langkah kode. Perbaiki lalu ajukan lagi."
+            }
+          },
+          "sender": {
+            "none": "Tanpa pengirim",
+            "option": "{label} ({kind})",
+            "unknown": "Pengirim tidak dikenal ({ref})",
+            "manage": "Kelola pengirim",
+            "empty": "Belum ada pengirim. Tambahkan lewat Kelola pengirim.",
+            "kinds": {
+              "waba": "WhatsApp Business",
+              "twilio": "Twilio",
+              "device": "Sesi tidak resmi",
+              "dev": "Hanya log"
+            },
+            "noneConnected": "Belum ada pengirim Anda yang terhubung. Selesaikan satu di Kelola pengirim; hanya pengirim yang terhubung yang dapat dipilih.",
+            "unfinished": "{label} ({kind}, belum selesai)"
+          },
+          "template": {
+            "title": "Templat pesan",
+            "states": {
+              "none": "Belum dibuat",
+              "pending": "Menunggu Meta",
+              "approved": "Disetujui",
+              "rejected": "Ditolak",
+              "local": "Siap"
+            },
+            "explain": {
+              "none": "Buat pesan setelah pengirim dan pengaturan kode di atas sudah benar. WhatsApp Business memerlukan persetujuan Meta; kanal lain langsung memakai pesan.",
+              "waba": "Diajukan ke Meta sebagai templat autentikasi. Langkah kode aktif sendiri setelah Meta menyetujuinya, biasanya dalam beberapa menit.",
+              "local": "Disimpan sebagai teks biasa untuk kanal ini. Tidak perlu peninjauan, jadi langsung dipakai."
+            },
+            "name": "Nama",
+            "metaId": "ID templat Meta",
+            "validFor": "Kode berlaku selama",
+            "minutes": "{count, plural, other {# menit}}",
+            "submitted": "Dibuat",
+            "checked": "Terakhir diperiksa",
+            "never": "Belum",
+            "reason": "Alasan",
+            "stale": "Templat ini dibuat untuk kode yang berlaku {count, plural, other {# menit}}. Buat dan ajukan lagi agar sesuai dengan masa berlaku di atas.",
+            "create": "Buat & ajukan templat OTP",
+            "creating": "Memproses",
+            "refresh": "Segarkan status",
+            "refreshing": "Memeriksa",
+            "outcome": {
+              "submitted": "Templat telah diajukan ke Meta untuk ditinjau. Langkah kode aktif sendiri setelah Meta menyetujuinya.",
+              "resubmitted": "Templat dikirim lagi ke Meta untuk ditinjau. Langkah kode tetap nonaktif sampai disetujui.",
+              "local_ready": "Pesan disimpan dan langsung dipakai. Kanal ini tidak memerlukan peninjauan.",
+              "already_pending": "Templat sudah ada di Meta untuk ditinjau. Gunakan Segarkan status untuk memeriksanya.",
+              "already_approved": "Templat sudah disetujui. Tidak ada yang perlu dikirim.",
+              "refreshed": "Status diperiksa.",
+              "approvedNow": "Meta langsung menyetujui templat. Langkah kode siap.",
+              "rejectedNow": "Meta menolak templat. Alasannya ditampilkan di bawah; perbaiki lalu ajukan lagi."
+            },
+            "refreshed": {
+              "pending": "Meta masih meninjau templat.",
+              "approved": "Meta menyetujui templat. Langkah kode siap.",
+              "rejected": "Meta menolak templat.",
+              "local": "Templat ini tidak memerlukan peninjauan."
+            },
+            "errors": {
+              "submit": "Meta tidak menerima templat. Pengaturan kode Anda yang lain telah disimpan.",
+              "check": "Status tidak dapat dibaca dari Meta.",
+              "rejected": "Templat tidak dapat dibuat.",
+              "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi."
+            },
+            "createHint": "Membuat pesan pendaftaran untuk pengirim yang dipilih. WhatsApp Business dikirim ke Meta untuk ditinjau; kanal lain langsung siap.",
+            "picker": {
+              "label": "Templat WhatsApp Business",
+              "hint": "Pendaftaran mengirim templat yang dibuat dengan tombol di bawah. Templat autentikasi lain yang disetujui dari pengirim ini ditampilkan agar Anda bisa melihatnya; belum dapat dipilih di sini.",
+              "none": "Belum ada (buat di bawah)",
+              "loading": "Memuat templat",
+              "option": "{name} ({language}), {status}",
+              "otherSender": "Simpan pengirim untuk melihat templatnya.",
+              "failed": "Daftar templat tidak dapat dimuat.",
+              "unavailable": "Daftar templat Meta tidak dapat dibaca: {reason}"
+            }
+          },
+          "test": {
+            "about": "Kirim kode asli ke sebuah ponsel untuk memeriksa pengirim berfungsi sebelum pendaftaran bergantung padanya.",
+            "button": "Kirim kode uji",
+            "title": "Kirim kode uji",
+            "intro": "Kode asli dikirim ke nomor yang Anda masukkan, lewat pengirim di bawah. Memakai pengaturan kode dan templat yang tersimpan. Anda dapat mengirim 5 per jam.",
+            "to": "Nomor telepon",
+            "toHint": "Dengan kode negara, misalnya +91 98765 43221.",
+            "sender": "Pengirim",
+            "senderHint": "Biarkan pada pengirim tersimpan, atau coba yang lain dari daftar.",
+            "savedSender": "Pengirim tersimpan",
+            "send": "Kirim kode",
+            "sending": "Mengirim",
+            "close": "Tutup",
+            "sent": "Kode uji dikirim ke {to}.",
+            "remaining": "{count, plural, other {Sisa # uji jam ini.}}",
+            "notShown": "Kode tidak ditampilkan di sini; baca di ponsel.",
+            "requestId": "ID permintaan",
+            "errors": {
+              "invalidNumber": "Masukkan nomor dengan kode negaranya, misalnya +91 98765 43221.",
+              "rateLimited": "Terlalu banyak kode uji jam ini. Coba lagi dalam {minutes, plural, other {# menit}}.",
+              "failed": "Kode tidak dapat dikirim.",
+              "rejected": "Uji tidak terkirim.",
+              "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi."
+            },
+            "reasons": {
+              "not_configured": "Pengirim hilang atau tidak lengkap.",
+              "template_not_approved": "Templat belum disetujui.",
+              "invalid_number": "Nomor itu tidak valid.",
+              "auth_failed": "Penyedia menolak kredensial. Periksa rahasia di Kelola pengirim.",
+              "rejected": "Penyedia menolak pesan.",
+              "provider_error": "Penyedia mengalami masalah. Coba lagi sebentar lagi.",
+              "connection_refused": "Alamat penyedia menolak koneksi.",
+              "timeout": "Penyedia tidak menjawab tepat waktu.",
+              "transport_error": "Penyedia tidak dapat dijangkau."
+            }
+          }
+        },
+        "senders": {
+          "title": "Kelola pengirim",
+          "intro": "Koneksi yang dapat mengirim kode pendaftaran. Rahasia disimpan terenkripsi dan tidak pernah ditampilkan lagi.",
+          "loading": "Memuat",
+          "working": "Memproses",
+          "empty": "Belum ada pengirim.",
+          "add": "Tambah pengirim",
+          "edit": "Edit",
+          "remove": "Hapus",
+          "close": "Tutup",
+          "cancel": "Batal",
+          "save": "Simpan pengirim",
+          "keep": "Pertahankan",
+          "addTitle": "Pengirim baru",
+          "editTitle": "Edit {label}",
+          "kind": "Jenis",
+          "kinds": {
+            "waba": "WhatsApp Business (Meta Cloud API)",
+            "twilio": "Twilio WhatsApp",
+            "device": "Sesi tidak resmi (Node bridge)",
+            "dev": "Hanya log (pengembangan)"
+          },
+          "kindHint": {
+            "waba": "Mengirim templat autentikasi yang disetujui lewat Meta. Memerlukan peninjauan templat.",
+            "twilio": "Mengirim pesan WhatsApp lewat Twilio. Tanpa peninjauan templat.",
+            "device": "Mengirim lewat sesi yang dipasangkan QR di Node bridge Anda. Tanpa peninjauan templat.",
+            "dev": "Menulis kode ke log server alih-alih mengirimnya. Tidak pernah tersedia di produksi."
+          },
+          "fields": {
+            "label": "Nama",
+            "phoneNumberId": "ID nomor telepon",
+            "wabaId": "ID akun WhatsApp Business",
+            "graphBaseUrl": "Alamat Graph API",
+            "accountSid": "Account SID",
+            "fromNumber": "Nomor WhatsApp (From)",
+            "apiBaseUrl": "Alamat Twilio API",
+            "bridgeUrl": "Alamat bridge",
+            "senderNumber": "Nomor sesi"
+          },
+          "hints": {
+            "waba": {
+              "phoneNumberId": "Dari Meta, di pengaturan API nomor WhatsApp.",
+              "wabaId": "Diperlukan untuk mengajukan templat ke Meta.",
+              "graphBaseUrl": "Kosongkan untuk memakai alamat Meta."
+            },
+            "twilio": {
+              "accountSid": "Dari konsol Twilio.",
+              "fromNumber": "Nomor yang mendukung WhatsApp, dengan kode negaranya.",
+              "apiBaseUrl": "Kosongkan untuk memakai alamat Twilio."
+            },
+            "device": {
+              "bridgeUrl": "Tempat Node bridge Anda mendengarkan, misalnya http://127.0.0.1:3003.",
+              "senderNumber": "Nomor terpasang yang dipakai bridge untuk mengirim, dengan kode negaranya."
+            }
+          },
+          "defaults": {
+            "graphBaseUrl": "https://graph.facebook.com/v23.0",
+            "apiBaseUrl": "https://api.twilio.com"
+          },
+          "secretLabel": {
+            "waba": "Token akses",
+            "twilio": "Token autentikasi",
+            "device": "Token bridge",
+            "dev": "Rahasia"
+          },
+          "secretHint": "Disimpan terenkripsi dan tidak pernah ditampilkan lagi.",
+          "secretHintSaved": "Disimpan terenkripsi. Kosongkan untuk mempertahankan yang tersimpan.",
+          "secretSaved": "tersimpan, kosongkan untuk mempertahankan",
+          "showSecret": "Tampilkan rahasia",
+          "hideSecret": "Sembunyikan rahasia",
+          "removeSecret": "Hapus rahasia tersimpan",
+          "removeSecretBody": "Pengirim berhenti berfungsi sampai rahasia baru disimpan.",
+          "removeSecretConfirm": "Hapus rahasia",
+          "hasSecret": "Rahasia tersimpan",
+          "noSecret": "Tanpa rahasia",
+          "inUse": "Dipakai untuk pendaftaran",
+          "removeBody": "Hapus {label}? Rahasia tersimpannya juga dihapus.",
+          "removeBodyInUse": "Hapus {label}? Pendaftaran memakainya, jadi langkah kode akan nonaktif. Rahasia tersimpannya juga dihapus.",
+          "removeConfirm": "Hapus pengirim",
+          "added": "Pengirim ditambahkan",
+          "saved": "Pengirim disimpan",
+          "removed": "Pengirim dihapus",
+          "secretRemoved": "Rahasia tersimpan dihapus",
+          "requestId": "ID permintaan",
+          "problems": {
+            "required": "Kolom ini wajib diisi.",
+            "tooLong": "Maksimal {max} karakter.",
+            "digits": "Hanya angka, 5 sampai 24.",
+            "url": "Gunakan alamat http atau https lengkap, tanpa nama pengguna atau kata sandi.",
+            "accountSid": "Account SID diawali AC dan terdiri dari 34 karakter.",
+            "phone": "Masukkan nomor dengan kode negaranya, 7 sampai 15 digit."
+          },
+          "errors": {
+            "unexpected": "Pengirim tidak dapat disimpan. Coba lagi sebentar lagi."
+          }
+        },
+        "footer": {
+          "kicker": "Pesan keluar",
+          "title": "Footer pesan platform",
+          "description": "Ditambahkan di akhir pesan teks biasa dan interaktif yang dikirim dari ruang kerja dengan paket yang tidak dapat menghapus branding. Templat membawa teksnya sendiri dan tidak memakai footer ini. Ruang kerja dengan paket yang dapat menghapus branding mengatur footer sendiri, atau tanpa footer, di akunnya.",
+          "builtIn": "Teks bawaan",
+          "label": "Teks footer",
+          "hint": "Hingga {max} karakter. Kosongkan untuk tidak mengirim footer sama sekali.",
+          "count": "{used}/{max}",
+          "preview": "Pratinjau",
+          "noFooter": "(tanpa footer)",
+          "save": "Simpan footer",
+          "saving": "Menyimpan",
+          "clear": "Hapus",
+          "saved": "Footer platform disimpan. Berlaku mulai pesan berikutnya.",
+          "savedNone": "Footer platform dihapus. Pesan keluar tanpa footer.",
+          "errors": {
+            "invalid": "Footer itu tidak diterima.",
+            "unexpected": "Footer tidak dapat disimpan. Coba lagi sebentar lagi."
+          },
+          "requestId": "ID permintaan"
+        }
+      },
+      "social": {
+        "kicker": "Halaman tamu",
+        "title": "Login sosial dan captcha",
+        "description": "Izinkan orang masuk dengan Google atau Facebook dan lindungi halaman masuk dan pendaftaran dengan reCAPTCHA. Masing-masing hanya muncul setelah diaktifkan dan kuncinya disimpan.",
+        "save": "Simpan perubahan",
+        "saving": "Menyimpan",
+        "saved": "{count, plural, other {# pengaturan disimpan}}",
+        "rejected": "Tidak ada yang disimpan. {count, plural, other {# kolom ditolak}}.",
+        "requestId": "ID permintaan",
+        "unsaved": "{count, plural, other {# perubahan belum disimpan}}",
+        "discard": "Buang perubahan",
+        "errors": {
+          "unexpected": "Pengaturan tidak dapat disimpan. Coba lagi sebentar lagi."
+        },
+        "problems": {
+          "tooLong": "Maksimal {max} karakter.",
+          "threshold": "Masukkan angka dari 0 sampai 1."
+        },
+        "labels": {
+          "google": {
+            "clientId": "Client ID Google",
+            "clientSecret": "Client secret Google",
+            "enabled": "Login Google"
+          },
+          "facebook": {
+            "clientId": "App ID Facebook",
+            "clientSecret": "App secret Facebook",
+            "enabled": "Login Facebook"
+          },
+          "recaptcha": {
+            "siteKey": "Site key reCAPTCHA",
+            "secret": "Secret key reCAPTCHA",
+            "v3Threshold": "Ambang skor reCAPTCHA",
+            "version": "Versi reCAPTCHA",
+            "enabled": "reCAPTCHA"
+          }
+        },
+        "enable": "Aktifkan",
+        "secretSaved": "tersimpan, kosongkan untuk mempertahankan",
+        "secretHint": "Disimpan terenkripsi dan tidak pernah ditampilkan lagi. Kosongkan untuk mempertahankan yang tersimpan.",
+        "showSecret": "Tampilkan rahasia",
+        "hideSecret": "Sembunyikan rahasia",
+        "google": {
+          "kicker": "OAuth 2.0 dengan Google Cloud",
+          "title": "Login Google",
+          "idLabel": "Client ID",
+          "idHint": "Dari Google Cloud, di bawah kredensial, klien OAuth bertipe aplikasi web.",
+          "idPlaceholder": "000000000000-xxxx.apps.googleusercontent.com",
+          "secretLabel": "Client secret",
+          "secretPlaceholder": "client secret",
+          "redirectLabel": "URI pengalihan resmi",
+          "redirectHint": "Tempel persis ini ke klien OAuth, atau Google menolak login dengan ketidakcocokan pengalihan."
+        },
+        "facebook": {
+          "kicker": "Facebook Login dengan Meta for Developers",
+          "title": "Login Facebook",
+          "idLabel": "App ID",
+          "idHint": "Dari pengaturan aplikasi Anda, di bawah dasar, App ID.",
+          "idPlaceholder": "0000000000000000",
+          "secretLabel": "App secret",
+          "secretPlaceholder": "App secret 32 karakter",
+          "redirectLabel": "URI pengalihan OAuth yang valid",
+          "redirectHint": "Tambahkan ini di pengaturan Facebook Login. Aplikasi memerlukan izin email dan profil publik."
+        },
+        "recaptcha": {
+          "kicker": "Perlindungan bot dengan Google reCAPTCHA",
+          "title": "reCAPTCHA",
+          "versionLabel": "Versi",
+          "versionHint": "v2 menampilkan kotak centang. v3 tak terlihat dan menilai setiap permintaan.",
+          "versions": {
+            "v2": "v2: kotak centang Saya bukan robot",
+            "v3": "v3: skor tak terlihat"
+          },
+          "thresholdLabel": "Ambang skor v3",
+          "thresholdHint": "Hanya v3. 0 paling mungkin bot, 1 paling mungkin manusia. Kosong memakai 0,5.",
+          "siteKeyLabel": "Site key",
+          "siteKeyHint": "Kunci publik yang dikirim ke browser, dari konsol reCAPTCHA.",
+          "secretLabel": "Secret key"
+        },
+        "live": {
+          "kicker": "Status",
+          "title": "Yang aktif saat ini",
+          "google": "Google aktif",
+          "facebook": "Facebook aktif",
+          "recaptcha": "reCAPTCHA aktif",
+          "yes": "aktif",
+          "no": "tidak aktif",
+          "note": "Penyedia aktif hanya jika diaktifkan dan kedua kuncinya disimpan. Ini menunjukkan yang tersimpan, bukan perubahan yang belum disimpan."
+        },
+        "guide": {
+          "kicker": "Penyiapan cepat",
+          "google": {
+            "title": "Google dalam empat langkah",
+            "step1": "Buka konsol Google Cloud dan pilih atau buat proyek.",
+            "step2": "Siapkan layar persetujuan OAuth sebagai aplikasi eksternal dengan email dukungan Anda.",
+            "step3": "Buat kredensial, pilih OAuth client ID, lalu Aplikasi web.",
+            "step4": "Tambahkan URI pengalihan dari formulir, lalu tempel client ID dan secret di sini.",
+            "link": "Buka kredensial Google Cloud"
+          },
+          "facebook": {
+            "title": "Facebook dalam empat langkah",
+            "step1": "Buka Meta for Developers dan buat aplikasi untuk mengautentikasi pengguna.",
+            "step2": "Tambahkan produk Facebook Login ke aplikasi.",
+            "step3": "Di pengaturannya, tambahkan URI pengalihan dari formulir.",
+            "step4": "Salin App ID dan secret dari pengaturan dasar, tempel di sini, lalu aktifkan aplikasi.",
+            "link": "Buka Meta for Developers"
+          },
+          "recaptcha": {
+            "title": "Kunci reCAPTCHA",
+            "body": "Daftarkan situs Anda di konsol reCAPTCHA, pilih v2 atau v3, dan tempel site key dan secret key di sini.",
+            "link": "Buka konsol reCAPTCHA"
+          },
+          "noSdk": {
+            "badge": "Perlu diketahui",
+            "body": "Login memakai alamat OAuth standar secara langsung, jadi tidak ada yang perlu dipasang. Tempel kuncinya dan aktifkan."
+          }
+        },
+        "removeSecret": {
+          "action": "Hapus rahasia tersimpan",
+          "title": "Hapus rahasia {name} yang tersimpan",
+          "body": "Rahasia {name} yang tersimpan dihapus dari server dan tidak dapat ditampilkan atau dipulihkan. Untuk memakai {name} lagi, Anda harus menyimpan rahasia baru.",
+          "liveWarning": "{name} sedang berfungsi. Menghapus rahasianya menonaktifkannya sampai rahasia baru disimpan.",
+          "confirm": "Hapus rahasia",
+          "cancel": "Batal",
+          "working": "Menghapus",
+          "error": "Rahasia tidak dapat dihapus. Coba lagi sebentar lagi.",
+          "requestId": "ID permintaan",
+          "done": "Rahasia {name} yang tersimpan telah dihapus.",
+          "names": {
+            "google": "Google",
+            "facebook": "Facebook",
+            "recaptcha": "reCAPTCHA"
+          }
+        },
+        "docs": {
+          "kicker": "Referensi",
+          "title": "Dokumentasi resmi",
+          "opensNewTab": "(terbuka di tab baru)",
+          "links": {
+            "google": "Penyiapan Google OAuth",
+            "facebook": "Penyiapan Facebook Login",
+            "recaptchaAdmin": "Konsol admin reCAPTCHA",
+            "recaptchaDocs": "Dokumentasi reCAPTCHA"
+          }
+        }
+      },
+      "plans": {
+        "eyebrow": "Paket",
+        "title": "Paket",
+        "description": "Katalog yang dipilih ruang kerja. Pendaftar baru masuk ke paket default; pembayaran paket hadir bersama penagihan.",
+        "new": "Paket baru",
+        "kpi": {
+          "label": "Ringkasan katalog",
+          "total": "Total paket",
+          "active": "Aktif",
+          "free": "Gratis",
+          "paid": "Berbayar"
+        },
+        "empty": {
+          "title": "Belum ada paket",
+          "body": "Buat paket pertama. Sampai ada, ruang kerja baru memulai dengan paket bernama starter yang tidak membatasi apa pun.",
+          "action": "Buat paket pertama"
+        },
+        "table": {
+          "label": "Paket",
+          "plan": "Paket",
+          "price": "Harga",
+          "messages": "Pesan",
+          "workspaces": "Ruang kerja",
+          "entitlements": "Termasuk",
+          "features": "Fitur",
+          "limits": "Batas",
+          "addons": "Add-on",
+          "status": "Status",
+          "actions": "Tindakan"
+        },
+        "counts": {
+          "ratio": "{count}/{total}",
+          "features": "{count} dari {total} fitur aktif",
+          "limits": "{count} dari {total} batas diatur",
+          "addons": "{count, plural, other {# add-on terlihat}}"
+        },
+        "badges": {
+          "popular": "Populer",
+          "signupDefault": "Default pendaftaran"
+        },
+        "price": {
+          "free": "Gratis",
+          "custom": "Penawaran kustom",
+          "lifetime": "sekali bayar"
+        },
+        "period": {
+          "days": "{count, plural, other {/ # hari}}",
+          "weeks": "{count, plural, other {/ # minggu}}",
+          "months": "{count, plural, other {/ # bulan}}",
+          "years": "{count, plural, other {/ # tahun}}"
+        },
+        "messages": {
+          "unlimited": "Tanpa batas",
+          "limited": "{count, number} / bulan"
+        },
+        "active": {
+          "on": "Aktif",
+          "off": "Nonaktif",
+          "toggle": "Aktif: {name}"
+        },
+        "actions": {
+          "edit": "Edit",
+          "delete": "Hapus",
+          "editName": "Edit {name}",
+          "deleteName": "Hapus {name}"
+        },
+        "toasts": {
+          "created": "Paket {name} dibuat.",
+          "updated": "Paket {name} disimpan.",
+          "activated": "{name} sekarang aktif.",
+          "deactivated": "{name} sekarang nonaktif.",
+          "deleted": "Paket {name} dihapus."
+        },
+        "delete": {
+          "title": "Hapus {name}?",
+          "body": "Tindakan ini tidak dapat dibatalkan. Menonaktifkan paket akan menyembunyikannya dari pembeli dan mempertahankan ruang kerja yang memakainya.",
+          "inUseHint": "{count, plural, other {# ruang kerja memakai paket ini.}} Penghapusan ditolak sampai mereka dipindahkan.",
+          "confirm": "Hapus paket",
+          "cancel": "Batal",
+          "deleting": "Menghapus"
+        },
+        "errors": {
+          "inUse": "{count, plural, other {Tidak dapat dihapus: # ruang kerja sedang memakai paket ini.}} Pindahkan ke paket lain, atau nonaktifkan paket ini saja.",
+          "defaultProtected": "Paket ini adalah default pendaftaran, jadi tidak dapat dinonaktifkan atau dihapus. Pilih paket default lain terlebih dahulu.",
+          "notFound": "Paket ini sudah tidak ada. Muat ulang daftar.",
+          "forbidden": "Hanya super admin yang dapat mengubah paket.",
+          "generic": "Terjadi kesalahan. Coba lagi."
+        },
+        "editor": {
+          "createTitle": "Paket baru",
+          "editTitle": "Edit {name}",
+          "slugLabel": "Slug:",
+          "slugNote": "Ditetapkan saat paket dibuat dan tidak pernah berubah.",
+          "save": "Simpan perubahan",
+          "create": "Buat paket",
+          "saving": "Menyimpan",
+          "cancel": "Batal",
+          "discard": "Buang perubahan Anda?",
+          "failed": "Paket tidak dapat disimpan. Coba lagi.",
+          "unlimited": "Tanpa batas",
+          "errorsBanner": "Beberapa kolom perlu perhatian. Tab yang ditandai titik memiliki kesalahan.",
+          "tabs": {
+            "label": "Bagian paket",
+            "details": "Detail dan harga",
+            "features": "Fitur",
+            "limits": "Batas",
+            "addons": "Add-on"
+          },
+          "tabSummary": {
+            "features": "{count} dari {total} fitur aktif",
+            "limits": "{count} dari {total} batas diatur",
+            "addons": "{count} add-on dipilih",
+            "error": "Ada kesalahan yang perlu diperbaiki"
+          },
+          "featuresUi": {
+            "intro": "Nonaktifkan yang tidak termasuk dalam paket ini. Ruang kerja pada paket tidak dapat membuka area yang fiturnya nonaktif.",
+            "search": "Cari fitur",
+            "searchPlaceholder": "Cari fitur",
+            "enableAll": "Aktifkan semua",
+            "disableAll": "Nonaktifkan semua",
+            "noMatch": "Tidak ada fitur yang cocok dengan pencarian Anda.",
+            "groupCount": "{count} dari {total} aktif"
+          },
+          "limitsUi": {
+            "intro": "Batas menghentikan tindakan setelah ruang kerja mencapainya. Centang Tanpa batas untuk menghapus batas.",
+            "search": "Cari batas",
+            "searchPlaceholder": "Cari batas",
+            "noMatch": "Tidak ada batas yang cocok dengan pencarian Anda.",
+            "unlimited": "Tanpa batas",
+            "platformDefault": "Default platform",
+            "groupCount": "{count} dari {total} dibatasi",
+            "valueFor": "Batas untuk {name}",
+            "unofficialOff": "Hanya berlaku saat WhatsApp tidak resmi diaktifkan oleh platform (saat ini nonaktif)."
+          },
+          "limitUnits": {
+            "perMonth": "per bulan",
+            "perBroadcast": "per siaran",
+            "perMinute": "per menit",
+            "perPlanPeriod": "per periode paket",
+            "total": "secara total"
+          },
+          "addons": {
+            "intro": "Add-on yang diaktifkan ditampilkan kepada ruang kerja pada paket ini di Marketplace mereka; hanya dapat dipakai setelah ruang kerja membelinya.",
+            "search": "Cari add-on",
+            "searchPlaceholder": "Cari add-on atau aplikasi",
+            "selectAll": "Pilih semua",
+            "clear": "Hapus pilihan",
+            "selected": "{count} dari {total} dipilih",
+            "loading": "Memuat add-on",
+            "empty": "Belum ada add-on berbayar",
+            "emptyHint": "Add-on dibuat di katalog Marketplace pada konsol operator. Setelah aplikasi memiliki paket berbayar, aplikasi itu tercantum di sini.",
+            "loadFailed": "Add-on tidak dapat dimuat.",
+            "loadFailedKept": "Add-on tidak dapat dimuat, jadi pilihan saat ini tetap seperti adanya kecuali Anda mengubahnya di sini.",
+            "retry": "Coba lagi",
+            "noMatch": "Tidak ada add-on yang cocok dengan pencarian Anda.",
+            "unknown": "Add-on tidak dikenal",
+            "unknownHint": "Add-on ini sudah tidak ada. Hapus centangnya untuk mengeluarkannya dari paket.",
+            "notOnSale": "Tidak dijual",
+            "packInactive": "Paket add-on dinonaktifkan, jadi tidak ada yang bisa membelinya.",
+            "appUnpublished": "Aplikasi belum dipublikasikan, jadi ruang kerja belum dapat melihatnya.",
+            "appLabel": "Aplikasi: {name}",
+            "price": "{price} {period}"
+          },
+          "featureHints": {
+            "automation": "Pembuat alur dan otomatisasi yang membalas dan bertindak pada percakapan.",
+            "ai_assistants": "Asisten AI, termasuk mode AI di widget chatbot situs web.",
+            "calling": "Bagian panggilan: panggilan suara dan pengaturan panggilan.",
+            "woocommerce": "Hubungkan toko WooCommerce untuk pesan pesanan, pemulihan keranjang, dan siaran toko.",
+            "shopify": "Hubungkan toko Shopify untuk pesan pesanan, pemulihan keranjang, dan siaran toko.",
+            "analytics": "Dasbor dan laporan analitik.",
+            "remove_branding": "White-label: ruang kerja dapat menyembunyikan branding platform di footer-nya.",
+            "sales_pipeline": "Deal, tugas, dan pipeline, serta angka pipeline di dasbor.",
+            "appointment_booking": "Jenis pemesanan, janji temu, dan halaman pemesanan publik. Aplikasi Janji temu berbayar memegang sakelar ini.",
+            "chatbot_widgets": "Pembuat widget chatbot situs web.",
+            "wa_storefront": "Area katalog dan etalase WhatsApp.",
+            "inbox_sla": "Kebijakan dan tenggat SLA di kotak masuk tim.",
+            "inbox_routing": "Aturan perutean yang menugaskan percakapan kotak masuk secara otomatis.",
+            "waba_calling": "Panggilan WhatsApp dari kotak masuk: nomor panggilan, izin panggilan, melakukan dan menjawab panggilan.",
+            "inbox_kanban": "Tampilan papan Kanban dari kotak masuk tim.",
+            "team_performance": "Laporan performa tim.",
+            "scheduled_messages": "Menjadwalkan pesan untuk dikirim nanti.",
+            "whatsapp_warmer": "Pemanas nomor WhatsApp.",
+            "marketplace": "Marketplace mini app dan integrasi.",
+            "lead_sources": "Sumber lead: pintu webhook dan konektor yang mengubah lead iklan dan portal menjadi kontak dan deal.",
+            "team_chat": "Kanal obrolan tim internal dan pesan langsung.",
+            "public_api": "REST API publik dan kunci API-nya.",
+            "outbound_webhooks": "Endpoint webhook keluar yang memberi tahu sistem lain tentang peristiwa.",
+            "storefront_builder": "Pembuat etalase online.",
+            "invoicing": "Faktur, nota kredit, pembayaran, pesanan penjualan, dan tarif pajak.",
+            "forms_and_links": "Formulir penangkap lead dan tautan yang dapat dibagikan.",
+            "extra_channels": "Kanal Telegram, Facebook, dan Instagram.",
+            "form_builder": "Formulir web yang di-host dan disematkan yang membuat kontak di CRM. Aplikasi Formulir berbayar memegang sakelar ini.",
+            "waba_groups": "Buat dan kelola grup WhatsApp dari nomor Cloud API: tautan undangan, permintaan bergabung, anggota. Nomor harus berupa Official Business Account."
+          },
+          "units": {
+            "days": "Hari",
+            "weeks": "Minggu",
+            "months": "Bulan",
+            "years": "Tahun"
+          },
+          "sections": {
+            "identity": {
+              "title": "Identitas",
+              "description": "Cara paket dinamai dan ditampilkan."
+            },
+            "pricing": {
+              "title": "Harga",
+              "description": "Biayanya dan seberapa sering ditagih."
+            },
+            "limits": {
+              "title": "Batas",
+              "description": "Kosongkan batas untuk tanpa batas."
+            },
+            "features": {
+              "title": "Fitur",
+              "description": "Nonaktifkan yang tidak termasuk dalam paket."
+            }
+          },
+          "fields": {
+            "name": {
+              "label": "Nama paket"
+            },
+            "subtitle": {
+              "label": "Subjudul",
+              "hint": "Satu baris singkat di bawah nama (hingga {max} karakter)."
+            },
+            "detail": {
+              "label": "Deskripsi",
+              "hint": "Ditampilkan di halaman harga (hingga {max} karakter)."
+            },
+            "ctaLabel": {
+              "label": "Label tombol",
+              "hint": "Hingga {max} karakter."
+            },
+            "sortOrder": {
+              "label": "Urutan",
+              "hint": "Yang lebih kecil tampil lebih dulu."
+            },
+            "currency": {
+              "label": "Mata uang",
+              "placeholder": "Cari mata uang",
+              "empty": "Tidak ada mata uang yang cocok dengan pencarian Anda."
+            },
+            "amount": {
+              "label": "Harga",
+              "hint": "Contoh 19 atau 19,99.",
+              "locked": "Paket gratis dan penawaran kustom tidak memiliki harga.",
+              "none": "tidak ada"
+            },
+            "offerAmount": {
+              "label": "Harga penawaran",
+              "hint": "Opsional. Harus lebih rendah dari harga."
+            },
+            "billingDuration": {
+              "label": "Periode penagihan",
+              "hint": "Dari {min} sampai {max}."
+            },
+            "billingUnit": {
+              "label": "Satuan"
+            },
+            "dataRetentionDays": {
+              "label": "Retensi data (hari setelah kedaluwarsa)",
+              "hint": "Hari setelah paket berbayar berakhir sebelum data ruang kerja dihapus. 0 = tidak pernah. Penghapusan bersifat permanen."
+            }
+          },
+          "flags": {
+            "isActive": {
+              "label": "Aktif",
+              "hint": "Paket nonaktif disembunyikan dari pembeli; ruang kerja yang sudah memakainya tetap memilikinya."
+            },
+            "isDefault": {
+              "label": "Default untuk pendaftaran",
+              "hint": "Ruang kerja baru mulai di sini kecuali kebijakan pendaftaran menyebut paket lain. Hanya satu paket yang bisa menjadi default."
+            },
+            "isHighlighted": {
+              "label": "Sorot sebagai populer",
+              "hint": "Menampilkan lencana Paling populer."
+            },
+            "isFree": {
+              "label": "Paket gratis",
+              "hint": "Tanpa harga. Ruang kerja baru pada paket gratis mendapat uji coba gratis."
+            },
+            "isCustomQuote": {
+              "label": "Penawaran kustom",
+              "hint": "Tidak ada harga yang ditampilkan. Pembeli diarahkan untuk berbicara dengan tim penjualan."
+            },
+            "isLifetime": {
+              "label": "Harga sekali bayar",
+              "hint": "Ditagih sekali, bukan setiap periode penagihan."
+            }
+          },
+          "limitGroups": {
+            "messaging": "Pesan",
+            "workspace": "Ruang kerja",
+            "content": "Konten",
+            "sales": "Penjualan dan penagihan",
+            "integrations": "Integrasi",
+            "ai": "AI"
+          },
+          "limitKeys": {
+            "monthly_messages": "Pesan per bulan",
+            "broadcasts": "Siaran",
+            "devices": "Nomor terhubung",
+            "users": "Kursi tim",
+            "contacts": "Kontak",
+            "tags": "Tag",
+            "pipelines": "Pipeline penjualan",
+            "appointments": "Janji temu per bulan",
+            "saved_replies": "Balasan tersimpan",
+            "routing_rules": "Aturan perutean",
+            "templates": "Templat pesan",
+            "flows": "Alur",
+            "autoreplies": "Balasan otomatis kata kunci",
+            "total_campaigns": "Kampanye dibuat (tidak dibebaskan dengan menghapus)",
+            "api_rate_limit_per_minute": "Permintaan API per menit (0 = default platform)",
+            "installed_apps": "Aplikasi dan integrasi Marketplace terpasang",
+            "scheduled_messages": "Pesan terjadwal tersimpan",
+            "lead_sources": "Sumber lead",
+            "broadcast_recipients": "Penerima dalam satu siaran",
+            "segments": "Segmen tersimpan",
+            "custom_fields": "Kolom kustom",
+            "team_chat_channels": "Kanal obrolan tim",
+            "sla_policies": "Kebijakan SLA kotak masuk",
+            "booking_types": "Jenis pemesanan",
+            "chatbot_widgets": "Widget chatbot situs web",
+            "catalog_products": "Produk katalog",
+            "invoices_monthly": "Faktur per bulan",
+            "recurring_invoices": "Faktur berulang",
+            "api_keys": "Kunci API",
+            "webhooks": "Webhook keluar",
+            "ai_token_limit_monthly": "Token AI per bulan (kunci platform)",
+            "forms": "Formulir web",
+            "form_submissions_monthly": "Pengiriman formulir per bulan",
+            "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI per bulan"
+          },
+          "featureGroups": {
+            "messaging": "Pesan",
+            "aiCalling": "AI dan panggilan",
+            "integrations": "Integrasi",
+            "advanced": "Lanjutan"
+          },
+          "featureKeys": {
+            "automation": "Otomatisasi",
+            "ai_assistants": "Asisten AI",
+            "calling": "Panggilan WhatsApp",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "analytics": "Analitik",
+            "remove_branding": "White-label (menghapus branding platform)",
+            "sales_pipeline": "Pipeline penjualan (deal dan tugas)",
+            "appointment_booking": "Janji temu dan halaman pemesanan",
+            "chatbot_widgets": "Widget chatbot situs web",
+            "wa_storefront": "Etalase dan katalog WhatsApp",
+            "inbox_sla": "Kebijakan SLA kotak masuk",
+            "inbox_routing": "Aturan perutean kotak masuk dan jam kerja",
+            "waba_calling": "Lakukan dan jawab panggilan WhatsApp dari kotak masuk",
+            "inbox_kanban": "Papan Kanban kotak masuk",
+            "team_performance": "Laporan performa tim",
+            "scheduled_messages": "Pesan terjadwal",
+            "whatsapp_warmer": "Pemanas nomor WhatsApp",
+            "marketplace": "Marketplace (mini app dan integrasi)",
+            "lead_sources": "Sumber lead (pintu webhook dan konektor yang membuat kontak)",
+            "team_chat": "Obrolan tim (kanal internal dan pesan langsung)",
+            "public_api": "REST API publik dan kunci API",
+            "outbound_webhooks": "Webhook keluar",
+            "storefront_builder": "Pembuat etalase dan situs web",
+            "invoicing": "Faktur (faktur, nota kredit, faktur berulang)",
+            "forms_and_links": "Formulir, tautan klik-untuk-obrolan, dan grup",
+            "extra_channels": "Kanal Telegram, Facebook, dan Instagram",
+            "form_builder": "Formulir (pembuat formulir web)",
+            "waba_groups": "Grup WhatsApp (Cloud API)"
+          },
+          "problems": {
+            "required": "Kolom ini wajib diisi.",
+            "tooLong": "Maksimal {max} karakter.",
+            "money": "Masukkan jumlah seperti 19 atau 19,99.",
+            "range": "Masukkan bilangan bulat dari {min} sampai {max}.",
+            "whole": "Masukkan bilangan bulat, atau kosongkan untuk tanpa batas.",
+            "server": "Server menolak nilai ini.",
+            "unknownAddon": "Add-on terpilih yang sudah tidak ada: {count}. Hapus centangnya lalu simpan lagi.",
+            "free_needs_zero_price": "Paket gratis harus berharga 0.",
+            "free_no_offer": "Paket gratis tidak boleh memiliki harga penawaran.",
+            "custom_no_price": "Paket penawaran kustom tidak menampilkan harga: kosongkan harga dan penawaran.",
+            "custom_not_free": "Paket tidak boleh sekaligus gratis dan penawaran kustom.",
+            "paid_needs_price": "Atur harga di atas 0, atau tandai paket sebagai gratis.",
+            "offer_not_lower": "Harga penawaran harus lebih rendah dari harga paket.",
+            "default_needs_active": "Paket default pendaftaran harus aktif."
+          },
+          "limitHints": {
+            "monthly_messages": "Pesan keluar yang dikirim dalam bulan kalender. Melebihi kuota, dompet ditagih.",
+            "broadcasts": "Siaran yang tidak diarsipkan.",
+            "scheduled_messages": "Pesan terjadwal yang dimiliki ruang kerja, dalam status apa pun. Menghapusnya membebaskan tempatnya.",
+            "total_campaigns": "Kampanye yang dibuat dalam periode paket. Menghapus kampanye tidak mengembalikan tempatnya.",
+            "devices": "Nomor WhatsApp terhubung. Menghapusnya membebaskan tempatnya.",
+            "users": "Anggota tim yang tidak dinonaktifkan.",
+            "contacts": "Kontak di ruang kerja.",
+            "tags": "Tag kontak.",
+            "pipelines": "Pipeline penjualan.",
+            "appointments": "Janji temu yang dipesan dalam bulan kalender (tertunda, dikonfirmasi, atau selesai), menurut waktu mulainya.",
+            "saved_replies": "Balasan tersimpan (balasan cepat) di kotak masuk tim.",
+            "routing_rules": "Aturan perutean kotak masuk tim.",
+            "templates": "Templat pesan WhatsApp.",
+            "flows": "Alur di pembuat.",
+            "autoreplies": "Balasan otomatis kata kunci.",
+            "api_rate_limit_per_minute": "Permintaan per menit untuk setiap kunci API. 0 memakai default platform, bukan tanpa batas.",
+            "installed_apps": "Aplikasi dan integrasi Marketplace yang terpasang saat ini. Mencopot pemasangan membebaskan tempatnya.",
+            "lead_sources": "Sumber lead (pintu webhook dan konektor). Menghapusnya membebaskan tempatnya.",
+            "broadcast_recipients": "Audiens terbesar yang boleh menerima satu siaran, diperiksa saat siaran dibuat atau diedit.",
+            "segments": "Segmen kontak tersimpan. Menghapusnya membebaskan tempatnya.",
+            "custom_fields": "Kolom kustom yang ditambahkan ke modul mana pun. Kolom sistem bawaan tidak dihitung.",
+            "team_chat_channels": "Kanal obrolan tim, publik dan privat. Menghapusnya membebaskan tempatnya.",
+            "sla_policies": "Kebijakan SLA kotak masuk tim.",
+            "booking_types": "Jenis pemesanan di balik halaman pemesanan publik.",
+            "chatbot_widgets": "Widget chatbot situs web.",
+            "catalog_products": "Produk di katalog WhatsApp. Menghapusnya membebaskan tempatnya.",
+            "invoices_monthly": "Faktur yang dibuat dalam bulan kalender, dalam status apa pun. Membatalkan atau menghapusnya tidak mengembalikan bulannya.",
+            "recurring_invoices": "Jadwal faktur berulang, dalam status apa pun.",
+            "api_keys": "Kunci API aktif. Mencabut kunci membebaskan tempatnya.",
+            "webhooks": "Endpoint webhook keluar (webhook kotak masuk dan webhook API digabung).",
+            "ai_token_limit_monthly": "Token yang dipakai asisten AI dalam bulan kalender pada kunci platform. Ruang kerja dengan kunci sendiri tidak dibatasi.",
+            "forms": "Formulir web aktif (aplikasi Formulir). Mengarsipkan formulir membebaskan tempatnya. 0 = tanpa batas.",
+            "form_submissions_monthly": "Pengiriman formulir yang diterima dalam bulan kalender, tidak termasuk spam. Melebihi batas, pengiriman tetap disimpan untuk ditinjau, tidak pernah dibuang. 0 = tanpa batas.",
+            "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI dalam bulan kalender, termasuk percobaan ulang perbaikan. 0 = tanpa batas."
+          }
+        }
+      },
+      "authPages": {
+        "kicker": "Halaman tamu",
+        "title": "Halaman autentikasi",
+        "description": "Pilih desain untuk halaman masuk, daftar, dan lupa kata sandi, lalu edit kata-kata dan warna masing-masing. Pratinjau menampilkan perubahan Anda yang belum disimpan seperti yang akan dilihat pengunjung. Tautan Ketentuan dan Privasi di halaman ini diatur di <link>Kebijakan pendaftaran</link>.",
+        "save": "Simpan perubahan",
+        "saving": "Menyimpan",
+        "saved": "{count, plural, other {# pengaturan disimpan}}",
+        "rejected": "Tidak ada yang disimpan. {count, plural, other {# kolom ditolak}}.",
+        "requestId": "ID permintaan",
+        "unsaved": "{count, plural, other {# perubahan belum disimpan}}",
+        "discard": "Buang perubahan",
+        "errors": {
+          "unexpected": "Pengaturan tidak dapat disimpan. Coba lagi sebentar lagi."
+        },
+        "problems": {
+          "accent": "Gunakan warna dalam format #rrggbb.",
+          "mediaUrl": "Gunakan alamat https lengkap."
+        },
+        "pages": {
+          "login": "Login",
+          "register": "Daftar",
+          "forgot": "Lupa kata sandi"
+        },
+        "designs": {
+          "legend": "Templat desain",
+          "legendNote": "Satu pilihan untuk ketiga halaman",
+          "split": {
+            "name": "Showcase terbelah",
+            "description": "Panel pemasaran di satu sisi, formulir di sisi lain."
+          },
+          "cinematic": {
+            "name": "Sinematik",
+            "description": "Gambar atau video layar penuh di belakang kartu di tengah."
+          },
+          "minimal": {
+            "name": "Minimal",
+            "description": "Kartu polos di tengah tanpa ilustrasi."
+          },
+          "spotlight": {
+            "name": "Sorotan merek",
+            "description": "Panel tebal dengan warna aksen Anda di samping formulir."
+          },
+          "aurora": {
+            "name": "Aurora",
+            "description": "Warna berpendar lembut di belakang kartu buram."
+          }
+        },
+        "fields": {
+          "accent": "Warna aksen",
+          "accentHint": "Warna heksadesimal enam digit seperti #0f766e. Singkatan (#fff), delapan digit, dan nama warna tidak diterima. Dipakai untuk kata yang disorot, tombol, dan panel merek. Reset mengembalikan ke warna bawaan.",
+          "accentPicker": "Pilih warna aksen",
+          "accentHex": "Warna aksen dalam hex",
+          "accentReset": "Reset ke default",
+          "mediaUrl": "Alamat media",
+          "mediaType": "Jenis media",
+          "eyebrow": "Eyebrow",
+          "heading": "Judul",
+          "headingAccent": "Kata aksen judul",
+          "subheading": "Subteks",
+          "emptyHint": "Hingga {max} karakter. Kosongkan untuk memakai teks bawaan yang ditampilkan dengan warna abu-abu."
+        },
+        "media": {
+          "title": "Media samping",
+          "description": "Gambar, GIF, atau video berulang untuk panel desain. Hosting menjadi tanggung jawab Anda untuk saat ini: tempel alamat https publik.",
+          "url": "Alamat media",
+          "urlHint": "Harus diawali https. Kosongkan jika tanpa media.",
+          "type": "Jenis media",
+          "types": {
+            "image": "Gambar",
+            "gif": "GIF animasi",
+            "video": "Video berulang"
+          },
+          "clear": "Hapus media"
+        },
+        "showcase": {
+          "title": "Teks panel showcase",
+          "description": "Ditampilkan oleh desain Split showcase. Kolom kosong akan memakai teks bawaan.",
+          "groups": {
+            "hero": "Kartu sorotan",
+            "stats": "Statistik",
+            "features": "Kartu fitur",
+            "chips": "Chip",
+            "footer": "Baris footer"
+          },
+          "keys": {
+            "hero_title": "Judul sorotan",
+            "hero_desc": "Teks sorotan",
+            "stat1_num": "Nilai statistik 1",
+            "stat1_label": "Label statistik 1",
+            "stat2_num": "Nilai statistik 2",
+            "stat2_label": "Label statistik 2",
+            "stat3_num": "Nilai statistik 3",
+            "stat3_label": "Label statistik 3",
+            "feat1_title": "Judul fitur 1",
+            "feat1_desc": "Teks fitur 1",
+            "feat2_title": "Judul fitur 2",
+            "feat2_desc": "Teks fitur 2",
+            "feat3_title": "Judul fitur 3",
+            "feat3_desc": "Teks fitur 3",
+            "feat4_title": "Judul fitur 4",
+            "feat4_desc": "Teks fitur 4",
+            "inside_heading": "Judul chip",
+            "chip1": "Chip 1",
+            "chip2": "Chip 2",
+            "chip3": "Chip 3",
+            "chip4": "Chip 4",
+            "chip5": "Chip 5",
+            "chip6": "Chip 6",
+            "footer": "Teks footer"
+          }
+        },
+        "preview": {
+          "title": "Pratinjau langsung",
+          "note": "Menampilkan halaman {page} beserta perubahan Anda yang belum disimpan.",
+          "showcaseNote": "Hanya desain Split showcase yang menampilkan teks panel showcase.",
+          "device": "Ukuran pratinjau",
+          "devices": {
+            "desktop": "Desktop",
+            "mobile": "Ponsel"
+          },
+          "frameLabel": "Pratinjau halaman",
+          "frameTitle": "Pratinjau halaman {page}",
+          "form": {
+            "org": "Nama workspace",
+            "name": "Nama Anda",
+            "email": "Email",
+            "password": "Kata sandi",
+            "remember": "Biarkan saya tetap masuk selama 30 hari",
+            "submit": {
+              "login": "Masuk",
+              "register": "Buat workspace",
+              "forgot": "Kirim tautan reset"
+            },
+            "workspace": "Alamat workspace",
+            "forgotLink": "Lupa kata sandi?",
+            "newHere": "Baru di sini?",
+            "createAccount": "Buat workspace",
+            "haveAccount": "Sudah terdaftar?",
+            "signInLink": "Masuk",
+            "backToSignIn": "Kembali ke halaman masuk",
+            "captchaV3": "Halaman ini dilindungi oleh reCAPTCHA.",
+            "captchaV2": "Saya bukan robot",
+            "captchaBrand": "reCAPTCHA"
+          },
+          "enlarge": "Perbesar pratinjau",
+          "shrink": "Berdampingan",
+          "openReal": "Buka halaman asli",
+          "openRealNote": "Membuka versi tersimpan di tab baru. Perubahan yang belum disimpan hanya tampil di pratinjau ini.",
+          "opensNewTab": "(dibuka di tab baru)"
+        },
+        "pagesLabel": "Halaman yang diedit"
+      },
+      "ipBlocked": {
+        "kicker": "Akses diblokir",
+        "title": "Alamat ini tidak diizinkan",
+        "body": "Konsol operator hanya menerima permintaan dari alamat yang ada di daftar izin. Alamat asal permintaan ini tidak ada di daftar tersebut, sehingga konsol menolaknya.",
+        "addressLabel": "Alamat yang diblokir",
+        "addressUnknown": "Server tidak dapat membaca alamat Anda.",
+        "fixTitle": "Cara mendapatkan akses",
+        "fixBody": "Super admin yang masih dapat mengakses konsol menambahkan alamat ini ke daftar izin IP. Tidak ada hal lain pada akun Anda yang berubah.",
+        "fixPath": "Pusat Keamanan › API dan webhook › Daftar izin IP",
+        "dashboard": "Buka dasbor",
+        "signOut": "Keluar",
+        "signingOut": "Sedang keluar"
+      }
+    }
+  }
+}

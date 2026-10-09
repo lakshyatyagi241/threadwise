@@ -1,0 +1,258 @@
+{
+  "workspaces-hub": {
+    "nav": {
+      "group": "Workspaces",
+      "workspaces": "Workspaces"
+    },
+    "crumb": {
+      "admin": "Beheer",
+      "workspaces": "Workspaces",
+      "label": "Kruimelpad"
+    },
+    "common": {
+      "loading": "Laden",
+      "retry": "Opnieuw proberen",
+      "cancel": "Annuleren",
+      "close": "Sluiten",
+      "none": "Geen",
+      "never": "Nooit",
+      "unlimited": "Onbeperkt",
+      "noAccess": "Je rol kan dit niet."
+    },
+    "list": {
+      "title": "Workspaces",
+      "subtitle": "Elke klant-workspace op één plek: abonnement, provider, portemonnee, eigenaar en activiteit, met de acties die je per workspace nodig hebt.",
+      "kpi": {
+        "total": "Workspaces",
+        "active": "Actief",
+        "suspended": "Geschorst",
+        "trial": "In proefperiode",
+        "newThisMonth": "Nieuw deze maand",
+        "lowBalance": "Laag saldo",
+        "mrr": "MRR"
+      },
+      "search": "Zoeken",
+      "searchPlaceholder": "Naam, slug, naam of e-mail van de eigenaar",
+      "status": {
+        "label": "Status",
+        "all": "Alle",
+        "active": "Actief",
+        "suspended": "Geschorst"
+      },
+      "plan": "Abonnement",
+      "allPlans": "Alle abonnementen",
+      "state": "Staat",
+      "allStates": "Alle staten",
+      "provider": "Provider",
+      "allProviders": "Alle providers",
+      "lowOnly": "Alleen laag saldo",
+      "sort": {
+        "label": "Sorteren op",
+        "created": "Nieuwste",
+        "last_active": "Laatst actief",
+        "name": "Naam"
+      },
+      "clear": "Filters wissen",
+      "refresh": "Vernieuwen",
+      "columns": {
+        "menu": "Kolommen",
+        "reset": "Kolommen resetten",
+        "workspace": "Workspace",
+        "provider": "Provider",
+        "numbers": "Nummers",
+        "plan": "Abonnement",
+        "state": "Staat",
+        "ends": "Eindigt",
+        "limits": "Limieten",
+        "wallet": "Portemonnee",
+        "owner": "Eigenaar",
+        "mrr": "MRR",
+        "messages7d": "Berichten 7d",
+        "lastActive": "Laatst actief",
+        "actions": "Acties"
+      },
+      "tableLabel": "Workspaces",
+      "emptyTitle": "Nog geen workspaces",
+      "emptyMessage": "Workspaces verschijnen hier zodra klanten zich aanmelden.",
+      "noMatchTitle": "Geen workspace gevonden",
+      "noMatchMessage": "Pas de zoekopdracht of de filters aan om er meer te zien.",
+      "loadMore": "Meer laden",
+      "loadingMore": "Meer laden",
+      "loaded": "{count, plural, one {# workspace} other {# workspaces}} getoond"
+    },
+    "cell": {
+      "suspended": "Geschorst",
+      "suspendedBy": {
+        "frozen": "Bevroren",
+        "tos_violation": "Schending van voorwaarden",
+        "fraud": "Fraude"
+      },
+      "providerSource": {
+        "override": "Uitzondering",
+        "default": "Standaard",
+        "platform_setting": "Platforminstelling"
+      },
+      "numbersCount": "{count, plural, one {# nummer} other {# nummers}}",
+      "platformOwned": "Platform",
+      "unknownPlan": "Onbekend abonnement",
+      "health": {
+        "suspended": "Geschorst",
+        "good": "Goed",
+        "active": "Actief",
+        "low": "Weinig gebruik",
+        "new": "Nieuw",
+        "idle": "Inactief"
+      },
+      "daysLeft": "{count, plural, one {# dag over} other {# dagen over}}",
+      "expired": "Verlopen",
+      "limits": {
+        "summary": "{messages} berichten/mnd · {users} gebruikers · {contacts} contacten · {devices} apparaten",
+        "override": "Uitzondering",
+        "messages": "Berichten per maand",
+        "users": "Gebruikers",
+        "contacts": "Contacten",
+        "devices": "Apparaten"
+      },
+      "lowBalance": "Laag",
+      "noOwner": "Geen eigenaar",
+      "ago": {
+        "now": "Zojuist",
+        "minutes": "{count, plural, one {# minuut geleden} other {# minuten geleden}}",
+        "hours": "{count, plural, one {# uur geleden} other {# uur geleden}}",
+        "days": "{count, plural, one {# dag geleden} other {# dagen geleden}}"
+      }
+    },
+    "actions": {
+      "menu": "Acties voor {name}",
+      "dashboard": "Dashboard van de workspace",
+      "editPlan": "Bewerken en abonnement wijzigen",
+      "planLimits": "Abonnement en limieten",
+      "provider": "Provider wijzigen en instellen",
+      "impersonate": "Inloggen als eigenaar",
+      "suspend": "Schorsen",
+      "unsuspend": "Heractiveren",
+      "denied": "Niet toegestaan"
+    },
+    "plan": {
+      "loading": "Abonnement laden",
+      "loadFailed": "Het abonnement kon niet worden geladen.",
+      "saved": "Abonnement opgeslagen voor {name}."
+    },
+    "provider": {
+      "title": "Provider voor {name}",
+      "help": "Nieuwe nummers van deze workspace koppelen via de provider die je kiest. Nummers die al gekoppeld zijn, blijven waar ze zijn totdat je ze verplaatst.",
+      "current": "Nu in gebruik: {name} ({source})",
+      "field": "Provider",
+      "note": "Notitie (optioneel)",
+      "noteHint": "Wordt bij de uitzondering bewaard, zodat de volgende beheerder weet waarom.",
+      "noActive": "Geen provider is actief. Schakel er eerst een in via het providerregister.",
+      "save": "Uitzondering instellen",
+      "clear": "De standaard gebruiken",
+      "switchLink": "Gekoppelde nummers naar een andere provider verplaatsen",
+      "assignmentsLink": "Providerregister",
+      "saved": "Provider ingesteld voor {name}.",
+      "cleared": "{name} volgt weer de standaardprovider."
+    },
+    "impersonate": {
+      "title": "Inloggen als eigenaar van {name}",
+      "help": "Je opent de workspace als eigenaar in een nieuw tabblad. De sessie duurt maximaal {minutes} minuten en wordt vastgelegd met je reden.",
+      "reason": "Reden",
+      "reasonHint": "Minimaal {min} tekens. Het wordt bewaard in het auditspoor.",
+      "readOnly": "Sessie alleen-lezen",
+      "readOnlyHint": "Je kunt rondkijken, maar elke wijziging wordt geweigerd.",
+      "submit": "Workspace openen",
+      "opened": "{name} wordt in een nieuw tabblad geopend.",
+      "popupBlocked": "Je browser heeft het nieuwe tabblad geblokkeerd. Sta pop-ups voor deze pagina toe en probeer het opnieuw.",
+      "reasonShort": "Schrijf minimaal {min} tekens."
+    },
+    "suspend": {
+      "title": "{name} schorsen?",
+      "message": "De gebruikers worden uit de workspace gelogd en berichtenverkeer stopt totdat je hem heractiveert.",
+      "reason": "Reden (optioneel)",
+      "confirm": "Workspace schorsen",
+      "done": "{name} is geschorst."
+    },
+    "unsuspend": {
+      "title": "{name} heractiveren?",
+      "message": "De gebruikers kunnen de workspace weer gebruiken.",
+      "reason": "Notitie (optioneel)",
+      "confirm": "Workspace heractiveren",
+      "done": "{name} is weer actief."
+    },
+    "errors": {
+      "unexpected": "Er ging iets mis. Probeer het opnieuw.",
+      "forbidden": "Je rol kan dit niet.",
+      "conflict": "Iemand anders heeft deze workspace gewijzigd. Laad opnieuw en probeer het opnieuw.",
+      "notFound": "Deze workspace bestaat niet meer.",
+      "reasonRequired": "Een reden van minimaal 8 tekens is vereist.",
+      "orgSuspended": "De workspace is geschorst, dus je kunt hem niet openen.",
+      "validation": "Controleer de waarden en probeer het opnieuw.",
+      "requestId": "Verzoek-id"
+    },
+    "detail": {
+      "crumb": "Workspace",
+      "back": "Alle workspaces",
+      "loadFailed": "Deze workspace kon niet worden geladen.",
+      "slug": "Slug",
+      "created": "Aangemaakt op {date}",
+      "kpi": {
+        "members": "Leden",
+        "contacts": "Contacten",
+        "openTickets": "Open tickets",
+        "delivered": "Bezorgd",
+        "wallet": "Portemonnee",
+        "mrr": "MRR",
+        "messages7d": "Berichten, 7 dagen"
+      },
+      "chart": {
+        "title": "Afgelopen 30 dagen",
+        "label": "Verzonden en bezorgde berichten per dag, afgelopen 30 dagen",
+        "sent": "Verzonden",
+        "delivered": "Bezorgd",
+        "empty": "Geen berichten in de afgelopen 30 dagen."
+      },
+      "tabs": {
+        "label": "Workspace-onderdelen",
+        "overview": "Overzicht",
+        "plan": "Abonnement en limieten",
+        "wallet": "Portemonnee",
+        "provider": "Provider",
+        "support": "Support"
+      },
+      "overview": {
+        "owner": "Eigenaar",
+        "adminNote": "Notitie van beheer",
+        "noNote": "Geen notitie.",
+        "health": "Gezondheid",
+        "lastActive": "Laatst actief",
+        "suspendedBy": "Beheerd door"
+      },
+      "planTab": {
+        "plan": "Abonnement",
+        "state": "Staat",
+        "ends": "Eindigt",
+        "limits": "Effectieve limieten",
+        "edit": "Bewerken en abonnement wijzigen",
+        "overrideNote": "Deze workspace heeft eigen limieten die die van het abonnement vervangen."
+      },
+      "walletTab": {
+        "open": "De volledige portemonnee openen",
+        "balance": "Saldo",
+        "adjust": "Saldo aanpassen",
+        "adjusted": "Het saldo is aangepast."
+      },
+      "providerTab": {
+        "provider": "Effectieve provider",
+        "source": "Gekozen door",
+        "numbers": "Gekoppelde nummers",
+        "change": "Provider wijzigen en instellen",
+        "switch": "Nummers naar een andere provider verplaatsen"
+      },
+      "supportTab": {
+        "text": "Tickets, gesprekken en de supportgeschiedenis van deze workspace.",
+        "open": "Het supportdossier openen",
+        "openTickets": "{count, plural, one {# open ticket} other {# open tickets}}"
+      }
+    }
+  }
+}

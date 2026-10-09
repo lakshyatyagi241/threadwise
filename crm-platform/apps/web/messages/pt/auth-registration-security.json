@@ -1,0 +1,484 @@
+{
+  "auth-registration-security": {
+    "guest": {
+      "shell": {
+        "appNameFallback": "CRM",
+        "header": {
+          "login": {
+            "eyebrow": "Entrar",
+            "title": "Bem-vindo",
+            "accent": "de volta",
+            "subtitle": "Digite seus dados para voltar ao seu espaço de trabalho."
+          },
+          "register": {
+            "eyebrow": "Etapa 1 de 3 / Criar conta",
+            "title": "Crie sua",
+            "accent": "conta",
+            "subtitle": "Alguns dados e seu espaço de trabalho estará pronto."
+          },
+          "forgot": {
+            "eyebrow": "Esqueci a senha",
+            "title": "Redefina sua",
+            "accent": "senha",
+            "subtitle": "Diga onde você entra e enviaremos um link de uso único."
+          }
+        },
+        "defaults": {
+          "login": {
+            "hero_title": "Tudo em um só lugar",
+            "hero_desc": "Conversas, campanhas e contatos ficam juntos, e ninguém precisa caçar contexto.",
+            "stat1_num": "24/7",
+            "stat1_label": "caixa de entrada compartilhada",
+            "stat2_num": "5 min",
+            "stat2_label": "configuração típica",
+            "stat3_num": "1 lugar",
+            "stat3_label": "para conversas e contatos",
+            "feat1_title": "Caixa de entrada compartilhada",
+            "feat1_desc": "Atribua, responda e transfira conversas sem perder o fio da meada.",
+            "feat2_title": "Transmissões",
+            "feat2_desc": "Alcance muitos contatos de uma vez, com ritmo controlado e acompanhamento de entrega.",
+            "feat3_title": "Automações",
+            "feat3_desc": "Direcione, responda e faça acompanhamentos com fluxos que você mesmo cria.",
+            "feat4_title": "Controle da equipe",
+            "feat4_desc": "Funções, permissões e trilhas de auditoria mantêm cada espaço de trabalho sob controle.",
+            "inside_heading": "Dentro do seu espaço de trabalho",
+            "chip1": "Caixa de entrada",
+            "chip2": "Transmissões",
+            "chip3": "Fluxos",
+            "chip4": "Contatos",
+            "chip5": "Relatórios",
+            "chip6": "Modelos"
+          },
+          "register": {
+            "hero_title": "Começar grátis",
+            "hero_desc": "Configure primeiro seu espaço de trabalho e escolha um plano quando estiver pronto.",
+            "stat1_num": "3 etapas",
+            "stat1_label": "até um espaço de trabalho funcionando",
+            "stat2_num": "5 min",
+            "stat2_label": "configuração típica",
+            "stat3_num": "Dia 1",
+            "stat3_label": "convide sua equipe",
+            "feat1_title": "Configuração rápida",
+            "feat1_desc": "Dê um nome ao espaço de trabalho, defina seu fuso horário e pronto.",
+            "feat2_title": "Traga sua equipe",
+            "feat2_desc": "Convide colegas e dê a cada um exatamente o acesso de que precisa.",
+            "feat3_title": "Conecte canais",
+            "feat3_desc": "Vincule seus números de mensagens e comece a conversar com os clientes.",
+            "feat4_title": "Mantenha o controle",
+            "feat4_desc": "Login em duas etapas e controles de sessão protegem todas as contas.",
+            "inside_heading": "O que você recebe",
+            "chip1": "Caixa de entrada compartilhada",
+            "chip2": "Transmissões",
+            "chip3": "Fluxos",
+            "chip4": "Contatos",
+            "chip5": "Relatórios",
+            "chip6": "Funções da equipe"
+          },
+          "forgot": {
+            "hero_title": "Um link novo, de uso único",
+            "hero_desc": "Enviamos por e-mail um link seguro que funciona uma única vez e expira logo."
+          }
+        },
+        "contentDefaults": {
+          "login": {
+            "eyebrow": "Caixa de entrada da equipe para WhatsApp",
+            "heading": "Cada conversa com o cliente,",
+            "headingAccent": "um espaço de trabalho tranquilo",
+            "subheading": "Transmissões, automações e uma caixa de entrada compartilhada para equipes que respondem rápido."
+          },
+          "register": {
+            "eyebrow": "Comece em minutos",
+            "heading": "Configure seu",
+            "headingAccent": "espaço de trabalho",
+            "subheading": "Crie seu espaço de trabalho e depois traga sua equipe e seu primeiro canal."
+          },
+          "forgot": {
+            "eyebrow": "Recuperação de conta",
+            "heading": "De volta em",
+            "headingAccent": "um minuto",
+            "subheading": "Digite seu e-mail e enviaremos um link seguro para você escolher uma nova senha."
+          }
+        }
+      },
+      "toolbar": {
+        "language": "Idioma",
+        "theme": "Alternar tema",
+        "themeToLight": "Claro",
+        "themeToDark": "Escuro"
+      },
+      "pages": {
+        "login": {
+          "title": "Entrar"
+        },
+        "signup": {
+          "title": "Crie sua conta"
+        },
+        "verifyOtp": {
+          "title": "Verifique seu número",
+          "eyebrow": "Verifique seu número",
+          "heading": "Confira seu",
+          "accent": "WhatsApp",
+          "subtitle": "Digite o código de uso único que enviamos para concluir a criação do seu espaço de trabalho."
+        },
+        "forgot": {
+          "title": "Redefina sua senha"
+        },
+        "reset": {
+          "title": "Escolha uma nova senha",
+          "eyebrow": "Redefinir senha",
+          "heading": "Escolha uma nova",
+          "accent": "senha",
+          "subtitle": "Escolha uma senha forte. Você entrará com ela logo em seguida.",
+          "panel": {
+            "heroTitle": "Uma senha nova",
+            "heroDesc": "Escolha uma que você vá lembrar. Seu espaço de trabalho pode exigir um tamanho mínimo.",
+            "eyebrow": "Recuperação de conta",
+            "heading": "Um novo",
+            "accent": "começo",
+            "subheading": "Depois que a nova senha for salva, você poderá entrar com ela imediatamente."
+          }
+        },
+        "verifyEmail": {
+          "title": "Confirme seu e-mail",
+          "eyebrow": "Confirmação de e-mail",
+          "heading": "Confirme seu",
+          "accent": "e-mail",
+          "subtitle": "Esta página verifica o link que você abriu na sua caixa de entrada.",
+          "panel": {
+            "heroTitle": "Confirme seu endereço",
+            "heroDesc": "Um único clique prova que esta caixa de entrada é sua.",
+            "eyebrow": "Confirmação de e-mail",
+            "heading": "Verificando seu",
+            "accent": "link",
+            "subheading": "Estamos confirmando o endereço do e-mail que você abriu."
+          }
+        },
+        "findWorkspace": {
+          "title": "Encontrar meu espaço de trabalho",
+          "eyebrow": "Encontrar meu espaço de trabalho",
+          "heading": "Encontre seu",
+          "accent": "espaço de trabalho",
+          "subtitle": "Digite seu e-mail e enviaremos os endereços dos espaços de trabalho em que você pode entrar."
+        },
+        "confirmEmailChange": {
+          "title": "Confirme seu novo e-mail",
+          "eyebrow": "Alteração de e-mail",
+          "heading": "Confirme seu",
+          "accent": "novo e-mail",
+          "subtitle": "Esta página verifica o link que você abriu na sua caixa de entrada.",
+          "panel": {
+            "heroTitle": "Novo e-mail de login",
+            "heroDesc": "Seu endereço muda assim que você o confirmar.",
+            "eyebrow": "Alteração de e-mail",
+            "heading": "Confirmando seu",
+            "accent": "novo e-mail",
+            "subheading": "Estamos verificando o link da mensagem que você abriu."
+          }
+        },
+        "socialCallback": {
+          "title": "Conectando você",
+          "eyebrow": "Login social",
+          "heading": "Conectando",
+          "accent": "você",
+          "subtitle": "Concluindo seu login."
+        }
+      },
+      "errors": {
+        "invalidCredentials": "Esses dados não conferem. Verifique o espaço de trabalho, o e-mail e a senha.",
+        "locked": "Muitas tentativas malsucedidas. Tente novamente em {minutes, plural, one {# minuto} other {# minutos}}.",
+        "rateLimited": "Muitas tentativas. Aguarde um momento e tente novamente.",
+        "rateLimitedWait": "Muitas tentativas. Tente novamente em {seconds, plural, one {# segundo} other {# segundos}}.",
+        "suspended": "Esta conta está suspensa. Fale com o administrador do seu espaço de trabalho.",
+        "captcha": "Conclua o captcha e tente novamente.",
+        "signupClosed": "O cadastro está fechado. Peça um convite a um administrador.",
+        "slugTaken": "Esse endereço de espaço de trabalho já está em uso.",
+        "emailTaken": "Esse e-mail já é usado neste espaço de trabalho.",
+        "passwordPolicy": "Essa senha não atende à política de segurança:",
+        "tokenInvalid": "Este link é inválido ou expirou.",
+        "emailUnverified": "Confirme primeiro seu endereço de e-mail.",
+        "mfaInvalid": "Esse código não é válido. Verifique o código e tente novamente.",
+        "mfaExpired": "Sua verificação expirou. Entre novamente.",
+        "otpInvalid": "Esse código está incorreto. Tente novamente.",
+        "otpExpired": "Esse código expirou. Solicite um novo.",
+        "otpTooMany": "Muitas tentativas. Solicite um novo código.",
+        "otpCooldown": "Aguarde um momento antes de solicitar outro código.",
+        "otpSendFailed": "Não foi possível enviar o código de verificação. Verifique o número e tente novamente.",
+        "socialUnavailable": "Esse método de login não está disponível.",
+        "socialExpired": "O login expirou. Tente novamente.",
+        "socialFailed": "Não foi possível concluir o login com {provider}. Tente novamente.",
+        "socialNoEmail": "Essa conta não compartilhou um endereço de e-mail. Use e-mail e senha.",
+        "ipBlocked": "O login não é permitido a partir desta rede.",
+        "workspaceUnavailable": "Esse espaço de trabalho não está disponível.",
+        "workspaceRequired": "Este e-mail é usado em mais de um espaço de trabalho. Digite seu espaço de trabalho para continuar.",
+        "validation": "Verifique os campos destacados.",
+        "sessionExpired": "Sua sessão expirou por segurança. Tente novamente.",
+        "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
+        "unexpected": "Algo deu errado do nosso lado. Tente novamente.",
+        "requestId": "ID da solicitação",
+        "signupExpired": "Inicie o cadastro novamente.",
+        "policyRules": {
+          "min_length": "Use pelo menos {min, plural, one {# caractere} other {# caracteres}}.",
+          "upper_lower": "Misture letras maiúsculas e minúsculas.",
+          "number": "Inclua pelo menos um número.",
+          "symbol": "Inclua pelo menos um símbolo.",
+          "common": "Essa senha é fácil demais de adivinhar."
+        },
+        "socialNoAccount": "Nenhuma conta corresponde a esse login com {provider}. Entre com e-mail e senha ou crie uma conta.",
+        "forbidden": "Essa solicitação foi recusada. Recarregue a página e tente novamente."
+      },
+      "validation": {
+        "orgSlug": "Digite o endereço do seu espaço de trabalho (letras, números, hífen ou sublinhado).",
+        "orgSlugForSocial": "Digite primeiro o endereço do seu espaço de trabalho para sabermos onde fazer seu login.",
+        "email": "Digite um endereço de e-mail válido.",
+        "password": "Digite uma senha que atenda aos requisitos mostrados.",
+        "passwordRequired": "Digite sua senha.",
+        "fullName": "Digite seu nome completo.",
+        "orgName": "Dê um nome ao seu espaço de trabalho (pelo menos 2 caracteres).",
+        "orgNameForSocial": "Dê primeiro um nome ao seu espaço de trabalho e depois continue com o Google ou o Facebook.",
+        "phoneRequired": "Digite seu número de celular.",
+        "phone": "Digite um número de celular válido para o país selecionado.",
+        "newPassword": "Use pelo menos {min, plural, one {# caractere} other {# caracteres}}.",
+        "confirmPassword": "As duas senhas não coincidem.",
+        "acceptTerms": "Você precisa aceitar os termos para continuar.",
+        "referralCode": "Os códigos de indicação usam apenas letras e números.",
+        "code": "Digite o código de {length} dígitos."
+      },
+      "legal": {
+        "login": "Ao entrar, você concorda com nossos <terms>Termos</terms> e com a <privacy>Política de Privacidade</privacy>.",
+        "signup": "Concordo com os <terms>Termos</terms> e com a <privacy>Política de Privacidade</privacy>.",
+        "cookies": "<cookies>Política de cookies</cookies>"
+      },
+      "captcha": {
+        "protected": "Este site é protegido pelo reCAPTCHA. Aplicam-se a <privacy>Política de Privacidade</privacy> e os <terms>Termos de Serviço</terms> do Google."
+      },
+      "social": {
+        "divider": "ou com e-mail",
+        "redirecting": "Abrindo o provedor",
+        "login": {
+          "google": "Continuar com o Google",
+          "facebook": "Continuar com o Facebook"
+        },
+        "signup": {
+          "google": "Cadastrar com o Google",
+          "facebook": "Cadastrar com o Facebook"
+        },
+        "google": "Google",
+        "facebook": "Facebook"
+      },
+      "login": {
+        "workspace": "Espaço de trabalho",
+        "workspaceHint": "O endereço que sua equipe usa, como acme.",
+        "chooseTitle": "Escolha um espaço de trabalho",
+        "chooseSubtitle": "Seu e-mail está em mais de um espaço de trabalho. Escolha o que deseja abrir.",
+        "chooseMembers": "{count, plural, one {# membro} other {# membros}}",
+        "chooseOpen": "Abrir",
+        "chooseBack": "Usar outra conta",
+        "chooseExpired": "Demorou demais. Entre novamente.",
+        "workspacePlaceholder": "seu-espaço-de-trabalho",
+        "email": "E-mail",
+        "emailPlaceholder": "voce@empresa.com",
+        "password": "Senha",
+        "forgot": "Esqueceu a senha?",
+        "showPassword": "Mostrar senha",
+        "hidePassword": "Ocultar senha",
+        "remember": "Manter conectado por 30 dias",
+        "submit": "Entrar",
+        "submitting": "Entrando",
+        "newHere": "Novo por aqui?",
+        "createAccount": "Criar uma conta",
+        "lostWorkspace": "Não tem certeza do endereço do seu espaço de trabalho?",
+        "findWorkspace": "Encontrar meu espaço de trabalho",
+        "loggedOut": "Você foi desconectado.",
+        "flashReset": "Senha redefinida. Entre com sua nova senha.",
+        "flashExpired": "Sua sessão expirou. Entre novamente.",
+        "flashIdle": "Você foi desconectado após {minutes, plural, one {# minuto} other {# minutos}} sem atividade. Entre novamente para continuar.",
+        "mfaExpired": "Sua verificação demorou demais. Entre novamente.",
+        "flashDeleted": "Sua conta foi excluída."
+      },
+      "mfa": {
+        "title": "Verificação em duas etapas",
+        "descriptionCode": "Digite o código de 6 dígitos do seu app autenticador.",
+        "descriptionRecovery": "Digite um dos seus códigos de recuperação de uso único.",
+        "codeLabel": "Código do autenticador",
+        "recoveryLabel": "Código de recuperação",
+        "recoveryHint": "Cada código de recuperação funciona uma vez.",
+        "invalidCode": "Digite o código de 6 dígitos.",
+        "invalidRecovery": "Digite um código de recuperação (8 a 32 caracteres).",
+        "verify": "Verificar",
+        "verifying": "Verificando",
+        "useRecovery": "Usar um código de recuperação",
+        "useApp": "Usar o código do autenticador",
+        "back": "Voltar ao login",
+        "expiresIn": "A verificação expira em {time}"
+      },
+      "signup": {
+        "steps": {
+          "label": "Progresso do cadastro",
+          "account": "Conta",
+          "workspace": "Espaço de trabalho",
+          "plan": "Plano"
+        },
+        "fullName": "Nome completo",
+        "fullNamePlaceholder": "Seu nome",
+        "email": "E-mail corporativo",
+        "orgName": "Nome do espaço de trabalho",
+        "orgNamePlaceholder": "Acme Ltda.",
+        "orgNameHint": "Sua equipe entra com o endereço {slug}.",
+        "orgNameHintEmpty": "Este é o nome que sua equipe vê.",
+        "customiseSlug": "Escolher um endereço personalizado para o espaço de trabalho",
+        "orgSlug": "Endereço do espaço de trabalho",
+        "orgSlugHint": "Letras, números, hífen ou sublinhado. Sua equipe digita isso ao entrar.",
+        "orgSlugPlaceholder": "seu-espaço-de-trabalho",
+        "phone": "Número de celular",
+        "phoneHint": "Usamos para verificar sua conta e para atualizações importantes.",
+        "phonePlaceholder": "Número sem código do país",
+        "country": "País",
+        "referral": "Código de indicação",
+        "optional": "opcional",
+        "referralPlaceholder": "Tem o código de um amigo?",
+        "password": "Senha",
+        "confirmPassword": "Confirmar senha",
+        "submit": "Continuar",
+        "submitting": "Criando sua conta",
+        "haveAccount": "Já tem uma conta?",
+        "signIn": "Entrar",
+        "closedBody": "O cadastro está fechado. Peça um convite a um administrador.",
+        "closedBack": "Voltar ao login",
+        "restart": "Inicie o cadastro novamente.",
+        "countryButton": "Código do país +{dial}",
+        "countrySearch": "Pesquisar países",
+        "countryEmpty": "Nenhum país corresponde"
+      },
+      "otp": {
+        "sentTo": "Enviamos um código para",
+        "code": "Código de verificação",
+        "expiresIn": "O código expira em {time}.",
+        "expired": "Este código expirou. Solicite um novo.",
+        "verify": "Verificar e continuar",
+        "verifying": "Verificando",
+        "resend": "Reenviar código",
+        "resendIn": "Reenviar código em {time}",
+        "resending": "Enviando",
+        "resent": "Um novo código está a caminho do seu WhatsApp.",
+        "wrongNumber": "Número errado?",
+        "goBack": "Voltar",
+        "addressTakenHint": "Esse endereço de espaço de trabalho foi usado enquanto você verificava. Escolha outro e enviaremos um novo código.",
+        "chooseAnotherAddress": "Escolher outro endereço"
+      },
+      "forgot": {
+        "submit": "Enviar link de redefinição por e-mail",
+        "submitting": "Enviando",
+        "remembered": "Lembrou?",
+        "back": "Voltar ao login",
+        "doneTitle": "Verifique sua caixa de entrada",
+        "doneBody": "Se esse e-mail pertencer a uma conta nesse espaço de trabalho, um link de redefinição está a caminho. Ele funciona uma vez e expira logo.",
+        "doneHint": "Nada ainda? Verifique a caixa de spam ou tente novamente em um minuto.",
+        "tryAnother": "Usar outro e-mail"
+      },
+      "reset": {
+        "password": "Nova senha",
+        "confirmPassword": "Confirmar nova senha",
+        "submit": "Salvar nova senha",
+        "submitting": "Salvando",
+        "back": "Voltar ao login",
+        "invalidTitle": "Este link não funciona mais",
+        "invalidBody": "Os links de redefinição funcionam uma vez e expiram em pouco tempo. Peça um novo para continuar.",
+        "requestNew": "Solicitar um novo link"
+      },
+      "verifyEmail": {
+        "working": "Confirmando seu e-mail",
+        "doneTitle": "E-mail confirmado",
+        "doneBody": "Obrigado, seu endereço foi verificado. Entre para continuar.",
+        "failedTitle": "Não foi possível confirmar seu e-mail",
+        "failedHint": "Entre e peça um novo e-mail de verificação no banner no topo do app.",
+        "signIn": "Ir para o login"
+      },
+      "confirmEmailChange": {
+        "working": "Confirmando seu novo e-mail",
+        "doneTitle": "Endereço de e-mail atualizado",
+        "doneBody": "Use seu novo endereço na próxima vez que entrar.",
+        "failedTitle": "Não foi possível confirmar a alteração",
+        "failedHint": "Entre e inicie a alteração de e-mail novamente na página da sua conta.",
+        "signIn": "Ir para o login"
+      },
+      "findWorkspace": {
+        "submit": "Enviar meus espaços de trabalho por e-mail",
+        "submitting": "Enviando",
+        "back": "Voltar ao login",
+        "doneTitle": "Verifique sua caixa de entrada",
+        "doneBody": "Se esse endereço pertencer a uma conta verificada, enviamos por e-mail os endereços dos espaços de trabalho em que você pode entrar.",
+        "doneHint": "Nada ainda? Verifique a caixa de spam ou tente outro e-mail.",
+        "tryAnother": "Usar outro e-mail"
+      },
+      "callback": {
+        "working": "Concluindo seu login",
+        "failedTitle": "O login não foi concluído",
+        "cancelled": "O login foi cancelado.",
+        "backToSignIn": "Voltar ao login",
+        "createAccount": "Criar uma conta"
+      },
+      "layout": {
+        "noscript": "O JavaScript está desativado neste navegador. Ative-o para entrar ou criar uma conta."
+      },
+      "consent": {
+        "label": "Aviso de cookies",
+        "title": "Usamos cookies",
+        "message": "Usamos cookies para manter você conectado e entender como este site é usado. Aceite todos, recuse os opcionais ou escolha o que permitir.",
+        "learnMore": "Saiba mais",
+        "decline": "Recusar",
+        "customize": "Personalizar",
+        "acceptAll": "Aceitar todos",
+        "prefsTitle": "Suas escolhas de privacidade",
+        "necessary": "Estritamente necessários",
+        "necessaryHint": "Necessários para login e segurança. Sempre ativos.",
+        "analytics": "Análises",
+        "analyticsHint": "Ajudam a ver quais páginas funcionam e quais não.",
+        "marketing": "Marketing",
+        "marketingHint": "Usados para exibir ofertas relevantes em outros sites.",
+        "rejectAll": "Rejeitar todos",
+        "save": "Salvar escolhas"
+      },
+      "policy": {
+        "minLength": "Pelo menos {min, plural, one {# caractere} other {# caracteres}}.",
+        "mixedCase": "Misture letras maiúsculas e minúsculas.",
+        "number": "Inclua um número.",
+        "symbol": "Inclua um símbolo.",
+        "placeholder": "Pelo menos {min, plural, one {# caractere} other {# caracteres}}"
+      }
+    },
+    "gate": {
+      "suspended": {
+        "titleLead": "Sua conta está",
+        "titleAccent": "suspensa"
+      },
+      "verify": {
+        "titleLead": "Por favor,",
+        "titleAccent": "verifique seu e-mail"
+      },
+      "onboarding": {
+        "header": {
+          "step2": {
+            "eyebrow": "Etapa 2 de 3 / Espaço de trabalho",
+            "title": "Crie seu",
+            "accent": "espaço de trabalho"
+          },
+          "step3": {
+            "eyebrow": "Etapa 3 de 3 / Plano",
+            "title": "Escolha um",
+            "accent": "plano",
+            "subtitle": "Todo plano vem com uma franquia mensal de mensagens. Comece no plano gratuito ou escolha um com mais espaço."
+          }
+        },
+        "timezonePlaceholder": "Pesquisar fuso horário...",
+        "timezoneEmpty": "Nenhum fuso horário corresponde à sua pesquisa.",
+        "timezoneLabel": "Fuso horário",
+        "phonePlaceholder": "Número sem código do país",
+        "plan": {
+          "credits": "Seu plano inclui um número fixo de mensagens por mês. Se a franquia acabar enquanto o plano estiver ativo, os envios extras usam créditos da carteira a <rate>{credits, plural, one {# crédito} other {# créditos}} por mensagem</rate>. Quando o plano termina, os envios ficam em pausa até você renovar.",
+          "topUpPrompt": "Ultrapassando sua franquia?",
+          "topUp": "Adicionar créditos de mensagem"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,439 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "Cửa hàng"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "Bỏ qua"
+      },
+      "errors": {
+        "requestId": "Mã yêu cầu",
+        "retry": "Thử lại",
+        "network": {
+          "title": "Không kết nối được máy chủ",
+          "message": "Kiểm tra kết nối rồi thử lại."
+        },
+        "forbidden": {
+          "title": "Không có quyền truy cập",
+          "message": "Vai trò của bạn không cho phép thao tác này."
+        },
+        "signedOut": {
+          "title": "Bạn đã đăng xuất",
+          "message": "Đăng nhập lại để tiếp tục."
+        },
+        "conflict": {
+          "title": "Đã thay đổi ở nơi khác",
+          "message": "Người khác đã thay đổi nội dung này khi bạn đang chỉnh sửa. Tải lại để xem bản mới nhất."
+        },
+        "validation": {
+          "title": "Kiểm tra biểu mẫu",
+          "message": "Một số trường cần được xem lại."
+        },
+        "unavailable": {
+          "title": "Chưa khả dụng",
+          "message": "Dịch vụ cửa hàng chưa khả dụng trên máy chủ này."
+        },
+        "rateLimited": {
+          "title": "Quá nhiều yêu cầu",
+          "message": "Vui lòng đợi một lát rồi thử lại."
+        },
+        "notFound": {
+          "title": "Không tìm thấy",
+          "message": "Cửa hàng này không tồn tại trong không gian làm việc."
+        },
+        "noShop": {
+          "title": "Chưa có cửa hàng",
+          "message": "Hãy thiết lập cửa hàng của bạn trước."
+        },
+        "slugTaken": {
+          "title": "Địa chỉ đã được dùng",
+          "message": "Địa chỉ cửa hàng này đã được sử dụng."
+        },
+        "deviceInvalid": {
+          "title": "Chọn một thiết bị đã kết nối",
+          "message": "Chọn một trong các thiết bị đã kết nối của bạn."
+        },
+        "noSender": {
+          "title": "Kết nối WhatsApp trước",
+          "message": "Cửa hàng cần một số WhatsApp đã kết nối. Hãy kết nối một số rồi thử lại."
+        },
+        "resetNotConfirmed": {
+          "title": "Chưa xác nhận",
+          "message": "Chưa xác nhận đặt lại."
+        },
+        "domainNotSet": {
+          "title": "Chưa có tên miền tùy chỉnh",
+          "message": "Chưa đặt tên miền tùy chỉnh."
+        },
+        "unexpected": {
+          "title": "Đã xảy ra lỗi",
+          "message": "Đã xảy ra lỗi. Vui lòng thử lại sau ít phút."
+        }
+      },
+      "sidebar": {
+        "label": "Cửa hàng",
+        "navLabel": "Các mục cửa hàng",
+        "section": "Cửa hàng",
+        "settings": "Cài đặt",
+        "items": {
+          "overview": "Tổng quan",
+          "orders": "Đơn hàng",
+          "products": "Sản phẩm",
+          "groups": "Nhóm",
+          "storefront": "Gian hàng",
+          "coupons": "Mã giảm giá",
+          "reviews": "Đánh giá",
+          "payments": "Thanh toán",
+          "gateways": "Cổng thanh toán",
+          "customers": "Khách hàng",
+          "invoices": "Hóa đơn",
+          "connection": "Kết nối"
+        },
+        "comingSoon": "Sắp ra mắt",
+        "comingSoonHint": "Sắp ra mắt",
+        "noShopTitle": "Chưa có cửa hàng",
+        "noShopMessage": "Tạo cửa hàng đầu tiên để sử dụng các công cụ cửa hàng.",
+        "noShopAction": "Thiết lập cửa hàng",
+        "live": "Đang hoạt động",
+        "setup": "Thiết lập",
+        "yourStore": "Cửa hàng của bạn",
+        "notConnected": "Chưa kết nối",
+        "unofficialApi": "API không chính thức",
+        "deviceConnected": "Đã kết nối thiết bị · /channels",
+        "switchShop": "Chuyển cửa hàng",
+        "shopFallback": "Cửa hàng",
+        "manageShops": "Quản lý tất cả cửa hàng →",
+        "publicUrl": "URL công khai",
+        "open": "Mở",
+        "copy": "Sao chép",
+        "copied": "Đã sao chép!",
+        "providerLive": "Nhà cung cấp đang hoạt động",
+        "sendingFrom": "Gửi từ",
+        "noDevice": "Chưa có thiết bị nào được kết nối.",
+        "connectOne": "Kết nối một thiết bị",
+        "thenBind": "rồi gắn thiết bị đó vào cửa hàng này từ",
+        "connectWizard": "trình hướng dẫn kết nối"
+      },
+      "dashboard": {
+        "eyebrow": "Cửa hàng / Tổng quan",
+        "title": "Tổng quan bán hàng",
+        "subtitle": "30 ngày gần nhất. Đơn hàng được gộp từ mọi kênh — WABA, gian hàng, Twilio.",
+        "addProduct": "Thêm sản phẩm",
+        "loading": "Đang tải tổng quan cửa hàng",
+        "kpi": {
+          "revenue": "Doanh thu (30 ngày)",
+          "orders": "Đơn hàng (30 ngày)",
+          "aov": "Đơn trung bình",
+          "products": "Sản phẩm",
+          "visits": "Lượt truy cập (30 ngày)"
+        },
+        "trend": {
+          "eyebrow": "Xu hướng bán hàng",
+          "title": "Doanh thu theo thời gian"
+        },
+        "legendRevenue": "Doanh thu ({symbol})",
+        "legendOrders": "Đơn hàng",
+        "dayReadout": "{day}: {revenue}, {orders, plural, other {# đơn hàng}}",
+        "chartLabel": "Doanh thu và đơn hàng mỗi ngày, 30 ngày gần nhất",
+        "tableDay": "Ngày",
+        "tableRevenue": "Doanh thu ({symbol})",
+        "tableOrders": "Đơn hàng",
+        "top": {
+          "eyebrow": "Sản phẩm bán chạy nhất (30 ngày)",
+          "title": "Bán chạy nhất",
+          "empty": "Chưa có doanh số — hãy chia sẻ liên kết cửa hàng của bạn."
+        },
+        "recent": {
+          "title": "Đơn hàng gần đây",
+          "viewAll": "Xem tất cả",
+          "open": "Mở",
+          "columns": {
+            "when": "Thời gian",
+            "customer": "Khách hàng",
+            "source": "Nguồn",
+            "items": "Mặt hàng",
+            "total": "Tổng cộng",
+            "status": "Trạng thái",
+            "open": "Mở"
+          },
+          "itemsCount": "{count, plural, other {# mặt hàng}}",
+          "emptyTitle": "Chưa có đơn hàng",
+          "emptyMessage": "Khi khách hàng đặt hàng từ gian hàng hoặc WhatsApp, đơn sẽ hiển thị tại đây."
+        }
+      },
+      "settings": {
+        "eyebrow": "Cửa hàng / Gian hàng",
+        "title": "Thiết kế gian hàng",
+        "viewLive": "Xem trực tiếp",
+        "noAccess": "Vai trò của bạn không có quyền truy cập cài đặt gian hàng.",
+        "loading": "Đang tải cài đặt gian hàng",
+        "saved": "Đã cập nhật gian hàng.",
+        "conflict": "Gian hàng này đã được thay đổi ở nơi khác khi bạn đang chỉnh sửa. Tải lại để nhận cài đặt mới nhất, rồi thực hiện lại các thay đổi của bạn.",
+        "reload": "Tải lại",
+        "fixErrors": "Sửa các trường được đánh dấu rồi lưu lại.",
+        "optional": "(không bắt buộc)",
+        "save": "Lưu",
+        "readOnly": "Bạn có thể xem các cài đặt này nhưng không thể thay đổi.",
+        "live": "Gian hàng đang hoạt động (bỏ chọn sẽ đưa gian hàng ngoại tuyến)",
+        "theme": {
+          "title": "Giao diện"
+        },
+        "slug": {
+          "label": "Đường dẫn gian hàng",
+          "hint": "Cửa hàng của bạn sẽ có địa chỉ"
+        },
+        "domain": {
+          "label": "Tên miền tùy chỉnh",
+          "placeholder": "shop.yourbiz.com",
+          "verifiedLive": "Đã xác minh — tên miền của bạn đang hoạt động",
+          "addCname": "Thêm CNAME này tại nhà cung cấp DNS của bạn:",
+          "cname": "CNAME",
+          "verify": "Xác minh ngay",
+          "verified": "Đã xác minh tên miền ✓",
+          "notPointing": "CNAME chưa trỏ tới {expected}",
+          "notSet": "Chưa đặt tên miền tùy chỉnh.",
+          "verifyFailed": "Không kiểm tra được tên miền. Vui lòng thử lại."
+        },
+        "brand": {
+          "logoUrl": "URL logo",
+          "color": "Màu thương hiệu (hex)",
+          "colorPicker": "Chọn màu thương hiệu",
+          "heroText": "Nội dung chào mừng",
+          "heroPlaceholder": "Chào mừng đến với cửa hàng của chúng tôi",
+          "footerText": "Nội dung chân trang",
+          "footerPlaceholder": "© 2026 Cửa hàng của bạn"
+        },
+        "currency": {
+          "title": "Tiền tệ",
+          "label": "Tiền tệ",
+          "hint": "Mặc định cho sản phẩm mới và ký hiệu hiển thị trong ngăn giỏ hàng."
+        },
+        "shipping": {
+          "title": "Vận chuyển",
+          "flat": "Phí vận chuyển cố định",
+          "flatHint": "Được cộng vào mọi đơn hàng. Để trống hoặc 0 = miễn phí.",
+          "freeAbove": "Miễn phí vận chuyển từ",
+          "freeAboveHint": "Giỏ hàng từ mức này trở lên được miễn phí vận chuyển.",
+          "note": "Ghi chú vận chuyển",
+          "noteHint": "Hiển thị trong giỏ hàng và trên trang sản phẩm.",
+          "notePlaceholder": "2–5 ngày làm việc · Có theo dõi"
+        },
+        "payment": {
+          "title": "Liên kết thanh toán",
+          "intro": "Chọn nhà cung cấp thanh toán và chúng tôi sẽ thêm liên kết thanh toán vào mọi tin nhắn đặt hàng WhatsApp. Người mua thanh toán qua liên kết, bạn xác nhận trong chat. Gian hàng không có quy trình thanh toán tích hợp.",
+          "provider": "Nhà cung cấp",
+          "providers": {
+            "none": "Không có · thanh toán khi nhận hàng",
+            "upi": "UPI (Ấn Độ) — VPA + tên",
+            "razorpay_link": "Liên kết thanh toán Razorpay (dán liên kết tĩnh)",
+            "razorpay_api": "Razorpay (tự tạo liên kết + tự xác nhận)",
+            "stripe_link": "Liên kết thanh toán Stripe",
+            "paypal_me": "Tên PayPal.me",
+            "bank_transfer": "Hướng dẫn chuyển khoản ngân hàng"
+          },
+          "handle": "Chi tiết thanh toán",
+          "handleHint": "VPA UPI, URL liên kết thanh toán, tên PayPal.me hoặc tài khoản ngân hàng.",
+          "handlePlaceholder": "vd. shop@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "API Razorpay (liên kết tự động)",
+            "keyId": "Key ID",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "Key secret",
+            "webhookSecret": "Webhook secret",
+            "stored": "đã lưu — để trống để giữ nguyên",
+            "show": "Hiện bí mật",
+            "hide": "Ẩn bí mật",
+            "webhookHelp": "Trong bảng điều khiển Razorpay, đặt URL webhook thành",
+            "webhookEvent": "cho sự kiện payment_link.paid."
+          }
+        },
+        "recovery": {
+          "title": "Khôi phục giỏ hàng bị bỏ",
+          "enable": "Gửi nhắc nhở qua WhatsApp đến khách hàng đã bắt đầu thanh toán nhưng chưa hoàn tất",
+          "enableHint": "Ghi nhận số điện thoại khi thanh toán; nhắc nhở sẽ tự hủy nếu khách đặt hàng. Cần có thiết bị đã kết nối.",
+          "delay": "Độ trễ (phút)",
+          "message": "Tin nhắn",
+          "messageHint": "(để trống = mặc định; '{name}' '{shop}' '{url}' '{total}')",
+          "messagePlaceholder": "Chào '{name}'! Bạn còn sản phẩm trong giỏ hàng tại '{shop}'. Hoàn tất tại đây: '{url}'"
+        },
+        "problems": {
+          "required": "Trường này là bắt buộc.",
+          "tooLong": "Tối đa {max} ký tự.",
+          "slugPattern": "Chỉ dùng chữ thường, số và dấu gạch ngang.",
+          "domainInvalid": "Tên miền này không hợp lệ (ví dụ: shop.yourbiz.com).",
+          "urlInvalid": "Nhập địa chỉ đầy đủ bắt đầu bằng http:// hoặc https://.",
+          "colorInvalid": "Dùng mã màu hex như #075E54.",
+          "amountInvalid": "Nhập một số, từ 0 trở lên.",
+          "amountTooBig": "Tối đa {max}.",
+          "delayRange": "Nhập một số nguyên từ {min} đến {max}.",
+          "themeInvalid": "Chọn một trong các giao diện.",
+          "currencyInvalid": "Chọn một trong các loại tiền tệ trong danh sách.",
+          "providerInvalid": "Chọn một trong các nhà cung cấp trong danh sách.",
+          "slugTaken": "Đường dẫn này đã được dùng. Hãy chọn đường dẫn khác."
+        }
+      },
+      "share": {
+        "message": "Xem cửa hàng của tôi: {name}",
+        "subject": "Xem cửa hàng của tôi · {name}",
+        "eyebrow": "Chia sẻ cửa hàng của bạn",
+        "fallbackName": "Cửa hàng của tôi",
+        "close": "Đóng",
+        "link": "Liên kết cửa hàng",
+        "copy": "Sao chép",
+        "copied": "Đã sao chép ✓",
+        "copiedShort": "Đã sao chép",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "Gửi đến một cuộc chat",
+        "email": "Email",
+        "emailHint": "Mở ứng dụng thư",
+        "telegram": "Telegram",
+        "telegramHint": "Chia sẻ tới kênh",
+        "more": "Thêm…",
+        "moreHint": "Menu chia sẻ trên điện thoại",
+        "nativeUnsupported": "Trình duyệt này không hỗ trợ",
+        "showQr": "Hiện mã QR",
+        "qrAlt": "Mã QR",
+        "qrCaption": "Quét để mở cửa hàng"
+      },
+      "wizard": {
+        "loading": "Đang tải cửa hàng của bạn",
+        "back": "Quay lại",
+        "breadcrumb": "Kết nối / Cửa hàng WhatsApp",
+        "manageConnections": "Quản lý tất cả kết nối →",
+        "titles": {
+          "list": "Cửa hàng của bạn",
+          "add": "Thiết lập cửa hàng",
+          "edit": "Sửa {name}",
+          "shopFallback": "cửa hàng"
+        },
+        "gate": {
+          "step": "Bước 1 trên 3",
+          "title": "Kết nối WhatsApp trước",
+          "message": "Cửa hàng cần một số WhatsApp đã kết nối để gửi xác nhận đơn hàng và cho phép khách trò chuyện. Vào kênh của bạn để ghép nối một số, chỉ mất 30 giây.",
+          "action": "Đi tới thiết bị"
+        },
+        "list": {
+          "headline": "{count, plural, other {# cửa hàng}} trong {workspace}",
+          "intro": "Mỗi cửa hàng có URL công khai, giao diện và thiết bị gửi tin riêng. Thêm bao nhiêu cửa hàng tùy ý — cho các thương hiệu, ngôn ngữ hoặc khu vực khác nhau.",
+          "add": "Thêm cửa hàng",
+          "addAnother": "Thêm một cửa hàng khác",
+          "addAnotherHint": "Vận hành một gian hàng riêng với URL, giao diện và số WhatsApp riêng."
+        },
+        "share": {
+          "fallbackName": "Cửa hàng của tôi"
+        },
+        "noAccess": {
+          "title": "Bạn không thể thay đổi cửa hàng",
+          "message": "Vai trò của bạn chỉ được xem cửa hàng, không được tạo hoặc chỉnh sửa.",
+          "action": "Quay lại danh sách cửa hàng"
+        },
+        "delete": {
+          "title": "Xóa {name}?",
+          "message": "Sẽ xóa vĩnh viễn gian hàng và các đơn hàng của gian hàng. Sản phẩm trong không gian làm việc không bị ảnh hưởng. Không thể hoàn tác.",
+          "confirm": "Có, xóa",
+          "cancel": "Hủy",
+          "done": "Đã xóa cửa hàng.",
+          "thisShop": "cửa hàng này"
+        },
+        "reset": {
+          "open": "Xóa toàn bộ dữ liệu cửa hàng",
+          "title": "Xóa toàn bộ dữ liệu cửa hàng?",
+          "message": "Sẽ xóa vĩnh viễn mọi cửa hàng, đơn hàng và sản phẩm của không gian làm việc này. Không thể hoàn tác.",
+          "confirm": "Có, xóa tất cả",
+          "done": "Đã xóa toàn bộ dữ liệu cửa hàng của không gian làm việc này.",
+          "notConfirmed": "Chưa xác nhận đặt lại."
+        },
+        "card": {
+          "live": "Đang hoạt động",
+          "disabled": "Đã tắt",
+          "theme": "Giao diện {theme}",
+          "untitled": "Cửa hàng chưa đặt tên",
+          "sendingFrom": "Gửi từ",
+          "noDevice": "Không có thiết bị",
+          "domain": "Tên miền",
+          "pending": "đang chờ",
+          "builtIn": "URL tích hợp sẵn",
+          "manage": "Quản lý",
+          "manageTitle": "Mở bảng điều khiển quản trị",
+          "preview": "Xem trước",
+          "previewTitle": "Mở gian hàng công khai trong tab mới",
+          "edit": "Sửa",
+          "editTitle": "Sửa cài đặt cửa hàng",
+          "share": "Chia sẻ",
+          "shareAria": "Chia sẻ {name}",
+          "delete": "Xóa cửa hàng",
+          "deleteAria": "Xóa {name}"
+        },
+        "form": {
+          "backToShops": "Quay lại danh sách cửa hàng",
+          "creatingShop": "Đang tạo cửa hàng #{n}",
+          "progress": "Các bước",
+          "steps": {
+            "details": "Thông tin cửa hàng",
+            "url": "URL công khai",
+            "device": "Thiết bị gửi tin"
+          },
+          "optional": "(không bắt buộc)",
+          "details": {
+            "title": "Thông tin cửa hàng",
+            "hint": "Tên hiển thị với khách và đường dẫn URL nơi sản phẩm sẽ nằm.",
+            "name": "Tên cửa hàng",
+            "nameHint": "Hiển thị trên đầu gian hàng và trong xác nhận đơn hàng.",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "vd. {workspace} · Mumbai",
+            "slug": "Đường dẫn gian hàng",
+            "auto": "(tự động)",
+            "slugLocked": "Sẽ bị khóa sau khi cửa hàng hoạt động để các liên kết đã chia sẻ vẫn hoạt động.",
+            "slugAuto": "Được tạo từ tên cửa hàng — sẽ được chốt khi bạn lưu."
+          },
+          "url": {
+            "title": "URL công khai",
+            "hint": "Chọn cách khách hàng truy cập cửa hàng — URL tích hợp sẵn miễn phí, tên miền tùy chỉnh trông chuyên nghiệp hơn.",
+            "builtIn": "URL tích hợp sẵn · miễn phí",
+            "pathMode": "Hoạt động ngay khi bạn lưu. Dùng URL theo đường dẫn vì chưa cấu hình máy chủ gian hàng công khai.",
+            "subdomainMode": "Hoạt động ngay khi bạn lưu. Được lưu trữ trên tên miền gian hàng của nền tảng.",
+            "domain": "Tên miền tùy chỉnh",
+            "domainHint": "Bạn sẽ thêm CNAME tại nhà cung cấp DNS và xác minh từ trang cài đặt gian hàng sau khi lưu. Để trống để dùng URL tích hợp sẵn.",
+            "domainPlaceholder": "shop.yourbiz.com",
+            "verified": "{domain} đã được xác minh.",
+            "pending": "{domain} đang chờ xác minh DNS."
+          },
+          "device": {
+            "title": "Thiết bị gửi tin",
+            "hint": "Số WhatsApp nào sẽ gửi xác nhận đơn hàng và phản hồi cho người mua.",
+            "none": "Không có thiết bị nào được kết nối trên tài khoản này.",
+            "pair": "Ghép nối một thiết bị trong kênh của bạn →",
+            "official": "API chính thức · Meta (WABA)",
+            "officialDetail": "Số WhatsApp Business của không gian làm việc",
+            "fallback": "Thiết bị",
+            "noNumber": "Không có số",
+            "connected": "đã kết nối"
+          },
+          "cancel": "Hủy",
+          "deleteThis": "Xóa cửa hàng này",
+          "saveChanges": "Lưu thay đổi",
+          "create": "Tạo cửa hàng →",
+          "created": "Đã tạo cửa hàng \"{name}\".",
+          "updated": "Đã cập nhật cửa hàng \"{name}\".",
+          "problems": {
+            "nameRequired": "Nhập tên cửa hàng.",
+            "nameTooLong": "Tối đa 191 ký tự.",
+            "domainInvalid": "Tên miền này không hợp lệ (ví dụ: shop.yourbiz.com).",
+            "domainTooLong": "Tối đa 191 ký tự.",
+            "deviceInvalid": "Chọn một trong các thiết bị đã kết nối của bạn.",
+            "slugTaken": "Tên cửa hàng này tạo ra một địa chỉ đã được sử dụng. Hãy đổi tên một chút."
+          },
+          "live": {
+            "eyebrow": "Cửa hàng này đang hoạt động",
+            "fallbackName": "Cửa hàng của bạn",
+            "hint": "Thêm sản phẩm, chọn giao diện, xem đơn hàng và chia sẻ liên kết của bạn.",
+            "view": "Xem cửa hàng",
+            "share": "Chia sẻ cửa hàng",
+            "dashboard": "Mở bảng điều khiển"
+          }
+        }
+      }
+    }
+  }
+}

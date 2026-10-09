@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhooks",
+      "forwarding": "Reenvío de webhooks"
+    },
+    "common": {
+      "loading": "Cargando",
+      "retry": "Reintentar",
+      "requestId": "ID de la solicitud",
+      "dash": "-",
+      "errors": {
+        "forbidden": "No tienes permiso para hacer esto.",
+        "request": "No se pudo completar la solicitud.",
+        "unexpected": "Algo falló de nuestro lado. Inténtalo de nuevo en un momento.",
+        "network": "No se pudo contactar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+        "conflict": "Otra persona cambió este destino. La lista se recargó: aplica tu cambio de nuevo.",
+        "validation": "Algunos valores no son válidos. Revisa los campos marcados.",
+        "notFound": "Ese elemento ya no existe.",
+        "urlRejected": "Esta URL no está permitida. Usa una dirección https accesible desde internet."
+      }
+    },
+    "page": {
+      "eyebrow": "Administración / Sistema / Webhooks",
+      "title": "Reenvío de webhooks",
+      "description": "La lista de servicios del operador de la plataforma que reciben una copia de cada webhook de Meta.",
+      "banner": "Meta permite una sola URL de callback. La recibimos una vez, la verificamos y reenviamos el cuerpo original sin cambios (con la firma original) a cada destino activo.",
+      "superOnly": "Solo un superadministrador puede gestionar el reenvío de webhooks.",
+      "add": "Añadir destino",
+      "tabs": {
+        "targets": "Destinos",
+        "failures": "Entregas fallidas"
+      }
+    },
+    "targets": {
+      "empty": "Todavía no hay destinos de reenvío",
+      "emptyBody": "Añade un destino para empezar a reenviar los webhooks de Meta a otro servicio.",
+      "columns": {
+        "target": "Destino",
+        "active": "Activo",
+        "fields": "Campos",
+        "deliveries": "Entregas",
+        "last": "Última entrega",
+        "actions": "Acciones"
+      },
+      "allFields": "Todos los campos",
+      "success": "{count, number} correctas",
+      "failure": "{count, number} fallidas",
+      "pending": "{count, number} pendientes",
+      "pendingLabel": "{count, number} entregas fallidas esperando reenvío",
+      "neverDelivered": "Todavía no se ha entregado nada",
+      "lastStatus": "Estado {status}",
+      "lastError": "Error: {error}",
+      "lastAt": "a las {time}",
+      "activeSwitch": "Reenviar a {name}",
+      "on": "Destino activado",
+      "off": "Destino desactivado",
+      "edit": "Editar",
+      "test": "Probar",
+      "testing": "Probando",
+      "testOk": "Prueba superada: estado {status} en {ms, number} ms",
+      "testFailed": "Prueba fallida: {reason} ({ms, number} ms)",
+      "testNoStatus": "sin respuesta",
+      "testStatus": "estado {status}",
+      "delete": "Eliminar",
+      "deleteTitle": "¿Eliminar {name}?",
+      "deleteBody": "El destino deja de recibir webhooks y se eliminan sus entregas fallidas guardadas. Esto no se puede deshacer.",
+      "deleteConfirm": "Eliminar destino",
+      "cancel": "Cancelar",
+      "toasts": {
+        "created": "{name} añadido",
+        "saved": "{name} guardado",
+        "on": "{name} está activado",
+        "off": "{name} está desactivado",
+        "deleted": "{name} eliminado"
+      }
+    },
+    "dialog": {
+      "createTitle": "Añadir destino de reenvío",
+      "editTitle": "Editar {name}",
+      "close": "Cerrar",
+      "name": "Nombre",
+      "namePlaceholder": "Servicio de analítica",
+      "url": "URL",
+      "urlHint": "Solo https. Se rechazan las direcciones de redes privadas.",
+      "headerName": "Nombre de cabecera (opcional)",
+      "headerNameHint": "Se envía con cada entrega, por ejemplo Authorization.",
+      "headerValue": "Valor de la cabecera",
+      "headerValueSaved": "Guardado, termina en ••••{last4}. Déjalo en blanco para conservarlo.",
+      "headerValueSavedNoLast4": "Guardado. Déjalo en blanco para conservarlo.",
+      "headerValueHint": "Solo escritura: no se vuelve a mostrar después de guardar.",
+      "removeHeader": "Eliminar la cabecera guardada",
+      "fieldFilter": "Filtro de campos",
+      "fieldFilterHint": "Déjalo vacío para reenviar todos los campos. Escribe un campo y pulsa Intro, por ejemplo messages o message_template_status_update.",
+      "fieldFilterPlaceholder": "Añadir un campo",
+      "fieldRemove": "Quitar {field}",
+      "timeout": "Tiempo de espera (segundos)",
+      "timeoutHint": "De 1 a 30",
+      "maxAttempts": "Intentos máximos",
+      "maxAttemptsHint": "De 1 a 10",
+      "active": "Reenviar a este destino",
+      "save": "Guardar",
+      "saving": "Guardando",
+      "cancel": "Cancelar",
+      "errors": {
+        "nameRequired": "Introduce un nombre.",
+        "urlRequired": "Introduce la URL.",
+        "urlHttps": "La URL debe empezar por https://.",
+        "headerNameInvalid": "Usa solo letras, dígitos y guiones.",
+        "headerValueRequired": "Una cabecera necesita nombre y valor.",
+        "headerNameRequired": "Introduce también el nombre de la cabecera.",
+        "timeout": "Introduce un número entero de 1 a 30.",
+        "maxAttempts": "Introduce un número entero de 1 a 10."
+      }
+    },
+    "failures": {
+      "empty": "No hay entregas fallidas",
+      "emptyBody": "Las entregas que se quedan sin reintentos se guardan aquí durante 14 días para que puedas volver a enviarlas.",
+      "filterAll": "Todos los destinos",
+      "filterLabel": "Destino",
+      "columns": {
+        "target": "Destino",
+        "when": "Falló el",
+        "attempts": "Intentos",
+        "reason": "Motivo",
+        "size": "Tamaño",
+        "actions": "Acción"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} bytes",
+      "replay": "Reenviar",
+      "replaying": "Reenviando",
+      "replayed": "Reenviado {time}",
+      "replayOk": "Entregado: estado {status} en {ms, number} ms",
+      "replayFailed": "No entregado: {reason} ({ms, number} ms)",
+      "reasonStatus": "estado {status}",
+      "reasonNone": "sin respuesta"
+    }
+  }
+}

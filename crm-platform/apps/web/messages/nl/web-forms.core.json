@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "nav": {
+      "forms": "Formulieren"
+    },
+    "kinds": {
+      "short_text": "Korte tekst",
+      "long_text": "Lange tekst",
+      "email": "E-mail",
+      "phone": "Telefoonnummer",
+      "number": "Getal",
+      "currency": "Bedrag",
+      "date": "Datum",
+      "dropdown": "Keuzelijst",
+      "radio": "Enkele keuze",
+      "checkbox_group": "Meerdere keuzes",
+      "checkbox": "Selectievakje",
+      "rating": "Beoordeling",
+      "hidden": "Verborgen veld"
+    },
+    "errors": {
+      "network": "De server kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt geen toestemming om dit te doen.",
+      "signedOut": "Je sessie is beëindigd. Log opnieuw in om door te gaan.",
+      "conflict": "Iemand anders heeft dit formulier gewijzigd. Laad de pagina opnieuw om de nieuwste versie te zien.",
+      "nameTaken": "Er bestaat al een ander formulier met deze naam. Kies een andere naam.",
+      "stateInvalid": "Dat is niet mogelijk in de huidige status van het formulier.",
+      "definitionInvalid": "Het formulier is nog niet geldig. Controleer de velden en probeer het opnieuw.",
+      "publishInvalid": "Het formulier kan nog niet worden gepubliceerd. Los de vermelde problemen op en probeer het opnieuw.",
+      "planLimit": "De limiet van je abonnement is bereikt.",
+      "planLimitForms": "Je hebt het aantal formulieren bereikt dat je abonnement toestaat. Archiveer een formulier dat je niet meer gebruikt, of upgrade je abonnement.",
+      "planLocked": "Formulieren maken geen deel uit van je workspace.",
+      "notFound": "Dit formulier is niet gevonden. Het is mogelijk verwijderd.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "unexpected": "Er ging iets mis. Probeer het zo meteen opnieuw.",
+      "upgrade": "Abonnementen bekijken"
+    }
+  }
+}

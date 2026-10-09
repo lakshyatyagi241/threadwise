@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "Boutique / Passerelles de paiement",
+      "title": "Passerelles de paiement",
+      "subtitle": "Ajoutez vos propres clés de passerelle pour que les paiements arrivent sur votre compte. Collez les clés indiquées dans le tableau de bord de la passerelle.",
+      "banner": "Une seule configuration de passerelle sert au paiement de votre boutique et aux factures de vente.",
+      "viewOnly": "Vous pouvez voir la configuration de la passerelle mais pas la modifier. Demandez à un administrateur de l’espace de travail l’autorisation de gérer les passerelles.",
+      "scope": {
+        "label": "Où s’appliquent ces paramètres",
+        "workspace": "Espace de travail (toutes les boutiques)",
+        "workspaceHint": "Utilisé par toutes les boutiques et par les factures de vente, sauf si une boutique a sa propre configuration.",
+        "store": "Cette boutique uniquement (remplacement)",
+        "storeHint": "Utilisé uniquement par le paiement de {shop}. Prioritaire sur la configuration de l’espace de travail.",
+        "storeNamed": "Boutique : {shop}",
+        "noShop": "Créez d’abord une boutique pour définir un remplacement.",
+        "shop": "Boutique"
+      },
+      "resolved": {
+        "used": "Actuellement utilisée : {name} (source : {source})",
+        "none": "Aucune passerelle configurée pour l’instant",
+        "noneHint": "Configurez une passerelle ci-dessous et activez-la. D’ici là, les acheteurs ne peuvent pas payer en ligne et les factures n’ont pas de bouton de paiement.",
+        "source": {
+          "store_override": "remplacement de la boutique",
+          "workspace_default": "valeur par défaut de l’espace de travail",
+          "legacy_storefront": "clés de la boutique"
+        }
+      },
+      "mode": {
+        "live": "Production",
+        "test": "Test"
+      },
+      "catalogue": {
+        "title": "Passerelles",
+        "count": "{count, plural, one {# passerelle} other {# passerelles}}",
+        "search": "Rechercher des passerelles",
+        "searchPlaceholder": "Rechercher par nom, pays ou devise",
+        "loading": "Chargement des passerelles",
+        "noDriversTitle": "Aucune passerelle disponible",
+        "noDriversMessage": "Ce serveur n’a pas encore de passerelle de paiement à configurer.",
+        "noMatchTitle": "Aucune passerelle ne correspond",
+        "noMatchMessage": "Essayez un autre nom, pays ou code de devise.",
+        "clearSearch": "Effacer la recherche"
+      },
+      "card": {
+        "available": "Disponible",
+        "unavailable": "Pas encore disponible",
+        "paymentLinks": "Liens de paiement",
+        "unavailableNote": "Cette passerelle est listée mais ne peut pas encore encaisser de paiements dans cette version.",
+        "active": "Active",
+        "off": "Désactivée",
+        "incomplete": "Clés incomplètes",
+        "default": "Par défaut",
+        "migrated": "Migré depuis les clés de votre vitrine. Enregistrez une fois ici pour les conserver dans la nouvelle configuration.",
+        "webhookMissing": "Secret du webhook manquant : les notifications de paiement de cette passerelle sont refusées tant que vous n’en ajoutez pas un.",
+        "notSetUp": "Pas encore configurée pour ce périmètre.",
+        "configure": "Configurer",
+        "edit": "Modifier",
+        "test": "Tester la connexion",
+        "testing": "Test en cours",
+        "setDefault": "Définir par défaut",
+        "activeSwitch": "{name} est activée",
+        "remove": "Supprimer",
+        "removeTitle": "Supprimer {name} ?",
+        "removeMessage": "Ses clés enregistrées sont supprimées pour ce périmètre ({scope}). Les acheteurs ne pourront plus payer par ce moyen et les paiements en cours risquent de ne pas être confirmés.",
+        "removeConfirm": "Supprimer la passerelle"
+      },
+      "toast": {
+        "saved": "Passerelle enregistrée",
+        "switchedOn": "{name} activée",
+        "switchedOff": "{name} désactivée",
+        "defaultSet": "{name} est maintenant la passerelle par défaut",
+        "removed": "{name} supprimée"
+      },
+      "test": {
+        "verified": "Le fournisseur a accepté les clés.",
+        "fieldsTitle": "Les champs obligatoires sont remplis",
+        "fieldsOnly": "Seuls les champs obligatoires ont été vérifiés : cette passerelle n’a pas d’appel de vérification léger, un paiement constitue donc le vrai test.",
+        "missingTitle": "Les clés sont incomplètes",
+        "missing": "Ces champs obligatoires sont vides : {fields}.",
+        "rejected": "Le fournisseur n’a pas accepté les clés.",
+        "providerSaid": "Le fournisseur a répondu : {message}"
+      },
+      "drawer": {
+        "eyebrow": "Configurer la passerelle",
+        "save": "Enregistrer la passerelle",
+        "appliesTo": "S’applique à : {scope}",
+        "credentials": "Identifiants",
+        "noFields": "Cette passerelle n’a besoin d’aucune clé.",
+        "secretsNote": "Les clés enregistrées ne sont plus jamais affichées. Seule la fin de chacune est affichée à titre de rappel.",
+        "requiredField": "{field} est obligatoire.",
+        "invalidOption": "Choisissez l’une des options proposées pour {field}.",
+        "mode": "Mode",
+        "modeHint": "Utilisez Test pendant que vous essayez la passerelle avec ses clés de test, et Production pour encaisser de vrais paiements.",
+        "active": "Active",
+        "activeHint": "Une passerelle désactivée n’est jamais utilisée par le paiement ni par les factures.",
+        "webhookTitle": "Adresse du webhook",
+        "webhookHint": "Collez ceci dans votre tableau de bord {name} pour que les paiements soient confirmés automatiquement.",
+        "webhookAfterSave": "L’adresse du webhook apparaît ici après le premier enregistrement.",
+        "willClear": "La valeur enregistrée sera supprimée à l’enregistrement.",
+        "keepBlank": "Laissez vide pour conserver la valeur enregistrée.",
+        "requiredMark": "(obligatoire)",
+        "stored": "Enregistrée : {mask}",
+        "keepOption": "Conserver la valeur enregistrée",
+        "chooseOption": "Choisir une option",
+        "clear": "Effacer la valeur enregistrée",
+        "show": "Afficher la valeur",
+        "hide": "Masquer la valeur"
+      }
+    }
+  }
+}

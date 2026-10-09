@@ -1,0 +1,716 @@
+{
+  "platform-payment-gateways": {
+    "nav": {
+      "gateways": "Gateway di pagamento",
+      "group": "Fatturazione",
+      "orders": "Storico ordini",
+      "billingHistory": "Storico fatturazione",
+      "invoices": "Fatture",
+      "billingSettings": "Impostazioni di fatturazione"
+    },
+    "admin": {
+      "title": "Gateway di pagamento",
+      "description": "{count} gateway. Le credenziali sono cifrate a riposo e non vengono più mostrate dopo il salvataggio.",
+      "kpi": {
+        "total": "Gateway",
+        "active": "Attivi",
+        "india": "India",
+        "crypto": "Crypto",
+        "totalHint": "driver disponibili",
+        "activeHint": "che accettano pagamenti",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "regolamento on-chain"
+      },
+      "tabsLabel": "Filtra per regione",
+      "all": "Tutti",
+      "search": "Filtra per nome o slug",
+      "emptyTitle": "Nessun gateway qui",
+      "emptyMessage": "Nessun risultato per questa regione e ricerca. Prova un’altra scheda o cancella la ricerca.",
+      "regions": {
+        "popular": "Popolari",
+        "india": "India",
+        "asia": "Asia",
+        "mena": "MENA",
+        "europe": "Europa",
+        "us": "USA e Canada",
+        "africa": "Africa",
+        "latam": "America Latina",
+        "crypto": "Crypto",
+        "offline": "Offline",
+        "other": "Altro"
+      },
+      "card": {
+        "active": "Attivo",
+        "disabled": "Disattivato",
+        "mode": {
+          "sandbox": "Sandbox",
+          "live": "Live"
+        },
+        "keysSaved": "Chiavi salvate",
+        "noDriverBadge": "Driver non ancora disponibile",
+        "activate": "Attiva",
+        "disable": "Disattiva",
+        "savedPlaceholder": "Salvato. Lascia vuoto per mantenerlo.",
+        "clear": "Rimuovi il valore salvato",
+        "undoClear": "Mantieni il valore salvato",
+        "modeLabel": "Modalità",
+        "sortOrder": "Ordinamento",
+        "currencies": "Valute supportate",
+        "currenciesAll": "Nessuna selezionata: vengono accettate tutte le valute",
+        "currenciesSelected": "{count, plural, one {# selezionata} other {# selezionate}}",
+        "currenciesHint": "Gli acquirenti vedono questo gateway solo nelle valute che selezioni. Lascia tutto deselezionato per accettare qualsiasi valuta.",
+        "webhookUrl": "URL del webhook",
+        "webhookHint": "Incollalo nella dashboard del provider perché ci avvisi dei pagamenti.",
+        "saving": "Salvataggio",
+        "readOnly": "Solo un super admin può modificare i gateway.",
+        "saved": "Impostazioni di {name} salvate.",
+        "activated": "{name} attivato.",
+        "deactivated": "{name} disattivato.",
+        "noCredentials": "Nessuna credenziale richiesta: il gateway usa una conferma manuale o esterna.",
+        "save": "Salva {name}"
+      },
+      "errors": {
+        "conflict": "Qualcun altro ha modificato questo gateway. È stato ricaricato; controllalo e salvalo di nuovo.",
+        "notConfigured": "Configura prima i campi obbligatori: {fields}",
+        "noDriver": "Questo gateway non ha ancora un driver in questa release, quindi può essere configurato ma non attivato.",
+        "forbidden": "Solo un super admin può modificare i gateway.",
+        "generic": "Qualcosa è andato storto. Riprova."
+      },
+      "eyebrow": "Admin · Fatturazione · Gateway",
+      "titleFirst": "Pagamenti",
+      "titleSecond": "gateway"
+    },
+    "checkout": {
+      "title": "Completa il tuo ordine",
+      "walletTitle": "Aggiungi denaro al tuo Wallet",
+      "subtitle": "Controlla il prezzo, indicaci chi paga e scegli come.",
+      "loading": "Caricamento del checkout",
+      "account": "Account",
+      "name": "Nome completo",
+      "email": "Email",
+      "billingAddress": "Indirizzo di fatturazione",
+      "company": "Azienda",
+      "taxId": "Partita IVA / codice fiscale",
+      "taxIdHint": "GSTIN, VAT o EIN, se disponibile.",
+      "address": "Indirizzo",
+      "city": "Città",
+      "postal": "CAP",
+      "country": "Paese",
+      "currency": "Valuta",
+      "period": "Periodo di fatturazione",
+      "periods": {
+        "monthly": "Mensile",
+        "yearly": "Annuale"
+      },
+      "paymentMethod": "Metodo di pagamento",
+      "noGateway": "Nessun gateway di pagamento è ancora configurato per {currency}. Chiedi al tuo amministratore di attivarne uno.",
+      "noGatewayButton": "Nessun gateway configurato",
+      "sandbox": "sandbox",
+      "pay": "Paga {amount}",
+      "processing": "Avvio del pagamento",
+      "summary": "Riepilogo ordine",
+      "billed": {
+        "monthly": "Addebitato per un periodo",
+        "yearly": "Addebitato per 12 mesi"
+      },
+      "subtotal": "Subtotale",
+      "tax": "{label} ({rate}%)",
+      "total": "Totale oggi",
+      "updating": "Aggiornamento del prezzo",
+      "errors": {
+        "gatewayUnavailable": "Questo gateway al momento non è disponibile.",
+        "currencyUnsupported": "Questo gateway non accetta questa valuta. Scegli un altro gateway o un’altra valuta.",
+        "providerError": "Errore del provider di pagamento. Riprova o scegli un altro gateway.",
+        "notPurchasable": "Questo piano non può essere acquistato online.",
+        "downgrade": "I downgrade non sono disponibili online. Contatta il supporto per passare a un piano inferiore.",
+        "amountTooLow": "Inserisci un importo maggiore da aggiungere al tuo Wallet.",
+        "couponUnavailable": "I coupon non sono ancora disponibili.",
+        "forbidden": "Non hai il permesso di acquistare.",
+        "notFound": "Impossibile trovare quel piano.",
+        "widgetBlocked": "Impossibile aprire la finestra di pagamento. Verifica che il browser lo consenta e riprova.",
+        "generic": "Qualcosa è andato storto. Riprova.",
+        "couponRejected": "Quel coupon non può essere usato."
+      },
+      "coupon": "Codice coupon",
+      "couponApply": "Applica",
+      "couponApplied": "Coupon {code} applicato: {amount} di sconto.",
+      "couponRemove": "Rimuovi",
+      "couponDiscount": "Sconto ({code})",
+      "refundGuarantee": "Garanzia di rimborso di {days} giorni",
+      "countryPlaceholder": "Scegli un paese",
+      "autoRenew": "Si rinnova automaticamente a ogni periodo. Puoi annullare in qualsiasi momento.",
+      "addonRenews": "Questo add-on si rinnova automaticamente a ogni periodo. Puoi annullarlo in qualsiasi momento e mantenerlo fino alla fine del periodo pagato.",
+      "cardTitle": "Paga con carta",
+      "payNow": "Paga ora",
+      "titleFirst": "Completa il tuo",
+      "titleSecond": "ordine",
+      "subtitleRefund": "Garanzia di rimborso di {days} giorni. Annulla in qualsiasi momento. Accettiamo carte, UPI, netbanking e wallet.",
+      "steps": {
+        "plan": "Scegli piano",
+        "checkout": "Cassa",
+        "confirmation": "Conferma"
+      },
+      "step": "Passo {n}",
+      "taxIdPlaceholder": "GSTIN / P.IVA / EIN",
+      "addressPlaceholder": "Via + numero civico",
+      "cityPlaceholder": "Mumbai",
+      "currencyTitle": "Paga nella tua valuta",
+      "currencyHint": "I prezzi si convertono all'istante. Vengono mostrate solo le valute accettate dai metodi di pagamento disponibili.",
+      "couponPlaceholder": "Hai un codice coupon?",
+      "live": "attivo",
+      "tlsNote": "I pagamenti vengono elaborati su una connessione TLS a 256 bit. Non vediamo mai i dati della tua carta.",
+      "change": "Modifica",
+      "terms": "Pagando accetti i nostri <terms>Termini</terms> e la nostra <privacy>Informativa sulla privacy</privacy>.",
+      "refundNote": "Non sei soddisfatto? Scrivici entro {days} giorni e rimborsiamo l'intero importo: senza domande, senza moduli.",
+      "autoRenewTitle": "Rinnovo automatico di questo piano"
+    },
+    "orders": {
+      "title": "Storico ordini",
+      "lifetime": "Spesa totale: {total}",
+      "loading": "Caricamento ordini",
+      "loadFailed": "Impossibile caricare i tuoi ordini. Ricarica la pagina per riprovare.",
+      "emptyTitle": "Ancora nessun ordine",
+      "emptyMessage": "I tuoi acquisti appariranno qui.",
+      "browsePlans": "Sfoglia i piani",
+      "loadMore": "Carica altri",
+      "outcome": {
+        "success": "Pagamento ricevuto. Grazie.",
+        "failed": "Il pagamento non è stato completato. Riprova o scegli un altro gateway.",
+        "cancelled": "Hai annullato il pagamento.",
+        "pending": "Attendiamo che il provider di pagamento confermi il tuo pagamento. Questa pagina si aggiornerà appena lo farà.",
+        "notfound": "Impossibile trovare quell’ordine.",
+        "proof": "Prova di pagamento inviata. Verificheremo e attiveremo il tuo piano a breve."
+      },
+      "col": {
+        "order": "Ordine",
+        "item": "Elemento",
+        "date": "Data",
+        "amount": "Importo",
+        "status": "Stato",
+        "actions": "Azioni"
+      },
+      "status": {
+        "pending": "In attesa",
+        "awaiting_approval": "In attesa di approvazione",
+        "paid": "Pagato",
+        "failed": "Non riuscito",
+        "cancelled": "Annullato",
+        "refunded": "Rimborsato"
+      },
+      "uploadProof": "Prova di pagamento",
+      "invoice": "Fattura"
+    },
+    "billing": {
+      "common": {
+        "admin": "Admin",
+        "breadcrumb": "Breadcrumb",
+        "billingHistory": "Storico fatturazione",
+        "analytics": "Analytics",
+        "exportCsv": "Esporta CSV",
+        "exportTruncated": "L’esportazione si è fermata a {rows} righe. Restringi i filtri per esportare il resto.",
+        "exportFailed": "Impossibile creare l’esportazione. Riprova.",
+        "actionFailed": "Operazione non riuscita. Ricarica la pagina e riprova.",
+        "cancel": "Annulla",
+        "back": "Mantienilo",
+        "close": "Chiudi",
+        "openWorkspace": "Apri workspace",
+        "showing": "Mostra {from}–{to} di {total} {noun}",
+        "pager": "Pagine",
+        "previous": "Precedente",
+        "next": "Successivo",
+        "chartEmpty": "Nessun dato in questo periodo.",
+        "periods": {
+          "monthly": "mensile",
+          "yearly": "annuale"
+        },
+        "status": {
+          "pending": "in attesa",
+          "awaiting_approval": "in attesa di approvazione",
+          "paid": "pagato",
+          "failed": "non riuscito",
+          "cancelled": "annullato",
+          "refunded": "rimborsato"
+        },
+        "windows": {
+          "7d": "Ultimi 7 giorni",
+          "30d": "Ultimi 30 giorni",
+          "90d": "Ultimi 90 giorni",
+          "1y": "Ultimo anno",
+          "all": "Sempre"
+        }
+      },
+      "orders": {
+        "title": "Storico ordini",
+        "eyebrow": "Admin · Fatturazione e piani · Storico ordini",
+        "titleFirst": "Ordine",
+        "titleSecond": "storico",
+        "description": "Ordini di abbonamento, upgrade e downgrade dei piani, acquisti di add-on e ricariche una tantum: ogni decisione commerciale presa da un workspace.",
+        "window": "Intervallo",
+        "windows": {
+          "90d": "Ultimi 90 giorni",
+          "this_year": "Quest’anno",
+          "all": "Sempre"
+        },
+        "kpi": {
+          "total": "Ordini totali",
+          "vsPrevious": "rispetto al periodo precedente",
+          "upgrades": "Upgrade",
+          "mrrAdded": "+{amount} di MRR aggiunti",
+          "downgrades": "Downgrade",
+          "mrrLowered": "{amount} su piani inferiori",
+          "addons": "Pacchetti add-on",
+          "attached": "{amount} associati",
+          "cancellations": "Cancellazioni",
+          "mrrLost": "-{amount} di MRR persi"
+        },
+        "typeFilter": "Filtra per tipo di ordine",
+        "types": {
+          "all": "Tutti",
+          "new": "Nuovo abbonamento",
+          "upgrade": "Upgrade",
+          "downgrade": "Downgrade",
+          "addon": "Add-on",
+          "cancel": "Annulla"
+        },
+        "rowTypes": {
+          "new": "Nuovo",
+          "renewal": "Rinnovo",
+          "upgrade": "Upgrade",
+          "downgrade": "Downgrade",
+          "addon": "Add-on",
+          "wallet_topup": "Ricarica Wallet",
+          "manual": "Manuale"
+        },
+        "search": "Cerca per n. ordine, workspace, piano…",
+        "noun": "ordini",
+        "col": {
+          "order": "Ordine n.",
+          "date": "Data",
+          "workspace": "Workspace",
+          "type": "Tipo",
+          "item": "Piano / elemento",
+          "mrr": "Δ MRR",
+          "total": "Totale",
+          "status": "Stato"
+        },
+        "empty": "Nessun ordine in questo periodo.",
+        "awaitingApproval": "in attesa di approvazione",
+        "actions": {
+          "markPaid": "Segna come pagato",
+          "cancelOrder": "Annulla",
+          "approve": "Approva",
+          "reject": "Rifiuta"
+        },
+        "confirm": {
+          "approveTitle": "Segnare questo ordine come pagato?",
+          "approve": "Segnare questo ordine come pagato e attivare il piano?",
+          "cancelTitle": "Annullare questo ordine?",
+          "cancel": "Annullare questo ordine in attesa? Verrà segnato come annullato e uscirà dagli importi da incassare."
+        },
+        "reject": {
+          "title": "Rifiuta {order}",
+          "reason": "Motivo (facoltativo)"
+        },
+        "awaiting": {
+          "title": "In attesa di approvazione",
+          "ref": "Rif.:",
+          "proofAttached": "Prova di pagamento allegata"
+        }
+      },
+      "orderAnalytics": {
+        "title": "Analisi degli ordini",
+        "eyebrow": "Admin · Fatturazione e piani · Analisi degli ordini",
+        "titleFirst": "Ordine",
+        "titleSecond": "analisi",
+        "description": "Abbonamenti, upgrade, downgrade, add-on e cancellazioni: ciò che guida il movimento dei ricavi netti sulla piattaforma.",
+        "window": "Intervallo",
+        "viewLedger": "Visualizza registro",
+        "kpi": {
+          "total": "Ordini totali",
+          "newMrr": "MRR netto nuovo",
+          "paid": "{count} pagati",
+          "lostMrr": "MRR perso",
+          "cancels": "{count} annullamenti",
+          "aov": "Valore medio ordine",
+          "paidOrders": "ordini pagati",
+          "attach": "Quota add-on",
+          "attachLabel": "{addons} add-on / {total}",
+          "conversion": "Tasso di conversione",
+          "conversionHint": "ordini pagati su {signups} iscrizioni"
+        },
+        "motion": {
+          "kicker": "Movimento ordini",
+          "title": "Ordini pagati e cancellazioni",
+          "paid": "Pagati",
+          "cancelled": "Annullati o non riusciti"
+        },
+        "typeMix": {
+          "kicker": "Mix per tipo di ordine",
+          "title": "Per tipo"
+        },
+        "addons": {
+          "kicker": "Add-on venduti",
+          "title": "Migliori performer",
+          "empty": "Nessun ordine di add-on in questo periodo."
+        },
+        "funnel": {
+          "kicker": "Funnel di conversione",
+          "title": "Dall’iscrizione al pagamento",
+          "note": "Vengono mostrate solo le fasi conteggiate."
+        },
+        "countries": {
+          "kicker": "Per paese",
+          "title": "Mercati principali",
+          "empty": "Non è ancora stato inserito alcun paese di fatturazione."
+        },
+        "cohorts": {
+          "kicker": "Retention per coorte",
+          "title": "% di workspace ancora attivi dopo N mesi",
+          "last": "ultime 6 coorti",
+          "emptyTitle": "Nessuna iscrizione di workspace ancora",
+          "empty": "Le coorti appaiono quando i workspace si sono iscritti."
+        }
+      },
+      "history": {
+        "title": "Storico fatturazione",
+        "eyebrow": "Admin · Fatturazione e piani · Storico fatturazione",
+        "titleFirst": "Fatturazione",
+        "titleSecond": "storico",
+        "description": "Ogni evento di pagamento elaborato dalla piattaforma: addebiti, rimborsi e tentativi in tutti i workspace.",
+        "window": "Intervallo",
+        "kpi": {
+          "gross": "Ricavi lordi",
+          "vsPrev": "vs periodo precedente",
+          "charges": "Addebiti riusciti",
+          "successRate": "Tasso di successo {pct}%",
+          "failed": "Non riusciti",
+          "dunning": "da riprovare / dunning",
+          "refunds": "Rimborsi emessi",
+          "refundsTotal": "{amount} in totale",
+          "chargebacks": "Chargeback",
+          "disputed": "{amount} contestati"
+        },
+        "trend": {
+          "kicker": "Andamento",
+          "title": "Addebiti e rimborsi giornalieri",
+          "charges": "Addebiti",
+          "refunds": "Rimborsi"
+        },
+        "statusFilter": "Filtra per stato del pagamento",
+        "statuses": {
+          "all": "Tutti",
+          "paid": "Riusciti",
+          "failed": "Non riusciti",
+          "refunded": "Rimborsati",
+          "pending": "In attesa"
+        },
+        "gateway": "Gateway",
+        "allGateways": "Tutti i gateway",
+        "search": "Cerca per n. ordine, workspace, cliente…",
+        "noun": "eventi",
+        "col": {
+          "date": "Data",
+          "order": "Ordine n.",
+          "workspace": "Workspace",
+          "gateway": "Gateway",
+          "plan": "Piano",
+          "amount": "Importo",
+          "status": "Stato",
+          "actions": "Azioni"
+        },
+        "empty": "Nessun evento di pagamento corrisponde."
+      },
+      "billingAnalytics": {
+        "title": "Analisi della fatturazione",
+        "eyebrow": "Admin · Fatturazione e piani · Analisi della fatturazione",
+        "titleFirst": "Fatturazione",
+        "titleSecond": "analisi",
+        "description": "Flusso di cassa, successo dei pagamenti, ripartizione per gateway e andamento dei rimborsi sulla piattaforma.",
+        "window": "Intervallo",
+        "viewLedger": "Visualizza registro",
+        "kpi": {
+          "gross": "Ricavi lordi",
+          "net": "Ricavi netti",
+          "netPct": "{pct}% netto",
+          "success": "Autorizzazioni riuscite",
+          "failed": "Non riuscite",
+          "events": "{count, plural, one {# evento} other {# eventi}}",
+          "refunds": "Rimborsi",
+          "chargebacks": "Chargeback",
+          "disputes": "{count, plural, one {# contestazione} other {# contestazioni}}"
+        },
+        "cashFlow": {
+          "kicker": "Flusso di cassa",
+          "title": "Addebiti, rimborsi e fallimenti",
+          "charges": "Addebiti",
+          "refunds": "Rimborsi",
+          "failed": "Non riusciti"
+        },
+        "gatewayShare": {
+          "title": "Quota dei gateway",
+          "hint": "Ricavi a pagamento divisi per provider"
+        },
+        "topPayers": {
+          "title": "Workspace con i pagamenti più alti",
+          "hint": "Spesa più alta nel periodo",
+          "all": "Tutti i workspace",
+          "workspace": "Workspace",
+          "orders": "Ordini",
+          "total": "Totale",
+          "empty": "Nessun ordine pagato in questo periodo.",
+          "unknown": "Workspace eliminato"
+        },
+        "statusMix": {
+          "title": "Mix dello stato degli ordini",
+          "hint": "Conteggio per stato del ciclo di vita"
+        }
+      },
+      "invoices": {
+        "title": "Fatture",
+        "eyebrow": "Admin · Fatturazione e piani · Fatture",
+        "titleFirst": "Tutte",
+        "titleSecond": "fatture",
+        "description": "Ogni ordine come documento di fatturazione. Filtra per stato, apri e stampa una fattura, segnala come pagata, annullala o emettine una manuale.",
+        "window": "Intervallo",
+        "windows": {
+          "all": "Sempre",
+          "this_month": "Questo mese",
+          "last_month": "Mese scorso",
+          "this_quarter": "Questo trimestre",
+          "this_year": "Quest’anno"
+        },
+        "kpi": {
+          "total": "Fatture totali",
+          "allTime": "sempre",
+          "paid": "Pagate",
+          "outstanding": "Da incassare",
+          "due": "{amount} da pagare",
+          "overdue": "Scadute",
+          "overdueHint": "oltre 15 giorni di ritardo",
+          "thisMonth": "Questo mese",
+          "mom": "MoM"
+        },
+        "statusFilter": "Filtra per stato della fattura",
+        "statuses": {
+          "all": "Tutte",
+          "paid": "Pagate",
+          "outstanding": "Da incassare",
+          "overdue": "Scadute",
+          "refunded": "Rimborsate",
+          "void": "Annullata"
+        },
+        "badges": {
+          "paid": "pagate",
+          "outstanding": "da incassare",
+          "overdue": "scadute",
+          "refunded": "rimborsate",
+          "void": "annullate"
+        },
+        "search": "Cerca per n. fattura, workspace, titolare…",
+        "noun": "fatture",
+        "col": {
+          "number": "Fattura n.",
+          "issued": "Data di emissione",
+          "due": "Scadenza",
+          "workspace": "Workspace",
+          "item": "Elemento",
+          "amount": "Importo",
+          "status": "Stato",
+          "view": "Visualizza",
+          "actions": "Azioni"
+        },
+        "daysLate": "{days} g di ritardo",
+        "refunded": "rimborsata",
+        "viewInvoice": "Visualizza fattura",
+        "rowMenu": "Azioni per {number}",
+        "empty": "Nessuna fattura in questo periodo.",
+        "actions": {
+          "view": "Visualizza",
+          "markPaid": "Segna come pagata",
+          "void": "Annulla fattura",
+          "delete": "Elimina"
+        },
+        "confirm": {
+          "markPaidTitle": "Segnare questa fattura come pagata?",
+          "markPaid": "Segnare questa fattura come pagata? Vengono applicati anche il piano, l’add-on o il credito Wallet per cui è stata acquistata.",
+          "markPaidManual": "Segnare questa fattura manuale come pagata? Viene registrato solo il pagamento.",
+          "voidTitle": "Annullare questa fattura?",
+          "void": "Annullare questa fattura? Resta in archivio ma viene annullata.",
+          "deleteTitle": "Eliminare questa fattura?",
+          "delete": "Eliminare definitivamente questa fattura? Non è reversibile."
+        },
+        "manual": {
+          "tag": "manuale",
+          "open": "Fattura manuale",
+          "eyebrow": "Fatture",
+          "title": "Fattura manuale",
+          "workspace": "Workspace",
+          "chooseWorkspace": "Scegli un workspace",
+          "customerName": "Nome del cliente",
+          "customerNameHint": "Predefinito: nome del workspace.",
+          "customerEmail": "Email del cliente",
+          "description": "Descrizione",
+          "amount": "Importo",
+          "currency": "Valuta",
+          "status": "Stato",
+          "statuses": {
+            "pending": "In attesa",
+            "paid": "Pagata"
+          },
+          "issuedAt": "Data di emissione",
+          "issuedAtHint": "Lascia vuoto per oggi. Una data passata retrodata la fattura.",
+          "submit": "Crea fattura",
+          "created": "Fattura manuale {number} creata."
+        }
+      },
+      "invoice": {
+        "title": "Fattura",
+        "print": "Stampa",
+        "downloadPdf": "Scarica PDF",
+        "banner": {
+          "invoice": "Fattura n. {number}",
+          "issued": "Emessa il {date}",
+          "settled": "saldata il {date}",
+          "paidInFull": "saldata per intero"
+        },
+        "taxInvoice": "Fattura fiscale",
+        "invoiceWord": "FATTURA",
+        "taxIdLabel": "GSTIN/VAT",
+        "number": "N. fattura",
+        "issueDate": "Data di emissione",
+        "paidDate": "Data di pagamento",
+        "status": "Stato",
+        "billTo": "Fatturato a",
+        "payment": "Pagamento",
+        "method": "Metodo",
+        "txn": "ID transazione",
+        "captured": "Acquisito il",
+        "currency": "Valuta",
+        "coupon": "Coupon",
+        "description": "Descrizione",
+        "qty": "Qtà",
+        "unit": "Unitario",
+        "total": "Totale",
+        "discount": "Sconto",
+        "code": "codice",
+        "subtotal": "Subtotale",
+        "amountPaid": "Importo pagato",
+        "balanceDue": "Saldo dovuto",
+        "notes": "Note",
+        "notesText": "Grazie per la fiducia. Questa fattura riguarda l’ordine indicato sopra. Cita il numero di fattura per qualsiasi domanda sulla fatturazione.",
+        "help": "Serve aiuto?",
+        "helpFallback": "Contatta l’amministratore della piattaforma.",
+        "refundNote": "Per assistenza o rimborsi, scrivici entro {days} giorni dal pagamento.",
+        "regNo": "N. reg.",
+        "computerGenerated": "Questa è una fattura generata dal computer, non serve firma."
+      },
+      "settings": {
+        "title": "Impostazioni di fatturazione",
+        "eyebrow": "Admin · Fatturazione e piani · Impostazioni",
+        "titleFirst": "Fatturazione",
+        "titleSecond": "impostazioni",
+        "description": "Tutto ciò che leggono le pagine di prezzi e checkout: tasse, periodo di rimborso, sconto annuale, rinnovo automatico, la tua identità di fattura e l’elenco dei paesi. Le modifiche si applicano al caricamento successivo della pagina.",
+        "previewPlans": "Anteprima pagina dei piani",
+        "readOnly": "Solo un super admin può modificare le impostazioni di fatturazione.",
+        "conflict": "Qualcun altro ha modificato queste impostazioni. Sono state ricaricate; controllale e salvale di nuovo.",
+        "saved": "Impostazioni di fatturazione salvate.",
+        "save": "Salva impostazioni",
+        "tax": {
+          "title": "Imposte",
+          "hint": "Applicate a ogni subtotale del checkout. Disattiva se i prezzi mostrati includono già le imposte.",
+          "rate": "Aliquota (%)",
+          "label": "Etichetta",
+          "labelPlaceholder": "GST / IVA / imposta sulle vendite"
+        },
+        "company": {
+          "title": "Identità aziendale e di fatturazione",
+          "hint": "I dati legali della tua società. Compaiono su ogni fattura: il blocco «Fatturato da», il numero fiscale e il piè di pagina.",
+          "name": "Ragione sociale",
+          "taxId": "Partita IVA (GSTIN / VAT)",
+          "address": "Sede legale",
+          "regNo": "N. di registrazione / CIN",
+          "email": "Email di fatturazione",
+          "phone": "Telefono di assistenza"
+        },
+        "logo": {
+          "title": "Logo della fattura",
+          "hint": "Mostrato in alto su ogni fattura e ricevuta. PNG, JPG, SVG o WebP, fino a {kb} KB. Lascia vuoto per usare il logo del sito.",
+          "none": "Nessun logo",
+          "choose": "Scegli un file del logo",
+          "remove": "Rimuovi il logo attuale (usa il logo del sito)",
+          "fallback": "Attualmente viene usato il logo del brand del sito come fallback.",
+          "tooBig": "Il logo deve essere di massimo {kb} KB."
+        },
+        "refund": {
+          "title": "Garanzia di rimborso",
+          "hint": "Se attivata, il checkout mostra la finestra della garanzia sotto il riepilogo dell’ordine. Disattivala per nasconderla ovunque.",
+          "days": "Finestra (giorni)"
+        },
+        "yearly": {
+          "title": "Interruttore fatturazione annuale",
+          "hint": "Mostra l’interruttore Mensile / Annuale nella pagina dei prezzi. Nascondilo del tutto se ogni piano è solo mensile.",
+          "discount": "Sconto annuale (%)",
+          "formula": "Prezzo annuale = mensile × 12 × (1 − sconto%)."
+        },
+        "recurring": {
+          "title": "Abbonamenti con rinnovo automatico",
+          "hint": "Se attivo, i piani a pagamento a tempo (mensili o annuali) si rinnovano automaticamente: il gateway addebita la carta a ogni ciclo e la validità del piano si estende da sola. I piani gratuiti, a vita e su preventivo non si ripetono mai, e qualsiasi gateway senza supporto ai ricorrenti resta un addebito una tantum. Disattiva per fatturare ogni acquisto una sola volta.",
+          "graceDays": "Periodo di tolleranza (giorni)",
+          "graceHint": "Quando un addebito di rinnovo automatico fallisce, il piano o l’add-on resta attivo per questi giorni dopo la fine del periodo, mentre il gateway riprova. 0 disattiva il periodo di tolleranza.",
+          "gateways": "Gateway che supportano il rinnovo automatico",
+          "note": "Braintree rinnova automaticamente solo dopo aver impostato un ID piano nelle credenziali del gateway. Square fattura ogni ciclo inviando al cliente una fattura via email (nessun addebito silenzioso sulla carta). Ogni rinnovo richiede che l’URL del webhook del gateway sia impostato nella dashboard del provider."
+        },
+        "countries": {
+          "title": "Elenco dei paesi del checkout",
+          "hint": "Le opzioni del selettore Paese nel modulo di fatturazione del checkout, usate per l’indirizzo della fattura. Un paese per riga; l’ordine viene mantenuto."
+        },
+        "links": {
+          "coupons": "Coupon",
+          "couponsTitle": "Gestisci i codici sconto",
+          "couponsHint": "Aggiungi, modifica o disattiva qualsiasi coupon.",
+          "faqs": "FAQ",
+          "faqsTitle": "Modifica le FAQ della pagina prezzi",
+          "faqsHint": "Elementi a fisarmonica mostrati sotto i piani.",
+          "configured": "{count} configurati."
+        }
+      }
+    },
+    "offline": {
+      "eyebrow": {
+        "bank_transfer": "Checkout / Bonifico bancario",
+        "offline": "Checkout / Offline"
+      },
+      "title": {
+        "bank_transfer": "Effettua il bonifico",
+        "offline": "Contattaci per completare questo ordine"
+      },
+      "intro": {
+        "bank_transfer": "Invia <strong>{amount}</strong> sul conto sottostante. Usa <mono>{ref}</mono> come causale così possiamo associare il pagamento al tuo ordine.",
+        "offline": "Ordine <mono>{ref}</mono> · <strong>{amount}</strong> · fatturato in {currency}"
+      },
+      "instructions": "Istruzioni",
+      "referenceNote": "<strong>Causale:</strong> indica <mono>{ref}</mono> nel bonifico, poi invia qui sotto la ricevuta di pagamento. Il tuo piano si attiva dopo che il nostro team avrà verificato il pagamento.",
+      "proofTitle": "Invia la ricevuta di pagamento",
+      "proofHelp": "Hai già pagato? Carica la ricevuta e il riferimento così possiamo verificare e attivare il tuo piano.",
+      "later": {
+        "bank_transfer": "Ho inviato il pagamento — invierò la ricevuta più tardi",
+        "offline": "Ho capito — invierò la ricevuta più tardi"
+      }
+    },
+    "proof": {
+      "file": "Screenshot / ricevuta del pagamento",
+      "fileHint": "JPG, PNG, WEBP o PDF · fino a 4 MB",
+      "reference": "Numero di riferimento / UTR",
+      "referencePlaceholder": "es. UTR / ID transazione",
+      "note": "Nota (facoltativa)",
+      "notePlaceholder": "Qualsiasi informazione utile su questo pagamento",
+      "submit": "Invia la ricevuta di pagamento",
+      "sending": "Caricamento in corso",
+      "chooseFile": "Scegli una ricevuta da caricare.",
+      "tooLarge": "Il file supera i 4 MB.",
+      "rejected": "Tipo di file non consentito. Usa JPG, PNG, WEBP o PDF.",
+      "closed": "Non è più possibile inviare la ricevuta di pagamento per questo ordine.",
+      "failed": "Impossibile caricare il file. Riprova."
+    }
+  }
+}

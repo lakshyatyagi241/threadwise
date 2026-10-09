@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "店铺 / 订单",
+      "title": "全部订单",
+      "subtitle": "来自所有渠道的每一笔订单：WhatsApp、店面、Twilio 和手动录入。",
+      "loading": "正在加载订单",
+      "statusTabs": "订单状态",
+      "searchLabel": "搜索订单",
+      "searchPlaceholder": "按电话、姓名或订单号搜索",
+      "sourceLabel": "来源",
+      "allSources": "全部来源",
+      "paymentLabel": "支付",
+      "allPayments": "全部支付方式",
+      "fromLabel": "从",
+      "toLabel": "到",
+      "shopLabel": "店铺",
+      "invertedRange": "开始日期晚于结束日期，因此没有订单可以匹配。",
+      "clearFilters": "清除筛选",
+      "cols": {
+        "order": "订单",
+        "customer": "客户",
+        "items": "商品",
+        "total": "合计",
+        "payment": "支付",
+        "status": "状态",
+        "source": "来源",
+        "created": "创建时间",
+        "actions": "操作"
+      },
+      "itemsCount": "{count, plural, other {# 件商品}}",
+      "anonymous": "匿名",
+      "openOrder": "打开订单 #{no}",
+      "changeStatus": "更改订单 #{no} 的状态",
+      "deleteOrder": "删除订单 #{no}",
+      "deleteTitle": "删除订单 #{no}？",
+      "deleteMessage": "订单及其商品将被永久删除。此操作无法撤销。",
+      "deleteConfirm": "删除订单",
+      "deleted": "订单 #{no} 已删除。",
+      "statusChanged": "订单 #{no} 现为{status}。",
+      "buyerNotified": "已通知买家。",
+      "confirmStatusTitle": "将订单 #{no} 标记为{status}？",
+      "confirmStatusMessage": "买家会收到新状态的通知。之后您仍可将订单改为其他状态。",
+      "confirmStatusConfirm": "更新状态",
+      "emptyTitle": "暂无订单",
+      "emptyMessage": "当客户从您的店面或在 WhatsApp 上下单时，订单会显示在这里。分享您的店铺链接以获得第一笔订单。",
+      "emptyAction": "打开店铺概览",
+      "noMatchTitle": "没有符合这些筛选条件的订单",
+      "noMatchMessage": "请尝试其他搜索、状态或日期范围，或清除筛选条件以查看所有订单。"
+    },
+    "orderDetail": {
+      "back": "返回订单",
+      "title": "订单 #{no}",
+      "placed": "下单于 {when}",
+      "loading": "正在加载订单",
+      "readOnly": "您可以查看此订单，但无法更改。",
+      "items": {
+        "title": "商品",
+        "empty": "此订单没有商品。",
+        "qty": "数量 {qty}",
+        "retailerId": "ID {id}",
+        "unit": "每件 {price}"
+      },
+      "totals": {
+        "title": "合计",
+        "subtotal": "小计",
+        "shipping": "运费",
+        "tax": "税费",
+        "taxInclusive": "已含在价格中",
+        "discount": "折扣",
+        "discountCoupon": "折扣（{code}）",
+        "total": "合计"
+      },
+      "customer": {
+        "title": "客户",
+        "anonymous": "匿名",
+        "phone": "电话",
+        "email": "电子邮箱",
+        "address": "收货地址",
+        "noAddress": "此订单未获取到地址。",
+        "notes": "备注"
+      },
+      "meta": {
+        "title": "订单详情",
+        "orderId": "订单 ID",
+        "source": "来源",
+        "shop": "店铺",
+        "paymentMethod": "支付方式",
+        "updated": "最后更新"
+      },
+      "rto": {
+        "title": "退回发货地风险",
+        "summary": "{band}（{score}）",
+        "low": "低",
+        "medium": "中",
+        "high": "高"
+      },
+      "timeline": {
+        "title": "时间线",
+        "empty": "此订单尚无任何动态。",
+        "kind": {
+          "created": "订单已提交",
+          "status_changed": "状态已更改",
+          "payment_link": "支付链接",
+          "paid": "已收到付款",
+          "invoice": "发票",
+          "note": "备注",
+          "updated": "订单已更新"
+        },
+        "actor": {
+          "user": "由团队成员操作",
+          "system": "自动",
+          "customer": "由客户操作"
+        }
+      },
+      "payments": {
+        "title": "支付记录",
+        "empty": "此订单尚无支付记录。",
+        "kind": {
+          "gateway": "在线支付",
+          "payment_link": "支付链接",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "货到付款",
+          "manual": "手动记录"
+        },
+        "reference": "参考号 {ref}",
+        "openLink": "打开链接"
+      },
+      "form": {
+        "title": "更新状态",
+        "status": "状态",
+        "suggestion": "通常的下一步：{status}",
+        "notes": "备注",
+        "paymentLink": "支付链接",
+        "optional": "可选",
+        "paymentLinkHint": "更新时会将新链接发送给买家。",
+        "invalidLink": "请输入以 http:// 或 https:// 开头的网址。",
+        "save": "保存更改",
+        "saving": "保存中",
+        "saved": "订单 #{no} 已更新。",
+        "notified": "已通知买家。",
+        "notNotified": "未通知买家。",
+        "reload": "重新加载订单"
+      },
+      "pay": {
+        "title": "支付链接",
+        "current": "当前支付链接",
+        "sendTitle": "发送您已有的链接",
+        "sendLabel": "支付链接 URL",
+        "sendButton": "发送支付链接",
+        "sent": "支付链接已发送给买家。",
+        "savedNotSent": "链接已保存，但无法发送给买家。",
+        "generateTitle": "生成结账链接",
+        "generateHint": "在您的支付网关上创建托管支付链接，并通过 WhatsApp 发送给买家。",
+        "gatewayLabel": "网关",
+        "generateButton": "生成链接并发送",
+        "noGatewayTitle": "未设置支付网关",
+        "noGatewayMessage": "生成结账链接前，必须先设置支付网关。",
+        "noGatewayAction": "设置网关",
+        "resultTitle": "支付链接已就绪",
+        "copyLink": "复制链接",
+        "resultSent": "已通过 WhatsApp 发送给买家。",
+        "resultNotSent": "已保存到订单，但无法发送给买家。请自行分享。"
+      },
+      "invoice": {
+        "title": "发票",
+        "description": "在销售中将此订单转为发票和销售订单。",
+        "create": "创建发票",
+        "creating": "创建中",
+        "created": "发票 {number} 已创建。",
+        "createdNoNumber": "发票已创建。",
+        "existing": "此订单已开具发票。",
+        "viewInvoice": "发票",
+        "viewSalesOrder": "销售订单"
+      },
+      "delete": {
+        "title": "删除订单 #{no}？",
+        "message": "订单及其商品将被永久删除。此操作无法撤销。",
+        "confirm": "删除订单",
+        "deleted": "订单 #{no} 已删除。"
+      }
+    }
+  }
+}

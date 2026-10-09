@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import type { FlbAiGenerateResponse, FlbBuilderContext, FlowType } from '@crm/contracts';
 import { flowsApi } from '../api/flows';
 import { aiGenerateError } from './ai-generate-error';
@@ -39,17 +40,20 @@ const Backdrop = ({
   </div>
 );
 
-const CloseButton = ({ onClose, disabled }: { onClose: () => void; disabled?: boolean }) => (
-  <button
-    type="button"
-    onClick={onClose}
-    disabled={disabled}
-    aria-label="Close"
-    className="grid h-9 w-9 place-items-center rounded-full border border-border hover:bg-muted disabled:opacity-40"
-  >
-    <Icon d="M4 4l8 8M12 4l-8 8" className="h-3.5 w-3.5" />
-  </button>
-);
+const CloseButton = ({ onClose, disabled }: { onClose: () => void; disabled?: boolean }) => {
+  const t = useTranslations('flb.builder.shell.modals');
+  return (
+    <button
+      type="button"
+      onClick={onClose}
+      disabled={disabled}
+      aria-label={t('close')}
+      className="grid h-9 w-9 place-items-center rounded-full border border-border hover:bg-muted disabled:opacity-40"
+    >
+      <Icon d="M4 4l8 8M12 4l-8 8" className="h-3.5 w-3.5" />
+    </button>
+  );
+};
 
 /** Save of a flow with no id yet: confirm the name first, then the real POST. */
 export function SaveConfirmModal(props: {
@@ -74,6 +78,8 @@ function SaveConfirmInner({
   onSave: (name: string) => void;
   onClose: () => void;
 }) {
+  const t = useTranslations('flb.builder.shell.modals');
+  const tc = useTranslations('flb.common');
   const [name, setName] = useState(initialName);
   const submit = () => {
     const trimmed = name.trim();
@@ -85,35 +91,32 @@ function SaveConfirmInner({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Save flow"
+        aria-label={t('saveFlow')}
         className="w-full max-w-[460px] rounded-2xl border border-border bg-background shadow-xl"
       >
         <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
           <div>
             <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              Save flow
+              {t('saveFlow')}
             </div>
             <h3 className="font-serif text-[20px] leading-tight tracking-[-0.01em]">
-              Confirm name, then save
+              {t('saveTitle')}
             </h3>
-            <p className="mt-0.5 text-[12px] text-muted-foreground">
-              Saving keeps your nodes + edges as a draft. Publish separately when you&apos;re ready
-              to run it.
-            </p>
+            <p className="mt-0.5 text-[12px] text-muted-foreground">{t('saveBody')}</p>
           </div>
           <CloseButton onClose={onClose} disabled={busy} />
         </div>
         <div className="space-y-3 px-5 py-4">
           <label className="block">
             <span className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80">
-              Flow name
+              {t('flowName')}
             </span>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && submit()}
               autoFocus
-              placeholder="e.g. Welcome flow"
+              placeholder={t('namePlaceholder')}
               className="w-full rounded-lg border border-border bg-background px-3 py-2 text-[13px] outline-none focus:border-brand focus:ring-4 focus:ring-brand/10"
             />
           </label>
@@ -125,7 +128,7 @@ function SaveConfirmInner({
             disabled={busy}
             className="rounded-full border border-border bg-background px-3 py-1.5 text-[12px] hover:bg-muted"
           >
-            Cancel
+            {tc('cancel')}
           </button>
           <button
             type="button"
@@ -134,7 +137,7 @@ function SaveConfirmInner({
             className="inline-flex items-center gap-1.5 rounded-full bg-brand px-3.5 py-1.5 text-[12px] font-semibold text-brand-foreground hover:opacity-90 disabled:opacity-50"
           >
             {busy ? <Spinner /> : <Icon d="M2 8l5 5 7-9" className="h-3 w-3" />}
-            {busy ? 'Saving…' : 'Save flow'}
+            {busy ? t('saving') : t('saveFlow')}
           </button>
         </div>
       </div>
@@ -148,12 +151,7 @@ const PROVIDER_META: Record<string, { label: string; dot: string }> = {
   gemini: { label: 'Google', dot: '#4285F4' },
   mistral: { label: 'Mistral', dot: '#FA520F' },
 };
-const EXAMPLES = [
-  'Customer support bot with name, email collection',
-  'Order tracking with order number verification',
-  'Lead qualification bot with budget questions',
-  'Appointment booking with date and time selection',
-];
+const EXAMPLE_KEYS = ['exampleSupport', 'exampleOrder', 'exampleLead', 'exampleBooking'] as const;
 
 type Model = FlbBuilderContext['aiModels'][number];
 
@@ -197,6 +195,9 @@ function AIGenInner({
   onClose: () => void;
   onGenerate: (flow: FlbAiGenerateResponse['flow'], modelLabel: string) => void;
 }) {
+  const t = useTranslations('flb.builder.shell.modals');
+  const tc = useTranslations('flb.common');
+  const tErr = useTranslations('flb.builder.shell.aiError');
   const [model, setModel] = useState('');
   const [prompt, setPrompt] = useState(initialPrompt);
   const [loading, setLoading] = useState(false);
@@ -219,7 +220,7 @@ function AIGenInner({
       setPrompt('');
       onClose();
     } catch (e) {
-      setError(aiGenerateError(e));
+      setError(aiGenerateError(e, tErr));
     } finally {
       setLoading(false);
     }
@@ -232,35 +233,35 @@ function AIGenInner({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Generate a flow with AI"
+        aria-label={t('aiTitle')}
         className="flex max-h-[88vh] w-full max-w-[640px] flex-col rounded-2xl border border-border bg-background shadow-xl"
       >
         <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
           <div>
             <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              AI Flow Generator
+              {t('aiEyebrow')}
             </div>
             <h3 className="font-serif text-[22px] leading-tight tracking-[-0.01em]">
-              Generate a flow with AI
+              {t('aiTitle')}
             </h3>
-            <p className="mt-0.5 text-[12px] text-muted-foreground">
-              Pick a model, describe what you want, and AI will build the nodes.
-            </p>
+            <p className="mt-0.5 text-[12px] text-muted-foreground">{t('aiSubtitle')}</p>
           </div>
           <CloseButton onClose={onClose} disabled={loading} />
         </div>
         <div className="flex-1 space-y-4 overflow-y-auto p-5">
           <div>
             <label className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80">
-              Choose model
+              {t('chooseModel')}
             </label>
             {models.length === 0 ? (
               <div className="rounded-lg border border-border bg-muted px-3 py-3 text-[12px] text-foreground/80">
-                No AI providers enabled. Admin needs to add a key in{' '}
-                <a href="/admin/api-keys" className="text-brand underline">
-                  AI Keys
-                </a>{' '}
-                before this can run.
+                {t.rich('noProviders', {
+                  link: (chunks) => (
+                    <a href="/admin/api-keys" className="text-brand underline">
+                      {chunks}
+                    </a>
+                  ),
+                })}
               </div>
             ) : (
               <div className={`grid gap-2 ${cols}`}>
@@ -302,30 +303,30 @@ function AIGenInner({
           ) : null}
           <div>
             <label className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80">
-              Describe your flow
+              {t('describe')}
             </label>
             <textarea
               rows={5}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Example: Create a customer support bot that asks for user name, email, and issue type, then sends a confirmation message…"
+              placeholder={t('promptPlaceholder')}
               className="w-full resize-y rounded-lg border border-border bg-background px-3 py-2 text-[12.5px] outline-none focus:border-brand focus:ring-4 focus:ring-brand/10"
             />
           </div>
           <div>
             <div className="mb-1.5 text-[11px] font-semibold text-foreground/80">
-              Quick examples
+              {t('quickExamples')}
             </div>
             <div className="space-y-1">
-              {EXAMPLES.map((ex) => (
+              {EXAMPLE_KEYS.map((key) => (
                 <button
-                  key={ex}
+                  key={key}
                   type="button"
-                  onClick={() => setPrompt(ex)}
+                  onClick={() => setPrompt(t(key))}
                   className="inline-flex w-full items-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-left text-[11.5px] text-foreground/80 hover:bg-muted"
                 >
                   <Icon d="M3 8l3 3 7-7" className="h-3 w-3 text-brand" />
-                  <span className="truncate">{ex}</span>
+                  <span className="truncate">{t(key)}</span>
                 </button>
               ))}
             </div>
@@ -333,7 +334,7 @@ function AIGenInner({
         </div>
         <div className="flex items-center justify-between border-t border-border bg-muted/40 px-5 py-3">
           <div className="text-[10.5px] text-muted-foreground">
-            {loading ? 'Generating…' : 'AI will replace the current flow.'}
+            {loading ? t('generating') : t('replaceNote')}
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -342,7 +343,7 @@ function AIGenInner({
               disabled={loading}
               className="rounded-full border border-border bg-background px-3 py-1.5 text-[12px] hover:bg-muted"
             >
-              Cancel
+              {tc('cancel')}
             </button>
             <button
               type="button"
@@ -352,7 +353,7 @@ function AIGenInner({
               style={{ background: 'linear-gradient(135deg,#7B57C7,#3D7CD3)' }}
             >
               {loading ? <Spinner /> : <Icon d="M8 1v3M8 12v3M1 8h3M12 8h3" className="h-3 w-3" />}
-              Generate
+              {t('generate')}
             </button>
           </div>
         </div>

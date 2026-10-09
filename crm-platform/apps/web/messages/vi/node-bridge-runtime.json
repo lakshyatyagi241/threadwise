@@ -1,0 +1,164 @@
+{
+  "node-bridge-runtime": {
+    "nav": {
+      "group": "Kênh",
+      "item": "Cầu nối Node"
+    },
+    "page": {
+      "title": "URL và token cầu nối Node",
+      "eyebrow": "toàn cục · cầu nối node",
+      "description": "Cầu nối Node dùng chung mà mọi động cơ kết nối tới. Unofficial API gửi qua đây và tốc độ gửi được áp dụng tại đây. Thiết lập một lần; áp dụng cho toàn nền tảng.",
+      "superOnly": "Chỉ quản trị viên cấp cao mới có thể thay đổi cầu nối Node. Bạn có thể xem các giá trị đã lưu."
+    },
+    "bridge": {
+      "tokenSet": "Đã đặt token",
+      "noToken": "Chưa có token",
+      "serverUrl": "URL máy chủ",
+      "serverUrlPlaceholder": "http://localhost:8888",
+      "urlInvalid": "Hãy nhập URL máy chủ hợp lệ (http:// hoặc https://) trước.",
+      "serverUrlHint": "Địa chỉ mà cầu nối Node của bạn có thể truy cập. Webhook đến và webhook trạng thái được xử lý tự động — cầu nối lấy URL của chúng tôi từ biến môi trường APP_DOMAIN_NAME.",
+      "token": "Token webhook Node (X-Node-Token)",
+      "tokenPlaceholder": "khóa bí mật X-Node-Token dùng chung",
+      "tokenSavedPlaceholder": "••• đã lưu, để trống để giữ nguyên",
+      "tokenHint": "Khóa bí mật dùng chung mà cầu nối Node gửi dưới dạng X-Node-Token. Phải khớp với token trong cấu hình cầu nối Node của bạn. Sẽ bị ẩn sau khi lưu; chỉ dán lại khi cần đổi.",
+      "save": "Lưu",
+      "saving": "Đang lưu…",
+      "test": "Kiểm tra kết nối",
+      "testing": "Đang kiểm tra…",
+      "saved": "Đã lưu cầu nối Node."
+    },
+    "pacing": {
+      "eyebrow": "tốc độ",
+      "title": "Tốc độ gửi và gửi theo lô",
+      "msgGap": "Khoảng cách giữa tin nhắn (giây)",
+      "msgGapHint": "Số giây giữa các lần gửi liên tiếp.",
+      "batchesGap": "Kích thước lô",
+      "batchesGapHint": "Số người nhận mỗi lô.",
+      "bwMsgGap": "Giữa các lô (phút)",
+      "bwMsgGapHint": "Số phút giữa các lô.",
+      "enableBatches": "Bật gửi theo lô",
+      "update": "Cập nhật thời gian",
+      "updating": "Đang lưu…",
+      "saved": "Đã cập nhật thời gian gửi.",
+      "tipTitle": "Mẹo về tốc độ gửi",
+      "tip": "Chỉ giảm khoảng cách tin nhắn sau khi đã chạy thử 24 giờ — Meta giới hạn các bên gửi quá mạnh. 3 giây là mặc định an toàn."
+    },
+    "errors": {
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "conflict": "Người khác vừa thay đổi các cài đặt này. Trang đã được làm mới; hãy thử lại.",
+      "validation": "Kiểm tra các giá trị và thử lại.",
+      "request": "Không thể hoàn tất yêu cầu này.",
+      "unexpected": "Đã có lỗi phía chúng tôi. Hãy thử lại sau ít phút.",
+      "network": "Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối mạng."
+    },
+    "loading": "Đang tải",
+    "retry": "Thử lại",
+    "unofficial": {
+      "eyebrow": "công tắc nền tảng",
+      "title": "WhatsApp không chính thức (số cá nhân qua mã QR)",
+      "status": {
+        "disabled": "Đã tắt / Không được hỗ trợ",
+        "enabled": "Đã bật (không được hỗ trợ)"
+      },
+      "explanation": "Chúng tôi chỉ hỗ trợ WhatsApp Business API chính thức. Đây là công tắc toàn nền tảng cho số cá nhân: không được hỗ trợ và có thể khiến số bị khóa. Ngay cả khi đã bật, chỉ các không gian làm việc được phép bên dưới mới dùng được.",
+      "state": {
+        "disabled": "Tắt. Không gian làm việc nào cũng không thể thấy hoặc kết nối số cá nhân, bất kể danh sách bên dưới: luồng kết nối QR, công cụ làm nóng và bộ gửi số cá nhân bị ẩn, và việc gửi qua các số này bị từ chối.",
+        "enabled": "Bật, chỉ cho các không gian làm việc được phép. Không gian làm việc không có trong danh sách bên dưới sẽ không thấy gì. Không được hỗ trợ; các số này có thể bị WhatsApp khóa."
+      },
+      "enable": "Bật WhatsApp không chính thức",
+      "disable": "Tắt WhatsApp không chính thức",
+      "cancel": "Hủy",
+      "enableDialog": {
+        "title": "Bật WhatsApp không chính thức?",
+        "body": "Không được hỗ trợ. Các số kết nối theo cách này có thể bị WhatsApp khóa, và tin nhắn gửi qua các số này không được bảo đảm giao hàng. Bật công tắc không tự động cấp quyền cho ai: chỉ các không gian làm việc trong danh sách cho phép mới dùng được.",
+        "typeLabel": "Nhập {word} để xác nhận",
+        "confirm": "Bật"
+      },
+      "disableDialog": {
+        "title": "Tắt WhatsApp không chính thức?",
+        "body": "Mọi không gian làm việc sẽ không còn thấy số cá nhân, công cụ làm nóng và luồng kết nối QR, và việc gửi qua số cá nhân sẽ bị từ chối. Dữ liệu đã lưu và danh sách cho phép được giữ nguyên.",
+        "confirm": "Tắt"
+      },
+      "enabledToast": "WhatsApp không chính thức đã được bật.",
+      "disabledToast": "WhatsApp không chính thức đã được tắt.",
+      "dimNote": "Các cài đặt bên dưới chỉ áp dụng cho số cá nhân và không được dùng khi WhatsApp không chính thức đang tắt.",
+      "errors": {
+        "forbidden": "Chỉ quản trị viên cấp cao mới có thể thay đổi công tắc này.",
+        "conflict": "Người khác vừa thay đổi các cài đặt này. Trang đã được làm mới; hãy thử lại.",
+        "validation": "Kiểm tra các giá trị và thử lại.",
+        "request": "Không thể hoàn tất yêu cầu này.",
+        "unexpected": "Đã có lỗi phía chúng tôi. Hãy thử lại sau ít phút.",
+        "network": "Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối mạng."
+      },
+      "allowedCount": "{count, plural, =0 {Chưa cho phép không gian làm việc nào} other {Đã cho phép # không gian làm việc}}"
+    },
+    "workspaces": {
+      "eyebrow": "danh sách cho phép",
+      "title": "Không gian làm việc dùng WhatsApp không chính thức",
+      "description": "Mặc định tắt với mọi người. Chỉ các không gian làm việc có tên ở đây mới dùng được WhatsApp số cá nhân, và chỉ khi công cụ ở trên đang bật.",
+      "count": "{count, plural, =0 {Chưa cho phép không gian làm việc nào} other {Đã cho phép # không gian làm việc}}",
+      "engineOff": "Công cụ đang tắt, nên các không gian làm việc này chưa thể dùng.",
+      "engineOffAction": "Đến công tắc",
+      "readOnly": "Chỉ quản trị viên cấp cao mới có thể thêm hoặc xóa không gian làm việc. Bạn có thể xem danh sách.",
+      "search": {
+        "label": "Thêm không gian làm việc",
+        "placeholder": "Tìm theo tên không gian làm việc, slug hoặc email chủ sở hữu",
+        "hint": "Nhập ít nhất 2 ký tự.",
+        "searching": "Đang tìm",
+        "none": "Không có không gian làm việc nào khớp với “{q}”.",
+        "add": "Thêm",
+        "alreadyAdded": "Đã được cho phép",
+        "owner": "Chủ sở hữu: {email}",
+        "noPlan": "Chưa có gói",
+        "results": "Kết quả tìm kiếm"
+      },
+      "table": {
+        "caption": "Không gian làm việc được dùng WhatsApp không chính thức",
+        "workspace": "Không gian làm việc",
+        "plan": "Gói",
+        "devices": "Thiết bị",
+        "since": "Bật từ",
+        "by": "Bật bởi",
+        "note": "Ghi chú",
+        "actions": "Thao tác",
+        "devicesValue": "{active} đang hoạt động / {total}",
+        "noPlan": "Chưa có gói",
+        "system": "Không rõ",
+        "noNote": "Không có",
+        "remove": "Xóa khỏi danh sách"
+      },
+      "empty": {
+        "title": "Chưa cho phép không gian làm việc nào",
+        "message": "Không ai dùng được WhatsApp số cá nhân, kể cả khi công cụ đang bật. Hãy tìm kiếm ở trên để thêm không gian làm việc đầu tiên."
+      },
+      "loadMore": "Tải thêm",
+      "loadingMore": "Đang tải",
+      "addDialog": {
+        "title": "Cho phép {name}?",
+        "body": "{name} ({slug}) sẽ có thể kết nối số WhatsApp cá nhân bằng mã QR khi công cụ đang bật. Đây là tính năng không được hỗ trợ và số có thể bị WhatsApp khóa.",
+        "noteLabel": "Ghi chú (không bắt buộc)",
+        "notePlaceholder": "Vì sao cho không gian làm việc này, và ai yêu cầu",
+        "noteCount": "{count} / {max}",
+        "noteTooLong": "Ghi chú tối đa {max} ký tự.",
+        "confirm": "Cho phép không gian làm việc"
+      },
+      "removeDialog": {
+        "title": "Xóa {name} khỏi danh sách?",
+        "body": "{name} sẽ không còn dùng được WhatsApp số cá nhân. Các kết nối của nó dừng trong vòng 20 giây. Phiên đã lưu được giữ lại, nên khi cho phép lại, các phiên sẽ được khôi phục.",
+        "confirm": "Xóa"
+      },
+      "cancel": "Hủy",
+      "addedToast": "{name} giờ có thể dùng WhatsApp không chính thức.",
+      "removedToast": "{name} đã được xóa khỏi danh sách.",
+      "errors": {
+        "forbidden": "Chỉ quản trị viên cấp cao mới có thể thay đổi danh sách này.",
+        "conflict": "Danh sách đã thay đổi trong lúc đó. Đã được làm mới; hãy thử lại.",
+        "validation": "Kiểm tra các giá trị và thử lại.",
+        "request": "Không thể hoàn tất yêu cầu này.",
+        "unexpected": "Đã có lỗi phía chúng tôi. Hãy thử lại sau ít phút.",
+        "network": "Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối mạng."
+      },
+      "retry": "Thử lại"
+    }
+  }
+}

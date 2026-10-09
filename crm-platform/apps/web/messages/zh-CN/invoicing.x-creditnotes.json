@@ -1,0 +1,326 @@
+{
+  "invoicing": {
+    "nav": {
+      "creditNotes": "贷项通知单"
+    },
+    "errors": {
+      "codes": {
+        "CN_EXCEEDS_INVOICE": "贷项通知单的合计金额不能超过发票金额。请降低金额，或仅贷记剩余可贷记的部分。",
+        "CN_NOT_DRAFT": "只有草稿状态的贷项通知单可以编辑或删除。请刷新以查看当前状态。",
+        "CN_ALREADY_VOID": "此贷项通知单已作废。",
+        "CN_HAS_REFUND": "此贷项通知单已退还现金，无法作废。退款记录保留在付款账本中。",
+        "CN_NOTHING_TO_CREDIT": "此处已无可贷记的金额。请选择仍有剩余的明细，或添加金额。",
+        "CN_LINE_INVALID": "贷记明细无效：数量超出剩余可贷记数量，或金额有误。请检查高亮显示的明细。",
+        "INV_NOT_ISSUED": "只能针对已开具的发票开具贷项通知单。"
+      }
+    },
+    "creditNotes": {
+      "status": {
+        "draft": "草稿",
+        "issued": "已开具",
+        "void": "已作废"
+      },
+      "reasons": {
+        "return": "退货",
+        "price_adjustment": "价格调整",
+        "billing_error": "开票错误",
+        "cancellation": "取消",
+        "goodwill": "优惠补偿",
+        "other": "其他"
+      },
+      "settlements": {
+        "balance": "抵扣余额",
+        "refund": "现金退款"
+      },
+      "tabs": {
+        "label": "贷项通知单状态",
+        "all": "全部",
+        "draft": "草稿",
+        "issued": "已开具",
+        "void": "已作废"
+      },
+      "list": {
+        "title": "贷项通知单",
+        "subtitle": "用于减少买方在已开具发票上应付金额的单据。",
+        "invoices": "发票",
+        "newCreditNote": "新建贷项通知单",
+        "search": "按编号或买方搜索",
+        "reset": "清除筛选",
+        "refresh": "刷新",
+        "tableLabel": "贷项通知单",
+        "noAccessTitle": "无访问权限",
+        "noAccess": "您没有查看贷项通知单的权限。",
+        "emptyFilteredTitle": "没有匹配的贷项通知单",
+        "emptyFiltered": "请尝试其他搜索词或清除筛选条件。",
+        "resetFilters": "清除筛选",
+        "empty": {
+          "all": {
+            "title": "暂无贷项通知单",
+            "message": "当货物退回、价格有误或需要向客户返还款项时，可对已开具的发票开具贷项通知单。"
+          },
+          "draft": {
+            "title": "没有草稿",
+            "message": "您仍在编辑的贷项通知单会显示在此处。"
+          },
+          "issued": {
+            "title": "没有已开具的单据",
+            "message": "已开具的贷项通知单带有编号，并已更改其对应的发票。"
+          },
+          "void": {
+            "title": "没有已作废的单据",
+            "message": "已作废的贷项通知单会保留在此处。"
+          }
+        },
+        "showing": "已加载 {count, plural, other {# 张贷项通知单}}",
+        "loadMore": "加载更多",
+        "allLoaded": "已全部加载",
+        "loading": "正在加载贷项通知单",
+        "contactLoading": "...",
+        "invoiceChip": "发票 {number}",
+        "clearInvoice": "显示所有发票的贷项通知单"
+      },
+      "table": {
+        "draft": "草稿",
+        "scrollArea": "贷项通知单表格，可横向滚动",
+        "columns": {
+          "number": "贷项通知单",
+          "invoice": "发票",
+          "buyer": "买方",
+          "reason": "原因",
+          "settlement": "结算方式",
+          "total": "总额",
+          "applied": "抵扣余额",
+          "refunded": "现金退款",
+          "issued": "开票日期",
+          "status": "状态"
+        }
+      },
+      "row": {
+        "moreFor": "{name} 的更多操作",
+        "draft": "草稿",
+        "open": "打开",
+        "edit": "编辑草稿",
+        "issue": "开具",
+        "pdf": "下载 PDF",
+        "print": "打印",
+        "void": "作废",
+        "delete": "删除草稿"
+      },
+      "dialogs": {
+        "draftName": "此草稿",
+        "close": "关闭",
+        "keep": "保留",
+        "done": {
+          "issue": "贷项通知单 {name} 已开具。",
+          "void": "贷项通知单 {name} 已作废。",
+          "delete": "草稿已删除。"
+        },
+        "issue": {
+          "title": "开具此贷项通知单？",
+          "message": "将分配编号，并减少买方在发票上的应付金额。如选择现金退款，款项将通过付款账本退还。开具后将无法再编辑。",
+          "confirm": "开具贷项通知单"
+        },
+        "void": {
+          "title": "作废此贷项通知单？",
+          "warning": "该贷项将不再计入：发票将恢复到本贷项通知单开具前的金额。",
+          "reason": "为何作废？",
+          "reasonHint": "必填。将保留在贷项通知单上。",
+          "confirm": "作废贷项通知单"
+        },
+        "delete": {
+          "title": "删除此草稿？",
+          "message": "草稿将被永久删除。由于尚未开具，发票不会有任何变化。",
+          "confirm": "删除草稿"
+        }
+      },
+      "picker": {
+        "total": "发票总额",
+        "paid": "已付",
+        "credited": "目前已贷记",
+        "balance": "应付余额",
+        "loading": "正在加载发票",
+        "change": "更换发票",
+        "search": "按编号或买方搜索已开具的发票",
+        "results": "可贷记的发票",
+        "searching": "正在搜索...",
+        "none": "未找到已开具的发票。",
+        "more": "显示更多",
+        "totalShort": "总额",
+        "notCreditable": "只能针对已开具的发票开具贷项通知单（已开具、部分付款、逾期或已付款）。请选择其他发票。"
+      },
+      "lines": {
+        "invoiceLines": "发票明细",
+        "creditLine": "贷记 {name}",
+        "lineFacts": "已开票 {qty}，税前金额 {amount}",
+        "tax": "税费",
+        "taxIncluded": "{name} {rate}%，已含在价格中",
+        "taxAdded": "{name} {rate}%，在价格之外加收",
+        "alreadyCredited": "已贷记 {qty}，剩余 {left}",
+        "fullyCredited": "已全额贷记",
+        "qtyToCredit": "贷记数量",
+        "freeTitle": "自由填写明细",
+        "freeHint": "优惠补偿金额或不关联明细的调整。金额为税前金额。",
+        "description": "说明",
+        "amount": "税前金额",
+        "taxRate": "税率",
+        "noTax": "无税",
+        "inclusive": "含税",
+        "removeFree": "删除此明细",
+        "addFree": "添加自由填写明细"
+      },
+      "problems": {
+        "noInvoice": "请选择要贷记的发票。",
+        "nothing": "请选择要贷记的内容：明细或自由填写的金额。",
+        "qtyInvalid": "请输入大于 0 的数量，最多 4 位小数。",
+        "qtyExceeds": "此明细最多还可贷记 {max}。",
+        "descriptionRequired": "请描述贷记的内容。",
+        "amountInvalid": "请输入大于 0 的金额。",
+        "noteTooLong": "备注超过 2000 个字符。"
+      },
+      "estimate": {
+        "title": "预估贷记金额",
+        "disclaimer": "根据发票价格和税费在此估算。服务器保存的金额为最终结果。",
+        "empty": "尚无可贷记的内容。请选择整张发票，或勾选明细。",
+        "lineQty": "数量 {qty}",
+        "taxSummary": "税费汇总",
+        "included": "已含在内",
+        "taxOn": "{tax}，基于 {base}",
+        "subtotal": "税前",
+        "tax": "税费",
+        "total": "贷记总额",
+        "exceeds": "超过该发票目前允许贷记的金额（{max}）。服务器将拒绝此操作。",
+        "money": "资金去向",
+        "balanceBefore": "当前应付余额",
+        "balanceAfter": "贷记后应付余额",
+        "applied": "抵扣发票",
+        "refunded": "现金退还",
+        "refundNote": "现金退款：开具时，买方已付超出应付金额的部分将通过付款账本退还。",
+        "balanceNote": "抵扣余额：不付出任何款项。贷记仅减少买方应付的金额。"
+      },
+      "builder": {
+        "noAccess": "您没有开具贷项通知单的权限。",
+        "backToList": "返回贷项通知单",
+        "loading": "正在加载贷项通知单",
+        "notDraft": "只能编辑草稿状态的贷项通知单。",
+        "openIt": "打开贷项通知单",
+        "back": "返回",
+        "newTitle": "新建贷项通知单",
+        "editTitle": "编辑草稿贷项通知单",
+        "conflict": "您编辑时，此贷项通知单已被他人修改。请刷新以查看最新版本；您在此处的更改将丢失。",
+        "reload": "刷新",
+        "invoice": {
+          "title": "要贷记的发票",
+          "hint": "一张贷项通知单只对应一张已开具的发票。"
+        },
+        "details": {
+          "title": "详细信息",
+          "reason": "原因",
+          "issueDate": "开具日期",
+          "issueDateHint": "留空则使用开具当天的日期（今天是 {today}）。",
+          "note": "备注",
+          "noteHint": "打印在贷项通知单上。可选。"
+        },
+        "settlement": {
+          "title": "资金去向",
+          "hint": "现在选择，开具贷项通知单时生效。",
+          "balance": {
+            "title": "抵扣发票余额",
+            "body": "发票应付金额减少，不产生资金流动。适用于买方尚未付款，或将保留该贷项的情况。"
+          },
+          "refund": {
+            "title": "现金退款",
+            "body": "买方已付超出当前应付金额的部分，将通过付款账本作为退款退还。"
+          }
+        },
+        "what": {
+          "title": "贷记内容",
+          "pickFirst": "请先选择发票。",
+          "loadingCredits": "正在检查该发票的既有贷项通知单",
+          "full": {
+            "title": "整张剩余发票",
+            "body": "将贷记所有明细，并在首张贷项通知单中贷记运费。仍可贷记："
+          },
+          "lines": {
+            "title": "部分明细或金额",
+            "body": "勾选要贷记的明细及数量，或添加自由填写的金额。"
+          }
+        },
+        "saveDraft": "保存草稿",
+        "saveAndIssue": "保存并开具",
+        "cancel": "取消",
+        "estimateWaiting": "选择发票以查看预估贷记金额。",
+        "savedToast": "贷项通知单已保存为草稿。",
+        "issuedToast": "贷项通知单 {number} 已开具。",
+        "savedNotIssued": "已保存为草稿，但无法开具：{reason}"
+      },
+      "detail": {
+        "noAccess": "您没有查看贷项通知单的权限。",
+        "loading": "正在加载贷项通知单",
+        "back": "返回贷项通知单",
+        "backToList": "返回贷项通知单",
+        "draft": "草稿",
+        "againstInvoice": "针对发票",
+        "edit": "编辑",
+        "issue": "开具",
+        "pdf": "PDF",
+        "print": "打印",
+        "void": "作废",
+        "delete": "删除",
+        "cannotVoidRefunded": "此贷项通知单已退还现金，无法作废。退款记录保留在付款账本中。",
+        "voidedOn": "作废于 {date}",
+        "voided": "此贷项通知单已作废。",
+        "voidReason": "原因"
+      },
+      "money": {
+        "title": "资金已如何处理",
+        "titleDraft": "资金将如何处理",
+        "total": "贷记总额",
+        "applied": "抵扣发票",
+        "refunded": "现金退还",
+        "voidNote": "此贷项通知单已作废，不再减少发票金额。",
+        "draftNote": "如按当前内容开具：",
+        "estimate": "开具前为预估金额。",
+        "balanceBody": "结算：抵扣余额，不付出任何款项。",
+        "refundBody": "结算：现金退款。买方已付超出应付金额的部分将通过付款账本退还。"
+      },
+      "after": {
+        "title": "本贷项通知单之后的发票",
+        "titleNow": "当前发票",
+        "total": "发票总额",
+        "paid": "已付",
+        "credited": "已贷记",
+        "balance": "应付余额",
+        "credit": "买方的贷方余额"
+      },
+      "paper": {
+        "label": "贷项通知单 {number}",
+        "labelDraft": "贷项通知单草稿",
+        "void": "作废",
+        "sellerFallback": "您的企业",
+        "title": "贷项通知单",
+        "draftNumber": "草稿",
+        "creditedTo": "贷记至",
+        "buyerFallback": "买方",
+        "issued": "已开具",
+        "invoice": "发票",
+        "item": "项目",
+        "qty": "数量",
+        "unit": "单价",
+        "tax": "税费",
+        "net": "未税金额",
+        "taxAmount": "税额",
+        "total": "总额",
+        "taxFallback": "税费",
+        "taxSummary": "税费汇总",
+        "taxRate": "税率",
+        "taxBase": "应税金额",
+        "included": "已含在内",
+        "subtotal": "税前",
+        "taxTotal": "税费",
+        "totalCredit": "贷记总额",
+        "reason": "原因",
+        "note": "备注"
+      }
+    }
+  }
+}

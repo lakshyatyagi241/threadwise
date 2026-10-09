@@ -1,0 +1,574 @@
+{
+  "ecom": {
+    "nav": {
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce"
+    },
+    "common": {
+      "dismiss": "閉じる",
+      "integrations": "連携",
+      "back": "戻る",
+      "docs": "ドキュメントを見る",
+      "loadError": "このページを読み込めませんでした。もう一度お試しください。",
+      "support": "サポートに連絡",
+      "integration": "連携",
+      "notConnected": "未接続",
+      "setupSteps": "セットアップ手順",
+      "needHelp": "お困りですか？",
+      "none": "なし",
+      "optional": "任意",
+      "yes": "はい"
+    },
+    "connect": {
+      "shopify": {
+        "title": "接続",
+        "accent": "Shopify",
+        "intro": "Shopifyストアを接続すると、注文、フルフィルメント、返金、カートのイベントによってWhatsAppメッセージが自動的に送信され、ダッシュボードに注文数、商品数、顧客数が表示されます。",
+        "step1": "管理者がShopifyアプリを有効化",
+        "step2": "ストアのドメインを入力",
+        "step3": "Shopifyでスコープを承認",
+        "step4": "イベントをWhatsAppテンプレートにマッピング",
+        "help": "Webhookは接続後に自動でインストールされるため、手動の手順は不要です。認証情報で困っていますか？",
+        "disabledTitle": "Shopifyはまだ有効化されていません",
+        "disabledBody": "ワークスペースがストアを接続する前に、管理者がShopifyアプリの認証情報を追加する必要があります。完了すると、下のフォームが有効になります。",
+        "formStep": "ステップ2",
+        "formTitle": "ストアのドメイン",
+        "urlLabel": "ShopifyストアのURL",
+        "urlPlaceholder": "my-store",
+        "urlSuffix": ".myshopify.com",
+        "urlHint": "ストアのハンドルだけで構いません。URL全体を貼り付けても自動で整形します。",
+        "webhookLabel": "Webhook URL・接続後に自動設定されます",
+        "cancel": "キャンセル",
+        "continue": "Shopifyに進む",
+        "continuing": "リダイレクト中…",
+        "guideKicker": "セットアップガイド",
+        "guideTitle": "この後の流れ",
+        "guide1": "Shopifyに移動し、要求されたスコープを承認します。",
+        "guide2": "ShopifyがHMAC署名付きの永続アクセストークンを返します。",
+        "guide3": "{count}件のイベントのWebhookがストアに自動登録されます。",
+        "guide4": "ここに戻り、各イベントをWhatsAppテンプレートに割り当てます。",
+        "scopes": "要求されるスコープ",
+        "failed": "Shopifyへの接続を開始できませんでした。",
+        "connected": "Shopifyに接続しました。",
+        "returnedError": "Shopifyに接続できませんでした。"
+      },
+      "woocommerce": {
+        "title": "接続",
+        "accent": "WooCommerce",
+        "intro": "WooCommerceの注文、返金、商品、顧客イベントをチャットスレッドに取り込みます。CRMを離れずにWhatsAppで注文確認、発送通知、カート回収ができます。",
+        "step1": "管理者がWooCommerceを有効化",
+        "step2": "WC管理画面でAPIキーを生成",
+        "step3": "ストアURLとキーを下に貼り付け",
+        "step4": "イベントをWhatsAppテンプレートに割り当て",
+        "help": "接続後、Webhookは自動でインストールされます。WC側での手動操作は不要です。キーで困っていますか?",
+        "disabledTitle": "WooCommerceはまだ有効化されていません",
+        "disabledBody": "ワークスペースがストアを接続する前に、管理者がWooCommerce連携を有効化する必要があります。",
+        "formStep": "ステップ2",
+        "formTitle": "ストアの認証情報",
+        "urlLabel": "ストアURL",
+        "urlHint": "Basic認証にはHTTPSが必要です。WP RESTは自動で検出します。",
+        "keyLabel": "コンシューマーキー",
+        "secretLabel": "コンシューマーシークレット",
+        "secretHint": "保存時に暗号化されます。ストアのREST APIを呼び出す目的にのみ使用します。",
+        "webhookLabel": "Webhook URL・接続後に自動設定されます",
+        "test": "接続をテスト",
+        "testing": "テスト中…",
+        "connect": "ストアを接続",
+        "connecting": "接続中…",
+        "guideKicker": "キーの生成方法",
+        "guideTitle": "WooCommerce管理画面で",
+        "g1": "WooCommerce → 設定 → 詳細 → REST APIを開きます。",
+        "g2": "「キーを追加」をクリックし、「CRM」などの説明を入力します。",
+        "g3": "ユーザー(管理者でも可)を選び、権限を「読み取り/書き込み」に設定します。",
+        "g4": "「APIキーを生成」をクリックします。シークレットは一度しか表示されないため、両方のキーをコピーしてください。",
+        "g5": "左のフォームに貼り付けて「接続をテスト」をクリックします。",
+        "httpsTitle": "HTTPSのみ",
+        "httpsBody": "Basic認証にはHTTPSが必要です。ストアがHTTPのみの場合は、先にSSL証明書をインストールしてください(Let's Encryptは無料です)。",
+        "connected": "WooCommerceに接続しました。",
+        "failed": "接続に失敗しました。",
+        "networkError": "ネットワークエラーです。"
+      }
+    },
+    "shell": {
+      "status": {
+        "active": "有効",
+        "error": "エラー",
+        "other": "{status}"
+      },
+      "plan": "プラン:",
+      "store": "ストア",
+      "related": "関連",
+      "allIntegrations": "すべての連携",
+      "disconnect": "接続解除",
+      "disconnectTitle": "{name}の接続を解除しますか?",
+      "disconnectShopify": "登録済みのWebhookは削除されますが、設定は保持されます。",
+      "disconnectWoo": "登録済みのWebhookが削除されます。",
+      "disconnectDone": "ストアの接続を解除しました。",
+      "healthy": "Webhookは正常です",
+      "noRecent": "最近のイベントはありません",
+      "lastEvent": "最終イベント:",
+      "triggerShopify": "Shopifyで操作を実行すると、ここに表示されます。",
+      "triggerWoo": "WooCommerceで注文を発生させると、ここに表示されます。",
+      "sync": "今すぐ同期",
+      "syncing": "同期中…",
+      "syncQueued": "同期を開始しました。新しいデータはまもなく表示されます。",
+      "syncFailed": "同期に失敗しました。",
+      "tabs": {
+        "overview": "概要",
+        "orders": "注文",
+        "products": "商品",
+        "offers": "オファーを送信",
+        "customers": "顧客",
+        "events": "自動化",
+        "analytics": "分析",
+        "invoices": "請求書",
+        "logs": "アクティビティ",
+        "settings": "設定"
+      },
+      "offersWoo": "オファー",
+      "desc": {
+        "shopify": {
+          "overview": "Shopifyから同期したストアの最新状況です。",
+          "orders": "Shopifyから同期した注文です。",
+          "products": "同期済みのカタログを閲覧し、WhatsAppで商品やオファーを送信できます。",
+          "offers": "商品とクーポンを選び、顧客セグメントを指定して、WhatsAppでオファーを一斉配信します。",
+          "customers": "Shopifyから連絡先に同期された顧客です。",
+          "events": "マーケティング自動化。オンにしてテンプレートを選ぶと、該当するストアイベントで送信されます。",
+          "analytics": "このストアの売上、注文の推移、メッセージの成果です。",
+          "logs": "このストアのWebhook配信ログです。",
+          "settings": "接続を管理します。再同期、スコープの確認、接続解除ができます。",
+          "invoices": "Shopifyの注文に対して発行された請求書です。"
+        },
+        "woocommerce": {
+          "overview": "WooCommerce REST APIから取得した最新状況です。",
+          "orders": "ストアから取得した直近10件の注文です。",
+          "products": "カタログ内の最新の商品です。",
+          "offers": "商品オファーを配信したり、離反した顧客を呼び戻したりできます。",
+          "customers": "最終購入が新しい順の顧客アカウントです。",
+          "events": "注文、代金引換、カート、在庫の自動化をオン/オフします。",
+          "analytics": "このストアの売上、メッセージ数、代金引換の影響です。",
+          "logs": "このストアのWebhook配信ログです。",
+          "settings": "接続の詳細です。再確認または接続解除ができます。",
+          "invoices": "WooCommerceの注文に対して発行された請求書です。"
+        }
+      },
+      "loading": "ストアを読み込み中…",
+      "flash": {
+        "success": "完了しました。",
+        "error": "問題が発生しました。"
+      },
+      "cancel": "キャンセル"
+    },
+    "overview": {
+      "revenueRecent": "売上(直近)",
+      "revenueRecentHint": "直近の同期済み注文の合計",
+      "ordersTotal": "注文合計",
+      "ordersMirrorHint": "CRMに同期済み",
+      "products": "商品",
+      "productsHint": "同期済みカタログ数",
+      "customers": "顧客",
+      "activeAutomations": "有効な自動化{count}件",
+      "revenue30": "売上・30日間",
+      "revenue30Hint": "WCの売上レポートより",
+      "orders30": "注文・30日間",
+      "ordersAllTime": "累計{count}件",
+      "customersNew": "30日間で新規{count}件",
+      "itemsSold": "販売点数・30日間",
+      "recentOrders": "最近の注文",
+      "viewAll": "すべて表示 →",
+      "noOrders": "注文はまだありません。「今すぐ同期」をクリックしてください。",
+      "recentActivity": "最近のWebhookアクティビティ",
+      "noActivity": "Webhookイベントはまだ受信していません。"
+    },
+    "orders": {
+      "order": "注文",
+      "customer": "顧客",
+      "status": "ステータス",
+      "total": "合計",
+      "placed": "注文日時",
+      "none": "注文が見つかりません。"
+    },
+    "products": {
+      "search": "商品を検索…",
+      "offers": "特別オファー",
+      "catalog": "カタログを送信 →",
+      "newArrivals": "新着商品",
+      "all": "すべての商品",
+      "none": "商品はまだありません。ストアを接続するか、「今すぐ同期」をクリックしてください。",
+      "noImage": "画像なし",
+      "save": "{pct}%オフ",
+      "send": "送信",
+      "offer": "オファー",
+      "noMatch": "一致する商品がありません。",
+      "wooNone": "商品が見つかりません。",
+      "inStock": "在庫あり",
+      "outOfStock": "在庫切れ"
+    },
+    "offers": {
+      "choose": "商品を選択",
+      "selected": "{count}件選択中",
+      "noProducts": "同期済みの商品はまだありません。",
+      "template": "メッセージテンプレート",
+      "pickTemplate": "テンプレートを選択",
+      "tokens": "使用できるトークン:",
+      "segment": "セグメントに送信",
+      "pickGroup": "連絡先グループを選択",
+      "coupon": "クーポン(任意)",
+      "noCoupon": "クーポンなし",
+      "couponPercent": "{amount}%",
+      "send": "オファーを送信",
+      "sending": "送信中…",
+      "pickTemplateFirst": "先にテンプレートを選択してください。",
+      "pickSegmentFirst": "先にセグメントを選択してください。",
+      "note": "セグメント内でオプトインした連絡先にのみ送信されます。WABAの送信には承認済みテンプレートが必要です。非公式APIではテキストとボタンとして表示されます。",
+      "queued": "{total}件の連絡先宛てにキューに追加しました。完了すると件数が「アクティビティ」タブに表示されます。",
+      "failed": "送信に失敗しました。",
+      "wooTitle": "商品オファーの一斉配信",
+      "wooIntro": "セグメント内のオプトイン済みの全連絡先に、承認済みテンプレートを送信します。商品とクーポンを差し込めます。",
+      "wooTemplate": "テンプレート",
+      "choose2": "選択",
+      "wooSegment": "セグメント(連絡先グループ)",
+      "wooProduct": "注目の商品",
+      "wooCoupon": "クーポンコード",
+      "wooCouponPlaceholder": "SAVE10",
+      "winTitle": "スマートセグメント配信",
+      "winIntro": "購入履歴(最終購入日=呼び戻し、注文回数、累計金額=VIP)で対象を絞り込みます。オプトアウト済みの連絡先は除外されます。",
+      "winLast": "最終購入",
+      "winAny": "いつでも",
+      "winDays": "{days}日より前",
+      "winMonths": "6か月より前",
+      "winYear": "1年より前",
+      "winMinOrders": "最小注文回数",
+      "winAnyOrders": "指定なし",
+      "winMinSpend": "最小金額({currency})",
+      "winTemplate": "テンプレート",
+      "winPick": "選択",
+      "winCoupon": "クーポン",
+      "winNone": "なし",
+      "winSend": "呼び戻しを送信",
+      "winConfirm": "このセグメントの全員にこの配信を送信しますか?",
+      "winQueued": "離反した顧客{total}人宛てにキューに追加しました。完了すると件数が「アクティビティ」タブに表示されます。",
+      "wooWinTitle": "スマートセグメント配信",
+      "wooWinIntro": "購入履歴で絞り込み、離反した購入者を呼び戻したり、優良顧客に特典を贈ったりできます。",
+      "wooLapsed": "離反日数 >",
+      "wooWinNote": "日数が0の場合は期間を問いません(セグメントのみ)。金額はストアの通貨です。オプトアウト済みの連絡先は常に除外されます。",
+      "wooCouponPlaceholder2": "COMEBACK15",
+      "wooWinSend": "配信を送信",
+      "optional": "任意",
+      "none": "なし",
+      "cancel": "キャンセル"
+    },
+    "customers": {
+      "name": "名前",
+      "email": "メール",
+      "phone": "電話番号",
+      "orders": "注文",
+      "spent": "購入金額",
+      "none": "顧客はまだ取得されていません。",
+      "noneWoo": "顧客はまだいません。"
+    },
+    "events": {
+      "noTemplates": "承認済みのWhatsAppテンプレートがまだありません。自動化をオンにするには、テンプレートで作成してください。",
+      "templatesLink": "テンプレート",
+      "sendFrom": "送信元",
+      "sendFromHint": "これらの自動化を送信する接続済みの番号です。",
+      "auto": "自動:接続済みのいずれかの番号",
+      "fired": "{count}件実行",
+      "logged": "{count}件記録",
+      "template": "テンプレート",
+      "pickTemplate": "テンプレートを選択",
+      "noneOption": "なし",
+      "sendTo": "送信先",
+      "customer": "顧客",
+      "admin": "管理者のみ",
+      "both": "両方",
+      "adminNumber": "管理者の番号",
+      "delay": "遅延",
+      "on": "オン",
+      "immediate": "即時",
+      "min": "{n}分",
+      "hour": "{n}時間",
+      "day": "{n, plural, other {#日}}",
+      "mapTitle": "テンプレート変数を注文フィールドに割り当て",
+      "param": "パラメータ{n}",
+      "blank": "— 空白 —",
+      "field": {
+        "name": "顧客名",
+        "first_name": "名",
+        "order_name": "注文番号(例: #1001)",
+        "order_number": "注文番号",
+        "total": "合計+通貨",
+        "total_price": "合計(金額のみ)",
+        "currency": "通貨",
+        "email": "顧客のメール",
+        "store_name": "ストア名",
+        "financial_status": "支払いステータス",
+        "fulfillment_status": "配送ステータス"
+      },
+      "advanced": "詳細設定・変数の順序",
+      "advancedHint": "テンプレートの番号付きプレースホルダーに順に割り当てるフィールドをカンマ区切りで指定します。空白の場合は標準設定(名前、注文、合計)になります。",
+      "advancedPlaceholder": "name, first_name, order_number, order_name, total, currency, order_url, tracking_number, tracking_url",
+      "save": "自動化を保存",
+      "saving": "保存中…",
+      "saved": "✓ 保存しました",
+      "saveFailed": "保存に失敗しました",
+      "needTemplate": "オンにする自動化ごとにテンプレートを選択してください。"
+    },
+    "autoGroups": {
+      "lifecycle": {
+        "name": "注文ライフサイクル",
+        "desc": "取引に関する通知。ストアイベントで自動送信されます。"
+      },
+      "recovery": {
+        "name": "売上の回復",
+        "desc": "失われた売上を取り戻します。"
+      },
+      "marketing": {
+        "name": "ライフサイクルマーケティング",
+        "desc": "顧客を増やし、維持します。"
+      }
+    },
+    "auto": {
+      "shopify": {
+        "orders_create": {
+          "name": "注文確認",
+          "desc": "注文が入った直後に、お客様へお礼を送ります。"
+        },
+        "orders_paid": {
+          "name": "入金確認",
+          "desc": "支払いが完了したら確認を送ります。"
+        },
+        "orders_fulfilled": {
+          "name": "発送済み/配達中",
+          "desc": "発送のお知らせを送ります。ライブ追跡リンクには '{{'tracking_url'}}' を使用してください。"
+        },
+        "order_delivered": {
+          "name": "配達完了",
+          "desc": "配達完了を通知します(テンプレートに含めればレビューも依頼できます)。配送業者が配達完了にした時点で送信されます。"
+        },
+        "orders_cancelled": {
+          "name": "注文キャンセル",
+          "desc": "注文がキャンセルされたことをお客様に知らせます。"
+        },
+        "refunds_create": {
+          "name": "返金完了",
+          "desc": "返金が処理されたことを通知します。"
+        },
+        "orders_updated": {
+          "name": "注文更新",
+          "desc": "既存の注文に変更があったときに送信されます。"
+        },
+        "checkouts_create": {
+          "name": "カート放棄・ステップ1",
+          "desc": "チェックアウトが放棄された直後に送信されます。お客様を呼び戻すには '{{'checkout_url'}}' を含めてください。"
+        },
+        "cart_step2": {
+          "name": "カート放棄・ステップ2",
+          "desc": "予約されたフォローアップです(遅延を設定、例: 1時間)。購入された場合は自動でキャンセルされます。"
+        },
+        "cart_step3": {
+          "name": "カート放棄・ステップ3",
+          "desc": "最後のひと押しです(例: 24時間後)。テンプレートにクーポンを加えて購入を促しましょう。"
+        },
+        "cod_confirm": {
+          "name": "代金引換の注文確認",
+          "desc": "代金引換のお客様に「はい/いいえ」の返信で確認を依頼します。偽の注文や返品(RTO)を減らせます。"
+        },
+        "cod_prepaid": {
+          "name": "代金引換から前払いへのオファー",
+          "desc": "代金引換のお客様にオンライン支払いを促します(テンプレートに '{{'order_url'}}' と割引を含めてください)。返品が減り、入金も早まります。"
+        },
+        "stock_back": {
+          "name": "再入荷通知",
+          "desc": "売り切れの商品についてメッセージを送ったお客様に、再入荷時に自動で通知します。"
+        },
+        "customers_create": {
+          "name": "新規顧客へのウェルカム",
+          "desc": "初めてのお客様を温かく迎えます。"
+        },
+        "customers_update": {
+          "name": "顧客更新",
+          "desc": "顧客プロフィールが変更されたときに送信されます。"
+        },
+        "products_update": {
+          "name": "商品更新",
+          "desc": "価格や在庫の変更時の内部トリガーです。"
+        }
+      },
+      "woocommerce": {
+        "order_created": {
+          "name": "注文受付",
+          "desc": "新しい注文が入った直後に送信されます。"
+        },
+        "order_processing": {
+          "name": "注文確定",
+          "desc": "入金を確認しました。注文を準備中です。"
+        },
+        "order_completed": {
+          "name": "注文配達完了",
+          "desc": "WooCommerceで注文が完了としてマークされました。"
+        },
+        "order_on_hold": {
+          "name": "注文保留",
+          "desc": "支払いまたは在庫待ちです。購入者に状況をお知らせします。"
+        },
+        "order_cancelled": {
+          "name": "注文キャンセル",
+          "desc": "注文がキャンセルされました。"
+        },
+        "order_refunded": {
+          "name": "注文返金",
+          "desc": "返金が行われました。"
+        },
+        "cod_confirm": {
+          "name": "代金引換の二重確認",
+          "desc": "発送前に代金引換の購入者へ「はい/いいえ」での確認を依頼します。RTOを減らす最も効果的な方法です。"
+        },
+        "cod_prepaid": {
+          "name": "代金引換から前払いへの誘導",
+          "desc": "代金引換の購入者にオンライン支払いリンクを案内します(テンプレートに '{{'order_url'}}' と特典を含められます)。"
+        },
+        "checkout_created": {
+          "name": "カート放棄・ステップ1",
+          "desc": "チェックアウトが始まったのに注文が入らないときの最初のリマインドです。WooCommerce用の専用プラグインが必要です。"
+        },
+        "cart_step2": {
+          "name": "カート放棄・ステップ2",
+          "desc": "下の遅延時間の後に送信される予約フォローアップです。"
+        },
+        "cart_step3": {
+          "name": "カート放棄・ステップ3",
+          "desc": "最後のリマインドです。テンプレートに割引を加えましょう。"
+        },
+        "stock_back": {
+          "name": "再入荷",
+          "desc": "売り切れ商品が再入荷したら、ウェイティングリストの全員にメッセージを送ります。"
+        },
+        "subscription_payment_failed": {
+          "name": "サブスクリプションの督促",
+          "desc": "サブスクリプションの更新決済に失敗したとき、ワンタップの「支払い情報を更新」リンクを送信します。WooCommerce用の専用プラグインが必要です。"
+        },
+        "customer_created": {
+          "name": "新規顧客へのウェルカム",
+          "desc": "お客様がストアに初めて登録したときに挨拶を送ります。"
+        },
+        "review_reward": {
+          "name": "レビュー連動クーポン",
+          "desc": "最近の購入者が高評価(4〜5/「最高」など)を返信したら、この特典テンプレートを自動送信します。クーポンを含めてください。評価を依頼する「注文配達完了」テンプレートと組み合わせて使います。"
+        }
+      }
+    },
+    "analytics": {
+      "revenue": "売上",
+      "orders": "注文",
+      "avgOrder": "平均注文額",
+      "messagesSent": "送信メッセージ数",
+      "offersSent": "送信したオファー",
+      "codProtected": "保護された代金引換売上",
+      "codConfirmed": "確認済みの代金引換注文{count}件",
+      "rtoAvoided": "回避したRTO",
+      "codCancelled": "偽注文/代金引換注文{count}件を阻止",
+      "recovery": "回復メッセージ",
+      "recoveryHint": "カート/オファー/呼び戻し/在庫",
+      "avgValue": "平均注文金額",
+      "trend": "売上・直近14日間",
+      "perf": "自動化のパフォーマンス",
+      "event": "イベント",
+      "fired": "実行数",
+      "noActivity": "自動化のアクティビティはまだありません。",
+      "revenueMirrored": "売上・ミラー済み",
+      "ordersSynced": "同期済みの注文{count}件",
+      "perOrder": "注文あたり",
+      "offerBroadcasts": "オファー配信{count}件",
+      "recoverySends": "回復送信",
+      "recoverySendsHint": "代金引換/カート/在庫/オファー",
+      "wouldBeRto": "早期にキャンセルされたRTO見込み",
+      "activeAutomations": "有効な自動化",
+      "firingOn": "ストアイベントで実行中"
+    },
+    "logs": {
+      "processed": "処理済み",
+      "sent": "送信済み",
+      "skipped": "スキップ",
+      "failed": "失敗",
+      "event": "イベント",
+      "recipient": "受信者",
+      "status": "ステータス",
+      "when": "日時",
+      "none": "このストアのWebhookイベントはまだ届いていません。"
+    },
+    "settings": {
+      "storeUrl": "ストアURL",
+      "connectedAt": "接続日時",
+      "lastVerified": "最終確認",
+      "scopes": "付与されたスコープ",
+      "wooVersion": "WooCommerceのバージョン",
+      "webhookUrl": "Webhook URL",
+      "registered": "登録済みのWebhook",
+      "registeredCount": "{count, plural, other {有効なサブスクリプション#件}}",
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "plugin": {
+        "title": "WordPressプラグイン",
+        "body": "このプラグインをストアにインストールすると、注文が作成される前のカート放棄の回収、失敗したサブスクリプション決済やカスタム注文ステータスの連携ができます。",
+        "step1": "下のプラグインをダウンロードします。このストア専用に作られています。",
+        "step2": "WordPressで「プラグイン」→「新規追加」→「プラグインのアップロード」を開き、zipを選択して有効化します。",
+        "step3": "サイトでWP-Cronが動作していることを確認してください。プラグインは5分ごとに放置されたカートを確認します。",
+        "download": "プラグインをダウンロード(.zip)",
+        "preparing": "プラグインを準備中…",
+        "started": "プラグインをダウンロードしました。",
+        "secretNote": "このファイルにはストアの秘密鍵が含まれています。外部に漏らさないでください。",
+        "forbidden": "プラグインをダウンロードする権限がありません。",
+        "failed": "プラグインをダウンロードできませんでした。もう一度お試しください。"
+      }
+    },
+    "embedded": {
+      "title": "Shopify",
+      "connected": "接続済み",
+      "notConnected": "未接続",
+      "store": "ストア",
+      "plan": "Shopifyプラン",
+      "lastVerified": "最終確認",
+      "openApp": "アプリを開く",
+      "openToConnect": "アプリを開いて接続",
+      "invalid": "Shopifyのセッションが無効です。Shopify管理画面からアプリを再読み込みしてください。",
+      "off": "このインストールではShopify連携が有効になっていません。サポートにお問い合わせください。",
+      "error": "問題が発生しました。Shopify管理画面からアプリを再読み込みしてください。"
+    },
+    "invoices": {
+      "policyTitle": "自動請求書",
+      "autoInvoice": "このストアの注文に対して請求書を自動発行",
+      "autoInvoiceHint": "各請求書は、WhatsAppで購入者宛てに送信キューに入ります。電話番号がない場合はメールで送信されます。オンにするまでは無効です。",
+      "trigger": "請求書を発行するタイミング",
+      "on_placed": "注文時",
+      "on_paid": "支払い時",
+      "on_fulfilled": "発送完了時",
+      "saved": "請求書の設定を保存しました。",
+      "saveFailed": "請求書の設定を保存できませんでした。",
+      "policyLoadFailed": "請求書の設定を読み込めませんでした。",
+      "listTitle": "このストアの請求書",
+      "number": "番号",
+      "buyer": "購入者",
+      "type": "種類",
+      "status": "ステータス",
+      "total": "合計",
+      "issued": "発行日",
+      "draft": "下書き",
+      "tax_invoice": "税務請求書",
+      "receipt": "領収書",
+      "proforma": "見積請求書",
+      "status_draft": "下書き",
+      "status_issued": "発行済み",
+      "status_partially_paid": "一部入金",
+      "status_paid": "支払い済み",
+      "status_overdue": "期限超過",
+      "status_void": "無効",
+      "loading": "請求書を読み込み中…",
+      "none": "このストアの請求書はまだありません。上の自動請求書をオンにすると、次に支払われた注文から発行されます。",
+      "error": "請求書を読み込めませんでした。",
+      "retry": "再試行",
+      "forbidden": "請求書へのアクセス権がありません。",
+      "viewAll": "すべての請求書を開く"
+    }
+  }
+}

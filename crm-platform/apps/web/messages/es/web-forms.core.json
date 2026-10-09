@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "common": {
+      "dismiss": "Descartar"
+    },
+    "nav": {
+      "forms": "Formularios"
+    },
+    "kinds": {
+      "short_text": "Texto corto",
+      "long_text": "Texto largo",
+      "email": "Correo",
+      "phone": "Número de teléfono",
+      "number": "Número",
+      "currency": "Importe",
+      "date": "Fecha",
+      "dropdown": "Desplegable",
+      "radio": "Opción única",
+      "checkbox_group": "Opción múltiple",
+      "checkbox": "Casilla",
+      "rating": "Valoración",
+      "hidden": "Campo oculto"
+    },
+    "errors": {
+      "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "forbidden": "No tienes permiso para hacer eso.",
+      "signedOut": "Tu sesión ha terminado. Inicia sesión de nuevo para continuar.",
+      "conflict": "Otra persona cambió este formulario. Recarga la página para ver la versión más reciente.",
+      "nameTaken": "Ya existe otro formulario con este nombre. Elige un nombre diferente.",
+      "stateInvalid": "Eso no es posible con el estado actual del formulario.",
+      "definitionInvalid": "El formulario todavía no es válido. Revisa los campos e inténtalo de nuevo.",
+      "publishInvalid": "El formulario no se puede publicar todavía. Corrige los problemas indicados e inténtalo de nuevo.",
+      "planLimit": "Se ha alcanzado el límite de tu plan.",
+      "planLimitForms": "Has alcanzado el número de formularios que permite tu plan. Archiva un formulario que ya no uses o mejora tu plan.",
+      "planLocked": "Los formularios no forman parte de tu espacio de trabajo.",
+      "notFound": "No se encontró este formulario. Puede que se haya eliminado.",
+      "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+      "unexpected": "Algo salió mal. Inténtalo de nuevo en un momento.",
+      "upgrade": "Ver planes"
+    }
+  }
+}

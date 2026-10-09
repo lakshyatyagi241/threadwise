@@ -1,0 +1,924 @@
+{
+  "marketplace": {
+    "operator": {
+      "nav": {
+        "group": "应用市场",
+        "catalogue": "目录",
+        "categories": "分类",
+        "requests": "申请",
+        "usage": "用量"
+      },
+      "common": {
+        "loading": "加载中...",
+        "requestId": "申请 ID",
+        "retry": "重试",
+        "noPermissions": "无权限"
+      },
+      "enums": {
+        "kind": {
+          "mini_app": "迷你应用",
+          "integration": "集成"
+        },
+        "appStatus": {
+          "draft": "草稿",
+          "in_review": "审核中",
+          "published": "已发布",
+          "hidden": "已隐藏",
+          "killed": "已终止"
+        },
+        "versionStatus": {
+          "draft": "草稿",
+          "in_review": "审核中",
+          "approved": "已批准",
+          "rejected": "已拒绝",
+          "published": "已发布",
+          "retired": "已下架"
+        },
+        "requestStatus": {
+          "open": "待处理",
+          "planned": "已计划",
+          "building": "开发中",
+          "shipped": "已发布",
+          "declined": "已拒绝"
+        },
+        "connector": {
+          "oauth": "OAuth 登录",
+          "push": "推送（门户主动发送给我们）",
+          "pull": "拉取（我们轮询门户）",
+          "email_parse": "邮件解析",
+          "webhook_relay": "Webhook 中继",
+          "client": "客户端（由成员安装）"
+        },
+        "risk": {
+          "low": "低风险",
+          "medium": "中风险",
+          "high": "高风险"
+        },
+        "subscriptionStatus": {
+          "active": "付费中",
+          "trialing": "试用中",
+          "comped": "赠予",
+          "canceling": "即将结束",
+          "ended": "已结束"
+        },
+        "subscriptionSource": {
+          "purchase": "购买",
+          "trial": "试用",
+          "comp": "赠予"
+        }
+      },
+      "errors": {
+        "conflict": "您查看期间，他人已更改此内容。请重新加载以查看其版本，然后再次进行您的更改。",
+        "noAccess": "此操作需要平台权限 {permission}。",
+        "manifestInvalid": "清单不符合清单 v1 格式。每个问题及其路径均已列出。",
+        "recipeInvalid": "配方不符合配方格式，或与清单不匹配。每个问题及其路径均已列出。",
+        "urlRefused": "配方中的一个地址被拒绝：{detail}。",
+        "urlRefusedPlain": "配方中的一个地址被拒绝。地址必须使用 https、为公共 DNS 名称、使用默认端口，且不包含凭据。",
+        "connectorNotAvailable": "{type} 连接器类型尚未实现，因此无法发布此条目。任何无法正常工作的内容都不会到达工作区。",
+        "slugTaken": "另一个条目或分类已使用该 ID。请选择其他 ID。",
+        "categoryGone": "该分类已不存在。请重新加载列表。",
+        "categoryUnknown": "清单中指定的分类对此类应用不存在，或已关闭。请从“分类”页面选择。",
+        "categoryInUse": "此分类中有应用。请先将其移至其他分类，或关闭该分类以对工作区隐藏。",
+        "versionState": "当条目或版本处于 {status} 状态时不允许此操作。请重新加载以查看其当前状态。",
+        "versionStatePlain": "在条目或版本的当前状态下不允许此操作。请重新加载以查看其当前状态。",
+        "versionExists": "版本号必须高于 {newest}，即目前的最高版本。",
+        "versionExistsPlain": "该版本号已存在。请使用更高的版本号。",
+        "appUnavailable": "已终止的条目无法发布。请先恢复，再发布。",
+        "appNotFound": "此条目不存在。它可能已被删除。",
+        "notFound": "未找到该项目。它可能已被删除。",
+        "rateLimited": "请求过多。请等待 {seconds} 秒后重试。",
+        "rateLimitedPlain": "请求过多。请稍等片刻后重试。",
+        "validationFields": "部分字段无效。每个问题及其字段均已列出。",
+        "validation": "请求无效。",
+        "request": "无法完成请求。",
+        "unexpected": "我们这边出现了问题。请重试；如果问题持续，请提供请求 ID。",
+        "subscriptionState": "在订阅的当前状态下无法执行此操作。已付费的工作区无法赠予（请先取消其订阅）；免费应用无需赠予；已结束的订阅无法再次取消。",
+        "subscriptionNotFound": "未找到该订阅。它可能已被移除。请重新加载列表。"
+      },
+      "list": {
+        "title": "应用市场目录",
+        "description": "所有状态下的每个条目：迷你应用和集成、它们的版本，以及有多少工作区已安装。",
+        "new": "新建条目",
+        "subscriptionsLink": "订阅与收入",
+        "kpi": {
+          "label": "按状态划分的条目",
+          "loaded": "已加载",
+          "published": "已发布",
+          "inReview": "审核中",
+          "hidden": "已隐藏",
+          "killed": "已终止",
+          "note": "计数仅涵盖目前已加载的 {count} 个条目，而非整个目录。",
+          "noteMore": "还有更多可用：请使用“加载更多”。"
+        },
+        "filters": {
+          "label": "筛选",
+          "search": "搜索",
+          "searchPlaceholder": "名称或 ID",
+          "kind": "类型",
+          "allKinds": "所有类型",
+          "status": "状态",
+          "allStatuses": "所有状态",
+          "category": "分类",
+          "allCategories": "所有分类",
+          "categoryNote": "仅筛选已加载的条目：API 不支持分类筛选。",
+          "pricing": "定价",
+          "allPricing": "所有定价",
+          "free": "免费",
+          "paid": "付费"
+        },
+        "cols": {
+          "app": "应用",
+          "kind": "类型",
+          "category": "分类",
+          "status": "状态",
+          "versions": "版本",
+          "installs": "安装次数",
+          "planFeature": "套餐功能",
+          "pricing": "定价",
+          "subscriptions": "有效订阅"
+        },
+        "badges": {
+          "firstParty": "自营",
+          "featured": "精选"
+        },
+        "versionPublished": "已发布",
+        "versionLatest": "最新",
+        "dash": "-",
+        "everyPlan": "所有套餐",
+        "killedReason": "已终止：{reason}",
+        "loadMore": "加载更多",
+        "clearFilters": "清除筛选条件",
+        "emptyTitle": "暂无条目",
+        "emptyMessage": "创建第一个条目，开始建立目录。",
+        "noMatchTitle": "没有符合的条目",
+        "noMatchMessage": "没有符合这些筛选条件的内容。请尝试其他条件。",
+        "noMatchMoreMessage": "目前已加载的条目均不符合。还有更多可用：请加载，或更改筛选条件。",
+        "tableCaption": "应用市场条目",
+        "viewSubscriptions": "{name} 的订阅"
+      },
+      "new": {
+        "title": "新建条目",
+        "description": "创建一个带有首个版本的草稿条目。在审核人员批准并发布之前，任何内容都不会到达工作区。",
+        "back": "返回目录",
+        "sections": {
+          "docs": "清单与配方",
+          "docsHelp": "清单说明应用是什么、可以做什么以及使用哪个连接器。集成还需要配方。两者都会在您输入时按服务器应用的规则进行检查。",
+          "changelog": "首个版本说明",
+          "changelogHelp": "作为首个版本包含的内容，显示给管理员。"
+        },
+        "changelog": "更新日志",
+        "changelogHint": "可选，最多 {max} 个字符。留空时显示为“首个版本”。",
+        "save": "创建条目",
+        "saving": "正在创建...",
+        "cancel": "取消",
+        "created": "已创建条目 {name}（草稿）。",
+        "draftNote": "条目以草稿形式创建。请在条目页面提交其版本以供审核。"
+      },
+      "editor": {
+        "cancel": "取消",
+        "format": "格式",
+        "problemCount": "{count, plural, other {# 个问题需修复}}",
+        "valid": {
+          "manifest": "有效的清单 v1。",
+          "recipe": "有效的配方。"
+        },
+        "manifest": {
+          "label": "清单（JSON）",
+          "hint": "清单 v1：id、name、kind、category、version、description、scopes、pricing、support、connector。"
+        },
+        "recipe": {
+          "label": "配方（JSON）",
+          "hint": "集成的连接器配方：connector、authFields、mapping、rateLimits、errorMapping、setupInstructions、testPayloads。",
+          "insertStarter": "插入入门配方"
+        },
+        "scopes": {
+          "title": "此版本请求的权限",
+          "help": "管理员需接受的内容，以通俗语言描述。请只请求必要的最少权限。"
+        },
+        "templates": {
+          "title": "从模板开始",
+          "help": "用可供编辑的有效起始内容填充两个编辑器。",
+          "mini_app": "迷你应用",
+          "webhook_relay": "集成：Webhook 中继",
+          "push": "集成：推送",
+          "replaceTitle": "替换编辑器中的内容？",
+          "replaceBody": "您在编辑器中输入的清单和配方将被模板替换。",
+          "replaceAction": "替换"
+        },
+        "problems": {
+          "listLabel": "问题",
+          "errorLabel": "错误：",
+          "warningLabel": "警告：",
+          "syntax": "不是有效的 JSON。",
+          "syntaxAt": "不是有效的 JSON，位于第 {line} 行、第 {column} 列附近。",
+          "empty": "此文档为空。",
+          "recipeNotAllowed": "迷你应用没有配方：请清空此编辑器。",
+          "recipeMissing": "集成在提交审核前需要配方。",
+          "recipeKeyMismatch": "必须等于清单 ID：{expected}。",
+          "recipeCategoryMismatch": "必须等于清单分类：{expected}。",
+          "recipeConnectorMismatch": "必须等于清单连接器类型：{expected}。",
+          "idChanged": "现有条目的 ID 无法更改：必须保持为 {expected}。",
+          "kindChanged": "现有条目的类型无法更改：必须保持为 {expected}。",
+          "versionNotHigher": "版本号必须高于 {newest}，即目前的最高版本。",
+          "versionTaken": "此条目的另一版本已使用 {version}。",
+          "categoryUnknown": "不存在有效的 {kind} 分类 {category}。请检查“分类”页面。",
+          "categoryRefused": "服务器拒绝此分类：该类型不存在，或已关闭。",
+          "recipeRequired": "集成需要其配方。",
+          "slugTaken": "另一个条目已使用此 ID。"
+        }
+      },
+      "fields": {
+        "sections": {
+          "page": "条目页面",
+          "pageHelp": "管理员在应用页面上看到的内容。",
+          "screenshots": "截图",
+          "screenshotsHelp": "应用页面最多显示 {max} 张图片。仅限 https 链接。",
+          "data": "数据处理声明",
+          "dataHelp": "此应用存储什么、存储在哪里以及如何删除：显示在应用页面上的声明。",
+          "placement": "展示位置与访问",
+          "placementHelp": "排序方式，以及哪个套餐可以安装它。"
+        },
+        "tagline": "标语",
+        "taglineHint": "{count}/{max} 个字符（至少 5 个）。",
+        "logo": "Logo 地址",
+        "logoHint": "https 图片链接。未填写的集成将使用其配方中的 Logo。",
+        "longDescription": "详细描述",
+        "longDescriptionHint": "纯文本；空行分隔段落。最多 {max} 个字符。",
+        "highlights": "亮点",
+        "highlightsHint": "每行一项：最多 {max} 项，每项最多 {length} 个字符。",
+        "screenshotUrl": "截图 {n} 地址",
+        "screenshotCaption": "截图 {n} 说明",
+        "screenshotRemove": "删除截图 {n}",
+        "screenshotAdd": "添加截图",
+        "screenshotsNone": "没有截图。",
+        "dataSummary": "存储内容",
+        "dataSummaryHint": "最多 {max} 个字符。",
+        "dataRegions": "地区",
+        "dataRegionsHint": "以逗号分隔，最多 {max} 项，例如 India, EU。",
+        "dataDeletion": "数据如何删除",
+        "dataDeletionHint": "最多 {max} 个字符。",
+        "firstParty": "自营",
+        "firstPartyHint": "由我们自行开发和运营：显示自营徽章。",
+        "featured": "精选",
+        "featuredHint": "显示在精选展示区。",
+        "planFeature": "套餐功能",
+        "planFeatureHint": "工作区需要套餐中包含此功能，或通过附加包获得此功能，才能安装此应用。标签来自套餐目录。",
+        "planFeatureNone": "所有套餐",
+        "sortOrder": "排序序号",
+        "sortOrderHint": "0 到 {max} 之间的整数；数值越小越靠前。",
+        "problems": {
+          "required": "此项为必填。",
+          "tooShort": "至少 {min} 个字符。",
+          "tooLong": "最多 {max} 个字符。",
+          "https": "请输入完整的 https:// 地址。",
+          "tooMany": "最多 {max} 项。",
+          "number": "请输入 0 到 {max} 之间的整数。",
+          "unknownFeature": "请使用小写字母、数字和下划线，且以字母开头。",
+          "slug": "请使用 2 到 48 个小写字母、数字或连字符，且以字母开头。",
+          "icon": "请使用 1 到 32 个小写字母、数字或连字符。"
+        }
+      },
+      "summary": {
+        "title": "保存前请修复这些问题",
+        "sentTitle": "服务器未保存此内容",
+        "manifest": "{count, plural, other {清单中有 # 个问题}}",
+        "recipe": "{count, plural, other {配方中有 # 个问题}}",
+        "fields": "{count, plural, other {条目字段中有 # 个问题}}"
+      },
+      "detail": {
+        "title": "条目",
+        "back": "返回目录",
+        "firstParty": "自营",
+        "featured": "精选",
+        "none": "无",
+        "everyPlan": "所有套餐",
+        "kpi": {
+          "installs": "安装",
+          "published": "已发布版本",
+          "latest": "最新版本",
+          "versions": "版本"
+        },
+        "facts": {
+          "kind": "类型",
+          "category": "分类",
+          "connector": "连接器",
+          "planFeature": "套餐功能"
+        },
+        "tabs": {
+          "overview": "条目",
+          "versions": "版本（{count}）"
+        },
+        "operate": {
+          "title": "操作",
+          "description": "隐藏、终止、恢复或删除此条目。每项操作都需要确认。",
+          "lacking": "由于您的角色不包含 {permission}，部分操作已隐藏。"
+        },
+        "killed": {
+          "title": "此条目已终止",
+          "reason": "原因",
+          "effect": "所有安装将被停止，所有投递地址都会返回 410。工作区只能卸载。"
+        },
+        "notice": {
+          "killedTitle": "{name} 已终止",
+          "killedBody": "{count, plural, other {# 个安装已被关闭。}}",
+          "publishedTitle": "{name} {version} 已发布",
+          "publishedUpgraded": "{count, plural, other {# 个安装已即时迁移至该版本。}}",
+          "publishedWaiting": "{count, plural, other {# 个安装保持当前版本，直至其管理员接受新权限。}}",
+          "dismiss": "忽略"
+        }
+      },
+      "edit": {
+        "readOnly": "只读。编辑条目需要平台权限 {permission}。",
+        "conflict": "您编辑期间，其他人已保存此条目。请重新加载以查看其版本，然后再次进行更改。",
+        "reload": "重新加载",
+        "save": "保存更改",
+        "saving": "正在保存...",
+        "discard": "放弃更改",
+        "nothingToSave": "暂无更改。",
+        "saved": "已保存 {name}。"
+      },
+      "actions": {
+        "cancel": "取消",
+        "hide": "隐藏",
+        "unhide": "重新显示",
+        "unkill": "恢复",
+        "delete": "删除",
+        "kill": "紧急开关",
+        "confirm": {
+          "hide": {
+            "title": "隐藏 {name}？",
+            "body": "{name} 将不再出现在浏览和搜索中，因此新工作区无法找到它。现有安装将继续运行。",
+            "action": "隐藏"
+          },
+          "unhide": {
+            "title": "重新显示 {name}？",
+            "body": "{name} 将以其已发布版本重新出现在浏览和搜索中。",
+            "action": "重新显示"
+          },
+          "unkill": {
+            "title": "恢复 {name}？",
+            "body": "{name} 将变为隐藏状态，以便修复并重新发布。已被终止的安装将保持关闭：工作区必须重新安装它。",
+            "action": "恢复"
+          },
+          "delete": {
+            "title": "删除 {name}？",
+            "body": "这将永久删除草稿条目及其版本。已发布或已安装的条目无法删除：请改为隐藏。",
+            "action": "删除条目"
+          }
+        },
+        "done": {
+          "hide": "{name} 已隐藏。",
+          "unhide": "{name} 已重新显示。",
+          "unkill": "{name} 已恢复为隐藏状态。",
+          "kill": "{name} 已终止。",
+          "delete": "{name} 已删除。"
+        }
+      },
+      "killDialog": {
+        "eyebrow": "紧急开关",
+        "title": "终止 {name}？",
+        "close": "关闭",
+        "cancel": "取消",
+        "confirm": "终止 {name}",
+        "installs": "{name} 已安装在 {count, plural, other {# 个工作区}}中。",
+        "effects": {
+          "stop": "所有安装将立即停止工作。",
+          "connections": "所有连接都将被禁用。",
+          "address": "从下一次请求起，投递地址将返回 410 Gone。",
+          "uninstall": "工作区只能卸载它。"
+        },
+        "undo": "之后恢复此条目会将其设为隐藏状态。已终止的安装将保持关闭，工作区必须重新安装。",
+        "reason": "原因",
+        "reasonHint": "介于 {min} 到 {max} 个字符之间。它会保存在审计记录中，并显示给每个工作区。",
+        "count": "{count}/{max} 个字符（至少 {min} 个）。",
+        "typeSlug": "输入 {slug} 以确认",
+        "typeSlugHint": "条目的 ID，请按所示原样输入。"
+      },
+      "versions": {
+        "title": "版本",
+        "description": "此条目的每个版本。选择一个版本可查看其清单、配方和操作。",
+        "newVersion": "新版本",
+        "newVersionHint": "新版本将基于您正在查看的版本（{version}）创建，并提高版本号。它必须高于之前的每个版本。",
+        "tableCaption": "此条目的版本",
+        "cols": {
+          "version": "版本",
+          "status": "状态",
+          "changelog": "更新日志",
+          "scopes": "权限",
+          "reviewNote": "审核备注",
+          "dates": "日期"
+        },
+        "viewing": "正在查看",
+        "none": "-",
+        "dates": {
+          "created": "创建于",
+          "submitted": "提交于",
+          "reviewed": "审核于",
+          "published": "发布于"
+        },
+        "selectedTitle": "版本 {version}",
+        "selectedHelp": "按存储状态显示其权限、清单和配方。操作取决于版本状态及您的权限。",
+        "edit": "编辑",
+        "newFrom": "基于此版本创建新版本",
+        "submit": "提交审核",
+        "approve": "批准",
+        "reject": "拒绝",
+        "publish": "发布",
+        "rejectedNote": "审核人员的原因（显示给开发者）",
+        "recipeMissing": "此集成尚无配方。请先添加配方，再提交审核。",
+        "permissions": "权限",
+        "manifest": "清单",
+        "recipe": "配方",
+        "noRecipeIntegration": "此版本未存储配方。",
+        "noRecipeMiniApp": "迷你应用没有配方。",
+        "done": {
+          "submit": "版本 {version} 已提交审核。",
+          "approve": "版本 {version} 已批准。",
+          "reject": "版本 {version} 已拒绝。",
+          "publish": "版本 {version} 已发布。",
+          "created": "版本 {version} 已保存为草稿。",
+          "updated": "版本 {version} 已更新。"
+        }
+      },
+      "versionEditor": {
+        "newTitle": "新版本",
+        "newHelp": "基于您正在查看的版本创建，并提高版本号。请更改清单和配方，然后描述所做的更改。",
+        "editTitle": "编辑版本",
+        "editHelp": "替换此版本的清单和配方。已拒绝的版本保存时将恢复为草稿。",
+        "changelog": "更新日志",
+        "changelogHint": "此版本的更改内容。管理员会阅读。最多 {max} 个字符。",
+        "saveNew": "保存新版本",
+        "saveEdit": "保存更改",
+        "saving": "正在保存...",
+        "cancel": "取消"
+      },
+      "versionDialogs": {
+        "approve": {
+          "title": "批准 {name} {version}？",
+          "close": "关闭",
+          "cancel": "取消",
+          "confirm": "批准",
+          "body": "批准后即可发布该版本。批准不会改变工作区所看到的内容。",
+          "note": "备注（可选）",
+          "noteHint": "与版本一同保存。最多 {max} 个字符。"
+        },
+        "reject": {
+          "title": "拒绝 {name} {version}？",
+          "close": "关闭",
+          "cancel": "取消",
+          "confirm": "拒绝版本",
+          "body": "拒绝原因将显示给开发者。他们需编辑该版本并重新提交。",
+          "note": "原因",
+          "noteHint": "至少 {min} 个字符，最多 {max} 个字符。",
+          "count": "{count}/{max} 个字符（至少 {min} 个）。"
+        },
+        "publish": {
+          "title": "发布 {name} {version}？",
+          "cancel": "取消",
+          "confirm": "发布 {version}",
+          "body": "{name} {version} 将成为每个新安装获得的版本。",
+          "effects": {
+            "retire": "之前发布的版本将下架。",
+            "moveSame": "已授予权限已涵盖此版本的安装将立即迁移至该版本。",
+            "moveMore": "此版本要求更多权限的安装将保持当前版本运行，直至其管理员接受新的权限列表。",
+            "killed": "已终止的安装不受影响。"
+          },
+          "installs": "{count, plural, other {# 个安装将受影响。}}",
+          "first": "这是首个已发布版本。",
+          "addedScopes": "{count, plural, other {它请求已发布版本没有的 # 项权限：}}"
+        }
+      },
+      "categories": {
+        "title": "分类",
+        "description": "两个应用市场选项卡的分类。已关闭的分类对工作区隐藏；含有应用的分类无法删除。",
+        "new": "新建分类",
+        "emptyTitle": "暂无分类",
+        "emptyMessage": "创建条目前请先添加分类：每个条目都必须属于一个分类。",
+        "groupCount": "{count, plural, other {# 个分类}}",
+        "groupEmpty": "此类型暂无分类。",
+        "tableCaption": "分类",
+        "cols": {
+          "name": "名称",
+          "slug": "ID",
+          "icon": "图标",
+          "order": "排序",
+          "apps": "应用",
+          "status": "状态",
+          "actions": "操作"
+        },
+        "dash": "-",
+        "active": "已启用",
+        "inactive": "对工作区隐藏",
+        "edit": "编辑",
+        "delete": "删除",
+        "inUse": "包含应用",
+        "form": {
+          "createTitle": "新建分类",
+          "editTitle": "编辑 {name}",
+          "close": "关闭",
+          "cancel": "取消",
+          "create": "创建分类",
+          "save": "保存更改",
+          "kind": "类型",
+          "kinds": {
+            "mini_app": "迷你应用",
+            "integration": "集成"
+          },
+          "kindLocked": "类型无法更改。",
+          "slug": "ID（slug）",
+          "slugHint": "2 到 48 个小写字母、数字或连字符，且以字母开头。创建后无法更改。",
+          "slugLocked": "创建后无法更改 ID。",
+          "name": "名称",
+          "nameHint": "{min} 到 {max} 个字符。",
+          "descriptionField": "描述",
+          "descriptionHint": "可选，最多 {max} 个字符。",
+          "icon": "图标",
+          "iconHint": "可选图标名称：小写字母、数字和连字符。",
+          "sortOrder": "排序序号",
+          "sortOrderHint": "0 到 {max} 之间的整数；数值越小越靠前。",
+          "active": "已启用",
+          "activeHint": "关闭后，该分类对工作区隐藏。其应用仍保留该分类。",
+          "conflict": "他人已更改此分类。请重新加载以查看其版本，然后再次进行更改。",
+          "reload": "重新加载",
+          "created": "已创建分类 {name}。",
+          "saved": "已保存分类 {name}。"
+        },
+        "deleteDialog": {
+          "title": "删除 {name}？",
+          "body": "{name} 没有应用。删除后将永久移除。",
+          "action": "删除分类",
+          "cancel": "取消",
+          "done": "已删除分类 {name}。"
+        }
+      },
+      "requests": {
+        "title": "申请",
+        "description": "工作区提出的需求，按票数从高到低排列。开发顺序将遵循此列表。",
+        "readOnly": "只读。分流处理需要平台权限 {permission}。",
+        "filters": {
+          "label": "筛选",
+          "search": "搜索",
+          "searchPlaceholder": "名称",
+          "kind": "类型",
+          "allKinds": "所有类型",
+          "status": "状态",
+          "allStatuses": "所有状态"
+        },
+        "clearFilters": "清除筛选条件",
+        "emptyTitle": "暂无申请",
+        "emptyMessage": "当工作区申请集成时，它会连同其票数显示在此处。",
+        "noMatchTitle": "没有符合的申请",
+        "noMatchMessage": "没有符合这些筛选条件的内容。",
+        "loadMore": "加载更多",
+        "tableCaption": "按票数排列的申请",
+        "cols": {
+          "votes": "票数",
+          "request": "申请",
+          "notes": "工作区备注",
+          "firstWorkspace": "最早提出者",
+          "status": "状态",
+          "actions": "操作"
+        },
+        "votes": "{count, plural, other {# 票}}",
+        "noNotes": "暂无备注。",
+        "dash": "-",
+        "operatorNote": "你的备注:{note}",
+        "triageAction": "分诊",
+        "triage": {
+          "title": "分诊 {name}",
+          "close": "关闭",
+          "cancel": "取消",
+          "save": "保存",
+          "saved": "已保存 {name}。",
+          "votes": "{count, plural, other {# 票}}",
+          "status": "状态",
+          "note": "运营备注",
+          "noteHint": "可选,最多 {max} 个字符。仅运营人员可见。",
+          "noteTooLong": "最多 {max} 个字符。",
+          "conflict": "此请求已被他人更新。请刷新以查看其版本,然后重新进行修改。",
+          "reload": "刷新"
+        }
+      },
+      "usage": {
+        "title": "使用情况与运行状况",
+        "description": "按应用统计:按状态和运行状况划分的安装数,以及最近 24 小时和 7 天内已接收、重复、被拒绝和失败的投递数。",
+        "kpi": {
+          "apps": "应用",
+          "installs": "安装数",
+          "activeHint": "{count} 个已启用",
+          "needsLook": "需要关注",
+          "failed7d": "投递失败(7 天)"
+        },
+        "sort": {
+          "label": "排序方式",
+          "failed": "投递失败最多",
+          "installs": "安装数最多",
+          "name": "名称"
+        },
+        "emptyTitle": "暂无使用数据",
+        "emptyMessage": "应用在目录中存在后将显示在此处。",
+        "tableCaption": "各应用使用情况",
+        "cols": {
+          "app": "应用",
+          "installs": "安装数",
+          "health": "运行状况",
+          "events24h": "投递数(24 小时)",
+          "events7d": "投递数(7 天)",
+          "attention": "注意"
+        },
+        "installs": {
+          "active": "{count} 个已启用",
+          "disabled": "{count} 个已暂停",
+          "killed": "{count} 个已终止"
+        },
+        "health": {
+          "healthy": "{count} 个运行正常",
+          "degraded": "{count} 个性能下降",
+          "error": "{count} 个出错",
+          "needsReauth": "{count} 个需要重新登录",
+          "unknown": "{count} 个未知"
+        },
+        "events": {
+          "accepted": "已接收 {count}",
+          "duplicate": "重复 {count}",
+          "rejected": "已拒绝 {count}",
+          "failed": "失败 {count}"
+        },
+        "needsLook": "需要关注",
+        "reasons": {
+          "installErrors": "出错的安装",
+          "needsReauth": "需要重新登录的安装",
+          "failed24h": "最近 24 小时内投递失败",
+          "failed7d": "最近 7 天内投递失败"
+        },
+        "recipeHint": "集成方案可能已失效:对方门户更改了格式,或密钥已过期。请发布新版本的方案进行修复。",
+        "fine": "未发现问题",
+        "runbookNote": "若某集成有大量出错或需要重新登录的安装,或失败数持续上升,说明该集成已失效。请在新版本中修补其方案(运行手册第 8 节)。"
+      },
+      "price": {
+        "free": "免费",
+        "perMonth": "/ 月",
+        "trial": "{count, plural, other {# 天试用}}",
+        "notOnSale": "未上架销售"
+      },
+      "pricing": {
+        "title": "定价",
+        "description": "决定此应用免费还是付费及价格。以你设定的价格为准:开发者清单中的价格仅作建议。",
+        "billing": "付费应用以按月预付的方式出售:即通过常规结算流程购买的计费附加包。目前尚不支持自动扣款续费,因此工作区会在当月即将结束时再次付款。价格变更适用于新订阅以及每位订阅者的下一次付款;已付费的周期不会受到影响。",
+        "readOnly": "只读。修改定价需要平台权限 {permission}。",
+        "visibility": {
+          "label": "上架状态",
+          "note": "请在上方“运营”中隐藏、重新显示或下架该应用。此面板不会更改上架状态。"
+        },
+        "subscribers": {
+          "label": "订阅",
+          "count": "{count, plural, other {# 个有效订阅}}",
+          "view": "查看订阅",
+          "hint": "统计当前生效的付费、试用和赠送订阅。即将结束或已结束的订阅不计入。"
+        },
+        "changed": "价格上次修改",
+        "conflict": "你在编辑定价时,他人已保存了此上架信息。请刷新以查看其版本,然后重新进行修改。",
+        "reload": "刷新",
+        "model": {
+          "legend": "价格",
+          "free": "免费",
+          "freeHint": "不收费。所有工作区均可安装。",
+          "paid": "付费,按月",
+          "paidHint": "工作区通过结算流程订阅,按月付费。"
+        },
+        "fields": {
+          "amount": "月费",
+          "amountHint": "按工作区计费,每月:9 或 9.99。",
+          "currency": "货币",
+          "currencyHint": "三位字母代码,例如 USD。平台会拒绝未启用的货币。",
+          "trialDays": "免费试用(天)",
+          "trialDaysHint": "填 0 表示不提供试用,最多 {max} 天。每个工作区每款应用仅可享受一次试用。",
+          "annualAmount": "年费(可选)",
+          "annualAmountHint": "先行保存,供以后使用。年度计费尚未开发,因此工作区目前无法按年付费。",
+          "purchasable": "在售",
+          "purchasableHint": "关闭后,新工作区将无法订阅。已订阅的工作区仍可续费。"
+        },
+        "included": {
+          "title": "包含在套餐中",
+          "help": "可选。符合任一规则的工作区可免费获得此应用。两项都留空则向所有工作区收费。",
+          "feature": "套餐功能",
+          "featureHint": "套餐(含附加包)包含此功能的工作区。可选择建议项或输入功能键。",
+          "plan": "最低套餐",
+          "planHint": "使用此套餐或更高套餐的工作区。套餐按由低到高排列。",
+          "planNone": "不设套餐规则",
+          "planTyped": "无法加载套餐列表。请输入套餐 ID。"
+        },
+        "grants": {
+          "title": "授予套餐功能",
+          "help": "可选。订阅此应用后将开启的套餐功能,使该功能可作为应用出售,同时保持其现有的权限控制正常运行。只能授予默认关闭的功能。",
+          "thirdParty": "只有第一方应用可以授予套餐功能。如需使用此功能,请先在“上架”标签页中将其标记为第一方应用。",
+          "grandfather": "为现有用户保留权益",
+          "grandfatherHint": "可为已拥有授予功能的工作区赠送此应用,确保没有人失去该功能。请先保存,然后使用下方的“赠送现有用户”。须在套餐中关闭该功能之前完成。",
+          "compExisting": "赠送现有用户",
+          "compExistingHint": "已通过套餐拥有授予功能、但尚未订阅的工作区将免费获得此应用。你可以先查看名单。",
+          "compExistingAction": "赠送现有用户..."
+        },
+        "proposal": {
+          "title": "开发者建议",
+          "intro": "来自版本 {version} 的清单。这仅为建议,不会产生任何更改:工作区看到的是上方的定价。",
+          "note": "备注:{note}",
+          "models": {
+            "free": "免费",
+            "included": "包含在套餐中",
+            "addon": "付费附加包"
+          }
+        },
+        "save": "保存定价",
+        "saving": "保存中...",
+        "discard": "放弃更改",
+        "nothingToSave": "暂无更改。",
+        "saved": "已保存 {name} 的定价。",
+        "problems": {
+          "priceRequired": "请设置月费。",
+          "priceFormat": "请输入数字,如 9 或 9.99(最多两位小数)。",
+          "pricePositive": "价格必须大于零。",
+          "currencyRequired": "请选择货币。",
+          "currencyFormat": "请使用三位字母货币代码。",
+          "yearlyFormat": "请输入数字,如 90 或 89.99,或留空。",
+          "yearlyPositive": "年费必须大于零,或留空。",
+          "trialRange": "请输入 0 至 {max} 之间的整数天数。",
+          "featureFormat": "请使用小写字母、数字和下划线,且以字母开头。",
+          "planFormat": "请使用套餐 ID:小写字母、数字和下划线。",
+          "grantsInvalid": "每个套餐功能只能选择一次,最多 10 个功能。",
+          "grandfatherNeedsGrants": "请先至少选择一个应用授予的套餐功能。",
+          "includedGranted": "应用授予的功能不能同时作为包含它的条件。"
+        },
+        "confirm": {
+          "cancel": "继续编辑",
+          "priceChange": {
+            "title": "更改 {name} 的价格?",
+            "body": "目前有 {count, plural, other {# 个工作区已订阅}}。月费将从 {from} 变更为 {to}。",
+            "next": "新价格适用于新订阅以及每位订阅者的下一次付款。",
+            "paid": "工作区已付费的周期不会受到影响,不予退款,也不会重新计价。",
+            "action": "更改价格"
+          },
+          "toFree": {
+            "title": "将 {name} 设为免费?",
+            "body": "目前有 {count, plural, other {# 个工作区已订阅}}。",
+            "free": "之后所有工作区均可免费使用此应用,且不再对其计费。",
+            "paid": "订阅者保留其已付费的时长,不予退款。",
+            "action": "设为免费"
+          }
+        }
+      },
+      "grandfather": {
+        "eyebrow": "现有用户",
+        "title": "赠送 {name} 的现有用户",
+        "close": "关闭",
+        "cancel": "取消",
+        "change": "更改",
+        "run": "{count, plural, other {赠送 # 个工作区}}",
+        "preview": "检查符合条件的用户",
+        "intro": "为所有已通过套餐或自定义设置拥有 {name} 所授予套餐功能、但尚未订阅该应用的工作区提供赠送。你会先看到将获赠的名单;在你确认之前不会有任何更改。",
+        "timing": "请在该功能在套餐中关闭或其默认值更改之前进行此操作:系统会读取每个工作区当前拥有的权益。",
+        "note": "备注",
+        "matched": "{count, plural, =0 {没有符合条件的工作区} other {# 个工作区符合条件}}",
+        "nobody": "没有人在未订阅的情况下拥有授予功能,因此无需赠送。",
+        "sample": "部分工作区:",
+        "more": "以及另外 {count} 个",
+        "confirm": "请检查名单,然后确认以进行赠送。此操作会记录在审计日志中,无法一键撤销:如需结束赠送,请逐一取消各订阅。",
+        "refused": "仅当付费上架的应用授予套餐功能且已开启“为现有用户保留权益”并保存时,才可执行此操作。请检查其定价。",
+        "done": "{count, plural, other {已为 {name} 赠送 # 个工作区。}}"
+      },
+      "compFields": {
+        "duration": "时长多久?",
+        "months": "按月数计算",
+        "monthsLabel": "月数",
+        "monthsHint": "整数月,1 至 {max}。",
+        "monthsInvalid": "请输入 1 至 {max} 之间的整数月数。",
+        "open": "直到我结束为止",
+        "noteHint": "{min} 至 {max} 个字符。将保存在审计日志中。",
+        "count": "{count}/{max} 个字符(至少 {min} 个)。"
+      },
+      "cancelDialog": {
+        "eyebrow": "订阅",
+        "title": "取消 {workspace} 的订阅?",
+        "close": "关闭",
+        "back": "保留",
+        "summary": "{workspace} 拥有 {app}。",
+        "when": "何时结束?",
+        "periodEnd": {
+          "label": "付费周期结束时",
+          "detail": "停止续费。{workspace} 可继续使用 {app} 直至 {date},之后安装将暂停,其数据将被保留。"
+        },
+        "now": {
+          "label": "立即",
+          "detail": "权限立即结束。安装将暂停,其数据将被保留。已付费的时长不予退款。"
+        },
+        "noEnd": "此订阅没有结束日期,因此只能立即结束。",
+        "ending": "已设置为于 {date} 结束。你仍可立即结束。",
+        "reason": "原因",
+        "confirmPeriod": "停止续费",
+        "confirmNow": "立即结束",
+        "done": {
+          "periodEnd": "已停止 {workspace} 的续费。权限将持续至付费周期结束。",
+          "now": "{workspace} 已不再拥有 {app}。"
+        }
+      },
+      "compDialog": {
+        "eyebrow": "赠送",
+        "title": "赠送工作区",
+        "close": "关闭",
+        "cancel": "取消",
+        "submit": "赠送工作区",
+        "intro": "免费为工作区提供一款付费应用。此操作将连同你的备注记录在审计日志中。若该工作区正在为此应用付费,则会被拒绝:请先取消该订阅。",
+        "app": "应用",
+        "appPlaceholder": "选择付费应用",
+        "noPaidApps": "目前没有可赠送的付费应用。请先为上架应用设置价格。",
+        "workspaceSearch": "查找工作区",
+        "workspaceSearchPlaceholder": "工作区名称",
+        "workspaceHint": "显示最多 {count} 个匹配项。输入以缩小范围。",
+        "workspaceChosen": "已选择:{name}",
+        "workspaceNone": "没有匹配的工作区。",
+        "workspaceResults": "匹配的工作区",
+        "workspacePlan": "套餐:{plan}",
+        "workspaceLoading": "正在加载工作区...",
+        "note": "备注",
+        "effectMonths": "{count, plural, other {该工作区将免费获得此应用 # 个月。}}",
+        "effectOpen": "该工作区将免费获得此应用,直至你取消其订阅为止。",
+        "done": "{workspace} 现已免费拥有 {app}。"
+      },
+      "subscriptions": {
+        "title": "订阅",
+        "description": "了解哪些工作区为哪款付费应用付费、各工作区拥有的应用,以及带来的月收入。数据按标价计算:不含税费、优惠券或试用。",
+        "readOnly": "只读。赠送工作区和取消订阅需要平台权限 {permission}。",
+        "comp": "赠送工作区",
+        "kpi": {
+          "label": "按状态划分的订阅",
+          "active": "付费中",
+          "trialing": "试用中",
+          "comped": "已赠送",
+          "canceling": "即将结束",
+          "ended": "已结束",
+          "mrr": "月收入",
+          "mrrNone": "暂无付费订阅者",
+          "mrrCurrency": "月收入({currency})"
+        },
+        "summary": {
+          "emptyTitle": "暂无付费应用",
+          "emptyMessage": "为上架应用设置价格即可开始销售。应用将连同其订阅者显示在此处。",
+          "caption": "各应用按状态划分的订阅",
+          "cols": {
+            "app": "应用",
+            "price": "价格",
+            "active": "付费中",
+            "trialing": "试用中",
+            "comped": "已赠送",
+            "canceling": "即将结束",
+            "ended": "已结束",
+            "total": "合计",
+            "mrr": "月收入"
+          },
+          "free": "免费",
+          "totals": "所有应用",
+          "note": "月收入为每笔付费订阅按其所用货币计算的标价总和。试用、赠送和已结束的订阅不计入,且不同货币之间不会相加。"
+        },
+        "filters": {
+          "label": "筛选",
+          "app": "应用",
+          "allApps": "所有应用",
+          "status": "状态",
+          "allStatuses": "所有状态",
+          "source": "来源",
+          "allSources": "所有来源",
+          "search": "工作区",
+          "searchPlaceholder": "工作区名称"
+        },
+        "cols": {
+          "workspace": "工作区",
+          "app": "应用",
+          "status": "状态",
+          "source": "来源",
+          "started": "开始时间",
+          "period": "周期",
+          "amount": "金额",
+          "actions": "操作"
+        },
+        "period": {
+          "paidUntil": "已付费至 {date}",
+          "trialEnds": "试用于 {date} 结束",
+          "endsOn": "{date} 结束",
+          "compUntil": "赠送至 {date}",
+          "compOpen": "赠送直至你结束为止",
+          "endedOn": "已于 {date} 结束",
+          "none": "无结束日期"
+        },
+        "noCharge": "不收费",
+        "compBy": "由 {operator} 赠送:{note}",
+        "cancel": "取消...",
+        "tableCaption": "订阅",
+        "emptyTitle": "暂无订阅",
+        "emptyMessage": "工作区订阅、开始试用或获得赠送后将显示在此处。",
+        "noMatchTitle": "没有匹配的订阅",
+        "noMatchMessage": "没有符合这些筛选条件的内容。请尝试其他条件。",
+        "clearFilters": "清除筛选",
+        "loadMore": "加载更多"
+      }
+    }
+  }
+}

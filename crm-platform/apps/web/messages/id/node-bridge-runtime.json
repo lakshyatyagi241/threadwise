@@ -1,0 +1,164 @@
+{
+  "node-bridge-runtime": {
+    "nav": {
+      "group": "Saluran",
+      "item": "Jembatan Node"
+    },
+    "page": {
+      "title": "URL & token jembatan Node",
+      "eyebrow": "global · jembatan node",
+      "description": "Jembatan Node bersama yang dipakai setiap mesin — Unofficial API mengirim lewat jembatan ini dan pengaturan kecepatan pengiriman diterapkan di sini. Atur sekali; berlaku untuk seluruh platform.",
+      "superOnly": "Hanya super admin yang dapat mengubah jembatan Node. Anda dapat melihat nilai yang tersimpan."
+    },
+    "bridge": {
+      "tokenSet": "Token diatur",
+      "noToken": "Tanpa token",
+      "serverUrl": "URL server",
+      "serverUrlPlaceholder": "http://localhost:8888",
+      "urlInvalid": "Masukkan URL server yang valid (http:// atau https://) terlebih dahulu.",
+      "serverUrlHint": "Alamat tempat jembatan Node Anda dapat dijangkau. Webhook masuk dan status ditangani otomatis — jembatan mengambil URL kami dari variabel env APP_DOMAIN_NAME.",
+      "token": "Token webhook Node (X-Node-Token)",
+      "tokenPlaceholder": "rahasia X-Node-Token bersama",
+      "tokenSavedPlaceholder": "••• tersimpan, kosongkan untuk mempertahankan",
+      "tokenHint": "Rahasia bersama yang dikirim jembatan Node sebagai X-Node-Token. Harus sama dengan token di konfigurasi jembatan Node Anda. Disembunyikan setelah disimpan; tempel ulang hanya untuk mengganti.",
+      "save": "Simpan",
+      "saving": "Menyimpan…",
+      "test": "Uji koneksi",
+      "testing": "Menguji…",
+      "saved": "Jembatan Node disimpan."
+    },
+    "pacing": {
+      "eyebrow": "kecepatan",
+      "title": "Kecepatan & pengelompokan pengirim",
+      "msgGap": "Jeda antar pesan (detik)",
+      "msgGapHint": "Detik di antara pengiriman berurutan.",
+      "batchesGap": "Ukuran batch",
+      "batchesGapHint": "Penerima per batch.",
+      "bwMsgGap": "Jeda antar batch (menit)",
+      "bwMsgGapHint": "Menit di antara batch.",
+      "enableBatches": "Aktifkan batch",
+      "update": "Perbarui waktu",
+      "updating": "Menyimpan…",
+      "saved": "Waktu pengiriman diperbarui.",
+      "tipTitle": "Tips kecepatan",
+      "tip": "Turunkan jeda pesan hanya setelah uji 24 jam — Meta membatasi pengirim agresif. 3 detik adalah nilai aman bawaan."
+    },
+    "errors": {
+      "forbidden": "Anda tidak memiliki izin untuk melakukan itu.",
+      "conflict": "Orang lain mengubah pengaturan ini. Halaman dimuat ulang; coba lagi.",
+      "validation": "Periksa nilainya dan coba lagi.",
+      "request": "Permintaan tidak dapat diselesaikan.",
+      "unexpected": "Terjadi kesalahan di pihak kami. Coba lagi sebentar lagi.",
+      "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda."
+    },
+    "loading": "Memuat",
+    "retry": "Coba lagi",
+    "unofficial": {
+      "eyebrow": "sakelar platform",
+      "title": "WhatsApp Tidak Resmi (nomor pribadi lewat QR)",
+      "status": {
+        "disabled": "Dinonaktifkan / Tidak didukung",
+        "enabled": "Diaktifkan (tidak didukung)"
+      },
+      "explanation": "Kami hanya mendukung WhatsApp Business API resmi. Ini adalah sakelar seluruh platform untuk nomor pribadi: tidak didukung dan dapat membuat nomor diblokir. Meski aktif, hanya workspace yang diizinkan di bawah yang dapat menggunakannya.",
+      "state": {
+        "disabled": "Mati. Tidak ada workspace yang dapat melihat atau menghubungkan nomor pribadi, apa pun isi daftar di bawah: alur hubung QR, Warmer, dan pengirim nomor pribadi disembunyikan, dan pengiriman lewat jalur ini ditolak.",
+        "enabled": "Aktif, hanya untuk workspace yang diizinkan. Workspace yang tidak ada di daftar di bawah tidak melihat apa pun. Ini tidak didukung; nomor tersebut dapat diblokir oleh WhatsApp."
+      },
+      "enable": "Aktifkan WhatsApp tidak resmi",
+      "disable": "Nonaktifkan WhatsApp tidak resmi",
+      "cancel": "Batal",
+      "enableDialog": {
+        "title": "Aktifkan WhatsApp tidak resmi?",
+        "body": "Ini tidak didukung. Nomor yang terhubung dengan cara ini dapat diblokir WhatsApp, dan pesan yang dikirim lewat nomor tersebut tidak dijamin pengirimannya. Menyalakan sakelar tidak otomatis memberi akses kepada siapa pun: hanya workspace di daftar izin yang dapat menggunakannya.",
+        "typeLabel": "Ketik {word} untuk konfirmasi",
+        "confirm": "Aktifkan"
+      },
+      "disableDialog": {
+        "title": "Nonaktifkan WhatsApp tidak resmi?",
+        "body": "Setiap workspace akan berhenti melihat nomor pribadi, Warmer, dan alur hubung QR, serta pengiriman lewat nomor pribadi akan ditolak. Data tersimpan dan daftar izin tetap disimpan.",
+        "confirm": "Nonaktifkan"
+      },
+      "enabledToast": "WhatsApp tidak resmi sekarang aktif.",
+      "disabledToast": "WhatsApp tidak resmi sekarang nonaktif.",
+      "dimNote": "Pengaturan di bawah hanya berlaku untuk nomor pribadi dan tidak digunakan saat WhatsApp tidak resmi nonaktif.",
+      "errors": {
+        "forbidden": "Hanya super admin yang dapat mengubah sakelar ini.",
+        "conflict": "Orang lain mengubah pengaturan ini. Halaman dimuat ulang; coba lagi.",
+        "validation": "Periksa nilainya dan coba lagi.",
+        "request": "Permintaan tidak dapat diselesaikan.",
+        "unexpected": "Terjadi kesalahan di pihak kami. Coba lagi sebentar lagi.",
+        "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda."
+      },
+      "allowedCount": "{count, plural, =0 {Tidak ada workspace yang diizinkan} other {# workspace diizinkan}}"
+    },
+    "workspaces": {
+      "eyebrow": "daftar izin",
+      "title": "Workspace dengan WhatsApp tidak resmi",
+      "description": "Mati untuk semua secara default. Hanya workspace yang tercantum di sini yang dapat memakai WhatsApp nomor pribadi, dan hanya selama mesin di atas aktif.",
+      "count": "{count, plural, =0 {Tidak ada workspace yang diizinkan} other {# workspace diizinkan}}",
+      "engineOff": "Mesin nonaktif, jadi workspace ini belum dapat menggunakannya.",
+      "engineOffAction": "Ke sakelar",
+      "readOnly": "Hanya super admin yang dapat menambah atau menghapus workspace. Anda dapat melihat daftarnya.",
+      "search": {
+        "label": "Tambah workspace",
+        "placeholder": "Cari berdasarkan nama workspace, slug, atau email pemilik",
+        "hint": "Ketik minimal 2 karakter.",
+        "searching": "Mencari",
+        "none": "Tidak ada workspace yang cocok dengan \"{q}\".",
+        "add": "Tambah",
+        "alreadyAdded": "Sudah diizinkan",
+        "owner": "Pemilik: {email}",
+        "noPlan": "Tanpa paket",
+        "results": "Hasil pencarian"
+      },
+      "table": {
+        "caption": "Workspace yang diizinkan memakai WhatsApp tidak resmi",
+        "workspace": "Workspace",
+        "plan": "Paket",
+        "devices": "Perangkat",
+        "since": "Diaktifkan sejak",
+        "by": "Diaktifkan oleh",
+        "note": "Catatan",
+        "actions": "Tindakan",
+        "devicesValue": "{active} aktif dari {total}",
+        "noPlan": "Tanpa paket",
+        "system": "Tidak diketahui",
+        "noNote": "Tidak ada",
+        "remove": "Hapus"
+      },
+      "empty": {
+        "title": "Belum ada workspace yang diizinkan",
+        "message": "Tidak ada yang dapat memakai WhatsApp nomor pribadi, meski mesinnya aktif. Cari di atas untuk menambahkan workspace pertama."
+      },
+      "loadMore": "Muat lebih banyak",
+      "loadingMore": "Memuat",
+      "addDialog": {
+        "title": "Izinkan {name}?",
+        "body": "{name} ({slug}) dapat menghubungkan nomor WhatsApp pribadi lewat kode QR selama mesin aktif. Ini tidak didukung dan nomor dapat diblokir WhatsApp.",
+        "noteLabel": "Catatan (opsional)",
+        "notePlaceholder": "Mengapa workspace ini, siapa yang meminta",
+        "noteCount": "{count} / {max}",
+        "noteTooLong": "Catatan maksimal {max} karakter.",
+        "confirm": "Izinkan workspace"
+      },
+      "removeDialog": {
+        "title": "Hapus {name}?",
+        "body": "{name} tidak lagi dapat memakai WhatsApp nomor pribadi. Sesinya berhenti dalam 20 detik. Sesi tersimpan tetap ada, sehingga mengizinkan workspace lagi akan memulihkannya.",
+        "confirm": "Hapus"
+      },
+      "cancel": "Batal",
+      "addedToast": "{name} sekarang dapat memakai WhatsApp tidak resmi.",
+      "removedToast": "{name} dihapus dari daftar.",
+      "errors": {
+        "forbidden": "Hanya super admin yang dapat mengubah daftar ini.",
+        "conflict": "Daftar berubah sementara itu. Daftar dimuat ulang; coba lagi.",
+        "validation": "Periksa nilainya dan coba lagi.",
+        "request": "Permintaan tidak dapat diselesaikan.",
+        "unexpected": "Terjadi kesalahan di pihak kami. Coba lagi sebentar lagi.",
+        "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda."
+      },
+      "retry": "Coba lagi"
+    }
+  }
+}

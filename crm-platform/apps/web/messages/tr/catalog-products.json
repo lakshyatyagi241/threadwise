@@ -1,0 +1,730 @@
+{
+  "catalogProducts": {
+    "nav": {
+      "catalog": "Katalog",
+      "products": "Ürünler",
+      "reviews": "Yorumlar"
+    },
+    "common": {
+      "dismiss": "Kapat",
+      "retry": "Tekrar dene",
+      "requestId": "İstek kimliği"
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapma izniniz yok.",
+      "signedOut": "Oturumunuz sona erdi. Devam etmek için yeniden giriş yapın.",
+      "conflict": "Siz düzenlerken başka biri bunu değiştirdi. En son sürümü görmek için yeniden yükleyin.",
+      "validation": "Bazı alanlar geçerli değil. Vurgulanan alanları kontrol edip tekrar deneyin.",
+      "unavailable": "Kataloğun bu bölümü bu sunucuda henüz kullanılamıyor.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "notFound": "Öğe bulunamadı. Silinmiş olabilir.",
+      "planLocked": "Planınız WhatsApp kataloğunu içermiyor. Açmak için yükseltin.",
+      "planLimit": "Planınızın mesaj sınırına ulaşıldı.",
+      "wallet": "Cüzdan bakiyeniz göndermek için çok düşük. Bakiye ekleyip tekrar deneyin.",
+      "sendBlocked": "Gönderim şu anda engelli: {detail}",
+      "notConnected": "Bağlı katalog yok. Önce Kurulum sekmesinden bir tane bağlayın.",
+      "metaRejected": "Meta isteği reddetti: {detail}",
+      "noWaba": "Bağlı WhatsApp Business (WABA) numarası bulunamadı. Önce bir WABA numarası bağlayın veya kataloğu elle bağlayın.",
+      "wabaToken": "WABA numaranız bağlı ancak belirteci okunamadı. Numarayı yeniden bağlayın veya kataloğu elle bağlayın.",
+      "noCatalogLinked": "WhatsApp hesabınıza henüz bağlı bir ürün kataloğu yok. Meta Commerce Manager içinde bir tane oluşturup tekrar deneyin veya elle bağlayın.",
+      "noRecipients": "En az bir kişi, grup seçin veya bir numara yapıştırın.",
+      "tooManyRecipients": "Gönderim başına en fazla 500 alıcı. Daha küçük partilere bölün.",
+      "noProducts": "Önce en az bir ürün seçin.",
+      "noSender": "Bağlı cihaz yok. Önce Kanallar bölümünde bir tane eşleştirin.",
+      "sendFailed": "Mesaj gönderilemedi: {detail}",
+      "collectionProducts": "Seçilen ürünlerin hiçbiri bu çalışma alanına ait değil.",
+      "providerFailed": "WhatsApp veya Meta isteği tamamlayamadı: {detail}",
+      "unexpected": "Bir şeyler ters gitti. Biraz sonra tekrar deneyin."
+    },
+    "paywall": {
+      "kicker": "Premium özellik",
+      "title": "WhatsApp mağaza vitrini planınızda yok",
+      "message": "Bunu içeren bir plan seçin. Yükseltin ve bu özelliği anında açın.",
+      "back": "Geri dön",
+      "compare": "Tüm planları karşılaştır"
+    },
+    "status": {
+      "unsynced": "eşitlenmedi",
+      "pending": "beklemede",
+      "synced": "eşitlendi",
+      "failed": "başarısız"
+    },
+    "pager": {
+      "showing": "{total} sonuçtan {from} - {to} arası gösteriliyor",
+      "label": "Sayfalar",
+      "prev": "Önceki sayfa",
+      "next": "Sonraki sayfa",
+      "goTo": "{page}. sayfaya git"
+    },
+    "shell": {
+      "back": "Entegrasyonlara dön",
+      "breadcrumb": "Entegrasyonlar / WhatsApp Kataloğu",
+      "titleLead": "Ürünleri şuraya gönder:",
+      "titleAccent": "WhatsApp sohbetleri",
+      "connected": "{provider} · bağlı",
+      "notConnected": "Bağlı değil",
+      "tabs": "Katalog bölümleri",
+      "tab": {
+        "setup": "Kurulum",
+        "send": "Gönder",
+        "collections": "Koleksiyonlar",
+        "activity": "Etkinlik"
+      }
+    },
+    "connect": {
+      "provider": "Sağlayıcı",
+      "providers": {
+        "meta_cloud": "Meta Cloud API (doğrudan)",
+        "dialog_360": "360dialog (BSP)"
+      },
+      "catalogId": "Katalog kimliği",
+      "catalogName": "Katalog adı",
+      "label": "(etiket)",
+      "catalogNamePlaceholder": "örn. Ana Katalog",
+      "wabaId": "WABA kimliği",
+      "phoneNumberId": "Telefon numarası kimliği",
+      "accessToken": "Erişim belirteci / API anahtarı",
+      "accessTokenHint": "Şifreli olarak saklanır. Kaydederken Meta ile doğrulanır.",
+      "accessTokenPlaceholder": "EAAxx... veya D360-API-KEY...",
+      "showToken": "Belirteci göster",
+      "hideToken": "Belirteci gizle",
+      "submit": "Bağla ve doğrula",
+      "connected": "Katalog bağlandı.",
+      "problem": {
+        "required": "Bu alan zorunludur.",
+        "tooShort": "Erişim belirteci en az 20 karakter olmalıdır.",
+        "tooLong": "Bu değer çok uzun."
+      }
+    },
+    "setup": {
+      "loading": "Katalog yükleniyor",
+      "loadError": "Katalog yüklenemedi",
+      "cancel": "İptal",
+      "manage": "Yönet →",
+      "view": "Görüntüle →",
+      "advanced": {
+        "kicker": "İsteğe bağlı · gelişmiş",
+        "titleManual": "Veya bir kataloğu elle bağlayın",
+        "titleAlso": "Ayrıca bir Meta Commerce Kataloğu bağlayın",
+        "intro": "WhatsApp Business profilinizdeki resmî katalog düğmesini, sepeti ve \"sipariş verildi\" web kancasını açar. Yalnızca doğrulanmış bir WABA kullanıyorsanız gerekir. Resmî olmayan API bunsuz da sorunsuz çalışır."
+      },
+      "noSender": {
+        "title": "Önce bir cihaz bağlayın",
+        "message": "Katalog gönderimi için bu hesapta en az bir WhatsApp cihazı gerekir: Resmî olmayan API QR eşleştirmesi (ücretsiz) veya Meta tarafından doğrulanmış bir WABA numarası. Yalnızca 30 saniye sürer.",
+        "connect": "Cihaz bağla"
+      },
+      "ready": {
+        "kicker": "✓ Göndermeye hazır",
+        "officialTitle": "Resmî WhatsApp katalog modu",
+        "unofficialTitle": "Resmî olmayan API karusel modu",
+        "officialBody": "Bağlı {count, plural, one {# numaranız} other {# numaranız}} var. Katalog gönderimleri bağlı {engine} numaranız üzerinden gider. Etkileşimli ürün mesajları için aşağıdan bir Meta Commerce Kataloğu bağlayın.",
+        "unofficialBody": "Bağlı {count, plural, one {# cihazınız} other {# cihazınız}} var. Katalog gönderimleri şu anda Resmî olmayan API üzerinden yerel WhatsApp karuselleriyle çalışır; Meta kurulumu ve onay beklemesi gerekmez.",
+        "head": "Ürünleri herhangi bir müşterinin numarasına göndermek için <b>Gönder sekmesine</b> gidin.",
+        "openSend": "Gönder sekmesini aç"
+      },
+      "senders": {
+        "title": "Bağlı cihazlar",
+        "noNumber": "Numara yok",
+        "connected": "bağlı"
+      },
+      "tiles": {
+        "products": "Ürünler",
+        "shops": "Mağazalar",
+        "recentSends": "Son gönderimler",
+        "total": "Toplam",
+        "synced": "Eşitlendi",
+        "pending": "Beklemede",
+        "failed": "Başarısız"
+      },
+      "autodetect": {
+        "title": "Meta Commerce Kataloğunuzu bağlayın",
+        "intro": "WhatsApp numaranız zaten bağlı, bu yüzden kataloğu doğrudan Meta üzerinden çekebiliriz; Katalog Kimliği, WABA Kimliği veya erişim belirteci yapıştırmanız gerekmez. Resmî katalog düğmesini, sepeti ve \"sipariş verildi\" web kancasını açar.",
+        "button": "WhatsApp hesabımdan getir",
+        "linked": "Katalog WhatsApp hesabınızdan bağlandı."
+      },
+      "header": {
+        "connected": "Bağlı · {provider}",
+        "defaultName": "Meta Commerce Kataloğu",
+        "sendProducts": "Ürünleri gönder →",
+        "disconnect": "Bağlantıyı kes"
+      },
+      "disconnectTitle": "Katalog bağlantısı kesilsin mi?",
+      "disconnectConfirm": "Ürünler Meta üzerinde kalır; yalnızca eşitlemeyi durdururuz.",
+      "disconnected": "Katalog bağlantısı kesildi.",
+      "table": {
+        "title": "Ürünler",
+        "hint": "En son güncellenenler · Meta'yı sorgulamak için <b>Durumu yenile</b> düğmesine tıklayın.",
+        "manage": "Ürünleri yönet →",
+        "product": "Ürün",
+        "sku": "SKU",
+        "price": "Fiyat",
+        "availability": "Stok durumu",
+        "metaStatus": "Meta durumu",
+        "actions": "İşlemler",
+        "empty": "Henüz ürün yok.",
+        "addOne": "Bir tane ekleyin →",
+        "sync": {
+          "idle": "Eşitle",
+          "busy": "…",
+          "queued": "Sıraya alındı ✓",
+          "skipped": "Sıraya alınmadı",
+          "failed": "Başarısız"
+        }
+      }
+    },
+    "sync": {
+      "title": "Ürünleri Meta ile eşitle",
+      "intro": "İstek başına en fazla 1000 gönderir, bitene kadar döner. {count} bekliyor.",
+      "syncButton": "Meta ile eşitle",
+      "syncing": "Eşitleniyor…",
+      "pollButton": "Durumu yenile",
+      "polling": "Sorgulanıyor…",
+      "importButton": "Meta'dan içe aktar",
+      "importing": "İçe aktarılıyor…",
+      "importHint": "Doğrudan Meta Commerce Manager içinde oluşturulan ürünleri kataloğa çekin.",
+      "progress": "Eşitleme ilerlemesi",
+      "starting": "Başlıyor…",
+      "pushed": "Gönderilen {pushed} · bekleyen {pending} · eşitlenen {synced} · başarısız {failed}",
+      "stalled": "Bu çalıştırmada başka bir şey gönderilemedi. Başarısız olarak işaretlenen ürünleri kontrol edin.",
+      "done": "bitti · {count} sıraya alındı",
+      "polled": "Sorgulandı · eşitlenen +{synced} · başarısız +{failed}",
+      "importStarting": "Meta'dan içe aktar · başlıyor…",
+      "imported": "{total} içinden {imported} içe aktarıldı · {updated} güncellendi · {skipped} atlandı"
+    },
+    "commerce": {
+      "title": "Ticaret ayarları",
+      "visible": "Kataloğu işletme profilinde göster",
+      "visibleHint": "WhatsApp Business profilinize \"Katalog\" düğmesini ekler.",
+      "cart": "Sepeti etkinleştir",
+      "cartHint": "Alıcılar siparişi göndermeden önce birden fazla ürün ekleyebilir.",
+      "save": "Kaydet",
+      "saved": "Ticaret ayarları güncellendi."
+    },
+    "automation": {
+      "title": "Otomasyon",
+      "ack": "Müşteri sepet gönderdiğinde otomatik yanıt",
+      "ackHint": "Alıcı sessizlik yerine hemen bir sipariş alındı mesajı (ürünler + toplam) alır; katalog dönüşümünün 1 numaralı düzeltmesi.",
+      "payUrl": "Ödeme bağlantısı tabanı (isteğe bağlı)",
+      "payUrlHint": "Sipariş kimliğini sona ekleriz; yalnızca alındığını onaylamak için boş bırakın.",
+      "concierge": "Katalog danışmanı: ürün sorularını otomatik yanıtla",
+      "conciergeHint": "Bir müşteri örneğin \"2000 altı kırmızı ayakkabı\" yazdığında, eşleşen bir Çoklu Ürün Mesajı ile otomatik yanıt verir. Varsayılan olarak kapalıdır.",
+      "header": "Yanıt başlığı",
+      "headerPlaceholder": "İşte bulduklarım",
+      "max": "En fazla ürün",
+      "replyOnEmpty": "Eşleşme olmasa bile yanıt ver",
+      "replyOnEmptyHint": "Aksi hâlde danışman eşleşme yoksa sessiz kalır (önerilir).",
+      "emptyText": "Eşleşme yok yanıtı",
+      "emptyTextPlaceholder": "Üzgünüm, eşleşen bir sonuç bulamadım. Başka bir anahtar kelime veya bütçe deneyin.",
+      "save": "Otomasyonu kaydet",
+      "saved": "Otomasyon ayarları kaydedildi.",
+      "problem": {
+        "badUrl": "https:// ile başlayan tam bir bağlantı girin",
+        "tooLong": "Bu metin çok uzun.",
+        "range": "1 ile 30 arasında bir tam sayı girin."
+      }
+    },
+    "health": {
+      "title": "Katalog sağlığı",
+      "needAttention": "{count, plural, one {# ürünün satılabilmesi için dikkat edilmesi gerekiyor.} other {# ürünün satılabilmesi için dikkat edilmesi gerekiyor.}}",
+      "allGood": "Her ürün katalog için hazır. Harika.",
+      "noImage": "görsel yok",
+      "noPrice": "fiyat yok",
+      "syncError": "eşitleme hatası",
+      "showFix": "Düzeltilecek ürünleri göster",
+      "fix": "Düzelt →"
+    },
+    "send": {
+      "loading": "Gönderim formu yükleniyor",
+      "loadError": "Gönderim formu yüklenemedi",
+      "maxProducts": "Karusel başına en fazla {max} ürün.",
+      "noSender": {
+        "title": "Önce bir cihaz bağlayın",
+        "message": "Katalog mesajı göndermek için bağlı bir WhatsApp cihazına ihtiyacınız var.",
+        "connect": "Cihaz bağla"
+      },
+      "feedback": {
+        "failed": "Hiçbir şey gönderilmedi.",
+        "sent": "{count, plural, one {# alıcıya gönderildi} other {# alıcıya gönderildi}}",
+        "someFailed": "{count} başarısız"
+      },
+      "recipients": {
+        "title": "Alıcılar",
+        "count": "{count, plural, one {# alıcı} other {# alıcı}}",
+        "source": "Alıcılar nereden gelir",
+        "modes": {
+          "groups": {
+            "title": "Kişi grupları",
+            "hint": "Kayıtlı segmentleri kullanın."
+          },
+          "contacts": {
+            "title": "Tekil kişiler",
+            "hint": "Belirli kişileri seçin."
+          },
+          "manual": {
+            "title": "Elle girilen numaralar",
+            "hint": "Yapıştırın, her satırda bir tane."
+          }
+        },
+        "noGroups": "Henüz kişi grubu yok. Önce <link>Kişiler</link> sayfasından bir tane oluşturun.",
+        "groupContacts": "{count, plural, one {# kişi} other {# kişi}}",
+        "noContacts": "Henüz kişi yok. <link>Kişiler</link> sayfasından ekleyin.",
+        "searchContacts": "Kişilerde ara…",
+        "noMatch": "Eşleşen kişi yok.",
+        "paste": "Telefon numaralarını yapıştırın",
+        "pastePlaceholder": "Her satırda bir numara, ülke kodunu ekleyin",
+        "pasteHint": "Her satırda bir tane, virgül veya noktalı virgülle. Ülke kodu gereklidir (+ ile veya + olmadan).",
+        "overCap": "Gönderim başına en fazla {max} alıcı. Daha küçük partilere bölün."
+      },
+      "format": {
+        "title": "Biçim ve gönderen",
+        "spm": {
+          "title": "Tek ürün",
+          "hint": "Bir ürün kartı"
+        },
+        "mpm": {
+          "title": "Ürün listesi (karusel)",
+          "hint": "En fazla 30 ürün"
+        },
+        "link": {
+          "title": "Katalog bağlantısı",
+          "hint": "Düz metin · her zaman çalışır"
+        },
+        "sendFrom": "Gönderen",
+        "fromShop": "Mağazadan",
+        "brandingContext": "(marka bağlamı)",
+        "shopFallback": "Mağaza {slug}"
+      },
+      "products": {
+        "title": "Ürünler",
+        "selected": "({count} seçildi)",
+        "selectedOf": "({count} seçildi / {max})",
+        "search": "Ürünlerde ara…",
+        "showingFrom": "<b>{shop}</b> mağazasının ürünleri gösteriliyor. Başka bir mağazanın kataloğunu görmek için yukarıdaki <b>Mağazadan</b> seçicisini değiştirin.",
+        "loading": "Ürünler yükleniyor…",
+        "loadError": "Ürünler yüklenemedi",
+        "other": "Diğer",
+        "noMatch": "Aramanızla eşleşen ürün yok.",
+        "emptyShop": "Bu mağazada etkin ürün yok.",
+        "empty": "Henüz etkin ürün yok.",
+        "addOne": "Bir tane ekleyin →"
+      },
+      "message": {
+        "title": "Mesaj ve gönderim",
+        "text": "Mesaj metni",
+        "optional": "(isteğe bağlı)",
+        "placeholder": "örn. Beğenebileceğiniz bazı ürünler, daha fazla bilgi için birine dokunun.",
+        "header": "Üst bilgi",
+        "headerPlaceholder": "örn. Şunlara göz atın",
+        "footer": "Alt bilgi",
+        "footerPlaceholder": "örn. Çıkmak için DUR yazın",
+        "counter": "{used} / {max}",
+        "viewRecent": "Son gönderimleri görüntüle →",
+        "sendProduct": "Ürünü gönder →",
+        "sendCarousel": "Karuseli gönder →",
+        "sendLink": "Katalog bağlantısını gönder →",
+        "sending": "Gönderiliyor…",
+        "noPermission": "Bu formu görüntüleyebilirsiniz ancak katalog mesajı gönderemezsiniz."
+      },
+      "rail": {
+        "label": "Gönderim özeti",
+        "summary": "Özet",
+        "recipients": "Alıcılar",
+        "products": "Ürünler",
+        "format": "Biçim",
+        "formats": {
+          "spm": "Tek ürün",
+          "mpm": "Çoklu ürün listesi",
+          "link": "Katalog bağlantısı"
+        },
+        "catalog": "Katalog",
+        "metaCommerce": "Meta Commerce",
+        "productCount": "{count, plural, one {# ürün} other {# ürün}}",
+        "unofficial": "Resmî olmayan API (karusel)",
+        "linkMeta": "Meta'yı bağla →",
+        "recent": "Son gönderimler",
+        "windowTitle": "24 saatlik pencere",
+        "windowBody": "SPM ve liste modu, alıcının son 24 saatte size mesaj göndermiş olmasını gerektirir. <b>Katalog bağlantısı</b> modu her zaman çalışır."
+      }
+    },
+    "collections": {
+      "loading": "Koleksiyonlar yükleniyor",
+      "loadError": "Koleksiyonlar yüklenemedi",
+      "title": "Koleksiyonlar",
+      "intro": "Bir ürün grubunu bir kez kaydedin, sonra her seferinde yeniden seçmeden tek tıkla Çoklu Ürün Mesajı olarak gönderin.",
+      "new": "Yeni koleksiyon",
+      "create": "Koleksiyon oluştur",
+      "created": "Koleksiyon oluşturuldu.",
+      "updated": "Koleksiyon güncellendi.",
+      "deleted": "Koleksiyon silindi.",
+      "empty": "Henüz koleksiyon yok. Yukarıdan ilkini oluşturun.",
+      "productCount": "{count, plural, =0 {ürün yok} one {# ürün} other {# ürün}}",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "cancel": "İptal",
+      "saveChanges": "Değişiklikleri kaydet",
+      "deleteTitle": "Bu koleksiyon silinsin mi?",
+      "deleteBody": "\"{name}\" silinecek. Ürünler etkilenmez.",
+      "send": {
+        "button": "Gönder",
+        "noLive": "Bu koleksiyonda gönderilecek canlı ürün yok.",
+        "needNumber": "Önce bir alıcı numarası girin.",
+        "sending": "Gönderiliyor…",
+        "sent": "{count, plural, one {# alıcıya gönderildi} other {# alıcıya gönderildi}}",
+        "someFailed": "{count} başarısız",
+        "failed": "Hiçbir şey gönderilmedi.",
+        "number": "Alıcı numarası",
+        "numberPlaceholder": "Ülke koduyla numara",
+        "header": "Üst bilgi (isteğe bağlı)",
+        "headerPlaceholder": "Şunlara göz atın",
+        "from": "Gönderen",
+        "auto": "Otomatik (etkin)",
+        "go": "MPM olarak gönder"
+      },
+      "picker": {
+        "filter": "Ürünleri filtrele…",
+        "empty": "Henüz etkin ürün yok.",
+        "addOne": "Bir tane ekleyin →",
+        "noMatch": "Eşleşen ürün yok.",
+        "max": "Bir koleksiyon en fazla {max} ürün içerebilir."
+      },
+      "form": {
+        "name": "Ad",
+        "namePlaceholder": "örn. Yaz İndirimi",
+        "description": "Açıklama (isteğe bağlı)",
+        "products": "Ürünler",
+        "upTo": "en fazla {max}",
+        "reload": "Yeniden yükle",
+        "problem": {
+          "nameRequired": "Bir ad girin.",
+          "nameTooLong": "Ad çok uzun.",
+          "descriptionTooLong": "Açıklama çok uzun.",
+          "noProducts": "En az bir ürün seçin."
+        }
+      }
+    },
+    "activity": {
+      "loading": "Etkinlik yükleniyor",
+      "loadError": "Etkinlik yüklenemedi",
+      "title": "Katalog gönderim etkinliği",
+      "subtitle": "Çalışma alanınızın gönderdiği her katalog mesajı (SPM · MPM · bağlantı).",
+      "sendAnother": "Başka bir tane gönder →",
+      "emptyTitle": "Henüz gönderim yok",
+      "emptyBody": "İlk kataloğunuzu <link>Gönder sekmesinden</link> gönderin.",
+      "failed": "Başarısız",
+      "col": {
+        "when": "Zaman",
+        "to": "Alıcı",
+        "mode": "Mod",
+        "body": "Gövde"
+      }
+    },
+    "products": {
+      "kicker": "Mağaza / Ürünler",
+      "title": "Katalog",
+      "add": "Ürün ekle",
+      "search": "Ada veya SKU ya göre ara...",
+      "loading": "Ürünler yükleniyor",
+      "loadError": "Ürünler yüklenemedi",
+      "col": {
+        "image": "Görsel",
+        "name": "Ad",
+        "sku": "SKU",
+        "price": "Fiyat",
+        "stock": "Stok",
+        "actions": "İşlemler"
+      },
+      "noMatchTitle": "Eşleşen ürün yok",
+      "noMatchBody": "\"{q}\" ile ad veya SKU bazında eşleşen yok.",
+      "clearSearch": "Aramayı temizle",
+      "emptyTitle": "Henüz ürün yok",
+      "emptyBody": "İlk ürününüzü oluşturmak için \"Ürün ekle\" düğmesine tıklayın.",
+      "inStock": "Stokta",
+      "out": "Tükendi",
+      "share": "Paylaş",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "cancel": "İptal",
+      "deleted": "Ürün kaldırıldı.",
+      "deleteTitle": "Bu ürün silinsin mi?",
+      "deleteBody": "\"{name}\" silinecek. Siz Meta üzerinden kaldırana kadar orada kalır."
+    },
+    "share": {
+      "eyebrow": "Ürünü paylaş",
+      "product": "Ürün",
+      "close": "Kapat",
+      "loading": "Bağlantılar yükleniyor",
+      "storefrontLink": "Mağaza vitrini bağlantısı",
+      "noStorefront": "(önce mağaza vitrini slug değerinizi ayarlayın)",
+      "waLink": "WhatsApp derin bağlantısı",
+      "noPhone": "(önce bir telefon numarası bağlayın)",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı!",
+      "sendToCustomer": "Bir müşteriye gönder",
+      "phonePlaceholder": "WhatsApp numarası, örn. +1 555…",
+      "send": "Gönder",
+      "sending": "Gönderiliyor…",
+      "sent": "Gönderildi.",
+      "invalidPhone": "Ülke koduyla geçerli bir WhatsApp numarası girin."
+    },
+    "form": {
+      "breadcrumb": "Gezinti yolu",
+      "products": "Ürünler",
+      "crumbNew": "Yeni",
+      "crumbEdit": "Düzenle",
+      "addTitle": "Ürün ekle",
+      "editFallback": "Ürünü düzenle",
+      "loading": "Ürün yükleniyor",
+      "loadError": "Ürün yüklenemedi",
+      "noPermissionTitle": "Bunu yapamazsınız",
+      "noPermission": "Rolünüz ürün oluşturmaya veya düzenlemeye izin vermiyor.",
+      "reload": "Yeniden yükle",
+      "fixFields": "Bazı alanlar geçerli değil. Vurgulanan alanları kontrol edin.",
+      "basics": "Temel bilgiler",
+      "name": "Ad",
+      "namePlaceholder": "örn. Bahar Pamuklu Tişört",
+      "sku": "SKU",
+      "optional": "(isteğe bağlı)",
+      "shortDescription": "Kısa açıklama",
+      "shortDescriptionPlaceholder": "Katalog kartlarında ve WhatsApp paylaşım bağlantılarında gösterilir.",
+      "fullDescription": "Tam açıklama",
+      "fullDescriptionNote": "(ürün sayfası gövdesi)",
+      "fullDescriptionPlaceholder": "Beden, kumaş, bakım talimatları: alıcının karar vermesine yardımcı olan her şey. HTML kullanılabilir.",
+      "media": "Medya",
+      "primaryImage": "Ana görsel · bir URL yapıştırın",
+      "imageUrl": "Görsel URL",
+      "imageUrlHint": "Herhangi bir doğrudan görsel URL yapıştırın.",
+      "photoTipsTitle": "Harika ürün fotoğrafları için ipuçları",
+      "photoTips": "Kare (1:1) görselleri 1024×1024 px veya daha büyük kullanın. Sade arka planlar kalabalık olanlardan daha iyi dönüşüm sağlar.",
+      "gallery": "Galeri",
+      "galleryHint": "Ürün ayrıntı sayfasına daha fazla görsel ekleyin. Alıcılar bunları küçük resim olarak görür.",
+      "addGalleryUrl": "Görsel URL ekle",
+      "galleryRow": "Galeri görseli {n} URL",
+      "removeGallery": "{n}. galeri görselini kaldır",
+      "galleryEmpty": "Henüz galeri görseli yok. Eklemek için yukarıdaki \"Görsel URL ekle\" düğmesine tıklayın.",
+      "pricing": "Fiyatlandırma",
+      "price": "Fiyat",
+      "comparePrice": "Karşılaştırma fiyatı",
+      "was": "(eski)",
+      "comparePriceHint": "Özgün fiyat · üstü çizili görünür.",
+      "currency": "Para birimi",
+      "profit": "Kâr göstergesi",
+      "profitHint": "Otomatik · fiyat ve karşılaştırma fiyatı.",
+      "profitOff": "-%{percent} indirim",
+      "profitLower": "Karşılaştırma < fiyat",
+      "profitSame": "%0 · aynı",
+      "inventory": "Stok ve kargo",
+      "stockQty": "Stok adedi",
+      "stockPlaceholder": "Boş = sınırsız",
+      "weight": "Ağırlık",
+      "weightHint": "Kargo maliyeti hesaplamalarında kullanılır.",
+      "weightPlaceholder": "örn. 250",
+      "available": "Satışa uygun",
+      "availableHint": "Ürünü görünür tutarak tükendi olarak işaretlemek için işareti kaldırın.",
+      "sortOrder": "Sıralama",
+      "sortOrderHint": "Küçük sayılar önce görünür.",
+      "visibility": "Görünürlük",
+      "status": {
+        "active": "Etkin: mağaza vitrininde yayında",
+        "draft": "Taslak: gizli, düzenlenebilir",
+        "archived": "Arşivlenmiş: gizli, kayıtlarda tutulur"
+      },
+      "organization": "Düzenleme",
+      "category": "Kategori",
+      "categoryPlaceholder": "örn. Giyim, Atıştırmalık",
+      "tags": "Etiketler",
+      "tagsNote": "(virgülle ayrılmış)",
+      "tagsPlaceholder": "pamuk, yaz, çok satan",
+      "preview": "Mağaza vitrini önizlemesi",
+      "noImage": "Henüz görsel yok",
+      "productName": "Ürün adı",
+      "cancel": "İptal",
+      "saveChanges": "Değişiklikleri kaydet",
+      "createProduct": "Ürün oluştur",
+      "created": "Ürün oluşturuldu.",
+      "updated": "Ürün güncellendi.",
+      "problem": {
+        "required": "Bu alan zorunludur.",
+        "tooLong": "Bu metin çok uzun.",
+        "notNumber": "499 veya 499.50 gibi bir sayı girin.",
+        "tooBig": "Tutar çok büyük.",
+        "notWhole": "Bir tam sayı girin.",
+        "badUrl": "https:// ile başlayan tam bir bağlantı girin",
+        "outOfRange": "Bu sayı aralık dışında.",
+        "tooMany": "Çok fazla görsel."
+      }
+    },
+    "reviews": {
+      "rating": "{rating, plural, one {5 üzerinden # yıldız} other {5 üzerinden # yıldız}}",
+      "kicker": "Mağaza / Yorumlar",
+      "title": "Ürün yorumları",
+      "subtitle": "Müşteri yorumlarını mağaza vitrini ürün sayfasında göstermek için onaylayın.",
+      "tabs": "Yorum durumu",
+      "tab": {
+        "pending": "Beklemede",
+        "approved": "Onaylandı",
+        "rejected": "Reddedildi"
+      },
+      "loading": "Yorumlar yükleniyor",
+      "loadError": "Yorumlar yüklenemedi",
+      "empty": {
+        "pending": "Bekleyen yorum yok.",
+        "approved": "Onaylanmış yorum yok.",
+        "rejected": "Reddedilmiş yorum yok."
+      },
+      "anonymous": "Anonim",
+      "on": "ürün:",
+      "unknownProduct": "silinmiş bir ürün",
+      "approve": "Onayla",
+      "reject": "Reddet",
+      "delete": "Sil",
+      "cancel": "İptal",
+      "approved": "Yorum onaylandı.",
+      "rejected": "Yorum reddedildi.",
+      "deleted": "Yorum silindi.",
+      "deleteTitle": "Bu yorum silinsin mi?",
+      "deleteBody": "Yorum kalıcı olarak kaldırılır."
+    },
+    "senderPicker": {
+      "none": "Bağlı gönderici yok.",
+      "connectOne": "Bir tane bağla →",
+      "select": "— Gönderici seçin —",
+      "connectNew": "Yeni cihaz bağla",
+      "engine": {
+        "waba": "Meta",
+        "twilio": "Twilio",
+        "baileys": "Resmi olmayan API"
+      }
+    },
+    "admin": {
+      "nav": "Katalog",
+      "pageTitle": "Katalog ayarları",
+      "loading": "Katalog ayarları yükleniyor",
+      "retry": "Tekrar dene",
+      "eyebrow": "Yönetici · Proje ayarları",
+      "titleLead": "WhatsApp",
+      "titleAccent": "Katalog",
+      "intro": "WABA Katalog özelliği için platform düzeyindeki denetimler. Her satıcı kendi Meta Commerce Account kataloğunu çalışma alanı tarafındaki <link>/catalog</link> sayfasından bağlar. Bu ekran, her çalışma alanının devraldığı varsayılanları belirler.",
+      "allSettings": "Tüm ayarlar",
+      "openCatalog": "Kullanıcı kataloğunu aç",
+      "reset": "Taslağı sıfırla",
+      "save": "Değişiklikleri kaydet",
+      "saved": "Katalog ayarları kaydedildi.",
+      "superOnly": "Bu ayarları yalnızca süper yönetici değiştirebilir. Kayıtlı değerleri görebilirsiniz.",
+      "fix": "Lütfen vurgulanan alanları düzeltin:",
+      "problems": {
+        "graphVersion": "v23.0 gibi bir Graph API sürümü kullanın.",
+        "currency": "3 harfli bir para birimi kodu kullanın."
+      },
+      "errors": {
+        "conflict": "Bu ayarları başka biri önce kaydetti. En son değerler gösteriliyor; değişikliğinizi yeniden yapın.",
+        "forbidden": "Bu ayarları değiştirme izniniz yok.",
+        "validation": "Bazı alanlar geçerli değil. Vurgulanan alanları kontrol edip tekrar deneyin.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+        "unexpected": "Bir şeyler ters gitti. Birazdan tekrar deneyin."
+      },
+      "usage": {
+        "connected": "Bağlı çalışma alanları",
+        "connectedHint": "Meta Katalog Kimliği kayıtlı",
+        "products": "Senkronize edilen ürünler",
+        "productsHint": "tüm çalışma alanı kataloglarında",
+        "sends": "Gönderilen katalog mesajları",
+        "sendsHint": "SPM + MPM + katalog CTA"
+      },
+      "gate": {
+        "kicker": "Özellik anahtarı",
+        "title": "Katalog kullanılabilirliği",
+        "enabled": "Etkin",
+        "body": "Etkinleştirildiğinde çalışma alanı sahipleri Meta Commerce kataloğunu <link>/catalog</link> sayfasında bağlayabilir ve sohbetten ile akış oluşturucudan Tek Ürün, Çoklu Ürün ve Katalog CTA mesajları gönderebilir. Tüm çalışma alanlarında menü girişini gizlemek için kapatın (mevcut bağlantılar korunur ancak salt okunur olur).",
+        "commerce": "Commerce ödemesine izin ver",
+        "commerceHint": "Satıcıların bağlı bir Commerce Account üzerinden WhatsApp içinde ödeme almasını sağlar. Meta onaylı bir Commerce Account ve desteklenen bir bölge gerekir."
+      },
+      "api": {
+        "kicker": "Cloud API",
+        "title": "Graph API sürümü",
+        "intro": "Tüm katalog işlemleri (gönderme, senkronizasyon, aktarma) bu Graph API sürümü üzerinden yapılır. Meta yaklaşık 3 ayda bir yeni sürüm yayınlar ve önceki sürümü yaklaşık 2 yıl destekler.",
+        "version": "Graph API sürümü",
+        "versionHint": "Biçim: v'{'major'}'.'{'minor'}', örneğin v23.0. Varsayılanı kullanmak için boş bırakın.",
+        "currency": "Varsayılan para birimi",
+        "currencyHint": "ISO-4217 kodu (3 harf). Yeni kataloglar için varsayılan olarak kullanılır; her Meta Commerce kataloğu yine de tek bir para birimine kilitlenir."
+      },
+      "app": {
+        "kicker": "İsteğe bağlı · Meta Uygulaması",
+        "title": "Platform genelinde Meta uygulaması",
+        "intro": "Yalnızca bir \"Meta ile yükle\" OAuth deneyimi sunmayı planlıyorsanız gerekir. Varsayılan akışta her satıcı kendi sistem kullanıcısı belirtecini katalog sayfasına yapıştırır, bu yüzden uygulama kimlik bilgileri gerekmez.",
+        "id": "Meta Uygulama Kimliği",
+        "idHint": "developers.facebook.com → uygulamanız → Ayarlar → Temel bölümünden.",
+        "secret": "Meta Uygulama Gizli Anahtarı",
+        "secretPlaceholder": "Uygulama gizli anahtarı",
+        "secretSaved": "•••••••••••• (kayıtlı, korumak için boş bırakın)",
+        "secretHint": "Bekleme halinde şifrelenir. Webhook yük imzalarını (X-Hub-Signature-256) doğrulamak için kullanılır."
+      },
+      "walk": {
+        "kicker": "Satıcı rehberi",
+        "title": "Bir çalışma alanı kataloğunu nasıl bağlar",
+        "intro": "Satıcılara katalog sayfasında gösterilir. Akışı gözden geçirebilmeniz için burada da yer alır.",
+        "waba": {
+          "title": "Etkin bir WABA + Telefon Numarası Kimliği olsun",
+          "body": "Satıcının Meta Business Suite'te doğrulanmış bir WhatsApp Business hesabı ve en az bir onaylı telefon numarası olmalıdır. Bu olmadan hiçbir katalog mesajı gönderilemez."
+        },
+        "catalog": {
+          "title": "Meta Commerce Manager'da katalog oluşturun",
+          "body": "business.facebook.com/commerce → Katalog oluştur → e-ticaret seçin. Ürünleri elle, CSV ile veya Shopify/Woo'dan çekerek ekleyin. Katalog Herkese Açık olmalı ve tek bir para birimine kilitlenmelidir."
+        },
+        "link": {
+          "title": "Kataloğu WABA'ya bağlayın",
+          "body": "Business Suite → WhatsApp Manager → Katalog sekmesi → \"Katalog seç\" → 2. Adımda oluşturduğunuzu seçin. Cloud API ürün mesajlarını etkinleştiren budur."
+        },
+        "token": {
+          "title": "Sistem Kullanıcısı belirteci oluşturun",
+          "body": "Business Settings → System Users → Add → Admin. whatsapp_business_messaging, whatsapp_business_management, catalog_management, business_management izinleriyle bir belirteç oluşturun. Üç aylık yeniden yetkilendirmeyi önlemek için son kullanma süresi olarak \"Never\" seçin."
+        },
+        "paste": {
+          "title": "Kimlik bilgilerini katalog sayfasına yapıştırın",
+          "body": "WABA Kimliği, Katalog Kimliği, Telefon Numarası Kimliği ve Sistem Kullanıcısı belirteci çalışma alanı tarafındaki katalog sayfasına girilir. Ardından belirtecin o katalogda catalog_management yetkisi olduğunu doğrulamak için GET /{CATALOG_ID}?fields=name,product_count testi çalıştırılır."
+        }
+      },
+      "side": {
+        "archKicker": "Mimari",
+        "archTitle": "Satıcı başına ve platform",
+        "here": "Burada (yönetici, tek seferlik)",
+        "hereBody": "Özellik anahtarı, Graph API sürümü, varsayılan para birimi, isteğe bağlı Meta Uygulaması kimlik bilgileri.",
+        "merchant": "Katalog sayfasında (satıcı başına)",
+        "merchantBody": "WABA Kimliği, Katalog Kimliği, Telefon Numarası Kimliği, Sistem Kullanıcısı belirteci. Meta, kataloğun satıcının Commerce Account hesabına ait olmasını şart koştuğu için paylaşılan katalog yoktur.",
+        "payloadsKicker": "Cloud API yükleri",
+        "payloadsTitle": "Gönderdiğimiz üç mesaj türü",
+        "payload": {
+          "spm": {
+            "title": "SPM · Tek Ürün",
+            "code": "interactive.type = \"product\""
+          },
+          "mpm": {
+            "title": "MPM · Çoklu Ürün",
+            "code": "interactive.type = \"product_list\" · en fazla 10 bölüm, 30 öğe"
+          },
+          "cta": {
+            "title": "Katalog CTA",
+            "code": "interactive.type = \"catalog_message\""
+          }
+        },
+        "docsKicker": "Resmi belgeler",
+        "docsTitle": "Başvuru",
+        "docs": {
+          "sell": "Ürün ve hizmet satışı →",
+          "messages": "Cloud API mesajları başvurusu →",
+          "batch": "Catalog Batch API (ürün aktarma) →",
+          "changelog": "Graph API değişiklik günlüğü →",
+          "policies": "Commerce politikaları →"
+        },
+        "constraintsTitle": "Kısıtlamalar",
+        "constraints": {
+          "public": "Katalog Herkese Açık olmalı",
+          "currency": "Katalog başına tek para birimi",
+          "images": "Görseller ≥ 500×500 px (JPG / PNG)",
+          "goods": "Alkol / yetişkin / düzenlemeye tabi ürün yok",
+          "verification": "Üretim için İşletme Doğrulaması gerekir"
+        }
+      }
+    }
+  }
+}

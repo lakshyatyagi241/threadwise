@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "tile": {
+      "label": "支出、钱包与账单明细",
+      "description": "追踪您的支出：消息余额、充值、每笔扣费及完整账单明细。",
+      "keywords": "钱包 余额 充值 加值 账单 明细 支出 消费 扣费 费用 用量 交易 记录 账本"
+    },
+    "common": {
+      "loading": "加载中",
+      "retry": "重试",
+      "requestId": "请求 ID",
+      "cancel": "取消",
+      "back": "返回",
+      "close": "关闭",
+      "dismiss": "关闭",
+      "on": "开启",
+      "off": "关闭",
+      "previous": "上一页",
+      "next": "下一页",
+      "pagination": "分页",
+      "pageN": "第 {page} 页",
+      "deniedTitle": "您无权访问此内容",
+      "deniedBody": "请向工作区管理员申请“{permission}”权限。"
+    },
+    "errors": {
+      "noteRequired": "需要至少 5 个字符的原因。",
+      "amountInvalid": "该金额不被接受。请使用不超过两位小数的正数金额。",
+      "insufficient": "余额不足。",
+      "notFound": "此工作区没有钱包。",
+      "rateInvalid": "无法保存费率。请检查国家、类别和金额。",
+      "importFailed": "无法读取费率表，或其中没有可用的行。",
+      "syncFailed": "无法读取 Meta 价目表，且没有可用的内置费率表。",
+      "conflict": "此内容已被他人更改。请刷新后重试。",
+      "forbidden": "只有超级管理员可以执行此操作。",
+      "validation": "请检查标出的字段。",
+      "network": "无法连接服务器。请检查网络连接后重试。",
+      "generic": "出错了，请重试。",
+      "currencyUnsupported": "暂无法使用该币种：请先导入其 Meta 费率表（消息定价 → Meta 费率表）。"
+    },
+    "types": {
+      "topup": "充值",
+      "earn": "收入",
+      "refund": "退款",
+      "spend": "消息费用",
+      "admin_adjust": "调整"
+    },
+    "categories": {
+      "marketing": "营销",
+      "utility": "通知",
+      "authentication": "验证",
+      "service": "服务"
+    },
+    "modes": {
+      "wallet": "按条付费",
+      "plan": "套餐"
+    },
+    "chip": {
+      "balance": "余额",
+      "low": "您的余额不足"
+    },
+    "wallet": {
+      "title": "钱包",
+      "subtitle": "您的消息余额、近 30 天的支出与收入，以及如何充值。",
+      "fullStatement": "完整账单明细",
+      "lowBalanceTitle": "您的余额即将不足",
+      "lowBalanceBody": "余额已达到或低于 {threshold}。请充值，以保证营销活动和回复持续发送。",
+      "kpi": {
+        "balance": "余额",
+        "available": "当前可用",
+        "approx": "约 {count, plural, other {# 条消息}}",
+        "spent": "已支出",
+        "earned": "已收入",
+        "last30": "近 30 天"
+      },
+      "add": {
+        "title": "充值",
+        "amount": "金额",
+        "hint": "仅限整数金额，最低 1。",
+        "invalid": "请输入不小于 1 的整数金额。",
+        "submit": "充值",
+        "quick": "快捷金额"
+      },
+      "how": {
+        "title": "计费方式",
+        "wallet": {
+          "body": "每条成功送达的消息都会按其国家和类别的价格从钱包扣费。发送失败的消息不收费。",
+          "funded": "余额为零时，批量发送将暂停，直至您充值。"
+        },
+        "plan": {
+          "allowance": "您的套餐每月包含 {limit} 条消息。",
+          "used": "本月已使用 {used} 条。",
+          "ends": "您的套餐将于 {date} 结束。",
+          "extra": "超出每月额度的消息将从钱包扣费。",
+          "ended": "您的套餐已结束，发送已暂停，直至续订。"
+        },
+        "generic": "您的消息由套餐覆盖。套餐未包含的部分由钱包支付。"
+      },
+      "activity": {
+        "title": "近期活动",
+        "fullStatement": "打开完整账单明细",
+        "emptyTitle": "暂无活动",
+        "emptyBody": "充值、消息费用和退款会显示在此处。"
+      }
+    },
+    "activity": {
+      "description": "描述",
+      "type": "类型",
+      "date": "日期",
+      "amount": "金额",
+      "balance": "余额",
+      "noDescription": "钱包变动",
+      "reason": "原因"
+    },
+    "pricingPanel": {
+      "title": "消息定价",
+      "badge": "每条消息",
+      "free": "免费",
+      "noCharge": "不收费",
+      "perMessage": "每条消息",
+      "footer": "消息送达后收费。价格取决于收件人所在国家及消息类别。"
+    },
+    "statement": {
+      "title": "钱包账单明细",
+      "subtitle": "钱包的每一笔变动。合计金额涵盖符合筛选条件的全部记录，而不仅限于本页。",
+      "back": "返回钱包",
+      "breadcrumbLabel": "面包屑导航",
+      "breadcrumbWallet": "钱包",
+      "breadcrumbStatement": "账单明细",
+      "export": "导出 CSV",
+      "exporting": "导出中",
+      "exported": "已保存 {fileName}",
+      "emptyTitle": "暂无交易",
+      "emptyFiltered": "没有符合这些筛选条件的记录。请更改或重置筛选条件。",
+      "emptyNone": "钱包的变动记录将显示在此处。",
+      "filters": {
+        "type": "类型",
+        "from": "从",
+        "to": "至",
+        "rangeInverted": "结束日期早于开始日期。",
+        "search": "搜索",
+        "searchPlaceholder": "描述或原因",
+        "apply": "应用",
+        "reset": "重置"
+      },
+      "typeFilter": {
+        "all": "全部",
+        "topup": "充值",
+        "earn": "收入",
+        "spend": "消息扣费",
+        "refund": "退款",
+        "admin_adjust": "调整"
+      },
+      "summary": {
+        "balance": "当前余额",
+        "in": "收入",
+        "out": "支出",
+        "net": "净变动",
+        "count": "{count, plural, other {# 笔交易}}"
+      },
+      "columns": {
+        "label": "钱包对账单",
+        "date": "日期",
+        "description": "说明",
+        "type": "类型",
+        "in": "收入",
+        "out": "支出",
+        "balance": "余额",
+        "none": "无"
+      },
+      "context": {
+        "reason": "原因",
+        "to": "收件人",
+        "template": "模板"
+      },
+      "channels": {
+        "campaign": "营销活动",
+        "broadcast": "群发",
+        "flow": "流程",
+        "scheduled": "定时发送",
+        "auto_reply": "自动回复",
+        "chat": "聊天",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      }
+    },
+    "admin": {
+      "admin": "管理员",
+      "wallet": "钱包",
+      "workspacesLabel": "工作区",
+      "breadcrumb": "面包屑导航",
+      "readOnly": "您当前以{role}身份登录。只有超级管理员可以更改钱包设置、价格或余额。",
+      "nav": {
+        "overview": "钱包",
+        "pricing": "消息定价",
+        "workspaces": "工作区钱包",
+        "logs": "钱包日志",
+        "margins": "利润率",
+        "packages": "充值套餐"
+      },
+      "overview": {
+        "title": "钱包概览",
+        "subtitle": "工作区钱包中的余额以及最近 30 天的资金变动。",
+        "linkWorkspaces": "工作区钱包",
+        "linkPricing": "消息定价",
+        "linkLogs": "钱包日志",
+        "float": "钱包余额总额",
+        "floatHint": "所有工作区合计持有",
+        "holding": "有余额的工作区",
+        "low": "余额不足",
+        "last30": "最近 30 天",
+        "toppedUp": "已充值",
+        "charged": "已扣费",
+        "refunded": "已退款",
+        "adjustedIn": "手动增加",
+        "adjustedOut": "手动扣减",
+        "chargedMessages": "已扣费消息",
+        "freeMessages": "免费消息",
+        "reconcile": {
+          "title": "对照账本核对余额",
+          "body": "根据账本重新计算每个钱包，并列出与之不符的余额。",
+          "button": "对照账本核对余额",
+          "running": "核对中",
+          "ok": "全部 {count, plural, other {# 个钱包}}与其账本一致。",
+          "mismatches": "{checked} 个钱包中有 {count} 个与账本不符。",
+          "workspace": "工作区",
+          "balance": "余额",
+          "ledger": "账本",
+          "difference": "差额"
+        },
+        "otherCurrencies": "其他货币的钱包",
+        "otherCurrenciesNote": "以其他货币计费的工作区持有该货币的资金。上方数字仅包含{currency}；其他每种货币单独一行统计。",
+        "other": {
+          "currency": "货币",
+          "float": "持有金额",
+          "holding": "有余额的工作区",
+          "toppedUp": "充值（30 天）",
+          "charged": "扣费（30 天）"
+        }
+      },
+      "pricing": {
+        "title": "消息定价",
+        "crumb": "消息定价",
+        "subtitle": "设置客户每条消息的费用、新钱包的保护方式以及按国家划分的费率表。",
+        "kpi": {
+          "signup": "推荐奖励",
+          "cost": "每条消息费用",
+          "costHint": "未启用按国家定价时的统一价格",
+          "spending": "实际消费",
+          "spendingHint": "{amount} 按统一价格可购买的消息数",
+          "lowBalance": "余额不足提醒"
+        },
+        "economics": {
+          "title": "定价设置",
+          "liveKeys": "立即生效",
+          "flatPrice": "每条消息统一价格",
+          "flatPriceHint": "最低 0.01。如需免费消息，请使用费率表。",
+          "referralSignup": "推荐奖励",
+          "referralSignupHint": "被推荐人的首笔付费订单完成后，向推荐人支付奖励。",
+          "lowBalance": "余额不足提醒阈值",
+          "lowBalanceHint": "余额等于或低于此值的工作区将收到提醒。",
+          "coverage": "发送覆盖率",
+          "coverageHint": "除非钱包余额覆盖预估费用的此比例，否则拒绝批量发送。设为 0 时仅拒绝余额为空的钱包。",
+          "rewardSentence": "{reward} 的奖励按统一价格可支付 {count, plural, other {# 条消息}}。",
+          "save": "保存定价设置",
+          "saving": "保存中",
+          "saved": "定价设置已保存。",
+          "problems": {
+            "invalid": "请输入最多两位小数的金额。",
+            "flatZero": "统一价格不能为 0。",
+            "percent": "请输入 0 到 100 之间的整数。"
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "按国家定价",
+            "on": "开启：每条消息按费率表中收件人所在国家和类别收费。",
+            "off": "关闭：所有消息均按统一价格收费。",
+            "save": "保存",
+            "confirmTitle": "更改按国家定价设置？",
+            "confirmOn": "从下一次发送起，消息将按国家和类别收费。",
+            "confirmOff": "从下一次发送起，消息将按统一价格收费。",
+            "confirm": "是，更改",
+            "savedOn": "按国家定价已开启。",
+            "savedOff": "按国家定价已关闭。"
+          },
+          "payPerMessage": {
+            "label": "按消息收费",
+            "on": "开启：没有套餐配额的工作区将从钱包中为每条已送达的消息付费。",
+            "off": "关闭：不从钱包扣除消息费用。",
+            "save": "保存",
+            "confirmTitle": "更改按消息收费设置？",
+            "confirmOn": "从现在起，已送达的消息将从钱包中扣费。",
+            "confirmOff": "钱包将不再为消息扣费。此设置影响所有工作区。",
+            "confirm": "是，更改",
+            "savedOn": "按消息收费已开启。",
+            "savedOff": "按消息收费已关闭。"
+          }
+        },
+        "grid": {
+          "title": "费率表",
+          "modeOn": "按国家定价已开启：将使用以下价格。",
+          "modeOff": "按国家定价已关闭：以下价格已保存，但仍按统一价格收费。",
+          "empty": "暂无费率。请添加一行、导入费率表或重新填充初始费率表。",
+          "country": "国家",
+          "category": "类别",
+          "charge": "您的收费",
+          "metaCost": "Meta 向您收取",
+          "margin": "利润率",
+          "marginUnknown": "未知",
+          "actions": "操作",
+          "anyCountry": "任意国家",
+          "anyCategory": "任意类别",
+          "serviceFree": "服务（免费）",
+          "addRow": "添加行",
+          "remove": "移除",
+          "cancel": "取消",
+          "removeTitle": "移除此费率？",
+          "removeBody": "已删除 {country} 的费率。消息将改用下一条匹配的费率。",
+          "removed": "费率已移除。",
+          "save": "保存费率",
+          "saving": "保存中",
+          "saved": "{count, plural, other {已保存 # 条费率。}}",
+          "savedSome": "已保存 {saved} 条，跳过 {skipped} 条。请查看每个被跳过行的原因。",
+          "unsaved": "{count, plural, other {# 行未保存}}",
+          "tooMany": "一次保存的更改行过多，请分批保存。",
+          "problems": {
+            "price": "请输入最多两位小数的价格。",
+            "metaCost": "请输入最多六位小数的费用。",
+            "country": "请使用 2 位国家代码，或留空表示任意国家。",
+            "empty": "请输入价格或 Meta 费用。",
+            "duplicate": "该国家和类别已有一行。"
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "同步 Meta 费用",
+            "title": "同步 Meta 费用",
+            "loading": "正在读取 Meta 价目表",
+            "source": "来源",
+            "version": "版本",
+            "noVersion": "无",
+            "currency": "货币",
+            "added": "待添加行",
+            "updated": "待更新行",
+            "untouched": "您的价格不会改变，仅更新 Meta 向您收取的费用。",
+            "bundledNote": "未连接在线 Meta 价目表，因此使用内置费率表。",
+            "apply": "应用",
+            "applying": "应用中",
+            "done": "Meta 费用已同步：新增 {added} 条，更新 {updated} 条。"
+          },
+          "import": {
+            "button": "导入费率表",
+            "title": "导入费率表",
+            "intro": "上传 CSV 费率表。保存前可先查看将要更改的内容。",
+            "file": "CSV 文件",
+            "limit": "最大 4 MB。",
+            "reading": "正在读取文件",
+            "shape": "布局",
+            "shapes": {
+              "wide": "每个类别一列",
+              "long": "每个类别一行"
+            },
+            "added": "待添加",
+            "updated": "待更新",
+            "skipped": "已跳过",
+            "currencyNote": "价格以{currency}读取。",
+            "problems": "将被跳过的行",
+            "line": "第 {line} 行：",
+            "fileProblems": {
+              "notCsv": "请选择 .csv 文件。",
+              "tooBig": "文件超过 4 MB。",
+              "unreadable": "无法读取该文件。"
+            },
+            "apply": "应用导入",
+            "applying": "导入中",
+            "done": "费率表已导入：新增 {added} 条，更新 {updated} 条，跳过 {skipped} 条。"
+          },
+          "seed": {
+            "button": "重新填充初始费率表",
+            "title": "重新填充初始费率表？",
+            "warning": "此操作会将内置的初始价格写入相同国家和类别的现有行。您为这些行手动设置的价格将被替换。",
+            "confirm": "重新填充",
+            "done": "{count, plural, other {已从初始费率表写入 # 条费率。}}"
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "跨境发送",
+            "body": "价格取决于收件人所在国家，而非工作区所在国家。请为每个发送目标国家添加一行。"
+          },
+          "how": {
+            "title": "价格如何查找",
+            "body": "钱包会在此费率表中查找收件人所在国家和消息类别。留空的类别或国家匹配任意值。"
+          },
+          "order": {
+            "title": "哪一行生效",
+            "body": "优先使用国家和类别完全匹配的行，其次是国家匹配、任意类别的行，然后是任意国家的行，最后是统一价格。"
+          }
+        },
+        "mode": {
+          "title": "客户价格如何计算",
+          "current": "当前：{mode}",
+          "intro": "选择客户每条消息的费用。此设置适用于所有工作区，并单独保存。",
+          "fixed": {
+            "label": "固定价格",
+            "body": "您需为下方费率表中的每个国家和类别输入价格。利润率会保存但不会使用。"
+          },
+          "margin": {
+            "label": "Meta 费用 + 利润率",
+            "body": "客户支付 Meta 费用加上您按国家和类别设置的利润率。若 Meta 费用未知，则按输入的固定价格收费。"
+          },
+          "save": "保存定价模式",
+          "manage": "设置利润率",
+          "confirmTitle": "更改客户定价方式？",
+          "confirmFixed": "从下一条消息起，所有工作区都将按费率表中的固定价格收费。利润率会保留但不再生效。",
+          "confirmMargin": "从下一条消息起，所有工作区将按 Meta 费用加上适用的利润率收费（依次为工作区覆盖设置、套餐设置、平台默认值）。若 Meta 费用未知，仍按固定价格收费。",
+          "confirm": "是，更改",
+          "savedFixed": "客户现已按固定价格计费。",
+          "savedMargin": "客户现已按 Meta 费用加利润率计费。"
+        },
+        "metaCards": {
+          "title": "Meta 费率表",
+          "intro": "Meta 为每种货币发布一份价目表，且仅在 1 月 1 日、4 月 1 日、7 月 1 日和 10 月 1 日更新。以 INR 计费的工作区按 Meta 的 INR 价目表定价，并从其 INR 钱包扣费，而不是按换算后的 USD 价目表。请按 Meta 发布的原样导入每个文件。手动输入的价格和统一价格以平台货币保存，对于以其他货币计费的工作区，则按其已记录的汇率换算。",
+          "none": "尚未保存 Meta 费率表。请导入 Meta 为您的货币发布的文件。",
+          "view": "查看",
+          "hide": "隐藏",
+          "usedPricing": "定价、利润率和转售损益，以及以平台货币计费的工作区",
+          "usedWorkspaces": "以{currency}计费的工作区价格",
+          "columns": {
+            "currency": "货币",
+            "effective": "生效日期",
+            "checked": "最近导入",
+            "markets": "市场",
+            "usedFor": "用于",
+            "status": "状态",
+            "actions": "操作"
+          },
+          "freshness": {
+            "current": "已是最新",
+            "upcoming": "即将检查",
+            "due": "立即检查"
+          },
+          "reminder": {
+            "link": "打开 Meta 定价页面",
+            "current": "已是最新。Meta 下次可能于 {date} 更改价格。",
+            "dueTitle": "新季度已于 {date} 开始：Meta 可能已更改价格。",
+            "dueBody": "请下载新的费率文件（每种在用货币一个）并在此导入。在此之前，费用和利润率仍使用旧费率表。",
+            "upcomingTitle": "Meta 可能于 {date} 更改价格（还有 {days, plural, other {# 天}}）。",
+            "upcomingBody": "请在当天准备好要导入的新文件。",
+            "missingTitle": "{currencies} 暂无 Meta 费率表。",
+            "missingBody": "设置为该货币的工作区没有可显示的 Meta 价目表。请导入 Meta 为其发布的文件。"
+          },
+          "table": {
+            "heading": "Meta 的{currency}费率表",
+            "note": "按 Meta 发布的标准价格计算的每条已送达消息价格。Meta 未列出的国家按“其他”定价。",
+            "market": "市场",
+            "everyOther": "其他未列出的国家",
+            "categories": {
+              "marketing": "营销",
+              "utility": "实用",
+              "authentication": "验证",
+              "authentication_international": "国际验证",
+              "service": "服务"
+            }
+          },
+          "import": {
+            "button": "导入 Meta 费率表",
+            "title": "导入 Meta 费率表",
+            "intro": "请选择 Meta 为某一种货币发布的文件（即使链接显示为 CSV，也是 Excel 工作簿）。货币和生效日期将从文件中读取。保存前可先查看将要更改的内容。",
+            "file": "Meta 费率文件（.xlsx 或 .csv）",
+            "hint": "每个文件仅限一种货币。新文件将整体替换该货币的费率表。最大 2 MB。",
+            "reading": "正在读取文件…",
+            "applying": "导入中",
+            "apply": "导入费率表",
+            "done": "{currency}费率表已导入。",
+            "fileProblems": {
+              "wrongType": "请选择 Meta 发布的 .xlsx 文件，或由其另存的 CSV。",
+              "tooBig": "文件超过 2 MB，不是有效的 Meta 费率表。",
+              "unreadable": "无法读取该文件。"
+            },
+            "summary": {
+              "currency": "货币",
+              "effective": "生效日期",
+              "added": "新增行",
+              "changed": "已更改",
+              "unchanged": "未更改",
+              "removed": "已移除"
+            },
+            "replaces": "将替换自 {date} 起生效的费率表。",
+            "appliesToPricing": "这是平台货币 {currency} 的费率表。导入后还会刷新定价、利润率和转售损益所依据的 Meta 费用（新增 {added} 条，更新 {updated} 条）。客户价格不会改变。",
+            "storedOnly": "这不是平台货币。它会被保存并显示，并为所有以{currency}计费的工作区定价。下方费率表中的 Meta 费用仍以平台货币计算。",
+            "biggest": "最大变动",
+            "categories": {
+              "marketing": "营销",
+              "utility": "实用",
+              "authentication": "验证",
+              "authentication_international": "国际验证",
+              "service": "服务"
+            },
+            "problems": "已跳过的行"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "工作区钱包",
+        "crumb": "工作区钱包",
+        "subtitle": "列出所有工作区及其余额。打开某个工作区可查看其记录或进行调整。",
+        "search": "搜索",
+        "searchPlaceholder": "工作区名称或标识",
+        "lowOnly": "仅显示余额不足",
+        "apply": "应用",
+        "totalWorkspaces": "工作区",
+        "totalFloat": "持有总额",
+        "totalLow": "余额不足",
+        "emptyTitle": "未找到工作区",
+        "emptyBody": "请更改搜索条件或清除余额不足筛选。",
+        "loadMore": "加载更多",
+        "loadingMore": "正在加载更多",
+        "columns": {
+          "label": "工作区钱包",
+          "workspace": "工作区",
+          "mode": "计费",
+          "balance": "余额",
+          "low": "不足",
+          "activity": "最近活动",
+          "never": "从未"
+        },
+        "totalFloatIn": "持有金额（{currency}）"
+      },
+      "detail": {
+        "crumb": "工作区",
+        "adjust": "调整余额",
+        "balance": "余额",
+        "lowBalance": "余额不足",
+        "threshold": "提醒阈值 {amount}",
+        "recent": "最近记录",
+        "emptyTitle": "暂无记录",
+        "emptyBody": "此钱包的变动将显示在此处。",
+        "columns": {
+          "label": "最近钱包记录",
+          "date": "日期",
+          "type": "类型",
+          "amount": "金额",
+          "balanceAfter": "变动后余额",
+          "who": "操作人",
+          "reason": "原因",
+          "customer": "客户",
+          "operator": "操作员",
+          "system": "系统"
+        },
+        "result": {
+          "appliedAdd": "已增加 {applied}。当前余额为 {balance}。",
+          "appliedDeduct": "已扣除 {applied}。当前余额为 {balance}。",
+          "partial": "由于余额不能低于 0，仅应用了 {requested} 中的 {applied}。当前余额为 {balance}。",
+          "replayed": "（此请求已应用。）"
+        },
+        "pricing": {
+          "title": "此工作区的定价",
+          "subtitle": "利润率覆盖设置优先于工作区套餐和平台默认值，且仅对此工作区生效。",
+          "plan": "套餐",
+          "planLoading": "正在加载套餐",
+          "planUnknown": "无法读取",
+          "noPlan": "无套餐",
+          "overrides": "利润率覆盖",
+          "overridesHint": "仅覆盖此处列出的行。其余均沿用套餐和平台默认值。",
+          "empty": "无覆盖设置。此工作区沿用其套餐和平台默认值。",
+          "reason": {
+            "label": "原因（保存在审计日志中）",
+            "hint": "任何更改或移除都需填写，5 到 500 个字符。",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "请至少用 5 个字符说明原因。",
+              "long": "原因请控制在 500 个字符以内。"
+            }
+          },
+          "save": "保存覆盖设置",
+          "saving": "保存中",
+          "saveHint": "请修正标记的行并填写原因后再保存。",
+          "saved": "已保存 {saved} 条，已移除 {removed} 条。",
+          "savedSome": "已保存 {saved} 条，跳过 {skipped} 条。请查看每个被跳过行的原因。",
+          "preview": {
+            "title": "价格预览",
+            "hint": "查看发送给此工作区的一条消息将如何定价，以及由哪一层设置决定。",
+            "country": "国家",
+            "category": "类别",
+            "run": "预览价格",
+            "running": "正在计算价格",
+            "result": {
+              "label": "价格预览结果",
+              "metaCost": "Meta 费用",
+              "unknownCost": "未知",
+              "margin": "利润率",
+              "noMargin": "无",
+              "layer": "设置来源",
+              "noLayer": "未匹配到利润率",
+              "layers": {
+                "workspace": "工作区覆盖",
+                "plan": "套餐利润率",
+                "platform": "平台默认值"
+              },
+              "price": "客户价格",
+              "basis": "计价依据",
+              "bases": {
+                "margin": "Meta 费用 + 利润率",
+                "fixed": "固定价格"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "计费货币",
+          "intro": "消息按 Meta 该货币的费率表定价，并从工作区在该货币下的钱包扣费。充值也以该货币录入和入账。",
+          "billedIn": "计费货币",
+          "change": "更改货币",
+          "otherWallets": "此工作区持有的其他钱包",
+          "notUsed": "不用于计费；资金保留在此处。",
+          "dialog": {
+            "title": "更改计费货币",
+            "currency": "计费货币为",
+            "effect": "从现在起，消息将按 Meta 的{to}费率表定价，并从{to}钱包扣费。不进行货币换算：{from}钱包保留其余额。",
+            "left": "{amount} 保留在{from}钱包中，直到工作区切换回来前均不会使用。",
+            "reason": "原因",
+            "reasonHint": "将显示在审计记录和工作区的钱包日志中。至少 5 个字符。",
+            "confirm": "以{currency}计费",
+            "saving": "保存中",
+            "done": "现以{to}计费（原为{from}）。"
+          }
+        }
+      },
+      "adjust": {
+        "title": "调整余额",
+        "current": "当前余额",
+        "direction": "操作",
+        "add": "增加金额",
+        "deduct": "扣除",
+        "amount": "金额",
+        "amountHint": "最多两位小数。",
+        "reason": "原因",
+        "reasonHint": "必填，5 到 500 个字符。工作区可在其对账单中看到此原因。",
+        "counter": "{count} / {max}",
+        "cappedWarning": "此金额超过余额 {balance}。仅扣除现有部分，余额将止于 0。",
+        "review": "检查",
+        "confirmAdd": "增加金额",
+        "confirmDeduct": "扣除",
+        "posting": "过账中",
+        "summaryAdd": "为{workspace}增加 {amount}。",
+        "summaryDeduct": "从{workspace}扣除 {amount}。",
+        "newBalance": "新余额：{balance}",
+        "summaryReason": "原因：{reason}",
+        "visibleNote": "该原因将显示给工作区，并保存在审计日志中。",
+        "problems": {
+          "amount": {
+            "required": "请输入金额。",
+            "invalid": "请输入最多两位小数的正数金额。",
+            "zero": "金额必须大于 0。",
+            "tooLarge": "超出单次调整的上限。"
+          },
+          "note": {
+            "short": "请至少用 {min} 个字符说明原因。",
+            "long": "原因请控制在 {max} 个字符以内。"
+          }
+        }
+      },
+      "logs": {
+        "title": "钱包日志",
+        "crumb": "钱包日志",
+        "subtitle": "钱包发生的事件以及操作员所做的更改。",
+        "scope": "范围",
+        "scopes": {
+          "all": "全部",
+          "workspace": "工作区事件",
+          "platform": "平台更改"
+        },
+        "event": "事件",
+        "anyEvent": "任意事件",
+        "severity": "严重程度",
+        "anySeverity": "任意严重程度",
+        "severities": {
+          "info": "信息",
+          "warning": "警告",
+          "error": "错误"
+        },
+        "workspaceId": "工作区 ID",
+        "workspaceIdInvalid": "请输入工作区 ID（UUID）。",
+        "search": "搜索",
+        "from": "开始",
+        "to": "结束",
+        "apply": "应用",
+        "reset": "重置",
+        "emptyTitle": "暂无日志记录",
+        "emptyBody": "没有符合这些筛选条件的内容。",
+        "loadMore": "加载更多",
+        "loadingMore": "正在加载更多",
+        "platform": "平台",
+        "showDetails": "显示详情",
+        "hideDetails": "隐藏详情",
+        "requestId": "请求 ID",
+        "columns": {
+          "time": "时间",
+          "severity": "严重程度",
+          "event": "事件",
+          "workspace": "工作区",
+          "actor": "执行者",
+          "message": "消息"
+        },
+        "actors": {
+          "operator": "操作员",
+          "customer": "客户",
+          "system": "系统"
+        }
+      },
+      "margins": {
+        "title": "利润率",
+        "crumb": "利润率",
+        "subtitle": "按国家和消息类别划分，客户在 Meta 费用之上需支付的部分。",
+        "retry": "重试",
+        "ratesFailed": "无法加载 Meta 费用，因此无法显示新行的价格。",
+        "mode": {
+          "current": "客户定价方式",
+          "inactive": "当前定价模式为固定价格，因此这些利润率尚未生效。它们已保存，切换为 Meta 费用 + 利润率后将生效。",
+          "switchLink": "前往定价模式开关"
+        },
+        "scope": {
+          "label": "利润率适用于",
+          "hint": "平台默认值适用于所有套餐。套餐自身的利润率优先于该默认值。",
+          "platform": "平台默认值（适用于所有套餐）"
+        },
+        "grid": {
+          "country": "国家",
+          "searchCountry": "搜索国家",
+          "category": "类别",
+          "margin": "利润率 %",
+          "metaCost": "Meta 费用",
+          "price": "客户价格",
+          "note": "原因",
+          "setBy": "设置来源",
+          "actions": "操作",
+          "anyCountry": "任意国家",
+          "anyCategory": "任意类别",
+          "unknownCost": "此处不知 Meta 费用，因此适用输入的固定价格。",
+          "priceInvalid": "请输入 -100 到 1000 之间、最多两位小数的利润率。",
+          "removedPending": "保存时将被移除。",
+          "addRow": "添加行",
+          "remove": "移除",
+          "undo": "撤销",
+          "cancel": "取消",
+          "empty": "暂无利润率。请添加一行进行设置。",
+          "removeTitle": "移除此利润率？",
+          "removeBody": "已删除 {country} 的利润率。价格将改用下一条匹配的利润率。",
+          "removed": "利润率已移除。",
+          "save": "保存利润率",
+          "saving": "保存中",
+          "saved": "{count, plural, other {已保存 # 条利润率。}}",
+          "savedSome": "已保存 {saved} 条，跳过 {skipped} 条。请查看每个被跳过行的原因。",
+          "unsaved": "{count, plural, other {# 行未保存}}",
+          "tooMany": "一次保存的更改行过多，请分批保存。",
+          "problems": {
+            "margin": "请输入 -100 到 1000 之间、最多两位小数的百分比。-100 表示免费。",
+            "duplicate": "该国家和类别已有一行。"
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "哪一条利润率生效",
+            "body": "工作区覆盖优先于其套餐利润率，套餐利润率又优先于平台默认值。每一层会完整读取后再进入下一层。"
+          },
+          "specific": {
+            "title": "优先匹配最具体的规则",
+            "body": "在同一层内，优先使用国家和类别完全匹配的行，其次是国家匹配、任意类别的行，然后是任意国家的同类别行，最后是默认行。"
+          },
+          "unknown": {
+            "title": "Meta 费用未知时",
+            "body": "价格为 Meta 费用加利润率，四舍五入到最接近的 0.01，且至少为 0.01（除非利润率为 -100%，即免费）。Meta 费用未知时，改用输入的固定价格。"
+          }
+        }
+      },
+      "packages": {
+        "title": "充值套餐",
+        "crumb": "充值套餐",
+        "subtitle": "可选优惠：支付此金额，获得相应钱包额度。额度高于价格的部分即为充值赠送。",
+        "new": "新建套餐",
+        "edit": "编辑",
+        "enable": "启用",
+        "disable": "停用",
+        "delete": "删除",
+        "cancel": "取消",
+        "enabled": "{name}已启用。",
+        "disabled": "{name}已停用。",
+        "deleted": "套餐已删除。",
+        "deleteTitle": "删除套餐？",
+        "deleteBody": "删除此套餐？已有购买记录将保留在账本中。",
+        "bonus": "+{percent}% 赠送",
+        "status": {
+          "active": "启用中",
+          "inactive": "未启用",
+          "featured": "推荐"
+        },
+        "empty": {
+          "title": "暂无充值套餐",
+          "body": "尚未创建任何套餐。",
+          "bodyWrite": "创建第一个套餐，以提供带赠送的钱包充值。"
+        },
+        "columns": {
+          "label": "充值套餐",
+          "name": "名称",
+          "slug": "标识",
+          "price": "价格",
+          "credit": "钱包额度",
+          "badge": "标签",
+          "status": "状态",
+          "actions": "操作"
+        },
+        "form": {
+          "newTitle": "新建充值套餐",
+          "editTitle": "编辑充值套餐",
+          "newCrumb": "新建套餐",
+          "editCrumb": "编辑套餐",
+          "notFound": "此套餐已不存在。",
+          "back": "返回充值套餐",
+          "sections": {
+            "identity": "基本信息",
+            "pricing": "定价",
+            "display": "显示"
+          },
+          "name": "名称",
+          "slug": "标识（可选）",
+          "slugHint": "可使用字母、数字、短横线和下划线。留空则根据名称生成。",
+          "description": "描述",
+          "price": "价格",
+          "priceHint": "客户支付的金额。",
+          "currency": "货币",
+          "walletCredit": "钱包额度",
+          "walletCreditHint": "存入钱包的金额。",
+          "bonusLine": "赠送 {percent}%：客户支付 {price}，获得 {credit}。",
+          "badge": "标签",
+          "badgeHint": "简短标签，例如“超值”。",
+          "sortOrder": "排序",
+          "sortOrderHint": "数值小的在前。",
+          "active": "启用",
+          "featured": "推荐",
+          "create": "创建套餐",
+          "save": "保存更改",
+          "saving": "保存中",
+          "created": "{name}已创建。",
+          "saved": "{name}已保存。",
+          "stale": {
+            "title": "此套餐已被他人修改",
+            "body": "您的编辑未保存，因此未覆盖任何内容。请重新加载最新版本，然后再次进行更改。",
+            "reload": "重新加载最新版本"
+          },
+          "problems": {
+            "name": "请输入最多 96 个字符的名称。",
+            "slug": "仅可使用字母、数字、短横线和下划线。",
+            "description": "描述请控制在 500 个字符以内。",
+            "price": "请输入最多两位小数的金额。",
+            "currency": "请选择列出的一种货币。",
+            "walletCredit": "请输入大于 0、最多两位小数的金额。",
+            "badge": "标签请控制在 32 个字符以内。",
+            "sortOrder": "请输入 0 到 9999 之间的整数。"
+          }
+        }
+      }
+    }
+  }
+}

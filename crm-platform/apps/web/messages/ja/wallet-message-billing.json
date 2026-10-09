@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "tile": {
+      "label": "支出、ウォレット、明細",
+      "description": "支出を確認できます。メッセージの残高、チャージ、すべての請求、明細の全体を表示します。",
+      "keywords": "ウォレット 残高 チャージ 入金 クレジット 明細 請求 支出 費用 利用 料金 取引 履歴 台帳"
+    },
+    "common": {
+      "loading": "読み込み中",
+      "retry": "再試行",
+      "requestId": "リクエスト ID",
+      "cancel": "キャンセル",
+      "back": "戻る",
+      "close": "閉じる",
+      "dismiss": "閉じる",
+      "on": "オン",
+      "off": "オフ",
+      "previous": "前へ",
+      "next": "次へ",
+      "pagination": "ページ送り",
+      "pageN": "{page} ページ",
+      "deniedTitle": "この内容にはアクセスできません",
+      "deniedBody": "ワークスペース管理者に「{permission}」権限を依頼してください。"
+    },
+    "errors": {
+      "noteRequired": "5文字以上の理由が必要です。",
+      "amountInvalid": "この金額は受け付けられません。正の金額を、小数点以下2桁まで入力してください。",
+      "insufficient": "残高が不足しているため、実行できません。",
+      "notFound": "このワークスペースにはウォレットがありません。",
+      "rateInvalid": "料金を保存できませんでした。国、カテゴリー、金額を確認してください。",
+      "importFailed": "料金表を読み取れなかったか、使用可能な行がありません。",
+      "syncFailed": "Meta の価格表を読み取れず、同梱の料金表もありません。",
+      "conflict": "別のユーザーがこの内容を変更しました。再読み込みして、もう一度お試しください。",
+      "forbidden": "この操作はスーパー管理者のみ実行できます。",
+      "validation": "ハイライトされた項目を確認してください。",
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "generic": "問題が発生しました。もう一度お試しください。",
+      "currencyUnsupported": "この通貨はまだ使用できません。先に Meta の料金表をインポートしてください（メッセージ料金、Meta 料金表）。"
+    },
+    "types": {
+      "topup": "チャージ",
+      "earn": "獲得",
+      "refund": "返金",
+      "spend": "メッセージ料金",
+      "admin_adjust": "調整"
+    },
+    "categories": {
+      "marketing": "マーケティング",
+      "utility": "ユーティリティ",
+      "authentication": "認証",
+      "service": "サービス"
+    },
+    "modes": {
+      "wallet": "メッセージごとの支払い",
+      "plan": "プラン"
+    },
+    "chip": {
+      "balance": "残高",
+      "low": "残高が少なくなっています"
+    },
+    "wallet": {
+      "title": "ウォレット",
+      "subtitle": "メッセージ残高、過去30日間の支出と獲得額、チャージ方法を確認できます。",
+      "fullStatement": "明細をすべて表示",
+      "lowBalanceTitle": "残高が少なくなってきています",
+      "lowBalanceBody": "{threshold} 以下になっています。キャンペーンや返信を送信し続けるには、チャージしてください。",
+      "kpi": {
+        "balance": "残高",
+        "available": "現在利用可能",
+        "approx": "約 {count, plural, other {# 件のメッセージ}}",
+        "spent": "支出",
+        "earned": "獲得",
+        "last30": "過去30日間"
+      },
+      "add": {
+        "title": "チャージする",
+        "amount": "金額",
+        "hint": "整数のみ、1 以上。",
+        "invalid": "1 以上の整数を入力してください。",
+        "submit": "チャージする",
+        "quick": "金額の候補"
+      },
+      "how": {
+        "title": "課金の仕組み",
+        "wallet": {
+          "body": "配信されたメッセージは、国とカテゴリーごとの料金でウォレットから課金されます。失敗したメッセージは課金されません。",
+          "funded": "残高がなくなると、チャージするまで一括送信は一時停止されます。"
+        },
+        "plan": {
+          "allowance": "ご利用のプランには、毎月 {limit} 件のメッセージが含まれています。",
+          "used": "今月は {used} 件使用しました。",
+          "ends": "ご利用のプランは {date} に終了します。",
+          "extra": "毎月の上限を超えたメッセージは、ウォレットから課金されます。",
+          "ended": "ご利用のプランは終了したため、更新するまで送信は一時停止されています。"
+        },
+        "generic": "メッセージはプランでカバーされています。プランに含まれないものはウォレットから支払われます。"
+      },
+      "activity": {
+        "title": "最近のアクティビティ",
+        "fullStatement": "明細をすべて表示",
+        "emptyTitle": "アクティビティはまだありません",
+        "emptyBody": "チャージ、メッセージ料金、返金がここに表示されます。"
+      }
+    },
+    "activity": {
+      "description": "説明",
+      "type": "種類",
+      "date": "日付",
+      "amount": "金額",
+      "balance": "残高",
+      "noDescription": "ウォレットの動き",
+      "reason": "理由"
+    },
+    "pricingPanel": {
+      "title": "メッセージ料金",
+      "badge": "メッセージごと",
+      "free": "無料",
+      "noCharge": "課金なし",
+      "perMessage": "メッセージごと",
+      "footer": "メッセージが配信されたときに課金されます。料金は受信者の国とメッセージのカテゴリーによって異なります。"
+    },
+    "statement": {
+      "title": "ウォレット明細",
+      "subtitle": "ウォレットのすべての入出金です。合計は、このページだけでなく、フィルターに一致するすべての取引が対象です。",
+      "back": "ウォレットに戻る",
+      "breadcrumbLabel": "パンくずリスト",
+      "breadcrumbWallet": "ウォレット",
+      "breadcrumbStatement": "明細",
+      "export": "CSV を書き出す",
+      "exporting": "書き出し中",
+      "exported": "{fileName} を保存しました",
+      "emptyTitle": "取引はありません",
+      "emptyFiltered": "この条件に一致する取引はありません。条件を変更するかリセットしてください。",
+      "emptyNone": "ウォレットの入出金がここに表示されます。",
+      "filters": {
+        "type": "種類",
+        "from": "開始日",
+        "to": "終了日",
+        "rangeInverted": "終了日が開始日より前になっています。",
+        "search": "検索",
+        "searchPlaceholder": "説明または理由",
+        "apply": "適用",
+        "reset": "リセット"
+      },
+      "typeFilter": {
+        "all": "すべて",
+        "topup": "チャージ",
+        "earn": "収益",
+        "spend": "メッセージ料金",
+        "refund": "返金",
+        "admin_adjust": "調整"
+      },
+      "summary": {
+        "balance": "現在の残高",
+        "in": "入金",
+        "out": "出金",
+        "net": "差引純増減",
+        "count": "{count, plural, other {# 件の取引}}"
+      },
+      "columns": {
+        "label": "ウォレット明細",
+        "date": "日付",
+        "description": "説明",
+        "type": "種類",
+        "in": "入金",
+        "out": "出金",
+        "balance": "残高",
+        "none": "なし"
+      },
+      "context": {
+        "reason": "理由",
+        "to": "宛先",
+        "template": "テンプレート"
+      },
+      "channels": {
+        "campaign": "キャンペーン",
+        "broadcast": "一斉送信",
+        "flow": "フロー",
+        "scheduled": "予約",
+        "auto_reply": "自動返信",
+        "chat": "チャット",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      }
+    },
+    "admin": {
+      "admin": "管理者",
+      "wallet": "ウォレット",
+      "workspacesLabel": "ワークスペース",
+      "breadcrumb": "パンくずリスト",
+      "readOnly": "{role} としてログインしています。ウォレットの設定、料金、残高を変更できるのはスーパー管理者のみです。",
+      "nav": {
+        "overview": "ウォレット",
+        "pricing": "メッセージ料金",
+        "workspaces": "ワークスペースのウォレット",
+        "logs": "ウォレットのログ",
+        "margins": "マージン",
+        "packages": "クレジットパッケージ"
+      },
+      "overview": {
+        "title": "ウォレット概要",
+        "subtitle": "ワークスペースのウォレットに預けられている残高と、過去30日間の入出金です。",
+        "linkWorkspaces": "ワークスペースのウォレット",
+        "linkPricing": "メッセージ料金",
+        "linkLogs": "ウォレットのログ",
+        "float": "ウォレット保有額",
+        "floatHint": "全ワークスペースの保有額",
+        "holding": "残高があるワークスペース",
+        "low": "残高不足",
+        "last30": "過去30日間",
+        "toppedUp": "チャージ済み",
+        "charged": "課金済み",
+        "refunded": "返金済み",
+        "adjustedIn": "手動で追加",
+        "adjustedOut": "手動で減額",
+        "chargedMessages": "課金されたメッセージ",
+        "freeMessages": "無料メッセージ",
+        "reconcile": {
+          "title": "残高を台帳と照合",
+          "body": "各ウォレットを台帳から再計算し、残高が一致しないものを一覧表示します。",
+          "button": "残高を台帳と照合",
+          "running": "確認中",
+          "ok": "{count, plural, other {# 件のウォレット}}がすべて台帳と一致しています。",
+          "mismatches": "{checked} 件中 {count} 件のウォレットが台帳と一致しません。",
+          "workspace": "ワークスペース",
+          "balance": "残高",
+          "ledger": "台帳",
+          "difference": "差額"
+        },
+        "otherCurrencies": "他通貨のウォレット",
+        "otherCurrenciesNote": "他の通貨で請求するワークスペースは、その通貨で資金を保有します。上記の数字は {currency} のみです。他の各通貨は別の行で集計されます。",
+        "other": {
+          "currency": "通貨",
+          "float": "保有額",
+          "holding": "残高があるワークスペース",
+          "toppedUp": "チャージ済み（30日間）",
+          "charged": "課金済み（30日間）"
+        }
+      },
+      "pricing": {
+        "title": "メッセージ料金",
+        "crumb": "メッセージ料金",
+        "subtitle": "顧客がメッセージ1通あたりに支払う金額、新規ウォレットの保護方法、国別の料金表です。",
+        "kpi": {
+          "signup": "紹介報酬",
+          "cost": "メッセージ1通あたりの料金",
+          "costHint": "国別料金をオフにした場合の一律料金",
+          "spending": "実際の支出",
+          "spendingHint": "一律料金で {amount} 分に相当するメッセージ数",
+          "lowBalance": "残高不足アラート"
+        },
+        "economics": {
+          "title": "料金設定",
+          "liveKeys": "すぐに反映されます",
+          "flatPrice": "メッセージ1通あたりの一律料金",
+          "flatPriceHint": "0.01 以上を入力してください。無料メッセージは料金表で設定します。",
+          "referralSignup": "紹介報酬",
+          "referralSignupHint": "紹介者に、紹介された人の最初の有料注文に対して支払われます。",
+          "lowBalance": "残高不足アラートの基準額",
+          "lowBalanceHint": "この残高以下のワークスペースには警告が表示されます。",
+          "coverage": "一斉送信の補償範囲",
+          "coverageHint": "一斉送信は、見積もり費用のこの割合をウォレットがカバーしていない場合に拒否されます。0 は残高が空の場合のみ拒否します。",
+          "rewardSentence": "{reward} の報酬は、一律料金で {count, plural, other {# 通のメッセージ}} 分に相当します。",
+          "save": "料金設定を保存",
+          "saving": "保存中",
+          "saved": "料金設定を保存しました。",
+          "problems": {
+            "invalid": "小数点以下2桁までの金額を入力してください。",
+            "flatZero": "一律料金は 0 にできません。",
+            "percent": "0〜100 の整数を入力してください。"
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "国別料金",
+            "on": "オン: 各メッセージは、料金表に基づき受信者の国とカテゴリで課金されます。",
+            "off": "オフ: すべてのメッセージに一律料金が適用されます。",
+            "save": "保存",
+            "confirmTitle": "国別料金を変更しますか?",
+            "confirmOn": "次回の送信から、メッセージは国とカテゴリごとに課金されます。",
+            "confirmOff": "次回の送信から、メッセージには一律料金が適用されます。",
+            "confirm": "はい、変更します",
+            "savedOn": "国別料金はオンです。",
+            "savedOff": "国別料金はオフです。"
+          },
+          "payPerMessage": {
+            "label": "メッセージごとの課金",
+            "on": "オン: プランの枠がないワークスペースは、配信されたメッセージごとにウォレットから支払います。",
+            "off": "オフ: メッセージはウォレットに課金されません。",
+            "save": "保存",
+            "confirmTitle": "メッセージごとの課金を変更しますか?",
+            "confirmOn": "今後、配信されたメッセージはウォレットに課金されます。",
+            "confirmOff": "今後、メッセージについてウォレットに課金されなくなります。これはすべてのワークスペースに影響します。",
+            "confirm": "はい、変更します",
+            "savedOn": "メッセージごとの課金はオンです。",
+            "savedOff": "メッセージごとの課金はオフです。"
+          }
+        },
+        "grid": {
+          "title": "料金表",
+          "modeOn": "国別料金はオンです: これらの料金が適用されます。",
+          "modeOff": "国別料金はオフです: これらの料金は保存されますが、一律料金が請求されます。",
+          "empty": "料金はまだ設定されていません。行を追加するか、料金表をインポートするか、スターター料金表を再投入してください。",
+          "country": "国",
+          "category": "カテゴリ",
+          "charge": "顧客への請求額",
+          "metaCost": "Meta からの請求額",
+          "margin": "マージン",
+          "marginUnknown": "不明",
+          "actions": "操作",
+          "anyCountry": "すべての国",
+          "anyCategory": "すべてのカテゴリ",
+          "serviceFree": "サービス（無料）",
+          "addRow": "行を追加",
+          "remove": "削除",
+          "cancel": "キャンセル",
+          "removeTitle": "この料金を削除しますか?",
+          "removeBody": "{country} の料金を削除します。メッセージには次に一致する料金が適用されます。",
+          "removed": "料金を削除しました。",
+          "save": "料金を保存",
+          "saving": "保存中",
+          "saved": "{count, plural, other {# 件の料金を保存しました。}}",
+          "savedSome": "{saved} 件を保存、{skipped} 件をスキップしました。スキップされた各行の理由を確認してください。",
+          "unsaved": "{count, plural, other {# 行が未保存です}}",
+          "tooMany": "一度に保存するには変更行が多すぎます。少しずつ保存してください。",
+          "problems": {
+            "price": "小数点以下2桁までの料金を入力してください。",
+            "metaCost": "小数点以下6桁までの原価を入力してください。",
+            "country": "2文字の国コードを入力するか、すべての国の場合は空欄のままにしてください。",
+            "empty": "料金または Meta の原価を入力してください。",
+            "duplicate": "この国とカテゴリの行はすでにあります。"
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "Meta 原価を同期",
+            "title": "Meta 原価を同期",
+            "loading": "Meta の料金リストを読み込んでいます",
+            "source": "ソース",
+            "version": "バージョン",
+            "noVersion": "なし",
+            "currency": "通貨",
+            "added": "追加される行",
+            "updated": "更新される行",
+            "untouched": "料金は変更されません。Meta からの原価のみ更新されます。",
+            "bundledNote": "Meta の最新料金リストが接続されていないため、同梱の料金表を使用します。",
+            "apply": "適用",
+            "applying": "適用中",
+            "done": "Meta 原価を同期しました: {added} 件追加、{updated} 件更新。"
+          },
+          "import": {
+            "button": "料金表をインポート",
+            "title": "料金表をインポート",
+            "intro": "CSV の料金表をアップロードしてください。保存前に変更内容を確認できます。",
+            "file": "CSV ファイル",
+            "limit": "4 MB まで。",
+            "reading": "ファイルを読み込んでいます",
+            "shape": "レイアウト",
+            "shapes": {
+              "wide": "カテゴリごとに1列",
+              "long": "カテゴリごとに1行"
+            },
+            "added": "追加",
+            "updated": "更新",
+            "skipped": "スキップ",
+            "currencyNote": "料金は {currency} で読み取られます。",
+            "problems": "スキップされる行",
+            "line": "{line} 行目:",
+            "fileProblems": {
+              "notCsv": ".csv ファイルを選択してください。",
+              "tooBig": "ファイルのサイズが 4 MB を超えています。",
+              "unreadable": "ファイルを読み込めませんでした。"
+            },
+            "apply": "インポートを適用",
+            "applying": "インポート中",
+            "done": "料金表をインポートしました: {added} 件追加、{updated} 件更新、{skipped} 件スキップ。"
+          },
+          "seed": {
+            "button": "スターター料金表を再投入",
+            "title": "スターター料金表を再投入しますか?",
+            "warning": "同じ国とカテゴリの既存の行を、同梱のスターター料金で上書きします。その行について手動で設定した料金は置き換えられます。",
+            "confirm": "再投入",
+            "done": "スターター料金表から {count, plural, other {# 件の料金}} を書き込みました。"
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "国境を越えた送信",
+            "body": "料金は、ワークスペースの国ではなく受信者の国に基づきます。送信先の国ごとに行を追加してください。"
+          },
+          "how": {
+            "title": "料金の決まり方",
+            "body": "ウォレットは、受信者の国とメッセージのカテゴリをこの料金表で照合します。カテゴリまたは国が空欄の行は、どれにでも一致します。"
+          },
+          "order": {
+            "title": "どの行が優先されるか",
+            "body": "国とカテゴリが完全に一致する行を最優先し、次に国が一致するカテゴリ任意の行、次に国任意の行、最後に一律料金を使用します。"
+          }
+        },
+        "mode": {
+          "title": "顧客への料金設定",
+          "current": "現在の設定: {mode}",
+          "intro": "メッセージ1通あたりの顧客への料金を選択してください。この設定はすべてのワークスペースに適用され、単独で保存されます。",
+          "fixed": {
+            "label": "固定料金",
+            "body": "下の料金表で、国とカテゴリごとに料金を入力します。マージンは保存されますが、使用されません。"
+          },
+          "margin": {
+            "label": "Meta の原価 + マージン",
+            "body": "顧客は、国とカテゴリごとに設定したマージンを加えた Meta の原価を支払います。Meta の原価が不明な場合は、入力された固定料金が請求されます。"
+          },
+          "save": "料金モードを保存",
+          "manage": "マージンを設定",
+          "confirmTitle": "顧客への料金設定を変更しますか?",
+          "confirmFixed": "次のメッセージから、すべてのワークスペースに料金表の固定料金が請求されます。マージンは保存されたままですが、適用されなくなります。",
+          "confirmMargin": "次のメッセージから、すべてのワークスペースに、そのワークスペースに適用される Meta の原価とマージンが請求されます（ワークスペースの個別設定、次にプラン、次にプラットフォームの既定値の順）。Meta の原価が不明な場合は、固定料金が引き続き請求されます。",
+          "confirm": "はい、変更します",
+          "savedFixed": "顧客への料金は固定料金になりました。",
+          "savedMargin": "顧客への料金は Meta の原価 + マージンになりました。"
+        },
+        "metaCards": {
+          "title": "Meta の料金表",
+          "intro": "Meta は通貨ごとに1つの料金リストを公開し、変更するのは1月1日、4月1日、7月1日、10月1日のみです。INR で請求されるワークスペースは、USD のリストを換算するのではなく Meta の INR リストから料金が決まり、INR のウォレットに請求されます。各ファイルは Meta が公開したとおりにインポートしてください。入力された料金と一律料金はプラットフォームの通貨で保持され、他通貨で請求されるワークスペースには登録済みの為替レートで換算されます。",
+          "none": "Meta の料金表はまだ保存されていません。通貨に対応するファイルを Meta から取得してインポートしてください。",
+          "view": "表示",
+          "hide": "非表示",
+          "usedPricing": "料金、マージン、リセラーの損益、およびプラットフォームの通貨で請求されるワークスペース",
+          "usedWorkspaces": "{currency} で請求されるワークスペースの料金",
+          "columns": {
+            "currency": "通貨",
+            "effective": "適用開始日",
+            "checked": "最後にインポート",
+            "markets": "市場",
+            "usedFor": "用途",
+            "status": "ステータス",
+            "actions": "操作"
+          },
+          "freshness": {
+            "current": "最新です",
+            "upcoming": "まもなく確認",
+            "due": "今すぐ確認"
+          },
+          "reminder": {
+            "link": "Meta の料金ページを開く",
+            "current": "最新です。Meta の次回の料金変更は {date} の予定です。",
+            "dueTitle": "{date} に新しい四半期が始まりました。Meta の料金が変更された可能性があります。",
+            "dueBody": "新しい料金ファイル（使用中の通貨ごとに1つ）をダウンロードし、ここでインポートしてください。それまでは、原価とマージンに古い料金表が使われます。",
+            "upcomingTitle": "Meta の料金は {date} に変更される可能性があります（あと {days, plural, other {# 日}}）。",
+            "upcomingBody": "当日にインポートできるよう、新しいファイルを用意しておいてください。",
+            "missingTitle": "{currencies} の Meta 料金表がありません。",
+            "missingBody": "その通貨に設定されたワークスペースには、表示できる Meta の料金リストがありません。対応する Meta のファイルをインポートしてください。"
+          },
+          "table": {
+            "heading": "Meta の {currency} 料金表",
+            "note": "Meta が公開している、配信済みメッセージ1通あたりの定価です。Meta が国名を挙げていない国は「その他」として料金設定されます。",
+            "market": "市場",
+            "everyOther": "挙げられていないすべての国",
+            "categories": {
+              "marketing": "マーケティング",
+              "utility": "ユーティリティ",
+              "authentication": "認証",
+              "authentication_international": "認証（国際）",
+              "service": "サービス"
+            }
+          },
+          "import": {
+            "button": "Meta 料金表をインポート",
+            "title": "Meta 料金表をインポート",
+            "intro": "Meta が1通貨ごとに公開しているファイルを選択してください（リンクが CSV であっても Excel ブック）。通貨と適用開始日はファイルから読み取られます。保存前に変更内容を確認できます。",
+            "file": "Meta の料金ファイル（.xlsx または .csv）",
+            "hint": "1ファイルにつき1通貨です。新しいファイルは、その通貨の料金表全体を置き換えます。2 MB まで。",
+            "reading": "ファイルを読み込んでいます…",
+            "applying": "インポート中",
+            "apply": "料金表を取り込む",
+            "done": "{currency} の料金表をインポートしました。",
+            "fileProblems": {
+              "wrongType": "Meta が公開している .xlsx ファイル、またはそこから保存した CSV を選択してください。",
+              "tooBig": "ファイルのサイズが 2 MB を超えており、Meta の料金表ではありません。",
+              "unreadable": "ファイルを読み込めませんでした。"
+            },
+            "summary": {
+              "currency": "通貨",
+              "effective": "適用開始日",
+              "added": "新しい行",
+              "changed": "変更",
+              "unchanged": "変更なし",
+              "removed": "削除"
+            },
+            "replaces": "{date} 適用の料金表を置き換えます。",
+            "appliesToPricing": "これはプラットフォームの通貨である {currency} の料金表です。インポートすると、料金、マージン、リセラーの損益の基礎となる Meta 原価も更新されます（新規 {added} 件、更新 {updated} 件）。顧客への料金は変更されません。",
+            "storedOnly": "これはプラットフォームの通貨ではありません。保存および表示され、{currency} で請求されるすべてのワークスペースの料金に適用されます。下の料金表にある Meta 原価は、引き続きプラットフォームの通貨で表示されます。",
+            "biggest": "変更が大きい項目",
+            "categories": {
+              "marketing": "マーケティング",
+              "utility": "ユーティリティ",
+              "authentication": "認証",
+              "authentication_international": "認証（国際）",
+              "service": "サービス"
+            },
+            "problems": "スキップされた行"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "ワークスペースのウォレット",
+        "crumb": "ワークスペースのウォレット",
+        "subtitle": "すべてのワークスペースと残高を表示します。開くと、明細の確認や残高の調整ができます。",
+        "search": "検索",
+        "searchPlaceholder": "ワークスペース名または slug",
+        "lowOnly": "残高不足のみ",
+        "apply": "適用",
+        "totalWorkspaces": "ワークスペース",
+        "totalFloat": "保有額の合計",
+        "totalLow": "残高不足",
+        "emptyTitle": "ワークスペースが見つかりません",
+        "emptyBody": "検索条件を変更するか、残高不足フィルターを解除してください。",
+        "loadMore": "さらに読み込む",
+        "loadingMore": "読み込み中",
+        "columns": {
+          "label": "ワークスペースのウォレット",
+          "workspace": "ワークスペース",
+          "mode": "請求",
+          "balance": "残高",
+          "low": "残高不足",
+          "activity": "最終アクティビティ",
+          "never": "なし"
+        },
+        "totalFloatIn": "保有額（{currency}）"
+      },
+      "detail": {
+        "crumb": "ワークスペース",
+        "adjust": "残高を調整",
+        "balance": "残高",
+        "lowBalance": "残高不足",
+        "threshold": "{amount} でアラート",
+        "recent": "最近の明細",
+        "emptyTitle": "まだ明細はありません",
+        "emptyBody": "このウォレットの入出金がここに表示されます。",
+        "columns": {
+          "label": "ウォレットの最近の明細",
+          "date": "日付",
+          "type": "種類",
+          "amount": "金額",
+          "balanceAfter": "処理後の残高",
+          "who": "実行者",
+          "reason": "理由",
+          "customer": "顧客",
+          "operator": "オペレーター",
+          "system": "システム"
+        },
+        "result": {
+          "appliedAdd": "{applied} を追加しました。残高は {balance} になりました。",
+          "appliedDeduct": "{applied} を減額しました。残高は {balance} になりました。",
+          "partial": "残高は 0 を下回れないため、{requested} のうち {applied} のみ適用されました。残高は {balance} になりました。",
+          "replayed": "（このリクエストは適用済みです。）"
+        },
+        "pricing": {
+          "title": "このワークスペースの料金設定",
+          "subtitle": "マージンの個別設定は、このワークスペースにのみ適用され、そのプランとプラットフォームの既定値より優先されます。",
+          "plan": "プラン",
+          "planLoading": "プランを読み込んでいます",
+          "planUnknown": "読み込めませんでした",
+          "noPlan": "プランなし",
+          "overrides": "マージンの個別設定",
+          "overridesHint": "ここに表示された行のみ個別設定されます。それ以外はプランとプラットフォームの既定値に従います。",
+          "empty": "個別設定はありません。このワークスペースはプランとプラットフォームの既定値に従います。",
+          "reason": {
+            "label": "理由（監査ログに保存されます）",
+            "hint": "変更または削除の際は必須です。5〜500 文字。",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "理由を 5 文字以上で入力してください。",
+              "long": "理由は 500 文字以内にしてください。"
+            }
+          },
+          "save": "個別設定を保存",
+          "saving": "保存中",
+          "saveHint": "ハイライトされた行を修正し、保存するには理由を入力してください。",
+          "saved": "{saved} 件を保存、{removed} 件を削除しました。",
+          "savedSome": "{saved} 件を保存、{skipped} 件をスキップしました。スキップされた各行の理由を確認してください。",
+          "preview": {
+            "title": "料金プレビュー",
+            "hint": "このワークスペース宛てのメッセージ1通の料金と、どの設定が適用されたかを確認します。",
+            "country": "国",
+            "category": "カテゴリ",
+            "run": "料金をプレビュー",
+            "running": "料金を計算しています",
+            "result": {
+              "label": "料金プレビューの結果",
+              "metaCost": "Meta の原価",
+              "unknownCost": "不明",
+              "margin": "マージン",
+              "noMargin": "なし",
+              "layer": "設定元",
+              "noLayer": "一致するマージンがありません",
+              "layers": {
+                "workspace": "ワークスペースの個別設定",
+                "plan": "プランのマージン",
+                "platform": "プラットフォームの既定値"
+              },
+              "price": "顧客への料金",
+              "basis": "根拠",
+              "bases": {
+                "margin": "Meta の原価 + マージン",
+                "fixed": "固定料金"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "請求通貨",
+          "intro": "メッセージは、この通貨の Meta 料金表に基づいて料金が決まり、ワークスペースのこの通貨のウォレットに請求されます。チャージもこの通貨で入力され、この通貨に計上されます。",
+          "billedIn": "請求通貨",
+          "change": "通貨を変更",
+          "otherWallets": "このワークスペースが保有する他のウォレット",
+          "notUsed": "請求には使用されません。残高はそのまま残ります。",
+          "dialog": {
+            "title": "請求通貨を変更",
+            "currency": "請求通貨",
+            "effect": "今後、メッセージは Meta の {to} 料金表に基づいて料金が決まり、{to} のウォレットに請求されます。換算は行われません。{from} のウォレットの残高はそのまま残ります。",
+            "left": "{amount} は {from} のウォレットに残り、ワークスペースが元の通貨に戻されるまで使用されません。",
+            "reason": "理由",
+            "reasonHint": "監査証跡とワークスペースのウォレットログに表示されます。5 文字以上。",
+            "confirm": "{currency} で請求",
+            "saving": "保存中",
+            "done": "請求通貨を {to} に変更しました（以前は {from}）。"
+          }
+        }
+      },
+      "adjust": {
+        "title": "残高を調整",
+        "current": "現在の残高",
+        "direction": "操作",
+        "add": "残高を追加",
+        "deduct": "減額",
+        "amount": "金額",
+        "amountHint": "小数点以下2桁まで。",
+        "reason": "理由",
+        "reasonHint": "必須、5〜500 文字。この理由はワークスペースの明細に表示されます。",
+        "counter": "{count} / {max}",
+        "cappedWarning": "残高 {balance} を超えています。残高の範囲内のみ減額され、残高は 0 で止まります。",
+        "review": "確認",
+        "confirmAdd": "残高を追加",
+        "confirmDeduct": "減額",
+        "posting": "登録中",
+        "summaryAdd": "{workspace} に {amount} を追加します。",
+        "summaryDeduct": "{workspace} から {amount} を減額します。",
+        "newBalance": "新しい残高: {balance}",
+        "summaryReason": "理由: {reason}",
+        "visibleNote": "この理由はワークスペースに表示され、監査ログに保存されます。",
+        "problems": {
+          "amount": {
+            "required": "金額を入力してください。",
+            "invalid": "小数点以下2桁までの正の金額を入力してください。",
+            "zero": "金額は 0 より大きい必要があります。",
+            "tooLarge": "1回の調整の上限を超えています。"
+          },
+          "note": {
+            "short": "理由を {min} 文字以上で入力してください。",
+            "long": "理由は {max} 文字未満にしてください。"
+          }
+        }
+      },
+      "logs": {
+        "title": "ウォレットのログ",
+        "crumb": "ウォレットのログ",
+        "subtitle": "ウォレットに起きたことと、オペレーターが変更した内容です。",
+        "scope": "範囲",
+        "scopes": {
+          "all": "すべて",
+          "workspace": "ワークスペースのイベント",
+          "platform": "プラットフォームの変更"
+        },
+        "event": "イベント",
+        "anyEvent": "すべてのイベント",
+        "severity": "重大度",
+        "anySeverity": "すべての重大度",
+        "severities": {
+          "info": "情報",
+          "warning": "警告",
+          "error": "エラー"
+        },
+        "workspaceId": "ワークスペース ID",
+        "workspaceIdInvalid": "ワークスペース ID（UUID）を入力してください。",
+        "search": "検索",
+        "from": "開始日",
+        "to": "終了日",
+        "apply": "適用",
+        "reset": "リセット",
+        "emptyTitle": "ログはありません",
+        "emptyBody": "この条件に一致するものはありません。",
+        "loadMore": "さらに読み込む",
+        "loadingMore": "読み込み中",
+        "platform": "プラットフォーム",
+        "showDetails": "詳細を表示",
+        "hideDetails": "詳細を非表示",
+        "requestId": "リクエスト ID",
+        "columns": {
+          "time": "日時",
+          "severity": "重大度",
+          "event": "イベント",
+          "workspace": "ワークスペース",
+          "actor": "実行者",
+          "message": "メッセージ"
+        },
+        "actors": {
+          "operator": "オペレーター",
+          "customer": "顧客",
+          "system": "システム"
+        }
+      },
+      "margins": {
+        "title": "マージン",
+        "crumb": "マージン",
+        "subtitle": "顧客が Meta の原価に上乗せして支払う金額を、国とメッセージカテゴリごとに示します。",
+        "retry": "再試行",
+        "ratesFailed": "Meta の原価を読み込めなかったため、新しい行の料金は表示できません。",
+        "mode": {
+          "current": "顧客への料金の基準",
+          "inactive": "料金モードが固定料金のため、これらのマージンはまだ適用されていません。保存されており、Meta の原価 + マージンに切り替えたときに適用されます。",
+          "switchLink": "料金モードの切り替えに移動"
+        },
+        "scope": {
+          "label": "マージン:",
+          "hint": "プラットフォームの既定値はすべてのプランに適用されます。プラン個別のマージンはそれより優先されます。",
+          "platform": "プラットフォームの既定値（すべてのプランに適用）"
+        },
+        "grid": {
+          "country": "国",
+          "searchCountry": "国を検索",
+          "category": "カテゴリ",
+          "margin": "マージン %",
+          "metaCost": "Meta の原価",
+          "price": "顧客への料金",
+          "note": "理由",
+          "setBy": "設定元",
+          "actions": "操作",
+          "anyCountry": "すべての国",
+          "anyCategory": "すべてのカテゴリ",
+          "unknownCost": "ここでは Meta の原価が不明のため、入力した固定料金が適用されます。",
+          "priceInvalid": "-100 から 1000 までのマージンを、小数点以下2桁までで入力してください。",
+          "removedPending": "保存すると削除されます。",
+          "addRow": "行を追加",
+          "remove": "削除",
+          "undo": "元に戻す",
+          "cancel": "キャンセル",
+          "empty": "マージンはまだありません。行を追加して設定してください。",
+          "removeTitle": "このマージンを削除しますか?",
+          "removeBody": "{country} のマージンを削除します。料金には次に一致するマージンが適用されます。",
+          "removed": "マージンを削除しました。",
+          "save": "マージンを保存",
+          "saving": "保存中",
+          "saved": "{count, plural, other {# 件のマージンを保存しました。}}",
+          "savedSome": "{saved} 件を保存、{skipped} 件をスキップしました。スキップされた各行の理由を確認してください。",
+          "unsaved": "{count, plural, other {# 行が未保存です}}",
+          "tooMany": "一度に保存するには変更行が多すぎます。少しずつ保存してください。",
+          "problems": {
+            "margin": "-100 から 1000 までのパーセンテージを、小数点以下2桁までで入力してください。-100 は無料を意味します。",
+            "duplicate": "この国とカテゴリの行はすでにあります。"
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "どのマージンが優先されるか",
+            "body": "ワークスペースの個別設定はプランのマージンより優先され、プランのマージンはプラットフォームの既定値より優先されます。各レイヤーは、次のレイヤーに進む前にすべて読み込まれます。"
+          },
+          "specific": {
+            "title": "最も具体的なものが優先",
+            "body": "レイヤー内では、国とカテゴリの組み合わせが最優先され、次に国が一致するカテゴリ任意の行、次にカテゴリが一致する任意の国の行、最後に既定の行が使われます。"
+          },
+          "unknown": {
+            "title": "Meta の原価が不明な場合",
+            "body": "料金は Meta の原価にマージンを加えたもので、0.01 単位に四捨五入され、最低 0.01 です（マージンが -100%（無料）の場合を除く）。Meta の原価が不明な場合は、入力した固定料金が代わりに適用されます。"
+          }
+        }
+      },
+      "packages": {
+        "title": "クレジットパッケージ",
+        "crumb": "クレジットパッケージ",
+        "subtitle": "任意の特典です。この金額を支払うと、この金額のウォレットクレジットが付与されます。価格を超えるクレジットは、チャージのボーナスになります。",
+        "new": "新しいパッケージ",
+        "edit": "編集",
+        "enable": "有効にする",
+        "disable": "無効にする",
+        "delete": "削除",
+        "cancel": "キャンセル",
+        "enabled": "{name} を有効にしました。",
+        "disabled": "{name} を無効にしました。",
+        "deleted": "パッケージを削除しました。",
+        "deleteTitle": "パッケージを削除しますか?",
+        "deleteBody": "このパッケージを削除しますか? 既存の購入記録は台帳に残ります。",
+        "bonus": "+{percent}% のボーナス",
+        "status": {
+          "active": "有効",
+          "inactive": "無効",
+          "featured": "おすすめ"
+        },
+        "empty": {
+          "title": "クレジットパッケージはまだありません",
+          "body": "パッケージはまだ作成されていません。",
+          "bodyWrite": "最初のパッケージを作成して、ボーナス付きのウォレットチャージを提供しましょう。"
+        },
+        "columns": {
+          "label": "クレジットパッケージ",
+          "name": "名前",
+          "slug": "slug",
+          "price": "価格",
+          "credit": "ウォレットクレジット",
+          "badge": "バッジ",
+          "status": "ステータス",
+          "actions": "操作"
+        },
+        "form": {
+          "newTitle": "新しいクレジットパッケージ",
+          "editTitle": "クレジットパッケージを編集",
+          "newCrumb": "新しいパッケージ",
+          "editCrumb": "パッケージを編集",
+          "notFound": "このパッケージは存在しません。",
+          "back": "クレジットパッケージに戻る",
+          "sections": {
+            "identity": "基本情報",
+            "pricing": "料金",
+            "display": "表示"
+          },
+          "name": "名前",
+          "slug": "slug（任意）",
+          "slugHint": "英字、数字、ハイフン、アンダースコアが使えます。空欄の場合は名前から自動で作成されます。",
+          "description": "説明",
+          "price": "価格",
+          "priceHint": "顧客の支払い額です。",
+          "currency": "通貨",
+          "walletCredit": "ウォレットクレジット",
+          "walletCreditHint": "ウォレットに入る金額です。",
+          "bonusLine": "ボーナス {percent}%: 顧客は {price} を支払い、{credit} を受け取ります。",
+          "badge": "バッジ",
+          "badgeHint": "「お得」などの短いラベルです。",
+          "sortOrder": "表示順",
+          "sortOrderHint": "小さい順に表示されます。",
+          "active": "有効",
+          "featured": "おすすめ",
+          "create": "パッケージを作成",
+          "save": "変更を保存",
+          "saving": "保存中",
+          "created": "{name} を作成しました。",
+          "saved": "{name} を保存しました。",
+          "stale": {
+            "title": "このパッケージは別の人が変更しました",
+            "body": "編集内容は保存されていないため、何も上書きされていません。最新版を読み込み直してから、もう一度変更してください。",
+            "reload": "最新版を読み込む"
+          },
+          "problems": {
+            "name": "名前は 96 文字以内で入力してください。",
+            "slug": "英字、数字、ハイフン、アンダースコアのみを使用してください。",
+            "description": "説明は 500 文字以内にしてください。",
+            "price": "小数点以下2桁までの金額を入力してください。",
+            "currency": "一覧にある通貨から選択してください。",
+            "walletCredit": "0 より大きく、小数点以下2桁までの金額を入力してください。",
+            "badge": "バッジは 32 文字以内にしてください。",
+            "sortOrder": "0〜9999 の整数を入力してください。"
+          }
+        }
+      }
+    }
+  }
+}

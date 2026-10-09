@@ -1,0 +1,164 @@
+{
+  "node-bridge-runtime": {
+    "nav": {
+      "group": "Kanalen",
+      "item": "Node-bridge"
+    },
+    "page": {
+      "title": "URL en token van de Node-bridge",
+      "eyebrow": "globaal · node-bridge",
+      "description": "De gedeelde Node-bridge waarmee elke engine communiceert: de Unofficial API verzendt daarlangs en de verzendsnelheid wordt hier toegepast. Eenmaal instellen; dit geldt voor het hele platform.",
+      "superOnly": "Alleen een superbeheerder kan de Node-bridge wijzigen. Je ziet de opgeslagen waarden."
+    },
+    "bridge": {
+      "tokenSet": "Token ingesteld",
+      "noToken": "Geen token",
+      "serverUrl": "Server-URL",
+      "serverUrlPlaceholder": "http://localhost:8888",
+      "urlInvalid": "Voer eerst een geldige server-URL in (http:// of https://).",
+      "serverUrlHint": "Waar je Node-bridge bereikbaar is. Inkomende en statuswebhooks worden automatisch afgehandeld; de bridge haalt onze URL op uit de omgevingsvariabele APP_DOMAIN_NAME.",
+      "token": "Node-webhooktoken (X-Node-Token)",
+      "tokenPlaceholder": "gedeeld X-Node-Token-geheim",
+      "tokenSavedPlaceholder": "••• opgeslagen, laat leeg om te behouden",
+      "tokenHint": "Gedeeld geheim dat de Node-bridge als X-Node-Token verstuurt. Moet overeenkomen met het token in je Node-bridge-configuratie. Na het opslaan verborgen; plak het alleen opnieuw om te roteren.",
+      "save": "Opslaan",
+      "saving": "Opslaan…",
+      "test": "Verbinding testen",
+      "testing": "Testen…",
+      "saved": "Node-bridge opgeslagen."
+    },
+    "pacing": {
+      "eyebrow": "verzendsnelheid",
+      "title": "Verzendsnelheid en batches",
+      "msgGap": "Tussenpoze tussen berichten (sec)",
+      "msgGapHint": "Seconden tussen opeenvolgende verzendingen.",
+      "batchesGap": "Batchgrootte",
+      "batchesGapHint": "Ontvangers per batch.",
+      "bwMsgGap": "Tussen batches (min)",
+      "bwMsgGapHint": "Minuten tussen batches.",
+      "enableBatches": "Batches inschakelen",
+      "update": "Timing bijwerken",
+      "updating": "Opslaan…",
+      "saved": "Verzendtiming bijgewerkt.",
+      "tipTitle": "Tip voor verzendsnelheid",
+      "tip": "Verklein de tussenpoze pas na een proefperiode van 24 uur; Meta beperkt agressieve verzenders. 3 seconden is de veilige standaard."
+    },
+    "errors": {
+      "forbidden": "Je hebt geen toestemming om dat te doen.",
+      "conflict": "Iemand anders heeft deze instellingen gewijzigd. De pagina is vernieuwd; probeer het opnieuw.",
+      "validation": "Controleer de waarden en probeer het opnieuw.",
+      "request": "Dat verzoek kon niet worden voltooid.",
+      "unexpected": "Er ging iets mis aan onze kant. Probeer het zo dadelijk opnieuw.",
+      "network": "Kan de server niet bereiken. Controleer je verbinding."
+    },
+    "loading": "Laden",
+    "retry": "Opnieuw proberen",
+    "unofficial": {
+      "eyebrow": "platformschakelaar",
+      "title": "Onofficiële WhatsApp (persoonlijke nummers via QR)",
+      "status": {
+        "disabled": "Uitgeschakeld / niet ondersteund",
+        "enabled": "Ingeschakeld (niet ondersteund)"
+      },
+      "explanation": "Wij ondersteunen alleen de officiële WhatsApp Business API. Dit is de platformbrede schakelaar voor persoonlijke nummers: dit wordt niet ondersteund en kan leiden tot geblokkeerde nummers. Zelfs als hij aan staat, kunnen alleen de hieronder toegestane workspaces het gebruiken.",
+      "state": {
+        "disabled": "Uit. Geen enkele workspace kan persoonlijke nummers zien of koppelen, ongeacht de lijst hieronder: de QR-koppelstroom, de Warmer en de verzenders voor persoonlijke nummers zijn verborgen, en verzendingen via deze nummers worden geweigerd.",
+        "enabled": "Aan, alleen voor de toegestane workspaces. Een workspace die niet op de lijst hieronder staat, ziet er niets van. Dit wordt niet ondersteund; WhatsApp kan deze nummers blokkeren."
+      },
+      "enable": "Onofficiële WhatsApp inschakelen",
+      "disable": "Onofficiële WhatsApp uitschakelen",
+      "cancel": "Annuleren",
+      "enableDialog": {
+        "title": "Onofficiële WhatsApp inschakelen?",
+        "body": "Dit wordt niet ondersteund. Nummers die zo zijn gekoppeld, kunnen door WhatsApp worden geblokkeerd, en berichten die via deze nummers worden verzonden, vallen niet onder een leveringsgarantie. De schakelaar aanzetten geeft er op zichzelf niemand toegang toe: alleen de workspaces op de toegangslijst kunnen het gebruiken.",
+        "typeLabel": "Typ {word} om te bevestigen",
+        "confirm": "Inschakelen"
+      },
+      "disableDialog": {
+        "title": "Onofficiële WhatsApp uitschakelen?",
+        "body": "Elke workspace ziet dan geen persoonlijke nummers, de Warmer en de QR-koppelstroom meer, en verzendingen via persoonlijke nummers worden geweigerd. Opgeslagen gegevens en de toegangslijst blijven behouden.",
+        "confirm": "Uitschakelen"
+      },
+      "enabledToast": "Onofficiële WhatsApp is nu ingeschakeld.",
+      "disabledToast": "Onofficiële WhatsApp is nu uitgeschakeld.",
+      "dimNote": "De onderstaande instellingen gelden alleen voor persoonlijke nummers en worden niet gebruikt zolang onofficiële WhatsApp is uitgeschakeld.",
+      "errors": {
+        "forbidden": "Alleen een superbeheerder kan deze schakelaar wijzigen.",
+        "conflict": "Iemand anders heeft deze instellingen gewijzigd. De pagina is vernieuwd; probeer het opnieuw.",
+        "validation": "Controleer de waarden en probeer het opnieuw.",
+        "request": "Dat verzoek kon niet worden voltooid.",
+        "unexpected": "Er ging iets mis aan onze kant. Probeer het zo dadelijk opnieuw.",
+        "network": "Kan de server niet bereiken. Controleer je verbinding."
+      },
+      "allowedCount": "{count, plural, =0 {Geen workspaces toegestaan} one {# workspace toegestaan} other {# workspaces toegestaan}}"
+    },
+    "workspaces": {
+      "eyebrow": "toegangslijst",
+      "title": "Workspaces met onofficiële WhatsApp",
+      "description": "Standaard uit voor iedereen. Alleen de hier vermelde workspaces kunnen WhatsApp met persoonlijke nummers gebruiken, en alleen zolang de engine hierboven aan staat.",
+      "count": "{count, plural, =0 {Geen workspaces toegestaan} one {# workspace toegestaan} other {# workspaces toegestaan}}",
+      "engineOff": "De engine staat uit, dus deze workspaces kunnen hem nog niet gebruiken.",
+      "engineOffAction": "Naar de schakelaar",
+      "readOnly": "Alleen een superbeheerder kan workspaces toevoegen of verwijderen. Je kunt de lijst wel zien.",
+      "search": {
+        "label": "Een workspace toevoegen",
+        "placeholder": "Zoek op workspacenaam, slug of e-mail van de eigenaar",
+        "hint": "Typ minimaal 2 tekens.",
+        "searching": "Zoeken",
+        "none": "Geen workspace gevonden voor \"{q}\".",
+        "add": "Toevoegen",
+        "alreadyAdded": "Al toegestaan",
+        "owner": "Eigenaar: {email}",
+        "noPlan": "Geen abonnement",
+        "results": "Zoekresultaten"
+      },
+      "table": {
+        "caption": "Workspaces die onofficiële WhatsApp mogen gebruiken",
+        "workspace": "Workspace",
+        "plan": "Abonnement",
+        "devices": "Apparaten",
+        "since": "Ingeschakeld sinds",
+        "by": "Ingeschakeld door",
+        "note": "Opmerking",
+        "actions": "Acties",
+        "devicesValue": "{active} actief van {total}",
+        "noPlan": "Geen abonnement",
+        "system": "Onbekend",
+        "noNote": "Geen",
+        "remove": "Verwijderen"
+      },
+      "empty": {
+        "title": "Nog geen workspaces toegestaan",
+        "message": "Niemand kan WhatsApp met persoonlijke nummers gebruiken, ook niet als de engine aan staat. Zoek hierboven om de eerste workspace toe te voegen."
+      },
+      "loadMore": "Meer laden",
+      "loadingMore": "Laden",
+      "addDialog": {
+        "title": "{name} toestaan?",
+        "body": "{name} ({slug}) kan persoonlijke WhatsApp-nummers via QR-code koppelen zolang de engine aan staat. Dit wordt niet ondersteund en nummers kunnen door WhatsApp worden geblokkeerd.",
+        "noteLabel": "Opmerking (optioneel)",
+        "notePlaceholder": "Waarom deze workspace, wie heeft erom gevraagd",
+        "noteCount": "{count} / {max}",
+        "noteTooLong": "De opmerking mag maximaal {max} tekens bevatten.",
+        "confirm": "Workspace toestaan"
+      },
+      "removeDialog": {
+        "title": "{name} verwijderen?",
+        "body": "{name} kan niet langer WhatsApp met persoonlijke nummers gebruiken. De verbindingen stoppen binnen 20 seconden. Opgeslagen sessies blijven bewaard, dus als je de workspace opnieuw toestaat, worden ze hersteld.",
+        "confirm": "Verwijderen"
+      },
+      "cancel": "Annuleren",
+      "addedToast": "{name} kan nu onofficiële WhatsApp gebruiken.",
+      "removedToast": "{name} is van de lijst verwijderd.",
+      "errors": {
+        "forbidden": "Alleen een superbeheerder kan deze lijst wijzigen.",
+        "conflict": "De lijst is in de tussentijd gewijzigd. Hij is vernieuwd; probeer het opnieuw.",
+        "validation": "Controleer de waarden en probeer het opnieuw.",
+        "request": "Dat verzoek kon niet worden voltooid.",
+        "unexpected": "Er ging iets mis aan onze kant. Probeer het zo dadelijk opnieuw.",
+        "network": "Kan de server niet bereiken. Controleer je verbinding."
+      },
+      "retry": "Opnieuw proberen"
+    }
+  }
+}

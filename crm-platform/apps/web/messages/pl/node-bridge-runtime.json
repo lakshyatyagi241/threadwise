@@ -1,0 +1,164 @@
+{
+  "node-bridge-runtime": {
+    "nav": {
+      "group": "Kanały",
+      "item": "Most Node"
+    },
+    "page": {
+      "title": "Adres URL i token mostu Node",
+      "eyebrow": "globalne · most Node",
+      "description": "Wspólny most Node, z którym komunikuje się każdy silnik: nieoficjalne API wysyła przez niego, a tempo nadawcy jest tu ustawiane. Ustaw raz; obowiązuje w całej platformie.",
+      "superOnly": "Tylko superadministrator może zmienić most Node. Zapisane wartości są widoczne."
+    },
+    "bridge": {
+      "tokenSet": "Token ustawiony",
+      "noToken": "Brak tokenu",
+      "serverUrl": "Adres URL serwera",
+      "serverUrlPlaceholder": "http://localhost:8888",
+      "urlInvalid": "Najpierw podaj prawidłowy adres URL serwera (http:// lub https://).",
+      "serverUrlHint": "Miejsce, pod którym dostępny jest most Node. Webhooki przychodzące i statusów są obsługiwane automatycznie: most pobiera nasz adres ze zmiennej środowiskowej APP_DOMAIN_NAME.",
+      "token": "Token webhooka Node (X-Node-Token)",
+      "tokenPlaceholder": "wspólny sekret X-Node-Token",
+      "tokenSavedPlaceholder": "••• zapisany, zostaw puste, aby zachować",
+      "tokenHint": "Wspólny sekret, który most Node wysyła jako X-Node-Token. Musi być zgodny z tokenem w konfiguracji mostu Node. Po zapisaniu jest ukryty; wklej ponownie tylko w celu zmiany.",
+      "save": "Zapisz",
+      "saving": "Zapisywanie…",
+      "test": "Testuj połączenie",
+      "testing": "Testowanie…",
+      "saved": "Zapisano most Node."
+    },
+    "pacing": {
+      "eyebrow": "tempo",
+      "title": "Tempo i paczki nadawcy",
+      "msgGap": "Odstęp między wiadomościami (s)",
+      "msgGapHint": "Sekundy między kolejnymi wysyłkami.",
+      "batchesGap": "Rozmiar paczki",
+      "batchesGapHint": "Odbiorcy w paczce.",
+      "bwMsgGap": "Między paczkami (min)",
+      "bwMsgGapHint": "Minuty między paczkami.",
+      "enableBatches": "Włącz paczki",
+      "update": "Zaktualizuj czas",
+      "updating": "Zapisywanie…",
+      "saved": "Zaktualizowano czas wysyłania.",
+      "tipTitle": "Wskazówka dotycząca tempa",
+      "tip": "Zmniejszaj odstęp między wiadomościami dopiero po 24-godzinnym okresie testowym: Meta ogranicza agresywnych nadawców. 3 sekundy to bezpieczna wartość domyślna."
+    },
+    "errors": {
+      "forbidden": "Nie masz uprawnień do tego działania.",
+      "conflict": "Ktoś inny zmienił te ustawienia. Strona została odświeżona; spróbuj ponownie.",
+      "validation": "Sprawdź wartości i spróbuj ponownie.",
+      "request": "Nie udało się zrealizować tego żądania.",
+      "unexpected": "Coś poszło nie tak po naszej stronie. Spróbuj ponownie za chwilę.",
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie."
+    },
+    "loading": "Wczytywanie",
+    "retry": "Spróbuj ponownie",
+    "unofficial": {
+      "eyebrow": "przełącznik platformy",
+      "title": "Nieoficjalny WhatsApp (numery prywatne przez kod QR)",
+      "status": {
+        "disabled": "Wyłączone / nieobsługiwane",
+        "enabled": "Włączone (nieobsługiwane)"
+      },
+      "explanation": "Obsługujemy wyłącznie oficjalne API WhatsApp Business. To ogólnoplatformowy przełącznik dla numerów prywatnych: jest nieobsługiwany i może skutkować zablokowaniem numerów. Nawet po włączeniu korzystać z niego mogą tylko przestrzenie robocze z listy poniżej.",
+      "state": {
+        "disabled": "Wyłączone. Żadna przestrzeń robocza nie widzi ani nie łączy numerów prywatnych, niezależnie od listy poniżej: przepływ połączenia QR, Warmer i nadawcy numerów prywatnych są ukryte, a wysyłki przez nie są odrzucane.",
+        "enabled": "Włączone, tylko dla dozwolonych przestrzeni roboczych. Przestrzeń robocza spoza listy poniżej nie widzi z tego nic. Jest to nieobsługiwane; WhatsApp może zablokować te numery."
+      },
+      "enable": "Włącz nieoficjalny WhatsApp",
+      "disable": "Wyłącz nieoficjalny WhatsApp",
+      "cancel": "Anuluj",
+      "enableDialog": {
+        "title": "Włączyć nieoficjalny WhatsApp?",
+        "body": "Nie jest to obsługiwane. Numery połączone w ten sposób mogą zostać zablokowane przez WhatsApp, a wiadomości wysłane tą drogą nie są objęte żadną gwarancją dostarczenia. Samo włączenie przełącznika nikomu nie daje dostępu: korzystać mogą tylko przestrzenie robocze z listy dozwolonych.",
+        "typeLabel": "Wpisz {word}, aby potwierdzić",
+        "confirm": "Włącz"
+      },
+      "disableDialog": {
+        "title": "Wyłączyć nieoficjalny WhatsApp?",
+        "body": "Każda przestrzeń robocza przestanie widzieć numery prywatne, Warmer i przepływ połączenia QR, a wysyłki przez numery prywatne zostaną odrzucone. Zapisane dane i lista dozwolonych zostają zachowane.",
+        "confirm": "Wyłącz"
+      },
+      "enabledToast": "Nieoficjalny WhatsApp został włączony.",
+      "disabledToast": "Nieoficjalny WhatsApp został wyłączony.",
+      "dimNote": "Poniższe ustawienia dotyczą tylko numerów prywatnych i nie są używane, gdy nieoficjalny WhatsApp jest wyłączony.",
+      "errors": {
+        "forbidden": "Tylko superadministrator może zmienić ten przełącznik.",
+        "conflict": "Ktoś inny zmienił te ustawienia. Strona została odświeżona; spróbuj ponownie.",
+        "validation": "Sprawdź wartości i spróbuj ponownie.",
+        "request": "Nie udało się zrealizować tego żądania.",
+        "unexpected": "Coś poszło nie tak po naszej stronie. Spróbuj ponownie za chwilę.",
+        "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie."
+      },
+      "allowedCount": "{count, plural, =0 {Brak dozwolonych przestrzeni roboczych} one {Dozwolona # przestrzeń robocza} few {Dozwolone # przestrzenie robocze} many {Dozwolonych # przestrzeni roboczych} other {Dozwolonej # przestrzeni roboczej}}"
+    },
+    "workspaces": {
+      "eyebrow": "lista dozwolonych",
+      "title": "Przestrzenie robocze z nieoficjalnym WhatsApp",
+      "description": "Domyślnie wyłączone dla wszystkich. Tylko przestrzenie robocze wymienione tutaj mogą korzystać z WhatsApp na numerach prywatnych i tylko wtedy, gdy powyższy silnik jest włączony.",
+      "count": "{count, plural, =0 {Brak dozwolonych przestrzeni roboczych} one {Dozwolona # przestrzeń robocza} few {Dozwolone # przestrzenie robocze} many {Dozwolonych # przestrzeni roboczych} other {Dozwolonej # przestrzeni roboczej}}",
+      "engineOff": "Silnik jest wyłączony, więc te przestrzenie robocze nie mogą z niego jeszcze korzystać.",
+      "engineOffAction": "Przejdź do przełącznika",
+      "readOnly": "Tylko superadministrator może dodawać lub usuwać przestrzenie robocze. Listę widać.",
+      "search": {
+        "label": "Dodaj przestrzeń roboczą",
+        "placeholder": "Szukaj po nazwie przestrzeni roboczej, slugu lub e-mailu właściciela",
+        "hint": "Wpisz co najmniej 2 znaki.",
+        "searching": "Wyszukiwanie",
+        "none": "Brak przestrzeni roboczej pasującej do „{q}”.",
+        "add": "Dodaj",
+        "alreadyAdded": "Już dozwolona",
+        "owner": "Właściciel: {email}",
+        "noPlan": "Brak planu",
+        "results": "Wyniki wyszukiwania"
+      },
+      "table": {
+        "caption": "Przestrzenie robocze z dostępem do nieoficjalnego WhatsApp",
+        "workspace": "Przestrzeń robocza",
+        "plan": "Plan",
+        "devices": "Urządzenia",
+        "since": "Włączono od",
+        "by": "Włączył",
+        "note": "Notatka",
+        "actions": "Działania",
+        "devicesValue": "Aktywne: {active} z {total}",
+        "noPlan": "Brak planu",
+        "system": "Nieznany",
+        "noNote": "Brak",
+        "remove": "Usuń"
+      },
+      "empty": {
+        "title": "Brak dozwolonych przestrzeni roboczych",
+        "message": "Nikt nie może korzystać z WhatsApp na numerze prywatnym, nawet gdy silnik jest włączony. Wyszukaj powyżej, aby dodać pierwszą przestrzeń roboczą."
+      },
+      "loadMore": "Wczytaj więcej",
+      "loadingMore": "Wczytywanie",
+      "addDialog": {
+        "title": "Zezwolić na {name}?",
+        "body": "{name} ({slug}) będzie mogła łączyć prywatne numery WhatsApp kodem QR, dopóki silnik jest włączony. Jest to nieobsługiwane, a WhatsApp może zablokować numery.",
+        "noteLabel": "Notatka (opcjonalnie)",
+        "notePlaceholder": "Dlaczego ta przestrzeń robocza, kto poprosił",
+        "noteCount": "{count} / {max}",
+        "noteTooLong": "Notatka może mieć najwyżej {max} znaków.",
+        "confirm": "Zezwól przestrzeni roboczej"
+      },
+      "removeDialog": {
+        "title": "Usunąć {name} z listy?",
+        "body": "{name} nie będzie już mogła korzystać z WhatsApp na numerze prywatnym. Jej połączenia zostaną zatrzymane w ciągu 20 sekund. Zapisane sesje są zachowane, więc ponowne dopuszczenie przestrzeni roboczej je przywróci.",
+        "confirm": "Usuń"
+      },
+      "cancel": "Anuluj",
+      "addedToast": "{name} może teraz korzystać z nieoficjalnego WhatsApp.",
+      "removedToast": "{name} została usunięta z listy.",
+      "errors": {
+        "forbidden": "Tylko superadministrator może zmienić tę listę.",
+        "conflict": "Lista zmieniła się w międzyczasie. Została odświeżona; spróbuj ponownie.",
+        "validation": "Sprawdź wartości i spróbuj ponownie.",
+        "request": "Nie udało się zrealizować tego żądania.",
+        "unexpected": "Coś poszło nie tak po naszej stronie. Spróbuj ponownie za chwilę.",
+        "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie."
+      },
+      "retry": "Spróbuj ponownie"
+    }
+  }
+}

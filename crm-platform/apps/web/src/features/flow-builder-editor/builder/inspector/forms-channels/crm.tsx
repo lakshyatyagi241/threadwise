@@ -1,126 +1,110 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Check, Field } from '../kit';
 import type { FormComponent } from '../types';
 import { formLabel, serviceLabel, stageOptions, withSavedOption } from './helpers';
 import { ExtLink, Intro, Mono, Num, Sel, Ta, Txt, voiceAssistantOptions } from './shared';
 
+const NS = 'flb.builder.formsChannels.crm';
+
 export const BookAppointmentForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  const th = useTranslations('flb.builder.formsChannels.helpers');
   const { bookingTypes } = p.env.ctx;
   const svcOpts = withSavedOption(
     [
       {
         v: '',
-        l: p.env.loading ? 'Loading services…' : '— all my services (customer picks) —',
+        l: p.env.loading ? t('loadingServices') : t('allServices'),
       },
-      ...bookingTypes.map((s) => ({ v: s.id, l: serviceLabel(s.name, s.active, s.duration) })),
+      ...bookingTypes.map((s) => ({
+        v: s.id,
+        l: serviceLabel(s.name, s.active, s.duration, th),
+      })),
     ],
     p.data.bookingTypeId,
-    (id) => `Service ${id.slice(0, 8)} (not loaded)`,
+    (id) => t('savedService', { id: id.slice(0, 8) }),
   );
   return (
     <>
       <Intro
-        sub={
-          <>
-            Manage services + hours at <ExtLink href="/appointments">/appointments</ExtLink>. The
-            keyword lives in this flow&apos;s <b>Trigger</b>.
-          </>
-        }
+        sub={t.rich('bookingSub', {
+          link: (c) => <ExtLink href="/appointments">{c}</ExtLink>,
+          b: (c) => <b>{c}</b>,
+        })}
       >
-        Books an appointment inside the chat. Pin this node to one <b>service</b> for a dedicated
-        flow (e.g. keyword <Mono>consult</Mono> → 30-min Consultation), or leave it on{' '}
-        <i>all services</i> to let the customer choose.
+        {t.rich('bookingIntro', {
+          b: (c) => <b>{c}</b>,
+          i: (c) => <i>{c}</i>,
+          mono: (c) => <Mono>{c}</Mono>,
+        })}
       </Intro>
       <Field
-        label="Service"
-        hint={
-          p.env.loading
-            ? 'Loading your services…'
-            : 'Pick one service, or leave on “all” for a menu.'
-        }
+        label={t('service')}
+        hint={p.env.loading ? t('loadingYourServices') : t('serviceHint')}
       >
         {Sel(p, 'bookingTypeId', svcOpts)}
       </Field>
-      <Field label="Slots to offer">{Num(p, 'slotCount', '5')}</Field>
-      <Field label="Prompt (sent before the list)">
-        {Txt(p, 'prompt', 'Pick a time that works for you:')}
-      </Field>
-      <Field label="Confirmation message">
-        {Txt(p, 'confirmation', 'Booked! See you on {{slot}}.')}
+      <Field label={t('slots')}>{Num(p, 'slotCount', '5')}</Field>
+      <Field label={t('prompt')}>{Txt(p, 'prompt', t('promptPlaceholder'))}</Field>
+      <Field label={t('confirmation')}>
+        {Txt(p, 'confirmation', t('confirmationPlaceholder'))}
       </Field>
     </>
   );
 };
 
-export const AiCallForm: FormComponent = (p) => (
-  <>
-    <Intro
-      sub={
-        <>
-          Manage voice agents in <ExtLink href="/ai-training">AI voice assistants</ExtLink>.
-          Requires WABA calling enabled + the customer&apos;s call permission.
-        </>
-      }
-    >
-      Places a WhatsApp <b>voice call</b> to this contact, answered by an AI voice agent. Drop it
-      after a keyword trigger (e.g. <Mono>call me</Mono>) so the customer is called automatically.
-    </Intro>
-    <Field
-      label="Voice assistant"
-      hint="The AI agent that talks on the call. Blank = the workspace default voice assistant."
-    >
-      {Sel(
-        p,
-        'assistantId',
-        voiceAssistantOptions(p, 'assistantId', '— workspace default assistant —'),
-      )}
-    </Field>
-  </>
-);
+export const AiCallForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  const ts = useTranslations('flb.builder.formsChannels.shared');
+  return (
+    <>
+      <Intro
+        sub={t.rich('aiCallSub', {
+          link: (c) => <ExtLink href="/ai-training">{c}</ExtLink>,
+        })}
+      >
+        {t.rich('aiCallIntro', { b: (c) => <b>{c}</b>, mono: (c) => <Mono>{c}</Mono> })}
+      </Intro>
+      <Field label={t('voiceAssistant')} hint={t('voiceAssistantHint')}>
+        {Sel(
+          p,
+          'assistantId',
+          voiceAssistantOptions(p, 'assistantId', t('workspaceDefaultAssistant'), ts),
+        )}
+      </Field>
+    </>
+  );
+};
 
 export const GoogleMeetForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
   const invite = !!p.data.sendCalendarInvite;
   return (
     <>
       <Intro
-        sub={
-          <>
-            Requires Google Calendar at{' '}
-            <ExtLink href="/appointments/settings">/appointments/settings</ExtLink>.
-          </>
-        }
+        sub={t.rich('meetSub', {
+          link: (c) => <ExtLink href="/appointments/settings">{c}</ExtLink>,
+        })}
       >
-        Creates a Google Calendar event with a Meet link the moment this node fires, then sends the
-        link to the customer.
+        {t('meetIntro')}
       </Intro>
-      <Field
-        label="Meeting title"
-        hint="Shown in Google Calendar. Use {{name}} or any flow variable."
-      >
-        {Txt(p, 'title', 'WhatsApp consultation with {{name}}')}
+      <Field label={t('meetingTitle')} hint={t('meetingTitleHint')}>
+        {Txt(p, 'title', t('meetingTitlePlaceholder'))}
       </Field>
-      <Field label="Duration (minutes)" hint="How long the calendar event lasts.">
+      <Field label={t('duration')} hint={t('durationHint')}>
         {Num(p, 'durationMinutes', '30')}
       </Field>
-      <Field
-        label="Lead time (minutes)"
-        hint="Schedule the meeting N minutes from now, so the customer has time to read the message."
-      >
+      <Field label={t('leadTime')} hint={t('leadTimeHint')}>
         {Num(p, 'leadMinutes', '5')}
       </Field>
-      <Field
-        label="Message template"
-        hint="Sent to the customer with the link. {{meet_link}} and {{meet_start}} get substituted."
-      >
-        {Ta(p, 'messageTemplate', 'Your meeting link:\n{{meet_link}}\n\nStarts {{meet_start}}', 4)}
+      <Field label={t('messageTemplate')} hint={t('messageTemplateHint')}>
+        {Ta(p, 'messageTemplate', t('messageTemplatePlaceholder'), 4)}
       </Field>
-      <Field
-        label="Send Google invite to attendees"
-        hint="Only useful when the contact has an email saved."
-      >
+      <Field label={t('sendInvite')} hint={t('sendInviteHint')}>
         <Check checked={invite} onChange={(v) => p.set('sendCalendarInvite', v)}>
-          {invite ? 'On — Google emails the attendees' : 'Off — link only via WhatsApp'}
+          {invite ? t('inviteOn') : t('inviteOff')}
         </Check>
       </Field>
     </>
@@ -128,42 +112,35 @@ export const GoogleMeetForm: FormComponent = (p) => {
 };
 
 export const WaFormForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  const th = useTranslations('flb.builder.formsChannels.helpers');
   const { forms } = p.env.ctx;
   const opts = withSavedOption(
     [
-      { v: '', l: p.env.loading ? 'Loading forms…' : '— pick form —' },
-      ...forms.map((f) => ({ v: f.id, l: formLabel(f.title, f.isPublished) })),
+      { v: '', l: p.env.loading ? t('loadingForms') : t('pickForm') },
+      ...forms.map((f) => ({ v: f.id, l: formLabel(f.title, f.isPublished, th) })),
     ],
     p.data.formId,
-    (id) => `Form ${id.slice(0, 8)} (not loaded)`,
+    (id) => t('savedForm', { id: id.slice(0, 8) }),
   );
+  const token = '{{field_id}}';
   return (
     <>
       <Intro
-        sub={
-          <>
-            Build + publish forms at <ExtLink href="/wa-forms">/wa-forms</ExtLink>.
-          </>
-        }
+        sub={t.rich('formSub', {
+          link: (c) => <ExtLink href="/wa-forms">{c}</ExtLink>,
+        })}
       >
-        Sends a published WhatsApp Form to the customer. The flow pauses until they submit, then
-        advances with each field available as <Mono>{'{{field_id}}'}</Mono>.
+        {t.rich('formIntro', { token, mono: (c) => <Mono>{c}</Mono> })}
       </Intro>
-      <Field label="Form" hint={p.env.loading ? 'Loading…' : 'Only published forms appear here.'}>
+      <Field label={t('form')} hint={p.env.loading ? t('loading') : t('formHint')}>
         {Sel(p, 'formId', opts)}
       </Field>
-      <Field label="Body bubble text (above the form button)">
-        {Txt(p, 'bodyText', 'Please tap below to fill out our quick form.')}
-      </Field>
-      <Field label="CTA label (on the button)">{Txt(p, 'ctaLabel', 'Open form')}</Field>
+      <Field label={t('bodyBubble')}>{Txt(p, 'bodyText', t('bodyBubblePlaceholder'))}</Field>
+      <Field label={t('ctaLabel')}>{Txt(p, 'ctaLabel', t('ctaPlaceholder'))}</Field>
       <Field
-        label="Save submission under variable"
-        hint={
-          <>
-            Field values land as <Mono>{'{{field_id}}'}</Mono> regardless — this is just a marker
-            for the audit log.
-          </>
-        }
+        label={t('saveSubmission')}
+        hint={t.rich('saveSubmissionHint', { token, mono: (c) => <Mono>{c}</Mono> })}
       >
         {Txt(p, 'flowVariable', 'form_submission')}
       </Field>
@@ -172,60 +149,51 @@ export const WaFormForm: FormComponent = (p) => {
 };
 
 export const DealForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  const th = useTranslations('flb.builder.formsChannels.helpers');
   const { stages } = p.env.ctx;
   const stageOpts = withSavedOption(
-    [{ v: '', l: p.env.loading ? 'Loading stages…' : '— pick stage —' }, ...stageOptions(stages)],
+    [
+      { v: '', l: p.env.loading ? t('loadingStages') : t('pickStage') },
+      ...stageOptions(stages, th),
+    ],
     p.data.stageId,
-    (id) => `Stage ${id.slice(0, 8)} (not loaded)`,
+    (id) => t('savedStage', { id: id.slice(0, 8) }),
   );
   const saveAs = String(p.data.saveAs || 'deal_id');
   return (
     <>
       <Intro>
-        Creates a CRM deal (or moves the contact&apos;s open deal) into a pipeline stage — so a
-        chatbot can qualify a lead and push it up the board. The deal id is saved as{' '}
-        <Mono>{`{{${saveAs}}}`}</Mono>. Moving into a stage fires the <b>deal stage</b> trigger on
-        other flows.
+        {t.rich('dealIntro', {
+          token: `{{${saveAs}}}`,
+          mono: (c) => <Mono>{c}</Mono>,
+          b: (c) => <b>{c}</b>,
+        })}
       </Intro>
       <Field
-        label="Action"
-        hint={
-          p.data.action === 'move'
-            ? "Re-stages the contact's most recent open deal. If they have none, a new deal is created."
-            : 'Always creates a fresh deal linked to this contact.'
-        }
+        label={t('action')}
+        hint={p.data.action === 'move' ? t('actionMoveHint') : t('actionCreateHint')}
       >
         {Sel(p, 'action', [
-          { v: 'create', l: 'Create a new deal' },
-          { v: 'move', l: "Move the contact's deal to a stage" },
+          { v: 'create', l: t('actionCreate') },
+          { v: 'move', l: t('actionMove') },
         ])}
       </Field>
       <Field
-        label="Pipeline stage"
-        hint={
-          <>
-            Required. Manage stages on the <ExtLink href="/deals">deals board</ExtLink>.
-          </>
-        }
+        label={t('stage')}
+        hint={t.rich('stageHint', { link: (c) => <ExtLink href="/deals">{c}</ExtLink> })}
       >
         {Sel(p, 'stageId', stageOpts)}
       </Field>
-      <Field label="Deal name" hint="Supports {{contact_name}}, {{phone}}, and any flow variable.">
-        {Txt(p, 'dealName', '{{contact_name}} — deal')}
+      <Field label={t('dealName')} hint={t('dealNameHint')}>
+        {Txt(p, 'dealName', t('dealNamePlaceholder'))}
       </Field>
-      <Field
-        label="Deal value (optional)"
-        hint="A number or a {{variable}}. Stored in the pipeline currency."
-      >
+      <Field label={t('dealValue')} hint={t('dealValueHint')}>
         {Txt(p, 'value', '5000')}
       </Field>
       <Field
-        label="Save deal id under variable"
-        hint={
-          <>
-            Use <Mono>{'{{deal_id}}'}</Mono> in later nodes.
-          </>
-        }
+        label={t('saveDealId')}
+        hint={t.rich('saveDealIdHint', { token: '{{deal_id}}', mono: (c) => <Mono>{c}</Mono> })}
       >
         {Txt(p, 'saveAs', 'deal_id')}
       </Field>

@@ -1,0 +1,139 @@
+{
+  "settings": {
+    "tiles": {
+      "google-sheets-addon": {
+        "label": "Dodatek Arkuszy Google",
+        "description": "Utwórz swój klucz, pobierz pliki dodatku i synchronizuj kontakty oraz produkty z arkusza kalkulacyjnego.",
+        "keywords": "arkusze google, arkusz kalkulacyjny, dodatek, apps script, import kontaktów, synchronizacja produktów, klucz"
+      }
+    }
+  },
+  "chrome-extension-sheets-addon": {
+    "common": {
+      "dismiss": "Odrzuć",
+      "copy": "Kopiuj",
+      "copied": "Skopiowano",
+      "copyFailed": "Nie udało się skopiować. Zaznacz klucz i skopiuj go ręcznie.",
+      "reference": "Numer referencyjny dla pomocy technicznej: {id}",
+      "back": "Wróć do integracji"
+    },
+    "page": {
+      "title": "Dodatek Arkuszy Google",
+      "subtitle": "Pobieraj i wysyłaj kontakty oraz synchronizuj produkty między arkuszem kalkulacyjnym a Twoją przestrzenią roboczą.",
+      "loading": "Wczytywanie konfiguracji dodatku",
+      "retry": "Ponów",
+      "status": {
+        "connected": "Klucz aktywny",
+        "noKey": "Brak klucza",
+        "notInstalled": "Niezainstalowany"
+      },
+      "forbidden": {
+        "title": "Nie możesz korzystać z dodatku Arkuszy Google",
+        "body": "Twoja rola nie obejmuje dodatku Arkuszy Google. Poproś administratora o nadanie dostępu Twojej roli."
+      },
+      "loadFailed": {
+        "title": "Nie udało się wczytać konfiguracji dodatku.",
+        "notInstalled": "Dodatek nie jest zainstalowany w tej przestrzeni roboczej.",
+        "forbidden": "Twoja rola nie ma uprawnień do wyświetlania tej strony.",
+        "planLocked": "Twój plan nie obejmuje Marketplace.",
+        "suspended": "To konto lub przestrzeń robocza jest zawieszona.",
+        "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+        "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+        "unexpected": "Po naszej stronie coś poszło nie tak. Spróbuj ponownie."
+      }
+    },
+    "install": {
+      "title": "Najpierw zainstaluj dodatek",
+      "body": "Dodatek Arkuszy Google nie jest zainstalowany w tej przestrzeni roboczej, więc klucze i dodatek jeszcze nie działają. Administrator instaluje go jednorazowo z Marketplace.",
+      "marketplace": "Zainstaluj z Marketplace",
+      "google": "Otwórz wpis w Google Workspace Marketplace",
+      "keyKept": "Nadal masz klucz. Możesz go wyłączyć poniżej."
+    },
+    "key": {
+      "title": "Twój klucz",
+      "intro": "Dodatek używa Twojego osobistego klucza, aby działać w Twoim imieniu. Widzi tylko to, na co pozwala Twoja rola.",
+      "none": "Nie masz jeszcze klucza.",
+      "generate": "Wygeneruj klucz",
+      "rotate": "Wygeneruj nowy klucz",
+      "revoke": "Unieważnij klucz",
+      "working": "Trwa praca...",
+      "active": "Klucz",
+      "created": "Utworzono {when}",
+      "lastUsed": "Ostatnio użyto {when}",
+      "neverUsed": "Nigdy nie używano",
+      "newTitle": "Twój nowy klucz",
+      "newWarning": "Skopiuj go teraz. Jest pokazywany tylko raz i nie można go pokazać ponownie. Każdy, kto ma ten klucz, może działać w dodatku w Twoim imieniu.",
+      "rotatedNote": "Twój poprzedni klucz przestał działać.",
+      "keyLabel": "Nowy klucz",
+      "confirmRotate": {
+        "title": "Zastąpić klucz?",
+        "message": "Używany obecnie klucz natychmiast przestanie działać. Wklej nowy klucz w dodatku, aby dalej z niego korzystać.",
+        "confirm": "Zastąp klucz"
+      },
+      "confirmRevoke": {
+        "title": "Unieważnić klucz?",
+        "message": "Dodatek przestanie działać, dopóki nie utworzysz i nie wkleisz nowego klucza.",
+        "confirm": "Unieważnij klucz"
+      },
+      "cancel": "Anuluj",
+      "revoked": "Twój klucz został unieważniony.",
+      "generated": "Twój klucz został utworzony. Skopiuj go teraz.",
+      "errors": {
+        "notInstalled": "Dodatek nie jest zainstalowany w tej przestrzeni roboczej. Poproś administratora o jego instalację.",
+        "forbidden": "Twoja rola nie ma uprawnień do wykonania tej czynności.",
+        "planLocked": "Twój plan nie obejmuje Marketplace.",
+        "suspended": "To konto lub przestrzeń robocza jest zawieszona.",
+        "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+        "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+        "unexpected": "Po naszej stronie coś poszło nie tak. Spróbuj ponownie."
+      }
+    },
+    "can": {
+      "title": "Co może Twój klucz",
+      "intro": "To część wspólna Twojej roli i tego, na co pozwala instalacja.",
+      "allowed": "Dozwolone",
+      "notAllowed": "Niedozwolone",
+      "readContacts": "Pobieranie kontaktów do arkusza",
+      "writeContacts": "Wysyłanie kontaktów z arkusza",
+      "readCatalog": "Wyświetlanie sklepów i produktów",
+      "writeCatalog": "Synchronizacja produktów ze sklepem"
+    },
+    "files": {
+      "title": "Pliki dodatku",
+      "intro": "Projekt Apps Script składa się z sześciu plików. Code.gs już wskazuje tę przestrzeń roboczą.",
+      "download": "Pobierz",
+      "downloadFile": "Pobierz {name}",
+      "downloaded": "Pobrano {name}.",
+      "notAvailable": "Jeszcze niedostępne na tym serwerze",
+      "failed": "Nie udało się pobrać {name}. Spróbuj ponownie."
+    },
+    "steps": {
+      "title": "Skonfiguruj w arkuszu kalkulacyjnym",
+      "one": "Otwórz arkusz kalkulacyjny, następnie Rozszerzenia, potem Apps Script.",
+      "two": "Pobierz sześć powyższych plików. W Ustawieniach projektu pokaż plik appsscript.json i wklej appsscript.json oraz Code.gs w miejsce tych w edytorze.",
+      "three": "Dodaj trzy pliki HTML o nazwach Dialog, Settings i Help i wklej do nich pobrane pliki.",
+      "four": "Zapisz i przeładuj arkusz kalkulacyjny. Pojawi się menu CRM. Zezwól na trzy uprawnienia, o które prosi Google.",
+      "five": "Wybierz CRM, następnie Ustawienia, wklej swój klucz i wybierz Zapisz i sprawdź.",
+      "six": "Wiersz 1 arkusza zawiera nazwy kolumn. Następnie użyj w menu CRM opcji Pobierz kontakty, Wyślij kontakty lub Synchronizuj produkty."
+    },
+    "columns": {
+      "title": "Kolumny odczytywane przez dodatek",
+      "contacts": "Kontakty",
+      "products": "Produkty",
+      "contactsHint": "Wymagany jest email lub phone. Kolumna o nazwie attr:city wypełnia właściwość niestandardową city. Pusta komórka nigdy nie czyści zapisanej wartości.",
+      "productsHint": "Wymagane są name i price. Produkty są dopasowywane najpierw po SKU, potem po nazwie. Pusty stan magazynowy oznacza brak limitu."
+    },
+    "shops": {
+      "title": "Sklepy",
+      "empty": "Brak sklepów. Pierwsza synchronizacja produktów utworzy jeden.",
+      "disabled": "Wyłączony",
+      "open": "Otwórz {name}",
+      "updated": "Zaktualizowano {when}"
+    },
+    "products": {
+      "title": "Ostatnie produkty",
+      "empty": "Brak produktów. Zsynchronizuj arkusz, aby je dodać.",
+      "count": "{count, plural, one {# produkt w Twojej przestrzeni roboczej} few {# produkty w Twojej przestrzeni roboczej} many {# produktów w Twojej przestrzeni roboczej} other {# produktu w Twojej przestrzeni roboczej}}"
+    }
+  }
+}

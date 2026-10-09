@@ -1,0 +1,531 @@
+{
+  "scheduled-queue-warmer": {
+    "nav": {
+      "scheduled": "予約済み",
+      "warmer": "ウォームアップ"
+    },
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "status": {
+      "scheduled": "キュー待ち",
+      "running": "実行中",
+      "paused": "一時停止中",
+      "completed": "完了",
+      "failed": "失敗",
+      "cancelled": "キャンセル済み"
+    },
+    "type": {
+      "plain": "テキスト",
+      "template": "テンプレート",
+      "media": "メディア",
+      "location": "位置情報"
+    },
+    "errors": {
+      "generic": "問題が発生しました。もう一度お試しください。",
+      "FORBIDDEN": "この操作を行う権限がありません。",
+      "VALIDATION_FAILED": "いくつかの項目を確認してください。",
+      "ROW_VERSION_CONFLICT": "この予約は、その間に変更されました。再読み込みしてから、もう一度お試しください。",
+      "PLAN_FEATURE_LOCKED": "ご利用のプランにはこの機能が含まれていません。",
+      "PLAN_LIMIT_REACHED": "ご利用のプランの上限に達しました。",
+      "WA_UNOFFICIAL_DISABLED": "個人のWhatsApp番号による送信（非公式API）は、このワークスペースでは有効になっていません。公式のWhatsApp Business APIの番号を選択してください。",
+      "AUTH_SEND_HALTED": "このワークスペースでは送信が停止されています。",
+      "upgrade": "プランを確認してアップグレード",
+      "requestId": "リクエスト {id}"
+    },
+    "actions": {
+      "done": {
+        "pause": "予約を一時停止しました。",
+        "resume": "予約を再開しました。",
+        "cancel": "予約をキャンセルしました。",
+        "run-now": "予約を今すぐ実行中です。",
+        "destroy": "予約を削除しました。",
+        "retry": "新しい時刻で予約をキューに入れました。"
+      }
+    },
+    "confirm": {
+      "yes": "はい、実行します",
+      "keep": "そのまま残す",
+      "cancel": {
+        "title": "この予約をキャンセルしますか？",
+        "body": "「{name}」は送信されません。この操作は取り消せません。"
+      },
+      "run-now": {
+        "title": "この予約を今すぐ実行しますか？",
+        "body": "「{name}」は設定時刻ではなく、すぐに送信を開始します。"
+      },
+      "destroy": {
+        "title": "この予約を削除しますか？",
+        "body": "「{name}」と宛先リストは削除されます。"
+      }
+    },
+    "retry": {
+      "title": "新しい時刻で再試行",
+      "body": "「{name}」の新しい送信時刻を選択してください。キュー待ちに戻ります。",
+      "date": "送信日",
+      "time": "時刻",
+      "timezone": "タイムゾーン",
+      "keep": "失敗のまま残す",
+      "confirm": "今すぐ再試行"
+    },
+    "list": {
+      "crumb": "キャンペーン / 予約メッセージ",
+      "title": "予約メッセージ",
+      "queued": "{n}件キュー待ち",
+      "create": "メッセージを予約",
+      "stats": {
+        "total": "予約合計",
+        "totalHint": "すべての状態の合計",
+        "active": "実行待ちのキュー",
+        "activeHint": "実行待ち",
+        "sent": "送信合計",
+        "sentHint": "送信メッセージ数（このページ）",
+        "delivery": "到達率",
+        "deliveryHint": "完了分の合計（このページ）"
+      },
+      "upNext": {
+        "eyebrow": "次の予定",
+        "title": "次に実行",
+        "pending": "{n}件保留中",
+        "empty": "まだ予約はありません。",
+        "createOne": "作成する →",
+        "recurring": "定期",
+        "queued": "キュー待ち"
+      },
+      "tip": {
+        "eyebrow": "ヒント",
+        "title": "相手が読むタイミングで送信",
+        "body": "連絡先の現地時間で、開封率は午前9〜11時と午後6〜8時にピークを迎えます。宛先グループに合った送信時刻を選択してください。定期予約なら、一度設定すれば以後は自動で送信されます。",
+        "cta": "予約を作成"
+      },
+      "tabs": {
+        "all": "すべて",
+        "upcoming": "今後の予約",
+        "running": "実行中",
+        "paused": "一時停止中",
+        "completed": "完了",
+        "failed": "失敗"
+      },
+      "search": "名前で検索…",
+      "cols": {
+        "schedule": "予約",
+        "type": "種類",
+        "recipients": "宛先",
+        "sendTime": "送信時刻",
+        "repeat": "繰り返し",
+        "status": "ステータス",
+        "actions": "操作"
+      },
+      "recipients": {
+        "group": "グループ",
+        "tag": "タグ",
+        "queue": "キュー",
+        "number": "番号"
+      },
+      "when": {
+        "overdue": "期限超過",
+        "now": "今",
+        "minutes": "{n}分後",
+        "hours": "{n}時間後",
+        "tomorrow": "明日",
+        "date": "後日"
+      },
+      "completedAt": "{when}に完了",
+      "once": "1回",
+      "actions": {
+        "open": "開く",
+        "pause": "一時停止",
+        "resume": "再開",
+        "runNow": "今すぐ実行",
+        "cancel": "キャンセル",
+        "retry": "新しい時刻で再試行",
+        "delete": "削除",
+        "deleteHistory": "履歴から削除"
+      },
+      "empty": {
+        "title": "予約はありません",
+        "none": "最初のメッセージを予約しましょう。",
+        "filtered": "現在のフィルターに一致する予約はありません。フィルターを解除するか、最初のメッセージを予約してください。",
+        "reset": "フィルターをリセット"
+      },
+      "page": "{pages}ページ中 {page}ページ",
+      "prev": "前へ",
+      "next": "次へ"
+    },
+    "composer": {
+      "crumb": "予約 / 新規",
+      "title": "メッセージを予約",
+      "back": "戻る",
+      "forbidden": "メッセージを予約する権限がありません。",
+      "steps": "手順",
+      "stepNames": {
+        "basics": "基本情報",
+        "audience": "宛先",
+        "message": "メッセージ",
+        "when": "日時",
+        "review": "確認"
+      },
+      "required": "必須",
+      "previous": "前へ",
+      "next": "次へ",
+      "submit": "メッセージを予約",
+      "stepOf": "手順 {n} / {total}",
+      "engine": {
+        "baileys": "非公式API",
+        "waba": "WhatsApp Cloud API",
+        "twilio": "Twilio"
+      },
+      "types": {
+        "plain": {
+          "title": "テキスト",
+          "hint": "テキストと絵文字のみ。",
+          "pill": "テキスト"
+        },
+        "template": {
+          "title": "テンプレート",
+          "hint": "承認済みのWhatsAppテンプレート。",
+          "pill": "テンプレート"
+        },
+        "media": {
+          "title": "メディア付き",
+          "hint": "画像、動画、文書、音声。",
+          "pill": "メディア"
+        },
+        "location": {
+          "title": "位置情報",
+          "hint": "緯度・経度のピン。",
+          "pill": "位置情報"
+        }
+      },
+      "basics": {
+        "title": "予約の基本情報",
+        "name": "予約名",
+        "nameHint": "社内用のラベルです。宛先には表示されません。",
+        "namePlaceholder": "例: 春のプロモーション / VIPセグメント",
+        "sender": "送信元",
+        "senders": "送信元",
+        "tickAll": "該当するものをすべて選択",
+        "noSenders": "接続済みの送信元がありません。先に番号を接続してください。",
+        "warming": "ウォームアップ中",
+        "splitHint": "選択した送信元ごとに、宛先を均等に分けて個別に予約を実行します。",
+        "messageType": "メッセージの種類"
+      },
+      "audience": {
+        "title": "宛先",
+        "source": "宛先の取得元",
+        "sources": {
+          "group": {
+            "title": "グループ",
+            "hint": "保存済みの連絡先グループを1つ以上選択してください。"
+          },
+          "tag": {
+            "title": "タグ",
+            "hint": "タグが付いている全員"
+          },
+          "queue": {
+            "title": "宛先キュー",
+            "hint": "過去の一斉送信の宛先を再指定します。"
+          },
+          "number": {
+            "title": "番号",
+            "hint": "リストを手動で貼り付けます。"
+          }
+        },
+        "chooseGroups": "グループを選択",
+        "chooseTags": "タグを1つ以上選択",
+        "chooseQueues": "過去の一斉送信を1つ以上選択",
+        "tickAny": "（いくつでも選択可）",
+        "noGroups": "グループはまだありません",
+        "noTags": "タグはまだありません",
+        "noQueues": "完了した一斉送信はまだありません",
+        "contacts": "連絡先へ移動",
+        "broadcast": "一斉送信へ移動",
+        "tagsHint": "宛先は予約の実行時に再計算されるため、新たにタグが付いた連絡先も含まれます。",
+        "queuesHint": "一斉送信をいくつでも選択できます。送信前に宛先は自動的に重複排除されます。",
+        "paste": "番号を貼り付け",
+        "pasteHint": "先頭に国番号を付け、+は付けないでください。改行またはカンマで区切ります。",
+        "pastePlaceholder": "1行に1つの番号を入力し、国番号を含めてください。+記号は不要です",
+        "total": "宛先の合計:",
+        "optedOut": "{n}件を除外: 配信停止またはアーカイブ済み"
+      },
+      "message": {
+        "title": "メッセージを作成",
+        "content": "メッセージ内容",
+        "caption": "キャプション",
+        "placeholder": "こんにちは '{name}' 様、予定していたお知らせをお届けします…",
+        "personalise": "'{name}'、'{phone}'、'{email}' を使うと、宛先ごとの内容に差し替えられます。",
+        "template": "承認済みテンプレート",
+        "chooseTemplate": "承認済みテンプレートを選択",
+        "browse": "クリックしてテンプレートを参照",
+        "approved": "承認済み",
+        "change": "変更",
+        "mediaLink": "メディアのリンク",
+        "mediaHint": "ファイルへのリンク（https://…）。画像、動画、音声、または文書。",
+        "pin": "位置を指定",
+        "latitude": "緯度",
+        "longitude": "経度",
+        "estimate": "送信見込み時間",
+        "minutes": "約{n}分",
+        "estimateHint": "毎分60件の場合",
+        "estimateEmpty": "先に宛先を選択してください。",
+        "variables": "メッセージ内の変数",
+        "variablesHint": "個のプレースホルダーを検出しました。",
+        "pickerEyebrow": "テンプレート",
+        "pickerTitle": "テンプレートを選択",
+        "pickerHint": "承認済みで有効なテンプレートのみ表示されます。",
+        "pickerSearch": "名前または言語で検索…",
+        "pickerEmpty": "一致するテンプレートはありません。",
+        "manageTemplates": "テンプレートを管理 →",
+        "cancel": "キャンセル"
+      },
+      "when": {
+        "title": "送信タイミング",
+        "modes": {
+          "once": {
+            "title": "1回送信",
+            "hint": "指定した日時に1回だけ配信します。"
+          },
+          "recurring": {
+            "title": "定期",
+            "hint": "毎日、毎週、または毎月、決まった間隔で繰り返します。"
+          }
+        },
+        "date": "送信日",
+        "time": "時刻",
+        "timezone": "タイムゾーン",
+        "recurrence": "繰り返し",
+        "every": "繰り返し間隔",
+        "interval": "間隔",
+        "intervals": {
+          "daily": "日",
+          "weekly": "週",
+          "monthly": "か月"
+        },
+        "end": "終了",
+        "endNever": "終了日なし",
+        "endDate": "指定日",
+        "endOn": "最終日",
+        "days": "曜日",
+        "daysHint": "日付をクリックして切り替えます。週単位の予約には1日以上が必要です。",
+        "lead": "予約は{n}分以上先の時刻を指定してください。"
+      },
+      "review": {
+        "title": "確認して予約",
+        "final": "最終",
+        "schedule": "予約",
+        "name": "名前",
+        "sender": "送信元",
+        "type": "種類",
+        "mode": "モード",
+        "at": "初回送信",
+        "once": "1回送信",
+        "recurring": "{n} {interval}ごと",
+        "delivery": "配信",
+        "source": "宛先の取得元",
+        "recipients": "宛先",
+        "estimated": "見込み時間",
+        "testTitle": "先にテスト送信",
+        "testHint": "一斉送信の前に、入力した番号でプレビューメッセージを1件受信します。",
+        "testNumber": "この番号にテスト送信",
+        "testNumberHint": "先頭に国番号を付け、+は付けないでください。"
+      },
+      "preview": {
+        "title": "ライブプレビュー",
+        "channel": "WhatsApp",
+        "empty": "ここにメッセージが表示されます…",
+        "media": "[ メディア添付 ]",
+        "pin": "位置ピン",
+        "noTemplate": "テンプレートが選択されていません"
+      },
+      "errors": {
+        "nameRequired": "予約に名前を付けてください。",
+        "senderRequired": "送信元を1つ以上選択してください。",
+        "wabaTemplate": "WhatsApp Cloud APIの番号ではテンプレートの予約を送信できません。選択を外すか、別のメッセージの種類を選択してください。",
+        "audienceRequired": "1つ以上選択してください。",
+        "numbersRequired": "番号を1つ以上貼り付けてください。",
+        "messageRequired": "メッセージを入力してください。",
+        "messageTooLong": "メッセージが1024文字を超えています。",
+        "templateRequired": "テンプレートを選択してください。",
+        "mediaLink": "http:// または https:// で始まるリンクを入力してください。",
+        "latitude": "-90〜90の範囲で緯度を入力してください。",
+        "longitude": "-180〜180の範囲で経度を入力してください。",
+        "dateRequired": "日付を選択してください。",
+        "timeRequired": "14:30 のように時刻を入力してください。",
+        "timezoneRequired": "タイムゾーンを選択してください。",
+        "tooSoon": "数分以上先の時刻を選択してください。",
+        "repeatEvery": "1〜365の整数を入力してください。",
+        "daysRequired": "曜日を選択してください。",
+        "endDateRequired": "最終日を選択してください。",
+        "endBeforeStart": "終了日が初回送信日より前になっています。",
+        "testNumber": "国番号を付けて番号を入力してください。"
+      }
+    },
+    "detail": {
+      "crumb": "予約 / 分析",
+      "title": "予約の分析",
+      "back": "予約メッセージに戻る",
+      "eyebrow": "予約メッセージ",
+      "untitled": "無題",
+      "recurs": "定期 · {interval} × {n}",
+      "fires": "{when}に実行",
+      "actions": {
+        "pause": "一時停止",
+        "resume": "再開",
+        "runNow": "今すぐ実行",
+        "cancel": "キャンセル",
+        "retry": "新しい時刻で再試行",
+        "delete": "削除"
+      },
+      "kpi": {
+        "recipients": "宛先",
+        "delivered": "配信済み",
+        "read": "既読",
+        "sent": "送信済み",
+        "status": "ステータス",
+        "ofSent": "送信済みのうち",
+        "failedCount": "{n}件失敗",
+        "pendingCount": "{n}件保留中",
+        "fires": "{when}に実行",
+        "paused": "一時停止中",
+        "done": "{when}に完了"
+      },
+      "funnel": {
+        "eyebrow": "配信ファネル",
+        "title": "送信から反応まで",
+        "recipients": "宛先",
+        "sent": "送信済み",
+        "delivered": "配信済み",
+        "read": "既読",
+        "failed": "失敗"
+      },
+      "mix": {
+        "eyebrow": "ステータス内訳",
+        "title": "配信ステータス",
+        "empty": "まだ送信履歴はありません。",
+        "delivered": "配信済み",
+        "sentOnly": "送信済み · 未配信",
+        "failed": "失敗",
+        "pending": "保留中"
+      },
+      "recipients": {
+        "eyebrow": "宛先",
+        "title": "宛先ごとの状況",
+        "none": "この予約に登録されている宛先はありません。",
+        "emptyTab": "このタブにはまだ宛先がありません。",
+        "truncated": "宛先 {total}件のうち最初の{n}件を表示しています。",
+        "tabs": {
+          "all": "すべて",
+          "sent": "送信済み",
+          "delivered": "配信済み",
+          "read": "既読",
+          "failed": "失敗",
+          "pending": "保留中"
+        },
+        "cols": {
+          "recipient": "宛先",
+          "phone": "電話番号",
+          "status": "ステータス",
+          "when": "日時",
+          "note": "メモ"
+        },
+        "status": {
+          "pending": "保留中",
+          "processing": "保留中",
+          "sent": "送信済み",
+          "delivered": "配信済み",
+          "read": "既読",
+          "failed": "失敗"
+        }
+      },
+      "config": {
+        "eyebrow": "予約の詳細",
+        "title": "設定",
+        "scheduleType": "予約の種類",
+        "messageType": "メッセージの種類",
+        "scheduledAt": "予約日時",
+        "nextRun": "次回実行",
+        "lastRun": "前回実行",
+        "repeats": "繰り返し間隔",
+        "until": "{date}まで",
+        "sender": "送信元",
+        "provider": "エンジン",
+        "attempts": "送信試行"
+      },
+      "preview": {
+        "eyebrow": "メッセージのプレビュー",
+        "title": "宛先に表示される内容",
+        "empty": "（本文なし）"
+      },
+      "another": "別の予約を作成"
+    },
+    "warmer": {
+      "warming": "{n}件ウォームアップ中",
+      "name": "WhatsAppウォームアップ",
+      "tagline": "番号のウォームアップ",
+      "how": {
+        "title": "仕組み",
+        "one": "番号のウォームアップをオンにします。",
+        "two": "1日ごとに、前日より少しずつ多く送信できるようになります。",
+        "three": "メッセージは、指定した時間帯にのみゆっくり送信されます。",
+        "four": "キャンペーン、一斉送信、予約送信はすべてこの上限に従います。"
+      },
+      "good": {
+        "title": "知っておくと良いこと",
+        "body": "ウォームアップは非公式API番号の停止リスクを下げますが、保証するものではありません。大量送信には、ウォームアップが不要な公式のWhatsApp Business（Cloud API）番号をご利用ください。"
+      },
+      "crumb": "キャンペーン / ウォームアップ",
+      "heading": "番号をウォームアップ",
+      "lead": "非公式API番号ごとに、人の操作に近い間隔と稼働時間で1日の送信上限を段階的に引き上げ、停止リスクを減らします。番号ごとに独自のスケジュールでウォームアップされます。",
+      "tiles": {
+        "warming": "ウォームアップ中の番号",
+        "warmingHint": "接続中の{n}件のうち",
+        "budget": "本日の上限",
+        "budgetHint": "本日送信可能なメッセージ数",
+        "sent": "本日の送信数",
+        "sentHint": "ウォームアップの計算に含まれます",
+        "health": "平均ヘルス",
+        "healthHint": "全番号の平均"
+      },
+      "empty": "接続済みの番号はまだありません。",
+      "connect": "番号を接続",
+      "number": "番号",
+      "engines": {
+        "baileys": "非公式API",
+        "waba": "WABA",
+        "twilio": "Twilio"
+      },
+      "health": "ヘルス {n}",
+      "healthTitle": "ヘルススコア（高いほど段階的な引き上げが安全）",
+      "switch": "ウォームアップ中",
+      "budgetToday": "本日の上限",
+      "remaining": "本日の残り",
+      "sentToday": "本日の送信数",
+      "fields": {
+        "dailyBase": "開始時の1日上限",
+        "stepPct": "引き上げ率 +% / ステップ",
+        "stepDays": "引き上げ間隔（日）",
+        "maxDaily": "1日の最大上限",
+        "gapMin": "最短間隔（秒）",
+        "gapMax": "最長間隔（秒）",
+        "activeStart": "稼働開始時刻（時）",
+        "activeEnd": "稼働終了時刻（時）"
+      },
+      "hints": {
+        "dailyBase": "初日にこの番号が送信できるメッセージ数です。",
+        "stepPct": "各ステップで1日の上限をこの割合ずつ増やします。",
+        "stepDays": "上限を増やす頻度です（N日ごと）。",
+        "maxDaily": "1日の上限が到達する最大値です。",
+        "gapMin": "2件のメッセージ間の最短待機時間です。",
+        "gapMax": "2件のメッセージ間の最長待機時間です。",
+        "activeStart": "この時刻（24時間表記）を過ぎてから送信を開始します。",
+        "activeEnd": "この時刻を過ぎたら送信を停止します。"
+      },
+      "spintax": {
+        "title": "スピンタックスの表現の多様化",
+        "hint": "メッセージが同一に見えないよう、宛先ごとに少しずつ異なる文言を送信します。選択肢は '{Hi|Hello|Hey}' のように入力してください。"
+      },
+      "save": "ウォームアップを保存",
+      "saved": "ウォームアップを保存しました。"
+    }
+  }
+}

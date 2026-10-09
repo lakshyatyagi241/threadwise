@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "Bestellingen",
+      "coupons": "Coupons"
+    },
+    "settingsTile": {
+      "label": "Betaalproviders",
+      "description": "De ene provider die je winkelkassa en Sales-facturen gebruiken om online betalingen te ontvangen.",
+      "keywords": "betaalprovider, razorpay, stripe, afrekenen, betaallink, online betaling, kaart, upi"
+    },
+    "common": {
+      "noAccessTitle": "Je hebt geen toegang tot deze pagina",
+      "noAccessMessage": "Vraag een workspace-beheerder om je rol de toestemming ervoor te geven.",
+      "loading": "Laden",
+      "loadMore": "Meer laden",
+      "cancel": "Annuleren",
+      "close": "Sluiten",
+      "save": "Opslaan",
+      "saving": "Opslaan",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "remove": "Verwijderen",
+      "open": "Openen",
+      "view": "Bekijken",
+      "search": "Zoeken",
+      "clear": "Wissen",
+      "all": "Alle",
+      "no": "Nee",
+      "none": "Geen",
+      "actions": "Acties",
+      "retry": "Opnieuw proberen",
+      "dismiss": "Sluiten",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "viewContact": "Contact bekijken",
+      "allShops": "Alle winkels",
+      "shop": "Winkel"
+    },
+    "status": {
+      "new": "Nieuw",
+      "pending": "In behandeling",
+      "confirmed": "Bevestigd",
+      "paid": "Betaald",
+      "processing": "Wordt verwerkt",
+      "completed": "Voltooid",
+      "shipped": "Verzonden",
+      "cancelled": "Geannuleerd"
+    },
+    "paymentStatus": {
+      "paid": "Betaald",
+      "awaiting": "Wacht op betaling",
+      "cod": "Onder rembours",
+      "unpaid": "Onbetaald"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "Webshop",
+      "twilio": "Twilio",
+      "manual": "Handmatig",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "WhatsApp AI"
+    },
+    "errors": {
+      "requestId": "Verzoek-ID",
+      "retry": "Opnieuw proberen",
+      "network": {
+        "title": "Kan de server niet bereiken",
+        "message": "Controleer je verbinding en probeer het opnieuw."
+      },
+      "forbidden": {
+        "title": "Niet toegestaan",
+        "message": "Je rol staat dit niet toe."
+      },
+      "signedOut": {
+        "title": "Je bent uitgelogd",
+        "message": "Log opnieuw in om verder te gaan."
+      },
+      "conflict": {
+        "title": "Gewijzigd door iemand anders",
+        "message": "Dit item is gewijzigd terwijl je het open had. Laad het opnieuw en probeer het nog eens."
+      },
+      "validation": {
+        "title": "Controleer het formulier",
+        "message": "Sommige waarden zijn ongeldig. Controleer de gemarkeerde velden."
+      },
+      "unavailable": {
+        "title": "Nog niet beschikbaar",
+        "message": "Dit onderdeel van de winkel is op deze server nog niet beschikbaar."
+      },
+      "rateLimited": {
+        "title": "Te veel verzoeken",
+        "message": "Wacht even en probeer het opnieuw."
+      },
+      "notFound": {
+        "title": "Niet gevonden",
+        "message": "Het is verwijderd of heeft nooit bestaan."
+      },
+      "planLocked": {
+        "title": "Niet in je abonnement",
+        "message": "Je abonnement bevat de winkel niet. Upgrade om hem te gebruiken."
+      },
+      "couponCodeTaken": {
+        "title": "Code al in gebruik",
+        "message": "Een andere coupon gebruikt deze code al. Kies een andere."
+      },
+      "groupCodeTaken": {
+        "title": "Code al in gebruik",
+        "message": "Een andere groep gebruikt deze bestelcode al."
+      },
+      "orderNoPhone": {
+        "title": "Geen telefoonnummer",
+        "message": "Deze bestelling heeft geen telefoonnummer van de koper, dus er kan niets worden verzonden."
+      },
+      "gatewayNotConfigured": {
+        "title": "Geen betaalprovider ingesteld",
+        "message": "Stel eerst een betaalprovider in. De sleutels ontbreken of de provider staat uit."
+      },
+      "gatewayUnavailable": {
+        "title": "Provider niet beschikbaar",
+        "message": "Deze provider kan geen betaallink maken die een koper kan openen."
+      },
+      "paymentLinkFailed": {
+        "title": "De provider heeft de link geweigerd",
+        "message": "Controleer de sleutels en of het bedrag boven het minimum van de provider ligt."
+      },
+      "unexpected": {
+        "title": "Er is iets misgegaan",
+        "message": "Probeer het opnieuw. Als het blijft gebeuren, deel dan het verzoek-ID met support."
+      }
+    }
+  }
+}

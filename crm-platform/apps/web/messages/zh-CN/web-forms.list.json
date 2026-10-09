@@ -1,0 +1,132 @@
+{
+  "web-forms": {
+    "list": {
+      "title": "表单",
+      "subtitle": "创建表单，将其放到您的网站上或分享链接，每份回复都会作为联系人进入您的 CRM。",
+      "templates": "模板",
+      "newForm": "新建表单",
+      "statsLabel": "当前表单的合计",
+      "stats": {
+        "forms": "表单",
+        "published": "已发布",
+        "submissions": "提交",
+        "needsReview": "需要注意"
+      },
+      "views": {
+        "label": "显示",
+        "all": "全部",
+        "published": "已发布",
+        "draft": "草稿",
+        "paused": "已暂停",
+        "archived": "已归档"
+      },
+      "search": "搜索表单",
+      "loading": "正在加载表单",
+      "loadFailed": "无法加载表单。",
+      "retry": "重试",
+      "empty": {
+        "title": "暂无表单",
+        "message": "从模板或空白表单开始，发布后分享链接，或将嵌入代码粘贴到您的网站上。",
+        "fromTemplate": "从模板开始",
+        "blank": "空白表单"
+      },
+      "noMatch": {
+        "title": "没有匹配的表单",
+        "message": "请尝试其他搜索或视图。",
+        "clear": "清除筛选"
+      },
+      "col": {
+        "name": "表单",
+        "status": "状态",
+        "submissions": "提交",
+        "views": "浏览",
+        "conversion": "转化率",
+        "last": "最近提交"
+      },
+      "unpublished": "未发布的更改",
+      "version": "版本 {n}",
+      "needsReview": "{count, plural, other {# 项需要注意}}",
+      "status": {
+        "draft": "草稿",
+        "published": "已发布",
+        "paused": "已暂停",
+        "archived": "已归档"
+      },
+      "noRate": "-",
+      "never": "从未",
+      "actionsFor": "{name}的操作",
+      "action": {
+        "edit": "编辑",
+        "submissions": "提交",
+        "copyLink": "复制链接",
+        "embed": "嵌入网站",
+        "duplicate": "复制",
+        "pause": "暂停",
+        "resume": "恢复",
+        "archive": "归档",
+        "delete": "删除",
+        "restore": "恢复"
+      },
+      "loadMore": "加载更多",
+      "copied": "链接已复制",
+      "copyBlocked": "此浏览器禁止复制。链接为 {url}",
+      "paused": "表单已暂停。访客将看到表单已关闭。",
+      "resumed": "表单已恢复",
+      "archived": "表单已归档",
+      "deleted": "表单已删除",
+      "cancel": "取消",
+      "archive": {
+        "title": "归档此表单？",
+        "message": "“{name}”的公开链接及所有嵌入将失效。其提交内容会保留，您仍可查看。",
+        "confirm": "归档"
+      },
+      "delete": {
+        "title": "删除此表单？",
+        "message": "“{name}”将被永久删除。它创建的联系人仍保留在您的 CRM 中。",
+        "confirm": "删除"
+      },
+      "restored": "表单已恢复"
+    },
+    "newForm": {
+      "eyebrow": "表单",
+      "title": "新建表单",
+      "close": "关闭",
+      "cancel": "取消",
+      "create": "创建表单",
+      "startFrom": "起始方式",
+      "mode": {
+        "template": "模板",
+        "blank": "空白"
+      },
+      "loadingTemplates": "正在加载模板",
+      "templatesFailed": "无法加载模板。您仍可从空白表单开始。",
+      "templates": "模板",
+      "fieldCount": "{count, plural, other {# 个字段}}",
+      "pickTemplate": "请选择一个模板以继续。",
+      "name": "表单名称",
+      "nameHint": "仅您的团队可见此名称。",
+      "nameRequired": "请输入表单名称。"
+    },
+    "templates": {
+      "breadcrumb": "面包屑导航",
+      "back": "返回表单列表",
+      "title": "表单模板",
+      "subtitle": "从现成的表单开始，并可随意修改。",
+      "blank": "空白表单",
+      "loading": "正在加载模板",
+      "loadFailed": "无法加载模板。",
+      "retry": "重试",
+      "empty": "暂无可用模板。",
+      "category": {
+        "lead": "线索收集",
+        "contact": "联系人",
+        "event": "活动",
+        "order": "订单",
+        "survey": "调查"
+      },
+      "fields": "此模板中的字段",
+      "more": "另外 {count} 个",
+      "use": "使用此模板"
+    }
+  }
+}

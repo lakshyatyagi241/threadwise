@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { AddButton, RowCard, TextArea } from '../kit';
 import { controlClass } from '../kit';
 import type { FormProps } from '../types';
@@ -10,15 +11,11 @@ import { SequencePreview } from './previews';
 type Reply = Record<string, unknown>;
 type ReplyKind = 'text' | 'image' | 'video' | 'audio' | 'document';
 
-const TYPE_OPTS: { v: ReplyKind; l: string }[] = [
-  { v: 'text', l: 'Text' },
-  { v: 'image', l: 'Image' },
-  { v: 'video', l: 'Video' },
-  { v: 'audio', l: 'Audio' },
-  { v: 'document', l: 'Document' },
-];
+const TYPE_OPTS: ReplyKind[] = ['text', 'image', 'video', 'audio', 'document'];
 
 export function SequenceForm({ data: d, set, env }: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.sequence');
+  const tp = useTranslations('flb.builder.formsCore.parts');
   const replies = asArray(d.replies).map(asRecord) as Reply[];
   const setReplies = (next: Reply[]) => set('replies', next);
   const setReply = (i: number, patch: Reply) => setReplies(patchItem(replies, i, patch));
@@ -31,12 +28,11 @@ export function SequenceForm({ data: d, set, env }: FormProps) {
   return (
     <>
       <SequencePreview d={d} />
-      <InfoBox>
-        Each reply is sent in order to the customer. Combine text, images, video, audio, and
-        documents in one node — perfect for product cards or onboarding kits.
-      </InfoBox>
+      <InfoBox>{t('info')}</InfoBox>
       {replies.map((r, i) => {
         const kind = (str(r.type) || 'text') as ReplyKind;
+        // A saved reply of an unknown type is labelled like an image, as the file filter treats it.
+        const labelKind = TYPE_OPTS.includes(kind) && kind !== 'text' ? kind : 'image';
         return (
           <RowCard key={i}>
             <CardHeader
@@ -52,8 +48,8 @@ export function SequenceForm({ data: d, set, env }: FormProps) {
                 className="rounded border border-border bg-background px-2 py-1 text-[11.5px] outline-none focus:border-brand"
               >
                 {TYPE_OPTS.map((o) => (
-                  <option key={o.v} value={o.v}>
-                    {o.l}
+                  <option key={o} value={o}>
+                    {t(`kind.${o}`)}
                   </option>
                 ))}
               </select>
@@ -63,7 +59,7 @@ export function SequenceForm({ data: d, set, env }: FormProps) {
                 <TextArea
                   value={r.text}
                   rows={3}
-                  placeholder="Message text…"
+                  placeholder={t('textPlaceholder')}
                   onChange={(v) => setReply(i, { text: v })}
                 />
               ) : (
@@ -71,9 +67,9 @@ export function SequenceForm({ data: d, set, env }: FormProps) {
                   <UploadBox
                     compact
                     accept={acceptFor(kind, '.pdf,.doc,.docx,.xls,.xlsx,.txt')}
-                    label={str(r.url) ? `Replace ${kind}` : `Upload ${kind}`}
+                    label={str(r.url) ? t(`replace.${labelKind}`) : t(`upload.${labelKind}`)}
                     onFile={(file) =>
-                      uploadFile(env, file, kind as 'image', (res) =>
+                      uploadFile(tp, env, file, kind as 'image', (res) =>
                         setReply(i, { url: res.url, filename: res.filename }),
                       )
                     }
@@ -90,14 +86,14 @@ export function SequenceForm({ data: d, set, env }: FormProps) {
                     type="text"
                     value={str(r.url)}
                     onChange={(e) => setReply(i, { url: e.target.value })}
-                    placeholder="Or paste a URL"
+                    placeholder={t('pasteUrl')}
                     className={`${controlClass} font-mono !text-[11.5px]`}
                   />
                   <input
                     type="text"
                     value={str(r.caption)}
                     onChange={(e) => setReply(i, { caption: e.target.value })}
-                    placeholder="Caption (optional)"
+                    placeholder={t('captionOptional')}
                     className={controlClass}
                   />
                 </>
@@ -108,14 +104,14 @@ export function SequenceForm({ data: d, set, env }: FormProps) {
       })}
       <div className="mt-1 flex flex-wrap gap-1.5">
         {TYPE_OPTS.map((o) => (
-          <AddButton key={o.v} onClick={() => addReply(o.v)}>
-            {o.l}
+          <AddButton key={o} onClick={() => addReply(o)}>
+            {t(`kind.${o}`)}
           </AddButton>
         ))}
       </div>
       {replies.length === 0 ? (
         <div className="mt-2 text-center text-[11.5px] italic text-muted-foreground">
-          No replies yet — click a button above to add one.
+          {t('empty')}
         </div>
       ) : null}
     </>

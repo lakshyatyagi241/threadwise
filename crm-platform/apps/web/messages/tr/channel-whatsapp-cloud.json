@@ -1,0 +1,513 @@
+{
+  "channel-whatsapp-cloud": {
+    "common": {
+      "dismiss": "Kapat",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "copyFailed": "Kopyalanamadı. Metni seçip elle kopyalayın."
+    },
+    "screen": {
+      "title": "WhatsApp",
+      "intro": "Bu çalışma alanına bağlı WhatsApp Business numaraları. Bir numaraya yazan müşteriler gelen kutunuzda görünür ve yanıtlarınız o numaradan gönderilir.",
+      "add": "WhatsApp numarası ekle",
+      "readOnly": "Bağlı numaraları görebilirsiniz. Yalnızca kanalları yönetenler numara ekleyebilir, değiştirebilir veya kaldırabilir.",
+      "helpNote": "Bir numarayı bağlamak için adım adım bir rehber depoda bulunur:",
+      "providerLine": "Numaralarınız platformun WhatsApp sağlayıcısı üzerinden sunulur.",
+      "loading": "WhatsApp numaralarınız yükleniyor",
+      "retry": "Tekrar dene",
+      "listLabel": "Bağlı WhatsApp numaraları",
+      "empty": {
+        "title": "Henüz bağlı WhatsApp numarası yok",
+        "message": "Bir numara bağlayın, müşterileriniz gelen kutusunda sizinle sohbet etmeye başlayabilsin. Üç kısa adım sürer.",
+        "messageReadOnly": "Henüz bağlı WhatsApp numarası yok. Kanalları yöneten birinden bir numara eklemesini isteyin."
+      }
+    },
+    "state": {
+      "connected": "Bağlı",
+      "needs_reconnect": "Yeniden bağlanmalı",
+      "error": "Hata",
+      "not_connected": "Bağlı değil",
+      "help": {
+        "needs_reconnect": "WhatsApp bu numaranın kimlik bilgilerini artık kabul etmiyor, bu nedenle mesaj gönderilemiyor veya alınamıyor. Devam etmek için yeniden bağlayın.",
+        "error": "Bu numarada bir sorun var. Ne olduğunu görmek için sağlık kontrolü çalıştırın.",
+        "not_connected": "Bu numara kapalı veya ilk kontrolünden henüz geçmedi. Üzerinden mesaj gönderilmez."
+      }
+    },
+    "quality": {
+      "green": "Yüksek",
+      "yellow": "Orta",
+      "red": "Düşük",
+      "unrated": "Derecelendirilmedi"
+    },
+    "tier": {
+      "limited": "Günde {label} müşteri",
+      "unlimited": "Sınırsız"
+    },
+    "card": {
+      "verifiedName": "Doğrulanmış ad: {name}",
+      "phoneId": "Telefon numarası kimliği",
+      "wabaId": "İşletme hesabı kimliği",
+      "quality": "Kalite derecelendirmesi",
+      "tier": "Mesaj sınırı",
+      "lastCheck": "Son sağlık kontrolü",
+      "neverChecked": "Hiç kontrol edilmedi",
+      "lastActivity": "Son etkinlik",
+      "noActivity": "Henüz yok",
+      "token": "Erişim belirteci",
+      "tokenEnds": "{hint} ile biter",
+      "none": "Mevcut değil",
+      "providerChanged": {
+        "title": "Bu numaranın sağlayıcısı değişti",
+        "message": "Platform bu numarayı farklı bir WhatsApp sağlayıcısına taşıdı. Çalıştığını doğrulamak için bir sağlık kontrolü çalıştırmanız dışında yapmanız gereken bir şey yok."
+      },
+      "actions": {
+        "check": "Sağlığı kontrol et",
+        "checking": "Kontrol ediliyor",
+        "edit": "Kimlik bilgilerini düzenle",
+        "reconnect": "Yeniden bağlan",
+        "editDetails": "Ayrıntıları düzenle",
+        "more": "Daha fazla",
+        "moreLabel": "{name} için diğer işlemler",
+        "subscribe": "Gelen mesajları düzelt",
+        "rotate": "Yeni doğrulama belirteci",
+        "switchOff": "Kapat",
+        "switchOn": "Aç",
+        "remove": "Kaldır"
+      }
+    },
+    "health": {
+      "issuesTitle": "Kontrolde bulunanlar",
+      "severity": {
+        "critical": "Sorun",
+        "warning": "Uyarı",
+        "info": "Not"
+      },
+      "phoneStatus": "Numara durumu",
+      "webhook": "Gelen mesajlar",
+      "subscribed": "Abone",
+      "notSubscribed": "Abone değil",
+      "token": "Erişim belirteci",
+      "tokenValid": "Geçerli",
+      "tokenInvalid": "Geçerli değil",
+      "tokenExpires": "Belirtecin sona ermesi",
+      "issues": {
+        "TOKEN_INVALID": {
+          "title": "Erişim belirteci artık geçerli değil",
+          "detail": "Meta işletme ayarlarınızdan yeni bir kalıcı belirteçle değiştirin."
+        },
+        "TOKEN_EXPIRED": {
+          "title": "Erişim belirtecinin süresi doldu",
+          "detail": "Hiç sona ermemesi için kalıcı bir sistem kullanıcısı belirteciyle değiştirin."
+        },
+        "TOKEN_EXPIRING": {
+          "title": "Erişim belirtecinin süresi 7 gün içinde dolacak",
+          "detail": "Gönderimin durmaması için kalıcı bir sistem kullanıcısı belirteci kullanın."
+        },
+        "TOKEN_SCOPE_MISSING": {
+          "title": "Belirteç mesaj gönderemiyor",
+          "detail": "whatsapp_business_messaging iznini içeren bir belirteç oluşturun."
+        },
+        "TOKEN_MANAGEMENT_SCOPE_MISSING": {
+          "title": "Belirteç hesabı yönetemiyor",
+          "detail": "Webhook'ların ve şablonların kurulabilmesi için whatsapp_business_management iznini ekleyin."
+        },
+        "NO_WEBHOOK_SUBSCRIPTION": {
+          "title": "Gelen mesajlar gelen kutusuna ulaşmıyor",
+          "detail": "Uygulama bu hesaba abone değil. Kart menüsündeki Gelen mesajları düzelt seçeneğini kullanın."
+        },
+        "QUALITY_RED": {
+          "title": "Mesaj kalitesi düşük",
+          "detail": "WhatsApp, mesaj gönderebileceğiniz müşteri sayısını sınırlayabilir. Talep edilmemiş mesajları daha az gönderin."
+        },
+        "QUALITY_YELLOW": {
+          "title": "Mesaj kalitesi orta",
+          "detail": "Dikkatle izleyin: müşterilerin numarayı engellemesi veya şikayet etmesi kaliteyi düşürür."
+        },
+        "NUMBER_NOT_VERIFIED": {
+          "title": "Numara doğrulanmamış",
+          "detail": "Bu numaranın doğrulamasını WhatsApp Manager'da tamamlayın."
+        },
+        "ON_PREMISE_NUMBER": {
+          "title": "Numara hâlâ eski WhatsApp API'sinde",
+          "detail": "WhatsApp Manager'da Cloud API'ye kaydedin, ardından yeniden bağlayın."
+        },
+        "NO_ACCOUNT_ID": {
+          "title": "Kayıtlı işletme hesabı kimliği yok",
+          "detail": "Hesabın ve webhook'unun kontrol edilebilmesi için Kimlik bilgilerini düzenle bölümünden ekleyin."
+        }
+      }
+    },
+    "errors": {
+      "tokenInvalid": "WhatsApp erişim belirtecini kabul etmiyor. Süresi dolmuş, iptal edilmiş veya eksik kopyalanmış olabilir.",
+      "permissionMissing": "Erişim belirtecinde gereken bir izin yok veya bu numaraya erişemiyor.",
+      "idNotFound": "WhatsApp bu telefon numarası kimliğini tanımıyor veya belirteç onu göremiyor. Her iki kimliği de kontrol edin.",
+      "appSecretInvalid": "Uygulama gizli anahtarı uygulamayla eşleşmiyor. Uygulama ayarlarından yeniden kopyalayın.",
+      "accountRestricted": "WhatsApp hesabı kısıtlanmış veya kilitlenmiş. Durumunu WhatsApp Manager'da kontrol edin.",
+      "numberNotRegistered": "Numara henüz WhatsApp Cloud API için kaydedilmemiş. Önce WhatsApp Manager'da kaydedin.",
+      "rateLimited": "WhatsApp şu anda istekleri sınırlıyor. Birkaç dakika bekleyip tekrar deneyin.",
+      "providerUnavailable": "WhatsApp'a ulaşılamadı veya geçici bir sorun oluştu. Birazdan tekrar deneyin.",
+      "healthFailed": "WhatsApp'a karşı yapılan kontrol başarısız olduğu için numara açılamadı.",
+      "alreadyConnected": "Bu WhatsApp numarası bu çalışma alanında zaten bağlı.",
+      "kindUnavailable": "WhatsApp bağlantıları bu çalışma alanı için henüz açılmadı. Platform yöneticinize danışın.",
+      "inUse": "Bu numaranın hâlâ görüşmeleri var, bu yüzden kaldırılamaz.",
+      "conflict": "Bu numarayı başka biri önce değiştirdi. Yeniden yüklendi; gözden geçirip tekrar deneyin.",
+      "forbidden": "Kanalları yönetme izniniz yok.",
+      "validation": "Girdiklerinizin bir kısmı geçerli değil. Vurgulanan alanları kontrol edin.",
+      "notFound": "Bu numara artık yok. Liste yenilendi.",
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "generic": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "genericWithId": "Bir şeyler ters gitti. Tekrar deneyin. Referans: {id}",
+      "detail": "Ayrıntılar: {detail}",
+      "fix": {
+        "tokenInvalid": "Meta işletme ayarlarınızda kalıcı bir sistem kullanıcısı belirteci oluşturun ve Kimlik bilgilerini düzenle bölümüne yapıştırın.",
+        "permissionMissing": "Belirteci whatsapp_business_messaging ve whatsapp_business_management ile oluşturun ve sistem kullanıcısının hesaba erişimi olduğundan emin olun.",
+        "idNotFound": "Her iki kimlik de Meta uygulamanızın WhatsApp altındaki API Kurulumu sayfasındadır. Bunlar farklı numaralardır.",
+        "appSecretInvalid": "Meta uygulama ayarlarınızın Temel sayfasındadır.",
+        "accountRestricted": "WhatsApp Manager'ı açın, hesabı seçin ve üstteki bildirimi okuyun.",
+        "numberNotRegistered": "WhatsApp Manager'da numarayı açın ve kaydını tamamlayın."
+      }
+    },
+    "fieldErrors": {
+      "required": "Bu alan zorunludur.",
+      "digits": "Yalnızca rakam kullanın, 5 ile 32 arasında.",
+      "tokenShort": "Bir erişim belirteci için çok kısa görünüyor.",
+      "tokenLong": "Bir erişim belirteci için çok uzun.",
+      "secretShort": "Uygulama gizli anahtarı en az 8 karakter olmalıdır.",
+      "secretLong": "Bir uygulama gizli anahtarı için çok uzun.",
+      "nameLong": "En fazla 120 karakter kullanın.",
+      "addressLong": "En fazla 40 karakter kullanın.",
+      "sameAsPhoneId": "Bu, telefon numarası kimliğiyle aynı. Bunlar iki farklı kimliktir."
+    },
+    "credentials": {
+      "name": {
+        "label": "Ad",
+        "hint": "Siz ve ekibinizin bu numaraya verdiği ad.",
+        "placeholder": "Destek hattı"
+      },
+      "displayAddress": {
+        "label": "Telefon numarası",
+        "hint": "İsteğe bağlı. Numaraların kolay ayırt edilmesi için listede gösterilir.",
+        "placeholder": "+91 98765 43210"
+      },
+      "phoneNumberId": {
+        "label": "Telefon numarası kimliği",
+        "hint": "WhatsApp Manager'da API Kurulumu altında bulabilirsiniz.",
+        "placeholder": "533524166787123",
+        "current": "Şu anki değer: {value}. Korumak için boş bırakın."
+      },
+      "businessAccountId": {
+        "label": "WhatsApp Business Hesap Kimliği",
+        "hint": "Aynı sayfada telefon numarası kimliğinin yanındadır.",
+        "placeholder": "102938475647382"
+      },
+      "accessToken": {
+        "label": "Erişim belirteci",
+        "hint": "Bir sistem kullanıcısından alınan kalıcı belirteç. Şifrelenmiş olarak saklanır ve bir daha gösterilmez.",
+        "placeholder": "EAA...",
+        "current": "Mevcut belirteç {hint} ile biter. Korumak için boş bırakın.",
+        "unusual": "Meta erişim belirteçleri genellikle EAA ile başlar. Başka bir şeyi değil, belirteci kopyaladığınızdan emin olun."
+      },
+      "appSecret": {
+        "label": "Uygulama gizli anahtarı",
+        "hint": "Meta uygulama ayarlarınızın Temel sayfasından. Meta'nın bize gönderdiği mesajları imzalar.",
+        "placeholder": "0123456789abcdef...",
+        "current": "Mevcut gizli anahtar {hint} ile biter. Korumak için boş bırakın."
+      },
+      "keepPlaceholder": "Değişmedi",
+      "show": "Göster",
+      "hide": "Gizle",
+      "privacy": "Gizli bilgiler şifrelenmiş olarak saklanır ve bir daha gösterilmez. Birlikte yapıştırdığınız boşluklar, satır sonları ve tırnak işaretleri sizin için kaldırılır.",
+      "privacyPlatform": "Yalnızca bu bilgiler gerekir. Kimlik bilgilerini platform halleder."
+    },
+    "wizard": {
+      "close": "Kapat",
+      "cancel": "İptal",
+      "back": "Geri",
+      "stepsLabel": "Adımlar",
+      "stepOf": "Adım {current} / {total}",
+      "steps": {
+        "before": "Başlamadan önce",
+        "credentials": "Numaranız",
+        "webhook": "Webhook'unuzu bağlayın",
+        "webhookAutomatic": "Bağlantıyı test edin"
+      },
+      "before": {
+        "intro": {
+          "channel_token": "Bir numarayı bağlamak için önce Meta'dan birkaç şey gerekir. Bunları bir kez ayarlayıp buraya dönün. İlerledikçe her birini işaretleyin; kutular yalnızca sizin içindir.",
+          "platform_token": "Numara eklemek için iki şey gerekir: WhatsApp Business Hesabının kimliği ve telefon numarasının kimliği. İlerledikçe her birini işaretleyin; kutular yalnızca sizin içindir."
+        },
+        "items": {
+          "channel_token": {
+            "app": {
+              "title": "WhatsApp eklenmiş bir Meta uygulaması",
+              "detail": "developers.facebook.com adresinde Business türünde bir uygulama oluşturun ve WhatsApp ürününü ekleyin. Mesajlarınızı gönderen ve alan uygulama budur."
+            },
+            "number": {
+              "title": "Bir WhatsApp Business hesabı ve bir numara",
+              "detail": "Numara normal WhatsApp uygulamasında kullanımda olmamalıdır. Önce denemek için Meta'nın her yeni uygulamaya verdiği ücretsiz test numarasını kullanın."
+            },
+            "token": {
+              "title": "Kalıcı bir erişim belirteci",
+              "detail": "Meta Business ayarlarında bir sistem kullanıcısı ekleyin, ona uygulamanızı ve WhatsApp hesabınızı verin ve whatsapp_business_messaging ile whatsapp_business_management izinli bir belirteç oluşturun. Süresiz seçin: 24 saatlik bir belirteç yarın çalışmaz."
+            },
+            "values": {
+              "title": "Kopyalanacak üç değer",
+              "detail": "Telefon numarası kimliği ve işletme hesabı kimliği (WhatsApp, API Kurulumu) ile uygulama gizli anahtarı (Uygulama ayarları, Temel)."
+            },
+            "webhook": {
+              "title": "Uygulamanızın webhook ayarlarına erişim",
+              "detail": "Son adımda bir adres ve bir doğrulama belirteci gösteriyoruz. Bunları Meta uygulamanızda WhatsApp, Yapılandırma bölümüne yapıştırırsınız."
+            }
+          },
+          "platform_token": {
+            "account": {
+              "title": "Bir WhatsApp Business Hesabı",
+              "detail": "Yoksa Meta Business Suite'te oluşturun. Numaralarınızı ve mesaj şablonlarınızı barındırır."
+            },
+            "number": {
+              "title": "WhatsApp Business için boş bir numara",
+              "detail": "Numara normal WhatsApp uygulamasında kullanımda olmamalıdır. Kullanımdaysa önce oradan kaldırın."
+            },
+            "ids": {
+              "title": "Kopyalanacak iki kimlik",
+              "detail": "Telefon numarası kimliği ve işletme hesabı kimliği; ikisi de WhatsApp Manager'daki API Kurulumu sayfasındadır."
+            }
+          }
+        },
+        "providerLine": "Numaralarınız platformun WhatsApp sağlayıcısı üzerinden sunulur. Erişim belirtecine ihtiyacınız yok.",
+        "runbook": "Açılacak menülerin tam olarak belirtildiği daha fazla ayrıntı depodaki rehberde:",
+        "continue": "Devam"
+      },
+      "embedded": {
+        "button": "Facebook ile bağlan (gömülü kayıt)",
+        "soon": "Yakında",
+        "help": "Yakında Facebook ile oturum açıp hiçbir kimlik kopyalamadan numaranızı seçebileceksiniz. O zamana kadar aşağıdaki iki kimliği girin."
+      },
+      "credentials": {
+        "intro": {
+          "channel_token": "Numaranın ayrıntılarını girin. Doğrudan Meta'dan yapıştırın: boşluklar ve satır sonları sizin için temizlenir.",
+          "platform_token": "Bağlamak istediğiniz numaranın iki kimliğini girin."
+        },
+        "save": "Kaydet ve devam et",
+        "saving": "Kaydediliyor"
+      },
+      "webhook": {
+        "done": "Bitti",
+        "finishLater": "Sonra bitir",
+        "test": {
+          "button": "Bağlantıyı test et",
+          "running": "Test ediliyor",
+          "again": "Tekrar test et",
+          "passedToast": "Bağlantı testi başarılı."
+        }
+      }
+    },
+    "webhook": {
+      "intro": "Son adım: WhatsApp'a mesajlarınızı nereye göndereceğini söyleyin. Numara zaten kaydedildi ancak bu yapılıp aşağıdaki test geçilene kadar bağlı olmayacak.",
+      "callbackUrl": "Geri çağırma URL'si",
+      "verifyToken": "Doğrulama belirteci",
+      "onceWarning": "Bu belirteç yalnızca şimdi gösterilir. Bu pencereyi kapatmadan önce kopyalayın. Kaybederseniz numaranın menüsünden yeni bir tane verebilirsiniz.",
+      "placeholderWarning": "Bu adres bir yer tutucudur. NEXT_PUBLIC_API_PUBLIC_URL değerini API'nin herkese açık adresine ayarlayıp sayfayı yenileyin veya platform yöneticinizin verdiği adresi kopyalayın.",
+      "localWarning": "Bu adres kendi ağınızdaki bir makineyi gösteriyor. WhatsApp ona ulaşamaz. API'nin herkese açık adresini kullanın.",
+      "httpWarning": "WhatsApp yalnızca https ile başlayan adresleri kabul eder.",
+      "tokenMissing": "Doğrulama belirteci gelmedi. Numaranın menüsünden yeni bir tane verin.",
+      "steps": {
+        "open": "Meta for Developers'ta uygulamanızı açın, ardından WhatsApp, sonra Yapılandırma bölümüne gidin.",
+        "paste": "Webhook altında Düzenle'yi seçin, geri çağırma URL'sini ve doğrulama belirtecini yapıştırın ve Doğrula ve kaydet'i seçin.",
+        "subscribe": "Webhook alanları altında messages alanına abone olun.",
+        "test": "Buraya dönüp Bağlantıyı test et'i seçin."
+      },
+      "testTitle": "Bağlantıyı test edin",
+      "automatic": {
+        "title": "Mesaj iletimi sizin için ayarlandı",
+        "message": "Platform bu numarayı gelen kutunuza kendiliğinden yönlendirir. Yapıştırılacak adres veya belirteç yok. Numaranın çalıştığını doğrulamak için testi çalıştırın."
+      },
+      "test": {
+        "hint": "Test, WhatsApp'a numarayı sorar ve söylediklerini gösterir.",
+        "running": "WhatsApp'a bu numara soruluyor",
+        "okTitle": "Numara bağlı",
+        "okMessage": "WhatsApp yanıt verdi ve numara kullanılabilir.",
+        "verifiedName": "Doğrulanmış ad",
+        "quality": "Kalite derecelendirmesi",
+        "tier": "Mesaj sınırı",
+        "unknown": "Bildirilmedi"
+      }
+    },
+    "edit": {
+      "close": "Kapat",
+      "cancel": "İptal",
+      "save": "Kaydet ve kontrol et",
+      "saving": "Kaydediliyor",
+      "nothing": "Hiçbir şey değişmedi. Kaydetmek için yeni bir değer yazın.",
+      "title": {
+        "channel_token": "Kimlik bilgilerini düzenle",
+        "platform_token": "Ayrıntıları düzenle"
+      },
+      "intro": {
+        "channel_token": "Yenilenen bir belirteci veya değiştirilen bir gizli anahtarı değiştirin. Boş bırakılan alanlar saklanan değeri korur. Kaydettikten sonra numara kontrol edilir ve yeniden açılır.",
+        "platform_token": "Bu numaranın adını veya kimliklerini değiştirin. Boş bırakılan alanlar saklanan değeri korur. Kaydettikten sonra numara kontrol edilir."
+      }
+    },
+    "rotate": {
+      "title": "Yeni doğrulama belirteci verilsin mi?",
+      "message": "{name} için mevcut doğrulama belirteci hemen çalışmayı bırakır. Yenisini Meta uygulamanıza yapıştırıp webhook'u yeniden doğrulamanız gerekir.",
+      "confirm": "Yeni belirteç ver",
+      "cancel": "İptal",
+      "close": "Kapat",
+      "done": "Bitti",
+      "resultTitle": "Yeni doğrulama belirteciniz",
+      "resultIntro": "Her iki değeri de Meta uygulamanızda WhatsApp, Yapılandırma bölümüne yapıştırın, ardından Doğrula ve kaydet'i seçin."
+    },
+    "remove": {
+      "title": "Bu numara kaldırılsın mı?",
+      "message": "{name} bu çalışma alanından kaldırılacak. Artık bu numara üzerinden mesaj gönderilemez veya alınamaz.",
+      "note": "Bu işlem geri alınamaz. Numarayı daha sonra yeniden ekleyebilirsiniz.",
+      "confirm": "Numarayı kaldır",
+      "cancel": "İptal",
+      "inUse": {
+        "title": "Bu numaranın görüşmeleri var",
+        "message": "{name} numarasının hâlâ görüşmeleri var, bu yüzden kaldırılamaz. Görüşmeler numarasız kalırdı.",
+        "hint": "Bunun yerine numarayı kapatabilirsiniz. Tüm görüşmeler korunur, üzerinden hiçbir şey gönderilmez ve daha sonra yeniden açabilirsiniz.",
+        "switchOff": "Bunun yerine kapat"
+      }
+    },
+    "switchOff": {
+      "title": "Bu numara kapatılsın mı?",
+      "message": "{name} kapalıyken üzerinden hiçbir şey gönderilmez veya alınmaz. Görüşmeler korunur ve yeniden açabilirsiniz.",
+      "confirm": "Kapat",
+      "cancel": "İptal"
+    },
+    "toasts": {
+      "checkPassed": "{name} sağlık kontrolünden geçti.",
+      "saved": "{name} için değişiklikler kaydedildi.",
+      "reconnected": "{name} yeniden bağlandı.",
+      "switchedOn": "{name} açıldı.",
+      "switchedOff": "{name} kapatıldı.",
+      "removed": "{name} kaldırıldı.",
+      "subscribed": "{name} gelen mesajlara abone edildi."
+    },
+    "inbox": {
+      "templatesSoon": "Şablonlar yakında geliyor; böylece bu müşteriye buradan yeniden ulaşabileceksiniz.",
+      "reconnect": {
+        "needs_reconnect": {
+          "title": "Bu WhatsApp numarasının yeniden bağlanması gerekiyor.",
+          "message": "WhatsApp, {name} için kimlik bilgilerini artık kabul etmiyor, bu yüzden yanıt gönderilemiyor. Dahili notlar çalışmaya devam eder."
+        },
+        "error": {
+          "title": "Bu WhatsApp numarasında bir bağlantı sorunu var.",
+          "message": "{name} hata durumunda, bu yüzden yanıt gönderilemiyor. Dahili notlar çalışmaya devam eder."
+        },
+        "not_connected": {
+          "title": "Bu WhatsApp numarası kapalı.",
+          "message": "{name} bağlı değil, bu yüzden yanıt gönderilemiyor. Dahili notlar çalışmaya devam eder."
+        },
+        "open": "WhatsApp ayarlarını aç",
+        "askAdmin": "Kanalları yöneten birinden yeniden bağlamasını isteyin."
+      },
+      "failure": {
+        "openSettings": "WhatsApp ayarlarını aç",
+        "windowClosed": {
+          "title": "24 saatlik yanıt penceresi kapandı.",
+          "hint": "WhatsApp, serbest biçimli yanıtlara yalnızca müşterinin son mesajından sonraki 24 saat içinde izin verir. Müşterinin yeniden yazmasını bekleyin."
+        },
+        "undeliverable": {
+          "title": "WhatsApp bu mesajı iletemedi.",
+          "hint": "Numara WhatsApp'ta olmayabilir veya müşteri en son koşulları kabul etmemiş olabilir."
+        },
+        "recipientNotAllowed": {
+          "title": "Bu numaraya buradan mesaj gönderilemez.",
+          "hint": "Gönderenin kendi numarası veya test alıcıları listesinde değil."
+        },
+        "rateLimit": {
+          "title": "WhatsApp gönderme hızınızı sınırlıyor.",
+          "hint": "Birkaç dakika bekleyin, ardından Yeniden dene'yi kullanın."
+        },
+        "spamLimited": {
+          "title": "Çok fazla mesaj spam olarak bildirildiği için gönderim sınırlandı.",
+          "hint": "Daha fazla göndermeden önce bir süre bekleyin ve yalnızca mesaj bekleyen müşterilere yazın."
+        },
+        "engagementBlocked": {
+          "title": "WhatsApp bu mesajı iletmemeyi seçti.",
+          "hint": "Bunu, müşterileri istemeyebilecekleri mesajlardan korumak için yapar."
+        },
+        "tokenExpired": {
+          "title": "WhatsApp numaranın erişim belirtecini reddetti.",
+          "hint": "Süresi dolmuş veya bir izni kaybetmiş. Numarayı yeniden bağlayın, ardından Yeniden dene'yi kullanın."
+        },
+        "accountRestricted": {
+          "title": "WhatsApp hesabında bir sorun var.",
+          "hint": "Kısıtlanmış, kilitlenmiş veya kayıtlı değil. WhatsApp Manager'da kontrol edin."
+        },
+        "mediaRejected": {
+          "title": "WhatsApp bu dosyayı veya mesaj türünü kullanamadı.",
+          "hint": "Farklı bir dosya deneyin veya bilgiyi metin olarak gönderin."
+        },
+        "templateProblem": {
+          "title": "Şablon gönderilemedi.",
+          "hint": "Bulunamadı, duraklatıldı veya reddedildi ya da değişkenleri eşleşmiyor."
+        },
+        "providerDown": {
+          "title": "WhatsApp'ta geçici bir sorun oluştu.",
+          "hint": "Birazdan Yeniden dene'yi kullanın."
+        },
+        "sendPaused": {
+          "title": "Gönderim tüm platform için duraklatıldı.",
+          "hint": "Yeniden açıldığında Yeniden dene'yi kullanın."
+        },
+        "channelOff": {
+          "title": "Bu numara bağlı değil.",
+          "hint": "Yeniden bağlayın, ardından Yeniden dene'yi kullanın."
+        },
+        "planLimit": {
+          "title": "Planınızın aylık mesaj sınırına ulaşıldı.",
+          "hint": "Planı yükseltin veya sonraki döneme kadar bekleyin, ardından Yeniden dene'yi kullanın."
+        },
+        "groupSendUnavailable": {
+          "title": "WhatsApp gruplarına gönderim henüz kullanılamıyor.",
+          "hint": "WhatsApp Business uygulamasından yanıtlayın."
+        }
+      },
+      "media": {
+        "downloading": "Dosya indiriliyor",
+        "failed": "Bu dosya indirilemedi",
+        "retry": "Yeniden dene",
+        "retrying": "Yeniden deneniyor",
+        "reason": {
+          "expired": "WhatsApp'ta artık yok. Dosyalar yaklaşık 30 gün saklanır.",
+          "auth": "WhatsApp numaranın erişim belirtecini reddetti. Numarayı yeniden bağlayın, ardından yeniden deneyin.",
+          "tooLarge": "Dosya bu kanalın izin verdiğinden büyük.",
+          "rejected": "Güvenli bir tür olmadığı için dosya reddedildi.",
+          "download": "WhatsApp zamanında yanıt vermedi. Yeniden denemek genellikle işe yarar."
+        }
+      },
+      "interactive": {
+        "button": "Bir düğme seçti",
+        "list": "Listeden seçti"
+      },
+      "contact": {
+        "unnamed": "Paylaşılan kişi",
+        "shared": "Kişi kartı"
+      },
+      "attach": {
+        "limit": {
+          "image": "{mb} MB'a kadar görseller",
+          "video": "{mb} MB'a kadar videolar",
+          "audio": "{mb} MB'a kadar ses dosyaları",
+          "document": "{mb} MB'a kadar belgeler"
+        },
+        "kind": {
+          "image": "Görseller",
+          "video": "Videolar",
+          "audio": "Ses dosyaları",
+          "document": "Belgeler"
+        },
+        "errors": {
+          "tooLarge": "WhatsApp'ta {kind} en fazla {mb} MB olabilir. Daha küçük bir dosya seçin.",
+          "kindNotAllowed": "Bu numara {kind} gönderemez.",
+          "unsupportedType": "WhatsApp bu dosya türünü kabul etmiyor. JPEG ve PNG görselleri, MP4 ve 3GP videoları, AAC, MP3, AMR, M4A ve OGG ses dosyalarını, PDF, Office ve metin belgelerini kabul eder.",
+          "empty": "Bu dosya boş."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,446 @@
+{
+  "team-inbox-conversations": {
+    "nav": {
+      "inbox": "Hộp thư"
+    },
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "screen": {
+      "listRegion": "Cuộc trò chuyện",
+      "panelRegion": "Liên hệ và ghi chú",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "conflict": "Có người khác vừa thay đổi cuộc trò chuyện này trước. Đã tải lại; hãy thử lại.",
+      "assigned": "Đã giao cuộc trò chuyện.",
+      "assignedToYou": "Đã giao cho bạn.",
+      "unassigned": "Đã bỏ giao cuộc trò chuyện.",
+      "resolved": "Đã đánh dấu giải quyết cuộc trò chuyện.",
+      "reopened": "Đã mở lại cuộc trò chuyện.",
+      "deleteNoteTitle": "Xóa ghi chú này?",
+      "deleteNoteMessage": "Ghi chú sẽ bị xóa đối với mọi thành viên trong nhóm. Không thể hoàn tác.",
+      "deleteNoteConfirm": "Xóa ghi chú",
+      "pickTitle": "Chọn một cuộc trò chuyện",
+      "pickMessage": "Chọn một cuộc trò chuyện trong danh sách để đọc và trả lời. Tin nhắn mới sẽ tự động xuất hiện tại đây.",
+      "shortcuts": "Phím tắt: j và k để di chuyển trong danh sách, e để giải quyết, / để tìm kiếm.",
+      "teamChanged": "Đã cập nhật nhóm."
+    },
+    "list": {
+      "title": "Hộp thư",
+      "refresh": "Làm mới danh sách",
+      "openSimulator": "Mở trình mô phỏng khách hàng",
+      "search": "Tìm cuộc trò chuyện",
+      "searchPlaceholder": "Tìm theo tên hoặc số",
+      "tabsLabel": "Chế độ xem cuộc trò chuyện",
+      "tabs": {
+        "all": "Tất cả",
+        "mine": "Của tôi",
+        "unassigned": "Chưa giao",
+        "unread": "Chưa đọc"
+      },
+      "statusFilter": "Trạng thái",
+      "statusOpen": "Đang mở",
+      "statusAll": "Mọi trạng thái",
+      "status": {
+        "open": "Đang mở",
+        "pending": "Đang chờ",
+        "snoozed": "Tạm hoãn",
+        "resolved": "Đã giải quyết",
+        "closed": "Đã giải quyết",
+        "spam": "Thư rác"
+      },
+      "priority": {
+        "low": "Thấp",
+        "normal": "Bình thường",
+        "high": "Cao",
+        "urgent": "Khẩn cấp"
+      },
+      "channelFilter": "Kênh",
+      "allChannels": "Mọi kênh",
+      "archived": "Đã lưu trữ",
+      "backToInbox": "Quay lại hộp thư",
+      "loading": "Đang tải cuộc trò chuyện",
+      "retry": "Thử lại",
+      "listLabel": "Cuộc trò chuyện",
+      "loadMore": "Tải thêm",
+      "moreFailed": "Không thể tải thêm cuộc trò chuyện.",
+      "unreadCount": "{count, plural, other {# tin nhắn chưa đọc}}",
+      "you": "Bạn:",
+      "noMessages": "Chưa có tin nhắn",
+      "windowClosed": "Đã đóng cửa sổ",
+      "windowLeftHours": "Còn {hours} giờ {minutes} phút",
+      "windowLeftMinutes": "Còn {minutes} phút",
+      "unassigned": "Chưa giao",
+      "needsContact": "Chưa có bản ghi liên hệ",
+      "gettingStarted": {
+        "title": "Kết nối một kênh để bắt đầu",
+        "message": "Hộp thư sẽ có tin khi khách hàng nhắn đến kênh đã kết nối. Kết nối một kênh và mọi cuộc trò chuyện sẽ hiển thị tại đây.",
+        "connect": "Kết nối kênh"
+      },
+      "emptyFiltered": {
+        "title": "Không có cuộc trò chuyện phù hợp",
+        "message": "Không cuộc trò chuyện nào khớp với bộ lọc. Xóa bộ lọc để xem lại mọi cuộc trò chuyện.",
+        "clear": "Xóa bộ lọc"
+      },
+      "empty": {
+        "all": {
+          "title": "Chưa có cuộc trò chuyện nào",
+          "message": "Khi khách hàng nhắn đến một trong các kênh của bạn, cuộc trò chuyện sẽ hiển thị tại đây."
+        },
+        "mine": {
+          "title": "Chưa có gì được giao cho bạn",
+          "message": "Các cuộc trò chuyện được giao cho bạn sẽ hiển thị ở đây. Mở một cuộc trò chuyện từ Tất cả và giao cho chính bạn."
+        },
+        "unassigned": {
+          "title": "Mọi cuộc trò chuyện đều có người phụ trách",
+          "message": "Các cuộc trò chuyện mới chưa có ai nhận sẽ được liệt kê tại đây."
+        },
+        "unread": {
+          "title": "Bạn đã xử lý hết",
+          "message": "Các cuộc trò chuyện có tin nhắn mới từ khách hàng sẽ được liệt kê tại đây."
+        }
+      }
+    },
+    "status": {
+      "received": "Đã nhận",
+      "queued": "Đang gửi",
+      "sent": "Đã gửi",
+      "delivered": "Đã nhận được",
+      "read": "Đã đọc",
+      "failed": "Chưa gửi"
+    },
+    "errors": {
+      "conflict": "Có người khác vừa thay đổi việc này trước. Đã tải lại; hãy thử lại.",
+      "windowClosed": "Đã hết thời hạn 24 giờ để trả lời, nên không thể gửi tin nhắn tự do.",
+      "planLimit": "Đã đạt giới hạn tin nhắn hằng tháng của gói bạn.",
+      "channelDisconnected": "Kênh này đã ngắt kết nối. Kết nối lại để gửi tin nhắn.",
+      "sendHalted": "Hiện tạm dừng gửi tin trên toàn nền tảng. Thử lại sau.",
+      "notFound": "Cuộc trò chuyện này không còn tồn tại hoặc bạn không có quyền xem.",
+      "notRetryable": "Chỉ có thể gửi lại tin nhắn đã gửi thất bại.",
+      "mediaNotFound": "Tệp đính kèm đã hết hạn hoặc bị xóa. Hãy đính kèm lại.",
+      "statusInvalid": "Không cho phép thay đổi này khi cuộc trò chuyện đang ở trạng thái hiện tại.",
+      "assigneeInvalid": "Không thể giao cuộc trò chuyện này cho người đó.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "rateLimited": "Quá nhiều yêu cầu. Chờ một lát rồi thử lại.",
+      "simulatorDisabled": "Trình mô phỏng kênh đã tắt trên máy chủ này.",
+      "channelInUse": "Kênh này vẫn còn cuộc trò chuyện. Hãy ngắt kết nối thay vì xóa.",
+      "validation": "Một số nội dung bạn nhập không hợp lệ.",
+      "tooLarge": "Tệp quá lớn.",
+      "unsupported": "Kênh này không thể gửi loại tin nhắn hoặc tệp đó.",
+      "network": "Không thể kết nối đến máy chủ. Kiểm tra kết nối và thử lại.",
+      "generic": "Đã xảy ra lỗi. Thử lại.",
+      "genericWithId": "Đã xảy ra lỗi. Thử lại. Mã tham chiếu: {id}",
+      "templateNotSendable": "Mẫu này không thể gửi vào cuộc trò chuyện này. Chọn mẫu khác.",
+      "groupSendUnavailable": "Hiện chưa hỗ trợ gửi tin đến nhóm WhatsApp. Hãy trả lời từ ứng dụng WhatsApp Business."
+    },
+    "bubble": {
+      "kind": {
+        "image": "Ảnh",
+        "text": "Tin nhắn",
+        "attachment": "Tệp đính kèm"
+      },
+      "template": "Tin nhắn mẫu: {name}",
+      "unavailable": "Tin nhắn không khả dụng",
+      "sentIn": "Đã gửi bằng {lang}. Hiện nội dung bạn đã nhập",
+      "translatedFrom": "Đã dịch từ {lang}. Hiện bản gốc",
+      "bot": "Bot",
+      "broadcast": "Gửi hàng loạt",
+      "reacted": "Phản ứng {emoji}",
+      "edited": "Đã chỉnh sửa",
+      "failed": "Tin nhắn này chưa được gửi đi.",
+      "retry": "Thử lại",
+      "sending": "Đang gửi",
+      "dismiss": "Bỏ qua",
+      "noteLabel": "Ghi chú nội bộ",
+      "unknownAuthor": "Một đồng nghiệp",
+      "deleteNote": "Xóa ghi chú này",
+      "templateHeader": {
+        "image": "Hình ảnh",
+        "video": "Video",
+        "document": "Tài liệu",
+        "location": "Vị trí"
+      },
+      "templateCopyCode": "Sao chép mã",
+      "templateButtonUnnamed": "Nút",
+      "templateButtonPrefix": "Nút: "
+    },
+    "media": {
+      "openImage": "Mở hình ảnh {name}",
+      "video": "Video",
+      "voice": "Tin nhắn thoại",
+      "audio": "Âm thanh",
+      "document": "Tài liệu",
+      "download": "Tải xuống {name}",
+      "location": "Vị trí đã chia sẻ",
+      "openMap": "Mở trên OpenStreetMap"
+    },
+    "thread": {
+      "title": "Cuộc trò chuyện",
+      "back": "Quay lại danh sách cuộc trò chuyện",
+      "loading": "Đang tải cuộc trò chuyện",
+      "retry": "Thử lại",
+      "notFound": {
+        "title": "Không tìm thấy cuộc trò chuyện",
+        "message": "Cuộc trò chuyện đã bị xóa hoặc bạn không có quyền xem. Chọn cuộc trò chuyện khác trong danh sách."
+      },
+      "status": {
+        "resolved": "Đã giải quyết",
+        "closed": "Đã đóng",
+        "spam": "Thư rác",
+        "snoozed": "Tạm hoãn"
+      },
+      "assignToMe": "Giao cho tôi",
+      "resolve": "Giải quyết",
+      "reopen": "Mở lại",
+      "resolveShortcut": "Giải quyết hoặc mở lại (e)",
+      "showPanel": "Hiện liên hệ và ghi chú",
+      "hidePanel": "Ẩn liên hệ và ghi chú",
+      "window": {
+        "closed": "Đã đóng cửa sổ",
+        "closesInHours": "Đóng sau {hours} giờ {minutes} phút",
+        "closesInMinutes": "Đóng sau {minutes} phút"
+      },
+      "windowBanner": {
+        "title": "Đã hết thời hạn 24 giờ để trả lời.",
+        "message": "Kênh này chỉ cho phép gửi tin nhắn mẫu đã được duyệt khi đã hơn 24 giờ kể từ tin nhắn cuối của khách hàng. Bạn vẫn có thể thêm ghi chú nội bộ. Khi khách hàng nhắn tin mới, cửa sổ sẽ mở lại.",
+        "sendTemplate": "Gửi mẫu tin nhắn"
+      },
+      "readOnly": "Bạn có thể đọc cuộc trò chuyện này nhưng không có quyền trả lời.",
+      "typing": "{count, plural, other {# đồng nghiệp đang nhập}}",
+      "messagesLabel": "Tin nhắn",
+      "loadOlder": "Tải tin nhắn trước đó",
+      "empty": "Chưa có tin nhắn trong cuộc trò chuyện này.",
+      "newMessageAnnounce": "Tin nhắn mới: {text}",
+      "attachment": "một tệp đính kèm",
+      "jumpLatest": "Đến tin nhắn mới nhất",
+      "jumpLatestNew": "{count, plural, other {# tin nhắn mới}}"
+    },
+    "composer": {
+      "modeLabel": "Loại tin nhắn",
+      "mode": {
+        "reply": "Trả lời",
+        "note": "Ghi chú nội bộ"
+      },
+      "attach": "Đính kèm tệp",
+      "removeAttachment": "Xóa tệp đính kèm",
+      "replyLabel": "Trả lời khách hàng",
+      "noteLabel": "Ghi chú nội bộ",
+      "replyPlaceholder": "Nhập tin nhắn",
+      "notePlaceholder": "Viết ghi chú chỉ nhóm của bạn mới thấy",
+      "replyDisabledPlaceholder": "Đã tắt trả lời cho cuộc trò chuyện này",
+      "send": "Gửi",
+      "addNote": "Thêm ghi chú",
+      "hint": "Enter để gửi. Shift+Enter để xuống dòng.",
+      "template": "Gửi mẫu tin nhắn",
+      "groupSendUnavailable": "Hiện chưa hỗ trợ gửi tin đến nhóm WhatsApp. Hãy trả lời từ ứng dụng WhatsApp Business."
+    },
+    "panel": {
+      "tabsLabel": "Ghi chú và dòng thời gian",
+      "contact": "Liên hệ",
+      "openContact": "Mở liên hệ",
+      "needsContact": "Số này chưa có bản ghi liên hệ vì đã đạt giới hạn liên hệ.",
+      "noContact": "Cuộc trò chuyện này chưa được liên kết với liên hệ nào.",
+      "email": "Email",
+      "stage": "Giai đoạn",
+      "status": "Trạng thái",
+      "source": "Nguồn",
+      "since": "Liên hệ từ",
+      "optedOut": "Đã từ chối nhận tiếp thị",
+      "resolve": "Giải quyết",
+      "reopen": "Mở lại",
+      "assignee": {
+        "title": "Giao cho",
+        "unknown": "Đồng nghiệp không xác định",
+        "none": "Chưa ai phụ trách cuộc trò chuyện này",
+        "team": "Nhóm: {name}",
+        "pick": "Chọn người phụ trách cuộc trò chuyện này",
+        "unassigned": "Chưa giao",
+        "you": "bạn",
+        "loadFailed": "Không thể tải danh sách đồng nghiệp.",
+        "assignToMe": "Giao cho tôi",
+        "unassign": "Bỏ giao",
+        "open": "{count} đang mở",
+        "pickTeam": "Chọn nhóm cho cuộc trò chuyện này",
+        "noTeam": "Không có nhóm"
+      },
+      "presence": {
+        "online": "Trực tuyến",
+        "away": "Vắng mặt",
+        "busy": "Bận",
+        "offline": "Ngoại tuyến"
+      },
+      "notes": {
+        "tab": "Ghi chú",
+        "label": "Ghi chú nội bộ mới",
+        "placeholder": "Viết ghi chú chỉ nhóm của bạn mới thấy",
+        "hint": "Ctrl+Enter để thêm ghi chú.",
+        "add": "Thêm ghi chú",
+        "addFailed": "Không thể lưu ghi chú.",
+        "loading": "Đang tải ghi chú",
+        "empty": "Chưa có ghi chú nào.",
+        "unknownAuthor": "Một đồng nghiệp",
+        "delete": "Xóa ghi chú này"
+      },
+      "timeline": {
+        "tab": "Dòng thời gian",
+        "loading": "Đang tải dòng thời gian",
+        "failed": "Không thể tải dòng thời gian.",
+        "retry": "Thử lại",
+        "empty": "Chưa có hoạt động nào trong cuộc trò chuyện này.",
+        "events": {
+          "created": "Bắt đầu cuộc trò chuyện",
+          "assigned": "Được giao bởi {actor}",
+          "reassigned": "Được giao lại bởi {actor}",
+          "unassigned": "Đã bỏ giao bởi {actor}",
+          "ai_handoff": "Được chuyển cho một người bởi {actor}",
+          "resolved": "Đã giải quyết bởi {actor}",
+          "closed": "Đã đóng bởi {actor}",
+          "reopened": "Đã mở lại bởi {actor}",
+          "status_changed": "Đã đổi trạng thái bởi {actor}",
+          "note_added": "Đã thêm ghi chú bởi {actor}",
+          "snoozed": "Đã tạm hoãn bởi {actor}",
+          "auto_unsnoozed": "Hết thời gian tạm hoãn",
+          "priority_changed": "Đã đổi mức ưu tiên bởi {actor}",
+          "tag_added": "Đã thêm nhãn bởi {actor}",
+          "tag_removed": "Đã gỡ nhãn bởi {actor}",
+          "first_response": "Đã gửi phản hồi đầu tiên",
+          "sla_breach": "Đã quá hạn phản hồi",
+          "unknown": "{what} bởi {actor}"
+        },
+        "actors": {
+          "user": "Một đồng nghiệp",
+          "system": "Hệ thống",
+          "bot": "Một bot",
+          "flow": "Một tự động hóa",
+          "ai": "Trợ lý AI"
+        }
+      },
+      "owner": "Người phụ trách",
+      "past": {
+        "title": "Cuộc trò chuyện trước đây",
+        "noMessages": "Không có tin nhắn",
+        "status": {
+          "open": "Đang mở",
+          "pending": "Đang chờ",
+          "snoozed": "Tạm hoãn",
+          "resolved": "Đã giải quyết",
+          "closed": "Đã đóng",
+          "spam": "Thư rác"
+        }
+      }
+    },
+    "simulator": {
+      "title": "Trình mô phỏng khách hàng",
+      "close": "Đóng trình mô phỏng",
+      "devOnly": "Chỉ dùng khi phát triển. Công cụ này giả làm khách hàng trên một kênh mô phỏng; không có tin nhắn nào đến điện thoại thật.",
+      "noChannel": "Chưa có kênh mô phỏng.",
+      "createChannel": "Tạo kênh mô phỏng",
+      "disabled": "Trình mô phỏng đã tắt trên máy chủ này.",
+      "channel": "Kênh mô phỏng",
+      "customer": "Khách hàng",
+      "name": "Tên",
+      "number": "Số điện thoại",
+      "numberHint": "Chỉ nhập chữ số, từ 5 đến 15 chữ số.",
+      "kind": "Loại tin nhắn",
+      "kinds": {
+        "text": "Văn bản",
+        "image": "Hình ảnh",
+        "document": "Tài liệu",
+        "audio": "Âm thanh",
+        "video": "Video",
+        "location": "Vị trí"
+      },
+      "file": "Tệp",
+      "fileHint": "Không bắt buộc. Tên và loại tệp sẽ được dùng; nếu không có, hệ thống sẽ gửi tệp mẫu.",
+      "message": "Tin nhắn",
+      "caption": "Chú thích",
+      "placeName": "Tên địa điểm",
+      "send": "Gửi với tư cách khách hàng",
+      "sent": "{count, plural, other {Đã nhận # lần, chỉ lưu một lần.}}",
+      "duplicate": "Nhận trùng lặp",
+      "duplicateHint": "Gửi cùng một tin nhắn ba lần để kiểm tra xem tin có chỉ được lưu một lần hay không.",
+      "nextSend": "Phản hồi tiếp theo của bạn",
+      "nextSendHint": "Áp dụng cho tin nhắn tiếp theo bạn gửi từ ô soạn thảo, sau đó tự động quay lại bình thường.",
+      "faults": {
+        "none": "Bình thường",
+        "fail": "Thất bại",
+        "flaky": "Thất bại hai lần, sau đó thành công",
+        "slow": "Chậm (10 giây)",
+        "ooo": "Biên nhận không đúng thứ tự"
+      },
+      "window": "Cửa sổ 24 giờ",
+      "windows": {
+        "auto": "Tự động",
+        "open": "Buộc mở",
+        "closed": "Buộc đóng"
+      },
+      "windowHint": "Chế độ Đóng cho biết ô soạn thảo hoạt động thế nào khi chỉ được gửi mẫu tin nhắn."
+    },
+    "channels": {
+      "title": "Kênh",
+      "intro": "Các tài khoản mà khách hàng liên hệ với bạn. Mỗi kênh đều đưa tin nhắn vào hộp thư.",
+      "backToInbox": "Quay lại hộp thư",
+      "simulatorNote": "Dành cho phát triển: thêm kênh mô phỏng để thử hộp thư mà không cần tài khoản thật.",
+      "addSimulator": "Thêm kênh mô phỏng",
+      "simulatorAdded": "Đã thêm kênh mô phỏng.",
+      "simulatorDisabled": "Trình mô phỏng đã tắt trên máy chủ này.",
+      "loading": "Đang tải kênh",
+      "loadFailed": "Không thể tải kênh.",
+      "retry": "Thử lại",
+      "empty": {
+        "title": "Chưa kết nối kênh nào",
+        "message": "Kết nối một kênh để tin nhắn của khách hàng bắt đầu đến hộp thư."
+      },
+      "listLabel": "Kênh đã kết nối",
+      "status": {
+        "connected": "Đã kết nối",
+        "disconnected": "Đã ngắt kết nối",
+        "error": "Lỗi"
+      },
+      "capWindow": "Cửa sổ trả lời {hours} giờ",
+      "capTemplates": "Mẫu",
+      "capMedia": "Phương tiện",
+      "capReceipts": "Biên nhận gửi",
+      "lastEvent": "Hoạt động gần nhất {when}",
+      "noEvents": "Chưa có hoạt động",
+      "remove": "Xóa",
+      "removeTitle": "Xóa kênh này?",
+      "removeMessage": "{name} sẽ bị xóa. Kênh còn cuộc trò chuyện không thể xóa; hãy ngắt kết nối thay thế.",
+      "removeConfirm": "Xóa kênh",
+      "cancel": "Hủy"
+    },
+    "templates": {
+      "eyebrow": "WhatsApp",
+      "title": "Gửi mẫu tin nhắn",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "back": "Quay lại mẫu",
+      "search": "Tìm theo tên hoặc nội dung",
+      "searchLabel": "Tìm mẫu",
+      "loading": "Đang tải mẫu",
+      "loadError": "Không thể tải mẫu.",
+      "retry": "Thử lại",
+      "empty": "Số WhatsApp này chưa có mẫu nào được duyệt. Tạo mẫu trong mục Mẫu và đợi Meta phê duyệt.",
+      "noResults": "Không có mẫu nào khớp với tìm kiếm.",
+      "windowHint": "Mẫu vẫn gửi được ngay cả khi đã hết cửa sổ trả lời 24 giờ.",
+      "variables": "Điền các biến",
+      "preview": "Nội dung khách hàng sẽ đọc",
+      "send": "Gửi mẫu",
+      "sending": "Đang gửi",
+      "sent": "Đã gửi mẫu",
+      "problem": {
+        "required": "{label} là bắt buộc.",
+        "format": "{label} không được chứa ký tự xuống dòng, tab hoặc bốn dấu cách liên tiếp."
+      },
+      "reason": {
+        "paused": "WhatsApp đã tạm dừng. Có thể gửi lại sau khi hết thời gian tạm dừng.",
+        "media_header": "Có tiêu đề là hình ảnh, video hoặc tài liệu, hiện chưa thể gửi từ hộp thư.",
+        "header_variable": "Có biến trong tiêu đề, hiện chưa thể điền từ hộp thư.",
+        "dynamic_button": "Có liên kết nút với biến, hiện chưa thể điền từ hộp thư.",
+        "authentication": "Mẫu mã OTP do hệ thống gửi, không gửi từ hộp thư.",
+        "named_variables": "Dùng biến có tên, hiện hộp thư chưa hỗ trợ."
+      },
+      "hasMore": "Đang hiển thị {count} mẫu đầu tiên. Tìm theo tên hoặc nội dung để xem các mẫu khác."
+    }
+  }
+}

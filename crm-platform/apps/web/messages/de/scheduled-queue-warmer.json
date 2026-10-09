@@ -1,0 +1,531 @@
+{
+  "scheduled-queue-warmer": {
+    "nav": {
+      "scheduled": "Geplant",
+      "warmer": "Warm-up"
+    },
+    "common": {
+      "dismiss": "Ausblenden"
+    },
+    "status": {
+      "scheduled": "In Warteschlange",
+      "running": "Läuft",
+      "paused": "Pausiert",
+      "completed": "Erledigt",
+      "failed": "Fehlgeschlagen",
+      "cancelled": "Abgebrochen"
+    },
+    "type": {
+      "plain": "Nur Text",
+      "template": "Vorlage",
+      "media": "Medien",
+      "location": "Standort"
+    },
+    "errors": {
+      "generic": "Etwas ist schiefgegangen. Versuchen Sie es erneut.",
+      "FORBIDDEN": "Sie haben keine Berechtigung dafür.",
+      "VALIDATION_FAILED": "Einige Felder müssen überprüft werden.",
+      "ROW_VERSION_CONFLICT": "Dieser Zeitplan wurde in der Zwischenzeit geändert. Laden Sie die Seite neu und versuchen Sie es erneut.",
+      "PLAN_FEATURE_LOCKED": "Ihr Tarif enthält diese Funktion nicht.",
+      "PLAN_LIMIT_REACHED": "Sie haben das Limit Ihres Tarifs erreicht.",
+      "WA_UNOFFICIAL_DISABLED": "Der Versand über persönliche WhatsApp-Nummern (inoffizielle API) ist für Ihren Workspace nicht aktiviert. Wählen Sie eine offizielle WhatsApp Business API-Nummer.",
+      "AUTH_SEND_HALTED": "Der Versand ist für diesen Workspace gestoppt.",
+      "upgrade": "Tarife ansehen und upgraden",
+      "requestId": "Anfrage {id}"
+    },
+    "actions": {
+      "done": {
+        "pause": "Zeitplan pausiert.",
+        "resume": "Zeitplan fortgesetzt.",
+        "cancel": "Zeitplan abgebrochen.",
+        "run-now": "Zeitplan läuft jetzt.",
+        "destroy": "Zeitplan gelöscht.",
+        "retry": "Zeitplan mit der neuen Zeit in die Warteschlange gestellt."
+      }
+    },
+    "confirm": {
+      "yes": "Ja, fortfahren",
+      "keep": "Behalten",
+      "cancel": {
+        "title": "Diesen Zeitplan abbrechen?",
+        "body": "„{name}“ wird nicht gesendet. Dies kann nicht rückgängig gemacht werden."
+      },
+      "run-now": {
+        "title": "Diesen Zeitplan jetzt ausführen?",
+        "body": "„{name}“ beginnt sofort mit dem Versand statt zum eingestellten Zeitpunkt."
+      },
+      "destroy": {
+        "title": "Diesen Zeitplan löschen?",
+        "body": "„{name}“ und seine Empfängerliste werden entfernt."
+      }
+    },
+    "retry": {
+      "title": "Mit neuer Zeit wiederholen",
+      "body": "Wählen Sie eine neue Sendezeit für „{name}“. Er wird wieder in die Warteschlange gestellt.",
+      "date": "Sendedatum",
+      "time": "Uhrzeit",
+      "timezone": "Zeitzone",
+      "keep": "Fehlgeschlagen behalten",
+      "confirm": "Jetzt wiederholen"
+    },
+    "list": {
+      "crumb": "Kampagnen / Geplante Nachrichten",
+      "title": "Geplante Nachrichten",
+      "queued": "{n} in Warteschlange",
+      "create": "Nachricht planen",
+      "stats": {
+        "total": "Geplant gesamt",
+        "totalHint": "über alle Status",
+        "active": "Aktive Warteschlange",
+        "activeHint": "wartet auf Versand",
+        "sent": "Gesamt gesendet",
+        "sentHint": "Nachrichten gesendet (diese Seite)",
+        "delivery": "Zustellrate",
+        "deliveryHint": "bei abgeschlossenen (diese Seite)"
+      },
+      "upNext": {
+        "eyebrow": "Als Nächstes",
+        "title": "Nächster Versand",
+        "pending": "{n} ausstehend",
+        "empty": "Noch nichts geplant.",
+        "createOne": "Eine erstellen →",
+        "recurring": "wiederkehrend",
+        "queued": "in Warteschlange"
+      },
+      "tip": {
+        "eyebrow": "Tipp",
+        "title": "Senden, wenn sie lesen",
+        "body": "Öffnungsraten erreichen zwischen 9–11 Uhr und 18–20 Uhr in der Ortszeit der Kontakte ihren Höhepunkt. Wählen Sie eine Sendezeit, die zur Empfängergruppe passt. Mit wiederkehrenden Zeitplänen legen Sie dies einmal fest und müssen nicht weiter daran denken.",
+        "cta": "Eine planen"
+      },
+      "tabs": {
+        "all": "Alle",
+        "upcoming": "Anstehend",
+        "running": "Läuft",
+        "paused": "Pausiert",
+        "completed": "Abgeschlossen",
+        "failed": "Fehlgeschlagen"
+      },
+      "search": "Nach Name suchen…",
+      "cols": {
+        "schedule": "Zeitplan",
+        "type": "Typ",
+        "recipients": "Empfänger",
+        "sendTime": "Sendezeit",
+        "repeat": "Wiederholung",
+        "status": "Status",
+        "actions": "Aktionen"
+      },
+      "recipients": {
+        "group": "Gruppe",
+        "tag": "Tag",
+        "queue": "Warteschlange",
+        "number": "Nummern"
+      },
+      "when": {
+        "overdue": "überfällig",
+        "now": "jetzt",
+        "minutes": "in {n} Min.",
+        "hours": "in {n} Std.",
+        "tomorrow": "morgen",
+        "date": "später"
+      },
+      "completedAt": "abgeschlossen {when}",
+      "once": "einmal",
+      "actions": {
+        "open": "Öffnen",
+        "pause": "Pausieren",
+        "resume": "Fortsetzen",
+        "runNow": "Jetzt ausführen",
+        "cancel": "Abbrechen",
+        "retry": "Mit neuer Zeit wiederholen",
+        "delete": "Löschen",
+        "deleteHistory": "Aus dem Verlauf löschen"
+      },
+      "empty": {
+        "title": "Keine Zeitpläne",
+        "none": "Planen Sie Ihre erste Nachricht.",
+        "filtered": "Keine Zeitpläne entsprechen den aktuellen Filtern. Löschen Sie die Filter oder planen Sie Ihre erste Nachricht.",
+        "reset": "Filter zurücksetzen"
+      },
+      "page": "Seite {page} von {pages}",
+      "prev": "Zurück",
+      "next": "Weiter"
+    },
+    "composer": {
+      "crumb": "Geplant / Neu",
+      "title": "Eine Nachricht planen",
+      "back": "Zurück",
+      "forbidden": "Sie haben keine Berechtigung, Nachrichten zu planen.",
+      "steps": "Schritte",
+      "stepNames": {
+        "basics": "Grundlagen",
+        "audience": "Empfänger",
+        "message": "Nachricht",
+        "when": "Wann",
+        "review": "Prüfen"
+      },
+      "required": "erforderlich",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "submit": "Nachricht planen",
+      "stepOf": "Schritt {n} von {total}",
+      "engine": {
+        "baileys": "Inoffizielle API",
+        "waba": "WhatsApp Cloud API",
+        "twilio": "Twilio"
+      },
+      "types": {
+        "plain": {
+          "title": "Nur Text",
+          "hint": "Nur Wörter und Emojis.",
+          "pill": "Nur Text"
+        },
+        "template": {
+          "title": "Vorlage",
+          "hint": "Genehmigte WhatsApp-Vorlage.",
+          "pill": "Vorlage"
+        },
+        "media": {
+          "title": "Mit Medien",
+          "hint": "Bild, Video, Dokument, Audio.",
+          "pill": "Medien"
+        },
+        "location": {
+          "title": "Standort",
+          "hint": "Breiten-/Längengrad-Markierung.",
+          "pill": "Standort"
+        }
+      },
+      "basics": {
+        "title": "Grundlagen des Zeitplans",
+        "name": "Name des Zeitplans",
+        "nameHint": "Nur interne Bezeichnung. Empfänger sehen dies nicht.",
+        "namePlaceholder": "z. B. Frühlingsaktion / VIP-Segment",
+        "sender": "Absender",
+        "senders": "Absender",
+        "tickAll": "Alle zutreffenden aktivieren",
+        "noSenders": "Kein verbundener Absender. Verbinden Sie zuerst eine Nummer.",
+        "warming": "Warm-up",
+        "splitHint": "Jeder aktivierte Absender führt seinen eigenen Zeitplan mit einem fairen Anteil der Zielgruppe aus.",
+        "messageType": "Nachrichtentyp"
+      },
+      "audience": {
+        "title": "Empfänger",
+        "source": "Quelle der Empfänger",
+        "sources": {
+          "group": {
+            "title": "Gruppe",
+            "hint": "Wählen Sie eine oder mehrere gespeicherte Kontaktgruppen."
+          },
+          "tag": {
+            "title": "Tags",
+            "hint": "Alle mit einem Tag"
+          },
+          "queue": {
+            "title": "Empfängerwarteschlange",
+            "hint": "Empfänger eines früheren Broadcasts erneut ansprechen."
+          },
+          "number": {
+            "title": "Nummern",
+            "hint": "Eine Liste manuell einfügen."
+          }
+        },
+        "chooseGroups": "Gruppe(n) auswählen",
+        "chooseTags": "Wählen Sie einen oder mehrere Tags",
+        "chooseQueues": "Wählen Sie einen oder mehrere frühere Broadcasts",
+        "tickAny": "(beliebig viele aktivieren)",
+        "noGroups": "Noch keine Gruppen",
+        "noTags": "Noch keine Tags",
+        "noQueues": "Noch keine abgeschlossenen Broadcasts",
+        "contacts": "Zu den Kontakten",
+        "broadcast": "Zu den Broadcasts",
+        "tagsHint": "Die Empfänger werden beim Start des Zeitplans neu berechnet, sodass neu getaggte Kontakte einbezogen werden.",
+        "queuesHint": "Aktivieren Sie beliebig viele Broadcasts. Doppelte Empfänger werden vor dem Versand automatisch entfernt.",
+        "paste": "Nummern einfügen",
+        "pasteHint": "Zuerst die Ländervorwahl, ohne führendes +. Zeilenumbrüche oder Kommas trennen die Einträge.",
+        "pastePlaceholder": "Eine Nummer pro Zeile mit Ländervorwahl, ohne Pluszeichen",
+        "total": "Empfänger gesamt:",
+        "optedOut": "{n} ausgeschlossen: abgemeldet oder archiviert"
+      },
+      "message": {
+        "title": "Nachricht verfassen",
+        "content": "Nachrichteninhalt",
+        "caption": "Beschriftung",
+        "placeholder": "Hallo '{name}', Ihr geplantes Update ist da…",
+        "personalise": "Verwenden Sie '{name}', '{phone}', '{email}' für die Personalisierung.",
+        "template": "Genehmigte Vorlage",
+        "chooseTemplate": "Genehmigte Vorlage auswählen",
+        "browse": "Klicken, um Ihre Vorlagen zu durchsuchen",
+        "approved": "GENEHMIGT",
+        "change": "Ändern",
+        "mediaLink": "Medienlink",
+        "mediaHint": "Ein Link zur Datei (https://…). Bild, Video, Audio oder Dokument.",
+        "pin": "Standort markieren",
+        "latitude": "Breitengrad",
+        "longitude": "Längengrad",
+        "estimate": "Geschätzte Sendedauer",
+        "minutes": "ca. {n} Min.",
+        "estimateHint": "bei 60 Nachrichten/Min.",
+        "estimateEmpty": "wählen Sie zuerst Empfänger aus.",
+        "variables": "Variablen in der Nachricht",
+        "variablesHint": "Platzhalter erkannt.",
+        "pickerEyebrow": "Vorlagen",
+        "pickerTitle": "Vorlage auswählen",
+        "pickerHint": "Es werden nur genehmigte, aktive Vorlagen angezeigt.",
+        "pickerSearch": "Nach Name oder Sprache suchen…",
+        "pickerEmpty": "Keine passenden Vorlagen.",
+        "manageTemplates": "Vorlagen verwalten →",
+        "cancel": "Abbrechen"
+      },
+      "when": {
+        "title": "Wann senden",
+        "modes": {
+          "once": {
+            "title": "Einmal senden",
+            "hint": "Eine einzelne Zustellung zum gewählten Datum und zur gewählten Uhrzeit."
+          },
+          "recurring": {
+            "title": "Wiederkehrend",
+            "hint": "Täglich, wöchentlich oder monatlich in festem Rhythmus wiederholen."
+          }
+        },
+        "date": "Sendedatum",
+        "time": "Uhrzeit",
+        "timezone": "Zeitzone",
+        "recurrence": "Wiederholung",
+        "every": "Wiederholen alle",
+        "interval": "Intervall",
+        "intervals": {
+          "daily": "Tag(e)",
+          "weekly": "Woche(n)",
+          "monthly": "Monat(e)"
+        },
+        "end": "Ende",
+        "endNever": "Nie",
+        "endDate": "An einem bestimmten Datum",
+        "endOn": "Letzter Tag",
+        "days": "Wochentage",
+        "daysHint": "Klicken Sie auf einen Tag, um ihn umzuschalten. Wöchentliche Zeitpläne benötigen mindestens einen Tag.",
+        "lead": "Ein Zeitplan muss mindestens {n} Minuten in der Zukunft liegen."
+      },
+      "review": {
+        "title": "Prüfen und planen",
+        "final": "endgültig",
+        "schedule": "Planen",
+        "name": "Name",
+        "sender": "Absender",
+        "type": "Typ",
+        "mode": "Modus",
+        "at": "Erster Versand",
+        "once": "Einmal senden",
+        "recurring": "Alle {n} {interval}",
+        "delivery": "Zustellung",
+        "source": "Quelle der Empfänger",
+        "recipients": "Empfänger",
+        "estimated": "Geschätzte Dauer",
+        "testTitle": "Zuerst einen Test senden",
+        "testHint": "Erhalten Sie vor dem vollständigen Versand eine Vorschaunachricht an eine von Ihnen eingegebene Nummer.",
+        "testNumber": "Test an diese Nummer senden",
+        "testNumberHint": "Zuerst die Ländervorwahl, ohne führendes +."
+      },
+      "preview": {
+        "title": "Live-Vorschau",
+        "channel": "WhatsApp",
+        "empty": "Ihre Nachricht erscheint hier…",
+        "media": "[ Medien angehängt ]",
+        "pin": "Standortmarkierung",
+        "noTemplate": "Keine Vorlage ausgewählt"
+      },
+      "errors": {
+        "nameRequired": "Geben Sie dem Zeitplan einen Namen.",
+        "senderRequired": "Wählen Sie mindestens einen Absender aus.",
+        "wabaTemplate": "Nummern der WhatsApp Cloud API können keine Vorlagen-Zeitpläne senden. Deaktivieren Sie sie oder wählen Sie einen anderen Nachrichtentyp.",
+        "audienceRequired": "Wählen Sie mindestens eine aus.",
+        "numbersRequired": "Fügen Sie mindestens eine Nummer ein.",
+        "messageRequired": "Schreiben Sie die Nachricht.",
+        "messageTooLong": "Die Nachricht ist länger als 1024 Zeichen.",
+        "templateRequired": "Wählen Sie eine Vorlage.",
+        "mediaLink": "Geben Sie einen Link ein, der mit http:// oder https:// beginnt.",
+        "latitude": "Geben Sie einen Breitengrad zwischen -90 und 90 ein.",
+        "longitude": "Geben Sie einen Längengrad zwischen -180 und 180 ein.",
+        "dateRequired": "Wählen Sie ein Datum.",
+        "timeRequired": "Geben Sie eine Uhrzeit wie 14:30 ein.",
+        "timezoneRequired": "Wählen Sie eine Zeitzone.",
+        "tooSoon": "Wählen Sie eine Uhrzeit, die mindestens einige Minuten in der Zukunft liegt.",
+        "repeatEvery": "Geben Sie eine ganze Zahl von 1 bis 365 ein.",
+        "daysRequired": "Wählen Sie die Wochentage.",
+        "endDateRequired": "Wählen Sie den letzten Tag.",
+        "endBeforeStart": "Das Enddatum liegt vor dem ersten Versand.",
+        "testNumber": "Geben Sie die Nummer mit Ländervorwahl ein."
+      }
+    },
+    "detail": {
+      "crumb": "Geplant / Auswertung",
+      "title": "Auswertung des Zeitplans",
+      "back": "Zurück zu geplanten Nachrichten",
+      "eyebrow": "Geplante Nachricht",
+      "untitled": "Ohne Titel",
+      "recurs": "Wiederholt sich · {interval} × {n}",
+      "fires": "Startet {when}",
+      "actions": {
+        "pause": "Pausieren",
+        "resume": "Fortsetzen",
+        "runNow": "Jetzt ausführen",
+        "cancel": "Abbrechen",
+        "retry": "Mit neuer Zeit wiederholen",
+        "delete": "Löschen"
+      },
+      "kpi": {
+        "recipients": "Empfänger",
+        "delivered": "Zugestellt",
+        "read": "Gelesen",
+        "sent": "Gesendet",
+        "status": "Status",
+        "ofSent": "der Gesendeten",
+        "failedCount": "{n} fehlgeschlagen",
+        "pendingCount": "{n} ausstehend",
+        "fires": "startet {when}",
+        "paused": "pausiert",
+        "done": "erledigt {when}"
+      },
+      "funnel": {
+        "eyebrow": "Zustellungstrichter",
+        "title": "Vom Versand bis zur Aktion",
+        "recipients": "Empfänger",
+        "sent": "Gesendet",
+        "delivered": "Zugestellt",
+        "read": "Gelesen",
+        "failed": "Fehlgeschlagen"
+      },
+      "mix": {
+        "eyebrow": "Statusverteilung",
+        "title": "Zustellstatus",
+        "empty": "Noch keine Versandaktivität.",
+        "delivered": "Zugestellt",
+        "sentOnly": "Gesendet · nicht zugestellt",
+        "failed": "Fehlgeschlagen",
+        "pending": "Ausstehend"
+      },
+      "recipients": {
+        "eyebrow": "Empfänger",
+        "title": "Wer was erhalten hat",
+        "none": "Für diesen Zeitplan sind keine Empfänger hinterlegt.",
+        "emptyTab": "In diesem Tab gibt es noch keine Empfänger.",
+        "truncated": "Angezeigt werden die ersten {n} von {total} Empfängern.",
+        "tabs": {
+          "all": "Alle",
+          "sent": "Gesendet",
+          "delivered": "Zugestellt",
+          "read": "Gelesen",
+          "failed": "Fehlgeschlagen",
+          "pending": "Ausstehend"
+        },
+        "cols": {
+          "recipient": "Empfänger",
+          "phone": "Telefon",
+          "status": "Status",
+          "when": "Wann",
+          "note": "Notiz"
+        },
+        "status": {
+          "pending": "Ausstehend",
+          "processing": "Ausstehend",
+          "sent": "Gesendet",
+          "delivered": "Zugestellt",
+          "read": "Gelesen",
+          "failed": "Fehlgeschlagen"
+        }
+      },
+      "config": {
+        "eyebrow": "Details des Zeitplans",
+        "title": "Konfiguration",
+        "scheduleType": "Zeitplantyp",
+        "messageType": "Nachrichtentyp",
+        "scheduledAt": "Geplant für",
+        "nextRun": "Nächster Lauf",
+        "lastRun": "Letzter Lauf",
+        "repeats": "Wiederholt sich alle",
+        "until": "bis {date}",
+        "sender": "Vom Absender",
+        "provider": "Engine",
+        "attempts": "Sendeversuche"
+      },
+      "preview": {
+        "eyebrow": "Nachrichtenvorschau",
+        "title": "Was Empfänger sehen",
+        "empty": "(leerer Inhalt)"
+      },
+      "another": "Weiteren planen"
+    },
+    "warmer": {
+      "warming": "{n} im Warm-up",
+      "name": "WhatsApp Warm-up",
+      "tagline": "Nummern-Warm-up",
+      "how": {
+        "title": "So funktioniert es",
+        "one": "Aktivieren Sie das Warm-up für eine Nummer.",
+        "two": "Jeden Tag darf sie etwas mehr senden als am Vortag.",
+        "three": "Nachrichten werden langsam und nur in den von Ihnen gewählten Stunden gesendet.",
+        "four": "Kampagnen, Broadcasts und geplante Versände halten alle das Limit ein."
+      },
+      "good": {
+        "title": "Gut zu wissen",
+        "body": "Warm-up senkt das Risiko einer Sperre bei Nummern der inoffiziellen API, garantiert aber nichts. Für hohe Volumen verwenden Sie eine offizielle WhatsApp Business Nummer (Cloud API), die kein Warm-up benötigt."
+      },
+      "crumb": "Kampagnen / Warm-up",
+      "heading": "Wärmen Sie Ihre Nummern auf",
+      "lead": "Erhöhen Sie das tägliche Versandlimit der einzelnen Nummern der inoffiziellen API mit menschenähnlichen Pausen und aktiven Zeiten, um das Sperrrisiko zu senken. Jede Nummer wärmt sich nach eigenem Zeitplan auf.",
+      "tiles": {
+        "warming": "Nummern im Warm-up",
+        "warmingHint": "von {n} verbunden",
+        "budget": "Tagesbudget",
+        "budgetHint": "heute erlaubte Nachrichten",
+        "sent": "Heute gesendet",
+        "sentHint": "wird auf das Warm-up angerechnet",
+        "health": "Ø Zustand",
+        "healthHint": "über alle Nummern"
+      },
+      "empty": "Noch keine verbundenen Nummern.",
+      "connect": "Nummer verbinden",
+      "number": "Nummer",
+      "engines": {
+        "baileys": "Inoffizielle API",
+        "waba": "WABA",
+        "twilio": "Twilio"
+      },
+      "health": "Zustand {n}",
+      "healthTitle": "Zustandswert (höher = sicherer zum Hochfahren)",
+      "switch": "Warm-up",
+      "budgetToday": "Tagesbudget",
+      "remaining": "Heute verbleibend",
+      "sentToday": "Heute gesendet",
+      "fields": {
+        "dailyBase": "Start-Budget/Tag",
+        "stepPct": "Steigerung +% / Schritt",
+        "stepDays": "Steigerung alle (Tage)",
+        "maxDaily": "Max. Budget/Tag",
+        "gapMin": "Min. Pause (Sek.)",
+        "gapMax": "Max. Pause (Sek.)",
+        "activeStart": "Aktiv ab (Std.)",
+        "activeEnd": "Aktiv bis (Std.)"
+      },
+      "hints": {
+        "dailyBase": "Wie viele Nachrichten diese Nummer am ersten Tag senden darf.",
+        "stepPct": "Erhöhen Sie das Tageslimit bei jedem Schritt um diesen Prozentsatz.",
+        "stepDays": "Wie oft das Limit steigt (alle N Tage).",
+        "maxDaily": "Der höchste Wert, den das Tageslimit erreichen kann.",
+        "gapMin": "Kürzeste Wartezeit zwischen zwei Nachrichten.",
+        "gapMax": "Längste Wartezeit zwischen zwei Nachrichten.",
+        "activeStart": "Erst ab dieser Stunde senden (24-Stunden-Format).",
+        "activeEnd": "Ab dieser Stunde nicht mehr senden."
+      },
+      "spintax": {
+        "title": "Spintax-Variation",
+        "hint": "Senden Sie jeder Person leicht abweichende Formulierungen, damit Nachrichten nicht identisch wirken. Schreiben Sie dort Auswahlmöglichkeiten wie '{Hi|Hello|Hey}'."
+      },
+      "save": "Warm-up speichern",
+      "saved": "Warm-up gespeichert."
+    }
+  }
+}

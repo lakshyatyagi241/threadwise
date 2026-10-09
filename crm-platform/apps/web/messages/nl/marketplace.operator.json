@@ -1,0 +1,924 @@
+{
+  "marketplace": {
+    "operator": {
+      "nav": {
+        "group": "Marketplace",
+        "catalogue": "Catalogus",
+        "categories": "Categorieën",
+        "requests": "Verzoeken",
+        "usage": "Gebruik"
+      },
+      "common": {
+        "loading": "Laden...",
+        "requestId": "Verzoek-ID",
+        "retry": "Opnieuw proberen",
+        "noPermissions": "Geen rechten"
+      },
+      "enums": {
+        "kind": {
+          "mini_app": "Mini app",
+          "integration": "Integratie"
+        },
+        "appStatus": {
+          "draft": "Concept",
+          "in_review": "In beoordeling",
+          "published": "Gepubliceerd",
+          "hidden": "Verborgen",
+          "killed": "Gedood"
+        },
+        "versionStatus": {
+          "draft": "Concept",
+          "in_review": "In beoordeling",
+          "approved": "Goedgekeurd",
+          "rejected": "Afgewezen",
+          "published": "Gepubliceerd",
+          "retired": "Uitgefaseerd"
+        },
+        "requestStatus": {
+          "open": "Open",
+          "planned": "Gepland",
+          "building": "In aanbouw",
+          "shipped": "Uitgebracht",
+          "declined": "Afgewezen"
+        },
+        "connector": {
+          "oauth": "OAuth-aanmelding",
+          "push": "Push (het portaal stuurt naar ons)",
+          "pull": "Pull (wij vragen het portaal)",
+          "email_parse": "E-mail verwerken",
+          "webhook_relay": "Webhook-relay",
+          "client": "Client (door leden geïnstalleerd)"
+        },
+        "risk": {
+          "low": "Laag risico",
+          "medium": "Gemiddeld risico",
+          "high": "Hoog risico"
+        },
+        "subscriptionStatus": {
+          "active": "Betalend",
+          "trialing": "Op proef",
+          "comped": "Gratis toegekend",
+          "canceling": "Eindigt",
+          "ended": "Beëindigd"
+        },
+        "subscriptionSource": {
+          "purchase": "Aankoop",
+          "trial": "Proef",
+          "comp": "Gratis toegekend"
+        }
+      },
+      "errors": {
+        "conflict": "Iemand heeft dit veranderd terwijl je ernaar keek. Laad opnieuw om hun versie te zien en doe daarna je wijziging opnieuw.",
+        "noAccess": "Hiervoor heb je het platformrecht {permission} nodig.",
+        "manifestInvalid": "Het manifest volgt niet manifest v1. Elk probleem wordt met het pad vermeld.",
+        "recipeInvalid": "Het recept volgt niet het receptformaat, of past niet bij het manifest. Elk probleem wordt met het pad vermeld.",
+        "urlRefused": "Een adres in het recept wordt geweigerd: {detail}.",
+        "urlRefusedPlain": "Een adres in het recept wordt geweigerd. Adressen moeten https zijn, een openbare DNS-naam hebben, de standaardpoort gebruiken en zonder inloggegevens zijn.",
+        "connectorNotAvailable": "Het connectortype {type} is nog niet gebouwd, dus deze vermelding kan niet worden gepubliceerd. Niets dat niet werkt, bereikt een workspace.",
+        "slugTaken": "Een andere vermelding of categorie gebruikt dat id al. Kies een ander id.",
+        "categoryGone": "Die categorie bestaat niet meer. Laad de lijst opnieuw.",
+        "categoryUnknown": "De categorie in het manifest bestaat niet voor dit type app, of is uitgeschakeld. Kies er een op de pagina Categorieën.",
+        "categoryInUse": "Er staan apps in deze categorie. Verplaats ze eerst naar een andere categorie, of schakel de categorie uit om hem voor workspaces te verbergen.",
+        "versionState": "Dit is niet toegestaan terwijl de vermelding of versie {status} is. Laad opnieuw om de huidige status te zien.",
+        "versionStatePlain": "Dit is niet toegestaan in de huidige status van de vermelding of versie. Laad opnieuw om de huidige status te zien.",
+        "versionExists": "Het versienummer moet hoger zijn dan {newest}, de hoogste versie tot nu toe.",
+        "versionExistsPlain": "Dat versienummer bestaat al. Gebruik een hoger nummer.",
+        "appUnavailable": "Een gedode vermelding kan niet worden gepubliceerd. Herstel hem eerst en publiceer daarna.",
+        "appNotFound": "Deze vermelding bestaat niet. Hij is mogelijk verwijderd.",
+        "notFound": "Dat item is niet gevonden. Het is mogelijk verwijderd.",
+        "rateLimited": "Te veel verzoeken. Wacht {seconds} seconden en probeer het opnieuw.",
+        "rateLimitedPlain": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+        "validationFields": "Sommige velden zijn niet geldig. Elk probleem wordt bij het veld vermeld.",
+        "validation": "Het verzoek was niet geldig.",
+        "request": "Het verzoek kon niet worden voltooid.",
+        "unexpected": "Er is iets misgegaan aan onze kant. Probeer het opnieuw; blijft het gebeuren, geef dan het verzoek-ID door.",
+        "subscriptionState": "Dat is niet mogelijk in de huidige status van het abonnement. Een workspace die al betaalt, kan niet gratis worden gemaakt (zeg eerst het abonnement op), een gratis app heeft niets om gratis te maken, en een beëindigd abonnement kan niet opnieuw worden opgezegd.",
+        "subscriptionNotFound": "Dat abonnement is niet gevonden. Het is mogelijk verwijderd. Laad de lijst opnieuw."
+      },
+      "list": {
+        "title": "Marketplace-catalogus",
+        "description": "Elke vermelding in elke status: mini apps en integraties, hun versies en hoeveel workspaces ze hebben geïnstalleerd.",
+        "new": "Nieuwe vermelding",
+        "subscriptionsLink": "Abonnementen en omzet",
+        "kpi": {
+          "label": "Vermeldingen per status",
+          "loaded": "Geladen",
+          "published": "Gepubliceerd",
+          "inReview": "In beoordeling",
+          "hidden": "Verborgen",
+          "killed": "Gedood",
+          "note": "De tellingen gelden voor de {count} vermeldingen die tot nu toe zijn geladen, niet voor de hele catalogus.",
+          "noteMore": "Er zijn er meer: gebruik Meer laden."
+        },
+        "filters": {
+          "label": "Filters",
+          "search": "Zoeken",
+          "searchPlaceholder": "Naam of id",
+          "kind": "Soort",
+          "allKinds": "Alle soorten",
+          "status": "Status",
+          "allStatuses": "Alle statussen",
+          "category": "Categorie",
+          "allCategories": "Alle categorieën",
+          "categoryNote": "Filtert de vermeldingen die al zijn geladen: de API heeft geen categoriefilter.",
+          "pricing": "Prijzen",
+          "allPricing": "Alle prijzen",
+          "free": "Gratis",
+          "paid": "Betaald"
+        },
+        "cols": {
+          "app": "App",
+          "kind": "Soort",
+          "category": "Categorie",
+          "status": "Status",
+          "versions": "Versies",
+          "installs": "Installaties",
+          "planFeature": "Abonnementsfunctie",
+          "pricing": "Prijzen",
+          "subscriptions": "Actieve abonnementen"
+        },
+        "badges": {
+          "firstParty": "Eigen product",
+          "featured": "Uitgelicht"
+        },
+        "versionPublished": "Gepubliceerd",
+        "versionLatest": "Nieuwste",
+        "dash": "-",
+        "everyPlan": "Elk abonnement",
+        "killedReason": "Gedood: {reason}",
+        "loadMore": "Meer laden",
+        "clearFilters": "Filters wissen",
+        "emptyTitle": "Nog geen vermeldingen",
+        "emptyMessage": "Maak de eerste vermelding aan om de catalogus te starten.",
+        "noMatchTitle": "Geen vermelding gevonden",
+        "noMatchMessage": "Niets komt overeen met deze filters. Probeer andere filters.",
+        "noMatchMoreMessage": "Geen van de tot nu toe geladen vermeldingen komt overeen. Er zijn er meer: laad ze, of wijzig de filters.",
+        "tableCaption": "Marketplace-vermeldingen",
+        "viewSubscriptions": "Abonnementen op {name}"
+      },
+      "new": {
+        "title": "Nieuwe vermelding",
+        "description": "Maak een conceptvermelding aan met de eerste versie. Niets bereikt een workspace totdat een beoordelaar het goedkeurt en publiceert.",
+        "back": "Terug naar de catalogus",
+        "sections": {
+          "docs": "Manifest en recept",
+          "docsHelp": "Het manifest beschrijft wie de app is, wat hij mag doen en welke connector hij gebruikt. Een integratie heeft ook een recept nodig. Beide worden tijdens het typen gecontroleerd met de regels die de server toepast.",
+          "changelog": "Notities bij de eerste versie",
+          "changelogHelp": "Beheerders zien dit als wat de eerste versie bevat."
+        },
+        "changelog": "Wijzigingslog",
+        "changelogHint": "Optioneel, tot {max} tekens. Laat je het leeg, dan staat er Eerste versie.",
+        "save": "Vermelding aanmaken",
+        "saving": "Aanmaken...",
+        "cancel": "Annuleren",
+        "created": "Vermelding {name} aangemaakt als concept.",
+        "draftNote": "De vermelding begint als concept. Dien de versie in ter beoordeling vanaf de vermeldingspagina."
+      },
+      "editor": {
+        "cancel": "Annuleren",
+        "format": "Opmaak",
+        "problemCount": "{count, plural, one {# probleem om op te lossen} other {# problemen om op te lossen}}",
+        "valid": {
+          "manifest": "Geldig manifest v1.",
+          "recipe": "Geldig recept."
+        },
+        "manifest": {
+          "label": "Manifest (JSON)",
+          "hint": "Manifest v1: id, name, kind, category, version, description, scopes, pricing, support, connector."
+        },
+        "recipe": {
+          "label": "Recept (JSON)",
+          "hint": "Het connectorrecept van een integratie: connector, authFields, mapping, rateLimits, errorMapping, setupInstructions, testPayloads.",
+          "insertStarter": "Startrecept invoegen"
+        },
+        "scopes": {
+          "title": "Rechten die deze versie vraagt",
+          "help": "Wat een beheerder moet accepteren, in gewone taal. Vraag zo weinig mogelijk rechten die werken."
+        },
+        "templates": {
+          "title": "Begin vanuit een sjabloon",
+          "help": "Vult beide editors met een geldig startpunt dat je daarna aanpast.",
+          "mini_app": "Mini app",
+          "webhook_relay": "Integratie: webhook-relay",
+          "push": "Integratie: push",
+          "replaceTitle": "Wat in de editors staat vervangen?",
+          "replaceBody": "Het manifest en recept die je hebt getypt, worden door het sjabloon vervangen.",
+          "replaceAction": "Vervangen"
+        },
+        "problems": {
+          "listLabel": "Problemen",
+          "errorLabel": "Fout:",
+          "warningLabel": "Waarschuwing:",
+          "syntax": "Geen geldige JSON.",
+          "syntaxAt": "Geen geldige JSON, bij regel {line}, kolom {column}.",
+          "empty": "Dit document is leeg.",
+          "recipeNotAllowed": "Een mini app heeft geen recept: maak deze editor leeg.",
+          "recipeMissing": "Een integratie heeft een recept nodig voordat hij ter beoordeling kan worden ingediend.",
+          "recipeKeyMismatch": "Moet gelijk zijn aan het manifest-id: {expected}.",
+          "recipeCategoryMismatch": "Moet gelijk zijn aan de manifestcategorie: {expected}.",
+          "recipeConnectorMismatch": "Moet gelijk zijn aan het manifest-connectortype: {expected}.",
+          "idChanged": "Het id van een bestaande vermelding kan niet veranderen: het moet {expected} blijven.",
+          "kindChanged": "De soort van een bestaande vermelding kan niet veranderen: die moet {expected} blijven.",
+          "versionNotHigher": "De versie moet hoger zijn dan {newest}, de hoogste versie tot nu toe.",
+          "versionTaken": "Een andere versie van deze vermelding gebruikt al {version}.",
+          "categoryUnknown": "Er is geen actieve categorie {category} van soort {kind}. Controleer de pagina Categorieën.",
+          "categoryRefused": "De server heeft deze categorie geweigerd: die bestaat niet voor deze soort, of is uitgeschakeld.",
+          "recipeRequired": "Een integratie heeft zijn recept nodig.",
+          "slugTaken": "Een andere vermelding gebruikt dit id al."
+        }
+      },
+      "fields": {
+        "sections": {
+          "page": "Vermeldingspagina",
+          "pageHelp": "Wat een beheerder op de app-pagina leest.",
+          "screenshots": "Schermafbeeldingen",
+          "screenshotsHelp": "Tot {max} afbeeldingen op de app-pagina. Alleen https-links.",
+          "data": "Melding gegevensverwerking",
+          "dataHelp": "Wat de app opslaat, waar, en hoe het wordt verwijderd: de verklaring die op de app-pagina staat.",
+          "placement": "Plaatsing en toegang",
+          "placementHelp": "Hoe hij gerangschikt wordt, en welk abonnement hem kan installeren."
+        },
+        "tagline": "Tagline",
+        "taglineHint": "{count} van {max} tekens (minstens 5).",
+        "logo": "Logo-adres",
+        "logoHint": "Een https-afbeeldingslink. Een integratie zonder logo valt terug op het logo in zijn recept.",
+        "longDescription": "Lange beschrijving",
+        "longDescriptionHint": "Platte tekst; lege regels scheiden alinea's. Tot {max} tekens.",
+        "highlights": "Hoogtepunten",
+        "highlightsHint": "Één per regel: tot {max}, elk tot {length} tekens.",
+        "screenshotUrl": "Adres van schermafbeelding {n}",
+        "screenshotCaption": "Bijschrift van schermafbeelding {n}",
+        "screenshotRemove": "Schermafbeelding {n} verwijderen",
+        "screenshotAdd": "Schermafbeelding toevoegen",
+        "screenshotsNone": "Geen schermafbeeldingen.",
+        "dataSummary": "Wat er wordt opgeslagen",
+        "dataSummaryHint": "Tot {max} tekens.",
+        "dataRegions": "Regio's",
+        "dataRegionsHint": "Kommagescheiden, tot {max}, bijvoorbeeld India, EU.",
+        "dataDeletion": "Hoe gegevens worden verwijderd",
+        "dataDeletionHint": "Tot {max} tekens.",
+        "firstParty": "Eigen product",
+        "firstPartyHint": "Door ons gebouwd en beheerd: getoond met een eigen-product-badge.",
+        "featured": "Uitgelicht",
+        "featuredHint": "Getoond in het uitgelichte overzicht.",
+        "planFeature": "Abonnementsfunctie",
+        "planFeatureHint": "Een workspace heeft deze functie nodig in zijn abonnement, of via een add-on, om de app te installeren. Labels komen uit de abonnementencatalogus.",
+        "planFeatureNone": "Elk abonnement",
+        "sortOrder": "Sorteervolgorde",
+        "sortOrderHint": "Een geheel getal van 0 tot {max}; lager wordt eerst getoond.",
+        "problems": {
+          "required": "Dit is verplicht.",
+          "tooShort": "Minstens {min} tekens.",
+          "tooLong": "Maximaal {max} tekens.",
+          "https": "Gebruik een volledig https://-adres.",
+          "tooMany": "Maximaal {max} items.",
+          "number": "Gebruik een geheel getal van 0 tot {max}.",
+          "unknownFeature": "Gebruik kleine letters, cijfers en underscores, beginnend met een letter.",
+          "slug": "Gebruik 2 tot 48 kleine letters, cijfers of streepjes, beginnend met een letter.",
+          "icon": "Gebruik 1 tot 32 kleine letters, cijfers of streepjes."
+        }
+      },
+      "summary": {
+        "title": "Los dit op voordat je opslaat",
+        "sentTitle": "De server heeft dit niet opgeslagen",
+        "manifest": "{count, plural, one {# probleem in het manifest} other {# problemen in het manifest}}",
+        "recipe": "{count, plural, one {# probleem in het recept} other {# problemen in het recept}}",
+        "fields": "{count, plural, one {# probleem in de vermeldingsvelden} other {# problemen in de vermeldingsvelden}}"
+      },
+      "detail": {
+        "title": "Vermelding",
+        "back": "Terug naar de catalogus",
+        "firstParty": "Eigen product",
+        "featured": "Uitgelicht",
+        "none": "Geen",
+        "everyPlan": "Elk abonnement",
+        "kpi": {
+          "installs": "Installaties",
+          "published": "Gepubliceerde versie",
+          "latest": "Nieuwste versie",
+          "versions": "Versies"
+        },
+        "facts": {
+          "kind": "Soort",
+          "category": "Categorie",
+          "connector": "Connector",
+          "planFeature": "Abonnementsfunctie"
+        },
+        "tabs": {
+          "overview": "Vermelding",
+          "versions": "Versies ({count})"
+        },
+        "operate": {
+          "title": "Beheren",
+          "description": "Verberg, dood, herstel of verwijder de vermelding. Elke actie vraagt om bevestiging.",
+          "lacking": "Sommige acties zijn verborgen omdat je rollen {permission} niet bevatten."
+        },
+        "killed": {
+          "title": "Deze vermelding is gedood",
+          "reason": "Reden",
+          "effect": "Elke installatie is gestopt en elk leveradres antwoordt met 410. Workspaces kunnen alleen verwijderen."
+        },
+        "notice": {
+          "killedTitle": "{name} is gedood",
+          "killedBody": "{count, plural, one {# installatie is uitgeschakeld.} other {# installaties zijn uitgeschakeld.}}",
+          "publishedTitle": "{name} {version} is gepubliceerd",
+          "publishedUpgraded": "{count, plural, one {# installatie is meteen naar deze versie gegaan.} other {# installaties zijn meteen naar deze versie gegaan.}}",
+          "publishedWaiting": "{count, plural, one {# installatie blijft op de huidige versie tot de beheerder de nieuwe rechten accepteert.} other {# installaties blijven op de huidige versie tot hun beheerders de nieuwe rechten accepteren.}}",
+          "dismiss": "Sluiten"
+        }
+      },
+      "edit": {
+        "readOnly": "Alleen lezen. Het bewerken van de vermelding vereist het platformrecht {permission}.",
+        "conflict": "Iemand anders heeft deze vermelding opgeslagen terwijl je hem bewerkte. Laad opnieuw om hun versie te zien en doe daarna je wijziging opnieuw.",
+        "reload": "Opnieuw laden",
+        "save": "Wijzigingen opslaan",
+        "saving": "Opslaan...",
+        "discard": "Wijzigingen verwerpen",
+        "nothingToSave": "Nog geen wijzigingen.",
+        "saved": "{name} opgeslagen."
+      },
+      "actions": {
+        "cancel": "Annuleren",
+        "hide": "Verbergen",
+        "unhide": "Opnieuw tonen",
+        "unkill": "Herstellen",
+        "delete": "Verwijderen",
+        "kill": "Kill switch",
+        "confirm": {
+          "hide": {
+            "title": "{name} verbergen?",
+            "body": "{name} verdwijnt uit bladeren en zoeken, dus geen nieuwe workspace vindt hem. Bestaande installaties blijven werken.",
+            "action": "Verbergen"
+          },
+          "unhide": {
+            "title": "{name} opnieuw tonen?",
+            "body": "{name} verschijnt weer in bladeren en zoeken met de gepubliceerde versie.",
+            "action": "Opnieuw tonen"
+          },
+          "unkill": {
+            "title": "{name} herstellen?",
+            "body": "{name} wordt verborgen zodat hij kan worden gerepareerd en opnieuw gepubliceerd. Installaties die zijn gedood blijven uit: workspaces moeten hem opnieuw installeren.",
+            "action": "Herstellen"
+          },
+          "delete": {
+            "title": "{name} verwijderen?",
+            "body": "Dit verwijdert de conceptvermelding en zijn versies definitief. Een vermelding die is gepubliceerd of geïnstalleerd kan niet worden verwijderd: verberg hem in plaats daarvan.",
+            "action": "Vermelding verwijderen"
+          }
+        },
+        "done": {
+          "hide": "{name} is verborgen.",
+          "unhide": "{name} is weer zichtbaar.",
+          "unkill": "{name} is hersteld als verborgen.",
+          "kill": "{name} is gedood.",
+          "delete": "{name} is verwijderd."
+        }
+      },
+      "killDialog": {
+        "eyebrow": "Kill switch",
+        "title": "{name} doden?",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "confirm": "{name} doden",
+        "installs": "{name} is geïnstalleerd in {count, plural, one {# workspace} other {# workspaces}}.",
+        "effects": {
+          "stop": "Elke installatie stopt meteen met werken.",
+          "connections": "Elke verbinding wordt uitgeschakeld.",
+          "address": "Het leveradres antwoordt vanaf het volgende verzoek met 410 Gone.",
+          "uninstall": "Workspaces kunnen hem alleen verwijderen."
+        },
+        "undo": "Als je de vermelding later herstelt, wordt hij verborgen. Gedode installaties blijven uit en workspaces moeten hem opnieuw installeren.",
+        "reason": "Reden",
+        "reasonHint": "Tussen {min} en {max} tekens. Het wordt in het auditlog bewaard en aan elke workspace getoond.",
+        "count": "{count} van {max} tekens (minstens {min}).",
+        "typeSlug": "Typ {slug} om te bevestigen",
+        "typeSlugHint": "Het id van de vermelding, precies zoals getoond."
+      },
+      "versions": {
+        "title": "Versies",
+        "description": "Elke versie van deze vermelding. Selecteer er een om het manifest, recept en acties te zien.",
+        "newVersion": "Nieuwe versie",
+        "newVersionHint": "Een nieuwe versie begint bij de versie die je bekijkt ({version}) met een hoger nummer. Het moet hoger zijn dan elke eerdere versie.",
+        "tableCaption": "Versies van deze vermelding",
+        "cols": {
+          "version": "Versie",
+          "status": "Status",
+          "changelog": "Wijzigingslog",
+          "scopes": "Rechten",
+          "reviewNote": "Beoordelingsnotitie",
+          "dates": "Data"
+        },
+        "viewing": "Bekijken",
+        "none": "-",
+        "dates": {
+          "created": "Aangemaakt",
+          "submitted": "Ingediend",
+          "reviewed": "Beoordeeld",
+          "published": "Gepubliceerd"
+        },
+        "selectedTitle": "Versie {version}",
+        "selectedHelp": "De rechten, het manifest en het recept zoals opgeslagen. De acties volgen de status van de versie en je rechten.",
+        "edit": "Bewerken",
+        "newFrom": "Nieuwe versie van deze",
+        "submit": "Indienen ter beoordeling",
+        "approve": "Goedkeuren",
+        "reject": "Afwijzen",
+        "publish": "Publiceren",
+        "rejectedNote": "Reden van de beoordelaar (zichtbaar voor de ontwikkelaar)",
+        "recipeMissing": "Deze integratie heeft nog geen recept. Voeg er een toe voordat je hem ter beoordeling indient.",
+        "permissions": "Rechten",
+        "manifest": "Manifest",
+        "recipe": "Recept",
+        "noRecipeIntegration": "Voor deze versie is geen recept opgeslagen.",
+        "noRecipeMiniApp": "Een mini app heeft geen recept.",
+        "done": {
+          "submit": "Versie {version} ter beoordeling ingediend.",
+          "approve": "Versie {version} goedgekeurd.",
+          "reject": "Versie {version} afgewezen.",
+          "publish": "Versie {version} gepubliceerd.",
+          "created": "Versie {version} opgeslagen als concept.",
+          "updated": "Versie {version} bijgewerkt."
+        }
+      },
+      "versionEditor": {
+        "newTitle": "Nieuwe versie",
+        "newHelp": "Begint bij de versie die je bekijkt, met een hoger nummer. Wijzig het manifest en recept en beschrijf daarna wat er is veranderd.",
+        "editTitle": "Versie bewerken",
+        "editHelp": "Vervangt het manifest en recept van deze versie. Een afgewezen versie gaat bij opslaan terug naar concept.",
+        "changelog": "Wijzigingslog",
+        "changelogHint": "Wat er in deze versie is veranderd. Beheerders lezen dit. Tot {max} tekens.",
+        "saveNew": "Nieuwe versie opslaan",
+        "saveEdit": "Wijzigingen opslaan",
+        "saving": "Opslaan...",
+        "cancel": "Annuleren"
+      },
+      "versionDialogs": {
+        "approve": {
+          "title": "{name} {version} goedkeuren?",
+          "close": "Sluiten",
+          "cancel": "Annuleren",
+          "confirm": "Goedkeuren",
+          "body": "Een goedgekeurde versie kan daarna worden gepubliceerd. Goedkeuren verandert niet wat workspaces zien.",
+          "note": "Notitie (optioneel)",
+          "noteHint": "Wordt bij de versie bewaard. Tot {max} tekens."
+        },
+        "reject": {
+          "title": "{name} {version} afwijzen?",
+          "close": "Sluiten",
+          "cancel": "Annuleren",
+          "confirm": "Versie afwijzen",
+          "body": "De reden wordt aan de ontwikkelaar getoond. Die bewerkt de versie en dient haar opnieuw in.",
+          "note": "Reden",
+          "noteHint": "Minstens {min} en maximaal {max} tekens.",
+          "count": "{count} van {max} tekens (minstens {min})."
+        },
+        "publish": {
+          "title": "{name} {version} publiceren?",
+          "cancel": "Annuleren",
+          "confirm": "{version} publiceren",
+          "body": "{name} {version} wordt de versie die elke nieuwe installatie krijgt.",
+          "effects": {
+            "retire": "De eerder gepubliceerde versie wordt uitgefaseerd.",
+            "moveSame": "Installaties waarvan de verleende rechten deze versie al dekken, gaan er meteen naartoe.",
+            "moveMore": "Installaties die er meer van vragen, blijven op hun huidige versie draaien tot hun beheerder de nieuwe lijst met rechten accepteert.",
+            "killed": "Gedode installaties worden niet aangeraakt."
+          },
+          "installs": "{count, plural, one {# installatie wordt beïnvloed.} other {# installaties worden beïnvloed.}}",
+          "first": "Dit is de eerste gepubliceerde versie.",
+          "addedScopes": "{count, plural, one {Hij vraagt om # recht dat de gepubliceerde versie niet heeft:} other {Hij vraagt om # rechten die de gepubliceerde versie niet heeft:}}"
+        }
+      },
+      "categories": {
+        "title": "Categorieën",
+        "description": "De categorieën van beide Marketplace-tabbladen. Een uitgeschakelde categorie wordt voor workspaces verborgen; een categorie met apps erin kan niet worden verwijderd.",
+        "new": "Nieuwe categorie",
+        "emptyTitle": "Geen categorieën",
+        "emptyMessage": "Voeg een categorie toe voordat je vermeldingen maakt: elke vermelding hoort bij één categorie.",
+        "groupCount": "{count, plural, one {# categorie} other {# categorieën}}",
+        "groupEmpty": "Nog geen categorieën voor deze soort.",
+        "tableCaption": "Categorieën",
+        "cols": {
+          "name": "Naam",
+          "slug": "Id",
+          "icon": "Pictogram",
+          "order": "Volgorde",
+          "apps": "Apps",
+          "status": "Status",
+          "actions": "Acties"
+        },
+        "dash": "-",
+        "active": "Actief",
+        "inactive": "Verborgen voor workspaces",
+        "edit": "Bewerken",
+        "delete": "Verwijderen",
+        "inUse": "Heeft apps",
+        "form": {
+          "createTitle": "Nieuwe categorie",
+          "editTitle": "{name} bewerken",
+          "close": "Sluiten",
+          "cancel": "Annuleren",
+          "create": "Categorie aanmaken",
+          "save": "Wijzigingen opslaan",
+          "kind": "Soort",
+          "kinds": {
+            "mini_app": "Mini app",
+            "integration": "Integratie"
+          },
+          "kindLocked": "De soort kan niet worden gewijzigd.",
+          "slug": "Id (slug)",
+          "slugHint": "2 tot 48 kleine letters, cijfers of streepjes, beginnend met een letter. Het kan later niet meer worden gewijzigd.",
+          "slugLocked": "Het id kan na het aanmaken niet worden gewijzigd.",
+          "name": "Naam",
+          "nameHint": "{min} tot {max} tekens.",
+          "descriptionField": "Beschrijving",
+          "descriptionHint": "Optioneel, tot {max} tekens.",
+          "icon": "Pictogram",
+          "iconHint": "Optionele pictogramnaam: kleine letters, cijfers en streepjes.",
+          "sortOrder": "Sorteervolgorde",
+          "sortOrderHint": "Een geheel getal van 0 tot {max}; lager wordt eerst getoond.",
+          "active": "Actief",
+          "activeHint": "Uitgeschakeld: de categorie wordt voor workspaces verborgen. Zijn apps houden hem wel.",
+          "conflict": "Iemand anders heeft deze categorie gewijzigd. Laad opnieuw om hun versie te zien en doe daarna je wijziging opnieuw.",
+          "reload": "Opnieuw laden",
+          "created": "Categorie {name} aangemaakt.",
+          "saved": "Categorie {name} opgeslagen."
+        },
+        "deleteDialog": {
+          "title": "{name} verwijderen?",
+          "body": "{name} heeft geen apps. Verwijderen haalt hem definitief weg.",
+          "action": "Categorie verwijderen",
+          "cancel": "Annuleren",
+          "done": "Categorie {name} verwijderd."
+        }
+      },
+      "requests": {
+        "title": "Verzoeken",
+        "description": "Wat workspaces hebben gevraagd, het meest gestemd eerst. De bouwvolgorde volgt deze lijst.",
+        "readOnly": "Alleen lezen. Triage vereist het platformrecht {permission}.",
+        "filters": {
+          "label": "Filters",
+          "search": "Zoeken",
+          "searchPlaceholder": "Naam",
+          "kind": "Soort",
+          "allKinds": "Alle soorten",
+          "status": "Status",
+          "allStatuses": "Alle statussen"
+        },
+        "clearFilters": "Filters wissen",
+        "emptyTitle": "Nog geen verzoeken",
+        "emptyMessage": "Wanneer een workspace om een integratie vraagt, verschijnt die hier met zijn stemmen.",
+        "noMatchTitle": "Geen verzoek gevonden",
+        "noMatchMessage": "Niets komt overeen met deze filters.",
+        "loadMore": "Meer laden",
+        "tableCaption": "Verzoeken op stemmen",
+        "cols": {
+          "votes": "Stemmen",
+          "request": "Verzoek",
+          "notes": "Notities van de workspace",
+          "firstWorkspace": "Eerst gevraagd door",
+          "status": "Status",
+          "actions": "Acties"
+        },
+        "votes": "{count, plural, one {# stem} other {# stemmen}}",
+        "noNotes": "Geen notities.",
+        "dash": "-",
+        "operatorNote": "Je notitie: {note}",
+        "triageAction": "Triage",
+        "triage": {
+          "title": "Triage {name}",
+          "close": "Sluiten",
+          "cancel": "Annuleren",
+          "save": "Opslaan",
+          "saved": "{name} opgeslagen.",
+          "votes": "{count, plural, one {# stem} other {# stemmen}}",
+          "status": "Status",
+          "note": "Notitie van beheerder",
+          "noteHint": "Optioneel, maximaal {max} tekens. Alleen beheerders zien dit.",
+          "noteTooLong": "Maximaal {max} tekens.",
+          "conflict": "Iemand anders heeft dit verzoek bijgewerkt. Laad de pagina opnieuw om hun versie te zien en pas daarna je wijziging opnieuw toe.",
+          "reload": "Opnieuw laden"
+        }
+      },
+      "usage": {
+        "title": "Gebruik en gezondheid",
+        "description": "Per app: installaties op status en gezondheid, en afleveringen die in de afgelopen 24 uur en 7 dagen zijn geaccepteerd, herhaald, geweigerd of mislukt.",
+        "kpi": {
+          "apps": "Apps",
+          "installs": "Installaties",
+          "activeHint": "{count} actief",
+          "needsLook": "Aandacht nodig",
+          "failed7d": "Mislukte afleveringen (7 dagen)"
+        },
+        "sort": {
+          "label": "Sorteren op",
+          "failed": "Meeste mislukte afleveringen",
+          "installs": "Meeste installaties",
+          "name": "Naam"
+        },
+        "emptyTitle": "Nog geen gebruik",
+        "emptyMessage": "Apps verschijnen hier zodra ze in de catalogus staan.",
+        "tableCaption": "Gebruik per app",
+        "cols": {
+          "app": "App",
+          "installs": "Installaties",
+          "health": "Gezondheid",
+          "events24h": "Afleveringen, 24 uur",
+          "events7d": "Afleveringen, 7 dagen",
+          "attention": "Aandacht"
+        },
+        "installs": {
+          "active": "{count} actief",
+          "disabled": "{count} gepauzeerd",
+          "killed": "{count} gestopt"
+        },
+        "health": {
+          "healthy": "{count} gezond",
+          "degraded": "{count} verminderd",
+          "error": "{count} met fout",
+          "needsReauth": "{count} moeten opnieuw inloggen",
+          "unknown": "{count} onbekend"
+        },
+        "events": {
+          "accepted": "{count} geaccepteerd",
+          "duplicate": "{count} herhaald",
+          "rejected": "{count} geweigerd",
+          "failed": "{count} mislukt"
+        },
+        "needsLook": "Aandacht nodig",
+        "reasons": {
+          "installErrors": "Installaties met fout",
+          "needsReauth": "Installaties die opnieuw moeten inloggen",
+          "failed24h": "Mislukte afleveringen in de afgelopen 24 uur",
+          "failed7d": "Mislukte afleveringen in de afgelopen 7 dagen"
+        },
+        "recipeHint": "Het recept loopt mogelijk stuk: een portaal heeft zijn formaat gewijzigd of een sleutel is verlopen. Los het op met een nieuwe versie van het recept.",
+        "fine": "Geen problemen gezien",
+        "runbookNote": "Een integratie met veel installaties met fout of die opnieuw moeten inloggen, of een oplopend aantal mislukkingen, loopt stuk. Herstel het recept in een nieuwe versie (runbook, sectie 8)."
+      },
+      "price": {
+        "free": "Gratis",
+        "perMonth": "/ maand",
+        "trial": "{count, plural, one {# dag proefperiode} other {# dagen proefperiode}}",
+        "notOnSale": "Niet te koop"
+      },
+      "pricing": {
+        "title": "Prijzen",
+        "description": "Bepaal of deze app gratis of betaald is en wat hij kost. Jouw prijs telt: het manifest van de ontwikkelaar stelt er alleen een voor.",
+        "billing": "Een betaalde app wordt verkocht als een maandelijkse vooruitbetaalde termijn: een facturatie-add-on die via de gewone checkout wordt gekocht. Er is nog geen automatische verlenging met creditcard, dus een workspace betaalt opnieuw wanneer de maand bijna voorbij is. Een prijswijziging geldt voor nieuwe abonnementen en voor de volgende betaling van elke abonnee; een periode die al betaald is, wordt nooit aangepast.",
+        "readOnly": "Alleen-lezen. Het wijzigen van de prijzen vereist het platformrecht {permission}.",
+        "visibility": {
+          "label": "Status van de vermelding",
+          "note": "Verberg, toon opnieuw of stop de vermelding onder Beheer hierboven. Dit paneel wijzigt het niet."
+        },
+        "subscribers": {
+          "label": "Abonnementen",
+          "count": "{count, plural, one {# actief abonnement} other {# actieve abonnementen}}",
+          "view": "Abonnementen bekijken",
+          "hint": "Lopende betaalde, proef- en gratis abonnementen. Abonnementen die aflopen of al zijn afgelopen, tellen niet mee."
+        },
+        "changed": "Prijs laatst gewijzigd",
+        "conflict": "Iemand anders heeft deze vermelding opgeslagen terwijl jij de prijzen bewerkte. Laad de pagina opnieuw om hun versie te zien en pas daarna je wijziging opnieuw toe.",
+        "reload": "Opnieuw laden",
+        "model": {
+          "legend": "Prijs",
+          "free": "Gratis",
+          "freeHint": "Geen kosten. Elke workspace kan hem installeren.",
+          "paid": "Betaald, per maand",
+          "paidHint": "Workspaces nemen een abonnement via de checkout en betalen maand na maand."
+        },
+        "fields": {
+          "amount": "Maandprijs",
+          "amountHint": "Per workspace, per maand: bijvoorbeeld 9 of 9,99.",
+          "currency": "Valuta",
+          "currencyHint": "Een code van drie letters, zoals USD. Het platform weigert een valuta die niet is ingeschakeld.",
+          "trialDays": "Gratis proefperiode (dagen)",
+          "trialDaysHint": "0 voor geen proefperiode, maximaal {max}. Een workspace krijgt één proefperiode per app.",
+          "annualAmount": "Jaarprijs (optioneel)",
+          "annualAmountHint": "Wordt voor later opgeslagen. Jaarlijkse facturatie is nog niet gebouwd, dus workspaces kunnen nu nog niet jaarlijks betalen.",
+          "purchasable": "Te koop",
+          "purchasableHint": "Als dit uit staat, kan geen nieuwe workspace zich abonneren. Workspaces die al een abonnement hebben, kunnen nog steeds verlengen."
+        },
+        "included": {
+          "title": "Inbegrepen in abonnementen",
+          "help": "Optioneel. Een workspace die aan een van beide regels voldoet, krijgt de app gratis. Laat beide leeg om elke workspace te laten betalen.",
+          "feature": "Abonnementsfunctie",
+          "featureHint": "Workspaces waarvan het abonnement (inclusief add-ons) deze functie heeft. Kies een suggestie of typ een functiesleutel.",
+          "plan": "Minimumabonnement",
+          "planHint": "Workspaces op dit abonnement of een hoger abonnement. Abonnementen staan van laag naar hoog.",
+          "planNone": "Geen abonnementsregel",
+          "planTyped": "De lijst met abonnementen kon niet worden geladen. Typ een abonnements-id."
+        },
+        "grants": {
+          "title": "Geeft abonnementsfuncties",
+          "help": "Optioneel. Abonnementsfuncties die een abonnement op deze app inschakelt, zodat een functie als app verkocht kan worden terwijl de huidige toegangscontroles blijven werken. Alleen functies die standaard uit staan, kunnen worden toegekend.",
+          "thirdParty": "Alleen eigen apps kunnen abonnementsfuncties toekennen. Markeer de vermelding op het tabblad Vermelding als eigen app om dit te gebruiken.",
+          "grandfather": "Bestaande gebruikers behouden",
+          "grandfatherHint": "Hiermee kun je de workspaces die al een toegekende functie hebben gratis zetten, zodat niemand die verliest. Sla op en gebruik daarna Bestaande gebruikers gratis toekennen hieronder. Doe dit voordat de functie bij de abonnementen wordt uitgeschakeld.",
+          "compExisting": "Bestaande gebruikers gratis toekennen",
+          "compExistingHint": "Workspaces die al een toegekende functie via hun abonnement hebben en nog geen abonnement op deze app hebben, krijgen deze app gratis. Eerst zie je wie dat zijn.",
+          "compExistingAction": "Bestaande gebruikers gratis toekennen..."
+        },
+        "proposal": {
+          "title": "Voorstel van de ontwikkelaar",
+          "intro": "Uit het manifest van versie {version}. Dit is alleen een voorstel en verandert niets: de prijs hierboven is wat workspaces zien.",
+          "note": "Opmerking: {note}",
+          "models": {
+            "free": "Gratis",
+            "included": "Inbegrepen in het abonnement",
+            "addon": "Betaalde add-on"
+          }
+        },
+        "save": "Prijzen opslaan",
+        "saving": "Opslaan...",
+        "discard": "Wijzigingen weggooien",
+        "nothingToSave": "Nog geen wijzigingen.",
+        "saved": "De prijzen van {name} zijn opgeslagen.",
+        "problems": {
+          "priceRequired": "Stel een maandprijs in.",
+          "priceFormat": "Gebruik een getal zoals 9 of 9,99 (maximaal twee decimalen).",
+          "pricePositive": "De prijs moet hoger zijn dan nul.",
+          "currencyRequired": "Kies een valuta.",
+          "currencyFormat": "Gebruik een valutacode van drie letters.",
+          "yearlyFormat": "Gebruik een getal zoals 90 of 89,99, of laat het leeg.",
+          "yearlyPositive": "De jaarprijs moet hoger zijn dan nul, of leeg zijn.",
+          "trialRange": "Gebruik hele dagen van 0 tot {max}.",
+          "featureFormat": "Gebruik kleine letters, cijfers en underscores, beginnend met een letter.",
+          "planFormat": "Gebruik een abonnements-id: kleine letters, cijfers en underscores.",
+          "grantsInvalid": "Kies elke abonnementsfunctie één keer, maximaal 10 functies.",
+          "grandfatherNeedsGrants": "Kies eerst minstens één abonnementsfunctie die de app toekent.",
+          "includedGranted": "Een functie die de app toekent, kan niet tegelijk de functie zijn die hem inbegrijpt."
+        },
+        "confirm": {
+          "cancel": "Blijven bewerken",
+          "priceChange": {
+            "title": "De prijs van {name} wijzigen?",
+            "body": "{count, plural, one {# workspace heeft nu een abonnement} other {# workspaces hebben nu een abonnement}}. De maandprijs gaat van {from} naar {to}.",
+            "next": "De nieuwe prijs geldt voor nieuwe abonnementen en voor de volgende betaling van elke abonnee.",
+            "paid": "Een periode die een workspace al heeft betaald, wordt nooit aangeraakt, terugbetaald of opnieuw geprijsd.",
+            "action": "Prijs wijzigen"
+          },
+          "toFree": {
+            "title": "{name} gratis maken?",
+            "body": "{count, plural, one {# workspace heeft nu een abonnement} other {# workspaces hebben nu een abonnement}}.",
+            "free": "Elke workspace kan de app dan zonder betalen gebruiken, en niemand wordt er nog voor gefactureerd.",
+            "paid": "Abonnees behouden de tijd die ze al hebben betaald. Die wordt niet terugbetaald.",
+            "action": "Gratis maken"
+          }
+        }
+      },
+      "grandfather": {
+        "eyebrow": "Bestaande gebruikers",
+        "title": "Bestaande gebruikers van {name} gratis toekennen",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "change": "Wijzigen",
+        "run": "{count, plural, one {# workspace gratis toekennen} other {# workspaces gratis toekennen}}",
+        "preview": "Controleren wie in aanmerking komt",
+        "intro": "Ken elke workspace die al een abonnementsfunctie heeft die {name} toekent, via het abonnement of de overrides, en nog geen abonnement erop heeft, gratis toe. Eerst zie je wie gratis zou krijgen; er verandert niets tot je bevestigt.",
+        "timing": "Doe dit voordat de functie bij de abonnementen wordt uitgeschakeld of de standaard wordt gewijzigd: het leest wat elke workspace nu heeft.",
+        "note": "Opmerking",
+        "matched": "{count, plural, =0 {Geen workspace komt in aanmerking} one {# workspace komt in aanmerking} other {# workspaces komen in aanmerking}}",
+        "nobody": "Niemand heeft een toegekende functie zonder abonnement, dus er is niets om gratis toe te kennen.",
+        "sample": "Enkele ervan:",
+        "more": "en {count} meer",
+        "confirm": "Controleer de lijst en bevestig daarna om ze gratis toe te kennen. Dit wordt in het auditlogboek vastgelegd en kan niet in één stap worden teruggedraaid: annuleer elk abonnement om een gratis toekenning te beëindigen.",
+        "refused": "Dit kan alleen bij een betaalde vermelding die abonnementsfuncties toekent en waarbij Bestaande gebruikers behouden is opgeslagen. Controleer de prijzen.",
+        "done": "{count, plural, one {# workspace gratis toegekend voor {name}.} other {# workspaces gratis toegekend voor {name}.}}"
+      },
+      "compFields": {
+        "duration": "Hoe lang?",
+        "months": "Voor een aantal maanden",
+        "monthsLabel": "Maanden",
+        "monthsHint": "Hele maanden, 1 tot {max}.",
+        "monthsInvalid": "Gebruik hele maanden van 1 tot {max}.",
+        "open": "Totdat ik het beëindig",
+        "noteHint": "Tussen {min} en {max} tekens. Het wordt in het auditlogboek bewaard.",
+        "count": "{count} van {max} tekens (minimaal {min})."
+      },
+      "cancelDialog": {
+        "eyebrow": "Abonnement",
+        "title": "Het abonnement van {workspace} annuleren?",
+        "close": "Sluiten",
+        "back": "Behouden",
+        "summary": "{workspace} heeft {app}.",
+        "when": "Wanneer moet het eindigen?",
+        "periodEnd": {
+          "label": "Aan het eind van de betaalde periode",
+          "detail": "Verlenging stopt. {workspace} houdt {app} tot {date}, daarna wordt de installatie gepauzeerd en blijven de gegevens bewaard."
+        },
+        "now": {
+          "label": "Nu meteen",
+          "detail": "De toegang eindigt meteen. De installatie wordt gepauzeerd en de gegevens blijven bewaard. Al betaalde tijd wordt niet terugbetaald."
+        },
+        "noEnd": "Dit abonnement heeft geen einddatum, dus het kan alleen nu meteen worden beëindigd.",
+        "ending": "Het is al ingesteld om op {date} te eindigen. Je kunt het nog steeds nu meteen beëindigen.",
+        "reason": "Reden",
+        "confirmPeriod": "Verlenging stoppen",
+        "confirmNow": "Nu beëindigen",
+        "done": {
+          "periodEnd": "Verlenging gestopt voor {workspace}. De toegang loopt tot het eind van de betaalde periode.",
+          "now": "{workspace} heeft {app} niet meer."
+        }
+      },
+      "compDialog": {
+        "eyebrow": "Gratis toekennen",
+        "title": "Een workspace gratis toekennen",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "submit": "Workspace gratis toekennen",
+        "intro": "Geef een workspace een betaalde app zonder kosten. Dit wordt met je notitie in het auditlogboek vastgelegd. Het wordt geweigerd zolang de workspace voor de app betaalt: annuleer dat abonnement eerst.",
+        "app": "App",
+        "appPlaceholder": "Kies een betaalde app",
+        "noPaidApps": "Er is nog geen betaalde app om gratis toe te kennen. Stel eerst een prijs in bij een vermelding.",
+        "workspaceSearch": "Zoek een workspace",
+        "workspaceSearchPlaceholder": "Naam van de workspace",
+        "workspaceHint": "Tot {count} resultaten worden getoond. Typ om de lijst te beperken.",
+        "workspaceChosen": "Gekozen: {name}",
+        "workspaceNone": "Geen workspace gevonden.",
+        "workspaceResults": "Overeenkomende workspaces",
+        "workspacePlan": "Abonnement: {plan}",
+        "workspaceLoading": "Workspaces laden...",
+        "note": "Opmerking",
+        "effectMonths": "{count, plural, one {De workspace krijgt de app # maand gratis.} other {De workspace krijgt de app # maanden gratis.}}",
+        "effectOpen": "De workspace krijgt de app gratis totdat je het beëindigt door het abonnement te annuleren.",
+        "done": "{workspace} heeft nu {app} gratis."
+      },
+      "subscriptions": {
+        "title": "Abonnementen",
+        "description": "Wie voor welke betaalde app betaalt, wat elke workspace heeft en de maandelijkse omzet die het oplevert. De cijfers zijn lijstprijzen: zonder btw, kortingscodes of proefperiodes.",
+        "readOnly": "Alleen-lezen. Een workspace gratis toekennen en een abonnement annuleren vereisen het platformrecht {permission}.",
+        "comp": "Een workspace gratis toekennen",
+        "kpi": {
+          "label": "Abonnementen per status",
+          "active": "Betalend",
+          "trialing": "In proefperiode",
+          "comped": "Gratis toegekend",
+          "canceling": "Eindigend",
+          "ended": "Beëindigd",
+          "mrr": "Maandelijkse omzet",
+          "mrrNone": "Nog geen betalende abonnees",
+          "mrrCurrency": "Maandelijkse omzet, {currency}"
+        },
+        "summary": {
+          "emptyTitle": "Nog geen betaalde apps",
+          "emptyMessage": "Stel een prijs in bij een vermelding om hem te gaan verkopen. Hij verschijnt hier met zijn abonnees.",
+          "caption": "Abonnementen per app per status",
+          "cols": {
+            "app": "App",
+            "price": "Prijs",
+            "active": "Betalend",
+            "trialing": "In proefperiode",
+            "comped": "Gratis toegekend",
+            "canceling": "Eindigend",
+            "ended": "Beëindigd",
+            "total": "Totaal",
+            "mrr": "Maandelijkse omzet"
+          },
+          "free": "Gratis",
+          "totals": "Alle apps",
+          "note": "De maandelijkse omzet is de lijstprijs van elk betalend abonnement, in de eigen valuta. Proefperiodes, gratis toekenningen en beëindigde abonnementen tellen niet mee, en valuta's worden nooit bij elkaar opgeteld."
+        },
+        "filters": {
+          "label": "Filters",
+          "app": "App",
+          "allApps": "Alle apps",
+          "status": "Status",
+          "allStatuses": "Alle statussen",
+          "source": "Bron",
+          "allSources": "Alle bronnen",
+          "search": "Workspace",
+          "searchPlaceholder": "Naam van de workspace"
+        },
+        "cols": {
+          "workspace": "Workspace",
+          "app": "App",
+          "status": "Status",
+          "source": "Bron",
+          "started": "Gestart",
+          "period": "Periode",
+          "amount": "Bedrag",
+          "actions": "Acties"
+        },
+        "period": {
+          "paidUntil": "Betaald tot {date}",
+          "trialEnds": "Proefperiode eindigt {date}",
+          "endsOn": "Eindigt {date}",
+          "compUntil": "Gratis tot {date}",
+          "compOpen": "Gratis totdat je het beëindigt",
+          "endedOn": "Beëindigd {date}",
+          "none": "Geen einddatum"
+        },
+        "noCharge": "Geen kosten",
+        "compBy": "Gratis toegekend door {operator}: {note}",
+        "cancel": "Annuleren...",
+        "tableCaption": "Abonnementen",
+        "emptyTitle": "Nog geen abonnementen",
+        "emptyMessage": "Een workspace verschijnt hier wanneer die zich abonneert, een proefperiode start of gratis wordt toegekend.",
+        "noMatchTitle": "Geen abonnement gevonden",
+        "noMatchMessage": "Geen enkel resultaat voldoet aan deze filters. Probeer andere filters.",
+        "clearFilters": "Filters wissen",
+        "loadMore": "Meer laden"
+      }
+    }
+  }
+}

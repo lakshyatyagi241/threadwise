@@ -1,0 +1,208 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "دردشة الفريق"
+    },
+    "common": {
+      "dismiss": "إغلاق"
+    },
+    "screen": {
+      "title": "دردشة الفريق",
+      "back": "العودة إلى القنوات",
+      "search": "ابحث في هذه القناة",
+      "pinned": "الرسائل المثبتة",
+      "members": "أعضاء القناة",
+      "deleteChannel": "حذف هذه القناة",
+      "type": {
+        "public": "القناة",
+        "private": "خاصة",
+        "dm": "رسالة مباشرة"
+      },
+      "olderMessage": "هذه الرسالة أقدم. حمّل الرسائل الأقدم لرؤيتها.",
+      "loading": "جارٍ تحميل دردشة الفريق",
+      "loadFailed": "تعذّر تحميل دردشة الفريق.",
+      "retry": "حاول مرة أخرى",
+      "deleteTitle": "هل تريد حذف هذه القناة؟",
+      "deleteMessage": "سيتم حذف #{name} وجميع رسائلها لدى الجميع. لا يمكن التراجع عن هذا الإجراء.",
+      "deleteConfirm": "حذف القناة",
+      "cancel": "إلغاء",
+      "defaultDescription": "دردشة داخلية لمساحة العمل",
+      "customerChats": "دردشات العملاء"
+    },
+    "sidebar": {
+      "label": "القنوات والأشخاص",
+      "channels": "القنوات",
+      "createChannel": "إنشاء قناة",
+      "loading": "جارٍ تحميل القنوات",
+      "loadFailed": "تعذّر تحميل القنوات.",
+      "noChannels": "لا توجد قنوات بعد",
+      "direct": "الرسائل المباشرة",
+      "people": "الأشخاص",
+      "invite": "دعوة زميل",
+      "pending": "الطلبات المعلّقة",
+      "pendingCount": "{count, plural, one {طلب واحد معلّق} two {طلبان معلّقان} few {# طلبات معلّقة} many {# طلباً معلّقاً} other {# طلب معلّق}}",
+      "unread": "{count, plural, one {رسالة واحدة غير مقروءة} two {رسالتان غير مقروءتين} few {# رسائل غير مقروءة} many {# رسالة غير مقروءة} other {# رسالة غير مقروءة}}",
+      "workspace": "مساحة العمل",
+      "mode": "الوضع",
+      "customerChats": "دردشات العملاء",
+      "teamChat": "دردشة الفريق",
+      "membersLink": "الأعضاء"
+    },
+    "members": {
+      "label": "الأعضاء",
+      "title": "دردشة الفريق",
+      "count": "{count, plural, one {عضو واحد} two {عضوان} few {# أعضاء} many {# عضواً} other {# عضو}}",
+      "countUnknown": "الأعضاء",
+      "search": "ابحث عن الأعضاء",
+      "loading": "جارٍ تحميل الأعضاء",
+      "none": "لا يوجد أعضاء مطابقون",
+      "online": "متصل",
+      "offline": "غير متصل",
+      "you": "(أنت)",
+      "message": "مراسلة {name}",
+      "titleAccent": "دردشة"
+    },
+    "panel": {
+      "searchTitle": "ابحث في الرسائل",
+      "pinnedTitle": "الرسائل المثبتة",
+      "searchPlaceholder": "ابحث في هذه القناة",
+      "searchHint": "اكتب حرفين على الأقل.",
+      "close": "إغلاق",
+      "failed": "تعذّر تحميل ذلك.",
+      "noResults": "لا توجد رسائل مطابقة.",
+      "noPinned": "لا توجد رسائل مثبتة في هذه القناة."
+    },
+    "stream": {
+      "loading": "جارٍ تحميل الرسائل",
+      "loadFailed": "تعذّر تحميل الرسائل.",
+      "loadOlder": "تحميل الرسائل الأقدم",
+      "emptyTitle": "لا توجد رسائل في #{name} بعد",
+      "emptyMessage": "قل مرحباً وابدأ المحادثة."
+    },
+    "message": {
+      "edited": "(معدّلة)",
+      "pinned": "مثبتة",
+      "editLabel": "عدّل رسالتك",
+      "cancel": "إلغاء",
+      "save": "حفظ",
+      "editConflict": "تغيّرت هذه الرسالة أثناء تعديلك لها. أعد التحميل وحاول مرة أخرى.",
+      "reactions": "التفاعلات",
+      "reactionChip": "{emoji}، {count, plural, one {شخص واحد} two {شخصان} few {# أشخاص} many {# شخصاً} other {# شخص}}",
+      "reactionTray": "اختر تفاعلاً",
+      "reply": "رد",
+      "react": "تفاعل",
+      "edit": "تعديل",
+      "pin": "تثبيت",
+      "unpin": "إلغاء التثبيت",
+      "delete": "حذف",
+      "deleteTitle": "هل تريد حذف هذه الرسالة؟",
+      "deleteMessage": "ستُزال لدى الجميع في القناة.",
+      "uploading": "جارٍ الرفع",
+      "retry": "إعادة المحاولة",
+      "discard": "تجاهل"
+    },
+    "composer": {
+      "placeholder": "الرسالة في #{name}",
+      "attach": "إرفاق ملف",
+      "send": "إرسال",
+      "hint": "اضغط Enter للإرسال، وShift+Enter لسطر جديد، و@ للإشارة إلى زميل.",
+      "replyingTo": "الرد على {name}",
+      "cancelReply": "إلغاء الرد",
+      "removeFile": "إزالة المرفق",
+      "fileTooLarge": "هذا الملف أكبر من 20 ميغابايت.",
+      "mentionList": "زملاء للإشارة إليهم",
+      "typingOne": "{name} يكتب الآن",
+      "typingMany": "{count} أشخاص يكتبون الآن",
+      "hintSend": "إرسال",
+      "hintNewLine": "سطر جديد",
+      "hintMention": "إشارة",
+      "hintShift": "Shift+↵"
+    },
+    "createChannel": {
+      "title": "إنشاء قناة",
+      "close": "إغلاق",
+      "name": "الاسم",
+      "nameHint": "أحرف إنجليزية صغيرة وأرقام وشرطات وشرطات سفلية، دون مسافات.",
+      "description": "الوصف (اختياري)",
+      "privacy": "الخصوصية",
+      "public": {
+        "label": "عامة",
+        "hint": "يستطيع الجميع في مساحة العمل القراءة والكتابة."
+      },
+      "private": {
+        "label": "خاصة",
+        "hint": "بالدعوة فقط. لا يراها إلا أعضاؤها."
+      },
+      "cancel": "إلغاء",
+      "create": "إنشاء القناة",
+      "namePlaceholder": "مثال: الدعم",
+      "descriptionPlaceholder": "ما الغرض من هذه القناة؟"
+    },
+    "invite": {
+      "title": "دعوة زميل",
+      "close": "إغلاق",
+      "email": "البريد الإلكتروني",
+      "name": "الاسم (اختياري)",
+      "note": "ملاحظة للمسؤول (اختياري)",
+      "noteHint": "لماذا يجب أن ينضم هذا الشخص.",
+      "addToChannel": "أضِفه أيضاً إلى #{name}",
+      "approved": "تم. وافق المسؤول على الطلب.",
+      "pending": "تم إرسال الدعوة، وهي بانتظار موافقة المسؤول.",
+      "cancel": "إلغاء",
+      "submit": "إرسال الدعوة",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "اسمهم",
+      "notePlaceholder": "لماذا ينبغي أن ينضموا؟"
+    },
+    "invitations": {
+      "title": "الدعوات المعلّقة",
+      "close": "إغلاق",
+      "loading": "جارٍ التحميل",
+      "loadFailed": "تعذّر تحميل الدعوات.",
+      "empty": "لا توجد دعوات بعد",
+      "status": {
+        "pending": "معلّقة",
+        "approved": "مقبولة",
+        "declined": "مرفوضة",
+        "expired": "منتهية الصلاحية"
+      },
+      "requestedBy": "طلبه {name} · {time}",
+      "decidedBy": "{status} بواسطة {name} · {time}",
+      "needsAccount": "ليس لهذا الشخص حساب في مساحة العمل بعد، لذلك لم تتم إضافة أحد.",
+      "approve": "موافقة",
+      "decline": "رفض"
+    },
+    "channelMembers": {
+      "title": "أعضاء #{name}",
+      "close": "إغلاق",
+      "admin": "مسؤول",
+      "leave": "مغادرة",
+      "remove": "إزالة",
+      "addLabel": "إضافة زميل",
+      "choose": "اختر زميلاً",
+      "add": "إضافة"
+    },
+    "errors": {
+      "network": "خطأ في الشبكة. تحقق من اتصالك وحاول مرة أخرى.",
+      "forbidden": "ليست لديك صلاحية للقيام بذلك.",
+      "signedOut": "تم تسجيل خروجك. سجّل الدخول مجدداً.",
+      "notFound": "لم يعد هذا موجوداً.",
+      "validation": "تحقق مما أدخلته وحاول مرة أخرى.",
+      "conflict": "تغيّر هذا في الأثناء. أعد التحميل وحاول مرة أخرى.",
+      "tooLarge": "هذا الملف أكبر من 20 ميغابايت.",
+      "rateLimited": "طلبات كثيرة جداً. انتظر لحظة وحاول مرة أخرى.",
+      "emptyMessage": "اكتب رسالة أو أرفق ملفاً.",
+      "replyOtherChannel": "يمكنك الرد فقط على رسالة في القناة نفسها.",
+      "attachmentRejected": "تعذّر إرفاق هذا الملف. مسموح فقط بالصور وملفات PDF وWord وExcel والنصوص وCSV التي لا تتجاوز 20 ميغابايت.",
+      "editExpired": "لا يمكن تعديل الرسائل إلا خلال 15 دقيقة.",
+      "nameTaken": "توجد قناة بهذا الاسم بالفعل.",
+      "channelProtected": "لا يمكن حذف #general.",
+      "alreadyMember": "هذا الشخص عضو في مساحة العمل بالفعل.",
+      "alreadyDecided": "تم البت فيه بالفعل.",
+      "notMember": "لست عضواً في هذه القناة.",
+      "notAuthor": "يمكنك تغيير رسائلك أنت فقط.",
+      "kindInvalid": "هذا لا ينطبق على هذا النوع من القنوات.",
+      "unexpected": "حدث خطأ ما. حاول مرة أخرى."
+    }
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "localization-translation": {
+    "nav": {
+      "languages": "Języki",
+      "providers": "Dostawcy tłumaczeń",
+      "usage": "Wykorzystanie tłumaczeń",
+      "group": "Lokalizacja"
+    },
+    "errors": {
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
+      "conflict": "Ktoś inny to zmienił. Lista została odświeżona, więc sprawdź ją i spróbuj ponownie.",
+      "languageIsDefault": "Nie można wyłączyć ani usunąć języka domyślnego. Najpierw ustaw jako domyślny inny język.",
+      "languageInactive": "Najpierw aktywuj język, zanim ustawisz go jako domyślny.",
+      "credentialsMissing": "Najpierw uzupełnij wymagane dane uwierzytelniające.",
+      "providerInactive": "Domyślnym może być tylko aktywny dostawca.",
+      "lockdownNoOfficial": "Aktywuj i skonfiguruj co najmniej jednego oficjalnego płatnego dostawcę (DeepL lub Google Cloud), zanim włączysz blokadę zgodności.",
+      "planGate": "Twój plan nie obejmuje tłumaczeń."
+    },
+    "switcher": {
+      "label": "Zmień język",
+      "menu": "Języki",
+      "failed": "Nie udało się zmienić języka. Spróbuj ponownie."
+    },
+    "languages": {
+      "kicker": "Admin · System · Języki",
+      "titleLead": "Platforma",
+      "titleEm": "języki",
+      "description": "Zarządzaj tym, które języki mogą wybierać nowi użytkownicy i przestrzenie robocze. Język „domyślny” jest zapasowy dla każdego nowo utworzonego konta.",
+      "loading": "Wczytywanie języków",
+      "stats": {
+        "total": "Razem",
+        "totalHint": "skonfigurowanych",
+        "active": "Aktywne",
+        "activeHint": "widoczne dla użytkowników",
+        "default": "Domyślny",
+        "defaultHint": "zapasowy dla nowych kont"
+      },
+      "catalog": "Katalog",
+      "allLanguages": "Wszystkie języki",
+      "columns": {
+        "name": "Nazwa",
+        "code": "Kod",
+        "dir": "Kier.",
+        "active": "Aktywny",
+        "default": "Domyślny",
+        "actions": "Akcje"
+      },
+      "on": "Wł.",
+      "off": "Wył.",
+      "defaultBadge": "Domyślny",
+      "set": "Ustaw",
+      "toggleLabel": "Włącz lub wyłącz {name}",
+      "delete": "Usuń",
+      "cancel": "Anuluj",
+      "empty": "Brak języków.",
+      "flash": {
+        "activated": "{name} aktywowany.",
+        "disabled": "{name} wyłączony.",
+        "nowDefault": "{name} jest teraz domyślnym językiem.",
+        "removed": "Język usunięty."
+      },
+      "confirmDelete": {
+        "title": "Usuń język",
+        "message": "Usunąć {name}?"
+      },
+      "pack": {
+        "kicker": "Pakiet językowy",
+        "title": "Stała liczba języków: {count}",
+        "body": "Każdy aktywny język opiera się na pliku tłumaczeń JSON dostarczanym z platformą. Nowe pozycje językowe pojawią się tutaj, gdy pakiet tłumaczeń zostanie rozszerzony.",
+        "note": "Nadal możesz przełączać stan aktywności, edytować nazwę natywną i kierunek oraz wybrać domyślny język platformy w tabeli po lewej."
+      },
+      "usedFor": {
+        "title": "Jak to jest używane",
+        "body": "Aktywne języki pojawiają się w przełączniku języka w profilu użytkownika oraz w wyborze szablonów i automatycznych odpowiedzi. Domyślny język dotyczy nowych kont, które jeszcze nie wybrały języka."
+      }
+    },
+    "providers": {
+      "kicker": "Admin · System",
+      "title": "Dostawcy tłumaczeń",
+      "description": "Wielojęzyczne automatyczne odpowiedzi korzystają z jednego z tych dostawców, aby tłumaczyć wiadomości przychodzące i tworzyć odpowiedzi w języku klienta. MyMemory jest aktywny od razu (bezpłatny, bez klucza) — podłącz DeepL / Google Cloud / LibreTranslate, aby uzyskać wyższą jakość lub prywatność na własnym serwerze.",
+      "loading": "Wczytywanie dostawców",
+      "on": "Wł.",
+      "off": "Wył.",
+      "cancel": "Anuluj",
+      "lockdown": {
+        "title": "Blokada zgodności",
+        "description": "Gdy jest włączona, łańcuch awaryjny pomija <mono>{slugs}</mono> i kieruje tłumaczenie automatycznych odpowiedzi wyłącznie przez oficjalne płatne API (DeepL, Google Cloud). Wymagane przez niektóre firmowe polityki bezpieczeństwa, które zakazują nieoficjalnych punktów końcowych firm trzecich.",
+        "enable": "Włącz blokadę",
+        "disable": "Wyłącz blokadę",
+        "confirmOn": "Włączyć blokadę? Bezpłatni dostawcy zostaną pominięci — tłumaczyć będą tylko płatne API.",
+        "confirmOff": "Wyłączyć blokadę? Bezpłatni dostawcy wrócą do łańcucha awaryjnego."
+      },
+      "flash": {
+        "activated": "{name} aktywowany.",
+        "disabled": "{name} wyłączony.",
+        "nowDefault": "{name} jest teraz domyślnym dostawcą.",
+        "saved": "{name} zapisany.",
+        "lockdownOn": "Blokada zgodności jest włączona.",
+        "lockdownOff": "Blokada zgodności jest wyłączona."
+      },
+      "empty": {
+        "title": "Nie skonfigurowano dostawców tłumaczeń",
+        "body": "Uruchom seed dostawców tłumaczeń, aby wypełnić tę listę."
+      },
+      "active": "Aktywny",
+      "disabled": "Wyłączony",
+      "defaultBadge": "Domyślny",
+      "skipped": "Blokada · pominięty",
+      "skippedTitle": "Pominięty, ponieważ włączona jest blokada zgodności.",
+      "slug": "slug: {slug}",
+      "makeDefault": "Ustaw jako domyślny",
+      "activate": "Aktywuj",
+      "disable": "Wyłącz",
+      "keepSecret": "••••••• (zostaw puste, aby zachować)",
+      "noCredentials": "Nie są wymagane żadne dane uwierzytelniające — ten dostawca działa od razu.",
+      "sortOrder": "Kolejność sortowania",
+      "sortOrderHint": "Niższa wartość = wyższy priorytet w łańcuchu awaryjnym.",
+      "save": "Zapisz {name}"
+    },
+    "usage": {
+      "kicker": "Admin · System",
+      "title": "Wykorzystanie tłumaczeń",
+      "description": "Liczba i szacowany koszt każdego tłumaczenia automatycznej odpowiedzi. Trafienia w wbudowanym słowniku i w pamięci podręcznej z 24 godzin nie są płatne i nie pojawiają się tutaj — są to wyłącznie wywołania sieciowe.",
+      "from": "Od",
+      "to": "Do",
+      "apply": "Zastosuj",
+      "badRange": "Data początkowa nie może być późniejsza niż data końcowa.",
+      "loading": "Wczytywanie wykorzystania",
+      "failed": "Nie udało się wczytać wykorzystania.",
+      "totals": {
+        "calls": "Wywołania sieciowe",
+        "chars": "Przetłumaczone znaki",
+        "charsOut": "wyjście: {count}",
+        "cost": "Szacowany koszt",
+        "costHint": "na podstawie opublikowanych stawek za znak",
+        "fallbackHits": "Trafienia awaryjne",
+        "fallbackHint": "podstawowy dostawca nie działał, łańcuch przejął"
+      },
+      "byProvider": "Według dostawcy",
+      "emptyProvider": "Brak wywołań tłumaczeń w tym zakresie. Wyślij wiadomość przychodzącą w innym języku niż angielski na urządzenie z automatyczną odpowiedzią, a następnie odśwież.",
+      "free": "bezpłatne",
+      "last30": "Ostatnie 30 dni",
+      "timelineHint": "najedź na każdy słupek, aby zobaczyć datę / znaki / koszt",
+      "topWorkspaces": "Przestrzenie robocze z największymi wydatkami",
+      "emptyWorkspaces": "Brak tłumaczeń w płatnym pakiecie w tym zakresie.",
+      "cols": {
+        "provider": "Dostawca",
+        "workspace": "Przestrzeń robocza",
+        "calls": "Wywołania",
+        "charsIn": "Znaki wej.",
+        "chars": "Znaki",
+        "cost": "Koszt",
+        "rate": "Stawka / 1 mln znaków"
+      }
+    },
+    "settings": {
+      "title": "Tłumaczenie w czasie rzeczywistym",
+      "description": "Rozmawiaj z klientami w dowolnym języku. Każda strona czyta w swoim języku — automatycznie.",
+      "loading": "Wczytywanie ustawień tłumaczeń",
+      "failed": "Nie udało się wczytać ustawień tłumaczeń.",
+      "saved": "Ustawienia tłumaczeń zapisane.",
+      "steps": {
+        "1": {
+          "title": "Wiadomości klientów (dowolny język)",
+          "body": "Ich wiadomość jest automatycznie tłumaczona NA język zespołu i pokazywana agentowi; oryginał jest o jedno kliknięcie dalej."
+        },
+        "2": {
+          "title": "Odpowiedzi agenta (język zespołu)",
+          "body": "Twoja odpowiedź jest tłumaczona NA język klienta tuż przed wysłaniem w WhatsApp."
+        },
+        "3": {
+          "title": "AI i widżet też",
+          "body": "Agent AI i widżet czatu na stronie odpowiadają natywnie w języku klienta."
+        }
+      },
+      "engine": {
+        "kicker": "Silnik tłumaczeń",
+        "free": "MyMemory (bezpłatny)",
+        "body": "NIE wpisujesz tutaj żadnych kluczy API — tłumaczenie jest konfigurowane raz, dla całej platformy, i działa automatycznie od razu. Bezpłatny silnik jest domyślnie włączony; platforma może zostać skonfigurowana do korzystania z DeepL / Google Translate dla wyższej jakości."
+      },
+      "usage": {
+        "kicker": "Ten miesiąc",
+        "line": "przetłumaczonych znaków · wiadomości: {count}"
+      },
+      "enabled": {
+        "title": "Automatyczne tłumaczenie rozmów",
+        "hint": "Włącz lub wyłącz całość dla tej przestrzeni roboczej."
+      },
+      "teamLanguage": {
+        "label": "Język zespołu",
+        "hint": "Język, w którym czytają i piszą Twoi agenci. Wiadomości klientów są tłumaczone na ten język; Twoje odpowiedzi są tłumaczone z niego."
+      },
+      "save": "Zapisz ustawienia tłumaczeń",
+      "upgrade": {
+        "title": "Ulepsz plan, aby odblokować tłumaczenia w czasie rzeczywistym.",
+        "body": "Automatycznie tłumacz rozmowy w WhatsApp między językiem zespołu a językami klientów.",
+        "link": "Zobacz plany →"
+      }
+    }
+  }
+}

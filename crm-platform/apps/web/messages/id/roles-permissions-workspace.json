@@ -1,0 +1,246 @@
+{
+  "roles-permissions-workspace": {
+    "nav": {
+      "team": "Anggota tim",
+      "roles": "Peran"
+    },
+    "common": {
+      "settings": "Pengaturan",
+      "breadcrumb": "Breadcrumb",
+      "loading": "Memuat…",
+      "retry": "Coba lagi",
+      "requestId": "ID permintaan",
+      "cancel": "Batal",
+      "close": "Tutup",
+      "dismiss": "Tutup",
+      "required": "Kolom ini wajib diisi.",
+      "showPassword": "Tampilkan kata sandi",
+      "hidePassword": "Sembunyikan kata sandi",
+      "noAccess": {
+        "title": "Anda tidak memiliki akses",
+        "body": "Peran Anda tidak mencakup izin yang dibutuhkan layar ini. Minta Owner atau Admin workspace untuk memberikannya.",
+        "bodyWithKey": "Layar ini memerlukan izin {permission}. Minta Owner atau Admin workspace untuk menambahkannya ke salah satu peran Anda.",
+        "back": "Kembali ke workspace"
+      }
+    },
+    "blurb": {
+      "owner": "Owner: semua termasuk tagihan.",
+      "admin": "Admin: akses penuh workspace, tanpa tagihan.",
+      "manager": "Manajer: melihat semua, dapat menugaskan dan menyelesaikan.",
+      "agent": "Agen: menangani percakapan yang ditugaskan.",
+      "viewer": "Viewer: hanya-baca."
+    },
+    "errors": {
+      "unexpected": "Terjadi kesalahan di sisi kami. Coba lagi; jika terus terjadi, sertakan ID permintaan.",
+      "request": "Permintaan tidak dapat diselesaikan.",
+      "validation": "Periksa formulir dan coba lagi.",
+      "passwordPolicy": "Kata sandi ini tidak memenuhi kebijakan kata sandi workspace:",
+      "validationField": "Periksa kolom ini dan coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukan ini.",
+      "conflict": "Orang lain mengubah ini saat Anda mengedit. Muat ulang untuk melihat versinya, lalu terapkan kembali perubahan Anda.",
+      "grantRole": "Anda tidak dapat melakukan ini: peran tersebut (atau peran anggota saat ini) berada di atas peran Anda. Hanya Owner yang dapat memberi, mengubah, atau menonaktifkan Owner dan Admin.",
+      "grantPermission": "Anda tidak dapat memberikan {permission}: Anda sendiri tidak memilikinya.",
+      "selfRoleChange": "Anda tidak dapat mengubah peran Anda sendiri.",
+      "lastOwner": "Workspace harus memiliki minimal satu Owner. Jadikan orang lain Owner terlebih dahulu.",
+      "selfDeactivate": "Anda tidak dapat menonaktifkan akun Anda sendiri.",
+      "presetRole": "Owner, Admin, Manajer, Agen, dan Viewer adalah peran bawaan: tidak dapat diganti nama atau dihapus.",
+      "roleInUse": "Anggota masih memiliki peran ini. Pindahkan mereka ke peran lain terlebih dahulu, lalu hapus.",
+      "nameTaken": "Peran dengan nama ini sudah ada.",
+      "nameRequired": "Nama peran wajib diisi.",
+      "nameTooLong": "Nama peran maksimal {max} karakter.",
+      "notFound": "Item ini tidak ada lagi. Mungkin sudah dihapus."
+    },
+    "team": {
+      "crumb": "Anggota tim",
+      "eyebrow": "Pengaturan · Tim",
+      "titleLead": "Tim",
+      "titleAccent": "anggota",
+      "description": "Tambahkan orang ke workspace ini, pilih apa yang dapat mereka lakukan, dan nonaktifkan akses saat seseorang keluar.",
+      "addMember": "Tambahkan anggota",
+      "reload": "Muat ulang",
+      "you": "Anda",
+      "noRole": "Tanpa peran",
+      "changeRoleAction": "Ubah peran",
+      "reactivate": "Aktifkan kembali",
+      "selfRoleHint": "Anda tidak dapat mengubah peran Anda sendiri.",
+      "roleLockedHint": "Anda tidak dapat mengubah peran anggota ini: peran tersebut berada di atas peran Anda, atau Anda tidak boleh menetapkan peran.",
+      "selfDeactivateHint": "Anda tidak dapat menonaktifkan akun Anda sendiri.",
+      "rolesUnavailable": "Peran tidak dapat dimuat, sehingga menambah anggota dan mengubah peran tidak tersedia. Chip peran dibuat dari anggota yang ditampilkan.",
+      "footer": "Menampilkan {shown} dari {total}",
+      "status": {
+        "active": "Aktif",
+        "inactive": "Nonaktif"
+      },
+      "filter": {
+        "label": "Filter anggota berdasarkan peran",
+        "all": "Semua",
+        "preset": {
+          "owner": "Owner",
+          "admin": "Admin",
+          "manager": "Manajer",
+          "agent": "Agen",
+          "viewer": "Viewer"
+        }
+      },
+      "search": {
+        "label": "Cari anggota",
+        "placeholder": "Cari nama atau email…"
+      },
+      "table": {
+        "caption": "Anggota workspace",
+        "member": "Anggota",
+        "roles": "Peran",
+        "status": "Status",
+        "actions": "Tindakan"
+      },
+      "empty": {
+        "none": "Belum ada anggota.",
+        "noMatch": "Tidak ada anggota yang cocok dengan filter ini.",
+        "clear": "Hapus filter"
+      },
+      "toasts": {
+        "added": "{name} ditambahkan ke workspace.",
+        "rolesUpdated": "Peran {name} diperbarui.",
+        "deactivated": "{name} dinonaktifkan.",
+        "reactivated": "{name} diaktifkan kembali."
+      },
+      "deactivate": {
+        "action": "Nonaktifkan",
+        "title": "Nonaktifkan anggota",
+        "message": "{name} tidak akan bisa masuk lagi. Anda dapat mengaktifkannya kembali kapan saja.",
+        "confirm": "Nonaktifkan",
+        "cancel": "Batal"
+      },
+      "add": {
+        "eyebrow": "Tim",
+        "title": "Tambahkan anggota",
+        "fullName": "Nama lengkap",
+        "email": "Email",
+        "emailInvalid": "Masukkan alamat email yang valid.",
+        "password": "Kata sandi",
+        "passwordHint": "Minimal 8 karakter. Bagikan kepada orang tersebut; mereka dapat mengubahnya setelah masuk.",
+        "passwordGenerated": "Kata sandi dibuat: tampilkan dengan tombol mata dan salin sebelum menyimpan.",
+        "passwordShort": "Kata sandi harus minimal 8 karakter.",
+        "generate": "Buat",
+        "role": "Peran",
+        "submit": "Tambahkan anggota"
+      },
+      "changeRole": {
+        "title": "Ubah peran {name}",
+        "legend": "Peran",
+        "keptRole": "{name} tetap: Anda tidak dapat memberikan atau mencabutnya.",
+        "atLeastOne": "Pilih minimal satu peran.",
+        "save": "Simpan peran",
+        "reload": "Muat ulang"
+      }
+    },
+    "list": {
+      "crumb": "Peran",
+      "eyebrow": "Pengaturan · Tim · Peran",
+      "titleLead": "Peran &",
+      "titleAccent": "izin",
+      "description": "Peran menentukan apa yang dapat dilakukan anggota. Pilih peran bawaan atau buat peran kustom dari matriks izin.",
+      "teamLink": "Anggota tim",
+      "addRole": "Tambahkan peran",
+      "empty": "Belum ada peran.",
+      "preset": "Bawaan",
+      "custom": "Kustom",
+      "locked": "Terkunci",
+      "footer": "{count} peran",
+      "membersLink": "{count} anggota memiliki {name}",
+      "table": {
+        "caption": "Peran workspace",
+        "name": "Peran",
+        "type": "Jenis",
+        "members": "Anggota",
+        "permissions": "Izin",
+        "lastEdited": "Terakhir diubah",
+        "actions": "Tindakan"
+      },
+      "row": {
+        "menu": "Tindakan untuk {name}",
+        "edit": "Edit peran",
+        "view": "Lihat peran",
+        "delete": "Hapus peran"
+      },
+      "toasts": {
+        "deleted": "Peran \"{name}\" dihapus."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Peran",
+      "crumbNew": "Peran baru",
+      "eyebrowNew": "Pengaturan · Peran · Baru",
+      "eyebrowEdit": "Pengaturan · Peran · Edit",
+      "titleLead": "Buat",
+      "titleAccent": "peran",
+      "description": "Beri nama peran dan pilih apa yang dapat dilakukannya.",
+      "summary": "{count, plural, =0 {Tidak ada anggota yang memiliki peran ini.} other {# anggota memiliki peran ini.}}",
+      "notFoundTitle": "Peran tidak ditemukan",
+      "notFoundBody": "Peran ini tidak ada lagi. Mungkin sudah dihapus.",
+      "backToRoles": "Kembali ke peran",
+      "back": "Kembali",
+      "save": "Simpan perubahan",
+      "create": "Buat peran",
+      "saving": "Menyimpan…",
+      "reload": "Muat ulang",
+      "discard": "Ada perubahan yang belum disimpan. Tinggalkan tanpa menyimpan?",
+      "lockedNotice": "Peran Owner memiliki semua izin dan tidak dapat diubah atau dihapus",
+      "adminNotice": "Hanya Owner yang dapat mengubah izin peran Admin.",
+      "readOnlyNotice": "Anda tidak dapat mengubah izin peran ini.",
+      "details": "Detail peran",
+      "name": "Nama peran",
+      "namePlaceholder": "mis. Kepala support",
+      "presetNameHint": "Peran bawaan mempertahankan namanya.",
+      "template": "Mulai dari peran",
+      "templateHint": "Menyalin izin peran lain ke dalam matriks di bawah.",
+      "templateBlank": "Kosong (tanpa izin)",
+      "templateOption": "{name} ({count} izin)",
+      "danger": {
+        "title": "Hapus peran ini",
+        "hint": "Tidak ada yang memiliki peran ini, jadi dapat dihapus.",
+        "inUse": "{count, plural, other {# anggota masih memiliki peran ini.}} Pindahkan mereka ke peran lain terlebih dahulu.",
+        "action": "Hapus peran"
+      },
+      "toasts": {
+        "created": "Peran \"{name}\" dibuat.",
+        "updated": "Peran \"{name}\" diperbarui.",
+        "deleted": "Peran \"{name}\" dihapus."
+      }
+    },
+    "matrix": {
+      "title": "Izin",
+      "counter": "{count} / {total} dipilih",
+      "deniedCount": "{count} ditolak",
+      "selectAll": "Pilih semua",
+      "selectAllCategory": "Pilih semua",
+      "selectAllOf": "Pilih semua di {category}",
+      "search": "Cari izin…",
+      "searchLabel": "Cari izin",
+      "denyHint": "Tolak lebih diutamakan daripada izinkan: izin yang ditolak tetap ditolak meskipun peran lain anggota mengizinkannya.",
+      "emptyCatalogue": "Tidak ada izin yang tersedia.",
+      "noMatch": "Tidak ada izin yang cocok dengan \"{query}\".",
+      "allow": "Izinkan",
+      "deny": "Tolak",
+      "effectLabel": "Izinkan atau tolak: {label}",
+      "scopeLabel": "Cakupan data: {label}",
+      "needsPlan": "Memerlukan paket {feature}",
+      "needsApp": "Memerlukan aplikasi {app} terpasang",
+      "lockedHint": "Izin ini belum tersedia untuk workspace ini. Akan aktif saat fitur paket diaktifkan atau aplikasi dipasang.",
+      "scope": {
+        "all": "Semua data",
+        "team": "Data tim",
+        "own": "Data sendiri"
+      }
+    },
+    "delete": {
+      "title": "Hapus peran",
+      "message": "Hapus peran \"{name}\"? Tindakan ini tidak dapat dibatalkan.",
+      "confirm": "Hapus peran",
+      "cancel": "Batal",
+      "inUseTitle": "\"{name}\" masih digunakan",
+      "inUse": "{count, plural, =0 {Anggota masih memiliki peran ini.} other {# anggota masih memiliki peran ini.}} Pindahkan mereka ke peran lain terlebih dahulu, lalu hapus.",
+      "viewMembers": "Lihat anggota dengan peran ini"
+    }
+  }
+}

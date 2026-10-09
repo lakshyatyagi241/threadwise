@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "Publicando…",
+        "live": "Ao vivo",
+        "liveTitle": "Ao vivo na Geta",
+        "push": "Publicar ao vivo",
+        "pushHint": "Publicado aqui; envie-o agora ao vivo para a Geta",
+        "failed": "Com falha",
+        "failedConfiguration": "Falha na atualização da configuração",
+        "failedPublish": "Falha na publicação",
+        "retry": "Tentar novamente",
+        "retrying": "Tentando novamente…",
+        "reasonLabel": "Motivo",
+        "failedNote": "O fluxo continua publicado aqui. Tentar novamente retoma a partir da etapa que falhou.",
+        "notConfigured": "Publicado aqui; configure a publicação na Geta nas configurações para colocá-lo ao vivo.",
+        "openSettings": "Abrir configurações",
+        "dismiss": "Dispensar"
+      },
+      "settings": {
+        "title": "Publicação na Geta",
+        "intro": "Ao clicar em Publicar no construtor de fluxos, seu bot também é publicado ao vivo no console da Geta. Informe os dados de conexão uma vez para este espaço de trabalho. Os segredos são armazenados com criptografia e nunca são exibidos novamente.",
+        "viewOnly": "Você pode ver o estado destas configurações, mas não alterá-las.",
+        "loading": "Carregando…",
+        "loadFailed": "Não foi possível carregar as configurações.",
+        "retry": "Tentar novamente",
+        "fixtureNotice": "Este servidor está em modo de fixture: a publicação é simulada e nada é enviado à Geta.",
+        "ready": "Pronto",
+        "incomplete": "Incompleto",
+        "readyNote": "Publicar um fluxo também colocará seu bot ao vivo na Geta.",
+        "incompleteNote": "Preencha todos os campos abaixo para publicar os fluxos ao vivo na Geta.",
+        "baseUrl": {
+          "label": "URL base",
+          "hint": "O endereço da API da Geta, por exemplo https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "Origem do console (opcional)",
+          "hint": "Enviada como origin e referer de cada requisição. Deixe vazio para não enviar nenhum."
+        },
+        "authorization": {
+          "label": "Token de autorização",
+          "hint": "Enviado exatamente como você digitar, sem adicionar “Bearer ”."
+        },
+        "getaHost": {
+          "label": "Token geta-host",
+          "hint": "Enviado no cabeçalho geta-host."
+        },
+        "secretKept": "Salvo. Deixe o campo vazio para mantê-lo ou digite um novo valor para substituí-lo.",
+        "secretPlaceholder": "Salvo (oculto)",
+        "show": "Mostrar",
+        "hide": "Ocultar",
+        "remove": "Remover",
+        "record": {
+          "label": "Registro do chatbot da Geta",
+          "paste": "Cole o registro do chatbot (JSON)",
+          "replace": "Substitua o registro do chatbot (JSON)",
+          "hint": "O objeto chatbot exatamente como deve ser enviado à Geta, ou o corpo completo da requisição com a chave chatbot. Precisa ter pelo menos id e bot_id. Apenas modified_time é atualizado no envio.",
+          "keepPlaceholder": "Deixe vazio para manter o registro salvo",
+          "id": "ID do chatbot",
+          "name": "Nome",
+          "botId": "ID do bot",
+          "remove": "Remover o registro salvo"
+        },
+        "saved": "Salvo",
+        "notSet": "Não definido",
+        "save": "Salvar",
+        "saving": "Salvando…",
+        "saveFailed": "Não foi possível salvar.",
+        "removed": "Removido.",
+        "clear": "Limpar tudo",
+        "cleared": "Configurações de publicação na Geta limpas.",
+        "clearConfirm": {
+          "title": "Limpar a publicação na Geta?",
+          "message": "Isso remove a URL base, os dois tokens e o registro do chatbot. Os fluxos publicados continuam publicados aqui, mas deixam de ser enviados à Geta.",
+          "confirm": "Limpar tudo",
+          "cancel": "Cancelar"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "node-bridge-runtime": {
+    "nav": {
+      "group": "Kanallar",
+      "item": "Node köprüsü"
+    },
+    "page": {
+      "title": "Node köprüsü URL'si ve belirteci",
+      "eyebrow": "genel · node köprüsü",
+      "description": "Tüm motorların konuştuğu ortak Node köprüsü — Resmi olmayan API bunun üzerinden gönderir ve gönderen hızı burada uygulanır. Bir kez ayarlayın; platform genelinde geçerlidir.",
+      "superOnly": "Node köprüsünü yalnızca süper yönetici değiştirebilir. Kayıtlı değerleri görebilirsiniz."
+    },
+    "bridge": {
+      "tokenSet": "Belirteç ayarlı",
+      "noToken": "Belirteç yok",
+      "serverUrl": "Sunucu URL'si",
+      "serverUrlPlaceholder": "http://localhost:8888",
+      "urlInvalid": "Önce geçerli bir Sunucu URL'si girin (http:// veya https://).",
+      "serverUrlHint": "Node köprünüzün erişilebilir olduğu adres. Gelen ve durum webhook'ları otomatik işlenir — köprü, URL'mizi APP_DOMAIN_NAME ortam değişkeninden alır.",
+      "token": "Node webhook belirteci (X-Node-Token)",
+      "tokenPlaceholder": "ortak X-Node-Token sırrı",
+      "tokenSavedPlaceholder": "••• kayıtlı, korumak için boş bırakın",
+      "tokenHint": "Node köprüsünün X-Node-Token olarak gönderdiği ortak sır. Node köprüsü yapılandırmanızdaki belirteçle eşleşmelidir. Kayıttan sonra gizlenir; yalnızca döndürmek için yeniden yapıştırın.",
+      "save": "Kaydet",
+      "saving": "Kaydediliyor…",
+      "test": "Bağlantıyı test et",
+      "testing": "Test ediliyor…",
+      "saved": "Node köprüsü kaydedildi."
+    },
+    "pacing": {
+      "eyebrow": "hız",
+      "title": "Gönderim hızı ve gruplama",
+      "msgGap": "Mesaj aralığı (sn)",
+      "msgGapHint": "Ardışık gönderimler arasındaki saniye.",
+      "batchesGap": "Grup boyutu",
+      "batchesGapHint": "Grup başına alıcı.",
+      "bwMsgGap": "Gruplar arası (dk)",
+      "bwMsgGapHint": "Gruplar arasındaki dakika.",
+      "enableBatches": "Gruplamayı etkinleştir",
+      "update": "Zamanlamayı güncelle",
+      "updating": "Kaydediliyor…",
+      "saved": "Gönderim zamanlaması güncellendi.",
+      "tipTitle": "Hız ipucu",
+      "tip": "Mesaj aralığını yalnızca 24 saatlik bir denemeden sonra düşürün — Meta, agresif gönderenleri sınırlar. 3 sn güvenli varsayılandır."
+    },
+    "errors": {
+      "forbidden": "Bunu yapmak için izniniz yok.",
+      "conflict": "Bu ayarları başka biri değiştirdi. Sayfa yenilendi; tekrar deneyin.",
+      "validation": "Değerleri kontrol edip tekrar deneyin.",
+      "request": "Bu istek tamamlanamadı.",
+      "unexpected": "Tarafımızda bir sorun oluştu. Biraz sonra tekrar deneyin.",
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edin."
+    },
+    "loading": "Yükleniyor",
+    "retry": "Tekrar dene",
+    "unofficial": {
+      "eyebrow": "platform anahtarı",
+      "title": "Resmi olmayan WhatsApp (QR ile kişisel numaralar)",
+      "status": {
+        "disabled": "Devre dışı / Desteklenmiyor",
+        "enabled": "Etkin (desteklenmiyor)"
+      },
+      "explanation": "Yalnızca resmi WhatsApp Business API'yi destekliyoruz. Bu, kişisel numaralar için platform genelinde bir anahtardır: desteklenmez ve numaraların yasaklanmasına yol açabilir. Açık olsa bile yalnızca aşağıda izin verilen çalışma alanları kullanabilir.",
+      "state": {
+        "disabled": "Kapalı. Aşağıdaki liste ne derse desin hiçbir çalışma alanı kişisel numaraları göremez ya da bağlayamaz: QR bağlantı akışı, Warmer ve kişisel numara göndericileri gizlenir ve bunlar üzerinden gönderimler reddedilir.",
+        "enabled": "Yalnızca izin verilen çalışma alanları için açık. Aşağıdaki listede olmayan bir çalışma alanı bunlardan hiçbirini görmez. Bu desteklenmez; bu numaralar WhatsApp tarafından yasaklanabilir."
+      },
+      "enable": "Resmi olmayan WhatsApp'ı etkinleştir",
+      "disable": "Resmi olmayan WhatsApp'ı devre dışı bırak",
+      "cancel": "İptal",
+      "enableDialog": {
+        "title": "Resmi olmayan WhatsApp etkinleştirilsin mi?",
+        "body": "Bu desteklenmez. Bu şekilde bağlanan numaralar WhatsApp tarafından yasaklanabilir ve bunlar üzerinden gönderilen mesajlar herhangi bir teslimat garantisi kapsamında değildir. Anahtarı açmak, tek başına kimseye erişim vermez: yalnızca izin listesindeki çalışma alanları kullanabilir.",
+        "typeLabel": "Onaylamak için {word} yazın",
+        "confirm": "Etkinleştir"
+      },
+      "disableDialog": {
+        "title": "Resmi olmayan WhatsApp devre dışı bırakılsın mı?",
+        "body": "Her çalışma alanı kişisel numaraları, Warmer'ı ve QR bağlantı akışını görmeyi bırakır; kişisel numaralar üzerinden gönderimler reddedilir. Kayıtlı veriler ve izin listesi korunur.",
+        "confirm": "Devre dışı bırak"
+      },
+      "enabledToast": "Resmi olmayan WhatsApp artık etkin.",
+      "disabledToast": "Resmi olmayan WhatsApp artık devre dışı.",
+      "dimNote": "Aşağıdaki ayarlar yalnızca kişisel numaralar için geçerlidir ve resmi olmayan WhatsApp devre dışıyken kullanılmaz.",
+      "errors": {
+        "forbidden": "Bu anahtarı yalnızca süper yönetici değiştirebilir.",
+        "conflict": "Bu ayarları başka biri değiştirdi. Sayfa yenilendi; tekrar deneyin.",
+        "validation": "Değerleri kontrol edip tekrar deneyin.",
+        "request": "Bu istek tamamlanamadı.",
+        "unexpected": "Tarafımızda bir sorun oluştu. Biraz sonra tekrar deneyin.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edin."
+      },
+      "allowedCount": "{count, plural, =0 {İzin verilen çalışma alanı yok} other {# çalışma alanına izin verildi}}"
+    },
+    "workspaces": {
+      "eyebrow": "izin listesi",
+      "title": "Resmi olmayan WhatsApp kullanan çalışma alanları",
+      "description": "Varsayılan olarak herkes için kapalı. Yalnızca burada listelenen çalışma alanları kişisel numaralı WhatsApp'ı kullanabilir ve yalnızca yukarıdaki motor açıkken.",
+      "count": "{count, plural, =0 {İzin verilen çalışma alanı yok} other {# çalışma alanına izin verildi}}",
+      "engineOff": "Motor kapalı olduğu için bu çalışma alanları henüz kullanamaz.",
+      "engineOffAction": "Anahtara git",
+      "readOnly": "Çalışma alanı ekleme veya kaldırma yalnızca süper yönetici tarafından yapılabilir. Listeyi görebilirsiniz.",
+      "search": {
+        "label": "Çalışma alanı ekle",
+        "placeholder": "Çalışma alanı adı, slug veya sahip e-postasına göre ara",
+        "hint": "En az 2 karakter yazın.",
+        "searching": "Aranıyor",
+        "none": "\"{q}\" ile eşleşen çalışma alanı yok.",
+        "add": "Ekle",
+        "alreadyAdded": "Zaten izinli",
+        "owner": "Sahip: {email}",
+        "noPlan": "Plan yok",
+        "results": "Arama sonuçları"
+      },
+      "table": {
+        "caption": "Resmi olmayan WhatsApp kullanmasına izin verilen çalışma alanları",
+        "workspace": "Çalışma alanı",
+        "plan": "Plan",
+        "devices": "Cihazlar",
+        "since": "Etkinleştirilme tarihi",
+        "by": "Etkinleştiren",
+        "note": "Not",
+        "actions": "İşlemler",
+        "devicesValue": "{total} içinden {active} etkin",
+        "noPlan": "Plan yok",
+        "system": "Bilinmiyor",
+        "noNote": "Yok",
+        "remove": "Kaldır"
+      },
+      "empty": {
+        "title": "Henüz izinli çalışma alanı yok",
+        "message": "Motor açık olsa bile kimse kişisel numaralı WhatsApp'ı kullanamaz. İlk çalışma alanını eklemek için yukarıda arama yapın."
+      },
+      "loadMore": "Daha fazla yükle",
+      "loadingMore": "Yükleniyor",
+      "addDialog": {
+        "title": "{name} için izin verilsin mi?",
+        "body": "Motor açıkken {name} ({slug}) QR kodu ile kişisel WhatsApp numaralarını bağlayabilecek. Bu desteklenmez ve numaralar WhatsApp tarafından yasaklanabilir.",
+        "noteLabel": "Not (isteğe bağlı)",
+        "notePlaceholder": "Bu çalışma alanı neden, kim istedi",
+        "noteCount": "{count} / {max}",
+        "noteTooLong": "Not en fazla {max} karakter olabilir.",
+        "confirm": "Çalışma alanına izin ver"
+      },
+      "removeDialog": {
+        "title": "{name} kaldırılsın mı?",
+        "body": "{name} artık kişisel numaralı WhatsApp'ı kullanamayacak. Bağlantıları 20 saniye içinde durur. Kayıtlı oturumlar korunur; bu nedenle çalışma alanına yeniden izin vermek bunları geri getirir.",
+        "confirm": "Kaldır"
+      },
+      "cancel": "İptal",
+      "addedToast": "{name} artık resmi olmayan WhatsApp'ı kullanabilir.",
+      "removedToast": "{name} listeden kaldırıldı.",
+      "errors": {
+        "forbidden": "Bu listeyi yalnızca süper yönetici değiştirebilir.",
+        "conflict": "Liste bu sırada değişti. Yenilendi; tekrar deneyin.",
+        "validation": "Değerleri kontrol edip tekrar deneyin.",
+        "request": "Bu istek tamamlanamadı.",
+        "unexpected": "Tarafımızda bir sorun oluştu. Biraz sonra tekrar deneyin.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edin."
+      },
+      "retry": "Tekrar dene"
+    }
+  }
+}

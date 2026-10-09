@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "प्लेटफ़ॉर्म",
+      "inbox": "इनबॉक्स और चैट",
+      "audience": "CRM",
+      "sales": "सेल्स",
+      "campaigns": "कैंपेन",
+      "automation": "ऑटोमेशन",
+      "store": "स्टोर",
+      "apps": "मार्केटप्लेस",
+      "help": "सपोर्ट और मदद",
+      "settings": "सेटिंग"
+    },
+    "locked": "अपग्रेड करें",
+    "language": "भाषा",
+    "theme": "थीम",
+    "themeLight": "लाइट",
+    "themeDark": "डार्क",
+    "logout": "लॉग आउट करें",
+    "openMenu": "मेनू खोलें",
+    "admin": {
+      "title": "प्लेटफ़ॉर्म कंसोल",
+      "note": "सुपर-एडमिन उपयोगकर्ता बनने के बाद प्लेटफ़ॉर्म-एडमिन स्क्रीन यहाँ आएँगी।"
+    },
+    "soon": "जल्द ही",
+    "new": "नया",
+    "comingSoon": "जल्द आ रहा है",
+    "appGate": {
+      "title": "{app} आपके वर्कस्पेस का हिस्सा नहीं है",
+      "body": "{app} एक वैकल्पिक ऐप है। इसे मार्केटप्लेस से जोड़ें, तो यह आपके मेनू में दिखेगा।",
+      "bodyNoMarketplace": "{app} एक वैकल्पिक ऐप है जो इस वर्कस्पेस में नहीं है। इसे मार्केटप्लेस से जोड़ने के लिए वर्कस्पेस एडमिन से कहें।",
+      "browse": "मार्केटप्लेस देखें",
+      "back": "डैशबोर्ड पर वापस जाएँ",
+      "unofficialTitle": "{app} उपलब्ध नहीं है",
+      "unofficialBody": "{app} का इस्तेमाल सिर्फ़ QR कोड से जोड़े गए निजी WhatsApp नंबरों के साथ होता है, जो आपके वर्कस्पेस के लिए सक्षम नहीं हैं। WhatsApp आधिकारिक WhatsApp Business API के ज़रिए कनेक्ट होता है।"
+    },
+    "closeMenu": "मेनू बंद करें",
+    "mainMenu": "मुख्य मेनू",
+    "userMenu": "अकाउंट मेनू",
+    "account": "अकाउंट",
+    "balance": "बैलेंस",
+    "pageSettings": {
+      "label": "इस पेज की सेटिंग",
+      "hint": "ये सेटिंग केवल इसलिए दिख रही हैं क्योंकि आपकी भूमिका इन्हें बदलने की अनुमति देती है।"
+    },
+    "notifications": "सूचनाएँ",
+    "settings": "सेटिंग",
+    "pinned": "मदद और सेटिंग",
+    "nav": {
+      "analytics": "एनालिटिक्स",
+      "notifications": "सूचनाएँ",
+      "inbox": "इनबॉक्स",
+      "quickChat": "क्विक चैट",
+      "callLogs": "कॉल लॉग",
+      "teamChat": "टीम चैट",
+      "leadFinder": "लीड खोजें",
+      "campaigns": "कैंपेन",
+      "broadcasts": "ब्रॉडकास्ट",
+      "scheduled": "शेड्यूल किया गया",
+      "templates": "टेम्प्लेट",
+      "history": "इतिहास",
+      "flows": "फ़्लो",
+      "aiAssistants": "AI असिस्टेंट",
+      "appointments": "अपॉइंटमेंट",
+      "crmDashboard": "CRM डैशबोर्ड",
+      "store": "स्टोर",
+      "catalog": "कैटलॉग",
+      "support": "सपोर्ट",
+      "guidebook": "गाइडबुक",
+      "pipelines": "पाइपलाइन",
+      "tasks": "टास्क",
+      "companies": "कंपनियाँ",
+      "emailTemplates": "ईमेल टेम्प्लेट",
+      "proposals": "प्रस्ताव",
+      "estimates": "अनुमान",
+      "invoices": "इनवॉइस",
+      "payments": "भुगतान"
+    },
+    "help": "मदद",
+    "unreadCount": "{count, plural, one {# बिना पढ़ा} other {# बिना पढ़े}}"
+  }
+}

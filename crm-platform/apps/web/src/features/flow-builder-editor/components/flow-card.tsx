@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { type FlowFeatured, type FlowState, type FlowSummary } from '@crm/contracts';
 import { cn } from '@crm/ui';
-import { plural, purposeOf, relativeTime } from '../lib/list-model';
+import { purposeOf, relativeTime } from '../lib/list-model';
+import { useMsg } from '../lib/msg';
 import { openHref, type BuilderMode } from '../lib/builder-mode';
 
 export const STATE_STYLE: Record<FlowState, { pill: string; dot: string }> = {
@@ -140,6 +141,7 @@ export function triggerLabelKey(
 /** One flow in the grid: category icon, state pill, title, the static purpose line, three bullets and the action row. */
 export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardActions }) {
   const t = useTranslations('flb.card');
+  const m = useMsg();
   const tl = useTranslations('flb.list.state');
   const sty = STATE_STYLE[flow.state];
   const cat = categoryStyle(flow.category);
@@ -211,7 +213,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
 
       <div className="mb-1 text-[14px] font-semibold">{flow.name || t('untitled')}</div>
       <p className="text-[12.5px] leading-relaxed text-muted-foreground">
-        {purposeOf(flow.category)}
+        {m(purposeOf(flow.category))}
       </p>
 
       <ul className="mt-3 space-y-1 text-[12px] text-foreground/70">
@@ -241,7 +243,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
               ) : null}
             </span>
           ) : (
-            t('edited', { when: relativeTime(flow.updatedAt) })
+            t('edited', { when: m(relativeTime(flow.updatedAt)) })
           )}
         </li>
       </ul>
@@ -339,6 +341,7 @@ const NODE_KIND: Record<string, string> = {
 /** The big card for the workspace's featured flow, with a mini preview of its first nodes. */
 export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: CardActions }) {
   const t = useTranslations('flb.featured');
+  const m = useMsg();
   const tl = useTranslations('flb.list.state');
   // `ucfirst(str_replace('-', ' ', category))`, "Flow" when there is none; the pill style upper-cases it.
   const raw = (flow.category || 'flow').replace(/-/g, ' ');
@@ -408,7 +411,7 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
           </span>
         </div>
         <p className="mt-4 max-w-xl text-[14px] leading-[1.65] text-foreground/80">
-          {t('updated', { when: relativeTime(flow.updatedAt) })}
+          {t('updated', { when: m(relativeTime(flow.updatedAt)) })}
         </p>
         <div className="mt-6 flex items-center gap-2">
           <Link
@@ -479,5 +482,3 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
     </div>
   );
 }
-
-export { plural };

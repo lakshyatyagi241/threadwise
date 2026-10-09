@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
 import { Icon } from './node-card';
 
 export type BuilderStatus = string;
@@ -33,17 +34,18 @@ export function Toolbar({
   onAIGen,
   remoteStatus,
 }: Props) {
+  const t = useTranslations('flb.builder.shell.toolbar');
   const isPublished = status === 'Published';
   const isUnsaved = status.includes('unsaved');
-  const label = isPublished ? 'Published' : isUnsaved ? 'Unsaved' : 'Draft';
+  const label = isPublished ? t('published') : isUnsaved ? t('unsaved') : t('draft');
   const dot = isPublished ? 'var(--flb-green)' : isUnsaved ? 'var(--flb-coral)' : '#92A29E';
   return (
     <header className="flow-toolbar relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background px-4">
       <Link
         href="/flows"
         className="grid h-9 w-9 place-items-center rounded-full border border-border hover:bg-muted"
-        title="Back to flows"
-        aria-label="Back to flows"
+        title={t('back')}
+        aria-label={t('back')}
       >
         <Icon d="M10 4l-4 4 4 4" className="h-3.5 w-3.5" />
       </Link>
@@ -64,12 +66,12 @@ export function Toolbar({
         </span>
         <div className="min-w-0">
           <div className="flow-eyebrow font-mono text-[9.5px] uppercase leading-none tracking-[0.16em] text-muted-foreground">
-            Flow Builder
+            {t('eyebrow')}
           </div>
           <input
             value={flowName}
             onChange={(e) => setFlowName(e.target.value)}
-            aria-label="Flow name"
+            aria-label={t('flowName')}
             className="-ml-px w-[220px] border-0 bg-transparent px-0 py-0 font-serif text-[16px] leading-tight tracking-[-0.01em] outline-none"
           />
         </div>
@@ -78,14 +80,14 @@ export function Toolbar({
       <button
         type="button"
         onClick={onAIGen}
-        title="Generate with AI"
+        title={t('generateAi')}
         className="btn-ai-shine relative isolate inline-flex items-center gap-1.5 overflow-hidden rounded-full px-3 py-1.5 text-[11.5px] font-semibold"
       >
         <Icon
           d="M8 1v3M8 12v3M1 8h3M12 8h3M3.5 3.5l2 2M10.5 10.5l2 2M3.5 12.5l2-2M10.5 5.5l2-2"
           className="h-3 w-3"
         />
-        <span className="flow-ai-text">Generate with AI</span>
+        <span className="flow-ai-text">{t('generateAi')}</span>
       </button>
       <button
         type="button"
@@ -93,7 +95,7 @@ export function Toolbar({
         className="flow-test-btn inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-[11.5px] font-medium hover:bg-muted"
       >
         <Icon d="M5 3l8 5-8 5z" className="h-3 w-3" />
-        <span className="flow-btn-text">Test</span>
+        <span className="flow-btn-text">{t('test')}</span>
       </button>
       <span
         className="flow-status inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-[10.5px] font-medium text-[var(--flb-ink-700)]"
@@ -110,8 +112,8 @@ export function Toolbar({
         disabled={busy}
         className="rounded-full border border-border bg-background px-3 py-1.5 text-[11.5px] font-medium hover:bg-muted disabled:opacity-60"
       >
-        <span className="flow-save-full">{flowId ? 'Save changes' : 'Save'}</span>
-        <span className="flow-save-short">Save</span>
+        <span className="flow-save-full">{flowId ? t('saveChanges') : t('save')}</span>
+        <span className="flow-save-short">{t('save')}</span>
       </button>
       <button
         type="button"
@@ -120,7 +122,7 @@ export function Toolbar({
         className="inline-flex items-center gap-1.5 rounded-full bg-brand px-3.5 py-1.5 text-[11.5px] font-semibold text-brand-foreground hover:opacity-90 disabled:opacity-60"
       >
         <Icon d="M2 8l5 5 7-9" className="h-3 w-3" />
-        Publish
+        {t('publish')}
       </button>
     </header>
   );

@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "Platform",
+      "inbox": "Gelen kutusu ve sohbet",
+      "audience": "CRM",
+      "sales": "Satış",
+      "campaigns": "Kampanyalar",
+      "automation": "Otomasyon",
+      "store": "Mağaza",
+      "apps": "Pazar yeri",
+      "help": "Destek ve yardım",
+      "settings": "Ayarlar"
+    },
+    "locked": "Yükselt",
+    "language": "Dil",
+    "theme": "Tema",
+    "themeLight": "Açık",
+    "themeDark": "Koyu",
+    "logout": "Oturumu kapat",
+    "openMenu": "Menüyü aç",
+    "admin": {
+      "title": "Platform konsolu",
+      "note": "Süper yönetici hesabı oluşturulduğunda platform yönetici ekranları burada görünecek."
+    },
+    "soon": "Yakında",
+    "new": "Yeni",
+    "comingSoon": "Yakında geliyor",
+    "appGate": {
+      "title": "{app} çalışma alanınızın bir parçası değil",
+      "body": "{app} isteğe bağlı bir uygulamadır. Pazar yerinden ekleyin, menünüzde görünecektir.",
+      "bodyNoMarketplace": "{app}, bu çalışma alanında bulunmayan isteğe bağlı bir uygulamadır. Bir çalışma alanı yöneticisinden onu Pazar yerinden eklemesini isteyin.",
+      "browse": "Pazar yerine göz at",
+      "back": "Panele dön",
+      "unofficialTitle": "{app} kullanılamıyor",
+      "unofficialBody": "{app} yalnızca QR kodla eşleştirilmiş kişisel WhatsApp numaralarıyla kullanılır; bu özellik çalışma alanınızda etkin değil. WhatsApp, resmi WhatsApp Business API üzerinden bağlanır."
+    },
+    "closeMenu": "Menüyü kapat",
+    "mainMenu": "Ana menü",
+    "userMenu": "Hesap menüsü",
+    "account": "Hesap",
+    "balance": "Bakiye",
+    "pageSettings": {
+      "label": "Bu sayfanın ayarları",
+      "hint": "Bu ayarlar yalnızca rolünüz bunları değiştirmeye izin verdiği için gösteriliyor."
+    },
+    "notifications": "Bildirimler",
+    "settings": "Ayarlar",
+    "pinned": "Yardım ve ayarlar",
+    "nav": {
+      "analytics": "Analitik",
+      "notifications": "Bildirimler",
+      "inbox": "Gelen kutusu",
+      "quickChat": "Hızlı sohbet",
+      "callLogs": "Arama kayıtları",
+      "teamChat": "Ekip sohbeti",
+      "leadFinder": "Aday bulucu",
+      "campaigns": "Kampanyalar",
+      "broadcasts": "Toplu gönderimler",
+      "scheduled": "Zamanlanmış",
+      "templates": "Şablonlar",
+      "history": "Geçmiş",
+      "flows": "Akışlar",
+      "aiAssistants": "AI asistanları",
+      "appointments": "Randevular",
+      "crmDashboard": "CRM paneli",
+      "store": "Mağaza",
+      "catalog": "Katalog",
+      "support": "Destek",
+      "guidebook": "Rehber",
+      "pipelines": "Satış hatları",
+      "tasks": "Görevler",
+      "companies": "Şirketler",
+      "emailTemplates": "E-posta şablonları",
+      "proposals": "Teklifler",
+      "estimates": "Fiyat teklifleri",
+      "invoices": "Faturalar",
+      "payments": "Ödemeler"
+    },
+    "help": "Yardım",
+    "unreadCount": "{count, plural, other {# okunmamış}}"
+  }
+}

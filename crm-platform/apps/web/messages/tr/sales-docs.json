@@ -1,0 +1,647 @@
+{
+  "sales-docs": {
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "nav": {
+      "proposals": "Teklifler",
+      "estimates": "Tahminler"
+    },
+    "kind": {
+      "proposal": {
+        "singular": "Teklif",
+        "plural": "teklif"
+      },
+      "estimate": {
+        "singular": "Tahmin",
+        "plural": "tahmin"
+      }
+    },
+    "status": {
+      "draft": "Taslak",
+      "sent": "Gönderildi",
+      "viewed": "Görüntülendi",
+      "accepted": "Kabul edildi",
+      "declined": "Reddedildi",
+      "expired": "Süresi doldu",
+      "converted": "Dönüştürüldü"
+    },
+    "tabs": {
+      "label": "Durum",
+      "all": "Tümü",
+      "draft": "Taslak",
+      "sent": "Gönderildi",
+      "viewed": "Görüntülendi",
+      "accepted": "Kabul edildi",
+      "declined": "Reddedildi",
+      "expired": "Süresi doldu",
+      "converted": "Dönüştürüldü",
+      "count": "{count, plural, other {# belge}}"
+    },
+    "list": {
+      "proposal": {
+        "title": "Teklifler",
+        "subtitle": "Kapsamı ve fiyatı sunun, alıcının ne yaptığını izleyin ve kazanan teklifi faturaya dönüştürün.",
+        "new": "Yeni teklif",
+        "emptyTitle": "Henüz teklif yok",
+        "emptyMessage": "İlk teklifinizi oluşturun, bağlantıyı alıcınıza gönderin ve gönderildi aşamasından kabul edildi aşamasına geçişini izleyin."
+      },
+      "estimate": {
+        "title": "Tahminler",
+        "subtitle": "Faturalandırmadan önce fiyat teklif edin. Gönderin, kabul ettirin ve tek tıklamayla dönüştürün.",
+        "new": "Yeni tahmin",
+        "emptyTitle": "Henüz tahmin yok",
+        "emptyMessage": "İlk tahmininizi oluşturun, bağlantıyı alıcınıza gönderin ve kabul edildiğinde faturaya dönüştürün."
+      },
+      "openValue": "Açık değer",
+      "tableLabel": "Belgeler",
+      "loading": "Yükleniyor",
+      "showing": "{count, plural, other {# belge gösteriliyor}}",
+      "loadMore": "Daha fazla yükle",
+      "allLoaded": "Tümü yüklendi",
+      "useSampleData": "Örnek veriyi kullan",
+      "emptyFilteredTitle": "Eşleşen yok",
+      "emptyFiltered": "Aramanıza ve filtrelerinize uyan belge yok. Daha az filtre kullanın veya farklı bir kelime deneyin.",
+      "resetFilters": "Filtreleri temizle",
+      "emptyTabTitle": "{status} belge yok",
+      "emptyTab": "{kind} belgelerinizden biri bu duruma ulaştığında burada görünecek.",
+      "statusWord": {
+        "all": "tümü",
+        "draft": "taslak",
+        "sent": "gönderildi",
+        "viewed": "görüntülendi",
+        "accepted": "kabul edildi",
+        "declined": "reddedildi",
+        "expired": "süresi doldu",
+        "converted": "dönüştürüldü"
+      }
+    },
+    "toolbar": {
+      "label": "Filtreler",
+      "search": "Numara, başlık veya alıcıda ara",
+      "owner": "Sahip",
+      "allOwners": "Tüm sahipler",
+      "validity": "Geçerlilik sonu",
+      "anyValidity": "Herhangi bir tarih",
+      "validWeek": "7 gün içinde sona erecek",
+      "validLapsed": "Tarihi geçti",
+      "clear": "Temizle",
+      "refresh": "Yenile",
+      "shortcuts": "Klavye kısayolları",
+      "contactFilter": "Kişi",
+      "dealFilter": "Fırsat",
+      "removeFilter": "Bu filtreyi kaldır",
+      "mine": "Benimkiler"
+    },
+    "table": {
+      "scrollArea": "Belge tablosu",
+      "selectAll": "Yüklenen tüm belgeleri seç",
+      "selectRow": "{number} numaralı belgeyi seç",
+      "columns": {
+        "number": "Numara",
+        "title": "Başlık / Alıcı",
+        "contact": "Kişi",
+        "amount": "Tutar",
+        "status": "Durum",
+        "validUntil": "Geçerlilik sonu",
+        "owner": "Sahip",
+        "created": "Oluşturulma"
+      }
+    },
+    "row": {
+      "moreFor": "{number} için işlemler",
+      "untitled": "Adsız",
+      "noBuyer": "Henüz alıcı yok",
+      "unowned": "Sahip yok"
+    },
+    "bulk": {
+      "label": "Toplu işlemler",
+      "selected": "{count, plural, other {# seçildi}}",
+      "working": "Çalışıyor",
+      "delete": "Sil",
+      "clear": "Seçimi temizle",
+      "deleteTitle": "Seçili belgeler silinsin mi?",
+      "deleteMessage": "{count, plural, other {# belge kalıcı olarak silinecek. Herkese açık bağlantıları çalışmayı durdurur.}} Dönüştürülmüş belgeler korunur.",
+      "deleteConfirm": "Sil",
+      "keep": "Sakla",
+      "deleted": "{count, plural, other {# belge silindi}}",
+      "someFailed": "{count, plural, other {# belge silinemedi}}",
+      "failed": "Silme başarısız."
+    },
+    "shortcuts": {
+      "title": "Klavye kısayolları",
+      "close": "Kapat",
+      "list": "Listede",
+      "builder": "Düzenleyicide",
+      "actions": {
+        "next": "Sonraki satır",
+        "prev": "Önceki satır",
+        "open": "Satırı aç",
+        "toggleSelect": "Satırı seç veya seçimini kaldır",
+        "newDoc": "Yeni belge",
+        "focusSearch": "Ara",
+        "clearSelection": "Seçimi temizle",
+        "help": "Bu listeyi göster",
+        "save": "Taslağı kaydet",
+        "send": "Gönder",
+        "addRow": "Satır kalemi ekle"
+      }
+    },
+    "actions": {
+      "open": "Aç",
+      "edit": "Düzenle",
+      "send": "Gönder",
+      "copyLink": "Herkese açık bağlantıyı kopyala",
+      "markSent": "Gönderildi olarak işaretle",
+      "convertInvoice": "Faturaya dönüştür",
+      "createSalesOrder": "Satış siparişi oluştur",
+      "convertDeal": "Fırsat oluştur",
+      "duplicate": "Çoğalt",
+      "print": "Yazdır / PDF",
+      "activity": "Etkinlik",
+      "delete": "Sil",
+      "accept": "Kabul edildi olarak kaydet",
+      "decline": "Reddedildi olarak kaydet",
+      "revise": "Revize et (taslağa dön)",
+      "extend": "Geçerliliği uzat"
+    },
+    "confirm": {
+      "cancel": "İptal",
+      "linkCopied": "Bağlantı kopyalandı",
+      "copyFailed": "Bağlantı kopyalanamadı. Seçip elle kopyalayın.",
+      "markSent": {
+        "title": "{number} gönderildi olarak işaretlensin mi?",
+        "message": "Bu, {kind} belgesinin alıcıyla elle paylaşıldığını kaydeder (bağlantı kopyalandı). Hiçbir şey göndermez; gönderim için Gönder'i kullanın.",
+        "confirm": "Gönderildi olarak işaretle"
+      },
+      "convertInvoice": {
+        "title": "{number} faturaya dönüştürülsün mü?",
+        "message": "Aynı satır ve toplamlarla bir fatura taslağı oluşturulur ve bu {kind} dönüştürüldü olarak kilitlenir. Bu işlem geri alınamaz.",
+        "confirm": "Faturaya dönüştür"
+      },
+      "convertDeal": {
+        "title": "{number} numarasından fırsat oluşturulsun mu?",
+        "message": "Bu {kind} belgesinin toplamı ve kişisiyle bir fırsat oluşturulur ve belgeye bağlanır.",
+        "confirm": "Fırsat oluştur"
+      },
+      "delete": {
+        "title": "{number} silinsin mi?",
+        "message": "{kind} kalıcı olarak silinir ve herkese açık bağlantısı çalışmayı durdurur. Numarası asla yeniden kullanılmaz.",
+        "confirm": "Sil"
+      },
+      "close": "Kapat",
+      "theBuyer": "alıcı",
+      "linkCopiedInactive": "Bağlantı kopyalandı. Belge gönderilene kadar alıcı açamaz.",
+      "accept": {
+        "title": "{number} kabul edildi olarak kaydedilsin mi?",
+        "message": "{name} bağlantı dışında, telefonla veya imzalı bir kopyayla anlaştığında bunu kullanın. Etkinlikte alıcının kendi imzası olarak değil, sizin girdiğiniz olarak kaydedilir.",
+        "confirm": "Kabul edildi olarak kaydet"
+      },
+      "decline": {
+        "title": "{number} reddedildi olarak kaydedilsin mi?",
+        "message": "{name} bağlantı dışında hayır dediğinde bunu kullanın. {kind} reddedildi olarak kapanır; daha sonra yeni bir taslak olarak revize edebilirsiniz.",
+        "confirm": "Reddedildi olarak kaydet"
+      },
+      "extend": {
+        "title": "{number} uzat",
+        "message": "Bu {kind} için yeni bir geçerlilik sonu tarihi verin. Süresi dolmuş olan, {name} için yeniden açık hale gelir.",
+        "confirm": "Uzat",
+        "date": "Yeni geçerlilik sonu tarihi",
+        "past": "Tarih geçmişte olamaz."
+      },
+      "revise": {
+        "title": "{number} revize edilsin mi?",
+        "message": "Değiştirebilmeniz için {kind} taslağa geri döner (revizyon numarası artar ve eski içerik korunur). Bir kez değiştirdiğinizde alıcı eski sürümü kabul edemez.",
+        "confirm": "Revize et"
+      },
+      "note": "Not (isteğe bağlı)",
+      "noteHint": "Bu kararla birlikte etkinlikte saklanır."
+    },
+    "toast": {
+      "created": "{number} oluşturuldu",
+      "saved": "{number} kaydedildi",
+      "duplicated": "{number} taslağı oluşturuldu",
+      "convertedInvoice": "{number} faturaya dönüştürüldü",
+      "convertedDeal": "{number} numarasından {deal} fırsatı oluşturuldu",
+      "deleted": "{number} silindi",
+      "accepted": "{number} kabul edildi olarak kaydedildi",
+      "declined": "{number} reddedildi olarak kaydedildi",
+      "revised": "{number} yeniden taslak (revizyon {revision})",
+      "extended": "{number} uzatıldı",
+      "delivery": {
+        "sent": "{number} alıcıya e-posta ile gönderildi",
+        "queued": "{number} WhatsApp teslimi için sıraya alındı",
+        "shared": "{number} gönderildi olarak işaretlendi"
+      }
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapmak için izniniz yok.",
+      "signedOut": "Oturumunuz sona erdi. Yeniden oturum açın.",
+      "conflict": "Bu belgeyi başka biri değiştirdi. Yeniden yüklendi; kontrol edip tekrar deneyin.",
+      "validation": "Bazı değerler kabul edilmedi. Vurgulanan alanları kontrol edin.",
+      "unavailable": "Teklifler ve tahminler bu sunucuda henüz kullanılamıyor.",
+      "rateLimited": "Çok fazla istek. Bir süre bekleyip tekrar deneyin.",
+      "notFound": "Bu belge bulunamadı. Silinmiş olabilir.",
+      "planDisabled": "Planınız teklif ve tahminleri içermiyor.",
+      "invalidTransition": "Belgenin mevcut durumundan bu değişikliğe izin verilmiyor. Yeniden yüklendi.",
+      "notEditable": "Yalnızca taslaklar düzenlenebilir. Taslağa dönmek için belgeyi revize edin.",
+      "notDeletable": "Kabul edilmiş ve dönüştürülmüş belgeler kayıt olarak saklanır ve silinemez.",
+      "alreadyDecided": "Bu belge zaten karara bağlandı. Yeniden yüklendi.",
+      "alreadyConverted": "Bu belge zaten faturaya dönüştürüldü.",
+      "alreadyLinkedDeal": "Bu belgeye zaten bir fırsat bağlı.",
+      "linkUnavailable": "Herkese açık bağlantı iptal edildi veya süresi doldu. Önce yeni bir bağlantı oluşturun.",
+      "noRecipient": "Önce alıcının e-postasını veya telefonunu ekleyin, ardından gönderin.",
+      "sendFailed": "Mesaj iletilemedi, bu nedenle belge gönderildi olarak işaretlenmedi. Tekrar deneyin.",
+      "expired": "Bu belgenin geçerlilik süresi doldu. Önce süresini uzatın.",
+      "ownerInvalid": "Sahip, çalışma alanının etkin bir üyesi olmalıdır.",
+      "invoicingUnavailable": "Faturalandırma henüz kullanılamıyor, bu nedenle bu belge dönüştürülemez.",
+      "unexpected": "Bir sorun oluştu. Tekrar deneyin.",
+      "requestId": "İstek kimliği",
+      "retry": "Tekrar dene"
+    },
+    "link": {
+      "unnamedContact": "Adsız kişi"
+    },
+    "picker": {
+      "unnamed": "Adsız",
+      "unlinkContact": "Kişinin bağlantısını kaldır",
+      "unlinkDeal": "Fırsatın bağlantısını kaldır",
+      "searchContact": "Kişileri ad, e-posta veya telefonla ara",
+      "searchDeal": "Fırsatlarda ara",
+      "results": "Sonuçlar",
+      "searching": "Aranıyor",
+      "unavailable": "Liste yüklenemedi.",
+      "none": "Eşleşme yok.",
+      "create": "Kişi oluştur",
+      "createNamed": "“{name}” kişisini oluştur",
+      "createTitle": "Kişi oluştur",
+      "createEyebrow": "Yeni kişi",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "createConfirm": "Oluştur ve bağla",
+      "nameLabel": "Ad",
+      "emailLabel": "E-posta",
+      "phoneLabel": "Telefon",
+      "phoneHint": "Ülke koduyla birlikte, örneğin +971 50 123 4567.",
+      "nameInvalid": "Bir ad girin.",
+      "emailInvalid": "Geçerli bir e-posta girin.",
+      "phoneInvalid": "Geçerli bir telefon numarası girin.",
+      "forbidden": "Kişi oluşturmak için izniniz yok.",
+      "createFailed": "Kişi oluşturulamadı. Tekrar deneyin.",
+      "contactCreated": "{name} kişisi oluşturuldu"
+    },
+    "send": {
+      "eyebrow": "Alıcıya gönder",
+      "title": "{number} gönder",
+      "close": "Kapat",
+      "done": "Bitti",
+      "channels": "Nasıl gönderilir",
+      "tabs": {
+        "link": "Bağlantı",
+        "email": "E-posta",
+        "whatsapp": "WhatsApp"
+      },
+      "linkLabel": "Herkese açık bağlantı",
+      "linkHint": "Bu bağlantıya sahip herkes belgeyi görüntüleyebilir ve kabul edebilir veya reddedebilir. Yalnızca alıcıyla paylaşın.",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "copiedToast": "Bağlantı kopyalandı",
+      "copyFailed": "Bağlantı kopyalanamadı. Seçip elle kopyalayın.",
+      "to": "Alıcı",
+      "emailInvalid": "Geçerli bir e-posta adresi girin.",
+      "noEmail": "Bu belgede alıcı e-postası yok. Buraya bir tane yazın.",
+      "message": "Mesaj",
+      "messageDefault": "Merhaba {name}, belgemiz ekte. Kapsamı ve fiyatı gösteriyor; çevrimiçi olarak kabul edebilirsiniz.",
+      "messageHint": "Belgenin bağlantısı mesajınızın altına eklenir.",
+      "sendEmail": "E-posta gönder",
+      "waTo": "Gönderilecek",
+      "noPhone": "Bu belgede alıcı telefon numarası yok. Önce alıcı ayrıntılarına bir numara ekleyin.",
+      "waPreview": "Mesaj",
+      "waTotal": "Toplam",
+      "waView": "Görüntüle ve kabul et",
+      "sendWhatsapp": "WhatsApp üzerinden gönder",
+      "openWhatsapp": "WhatsApp'ta aç",
+      "markSent": "Paylaştım: gönderildi olarak işaretle",
+      "linkLoading": "Bağlantı yükleniyor",
+      "linkUnavailable": "Bağlantı bu sunucuda henüz kullanılamıyor.",
+      "stateDraft": "Bağlantı, belge gönderildikten sonra açılır. O zamana kadar alıcı hiçbir şey görmez.",
+      "stateRevoked": "Bu bağlantı iptal edildi: alıcı açamaz. Yeniden paylaşmak için yeni bir tane oluşturun.",
+      "stateActive": "{views, plural, =0 {Henüz açılmadı.} other {# kez açıldı.}}",
+      "stateInactive": "Bu bağlantının süresi doldu ve alıcı açamaz. Yeni bir tane oluşturun.",
+      "regenerate": "Yeni bağlantı oluştur",
+      "revoke": "Bağlantıyı iptal et",
+      "regenerateWarning": "Eski bağlantı hemen çalışmayı durdurur. Bağlantıya sahip olan herkes artık kullanılamadığını görecek.",
+      "keepLink": "Mevcut bağlantıyı koru",
+      "regenerateConfirm": "Yeni bağlantı oluştur",
+      "regenerated": "Yeni bağlantı oluşturuldu",
+      "revoked": "Bağlantı iptal edildi",
+      "waHint": "Gönder, mesajı bağlı WhatsApp hesabınızda sıraya alır ve belgeyi gönderildi olarak işaretler. WhatsApp'ta aç ile belgeyi kendiniz gönderebilirsiniz; ardından gönderildi olarak işaretlemek için Bağlantı sekmesini kullanın."
+    },
+    "activity": {
+      "title": "{number} etkinliği",
+      "subtitle": "Bu belgeyle ilgili tüm olaylar, en yeniden en eskiye.",
+      "close": "Kapat",
+      "loading": "Yükleniyor",
+      "unavailable": "Etkinlik geçmişi bu sunucuda henüz kullanılamıyor.",
+      "empty": "Bu belgede henüz bir işlem yapılmadı.",
+      "buyer": "alıcı",
+      "system": "sistem",
+      "someone": "Biri",
+      "via": "{channel} ile gönderildi",
+      "signedBy": "{name} tarafından imzalandı",
+      "reason": "Gerekçe: {reason}",
+      "channels": {
+        "link": "bağlantı",
+        "email": "e-posta",
+        "whatsapp": "WhatsApp"
+      },
+      "events": {
+        "created": "Oluşturan: {who}",
+        "edited": "Düzenleyen: {who}",
+        "sent": "Gönderen: {who}",
+        "viewed": "Görüntüleyen: {who}",
+        "accepted": "Kabul eden: {who}",
+        "declined": "Reddeden: {who}",
+        "expired": "Süresi doldu",
+        "duplicated": "Çoğaltan: {who}",
+        "revised": "Revize eden: {who}",
+        "extended": "Geçerlilik süresini uzatan: {who}",
+        "converted_invoice": "Faturaya dönüştüren: {who}",
+        "converted_deal": "Fırsatı oluşturan: {who}",
+        "link_regenerated": "Yeni bağlantıyı oluşturan: {who}",
+        "link_revoked": "Bağlantı {who} tarafından iptal edildi"
+      },
+      "withSignature": "Çizilen imza kaydedildi",
+      "recordedByStaff": "Alıcı adına bir ekip üyesi tarafından kaydedildi",
+      "note": "Not: {note}",
+      "revision": "Revizyon {revision}",
+      "fromAddress": "Ağ adresi: {ip}"
+    },
+    "paper": {
+      "label": "{kind} {number}",
+      "sellerFallback": "Şirketiniz",
+      "numberPending": "Numara kaydedildiğinde atanır",
+      "untitled": "Adsız {kind}",
+      "preparedFor": "Hazırlanan kişi",
+      "noBuyer": "Henüz alıcı yok",
+      "issued": "Düzenlendi",
+      "validUntil": "Geçerlilik tarihi",
+      "description": "Açıklama",
+      "qty": "Miktar",
+      "unit": "Birim fiyat",
+      "discount": "İnd.",
+      "tax": "Vergi",
+      "amount": "Tutar",
+      "noItems": "Kalem yok.",
+      "subtotal": "Ara toplam",
+      "discountPercent": "İndirim ({percent}%)",
+      "discountRow": "İndirim",
+      "taxRow": "Vergi ({percent}%)",
+      "total": "Toplam",
+      "notes": "Notlar",
+      "terms": "Koşullar"
+    },
+    "builder": {
+      "loading": "Yükleniyor",
+      "notFoundTitle": "Belge bulunamadı",
+      "notFound": "Bu belge yok ya da silinmiş.",
+      "back": {
+        "proposal": "Tüm teklifler",
+        "estimate": "Tüm tahminler"
+      },
+      "formLabel": "Belge ayrıntıları",
+      "newTitle": {
+        "proposal": "Yeni teklif",
+        "estimate": "Yeni tahmin"
+      },
+      "newSubtitle": "Alıcıyı ve kalemleri doldurun. Bu {kind} kaydedildiğinde numara atanır.",
+      "untitledSub": "Adsız",
+      "unsaved": "Kaydedilmemiş değişiklikler",
+      "leaveTitle": "Kaydetmeden çıkılsın mı?",
+      "leaveMessage": "Bu sayfada kaydedilmemiş değişiklikler var. Şimdi çıkarsanız bunlar kaybolur.",
+      "leave": "Kaydetmeden çık",
+      "keepEditing": "Düzenlemeye devam et",
+      "save": "Taslağı kaydet",
+      "send": "Gönder",
+      "more": "Diğer işlemler",
+      "fixErrors": "Kaydetmeden önce bazı alanlara bakmanız gerekiyor.",
+      "panes": "Form veya önizleme",
+      "pane": {
+        "edit": "Düzenle",
+        "preview": "Önizleme"
+      },
+      "locked": {
+        "sent": "Bu belge alıcıda olduğu için düzenlenemez. Taslağa dönmek için revize edin ya da yeni bir belge için çoğaltın.",
+        "accepted": "Bu belge kabul edildi ve kayıt olarak saklanıyor. Faturaya dönüştürün ya da yeni bir belge için çoğaltın.",
+        "converted": "Bu belge faturaya dönüştürüldü ve kilitli.",
+        "openInvoice": "Faturayı aç",
+        "revise": "Revize et",
+        "duplicate": "Taslak olarak çoğalt"
+      },
+      "buyer": {
+        "title": "Alıcı",
+        "hint": "Bir kişi seçin ya da alıcının bilgilerini yazın. Gönderim için e-posta ve telefon kullanılır.",
+        "contact": "Kişi",
+        "name": "Alıcı adı",
+        "email": "Alıcı e-postası",
+        "phone": "Alıcı telefonu",
+        "phoneHint": "Ülke koduyla birlikte. WhatsApp üzerinden göndermek için gerekli."
+      },
+      "details": {
+        "title": "Ayrıntılar",
+        "docTitle": "Başlık",
+        "titlePlaceholder": {
+          "proposal": "ör. Web sitesi yeniden tasarımı, 1. aşama",
+          "estimate": "ör. Mutfak montajı hızlı teklifi"
+        },
+        "deal": "Fırsat",
+        "currency": "Para birimi",
+        "validUntil": "Geçerlilik tarihi",
+        "plusDays": "+{days} gün",
+        "noExpiry": "Son kullanma yok"
+      },
+      "items": {
+        "title": "Kalemler",
+        "hint": "Miktarlara ondalık girilebilir. İndirim yüzde ya da tutar olabilir (değiştirmek için kutudaki işarete dokunun); vergi boş bırakılırsa belgenin oranı kullanılır.",
+        "description": "Açıklama",
+        "qty": "Miktar",
+        "unit": "Birim fiyat",
+        "discount": "İnd. %",
+        "tax": "Vergi %",
+        "amount": "Tutar",
+        "drag": "Sıralamak için sürükleyin",
+        "row": "Satır {n}",
+        "descriptionPlaceholder": "Neyin ücretlendirildiği",
+        "descriptionFor": "{n}. satırın açıklaması",
+        "qtyFor": "{n}. satırın miktarı",
+        "unitFor": "{n}. satırın birim fiyatı",
+        "discountFor": "{n}. satırın indirim yüzdesi",
+        "taxFor": "{n}. satırın vergi yüzdesi",
+        "amountFor": "{n}. satırın tutarı",
+        "moveUp": "{n}. satırı yukarı taşı",
+        "moveDown": "{n}. satırı aşağı taşı",
+        "duplicate": "{n}. satırı çoğalt",
+        "remove": "{n}. satırı kaldır",
+        "add": "Satır ekle",
+        "discountToAmount": "{n}. satır: indirim yüzde; tutara geçin",
+        "discountToPercent": "{n}. satır: indirim tutar; yüzdeye geçin"
+      },
+      "problems": {
+        "noItems": "Açıklaması ve fiyatı olan en az bir kalem ekleyin.",
+        "descriptionRequired": "Bir açıklama girin.",
+        "descriptionTooLong": "Açıklama çok uzun (en fazla 500 karakter).",
+        "qtyInvalid": "Miktar, 0 veya daha büyük ve en fazla 4 ondalık basamaklı bir sayı olmalı.",
+        "priceInvalid": "Birim fiyatı 0 veya daha büyük bir sayı olarak girin.",
+        "discountInvalid": "İndirim 0 ile 100 arasında bir yüzde olmalı.",
+        "taxInvalid": "Vergi 0 ile 100 arasında bir yüzde olmalı.",
+        "docDiscountInvalid": "İndirimi 0 veya daha büyük bir sayı olarak girin.",
+        "docTaxInvalid": "Vergi 0 ile 100 arasında bir yüzde olmalı.",
+        "emailInvalid": "Geçerli bir e-posta adresi girin.",
+        "phoneInvalid": "Telefonu ülke koduyla girin, ör. +971 50 123 4567.",
+        "titleTooLong": "Başlık çok uzun (en fazla 255 karakter).",
+        "notesTooLong": "Notlar çok uzun (en fazla 5.000 karakter).",
+        "termsTooLong": "Koşullar çok uzun (en fazla 10.000 karakter).",
+        "dateInvalid": "Geçerli bir tarih girin.",
+        "tooLarge": "Tutar çok büyük. Bir miktarı ya da fiyatı azaltın."
+      },
+      "totals": {
+        "defaultTax": "Vergi oranı",
+        "defaultTaxHint": "Kendi vergisi olmayan her satıra uygulanır.",
+        "discount": "Tüm belgeye indirim",
+        "discountKind": "İndirim türü",
+        "subtotal": "Ara toplam",
+        "discountRow": "İndirim",
+        "taxRow": "Vergi ({percent}%)",
+        "total": "Toplam"
+      },
+      "notes": {
+        "title": "Notlar ve koşullar",
+        "notes": "Alıcıya notlar",
+        "terms": "Koşullar",
+        "insertTemplate": "Şablon kullan",
+        "count": "{count} / {max}"
+      },
+      "preview": {
+        "title": "Önizleme",
+        "print": "Yazdır / PDF",
+        "hint": "Alıcının gördüğü ve yazdırılan içerik budur. Toplamlar kaydedilmiş belgeyle aynı yuvarlamayı kullanır."
+      }
+    },
+    "templates": {
+      "notes": {
+        "thanks": {
+          "label": "Teşekkür ederiz",
+          "text": "Birlikte çalışma fırsatı için teşekkür ederiz. Başlamayı sabırsızlıkla bekliyoruz."
+        },
+        "scope": {
+          "label": "Kapsam hatırlatması",
+          "text": "Bu belge yalnızca yukarıda listelenen kalemleri kapsar. Bu kapsam dışındaki işler ayrıca teklif edilir."
+        },
+        "followUp": {
+          "label": "Sonraki adımlar",
+          "text": "Devam etmek için bu belgeyi çevrim içi kabul edin. Başlangıç tarihini bir iş günü içinde onaylayacağız."
+        }
+      },
+      "terms": {
+        "net14": {
+          "label": "14 gün içinde ödeme",
+          "text": "Ödeme, fatura tarihinden itibaren 14 gün içinde yapılmalıdır."
+        },
+        "net30": {
+          "label": "30 gün içinde ödeme",
+          "text": "Ödeme, fatura tarihinden itibaren 30 gün içinde yapılmalıdır."
+        },
+        "deposit50": {
+          "label": "%50 kapora",
+          "text": "Kabul edildiğinde %50 kapora ödenir. Kalan tutar işin tamamlanmasında ödenir."
+        },
+        "warranty": {
+          "label": "Garanti",
+          "text": "İşçilik kusurlarına karşı işler teslimden itibaren 90 gün garanti kapsamındadır."
+        }
+      }
+    },
+    "linked": {
+      "title": "Teklifler ve tahminler",
+      "newProposal": "Teklif",
+      "newEstimate": "Tahmin",
+      "loading": "Yükleniyor",
+      "unavailableTitle": "Henüz kullanılamıyor",
+      "unavailable": "Teklifler ve tahminler bu sunucuda henüz kullanılamıyor.",
+      "empty": "Henüz teklif ya da tahmin yok.",
+      "kind": {
+        "proposal": "Teklif",
+        "estimate": "Tahmin"
+      },
+      "viewProposals": "Tüm teklifler",
+      "viewEstimates": "Tüm tahminler"
+    },
+    "signature": {
+      "area": "İmza kutusu: imzanızı parmağınızla, kalemle ya da fareyle çizin",
+      "placeholder": "Buraya imzalayın",
+      "clear": "İmzayı temizle"
+    },
+    "public": {
+      "loading": "Belge yükleniyor",
+      "brandFallback": "Tedarikçiniz",
+      "language": "Dil",
+      "print": "Yazdır / PDF",
+      "invalid": {
+        "title": "Bu bağlantı geçerli değil",
+        "message": "Belge kaldırılmış olabilir ya da bağlantı eksiktir. Gönderenden yeni bir bağlantı isteyin."
+      },
+      "error": {
+        "title": "Belge yüklenemedi",
+        "message": "Bağlantınızı kontrol edip yeniden deneyin. Sorun devam ederse gönderenle iletişime geçin.",
+        "retry": "Yeniden dene"
+      },
+      "banner": {
+        "accepted": "Bu {kind} belgesini kabul ettiniz. {seller} bilgilendirildi ve sizinle ilgilenecek.",
+        "signedBy": "{name} tarafından imzalandı",
+        "declined": "Bu {kind} reddedildi.",
+        "declinedHint": "Bu bir hataysa lütfen {seller} ile iletişime geçin.",
+        "converted": "Kabul edildi. Bu {kind} için fatura düzenlendi.",
+        "expired": "Bu {kind} {date} tarihinde süresi doldu.",
+        "expiredHint": "Artık kabul edilemez. Yeni bir tane istemek için {seller} ile iletişime geçin."
+      },
+      "footer": "Bu {kind} {seller} tarafından oluşturuldu.",
+      "decision": {
+        "title": "Kararınız",
+        "intro": "Bu {kind} belgesini {total} tutarında kabul etmek, yukarıdaki kapsam ve fiyatlandırmayı {seller} ile onaylar.",
+        "name": "Adınız soyadınız",
+        "nameHint": "Kayıtta adınız olarak yazılır (en az 2 karakter).",
+        "nameRequired": "Adınızı ve soyadınızı girin.",
+        "signature": "İmza",
+        "typedPlaceholder": "Adınız burada görünür",
+        "useTyped": "Çizmek yerine yazdığım adla imzala",
+        "signatureRequired": "İmzanızı çizin ya da yazdığınız adla imzalamayı seçin.",
+        "agree": "Bu {kind} belgesini okudum; kapsamını, fiyatını ve koşullarını kabul ediyorum.",
+        "agreeRequired": "Onaylamak için kutuyu işaretleyin.",
+        "accept": "Bu {kind} belgesini kabul et",
+        "decline": "Reddet",
+        "note": "Kararınızla birlikte adınız, imzanız, saat ve ağ adresiniz kaydedilir.",
+        "declineTitle": "Bu {kind} reddedilsin mi?",
+        "declineMessage": "{seller} reddettiğiniz konusunda bilgilendirilecek. Bunu daha sonra değiştiremeyeceksiniz.",
+        "reason": "Neden (isteğe bağlı)",
+        "reasonHint": "Kısa bir not, {seller} tarafının neyi düzeltmesi gerektiğini anlamasına yardımcı olur.",
+        "keep": "Geri dön",
+        "declineConfirm": "Reddet",
+        "close": "Kapat",
+        "problem": {
+          "expired": "Bu belgenin süresi doldu ve artık kabul edilemez.",
+          "closed": "Bu belge zaten karara bağlandı. Sayfa yenilendi.",
+          "rateLimited": "Çok fazla deneme yapıldı. Bir dakika bekleyip yeniden deneyin.",
+          "validation": "Bazı bilgileriniz kabul edilmedi. Adınızı kontrol edip yeniden deneyin.",
+          "generic": "Kararınız kaydedilemedi. Bağlantınızı kontrol edip yeniden deneyin.",
+          "gone": "Bu bağlantı artık etkin değil."
+        }
+      },
+      "gone": {
+        "title": "Bu bağlantı artık etkin değil",
+        "message": "Gönderen bu bağlantıyı kapattı ya da süresi doldu. Ondan yeni bir bağlantı isteyin."
+      },
+      "metaTitle": "Teklif"
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "公開中…",
+        "live": "ライブ",
+        "liveTitle": "Getaで公開中",
+        "push": "公開を反映",
+        "pushHint": "こちらでは公開済みです。今すぐGetaに反映します",
+        "failed": "失敗",
+        "failedConfiguration": "設定の更新で失敗",
+        "failedPublish": "公開で失敗",
+        "retry": "再試行",
+        "retrying": "再試行中…",
+        "reasonLabel": "理由",
+        "failedNote": "フローはこちらでは引き続き公開されています。再試行すると失敗したステップから続行します。",
+        "notConfigured": "こちらでは公開済みです。Getaに反映するには、設定でGetaへの公開を設定してください。",
+        "openSettings": "設定を開く",
+        "dismiss": "閉じる"
+      },
+      "settings": {
+        "title": "Getaへの公開",
+        "intro": "フロービルダーで「公開」を押すと、ボットはGetaコンソールでも公開されます。このワークスペースの接続情報を一度入力してください。シークレットは暗号化されて保存され、再表示されません。",
+        "viewOnly": "これらの設定の状態は確認できますが、変更はできません。",
+        "loading": "読み込み中…",
+        "loadFailed": "設定を読み込めませんでした。",
+        "retry": "再試行",
+        "fixtureNotice": "このサーバーはフィクスチャモードです。公開はシミュレートされ、Getaには何も送信されません。",
+        "ready": "準備完了",
+        "incomplete": "未完了",
+        "readyNote": "フローを公開すると、ボットもGetaで公開されます。",
+        "incompleteNote": "公開したフローをGetaで公開するには、下の項目をすべて入力してください。",
+        "baseUrl": {
+          "label": "ベースURL",
+          "hint": "GetaのAPIアドレスです。例: https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "コンソールのオリジン(任意)",
+          "hint": "各リクエストのoriginとrefererとして送信されます。空欄の場合はどちらも送信されません。"
+        },
+        "authorization": {
+          "label": "認可トークン",
+          "hint": "入力したとおりに送信され、「Bearer 」は追加されません。"
+        },
+        "getaHost": {
+          "label": "geta-hostトークン",
+          "hint": "geta-hostヘッダーで送信されます。"
+        },
+        "secretKept": "保存済みです。保持する場合は空欄のままにし、置き換える場合は新しい値を入力してください。",
+        "secretPlaceholder": "保存済み(非表示)",
+        "show": "表示",
+        "hide": "非表示",
+        "remove": "削除",
+        "record": {
+          "label": "Getaチャットボットレコード",
+          "paste": "チャットボットレコード(JSON)を貼り付け",
+          "replace": "チャットボットレコード(JSON)を置き換え",
+          "hint": "Getaに送信する形式そのままのチャットボットオブジェクト、またはchatbotキーを含むリクエストボディ全体です。少なくともidとbot_idが必要です。送信時に更新されるのはmodified_timeのみです。",
+          "keepPlaceholder": "空欄のままにすると保存済みのレコードを保持します",
+          "id": "チャットボットID",
+          "name": "名前",
+          "botId": "ボットID",
+          "remove": "保存済みレコードを削除"
+        },
+        "saved": "保存済み",
+        "notSet": "未設定",
+        "save": "保存",
+        "saving": "保存中…",
+        "saveFailed": "保存できませんでした。",
+        "removed": "削除しました。",
+        "clear": "すべてクリア",
+        "cleared": "Getaへの公開設定をクリアしました。",
+        "clearConfirm": {
+          "title": "Getaへの公開設定をクリアしますか?",
+          "message": "ベースURL、両方のトークン、チャットボットレコードが削除されます。公開済みのフローはこちらでは公開されたままですが、Getaには反映されなくなります。",
+          "confirm": "すべてクリア",
+          "cancel": "キャンセル"
+        }
+      }
+    }
+  }
+}

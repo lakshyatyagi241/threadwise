@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "Winkel / Betalingen",
+      "title": "Betalingen",
+      "subtitle": "De geldkant van je winkelbestellingen: wat is betaald, wat nog openstaat en wat onder rembours is.",
+      "listTitle": "Betalingslijst",
+      "loading": "Betalingen laden",
+      "emptyFilteredTitle": "Geen betalingen gevonden",
+      "emptyFilteredMessage": "Wijzig de filters of zet ze terug om alle betalingen te zien.",
+      "resetFilters": "Filters herstellen",
+      "emptyTitle": "Nog geen betalingen",
+      "emptyMessage": "Een betaling verschijnt hier zodra een winkelbestelling wordt geplaatst. Open Bestellingen om je bestellingen te zien of voeg er handmatig een toe.",
+      "goToOrders": "Naar bestellingen",
+      "summary": {
+        "loading": "Betalingstotalen laden",
+        "orders": "bestellingen",
+        "collected": "Ontvangen",
+        "collectedNone": "Nog niets ontvangen."
+      },
+      "filters": {
+        "search": "Zoeken",
+        "searchPlaceholder": "Bestelnummer, klant of referentie",
+        "status": "Status",
+        "allStatuses": "Alle statussen",
+        "method": "Methode",
+        "allMethods": "Alle methoden",
+        "prepaid": "Vooruitbetaald",
+        "cod": "Onder rembours",
+        "gatewayOption": "Een provider...",
+        "gatewayCode": "Providercode",
+        "gatewayCodePlaceholder": "bijv. razorpay",
+        "from": "Van",
+        "to": "Tot",
+        "rangeInverted": "De startdatum ligt na de einddatum, dus de periode wordt genegeerd.",
+        "reset": "Filters herstellen"
+      },
+      "table": {
+        "caption": "Betalingen van winkelbestellingen, nieuwste eerst",
+        "order": "Bestelling",
+        "customer": "Klant",
+        "status": "Status",
+        "method": "Methode",
+        "paidVia": "Betaald via",
+        "reference": "Referentie",
+        "amount": "Bedrag",
+        "shop": "Winkel",
+        "date": "Datum",
+        "methodPrepaid": "Vooruitbetaald",
+        "methodCod": "Onder rembours",
+        "via": {
+          "razorpay_link": "Razorpay-link",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "WhatsApp Pay in de chat",
+        "intro": "Laat kopers een bestelling betalen zonder WhatsApp te verlaten (UPI, kaarten, netbankieren, wallets) en ontvang het geld op je eigen Razorpay-, PayU-, BillDesk- of Zaakpay-account.",
+        "indiaOnly": "India is voorlopig de enige ondersteunde markt: land en valuta staan vast op India en INR.",
+        "viewOnly": "Je kunt de WhatsApp Pay-configuraties bekijken maar niet wijzigen. Vraag een workspace-beheerder om toestemming om betalingen te beheren.",
+        "howTitle": "Hoe stel je het in",
+        "how1": "Maak in WhatsApp Manager, onder Betalingen voor India, een Direct Pay Method en koppel je provideraccount.",
+        "how2": "Geef het een naam en kopieer die naam hierheen. Het kan niet vanuit deze app worden gemaakt, het is een stap aan de kant van Meta.",
+        "how3": "Sla de configuratie op, open Bestellingen en vraag bij een bestelling om betaling via WhatsApp.",
+        "how4": "De koper tikt op Bekijken en betalen, betaalt in de chat en de bestelling wordt als betaald gemarkeerd zodra Meta het bevestigt.",
+        "listTitle": "Je configuraties",
+        "loading": "Configuraties laden",
+        "emptyTitle": "Nog geen betalingsconfiguraties",
+        "emptyMessage": "Voeg er een toe op deze pagina om betalingen in de chat te ontvangen.",
+        "emptyMessageReadOnly": "Niemand heeft er nog een toegevoegd.",
+        "market": "India · INR",
+        "autoChargeOn": "Automatisch afschrijven aan",
+        "active": "Actief",
+        "off": "Uit",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "Configuratie opgeslagen",
+          "removed": "Configuratie verwijderd"
+        },
+        "addTitle": "Een betalingsconfiguratie toevoegen",
+        "editTitle": "{name} bewerken",
+        "name": "Naam van de configuratie",
+        "nameLocked": "De naam identificeert de configuratie. Om hem te hernoemen, verwijder je hem en voeg je hem opnieuw toe.",
+        "updatesExisting": "Er bestaat al een configuratie met deze naam: opslaan werkt die bij.",
+        "nameHint": "Moet exact overeenkomen met de naam van de Direct Pay Method in WhatsApp Manager (Betalingen, India).",
+        "nameInvalid": "Voer een naam van 1 tot {max} tekens in.",
+        "namePlaceholder": "bijv. mijn-razorpay-pay",
+        "gateway": "Provider",
+        "activeLabel": "Actief",
+        "autoCharge": "Nieuwe bestellingen automatisch afschrijven",
+        "autoChargeHint": "Stuur het betaalverzoek in de chat automatisch zodra een bestelling is geplaatst.",
+        "save": "Configuratie opslaan",
+        "cancelEdit": "Bewerken annuleren",
+        "removeTitle": "{name} verwijderen?",
+        "removeMessage": "Bestellingen kunnen met deze configuratie niet meer in de chat worden afgerekend. De Direct Pay Method in WhatsApp Manager blijft ongemoeid.",
+        "removeConfirm": "Configuratie verwijderen"
+      }
+    }
+  }
+}

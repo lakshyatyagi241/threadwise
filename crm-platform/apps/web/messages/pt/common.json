@@ -1,0 +1,18 @@
+{
+  "common": {
+    "appName": "CRM",
+    "loadMore": "Carregar mais",
+    "loading": "Carregando",
+    "empty": "Nada por aqui ainda",
+    "retry": "Tentar novamente",
+    "requestId": "ID da solicitação",
+    "search": "Buscar",
+    "unexpected": "Algo deu errado",
+    "fatal": {
+      "title": "Algo deu errado",
+      "body": "A página não carregou. O problema foi reportado. Tente novamente e, se continuar acontecendo, entre em contato com o suporte.",
+      "bodyWithDigest": "A página não carregou. O problema foi reportado. Tente novamente e, se continuar acontecendo, entre em contato com o suporte e informe {digest}.",
+      "home": "Voltar ao início"
+    }
+  }
+}

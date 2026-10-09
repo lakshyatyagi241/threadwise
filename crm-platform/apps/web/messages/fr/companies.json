@@ -1,0 +1,218 @@
+{
+  "companies": {
+    "nav": {
+      "companies": "Entreprises"
+    },
+    "common": {
+      "dismiss": "Ignorer"
+    },
+    "errors": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Vous n’avez pas l’autorisation de faire cela.",
+      "signedOut": "Votre session a pris fin. Reconnectez-vous pour continuer.",
+      "conflict": "Quelqu’un d’autre a modifié cette entreprise pendant que vous la modifiiez. Ses modifications sont chargées ; les vôtres sont conservées, vérifiez-les et enregistrez à nouveau.",
+      "validation": "Certaines des informations saisies ne sont pas valides. Vérifiez les champs et réessayez.",
+      "unavailable": "Les entreprises ne sont pas encore disponibles sur ce serveur.",
+      "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+      "notFound": "Cette entreprise n’existe plus.",
+      "planDisabled": "Votre forfait n’inclut pas les entreprises. Passez à un forfait supérieur pour les débloquer.",
+      "ownerInvalid": "Le propriétaire doit être un membre actif de cet espace de travail.",
+      "unexpected": "Un problème est survenu. Réessayez dans un instant.",
+      "requestId": "ID de requête",
+      "retry": "Réessayer"
+    },
+    "list": {
+      "eyebrow": "CRM · Organisations",
+      "title": "Entreprises",
+      "subtitle": "Regroupez contacts et opportunités sous une organisation — voyez en un seul endroit tous les contacts, les opportunités ouvertes et le chiffre d’affaires gagné.",
+      "newCompany": "Nouvelle entreprise",
+      "tiles": {
+        "companies": "Entreprises",
+        "withDeals": "Avec opportunités ouvertes",
+        "wonRevenue": "Chiffre d’affaires gagné"
+      },
+      "bulk": {
+        "label": "Actions groupées",
+        "selected": "{count, plural, one {# entreprise sélectionnée} other {# entreprises sélectionnées}}",
+        "delete": "Supprimer",
+        "clear": "Effacer la sélection"
+      },
+      "loading": "Chargement des entreprises",
+      "unavailableTitle": "Les entreprises ne sont pas disponibles",
+      "unavailable": "Le service des entreprises n’est pas encore déployé sur ce serveur.",
+      "emptyFilteredTitle": "Aucune entreprise ne correspond",
+      "emptyFiltered": "Essayez une autre recherche ou effacez les filtres.",
+      "clearFilters": "Effacer les filtres",
+      "emptyTitle": "Aucune entreprise pour l’instant",
+      "empty": "Aucune entreprise pour l’instant. Créez la première.",
+      "showing": "{count, plural, one {# entreprise chargée} other {# entreprises chargées}}",
+      "loadMore": "Charger plus",
+      "allLoaded": "Toutes les entreprises sont chargées",
+      "deleteTitle": "Supprimer l’entreprise",
+      "deleteMessage": "Supprimer cette entreprise ? Ses contacts et opportunités sont conservés et simplement dissociés.",
+      "deleteManyTitle": "Supprimer les entreprises",
+      "deleteManyMessage": "{count, plural, one {Supprimer cette entreprise ? Ses contacts et opportunités sont conservés et simplement dissociés.} other {Supprimer ces # entreprises ? Leurs contacts et opportunités sont conservés et simplement dissociés.}}",
+      "delete": "Supprimer",
+      "keep": "Conserver"
+    },
+    "toolbar": {
+      "label": "Filtrer les entreprises",
+      "search": "Rechercher des entreprises…",
+      "industry": "Secteur",
+      "allIndustries": "Tous les secteurs",
+      "owner": "Propriétaire",
+      "allOwners": "Tous les propriétaires",
+      "noOwner": "Sans propriétaire",
+      "withOpenDeals": "Avec opportunités ouvertes",
+      "sort": "Ordre",
+      "sorts": {
+        "created": "Plus récentes d’abord",
+        "name": "Nom de A à Z"
+      },
+      "clear": "Effacer",
+      "refresh": "Actualiser"
+    },
+    "table": {
+      "label": "Entreprises",
+      "selectAll": "Sélectionner toutes les entreprises chargées",
+      "select": "Sélectionner {name}",
+      "company": "Entreprise",
+      "industry": "Secteur",
+      "contacts": "Contacts",
+      "openDeals": "Opportunités ouvertes",
+      "wonValue": "Valeur gagnée",
+      "actions": "Actions",
+      "delete": "Supprimer l’entreprise",
+      "deleteNamed": "Supprimer l’entreprise {name}"
+    },
+    "form": {
+      "eyebrow": "Entreprise",
+      "newTitle": "Nouvelle entreprise",
+      "editTitle": "Modifier l’entreprise",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "create": "Créer",
+      "save": "Enregistrer les modifications",
+      "name": "Nom de l’entreprise *",
+      "namePlaceholder": "Acme SARL",
+      "industry": "Secteur",
+      "website": "Site web",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "notes": "Notes",
+      "moreDetails": "Plus de détails",
+      "sizeRange": "Taille",
+      "sizeHint": "Par exemple 1-10 ou 11-50.",
+      "owner": "Propriétaire",
+      "noOwner": "Sans propriétaire",
+      "me": "{name} (vous)",
+      "address": "Adresse",
+      "problems": {
+        "required": "Le nom de l’entreprise est obligatoire.",
+        "tooLong": "Trop long : {limit} caractères maximum.",
+        "email": "Saisissez une adresse e-mail valide.",
+        "invalid": "Certaines des informations saisies ne sont pas valides.",
+        "ownerInvalid": "Le propriétaire doit être un membre actif de cet espace de travail."
+      }
+    },
+    "toast": {
+      "created": "Entreprise créée.",
+      "updated": "Entreprise mise à jour.",
+      "deleted": "{count, plural, one {Entreprise supprimée.} other {# entreprises supprimées.}}",
+      "deletedSome": "{count, plural, one {# entreprise supprimée} other {# entreprises supprimées}}, {failed, plural, one {# n’a pas pu être supprimée.} other {# n’ont pas pu être supprimées.}}",
+      "deleteFailed": "Impossible de supprimer. Réessayez.",
+      "contactUnlinked": "Contact retiré de l’entreprise.",
+      "contactAlreadyOut": "Ce contact ne fait plus partie de cette entreprise.",
+      "contactUnlinkFailed": "Impossible de retirer le contact. Réessayez.",
+      "contactsLinked": "{count, plural, one {# contact ajouté à l’entreprise.} other {# contacts ajoutés à l’entreprise.}}",
+      "contactsLinkedSome": "{count, plural, one {# contact ajouté} other {# contacts ajoutés}}, {failed, plural, one {# n’a pas pu être ajouté.} other {# n’ont pas pu être ajoutés.}}",
+      "contactsLinkFailed": "Impossible d’ajouter les contacts. Réessayez."
+    },
+    "detail": {
+      "back": "Toutes les entreprises",
+      "loading": "Chargement de l’entreprise",
+      "notFoundTitle": "Entreprise introuvable",
+      "notFound": "Cette entreprise n’existe pas ou a été supprimée.",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "keep": "Conserver",
+      "tiles": {
+        "contacts": "Contacts",
+        "openDeals": "Opportunités ouvertes",
+        "wonRevenue": "Chiffre d’affaires gagné"
+      },
+      "notes": "Notes",
+      "deleteTitle": "Supprimer l’entreprise",
+      "deleteMessage": "Supprimer cette entreprise ? Ses contacts et opportunités sont conservés et simplement dissociés.",
+      "details": "Détails",
+      "owner": "Propriétaire",
+      "sizeRange": "Taille",
+      "address": "Adresse",
+      "createdBy": "Créée par",
+      "created": "Créée",
+      "updated": "Dernière modification"
+    },
+    "contacts": {
+      "title": "Contacts",
+      "add": "Ajouter des contacts",
+      "loading": "Chargement des contacts",
+      "empty": "Aucun contact lié à cette entreprise.",
+      "unnamed": "(sans nom)",
+      "unlink": "Retirer de l’entreprise",
+      "unlinkNamed": "Retirer {name} de l’entreprise",
+      "loadMore": "Charger plus",
+      "addModal": {
+        "title": "Ajouter des contacts à l’entreprise",
+        "close": "Fermer",
+        "cancel": "Annuler",
+        "add": "{count, plural, one {Ajouter # contact} other {Ajouter # contacts}}",
+        "search": "Rechercher des contacts par nom, e-mail ou numéro",
+        "loading": "Recherche de contacts",
+        "noneTitle": "Aucun contact trouvé",
+        "none": "Aucun contact ne correspond. Essayez un autre nom, e-mail ou numéro.",
+        "unnamed": "(sans nom)",
+        "already": "Déjà présent",
+        "willMove": "Dans une autre entreprise",
+        "hint": "Un contact ne peut appartenir qu’à une seule entreprise. Ajouter un contact qui appartient à une autre entreprise le déplace ici."
+      }
+    },
+    "deals": {
+      "title": "Opportunités",
+      "loading": "Chargement des opportunités",
+      "empty": "Aucune opportunité pour cette entreprise.",
+      "loadMore": "Charger plus",
+      "status": {
+        "open": "Ouverte",
+        "won": "Gagnée",
+        "lost": "Perdue"
+      }
+    },
+    "activity": {
+      "title": "Activité",
+      "loading": "Chargement de l’activité",
+      "none": "Rien ne s’est encore passé pour cette entreprise.",
+      "loadMore": "Charger plus",
+      "empty": "vide",
+      "system": "Le système",
+      "actions": {
+        "insert": "a créé l’entreprise",
+        "update": "a modifié l’entreprise",
+        "delete": "a supprimé l’entreprise"
+      },
+      "contactLinked": "Contact ajouté",
+      "contactUnlinked": "Contact retiré",
+      "deletedContact": "un contact supprimé",
+      "fields": {
+        "name": "Nom",
+        "website": "Site web",
+        "email": "E-mail",
+        "phone": "Téléphone",
+        "industry": "Secteur",
+        "sizeRange": "Taille",
+        "address": "Adresse",
+        "notes": "Notes",
+        "owner": "Propriétaire"
+      }
+    }
+  }
+}

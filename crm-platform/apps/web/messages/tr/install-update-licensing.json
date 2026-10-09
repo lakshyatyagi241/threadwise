@@ -1,0 +1,365 @@
+{
+  "install-update-licensing": {
+    "setup": {
+      "title": "Kurulum sihirbazı",
+      "brand": "CRM",
+      "railEyebrow": "Kurulum sihirbazı",
+      "railTitle": "<i>WhatsApp paketiniz</i>, birkaç dakikada hazır.",
+      "railFooter": "Platform kurulum programı · v{version}",
+      "stepsLabel": "Kurulum adımları",
+      "stepOf": "{total} adımdan {n}. adım",
+      "mobileStep": "Adım {n}/{total} · {name}",
+      "steps": {
+        "welcome": "Hoş geldiniz",
+        "requirements": "Gereksinimler",
+        "database": "Veritabanı",
+        "application": "Uygulama",
+        "admin": "Yönetici hesabı",
+        "node": "Node köprüsü",
+        "install": "Kur"
+      },
+      "screens": {
+        "licence": "Lisans"
+      },
+      "disabled": "Sunucuda kurulum belirteci yapılandırılmadığı için kurulum kapalı. SETUP_TOKEN değerini ayarlayın ya da ilk operatörü komut satırından oluşturun.",
+      "unavailable": "Kurulum durumu okunamadı. API'nin çalıştığını kontrol edin, ardından bu sayfayı yenileyin.",
+      "welcome": {
+        "eyebrow": "Hoş geldiniz",
+        "title": "<i>{app}</i> uygulamasını çalıştıralım.",
+        "intro": "Toplam yaklaşık üç dakikalık yedi basit adım. Sunucunuzu doğrulayacak, veritabanınızı kontrol edecek, yönetici konsolunun ihtiyaç duyduğu tüm varsayılanları onaylayacak, Node köprüsünü bağlayacak ve ilk süper yönetici girişinizi oluşturacağız.",
+        "tiles": {
+          "database": "Veritabanı",
+          "security": "Güvenlik",
+          "translations": "Çeviriler",
+          "admin": "Yönetici"
+        },
+        "beforeTitle": "Başlamadan önce",
+        "before": {
+          "database": "Bu dağıtımın erişebildiği, geçişleri uygulanmış bir PostgreSQL 16 veritabanı.",
+          "runtime": "API'nin yanında çalışan Node.js 22 veya üzeri ve Redis.",
+          "token": "Dağıtım yapılandırmanızdaki kurulum belirteci (SETUP_TOKEN)."
+        },
+        "tokenLabel": "Kurulum belirteci",
+        "tokenHint": "Bu dağıtımı kontrol ettiğinizi kanıtlar. Her adımda yeniden denetlenir.",
+        "begin": "Kurulumu başlat"
+      },
+      "licence": {
+        "eyebrow": "Lisans",
+        "title": "<i>Satın alımınızı</i> doğrulayın.",
+        "intro": "CodeCanyon satın alma kodunuzu girin. Kurulumdan önce Envato ile doğrularız — geçerli bir kod olmadan kurulum devam edemez.",
+        "label": "Satın alma kodu",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "help": "CodeCanyon hesabınızda → <b>İndirmeler</b> → <b>Lisans sertifikası ve satın alma kodu</b> bölümünde bulun.",
+        "verified": "Satın alma zaten doğrulandı — devam edebilirsiniz.",
+        "submit": "Doğrula ve devam et"
+      },
+      "requirements": {
+        "eyebrow": "{total} adımdan {n}. adım",
+        "title": "Sunucu <i>gereksinimleri</i>.",
+        "intro": "Kurulumdan önce sunucunun asgari gereksinimleri karşıladığını kontrol ediyoruz.",
+        "runtimeOk": "Node.js {version}",
+        "runtimeOkDetail": "— {required}+ gereksinimini karşılıyor",
+        "runtimeBad": "Node.js {version}",
+        "runtimeBadDetail": "— {app} için Node.js {required} veya üzeri gerekir.",
+        "modules": "Çalışma zamanı modülleri",
+        "services": "Hizmetler",
+        "directories": "Dizinler",
+        "database": "Veritabanı",
+        "noDatabase": "Veritabanı algılanmadı.",
+        "databaseRequired": "PostgreSQL gerekli.",
+        "extensionMissing": "Eksik veritabanı eklentisi: {name}.",
+        "tiles": {
+          "database": "veritabanı",
+          "redis": "redis",
+          "migrations": "geçişler",
+          "permissions": "izinler",
+          "temp": "geçici dosyalar",
+          "migrationsDir": "geçişler"
+        },
+        "fixNotice": "Devam etmeden önce mercanla işaretlenen öğeleri düzeltin. Her şey geçene kadar Devam düğmesi devre dışı kalır.",
+        "recheck": "Yeniden kontrol et",
+        "checking": "Kontrol ediliyor…",
+        "loadFailed": "Gereksinim kontrolü çalıştırılamadı."
+      },
+      "database": {
+        "eyebrow": "{total} adımdan {n}. adım",
+        "title": "Veritabanı <i>bağlantısı</i>.",
+        "intro": "Bu platformun çalıştığı PostgreSQL veritabanını kontrol edin. İlerlemeden önce bağlantıyı doğrulayacağız.",
+        "driver": "Veritabanı sürücüsü",
+        "driverName": "PostgreSQL",
+        "host": "Sunucu",
+        "port": "Bağlantı noktası",
+        "name": "Veritabanı adı",
+        "namePlaceholder": "crm",
+        "user": "Kullanıcı adı",
+        "userPlaceholder": "postgres",
+        "password": "Parola",
+        "passwordHint": "Bu dağıtımın kendi parolasını kullanmak için boş bırakın. Bağlantının kendisi sunucunun ortamında ayarlanır; bu adım yalnızca onu test eder.",
+        "test": "Bağlantıyı test et",
+        "testing": "Test ediliyor…",
+        "ok": "Bağlantı başarılı.",
+        "unreachable": "PostgreSQL'e hiçbir yoldan ulaşılamadı. Barındırma panelinizde görünen tam sunucu adını kullanın, bağlantı noktasını kontrol edin, veritabanı ve kullanıcının var olduğunu ve sunucunun bu makineden bağlantı kabul ettiğini doğrulayın, ardından yeniden deneyin.",
+        "networkError": "Ağ hatası: {detail}"
+      },
+      "application": {
+        "eyebrow": "{total} adımdan {n}. adım",
+        "title": "Uygulama <i>temelleri</i>.",
+        "intro": "Kurulumunuza bir ad verin, genel URL'yi ayarlayın ve saat dilimini ile varsayılan dili seçin.",
+        "name": "Uygulama adı",
+        "url": "Uygulama URL'si",
+        "urlPlaceholder": "https://app.example.com",
+        "timezone": "Saat dilimi",
+        "timezonePlaceholder": "Saat dilimlerinde ara…",
+        "timezoneEmpty": "Eşleşen saat dilimi yok.",
+        "locale": "Varsayılan dil"
+      },
+      "admin": {
+        "eyebrow": "{total} adımdan {n}. adım",
+        "title": "Yönetici <i>hesabı</i>.",
+        "intro": "İlk süper yönetici girişiniz ve özel çalışma alanınız. Ekip arkadaşlarınızı daha sonra konsoldan ekleyin.",
+        "fullName": "Ad soyad",
+        "fullNamePlaceholder": "Vetrick R.",
+        "email": "E-posta",
+        "emailPlaceholder": "you@yourdomain.com",
+        "password": "Parola",
+        "confirm": "Parolayı onaylayın",
+        "workspace": "Çalışma alanı adı",
+        "workspacePlaceholder": "Ekibim",
+        "note": "En az 12 karakter; büyük harf, küçük harf, rakam ve sembol içermeli · argon2id ile karma olarak saklanır. Bu platform çok kiracılıdır — önceden yapılandırılmış tek bir özel çalışma alanı gelir; daha sonra Çalışma alanları bölümünden yeniden adlandırabilirsiniz. Parolanız düz metin olarak asla saklanmaz ve ilk girişte iki faktörlü oturum açma ile eşleştirilmelidir."
+      },
+      "node": {
+        "eyebrow": "{total} adımdan {n}. adım",
+        "title": "Node <i>köprüsü</i>.",
+        "intro": "WhatsApp mesajları küçük bir Node servisi üzerinden gönderilir. Platformu buna yönlendirin ve ortak belirteci ayarlayın — kurulum programı bunu iki taraf için de kaydeder.",
+        "url": "Node sunucu URL'si",
+        "urlHint": "Node köprünüzün dinlediği adres. API, mesaj göndermek için buraya istek yapar.",
+        "port": "Node bağlantı noktası",
+        "portHint": "Node köprüsünün bağlandığı bağlantı noktası.",
+        "token": "Node ortak belirteci",
+        "tokenHint": "Otomatik doldurulur. API ve Node köprüsünde eşleşmelidir — kurulum programı bunu bir kez, şifreli olarak kaydeder.",
+        "generate": "Oluştur",
+        "info": "Bunlar .env dosyalarında değil, platform ayarlarında kaydedilir. Belirteç, Node köprüsüyle NODE_WEBHOOK_TOKEN olarak paylaşılır.",
+        "submit": "Devam et ve kur"
+      },
+      "install": {
+        "eyebrow": "{total} adımdan {n}. adım",
+        "title": "<i>{app}</i> kuruluyor.",
+        "intro": "Lütfen bekleyin — her şeyi yapılandırıyoruz. Bu genellikle birkaç saniye sürer.",
+        "preparing": "Hazırlanıyor…",
+        "complete": "Tamamlandı",
+        "failed": "Başarısız — aşağıya bakın",
+        "paused": "Kurulum duraklatıldı",
+        "retry": "Başarısız adımdan yeniden dene",
+        "success": "Kurulum tamamlandı — yönlendiriliyorsunuz…",
+        "rows": {
+          "configuration": {
+            "done": "Yapılandırma kaydedildi",
+            "active": "Uygulama ve Node köprüsü yapılandırması kaydediliyor…"
+          },
+          "migrations": {
+            "done": "Veritabanı geçişleri doğrulandı",
+            "active": "Veritabanı geçişleri kontrol ediliyor…"
+          },
+          "defaults": {
+            "done": "Temel veriler doğrulandı",
+            "active": "Roller, izinler ve varsayılanlar kontrol ediliyor…"
+          },
+          "account": {
+            "done": "Yönetici ve çalışma alanı hazır",
+            "active": "Yönetici hesabı ve özel çalışma alanı oluşturuluyor…"
+          },
+          "storage": {
+            "done": "Depolama hazır",
+            "active": "Depolama ve geçici dizinler kontrol ediliyor…"
+          },
+          "finalize": {
+            "done": "Kurulum tamamlandı",
+            "active": "Kurulum kilitleniyor ve kurulum kaydediliyor…"
+          }
+        }
+      },
+      "completed": {
+        "body": "Bu dağıtımda kurulum zaten tamamlandı.",
+        "login": "Oturum açma sayfasına git"
+      },
+      "back": "Geri",
+      "continue": "Devam et",
+      "show": "Göster",
+      "hide": "Gizle",
+      "working": "Çalışıyor",
+      "problems": {
+        "token": "Kurulum belirteci doğru değil.",
+        "disabled": "Kurulum bu sunucuda devre dışı.",
+        "outOfOrder": "Bir adım sıra dışı çalıştı. Sayfayı yenileyin ve yeniden başlayın.",
+        "step": "Kurulum adımı başarısız oldu. Bilgilerinizi ve sunucu günlüklerini kontrol edip yeniden deneyin.",
+        "unknown": "Bir sorun oluştu. Yeniden deneyin.",
+        "requestId": "İstek kimliği {id}",
+        "prerequisites": "Sunucu kurulum için hazır değil: {items}.",
+        "licence": {
+          "empty": "CodeCanyon satın alma kodunuzu girin.",
+          "not_configured": "Lisans denetimi yapılandırılmamış (Envato belirteci eksik).",
+          "unreachable": "Kodu doğrulamak için Envato'ya ulaşılamadı. Sunucunun internet bağlantısını kontrol edin.",
+          "not_found": "Geçersiz satın alma kodu — Envato bunun için bir satış kaydı bulamadı.",
+          "http_error": "Envato doğrulaması başarısız oldu.",
+          "other_product": "Bu satın alma kodu farklı bir ürüne ait.",
+          "unknown": "Satın alma kodu doğrulanamadı."
+        },
+        "keys": {
+          "runtime": "Node.js sürümü",
+          "database": "veritabanı",
+          "redis": "Redis",
+          "migrations": "veritabanı geçişleri",
+          "permissions": "izin tanımları",
+          "temp": "geçici dizin",
+          "storage": "depolama",
+          "default": "{key}"
+        }
+      },
+      "errors": {
+        "tokenLength": "Kurulum belirteci en az {min} karakter olmalıdır.",
+        "dbHost": "Veritabanı sunucusunu girin.",
+        "dbPort": "1 ile 65535 arasında bir bağlantı noktası girin.",
+        "dbName": "Veritabanı adını girin.",
+        "dbUser": "Veritabanı kullanıcı adını girin.",
+        "appNameRequired": "Uygulama adını girin.",
+        "appNameLong": "Uygulama adı en fazla {max} karakter olabilir.",
+        "appUrl": "http:// veya https:// ile başlayan tam bir URL girin.",
+        "timezone": "Listeden bir saat dilimi seçin.",
+        "locale": "Listeden bir dil seçin.",
+        "fullNameRequired": "Ad soyadınızı girin.",
+        "fullNameLong": "Ad soyad en fazla {max} karakter olabilir.",
+        "email": "Geçerli bir e-posta adresi girin.",
+        "passwordMismatch": "Parola onayı eşleşmiyor.",
+        "workspaceRequired": "En az 2 karakterlik bir çalışma alanı adı girin.",
+        "workspaceLong": "Çalışma alanı adı en fazla {max} karakter olabilir.",
+        "nodeUrl": "http:// veya https:// ile başlayan Node sunucu URL'sini girin.",
+        "nodePort": "1 ile 65535 arasında bir bağlantı noktası girin.",
+        "nodeToken": "Ortak belirteç en az {min} karakter olmalıdır.",
+        "password": {
+          "length": "Parola en az 12 karakter olmalıdır.",
+          "upper": "Parolada bir büyük harf olmalıdır.",
+          "lower": "Parolada bir küçük harf olmalıdır.",
+          "number": "Parolada bir rakam olmalıdır.",
+          "symbol": "Parolada bir sembol olmalıdır.",
+          "personal": "Parola adınızı veya e-posta adresinizi içermemelidir."
+        }
+      }
+    },
+    "system": {
+      "nav": {
+        "group": "Sistem",
+        "item": "Güncelleyici"
+      },
+      "title": "Uygulama güncelleyicisi",
+      "titleRich": "Uygulama <i>güncelleyicisi</i>.",
+      "titleAccent": "güncelleyici",
+      "kicker": "Yönetici · Bakım",
+      "description": "Satın alımınızı doğrulayın ve bu dağıtımın tam olarak neyi çalıştırdığını görün. Güncellemeler yeni bir imaj olarak gelir ve başlamadan önce geçişler çalışır — veritabanınız, depolamanız ve yüklemeleriniz bu sayfadan asla değiştirilmez.",
+      "crumbAdmin": "Yönetici",
+      "crumbSettings": "Ayarlar",
+      "crumbUpdater": "Güncelleyici",
+      "version": "v{version} · derleme {build}",
+      "buildNone": "yok",
+      "allSettings": "Tüm ayarlar",
+      "refresh": "Yenile",
+      "loading": "Yükleniyor",
+      "errorForbidden": "Bu sayfayı görüntüleyemezsiniz.",
+      "errorUnexpected": "Güncelleyici yüklenemedi.",
+      "requestId": "İstek kimliği",
+      "retry": "Yeniden dene",
+      "licence": {
+        "kicker": "1. adım · lisans",
+        "title": "Satın alımınızı doğrulayın",
+        "intro": "CodeCanyon satın alma kodunuzu girin. Herhangi bir güncelleme çalışmadan önce Envato ile doğrulanır.",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "mask": "••••••••-••••-••••-••••-••••••••••••",
+        "verify": "Doğrula",
+        "verifying": "Doğrulanıyor…",
+        "verified": "Satın alma doğrulandı — devam edebilirsiniz.",
+        "verifiedAt": "{date} tarihinde doğrulandı.",
+        "notVerified": "Henüz doğrulanmadı.",
+        "notEnabled": "Bu dağıtım satın alma kodunu zorunlu kılmıyor, bu yüzden burada doğrulanacak bir şey yok.",
+        "superAdminOnly": "Satın alma kodunu yalnızca süper yönetici doğrulayabilir.",
+        "reasons": {
+          "empty": "CodeCanyon satın alma kodunuzu girin.",
+          "not_configured": "Lisans denetimi yapılandırılmamış (Envato belirteci eksik).",
+          "unreachable": "Kodu doğrulamak için Envato'ya ulaşılamadı. Sunucunun internet bağlantısını kontrol edin.",
+          "not_found": "Geçersiz satın alma kodu — Envato bunun için bir satış kaydı bulamadı.",
+          "http_error": "Envato doğrulaması başarısız oldu.",
+          "other_product": "Bu satın alma kodu farklı bir ürüne ait.",
+          "unknown": "Satın alma kodu doğrulanamadı."
+        }
+      },
+      "process": {
+        "kicker": "güncelleme süreci",
+        "title": "Güncellemeler bir imaj olarak gelir",
+        "step2": {
+          "title": "Veritabanını yedekleyin",
+          "body": "Dağıtımdan önce bir veritabanı yedeği alın (pg_dump veya noktaya dönük kurtarma). Yedekleme burada bir düğme değil, altyapı işidir."
+        },
+        "step3": {
+          "title": "Yeni imajı dağıtın",
+          "body": "Yeni konteyner imajını yayınlayın. Çalışan sürüm ve derleme aşağıda gösterilir."
+        },
+        "step4": {
+          "title": "Geçişleri çalıştırın",
+          "body": "pnpm db:migrate yeni tabloları ve sütunları uygular ve hiçbir veriyi silmez. Aşağıdaki defter her geçişi ve durumunu listeler."
+        },
+        "step5": {
+          "title": "Sağlık denetimi",
+          "body": "Bağımlılıklar aşağıda canlı olarak denetlenir. Her şeyin çalıştığını doğrulamak için dağıtımdan sonra bu sayfayı yenileyin."
+        }
+      },
+      "release": {
+        "kicker": "bu dağıtım",
+        "title": "Sürüm",
+        "version": "Sürüm",
+        "gitSha": "Derleme commit'i",
+        "buildNumber": "Derleme numarası",
+        "builtAt": "Derlenme zamanı",
+        "environment": "Ortam",
+        "uptime": "Çalışma süresi",
+        "none": "Kaydedilmedi",
+        "demo": "Demo modu açık: izin verilenler dışındaki yazma işlemleri reddedilir."
+      },
+      "setup": {
+        "title": "İlk çalıştırma kurulumu",
+        "open": "Açık",
+        "completed": "Tamamlandı",
+        "completedAt": "{date} tarihinde {version} sürümünde tamamlandı"
+      },
+      "checks": {
+        "kicker": "sağlık",
+        "title": "Sağlık denetimi",
+        "database": "Veritabanı",
+        "redis": "Redis",
+        "migrations": "Geçişler",
+        "up": "Çalışıyor",
+        "down": "Kapalı",
+        "degraded": "Bozulmuş",
+        "latency": "{ms} ms"
+      },
+      "migrations": {
+        "kicker": "defter",
+        "title": "Geçişler",
+        "summary": "{count} uygulandı",
+        "status": {
+          "current": "Güncel",
+          "pending": "Bekleyen geçişler",
+          "drift": "Bir geçiş dosyası uygulandıktan sonra değiştirildi",
+          "unknown": "Bu derlemeyle geçiş dosyaları gönderilmedi"
+        },
+        "state": {
+          "applied": "Uygulandı",
+          "pending": "Bekliyor",
+          "modified": "Değiştirildi",
+          "missing-file": "Dosya eksik"
+        },
+        "id": "Geçiş",
+        "stateLabel": "Durum",
+        "appliedAt": "Uygulanma zamanı"
+      },
+      "breadcrumb": "Gezinti yolu"
+    }
+  }
+}

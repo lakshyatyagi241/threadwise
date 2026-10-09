@@ -1,0 +1,412 @@
+{
+  "coupons-credits-referral-currency": {
+    "nav": {
+      "group": "Abrechnung und Tarife",
+      "coupons": "Gutscheine",
+      "currencies": "Währungen",
+      "currenciesGroup": "Lokalisierung",
+      "affiliate": "Affiliate"
+    },
+    "common": {
+      "loading": "Wird geladen",
+      "retry": "Erneut versuchen",
+      "cancel": "Abbrechen",
+      "dismiss": "Schließen",
+      "admin": "Admin",
+      "readOnly": "Sie können diese Seite ansehen, aber nur ein Super-Admin kann sie ändern.",
+      "requestId": "Anfrage-ID",
+      "errors": {
+        "forbidden": "Sie haben keinen Zugriff auf diese Seite.",
+        "request": "Die Anfrage konnte nicht abgeschlossen werden.",
+        "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal."
+      },
+      "pager": {
+        "label": "Seitennavigation",
+        "previous": "Zurück",
+        "next": "Weiter",
+        "page": "Seite {n}"
+      }
+    },
+    "errors": {
+      "generic": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+      "forbidden": "Nur ein Super-Admin kann dies ändern.",
+      "notFound": "Dieses Element existiert nicht mehr. Es wurde möglicherweise gelöscht.",
+      "conflict": "Jemand anderes hat dies gerade geändert. Laden Sie die Seite neu und versuchen Sie es erneut.",
+      "validation": "Einige Werte sind ungültig. Prüfen Sie das Formular und versuchen Sie es erneut.",
+      "codeTaken": "Ein anderer Gutschein verwendet diesen Code bereits.",
+      "planUnknown": "Einer oder mehrere der ausgewählten Tarife existieren nicht mehr.",
+      "currencyUnknown": "Wählen Sie eine der aktiven Währungen.",
+      "currencyTaken": "Eine Währung mit diesem Code existiert bereits.",
+      "defaultProtected": "Dies ist die Standardwährung des Systems. Wählen Sie zuerst eine andere Standardwährung.",
+      "inUse": "Diese Währung wird noch von {used} verwendet. Deaktivieren Sie sie stattdessen.",
+      "ratesFailed": "Der Kursanbieter war nicht erreichbar oder lieferte keine Kurse. Es wurde kein Kurs geändert."
+    },
+    "coupons": {
+      "title": "Rabattgutscheine",
+      "titleLead": "Rabatt",
+      "titleAccent": "Gutscheine",
+      "crumbHere": "Gutscheine",
+      "eyebrow": "Admin · Abrechnung · Gutscheincodes",
+      "description": "Aktionscodes, die Käufer an der Kasse eingeben. Wählen Sie einen Prozentsatz oder festen Betrag, legen Sie einen Gültigkeitszeitraum fest, beschränken Sie sie auf bestimmte Tarife und begrenzen Sie die Einlösungen insgesamt.",
+      "new": "Neuer Gutschein",
+      "kpi": {
+        "total": "Gutscheine gesamt",
+        "totalHint": "im Katalog",
+        "active": "Aktiv",
+        "activeHint": "einlösbar",
+        "expired": "Abgelaufen",
+        "expiredHint": "Ablaufdatum überschritten",
+        "redeemed": "Einlösungen gesamt",
+        "redeemedHint": "Nutzungen insgesamt"
+      },
+      "filters": {
+        "label": "Gutscheine filtern",
+        "all": "Alle",
+        "active": "Aktiv",
+        "disabled": "Deaktiviert",
+        "expired": "Abgelaufen",
+        "search": "Nach Code oder Beschreibung suchen…",
+        "searchLabel": "Gutscheine suchen"
+      },
+      "table": {
+        "label": "Gutscheine",
+        "code": "Code",
+        "discount": "Rabatt",
+        "uses": "Nutzungen",
+        "validity": "Gültigkeit",
+        "status": "Status",
+        "actions": "Aktionen"
+      },
+      "validity": {
+        "forever": "unbefristet",
+        "now": "jetzt",
+        "range": "{from} → {to}"
+      },
+      "empty": {
+        "title": "Keine passenden Gutscheine.",
+        "hint": "Passen Sie die Filter an oder setzen Sie sie zurück, oder",
+        "create": "erstellen Sie den ersten"
+      },
+      "footer": "{from}–{to} von {total} Gutscheinen",
+      "pager": {
+        "label": "Seitennavigation",
+        "previous": "Zurück",
+        "next": "Weiter",
+        "page": "Seite {n}"
+      },
+      "actions": {
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "menu": "Aktionen",
+        "toggle": "{code} ein- oder ausschalten"
+      },
+      "toasts": {
+        "created": "Gutschein erstellt.",
+        "updated": "Gutschein aktualisiert.",
+        "activated": "Aktiviert.",
+        "deactivated": "Deaktiviert.",
+        "deleted": "Gutschein entfernt."
+      },
+      "delete": {
+        "title": "Gutschein löschen",
+        "body": "Gutschein {code} löschen? Arbeitsbereiche, die ihn bereits eingelöst haben, behalten ihren Rabatt.",
+        "confirm": "Ja, löschen"
+      },
+      "editor": {
+        "notFoundTitle": "Gutschein nicht gefunden",
+        "notFoundBody": "Unter dieser Adresse existiert kein Gutschein. Er wurde möglicherweise gelöscht, oder der Link ist falsch.",
+        "backToList": "Zurück zu Gutscheinen",
+        "crumbNew": "Neu",
+        "eyebrowNew": "Admin · Abrechnung · Gutscheincodes · Erstellen",
+        "eyebrowEdit": "Admin · Abrechnung · Gutscheincodes · Ändern",
+        "titleLead": "Neuer",
+        "titleAccent": "Gutschein",
+        "descriptionNew": "Aktionscodes, die beim /checkout eingelöst werden. Wählen Sie einen Prozentsatz oder festen Betrag, binden Sie ihn an einen oder alle Tarife und geben Sie ihm optional einen Gültigkeitszeitraum.",
+        "redeemed": "{used}{max} Mal eingelöst",
+        "redeemedMax": " / {max}",
+        "expires": "läuft ab {when}",
+        "active": "Aktiv",
+        "disabled": "Deaktiviert",
+        "create": "Gutschein erstellen",
+        "saveChanges": "Änderungen speichern",
+        "saving": "Wird gespeichert",
+        "cancel": "Abbrechen",
+        "problemsTitle": "Einige Felder erfordern Ihre Aufmerksamkeit:",
+        "problems": {
+          "code": "Code: Geben Sie einen Code mit bis zu 64 Zeichen ein.",
+          "description": "Beschreibung: höchstens 255 Zeichen.",
+          "adminNote": "Admin-Notiz: höchstens 1000 Zeichen.",
+          "type": "Typ: Wählen Sie Prozent oder festen Betrag.",
+          "amount": "Betrag: Geben Sie eine Zahl wie 10 oder 12.5 ein.",
+          "maxDiscountAmount": "Maximale Rabattgrenze: Geben Sie eine Zahl ein oder lassen Sie das Feld leer.",
+          "currencyCode": "Währungssperre: höchstens 8 Zeichen.",
+          "minOrderAmount": "Mindestbestellwert: Geben Sie eine Zahl ein oder lassen Sie das Feld leer.",
+          "applicablePlans": "Gültige Tarife: Wählen Sie Tarife aus der Liste.",
+          "startsAt": "Beginnt am: Geben Sie ein gültiges Datum mit Uhrzeit ein.",
+          "expiresAt": "Läuft ab am: Geben Sie ein gültiges Datum mit Uhrzeit ein, das nicht vor dem Beginn liegt.",
+          "maxUses": "Maximale Einlösungen gesamt: eine ganze Zahl ab 1 oder leer.",
+          "perUserLimit": "Limit pro Nutzer: eine ganze Zahl ab 1 oder leer."
+        },
+        "sections": {
+          "identity": "Identität",
+          "discount": "Rabatt",
+          "eligibility": "Berechtigung",
+          "limits": "Limits und Verhalten"
+        },
+        "fields": {
+          "code": "Code",
+          "codeHint": "Wird in Großbuchstaben gespeichert. Kunden geben genau diesen Code beim Bezahlen ein.",
+          "codePlaceholder": "WELCOME10",
+          "description": "Beschreibung",
+          "descriptionNote": "(für Kunden sichtbar)",
+          "descriptionPlaceholder": "Willkommensangebot: 10 % Rabatt im ersten Monat",
+          "adminNote": "Admin-Notiz",
+          "adminNoteNote": "(intern, nicht sichtbar)",
+          "adminNotePlaceholder": "Feiertags-Aktion · Slack #marketing · endet mit Kampagne",
+          "activeTitle": "Aktiv",
+          "activeHint": "Käufer können ihn an der Kasse anwenden",
+          "type": "Typ",
+          "typePercent": "Prozent (%)",
+          "typeFixed": "Fester Betrag",
+          "amount": "Betrag",
+          "amountHint": "Bei Prozent-Gutscheinen bedeutet 10 so viel wie 10 %. Bei Gutscheinen mit festem Betrag bedeutet 10 so viel wie 10 Einheiten der Währung.",
+          "maxDiscount": "Maximale Rabattgrenze",
+          "maxDiscountNote": "(nur Typ %)",
+          "maxDiscountPlaceholder": "leer = keine Grenze",
+          "maxDiscountHint": "Zum Beispiel 20 % Rabatt mit einer Obergrenze von 50 $.",
+          "currency": "Währungssperre",
+          "currencyAny": "Beliebige Währung",
+          "currencyHint": "Einlösung auf eine einzelne Währung beschränken (gilt für Gutscheine mit festem Betrag).",
+          "minOrder": "Mindestbestellwert",
+          "minOrderPlaceholder": "0 = kein Minimum",
+          "plans": "Gültige Tarife",
+          "plansNote": "(leer = beliebiger Tarif)",
+          "plansPlaceholder": "Einen oder mehrere Tarife wählen (leer = beliebiger Tarif)...",
+          "plansHint": "Tippen Sie, um die Liste einzugrenzen, wählen Sie zum Hinzufügen und entfernen Sie mit dem × des Chips einen Eintrag.",
+          "plansEmpty": "Keine weiteren Tarife zur Auswahl.",
+          "plansRemove": "{name} entfernen",
+          "plansClear": "Alle Tarife entfernen",
+          "startsAt": "Beginnt am",
+          "startsAtHint": "Leer = sofort verfügbar.",
+          "expiresAt": "Läuft ab am",
+          "expiresAtHint": "Leer = läuft nie ab.",
+          "maxUses": "Maximale Einlösungen gesamt",
+          "unlimitedPlaceholder": "leer = unbegrenzt",
+          "maxUsesHint": "Über alle Kunden hinweg.",
+          "perUser": "Limit pro Nutzer",
+          "perUserHint": "Anzahl der erlaubten Einlösungen pro Kunde.",
+          "firstPurchaseTitle": "Nur erster Kauf",
+          "firstPurchaseHint": "Nur Arbeitsbereiche, die noch keine bezahlte Bestellung aufgegeben haben",
+          "stackableTitle": "Mit anderen Gutscheinen kombinierbar",
+          "stackableHint": "Erlaubt Käufern, ihn zusammen mit einem anderen aktiven Code an der Kasse zu verwenden"
+        }
+      }
+    },
+    "currencies": {
+      "title": "Plattformwährungen",
+      "titleLead": "Plattform",
+      "titleAccent": "Währungen",
+      "crumbGroup": "System",
+      "crumbGroup2": "Lokalisierung",
+      "crumbHere": "Währungen",
+      "eyebrow": "Admin · Plattform · Lokalisierung",
+      "description": "Verwalten Sie die Währungen, die Arbeitsbereiche wählen können. Wechselkurse werden relativ zu USD gespeichert. Eine Änderung der Standardwährung wirkt sich auf jedes Nutzer-Dashboard, jede Rechnung und jede Guthabenanzeige aus.",
+      "fetchRates": "Aktuelle Kurse abrufen",
+      "fetching": "Wird abgerufen",
+      "add": "Währung hinzufügen",
+      "kpi": {
+        "total": "Gesamt",
+        "totalHint": "Währungen konfiguriert",
+        "active": "Aktiv",
+        "activeHint": "für Arbeitsbereiche sichtbar",
+        "default": "Systemstandard",
+        "defaultHint": "für neu erstellte Arbeitsbereiche verwendet",
+        "inactive": "Inaktiv",
+        "inactiveHint": "In den Arbeitsbereichseinstellungen nicht angeboten"
+      },
+      "defaultCard": {
+        "eyebrow": "Systemstandard",
+        "title": "Ersatzwährung für die gesamte Plattform",
+        "body": "Jeder Arbeitsbereich ohne gewählte Währung verwendet diese. Beim Speichern wird der Cache sofort geleert, sodass die Änderung beim nächsten Seitenaufruf in der gesamten App sichtbar ist.",
+        "select": "Standardwährung",
+        "set": "Als Standard festlegen",
+        "setting": "Wird gespeichert"
+      },
+      "search": "Code, Name oder Symbol…",
+      "searchLabel": "Währungen suchen",
+      "searchButton": "Suchen",
+      "table": {
+        "label": "Währungen",
+        "code": "Code",
+        "name": "Name",
+        "symbol": "Symbol",
+        "rate": "Kurs (1 USD →)",
+        "decimals": "Dezimalstellen",
+        "active": "Aktiv",
+        "actions": "Aktionen"
+      },
+      "defaultBadge": "Standard",
+      "rate": "1 USD → {rate}",
+      "on": "An",
+      "off": "Aus",
+      "empty": {
+        "none": "Noch keine Währungen.",
+        "noMatch": "Keine Treffer für „{q}“."
+      },
+      "footer": "{from}–{to} von {total} Währungen",
+      "actions": {
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "toggle": "{code} ein- oder ausschalten"
+      },
+      "toasts": {
+        "added": "Währung hinzugefügt.",
+        "updated": "Währung aktualisiert.",
+        "activated": "Aktiviert.",
+        "deactivated": "Deaktiviert.",
+        "deleted": "Währung entfernt.",
+        "defaultSet": "Standardwährung auf {code} gesetzt.",
+        "ratesUpdated": "{count} Währungen von {provider} aktualisiert."
+      },
+      "delete": {
+        "title": "Währung löschen",
+        "body": "{code} löschen? Alle in dieser Währung gespeicherten Preise werden verwaist.",
+        "confirm": "Ja, löschen"
+      },
+      "form": {
+        "addTitle": "Währung hinzufügen",
+        "editTitle": "{code} bearbeiten",
+        "name": "Name *",
+        "namePlaceholder": "Schweizer Franken",
+        "code": "ISO-Code *",
+        "codePlaceholder": "CHF",
+        "codeLocked": "Der Code ändert sich nie, sobald eine Währung existiert.",
+        "symbol": "Symbol",
+        "symbolPlaceholder": "Fr",
+        "precision": "Dezimalstellen *",
+        "rate": "Umrechnungskurs (1 USD = ?) *",
+        "active": "Sofort aktiv",
+        "save": "Währung hinzufügen",
+        "saveChanges": "Änderungen speichern",
+        "cancel": "Abbrechen",
+        "problemsTitle": "Einige Felder erfordern Ihre Aufmerksamkeit:",
+        "problems": {
+          "name": "Name: Geben Sie einen Namen mit bis zu 120 Zeichen ein.",
+          "code": "ISO-Code: drei Buchstaben, z. B. CHF.",
+          "symbol": "Symbol: höchstens 20 Zeichen.",
+          "precision": "Dezimalstellen: eine ganze Zahl von 0 bis 6.",
+          "exchangeRate": "Wechselkurs: eine Zahl von mindestens 0.000001."
+        },
+        "eyebrow": "Neuer Eintrag",
+        "rateHint": "Verwenden Sie oben „Aktuelle Kurse abrufen“, um Werte von open.er-api.com vorzufüllen.",
+        "editEyebrow": "Eintrag bearbeiten"
+      },
+      "catalog": {
+        "eyebrow": "Katalog",
+        "title": "Alle Währungen"
+      }
+    },
+    "affiliate": {
+      "title": "Affiliate",
+      "subtitle": "Teilen Sie Ihren Link und verfolgen Sie die Arbeitsbereiche, die Sie gewinnen.",
+      "common": {
+        "dismiss": "Schließen"
+      },
+      "states": {
+        "loading": "Ihre Affiliate-Daten werden geladen"
+      },
+      "header": {
+        "codeLabel": "Ihr Empfehlungscode",
+        "noCode": "Noch kein Code",
+        "linkLabel": "Ihr Empfehlungslink",
+        "copyLink": "Link kopieren",
+        "copied": "Link kopiert.",
+        "copyFailed": "Der Link konnte nicht kopiert werden. Markieren Sie ihn und kopieren Sie ihn von Hand.",
+        "reward": "Jeder empfohlene Arbeitsbereich, der eine erste Zahlung leistet, bringt Ihnen {amount} ein.",
+        "rewardMessages": "Das entspricht {count, plural, one {# Nachricht} other {# Nachrichten}}.",
+        "rewardNone": "Das Programm zahlt derzeit nichts für neue Empfehlungen. Ihr Code und Ihr Verlauf bleiben hier erhalten."
+      },
+      "filters": {
+        "label": "Zeitraum und Export",
+        "range": "Zeitraum",
+        "ranges": {
+          "7d": "Letzte 7 Tage",
+          "30d": "Letzte 30 Tage",
+          "90d": "Letzte 90 Tage",
+          "all": "Gesamter Zeitraum"
+        },
+        "search": "Empfehlungen suchen",
+        "searchPlaceholder": "Name, E-Mail oder Code",
+        "reset": "Zurücksetzen",
+        "export": "CSV exportieren",
+        "exporting": "Datei wird vorbereitet",
+        "exported": "{fileName} heruntergeladen."
+      },
+      "kpi": {
+        "inRange": "Empfehlungen im Zeitraum",
+        "vsPrevious": "{delta} ggü. Vorperiode",
+        "earned": "Verdient, insgesamt",
+        "last30": "Empfehlungen, letzte 30 Tage",
+        "last30Earned": "{amount} in den letzten 30 Tagen verdient",
+        "average": "Durchschnitt pro Empfehlung"
+      },
+      "chart": {
+        "title": "Empfehlungen im Zeitverlauf",
+        "label": "Empfehlungen als Balken und verdiente Credits als Linie, nach Periode",
+        "buckets": {
+          "daily": "Täglich",
+          "weekly": "Wöchentlich",
+          "monthly": "Monatlich"
+        },
+        "signups": "Empfehlungen",
+        "credits": "Verdiente Credits",
+        "bucket": "Periode",
+        "empty": "Noch keine Empfehlungen in diesem Zeitraum."
+      },
+      "topCodes": {
+        "title": "Top-Codes",
+        "referrals": "{count, plural, one {# Empfehlung} other {# Empfehlungen}}",
+        "empty": "In diesem Zeitraum wurde kein Code verwendet."
+      },
+      "payouts": {
+        "title": "Letzte Auszahlungen",
+        "balanceAfter": "Guthaben nach {amount}",
+        "empty": "Noch keine Auszahlungen. Eine Belohnung wird Ihrem Wallet gutgeschrieben, wenn ein empfohlener Arbeitsbereich seine erste Zahlung leistet."
+      },
+      "table": {
+        "title": "Empfehlungen",
+        "label": "Empfehlungen im gewählten Zeitraum",
+        "when": "Wann",
+        "referee": "Empfohlener",
+        "code": "Verwendeter Code",
+        "credits": "Verdiente Credits",
+        "status": "Status",
+        "transaction": "Wallet-Transaktion",
+        "noName": "Unbenannter Nutzer",
+        "paid": "Bezahlt",
+        "pending": "Ausstehend",
+        "noTransaction": "Keine Wallet-Transaktion",
+        "pagination": "Empfehlungsseiten",
+        "previous": "Zurück",
+        "next": "Weiter",
+        "showing": "{from}-{to} von {total}"
+      },
+      "empty": {
+        "noneTitle": "Noch keine Empfehlungen",
+        "noneBody": "Teilen Sie Ihren Link. Personen, die sich damit anmelden, erscheinen hier.",
+        "filteredTitle": "Keine passenden Empfehlungen",
+        "filteredBody": "Versuchen Sie einen anderen Zeitraum oder löschen Sie die Suche."
+      },
+      "errors": {
+        "unauthenticated": "Ihre Sitzung ist beendet. Melden Sie sich erneut an, um Ihre Affiliate-Daten zu sehen.",
+        "forbidden": "Sie haben keinen Zugriff auf diese Seite.",
+        "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+        "validation": "Diese Filter konnten nicht angewendet werden. Setzen Sie sie zurück und versuchen Sie es erneut.",
+        "network": "Der Server war nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "generic": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+        "requestId": "Anfrage-ID",
+        "retry": "Erneut versuchen"
+      }
+    }
+  }
+}

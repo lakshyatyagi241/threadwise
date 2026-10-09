@@ -1,0 +1,54 @@
+{
+  "checkout-orders-merchant-payments": {
+    "groups": {
+      "eyebrow": "Cửa hàng / Nhóm",
+      "title": "Nhóm WhatsApp",
+      "subtitle": "Các nhóm mà số đã kết nối của bạn tham gia. Khi một đơn hàng được xác nhận, nó được đăng vào nhóm của khách hàng và khách hàng được @nhắc tên. Hãy đặt mã đặt hàng cho một nhóm để khách hàng có thể đặt hàng từ đó.",
+      "loading": "Đang tải nhóm",
+      "summary": {
+        "groups": "Nhóm đã đồng bộ",
+        "coded": "Có mã đặt hàng",
+        "bot": "Số bot",
+        "noBot": "Chưa có số WhatsApp nào được kết nối.",
+        "connect": "Kết nối một số trong Kênh",
+        "copyNumber": "Sao chép số"
+      },
+      "search": {
+        "label": "Tìm nhóm",
+        "placeholder": "Tìm tên nhóm..."
+      },
+      "columns": {
+        "group": "Nhóm",
+        "members": "Thành viên",
+        "device": "Thiết bị bot",
+        "synced": "Đã đồng bộ",
+        "code": "Mã đặt hàng"
+      },
+      "row": {
+        "unnamed": "(nhóm chưa đặt tên)",
+        "noCode": "Chưa có mã",
+        "placeholder": "vd: ACME",
+        "label": "Mã đặt hàng cho {name}",
+        "copyLink": "Sao chép liên kết đặt hàng",
+        "saved": "Đã lưu mã đặt hàng.",
+        "cleared": "Đã xóa mã đặt hàng.",
+        "tooLong": "Dùng tối đa {max} ký tự.",
+        "badChars": "Chỉ dùng chữ cái, số, dấu chấm, dấu gạch ngang và gạch dưới.",
+        "taken": "Một nhóm khác đã dùng mã này."
+      },
+      "empty": {
+        "title": "Chưa có nhóm",
+        "message": "Danh sách nhóm được sao chép từ phiên WhatsApp đã kết nối của bạn. Các nhóm sẽ xuất hiện tại đây khi phiên đó đã đồng bộ; hiện chưa cam kết thời gian.",
+        "action": "Mở Kênh"
+      },
+      "noMatch": {
+        "title": "Không có nhóm nào khớp với tìm kiếm",
+        "message": "Hãy thử một phần khác của tên nhóm, hoặc xóa tìm kiếm."
+      },
+      "how": {
+        "title": "Cách hoạt động của mã đặt hàng",
+        "body": "Đặt cho nhóm một mã ngắn (ví dụ ACME), rồi chia sẻ liên kết đặt hàng của nhóm. Khi khách hàng nhấn vào và xác nhận đơn, đơn được đăng thẳng vào đúng nhóm đó và khách hàng được @nhắc tên, kể cả khi họ ở nhiều nhóm."
+      }
+    }
+  }
+}

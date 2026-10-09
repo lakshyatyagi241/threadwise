@@ -1,0 +1,246 @@
+{
+  "roles-permissions-workspace": {
+    "nav": {
+      "team": "Miembros del equipo",
+      "roles": "Roles"
+    },
+    "common": {
+      "settings": "Ajustes",
+      "breadcrumb": "Ruta de navegación",
+      "loading": "Cargando…",
+      "retry": "Reintentar",
+      "requestId": "ID de la solicitud",
+      "cancel": "Cancelar",
+      "close": "Cerrar",
+      "dismiss": "Descartar",
+      "required": "Este campo es obligatorio.",
+      "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña",
+      "noAccess": {
+        "title": "No tienes acceso",
+        "body": "Tus roles no incluyen el permiso que necesita esta pantalla. Pide a un propietario o administrador del espacio de trabajo que lo conceda.",
+        "bodyWithKey": "Esta pantalla necesita el permiso {permission}. Pide a un propietario o administrador del espacio de trabajo que lo añada a uno de tus roles.",
+        "back": "Volver al espacio de trabajo"
+      }
+    },
+    "blurb": {
+      "owner": "Propietario: acceso a todo, incluida la facturación.",
+      "admin": "Administrador: acceso completo al espacio de trabajo, sin facturación.",
+      "manager": "Gestor: lo ve todo, puede asignar y resolver.",
+      "agent": "Agente: atiende las conversaciones asignadas.",
+      "viewer": "Visor: solo lectura."
+    },
+    "errors": {
+      "unexpected": "Algo salió mal por nuestra parte. Inténtalo de nuevo; si sigue ocurriendo, indica el ID de la solicitud.",
+      "request": "No se pudo completar la solicitud.",
+      "validation": "Revisa el formulario e inténtalo de nuevo.",
+      "passwordPolicy": "Esta contraseña no cumple la política de contraseñas del espacio de trabajo:",
+      "validationField": "Revisa este campo e inténtalo de nuevo.",
+      "forbidden": "No tienes permiso para hacer esto.",
+      "conflict": "Otra persona cambió esto mientras editabas. Recarga para ver su versión y vuelve a aplicar tus cambios.",
+      "grantRole": "No puedes hacer esto: ese rol (o el rol actual del miembro) está por encima del tuyo. Solo un propietario puede asignar, cambiar o desactivar propietarios y administradores.",
+      "grantPermission": "No puedes conceder {permission}: tú mismo no lo tienes.",
+      "selfRoleChange": "No puedes cambiar tu propio rol.",
+      "lastOwner": "El espacio de trabajo debe conservar al menos un propietario. Haz primero propietario a otra persona.",
+      "selfDeactivate": "No puedes desactivar tu propia cuenta.",
+      "presetRole": "Propietario, Administrador, Gestor, Agente y Visor son roles predefinidos: no se pueden renombrar ni eliminar.",
+      "roleInUse": "Aún hay miembros con este rol. Muévelos a otro rol antes de eliminarlo.",
+      "nameTaken": "Ya existe un rol con este nombre.",
+      "nameRequired": "El nombre del rol es obligatorio.",
+      "nameTooLong": "El nombre del rol puede tener como máximo {max} caracteres.",
+      "notFound": "Este elemento ya no existe. Puede que se haya eliminado."
+    },
+    "team": {
+      "crumb": "Miembros del equipo",
+      "eyebrow": "Ajustes · Equipo",
+      "titleLead": "Equipo",
+      "titleAccent": "miembros",
+      "description": "Añade personas a este espacio de trabajo, elige qué puede hacer cada una y desactiva el acceso cuando alguien se vaya.",
+      "addMember": "Añadir miembro",
+      "reload": "Recargar",
+      "you": "Tú",
+      "noRole": "Sin rol",
+      "changeRoleAction": "Cambiar rol",
+      "reactivate": "Reactivar",
+      "selfRoleHint": "No puedes cambiar tu propio rol.",
+      "roleLockedHint": "No puedes cambiar el rol de este miembro: está por encima del tuyo o no puedes asignar roles.",
+      "selfDeactivateHint": "No puedes desactivar tu propia cuenta.",
+      "rolesUnavailable": "No se pudieron cargar los roles, así que añadir miembros y cambiar roles no está disponible. Los filtros de rol se generan a partir de los miembros mostrados.",
+      "footer": "Mostrando {shown} de {total}",
+      "status": {
+        "active": "Activos",
+        "inactive": "Inactivos"
+      },
+      "filter": {
+        "label": "Filtrar miembros por rol",
+        "all": "Todos",
+        "preset": {
+          "owner": "Propietarios",
+          "admin": "Administradores",
+          "manager": "Gestores",
+          "agent": "Agentes",
+          "viewer": "Visores"
+        }
+      },
+      "search": {
+        "label": "Buscar miembros",
+        "placeholder": "Buscar por nombre o correo…"
+      },
+      "table": {
+        "caption": "Miembros del espacio de trabajo",
+        "member": "Miembro",
+        "roles": "Roles",
+        "status": "Estado",
+        "actions": "Acciones"
+      },
+      "empty": {
+        "none": "Todavía no hay miembros.",
+        "noMatch": "Ningún miembro coincide con este filtro.",
+        "clear": "Limpiar filtros"
+      },
+      "toasts": {
+        "added": "{name} se añadió al espacio de trabajo.",
+        "rolesUpdated": "Roles actualizados para {name}.",
+        "deactivated": "{name} se desactivó.",
+        "reactivated": "{name} se reactivó."
+      },
+      "deactivate": {
+        "action": "Desactivar",
+        "title": "Desactivar miembro",
+        "message": "{name} ya no podrá iniciar sesión. Puedes reactivarlo en cualquier momento.",
+        "confirm": "Desactivar",
+        "cancel": "Cancelar"
+      },
+      "add": {
+        "eyebrow": "Equipo",
+        "title": "Añadir miembro",
+        "fullName": "Nombre completo",
+        "email": "Correo",
+        "emailInvalid": "Introduce una dirección de correo válida.",
+        "password": "Contraseña",
+        "passwordHint": "Al menos 8 caracteres. Compártela con la persona; puede cambiarla al iniciar sesión.",
+        "passwordGenerated": "Contraseña generada: muéstrala con el botón del ojo y cópiala antes de guardar.",
+        "passwordShort": "La contraseña debe tener al menos 8 caracteres.",
+        "generate": "Generar",
+        "role": "Rol",
+        "submit": "Añadir miembro"
+      },
+      "changeRole": {
+        "title": "Cambiar roles de {name}",
+        "legend": "Roles",
+        "keptRole": "{name} se mantiene: no puedes asignarlo ni quitarlo.",
+        "atLeastOne": "Elige al menos un rol.",
+        "save": "Guardar roles",
+        "reload": "Recargar"
+      }
+    },
+    "list": {
+      "crumb": "Roles",
+      "eyebrow": "Ajustes · Equipo · Roles",
+      "titleLead": "Roles y",
+      "titleAccent": "permisos",
+      "description": "Los roles deciden qué puede hacer cada miembro. Elige uno predefinido o crea un rol personalizado en la matriz de permisos.",
+      "teamLink": "Miembros del equipo",
+      "addRole": "Añadir rol",
+      "empty": "Todavía no hay roles.",
+      "preset": "Predefinido",
+      "custom": "Personalizado",
+      "locked": "Bloqueado",
+      "footer": "{count} roles",
+      "membersLink": "{count} miembros tienen {name}",
+      "table": {
+        "caption": "Roles del espacio de trabajo",
+        "name": "Rol",
+        "type": "Tipo",
+        "members": "Miembros",
+        "permissions": "Permisos",
+        "lastEdited": "Última edición",
+        "actions": "Acciones"
+      },
+      "row": {
+        "menu": "Acciones para {name}",
+        "edit": "Editar rol",
+        "view": "Ver rol",
+        "delete": "Eliminar rol"
+      },
+      "toasts": {
+        "deleted": "Rol \"{name}\" eliminado."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Roles",
+      "crumbNew": "Nuevo rol",
+      "eyebrowNew": "Configuración · Roles · Nuevo",
+      "eyebrowEdit": "Configuración · Roles · Editar",
+      "titleLead": "Crear",
+      "titleAccent": "rol",
+      "description": "Ponle nombre al rol y elige lo que puede hacer.",
+      "summary": "{count, plural, =0 {Ningún miembro tiene este rol.} one {1 miembro tiene este rol.} other {# miembros tienen este rol.}}",
+      "notFoundTitle": "Rol no encontrado",
+      "notFoundBody": "Este rol ya no existe. Puede que se haya eliminado.",
+      "backToRoles": "Volver a roles",
+      "back": "Atrás",
+      "save": "Guardar cambios",
+      "create": "Crear rol",
+      "saving": "Guardando…",
+      "reload": "Recargar",
+      "discard": "Tienes cambios sin guardar. ¿Salir sin guardar?",
+      "lockedNotice": "El rol Propietario tiene todos los permisos y no puede cambiarse ni eliminarse",
+      "adminNotice": "Solo un propietario puede cambiar los permisos del rol de administrador.",
+      "readOnlyNotice": "No puedes cambiar los permisos de este rol.",
+      "details": "Detalles del rol",
+      "name": "Nombre del rol",
+      "namePlaceholder": "p. ej., Responsable de soporte",
+      "presetNameHint": "Los roles predefinidos conservan su nombre.",
+      "template": "Partir de un rol",
+      "templateHint": "Copia los permisos de otro rol en la matriz de abajo.",
+      "templateBlank": "En blanco (sin permisos)",
+      "templateOption": "{name} ({count} permisos)",
+      "danger": {
+        "title": "Eliminar este rol",
+        "hint": "Nadie tiene este rol, así que puede eliminarse.",
+        "inUse": "{count, plural, one {1 miembro aún tiene este rol.} other {# miembros aún tienen este rol.}} Muévelos primero a otro rol.",
+        "action": "Eliminar rol"
+      },
+      "toasts": {
+        "created": "Rol \"{name}\" creado.",
+        "updated": "Rol \"{name}\" actualizado.",
+        "deleted": "Rol \"{name}\" eliminado."
+      }
+    },
+    "matrix": {
+      "title": "Permisos",
+      "counter": "{count} / {total} seleccionados",
+      "deniedCount": "{count} denegados",
+      "selectAll": "Seleccionar todo",
+      "selectAllCategory": "Seleccionar todo",
+      "selectAllOf": "Seleccionar todo en {category}",
+      "search": "Buscar permisos…",
+      "searchLabel": "Buscar permisos",
+      "denyHint": "Denegar prevalece sobre permitir: un permiso denegado se rechaza aunque otro rol del miembro lo permita.",
+      "emptyCatalogue": "No hay permisos disponibles.",
+      "noMatch": "Ningún permiso coincide con \"{query}\".",
+      "allow": "Permitir",
+      "deny": "Denegar",
+      "effectLabel": "Permitir o denegar: {label}",
+      "scopeLabel": "Alcance de registros: {label}",
+      "needsPlan": "Requiere el plan {feature}",
+      "needsApp": "Requiere instalar la app {app}",
+      "lockedHint": "Este permiso todavía no está disponible para este espacio de trabajo. Se activa cuando se habilita la función del plan o se instala la app.",
+      "scope": {
+        "all": "Todos los registros",
+        "team": "Registros del equipo",
+        "own": "Registros propios"
+      }
+    },
+    "delete": {
+      "title": "Eliminar rol",
+      "message": "¿Eliminar el rol \"{name}\"? Esta acción no se puede deshacer.",
+      "confirm": "Eliminar rol",
+      "cancel": "Cancelar",
+      "inUseTitle": "\"{name}\" sigue en uso",
+      "inUse": "{count, plural, =0 {Aún hay miembros con este rol.} one {1 miembro aún tiene este rol.} other {# miembros aún tienen este rol.}} Muévelos primero a otro rol y luego elimínalo.",
+      "viewMembers": "Ver miembros con este rol"
+    }
+  }
+}

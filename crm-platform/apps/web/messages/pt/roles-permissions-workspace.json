@@ -1,0 +1,246 @@
+{
+  "roles-permissions-workspace": {
+    "nav": {
+      "team": "Membros da equipe",
+      "roles": "Funções"
+    },
+    "common": {
+      "settings": "Configurações",
+      "breadcrumb": "Trilha de navegação",
+      "loading": "Carregando…",
+      "retry": "Tentar novamente",
+      "requestId": "ID da solicitação",
+      "cancel": "Cancelar",
+      "close": "Fechar",
+      "dismiss": "Dispensar",
+      "required": "Este campo é obrigatório.",
+      "showPassword": "Mostrar senha",
+      "hidePassword": "Ocultar senha",
+      "noAccess": {
+        "title": "Você não tem acesso",
+        "body": "Suas funções não incluem a permissão necessária para esta tela. Peça a um proprietário ou administrador do espaço de trabalho para concedê-la.",
+        "bodyWithKey": "Esta tela precisa da permissão {permission}. Peça a um proprietário ou administrador do espaço de trabalho para adicioná-la a uma de suas funções.",
+        "back": "Voltar ao espaço de trabalho"
+      }
+    },
+    "blurb": {
+      "owner": "Proprietário: tudo, incluindo cobrança.",
+      "admin": "Administrador: acesso total ao espaço de trabalho, sem cobrança.",
+      "manager": "Gerente: vê tudo, pode atribuir e resolver.",
+      "agent": "Agente: atende as conversas atribuídas.",
+      "viewer": "Visualizador: somente leitura."
+    },
+    "errors": {
+      "unexpected": "Algo deu errado do nosso lado. Tente novamente; se continuar, informe o ID da solicitação.",
+      "request": "Não foi possível concluir a solicitação.",
+      "validation": "Verifique o formulário e tente novamente.",
+      "passwordPolicy": "Esta senha não atende à política de senhas do espaço de trabalho:",
+      "validationField": "Verifique este campo e tente novamente.",
+      "forbidden": "Você não tem permissão para fazer isto.",
+      "conflict": "Outra pessoa alterou isto enquanto você editava. Recarregue para ver a versão dela e aplique suas alterações novamente.",
+      "grantRole": "Você não pode fazer isto: essa função (ou a função atual do membro) está acima da sua. Somente um proprietário pode conceder, alterar ou desativar proprietários e administradores.",
+      "grantPermission": "Você não pode conceder {permission}: você mesmo não a possui.",
+      "selfRoleChange": "Você não pode alterar a própria função.",
+      "lastOwner": "O espaço de trabalho precisa manter pelo menos um proprietário. Torne outra pessoa proprietária primeiro.",
+      "selfDeactivate": "Você não pode desativar a própria conta.",
+      "presetRole": "Proprietário, Administrador, Gerente, Agente e Visualizador são funções predefinidas: não podem ser renomeadas nem excluídas.",
+      "roleInUse": "Membros ainda têm esta função. Mova-os para outra função antes de excluí-la.",
+      "nameTaken": "Já existe uma função com este nome.",
+      "nameRequired": "O nome da função é obrigatório.",
+      "nameTooLong": "O nome da função pode ter no máximo {max} caracteres.",
+      "notFound": "Este item não existe mais. Pode ter sido excluído."
+    },
+    "team": {
+      "crumb": "Membros da equipe",
+      "eyebrow": "Configurações · Equipe",
+      "titleLead": "Equipe",
+      "titleAccent": "membros",
+      "description": "Adicione pessoas a este espaço de trabalho, escolha o que cada uma pode fazer e desative o acesso quando alguém sair.",
+      "addMember": "Adicionar membro",
+      "reload": "Recarregar",
+      "you": "Você",
+      "noRole": "Sem função",
+      "changeRoleAction": "Alterar função",
+      "reactivate": "Reativar",
+      "selfRoleHint": "Você não pode alterar a própria função.",
+      "roleLockedHint": "Você não pode alterar a função deste membro: ela está acima da sua, ou você não pode atribuir funções.",
+      "selfDeactivateHint": "Você não pode desativar a própria conta.",
+      "rolesUnavailable": "Não foi possível carregar as funções, por isso adicionar membros e alterar funções não está disponível. Os filtros de função são montados a partir dos membros exibidos.",
+      "footer": "Mostrando {shown} de {total}",
+      "status": {
+        "active": "Ativo",
+        "inactive": "Inativo"
+      },
+      "filter": {
+        "label": "Filtrar membros por função",
+        "all": "Todos",
+        "preset": {
+          "owner": "Proprietários",
+          "admin": "Administradores",
+          "manager": "Gerentes",
+          "agent": "Agentes",
+          "viewer": "Visualizadores"
+        }
+      },
+      "search": {
+        "label": "Pesquisar membros",
+        "placeholder": "Pesquisar nome ou e-mail…"
+      },
+      "table": {
+        "caption": "Membros do espaço de trabalho",
+        "member": "Membro",
+        "roles": "Funções",
+        "status": "Status",
+        "actions": "Ações"
+      },
+      "empty": {
+        "none": "Ainda não há membros.",
+        "noMatch": "Nenhum membro corresponde a este filtro.",
+        "clear": "Limpar filtros"
+      },
+      "toasts": {
+        "added": "{name} foi adicionado ao espaço de trabalho.",
+        "rolesUpdated": "Funções atualizadas para {name}.",
+        "deactivated": "{name} foi desativado.",
+        "reactivated": "{name} foi reativado."
+      },
+      "deactivate": {
+        "action": "Desativar",
+        "title": "Desativar membro",
+        "message": "{name} não poderá mais entrar. Você pode reativar o acesso a qualquer momento.",
+        "confirm": "Desativar",
+        "cancel": "Cancelar"
+      },
+      "add": {
+        "eyebrow": "Equipe",
+        "title": "Adicionar membro",
+        "fullName": "Nome completo",
+        "email": "E-mail",
+        "emailInvalid": "Insira um endereço de e-mail válido.",
+        "password": "Senha",
+        "passwordHint": "Pelo menos 8 caracteres. Compartilhe com a pessoa; ela pode alterá-la depois de entrar.",
+        "passwordGenerated": "Senha gerada: mostre-a com o botão do olho e copie-a antes de salvar.",
+        "passwordShort": "A senha deve ter pelo menos 8 caracteres.",
+        "generate": "Gerar",
+        "role": "Função",
+        "submit": "Adicionar membro"
+      },
+      "changeRole": {
+        "title": "Alterar funções de {name}",
+        "legend": "Funções",
+        "keptRole": "{name} permanece: você não pode concedê-la nem removê-la.",
+        "atLeastOne": "Escolha pelo menos uma função.",
+        "save": "Salvar funções",
+        "reload": "Recarregar"
+      }
+    },
+    "list": {
+      "crumb": "Funções",
+      "eyebrow": "Configurações · Equipe · Funções",
+      "titleLead": "Funções e",
+      "titleAccent": "permissões",
+      "description": "As funções definem o que os membros podem fazer. Escolha uma predefinida ou crie uma função personalizada na matriz de permissões.",
+      "teamLink": "Membros da equipe",
+      "addRole": "Adicionar função",
+      "empty": "Ainda não há funções.",
+      "preset": "Predefinida",
+      "custom": "Personalizada",
+      "locked": "Bloqueada",
+      "footer": "{count} funções",
+      "membersLink": "{count} membros têm {name}",
+      "table": {
+        "caption": "Funções do espaço de trabalho",
+        "name": "Função",
+        "type": "Tipo",
+        "members": "Membros",
+        "permissions": "Permissões",
+        "lastEdited": "Última edição",
+        "actions": "Ações"
+      },
+      "row": {
+        "menu": "Ações para {name}",
+        "edit": "Editar função",
+        "view": "Ver função",
+        "delete": "Excluir função"
+      },
+      "toasts": {
+        "deleted": "Função “{name}” excluída."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Funções",
+      "crumbNew": "Nova função",
+      "eyebrowNew": "Configurações · Funções · Nova",
+      "eyebrowEdit": "Configurações · Funções · Editar",
+      "titleLead": "Criar",
+      "titleAccent": "função",
+      "description": "Dê um nome à função e escolha o que ela pode fazer.",
+      "summary": "{count, plural, =0 {Nenhum membro tem esta função.} one {1 membro tem esta função.} other {# membros têm esta função.}}",
+      "notFoundTitle": "Função não encontrada",
+      "notFoundBody": "Esta função não existe mais. Pode ter sido excluída.",
+      "backToRoles": "Voltar às funções",
+      "back": "Voltar",
+      "save": "Salvar alterações",
+      "create": "Criar função",
+      "saving": "Salvando…",
+      "reload": "Recarregar",
+      "discard": "Você tem alterações não salvas. Sair sem salvar?",
+      "lockedNotice": "A função Proprietário tem todas as permissões e não pode ser alterada nem excluída",
+      "adminNotice": "Somente um proprietário pode alterar as permissões da função Administrador.",
+      "readOnlyNotice": "Você não pode alterar as permissões desta função.",
+      "details": "Detalhes da função",
+      "name": "Nome da função",
+      "namePlaceholder": "ex.: Líder de suporte",
+      "presetNameHint": "Funções predefinidas mantêm o nome.",
+      "template": "Começar a partir de uma função",
+      "templateHint": "Copia as permissões de outra função para a matriz abaixo.",
+      "templateBlank": "Em branco (sem permissões)",
+      "templateOption": "{name} ({count} permissões)",
+      "danger": {
+        "title": "Excluir esta função",
+        "hint": "Ninguém tem esta função, então ela pode ser excluída.",
+        "inUse": "{count, plural, one {1 membro ainda tem esta função.} other {# membros ainda têm esta função.}} Mova-os para outra função primeiro.",
+        "action": "Excluir função"
+      },
+      "toasts": {
+        "created": "Função “{name}” criada.",
+        "updated": "Função “{name}” atualizada.",
+        "deleted": "Função “{name}” excluída."
+      }
+    },
+    "matrix": {
+      "title": "Permissões",
+      "counter": "{count} / {total} selecionadas",
+      "deniedCount": "{count} negadas",
+      "selectAll": "Selecionar tudo",
+      "selectAllCategory": "Selecionar tudo",
+      "selectAllOf": "Selecionar tudo em {category}",
+      "search": "Pesquisar permissões…",
+      "searchLabel": "Pesquisar permissões",
+      "denyHint": "Negar tem prioridade sobre permitir: uma permissão negada é recusada mesmo quando outra função do membro a permite.",
+      "emptyCatalogue": "Nenhuma permissão disponível.",
+      "noMatch": "Nenhuma permissão corresponde a “{query}”.",
+      "allow": "Permitir",
+      "deny": "Negar",
+      "effectLabel": "Permitir ou negar: {label}",
+      "scopeLabel": "Escopo dos registros: {label}",
+      "needsPlan": "Requer o plano {feature}",
+      "needsApp": "Requer o app {app} instalado",
+      "lockedHint": "Esta permissão ainda não está disponível para este espaço de trabalho. Ela é liberada quando o recurso do plano está ativo ou o app está instalado.",
+      "scope": {
+        "all": "Todos os registros",
+        "team": "Registros da equipe",
+        "own": "Registros próprios"
+      }
+    },
+    "delete": {
+      "title": "Excluir função",
+      "message": "Excluir a função “{name}”? Esta ação não pode ser desfeita.",
+      "confirm": "Excluir função",
+      "cancel": "Cancelar",
+      "inUseTitle": "“{name}” ainda está em uso",
+      "inUse": "{count, plural, =0 {Membros ainda têm esta função.} one {1 membro ainda tem esta função.} other {# membros ainda têm esta função.}} Mova-os para outra função primeiro e depois exclua-a.",
+      "viewMembers": "Ver membros com esta função"
+    }
+  }
+}

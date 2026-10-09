@@ -1,0 +1,1742 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "Platform ayarları",
+      "hub": "Ayarlar merkezi",
+      "general": "Genel",
+      "appearance": "Görünüm ve renkler",
+      "siteInfo": "Site bilgileri",
+      "footer": "Alt bilgi",
+      "mail": "E-posta",
+      "seo": "SEO",
+      "privacy": "Gizlilik, GDPR ve ADA",
+      "analytics": "Analitik",
+      "custom": "Özel kod",
+      "pwa": "PWA",
+      "storage": "Bulut depolama",
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "Kampanyalar",
+      "googleCalendar": "Google Takvim",
+      "flowBuilder": "Akış oluşturucu"
+    },
+    "hub": {
+      "kicker": "Yönetici - Proje ayarları",
+      "title": "Proje ayarları",
+      "description": "Uygulama kimliğini, mesajlaşma sağlayıcılarını, e-postayı, e-ticaret entegrasyonlarını, mağaza meta verilerini, alt bilgi içeriğini, PWA, SEO ve özel kodu yapılandırın.",
+      "export": "Yapılandırmayı dışa aktar",
+      "exporting": "Dışa aktarılıyor",
+      "exportHint": "Kaydedilmiş tüm ayarları indirir. Gizli bilgiler ve hesap kimlikleri değiştirilir.",
+      "tiles": {
+        "saved": "Kaydedilmiş ayarlar",
+        "savedHint": "{total} gruptan kaydedilen",
+        "healthy": "Sağlıklı",
+        "healthyHint": "boş olmayan bir değerle",
+        "needsTest": "Test gerekli",
+        "needsTestNone": "tümü doğrulandı",
+        "secrets": "Gizli alanlar",
+        "secretsHint": "şifreli / maskeli",
+        "lastUpdated": "Son güncelleme",
+        "lastUpdatedNone": "henüz düzenleme yok",
+        "lastUpdatedHint": "en son kayıt"
+      },
+      "card": {
+        "saved": "Kaydedildi",
+        "defaults": "Varsayılanlar",
+        "needsTest": "Test gerekli",
+        "updated": "Güncellendi: {when}",
+        "open": "Aç"
+      },
+      "others": "Para birimleri, katalog, Shopify, WooCommerce, HubSpot, Google, Slack, mobil push ve Trello ayarları, ilgili modüller yüklendiğinde burada görünür.",
+      "actions": {
+        "addons": "Eklentiler",
+        "updater": "Güncelleyici",
+        "legal": "Yasal sayfalar",
+        "general": "Genel'i aç"
+      }
+    },
+    "common": {
+      "save": "Değişiklikleri kaydet",
+      "saving": "Kaydediliyor",
+      "saved": "{count, plural, other {# değişiklik kaydedildi.}}",
+      "rejected": "{count, plural, other {# alan dikkat gerektiriyor}}",
+      "conflict": "Bu ayarları siz açtıktan sonra başka biri kaydetti. Değişiklikleri görmek için sayfayı yenileyin, ardından kendi değişikliklerinizi yeniden uygulayın.",
+      "reload": "Ayarları yenile",
+      "unexpected": "Bir sorun oluştu ve hiçbir şey kaydedilmedi.",
+      "requestId": "İstek kimliği",
+      "readOnly": "Bu ayarları görüntüleyebilirsiniz ancak yalnızca süper yönetici değiştirebilir.",
+      "secretSet": "Kaydedildi. Olduğu gibi bırakmak için boş bırakın.",
+      "secretUnset": "Ayarlanmadı.",
+      "secretClear": "Kayıtlı değeri kaldır",
+      "secretShow": "Göster",
+      "secretHide": "Gizle",
+      "numberRequired": "Bir tam sayı girin.",
+      "numberInteger": "Tam sayı kullanın.",
+      "updated": "Son kayıt: {when}",
+      "neverSaved": "Hiç kaydedilmedi: varsayılanlar gösteriliyor.",
+      "back": "Tüm ayarlar",
+      "invalidGroup": "Bu ayarlar sayfası mevcut değil.",
+      "eyebrow": "Yönetici - Proje ayarları",
+      "guide": "Hızlı kılavuz",
+      "resetDraft": "Taslağı sıfırla",
+      "cancel": "İptal",
+      "applyAfterSave": "Değişiklikler yalnızca kaydettikten sonra uygulanır.",
+      "saveAndTest": "Kaydet ve bağlantıyı test et",
+      "custom": "özel",
+      "manageLanguages": "Dilleri yönet"
+    },
+    "test": {
+      "title": "Test e-postası gönder",
+      "saveFirst": "Önce değişikliklerinizi kaydedin: kontrol kayıtlı ayarları kullanır.",
+      "mailTo": "Test e-postasını şuraya gönder:",
+      "mailRun": "Test e-postası gönder",
+      "run": "Bağlantıyı test et",
+      "running": "Test ediliyor",
+      "ok": "Başarılı",
+      "failed": "Başarısız",
+      "lastOk": "Son başarılı kontrol: {when}",
+      "neverTested": "Henüz kontrol edilmedi."
+    },
+    "groups": {
+      "general": {
+        "title": "Genel ayarlar",
+        "description": "Uygulama kimliği, platform varsayılanları ve bakım modu anahtarı.",
+        "sections": {
+          "identity": {
+            "title": "Uygulama kimliği"
+          },
+          "defaults": {
+            "title": "Platform varsayılanları"
+          },
+          "platform": {
+            "title": "Platform anahtarları"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "Uygulama adı",
+            "hint": "Sayfa başlıklarında, e-postalarda ve tarayıcı sekmesinde gösterilir."
+          },
+          "appUrl": {
+            "label": "Uygulama URL'si"
+          },
+          "supportEmail": {
+            "label": "Destek e-postası",
+            "placeholder": "support@…"
+          },
+          "fromEmail": {
+            "label": "Gönderen e-posta",
+            "placeholder": "hello@…"
+          },
+          "contactNumber": {
+            "label": "İletişim numarası",
+            "placeholder": "+91 …"
+          },
+          "address": {
+            "label": "Adres"
+          },
+          "mapIframeUrl": {
+            "label": "Harita iframe URL'si",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
+          },
+          "platformFooter": {
+            "label": "Platform alt bilgisi",
+            "hint": "Platformdan giden mesajlara eklenir. Yoksa boş bırakın."
+          },
+          "defaultTimezone": {
+            "label": "Varsayılan saat dilimi",
+            "hint": "Bir çalışma alanı veya kişi seçmediğinde kullanılır."
+          },
+          "defaultLanguage": {
+            "label": "Varsayılan dil"
+          },
+          "defaultCurrency": {
+            "label": "Varsayılan para birimi"
+          },
+          "defaultCountryCode": {
+            "label": "Varsayılan ülke kodu",
+            "hint": "Artı işaretli arama kodu, ör. +91."
+          },
+          "defaultCountryIso": {
+            "label": "Varsayılan ülke (telefon seçiciler)",
+            "hint": "Platformdaki tüm telefon giriş seçicilerinde geçerlidir."
+          },
+          "fontFamily": {
+            "label": "Yazı tipi ailesi"
+          },
+          "maintenanceMode": {
+            "label": "Bakım modu",
+            "hint": "Müşteri uygulamasını 503 ile çevrimdışı yapar. Operatörler, oturum açma ve makine geri çağrıları çalışmaya devam eder."
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "Varsayılan tema"
+          }
+        }
+      },
+      "branding": {
+        "title": "Marka ve görünüm",
+        "description": "Favicon, temaya göre logolar, renk belirteçleri ve arayüz boyutu.",
+        "sections": {
+          "assets": {
+            "title": "Marka varlıkları"
+          },
+          "colors": {
+            "title": "Renk belirteçleri"
+          },
+          "interface": {
+            "title": "Arayüz"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "Favicon URL'si"
+          },
+          "logos": {
+            "paper": {
+              "label": "Kağıt"
+            },
+            "bright": {
+              "label": "Parlak"
+            },
+            "dark": {
+              "label": "Koyu"
+            },
+            "doodle": {
+              "label": "Karalama"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "Birincil",
+              "hint": "Birincil rengi ayarlamak, siz de ayarlamadığınız sürece turkuaz, yeşil, nane ve balon tonlarının rengini de değiştirir."
+            },
+            "wa-teal": {
+              "label": "Birincil (üzerine gelince)"
+            },
+            "wa-green": {
+              "label": "Vurgu / başarı"
+            },
+            "wa-mint": {
+              "label": "Yumuşak vurgu dolgusu"
+            },
+            "wa-bubble": {
+              "label": "Sohbet balonu"
+            },
+            "paper-0": {
+              "label": "Sayfa arka planı"
+            },
+            "paper-50": {
+              "label": "Kart / soluk arka plan"
+            },
+            "paper-100": {
+              "label": "Üzerine gelince arka plan"
+            },
+            "paper-200": {
+              "label": "Kenarlıklar"
+            },
+            "ink-500": {
+              "label": "Soluk metin"
+            },
+            "ink-700": {
+              "label": "Gövde metni"
+            },
+            "ink-900": {
+              "label": "Başlıklar"
+            },
+            "accent-coral": {
+              "label": "Vurgu - mercan"
+            },
+            "accent-amber": {
+              "label": "Vurgu - kehribar"
+            },
+            "accent-plum": {
+              "label": "Vurgu - erik"
+            },
+            "accent-sky": {
+              "label": "Vurgu - gökyüzü"
+            }
+          },
+          "fontScale": {
+            "label": "Yazı boyutu",
+            "hint": "Tüm arayüzün yazı boyutu yüzde olarak, 80 ile 130 arasında."
+          },
+          "uiOpacity": {
+            "label": "Opaklık",
+            "hint": "Tüm arayüzün opaklığı yüzde olarak, 55 ile 100 arasında."
+          },
+          "dashboardLayout": {
+            "label": "Gezinme düzeni"
+          },
+          "sidebarColor": {
+            "label": "Arka plan"
+          },
+          "sidebarTextColor": {
+            "label": "Metin rengi"
+          },
+          "sidebarAccentColor": {
+            "label": "Vurgu rengi"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "Üst çubuk",
+            "sidebar": "Kenar çubuğu"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "Mevcut: üstte menü ve taşan öğeler için Daha fazla sayfası.",
+            "sidebar": "Tüm özellikleri gruplandıran, yönetici tarzı sol kenar şeridi. Üst menü yok."
+          }
+        }
+      },
+      "site": {
+        "title": "Site bilgileri",
+        "description": "Şirket bilgileri, iletişim adresleri, sosyal profiller ve genel alt bilgi.",
+        "sections": {
+          "company": {
+            "title": "Şirket"
+          },
+          "contact": {
+            "title": "İletişim adresleri"
+          },
+          "social": {
+            "title": "Sosyal profiller"
+          },
+          "footer": {
+            "title": "Genel alt bilgi"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "Şirket adı"
+          },
+          "tagline": {
+            "label": "Slogan"
+          },
+          "foundedYear": {
+            "label": "Kuruluş yılı"
+          },
+          "address": {
+            "label": "Adres"
+          },
+          "cityCountry": {
+            "label": "Şehir ülke"
+          },
+          "emailGeneral": {
+            "label": "Genel e-posta"
+          },
+          "emailSupport": {
+            "label": "Destek e-postası"
+          },
+          "emailSales": {
+            "label": "Satış e-postası"
+          },
+          "emailSecurity": {
+            "label": "Güvenlik e-postası"
+          },
+          "emailCareers": {
+            "label": "Kariyer e-postası"
+          },
+          "phone": {
+            "label": "Telefon"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "Sosyal X"
+          },
+          "socialLinkedin": {
+            "label": "Sosyal LinkedIn"
+          },
+          "socialInstagram": {
+            "label": "Sosyal Instagram"
+          },
+          "socialYoutube": {
+            "label": "Sosyal YouTube"
+          },
+          "socialFacebook": {
+            "label": "Sosyal Facebook"
+          },
+          "socialGithub": {
+            "label": "Sosyal GitHub"
+          },
+          "footerTitle": {
+            "label": "Alt bilgi başlığı"
+          },
+          "footerDescription": {
+            "label": "Alt bilgi açıklaması"
+          },
+          "footerCopyright": {
+            "label": "Alt bilgi telif hakkı"
+          }
+        }
+      },
+      "mail": {
+        "title": "E-posta ayarları",
+        "description": "Giden e-posta. Kaydedilen değerler her gönderimde sunucu varsayılanlarının yerine geçer.",
+        "sections": {
+          "sender": {
+            "title": "Gönderen"
+          },
+          "smtp": {
+            "title": "E-posta sunucusu"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "Gönderen adı",
+            "placeholder": "Acme Inc.",
+            "hint": "Alıcılara \"Gönderen\" adı olarak gösterilir."
+          },
+          "fromAddress": {
+            "label": "Gönderen adresi",
+            "placeholder": "hello@yourdomain.com",
+            "hint": "Alan adında geçerli SPF + DKIM bulunmalı, aksi halde e-postalar spam klasörüne düşer."
+          },
+          "mailer": {
+            "label": "Gönderici",
+            "hint": "SMTP ve günlük göndericisi bugün çalışıyor; API tabanlı göndericiler henüz bağlı değil."
+          },
+          "host": {
+            "label": "Sunucu",
+            "placeholder": "smtp.mailgun.org",
+            "hint": "Sunucu varsayılanını korumak için boş bırakın."
+          },
+          "port": {
+            "label": "Bağlantı noktası",
+            "hint": "TLS için 587, SSL için 465, 25 (kullanmaktan kaçının)."
+          },
+          "encryption": {
+            "label": "Şifreleme",
+            "hint": "ssl, örtük TLS anlamına gelir (genellikle 465 numaralı bağlantı noktası); tls ve starttls, 587 numaralı bağlantı noktasında yükseltme yapar."
+          },
+          "username": {
+            "label": "Kullanıcı adı",
+            "placeholder": "postmaster@mg.example.com"
+          },
+          "password": {
+            "label": "Parola",
+            "placeholder": "SMTP parolasını girin",
+            "hint": "Şifreli olarak saklanır ve bir daha gösterilmez."
+          }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls (bağlantı noktası 587)",
+            "ssl": "ssl (bağlantı noktası 465)",
+            "starttls": "starttls",
+            "none": "yok"
+          }
+        }
+      },
+      "seo": {
+        "title": "SEO ayarları",
+        "description": "Genel site için arama ve sosyal paylaşım etiketleri.",
+        "sections": {
+          "search": {
+            "title": "Arama sonuçları"
+          },
+          "social": {
+            "title": "Sosyal paylaşım"
+          },
+          "verification": {
+            "title": "Site doğrulama"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "Meta başlığı",
+            "hint": "Markayla başlayın."
+          },
+          "metaDescription": {
+            "label": "Meta açıklaması",
+            "hint": "Google'da başlığın altında gösterilir.",
+            "placeholder": "Google'da başlığın altında gösterilen 1–2 cümlelik tanıtım."
+          },
+          "metaKeywords": {
+            "label": "Meta anahtar kelimeleri",
+            "placeholder": "whatsapp pazarlama, whatsapp crm, kampanyalar, otomasyon, gelen kutusu"
+          },
+          "robots": {
+            "label": "Robots yönergesi",
+            "hint": "Arama tarayıcılarına bağlantıları listeleyip izlemeleri gerektiğini bildirin."
+          },
+          "canonical": {
+            "label": "Kanonik",
+            "placeholder": "https://app.example.com"
+          },
+          "author": {
+            "label": "Yazar"
+          },
+          "ogTitle": {
+            "label": "Open Graph başlığı",
+            "placeholder": "Varsayılan olarak Meta başlığı"
+          },
+          "ogDescription": {
+            "label": "Open Graph açıklaması",
+            "placeholder": "Varsayılan olarak Meta açıklaması"
+          },
+          "ogType": {
+            "label": "Open Graph türü"
+          },
+          "ogUrl": {
+            "label": "Open Graph URL'si",
+            "placeholder": "https://app.example.com"
+          },
+          "ogImage": {
+            "label": "Open Graph görseli",
+            "hint": "Önerilen 1200x630. Slack, X, WhatsApp, Discord tarafından kullanılır.",
+            "placeholder": "https://app.example.com/og.png"
+          },
+          "twitterCard": {
+            "label": "Twitter kartı"
+          },
+          "twitterSite": {
+            "label": "Twitter sitesi",
+            "placeholder": "@yourbrand"
+          },
+          "twitterCreator": {
+            "label": "Twitter oluşturucusu",
+            "placeholder": "@author"
+          },
+          "googleVerification": {
+            "label": "Google doğrulama",
+            "placeholder": "google-site-verification=…"
+          },
+          "bingVerification": {
+            "label": "Bing doğrulama",
+            "placeholder": "msvalidate.01=…"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "Dizine ekle, takip et — genel site",
+            "index, nofollow": "Dizine ekle, takip etme",
+            "noindex, follow": "Dizine ekleme, takip et",
+            "noindex, nofollow": "Dizine ekleme, takip etme — aramadan gizle"
+          }
+        }
+      },
+      "privacy": {
+        "title": "Gizlilik ve çerezler",
+        "description": "Çerez onay bandı, yasal bağlantılar ve uyumluluk işaretleri.",
+        "sections": {
+          "banner": {
+            "title": "Çerez bandı"
+          },
+          "links": {
+            "title": "Yasal bağlantılar"
+          },
+          "compliance": {
+            "title": "Uyumluluk işaretleri"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "Bant etkin"
+          },
+          "cookieBannerStyle": {
+            "label": "Bant stili"
+          },
+          "cookieMessage": {
+            "label": "Onay mesajı"
+          },
+          "respectDoNotTrack": {
+            "label": "Do-Not-Track'e uy",
+            "hint": "Tarayıcı DNT=1 gönderirse → tümünü reddet"
+          },
+          "policyUrl": {
+            "label": "Gizlilik politikası URL'si",
+            "placeholder": "https://example.com/privacy"
+          },
+          "termsUrl": {
+            "label": "Hizmet şartları URL'si",
+            "placeholder": "https://example.com/terms"
+          },
+          "cookiesPolicyUrl": {
+            "label": "Çerez politikası URL'si (Daha fazla bilgi)",
+            "placeholder": "https://example.com/cookies"
+          },
+          "gdprCompliance": {
+            "label": "GDPR uyumluluğu (AB)",
+            "hint": "Kayıtlarınız için saklanır. Henüz davranışı değiştirmez."
+          },
+          "ccpaCompliance": {
+            "label": "CCPA uyumluluğu (Kaliforniya)",
+            "hint": "Kayıtlarınız için saklanır. Henüz davranışı değiştirmez."
+          },
+          "adaSkipLink": {
+            "label": "İçeriğe atla bağlantısı",
+            "hint": "Kayıtlarınız için saklanır. Henüz davranışı değiştirmez."
+          },
+          "adaHighContrast": {
+            "label": "Yüksek kontrast modunu sun",
+            "hint": "Kayıtlarınız için saklanır. Henüz davranışı değiştirmez."
+          },
+          "adaLargeText": {
+            "label": "Büyük yazı modunu sun",
+            "hint": "Kayıtlarınız için saklanır. Henüz davranışı değiştirmez."
+          },
+          "adaReducedMotion": {
+            "label": "prefers-reduced-motion tercihine uy",
+            "hint": "Kayıtlarınız için saklanır. Henüz davranışı değiştirmez."
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "Alt sabit çubuk — önerilen",
+            "top-bar": "Üst sabit çubuk",
+            "modal": "Ortalanmış pencere"
+          }
+        }
+      },
+      "analytics": {
+        "title": "Analitik",
+        "description": "İzleyici kimlikleri. İzleyiciler yalnızca ziyaretçi onay verdikten sonra yüklenir.",
+        "sections": {
+          "trackers": {
+            "title": "İzleyici kimlikleri"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "Meta pikseli"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft Clarity"
+          },
+          "tiktokPixel": {
+            "label": "TikTok pikseli"
+          },
+          "linkedinPartner": {
+            "label": "LinkedIn ortağı"
+          },
+          "twitterPixel": {
+            "label": "Twitter pikseli"
+          },
+          "plausibleDomain": {
+            "label": "Plausible alan adı"
+          },
+          "posthogKey": {
+            "label": "PostHog anahtarı"
+          },
+          "mixpanelToken": {
+            "label": "Mixpanel belirteci"
+          },
+          "hotjarSiteId": {
+            "label": "Hotjar site kimliği"
+          },
+          "posthogHost": {
+            "label": "PostHog sunucusu"
+          }
+        }
+      },
+      "customCode": {
+        "title": "Özel kod",
+        "description": "Genel siteye eklenen CSS ve JavaScript.",
+        "sections": {
+          "code": {
+            "title": "Özel kod"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Canlıda uygula",
+            "hint": "Bu açık olana kadar aşağıdakilerin hiçbiri genel sitede çalışmaz."
+          },
+          "css": {
+            "label": "Özel CSS"
+          },
+          "js": {
+            "label": "Özel JS",
+            "hint": "Her ziyaretçi için çalışır. Yalnızca güvendiğiniz kodu yapıştırın."
+          }
+        }
+      },
+      "pwa": {
+        "title": "Yüklenebilir uygulama",
+        "description": "Web uygulaması bildirimi ve yükleme davranışı.",
+        "sections": {
+          "app": {
+            "title": "Yüklenebilir uygulama"
+          },
+          "look": {
+            "title": "Görünüm ve davranış"
+          },
+          "install": {
+            "title": "Yükleme ve çevrimdışı"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Etkin"
+          },
+          "appName": {
+            "label": "Uygulama adı"
+          },
+          "shortName": {
+            "label": "Kısa ad"
+          },
+          "description": {
+            "label": "Açıklama"
+          },
+          "startUrl": {
+            "label": "Başlangıç URL'si"
+          },
+          "scope": {
+            "label": "Kapsam"
+          },
+          "display": {
+            "label": "Görüntüleme"
+          },
+          "orientation": {
+            "label": "Yön"
+          },
+          "themeColor": {
+            "label": "Tema rengi"
+          },
+          "backgroundColor": {
+            "label": "Arka plan rengi"
+          },
+          "icon192": {
+            "label": "Simge 192"
+          },
+          "icon512": {
+            "label": "Simge 512"
+          },
+          "installPrompt": {
+            "label": "Yükleme istemi"
+          },
+          "offlineEnabled": {
+            "label": "Çevrimdışı etkin"
+          }
+        }
+      },
+      "storage": {
+        "title": "Bulut depolama",
+        "description": "Medya için S3 uyumlu depolama alanı. Açmadan önce bağlantıyı test edin.",
+        "sections": {
+          "provider": {
+            "title": "Sağlayıcı"
+          },
+          "credentials": {
+            "title": "Depolama alanı kimlik bilgileri"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Etkin"
+          },
+          "provider": {
+            "label": "Sağlayıcı"
+          },
+          "visibility": {
+            "label": "Dosya görünürlüğü",
+            "hint": "Özel nesneler imzalı bağlantı gerektirir; insanların doğrudan açtığı medya için genel veya CDN URL'si kullanın."
+          },
+          "basePath": {
+            "label": "Temel klasör yolu (isteğe bağlı)",
+            "hint": "Test nesnesi için önek. Dosya modülü geldiğinde yüklemeler bunu kullanacak."
+          },
+          "accessKeyId": {
+            "label": "Erişim anahtarı kimliği *"
+          },
+          "secret": {
+            "label": "Gizli erişim anahtarı *",
+            "hint": "Şifreli olarak saklanır ve bir daha gösterilmez.",
+            "placeholder": "gizli anahtarı yapıştırın"
+          },
+          "region": {
+            "label": "Bölge",
+            "placeholder": "us-east-1"
+          },
+          "bucket": {
+            "label": "Depolama alanı *"
+          },
+          "endpoint": {
+            "label": "Uç nokta",
+            "hint": "Spaces, R2 ve MinIO için gerekli. Sondaki /bucket kaldırılır.",
+            "placeholder": "https://… (Spaces / R2 / MinIO için gerekli; Wasabi ve Bunny için otomatik)"
+          },
+          "cdnUrl": {
+            "label": "Genel / CDN URL'si (isteğe bağlı)",
+            "placeholder": "https://cdn.example.com"
+          },
+          "pathStyle": {
+            "label": "Yol tabanlı uç nokta kullan (MinIO / bazı S3 uyumlu depolamalar)"
+          },
+          "storageZone": {
+            "label": "Depolama bölgesi",
+            "hint": "Yalnızca Bunny."
+          },
+          "storagePassword": {
+            "label": "Depolama parolası (erişim anahtarı)",
+            "hint": "Yalnızca Bunny: depolama bölgesi parolası. Şifreli olarak saklanır.",
+            "placeholder": "parolayı yapıştırın"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net Storage",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO / S3 uyumlu"
+          },
+          "visibility": {
+            "private": "Özel (imzalı URL'ler)",
+            "public": "Genel"
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "WhatsApp ayarları",
+        "description": "WhatsApp numaralarını eklemek için kullanılan Meta uygulaması ve Interakt ortağı.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)"
+          },
+          "interakt": {
+            "title": "Interakt yolu"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "Meta App ID",
+            "hint": "Boş bırakılırsa sunucu ortamı kullanılır."
+          },
+          "appSecret": {
+            "label": "Uygulama gizli anahtarı",
+            "hint": "Şifreli olarak saklanır, bir daha gösterilmez. Kayıtlı gizli anahtarı korumak için boş bırakın."
+          },
+          "configId": {
+            "label": "Embedded Signup yapılandırma kimliği",
+            "hint": "Boş bırakılırsa çalışma alanları belirteci elle yapıştırır."
+          },
+          "graphVersion": {
+            "label": "Graph API sürümü",
+            "hint": "v25.0 gibi. Boş bırakılırsa sunucu varsayılanı kullanılır."
+          },
+          "coexistence": {
+            "label": "Birlikte kullanım",
+            "hint": "Embedded Signup'ta \"Mevcut İş Uygulaması numaramı bağla\" seçeneğini sun."
+          },
+          "defaultProvider": {
+            "label": "Varsayılan yol",
+            "hint": "Yeni bağlanan numaraların kullandığı API."
+          },
+          "solutionId": {
+            "label": "Interakt çözüm kimliği",
+            "hint": "Meta'ya extras.setup.solutionID olarak, kayıt sırasında Interakt'e gönderilir."
+          },
+          "partnerAuthKey": {
+            "label": "Interakt ortak anahtarı",
+            "hint": "Paylaşılan teknoloji ortağı anahtarı. Şifreli olarak saklanır."
+          },
+          "systemUserId": {
+            "label": "Sistem kullanıcı kimliği",
+            "hint": "Bağlı her WABA'ya MANAGE görevi ile atanır."
+          },
+          "systemUserToken": {
+            "label": "Sistem kullanıcı belirteci",
+            "hint": "Belirteçleri incelemek ve sistem kullanıcısını atamak için kullanılır. Şifreli olarak saklanır."
+          },
+          "businessId": {
+            "label": "İşletme kimliği",
+            "hint": "Belirteç WABA listelemediğinde WABA'yı bulmak için yedek olarak kullanılır."
+          },
+          "verifyToken": {
+            "label": "Webhook doğrulama belirteci",
+            "hint": "Rastgele herhangi bir metin. Yukarıda gösterilen oluşturulmuş değeri kullanmak için boş bırakın."
+          },
+          "requireSignature": {
+            "label": "Her webhook için imza iste",
+            "hint": "Geçerli Meta imzası taşımayan Interakt yönlendirmeli olayları reddeder. Yalnızca Interakt bunları imzalıyorsa açın."
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt (Meta vekili)",
+            "meta": "Meta (doğrudan)"
+          }
+        }
+      },
+      "campaigns": {
+        "title": "Kampanyalar",
+        "description": "Bir kampanyanın başarısız bir mesajı nasıl yeniden deneyeceği ve tamamlanmamış bir kampanyanın ne zaman sona ereceği.",
+        "sections": {
+          "retry": {
+            "title": "Yeniden denemeler"
+          },
+          "expiry": {
+            "title": "Otomatik sonlandırma"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "Yeniden deneme sayısı",
+            "hint": "Başarısız olarak işaretlenmeden önce alıcı başına deneme sayısı (0 ile 10 arası)."
+          },
+          "retryBackoffSec": {
+            "label": "Yeniden deneme beklemesi (saniye)",
+            "hint": "Bir sonraki denemeden önceki bekleme; her denemede artar."
+          },
+          "autoExpiryEnabled": {
+            "label": "Tamamlanmamış kampanyaları sonlandır",
+            "hint": "Aşağıdaki saatten sonra hâlâ çalışan bir kampanyayı sonlandırır."
+          },
+          "defaultExpiryHours": {
+            "label": "Şu süreden sonra sonlandır (saat)"
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Takvim",
+        "description": "Her çalışma alanının takvimini bağladığı Google OAuth istemcisi.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth istemcisi"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Çalışma alanlarının Google Takvim'i bağlamasına izin ver",
+            "hint": "Kapalı: hiçbir çalışma alanı bağlanamaz ve bir takvime hiçbir şey yazılmaz veya okunmaz."
+          },
+          "clientId": {
+            "label": "İstemci kimliği",
+            "hint": "Google Cloud, Kimlik bilgileri, OAuth 2.0 İstemci Kimliği (Web uygulaması). Boş bırakılırsa GOOGLE_CALENDAR_CLIENT_ID kullanılır."
+          },
+          "clientSecret": {
+            "label": "İstemci gizli anahtarı",
+            "hint": "Şifreli olarak saklanır, bir daha gösterilmez. Boş bırakılırsa kayıtlı olan korunur; GOOGLE_CALENDAR_CLIENT_SECRET yedek olarak kullanılır."
+          },
+          "redirectUri": {
+            "label": "Yönlendirme URI geçersiz kılma",
+            "hint": "Yukarıdaki adresi kullanmak için boş bırakın. İstemcideki Yetkili yönlendirme URI'lerinden biriyle birebir eşleşmelidir."
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Akış oluşturucu",
+        "description": "Çalışma alanlarına sunulan akış oluşturucular.",
+        "sections": {
+          "mode": {
+            "title": "Oluşturucu"
+          }
+        },
+        "fields": {
+          "mode": {
+            "label": "Çalışma alanları için varsayılan oluşturucu",
+            "hint": "Basit, adım adım liste oluşturucudur; Gelişmiş ise tuval oluşturucudur. Bir çalışma alanı bunu kendi Akışlar sayfasında geçersiz kılabilir."
+          }
+        },
+        "options": {
+          "mode": {
+            "simple": "Yalnızca basit",
+            "advanced": "Yalnızca gelişmiş"
+          }
+        }
+      }
+    },
+    "cards": {
+      "appearance": {
+        "title": "Görünüm ve renkler",
+        "description": "Kullanıcı ve yönetici panellerinin tüm sayfalarının renklerini değiştirin: marka, yüzeyler, metin ve vurgular. Anında uygulanır.",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "Genel ayarlar",
+        "description": "Uygulama adı, iletişim bilgileri, logolar, URL, adres ve genel hizmet anahtarları.",
+        "tags": "APP_NAME / APP_URL / logolar"
+      },
+      "paymentGateways": {
+        "title": "Ödeme geçitleri",
+        "description": "Stripe, Razorpay, PayPal, Paystack, Flutterwave ve daha fazlası: anahtarlar, para birimleri ve canlı anahtarlar.",
+        "tags": "Canlı / test ortamı - geçit başına anahtarlar"
+      },
+      "aiKeys": {
+        "title": "AI / API anahtarları",
+        "description": "OpenAI, Anthropic, Google ve diğerleri için sağlayıcı kimlik bilgileri. Platformdaki tüm AI özelliklerini yönetir.",
+        "tags": "BYOK / varsayılan modeller"
+      },
+      "mail": {
+        "title": "E-posta ayarları",
+        "description": "SMTP sürücüsü, sunucu, bağlantı noktası, gönderen adı, şifreleme ve test gönderimi.",
+        "tags": "SMTP / doğrulama / karşılama"
+      },
+      "auditLog": {
+        "title": "Denetim günlüğü",
+        "description": "Her yönetici işleminin aranabilir geçmişi: çalışma alanı düzenlemeleri, kullanıcı değişiklikleri, faturalandırma olayları, güvenlik olayları, ayar güncellemeleri.",
+        "tags": "Filtre / ayrıntı / CSV dışa aktarma"
+      },
+      "privacy": {
+        "title": "Gizlilik, GDPR ve ADA",
+        "description": "Çerez onay bandı, GDPR / CCPA uyumluluğu, ADA / WCAG erişilebilirlik anahtarları ve politika URL'leri.",
+        "tags": "Onay / politikalar / erişilebilirlik"
+      },
+      "menuOrder": {
+        "title": "Menü sırası",
+        "description": "Her kullanıcı çalışma alanında gösterilen üst gezinme öğelerinin sırasını belirleyin.",
+        "tags": "Sırayı değiştir"
+      },
+      "authPages": {
+        "title": "Kimlik doğrulama sayfaları",
+        "description": "Giriş, kayıt ve parola unuttum sayfalarını düzenleyin: başlık, alt metin, vurgu rengi ve yan görsel veya video. Canlı önizleme.",
+        "tags": "Giriş / kayıt / parola unuttum"
+      },
+      "analytics": {
+        "title": "Analitik entegrasyonları",
+        "description": "Google Analytics, GTM, Meta Pixel, Clarity, Plausible, PostHog, Hotjar, TikTok, LinkedIn, X: kimliği yapıştırın, betiği biz oluştururuz.",
+        "tags": "GA4 / Pixel / Clarity / GTM"
+      },
+      "seo": {
+        "title": "SEO ayarları",
+        "description": "Meta başlığı, açıklama, OpenGraph, Twitter kartları, robots, kanonik ve Google + Bing site doğrulaması.",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "Diller",
+        "description": "Kullanılabilir yerel ayarlar, varsayılan dil, RTL işareti ve dil başına etkinleştirme anahtarı. Dil seçiciyi yönetir.",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "PWA ayarları",
+        "description": "Uygulama adı, yükleme simgeleri, tema rengi, arka plan rengi, görüntüleme modu ve PWA etkinleştirme anahtarı.",
+        "tags": "Simgeler / renkler / yükleme"
+      },
+      "footer": {
+        "title": "Alt bilgi ayarları",
+        "description": "Alt bilgi başlığı, sosyal bağlantılar, telif hakkı metni ve genel alt bilgi açıklaması.",
+        "tags": "Logo / sosyal / telif hakkı"
+      },
+      "siteInfo": {
+        "title": "Site bilgileri",
+        "description": "Genel alt bilgide, iletişim ve hakkında sayfalarında paylaşılan e-postalar, telefon, WhatsApp, adres ve sosyal bağlantılar.",
+        "tags": "e-postalar / telefon / sosyal"
+      },
+      "socialLogin": {
+        "title": "Sosyal giriş ve captcha",
+        "description": "Giriş ve kayıt sayfalarında Google ve Facebook ile oturum açmayı açıp kapatın, OAuth anahtarlarını yapıştırın ve reCAPTCHA'yı etkinleştirin.",
+        "tags": "yapılandırılmadı"
+      },
+      "registration": {
+        "title": "Kayıt",
+        "description": "Yeni çalışma alanları için genel kayıt, e-posta doğrulama, varsayılan plan ve deneme süresi.",
+        "tags": "Kayıt / deneme / plan"
+      },
+      "custom": {
+        "title": "Özel kod",
+        "description": "Anahtar açıkken genel sayfalara eklenen canlı CSS ve JavaScript.",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "Bulut depolama",
+        "description": "Müşteri medyasını kendi depolama alanınıza gönderin: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 veya MinIO.",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "Her çalışma alanının WhatsApp numaralarını bağladığı Meta uygulaması: uygulama kimliği ve gizli anahtarı, Embedded Signup, webhook ve Interakt yolu.",
+        "tags": "Meta / Embedded Signup / Interakt"
+      },
+      "campaigns": {
+        "title": "Kampanyalar",
+        "description": "Yeniden denemeler ve hiç tamamlanmamış bir kampanyanın otomatik sonlandırılması.",
+        "tags": "Yeniden deneme / son kullanma"
+      },
+      "googleCalendar": {
+        "title": "Google Takvim",
+        "description": "Çalışma alanlarının randevu ve meşgul saatler için takvimlerini bağlamak amacıyla kullandığı Google OAuth istemcisi.",
+        "tags": "Google / OAuth / Calendar"
+      },
+      "flowBuilder": {
+        "title": "Akış oluşturucu",
+        "description": "Her çalışma alanı için varsayılan akış oluşturucu: Basit adım adım veya Gelişmiş tuval. Bir çalışma alanı bunu geçersiz kılabilir.",
+        "tags": "Basit / Gelişmiş / Otomasyon"
+      }
+    },
+    "signup": {
+      "body": "Genel kayıt, e-postanın otomatik doğrulanması, yeni kayıtlar için varsayılan plan ve ücretsiz deneme süresi Kayıt sayfasında düzenlenir.",
+      "link": "Kayıt ayarlarını aç"
+    },
+    "brandAssets": {
+      "intro": "Favicon tüm temalarda ortaktır. Logo temaya özeldir: koyu mod için ters veya açık bir varyant, karalama teması için karalamaya uygun bir varyant yükleyin.",
+      "favicon": {
+        "title": "Favicon",
+        "note": "Tarayıcı sekmelerinde ve yer imlerinde gösterilir. Önerilen 35x35 px. PNG, ICO, JPG, SVG veya WebP, en fazla 512 KB. Yükleme mevcut olanın yerini alır."
+      },
+      "logos": {
+        "title": "Temaya göre logo",
+        "note": "Her tema kendi logosunu kullanır. Temaya özel logo yüklenmezse Kağıt temasına geri döner."
+      },
+      "themes": {
+        "paper": {
+          "label": "Kağıt (varsayılan)",
+          "note": "Açık, kırık beyaz. Varsayılan görünüm."
+        },
+        "bright": {
+          "label": "Parlak beyaz",
+          "note": "Daha yüksek kontrastlı beyaz arka plan."
+        },
+        "dark": {
+          "label": "Koyu (beta)",
+          "note": "Logonuzun açık veya ters bir sürümünü kullanın."
+        },
+        "doodle": {
+          "label": "Karalama (şık)",
+          "note": "Pastel nane arka plan."
+        }
+      },
+      "noFile": "Dosya yok",
+      "upload": "Yükle",
+      "uploading": "Yükleniyor",
+      "remove": "Kaldır",
+      "loading": "Yükleniyor",
+      "loadFailed": "Marka dosyaları yüklenemedi.",
+      "failed": "Yükleme başarısız oldu.",
+      "tooLarge": "Bu dosya {kb} KB'tan büyük.",
+      "wrongType": "Bu dosya türüne burada izin verilmiyor."
+    },
+    "teamInbox": {
+      "intro": "Ekip Gelen Kutusu'na özel, ayrı bir yüklenebilir uygulama. Temsilciler bağlantıyı açar, ana ekrana ekler ve uygulama kapalıyken bile yeni mesajlar için anlık bildirim alır.",
+      "enabled": {
+        "label": "Ekip Gelen Kutusu uygulamasını etkinleştir",
+        "hint": "/team-inbox için ayrı bildirim dosyasını, yükleme istemini ve bildirimleri açar."
+      },
+      "name": {
+        "label": "Uygulama adı"
+      },
+      "shortName": {
+        "label": "Kısa ad",
+        "hint": "En fazla 12 karakter."
+      },
+      "icon192": {
+        "label": "Uygulama simgesi (192x192 PNG)",
+        "note": "Boşsa uygulama simgesi kullanılır. Gelen kutusu uygulamasının ana ekran simgesi."
+      },
+      "icon512": {
+        "label": "Büyük simge / açılış ekranı (512x512 PNG)",
+        "note": "Boşsa uygulama simgesi kullanılır. Yükleme açılış ekranı ve yüksek DPI ekranlar için."
+      },
+      "push": {
+        "ready": {
+          "title": "Anlık bildirimler: hazır",
+          "body": "Anahtarlar oluşturuldu. Temsilciler bildirimleri gelen kutusundan açabilir."
+        },
+        "todo": {
+          "title": "Anlık bildirimler: bir adım kaldı",
+          "body": "Anlık bildirimleri ayarlamak için Anahtar oluştur'a tıklayın. Sunucu erişimi gerekmez."
+        },
+        "generate": "Anahtar oluştur",
+        "generating": "Oluşturuluyor",
+        "generated": "Anlık bildirim anahtarları oluşturuldu."
+      },
+      "manifestLink": "Ekip Gelen Kutusu bildirim dosyası",
+      "save": "Ekip Gelen Kutusu uygulamasını kaydet",
+      "saving": "Kaydediliyor",
+      "saved": "Ekip Gelen Kutusu uygulaması kaydedildi.",
+      "conflict": "Siz açtıktan sonra başka biri bunu kaydetti. Sayfayı yenileyin ve tekrar deneyin.",
+      "failed": "Bir sorun oluştu ve hiçbir şey kaydedilmedi.",
+      "loading": "Yükleniyor",
+      "loadFailed": "Ekip Gelen Kutusu uygulama ayarları yüklenemedi."
+    },
+    "seoPreview": {
+      "google": "Google sonucu",
+      "noDescription": "Henüz meta açıklaması yok.",
+      "noImage": "OG görseli yok",
+      "sitemapKicker": "Site haritası ve robots",
+      "sitemapTitle": "Tarayıcı dosyaları",
+      "sitemapFile": "Genel sayfalar ve yayımlanmış blog yazılarından otomatik oluşturulur. /sitemap.xml dosyasını Google Search Console'a gönderin.",
+      "download": "sitemap.xml dosyasını indir"
+    },
+    "pages": {
+      "general": {
+        "title": "Genel ayarlar",
+        "description": "Temel uygulama kimliği, iletişim bilgileri, varsayılan yerel ayar ve para birimi ile platform düzeyindeki hizmet anahtarları.",
+        "sections": {
+          "identity": {
+            "title": "Uygulama kimliği"
+          },
+          "brandAssets": {
+            "title": "Marka varlıkları"
+          },
+          "platform": {
+            "title": "Platform anahtarları"
+          },
+          "signup": {
+            "title": "Kayıtlar ve ücretsiz deneme"
+          }
+        },
+        "guide": {
+          "title": "Ne nereye gider",
+          "items": {
+            "appName": {
+              "title": "Uygulama adı",
+              "body": "Sayfa başlıklarında, e-postalarda ve uygulama içi markada kullanılır. Kısa tutun: ideal olarak bir veya iki kelime."
+            },
+            "appUrl": {
+              "title": "Uygulama URL'si",
+              "body": "Kanonik adres. Tüm geri çağrılar, e-postalar ve OAuth yönlendirmeleri buradan türetilir."
+            },
+            "language": {
+              "title": "Varsayılan dil",
+              "body": "Yeni hesaplara uygulanır. Mevcut kullanıcılar seçtiklerini korur."
+            },
+            "currency": {
+              "title": "Varsayılan para birimi",
+              "body": "Açık bir geçersiz kılma olmayan faturalar ve cüzdanlar için kullanılır."
+            },
+            "maintenance": {
+              "title": "Bakım modu",
+              "body": "AÇIK olduğunda yönetici olmayan tüm rotalar bir yer tutucu gösterir. Yönetici yine de konsola erişebilir."
+            }
+          }
+        },
+        "tip": {
+          "title": "Canlı kuralı",
+          "body": "Yalnızca etkilenen kullanıcı akışını test ettikten sonra kaydedin. Kimlik değişiklikleri faturalara ve giden e-postalara yansır."
+        }
+      },
+      "appearance": {
+        "title": "Pano renkleri",
+        "description": "Bu tema renklerini değiştirerek tüm uygulamanın, kullanıcı panelinin her sayfasının ve yönetici panelinin renklerini değiştirin. Kaydetmek herkes için anında uygulanır; sunulan görünümü korumak için bir rengi varsayılanında bırakın.",
+        "sections": {
+          "layout": {
+            "title": "Gezinme düzeni",
+            "description": "Kullanıcı panelinin düzenini seçin. Kenar çubuğu her menüyü sol şeride taşır (üst başlık ve Daha fazla sayfası yok)."
+          },
+          "sidebar": {
+            "title": "Kenar çubuğu rengi",
+            "description": "Koyu sol şerit arka planı (yalnızca kenar çubuğu düzeni). Sunulan neredeyse siyah için varsayılanı bırakın."
+          },
+          "interface": {
+            "title": "Arayüz"
+          },
+          "brand": {
+            "title": "Marka"
+          },
+          "surfaces": {
+            "title": "Yüzeyler"
+          },
+          "text": {
+            "title": "Metin"
+          },
+          "accents": {
+            "title": "Vurgular"
+          }
+        },
+        "guide": {
+          "title": "Renkler nasıl çalışır",
+          "items": {
+            "how": {
+              "title": "Anında uygulanır",
+              "body": "Kaydetmek herkes için canlı tema belirteçlerini yeniden yazar."
+            },
+            "tokens": {
+              "title": "Bir belirteç, bir görev",
+              "body": "Her renk örneği, kullanıcı panelinde ve yönetici panelinde kullanılan tek bir CSS değişkenine karşılık gelir."
+            },
+            "primary": {
+              "title": "Birincil rengi değiştirin, diğerleri izler",
+              "body": "Siz ayarlamadığınız sürece birincil (üzerine gelince), vurgu, yumuşak dolgu ve sohbet balonu birincil renkten türetilir."
+            },
+            "defaults": {
+              "title": "Varsayılanlara dokunmayın",
+              "body": "Sunulan değerinde bırakılan her renk özgün görünümü korur; yalnızca değiştirilen belirteçler geçersiz kılınır."
+            }
+          }
+        },
+        "tip": {
+          "title": "İpucu",
+          "body": "Büyük değişikliklerden sonra kontrastı kontrol edin. Metin ve arka plan renkleri bu belirteçlerden gelir."
+        },
+        "eyebrow": "Yönetici - Görünüm"
+      },
+      "siteInfo": {
+        "title": "Site bilgileri",
+        "description": "Alt bilgi, iletişim ve hakkında sayfalarında paylaşılan iletişim bilgileri ve sosyal bağlantılar. Bir kez düzenleyin, her yerde güncellenir.",
+        "sections": {
+          "company": {
+            "title": "Şirket"
+          },
+          "contact": {
+            "title": "İletişim e-postaları"
+          },
+          "phone": {
+            "title": "Telefon ve WhatsApp"
+          },
+          "social": {
+            "title": "Sosyal bağlantılar"
+          }
+        },
+        "guide": {
+          "title": "Ne nereye gider",
+          "items": {
+            "shared": {
+              "title": "Her yerde paylaşılır",
+              "body": "Bu değerler genel alt bilgiye, iletişim sayfasına ve yasal sayfalara aktarılır."
+            },
+            "frontend": {
+              "title": "Sayfa metni ve renkleri",
+              "body": "Burada değil, Ön yüz düzenleyicisinde düzenlenir."
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "Alt bilgi ayarları",
+        "description": "Alt bilgi başlığı, sosyal bağlantılar, telif hakkı metni ve genel alt bilgi açıklaması.",
+        "sections": {
+          "footer": {
+            "title": "Genel alt bilgi"
+          }
+        },
+        "guide": {
+          "title": "Ne nereye gider",
+          "items": {
+            "what": {
+              "title": "Alt bilgi başlığı ve telif hakkı",
+              "body": "Boş başlıkta platform adı kullanılır. Boş telif hakkı metni yıldan ve markadan oluşturulur."
+            },
+            "social": {
+              "title": "Sosyal URL'ler",
+              "body": "Boş alanlar simgeyi gizler. Bunlar Site bilgileri sosyal bağlantılarını paylaşır: buradan yapılan düzenleme her yerde güncellenir."
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "E-posta ayarları",
+        "description": "SMTP sunucusu, bağlantı noktası, şifreleme ve kimlik bilgileri. Kaydedilen değerler her gönderimde uygulanır; böylece karşılama, doğrulama, makbuz ve destek e-postaları yeniden başlatma gerekmeden bunları kullanır.",
+        "sections": {
+          "smtp": {
+            "title": "SMTP kimlik bilgileri"
+          }
+        },
+        "guide": {
+          "title": "Yaygın sağlayıcı sunucuları",
+          "items": {
+            "hosts": {
+              "title": "Tipik ayarlar",
+              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.REGION.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls, uygulama parolasıyla."
+            },
+            "used": {
+              "title": "Sistemdeki e-posta türleri",
+              "body": "Karşılama ve doğrulama e-postaları, parola sıfırlama, faturalar ve makbuzlar, destek yanıtları, güvenlik uyarıları ve çalışma alanı davetleri."
+            }
+          }
+        },
+        "tip": {
+          "title": "İpucu",
+          "body": "Düzenledikten sonra her zaman test gönderin. Sunucu veya bağlantı noktasındaki tek bir yazım hatası, platformdaki tüm işlemsel e-postaları sessizce bozar."
+        }
+      },
+      "seo": {
+        "title": "SEO ayarları",
+        "description": "Site genelindeki varsayılan meta etiketleri: başlık, açıklama, OpenGraph, Twitter kartları, robots, kanonik ve arama motoru doğrulaması.",
+        "sections": {
+          "search": {
+            "title": "Meta etiketleri"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "Twitter kartları"
+          },
+          "verification": {
+            "title": "Site doğrulama"
+          },
+          "preview": {
+            "title": "Canlı önizleme"
+          }
+        },
+        "guide": {
+          "title": "SEO temelleri",
+          "items": {
+            "basics": {
+              "title": "Başlıklar ve açıklamalar",
+              "body": "Meta başlığı: markayla ve güçlü bir tanımlayıcıyla başlayın, 50-60 karakter. Meta açıklaması: 1-2 cümlelik tanıtım, 140-160 karakter."
+            },
+            "where": {
+              "title": "Nerede görünür",
+              "body": "Yönetici sayfaları, oturum açılmış sayfalar, genel sayfalar ve bağlantı önizlemeleri (WhatsApp, Slack, Discord, X). Robots: test veya özel dağıtımlar için noindex kullanın."
+            },
+            "sitemap": {
+              "title": "Doğrula",
+              "body": "opengraph.xyz, Google Zengin Sonuçlar testi ve Twitter Kart doğrulayıcısı."
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "Gizlilik, GDPR ve ADA",
+        "eyebrow": "Yönetici - Uyumluluk",
+        "description": "Çerez onay bandı, politika URL'leri, GDPR/CCPA uyumluluğu ve WCAG erişilebilirlik anahtarları. Aynı ayar onay arayüzüne beslenir ve her analitik entegrasyonunu denetler.",
+        "sections": {
+          "banner": {
+            "title": "Bant ve politika"
+          },
+          "compliance": {
+            "title": "GDPR ve CCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG",
+            "description": "ABD Engelli Amerikalılar Yasası + ziyaretçilerin açıp kapatabileceği WCAG 2.1 AA düzeyinde kolaylıklar."
+          }
+        },
+        "guide": {
+          "title": "Onayın nasıl çalıştığı",
+          "items": {
+            "order": {
+              "title": "İşlem sırası",
+              "body": "1. Ziyaretçi siteye gelir ve çerez bandı açılır (Do-Not-Track'e uyulduğunda atlanır). 2. Seçim bir yıl boyunca crm_cookie_consent çerezinde saklanır. 3. Yalnızca izin verilen izleyiciler yüklenir. 4. Ziyaretçi, data-cookie-prefs-open özniteliğine sahip herhangi bir öğeden tercih seçiciyi yeniden açabilir."
+            },
+            "linked": {
+              "title": "Bağlantılı ayarlar",
+              "body": "Analitik entegrasyonları (GA4, GTM, Pixel, Clarity ve diğerleri) ve PWA ayarları."
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "Analitik entegrasyonları",
+        "eyebrow": "Yönetici - İzleme",
+        "description": "Her sağlayıcı kimliğini bir kez yapıştırın. Resmi satıcı kodu her genel sayfada oluşturulur, ancak yalnızca ziyaretçi ilgili çerez kategorisine onay verdikten sonra.",
+        "sections": {
+          "site": {
+            "title": "Site analitiği"
+          },
+          "marketing": {
+            "title": "Reklam pikselleri"
+          }
+        },
+        "guide": {
+          "title": "İzleyici -> kategori",
+          "items": {
+            "categories": {
+              "title": "Her birinin ne zaman çalıştığı",
+              "body": "Analitik: GA4, GTM, Clarity, Plausible, PostHog, Hotjar, Mixpanel. Pazarlama: Meta Pixel, TikTok, LinkedIn, X Pixel. GTM kapsayıcı betikleri başka izleyiciler de içerebilir; bunları GTM içindeki kategori tetikleyicileriyle duraklatın."
+            },
+            "where": {
+              "title": "Nerede yüklenir",
+              "body": "Genel ve oturum açma sayfaları. Yönetici sayfalarında bilerek kapalıdır."
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "Özel kod",
+        "description": "Gelişmiş marka ve davranış için canlı özel stiller ve betikler. Etkinleştirildiğinde genel sayfalara eklenir.",
+        "sections": {
+          "code": {
+            "title": "Özel kod"
+          }
+        },
+        "guide": {
+          "title": "Genel kurallar",
+          "items": {
+            "scope": {
+              "title": "CSS'inizi kapsamlandırın",
+              "body": "Kuralları bir marka sınıfıyla sarın. body, *, veya çerçeve yardımcı sınıflarına dokunmaktan kaçının."
+            },
+            "block": {
+              "title": "Engellemeyin",
+              "body": "JS'yi DOMContentLoaded içine alın. Eşzamanlı ağ çağrısı yapmayın."
+            },
+            "dark": {
+              "title": "Koyu modu test edin",
+              "body": "Kaydetmeden önce temayı değiştirin ve html[data-theme=\"dark\"] seçicilerini kontrol edin."
+            },
+            "sensitive": {
+              "title": "Canlıda hassas",
+              "body": "Hatalı bir kayıt tüm genel sayfalara anında ulaşır. Büyük farkları bir ekip arkadaşınız incelesin."
+            }
+          }
+        },
+        "tip": {
+          "title": "Dikkatli olun",
+          "body": "Özel kod her genel sayfada çalışır ve izole edilemez. Yalnızca süper yönetici değiştirebilir."
+        }
+      },
+      "pwa": {
+        "title": "PWA ayarları",
+        "description": "Yüklenebilir uygulama bildirimi: ad, simgeler, renkler ve görüntüleme modu. Bildirimi ve yükleme istemini yönetir.",
+        "sections": {
+          "app": {
+            "title": "PWA bildirimi"
+          },
+          "teamInbox": {
+            "title": "Ekip Gelen Kutusu PWA"
+          }
+        },
+        "guide": {
+          "title": "Yüklenebilir uygulama",
+          "items": {
+            "manifest": {
+              "title": "Canlı bildirim",
+              "body": "Bildirim /api/v2/public/manifest.webmanifest adresinde sunulur ve yalnızca anahtar açıkken bulunur."
+            },
+            "install": {
+              "title": "Simgeler",
+              "body": "Görünüm sayfasında kare PNG simgeler yükleyin veya barındırılan URL'leri yapıştırın. Ana ekran için 192 px, açılış ekranı için 512 px."
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "Bulut depolama",
+        "eyebrow": "Yönetici - Medya depolama",
+        "description": "Tüm müşteri medya eklerini uygulama sunucusu yerine kendi depolama alanınıza gönderin — Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 veya S3 uyumlu herhangi bir depolama. Kapalıyken medya yerel diskte kalır; açana kadar hiçbir şey bozulmaz.",
+        "status": {
+          "active": "Etkin: {provider}. Yeni yüklemeler depolama alanınıza gider.",
+          "configured": "Yapılandırıldı ama kapalı. Medya hâlâ yerel diskte. Test edin, ardından etkinleştirin.",
+          "local": "Yerel disk (henüz bulut sağlayıcısı ayarlanmadı).",
+          "enabled": "Etkin",
+          "disabled": "Devre dışı"
+        },
+        "sections": {
+          "provider": {
+            "title": "Bulut medya yönlendirme"
+          },
+          "credentials": {
+            "title": "Depolama alanı bağlantısı"
+          }
+        },
+        "guide": {
+          "title": "Kurun",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "Erişim anahtarı + gizli anahtar + bölge + depolama alanı. Wasabi uç noktası bölgeden türetilir."
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "Bunny alanlarını kullanın: depolama bölgesi ve parola. Bölge, depolama bölgesinin konumudur (de, ny, la...)."
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "S3 alanlarını doldurun ve Uç Nokta URL'sini yapıştırın. MinIO için yol tabanlı seçeneğini işaretleyin."
+            },
+            "test": {
+              "title": "Her zaman önce test edin",
+              "body": "\"Kaydet ve bağlantıyı test et\", Etkin anahtarını açmadan önce bir test dosyası yazar ve siler."
+            }
+          }
+        },
+        "tip": {
+          "title": "Varsayılan olarak güvenli",
+          "body": "Mevcut dosyalar olduğu yerde kalır. Yalnızca yeni yüklemeler depolama alanına gider; hiçbir şey taşınmaz veya silinmez."
+        }
+      },
+      "whatsapp": {
+        "title": "WhatsApp ayarları",
+        "eyebrow": "Yönetici - Ayarlar - Kanallar - WhatsApp",
+        "description": "Her çalışma alanının WhatsApp numaralarının eklendiği tek Meta uygulaması (ve Interakt ortağı). Uygulama kimliği ve gizli anahtar olmadan Embedded Signup ve belirteç yenileme çalışmaz; yapılandırma kimliği olmadan çalışma alanları belirteci elle yapıştırır. Kaydedilen değerler her süreçte birkaç saniye içinde sunucu varsayılanlarının yerine geçer.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)",
+            "description": "Meta'nın resmi Cloud API'si. Yüksek hacimli trafik, şablon mesajları ve doğrulanmış bir işletme profili için gereklidir. Hem elle belirteç yapıştırmayı hem de Embedded Signup'ı (WhatsApp girişi) destekler."
+          },
+          "interakt": {
+            "title": "Interakt yolu",
+            "description": "Embedded Signup ile bağlanan numaralar varsayılan olarak Interakt'in Meta vekili üzerinden gönderilir ve alınır. Interakt'i atlamak için Meta (doğrudan) seçeneğine geçin. Mevcut numaralar bağlandıkları yolu korur."
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "Business API (WABA)",
+          "items": {
+            "api": {
+              "title": "Meta Cloud API",
+              "body": "Meta'nın resmi Cloud API'si. Yüksek hacimli trafik, şablon mesajları ve doğrulanmış bir işletme profili için gereklidir. Hem elle belirteç yapıştırmayı hem de Embedded Signup'ı (WhatsApp girişi) destekler."
+            },
+            "app": {
+              "title": "Facebook uygulama kimliği + gizli anahtar",
+              "body": "developers.facebook.com/apps, Temel ayarlar. Uygulamayı değiştirmek eski uygulama tarafından verilen belirteçleri geçersiz kılar; bu nedenle çalışma alanlarının yeniden bağlanması gerekir."
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "Uygulama paneli, WhatsApp, Yapılandırma: bu sayfadaki Geri çağrı URL'sini ve Doğrulama belirtecini yapıştırın, ardından messages ve message_template_status_update olaylarına abone olun."
+            },
+            "perWorkspace": {
+              "title": "Çalışma alanı başına",
+              "body": "Her çalışma alanı kendi numarasını Kanallar, WhatsApp numaraları bölümünden bağlar. Telefon numarası kimliği ve kalıcı belirteç orada toplanır."
+            },
+            "login": {
+              "title": "WABA girişi (isteğe bağlı)",
+              "body": "Tek tıkla Meta ile oturum açmayı etkinleştirmek için Embedded Signup Yapılandırma Kimliğini doldurun. Uygulamada Teknoloji Sağlayıcı rolü gerektirir. Yalnızca elle yapıştırmayı kullanmak için boş bırakın."
+            }
+          }
+        },
+        "tip": {
+          "title": "İpucu",
+          "body": "Trafik sürerken varsayılan yolu veya uygulamayı değiştirmek yalnızca daha sonra bağlanan numaraları etkiler. Meta uygulamasını değiştirmeden önce kampanyaları duraklatın."
+        }
+      },
+      "campaigns": {
+        "title": "Kampanya teslimatı",
+        "eyebrow": "Yönetici - Kampanyalar",
+        "description": "Her çalışma alanının kampanyaları için platform genelindeki kurallar: başarısız bir mesajın ne sıklıkla yeniden deneneceği ve tamamlanmamış bir kampanyanın ne zaman sonlandırılacağı.",
+        "sections": {
+          "retry": {
+            "title": "Yeniden denemeler"
+          },
+          "expiry": {
+            "title": "Otomatik sonlandırma"
+          }
+        },
+        "guide": {
+          "title": "Nasıl çalışır",
+          "items": {
+            "retry": {
+              "title": "Yeniden denemeler",
+              "body": "Gönderimi başarısız olan alıcı, bekleme süresinden sonra burada belirlenen deneme sayısına kadar yeniden denenir."
+            },
+            "expiry": {
+              "title": "Otomatik sonlandırma",
+              "body": "Burada belirlenen saatten sonra hâlâ çalışan bir kampanya sonlandırılır; böylece bir göndericiyi süresiz meşgul edemez."
+            }
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Takvim",
+        "eyebrow": "Yönetici - Randevular",
+        "description": "Tüm platform için tek bir Google Cloud OAuth istemcisi. Her çalışma alanı daha sonra Randevular, Ayarlar bölümünden kendi Google hesabını bağlar; bir çalışma alanı istemci kimliğini veya gizli anahtarı asla görmez.",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth istemcisi",
+            "description": "İstemci kimliği ve gizli anahtar olmadan çalışma alanları Google Takvim'i kullanılamaz olarak görür ve randevular takvim olmadan devam eder."
+          }
+        },
+        "guide": {
+          "title": "Google Cloud'da kurun",
+          "items": {
+            "project": {
+              "title": "1. Proje ve API",
+              "body": "Google Cloud Console'da bir proje oluşturun ve Google Takvim API'sini etkinleştirin."
+            },
+            "redirect": {
+              "title": "2. OAuth istemcisi",
+              "body": "Web uygulaması türünde bir OAuth 2.0 İstemci Kimliği oluşturun ve bu sayfada gösterilen yönlendirme URI'sini Yetkili yönlendirme URI'leri altına ekleyin."
+            },
+            "consent": {
+              "title": "3. Onay ekranı",
+              "body": "calendar.events, calendar.freebusy ve calendar.calendarlist.readonly kapsamlarını ekleyin, ardından uygulamayı yayımlayın: Test aşamasında Google her izni 7 gün sonra sonlandırır ve çalışma alanlarının yeniden bağlanması gerekir."
+            },
+            "workspaces": {
+              "title": "4. Çalışma alanları bağlanır",
+              "body": "İstemci kimliğini ve gizli anahtarı buraya yapıştırıp kaydedin. Yöneticiler daha sonra Randevular, Ayarlar, Google Takvim bölümünden bağlanır."
+            }
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Akış oluşturucu",
+        "eyebrow": "Yönetici - Otomasyon",
+        "description": "Her çalışma alanı için varsayılan akış oluşturucuyu seçin: Basit adım adım oluşturucu veya Gelişmiş tuval oluşturucu. Bir çalışma alanı bunu kendi Akışlar sayfasında geçersiz kılabilir.",
+        "sections": {
+          "mode": {
+            "title": "Oluşturucu"
+          }
+        },
+        "guide": {
+          "title": "Nasıl çalışır",
+          "items": {
+            "modes": {
+              "title": "İki oluşturucu",
+              "body": "Basit, bir akışı adımların altında alt alta, adımlar arasında artı işaretiyle listeler. Gelişmiş ise düğüm ve bağlantılı tuvaldir. İkisi de aynı akışı kaydeder; bu nedenle akış aynı şekilde çalışır."
+            },
+            "existing": {
+              "title": "Mevcut akışlar",
+              "body": "Bu ayarı değiştirmek hiçbir akışı değiştirmez veya silmez. Akış çalışmaya devam eder; yalnızca etkin olan oluşturucuda açılır. Kendi oluşturucusunu seçen bir çalışma alanı, platform varsayılanını yeniden seçene kadar onu korur."
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "Çerez kullanıyoruz",
+      "learnMore": "Daha fazla bilgi",
+      "decline": "Reddet",
+      "customize": "Özelleştir",
+      "acceptAll": "Tümünü kabul et",
+      "rejectAll": "Tümünü reddet",
+      "save": "Tercihleri kaydet",
+      "preferences": "Çerez tercihleri",
+      "categories": {
+        "necessary": {
+          "title": "Zorunlu",
+          "body": "Sitenin çalışması için gerekli: oturum açma, güvenlik ve tercihleriniz. Her zaman açık."
+        },
+        "analytics": {
+          "title": "Analitik çerezleri",
+          "body": "Siteyi nasıl kullandığınızı anlayarak onu geliştirmemize yardımcı olun."
+        },
+        "marketing": {
+          "title": "Pazarlama çerezleri",
+          "body": "Reklamları ölçmek ve size başka yerlerde ilgili kampanyaları göstermek için kullanılır."
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "Canlı önizleme",
+      "previewTitle": "Kaydetmeden önce",
+      "previewNote": "Renkler, boyut ve opaklık sürüklerken güncellenir. Kaydedene kadar hiçbir şey kimseye uygulanmaz.",
+      "resetTitle": "Varsayılanlara sıfırla",
+      "resetBody": "Tüm geçersiz kılmaları temizler ve özgün paleti geri yükler.",
+      "reset": "Tüm renkleri sıfırla",
+      "tokens": "{count} belirteç",
+      "controls": "{count} denetim",
+      "primary": "Birincil",
+      "cancel": "İptal",
+      "active": "Etkin"
+    },
+    "wabaCallback": {
+      "loading": "Webhook ayrıntıları yükleniyor…",
+      "unavailable": "Webhook ayrıntıları yalnızca süper yöneticilere gösterilir.",
+      "webhookUrl": "Webhook URL'si",
+      "noUrl": "APP_URL veya WABA_WEBHOOK_PUBLIC_URL değerini ayarlayın",
+      "webhookHint": "Meta uygulamasına (WhatsApp, Yapılandırma, Geri çağrı URL'si) yapıştırın. Şu alanlara abone olun: {fields}.",
+      "verifyToken": "Doğrulama belirteci",
+      "verifyHint": "Doğrulama belirtecinin olduğu aynı ekrana yapıştırın.",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "connected": "Bağlı WABA'lar (tüm çalışma alanları)",
+      "fieldsTitle": "Webhook alanları (birlikte kullanım ve Gruplar)",
+      "fieldsHint": "Birlikte kullanım için Meta uygulamasının messages, smb_message_echoes, smb_app_state_sync ve history olaylarına abone olması gerekir. WhatsApp Grupları için group_lifecycle_update, group_participants_update, group_settings_update ve group_status_update gerekir.",
+      "fieldsCheck": "Webhook alanlarını kontrol et",
+      "fieldsChecking": "Meta'ya soruluyor…",
+      "fieldsOk": "Tüm alanlara abone olunmuş: telefonda yazılan yanıtlar senkronize edilir ve WhatsApp grup olayları gelir.",
+      "fieldsMissing": "Bazı alanlara henüz abone olunmadı.",
+      "fieldsSubscribed": "Abone olundu. Telefonda yazılan yanıtlar artık senkronize edilecek ve WhatsApp grup olayları gelecek.",
+      "fieldsMissingTag": "EKSİK",
+      "fieldsGroupTag": "Gruplar",
+      "fieldsSubscribe": "Eksik alanlara abone ol",
+      "fieldsSubscribing": "Abone olunuyor…"
+    },
+    "googleCallback": {
+      "redirectTitle": "Yönlendirme URI'si",
+      "redirectHint": "Bu adresi OAuth istemcisinde Yetkili yönlendirme URI'si olarak tam olarak kaydedin. Bir çalışma alanı yöneticisi onayladıktan sonra Google tarayıcıyı buraya yönlendirir.",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı"
+    }
+  }
+}

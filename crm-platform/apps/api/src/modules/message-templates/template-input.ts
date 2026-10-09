@@ -1,4 +1,4 @@
-import type { TplButton } from '@crm/contracts';
+import type { TplButton, TplHeaderLocation } from '@crm/contracts';
 import { lintTemplate, type LintIssue } from './template-linter';
 import {
   buildMetaTemplate,
@@ -28,6 +28,7 @@ export interface AuthoredTemplate {
   attachmentType: string;
   headerHandle?: string | null;
   headerSampleUrl?: string | null;
+  headerLocation?: TplHeaderLocation | null;
   body: string;
   footer?: string | null;
   buttons: TplButton[];
@@ -48,6 +49,8 @@ export interface PreparedTemplate {
   attachmentType: string | null;
   headerHandle: string | null;
   headerSampleUrl: string | null;
+  /** The pin of a `location` header; null for every other header. */
+  headerLocation: TplHeaderLocation | null;
   body: string;
   footer: string | null;
   buttons: TplButton[];
@@ -109,6 +112,7 @@ export function prepareTemplate(input: AuthoredTemplate): PreparedTemplate {
     headerHandle:
       auth || !attachment || attachment === 'location' ? null : (input.headerHandle ?? null),
     headerSampleUrl: auth || !attachment ? null : (input.headerSampleUrl ?? null),
+    headerLocation: !auth && attachment === 'location' ? (input.headerLocation ?? null) : null,
     body: text.body,
     footer: auth ? null : text.footer,
     buttons: auth ? [] : input.buttons,

@@ -1,0 +1,316 @@
+{
+  "aiTraining": {
+    "nav": {
+      "title": "KI-Training"
+    },
+    "common": {
+      "dismiss": "Ausblenden"
+    },
+    "paywall": {
+      "kicker": "Tarif",
+      "title": "KI-Training ist nicht in Ihrem Tarif enthalten",
+      "body": "Ihr Tarif enthält keine KI-Assistenten. Führen Sie ein Upgrade durch, um diese Funktion freizuschalten.",
+      "upgrade": "Tarife ansehen"
+    },
+    "responder": {
+      "title": "Wer beantwortet Ihr WhatsApp?",
+      "body": "Wenn Sie Metas eigenen Business Agent aktivieren, treten unsere KI und die Schlüsselwort-Autoantworten für diesen Workspace zurück, sodass Ihr Kunde nie zwei Antworten auf dieselbe Nachricht erhält.",
+      "metaCheck": "Ich nutze Meta Business Agent",
+      "mode": {
+        "threadwise_only": {
+          "label": "Unsere KI antwortet",
+          "desc": "Unsere KI und die Schlüsselwort-Autoantworten bearbeiten Chats (Standard)."
+        },
+        "meta_agent_only": {
+          "label": "Meta-Agent antwortet",
+          "desc": "Metas Business Agent antwortet. Wir protokollieren nur den Thread, unsere KI bleibt stumm."
+        },
+        "meta_agent_then_handoff": {
+          "label": "Meta-Agent, dann Übergabe",
+          "desc": "Meta übernimmt die ersten Fragen. Bei einer Eskalation landet der Chat im Team-Posteingang für eine Person. Unsere Auto-KI bleibt stumm."
+        }
+      },
+      "save": "Speichern",
+      "hint": "Metas Agent benötigt eine WhatsApp-Business-Nummer (Cloud API). Nummern auf der inoffiziellen Engine nutzen immer unsere KI.",
+      "readOnly": "Sie können diese Einstellung sehen, aber nicht ändern.",
+      "saved": "Antwortmodus der KI gespeichert.",
+      "saveFailed": "Der Antwortmodus konnte nicht gespeichert werden.",
+      "loadError": "Der Antwortmodus konnte nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "loading": "Antwortmodus wird geladen"
+    },
+    "list": {
+      "tip": "Tipp",
+      "tipBody": "Intelligente Agenten betreiben Ihre <link>Chatbot-Widgets</link> und den KI-Schritt Ihrer Flows. Der Fünf-Schritte-Builder führt Sie durch Identität, Persona, Gehirn, Sicherheit und Wissen.",
+      "statusViews": "Agentenstatus",
+      "view": {
+        "all": "Alle Agenten",
+        "active": "Aktiv",
+        "paused": "Pausiert"
+      },
+      "status": {
+        "all": "Alle",
+        "active": "Aktiv",
+        "paused": "Pausiert"
+      },
+      "knowledgeTip": "Wissens-Tipp",
+      "knowledgeTipBody": "Oft genügt eine einzige FAQ-Frage mit Antwort. Ein paar Hilfeseiten-URLs decken die meisten Supportfragen ab, Sie müssen also nicht Ihre gesamte Website laden.",
+      "workspace": "Workspace",
+      "title": "KI",
+      "titleAccent": "Training",
+      "intro": "Erstellen Sie intelligente Agenten, die in der Stimme Ihrer Marke sprechen. Trainieren Sie sie mit URLs, Text, Frage-Antwort-Paaren und Dateien.",
+      "activePill": "{count} aktiv",
+      "newAgent": "Neuer intelligenter Agent",
+      "card": {
+        "total": "Agenten gesamt",
+        "knowledge": "Wissenseinträge",
+        "avg": "Ø / Agent",
+        "health": "Zustand",
+        "activeHint": "{count} aktiv",
+        "indexedHint": "{count} indexiert",
+        "entriesUnit": "Einträge"
+      },
+      "health": {
+        "healthy": "fehlerfrei",
+        "empty": "leer",
+        "attention": "Aufmerksamkeit"
+      },
+      "col": {
+        "agent": "Agent",
+        "provider": "Anbieter",
+        "knowledge": "Wissen",
+        "tone": "Ton",
+        "updated": "Aktualisiert",
+        "actions": "Aktionen"
+      },
+      "search": "Nach Name oder Slug suchen…",
+      "loading": "Agenten werden geladen",
+      "loadError": "Die Agenten konnten nicht geladen werden",
+      "retry": "Erneut versuchen",
+      "emptyTitle": "Noch keine intelligenten Agenten",
+      "emptyBody": "Erstellen Sie Ihren ersten Agenten. Der Fünf-Schritte-Builder führt Sie durch Identität, Persona, Gehirn, Sicherheit und das Wissen, das er haben soll.",
+      "buildAgent": "Intelligenten Agenten erstellen",
+      "noMatch": "Kein Agent entspricht Ihrer Suche oder Statusansicht.",
+      "entries": "{count, plural, one {# Eintrag} other {# Einträge}}",
+      "edit": "Agent bearbeiten",
+      "editNamed": "{name} bearbeiten",
+      "duplicate": "Agent duplizieren",
+      "duplicateNamed": "{name} duplizieren",
+      "deleteAgent": "Agent löschen",
+      "deleteNamed": "{name} löschen",
+      "deleteTitle": "„{name}“ löschen?",
+      "deleteBody": "Der Agent und seine Wissenseinträge werden entfernt. Widgets und Flows, die ihn verwenden, antworten nicht mehr mit diesem Agenten, bis Sie einen anderen wählen.",
+      "delete": "Agent löschen",
+      "keep": "Behalten",
+      "deleted": "Agent gelöscht.",
+      "deleteFailed": "Löschen fehlgeschlagen: {reason}",
+      "duplicateFailed": "Der Agent konnte nicht dupliziert werden.",
+      "networkError": "Netzwerkfehler",
+      "showing": "Angezeigt",
+      "of": "von",
+      "agentsCount": "{count, plural, one {# Agent} other {# Agenten}}",
+      "loadMore": "Mehr laden"
+    },
+    "builder": {
+      "back": "Zurück zum KI-Training",
+      "crumb": "KI-Training",
+      "crumbNew": "Neu",
+      "crumbEdit": "Bearbeiten",
+      "titleNew": "Intelligenten Agenten",
+      "titleEdit": "Intelligenten Agenten bearbeiten",
+      "titleAccent": "erstellen",
+      "stateSaved": "Gespeichert",
+      "stateDraft": "Entwurf / nicht gespeichert",
+      "saveDraft": "Entwurf speichern",
+      "stepper": "Builder-Schritte",
+      "steps": {
+        "identity": "Identität",
+        "persona": "Persona",
+        "brain": "Gehirn",
+        "safety": "Sicherheit",
+        "knowledge": "Wissen"
+      },
+      "stepOf": "Schritt {n} von {total}",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "finish": "Fertigstellen & schließen",
+      "loading": "Agent wird geladen",
+      "loadError": "Der Agent konnte nicht geladen werden",
+      "notFoundTitle": "Agent nicht gefunden",
+      "notFoundBody": "Dieser Agent existiert in Ihrem Workspace nicht oder wurde gelöscht.",
+      "backToList": "Zurück zum KI-Training",
+      "saved": "Agent gespeichert.",
+      "saveFailed": "Speichern fehlgeschlagen. Prüfen Sie die Felder und versuchen Sie es erneut.",
+      "conflict": "Dieser Agent wurde an anderer Stelle geändert. Laden Sie die Seite neu, um die neueste Version zu erhalten, und speichern Sie dann erneut.",
+      "problem": {
+        "name": "Geben Sie Ihrem Assistenten einen Namen.",
+        "greeting": "Schreiben Sie eine Eröffnungszeile.",
+        "model": "Wählen Sie ein Modell.",
+        "tokens": "Die Antwortlänge muss zwischen 50 und 4000 Token liegen.",
+        "temperature": "Die Kreativität muss zwischen 0 und 2 liegen."
+      },
+      "identity": {
+        "title": "Agentenidentität",
+        "required": "erforderlich",
+        "name": "Anzeigename des Agenten",
+        "namePlaceholder": "z. B. Preisberater",
+        "nameHint": "Für Ihre Unterlagen. Besucher sehen diese Bezeichnung nicht.",
+        "status": "Einführungsstatus",
+        "statusActive": "Live: Diesen Agenten in Widgets und Flows auswählen",
+        "statusPaused": "Pausiert: in Auswahllisten ausblenden",
+        "statusHint": "Pausierte Agenten bleiben in der Liste, können aber keinen neuen Widgets zugeordnet werden.",
+        "language": "Bevorzugte Sprache",
+        "languageHint": "ISO-639-1-Code. Passt sich der Sprache des Besuchers an, wenn sie abweicht.",
+        "tone": "Gesprächston",
+        "toneHint": "Legt den Schreibstil fest, unabhängig von der Persona-Beschreibung.",
+        "tones": {
+          "helpful": "Hilfsbereit · ruhig und auf den Punkt",
+          "friendly": "Freundlich · warm und locker",
+          "formal": "Förmlich · neutral und präzise",
+          "playful": "Verspielt · leicht und witzig"
+        }
+      },
+      "persona": {
+        "title": "Persona & Eröffnungszeile",
+        "tag": "Inhalt",
+        "greeting": "Eröffnungszeile",
+        "greetingPlaceholder": "Hallo! Ich helfe Ihnen gern. Fragen Sie mich alles zu Preisen oder Tarifen.",
+        "greetingHint": "Für Besucher sichtbar. Wird als erste Blase angezeigt, wenn der Chat sich öffnet.",
+        "brief": "Charakterbeschreibung (Systemanweisungen)",
+        "briefPlaceholder": "Sie sind der freundliche Support-Agent von Acme Inc. Antworten Sie immer in kurzen Sätzen und übergeben Sie bei allem rund um Rückerstattungen an einen Menschen.",
+        "briefHint": "Intern, nie für Besucher sichtbar. Enthalten Sie Gebote, Verbote und Eskalationsregeln."
+      },
+      "brain": {
+        "title": "Modell & Antwortsteuerung",
+        "tag": "Gehirn",
+        "provider": "Modellanbieter",
+        "providerHint": "Ihr Admin richtet die Anbieterschlüssel ein. Anbieter, für die Sie einen eigenen Schlüssel hinzugefügt haben, werden ebenfalls angezeigt, sofern der Tarif es erlaubt.",
+        "notEnabled": "{name} (nicht aktiviert)",
+        "model": "Modellname",
+        "modelHint": "Wählen Sie eines der für Sie aktivierten Modelle oder geben Sie eine andere Modell-ID ein.",
+        "noModels": "Für Ihren Workspace ist noch kein KI-Modell aktiviert. Bitten Sie Ihren Admin, eines einzuschalten, oder fügen Sie unter Einstellungen, KI-Schlüssel, Ihren eigenen Schlüssel hinzu.",
+        "tokens": "Antwortlängenbudget (Token)",
+        "tokensHint": "Ein Token entspricht etwa 4 Zeichen. 400 reichen für einen Absatz.",
+        "temperature": "Kreativität (0 = streng, 2 = wild)",
+        "temperatureHint": "Niedriger ist konsistent und sachlich. Höher ergibt abwechslungsreichere Formulierungen."
+      },
+      "safety": {
+        "title": "Fallback & Übergabe an einen Menschen",
+        "tag": "Sicherheit",
+        "fallback": "Fallback-Antwort (wird verwendet, wenn das Modell einen Fehler liefert)",
+        "fallbackPlaceholder": "Ein Teammitglied meldet sich in Kürze. Danke für Ihre Geduld.",
+        "fallbackHint": "Wird unverändert gesendet, wenn das Modell nichts zurückgibt oder der Aufruf fehlschlägt.",
+        "handoff": "Übergabe an einen Menschen aktivieren",
+        "handoffHint": "Gibt der Besucher die Auslösephrase ein, hört der Agent auf zu antworten und Ihr Team-Posteingang leuchtet auf.",
+        "keyword": "Auslösephrase",
+        "keywordPlaceholder": "mit Mensch sprechen",
+        "keywordHint": "Wenn ein Besucher dies irgendwo in einer Nachricht eingibt, wird die Übergabe ausgelöst.",
+        "ack": "Übergabebestätigung",
+        "ackPlaceholder": "Klar, ich hole jetzt einen Kollegen dazu. Bitte bleiben Sie in der Leitung.",
+        "ackHint": "Die letzte Nachricht, bevor der Agent verstummt."
+      }
+    },
+    "knowledge": {
+      "title": "Agenten trainieren",
+      "tag": "Wissen",
+      "saveFirst": "Speichern Sie zuerst den Agenten. Wissenseinträge werden einem gespeicherten Agenten zugeordnet.",
+      "addLabel": "Wissen hinzufügen",
+      "add": {
+        "url": {
+          "title": "Live-URL",
+          "body": "Eine öffentliche Seite abrufen und ihren Text behalten."
+        },
+        "text": {
+          "title": "Freitext",
+          "body": "Einen Hilfetext oder eine Richtlinie einfügen."
+        },
+        "qa": {
+          "title": "Frage-Antwort-Paar",
+          "body": "Eine Frage mit ihrer maßgeblichen Antwort."
+        },
+        "file": {
+          "title": "PDF, DOCX, TXT & mehr",
+          "body": "Eine Datei hochladen. Der Text wird für Sie extrahiert."
+        }
+      },
+      "panel": {
+        "url": "Öffentliche URL abrufen",
+        "text": "Nur Text einfügen",
+        "qa": "Einzelnes Frage-Antwort-Paar",
+        "file": "Wissensdatei hochladen"
+      },
+      "label": "Bezeichnung",
+      "url": "URL",
+      "content": "Text",
+      "question": "Frage",
+      "answer": "Antwort",
+      "file": "Datei",
+      "placeholder": {
+        "label": {
+          "url": "Bezeichnung (z. B. Preisseite)",
+          "text": "Bezeichnung (z. B. Zusammenfassung der Rückerstattungsrichtlinie)",
+          "qa": "Bezeichnung (z. B. Dauer der Rückerstattung)",
+          "file": "Bezeichnung (z. B. Produkthandbuch)"
+        },
+        "content": "Fügen Sie beliebigen Text ein, den der Agent kennen soll…",
+        "question": "Frage, z. B. Wie lange dauern Rückerstattungen?",
+        "answer": "Antwort, z. B. Rückerstattungen werden innerhalb von 3 bis 5 Werktagen abgewickelt."
+      },
+      "urlHint": "Es werden nur öffentliche http- und https-Seiten gelesen. Die Seite wird im Hintergrund abgerufen, daher zeigt der Eintrag kurz „In Bearbeitung“.",
+      "fileHint": "PDF, DOCX, TXT, Markdown, CSV oder HTML, bis zu 10 MB. Text wird automatisch extrahiert.",
+      "uploading": "Upload-Fortschritt",
+      "submit": {
+        "url": "Abrufen & trainieren",
+        "text": "Text speichern",
+        "qa": "Paar speichern",
+        "file": "Hochladen"
+      },
+      "cancel": "Abbrechen",
+      "added": "Wissen hinzugefügt.",
+      "addFailed": "Der Eintrag konnte nicht hinzugefügt werden.",
+      "problem": {
+        "label": "Fügen Sie eine Bezeichnung hinzu, damit Sie diesen Eintrag später finden.",
+        "url": "Fügen Sie die Seitenadresse hinzu.",
+        "content": "Fügen Sie zuerst Text ein.",
+        "question": "Fügen Sie die Frage hinzu.",
+        "answer": "Fügen Sie die Antwort hinzu.",
+        "file": "Wählen Sie eine Datei (PDF, DOCX, TXT, Markdown, CSV oder HTML).",
+        "file_type": "Zulässige Dateitypen: TXT, Markdown, CSV, HTML, PDF, DOCX. Fügen Sie für alles andere den Text in einen Text-Eintrag ein.",
+        "file_legacyDoc": "Ältere .doc-Dateien werden nicht unterstützt. Speichern Sie als .docx (oder exportieren Sie als .pdf) und laden Sie erneut hoch.",
+        "file_size": "Diese Datei ist größer als 10 MB.",
+        "file_empty": "Diese Datei ist leer.",
+        "tooLarge": "Das ist zu viel Text für einmaliges Einfügen. Laden Sie ihn stattdessen als Datei hoch."
+      },
+      "col": {
+        "kind": "Art",
+        "label": "Bezeichnung",
+        "state": "Status",
+        "actions": "Aktionen"
+      },
+      "kind": {
+        "url": "URL",
+        "text": "Text",
+        "qa": "Q&A",
+        "file": "Datei"
+      },
+      "state": {
+        "ready": "bereit",
+        "processing": "in Bearbeitung",
+        "failed": "fehlgeschlagen"
+      },
+      "tokens": "etwa {count} Token",
+      "workspaceWide": "workspaceweit",
+      "loading": "Einträge werden geladen",
+      "loadError": "Die Einträge konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "empty": "Noch kein Wissen. Wählen Sie oben eine Art, um den ersten Eintrag hinzuzufügen.",
+      "remove": "Entfernen",
+      "removeNamed": "{label} entfernen",
+      "removeTitle": "Diesen Wissenseintrag entfernen?",
+      "removeBody": "Der Agent verwendet ihn nicht mehr für neue Antworten. Ältere Unterhaltungen bleiben unverändert.",
+      "keep": "Behalten",
+      "removed": "Entfernt.",
+      "removeFailed": "Entfernen fehlgeschlagen."
+    }
+  }
+}

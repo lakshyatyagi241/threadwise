@@ -1,7 +1,12 @@
 {
   "message-templates": {
-    "nav": { "title": "Templates" },
-    "common": { "dismiss": "Dismiss", "requestId": "Request ID" },
+    "nav": {
+      "title": "Templates"
+    },
+    "common": {
+      "dismiss": "Dismiss",
+      "requestId": "Request ID"
+    },
     "status": {
       "draft": "Draft",
       "pending": "In review",
@@ -30,7 +35,7 @@
       "TPL_META_REJECTED": "Meta refused the template. Its reason is below; the template is kept as a draft so you can fix it and try again.",
       "TPL_NO_CONNECTION": "This template has no connected WhatsApp number to submit through. Connect a number first.",
       "TPL_IN_USE": "This template cannot be deleted because a running or scheduled broadcast uses it.",
-      "TPL_NOT_EDITABLE": "Only a template that Meta has not approved yet, or one it rejected, can be edited.",
+      "TPL_NOT_EDITABLE": "Only a template that is not disabled and that Meta still lists can be edited.",
       "ROW_VERSION_CONFLICT": "Someone changed this template while you were editing. Reload to see the latest version, then apply your change again.",
       "VALIDATION_FAILED": "Some fields are not valid. Check the fields below.",
       "INTERNAL": "The server failed to handle this request. Try again shortly."
@@ -50,17 +55,30 @@
       "time": "10:30",
       "copyCode": "Copy code",
       "buttonUnnamed": "Button",
-      "moreButtons": "{count, plural, one {+# more button} other {+# more buttons}}"
+      "moreButtons": "{count, plural, one {+# more button} other {+# more buttons}}",
+      "live": "Live preview",
+      "business": "Bloomly",
+      "online": "online"
     },
     "card": {
-      "rejected": "Rejected: {reason}",
-      "view": "View",
-      "edit": "Edit",
-      "delete": "Delete"
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "Standard",
+        "media": "Media",
+        "auth": "Auth",
+        "carousel": "Carousel",
+        "catalog": "Catalog",
+        "limited_time_offer": "Limited-time offer"
+      },
+      "rejectedLabel": "Rejected:",
+      "edit": "Edit template",
+      "viewTitle": "View details & Meta review status",
+      "delete": "Delete",
+      "deleteNamed": "Delete {name}"
     },
     "library": {
       "title": "Template library",
-      "intro": "WhatsApp message templates: write them, send them to Meta for review, and track their status here.",
+      "intro": "Pick a starter or submit your own. All templates must adhere to <link>WhatsApp's guidelines</link> before they're approved by Meta.",
       "sync": "Sync from Meta",
       "syncing": "Syncing...",
       "syncHint": "Fetch your templates from Meta",
@@ -68,24 +86,68 @@
       "syncNone": "No templates found on this WhatsApp Business account yet.",
       "syncFailed": "Sync from Meta failed. Check the number's connection and try again.",
       "syncPartial": "{count, plural, one {# number could not be synced.} other {# numbers could not be synced.}}",
-      "new": "New template",
-      "filters": "Filter templates",
-      "search": "Search",
-      "searchPlaceholder": "Template name",
-      "status": "Status",
-      "allStatuses": "All statuses",
-      "category": "Category",
-      "allCategories": "All categories",
-      "connection": "WhatsApp number",
+      "new": "New Template Message",
+      "search": "Search templates",
+      "searchPlaceholder": "Search…",
+      "connection": "Filter by WhatsApp number",
       "allConnections": "All numbers",
       "loading": "Loading templates",
       "retry": "Try again",
       "emptyTitle": "No templates yet",
-      "emptyBody": "Create a template and submit it to Meta, or sync the ones you already have in Meta Business Manager.",
+      "emptyBody": "No templates match the current filters. Try clearing filters or submit a new template for review.",
       "emptyFilteredTitle": "No templates match",
-      "emptyFilteredBody": "Change or clear the filters to see more templates.",
+      "emptyFilteredBody": "No templates match the current filters. Try clearing filters or submit a new template for review.",
       "clearFilters": "Clear filters",
-      "loadMore": "Load more"
+      "loadMore": "Load more",
+      "crumb": "Campaigns / Templates",
+      "titleA": "Template",
+      "titleB": "library",
+      "tipTitle": "Tip",
+      "tip": "Submit templates with clear, variable-friendly copy ('{{name}}', '{{order_id}}'). Approval times stay under 24h when bodies avoid promotional triggers and match the chosen Meta category.",
+      "statusTitle": "Status",
+      "statusTab": {
+        "all": "All",
+        "approved": "Approved",
+        "pending": "In review",
+        "rejected": "Rejected"
+      },
+      "quickStartTitle": "Quick start",
+      "quickStart": "Read the <link>Template Guidelines</link> before submitting to Meta to keep approval times under 24 h.",
+      "createTemplate": "Create template",
+      "syncFailedLabel": "Sync from Meta failed:",
+      "categories": "Categories",
+      "tabAll": "All",
+      "sortLabel": "Sort templates",
+      "sort": {
+        "newest": "Newest",
+        "oldest": "Oldest",
+        "name-asc": "Name A→Z",
+        "name-desc": "Name Z→A"
+      },
+      "showing": "Showing",
+      "of": "of",
+      "filteredTemplates": "filtered templates",
+      "showingRange": "Showing 1-{shown} of {total} templates",
+      "legend": {
+        "approved": "Approved",
+        "pending": "In review",
+        "rejected": "Rejected"
+      },
+      "helpLabel": "Help - 0{n}",
+      "help": {
+        "one": {
+          "title": "What is a template message?",
+          "body": "A pre-approved message format required by Meta for starting new conversations with customers outside the 24-hour service window."
+        },
+        "two": {
+          "title": "How to improve approval times?",
+          "body": "Keep your message body clear, avoid overly promotional language in Utility categories, and always provide sample values for variables."
+        },
+        "three": {
+          "title": "Why was my template rejected?",
+          "body": "Common reasons include incorrect formatting, mismatched category, or abusive content. Check the rejection reason and edit to resubmit."
+        }
+      }
     },
     "delete": {
       "title": "Delete template",
@@ -101,7 +163,10 @@
       "unavailable": "The checks could not run just now. Meta's review still applies, and the server checks again on submit.",
       "clean": "No problems found.",
       "summary": "{errors, plural, one {# error} other {# errors}}, {warnings, plural, one {# warning} other {# warnings}}",
-      "severity": { "error": "Error", "warning": "Warning" },
+      "severity": {
+        "error": "Error",
+        "warning": "Warning"
+      },
       "field": {
         "name": "Name",
         "language": "Language",
@@ -118,7 +183,7 @@
       "backToLibrary": "Back to the library",
       "noPermission": "You do not have permission to create or edit templates.",
       "notEditableTitle": "This template can no longer be edited",
-      "notEditableBody": "Only a template that Meta has not approved yet, or one it rejected, can be edited. Create a new template to change an approved one.",
+      "notEditableBody": "This template is disabled, or Meta no longer lists it, so it cannot be edited. Create a new template instead.",
       "viewTemplate": "View template",
       "breadcrumb": "Breadcrumb",
       "breadcrumbLibrary": "Templates",
@@ -204,7 +269,12 @@
         "title": "Body",
         "hint": "The message text. Use '{{name}}' style variables; they are numbered for Meta when you save.",
         "toolbar": "Text formatting",
-        "format": { "bold": "Bold", "italic": "Italic", "strike": "Strikethrough", "code": "Code" },
+        "format": {
+          "bold": "Bold",
+          "italic": "Italic",
+          "strike": "Strikethrough",
+          "code": "Code"
+        },
         "variable": "Add variable",
         "label": "Body text",
         "counter": "{used}/{max}",
@@ -282,45 +352,43 @@
     "detail": {
       "loading": "Loading template",
       "retry": "Try again",
-      "back": "Back to the library",
       "breadcrumb": "Breadcrumb",
-      "refresh": "Refresh status",
-      "retrySubmit": "Submit to Meta",
+      "refresh": "Refresh",
       "edit": "Edit",
-      "delete": "Delete",
       "refreshed": "Status refreshed from Meta.",
       "submittedToast": "Template submitted to Meta for review.",
       "never": "Never",
       "none": "None",
       "banner": {
-        "metaFailed": "Meta refused the template",
-        "draft": "This template has not been submitted to Meta yet. Submit it to start the review.",
-        "pending": "Submitted for Meta review. This page checks for an answer every 15 seconds.",
-        "pendingMeta": "Submitted {submitted}. Last checked {checked}.",
-        "polling": "You can leave this page open or come back later.",
+        "metaFailed": "Meta submission failed",
+        "notSubmitted": "Not submitted to Meta yet",
+        "notSubmittedBody": "This template is saved here but has no Meta Template ID: Meta never accepted it, which is why it cannot be reviewed or sent. Submit it to start the review.",
+        "notSubmittedNoWaba": "This template has no Meta Template ID. Connect a WhatsApp Business (WABA) account, then submit it for review.",
+        "pending": "Submitted for Meta review",
+        "pendingBody": "Most templates are approved within minutes; Meta allows up to 48 hours. This page refreshes automatically every 30 seconds while the status is pending.",
+        "submittedAgo": "Submitted {when}",
+        "checkedAgo": "last checked {when}",
         "rejected": "Rejected by Meta",
-        "rejectedHelp": "Edit the template to address the reason, then submit it again.",
-        "paused": "Paused by Meta. It cannot be sent until Meta lifts the pause.",
-        "pausedUntil": "Paused by Meta until {when}.",
+        "code": "Code:",
+        "paused": "Paused by Meta",
+        "pausedBody": "Repeated negative feedback (blocks or spam reports) paused this template. Its quality score must recover before it can be sent again.",
+        "pausedUntil": "Auto-unpause after {when}.",
         "disabled": "Disabled by Meta. It cannot be sent.",
-        "deleted": "Meta no longer lists this template. It is kept here; sync again or delete it."
+        "deleted": "Meta no longer lists this template. It is kept here; sync again or delete it from the library."
       },
       "facts": {
         "title": "Meta sync",
-        "status": "Meta status",
+        "status": "Status",
         "quality": "Quality",
         "category": "Meta category",
         "metaId": "Template ID",
-        "number": "WhatsApp number",
-        "numberUnknown": "Number no longer available",
         "submitted": "Submitted",
-        "approved": "Approved",
-        "synced": "Last synced"
+        "synced": "Last synced",
+        "numberUnknown": "Number no longer available"
       },
       "components": {
         "title": "Components",
         "header": "Header",
-        "media": "Header media",
         "body": "Body",
         "footer": "Footer",
         "buttons": "Buttons",
@@ -334,11 +402,31 @@
         "document": "Document",
         "location": "Location"
       },
-      "lint": { "title": "Checks", "clean": "No problems found." },
-      "payload": {
-        "title": "Meta payload",
-        "hint": "What is sent to Meta for review, exactly as built.",
-        "empty": "Nothing built yet."
+      "back": "Back to templates",
+      "refreshNow": "Refresh now",
+      "editTemplate": "Edit template",
+      "editResubmit": "Edit & resubmit",
+      "submitToMeta": "Submit to Meta",
+      "wabaAccount": "WhatsApp Business account",
+      "noWaba": "No WABA account connected.",
+      "connectOne": "Connect one",
+      "noWabaTail": "to submit templates to Meta.",
+      "related": "Related",
+      "useInBroadcast": "Use in a broadcast",
+      "crumbTemplates": "Templates",
+      "crumbDetail": "Detail",
+      "notSubmittedPill": "Not submitted",
+      "qualityPill": "Quality · {quality}",
+      "preview": {
+        "title": "Preview",
+        "hint": "How it appears on WhatsApp"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "Content was flagged as abusive or threatening.",
+        "INVALID_FORMAT": "Format violates Meta's template rules (placeholders, line breaks, length).",
+        "PROMOTIONAL": "Marketing language not allowed in this category.",
+        "TAG_CONTENT_MISMATCH": "Category does not match the content (e.g. promotional copy in a UTILITY template).",
+        "SCAM": "Meta flagged the template as a potential scam. Review claims and language."
       }
     }
   }

@@ -5,6 +5,7 @@ import { WabaHttp, type WabaAuth } from './waba-http';
 import type {
   CreateRemoteTemplate,
   CreatedRemoteTemplate,
+  EditRemoteTemplate,
   MediaUpload,
   RemoteTemplate,
   TemplatePage,
@@ -94,6 +95,21 @@ export class WabaTemplateClient implements WabaTemplatePort {
       status: (res.status ?? 'PENDING').toUpperCase(),
       category: res.category ?? null,
     };
+  }
+
+  async edit(
+    conn: WabaConnection,
+    metaTemplateId: string,
+    input: EditRemoteTemplate,
+  ): Promise<void> {
+    await this.http.call(authOf(conn), {
+      method: 'POST',
+      path: `/${metaTemplateId}`,
+      json: {
+        ...(input.category ? { category: input.category } : {}),
+        components: input.components,
+      },
+    });
   }
 
   async list(

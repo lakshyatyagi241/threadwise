@@ -1,0 +1,223 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "Użycie AI",
+      "keys": "Klucze dostawców AI"
+    },
+    "admin": {
+      "nav": {
+        "group": "AI",
+        "keys": "Klucze dostawców AI",
+        "dashboard": "Użycie AI"
+      }
+    },
+    "common": {
+      "loading": "Ładowanie",
+      "retry": "Spróbuj ponownie",
+      "requestId": "Identyfikator żądania",
+      "dismiss": "Odrzuć",
+      "tokens": "{count, number} tokenów",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Nie masz uprawnień, aby to zobaczyć.",
+        "request": "Nie udało się zrealizować tego żądania.",
+        "unexpected": "Po naszej stronie coś poszło nie tak. Spróbuj ponownie za chwilę.",
+        "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+        "conflict": "Ktoś inny to zmienił. Strona została przeładowana: zastosuj zmianę ponownie.",
+        "keyRequired": "Dodaj klucz API, zanim włączysz tego dostawcę.",
+        "validation": "Niektóre wartości są nieprawidłowe. Sprawdź zaznaczone pola.",
+        "notFound": "Ta pozycja już nie istnieje."
+      }
+    },
+    "windows": {
+      "label": "Przedział czasu",
+      "7d": "7 dni",
+      "30d": "30 dni",
+      "90d": "90 dni",
+      "1y": "1 rok",
+      "custom": "Własny",
+      "from": "Od",
+      "to": "Do",
+      "pick": "Wybierz datę początkową i końcową.",
+      "invalid": "Data końcowa jest wcześniejsza niż początkowa.",
+      "tooLong": "Wybierz zakres maksymalnie {days} dni."
+    },
+    "keys": {
+      "eyebrow": "Administracja · System · Dostawcy AI",
+      "title": "Klucze API AI",
+      "description": "Globalne klucze dla każdego obsługiwanego dostawcy AI. Przestrzenie robocze w planach bez opcji „Użyj własnego klucza” używają ich jako zapasowych. Szyfrowane w spoczynku.",
+      "superOnly": "Tylko superadministrator może zarządzać kluczami AI platformy.",
+      "summary": {
+        "providers": "Dostawcy",
+        "providersHint": "wstępnie dodani",
+        "active": "Aktywny",
+        "activeHint": "włączony jako zapasowy",
+        "ready": "Gotowy",
+        "readyHint": "aktywny + ma klucz",
+        "noKey": "Brak klucza",
+        "noKeyHint": "wklej klucz, aby był gotowy"
+      },
+      "groups": {
+        "llm": "Modele językowe",
+        "voice": "Głos"
+      },
+      "card": {
+        "active": "Aktywny",
+        "off": "Wyłączony",
+        "keySaved": "Klucz zapisany",
+        "keySavedLast4": "Klucz zapisany, kończy się na {last4}",
+        "noKey": "Brak klucza",
+        "unreadable": "Nie można odczytać zapisanego klucza, wklej go ponownie",
+        "apiKey": "Klucz API",
+        "apiKeyHint": "Zostaw puste, aby zachować zapisany klucz.",
+        "apiKeyPlaceholder": "Wklej klucz tutaj",
+        "apiKeySavedPlaceholder": "•••••••••• (zapisano — zostaw puste, aby zachować)",
+        "defaultModel": "Model domyślny",
+        "pickModel": "— Wybierz model domyślny —",
+        "customModel": "{model} (własny)",
+        "sortOrder": "Kolejność",
+        "maxTokens": "Maks. tokenów na żądanie",
+        "maxTokensHint": "Opcjonalny limit długości odpowiedzi dla każdej przestrzeni roboczej. Puste oznacza brak limitu.",
+        "extraModels": "Dodatkowe modele",
+        "extraModelsHint": "Opcjonalne. Identyfikatory modeli oferowanych obok domyślnego, oddzielone przecinkami.",
+        "save": "Zapisz {name}",
+        "saving": "Zapisywanie",
+        "turnOn": "Aktywuj",
+        "turnOff": "Wyłącz",
+        "removeKey": "Usuń klucz",
+        "removeTitle": "Usunąć klucz {name}?",
+        "removeBody": "Przestrzenie robocze przestaną używać {name}, dopóki ponownie nie dodasz klucza. Dostawca zostanie wyłączony.",
+        "removeConfirm": "Usuń klucz",
+        "cancel": "Anuluj",
+        "slug": "dostawca: {provider} · model domyślny: {model}",
+        "maxTokensPlaceholder": "np. 4096"
+      },
+      "toasts": {
+        "saved": "Zapisano {name}.",
+        "savedOn": "Zapisano i włączono {name}.",
+        "on": "Włączono {name}.",
+        "off": "Wyłączono {name}.",
+        "removed": "Usunięto klucz {name}."
+      },
+      "help": {
+        "title": "Jak używane są te klucze",
+        "body": "Własny klucz przestrzeni roboczej wygrywa tylko wtedy, gdy pozwala na to jej plan. W przeciwnym razie używany jest odpowiadający mu aktywny dostawca stąd. Wyłączenie dostawcy oznacza, że przestrzenie robocze bez własnego klucza nie mogą z niego korzystać.",
+        "eyebrow": "Jak używane są te klucze"
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Administracja / Pulpit AI",
+      "title": "Użycie AI i zużycie tokenów",
+      "description": "Każde wywołanie AI na platformie — który dostawca, który model, która przestrzeń robocza, na kluczach platformy czy własnych (BYOK), z szacunkowym kosztem.",
+      "kpis": {
+        "tokens": "Zużyte tokeny",
+        "tokensHint": "w tym okresie",
+        "cost": "Szacowany koszt",
+        "costHint": "szac. uśredniony",
+        "calls": "Wywołania AI",
+        "callsHint": "zarejestrowanych żądań",
+        "workspaces": "Przestrzenie robocze używające AI",
+        "workspacesHint": "aktywne"
+      },
+      "daily": "Dzienne zużycie tokenów",
+      "byProvider": "Tokeny według dostawcy",
+      "split": "Kto płaci — platforma czy BYOK",
+      "splitPlatform": "Klucze platformy",
+      "splitOwn": "Własne klucze (BYOK)",
+      "topWorkspaces": "Przestrzenie robocze zużywające najwięcej tokenów",
+      "topModels": "Najpopularniejsze modele",
+      "keyHealth": "Kondycja kluczy AI",
+      "live": "Aktywny",
+      "notLive": "Wyłączony",
+      "peak": "szczyt {value}/dzień",
+      "dailyEmpty": "W tym okresie nie zarejestrowano jeszcze wywołań AI.",
+      "providerCalls": "{count, number} wywołań",
+      "providerEmpty": "Brak użycia.",
+      "splitNote": "Do miesięcznego limitu AI planu liczą się tylko tokeny z kluczy platformy. Przestrzenie robocze BYOK płacą na własnym koncie dostawcy.",
+      "workspaceEmpty": "Brak użycia AI w przestrzeniach roboczych.",
+      "workspaceMeta": "{count, number} wywołań",
+      "workspaceByok": "{tokens} BYOK",
+      "modelEmpty": "Brak użycia modeli.",
+      "modelMeta": "{provider} · {count, number} wywołań",
+      "manageKeys": "Zarządzaj kluczami",
+      "noDefaultModel": "brak modelu domyślnego",
+      "noPlatformKeys": "Nie skonfigurowano kluczy AI platformy.",
+      "byokKeys": "Aktywne klucze BYOK",
+      "byokWorkspaces": "Przestrzenie robocze z BYOK"
+    },
+    "usage": {
+      "title": "Użycie AI",
+      "description": "Każde wywołanie AI wykonane przez Twoją przestrzeń roboczą — zużyte tokeny, według modelu i dostawcy, klucze planu a Twoje własne, oraz szacowany koszt.",
+      "kpis": {
+        "tokens": "Użyte tokeny",
+        "calls": "{count, plural, one {# wywołanie AI} few {# wywołania AI} many {# wywołań AI} other {# wywołania AI}}",
+        "platform": "Klucze planu",
+        "ownKeys": "Twoje klucze (BYOK)",
+        "cost": "Szacowany koszt",
+        "costHint": "uśredniona stawka dostawcy",
+        "providers": "Dostawcy",
+        "models": "Modele"
+      },
+      "cap": {
+        "title": "Ten miesiąc · limit AI planu",
+        "used": "Wykorzystano {used, number} z {limit, number} tokenów w tym miesiącu",
+        "unlimited": "Wykorzystano {used, number} tokenów w tym miesiącu: bez limitu w Twoim planie",
+        "reached": "Zbliżasz się do miesięcznego limitu. Ulepsz plan lub dodaj własne klucze (BYOK), aby dalej korzystać z AI.",
+        "note": "Tokeny BYOK działają na Twoim koncie dostawcy i nigdy nie liczą się do limitu planu."
+      },
+      "daily": "Dzienne zużycie tokenów",
+      "byProvider": "Według dostawcy",
+      "split": "Klucze planu a Twoje klucze",
+      "splitPlatform": "Klucze planu",
+      "splitOwn": "Twoje klucze (BYOK)",
+      "models": "Według modelu",
+      "columns": {
+        "model": "Model",
+        "provider": "Dostawca",
+        "tokens": "Tokeny",
+        "calls": "Wywołania",
+        "prompt": "Prompt",
+        "completion": "Odpowiedź"
+      },
+      "empty": "W tym okresie nie ma jeszcze użycia AI.",
+      "costNote": "Koszt jest szacunkiem opartym na opublikowanych uśrednionych stawkach tokenów dostawców i może różnić się od faktury dostawcy. Liczby tokenów są dokładne."
+    },
+    "own": {
+      "title": "Twoje klucze dostawców AI",
+      "description": "Dodaj własny klucz dla dostawcy, aby funkcje AI używały Twojego konta zamiast wspólnego. Klucze są szyfrowane i nigdy więcej nie są pokazywane.",
+      "allowed": "Twój plan pozwala, aby Twoje własne klucze miały pierwszeństwo.",
+      "notAllowed": "Twój plan nie obejmuje jeszcze własnych kluczy. Możesz je teraz zapisać, ale wywołania będą nadal używać wspólnego klucza do czasu ulepszenia planu.",
+      "add": "Dodaj klucz",
+      "provider": "Dostawca",
+      "apiKey": "Klucz API",
+      "apiKeyHint": "Co najmniej 8 znaków.",
+      "save": "Zapisz klucz",
+      "replace": "Zastąp klucz",
+      "saving": "Zapisywanie",
+      "on": "Wł.",
+      "off": "Wyłączony",
+      "ends": "Kończy się na {last4}",
+      "using": "Wywołania używają",
+      "usingOwn": "Twojego klucza",
+      "usingShared": "wspólnego klucza",
+      "usingNone": "brak klucza (nic niedostępne)",
+      "turnOn": "Włącz",
+      "turnOff": "Wyłącz",
+      "remove": "Usuń",
+      "removeTitle": "Usunąć Twój klucz {name}?",
+      "removeBody": "Wywołania wrócą do wspólnego klucza, jeśli jest dostępny.",
+      "removeConfirm": "Usuń klucz",
+      "cancel": "Anuluj",
+      "empty": "Nie dodano żadnych kluczy.",
+      "toasts": {
+        "saved": "Zapisano klucz {name}.",
+        "on": "Włączono klucz {name}.",
+        "off": "Wyłączono klucz {name}.",
+        "removed": "Usunięto klucz {name}."
+      },
+      "errors": {
+        "tooShort": "Klucz ma co najmniej 8 znaków."
+      }
+    }
+  }
+}

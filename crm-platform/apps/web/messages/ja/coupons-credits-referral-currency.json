@@ -1,0 +1,412 @@
+{
+  "coupons-credits-referral-currency": {
+    "nav": {
+      "group": "請求とプラン",
+      "coupons": "クーポン",
+      "currencies": "通貨",
+      "currenciesGroup": "ローカライズ",
+      "affiliate": "アフィリエイト"
+    },
+    "common": {
+      "loading": "読み込み中",
+      "retry": "再試行",
+      "cancel": "キャンセル",
+      "dismiss": "閉じる",
+      "admin": "管理者",
+      "readOnly": "このページは閲覧のみ可能で、変更できるのはスーパー管理者のみです。",
+      "requestId": "リクエストID",
+      "errors": {
+        "forbidden": "このページへのアクセス権がありません。",
+        "request": "リクエストを完了できませんでした。",
+        "unexpected": "問題が発生しました。しばらくしてからもう一度お試しください。"
+      },
+      "pager": {
+        "label": "ページネーション",
+        "previous": "前へ",
+        "next": "次へ",
+        "page": "{n}ページ"
+      }
+    },
+    "errors": {
+      "generic": "問題が発生しました。しばらくしてからもう一度お試しください。",
+      "forbidden": "変更できるのはスーパー管理者のみです。",
+      "notFound": "この項目は存在しません。削除された可能性があります。",
+      "conflict": "たった今、他のユーザーが変更しました。ページを再読み込みして、もう一度お試しください。",
+      "validation": "無効な値があります。フォームを確認して、もう一度お試しください。",
+      "codeTaken": "このコードは別のクーポンで既に使用されています。",
+      "planUnknown": "選択したプランの1つ以上が存在しません。",
+      "currencyUnknown": "有効な通貨のいずれかを選択してください。",
+      "currencyTaken": "このコードの通貨は既に存在します。",
+      "defaultProtected": "これはシステム既定の通貨です。先に別の既定を選択してください。",
+      "inUse": "この通貨は現在{used}で使用されています。代わりに無効化してください。",
+      "ratesFailed": "レートプロバイダーに接続できなかったか、レートが返されませんでした。レートは変更されていません。"
+    },
+    "coupons": {
+      "title": "割引クーポン",
+      "titleLead": "割引",
+      "titleAccent": "件のクーポン",
+      "crumbHere": "クーポン",
+      "eyebrow": "管理 · 請求 · クーポンコード",
+      "description": "購入者がチェックアウト時に入力するプロモーションコードです。割合または固定額を選び、有効期間を設定し、特定のプランに限定し、利用回数の上限を設定できます。",
+      "new": "新しいクーポン",
+      "kpi": {
+        "total": "クーポン総数",
+        "totalHint": "カタログ内",
+        "active": "有効",
+        "activeHint": "利用可能",
+        "expired": "期限切れ",
+        "expiredHint": "有効期限を過ぎています",
+        "redeemed": "総利用回数",
+        "redeemedHint": "累計利用数"
+      },
+      "filters": {
+        "label": "クーポンを絞り込み",
+        "all": "すべて",
+        "active": "有効",
+        "disabled": "無効",
+        "expired": "期限切れ",
+        "search": "コードまたは説明で検索…",
+        "searchLabel": "クーポンを検索"
+      },
+      "table": {
+        "label": "クーポン",
+        "code": "コード",
+        "discount": "割引",
+        "uses": "利用数",
+        "validity": "有効期間",
+        "status": "ステータス",
+        "actions": "操作"
+      },
+      "validity": {
+        "forever": "無期限",
+        "now": "現在",
+        "range": "{from} → {to}"
+      },
+      "empty": {
+        "title": "一致するクーポンがありません。",
+        "hint": "フィルターを調整またはリセットするか、",
+        "create": "最初のクーポンを作成"
+      },
+      "footer": "{total}件中{from}～{to}件のクーポンを表示",
+      "pager": {
+        "label": "ページネーション",
+        "previous": "前へ",
+        "next": "次へ",
+        "page": "{n}ページ"
+      },
+      "actions": {
+        "edit": "編集",
+        "delete": "削除",
+        "menu": "操作",
+        "toggle": "{code}のオン／オフを切り替え"
+      },
+      "toasts": {
+        "created": "クーポンを作成しました。",
+        "updated": "クーポンを更新しました。",
+        "activated": "有効化しました。",
+        "deactivated": "無効化しました。",
+        "deleted": "クーポンを削除しました。"
+      },
+      "delete": {
+        "title": "クーポンを削除",
+        "body": "クーポン{code}を削除しますか？すでに利用したワークスペースの割引は維持されます。",
+        "confirm": "はい、削除する"
+      },
+      "editor": {
+        "notFoundTitle": "クーポンが見つかりません",
+        "notFoundBody": "このアドレスのクーポンは存在しません。削除されたか、リンクが間違っている可能性があります。",
+        "backToList": "クーポンに戻る",
+        "crumbNew": "新規",
+        "eyebrowNew": "管理 · 請求 · クーポンコード · 作成",
+        "eyebrowEdit": "管理 · 請求 · クーポンコード · 編集",
+        "titleLead": "新規",
+        "titleAccent": "クーポン",
+        "descriptionNew": "/checkout で利用されるプロモーションコードです。割合または固定額を選び、1つのプランまたはすべてのプランに紐付け、必要に応じて有効期間を設定できます。",
+        "redeemed": "{used}{max}回利用",
+        "redeemedMax": " / {max}",
+        "expires": "{when}に期限切れ",
+        "active": "有効",
+        "disabled": "無効",
+        "create": "クーポンを作成",
+        "saveChanges": "変更を保存",
+        "saving": "保存中",
+        "cancel": "キャンセル",
+        "problemsTitle": "確認が必要な項目があります：",
+        "problems": {
+          "code": "コード：64文字以内で入力してください。",
+          "description": "説明：255文字以内で入力してください。",
+          "adminNote": "管理者メモ：1000文字以内で入力してください。",
+          "type": "タイプ：割合または固定額を選択してください。",
+          "amount": "金額：10 や 12.5 などの数値を入力してください。",
+          "maxDiscountAmount": "割引上限：数値を入力するか、空欄にしてください。",
+          "currencyCode": "通貨の固定：8文字以内で入力してください。",
+          "minOrderAmount": "最低注文金額：数値を入力するか、空欄にしてください。",
+          "applicablePlans": "対象プラン：リストからプランを選択してください。",
+          "startsAt": "開始日時：有効な日時を入力してください。",
+          "expiresAt": "終了日時：開始より前にならない有効な日時を入力してください。",
+          "maxUses": "総利用回数の上限：1以上の整数を入力するか、空欄にしてください。",
+          "perUserLimit": "ユーザーごとの上限：1以上の整数を入力するか、空欄にしてください。"
+        },
+        "sections": {
+          "identity": "識別情報",
+          "discount": "割引",
+          "eligibility": "対象条件",
+          "limits": "制限と動作"
+        },
+        "fields": {
+          "code": "コード",
+          "codeHint": "大文字で保存されます。お客様は支払い時にこのコードをそのまま入力します。",
+          "codePlaceholder": "WELCOME10",
+          "description": "説明",
+          "descriptionNote": "（お客様に表示）",
+          "descriptionPlaceholder": "ウェルカムオファー：初月10％オフ",
+          "adminNote": "管理者メモ",
+          "adminNoteNote": "（社内用、非表示）",
+          "adminNotePlaceholder": "ホリデーセール分 · Slack #marketing · キャンペーン終了時に終了",
+          "activeTitle": "有効",
+          "activeHint": "購入者がチェックアウト時に適用できます",
+          "type": "タイプ",
+          "typePercent": "割合（%）",
+          "typeFixed": "固定額",
+          "amount": "金額",
+          "amountHint": "割合クーポンでは、10は10%を意味します。固定額クーポンでは、10は通貨10単位を意味します。",
+          "maxDiscount": "割引上限",
+          "maxDiscountNote": "（割合タイプのみ）",
+          "maxDiscountPlaceholder": "空欄 = 上限なし",
+          "maxDiscountHint": "例：20％オフ、上限50ドル。",
+          "currency": "通貨の固定",
+          "currencyAny": "すべての通貨",
+          "currencyHint": "利用を1つの通貨に限定します（固定額クーポンに適用）。",
+          "minOrder": "最低注文金額",
+          "minOrderPlaceholder": "0 = 最低額なし",
+          "plans": "対象プラン",
+          "plansNote": "（空 = すべてのプラン）",
+          "plansPlaceholder": "プランを1つ以上選択（空 = すべてのプラン）...",
+          "plansHint": "入力してリストを絞り込み、選択して追加し、チップの×で削除します。",
+          "plansEmpty": "選択できるプランはこれ以上ありません。",
+          "plansRemove": "{name}を削除",
+          "plansClear": "すべてのプランを削除",
+          "startsAt": "開始日時",
+          "startsAtHint": "空欄 = 今すぐ利用可能。",
+          "expiresAt": "終了日時",
+          "expiresAtHint": "空欄 = 無期限。",
+          "maxUses": "総利用回数の上限",
+          "unlimitedPlaceholder": "空欄 = 無制限",
+          "maxUsesHint": "全顧客の合計です。",
+          "perUser": "ユーザーごとの上限",
+          "perUserHint": "各顧客が利用できる回数。",
+          "firstPurchaseTitle": "初回購入のみ",
+          "firstPurchaseHint": "有料注文をまだ行っていないワークスペースのみ",
+          "stackableTitle": "他のクーポンと併用可能",
+          "stackableHint": "チェックアウト時に他の有効なコードと併用できます"
+        }
+      }
+    },
+    "currencies": {
+      "title": "プラットフォームの通貨",
+      "titleLead": "プラットフォーム",
+      "titleAccent": "通貨",
+      "crumbGroup": "システム",
+      "crumbGroup2": "ローカライズ",
+      "crumbHere": "通貨",
+      "eyebrow": "管理 · プラットフォーム · ローカライズ",
+      "description": "ワークスペースが選べる通貨を管理します。為替レートはUSD基準で保存されます。既定を変更すると、すべてのユーザーのダッシュボード、請求書、ウォレット表示に反映されます。",
+      "fetchRates": "ライブレートを取得",
+      "fetching": "取得中",
+      "add": "通貨を追加",
+      "kpi": {
+        "total": "合計",
+        "totalHint": "件の通貨が設定済み",
+        "active": "有効",
+        "activeHint": "ワークスペースに表示",
+        "default": "システム既定",
+        "defaultHint": "新規作成されるワークスペースに使用",
+        "inactive": "無効",
+        "inactiveHint": "ワークスペース設定に表示されません"
+      },
+      "defaultCard": {
+        "eyebrow": "システム既定",
+        "title": "プラットフォーム全体のフォールバック通貨",
+        "body": "通貨を選択していないワークスペースはこの通貨を使用します。保存するとキャッシュがすぐにクリアされ、アプリ全体で次のページ読み込みから反映されます。",
+        "select": "既定の通貨",
+        "set": "既定に設定",
+        "setting": "保存中"
+      },
+      "search": "コード、名前、記号…",
+      "searchLabel": "通貨を検索",
+      "searchButton": "検索",
+      "table": {
+        "label": "通貨",
+        "code": "コード",
+        "name": "名前",
+        "symbol": "記号",
+        "rate": "レート（1 USD →）",
+        "decimals": "小数桁数",
+        "active": "有効",
+        "actions": "操作"
+      },
+      "defaultBadge": "既定",
+      "rate": "1 USD → {rate}",
+      "on": "オン",
+      "off": "オフ",
+      "empty": {
+        "none": "通貨はまだありません。",
+        "noMatch": "「{q}」に一致する通貨はありません。"
+      },
+      "footer": "{total}件中{from}～{to}件の通貨を表示",
+      "actions": {
+        "edit": "編集",
+        "delete": "削除",
+        "toggle": "{code}のオン／オフを切り替え"
+      },
+      "toasts": {
+        "added": "通貨を追加しました。",
+        "updated": "通貨を更新しました。",
+        "activated": "有効化しました。",
+        "deactivated": "無効化しました。",
+        "deleted": "通貨を削除しました。",
+        "defaultSet": "既定の通貨を{code}に設定しました。",
+        "ratesUpdated": "{provider}から{count}件の通貨を更新しました。"
+      },
+      "delete": {
+        "title": "通貨を削除",
+        "body": "{code}を削除しますか？この通貨で保存された価格は孤立した状態になります。",
+        "confirm": "はい、削除する"
+      },
+      "form": {
+        "addTitle": "通貨を追加",
+        "editTitle": "{code}を編集",
+        "name": "名前 *",
+        "namePlaceholder": "スイスフラン",
+        "code": "ISOコード *",
+        "codePlaceholder": "CHF",
+        "codeLocked": "通貨が作成された後、コードは変更できません。",
+        "symbol": "記号",
+        "symbolPlaceholder": "Fr",
+        "precision": "小数桁数 *",
+        "rate": "換算レート（1 USD = ?）*",
+        "active": "すぐに有効化",
+        "save": "通貨を追加",
+        "saveChanges": "変更を保存",
+        "cancel": "キャンセル",
+        "problemsTitle": "確認が必要な項目があります：",
+        "problems": {
+          "name": "名前：120文字以内で入力してください。",
+          "code": "ISOコード：CHF のように3文字で入力してください。",
+          "symbol": "記号：20文字以内で入力してください。",
+          "precision": "小数桁数：0～6の整数を入力してください。",
+          "exchangeRate": "為替レート：0.000001以上の数値を入力してください。"
+        },
+        "eyebrow": "新規エントリー",
+        "rateHint": "上の「ライブレートを取得」を使うと、open.er-api.com から値を自動入力できます。",
+        "editEyebrow": "エントリーを編集"
+      },
+      "catalog": {
+        "eyebrow": "カタログ",
+        "title": "すべての通貨"
+      }
+    },
+    "affiliate": {
+      "title": "アフィリエイト",
+      "subtitle": "リンクを共有して、紹介したワークスペースを確認しましょう。",
+      "common": {
+        "dismiss": "閉じる"
+      },
+      "states": {
+        "loading": "アフィリエイトデータを読み込み中"
+      },
+      "header": {
+        "codeLabel": "あなたの紹介コード",
+        "noCode": "コードはまだありません",
+        "linkLabel": "あなたの紹介リンク",
+        "copyLink": "リンクをコピー",
+        "copied": "リンクをコピーしました。",
+        "copyFailed": "リンクをコピーできませんでした。選択して手動でコピーしてください。",
+        "reward": "紹介されたワークスペースが初回の支払いを行うたびに、{amount}を獲得できます。",
+        "rewardMessages": "{count, plural, other {#件のメッセージ}}に相当します。",
+        "rewardNone": "現在、プログラムでは新規紹介に報酬は支払われません。コードと履歴はここに残ります。"
+      },
+      "filters": {
+        "label": "期間とエクスポート",
+        "range": "期間",
+        "ranges": {
+          "7d": "過去7日間",
+          "30d": "過去30日間",
+          "90d": "過去90日間",
+          "all": "全期間"
+        },
+        "search": "紹介を検索",
+        "searchPlaceholder": "名前、メールアドレス、またはコード",
+        "reset": "リセット",
+        "export": "CSVをエクスポート",
+        "exporting": "ファイルを準備中",
+        "exported": "{fileName}をダウンロードしました。"
+      },
+      "kpi": {
+        "inRange": "期間内の紹介",
+        "vsPrevious": "前期間比 {delta}",
+        "earned": "獲得額（累計）",
+        "last30": "紹介（過去30日間）",
+        "last30Earned": "過去30日間で{amount}を獲得",
+        "average": "紹介あたりの平均"
+      },
+      "chart": {
+        "title": "紹介数の推移",
+        "label": "期間別の紹介数（棒グラフ）と獲得クレジット（折れ線グラフ）",
+        "buckets": {
+          "daily": "日別",
+          "weekly": "週別",
+          "monthly": "月別"
+        },
+        "signups": "紹介",
+        "credits": "獲得クレジット",
+        "bucket": "期間",
+        "empty": "この期間の紹介はまだありません。"
+      },
+      "topCodes": {
+        "title": "上位のコード",
+        "referrals": "{count, plural, other {#件の紹介}}",
+        "empty": "この期間に使用されたコードはありません。"
+      },
+      "payouts": {
+        "title": "最近の支払い",
+        "balanceAfter": "{amount}後の残高",
+        "empty": "支払いはまだありません。紹介されたワークスペースが初回の支払いを行うと、報酬がウォレットに入ります。"
+      },
+      "table": {
+        "title": "紹介",
+        "label": "選択した期間の紹介",
+        "when": "日時",
+        "referee": "紹介された人",
+        "code": "使用コード",
+        "credits": "獲得クレジット",
+        "status": "ステータス",
+        "transaction": "ウォレット取引",
+        "noName": "名前なしのユーザー",
+        "paid": "支払い済み",
+        "pending": "保留中",
+        "noTransaction": "ウォレット取引なし",
+        "pagination": "紹介ページ",
+        "previous": "前へ",
+        "next": "次へ",
+        "showing": "{total}件中{from}～{to}件を表示"
+      },
+      "empty": {
+        "noneTitle": "紹介はまだありません",
+        "noneBody": "リンクを共有してください。リンクから登録した人がここに表示されます。",
+        "filteredTitle": "一致する紹介がありません",
+        "filteredBody": "別の期間を試すか、検索をクリアしてください。"
+      },
+      "errors": {
+        "unauthenticated": "セッションが終了しました。アフィリエイトデータを見るには、もう一度サインインしてください。",
+        "forbidden": "このページへのアクセス権がありません。",
+        "rateLimited": "リクエストが多すぎます。しばらくしてからもう一度お試しください。",
+        "validation": "これらのフィルターを適用できませんでした。リセットしてもう一度お試しください。",
+        "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+        "generic": "問題が発生しました。しばらくしてからもう一度お試しください。",
+        "requestId": "リクエストID",
+        "retry": "再試行"
+      }
+    }
+  }
+}

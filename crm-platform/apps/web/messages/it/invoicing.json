@@ -1,0 +1,662 @@
+{
+  "invoicing": {
+    "nav": {
+      "invoices": "Fatture",
+      "payments": "Pagamenti",
+      "taxRates": "Aliquote fiscali",
+      "recurring": "Fatture ricorrenti",
+      "salesOrders": "Ordini di vendita"
+    },
+    "common": {
+      "unnamedContact": "Contatto senza nome",
+      "dismiss": "Chiudi"
+    },
+    "status": {
+      "draft": "Bozza",
+      "issued": "Emessa",
+      "partially_paid": "Parzialmente pagata",
+      "overdue": "Scaduta",
+      "paid": "Pagata",
+      "void": "Annullata"
+    },
+    "method": {
+      "bank_transfer": "Bonifico bancario",
+      "cash": "Contanti",
+      "card": "Carta",
+      "upi": "UPI",
+      "cheque": "Assegno",
+      "gateway": "Online",
+      "other": "Altro"
+    },
+    "errors": {
+      "network": "Impossibile contattare il server. Controlla la connessione e riprova.",
+      "forbidden": "Non hai il permesso per farlo.",
+      "signedOut": "La sessione è terminata. Accedi di nuovo.",
+      "conflict": "Qualcun altro ha appena modificato questo elemento. Ricarica per vedere la versione più recente.",
+      "validation": "Alcune informazioni non sono valide. Controlla i campi evidenziati.",
+      "unavailable": "La fatturazione non è ancora disponibile su questo server.",
+      "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+      "notFound": "Questa fattura non esiste più.",
+      "planDisabled": "Il tuo piano non include la fatturazione.",
+      "invalidState": "Non è possibile nello stato attuale della fattura. Ricarica e controlla il suo stato.",
+      "unexpected": "Si è verificato un problema lato nostro. Riprova.",
+      "requestId": "ID richiesta",
+      "retry": "Riprova"
+    },
+    "picker": {
+      "unlink": "Rimuovi contatto",
+      "searchContact": "Cerca contatti per nome",
+      "results": "Contatti corrispondenti",
+      "searching": "Ricerca in corso...",
+      "unavailable": "Impossibile caricare i contatti.",
+      "none": "Nessun contatto trovato."
+    },
+    "actions": {
+      "failed": "Operazione non riuscita.",
+      "issued": "Fattura {number} emessa.",
+      "sent": "Contrassegnata come inviata.",
+      "voided": "Fattura {number} annullata.",
+      "duplicated": "Copia creata come bozza.",
+      "deleted": "Bozza eliminata.",
+      "linkCopied": "Link copiato.",
+      "linkCopyFailed": "Il browser ha bloccato la copia. Seleziona il link e copialo manualmente."
+    },
+    "payDialog": {
+      "title": "Registra pagamento",
+      "forInvoice": "Fattura {number}",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "record": "Registra pagamento",
+      "markPaid": "Registra e contrassegna come pagata",
+      "recordAnyway": "Registra comunque",
+      "balance": "Saldo dovuto",
+      "amount": "Importo ({currency})",
+      "method": "Metodo",
+      "paidOn": "Pagato il",
+      "reference": "Riferimento",
+      "referenceHint": "ID transazione o numero di assegno",
+      "note": "Nota",
+      "recorded": "Pagamento di {amount} registrato.",
+      "partialNote": "È un pagamento parziale. Resteranno da pagare {left}.",
+      "overpayNote": "Questo importo supera il saldo di {extra}. Controlla l’importo prima di registrarlo.",
+      "problems": {
+        "amountInvalid": "Inserisci un importo, per esempio 125,50.",
+        "amountZero": "L’importo deve essere maggiore di zero.",
+        "dateInvalid": "Inserisci una data valida.",
+        "dateFuture": "La data del pagamento non può essere futura.",
+        "tooMuch": "Supera l’importo rimborsabile.",
+        "referenceTooLong": "Il riferimento è troppo lungo (massimo 191 caratteri).",
+        "noteTooLong": "La nota è troppo lunga (massimo 2000 caratteri)."
+      }
+    },
+    "refundDialog": {
+      "title": "Rimborsa pagamento",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "refund": "Rimborsa",
+      "available": "Si possono rimborsare fino a {amount}.",
+      "amount": "Importo ({currency})",
+      "date": "Rimborsato il",
+      "reason": "Motivo",
+      "effect": "La fattura tornerà a dovere l’importo rimborsato.",
+      "refunded": "Rimborsati {amount}.",
+      "problems": {
+        "amountInvalid": "Inserisci un importo, per esempio 125,50.",
+        "amountZero": "L’importo deve essere maggiore di zero.",
+        "tooMuch": "Supera l’importo rimborsabile."
+      }
+    },
+    "voidDialog": {
+      "title": "Annulla fattura",
+      "close": "Chiudi",
+      "keep": "Mantieni fattura",
+      "void": "Annulla fattura",
+      "warning": "Una fattura annullata mantiene il suo numero ma non può più essere pagata, modificata o riaperta. Il link dell’acquirente la mostrerà come annullata.",
+      "reason": "Motivo",
+      "reasonHint": "Facoltativo. Viene conservato nell’attività della fattura."
+    },
+    "sendDialog": {
+      "title": "Condividi fattura",
+      "issueTitle": "Emetti fattura",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "issue": "Emetti fattura",
+      "done": "Fatto",
+      "issueIntro": "Emettere la fattura la rende ufficiale:",
+      "issueNumber": "Riceve il numero di fattura successivo.",
+      "issueFrozen": "Le sue righe, i prezzi e le imposte non potranno più essere modificati.",
+      "issueLink": "Diventa disponibile un link per il tuo cliente.",
+      "link": "Link per il cliente",
+      "linkHint": "Chiunque abbia questo link può vedere la fattura e come pagarla.",
+      "copy": "Copia",
+      "copied": "Copiato",
+      "copyFailed": "Il browser ha bloccato la copia. Seleziona il link e copialo manualmente.",
+      "open": "Apri la pagina del cliente",
+      "email": "Invia via email a",
+      "emailHint": "Facoltativo. Lascia vuoto per condividere tu il link e contrassegnare solo la fattura come inviata.",
+      "alreadySent": "Questa fattura era già contrassegnata come inviata."
+    },
+    "deleteDialog": {
+      "title": "Eliminare la bozza?",
+      "message": "{name} verrà eliminata definitivamente. Si possono eliminare solo le bozze.",
+      "delete": "Elimina bozza",
+      "keep": "Conserva"
+    },
+    "row": {
+      "moreFor": "Azioni per {name}",
+      "draft": "bozza",
+      "open": "Apri",
+      "edit": "Modifica",
+      "issue": "Emetti e invia",
+      "send": "Condividi link / contrassegna come inviata",
+      "copyLink": "Copia link",
+      "recordPayment": "Registra pagamento",
+      "markPaid": "Contrassegna come pagata",
+      "duplicate": "Duplica",
+      "print": "Scarica / stampa",
+      "void": "Annulla",
+      "delete": "Elimina bozza"
+    },
+    "table": {
+      "columns": {
+        "number": "Fattura",
+        "contact": "Cliente",
+        "issued": "Emessa",
+        "due": "Scadenza",
+        "total": "Totale",
+        "paid": "Pagato",
+        "balance": "Saldo",
+        "status": "Stato"
+      },
+      "draft": "Bozza",
+      "daysLate": "{count, plural, one {# giorno di ritardo} other {# giorni di ritardo}}",
+      "selectAll": "Seleziona tutte le fatture caricate",
+      "selectRow": "Seleziona {name}",
+      "scrollArea": "Tabella delle fatture"
+    },
+    "tabs": {
+      "label": "Stato fattura",
+      "all": "Tutte",
+      "draft": "Bozza",
+      "issued": "Emessa",
+      "partially_paid": "Parzialmente pagata",
+      "overdue": "Scaduta",
+      "paid": "Pagata",
+      "void": "Annullata",
+      "count": "{count, plural, one {# fattura} other {# fatture}}"
+    },
+    "toolbar": {
+      "search": "Cerca per numero o cliente",
+      "contactLoading": "Cliente",
+      "from": "Da",
+      "to": "A",
+      "issuedFrom": "Emessa dal",
+      "issuedTo": "Emessa fino al",
+      "sort": "Ordina fatture",
+      "sorts": {
+        "newest": "Più recenti prima",
+        "oldest": "Più vecchie prima",
+        "due": "Data di scadenza",
+        "amount": "Importo più alto"
+      },
+      "reset": "Cancella filtri",
+      "refresh": "Aggiorna"
+    },
+    "bulk": {
+      "label": "Azioni multiple",
+      "selected": "{count, plural, one {# fattura selezionata} other {# fatture selezionate}}",
+      "working": "In corso...",
+      "issue": "Emetti bozze",
+      "void": "Annulla",
+      "delete": "Elimina bozze",
+      "clear": "Deseleziona",
+      "failed": "Operazione non riuscita.",
+      "keep": "Conserva",
+      "someFailed": "{count, plural, one {# fattura non è stata modificata.} other {# fatture non sono state modificate.}}",
+      "done": {
+        "issue": "{count, plural, one {# bozza emessa.} other {# bozze emesse.}}",
+        "void": "{count, plural, one {# fattura annullata.} other {# fatture annullate.}}",
+        "delete": "{count, plural, one {# bozza eliminata.} other {# bozze eliminate.}}"
+      },
+      "confirm": {
+        "void": {
+          "title": "Annullare le fatture selezionate?",
+          "message": "{count, plural, one {# fattura selezionata verrà annullata. Le fatture con pagamenti vengono saltate.} other {# fatture selezionate verranno annullate. Le fatture con pagamenti vengono saltate.}}",
+          "confirm": "Annulla fatture"
+        },
+        "delete": {
+          "title": "Eliminare le bozze selezionate?",
+          "message": "{count, plural, one {# fattura selezionata verrà considerata. Vengono eliminate solo le bozze, in modo definitivo.} other {# fatture selezionate verranno considerate. Vengono eliminate solo le bozze, in modo definitivo.}}",
+          "confirm": "Elimina bozze"
+        }
+      }
+    },
+    "list": {
+      "title": "Fatture",
+      "subtitle": "Fattura ai tuoi clienti e tieni sotto controllo cosa è pagato e cosa è in ritardo.",
+      "payments": "Pagamenti",
+      "newInvoice": "Nuova fattura",
+      "tableLabel": "Elenco fatture",
+      "empty": {
+        "all": {
+          "title": "Nessuna fattura ancora",
+          "message": "Crea la tua prima fattura oppure avviane una da una proposta o un preventivo accettato."
+        },
+        "draft": {
+          "title": "Nessuna bozza",
+          "message": "Qui compaiono le fatture che stai ancora scrivendo."
+        },
+        "issued": {
+          "title": "Nessun pagamento in attesa",
+          "message": "Qui compaiono le fatture emesse senza ancora alcun pagamento."
+        },
+        "partially_paid": {
+          "title": "Nessuna fattura parzialmente pagata",
+          "message": "Qui compaiono le fatture con un pagamento ma con un saldo residuo."
+        },
+        "overdue": {
+          "title": "Nessuna scadenza superata",
+          "message": "Qui compaiono le fatture scadute con un saldo residuo."
+        },
+        "paid": {
+          "title": "Nessuna fattura pagata ancora",
+          "message": "Qui compaiono le fatture pagate per intero."
+        },
+        "void": {
+          "title": "Nessuna fattura annullata",
+          "message": "Qui compaiono le fatture annullate, che mantengono il loro numero."
+        }
+      },
+      "emptyFilteredTitle": "Nessuna fattura corrisponde",
+      "emptyFiltered": "Prova una ricerca diversa o cancella i filtri.",
+      "resetFilters": "Cancella filtri",
+      "loading": "Caricamento fatture",
+      "showing": "{count, plural, one {# fattura caricata} other {# fatture caricate}}",
+      "loadMore": "Carica altro",
+      "allLoaded": "Sono tutte"
+    },
+    "lines": {
+      "lineN": "Riga {n}",
+      "description": "Descrizione",
+      "descriptionPlaceholder": "Per cosa stai fatturando?",
+      "removeLine": "Rimuovi riga {n}",
+      "qty": "Q.tà",
+      "price": "Prezzo unitario ({currency})",
+      "discount": "Sconto %",
+      "tax": "Imposta",
+      "noTax": "Nessuna imposta",
+      "inclusive": "incl.",
+      "removedRate": "Aliquota rimossa",
+      "inactive": "inattiva",
+      "amount": "Importo",
+      "addLine": "Aggiungi una riga",
+      "problems": {
+        "descriptionRequired": "Descrivi questa riga.",
+        "qtyInvalid": "Inserisci una quantità maggiore di zero.",
+        "priceInvalid": "Inserisci un prezzo, per esempio 49,90.",
+        "lineDiscountInvalid": "Inserisci una percentuale da 0 a 100.",
+        "noLines": "Aggiungi almeno una riga prima di emettere.",
+        "amountZero": "Il totale della fattura deve essere maggiore di zero."
+      }
+    },
+    "totals": {
+      "label": "Totali fattura",
+      "title": "Totali",
+      "subtotal": "Subtotale",
+      "discount": "Sconto",
+      "total": "Totale"
+    },
+    "builder": {
+      "creatingFromDocument": "Creazione della fattura dal documento...",
+      "loading": "Caricamento",
+      "notEditable": "Questa fattura è stata emessa e non può più essere modificata. Duplicala per crearne una corretta.",
+      "openInvoice": "Apri la fattura",
+      "newTitle": "Nuova fattura",
+      "editTitle": "Modifica bozza",
+      "back": "Indietro",
+      "unsaved": "Modifiche non salvate",
+      "cancel": "Annulla",
+      "saveDraft": "Salva bozza",
+      "saveAndIssue": "Salva ed emetti",
+      "conflict": "Qualcun altro ha modificato questa bozza mentre la stavi modificando. Ricarica per vedere la sua versione: le tue modifiche qui andranno perse.",
+      "reload": "Ricarica",
+      "viewLabel": "Vista editor",
+      "views": {
+        "edit": "Modifica",
+        "preview": "Anteprima"
+      },
+      "billTo": "Fattura a",
+      "contact": "Contatto",
+      "contactHint": "Scegli un contatto a cui collegare la fattura, oppure scrivi l’acquirente qui sotto.",
+      "buyerName": "Nome sulla fattura",
+      "buyerEmail": "Email",
+      "buyerPhone": "Telefono",
+      "buyerAddress": "Indirizzo di fatturazione",
+      "details": "Date e valuta",
+      "currency": "Valuta",
+      "currencyHint": "Tre lettere, per esempio USD o KWD. I decimali seguono la valuta.",
+      "issueDate": "Data di emissione",
+      "terms": "Termini di pagamento",
+      "noDueDate": "Nessuna scadenza",
+      "dueDate": "Data di scadenza",
+      "lineItems": "Righe",
+      "orderLinkedNote": "Le righe di una fattura emessa da un ordine di vendita sono fisse. Per modificarle, annulla o elimina questa fattura e fattura di nuovo l’ordine.",
+      "adjustments": "Sconto",
+      "discountKind": "Sconto sull’intera fattura",
+      "discountNone": "Nessuno sconto",
+      "discountPercent": "Percentuale",
+      "discountAmount": "Importo fisso ({currency})",
+      "discountValue": "Valore dello sconto",
+      "notesAndTerms": "Note e condizioni",
+      "notes": "Nota per il cliente",
+      "notesHint": "Mostrata sulla fattura.",
+      "termsText": "Termini e condizioni",
+      "termsHint": "Mostrati in fondo alla fattura.",
+      "preview": "Anteprima",
+      "saved": "Bozza salvata.",
+      "fixProblems": "Correggi prima i campi evidenziati.",
+      "serverRejected": "Il server non ha accettato alcuni valori. Controlla i campi e riprova.",
+      "problems": {
+        "contactRequired": "Scegli un contatto o scrivi il nome dell’acquirente.",
+        "currencyInvalid": "Inserisci un codice valuta di tre lettere.",
+        "issueDateInvalid": "Inserisci una data di emissione valida.",
+        "dueBeforeIssue": "La data di scadenza non può precedere la data di emissione.",
+        "dueInvalid": "Inserisci una data di scadenza valida.",
+        "noLines": "Aggiungi almeno una riga prima di emettere.",
+        "discountInvalid": "Inserisci uno sconto valido.",
+        "emailInvalid": "Inserisci un indirizzo email valido.",
+        "amountZero": "Il totale della fattura deve essere maggiore di zero.",
+        "descriptionRequired": "Descrivi questa riga.",
+        "priceInvalid": "Inserisci un prezzo valido.",
+        "qtyInvalid": "Inserisci una quantità maggiore di zero.",
+        "lineDiscountInvalid": "Inserisci una percentuale da 0 a 100."
+      }
+    },
+    "terms": {
+      "onReceipt": "Pagamento alla ricezione",
+      "net": "Netto {days} giorni",
+      "custom": "Data personalizzata"
+    },
+    "paper": {
+      "label": "Fattura {number}",
+      "labelDraft": "Anteprima bozza di fattura",
+      "sellerFallback": "Il nome della tua attività",
+      "title": "Fattura",
+      "draftNumber": "Bozza",
+      "billedTo": "Fatturata a",
+      "buyerFallback": "Cliente",
+      "issued": "Emessa",
+      "due": "Scadenza",
+      "onReceipt": "Alla ricezione",
+      "item": "Articolo",
+      "qty": "Q.tà",
+      "price": "Prezzo",
+      "tax": "Imposta",
+      "amount": "Importo",
+      "noLines": "Nessuna riga ancora",
+      "noDescription": "Nessuna descrizione",
+      "lineDiscount": "Sconto {percent}%",
+      "subtotal": "Subtotale",
+      "discount": "Sconto",
+      "discountPercent": "Sconto ({percent}%)",
+      "total": "Totale",
+      "includesTax": "Imposte incluse nei prezzi",
+      "paid": "Pagato",
+      "balanceDue": "Saldo dovuto",
+      "notes": "Note",
+      "terms": "Condizioni"
+    },
+    "detail": {
+      "loading": "Caricamento fattura",
+      "backToList": "Torna alle fatture",
+      "draftTitle": "Bozza di fattura",
+      "edit": "Modifica",
+      "issueAndSend": "Emetti e invia",
+      "shareAgain": "Condividi di nuovo",
+      "send": "Condividi e invia",
+      "recordPayment": "Registra pagamento",
+      "markPaid": "Contrassegna come pagata",
+      "copyLink": "Copia link",
+      "print": "Scarica / stampa",
+      "duplicate": "Duplica",
+      "void": "Annulla",
+      "delete": "Elimina bozza",
+      "voidedBanner": "Questa fattura è stata annullata il {date}. Mantiene il suo numero ma non può più essere pagata.",
+      "voidNeedsRefund": "Per annullare questa fattura, rimborsa prima i suoi pagamenti.",
+      "overpaid": "È stato pagato più di quanto richiesto da questa fattura.",
+      "amountsLabel": "Importi",
+      "total": "Totale",
+      "paid": "Pagato",
+      "balance": "Saldo dovuto",
+      "issued": "Emessa",
+      "due": "Scadenza",
+      "noDue": "Nessuna scadenza",
+      "daysLate": "{count, plural, one {# giorno di ritardo} other {# giorni di ritardo}}",
+      "sentAt": "Inviata",
+      "paidAt": "Pagata per intero",
+      "source": "Creata da",
+      "sourceKind": {
+        "proposal": "Proposta",
+        "estimate": "Preventivo"
+      },
+      "deal": "Trattativa",
+      "dealFallback": "Apri trattativa"
+    },
+    "paymentsSection": {
+      "title": "Pagamenti",
+      "loading": "Caricamento pagamenti",
+      "none": "Nessun pagamento registrato ancora.",
+      "refund": "Rimborsa"
+    },
+    "activity": {
+      "title": "Attività",
+      "loading": "Caricamento attività",
+      "events": {
+        "created": "Bozza creata",
+        "edited": "Bozza modificata",
+        "issued": "Fattura emessa",
+        "sent": "Segnata come inviata",
+        "viewed": "Aperta dal cliente",
+        "payment_recorded": "Pagamento registrato",
+        "payment_refunded": "Pagamento rimborsato",
+        "paid": "Saldata",
+        "reminder_sent": "Sollecito inviato",
+        "voided": "Fattura annullata"
+      }
+    },
+    "pickInvoice": {
+      "title": "Quale fattura è stata pagata?",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "search": "Cerca per numero o cliente",
+      "loading": "Caricamento fatture",
+      "noMatch": "Nessuna fattura da incassare corrisponde.",
+      "nothingOwed": "Al momento non c’è nulla da incassare.",
+      "balance": "Saldo",
+      "more": "Mostra altro"
+    },
+    "aging": {
+      "loading": "Caricamento del report di anzianità",
+      "emptyTitle": "Nulla da incassare",
+      "emptyMessage": "Tutte le fatture emesse sono pagate. Qui compariranno le fatture non pagate, raggruppate per ritardo.",
+      "asOf": "Al {date}. Il ritardo si calcola dalla data di scadenza.",
+      "currencyLabel": "Da incassare in {currency}",
+      "outstanding": "Da incassare",
+      "invoices": "{count, plural, one {# fattura} other {# fatture}}",
+      "barLabel": "Quota dell’importo da incassare in ogni fascia di ritardo",
+      "buckets": {
+        "current": "Non ancora scaduta",
+        "d1_30": "Ritardo di 1-30 giorni",
+        "d31_60": "Ritardo di 31-60 giorni",
+        "d61_90": "Ritardo di 61-90 giorni",
+        "d90_plus": "Ritardo oltre 90 giorni"
+      },
+      "total": "Totale",
+      "unnamed": "Contatto senza nome",
+      "noContact": "Nessun contatto"
+    },
+    "payments": {
+      "title": "Pagamenti",
+      "subtitle": "Importi incassati sulle tue fatture e cosa resta da incassare.",
+      "invoices": "Fatture",
+      "record": "Registra pagamento",
+      "viewLabel": "Vista pagamenti",
+      "views": {
+        "ledger": "Registro",
+        "aging": "Anzianità"
+      },
+      "tableLabel": "Registro dei pagamenti",
+      "loading": "Caricamento pagamenti",
+      "emptyFilteredTitle": "Nessun pagamento corrisponde",
+      "emptyFiltered": "Prova una ricerca diversa o rimuovi i filtri.",
+      "emptyTitle": "Nessun pagamento ancora",
+      "emptyMessage": "Quando un cliente paga una fattura, registrala qui o dalla fattura.",
+      "resetFilters": "Rimuovi filtri",
+      "showing": "{count, plural, one {# pagamento caricato} other {# pagamenti caricati}}",
+      "loadMore": "Carica altri",
+      "allLoaded": "Sono tutti",
+      "strip": {
+        "loading": "Caricamento totali",
+        "label": "Totali dei pagamenti",
+        "window": "Dal {from} al {to}",
+        "none": "Nessun pagamento in questo periodo.",
+        "collected": "Incassato ({currency})",
+        "count": "Pagamenti",
+        "refunded": "Rimborsato"
+      },
+      "toolbar": {
+        "search": "Cerca riferimento, fattura o cliente",
+        "method": "Metodo",
+        "allMethods": "Tutti i metodi",
+        "from": "Da",
+        "to": "A",
+        "paidFrom": "Pagato dal",
+        "paidTo": "Pagato al",
+        "reset": "Rimuovi filtri",
+        "refresh": "Aggiorna"
+      },
+      "table": {
+        "scrollArea": "Tabella dei pagamenti",
+        "columns": {
+          "date": "Data",
+          "invoice": "Fattura",
+          "contact": "Cliente",
+          "method": "Metodo",
+          "reference": "Riferimento",
+          "amount": "Importo",
+          "refunded": "Rimborsato",
+          "recordedBy": "Registrato da",
+          "actions": "Azioni"
+        },
+        "moreFor": "Azioni per il pagamento del {date}",
+        "openInvoice": "Apri fattura",
+        "refund": "Rimborsa"
+      }
+    },
+    "taxRates": {
+      "title": "Aliquote fiscali",
+      "subtitle": "Le imposte che aggiungi alle righe delle fatture. Una è quella predefinita per le nuove righe.",
+      "new": "Nuova aliquota",
+      "tableLabel": "Aliquote fiscali",
+      "loading": "Caricamento aliquote",
+      "emptyTitle": "Nessuna aliquota ancora",
+      "emptyMessage": "Aggiungi le imposte che applichi, come IVA o GST, per sceglierle nelle righe delle fatture.",
+      "scrollArea": "Tabella delle aliquote fiscali",
+      "columns": {
+        "name": "Nome",
+        "rate": "Aliquota",
+        "type": "Tipo",
+        "status": "Stato",
+        "effective": "In vigore dal",
+        "used": "Righe",
+        "actions": "Azioni"
+      },
+      "default": "Predefinita",
+      "inclusive": "Inclusa",
+      "exclusive": "Esclusa",
+      "active": "Attiva",
+      "inactive": "Inattiva",
+      "always": "Sempre",
+      "moreFor": "Azioni per {name}",
+      "edit": "Modifica",
+      "makeDefault": "Imposta come predefinita",
+      "madeDefault": "{name} è ora la predefinita.",
+      "deactivate": "Disattiva",
+      "activate": "Attiva",
+      "deactivated": "{name} disattivata.",
+      "activated": "{name} attivata.",
+      "delete": "Elimina",
+      "deleteTitle": "Eliminare questa aliquota?",
+      "keep": "Mantieni",
+      "deleted": "{name} eliminata.",
+      "count": "{count, plural, one {# aliquota fiscale} other {# aliquote fiscali}}",
+      "hint": "Modificare un’aliquota non cambia mai le fatture già emesse: ciascuna fattura mantiene l’aliquota con cui è stata creata.",
+      "errors": {
+        "isDefault": "Questa è l’aliquota predefinita. Prima imposta un’altra aliquota come predefinita."
+      },
+      "form": {
+        "eyebrow": "Aliquota fiscale",
+        "editTitle": "Modifica aliquota fiscale",
+        "newTitle": "Nuova aliquota fiscale",
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "save": "Salva",
+        "name": "Nome",
+        "namePlaceholder": "IVA, GST, Sales tax",
+        "rate": "Aliquota",
+        "type": "Come si applica",
+        "exclusive": "Esclusa: si aggiunge al prezzo",
+        "inclusive": "Inclusa: già nel prezzo",
+        "typeHint": {
+          "exclusive": "Il cliente paga il prezzo più l’imposta.",
+          "inclusive": "Il prezzo contiene già l’imposta; la fattura mostra quanta parte del prezzo è imposta."
+        },
+        "effectiveFrom": "In vigore dal",
+        "effectiveHint": "Facoltativo. Usalo per un’aliquota che cambia a una data.",
+        "description": "Descrizione",
+        "makeDefault": "Predefinita per le nuove righe",
+        "defaultHint": "Le nuove righe della fattura partono con questa aliquota.",
+        "active": "Attiva",
+        "activeHint": "Le aliquote inattive non possono essere scelte nelle nuove righe.",
+        "saved": "{name} salvata.",
+        "created": "{name} aggiunta.",
+        "problems": {
+          "nameRequired": "Inserisci un nome.",
+          "nameTaken": "Esiste già un’aliquota con questo nome.",
+          "rateInvalid": "Inserisci una percentuale da 0 a 100.",
+          "dateInvalid": "Inserisci una data valida.",
+          "conflict": "Qualcun altro ha modificato questa aliquota. Chiudi e riapri."
+        }
+      }
+    },
+    "public": {
+      "loading": "Caricamento fattura",
+      "errorTitle": "Impossibile caricare questa fattura",
+      "errorMessage": "Controlla la connessione e riprova.",
+      "retry": "Riprova",
+      "title": "Fattura di {seller}",
+      "dueOn": "scadenza {date}",
+      "print": "Stampa",
+      "download": "Scarica PDF",
+      "paidBanner": "Questa fattura è saldata. Grazie.",
+      "voidBanner": "Questa fattura è stata annullata e non va pagata.",
+      "payNow": "Come pagare",
+      "amountDue": "Importo dovuto:",
+      "bankIntro": "Paga con bonifico bancario e usa {number} come riferimento del pagamento.",
+      "copied": "Copiato",
+      "payButton": "Paga {amount}",
+      "gatewayNote": "Verrai indirizzato alla pagina di pagamento del fornitore di pagamenti del venditore.",
+      "questions": "Domande su questa fattura?",
+      "metaTitle": "Fattura"
+    },
+    "linked": {
+      "title": "Fatture",
+      "new": "Nuova fattura",
+      "viewAll": "Vedi tutte",
+      "loading": "Caricamento fatture",
+      "none": "Nessuna fattura ancora.",
+      "draft": "Bozza",
+      "owes": "deve"
+    }
+  }
+}

@@ -1,13 +1,14 @@
 'use client';
 
 import {
-  FLB_ASK_INPUT_LABELS,
   FLB_ASK_INPUT_TYPES,
   FLB_DATE_FORMATS,
-  flbAskInputWrongText,
   flbCleanAskInputType,
   flbCleanDateFormat,
 } from '@crm/contracts';
+import { useTranslations } from 'next-intl';
+import { askInputLabel, askInputWrongText, dateFormatLabel } from '../../../lib/contract-text';
+import { useFlb } from '../../../lib/msg';
 import { cn } from '@crm/ui';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import {
@@ -42,13 +43,14 @@ function setStringOption(options: unknown, i: number, value: string): string[] {
 }
 
 export function ButtonsForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.options');
   return (
     <>
       <ButtonsPreview d={d} />
-      <Field label="Prompt">
+      <Field label={t('prompt')}>
         <TextArea value={d.prompt} rows={3} onChange={(v) => set('prompt', v)} />
       </Field>
-      <Field label="Options" hint="Max 3 buttons. Each gets its own output port.">
+      <Field label={t('buttonsOptions')} hint={t('buttonsOptionsHint', { max: 3 })}>
         {asArray(d.options).map((o, i) => (
           <OptionRow
             key={`${node.id}-opt-${i}`}
@@ -58,7 +60,7 @@ export function ButtonsForm({ node, data: d, set, addOption, removeOption }: For
             onRemove={() => removeOption(i)}
           />
         ))}
-        <AddLink onClick={addOption}>Add button</AddLink>
+        <AddLink onClick={addOption}>{t('addButton')}</AddLink>
       </Field>
       <ChoiceVariableField data={d} set={set} />
       <SaveToAttributeField data={d} set={set} noun="choice" />
@@ -82,6 +84,7 @@ function Counter({ len, max }: { len: number; max: number }) {
 const subInput = `${controlClass} !w-auto min-w-0 flex-1 !py-1.5 !text-[11.5px]`;
 
 export function ListForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.options');
   const unofficial = useUnofficialWhatsapp();
   const items = listItems(d.options);
   const setItem = (i: number, patch: Partial<ListItem>) =>
@@ -92,22 +95,19 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
   return (
     <>
       <ListPreview d={d} />
-      <Field label="Prompt">
+      <Field label={t('prompt')}>
         <TextArea value={d.prompt} rows={3} onChange={(v) => set('prompt', v)} />
       </Field>
-      <Field
-        label="Button label"
-        hint="Text on the tap-to-open button under the bubble. Max 20 chars on WhatsApp."
-      >
-        <TextInput value={d.button} placeholder="View options" onChange={(v) => set('button', v)} />
+      <Field label={t('listButtonLabel')} hint={t('listButtonHint', { max: 20 })}>
+        <TextInput
+          value={d.button}
+          placeholder={t('listButtonPlaceholder')}
+          onChange={(v) => set('button', v)}
+        />
       </Field>
       <Field
-        label="Items"
-        hint={`Up to 10 items total. Give two items the SAME section name to group them under one heading. Sections and descriptions render on WhatsApp Business API (Cloud).${
-          unofficial
-            ? ' On the Unofficial API the list falls back to plain buttons showing the title only.'
-            : ''
-        }`}
+        label={t('listItems')}
+        hint={t('listItemsHint', { max: 10, unofficial: unofficial ? 'true' : 'false' })}
       >
         <datalist id={listId}>
           {sectionNames.map((s) => (
@@ -126,11 +126,11 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
                 value={o.title}
                 maxLength={LIST_TITLE_MAX}
                 onChange={(e) => setItem(i, { title: e.target.value })}
-                placeholder="Item title"
+                placeholder={t('itemTitle')}
                 className={cn(controlClass, '!w-auto min-w-0 flex-1')}
               />
               <Counter len={o.title.length} max={LIST_TITLE_MAX} />
-              <IconButton title="Remove" danger onClick={() => removeOption(i)}>
+              <IconButton title={t('remove')} danger onClick={() => removeOption(i)}>
                 <XIcon />
               </IconButton>
             </div>
@@ -140,7 +140,7 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
                 value={o.description}
                 maxLength={LIST_DESC_MAX}
                 onChange={(e) => setItem(i, { description: e.target.value })}
-                placeholder="Description (optional)"
+                placeholder={t('itemDescription')}
                 className={subInput}
               />
               <Counter len={o.description.length} max={LIST_DESC_MAX} />
@@ -152,18 +152,25 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
                 maxLength={LIST_SECTION_MAX}
                 list={listId}
                 onChange={(e) => setItem(i, { section: e.target.value })}
-                placeholder="Section (optional)"
+                placeholder={t('itemSection')}
                 className={subInput}
               />
               <Counter len={o.section.length} max={LIST_SECTION_MAX} />
             </div>
           </div>
         ))}
-        <AddLink onClick={addOption}>Add item</AddLink>
+        <AddLink onClick={addOption}>{t('addItem')}</AddLink>
         {groups.length > 1 ? (
           <div className="mt-2 text-[11px] text-muted-foreground">
-            Renders as <b>{groups.length}</b> sections:{' '}
-            {groups.map((g) => `${g.title || '(no heading)'} × ${g.rows.length}`).join(' · ')}
+            {t.rich('listSections', {
+              b: (chunks) => <b>{chunks}</b>,
+              count: groups.length,
+              summary: groups
+                .map((g) =>
+                  t('listSectionRow', { title: g.title || t('noHeading'), count: g.rows.length }),
+                )
+                .join(' · '),
+            })}
           </div>
         ) : null}
       </Field>
@@ -174,6 +181,8 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
 }
 
 export function AskForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.options');
+  const tf = useFlb();
   const unofficial = useUnofficialWhatsapp();
   const options = asArray(d.options);
   // A checked answer applies to a free reply: with fixed answers or a file upload the plain Ask runs.
@@ -181,52 +190,39 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
     flbCleanAskInputType(d.validate) !== 'text' && options.length === 0 && d.acceptMedia !== true;
   return (
     <>
-      <Field label="Question">
+      <Field label={t('askQuestion')}>
         <TextArea value={d.prompt} rows={3} onChange={(v) => set('prompt', v)} />
       </Field>
       <Field
-        label="Validate as"
-        hint={
-          checked
-            ? 'The answer is checked before the flow goes on; a wrong one gets the message below.'
-            : 'Free text takes any answer.'
-        }
+        label={t('askValidate')}
+        hint={checked ? t('askValidateChecked') : t('askValidateFree')}
       >
         <SelectInput
           value={flbCleanAskInputType(d.validate)}
-          options={FLB_ASK_INPUT_TYPES.map((v) => ({ v, l: FLB_ASK_INPUT_LABELS[v] }))}
+          options={FLB_ASK_INPUT_TYPES.map((v) => ({ v, l: askInputLabel(tf, v) }))}
           onChange={(v) => set('validate', v)}
         />
       </Field>
       {checked ? (
         <>
           {flbCleanAskInputType(d.validate) === 'date' ? (
-            <Field
-              label="Date format"
-              hint="How the customer writes the date. It is saved as typed, with an ISO copy in the _iso variable."
-            >
+            <Field label={t('askDateFormat')} hint={t('askDateFormatHint')}>
               <SelectInput
                 value={flbCleanDateFormat(d.dateFormat)}
-                options={FLB_DATE_FORMATS.map((v) => ({ v, l: v.toUpperCase() }))}
+                options={FLB_DATE_FORMATS.map((v) => ({ v, l: dateFormatLabel(tf, v) }))}
                 onChange={(v) => set('dateFormat', v)}
               />
             </Field>
           ) : null}
-          <Field
-            label="Wrong-answer message"
-            hint="Leave blank to use a ready-made one for this type."
-          >
+          <Field label={t('askWrongLabel')} hint={t('askWrongHint')}>
             <TextArea
               value={d.wrongReply}
               rows={2}
-              placeholder={flbAskInputWrongText(flbCleanAskInputType(d.validate), d.dateFormat)}
+              placeholder={askInputWrongText(tf, flbCleanAskInputType(d.validate), d.dateFormat)}
               onChange={(v) => set('wrongReply', v)}
             />
           </Field>
-          <Field
-            label="Stop after wrong answers"
-            hint="0 keeps asking until the answer is right (the run's idle limit still ends it)."
-          >
+          <Field label={t('askRetriesLabel')} hint={t('askRetriesHint')}>
             <NumberInput
               value={d.retries}
               min={0}
@@ -237,12 +233,12 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
             />
           </Field>
           {Number(d.retries) > 0 ? (
-            <Field label="Then">
+            <Field label={t('askThen')}>
               <SelectInput
                 value={d.onFail === 'end' ? 'end' : 'continue'}
                 options={[
-                  { v: 'continue', l: 'Carry on without an answer' },
-                  { v: 'end', l: 'End the flow' },
+                  { v: 'continue', l: t('askThenContinue') },
+                  { v: 'end', l: t('askThenEnd') },
                 ]}
                 onChange={(v) => set('onFail', v)}
               />
@@ -251,37 +247,26 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
         </>
       ) : null}
       <Field
-        label="Save answer to variable"
-        hint={
-          <>
-            The customer&apos;s reply is stored here — reuse it later as <V>answer</V> (or whatever
-            you name it) in a Send message. IMPORTANT: give each Ask question a UNIQUE name — e.g.{' '}
-            <span className="font-mono">name</span>, <span className="font-mono">email</span> —
-            otherwise a later question overwrites the earlier answer.
-          </>
-        }
+        label={t('askVarLabel')}
+        hint={t.rich('askVarHint', {
+          v: (chunks) => <V>{chunks}</V>,
+          m: (chunks) => <span className="font-mono">{chunks}</span>,
+        })}
       >
         <TextInput value={d.var} placeholder="answer" onChange={(v) => set('var', v)} />
       </Field>
       <SaveToAttributeField data={d} set={set} noun="answer" />
       <Field
-        label="Accept a file/photo upload"
-        hint={`When on and the customer replies with a file instead of text, the variable holds a link to the stored file — reuse it in Sheets, a Webhook, or a template media header. Works on WhatsApp${
-          unofficial ? ' (official & unofficial)' : ''
-        } and Twilio.`}
+        label={t('askMediaLabel')}
+        hint={t('askMediaHint', { unofficial: unofficial ? 'true' : 'false' })}
       >
         <Check checked={!!d.acceptMedia} onChange={(v) => set('acceptMedia', v)}>
-          Save an uploaded image / PDF / audio as this variable (a link)
+          {t('askMediaCheck')}
         </Check>
       </Field>
       <Field
-        label="Expected answers"
-        hint={
-          <>
-            Max 3 answers, same as Quick replies. Each becomes its own output port; anything else
-            goes through the <b>else</b> port. Leave empty for free-text answers.
-          </>
-        }
+        label={t('askAnswersLabel')}
+        hint={t.rich('askAnswersHint', { max: 3, b: (chunks) => <b>{chunks}</b> })}
       >
         {options.map((o, i) => (
           <OptionRow
@@ -293,9 +278,11 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
           />
         ))}
         {options.length < 3 ? (
-          <AddLink onClick={addOption}>Add answer</AddLink>
+          <AddLink onClick={addOption}>{t('addAnswer')}</AddLink>
         ) : (
-          <div className="mt-1 text-[11px] italic text-muted-foreground">Max 3 reached.</div>
+          <div className="mt-1 text-[11px] italic text-muted-foreground">
+            {t('maxReached', { max: 3 })}
+          </div>
         )}
       </Field>
     </>
@@ -303,19 +290,20 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
 }
 
 export function PollForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+  const t = useTranslations('flb.builder.formsCore.options');
   const options = asArray(d.options);
   return (
     <>
       <PollPreview d={d} />
-      <Field label="Question">
+      <Field label={t('askQuestion')}>
         <TextArea
           value={d.question}
-          placeholder="Pick one"
+          placeholder={t('pollPlaceholder')}
           rows={2}
           onChange={(v) => set('question', v)}
         />
       </Field>
-      <Field label="Options" hint="Max 3 options. Each becomes its own output port.">
+      <Field label={t('buttonsOptions')} hint={t('pollOptionsHint', { max: 3 })}>
         {options.map((o, i) => (
           <OptionRow
             key={`${node.id}-poll-${i}`}
@@ -326,14 +314,16 @@ export function PollForm({ node, data: d, set, addOption, removeOption }: FormPr
           />
         ))}
         {options.length < 3 ? (
-          <AddLink onClick={addOption}>Add option</AddLink>
+          <AddLink onClick={addOption}>{t('addOption')}</AddLink>
         ) : (
-          <div className="mt-1 text-[11px] italic text-muted-foreground">Max 3 reached.</div>
+          <div className="mt-1 text-[11px] italic text-muted-foreground">
+            {t('maxReached', { max: 3 })}
+          </div>
         )}
       </Field>
-      <Field label="Multiple choice">
+      <Field label={t('pollMulti')}>
         <Check checked={!!d.multi} onChange={(v) => set('multi', v)}>
-          Allow multiple answers
+          {t('pollMultiCheck')}
         </Check>
       </Field>
     </>

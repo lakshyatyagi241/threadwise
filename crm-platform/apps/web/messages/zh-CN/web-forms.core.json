@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "common": {
+      "dismiss": "关闭"
+    },
+    "nav": {
+      "forms": "表单"
+    },
+    "kinds": {
+      "short_text": "单行文本",
+      "long_text": "多行文本",
+      "email": "邮箱",
+      "phone": "电话号码",
+      "number": "数字",
+      "currency": "金额",
+      "date": "日期",
+      "dropdown": "下拉列表",
+      "radio": "单选",
+      "checkbox_group": "多选",
+      "checkbox": "复选框",
+      "rating": "评分",
+      "hidden": "隐藏字段"
+    },
+    "errors": {
+      "network": "无法连接服务器。请检查网络连接后重试。",
+      "forbidden": "您没有执行此操作的权限。",
+      "signedOut": "您的会话已结束。请重新登录后继续。",
+      "conflict": "此表单已被他人修改。请重新加载页面以查看最新版本。",
+      "nameTaken": "已有其他表单使用此名称。请选择其他名称。",
+      "stateInvalid": "在表单当前状态下无法执行此操作。",
+      "definitionInvalid": "表单尚无效。请检查字段后重试。",
+      "publishInvalid": "表单暂时无法发布。请修正列出的问题后重试。",
+      "planLimit": "已达到套餐上限。",
+      "planLimitForms": "您已达到套餐允许的表单数量上限。请归档不再使用的表单，或升级套餐。",
+      "planLocked": "表单功能不属于您的工作区。",
+      "notFound": "未找到此表单，可能已被删除。",
+      "rateLimited": "请求过于频繁，请稍候再试。",
+      "unexpected": "出现错误，请稍后重试。",
+      "upgrade": "查看套餐"
+    }
+  }
+}

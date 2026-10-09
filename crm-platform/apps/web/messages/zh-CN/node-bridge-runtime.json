@@ -1,0 +1,164 @@
+{
+  "node-bridge-runtime": {
+    "nav": {
+      "group": "渠道",
+      "item": "Node 桥接"
+    },
+    "page": {
+      "title": "Node 桥接网址与令牌",
+      "eyebrow": "全局 · Node 桥接",
+      "description": "所有引擎共用的 Node 桥接:非官方 API 通过它发送消息,发送节奏也在此处统一设置。仅需设置一次,即对整个平台生效。",
+      "superOnly": "只有超级管理员才能更改 Node 桥接。你可以查看已保存的值。"
+    },
+    "bridge": {
+      "tokenSet": "已设置令牌",
+      "noToken": "无令牌",
+      "serverUrl": "服务器网址",
+      "serverUrlPlaceholder": "http://localhost:8888",
+      "urlInvalid": "请先输入有效的服务器网址(http:// 或 https://)。",
+      "serverUrlHint": "Node 桥接可访问的地址。入站及状态 Webhook 会自动处理——桥接会从其 APP_DOMAIN_NAME 环境变量中获取我们的网址。",
+      "token": "Node Webhook 令牌(X-Node-Token)",
+      "tokenPlaceholder": "共享的 X-Node-Token 密钥",
+      "tokenSavedPlaceholder": "••• 已保存,留空则保持不变",
+      "tokenHint": "Node 桥接以 X-Node-Token 发送的共享密钥。必须与 Node 桥接配置中的令牌一致。保存后将隐藏;仅在轮换时重新粘贴。",
+      "save": "保存",
+      "saving": "保存中…",
+      "test": "测试连接",
+      "testing": "测试中…",
+      "saved": "Node 桥接已保存。"
+    },
+    "pacing": {
+      "eyebrow": "节奏",
+      "title": "发送节奏与分批",
+      "msgGap": "消息间隔(秒)",
+      "msgGapHint": "连续发送之间的秒数。",
+      "batchesGap": "每批数量",
+      "batchesGapHint": "每批的收件人数。",
+      "bwMsgGap": "批次间隔(分钟)",
+      "bwMsgGapHint": "批次之间的分钟数。",
+      "enableBatches": "启用分批",
+      "update": "更新时序",
+      "updating": "保存中…",
+      "saved": "发送时序已更新。",
+      "tipTitle": "节奏提示",
+      "tip": "仅在 24 小时观察期后才降低消息间隔——Meta 会限制激进的发送方。3 秒是安全的默认值。"
+    },
+    "errors": {
+      "forbidden": "你没有执行此操作的权限。",
+      "conflict": "他人已更改这些设置。页面已刷新;请重试。",
+      "validation": "请检查输入的值后重试。",
+      "request": "无法完成该请求。",
+      "unexpected": "服务器端出现错误。请稍后重试。",
+      "network": "无法连接服务器。请检查网络连接。"
+    },
+    "loading": "加载中",
+    "retry": "重试",
+    "unofficial": {
+      "eyebrow": "平台开关",
+      "title": "非官方 WhatsApp(通过二维码连接个人号码)",
+      "status": {
+        "disabled": "已禁用 / 不受支持",
+        "enabled": "已启用(不受支持)"
+      },
+      "explanation": "我们仅支持官方 WhatsApp Business API。这是面向个人号码的全平台开关:此功能不受支持,可能导致号码被封禁。即使开启,也仅下方列出的工作区可以使用。",
+      "state": {
+        "disabled": "已关闭。无论下方列表如何设置,任何工作区都无法查看或连接个人号码:二维码连接流程、养号及个人号码发送功能均会隐藏,通过它们的发送请求将被拒绝。",
+        "enabled": "已开启,仅对获准的工作区生效。不在下方列表中的工作区仍无法看到此功能。此功能不受支持;这些号码可能会被 WhatsApp 封禁。"
+      },
+      "enable": "启用非官方 WhatsApp",
+      "disable": "禁用非官方 WhatsApp",
+      "cancel": "取消",
+      "enableDialog": {
+        "title": "启用非官方 WhatsApp?",
+        "body": "此功能不受支持。以此方式连接的号码可能会被 WhatsApp 封禁,通过它们发送的消息也不享有任何送达保证。仅开启开关本身不会授予任何人使用权限:只有白名单中的工作区可以使用。",
+        "typeLabel": "输入 {word} 以确认",
+        "confirm": "启用"
+      },
+      "disableDialog": {
+        "title": "禁用非官方 WhatsApp?",
+        "body": "所有工作区将不再看到个人号码、养号及二维码连接流程,通过个人号码的发送将被拒绝。已保存的数据和白名单将被保留。",
+        "confirm": "禁用"
+      },
+      "enabledToast": "非官方 WhatsApp 已启用。",
+      "disabledToast": "非官方 WhatsApp 已禁用。",
+      "dimNote": "下方设置仅适用于个人号码,在非官方 WhatsApp 禁用期间不生效。",
+      "errors": {
+        "forbidden": "只有超级管理员才能更改此开关。",
+        "conflict": "他人已更改这些设置。页面已刷新;请重试。",
+        "validation": "请检查输入的值后重试。",
+        "request": "无法完成该请求。",
+        "unexpected": "服务器端出现错误。请稍后重试。",
+        "network": "无法连接服务器。请检查网络连接。"
+      },
+      "allowedCount": "{count, plural, =0 {未允许任何工作区} other {已允许 # 个工作区}}"
+    },
+    "workspaces": {
+      "eyebrow": "白名单",
+      "title": "使用非官方 WhatsApp 的工作区",
+      "description": "默认对所有人关闭。仅此处列出的工作区可以使用个人号码 WhatsApp,且仅在上方引擎开启时生效。",
+      "count": "{count, plural, =0 {未允许任何工作区} other {已允许 # 个工作区}}",
+      "engineOff": "引擎已关闭,因此这些工作区目前无法使用。",
+      "engineOffAction": "前往开关",
+      "readOnly": "只有超级管理员才能添加或移除工作区。你可以查看列表。",
+      "search": {
+        "label": "添加工作区",
+        "placeholder": "按工作区名称、标识或所有者邮箱搜索",
+        "hint": "请至少输入 2 个字符。",
+        "searching": "搜索中",
+        "none": "没有与“{q}”匹配的工作区。",
+        "add": "添加",
+        "alreadyAdded": "已允许",
+        "owner": "所有者:{email}",
+        "noPlan": "无套餐",
+        "results": "搜索结果"
+      },
+      "table": {
+        "caption": "获准使用非官方 WhatsApp 的工作区",
+        "workspace": "工作区",
+        "plan": "套餐",
+        "devices": "设备",
+        "since": "启用时间",
+        "by": "启用人",
+        "note": "备注",
+        "actions": "操作",
+        "devicesValue": "{active}/{total} 个已启用",
+        "noPlan": "无套餐",
+        "system": "未知",
+        "noNote": "无",
+        "remove": "移除"
+      },
+      "empty": {
+        "title": "尚未允许任何工作区",
+        "message": "即使引擎已开启,也没有人可以使用个人号码 WhatsApp。请在上方搜索以添加第一个工作区。"
+      },
+      "loadMore": "加载更多",
+      "loadingMore": "加载中",
+      "addDialog": {
+        "title": "允许 {name}?",
+        "body": "引擎开启期间,{name}({slug})将能够通过二维码连接个人 WhatsApp 号码。此功能不受支持,号码可能会被 WhatsApp 封禁。",
+        "noteLabel": "备注(可选)",
+        "notePlaceholder": "为何添加此工作区,由谁提出",
+        "noteCount": "{count} / {max}",
+        "noteTooLong": "备注最多 {max} 个字符。",
+        "confirm": "允许工作区"
+      },
+      "removeDialog": {
+        "title": "移除 {name}?",
+        "body": "{name} 将无法再使用个人号码 WhatsApp。其连接将在 20 秒内停止。已保存的会话将被保留,因此重新允许该工作区即可恢复。",
+        "confirm": "移除"
+      },
+      "cancel": "取消",
+      "addedToast": "{name} 现在可以使用非官方 WhatsApp。",
+      "removedToast": "{name} 已从列表中移除。",
+      "errors": {
+        "forbidden": "只有超级管理员才能更改此列表。",
+        "conflict": "列表期间已有更改。已刷新;请重试。",
+        "validation": "请检查输入的值后重试。",
+        "request": "无法完成该请求。",
+        "unexpected": "服务器端出现错误。请稍后重试。",
+        "network": "无法连接服务器。请检查网络连接。"
+      },
+      "retry": "重试"
+    }
+  }
+}

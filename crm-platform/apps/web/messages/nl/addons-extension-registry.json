@@ -1,0 +1,311 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "Add-ons en modules",
+      "packs": "Add-ons (facturatie)",
+      "extensions": "Add-ons (code)",
+      "workspace": "Add-ons"
+    },
+    "common": {
+      "loading": "Laden",
+      "retry": "Opnieuw proberen",
+      "cancel": "Annuleren",
+      "save": "Opslaan",
+      "saving": "Opslaan…",
+      "close": "Sluiten",
+      "dismiss": "Negeren",
+      "admin": "Beheer",
+      "settings": "Instellingen",
+      "optional": "optioneel",
+      "required": "verplicht",
+      "readOnly": "Je kunt deze pagina bekijken, maar alleen een superbeheerder kan haar wijzigen.",
+      "requestId": "Verzoek-ID",
+      "errors": {
+        "forbidden": "Je hebt geen toegang tot deze pagina.",
+        "request": "Het verzoek kon niet worden voltooid.",
+        "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw.",
+        "conflict": "Iemand anders heeft dit zojuist gewijzigd. Laad de pagina opnieuw en probeer het nogmaals."
+      }
+    },
+    "packs": {
+      "crumbHere": "Add-ons",
+      "eyebrow": "Beheer · Facturatie en abonnementen · Add-ons",
+      "titleLead": "Add",
+      "titleAccent": "-ons",
+      "title": "Add-ons",
+      "description": "Losse functiepakketten die een klant bovenop zijn abonnement koopt, zoals „Campagnes-add-on” of „+1 WhatsApp-nummer”. Elke add-on geeft de functieschakelaars en limieten die je erop instelt, samengevoegd met het abonnement van de klant. Ze verschijnen op de accountpagina van de klant zodra die een actief abonnement heeft.",
+      "new": "Nieuwe add-on",
+      "empty": {
+        "title": "Nog geen add-ons.",
+        "action": "Maak je eerste add-on"
+      },
+      "table": {
+        "label": "Add-ons",
+        "name": "Naam",
+        "price": "Prijs",
+        "period": "Periode",
+        "grants": "Biedt",
+        "status": "Status",
+        "actions": "Acties"
+      },
+      "price": {
+        "free": "Gratis",
+        "lifetime": "eenmalig"
+      },
+      "period": {
+        "days": "{count} dagen",
+        "weeks": "{count} weken",
+        "months": "{count} maanden",
+        "years": "{count} jaar"
+      },
+      "grants": {
+        "none": "niets ingesteld",
+        "unlimited": "Onbeperkt {name}",
+        "add": "+{amount} {name}",
+        "more": "+{count}"
+      },
+      "status": {
+        "active": "Actief",
+        "off": "Uit"
+      },
+      "actions": {
+        "edit": "Bewerken",
+        "enable": "Inschakelen",
+        "disable": "Uitschakelen",
+        "delete": "Verwijderen"
+      },
+      "toasts": {
+        "created": "Add-on aangemaakt.",
+        "updated": "Add-on bijgewerkt.",
+        "activated": "{name} ingeschakeld",
+        "deactivated": "{name} uitgeschakeld",
+        "deleted": "{name} verwijderd"
+      },
+      "delete": {
+        "title": "{name} verwijderen?",
+        "body": "Deze add-on verwijderen? Workspaces die hem hebben gekocht behouden hem tot hij verloopt.",
+        "confirm": "Verwijderen",
+        "inUse": "{count, plural, one {# workspace bezit deze add-on, dus hij kan niet worden verwijderd. Schakel hem in plaats daarvan uit; eigenaren behouden hem tot hij afloopt.} other {# workspaces bezitten deze add-on, dus hij kan niet worden verwijderd. Schakel hem in plaats daarvan uit; eigenaren behouden hem tot hij afloopt.}}"
+      },
+      "errors": {
+        "generic": "De add-on kon niet worden opgeslagen.",
+        "forbidden": "Alleen een superbeheerder kan add-ons wijzigen.",
+        "notFound": "Deze add-on bestaat niet meer."
+      },
+      "editor": {
+        "crumbHere": "Add-ons",
+        "crumbNew": "Nieuw",
+        "crumbEdit": "Bewerken",
+        "eyebrowNew": "Beheer · Add-ons · Nieuw",
+        "eyebrowEdit": "Beheer · Add-ons · Bewerken",
+        "titleNewLead": "Maak een",
+        "titleEditLead": "Bewerk de",
+        "titleAccent": "add-on",
+        "intro": "Een add-on geeft ALLEEN wat je inschakelt en niets anders. Een leeg gelaten limiet wordt niet aangepast, dus er is geen onbedoeld „onbeperkt”.",
+        "fixTitle": "Los het volgende op:",
+        "cancel": "Annuleren",
+        "create": "Add-on aanmaken",
+        "saveChanges": "Wijzigingen opslaan",
+        "basics": "Basis van de add-on",
+        "features": "Functies die deze add-on ontgrendelt",
+        "featuresHint": "Vink alleen aan wat deze add-on biedt. Alles wat niet is aangevinkt blijft bepaald door het abonnement van de klant.",
+        "coreFeature": "in elk abonnement",
+        "limits": "Limietverhogingen",
+        "limitsHint": "Leeg = de add-on raakt deze limiet niet aan. Voer een getal in om OP het abonnement TE TELLEN (bijvoorbeeld +2 apparaten). Gebruik -1 voor onbeperkt.",
+        "fields": {
+          "name": "Naam",
+          "namePlaceholder": "Campagnes-add-on",
+          "subtitle": "Ondertitel",
+          "subtitlePlaceholder": "Campagnes ontgrendelen",
+          "amount": "Prijs",
+          "offerAmount": "Aanbiedingsprijs (optioneel)",
+          "currency": "Valuta",
+          "billingDuration": "Looptijd",
+          "billingUnit": "Eenheid",
+          "billingMode": "Facturatie",
+          "sortOrder": "Sorteervolgorde",
+          "isActive": "Actief",
+          "isLifetime": "Levenslang (eenmalig)"
+        },
+        "modes": {
+          "one_time": "Eenmalig (opnieuw kopen na afloop)",
+          "recurring": "Terugkerend (verlengt via automatische incasso)"
+        },
+        "units": {
+          "days": "Dagen",
+          "weeks": "Weken",
+          "months": "Maanden",
+          "years": "Jaren"
+        },
+        "problems": {
+          "name": "Voer een naam in.",
+          "amount": "Voer een bedrag in zoals 19 of 19,99.",
+          "offerAmount": "De aanbieding moet lager zijn dan de prijs.",
+          "currency": "Gebruik een valutacode van drie letters.",
+          "billingDuration": "Voer een geheel getal van 1 of hoger in.",
+          "sortOrder": "Voer een geheel getal in.",
+          "limits": "Limieten zijn gehele getallen, of -1 voor onbeperkt.",
+          "form": "Controleer de gemarkeerde velden."
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "Add-ons",
+      "eyebrow": "Beheer · Add-ons",
+      "titleLead": "Installeer een",
+      "titleAccent": "add-on",
+      "title": "Add-ons",
+      "description": "Add-ons voegen extra functies toe aan deze installatie. Instagram is de eerste. Verifieer je aankoopcode, upload het pakket en het wordt ter plekke geïnstalleerd. Je gegevens en instellingen blijven ongewijzigd.",
+      "coreVersion": "Kern",
+      "packsLead": "Zoek je de betaalde functiepakketten die klanten bovenop een abonnement kopen?",
+      "packsLink": "Dat zijn abonnements-add-ons (facturatie)",
+      "packsTail": ". Deze pagina installeert code.",
+      "installed": {
+        "title": "Geïnstalleerde add-ons",
+        "empty": "Nog geen add-ons geïnstalleerd. Verifieer hierboven je aankoopcode en upload dan een pakket.",
+        "version": "v{version}",
+        "files": "{count, plural, one {# bestand} other {# bestanden}}",
+        "inPlace": "Module ter plekke",
+        "filesKept": "bestanden blijven op schijf",
+        "active": "Actief",
+        "disabled": "Uitgeschakeld",
+        "inactive": "Inactief",
+        "enable": "Inschakelen",
+        "disable": "Uitschakelen",
+        "remove": "Verwijderen",
+        "reactivate": "Opnieuw activeren",
+        "footnote": "Bij het verwijderen van een add-on worden alleen de bestanden verwijderd die hij heeft geïnstalleerd, bijgehouden vanaf het moment van toevoegen, dus kernbestanden worden nooit aangeraakt. Gegevens blijven in de database."
+      },
+      "verify": {
+        "title": "Verifieer je aankoopcode",
+        "body": "Dezelfde {brand}-licentie die updates ontgrendelt. Add-ons zijn eraan gekoppeld.",
+        "placeholder": "bijv. 8f2c1a44-...",
+        "label": "Aankoopcode",
+        "action": "Verifiëren",
+        "checking": "Verifiëren…",
+        "empty": "Voer eerst je aankoopcode in.",
+        "failed": "Verificatie mislukt."
+      },
+      "upload": {
+        "title": "Upload het add-onpakket",
+        "body": "De ZIP wordt gecontroleerd voordat er iets wordt geschreven. Een beschadigd of incompatibel pakket wordt geweigerd en je installatie blijft ongewijzigd.",
+        "choose": "Kies een add-on-.zip",
+        "max": "Max. 100 MB",
+        "action": "Installeren",
+        "installing": "Installeren…",
+        "progress": "Uploaden en samenvoegen. Sluit dit tabblad niet."
+      },
+      "confirm": {
+        "removeTitle": "{name} verwijderen?",
+        "removeBody": "Hiermee worden de bestanden verwijderd die hij heeft geïnstalleerd. Zijn gegevens blijven in de database.",
+        "remove": "Verwijderen",
+        "moduleOffTitle": "{name} verwijderen?",
+        "moduleOffBody": "Hiermee wordt de add-on gedeactiveerd, zodat zijn pagina's en automatiseringen stoppen. De bestanden blijven bewaard, dus je kunt hem op elk moment opnieuw activeren. Er wordt niets verwijderd en zijn gegevens blijven in de database.",
+        "moduleOnTitle": "{name} opnieuw activeren?",
+        "moduleOnBody": "Hiermee wordt de add-on weer ingeschakeld. De bestanden staan nog op schijf, dus hij werkt meteen weer.",
+        "reactivate": "Opnieuw activeren"
+      },
+      "engines": {
+        "connected": "Verbonden",
+        "notConnected": "Niet verbonden",
+        "connect": "Verbinden",
+        "manage": "Beheren",
+        "disconnect": "Verbinding verbreken",
+        "disconnectYes": "Ja, verbinding verbreken",
+        "save": "Opslaan en verbinden",
+        "testing": "Verbinden…",
+        "displayName": "Weergavenaam",
+        "secret": "Gedeeld geheim token",
+        "secretSaved": "•••••••• opgeslagen, leeg laten om te behouden",
+        "secretNew": "plak het gedeelde geheim",
+        "lastChecked": "Laatst gecontroleerd",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "Draait als een aparte {brand}-implementatie. Verbind via URL + geheim, zonder upload.",
+          "blocked": "Geblokkeerd: native add-on actief",
+          "blockedNote": "De native Instagram-add-on is geïnstalleerd. Verwijder hem hieronder om een externe {brand} te verbinden.",
+          "modalTitle": "Instagram verbinden",
+          "modalBody": "Plak de URL van je {brand}-implementatie en het gedeelde geheime token. {app} verifieert de verbinding via de API. Er wordt niets geüpload.",
+          "url": "{brand}-URL",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "Wordt getoond bij elk label „Synchroniseren vanuit …”, „Beheren op …” en „… URL” in de app.",
+          "disconnectTitle": "Instagram loskoppelen?",
+          "disconnectBody": "Hiermee wordt Instagram losgekoppeld van {app}. Instagram verdwijnt direct uit het dashboard, de analyses, de inbox, flows, sjablonen en automatische antwoorden van elke workspace en niets ervan is bruikbaar totdat je opnieuw verbindt. Doorgaan?"
+        },
+        "email": {
+          "title": "E-mail",
+          "body": "Door te verbinden koppel je het {brand}-e-mailplatform, zodat e-mail in de teaminbox binnenkomt, via URL + geheim, zonder upload.",
+          "modalTitle": "E-mail verbinden",
+          "modalBody": "Plak de URL van je {brand}-implementatie en het gedeelde geheime token. {app} verifieert de verbinding via de API. Er wordt niets geüpload.",
+          "url": "{brand}-URL",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "Wordt getoond bij elk e-maillabel in de app.",
+          "disconnectTitle": "E-mail loskoppelen?",
+          "disconnectBody": "Hiermee wordt het e-mailplatform losgekoppeld van {app}. E-mail komt voor elke workspace niet meer binnen in de teaminbox totdat je opnieuw verbindt. Doorgaan?"
+        }
+      },
+      "errors": {
+        "generic": "Dat is niet gelukt.",
+        "forbidden": "Alleen een superbeheerder kan modules wijzigen.",
+        "invalidPackage": "Het pakket is ongeldig.",
+        "tooLarge": "Het pakket is te groot.",
+        "coreTooOld": "Dit pakket vereist een nieuwere kernversie.",
+        "engineConflict": "Instagram draait op één engine tegelijk. Verbreek eerst de verbinding met de andere."
+      }
+    },
+    "workspace": {
+      "title": "Add-ons",
+      "description": "Extra functiepakketten die je bovenop je abonnement koopt.",
+      "needPlanTitle": "Add-ons vereisen een actief abonnement",
+      "needPlanBody": "Add-ons zijn extra functiepakketten die je bovenop je abonnement koopt. Kies eerst een abonnement en kom dan hier terug om functies toe te voegen.",
+      "viewPlans": "Abonnementen bekijken",
+      "noneTitle": "Geen add-ons beschikbaar",
+      "noneBody": "Er worden momenteel geen add-ons aangeboden. Kom later terug.",
+      "ownedTitle": "Jouw add-ons",
+      "ownedBody": "Actieve pakketten die op je huidige abonnement zijn toegepast.",
+      "ends": "Eindigt op {date}",
+      "lifetime": "Levenslang",
+      "autoRenews": "Verlengt automatisch",
+      "renewal": {
+        "cancel": "Verlenging annuleren",
+        "confirmTitle": "Verlenging annuleren?",
+        "confirmBody": "Deze add-on blijft actief tot het einde van de looptijd die je al hebt betaald en wordt daarna niet verlengd.",
+        "confirm": "Verlenging annuleren",
+        "keep": "Blijven verlengen",
+        "forbidden": "Je hebt geen toestemming om het abonnement te wijzigen.",
+        "none": "Er is geen actief abonnement om te annuleren.",
+        "failed": "We konden de verlenging niet annuleren. Probeer het opnieuw."
+      },
+      "active": "Actief",
+      "cardEyebrow": "Add-on",
+      "catalogTitle": "Add-ons",
+      "catalogBody": "Ontgrendel extra functies bovenop je huidige abonnement. Geen abonnementswijziging nodig.",
+      "count": "{count, plural, one {# add-on} other {# add-ons}}",
+      "free": "Gratis",
+      "lifetimePrice": "eenmalig",
+      "per": "/ {unit}",
+      "units": {
+        "days": "dagen",
+        "weeks": "weken",
+        "months": "maanden",
+        "years": "jaar"
+      },
+      "buy": "Toevoegen aan abonnement",
+      "buyAgain": "Opnieuw kopen",
+      "owned": "In bezit ×{count} · opnieuw kopen voegt meer toe",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "Onbeperkt {name}",
+        "add": "+{amount} {name}"
+      },
+      "error": "De add-ons konden niet worden geladen."
+    },
+    "planFields": {
+      "fromModule": "vanuit een geïnstalleerde module",
+      "unlimited": "Onbeperkt"
+    }
+  }
+}

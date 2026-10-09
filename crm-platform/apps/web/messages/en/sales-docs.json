@@ -640,7 +640,8 @@
       "gone": {
         "title": "This link is no longer active",
         "message": "The sender turned this link off or it ran out. Ask them for a new link."
-      }
+      },
+      "metaTitle": "Quote"
     }
   }
 }
