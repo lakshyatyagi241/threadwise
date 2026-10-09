@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "帮助中心",
+    "searchLabel": "搜索帮助",
+    "searchPlaceholder": "搜索指南",
+    "resultsStatus": "{count, plural, =0 {未找到指南} other {# 篇指南}}",
+    "none": {
+      "title": "暂无指南",
+      "message": "您套餐中功能的指南将显示在此处。"
+    },
+    "noResults": {
+      "title": "没有与搜索匹配的指南",
+      "message": "请尝试其他关键词，或清除搜索以查看所有指南。"
+    },
+    "areas": {
+      "overview": "平台",
+      "inbox": "收件箱与聊天",
+      "audience": "CRM",
+      "sales": "销售",
+      "campaigns": "营销活动",
+      "automation": "自动化",
+      "store": "商店",
+      "apps": "应用市场",
+      "settings": "设置",
+      "account": "账户",
+      "getting-started": "入门指南",
+      "troubleshooting": "故障排除"
+    },
+    "allHelp": "返回帮助",
+    "onThisPage": "本页内容",
+    "openScreen": "打开此页面",
+    "shownInEnglish": "此指南尚未翻译成您的语言，因此以英文显示。",
+    "tip": {
+      "label": "帮助：{title}",
+      "readMore": "阅读指南"
+    },
+    "guideCount": "{count, plural, =0 {没有指南} other {# 篇指南}}",
+    "crumb": "更多 / 帮助",
+    "heading": "帮助",
+    "headingRest": "与指南",
+    "back": "返回",
+    "askSupport": "找不到？联系支持",
+    "askSupportShort": "支持",
+    "categories": "分类",
+    "allGuides": "全部指南",
+    "needHuman": "需要人工帮助？",
+    "contactSupport": "联系支持",
+    "popular": "热门",
+    "searchResults": "搜索结果",
+    "read": "阅读指南",
+    "readMinutes": "{count, plural, other {阅读约 # 分钟}}",
+    "moreInArea": "{area} 中的更多内容"
+  }
+}

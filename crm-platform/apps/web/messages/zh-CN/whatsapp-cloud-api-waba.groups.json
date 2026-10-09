@@ -1,0 +1,157 @@
+{
+  "whatsapp-cloud-api-waba": {
+    "nav": {
+      "groups": "Meta 群组"
+    },
+    "errors": {
+      "WABA_GROUPS_NOT_ELIGIBLE": "此号码不符合群组条件。WhatsApp 仅向官方商业账号开放群组功能。",
+      "WABA_GROUPS_PROVIDER_UNSUPPORTED": "群组仅适用于直接连接到 Meta 的号码。此号码通过其他服务商连接。",
+      "WABA_GROUP_NOT_FOUND": "未找到群组。",
+      "WABA_GROUP_SUSPENDED": "WhatsApp 因违反政策已暂停此群组。",
+      "WABA_GROUP_LIMIT_REACHED": "已达到 WhatsApp 群组限制。请删除一个群组，或向 WhatsApp 申请提高限额。",
+      "WABA_GROUP_RATE_LIMITED": "此号码的群组操作过于频繁。请稍候后重试。",
+      "PLAN_FEATURE_LOCKED": "您的套餐不包含 WhatsApp 群组。升级即可解锁。",
+      "VALIDATION_FAILED": "请检查字段后重试。"
+    },
+    "groups": {
+      "pageTitle": "WhatsApp 群组",
+      "eyebrow": "WhatsApp / 群组",
+      "headingA": "群组",
+      "headingB": "消息",
+      "intro": "通过您的商务号码创建 WhatsApp 群组，分享邀请链接，并处理入群申请。群组会话与其他聊天一样显示在收件箱中。",
+      "loading": "正在加载群组…",
+      "loadFailed": "无法加载群组。",
+      "retry": "重试",
+      "numbersDenied": "您可以查看群组，但无法查看它们所属的 WhatsApp 号码列表。请向管理员申请 WhatsApp 号码的访问权限。",
+      "rail": {
+        "title": "群组",
+        "noNumber": "未连接 WhatsApp Business 号码",
+        "eligible": "符合条件",
+        "notEligible": "不符合条件",
+        "numberLabel": "号码",
+        "howTitle": "群组如何运作",
+        "howInvite": "群组仅限邀请加入。您创建群组，WhatsApp 会提供邀请链接，您分享该链接，由人们自行选择是否加入。无法直接添加某人。",
+        "howCost": "您发送的每条消息都会按接收人数计费。发送给 100 名成员的消息将计为 100 条。"
+      },
+      "state": {
+        "noNumber": {
+          "title": "尚未连接 WhatsApp Business 号码",
+          "message": "群组需要通过官方 WhatsApp Business Platform 连接的 WhatsApp 号码。",
+          "hint": "请在“设置 → 渠道 → WhatsApp”中连接号码。",
+          "connect": "打开 WhatsApp 号码"
+        },
+        "notEligible": {
+          "title": "此号码暂时无法使用群组",
+          "message": "WhatsApp 仅向官方商业账号开放群组功能，即带有绿色徽章的认证账号。您的号码已连接并可正常收发普通聊天，只是尚未获得群组权限。",
+          "hint": "请在 WhatsApp Manager 中申请官方商业账号身份，然后重新加载此页面。",
+          "reload": "重新检查",
+          "checking": "检查中…"
+        },
+        "providerUnsupported": {
+          "title": "此路由不支持群组",
+          "message": "此号码通过其他服务商连接，而非直接通过 Meta。群组仅支持直接连接到 Meta 的号码。",
+          "hint": "请直接通过 Meta 连接此号码，或询问服务商是否支持群组。"
+        },
+        "missingCredentials": {
+          "title": "此号码需要重新连接",
+          "message": "此号码未存储访问令牌，因此无法向 WhatsApp 查询群组权限。",
+          "hint": "请在号码的健康页面替换令牌。"
+        },
+        "checkFailed": "目前无法向 WhatsApp 查询此号码是否可以使用群组。如果可以，以下功能仍可正常使用；若某操作失败，请稍后再试。"
+      },
+      "kpi": {
+        "groups": "群组",
+        "groupsSub": "此号码上的",
+        "members": "成员",
+        "membersSub": "所有群组合计",
+        "joinRequests": "入群申请",
+        "joinRequestsSub": "等待您处理",
+        "suspended": "已暂停",
+        "suspendedSub": "被 WhatsApp 封锁"
+      },
+      "create": {
+        "title": "创建群组",
+        "name": "群组名称",
+        "nameHint": "成员在聊天顶部看到的名称。最多 128 个字符。",
+        "who": "谁可以加入",
+        "whoAuto": "持有链接的人可以直接加入",
+        "whoApproval": "您需先批准每位成员",
+        "whoHint": "审批可让您在允许任何人加入前先进行审核。",
+        "description": "描述",
+        "descriptionHint": "可选。显示在群组信息页面上。",
+        "submit": "创建群组",
+        "submitting": "正在创建…"
+      },
+      "list": {
+        "title": "您的群组",
+        "empty": "还没有群组。在上方创建一个即可开始。",
+        "untitled": "未命名群组",
+        "members": "{count, plural, =0 {没有成员} other {# 名成员}}",
+        "approvalRequired": "需要审批",
+        "suspended": "WhatsApp 已暂停此群组。在其恢复之前，您无法向其发送消息。",
+        "creationFailed": "WhatsApp 无法创建此群组：{message}",
+        "refresh": "刷新",
+        "refreshing": "正在刷新…",
+        "delete": "删除",
+        "edit": "编辑",
+        "membersButton": "成员",
+        "loadMore": "显示更多群组",
+        "loadingMore": "加载中…"
+      },
+      "link": {
+        "awaiting": "WhatsApp 正在创建邀请链接…",
+        "label": "邀请链接",
+        "copy": "复制",
+        "copied": "已复制",
+        "newLink": "新链接"
+      },
+      "joinRequests": {
+        "title": "等待加入",
+        "approve": "批准",
+        "reject": "拒绝",
+        "working": "…",
+        "hidden": "{count, plural, other {# 人正在等待加入。}} 您需要具有管理群组的权限才能查看具体是谁。"
+      },
+      "confirm": {
+        "deleteTitle": "删除此群组？",
+        "deleteMessage": "删除此群组并移除所有成员？已删除的群组无法恢复。其聊天记录将保留在您的收件箱中。",
+        "deleteConfirm": "删除群组",
+        "linkTitle": "创建新链接？",
+        "linkMessage": "创建新链接？之前已发送旧链接的人将无法再使用它。",
+        "linkConfirm": "创建新链接",
+        "cancel": "取消"
+      },
+      "edit": {
+        "title": "编辑群组",
+        "subject": "群组名称",
+        "description": "描述",
+        "hint": "已发送至 WhatsApp。Meta 确认后，群组将在此处刷新。",
+        "save": "发送至 WhatsApp",
+        "saving": "发送中…"
+      },
+      "members": {
+        "title": "{name} 的成员",
+        "hint": "打开此窗口时从 WhatsApp 读取；此处不存储任何数据。每次最多可移除 {max} 人。",
+        "loading": "正在从 WhatsApp 读取成员…",
+        "empty": "还没有成员。",
+        "selected": "已选择 {count} 人",
+        "remove": "移除所选",
+        "removing": "正在移除…",
+        "limit": "每次最多只能移除 {max} 人。",
+        "removeConfirm": "从群组中移除{count, plural, other {这 # 人}}？他们将无法再通过旧链接重新加入。"
+      },
+      "notice": {
+        "created": "群组已创建。Meta 颁发后，邀请链接将显示在此处。",
+        "refreshed": "群组已刷新。",
+        "linkReset": "已创建新的邀请链接。此前分享的所有链接已失效。",
+        "updateSent": "更新已发送至 WhatsApp。Meta 确认后，群组将在此处刷新。",
+        "deleted": "群组已删除，所有成员已被移除。",
+        "removed": "{count, plural, other {已将 # 人移出群组。}}",
+        "approved": "{count, plural, other {已批准 # 人。}}",
+        "rejected": "{count, plural, other {已拒绝 # 条申请。}}",
+        "copyFailed": "无法复制链接。请手动选中并复制。"
+      },
+      "removeNumberWarning": "此号码在此有 {count, plural, other {# 条群组记录}}。从工作区删除此号码会同时删除这些记录。群组本身仍保留在 WhatsApp 中，其聊天记录也会保留在您的收件箱中。"
+    }
+  }
+}

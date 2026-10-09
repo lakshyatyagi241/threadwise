@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "connect": {
+      "title": "Telegram Botunu bağla",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "submit": "Botu bağla",
+      "intro": "Webhook'u yapılandırmak ve Telegram sohbetlerini yönetmeye başlamak için HTTP API bot jetonunuzu girin.",
+      "tokenLabel": "Bot jetonu *",
+      "tokenPlaceholder": "ör. 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "Bu bir BotFather jetonuna benzemiyor.",
+      "connected": "Telegram botu bağlandı.",
+      "savedNeedsAttention": "Bot kaydedildi, ancak Telegram webhook'u kabul etmedi.",
+      "failed": "Bot bağlanamadı. Yeniden deneyin.",
+      "howTitle": "Bot jetonu nasıl alınır?",
+      "how1a": "Telegram'ı açın ve doğrulanmış",
+      "how1b": "hesabını arayın.",
+      "how2a": "Gönderin",
+      "how2b": "ve bir görünen ad ile kullanıcı adı seçin.",
+      "how3": "Oluşturulan HTTP API jetonunu kopyalayıp yukarıya yapıştırın."
+    },
+    "bot": {
+      "failed": "Olmadı. Yeniden deneyin.",
+      "webhookFixed": "Gelen mesajlar yeniden etkin.",
+      "live": "Etkin",
+      "paused": "Duraklatıldı",
+      "needsAttention": "Dikkat gerektiriyor",
+      "lastMessage": "Son mesaj: {when}",
+      "payments": "Ödemeler",
+      "on": "açık",
+      "paymentsSaved": "Ödeme ayarları kaydedildi.",
+      "paymentsHint": "Sohbet içi yerel faturalar için Ödeme akış düğümünü etkinleştirmek üzere @BotFather'dan (/mybots → Payments) bir ödeme sağlayıcı jetonu yapıştırın.",
+      "paymentsSavedPlaceholder": "•••••••• (kaydedildi — korumak için boş bırakın)",
+      "paymentsToken": "Ödeme sağlayıcı jetonu",
+      "removeToken": "Jetonu kaldır",
+      "save": "Kaydet",
+      "webhook": "Webhook",
+      "fixInbound": "Gelen mesajları düzelt (webhook'u yeniden kaydet)",
+      "pause": "Duraklat",
+      "resume": "Devam et",
+      "pausedDone": "Bot duraklatıldı.",
+      "resumedDone": "Bot devam ediyor.",
+      "disconnect": "Bağlantıyı kes",
+      "disconnectConfirm": "Bu Telegram botunun bağlantısı kesilsin mi? Gelen kutusu konuşmaları kalır, ancak mesaj göndermesi ve alması durur.",
+      "cancel": "İptal",
+      "disconnected": "Bot bağlantısı kesildi."
+    },
+    "hub": {
+      "kicker": "Kanal · Telegram",
+      "title": "Telegram",
+      "titleAccent": "Bağla",
+      "intro": "Mesajlaşma iş akışlarını otomatikleştirmek, müşteri desteğini yönetmek ve abonelerinize dünya genelinde güncellemeler göndermek için bir Telegram botu dağıtın.",
+      "teamInbox": "Ekip gelen kutusu",
+      "flows": "Akışlar",
+      "broadcasts": "Toplu gönderimler",
+      "telegramBroadcasts": "Telegram toplu gönderimleri",
+      "loadError": "Telegram botlarınız yüklenemedi.",
+      "connectedCount": "{count} bağlı",
+      "notConnected": "Bağlı değil",
+      "botCardTitle": "Telegram Bot bağlantısı",
+      "botCardBody": "Mesajlaşmayı otomatikleştirmek, desteği yönetmek ve abonelerinize toplu mesaj göndermek için @BotFather'dan bir bot jetonu yapıştırın.",
+      "connectAnother": "Başka bir bot bağla",
+      "connectBot": "Botu bağla",
+      "accountCardTitle": "Telegram Hesap bağlantısı",
+      "accountCardBody": "Telegram hesabınızı bağlayarak buradan bot oluşturun — tıpkı WhatsApp'ta olduğu gibi bir QR kodu tarayın veya telefon numaranızı kullanın.",
+      "connectAccount": "Hesabı bağla",
+      "accountUnavailable": "Henüz kullanılamıyor: Bu çalışma alanında kurulu olmayan Telegram hesap hizmetine ihtiyaç var.",
+      "connectedBots": "Bağlı botlar",
+      "guideTitle": "Telegram Bot kurulum kılavuzu",
+      "guideBody": "Telegram kanalınızı bağlamak ve otomatik iş akışlarını etkinleştirmek için bu adımları tamamlayın.",
+      "prerequisites": "Ön koşullar",
+      "pre": {
+        "account": "Etkin bir Telegram hesabı",
+        "name": "Botunuz için benzersiz bir ad",
+        "app": "Telegram Web/Uygulamasına erişim"
+      },
+      "stepsTitle": "Bağlantı adımları",
+      "step": "Adım {n}",
+      "steps": {
+        "locate": {
+          "title": "BotFather'ı bulun",
+          "body": "Telegram'ı açın ve resmi @BotFather hesabını arayın (doğrulanmış rozetine bakın)."
+        },
+        "create": {
+          "title": "Yeni bir bot oluşturun",
+          "body": "@BotFather'a /newbot gönderin ve botunuza ad verip kullanıcı adı seçmek için istemleri izleyin."
+        },
+        "token": {
+          "title": "API jetonunu alın",
+          "body": "BotFather bir HTTP API jetonu oluşturur (ör. 123456789:ABC…). Güvenli bir yere kopyalayın."
+        },
+        "connect": {
+          "title": "Botu buradan bağlayın",
+          "body": "“Botu bağla”ya tıklayın, jetonunuzu kutuya yapıştırın ve bağlantıyı tamamlamak için gönderin."
+        }
+      },
+      "unlockedTitle": "Neler açılır?",
+      "unlocked": {
+        "support": {
+          "title": "Desteği otomatikleştirin",
+          "body": "AI botların sık sorulan soruları yanıtlamasına ve konuşmaları 7/24 yönlendirmesine izin verin."
+        },
+        "broadcast": {
+          "title": "Toplu gönderim kampanyaları",
+          "body": "Promosyonları, uyarıları ve bültenleri tüm abonelere aynı anda gönderin."
+        },
+        "media": {
+          "title": "Zengin etkileşimli medya",
+          "body": "Kullanıcıları düğmeler, menüler, faturalar ve görsellerle etkileşime geçirin."
+        }
+      },
+      "tipTitle": "Yapılandırma ipucu",
+      "tipBody": "Bot API jetonunuzu asla herkese açık paylaşmayın. Ele geçirilirse @BotFather'a yazıp /revoke komutunu çalıştırarak hemen yenisini oluşturun. localhost üzerinde bir tünelin adresi her yeniden başlatmada değişir; yeniden kaydetmek için “Gelen mesajları düzelt”e basın."
+    },
+    "broadcasts": {
+      "kicker": "Telegram · Toplu gönderimler",
+      "title": "Telegram",
+      "titleAccent": "toplu gönderimler",
+      "intro": "Botunuzla sohbet etmiş herkese mesaj gönderin; her toplu gönderim için gönderilen, başarısız ve engellenen sayılarını takip edin.",
+      "bots": "Botlar",
+      "newBroadcast": "Yeni toplu gönderim",
+      "connectFirst": "Önce bir Telegram botu bağlayın.",
+      "connectBot": "Bir bot bağlayın",
+      "tile": {
+        "sent": "Gönderildi",
+        "audience": "Hedef kitle",
+        "failed": "Başarısız",
+        "blocked": "Engellendi",
+        "sending": "Gönderiliyor",
+        "broadcasts": "{count} toplu gönderim",
+        "audienceHint": "toplam alıcı",
+        "failedHint": "teslim hataları",
+        "blockedHint": "kullanıcı botu engelledi",
+        "sendingHint": "yolda"
+      },
+      "listKicker": "Toplu gönderim listesi",
+      "listTitle": "Son toplu gönderimler",
+      "col": {
+        "broadcast": "Toplu gönderim",
+        "bot": "Bot",
+        "recipients": "Alıcılar",
+        "progress": "İlerleme",
+        "status": "Durum",
+        "actions": "İşlemler"
+      },
+      "counts": "{sent} gönderildi · {failed} başarısız · {blocked} engellendi",
+      "status": {
+        "draft": "Taslak",
+        "sending": "Gönderiliyor",
+        "done": "Tamamlandı",
+        "failed": "Başarısız"
+      },
+      "start": "Başlat",
+      "pause": "Duraklat",
+      "retry": "Yeniden dene",
+      "delete": "Sil",
+      "deleteConfirm": "Bu toplu gönderim silinsin mi?",
+      "cancel": "İptal",
+      "empty": "Henüz toplu gönderim yok.",
+      "createFirst": "İlkini oluşturun",
+      "failed": "Olmadı. Yeniden deneyin.",
+      "started": "Gönderim başladı.",
+      "paused": "Duraklatıldı. Gönderilmemiş sohbetler beklemede kalır.",
+      "retried": "{count} başarısız sohbet yeniden gönderilmeye hazır. Başlat'a basın.",
+      "deleted": "Toplu gönderim silindi."
+    },
+    "compose": {
+      "kicker": "Telegram · Yeni toplu gönderim",
+      "title": "Bir",
+      "titleAccent": "toplu gönderim hazırlayın",
+      "back": "Geri",
+      "loadError": "Botlar ve şablonlar yüklenemedi.",
+      "noPermission": "Bu sayfayı görüntüleyebilirsiniz, ancak toplu gönderim oluşturmanıza izin verilmiyor.",
+      "setup": "Toplu gönderim ayarları",
+      "name": "Toplu gönderim adı",
+      "namePlaceholder": "ör. Hafta sonu indirimi",
+      "bot": "Bot",
+      "template": "Şablon (isteğe bağlı)",
+      "templateHint": "Mesajı önceden doldurur ve şablonun düğmelerini gönderir.",
+      "templateNone": "— yok (kendiniz yazın) —",
+      "buttonCount": "{count} düğme",
+      "message": "Mesaj",
+      "messageHint": "Kişiselleştirmek için '{name}' kullanın.",
+      "messagePlaceholder": "Merhaba '{name}'! …",
+      "attachment": "Ek (isteğe bağlı)",
+      "attachmentHint": "Bir görsel, video, ses dosyası veya belgeye ait herkese açık bir adres. Dosya yüklemek için depolama hizmeti gerekir.",
+      "attachmentInvalid": "http:// veya https:// ile başlayan tam bir adres girin.",
+      "recipients": "Alıcılar",
+      "selectAll": "Tümünü seç",
+      "clearAll": "Tümünü temizle",
+      "noChats": "Bu botla henüz sohbet eden olmadı.",
+      "type": {
+        "private": "özel",
+        "group": "grup",
+        "channel": "kanal"
+      },
+      "selected": "{count} seçildi",
+      "submit": "Toplu gönderim oluştur",
+      "preview": "Canlı önizleme",
+      "previewEmpty": "Mesajınızın önizlemesi…",
+      "previewNote": "Toplu gönderiminiz her alıcının sohbetinde böyle görünecek.",
+      "created": "{count} alıcıyla toplu gönderim oluşturuldu. Hazır olduğunda Gönderimi başlat'a basın.",
+      "failed": "Toplu gönderim oluşturulamadı. Yeniden deneyin."
+    }
+  }
+}

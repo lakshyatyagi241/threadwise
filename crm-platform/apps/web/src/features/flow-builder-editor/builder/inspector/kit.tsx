@@ -11,8 +11,10 @@ import {
   type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
+import { useFlb } from '../../lib/msg';
 import {
   attrEntries,
   filterAttrs,
@@ -78,13 +80,15 @@ function useAttrPicker<T extends AttrEl>(
   onChange: (v: string) => void,
   enabled: boolean,
 ) {
+  const t = useTranslations('flb.builder.shell.kit');
+  const tf = useFlb();
   const ref = useRef<T>(null);
   const [caret, setCaret] = useState(0);
   const [active, setActive] = useState(0);
   const [dismissedAt, setDismissedAt] = useState<number | null>(null);
   const [pos, setPos] = useState<PopoverPos | null>(null);
   const feed = usePickerFeed();
-  const entries = useMemo(() => attrEntries(feed.data), [feed.data]);
+  const entries = useMemo(() => attrEntries(feed.data, tf), [feed.data, tf]);
 
   const slash = enabled ? findSlashQuery(value, Math.min(caret, value.length)) : null;
   const open = slash !== null && dismissedAt !== slash.start;
@@ -180,17 +184,19 @@ function useAttrPicker<T extends AttrEl>(
               >
                 <path d="M3 8h10" />
               </svg>
-              Insert attribute
+              {t('insertAttribute')}
               <span className="ml-auto text-foreground/80">/{slash!.query}</span>
             </div>
             <div className="overflow-y-auto" style={{ maxHeight: 232 }}>
               {matches.length === 0 ? (
                 <div className="px-3 py-6 text-center text-[12px] text-muted-foreground">
-                  No attributes match.{' '}
-                  <a href="/attributes" className="font-semibold text-brand hover:underline">
-                    Create one
-                  </a>
-                  .
+                  {t.rich('noAttributes', {
+                    link: (chunks) => (
+                      <a href="/attributes" className="font-semibold text-brand hover:underline">
+                        {chunks}
+                      </a>
+                    ),
+                  })}
                 </div>
               ) : (
                 matches.map((a, i) => (
@@ -217,7 +223,7 @@ function useAttrPicker<T extends AttrEl>(
                           : 'bg-[#F3E9FF] text-[#5B3D8A]',
                       )}
                     >
-                      {a.kind === 'system' ? 'S' : 'C'}
+                      {a.kind === 'system' ? t('systemBadge') : t('customBadge')}
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[12.5px] font-medium text-foreground">
@@ -294,6 +300,7 @@ export function PasswordInput({
   onChange: (v: string) => void;
   placeholder?: string;
 }) {
+  const t = useTranslations('flb.builder.shell.kit');
   const [shown, setShown] = useState(false);
   return (
     <div className="relative">
@@ -308,7 +315,7 @@ export function PasswordInput({
       <button
         type="button"
         onClick={() => setShown((v) => !v)}
-        aria-label={shown ? 'Hide password' : 'Show password'}
+        aria-label={shown ? t('hidePassword') : t('showPassword')}
         aria-pressed={shown}
         className="absolute inset-y-0 end-0 grid w-10 place-items-center text-muted-foreground hover:text-foreground"
       >
@@ -441,6 +448,7 @@ export function SelectInput({
  * Refresh list re-reads the workspace's assistants, so the new one is there when the person comes back.
  */
 export function KnowledgeBaseActions({ refresh }: { refresh: () => void }) {
+  const t = useTranslations('flb.builder.shell.kit');
   return (
     <div className="mt-1.5 flex items-center justify-between text-[10.5px]">
       <a
@@ -449,10 +457,10 @@ export function KnowledgeBaseActions({ refresh }: { refresh: () => void }) {
         rel="noopener noreferrer"
         className="font-semibold text-brand underline"
       >
-        + Create knowledge base
+        {t('createKnowledgeBase')}
       </a>
       <button type="button" onClick={refresh} className="text-brand underline">
-        Refresh list
+        {t('refreshList')}
       </button>
     </div>
   );
@@ -605,10 +613,11 @@ export function renderWaText(s: unknown): string {
 
 /** The dark "Preview · WhatsApp" frame the inspector shows above message-like forms. */
 export function WaPreview({ label, children }: { label?: string; children: ReactNode }) {
+  const t = useTranslations('flb.builder.shell.kit');
   return (
     <div className="mb-4 rounded-xl p-3" style={{ background: '#0E2A26' }}>
       <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[#C9F0E1]/70">
-        {label ?? 'Preview · WhatsApp'}
+        {label ?? t('previewWhatsApp')}
       </div>
       <div
         className="rounded-md p-2"
@@ -624,17 +633,18 @@ export function WaPreview({ label, children }: { label?: string; children: React
   );
 }
 
-const time = (): string => {
+const time = (am: string, pm: string): string => {
   const d = new Date();
   let h = d.getHours();
   const m = d.getMinutes().toString().padStart(2, '0');
-  const ap = h >= 12 ? 'PM' : 'AM';
+  const ap = h >= 12 ? pm : am;
   h = h % 12 || 12;
   return `${h}:${m} ${ap}`;
 };
 
 /** A sent-message bubble (green, right aligned) with the clock and double tick. */
 export function WaBubble({ html, children }: { html?: string; children?: ReactNode }) {
+  const t = useTranslations('flb.builder.shell.kit');
   return (
     <div
       className="relative mb-1 ml-auto max-w-[88%] rounded-lg px-2.5 py-1.5 shadow-sm"
@@ -651,7 +661,7 @@ export function WaBubble({ html, children }: { html?: string; children?: ReactNo
         </div>
       )}
       <div className="mt-0.5 text-right text-[9.5px]" style={{ color: 'rgba(0,0,0,0.45)' }}>
-        {time()} ✓✓
+        {time(t('am'), t('pm'))} ✓✓
       </div>
     </div>
   );

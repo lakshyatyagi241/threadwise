@@ -1,0 +1,1809 @@
+{
+  "auth-registration-security": {
+    "platform": {
+      "shell": {
+        "brand": "CRM",
+        "title": "Console de la plateforme",
+        "skipToContent": "Aller au contenu",
+        "navLabel": "Navigation de la console",
+        "openMenu": "Ouvrir le menu",
+        "closeMenu": "Fermer le menu",
+        "language": "Langue",
+        "themeToLight": "Passer au thème clair",
+        "themeToDark": "Passer au thème sombre",
+        "accountLink": "Compte et sécurité ({email})",
+        "signOut": "Se déconnecter",
+        "signingOut": "Déconnexion",
+        "redirecting": "Ouverture de la configuration à deux facteurs",
+        "roles": {
+          "super_admin": "Super administrateur",
+          "support": "Support",
+          "auditor": "Auditeur"
+        },
+        "mfaRequired": {
+          "title": "L’authentification à deux facteurs est obligatoire",
+          "body": "Les super administrateurs doivent activer une application d’authentification avant d’utiliser la console. Terminez la configuration ci-dessous pour débloquer toutes les pages."
+        }
+      },
+      "nav": {
+        "securityCenter": "Centre de sécurité",
+        "securityEvents": "Événements de sécurité",
+        "registration": "Politique d’inscription",
+        "socialLogin": "Connexion sociale et captcha",
+        "authPages": "Pages d’authentification",
+        "plans": "Offres",
+        "account": "Compte et authentification à deux facteurs",
+        "groups": {
+          "security": "Sécurité",
+          "guestPages": "Connexion et inscription",
+          "plans": "Offres",
+          "account": "Votre compte"
+        }
+      },
+      "common": {
+        "copy": "Copier",
+        "copied": "Copié",
+        "copyFailed": "Copie impossible",
+        "loading": "Chargement",
+        "retry": "Réessayer",
+        "requestId": "ID de requête",
+        "errors": {
+          "forbidden": "Votre rôle ne permet pas cette action.",
+          "request": "La requête a été refusée. Rechargez la page et réessayez.",
+          "unexpected": "Un problème est survenu de notre côté. Réessayez dans un instant."
+        },
+        "readOnly": {
+          "superAdmin": "Seuls les super administrateurs peuvent modifier ces paramètres. Votre rôle ({role}) peut les consulter.",
+          "superAdminSupport": "Seuls les super administrateurs et le support peuvent modifier ces paramètres. Votre rôle ({role}) peut les consulter."
+        },
+        "copyWhat": "Copier {what}"
+      },
+      "login": {
+        "title": "Connexion opérateur",
+        "intro": "Cette console est destinée aux personnes qui exploitent la plateforme. Les utilisateurs d’espaces de travail se connectent sur la page de connexion principale.",
+        "requestId": "ID de requête",
+        "submit": "Se connecter",
+        "submitting": "Connexion",
+        "fields": {
+          "email": "E-mail",
+          "emailPlaceholder": "vous@entreprise.com",
+          "password": "Mot de passe",
+          "showPassword": "Afficher le mot de passe",
+          "hidePassword": "Masquer le mot de passe"
+        },
+        "errors": {
+          "email": "Saisissez une adresse e-mail valide.",
+          "passwordRequired": "Saisissez votre mot de passe.",
+          "captchaRequired": "Cochez la case pour confirmer que vous n’êtes pas un robot.",
+          "codeFormat": "Saisissez les 6 chiffres de votre application d’authentification.",
+          "recoveryFormat": "Un code de récupération comporte 8 à 32 lettres, chiffres ou tirets."
+        },
+        "notices": {
+          "expired": "Votre session est terminée. Reconnectez-vous pour continuer.",
+          "idle": "Vous avez été déconnecté après {minutes, plural, one {# minute} other {# minutes}} d’inactivité. Reconnectez-vous pour continuer."
+        },
+        "problems": {
+          "invalid": "Ces identifiants ne correspondent pas.",
+          "invalidCode": "Ce code n’est pas valide. Vérifiez-le et réessayez.",
+          "locked": "Trop de tentatives échouées. La connexion est suspendue pour un moment.",
+          "tryAgainIn": "Réessayez dans {time}",
+          "ipBlocked": "L’accès depuis {ip} n’est pas autorisé.",
+          "ipBlockedUnknown": "L’accès depuis cette adresse n’est pas autorisé.",
+          "ipBlockedHelp": "La liste d’autorisation des opérateurs n’inclut pas cette adresse. Demandez à un super administrateur de l’ajouter.",
+          "captcha": "La vérification captcha a échoué. Résolvez-la et réessayez.",
+          "challengeExpired": "Cette connexion a expiré. Saisissez à nouveau votre mot de passe.",
+          "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+          "unexpected": "Impossible de vous connecter. Réessayez dans un instant.",
+          "lockedWait": "Trop de tentatives échouées. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
+        },
+        "captcha": {
+          "loadFailed": "Le captcha n’a pas pu se charger. Vérifiez votre connexion ou un bloqueur de contenu, puis réessayez.",
+          "retry": "Réessayer le captcha",
+          "v3Notice": "Cette page est protégée par une vérification captcha invisible."
+        },
+        "mfa": {
+          "title": "Vérification à deux facteurs",
+          "intro": "Saisissez le code à 6 chiffres de votre application d’authentification.",
+          "recoveryIntro": "Saisissez l’un de vos codes de récupération. Chaque code ne fonctionne qu’une fois.",
+          "codeLabel": "Code d’authentification",
+          "codeHint": "Le code change toutes les 30 secondes.",
+          "recoveryLabel": "Code de récupération",
+          "recoveryHint": "Lettres, chiffres et tirets, exactement comme enregistrés.",
+          "windowLeft": "Cette connexion reste ouverte pendant {time}.",
+          "windowClosed": "Cette fenêtre de connexion est fermée. Revenez en arrière et saisissez à nouveau votre mot de passe.",
+          "verify": "Vérifier et se connecter",
+          "verifying": "Vérification",
+          "useRecovery": "Utiliser un code de récupération",
+          "useAuthenticator": "Utiliser l’application d’authentification",
+          "back": "Retour à la connexion"
+        }
+      },
+      "mfa": {
+        "eyebrow": "Votre compte",
+        "title": "Authentification à deux facteurs",
+        "description": "Protégez {email} avec une application d’authentification. Les comptes opérateur sont les comptes les plus sensibles de la plateforme.",
+        "requestId": "ID de requête",
+        "status": {
+          "title": "Application d’authentification",
+          "on": "Activée",
+          "body": "L’authentification à deux facteurs est activée pour ce compte. Un code vous sera demandé à chaque connexion. Les codes de récupération ont été affichés une seule fois lors de l’activation."
+        },
+        "intro": {
+          "title": "Configurer une application d’authentification",
+          "step1": "Installez une application d’authentification telle que Google Authenticator, Microsoft Authenticator ou 1Password.",
+          "step2": "Scannez le code QR affiché, ou saisissez la clé de configuration à la main.",
+          "step3": "Saisissez le code à 6 chiffres affiché par l’application pour confirmer. Vous recevrez ensuite des codes de récupération.",
+          "begin": "Commencer la configuration",
+          "starting": "Préparation"
+        },
+        "setup": {
+          "qrLabel": "Code QR pour votre application d’authentification",
+          "title": "Scanner, puis confirmer",
+          "scan": "Ouvrez votre application d’authentification, ajoutez un compte et scannez ce code. Il est généré dans votre navigateur et n’est jamais envoyé à un autre site.",
+          "manualTitle": "Impossible de scanner ?",
+          "manualHint": "Saisissez plutôt cette clé de configuration dans l’application. Basée sur le temps, 6 chiffres.",
+          "codeLabel": "Code à 6 chiffres",
+          "codeHint": "Saisissez le code que l’application affiche en ce moment.",
+          "enable": "Activer l’authentification à deux facteurs",
+          "enabling": "Activation",
+          "cancel": "Annuler la configuration"
+        },
+        "codes": {
+          "enabled": "L’authentification à deux facteurs est activée.",
+          "title": "Enregistrez vos codes de récupération",
+          "body": "Si vous perdez votre téléphone, chacun de ces codes vous permet de vous connecter une fois. Ils ne sont affichés que maintenant. Conservez-les en lieu sûr, séparément de votre mot de passe.",
+          "copyAll": "Tout copier",
+          "download": "Télécharger en fichier texte",
+          "saved": "J’ai enregistré ces codes de récupération en lieu sûr.",
+          "continue": "Continuer vers la console",
+          "fileHeader": "Codes de récupération de la console de la plateforme pour {email}. Chaque code ne fonctionne qu’une fois."
+        },
+        "errors": {
+          "unexpected": "Impossible de terminer cette étape. Réessayez dans un instant.",
+          "codeFormat": "Saisissez les 6 chiffres affichés dans votre application.",
+          "codeInvalid": "Ce code n’est pas valide. Vérifiez l’heure de votre téléphone et essayez le code suivant.",
+          "setupExpired": "La configuration a expiré. Recommencez.",
+          "locked": "Trop de tentatives échouées. Patientez un moment avant de réessayer.",
+          "lockedWait": "Trop de tentatives échouées. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
+        }
+      },
+      "security": {
+        "kicker": "Centre de sécurité",
+        "title": "Sécurité et conformité",
+        "description": "Protégez l’accès des opérateurs, l’envoi WhatsApp, les appareils et les webhooks. Chaque modification est enregistrée en une seule mise à jour et écrite dans le journal des événements de sécurité.",
+        "viewEvents": "Voir les événements de sécurité",
+        "save": "Enregistrer les paramètres",
+        "saving": "Enregistrement",
+        "saved": "{count, plural, one {# paramètre enregistré} other {# paramètres enregistrés}}",
+        "rejected": "Rien n’a été enregistré. {count, plural, one {# champ a été rejeté} other {# champs ont été rejetés}}.",
+        "requestId": "ID de requête",
+        "unsaved": "{count, plural, one {# modification non enregistrée} other {# modifications non enregistrées}}",
+        "discard": "Annuler les modifications",
+        "errors": {
+          "forbidden": "Votre rôle n’autorise pas la modification de ces paramètres.",
+          "unexpected": "Les paramètres n’ont pas pu être enregistrés. Réessayez dans un instant."
+        },
+        "tabs": {
+          "summary": "Résumé",
+          "login": "Connexion et MFA",
+          "whatsapp": "Garde-fous WhatsApp",
+          "abuse": "Filtres anti-abus",
+          "api": "API et webhooks",
+          "devices": "Appareils",
+          "danger": "Zone de danger"
+        },
+        "common": {
+          "range": "Valeurs autorisées : {min} à {max}.",
+          "rangeWithZero": "Valeurs autorisées : 0 (désactivé), ou {min} à {max}.",
+          "blankKeeps": "Laisser vide conserve la valeur enregistrée."
+        },
+        "problems": {
+          "range": "Saisissez un nombre entier de {min} à {max}.",
+          "rangeWithZero": "Saisissez 0, ou un nombre entier de {min} à {max}.",
+          "tooMany": "{max} entrées maximum.",
+          "tooLong": "Chaque entrée peut comporter {max} caractères au maximum.",
+          "invalidEntry": "{entry} n’est pas une adresse ou une plage valide.",
+          "totalTooLong": "Gardez la liste sous {max} caractères au total."
+        },
+        "kpis": {
+          "score": {
+            "label": "Score de sécurité",
+            "strong": "contrôles robustes actifs",
+            "attention": "attention requise"
+          },
+          "openRisks": {
+            "label": "Risques ouverts",
+            "note": "{count} haute priorité"
+          },
+          "blocked": {
+            "label": "Tentatives bloquées"
+          },
+          "last24h": "dernières 24 heures",
+          "warnings": {
+            "label": "Avertissements"
+          },
+          "mfa": {
+            "label": "Couverture MFA des opérateurs",
+            "note": "{enrolled}/{total} opérateurs inscrits"
+          },
+          "webhooks": {
+            "label": "Échecs de webhook",
+            "normal": "normal",
+            "review": "à examiner"
+          }
+        },
+        "risks": {
+          "kicker": "File prioritaire",
+          "title": "Risques à examiner",
+          "seeAll": "Voir tous les échecs",
+          "empty": "Tout est en ordre. Aucun échec ni avertissement au cours des 7 derniers jours.",
+          "columns": {
+            "severity": "Gravité",
+            "signal": "Signal",
+            "workspace": "Espace de travail",
+            "owner": "Propriétaire",
+            "action": "Action"
+          },
+          "severity": {
+            "high": "Élevée",
+            "medium": "Moyenne",
+            "watch": "À surveiller"
+          },
+          "platform": "Plateforme",
+          "inspect": "Inspecter",
+          "platformOf": "Plateforme {app}",
+          "owner": {
+            "system": "Système",
+            "types": {
+              "user": "Utilisateur",
+              "platform_operator": "Opérateur de la plateforme"
+            }
+          },
+          "noWorkspace": "Aucun espace de travail"
+        },
+        "coverage": {
+          "kicker": "Couverture",
+          "title": "Contrôles activés",
+          "buckets": {
+            "admin_access": "Accès administrateur",
+            "send_abuse": "Prévention des abus WhatsApp",
+            "api_hardening": "Renforcement de l’API",
+            "incident_readiness": "Préparation aux incidents"
+          }
+        },
+        "quickActions": {
+          "kicker": "Actions rapides",
+          "rotate": "Renouveler les secrets des webhooks",
+          "forceReset": "Forcer la réinitialisation du mot de passe",
+          "resume": "Reprendre les envois",
+          "halt": "Arrêt d’urgence des envois",
+          "scopeAll": "tous",
+          "scopeUsers": "tous les utilisateurs",
+          "scopeGlobal": "global",
+          "halted": "actuellement à l’arrêt",
+          "superAdminOnly": "Seul un super administrateur peut exécuter ces actions."
+        },
+        "enforcement": {
+          "kicker": "Contrôles transparents",
+          "title": "Ce que fait chaque contrôle aujourd’hui",
+          "description": "Enregistrer un paramètre ne signifie pas que la plateforme l’applique. Appliqué signifie qu’une vérification est active, partiel que seuls certains chemins le vérifient, réservé qu’il est stocké pour plus tard.",
+          "show": "Afficher",
+          "hide": "Masquer",
+          "columns": {
+            "control": "Contrôle",
+            "consumer": "Ce qui l’utilise",
+            "status": "Statut"
+          },
+          "enforced": "Appliqué",
+          "partial": "Partiel",
+          "reserved": "Réservé"
+        },
+        "controls": {
+          "requireMfaForAll": {
+            "label": "Exiger la 2FA pour tous les utilisateurs",
+            "hint": "Chaque utilisateur d’un espace de travail doit configurer une application d’authentification avant de continuer."
+          },
+          "requireMfaForAdmins": {
+            "label": "Exiger la 2FA pour les administrateurs",
+            "hint": "Les utilisateurs ayant le rôle Administrateur dans un espace de travail doivent configurer une application d’authentification."
+          },
+          "requireMfaForSuperAdmins": {
+            "label": "Exiger la 2FA pour les super administrateurs",
+            "hint": "Tant que cette option est désactivée, les super administrateurs de la plateforme se connectent avec un simple mot de passe. L’activer les oblige à s’inscrire et à utiliser une application d’authentification."
+          },
+          "requireMfaForOwners": {
+            "label": "Exiger la 2FA pour les propriétaires d’espace de travail",
+            "hint": "Le propriétaire de chaque espace de travail doit configurer une application d’authentification."
+          },
+          "allowedMfaMethods": {
+            "label": "Méthodes 2FA autorisées",
+            "hint": "Au moins une reste sélectionnée : si aucune n’est cochée, la liste enregistrée est conservée. Seules les applications d’authentification existent aujourd’hui.",
+            "methods": {
+              "totp": "Application d’authentification",
+              "email": "Code par e-mail",
+              "telegram": "Bot Telegram"
+            }
+          },
+          "sessionTimeoutMinutes": {
+            "label": "Délai d’expiration de session (minutes)",
+            "hint": "Durée d’inactivité avant la fin d’une connexion de session de navigateur. Les sessions conservées 30 jours en sont exemptées."
+          },
+          "maxConcurrentSessions": {
+            "label": "Nombre maximal de sessions simultanées par utilisateur",
+            "hint": "En cas de dépassement, la plus ancienne session est déconnectée."
+          },
+          "rememberMeEnabled": {
+            "label": "Autoriser « Rester connecté »",
+            "hint": "Désactivé : chaque session se termine à la fermeture du navigateur."
+          },
+          "lockoutAfterFailures": {
+            "label": "Nombre maximal de tentatives de connexion",
+            "hint": "Connexions échouées dans la fenêtre avant la suspension du compte."
+          },
+          "lockoutWindowMinutes": {
+            "label": "Fenêtre de verrouillage (minutes)",
+            "hint": "Durée pendant laquelle les échecs sont comptés et durée de la suspension."
+          },
+          "passwordMinLength": {
+            "label": "Longueur minimale"
+          },
+          "passwordRequireUpper": {
+            "label": "Exiger une majuscule",
+            "short": "Majuscule"
+          },
+          "passwordRequireNumber": {
+            "label": "Exiger un chiffre",
+            "short": "Chiffre"
+          },
+          "passwordRequireSymbol": {
+            "label": "Exiger un symbole",
+            "short": "Symbole"
+          },
+          "passwordMaxAgeDays": {
+            "label": "Durée de vie maximale du mot de passe (jours)",
+            "hint": "0 signifie que les mots de passe n’expirent jamais."
+          },
+          "waGuardrailsMode": {
+            "label": "Mode",
+            "options": {
+              "off": "Désactivé (aucune vérification)",
+              "monitor": "Surveillance (journal uniquement)",
+              "enforce": "Application (blocage)"
+            },
+            "explain": {
+              "off": "Aucune vérification n’est exécutée. Les plafonds et filtres de ces onglets n’ont aucun effet.",
+              "monitor": "Les vérifications s’exécutent et les correspondances sont écrites dans le journal des événements, mais aucun message n’est arrêté. Utilisez ce mode pour valider les règles avant de les appliquer.",
+              "enforce": "Les messages correspondants sont bloqués avant leur envoi."
+            }
+          },
+          "waMaxSendsPerMinute": {
+            "label": "Envois maximum par minute",
+            "hint": "Par espace de travail. 0 signifie illimité."
+          },
+          "waMaxSendsPerDay": {
+            "label": "Envois maximum par jour",
+            "hint": "Par espace de travail. 0 signifie illimité."
+          },
+          "waHoldOnLinksCount": {
+            "label": "Retenir si les liens dépassent",
+            "hint": "Les messages contenant plus de liens que cette valeur sont retenus. 0 signifie aucune limite."
+          },
+          "waHoldOnScamPattern": {
+            "label": "Retenir les envois correspondant à des schémas d’arnaque",
+            "hint": "Formulations de gain, de compte urgent et de piège de vérification."
+          },
+          "waRequireTemplateReview": {
+            "label": "Exiger la révision du modèle avant l’envoi",
+            "hint": "Compte uniquement dans le score de sécurité ; rien ne le vérifie pour l’instant."
+          },
+          "abuseBlockFinanceTerms": {
+            "label": "Bloquer les termes financiers et d’enrichissement rapide",
+            "hint": "Faux investissements, rendements garantis et schémas de redirection de paiement."
+          },
+          "abuseBlockShortLinks": {
+            "label": "Bloquer les liens courts et suspects",
+            "hint": "Raccourcisseurs de liens qui masquent la destination d’un message."
+          },
+          "abuseBlockKeywordList": {
+            "label": "Liste de blocage de mots-clés personnalisée",
+            "hint": "Un par ligne, ou séparés par des virgules. Jusqu’à 5 000 caractères au total. La correspondance ne tient pas compte de la casse. Les messages correspondants sont signalés ou bloqués selon le mode des garde-fous.",
+            "placeholder": "forex\nargent facile\nrendement garanti"
+          },
+          "apiRateLimitPerMinute": {
+            "label": "Requêtes API par minute",
+            "hint": "Le nombre maximal de requêtes par minute que peut effectuer une clé API d’espace de travail. Une clé peut avoir sa propre limite plus basse, jamais plus haute."
+          },
+          "webhookSignatureRequired": {
+            "label": "Exiger des signatures HMAC",
+            "hint": "Un point de terminaison de webhook ne peut pas être créé sans secret de signature."
+          },
+          "webhookReplayWindowSec": {
+            "label": "Fenêtre de rejeu des webhooks (secondes)",
+            "hint": "Stocké pour plus tard ; les webhooks entrants des fournisseurs sont déjà vérifiés par signature."
+          },
+          "deviceTrustRequired": {
+            "label": "Exiger un navigateur de confiance",
+            "hint": "Stocké pour plus tard ; il n’existe pas encore de processus de confiance des appareils."
+          },
+          "deviceLogoutOnInactiveDays": {
+            "label": "Déconnexion automatique après inactivité (jours)",
+            "hint": "Les appareils WhatsApp associés non vus depuis cette durée sont marqués comme déconnectés. 0 signifie jamais."
+          },
+          "ipAllowlistEnabled": {
+            "label": "Activer la liste d’autorisation",
+            "hint": "Seules les adresses ci-dessous peuvent accéder à cette console."
+          },
+          "ipAllowlistCidrs": {
+            "label": "Adresses autorisées"
+          },
+          "alertOnNewDevice": {
+            "label": "Alertes de nouvel appareil",
+            "hint": "Envoyer un e-mail à l’utilisateur lorsqu’une connexion provient d’un appareil jamais vu."
+          },
+          "alertOnNewCountry": {
+            "label": "Alertes de changement de réseau",
+            "hint": "Envoyer un e-mail à l’utilisateur lorsqu’une connexion provient d’un réseau différent de d’habitude."
+          },
+          "alertChannel": {
+            "label": "Destination des alertes de connexion",
+            "hint": "Seul l’e-mail est envoyé pour le moment ; le canal WhatsApp est enregistré pour plus tard.",
+            "options": {
+              "email": "E-mail",
+              "whatsapp": "WhatsApp",
+              "both": "E-mail et WhatsApp"
+            }
+          },
+          "auditLogRetentionDays": {
+            "label": "Conserver les événements de sécurité pendant (jours)",
+            "hint": "0 signifie les conserver indéfiniment."
+          }
+        },
+        "panels": {
+          "login": {
+            "lockout": {
+              "kicker": "Protection de la connexion",
+              "title": "Règles de verrouillage du compte"
+            },
+            "password": {
+              "title": "Règles des nouveaux mots de passe",
+              "note": "Appliquées lors de la création ou de la modification d’un mot de passe, jamais à une connexion existante ; les durcir ne peut donc enfermer personne dehors."
+            },
+            "mfa": {
+              "kicker": "Authentification multifacteur",
+              "title": "Application de la 2FA",
+              "description": "S’applique aux utilisateurs des espaces de travail. Les opérateurs de la plateforme super administrateurs ont toujours besoin de la 2FA."
+            }
+          },
+          "whatsapp": {
+            "master": {
+              "kicker": "Interrupteur principal",
+              "title": "Application des garde-fous",
+              "description": "Les plafonds et filtres de ces onglets n’agissent que selon ce mode. Choisissez un mode et lisez ce qu’il fait."
+            },
+            "caps": {
+              "kicker": "Cadence d’envoi",
+              "title": "Plafonds stricts"
+            },
+            "spam": {
+              "kicker": "Règles de contenu",
+              "title": "Contrôles anti-spam"
+            },
+            "health": {
+              "kicker": "Qualité de confiance",
+              "title": "Santé de l’espace de travail",
+              "body": "Les nombres de blocages et de signalements par espace de travail apparaîtront ici dès que les pipelines d’envoi les remonteront. D’ici là, utilisez le journal des événements de sécurité pour voir ce que les garde-fous ont détecté.",
+              "link": "Voir les espaces de travail"
+            }
+          },
+          "abuse": {
+            "kicker": "Filtres anti-abus",
+            "title": "Prévention des usages illégaux",
+            "aside": {
+              "title": "Gardez cette politique stricte",
+              "body": "Ces filtres tiennent les arnaques, l’hameçonnage et le harcèlement à l’écart des canaux utilisés par vos clients. Ils suivent le mode des garde-fous défini dans l’onglet Garde-fous WhatsApp."
+            }
+          },
+          "api": {
+            "traffic": {
+              "kicker": "Contrôle du trafic",
+              "title": "Limites de débit"
+            },
+            "integrity": {
+              "kicker": "Défense des webhooks",
+              "title": "Intégrité"
+            },
+            "allowlist": {
+              "kicker": "Liste d’autorisation d’IP",
+              "title": "Accès à la console",
+              "description": "Restreint uniquement cette console d’opérateur. Les utilisateurs d’espaces de travail, l’API publique et les webhooks ne sont pas concernés. Une liste vide laisse tout le monde entrer, elle ne peut donc jamais exclure tous les opérateurs.",
+              "cidrs": "Adresses autorisées",
+              "cidrsHint": "Une adresse ou plage par ligne, par exemple 203.0.113.9 ou 203.0.113.0/24. Les virgules fonctionnent aussi.",
+              "placeholder": "203.0.113.0/24\n2001:db8::/32",
+              "yourIp": "Votre adresse telle que l’API la voit :",
+              "yourIpUnknown": "Nous n’avons pas pu détecter votre adresse, nous ne pouvons donc pas vous avertir d’un risque de vous exclure vous-même.",
+              "addMine": "Ajouter mon IP",
+              "alreadyListed": "Déjà dans la liste",
+              "lockoutWarning": "Votre adresse {ip} ne figure pas dans cette liste. L’enregistrement vous exclurait, le serveur le refusera donc. Ajoutez d’abord votre adresse."
+            }
+          },
+          "devices": {
+            "trust": {
+              "kicker": "Intégrité des appareils",
+              "title": "Politique de confiance et de session"
+            },
+            "alerts": {
+              "kicker": "Canal des alertes de connexion",
+              "title": "Destination des alertes"
+            },
+            "audit": {
+              "kicker": "Piste d’audit",
+              "title": "Conservation",
+              "description": "Les événements de sécurité plus anciens que cette durée sont purgés une fois la tâche de purge disponible.",
+              "link": "Ouvrir le journal des événements de sécurité"
+            }
+          }
+        },
+        "danger": {
+          "kicker": "Zone de danger",
+          "title": "Actions irréversibles à l’échelle de la plateforme",
+          "description": "Chaque action vous demande de saisir son nom avant toute exécution, et chacune est écrite dans le journal des événements de sécurité.",
+          "superAdminOnly": "Ces actions sont réservées aux super administrateurs. Votre rôle est {role}.",
+          "haltState": "Envois sortants :",
+          "haltOn": "À l’arrêt",
+          "haltOff": "En cours",
+          "revoke": {
+            "title": "Révoquer toutes les sessions",
+            "detail": "déconnecte tout le monde"
+          },
+          "forceReset": {
+            "title": "Forcer la réinitialisation du mot de passe pour tous les utilisateurs",
+            "detail": "signale chaque utilisateur"
+          },
+          "rotate": {
+            "title": "Renouveler tous les secrets de webhook",
+            "detail": "les intégrations existantes cessent de fonctionner",
+            "note": "Les secrets de signature des webhooks relèvent de l’espace des intégrations, qui n’existe pas encore ; cette action indique donc 0 secret renouvelé pour le moment."
+          },
+          "halt": {
+            "title": "Arrêt d’urgence de tous les envois",
+            "detail": "interrupteur d’urgence à l’échelle de la plateforme"
+          },
+          "resume": {
+            "title": "Reprendre les envois",
+            "detail": "actuellement à l’arrêt"
+          },
+          "logged": {
+            "kicker": "Ce qui est consigné",
+            "title": "Chaque action écrit un événement",
+            "events": {
+              "revoke": "platform.security.sessions_revoked",
+              "forceReset": "platform.security.force_password_reset_all",
+              "rotate": "platform.security.webhook_secrets_rotated",
+              "halt": "platform.security.emergency_halt_engaged",
+              "policy": "platform.security.policy_updated"
+            },
+            "notes": {
+              "revoke": "Quand toutes les sessions sont terminées, y compris la vôtre.",
+              "forceReset": "Quand tous les utilisateurs doivent choisir un nouveau mot de passe.",
+              "rotate": "Quand les secrets sont renouvelés, avec leur nombre.",
+              "halt": "Quand l’arrêt est enclenché, et de nouveau quand les envois reprennent.",
+              "policy": "À chaque modification de paramètre ci-dessus, avec les anciennes et nouvelles valeurs."
+            },
+            "trail": "Voir la piste d’audit de sécurité"
+          },
+          "halted": {
+            "title": "L’arrêt d’urgence est activé",
+            "body": "Tous les messages sortants sont bloqués sur la plateforme jusqu’à la reprise des envois.",
+            "resume": "Reprendre les envois"
+          },
+          "dialog": {
+            "revoke_sessions": {
+              "title": "Révoquer toutes les sessions",
+              "body": "Toutes les personnes connectées à un espace de travail ou à cette console sont déconnectées, vous compris.",
+              "effect1": "Chaque personne doit se reconnecter, avec la double authentification si elle est activée.",
+              "effect2": "Le travail non enregistré dans le navigateur peut être perdu.",
+              "confirm": "Révoquer toutes les sessions",
+              "done": "{count, plural, =0 {Aucune session n’était active.} one {# session révoquée.} other {# sessions révoquées.}}",
+              "signedOut": "Vous avez également été déconnecté. Reconnectez-vous pour continuer."
+            },
+            "force_password_reset": {
+              "title": "Forcer la réinitialisation du mot de passe pour tous les utilisateurs",
+              "body": "Chaque utilisateur d’un espace de travail devra choisir un nouveau mot de passe à sa prochaine utilisation de l’application.",
+              "effect1": "Personne n’est déconnecté pour l’instant ; l’invite apparaît à la prochaine requête.",
+              "effect2": "Les personnes qui ignorent l’invite ne peuvent plus utiliser l’application tant qu’elles n’ont pas changé de mot de passe.",
+              "confirm": "Forcer la réinitialisation",
+              "done": "{count, plural, =0 {Aucun utilisateur n’a été signalé.} one {# utilisateur doit choisir un nouveau mot de passe.} other {# utilisateurs doivent choisir un nouveau mot de passe.}}"
+            },
+            "rotate_webhook_secrets": {
+              "title": "Renouveler tous les secrets de webhook",
+              "body": "Chaque secret de signature de webhook est remplacé par un nouveau.",
+              "effect1": "Les intégrations qui vérifient les signatures cessent de fonctionner tant qu’elles n’utilisent pas le nouveau secret.",
+              "effect2": "Il est impossible de récupérer les anciens secrets.",
+              "confirm": "Renouveler les secrets",
+              "done": "{count, plural, =0 {0 secret renouvelé.} one {# secret renouvelé.} other {# secrets renouvelés.}}",
+              "noneRotated": "Rien n’a été renouvelé car l’espace des intégrations ne stocke pas encore de secrets de webhook."
+            },
+            "halt_sends": {
+              "title": "Arrêt d’urgence de tous les envois",
+              "body": "Chaque message sortant de tous les espaces de travail est refusé jusqu’à la reprise des envois.",
+              "effect1": "Les clients ne reçoivent rien, ni réponses, ni campagnes, ni automatisations.",
+              "effect2": "Utilisez « Reprendre les envois » pour réactiver la messagerie.",
+              "confirm": "Arrêter tous les envois",
+              "done": "L’arrêt d’urgence est activé. Tous les envois sortants sont bloqués."
+            },
+            "resume_sends": {
+              "title": "Reprendre les envois",
+              "body": "La messagerie sortante est réactivée pour tous les espaces de travail.",
+              "effect1": "Les messages refusés pendant l’arrêt ne sont pas envoyés automatiquement.",
+              "effect2": "Consultez d’abord le journal des événements si vous avez arrêté les envois à cause d’un incident.",
+              "confirm": "Reprendre les envois",
+              "done": "Les envois ont repris."
+            },
+            "typeToConfirm": "Saisissez <code>{phrase}</code> pour confirmer",
+            "phraseHint": "Les majuscules et les espaces en trop sont ignorés.",
+            "cancel": "Annuler",
+            "working": "En cours",
+            "close": "Fermer",
+            "signInAgain": "Se reconnecter",
+            "requestId": "ID de requête",
+            "errors": {
+              "forbidden": "Seul un super administrateur peut exécuter cette action.",
+              "unexpected": "L’action ne s’est pas terminée. Consultez le journal des événements avant de réessayer."
+            }
+          }
+        },
+        "tabsLabel": "Sections du Centre de sécurité",
+        "search": {
+          "label": "Rechercher des règles de sécurité, des IP et des acteurs",
+          "placeholder": "Rechercher des règles de sécurité, des IP, des acteurs…",
+          "shortcut": "Cmd K"
+        }
+      },
+      "events": {
+        "kicker": "Centre de sécurité",
+        "title": "Événements de sécurité",
+        "description": "Connexions, verrouillages, modifications de politique et actions à risque, du plus récent au plus ancien.",
+        "refresh": "Actualiser",
+        "refreshing": "Actualisation",
+        "filters": {
+          "label": "Filtrer les événements",
+          "event": "Nom de l’événement",
+          "eventHint": "Nom exact, par exemple auth.failed. Choisissez une suggestion ou saisissez le vôtre.",
+          "status": "Statut",
+          "anyStatus": "Tous les statuts",
+          "apply": "Appliquer",
+          "clear": "Effacer les filtres",
+          "q": "Texte de recherche",
+          "qHint": "Trouve les événements dont le nom contient ce texte, sans tenir compte de la casse."
+        },
+        "status": {
+          "success": "Succès",
+          "failure": "Échec",
+          "warning": "Avertissement",
+          "info": "Info"
+        },
+        "empty": "Aucun événement de sécurité n’a encore été enregistré.",
+        "emptyFiltered": "Aucun événement ne correspond à ces filtres.",
+        "listLabel": "Événements de sécurité",
+        "ip": "IP",
+        "showPayload": "Afficher les détails",
+        "hidePayload": "Masquer les détails",
+        "noPayload": "Cet événement n’a pas de détails supplémentaires.",
+        "payloadLabel": "Détails de {event}",
+        "loadMore": "Charger plus",
+        "loading": "Chargement",
+        "end": "{count, plural, one {Affichage de l’unique événement.} other {Affichage des # événements.}}",
+        "export": "Exporter en CSV",
+        "exported": "{count, plural, one {# événement chargé enregistré dans un fichier CSV.} other {# événements chargés enregistrés dans un fichier CSV.}}",
+        "actorLabel": "Acteur",
+        "actorTypes": {
+          "user": "Utilisateur",
+          "platform_operator": "Opérateur de la plateforme",
+          "system": "Système"
+        },
+        "workspaceLabel": "Espace de travail",
+        "requestIdLabel": "ID de requête",
+        "userAgentLabel": "Navigateur",
+        "copyNames": {
+          "actorId": "ID de l’acteur",
+          "orgId": "ID de l’espace de travail",
+          "requestId": "ID de requête"
+        }
+      },
+      "registration": {
+        "kicker": "Pages publiques",
+        "title": "Politique d’inscription",
+        "description": "Décidez qui peut s’inscrire, comment l’e-mail est vérifié, sur quelle offre démarrent les nouveaux espaces de travail et comment fonctionne le code d’inscription.",
+        "save": "Enregistrer les paramètres",
+        "saving": "Enregistrement",
+        "saved": "{count, plural, one {# paramètre enregistré} other {# paramètres enregistrés}}",
+        "rejected": "Rien n’a été enregistré. {count, plural, one {# champ a été rejeté} other {# champs ont été rejetés}}.",
+        "requestId": "ID de requête",
+        "unsaved": "{count, plural, one {# modification non enregistrée} other {# modifications non enregistrées}}",
+        "discard": "Annuler les modifications",
+        "errors": {
+          "unexpected": "Les paramètres n’ont pas pu être enregistrés. Réessayez dans un instant."
+        },
+        "problems": {
+          "range": "Saisissez un nombre entier de {min} à {max}.",
+          "tooLong": "{max} caractères au maximum.",
+          "required": "Ce champ est obligatoire.",
+          "link": "Utilisez un chemin du site tel que /legal/terms, ou une adresse http ou https complète.",
+          "senderFormat": "Choisissez l’un des expéditeurs de la liste.",
+          "countryFormat": "Utilisez un code pays à deux lettres.",
+          "senderRequired": "Choisissez un canal d’expédition avant de créer le modèle."
+        },
+        "policy": {
+          "kicker": "Inscription",
+          "title": "Qui peut s’inscrire",
+          "description": "Ces paramètres s’appliquent aux nouvelles inscriptions, y compris via les réseaux sociaux."
+        },
+        "fields": {
+          "publicRegistration": {
+            "label": "Inscription publique",
+            "hintOn": "Tout le monde peut créer un espace de travail depuis la page d’inscription.",
+            "hintOff": "La page d’inscription affiche un message d’inscriptions fermées. Les utilisateurs existants ne sont pas concernés."
+          },
+          "emailVerification": {
+            "label": "Vérification de l’e-mail",
+            "options": {
+              "off": "Désactivée : les comptes sont vérifiés automatiquement",
+              "banner": "Bannière : autorisé, avec un rappel",
+              "block": "Blocage : vérifier avant de continuer"
+            },
+            "explain": {
+              "off": "Les nouveaux comptes sont considérés comme vérifiés immédiatement. Aucun e-mail de vérification n’est nécessaire.",
+              "banner": "Les personnes peuvent utiliser l’application tout de suite et voient un rappel jusqu’à la vérification.",
+              "block": "Les personnes doivent vérifier leur e-mail avant de pouvoir utiliser quoi que ce soit d’autre."
+            }
+          },
+          "defaultPlanId": {
+            "label": "Offre par défaut",
+            "hint": "L’offre sur laquelle démarrent les nouveaux espaces de travail. Automatique utilise l’offre marquée comme valeur par défaut d’inscription, sinon la première offre gratuite active.",
+            "placeholder": "identifiant de l’offre",
+            "auto": "Automatique",
+            "unavailable": "{slug} (pas une offre active)",
+            "loadFailed": "La liste des offres n’a pas pu être chargée.",
+            "kinds": {
+              "free": "Gratuite",
+              "paid": "Payante",
+              "custom_quote": "Devis sur mesure"
+            }
+          },
+          "trialDays": {
+            "label": "Essai gratuit (jours)",
+            "hint": "Nombre entier de {min} à {max}. 0 signifie aucun essai. Laissez vide pour conserver la valeur enregistrée."
+          },
+          "defaultTimezone": {
+            "label": "Fuseau horaire par défaut",
+            "hint": "Utilisé pour les nouveaux espaces de travail jusqu’à ce qu’ils choisissent le leur."
+          },
+          "defaultCountryIso": {
+            "label": "Pays par défaut",
+            "hint": "Présélectionne le pays du téléphone à l’inscription.",
+            "none": "Aucun par défaut"
+          },
+          "termsUrl": {
+            "label": "Lien des conditions",
+            "hint": "Un chemin du site ou une adresse complète, affiché sur les pages d’inscription et de connexion."
+          },
+          "privacyUrl": {
+            "label": "Lien de confidentialité"
+          },
+          "cookiesUrl": {
+            "label": "Lien des cookies",
+            "hint": "Facultatif. Laissez vide pour le masquer."
+          },
+          "otpEnabled": {
+            "label": "Code d’inscription par WhatsApp",
+            "hint": "Les nouveaux comptes doivent confirmer leur numéro de téléphone avec un code à usage unique avant la création de l’espace de travail."
+          },
+          "otpSender": {
+            "label": "Expéditeur",
+            "hint": "Le numéro connecté qui envoie le code. Ajoutez-en un avec Gérer les expéditeurs."
+          },
+          "ttlMinutes": {
+            "label": "Validité du code (minutes)"
+          },
+          "length": {
+            "label": "Longueur du code (chiffres)"
+          },
+          "resendCooldownSec": {
+            "label": "Délai avant renvoi (secondes)"
+          },
+          "maxAttempts": {
+            "label": "Tentatives maximum"
+          }
+        },
+        "otp": {
+          "kicker": "Vérification",
+          "title": "Code d’inscription",
+          "description": "Paramètres du code à usage unique envoyé lors d’une inscription.",
+          "knobHint": "{min} à {max}. Vide utilise {default}.",
+          "status": {
+            "on": "En cours",
+            "off": "Inactif",
+            "unsavedNote": "Ceci affiche les paramètres enregistrés. Enregistrez vos modifications pour voir leur effet.",
+            "reason": {
+              "active": "Les nouvelles inscriptions doivent confirmer leur numéro de téléphone avec un code.",
+              "disabled": "L’interrupteur est désactivé, l’inscription ne demande donc pas de code.",
+              "no_sender": "Aucun expéditeur n’est choisi, l’inscription ignore donc l’étape du code.",
+              "sender_missing": "L’expéditeur choisi n’existe plus, l’inscription ignore donc l’étape du code.",
+              "sender_incomplete": "L’expéditeur choisi n’a pas d’identifiants, l’inscription ignore donc l’étape du code.",
+              "dev_in_production": "L’expéditeur de journal ne peut pas fonctionner en production, l’inscription ignore donc l’étape du code.",
+              "template_missing": "Un expéditeur WhatsApp Business nécessite un modèle approuvé. Créez-en un et soumettez-le ci-dessous ; d’ici là, l’inscription ignore l’étape du code.",
+              "template_pending": "Meta examine encore le modèle, l’inscription ignore donc l’étape du code jusqu’à son approbation.",
+              "template_rejected": "Meta a rejeté le modèle, l’inscription ignore donc l’étape du code. Corrigez-le et soumettez-le à nouveau."
+            }
+          },
+          "sender": {
+            "none": "Aucun expéditeur",
+            "option": "{label} ({kind})",
+            "unknown": "Expéditeur inconnu ({ref})",
+            "manage": "Gérer les expéditeurs",
+            "empty": "Aucun expéditeur pour l’instant. Ajoutez-en un avec Gérer les expéditeurs.",
+            "kinds": {
+              "waba": "WhatsApp Business",
+              "twilio": "Twilio",
+              "device": "Session non officielle",
+              "dev": "Journal uniquement"
+            },
+            "noneConnected": "Aucun de vos expéditeurs n’est encore connecté. Terminez-en un dans Gérer les expéditeurs ; seuls les expéditeurs connectés peuvent être choisis.",
+            "unfinished": "{label} ({kind}, non terminé)"
+          },
+          "template": {
+            "title": "Modèle de message",
+            "states": {
+              "none": "Non créé",
+              "pending": "En attente de Meta",
+              "approved": "Approuvé",
+              "rejected": "Rejeté",
+              "local": "Prêt"
+            },
+            "explain": {
+              "none": "Créez le message une fois l’expéditeur et les paramètres du code ci-dessus corrects. WhatsApp Business nécessite l’approbation de Meta ; les autres canaux utilisent le message immédiatement.",
+              "waba": "Soumis à Meta comme modèle d’authentification. L’étape du code s’active d’elle-même une fois que Meta l’a approuvé, généralement en quelques minutes.",
+              "local": "Enregistré en texte brut pour ce canal. Aucune révision n’est nécessaire, il est donc utilisé dès maintenant."
+            },
+            "name": "Nom",
+            "metaId": "ID du modèle Meta",
+            "validFor": "Code valide pendant",
+            "minutes": "{count, plural, one {# minute} other {# minutes}}",
+            "submitted": "Créé",
+            "checked": "Dernière vérification",
+            "never": "Pas encore",
+            "reason": "Motif",
+            "stale": "Ce modèle a été créé pour un code valide {count, plural, one {# minute} other {# minutes}}. Créez-le et soumettez-le à nouveau pour correspondre à la validité ci-dessus.",
+            "create": "Créer et soumettre le modèle OTP",
+            "creating": "En cours",
+            "refresh": "Actualiser le statut",
+            "refreshing": "Vérification",
+            "outcome": {
+              "submitted": "Le modèle a été soumis à Meta pour examen. L’étape du code s’active d’elle-même une fois que Meta l’a approuvé.",
+              "resubmitted": "Le modèle a été renvoyé à Meta pour examen. L’étape du code reste désactivée jusqu’à son approbation.",
+              "local_ready": "Le message est enregistré et utilisé dès maintenant. Ce canal ne nécessite aucune révision.",
+              "already_pending": "Le modèle est déjà chez Meta pour examen. Utilisez Actualiser le statut pour le consulter.",
+              "already_approved": "Le modèle est déjà approuvé. Rien n’a eu besoin d’être envoyé.",
+              "refreshed": "Statut vérifié.",
+              "approvedNow": "Meta a approuvé le modèle immédiatement. L’étape du code est prête.",
+              "rejectedNow": "Meta a rejeté le modèle. Le motif est affiché ci-dessous ; corrigez-le et soumettez-le à nouveau."
+            },
+            "refreshed": {
+              "pending": "Meta examine toujours le modèle.",
+              "approved": "Meta a approuvé le modèle. L’étape du code est prête.",
+              "rejected": "Meta a rejeté le modèle.",
+              "local": "Ce modèle ne nécessite aucune révision."
+            },
+            "errors": {
+              "submit": "Meta n’a pas accepté le modèle. Vos autres paramètres de code ont été enregistrés.",
+              "check": "Le statut n’a pas pu être lu depuis Meta.",
+              "rejected": "Le modèle n’a pas pu être créé.",
+              "unexpected": "Un problème est survenu. Réessayez dans un instant."
+            },
+            "createHint": "Crée le message d’inscription pour l’expéditeur choisi. WhatsApp Business est envoyé à Meta pour examen ; les autres canaux sont prêts immédiatement.",
+            "picker": {
+              "label": "Modèle WhatsApp Business",
+              "hint": "L’inscription envoie le modèle créé avec le bouton ci-dessous. Les autres modèles d’authentification approuvés de cet expéditeur sont listés pour information ; ils ne peuvent pas encore être choisis ici.",
+              "none": "Aucun pour l’instant (créez-en un ci-dessous)",
+              "loading": "Chargement des modèles",
+              "option": "{name} ({language}), {status}",
+              "otherSender": "Enregistrez l’expéditeur pour voir ses modèles.",
+              "failed": "La liste des modèles n’a pas pu être chargée.",
+              "unavailable": "La liste des modèles de Meta n’a pas pu être lue : {reason}"
+            }
+          },
+          "test": {
+            "about": "Envoyez un vrai code à un téléphone pour vérifier que l’expéditeur fonctionne avant que les inscriptions en dépendent.",
+            "button": "Envoyer un code de test",
+            "title": "Envoyer un code de test",
+            "intro": "Un vrai code est envoyé au numéro saisi, via l’expéditeur ci-dessous. Il utilise les paramètres de code et le modèle enregistrés. Vous pouvez en envoyer 5 par heure.",
+            "to": "Numéro de téléphone",
+            "toHint": "Avec l’indicatif du pays, par exemple +91 98765 43221.",
+            "sender": "Expéditeur",
+            "senderHint": "Laissez l’expéditeur enregistré, ou essayez-en un autre dans la liste.",
+            "savedSender": "Expéditeur enregistré",
+            "send": "Envoyer le code",
+            "sending": "Envoi en cours",
+            "close": "Fermer",
+            "sent": "Un code de test a été envoyé à {to}.",
+            "remaining": "{count, plural, one {# test restant cette heure.} other {# tests restants cette heure.}}",
+            "notShown": "Le code n’est pas affiché ici ; lisez-le sur le téléphone.",
+            "requestId": "ID de requête",
+            "errors": {
+              "invalidNumber": "Saisissez le numéro avec son indicatif de pays, par exemple +91 98765 43221.",
+              "rateLimited": "Trop de codes de test cette heure. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+              "failed": "Le code n’a pas pu être envoyé.",
+              "rejected": "Le test n’a pas été envoyé.",
+              "unexpected": "Un problème est survenu. Réessayez dans un instant."
+            },
+            "reasons": {
+              "not_configured": "L’expéditeur est manquant ou incomplet.",
+              "template_not_approved": "Le modèle n’est pas encore approuvé.",
+              "invalid_number": "Ce numéro n’est pas valide.",
+              "auth_failed": "Le fournisseur a refusé les identifiants. Vérifiez le secret dans Gérer les expéditeurs.",
+              "rejected": "Le fournisseur a refusé le message.",
+              "provider_error": "Le fournisseur a rencontré un problème. Réessayez sous peu.",
+              "connection_refused": "L’adresse du fournisseur a refusé la connexion.",
+              "timeout": "Le fournisseur n’a pas répondu à temps.",
+              "transport_error": "Le fournisseur n’a pas pu être joint."
+            }
+          }
+        },
+        "senders": {
+          "title": "Gérer les expéditeurs",
+          "intro": "Les connexions qui peuvent envoyer le code d’inscription. Les secrets sont stockés chiffrés et ne sont plus jamais affichés.",
+          "loading": "Chargement",
+          "working": "En cours",
+          "empty": "Aucun expéditeur pour l’instant.",
+          "add": "Ajouter un expéditeur",
+          "edit": "Modifier",
+          "remove": "Supprimer",
+          "close": "Fermer",
+          "cancel": "Annuler",
+          "save": "Enregistrer l’expéditeur",
+          "keep": "Conserver",
+          "addTitle": "Nouvel expéditeur",
+          "editTitle": "Modifier {label}",
+          "kind": "Type",
+          "kinds": {
+            "waba": "WhatsApp Business (API Cloud de Meta)",
+            "twilio": "Twilio WhatsApp",
+            "device": "Session non officielle (pont Node)",
+            "dev": "Journal uniquement (développement)"
+          },
+          "kindHint": {
+            "waba": "Envoie un modèle d’authentification approuvé via Meta. Nécessite l’examen du modèle.",
+            "twilio": "Envoie un message WhatsApp via Twilio. Sans examen de modèle.",
+            "device": "Envoie via une session associée par QR sur votre pont Node. Sans examen de modèle.",
+            "dev": "Écrit le code dans le journal du serveur au lieu de l’envoyer. Jamais disponible en production."
+          },
+          "fields": {
+            "label": "Nom",
+            "phoneNumberId": "ID du numéro de téléphone",
+            "wabaId": "ID du compte WhatsApp Business",
+            "graphBaseUrl": "Adresse de l’API Graph",
+            "accountSid": "SID du compte",
+            "fromNumber": "Numéro WhatsApp (From)",
+            "apiBaseUrl": "Adresse de l’API Twilio",
+            "bridgeUrl": "Adresse du pont",
+            "senderNumber": "Numéro de la session"
+          },
+          "hints": {
+            "waba": {
+              "phoneNumberId": "Fourni par Meta, dans la configuration de l’API du numéro WhatsApp.",
+              "wabaId": "Nécessaire pour soumettre le modèle à Meta.",
+              "graphBaseUrl": "Laissez vide pour utiliser l’adresse de Meta."
+            },
+            "twilio": {
+              "accountSid": "Depuis la console Twilio.",
+              "fromNumber": "Le numéro compatible WhatsApp, avec son indicatif de pays.",
+              "apiBaseUrl": "Laissez vide pour utiliser l’adresse de Twilio."
+            },
+            "device": {
+              "bridgeUrl": "L’adresse d’écoute de votre pont Node, par exemple http://127.0.0.1:3003.",
+              "senderNumber": "Le numéro associé depuis lequel le pont envoie, avec son indicatif de pays."
+            }
+          },
+          "defaults": {
+            "graphBaseUrl": "https://graph.facebook.com/v23.0",
+            "apiBaseUrl": "https://api.twilio.com"
+          },
+          "secretLabel": {
+            "waba": "Jeton d’accès",
+            "twilio": "Jeton d’authentification",
+            "device": "Jeton du pont",
+            "dev": "Secret"
+          },
+          "secretHint": "Stocké chiffré et plus jamais affiché.",
+          "secretHintSaved": "Stocké chiffré. Laissez vide pour conserver celui enregistré.",
+          "secretSaved": "enregistré, laissez vide pour conserver",
+          "showSecret": "Afficher le secret",
+          "hideSecret": "Masquer le secret",
+          "removeSecret": "Supprimer le secret enregistré",
+          "removeSecretBody": "L’expéditeur cesse de fonctionner tant qu’un nouveau secret n’est pas enregistré.",
+          "removeSecretConfirm": "Supprimer le secret",
+          "hasSecret": "Secret enregistré",
+          "noSecret": "Aucun secret",
+          "inUse": "Utilisé pour l’inscription",
+          "removeBody": "Supprimer {label} ? Son secret enregistré est également supprimé.",
+          "removeBodyInUse": "Supprimer {label} ? L’inscription l’utilise, l’étape du code sera donc désactivée. Son secret enregistré est également supprimé.",
+          "removeConfirm": "Supprimer l’expéditeur",
+          "added": "Expéditeur ajouté",
+          "saved": "Expéditeur enregistré",
+          "removed": "Expéditeur supprimé",
+          "secretRemoved": "Secret enregistré supprimé",
+          "requestId": "ID de requête",
+          "problems": {
+            "required": "Ce champ est obligatoire.",
+            "tooLong": "{max} caractères au maximum.",
+            "digits": "Chiffres uniquement, de 5 à 24.",
+            "url": "Utilisez une adresse http ou https complète, sans nom d’utilisateur ni mot de passe.",
+            "accountSid": "Un SID de compte commence par AC et comporte 34 caractères.",
+            "phone": "Saisissez le numéro avec son indicatif de pays, de 7 à 15 chiffres."
+          },
+          "errors": {
+            "unexpected": "L’expéditeur n’a pas pu être enregistré. Réessayez dans un instant."
+          }
+        },
+        "footer": {
+          "kicker": "Messages sortants",
+          "title": "Pied de message de la plateforme",
+          "description": "Ajouté à la fin des messages en texte brut et interactifs envoyés depuis les espaces de travail dont l’offre ne permet pas de retirer la marque. Les modèles ont leur propre texte et l’ignorent. Un espace de travail dont l’offre permet de retirer la marque définit son propre pied de message, ou aucun, dans son compte.",
+          "builtIn": "Texte intégré",
+          "label": "Texte du pied de message",
+          "hint": "Jusqu’à {max} caractères. Laissez vide pour n’envoyer aucun pied de message.",
+          "count": "{used}/{max}",
+          "preview": "Aperçu",
+          "noFooter": "(aucun pied de message)",
+          "save": "Enregistrer le pied de message",
+          "saving": "Enregistrement",
+          "clear": "Effacer",
+          "saved": "Pied de message de la plateforme enregistré. Il s’applique dès le prochain message.",
+          "savedNone": "Pied de message de la plateforme supprimé. Les messages partent sans pied de message.",
+          "errors": {
+            "invalid": "Ce pied de message n’a pas été accepté.",
+            "unexpected": "Le pied de message n’a pas pu être enregistré. Réessayez dans un instant."
+          },
+          "requestId": "ID de requête"
+        }
+      },
+      "social": {
+        "kicker": "Pages publiques",
+        "title": "Connexion sociale et captcha",
+        "description": "Permettez de se connecter avec Google ou Facebook et protégez les pages de connexion et d’inscription avec reCAPTCHA. Chacun n’apparaît que lorsqu’il est activé et que ses clés sont enregistrées.",
+        "save": "Enregistrer les modifications",
+        "saving": "Enregistrement",
+        "saved": "{count, plural, one {# paramètre enregistré} other {# paramètres enregistrés}}",
+        "rejected": "Rien n’a été enregistré. {count, plural, one {# champ a été rejeté} other {# champs ont été rejetés}}.",
+        "requestId": "ID de requête",
+        "unsaved": "{count, plural, one {# modification non enregistrée} other {# modifications non enregistrées}}",
+        "discard": "Annuler les modifications",
+        "errors": {
+          "unexpected": "Les paramètres n’ont pas pu être enregistrés. Réessayez dans un instant."
+        },
+        "problems": {
+          "tooLong": "{max} caractères au maximum.",
+          "threshold": "Saisissez un nombre entre 0 et 1."
+        },
+        "labels": {
+          "google": {
+            "clientId": "ID client Google",
+            "clientSecret": "Secret client Google",
+            "enabled": "Connexion Google"
+          },
+          "facebook": {
+            "clientId": "ID d’application Facebook",
+            "clientSecret": "Secret d’application Facebook",
+            "enabled": "Connexion Facebook"
+          },
+          "recaptcha": {
+            "siteKey": "Clé de site reCAPTCHA",
+            "secret": "Clé secrète reCAPTCHA",
+            "v3Threshold": "Seuil de score reCAPTCHA",
+            "version": "Version de reCAPTCHA",
+            "enabled": "reCAPTCHA"
+          }
+        },
+        "enable": "Activer",
+        "secretSaved": "enregistré, laissez vide pour conserver",
+        "secretHint": "Stocké chiffré et plus jamais affiché. Laissez vide pour conserver celui enregistré.",
+        "showSecret": "Afficher le secret",
+        "hideSecret": "Masquer le secret",
+        "google": {
+          "kicker": "OAuth 2.0 avec Google Cloud",
+          "title": "Connexion Google",
+          "idLabel": "ID client",
+          "idHint": "Depuis Google Cloud, dans les identifiants, le client OAuth de type application web.",
+          "idPlaceholder": "000000000000-xxxx.apps.googleusercontent.com",
+          "secretLabel": "Secret client",
+          "secretPlaceholder": "secret client",
+          "redirectLabel": "URI de redirection autorisé",
+          "redirectHint": "Collez-le exactement dans le client OAuth, sinon Google refuse la connexion avec une erreur de non-concordance de redirection."
+        },
+        "facebook": {
+          "kicker": "Facebook Login avec Meta for Developers",
+          "title": "Connexion Facebook",
+          "idLabel": "ID d’application",
+          "idHint": "Dans les paramètres de votre application, sous général, l’ID d’application.",
+          "idPlaceholder": "0000000000000000",
+          "secretLabel": "Secret de l’application",
+          "secretPlaceholder": "secret d’application de 32 caractères",
+          "redirectLabel": "URI de redirection OAuth valide",
+          "redirectHint": "Ajoutez-le dans les paramètres de Facebook Login. L’application a besoin des autorisations e-mail et profil public."
+        },
+        "recaptcha": {
+          "kicker": "Protection anti-bot avec Google reCAPTCHA",
+          "title": "reCAPTCHA",
+          "versionLabel": "Version",
+          "versionHint": "v2 affiche une case à cocher. v3 est invisible et note chaque requête.",
+          "versions": {
+            "v2": "v2 : case « Je ne suis pas un robot »",
+            "v3": "v3 : score invisible"
+          },
+          "thresholdLabel": "Seuil de score v3",
+          "thresholdHint": "v3 uniquement. 0 correspond très probablement à un bot, 1 très probablement à une personne. Vide utilise 0,5.",
+          "siteKeyLabel": "Clé de site",
+          "siteKeyHint": "La clé publique envoyée au navigateur, depuis la console reCAPTCHA.",
+          "secretLabel": "Clé secrète"
+        },
+        "live": {
+          "kicker": "Statut",
+          "title": "Ce qui est actif en ce moment",
+          "google": "Google actif",
+          "facebook": "Facebook actif",
+          "recaptcha": "reCAPTCHA actif",
+          "yes": "actif",
+          "no": "inactif",
+          "note": "Un fournisseur n’est actif que s’il est activé et que ses deux clés sont enregistrées. Ceci montre ce qui est enregistré, pas les modifications non enregistrées."
+        },
+        "guide": {
+          "kicker": "Configuration rapide",
+          "google": {
+            "title": "Google en quatre étapes",
+            "step1": "Ouvrez la console Google Cloud et choisissez ou créez un projet.",
+            "step2": "Configurez l’écran de consentement OAuth comme application externe avec votre e-mail de support.",
+            "step3": "Créez des identifiants, choisissez ID client OAuth, puis Application web.",
+            "step4": "Ajoutez l’URI de redirection du formulaire, puis collez ici l’ID client et le secret.",
+            "link": "Ouvrir les identifiants Google Cloud"
+          },
+          "facebook": {
+            "title": "Facebook en quatre étapes",
+            "step1": "Ouvrez Meta for Developers et créez une application pour authentifier les utilisateurs.",
+            "step2": "Ajoutez le produit Facebook Login à l’application.",
+            "step3": "Dans ses paramètres, ajoutez l’URI de redirection du formulaire.",
+            "step4": "Copiez l’ID et le secret de l’application depuis les paramètres généraux, collez-les ici, puis passez l’application en production.",
+            "link": "Ouvrir Meta for Developers"
+          },
+          "recaptcha": {
+            "title": "Clés reCAPTCHA",
+            "body": "Enregistrez votre site dans la console reCAPTCHA, choisissez v2 ou v3, et collez ici la clé de site et la clé secrète.",
+            "link": "Ouvrir la console reCAPTCHA"
+          },
+          "noSdk": {
+            "badge": "Bon à savoir",
+            "body": "La connexion utilise directement les adresses OAuth standard, il n’y a donc rien à installer. Collez les clés et activez-la."
+          }
+        },
+        "removeSecret": {
+          "action": "Supprimer le secret enregistré",
+          "title": "Supprimer le secret {name} enregistré",
+          "body": "Le secret enregistré pour {name} est supprimé du serveur et ne peut plus être affiché ni récupéré. Pour réutiliser {name}, vous devrez enregistrer un nouveau secret.",
+          "liveWarning": "{name} fonctionne en ce moment. Supprimer son secret le désactive jusqu’à l’enregistrement d’un nouveau.",
+          "confirm": "Supprimer le secret",
+          "cancel": "Annuler",
+          "working": "Suppression",
+          "error": "Le secret n’a pas pu être supprimé. Réessayez dans un instant.",
+          "requestId": "ID de requête",
+          "done": "Le secret {name} enregistré a été supprimé.",
+          "names": {
+            "google": "Google",
+            "facebook": "Facebook",
+            "recaptcha": "reCAPTCHA"
+          }
+        },
+        "docs": {
+          "kicker": "Référence",
+          "title": "Documentation officielle",
+          "opensNewTab": "(s’ouvre dans un nouvel onglet)",
+          "links": {
+            "google": "Configuration de Google OAuth",
+            "facebook": "Configuration de Facebook Login",
+            "recaptchaAdmin": "Console d’administration reCAPTCHA",
+            "recaptchaDocs": "Documentation reCAPTCHA"
+          }
+        }
+      },
+      "plans": {
+        "eyebrow": "Offres",
+        "title": "Offres",
+        "description": "Le catalogue parmi lequel les espaces de travail choisissent. Les nouvelles inscriptions arrivent sur l’offre par défaut ; le paiement d’une offre arrivera avec la facturation.",
+        "new": "Nouvelle offre",
+        "kpi": {
+          "label": "Résumé du catalogue",
+          "total": "Total des offres",
+          "active": "Actives",
+          "free": "Gratuites",
+          "paid": "Payantes"
+        },
+        "empty": {
+          "title": "Aucune offre pour l’instant",
+          "body": "Créez la première offre. Tant qu’aucune n’existe, les nouveaux espaces de travail démarrent sur une offre nommée starter qui ne limite rien.",
+          "action": "Créer la première offre"
+        },
+        "table": {
+          "label": "Offres",
+          "plan": "Offre",
+          "price": "Prix",
+          "messages": "Messages",
+          "workspaces": "Espaces de travail",
+          "entitlements": "Inclus",
+          "features": "Fonctionnalités",
+          "limits": "Limites",
+          "addons": "Modules complémentaires",
+          "status": "Statut",
+          "actions": "Actions"
+        },
+        "counts": {
+          "ratio": "{count}/{total}",
+          "features": "{count} fonctionnalités sur {total} activées",
+          "limits": "{count} limites sur {total} définies",
+          "addons": "{count, plural, one {# module complémentaire visible} other {# modules complémentaires visibles}}"
+        },
+        "badges": {
+          "popular": "Populaire",
+          "signupDefault": "Par défaut à l’inscription"
+        },
+        "price": {
+          "free": "Gratuite",
+          "custom": "Devis sur mesure",
+          "lifetime": "paiement unique"
+        },
+        "period": {
+          "days": "{count, plural, one {/ jour} other {/ # jours}}",
+          "weeks": "{count, plural, one {/ semaine} other {/ # semaines}}",
+          "months": "{count, plural, one {/ mois} other {/ # mois}}",
+          "years": "{count, plural, one {/ an} other {/ # ans}}"
+        },
+        "messages": {
+          "unlimited": "Illimité",
+          "limited": "{count, number} / mois"
+        },
+        "active": {
+          "on": "Active",
+          "off": "Inactive",
+          "toggle": "Active : {name}"
+        },
+        "actions": {
+          "edit": "Modifier",
+          "delete": "Supprimer",
+          "editName": "Modifier {name}",
+          "deleteName": "Supprimer {name}"
+        },
+        "toasts": {
+          "created": "Offre {name} créée.",
+          "updated": "Offre {name} enregistrée.",
+          "activated": "{name} est maintenant active.",
+          "deactivated": "{name} est maintenant inactive.",
+          "deleted": "Offre {name} supprimée."
+        },
+        "delete": {
+          "title": "Supprimer {name} ?",
+          "body": "Cette action est irréversible. Désactiver une offre la masque plutôt aux acheteurs et conserve les espaces de travail qui l’utilisent.",
+          "inUseHint": "{count, plural, one {# espace de travail utilise cette offre.} other {# espaces de travail utilisent cette offre.}} La suppression est refusée tant qu’ils n’ont pas été déplacés.",
+          "confirm": "Supprimer l’offre",
+          "cancel": "Annuler",
+          "deleting": "Suppression"
+        },
+        "errors": {
+          "inUse": "{count, plural, one {Suppression impossible : # espace de travail utilise actuellement cette offre.} other {Suppression impossible : # espaces de travail utilisent actuellement cette offre.}} Déplacez-les vers une autre offre, ou désactivez plutôt celle-ci.",
+          "defaultProtected": "Cette offre est celle par défaut à l’inscription, elle ne peut donc être ni désactivée ni supprimée. Choisissez d’abord une autre offre par défaut.",
+          "notFound": "Cette offre n’existe plus. Rechargez la liste.",
+          "forbidden": "Seuls les super administrateurs peuvent modifier les offres.",
+          "generic": "Un problème est survenu. Réessayez."
+        },
+        "editor": {
+          "createTitle": "Nouvelle offre",
+          "editTitle": "Modifier {name}",
+          "slugLabel": "Identifiant :",
+          "slugNote": "Il est défini à la création de l’offre et ne change jamais.",
+          "save": "Enregistrer les modifications",
+          "create": "Créer l’offre",
+          "saving": "Enregistrement",
+          "cancel": "Annuler",
+          "discard": "Abandonner vos modifications ?",
+          "failed": "L’offre n’a pas pu être enregistrée. Réessayez.",
+          "unlimited": "Illimité",
+          "errorsBanner": "Certains champs demandent votre attention. Les onglets marqués d’un point comportent des erreurs.",
+          "tabs": {
+            "label": "Sections de l’offre",
+            "details": "Détails et tarification",
+            "features": "Fonctionnalités",
+            "limits": "Limites",
+            "addons": "Modules complémentaires"
+          },
+          "tabSummary": {
+            "features": "{count} fonctionnalités sur {total} activées",
+            "limits": "{count} limites sur {total} définies",
+            "addons": "{count} modules complémentaires sélectionnés",
+            "error": "Erreurs à corriger"
+          },
+          "featuresUi": {
+            "intro": "Désactivez ce que cette offre n’inclut pas. Un espace de travail sur cette offre ne peut pas ouvrir une zone dont la fonctionnalité est désactivée.",
+            "search": "Rechercher des fonctionnalités",
+            "searchPlaceholder": "Rechercher des fonctionnalités",
+            "enableAll": "Tout activer",
+            "disableAll": "Tout désactiver",
+            "noMatch": "Aucune fonctionnalité ne correspond à votre recherche.",
+            "groupCount": "{count} sur {total} activées"
+          },
+          "limitsUi": {
+            "intro": "Un plafond arrête l’action une fois atteint par l’espace de travail. Cochez Illimité pour supprimer le plafond.",
+            "search": "Rechercher des limites",
+            "searchPlaceholder": "Rechercher des limites",
+            "noMatch": "Aucune limite ne correspond à votre recherche.",
+            "unlimited": "Illimité",
+            "platformDefault": "Valeur par défaut de la plateforme",
+            "groupCount": "{count} sur {total} plafonnées",
+            "valueFor": "Plafond pour {name}",
+            "unofficialOff": "S’applique uniquement lorsque WhatsApp non officiel est activé par la plateforme (actuellement désactivé)."
+          },
+          "limitUnits": {
+            "perMonth": "par mois",
+            "perBroadcast": "par diffusion",
+            "perMinute": "par minute",
+            "perPlanPeriod": "par période d’offre",
+            "total": "au total"
+          },
+          "addons": {
+            "intro": "Les modules complémentaires activés sont présentés aux espaces de travail de cette offre dans leur Marketplace ; ils ne sont utilisables qu’après achat par l’espace de travail.",
+            "search": "Rechercher des modules complémentaires",
+            "searchPlaceholder": "Rechercher des modules complémentaires ou des applications",
+            "selectAll": "Tout sélectionner",
+            "clear": "Effacer",
+            "selected": "{count} sur {total} sélectionnés",
+            "loading": "Chargement des modules complémentaires",
+            "empty": "Aucun module complémentaire payant n’existe encore",
+            "emptyHint": "Les modules complémentaires sont créés dans le catalogue Marketplace de la console opérateur. Dès qu’une application a un pack payant, elle est listée ici.",
+            "loadFailed": "Les modules complémentaires n’ont pas pu être chargés.",
+            "loadFailedKept": "Les modules complémentaires n’ont pas pu être chargés, la sélection actuelle reste donc telle quelle sauf si vous la modifiez ici.",
+            "retry": "Réessayer",
+            "noMatch": "Aucun module complémentaire ne correspond à votre recherche.",
+            "unknown": "Module complémentaire inconnu",
+            "unknownHint": "Ce module complémentaire n’existe plus. Décochez-le pour le retirer de l’offre.",
+            "notOnSale": "Non commercialisé",
+            "packInactive": "Le pack du module complémentaire est désactivé, personne ne peut donc l’acheter.",
+            "appUnpublished": "L’application n’est pas publiée, les espaces de travail ne peuvent donc pas encore la voir.",
+            "appLabel": "Application : {name}",
+            "price": "{price} {period}"
+          },
+          "featureHints": {
+            "automation": "Le créateur de flux et les automatisations qui répondent aux conversations et agissent dessus.",
+            "ai_assistants": "Les assistants IA, y compris le mode IA du widget de chatbot du site web.",
+            "calling": "La section des appels : appels vocaux et paramètres d’appel.",
+            "woocommerce": "Connecter des boutiques WooCommerce pour les messages de commande, la récupération de paniers et les diffusions de boutique.",
+            "shopify": "Connecter des boutiques Shopify pour les messages de commande, la récupération de paniers et les diffusions de boutique.",
+            "analytics": "Les tableaux de bord et rapports d’analytique.",
+            "remove_branding": "Marque blanche : l’espace de travail peut masquer la marque de la plateforme dans son pied de message.",
+            "sales_pipeline": "Affaires, tâches et pipelines, et les chiffres du pipeline sur le tableau de bord.",
+            "appointment_booking": "Types de réservation, rendez-vous et pages de réservation publiques. L’application payante Rendez-vous gère cet interrupteur.",
+            "chatbot_widgets": "Le créateur de widgets de chatbot pour site web.",
+            "wa_storefront": "La zone du catalogue et de la boutique WhatsApp.",
+            "inbox_sla": "Politiques et échéances SLA dans la boîte de réception d’équipe.",
+            "inbox_routing": "Règles de routage qui attribuent automatiquement les conversations de la boîte de réception.",
+            "waba_calling": "Appels WhatsApp depuis la boîte de réception : numéros d’appel, autorisations d’appel, émission et réponse aux appels.",
+            "inbox_kanban": "La vue tableau Kanban de la boîte de réception d’équipe.",
+            "team_performance": "Les rapports de performance de l’équipe.",
+            "scheduled_messages": "Programmation de messages à envoyer plus tard.",
+            "whatsapp_warmer": "Le préchauffeur de numéros WhatsApp.",
+            "marketplace": "La Marketplace de mini-applications et d’intégrations.",
+            "lead_sources": "Sources de leads : entrées webhook et connecteur qui transforment les leads publicitaires et de portails en contacts et en affaires.",
+            "team_chat": "Canaux de chat d’équipe internes et messages directs.",
+            "public_api": "L’API REST publique et ses clés API.",
+            "outbound_webhooks": "Points de terminaison de webhooks sortants qui informent d’autres systèmes des événements.",
+            "storefront_builder": "Le créateur de boutique en ligne.",
+            "invoicing": "Factures, avoirs, paiements, commandes de vente et taux de taxe.",
+            "forms_and_links": "Formulaires de capture de leads et liens partageables.",
+            "extra_channels": "Les canaux Telegram, Facebook et Instagram.",
+            "form_builder": "Formulaires web hébergés et intégrés qui créent des contacts dans le CRM. L’application payante Formulaires gère cet interrupteur.",
+            "waba_groups": "Créer et gérer des groupes WhatsApp depuis un numéro de l’API Cloud : lien d’invitation, demandes d’adhésion, membres. Le numéro doit être un compte d’entreprise officiel."
+          },
+          "units": {
+            "days": "Jours",
+            "weeks": "Semaines",
+            "months": "Mois",
+            "years": "Ans"
+          },
+          "sections": {
+            "identity": {
+              "title": "Identité",
+              "description": "Comment l’offre est nommée et affichée."
+            },
+            "pricing": {
+              "title": "Tarification",
+              "description": "Combien elle coûte et à quelle fréquence elle est facturée."
+            },
+            "limits": {
+              "title": "Limites",
+              "description": "Laissez un plafond vide pour illimité."
+            },
+            "features": {
+              "title": "Fonctionnalités",
+              "description": "Désactivez ce que l’offre n’inclut pas."
+            }
+          },
+          "fields": {
+            "name": {
+              "label": "Nom de l’offre"
+            },
+            "subtitle": {
+              "label": "Sous-titre",
+              "hint": "Une courte ligne sous le nom (jusqu’à {max} caractères)."
+            },
+            "detail": {
+              "label": "Description",
+              "hint": "Affichée sur les pages de tarifs (jusqu’à {max} caractères)."
+            },
+            "ctaLabel": {
+              "label": "Libellé du bouton",
+              "hint": "Jusqu’à {max} caractères."
+            },
+            "sortOrder": {
+              "label": "Ordre de tri",
+              "hint": "Le plus petit vient en premier."
+            },
+            "currency": {
+              "label": "Devise",
+              "placeholder": "Rechercher des devises",
+              "empty": "Aucune devise ne correspond à votre recherche."
+            },
+            "amount": {
+              "label": "Prix",
+              "hint": "Par exemple 19 ou 19.99.",
+              "locked": "Les offres gratuites et sur devis n’ont pas de prix.",
+              "none": "aucun"
+            },
+            "offerAmount": {
+              "label": "Prix promotionnel",
+              "hint": "Facultatif. Doit être inférieur au prix."
+            },
+            "billingDuration": {
+              "label": "Période de facturation",
+              "hint": "De {min} à {max}."
+            },
+            "billingUnit": {
+              "label": "Unité"
+            },
+            "dataRetentionDays": {
+              "label": "Conservation des données (jours après expiration)",
+              "hint": "Nombre de jours après l’expiration d’une offre payante avant la suppression des données de l’espace de travail. 0 = jamais. La suppression est définitive."
+            }
+          },
+          "flags": {
+            "isActive": {
+              "label": "Active",
+              "hint": "Les offres inactives sont masquées aux acheteurs ; les espaces de travail qui l’utilisent déjà la conservent."
+            },
+            "isDefault": {
+              "label": "Par défaut à l’inscription",
+              "hint": "Les nouveaux espaces de travail démarrent ici, sauf si la politique d’inscription désigne une autre offre. Une seule offre peut être celle par défaut."
+            },
+            "isHighlighted": {
+              "label": "Mettre en avant comme populaire",
+              "hint": "Affiche un badge La plus populaire."
+            },
+            "isFree": {
+              "label": "Offre gratuite",
+              "hint": "Pas de prix. Les nouveaux espaces de travail sur une offre gratuite bénéficient de l’essai gratuit."
+            },
+            "isCustomQuote": {
+              "label": "Devis sur mesure",
+              "hint": "Aucun prix n’est affiché. Les acheteurs sont invités à contacter les ventes."
+            },
+            "isLifetime": {
+              "label": "Prix unique",
+              "hint": "Facturé une seule fois, et non à chaque période de facturation."
+            }
+          },
+          "limitGroups": {
+            "messaging": "Messagerie",
+            "workspace": "Espace de travail",
+            "content": "Contenu",
+            "sales": "Ventes et facturation",
+            "integrations": "Intégrations",
+            "ai": "IA"
+          },
+          "limitKeys": {
+            "monthly_messages": "Messages par mois",
+            "broadcasts": "Diffusions",
+            "devices": "Numéros connectés",
+            "users": "Postes d’équipe",
+            "contacts": "Contacts",
+            "tags": "Étiquettes",
+            "pipelines": "Pipelines de vente",
+            "appointments": "Rendez-vous par mois",
+            "saved_replies": "Réponses enregistrées",
+            "routing_rules": "Règles de routage",
+            "templates": "Modèles de message",
+            "flows": "Flux",
+            "autoreplies": "Réponses automatiques par mot-clé",
+            "total_campaigns": "Campagnes créées (jamais libérées par une suppression)",
+            "api_rate_limit_per_minute": "Requêtes API par minute (0 = valeur par défaut de la plateforme)",
+            "installed_apps": "Applications et intégrations Marketplace installées",
+            "scheduled_messages": "Messages programmés en attente",
+            "lead_sources": "Sources de leads",
+            "broadcast_recipients": "Destinataires dans une diffusion",
+            "segments": "Segments enregistrés",
+            "custom_fields": "Champs personnalisés",
+            "team_chat_channels": "Canaux de chat d’équipe",
+            "sla_policies": "Politiques SLA de la boîte de réception",
+            "booking_types": "Types de réservation",
+            "chatbot_widgets": "Widgets de chatbot pour site web",
+            "catalog_products": "Produits du catalogue",
+            "invoices_monthly": "Factures par mois",
+            "recurring_invoices": "Factures récurrentes",
+            "api_keys": "Clés API",
+            "webhooks": "Webhooks sortants",
+            "ai_token_limit_monthly": "Jetons IA par mois (clés de la plateforme)",
+            "forms": "Formulaires web",
+            "form_submissions_monthly": "Soumissions de formulaires par mois",
+            "ai_form_generations_monthly": "Générations du créateur de formulaires IA par mois"
+          },
+          "featureGroups": {
+            "messaging": "Messagerie",
+            "aiCalling": "IA et appels",
+            "integrations": "Intégrations",
+            "advanced": "Avancé"
+          },
+          "featureKeys": {
+            "automation": "Automatisation",
+            "ai_assistants": "Assistants IA",
+            "calling": "Appels WhatsApp",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "analytics": "Analytique",
+            "remove_branding": "Marque blanche (supprime la marque de la plateforme)",
+            "sales_pipeline": "Pipeline de vente (affaires et tâches)",
+            "appointment_booking": "Rendez-vous et pages de réservation",
+            "chatbot_widgets": "Widgets de chatbot pour site web",
+            "wa_storefront": "Boutique et catalogue WhatsApp",
+            "inbox_sla": "Politiques SLA de la boîte de réception",
+            "inbox_routing": "Règles de routage de la boîte de réception et horaires d’ouverture",
+            "waba_calling": "Passer et recevoir des appels WhatsApp depuis la boîte de réception",
+            "inbox_kanban": "Tableau Kanban de la boîte de réception",
+            "team_performance": "Rapports de performance de l’équipe",
+            "scheduled_messages": "Messages programmés",
+            "whatsapp_warmer": "Préchauffeur de numéros WhatsApp",
+            "marketplace": "Marketplace (mini-applications et intégrations)",
+            "lead_sources": "Sources de leads (entrées webhook et connecteur qui créent des contacts)",
+            "team_chat": "Chat d’équipe (canaux internes et messages directs)",
+            "public_api": "API REST publique et clés API",
+            "outbound_webhooks": "Webhooks sortants",
+            "storefront_builder": "Créateur de boutique et de site web",
+            "invoicing": "Facturation (factures, avoirs, factures récurrentes)",
+            "forms_and_links": "Formulaires, liens click-to-chat et groupes",
+            "extra_channels": "Canaux Telegram, Facebook et Instagram",
+            "form_builder": "Formulaires (créateur de formulaires web)",
+            "waba_groups": "Groupes WhatsApp (API Cloud)"
+          },
+          "problems": {
+            "required": "Ce champ est obligatoire.",
+            "tooLong": "{max} caractères au maximum.",
+            "money": "Saisissez un montant tel que 19 ou 19.99.",
+            "range": "Saisissez un nombre entier de {min} à {max}.",
+            "whole": "Saisissez un nombre entier, ou laissez vide pour illimité.",
+            "server": "Le serveur a refusé cette valeur.",
+            "unknownAddon": "Modules complémentaires sélectionnés qui n’existent plus : {count}. Décochez-les et enregistrez à nouveau.",
+            "free_needs_zero_price": "Une offre gratuite doit avoir un prix de 0.",
+            "free_no_offer": "Une offre gratuite ne peut pas avoir de prix promotionnel.",
+            "custom_no_price": "Une offre sur devis n’affiche aucun prix : laissez le prix et le prix promotionnel vides.",
+            "custom_not_free": "Une offre ne peut pas être à la fois gratuite et sur devis.",
+            "paid_needs_price": "Définissez un prix supérieur à 0, ou marquez l’offre comme gratuite.",
+            "offer_not_lower": "Le prix promotionnel doit être inférieur au prix de l’offre.",
+            "default_needs_active": "L’offre par défaut à l’inscription doit être active."
+          },
+          "limitHints": {
+            "monthly_messages": "Messages sortants envoyés dans le mois calendaire. Au-delà du quota, le portefeuille est débité.",
+            "broadcasts": "Diffusions qui ne sont pas archivées.",
+            "scheduled_messages": "Messages programmés que l’espace de travail détient, quel que soit leur statut. En supprimer un libère sa place.",
+            "total_campaigns": "Campagnes créées dans la période de l’offre. Supprimer une campagne ne libère pas sa place.",
+            "devices": "Numéros WhatsApp connectés. En retirer un libère sa place.",
+            "users": "Membres de l’équipe non désactivés.",
+            "contacts": "Contacts de l’espace de travail.",
+            "tags": "Étiquettes de contacts.",
+            "pipelines": "Pipelines de vente.",
+            "appointments": "Rendez-vous réservés dans le mois calendaire (en attente, confirmés ou terminés), selon leur heure de début.",
+            "saved_replies": "Réponses enregistrées (réponses rapides) de la boîte de réception d’équipe.",
+            "routing_rules": "Règles de routage de la boîte de réception d’équipe.",
+            "templates": "Modèles de message WhatsApp.",
+            "flows": "Flux dans le créateur.",
+            "autoreplies": "Réponses automatiques par mot-clé.",
+            "api_rate_limit_per_minute": "Requêtes par minute pour chaque clé API. 0 utilise la valeur par défaut de la plateforme au lieu d’illimité.",
+            "installed_apps": "Applications et intégrations Marketplace actuellement installées. Désinstaller libère une place.",
+            "lead_sources": "Sources de leads (entrées webhook et connecteur). En supprimer une libère sa place.",
+            "broadcast_recipients": "L’audience maximale à laquelle une diffusion peut être envoyée, vérifiée à la création ou à la modification de la diffusion.",
+            "segments": "Segments de contacts enregistrés. En supprimer un libère sa place.",
+            "custom_fields": "Champs personnalisés ajoutés à n’importe quel module. Les champs système intégrés ne sont pas comptés.",
+            "team_chat_channels": "Canaux de chat d’équipe, publics et privés. En supprimer un libère sa place.",
+            "sla_policies": "Politiques SLA de la boîte de réception d’équipe.",
+            "booking_types": "Types de réservation derrière les pages de réservation publiques.",
+            "chatbot_widgets": "Widgets de chatbot pour site web.",
+            "catalog_products": "Produits du catalogue WhatsApp. En supprimer un libère sa place.",
+            "invoices_monthly": "Factures créées dans le mois calendaire, quel que soit leur statut. Annuler ou supprimer une facture ne rend pas le mois.",
+            "recurring_invoices": "Calendriers de factures récurrentes, quel que soit leur statut.",
+            "api_keys": "Clés API actives. Révoquer une clé libère sa place.",
+            "webhooks": "Points de terminaison de webhooks sortants (webhooks de la boîte de réception et webhooks API ensemble).",
+            "ai_token_limit_monthly": "Jetons que les assistants IA utilisent dans le mois calendaire sur les clés de la plateforme. Les espaces de travail avec leurs propres clés ne sont pas plafonnés.",
+            "forms": "Formulaires web actifs (application Formulaires). Archiver un formulaire libère sa place. 0 = illimité.",
+            "form_submissions_monthly": "Soumissions de formulaires acceptées dans le mois calendaire, spam exclu. Au-delà du plafond, une soumission est tout de même enregistrée pour examen, jamais perdue. 0 = illimité.",
+            "ai_form_generations_monthly": "Générations du créateur de formulaires IA dans le mois calendaire, nouvelle tentative de réparation comprise. 0 = illimité."
+          }
+        }
+      },
+      "authPages": {
+        "kicker": "Pages publiques",
+        "title": "Pages d’authentification",
+        "description": "Choisissez un design pour les pages de connexion, d’inscription et de mot de passe oublié, puis modifiez les textes et la couleur de chacune. L’aperçu montre vos modifications non enregistrées telles que les visiteurs les verront. Les liens Conditions et Confidentialité de ces pages se définissent dans <link>Politique d’inscription</link>.",
+        "save": "Enregistrer les modifications",
+        "saving": "Enregistrement",
+        "saved": "{count, plural, one {# paramètre enregistré} other {# paramètres enregistrés}}",
+        "rejected": "Rien n’a été enregistré. {count, plural, one {# champ a été rejeté} other {# champs ont été rejetés}}.",
+        "requestId": "ID de requête",
+        "unsaved": "{count, plural, one {# modification non enregistrée} other {# modifications non enregistrées}}",
+        "discard": "Annuler les modifications",
+        "errors": {
+          "unexpected": "Les paramètres n’ont pas pu être enregistrés. Réessayez dans un instant."
+        },
+        "problems": {
+          "accent": "Utilisez une couleur au format #rrggbb.",
+          "mediaUrl": "Utilisez une adresse https complète."
+        },
+        "pages": {
+          "login": "Connexion",
+          "register": "Inscription",
+          "forgot": "Mot de passe oublié"
+        },
+        "designs": {
+          "legend": "Modèle de design",
+          "legendNote": "Un seul choix pour les trois pages",
+          "split": {
+            "name": "Vitrine partagée",
+            "description": "Panneau marketing d’un côté, formulaire de l’autre."
+          },
+          "cinematic": {
+            "name": "Cinématique",
+            "description": "Image ou vidéo plein écran derrière une carte centrée."
+          },
+          "minimal": {
+            "name": "Minimal",
+            "description": "Une simple carte centrée sans illustration."
+          },
+          "spotlight": {
+            "name": "Mise en avant de la marque",
+            "description": "Un panneau marqué dans votre couleur d’accent à côté du formulaire."
+          },
+          "aurora": {
+            "name": "Aurore",
+            "description": "Une couleur douce et lumineuse derrière une carte givrée."
+          }
+        },
+        "fields": {
+          "accent": "Couleur d’accent",
+          "accentHint": "Une couleur hexadécimale à six chiffres telle que #0f766e. Les formes courtes (#fff), à huit chiffres et les couleurs nommées ne sont pas acceptées. Utilisée pour le mot en évidence, les boutons et le panneau de marque. Réinitialiser revient à la couleur d’origine.",
+          "accentPicker": "Choisir la couleur d’accent",
+          "accentHex": "Couleur d’accent en hexadécimal",
+          "accentReset": "Rétablir la valeur par défaut",
+          "mediaUrl": "Adresse du média",
+          "mediaType": "Type de média",
+          "eyebrow": "Surtitre",
+          "heading": "Titre",
+          "headingAccent": "Mot d’accent du titre",
+          "subheading": "Sous-texte",
+          "emptyHint": "Jusqu’à {max} caractères. Laissez vide pour utiliser le texte d’origine affiché en gris."
+        },
+        "media": {
+          "title": "Média latéral",
+          "description": "Une image, un GIF ou une vidéo en boucle pour le panneau de design. L’hébergement est pour l’instant à votre charge : collez une adresse https publique.",
+          "url": "Adresse du média",
+          "urlHint": "Doit commencer par https. Laissez vide pour aucun média.",
+          "type": "Type de média",
+          "types": {
+            "image": "Image",
+            "gif": "GIF animé",
+            "video": "Vidéo en boucle"
+          },
+          "clear": "Effacer le média"
+        },
+        "showcase": {
+          "title": "Texte du panneau de présentation",
+          "description": "Affiché par le design Présentation scindée. Les champs vides conservent le texte fourni.",
+          "groups": {
+            "hero": "Carte à la une",
+            "stats": "Statistiques",
+            "features": "Cartes de fonctionnalités",
+            "chips": "Pastilles",
+            "footer": "Ligne de pied de page"
+          },
+          "keys": {
+            "hero_title": "Titre à la une",
+            "hero_desc": "Texte à la une",
+            "stat1_num": "Valeur de la statistique 1",
+            "stat1_label": "Libellé de la statistique 1",
+            "stat2_num": "Valeur de la statistique 2",
+            "stat2_label": "Libellé de la statistique 2",
+            "stat3_num": "Valeur de la statistique 3",
+            "stat3_label": "Libellé de la statistique 3",
+            "feat1_title": "Titre de la fonctionnalité 1",
+            "feat1_desc": "Texte de la fonctionnalité 1",
+            "feat2_title": "Titre de la fonctionnalité 2",
+            "feat2_desc": "Texte de la fonctionnalité 2",
+            "feat3_title": "Titre de la fonctionnalité 3",
+            "feat3_desc": "Texte de la fonctionnalité 3",
+            "feat4_title": "Titre de la fonctionnalité 4",
+            "feat4_desc": "Texte de la fonctionnalité 4",
+            "inside_heading": "Titre des pastilles",
+            "chip1": "Pastille 1",
+            "chip2": "Pastille 2",
+            "chip3": "Pastille 3",
+            "chip4": "Pastille 4",
+            "chip5": "Pastille 5",
+            "chip6": "Pastille 6",
+            "footer": "Texte du pied de page"
+          }
+        },
+        "preview": {
+          "title": "Aperçu en direct",
+          "note": "Affichage de la page {page} avec vos modifications non enregistrées.",
+          "showcaseNote": "Seul le design Présentation scindée affiche le texte du panneau de présentation.",
+          "device": "Taille de l’aperçu",
+          "devices": {
+            "desktop": "Ordinateur",
+            "mobile": "Téléphone"
+          },
+          "frameLabel": "Aperçu de la page",
+          "frameTitle": "Aperçu de la page {page}",
+          "form": {
+            "org": "Nom de l’espace de travail",
+            "name": "Votre nom",
+            "email": "E-mail",
+            "password": "Mot de passe",
+            "remember": "Rester connecté pendant 30 jours",
+            "submit": {
+              "login": "Se connecter",
+              "register": "Créer un espace de travail",
+              "forgot": "Envoyer le lien de réinitialisation"
+            },
+            "workspace": "Adresse de l’espace de travail",
+            "forgotLink": "Mot de passe oublié ?",
+            "newHere": "Nouveau ici ?",
+            "createAccount": "Créer un espace de travail",
+            "haveAccount": "Déjà inscrit ?",
+            "signInLink": "Se connecter",
+            "backToSignIn": "Retour à la connexion",
+            "captchaV3": "Cette page est protégée par reCAPTCHA.",
+            "captchaV2": "Je ne suis pas un robot",
+            "captchaBrand": "reCAPTCHA"
+          },
+          "enlarge": "Agrandir l’aperçu",
+          "shrink": "Côte à côte",
+          "openReal": "Ouvrir la vraie page",
+          "openRealNote": "Ouvre la version enregistrée dans un nouvel onglet. Les modifications non enregistrées n’apparaissent que dans cet aperçu.",
+          "opensNewTab": "(s’ouvre dans un nouvel onglet)"
+        },
+        "pagesLabel": "Page à modifier"
+      },
+      "ipBlocked": {
+        "kicker": "Accès bloqué",
+        "title": "Cette adresse n’est pas autorisée",
+        "body": "La console opérateur n’accepte que les requêtes provenant d’adresses de sa liste d’autorisation. L’adresse d’où proviennent ces requêtes n’y figure pas, la console les a donc refusées.",
+        "addressLabel": "Adresse bloquée",
+        "addressUnknown": "Le serveur n’a pas pu lire votre adresse.",
+        "fixTitle": "Comment obtenir l’accès",
+        "fixBody": "Un super administrateur qui peut encore accéder à la console ajoute cette adresse à la liste d’autorisation d’IP. Rien d’autre ne change sur votre compte.",
+        "fixPath": "Centre de sécurité › API et webhooks › Liste d’autorisation d’IP",
+        "dashboard": "Aller au tableau de bord",
+        "signOut": "Se déconnecter",
+        "signingOut": "Déconnexion en cours"
+      }
+    }
+  }
+}

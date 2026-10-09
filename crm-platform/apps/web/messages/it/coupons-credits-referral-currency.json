@@ -1,0 +1,412 @@
+{
+  "coupons-credits-referral-currency": {
+    "nav": {
+      "group": "Fatturazione e piani",
+      "coupons": "Coupon",
+      "currencies": "Valute",
+      "currenciesGroup": "Localizzazione",
+      "affiliate": "Affiliazione"
+    },
+    "common": {
+      "loading": "Caricamento",
+      "retry": "Riprova",
+      "cancel": "Annulla",
+      "dismiss": "Ignora",
+      "admin": "Admin",
+      "readOnly": "Puoi vedere questa pagina, ma solo un super admin può modificarla.",
+      "requestId": "ID richiesta",
+      "errors": {
+        "forbidden": "Non hai accesso a questa pagina.",
+        "request": "Non è stato possibile completare la richiesta.",
+        "unexpected": "Qualcosa è andato storto. Riprova tra un momento."
+      },
+      "pager": {
+        "label": "Paginazione",
+        "previous": "Precedente",
+        "next": "Successiva",
+        "page": "Pagina {n}"
+      }
+    },
+    "errors": {
+      "generic": "Qualcosa è andato storto. Riprova tra un momento.",
+      "forbidden": "Solo un super admin può modificarlo.",
+      "notFound": "Questo elemento non esiste più. Potrebbe essere stato eliminato.",
+      "conflict": "Qualcun altro lo ha appena modificato. Ricarica la pagina e riprova.",
+      "validation": "Alcuni valori non sono validi. Controlla il modulo e riprova.",
+      "codeTaken": "Un altro coupon usa già questo codice.",
+      "planUnknown": "Uno o più dei piani selezionati non esistono più.",
+      "currencyUnknown": "Scegli una delle valute attive.",
+      "currencyTaken": "Esiste già una valuta con questo codice.",
+      "defaultProtected": "Questa è la valuta predefinita del sistema. Scegli prima un'altra valuta predefinita.",
+      "inUse": "Questa valuta è ancora usata da {used}. Disattivala invece.",
+      "ratesFailed": "Non è stato possibile raggiungere il provider dei tassi oppure non ha restituito tassi. Nessun tasso è stato modificato."
+    },
+    "coupons": {
+      "title": "Coupon sconto",
+      "titleLead": "Coupon",
+      "titleAccent": "sconto",
+      "crumbHere": "Coupon",
+      "eyebrow": "Admin · Fatturazione · Codici coupon",
+      "description": "Codici promozionali che i clienti inseriscono al checkout. Scegli una percentuale o un importo fisso, imposta un periodo di validità, limitali a certi piani e fissa un tetto al totale degli utilizzi.",
+      "new": "Nuovo coupon",
+      "kpi": {
+        "total": "Coupon totali",
+        "totalHint": "in catalogo",
+        "active": "Attivi",
+        "activeHint": "accettano utilizzi",
+        "expired": "Scaduti",
+        "expiredHint": "oltre la data di scadenza",
+        "redeemed": "Utilizzi totali",
+        "redeemedHint": "utilizzi complessivi"
+      },
+      "filters": {
+        "label": "Filtra coupon",
+        "all": "Tutti",
+        "active": "Attivi",
+        "disabled": "Disattivati",
+        "expired": "Scaduti",
+        "search": "Cerca per codice o descrizione…",
+        "searchLabel": "Cerca coupon"
+      },
+      "table": {
+        "label": "Coupon",
+        "code": "Codice",
+        "discount": "Sconto",
+        "uses": "Utilizzi",
+        "validity": "Validità",
+        "status": "Stato",
+        "actions": "Azioni"
+      },
+      "validity": {
+        "forever": "per sempre",
+        "now": "ora",
+        "range": "{from} → {to}"
+      },
+      "empty": {
+        "title": "Nessun coupon corrisponde.",
+        "hint": "Modifica o reimposta i filtri, oppure",
+        "create": "crea il primo"
+      },
+      "footer": "Visualizzati {from}–{to} di {total} coupon",
+      "pager": {
+        "label": "Paginazione",
+        "previous": "Precedente",
+        "next": "Successiva",
+        "page": "Pagina {n}"
+      },
+      "actions": {
+        "edit": "Modifica",
+        "delete": "Elimina",
+        "menu": "Azioni",
+        "toggle": "Attiva o disattiva {code}"
+      },
+      "toasts": {
+        "created": "Coupon creato.",
+        "updated": "Coupon aggiornato.",
+        "activated": "Attivato.",
+        "deactivated": "Disattivato.",
+        "deleted": "Coupon rimosso."
+      },
+      "delete": {
+        "title": "Elimina coupon",
+        "body": "Eliminare il coupon {code}? I Workspace che lo hanno già usato mantengono il loro sconto.",
+        "confirm": "Sì, elimina"
+      },
+      "editor": {
+        "notFoundTitle": "Coupon non trovato",
+        "notFoundBody": "Non esiste alcun coupon con questo indirizzo. Potrebbe essere stato eliminato, oppure il link è sbagliato.",
+        "backToList": "Torna ai coupon",
+        "crumbNew": "Nuovo",
+        "eyebrowNew": "Admin · Fatturazione · Codici coupon · Crea",
+        "eyebrowEdit": "Admin · Fatturazione · Codici coupon · Modifica",
+        "titleLead": "Nuovo",
+        "titleAccent": "coupon",
+        "descriptionNew": "Codici promozionali usati durante /checkout. Scegli una percentuale o un importo fisso, collegalo a un piano o a tutti i piani e, se vuoi, dagli un periodo di validità.",
+        "redeemed": "Utilizzato {used}{max} volte",
+        "redeemedMax": " / {max}",
+        "expires": "scade {when}",
+        "active": "Attivo",
+        "disabled": "Disattivato",
+        "create": "Crea coupon",
+        "saveChanges": "Salva modifiche",
+        "saving": "Salvataggio",
+        "cancel": "Annulla",
+        "problemsTitle": "Alcuni campi richiedono attenzione:",
+        "problems": {
+          "code": "Codice: inserisci un codice di massimo 64 caratteri.",
+          "description": "Descrizione: massimo 255 caratteri.",
+          "adminNote": "Nota admin: massimo 1000 caratteri.",
+          "type": "Tipo: scegli percentuale o importo fisso.",
+          "amount": "Importo: inserisci un numero come 10 o 12.5.",
+          "maxDiscountAmount": "Tetto massimo dello sconto: inserisci un numero o lascia vuoto.",
+          "currencyCode": "Blocco valuta: massimo 8 caratteri.",
+          "minOrderAmount": "Importo minimo dell'ordine: inserisci un numero o lascia vuoto.",
+          "applicablePlans": "Piani applicabili: scegli i piani dall'elenco.",
+          "startsAt": "Inizia il: inserisci una data e un'ora valide.",
+          "expiresAt": "Scade il: inserisci una data e un'ora valide non precedenti all'inizio.",
+          "maxUses": "Utilizzi totali massimi: un numero intero pari o superiore a 1, oppure vuoto.",
+          "perUserLimit": "Limite per utente: un numero intero pari o superiore a 1, oppure vuoto."
+        },
+        "sections": {
+          "identity": "Identità",
+          "discount": "Sconto",
+          "eligibility": "Idoneità",
+          "limits": "Limiti e comportamento"
+        },
+        "fields": {
+          "code": "Codice",
+          "codeHint": "Salvato in maiuscolo. I clienti inseriscono questo codice esatto al pagamento.",
+          "codePlaceholder": "WELCOME10",
+          "description": "Descrizione",
+          "descriptionNote": "(mostrata al cliente)",
+          "descriptionPlaceholder": "Offerta di benvenuto: 10% di sconto sul primo mese",
+          "adminNote": "Nota admin",
+          "adminNoteNote": "(interna, non mostrata)",
+          "adminNotePlaceholder": "Lotto saldi festivi · Slack #marketing · termina con la campagna",
+          "activeTitle": "Attivo",
+          "activeHint": "I clienti possono applicarlo al checkout",
+          "type": "Tipo",
+          "typePercent": "Percentuale (%)",
+          "typeFixed": "Importo fisso",
+          "amount": "Importo",
+          "amountHint": "Per i coupon in percentuale, 10 significa 10%. Per quelli a importo fisso, 10 significa 10 unità di valuta.",
+          "maxDiscount": "Tetto massimo dello sconto",
+          "maxDiscountNote": "(solo tipo %)",
+          "maxDiscountPlaceholder": "vuoto = nessun tetto",
+          "maxDiscountHint": "Ad esempio, 20% di sconto con un massimo di 50 $.",
+          "currency": "Blocco valuta",
+          "currencyAny": "Qualsiasi valuta",
+          "currencyHint": "Limita l'utilizzo a una sola valuta (vale per i coupon a importo fisso).",
+          "minOrder": "Importo minimo dell'ordine",
+          "minOrderPlaceholder": "0 = nessun minimo",
+          "plans": "Piani applicabili",
+          "plansNote": "(vuoto = qualsiasi piano)",
+          "plansPlaceholder": "Scegli uno o più piani (vuoto = qualsiasi piano)...",
+          "plansHint": "Inizia a digitare per restringere l'elenco, seleziona per aggiungere e usa la × del chip per toglierne uno.",
+          "plansEmpty": "Nessun altro piano da scegliere.",
+          "plansRemove": "Rimuovi {name}",
+          "plansClear": "Rimuovi tutti i piani",
+          "startsAt": "Inizia il",
+          "startsAtHint": "Vuoto = disponibile subito.",
+          "expiresAt": "Scade il",
+          "expiresAtHint": "Vuoto = non scade mai.",
+          "maxUses": "Utilizzi totali massimi",
+          "unlimitedPlaceholder": "vuoto = illimitati",
+          "maxUsesHint": "Su tutti i clienti.",
+          "perUser": "Limite per utente",
+          "perUserHint": "Numero di utilizzi consentiti per ogni cliente.",
+          "firstPurchaseTitle": "Solo primo acquisto",
+          "firstPurchaseHint": "Solo i Workspace che non hanno ancora effettuato un ordine a pagamento",
+          "stackableTitle": "Cumulabile con altri coupon",
+          "stackableHint": "Permette ai clienti di usarlo insieme a un altro codice attivo al checkout"
+        }
+      }
+    },
+    "currencies": {
+      "title": "Valute della piattaforma",
+      "titleLead": "Valute",
+      "titleAccent": "della piattaforma",
+      "crumbGroup": "Sistema",
+      "crumbGroup2": "Localizzazione",
+      "crumbHere": "Valute",
+      "eyebrow": "Admin · Piattaforma · Localizzazione",
+      "description": "Gestisci le valute che i Workspace possono scegliere. I tassi di cambio sono memorizzati rispetto al USD. Cambiare la valuta predefinita si propaga a ogni dashboard utente, fattura e visualizzazione del wallet.",
+      "fetchRates": "Recupera tassi in tempo reale",
+      "fetching": "Recupero in corso",
+      "add": "Aggiungi valuta",
+      "kpi": {
+        "total": "Totale",
+        "totalHint": "valute configurate",
+        "active": "Attive",
+        "activeHint": "visibili ai Workspace",
+        "default": "Predefinita del sistema",
+        "defaultHint": "usata per i Workspace appena creati",
+        "inactive": "Inattive",
+        "inactiveHint": "non proposte nelle impostazioni del Workspace"
+      },
+      "defaultCard": {
+        "eyebrow": "Predefinita del sistema",
+        "title": "Valuta di riserva per l'intera piattaforma",
+        "body": "Qualsiasi Workspace che non ha scelto una valuta usa questa. Il salvataggio svuota subito la cache, quindi la modifica compare già al prossimo caricamento di pagina in tutta l'app.",
+        "select": "Valuta predefinita",
+        "set": "Imposta come predefinita",
+        "setting": "Salvataggio"
+      },
+      "search": "Codice, nome o simbolo…",
+      "searchLabel": "Cerca valute",
+      "searchButton": "Cerca",
+      "table": {
+        "label": "Valute",
+        "code": "Codice",
+        "name": "Nome",
+        "symbol": "Simbolo",
+        "rate": "Tasso (1 USD →)",
+        "decimals": "Decimali",
+        "active": "Attiva",
+        "actions": "Azioni"
+      },
+      "defaultBadge": "Predefinita",
+      "rate": "1 USD → {rate}",
+      "on": "Sì",
+      "off": "No",
+      "empty": {
+        "none": "Ancora nessuna valuta.",
+        "noMatch": "Nessun risultato per «{q}»."
+      },
+      "footer": "Visualizzate {from}–{to} di {total} valute",
+      "actions": {
+        "edit": "Modifica",
+        "delete": "Elimina",
+        "toggle": "Attiva o disattiva {code}"
+      },
+      "toasts": {
+        "added": "Valuta aggiunta.",
+        "updated": "Valuta aggiornata.",
+        "activated": "Attivata.",
+        "deactivated": "Disattivata.",
+        "deleted": "Valuta rimossa.",
+        "defaultSet": "Valuta predefinita impostata su {code}.",
+        "ratesUpdated": "Aggiornate {count} valute da {provider}."
+      },
+      "delete": {
+        "title": "Elimina valuta",
+        "body": "Eliminare {code}? Tutti i prezzi salvati in questa valuta resteranno orfani.",
+        "confirm": "Sì, elimina"
+      },
+      "form": {
+        "addTitle": "Aggiungi una valuta",
+        "editTitle": "Modifica {code}",
+        "name": "Nome *",
+        "namePlaceholder": "Franco svizzero",
+        "code": "Codice ISO *",
+        "codePlaceholder": "CHF",
+        "codeLocked": "Il codice non cambia mai una volta creata la valuta.",
+        "symbol": "Simbolo",
+        "symbolPlaceholder": "Fr",
+        "precision": "Decimali *",
+        "rate": "Tasso di conversione (1 USD = ?) *",
+        "active": "Attiva subito",
+        "save": "Aggiungi valuta",
+        "saveChanges": "Salva modifiche",
+        "cancel": "Annulla",
+        "problemsTitle": "Alcuni campi richiedono attenzione:",
+        "problems": {
+          "name": "Nome: inserisci un nome di massimo 120 caratteri.",
+          "code": "Codice ISO: tre lettere, ad esempio CHF.",
+          "symbol": "Simbolo: massimo 20 caratteri.",
+          "precision": "Decimali: un numero intero da 0 a 6.",
+          "exchangeRate": "Tasso di cambio: un numero di almeno 0.000001."
+        },
+        "eyebrow": "Nuova voce",
+        "rateHint": "Usa «Recupera tassi in tempo reale» qui sopra per precompilare i valori da open.er-api.com.",
+        "editEyebrow": "Modifica voce"
+      },
+      "catalog": {
+        "eyebrow": "Catalogo",
+        "title": "Tutte le valute"
+      }
+    },
+    "affiliate": {
+      "title": "Affiliazione",
+      "subtitle": "Condividi il tuo link e segui i Workspace che porti.",
+      "common": {
+        "dismiss": "Ignora"
+      },
+      "states": {
+        "loading": "Caricamento dei tuoi dati di affiliazione"
+      },
+      "header": {
+        "codeLabel": "Il tuo codice di riferimento",
+        "noCode": "Ancora nessun codice",
+        "linkLabel": "Il tuo link di riferimento",
+        "copyLink": "Copia link",
+        "copied": "Link copiato.",
+        "copyFailed": "Non è stato possibile copiare il link. Selezionalo e copialo a mano.",
+        "reward": "Ogni Workspace segnalato che effettua un primo pagamento ti fa guadagnare {amount}.",
+        "rewardMessages": "Equivale a {count, plural, one {# messaggio} other {# messaggi}}.",
+        "rewardNone": "Al momento il programma non paga nulla per i nuovi referral. Il tuo codice e lo storico restano qui."
+      },
+      "filters": {
+        "label": "Intervallo ed esportazione",
+        "range": "Intervallo",
+        "ranges": {
+          "7d": "Ultimi 7 giorni",
+          "30d": "Ultimi 30 giorni",
+          "90d": "Ultimi 90 giorni",
+          "all": "Sempre"
+        },
+        "search": "Cerca referral",
+        "searchPlaceholder": "Nome, e-mail o codice",
+        "reset": "Reimposta",
+        "export": "Esporta CSV",
+        "exporting": "Preparazione del file",
+        "exported": "Scaricato {fileName}."
+      },
+      "kpi": {
+        "inRange": "Referral nell'intervallo",
+        "vsPrevious": "{delta} rispetto al periodo precedente",
+        "earned": "Guadagnato, in totale",
+        "last30": "Referral, ultimi 30 giorni",
+        "last30Earned": "{amount} guadagnati negli ultimi 30 giorni",
+        "average": "Media per referral"
+      },
+      "chart": {
+        "title": "Referral nel tempo",
+        "label": "Referral come barre e crediti guadagnati come linea, per periodo",
+        "buckets": {
+          "daily": "Giornaliero",
+          "weekly": "Settimanale",
+          "monthly": "Mensile"
+        },
+        "signups": "Referral",
+        "credits": "Crediti guadagnati",
+        "bucket": "Periodo",
+        "empty": "Ancora nessun referral in questo intervallo."
+      },
+      "topCodes": {
+        "title": "Codici migliori",
+        "referrals": "{count, plural, one {# referral} other {# referral}}",
+        "empty": "Nessun codice è stato usato in questo intervallo."
+      },
+      "payouts": {
+        "title": "Pagamenti recenti",
+        "balanceAfter": "Saldo dopo {amount}",
+        "empty": "Ancora nessun pagamento. Una ricompensa arriva nel tuo wallet quando un Workspace segnalato effettua il primo pagamento."
+      },
+      "table": {
+        "title": "Referral",
+        "label": "Referral nell'intervallo selezionato",
+        "when": "Quando",
+        "referee": "Segnalato",
+        "code": "Codice usato",
+        "credits": "Crediti guadagnati",
+        "status": "Stato",
+        "transaction": "Transazione del wallet",
+        "noName": "Utente senza nome",
+        "paid": "Pagato",
+        "pending": "In attesa",
+        "noTransaction": "Nessuna transazione del wallet",
+        "pagination": "Pagine dei referral",
+        "previous": "Precedente",
+        "next": "Successiva",
+        "showing": "Visualizzati {from}-{to} di {total}"
+      },
+      "empty": {
+        "noneTitle": "Ancora nessun referral",
+        "noneBody": "Condividi il tuo link. Le persone che si registrano con esso compaiono qui.",
+        "filteredTitle": "Nessun referral corrisponde",
+        "filteredBody": "Prova un altro intervallo o cancella la ricerca."
+      },
+      "errors": {
+        "unauthenticated": "La tua sessione è terminata. Accedi di nuovo per vedere i tuoi dati di affiliazione.",
+        "forbidden": "Non hai accesso a questa pagina.",
+        "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+        "validation": "Non è stato possibile applicare questi filtri. Reimpostali e riprova.",
+        "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+        "generic": "Qualcosa è andato storto. Riprova tra un momento.",
+        "requestId": "ID richiesta",
+        "retry": "Riprova"
+      }
+    }
+  }
+}

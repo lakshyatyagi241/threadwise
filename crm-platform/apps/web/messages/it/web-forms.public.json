@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "Avanti",
+      "back": "Indietro",
+      "sending": "Invio in corso...",
+      "optional": "facoltativo",
+      "selectPlaceholder": "Seleziona un’opzione",
+      "stepOf": "Passaggio {n} di {total}",
+      "summaryTitle": "{count, plural, one {Correggi 1 campo} other {Correggi # campi}}",
+      "successTitle": "Grazie",
+      "continue": "Continua",
+      "previewNotice": "Anteprima: da qui non viene inviato nulla.",
+      "honeypot": "Lascia vuoto questo campo",
+      "privacyPolicy": "Informativa sulla privacy",
+      "poweredBy": "Offerto da {brand}",
+      "brandName": "Moduli",
+      "captchaNeeded": "Completa la verifica qui sotto prima di inviare.",
+      "rateLimited": "Troppi tentativi. Attendi un momento e riprova.",
+      "closed": "Questo modulo non accetta risposte in questo momento.",
+      "genericError": "Qualcosa è andato storto e le tue risposte non sono state inviate. Riprova.",
+      "notAvailableTitle": "Questo modulo non è disponibile",
+      "notAvailableBody": "Il link potrebbe essere errato, oppure il modulo è stato chiuso.",
+      "errors": {
+        "required": "Questo campo è obbligatorio.",
+        "consent_required": "Seleziona questa casella per continuare.",
+        "invalid_email": "Inserisci un indirizzo email valido.",
+        "invalid_phone": "Inserisci un numero di telefono valido, con il prefisso internazionale se possibile.",
+        "invalid_number": "Inserisci un numero valido.",
+        "invalid_date": "Inserisci una data valida.",
+        "too_small": "Inserisci un valore di almeno {min}.",
+        "too_large": "Inserisci un valore di al massimo {max}.",
+        "too_short": "Inserisci almeno {min} caratteri.",
+        "too_long": "Inserisci al massimo {max} caratteri.",
+        "pattern": "Il formato non è quello previsto.",
+        "invalid_option": "Scegli una delle opzioni elencate."
+      },
+      "closedTitle": "Questo modulo è chiuso"
+    }
+  }
+}

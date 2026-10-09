@@ -1,0 +1,350 @@
+{
+  "chatbotWidget": {
+    "nav": {
+      "title": "Widget de chat"
+    },
+    "common": {
+      "dismiss": "Dispensar"
+    },
+    "paywall": {
+      "kicker": "Plano",
+      "title": "Os widgets de chatbot não estão no seu plano",
+      "body": "Seu plano não inclui widgets de chatbot. Faça upgrade para desbloquear este recurso.",
+      "upgrade": "Ver planos"
+    },
+    "list": {
+      "tip": "Dica",
+      "tipBody": "Cole um trecho de uma linha em qualquer site para exibir um balão de chat flutuante. Cada widget pode ser alimentado por um agente inteligente, direcionar para o WhatsApp ou ambos — as conversas dos visitantes chegam à caixa de entrada da sua equipe.",
+      "statusViews": "Status do widget",
+      "view": {
+        "all": "Todos os widgets",
+        "active": "Ativo",
+        "paused": "Pausado"
+      },
+      "status": {
+        "all": "Todos",
+        "active": "Ativos",
+        "paused": "Pausados"
+      },
+      "trainFirst": "Treine primeiro",
+      "trainBody": "Crie um agente inteligente e adicione conhecimento em <link>Treinamento de IA</link>; depois vincule-o aqui para que seu widget responda com a sua voz.",
+      "workspace": "Espaço de trabalho",
+      "title": "Chatbot",
+      "titleAccent": "widgets",
+      "intro": "Incorpore um balão de chat flutuante em qualquer página. O agente inteligente responde no navegador e passa para a Caixa de Entrada Unificada quando necessário.",
+      "activePill": "{count} ativos",
+      "newWidget": "Novo widget",
+      "card": {
+        "total": "Total de widgets",
+        "visitors": "Visitantes",
+        "avg": "Média / widget",
+        "health": "Integridade",
+        "activeHint": "{count} ativos",
+        "allTime": "desde o início",
+        "visitorsUnit": "visitantes"
+      },
+      "health": {
+        "healthy": "saudáveis",
+        "empty": "vazios",
+        "attention": "atenção"
+      },
+      "search": "Buscar por nome ou slug…",
+      "col": {
+        "widget": "Widget",
+        "engine": "Mecanismo",
+        "agent": "Agente inteligente",
+        "visitors": "Visitantes",
+        "updated": "Atualizado",
+        "actions": "Ações"
+      },
+      "loading": "Carregando widgets",
+      "loadError": "Não foi possível carregar os widgets.",
+      "retry": "Tentar novamente",
+      "emptyTitle": "Nenhum widget ainda",
+      "emptyBody": "Crie seu primeiro widget de chat — ele ficará como um balão flutuante na página em que você o incorporar.",
+      "createWidget": "Criar widget",
+      "noMatch": "Nenhum widget desta página corresponde à sua busca.",
+      "showing": "Exibindo",
+      "of": "de",
+      "widgetsCount": "{count} widgets",
+      "loadMore": "Carregar mais",
+      "pill": {
+        "active": "Ativo",
+        "paused": "Pausado"
+      },
+      "action": {
+        "preview": "Abrir pré-visualização independente",
+        "copy": "Copiar trecho de incorporação",
+        "edit": "Editar widget",
+        "rotate": "Girar token de incorporação",
+        "duplicate": "Duplicar widget",
+        "delete": "Excluir widget"
+      },
+      "copied": "Trecho copiado — cole antes de {tag} no seu site.",
+      "duplicateFailed": "Não foi possível duplicar o widget.",
+      "rotated": "Token girado — copie o novo trecho.",
+      "rotateFailed": "Falha ao girar — {reason}",
+      "networkError": "erro de rede",
+      "deleted": "Widget excluído.",
+      "deleteFailed": "Falha ao excluir — {reason}",
+      "rotateTitle": "Girar o token de incorporação deste widget?",
+      "rotateBody": "O trecho atual no seu site deixará de funcionar imediatamente. Você precisará copiar e colar o novo trecho.",
+      "rotate": "Girar",
+      "cancel": "Cancelar",
+      "deleteTitle": "Excluir “{name}”?",
+      "deleteBody": "O trecho de incorporação no seu site deixará de funcionar imediatamente. As conversas anteriores permanecem na caixa de entrada da sua equipe.",
+      "delete": "Excluir widget",
+      "keep": "Manter",
+      "copyManuallyTitle": "Copie isto manualmente",
+      "gotIt": "Entendi",
+      "close": "Fechar"
+    },
+    "builder": {
+      "loading": "Carregando widget",
+      "notFoundTitle": "Widget não encontrado",
+      "notFoundBody": "Este widget não existe no seu espaço de trabalho.",
+      "loadError": "Não foi possível carregar o widget.",
+      "backToWidgets": "Voltar para widgets",
+      "back": "Voltar para widgets",
+      "crumb": "Widgets de chatbot",
+      "crumbEdit": "Editar",
+      "crumbNew": "Novo",
+      "titleNew": "Criar um chatbot",
+      "titleEdit": "Editar chatbot",
+      "titleAccent": "widget",
+      "stateSaved": "Salvo",
+      "stateDraft": "Rascunho / não salvo",
+      "saveDraft": "Salvar rascunho",
+      "stepper": "Etapas do construtor",
+      "steps": {
+        "setup": "Configuração",
+        "look": "Aparência",
+        "voice": "Voz",
+        "launch": "Lançamento"
+      },
+      "previous": "Anterior",
+      "next": "Próxima",
+      "stepOf": "Etapa {n} de {total}",
+      "launchWidget": "Lançar widget",
+      "draftSaved": "Rascunho salvo.",
+      "savedEmbed": "Salvo — incorporação pronta para copiar.",
+      "saveFailed": "Falha ao salvar — verifique a etapa destacada.",
+      "snippetCopied": "Trecho copiado.",
+      "clipboardBlocked": "Área de transferência bloqueada — selecione o trecho manualmente.",
+      "problem": {
+        "name": "Dê um nome ao seu widget.",
+        "assistant": "Vincule um agente inteligente — ou mude o mecanismo para link direto do WhatsApp.",
+        "whatsapp": "Adicione um número completo do WhatsApp — código do país e dígitos.",
+        "launcherColour": "O preenchimento do lançador deve ser uma cor hexadecimal (ex.: #075E54).",
+        "headerTitle": "Dê um título à janela de chat.",
+        "welcome": "Escreva uma frase de abertura.",
+        "bgImage": "Adicione a URL de uma imagem de fundo ou mude para cor sólida."
+      },
+      "setup": {
+        "title": "Configuração do widget",
+        "required": "obrigatório",
+        "name": "Nome interno",
+        "namePlaceholder": "ex.: Widget da página de preços",
+        "nameHint": "Para sua equipe. Os visitantes não veem este rótulo.",
+        "position": "Posição do lançador",
+        "bottomRight": "Canto inferior direito",
+        "bottomLeft": "Canto inferior esquerdo",
+        "positionHint": "Onde o balão de chat redondo flutua no seu site.",
+        "engine": "Mecanismo de conversa",
+        "mode": {
+          "ai": {
+            "title": "Agente inteligente",
+            "body": "Respostas de IA treinada direto no navegador."
+          },
+          "whatsapp": {
+            "title": "Link direto do WhatsApp",
+            "body": "Leva o visitante ao app WhatsApp para conversar."
+          },
+          "both": {
+            "title": "Inteligente + WhatsApp",
+            "body": "O visitante escolhe — conversar aqui ou abrir o WhatsApp."
+          }
+        },
+        "agent": "Agente inteligente (o cérebro)",
+        "agentPlaceholder": "— Escolha um agente inteligente salvo —",
+        "agentHintBefore": "Não vê nenhum?",
+        "agentBuild": "Crie um agente inteligente",
+        "agentHintAfter": "primeiro.",
+        "whatsapp": "Número do WhatsApp",
+        "country": "País",
+        "phonePlaceholder": "Seu número sem o código do país",
+        "whatsappHint": "Escolha a bandeira do país — o código de discagem é adicionado automaticamente.",
+        "prefilled": "Mensagem pré-digitada (chega ao WhatsApp)",
+        "prefilledPlaceholder": "Olá, gostaria de saber mais sobre os preços.",
+        "prefilledHint": "O visitante chega ao WhatsApp com esta mensagem já digitada."
+      },
+      "look": {
+        "title": "Estilo do lançador e da janela",
+        "tag": "marca",
+        "launcherFill": "Preenchimento do lançador",
+        "launcherFillHint": "Fundo do balão redondo.",
+        "headerTint": "Cor do cabeçalho da janela",
+        "headerTintHint": "Faixa superior da janela de chat.",
+        "headerInk": "Cor do texto do cabeçalho",
+        "headerInkHint": "Cor do texto/ícone do cabeçalho.",
+        "windowTitle": "Título da janela (exibido no cabeçalho)",
+        "windowTitlePlaceholder": "Converse com nossa equipe",
+        "windowTitleHint": "Mantenha abaixo de ~30 caracteres.",
+        "icon": "URL do ícone personalizado do lançador",
+        "optional": "opcional",
+        "iconHint": "PNG / SVG · 80×80 px recomendado · fundo transparente."
+      },
+      "voice": {
+        "title": "Mensagem de abertura e superfície do chat",
+        "tag": "conteúdo",
+        "opening": "Frase de abertura",
+        "openingPlaceholder": "Olá! Como podemos ajudar hoje?",
+        "openingHint": "Primeiro balão exibido quando o chat abre.",
+        "bubbleFill": "Preenchimento do balão recebido",
+        "bubbleFillHint": "Cor dos balões do seu lado.",
+        "bubbleInk": "Cor do texto do balão recebido",
+        "bubbleInkHint": "Cor do texto dentro dos balões.",
+        "canvas": "Fundo da janela",
+        "canvasKind": {
+          "color": "Cor sólida",
+          "image": "Imagem em mosaico"
+        },
+        "canvasColour": "Cor de fundo da janela",
+        "canvasImage": "URL da imagem de fundo da janela",
+        "canvasImageHint": "Um PNG repetível funciona melhor.",
+        "autoOpen": "Abrir automaticamente",
+        "autoOpenHint": "Abre o chat ~1,2 s após o carregamento da página.",
+        "intake": "Coleta de dados do visitante",
+        "intakeHint": "Campos pré-chat exibidos antes de o chat começar. Ignore tudo para chat anônimo.",
+        "intakeField": {
+          "name": "Nome de exibição",
+          "email": "Endereço de e-mail",
+          "phone": "Número de telefone"
+        }
+      },
+      "launch": {
+        "title": "Botão de envio e trecho de incorporação",
+        "tag": "lançamento",
+        "label": "Rótulo do botão de envio",
+        "labelPlaceholder": "Enviar mensagem",
+        "labelHint": "Evite “Enviar formulário”. Tente “Enviar mensagem” ou “Perguntar à equipe”.",
+        "fill": "Preenchimento do botão de envio",
+        "ink": "Cor do texto do botão de envio",
+        "ready": "Pronto. Cole isto logo antes de <code>{tag}</code> na página em que você quer o widget.",
+        "copy": "Copiar para a área de transferência",
+        "preview": "Abrir pré-visualização independente"
+      },
+      "preview": {
+        "title": "Pré-visualização ao vivo",
+        "chat": "Chat",
+        "hi": "Olá!",
+        "send": "Enviar",
+        "engine": {
+          "ai": "Agente inteligente",
+          "whatsapp": "WhatsApp",
+          "both": "IA + WhatsApp"
+        },
+        "metaEngine": "Mecanismo",
+        "metaPlacement": "Posição",
+        "metaAutoOpen": "Abertura automática",
+        "metaIntake": "Coleta de dados",
+        "left": "Esquerda",
+        "right": "Direita",
+        "on": "Ativada",
+        "off": "Desativada",
+        "none": "Nenhum"
+      },
+      "colorSwatch": "{label} (amostra)"
+    },
+    "whatsappBuilder": {
+      "crumb": "Widget do WhatsApp",
+      "title": "Widget do WhatsApp",
+      "titleAccent": "Instalar e personalizar",
+      "type": "Tipo de widget",
+      "nameHint": "Só você vê este nome. Ele também é o nome da empresa exibido no mensageiro.",
+      "save": "Salvar alterações",
+      "saved": "Alterações salvas. Seu widget está no ar.",
+      "card": {
+        "1": {
+          "title": "Estilize seu botão de chat do WhatsApp",
+          "subtitle": "Escolha o design de botão de chat mais bonito para o seu site",
+          "buttonType": "Tipo de botão",
+          "type": {
+            "pill": "Botão “Converse conosco”",
+            "icon": "Botão redondo só com ícone"
+          },
+          "iconOnly": "Somente ícone",
+          "buttonColor": "Cor do botão",
+          "pickCustom": "Escolha uma cor personalizada",
+          "custom": "Personalizada {hex}"
+        },
+        "2": {
+          "title": "Desenhe seu mensageiro",
+          "subtitle": "Escolha uma imagem bonita para o seu mensageiro",
+          "image": "Imagem do mensageiro",
+          "names": {
+            "support": "Suporte",
+            "store": "Loja",
+            "chat": "Chat",
+            "person": "Pessoa"
+          },
+          "url": "Ou use o endereço da sua própria imagem",
+          "urlHint": "Cole o endereço de uma imagem quadrada (https://...). O envio de arquivo ainda não está disponível."
+        },
+        "3": {
+          "title": "Defina sua mensagem de boas-vindas",
+          "subtitle": "Dê boas-vindas aos seus clientes",
+          "greeting": "Saudação",
+          "greetingHint": "Cumprimente seus clientes quando abrirem o mensageiro",
+          "intro": "Mensagem de apresentação",
+          "introHint": "Apresente sua empresa e diga aos clientes como você pode ajudar"
+        },
+        "4": {
+          "title": "Defina a posição do botão de chat",
+          "subtitle": "Ajuste a posição do botão em computadores e celulares",
+          "preview": "Pré-visualização do botão de chat",
+          "desktopPreview": "Pré-visualização no computador",
+          "mobilePreview": "Pré-visualização no celular",
+          "desktopPosition": "Posição do lançador no computador",
+          "mobilePosition": "Posição do lançador no celular",
+          "left": "Esquerda",
+          "right": "Direita",
+          "desktopSideSpacing": "Espaçamento lateral no computador",
+          "desktopBottomSpacing": "Espaçamento inferior no computador",
+          "mobileSideSpacing": "Espaçamento lateral no celular",
+          "mobileBottomSpacing": "Espaçamento inferior no celular",
+          "px": "px"
+        },
+        "5": {
+          "title": "Configure seu número do WhatsApp",
+          "subtitle": "Conecte o número do WhatsApp ao mensageiro",
+          "number": "Número do WhatsApp",
+          "numberHint": "O mensageiro enviará seus clientes para este número do WhatsApp",
+          "prefilled": "Mensagem pré-preenchida",
+          "prefilledHint": "Será o texto da primeira mensagem padrão"
+        }
+      },
+      "install": {
+        "title": "Instalar no seu site",
+        "body": "Cole esta tag logo antes da tag de fechamento do body de cada página que deve exibir o widget.",
+        "copy": "Copiar código"
+      },
+      "problem": {
+        "name": "Dê um nome ao seu widget.",
+        "avatar": "Use uma imagem integrada ou o endereço http(s) de uma imagem.",
+        "greeting": "Adicione uma saudação.",
+        "intro": "Adicione uma mensagem de apresentação.",
+        "spacing": "O espaçamento deve ser um número inteiro de pixels de 0 a 500.",
+        "whatsapp": "Adicione um número completo do WhatsApp: código do país e dígitos."
+      },
+      "preview": {
+        "title": "Pré-visualização ao vivo",
+        "desktop": "Computador",
+        "mobile": "Celular",
+        "frameTitle": "Pré-visualização ao vivo do seu widget do WhatsApp",
+        "hint": "Recolha o painel com o botão redondo, abra-o novamente pelo lançador e experimente Iniciar conversa.",
+        "businessName": "Sua empresa"
+      }
+    }
+  }
+}

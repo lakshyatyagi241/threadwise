@@ -1,0 +1,330 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "Tâches"
+    },
+    "common": {
+      "dismiss": "Ignorer"
+    },
+    "hub": {
+      "title": "Tâches",
+      "subtitle": "Relances et choses à faire. Assignez-les, définissez une priorité et une échéance, puis cochez-les.",
+      "newTask": "Nouvelle tâche",
+      "tableLabel": "Tâches",
+      "loading": "Chargement des tâches",
+      "useSampleData": "Utiliser des données d’exemple (développement)",
+      "emptyFilteredTitle": "Aucune tâche ne correspond",
+      "emptyFiltered": "Essayez une autre recherche ou effacez les filtres.",
+      "resetFilters": "Effacer les filtres",
+      "empty": {
+        "mine": {
+          "title": "Rien ne vous est assigné",
+          "message": "Les tâches qui vous sont assignées s’afficheront ici. Ajoutez-en une ci-dessus ou consultez Toutes les tâches."
+        },
+        "all": {
+          "title": "Aucune tâche pour l’instant",
+          "message": "Ajoutez une relance ou une chose à faire dans le champ ci-dessus : elle s’affichera ici."
+        },
+        "overdue": {
+          "title": "Rien en retard",
+          "message": "Toutes les tâches ouvertes sont dans les délais."
+        },
+        "today": {
+          "title": "Rien à faire aujourd’hui",
+          "message": "Aucune tâche ouverte n’est due pour le reste de la journée."
+        },
+        "upcoming": {
+          "title": "Rien à venir",
+          "message": "Les tâches ouvertes prévues plus tard s’afficheront ici."
+        },
+        "completed": {
+          "title": "Aucune tâche terminée pour l’instant",
+          "message": "Les tâches que vous cochez s’afficheront ici, les plus récentes en premier."
+        }
+      },
+      "showing": "{count, plural, one {# tâche chargée} other {# tâches chargées}}",
+      "loadMore": "Charger plus",
+      "allLoaded": "Toutes les tâches sont chargées",
+      "deleteTitle": "Supprimer cette tâche ?",
+      "deleteMessage": "« {title} » sera supprimée pour tout le monde. Cette action est irréversible.",
+      "delete": "Supprimer",
+      "keep": "Conserver"
+    },
+    "tabs": {
+      "label": "Listes de tâches",
+      "mine": "Mes tâches",
+      "all": "Toutes les tâches",
+      "overdue": "En retard",
+      "today": "Aujourd’hui",
+      "upcoming": "À venir",
+      "completed": "Terminées",
+      "count": "{count, plural, one {# tâche} other {# tâches}}"
+    },
+    "toolbar": {
+      "label": "Filtres des tâches",
+      "search": "Rechercher des tâches",
+      "status": "Statut",
+      "statusOpen": "Ouverte",
+      "statusDone": "Terminée",
+      "statusAll": "Ouvertes et terminées",
+      "priority": "Priorité",
+      "allPriorities": "Toutes les priorités",
+      "priorities": {
+        "high": "Haute",
+        "medium": "Moyenne",
+        "low": "Basse"
+      },
+      "assignee": "Assigné à",
+      "allAssignees": "Tous les assignés",
+      "unassigned": "Non assignée",
+      "linked": "Lié à",
+      "anyLink": "Tout enregistrement",
+      "linkContact": "Un contact",
+      "linkDeal": "Une opportunité",
+      "clear": "Effacer",
+      "modifyColumns": "Modifier les colonnes",
+      "resetColumns": "Réinitialiser les colonnes",
+      "columns": {
+        "title": "Tâche",
+        "priority": "Priorité",
+        "due": "Échéance",
+        "assignee": "Assigné à",
+        "contact": "Contact",
+        "deal": "Opportunité",
+        "created": "Créée le",
+        "completed": "Terminée le"
+      },
+      "refresh": "Actualiser",
+      "shortcuts": "Raccourcis clavier",
+      "view": "Affichage",
+      "views": {
+        "list": "Liste",
+        "board": "Tableau par échéance"
+      }
+    },
+    "table": {
+      "scrollArea": "Tableau des tâches",
+      "selectAll": "Sélectionner toutes les tâches chargées",
+      "selectRow": "Sélectionner {title}",
+      "columns": {
+        "title": "Tâche",
+        "priority": "Priorité",
+        "due": "Échéance",
+        "assignee": "Assigné à",
+        "contact": "Contact",
+        "deal": "Opportunité",
+        "created": "Créée le",
+        "completed": "Terminée le"
+      }
+    },
+    "row": {
+      "complete": "Marquer comme terminée",
+      "reopen": "Rouvrir",
+      "completeNamed": "Marquer « {title} » comme terminée",
+      "reopenNamed": "Rouvrir « {title} »",
+      "moreFor": "Plus d’actions pour {title}",
+      "open": "Ouvrir",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "unassigned": "Non assignée"
+    },
+    "bulk": {
+      "label": "Actions pour les tâches sélectionnées",
+      "selected": "{count, plural, one {# tâche sélectionnée} other {# tâches sélectionnées}}",
+      "working": "En cours",
+      "complete": "Terminer",
+      "assign": "Assigner",
+      "assignTo": "Assigner à",
+      "me": "{name} (moi)",
+      "unassign": "Désassigner",
+      "delete": "Supprimer",
+      "clear": "Effacer la sélection",
+      "failed": "Cela n’a pas fonctionné.",
+      "someFailed": "{count, plural, one {# tâche n’a pas pu être modifiée.} other {# tâches n’ont pas pu être modifiées.}}",
+      "completed": "{count, plural, one {# tâche terminée.} other {# tâches terminées.}}",
+      "assigned": "{count, plural, one {# tâche assignée à {name}.} other {# tâches assignées à {name}.}}",
+      "unassigned": "{count, plural, one {# tâche désassignée.} other {# tâches désassignées.}}",
+      "deleted": "{count, plural, one {# tâche supprimée.} other {# tâches supprimées.}}",
+      "deleteTitle": "Supprimer les tâches sélectionnées ?",
+      "deleteMessage": "{count, plural, one {# tâche sera supprimée pour tout le monde. Cette action est irréversible.} other {# tâches seront supprimées pour tout le monde. Cette action est irréversible.}}",
+      "keep": "Conserver"
+    },
+    "quick": {
+      "label": "Ajouter une tâche",
+      "placeholder": "Ajoutez une tâche et appuyez sur Entrée",
+      "priority": "Priorité",
+      "priorities": {
+        "high": "Haute",
+        "medium": "Moyenne",
+        "low": "Basse"
+      },
+      "due": "Date et heure d’échéance",
+      "add": "Ajouter",
+      "dueRequired": "Choisissez une date et une heure d’échéance.",
+      "titleRequired": "Saisissez ce qu’il faut faire.",
+      "options": "Plus d’options (priorité et échéance)"
+    },
+    "form": {
+      "eyebrow": "Tâche",
+      "newTitle": "Nouvelle tâche",
+      "editTitle": "Modifier la tâche",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "create": "Créer la tâche",
+      "save": "Enregistrer les modifications",
+      "title": "Tâche",
+      "titlePlaceholder": "ex. Appeler Acme au sujet du renouvellement",
+      "priority": "Priorité",
+      "priorities": {
+        "high": "Haute",
+        "medium": "Moyenne",
+        "low": "Basse"
+      },
+      "assignee": "Assigner à",
+      "unassigned": "Personne",
+      "me": "{name} (moi)",
+      "due": "Échéance",
+      "presets": {
+        "today": "Aujourd’hui",
+        "tomorrow": "Demain",
+        "nextWeek": "Semaine prochaine"
+      },
+      "clearDue": "Effacer la date",
+      "contact": "Contact",
+      "deal": "Opportunité",
+      "notes": "Notes",
+      "reminderHint": "Le responsable reçoit un rappel lorsque la tâche arrive à échéance.",
+      "assigneePick": "Choisissez la personne responsable de cette tâche.",
+      "problems": {
+        "dueRequired": "Choisissez une date et une heure d’échéance.",
+        "priorityRequired": "Choisissez une priorité.",
+        "assigneeRequired": "Choisissez la personne concernée par cette tâche.",
+        "titleRequired": "Saisissez ce qu’il faut faire.",
+        "titleTooLong": "La tâche est trop longue (255 caractères maximum).",
+        "notesTooLong": "Les notes sont trop longues (5 000 caractères maximum).",
+        "dueInvalid": "Cette date n’est pas valide.",
+        "assigneeInvalid": "Cette personne n’est pas un membre actif de cet espace de travail."
+      }
+    },
+    "drawer": {
+      "loading": "Chargement de la tâche",
+      "close": "Fermer",
+      "eyebrow": "Tâche",
+      "name": "Nom de la tâche",
+      "titleRequired": "Une tâche doit avoir un nom.",
+      "statusOpen": "Ouvrir",
+      "statusDone": "Terminée",
+      "complete": "Marquer comme terminée",
+      "reopen": "Rouvrir",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "details": "Détails",
+      "notes": "Notes",
+      "notesPlaceholder": "Ajoutez du contexte pour la personne qui la reprendra",
+      "linked": "Éléments liés",
+      "company": "Entreprise",
+      "noLinks": "Non lié à un contact ni à une opportunité.",
+      "activity": "Activité",
+      "events": {
+        "created": "Tâche créée",
+        "createdBy": "Créée par {name}",
+        "reminded": "Rappel d’échéance envoyé",
+        "completed": "Marquée comme terminée"
+      },
+      "deleteTitle": "Supprimer cette tâche ?",
+      "deleteMessage": "« {title} » sera supprimée pour tout le monde. Cette action est irréversible.",
+      "cancel": "Conserver"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "En retard",
+        "today": "Aujourd’hui",
+        "upcoming": "À venir",
+        "no_date": "Sans date"
+      },
+      "empty": "Rien ici."
+    },
+    "due": {
+      "none": "Sans date",
+      "overdue": "En retard",
+      "today": "Aujourd’hui, {time}",
+      "tomorrow": "Demain, {time}",
+      "yesterday": "Hier, {time}",
+      "date": "{date}, {time}"
+    },
+    "priority": {
+      "high": "Élevée",
+      "medium": "Moyenne",
+      "low": "Faible"
+    },
+    "link": {
+      "unnamedContact": "Contact sans nom",
+      "unnamedDeal": "Opportunité"
+    },
+    "picker": {
+      "searchContact": "Rechercher des contacts",
+      "searchDeal": "Rechercher des opportunités",
+      "results": "Résultats de recherche",
+      "searching": "Recherche en cours",
+      "unavailable": "La recherche n’est pas disponible pour le moment.",
+      "none": "Aucun résultat.",
+      "unlink": "Retirer le lien"
+    },
+    "errors": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Vous n’avez pas l’autorisation d’effectuer cette action.",
+      "signedOut": "Votre session a pris fin. Reconnectez-vous pour continuer.",
+      "conflict": "Cette tâche a été modifiée par un autre utilisateur. Actualisez la page et réessayez.",
+      "validation": "Certains détails ne sont pas valides.",
+      "unavailable": "Le service de tâches n’est pas encore disponible sur ce serveur.",
+      "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+      "notFound": "Tâche introuvable. Elle a peut-être été supprimée.",
+      "planDisabled": "Votre offre ne comprend pas les tâches. Mettez à niveau votre offre pour y accéder.",
+      "assigneeInvalid": "Cette personne n’est pas un membre actif de cet espace de travail.",
+      "unexpected": "Une erreur s’est produite. Réessayez dans un instant.",
+      "requestId": "Identifiant de la requête",
+      "retry": "Réessayer"
+    },
+    "toast": {
+      "completed": "Tâche terminée.",
+      "reopened": "Tâche rouverte.",
+      "created": "Tâche créée.",
+      "saved": "Tâche enregistrée.",
+      "deleted": "Tâche supprimée.",
+      "conflict": "Cette tâche a été modifiée par un autre utilisateur. La liste a été actualisée ; réessayez.",
+      "failed": "Impossible de mettre à jour la tâche.",
+      "saveFailed": "Impossible d’enregistrer la tâche.",
+      "deleteFailed": "Impossible de supprimer la tâche.",
+      "createFailed": "Impossible de créer la tâche."
+    },
+    "shortcuts": {
+      "title": "Raccourcis clavier",
+      "close": "Fermer",
+      "intro": "Parcourez la liste sans la souris. Les raccourcis sont suspendus pendant la saisie dans un champ.",
+      "actions": {
+        "next": "Tâche suivante",
+        "prev": "Tâche précédente",
+        "open": "Ouvrir la tâche",
+        "toggleComplete": "Terminer ou rouvrir",
+        "toggleSelect": "Sélectionner ou désélectionner",
+        "newTask": "Nouvelle tâche",
+        "focusSearch": "Rechercher",
+        "clearSelection": "Effacer la sélection",
+        "help": "Afficher cette liste"
+      }
+    },
+    "linked": {
+      "title": "Tâches",
+      "addPlaceholder": "Saisissez un titre de tâche, puis cliquez sur Ajouter pour compléter les détails",
+      "viewAll": "Tout afficher",
+      "loading": "Chargement des tâches",
+      "unavailableTitle": "Les tâches ne sont pas encore disponibles",
+      "unavailable": "Le service de tâches n’est pas encore disponible sur ce serveur.",
+      "empty": "Aucune tâche en cours.",
+      "loadMore": "Charger plus",
+      "loadMoreDone": "Charger plus de tâches terminées",
+      "showDone": "Afficher les tâches terminées",
+      "hideDone": "Masquer les tâches terminées"
+    }
+  }
+}

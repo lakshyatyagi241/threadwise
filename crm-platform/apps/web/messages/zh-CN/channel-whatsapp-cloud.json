@@ -1,0 +1,513 @@
+{
+  "channel-whatsapp-cloud": {
+    "common": {
+      "dismiss": "关闭",
+      "copy": "复制",
+      "copied": "已复制",
+      "copyFailed": "无法复制。请选中文本后手动复制。"
+    },
+    "screen": {
+      "title": "WhatsApp",
+      "intro": "已连接到此工作区的 WhatsApp Business 号码。给号码发消息的客户会出现在您的收件箱中，您的回复也将从该号码发出。",
+      "add": "添加 WhatsApp 号码",
+      "readOnly": "您可以查看已连接的号码。只有管理渠道的人员才能添加、更改或移除号码。",
+      "helpNote": "仓库中提供了连接号码的分步指南：",
+      "providerLine": "您的号码通过平台的 WhatsApp 提供商提供服务。",
+      "loading": "正在加载您的 WhatsApp 号码",
+      "retry": "重试",
+      "listLabel": "已连接的 WhatsApp 号码",
+      "empty": {
+        "title": "尚未连接 WhatsApp 号码",
+        "message": "连接号码后，客户即可在收件箱中与您聊天。只需简单三步。",
+        "messageReadOnly": "尚未连接 WhatsApp 号码。请联系管理渠道的人员添加。"
+      }
+    },
+    "state": {
+      "connected": "已连接",
+      "needs_reconnect": "需要重新连接",
+      "error": "错误",
+      "not_connected": "未连接",
+      "help": {
+        "needs_reconnect": "WhatsApp 不再接受此号码的凭据，因此无法发送或接收消息。请重新连接以继续使用。",
+        "error": "此号码出现问题。请运行健康检查查看详情。",
+        "not_connected": "此号码已关闭或尚未通过首次检查。消息不会通过它发送。"
+      }
+    },
+    "quality": {
+      "green": "高",
+      "yellow": "中",
+      "red": "低",
+      "unrated": "未评级"
+    },
+    "tier": {
+      "limited": "每天 {label} 位客户",
+      "unlimited": "不限"
+    },
+    "card": {
+      "verifiedName": "已验证名称：{name}",
+      "phoneId": "电话号码 ID",
+      "wabaId": "商务账户 ID",
+      "quality": "质量评级",
+      "tier": "消息发送限额",
+      "lastCheck": "上次健康检查",
+      "neverChecked": "从未检查",
+      "lastActivity": "最近活动",
+      "noActivity": "暂无",
+      "token": "访问令牌",
+      "tokenEnds": "末尾为 {hint}",
+      "none": "不可用",
+      "providerChanged": {
+        "title": "此号码的提供商已更改",
+        "message": "平台已将此号码迁移到另一个 WhatsApp 提供商。您无需任何操作，只需运行健康检查确认其正常即可。"
+      },
+      "actions": {
+        "check": "检查健康状况",
+        "checking": "检查中",
+        "edit": "编辑凭据",
+        "reconnect": "重新连接",
+        "editDetails": "编辑详情",
+        "more": "更多",
+        "moreLabel": "{name} 的更多操作",
+        "subscribe": "修复入站消息",
+        "rotate": "新的验证令牌",
+        "switchOff": "关闭",
+        "switchOn": "开启",
+        "remove": "移除"
+      }
+    },
+    "health": {
+      "issuesTitle": "检查结果",
+      "severity": {
+        "critical": "问题",
+        "warning": "警告",
+        "info": "提示"
+      },
+      "phoneStatus": "号码状态",
+      "webhook": "传入消息",
+      "subscribed": "已订阅",
+      "notSubscribed": "未订阅",
+      "token": "访问令牌",
+      "tokenValid": "有效",
+      "tokenInvalid": "无效",
+      "tokenExpires": "令牌到期时间",
+      "issues": {
+        "TOKEN_INVALID": {
+          "title": "访问令牌已失效",
+          "detail": "请在 Meta 商务设置中获取新的永久令牌并替换。"
+        },
+        "TOKEN_EXPIRED": {
+          "title": "访问令牌已过期",
+          "detail": "请替换为永久系统用户令牌，使其永不过期。"
+        },
+        "TOKEN_EXPIRING": {
+          "title": "访问令牌将在 7 天内过期",
+          "detail": "请使用永久系统用户令牌，以免发送中断。"
+        },
+        "TOKEN_SCOPE_MISSING": {
+          "title": "该令牌无法发送消息",
+          "detail": "请生成包含 whatsapp_business_messaging 权限的令牌。"
+        },
+        "TOKEN_MANAGEMENT_SCOPE_MISSING": {
+          "title": "该令牌无法管理账户",
+          "detail": "请添加 whatsapp_business_management 权限，以便设置 Webhook 和模板。"
+        },
+        "NO_WEBHOOK_SUBSCRIPTION": {
+          "title": "传入消息未进入收件箱",
+          "detail": "应用尚未订阅此账户。请使用卡片菜单中的“修复入站消息”。"
+        },
+        "QUALITY_RED": {
+          "title": "消息质量较低",
+          "detail": "WhatsApp 可能会限制您可联系的客户数量。请减少主动发送的消息。"
+        },
+        "QUALITY_YELLOW": {
+          "title": "消息质量中等",
+          "detail": "请留意：客户屏蔽或举报该号码会降低质量。"
+        },
+        "NUMBER_NOT_VERIFIED": {
+          "title": "号码未验证",
+          "detail": "请在 WhatsApp Manager 中完成此号码的验证。"
+        },
+        "ON_PREMISE_NUMBER": {
+          "title": "该号码仍在旧版 WhatsApp API 上",
+          "detail": "请在 WhatsApp Manager 中将其注册到 Cloud API，然后重新连接。"
+        },
+        "NO_ACCOUNT_ID": {
+          "title": "未存储商务账户 ID",
+          "detail": "请在“编辑凭据”中添加，以便检查账户及其 Webhook。"
+        }
+      }
+    },
+    "errors": {
+      "tokenInvalid": "WhatsApp 不接受该访问令牌。它可能已过期、被撤销或复制不完整。",
+      "permissionMissing": "该访问令牌缺少所需权限，或无法访问此号码。",
+      "idNotFound": "WhatsApp 无法识别此电话号码 ID，或令牌无法查看它。请检查两个 ID。",
+      "appSecretInvalid": "应用密钥与应用不匹配。请从应用设置中重新复制。",
+      "accountRestricted": "该 WhatsApp 账户受限或已被锁定。请在 WhatsApp Manager 中查看其状态。",
+      "numberNotRegistered": "该号码尚未注册到 WhatsApp Cloud API。请先在 WhatsApp Manager 中注册。",
+      "rateLimited": "WhatsApp 当前正在限制请求。请等待几分钟后重试。",
+      "providerUnavailable": "无法连接到 WhatsApp，或其出现临时故障。请稍后重试。",
+      "healthFailed": "由于与 WhatsApp 的检查失败，无法开启该号码。",
+      "alreadyConnected": "此 WhatsApp 号码已在该工作区中连接。",
+      "kindUnavailable": "此工作区尚未开启 WhatsApp 连接。请联系平台管理员。",
+      "inUse": "此号码仍有会话，无法移除。",
+      "conflict": "其他人已先更改了此号码。已重新加载，请查看后重试。",
+      "forbidden": "您没有管理渠道的权限。",
+      "validation": "您输入的部分内容无效。请检查高亮的字段。",
+      "notFound": "此号码已不存在。列表已刷新。",
+      "network": "无法连接到服务器。请检查网络连接后重试。",
+      "generic": "出了点问题。请重试。",
+      "genericWithId": "出了点问题。请重试。参考编号：{id}",
+      "detail": "详情：{detail}",
+      "fix": {
+        "tokenInvalid": "请在 Meta 商务设置中创建永久系统用户令牌，并粘贴到“编辑凭据”中。",
+        "permissionMissing": "请使用 whatsapp_business_messaging 和 whatsapp_business_management 权限生成令牌，并确保系统用户有权访问该账户。",
+        "idNotFound": "两个 ID 都在 Meta 应用的 API 设置页面，位于 WhatsApp 下。它们是不同的编号。",
+        "appSecretInvalid": "位于 Meta 应用设置的“基本”页面。",
+        "accountRestricted": "打开 WhatsApp Manager，选择该账户并查看顶部的通知。",
+        "numberNotRegistered": "在 WhatsApp Manager 中打开该号码并完成注册。"
+      }
+    },
+    "fieldErrors": {
+      "required": "此字段为必填项。",
+      "digits": "仅限数字，长度 5 到 32 位。",
+      "tokenShort": "对访问令牌来说似乎太短了。",
+      "tokenLong": "对访问令牌来说太长了。",
+      "secretShort": "应用密钥至少需要 8 个字符。",
+      "secretLong": "对应用密钥来说太长了。",
+      "nameLong": "最多 120 个字符。",
+      "addressLong": "最多 40 个字符。",
+      "sameAsPhoneId": "这与电话号码 ID 相同。它们是两个不同的 ID。"
+    },
+    "credentials": {
+      "name": {
+        "label": "名称",
+        "hint": "您和团队对此号码的称呼。",
+        "placeholder": "客服热线"
+      },
+      "displayAddress": {
+        "label": "电话号码",
+        "hint": "可选。会显示在列表中，便于区分号码。",
+        "placeholder": "+91 98765 43210"
+      },
+      "phoneNumberId": {
+        "label": "电话号码 ID",
+        "hint": "在 WhatsApp Manager 的 API 设置中查找。",
+        "placeholder": "533524166787123",
+        "current": "当前为 {value}。留空则保持不变。"
+      },
+      "businessAccountId": {
+        "label": "WhatsApp Business 账户 ID",
+        "hint": "位于同一页面电话号码 ID 旁边。",
+        "placeholder": "102938475647382"
+      },
+      "accessToken": {
+        "label": "访问令牌",
+        "hint": "来自系统用户的永久令牌。加密存储，之后不再显示。",
+        "placeholder": "EAA...",
+        "current": "当前令牌末尾为 {hint}。留空则保持不变。",
+        "unusual": "Meta 访问令牌通常以 EAA 开头。请确认您复制的是令牌而不是其他内容。"
+      },
+      "appSecret": {
+        "label": "应用密钥",
+        "hint": "来自 Meta 应用设置的“基本”页面。用于对 Meta 发给我们的消息签名。",
+        "placeholder": "0123456789abcdef...",
+        "current": "当前密钥末尾为 {hint}。留空则保持不变。"
+      },
+      "keepPlaceholder": "未更改",
+      "show": "显示",
+      "hide": "隐藏",
+      "privacy": "密钥加密存储，之后不再显示。随密钥一同粘贴的空格、换行和引号会自动去除。",
+      "privacyPlatform": "只需填写这些详情。凭据由平台负责处理。"
+    },
+    "wizard": {
+      "close": "关闭",
+      "cancel": "取消",
+      "back": "返回",
+      "stepsLabel": "步骤",
+      "stepOf": "第 {current} 步，共 {total} 步",
+      "steps": {
+        "before": "开始之前",
+        "credentials": "您的号码",
+        "webhook": "连接 Webhook",
+        "webhookAutomatic": "测试连接"
+      },
+      "before": {
+        "intro": {
+          "channel_token": "连接号码前，需要先在 Meta 准备好几项内容。一次设置好，然后回到这里。完成一项就勾选一项；复选框仅供您自己参考。",
+          "platform_token": "添加号码需要两项信息：其 WhatsApp Business 账户 ID 和电话号码 ID。完成一项就勾选一项；复选框仅供您自己参考。"
+        },
+        "items": {
+          "channel_token": {
+            "app": {
+              "title": "已添加 WhatsApp 的 Meta 应用",
+              "detail": "在 developers.facebook.com 创建 Business 类型的应用，并为其添加 WhatsApp 产品。该应用负责收发您的消息。"
+            },
+            "number": {
+              "title": "WhatsApp Business 账户和一个号码",
+              "detail": "该号码不得在普通 WhatsApp 应用中使用。如想先试用，可使用 Meta 为每个新应用提供的免费测试号码。"
+            },
+            "token": {
+              "title": "永久访问令牌",
+              "detail": "在 Meta 商务设置中添加系统用户，授予其您的应用和 WhatsApp 账户，并生成包含 whatsapp_business_messaging 和 whatsapp_business_management 权限的令牌。请选择永不过期：24 小时令牌明天就会失效。"
+            },
+            "values": {
+              "title": "需要复制的三个值",
+              "detail": "电话号码 ID 和商务账户 ID（WhatsApp，API 设置），以及应用密钥（应用设置，基本）。"
+            },
+            "webhook": {
+              "title": "应用 Webhook 设置的访问权限",
+              "detail": "最后一步会显示一个地址和一个验证令牌。您需要将它们粘贴到 Meta 应用的 WhatsApp 配置中。"
+            }
+          },
+          "platform_token": {
+            "account": {
+              "title": "WhatsApp Business 账户",
+              "detail": "如果还没有，请在 Meta Business Suite 中创建。它包含您的号码和消息模板。"
+            },
+            "number": {
+              "title": "可用于 WhatsApp Business 的号码",
+              "detail": "该号码不得在普通 WhatsApp 应用中使用。如果正在使用，请先从中移除。"
+            },
+            "ids": {
+              "title": "需要复制的两个 ID",
+              "detail": "电话号码 ID 和商务账户 ID，均位于 WhatsApp Manager 的 API 设置页面。"
+            }
+          }
+        },
+        "providerLine": "您的号码通过平台的 WhatsApp 提供商提供服务。您不需要访问令牌。",
+        "runbook": "更多详情及需要打开的具体菜单，请参阅仓库指南：",
+        "continue": "继续"
+      },
+      "embedded": {
+        "button": "通过 Facebook 连接（嵌入式注册）",
+        "soon": "即将推出",
+        "help": "不久后您将可以用 Facebook 登录并选择号码，无需复制任何 ID。在此之前，请在下方输入两个 ID。"
+      },
+      "credentials": {
+        "intro": {
+          "channel_token": "输入号码的详细信息。可直接从 Meta 粘贴：空格和换行会自动清理。",
+          "platform_token": "输入您要连接的号码的两个 ID。"
+        },
+        "save": "保存并继续",
+        "saving": "保存中"
+      },
+      "webhook": {
+        "done": "完成",
+        "finishLater": "稍后完成",
+        "test": {
+          "button": "测试连接",
+          "running": "测试中",
+          "again": "重新测试",
+          "passedToast": "连接测试通过。"
+        }
+      }
+    },
+    "webhook": {
+      "intro": "最后一步：告诉 WhatsApp 将消息发送到哪里。号码已保存，但在完成此步骤并通过下方测试之前，它仍处于未连接状态。",
+      "callbackUrl": "回调 URL",
+      "verifyToken": "验证令牌",
+      "onceWarning": "此令牌仅此时显示。请在关闭窗口前复制。如果丢失，可从该号码的菜单中重新签发。",
+      "placeholderWarning": "此地址是占位符。请将 NEXT_PUBLIC_API_PUBLIC_URL 设置为 API 的公网地址并重新加载，或复制平台管理员提供的地址。",
+      "localWarning": "此地址指向您自己网络中的一台机器，WhatsApp 无法访问。请使用 API 的公网地址。",
+      "httpWarning": "WhatsApp 只接受以 https 开头的地址。",
+      "tokenMissing": "未返回验证令牌。请从该号码的菜单中重新签发。",
+      "steps": {
+        "open": "在 Meta for Developers 中打开您的应用，然后依次选择 WhatsApp、配置。",
+        "paste": "在 Webhook 下选择编辑，粘贴回调 URL 和验证令牌，然后选择验证并保存。",
+        "subscribe": "在 Webhook 字段下，订阅 messages。",
+        "test": "回到这里并选择“测试连接”。"
+      },
+      "testTitle": "测试连接",
+      "automatic": {
+        "title": "消息投递已为您设置好",
+        "message": "平台会自动将此号码指向您的收件箱，无需粘贴地址或令牌。运行测试以确认号码可用。"
+      },
+      "test": {
+        "hint": "测试会向 WhatsApp 查询该号码并显示其返回的内容。",
+        "running": "正在向 WhatsApp 查询此号码",
+        "okTitle": "号码已连接",
+        "okMessage": "WhatsApp 已响应，该号码可以使用。",
+        "verifiedName": "已验证名称",
+        "quality": "质量评级",
+        "tier": "消息发送限额",
+        "unknown": "未报告"
+      }
+    },
+    "edit": {
+      "close": "关闭",
+      "cancel": "取消",
+      "save": "保存并检查",
+      "saving": "保存中",
+      "nothing": "未做任何更改。输入新值后再保存。",
+      "title": {
+        "channel_token": "编辑凭据",
+        "platform_token": "编辑详情"
+      },
+      "intro": {
+        "channel_token": "替换已续期的令牌或已轮换的密钥。留空的字段保持原有内容。保存后将检查该号码并重新开启。",
+        "platform_token": "更改此号码的名称或 ID。留空的字段保持原有内容。保存后将检查该号码。"
+      }
+    },
+    "rotate": {
+      "title": "签发新的验证令牌？",
+      "message": "{name} 当前的验证令牌将立即失效。您需要将新令牌粘贴到 Meta 应用中并重新验证 Webhook。",
+      "confirm": "签发新令牌",
+      "cancel": "取消",
+      "close": "关闭",
+      "done": "完成",
+      "resultTitle": "您的新验证令牌",
+      "resultIntro": "将这两个值粘贴到 Meta 应用的 WhatsApp 配置中，然后选择验证并保存。"
+    },
+    "remove": {
+      "title": "移除此号码？",
+      "message": "{name} 将从此工作区中移除。之后将无法通过它发送或接收消息。",
+      "note": "此操作无法撤销。您之后可以重新添加该号码。",
+      "confirm": "移除号码",
+      "cancel": "取消",
+      "inUse": {
+        "title": "此号码有会话",
+        "message": "{name} 仍有会话，因此无法移除。否则这些会话将没有号码可用。",
+        "hint": "您可以改为关闭该号码。所有会话都会保留，不会通过它发送任何内容，之后可随时重新开启。",
+        "switchOff": "改为关闭"
+      }
+    },
+    "switchOff": {
+      "title": "关闭此号码？",
+      "message": "{name} 关闭期间，不会通过它发送或接收任何内容。会话会保留，您可以重新开启。",
+      "confirm": "关闭",
+      "cancel": "取消"
+    },
+    "toasts": {
+      "checkPassed": "{name} 已通过健康检查。",
+      "saved": "已保存对 {name} 的更改。",
+      "reconnected": "{name} 已重新连接。",
+      "switchedOn": "{name} 已开启。",
+      "switchedOff": "{name} 已关闭。",
+      "removed": "{name} 已移除。",
+      "subscribed": "已为 {name} 订阅传入消息。"
+    },
+    "inbox": {
+      "templatesSoon": "模板功能即将推出，届时您可在此再次联系该客户。",
+      "reconnect": {
+        "needs_reconnect": {
+          "title": "此 WhatsApp 号码需要重新连接。",
+          "message": "WhatsApp 不再接受 {name} 的凭据，因此无法发送回复。内部备注仍可使用。"
+        },
+        "error": {
+          "title": "此 WhatsApp 号码存在连接问题。",
+          "message": "{name} 处于错误状态，因此无法发送回复。内部备注仍可使用。"
+        },
+        "not_connected": {
+          "title": "此 WhatsApp 号码已关闭。",
+          "message": "{name} 未连接，因此无法发送回复。内部备注仍可使用。"
+        },
+        "open": "打开 WhatsApp 设置",
+        "askAdmin": "请联系管理渠道的人员重新连接。"
+      },
+      "failure": {
+        "openSettings": "打开 WhatsApp 设置",
+        "windowClosed": {
+          "title": "24 小时回复窗口已关闭。",
+          "hint": "WhatsApp 仅允许在客户最后一条消息后的 24 小时内发送自由格式的回复。请等待对方再次发来消息。"
+        },
+        "undeliverable": {
+          "title": "WhatsApp 无法送达此消息。",
+          "hint": "该号码可能未注册 WhatsApp，或客户尚未接受其最新条款。"
+        },
+        "recipientNotAllowed": {
+          "title": "无法从此处向该号码发送消息。",
+          "hint": "它是发送方自己的号码，或不在测试收件人名单中。"
+        },
+        "rateLimit": {
+          "title": "WhatsApp 正在限制您的发送速度。",
+          "hint": "请等待几分钟，然后点击重试。"
+        },
+        "spamLimited": {
+          "title": "由于过多消息被举报为垃圾信息，发送已受限。",
+          "hint": "请等待一段时间再继续发送，并且只向期望收到消息的客户发送。"
+        },
+        "engagementBlocked": {
+          "title": "WhatsApp 选择不送达此消息。",
+          "hint": "这样做是为了保护客户免受可能不想要的消息打扰。"
+        },
+        "tokenExpired": {
+          "title": "WhatsApp 拒绝了该号码的访问令牌。",
+          "hint": "令牌已过期或缺少权限。请重新连接该号码，然后点击重试。"
+        },
+        "accountRestricted": {
+          "title": "WhatsApp 账户存在问题。",
+          "hint": "账户受限、已锁定或未注册。请在 WhatsApp Manager 中检查。"
+        },
+        "mediaRejected": {
+          "title": "WhatsApp 无法使用此文件或消息类型。",
+          "hint": "请尝试其他文件，或以文本形式发送该信息。"
+        },
+        "templateProblem": {
+          "title": "无法发送该模板。",
+          "hint": "模板未找到、已暂停或被拒绝，或其变量不匹配。"
+        },
+        "providerDown": {
+          "title": "WhatsApp 出现临时故障。",
+          "hint": "请稍后点击重试。"
+        },
+        "sendPaused": {
+          "title": "整个平台的发送已暂停。",
+          "hint": "恢复后请点击重试。"
+        },
+        "channelOff": {
+          "title": "此号码未连接。",
+          "hint": "请重新连接，然后点击重试。"
+        },
+        "planLimit": {
+          "title": "已达到您套餐的每月消息上限。",
+          "hint": "请升级套餐或等待下一周期，然后点击重试。"
+        },
+        "groupSendUnavailable": {
+          "title": "暂不支持向 WhatsApp 群组发送消息。",
+          "hint": "请通过 WhatsApp Business 应用回复。"
+        }
+      },
+      "media": {
+        "downloading": "正在下载文件",
+        "failed": "无法下载此文件",
+        "retry": "重试",
+        "retrying": "正在重试",
+        "reason": {
+          "expired": "WhatsApp 已不再保留该文件。文件约保留 30 天。",
+          "auth": "WhatsApp 拒绝了该号码的访问令牌。请重新连接该号码，然后重试。",
+          "tooLarge": "文件大小超出此渠道的限制。",
+          "rejected": "该文件因类型不安全而被拒绝。",
+          "download": "WhatsApp 未能及时响应。再试一次通常就能成功。"
+        }
+      },
+      "interactive": {
+        "button": "选择了一个按钮",
+        "list": "从列表中选择"
+      },
+      "contact": {
+        "unnamed": "共享的联系人",
+        "shared": "联系人名片"
+      },
+      "attach": {
+        "limit": {
+          "image": "图片最大 {mb} MB",
+          "video": "视频最大 {mb} MB",
+          "audio": "音频最大 {mb} MB",
+          "document": "文档最大 {mb} MB"
+        },
+        "kind": {
+          "image": "图片",
+          "video": "视频",
+          "audio": "音频文件",
+          "document": "文档"
+        },
+        "errors": {
+          "tooLarge": "在 WhatsApp 上，{kind}最大为 {mb} MB。请选择更小的文件。",
+          "kindNotAllowed": "此号码无法发送{kind}。",
+          "unsupportedType": "WhatsApp 不接受此类型的文件。支持 JPEG 和 PNG 图片、MP4 和 3GP 视频、AAC、MP3、AMR、M4A 和 OGG 音频，以及 PDF、Office 和文本文档。",
+          "empty": "该文件为空。"
+        }
+      }
+    }
+  }
+}

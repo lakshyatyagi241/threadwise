@@ -1,0 +1,571 @@
+{
+  "auth-registration-security": {
+    "account": {
+      "nav": {
+        "title": "Konto"
+      },
+      "common": {
+        "cancel": "Abbrechen",
+        "loading": "Wird geladen",
+        "reset": "Zurücksetzen",
+        "retry": "Erneut versuchen",
+        "save": "Änderungen speichern",
+        "saving": "Wird gespeichert",
+        "showPassword": "Passwort anzeigen",
+        "hidePassword": "Passwort ausblenden",
+        "signOut": "Abmelden"
+      },
+      "errors": {
+        "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Bitte versuchen Sie es erneut.",
+        "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "forbidden": "Sie haben keine Berechtigung dafür.",
+        "signedOut": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+        "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+        "rateLimitedWait": "Zu viele Versuche. Versuchen Sie es in {seconds, plural, one {# Sekunde} other {# Sekunden}} erneut.",
+        "requestId": "Anfrage-ID",
+        "locked": "Zu viele fehlgeschlagene Versuche. Warten Sie eine Weile, bevor Sie es erneut versuchen.",
+        "lockedWait": "Zu viele fehlgeschlagene Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
+      },
+      "hub": {
+        "railLabel": "Konto",
+        "menuLabel": "Kontobereiche",
+        "groups": {
+          "account": "Konto",
+          "security": "Sicherheit"
+        },
+        "tabs": {
+          "profile": "Profil",
+          "security": "Passwort & Sicherheit",
+          "delete": "Konto löschen",
+          "plan": "Tarife"
+        },
+        "pages": {
+          "profile": {
+            "title": "Profil",
+            "description": "Aktualisieren Sie Ihr Foto, Ihren Namen und Ihre Kontaktdaten."
+          },
+          "security": {
+            "title": "Passwort & Sicherheit",
+            "description": "Ändern Sie Ihr Passwort, aktivieren Sie die Zwei-Faktor-Authentifizierung und prüfen Sie, wo Sie angemeldet sind."
+          },
+          "delete": {
+            "title": "Konto löschen",
+            "description": "Entfernen Sie Ihr Konto dauerhaft aus diesem Workspace."
+          }
+        },
+        "breadcrumbLabel": "Brotkrumennavigation",
+        "breadcrumbRoot": "Konto",
+        "planBadge": "Tarif {plan}",
+        "planFree": "Kostenlos",
+        "upgrade": {
+          "title": "Brauchen Sie mehr Spielraum?",
+          "body": "Schalten Sie mit einem höheren Tarif mehr Kampagnen, Geräte und KI-Unterstützung frei.",
+          "cta": "Tarife ansehen"
+        },
+        "lockedHint": "Schließen Sie zuerst den Sicherheitsschritt für dieses Konto ab."
+      },
+      "avatar": {
+        "alt": "Foto von {name}",
+        "change": "Foto ändern",
+        "remove": "Foto entfernen",
+        "uploading": "Foto wird hochgeladen",
+        "removing": "Foto wird entfernt",
+        "updated": "Foto aktualisiert.",
+        "removed": "Foto entfernt.",
+        "errors": {
+          "type": "Wählen Sie ein Bild im Format JPG, PNG, WebP oder GIF.",
+          "too-large": "Das Bild überschreitet auch nach dem Verkleinern das Limit von {size}. Versuchen Sie es mit einem kleineren Bild.",
+          "decode": "Das Bild konnte nicht gelesen werden. Versuchen Sie eine andere Datei.",
+          "encode": "Das Bild konnte nicht vorbereitet werden. Versuchen Sie eine andere Datei.",
+          "rejected": "Die Datei wurde nicht akzeptiert. Verwenden Sie ein Bild im Format JPG, PNG, WebP oder GIF.",
+          "source-too-large": "Das Bild ist zu groß zum Öffnen. Wählen Sie eines unter 20 MB.",
+          "forbidden": "Sie dürfen das Foto dieses Kontos nicht ändern.",
+          "expired": "Ihre Sitzung ist abgelaufen. Laden Sie die Seite neu, melden Sie sich erneut an und versuchen Sie es noch einmal."
+        },
+        "hint": "JPG, PNG, WebP oder GIF. Wir verkleinern es auf {size}."
+      },
+      "timezone": {
+        "label": "Zeitzone",
+        "placeholder": "Zeitzonen suchen, z. B. Kolkata oder UTC+05:30",
+        "empty": "Keine Zeitzone entspricht Ihrer Suche."
+      },
+      "phone": {
+        "country": "Land",
+        "countryPlaceholder": "Länder suchen",
+        "countryEmpty": "Kein Land entspricht Ihrer Suche.",
+        "number": "Telefonnummer",
+        "numberPlaceholder": "Telefonnummer"
+      },
+      "profile": {
+        "personalInfo": "Persönliche Angaben",
+        "fullName": "Vollständiger Name",
+        "displayName": "Anzeigename",
+        "displayNameHint": "So wird Ihr Name für Teamkollegen angezeigt. Wir beginnen mit Ihrem Vornamen.",
+        "email": "E-Mail",
+        "changeEmail": "E-Mail ändern",
+        "verified": "Bestätigt",
+        "unverified": "Nicht bestätigt",
+        "pendingEmail": "Wir haben einen Bestätigungslink an {email} gesendet. Ihre Anmelde-E-Mail ändert sich, sobald Sie ihn geöffnet haben.",
+        "phone": "Telefon",
+        "phoneHint": "Optional. Wählen Sie ein Land und geben Sie dann die Nummer ein.",
+        "language": "Sprache",
+        "languageHint": "Die Sprache der App für Sie.",
+        "languageDefault": "Standard verwenden",
+        "theme": "Design",
+        "themes": {
+          "paper": "Papier",
+          "bright": "Hell",
+          "dark": "Dunkel"
+        },
+        "workspaceTimezone": "Zeitzone",
+        "workspaceTimezoneHint": "Gilt für {workspace}. Nur Inhaber und Administratoren können sie ändern.",
+        "saved": "Profil gespeichert.",
+        "errors": {
+          "fullNameRequired": "Geben Sie Ihren vollständigen Namen ein.",
+          "phoneInvalid": "Geben Sie eine gültige Telefonnummer für das gewählte Land ein.",
+          "invalid": "Dieser Wert ist ungültig.",
+          "timezoneInvalid": "Wählen Sie eine Zeitzone aus der Liste.",
+          "timezoneForbidden": "Nur Inhaber und Administratoren können die Zeitzone des Workspace ändern."
+        },
+        "workspaceTag": "(Workspace)"
+      },
+      "emailChange": {
+        "title": "E-Mail-Adresse ändern",
+        "intro": "Geben Sie die neue Adresse und Ihr aktuelles Passwort ein. Wir senden einen Bestätigungslink an die neue Adresse; Ihre Anmelde-E-Mail ändert sich erst, nachdem Sie ihn geöffnet haben.",
+        "newEmail": "Neue E-Mail-Adresse",
+        "password": "Aktuelles Passwort",
+        "passwordHint": "Die neue Adresse wird Ihre Anmelde-ID, daher fragen wir nach Ihrem Passwort.",
+        "showPassword": "Passwort anzeigen",
+        "hidePassword": "Passwort verbergen",
+        "cancel": "Abbrechen",
+        "submit": "Bestätigungslink senden",
+        "sending": "Wird gesendet",
+        "errors": {
+          "invalidEmail": "Geben Sie eine gültige E-Mail-Adresse ein.",
+          "same": "Das ist bereits Ihre E-Mail-Adresse.",
+          "taken": "Diese E-Mail-Adresse wird in diesem Workspace bereits verwendet.",
+          "passwordRequired": "Geben Sie Ihr aktuelles Passwort ein.",
+          "passwordWrong": "Das Passwort ist nicht korrekt."
+        }
+      },
+      "messageFooterPage": {
+        "title": "Nachrichtenfußzeile",
+        "titleLead": "Nachricht",
+        "titleAccent": "Fußzeile",
+        "description": "Die Zeile am Ende der Nachrichten, die Ihr Workspace über Automatisierungen, geplante Sendungen und Antworten aus dem Team-Posteingang versendet."
+      },
+      "branding": {
+        "title": "Nachrichtenfußzeile",
+        "description": "Die Zeile am Ende von Nur-Text- und interaktiven Nachrichten, die über Automatisierungen, geplante Sendungen und Antworten aus dem Team-Posteingang versendet werden. Genehmigte Vorlagen enthalten ihren eigenen Text und lassen sie weg.",
+        "label": "Eigene Fußzeile (höchstens {max} Zeichen)",
+        "hint": "Lassen Sie das Feld leer, um Nachrichten ganz ohne Fußzeile zu senden.",
+        "preview": "Vorschau",
+        "sampleMessage": "Hallo! Hier sind die gewünschten Informationen.",
+        "noFooter": "(keine Fußzeile)",
+        "save": "Fußzeile speichern",
+        "saving": "Wird gespeichert",
+        "saved": "Fußzeile aktualisiert. Sie gilt ab der nächsten gesendeten Nachricht.",
+        "tooLong": "Die Fußzeile darf höchstens {max} Zeichen lang sein.",
+        "forbidden": "Sie dürfen die Fußzeile nicht ändern.",
+        "current": "Aktuelle Fußzeile",
+        "currentDefault": "Aktuelle Fußzeile (Plattform-Standard)",
+        "planLocked": "Ihr Tarif verwendet bei ausgehenden Nachrichten die Standard-Fußzeile der Plattform. Höhere Tarife schalten eine eigene Fußzeile oder den Verzicht auf eine Fußzeile frei.",
+        "permissionLocked": "Nur Workspace-Administratoren können die Fußzeile ändern. Sie können sie hier sehen, aber nicht bearbeiten.",
+        "upgrade": "Tarife ansehen",
+        "upgradeTitle": "Wechseln Sie zu einem höheren Tarif, um die Plattform-Fußzeile zu entfernen.",
+        "placeholder": "Gesendet über {name}",
+        "remove": "Meine Fußzeile entfernen",
+        "removed": "Fußzeile entfernt. Ihre Nachrichten werden ab dem nächsten Versand ohne Fußzeile gesendet."
+      },
+      "password": {
+        "title": "Passwort ändern",
+        "subtitle": "Wählen Sie ein sicheres Passwort, das Sie nirgendwo sonst verwenden.",
+        "current": "Aktuelles Passwort",
+        "new": "Neues Passwort",
+        "newHint": "Mindestens {count} Zeichen.",
+        "confirm": "Neues Passwort bestätigen",
+        "submit": "Passwort aktualisieren",
+        "updating": "Wird aktualisiert",
+        "forcedBanner": "Sie müssen ein neues Passwort festlegen, bevor Sie fortfahren können. Wählen Sie unten eines aus.",
+        "forcedDone": "Passwort aktualisiert. Willkommen zurück.",
+        "success": "Passwort aktualisiert. {count, plural, =0 {Sie bleiben auf diesem Gerät angemeldet.} one {1 weiteres Gerät wurde abgemeldet.} other {# weitere Geräte wurden abgemeldet.}}",
+        "errors": {
+          "currentRequired": "Geben Sie Ihr aktuelles Passwort ein.",
+          "currentWrong": "Das Passwort ist nicht korrekt.",
+          "tooShort": "Verwenden Sie mindestens {count} Zeichen.",
+          "tooLong": "Verwenden Sie höchstens 256 Zeichen.",
+          "sameAsCurrent": "Wählen Sie ein Passwort, das sich von Ihrem aktuellen unterscheidet.",
+          "mismatch": "Die beiden Passwörter stimmen nicht überein.",
+          "policy": "Das Passwort erfüllt die Regeln Ihres Workspace nicht:"
+        },
+        "rules": {
+          "min_length": "Verwenden Sie mindestens {count} Zeichen.",
+          "upper_lower": "Mischen Sie Groß- und Kleinbuchstaben.",
+          "number": "Fügen Sie mindestens eine Zahl ein.",
+          "symbol": "Fügen Sie mindestens ein Sonderzeichen ein.",
+          "common": "Das Passwort ist zu leicht zu erraten."
+        },
+        "currentPlaceholder": "Geben Sie Ihr aktuelles Passwort ein",
+        "newPlaceholder": "Mindestens {count} Zeichen",
+        "confirmPlaceholder": "Erneut eingeben",
+        "tips": {
+          "title": "Passworttipps",
+          "mix": "Mischen Sie Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen.",
+          "reuse": "Verwenden Sie keine Passwörter von anderen Websites erneut.",
+          "manager": "Erwägen Sie einen Passwortmanager."
+        },
+        "newHintRequires": "Es muss {rules} enthalten.",
+        "requirement": {
+          "mixedCase": "Groß- und Kleinbuchstaben",
+          "number": "eine Zahl",
+          "symbol": "ein Sonderzeichen"
+        },
+        "resetLink": {
+          "title": "Kein aktuelles Passwort zur Hand?",
+          "body": "Wenn Sie sich mit Google oder Facebook angemeldet haben oder Ihr Passwort vergessen haben, senden wir einen Link an {email}, mit dem Sie ohne das alte Passwort ein neues wählen können.",
+          "send": "Link zum Zurücksetzen senden",
+          "sending": "Wird gesendet",
+          "sent": "Wenn {email} E-Mails empfangen kann, ist ein Link zum Zurücksetzen unterwegs. Öffnen Sie ihn, um ein neues Passwort zu wählen. Sie werden überall abgemeldet und können sich mit dem neuen Passwort wieder anmelden.",
+          "captchaFailed": "Schließen Sie die Captcha-Prüfung ab und versuchen Sie es erneut."
+        }
+      },
+      "passwordConfirm": {
+        "password": "Aktuelles Passwort",
+        "required": "Geben Sie Ihr aktuelles Passwort ein.",
+        "wrong": "Das Passwort ist nicht korrekt.",
+        "show": "Passwort anzeigen",
+        "hide": "Passwort verbergen",
+        "cancel": "Abbrechen",
+        "working": "Wird verarbeitet"
+      },
+      "mfa": {
+        "title": "Zwei-Faktor-Authentifizierung",
+        "subtitle": "Fordern Sie bei jeder Anmeldung einen Code aus einer Authenticator-App an.",
+        "forcedBanner": "Ihre Organisation verlangt die Zwei-Faktor-Authentifizierung. Richten Sie sie ein, um die App weiter zu nutzen.",
+        "forcedDone": "Die Zwei-Faktor-Authentifizierung ist aktiviert. Willkommen zurück.",
+        "offDescription": "Die Zwei-Faktor-Authentifizierung ist deaktiviert. Aktivieren Sie sie, um Ihr Konto auch dann zu schützen, wenn Ihr Passwort bekannt wird.",
+        "starting": "Einrichtung wird vorbereitet",
+        "step1": "Öffnen Sie auf Ihrem Telefon eine Authenticator-App (Google Authenticator, Microsoft Authenticator, 1Password und ähnliche).",
+        "step2": "Scannen Sie den QR-Code oder geben Sie den Einrichtungsschlüssel von Hand ein.",
+        "step3": "Geben Sie zum Abschluss den sechsstelligen Code ein, den die App anzeigt.",
+        "qrLabel": "QR-Code für Ihre Authenticator-App",
+        "manualKey": "Einrichtungsschlüssel",
+        "manualKeyHint": "Verwenden Sie ihn, wenn Sie den Code nicht scannen können. Halten Sie ihn geheim.",
+        "copy": "Kopieren",
+        "copied": "Kopiert",
+        "codeLabel": "Sechsstelliger Code",
+        "codeHint": "Der Code ändert sich alle 30 Sekunden.",
+        "codeInvalid": "Geben Sie die sechs Ziffern aus Ihrer App ein.",
+        "codeWrong": "Der Code ist falsch oder abgelaufen. Warten Sie auf einen neuen und versuchen Sie es erneut.",
+        "enable": "Aktivieren",
+        "enabling": "Wird aktiviert",
+        "expired": "Diese Einrichtung ist abgelaufen. Beginnen Sie von vorn, um einen neuen Code zu erhalten.",
+        "restart": "Neu beginnen",
+        "on": "Ein",
+        "since": "Seit {date}",
+        "onDescription": "Bei jeder Anmeldung werden Sie nach einem Code aus Ihrer Authenticator-App gefragt.",
+        "remaining": "{count, plural, =0 {Sie haben keine Wiederherstellungscodes mehr.} one {1 Wiederherstellungscode übrig.} other {# Wiederherstellungscodes übrig.}}",
+        "remainingLow": "Erzeugen Sie bald neue.",
+        "regenerate": "Wiederherstellungscodes ersetzen",
+        "regenerateTitle": "Wiederherstellungscodes ersetzen",
+        "regenerateDescription": "Dadurch werden zehn neue Codes erstellt und die alten werden ungültig. Geben Sie zum Fortfahren Ihr Passwort ein.",
+        "regenerateConfirm": "Codes ersetzen",
+        "disable": "Deaktivieren",
+        "disableTitle": "Zwei-Faktor-Authentifizierung deaktivieren",
+        "disableDescription": "Ihr Konto wird dann nur noch durch Ihr Passwort geschützt. Geben Sie zur Bestätigung Ihr Passwort ein.",
+        "disableConfirm": "Deaktivieren",
+        "disabledDone": "Die Zwei-Faktor-Authentifizierung ist deaktiviert.",
+        "codesTitleEnabled": "Die Zwei-Faktor-Authentifizierung ist aktiviert. Speichern Sie Ihre Wiederherstellungscodes.",
+        "codesTitleRegenerated": "Ihre neuen Wiederherstellungscodes",
+        "scanTitle": "Diesen QR-Code scannen"
+      },
+      "recovery": {
+        "intro": "Wenn Sie Ihr Telefon verlieren, können Sie sich mit jedem dieser Codes einmal anmelden.",
+        "onlyOnce": "Diese Codes werden nur einmal angezeigt. Bewahren Sie sie an einem sicheren Ort auf, zum Beispiel in einem Passwortmanager.",
+        "listLabel": "Wiederherstellungscodes",
+        "copy": "Codes kopieren",
+        "copied": "Kopiert",
+        "copyFailed": "Ihr Browser hat das Kopieren nicht erlaubt. Markieren Sie die Codes und kopieren Sie sie von Hand, oder laden Sie sie herunter.",
+        "download": "Herunterladen",
+        "fileHeader": "Wiederherstellungscodes. Jeder gilt nur einmal.",
+        "confirmSaved": "Ich habe diese Codes an einem sicheren Ort gespeichert.",
+        "done": "Ich habe sie gespeichert"
+      },
+      "sessions": {
+        "title": "Wo Sie angemeldet sind",
+        "subtitle": "Geräte, die bei Ihrem Konto angemeldet sind. Widerrufen Sie alle, die Sie nicht kennen.",
+        "thisDevice": "Dieses Gerät",
+        "remembered": "Bleibt angemeldet",
+        "ipUnknown": "Adresse unbekannt",
+        "signOutOthers": "Von allen anderen abmelden",
+        "signingOut": "Abmeldung läuft",
+        "empty": "Keine aktiven Sitzungen.",
+        "confirmOneTitle": "Dieses Gerät abmelden?",
+        "confirmOneBody": "{device} wird abgemeldet und benötigt Ihr Passwort für die erneute Anmeldung.",
+        "confirmOthersTitle": "Von allen anderen Geräten abmelden?",
+        "confirmOthersBody": "{count, plural, one {1 anderes Gerät wird} other {# andere Geräte werden}} abgemeldet. Dieses Gerät bleibt angemeldet.",
+        "revoked": "{device} wurde abgemeldet.",
+        "revokedOthers": "{count, plural, =0 {Es waren keine anderen Geräte angemeldet.} one {1 Gerät wurde abgemeldet.} other {# Geräte wurden abgemeldet.}}",
+        "columns": {
+          "device": "Gerät",
+          "ip": "IP-Adresse",
+          "lastActive": "Zuletzt aktiv",
+          "actions": "Aktionen"
+        },
+        "revoke": "Widerrufen",
+        "showing": "{from}–{to} von {total}",
+        "prev": "Zurück",
+        "next": "Weiter",
+        "lifetimes": "Eine Anmeldung endet automatisch nach {session} oder nach {remembered}, wenn „Angemeldet bleiben“ gewählt wurde.",
+        "idle": "Ohne diese Auswahl endet sie außerdem nach {idle} ohne Aktivität."
+      },
+      "delete": {
+        "title": "Ihr Konto löschen",
+        "warning": "Dadurch werden Ihr Konto, Ihre Anmeldung, Ihr Profil, Ihr Foto und Ihre Geräte dauerhaft gelöscht.",
+        "irreversible": "Dies kann nicht rückgängig gemacht werden.",
+        "consequencesTitle": "Was passiert",
+        "consequence1": "Sie werden überall abgemeldet und können sich mit diesem Konto nicht mehr anmelden.",
+        "consequence2": "Der Workspace und seine anderen Mitglieder bleiben bestehen. Ihre geleistete Arbeit verbleibt im Workspace.",
+        "consequence3": "Ein Nachweis über die Löschung des Kontos wird für Prüfzwecke aufbewahrt.",
+        "blocked": {
+          "sole_member": {
+            "title": "Sie sind das einzige Mitglied dieses Workspace.",
+            "body": "Das Konto kann nicht einzeln gelöscht werden. Bitten Sie das Plattform-Team, den Workspace zu schließen."
+          },
+          "sole_admin": {
+            "title": "Sie sind der einzige Administrator.",
+            "body": "Machen Sie zuerst ein anderes Mitglied zum Administrator und kehren Sie dann zurück, um Ihr Konto zu löschen."
+          }
+        },
+        "phraseLabel": "Geben Sie zur Bestätigung {phrase} ein",
+        "phraseHint": "Genau wie angezeigt, einschließlich Großbuchstaben.",
+        "password": "Aktuelles Passwort",
+        "showPassword": "Passwort anzeigen",
+        "hidePassword": "Passwort verbergen",
+        "cancel": "Abbrechen",
+        "submit": "Konto dauerhaft löschen",
+        "deleting": "Wird gelöscht",
+        "errors": {
+          "phrase": "Geben Sie die Wortfolge genau wie angezeigt ein.",
+          "passwordRequired": "Geben Sie Ihr aktuelles Passwort ein.",
+          "passwordWrong": "Das Passwort ist nicht korrekt."
+        },
+        "considerTitle": "Bedenken Sie vor dem Löschen",
+        "considerPlanLink": "Wechsel zum kostenlosen Tarif",
+        "considerPlanRest": "anstelle des Löschens.",
+        "considerSupportLink": "Support kontaktieren",
+        "considerSupportRest": "wenn ein Problem Sie zum Gehen bewegt. Vielleicht können wir es beheben.",
+        "reasonLabel": "Warum gehen Sie? (optional)",
+        "reasonHint": "Dies bleibt in diesem Formular. Es wird nirgendwohin gesendet.",
+        "reasonPlaceholder": "Sagen Sie uns, was wir besser machen können"
+      },
+      "switcher": {
+        "heading": "Workspaces",
+        "label": "Workspace: {name}. Workspace wechseln",
+        "switching": "Workspace wird gewechselt",
+        "switched": "Zu {name} gewechselt",
+        "failed": "Der Workspace konnte nicht gewechselt werden. Bitte versuchen Sie es erneut.",
+        "notAvailable": "Sie können nicht zu diesem Workspace wechseln.",
+        "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+        "rateLimitedWait": "Zu viele Versuche. Versuchen Sie es in {seconds, plural, one {# Sekunde} other {# Sekunden}} erneut."
+      },
+      "mfaChallenge": {
+        "title": "Bestätigen Sie, dass Sie es sind",
+        "intro": "{name} verwendet die Zwei-Faktor-Authentifizierung. Geben Sie zum Wechseln den Code aus Ihrer Authenticator-App ein.",
+        "codeLabel": "Sechsstelliger Code",
+        "codeHint": "Der Code ändert sich alle 30 Sekunden.",
+        "codeInvalid": "Geben Sie die sechs Ziffern aus Ihrer App ein.",
+        "codeWrong": "Der Code ist falsch oder abgelaufen. Versuchen Sie den nächsten.",
+        "recoveryLabel": "Wiederherstellungscode",
+        "recoveryHint": "Jeder Wiederherstellungscode gilt nur einmal.",
+        "recoveryInvalid": "Geben Sie einen Wiederherstellungscode ein.",
+        "recoveryWrong": "Dieser Wiederherstellungscode ist ungültig.",
+        "expired": "Dieser Anmeldeschritt ist abgelaufen. Schließen Sie dieses Fenster und wählen Sie den Workspace erneut aus.",
+        "useRecovery": "Stattdessen einen Wiederherstellungscode verwenden",
+        "useCode": "Stattdessen einen Authenticator-Code verwenden",
+        "cancel": "Abbrechen",
+        "confirm": "Bestätigen",
+        "verifying": "Wird überprüft"
+      },
+      "banners": {
+        "dismiss": "Schließen",
+        "verifyMessage": "Bitte bestätigen Sie Ihre E-Mail-Adresse ({email}). Wir haben Ihnen bei der Registrierung einen Link gesendet.",
+        "resend": "E-Mail erneut senden",
+        "resendIn": "Erneut senden in {seconds} s",
+        "resendWait": "Sie können in Kürze eine weitere E-Mail anfordern.",
+        "sending": "Wird gesendet",
+        "sent": "E-Mail gesendet.",
+        "notSent": "Die E-Mail konnte gerade nicht gesendet werden.",
+        "throttled": "Bitte warten Sie, bevor Sie es erneut anfordern.",
+        "alreadyVerified": "Ihre E-Mail-Adresse ist bereits bestätigt."
+      },
+      "suspended": {
+        "title": "Ihr Konto ist gesperrt",
+        "greeting": "Hallo {name}, ein Administrator hat dieses Konto gesperrt. Sie können sich weiterhin anmelden, aber der Rest der App bleibt bis zur Reaktivierung gesperrt.",
+        "support": "Wenn Sie glauben, dass dies ein Irrtum ist, bitten Sie den Inhaber oder Administrator Ihres Workspace, Ihr Konto zu reaktivieren.",
+        "signOut": "Abmelden",
+        "checking": "Wird geprüft"
+      },
+      "verifyRequired": {
+        "title": "Bitte bestätigen Sie Ihre E-Mail-Adresse",
+        "body": "Wir haben einen Bestätigungslink an die unten stehende Adresse gesendet. Öffnen Sie ihn, um Ihren Workspace freizuschalten.",
+        "resend": "Bestätigungs-E-Mail erneut senden",
+        "resendIn": "Erneut senden in {seconds} s",
+        "sending": "Wird gesendet",
+        "sent": "Wir haben einen neuen Link an {email} gesendet.",
+        "notSent": "Die E-Mail konnte gerade nicht gesendet werden.",
+        "throttled": "Vor Kurzem wurde ein Link gesendet. Bitte warten Sie, bevor Sie es erneut anfordern.",
+        "alreadyVerified": "Ihre E-Mail-Adresse ist bereits bestätigt. Sie werden weitergeleitet.",
+        "signOut": "Abmelden",
+        "help": "Nichts erhalten? Prüfen Sie Ihren Spam-Ordner. Wenn Sie den Link auf einem anderen Gerät geöffnet haben, kehren Sie zu diesem Tab zurück, wir erkennen es automatisch."
+      },
+      "onboarding": {
+        "metaTitle": "Workspace einrichten",
+        "notAllowed": {
+          "title": "Die Einrichtung ist nicht abgeschlossen",
+          "body": "Ihr Workspace wird noch eingerichtet. Ein Administrator muss die Einrichtung abschließen, bevor Sie fortfahren können."
+        },
+        "stepper": {
+          "label": "Schritt {current} von {total} / {name}",
+          "progress": "Einrichtungsfortschritt",
+          "account": "Konto",
+          "workspace": "Workspace",
+          "plan": "Tarif"
+        },
+        "workspace": {
+          "title": "Workspace einrichten",
+          "subtitle": "Ein paar Angaben, damit die App zu Ihrem Team passt.",
+          "name": "Workspace-Name",
+          "nameHint": "Eine verständliche Bezeichnung, die Ihr Team oben in der App sieht.",
+          "namePlaceholder": "Zum Beispiel Bloomly Marketing",
+          "industry": "Branche",
+          "industryPlaceholder": "Branche auswählen",
+          "industries": {
+            "ecommerce": "E-Commerce",
+            "saas": "SaaS",
+            "agency": "Agentur",
+            "education": "Bildung",
+            "healthcare": "Gesundheitswesen",
+            "finance": "Finanzen",
+            "travel": "Reisen",
+            "hospitality": "Gastgewerbe",
+            "other": "Sonstiges"
+          },
+          "size": "Teamgröße",
+          "sizePlaceholder": "Teamgröße auswählen",
+          "timezone": "Zeitzone",
+          "timezoneHint": "Tippen Sie, um eine beliebige Zeitzone zu suchen. Zeitpläne und Berichte verwenden sie.",
+          "currency": "Währung",
+          "currencyHint": "In dieser Währung wird Ihr Nachrichtenguthaben abgerechnet. Indien verwendet standardmäßig INR, alle anderen Länder USD. Sie kann nach der ersten Nutzung des Guthabens nicht mehr geändert werden.",
+          "currencyNone": "Nicht festgelegt",
+          "currencyPlaceholder": "Währungen suchen",
+          "currencyEmpty": "Keine Währung entspricht Ihrer Suche.",
+          "phone": "Mobilnummer",
+          "phoneHint": "Wir nutzen sie, um Sie zu Ihrem Konto und wichtigen Neuigkeiten zu kontaktieren.",
+          "continue": "Weiter",
+          "saving": "Wird gespeichert",
+          "errors": {
+            "nameInvalid": "Geben Sie einen Workspace-Namen mit 2 bis 120 Zeichen ein.",
+            "timezoneRequired": "Wählen Sie eine Zeitzone.",
+            "timezoneInvalid": "Wählen Sie eine Zeitzone aus der Liste.",
+            "phoneRequired": "Geben Sie Ihre Mobilnummer ein.",
+            "phoneInvalid": "Geben Sie eine gültige Telefonnummer für das gewählte Land ein.",
+            "invalid": "Dieser Wert ist ungültig.",
+            "forbidden": "Nur ein Workspace-Administrator kann den Workspace einrichten.",
+            "countryRequired": "Wählen Sie ein Land.",
+            "countryInvalid": "Wählen Sie ein Land aus der Liste.",
+            "currencyInvalid": "Diese Währung ist nicht verfügbar oder die Abrechnungswährung wird bereits verwendet. Wenden Sie sich zur Änderung an den Support."
+          },
+          "country": "Land",
+          "countryHint": "Wo Ihr Unternehmen ansässig ist.",
+          "countryPlaceholder": "Länder suchen",
+          "countryEmpty": "Kein Land entspricht Ihrer Suche."
+        },
+        "plan": {
+          "title": "Tarif auswählen",
+          "intro": "Jeder Tarif enthält ein monatliches Nachrichtenkontingent. Starten Sie kostenlos oder wählen Sie einen Tarif, um mehr freizuschalten. Sie können dies später ändern.",
+          "empty": "Es sind noch keine Tarife eingerichtet. Sie können jetzt kostenlos starten und später einen Tarif wählen.",
+          "listLabel": "Verfügbare Tarife",
+          "free": "Kostenlos",
+          "back": "Zurück",
+          "startFree": "Kostenlos starten / vorerst überspringen",
+          "finishing": "Wird abgeschlossen",
+          "welcome": "Alles bereit. Willkommen!"
+        }
+      },
+      "plans": {
+        "title": "Tarife",
+        "description": "Wählen Sie, was Ihr Workspace leisten kann.",
+        "currentPlan": "Ihr Tarif",
+        "noPlan": "Kein Tarif",
+        "trialEnds": "Kostenlose Testphase endet am {date}",
+        "comingSoon": "Die Auswahl und Bezahlung eines Tarifs folgt mit der Abrechnung, die noch nicht Teil dieser Version ist. Bis dahin wenden Sie sich an den Support, und wir stellen Ihren Workspace auf den gewünschten Tarif um.",
+        "contactSupport": "Support kontaktieren",
+        "back": "Zurück zum Konto",
+        "card": {
+          "popular": "Am beliebtesten",
+          "current": "Aktueller Tarif",
+          "free": "Kostenlos",
+          "custom": "Individuell",
+          "lifetime": "einmalig",
+          "messagesUnlimited": "Unbegrenzte Nachrichten",
+          "messagesLimited": "{count, number} Nachrichten / Monat",
+          "chipsLabel": "Enthaltene Funktionen",
+          "period": {
+            "days": "{count, plural, one {/ Tag} other {/ # Tage}}",
+            "weeks": "{count, plural, one {/ Woche} other {/ # Wochen}}",
+            "months": "{count, plural, one {/ Monat} other {/ # Monate}}",
+            "years": "{count, plural, one {/ Jahr} other {/ # Jahre}}"
+          },
+          "chips": {
+            "analytics": "Analysen",
+            "automation": "Automatisierung",
+            "ai_assistants": "KI-Assistenten",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "calling": "WhatsApp-Anrufe",
+            "remove_branding": "White-Label",
+            "sales_pipeline": "Vertriebspipeline",
+            "appointment_booking": "Termine",
+            "chatbot_widgets": "Chatbot-Widgets",
+            "wa_storefront": "WhatsApp-Katalog",
+            "inbox_sla": "Posteingangs-SLA",
+            "inbox_routing": "Posteingangs-Routing",
+            "waba_calling": "WhatsApp-Anrufe",
+            "inbox_kanban": "Posteingangs-Kanban",
+            "team_performance": "Teamleistung",
+            "scheduled_messages": "Geplante Nachrichten",
+            "whatsapp_warmer": "WhatsApp-Warmer",
+            "marketplace": "Marktplatz",
+            "lead_sources": "Lead-Quellen",
+            "team_chat": "Team-Chat",
+            "public_api": "Öffentliche API",
+            "outbound_webhooks": "Ausgehende Webhooks",
+            "storefront_builder": "Storefront-Builder",
+            "invoicing": "Rechnungsstellung",
+            "forms_and_links": "Formulare und Links",
+            "extra_channels": "Telegram, Facebook und Instagram",
+            "form_builder": "Formulare",
+            "waba_groups": "WhatsApp-Gruppen"
+          },
+          "cta": {
+            "continueFree": "Kostenlos fortfahren",
+            "talkToSales": "Vertrieb kontaktieren",
+            "upgrade": "Auf {name} upgraden",
+            "downgradeUnavailable": "Downgrade nicht verfügbar",
+            "downgradeHint": "Downgrades sind online nicht möglich. Wenden Sie sich an den Support, um zu einem niedrigeren Tarif zu wechseln.",
+            "working": "Wird verarbeitet"
+          }
+        }
+      },
+      "mailFailure": {
+        "not_configured": "Der E-Mail-Versand ist auf dieser Plattform noch nicht eingerichtet. Wenden Sie sich an Ihren Administrator.",
+        "auth_failed": "Der Mailserver hat unsere Anmeldung abgelehnt. Bitten Sie Ihren Administrator, die Mail-Einstellungen zu prüfen.",
+        "connection_refused": "Der Mailserver hat die Verbindung nicht angenommen. Versuchen Sie es später erneut oder wenden Sie sich an Ihren Administrator.",
+        "timeout": "Der Mailserver hat zu lange für die Antwort gebraucht. Sie können es sofort erneut versuchen.",
+        "transport_error": "Die E-Mail konnte nicht an den Mailserver übergeben werden. Sie können es sofort erneut versuchen.",
+        "unknown": "Die E-Mail konnte aus einem unbekannten Grund nicht gesendet werden. Sie können es sofort erneut versuchen."
+      }
+    }
+  }
+}

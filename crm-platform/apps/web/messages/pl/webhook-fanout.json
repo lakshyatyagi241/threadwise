@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhooki",
+      "forwarding": "Przekazywanie webhooków"
+    },
+    "common": {
+      "loading": "Wczytywanie",
+      "retry": "Spróbuj ponownie",
+      "requestId": "Identyfikator żądania",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+        "request": "Nie udało się zrealizować żądania.",
+        "unexpected": "Coś poszło nie tak po naszej stronie. Spróbuj ponownie za chwilę.",
+        "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+        "conflict": "Ktoś inny zmienił ten cel. Lista została wczytana ponownie: zastosuj zmianę jeszcze raz.",
+        "validation": "Niektóre wartości są nieprawidłowe. Sprawdź wyróżnione pola.",
+        "notFound": "Ta pozycja już nie istnieje.",
+        "urlRejected": "Ten URL jest niedozwolony. Użyj adresu https dostępnego z internetu."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin / System / Webhooki",
+      "title": "Przekazywanie webhooków",
+      "description": "Lista usług operatora platformy, które otrzymują kopię każdego webhooka Meta.",
+      "banner": "Meta pozwala na jeden URL zwrotny. Odbieramy go raz, weryfikujemy i przekazujemy surowe ciało bez zmian (z oryginalnym podpisem) do każdego aktywnego celu.",
+      "superOnly": "Przekazywaniem webhooków może zarządzać tylko superadministrator.",
+      "add": "Dodaj cel",
+      "tabs": {
+        "targets": "Cele",
+        "failures": "Nieudane dostarczenia"
+      }
+    },
+    "targets": {
+      "empty": "Brak celów przekazywania",
+      "emptyBody": "Dodaj cel, aby zacząć przekazywać webhooki Meta do innej usługi.",
+      "columns": {
+        "target": "Cel",
+        "active": "Aktywny",
+        "fields": "Pola",
+        "deliveries": "Dostarczenia",
+        "last": "Ostatnie dostarczenie",
+        "actions": "Działania"
+      },
+      "allFields": "Wszystkie pola",
+      "success": "{count, number} OK",
+      "failure": "{count, number} nieudanych",
+      "pending": "{count, number} oczekujących",
+      "pendingLabel": "{count, number} nieudanych dostaw czeka na ponowne wysłanie",
+      "neverDelivered": "Nic jeszcze nie dostarczono",
+      "lastStatus": "Status {status}",
+      "lastError": "Błąd: {error}",
+      "lastAt": "o {time}",
+      "activeSwitch": "Przekaż do {name}",
+      "on": "Cel włączony",
+      "off": "Cel wyłączony",
+      "edit": "Edytuj",
+      "test": "Testuj",
+      "testing": "Przetwarzanie…",
+      "testOk": "Test zaliczony: status {status} w {ms, number} ms",
+      "testFailed": "Test nieudany: {reason} ({ms, number} ms)",
+      "testNoStatus": "brak odpowiedzi",
+      "testStatus": "status {status}",
+      "delete": "Usuń",
+      "deleteTitle": "Usunąć {name}?",
+      "deleteBody": "Cel przestanie otrzymywać webhooki, a zachowane nieudane dostarczenia zostaną usunięte. Tego nie można cofnąć.",
+      "deleteConfirm": "Usuń cel",
+      "cancel": "Anuluj",
+      "toasts": {
+        "created": "Dodano {name}",
+        "saved": "Zapisano {name}",
+        "on": "{name} jest włączony",
+        "off": "{name} jest wyłączony",
+        "deleted": "Usunięto {name}"
+      }
+    },
+    "dialog": {
+      "createTitle": "Dodaj cel przekazywania",
+      "editTitle": "Edytuj {name}",
+      "close": "Zamknij",
+      "name": "Nazwa",
+      "namePlaceholder": "Usługa analityczna",
+      "url": "URL",
+      "urlHint": "Tylko https. Adresy w sieciach prywatnych są odrzucane.",
+      "headerName": "Nazwa nagłówka (opcjonalnie)",
+      "headerNameHint": "Wysyłany z każdym dostarczeniem, np. Authorization.",
+      "headerValue": "Wartość nagłówka",
+      "headerValueSaved": "Zapisano, kończy się na ••••{last4}. Zostaw puste, aby zachować.",
+      "headerValueSavedNoLast4": "Zapisano. Zostaw puste, aby zachować.",
+      "headerValueHint": "Tylko zapis: po zapisaniu nie jest już pokazywana.",
+      "removeHeader": "Usuń zapisany nagłówek",
+      "fieldFilter": "Filtr pól",
+      "fieldFilterHint": "Zostaw puste, aby przekazywać wszystkie pola. Wpisz pole i naciśnij Enter, np. messages lub message_template_status_update.",
+      "fieldFilterPlaceholder": "Dodaj pole",
+      "fieldRemove": "Usuń {field}",
+      "timeout": "Limit czasu (sekundy)",
+      "timeoutHint": "Od 1 do 30",
+      "maxAttempts": "Maks. liczba prób",
+      "maxAttemptsHint": "Od 1 do 10",
+      "active": "Przekazuj do tego celu",
+      "save": "Zapisz",
+      "saving": "Przetwarzanie…",
+      "cancel": "Anuluj",
+      "errors": {
+        "nameRequired": "Wpisz nazwę.",
+        "urlRequired": "Wpisz URL.",
+        "urlHttps": "URL musi zaczynać się od https://.",
+        "headerNameInvalid": "Używaj tylko liter, cyfr i myślników.",
+        "headerValueRequired": "Nagłówek wymaga nazwy i wartości.",
+        "headerNameRequired": "Wpisz też nazwę nagłówka.",
+        "timeout": "Wpisz liczbę całkowitą od 1 do 30.",
+        "maxAttempts": "Wpisz liczbę całkowitą od 1 do 10."
+      }
+    },
+    "failures": {
+      "empty": "Brak nieudanych dostarczeń",
+      "emptyBody": "Dostarczenia, które wyczerpały próby, są tutaj przechowywane przez 14 dni, abyś mógł wysłać je ponownie.",
+      "filterAll": "Wszystkie cele",
+      "filterLabel": "Cel",
+      "columns": {
+        "target": "Cel",
+        "when": "Nieudane o",
+        "attempts": "Próby",
+        "reason": "Powód",
+        "size": "Rozmiar",
+        "actions": "Działanie"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} B",
+      "replay": "Wyślij ponownie",
+      "replaying": "Przetwarzanie…",
+      "replayed": "Wysłano ponownie {time}",
+      "replayOk": "Dostarczono: status {status} w {ms, number} ms",
+      "replayFailed": "Nie dostarczono: {reason} ({ms, number} ms)",
+      "reasonStatus": "status {status}",
+      "reasonNone": "brak odpowiedzi"
+    }
+  }
+}

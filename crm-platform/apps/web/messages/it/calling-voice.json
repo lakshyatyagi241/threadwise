@@ -1,0 +1,113 @@
+{
+  "calling-voice": {
+    "nav": {
+      "title": "Chiamate",
+      "description": "Attiva o disattiva le chiamate WhatsApp per ogni numero.",
+      "keywords": "chiamata, chiamate, voce, telefono, chiamate whatsapp, pulsante chiamata"
+    },
+    "common": {
+      "dismiss": "Chiudi"
+    },
+    "button": {
+      "label": "Chiama",
+      "tooltip": "Avvia una chiamata WhatsApp",
+      "working": "Operazione in corso..."
+    },
+    "confirm": {
+      "title": "Nessuna autorizzazione alle chiamate confermata",
+      "body": "Non abbiamo un'autorizzazione alle chiamate confermata per questo contatto.",
+      "callAnyway": "Chiama comunque",
+      "callAnywayHint": "Funziona se ha già toccato \"Consenti\" in WhatsApp.",
+      "askPermission": "Chiedi autorizzazione",
+      "askPermissionHint": "Gli invia invece una richiesta di autorizzazione. Nessuna chiamata viene effettuata.",
+      "close": "Chiudi"
+    },
+    "toast": {
+      "noPhone": "Nessun numero di telefono per questo contatto.",
+      "noNumber": "Le chiamate non sono abilitate su nessun numero WABA.",
+      "alreadyPermitted": "Questo contatto consente già le chiamate: avvio della chiamata in corso...",
+      "permissionSent": "Richiesta di autorizzazione inviata. Vedrà Accetta/Rifiuta in WhatsApp: riprova a chiamare dopo la sua risposta.",
+      "permissionFailed": "Impossibile inviare la richiesta di autorizzazione: {message}",
+      "startFailed": "Impossibile avviare la chiamata: {message}",
+      "acceptInvalid": "Impossibile accettare la chiamata: dati della chiamata non validi da WhatsApp. Riprova.",
+      "acceptFailed": "Impossibile accettare la chiamata: {message}",
+      "alreadyAccepted": "Chiamata già accettata da un altro collega.",
+      "recordingStarted": "Registrazione avviata: verrà salvata nei Registri chiamate al termine della chiamata.",
+      "recordingSaved": "Registrazione della chiamata salvata nei Registri chiamate.",
+      "recordUnsupported": "La registrazione non è supportata in questo browser.",
+      "noActiveCall": "Nessuna chiamata attiva da registrare."
+    },
+    "incoming": {
+      "title": "Chiamata WhatsApp in arrivo",
+      "caller": "Chiamante +{digits}",
+      "accept": "Accetta",
+      "decline": "Rifiuta",
+      "aiHandling": "L'IA sta gestendo questa chiamata..."
+    },
+    "panel": {
+      "label": "Chiamata in corso",
+      "title": "In chiamata",
+      "ringing": "squilla...",
+      "connected": "connessa",
+      "timer": "Durata chiamata",
+      "mute": "Disattiva audio",
+      "muted": "Audio disattivato",
+      "end": "Termina",
+      "record": "Registra",
+      "recording": "Registrazione",
+      "recordTooltip": "Registra questa chiamata",
+      "recordingTooltip": "Registrazione di questa chiamata",
+      "recordingNotice": "Questa chiamata è in registrazione"
+    },
+    "failures": {
+      "REJECTED": "Il cliente ha rifiutato la chiamata.",
+      "BUSY": "Il cliente è in un'altra chiamata.",
+      "NO_ANSWER": "Nessuna risposta: il cliente non ha risposto.",
+      "MISSED": "Il cliente ha perso la chiamata.",
+      "CANCELLED": "La chiamata è stata annullata.",
+      "MIC_BLOCKED": "Accesso al microfono bloccato: chi chiama non ti sentirà. Concedi l'autorizzazione al microfono nel browser e riprova.",
+      "BUSY_SLOT": "Un'altra chiamata è già attiva in questa scheda.",
+      "INVALID_SDP": "Offerta SDP non valida: manca v=0 o la riga media",
+      "LOCAL_SDP_EMPTY": "SDP locale vuoto: raccolta ICE non riuscita",
+      "ENDED_EARLY": "La chiamata è terminata prima di connettersi.",
+      "ANSWER_FAILED": "Impossibile applicare la risposta di WhatsApp"
+    },
+    "errors": {
+      "CALL_NUMBER_NOT_FOUND": "Questo numero non fa più parte del tuo Workspace. Aggiorna la pagina e riprova.",
+      "CALL_NOT_FOUND": "Impossibile trovare questa chiamata. Potrebbe essere già terminata.",
+      "CALL_NOT_WABA": "Le chiamate funzionano solo sui numeri WhatsApp Cloud API. Questo numero è collegato in un altro modo.",
+      "CALL_NUMBER_NOT_CONNECTED": "Questo numero non è al momento collegato a WhatsApp Cloud API. Ricollegalo in Canali, poi riprova.",
+      "CALL_COEXISTENCE_UNSUPPORTED": "Un numero usato anche nell'app WhatsApp Business non può ricevere chiamate.",
+      "CALL_NOT_ENABLED": "Le chiamate sono disattivate per questo numero. Attivale prima in Chiamate.",
+      "CALL_META_REFUSED": "WhatsApp ha rifiutato la richiesta. Riprova tra un attimo.",
+      "CALL_PERMISSION_REQUESTED": "Richiesta di autorizzazione inviata. Vedrà Accetta/Rifiuta in WhatsApp: riprova a chiamare dopo la sua risposta.",
+      "CALL_STATE_CONFLICT": "Chiamata già accettata da un altro collega.",
+      "CALL_RECORDING_FAILED": "Impossibile salvare la registrazione.",
+      "FORBIDDEN": "Non hai l'autorizzazione a usare le chiamate.",
+      "PLAN_FEATURE_LOCKED": "Il tuo piano non include le chiamate WhatsApp.",
+      "NETWORK": "Errore di rete: riprova.",
+      "UNEXPECTED": "Qualcosa è andato storto. Riprova."
+    },
+    "settings": {
+      "title": "Chiamate",
+      "intro": "Attiva le chiamate WhatsApp per un numero per mostrare il pulsante verde Chiama nelle sue chat nell'Inbox.",
+      "cardTitle": "Chiamate WhatsApp",
+      "numberFallback": "Numero WhatsApp",
+      "connection": "Connessione: {status}",
+      "enabledStatus": "Attivo: il pulsante verde Chiama ora compare nelle chat di questo numero nell'Inbox.",
+      "enabledSince": "Attivato il {date}",
+      "offStatus": "Disattivato: attivalo perché il pulsante Chiama compaia nelle chat con questo numero.",
+      "enable": "Attiva le chiamate",
+      "disable": "Disattiva le chiamate",
+      "asking": "Richiesta a WhatsApp...",
+      "enabledDone": "Le chiamate sono ora attive per questo numero.",
+      "disabledDone": "Le chiamate sono ora disattivate per questo numero.",
+      "loading": "Caricamento dei numeri",
+      "loadFailed": "Impossibile caricare i tuoi numeri.",
+      "retry": "Riprova",
+      "emptyTitle": "Ancora nessun numero WhatsApp",
+      "emptyMessage": "Collega un numero WhatsApp Cloud API in Canali, poi torna qui per attivare le chiamate.",
+      "viewOnly": "Puoi vedere lo stato delle chiamate di ogni numero. Attivarle o disattivarle richiede l'autorizzazione di gestione delle chiamate."
+    }
+  }
+}

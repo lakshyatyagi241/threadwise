@@ -8,6 +8,8 @@ import {
   type FlowNode,
   type FlbNodeData,
 } from '@crm/contracts';
+import { nodeLabelMsg } from './contract-text';
+import { msg, type Msg } from './msg';
 
 /**
  * The canvas operations (TW-FLB-015) as pure functions over `{ nodes, edges }`: add, duplicate, delete, connect, pin the
@@ -19,23 +21,22 @@ export interface CanvasState {
   edges: FlowEdge[];
 }
 
-export type OpResult =
-  { ok: true; state: CanvasState; id?: string } | { ok: false; message: string };
+export type OpResult = { ok: true; state: CanvasState; id?: string } | { ok: false; message: Msg };
 
 export const NODE_W = 280;
-export const OPTION_CAPS: Record<string, { max: number; message: string; label: string }> = {
-  buttons: { max: 3, message: 'Max 3 quick reply buttons', label: 'Button ' },
-  ask: { max: 3, message: 'Max 3 expected answers', label: 'Answer ' },
-  poll: { max: 3, message: 'Max 3 poll options', label: 'Option ' },
+export const OPTION_CAPS: Record<string, { max: number; message: Msg; label: string }> = {
+  buttons: { max: 3, message: msg('graphOps.maxButtons'), label: 'Button ' },
+  ask: { max: 3, message: msg('graphOps.maxAnswers'), label: 'Answer ' },
+  poll: { max: 3, message: msg('graphOps.maxPollOptions'), label: 'Option ' },
 };
 const OPTION_HARD_MAX = 10;
 
 /** A fresh node at (x, y). The Trigger can exist once; the first node on an empty canvas becomes START. */
 export function addNode(s: CanvasState, type: string, x: number, y: number): OpResult {
   const def = FLB_NODE_TYPES[type];
-  if (!def) return { ok: false, message: `Unknown node type "${type}".` };
+  if (!def) return { ok: false, message: msg('graphOps.unknownType', { type }) };
   if (def.singleton && s.nodes.some((n) => n.type === type)) {
-    return { ok: false, message: `${def.label} can only exist once.` };
+    return { ok: false, message: msg('graphOps.singleton', { node: nodeLabelMsg(type) }) };
   }
   const id = flbNewNodeId();
   const node: FlowNode = {
@@ -57,12 +58,12 @@ export function pinStart(s: CanvasState, id: string): CanvasState {
 /** A disconnected copy 40 px down-right; never the start; the Trigger cannot be copied. */
 export function duplicateNode(s: CanvasState, id: string): OpResult {
   const src = s.nodes.find((n) => n.id === id);
-  if (!src) return { ok: false, message: 'Node not found.' };
+  if (!src) return { ok: false, message: msg('graphOps.nodeNotFound') };
   const def = FLB_NODE_TYPES[src.type];
   if (def?.singleton) {
     return {
       ok: false,
-      message: `${def.label || 'This node'} can only exist once — can’t duplicate.`,
+      message: msg('graphOps.cannotDuplicate', { node: nodeLabelMsg(src.type) }),
     };
   }
   const copy: FlowNode = {
@@ -128,11 +129,11 @@ export function moveNode(s: CanvasState, id: string, x: number, y: number): Canv
 /** Adds an option to buttons / list / ask / poll with Reference's caps; a list item inherits the last item's section. */
 export function addOption(s: CanvasState, id: string): OpResult {
   const node = s.nodes.find((n) => n.id === id);
-  if (!node) return { ok: false, message: 'Node not found.' };
+  if (!node) return { ok: false, message: msg('graphOps.nodeNotFound') };
   const opts = Array.isArray(node.data.options) ? [...(node.data.options as unknown[])] : [];
   const cap = OPTION_CAPS[node.type];
   if (cap && opts.length >= cap.max) return { ok: false, message: cap.message };
-  if (opts.length >= OPTION_HARD_MAX) return { ok: false, message: 'Max 10 items' };
+  if (opts.length >= OPTION_HARD_MAX) return { ok: false, message: msg('graphOps.maxItems') };
   const label = cap?.label ?? 'Item ';
   if (node.type === 'list') {
     const last = opts.length ? flbListOption(opts[opts.length - 1], opts.length - 1).section : '';

@@ -1,4 +1,5 @@
 import { SYSTEM_ATTRIBUTES } from '@crm/contracts';
+import type { Translate } from '../../lib/msg';
 
 /**
  * Pure logic behind the "type / to insert an attribute" popover every inspector text field carries (Reference's
@@ -62,7 +63,13 @@ export function filterAttrs(entries: readonly AttrEntry[], query: string): AttrE
   );
 }
 
-/** The picker feed as entries; until the feed arrives (or if it fails) the built-in tokens are still offered. */
+const SYSTEM_KEYS: ReadonlySet<string> = new Set(SYSTEM_ATTRIBUTES.map((a) => a.key));
+
+/**
+ * The picker feed as entries; until the feed arrives (or if it fails) the built-in tokens are still offered. The built-in
+ * tokens' names and descriptions come from the catalogue (`flb.builder.attrPicker.system.<key>`) when a translator is given;
+ * the workspace's own attributes keep the names its users gave them.
+ */
 export function attrEntries(
   feed:
     | {
@@ -70,14 +77,18 @@ export function attrEntries(
         custom: ReadonlyArray<{ key: string; name: string; description: string | null }>;
       }
     | undefined,
+  t?: Translate,
 ): AttrEntry[] {
   const system = feed?.system ?? SYSTEM_ATTRIBUTES;
+  const known = (key: string) => t !== undefined && SYSTEM_KEYS.has(key);
   return [
     ...system.map((s) => ({
       kind: 'system' as const,
       key: s.key,
-      name: s.name,
-      description: s.description,
+      name: known(s.key) ? t!(`builder.attrPicker.system.${s.key}.name`) : s.name,
+      description: known(s.key)
+        ? t!(`builder.attrPicker.system.${s.key}.description`)
+        : s.description,
     })),
     ...(feed?.custom ?? []).map((c) => ({
       kind: 'custom' as const,

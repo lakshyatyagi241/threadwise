@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "common": {
+      "dismiss": "Dispensar"
+    },
+    "nav": {
+      "forms": "Formulários"
+    },
+    "kinds": {
+      "short_text": "Texto curto",
+      "long_text": "Texto longo",
+      "email": "E-mail",
+      "phone": "Número de telefone",
+      "number": "Número",
+      "currency": "Valor",
+      "date": "Data",
+      "dropdown": "Lista suspensa",
+      "radio": "Escolha única",
+      "checkbox_group": "Múltipla escolha",
+      "checkbox": "Caixa de seleção",
+      "rating": "Avaliação",
+      "hidden": "Campo oculto"
+    },
+    "errors": {
+      "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
+      "forbidden": "Você não tem permissão para fazer isso.",
+      "signedOut": "Sua sessão terminou. Entre novamente para continuar.",
+      "conflict": "Outra pessoa alterou este formulário. Recarregue a página para ver a versão mais recente.",
+      "nameTaken": "Outro formulário já tem este nome. Escolha um nome diferente.",
+      "stateInvalid": "Isso não é possível no status atual do formulário.",
+      "definitionInvalid": "O formulário ainda não é válido. Verifique os campos e tente novamente.",
+      "publishInvalid": "O formulário ainda não pode ser publicado. Corrija os problemas listados e tente novamente.",
+      "planLimit": "O limite do seu plano foi atingido.",
+      "planLimitForms": "Você atingiu o número de formulários permitido pelo seu plano. Arquive um formulário que não usa mais ou faça upgrade do plano.",
+      "planLocked": "Formulários não fazem parte do seu espaço de trabalho.",
+      "notFound": "Este formulário não foi encontrado. Ele pode ter sido excluído.",
+      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
+      "unexpected": "Algo deu errado. Tente novamente em instantes.",
+      "upgrade": "Ver planos"
+    }
+  }
+}

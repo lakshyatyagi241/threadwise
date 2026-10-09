@@ -1,0 +1,370 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "REC_ENDED": "Questa pianificazione è terminata, quindi non c'è più nulla da modificare o eseguire.",
+        "REC_NOT_ACTIVE": "Questa pianificazione non è attiva. Riprendila prima.",
+        "REC_START_TOO_OLD": "La data di inizio è troppo lontana nel passato. Si creano al massimo 12 periodi passati, quindi inizia da una data più recente.",
+        "INV_RECURRING_INVALID": "Non è stato possibile usare il modello per creare una fattura. Controlla il cliente, le righe e l'imposta, poi salva di nuovo."
+      }
+    },
+    "recurring": {
+      "title": "Fatture ricorrenti",
+      "subtitle": "Pianificazioni che creano fatture da sole, nelle date che imposti.",
+      "new": "Nuova pianificazione",
+      "invoices": "Fatture",
+      "tabsLabel": "Stato della pianificazione",
+      "tabs": {
+        "all": "Tutte",
+        "active": "Attive",
+        "paused": "In pausa",
+        "ended": "Terminate"
+      },
+      "search": "Cerca tra le pianificazioni caricate",
+      "refresh": "Aggiorna",
+      "tableLabel": "Pianificazioni delle fatture ricorrenti",
+      "scrollArea": "Tabella delle pianificazioni, scorre in orizzontale",
+      "loading": "Caricamento pianificazioni in corso",
+      "empty": {
+        "all": {
+          "title": "Nessuna fattura ricorrente",
+          "message": "Imposta una pianificazione una volta e la fattura viene creata per te ogni settimana, mese o anno."
+        },
+        "active": {
+          "title": "Nessuna pianificazione attiva",
+          "message": "Qui compaiono le pianificazioni attive, quelle che creeranno la prossima fattura in tempo."
+        },
+        "paused": {
+          "title": "Nessuna pianificazione in pausa",
+          "message": "Una pianificazione in pausa non crea fatture finché non la riprendi."
+        },
+        "ended": {
+          "title": "Nessuna pianificazione terminata",
+          "message": "Una pianificazione termina dopo l'ultima esecuzione o alla data di fine."
+        }
+      },
+      "emptySearchTitle": "Nessuna pianificazione corrisponde",
+      "emptySearch": "Nessuna riga caricata corrisponde. Cancella la ricerca o carica altre righe.",
+      "clearSearch": "Cancella ricerca",
+      "showing": "{count, plural, one {Mostra 1 pianificazione} other {Mostra # pianificazioni}}",
+      "showingMatches": "{count} delle {loaded} pianificazioni caricate corrispondono",
+      "loadMore": "Carica altre",
+      "allLoaded": "Tutte le pianificazioni sono caricate",
+      "searchLoadedOnly": "La ricerca considera solo le pianificazioni già caricate. Carica altre per cercare oltre.",
+      "columns": {
+        "name": "Pianificazione",
+        "buyer": "Cliente",
+        "every": "Ripetizione",
+        "next": "Prossima esecuzione",
+        "last": "Ultima esecuzione",
+        "runs": "Esecuzioni",
+        "failures": "Errori",
+        "amount": "Per fattura",
+        "mode": "Ogni fattura è",
+        "status": "Stato",
+        "actions": "Azioni"
+      },
+      "lineCount": "{count, plural, one {1 riga} other {# righe}}",
+      "onHold": "In attesa",
+      "runsOf": "{done} di {max}",
+      "failuresTitle": "{count, plural, one {1 periodo non riuscito. Apri lo storico.} other {# periodi non riusciti. Apri lo storico.}}",
+      "channel": {
+        "link": "Link",
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "moreFor": "Altre azioni per {name}",
+      "open": "Apri",
+      "edit": "Modifica",
+      "pause": "Metti in pausa",
+      "resume": "Riprendi",
+      "cancel": "Annulla",
+      "runNow": {
+        "action": "Esegui ora",
+        "title": "Eseguire {name} ora?",
+        "confirm": "Esegui ora",
+        "message": {
+          "draft": "Questo crea ora la fattura per {date} come bozza da controllare, e la pianificazione passa al periodo successivo.",
+          "issue": "Questo crea ora la fattura per {date} e la emette (riceve subito il numero). La pianificazione passa al periodo successivo.",
+          "issue_send": "Questo crea ora la fattura per {date}, la emette e la invia al cliente. La pianificazione passa al periodo successivo."
+        }
+      },
+      "delete": {
+        "action": "Elimina",
+        "title": "Eliminare {name}?",
+        "message": "{name} smette di creare fatture. Le fatture già create restano nell'elenco.",
+        "confirm": "Elimina pianificazione",
+        "keep": "Conserva"
+      },
+      "toast": {
+        "paused": "{name} è in pausa.",
+        "resumed": "{name} è di nuovo attiva. Prossima fattura: {date}.",
+        "resumedEnded": "{name} non aveva più periodi, quindi è terminata.",
+        "ran": "È stata creata una fattura da {name}.",
+        "runFailed": "L'esecuzione per {name} non è riuscita ed è stata registrata. Apri lo storico per vedere il motivo.",
+        "deleted": "{name} è stata eliminata."
+      },
+      "every": {
+        "day": "{interval, plural, one {Ogni giorno} other {Ogni # giorni}}",
+        "week": "{interval, plural, one {Ogni settimana} other {Ogni # settimane}}",
+        "month": "{interval, plural, one {Ogni mese} other {Ogni # mesi}}",
+        "year": "{interval, plural, one {Ogni anno} other {Ogni # anni}}"
+      },
+      "status": {
+        "active": "Attiva",
+        "paused": "In pausa",
+        "ended": "Terminata"
+      },
+      "runStatus": {
+        "created": "Creata",
+        "failed": "Non riuscita"
+      },
+      "modeShort": {
+        "draft": "Una bozza",
+        "issue": "Emessa",
+        "issue_send": "Emessa e inviata"
+      },
+      "modeSent": {
+        "email": "Emessa e inviata via email",
+        "link": "Emessa, condivisa tramite link",
+        "whatsapp": "Emessa e inviata su WhatsApp"
+      },
+      "frequency": {
+        "day": "Giorni",
+        "week": "Settimane",
+        "month": "Mesi",
+        "year": "Anni"
+      },
+      "modeCards": {
+        "draft": {
+          "title": "Lascia come bozza",
+          "hint": "Ogni fattura attende la tua revisione prima di essere emessa."
+        },
+        "issue": {
+          "title": "Emettila",
+          "hint": "Ogni fattura viene numerata ed è pronta il giorno in cui scade."
+        },
+        "issue_send": {
+          "title": "Emetti e invia",
+          "hint": "Ogni fattura viene emessa e inviata al cliente in automatico."
+        }
+      },
+      "warnings": {
+        "noBuyerEmail": "Nel modello non c'è un'email del cliente, quindi l'invio via email non riuscirà. Aggiungi un'email oppure invia tramite link."
+      },
+      "preview": {
+        "title": "Prossime esecuzioni",
+        "incomplete": "Compila la pianificazione per vedere quando verranno create le fatture.",
+        "sentence": "{every} dal {start}{limit}. {outcome}",
+        "sentenceLimit": "{kind, select, runs {, {count, plural, one {1 fattura} other {# fatture}}} end {, fino al {end}} both {, {count, plural, one {1 fattura} other {# fatture}}, fino al {end}} other {}}",
+        "outcome": {
+          "draft": "Ogni fattura resta una bozza da controllare.",
+          "issue": "Ogni fattura viene emessa automaticamente.",
+          "issue_email": "Ogni fattura viene emessa e inviata via email al cliente.",
+          "issue_link": "Ogni fattura viene emessa e registrata come condivisa tramite link.",
+          "issue_whatsapp": "Ogni fattura viene emessa e inviata su WhatsApp."
+        },
+        "eachInvoice": "Ogni fattura vale circa",
+        "lastDay": "Ultimo giorno del mese",
+        "noRuns": "Nessuna esecuzione rientra in questa pianificazione.",
+        "endsMaxRuns": "{count, plural, one {Si ferma dopo 1 fattura.} other {Si ferma dopo # fatture.}}",
+        "endsEndDate": "{count, plural, one {Nulla viene eseguito dopo {date}: 1 fattura in tutto.} other {Nulla viene eseguito dopo {date}: # fatture in tutto.}}",
+        "moreBounded": "{count, plural, one {1 fattura in tutto.} other {# fatture in tutto, le altre seguono lo stesso ritmo.}}",
+        "moreForever": "Continua finché non la metti in pausa o non la elimini.",
+        "clampNote": "Questa pianificazione inizia il giorno {day}. Un mese senza il giorno {day} viene eseguito invece l'ultimo giorno, e il mese successivo torna al giorno {day}.",
+        "catchUp": "{count, plural, one {1 periodo è già passato: la sua fattura viene creata subito.} other {# periodi sono già passati: le loro fatture vengono create subito, una per ciascuno.}}",
+        "catchUpTooOld": "{count} periodi sono già passati, e al massimo ne vengono creati {max}. Inizia da una data più recente."
+      },
+      "builder": {
+        "loading": "Caricamento",
+        "endedNoEdit": "Questa pianificazione è terminata, quindi non può più essere modificata.",
+        "openSchedule": "Apri la pianificazione",
+        "back": "Indietro",
+        "newTitle": "Nuova fattura ricorrente",
+        "editTitle": "Modifica {name}",
+        "newSubtitle": "Imposta la frequenza e la fattura da creare. Le prossime esecuzioni sono mostrate a lato.",
+        "editSubtitle": "Modifica la frequenza o la fattura per i periodi ancora da venire.",
+        "cancel": "Annulla",
+        "save": "Salva modifiche",
+        "create": "Crea pianificazione",
+        "conflict": "Qualcun altro ha modificato questa pianificazione mentre stavi modificando. Ricarica per vedere la sua versione. Le tue modifiche qui andranno perse.",
+        "reload": "Ricarica",
+        "fixProblems": "Correggi prima i campi evidenziati.",
+        "nothingToSave": "Non è stato modificato nulla.",
+        "saved": "Pianificazione salvata.",
+        "created": "{name} ora creerà fatture secondo la pianificazione.",
+        "schedule": "Pianificazione",
+        "name": "Nome",
+        "nameHint": "Lo vedi solo tu, ad esempio Canone mensile.",
+        "every": "Ripeti ogni",
+        "frequency": "Unità",
+        "startDate": "Prima fattura il",
+        "startFixed": "La data di inizio non può essere modificata. Crea una nuova pianificazione per iniziare da un'altra data.",
+        "startHint": "Una data passata rende subito dovuti i periodi già scaduti, fino a 12.",
+        "endDate": "Termina dopo (facoltativo)",
+        "endHint": "Dopo questa data non viene creata alcuna fattura.",
+        "maxRuns": "Numero di fatture (facoltativo)",
+        "maxRunsHint": "La pianificazione termina dopo questo numero di fatture.",
+        "noLimit": "Nessun limite",
+        "scheduleEditNote": "Una frequenza modificata continua da oggi e non ripete mai un periodo già eseguito.",
+        "mode": "Cosa succede a ogni fattura",
+        "sendChannel": "Invia tramite",
+        "sendChannelHint": "Link registra che condividi tu il link. Email e WhatsApp lo inviano per te.",
+        "templateTitle": "Modello di fattura",
+        "templateFuture": "Un nuovo modello si applica alle fatture ancora da venire. Le fatture già create non vengono modificate.",
+        "replaceTemplate": "Sostituisci il modello",
+        "keepTemplate": "Mantieni il modello attuale"
+      },
+      "template": {
+        "title": "Modello di fattura",
+        "hint": "Ogni periodo riceve una nuova fattura creata da questa, datata per quel periodo.",
+        "hintEdit": "Crea qui il nuovo modello. Sostituisce quello attuale per le fatture future.",
+        "sourceLabel": "Da dove viene il modello",
+        "source": {
+          "invoice": {
+            "title": "Copia una fattura",
+            "hint": "Usa cliente e righe di una fattura già creata."
+          },
+          "build": {
+            "title": "Crea un modello",
+            "hint": "Compila qui cliente e righe."
+          }
+        },
+        "draftInvoice": "Bozza di fattura",
+        "copyOf": "Una copia di questa fattura, per un totale di",
+        "change": "Cambia",
+        "choose": "Scegli una fattura",
+        "copyNote": "Cliente, righe, imposta e note vengono copiati al salvataggio. Le modifiche successive all'originale non arrivano alla pianificazione.",
+        "startFromInvoice": "Parti da una fattura",
+        "startFromInvoiceHint": "Carica qui il suo cliente e le sue righe così puoi modificarli.",
+        "billTo": "Intestata a",
+        "contact": "Contatto",
+        "contactHint": "Scegli un contatto per collegare ogni fattura a lui, oppure digita il cliente qui sotto.",
+        "buyerName": "Nome sulla fattura",
+        "buyerEmail": "Email",
+        "buyerPhone": "Telefono",
+        "buyerCountry": "Paese",
+        "buyerCountryHint": "Due lettere, come IT o DE.",
+        "buyerTaxId": "Codice fiscale / P.IVA",
+        "buyerAddress": "Indirizzo di fatturazione",
+        "details": "Valuta e imposte",
+        "currency": "Valuta",
+        "docType": "Documento",
+        "docTypes": {
+          "tax_invoice": "Fattura",
+          "proforma": "Fattura proforma"
+        },
+        "taxMode": "Imposta",
+        "taxModes": {
+          "rates": "Per aliquota",
+          "auto": "Automatica"
+        },
+        "taxModeAutoHint": "Il motore fiscale decide le imposte in base ai Paesi di venditore e cliente.",
+        "supplyType": "Operazione",
+        "supply": {
+          "goods": "Beni",
+          "services": "Servizi",
+          "digital": "Servizi digitali"
+        },
+        "paymentTerms": "Termini di pagamento",
+        "paymentTermsHint": "Conteggiati dal giorno di emissione di ogni fattura.",
+        "termsDefault": "Predefinito dello spazio di lavoro",
+        "termsOnReceipt": "Alla ricezione",
+        "termsNet": "Netto {days}",
+        "lines": "Righe",
+        "adjustments": "Sconto e spedizione",
+        "discountKind": "Sconto sull'intera fattura",
+        "discountNone": "Nessuno sconto",
+        "discountPercent": "Percentuale",
+        "discountAmount": "Importo fisso ({currency})",
+        "discountValue": "Valore dello sconto",
+        "shipping": "Spedizione ({currency})",
+        "notes": "Nota per il cliente",
+        "notesHint": "Stampata su ogni fattura.",
+        "termsText": "Termini e condizioni",
+        "termsTextHint": "Stampati in fondo a ogni fattura.",
+        "kept": "{count, plural, one {Il modello ha 1 riga, fatturata a} other {Il modello ha # righe, fatturate a}}"
+      },
+      "problems": {
+        "generic": "Controlla questo campo.",
+        "nameRequired": "Dai un nome alla pianificazione.",
+        "nameTooLong": "Usa al massimo 120 caratteri.",
+        "intervalInvalid": "Inserisci un numero intero da 1 a 365.",
+        "startInvalid": "Inserisci una data di inizio valida.",
+        "startTooOld": "Quella data di inizio è {count} periodi indietro, e al massimo si creano {max} periodi passati. Scegli una data più recente.",
+        "endInvalid": "Inserisci una data di fine valida.",
+        "endBeforeStart": "La data di fine è precedente alla data di inizio.",
+        "maxRunsInvalid": "Inserisci un numero intero da 1 a 1000, oppure lascia vuoto.",
+        "invoiceRequired": "Scegli la fattura da copiare.",
+        "termsInvalid": "Inserisci da 0 a 365 giorni.",
+        "descriptionRequired": "Descrivi questa riga.",
+        "qtyInvalid": "Inserisci una quantità maggiore di zero.",
+        "priceInvalid": "Inserisci un prezzo valido.",
+        "lineDiscountInvalid": "Inserisci una percentuale da 0 a 100.",
+        "hsnRequired": "Inserisci il codice HSN o SAC.",
+        "hsnInvalid": "Un codice HSN o SAC è composto da 2 a 12 lettere o cifre.",
+        "taxRateRemoved": "Questa aliquota non esiste più. Scegline un'altra.",
+        "currencyInvalid": "Inserisci un codice valuta di tre lettere.",
+        "noLines": "Aggiungi almeno una riga.",
+        "discountInvalid": "Inserisci uno sconto valido.",
+        "shippingInvalid": "Inserisci un importo valido.",
+        "emailInvalid": "Inserisci un indirizzo email valido.",
+        "amountZero": "Il totale della fattura deve essere maggiore di zero.",
+        "amountInvalid": "Questo importo non è valido.",
+        "contactRequired": "Scegli un contatto o digita il nome del cliente. Le fatture emesse automaticamente richiedono un cliente.",
+        "countryInvalid": "Usa un codice paese di due lettere.",
+        "regionInvalid": "Inserisci un codice di provincia o regione valido.",
+        "autoNeedsSellerCountry": "L'imposta automatica richiede il tuo Paese nelle impostazioni di fatturazione."
+      },
+      "detail": {
+        "loading": "Caricamento della pianificazione",
+        "backToList": "Torna alle fatture ricorrenti",
+        "back": "Torna alle fatture ricorrenti",
+        "failures": "{count, plural, one {1 periodo non è riuscito a creare la sua fattura.} other {# periodi non sono riusciti a creare le loro fatture.}}",
+        "seeHistory": "Vedi il motivo",
+        "pausedNote": "Questa pianificazione è in pausa. I periodi che cadono durante la pausa vengono saltati: quando la riprendi, la prossima fattura è per oggi o per una data successiva.",
+        "endedNote": "Questa pianificazione è terminata. Non verrà creato altro e non può più essere modificata.",
+        "nextRun": "Prossima esecuzione",
+        "lastRun": "Ultima esecuzione",
+        "runs": "Fatture create",
+        "failedCount": "{count, plural, one {1 errore} other {# errori}}",
+        "amount": "Per fattura",
+        "amountNote": "Quanto vale oggi il modello",
+        "upcoming": "Prossime date",
+        "noUpcoming": "Non ci sono altre esecuzioni previste.",
+        "template": "Modello",
+        "buyer": "Cliente",
+        "lines": "Righe",
+        "currency": "Valuta",
+        "mode": "Ogni fattura è",
+        "starts": "Iniziata il",
+        "ends": "Termina",
+        "never": "Nessuna data di fine",
+        "limit": "Limite",
+        "noLimit": "Nessun limite",
+        "invoicesCount": "{count, plural, one {1 fattura} other {# fatture}}",
+        "templateNote": "Modificare il modello cambia le fatture ancora da venire, mai quelle già create."
+      },
+      "runs": {
+        "title": "Storico delle esecuzioni",
+        "subtitle": "Una riga per ogni periodo, dal più recente.",
+        "loading": "Caricamento dello storico",
+        "scrollArea": "Tabella dello storico, scorre in orizzontale",
+        "emptyTitle": "Nessuna esecuzione",
+        "emptyMessage": "La prima fattura viene creata alla prossima data di esecuzione.",
+        "period": "Periodo {n}",
+        "draftInvoice": "Bozza",
+        "showing": "{count, plural, one {Mostra 1 esecuzione} other {Mostra # esecuzioni}}",
+        "loadMore": "Carica altre",
+        "allLoaded": "Storico completo mostrato",
+        "columns": {
+          "period": "Data del periodo",
+          "status": "Esito",
+          "invoice": "Fattura",
+          "error": "Motivo dell'errore",
+          "at": "Creata il"
+        }
+      }
+    }
+  }
+}

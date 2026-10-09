@@ -1,0 +1,218 @@
+{
+  "companies": {
+    "nav": {
+      "companies": "公司"
+    },
+    "common": {
+      "dismiss": "关闭"
+    },
+    "errors": {
+      "network": "无法连接到服务器。请检查网络连接后重试。",
+      "forbidden": "您没有执行该操作的权限。",
+      "signedOut": "您的会话已结束。请重新登录以继续。",
+      "conflict": "您编辑期间其他人更改了此公司。已载入他们的更改；您的修改已保留，请查看后再次保存。",
+      "validation": "输入的部分内容无效。请检查字段后重试。",
+      "unavailable": "此服务器暂不支持公司功能。",
+      "rateLimited": "请求过多。请稍候再试。",
+      "notFound": "该公司已不存在。",
+      "planDisabled": "您的套餐不包含公司功能。升级即可解锁。",
+      "ownerInvalid": "负责人必须是此工作区的活跃成员。",
+      "unexpected": "出了点问题。请稍后重试。",
+      "requestId": "请求 ID",
+      "retry": "重试"
+    },
+    "list": {
+      "eyebrow": "CRM · 组织",
+      "title": "公司",
+      "subtitle": "将联系人和交易归入组织——在一处查看所有联系人、进行中的交易和已成交收入。",
+      "newCompany": "新建公司",
+      "tiles": {
+        "companies": "公司",
+        "withDeals": "有进行中的交易",
+        "wonRevenue": "成交收入"
+      },
+      "bulk": {
+        "label": "批量操作",
+        "selected": "{count, plural, other {已选择 # 家公司}}",
+        "delete": "删除",
+        "clear": "清除选择"
+      },
+      "loading": "正在加载公司",
+      "unavailableTitle": "公司功能不可用",
+      "unavailable": "此服务器尚未部署公司服务。",
+      "emptyFilteredTitle": "没有匹配的公司",
+      "emptyFiltered": "请尝试其他搜索，或清除筛选条件。",
+      "clearFilters": "清除筛选",
+      "emptyTitle": "暂无公司",
+      "empty": "暂无公司。创建您的第一家公司。",
+      "showing": "{count, plural, other {已加载 # 家公司}}",
+      "loadMore": "加载更多",
+      "allLoaded": "已加载全部公司",
+      "deleteTitle": "删除公司",
+      "deleteMessage": "删除此公司？其联系人和交易会保留，仅解除关联。",
+      "deleteManyTitle": "删除公司",
+      "deleteManyMessage": "{count, plural, other {删除这 # 家公司？其联系人和交易会保留，仅解除关联。}}",
+      "delete": "删除",
+      "keep": "保留"
+    },
+    "toolbar": {
+      "label": "筛选公司",
+      "search": "搜索公司…",
+      "industry": "行业",
+      "allIndustries": "全部行业",
+      "owner": "负责人",
+      "allOwners": "全部负责人",
+      "noOwner": "无负责人",
+      "withOpenDeals": "有进行中的交易",
+      "sort": "排序",
+      "sorts": {
+        "created": "最新优先",
+        "name": "名称 A 到 Z"
+      },
+      "clear": "清除",
+      "refresh": "刷新"
+    },
+    "table": {
+      "label": "公司",
+      "selectAll": "选择所有已加载的公司",
+      "select": "选择 {name}",
+      "company": "公司",
+      "industry": "行业",
+      "contacts": "联系人",
+      "openDeals": "进行中的交易",
+      "wonValue": "成交金额",
+      "actions": "操作",
+      "delete": "删除公司",
+      "deleteNamed": "删除公司 {name}"
+    },
+    "form": {
+      "eyebrow": "公司",
+      "newTitle": "新建公司",
+      "editTitle": "编辑公司",
+      "close": "关闭",
+      "cancel": "取消",
+      "create": "创建",
+      "save": "保存更改",
+      "name": "公司名称 *",
+      "namePlaceholder": "Acme Ltd",
+      "industry": "行业",
+      "website": "网站",
+      "email": "电子邮箱",
+      "phone": "电话",
+      "notes": "备注",
+      "moreDetails": "更多详情",
+      "sizeRange": "规模",
+      "sizeHint": "例如 1-10 或 11-50。",
+      "owner": "负责人",
+      "noOwner": "无负责人",
+      "me": "{name}（您）",
+      "address": "地址",
+      "problems": {
+        "required": "公司名称为必填项。",
+        "tooLong": "太长了：最多 {limit} 个字符。",
+        "email": "请输入有效的电子邮箱地址。",
+        "invalid": "输入的部分内容无效。",
+        "ownerInvalid": "负责人必须是此工作区的活跃成员。"
+      }
+    },
+    "toast": {
+      "created": "公司已创建。",
+      "updated": "公司已更新。",
+      "deleted": "{count, plural, other {已删除 # 家公司。}}",
+      "deletedSome": "{count, plural, other {已删除 # 家公司}}，{failed, plural, other {# 家无法删除。}}",
+      "deleteFailed": "无法删除。请重试。",
+      "contactUnlinked": "联系人已从公司中移除。",
+      "contactAlreadyOut": "该联系人已不在此公司中。",
+      "contactUnlinkFailed": "无法移除联系人。请重试。",
+      "contactsLinked": "{count, plural, other {已将 # 位联系人添加到公司。}}",
+      "contactsLinkedSome": "{count, plural, other {已添加 # 位联系人}}，{failed, plural, other {# 位无法添加。}}",
+      "contactsLinkFailed": "无法添加联系人。请重试。"
+    },
+    "detail": {
+      "back": "全部公司",
+      "loading": "正在加载公司",
+      "notFoundTitle": "未找到公司",
+      "notFound": "此公司不存在或已被删除。",
+      "edit": "编辑",
+      "delete": "删除",
+      "keep": "保留",
+      "tiles": {
+        "contacts": "联系人",
+        "openDeals": "进行中的交易",
+        "wonRevenue": "成交收入"
+      },
+      "notes": "备注",
+      "deleteTitle": "删除公司",
+      "deleteMessage": "删除此公司？其联系人和交易会保留，仅解除关联。",
+      "details": "详情",
+      "owner": "负责人",
+      "sizeRange": "规模",
+      "address": "地址",
+      "createdBy": "创建者",
+      "created": "创建时间",
+      "updated": "最后更改"
+    },
+    "contacts": {
+      "title": "联系人",
+      "add": "添加联系人",
+      "loading": "正在加载联系人",
+      "empty": "没有联系人关联到此公司。",
+      "unnamed": "（无姓名）",
+      "unlink": "从公司移除",
+      "unlinkNamed": "将 {name} 从公司移除",
+      "loadMore": "加载更多",
+      "addModal": {
+        "title": "向公司添加联系人",
+        "close": "关闭",
+        "cancel": "取消",
+        "add": "{count, plural, other {添加 # 位联系人}}",
+        "search": "按姓名、邮箱或号码搜索联系人",
+        "loading": "正在搜索联系人",
+        "noneTitle": "未找到联系人",
+        "none": "没有匹配的联系人。请尝试其他姓名、邮箱或号码。",
+        "unnamed": "（无姓名）",
+        "already": "已在此处",
+        "willMove": "在其他公司中",
+        "hint": "一位联系人只能属于一家公司。添加已在其他公司中的联系人会将其移到这里。"
+      }
+    },
+    "deals": {
+      "title": "交易",
+      "loading": "正在加载交易",
+      "empty": "此公司暂无交易。",
+      "loadMore": "加载更多",
+      "status": {
+        "open": "进行中",
+        "won": "已赢单",
+        "lost": "已输单"
+      }
+    },
+    "activity": {
+      "title": "动态",
+      "loading": "正在加载动态",
+      "none": "此公司尚无任何动态。",
+      "loadMore": "加载更多",
+      "empty": "空",
+      "system": "系统",
+      "actions": {
+        "insert": "创建了公司",
+        "update": "更改了公司",
+        "delete": "删除了公司"
+      },
+      "contactLinked": "添加了联系人",
+      "contactUnlinked": "移除了联系人",
+      "deletedContact": "一位已删除的联系人",
+      "fields": {
+        "name": "名称",
+        "website": "网站",
+        "email": "电子邮箱",
+        "phone": "电话",
+        "industry": "行业",
+        "sizeRange": "规模",
+        "address": "地址",
+        "notes": "备注",
+        "owner": "负责人"
+      }
+    }
+  }
+}

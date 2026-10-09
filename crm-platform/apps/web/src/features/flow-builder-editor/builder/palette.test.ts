@@ -1,12 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { filterPalette } from './palette';
+import { translator } from '../test-utils/intl';
+
+const tf = translator('flb');
 
 const ids = (mode: Parameters<typeof filterPalette>[0], q = '') =>
-  filterPalette(mode, q).flatMap(([, items]) => items.map((d) => d.id));
+  filterPalette(mode, q, tf).flatMap(([, items]) => items.map((d) => d.id));
 
 describe('palette (TW-FLB-016)', () => {
   it('a WhatsApp flow lists the 35 Reference nodes plus Ask for file / location and the workflow additions, in Reference group order, Template / List / Sequence / MySQL / Google included', () => {
-    const groups = filterPalette('chat', '');
+    const groups = filterPalette('chat', '', tf);
     expect(groups.reduce((a, [, items]) => a + items.length, 0)).toBe(45); // 44 + API (from library), the owner-requested node
     expect(groups.map(([g]) => g)).toEqual([
       'Start',

@@ -1,0 +1,208 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "チームチャット"
+    },
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "screen": {
+      "title": "チームチャット",
+      "back": "チャンネル一覧に戻る",
+      "search": "このチャンネルを検索",
+      "pinned": "固定されたメッセージ",
+      "members": "チャンネルのメンバー",
+      "deleteChannel": "このチャンネルを削除",
+      "type": {
+        "public": "チャンネル",
+        "private": "プライベート",
+        "dm": "ダイレクトメッセージ"
+      },
+      "olderMessage": "そのメッセージはさらに前にあります。古いメッセージを読み込むと表示されます。",
+      "loading": "チームチャットを読み込んでいます",
+      "loadFailed": "チームチャットを読み込めませんでした。",
+      "retry": "再試行",
+      "deleteTitle": "このチャンネルを削除しますか？",
+      "deleteMessage": "#{name} とそのすべてのメッセージは全員から削除されます。この操作は元に戻せません。",
+      "deleteConfirm": "チャンネルを削除",
+      "cancel": "キャンセル",
+      "defaultDescription": "ワークスペース内部のチャット",
+      "customerChats": "顧客チャット"
+    },
+    "sidebar": {
+      "label": "チャンネルと連絡先",
+      "channels": "チャンネル",
+      "createChannel": "チャンネルを作成",
+      "loading": "チャンネルを読み込んでいます",
+      "loadFailed": "チャンネルを読み込めませんでした。",
+      "noChannels": "チャンネルはまだありません",
+      "direct": "ダイレクトメッセージ",
+      "people": "メンバー",
+      "invite": "チームメイトを招待",
+      "pending": "保留中のリクエスト",
+      "pendingCount": "{count, plural, other {保留中のリクエスト #件}}",
+      "unread": "{count, plural, other {未読メッセージ #件}}",
+      "workspace": "ワークスペース",
+      "mode": "モード",
+      "customerChats": "顧客チャット",
+      "teamChat": "チームチャット",
+      "membersLink": "メンバー"
+    },
+    "members": {
+      "label": "メンバー",
+      "title": "チームチャット",
+      "count": "{count, plural, other {メンバー #人}}",
+      "countUnknown": "メンバー",
+      "search": "メンバーを検索",
+      "loading": "メンバーを読み込んでいます",
+      "none": "一致するメンバーはいません",
+      "online": "オンライン",
+      "offline": "オフライン",
+      "you": "（あなた）",
+      "message": "{name} にメッセージ",
+      "titleAccent": "チャット"
+    },
+    "panel": {
+      "searchTitle": "メッセージを検索",
+      "pinnedTitle": "固定されたメッセージ",
+      "searchPlaceholder": "このチャンネルを検索",
+      "searchHint": "2文字以上入力してください。",
+      "close": "閉じる",
+      "failed": "読み込めませんでした。",
+      "noResults": "一致するメッセージはありません。",
+      "noPinned": "このチャンネルには固定されたメッセージはありません。"
+    },
+    "stream": {
+      "loading": "メッセージを読み込んでいます",
+      "loadFailed": "メッセージを読み込めませんでした。",
+      "loadOlder": "古いメッセージを読み込む",
+      "emptyTitle": "#{name} にはまだメッセージがありません",
+      "emptyMessage": "あいさつをして会話を始めましょう。"
+    },
+    "message": {
+      "edited": "（編集済み）",
+      "pinned": "固定済み",
+      "editLabel": "メッセージを編集",
+      "cancel": "キャンセル",
+      "save": "保存",
+      "editConflict": "編集中にこのメッセージが変更されました。再読み込みして、もう一度お試しください。",
+      "reactions": "リアクション",
+      "reactionChip": "{emoji}、{count, plural, other {#人}}",
+      "reactionTray": "リアクションを選択",
+      "reply": "返信",
+      "react": "リアクション",
+      "edit": "編集",
+      "pin": "固定",
+      "unpin": "固定解除",
+      "delete": "削除",
+      "deleteTitle": "このメッセージを削除しますか？",
+      "deleteMessage": "チャンネル内の全員から削除されます。",
+      "uploading": "アップロード中",
+      "retry": "再試行",
+      "discard": "破棄"
+    },
+    "composer": {
+      "placeholder": "#{name} へのメッセージ",
+      "attach": "ファイルを添付",
+      "send": "送信",
+      "hint": "Enterで送信、Shift+Enterで改行、@でチームメイトをメンション",
+      "replyingTo": "{name} に返信中",
+      "cancelReply": "返信をキャンセル",
+      "removeFile": "添付ファイルを削除",
+      "fileTooLarge": "そのファイルは 20 MB を超えています。",
+      "mentionList": "メンションできるチームメイト",
+      "typingOne": "{name} が入力中",
+      "typingMany": "{count} 人が入力中",
+      "hintSend": "送信",
+      "hintNewLine": "改行",
+      "hintMention": "メンション",
+      "hintShift": "Shift+↵"
+    },
+    "createChannel": {
+      "title": "チャンネルを作成",
+      "close": "閉じる",
+      "name": "名前",
+      "nameHint": "英小文字、数字、ハイフン、アンダースコアのみ使用できます。スペースは使用できません。",
+      "description": "説明（任意）",
+      "privacy": "公開設定",
+      "public": {
+        "label": "公開",
+        "hint": "ワークスペースの全員が閲覧・投稿できます。"
+      },
+      "private": {
+        "label": "プライベート",
+        "hint": "招待された人のみ参加できます。メンバーだけが閲覧できます。"
+      },
+      "cancel": "キャンセル",
+      "create": "チャンネルを作成",
+      "namePlaceholder": "例: サポート",
+      "descriptionPlaceholder": "このチャネルの目的は何ですか？"
+    },
+    "invite": {
+      "title": "チームメイトを招待",
+      "close": "閉じる",
+      "email": "メールアドレス",
+      "name": "名前（任意）",
+      "note": "管理者へのメモ（任意）",
+      "noteHint": "この人が参加すべき理由を入力してください。",
+      "addToChannel": "#{name} にも追加する",
+      "approved": "完了しました。リクエストが承認されました。",
+      "pending": "招待を送信しました。管理者の承認をお待ちください。",
+      "cancel": "キャンセル",
+      "submit": "招待を送信",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "お名前",
+      "notePlaceholder": "参加する理由は何ですか？"
+    },
+    "invitations": {
+      "title": "保留中の招待",
+      "close": "閉じる",
+      "loading": "読み込み中",
+      "loadFailed": "招待を読み込めませんでした。",
+      "empty": "招待はまだありません",
+      "status": {
+        "pending": "保留中",
+        "approved": "承認済み",
+        "declined": "辞退",
+        "expired": "期限切れ"
+      },
+      "requestedBy": "{name} がリクエスト · {time}",
+      "decidedBy": "{name} により {status} · {time}",
+      "needsAccount": "この人はまだワークスペースにアカウントがないため、追加されませんでした。",
+      "approve": "承認",
+      "decline": "辞退"
+    },
+    "channelMembers": {
+      "title": "#{name} のメンバー",
+      "close": "閉じる",
+      "admin": "管理者",
+      "leave": "退出",
+      "remove": "削除",
+      "addLabel": "チームメイトを追加",
+      "choose": "チームメイトを選択",
+      "add": "追加"
+    },
+    "errors": {
+      "network": "ネットワークエラーです。接続を確認して、もう一度お試しください。",
+      "forbidden": "その操作を行う権限がありません。",
+      "signedOut": "サインアウトされました。再度サインインしてください。",
+      "notFound": "それは既に存在しません。",
+      "validation": "入力内容を確認して、もう一度お試しください。",
+      "conflict": "その間に内容が変更されました。再読み込みして、もう一度お試しください。",
+      "tooLarge": "そのファイルは 20 MB を超えています。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
+      "emptyMessage": "メッセージを入力するか、ファイルを添付してください。",
+      "replyOtherChannel": "返信できるのは同じチャンネル内のメッセージだけです。",
+      "attachmentRejected": "このファイルは添付できませんでした。添付できるのは 20 MB 以下の画像、PDF、Word、Excel、テキスト、CSV ファイルのみです。",
+      "editExpired": "メッセージは 15 分以内のみ編集できます。",
+      "nameTaken": "同じ名前のチャンネルが既に存在します。",
+      "channelProtected": "#general は削除できません。",
+      "alreadyMember": "既にワークスペースのメンバーです。",
+      "alreadyDecided": "既に決定済みです。",
+      "notMember": "このチャンネルのメンバーではありません。",
+      "notAuthor": "編集できるのは自分のメッセージだけです。",
+      "kindInvalid": "この種類のチャンネルには適用できません。",
+      "unexpected": "問題が発生しました。もう一度お試しください。"
+    }
+  }
+}

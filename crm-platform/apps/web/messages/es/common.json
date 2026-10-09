@@ -1,0 +1,18 @@
+{
+  "common": {
+    "appName": "CRM",
+    "loadMore": "Cargar más",
+    "loading": "Cargando",
+    "empty": "Aún no hay nada aquí",
+    "retry": "Reintentar",
+    "requestId": "ID de solicitud",
+    "search": "Buscar",
+    "unexpected": "Algo salió mal",
+    "fatal": {
+      "title": "Algo salió mal",
+      "body": "No se pudo cargar la página. Se ha notificado. Inténtalo de nuevo y, si sigue ocurriendo, contacta con soporte.",
+      "bodyWithDigest": "No se pudo cargar la página. Se ha notificado. Inténtalo de nuevo y, si sigue ocurriendo, contacta con soporte e indica {digest}.",
+      "home": "Volver al inicio"
+    }
+  }
+}

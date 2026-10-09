@@ -1,0 +1,113 @@
+{
+  "calling-voice": {
+    "nav": {
+      "title": "通话",
+      "description": "为每个号码开启或关闭 WhatsApp 通话。",
+      "keywords": "通话, 电话, 语音, 手机, whatsapp 通话, 通话按钮"
+    },
+    "common": {
+      "dismiss": "关闭"
+    },
+    "button": {
+      "label": "通话",
+      "tooltip": "发起 WhatsApp 通话",
+      "working": "处理中..."
+    },
+    "confirm": {
+      "title": "没有已确认的通话权限",
+      "body": "我们没有该联系人已确认的通话权限记录。",
+      "callAnyway": "仍然拨打",
+      "callAnywayHint": "如果对方已在 WhatsApp 中点击“允许”，则可以拨通。",
+      "askPermission": "请求权限",
+      "askPermissionHint": "改为向对方发送权限请求，不会发起通话。",
+      "close": "关闭"
+    },
+    "toast": {
+      "noPhone": "此联系人没有电话号码。",
+      "noNumber": "没有任何 WABA 号码启用了通话功能。",
+      "alreadyPermitted": "此联系人已允许通话——正在发起通话...",
+      "permissionSent": "权限请求已发送。对方将在 WhatsApp 中看到“接受/拒绝”——待其回复后请再次尝试通话。",
+      "permissionFailed": "无法发送权限请求：{message}",
+      "startFailed": "无法发起通话：{message}",
+      "acceptInvalid": "无法接听通话：来自 WhatsApp 的通话数据无效。请重试。",
+      "acceptFailed": "无法接听通话：{message}",
+      "alreadyAccepted": "通话已被其他同事接听。",
+      "recordingStarted": "已开始录音——挂断后将保存到通话记录。",
+      "recordingSaved": "通话录音已保存到通话记录。",
+      "recordUnsupported": "此浏览器不支持录音。",
+      "noActiveCall": "没有可录音的进行中通话。"
+    },
+    "incoming": {
+      "title": "WhatsApp 来电",
+      "caller": "来电号码 +{digits}",
+      "accept": "接听",
+      "decline": "拒绝",
+      "aiHandling": "AI 正在处理此通话..."
+    },
+    "panel": {
+      "label": "通话中",
+      "title": "通话中",
+      "ringing": "响铃中...",
+      "connected": "已接通",
+      "timer": "通话时长",
+      "mute": "静音",
+      "muted": "已静音",
+      "end": "结束",
+      "record": "录音",
+      "recording": "录音中",
+      "recordTooltip": "录制此通话",
+      "recordingTooltip": "正在录制此通话",
+      "recordingNotice": "此通话正在录音"
+    },
+    "failures": {
+      "REJECTED": "客户已拒绝通话。",
+      "BUSY": "客户正在通话中。",
+      "NO_ANSWER": "无人接听——客户未接听。",
+      "MISSED": "客户未接来电。",
+      "CANCELLED": "通话已取消。",
+      "MIC_BLOCKED": "麦克风访问被阻止——对方将听不到您的声音。请在浏览器中授予麦克风权限后重试。",
+      "BUSY_SLOT": "此标签页中已有另一个进行中的通话。",
+      "INVALID_SDP": "SDP offer 无效——缺少 v=0 或媒体行",
+      "LOCAL_SDP_EMPTY": "本地 SDP 为空——ICE 收集失败",
+      "ENDED_EARLY": "通话在接通前已结束。",
+      "ANSWER_FAILED": "无法应用 WhatsApp 的应答"
+    },
+    "errors": {
+      "CALL_NUMBER_NOT_FOUND": "此号码已不在您的工作区中。请刷新页面后重试。",
+      "CALL_NOT_FOUND": "找不到此通话，可能已经结束。",
+      "CALL_NOT_WABA": "通话仅适用于 WhatsApp Cloud API 号码。此号码是通过其他方式连接的。",
+      "CALL_NUMBER_NOT_CONNECTED": "此号码当前未连接到 WhatsApp Cloud API。请在“渠道”下重新连接，然后重试。",
+      "CALL_COEXISTENCE_UNSUPPORTED": "同时用于 WhatsApp Business 应用的号码无法接听通话。",
+      "CALL_NOT_ENABLED": "此号码的通话功能已关闭。请先在“通话”下开启。",
+      "CALL_META_REFUSED": "WhatsApp 拒绝了该请求。请稍后重试。",
+      "CALL_PERMISSION_REQUESTED": "权限请求已发送。对方将在 WhatsApp 中看到“接受/拒绝”——待其回复后请再次尝试通话。",
+      "CALL_STATE_CONFLICT": "通话已被其他同事接听。",
+      "CALL_RECORDING_FAILED": "无法保存录音。",
+      "FORBIDDEN": "您没有使用通话功能的权限。",
+      "PLAN_FEATURE_LOCKED": "您的套餐不包含 WhatsApp 通话。",
+      "NETWORK": "网络错误，请重试。",
+      "UNEXPECTED": "出了点问题，请重试。"
+    },
+    "settings": {
+      "title": "通话",
+      "intro": "为号码开启 WhatsApp 通话后，收件箱中该号码的聊天将显示绿色的“通话”按钮。",
+      "cardTitle": "WhatsApp 通话",
+      "numberFallback": "WhatsApp 号码",
+      "connection": "连接状态：{status}",
+      "enabledStatus": "已启用——收件箱中此号码的聊天现在会显示绿色的“通话”按钮。",
+      "enabledSince": "启用于 {date}",
+      "offStatus": "已关闭——开启后，此号码的聊天中将显示“通话”按钮。",
+      "enable": "启用通话",
+      "disable": "关闭通话",
+      "asking": "正在询问 WhatsApp...",
+      "enabledDone": "此号码的通话功能现已开启。",
+      "disabledDone": "此号码的通话功能现已关闭。",
+      "loading": "正在加载号码",
+      "loadFailed": "无法加载您的号码。",
+      "retry": "重试",
+      "emptyTitle": "暂无 WhatsApp 号码",
+      "emptyMessage": "请在“渠道”下连接 WhatsApp Cloud API 号码，然后再回来开启通话。",
+      "viewOnly": "您可以查看每个号码的通话状态。开启或关闭需要通话管理权限。"
+    }
+  }
+}

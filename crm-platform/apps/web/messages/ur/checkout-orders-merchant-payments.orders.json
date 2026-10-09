@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "اسٹور / آرڈرز",
+      "title": "تمام آرڈرز",
+      "subtitle": "ہر چینل کا ہر آرڈر: WhatsApp، اسٹور فرنٹ، Twilio اور دستی۔",
+      "loading": "آرڈرز لوڈ ہو رہے ہیں",
+      "statusTabs": "آرڈر کی حالت",
+      "searchLabel": "آرڈرز تلاش کریں",
+      "searchPlaceholder": "فون، نام یا آرڈر نمبر سے تلاش کریں",
+      "sourceLabel": "ماخذ",
+      "allSources": "تمام ماخذ",
+      "paymentLabel": "ادائیگی",
+      "allPayments": "تمام ادائیگیاں",
+      "fromLabel": "از",
+      "toLabel": "تا",
+      "shopLabel": "دکان",
+      "invertedRange": "آغاز کی تاریخ اختتام کی تاریخ کے بعد ہے، اس لیے کوئی آرڈر میل نہیں کھا سکتا۔",
+      "clearFilters": "فلٹرز صاف کریں",
+      "cols": {
+        "order": "آرڈر",
+        "customer": "کسٹمر",
+        "items": "آئٹمز",
+        "total": "کل",
+        "payment": "ادائیگی",
+        "status": "حالت",
+        "source": "ماخذ",
+        "created": "بنایا گیا",
+        "actions": "اقدامات"
+      },
+      "itemsCount": "{count, plural, one {# آئٹم} other {# آئٹمز}}",
+      "anonymous": "گمنام",
+      "openOrder": "آرڈر #{no} کھولیں",
+      "changeStatus": "آرڈر #{no} کی حالت بدلیں",
+      "deleteOrder": "آرڈر #{no} حذف کریں",
+      "deleteTitle": "آرڈر #{no} حذف کریں؟",
+      "deleteMessage": "آرڈر اور اس کے آئٹمز ہمیشہ کے لیے ہٹا دیے جائیں گے۔ یہ عمل واپس نہیں ہو سکتا۔",
+      "deleteConfirm": "آرڈر حذف کریں",
+      "deleted": "آرڈر #{no} حذف کر دیا گیا۔",
+      "statusChanged": "آرڈر #{no} اب {status} ہے۔",
+      "buyerNotified": "خریدار کو پیغام بھیج دیا گیا۔",
+      "confirmStatusTitle": "آرڈر #{no} کو {status} کے طور پر نشان زد کریں؟",
+      "confirmStatusMessage": "خریدار کو نئی حالت کی اطلاع دی جاتی ہے۔ آپ بعد میں آرڈر کو کسی اور حالت میں بھی لے جا سکتے ہیں۔",
+      "confirmStatusConfirm": "حالت اپ ڈیٹ کریں",
+      "emptyTitle": "ابھی کوئی آرڈر نہیں",
+      "emptyMessage": "جب کسٹمرز آپ کے اسٹور فرنٹ سے یا WhatsApp پر آرڈر کریں گے تو وہ یہاں نظر آئیں گے۔ پہلا آرڈر پانے کے لیے اپنی دکان کا لنک شیئر کریں۔",
+      "emptyAction": "اسٹور کا جائزہ کھولیں",
+      "noMatchTitle": "ان فلٹرز سے کوئی آرڈر میل نہیں کھاتا",
+      "noMatchMessage": "دوسری تلاش، حالت یا تاریخ کی حد آزمائیں، یا ہر آرڈر دیکھنے کے لیے فلٹرز صاف کریں۔"
+    },
+    "orderDetail": {
+      "back": "آرڈرز پر واپس",
+      "title": "آرڈر #{no}",
+      "placed": "{when} کو دیا گیا",
+      "loading": "آرڈر لوڈ ہو رہا ہے",
+      "readOnly": "آپ یہ آرڈر دیکھ سکتے ہیں مگر بدل نہیں سکتے۔",
+      "items": {
+        "title": "آئٹمز",
+        "empty": "اس آرڈر میں کوئی آئٹم نہیں۔",
+        "qty": "مقدار {qty}",
+        "retailerId": "ID {id}",
+        "unit": "{price} فی عدد"
+      },
+      "totals": {
+        "title": "کل رقوم",
+        "subtotal": "ذیلی کل",
+        "shipping": "شپنگ",
+        "tax": "ٹیکس",
+        "taxInclusive": "قیمتوں میں شامل",
+        "discount": "چھوٹ",
+        "discountCoupon": "چھوٹ ({code})",
+        "total": "کل"
+      },
+      "customer": {
+        "title": "کسٹمر",
+        "anonymous": "گمنام",
+        "phone": "فون",
+        "email": "ای میل",
+        "address": "شپنگ ایڈریس",
+        "noAddress": "اس آرڈر کے لیے کوئی ایڈریس درج نہیں ہوا۔",
+        "notes": "نوٹس"
+      },
+      "meta": {
+        "title": "آرڈر کی تفصیلات",
+        "orderId": "آرڈر ID",
+        "source": "ماخذ",
+        "shop": "دکان",
+        "paymentMethod": "ادائیگی کا طریقہ",
+        "updated": "آخری اپ ڈیٹ"
+      },
+      "rto": {
+        "title": "واپسی کا خطرہ",
+        "summary": "{band} ({score})",
+        "low": "کم",
+        "medium": "درمیانہ",
+        "high": "زیادہ"
+      },
+      "timeline": {
+        "title": "ٹائم لائن",
+        "empty": "اس آرڈر پر ابھی کچھ نہیں ہوا۔",
+        "kind": {
+          "created": "آرڈر دیا گیا",
+          "status_changed": "حالت بدلی",
+          "payment_link": "ادائیگی کا لنک",
+          "paid": "ادائیگی موصول",
+          "invoice": "انوائس",
+          "note": "نوٹ",
+          "updated": "آرڈر اپ ڈیٹ ہوا"
+        },
+        "actor": {
+          "user": "ٹیم کے رکن کی طرف سے",
+          "system": "خودکار",
+          "customer": "کسٹمر کی طرف سے"
+        }
+      },
+      "payments": {
+        "title": "ادائیگیاں",
+        "empty": "اس آرڈر کے لیے کوئی ادائیگی ریکارڈ نہیں ہوئی۔",
+        "kind": {
+          "gateway": "آن لائن ادائیگی",
+          "payment_link": "ادائیگی کا لنک",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "ڈیلیوری پر نقد",
+          "manual": "دستی طور پر درج"
+        },
+        "reference": "حوالہ {ref}",
+        "openLink": "لنک کھولیں"
+      },
+      "form": {
+        "title": "حالت اپ ڈیٹ کریں",
+        "status": "حالت",
+        "suggestion": "عموماً اگلا مرحلہ: {status}",
+        "notes": "نوٹس",
+        "paymentLink": "ادائیگی کا لنک",
+        "optional": "اختیاری",
+        "paymentLinkHint": "اپ ڈیٹ کے ساتھ خریدار کو نیا لنک بھیجا جاتا ہے۔",
+        "invalidLink": "http:// یا https:// سے شروع ہونے والا ویب لنک درج کریں۔",
+        "save": "تبدیلیاں محفوظ کریں",
+        "saving": "محفوظ ہو رہا ہے",
+        "saved": "آرڈر #{no} اپ ڈیٹ ہو گیا۔",
+        "notified": "خریدار کو پیغام بھیج دیا گیا۔",
+        "notNotified": "خریدار کو پیغام نہیں بھیجا گیا۔",
+        "reload": "آرڈر دوبارہ لوڈ کریں"
+      },
+      "pay": {
+        "title": "ادائیگی کا لنک",
+        "current": "موجودہ ادائیگی کا لنک",
+        "sendTitle": "اپنے پاس موجود لنک بھیجیں",
+        "sendLabel": "ادائیگی لنک کا URL",
+        "sendButton": "ادائیگی کا لنک بھیجیں",
+        "sent": "ادائیگی کا لنک خریدار کو بھیج دیا گیا۔",
+        "savedNotSent": "لنک محفوظ ہو گیا، مگر خریدار کو بھیجا نہیں جا سکا۔",
+        "generateTitle": "چیک آؤٹ لنک بنائیں",
+        "generateHint": "آپ کے ادائیگی گیٹ وے پر ہوسٹڈ ادائیگی لنک بناتا ہے اور WhatsApp پر خریدار کو بھیجتا ہے۔",
+        "gatewayLabel": "گیٹ وے",
+        "generateButton": "لنک بنائیں اور بھیجیں",
+        "noGatewayTitle": "کوئی ادائیگی گیٹ وے سیٹ اپ نہیں",
+        "noGatewayMessage": "چیک آؤٹ لنک بنانے سے پہلے ادائیگی گیٹ وے سیٹ اپ کرنا ضروری ہے۔",
+        "noGatewayAction": "گیٹ وے سیٹ اپ کریں",
+        "resultTitle": "ادائیگی کا لنک تیار",
+        "copyLink": "لنک کاپی کریں",
+        "resultSent": "WhatsApp پر خریدار کو بھیج دیا گیا۔",
+        "resultNotSent": "آرڈر پر محفوظ ہو گیا، مگر خریدار کو بھیجا نہیں جا سکا۔ اسے خود شیئر کریں۔"
+      },
+      "invoice": {
+        "title": "انوائس",
+        "description": "اس آرڈر کو سیلز میں انوائس اور سیلز آرڈر بنائیں۔",
+        "create": "انوائس بنائیں",
+        "creating": "بن رہی ہے",
+        "created": "انوائس {number} بن گئی۔",
+        "createdNoNumber": "انوائس بن گئی۔",
+        "existing": "اس آرڈر کی انوائس پہلے ہی بن چکی ہے۔",
+        "viewInvoice": "انوائس",
+        "viewSalesOrder": "سیلز آرڈر"
+      },
+      "delete": {
+        "title": "آرڈر #{no} حذف کریں؟",
+        "message": "آرڈر اور اس کے آئٹمز ہمیشہ کے لیے ہٹا دیے جائیں گے۔ یہ عمل واپس نہیں ہو سکتا۔",
+        "confirm": "آرڈر حذف کریں",
+        "deleted": "آرڈر #{no} حذف کر دیا گیا۔"
+      }
+    }
+  }
+}

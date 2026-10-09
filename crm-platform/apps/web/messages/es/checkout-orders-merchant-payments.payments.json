@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "Tienda / Pagos",
+      "title": "Pagos",
+      "subtitle": "El lado económico de los pedidos de tu tienda: qué está pagado, qué está pendiente y qué es contra reembolso.",
+      "listTitle": "Lista de pagos",
+      "loading": "Cargando pagos",
+      "emptyFilteredTitle": "Ningún pago coincide",
+      "emptyFilteredMessage": "Cambia los filtros o restablécelos para ver todos los pagos.",
+      "resetFilters": "Restablecer filtros",
+      "emptyTitle": "Aún no hay pagos",
+      "emptyMessage": "Un pago aparece aquí en cuanto se hace un pedido en la tienda. Abre Pedidos para ver tus pedidos o añadir uno a mano.",
+      "goToOrders": "Ir a pedidos",
+      "summary": {
+        "loading": "Cargando totales de pagos",
+        "orders": "pedidos",
+        "collected": "Cobrado",
+        "collectedNone": "Aún no se ha cobrado nada."
+      },
+      "filters": {
+        "search": "Buscar",
+        "searchPlaceholder": "Número de pedido, cliente o referencia",
+        "status": "Estado",
+        "allStatuses": "Todos los estados",
+        "method": "Método",
+        "allMethods": "Todos los métodos",
+        "prepaid": "Prepagado",
+        "cod": "Contra reembolso",
+        "gatewayOption": "Una pasarela...",
+        "gatewayCode": "Código de la pasarela",
+        "gatewayCodePlaceholder": "p. ej., razorpay",
+        "from": "Desde",
+        "to": "Hasta",
+        "rangeInverted": "La fecha de inicio es posterior a la de fin, así que se ignora el rango de fechas.",
+        "reset": "Restablecer filtros"
+      },
+      "table": {
+        "caption": "Pagos de los pedidos de la tienda, del más reciente al más antiguo",
+        "order": "Pedido",
+        "customer": "Cliente",
+        "status": "Estado",
+        "method": "Método",
+        "paidVia": "Pagado mediante",
+        "reference": "Referencia",
+        "amount": "Importe",
+        "shop": "Tienda",
+        "date": "Fecha",
+        "methodPrepaid": "Prepagado",
+        "methodCod": "Contra reembolso",
+        "via": {
+          "razorpay_link": "Enlace de Razorpay",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "WhatsApp Pay en el chat",
+        "intro": "Permite a los compradores pagar un pedido sin salir de WhatsApp (UPI, tarjetas, banca en línea, monederos) y cobrar el dinero en tu propia cuenta de Razorpay, PayU, BillDesk o Zaakpay.",
+        "indiaOnly": "Por ahora India es el único mercado compatible: el país y la moneda están fijados en India e INR.",
+        "viewOnly": "Puedes ver las configuraciones de WhatsApp Pay, pero no cambiarlas. Pide a un administrador del espacio de trabajo permiso para gestionar pagos.",
+        "howTitle": "Cómo configurarlo",
+        "how1": "En WhatsApp Manager, en Pagos para India, crea un método de pago directo y vincula la cuenta de tu pasarela.",
+        "how2": "Ponle un nombre y copia ese nombre aquí. No se puede crear desde esta app, es un paso que se hace en Meta.",
+        "how3": "Guarda la configuración, luego abre Pedidos y solicita el pago por WhatsApp en cualquier pedido.",
+        "how4": "El comprador toca Revisar y pagar, paga en el chat y el pedido se marca como pagado cuando Meta lo confirma.",
+        "listTitle": "Tus configuraciones",
+        "loading": "Cargando configuraciones",
+        "emptyTitle": "Aún no hay configuraciones de pago",
+        "emptyMessage": "Añade una en esta página para empezar a cobrar pagos en el chat.",
+        "emptyMessageReadOnly": "Nadie ha añadido ninguna todavía.",
+        "market": "India · INR",
+        "autoChargeOn": "Cobro automático activado",
+        "active": "Activa",
+        "off": "Desactivada",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "Configuración guardada",
+          "removed": "Configuración quitada"
+        },
+        "addTitle": "Añadir una configuración de pago",
+        "editTitle": "Editar {name}",
+        "name": "Nombre de la configuración",
+        "nameLocked": "El nombre identifica la configuración. Para cambiarlo, quítala y vuelve a añadirla.",
+        "updatesExisting": "Ya existe una configuración con este nombre: al guardar se actualiza.",
+        "nameHint": "Debe coincidir exactamente con el nombre del método de pago directo en WhatsApp Manager (Pagos, India).",
+        "nameInvalid": "Introduce un nombre de entre 1 y {max} caracteres.",
+        "namePlaceholder": "p. ej., mi-razorpay-pay",
+        "gateway": "Pasarela",
+        "activeLabel": "Activa",
+        "autoCharge": "Cobrar automáticamente los pedidos nuevos",
+        "autoChargeHint": "Envía la solicitud de pago en el chat automáticamente en cuanto se hace un pedido.",
+        "save": "Guardar configuración",
+        "cancelEdit": "Cancelar edición",
+        "removeTitle": "¿Quitar {name}?",
+        "removeMessage": "Con esta configuración ya no se podrán cobrar pedidos en el chat. El método de pago directo de WhatsApp Manager no se toca.",
+        "removeConfirm": "Quitar configuración"
+      }
+    }
+  }
+}

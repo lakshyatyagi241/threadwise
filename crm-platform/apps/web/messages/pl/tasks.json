@@ -1,0 +1,330 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "Zadania"
+    },
+    "common": {
+      "dismiss": "Zamknij"
+    },
+    "hub": {
+      "title": "Zadania",
+      "subtitle": "Przypomnienia i lista zadań. Przypisuj je, ustawiaj priorytet i termin, a potem odhaczaj.",
+      "newTask": "Nowe zadanie",
+      "tableLabel": "Zadania",
+      "loading": "Wczytywanie zadań",
+      "useSampleData": "Użyj przykładowych danych (środowisko deweloperskie)",
+      "emptyFilteredTitle": "Brak pasujących zadań",
+      "emptyFiltered": "Spróbuj innego wyszukiwania lub wyczyść filtry.",
+      "resetFilters": "Wyczyść filtry",
+      "empty": {
+        "mine": {
+          "title": "Nic nie jest przypisane do Ciebie",
+          "message": "Zadania przypisane do Ciebie pojawią się tutaj. Dodaj jedno powyżej lub zobacz Wszystkie zadania."
+        },
+        "all": {
+          "title": "Brak zadań",
+          "message": "Dodaj przypomnienie lub zadanie w polu powyżej, a pojawi się tutaj."
+        },
+        "overdue": {
+          "title": "Brak zaległych zadań",
+          "message": "Wszystkie otwarte zadania są w terminie."
+        },
+        "today": {
+          "title": "Brak zadań na dziś",
+          "message": "Żadne otwarte zadanie nie ma terminu na resztę dnia."
+        },
+        "upcoming": {
+          "title": "Brak nadchodzących zadań",
+          "message": "Otwarte zadania z późniejszym terminem pojawią się tutaj."
+        },
+        "completed": {
+          "title": "Brak ukończonych zadań",
+          "message": "Odhaczone zadania pojawią się tutaj, od najnowszych."
+        }
+      },
+      "showing": "{count, plural, one {# zadanie wczytane} few {# zadania wczytane} many {# zadań wczytanych} other {# zadań wczytanych}}",
+      "loadMore": "Wczytaj więcej",
+      "allLoaded": "Wczytano wszystkie zadania",
+      "deleteTitle": "Usunąć to zadanie?",
+      "deleteMessage": "„{title}” zostanie usunięte dla wszystkich. Tej operacji nie można cofnąć.",
+      "delete": "Usuń",
+      "keep": "Zachowaj"
+    },
+    "tabs": {
+      "label": "Listy zadań",
+      "mine": "Moje zadania",
+      "all": "Wszystkie zadania",
+      "overdue": "Zaległe",
+      "today": "Dziś",
+      "upcoming": "Nadchodzące",
+      "completed": "Ukończone",
+      "count": "{count, plural, one {# zadanie} few {# zadania} many {# zadań} other {# zadań}}"
+    },
+    "toolbar": {
+      "label": "Filtry zadań",
+      "search": "Szukaj zadań",
+      "status": "Status",
+      "statusOpen": "Otwarte",
+      "statusDone": "Ukończone",
+      "statusAll": "Otwarte i ukończone",
+      "priority": "Priorytet",
+      "allPriorities": "Wszystkie priorytety",
+      "priorities": {
+        "high": "Wysoki",
+        "medium": "Średni",
+        "low": "Niski"
+      },
+      "assignee": "Przypisany",
+      "allAssignees": "Wszyscy przypisani",
+      "unassigned": "Nieprzypisane",
+      "linked": "Powiązane z",
+      "anyLink": "Dowolny rekord",
+      "linkContact": "Kontakt",
+      "linkDeal": "Szansa sprzedaży",
+      "clear": "Wyczyść",
+      "modifyColumns": "Zmień kolumny",
+      "resetColumns": "Resetuj kolumny",
+      "columns": {
+        "title": "Zadanie",
+        "priority": "Priorytet",
+        "due": "Termin",
+        "assignee": "Przypisany",
+        "contact": "Kontakt",
+        "deal": "Szansa sprzedaży",
+        "created": "Utworzono",
+        "completed": "Ukończono"
+      },
+      "refresh": "Odśwież",
+      "shortcuts": "Skróty klawiaturowe",
+      "view": "Układ",
+      "views": {
+        "list": "Lista",
+        "board": "Tablica wg terminu"
+      }
+    },
+    "table": {
+      "scrollArea": "Tabela zadań",
+      "selectAll": "Zaznacz wszystkie wczytane zadania",
+      "selectRow": "Zaznacz {title}",
+      "columns": {
+        "title": "Zadanie",
+        "priority": "Priorytet",
+        "due": "Termin",
+        "assignee": "Przypisany",
+        "contact": "Kontakt",
+        "deal": "Szansa sprzedaży",
+        "created": "Utworzono",
+        "completed": "Ukończono"
+      }
+    },
+    "row": {
+      "complete": "Oznacz jako ukończone",
+      "reopen": "Otwórz ponownie",
+      "completeNamed": "Oznacz „{title}” jako ukończone",
+      "reopenNamed": "Otwórz ponownie „{title}”",
+      "moreFor": "Więcej działań dla: {title}",
+      "open": "Otwórz",
+      "edit": "Edytuj",
+      "delete": "Usuń",
+      "unassigned": "Nieprzypisane"
+    },
+    "bulk": {
+      "label": "Działania dla zaznaczonych zadań",
+      "selected": "{count, plural, one {# zadanie zaznaczone} few {# zadania zaznaczone} many {# zadań zaznaczonych} other {# zadań zaznaczonych}}",
+      "working": "Przetwarzanie",
+      "complete": "Ukończ",
+      "assign": "Przypisz",
+      "assignTo": "Przypisz do",
+      "me": "{name} (ja)",
+      "unassign": "Usuń przypisanie",
+      "delete": "Usuń",
+      "clear": "Wyczyść zaznaczenie",
+      "failed": "Nie udało się.",
+      "someFailed": "{count, plural, one {Nie udało się zmienić # zadania.} few {Nie udało się zmienić # zadania.} many {Nie udało się zmienić # zadań.} other {Nie udało się zmienić # zadań.}}",
+      "completed": "{count, plural, one {Ukończono # zadanie.} few {Ukończono # zadania.} many {Ukończono # zadań.} other {Ukończono # zadań.}}",
+      "assigned": "{count, plural, one {Przypisano # zadanie do {name}.} few {Przypisano # zadania do {name}.} many {Przypisano # zadań do {name}.} other {Przypisano # zadań do {name}.}}",
+      "unassigned": "{count, plural, one {Cofnięto przypisanie: # zadanie.} few {Cofnięto przypisanie: # zadania.} many {Cofnięto przypisanie: # zadań.} other {Cofnięto przypisanie: # zadań.}}",
+      "deleted": "{count, plural, one {Usunięto # zadanie.} few {Usunięto # zadania.} many {Usunięto # zadań.} other {Usunięto # zadań.}}",
+      "deleteTitle": "Usunąć zaznaczone zadania?",
+      "deleteMessage": "{count, plural, one {# zadanie zostanie usunięte dla wszystkich. Tej operacji nie można cofnąć.} few {# zadania zostaną usunięte dla wszystkich. Tej operacji nie można cofnąć.} many {# zadań zostanie usuniętych dla wszystkich. Tej operacji nie można cofnąć.} other {# zadań zostanie usuniętych dla wszystkich. Tej operacji nie można cofnąć.}}",
+      "keep": "Zachowaj"
+    },
+    "quick": {
+      "label": "Dodaj zadanie",
+      "placeholder": "Dodaj zadanie i naciśnij Enter",
+      "priority": "Priorytet",
+      "priorities": {
+        "high": "Wysoki",
+        "medium": "Średni",
+        "low": "Niski"
+      },
+      "due": "Termin i godzina",
+      "add": "Dodaj",
+      "dueRequired": "Wybierz termin i godzinę.",
+      "titleRequired": "Wpisz, co trzeba zrobić.",
+      "options": "Więcej opcji (priorytet i termin)"
+    },
+    "form": {
+      "eyebrow": "Zadanie",
+      "newTitle": "Nowe zadanie",
+      "editTitle": "Edytuj zadanie",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "create": "Utwórz zadanie",
+      "save": "Zapisz zmiany",
+      "title": "Zadanie",
+      "titlePlaceholder": "np. Zadzwoń do Acme w sprawie odnowienia",
+      "priority": "Priorytet",
+      "priorities": {
+        "high": "Wysoki",
+        "medium": "Średni",
+        "low": "Niski"
+      },
+      "assignee": "Przypisz do",
+      "unassigned": "Nikt",
+      "me": "{name} (ja)",
+      "due": "Termin",
+      "presets": {
+        "today": "Dziś",
+        "tomorrow": "Jutro",
+        "nextWeek": "Przyszły tydzień"
+      },
+      "clearDue": "Wyczyść datę",
+      "contact": "Kontakt",
+      "deal": "Szansa sprzedaży",
+      "notes": "Notatki",
+      "reminderHint": "Osoba przypisana otrzyma przypomnienie, gdy nadejdzie termin zadania.",
+      "assigneePick": "Wybierz, kto odpowiada za to zadanie.",
+      "problems": {
+        "dueRequired": "Wybierz termin i godzinę.",
+        "priorityRequired": "Wybierz priorytet.",
+        "assigneeRequired": "Wybierz, dla kogo jest to zadanie.",
+        "titleRequired": "Wpisz, co trzeba zrobić.",
+        "titleTooLong": "Zadanie jest za długie (maksymalnie 255 znaków).",
+        "notesTooLong": "Notatki są za długie (maksymalnie 5000 znaków).",
+        "dueInvalid": "Ta data jest nieprawidłowa.",
+        "assigneeInvalid": "Ta osoba nie jest aktywnym członkiem tej przestrzeni roboczej."
+      }
+    },
+    "drawer": {
+      "loading": "Wczytywanie zadania",
+      "close": "Zamknij",
+      "eyebrow": "Zadanie",
+      "name": "Nazwa zadania",
+      "titleRequired": "Zadanie wymaga nazwy.",
+      "statusOpen": "Otwarte",
+      "statusDone": "Ukończone",
+      "complete": "Oznacz jako ukończone",
+      "reopen": "Otwórz ponownie",
+      "edit": "Edytuj",
+      "delete": "Usuń",
+      "details": "Szczegóły",
+      "notes": "Notatki",
+      "notesPlaceholder": "Dodaj kontekst dla osoby, która się tym zajmie",
+      "linked": "Powiązane rekordy",
+      "company": "Firma",
+      "noLinks": "Nie jest powiązane z kontaktem ani szansą sprzedaży.",
+      "activity": "Aktywność",
+      "events": {
+        "created": "Utworzono zadanie",
+        "createdBy": "Utworzone przez {name}",
+        "reminded": "Wysłano przypomnienie o terminie",
+        "completed": "Oznaczono jako ukończone"
+      },
+      "deleteTitle": "Usunąć to zadanie?",
+      "deleteMessage": "„{title}” zostanie usunięte dla wszystkich. Tej operacji nie można cofnąć.",
+      "cancel": "Zachowaj"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "Zaległe",
+        "today": "Dzisiaj",
+        "upcoming": "Nadchodzące",
+        "no_date": "Bez terminu"
+      },
+      "empty": "Brak pozycji."
+    },
+    "due": {
+      "none": "Bez terminu",
+      "overdue": "Zaległe",
+      "today": "Dziś, {time}",
+      "tomorrow": "Jutro, {time}",
+      "yesterday": "Wczoraj, {time}",
+      "date": "{date}, {time}"
+    },
+    "priority": {
+      "high": "Wysoki",
+      "medium": "Średni",
+      "low": "Niski"
+    },
+    "link": {
+      "unnamedContact": "Kontakt bez nazwy",
+      "unnamedDeal": "Szansa sprzedaży"
+    },
+    "picker": {
+      "searchContact": "Szukaj kontaktów",
+      "searchDeal": "Szukaj szans sprzedaży",
+      "results": "Wyniki wyszukiwania",
+      "searching": "Wyszukiwanie",
+      "unavailable": "Wyszukiwanie jest teraz niedostępne.",
+      "none": "Brak wyników.",
+      "unlink": "Usuń powiązanie"
+    },
+    "errors": {
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "signedOut": "Sesja wygasła. Zaloguj się ponownie, aby kontynuować.",
+      "conflict": "Ktoś inny zmienił to zadanie. Odśwież stronę i spróbuj ponownie.",
+      "validation": "Niektóre dane są nieprawidłowe.",
+      "unavailable": "Usługa zadań nie jest jeszcze dostępna na tym serwerze.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "notFound": "Nie znaleziono tego zadania. Mogło zostać usunięte.",
+      "planDisabled": "Twój plan nie obejmuje zadań. Ulepsz plan, aby je odblokować.",
+      "assigneeInvalid": "Ta osoba nie jest aktywnym członkiem tej przestrzeni roboczej.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
+      "requestId": "Identyfikator żądania",
+      "retry": "Spróbuj ponownie"
+    },
+    "toast": {
+      "completed": "Zadanie ukończone.",
+      "reopened": "Zadanie otwarto ponownie.",
+      "created": "Utworzono zadanie.",
+      "saved": "Zadanie zapisane.",
+      "deleted": "Zadanie usunięte.",
+      "conflict": "Ktoś inny zmienił to zadanie. Lista została odświeżona; spróbuj ponownie.",
+      "failed": "Nie udało się zaktualizować zadania.",
+      "saveFailed": "Nie udało się zapisać zadania.",
+      "deleteFailed": "Nie udało się usunąć zadania.",
+      "createFailed": "Nie udało się utworzyć zadania."
+    },
+    "shortcuts": {
+      "title": "Skróty klawiaturowe",
+      "close": "Zamknij",
+      "intro": "Przeglądaj listę bez myszy. Skróty są wstrzymane, gdy wpisujesz w polu.",
+      "actions": {
+        "next": "Następne zadanie",
+        "prev": "Poprzednie zadanie",
+        "open": "Otwórz zadanie",
+        "toggleComplete": "Ukończ lub otwórz ponownie",
+        "toggleSelect": "Zaznacz lub odznacz",
+        "newTask": "Nowe zadanie",
+        "focusSearch": "Szukaj",
+        "clearSelection": "Wyczyść zaznaczenie",
+        "help": "Pokaż tę listę"
+      }
+    },
+    "linked": {
+      "title": "Zadania",
+      "addPlaceholder": "Wpisz tytuł zadania, a następnie kliknij Dodaj, aby uzupełnić szczegóły",
+      "viewAll": "Zobacz wszystkie",
+      "loading": "Wczytywanie zadań",
+      "unavailableTitle": "Zadania nie są jeszcze dostępne",
+      "unavailable": "Usługa zadań nie jest jeszcze dostępna na tym serwerze.",
+      "empty": "Brak otwartych zadań.",
+      "loadMore": "Wczytaj więcej",
+      "loadMoreDone": "Wczytaj więcej ukończonych",
+      "showDone": "Pokaż ukończone",
+      "hideDone": "Ukryj ukończone"
+    }
+  }
+}

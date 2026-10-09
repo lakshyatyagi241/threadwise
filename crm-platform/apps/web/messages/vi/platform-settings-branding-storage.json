@@ -1,0 +1,1742 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "Cài đặt nền tảng",
+      "hub": "Trung tâm cài đặt",
+      "general": "Chung",
+      "appearance": "Giao diện và màu sắc",
+      "siteInfo": "Thông tin trang web",
+      "footer": "Chân trang",
+      "mail": "Email",
+      "seo": "SEO",
+      "privacy": "Quyền riêng tư, GDPR và ADA",
+      "analytics": "Phân tích",
+      "custom": "Mã tùy chỉnh",
+      "pwa": "PWA",
+      "storage": "Lưu trữ đám mây",
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "Chiến dịch",
+      "googleCalendar": "Google Calendar",
+      "flowBuilder": "Trình tạo luồng"
+    },
+    "hub": {
+      "kicker": "Quản trị - Cài đặt dự án",
+      "title": "Cài đặt dự án",
+      "description": "Cấu hình nhận diện ứng dụng, nhà cung cấp tin nhắn, email, tích hợp thương mại điện tử, siêu dữ liệu cửa hàng, nội dung chân trang, PWA, SEO và mã tùy chỉnh.",
+      "export": "Xuất cấu hình",
+      "exporting": "Đang xuất",
+      "exportHint": "Tải xuống mọi cài đặt đã lưu. Thông tin bí mật và mã định danh tài khoản sẽ được thay thế.",
+      "tiles": {
+        "saved": "Cài đặt đã lưu",
+        "savedHint": "nhóm trong tổng số {total} đã lưu",
+        "healthy": "Ổn định",
+        "healthyHint": "có giá trị",
+        "needsTest": "Cần kiểm tra",
+        "needsTestNone": "đã xác minh tất cả",
+        "secrets": "Trường bí mật",
+        "secretsHint": "đã mã hóa / ẩn",
+        "lastUpdated": "Cập nhật lần cuối",
+        "lastUpdatedNone": "chưa chỉnh sửa",
+        "lastUpdatedHint": "lần lưu gần nhất"
+      },
+      "card": {
+        "saved": "Đã lưu",
+        "defaults": "Mặc định",
+        "needsTest": "Cần kiểm tra",
+        "updated": "Đã cập nhật {when}",
+        "open": "Mở"
+      },
+      "others": "Cài đặt tiền tệ, danh mục, Shopify, WooCommerce, HubSpot, Google, Slack, thông báo đẩy trên di động và Trello sẽ xuất hiện ở đây khi các mô-đun tương ứng được cài đặt.",
+      "actions": {
+        "addons": "Tiện ích mở rộng",
+        "updater": "Trình cập nhật",
+        "legal": "Trang pháp lý",
+        "general": "Mở phần chung"
+      }
+    },
+    "common": {
+      "save": "Lưu thay đổi",
+      "saving": "Đang lưu",
+      "saved": "{count, plural, other {Đã lưu # thay đổi.}}",
+      "rejected": "{count, plural, other {# trường cần được xem lại}}",
+      "conflict": "Người khác đã lưu các cài đặt này sau khi bạn mở chúng. Tải lại trang để xem thay đổi của họ, rồi áp dụng lại thay đổi của bạn.",
+      "reload": "Tải lại cài đặt",
+      "unexpected": "Đã xảy ra lỗi và chưa có gì được lưu.",
+      "requestId": "Mã yêu cầu",
+      "readOnly": "Bạn có thể xem các cài đặt này, nhưng chỉ quản trị viên cấp cao mới có thể thay đổi.",
+      "secretSet": "Đã lưu. Để trống để giữ nguyên.",
+      "secretUnset": "Chưa đặt.",
+      "secretClear": "Xóa giá trị đã lưu",
+      "secretShow": "Hiện",
+      "secretHide": "Ẩn",
+      "numberRequired": "Nhập một số nguyên.",
+      "numberInteger": "Hãy dùng số nguyên.",
+      "updated": "Lưu lần cuối {when}",
+      "neverSaved": "Chưa lưu lần nào: đang hiển thị mặc định.",
+      "back": "Tất cả cài đặt",
+      "invalidGroup": "Trang cài đặt này không tồn tại.",
+      "eyebrow": "Quản trị - Cài đặt dự án",
+      "guide": "Hướng dẫn nhanh",
+      "resetDraft": "Đặt lại bản nháp",
+      "cancel": "Hủy",
+      "applyAfterSave": "Thay đổi chỉ có hiệu lực sau khi bạn lưu.",
+      "saveAndTest": "Lưu và kiểm tra kết nối",
+      "custom": "tùy chỉnh",
+      "manageLanguages": "Quản lý ngôn ngữ"
+    },
+    "test": {
+      "title": "Gửi email thử nghiệm",
+      "saveFirst": "Hãy lưu thay đổi trước: việc kiểm tra dùng các cài đặt đã lưu.",
+      "mailTo": "Gửi email thử nghiệm đến",
+      "mailRun": "Gửi email thử nghiệm",
+      "run": "Kiểm tra kết nối",
+      "running": "Đang kiểm tra",
+      "ok": "Đạt",
+      "failed": "Thất bại",
+      "lastOk": "Lần kiểm tra thành công gần nhất {when}",
+      "neverTested": "Chưa kiểm tra."
+    },
+    "groups": {
+      "general": {
+        "title": "Cài đặt chung",
+        "description": "Nhận diện ứng dụng, mặc định của nền tảng và công tắc bảo trì.",
+        "sections": {
+          "identity": {
+            "title": "Nhận diện ứng dụng"
+          },
+          "defaults": {
+            "title": "Mặc định nền tảng"
+          },
+          "platform": {
+            "title": "Công tắc nền tảng"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "Tên ứng dụng",
+            "hint": "Hiển thị trong tiêu đề trang, email và thẻ trình duyệt."
+          },
+          "appUrl": {
+            "label": "URL ứng dụng"
+          },
+          "supportEmail": {
+            "label": "Email hỗ trợ",
+            "placeholder": "support@…"
+          },
+          "fromEmail": {
+            "label": "Email người gửi",
+            "placeholder": "hello@…"
+          },
+          "contactNumber": {
+            "label": "Số điện thoại liên hệ",
+            "placeholder": "+91 …"
+          },
+          "address": {
+            "label": "Địa chỉ"
+          },
+          "mapIframeUrl": {
+            "label": "URL iframe bản đồ",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
+          },
+          "platformFooter": {
+            "label": "Chân trang nền tảng",
+            "hint": "Được thêm vào các tin nhắn gửi đi của nền tảng. Để trống nếu không cần."
+          },
+          "defaultTimezone": {
+            "label": "Múi giờ mặc định",
+            "hint": "Dùng khi không gian làm việc hoặc người dùng chưa chọn múi giờ."
+          },
+          "defaultLanguage": {
+            "label": "Ngôn ngữ mặc định"
+          },
+          "defaultCurrency": {
+            "label": "Tiền tệ mặc định"
+          },
+          "defaultCountryCode": {
+            "label": "Mã quốc gia mặc định",
+            "hint": "Mã quay số có dấu cộng, ví dụ +91."
+          },
+          "defaultCountryIso": {
+            "label": "Quốc gia mặc định (bộ chọn số điện thoại)",
+            "hint": "Áp dụng cho mọi bộ chọn nhập số điện thoại trên nền tảng."
+          },
+          "fontFamily": {
+            "label": "Họ phông chữ"
+          },
+          "maintenanceMode": {
+            "label": "Chế độ bảo trì",
+            "hint": "Đưa ứng dụng khách hàng ngoại tuyến với mã 503. Nhân viên vận hành, đăng nhập và các callback máy vẫn hoạt động."
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "Giao diện mặc định"
+          }
+        }
+      },
+      "branding": {
+        "title": "Thương hiệu và giao diện",
+        "description": "Favicon, logo theo từng giao diện, mã màu và kích thước giao diện.",
+        "sections": {
+          "assets": {
+            "title": "Tài nguyên thương hiệu"
+          },
+          "colors": {
+            "title": "Mã màu"
+          },
+          "interface": {
+            "title": "Giao diện"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "URL favicon"
+          },
+          "logos": {
+            "paper": {
+              "label": "Giấy"
+            },
+            "bright": {
+              "label": "Sáng"
+            },
+            "dark": {
+              "label": "Tối"
+            },
+            "doodle": {
+              "label": "Doodle"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "Chính",
+              "hint": "Đặt màu chính cũng sẽ đổi màu xanh cổ vịt, xanh lá, bạc hà và bong bóng chat, trừ khi bạn đặt các màu đó."
+            },
+            "wa-teal": {
+              "label": "Chính (khi di chuột)"
+            },
+            "wa-green": {
+              "label": "Nhấn mạnh / thành công"
+            },
+            "wa-mint": {
+              "label": "Nền nhấn mạnh nhạt"
+            },
+            "wa-bubble": {
+              "label": "Bong bóng chat"
+            },
+            "paper-0": {
+              "label": "Nền trang"
+            },
+            "paper-50": {
+              "label": "Nền thẻ / nền phụ"
+            },
+            "paper-100": {
+              "label": "Nền khi di chuột"
+            },
+            "paper-200": {
+              "label": "Viền"
+            },
+            "ink-500": {
+              "label": "Chữ phụ"
+            },
+            "ink-700": {
+              "label": "Chữ nội dung"
+            },
+            "ink-900": {
+              "label": "Tiêu đề"
+            },
+            "accent-coral": {
+              "label": "Nhấn mạnh - san hô"
+            },
+            "accent-amber": {
+              "label": "Nhấn mạnh - hổ phách"
+            },
+            "accent-plum": {
+              "label": "Nhấn mạnh - mận"
+            },
+            "accent-sky": {
+              "label": "Nhấn mạnh - xanh trời"
+            }
+          },
+          "fontScale": {
+            "label": "Cỡ chữ",
+            "hint": "Cỡ chữ toàn giao diện tính theo phần trăm, từ 80 đến 130."
+          },
+          "uiOpacity": {
+            "label": "Độ mờ",
+            "hint": "Độ mờ toàn giao diện tính theo phần trăm, từ 55 đến 100."
+          },
+          "dashboardLayout": {
+            "label": "Bố cục điều hướng"
+          },
+          "sidebarColor": {
+            "label": "Nền"
+          },
+          "sidebarTextColor": {
+            "label": "Màu chữ"
+          },
+          "sidebarAccentColor": {
+            "label": "Màu nhấn mạnh"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "Thanh trên cùng",
+            "sidebar": "Thanh bên"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "Hiện tại: menu ở trên cùng cộng trang Thêm cho các mục còn lại.",
+            "sidebar": "Thanh bên trái kiểu quản trị với mọi tính năng được nhóm lại. Không có menu trên cùng."
+          }
+        }
+      },
+      "site": {
+        "title": "Thông tin trang web",
+        "description": "Thông tin công ty, địa chỉ liên hệ, hồ sơ mạng xã hội và chân trang công khai.",
+        "sections": {
+          "company": {
+            "title": "Công ty"
+          },
+          "contact": {
+            "title": "Địa chỉ liên hệ"
+          },
+          "social": {
+            "title": "Hồ sơ mạng xã hội"
+          },
+          "footer": {
+            "title": "Chân trang công khai"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "Tên công ty"
+          },
+          "tagline": {
+            "label": "Khẩu hiệu"
+          },
+          "foundedYear": {
+            "label": "Năm thành lập"
+          },
+          "address": {
+            "label": "Địa chỉ"
+          },
+          "cityCountry": {
+            "label": "Thành phố, quốc gia"
+          },
+          "emailGeneral": {
+            "label": "Email chung"
+          },
+          "emailSupport": {
+            "label": "Email hỗ trợ"
+          },
+          "emailSales": {
+            "label": "Email kinh doanh"
+          },
+          "emailSecurity": {
+            "label": "Email bảo mật"
+          },
+          "emailCareers": {
+            "label": "Email tuyển dụng"
+          },
+          "phone": {
+            "label": "Điện thoại"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "X"
+          },
+          "socialLinkedin": {
+            "label": "LinkedIn"
+          },
+          "socialInstagram": {
+            "label": "Instagram"
+          },
+          "socialYoutube": {
+            "label": "YouTube"
+          },
+          "socialFacebook": {
+            "label": "Facebook"
+          },
+          "socialGithub": {
+            "label": "GitHub"
+          },
+          "footerTitle": {
+            "label": "Tiêu đề chân trang"
+          },
+          "footerDescription": {
+            "label": "Mô tả chân trang"
+          },
+          "footerCopyright": {
+            "label": "Bản quyền chân trang"
+          }
+        }
+      },
+      "mail": {
+        "title": "Cài đặt email",
+        "description": "Email gửi đi. Giá trị đã lưu sẽ ghi đè mặc định của máy chủ ở mọi lần gửi.",
+        "sections": {
+          "sender": {
+            "title": "Người gửi"
+          },
+          "smtp": {
+            "title": "Máy chủ email"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "Tên người gửi",
+            "placeholder": "Acme Inc.",
+            "hint": "Hiển thị cho người nhận như tên người gửi “From”."
+          },
+          "fromAddress": {
+            "label": "Địa chỉ người gửi",
+            "placeholder": "hello@yourdomain.com",
+            "hint": "Tên miền phải có SPF + DKIM hợp lệ, nếu không email sẽ rơi vào thư rác."
+          },
+          "mailer": {
+            "label": "Trình gửi email",
+            "hint": "Hiện SMTP và trình gửi ghi nhật ký đã hoạt động; các trình gửi qua API chưa được kết nối."
+          },
+          "host": {
+            "label": "Máy chủ",
+            "placeholder": "smtp.mailgun.org",
+            "hint": "Để trống để giữ mặc định của máy chủ."
+          },
+          "port": {
+            "label": "Cổng",
+            "hint": "587 cho TLS, 465 cho SSL, 25 (nên tránh)."
+          },
+          "encryption": {
+            "label": "Mã hóa",
+            "hint": "ssl là TLS ngầm định (thường dùng cổng 465); tls và starttls nâng cấp trên cổng 587."
+          },
+          "username": {
+            "label": "Tên người dùng",
+            "placeholder": "postmaster@mg.example.com"
+          },
+          "password": {
+            "label": "Mật khẩu",
+            "placeholder": "Nhập mật khẩu SMTP",
+            "hint": "Được lưu dưới dạng mã hóa và sẽ không hiển thị lại."
+          }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls (cổng 587)",
+            "ssl": "ssl (cổng 465)",
+            "starttls": "starttls",
+            "none": "không"
+          }
+        }
+      },
+      "seo": {
+        "title": "Cài đặt SEO",
+        "description": "Thẻ tìm kiếm và chia sẻ mạng xã hội cho trang công khai.",
+        "sections": {
+          "search": {
+            "title": "Kết quả tìm kiếm"
+          },
+          "social": {
+            "title": "Chia sẻ mạng xã hội"
+          },
+          "verification": {
+            "title": "Xác minh trang web"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "Tiêu đề meta",
+            "hint": "Bắt đầu bằng tên thương hiệu."
+          },
+          "metaDescription": {
+            "label": "Mô tả meta",
+            "hint": "Hiển thị dưới tiêu đề trên Google.",
+            "placeholder": "Đoạn giới thiệu 1–2 câu hiển thị dưới tiêu đề trên Google."
+          },
+          "metaKeywords": {
+            "label": "Từ khóa meta",
+            "placeholder": "tiếp thị whatsapp, crm whatsapp, chiến dịch, tự động hóa, hộp thư"
+          },
+          "robots": {
+            "label": "Chỉ thị robots",
+            "hint": "Cho công cụ tìm kiếm biết có nên lập chỉ mục và theo dõi liên kết hay không."
+          },
+          "canonical": {
+            "label": "Canonical",
+            "placeholder": "https://app.example.com"
+          },
+          "author": {
+            "label": "Tác giả"
+          },
+          "ogTitle": {
+            "label": "Tiêu đề Open Graph",
+            "placeholder": "Mặc định là tiêu đề meta"
+          },
+          "ogDescription": {
+            "label": "Mô tả Open Graph",
+            "placeholder": "Mặc định là mô tả meta"
+          },
+          "ogType": {
+            "label": "Loại Open Graph"
+          },
+          "ogUrl": {
+            "label": "URL Open Graph",
+            "placeholder": "https://app.example.com"
+          },
+          "ogImage": {
+            "label": "Ảnh Open Graph",
+            "hint": "Khuyến nghị 1200x630. Được Slack, X, WhatsApp, Discord sử dụng.",
+            "placeholder": "https://app.example.com/og.png"
+          },
+          "twitterCard": {
+            "label": "Thẻ Twitter"
+          },
+          "twitterSite": {
+            "label": "Trang Twitter",
+            "placeholder": "@yourbrand"
+          },
+          "twitterCreator": {
+            "label": "Người tạo trên Twitter",
+            "placeholder": "@author"
+          },
+          "googleVerification": {
+            "label": "Xác minh Google",
+            "placeholder": "google-site-verification=…"
+          },
+          "bingVerification": {
+            "label": "Xác minh Bing",
+            "placeholder": "msvalidate.01=…"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "Lập chỉ mục, theo dõi — trang công khai",
+            "index, nofollow": "Lập chỉ mục, không theo dõi",
+            "noindex, follow": "Không lập chỉ mục, theo dõi",
+            "noindex, nofollow": "Không lập chỉ mục, không theo dõi — ẩn khỏi tìm kiếm"
+          }
+        }
+      },
+      "privacy": {
+        "title": "Quyền riêng tư và cookie",
+        "description": "Banner đồng ý cookie, liên kết pháp lý và cờ tuân thủ.",
+        "sections": {
+          "banner": {
+            "title": "Banner cookie"
+          },
+          "links": {
+            "title": "Liên kết pháp lý"
+          },
+          "compliance": {
+            "title": "Cờ tuân thủ"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "Bật banner"
+          },
+          "cookieBannerStyle": {
+            "label": "Kiểu banner"
+          },
+          "cookieMessage": {
+            "label": "Thông điệp đồng ý"
+          },
+          "respectDoNotTrack": {
+            "label": "Tôn trọng Do-Not-Track",
+            "hint": "Trình duyệt gửi DNT=1 → từ chối tất cả"
+          },
+          "policyUrl": {
+            "label": "URL chính sách quyền riêng tư",
+            "placeholder": "https://example.com/privacy"
+          },
+          "termsUrl": {
+            "label": "URL điều khoản dịch vụ",
+            "placeholder": "https://example.com/terms"
+          },
+          "cookiesPolicyUrl": {
+            "label": "URL chính sách cookie (Tìm hiểu thêm)",
+            "placeholder": "https://example.com/cookies"
+          },
+          "gdprCompliance": {
+            "label": "Tuân thủ GDPR (EU)",
+            "hint": "Được lưu để ghi nhận. Hiện chưa thay đổi hành vi."
+          },
+          "ccpaCompliance": {
+            "label": "Tuân thủ CCPA (California)",
+            "hint": "Được lưu để ghi nhận. Hiện chưa thay đổi hành vi."
+          },
+          "adaSkipLink": {
+            "label": "Liên kết bỏ qua đến nội dung",
+            "hint": "Được lưu để ghi nhận. Hiện chưa thay đổi hành vi."
+          },
+          "adaHighContrast": {
+            "label": "Cung cấp chế độ tương phản cao",
+            "hint": "Được lưu để ghi nhận. Hiện chưa thay đổi hành vi."
+          },
+          "adaLargeText": {
+            "label": "Cung cấp chế độ chữ lớn",
+            "hint": "Được lưu để ghi nhận. Hiện chưa thay đổi hành vi."
+          },
+          "adaReducedMotion": {
+            "label": "Tôn trọng prefers-reduced-motion",
+            "hint": "Được lưu để ghi nhận. Hiện chưa thay đổi hành vi."
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "Thanh dính phía dưới — khuyến nghị",
+            "top-bar": "Thanh dính phía trên",
+            "modal": "Hộp thoại căn giữa"
+          }
+        }
+      },
+      "analytics": {
+        "title": "Phân tích",
+        "description": "Mã theo dõi. Trình theo dõi chỉ tải sau khi khách truy cập đồng ý.",
+        "sections": {
+          "trackers": {
+            "title": "Mã theo dõi"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "Pixel Meta"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft Clarity"
+          },
+          "tiktokPixel": {
+            "label": "Pixel TikTok"
+          },
+          "linkedinPartner": {
+            "label": "Đối tác LinkedIn"
+          },
+          "twitterPixel": {
+            "label": "Pixel Twitter"
+          },
+          "plausibleDomain": {
+            "label": "Tên miền Plausible"
+          },
+          "posthogKey": {
+            "label": "Khóa PostHog"
+          },
+          "mixpanelToken": {
+            "label": "Token Mixpanel"
+          },
+          "hotjarSiteId": {
+            "label": "ID trang Hotjar"
+          },
+          "posthogHost": {
+            "label": "Máy chủ PostHog"
+          }
+        }
+      },
+      "customCode": {
+        "title": "Mã tùy chỉnh",
+        "description": "CSS và JavaScript được chèn vào trang công khai.",
+        "sections": {
+          "code": {
+            "title": "Mã tùy chỉnh"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Chèn trên môi trường sản xuất",
+            "hint": "Không có nội dung nào bên dưới chạy trên trang công khai cho đến khi bật tùy chọn này."
+          },
+          "css": {
+            "label": "CSS tùy chỉnh"
+          },
+          "js": {
+            "label": "JS tùy chỉnh",
+            "hint": "Chạy với mọi khách truy cập. Chỉ dán mã mà bạn tin cậy."
+          }
+        }
+      },
+      "pwa": {
+        "title": "Ứng dụng có thể cài đặt",
+        "description": "Manifest ứng dụng web và hành vi cài đặt.",
+        "sections": {
+          "app": {
+            "title": "Ứng dụng có thể cài đặt"
+          },
+          "look": {
+            "title": "Giao diện và hành vi"
+          },
+          "install": {
+            "title": "Cài đặt và ngoại tuyến"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Đã bật"
+          },
+          "appName": {
+            "label": "Tên ứng dụng"
+          },
+          "shortName": {
+            "label": "Tên ngắn"
+          },
+          "description": {
+            "label": "Mô tả"
+          },
+          "startUrl": {
+            "label": "URL khởi động"
+          },
+          "scope": {
+            "label": "Phạm vi"
+          },
+          "display": {
+            "label": "Hiển thị"
+          },
+          "orientation": {
+            "label": "Hướng màn hình"
+          },
+          "themeColor": {
+            "label": "Màu giao diện"
+          },
+          "backgroundColor": {
+            "label": "Màu nền"
+          },
+          "icon192": {
+            "label": "Biểu tượng 192"
+          },
+          "icon512": {
+            "label": "Biểu tượng 512"
+          },
+          "installPrompt": {
+            "label": "Lời nhắc cài đặt"
+          },
+          "offlineEnabled": {
+            "label": "Bật chế độ ngoại tuyến"
+          }
+        }
+      },
+      "storage": {
+        "title": "Lưu trữ đám mây",
+        "description": "Bucket tương thích S3 cho phương tiện. Kiểm tra kết nối trước khi bật.",
+        "sections": {
+          "provider": {
+            "title": "Nhà cung cấp"
+          },
+          "credentials": {
+            "title": "Thông tin xác thực bucket"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Đã bật"
+          },
+          "provider": {
+            "label": "Nhà cung cấp"
+          },
+          "visibility": {
+            "label": "Hiển thị tệp",
+            "hint": "Đối tượng riêng tư cần liên kết có chữ ký; dùng URL công khai hoặc CDN cho phương tiện mà mọi người mở trực tiếp."
+          },
+          "basePath": {
+            "label": "Đường dẫn thư mục gốc (không bắt buộc)",
+            "hint": "Tiền tố cho đối tượng kiểm tra. Các tệp tải lên sẽ dùng tiền tố này khi mô-đun tệp được triển khai."
+          },
+          "accessKeyId": {
+            "label": "ID khóa truy cập *"
+          },
+          "secret": {
+            "label": "Khóa truy cập bí mật *",
+            "hint": "Được lưu dưới dạng mã hóa và sẽ không hiển thị lại.",
+            "placeholder": "dán khóa bí mật"
+          },
+          "region": {
+            "label": "Khu vực",
+            "placeholder": "us-east-1"
+          },
+          "bucket": {
+            "label": "Bucket *"
+          },
+          "endpoint": {
+            "label": "Endpoint",
+            "hint": "Bắt buộc với Spaces, R2 và MinIO. Phần /bucket ở cuối sẽ bị xóa.",
+            "placeholder": "https://… (bắt buộc với Spaces / R2 / MinIO; tự động với Wasabi và Bunny)"
+          },
+          "cdnUrl": {
+            "label": "URL công khai / CDN (không bắt buộc)",
+            "placeholder": "https://cdn.example.com"
+          },
+          "pathStyle": {
+            "label": "Dùng endpoint kiểu đường dẫn (MinIO / một số kho tương thích S3)"
+          },
+          "storageZone": {
+            "label": "Vùng lưu trữ",
+            "hint": "Chỉ dành cho Bunny."
+          },
+          "storagePassword": {
+            "label": "Mật khẩu lưu trữ (khóa truy cập)",
+            "hint": "Chỉ dành cho Bunny: mật khẩu của vùng lưu trữ. Được lưu dưới dạng mã hóa.",
+            "placeholder": "dán mật khẩu"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net Storage",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO / tương thích S3"
+          },
+          "visibility": {
+            "private": "Riêng tư (URL có chữ ký)",
+            "public": "Công khai"
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "Cài đặt WhatsApp",
+        "description": "Ứng dụng Meta và đối tác Interakt dùng để đưa số WhatsApp vào hệ thống.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)"
+          },
+          "interakt": {
+            "title": "Tuyến Interakt"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "ID ứng dụng Meta",
+            "hint": "Để trống sẽ dùng môi trường máy chủ."
+          },
+          "appSecret": {
+            "label": "Khóa bí mật ứng dụng",
+            "hint": "Được lưu dưới dạng mã hóa, sẽ không hiển thị lại. Để trống để giữ khóa đã lưu."
+          },
+          "configId": {
+            "label": "ID cấu hình Embedded Signup",
+            "hint": "Để trống nghĩa là các không gian làm việc sẽ dán token thủ công."
+          },
+          "graphVersion": {
+            "label": "Phiên bản Graph API",
+            "hint": "Ví dụ như v25.0. Để trống sẽ giữ mặc định của máy chủ."
+          },
+          "coexistence": {
+            "label": "Cùng tồn tại",
+            "hint": "Hiển thị “Kết nối số Business App hiện có của tôi” trong Embedded Signup."
+          },
+          "defaultProvider": {
+            "label": "Tuyến mặc định",
+            "hint": "API mà các số mới kết nối sẽ sử dụng."
+          },
+          "solutionId": {
+            "label": "ID giải pháp Interakt",
+            "hint": "Được gửi tới Meta dưới dạng extras.setup.solutionID và tới Interakt khi đăng ký."
+          },
+          "partnerAuthKey": {
+            "label": "Khóa đối tác Interakt",
+            "hint": "Khóa đối tác công nghệ dùng chung. Được lưu dưới dạng mã hóa."
+          },
+          "systemUserId": {
+            "label": "ID người dùng hệ thống",
+            "hint": "Được gán cho mỗi WABA đã kết nối với quyền MANAGE."
+          },
+          "systemUserToken": {
+            "label": "Token người dùng hệ thống",
+            "hint": "Dùng để kiểm tra token và gán người dùng hệ thống. Được lưu dưới dạng mã hóa."
+          },
+          "businessId": {
+            "label": "ID doanh nghiệp",
+            "hint": "Dùng để tìm WABA khi token không liệt kê WABA nào."
+          },
+          "verifyToken": {
+            "label": "Token xác minh webhook",
+            "hint": "Chuỗi ngẫu nhiên bất kỳ. Để trống để dùng mã được tạo sẵn hiển thị ở trên."
+          },
+          "requireSignature": {
+            "label": "Yêu cầu chữ ký trên mọi webhook",
+            "hint": "Từ chối các sự kiện do Interakt chuyển tiếp nhưng không có chữ ký Meta hợp lệ. Chỉ bật nếu Interakt có ký các sự kiện này."
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt (proxy của Meta)",
+            "meta": "Meta (trực tiếp)"
+          }
+        }
+      },
+      "campaigns": {
+        "title": "Chiến dịch",
+        "description": "Cách chiến dịch thử gửi lại tin nhắn lỗi và thời điểm kết thúc chiến dịch chưa hoàn tất.",
+        "sections": {
+          "retry": {
+            "title": "Thử lại"
+          },
+          "expiry": {
+            "title": "Tự động kết thúc"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "Số lần thử lại",
+            "hint": "Số lần thử cho mỗi người nhận trước khi đánh dấu lỗi (0 đến 10)."
+          },
+          "retryBackoffSec": {
+            "label": "Thời gian chờ thử lại (giây)",
+            "hint": "Khoảng dừng trước lần thử tiếp theo; thời gian này tăng dần sau mỗi lần thử."
+          },
+          "autoExpiryEnabled": {
+            "label": "Kết thúc chiến dịch chưa hoàn tất",
+            "hint": "Kết thúc chiến dịch vẫn đang chạy sau số giờ bên dưới."
+          },
+          "defaultExpiryHours": {
+            "label": "Kết thúc sau (giờ)"
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "Client OAuth của Google mà mọi không gian làm việc dùng để kết nối lịch.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth của Google"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Cho phép không gian làm việc kết nối Google Calendar",
+            "hint": "Tắt: không không gian làm việc nào có thể kết nối, và không có dữ liệu nào được ghi hoặc đọc từ lịch."
+          },
+          "clientId": {
+            "label": "ID client",
+            "hint": "Lấy từ Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). Để trống sẽ dùng GOOGLE_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Khóa bí mật client",
+            "hint": "Được lưu dưới dạng mã hóa và sẽ không hiển thị lại. Để trống sẽ giữ khóa đã lưu; GOOGLE_CALENDAR_CLIENT_SECRET là phương án dự phòng."
+          },
+          "redirectUri": {
+            "label": "Ghi đè URI chuyển hướng",
+            "hint": "Để trống để dùng địa chỉ ở trên. Địa chỉ này phải khớp chính xác với một Authorised redirect URI của client."
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Trình tạo luồng",
+        "description": "Các trình tạo luồng nào được cung cấp cho không gian làm việc.",
+        "sections": {
+          "mode": {
+            "title": "Trình tạo"
+          }
+        },
+        "fields": {
+          "mode": {
+            "label": "Trình tạo mặc định cho không gian làm việc",
+            "hint": "Simple là trình tạo danh sách từng bước, Advanced là trình tạo dạng canvas. Một không gian làm việc có thể ghi đè tùy chọn này trên trang Luồng của họ."
+          }
+        },
+        "options": {
+          "mode": {
+            "simple": "Chỉ Simple",
+            "advanced": "Chỉ Advanced"
+          }
+        }
+      }
+    },
+    "cards": {
+      "appearance": {
+        "title": "Giao diện và màu sắc",
+        "description": "Đổi màu mọi trang của bảng điều khiển người dùng và quản trị: thương hiệu, bề mặt, chữ và màu nhấn. Áp dụng ngay.",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "Cài đặt chung",
+        "description": "Tên ứng dụng, thông tin liên hệ, logo, URL, địa chỉ và các công tắc dịch vụ toàn cục.",
+        "tags": "APP_NAME / APP_URL / logo"
+      },
+      "paymentGateways": {
+        "title": "Cổng thanh toán",
+        "description": "Stripe, Razorpay, PayPal, Paystack, Flutterwave và nhiều hơn nữa: khóa, tiền tệ và công tắc hoạt động thực tế.",
+        "tags": "Thực tế / sandbox - khóa riêng cho từng cổng"
+      },
+      "aiKeys": {
+        "title": "Khóa AI / API",
+        "description": "Thông tin xác thực nhà cung cấp cho OpenAI, Anthropic, Google và các nhà cung cấp khác. Điều khiển mọi tính năng AI trên nền tảng.",
+        "tags": "BYOK / mô hình mặc định"
+      },
+      "mail": {
+        "title": "Cài đặt email",
+        "description": "Trình điều khiển SMTP, máy chủ, cổng, tên người gửi, mã hóa và gửi thử.",
+        "tags": "SMTP / xác minh / chào mừng"
+      },
+      "auditLog": {
+        "title": "Nhật ký kiểm toán",
+        "description": "Lịch sử có thể tìm kiếm của mọi thao tác quản trị: chỉnh sửa không gian làm việc, thay đổi người dùng, sự kiện thanh toán, sự cố bảo mật, cập nhật cài đặt.",
+        "tags": "Lọc / chi tiết / xuất CSV"
+      },
+      "privacy": {
+        "title": "Quyền riêng tư, GDPR và ADA",
+        "description": "Banner đồng ý cookie, tuân thủ GDPR / CCPA, công tắc khả năng truy cập ADA / WCAG và URL chính sách.",
+        "tags": "Đồng ý / chính sách / khả năng truy cập"
+      },
+      "menuOrder": {
+        "title": "Thứ tự menu",
+        "description": "Đặt thứ tự các mục điều hướng trên cùng hiển thị trong mọi không gian làm việc của người dùng.",
+        "tags": "Sắp xếp lại"
+      },
+      "authPages": {
+        "title": "Trang xác thực",
+        "description": "Chỉnh sửa trang đăng nhập, đăng ký và quên mật khẩu: tiêu đề, dòng mô tả, màu nhấn và ảnh hoặc video bên cạnh. Có xem trước trực tiếp.",
+        "tags": "Đăng nhập / đăng ký / quên mật khẩu"
+      },
+      "analytics": {
+        "title": "Tích hợp phân tích",
+        "description": "Google Analytics, GTM, Meta Pixel, Clarity, Plausible, PostHog, Hotjar, TikTok, LinkedIn, X: dán ID, chúng tôi sẽ tạo đoạn mã.",
+        "tags": "GA4 / Pixel / Clarity / GTM"
+      },
+      "seo": {
+        "title": "Cài đặt SEO",
+        "description": "Tiêu đề meta, mô tả, OpenGraph, thẻ Twitter, robots, canonical và xác minh site với Google và Bing.",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "Ngôn ngữ",
+        "description": "Các ngôn ngữ khả dụng, ngôn ngữ mặc định, cờ RTL và công tắc bật cho từng ngôn ngữ. Điều khiển bộ chọn ngôn ngữ.",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "Cài đặt PWA",
+        "description": "Tên ứng dụng, biểu tượng cài đặt, màu giao diện, màu nền, chế độ hiển thị và công tắc bật PWA.",
+        "tags": "Biểu tượng / màu / cài đặt"
+      },
+      "footer": {
+        "title": "Cài đặt chân trang",
+        "description": "Tiêu đề chân trang, liên kết mạng xã hội, nội dung bản quyền và mô tả chân trang công khai.",
+        "tags": "Logo / mạng xã hội / bản quyền"
+      },
+      "siteInfo": {
+        "title": "Thông tin trang web",
+        "description": "Email liên hệ, điện thoại, WhatsApp, địa chỉ và liên kết mạng xã hội dùng chung cho chân trang công khai, trang liên hệ và trang giới thiệu.",
+        "tags": "email / điện thoại / mạng xã hội"
+      },
+      "socialLogin": {
+        "title": "Đăng nhập mạng xã hội và captcha",
+        "description": "Bật hoặc tắt đăng nhập Google và Facebook trên trang đăng nhập và đăng ký, dán khóa OAuth và bật reCAPTCHA.",
+        "tags": "chưa cấu hình"
+      },
+      "registration": {
+        "title": "Đăng ký",
+        "description": "Đăng ký công khai, xác minh email, gói mặc định và thời gian dùng thử cho không gian làm việc mới.",
+        "tags": "Đăng ký / dùng thử / gói"
+      },
+      "custom": {
+        "title": "Mã tùy chỉnh",
+        "description": "CSS và JavaScript môi trường sản xuất được chèn vào các trang công khai khi công tắc bật.",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "Lưu trữ đám mây",
+        "description": "Gửi phương tiện của khách hàng tới bucket riêng: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 hoặc MinIO.",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "Ứng dụng Meta mà mọi không gian làm việc dùng để kết nối số WhatsApp: ID và khóa ứng dụng, Embedded Signup, webhook và tuyến Interakt.",
+        "tags": "Meta / Embedded Signup / Interakt"
+      },
+      "campaigns": {
+        "title": "Chiến dịch",
+        "description": "Thử lại và tự động kết thúc chiến dịch chưa được hoàn tất.",
+        "tags": "Thử lại / hết hạn"
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "Client OAuth của Google mà không gian làm việc dùng để kết nối lịch cho việc đặt lịch và thời gian bận.",
+        "tags": "Google / OAuth / Lịch"
+      },
+      "flowBuilder": {
+        "title": "Trình tạo luồng",
+        "description": "Trình tạo luồng mặc định cho mọi không gian làm việc: Simple từng bước hoặc Advanced dạng canvas. Một không gian làm việc có thể ghi đè tùy chọn này.",
+        "tags": "Simple / Advanced / Tự động hóa"
+      }
+    },
+    "signup": {
+      "body": "Đăng ký công khai, xác minh email tự động, gói mặc định cho người đăng ký mới và thời gian dùng thử miễn phí được chỉnh sửa trên trang Đăng ký.",
+      "link": "Mở cài đặt đăng ký"
+    },
+    "brandAssets": {
+      "intro": "Favicon dùng chung cho mọi giao diện. Logo thì theo từng giao diện: tải lên bản đảo màu hoặc sáng cho chế độ tối, và bản phù hợp với giao diện doodle cho giao diện doodle.",
+      "favicon": {
+        "title": "Favicon",
+        "note": "Hiển thị trên thẻ trình duyệt và dấu trang. Khuyến nghị 35x35 px. PNG, ICO, JPG, SVG hoặc WebP, tối đa 512 KB. Tải lên sẽ thay thế favicon cũ."
+      },
+      "logos": {
+        "title": "Logo theo từng giao diện",
+        "note": "Mỗi giao diện dùng logo riêng. Nếu chưa tải lên logo cho giao diện, sẽ dùng logo của Giấy."
+      },
+      "themes": {
+        "paper": {
+          "label": "Giấy (mặc định)",
+          "note": "Sáng nhạt, nền trắng ngà. Giao diện mặc định."
+        },
+        "bright": {
+          "label": "Trắng sáng",
+          "note": "Nền trắng có độ tương phản cao hơn."
+        },
+        "dark": {
+          "label": "Tối (beta)",
+          "note": "Dùng phiên bản logo sáng hoặc đảo màu."
+        },
+        "doodle": {
+          "label": "Doodle (đặc biệt)",
+          "note": "Nền xanh bạc hà pastel."
+        }
+      },
+      "noFile": "Chưa có tệp",
+      "upload": "Tải lên",
+      "uploading": "Đang tải lên",
+      "remove": "Xóa",
+      "loading": "Đang tải",
+      "loadFailed": "Không thể tải các tệp thương hiệu.",
+      "failed": "Tải lên thất bại.",
+      "tooLarge": "Tệp này vượt quá {kb} KB.",
+      "wrongType": "Loại tệp này không được phép ở đây."
+    },
+    "teamInbox": {
+      "intro": "Một ứng dụng cài đặt riêng dành cho Hộp thư nhóm. Nhân viên mở liên kết, thêm vào màn hình chính và nhận thông báo đẩy về tin nhắn mới ngay cả khi ứng dụng đã đóng.",
+      "enabled": {
+        "label": "Bật ứng dụng Hộp thư nhóm",
+        "hint": "Bật manifest riêng, lời nhắc cài đặt và thông báo trên /team-inbox."
+      },
+      "name": {
+        "label": "Tên ứng dụng"
+      },
+      "shortName": {
+        "label": "Tên ngắn",
+        "hint": "Tối đa 12 ký tự."
+      },
+      "icon192": {
+        "label": "Biểu tượng ứng dụng (PNG 192x192)",
+        "note": "Dùng biểu tượng ứng dụng nếu để trống. Biểu tượng trên màn hình chính của ứng dụng hộp thư."
+      },
+      "icon512": {
+        "label": "Biểu tượng lớn / màn hình chờ (PNG 512x512)",
+        "note": "Dùng biểu tượng ứng dụng nếu để trống. Màn hình chờ khi cài đặt và màn hình độ phân giải cao."
+      },
+      "push": {
+        "ready": {
+          "title": "Thông báo đẩy: đã sẵn sàng",
+          "body": "Đã tạo khóa. Nhân viên có thể bật thông báo từ hộp thư."
+        },
+        "todo": {
+          "title": "Thông báo đẩy: còn một bước",
+          "body": "Nhấn Tạo khóa để thiết lập thông báo đẩy. Không cần truy cập máy chủ."
+        },
+        "generate": "Tạo khóa",
+        "generating": "Đang tạo",
+        "generated": "Đã tạo khóa thông báo đẩy."
+      },
+      "manifestLink": "Manifest Hộp thư nhóm",
+      "save": "Lưu ứng dụng Hộp thư nhóm",
+      "saving": "Đang lưu",
+      "saved": "Đã lưu ứng dụng Hộp thư nhóm.",
+      "conflict": "Người khác đã lưu nội dung này sau khi bạn mở trang. Hãy tải lại trang và thử lại.",
+      "failed": "Đã xảy ra lỗi và chưa có gì được lưu.",
+      "loading": "Đang tải",
+      "loadFailed": "Không thể tải cài đặt ứng dụng Hộp thư nhóm."
+    },
+    "seoPreview": {
+      "google": "Kết quả Google",
+      "noDescription": "Chưa có mô tả meta.",
+      "noImage": "Chưa có ảnh OG",
+      "sitemapKicker": "Sơ đồ trang và robots",
+      "sitemapTitle": "Tệp cho công cụ thu thập dữ liệu",
+      "sitemapFile": "Tự động tạo từ các trang công khai và bài viết blog đã xuất bản. Gửi /sitemap.xml tới Google Search Console.",
+      "download": "Tải sitemap.xml"
+    },
+    "pages": {
+      "general": {
+        "title": "Cài đặt chung",
+        "description": "Nhận diện ứng dụng cốt lõi, thông tin liên hệ, ngôn ngữ và tiền tệ mặc định, cùng các công tắc dịch vụ cấp nền tảng.",
+        "sections": {
+          "identity": {
+            "title": "Nhận diện ứng dụng"
+          },
+          "brandAssets": {
+            "title": "Tài nguyên thương hiệu"
+          },
+          "platform": {
+            "title": "Công tắc nền tảng"
+          },
+          "signup": {
+            "title": "Đăng ký và dùng thử miễn phí"
+          }
+        },
+        "guide": {
+          "title": "Nơi mọi thứ được đặt",
+          "items": {
+            "appName": {
+              "title": "Tên ứng dụng",
+              "body": "Dùng trong tiêu đề trang, email và thương hiệu trong ứng dụng. Nên ngắn: tốt nhất một hoặc hai từ."
+            },
+            "appUrl": {
+              "title": "URL ứng dụng",
+              "body": "Địa chỉ chính thức. Mọi callback, email và chuyển hướng OAuth đều lấy từ địa chỉ này."
+            },
+            "language": {
+              "title": "Ngôn ngữ mặc định",
+              "body": "Áp dụng cho tài khoản mới. Người dùng hiện có giữ nguyên lựa chọn của họ."
+            },
+            "currency": {
+              "title": "Tiền tệ mặc định",
+              "body": "Dùng cho hóa đơn và ví không có ghi đè riêng."
+            },
+            "maintenance": {
+              "title": "Chế độ bảo trì",
+              "body": "Khi BẬT, mọi tuyến không dành cho quản trị đều hiển thị trang tạm. Quản trị viên vẫn truy cập được bảng điều khiển."
+            }
+          }
+        },
+        "tip": {
+          "title": "Quy tắc môi trường sản xuất",
+          "body": "Chỉ lưu sau khi đã kiểm tra luồng người dùng bị ảnh hưởng. Thay đổi nhận diện sẽ lan sang hóa đơn và email gửi đi."
+        }
+      },
+      "appearance": {
+        "title": "Màu bảng điều khiển",
+        "description": "Đổi màu toàn bộ ứng dụng, mọi trang của bảng điều khiển người dùng và bảng quản trị bằng cách thay đổi các màu giao diện này. Lưu sẽ áp dụng ngay cho mọi người; để màu ở mặc định để giữ giao diện gốc.",
+        "sections": {
+          "layout": {
+            "title": "Bố cục điều hướng",
+            "description": "Chọn cách bố trí bảng điều khiển người dùng. Thanh bên chuyển mọi menu vào thanh trái (không có tiêu đề trên cùng, không có trang Thêm)."
+          },
+          "sidebar": {
+            "title": "Màu thanh bên",
+            "description": "Màu nền thanh trái tối (chỉ dùng cho bố cục thanh bên). Để mặc định để giữ màu đen gần như gốc."
+          },
+          "interface": {
+            "title": "Giao diện"
+          },
+          "brand": {
+            "title": "Thương hiệu"
+          },
+          "surfaces": {
+            "title": "Bề mặt"
+          },
+          "text": {
+            "title": "Chữ"
+          },
+          "accents": {
+            "title": "Màu nhấn"
+          }
+        },
+        "guide": {
+          "title": "Màu hoạt động như thế nào",
+          "items": {
+            "how": {
+              "title": "Áp dụng ngay",
+              "body": "Lưu sẽ ghi lại các mã giao diện đang hoạt động cho mọi người."
+            },
+            "tokens": {
+              "title": "Một mã, một nhiệm vụ",
+              "body": "Mỗi ô màu tương ứng với một biến CSS duy nhất được dùng trên bảng điều khiển người dùng và bảng quản trị."
+            },
+            "primary": {
+              "title": "Đổi Chính, phần còn lại tự theo",
+              "body": "Chính (khi di chuột), màu nhấn, nền nhạt và bong bóng chat được suy ra từ Chính, trừ khi bạn tự đặt."
+            },
+            "defaults": {
+              "title": "Giữ nguyên mặc định",
+              "body": "Màu nào để ở giá trị gốc sẽ giữ giao diện ban đầu; chỉ những mã đã đổi mới được ghi đè."
+            }
+          }
+        },
+        "tip": {
+          "title": "Mẹo",
+          "body": "Kiểm tra độ tương phản sau những thay đổi lớn. Màu chữ và màu nền đều lấy từ các mã này."
+        },
+        "eyebrow": "Quản trị - Giao diện"
+      },
+      "siteInfo": {
+        "title": "Thông tin trang web",
+        "description": "Thông tin liên hệ và liên kết mạng xã hội dùng chung cho chân trang, trang liên hệ và trang giới thiệu. Chỉnh sửa một lần, mọi nơi đều cập nhật.",
+        "sections": {
+          "company": {
+            "title": "Công ty"
+          },
+          "contact": {
+            "title": "Email liên hệ"
+          },
+          "phone": {
+            "title": "Điện thoại và WhatsApp"
+          },
+          "social": {
+            "title": "Liên kết mạng xã hội"
+          }
+        },
+        "guide": {
+          "title": "Thông tin hiển thị ở đâu",
+          "items": {
+            "shared": {
+              "title": "Dùng chung ở mọi nơi",
+              "body": "Các giá trị này được dùng cho chân trang công khai, trang liên hệ và trang pháp lý."
+            },
+            "frontend": {
+              "title": "Nội dung và màu trang",
+              "body": "Chỉnh sửa trong trình chỉnh sửa Giao diện người dùng, không phải tại đây."
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "Cài đặt chân trang",
+        "description": "Tiêu đề chân trang, liên kết mạng xã hội, nội dung bản quyền và mô tả chân trang công khai.",
+        "sections": {
+          "footer": {
+            "title": "Chân trang công khai"
+          }
+        },
+        "guide": {
+          "title": "Thông tin hiển thị ở đâu",
+          "items": {
+            "what": {
+              "title": "Tiêu đề và bản quyền chân trang",
+              "body": "Tiêu đề để trống sẽ dùng tên nền tảng. Nội dung bản quyền để trống sẽ được tạo từ năm và thương hiệu."
+            },
+            "social": {
+              "title": "URL mạng xã hội",
+              "body": "Ô để trống sẽ ẩn biểu tượng. Các ô này dùng chung liên kết mạng xã hội của Thông tin trang web: chỉnh sửa ở đây sẽ cập nhật ở mọi nơi."
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "Cài đặt email",
+        "description": "Máy chủ SMTP, cổng, mã hóa và thông tin đăng nhập. Giá trị đã lưu được áp dụng ở mọi lần gửi, nên email chào mừng, xác minh, biên lai và hỗ trợ dùng ngay mà không cần khởi động lại.",
+        "sections": {
+          "smtp": {
+            "title": "Thông tin đăng nhập SMTP"
+          }
+        },
+        "guide": {
+          "title": "Máy chủ nhà cung cấp phổ biến",
+          "items": {
+            "hosts": {
+              "title": "Cài đặt thông thường",
+              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.REGION.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls với mật khẩu ứng dụng."
+            },
+            "used": {
+              "title": "Các email có trong hệ thống",
+              "body": "Email chào mừng và xác minh, đặt lại mật khẩu, hóa đơn và biên lai, phản hồi hỗ trợ, cảnh báo bảo mật và lời mời vào không gian làm việc."
+            }
+          }
+        },
+        "tip": {
+          "title": "Mẹo",
+          "body": "Luôn gửi email thử sau khi chỉnh sửa. Chỉ một lỗi gõ ở máy chủ hoặc cổng cũng có thể làm hỏng mọi email giao dịch trên nền tảng mà không báo lỗi."
+        }
+      },
+      "seo": {
+        "title": "Cài đặt SEO",
+        "description": "Thẻ meta mặc định toàn trang web: tiêu đề, mô tả, OpenGraph, thẻ Twitter, robots, canonical và xác minh với công cụ tìm kiếm.",
+        "sections": {
+          "search": {
+            "title": "Thẻ meta"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "Thẻ Twitter"
+          },
+          "verification": {
+            "title": "Xác minh trang web"
+          },
+          "preview": {
+            "title": "Xem trước trực tiếp"
+          }
+        },
+        "guide": {
+          "title": "Cơ bản về SEO",
+          "items": {
+            "basics": {
+              "title": "Tiêu đề và mô tả",
+              "body": "Tiêu đề meta: bắt đầu bằng thương hiệu và một từ mô tả mạnh, 50-60 ký tự. Mô tả meta: đoạn giới thiệu 1-2 câu, 140-160 ký tự."
+            },
+            "where": {
+              "title": "Hiển thị ở đâu",
+              "body": "Trang quản trị, trang đã đăng nhập, trang công khai và xem trước liên kết (WhatsApp, Slack, Discord, X). Robots: dùng noindex cho môi trường thử nghiệm hoặc triển khai riêng tư."
+            },
+            "sitemap": {
+              "title": "Kiểm tra",
+              "body": "opengraph.xyz, công cụ Google Rich Results test và trình kiểm tra Twitter Card."
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "Quyền riêng tư, GDPR và ADA",
+        "eyebrow": "Quản trị - Tuân thủ",
+        "description": "Banner đồng ý cookie, URL chính sách, tuân thủ GDPR/CCPA và công tắc khả năng truy cập WCAG. Cùng một cài đặt điều khiển giao diện đồng ý và chặn mọi tích hợp phân tích.",
+        "sections": {
+          "banner": {
+            "title": "Banner và chính sách"
+          },
+          "compliance": {
+            "title": "GDPR và CCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG",
+            "description": "Đạo luật Người Mỹ khuyết tật (ADA) của Hoa Kỳ + các tính năng ở mức WCAG 2.1 AA mà khách truy cập có thể bật."
+          }
+        },
+        "guide": {
+          "title": "Cách đồng ý hoạt động",
+          "items": {
+            "order": {
+              "title": "Thứ tự thực hiện",
+              "body": "1. Khách truy cập vào trang và banner cookie hiện ra (bỏ qua khi tôn trọng Do-Not-Track). 2. Lựa chọn được lưu vào cookie crm_cookie_consent trong một năm. 3. Chỉ tải các trình theo dõi được phép. 4. Khách truy cập có thể mở lại bảng lựa chọn từ bất kỳ phần tử nào có data-cookie-prefs-open."
+            },
+            "linked": {
+              "title": "Cài đặt liên kết",
+              "body": "Tích hợp phân tích (GA4, GTM, Pixel, Clarity và nhiều hơn nữa) và cài đặt PWA."
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "Tích hợp phân tích",
+        "eyebrow": "Quản trị - Theo dõi",
+        "description": "Dán mỗi ID nhà cung cấp một lần. Đoạn mã chính thức của nhà cung cấp sẽ được hiển thị trên mọi trang công khai, nhưng chỉ sau khi khách truy cập đồng ý với nhóm cookie tương ứng.",
+        "sections": {
+          "site": {
+            "title": "Phân tích trang web"
+          },
+          "marketing": {
+            "title": "Pixel quảng cáo"
+          }
+        },
+        "guide": {
+          "title": "Trình theo dõi -> nhóm",
+          "items": {
+            "categories": {
+              "title": "Thời điểm kích hoạt",
+              "body": "Phân tích: GA4, GTM, Clarity, Plausible, PostHog, Hotjar, Mixpanel. Tiếp thị: Meta Pixel, TikTok, LinkedIn, X Pixel. Các script container GTM có thể bao gồm thêm trình theo dõi; hãy tạm dừng chúng bằng trigger theo nhóm trong GTM."
+            },
+            "where": {
+              "title": "Được tải ở đâu",
+              "body": "Trang công khai và trang đăng nhập. Trang quản trị cố ý tắt."
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "Mã tùy chỉnh",
+        "description": "CSS và script môi trường sản xuất để tùy chỉnh thương hiệu và hành vi nâng cao. Được chèn vào trang công khai khi bật.",
+        "sections": {
+          "code": {
+            "title": "Mã tùy chỉnh"
+          }
+        },
+        "guide": {
+          "title": "Nguyên tắc chung",
+          "items": {
+            "scope": {
+              "title": "Giới hạn phạm vi CSS",
+              "body": "Bọc các quy tắc trong một lớp thương hiệu. Tránh chạm vào body, *, hoặc các lớp tiện ích của framework."
+            },
+            "block": {
+              "title": "Đừng chặn",
+              "body": "Bọc JS trong DOMContentLoaded. Không thực hiện lệnh gọi mạng đồng bộ."
+            },
+            "dark": {
+              "title": "Kiểm tra chế độ tối",
+              "body": "Bật/tắt giao diện và kiểm tra các selector html[data-theme=\"dark\"] trước khi lưu."
+            },
+            "sensitive": {
+              "title": "Nhạy cảm với môi trường sản xuất",
+              "body": "Một lần lưu lỗi sẽ ảnh hưởng ngay tới mọi trang công khai. Nhờ đồng nghiệp xem lại các thay đổi lớn."
+            }
+          }
+        },
+        "tip": {
+          "title": "Thận trọng",
+          "body": "Mã tùy chỉnh chạy trên mọi trang công khai và không thể cách ly. Chỉ quản trị viên cấp cao mới có thể thay đổi."
+        }
+      },
+      "pwa": {
+        "title": "Cài đặt PWA",
+        "description": "Manifest ứng dụng cài đặt được: tên, biểu tượng, màu sắc và chế độ hiển thị. Điều khiển manifest và lời nhắc cài đặt.",
+        "sections": {
+          "app": {
+            "title": "Manifest PWA"
+          },
+          "teamInbox": {
+            "title": "PWA Hộp thư nhóm"
+          }
+        },
+        "guide": {
+          "title": "Ứng dụng có thể cài đặt",
+          "items": {
+            "manifest": {
+              "title": "Manifest đang hoạt động",
+              "body": "Manifest được phục vụ tại /api/v2/public/manifest.webmanifest và chỉ tồn tại khi công tắc đang bật."
+            },
+            "install": {
+              "title": "Biểu tượng",
+              "body": "Tải lên biểu tượng PNG vuông trên trang Giao diện hoặc dán URL đã lưu trữ. 192 px cho màn hình chính, 512 px cho màn hình chờ."
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "Lưu trữ đám mây",
+        "eyebrow": "Quản trị - Lưu trữ phương tiện",
+        "description": "Gửi mọi tệp đính kèm phương tiện của khách hàng tới bucket riêng của bạn — Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 hoặc bất kỳ kho tương thích S3 nào — thay vì máy chủ ứng dụng. Khi tắt, phương tiện vẫn nằm trên đĩa cục bộ, nên không có gì bị hỏng cho đến khi bạn bật.",
+        "status": {
+          "active": "Đang hoạt động: {provider}. Tệp tải lên mới sẽ được gửi tới bucket của bạn.",
+          "configured": "Đã cấu hình nhưng đang tắt. Phương tiện vẫn nằm trên đĩa cục bộ. Hãy kiểm tra rồi bật.",
+          "local": "Đĩa cục bộ (chưa thiết lập nhà cung cấp đám mây).",
+          "enabled": "Đã bật",
+          "disabled": "Đã tắt"
+        },
+        "sections": {
+          "provider": {
+            "title": "Định tuyến phương tiện đám mây"
+          },
+          "credentials": {
+            "title": "Kết nối bucket"
+          }
+        },
+        "guide": {
+          "title": "Thiết lập",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "Khóa truy cập + bí mật + khu vực + bucket. Endpoint Wasabi được suy ra từ khu vực."
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "Dùng các trường Bunny: vùng lưu trữ và mật khẩu. Khu vực là khu vực của vùng (de, ny, la...)."
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "Điền các trường S3 và dán URL Endpoint. Chọn kiểu đường dẫn đối với MinIO."
+            },
+            "test": {
+              "title": "Luôn kiểm tra trước",
+              "body": "“Lưu và kiểm tra kết nối” sẽ ghi rồi xóa một tệp thăm dò trước khi bạn bật Đã bật."
+            }
+          }
+        },
+        "tip": {
+          "title": "An toàn theo mặc định",
+          "body": "Các tệp hiện có vẫn ở nguyên chỗ. Chỉ tệp tải lên mới được gửi tới bucket; không có gì được di chuyển hoặc xóa."
+        }
+      },
+      "whatsapp": {
+        "title": "Cài đặt WhatsApp",
+        "eyebrow": "Quản trị - Cài đặt - Kênh - WhatsApp",
+        "description": "Ứng dụng Meta duy nhất (và đối tác Interakt) mà số WhatsApp của mọi không gian làm việc được đưa vào hệ thống. Nếu thiếu ID và khóa ứng dụng, Embedded Signup và gia hạn token sẽ không hoạt động; nếu thiếu ID cấu hình, không gian làm việc phải dán token thủ công. Giá trị đã lưu sẽ ghi đè mặc định máy chủ trong vài giây, ở mọi tiến trình.",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)",
+            "description": "API Cloud chính thức của Meta. Cần thiết cho lưu lượng lớn, tin nhắn mẫu và hồ sơ doanh nghiệp đã xác minh. Hỗ trợ cả dán token thủ công và Embedded Signup (đăng nhập WhatsApp)."
+          },
+          "interakt": {
+            "title": "Tuyến Interakt",
+            "description": "Các số kết nối qua Embedded Signup mặc định được gửi và nhận qua proxy Meta của Interakt. Chuyển sang Meta (trực tiếp) để bỏ qua Interakt. Các số hiện có giữ tuyến đã kết nối."
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "Business API (WABA)",
+          "items": {
+            "api": {
+              "title": "Meta Cloud API",
+              "body": "API Cloud chính thức của Meta. Cần thiết cho lưu lượng lớn, tin nhắn mẫu và hồ sơ doanh nghiệp đã xác minh. Hỗ trợ cả dán token thủ công và Embedded Signup (đăng nhập WhatsApp)."
+            },
+            "app": {
+              "title": "ID và khóa ứng dụng Facebook",
+              "body": "developers.facebook.com/apps, Basic settings. Đổi ứng dụng sẽ làm mất hiệu lực các token do ứng dụng cũ cấp, nên các không gian làm việc phải kết nối lại."
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "App dashboard, WhatsApp, Configuration: dán Callback URL và Verify token từ trang này, sau đó đăng ký nhận messages và message_template_status_update."
+            },
+            "perWorkspace": {
+              "title": "Theo từng không gian làm việc",
+              "body": "Mỗi không gian làm việc kết nối số của riêng mình từ Kênh, số WhatsApp. Phone number ID và token vĩnh viễn được thu thập tại đó."
+            },
+            "login": {
+              "title": "Đăng nhập WABA (không bắt buộc)",
+              "body": "Điền Embedded Signup Config ID để bật Đăng nhập bằng Meta chỉ với một nhấp chuột. Yêu cầu vai trò Tech Provider trên ứng dụng. Để trống để chỉ dùng dán thủ công."
+            }
+          }
+        },
+        "tip": {
+          "title": "Mẹo",
+          "body": "Đổi tuyến mặc định hoặc ứng dụng khi đang có lưu lượng chỉ ảnh hưởng tới các số được kết nối sau đó. Tạm dừng chiến dịch trước khi đổi ứng dụng Meta."
+        }
+      },
+      "campaigns": {
+        "title": "Gửi chiến dịch",
+        "eyebrow": "Quản trị - Chiến dịch",
+        "description": "Quy tắc toàn nền tảng cho chiến dịch của mọi không gian làm việc: tần suất thử lại tin nhắn lỗi và thời điểm kết thúc chiến dịch chưa hoàn tất.",
+        "sections": {
+          "retry": {
+            "title": "Thử lại"
+          },
+          "expiry": {
+            "title": "Tự động kết thúc"
+          }
+        },
+        "guide": {
+          "title": "Cách hoạt động",
+          "items": {
+            "retry": {
+              "title": "Thử lại",
+              "body": "Người nhận có lượt gửi thất bại sẽ được thử lại sau khoảng chờ, tối đa số lần thiết lập tại đây."
+            },
+            "expiry": {
+              "title": "Tự động kết thúc",
+              "body": "Chiến dịch vẫn đang chạy sau số giờ thiết lập tại đây sẽ bị kết thúc để không giữ bộ gửi mãi mãi."
+            }
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "eyebrow": "Quản trị - Lịch hẹn",
+        "description": "Một client OAuth Google Cloud cho toàn nền tảng. Sau đó mỗi không gian làm việc kết nối tài khoản Google của mình từ Lịch hẹn, Cài đặt; không gian làm việc không bao giờ thấy client id hoặc secret.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth của Google",
+            "description": "Nếu không có client id và secret, không gian làm việc sẽ thấy Google Calendar là không khả dụng và việc đặt lịch vẫn tiếp tục mà không có lịch."
+          }
+        },
+        "guide": {
+          "title": "Thiết lập trong Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Dự án và API",
+              "body": "Trong Google Cloud Console, tạo một dự án và bật Google Calendar API."
+            },
+            "redirect": {
+              "title": "2. Client OAuth",
+              "body": "Tạo OAuth 2.0 Client ID loại Web application và thêm URI chuyển hướng hiển thị trên trang này vào mục Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Màn hình đồng ý",
+              "body": "Thêm các phạm vi calendar.events, calendar.freebusy và calendar.calendarlist.readonly, sau đó xuất bản ứng dụng: ở chế độ Testing, Google sẽ hủy mọi cấp quyền sau 7 ngày và không gian làm việc sẽ phải kết nối lại."
+            },
+            "workspaces": {
+              "title": "4. Không gian làm việc kết nối",
+              "body": "Dán client id và secret tại đây rồi lưu. Sau đó quản trị viên kết nối từ Lịch hẹn, Cài đặt, Google Calendar."
+            }
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Trình tạo luồng",
+        "eyebrow": "Quản trị - Tự động hóa",
+        "description": "Chọn trình tạo luồng mặc định cho mọi không gian làm việc: trình tạo Simple từng bước hoặc trình tạo Advanced dạng canvas. Không gian làm việc có thể ghi đè trên trang Luồng của họ.",
+        "sections": {
+          "mode": {
+            "title": "Trình tạo"
+          }
+        },
+        "guide": {
+          "title": "Cách hoạt động",
+          "items": {
+            "modes": {
+              "title": "Hai trình tạo",
+              "body": "Simple hiển thị luồng thành các bước xếp dưới nhau, có dấu cộng giữa các bước. Advanced là canvas với các nút và đường nối. Cả hai đều lưu cùng một luồng nên luồng chạy giống nhau."
+            },
+            "existing": {
+              "title": "Các luồng đã có sẵn",
+              "body": "Thay đổi cài đặt này không bao giờ thay đổi hay xóa luồng. Luồng vẫn hoạt động; chỉ là nó được mở trong trình tạo đang được bật. Không gian làm việc đã chọn trình tạo riêng sẽ giữ nguyên cho đến khi họ chọn lại mặc định của nền tảng."
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "Chúng tôi sử dụng cookie",
+      "learnMore": "Tìm hiểu thêm",
+      "decline": "Từ chối",
+      "customize": "Tùy chỉnh",
+      "acceptAll": "Chấp nhận tất cả",
+      "rejectAll": "Từ chối tất cả",
+      "save": "Lưu tùy chọn",
+      "preferences": "Tùy chọn cookie",
+      "categories": {
+        "necessary": {
+          "title": "Cần thiết tuyệt đối",
+          "body": "Cần cho trang hoạt động: đăng nhập, bảo mật và lựa chọn của bạn. Luôn bật."
+        },
+        "analytics": {
+          "title": "Cookie phân tích",
+          "body": "Giúp chúng tôi hiểu cách trang được sử dụng để cải thiện."
+        },
+        "marketing": {
+          "title": "Cookie tiếp thị",
+          "body": "Dùng để đo lường quảng cáo và hiển thị chiến dịch phù hợp với bạn ở nơi khác."
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "Xem trước trực tiếp",
+      "previewTitle": "Trước khi lưu",
+      "previewNote": "Màu sắc, kích thước và độ mờ cập nhật khi bạn kéo. Chưa có gì được áp dụng cho ai cho đến khi bạn lưu.",
+      "resetTitle": "Đặt lại mặc định",
+      "resetBody": "Xóa mọi ghi đè và khôi phục bảng màu gốc.",
+      "reset": "Đặt lại tất cả màu",
+      "tokens": "{count} mã",
+      "controls": "{count} điều khiển",
+      "primary": "Chính",
+      "cancel": "Hủy",
+      "active": "Đang hoạt động"
+    },
+    "wabaCallback": {
+      "loading": "Đang tải chi tiết webhook…",
+      "unavailable": "Chi tiết webhook chỉ hiển thị cho quản trị viên cấp cao.",
+      "webhookUrl": "URL Webhook",
+      "noUrl": "Đặt APP_URL hoặc WABA_WEBHOOK_PUBLIC_URL",
+      "webhookHint": "Dán vào ứng dụng Meta (WhatsApp, Configuration, Callback URL). Đăng ký nhận: {fields}.",
+      "verifyToken": "Verify token",
+      "verifyHint": "Dán vào cùng màn hình với Verify token.",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "connected": "WABA đã kết nối (mọi không gian làm việc)",
+      "fieldsTitle": "Trường webhook (cùng tồn tại và Nhóm)",
+      "fieldsHint": "Cùng tồn tại cần ứng dụng Meta đăng ký nhận messages, smb_message_echoes, smb_app_state_sync và history. Nhóm WhatsApp cần group_lifecycle_update, group_participants_update, group_settings_update và group_status_update.",
+      "fieldsCheck": "Kiểm tra trường webhook",
+      "fieldsChecking": "Đang hỏi Meta…",
+      "fieldsOk": "Đã đăng ký đủ mọi trường: tin nhắn trả lời trên điện thoại sẽ được đồng bộ và sự kiện nhóm WhatsApp sẽ được nhận.",
+      "fieldsMissing": "Một số trường chưa được đăng ký.",
+      "fieldsSubscribed": "Đã đăng ký. Tin nhắn trả lời trên điện thoại giờ sẽ được đồng bộ và sự kiện nhóm WhatsApp sẽ được nhận.",
+      "fieldsMissingTag": "THIẾU",
+      "fieldsGroupTag": "Nhóm",
+      "fieldsSubscribe": "Đăng ký các trường còn thiếu",
+      "fieldsSubscribing": "Đang đăng ký…"
+    },
+    "googleCallback": {
+      "redirectTitle": "URI chuyển hướng",
+      "redirectHint": "Đăng ký đúng địa chỉ này làm Authorised redirect URI trên client OAuth. Đây là nơi Google chuyển trình duyệt đến sau khi quản trị viên không gian làm việc đồng ý.",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép"
+    }
+  }
+}

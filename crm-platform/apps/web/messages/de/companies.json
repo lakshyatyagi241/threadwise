@@ -1,0 +1,218 @@
+{
+  "companies": {
+    "nav": {
+      "companies": "Unternehmen"
+    },
+    "common": {
+      "dismiss": "Ausblenden"
+    },
+    "errors": {
+      "network": "Der Server war nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Sie haben keine Berechtigung dafür.",
+      "signedOut": "Ihre Sitzung ist beendet. Melden Sie sich erneut an, um fortzufahren.",
+      "conflict": "Jemand anderes hat dieses Unternehmen geändert, während Sie es bearbeitet haben. Die Änderungen wurden geladen; Ihre Bearbeitungen bleiben erhalten. Prüfen Sie sie und speichern Sie erneut.",
+      "validation": "Einige Eingaben sind ungültig. Prüfen Sie die Felder und versuchen Sie es erneut.",
+      "unavailable": "Unternehmen sind auf diesem Server noch nicht verfügbar.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "notFound": "Dieses Unternehmen existiert nicht mehr.",
+      "planDisabled": "Ihr Tarif enthält keine Unternehmen. Wechseln Sie auf einen höheren Tarif, um sie freizuschalten.",
+      "ownerInvalid": "Der Eigentümer muss ein aktives Mitglied dieses Workspace sein.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+      "requestId": "Anfrage-ID",
+      "retry": "Erneut versuchen"
+    },
+    "list": {
+      "eyebrow": "CRM · Organisationen",
+      "title": "Unternehmen",
+      "subtitle": "Fassen Sie Kontakte und Deals unter einer Organisation zusammen und sehen Sie alle Kontakte, offenen Deals und gewonnenen Umsatz an einem Ort.",
+      "newCompany": "Neues Unternehmen",
+      "tiles": {
+        "companies": "Unternehmen",
+        "withDeals": "Mit offenen Deals",
+        "wonRevenue": "Gewonnener Umsatz"
+      },
+      "bulk": {
+        "label": "Massenaktionen",
+        "selected": "{count, plural, one {# Unternehmen ausgewählt} other {# Unternehmen ausgewählt}}",
+        "delete": "Löschen",
+        "clear": "Auswahl aufheben"
+      },
+      "loading": "Unternehmen werden geladen",
+      "unavailableTitle": "Unternehmen sind nicht verfügbar",
+      "unavailable": "Der Unternehmensdienst ist auf diesem Server noch nicht bereitgestellt.",
+      "emptyFilteredTitle": "Keine passenden Unternehmen",
+      "emptyFiltered": "Versuchen Sie eine andere Suche oder setzen Sie die Filter zurück.",
+      "clearFilters": "Filter zurücksetzen",
+      "emptyTitle": "Noch keine Unternehmen",
+      "empty": "Noch keine Unternehmen. Erstellen Sie Ihr erstes.",
+      "showing": "{count, plural, one {# Unternehmen geladen} other {# Unternehmen geladen}}",
+      "loadMore": "Mehr laden",
+      "allLoaded": "Alle Unternehmen geladen",
+      "deleteTitle": "Unternehmen löschen",
+      "deleteMessage": "Dieses Unternehmen löschen? Seine Kontakte und Deals bleiben erhalten und werden nur getrennt.",
+      "deleteManyTitle": "Unternehmen löschen",
+      "deleteManyMessage": "{count, plural, one {Dieses Unternehmen löschen? Seine Kontakte und Deals bleiben erhalten und werden nur getrennt.} other {Diese # Unternehmen löschen? Ihre Kontakte und Deals bleiben erhalten und werden nur getrennt.}}",
+      "delete": "Löschen",
+      "keep": "Behalten"
+    },
+    "toolbar": {
+      "label": "Unternehmen filtern",
+      "search": "Unternehmen suchen…",
+      "industry": "Branche",
+      "allIndustries": "Alle Branchen",
+      "owner": "Eigentümer",
+      "allOwners": "Alle Eigentümer",
+      "noOwner": "Kein Eigentümer",
+      "withOpenDeals": "Mit offenen Deals",
+      "sort": "Reihenfolge",
+      "sorts": {
+        "created": "Neueste zuerst",
+        "name": "Name A bis Z"
+      },
+      "clear": "Zurücksetzen",
+      "refresh": "Aktualisieren"
+    },
+    "table": {
+      "label": "Unternehmen",
+      "selectAll": "Alle geladenen Unternehmen auswählen",
+      "select": "{name} auswählen",
+      "company": "Unternehmen",
+      "industry": "Branche",
+      "contacts": "Kontakte",
+      "openDeals": "Offene Deals",
+      "wonValue": "Gewonnener Wert",
+      "actions": "Aktionen",
+      "delete": "Unternehmen löschen",
+      "deleteNamed": "Unternehmen {name} löschen"
+    },
+    "form": {
+      "eyebrow": "Unternehmen",
+      "newTitle": "Neues Unternehmen",
+      "editTitle": "Unternehmen bearbeiten",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "create": "Erstellen",
+      "save": "Änderungen speichern",
+      "name": "Unternehmensname *",
+      "namePlaceholder": "Acme GmbH",
+      "industry": "Branche",
+      "website": "Website",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "notes": "Notizen",
+      "moreDetails": "Weitere Details",
+      "sizeRange": "Größe",
+      "sizeHint": "Zum Beispiel 1-10 oder 11-50.",
+      "owner": "Eigentümer",
+      "noOwner": "Kein Eigentümer",
+      "me": "{name} (Sie)",
+      "address": "Adresse",
+      "problems": {
+        "required": "Ein Unternehmensname ist erforderlich.",
+        "tooLong": "Zu lang: höchstens {limit} Zeichen.",
+        "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
+        "invalid": "Einige Eingaben sind ungültig.",
+        "ownerInvalid": "Der Eigentümer muss ein aktives Mitglied dieses Workspace sein."
+      }
+    },
+    "toast": {
+      "created": "Unternehmen erstellt.",
+      "updated": "Unternehmen aktualisiert.",
+      "deleted": "{count, plural, one {Unternehmen gelöscht.} other {# Unternehmen gelöscht.}}",
+      "deletedSome": "{count, plural, one {# Unternehmen gelöscht} other {# Unternehmen gelöscht}}, {failed, plural, one {# konnte nicht gelöscht werden.} other {# konnten nicht gelöscht werden.}}",
+      "deleteFailed": "Löschen nicht möglich. Versuchen Sie es erneut.",
+      "contactUnlinked": "Kontakt aus dem Unternehmen entfernt.",
+      "contactAlreadyOut": "Dieser Kontakt gehört nicht mehr zu diesem Unternehmen.",
+      "contactUnlinkFailed": "Der Kontakt konnte nicht entfernt werden. Versuchen Sie es erneut.",
+      "contactsLinked": "{count, plural, one {# Kontakt zum Unternehmen hinzugefügt.} other {# Kontakte zum Unternehmen hinzugefügt.}}",
+      "contactsLinkedSome": "{count, plural, one {# Kontakt hinzugefügt} other {# Kontakte hinzugefügt}}, {failed, plural, one {# konnte nicht hinzugefügt werden.} other {# konnten nicht hinzugefügt werden.}}",
+      "contactsLinkFailed": "Die Kontakte konnten nicht hinzugefügt werden. Versuchen Sie es erneut."
+    },
+    "detail": {
+      "back": "Alle Unternehmen",
+      "loading": "Unternehmen wird geladen",
+      "notFoundTitle": "Unternehmen nicht gefunden",
+      "notFound": "Dieses Unternehmen existiert nicht oder wurde gelöscht.",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "keep": "Behalten",
+      "tiles": {
+        "contacts": "Kontakte",
+        "openDeals": "Offene Deals",
+        "wonRevenue": "Gewonnener Umsatz"
+      },
+      "notes": "Notizen",
+      "deleteTitle": "Unternehmen löschen",
+      "deleteMessage": "Dieses Unternehmen löschen? Seine Kontakte und Deals bleiben erhalten und werden nur getrennt.",
+      "details": "Details",
+      "owner": "Eigentümer",
+      "sizeRange": "Größe",
+      "address": "Adresse",
+      "createdBy": "Erstellt von",
+      "created": "Erstellt",
+      "updated": "Zuletzt geändert"
+    },
+    "contacts": {
+      "title": "Kontakte",
+      "add": "Kontakte hinzufügen",
+      "loading": "Kontakte werden geladen",
+      "empty": "Mit diesem Unternehmen sind keine Kontakte verknüpft.",
+      "unnamed": "(kein Name)",
+      "unlink": "Aus dem Unternehmen entfernen",
+      "unlinkNamed": "{name} aus dem Unternehmen entfernen",
+      "loadMore": "Mehr laden",
+      "addModal": {
+        "title": "Kontakte zum Unternehmen hinzufügen",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "add": "{count, plural, one {# Kontakt hinzufügen} other {# Kontakte hinzufügen}}",
+        "search": "Kontakte nach Name, E-Mail oder Nummer suchen",
+        "loading": "Kontakte werden gesucht",
+        "noneTitle": "Keine Kontakte gefunden",
+        "none": "Kein Kontakt passt. Versuchen Sie einen anderen Namen, eine andere E-Mail oder Nummer.",
+        "unnamed": "(kein Name)",
+        "already": "Bereits hier",
+        "willMove": "In einem anderen Unternehmen",
+        "hint": "Ein Kontakt kann zu einem Unternehmen gehören. Wenn Sie einen Kontakt hinzufügen, der in einem anderen Unternehmen ist, wird er hierher verschoben."
+      }
+    },
+    "deals": {
+      "title": "Deals",
+      "loading": "Deals werden geladen",
+      "empty": "Keine Deals für dieses Unternehmen.",
+      "loadMore": "Mehr laden",
+      "status": {
+        "open": "Offen",
+        "won": "Gewonnen",
+        "lost": "Verloren"
+      }
+    },
+    "activity": {
+      "title": "Aktivität",
+      "loading": "Aktivität wird geladen",
+      "none": "Bei diesem Unternehmen ist noch nichts passiert.",
+      "loadMore": "Mehr laden",
+      "empty": "leer",
+      "system": "Das System",
+      "actions": {
+        "insert": "hat das Unternehmen erstellt",
+        "update": "hat das Unternehmen geändert",
+        "delete": "hat das Unternehmen gelöscht"
+      },
+      "contactLinked": "Kontakt hinzugefügt",
+      "contactUnlinked": "Kontakt entfernt",
+      "deletedContact": "ein gelöschter Kontakt",
+      "fields": {
+        "name": "Name",
+        "website": "Website",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "industry": "Branche",
+        "sizeRange": "Größe",
+        "address": "Adresse",
+        "notes": "Notizen",
+        "owner": "Eigentümer"
+      }
+    }
+  }
+}

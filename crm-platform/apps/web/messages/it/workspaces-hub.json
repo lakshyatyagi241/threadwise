@@ -1,0 +1,258 @@
+{
+  "workspaces-hub": {
+    "nav": {
+      "group": "Workspace",
+      "workspaces": "Workspace"
+    },
+    "crumb": {
+      "admin": "Admin",
+      "workspaces": "Workspace",
+      "label": "Percorso di navigazione"
+    },
+    "common": {
+      "loading": "Caricamento",
+      "retry": "Riprova",
+      "cancel": "Annulla",
+      "close": "Chiudi",
+      "none": "Nessuno",
+      "never": "Mai",
+      "unlimited": "Illimitato",
+      "noAccess": "Il tuo ruolo non può eseguire questa operazione."
+    },
+    "list": {
+      "title": "Workspace",
+      "subtitle": "Tutti i workspace dei clienti in un unico posto: piano, provider, wallet, proprietario e attività, con le azioni necessarie per ciascuno.",
+      "kpi": {
+        "total": "Workspace",
+        "active": "Attivi",
+        "suspended": "Sospesi",
+        "trial": "In prova",
+        "newThisMonth": "Nuovi questo mese",
+        "lowBalance": "Saldo basso",
+        "mrr": "MRR"
+      },
+      "search": "Cerca",
+      "searchPlaceholder": "Nome, slug, nome o email del proprietario",
+      "status": {
+        "label": "Stato",
+        "all": "Tutti",
+        "active": "Attivi",
+        "suspended": "Sospesi"
+      },
+      "plan": "Piano",
+      "allPlans": "Tutti i piani",
+      "state": "Stato",
+      "allStates": "Tutti gli stati",
+      "provider": "Provider",
+      "allProviders": "Tutti i provider",
+      "lowOnly": "Solo saldo basso",
+      "sort": {
+        "label": "Ordina per",
+        "created": "Più recenti",
+        "last_active": "Ultimo accesso",
+        "name": "Nome"
+      },
+      "clear": "Cancella filtri",
+      "refresh": "Aggiorna",
+      "columns": {
+        "menu": "Colonne",
+        "reset": "Ripristina colonne",
+        "workspace": "Workspace",
+        "provider": "Provider",
+        "numbers": "Numeri",
+        "plan": "Piano",
+        "state": "Stato",
+        "ends": "Scade",
+        "limits": "Limiti",
+        "wallet": "Wallet",
+        "owner": "Proprietario",
+        "mrr": "MRR",
+        "messages7d": "Msg 7 gg",
+        "lastActive": "Ultimo accesso",
+        "actions": "Azioni"
+      },
+      "tableLabel": "Workspace",
+      "emptyTitle": "Nessun workspace ancora",
+      "emptyMessage": "I workspace compaiono qui non appena i clienti si registrano.",
+      "noMatchTitle": "Nessun workspace corrisponde",
+      "noMatchMessage": "Cambia la ricerca o i filtri per vederne di più.",
+      "loadMore": "Carica altri",
+      "loadingMore": "Caricamento altri",
+      "loaded": "{count, plural, one {# workspace mostrato} other {# workspace mostrati}}"
+    },
+    "cell": {
+      "suspended": "Sospeso",
+      "suspendedBy": {
+        "frozen": "Bloccato",
+        "tos_violation": "Violazione dei termini",
+        "fraud": "Frode"
+      },
+      "providerSource": {
+        "override": "Override",
+        "default": "Predefinito",
+        "platform_setting": "Impostazione di piattaforma"
+      },
+      "numbersCount": "{count, plural, one {# numero} other {# numeri}}",
+      "platformOwned": "Piattaforma",
+      "unknownPlan": "Piano sconosciuto",
+      "health": {
+        "suspended": "Sospeso",
+        "good": "Buono",
+        "active": "Attivo",
+        "low": "Uso basso",
+        "new": "Nuovo",
+        "idle": "Inattivo"
+      },
+      "daysLeft": "{count, plural, one {# giorno rimasto} other {# giorni rimasti}}",
+      "expired": "Scaduto",
+      "limits": {
+        "summary": "{messages} msg/mese · {users} utenti · {contacts} contatti · {devices} dispositivi",
+        "override": "Override",
+        "messages": "Messaggi al mese",
+        "users": "Utenti",
+        "contacts": "Contatti",
+        "devices": "Dispositivi"
+      },
+      "lowBalance": "Basso",
+      "noOwner": "Nessun proprietario",
+      "ago": {
+        "now": "Poco fa",
+        "minutes": "{count, plural, one {# minuto fa} other {# minuti fa}}",
+        "hours": "{count, plural, one {# ora fa} other {# ore fa}}",
+        "days": "{count, plural, one {# giorno fa} other {# giorni fa}}"
+      }
+    },
+    "actions": {
+      "menu": "Azioni per {name}",
+      "dashboard": "Dashboard del workspace",
+      "editPlan": "Modifica e cambia piano",
+      "planLimits": "Piano e limiti",
+      "provider": "Cambia e imposta provider",
+      "impersonate": "Accedi come Proprietario",
+      "suspend": "Sospendi",
+      "unsuspend": "Riattiva",
+      "denied": "Non consentito"
+    },
+    "plan": {
+      "loading": "Caricamento del piano",
+      "loadFailed": "Impossibile caricare il piano.",
+      "saved": "Piano salvato per {name}."
+    },
+    "provider": {
+      "title": "Provider per {name}",
+      "help": "I nuovi numeri di questo workspace si collegheranno tramite il provider che scegli. I numeri già collegati restano dove sono finché non li sposti.",
+      "current": "Ora usa {name} ({source})",
+      "field": "Provider",
+      "note": "Nota (facoltativa)",
+      "noteHint": "Conservata con l’override così il prossimo operatore saprà il motivo.",
+      "noActive": "Nessun provider attivo. Abilitane prima uno nel registro dei provider.",
+      "save": "Imposta override",
+      "clear": "Usa il predefinito",
+      "switchLink": "Sposta i numeri collegati su un altro provider",
+      "assignmentsLink": "Registro dei provider",
+      "saved": "Provider impostato per {name}.",
+      "cleared": "{name} segue di nuovo il provider predefinito."
+    },
+    "impersonate": {
+      "title": "Accedi come proprietario di {name}",
+      "help": "Aprirai il workspace come suo proprietario in una nuova scheda. La sessione dura al massimo {minutes} minuti ed è registrata con il tuo motivo.",
+      "reason": "Motivo",
+      "reasonHint": "Almeno {min} caratteri. Viene conservato nel registro delle attività.",
+      "readOnly": "Sessione in sola lettura",
+      "readOnlyHint": "Puoi esplorare, ma ogni modifica viene rifiutata.",
+      "submit": "Apri workspace",
+      "opened": "Apertura di {name} in una nuova scheda.",
+      "popupBlocked": "Il browser ha bloccato la nuova scheda. Consenti i pop-up per questa pagina e riprova.",
+      "reasonShort": "Scrivi almeno {min} caratteri."
+    },
+    "suspend": {
+      "title": "Sospendere {name}?",
+      "message": "I suoi utenti vengono disconnessi dal workspace e la messaggistica si ferma finché non lo riattivi.",
+      "reason": "Motivo (facoltativo)",
+      "confirm": "Sospendi workspace",
+      "done": "{name} è sospeso."
+    },
+    "unsuspend": {
+      "title": "Riattivare {name}?",
+      "message": "I suoi utenti potranno di nuovo usare il workspace.",
+      "reason": "Nota (facoltativa)",
+      "confirm": "Riattiva workspace",
+      "done": "{name} è di nuovo attivo."
+    },
+    "errors": {
+      "unexpected": "Qualcosa è andato storto. Riprova.",
+      "forbidden": "Il tuo ruolo non può eseguire questa operazione.",
+      "conflict": "Qualcun altro ha modificato questo workspace. Ricarica la pagina e riprova.",
+      "notFound": "Questo workspace non esiste più.",
+      "reasonRequired": "È richiesto un motivo di almeno 8 caratteri.",
+      "orgSuspended": "Il workspace è sospeso, quindi non può essere aperto.",
+      "validation": "Verifica i valori e riprova.",
+      "requestId": "ID richiesta"
+    },
+    "detail": {
+      "crumb": "Workspace",
+      "back": "Tutti i workspace",
+      "loadFailed": "Impossibile caricare questo workspace.",
+      "slug": "Slug",
+      "created": "Creato il {date}",
+      "kpi": {
+        "members": "Membri",
+        "contacts": "Contatti",
+        "openTickets": "Ticket aperti",
+        "delivered": "Consegnati",
+        "wallet": "Wallet",
+        "mrr": "MRR",
+        "messages7d": "Messaggi, 7 giorni"
+      },
+      "chart": {
+        "title": "Ultimi 30 giorni",
+        "label": "Messaggi inviati e consegnati al giorno, ultimi 30 giorni",
+        "sent": "Inviati",
+        "delivered": "Consegnati",
+        "empty": "Nessun messaggio negli ultimi 30 giorni."
+      },
+      "tabs": {
+        "label": "Sezioni del workspace",
+        "overview": "Panoramica",
+        "plan": "Piano e limiti",
+        "wallet": "Wallet",
+        "provider": "Provider",
+        "support": "Supporto"
+      },
+      "overview": {
+        "owner": "Proprietario",
+        "adminNote": "Nota dell’amministratore",
+        "noNote": "Nessuna nota.",
+        "health": "Salute",
+        "lastActive": "Ultimo accesso",
+        "suspendedBy": "Gestito da"
+      },
+      "planTab": {
+        "plan": "Piano",
+        "state": "Stato",
+        "ends": "Scade",
+        "limits": "Limiti effettivi",
+        "edit": "Modifica e cambia piano",
+        "overrideNote": "Questo workspace ha limiti propri che sostituiscono quelli del piano."
+      },
+      "walletTab": {
+        "open": "Apri il wallet completo",
+        "balance": "Saldo",
+        "adjust": "Rettifica saldo",
+        "adjusted": "Il saldo è stato rettificato."
+      },
+      "providerTab": {
+        "provider": "Provider effettivo",
+        "source": "Scelto da",
+        "numbers": "Numeri collegati",
+        "change": "Cambia e imposta provider",
+        "switch": "Sposta i numeri su un altro provider"
+      },
+      "supportTab": {
+        "text": "Ticket, conversazioni e storico di supporto di questo workspace.",
+        "open": "Apri la scheda di supporto",
+        "openTickets": "{count, plural, one {# ticket aperto} other {# ticket aperti}}"
+      }
+    }
+  }
+}

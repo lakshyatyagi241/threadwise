@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "ストア / 決済ゲートウェイ",
+      "title": "決済ゲートウェイ",
+      "subtitle": "ご自身のゲートウェイのキーを追加すると、支払いがあなたのアカウントに入金されます。ゲートウェイのダッシュボードに表示されるキーを貼り付けてください。",
+      "banner": "1つのゲートウェイ設定が、ストアのチェックアウトと販売の請求書で共通して使われます。",
+      "viewOnly": "ゲートウェイの設定は確認できますが、変更はできません。ゲートウェイの管理権限については、ワークスペース管理者に依頼してください。",
+      "scope": {
+        "label": "これらの設定の適用範囲",
+        "workspace": "ワークスペース(すべてのストア)",
+        "workspaceHint": "ストアに個別の上書き設定がない限り、すべてのストアと販売の請求書で使用されます。",
+        "store": "このストアのみ(上書き)",
+        "storeHint": "{shop}のチェックアウトでのみ使用されます。ワークスペースの設定より優先されます。",
+        "storeNamed": "ストア: {shop}",
+        "noShop": "上書き設定を行うには、先にストアを作成してください。",
+        "shop": "ストア"
+      },
+      "resolved": {
+        "used": "現在使用中: {name}(ソース: {source})",
+        "none": "ゲートウェイはまだ設定されていません",
+        "noneHint": "下でゲートウェイを設定してオンにしてください。それまでは、購入者はオンライン決済ができず、請求書に支払いボタンも表示されません。",
+        "source": {
+          "store_override": "ストアの上書き設定",
+          "workspace_default": "ワークスペースの既定",
+          "legacy_storefront": "ストアのキー"
+        }
+      },
+      "mode": {
+        "live": "本番",
+        "test": "テスト"
+      },
+      "catalogue": {
+        "title": "ゲートウェイ",
+        "count": "{count, plural, other {#件のゲートウェイ}}",
+        "search": "ゲートウェイを検索",
+        "searchPlaceholder": "名前、国、通貨で検索",
+        "loading": "ゲートウェイを読み込み中",
+        "noDriversTitle": "利用可能なゲートウェイがありません",
+        "noDriversMessage": "このサーバーには、設定できる決済ゲートウェイがまだありません。",
+        "noMatchTitle": "一致するゲートウェイがありません",
+        "noMatchMessage": "別の名前、国、通貨コードを試してください。",
+        "clearSearch": "検索をクリア"
+      },
+      "card": {
+        "available": "利用可能",
+        "unavailable": "まだ利用できません",
+        "paymentLinks": "決済リンク",
+        "unavailableNote": "このゲートウェイは一覧に表示されていますが、このバージョンではまだ支払いを受け付けられません。",
+        "active": "有効",
+        "off": "オフ",
+        "incomplete": "キーが不完全",
+        "default": "既定",
+        "migrated": "ストアフロントのキーから移行されました。新しい設定に保持するには、ここで一度保存してください。",
+        "webhookMissing": "Webhookシークレットがありません。追加するまで、このゲートウェイからの支払い通知は拒否されます。",
+        "notSetUp": "この適用範囲ではまだ設定されていません。",
+        "configure": "設定",
+        "edit": "編集",
+        "test": "接続をテスト",
+        "testing": "テスト中",
+        "setDefault": "既定に設定",
+        "activeSwitch": "{name}はオンです",
+        "remove": "削除",
+        "removeTitle": "{name}を削除しますか?",
+        "removeMessage": "この適用範囲({scope})に保存されているキーが削除されます。購入者はこのゲートウェイで支払えなくなり、進行中の支払いが確認されない可能性があります。",
+        "removeConfirm": "ゲートウェイを削除"
+      },
+      "toast": {
+        "saved": "ゲートウェイを保存しました",
+        "switchedOn": "{name}をオンにしました",
+        "switchedOff": "{name}をオフにしました",
+        "defaultSet": "{name}を既定に設定しました",
+        "removed": "{name}を削除しました"
+      },
+      "test": {
+        "verified": "プロバイダーがキーを受け付けました。",
+        "fieldsTitle": "必須項目は入力されています",
+        "fieldsOnly": "必須項目のみ確認しました。このゲートウェイには簡易的な確認用の呼び出しがないため、実際の支払いが本当のテストになります。",
+        "missingTitle": "キーが不完全です",
+        "missing": "次の必須項目が空です: {fields}。",
+        "rejected": "プロバイダーがキーを受け付けませんでした。",
+        "providerSaid": "プロバイダーからのメッセージ: {message}"
+      },
+      "drawer": {
+        "eyebrow": "ゲートウェイを設定",
+        "save": "ゲートウェイを保存",
+        "appliesTo": "適用範囲: {scope}",
+        "credentials": "認証情報",
+        "noFields": "このゲートウェイにはキーは不要です。",
+        "secretsNote": "保存したキーは再表示されません。確認用に、各キーの末尾のみ表示されます。",
+        "requiredField": "{field}は必須です。",
+        "invalidOption": "{field}は、一覧の選択肢から選んでください。",
+        "mode": "モード",
+        "modeHint": "ゲートウェイをテストキーで試すときは「テスト」、実際の支払いを受け付けるときは「本番」を使用してください。",
+        "active": "有効",
+        "activeHint": "オフのゲートウェイは、チェックアウトでも請求書でも使用されません。",
+        "webhookTitle": "Webhookアドレス",
+        "webhookHint": "支払いが自動的に確認されるよう、{name}のダッシュボードにこれを貼り付けてください。",
+        "webhookAfterSave": "Webhookアドレスは、最初の保存後にここに表示されます。",
+        "willClear": "保存すると、保存済みの値が削除されます。",
+        "keepBlank": "保存済みの値を維持する場合は空欄のままにしてください。",
+        "requiredMark": "(必須)",
+        "stored": "保存済み: {mask}",
+        "keepOption": "保存済みの値を維持",
+        "chooseOption": "選択してください",
+        "clear": "保存済みの値を削除",
+        "show": "値を表示",
+        "hide": "値を非表示"
+      }
+    }
+  }
+}

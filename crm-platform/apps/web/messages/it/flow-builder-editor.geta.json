@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "Pubblicazione in corso…",
+        "live": "Attivo",
+        "liveTitle": "Attivo su Geta",
+        "push": "Pubblica online",
+        "pushHint": "Pubblicato qui; invialo subito online su Geta",
+        "failed": "Fallito",
+        "failedConfiguration": "Fallito nell’aggiornamento della configurazione",
+        "failedPublish": "Fallito nella pubblicazione",
+        "retry": "Riprova",
+        "retrying": "Nuovo tentativo…",
+        "reasonLabel": "Motivo",
+        "failedNote": "Il flow resta pubblicato qui. Il nuovo tentativo riprende dal passaggio che non è riuscito.",
+        "notConfigured": "Pubblicato qui; configura la pubblicazione su Geta nelle impostazioni per portarlo online.",
+        "openSettings": "Apri impostazioni",
+        "dismiss": "Ignora"
+      },
+      "settings": {
+        "title": "Pubblicazione su Geta",
+        "intro": "Quando premi Pubblica nel builder dei flow, il tuo bot viene portato online anche sulla console Geta. Inserisci una sola volta i dati di connessione per questo spazio di lavoro. I segreti vengono salvati cifrati e non vengono mai mostrati di nuovo.",
+        "viewOnly": "Puoi vedere lo stato di queste impostazioni, ma non puoi modificarle.",
+        "loading": "Caricamento…",
+        "loadFailed": "Impossibile caricare le impostazioni.",
+        "retry": "Riprova",
+        "fixtureNotice": "Questo server è in modalità fixture: la pubblicazione è simulata e nulla viene inviato a Geta.",
+        "ready": "Pronto",
+        "incomplete": "Non completo",
+        "readyNote": "Pubblicare un flow porterà online anche il tuo bot su Geta.",
+        "incompleteNote": "Compila tutti i campi qui sotto per portare online su Geta i flow pubblicati.",
+        "baseUrl": {
+          "label": "URL di base",
+          "hint": "L’indirizzo dell’API di Geta, per esempio https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "Origine della console (facoltativa)",
+          "hint": "Inviata come origin e referer di ogni richiesta. Lascia vuoto per non inviarne nessuno."
+        },
+        "authorization": {
+          "label": "Token di autorizzazione",
+          "hint": "Inviato esattamente come lo inserisci, senza aggiungere «Bearer »."
+        },
+        "getaHost": {
+          "label": "Token geta-host",
+          "hint": "Inviato nell’header geta-host."
+        },
+        "secretKept": "Salvato. Lascia vuota la casella per mantenerlo, oppure scrivi un nuovo valore per sostituirlo.",
+        "secretPlaceholder": "Salvato (nascosto)",
+        "show": "Mostra",
+        "hide": "Nascondi",
+        "remove": "Rimuovi",
+        "record": {
+          "label": "Record del chatbot di Geta",
+          "paste": "Incolla il record del chatbot (JSON)",
+          "replace": "Sostituisci il record del chatbot (JSON)",
+          "hint": "L’oggetto chatbot esattamente come deve essere inviato a Geta, oppure l’intero corpo della richiesta con una chiave chatbot. Servono almeno id e bot_id. Viene aggiornato solo modified_time quando viene inviato.",
+          "keepPlaceholder": "Lascia vuoto per mantenere il record salvato",
+          "id": "ID chatbot",
+          "name": "Nome",
+          "botId": "ID bot",
+          "remove": "Rimuovi il record salvato"
+        },
+        "saved": "Salvato",
+        "notSet": "Non impostato",
+        "save": "Salva",
+        "saving": "Salvataggio…",
+        "saveFailed": "Impossibile salvare.",
+        "removed": "Rimosso.",
+        "clear": "Cancella tutto",
+        "cleared": "Impostazioni di pubblicazione su Geta cancellate.",
+        "clearConfirm": {
+          "title": "Cancellare la pubblicazione su Geta?",
+          "message": "Questa operazione rimuove l’URL di base, entrambi i token e il record del chatbot. I flow pubblicati restano pubblicati qui, ma non verranno più inviati a Geta.",
+          "confirm": "Cancella tutto",
+          "cancel": "Annulla"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,361 @@
+{
+  "message-templates": {
+    "nav": {
+      "title": "模板"
+    },
+    "common": {
+      "dismiss": "关闭",
+      "requestId": "请求 ID"
+    },
+    "status": {
+      "draft": "草稿",
+      "pending": "审核中",
+      "approved": "已通过",
+      "rejected": "已拒绝",
+      "paused": "已暂停",
+      "disabled": "已禁用",
+      "deleted": "Meta 中缺失"
+    },
+    "category": {
+      "MARKETING": "营销",
+      "UTILITY": "实用",
+      "AUTHENTICATION": "验证"
+    },
+    "quality": {
+      "GREEN": "高质量",
+      "YELLOW": "中等质量",
+      "RED": "低质量",
+      "UNKNOWN": "质量待定"
+    },
+    "errors": {
+      "generic": "出现错误。请重试;如果问题持续,请附上请求 ID。",
+      "TPL_NOT_FOUND": "此模板已不存在。",
+      "TPL_NAME_TAKEN": "此号码上已存在同名同语言的模板。请选择其他名称或语言。",
+      "TPL_LINT_FAILED": "检查发现了 Meta 会拒绝的问题。尚未发送任何内容。请修正右侧列出的错误。",
+      "TPL_META_REJECTED": "Meta 拒绝了该模板。原因如下;模板已保存为草稿,你可以修正后重新提交。",
+      "TPL_NO_CONNECTION": "此模板没有可用于提交的已连接 WhatsApp 号码。请先连接号码。",
+      "TPL_IN_USE": "此模板正被运行中或已计划的群发使用,无法删除。",
+      "TPL_NOT_EDITABLE": "只能编辑 Meta 尚未通过或已拒绝的模板。",
+      "ROW_VERSION_CONFLICT": "你在编辑时此模板已被他人更改。请刷新以查看最新版本,然后重新应用你的更改。",
+      "VALIDATION_FAILED": "部分字段无效。请检查下方字段。",
+      "INTERNAL": "服务器无法处理此请求。请稍后重试。"
+    },
+    "preview": {
+      "title": "预览",
+      "headerImageAlt": "页眉图片示例",
+      "header": {
+        "image": "图片",
+        "video": "视频",
+        "document": "文档",
+        "location": "位置"
+      },
+      "authBody": "是你的验证码。",
+      "authExpiry": "{count, plural, other {此验证码将在 # 分钟后过期。}}",
+      "bodyEmpty": "你的消息文本将显示在此处。",
+      "time": "10:30",
+      "copyCode": "复制验证码",
+      "buttonUnnamed": "按钮",
+      "moreButtons": "{count, plural, other {另有 # 个按钮}}"
+    },
+    "card": {
+      "rejected": "已拒绝:{reason}",
+      "view": "查看",
+      "edit": "编辑",
+      "delete": "删除"
+    },
+    "library": {
+      "title": "模板库",
+      "intro": "WhatsApp 消息模板:在此编写、提交至 Meta 审核并跟踪其状态。",
+      "sync": "从 Meta 同步",
+      "syncing": "同步中...",
+      "syncHint": "从 Meta 获取你的模板",
+      "syncDone": "已从 Meta 同步:新增 {created} 个,更新 {updated} 个,Meta 中已不存在 {missing} 个。",
+      "syncNone": "此 WhatsApp Business 账户下暂未找到模板。",
+      "syncFailed": "从 Meta 同步失败。请检查号码连接后重试。",
+      "syncPartial": "{count, plural, other {# 个号码无法同步。}}",
+      "new": "新建模板",
+      "filters": "筛选模板",
+      "search": "搜索",
+      "searchPlaceholder": "模板名称",
+      "status": "状态",
+      "allStatuses": "所有状态",
+      "category": "类别",
+      "allCategories": "所有类别",
+      "connection": "WhatsApp 号码",
+      "allConnections": "所有号码",
+      "loading": "正在加载模板",
+      "retry": "重试",
+      "emptyTitle": "暂无模板",
+      "emptyBody": "创建模板并提交至 Meta,或同步你在 Meta Business Manager 中已有的模板。",
+      "emptyFilteredTitle": "没有匹配的模板",
+      "emptyFilteredBody": "更改或清除筛选条件以查看更多模板。",
+      "clearFilters": "清除筛选",
+      "loadMore": "加载更多"
+    },
+    "delete": {
+      "title": "删除模板",
+      "message": "删除“{name}”?它将从此处和 Meta 中移除,且无法再发送。",
+      "confirm": "删除模板",
+      "cancel": "取消",
+      "done": "已删除“{name}”。",
+      "inUseHelp": "请打开使用此模板的群发,将其取消或改用其他模板,然后再删除此模板。"
+    },
+    "lint": {
+      "title": "提交前检查",
+      "checking": "检查中",
+      "unavailable": "目前无法运行检查。Meta 的审核仍然适用,服务器会在提交时再次检查。",
+      "clean": "未发现问题。",
+      "summary": "{errors, plural, other {# 个错误}},{warnings, plural, other {# 个警告}}",
+      "severity": {
+        "error": "错误",
+        "warning": "警告"
+      },
+      "field": {
+        "name": "名称",
+        "language": "语言",
+        "header": "页眉",
+        "body": "正文",
+        "footer": "页脚",
+        "buttons": "按钮",
+        "template": "模板"
+      }
+    },
+    "form": {
+      "loading": "加载中",
+      "retry": "重试",
+      "backToLibrary": "返回模板库",
+      "noPermission": "你没有创建或编辑模板的权限。",
+      "notEditableTitle": "此模板已无法编辑",
+      "notEditableBody": "只能编辑 Meta 尚未通过或已拒绝的模板。如需修改已通过的模板,请新建模板。",
+      "viewTemplate": "查看模板",
+      "breadcrumb": "导航路径",
+      "breadcrumbLibrary": "模板",
+      "breadcrumbNew": "新建",
+      "breadcrumbEdit": "编辑",
+      "titleNew": "新建模板",
+      "titleEdit": "编辑 {name}",
+      "saveDraft": "保存草稿",
+      "submit": "提交至 Meta",
+      "reload": "刷新模板",
+      "aside": "预览与检查",
+      "why": {
+        "connection": "请选择用于提交的 WhatsApp 号码。",
+        "name": "请输入模板名称。",
+        "fields": "部分字段无效。",
+        "errors": "提交前请先修正错误。",
+        "checking": "正在检查模板。"
+      },
+      "toast": {
+        "submitted": "模板已提交至 Meta 审核。",
+        "saved": "模板已保存为草稿。"
+      },
+      "errors": {
+        "name": "请输入模板名称。",
+        "header": "页眉最多 60 个字符。",
+        "body": "正文最多 {max} 个字符。",
+        "footer": "页脚最多 60 个字符。"
+      },
+      "identity": {
+        "title": "身份信息",
+        "connection": "WhatsApp 号码",
+        "connectionHint": "媒体文件与提交必须使用同一号码,否则 Meta 会拒绝该模板。",
+        "connectionUnknown": "号码已不可用",
+        "noConnection": "没有可用于提交的已连接 WhatsApp 号码。",
+        "connectNumber": "连接号码",
+        "category": "类别",
+        "categoryHint": "Meta 将根据类别审核模板并确定价格。",
+        "categories": {
+          "MARKETING": "营销",
+          "UTILITY": "实用",
+          "AUTHENTICATION": "验证"
+        },
+        "name": "模板名称",
+        "nameHint": "仅限 a-z、0-9 和下划线,最多 60 个字符。",
+        "nameTaken": "此号码上该语言已使用此名称。",
+        "language": "语言"
+      },
+      "auth": {
+        "title": "一次性验证码",
+        "hint": "验证模板的消息内容和“复制验证码”按钮由 Meta 生成。",
+        "expiry": "验证码有效期(分钟)",
+        "expiryHint": "可选。{min} 至 {max} 分钟。",
+        "expiryInvalid": "请输入 {min} 至 {max} 之间的整数。",
+        "fixedBody": "消息内容为:验证码,后接“是你的验证码”及安全提醒。此内容无法更改。"
+      },
+      "header": {
+        "title": "页眉",
+        "hint": "可选。文本,或一张图片、一段视频、一份文档或位置信息。",
+        "type": "页眉类型",
+        "kind": {
+          "none": "无",
+          "text": "文本",
+          "image": "图片",
+          "video": "视频",
+          "document": "文档",
+          "location": "位置"
+        },
+        "text": "页眉文本",
+        "textHint": "{used}/{max}。最多一个变量。",
+        "sample": "示例文件",
+        "uploading": "上传中",
+        "keptSample": "已保存的示例将被保留。选择文件即可替换。",
+        "noFile": "未选择文件",
+        "limits": "图片最大 5 MB,视频最大 16 MB,PDF 最大 100 MB。",
+        "replace": "替换文件",
+        "choose": "选择示例文件",
+        "tooBig": "此{kind}为 {size} MB。WhatsApp 最大接受 {max} MB。请选择较小的文件。",
+        "wrongType": "此页眉不接受该文件类型。",
+        "emptyFile": "此文件为空。",
+        "locationHelp": "位置信息将在发送消息时填写。Meta 仅需知道页眉为位置类型。"
+      },
+      "body": {
+        "title": "正文",
+        "hint": "消息文本。请使用 '{{name}}' 样式的变量;保存时将为 Meta 自动编号。",
+        "toolbar": "文本格式",
+        "format": {
+          "bold": "粗体",
+          "italic": "斜体",
+          "strike": "删除线",
+          "code": "代码"
+        },
+        "variable": "添加变量",
+        "label": "正文文本",
+        "counter": "{used}/{max}",
+        "wrapSample": "文本"
+      },
+      "variables": {
+        "title": "变量映射",
+        "empty": "暂无变量。请在正文中输入如 '{{name}}' 的占位符,或使用“添加变量”。",
+        "help": "对于每个变量,请指定发送时填充该变量的联系人属性,并提供供 Meta 审核使用的示例值。",
+        "attribute": "联系人属性",
+        "sample": "示例值",
+        "header": "页眉",
+        "body": "正文"
+      },
+      "footer": {
+        "title": "页脚",
+        "label": "页脚文本",
+        "hint": "可选。{used}/{max}。不支持变量。"
+      },
+      "buttons": {
+        "title": "按钮",
+        "hint": "可选。快速回复须集中放在开头或末尾。",
+        "add": {
+          "quick_reply": "快速回复",
+          "url": "访问网站",
+          "phone": "拨打电话",
+          "copy_code": "复制验证码"
+        },
+        "kind": {
+          "quick_reply": "快速回复",
+          "url": "访问网站",
+          "phone": "拨打电话",
+          "copy_code": "复制验证码",
+          "other": "其他"
+        },
+        "count": "{used}/{max} 个按钮",
+        "limitReached": "此类按钮最多 {max} 个。",
+        "empty": "暂无按钮。请使用上方的按钮添加。",
+        "moveUp": "将按钮 {n} 上移",
+        "moveDown": "将按钮 {n} 下移",
+        "remove": "移除按钮 {n}",
+        "keptAsIs": "“{text}”将保持原样。此编辑器不会更改它。",
+        "text": "按钮文本",
+        "textHint": "{used}/25",
+        "url": "网站网址",
+        "urlHint": "如需动态部分,请在末尾添加 '{{1}}'。",
+        "urlExample": "变量示例",
+        "phone": "电话号码",
+        "phoneHint": "请包含国家/地区代码。",
+        "code": "示例验证码",
+        "codeHint": "例如 PROMO50。",
+        "limits": "Meta 最多允许 {quick} 个快速回复、{url} 个网站按钮、{phone} 个电话按钮和 {copy} 个复制验证码按钮。",
+        "allUsed": "所有按钮类型均已达上限。",
+        "issue": {
+          "textRequired": "请输入按钮文本。",
+          "textTooLong": "最多 {max} 个字符。",
+          "urlRequired": "请输入网址。",
+          "urlInvalid": "网址必须以 http:// 或 https:// 开头。",
+          "phoneRequired": "请输入电话号码。",
+          "codeRequired": "请输入示例验证码。",
+          "quickReplyVariable": "快速回复不能包含变量。",
+          "urlExampleRequired": "请为网址变量提供示例值。",
+          "quickReplyPosition": "快速回复须集中放在按钮的开头或末尾。"
+        }
+      },
+      "result": {
+        "metaRefused": "已保存,但 Meta 拒绝了该模板。",
+        "metaRefusedHelp": "模板已保存为草稿。请修正 Meta 指出的问题后重新提交。你的表单内容未作更改。",
+        "submitted": "已提交至 Meta 审核。",
+        "saved": "已保存为草稿。",
+        "warnings": "在 Meta 审核前值得留意:",
+        "open": "打开模板"
+      }
+    },
+    "detail": {
+      "loading": "正在加载模板",
+      "retry": "重试",
+      "back": "返回模板库",
+      "breadcrumb": "导航路径",
+      "refresh": "刷新状态",
+      "retrySubmit": "提交至 Meta",
+      "edit": "编辑",
+      "delete": "删除",
+      "refreshed": "已从 Meta 刷新状态。",
+      "submittedToast": "模板已提交至 Meta 审核。",
+      "never": "从未",
+      "none": "无",
+      "banner": {
+        "metaFailed": "Meta 拒绝了该模板",
+        "draft": "此模板尚未提交至 Meta。提交后即可开始审核。",
+        "pending": "已提交 Meta 审核。此页面每 15 秒检查一次结果。",
+        "pendingMeta": "提交于 {submitted}。上次检查于 {checked}。",
+        "polling": "你可以保持此页面打开,或稍后再回来查看。",
+        "rejected": "Meta 已拒绝",
+        "rejectedHelp": "请编辑模板以解决拒绝原因,然后重新提交。",
+        "paused": "已被 Meta 暂停。在 Meta 解除暂停之前无法发送。",
+        "pausedUntil": "已被 Meta 暂停,直至 {when}。",
+        "disabled": "已被 Meta 禁用。无法发送。",
+        "deleted": "Meta 已不再列出此模板。此处将保留该模板;请重新同步或删除它。"
+      },
+      "facts": {
+        "title": "Meta 同步",
+        "status": "Meta 状态",
+        "quality": "质量",
+        "category": "Meta 类别",
+        "metaId": "模板 ID",
+        "number": "WhatsApp 号码",
+        "numberUnknown": "号码已不可用",
+        "submitted": "提交时间",
+        "approved": "通过时间",
+        "synced": "上次同步"
+      },
+      "components": {
+        "title": "组件",
+        "header": "页眉",
+        "media": "页眉媒体",
+        "body": "正文",
+        "footer": "页脚",
+        "buttons": "按钮",
+        "expiry": "验证码有效期",
+        "expiryValue": "{count, plural, other {# 分钟}}"
+      },
+      "attachment": {
+        "none": "无",
+        "image": "图片",
+        "video": "视频",
+        "document": "文档",
+        "location": "位置"
+      },
+      "lint": {
+        "title": "检查",
+        "clean": "未发现问题。"
+      },
+      "payload": {
+        "title": "Meta 请求内容",
+        "hint": "按原样构建后发送给 Meta 审核的内容。",
+        "empty": "尚未生成任何内容。"
+      }
+    }
+  }
+}

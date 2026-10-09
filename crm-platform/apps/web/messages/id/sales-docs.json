@@ -1,0 +1,647 @@
+{
+  "sales-docs": {
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "nav": {
+      "proposals": "Penawaran",
+      "estimates": "Estimasi"
+    },
+    "kind": {
+      "proposal": {
+        "singular": "Penawaran",
+        "plural": "penawaran"
+      },
+      "estimate": {
+        "singular": "Estimasi",
+        "plural": "estimasi"
+      }
+    },
+    "status": {
+      "draft": "Draf",
+      "sent": "Terkirim",
+      "viewed": "Dilihat",
+      "accepted": "Diterima",
+      "declined": "Ditolak",
+      "expired": "Kedaluwarsa",
+      "converted": "Dikonversi"
+    },
+    "tabs": {
+      "label": "Status",
+      "all": "Semua",
+      "draft": "Draf",
+      "sent": "Terkirim",
+      "viewed": "Dilihat",
+      "accepted": "Diterima",
+      "declined": "Ditolak",
+      "expired": "Kedaluwarsa",
+      "converted": "Dikonversi",
+      "count": "{count, plural, other {# dokumen}}"
+    },
+    "list": {
+      "proposal": {
+        "title": "Penawaran",
+        "subtitle": "Ajukan cakupan dan harga, pantau tindakan pembeli, dan ubah yang disetujui menjadi faktur.",
+        "new": "Penawaran baru",
+        "emptyTitle": "Belum ada penawaran",
+        "emptyMessage": "Buat penawaran pertama, kirim tautannya ke pembeli, dan pantau statusnya dari terkirim hingga diterima."
+      },
+      "estimate": {
+        "title": "Estimasi",
+        "subtitle": "Beri penawaran harga sebelum menerbitkan faktur. Kirim, minta persetujuan, dan konversi dengan satu klik.",
+        "new": "Estimasi baru",
+        "emptyTitle": "Belum ada estimasi",
+        "emptyMessage": "Buat estimasi pertama, kirim tautannya ke pembeli, dan konversi menjadi faktur setelah diterima."
+      },
+      "openValue": "Nilai terbuka",
+      "tableLabel": "Dokumen",
+      "loading": "Memuat",
+      "showing": "{count, plural, other {Menampilkan # dokumen}}",
+      "loadMore": "Muat lebih banyak",
+      "allLoaded": "Semua sudah dimuat",
+      "useSampleData": "Gunakan data contoh",
+      "emptyFilteredTitle": "Tidak ada yang cocok",
+      "emptyFiltered": "Tidak ada dokumen yang cocok dengan pencarian dan filter. Coba kurangi filter atau gunakan kata lain.",
+      "resetFilters": "Hapus filter",
+      "emptyTabTitle": "Tidak ada dokumen {status}",
+      "emptyTab": "Saat salah satu {kind} Anda mencapai status ini, akan muncul di sini.",
+      "statusWord": {
+        "all": "semua",
+        "draft": "draf",
+        "sent": "terkirim",
+        "viewed": "dilihat",
+        "accepted": "diterima",
+        "declined": "ditolak",
+        "expired": "kedaluwarsa",
+        "converted": "dikonversi"
+      }
+    },
+    "toolbar": {
+      "label": "Filter",
+      "search": "Cari nomor, judul, atau pembeli",
+      "owner": "Pemilik",
+      "allOwners": "Semua pemilik",
+      "validity": "Berlaku hingga",
+      "anyValidity": "Tanggal apa pun",
+      "validWeek": "Kedaluwarsa dalam 7 hari",
+      "validLapsed": "Tanggal sudah lewat",
+      "clear": "Hapus",
+      "refresh": "Muat ulang",
+      "shortcuts": "Pintasan keyboard",
+      "contactFilter": "Kontak",
+      "dealFilter": "Deal",
+      "removeFilter": "Hapus filter ini",
+      "mine": "Milik saya"
+    },
+    "table": {
+      "scrollArea": "Tabel dokumen",
+      "selectAll": "Pilih semua dokumen yang dimuat",
+      "selectRow": "Pilih {number}",
+      "columns": {
+        "number": "Nomor",
+        "title": "Judul / Pembeli",
+        "contact": "Kontak",
+        "amount": "Jumlah",
+        "status": "Status",
+        "validUntil": "Berlaku hingga",
+        "owner": "Pemilik",
+        "created": "Dibuat"
+      }
+    },
+    "row": {
+      "moreFor": "Tindakan untuk {number}",
+      "untitled": "Tanpa judul",
+      "noBuyer": "Belum ada pembeli",
+      "unowned": "Tanpa pemilik"
+    },
+    "bulk": {
+      "label": "Tindakan massal",
+      "selected": "{count, plural, other {# dipilih}}",
+      "working": "Diproses",
+      "delete": "Hapus",
+      "clear": "Hapus pilihan",
+      "deleteTitle": "Hapus dokumen yang dipilih?",
+      "deleteMessage": "{count, plural, other {# dokumen akan dihapus permanen. Tautan publiknya tidak lagi berfungsi.}} Dokumen yang sudah dikonversi tetap disimpan.",
+      "deleteConfirm": "Hapus",
+      "keep": "Simpan",
+      "deleted": "{count, plural, other {# dokumen dihapus}}",
+      "someFailed": "{count, plural, other {# dokumen tidak dapat dihapus}}",
+      "failed": "Gagal menghapus."
+    },
+    "shortcuts": {
+      "title": "Pintasan keyboard",
+      "close": "Tutup",
+      "list": "Di daftar",
+      "builder": "Di pembuat dokumen",
+      "actions": {
+        "next": "Baris berikutnya",
+        "prev": "Baris sebelumnya",
+        "open": "Buka baris",
+        "toggleSelect": "Pilih atau batalkan pilihan baris",
+        "newDoc": "Dokumen baru",
+        "focusSearch": "Cari",
+        "clearSelection": "Hapus pilihan",
+        "help": "Tampilkan daftar ini",
+        "save": "Simpan draf",
+        "send": "Kirim",
+        "addRow": "Tambahkan item baris"
+      }
+    },
+    "actions": {
+      "open": "Buka",
+      "edit": "Edit",
+      "send": "Kirim",
+      "copyLink": "Salin tautan publik",
+      "markSent": "Tandai sebagai terkirim",
+      "convertInvoice": "Konversi ke faktur",
+      "createSalesOrder": "Buat pesanan penjualan",
+      "convertDeal": "Buat deal",
+      "duplicate": "Duplikasi",
+      "print": "Cetak / PDF",
+      "activity": "Aktivitas",
+      "delete": "Hapus",
+      "accept": "Catat sebagai diterima",
+      "decline": "Catat sebagai ditolak",
+      "revise": "Revisi (kembali ke draf)",
+      "extend": "Perpanjang masa berlaku"
+    },
+    "confirm": {
+      "cancel": "Batal",
+      "linkCopied": "Tautan disalin",
+      "copyFailed": "Tautan tidak dapat disalin. Pilih lalu salin secara manual.",
+      "markSent": {
+        "title": "Tandai {number} sebagai terkirim?",
+        "message": "Ini mencatat bahwa {kind} dibagikan kepada pembeli secara manual (tautan disalin). Tidak ada yang dikirim; gunakan Kirim untuk itu.",
+        "confirm": "Tandai sebagai terkirim"
+      },
+      "convertInvoice": {
+        "title": "Konversi {number} menjadi faktur?",
+        "message": "Draf faktur akan dibuat dengan baris dan total yang sama, dan {kind} ini dikunci sebagai dikonversi. Tindakan ini tidak dapat dibatalkan.",
+        "confirm": "Konversi ke faktur"
+      },
+      "convertDeal": {
+        "title": "Buat deal dari {number}?",
+        "message": "Deal akan dibuat dengan total dan kontak {kind} ini, serta ditautkan kembali ke dokumen ini.",
+        "confirm": "Buat deal"
+      },
+      "delete": {
+        "title": "Hapus {number}?",
+        "message": "{kind} akan dihapus permanen dan tautan publiknya tidak lagi berfungsi. Nomornya tidak akan digunakan lagi.",
+        "confirm": "Hapus"
+      },
+      "close": "Tutup",
+      "theBuyer": "pembeli",
+      "linkCopiedInactive": "Tautan disalin. Pembeli tidak dapat membukanya sebelum dokumen dikirim.",
+      "accept": {
+        "title": "Catat {number} sebagai diterima?",
+        "message": "Gunakan ini saat {name} menyetujui di luar tautan, melalui telepon atau dengan salinan bertanda tangan. Ini dicatat dalam aktivitas sebagai diinput oleh Anda, bukan tanda tangan pembeli sendiri.",
+        "confirm": "Catat sebagai diterima"
+      },
+      "decline": {
+        "title": "Catat {number} sebagai ditolak?",
+        "message": "Gunakan ini saat {name} menolak di luar tautan. {kind} akan ditutup sebagai ditolak; Anda dapat merevisinya menjadi draf baru nanti.",
+        "confirm": "Catat sebagai ditolak"
+      },
+      "extend": {
+        "title": "Perpanjang {number}",
+        "message": "Berikan tanggal berlaku baru untuk {kind} ini. Yang sudah kedaluwarsa akan kembali terbuka untuk {name}.",
+        "confirm": "Perpanjang",
+        "date": "Tanggal berlaku baru",
+        "past": "Tanggal tidak boleh di masa lalu."
+      },
+      "revise": {
+        "title": "Revisi {number}?",
+        "message": "{kind} akan kembali menjadi draf agar dapat Anda ubah (nomor revisi naik dan konten lama disimpan). Pembeli tidak dapat menerima versi lama setelah Anda mengubahnya.",
+        "confirm": "Revisi"
+      },
+      "note": "Catatan (opsional)",
+      "noteHint": "Disimpan dalam aktivitas bersama keputusan ini."
+    },
+    "toast": {
+      "created": "{number} dibuat",
+      "saved": "{number} disimpan",
+      "duplicated": "Draf {number} dibuat",
+      "convertedInvoice": "{number} dikonversi menjadi faktur",
+      "convertedDeal": "Deal {deal} dibuat dari {number}",
+      "deleted": "{number} dihapus",
+      "accepted": "{number} dicatat sebagai diterima",
+      "declined": "{number} dicatat sebagai ditolak",
+      "revised": "{number} kembali menjadi draf (revisi {revision})",
+      "extended": "{number} diperpanjang",
+      "delivery": {
+        "sent": "{number} dikirim melalui email ke pembeli",
+        "queued": "{number} masuk antrean pengiriman WhatsApp",
+        "shared": "{number} ditandai sebagai terkirim"
+      }
+    },
+    "errors": {
+      "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukan itu.",
+      "signedOut": "Sesi Anda telah berakhir. Masuk lagi.",
+      "conflict": "Orang lain mengubah dokumen ini. Dokumen telah dimuat ulang; tinjau dan coba lagi.",
+      "validation": "Beberapa nilai tidak diterima. Periksa kolom yang disorot.",
+      "unavailable": "Penawaran dan estimasi belum tersedia di server ini.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar dan coba lagi.",
+      "notFound": "Dokumen ini tidak ditemukan. Mungkin sudah dihapus.",
+      "planDisabled": "Paket Anda tidak mencakup penawaran dan estimasi.",
+      "invalidTransition": "Perubahan itu tidak diizinkan dari status dokumen saat ini. Dokumen telah dimuat ulang.",
+      "notEditable": "Hanya draf yang dapat diedit. Revisi dokumen untuk kembali ke draf.",
+      "notDeletable": "Dokumen yang diterima dan dikonversi disimpan sebagai catatan dan tidak dapat dihapus.",
+      "alreadyDecided": "Dokumen ini sudah diputuskan. Dokumen telah dimuat ulang.",
+      "alreadyConverted": "Dokumen ini sudah dikonversi menjadi faktur.",
+      "alreadyLinkedDeal": "Dokumen ini sudah memiliki deal yang tertaut.",
+      "linkUnavailable": "Tautan publik telah dicabut atau kedaluwarsa. Buat tautan baru terlebih dahulu.",
+      "noRecipient": "Tambahkan email atau telepon pembeli terlebih dahulu, lalu kirim.",
+      "sendFailed": "Pesan tidak dapat dikirim, sehingga dokumen tidak ditandai sebagai terkirim. Coba lagi.",
+      "expired": "Dokumen ini sudah melewati tanggal berlakunya. Perpanjang terlebih dahulu.",
+      "ownerInvalid": "Pemilik harus merupakan anggota workspace yang aktif.",
+      "invoicingUnavailable": "Penagihan belum tersedia, sehingga dokumen ini tidak dapat dikonversi.",
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "requestId": "ID permintaan",
+      "retry": "Coba lagi"
+    },
+    "link": {
+      "unnamedContact": "Kontak tanpa nama"
+    },
+    "picker": {
+      "unnamed": "Tanpa nama",
+      "unlinkContact": "Lepaskan kontak",
+      "unlinkDeal": "Lepaskan deal",
+      "searchContact": "Cari kontak berdasarkan nama, email, atau telepon",
+      "searchDeal": "Cari deal",
+      "results": "Hasil",
+      "searching": "Mencari",
+      "unavailable": "Daftar tidak dapat dimuat.",
+      "none": "Tidak ada yang cocok.",
+      "create": "Buat kontak",
+      "createNamed": "Buat kontak \"{name}\"",
+      "createTitle": "Buat kontak",
+      "createEyebrow": "Kontak baru",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "createConfirm": "Buat dan tautkan",
+      "nameLabel": "Nama",
+      "emailLabel": "Email",
+      "phoneLabel": "Telepon",
+      "phoneHint": "Dengan kode negara, misalnya +971 50 123 4567.",
+      "nameInvalid": "Masukkan nama.",
+      "emailInvalid": "Masukkan email yang valid.",
+      "phoneInvalid": "Masukkan nomor telepon yang valid.",
+      "forbidden": "Anda tidak memiliki izin untuk membuat kontak.",
+      "createFailed": "Kontak tidak dapat dibuat. Coba lagi.",
+      "contactCreated": "Kontak {name} dibuat"
+    },
+    "send": {
+      "eyebrow": "Kirim ke pembeli",
+      "title": "Kirim {number}",
+      "close": "Tutup",
+      "done": "Selesai",
+      "channels": "Cara mengirim",
+      "tabs": {
+        "link": "Tautan",
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "linkLabel": "Tautan publik",
+      "linkHint": "Siapa pun dengan tautan ini dapat melihat dokumen dan menerima atau menolaknya. Bagikan hanya kepada pembeli.",
+      "copy": "Salin",
+      "copied": "Tersalin",
+      "copiedToast": "Tautan disalin",
+      "copyFailed": "Tautan tidak dapat disalin. Pilih lalu salin secara manual.",
+      "to": "Kepada",
+      "emailInvalid": "Masukkan alamat email yang valid.",
+      "noEmail": "Dokumen ini tidak memiliki email pembeli. Ketik di sini.",
+      "message": "Pesan",
+      "messageDefault": "Halo {name}, berikut dokumen kami. Dokumen ini memuat cakupan dan harga, dan Anda dapat menerimanya secara online.",
+      "messageHint": "Tautan ke dokumen ditambahkan di bawah pesan Anda.",
+      "sendEmail": "Kirim email",
+      "waTo": "Kirim ke",
+      "noPhone": "Dokumen ini tidak memiliki nomor telepon pembeli. Tambahkan terlebih dahulu di detail pembeli.",
+      "waPreview": "Pesan",
+      "waTotal": "Total",
+      "waView": "Lihat dan terima",
+      "sendWhatsapp": "Kirim lewat WhatsApp",
+      "openWhatsapp": "Buka di WhatsApp",
+      "markSent": "Sudah saya bagikan: tandai sebagai terkirim",
+      "linkLoading": "Memuat tautan",
+      "linkUnavailable": "Tautan belum tersedia di server ini.",
+      "stateDraft": "Tautan dapat dibuka setelah dokumen dikirim. Sampai saat itu pembeli tidak melihat apa pun.",
+      "stateRevoked": "Tautan ini telah dicabut: pembeli tidak dapat membukanya. Buat yang baru untuk dibagikan lagi.",
+      "stateActive": "{views, plural, =0 {Belum dibuka.} other {Dibuka # kali.}}",
+      "stateInactive": "Tautan ini telah kedaluwarsa dan pembeli tidak dapat membukanya. Buat yang baru.",
+      "regenerate": "Buat tautan baru",
+      "revoke": "Cabut tautan",
+      "regenerateWarning": "Tautan lama langsung berhenti berfungsi. Siapa pun yang memilikinya akan melihat bahwa tautan itu tidak lagi tersedia.",
+      "keepLink": "Pertahankan tautan saat ini",
+      "regenerateConfirm": "Buat tautan baru",
+      "regenerated": "Tautan baru dibuat",
+      "revoked": "Tautan dicabut",
+      "waHint": "Kirim memasukkan pesan ke antrean WhatsApp Anda yang terhubung dan menandai dokumen sebagai terkirim. Buka di WhatsApp memungkinkan Anda mengirimnya sendiri; lalu gunakan tab Tautan untuk menandainya sebagai terkirim."
+    },
+    "activity": {
+      "title": "Aktivitas {number}",
+      "subtitle": "Semua yang terjadi pada dokumen ini, terbaru di atas.",
+      "close": "Tutup",
+      "loading": "Memuat",
+      "unavailable": "Riwayat aktivitas belum tersedia di server ini.",
+      "empty": "Belum ada yang terjadi pada dokumen ini.",
+      "buyer": "pembeli",
+      "system": "sistem",
+      "someone": "Seseorang",
+      "via": "Dikirim oleh {channel}",
+      "signedBy": "Ditandatangani oleh {name}",
+      "reason": "Alasan: {reason}",
+      "channels": {
+        "link": "tautan",
+        "email": "email",
+        "whatsapp": "WhatsApp"
+      },
+      "events": {
+        "created": "Dibuat oleh {who}",
+        "edited": "Diedit oleh {who}",
+        "sent": "Dikirim oleh {who}",
+        "viewed": "Dilihat oleh {who}",
+        "accepted": "Diterima oleh {who}",
+        "declined": "Ditolak oleh {who}",
+        "expired": "Kedaluwarsa",
+        "duplicated": "Diduplikasi oleh {who}",
+        "revised": "Direvisi oleh {who}",
+        "extended": "Masa berlaku diperpanjang oleh {who}",
+        "converted_invoice": "Dikonversi menjadi faktur oleh {who}",
+        "converted_deal": "Deal dibuat oleh {who}",
+        "link_regenerated": "Tautan baru dibuat oleh {who}",
+        "link_revoked": "Tautan dicabut oleh {who}"
+      },
+      "withSignature": "Tanda tangan gambar telah direkam",
+      "recordedByStaff": "Direkam oleh anggota tim atas nama pembeli",
+      "note": "Catatan: {note}",
+      "revision": "Revisi {revision}",
+      "fromAddress": "Dari alamat jaringan {ip}"
+    },
+    "paper": {
+      "label": "{kind} {number}",
+      "sellerFallback": "Perusahaan Anda",
+      "numberPending": "Nomor ditetapkan saat disimpan",
+      "untitled": "{kind} tanpa judul",
+      "preparedFor": "Disiapkan untuk",
+      "noBuyer": "Belum ada pembeli",
+      "issued": "Diterbitkan",
+      "validUntil": "Berlaku hingga",
+      "description": "Deskripsi",
+      "qty": "Qty",
+      "unit": "Harga satuan",
+      "discount": "Disk.",
+      "tax": "Pajak",
+      "amount": "Jumlah",
+      "noItems": "Tidak ada item.",
+      "subtotal": "Subtotal",
+      "discountPercent": "Diskon ({percent}%)",
+      "discountRow": "Diskon",
+      "taxRow": "Pajak ({percent}%)",
+      "total": "Total",
+      "notes": "Catatan",
+      "terms": "Syarat"
+    },
+    "builder": {
+      "loading": "Memuat",
+      "notFoundTitle": "Dokumen tidak ditemukan",
+      "notFound": "Dokumen ini tidak ada atau sudah dihapus.",
+      "back": {
+        "proposal": "Semua proposal",
+        "estimate": "Semua estimasi"
+      },
+      "formLabel": "Detail dokumen",
+      "newTitle": {
+        "proposal": "Proposal baru",
+        "estimate": "Estimasi baru"
+      },
+      "newSubtitle": "Isi pembeli dan item baris. Nomor ditetapkan saat Anda menyimpan {kind} ini.",
+      "untitledSub": "Tanpa judul",
+      "unsaved": "Perubahan belum disimpan",
+      "leaveTitle": "Keluar tanpa menyimpan?",
+      "leaveMessage": "Halaman ini memiliki perubahan yang belum disimpan. Jika Anda keluar sekarang, perubahan akan hilang.",
+      "leave": "Keluar tanpa menyimpan",
+      "keepEditing": "Lanjutkan mengedit",
+      "save": "Simpan draf",
+      "send": "Kirim",
+      "more": "Tindakan lainnya",
+      "fixErrors": "Beberapa kolom perlu diperhatikan sebelum ini dapat disimpan.",
+      "panes": "Formulir atau pratinjau",
+      "pane": {
+        "edit": "Edit",
+        "preview": "Pratinjau"
+      },
+      "locked": {
+        "sent": "Dokumen ini sudah dikirim ke pembeli sehingga tidak dapat diedit. Revisi untuk kembali ke draf, atau duplikat untuk membuat yang baru.",
+        "accepted": "Dokumen ini telah diterima dan disimpan sebagai catatan. Ubah menjadi invoice, atau duplikat untuk membuat yang baru.",
+        "converted": "Dokumen ini telah diubah menjadi invoice dan dikunci.",
+        "openInvoice": "Buka invoice",
+        "revise": "Revisi",
+        "duplicate": "Duplikat sebagai draf"
+      },
+      "buyer": {
+        "title": "Pembeli",
+        "hint": "Pilih kontak atau ketik detail pembeli. Email dan telepon mereka digunakan untuk pengiriman.",
+        "contact": "Kontak",
+        "name": "Nama pembeli",
+        "email": "Email pembeli",
+        "phone": "Telepon pembeli",
+        "phoneHint": "Dengan kode negara. Diperlukan untuk mengirim melalui WhatsApp."
+      },
+      "details": {
+        "title": "Detail",
+        "docTitle": "Judul",
+        "titlePlaceholder": {
+          "proposal": "contoh: Redesain website, tahap 1",
+          "estimate": "contoh: Penawaran cepat pemasangan dapur"
+        },
+        "deal": "Deal",
+        "currency": "Mata uang",
+        "validUntil": "Berlaku hingga",
+        "plusDays": "+{days} hari",
+        "noExpiry": "Tanpa batas waktu"
+      },
+      "items": {
+        "title": "Item baris",
+        "hint": "Kuantitas boleh berisi desimal. Diskon berupa persentase atau nominal (ketuk tanda di kotak untuk mengganti); pajak kosong menggunakan tarif dokumen.",
+        "description": "Deskripsi",
+        "qty": "Qty",
+        "unit": "Harga satuan",
+        "discount": "Disk. %",
+        "tax": "Pajak %",
+        "amount": "Jumlah",
+        "drag": "Seret untuk mengurutkan ulang",
+        "row": "Baris {n}",
+        "descriptionPlaceholder": "Yang Anda tagihkan",
+        "descriptionFor": "Deskripsi baris {n}",
+        "qtyFor": "Kuantitas baris {n}",
+        "unitFor": "Harga satuan baris {n}",
+        "discountFor": "Persentase diskon baris {n}",
+        "taxFor": "Persentase pajak baris {n}",
+        "amountFor": "Jumlah baris {n}",
+        "moveUp": "Pindahkan baris {n} ke atas",
+        "moveDown": "Pindahkan baris {n} ke bawah",
+        "duplicate": "Duplikat baris {n}",
+        "remove": "Hapus baris {n}",
+        "add": "Tambah baris",
+        "discountToAmount": "Baris {n}: diskon berupa persentase; ganti ke nominal",
+        "discountToPercent": "Baris {n}: diskon berupa nominal; ganti ke persentase"
+      },
+      "problems": {
+        "noItems": "Tambahkan minimal satu item baris dengan deskripsi dan harga.",
+        "descriptionRequired": "Masukkan deskripsi.",
+        "descriptionTooLong": "Deskripsi terlalu panjang (maksimal 500 karakter).",
+        "qtyInvalid": "Kuantitas harus berupa angka, 0 atau lebih, dengan maksimal 4 desimal.",
+        "priceInvalid": "Masukkan harga satuan sebagai angka, 0 atau lebih.",
+        "discountInvalid": "Diskon harus berupa persentase dari 0 sampai 100.",
+        "taxInvalid": "Pajak harus berupa persentase dari 0 sampai 100.",
+        "docDiscountInvalid": "Masukkan diskon sebagai angka, 0 atau lebih.",
+        "docTaxInvalid": "Pajak harus berupa persentase dari 0 sampai 100.",
+        "emailInvalid": "Masukkan alamat email yang valid.",
+        "phoneInvalid": "Masukkan telepon dengan kode negara, misalnya +971 50 123 4567.",
+        "titleTooLong": "Judul terlalu panjang (maksimal 255 karakter).",
+        "notesTooLong": "Catatan terlalu panjang (maksimal 5.000 karakter).",
+        "termsTooLong": "Syarat terlalu panjang (maksimal 10.000 karakter).",
+        "dateInvalid": "Masukkan tanggal yang valid.",
+        "tooLarge": "Jumlah terlalu besar. Kurangi kuantitas atau harga."
+      },
+      "totals": {
+        "defaultTax": "Tarif pajak",
+        "defaultTaxHint": "Diterapkan ke setiap baris yang tidak memiliki pajak sendiri.",
+        "discount": "Diskon untuk seluruh dokumen",
+        "discountKind": "Jenis diskon",
+        "subtotal": "Subtotal",
+        "discountRow": "Diskon",
+        "taxRow": "Pajak ({percent}%)",
+        "total": "Total"
+      },
+      "notes": {
+        "title": "Catatan dan syarat",
+        "notes": "Catatan untuk pembeli",
+        "terms": "Syarat",
+        "insertTemplate": "Gunakan templat",
+        "count": "{count} / {max}"
+      },
+      "preview": {
+        "title": "Pratinjau",
+        "print": "Cetak / PDF",
+        "hint": "Ini yang dilihat pembeli dan yang dicetak. Total menggunakan pembulatan yang sama dengan dokumen tersimpan."
+      }
+    },
+    "templates": {
+      "notes": {
+        "thanks": {
+          "label": "Terima kasih",
+          "text": "Terima kasih atas kesempatan bekerja sama dengan Anda. Kami menantikan untuk memulai."
+        },
+        "scope": {
+          "label": "Pengingat lingkup",
+          "text": "Dokumen ini hanya mencakup item yang tercantum di atas. Apa pun di luar lingkup ini akan ditawarkan secara terpisah."
+        },
+        "followUp": {
+          "label": "Langkah selanjutnya",
+          "text": "Untuk melanjutkan, terima dokumen ini secara online. Kami akan mengonfirmasi tanggal mulai dalam satu hari kerja."
+        }
+      },
+      "terms": {
+        "net14": {
+          "label": "Pembayaran dalam 14 hari",
+          "text": "Pembayaran jatuh tempo dalam 14 hari sejak tanggal invoice."
+        },
+        "net30": {
+          "label": "Pembayaran dalam 30 hari",
+          "text": "Pembayaran jatuh tempo dalam 30 hari sejak tanggal invoice."
+        },
+        "deposit50": {
+          "label": "Uang muka 50%",
+          "text": "Uang muka 50% jatuh tempo saat penerimaan. Sisa pembayaran jatuh tempo saat penyelesaian."
+        },
+        "warranty": {
+          "label": "Garansi",
+          "text": "Pekerjaan dijamin selama 90 hari sejak pengiriman terhadap cacat pengerjaan."
+        }
+      }
+    },
+    "linked": {
+      "title": "Proposal dan estimasi",
+      "newProposal": "Proposal",
+      "newEstimate": "Estimasi",
+      "loading": "Memuat",
+      "unavailableTitle": "Belum tersedia",
+      "unavailable": "Proposal dan estimasi belum tersedia di server ini.",
+      "empty": "Belum ada proposal atau estimasi.",
+      "kind": {
+        "proposal": "Proposal",
+        "estimate": "Estimasi"
+      },
+      "viewProposals": "Semua proposal",
+      "viewEstimates": "Semua estimasi"
+    },
+    "signature": {
+      "area": "Kotak tanda tangan: buat tanda tangan Anda dengan jari, pena, atau mouse",
+      "placeholder": "Tanda tangan di sini",
+      "clear": "Hapus tanda tangan"
+    },
+    "public": {
+      "loading": "Memuat dokumen",
+      "brandFallback": "Pemasok Anda",
+      "language": "Bahasa",
+      "print": "Cetak / PDF",
+      "invalid": {
+        "title": "Tautan ini tidak valid",
+        "message": "Dokumen mungkin telah dihapus, atau tautan tidak lengkap. Minta tautan baru kepada pengirim."
+      },
+      "error": {
+        "title": "Kami tidak dapat memuat dokumen",
+        "message": "Periksa koneksi Anda lalu coba lagi. Jika terus terjadi, hubungi pengirim.",
+        "retry": "Coba lagi"
+      },
+      "banner": {
+        "accepted": "Anda telah menerima {kind} ini. {seller} telah diberi tahu dan akan menindaklanjuti.",
+        "signedBy": "Ditandatangani oleh {name}",
+        "declined": "{kind} ini ditolak.",
+        "declinedHint": "Jika ini kesalahan, silakan hubungi {seller}.",
+        "converted": "Diterima. Invoice telah diterbitkan untuk {kind} ini.",
+        "expired": "{kind} ini kedaluwarsa pada {date}.",
+        "expiredHint": "Tidak dapat diterima lagi. Hubungi {seller} untuk meminta yang baru."
+      },
+      "footer": "{kind} ini dibuat oleh {seller}.",
+      "decision": {
+        "title": "Keputusan Anda",
+        "intro": "Menerima {kind} ini sebesar {total} mengonfirmasi lingkup dan harga di atas dengan {seller}.",
+        "name": "Nama lengkap Anda",
+        "nameHint": "Diketik sebagai nama Anda pada catatan (minimal 2 karakter).",
+        "nameRequired": "Masukkan nama lengkap Anda.",
+        "signature": "Tanda tangan",
+        "typedPlaceholder": "Nama Anda muncul di sini",
+        "useTyped": "Tandatangani dengan nama yang diketik, bukan digambar",
+        "signatureRequired": "Gambar tanda tangan Anda, atau pilih untuk menandatangani dengan nama yang diketik.",
+        "agree": "Saya telah membaca {kind} ini dan menyetujui lingkup, harga, dan syaratnya.",
+        "agreeRequired": "Centang kotak untuk mengonfirmasi.",
+        "accept": "Terima {kind} ini",
+        "decline": "Tolak",
+        "note": "Nama, tanda tangan, waktu, dan alamat jaringan Anda dicatat bersama keputusan Anda.",
+        "declineTitle": "Tolak {kind} ini?",
+        "declineMessage": "{seller} akan diberi tahu bahwa Anda menolak. Anda tidak dapat mengubah ini setelahnya.",
+        "reason": "Alasan (opsional)",
+        "reasonHint": "Catatan singkat membantu {seller} memahami apa yang perlu disesuaikan.",
+        "keep": "Kembali",
+        "declineConfirm": "Tolak",
+        "close": "Tutup",
+        "problem": {
+          "expired": "Dokumen ini telah kedaluwarsa dan tidak dapat diterima lagi.",
+          "closed": "Dokumen ini sudah diputuskan. Halaman telah dimuat ulang.",
+          "rateLimited": "Terlalu banyak percobaan. Tunggu satu menit lalu coba lagi.",
+          "validation": "Beberapa detail Anda tidak diterima. Periksa nama Anda lalu coba lagi.",
+          "generic": "Keputusan Anda tidak dapat dicatat. Periksa koneksi Anda lalu coba lagi.",
+          "gone": "Tautan ini tidak lagi aktif."
+        }
+      },
+      "gone": {
+        "title": "Tautan ini tidak lagi aktif",
+        "message": "Pengirim menonaktifkan tautan ini atau masa berlakunya habis. Minta tautan baru kepada mereka."
+      },
+      "metaTitle": "Penawaran"
+    }
+  }
+}

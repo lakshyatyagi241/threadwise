@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhook",
+      "forwarding": "Chuyển tiếp webhook"
+    },
+    "common": {
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "requestId": "Mã yêu cầu",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Bạn không có quyền thực hiện việc này.",
+        "request": "Không thể hoàn tất yêu cầu.",
+        "unexpected": "Có lỗi xảy ra phía chúng tôi. Hãy thử lại sau ít phút.",
+        "network": "Không thể kết nối máy chủ. Kiểm tra kết nối và thử lại.",
+        "conflict": "Có người khác vừa thay đổi mục tiêu này. Danh sách đã được tải lại: hãy áp dụng thay đổi của bạn một lần nữa.",
+        "validation": "Một số giá trị không hợp lệ. Kiểm tra các trường được tô sáng.",
+        "notFound": "Mục này không còn tồn tại.",
+        "urlRejected": "URL này không được phép. Dùng địa chỉ https có thể truy cập từ internet."
+      }
+    },
+    "page": {
+      "eyebrow": "Quản trị / Hệ thống / Webhook",
+      "title": "Chuyển tiếp webhook",
+      "description": "Danh sách dịch vụ của người vận hành nền tảng nhận bản sao của mọi webhook Meta.",
+      "banner": "Meta chỉ cho phép một URL callback. Chúng tôi nhận một lần, xác minh và chuyển tiếp nguyên văn nội dung (kèm chữ ký gốc) đến mọi mục tiêu đang hoạt động.",
+      "superOnly": "Chỉ siêu quản trị viên mới có thể quản lý chuyển tiếp webhook.",
+      "add": "Thêm mục tiêu",
+      "tabs": {
+        "targets": "Mục tiêu",
+        "failures": "Lần gửi thất bại"
+      }
+    },
+    "targets": {
+      "empty": "Chưa có mục tiêu chuyển tiếp nào",
+      "emptyBody": "Thêm một mục tiêu để bắt đầu chuyển tiếp webhook Meta sang dịch vụ khác.",
+      "columns": {
+        "target": "Mục tiêu",
+        "active": "Đang bật",
+        "fields": "Trường",
+        "deliveries": "Lần gửi",
+        "last": "Lần gửi gần nhất",
+        "actions": "Hành động"
+      },
+      "allFields": "Tất cả trường",
+      "success": "{count, number} thành công",
+      "failure": "{count, number} thất bại",
+      "pending": "{count, number} đang chờ",
+      "pendingLabel": "{count, number} lần gửi thất bại đang chờ phát lại",
+      "neverDelivered": "Chưa gửi lần nào",
+      "lastStatus": "Trạng thái {status}",
+      "lastError": "Lỗi: {error}",
+      "lastAt": "lúc {time}",
+      "activeSwitch": "Chuyển tiếp đến {name}",
+      "on": "Mục tiêu đang bật",
+      "off": "Mục tiêu đang tắt",
+      "edit": "Sửa",
+      "test": "Kiểm tra",
+      "testing": "Đang kiểm tra",
+      "testOk": "Kiểm tra thành công: trạng thái {status} trong {ms, number} ms",
+      "testFailed": "Kiểm tra thất bại: {reason} ({ms, number} ms)",
+      "testNoStatus": "không có phản hồi",
+      "testStatus": "trạng thái {status}",
+      "delete": "Xóa",
+      "deleteTitle": "Xóa {name}?",
+      "deleteBody": "Mục tiêu sẽ ngừng nhận webhook và các lần gửi thất bại đang lưu sẽ bị xóa. Không thể hoàn tác.",
+      "deleteConfirm": "Xóa mục tiêu",
+      "cancel": "Hủy",
+      "toasts": {
+        "created": "Đã thêm {name}",
+        "saved": "Đã lưu {name}",
+        "on": "{name} đang bật",
+        "off": "{name} đang tắt",
+        "deleted": "Đã xóa {name}"
+      }
+    },
+    "dialog": {
+      "createTitle": "Thêm mục tiêu chuyển tiếp",
+      "editTitle": "Sửa {name}",
+      "close": "Đóng",
+      "name": "Tên",
+      "namePlaceholder": "Dịch vụ phân tích",
+      "url": "URL",
+      "urlHint": "Chỉ https. Các địa chỉ trong mạng nội bộ bị từ chối.",
+      "headerName": "Tên tiêu đề (không bắt buộc)",
+      "headerNameHint": "Gửi kèm mọi lần chuyển tiếp, ví dụ Authorization.",
+      "headerValue": "Giá trị tiêu đề",
+      "headerValueSaved": "Đã lưu, kết thúc bằng ••••{last4}. Để trống để giữ nguyên.",
+      "headerValueSavedNoLast4": "Đã lưu. Để trống để giữ nguyên.",
+      "headerValueHint": "Chỉ ghi: sau khi lưu sẽ không bao giờ hiển thị lại.",
+      "removeHeader": "Xóa tiêu đề đã lưu",
+      "fieldFilter": "Bộ lọc trường",
+      "fieldFilterHint": "Để trống để chuyển tiếp mọi trường. Nhập tên trường rồi nhấn Enter, ví dụ messages hoặc message_template_status_update.",
+      "fieldFilterPlaceholder": "Thêm trường",
+      "fieldRemove": "Xóa {field}",
+      "timeout": "Thời gian chờ (giây)",
+      "timeoutHint": "1 đến 30",
+      "maxAttempts": "Số lần thử tối đa",
+      "maxAttemptsHint": "1 đến 10",
+      "active": "Chuyển tiếp đến mục tiêu này",
+      "save": "Lưu",
+      "saving": "Đang lưu",
+      "cancel": "Hủy",
+      "errors": {
+        "nameRequired": "Nhập tên.",
+        "urlRequired": "Nhập URL.",
+        "urlHttps": "URL phải bắt đầu bằng https://.",
+        "headerNameInvalid": "Chỉ dùng chữ cái, chữ số và dấu gạch ngang.",
+        "headerValueRequired": "Tiêu đề cần cả tên và giá trị.",
+        "headerNameRequired": "Cũng nhập tên tiêu đề.",
+        "timeout": "Nhập một số nguyên từ 1 đến 30.",
+        "maxAttempts": "Nhập một số nguyên từ 1 đến 10."
+      }
+    },
+    "failures": {
+      "empty": "Không có lần gửi thất bại",
+      "emptyBody": "Các lần gửi đã hết số lần thử lại sẽ được giữ tại đây trong 14 ngày để bạn gửi lại.",
+      "filterAll": "Tất cả mục tiêu",
+      "filterLabel": "Mục tiêu",
+      "columns": {
+        "target": "Mục tiêu",
+        "when": "Thất bại lúc",
+        "attempts": "Số lần thử",
+        "reason": "Lý do",
+        "size": "Kích thước",
+        "actions": "Hành động"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} byte",
+      "replay": "Phát lại",
+      "replaying": "Đang phát lại",
+      "replayed": "Đã phát lại {time}",
+      "replayOk": "Đã gửi: trạng thái {status} trong {ms, number} ms",
+      "replayFailed": "Chưa gửi được: {reason} ({ms, number} ms)",
+      "reasonStatus": "trạng thái {status}",
+      "reasonNone": "không có phản hồi"
+    }
+  }
+}

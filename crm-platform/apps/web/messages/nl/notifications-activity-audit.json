@@ -1,0 +1,402 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "Meldingen",
+      "labelUnread": "Meldingen, {count} ongelezen",
+      "title": "Meldingen",
+      "markAll": "Alles als gelezen markeren",
+      "empty": "Nog geen meldingen.",
+      "loading": "Meldingen laden",
+      "failed": "Meldingen konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "unread": "Ongelezen",
+      "settings": "Waarschuwingsinstellingen",
+      "sound": "Een geluid afspelen bij nieuwe chats en berichten",
+      "soundOn": "Geluid: aan",
+      "soundOff": "Geluid: uit",
+      "desktopEnable": "Desktopmeldingen inschakelen",
+      "desktopOn": "Desktopmeldingen: aan",
+      "desktopOff": "Desktopmeldingen: uit",
+      "desktopBlocked": "Desktopmeldingen zijn geblokkeerd in je browserinstellingen.",
+      "desktopHint": "Toont de naam van het contact alleen wanneer dit tabblad op de achtergrond staat.",
+      "preferences": "Meldingsinstellingen"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Taak aan jou toegewezen",
+        "body": "{actor} heeft je deze taak toegewezen: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "Taak verloopt",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "Taak voltooid",
+        "body": "{actor} heeft voltooid: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "Nieuwe lead",
+        "titleReturning": "Lead is opnieuw binnengekomen",
+        "body": "{name} is binnengekomen via {platform}",
+        "bodyReturning": "{name} heeft nog een lead gestuurd via {platform}",
+        "bodyNoActor": "{name} is binnengekomen"
+      },
+      "new_chat": {
+        "title": "Nieuwe chat van {name}",
+        "titleNoName": "Nieuwe chat",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, one {Nieuw bericht van {name}} other {# nieuwe berichten van {name}}}",
+        "titleNoName": "{count, plural, one {Nieuw bericht} other {# nieuwe berichten}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "chat_waiting": {
+        "title": "Nog niemand heeft {name} geantwoord",
+        "titleNoName": "Een chat wacht nog op antwoord",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "{name} is aan jou toegewezen",
+        "titleNoName": "Een chat is aan jou toegewezen",
+        "titleTeam": "{name} is aan je team toegewezen",
+        "titleTeamNoName": "Een chat is aan je team toegewezen",
+        "body": "Toegewezen door {actor}",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "{actor} heeft je genoemd",
+        "titleNoName": "Je bent genoemd in een notitie",
+        "body": "{name}: {preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "device_connected": {
+        "title": "{name} is verbonden",
+        "titleNoName": "Je WhatsApp-nummer is verbonden"
+      },
+      "device_disconnected": {
+        "title": "{name} is losgekoppeld",
+        "titleNoName": "Een WhatsApp-nummer is losgekoppeld",
+        "body": "Open het apparaat om opnieuw te verbinden."
+      },
+      "device_logged_out": {
+        "title": "{name} is uitgelogd",
+        "titleNoName": "Een WhatsApp-nummer is uitgelogd",
+        "body": "Scan de QR-code opnieuw om opnieuw te verbinden."
+      },
+      "broadcast_completed": {
+        "title": "Broadcast “{name}” is afgerond",
+        "titleNoName": "Een broadcast is afgerond",
+        "bodySent": "{sent, plural, one {# bericht verzonden} other {# berichten verzonden}}",
+        "bodySentFailed": "{sent, plural, one {# bericht verzonden} other {# berichten verzonden}}, {failed, plural, one {# mislukt} other {# mislukt}}"
+      },
+      "broadcast_failed": {
+        "title": "Broadcast “{name}” is mislukt",
+        "titleNoName": "Een broadcast is mislukt",
+        "body": "{reason}",
+        "bodyNoReason": "Open het om te zien wat er misging."
+      },
+      "campaign_completed": {
+        "title": "Campagne “{name}” is afgerond",
+        "titleNoName": "Een campagne is afgerond",
+        "bodySent": "{sent, plural, one {# bericht verzonden} other {# berichten verzonden}}",
+        "bodySentFailed": "{sent, plural, one {# bericht verzonden} other {# berichten verzonden}}, {failed, plural, one {# mislukt} other {# mislukt}}"
+      },
+      "campaign_failed": {
+        "title": "Campagne “{name}” is mislukt",
+        "titleNoName": "Een campagne is mislukt",
+        "body": "{reason}",
+        "bodyNoReason": "Open het om te zien wat er misging."
+      },
+      "scheduled_completed": {
+        "title": "Geplande verzending “{name}” is verstuurd",
+        "titleNoName": "Een geplande verzending is verstuurd",
+        "bodySent": "{sent, plural, one {# bericht verzonden} other {# berichten verzonden}}",
+        "bodySentFailed": "{sent, plural, one {# bericht verzonden} other {# berichten verzonden}}, {failed, plural, one {# mislukt} other {# mislukt}}"
+      },
+      "scheduled_failed": {
+        "title": "Geplande verzending “{name}” is mislukt",
+        "titleNoName": "Een geplande verzending is mislukt",
+        "body": "{reason}",
+        "bodyNoReason": "Open het om te zien wat er misging."
+      },
+      "teamchat_mention": {
+        "title": "{author} heeft je genoemd in {channel}",
+        "titleNoChannel": "{author} heeft je genoemd in Teamchat",
+        "titleNoName": "Je bent genoemd in Teamchat"
+      },
+      "teamchat_message": {
+        "title": "{count, plural, one {Nieuw bericht van {author}} other {# nieuwe berichten van {author}}}",
+        "titleNoName": "{count, plural, one {Nieuw direct bericht} other {# nieuwe directe berichten}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {Iemand wil {name} joinen} other {# personen willen {name} joinen}}",
+        "titleNoName": "{count, plural, one {Iemand wil een WhatsApp-groep joinen} other {# personen willen een WhatsApp-groep joinen}}",
+        "body": "Open Groepen om goed te keuren of af te wijzen."
+      },
+      "waba_group_suspended": {
+        "title": "{name} is geschorst",
+        "titleNoName": "Een WhatsApp-groep is geschorst",
+        "body": "WhatsApp heeft deze groep geschorst. Je kunt er geen berichten naartoe sturen totdat ze hersteld is."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} is weer actief",
+        "titleNoName": "Een WhatsApp-groep is weer actief",
+        "body": "WhatsApp heeft deze groep hersteld. Je kunt er weer berichten naartoe sturen."
+      }
+    },
+    "live": {
+      "open": "Openen",
+      "dismiss": "Negeren",
+      "toastRegion": "Meldingen",
+      "summary": "{count} nieuwe meldingen",
+      "announceMany": "{count} nieuwe meldingen",
+      "desktop": {
+        "new_chat": "Nieuwe chat",
+        "new_message": "Nieuw bericht",
+        "chat_waiting": "Wacht op antwoord",
+        "conversation_assigned": "Aan jou toegewezen",
+        "mention": "Heeft je genoemd",
+        "fallbackTitle": "Nieuwe melding",
+        "device_connected": "WhatsApp-nummer verbonden",
+        "device_disconnected": "WhatsApp-nummer losgekoppeld",
+        "device_logged_out": "WhatsApp-nummer uitgelogd",
+        "broadcast_completed": "Broadcast afgerond",
+        "broadcast_failed": "Broadcast mislukt",
+        "campaign_completed": "Campagne afgerond",
+        "campaign_failed": "Campagne mislukt",
+        "scheduled_completed": "Geplande verzending verstuurd",
+        "scheduled_failed": "Geplande verzending mislukt",
+        "teamchat_mention": "Heeft je genoemd in Teamchat",
+        "teamchat_message": "Nieuw direct bericht",
+        "waba_group_join_request": "Verzoek om een groep te joinen",
+        "waba_group_suspended": "WhatsApp-groep geschorst",
+        "waba_group_suspension_cleared": "WhatsApp-groep weer actief"
+      }
+    },
+    "prefs": {
+      "title": "Meldingsvoorkeuren",
+      "description": "Kies hoe elke gebeurtenis je bereikt. Deze keuzes zijn alleen van jou; je workspace bepaalt welke gebeurtenissen standaard aanstaan.",
+      "columns": {
+        "event": "Gebeurtenis",
+        "bell": "Belletje",
+        "toast": "Pop-up",
+        "sound": "Geluid",
+        "push": "Push"
+      },
+      "groups": {
+        "conversations": "Chats",
+        "tasks": "Taken",
+        "leads": "Leads en formulieren",
+        "documents": "Verkoopdocumenten",
+        "wallet": "Wallet",
+        "devices": "WhatsApp-nummers",
+        "broadcasts": "Broadcasts en campagnes",
+        "team_chat": "Teamchat",
+        "whatsapp_groups": "WhatsApp-groepen"
+      },
+      "types": {
+        "new_chat": {
+          "label": "Nieuwe chat",
+          "hint": "Een gesprek dat nog niemand toebehoort, krijgt zijn eerste bericht."
+        },
+        "new_message": {
+          "label": "Nieuw bericht in mijn chat",
+          "hint": "Een klant schrijft in een chat die aan jou is toegewezen."
+        },
+        "chat_waiting": {
+          "label": "Chat wacht nog op antwoord",
+          "hint": "Een chat van niemand heeft al enkele minuten een onbeantwoord klantbericht. Je hoort hier één keer over."
+        },
+        "conversation_assigned": {
+          "label": "Chat aan mij toegewezen",
+          "hint": "Een chat is aan jou of aan je team toegewezen."
+        },
+        "mention": {
+          "label": "Genoemd in een notitie",
+          "hint": "Een collega noemt je in een notitie bij een gesprek."
+        },
+        "teamchat_mention": {
+          "label": "Genoemd in Teamchat",
+          "hint": "Een collega noemt je in een kanaal van de teamchat."
+        },
+        "teamchat_message": {
+          "label": "Direct bericht",
+          "hint": "Een collega schrijft je in de teamchat."
+        },
+        "device_connected": {
+          "label": "Nummer verbonden",
+          "hint": "Een persoonlijk WhatsApp-nummer is klaar met verbinden."
+        },
+        "device_disconnected": {
+          "label": "Nummer losgekoppeld",
+          "hint": "Een persoonlijk WhatsApp-nummer heeft zijn verbinding verloren."
+        },
+        "device_logged_out": {
+          "label": "Nummer uitgelogd",
+          "hint": "Een persoonlijk WhatsApp-nummer is op de telefoon uitgelogd."
+        },
+        "broadcast_completed": {
+          "label": "Broadcast afgerond",
+          "hint": "Een broadcast die je hebt gestart, is verstuurd."
+        },
+        "broadcast_failed": {
+          "label": "Broadcast mislukt",
+          "hint": "Een broadcast die je hebt gestart, is mislukt."
+        },
+        "campaign_completed": {
+          "label": "Campagne afgerond",
+          "hint": "Een campagne die je hebt gestart, is verstuurd."
+        },
+        "campaign_failed": {
+          "label": "Campagne mislukt",
+          "hint": "Een campagne die je hebt gestart, is mislukt."
+        },
+        "scheduled_completed": {
+          "label": "Geplande verzending verstuurd",
+          "hint": "Een geplande verzending die je hebt ingesteld, is verstuurd."
+        },
+        "scheduled_failed": {
+          "label": "Geplande verzending mislukt",
+          "hint": "Een geplande verzending die je hebt ingesteld, is mislukt."
+        },
+        "task_assigned": {
+          "label": "Taak aan mij toegewezen",
+          "hint": "Een taak is aan jou toegewezen."
+        },
+        "task_due": {
+          "label": "Taak verloopt",
+          "hint": "Een van je taken verloopt."
+        },
+        "task_completed": {
+          "label": "Taak voltooid",
+          "hint": "Een taak die je hebt aangemaakt, is voltooid."
+        },
+        "new_lead": {
+          "label": "Nieuwe lead",
+          "hint": "Er is een lead binnengekomen via een leadbron."
+        },
+        "form_submission": {
+          "label": "Formulier ingediend",
+          "hint": "Iemand heeft een van je formulieren ingediend."
+        },
+        "form_needs_review": {
+          "label": "Formulier moet worden bekeken",
+          "hint": "Een inzending moet worden bekeken."
+        },
+        "wallet_low_balance": {
+          "label": "Walletsaldo laag",
+          "hint": "Het walletsaldo van de workspace raakt op."
+        },
+        "sales_doc_decided": {
+          "label": "Verkoopdocument beslist",
+          "hint": "Een offerte of factuur is geaccepteerd of afgewezen."
+        },
+        "wallet_credited": {
+          "label": "Wallet opgeladen",
+          "hint": "Het walletsaldo van de workspace is bijgeschreven."
+        },
+        "waba_group_join_request": {
+          "label": "Verzoek om een groep te joinen",
+          "hint": "Personen vragen om lid te worden van een WhatsApp-groep van je zakelijke nummer. Tien verzoeken vormen één rij."
+        },
+        "waba_group_suspended": {
+          "label": "Groep geschorst",
+          "hint": "WhatsApp heeft een van je groepen geschorst."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "Groep weer actief",
+          "hint": "WhatsApp heeft een geschorste groep hersteld. Alleen als je over de schorsing bent geïnformeerd."
+        }
+      },
+      "loading": "Je voorkeuren laden",
+      "failed": "Je voorkeuren konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "saveFailed": "Die wijziging kon niet worden opgeslagen. Ze is ongedaan gemaakt.",
+      "saved": "Opgeslagen",
+      "dismiss": "Negeren",
+      "resetRow": "Terugzetten naar standaard",
+      "resetRowFor": "{event} terugzetten naar standaard",
+      "resetAll": "Alles terugzetten naar standaard",
+      "resetAllDone": "Alle voorkeuren staan weer op de standaardwaarden.",
+      "customised": "Gewijzigd",
+      "usingDefault": "Standaard",
+      "toggleLabel": "{event}: {channel}",
+      "workspaceOff": "Uitgeschakeld door je workspace",
+      "workspaceOffHelp": "Je workspace heeft dit uitgeschakeld; je keuze geldt voor jou nog steeds.",
+      "bellOffHelp": "Zet de bel aan om een pop-up, geluid of push te kiezen.",
+      "notAvailable": "Niet beschikbaar",
+      "defaultSummary": "Standaard: {bell}, {toast}, {sound}",
+      "on": "aan",
+      "off": "uit",
+      "channelNames": {
+        "bell": "belletje",
+        "toast": "pop-up",
+        "sound": "geluid",
+        "push": "push"
+      },
+      "browser": {
+        "title": "Deze browser",
+        "description": "Geluid en desktopmeldingen worden per browser ingesteld, niet per account."
+      },
+      "empty": "Er zijn nog geen meldingstypen om in te stellen.",
+      "defaultSummaryPush": "Standaard: {bell}, {toast}, {sound}, {push}",
+      "push": {
+        "title": "Browsermeldingen",
+        "description": "Ontvang een melding van je browser voor de gebeurtenissen die je belletje bereiken, ook als de CRM gesloten is. Je kiest hieronder in de kolom Push welke gebeurtenissen dat zijn.",
+        "state": {
+          "on": "Aan voor dit apparaat",
+          "off": "Uit",
+          "blocked": "Geblokkeerd",
+          "unavailable": "Niet beschikbaar"
+        },
+        "checking": "Deze browser controleren",
+        "unsupported": "Deze browser kan geen meldingen tonen terwijl de CRM gesloten is. Probeer een actuele versie van Chrome, Edge, Firefox of Safari, op een beveiligde (https) pagina.",
+        "needsInstall": "Op iPhone en iPad werken browsermeldingen alleen voor een app die aan je beginscherm is toegevoegd.",
+        "needsInstallSteps": "Open deze pagina in Safari, tik op Delen, kies Zet op beginscherm, open daarna de CRM via het nieuwe icoon en kom hier terug. Vereist iOS of iPadOS 16.4 of nieuwer.",
+        "blocked": "Meldingen zijn voor deze site in je browser geblokkeerd.",
+        "blockedHelp": "Alleen je browser kan dit ongedaan maken: open de siteinstellingen (het icoon naast het adres), zet Meldingen op Toestaan en kom daarna terug naar deze pagina.",
+        "offHelp": "Niet ingeschakeld op dit apparaat. Je browser vraagt om toestemming wanneer je op Inschakelen drukt.",
+        "enable": "Inschakelen op dit apparaat",
+        "enabling": "Inschakelen...",
+        "onHelp": "Dit apparaat krijgt een browsermelding voor de gebeurtenissen die je hieronder hebt ingeschakeld, wanneer je niet naar de CRM kijkt.",
+        "howItWorks": "Je krijgt geen melding terwijl de CRM open en voor je in beeld is (het belletje en de pop-ups dekken dat). De melding toont wie en welk soort gebeurtenis het is, nooit de berichttekst.",
+        "test": "Een testmelding verzenden",
+        "testing": "Verzenden...",
+        "disable": "Uitschakelen op dit apparaat",
+        "disabling": "Uitschakelen...",
+        "testResult": {
+          "sent": "Verzonden. Hij zou zo op je apparaten moeten verschijnen, ook als de CRM gesloten is.",
+          "none_reachable": "Je browser of de pushdienst kon nu niet worden bereikt. Probeer het zo dadelijk opnieuw; een apparaat dat er niet meer is, wordt automatisch verwijderd.",
+          "no_device": "Er is geen apparaat om naar te sturen. Schakel eerst meldingen in op dit apparaat.",
+          "wait": "Er is net een test verzonden. Wacht even voordat je er nog een verzendt."
+        },
+        "problem": {
+          "enable_failed": "Meldingen konden niet worden ingeschakeld op dit apparaat. Probeer het opnieuw.",
+          "disable_failed": "Meldingen konden niet worden uitgeschakeld op dit apparaat. Probeer het opnieuw.",
+          "remove_failed": "Dat apparaat kon niet worden verwijderd. Probeer het opnieuw.",
+          "test_failed": "De test kon niet worden verzonden. Probeer het opnieuw."
+        },
+        "devicesFailed": "Je apparaten konden niet worden geladen.",
+        "devices": {
+          "title": "Je apparaten",
+          "thisDevice": "Dit apparaat",
+          "added": "Toegevoegd {date}",
+          "lastUsed": "laatst gemeld {date}",
+          "neverUsed": "nog niet gemeld",
+          "remove": "Verwijderen",
+          "removeFor": "{device} verwijderen"
+        }
+      }
+    },
+    "nav": {
+      "preferences": "Meldingen"
+    }
+  }
+}

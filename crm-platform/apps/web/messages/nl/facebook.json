@@ -1,0 +1,491 @@
+{
+  "facebook": {
+    "nav": {
+      "hub": "Facebook",
+      "posts": "Facebook-posts",
+      "setup": "Messenger-instellingen",
+      "broadcasts": "Messenger-broadcasts"
+    },
+    "common": {
+      "dismiss": "Sluiten",
+      "cancel": "Annuleren"
+    },
+    "hub": {
+      "kicker": "Kanaal · Facebook",
+      "title": "Facebook",
+      "titleAccent": "Pagina’s",
+      "intro": "Log één keer in met Facebook en elke pagina die je account beheert, wordt toegevoegd. Publiceer daarna posts, reageer op reacties en beheer Messenger vanuit je inbox.",
+      "teamInbox": "Teaminbox",
+      "posts": "Posts",
+      "setup": "Messenger-instellingen",
+      "broadcasts": "Messenger-broadcasts",
+      "loadError": "De gekoppelde pagina’s konden niet worden geladen. Probeer het opnieuw.",
+      "notConfigured": "Facebook is nog niet ingesteld op deze installatie. Een beheerder moet eerst de Meta-app toevoegen voordat een pagina kan worden gekoppeld.",
+      "connectedCount": "{count, plural, one {# pagina gekoppeld} other {# pagina’s gekoppeld}}",
+      "notConnected": "Niet verbonden",
+      "cardTitle": "Koppel je Facebook-account",
+      "cardBody": "Log één keer in met Facebook; elke pagina die je account beheert, wordt automatisch toegevoegd, elk met eigen toegang. Of voeg één pagina toe met het toegangstoken.",
+      "connect": "Een pagina koppelen",
+      "connectAnother": "Een ander account koppelen",
+      "connectedPages": "Gekoppelde pagina’s",
+      "webhookTitle": "Webhook-adres",
+      "webhookBody": "Plak dit adres in de webhook-instellingen (callback-URL) van je Meta-app, zodat Messenger-berichten en reacties in je inbox komen. Het gebruikt hetzelfde verificatietoken als WhatsApp, tenzij er een Facebook-token is ingesteld."
+    },
+    "connect": {
+      "close": "Sluiten",
+      "kicker": "Facebook",
+      "title": "Koppel je Facebook-account",
+      "intro": "Log één keer in met Facebook; elke pagina die je account beheert, wordt automatisch toegevoegd. Daarna kun je posts publiceren, op reacties reageren en Messenger vanuit je inbox beheren.",
+      "continue": "Doorgaan met Facebook",
+      "or": "of",
+      "manualToggle": "Een pagina handmatig toevoegen met een toegangstoken",
+      "tokenLabel": "Toegangstoken van pagina",
+      "tokenHint": "Via Meta → Bedrijfsinstellingen → Systeemgebruikers, of de Graph API Explorer. De pagina wordt uit het token afgeleid.",
+      "connectPage": "Pagina koppelen",
+      "tokenShape": "Dit lijkt niet op een toegangstoken van een pagina.",
+      "failed": "Verbinden mislukt. Probeer het opnieuw.",
+      "footerLeft": "Komt direct in je inbox terecht",
+      "footerRight": "versleuteld"
+    },
+    "page": {
+      "facebookPage": "Facebook-pagina",
+      "failed": "Dat is niet gelukt. Probeer het opnieuw.",
+      "live": "Live",
+      "reconnect": "Opnieuw verbinden",
+      "followers": "{count} volgers",
+      "liveNoCount": "live",
+      "dataAccess": "Meta’s toegang tot gegevens eindigt {when}",
+      "refresh": "Profiel vernieuwen",
+      "refreshed": "Facebook-pagina vernieuwd.",
+      "inboundFixed": "Facebook-webhooks opnieuw geabonneerd voor deze pagina.",
+      "fixInbound": "Inkomende berichten herstellen",
+      "remove": "Ontkoppelen",
+      "removeConfirm": "Deze Facebook-pagina ontkoppelen? De gesprekken in je inbox blijven bewaard, maar verzenden stopt tot je opnieuw verbindt.",
+      "cancel": "Annuleren",
+      "removed": "Facebook-pagina ontkoppeld."
+    },
+    "broadcasts": {
+      "kicker": "Facebook · Broadcasts",
+      "title": "Messenger",
+      "titleAccent": "broadcasts",
+      "intro": "Stuur berichten naar mensen die recent met je pagina hebben gechat. Meta staat een pagina alleen toe om iemand binnen 24 uur na diens laatste bericht te berichten; de lijst hieronder is je bereikbare publiek op dit moment.",
+      "inbox": "Inbox",
+      "loadError": "De broadcasts konden niet worden geladen. Probeer het opnieuw.",
+      "connectFirst": "Koppel eerst een Facebook-pagina.",
+      "connectPage": "Een pagina koppelen",
+      "none": "Nog geen broadcasts. Maak er rechts een aan.",
+      "recipients": "{count, plural, one {# ontvanger} other {# ontvangers}}",
+      "status": {
+        "sending": "Versturen",
+        "done": "Klaar",
+        "failed": "Mislukt",
+        "draft": "Concept"
+      },
+      "counts": "{sent} verzonden · {failed} mislukt · {blocked} geblokkeerd",
+      "start": "Verzenden starten",
+      "started": "Verzenden gestart. Het gaat door, ook als je deze pagina verlaat.",
+      "pause": "Pauzeren",
+      "paused": "Gepauzeerd. De overige ontvangers staan nog in de wachtrij.",
+      "retry": "Mislukte opnieuw proberen",
+      "retried": "{count, plural, one {# ontvanger} other {# ontvangers}} opnieuw in de wachtrij gezet. Klik op Verzenden starten.",
+      "delete": "Verwijderen",
+      "deleted": "Broadcast verwijderd.",
+      "deleteConfirm": "Deze broadcast verwijderen?",
+      "cancel": "Annuleren",
+      "newBroadcast": "Nieuwe broadcast",
+      "name": "Naam",
+      "namePlaceholder": "bijv. Weekendactie",
+      "page": "Pagina",
+      "template": "Sjabloon (optioneel)",
+      "templateHint": "Vult het bericht vooraf in en verstuurt de knoppen van het sjabloon.",
+      "templateNone": "— geen (zelf schrijven) —",
+      "buttons": "{count, plural, one {# knop} other {# knoppen}}",
+      "message": "Bericht",
+      "messageHint": "Gebruik '{name}' om te personaliseren.",
+      "messagePlaceholder": "Hoi '{name}'! …",
+      "recipientsLabel": "Ontvangers",
+      "within24": "(binnen 24 uur)",
+      "selectAll": "Alles selecteren",
+      "noAudience": "Niemand valt nu binnen het 24-uursvenster; iemand moet eerst deze pagina berichten.",
+      "messengerUser": "Messenger-gebruiker",
+      "selected": "{count} geselecteerd",
+      "create": "Broadcast maken",
+      "created": "Broadcast gemaakt met {count, plural, one {# ontvanger} other {# ontvangers}}. Klik op Verzenden starten als je klaar bent.",
+      "failed": "Dat is niet gelukt. Probeer het opnieuw."
+    },
+    "setup": {
+      "kicker": "Facebook · Messenger",
+      "title": "Messenger",
+      "titleAccent": "instellen",
+      "intro": "Stel in hoe je Messenger-chat klanten begroet en begeleidt: de knop Aan de slag, een welkomstgroet, een altijd beschikbaar menu en aantikbare veelgestelde vragen. Kies een functie, lees wat die doet en vul hem in. Wijzigingen worden direct in Facebook opgeslagen.",
+      "pagePicker": "Pagina",
+      "composer": "Opstellen",
+      "loadError": "Het Messenger-profiel kon niet worden geladen. Probeer het opnieuw.",
+      "noPage": "Nog geen Facebook-pagina gekoppeld.",
+      "connect": "Koppel een Facebook-account",
+      "profile": "Messenger-profiel",
+      "tabs": {
+        "getstarted": "Knop Aan de slag",
+        "greeting": "Begroeting",
+        "menu": "Vast menu",
+        "icebreakers": "IJsbrekers"
+      },
+      "isSet": "Instellen",
+      "notSet": "Niet ingesteld",
+      "failed": "Dat is niet gelukt. Probeer het opnieuw.",
+      "footnote": "Deze instellingen worden via de Graph API naar het Facebook Messenger-profiel geschreven en gelden voor nieuwe gesprekken. Meta kan even nodig hebben om wijzigingen door te voeren.",
+      "frame": {
+        "preview": "Voorbeeld",
+        "yourPage": "Je pagina",
+        "activeNow": "Nu actief"
+      },
+      "explainer": {
+        "what": "Wat het is",
+        "customer": "Hoe je klanten het gebruiken",
+        "how": "Hoe je het instelt"
+      },
+      "getstarted": {
+        "title": "Knop Aan de slag",
+        "subtitle": "De knop waarmee een nieuwe klant de chat start.",
+        "what": "Het is het allereerste wat iemand ziet wanneer die je Messenger opent: één knop “Aan de slag” op het welkomstscherm.",
+        "customer": "Ze tikken er één keer op en het gesprek begint. De knop wordt alleen getoond vóór het eerste bericht.",
+        "how": "Geef er een payload aan (een sleutelwoord zoals GET_STARTED). Voeg daarna in Flows een trigger toe die naar die payload luistert, zodat een welkomstflow direct start wanneer ze tikken.",
+        "payload": "Payload",
+        "payloadHint": "Dit woord wordt naar je verstuurd wanneer op de knop wordt getikt. Koppel het aan een Flow-trigger om automatisering te starten.",
+        "remove": "Verwijderen",
+        "removeConfirm": "De knop Aan de slag verwijderen?",
+        "save": "Opslaan",
+        "yourPage": "Je pagina",
+        "typically": "Reageert meestal direct",
+        "button": "Aan de slag"
+      },
+      "greeting": {
+        "title": "Begroeting",
+        "subtitle": "De vriendelijke welkomstzin die wordt getoond voordat iemand typt.",
+        "what": "Een korte welkomstboodschap op het eerste scherm van je chat, direct onder de naam van je pagina.",
+        "customer": "Ze lezen het zodra ze je Messenger openen; het bepaalt de toon en laat zien waarmee je kunt helpen.",
+        "how": "Houd het bij één vriendelijke zin (max. 160 tekens). Tip: voeg een voornaamtag toe, dan begroet Messenger elke klant bij naam.",
+        "welcomeText": "Welkomsttekst",
+        "placeholder": "Hoi! Waarmee kunnen we je vandaag helpen?",
+        "remove": "Verwijderen",
+        "removeConfirm": "De begroeting verwijderen?",
+        "save": "Opslaan",
+        "yourPage": "Je pagina",
+        "sample": "Hoi! Waarmee kunnen we je vandaag helpen?"
+      },
+      "menu": {
+        "title": "Vast menu",
+        "subtitle": "Het altijd beschikbare snelmenu in de berichtenbalk.",
+        "what": "Een menu (het ☰-pictogram naast het tekstvak) dat de hele chat beschikbaar blijft; maximaal 3 snelkoppelingen.",
+        "customer": "Ze tikken op ☰ om op elk moment direct te kiezen wat ze nodig hebben: “Met een medewerker praten”, “Mijn bestelling volgen”, “Winkel bezoeken”.",
+        "how": "Voeg maximaal 3 items toe. Elk item start een Flow (stuurt een payload) of opent een link (URL). Je kunt het tekstvak optioneel verbergen, zodat mensen alleen het menu gebruiken.",
+        "sample1": "Neem contact op",
+        "sample2": "Mijn bestelling volgen",
+        "sample3": "Winkel bezoeken",
+        "menuLabel": "Menu",
+        "menuItem": "Menu-item",
+        "titleLabel": "Titel",
+        "titlePlaceholder": "Neem contact op",
+        "action": "Actie",
+        "actionFlow": "Een flow starten (payload verzenden)",
+        "actionLink": "Een link openen (URL)",
+        "url": "URL",
+        "payload": "Payload",
+        "removeItem": "Item verwijderen",
+        "add": "Menu-item toevoegen",
+        "hideComposer": "Het tekstvak verbergen (alleen menu)",
+        "remove": "Menu verwijderen",
+        "removeConfirm": "Het vaste menu verwijderen?",
+        "save": "Menu opslaan"
+      },
+      "ice": {
+        "title": "IJsbrekers",
+        "subtitle": "Voorgestelde vragen die worden getoond vóór het eerste bericht.",
+        "what": "Maximaal 4 aantikbare vragen op het welkomstscherm; de veelgestelde vragen, klaar om aan te tikken in plaats van te typen.",
+        "customer": "In plaats van na te denken over wat ze moeten schrijven, tikken ze een vraag aan zoals “Wat zijn jullie openingstijden?” en krijgen direct antwoord.",
+        "how": "Voeg je belangrijkste veelgestelde vragen toe. Elke tik stuurt de bijbehorende payload; koppel die aan een Flow-trigger om automatisch te antwoorden.",
+        "sample1": "Wat zijn jullie openingstijden?",
+        "sample2": "Waar verzenden jullie naartoe?",
+        "sample3": "Met een medewerker praten",
+        "yourPage": "Je pagina",
+        "question": "Vraag",
+        "questionLabel": "Vraag",
+        "questionPlaceholder": "Wat zijn jullie openingstijden?",
+        "payload": "Payload",
+        "removeItem": "IJsbreker verwijderen",
+        "add": "IJsbreker toevoegen",
+        "remove": "Alles verwijderen",
+        "removeConfirm": "Alle ijsbrekers verwijderen?",
+        "save": "IJsbrekers opslaan"
+      }
+    },
+    "posts": {
+      "kicker": "Facebook · Posts",
+      "title": "Facebook",
+      "titleAccent": "posts",
+      "intro": "Alles wat je hier hebt gemaakt, ingepland of gepubliceerd: volg de status, probeer mislukte posts opnieuw en beheer je wachtrij.",
+      "allPages": "Alle pagina’s",
+      "pagePicker": "Pagina",
+      "myPosts": "Mijn posts",
+      "insights": "Inzichten",
+      "create": "Post maken",
+      "loadError": "De posts konden niet worden geladen. Probeer het opnieuw.",
+      "noPage": "Nog geen Facebook-pagina gekoppeld",
+      "noPageHint": "Koppel een Facebook-account om pagina-posts te publiceren en in te plannen.",
+      "connect": "Koppel een Facebook-account",
+      "kpi": {
+        "total": "Totaal posts",
+        "scheduled": "Ingepland",
+        "published": "Gepubliceerd",
+        "failed": "Mislukt"
+      },
+      "tabs": {
+        "all": "Alle",
+        "scheduled": "Ingepland",
+        "published": "Gepubliceerd",
+        "failed": "Mislukt"
+      },
+      "ranges": {
+        "all": "Altijd",
+        "7d": "7d",
+        "30d": "30d",
+        "90d": "90d"
+      },
+      "search": "Posts zoeken…",
+      "cols": {
+        "post": "Post",
+        "page": "Pagina",
+        "type": "Type",
+        "status": "Status",
+        "when": "Wanneer",
+        "actions": "Acties"
+      },
+      "status": {
+        "scheduled": "Ingepland",
+        "published": "Gepubliceerd",
+        "failed": "Mislukt",
+        "draft": "Concept"
+      },
+      "publishNow": "Nu publiceren",
+      "delete": "Verwijderen",
+      "noMatch": "Geen posts gevonden met deze filters",
+      "none": "Nog geen posts",
+      "noneHint": "Maak je eerste post; publiceer hem nu of plan hem in.",
+      "pageOf": "Pagina {page} van {last}",
+      "prev": "Vorige",
+      "next": "Volgende",
+      "deleteTitle": "Post verwijderen",
+      "deleteLive": "Hiermee wordt de post ook uit Facebook verwijderd; dit kan niet ongedaan worden gemaakt.",
+      "deleteLocal": "Deze post verwijderen?",
+      "deleteYes": "Ja, verwijderen",
+      "cancel": "Annuleren",
+      "rejected": "Facebook heeft de post geweigerd: {error}",
+      "published": "Post gepubliceerd op Facebook.",
+      "removed": "Post verwijderd.",
+      "failed": "Dat is niet gelukt. Probeer het opnieuw."
+    },
+    "compose": {
+      "kicker": "Facebook · Maken",
+      "title": "Maak een",
+      "titleAccent": "post",
+      "intro": "Stel foto’s, albums, links, video’s en reels samen; publiceer ze nu of plan ze direct in op je gekoppelde pagina’s. Bekijk de opbouw in het livevoorbeeld.",
+      "posts": "Posts",
+      "myPosts": "Mijn posts",
+      "insights": "Inzichten",
+      "loadError": "De pagina’s konden niet worden geladen. Probeer het opnieuw.",
+      "noPage": "Nog geen Facebook-pagina gekoppeld",
+      "noPageHint": "Koppel een Facebook-account om pagina-posts te publiceren en in te plannen.",
+      "noAccess": "Je kunt geen posts maken",
+      "noAccessHint": "Vraag een beheerder om toestemming om Facebook-posts te maken.",
+      "connect": "Koppel een Facebook-account",
+      "required": "verplicht",
+      "steps": {
+        "page": "Pagina",
+        "type": "Posttype",
+        "media": "Media",
+        "message": "Bericht",
+        "when": "Wanneer posten"
+      },
+      "types": {
+        "photo": {
+          "label": "Foto",
+          "hint": "Een post met één foto."
+        },
+        "multi_photo": {
+          "label": "Album",
+          "hint": "2–10 foto’s in één post."
+        },
+        "link": {
+          "label": "Link",
+          "hint": "Deel een link met voorbeeld."
+        },
+        "video": {
+          "label": "Video",
+          "hint": "Een video in de tijdlijn (MP4 / MOV)."
+        },
+        "reel": {
+          "label": "Reel",
+          "hint": "Een verticale korte videoreel."
+        }
+      },
+      "photoUrls": "Plak openbare afbeeldings-URL’s",
+      "photoHint": "Eén per regel, maximaal 10. Een bestand uploaden vereist de opslagdienst, die nog niet is gekoppeld; gebruik daarom openbare afbeeldingsadressen.",
+      "linkUrl": "Link-URL",
+      "linkHint": "Facebook maakt een voorbeeldkaart op basis van de link. Een post kan een link of foto’s bevatten, niet allebei.",
+      "videoUrl": "Plak een openbare HTTPS-video-URL",
+      "reelNote": "Reels zijn verticale korte video’s. Het bericht hieronder wordt gebruikt als beschrijving van de reel.",
+      "videoNote": "Meta haalt het bestand op via openbare HTTPS. Het bericht hieronder wordt gebruikt als videobeschrijving.",
+      "messagePlaceholder": "Schrijf je post…",
+      "ai": {
+        "title": "AI-hulpmiddelen voor opstellen",
+        "caption": "Bijschrift",
+        "repurpose": "Hergebruiken",
+        "review": "Controleren",
+        "bestTime": "Beste tijd",
+        "image": "Afbeelding",
+        "unavailable": "AI-hulpmiddelen zijn nog niet beschikbaar: ze wachten op de instellingen van de AI-provider."
+      },
+      "when": {
+        "now": "Nu publiceren",
+        "later": "Later inplannen",
+        "label": "Datum en tijd van verzenden",
+        "hint": "Tussen 10 minuten en 75 dagen vanaf nu, in je tijdzone ({tz}). Facebook zet hem in de wachtrij en publiceert hem op het ingeplande moment."
+      },
+      "submit": {
+        "publish": "Publiceren",
+        "schedule": "Inplannen"
+      },
+      "preview": {
+        "live": "Livevoorbeeld",
+        "facebook": "Facebook",
+        "yourPage": "Je pagina",
+        "justNow": "Zojuist",
+        "empty": "Je posttekst verschijnt hier…",
+        "reel": "Reel",
+        "video": "Video",
+        "like": "Vind ik leuk",
+        "comment": "Reageren",
+        "share": "Delen",
+        "note": "Livevoorbeeld: de echte post kan er op Facebook iets anders uitzien."
+      },
+      "help": {
+        "label": "Help - {n}",
+        "help1": {
+          "title": "Wat kan ik posten?",
+          "body": "Foto’s, albums, links, video’s en reels worden via de Graph API direct naar je gekoppelde pagina gepubliceerd."
+        },
+        "help2": {
+          "title": "Hoe werkt inplannen?",
+          "body": "Kies een tijd tussen 10 minuten en 75 dagen vooruit; Facebook zet de post in de wachtrij en publiceert hem automatisch op het ingeplande moment. Of publiceer hem nu."
+        },
+        "help3": {
+          "title": "Een post is mislukt; waarom?",
+          "body": "Meestal was de media-URL geen openbare HTTPS, of is de pagina opnieuw verbonden. Lees de fout in de rij en probeer het daarna opnieuw met Nu publiceren."
+        }
+      },
+      "problem": {
+        "noPage": "Kies een gekoppelde Facebook-pagina.",
+        "scheduleMissing": "Kies een datum en tijd om de post in te plannen.",
+        "scheduleInvalid": "Die datum en tijd konden niet worden gelezen."
+      },
+      "rejected": "Facebook heeft de post geweigerd: {error}",
+      "scheduled": "Post ingepland.",
+      "published": "Post gepubliceerd op Facebook.",
+      "failed": "Dat is niet gelukt. Probeer het opnieuw."
+    },
+    "grid": {
+      "kicker": "Facebook · Mijn posts",
+      "title": "Je",
+      "titleAccent": "raster",
+      "intro": "Je recent gepubliceerde pagina-posts, live vanuit Facebook. Tik op een post om een voorbeeld te bekijken.",
+      "posts": "Posts",
+      "newPost": "Nieuwe post",
+      "pagePicker": "Pagina",
+      "loadError": "De posts konden niet worden geladen. Probeer het opnieuw.",
+      "noPage": "Geen Facebook-pagina gekoppeld",
+      "noPageHint": "Koppel er een om hier je raster te zien.",
+      "goHub": "Naar Facebook",
+      "empty": "Hier staat nog niets",
+      "emptyHint": "Posts die je publiceert, verschijnen hier.",
+      "firstPost": "Maak je eerste post",
+      "noCaption": "(geen bijschrift)",
+      "view": "Post bekijken",
+      "close": "Sluiten",
+      "postTitle": "Post",
+      "noImage": "Geen afbeelding",
+      "viewOnFacebook": "Bekijken op Facebook"
+    },
+    "insights": {
+      "kicker": "Facebook · Analyse",
+      "title": "Pagina",
+      "titleAccent": "inzichten",
+      "intro": "Bereik en betrokkenheid (28 dagen, live vanuit Facebook), gecombineerd met je Messenger-activiteit en de posts die je hier publiceert.",
+      "create": "Post maken",
+      "myPosts": "Mijn posts",
+      "loadError": "De inzichten konden niet worden geladen. Probeer het opnieuw.",
+      "noPage": "Nog geen Facebook-pagina gekoppeld.",
+      "connect": "Koppel een Facebook-account",
+      "connected": "Verbonden",
+      "viewing": "Account bekijken",
+      "cards": {
+        "followers": "Volgers",
+        "followersSub": "totaal publiek",
+        "reach": "Bereik · 28 dagen",
+        "reachSub": "mensen bereikt",
+        "impressions": "Weergaven · 28 dagen",
+        "impressionsSub": "keer getoond",
+        "engagements": "Betrokkenheid · 28 dagen",
+        "engagementsSub": "interacties",
+        "convos": "Gesprekken",
+        "convosSub": "{n} open",
+        "messagesIn": "Binnenkomende berichten · 28 dagen",
+        "messagesInSub": "{n} teruggestuurd",
+        "published": "Gepubliceerde posts",
+        "publishedSub": "{n} ingepland",
+        "rate": "Betrokkenheidspercentage",
+        "rateSub": "betrokkenheid ÷ bereik"
+      },
+      "liveFromFacebook": "Live vanuit Facebook",
+      "fromHere": "Vanuit deze workspace",
+      "activity": "Messenger-activiteit · afgelopen 14 dagen",
+      "received": "Ontvangen",
+      "sent": "Verzonden",
+      "mix": {
+        "title": "Contentmix",
+        "posts": "{n} posts",
+        "none": "Nog geen posts vanuit hier gepubliceerd.",
+        "first": "Maak je eerste post"
+      },
+      "types": {
+        "photo": "Foto",
+        "multi_photo": "Album",
+        "link": "Link",
+        "video": "Video",
+        "reel": "Reel"
+      },
+      "convos": {
+        "title": "Gesprekken",
+        "total": "{n} in totaal",
+        "open": "Teaminbox openen",
+        "none": "Nog geen Facebook-gesprekken. Ze verschijnen hier zodra mensen je pagina berichten."
+      },
+      "status": {
+        "open": "Open",
+        "pending": "In behandeling",
+        "resolved": "Afgehandeld",
+        "closed": "Gesloten",
+        "snoozed": "Uitgesteld"
+      },
+      "recent": {
+        "title": "Recente posts",
+        "none": "Nog geen posts, of de inzichten worden nog verzameld.",
+        "noCaption": "(geen bijschrift)",
+        "impressions": "weergaven",
+        "engaged": "betrokken",
+        "view": "Bekijken"
+      },
+      "legendLive": "Live vanuit Facebook; verouderde statistieken kunnen als — worden getoond.",
+      "legendHere": "Vanuit deze workspace: Messenger en gepubliceerde posts."
+    }
+  }
+}

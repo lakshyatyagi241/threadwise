@@ -1,0 +1,531 @@
+{
+  "scheduled-queue-warmer": {
+    "nav": {
+      "scheduled": "已排期",
+      "warmer": "养号"
+    },
+    "common": {
+      "dismiss": "关闭"
+    },
+    "status": {
+      "scheduled": "排队中",
+      "running": "运行中",
+      "paused": "已暂停",
+      "completed": "已完成",
+      "failed": "失败",
+      "cancelled": "已取消"
+    },
+    "type": {
+      "plain": "纯文本",
+      "template": "模板",
+      "media": "媒体",
+      "location": "位置"
+    },
+    "errors": {
+      "generic": "出现错误，请重试。",
+      "FORBIDDEN": "您没有执行此操作的权限。",
+      "VALIDATION_FAILED": "部分字段需要检查。",
+      "ROW_VERSION_CONFLICT": "此排期已被更改。请刷新后重试。",
+      "PLAN_FEATURE_LOCKED": "您的套餐不包含此功能。",
+      "PLAN_LIMIT_REACHED": "您已达到套餐上限。",
+      "WA_UNOFFICIAL_DISABLED": "工作区未启用通过个人 WhatsApp 号码（非官方 API）发送。请选择官方 WhatsApp Business API 号码。",
+      "AUTH_SEND_HALTED": "此工作区的发送已暂停。",
+      "upgrade": "查看套餐并升级",
+      "requestId": "请求 {id}"
+    },
+    "actions": {
+      "done": {
+        "pause": "排期已暂停。",
+        "resume": "排期已恢复。",
+        "cancel": "排期已取消。",
+        "run-now": "排期正在运行。",
+        "destroy": "排期已删除。",
+        "retry": "排期已按新时间加入队列。"
+      }
+    },
+    "confirm": {
+      "yes": "是，继续",
+      "keep": "保留",
+      "cancel": {
+        "title": "取消此排期？",
+        "body": "“{name}”将不会发送。此操作无法撤销。"
+      },
+      "run-now": {
+        "title": "立即运行此排期？",
+        "body": "“{name}”将立即开始发送，而不是按设定时间发送。"
+      },
+      "destroy": {
+        "title": "删除此排期？",
+        "body": "“{name}”及其收件人列表将被删除。"
+      }
+    },
+    "retry": {
+      "title": "重新设定时间后重试",
+      "body": "为“{name}”选择新的发送时间，它将重新进入排队中。",
+      "date": "发送日期",
+      "time": "时间",
+      "timezone": "时区",
+      "keep": "保留失败记录",
+      "confirm": "立即重试"
+    },
+    "list": {
+      "crumb": "营销活动 / 定时消息",
+      "title": "定时消息",
+      "queued": "{n} 条排队中",
+      "create": "定时消息",
+      "stats": {
+        "total": "定时总数",
+        "totalHint": "所有状态合计",
+        "active": "活跃队列",
+        "activeHint": "等待触发",
+        "sent": "已发送总数",
+        "sentHint": "已发出的消息（本页）",
+        "delivery": "送达率",
+        "deliveryHint": "已完成项的合计（本页）"
+      },
+      "upNext": {
+        "eyebrow": "即将发送",
+        "title": "下一个触发",
+        "pending": "{n} 条待处理",
+        "empty": "暂无排期。",
+        "createOne": "立即创建 →",
+        "recurring": "周期性",
+        "queued": "排队中"
+      },
+      "tip": {
+        "eyebrow": "提示",
+        "title": "对方阅读时发送",
+        "body": "在联系人所在时区，打开率在上午 9–11 点和晚上 6–8 点最高。请选择与收件人群体相符的发送时间；周期性排期只需设置一次即可。",
+        "cta": "创建定时消息"
+      },
+      "tabs": {
+        "all": "全部",
+        "upcoming": "即将发送",
+        "running": "运行中",
+        "paused": "已暂停",
+        "completed": "已完成",
+        "failed": "失败"
+      },
+      "search": "按名称搜索…",
+      "cols": {
+        "schedule": "排期",
+        "type": "类型",
+        "recipients": "收件人",
+        "sendTime": "发送时间",
+        "repeat": "重复",
+        "status": "状态",
+        "actions": "操作"
+      },
+      "recipients": {
+        "group": "分组",
+        "tag": "标签",
+        "queue": "队列",
+        "number": "号码"
+      },
+      "when": {
+        "overdue": "已逾期",
+        "now": "现在",
+        "minutes": "{n} 分钟后",
+        "hours": "{n} 小时后",
+        "tomorrow": "明天",
+        "date": "稍后"
+      },
+      "completedAt": "已于 {when} 完成",
+      "once": "一次",
+      "actions": {
+        "open": "打开",
+        "pause": "暂停",
+        "resume": "恢复",
+        "runNow": "立即运行",
+        "cancel": "取消",
+        "retry": "重新设定时间后重试",
+        "delete": "删除",
+        "deleteHistory": "从历史记录中删除"
+      },
+      "empty": {
+        "title": "暂无排期",
+        "none": "创建您的第一条定时消息。",
+        "filtered": "没有符合当前筛选条件的排期。请清除筛选条件，或创建您的第一条定时消息。",
+        "reset": "重置筛选"
+      },
+      "page": "第 {page} / {pages} 页",
+      "prev": "上一页",
+      "next": "下一页"
+    },
+    "composer": {
+      "crumb": "定时消息 / 新建",
+      "title": "创建定时消息",
+      "back": "返回",
+      "forbidden": "您没有创建定时消息的权限。",
+      "steps": "步骤",
+      "stepNames": {
+        "basics": "基本信息",
+        "audience": "收件人",
+        "message": "消息",
+        "when": "时间",
+        "review": "检查"
+      },
+      "required": "必填",
+      "previous": "上一步",
+      "next": "下一步",
+      "submit": "创建定时消息",
+      "stepOf": "第 {n} / {total} 步",
+      "engine": {
+        "baileys": "非官方 API",
+        "waba": "WhatsApp Cloud API",
+        "twilio": "Twilio"
+      },
+      "types": {
+        "plain": {
+          "title": "纯文本",
+          "hint": "仅文字和表情符号。",
+          "pill": "纯文本"
+        },
+        "template": {
+          "title": "模板",
+          "hint": "已通过审核的 WhatsApp 模板。",
+          "pill": "模板"
+        },
+        "media": {
+          "title": "含媒体",
+          "hint": "图片、视频、文档、音频。",
+          "pill": "媒体"
+        },
+        "location": {
+          "title": "位置",
+          "hint": "经纬度定位点。",
+          "pill": "位置"
+        }
+      },
+      "basics": {
+        "title": "排期基本信息",
+        "name": "排期名称",
+        "nameHint": "仅供内部标识，收件人不会看到。",
+        "namePlaceholder": "例如：春季促销 / VIP 细分",
+        "sender": "发送号码",
+        "senders": "发送号码",
+        "tickAll": "勾选所有适用项",
+        "noSenders": "没有已连接的发送号码，请先连接号码。",
+        "warming": "养号中",
+        "splitHint": "每个勾选的发送号码都将运行各自的排期，并公平分配受众。",
+        "messageType": "消息类型"
+      },
+      "audience": {
+        "title": "收件人",
+        "source": "收件人来源",
+        "sources": {
+          "group": {
+            "title": "分组",
+            "hint": "选择一个或多个已保存的联系人分组。"
+          },
+          "tag": {
+            "title": "标签",
+            "hint": "带有某标签的所有人"
+          },
+          "queue": {
+            "title": "受众队列",
+            "hint": "重新定向过往群发的收件人。"
+          },
+          "number": {
+            "title": "号码",
+            "hint": "手动粘贴列表。"
+          }
+        },
+        "chooseGroups": "选择分组",
+        "chooseTags": "选择一个或多个标签",
+        "chooseQueues": "选择一个或多个过往群发",
+        "tickAny": "（可多选）",
+        "noGroups": "暂无分组",
+        "noTags": "暂无标签",
+        "noQueues": "暂无已完成的群发",
+        "contacts": "前往联系人",
+        "broadcast": "前往群发",
+        "tagsHint": "排期触发时会重新计算收件人，因此新添加标签的联系人也会包含在内。",
+        "queuesHint": "可勾选任意数量的群发。发送前会自动对收件人去重。",
+        "paste": "粘贴号码",
+        "pasteHint": "请先填写国家区号，不要带前导 +。每条之间用换行或逗号分隔。",
+        "pastePlaceholder": "每行一个号码，包含国家区号，不带加号",
+        "total": "收件人总数：",
+        "optedOut": "{n} 个已排除：已退订或已归档"
+      },
+      "message": {
+        "title": "编辑消息",
+        "content": "消息内容",
+        "caption": "说明文字",
+        "placeholder": "您好 '{name}'，您的定时消息已到达…",
+        "personalise": "可使用 '{name}'、'{phone}'、'{email}' 进行个性化设置。",
+        "template": "已审核模板",
+        "chooseTemplate": "选择已审核的模板",
+        "browse": "点击浏览您的模板",
+        "approved": "已通过",
+        "change": "更改",
+        "mediaLink": "媒体链接",
+        "mediaHint": "文件链接（https://…）。支持图片、视频、音频或文档。",
+        "pin": "定位点",
+        "latitude": "纬度",
+        "longitude": "经度",
+        "estimate": "预计发送时间",
+        "minutes": "约 {n} 分钟",
+        "estimateHint": "按每分钟 60 条计算",
+        "estimateEmpty": "请先选择收件人。",
+        "variables": "消息中的变量",
+        "variablesHint": "个占位符已检测到。",
+        "pickerEyebrow": "模板",
+        "pickerTitle": "选择模板",
+        "pickerHint": "仅显示已审核且启用的模板。",
+        "pickerSearch": "按名称或语言搜索…",
+        "pickerEmpty": "没有匹配的模板。",
+        "manageTemplates": "管理模板 →",
+        "cancel": "取消"
+      },
+      "when": {
+        "title": "发送时间",
+        "modes": {
+          "once": {
+            "title": "单次发送",
+            "hint": "在所选日期和时间发送一次。"
+          },
+          "recurring": {
+            "title": "周期性",
+            "hint": "按固定周期每日、每周或每月重复。"
+          }
+        },
+        "date": "发送日期",
+        "time": "时间",
+        "timezone": "时区",
+        "recurrence": "重复规则",
+        "every": "重复间隔",
+        "interval": "间隔",
+        "intervals": {
+          "daily": "天",
+          "weekly": "周",
+          "monthly": "月"
+        },
+        "end": "结束",
+        "endNever": "永不",
+        "endDate": "在指定日期",
+        "endOn": "最后一天",
+        "days": "星期",
+        "daysHint": "点击任意日期可切换选择。每周排期至少需选择一天。",
+        "lead": "排期时间须至少比当前时间晚 {n} 分钟。"
+      },
+      "review": {
+        "title": "检查并排期",
+        "final": "最终",
+        "schedule": "排期",
+        "name": "名称",
+        "sender": "发送号码",
+        "type": "类型",
+        "mode": "模式",
+        "at": "首次发送",
+        "once": "单次发送",
+        "recurring": "每 {n} {interval}",
+        "delivery": "投递",
+        "source": "收件人来源",
+        "recipients": "收件人",
+        "estimated": "预计用时",
+        "testTitle": "先发送测试",
+        "testHint": "在正式群发前，向您输入的号码接收一条预览消息。",
+        "testNumber": "向此号码发送测试",
+        "testNumberHint": "请先填写国家区号，不要带前导 +。"
+      },
+      "preview": {
+        "title": "实时预览",
+        "channel": "WhatsApp",
+        "empty": "您的消息将显示在此处…",
+        "media": "[ 已附加媒体 ]",
+        "pin": "位置定位点",
+        "noTemplate": "未选择模板"
+      },
+      "errors": {
+        "nameRequired": "请为排期命名。",
+        "senderRequired": "请至少选择一个发送号码。",
+        "wabaTemplate": "WhatsApp Cloud API 号码无法发送模板排期。请取消勾选或选择其他消息类型。",
+        "audienceRequired": "请至少选择一项。",
+        "numbersRequired": "请至少粘贴一个号码。",
+        "messageRequired": "请填写消息内容。",
+        "messageTooLong": "消息超过 1024 个字符。",
+        "templateRequired": "请选择模板。",
+        "mediaLink": "请输入以 http:// 或 https:// 开头的链接。",
+        "latitude": "请输入 -90 至 90 之间的纬度。",
+        "longitude": "请输入 -180 至 180 之间的经度。",
+        "dateRequired": "请选择日期。",
+        "timeRequired": "请输入时间，例如 14:30。",
+        "timezoneRequired": "请选择时区。",
+        "tooSoon": "请选择至少几分钟后的时间。",
+        "repeatEvery": "请输入 1 至 365 之间的整数。",
+        "daysRequired": "请选择星期。",
+        "endDateRequired": "请选择最后一天。",
+        "endBeforeStart": "结束日期早于首次发送日期。",
+        "testNumber": "请输入包含国家区号的号码。"
+      }
+    },
+    "detail": {
+      "crumb": "定时消息 / 数据分析",
+      "title": "排期数据分析",
+      "back": "返回定时消息",
+      "eyebrow": "定时消息",
+      "untitled": "未命名",
+      "recurs": "周期 · {interval} × {n}",
+      "fires": "触发时间：{when}",
+      "actions": {
+        "pause": "暂停",
+        "resume": "恢复",
+        "runNow": "立即运行",
+        "cancel": "取消",
+        "retry": "重新设定时间后重试",
+        "delete": "删除"
+      },
+      "kpi": {
+        "recipients": "收件人",
+        "delivered": "已送达",
+        "read": "已读",
+        "sent": "已发送",
+        "status": "状态",
+        "ofSent": "占已发送",
+        "failedCount": "{n} 条失败",
+        "pendingCount": "{n} 条待处理",
+        "fires": "触发时间 {when}",
+        "paused": "已暂停",
+        "done": "已于 {when} 完成"
+      },
+      "funnel": {
+        "eyebrow": "投递漏斗",
+        "title": "从发送到互动",
+        "recipients": "收件人",
+        "sent": "已发送",
+        "delivered": "已送达",
+        "read": "已读",
+        "failed": "失败"
+      },
+      "mix": {
+        "eyebrow": "状态分布",
+        "title": "投递状态",
+        "empty": "暂无发送记录。",
+        "delivered": "已送达",
+        "sentOnly": "已发送 · 未送达",
+        "failed": "失败",
+        "pending": "待处理"
+      },
+      "recipients": {
+        "eyebrow": "收件人",
+        "title": "收件情况",
+        "none": "此排期暂无收件人记录。",
+        "emptyTab": "此标签页暂无收件人。",
+        "truncated": "显示前 {n} 位（共 {total} 位）收件人。",
+        "tabs": {
+          "all": "全部",
+          "sent": "已发送",
+          "delivered": "已送达",
+          "read": "已读",
+          "failed": "失败",
+          "pending": "待处理"
+        },
+        "cols": {
+          "recipient": "收件人",
+          "phone": "电话",
+          "status": "状态",
+          "when": "时间",
+          "note": "备注"
+        },
+        "status": {
+          "pending": "待处理",
+          "processing": "待处理",
+          "sent": "已发送",
+          "delivered": "已送达",
+          "read": "已读",
+          "failed": "失败"
+        }
+      },
+      "config": {
+        "eyebrow": "排期详情",
+        "title": "配置",
+        "scheduleType": "排期类型",
+        "messageType": "消息类型",
+        "scheduledAt": "排期时间",
+        "nextRun": "下次运行",
+        "lastRun": "上次运行",
+        "repeats": "重复间隔",
+        "until": "截止至 {date}",
+        "sender": "发送号码",
+        "provider": "引擎",
+        "attempts": "发送尝试次数"
+      },
+      "preview": {
+        "eyebrow": "消息预览",
+        "title": "收件人看到的内容",
+        "empty": "（消息正文为空）"
+      },
+      "another": "再创建一个排期"
+    },
+    "warmer": {
+      "warming": "{n} 个养号中",
+      "name": "WhatsApp 养号",
+      "tagline": "号码养号",
+      "how": {
+        "title": "运作方式",
+        "one": "为号码开启养号。",
+        "two": "每天的发送量可比前一天略多一些。",
+        "three": "消息将缓慢发出，仅在您选择的时段内发送。",
+        "four": "营销活动、群发和定时发送均受此限额约束。"
+      },
+      "good": {
+        "title": "须知",
+        "body": "养号可降低非官方 API 号码被封的风险，但不能保证不被封。如需大量发送，请使用无需养号的官方 WhatsApp Business（Cloud API）号码。"
+      },
+      "crumb": "营销活动 / 养号",
+      "heading": "为号码养号",
+      "lead": "通过模拟真人的间隔和活跃时段逐步提高每个非官方 API 号码的每日发送上限，以降低被封风险。每个号码按各自的计划养号。",
+      "tiles": {
+        "warming": "养号中的号码",
+        "warmingHint": "（共 {n} 个已连接）",
+        "budget": "今日额度",
+        "budgetHint": "今日允许发送的消息数",
+        "sent": "今日已发送",
+        "sentHint": "计入养号额度",
+        "health": "平均健康度",
+        "healthHint": "所有号码的平均值"
+      },
+      "empty": "暂无已连接的号码。",
+      "connect": "连接号码",
+      "number": "号码",
+      "engines": {
+        "baileys": "非官方 API",
+        "waba": "WABA",
+        "twilio": "Twilio"
+      },
+      "health": "健康度 {n}",
+      "healthTitle": "健康度评分（越高越适合提速）",
+      "switch": "养号中",
+      "budgetToday": "今日额度",
+      "remaining": "今日剩余",
+      "sentToday": "今日已发送",
+      "fields": {
+        "dailyBase": "初始每日额度",
+        "stepPct": "每步提升 %",
+        "stepDays": "提升间隔（天）",
+        "maxDaily": "每日额度上限",
+        "gapMin": "最短间隔（秒）",
+        "gapMax": "最长间隔（秒）",
+        "activeStart": "开始活跃时间（时）",
+        "activeEnd": "结束活跃时间（时）"
+      },
+      "hints": {
+        "dailyBase": "该号码第一天可发送的消息数。",
+        "stepPct": "每一步将每日上限按此百分比增长。",
+        "stepDays": "上限增长的频率（每 N 天）。",
+        "maxDaily": "每日上限可达到的最高值。",
+        "gapMin": "两条消息之间的最短等待时间。",
+        "gapMax": "两条消息之间的最长等待时间。",
+        "activeStart": "仅在此时（24 小时制）之后开始发送。",
+        "activeEnd": "在此时（24 小时制）之后停止发送。"
+      },
+      "spintax": {
+        "title": "Spintax 变体",
+        "hint": "向每位收件人发送略有不同的措辞，使消息看起来不完全相同。可在此处填写类似 '{Hi|Hello|Hey}' 的选项。"
+      },
+      "save": "保存养号设置",
+      "saved": "养号设置已保存。"
+    }
+  }
+}

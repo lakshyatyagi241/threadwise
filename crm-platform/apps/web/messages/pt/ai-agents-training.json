@@ -1,0 +1,316 @@
+{
+  "aiTraining": {
+    "nav": {
+      "title": "Treinamento de IA"
+    },
+    "common": {
+      "dismiss": "Dispensar"
+    },
+    "paywall": {
+      "kicker": "Plano",
+      "title": "O Treinamento de IA não está no seu plano",
+      "body": "Seu plano não inclui assistentes de IA. Faça upgrade para liberar este recurso.",
+      "upgrade": "Ver planos"
+    },
+    "responder": {
+      "title": "Quem responde no seu WhatsApp?",
+      "body": "Se você ativar o Business Agent da própria Meta, nossa IA e as respostas automáticas por palavra-chave deixam de atuar neste espaço de trabalho, para que seu cliente nunca receba duas respostas à mesma mensagem.",
+      "metaCheck": "Uso o Meta Business Agent",
+      "mode": {
+        "threadwise_only": {
+          "label": "Nossa IA responde",
+          "desc": "Nossa IA e as respostas automáticas por palavra-chave cuidam dos chats (padrão)."
+        },
+        "meta_agent_only": {
+          "label": "O agente da Meta responde",
+          "desc": "O Business Agent da Meta responde. Apenas registramos a conversa; nossa IA fica em silêncio."
+        },
+        "meta_agent_then_handoff": {
+          "label": "Agente da Meta, depois transferência",
+          "desc": "A Meta cuida das primeiras perguntas. Quando ela escala, o chat chega à sua Caixa de entrada da equipe para uma pessoa. Nossa IA automática fica em silêncio."
+        }
+      },
+      "save": "Salvar",
+      "hint": "O agente da Meta precisa de um número do WhatsApp Business (Cloud API). Números no mecanismo não oficial sempre usam nossa IA.",
+      "readOnly": "Você pode ver esta configuração, mas não alterá-la.",
+      "saved": "Modo de resposta da IA salvo.",
+      "saveFailed": "Não foi possível salvar o modo de resposta.",
+      "loadError": "Não foi possível carregar o modo de resposta.",
+      "retry": "Tentar novamente",
+      "loading": "Carregando o modo de resposta"
+    },
+    "list": {
+      "tip": "Dica",
+      "tipBody": "Agentes inteligentes alimentam seus <link>widgets de chatbot</link> e a etapa de IA dos seus fluxos. O construtor de cinco etapas guia você por identidade, persona, cérebro, segurança e conhecimento.",
+      "statusViews": "Status do agente",
+      "view": {
+        "all": "Todos os agentes",
+        "active": "Ativos",
+        "paused": "Pausados"
+      },
+      "status": {
+        "all": "Todos",
+        "active": "Ativos",
+        "paused": "Pausados"
+      },
+      "knowledgeTip": "Dica de conhecimento",
+      "knowledgeTipBody": "Uma pergunta e resposta de FAQ muitas vezes basta. Algumas URLs de páginas de ajuda cobrem a maioria das dúvidas de suporte, então não é preciso carregar o site inteiro.",
+      "workspace": "Espaço de trabalho",
+      "title": "IA",
+      "titleAccent": "Treinamento",
+      "intro": "Crie agentes inteligentes que falam com a voz da sua marca. Treine-os com URLs, texto, pares de perguntas e respostas e arquivos.",
+      "activePill": "{count} ativos",
+      "newAgent": "Novo agente inteligente",
+      "card": {
+        "total": "Total de agentes",
+        "knowledge": "Entradas de conhecimento",
+        "avg": "Média / agente",
+        "health": "Saúde",
+        "activeHint": "{count} ativos",
+        "indexedHint": "{count} indexadas",
+        "entriesUnit": "entradas"
+      },
+      "health": {
+        "healthy": "saudável",
+        "empty": "vazio",
+        "attention": "atenção"
+      },
+      "col": {
+        "agent": "Agente",
+        "provider": "Provedor",
+        "knowledge": "Conhecimento",
+        "tone": "Tom",
+        "updated": "Atualizado",
+        "actions": "Ações"
+      },
+      "search": "Buscar por nome ou slug…",
+      "loading": "Carregando agentes",
+      "loadError": "Não foi possível carregar os agentes",
+      "retry": "Tentar novamente",
+      "emptyTitle": "Nenhum agente inteligente ainda",
+      "emptyBody": "Crie seu primeiro agente. O construtor de cinco etapas guia você por identidade, persona, cérebro, segurança e o conhecimento que ele deve ter.",
+      "buildAgent": "Criar agente inteligente",
+      "noMatch": "Nenhum agente corresponde à sua busca ou ao filtro de status.",
+      "entries": "{count, plural, one {# entrada} other {# entradas}}",
+      "edit": "Editar agente",
+      "editNamed": "Editar {name}",
+      "duplicate": "Duplicar agente",
+      "duplicateNamed": "Duplicar {name}",
+      "deleteAgent": "Excluir agente",
+      "deleteNamed": "Excluir {name}",
+      "deleteTitle": "Excluir “{name}”?",
+      "deleteBody": "O agente e suas entradas de conhecimento serão removidos. Widgets e fluxos que o usam deixarão de responder com este agente até você escolher outro.",
+      "delete": "Excluir agente",
+      "keep": "Manter",
+      "deleted": "Agente excluído.",
+      "deleteFailed": "Falha ao excluir: {reason}",
+      "duplicateFailed": "Não foi possível duplicar o agente.",
+      "networkError": "erro de rede",
+      "showing": "Mostrando",
+      "of": "de",
+      "agentsCount": "{count, plural, one {# agente} other {# agentes}}",
+      "loadMore": "Carregar mais"
+    },
+    "builder": {
+      "back": "Voltar ao Treinamento de IA",
+      "crumb": "Treinamento de IA",
+      "crumbNew": "Novo",
+      "crumbEdit": "Editar",
+      "titleNew": "Crie um agente",
+      "titleEdit": "Edite o agente",
+      "titleAccent": "inteligente",
+      "stateSaved": "Salvo",
+      "stateDraft": "Rascunho / não salvo",
+      "saveDraft": "Salvar rascunho",
+      "stepper": "Etapas do construtor",
+      "steps": {
+        "identity": "Identidade",
+        "persona": "Persona",
+        "brain": "Cérebro",
+        "safety": "Segurança",
+        "knowledge": "Conhecimento"
+      },
+      "stepOf": "Etapa {n} de {total}",
+      "previous": "Anterior",
+      "next": "Avançar",
+      "finish": "Concluir e fechar",
+      "loading": "Carregando o agente",
+      "loadError": "Não foi possível carregar o agente",
+      "notFoundTitle": "Agente não encontrado",
+      "notFoundBody": "Este agente não existe no seu espaço de trabalho ou foi excluído.",
+      "backToList": "Voltar ao Treinamento de IA",
+      "saved": "Agente salvo.",
+      "saveFailed": "Falha ao salvar. Verifique os campos e tente novamente.",
+      "conflict": "Este agente foi alterado em outro lugar. Recarregue a página para obter a versão mais recente e salve novamente.",
+      "problem": {
+        "name": "Dê um nome ao seu assistente.",
+        "greeting": "Escreva uma frase de abertura.",
+        "model": "Escolha um modelo.",
+        "tokens": "O tamanho da resposta deve ser de 50 a 4000 tokens.",
+        "temperature": "A criatividade deve estar entre 0 e 2."
+      },
+      "identity": {
+        "title": "Identidade do agente",
+        "required": "obrigatório",
+        "name": "Nome de exibição do agente",
+        "namePlaceholder": "ex.: Concierge de preços",
+        "nameHint": "Para seu controle. Os visitantes não veem este rótulo.",
+        "status": "Status de lançamento",
+        "statusActive": "Ativo: escolha este agente em widgets e fluxos",
+        "statusPaused": "Pausado: ocultar das listas de seleção",
+        "statusHint": "Agentes pausados permanecem na lista, mas não podem ser vinculados a novos widgets.",
+        "language": "Idioma preferido",
+        "languageHint": "Código ISO 639-1. Acompanha o idioma do visitante quando for diferente.",
+        "tone": "Tom de conversa",
+        "toneHint": "Define o estilo de escrita, independente do briefing da persona.",
+        "tones": {
+          "helpful": "Prestativo · calmo e objetivo",
+          "friendly": "Amigável · caloroso e descontraído",
+          "formal": "Formal · neutro e preciso",
+          "playful": "Divertido · leve e espirituoso"
+        }
+      },
+      "persona": {
+        "title": "Persona e frase de abertura",
+        "tag": "conteúdo",
+        "greeting": "Frase de abertura",
+        "greetingPlaceholder": "Olá! Estou aqui para ajudar. Pergunte-me qualquer coisa sobre preços ou planos.",
+        "greetingHint": "Visível ao visitante. Exibida como o primeiro balão quando o chat é aberto.",
+        "brief": "Briefing do personagem (instruções do sistema)",
+        "briefPlaceholder": "Você é o agente de suporte simpático da Acme Inc. Responda sempre com frases curtas e passe para uma pessoa qualquer assunto sobre reembolsos.",
+        "briefHint": "Interno, nunca exibido aos visitantes. Inclua o que fazer, o que evitar e regras de escalonamento."
+      },
+      "brain": {
+        "title": "Modelo e controles de resposta",
+        "tag": "cérebro",
+        "provider": "Provedor do modelo",
+        "providerHint": "Seu administrador configura as chaves dos provedores. Os provedores para os quais você adicionou sua própria chave também aparecem, nos planos que permitem.",
+        "notEnabled": "{name} (não ativado)",
+        "model": "Nome do modelo",
+        "modelHint": "Escolha um dos modelos ativados para você ou digite outro ID de modelo.",
+        "noModels": "Nenhum modelo de IA está ativado para o seu espaço de trabalho ainda. Peça ao seu administrador para ativar um ou adicione sua própria chave em Configurações, Chaves de IA.",
+        "tokens": "Limite de tamanho da resposta (tokens)",
+        "tokensHint": "Aproximadamente 1 token equivale a 4 caracteres. 400 cabe em um parágrafo.",
+        "temperature": "Criatividade (0 = rígido, 2 = solto)",
+        "temperatureHint": "Valores menores são consistentes e factuais. Valores maiores dão frases mais variadas."
+      },
+      "safety": {
+        "title": "Resposta alternativa e transferência humana",
+        "tag": "segurança",
+        "fallback": "Resposta alternativa (usada quando o modelo falha)",
+        "fallbackPlaceholder": "Um colega entrará em contato em breve. Obrigado pela paciência.",
+        "fallbackHint": "Enviada como está escrita se o modelo não retornar nada ou a chamada falhar.",
+        "handoff": "Ativar transferência para uma pessoa",
+        "handoffHint": "O visitante digita a frase de gatilho, o agente para de responder e a caixa de entrada da sua equipe é acionada.",
+        "keyword": "Frase de gatilho",
+        "keywordPlaceholder": "falar com um humano",
+        "keywordHint": "Quando um visitante digita isto em qualquer parte de uma mensagem, a transferência é acionada.",
+        "ack": "Confirmação da transferência",
+        "ackPlaceholder": "Claro, vou chamar um colega agora. Fique na linha.",
+        "ackHint": "A última mensagem antes de o agente ficar em silêncio."
+      }
+    },
+    "knowledge": {
+      "title": "Treinar o agente",
+      "tag": "conhecimento",
+      "saveFirst": "Salve o agente primeiro. As entradas de conhecimento são vinculadas a um agente salvo.",
+      "addLabel": "Adicionar conhecimento",
+      "add": {
+        "url": {
+          "title": "URL ao vivo",
+          "body": "Busca uma página pública e guarda o texto dela."
+        },
+        "text": {
+          "title": "Texto livre",
+          "body": "Cole um trecho de ajuda ou uma política."
+        },
+        "qa": {
+          "title": "Par de P&R",
+          "body": "Uma pergunta com a resposta oficial."
+        },
+        "file": {
+          "title": "PDF, DOCX, TXT e mais",
+          "body": "Envie um arquivo. O texto é extraído para você."
+        }
+      },
+      "panel": {
+        "url": "Buscar uma URL pública",
+        "text": "Colar texto simples",
+        "qa": "P&R individual",
+        "file": "Enviar um arquivo de conhecimento"
+      },
+      "label": "Rótulo",
+      "url": "URL",
+      "content": "Texto",
+      "question": "Pergunta",
+      "answer": "Resposta",
+      "file": "Arquivo",
+      "placeholder": {
+        "label": {
+          "url": "Rótulo (ex.: Página de preços)",
+          "text": "Rótulo (ex.: Resumo da política de reembolso)",
+          "qa": "Rótulo (ex.: Prazo de reembolso)",
+          "file": "Rótulo (ex.: Manual do produto)"
+        },
+        "content": "Cole qualquer texto que o agente deva conhecer…",
+        "question": "Pergunta, ex.: Quanto tempo levam os reembolsos?",
+        "answer": "Resposta, ex.: Os reembolsos são concluídos em 3 a 5 dias úteis."
+      },
+      "urlHint": "Somente páginas públicas http e https são lidas. A página é buscada em segundo plano, então a entrada mostra Processando por um instante.",
+      "fileHint": "PDF, DOCX, TXT, Markdown, CSV ou HTML, até 10 MB. O texto é extraído automaticamente.",
+      "uploading": "Progresso do envio",
+      "submit": {
+        "url": "Buscar e treinar",
+        "text": "Salvar texto",
+        "qa": "Salvar par",
+        "file": "Enviar"
+      },
+      "cancel": "Cancelar",
+      "added": "Conhecimento adicionado.",
+      "addFailed": "Não foi possível adicionar a entrada.",
+      "problem": {
+        "label": "Adicione um rótulo para encontrar esta entrada depois.",
+        "url": "Adicione o endereço da página.",
+        "content": "Cole algum texto primeiro.",
+        "question": "Adicione a pergunta.",
+        "answer": "Adicione a resposta.",
+        "file": "Escolha um arquivo (PDF, DOCX, TXT, Markdown, CSV ou HTML).",
+        "file_type": "Tipos de arquivo aceitos: TXT, Markdown, CSV, HTML, PDF, DOCX. Para qualquer outro, cole o texto em uma entrada de Texto.",
+        "file_legacyDoc": "Arquivos .doc antigos não são compatíveis. Salve novamente como .docx (ou exporte para .pdf) e envie de novo.",
+        "file_size": "Esse arquivo tem mais de 10 MB.",
+        "file_empty": "Esse arquivo está vazio.",
+        "tooLarge": "Texto demais para uma única colagem. Envie-o como arquivo."
+      },
+      "col": {
+        "kind": "Tipo",
+        "label": "Rótulo",
+        "state": "Estado",
+        "actions": "Ações"
+      },
+      "kind": {
+        "url": "url",
+        "text": "texto",
+        "qa": "p&r",
+        "file": "arquivo"
+      },
+      "state": {
+        "ready": "pronto",
+        "processing": "processando",
+        "failed": "falhou"
+      },
+      "tokens": "cerca de {count} tokens",
+      "workspaceWide": "em todo o espaço de trabalho",
+      "loading": "Carregando entradas",
+      "loadError": "Não foi possível carregar as entradas.",
+      "retry": "Tentar novamente",
+      "empty": "Nenhum conhecimento ainda. Escolha um tipo acima para adicionar a primeira entrada.",
+      "remove": "Remover",
+      "removeNamed": "Remover {label}",
+      "removeTitle": "Remover esta entrada de conhecimento?",
+      "removeBody": "O agente deixará de usá-la em novas respostas. As conversas mais antigas permanecem inalteradas.",
+      "keep": "Manter",
+      "removed": "Removido.",
+      "removeFailed": "Falha ao remover."
+    }
+  }
+}

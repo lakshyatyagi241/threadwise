@@ -1,0 +1,139 @@
+{
+  "settings": {
+    "tiles": {
+      "google-sheets-addon": {
+        "label": "Tiện ích Google Sheets",
+        "description": "Tạo khóa của bạn, tải các tệp tiện ích và đồng bộ liên hệ và sản phẩm từ bảng tính.",
+        "keywords": "google sheets, bảng tính, tiện ích, apps script, nhập liên hệ, đồng bộ sản phẩm, khóa"
+      }
+    }
+  },
+  "chrome-extension-sheets-addon": {
+    "common": {
+      "dismiss": "Bỏ qua",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "copyFailed": "Không thể sao chép. Hãy chọn khóa và sao chép thủ công.",
+      "reference": "Mã tham chiếu cho bộ phận hỗ trợ: {id}",
+      "back": "Quay lại tích hợp"
+    },
+    "page": {
+      "title": "Tiện ích Google Sheets",
+      "subtitle": "Kéo và đẩy liên hệ và đồng bộ sản phẩm giữa bảng tính và không gian làm việc của bạn.",
+      "loading": "Đang tải thiết lập tiện ích",
+      "retry": "Thử lại",
+      "status": {
+        "connected": "Khóa đang hoạt động",
+        "noKey": "Chưa có khóa",
+        "notInstalled": "Chưa cài đặt"
+      },
+      "forbidden": {
+        "title": "Bạn không thể dùng tiện ích Google Sheets",
+        "body": "Vai trò của bạn không bao gồm tiện ích Google Sheets. Hãy nhờ quản trị viên cấp quyền truy cập cho vai trò của bạn."
+      },
+      "loadFailed": {
+        "title": "Không thể tải thiết lập tiện ích.",
+        "notInstalled": "Tiện ích chưa được cài đặt trong không gian làm việc này.",
+        "forbidden": "Vai trò của bạn không được phép xem trang này.",
+        "planLocked": "Gói của bạn không bao gồm Marketplace.",
+        "suspended": "Tài khoản hoặc không gian làm việc này đã bị tạm ngưng.",
+        "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+        "network": "Chúng tôi không thể kết nối đến máy chủ. Hãy kiểm tra kết nối và thử lại.",
+        "unexpected": "Đã xảy ra lỗi từ phía chúng tôi. Hãy thử lại."
+      }
+    },
+    "install": {
+      "title": "Hãy cài đặt tiện ích trước",
+      "body": "Tiện ích Google Sheets chưa được cài đặt trong không gian làm việc này, nên khóa và tiện ích chưa hoạt động. Quản trị viên cài đặt một lần từ Marketplace.",
+      "marketplace": "Cài đặt từ Marketplace",
+      "google": "Mở trang Google Workspace Marketplace",
+      "keyKept": "Bạn vẫn còn một khóa. Bạn có thể tắt nó bên dưới."
+    },
+    "key": {
+      "title": "Khóa của bạn",
+      "intro": "Tiện ích dùng khóa cá nhân của bạn để hoạt động thay bạn. Nó chỉ thấy những gì vai trò của bạn cho phép.",
+      "none": "Bạn chưa có khóa.",
+      "generate": "Tạo khóa",
+      "rotate": "Tạo khóa mới",
+      "revoke": "Thu hồi khóa",
+      "working": "Đang xử lý...",
+      "active": "Khóa",
+      "created": "Tạo {when}",
+      "lastUsed": "Dùng lần cuối {when}",
+      "neverUsed": "Chưa từng dùng",
+      "newTitle": "Khóa mới của bạn",
+      "newWarning": "Hãy sao chép ngay. Khóa chỉ hiển thị một lần và không thể hiển thị lại. Bất kỳ ai có khóa này đều có thể hoạt động thay bạn trong tiện ích.",
+      "rotatedNote": "Khóa trước đó của bạn đã ngừng hoạt động.",
+      "keyLabel": "Khóa mới",
+      "confirmRotate": {
+        "title": "Thay khóa của bạn?",
+        "message": "Khóa bạn đang dùng sẽ ngừng hoạt động ngay lập tức. Hãy dán khóa mới vào tiện ích để tiếp tục sử dụng.",
+        "confirm": "Thay khóa"
+      },
+      "confirmRevoke": {
+        "title": "Thu hồi khóa của bạn?",
+        "message": "Tiện ích sẽ ngừng hoạt động cho đến khi bạn tạo và dán khóa mới.",
+        "confirm": "Thu hồi khóa"
+      },
+      "cancel": "Hủy",
+      "revoked": "Khóa của bạn đã bị thu hồi.",
+      "generated": "Đã tạo khóa của bạn. Hãy sao chép ngay.",
+      "errors": {
+        "notInstalled": "Tiện ích chưa được cài đặt trong không gian làm việc này. Hãy nhờ quản trị viên cài đặt.",
+        "forbidden": "Vai trò của bạn không được phép thực hiện thao tác này.",
+        "planLocked": "Gói của bạn không bao gồm Marketplace.",
+        "suspended": "Tài khoản hoặc không gian làm việc này đã bị tạm ngưng.",
+        "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+        "network": "Chúng tôi không thể kết nối đến máy chủ. Hãy kiểm tra kết nối và thử lại.",
+        "unexpected": "Đã xảy ra lỗi từ phía chúng tôi. Hãy thử lại."
+      }
+    },
+    "can": {
+      "title": "Khóa của bạn có thể làm gì",
+      "intro": "Đây là giao của vai trò của bạn với những gì bản cài đặt cho phép.",
+      "allowed": "Được phép",
+      "notAllowed": "Không được phép",
+      "readContacts": "Kéo liên hệ vào bảng tính",
+      "writeContacts": "Đẩy liên hệ từ bảng tính",
+      "readCatalog": "Xem cửa hàng và sản phẩm",
+      "writeCatalog": "Đồng bộ sản phẩm vào cửa hàng"
+    },
+    "files": {
+      "title": "Tệp tiện ích",
+      "intro": "Sáu tệp tạo nên dự án Apps Script. Code.gs đã trỏ sẵn đến không gian làm việc này.",
+      "download": "Tải xuống",
+      "downloadFile": "Tải xuống {name}",
+      "downloaded": "Đã tải xuống {name}.",
+      "notAvailable": "Chưa khả dụng trên máy chủ này",
+      "failed": "Không thể tải xuống {name}. Hãy thử lại."
+    },
+    "steps": {
+      "title": "Thiết lập trong bảng tính",
+      "one": "Mở một bảng tính, rồi chọn Extensions, sau đó Apps Script.",
+      "two": "Tải sáu tệp ở trên. Trong Project Settings, hiển thị tệp appsscript.json, rồi dán appsscript.json và Code.gs đè lên các tệp trong trình soạn thảo.",
+      "three": "Thêm ba tệp HTML tên Dialog, Settings và Help rồi dán các tệp đã tải vào đó.",
+      "four": "Lưu và tải lại bảng tính. Menu CRM sẽ xuất hiện. Hãy cho phép ba quyền mà Google yêu cầu.",
+      "five": "Chọn CRM, rồi Settings, dán khóa của bạn và chọn Save and check.",
+      "six": "Hàng 1 của trang tính chứa tên các cột. Sau đó dùng Pull contacts, Push contacts hoặc Sync products từ menu CRM."
+    },
+    "columns": {
+      "title": "Các cột mà tiện ích đọc",
+      "contacts": "Liên hệ",
+      "products": "Sản phẩm",
+      "contactsHint": "Bắt buộc có email hoặc phone. Cột tên attr:city sẽ điền thuộc tính tùy chỉnh city. Ô trống không bao giờ xóa giá trị đã lưu.",
+      "productsHint": "Bắt buộc có name và price. Sản phẩm được khớp theo SKU, rồi theo tên. Tồn kho để trống nghĩa là không giới hạn."
+    },
+    "shops": {
+      "title": "Cửa hàng",
+      "empty": "Chưa có cửa hàng. Lần đồng bộ sản phẩm đầu tiên sẽ tạo một cửa hàng.",
+      "disabled": "Tắt",
+      "open": "Mở {name}",
+      "updated": "Cập nhật {when}"
+    },
+    "products": {
+      "title": "Sản phẩm gần đây",
+      "empty": "Chưa có sản phẩm. Hãy đồng bộ một trang tính để thêm sản phẩm.",
+      "count": "{count, plural, other {# sản phẩm trong không gian làm việc của bạn}}"
+    }
+  }
+}

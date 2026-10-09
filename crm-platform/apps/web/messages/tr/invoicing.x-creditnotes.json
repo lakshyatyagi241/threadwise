@@ -1,0 +1,326 @@
+{
+  "invoicing": {
+    "nav": {
+      "creditNotes": "Kredi notları"
+    },
+    "errors": {
+      "codes": {
+        "CN_EXCEEDS_INVOICE": "Kredi notları toplamda faturayı aşamaz. Tutarları düşürün veya kalan tutarı alacaklandırın.",
+        "CN_NOT_DRAFT": "Yalnızca taslak kredi notları düzenlenebilir veya silinebilir. Güncel durumu görmek için yeniden yükleyin.",
+        "CN_ALREADY_VOID": "Bu kredi notu zaten iptal edilmiş.",
+        "CN_HAS_REFUND": "Bu kredi notu için nakit iade yapıldığından iptal edilemez. İade, ödeme defterinde kalır.",
+        "CN_NOTHING_TO_CREDIT": "Burada alacaklandırılacak bir şey kalmadı. Kalanı olan bir kalem seçin veya bir tutar ekleyin.",
+        "CN_LINE_INVALID": "Alacaklandırılan bir kalem geçerli değil: miktar kalandan fazla veya bir tutar hatalı. Vurgulanan kalemleri kontrol edin.",
+        "INV_NOT_ISSUED": "Kredi notu yalnızca kesilmiş bir faturaya karşı düzenlenebilir."
+      }
+    },
+    "creditNotes": {
+      "status": {
+        "draft": "Taslak",
+        "issued": "Kesildi",
+        "void": "İptal"
+      },
+      "reasons": {
+        "return": "Mal iadesi",
+        "price_adjustment": "Fiyat düzeltmesi",
+        "billing_error": "Faturalama hatası",
+        "cancellation": "İptal",
+        "goodwill": "İyi niyet",
+        "other": "Diğer"
+      },
+      "settlements": {
+        "balance": "Bakiyeye uygulandı",
+        "refund": "Nakit iade"
+      },
+      "tabs": {
+        "label": "Kredi notu durumu",
+        "all": "Tümü",
+        "draft": "Taslak",
+        "issued": "Kesildi",
+        "void": "İptal"
+      },
+      "list": {
+        "title": "Kredi notları",
+        "subtitle": "Kesilmiş bir faturada alıcının borcunu azaltan belgeler.",
+        "invoices": "Faturalar",
+        "newCreditNote": "Yeni kredi notu",
+        "search": "Numaraya veya alıcıya göre ara",
+        "reset": "Filtreleri temizle",
+        "refresh": "Yenile",
+        "tableLabel": "Kredi notları",
+        "noAccessTitle": "Erişim yok",
+        "noAccess": "Kredi notlarını görmek için yetkiniz yok.",
+        "emptyFilteredTitle": "Eşleşen kredi notu yok",
+        "emptyFiltered": "Farklı bir arama yapın veya filtreleri temizleyin.",
+        "resetFilters": "Filtreleri temizle",
+        "empty": {
+          "all": {
+            "title": "Henüz kredi notu yok",
+            "message": "Mal iade geldiğinde, fiyat yanlış olduğunda veya bir şey geri vermek istediğinizde kesilmiş bir faturayı alacaklandırın."
+          },
+          "draft": {
+            "title": "Taslak yok",
+            "message": "Hâlâ hazırladığınız kredi notları burada görünür."
+          },
+          "issued": {
+            "title": "Kesilen yok",
+            "message": "Kesilmiş kredi notlarının bir numarası vardır ve faturalarını zaten değiştirmişlerdir."
+          },
+          "void": {
+            "title": "İptal edilen yok",
+            "message": "İptal edilen kredi notları burada tutulur."
+          }
+        },
+        "showing": "{count, plural, other {# kredi notu yüklendi}}",
+        "loadMore": "Daha fazla yükle",
+        "allLoaded": "Hepsi yüklendi",
+        "loading": "Kredi notları yükleniyor",
+        "contactLoading": "...",
+        "invoiceChip": "Fatura {number}",
+        "clearInvoice": "Her faturanın kredi notlarını göster"
+      },
+      "table": {
+        "draft": "Taslak",
+        "scrollArea": "Kredi notları tablosu, yatay kaydırılır",
+        "columns": {
+          "number": "Kredi notu",
+          "invoice": "Fatura",
+          "buyer": "Alıcı",
+          "reason": "Neden",
+          "settlement": "Mahsup",
+          "total": "Toplam",
+          "applied": "Bakiyeye uygulandı",
+          "refunded": "Nakit olarak iade edildi",
+          "issued": "Düzenleme tarihi",
+          "status": "Durum"
+        }
+      },
+      "row": {
+        "moreFor": "{name} için diğer işlemler",
+        "draft": "taslak",
+        "open": "Aç",
+        "edit": "Taslağı düzenle",
+        "issue": "Kes",
+        "pdf": "PDF indir",
+        "print": "Yazdır",
+        "void": "İptal et",
+        "delete": "Taslağı sil"
+      },
+      "dialogs": {
+        "draftName": "bu taslak",
+        "close": "Kapat",
+        "keep": "Vazgeç",
+        "done": {
+          "issue": "{name} kredi notu kesildi.",
+          "void": "{name} kredi notu iptal edildi.",
+          "delete": "Taslak silindi."
+        },
+        "issue": {
+          "title": "Bu kredi notu kesilsin mi?",
+          "message": "Bir numara alır ve alıcının faturadaki borcunu düşürür. Nakit iadede para, ödeme defteri üzerinden geri ödenir. Bundan sonra düzenlenemez.",
+          "confirm": "Kredi notunu kes"
+        },
+        "void": {
+          "title": "Bu kredi notu iptal edilsin mi?",
+          "warning": "Alacak artık sayılmaz: fatura, bu kredi notundan önceki haline döner.",
+          "reason": "Neden iptal edildi?",
+          "reasonHint": "Zorunlu. Kredi notunda saklanır.",
+          "confirm": "Kredi notunu iptal et"
+        },
+        "delete": {
+          "title": "Bu taslak silinsin mi?",
+          "message": "Taslak kalıcı olarak kaldırılır. Hiçbir şey kesilmediği için fatura değişmez.",
+          "confirm": "Taslağı sil"
+        }
+      },
+      "picker": {
+        "total": "Fatura toplamı",
+        "paid": "Ödendi",
+        "credited": "Şimdiye kadar alacaklandırılan",
+        "balance": "Ödenecek bakiye",
+        "loading": "Fatura yükleniyor",
+        "change": "Faturayı değiştir",
+        "search": "Kesilmiş faturaları numaraya veya alıcıya göre ara",
+        "results": "Alacaklandırılabilecek faturalar",
+        "searching": "Aranıyor...",
+        "none": "Kesilmiş fatura bulunamadı.",
+        "more": "Daha fazla göster",
+        "totalShort": "Toplam",
+        "notCreditable": "Kredi notu yalnızca kesilmiş bir faturaya karşı düzenlenebilir (kesildi, kısmen ödendi, vadesi geçmiş veya ödendi). Başka bir fatura seçin."
+      },
+      "lines": {
+        "invoiceLines": "Faturanın kalemleri",
+        "creditLine": "{name} alacaklandır",
+        "lineFacts": "{qty} adet, vergi öncesi {amount} tutarında faturalandı",
+        "tax": "Vergi",
+        "taxIncluded": "{name} {rate}% fiyata dahil",
+        "taxAdded": "{name} {rate}% fiyatın üzerine eklendi",
+        "alreadyCredited": "{qty} zaten alacaklandırıldı, {left} kaldı",
+        "fullyCredited": "Zaten tamamen alacaklandırıldı",
+        "qtyToCredit": "Alacaklandırılacak miktar",
+        "freeTitle": "Serbest kalemler",
+        "freeHint": "Bir kalemle bağlantılı olmayan iyi niyet tutarı veya düzeltme. Tutar vergi öncesidir.",
+        "description": "Açıklama",
+        "amount": "Vergi öncesi tutar",
+        "taxRate": "Vergi oranı",
+        "noTax": "Vergisiz",
+        "inclusive": "dahil",
+        "removeFree": "Bu kalemi kaldır",
+        "addFree": "Serbest kalem ekle"
+      },
+      "problems": {
+        "noInvoice": "Alacaklandırılacak faturayı seçin.",
+        "nothing": "Alacaklandırılacak bir şey seçin: bir kalem veya serbest bir tutar.",
+        "qtyInvalid": "En fazla 4 ondalık basamaklı, 0'dan büyük bir miktar girin.",
+        "qtyExceeds": "Bu kalemde en fazla {max} hâlâ alacaklandırılabilir.",
+        "descriptionRequired": "Neyin alacaklandırıldığını açıklayın.",
+        "amountInvalid": "0'dan büyük bir tutar girin.",
+        "noteTooLong": "Not 2000 karakterden uzun."
+      },
+      "estimate": {
+        "title": "Tahmini alacak",
+        "disclaimer": "Fatura fiyatları ve vergisiyle burada hesaplanan bir tahmin. Sunucunun kaydettiği rakamlar kesin olanlardır.",
+        "empty": "Henüz alacaklandırılacak bir şey yok. Tüm faturayı seçin veya kalemleri işaretleyin.",
+        "lineQty": "Miktar {qty}",
+        "taxSummary": "Vergi özeti",
+        "included": "dahil",
+        "taxOn": "{base} üzerinden {tax}",
+        "subtotal": "Vergi öncesi",
+        "tax": "Vergi",
+        "total": "Toplam alacak",
+        "exceeds": "Bu, faturanın hâlâ alacaklandırılmasına izin verdiğinden ({max}) fazla. Sunucu reddedecek.",
+        "money": "Paraya ne olur",
+        "balanceBefore": "Şu an ödenecek bakiye",
+        "balanceAfter": "Sonrasında ödenecek bakiye",
+        "applied": "Faturaya uygulandı",
+        "refunded": "Nakit olarak iade edildi",
+        "refundNote": "Nakit iade: Alıcının şu an borçlu olduğu tutarın üzerinde ödediği para, kesildiğinde ödeme defteri üzerinden geri ödenir.",
+        "balanceNote": "Bakiyeye uygulama: para ödenmez. Alacak yalnızca alıcının borcunu düşürür."
+      },
+      "builder": {
+        "noAccess": "Kredi notu oluşturma yetkiniz yok.",
+        "backToList": "Kredi notlarına dön",
+        "loading": "Kredi notu yükleniyor",
+        "notDraft": "Yalnızca taslak kredi notu düzenlenebilir.",
+        "openIt": "Kredi notunu aç",
+        "back": "Geri",
+        "newTitle": "Yeni kredi notu",
+        "editTitle": "Taslak kredi notunu düzenle",
+        "conflict": "Siz düzenlerken bu kredi notunu başka biri değiştirdi. En son sürümü görmek için yeniden yükleyin; buradaki değişiklikleriniz kaybolacak.",
+        "reload": "Yeniden yükle",
+        "invoice": {
+          "title": "Alacaklandırılacak fatura",
+          "hint": "Bir kredi notu tek bir kesilmiş faturaya aittir."
+        },
+        "details": {
+          "title": "Ayrıntılar",
+          "reason": "Neden",
+          "issueDate": "Düzenleme tarihi",
+          "issueDateHint": "Kesildiği günü kullanmak için boş bırakın (bugün {today}).",
+          "note": "Not",
+          "noteHint": "Kredi notunda yazdırılır. İsteğe bağlı."
+        },
+        "settlement": {
+          "title": "Paraya ne olur",
+          "hint": "Şimdi seçilir, kredi notu kesildiğinde uygulanır.",
+          "balance": {
+            "title": "Fatura bakiyesine uygula",
+            "body": "Fatura daha az borçlu olur. Para hareket etmez. Alıcı henüz ödemediğinde veya alacağı tutacaksa kullanın."
+          },
+          "refund": {
+            "title": "Nakit iade",
+            "body": "Alıcının şu an borçlu olduğu tutarın üzerinde ödediği her şey, ödeme defteri üzerinden iade olarak geri ödenir."
+          }
+        },
+        "what": {
+          "title": "Neyin alacaklandırılacağı",
+          "pickFirst": "Önce faturayı seçin.",
+          "loadingCredits": "Bu faturanın önceki kredi notları kontrol ediliyor",
+          "full": {
+            "title": "Kalan tüm fatura",
+            "body": "Her kalemi ve kargoyu ilk kredi notuyla alacaklandırır. Hâlâ alacaklandırılabilir:"
+          },
+          "lines": {
+            "title": "Bazı kalemler veya tutarlar",
+            "body": "Alacaklandırılacak kalemleri ve miktarları işaretleyin veya serbest bir tutar ekleyin."
+          }
+        },
+        "saveDraft": "Taslağı kaydet",
+        "saveAndIssue": "Kaydet ve kes",
+        "cancel": "İptal",
+        "estimateWaiting": "Tahmini alacağı görmek için bir fatura seçin.",
+        "savedToast": "Kredi notu taslak olarak kaydedildi.",
+        "issuedToast": "Kredi notu {number} kesildi.",
+        "savedNotIssued": "Taslak olarak kaydedildi, ancak kesilemedi: {reason}"
+      },
+      "detail": {
+        "noAccess": "Kredi notlarını görmek için yetkiniz yok.",
+        "loading": "Kredi notu yükleniyor",
+        "back": "Kredi notlarına dön",
+        "backToList": "Kredi notlarına dön",
+        "draft": "Taslak",
+        "againstInvoice": "Fatura karşılığı",
+        "edit": "Düzenle",
+        "issue": "Kes",
+        "pdf": "PDF",
+        "print": "Yazdır",
+        "void": "İptal et",
+        "delete": "Sil",
+        "cannotVoidRefunded": "Bu kredi notu için nakit iade yapıldığından iptal edilemez. İade, ödeme defterinde kalır.",
+        "voidedOn": "{date} tarihinde iptal edildi",
+        "voided": "Bu kredi notu iptal edildi.",
+        "voidReason": "Neden"
+      },
+      "money": {
+        "title": "Paraya ne oldu",
+        "titleDraft": "Paraya ne olacak",
+        "total": "Alacak toplamı",
+        "applied": "Faturaya uygulandı",
+        "refunded": "Nakit olarak iade edildi",
+        "voidNote": "Bu kredi notu iptal edildi, bu nedenle artık faturayı düşürmüyor.",
+        "draftNote": "Şu haliyle keserseniz:",
+        "estimate": "Kesilene kadar bir tahmindir.",
+        "balanceBody": "Mahsup: bakiyeye uygulandı. Para ödenmez.",
+        "refundBody": "Mahsup: nakit iade. Hâlâ ödenecek tutarın üzerinde ödenen para, ödeme defteri üzerinden alıcıya geri döner."
+      },
+      "after": {
+        "title": "Bu kredi notundan sonraki fatura",
+        "titleNow": "Şu anki fatura",
+        "total": "Fatura toplamı",
+        "paid": "Ödendi",
+        "credited": "Alacaklandırıldı",
+        "balance": "Ödenecek bakiye",
+        "credit": "Alıcı lehine alacak"
+      },
+      "paper": {
+        "label": "Kredi notu {number}",
+        "labelDraft": "Taslak kredi notu",
+        "void": "İptal",
+        "sellerFallback": "İşletmeniz",
+        "title": "Kredi notu",
+        "draftNumber": "Taslak",
+        "creditedTo": "Alacaklandırılan",
+        "buyerFallback": "Alıcı",
+        "issued": "Kesildi",
+        "invoice": "Fatura",
+        "item": "Kalem",
+        "qty": "Miktar",
+        "unit": "Birim fiyat",
+        "tax": "Vergi",
+        "net": "Net",
+        "taxAmount": "Vergi tutarı",
+        "total": "Toplam",
+        "taxFallback": "Vergi",
+        "taxSummary": "Vergi özeti",
+        "taxRate": "Oran",
+        "taxBase": "Vergilendirilebilir tutar",
+        "included": "dahil",
+        "subtotal": "Vergi öncesi",
+        "taxTotal": "Vergi",
+        "totalCredit": "Toplam alacak",
+        "reason": "Neden",
+        "note": "Not"
+      }
+    }
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "workspaces-hub": {
+    "nav": {
+      "group": "Espaces de travail",
+      "workspaces": "Espaces de travail"
+    },
+    "crumb": {
+      "admin": "Admin",
+      "workspaces": "Espaces de travail",
+      "label": "Fil d’Ariane"
+    },
+    "common": {
+      "loading": "Chargement",
+      "retry": "Réessayer",
+      "cancel": "Annuler",
+      "close": "Fermer",
+      "none": "Aucun",
+      "never": "Jamais",
+      "unlimited": "Illimité",
+      "noAccess": "Votre rôle ne permet pas cette action."
+    },
+    "list": {
+      "title": "Espaces de travail",
+      "subtitle": "Tous les espaces de travail clients au même endroit : forfait, fournisseur, portefeuille, propriétaire et activité, avec les actions dont vous avez besoin pour chacun.",
+      "kpi": {
+        "total": "Espaces de travail",
+        "active": "Actifs",
+        "suspended": "Suspendus",
+        "trial": "En essai",
+        "newThisMonth": "Nouveaux ce mois-ci",
+        "lowBalance": "Solde faible",
+        "mrr": "MRR"
+      },
+      "search": "Rechercher",
+      "searchPlaceholder": "Nom, slug, nom ou e-mail du propriétaire",
+      "status": {
+        "label": "Statut",
+        "all": "Tous",
+        "active": "Actif",
+        "suspended": "Suspendu"
+      },
+      "plan": "Forfait",
+      "allPlans": "Tous les forfaits",
+      "state": "État",
+      "allStates": "Tous les états",
+      "provider": "Fournisseur",
+      "allProviders": "Tous les fournisseurs",
+      "lowOnly": "Solde faible uniquement",
+      "sort": {
+        "label": "Trier par",
+        "created": "Plus récents",
+        "last_active": "Dernière activité",
+        "name": "Nom"
+      },
+      "clear": "Effacer les filtres",
+      "refresh": "Actualiser",
+      "columns": {
+        "menu": "Colonnes",
+        "reset": "Réinitialiser les colonnes",
+        "workspace": "Espace de travail",
+        "provider": "Fournisseur",
+        "numbers": "Numéros",
+        "plan": "Forfait",
+        "state": "État",
+        "ends": "Fin",
+        "limits": "Limites",
+        "wallet": "Portefeuille",
+        "owner": "Propriétaire",
+        "mrr": "MRR",
+        "messages7d": "Msg 7 j",
+        "lastActive": "Dernière activité",
+        "actions": "Actions"
+      },
+      "tableLabel": "Espaces de travail",
+      "emptyTitle": "Aucun espace de travail pour le moment",
+      "emptyMessage": "Les espaces de travail apparaissent ici dès que des clients s’inscrivent.",
+      "noMatchTitle": "Aucun espace de travail ne correspond",
+      "noMatchMessage": "Modifiez la recherche ou les filtres pour voir davantage de résultats.",
+      "loadMore": "Charger plus",
+      "loadingMore": "Chargement en cours",
+      "loaded": "{count, plural, one {# espace de travail affiché} other {# espaces de travail affichés}}"
+    },
+    "cell": {
+      "suspended": "Suspendu",
+      "suspendedBy": {
+        "frozen": "Gelé",
+        "tos_violation": "Violation des conditions",
+        "fraud": "Fraude"
+      },
+      "providerSource": {
+        "override": "Exception",
+        "default": "Par défaut",
+        "platform_setting": "Paramètre de la plateforme"
+      },
+      "numbersCount": "{count, plural, one {# numéro} other {# numéros}}",
+      "platformOwned": "Plateforme",
+      "unknownPlan": "Forfait inconnu",
+      "health": {
+        "suspended": "Suspendu",
+        "good": "Bon",
+        "active": "Actif",
+        "low": "Faible usage",
+        "new": "Nouveau",
+        "idle": "Inactif"
+      },
+      "daysLeft": "{count, plural, one {# jour restant} other {# jours restants}}",
+      "expired": "Expiré",
+      "limits": {
+        "summary": "{messages} msg/mois · {users} utilisateurs · {contacts} contacts · {devices} appareils",
+        "override": "Exception",
+        "messages": "Messages par mois",
+        "users": "Utilisateurs",
+        "contacts": "Contacts",
+        "devices": "Appareils"
+      },
+      "lowBalance": "Faible",
+      "noOwner": "Aucun propriétaire",
+      "ago": {
+        "now": "À l’instant",
+        "minutes": "{count, plural, one {Il y a # minute} other {Il y a # minutes}}",
+        "hours": "{count, plural, one {Il y a # heure} other {Il y a # heures}}",
+        "days": "{count, plural, one {Il y a # jour} other {Il y a # jours}}"
+      }
+    },
+    "actions": {
+      "menu": "Actions pour {name}",
+      "dashboard": "Tableau de bord de l’espace de travail",
+      "editPlan": "Modifier et changer de forfait",
+      "planLimits": "Forfait et limites",
+      "provider": "Changer et définir le fournisseur",
+      "impersonate": "Se connecter en tant que propriétaire",
+      "suspend": "Suspendre",
+      "unsuspend": "Réactiver",
+      "denied": "Non autorisé"
+    },
+    "plan": {
+      "loading": "Chargement du forfait",
+      "loadFailed": "Le forfait n’a pas pu être chargé.",
+      "saved": "Forfait enregistré pour {name}."
+    },
+    "provider": {
+      "title": "Fournisseur pour {name}",
+      "help": "Les nouveaux numéros de cet espace de travail se connectent via le fournisseur choisi. Les numéros déjà connectés restent en place tant que vous ne les déplacez pas.",
+      "current": "Utilise désormais {name} ({source})",
+      "field": "Fournisseur",
+      "note": "Note (facultatif)",
+      "noteHint": "Conservée avec l’exception pour que le prochain opérateur sache pourquoi.",
+      "noActive": "Aucun fournisseur n’est actif. Activez-en un dans le registre des fournisseurs d’abord.",
+      "save": "Définir une exception",
+      "clear": "Utiliser la valeur par défaut",
+      "switchLink": "Déplacer les numéros connectés vers un autre fournisseur",
+      "assignmentsLink": "Registre des fournisseurs",
+      "saved": "Fournisseur défini pour {name}.",
+      "cleared": "{name} suit à nouveau le fournisseur par défaut."
+    },
+    "impersonate": {
+      "title": "Se connecter en tant que propriétaire de {name}",
+      "help": "Vous ouvrirez l’espace de travail en tant que propriétaire dans un nouvel onglet. La session dure {minutes} minutes au maximum et est consignée avec votre motif.",
+      "reason": "Motif",
+      "reasonHint": "{min} caractères minimum. Il est conservé dans le journal d’audit.",
+      "readOnly": "Session en lecture seule",
+      "readOnlyHint": "Vous pouvez consulter, mais toute modification est refusée.",
+      "submit": "Ouvrir l’espace de travail",
+      "opened": "Ouverture de {name} dans un nouvel onglet.",
+      "popupBlocked": "Votre navigateur a bloqué le nouvel onglet. Autorisez les fenêtres publicitaires pour cette page et réessayez.",
+      "reasonShort": "Saisissez au moins {min} caractères."
+    },
+    "suspend": {
+      "title": "Suspendre {name} ?",
+      "message": "Ses utilisateurs sont déconnectés de l’espace de travail et la messagerie s’arrête jusqu’à sa réactivation.",
+      "reason": "Motif (facultatif)",
+      "confirm": "Suspendre l’espace de travail",
+      "done": "{name} est suspendu."
+    },
+    "unsuspend": {
+      "title": "Réactiver {name} ?",
+      "message": "Ses utilisateurs peuvent à nouveau utiliser l’espace de travail.",
+      "reason": "Note (facultatif)",
+      "confirm": "Réactiver l’espace de travail",
+      "done": "{name} est de nouveau actif."
+    },
+    "errors": {
+      "unexpected": "Une erreur s’est produite. Réessayez.",
+      "forbidden": "Votre rôle ne permet pas cette action.",
+      "conflict": "Quelqu’un d’autre a modifié cet espace de travail. Rechargez la page et réessayez.",
+      "notFound": "Cet espace de travail n’existe plus.",
+      "reasonRequired": "Un motif d’au moins 8 caractères est requis.",
+      "orgSuspended": "L’espace de travail est suspendu : impossible d’y accéder.",
+      "validation": "Vérifiez les valeurs et réessayez.",
+      "requestId": "Identifiant de la requête"
+    },
+    "detail": {
+      "crumb": "Espace de travail",
+      "back": "Tous les espaces de travail",
+      "loadFailed": "Cet espace de travail n’a pas pu être chargé.",
+      "slug": "Slug",
+      "created": "Créé le {date}",
+      "kpi": {
+        "members": "Membres",
+        "contacts": "Contacts",
+        "openTickets": "Tickets ouverts",
+        "delivered": "Délivrés",
+        "wallet": "Portefeuille",
+        "mrr": "MRR",
+        "messages7d": "Messages, 7 jours"
+      },
+      "chart": {
+        "title": "30 derniers jours",
+        "label": "Messages envoyés et délivrés par jour, 30 derniers jours",
+        "sent": "Envoyés",
+        "delivered": "Délivrés",
+        "empty": "Aucun message au cours des 30 derniers jours."
+      },
+      "tabs": {
+        "label": "Sections de l’espace de travail",
+        "overview": "Vue d’ensemble",
+        "plan": "Forfait et limites",
+        "wallet": "Portefeuille",
+        "provider": "Fournisseur",
+        "support": "Support"
+      },
+      "overview": {
+        "owner": "Propriétaire",
+        "adminNote": "Note d’admin",
+        "noNote": "Aucune note.",
+        "health": "Santé",
+        "lastActive": "Dernière activité",
+        "suspendedBy": "Détenu par"
+      },
+      "planTab": {
+        "plan": "Forfait",
+        "state": "État",
+        "ends": "Fin",
+        "limits": "Limites effectives",
+        "edit": "Modifier et changer de forfait",
+        "overrideNote": "Cet espace de travail a ses propres limites, qui remplacent celles du forfait."
+      },
+      "walletTab": {
+        "open": "Ouvrir le portefeuille complet",
+        "balance": "Solde",
+        "adjust": "Ajuster le solde",
+        "adjusted": "Le solde a été ajusté."
+      },
+      "providerTab": {
+        "provider": "Fournisseur effectif",
+        "source": "Choisi par",
+        "numbers": "Numéros connectés",
+        "change": "Changer et définir le fournisseur",
+        "switch": "Déplacer les numéros vers un autre fournisseur"
+      },
+      "supportTab": {
+        "text": "Tickets, conversations et historique de support de cet espace de travail.",
+        "open": "Ouvrir le dossier de support",
+        "openTickets": "{count, plural, one {# ticket ouvert} other {# tickets ouverts}}"
+      }
+    }
+  }
+}

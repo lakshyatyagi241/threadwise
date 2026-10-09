@@ -1,0 +1,439 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "Sklep"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "Zamknij"
+      },
+      "errors": {
+        "requestId": "ID żądania",
+        "retry": "Spróbuj ponownie",
+        "network": {
+          "title": "Nie można połączyć się z serwerem",
+          "message": "Sprawdź połączenie i spróbuj ponownie."
+        },
+        "forbidden": {
+          "title": "Brak dostępu",
+          "message": "Twoja rola na to nie pozwala."
+        },
+        "signedOut": {
+          "title": "Zostałeś wylogowany",
+          "message": "Zaloguj się ponownie, aby kontynuować."
+        },
+        "conflict": {
+          "title": "Zmieniono w innym miejscu",
+          "message": "Ktoś inny zmienił to podczas Twojej edycji. Odśwież, aby zobaczyć najnowszą wersję."
+        },
+        "validation": {
+          "title": "Sprawdź formularz",
+          "message": "Niektóre pola wymagają uwagi."
+        },
+        "unavailable": {
+          "title": "Jeszcze niedostępne",
+          "message": "Usługa sklepu nie jest dostępna na tym serwerze."
+        },
+        "rateLimited": {
+          "title": "Zbyt wiele żądań",
+          "message": "Poczekaj chwilę i spróbuj ponownie."
+        },
+        "notFound": {
+          "title": "Nie znaleziono",
+          "message": "Ten sklep nie istnieje w tej przestrzeni roboczej."
+        },
+        "noShop": {
+          "title": "Brak sklepu",
+          "message": "Najpierw skonfiguruj swój sklep."
+        },
+        "slugTaken": {
+          "title": "Adres jest zajęty",
+          "message": "Ten adres sklepu jest już używany."
+        },
+        "deviceInvalid": {
+          "title": "Wybierz połączone urządzenie",
+          "message": "Wybierz jedno z połączonych urządzeń."
+        },
+        "noSender": {
+          "title": "Najpierw połącz WhatsApp",
+          "message": "Sklep wymaga połączonego numeru WhatsApp. Połącz go i spróbuj ponownie."
+        },
+        "resetNotConfirmed": {
+          "title": "Nie potwierdzono",
+          "message": "Resetowanie nie zostało potwierdzone."
+        },
+        "domainNotSet": {
+          "title": "Brak własnej domeny",
+          "message": "Nie ustawiono własnej domeny."
+        },
+        "unexpected": {
+          "title": "Coś poszło nie tak",
+          "message": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
+        }
+      },
+      "sidebar": {
+        "label": "Sklep",
+        "navLabel": "Sekcje sklepu",
+        "section": "Sklep",
+        "settings": "Ustawienia",
+        "items": {
+          "overview": "Przegląd",
+          "orders": "Zamówienia",
+          "products": "Produkty",
+          "groups": "Grupy",
+          "storefront": "Witryna sklepu",
+          "coupons": "Kupony",
+          "reviews": "Recenzje",
+          "payments": "Płatności",
+          "gateways": "Bramki płatności",
+          "customers": "Klienci",
+          "invoices": "Faktury",
+          "connection": "Połączenie"
+        },
+        "comingSoon": "Wkrótce dostępne",
+        "comingSoonHint": "Wkrótce dostępne",
+        "noShopTitle": "Brak sklepu",
+        "noShopMessage": "Utwórz pierwszy sklep, aby korzystać z narzędzi sklepu.",
+        "noShopAction": "Skonfiguruj swój sklep",
+        "live": "Aktywny",
+        "setup": "Konfiguracja",
+        "yourStore": "Twój sklep",
+        "notConnected": "Niepołączono",
+        "unofficialApi": "Nieoficjalne API",
+        "deviceConnected": "Urządzenie połączone · /channels",
+        "switchShop": "Przełącz sklep",
+        "shopFallback": "Sklep",
+        "manageShops": "Zarządzaj wszystkimi sklepami →",
+        "publicUrl": "Publiczny URL",
+        "open": "Otwórz",
+        "copy": "Kopiuj",
+        "copied": "Skopiowano!",
+        "providerLive": "Dostawca aktywny",
+        "sendingFrom": "Wysyłanie z",
+        "noDevice": "Brak połączonego urządzenia.",
+        "connectOne": "Połącz jedno",
+        "thenBind": "następnie przypisz je do tego sklepu z",
+        "connectWizard": "kreatora połączenia"
+      },
+      "dashboard": {
+        "eyebrow": "Sklep / Przegląd",
+        "title": "Przegląd sprzedaży",
+        "subtitle": "Ostatnie 30 dni. Zamówienia są łączone ze wszystkich kanałów — WABA, witryna sklepu, Twilio.",
+        "addProduct": "Dodaj produkt",
+        "loading": "Wczytywanie przeglądu sklepu",
+        "kpi": {
+          "revenue": "Przychód (30 dni)",
+          "orders": "Zamówienia (30 dni)",
+          "aov": "Śr. zamówienie",
+          "products": "Produkty",
+          "visits": "Wizyty (30 dni)"
+        },
+        "trend": {
+          "eyebrow": "Trend sprzedaży",
+          "title": "Przychód w czasie"
+        },
+        "legendRevenue": "Przychód ({symbol})",
+        "legendOrders": "Zamówienia",
+        "dayReadout": "{day}: {revenue}, {orders, plural, one {# zamówienie} few {# zamówienia} many {# zamówień} other {# zamówień}}",
+        "chartLabel": "Przychód i zamówienia dziennie, ostatnie 30 dni",
+        "tableDay": "Dzień",
+        "tableRevenue": "Przychód ({symbol})",
+        "tableOrders": "Zamówienia",
+        "top": {
+          "eyebrow": "Najlepsze produkty (30 dni)",
+          "title": "Bestsellery",
+          "empty": "Brak sprzedaży — udostępnij link do sklepu."
+        },
+        "recent": {
+          "title": "Ostatnie zamówienia",
+          "viewAll": "Zobacz wszystkie",
+          "open": "Otwórz",
+          "columns": {
+            "when": "Kiedy",
+            "customer": "Klient",
+            "source": "Źródło",
+            "items": "Pozycje",
+            "total": "Suma",
+            "status": "Status",
+            "open": "Otwórz"
+          },
+          "itemsCount": "{count, plural, one {# pozycja} few {# pozycje} many {# pozycji} other {# pozycji}}",
+          "emptyTitle": "Brak zamówień",
+          "emptyMessage": "Gdy klienci złożą zamówienie w Twojej witrynie lub na WhatsApp, pojawią się tutaj."
+        }
+      },
+      "settings": {
+        "eyebrow": "Sklep / Witryna sklepu",
+        "title": "Projekt witryny sklepu",
+        "viewLive": "Zobacz na żywo",
+        "noAccess": "Twoja rola nie ma dostępu do ustawień witryny sklepu.",
+        "loading": "Wczytywanie ustawień witryny sklepu",
+        "saved": "Witryna sklepu została zaktualizowana.",
+        "conflict": "Ta witryna została zmieniona w innym miejscu, gdy ją edytowałeś. Odśwież, aby pobrać najnowsze ustawienia, a następnie wprowadź zmiany ponownie.",
+        "reload": "Odśwież",
+        "fixErrors": "Popraw zaznaczone pola i zapisz ponownie.",
+        "optional": "(opcjonalne)",
+        "save": "Zapisz",
+        "readOnly": "Możesz przeglądać te ustawienia, ale nie możesz ich zmieniać.",
+        "live": "Witryna sklepu aktywna (odznaczenie wyłącza ją)",
+        "theme": {
+          "title": "Motyw"
+        },
+        "slug": {
+          "label": "Identyfikator witryny (slug)",
+          "hint": "Twój sklep będzie dostępny pod adresem"
+        },
+        "domain": {
+          "label": "Własna domena",
+          "placeholder": "shop.yourbiz.com",
+          "verifiedLive": "Zweryfikowano — Twoja domena jest aktywna",
+          "addCname": "Dodaj ten rekord CNAME u swojego dostawcy DNS:",
+          "cname": "CNAME",
+          "verify": "Zweryfikuj teraz",
+          "verified": "Domena zweryfikowana ✓",
+          "notPointing": "CNAME nie wskazuje na {expected}",
+          "notSet": "Nie ustawiono własnej domeny.",
+          "verifyFailed": "Nie udało się sprawdzić domeny. Spróbuj ponownie."
+        },
+        "brand": {
+          "logoUrl": "URL logo",
+          "color": "Kolor marki (hex)",
+          "colorPicker": "Wybierz kolor marki",
+          "heroText": "Tekst nagłówka",
+          "heroPlaceholder": "Witamy w naszym sklepie",
+          "footerText": "Tekst stopki",
+          "footerPlaceholder": "© 2026 Twój sklep"
+        },
+        "currency": {
+          "title": "Waluta",
+          "label": "Waluta",
+          "hint": "Domyślna dla nowych produktów oraz symbol wyświetlany w szufladzie koszyka."
+        },
+        "shipping": {
+          "title": "Dostawa",
+          "flat": "Stała opłata za dostawę",
+          "flatHint": "Dodawana do każdego zamówienia. Puste lub 0 = bezpłatnie.",
+          "freeAbove": "Darmowa dostawa powyżej",
+          "freeAboveHint": "Koszyki powyżej tej kwoty są wysyłane bezpłatnie.",
+          "note": "Uwaga o dostawie",
+          "noteHint": "Wyświetlana w koszyku i na stronie produktu.",
+          "notePlaceholder": "2–5 dni roboczych · Śledzona"
+        },
+        "payment": {
+          "title": "Link do płatności",
+          "intro": "Wybierz dostawcę płatności, a dodamy link do płatności do każdej wiadomości o zamówieniu na WhatsApp. Kupujący płaci przez link, a Ty potwierdzasz w czacie. Witryna nie ma wbudowanego procesu kasy.",
+          "provider": "Dostawca",
+          "providers": {
+            "none": "Brak · płatność przy odbiorze",
+            "upi": "UPI (Indie) — VPA + nazwa",
+            "razorpay_link": "Link do płatności Razorpay (wklej statyczny link)",
+            "razorpay_api": "Razorpay (automatyczne generowanie linków i automatyczne potwierdzanie)",
+            "stripe_link": "Link do płatności Stripe",
+            "paypal_me": "Nazwa PayPal.me",
+            "bank_transfer": "Instrukcje przelewu bankowego"
+          },
+          "handle": "Dane płatności",
+          "handleHint": "VPA UPI, URL linku do płatności, nazwa PayPal.me lub konto bankowe.",
+          "handlePlaceholder": "np. shop@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "API Razorpay (automatyczne linki)",
+            "keyId": "ID klucza",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "Sekretny klucz",
+            "webhookSecret": "Sekret webhooka",
+            "stored": "zapisano — zostaw puste, aby zachować",
+            "show": "Pokaż sekret",
+            "hide": "Ukryj sekret",
+            "webhookHelp": "W panelu Razorpay ustaw URL webhooka na",
+            "webhookEvent": "dla zdarzenia payment_link.paid."
+          }
+        },
+        "recovery": {
+          "title": "Odzyskiwanie porzuconych koszyków",
+          "enable": "Wysyłaj przypomnienie na WhatsApp do klientów, którzy zaczęli finalizację zamówienia, ale jej nie dokończyli",
+          "enableHint": "Zapisuje numer telefonu przy finalizacji; przypomnienie jest automatycznie anulowane, jeśli klient złoży zamówienie. Wymaga połączonego urządzenia.",
+          "delay": "Opóźnienie (minuty)",
+          "message": "Wiadomość",
+          "messageHint": "(puste = domyślna; '{name}' '{shop}' '{url}' '{total}')",
+          "messagePlaceholder": "Cześć '{name}'! Zostawiłeś produkty w koszyku w '{shop}'. Dokończ tutaj: '{url}'"
+        },
+        "problems": {
+          "required": "To pole jest wymagane.",
+          "tooLong": "Maksymalnie {max} znaków.",
+          "slugPattern": "Używaj tylko małych liter, cyfr i myślników.",
+          "domainInvalid": "To nie wygląda na prawidłową domenę (np. shop.yourbiz.com).",
+          "urlInvalid": "Wpisz pełny adres zaczynający się od http:// lub https://.",
+          "colorInvalid": "Użyj koloru w formacie hex, np. #075E54.",
+          "amountInvalid": "Wpisz liczbę, zero lub więcej.",
+          "amountTooBig": "Maksymalnie {max}.",
+          "delayRange": "Wpisz liczbę całkowitą od {min} do {max}.",
+          "themeInvalid": "Wybierz jeden z motywów.",
+          "currencyInvalid": "Wybierz jedną z walut z listy.",
+          "providerInvalid": "Wybierz jednego z dostawców z listy.",
+          "slugTaken": "Ten identyfikator jest już zajęty. Wybierz inny."
+        }
+      },
+      "share": {
+        "message": "Zobacz mój sklep: {name}",
+        "subject": "Zobacz mój sklep · {name}",
+        "eyebrow": "Udostępnij swój sklep",
+        "fallbackName": "Mój sklep",
+        "close": "Zamknij",
+        "link": "Link do sklepu",
+        "copy": "Kopiuj",
+        "copied": "Skopiowano ✓",
+        "copiedShort": "Skopiowano",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "Wyślij do czatu",
+        "email": "E-mail",
+        "emailHint": "Otwórz aplikację pocztową",
+        "telegram": "Telegram",
+        "telegramHint": "Udostępnij do kanału",
+        "more": "Więcej…",
+        "moreHint": "Menu udostępniania telefonu",
+        "nativeUnsupported": "Nieobsługiwane w tej przeglądarce",
+        "showQr": "Pokaż kod QR",
+        "qrAlt": "Kod QR",
+        "qrCaption": "Zeskanuj, aby otworzyć sklep"
+      },
+      "wizard": {
+        "loading": "Wczytywanie Twoich sklepów",
+        "back": "Wstecz",
+        "breadcrumb": "Połączenia / Sklep WhatsApp",
+        "manageConnections": "Zarządzaj wszystkimi połączeniami →",
+        "titles": {
+          "list": "Twoje sklepy",
+          "add": "Skonfiguruj swój sklep",
+          "edit": "Edytuj {name}",
+          "shopFallback": "sklep"
+        },
+        "gate": {
+          "step": "Krok 1 z 3",
+          "title": "Najpierw połącz WhatsApp",
+          "message": "Twój sklep potrzebuje połączonego numeru WhatsApp, aby wysyłać potwierdzenia zamówień i umożliwić klientom czat. Przejdź do kanałów, aby go sparować — zajmuje to 30 sekund.",
+          "action": "Przejdź do urządzeń"
+        },
+        "list": {
+          "headline": "{count, plural, one {# sklep} few {# sklepy} many {# sklepów} other {# sklepów}} w {workspace}",
+          "intro": "Każdy sklep ma własny publiczny URL, motyw i urządzenie wysyłające. Dodawaj tyle, ile potrzebujesz — różne marki, języki lub regiony.",
+          "add": "Dodaj sklep",
+          "addAnother": "Dodaj kolejny sklep",
+          "addAnotherHint": "Prowadź osobną witrynę z własnym URL, motywem i numerem WhatsApp."
+        },
+        "share": {
+          "fallbackName": "Mój sklep"
+        },
+        "noAccess": {
+          "title": "Nie możesz zmieniać sklepów",
+          "message": "Twoja rola pozwala przeglądać sklepy, ale nie tworzyć ani edytować.",
+          "action": "Wróć do sklepów"
+        },
+        "delete": {
+          "title": "Usunąć {name}?",
+          "message": "Trwale usuwa witrynę sklepu i jej zamówienia. Produkty w Twojej przestrzeni roboczej nie zostaną zmienione. Nie można tego cofnąć.",
+          "confirm": "Tak, usuń",
+          "cancel": "Anuluj",
+          "done": "Sklep usunięty.",
+          "thisShop": "ten sklep"
+        },
+        "reset": {
+          "open": "Wyczyść wszystkie dane sklepu",
+          "title": "Wyczyścić wszystkie dane sklepu?",
+          "message": "Trwale usuwa wszystkie sklepy, zamówienia i produkty tej przestrzeni roboczej. Nie można tego cofnąć.",
+          "confirm": "Tak, wyczyść wszystko",
+          "done": "Wszystkie dane sklepu w tej przestrzeni roboczej zostały wyczyszczone.",
+          "notConfirmed": "Resetowanie nie zostało potwierdzone."
+        },
+        "card": {
+          "live": "Aktywny",
+          "disabled": "Wyłączony",
+          "theme": "Motyw {theme}",
+          "untitled": "Sklep bez nazwy",
+          "sendingFrom": "Wysyłanie z",
+          "noDevice": "Brak urządzenia",
+          "domain": "Domena",
+          "pending": "oczekuje",
+          "builtIn": "Wbudowany URL",
+          "manage": "Zarządzaj",
+          "manageTitle": "Otwórz pulpit administratora",
+          "preview": "Podgląd",
+          "previewTitle": "Otwórz publiczną witrynę w nowej karcie",
+          "edit": "Edytuj",
+          "editTitle": "Edytuj ustawienia sklepu",
+          "share": "Udostępnij",
+          "shareAria": "Udostępnij {name}",
+          "delete": "Usuń sklep",
+          "deleteAria": "Usuń {name}"
+        },
+        "form": {
+          "backToShops": "Wróć do sklepów",
+          "creatingShop": "Tworzenie sklepu nr {n}",
+          "progress": "Kroki",
+          "steps": {
+            "details": "Szczegóły sklepu",
+            "url": "Publiczny URL",
+            "device": "Urządzenie wysyłające"
+          },
+          "optional": "(opcjonalne)",
+          "details": {
+            "title": "Szczegóły sklepu",
+            "hint": "Nazwa widoczna dla klientów oraz identyfikator URL, pod którym będą działać produkty.",
+            "name": "Nazwa sklepu",
+            "nameHint": "Wyświetlana w nagłówku witryny i w potwierdzeniach zamówień.",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "np. {workspace} · Mumbaj",
+            "slug": "Identyfikator witryny (slug)",
+            "auto": "(automatycznie)",
+            "slugLocked": "Zablokowany po uruchomieniu sklepu, aby udostępnione linki nadal działały.",
+            "slugAuto": "Generowany z nazwy sklepu — finalizowany po zapisaniu."
+          },
+          "url": {
+            "title": "Publiczny URL",
+            "hint": "Wybierz, jak kupujący trafią do sklepu — wbudowany URL jest bezpłatny, własna domena wygląda bardziej profesjonalnie.",
+            "builtIn": "Wbudowany URL · bezpłatnie",
+            "pathMode": "Działa od razu po zapisaniu. URL oparty na ścieżce, ponieważ nie skonfigurowano publicznego hosta witryn.",
+            "subdomainMode": "Działa od razu po zapisaniu. Hostowany na domenie witryn platformy.",
+            "domain": "Własna domena",
+            "domainHint": "Po zapisaniu dodasz rekord CNAME u swojego dostawcy DNS i zweryfikujesz go na stronie ustawień witryny. Zostaw puste, aby użyć wbudowanego URL.",
+            "domainPlaceholder": "shop.yourbiz.com",
+            "verified": "{domain} jest zweryfikowana.",
+            "pending": "{domain} oczekuje na weryfikację DNS."
+          },
+          "device": {
+            "title": "Urządzenie wysyłające",
+            "hint": "Który numer WhatsApp wysyła potwierdzenia zamówień i odpowiedzi do kupujących.",
+            "none": "Brak połączonych urządzeń na tym koncie.",
+            "pair": "Sparuj jedno w swoich kanałach →",
+            "official": "Oficjalne API · Meta (WABA)",
+            "officialDetail": "Numer WhatsApp Business przestrzeni roboczej",
+            "fallback": "Urządzenie",
+            "noNumber": "Brak numeru",
+            "connected": "połączone"
+          },
+          "cancel": "Anuluj",
+          "deleteThis": "Usuń ten sklep",
+          "saveChanges": "Zapisz zmiany",
+          "create": "Utwórz sklep →",
+          "created": "Sklep „{name}” został utworzony.",
+          "updated": "Sklep „{name}” został zaktualizowany.",
+          "problems": {
+            "nameRequired": "Wpisz nazwę sklepu.",
+            "nameTooLong": "Maksymalnie 191 znaków.",
+            "domainInvalid": "To nie wygląda na prawidłową domenę (np. shop.yourbiz.com).",
+            "domainTooLong": "Maksymalnie 191 znaków.",
+            "deviceInvalid": "Wybierz jedno z połączonych urządzeń.",
+            "slugTaken": "Ta nazwa sklepu tworzy adres, który jest już zajęty. Zmień nieco nazwę."
+          },
+          "live": {
+            "eyebrow": "Ten sklep jest aktywny",
+            "fallbackName": "Twój sklep",
+            "hint": "Dodaj produkty, wybierz motyw, przeglądaj zamówienia i udostępniaj link.",
+            "view": "Zobacz sklep",
+            "share": "Udostępnij sklep",
+            "dashboard": "Otwórz pulpit"
+          }
+        }
+      }
+    }
+  }
+}

@@ -18,11 +18,13 @@ describe('test panel', () => {
     const html = renderToStaticMarkup(
       <TestPanel open onClose={() => undefined} nodes={[]} edges={[]} runNonce={0} />,
     );
-    expect(html).toContain('Test runner');
-    expect(html).toContain('Simulate a chat');
-    expect(html).toContain('Restart');
+    // The mock above echoes the message keys.
+    expect(html).toContain('aria-label="dialogLabel"');
+    expect(html).toContain('>title<');
+    expect(html).toContain('>subtitle<');
+    expect(html).toContain('>restart<');
     expect(html).toContain('w-[380px]');
-    expect(html).toContain('Waiting for bot…');
+    expect(html).toContain('placeholder="waitingForBot"');
     expect(html).toContain('disabled=""');
   });
 

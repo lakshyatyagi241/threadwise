@@ -1,0 +1,574 @@
+{
+  "ecom": {
+    "nav": {
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce"
+    },
+    "common": {
+      "dismiss": "Descartar",
+      "integrations": "Integraciones",
+      "back": "Atrás",
+      "docs": "Ver documentación",
+      "loadError": "No se pudo cargar esta página. Inténtalo de nuevo.",
+      "support": "Contactar con soporte",
+      "integration": "Integración",
+      "notConnected": "No conectado",
+      "setupSteps": "Pasos de configuración",
+      "needHelp": "¿Necesitas ayuda?",
+      "none": "ninguno",
+      "optional": "opcional",
+      "yes": "Sí"
+    },
+    "connect": {
+      "shopify": {
+        "title": "Conectar",
+        "accent": "Shopify",
+        "intro": "Conecta tu tienda de Shopify para que los eventos de pedidos, cumplimiento, reembolsos y carritos activen mensajes de WhatsApp automáticamente, y el panel muestre tus cifras de pedidos, productos y clientes.",
+        "step1": "El administrador activa la app de Shopify",
+        "step2": "Introduce el dominio de tu tienda",
+        "step3": "Aprueba los permisos en Shopify",
+        "step4": "Asigna eventos → plantillas de WhatsApp",
+        "help": "Los webhooks se instalan solos tras conectar, sin pasos manuales. ¿Tienes problemas con las credenciales?",
+        "disabledTitle": "Shopify aún no está activado",
+        "disabledBody": "Un administrador debe añadir las credenciales de la app de Shopify antes de que cualquier espacio de trabajo pueda conectar una tienda. Cuando esté hecho, se activará el formulario de abajo.",
+        "formStep": "Paso 2",
+        "formTitle": "Dominio de la tienda",
+        "urlLabel": "URL de la tienda de Shopify",
+        "urlPlaceholder": "mi-tienda",
+        "urlSuffix": ".myshopify.com",
+        "urlHint": "Solo el identificador de la tienda, o pega la URL completa y la normalizamos.",
+        "webhookLabel": "URL del webhook · se configura automáticamente tras conectar",
+        "cancel": "Cancelar",
+        "continue": "Continuar a Shopify",
+        "continuing": "Redirigiendo…",
+        "guideKicker": "Guía de configuración",
+        "guideTitle": "Qué pasa después",
+        "guide1": "Te redirigimos a Shopify para autorizar los permisos solicitados.",
+        "guide2": "Shopify nos devuelve un token de acceso permanente firmado con HMAC.",
+        "guide3": "Los webhooks de {count} eventos se registran automáticamente en tu tienda.",
+        "guide4": "Vuelves aquí para asignar cada evento a una plantilla de WhatsApp.",
+        "scopes": "Permisos solicitados",
+        "failed": "No se pudo iniciar la conexión con Shopify.",
+        "connected": "Shopify conectado.",
+        "returnedError": "Shopify no se conectó."
+      },
+      "woocommerce": {
+        "title": "Conectar",
+        "accent": "WooCommerce",
+        "intro": "Trae pedidos, reembolsos, productos y eventos de clientes de WooCommerce a los hilos de chat. Confirma pedidos, avisa de envíos y recupera carritos en WhatsApp sin salir del CRM.",
+        "step1": "El administrador activa WooCommerce",
+        "step2": "Genera claves de API en el panel de WC",
+        "step3": "Pega la URL de la tienda y las claves abajo",
+        "step4": "Asigna eventos → plantillas de WhatsApp",
+        "help": "Los webhooks se instalan solos tras conectar, sin pasos manuales en WC. ¿Atascado con las claves?",
+        "disabledTitle": "WooCommerce aún no está activado",
+        "disabledBody": "Un administrador debe activar la integración de WooCommerce antes de que cualquier espacio de trabajo pueda conectar una tienda.",
+        "formStep": "Paso 2",
+        "formTitle": "Credenciales de la tienda",
+        "urlLabel": "URL de la tienda",
+        "urlHint": "Se requiere HTTPS para la autenticación básica. Detectaremos WP REST automáticamente.",
+        "keyLabel": "Clave de cliente",
+        "secretLabel": "Secreto de cliente",
+        "secretHint": "Se guarda cifrado. Solo se usa para llamar a la API REST de tu tienda.",
+        "webhookLabel": "URL del webhook · se configura automáticamente tras conectar",
+        "test": "Probar conexión",
+        "testing": "Probando…",
+        "connect": "Conectar tienda",
+        "connecting": "Conectando…",
+        "guideKicker": "Cómo generar las claves",
+        "guideTitle": "En el panel de WooCommerce",
+        "g1": "Abre WooCommerce → Ajustes → Avanzado → API REST.",
+        "g2": "Haz clic en Añadir clave. Ponle una descripción como \"CRM\".",
+        "g3": "Elige un usuario (sirve un administrador) y establece Permisos = Lectura/Escritura.",
+        "g4": "Haz clic en Generar clave de API. Copia ambas claves: el secreto solo se muestra una vez.",
+        "g5": "Pégalas en el formulario de la izquierda y haz clic en Probar conexión.",
+        "httpsTitle": "Solo HTTPS",
+        "httpsBody": "La autenticación básica requiere HTTPS. Si tu tienda solo usa HTTP, instala primero un certificado SSL (Let's Encrypt es gratis).",
+        "connected": "WooCommerce conectado.",
+        "failed": "La conexión falló.",
+        "networkError": "Error de red."
+      }
+    },
+    "shell": {
+      "status": {
+        "active": "Activa",
+        "error": "Error",
+        "other": "{status}"
+      },
+      "plan": "Plan:",
+      "store": "Tienda",
+      "related": "Relacionado",
+      "allIntegrations": "Todas las integraciones",
+      "disconnect": "Desconectar",
+      "disconnectTitle": "¿Desconectar {name}?",
+      "disconnectShopify": "Esto elimina los webhooks registrados pero conserva tus ajustes.",
+      "disconnectWoo": "Esto elimina los webhooks registrados.",
+      "disconnectDone": "Tienda desconectada.",
+      "healthy": "Webhooks en buen estado",
+      "noRecent": "Sin eventos recientes",
+      "lastEvent": "Último evento:",
+      "triggerShopify": "Activa una acción en Shopify y aparecerá aquí.",
+      "triggerWoo": "Genera un pedido en WooCommerce y aparecerá aquí.",
+      "sync": "Sincronizar ahora",
+      "syncing": "Sincronizando…",
+      "syncQueued": "Sincronización iniciada. Los datos nuevos aparecerán en un momento.",
+      "syncFailed": "La sincronización falló.",
+      "tabs": {
+        "overview": "Resumen",
+        "orders": "Pedidos",
+        "products": "Productos",
+        "offers": "Enviar oferta",
+        "customers": "Clientes",
+        "events": "Automatizaciones",
+        "analytics": "Analítica",
+        "invoices": "Facturas",
+        "logs": "Actividad",
+        "settings": "Ajustes"
+      },
+      "offersWoo": "Ofertas",
+      "desc": {
+        "shopify": {
+          "overview": "Vista en vivo de tu tienda, sincronizada desde Shopify.",
+          "orders": "Pedidos sincronizados desde Shopify.",
+          "products": "Explora tu catálogo sincronizado: envía cualquier producto o una oferta por WhatsApp.",
+          "offers": "Elige productos y un cupón, selecciona un segmento de clientes y difunde la oferta por WhatsApp.",
+          "customers": "Clientes sincronizados de Shopify a tus contactos.",
+          "events": "Automatizaciones de marketing: activa una, elige una plantilla y se dispara con el evento de tienda correspondiente.",
+          "analytics": "Ingresos, tendencia de pedidos y rendimiento de mensajes de esta tienda.",
+          "logs": "Registro de entregas de webhooks de esta tienda.",
+          "settings": "Gestiona la conexión: resincroniza, consulta los permisos o desconecta.",
+          "invoices": "Facturas emitidas por tus pedidos de Shopify."
+        },
+        "woocommerce": {
+          "overview": "Vista en vivo obtenida de tu API REST de WooCommerce.",
+          "orders": "Últimos 10 pedidos obtenidos de la tienda.",
+          "products": "Productos más recientes del catálogo.",
+          "offers": "Difunde una oferta de producto o recupera a clientes inactivos.",
+          "customers": "Cuentas de clientes ordenadas por actividad reciente.",
+          "events": "Activa o desactiva las automatizaciones de pedidos, contra reembolso, carritos y stock.",
+          "analytics": "Ingresos, volumen de mensajes e impacto del contra reembolso de esta tienda.",
+          "logs": "Registro de entregas de webhooks de esta tienda.",
+          "settings": "Detalles de la conexión: verifícala de nuevo o desconecta.",
+          "invoices": "Facturas emitidas por tus pedidos de WooCommerce."
+        }
+      },
+      "loading": "Cargando la tienda…",
+      "flash": {
+        "success": "Listo.",
+        "error": "Algo salió mal."
+      },
+      "cancel": "Cancelar"
+    },
+    "overview": {
+      "revenueRecent": "Ingresos (recientes)",
+      "revenueRecentHint": "en los pedidos sincronizados recientes",
+      "ordersTotal": "Total de pedidos",
+      "ordersMirrorHint": "sincronizados en el CRM",
+      "products": "Productos",
+      "productsHint": "tamaño del catálogo sincronizado",
+      "customers": "Clientes",
+      "activeAutomations": "{count} automatizaciones activas",
+      "revenue30": "Ingresos · 30 d",
+      "revenue30Hint": "del informe de ventas de WC",
+      "orders30": "Pedidos · 30 d",
+      "ordersAllTime": "{count} en total históricamente",
+      "customersNew": "{count} nuevos en 30 d",
+      "itemsSold": "Artículos vendidos · 30 d",
+      "recentOrders": "Pedidos recientes",
+      "viewAll": "Ver todo →",
+      "noOrders": "Aún no hay pedidos. Pulsa Sincronizar ahora.",
+      "recentActivity": "Actividad reciente de webhooks",
+      "noActivity": "Aún no se han recibido eventos de webhook."
+    },
+    "orders": {
+      "order": "Pedido",
+      "customer": "Cliente",
+      "status": "Estado",
+      "total": "Total",
+      "placed": "Realizado",
+      "none": "No se encontraron pedidos."
+    },
+    "products": {
+      "search": "Buscar productos…",
+      "offers": "Ofertas especiales",
+      "catalog": "Enviar un catálogo →",
+      "newArrivals": "Novedades",
+      "all": "Todos los productos",
+      "none": "Aún no hay productos. Conecta una tienda o pulsa Sincronizar ahora.",
+      "noImage": "sin imagen",
+      "save": "AHORRA {pct}%",
+      "send": "Enviar",
+      "offer": "Oferta",
+      "noMatch": "Ningún producto coincide.",
+      "wooNone": "No se encontraron productos.",
+      "inStock": "En stock",
+      "outOfStock": "Agotado"
+    },
+    "offers": {
+      "choose": "Elegir productos",
+      "selected": "{count} seleccionados",
+      "noProducts": "Aún no hay productos sincronizados.",
+      "template": "Plantilla de mensaje",
+      "pickTemplate": "Elige una plantilla",
+      "tokens": "Variables que puedes usar:",
+      "segment": "Enviar al segmento",
+      "pickGroup": "Elige un grupo de contactos",
+      "coupon": "Cupón (opcional)",
+      "noCoupon": "Sin cupón",
+      "couponPercent": "{amount}%",
+      "send": "Enviar oferta",
+      "sending": "Enviando…",
+      "pickTemplateFirst": "Primero elige una plantilla.",
+      "pickSegmentFirst": "Primero elige un segmento.",
+      "note": "Solo se envía a los contactos del segmento que dieron su consentimiento. Los envíos por WABA requieren una plantilla aprobada; la API no oficial la muestra como texto con botones.",
+      "queued": "En cola para {total} contactos. Los recuentos aparecerán en la pestaña Actividad al terminar.",
+      "failed": "El envío falló.",
+      "wooTitle": "Difusión de oferta de producto",
+      "wooIntro": "Envía una plantilla aprobada a todos los contactos de un segmento que dieron su consentimiento. Incluye un producto y un cupón.",
+      "wooTemplate": "Plantilla",
+      "choose2": "elegir",
+      "wooSegment": "Segmento (grupo de contactos)",
+      "wooProduct": "Producto destacado",
+      "wooCoupon": "Código de cupón",
+      "wooCouponPlaceholder": "SAVE10",
+      "winTitle": "Difusión por segmento inteligente",
+      "winIntro": "Segmenta a los clientes según su historial de pedidos: antigüedad (recuperación), número de pedidos y gasto total (VIP). Omite a los contactos con baja voluntaria.",
+      "winLast": "Último pedido",
+      "winAny": "Cualquier fecha",
+      "winDays": "> {days} días atrás",
+      "winMonths": "> 6 meses",
+      "winYear": "> 1 año",
+      "winMinOrders": "Mín. de pedidos",
+      "winAnyOrders": "Cualquiera",
+      "winMinSpend": "Gasto mín. ({currency})",
+      "winTemplate": "Plantilla",
+      "winPick": "Elegir",
+      "winCoupon": "Cupón",
+      "winNone": "Ninguno",
+      "winSend": "Enviar recuperación",
+      "winConfirm": "¿Enviar esta difusión a todos los del segmento?",
+      "winQueued": "En cola para {total} clientes inactivos. Los recuentos aparecerán en la pestaña Actividad al terminar.",
+      "wooWinTitle": "Difusión por segmento inteligente",
+      "wooWinIntro": "Segmenta por historial de pedidos: recupera a compradores inactivos o premia a tus mejores clientes.",
+      "wooLapsed": "Inactivos > días",
+      "wooWinNote": "Días = 0 apunta a cualquier fecha (segmento puro). El gasto se mide en la moneda de la tienda. Los contactos con baja voluntaria siempre se omiten.",
+      "wooCouponPlaceholder2": "COMEBACK15",
+      "wooWinSend": "Enviar difusión",
+      "optional": "opcional",
+      "none": "ninguno",
+      "cancel": "Cancelar"
+    },
+    "customers": {
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "orders": "Pedidos",
+      "spent": "Gastado",
+      "none": "Aún no se han obtenido clientes.",
+      "noneWoo": "Aún no hay clientes."
+    },
+    "events": {
+      "noTemplates": "Aún no tienes plantillas de WhatsApp aprobadas. Crea una en Plantillas para activar una automatización.",
+      "templatesLink": "Plantillas",
+      "sendFrom": "Enviar desde",
+      "sendFromHint": "Qué número conectado envía estas automatizaciones.",
+      "auto": "Automático: cualquier número conectado",
+      "fired": "{count} disparadas",
+      "logged": "{count} registradas",
+      "template": "Plantilla",
+      "pickTemplate": "Elige una plantilla",
+      "noneOption": "ninguna",
+      "sendTo": "Enviar a",
+      "customer": "Cliente",
+      "admin": "Solo administrador",
+      "both": "Ambos",
+      "adminNumber": "Número del administrador",
+      "delay": "Retraso",
+      "on": "Activada",
+      "immediate": "Inmediato",
+      "min": "{n} min",
+      "hour": "{n} h",
+      "day": "{n, plural, one {# día} other {# días}}",
+      "mapTitle": "Asigna variables de plantilla → campos del pedido",
+      "param": "Parámetro {n}",
+      "blank": "— vacío —",
+      "field": {
+        "name": "Nombre del cliente",
+        "first_name": "Nombre de pila",
+        "order_name": "N.º de pedido (p. ej., #1001)",
+        "order_number": "Número de pedido",
+        "total": "Total + moneda",
+        "total_price": "Total (solo importe)",
+        "currency": "Moneda",
+        "email": "Correo del cliente",
+        "store_name": "Nombre de la tienda",
+        "financial_status": "Estado del pago",
+        "fulfillment_status": "Estado del cumplimiento"
+      },
+      "advanced": "Avanzado · orden de variables",
+      "advancedHint": "Campos separados por comas que se asignan en orden a los marcadores numerados de tu plantilla. Déjalo vacío para el valor inteligente por defecto: nombre, pedido, total.",
+      "advancedPlaceholder": "name, first_name, order_number, order_name, total, currency, order_url, tracking_number, tracking_url",
+      "save": "Guardar automatizaciones",
+      "saving": "Guardando…",
+      "saved": "✓ Guardado",
+      "saveFailed": "Error al guardar",
+      "needTemplate": "Elige una plantilla para cada automatización que actives."
+    },
+    "autoGroups": {
+      "lifecycle": {
+        "name": "Ciclo de vida del pedido",
+        "desc": "Avisos transaccionales: se disparan solos con los eventos de la tienda."
+      },
+      "recovery": {
+        "name": "Recuperación de ingresos",
+        "desc": "Recupera ventas perdidas."
+      },
+      "marketing": {
+        "name": "Marketing de ciclo de vida",
+        "desc": "Haz crecer y fideliza a tus clientes."
+      }
+    },
+    "auto": {
+      "shopify": {
+        "orders_create": {
+          "name": "Confirmación del pedido",
+          "desc": "Da las gracias al cliente en cuanto hace un pedido."
+        },
+        "orders_paid": {
+          "name": "Pago recibido",
+          "desc": "Confirma cuando el pago se haya completado."
+        },
+        "orders_fulfilled": {
+          "name": "Enviado / En reparto",
+          "desc": "Envía un aviso de despacho: usa '{{'tracking_url'}}' para el enlace de seguimiento en vivo."
+        },
+        "order_delivered": {
+          "name": "Entregado",
+          "desc": "Confirma la entrega (pide una reseña si tu plantilla lo hace). Se dispara cuando el transportista lo marca como entregado."
+        },
+        "orders_cancelled": {
+          "name": "Pedido cancelado",
+          "desc": "Avisa al cliente de que se canceló un pedido."
+        },
+        "refunds_create": {
+          "name": "Reembolso emitido",
+          "desc": "Confirma que se procesó un reembolso."
+        },
+        "orders_updated": {
+          "name": "Pedido actualizado",
+          "desc": "Se dispara ante cualquier cambio en un pedido existente."
+        },
+        "checkouts_create": {
+          "name": "Carrito abandonado · paso 1",
+          "desc": "Se dispara justo tras abandonar un pago: incluye '{{'checkout_url'}}' para que vuelvan."
+        },
+        "cart_step2": {
+          "name": "Carrito abandonado · paso 2",
+          "desc": "Seguimiento programado (define el retraso, p. ej., 1 hora). Se cancela solo si compran."
+        },
+        "cart_step3": {
+          "name": "Carrito abandonado · paso 3",
+          "desc": "Último recordatorio (p. ej., 24 horas): añade un cupón en la plantilla para cerrar la venta."
+        },
+        "cod_confirm": {
+          "name": "Confirmación de pedido contra reembolso",
+          "desc": "Pide a los clientes de contra reembolso que confirmen con un Sí/No: reduce pedidos falsos y devoluciones (RTO)."
+        },
+        "cod_prepaid": {
+          "name": "Oferta contra reembolso → prepago",
+          "desc": "Anima a los clientes de contra reembolso a pagar ya en línea (usa '{{'order_url'}}' y un descuento en la plantilla): menos devoluciones, cobro más rápido."
+        },
+        "stock_back": {
+          "name": "Aviso de vuelta al stock",
+          "desc": "Los clientes que escriben por un artículo agotado reciben un aviso automático cuando se repone."
+        },
+        "customers_create": {
+          "name": "Bienvenida a nuevo cliente",
+          "desc": "Saluda con calidez a un cliente nuevo."
+        },
+        "customers_update": {
+          "name": "Cliente actualizado",
+          "desc": "Se dispara cuando cambia el perfil de un cliente."
+        },
+        "products_update": {
+          "name": "Producto actualizado",
+          "desc": "Disparador interno por cambio de precio o stock."
+        }
+      },
+      "woocommerce": {
+        "order_created": {
+          "name": "Pedido realizado",
+          "desc": "Se envía en cuanto entra un pedido nuevo."
+        },
+        "order_processing": {
+          "name": "Pedido confirmado",
+          "desc": "Pago recibido: el pedido se está preparando."
+        },
+        "order_completed": {
+          "name": "Pedido entregado",
+          "desc": "Pedido marcado como completado en WooCommerce."
+        },
+        "order_on_hold": {
+          "name": "Pedido en espera",
+          "desc": "A la espera de pago o stock: mantén informado al comprador."
+        },
+        "order_cancelled": {
+          "name": "Pedido cancelado",
+          "desc": "El pedido fue cancelado."
+        },
+        "order_refunded": {
+          "name": "Pedido reembolsado",
+          "desc": "Se emitió un reembolso."
+        },
+        "cod_confirm": {
+          "name": "Doble confirmación de contra reembolso",
+          "desc": "Pide a los compradores de contra reembolso que confirmen Sí / No antes de enviar: la mejor forma de reducir las devoluciones (RTO)."
+        },
+        "cod_prepaid": {
+          "name": "Contra reembolso → empujón al prepago",
+          "desc": "Ofrece a los compradores de contra reembolso un enlace de pago en línea (la plantilla puede incluir '{{'order_url'}}' y un incentivo)."
+        },
+        "checkout_created": {
+          "name": "Carrito abandonado · paso 1",
+          "desc": "Primer recordatorio cuando se inicia el pago pero no entra ningún pedido. Requiere el plugin complementario de WooCommerce."
+        },
+        "cart_step2": {
+          "name": "Carrito abandonado · paso 2",
+          "desc": "Seguimiento programado tras el retraso indicado abajo."
+        },
+        "cart_step3": {
+          "name": "Carrito abandonado · paso 3",
+          "desc": "Último recordatorio: añade un descuento en la plantilla."
+        },
+        "stock_back": {
+          "name": "De vuelta en stock",
+          "desc": "Avisa a todos los de la lista de espera cuando se repone un producto agotado."
+        },
+        "subscription_payment_failed": {
+          "name": "Reclamación de suscripción",
+          "desc": "Cuando falla el pago de renovación de una suscripción, envía un enlace de \"actualizar pago\" de un toque. Requiere el plugin complementario de WooCommerce."
+        },
+        "customer_created": {
+          "name": "Bienvenida a nuevo cliente",
+          "desc": "Saluda a un cliente la primera vez que se registra en la tienda."
+        },
+        "review_reward": {
+          "name": "Cupón por reseña",
+          "desc": "Cuando un comprador reciente responde con una valoración positiva (4–5 / \"genial\"), envía automáticamente esta plantilla de recompensa: incluye un cupón. Combínala con una plantilla de \"Pedido entregado\" que pida valorar."
+        }
+      }
+    },
+    "analytics": {
+      "revenue": "Ingresos",
+      "orders": "Pedidos",
+      "avgOrder": "Pedido medio",
+      "messagesSent": "Mensajes enviados",
+      "offersSent": "Ofertas enviadas",
+      "codProtected": "Ingresos de contra reembolso protegidos",
+      "codConfirmed": "{count} pedidos contra reembolso confirmados",
+      "rtoAvoided": "RTO evitados",
+      "codCancelled": "{count} pedidos falsos o contra reembolso detenidos",
+      "recovery": "Mensajes de recuperación",
+      "recoveryHint": "carrito / oferta / recuperación / stock",
+      "avgValue": "Valor medio del pedido",
+      "trend": "Ingresos · últimos 14 días",
+      "perf": "Rendimiento de las automatizaciones",
+      "event": "Evento",
+      "fired": "Disparadas",
+      "noActivity": "Aún no hay actividad de automatizaciones.",
+      "revenueMirrored": "Ingresos · reflejados",
+      "ordersSynced": "{count} pedidos sincronizados",
+      "perOrder": "por pedido",
+      "offerBroadcasts": "{count} difusiones de ofertas",
+      "recoverySends": "Envíos de recuperación",
+      "recoverySendsHint": "contra reembolso / carrito / stock / ofertas",
+      "wouldBeRto": "posibles RTO cancelados a tiempo",
+      "activeAutomations": "Automatizaciones activas",
+      "firingOn": "se disparan con eventos de la tienda"
+    },
+    "logs": {
+      "processed": "Procesados",
+      "sent": "Enviados",
+      "skipped": "Omitidos",
+      "failed": "Fallidos",
+      "event": "Evento",
+      "recipient": "Destinatario",
+      "status": "Estado",
+      "when": "Cuándo",
+      "none": "Aún no ha llegado ningún evento de webhook de esta tienda."
+    },
+    "settings": {
+      "storeUrl": "URL de la tienda",
+      "connectedAt": "Conectada el",
+      "lastVerified": "Última verificación",
+      "scopes": "Permisos concedidos",
+      "wooVersion": "Versión de WooCommerce",
+      "webhookUrl": "URL del webhook",
+      "registered": "Webhooks registrados",
+      "registeredCount": "{count, plural, one {# suscripción activa} other {# suscripciones activas}}",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "plugin": {
+        "title": "Plugin de WordPress",
+        "body": "Instala este pequeño plugin en tu tienda para recuperar carritos abandonados antes de que exista un pedido y para transmitir pagos de suscripción fallidos y estados de pedido personalizados.",
+        "step1": "Descarga el plugin abajo. Está hecho para esta tienda.",
+        "step2": "En WordPress, abre Plugins, Añadir nuevo, Subir plugin, elige el zip y actívalo.",
+        "step3": "Asegúrate de que WP-Cron se ejecute en tu sitio. El plugin busca carritos inactivos cada 5 minutos.",
+        "download": "Descargar plugin (.zip)",
+        "preparing": "Preparando el plugin…",
+        "started": "Plugin descargado.",
+        "secretNote": "El archivo contiene la clave secreta de esta tienda. Mantenla privada.",
+        "forbidden": "No tienes permiso para descargar el plugin.",
+        "failed": "No se pudo descargar el plugin. Inténtalo de nuevo."
+      }
+    },
+    "embedded": {
+      "title": "Shopify",
+      "connected": "Conectada",
+      "notConnected": "No conectada",
+      "store": "Tienda",
+      "plan": "Plan de Shopify",
+      "lastVerified": "Última verificación",
+      "openApp": "Abrir la app",
+      "openToConnect": "Abre la app para conectar",
+      "invalid": "La sesión de Shopify no es válida. Recarga la app desde tu panel de Shopify.",
+      "off": "La integración de Shopify no está activada en esta instalación. Contacta con soporte.",
+      "error": "Algo salió mal. Recarga la app desde tu panel de Shopify."
+    },
+    "invoices": {
+      "policyTitle": "Facturas automáticas",
+      "autoInvoice": "Facturar automáticamente los pedidos de esta tienda",
+      "autoInvoiceHint": "Cada factura se pone en cola para el comprador por WhatsApp, o por correo si no hay número de teléfono. Desactivado hasta que lo actives.",
+      "trigger": "Facturar cuando el pedido esté",
+      "on_placed": "Realizado",
+      "on_paid": "Pagado",
+      "on_fulfilled": "Cumplido",
+      "saved": "Ajustes de facturación guardados.",
+      "saveFailed": "No se pudieron guardar los ajustes de facturación.",
+      "policyLoadFailed": "No se pudieron cargar los ajustes de facturación.",
+      "listTitle": "Facturas de esta tienda",
+      "number": "Número",
+      "buyer": "Comprador",
+      "type": "Tipo",
+      "status": "Estado",
+      "total": "Total",
+      "issued": "Emitida",
+      "draft": "Borrador",
+      "tax_invoice": "Factura fiscal",
+      "receipt": "Recibo",
+      "proforma": "Proforma",
+      "status_draft": "Borrador",
+      "status_issued": "Emitida",
+      "status_partially_paid": "Pago parcial",
+      "status_paid": "Pagada",
+      "status_overdue": "Vencida",
+      "status_void": "Anulada",
+      "loading": "Cargando facturas…",
+      "none": "Aún no hay facturas de esta tienda. Activa las facturas automáticas arriba y el próximo pedido pagado tendrá una.",
+      "error": "No se pudieron cargar las facturas.",
+      "retry": "Reintentar",
+      "forbidden": "No tienes acceso a las facturas.",
+      "viewAll": "Abrir todas las facturas"
+    }
+  }
+}

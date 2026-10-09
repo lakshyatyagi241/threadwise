@@ -15,7 +15,6 @@ import {
   type ConsoleLeaf,
 } from './console-nav';
 import type { ConsoleCounts } from './console-counts';
-import { ConsoleIcon } from './console-icons';
 import { RailLink } from './rail-link';
 
 /**
@@ -153,60 +152,51 @@ export function HubMenu({
   gated: boolean;
 }) {
   const t = useTranslations();
-  const tc = useTranslations('admin-console-shell.shell');
+  const home = entries.find((e): e is ConsoleLeaf => !isGroup(e));
   return (
     <div data-testid="hub-menu" className="space-y-0.5">
-      <Link
-        href={CONSOLE_HOME}
-        data-testid="hub-all-areas"
-        className="flex items-center gap-2 rounded-md px-2 py-1.5 text-xs opacity-80 hover:bg-sidebar-active hover:opacity-100 focus-visible:ring-2 focus-visible:ring-primary"
-      >
-        <span aria-hidden="true" className="rtl:-scale-x-100">
-          ←
-        </span>
-        {tc('allAreas')}
-      </Link>
-      <details key={hub.id} className="group/switch">
-        <summary
-          aria-label={tc('switchArea', { area: t(hub.labelKey) })}
-          data-testid="hub-switcher"
-          className="flex cursor-pointer list-none items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium text-white hover:bg-sidebar-active focus-visible:ring-2 focus-visible:ring-primary [&::-webkit-details-marker]:hidden"
-        >
-          <ConsoleIcon name={hub.icon ?? 'dashboard'} />
-          <span className="min-w-0 flex-1 truncate">{t(hub.labelKey)}</span>
-          <span
-            aria-hidden="true"
-            className="text-xs transition-transform group-open/switch:rotate-180"
-          >
-            ▾
-          </span>
-        </summary>
-        <div className="ms-2 mt-1 space-y-0.5 border-s border-white/10 ps-2">
-          <AreaLinks
-            entries={entries}
-            activeHubId={hub.id}
-            homeActive={false}
-            gated={gated}
-            skip={hub.id}
+      {home && (
+        <RailLink
+          href={CONSOLE_HOME}
+          icon="dashboard"
+          label={home.label ?? t(home.labelKey)}
+          active={false}
+          disabled={gated}
+          testId="hub-home"
+        />
+      )}
+      {entries.filter(isGroup).map((area) => (
+        <div key={area.id} className="space-y-0.5">
+          <RailLink
+            href={hubHref(area)}
+            icon={area.icon ?? 'dashboard'}
+            label={t(area.labelKey)}
+            active={area.id === hub.id}
+            disabled={gated}
+            testId={`hub-${area.id}`}
           />
-        </div>
-      </details>
-      {pageRuns(hub).map((run, i) => (
-        <div key={run.captionKey ?? `run-${i}`} className="space-y-0.5">
-          {run.captionKey && (
-            <div className="px-2 pb-0.5 pt-2.5 text-[0.6875rem] font-semibold uppercase tracking-wider opacity-60">
-              {t(run.captionKey)}
+          {area.id === hub.id && (
+            <div data-testid="hub-pages" className="ms-4 space-y-0.5 border-s border-white/10 ps-2">
+              {pageRuns(hub).map((run, i) => (
+                <div key={run.captionKey ?? `run-${i}`} className="space-y-0.5">
+                  {run.captionKey && (
+                    <div className="px-2 pb-0.5 pt-2.5 text-[0.6875rem] font-semibold uppercase tracking-wider opacity-60">
+                      {t(run.captionKey)}
+                    </div>
+                  )}
+                  {run.pages.map((leaf) => (
+                    <PageLink
+                      key={leaf.id}
+                      leaf={leaf}
+                      active={leaf.id === activeId}
+                      counts={counts}
+                      gated={gated}
+                    />
+                  ))}
+                </div>
+              ))}
             </div>
           )}
-          {run.pages.map((leaf) => (
-            <PageLink
-              key={leaf.id}
-              leaf={leaf}
-              active={leaf.id === activeId}
-              counts={counts}
-              gated={gated}
-            />
-          ))}
         </div>
       ))}
     </div>

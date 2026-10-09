@@ -1,0 +1,258 @@
+{
+  "workspaces-hub": {
+    "nav": {
+      "group": "Espacios de trabajo",
+      "workspaces": "Espacios de trabajo"
+    },
+    "crumb": {
+      "admin": "Administrador",
+      "workspaces": "Espacios de trabajo",
+      "label": "Ruta de navegación"
+    },
+    "common": {
+      "loading": "Cargando",
+      "retry": "Reintentar",
+      "cancel": "Cancelar",
+      "close": "Cerrar",
+      "none": "Ninguno",
+      "never": "Nunca",
+      "unlimited": "Ilimitado",
+      "noAccess": "Tu rol no puede hacer esto."
+    },
+    "list": {
+      "title": "Espacios de trabajo",
+      "subtitle": "Todos los espacios de trabajo de clientes en un solo lugar: plan, proveedor, monedero, propietario y actividad, con las acciones que necesitas en cada uno.",
+      "kpi": {
+        "total": "Espacios de trabajo",
+        "active": "Activos",
+        "suspended": "Suspendidos",
+        "trial": "En prueba",
+        "newThisMonth": "Nuevos este mes",
+        "lowBalance": "Saldo bajo",
+        "mrr": "MRR"
+      },
+      "search": "Buscar",
+      "searchPlaceholder": "Nombre, slug, nombre o correo del propietario",
+      "status": {
+        "label": "Estado",
+        "all": "Todos",
+        "active": "Activos",
+        "suspended": "Suspendidos"
+      },
+      "plan": "Plan",
+      "allPlans": "Todos los planes",
+      "state": "Situación",
+      "allStates": "Todas las situaciones",
+      "provider": "Proveedor",
+      "allProviders": "Todos los proveedores",
+      "lowOnly": "Solo saldo bajo",
+      "sort": {
+        "label": "Ordenar por",
+        "created": "Más recientes",
+        "last_active": "Última actividad",
+        "name": "Nombre"
+      },
+      "clear": "Borrar filtros",
+      "refresh": "Actualizar",
+      "columns": {
+        "menu": "Columnas",
+        "reset": "Restablecer columnas",
+        "workspace": "Espacio de trabajo",
+        "provider": "Proveedor",
+        "numbers": "Números",
+        "plan": "Plan",
+        "state": "Situación",
+        "ends": "Termina",
+        "limits": "Límites",
+        "wallet": "Monedero",
+        "owner": "Propietario",
+        "mrr": "MRR",
+        "messages7d": "Msgs 7 d",
+        "lastActive": "Última actividad",
+        "actions": "Acciones"
+      },
+      "tableLabel": "Espacios de trabajo",
+      "emptyTitle": "Todavía no hay espacios de trabajo",
+      "emptyMessage": "Los espacios de trabajo aparecen aquí en cuanto los clientes se registran.",
+      "noMatchTitle": "Ningún espacio de trabajo coincide",
+      "noMatchMessage": "Cambia la búsqueda o los filtros para ver más.",
+      "loadMore": "Cargar más",
+      "loadingMore": "Cargando más",
+      "loaded": "{count, plural, one {# espacio de trabajo mostrado} other {# espacios de trabajo mostrados}}"
+    },
+    "cell": {
+      "suspended": "Suspendido",
+      "suspendedBy": {
+        "frozen": "Congelado",
+        "tos_violation": "Incumplimiento de términos",
+        "fraud": "Fraude"
+      },
+      "providerSource": {
+        "override": "Anulación",
+        "default": "Predeterminado",
+        "platform_setting": "Ajuste de la plataforma"
+      },
+      "numbersCount": "{count, plural, one {# número} other {# números}}",
+      "platformOwned": "Plataforma",
+      "unknownPlan": "Plan desconocido",
+      "health": {
+        "suspended": "Suspendido",
+        "good": "Bueno",
+        "active": "Activo",
+        "low": "Uso bajo",
+        "new": "Nuevo",
+        "idle": "Inactivo"
+      },
+      "daysLeft": "{count, plural, one {# día restante} other {# días restantes}}",
+      "expired": "Caducado",
+      "limits": {
+        "summary": "{messages} msgs/mes · {users} usuarios · {contacts} contactos · {devices} dispositivos",
+        "override": "Anulación",
+        "messages": "Mensajes por mes",
+        "users": "Usuarios",
+        "contacts": "Contactos",
+        "devices": "Dispositivos"
+      },
+      "lowBalance": "Bajo",
+      "noOwner": "Sin propietario",
+      "ago": {
+        "now": "Justo ahora",
+        "minutes": "{count, plural, one {hace # minuto} other {hace # minutos}}",
+        "hours": "{count, plural, one {hace # hora} other {hace # horas}}",
+        "days": "{count, plural, one {hace # día} other {hace # días}}"
+      }
+    },
+    "actions": {
+      "menu": "Acciones para {name}",
+      "dashboard": "Panel del espacio de trabajo",
+      "editPlan": "Editar y cambiar plan",
+      "planLimits": "Plan y límites",
+      "provider": "Cambiar y definir proveedor",
+      "impersonate": "Entrar como propietario",
+      "suspend": "Suspender",
+      "unsuspend": "Reactivar",
+      "denied": "No permitido"
+    },
+    "plan": {
+      "loading": "Cargando el plan",
+      "loadFailed": "No se pudo cargar el plan.",
+      "saved": "Plan guardado para {name}."
+    },
+    "provider": {
+      "title": "Proveedor para {name}",
+      "help": "Los números nuevos de este espacio de trabajo se conectan a través del proveedor que elijas. Los números ya conectados se quedan donde están hasta que los muevas.",
+      "current": "Ahora usa {name} ({source})",
+      "field": "Proveedor",
+      "note": "Nota (opcional)",
+      "noteHint": "Se guarda con la anulación para que el siguiente operador sepa por qué.",
+      "noActive": "No hay ningún proveedor activo. Activa uno primero en el registro de proveedores.",
+      "save": "Definir anulación",
+      "clear": "Usar el predeterminado",
+      "switchLink": "Mover los números conectados a otro proveedor",
+      "assignmentsLink": "Registro de proveedores",
+      "saved": "Proveedor definido para {name}.",
+      "cleared": "{name} vuelve a seguir el proveedor predeterminado."
+    },
+    "impersonate": {
+      "title": "Entrar como propietario de {name}",
+      "help": "Abrirás el espacio de trabajo como su propietario en una pestaña nueva. La sesión dura como máximo {minutes} minutos y queda registrada con tu motivo.",
+      "reason": "Motivo",
+      "reasonHint": "Al menos {min} caracteres. Se guarda en el registro de auditoría.",
+      "readOnly": "Sesión de solo lectura",
+      "readOnlyHint": "Puedes explorar, pero cada cambio se rechaza.",
+      "submit": "Abrir espacio de trabajo",
+      "opened": "Abriendo {name} en una pestaña nueva.",
+      "popupBlocked": "Tu navegador bloqueó la pestaña nueva. Permite las ventanas emergentes para esta página e inténtalo de nuevo.",
+      "reasonShort": "Escribe al menos {min} caracteres."
+    },
+    "suspend": {
+      "title": "¿Suspender {name}?",
+      "message": "Sus usuarios cerrarán sesión en el espacio de trabajo y se detendrá la mensajería hasta que lo reactives.",
+      "reason": "Motivo (opcional)",
+      "confirm": "Suspender espacio de trabajo",
+      "done": "{name} está suspendido."
+    },
+    "unsuspend": {
+      "title": "¿Reactivar {name}?",
+      "message": "Sus usuarios podrán volver a usar el espacio de trabajo.",
+      "reason": "Nota (opcional)",
+      "confirm": "Reactivar espacio de trabajo",
+      "done": "{name} está activo de nuevo."
+    },
+    "errors": {
+      "unexpected": "Algo salió mal. Inténtalo de nuevo.",
+      "forbidden": "Tu rol no puede hacer esto.",
+      "conflict": "Otra persona cambió este espacio de trabajo. Recarga la página e inténtalo de nuevo.",
+      "notFound": "Este espacio de trabajo ya no existe.",
+      "reasonRequired": "Se requiere un motivo de al menos 8 caracteres.",
+      "orgSuspended": "El espacio de trabajo está suspendido, así que no se puede entrar.",
+      "validation": "Revisa los valores e inténtalo de nuevo.",
+      "requestId": "ID de la solicitud"
+    },
+    "detail": {
+      "crumb": "Espacio de trabajo",
+      "back": "Todos los espacios de trabajo",
+      "loadFailed": "No se pudo cargar este espacio de trabajo.",
+      "slug": "Slug",
+      "created": "Creado el {date}",
+      "kpi": {
+        "members": "Miembros",
+        "contacts": "Contactos",
+        "openTickets": "Tickets abiertos",
+        "delivered": "Entregados",
+        "wallet": "Monedero",
+        "mrr": "MRR",
+        "messages7d": "Mensajes, 7 días"
+      },
+      "chart": {
+        "title": "Últimos 30 días",
+        "label": "Mensajes enviados y entregados por día, últimos 30 días",
+        "sent": "Enviados",
+        "delivered": "Entregados",
+        "empty": "No hay mensajes en los últimos 30 días."
+      },
+      "tabs": {
+        "label": "Secciones del espacio de trabajo",
+        "overview": "Resumen",
+        "plan": "Plan y límites",
+        "wallet": "Monedero",
+        "provider": "Proveedor",
+        "support": "Soporte"
+      },
+      "overview": {
+        "owner": "Propietario",
+        "adminNote": "Nota del administrador",
+        "noNote": "Sin nota.",
+        "health": "Estado de salud",
+        "lastActive": "Última actividad",
+        "suspendedBy": "Gestionado por"
+      },
+      "planTab": {
+        "plan": "Plan",
+        "state": "Situación",
+        "ends": "Termina",
+        "limits": "Límites efectivos",
+        "edit": "Editar y cambiar plan",
+        "overrideNote": "Este espacio de trabajo tiene límites propios que reemplazan los del plan."
+      },
+      "walletTab": {
+        "open": "Abrir el monedero completo",
+        "balance": "Saldo",
+        "adjust": "Ajustar saldo",
+        "adjusted": "Se ajustó el saldo."
+      },
+      "providerTab": {
+        "provider": "Proveedor efectivo",
+        "source": "Elegido por",
+        "numbers": "Números conectados",
+        "change": "Cambiar y definir proveedor",
+        "switch": "Mover números a otro proveedor"
+      },
+      "supportTab": {
+        "text": "Tickets, conversaciones e historial de soporte de este espacio de trabajo.",
+        "open": "Abrir el registro de soporte",
+        "openTickets": "{count, plural, one {# ticket abierto} other {# tickets abiertos}}"
+      }
+    }
+  }
+}

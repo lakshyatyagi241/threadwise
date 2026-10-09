@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "מרכז העזרה",
+    "searchLabel": "חיפוש בעזרה",
+    "searchPlaceholder": "חיפוש מדריכים",
+    "resultsStatus": "{count, plural, =0 {לא נמצאו מדריכים} one {מדריך אחד} two {# מדריכים} other {# מדריכים}}",
+    "none": {
+      "title": "עדיין אין מדריכים",
+      "message": "מדריכים לתכונות בתוכנית שלכם יופיעו כאן."
+    },
+    "noResults": {
+      "title": "אין מדריכים שתואמים לחיפוש שלכם",
+      "message": "נסו מילים אחרות, או נקו את החיפוש כדי לראות את כל המדריכים."
+    },
+    "areas": {
+      "overview": "פלטפורמה",
+      "inbox": "תיבת הדואר והצ׳אט",
+      "audience": "CRM",
+      "sales": "מכירות",
+      "campaigns": "קמפיינים",
+      "automation": "אוטומציה",
+      "store": "חנות",
+      "apps": "שוק",
+      "settings": "הגדרות",
+      "account": "חשבון",
+      "getting-started": "התחלה מהירה",
+      "troubleshooting": "פתרון בעיות"
+    },
+    "allHelp": "חזרה לעזרה",
+    "onThisPage": "בעמוד זה",
+    "openScreen": "פתיחת המסך הזה",
+    "shownInEnglish": "המדריך הזה עדיין לא תורגם לשפה שלכם, ולכן הוא מוצג באנגלית.",
+    "tip": {
+      "label": "עזרה: {title}",
+      "readMore": "קריאת המדריך"
+    },
+    "guideCount": "{count, plural, =0 {אין מדריכים} one {מדריך אחד} two {# מדריכים} other {# מדריכים}}",
+    "crumb": "עוד / עזרה",
+    "heading": "עזרה",
+    "headingRest": "ומדריכים",
+    "back": "חזרה",
+    "askSupport": "לא מצאתם? פנו לתמיכה",
+    "askSupportShort": "תמיכה",
+    "categories": "קטגוריות",
+    "allGuides": "כל המדריכים",
+    "needHuman": "צריכים נציג אנושי?",
+    "contactSupport": "יצירת קשר עם התמיכה",
+    "popular": "פופולרי",
+    "searchResults": "תוצאות חיפוש",
+    "read": "קריאת מדריך",
+    "readMinutes": "{count, plural, one {דקת קריאה אחת} two {# דק׳ קריאה} other {# דק׳ קריאה}}",
+    "moreInArea": "עוד ב־{area}"
+  }
+}

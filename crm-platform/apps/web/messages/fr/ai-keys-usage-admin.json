@@ -1,0 +1,223 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "Utilisation de l’IA",
+      "keys": "Clés des fournisseurs d’IA"
+    },
+    "admin": {
+      "nav": {
+        "group": "IA",
+        "keys": "Clés des fournisseurs d’IA",
+        "dashboard": "Utilisation de l’IA"
+      }
+    },
+    "common": {
+      "loading": "Chargement",
+      "retry": "Réessayer",
+      "requestId": "ID de requête",
+      "dismiss": "Ignorer",
+      "tokens": "{count, number} jetons",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Vous n’avez pas l’autorisation de voir ceci.",
+        "request": "Cette requête n’a pas pu aboutir.",
+        "unexpected": "Un problème est survenu de notre côté. Réessayez dans un instant.",
+        "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+        "conflict": "Quelqu’un d’autre a modifié cet élément. La page a été rechargée : appliquez à nouveau votre modification.",
+        "keyRequired": "Ajoutez une clé API avant d’activer ce fournisseur.",
+        "validation": "Certaines valeurs ne sont pas valides. Vérifiez les champs en surbrillance.",
+        "notFound": "Cet élément n’existe plus."
+      }
+    },
+    "windows": {
+      "label": "Période",
+      "7d": "7 jours",
+      "30d": "30 jours",
+      "90d": "90 jours",
+      "1y": "1 an",
+      "custom": "Personnalisée",
+      "from": "Du",
+      "to": "Au",
+      "pick": "Choisissez une date de début et de fin.",
+      "invalid": "La date de fin est antérieure à la date de début.",
+      "tooLong": "Choisissez une période de {days} jours maximum."
+    },
+    "keys": {
+      "eyebrow": "Admin · Système · Fournisseurs d’IA",
+      "title": "Clés API d’IA",
+      "description": "Clés globales pour chaque fournisseur d’IA pris en charge. Les espaces de travail dont le forfait n’inclut pas « Apportez votre propre clé » les utilisent en secours. Chiffrées au repos.",
+      "superOnly": "Seul un super administrateur peut gérer les clés d’IA de la plateforme.",
+      "summary": {
+        "providers": "Fournisseurs",
+        "providersHint": "préconfigurés",
+        "active": "Actif",
+        "activeHint": "activé comme secours",
+        "ready": "Prêt",
+        "readyHint": "actif + clé présente",
+        "noKey": "Aucune clé définie",
+        "noKeyHint": "collez une clé pour passer à prêt"
+      },
+      "groups": {
+        "llm": "Modèles de langage",
+        "voice": "Voix"
+      },
+      "card": {
+        "active": "Actif",
+        "off": "Désactivé",
+        "keySaved": "Clé enregistrée",
+        "keySavedLast4": "Clé enregistrée, se termine par {last4}",
+        "noKey": "Aucune clé",
+        "unreadable": "La clé enregistrée est illisible, collez-la à nouveau",
+        "apiKey": "Clé API",
+        "apiKeyHint": "Laissez vide pour conserver la clé enregistrée.",
+        "apiKeyPlaceholder": "Collez la clé ici",
+        "apiKeySavedPlaceholder": "•••••••••• (enregistrée — laissez vide pour la conserver)",
+        "defaultModel": "Modèle par défaut",
+        "pickModel": "— Choisissez un modèle par défaut —",
+        "customModel": "{model} (personnalisé)",
+        "sortOrder": "Ordre de tri",
+        "maxTokens": "Nombre max. de jetons par requête",
+        "maxTokensHint": "Plafond facultatif de longueur de réponse pour tous les espaces de travail. Vide signifie aucun plafond.",
+        "extraModels": "Modèles supplémentaires",
+        "extraModelsHint": "Facultatif. Identifiants de modèles à proposer en plus du modèle par défaut, séparés par des virgules.",
+        "save": "Enregistrer {name}",
+        "saving": "Enregistrement",
+        "turnOn": "Activer",
+        "turnOff": "Désactiver",
+        "removeKey": "Retirer la clé",
+        "removeTitle": "Retirer la clé {name} ?",
+        "removeBody": "Les espaces de travail cesseront d’utiliser {name} tant que vous n’aurez pas ajouté de clé. Le fournisseur est désactivé.",
+        "removeConfirm": "Retirer la clé",
+        "cancel": "Annuler",
+        "slug": "fournisseur : {provider} · modèle par défaut : {model}",
+        "maxTokensPlaceholder": "ex. 4096"
+      },
+      "toasts": {
+        "saved": "{name} enregistré.",
+        "savedOn": "{name} enregistré et activé.",
+        "on": "{name} activé.",
+        "off": "{name} désactivé.",
+        "removed": "Clé {name} retirée."
+      },
+      "help": {
+        "title": "Comment ces clés sont utilisées",
+        "body": "La clé propre d’un espace de travail ne prime que si son forfait le permet. Sinon, le fournisseur actif correspondant ici est utilisé. Désactiver un fournisseur signifie que les espaces de travail sans clé propre ne peuvent pas l’utiliser.",
+        "eyebrow": "Utilisation de ces clés"
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Admin / Tableau de bord IA",
+      "title": "Utilisation de l’IA et consommation de jetons",
+      "description": "Chaque appel d’IA sur la plateforme : quel fournisseur, quel modèle, quel espace de travail, clés de la plateforme ou clés propres (BYOK), avec une estimation des dépenses.",
+      "kpis": {
+        "tokens": "Jetons consommés",
+        "tokensHint": "sur cette période",
+        "cost": "Coût estimé",
+        "costHint": "est. combinée",
+        "calls": "Appels IA",
+        "callsHint": "requêtes enregistrées",
+        "workspaces": "Espaces de travail utilisant l’IA",
+        "workspacesHint": "actifs"
+      },
+      "daily": "Consommation quotidienne de jetons",
+      "byProvider": "Jetons par fournisseur",
+      "split": "Qui paie : plateforme ou BYOK",
+      "splitPlatform": "Clés de la plateforme",
+      "splitOwn": "Clés propres (BYOK)",
+      "topWorkspaces": "Espaces de travail les plus consommateurs de jetons",
+      "topModels": "Modèles les plus utilisés",
+      "keyHealth": "État des clés IA",
+      "live": "En ligne",
+      "notLive": "Désactivé",
+      "peak": "pic de {value}/jour",
+      "dailyEmpty": "Aucun appel d’IA enregistré sur cette période.",
+      "providerCalls": "{count, number} appels",
+      "providerEmpty": "Aucune utilisation pour le moment.",
+      "splitNote": "Seuls les jetons des clés de la plateforme comptent dans le plafond mensuel d’IA d’un forfait. Les espaces de travail BYOK dépensent sur leur propre compte fournisseur.",
+      "workspaceEmpty": "Aucune utilisation d’IA par les espaces de travail pour le moment.",
+      "workspaceMeta": "{count, number} appels",
+      "workspaceByok": "{tokens} BYOK",
+      "modelEmpty": "Aucune utilisation de modèle pour le moment.",
+      "modelMeta": "{provider} · {count, number} appels",
+      "manageKeys": "Gérer les clés",
+      "noDefaultModel": "aucun modèle par défaut",
+      "noPlatformKeys": "Aucune clé d’IA de la plateforme configurée.",
+      "byokKeys": "Clés BYOK actives",
+      "byokWorkspaces": "Espaces de travail en BYOK"
+    },
+    "usage": {
+      "title": "Utilisation de l’IA",
+      "description": "Chaque appel d’IA effectué par votre espace de travail : jetons consommés, par modèle et fournisseur, clés du forfait ou vos propres clés, et coût estimé.",
+      "kpis": {
+        "tokens": "Jetons utilisés",
+        "calls": "{count, plural, one {# appel IA} other {# appels IA}}",
+        "platform": "Clés du forfait",
+        "ownKeys": "Vos clés (BYOK)",
+        "cost": "Coût estimé",
+        "costHint": "tarif combiné des fournisseurs",
+        "providers": "Fournisseurs",
+        "models": "Modèles"
+      },
+      "cap": {
+        "title": "Ce mois-ci · plafond IA du forfait",
+        "used": "{used, number} jetons utilisés sur {limit, number} ce mois-ci",
+        "unlimited": "{used, number} jetons utilisés ce mois-ci : illimité avec votre forfait",
+        "reached": "Vous approchez de votre plafond mensuel. Passez à un forfait supérieur ou ajoutez vos propres clés (BYOK) pour continuer à utiliser l’IA.",
+        "note": "Les jetons BYOK sont consommés sur votre propre compte fournisseur et ne comptent jamais dans le plafond de votre forfait."
+      },
+      "daily": "Consommation quotidienne de jetons",
+      "byProvider": "Par fournisseur",
+      "split": "Clés du forfait ou vos clés",
+      "splitPlatform": "Clés du forfait",
+      "splitOwn": "Vos clés (BYOK)",
+      "models": "Par modèle",
+      "columns": {
+        "model": "Modèle",
+        "provider": "Fournisseur",
+        "tokens": "Jetons",
+        "calls": "Appels",
+        "prompt": "Invite",
+        "completion": "Complétion"
+      },
+      "empty": "Aucune utilisation d’IA sur cette période.",
+      "costNote": "Le coût est une estimation basée sur les tarifs combinés publiés par fournisseur et peut différer de la facture de votre fournisseur. Les nombres de jetons sont exacts."
+    },
+    "own": {
+      "title": "Vos clés de fournisseurs d’IA",
+      "description": "Ajoutez votre propre clé pour un fournisseur afin que vos fonctionnalités d’IA utilisent votre compte plutôt que le compte partagé. Les clés sont chiffrées et ne sont plus jamais affichées.",
+      "allowed": "Votre forfait donne priorité à vos propres clés.",
+      "notAllowed": "Votre forfait n’inclut pas encore vos propres clés. Vous pouvez les enregistrer dès maintenant, mais les appels continueront d’utiliser la clé partagée jusqu’à ce que vous passiez à un forfait supérieur.",
+      "add": "Ajouter une clé",
+      "provider": "Fournisseur",
+      "apiKey": "Clé API",
+      "apiKeyHint": "Au moins 8 caractères.",
+      "save": "Enregistrer la clé",
+      "replace": "Remplacer la clé",
+      "saving": "Enregistrement",
+      "on": "Activé",
+      "off": "Désactivé",
+      "ends": "Se termine par {last4}",
+      "using": "Les appels utilisent",
+      "usingOwn": "votre clé",
+      "usingShared": "la clé partagée",
+      "usingNone": "aucune clé (rien de disponible)",
+      "turnOn": "Activer",
+      "turnOff": "Désactiver",
+      "remove": "Retirer",
+      "removeTitle": "Retirer votre clé {name} ?",
+      "removeBody": "Les appels reviennent à la clé partagée si elle est disponible.",
+      "removeConfirm": "Retirer la clé",
+      "cancel": "Annuler",
+      "empty": "Vous n’avez ajouté aucune clé.",
+      "toasts": {
+        "saved": "Clé {name} enregistrée.",
+        "on": "Clé {name} activée.",
+        "off": "Clé {name} désactivée.",
+        "removed": "Clé {name} retirée."
+      },
+      "errors": {
+        "tooShort": "Une clé comporte au moins 8 caractères."
+      }
+    }
+  }
+}

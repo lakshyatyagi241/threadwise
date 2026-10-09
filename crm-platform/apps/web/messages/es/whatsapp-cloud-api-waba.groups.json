@@ -1,0 +1,157 @@
+{
+  "whatsapp-cloud-api-waba": {
+    "nav": {
+      "groups": "Grupos de Meta"
+    },
+    "errors": {
+      "WABA_GROUPS_NOT_ELIGIBLE": "Este número no es apto para Grupos. WhatsApp solo abre los Grupos a cuentas de empresa oficiales.",
+      "WABA_GROUPS_PROVIDER_UNSUPPORTED": "Los grupos solo están disponibles en números conectados directamente a Meta. Este número se gestiona a través de otro proveedor.",
+      "WABA_GROUP_NOT_FOUND": "Grupo no encontrado.",
+      "WABA_GROUP_SUSPENDED": "WhatsApp ha suspendido este grupo por infringir sus políticas.",
+      "WABA_GROUP_LIMIT_REACHED": "Se alcanzó un límite de WhatsApp para grupos. Elimina un grupo o pide más a WhatsApp.",
+      "WABA_GROUP_RATE_LIMITED": "Demasiadas operaciones de grupo desde este número. Espera un momento y reintenta.",
+      "PLAN_FEATURE_LOCKED": "Tu plan no incluye grupos de WhatsApp. Mejora el plan para desbloquearlos.",
+      "VALIDATION_FAILED": "Revisa los campos e inténtalo de nuevo."
+    },
+    "groups": {
+      "pageTitle": "Grupos de WhatsApp",
+      "eyebrow": "WhatsApp / Grupos",
+      "headingA": "Grupo",
+      "headingB": "mensajería",
+      "intro": "Crea grupos de WhatsApp desde tu número de empresa, comparte el enlace de invitación y gestiona las solicitudes de entrada. Las conversaciones aparecen en tu bandeja de entrada como cualquier otro chat.",
+      "loading": "Cargando grupos…",
+      "loadFailed": "No se pudieron cargar los grupos.",
+      "retry": "Reintentar",
+      "numbersDenied": "Puedes ver los grupos, pero no la lista de números de WhatsApp a los que pertenecen. Pide a un administrador acceso a los números de WhatsApp.",
+      "rail": {
+        "title": "Grupos",
+        "noNumber": "Sin número de WhatsApp Business",
+        "eligible": "Apto",
+        "notEligible": "No apto",
+        "numberLabel": "Número",
+        "howTitle": "Cómo funcionan los grupos",
+        "howInvite": "Los grupos son solo por invitación. Tú creas el grupo, WhatsApp te da un enlace de invitación y lo compartes: las personas eligen unirse. No hay forma de añadir a alguien directamente.",
+        "howCost": "Cada mensaje que envías se cobra una vez por cada persona que lo recibe. Un mensaje a 100 miembros cuesta 100 envíos."
+      },
+      "state": {
+        "noNumber": {
+          "title": "No hay ningún número de WhatsApp Business conectado",
+          "message": "Los grupos necesitan un número de WhatsApp conectado a través de la Plataforma oficial de WhatsApp Business.",
+          "hint": "Conecta uno en Configuración, Canales, WhatsApp.",
+          "connect": "Abrir números de WhatsApp"
+        },
+        "notEligible": {
+          "title": "Este número todavía no puede usar grupos",
+          "message": "WhatsApp solo abre la función de Grupos a cuentas de empresa oficiales: el nivel verificado con la insignia verde. Tu número está conectado y funciona para chats normales; simplemente no tiene acceso a grupos.",
+          "hint": "Solicita el estado de cuenta de empresa oficial en WhatsApp Manager y luego recarga esta página.",
+          "reload": "Comprobar de nuevo",
+          "checking": "Comprobando…"
+        },
+        "providerUnsupported": {
+          "title": "Los grupos no están disponibles en esta ruta",
+          "message": "Este número se gestiona a través de otro proveedor, no directamente a través de Meta. Los grupos solo se han configurado para números conectados directamente a Meta.",
+          "hint": "Conecta el número directamente con Meta o pregunta al proveedor si admite Grupos."
+        },
+        "missingCredentials": {
+          "title": "Este número necesita volver a conectarse",
+          "message": "No hay ningún token de acceso guardado para este número, así que no se puede consultar a WhatsApp sobre grupos.",
+          "hint": "Sustituye el token en la página de estado del número."
+        },
+        "checkFailed": "No se pudo consultar a WhatsApp si este número puede usar grupos en este momento. Todo lo de abajo sigue funcionando si puede; si una acción falla, inténtalo de nuevo en un momento."
+      },
+      "kpi": {
+        "groups": "Grupos",
+        "groupsSub": "en este número",
+        "members": "Miembros",
+        "membersSub": "en todos los grupos",
+        "joinRequests": "Solicitudes de entrada",
+        "joinRequestsSub": "esperando tu respuesta",
+        "suspended": "Suspendido",
+        "suspendedSub": "bloqueado por WhatsApp"
+      },
+      "create": {
+        "title": "Crear un grupo",
+        "name": "Nombre del grupo",
+        "nameHint": "Lo que ven los miembros en la parte superior del chat. Hasta 128 caracteres.",
+        "who": "Quién puede unirse",
+        "whoAuto": "Cualquiera con el enlace se une de inmediato",
+        "whoApproval": "Apruebas a cada persona antes",
+        "whoHint": "La aprobación te da una cola para revisar antes de que alguien entre.",
+        "description": "Descripción",
+        "descriptionHint": "Opcional. Se muestra en la pantalla de información del grupo.",
+        "submit": "Crear grupo",
+        "submitting": "Creando…"
+      },
+      "list": {
+        "title": "Tus grupos",
+        "empty": "Todavía no hay grupos. Crea uno arriba para empezar.",
+        "untitled": "Grupo sin nombre",
+        "members": "{count, plural, =0 {Sin miembros} one {1 miembro} other {# miembros}}",
+        "approvalRequired": "requiere aprobación",
+        "suspended": "WhatsApp ha suspendido este grupo. No puedes enviarle mensajes hasta que lo restablezca.",
+        "creationFailed": "WhatsApp no pudo crear este grupo: {message}",
+        "refresh": "Actualizar",
+        "refreshing": "Actualizando…",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "membersButton": "Miembros",
+        "loadMore": "Mostrar más grupos",
+        "loadingMore": "Cargando…"
+      },
+      "link": {
+        "awaiting": "WhatsApp está creando el enlace de invitación…",
+        "label": "Enlace de invitación",
+        "copy": "Copiar",
+        "copied": "Copiado",
+        "newLink": "Nuevo enlace"
+      },
+      "joinRequests": {
+        "title": "Esperando para unirse",
+        "approve": "Aprobar",
+        "reject": "Rechazar",
+        "working": "…",
+        "hidden": "{count, plural, one {1 persona espera para unirse.} other {# personas esperan para unirse.}} Necesitas permiso para gestionar grupos para ver quiénes son."
+      },
+      "confirm": {
+        "deleteTitle": "¿Eliminar este grupo?",
+        "deleteMessage": "¿Eliminar este grupo y sacar a todos de él? Un grupo eliminado no se puede recuperar. Su historial de chat se mantiene en tu bandeja de entrada.",
+        "deleteConfirm": "Eliminar grupo",
+        "linkTitle": "¿Crear un enlace nuevo?",
+        "linkMessage": "¿Crear un enlace nuevo? Las personas a las que ya enviaste el enlace antiguo no podrán usarlo.",
+        "linkConfirm": "Crear enlace nuevo",
+        "cancel": "Cancelar"
+      },
+      "edit": {
+        "title": "Editar grupo",
+        "subject": "Nombre del grupo",
+        "description": "Descripción",
+        "hint": "Enviado a WhatsApp. El grupo se actualiza aquí cuando Meta lo confirme.",
+        "save": "Enviar a WhatsApp",
+        "saving": "Enviando…"
+      },
+      "members": {
+        "title": "Miembros de {name}",
+        "hint": "Se leen de WhatsApp al abrir esta ventana; aquí no se guarda nada. Puedes eliminar hasta {max} personas a la vez.",
+        "loading": "Leyendo los miembros de WhatsApp…",
+        "empty": "Todavía no hay miembros.",
+        "selected": "{count} seleccionados",
+        "remove": "Eliminar seleccionados",
+        "removing": "Eliminando…",
+        "limit": "Puedes eliminar como máximo {max} personas a la vez.",
+        "removeConfirm": "¿Eliminar {count, plural, one {a esta persona} other {a estas # personas}} del grupo? No podrán volver a unirse con el enlace antiguo."
+      },
+      "notice": {
+        "created": "Grupo creado. El enlace de invitación aparece aquí en cuanto Meta lo emita.",
+        "refreshed": "Grupo actualizado.",
+        "linkReset": "Nuevo enlace de invitación creado. Todos los enlaces compartidos hasta ahora han dejado de funcionar.",
+        "updateSent": "Actualización enviada a WhatsApp. El grupo se actualiza aquí cuando Meta lo confirme.",
+        "deleted": "Grupo eliminado y todos los participantes sacados.",
+        "removed": "{count, plural, one {1 persona sacada del grupo.} other {# personas sacadas del grupo.}}",
+        "approved": "{count, plural, one {1 persona aprobada.} other {# personas aprobadas.}}",
+        "rejected": "{count, plural, one {1 solicitud rechazada.} other {# solicitudes rechazadas.}}",
+        "copyFailed": "No se pudo copiar el enlace. Selecciónalo y cópialo a mano."
+      },
+      "removeNumberWarning": "Este número tiene {count, plural, one {1 registro de grupo} other {# registros de grupo}} aquí. Quitar el número los elimina de este espacio de trabajo. Los grupos siguen en WhatsApp y sus chats siguen en tu bandeja de entrada."
+    }
+  }
+}

@@ -1,0 +1,722 @@
+{
+  "dashboards-analytics-charts": {
+    "nav": {
+      "title": "대시보드",
+      "analytics": "분석"
+    },
+    "home": {
+      "title": "대시보드",
+      "welcome": "워크스페이스에 오신 것을 환영합니다."
+    },
+    "chart": {
+      "empty": "이 기간에는 데이터가 아직 없습니다.",
+      "bucket": "기간",
+      "cell": "{day} {hour}:00 · {count, plural, other {메시지 #건}}"
+    },
+    "range": {
+      "label": "날짜 범위",
+      "short": {
+        "24h": "24시간",
+        "7d": "7일",
+        "30d": "30일",
+        "90d": "90일",
+        "qtd": "분기 누계",
+        "custom": "사용자 지정"
+      },
+      "long": {
+        "24h": "최근 24시간",
+        "7d": "최근 7일",
+        "30d": "최근 30일",
+        "qtd": "분기 누계",
+        "custom": "사용자 지정 범위"
+      },
+      "from": "시작일",
+      "to": "종료일",
+      "apply": "적용"
+    },
+    "funnel": {
+      "listLabel": "연락처 퍼널",
+      "stageLabel": "{stage}: 연락처 {n}명, 메시지를 보낸 연락처의 {pct}%",
+      "stage": {
+        "messaged": "메시지를 보낸 연락처",
+        "delivered": "전달됨",
+        "replied": "답장함",
+        "goalCompleted": "목표 달성"
+      },
+      "goalCompletedHint": "플로우를 완료한 연락처",
+      "activity": {
+        "title": "대화 활동",
+        "summary": "{inbound, plural, other {수신 메시지 #건}} · {contacts, plural, other {응답한 연락처 #명}} · 응답한 연락처당 답장 {perContact}건"
+      },
+      "comparison": {
+        "title": "이전 기간과 비교",
+        "replyRate": "답장률"
+      }
+    },
+    "error": {
+      "locked": "요금제에 분석 기능이 포함되어 있지 않습니다.",
+      "upgrade": "요금제 보기",
+      "forbidden": "이 페이지에 접근할 권한이 없습니다.",
+      "generic": "수치를 불러오지 못했습니다. 잠시 후 다시 시도하세요."
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "좋은 아침입니다, {name}님.",
+        "afternoon": "좋은 오후입니다, {name}님.",
+        "evening": "좋은 저녁입니다, {name}님."
+      },
+      "subline": "{date} - {range} 기준 발신 {sent}건, 연결된 {devices, plural, other {기기 #대}} 전체의 전달률 {rate}%.",
+      "kpis": "주요 수치",
+      "kpi": {
+        "sent": "발송된 메시지 · {range}",
+        "sentLegend": "전달 {delivered}건 · 실패 {failed}건",
+        "readRate": "읽음률",
+        "deliverability": "전달률",
+        "deliveredOf": "{sent}건 중 {delivered}건",
+        "replies": "답장",
+        "replyRate": "답장률 {rate}%",
+        "readMini": {
+          "sent": "발송됨",
+          "delivered": "전달됨",
+          "read": "읽음"
+        }
+      },
+      "throughput": {
+        "title": "메시지 처리량",
+        "subtitle": {
+          "24h": "발신, 전달, 실패 (시간별, 최근 24시간)",
+          "7d": "발신, 전달, 실패 (일별, 최근 7일)",
+          "30d": "발신, 전달, 실패 (일별, 최근 30일)",
+          "qtd": "발신, 전달, 실패 (일별, 분기 누계)",
+          "custom": "발신, 전달, 실패 (일별, 사용자 지정 범위)"
+        },
+        "peak": "피크 시간 {when} · 메시지 {n}건",
+        "sent": "발송됨",
+        "delivered": "전달됨",
+        "failed": "실패",
+        "avgHour": "시간당 평균",
+        "replies": "답장",
+        "replyRate": "답장률"
+      },
+      "sparkline": {
+        "title": "최근 20시간",
+        "subtitle": "시간별 발송 메시지, 오래된 순",
+        "inCard": "최근 20시간"
+      },
+      "funnel": {
+        "title": "참여 퍼널",
+        "viewAll": "분석 보기"
+      },
+      "kicker": "운영자 대시보드",
+      "calm": "워크스페이스가 조용합니다.",
+      "running": "{n, plural, other {브로드캐스트 #건이 실행 중입니다.}}",
+      "export": "내보내기",
+      "newCampaign": "새 캠페인",
+      "contacts": {
+        "title": "활성 연락처",
+        "subscribed": "구독 중",
+        "optedIn": "수신 동의",
+        "blocked": "차단됨"
+      },
+      "wallet": {
+        "title": "지갑 잔액",
+        "payPerMessage": "메시지당 결제",
+        "topUp": "충전",
+        "earn": "제휴로 수익 얻기"
+      },
+      "autopilot": {
+        "kicker": "더 많은 일을 처리하세요",
+        "title": "답장을 자동으로 처리하세요",
+        "body": "플로우를 만들거나 캠페인을 시작하여 더 많은 고객에게 자동으로 도달하세요.",
+        "flow": "플로우 만들기",
+        "campaign": "새 캠페인"
+      },
+      "pipeline": {
+        "kicker": "영업 파이프라인",
+        "open": "파이프라인 열기",
+        "deals": "진행 중인 딜",
+        "won": "이번 달 성사",
+        "winRate": "성사율",
+        "board": "보드 열기"
+      },
+      "inbox": {
+        "title": "실시간 수신함",
+        "unread": "읽지 않음 {n}건",
+        "oldest": "가장 오래된 항목 {when}",
+        "open": "수신함 열기",
+        "recent": "최근 대화",
+        "empty": "대화가 아직 없습니다."
+      },
+      "campaigns": {
+        "title": "진행 중인 캠페인",
+        "summary": "실행 중 {running} - 예약됨 {scheduled} - 일시 중지됨 {paused}",
+        "viewAll": "{n}개 모두 보기",
+        "untitled": "제목 없는 브로드캐스트",
+        "delivered": "{total}건 중 {done}건 전달됨",
+        "emptyTitle": "진행 중인 브로드캐스트 없음",
+        "emptyBody": "하나를 만들어 연락처 그룹에 발송을 시작하세요.",
+        "new": "새 브로드캐스트",
+        "status": {
+          "processing": "발송 중",
+          "sending": "발송 중",
+          "running": "발송 중",
+          "active": "발송 중",
+          "scheduled": "예약됨",
+          "pending": "예약됨",
+          "queued": "예약됨",
+          "paused": "일시 중지됨",
+          "cancelled": "일시 중지됨",
+          "failed": "실패",
+          "completed": "완료됨",
+          "completed_with_errors": "완료됨",
+          "done": "완료됨",
+          "sent": "완료됨"
+        }
+      },
+      "devices": {
+        "title": "연결된 기기",
+        "summary": "슬롯 {cap}개 중 {total}개 사용 - 온라인 {online}대",
+        "connect": "연결",
+        "emptyTitle": "연결된 기기 없음",
+        "emptyBody": "WhatsApp 번호를 연결하여 발송을 시작하세요.",
+        "connectDevice": "기기 연결",
+        "unzoned": "구역 미지정",
+        "per24h": "{n}/24시간",
+        "deliv": "전달",
+        "free": "{n, plural, other {사용 가능한 기기 슬롯 #개}}",
+        "freeHint": "WABA 추가",
+        "connectDeviceShort": "기기 연결"
+      },
+      "templates": {
+        "title": "성과 상위 템플릿",
+        "subtitle": "발송량 기준 - 선택한 기간",
+        "count": "{n, plural, other {템플릿 #개}}",
+        "new": "새 템플릿",
+        "empty": "템플릿이 아직 없습니다.",
+        "create": "첫 템플릿 만들기",
+        "col": {
+          "template": "템플릿",
+          "type": "유형",
+          "sent": "발송됨",
+          "delivered": "전달됨",
+          "read": "읽음",
+          "readRate": "읽음률",
+          "performance": "전달률",
+          "status": "상태"
+        },
+        "status": {
+          "approved": "승인됨",
+          "public": "승인됨",
+          "active": "승인됨",
+          "pending": "검토 중",
+          "submitted": "검토 중",
+          "in_review": "검토 중",
+          "rejected": "거부됨",
+          "disabled": "거부됨"
+        }
+      },
+      "activity": {
+        "title": "활동 로그",
+        "subtitle": "워크스페이스 이벤트",
+        "empty": "이 워크스페이스에 기록된 최근 활동이 없습니다.",
+        "by": "{actor} - {module} {action}"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "accounts": "{count, plural, other {계정 #개}}",
+        "connected": "연결됨",
+        "openInbox": "수신함 열기 →",
+        "tile": {
+          "needReply": "답장 필요",
+          "openChats": "진행 중인 채팅",
+          "dmsIn": "수신 DM · 7일",
+          "dmsOut": "발신 DM · 7일",
+          "followers": "팔로워",
+          "replyRate": "답장률"
+        }
+      },
+      "copilot": {
+        "title": "{brand} Copilot",
+        "tag": "AI 기반",
+        "headline": "문장 하나로 플로우를 만드세요.",
+        "body": "고객 여정을 설명하면 Copilot이 노드, 분기, 템플릿 제안을 초안으로 작성합니다.",
+        "try": "예시:",
+        "generate": "플로우 생성 ✦",
+        "examples": "예시",
+        "stat": {
+          "flows": "플로우",
+          "active": "활성",
+          "subscribers": "구독자"
+        }
+      },
+      "flows": {
+        "title": "자동화 플로우",
+        "summary": "활성 {active} · 구독자 {subscribers}명",
+        "open": "열기",
+        "empty": "플로우가 아직 없습니다.",
+        "build": "첫 플로우 만들기",
+        "meta": "트리거 {trigger} · 단계 {steps}개 · 구독자 {subs}명",
+        "statusActive": "활성",
+        "statusPaused": "일시 중지됨",
+        "subs": "구독자"
+      },
+      "quickActions": {
+        "title": "빠른 작업",
+        "soon": "출시 예정",
+        "broadcast": {
+          "label": "새 브로드캐스트",
+          "hint": "연락처 그룹에게"
+        },
+        "flow": {
+          "label": "플로우 만들기",
+          "hint": "드래그 앤 드롭"
+        },
+        "template": {
+          "label": "새 템플릿",
+          "hint": "Meta에 제출"
+        },
+        "autoReply": {
+          "label": "자동 응답",
+          "hint": "키워드 규칙"
+        }
+      },
+      "integrations": {
+        "title": "연동",
+        "name": {
+          "woocommerce": "WooCommerce",
+          "shopify": "Shopify",
+          "google_sheets": "Google Sheets",
+          "meta_catalog": "Meta Catalog"
+        },
+        "events": "이벤트 {n}건 / 7일",
+        "connected": {
+          "woocommerce": "연결됨",
+          "shopify": "연결됨",
+          "google_sheets": "API 키 발급됨",
+          "meta_catalog": "카탈로그 연결됨"
+        },
+        "notConnected": "연결되지 않음",
+        "connect": "연결",
+        "connectedLabel": "연결됨"
+      },
+      "sublineOfficial": "{date} - {range} 기준 발신 {sent}건, 전달률 {rate}%.",
+      "synced": "실시간 · {s}초 전 동기화됨"
+    },
+    "analytics": {
+      "title": "분석",
+      "headline": "{from}부터 {to}까지 메시지의 {rate}%가 수신자에게 도달했습니다.",
+      "subline": "{sent, plural, other {메시지 #건}} 발송, 답장률 {replyRate}%.",
+      "noSends": "이 기간에는 발신 메시지가 아직 없습니다.",
+      "export": "CSV 내보내기",
+      "from": "시작",
+      "to": "종료",
+      "apply": "적용",
+      "kpis": "주요 수치",
+      "kpi": {
+        "sent": "발송됨",
+        "delivered": "전달됨",
+        "queued": "대기 중",
+        "failed": "실패",
+        "replyRate": "답장률"
+      },
+      "series": {
+        "sent": "발송됨",
+        "delivered": "전달됨",
+        "failed": "실패",
+        "queued": "대기 중"
+      },
+      "empty": "이 기간에는 표시할 항목이 없습니다.",
+      "volume": {
+        "title": "시간별 메시지",
+        "subtitle": "일별 발송, 전달, 실패"
+      },
+      "rates": {
+        "title": "전달률",
+        "subtitle": "전달, 대기, 실패 비율"
+      },
+      "totals": {
+        "title": "일별 합계",
+        "subtitle": "일별 전달, 대기, 실패 (누적)"
+      },
+      "funnel": {
+        "title": "참여 퍼널"
+      },
+      "types": {
+        "title": "메시지 유형",
+        "subtitle": "발신 분포",
+        "byType": "메시지 유형별 발송 및 전달",
+        "kind": "유형",
+        "sent": "발송됨",
+        "delivered": "전달됨",
+        "text": "텍스트",
+        "template": "템플릿",
+        "media": "미디어",
+        "interactive": "인터랙티브",
+        "location": "위치"
+      },
+      "heatmap": {
+        "title": "최적 시간대",
+        "subtitle": "요일 및 시간별 메시지량, {zone}. 색이 진할수록 많습니다.",
+        "empty": "이 기간에는 메시지량이 없습니다.",
+        "footer": "메시지 {total}건 기준, 시간대 {tz}"
+      },
+      "panels": {
+        "devices": {
+          "title": "기기별",
+          "subtitle": "최근 24시간 발송",
+          "online": "온라인 {online}/{total}",
+          "empty": "연결된 기기가 아직 없습니다.",
+          "msg": "{n}건"
+        },
+        "templates": {
+          "title": "템플릿",
+          "subtitle": "발송 기준 상위",
+          "empty": "이 기간에는 템플릿 발송이 없습니다."
+        },
+        "contacts": {
+          "title": "상위 연락처",
+          "subtitle": "가장 활발한 대화",
+          "empty": "이 기간에는 대화가 없습니다.",
+          "msgs": "{n}건"
+        },
+        "team": {
+          "title": "팀 성과",
+          "subtitle": "이 기간의 상담원",
+          "count": "{n, plural, other {상담원 #명}}",
+          "col": {
+            "agent": "상담원",
+            "convos": "대화",
+            "resolved": "해결됨",
+            "first": "평균 첫 응답",
+            "resolution": "평균 해결 시간",
+            "csat": "CSAT"
+          }
+        },
+        "geo": {
+          "title": "국가별",
+          "subtitle": "도달",
+          "markets": "{n, plural, other {시장 #곳}}",
+          "unspecified": "미지정",
+          "empty": "이 기간에 국가가 확인된 대화가 없습니다."
+        },
+        "events": {
+          "title": "이벤트 스트림",
+          "subtitle": "이 기간의 최신 메시지",
+          "sent": "발신 → {peer}",
+          "received": "{peer}에서 수신",
+          "empty": "이 기간에는 최근 활동이 없습니다."
+        }
+      }
+    },
+    "health": {
+      "nav": "시스템 상태",
+      "group": "시스템",
+      "title": "시스템 상태",
+      "kicker": "플랫폼",
+      "description": "플랫폼이 사용하는 서비스의 실시간 점검 결과입니다.",
+      "banner": {
+        "up": "전체 시스템 - 정상",
+        "warn": "전체 시스템 - 성능 저하",
+        "down": "전체 시스템 - 중단",
+        "checked": "마지막 확인 {time} · 20초마다 자동 새로 고침",
+        "refresh": "지금 새로 고침",
+        "refreshing": "확인 중..."
+      },
+      "core": "핵심 서비스",
+      "activity": {
+        "messages": "메시지 · 24시간",
+        "aiCalls": "AI 호출 · 24시간",
+        "conversations": "대화 · 24시간",
+        "webhooks": "웹훅 · 24시간"
+      },
+      "throughput": {
+        "title": "메시지 처리량 · 14일",
+        "peak": "최대 {n}/일",
+        "empty": "최근 14일간 메시지 활동이 없습니다.",
+        "aria": "일별 메시지, 최근 14일"
+      },
+      "state": {
+        "up": "정상",
+        "warn": "성능 저하",
+        "down": "중단",
+        "idle": "유휴"
+      },
+      "check": {
+        "database": "데이터베이스",
+        "cache": "캐시",
+        "queue": "큐",
+        "bridge": "노드 브리지",
+        "storage": "미디어 스토리지"
+      },
+      "latency": {
+        "title": "응답 시간",
+        "empty": "시간 데이터가 없습니다.",
+        "ms": "{ms} ms"
+      },
+      "queues": {
+        "title": "큐",
+        "name": "큐",
+        "pending": "대기 중",
+        "failed": "실패"
+      },
+      "clear": {
+        "button": "대기 중인 작업 지우기",
+        "busy": "지우는 중...",
+        "confirmTitle": "대기 중 및 실패한 작업을 지울까요?",
+        "confirmBody": "대기 중 및 지연된 작업이 제거되고 실패한 작업은 모든 큐에서 삭제됩니다. 실행 중인 작업은 그대로 둡니다.",
+        "confirm": "작업 지우기",
+        "cancel": "취소",
+        "done": "대기 중 작업 {pending}개와 실패한 작업 {failed}개를 지웠습니다.",
+        "failed": "실패: {message}",
+        "superOnly": "슈퍼 관리자만 작업을 지울 수 있습니다."
+      },
+      "vitals": {
+        "title": "호스트 상태",
+        "node": "Node",
+        "app": "앱 버전",
+        "environment": "환경",
+        "uptime": "가동 시간",
+        "memory": "메모리 (RSS)",
+        "heap": "사용 중인 힙",
+        "diskFree": "남은 디스크",
+        "diskFreeValue": "{gb} GB",
+        "diskUsed": "디스크 사용 {pct}%",
+        "noDisk": "사용할 수 없음"
+      },
+      "error": "상태 점검 결과를 불러오지 못했습니다. 잠시 후 다시 시도하세요.",
+      "engines": {
+        "title": "WhatsApp 엔진 및 연결된 번호",
+        "empty": "설정된 엔진이 아직 없습니다.",
+        "caption": "전체 번호 중 연결됨"
+      }
+    },
+    "admin": {
+      "nav": {
+        "analytics": "분석"
+      },
+      "window": {
+        "label": "기간",
+        "24h": "최근 24시간",
+        "7d": "최근 7일",
+        "30d": "최근 30일",
+        "90d": "최근 90일",
+        "1y": "최근 1년"
+      },
+      "error": "플랫폼 수치를 불러오지 못했습니다.",
+      "retry": "다시 시도",
+      "vsPrevious": "이전 기간 대비",
+      "overview": {
+        "title": "관리자 대시보드.",
+        "kicker": "관리자 / 개요",
+        "subtitle": "플랫폼 상태, 매출, 사용량, 워크스페이스 활동을 한곳에서 확인하세요.",
+        "addWorkspace": "워크스페이스 추가",
+        "kpi": {
+          "income": "총 수입",
+          "profit": "이익",
+          "profitHint": "마진 32% 기준 추정치이며 회계 수치가 아닙니다",
+          "views": "총 조회수",
+          "viewsHint": "모든 워크스페이스가 발송한 메시지",
+          "conversion": "전환율"
+        },
+        "revenue": {
+          "title": "기간별 매출",
+          "total": "총 매출",
+          "target": "총 목표",
+          "targetHint": "목표는 저장된 목표가 아니라 이전 기간 대비 10% 성장을 기준으로 한 벤치마크입니다.",
+          "revenue": "매출",
+          "aria": "기간별 매출과 목표 비교"
+        },
+        "countries": {
+          "title": "국가별 세션",
+          "subtitle": "지역별 상위 세션",
+          "empty": "국가 데이터가 아직 없습니다. 사용자가 지역을 공유하지 않았습니다."
+        },
+        "regions": {
+          "title": "지역별 판매",
+          "subtitle": "플랫폼 매출 비중",
+          "aria": "지역별 신규 사용자"
+        },
+        "platform": {
+          "title": "플랫폼별 판매",
+          "subtitle": "이커머스 연동",
+          "empty": "이 기간에는 결제된 주문이 없습니다.",
+          "aria": "결제 게이트웨이별 유료 매출"
+        },
+        "users": {
+          "title": "가입 사용자",
+          "subtitle": "사용자 좌석 개요",
+          "total": "전체 사용자",
+          "premium": "프리미엄 요금제",
+          "basic": "기본 요금제",
+          "aria": "사용자의 {pct}%가 유료 요금제를 사용 중입니다"
+        },
+        "workspaces": {
+          "title": "워크스페이스 활동",
+          "subtitle": "최근 주요 관리자 이벤트",
+          "viewAll": "모두 보기",
+          "empty": "워크스페이스가 아직 없습니다.",
+          "col": {
+            "workspace": "워크스페이스",
+            "owner": "소유자",
+            "plan": "요금제",
+            "messages": "메시지",
+            "health": "상태",
+            "mrr": "MRR"
+          },
+          "health": {
+            "good": "양호",
+            "active": "활성",
+            "low": "낮음",
+            "idle": "유휴"
+          }
+        },
+        "alerts": {
+          "title": "관리자 알림",
+          "subtitle": "우선순위 큐",
+          "open": "{n}건 열림",
+          "empty": "모든 시스템이 정상입니다. 알림이 없습니다."
+        },
+        "titleLead": "관리자",
+        "titleAccent": "대시보드"
+      },
+      "analytics": {
+        "title": "관리자 분석.",
+        "kicker": "관리자 - 플랫폼",
+        "subtitle": "매출, 워크스페이스 성장, WhatsApp 사용량, 캠페인 전달, 기기 상태, 지원 부하를 한눈에 보는 종합 관제 화면입니다.",
+        "days": {
+          "7": "최근 7일",
+          "30": "최근 30일",
+          "90": "최근 90일",
+          "365": "올해",
+          "custom": "최근 {n}일"
+        },
+        "daysLabel": "일",
+        "export": "내보내기",
+        "tabs": {
+          "overview": "개요",
+          "revenue": "매출",
+          "usage": "사용량",
+          "workspaces": "워크스페이스",
+          "campaigns": "캠페인",
+          "support": "지원"
+        },
+        "kpi": {
+          "revenue": "매출",
+          "revenueSub": "{n, plural, other {신규 워크스페이스 #개}}",
+          "workspaces": "워크스페이스",
+          "workspacesSub": "{n, plural, other {전체 사용자 #명}}",
+          "messages": "메시지",
+          "messagesSub": "하루 평균 {n}건",
+          "devices": "온라인 기기",
+          "newUsers": "신규 사용자",
+          "newUsersSub": "총 {n}",
+          "tickets": "열린 티켓",
+          "watch": "주의",
+          "clear": "이상 없음"
+        },
+        "pulse": {
+          "title": "플랫폼 현황",
+          "subtitle": "관제실 실시간 포화도",
+          "workspaces": "워크스페이스",
+          "devices": "연결된 기기",
+          "tickets": "열린 티켓",
+          "signups": "신규 가입",
+          "normal": "정상"
+        },
+        "growth": {
+          "title": "성장 커맨드 센터",
+          "subtitle": "사용자 가입, 최근 {days}일",
+          "aria": "일별 가입",
+          "series": "가입"
+        },
+        "plans": {
+          "title": "요금제 분포",
+          "subtitle": "요금제별 워크스페이스",
+          "empty": "아직 데이터가 없습니다. 요금제가 하나 이상의 워크스페이스에 배정되면 요금제 분포가 표시됩니다.",
+          "aria": "요금제별 워크스페이스"
+        },
+        "acquisition": {
+          "title": "유입",
+          "subtitle": "사용자에서 워크스페이스로",
+          "users": "전체 사용자",
+          "newUsers": "신규 사용자",
+          "workspaces": "생성된 워크스페이스",
+          "newWorkspaces": "신규 워크스페이스",
+          "devices": "연결된 기기"
+        },
+        "devices": {
+          "title": "상위 기기 - 24시간",
+          "subtitle": "발송량",
+          "empty": "아직 발송 없음",
+          "devices": "기기",
+          "online": "온라인",
+          "sends": "24시간 발송",
+          "aria": "기기별 최근 24시간 발송"
+        },
+        "leaderboard": {
+          "title": "유료 매출 상위 워크스페이스",
+          "subtitle": "최근 {days}일",
+          "workspace": "워크스페이스",
+          "orders": "주문",
+          "revenue": "유료 매출",
+          "open": "열기",
+          "empty": "이 기간에는 결제된 주문이 없습니다."
+        },
+        "cohort": {
+          "title": "가입 코호트",
+          "subtitle": "최근 {days}일",
+          "aria": "일별 가입"
+        },
+        "composition": {
+          "title": "매출 구성",
+          "subtitle": "상위 기여자",
+          "empty": "유료 매출이 아직 없습니다."
+        },
+        "support": {
+          "title": "지원 부하",
+          "subtitle": "티켓 상태",
+          "empty": "티켓이 아직 없습니다.",
+          "open": "열림",
+          "resolved": "해결됨",
+          "inbox": "수신함 열기"
+        },
+        "queue": {
+          "title": "관리자 확인 필요",
+          "subtitle": "작업 큐",
+          "tickets": "{n, plural, other {열린 티켓 #건}}",
+          "ticketsHint": "SLA 위반 전에 지원에서 분류하세요",
+          "offline": "{n, plural, other {오프라인 기기 #대}}",
+          "offlineHint": "온라인 기기가 절반 미만입니다",
+          "users": "{n, plural, other {신규 사용자 #명}}",
+          "usersHint": "최근 가입을 검토하세요",
+          "clear": "이상 없음"
+        },
+        "titleLead": "관리자",
+        "titleAccent": "분석"
+      },
+      "kpiLabel": "KPI"
+    },
+    "quickAccess": {
+      "title": "빠른 접근",
+      "kicker": "바로가기",
+      "edit": "바로가기 수정",
+      "empty": "빠른 접근 바로가기 추가",
+      "open": "{label} 열기",
+      "modalTitle": "빠른 접근",
+      "modalEyebrow": "바로가기를 최대 10개까지 고정할 수 있습니다",
+      "pages": "앱 페이지 (최대 10개)",
+      "custom": "사용자 지정 링크",
+      "labelPlaceholder": "레이블",
+      "urlPlaceholder": "https://... 또는 /path",
+      "addCustom": "+ 사용자 지정 링크 추가",
+      "removeCustom": "이 링크 제거",
+      "counter": "{n} / 10 고정됨",
+      "cancel": "취소",
+      "save": "바로가기 저장",
+      "saving": "저장 중...",
+      "limit": "바로가기는 최대 10개까지 고정할 수 있습니다.",
+      "saved": "빠른 접근이 업데이트되었습니다.",
+      "failed": "바로가기를 저장하지 못했습니다."
+    }
+  }
+}

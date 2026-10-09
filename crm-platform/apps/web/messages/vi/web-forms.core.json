@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "nav": {
+      "forms": "Biểu mẫu"
+    },
+    "kinds": {
+      "short_text": "Văn bản ngắn",
+      "long_text": "Văn bản dài",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "number": "Số",
+      "currency": "Số tiền",
+      "date": "Ngày",
+      "dropdown": "Danh sách thả xuống",
+      "radio": "Chọn một",
+      "checkbox_group": "Chọn nhiều",
+      "checkbox": "Hộp kiểm",
+      "rating": "Đánh giá",
+      "hidden": "Trường ẩn"
+    },
+    "errors": {
+      "network": "Không kết nối được máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "signedOut": "Phiên làm việc đã kết thúc. Hãy đăng nhập lại để tiếp tục.",
+      "conflict": "Có người khác vừa thay đổi biểu mẫu này. Hãy tải lại trang để xem phiên bản mới nhất.",
+      "nameTaken": "Đã có biểu mẫu khác dùng tên này. Hãy chọn tên khác.",
+      "stateInvalid": "Thao tác này không thể thực hiện ở trạng thái hiện tại của biểu mẫu.",
+      "definitionInvalid": "Biểu mẫu chưa hợp lệ. Hãy kiểm tra các trường và thử lại.",
+      "publishInvalid": "Chưa thể xuất bản biểu mẫu. Hãy sửa các vấn đề được liệt kê và thử lại.",
+      "planLimit": "Đã đạt giới hạn của gói.",
+      "planLimitForms": "Bạn đã đạt số biểu mẫu tối đa theo gói. Hãy lưu trữ biểu mẫu không còn dùng hoặc nâng cấp gói.",
+      "planLocked": "Biểu mẫu không có trong không gian làm việc của bạn.",
+      "notFound": "Không tìm thấy biểu mẫu này. Có thể đã bị xóa.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại sau ít phút.",
+      "upgrade": "Xem gói"
+    }
+  }
+}

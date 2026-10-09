@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "テーマ",
+        "custom": "カスタム: 元にしたテーマの色、角丸、またはフォントを変更しています。",
+        "classic": "クラシック",
+        "ocean": "オーシャン",
+        "forest": "フォレスト",
+        "sunset": "サンセット",
+        "berry": "ベリー",
+        "slate": "スレート",
+        "noir": "ノワール",
+        "paper": "ペーパー"
+      },
+      "colours": {
+        "title": "色",
+        "hint": "#2563eb のような6桁の16進数カラーを使用してください。不完全な値は適用されません。",
+        "swatch": "{name}（カラーピッカー）",
+        "primary": "メイン（ボタンとアクセント）",
+        "background": "ページの背景",
+        "surface": "フォームの背景",
+        "text": "テキスト",
+        "mutedText": "補足テキスト",
+        "border": "枠線",
+        "error": "エラー"
+      },
+      "contrast": {
+        "title": "読みにくい色があります。コントラスト比は 4.5:1 以上を目安にしてください。",
+        "item": "{pair}: {ratio}:1",
+        "ok": "確認したすべての色の組み合わせは読みやすくなっています。",
+        "text": "フォームの背景上のテキスト",
+        "muted": "フォームの背景上の補足テキスト",
+        "button": "ボタン上のボタンラベル"
+      },
+      "shape": {
+        "title": "形状と間隔",
+        "radius": "角丸",
+        "none": "なし",
+        "sm": "小",
+        "md": "中",
+        "lg": "大",
+        "pill": "丸",
+        "density": "間隔",
+        "compact": "コンパクト",
+        "comfortable": "標準",
+        "spacious": "ゆったり",
+        "shadow": "影",
+        "shadowNone": "なし"
+      },
+      "type": {
+        "title": "タイポグラフィ",
+        "font": "フォント",
+        "fontHint": "Web フォントは選択した場合にのみ読み込まれます。",
+        "sample": "The quick brown fox jumps over the lazy dog",
+        "scale": "文字サイズ"
+      },
+      "fonts": {
+        "system": "システムの既定値",
+        "serif": "明朝体",
+        "mono": "等幅"
+      },
+      "layout": {
+        "title": "レイアウトとボタン",
+        "preset": "レイアウト",
+        "classic": "クラシックカード",
+        "fullWidth": "全幅",
+        "split": "画像付きの分割",
+        "minimal": "ミニマル",
+        "labelPosition": "ラベルの位置",
+        "labelTop": "入力欄の上",
+        "labelLeft": "入力欄の横",
+        "buttonStyle": "ボタンのスタイル",
+        "filled": "塗りつぶし",
+        "outline": "枠線のみ",
+        "buttonWidth": "ボタンの幅",
+        "widthAuto": "ラベルに合わせる",
+        "widthFull": "全幅",
+        "maxWidth": "最大幅",
+        "maxWidthHint": "320 から 960 ピクセルの間。",
+        "maxWidthInvalid": "320 から 960 までの整数を入力してください。",
+        "maxWidthSlider": "最大幅のスライダー",
+        "mode": "カラーモード",
+        "light": "ライト",
+        "dark": "ダーク",
+        "auto": "訪問者のデバイスに合わせる"
+      },
+      "images": {
+        "title": "画像",
+        "logo": "ロゴ",
+        "logoHint": "https のアドレス。ロゴなしの場合は空欄のままにしてください。",
+        "cover": "カバー画像",
+        "coverHint": "分割レイアウトでフォームの横に表示されます。",
+        "background": "背景画像",
+        "backgroundHint": "https のアドレス。単色の背景の場合は空欄のままにしてください。",
+        "invalid": "https のアドレスを入力するか、空欄のままにしてください。"
+      },
+      "reset": "既定値に戻す",
+      "readOnly": "デザインを確認できますが、変更はできません。",
+      "preview": {
+        "title": "プレビュー",
+        "device": "プレビューのサイズ",
+        "desktop": "デスクトップ",
+        "mobile": "モバイル",
+        "scheme": "プレビューのカラーモード",
+        "light": "ライト",
+        "dark": "ダーク",
+        "schemeHint": "カラーモードがライトに設定されているため、ダークのプレビューはありません。",
+        "frameTitle": "フォームのライブプレビュー"
+      }
+    }
+  }
+}

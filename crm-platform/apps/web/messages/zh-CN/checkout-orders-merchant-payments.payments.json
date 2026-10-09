@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "店铺 / 支付",
+      "title": "支付",
+      "subtitle": "店铺订单的资金情况：已付款的、待付款的以及货到付款的。",
+      "listTitle": "支付列表",
+      "loading": "正在加载支付记录",
+      "emptyFilteredTitle": "没有匹配的支付记录",
+      "emptyFilteredMessage": "更改筛选条件或重置以查看所有支付记录。",
+      "resetFilters": "重置筛选",
+      "emptyTitle": "暂无支付记录",
+      "emptyMessage": "店铺订单一提交，支付记录就会显示在这里。打开订单查看您的订单，或手动添加一笔。",
+      "goToOrders": "前往订单",
+      "summary": {
+        "loading": "正在加载支付汇总",
+        "orders": "个订单",
+        "collected": "已收款",
+        "collectedNone": "尚未收到款项。"
+      },
+      "filters": {
+        "search": "搜索",
+        "searchPlaceholder": "订单号、客户或参考号",
+        "status": "状态",
+        "allStatuses": "全部状态",
+        "method": "方式",
+        "allMethods": "全部方式",
+        "prepaid": "预付",
+        "cod": "货到付款",
+        "gatewayOption": "某个网关...",
+        "gatewayCode": "网关代码",
+        "gatewayCodePlaceholder": "例如 razorpay",
+        "from": "从",
+        "to": "到",
+        "rangeInverted": "开始日期晚于结束日期，因此日期范围被忽略。",
+        "reset": "重置筛选"
+      },
+      "table": {
+        "caption": "店铺订单的支付记录，按最新排序",
+        "order": "订单",
+        "customer": "客户",
+        "status": "状态",
+        "method": "方式",
+        "paidVia": "支付渠道",
+        "reference": "参考号",
+        "amount": "金额",
+        "shop": "店铺",
+        "date": "日期",
+        "methodPrepaid": "预付",
+        "methodCod": "货到付款",
+        "via": {
+          "razorpay_link": "Razorpay 链接",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "聊天内 WhatsApp Pay",
+        "intro": "让买家无需离开 WhatsApp 即可为订单付款（UPI、银行卡、网银、电子钱包），款项进入您自己的 Razorpay、PayU、BillDesk 或 Zaakpay 账户。",
+        "indiaOnly": "目前仅支持印度市场：国家/地区和货币固定为印度和 INR。",
+        "viewOnly": "您可以查看 WhatsApp Pay 配置，但无法更改。请联系工作区管理员获取管理支付的权限。",
+        "howTitle": "设置方法",
+        "how1": "在 WhatsApp Manager 的印度支付中，创建直接支付方式并关联您的网关账户。",
+        "how2": "为其命名，并将该名称复制到这里。它无法在此应用中创建，这是 Meta 一侧的步骤。",
+        "how3": "保存配置，然后打开订单，在任意订单上选择通过 WhatsApp 请求付款。",
+        "how4": "买家点击“查看并支付”，在聊天中付款，Meta 确认后订单将标记为已支付。",
+        "listTitle": "您的配置",
+        "loading": "正在加载配置",
+        "emptyTitle": "暂无支付配置",
+        "emptyMessage": "在此页面添加一个，即可开始在聊天中收款。",
+        "emptyMessageReadOnly": "还没有人添加。",
+        "market": "印度 · INR",
+        "autoChargeOn": "自动扣款已开启",
+        "active": "启用中",
+        "off": "已关闭",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "配置已保存",
+          "removed": "配置已移除"
+        },
+        "addTitle": "添加支付配置",
+        "editTitle": "编辑 {name}",
+        "name": "配置名称",
+        "nameLocked": "名称用于标识该配置。如需重命名，请移除后重新添加。",
+        "updatesExisting": "已存在同名配置：保存将更新该配置。",
+        "nameHint": "必须与 WhatsApp Manager（支付，印度）中的直接支付方式名称完全一致。",
+        "nameInvalid": "请输入 1 到 {max} 个字符的名称。",
+        "namePlaceholder": "例如 my-razorpay-pay",
+        "gateway": "网关",
+        "activeLabel": "启用",
+        "autoCharge": "对新订单自动扣款",
+        "autoChargeHint": "订单提交的瞬间，自动发送聊天内付款请求。",
+        "save": "保存配置",
+        "cancelEdit": "取消编辑",
+        "removeTitle": "移除 {name}？",
+        "removeMessage": "之后将无法使用此配置在聊天中为订单收款。WhatsApp Manager 中的直接支付方式不受影响。",
+        "removeConfirm": "移除配置"
+      }
+    }
+  }
+}

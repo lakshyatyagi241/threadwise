@@ -1,0 +1,170 @@
+{
+  "web-forms": {
+    "submissions": {
+      "title": "Pengiriman",
+      "backToForm": "Kembali ke {name}",
+      "formFallback": "Formulir",
+      "count": "{count, plural, =0 {Tidak ada pengiriman} other {# pengiriman}} dimuat",
+      "moreAvailable": "Lainnya tersedia",
+      "tabsLabel": "Grup pengiriman",
+      "tabs": {
+        "all": "Semua",
+        "needs_attention": "Perlu tindakan",
+        "spam": "Spam"
+      },
+      "filters": {
+        "search": "Cari",
+        "searchPlaceholder": "Nama, email, atau telepon",
+        "status": "Status",
+        "allStatuses": "Semua status",
+        "from": "Dari",
+        "to": "Ke",
+        "clear": "Hapus filter"
+      },
+      "status": {
+        "received": "Diterima",
+        "created": "Kontak dibuat",
+        "updated": "Kontak diperbarui",
+        "needs_review": "Perlu ditinjau",
+        "awaiting_payment": "Menunggu pembayaran",
+        "paid": "Dibayar",
+        "failed": "Gagal",
+        "spam": "Spam"
+      },
+      "reason": {
+        "label": "Alasan",
+        "todo": "Yang harus dilakukan",
+        "no_contact_point": {
+          "what": "Pengunjung tidak memberikan email atau telepon yang dapat digunakan, sehingga kontak tidak dapat dibuat.",
+          "todo": "Buka jawabannya, tambahkan detail yang kurang ke kontak secara manual, atau perbaiki pemetaan formulir lalu coba lagi."
+        },
+        "invalid_phone": {
+          "what": "Nomor telepon tidak dapat dibaca sebagai nomor yang valid.",
+          "todo": "Buka jawabannya, periksa nomor, lalu coba lagi setelah formulir menerimanya atau tambahkan kontak secara manual."
+        },
+        "plan_limit_reached": {
+          "what": "Batas kontak paket Anda sudah tercapai, sehingga kontak baru tidak dibuat.",
+          "todo": "Kosongkan kontak atau tingkatkan paket Anda, lalu coba lagi."
+        },
+        "submissions_cap": {
+          "what": "Batas pengiriman bulanan paket Anda sudah tercapai, sehingga pengiriman ini disimpan untuk ditinjau.",
+          "todo": "Tingkatkan paket Anda atau tunggu bulan berikutnya, lalu coba lagi."
+        },
+        "spam_score": {
+          "what": "Pengiriman ini terlihat seperti spam dan dikesampingkan.",
+          "todo": "Jika ini orang sungguhan, buka dan tambahkan sebagai kontak secara manual."
+        },
+        "too_fast": {
+          "what": "Pengiriman dilakukan lebih cepat daripada yang mungkin dilakukan manusia saat mengisi formulir, sehingga dikesampingkan sebagai spam.",
+          "todo": "Jika ini orang sungguhan, buka dan tambahkan sebagai kontak secara manual."
+        },
+        "internal_error": {
+          "what": "Terjadi kesalahan di sisi kami saat memproses pengiriman ini. Jawaban disimpan.",
+          "todo": "Coba lagi. Jika gagal lagi, hubungi dukungan dengan waktu pengiriman."
+        },
+        "unknown": {
+          "what": "Pengiriman ini dikesampingkan karena alasan yang tidak dikenali oleh versi aplikasi ini.",
+          "todo": "Buka untuk melihat detailnya, lalu coba lagi atau tangani secara manual."
+        }
+      },
+      "table": {
+        "received": "Diterima",
+        "visitor": "Pengunjung",
+        "status": "Status",
+        "contact": "Kontak",
+        "company": "Perusahaan",
+        "version": "Versi",
+        "open": "Buka pengiriman dari {who}"
+      },
+      "anonymous": "Tidak ada nama",
+      "answersRemovedShort": "Jawaban dihapus",
+      "versionShort": "v{n}",
+      "noLink": "Tidak ada",
+      "unnamedContact": "Buka kontak",
+      "unnamedCompany": "Buka perusahaan",
+      "drawer": {
+        "title": "Pengiriman dari {who}",
+        "close": "Tutup",
+        "loading": "Membuka pengiriman",
+        "errorTitle": "Pengiriman ini tidak dapat dibuka.",
+        "errorBody": "Periksa koneksi Anda dan coba lagi.",
+        "retryLoad": "Coba lagi",
+        "auditNote": "Membuka jawaban pengiriman dicatat di log audit.",
+        "answers": "Jawaban",
+        "noAnswers": "Pengiriman ini tidak memiliki jawaban.",
+        "emptyAnswer": "Tidak ada jawaban",
+        "yes": "Ya",
+        "no": "Tidak",
+        "removedTitle": "Jawaban telah dihapus",
+        "removedBody": "Jawaban dihapus atau dibersihkan. Hanya catatan ini yang tersisa, dan kontak tetap disimpan.",
+        "summary": "Ringkasan",
+        "receivedAt": "Diterima",
+        "formVersion": "Versi formulir",
+        "spamScore": "Skor spam",
+        "error": "Kesalahan",
+        "attribution": "Asal",
+        "noAttribution": "Tidak ada detail sumber yang tercatat.",
+        "utm": "Tag kampanye",
+        "referrer": "Referrer",
+        "pageUrl": "Halaman",
+        "userAgent": "Browser",
+        "consent": "Persetujuan",
+        "consentGiven": "Persetujuan diberikan",
+        "consentText": "Teks yang dilihat pengunjung",
+        "consentVersion": "Versi teks",
+        "consentAt": "Diberikan pada",
+        "noConsent": "Formulir ini tidak meminta persetujuan.",
+        "links": "Catatan",
+        "actions": "Tindakan"
+      },
+      "actions": {
+        "retry": "Coba lagi",
+        "retrying": "Mencoba lagi",
+        "delete": "Hapus jawaban",
+        "deleting": "Menghapus",
+        "export": "Ekspor CSV",
+        "exporting": "Mengekspor",
+        "exportHintAttention": "Pilih satu status untuk diekspor dari grup ini, atau gunakan Semua.",
+        "exportHintSearch": "Ekspor mengabaikan teks pencarian.",
+        "notSpam": "Bukan spam: proses"
+      },
+      "confirmDelete": {
+        "title": "Hapus jawaban ini?",
+        "message": "Ini menghapus jawaban dari pengiriman ini secara permanen. Satu baris tetap di daftar sebagai catatan bahwa pengiriman terjadi, dan kontak tidak pernah dihapus.",
+        "confirm": "Hapus jawaban",
+        "cancel": "Batal"
+      },
+      "toast": {
+        "retried": "Dicoba ulang. Pengiriman sekarang: {status}.",
+        "notRetryable": "Hanya pengiriman yang perlu ditinjau atau gagal yang dapat dicoba ulang.",
+        "purged": "Jawaban sudah dihapus, jadi tidak ada yang dapat dicoba ulang.",
+        "retryFailed": "Percobaan ulang tidak berhasil. Silakan coba lagi.",
+        "deleted": "Jawaban dihapus. Kontak tetap disimpan.",
+        "deleteFailed": "Jawaban tidak dapat dihapus. Silakan coba lagi.",
+        "exported": "CSV telah diunduh.",
+        "exportTruncated": "Ekspor dipotong pada {max} baris terbaru. Persempit tanggal untuk mendapatkan sisanya.",
+        "exportFailed": "Ekspor tidak dapat dibuat. Silakan coba lagi."
+      },
+      "state": {
+        "loading": "Memuat pengiriman",
+        "errorTitle": "Pengiriman tidak dapat dimuat.",
+        "errorBody": "Periksa koneksi Anda dan coba lagi.",
+        "retry": "Coba lagi",
+        "lockedTitle": "Formulir tidak termasuk dalam paket Anda",
+        "lockedBody": "Tambahkan aplikasi Formulir ke workspace Anda untuk mengumpulkan dan meninjau pengiriman.",
+        "upgrade": "Lihat paket",
+        "emptyTitle": "Belum ada pengiriman",
+        "emptyBody": "Bagikan tautan formulir atau sematkan di situs Anda. Setiap pengiriman muncul di sini segera setelah seseorang mengirimnya.",
+        "emptyShare": "Bagikan formulir ini",
+        "emptyFilteredTitle": "Tidak ada pengiriman yang cocok",
+        "emptyFilteredBody": "Tidak ada yang sesuai dengan filter ini. Hapus filter untuk melihat semua.",
+        "loadMore": "Muat lebih banyak",
+        "loadingMore": "Memuat lebih banyak"
+      },
+      "cap": {
+        "notice": "Beberapa pengiriman disimpan untuk ditinjau karena batas pengiriman bulanan paket Anda sudah tercapai.",
+        "upgrade": "Tingkatkan paket Anda"
+      }
+    }
+  }
+}

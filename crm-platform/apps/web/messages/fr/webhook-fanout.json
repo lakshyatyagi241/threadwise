@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhooks",
+      "forwarding": "Transfert de webhooks"
+    },
+    "common": {
+      "loading": "Chargement",
+      "retry": "Réessayer",
+      "requestId": "Identifiant de la requête",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Vous n’avez pas l’autorisation d’effectuer cette action.",
+        "request": "Cette requête n’a pas pu aboutir.",
+        "unexpected": "Une erreur est survenue de notre côté. Réessayez dans un instant.",
+        "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+        "conflict": "Quelqu’un d’autre a modifié cette cible. La liste a été rechargée : appliquez de nouveau votre modification.",
+        "validation": "Certaines valeurs ne sont pas valides. Vérifiez les champs en surbrillance.",
+        "notFound": "Cet élément n’existe plus.",
+        "urlRejected": "Cette URL n’est pas autorisée. Utilisez une adresse https accessible depuis internet."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin / Système / Webhooks",
+      "title": "Transfert de webhooks",
+      "description": "Liste des services de l’opérateur de la plateforme qui reçoivent une copie de chaque webhook Meta.",
+      "banner": "Meta n’autorise qu’une seule URL de rappel. Nous la recevons une fois, la vérifions et transférons le corps brut sans modification (avec la signature d’origine) à chaque cible active.",
+      "superOnly": "Seul un super administrateur peut gérer le transfert de webhooks.",
+      "add": "Ajouter une cible",
+      "tabs": {
+        "targets": "Cibles",
+        "failures": "Envois en échec"
+      }
+    },
+    "targets": {
+      "empty": "Aucune cible de transfert pour l’instant",
+      "emptyBody": "Ajoutez une cible pour commencer à transférer les webhooks Meta vers un autre service.",
+      "columns": {
+        "target": "Cible",
+        "active": "Active",
+        "fields": "Champs",
+        "deliveries": "Envois",
+        "last": "Dernier envoi",
+        "actions": "Actions"
+      },
+      "allFields": "Tous les champs",
+      "success": "{count, number} OK",
+      "failure": "{count, number} en échec",
+      "pending": "{count, number} en attente",
+      "pendingLabel": "{count, number} envois en échec en attente de rejeu",
+      "neverDelivered": "Rien n’a encore été envoyé",
+      "lastStatus": "Statut {status}",
+      "lastError": "Erreur : {error}",
+      "lastAt": "à {time}",
+      "activeSwitch": "Transférer vers {name}",
+      "on": "Cible activée",
+      "off": "Cible désactivée",
+      "edit": "Modifier",
+      "test": "Tester",
+      "testing": "Test en cours",
+      "testOk": "Test réussi : statut {status} en {ms, number} ms",
+      "testFailed": "Test échoué : {reason} ({ms, number} ms)",
+      "testNoStatus": "pas de réponse",
+      "testStatus": "statut {status}",
+      "delete": "Supprimer",
+      "deleteTitle": "Supprimer {name} ?",
+      "deleteBody": "La cible ne reçoit plus de webhooks et ses envois en échec conservés sont supprimés. Cette action est irréversible.",
+      "deleteConfirm": "Supprimer la cible",
+      "cancel": "Annuler",
+      "toasts": {
+        "created": "{name} ajouté",
+        "saved": "{name} enregistré",
+        "on": "{name} est activé",
+        "off": "{name} est désactivé",
+        "deleted": "{name} supprimé"
+      }
+    },
+    "dialog": {
+      "createTitle": "Ajouter une cible de transfert",
+      "editTitle": "Modifier {name}",
+      "close": "Fermer",
+      "name": "Nom",
+      "namePlaceholder": "Service d’analyse",
+      "url": "URL",
+      "urlHint": "https uniquement. Les adresses sur des réseaux privés sont refusées.",
+      "headerName": "Nom de l’en-tête (facultatif)",
+      "headerNameHint": "Envoyé avec chaque envoi, par exemple Authorization.",
+      "headerValue": "Valeur de l’en-tête",
+      "headerValueSaved": "Enregistrée, se termine par ••••{last4}. Laissez vide pour la conserver.",
+      "headerValueSavedNoLast4": "Enregistrée. Laissez vide pour la conserver.",
+      "headerValueHint": "Écriture seule : elle n’est plus jamais affichée après l’enregistrement.",
+      "removeHeader": "Supprimer l’en-tête enregistré",
+      "fieldFilter": "Filtre de champs",
+      "fieldFilterHint": "Laissez vide pour transférer tous les champs. Saisissez un champ puis appuyez sur Entrée, par exemple messages ou message_template_status_update.",
+      "fieldFilterPlaceholder": "Ajouter un champ",
+      "fieldRemove": "Retirer {field}",
+      "timeout": "Délai d’expiration (secondes)",
+      "timeoutHint": "De 1 à 30",
+      "maxAttempts": "Nombre maximal de tentatives",
+      "maxAttemptsHint": "De 1 à 10",
+      "active": "Transférer vers cette cible",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…",
+      "cancel": "Annuler",
+      "errors": {
+        "nameRequired": "Saisissez un nom.",
+        "urlRequired": "Saisissez l’URL.",
+        "urlHttps": "L’URL doit commencer par https://.",
+        "headerNameInvalid": "Utilisez uniquement des lettres, des chiffres et des tirets.",
+        "headerValueRequired": "Un en-tête nécessite à la fois un nom et une valeur.",
+        "headerNameRequired": "Saisissez aussi le nom de l’en-tête.",
+        "timeout": "Saisissez un nombre entier de 1 à 30.",
+        "maxAttempts": "Saisissez un nombre entier de 1 à 10."
+      }
+    },
+    "failures": {
+      "empty": "Aucun envoi en échec",
+      "emptyBody": "Les envois qui épuisent leurs tentatives sont conservés ici pendant 14 jours pour pouvoir être renvoyés.",
+      "filterAll": "Toutes les cibles",
+      "filterLabel": "Cible",
+      "columns": {
+        "target": "Cible",
+        "when": "Échec à",
+        "attempts": "Tentatives",
+        "reason": "Motif",
+        "size": "Taille",
+        "actions": "Action"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} octets",
+      "replay": "Rejouer",
+      "replaying": "Rejeu en cours",
+      "replayed": "Rejoué {time}",
+      "replayOk": "Remis : statut {status} en {ms, number} ms",
+      "replayFailed": "Non remis : {reason} ({ms, number} ms)",
+      "reasonStatus": "statut {status}",
+      "reasonNone": "pas de réponse"
+    }
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "חנות / הזמנות",
+      "title": "כל ההזמנות",
+      "subtitle": "כל הזמנה מכל ערוץ: WhatsApp, חזית החנות, Twilio וידני.",
+      "loading": "טוען הזמנות",
+      "statusTabs": "סטטוס הזמנה",
+      "searchLabel": "חיפוש הזמנות",
+      "searchPlaceholder": "חיפוש לפי טלפון, שם או מספר הזמנה",
+      "sourceLabel": "מקור",
+      "allSources": "כל המקורות",
+      "paymentLabel": "תשלום",
+      "allPayments": "כל התשלומים",
+      "fromLabel": "מתאריך",
+      "toLabel": "עד תאריך",
+      "shopLabel": "חנות",
+      "invertedRange": "תאריך ההתחלה מאוחר מתאריך הסיום, ולכן אף הזמנה לא תתאים.",
+      "clearFilters": "נקה מסננים",
+      "cols": {
+        "order": "הזמנה",
+        "customer": "לקוח",
+        "items": "פריטים",
+        "total": "סה\"כ",
+        "payment": "תשלום",
+        "status": "סטטוס",
+        "source": "מקור",
+        "created": "נוצרה",
+        "actions": "פעולות"
+      },
+      "itemsCount": "{count, plural, one {פריט #} two {# פריטים} other {# פריטים}}",
+      "anonymous": "אנונימי",
+      "openOrder": "פתח הזמנה #{no}",
+      "changeStatus": "שנה סטטוס של הזמנה #{no}",
+      "deleteOrder": "מחק הזמנה #{no}",
+      "deleteTitle": "למחוק את הזמנה #{no}?",
+      "deleteMessage": "ההזמנה והפריטים שלה יוסרו לצמיתות. לא ניתן לבטל פעולה זו.",
+      "deleteConfirm": "מחק הזמנה",
+      "deleted": "הזמנה #{no} נמחקה.",
+      "statusChanged": "הזמנה #{no} היא כעת {status}.",
+      "buyerNotified": "נשלחה הודעה לקונה.",
+      "confirmStatusTitle": "לסמן את הזמנה #{no} כ{status}?",
+      "confirmStatusMessage": "הקונה יקבל הודעה על הסטטוס החדש. ניתן להעביר את ההזמנה לסטטוס אחר גם מאוחר יותר.",
+      "confirmStatusConfirm": "עדכן סטטוס",
+      "emptyTitle": "עדיין אין הזמנות",
+      "emptyMessage": "כשלקוחות מזמינים מחזית החנות שלך או ב-WhatsApp, ההזמנות מופיעות כאן. שתף את קישור החנות כדי לקבל את הראשונה.",
+      "emptyAction": "פתח את סקירת החנות",
+      "noMatchTitle": "אין הזמנות התואמות למסננים אלה",
+      "noMatchMessage": "נסה חיפוש, סטטוס או טווח תאריכים אחר, או נקה את המסננים כדי לראות כל הזמנה."
+    },
+    "orderDetail": {
+      "back": "חזרה להזמנות",
+      "title": "הזמנה #{no}",
+      "placed": "בוצעה {when}",
+      "loading": "טוען הזמנה",
+      "readOnly": "ניתן לצפות בהזמנה זו אך לא לשנותה.",
+      "items": {
+        "title": "פריטים",
+        "empty": "להזמנה זו אין פריטים.",
+        "qty": "כמות {qty}",
+        "retailerId": "מזהה {id}",
+        "unit": "{price} ליחידה"
+      },
+      "totals": {
+        "title": "סיכומים",
+        "subtotal": "סכום ביניים",
+        "shipping": "משלוח",
+        "tax": "מס",
+        "taxInclusive": "כלול במחירים",
+        "discount": "הנחה",
+        "discountCoupon": "הנחה ({code})",
+        "total": "סה\"כ"
+      },
+      "customer": {
+        "title": "לקוח",
+        "anonymous": "אנונימי",
+        "phone": "טלפון",
+        "email": "אימייל",
+        "address": "כתובת למשלוח",
+        "noAddress": "לא נקלטה כתובת עבור הזמנה זו.",
+        "notes": "הערות"
+      },
+      "meta": {
+        "title": "פרטי הזמנה",
+        "orderId": "מזהה הזמנה",
+        "source": "מקור",
+        "shop": "חנות",
+        "paymentMethod": "אמצעי תשלום",
+        "updated": "עודכן לאחרונה"
+      },
+      "rto": {
+        "title": "סיכון החזרה למוצא",
+        "summary": "{band} ({score})",
+        "low": "נמוך",
+        "medium": "בינוני",
+        "high": "גבוה"
+      },
+      "timeline": {
+        "title": "ציר זמן",
+        "empty": "עדיין לא קרה דבר בהזמנה זו.",
+        "kind": {
+          "created": "ההזמנה בוצעה",
+          "status_changed": "הסטטוס השתנה",
+          "payment_link": "קישור תשלום",
+          "paid": "התשלום התקבל",
+          "invoice": "חשבונית",
+          "note": "הערה",
+          "updated": "ההזמנה עודכנה"
+        },
+        "actor": {
+          "user": "על ידי חבר צוות",
+          "system": "אוטומטי",
+          "customer": "על ידי הלקוח"
+        }
+      },
+      "payments": {
+        "title": "תשלומים",
+        "empty": "לא נרשם תשלום להזמנה זו.",
+        "kind": {
+          "gateway": "תשלום אונליין",
+          "payment_link": "קישור תשלום",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "מזומן במשלוח",
+          "manual": "נרשם ידנית"
+        },
+        "reference": "אסמכתא {ref}",
+        "openLink": "פתח קישור"
+      },
+      "form": {
+        "title": "עדכן סטטוס",
+        "status": "סטטוס",
+        "suggestion": "הצעד הבא הרגיל: {status}",
+        "notes": "הערות",
+        "paymentLink": "קישור תשלום",
+        "optional": "אופציונלי",
+        "paymentLinkHint": "קישור חדש נשלח לקונה עם העדכון.",
+        "invalidLink": "הזן קישור אינטרנט המתחיל ב-http:// או ב-https://.",
+        "save": "שמור שינויים",
+        "saving": "שומר",
+        "saved": "הזמנה #{no} עודכנה.",
+        "notified": "נשלחה הודעה לקונה.",
+        "notNotified": "לא נשלחה הודעה לקונה.",
+        "reload": "טען הזמנה מחדש"
+      },
+      "pay": {
+        "title": "קישור תשלום",
+        "current": "קישור התשלום הנוכחי",
+        "sendTitle": "שלח קישור שכבר יש לך",
+        "sendLabel": "כתובת קישור התשלום",
+        "sendButton": "שלח קישור תשלום",
+        "sent": "קישור התשלום נשלח לקונה.",
+        "savedNotSent": "הקישור נשמר, אך לא ניתן היה לשלוח אותו לקונה.",
+        "generateTitle": "צור קישור לקופה",
+        "generateHint": "יוצר קישור תשלום מאוחסן בשער התשלום שלך ושולח אותו לקונה ב-WhatsApp.",
+        "gatewayLabel": "שער תשלום",
+        "generateButton": "צור קישור ושלח",
+        "noGatewayTitle": "לא הוגדר שער תשלום",
+        "noGatewayMessage": "יש להגדיר שער תשלום לפני שניתן ליצור קישור לקופה.",
+        "noGatewayAction": "הגדר שער תשלום",
+        "resultTitle": "קישור התשלום מוכן",
+        "copyLink": "העתק קישור",
+        "resultSent": "נשלח לקונה ב-WhatsApp.",
+        "resultNotSent": "נשמר בהזמנה, אך לא ניתן היה לשלוח אותו לקונה. שתף אותו בעצמך."
+      },
+      "invoice": {
+        "title": "חשבונית",
+        "description": "הפוך הזמנה זו לחשבונית ולהזמנת מכירה במכירות.",
+        "create": "צור חשבונית",
+        "creating": "יוצר",
+        "created": "חשבונית {number} נוצרה.",
+        "createdNoNumber": "החשבונית נוצרה.",
+        "existing": "הזמנה זו כבר חויבה בחשבונית.",
+        "viewInvoice": "חשבונית",
+        "viewSalesOrder": "הזמנת מכירה"
+      },
+      "delete": {
+        "title": "למחוק את הזמנה #{no}?",
+        "message": "ההזמנה והפריטים שלה יוסרו לצמיתות. לא ניתן לבטל פעולה זו.",
+        "confirm": "מחק הזמנה",
+        "deleted": "הזמנה #{no} נמחקה."
+      }
+    }
+  }
+}

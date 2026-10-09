@@ -1,0 +1,107 @@
+{
+  "developer-rest-api-v1-docs": {
+    "metaTitle": "{brand} API-referentie",
+    "metaDescription": "De REST API-referentie van {brand}: authenticatie, limieten en elk endpoint met voorbeelden van verzoeken en antwoorden.",
+    "common": {
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "copyFailed": "Kopiëren mislukt. Selecteer de tekst en kopieer hem handmatig."
+    },
+    "topbar": {
+      "home": "{brand} startpagina",
+      "apiWord": "API",
+      "version": "v1",
+      "spec": "OpenAPI-specificatie",
+      "getKey": "Een API-sleutel aanvragen"
+    },
+    "sidebar": {
+      "label": "Referentienavigatie",
+      "filterLabel": "Endpoints filteren",
+      "filterPlaceholder": "Endpoints filteren…",
+      "startHere": "Begin hier",
+      "intro": "Introductie",
+      "auth": "Authenticatie",
+      "webhooks": "Webhooks"
+    },
+    "hero": {
+      "eyebrow": "Ontwikkelaarsreferentie",
+      "title": "De {brand} <em>REST API</em>",
+      "lead": "Eén REST API om WhatsApp-berichten te sturen, broadcasts en campagnes uit te voeren, contacten en sjablonen te beheren, automatiseringsflows te starten en je account uit te lezen: alles wat je CRM, automatiseringsplatform of app nodig heeft.",
+      "baseUrl": "Basis-URL",
+      "copyBaseUrl": "De basis-URL kopiëren"
+    },
+    "capabilities": {
+      "title": "Wat je kunt doen",
+      "send": {
+        "title": "Berichten sturen",
+        "body": "Losse verzendingen, broadcasts, campagnes en geplande verzendingen"
+      },
+      "receive": {
+        "title": "Berichten ontvangen",
+        "body": "Inkomende gesprekken en hun berichten lezen"
+      },
+      "contacts": {
+        "title": "Contacten en leads",
+        "body": "Volledig aanmaken, lezen, bijwerken en verwijderen, groepen en aangepaste attributen"
+      },
+      "templates": {
+        "title": "Sjablonen",
+        "body": "WhatsApp-sjablonen aanmaken, bijwerken en weergeven"
+      },
+      "flows": {
+        "title": "Automatiseringsflows",
+        "body": "Een contact via de API in een flow inschrijven"
+      },
+      "status": {
+        "title": "Bezorgstatus",
+        "body": "Per bericht verzonden, bezorgd, gelezen en mislukt"
+      },
+      "devices": {
+        "title": "Apparaten",
+        "body": "Verbonden nummers en hun status weergeven"
+      },
+      "account": {
+        "title": "Account en gebruik",
+        "body": "Abonnement, limieten en berichttegoed"
+      }
+    },
+    "auth": {
+      "title": "Authenticatie",
+      "intro": "Elk verzoek wordt geauthenticeerd met een <strong>API-sleutel</strong> van de workspace. Maak er een aan in het dashboard onder <strong>Instellingen, REST API</strong>. Stuur hem mee als Bearer-token:",
+      "copyHeader": "De header kopiëren",
+      "alt": "Je kunt hem ook meesturen in een <code>X-Api-Key</code>-header. Sleutels horen bij één workspace en alleen de hash wordt opgeslagen, dus kopieer een sleutel zodra hij is aangemaakt: hij kan niet opnieuw worden getoond. Sleutels kunnen op elk moment worden ingetrokken en werken dan direct niet meer."
+    },
+    "webhooks": {
+      "title": "Webhooks en realtime gebeurtenissen",
+      "comingTitle": "Webhookbezorging komt eraan",
+      "comingBody": "Een webhook registreren en gebeurtenissen op je eigen URL ontvangen is nog niet beschikbaar. Er worden momenteel geen gebeurtenissen naar je server gestuurd, dus er is niets om je op te abonneren. Deze kaart toont de gebeurtenissen en de handtekening-header zodra de bezorging live gaat.",
+      "rateLabel": "Limieten",
+      "rate": "Elke sleutel valt onder de limiet per minuut van het abonnement van de workspace; als het abonnement er geen instelt, geldt de platformstandaard van {limit} verzoeken per minuut. Elk antwoord bevat <code>X-RateLimit-Limit</code> en <code>X-RateLimit-Remaining</code>, en een verzoek boven de limiet krijgt HTTP 429 en een <code>Retry-After</code>-header als antwoord. Uitgaande verzendingen gaan ook ten laste van het berichttegoed van je abonnement."
+    },
+    "reference": {
+      "title": "Endpoints",
+      "count": "{count, plural, one {# endpoint} other {# endpoints}}",
+      "noMatch": "Geen endpoint komt overeen met “{query}”.",
+      "clearFilter": "Het filter wissen",
+      "empty": "Er zijn nog geen endpoints gepubliceerd. Kom binnenkort terug.",
+      "unavailableTitle": "De endpointreferentie kon niet worden geladen",
+      "unavailableBody": "De API-specificatie is nu niet bereikbaar. De introductie hierboven blijft gelden. Probeer het zo meteen opnieuw.",
+      "retry": "Opnieuw proberen",
+      "general": "Algemeen",
+      "toggle": "Details van {method} {path} tonen of verbergen",
+      "parameters": "Parameters",
+      "bodyParameters": "Bodyparameters",
+      "name": "Naam",
+      "field": "Veld",
+      "description": "Beschrijving",
+      "required": "verplicht",
+      "exampleRequest": "Voorbeeldverzoek",
+      "requestBody": "Verzoekbody",
+      "responses": "Antwoorden",
+      "copyCurl": "Het verzoek kopiëren",
+      "copyJson": "De JSON kopiëren",
+      "noExample": "De specificatie geeft geen voorbeeld voor dit antwoord."
+    },
+    "footer": "{brand} REST API · v1 · gegenereerd uit de live OpenAPI-specificatie"
+  }
+}

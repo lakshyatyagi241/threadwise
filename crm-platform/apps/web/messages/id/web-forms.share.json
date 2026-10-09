@@ -1,0 +1,278 @@
+{
+  "web-forms": {
+    "share": {
+      "readOnly": "Anda dapat melihat pengaturan ini tetapi tidak dapat mengubahnya.",
+      "clipboardBlocked": "Browser Anda memblokir penyalinan. Pilih teks lalu salin secara manual.",
+      "copied": "Disalin",
+      "status": {
+        "archived": {
+          "title": "Formulir ini diarsipkan",
+          "body": "Tautan publik dan semua embed ditutup. Pulihkan formulir untuk menggunakannya kembali."
+        },
+        "draft": {
+          "title": "Terbitkan formulir agar tautan ini berfungsi",
+          "body": "Tidak ada yang dapat membuka tautan atau embed sebelum formulir diterbitkan setidaknya sekali."
+        },
+        "paused": {
+          "title": "Formulir ini ditutup",
+          "body": "Tautan dan embed menampilkan pesan bahwa formulir ditutup dan tidak menerima jawaban. Lanjutkan formulir untuk membukanya kembali."
+        },
+        "live": {
+          "title": "Formulir ini aktif",
+          "body": "Pengunjung melihat versi {version}. Perubahan yang Anda buat di builder baru sampai ke mereka setelah Anda menerbitkannya."
+        }
+      },
+      "hosted": {
+        "title": "Tautan publik",
+        "description": "Bagikan alamat ini di mana saja: pesan, email, bio media sosial. Alamat ini membuka formulir di halamannya sendiri.",
+        "label": "Alamat formulir",
+        "copy": "Salin tautan",
+        "copiedToast": "Tautan disalin.",
+        "open": "Buka",
+        "newTab": "(dibuka di tab baru)"
+      },
+      "qr": {
+        "title": "Kode QR",
+        "description": "Untuk cetak, poster, dan kemasan. Saat dipindai, kode ini membuka tautan publik.",
+        "alt": "Kode QR yang membuka formulir",
+        "tracking": "Kode ini menambahkan utm_source=qr ke alamat, sehingga pengiriman yang berasal darinya ditampilkan sebagai QR pada atribusinya.",
+        "downloadPng": "Unduh PNG",
+        "downloadSvg": "Unduh SVG",
+        "downloadFailed": "Kode QR tidak dapat diunduh. Coba lagi."
+      },
+      "embed": {
+        "title": "Pasang formulir di situs web Anda",
+        "description": "Tempel salah satu kode ini di tempat formulir ingin ditampilkan. Embed hanya berfungsi di situs yang tercantum di bawah Situs web yang diizinkan.",
+        "copy": "Salin kode",
+        "copiedToast": "{name} disalin.",
+        "script": {
+          "title": "Embed skrip",
+          "description": "Direkomendasikan. Formulir menyesuaikan ukurannya sendiri agar pas dengan halaman dan dapat mengarahkan ulang setelah dikirim."
+        },
+        "iframe": {
+          "title": "Embed iframe",
+          "description": "Bingkai sederhana untuk builder yang tidak mengizinkan skrip. Tinggi diatur sendiri oleh Anda."
+        }
+      },
+      "domains": {
+        "title": "Situs web yang diizinkan",
+        "description": "Hanya situs web yang tercantum di sini yang boleh menyematkan formulir ini dan mengirim jawaban dari browser.",
+        "none": "Belum ada situs web yang diizinkan, jadi formulir hanya berfungsi melalui tautan publiknya dan tidak dapat disematkan.",
+        "label": "Tambahkan situs web",
+        "hint": "Gunakan alamat persis, misalnya https://www.example.com. Satu tingkat wildcard diizinkan, misalnya https://*.example.com. http biasa hanya untuk localhost.",
+        "count": "{count} dari {max}",
+        "add": "Tambah",
+        "remove": "Hapus {value}",
+        "empty": "Belum ada situs web yang ditambahkan.",
+        "issues": {
+          "empty": "Masukkan alamat situs web terlebih dahulu.",
+          "invalid": "Alamat ini tidak valid. Gunakan format https://example.com atau https://*.example.com, tanpa path.",
+          "duplicate": "Situs web ini sudah ada di daftar.",
+          "max": "Anda hanya dapat mengizinkan maksimal {max} situs web."
+        }
+      },
+      "rotate": {
+        "title": "Putar ulang kunci publik",
+        "description": "Membuat kunci baru untuk formulir ini. Gunakan jika tautan atau kode embed bocor atau Anda ingin menonaktifkannya.",
+        "button": "Putar ulang kunci",
+        "readOnly": "Anda tidak dapat mengubah formulir ini",
+        "confirmTitle": "Putar ulang kunci publik?",
+        "confirmMessage": "Tautan lama, kode QR, dan kode embed langsung berhenti berfungsi. Anda harus membagikan tautan baru dan mengganti kode di setiap situs yang menyematkan formulir.",
+        "confirmButton": "Putar ulang kunci",
+        "cancel": "Batal",
+        "success": "Kunci berhasil diputar ulang. Salin tautan dan kode yang baru.",
+        "failed": "Kunci tidak dapat diputar ulang. Tidak ada yang berubah. Coba lagi.",
+        "conflict": "Orang lain telah mengubah formulir ini. Muat ulang halaman untuk melihat versi terbaru, lalu coba lagi."
+      }
+    },
+    "settings": {
+      "readOnly": "Anda dapat melihat pengaturan ini tetapi tidak dapat mengubahnya.",
+      "usersFailed": "Daftar anggota tim tidak dapat dimuat, sehingga pemilik belum dapat dipilih saat ini.",
+      "form": {
+        "title": "Formulir",
+        "description": "Nama yang Anda lihat di daftar dan informasi dasar yang dilihat pengunjung di formulir.",
+        "name": "Nama formulir",
+        "nameHint": "Hanya tim Anda yang melihat nama ini.",
+        "issues": {
+          "nameRequired": "Beri nama formulir.",
+          "submit_empty": "Tombol memerlukan label.",
+          "submit_too_long": "Buat label tombol maksimal {max} karakter."
+        },
+        "language": "Bahasa formulir",
+        "languageHint": "Mengatur bahasa teks bawaan dan arah baca (bahasa Arab dibaca dari kanan ke kiri).",
+        "languages": {
+          "en": "Inggris",
+          "ar": "Arab"
+        },
+        "submitLabel": "Label tombol kirim",
+        "submitLabelHint": "1 sampai {max} karakter."
+      },
+      "after": {
+        "title": "Setelah dikirim",
+        "description": "Yang dilihat pengunjung setelah jawaban mereka terkirim.",
+        "mode": "Yang terjadi",
+        "modes": {
+          "message": "Tampilkan pesan",
+          "redirect": "Buka halaman lain"
+        },
+        "modeHints": {
+          "message": "Formulir digantikan oleh pesan terima kasih Anda.",
+          "redirect": "Pengunjung diarahkan ke halaman Anda, misalnya halaman terima kasih atau pemesanan."
+        },
+        "message": "Pesan terima kasih",
+        "messageHint": "Teks biasa. Tag sederhana yang diizinkan: b, i, u, br, ul, ol, li, dan a. Maksimal {max} karakter.",
+        "messageTooLong": "Pesan melebihi {max} karakter.",
+        "redirect": "Alamat pengalihan",
+        "redirectHint": "Harus diawali dengan https://. Halaman yang tidak menggunakan https tidak pernah dibuka.",
+        "redirectIssues": {
+          "required": "Masukkan alamat tujuan pengunjung.",
+          "https": "Gunakan alamat yang diawali dengan https://."
+        },
+        "redirectKeepsMessage": "Pesan terima kasih disimpan di formulir dan tidak ditampilkan saat pengalihan diatur."
+      },
+      "consent": {
+        "title": "Persetujuan",
+        "description": "Kotak centang yang mencatat apa yang disetujui pengunjung, dengan kata-kata persisnya, versinya, dan waktunya.",
+        "enabled": "Minta persetujuan",
+        "enabledHint": "Menampilkan baris persetujuan di atas tombol kirim.",
+        "text": "Teks persetujuan",
+        "textHint": "Maksimal {max} karakter. Pengunjung melihat kata-kata persis ini.",
+        "textRequired": "Tulis teks persetujuan, atau nonaktifkan persetujuan.",
+        "textTooLong": "Teks melebihi {max} karakter.",
+        "version": "Versi kata-kata {version}",
+        "versionHintPublished": "Setelah formulir diterbitkan, mengubah kata-kata akan otomatis memulai versi baru. Pengiriman sebelumnya tetap menggunakan versi yang mereka setujui.",
+        "versionHintDraft": "Versi tetap 1 sampai formulir diterbitkan. Setelah itu, perubahan kata-kata akan memulai versi baru.",
+        "privacyUrl": "Tautan kebijakan privasi",
+        "privacyUrlHint": "Opsional. Ditampilkan di samping teks persetujuan. Harus diawali dengan https://.",
+        "privacyUrlHttps": "Gunakan alamat yang diawali dengan https://.",
+        "required": "Harus dicentang untuk mengirim",
+        "requiredHint": "Nonaktifkan jika persetujuan bersifat opsional.",
+        "marketing": "Persetujuan pemasaran",
+        "marketingHint": "Mencentang kotak ini mencatat persetujuan pemasaran pada kontak. Kotak yang tidak dicentang tidak pernah berlangganan siapa pun."
+      },
+      "crm": {
+        "title": "Di CRM",
+        "description": "Yang dilakukan setiap pengiriman pada kontak yang dibuat atau diperbarui.",
+        "company": "Cocokkan perusahaan",
+        "companyOptions": {
+          "none": "Jangan cocokkan",
+          "email_domain": "Berdasarkan domain email",
+          "name_or_domain": "Berdasarkan nama atau domain"
+        },
+        "companyHints": {
+          "none": "Jawaban perusahaan tidak digunakan untuk menautkan perusahaan.",
+          "email_domain": "Menautkan kontak ke perusahaan yang memiliki domain dari alamat email mereka.",
+          "name_or_domain": "Menautkan perusahaan berdasarkan nama atau domain situs web, dan membuatnya jika tidak ada yang cocok."
+        },
+        "lifecycle": "Tahap siklus hidup",
+        "lifecycleHint": "Diatur pada kontak saat formulir dikirim.",
+        "lifecycleNone": "Jangan atur",
+        "stages": {
+          "new": "Baru",
+          "contacted": "Sudah dihubungi",
+          "qualified": "Memenuhi syarat",
+          "application_started": "Pengajuan dimulai",
+          "application_submitted": "Pengajuan dikirim",
+          "interview_scheduled": "Wawancara dijadwalkan",
+          "offer_received": "Penawaran diterima",
+          "admission_confirmed": "Penerimaan dikonfirmasi",
+          "enrolled": "Terdaftar",
+          "lost": "Hilang"
+        },
+        "tags": "Tag yang ditambahkan",
+        "tagsHint": "Ditambahkan ke setiap kontak yang mengirim formulir ini. Maksimal {max} tag dengan panjang 1 sampai 60 karakter.",
+        "tagsPlaceholder": "Misalnya: webinar",
+        "tagsCount": "{count} dari {max}",
+        "tagAdd": "Tambah tag",
+        "tagRemove": "Hapus tag {value}",
+        "tagsNone": "Tidak ada tag.",
+        "tagIssues": {
+          "empty": "Masukkan tag terlebih dahulu.",
+          "too_long": "Tag maksimal 60 karakter.",
+          "duplicate": "Tag ini sudah ada di daftar.",
+          "max": "Anda hanya dapat menambahkan maksimal {max} tag."
+        },
+        "owner": "Pemilik kontak baru",
+        "ownerHint": "Siapa yang mengelola kontak yang dibuat formulir ini.",
+        "ownerMode": "Aturan pemilik",
+        "ownerModes": {
+          "unassigned": "Tanpa pemilik",
+          "fixed": "Satu orang",
+          "round_robin": "Bergiliran"
+        },
+        "ownerModeHints": {
+          "unassigned": "Kontak tidak memiliki pemilik sampai seseorang mengklaimnya.",
+          "fixed": "Setiap kontak diberikan kepada orang yang sama.",
+          "round_robin": "Kontak diberikan kepada orang yang dipilih secara bergiliran. Orang yang tidak lagi aktif dilewati."
+        },
+        "ownerFixed": "Pemilik",
+        "ownerRoundRobin": "Orang yang bergiliran",
+        "ownerRoundRobinHint": "Pilih minimal dua orang.",
+        "chooseUser": "Pilih seseorang",
+        "unknownUser": "Orang yang tidak lagi tersedia",
+        "pickUsers": "Pilih orang",
+        "noUsers": "Tidak ada orang yang cocok",
+        "removeUser": "Hapus {name}",
+        "ownerIssues": {
+          "fixed_one": "Pilih tepat satu orang.",
+          "round_robin_two": "Round robin memerlukan minimal dua orang.",
+          "unassigned_none": "Aturan tanpa penugasan tidak dapat memiliki orang. Pilih aturan lain atau kosongkan daftar.",
+          "too_many": "Anda hanya dapat memilih maksimal 50 orang."
+        }
+      },
+      "notify": {
+        "title": "Notifikasi",
+        "description": "Siapa yang diberi tahu saat pengiriman masuk.",
+        "owner": "Beri tahu pemilik kontak",
+        "ownerHint": "Pemilik mendapat notifikasi untuk setiap pengiriman.",
+        "users": "Beri tahu juga orang berikut",
+        "usersHint": "Maksimal {max} anggota tim juga mendapat notifikasi.",
+        "emails": "Kirim email juga ke alamat berikut",
+        "emailsHint": "Maksimal {max} alamat mendapat email untuk setiap pengiriman. Alamat ini boleh milik orang di luar tim Anda.",
+        "emailPlaceholder": "name@example.com",
+        "emailsCount": "{count} dari {max}",
+        "emailAdd": "Tambah email",
+        "emailRemove": "Hapus {value}",
+        "emailsNone": "Tidak ada alamat tambahan.",
+        "emailIssues": {
+          "empty": "Masukkan alamat email terlebih dahulu.",
+          "invalid": "Alamat email ini tidak valid.",
+          "duplicate": "Alamat ini sudah ada di daftar.",
+          "max": "Anda hanya dapat menambahkan maksimal {max} alamat."
+        }
+      },
+      "protection": {
+        "title": "Perlindungan",
+        "description": "Mencegah spam dan menentukan berapa lama jawaban disimpan.",
+        "honeypot": "Kolom jebakan tersembunyi",
+        "honeypotHint": "Menambahkan kolom yang tidak pernah dilihat orang. Bot mengisinya dan pengirimannya ditandai sebagai spam.",
+        "captcha": "CAPTCHA",
+        "captchaOptions": {
+          "inherit": "Ikuti pengaturan platform",
+          "on": "Selalu aktif",
+          "off": "Nonaktif"
+        },
+        "captchaHints": {
+          "inherit": "Menggunakan pengaturan yang diterapkan workspace Anda untuk formulir publik.",
+          "on": "Pengunjung harus lolos pemeriksaan sebelum dapat mengirim.",
+          "off": "Tanpa pemeriksaan. Mengandalkan kolom jebakan tersembunyi dan batas laju."
+        },
+        "retention": "Simpan jawaban selama (hari)",
+        "retentionHint": "Setelah jumlah hari ini, jawaban akan dihapus. Ini membantu memenuhi aturan perlindungan data seperti GDPR. Antara 30 dan 3650.",
+        "range": "Masukkan bilangan bulat dari {min} sampai {max}.",
+        "keepForever": "Simpan sampai saya menghapusnya",
+        "keepForeverHint": "Jawaban tetap ada sampai dihapus oleh seseorang. Pilih ini hanya jika Anda memiliki alasan hukum untuk menyimpannya.",
+        "advanced": "Lanjutan: batas laju",
+        "advancedHint": "Batas yang memperlambat banjir pengiriman. Pengaturan bawaan cocok untuk sebagian besar formulir.",
+        "rate": {
+          "perIpPerMinute": "Per alamat, per menit",
+          "perIpPerMinuteHint": "Pengiriman dari satu alamat internet.",
+          "perFormPerMinute": "Per formulir, per menit",
+          "perFormPerMinuteHint": "Pengiriman ke formulir ini dari mana saja.",
+          "perContactPerHour": "Per kontak, per jam",
+          "perContactPerHourHint": "Pengiriman dengan email atau nomor telepon yang sama."
+        }
+      }
+    }
+  }
+}

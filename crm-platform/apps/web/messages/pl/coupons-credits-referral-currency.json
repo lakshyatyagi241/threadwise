@@ -1,0 +1,412 @@
+{
+  "coupons-credits-referral-currency": {
+    "nav": {
+      "group": "Rozliczenia i plany",
+      "coupons": "Kupony",
+      "currencies": "Waluty",
+      "currenciesGroup": "Lokalizacja",
+      "affiliate": "Program partnerski"
+    },
+    "common": {
+      "loading": "Wczytywanie",
+      "retry": "Spróbuj ponownie",
+      "cancel": "Anuluj",
+      "dismiss": "Odrzuć",
+      "admin": "Administrator",
+      "readOnly": "Możesz przeglądać tę stronę, ale zmieniać ją może tylko superadministrator.",
+      "requestId": "Identyfikator żądania",
+      "errors": {
+        "forbidden": "Nie masz dostępu do tej strony.",
+        "request": "Nie udało się zrealizować żądania.",
+        "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
+      },
+      "pager": {
+        "label": "Paginacja",
+        "previous": "Poprzednia",
+        "next": "Następna",
+        "page": "Strona {n}"
+      }
+    },
+    "errors": {
+      "generic": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
+      "forbidden": "Tylko superadministrator może to zmienić.",
+      "notFound": "Ten element już nie istnieje. Mógł zostać usunięty.",
+      "conflict": "Ktoś inny właśnie to zmienił. Odśwież stronę i spróbuj ponownie.",
+      "validation": "Niektóre wartości są nieprawidłowe. Sprawdź formularz i spróbuj ponownie.",
+      "codeTaken": "Inny kupon używa już tego kodu.",
+      "planUnknown": "Co najmniej jeden z wybranych planów już nie istnieje.",
+      "currencyUnknown": "Wybierz jedną z aktywnych walut.",
+      "currencyTaken": "Waluta o tym kodzie już istnieje.",
+      "defaultProtected": "To jest systemowa waluta domyślna. Najpierw wybierz inną walutę domyślną.",
+      "inUse": "Ta waluta jest nadal używana przez: {used}. Zamiast tego ją dezaktywuj.",
+      "ratesFailed": "Nie udało się połączyć z dostawcą kursów lub nie zwrócił on żadnych kursów. Żaden kurs nie został zmieniony."
+    },
+    "coupons": {
+      "title": "Kupony rabatowe",
+      "titleLead": "Rabatowe",
+      "titleAccent": "kupony",
+      "crumbHere": "Kupony",
+      "eyebrow": "Admin · Rozliczenia · Kody kuponów",
+      "description": "Kody promocyjne wpisywane przez kupujących przy płatności. Wybierz rabat procentowy lub kwotowy, ustaw okres ważności, ogranicz do wybranych planów i ustaw limit łącznej liczby realizacji.",
+      "new": "Nowy kupon",
+      "kpi": {
+        "total": "Wszystkie kupony",
+        "totalHint": "w katalogu",
+        "active": "Aktywne",
+        "activeHint": "przyjmują realizacje",
+        "expired": "Wygasłe",
+        "expiredHint": "po dacie ważności",
+        "redeemed": "Łączna liczba realizacji",
+        "redeemedHint": "użycia w całym okresie"
+      },
+      "filters": {
+        "label": "Filtruj kupony",
+        "all": "Wszystkie",
+        "active": "Aktywne",
+        "disabled": "Wyłączone",
+        "expired": "Wygasłe",
+        "search": "Szukaj według kodu lub opisu…",
+        "searchLabel": "Szukaj kuponów"
+      },
+      "table": {
+        "label": "Kupony",
+        "code": "Kod",
+        "discount": "Rabat",
+        "uses": "Użycia",
+        "validity": "Ważność",
+        "status": "Status",
+        "actions": "Akcje"
+      },
+      "validity": {
+        "forever": "bezterminowo",
+        "now": "teraz",
+        "range": "{from} → {to}"
+      },
+      "empty": {
+        "title": "Brak pasujących kuponów.",
+        "hint": "Zmień lub zresetuj filtry albo",
+        "create": "utwórz pierwszy"
+      },
+      "footer": "Wyświetlono {from}–{to} z {total} kuponów",
+      "pager": {
+        "label": "Paginacja",
+        "previous": "Poprzednia",
+        "next": "Następna",
+        "page": "Strona {n}"
+      },
+      "actions": {
+        "edit": "Edytuj",
+        "delete": "Usuń",
+        "menu": "Akcje",
+        "toggle": "Włącz lub wyłącz {code}"
+      },
+      "toasts": {
+        "created": "Kupon został utworzony.",
+        "updated": "Kupon został zaktualizowany.",
+        "activated": "Aktywowano.",
+        "deactivated": "Dezaktywowano.",
+        "deleted": "Kupon został usunięty."
+      },
+      "delete": {
+        "title": "Usuń kupon",
+        "body": "Usunąć kupon {code}? Przestrzenie robocze, które już go zrealizowały, zachowają rabat.",
+        "confirm": "Tak, usuń"
+      },
+      "editor": {
+        "notFoundTitle": "Nie znaleziono kuponu",
+        "notFoundBody": "Nie ma kuponu pod tym adresem. Mógł zostać usunięty lub link jest nieprawidłowy.",
+        "backToList": "Wróć do kuponów",
+        "crumbNew": "Nowy",
+        "eyebrowNew": "Admin · Rozliczenia · Kody kuponów · Tworzenie",
+        "eyebrowEdit": "Admin · Rozliczenia · Kody kuponów · Modyfikacja",
+        "titleLead": "Nowy",
+        "titleAccent": "kupon",
+        "descriptionNew": "Kody promocyjne realizowane podczas /checkout. Wybierz rabat procentowy lub kwotowy, przypisz go do jednego planu lub wszystkich i opcjonalnie ustaw okres ważności.",
+        "redeemed": "Zrealizowano {used}{max} razy",
+        "redeemedMax": " / {max}",
+        "expires": "wygasa {when}",
+        "active": "Aktywny",
+        "disabled": "Wyłączony",
+        "create": "Utwórz kupon",
+        "saveChanges": "Zapisz zmiany",
+        "saving": "Zapisywanie",
+        "cancel": "Anuluj",
+        "problemsTitle": "Niektóre pola wymagają uwagi:",
+        "problems": {
+          "code": "Kod: wpisz kod o długości do 64 znaków.",
+          "description": "Opis: maksymalnie 255 znaków.",
+          "adminNote": "Notatka administratora: maksymalnie 1000 znaków.",
+          "type": "Typ: wybierz procent lub kwotę stałą.",
+          "amount": "Kwota: wpisz liczbę, np. 10 lub 12.5.",
+          "maxDiscountAmount": "Limit maksymalnego rabatu: wpisz liczbę lub zostaw puste.",
+          "currencyCode": "Blokada waluty: maksymalnie 8 znaków.",
+          "minOrderAmount": "Minimalna kwota zamówienia: wpisz liczbę lub zostaw puste.",
+          "applicablePlans": "Obowiązujące plany: wybierz plany z listy.",
+          "startsAt": "Początek: wpisz prawidłową datę i godzinę.",
+          "expiresAt": "Wygasa: wpisz prawidłową datę i godzinę nie wcześniejszą niż początek.",
+          "maxUses": "Maksymalna łączna liczba realizacji: liczba całkowita 1 lub większa albo puste.",
+          "perUserLimit": "Limit na użytkownika: liczba całkowita 1 lub większa albo puste."
+        },
+        "sections": {
+          "identity": "Tożsamość",
+          "discount": "Rabat",
+          "eligibility": "Kwalifikowalność",
+          "limits": "Limity i działanie"
+        },
+        "fields": {
+          "code": "Kod",
+          "codeHint": "Zapisywany wielkimi literami. Klienci wpisują dokładnie ten kod podczas płatności.",
+          "codePlaceholder": "WELCOME10",
+          "description": "Opis",
+          "descriptionNote": "(widoczny dla klienta)",
+          "descriptionPlaceholder": "Oferta powitalna: 10% zniżki w pierwszym miesiącu",
+          "adminNote": "Notatka administratora",
+          "adminNoteNote": "(wewnętrzna, niewidoczna)",
+          "adminNotePlaceholder": "Partia wyprzedaży świątecznej · Slack #marketing · kończy się z kampanią",
+          "activeTitle": "Aktywny",
+          "activeHint": "Kupujący mogą go zastosować przy płatności",
+          "type": "Typ",
+          "typePercent": "Procent (%)",
+          "typeFixed": "Kwota stała",
+          "amount": "Kwota",
+          "amountHint": "Dla kuponów procentowych 10 oznacza 10%. Dla kuponów kwotowych 10 oznacza 10 jednostek waluty.",
+          "maxDiscount": "Limit maksymalnego rabatu",
+          "maxDiscountNote": "(tylko typ %)",
+          "maxDiscountPlaceholder": "puste = bez limitu",
+          "maxDiscountHint": "Na przykład 20% zniżki z górnym limitem 50 USD.",
+          "currency": "Blokada waluty",
+          "currencyAny": "Dowolna waluta",
+          "currencyHint": "Ogranicz realizację do jednej waluty (dotyczy kuponów kwotowych).",
+          "minOrder": "Minimalna kwota zamówienia",
+          "minOrderPlaceholder": "0 = bez minimum",
+          "plans": "Obowiązujące plany",
+          "plansNote": "(puste = dowolny plan)",
+          "plansPlaceholder": "Wybierz jeden lub więcej planów (puste = dowolny plan)...",
+          "plansHint": "Zacznij pisać, aby zawęzić listę, wybierz, aby dodać, a × na etykiecie usuwa pozycję.",
+          "plansEmpty": "Nie ma więcej planów do wyboru.",
+          "plansRemove": "Usuń {name}",
+          "plansClear": "Usuń wszystkie plany",
+          "startsAt": "Początek",
+          "startsAtHint": "Puste = dostępny od razu.",
+          "expiresAt": "Wygasa",
+          "expiresAtHint": "Puste = nigdy nie wygasa.",
+          "maxUses": "Maksymalna łączna liczba realizacji",
+          "unlimitedPlaceholder": "puste = bez limitu",
+          "maxUsesHint": "Dla wszystkich klientów łącznie.",
+          "perUser": "Limit na użytkownika",
+          "perUserHint": "Liczba realizacji dozwolona dla każdego klienta.",
+          "firstPurchaseTitle": "Tylko pierwszy zakup",
+          "firstPurchaseHint": "Tylko przestrzenie robocze, które nie złożyły płatnego zamówienia",
+          "stackableTitle": "Można łączyć z innymi kuponami",
+          "stackableHint": "Pozwala kupującym użyć go razem z innym aktywnym kodem przy płatności"
+        }
+      }
+    },
+    "currencies": {
+      "title": "Waluty platformy",
+      "titleLead": "Platforma",
+      "titleAccent": "waluty",
+      "crumbGroup": "System",
+      "crumbGroup2": "Lokalizacja",
+      "crumbHere": "Waluty",
+      "eyebrow": "Admin · Platforma · Lokalizacja",
+      "description": "Zarządzaj walutami, które mogą wybierać przestrzenie robocze. Kursy wymiany są przechowywane względem USD. Zmiana waluty domyślnej obejmuje każdy pulpit użytkownika, fakturę i widok portfela.",
+      "fetchRates": "Pobierz kursy na żywo",
+      "fetching": "Pobieranie",
+      "add": "Dodaj walutę",
+      "kpi": {
+        "total": "Razem",
+        "totalHint": "skonfigurowanych walut",
+        "active": "Aktywne",
+        "activeHint": "widoczne dla przestrzeni roboczych",
+        "default": "Domyślna systemowa",
+        "defaultHint": "używana dla nowo tworzonych przestrzeni roboczych",
+        "inactive": "Nieaktywne",
+        "inactiveHint": "niedostępne w ustawieniach przestrzeni roboczej"
+      },
+      "defaultCard": {
+        "eyebrow": "Domyślna systemowa",
+        "title": "Waluta zastępcza dla całej platformy",
+        "body": "Każda przestrzeń robocza, która nie wybrała waluty, używa tej. Zapisanie natychmiast czyści pamięć podręczną, więc zmiana będzie widoczna w całej aplikacji już przy następnym wczytaniu strony.",
+        "select": "Waluta domyślna",
+        "set": "Ustaw jako domyślną",
+        "setting": "Zapisywanie"
+      },
+      "search": "Kod, nazwa lub symbol…",
+      "searchLabel": "Szukaj walut",
+      "searchButton": "Szukaj",
+      "table": {
+        "label": "Waluty",
+        "code": "Kod",
+        "name": "Nazwa",
+        "symbol": "Symbol",
+        "rate": "Kurs (1 USD →)",
+        "decimals": "Miejsca dziesiętne",
+        "active": "Aktywna",
+        "actions": "Akcje"
+      },
+      "defaultBadge": "Domyślna",
+      "rate": "1 USD → {rate}",
+      "on": "Wł.",
+      "off": "Wył.",
+      "empty": {
+        "none": "Brak walut.",
+        "noMatch": "Brak wyników dla „{q}”."
+      },
+      "footer": "Wyświetlono {from}–{to} z {total} walut",
+      "actions": {
+        "edit": "Edytuj",
+        "delete": "Usuń",
+        "toggle": "Włącz lub wyłącz {code}"
+      },
+      "toasts": {
+        "added": "Waluta została dodana.",
+        "updated": "Waluta została zaktualizowana.",
+        "activated": "Aktywowano.",
+        "deactivated": "Dezaktywowano.",
+        "deleted": "Waluta została usunięta.",
+        "defaultSet": "Walutę domyślną ustawiono na {code}.",
+        "ratesUpdated": "Zaktualizowano waluty ({count}) z {provider}."
+      },
+      "delete": {
+        "title": "Usuń walutę",
+        "body": "Usunąć {code}? Wszystkie ceny zapisane w tej walucie zostaną osierocone.",
+        "confirm": "Tak, usuń"
+      },
+      "form": {
+        "addTitle": "Dodaj walutę",
+        "editTitle": "Edytuj: {code}",
+        "name": "Nazwa *",
+        "namePlaceholder": "Frank szwajcarski",
+        "code": "Kod ISO *",
+        "codePlaceholder": "CHF",
+        "codeLocked": "Kod nigdy się nie zmienia po utworzeniu waluty.",
+        "symbol": "Symbol",
+        "symbolPlaceholder": "Fr",
+        "precision": "Miejsca dziesiętne *",
+        "rate": "Kurs przeliczenia (1 USD = ?) *",
+        "active": "Aktywna od razu",
+        "save": "Dodaj walutę",
+        "saveChanges": "Zapisz zmiany",
+        "cancel": "Anuluj",
+        "problemsTitle": "Niektóre pola wymagają uwagi:",
+        "problems": {
+          "name": "Nazwa: wpisz nazwę o długości do 120 znaków.",
+          "code": "Kod ISO: trzy litery, np. CHF.",
+          "symbol": "Symbol: maksymalnie 20 znaków.",
+          "precision": "Miejsca dziesiętne: liczba całkowita od 0 do 6.",
+          "exchangeRate": "Kurs wymiany: liczba nie mniejsza niż 0.000001."
+        },
+        "eyebrow": "Nowy wpis",
+        "rateHint": "Użyj powyżej „Pobierz kursy na żywo”, aby wstępnie wypełnić wartości z open.er-api.com.",
+        "editEyebrow": "Edytuj wpis"
+      },
+      "catalog": {
+        "eyebrow": "Katalog",
+        "title": "Wszystkie waluty"
+      }
+    },
+    "affiliate": {
+      "title": "Program partnerski",
+      "subtitle": "Udostępnij swój link i śledź przestrzenie robocze, które przyprowadzisz.",
+      "common": {
+        "dismiss": "Odrzuć"
+      },
+      "states": {
+        "loading": "Wczytywanie danych programu partnerskiego"
+      },
+      "header": {
+        "codeLabel": "Twój kod polecający",
+        "noCode": "Brak kodu",
+        "linkLabel": "Twój link polecający",
+        "copyLink": "Kopiuj link",
+        "copied": "Skopiowano link.",
+        "copyFailed": "Nie udało się skopiować linku. Zaznacz go i skopiuj ręcznie.",
+        "reward": "Każda polecona przestrzeń robocza, która dokona pierwszej płatności, przynosi Ci {amount}.",
+        "rewardMessages": "To pokrywa {count, plural, one {# wiadomość} few {# wiadomości} many {# wiadomości} other {# wiadomości}}.",
+        "rewardNone": "Program obecnie nie wypłaca nic za nowe polecenia. Twój kod i historia pozostają tutaj."
+      },
+      "filters": {
+        "label": "Zakres i eksport",
+        "range": "Zakres",
+        "ranges": {
+          "7d": "Ostatnie 7 dni",
+          "30d": "Ostatnie 30 dni",
+          "90d": "Ostatnie 90 dni",
+          "all": "Cały okres"
+        },
+        "search": "Szukaj poleceń",
+        "searchPlaceholder": "Nazwa, e-mail lub kod",
+        "reset": "Resetuj",
+        "export": "Eksportuj CSV",
+        "exporting": "Przygotowywanie pliku",
+        "exported": "Pobrano plik {fileName}."
+      },
+      "kpi": {
+        "inRange": "Polecenia w zakresie",
+        "vsPrevious": "{delta} względem poprzedniego okresu",
+        "earned": "Zarobiono łącznie",
+        "last30": "Polecenia, ostatnie 30 dni",
+        "last30Earned": "Zarobiono {amount} w ostatnich 30 dniach",
+        "average": "Średnio na polecenie"
+      },
+      "chart": {
+        "title": "Polecenia w czasie",
+        "label": "Polecenia jako słupki i zarobione kredyty jako linia, według okresu",
+        "buckets": {
+          "daily": "Dziennie",
+          "weekly": "Tygodniowo",
+          "monthly": "Miesięcznie"
+        },
+        "signups": "Polecenia",
+        "credits": "Zarobione kredyty",
+        "bucket": "Okres",
+        "empty": "Brak poleceń w tym zakresie."
+      },
+      "topCodes": {
+        "title": "Najlepsze kody",
+        "referrals": "{count, plural, one {# polecenie} few {# polecenia} many {# poleceń} other {# polecenia}}",
+        "empty": "W tym zakresie nie użyto żadnego kodu."
+      },
+      "payouts": {
+        "title": "Ostatnie wypłaty",
+        "balanceAfter": "Saldo po {amount}",
+        "empty": "Brak wypłat. Nagroda trafia do portfela, gdy polecona przestrzeń robocza dokona pierwszej płatności."
+      },
+      "table": {
+        "title": "Polecenia",
+        "label": "Polecenia w wybranym zakresie",
+        "when": "Kiedy",
+        "referee": "Polecony",
+        "code": "Użyty kod",
+        "credits": "Zarobione kredyty",
+        "status": "Status",
+        "transaction": "Transakcja w portfelu",
+        "noName": "Użytkownik bez nazwy",
+        "paid": "Opłacone",
+        "pending": "Oczekuje",
+        "noTransaction": "Brak transakcji w portfelu",
+        "pagination": "Strony poleceń",
+        "previous": "Poprzednia",
+        "next": "Następna",
+        "showing": "Wyświetlono {from}-{to} z {total}"
+      },
+      "empty": {
+        "noneTitle": "Brak poleceń",
+        "noneBody": "Udostępnij swój link. Osoby, które zarejestrują się za jego pomocą, pojawią się tutaj.",
+        "filteredTitle": "Brak pasujących poleceń",
+        "filteredBody": "Wypróbuj inny zakres lub wyczyść wyszukiwanie."
+      },
+      "errors": {
+        "unauthenticated": "Twoja sesja wygasła. Zaloguj się ponownie, aby zobaczyć dane programu partnerskiego.",
+        "forbidden": "Nie masz dostępu do tej strony.",
+        "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+        "validation": "Nie udało się zastosować tych filtrów. Zresetuj je i spróbuj ponownie.",
+        "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+        "generic": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
+        "requestId": "Identyfikator żądania",
+        "retry": "Spróbuj ponownie"
+      }
+    }
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "Toko / Pesanan",
+      "title": "Semua pesanan",
+      "subtitle": "Setiap pesanan dari semua kanal: WhatsApp, storefront, Twilio, dan manual.",
+      "loading": "Memuat pesanan",
+      "statusTabs": "Status pesanan",
+      "searchLabel": "Cari pesanan",
+      "searchPlaceholder": "Cari berdasarkan telepon, nama, atau nomor pesanan",
+      "sourceLabel": "Sumber",
+      "allSources": "Semua sumber",
+      "paymentLabel": "Pembayaran",
+      "allPayments": "Semua pembayaran",
+      "fromLabel": "Dari",
+      "toLabel": "Sampai",
+      "shopLabel": "Toko",
+      "invertedRange": "Tanggal mulai setelah tanggal akhir, sehingga tidak ada pesanan yang cocok.",
+      "clearFilters": "Hapus filter",
+      "cols": {
+        "order": "Pesanan",
+        "customer": "Pelanggan",
+        "items": "Item",
+        "total": "Total",
+        "payment": "Pembayaran",
+        "status": "Status",
+        "source": "Sumber",
+        "created": "Dibuat",
+        "actions": "Tindakan"
+      },
+      "itemsCount": "{count, plural, other {# item}}",
+      "anonymous": "Anonim",
+      "openOrder": "Buka pesanan #{no}",
+      "changeStatus": "Ubah status pesanan #{no}",
+      "deleteOrder": "Hapus pesanan #{no}",
+      "deleteTitle": "Hapus pesanan #{no}?",
+      "deleteMessage": "Pesanan dan itemnya akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.",
+      "deleteConfirm": "Hapus pesanan",
+      "deleted": "Pesanan #{no} dihapus.",
+      "statusChanged": "Pesanan #{no} sekarang {status}.",
+      "buyerNotified": "Pembeli telah dikirimi pesan.",
+      "confirmStatusTitle": "Tandai pesanan #{no} sebagai {status}?",
+      "confirmStatusMessage": "Pembeli diberi tahu tentang status baru. Anda masih dapat memindahkan pesanan ke status lain nanti.",
+      "confirmStatusConfirm": "Perbarui status",
+      "emptyTitle": "Belum ada pesanan",
+      "emptyMessage": "Saat pelanggan memesan dari storefront atau lewat WhatsApp, pesanan muncul di sini. Bagikan tautan toko Anda untuk mendapatkan yang pertama.",
+      "emptyAction": "Buka ringkasan toko",
+      "noMatchTitle": "Tidak ada pesanan yang cocok dengan filter ini",
+      "noMatchMessage": "Coba pencarian, status, atau rentang tanggal lain, atau hapus filter untuk melihat semua pesanan."
+    },
+    "orderDetail": {
+      "back": "Kembali ke pesanan",
+      "title": "Pesanan #{no}",
+      "placed": "Dibuat {when}",
+      "loading": "Memuat pesanan",
+      "readOnly": "Anda dapat melihat pesanan ini tetapi tidak dapat mengubahnya.",
+      "items": {
+        "title": "Item",
+        "empty": "Pesanan ini tidak memiliki item.",
+        "qty": "Jml {qty}",
+        "retailerId": "ID {id}",
+        "unit": "{price} per item"
+      },
+      "totals": {
+        "title": "Total",
+        "subtotal": "Subtotal",
+        "shipping": "Pengiriman",
+        "tax": "Pajak",
+        "taxInclusive": "Termasuk dalam harga",
+        "discount": "Diskon",
+        "discountCoupon": "Diskon ({code})",
+        "total": "Total"
+      },
+      "customer": {
+        "title": "Pelanggan",
+        "anonymous": "Anonim",
+        "phone": "Telepon",
+        "email": "Email",
+        "address": "Alamat pengiriman",
+        "noAddress": "Tidak ada alamat yang tercatat untuk pesanan ini.",
+        "notes": "Catatan"
+      },
+      "meta": {
+        "title": "Detail pesanan",
+        "orderId": "ID pesanan",
+        "source": "Sumber",
+        "shop": "Toko",
+        "paymentMethod": "Metode pembayaran",
+        "updated": "Terakhir diperbarui"
+      },
+      "rto": {
+        "title": "Risiko pengembalian ke asal",
+        "summary": "{band} ({score})",
+        "low": "Rendah",
+        "medium": "Sedang",
+        "high": "Tinggi"
+      },
+      "timeline": {
+        "title": "Linimasa",
+        "empty": "Belum ada yang terjadi pada pesanan ini.",
+        "kind": {
+          "created": "Pesanan dibuat",
+          "status_changed": "Status berubah",
+          "payment_link": "Tautan pembayaran",
+          "paid": "Pembayaran diterima",
+          "invoice": "Faktur",
+          "note": "Catatan",
+          "updated": "Pesanan diperbarui"
+        },
+        "actor": {
+          "user": "Oleh anggota tim",
+          "system": "Otomatis",
+          "customer": "Oleh pelanggan"
+        }
+      },
+      "payments": {
+        "title": "Pembayaran",
+        "empty": "Belum ada pembayaran yang dicatat untuk pesanan ini.",
+        "kind": {
+          "gateway": "Pembayaran online",
+          "payment_link": "Tautan pembayaran",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "Bayar di tempat",
+          "manual": "Dicatat manual"
+        },
+        "reference": "Referensi {ref}",
+        "openLink": "Buka tautan"
+      },
+      "form": {
+        "title": "Perbarui status",
+        "status": "Status",
+        "suggestion": "Langkah berikutnya yang umum: {status}",
+        "notes": "Catatan",
+        "paymentLink": "Tautan pembayaran",
+        "optional": "opsional",
+        "paymentLinkHint": "Tautan baru dikirim ke pembeli bersama pembaruan.",
+        "invalidLink": "Masukkan tautan web yang diawali http:// atau https://.",
+        "save": "Simpan perubahan",
+        "saving": "Menyimpan",
+        "saved": "Pesanan #{no} diperbarui.",
+        "notified": "Pembeli telah dikirimi pesan.",
+        "notNotified": "Pembeli tidak dikirimi pesan.",
+        "reload": "Muat ulang pesanan"
+      },
+      "pay": {
+        "title": "Tautan pembayaran",
+        "current": "Tautan pembayaran saat ini",
+        "sendTitle": "Kirim tautan yang sudah Anda miliki",
+        "sendLabel": "URL tautan pembayaran",
+        "sendButton": "Kirim tautan pembayaran",
+        "sent": "Tautan pembayaran telah dikirim ke pembeli.",
+        "savedNotSent": "Tautan disimpan, tetapi tidak ada yang dapat mengirimkannya ke pembeli.",
+        "generateTitle": "Buat tautan checkout",
+        "generateHint": "Membuat tautan bayar di gateway pembayaran Anda dan mengirimkannya ke pembeli lewat WhatsApp.",
+        "gatewayLabel": "Gateway",
+        "generateButton": "Buat tautan dan kirim",
+        "noGatewayTitle": "Belum ada gateway pembayaran",
+        "noGatewayMessage": "Gateway pembayaran harus diatur sebelum Anda dapat membuat tautan checkout.",
+        "noGatewayAction": "Atur gateway",
+        "resultTitle": "Tautan pembayaran siap",
+        "copyLink": "Salin tautan",
+        "resultSent": "Dikirim ke pembeli lewat WhatsApp.",
+        "resultNotSent": "Disimpan di pesanan, tetapi tidak ada yang dapat mengirimkannya ke pembeli. Bagikan sendiri."
+      },
+      "invoice": {
+        "title": "Faktur",
+        "description": "Ubah pesanan ini menjadi faktur dan pesanan penjualan di Penjualan.",
+        "create": "Buat faktur",
+        "creating": "Membuat",
+        "created": "Faktur {number} dibuat.",
+        "createdNoNumber": "Faktur dibuat.",
+        "existing": "Pesanan ini sudah difakturkan.",
+        "viewInvoice": "Faktur",
+        "viewSalesOrder": "Pesanan penjualan"
+      },
+      "delete": {
+        "title": "Hapus pesanan #{no}?",
+        "message": "Pesanan dan itemnya akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.",
+        "confirm": "Hapus pesanan",
+        "deleted": "Pesanan #{no} dihapus."
+      }
+    }
+  }
+}

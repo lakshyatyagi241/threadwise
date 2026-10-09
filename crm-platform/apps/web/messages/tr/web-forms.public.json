@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "İleri",
+      "back": "Geri",
+      "sending": "Gönderiliyor...",
+      "optional": "isteğe bağlı",
+      "selectPlaceholder": "Bir seçenek seçin",
+      "stepOf": "Adım {n} / {total}",
+      "summaryTitle": "{count, plural, other {Lütfen # alanı düzeltin}}",
+      "successTitle": "Teşekkürler",
+      "continue": "Devam et",
+      "previewNotice": "Önizleme: buradan hiçbir şey gönderilmez.",
+      "honeypot": "Bu alanı boş bırakın",
+      "privacyPolicy": "Gizlilik politikası",
+      "poweredBy": "{brand} tarafından desteklenir",
+      "brandName": "Formlar",
+      "captchaNeeded": "Göndermeden önce aşağıdaki doğrulamayı tamamlayın.",
+      "rateLimited": "Çok fazla deneme. Bir süre bekleyip tekrar deneyin.",
+      "closed": "Bu form şu anda yanıt kabul etmiyor.",
+      "genericError": "Bir sorun oluştu ve yanıtlarınız gönderilmedi. Lütfen tekrar deneyin.",
+      "notAvailableTitle": "Bu form kullanılamıyor",
+      "notAvailableBody": "Bağlantı yanlış olabilir veya form kapatılmış olabilir.",
+      "errors": {
+        "required": "Bu alan zorunludur.",
+        "consent_required": "Devam etmek için bu kutuyu işaretleyin.",
+        "invalid_email": "Geçerli bir e-posta adresi girin.",
+        "invalid_phone": "Geçerli bir telefon numarası girin, mümkünse ülke koduyla birlikte.",
+        "invalid_number": "Geçerli bir sayı girin.",
+        "invalid_date": "Geçerli bir tarih girin.",
+        "too_small": "En az {min} olan bir değer girin.",
+        "too_large": "En fazla {max} olan bir değer girin.",
+        "too_short": "En az {min} karakter girin.",
+        "too_long": "En fazla {max} karakter girin.",
+        "pattern": "Beklenen biçimle eşleşmiyor.",
+        "invalid_option": "Listelenen seçeneklerden birini seçin."
+      },
+      "closedTitle": "Bu form kapalı"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "Centre d’aide",
+    "searchLabel": "Rechercher dans l’aide",
+    "searchPlaceholder": "Rechercher dans les guides",
+    "resultsStatus": "{count, plural, =0 {Aucun guide trouvé} one {# guide} other {# guides}}",
+    "none": {
+      "title": "Aucun guide pour l’instant",
+      "message": "Les guides des fonctionnalités de votre offre apparaîtront ici."
+    },
+    "noResults": {
+      "title": "Aucun guide ne correspond à votre recherche",
+      "message": "Essayez d’autres mots ou effacez la recherche pour voir tous les guides."
+    },
+    "areas": {
+      "overview": "Plateforme",
+      "inbox": "Boîte de réception et chat",
+      "audience": "CRM",
+      "sales": "Ventes",
+      "campaigns": "Campagnes",
+      "automation": "Automatisation",
+      "store": "Boutique",
+      "apps": "Marketplace",
+      "settings": "Paramètres",
+      "account": "Compte",
+      "getting-started": "Premiers pas",
+      "troubleshooting": "Dépannage"
+    },
+    "allHelp": "Retour à l’aide",
+    "onThisPage": "Sur cette page",
+    "openScreen": "Ouvrir cet écran",
+    "shownInEnglish": "Ce guide n’est pas encore traduit dans votre langue ; il est affiché en anglais.",
+    "tip": {
+      "label": "Aide : {title}",
+      "readMore": "Lire le guide"
+    },
+    "guideCount": "{count, plural, =0 {Aucun guide} one {# guide} other {# guides}}",
+    "crumb": "Plus / Aide",
+    "heading": "Aide",
+    "headingRest": "et guides",
+    "back": "Retour",
+    "askSupport": "Vous ne trouvez pas ? Contactez le support",
+    "askSupportShort": "Support",
+    "categories": "Catégories",
+    "allGuides": "Tous les guides",
+    "needHuman": "Besoin d’un interlocuteur ?",
+    "contactSupport": "Contacter le support",
+    "popular": "Populaires",
+    "searchResults": "Résultats de recherche",
+    "read": "Lire le guide",
+    "readMinutes": "{count, plural, one {# min de lecture} other {# min de lecture}}",
+    "moreInArea": "Plus dans {area}"
+  }
+}

@@ -1,0 +1,439 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "Tienda"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "Descartar"
+      },
+      "errors": {
+        "requestId": "ID de la solicitud",
+        "retry": "Intentar de nuevo",
+        "network": {
+          "title": "No se puede conectar con el servidor",
+          "message": "Revisa tu conexión e inténtalo de nuevo."
+        },
+        "forbidden": {
+          "title": "Sin acceso",
+          "message": "Tu rol no permite esto."
+        },
+        "signedOut": {
+          "title": "Has cerrado sesión",
+          "message": "Vuelve a iniciar sesión para continuar."
+        },
+        "conflict": {
+          "title": "Cambiado en otro lugar",
+          "message": "Otra persona cambió esto mientras editabas. Recarga para ver la última versión."
+        },
+        "validation": {
+          "title": "Revisa el formulario",
+          "message": "Algunos campos necesitan atención."
+        },
+        "unavailable": {
+          "title": "Aún no disponible",
+          "message": "El servicio de tienda no está disponible en este servidor."
+        },
+        "rateLimited": {
+          "title": "Demasiadas solicitudes",
+          "message": "Espera un momento e inténtalo de nuevo."
+        },
+        "notFound": {
+          "title": "No encontrado",
+          "message": "Esa tienda no existe en este espacio de trabajo."
+        },
+        "noShop": {
+          "title": "Aún no hay tiendas",
+          "message": "Configura primero tu tienda."
+        },
+        "slugTaken": {
+          "title": "Dirección ocupada",
+          "message": "Esa dirección de tienda ya está en uso."
+        },
+        "deviceInvalid": {
+          "title": "Elige un dispositivo conectado",
+          "message": "Elige uno de tus dispositivos conectados."
+        },
+        "noSender": {
+          "title": "Conecta primero WhatsApp",
+          "message": "Una tienda necesita un número de WhatsApp conectado. Conecta uno y vuelve a intentarlo."
+        },
+        "resetNotConfirmed": {
+          "title": "No confirmado",
+          "message": "Restablecimiento no confirmado."
+        },
+        "domainNotSet": {
+          "title": "Sin dominio propio",
+          "message": "No hay ningún dominio propio configurado."
+        },
+        "unexpected": {
+          "title": "Algo salió mal",
+          "message": "Algo salió mal. Inténtalo de nuevo en un momento."
+        }
+      },
+      "sidebar": {
+        "label": "Tienda",
+        "navLabel": "Secciones de la tienda",
+        "section": "Tienda",
+        "settings": "Ajustes",
+        "items": {
+          "overview": "Resumen",
+          "orders": "Pedidos",
+          "products": "Productos",
+          "groups": "Grupos",
+          "storefront": "Escaparate",
+          "coupons": "Cupones",
+          "reviews": "Reseñas",
+          "payments": "Pagos",
+          "gateways": "Pasarelas de pago",
+          "customers": "Clientes",
+          "invoices": "Facturas",
+          "connection": "Conexión"
+        },
+        "comingSoon": "Próximamente",
+        "comingSoonHint": "Próximamente",
+        "noShopTitle": "Aún no hay tiendas",
+        "noShopMessage": "Crea tu primera tienda para usar las herramientas de tienda.",
+        "noShopAction": "Configura tu tienda",
+        "live": "En directo",
+        "setup": "Configuración",
+        "yourStore": "Tu tienda",
+        "notConnected": "No conectado",
+        "unofficialApi": "API no oficial",
+        "deviceConnected": "Dispositivo conectado · /channels",
+        "switchShop": "Cambiar de tienda",
+        "shopFallback": "Tienda",
+        "manageShops": "Gestionar todas las tiendas →",
+        "publicUrl": "URL pública",
+        "open": "Abrir",
+        "copy": "Copiar",
+        "copied": "¡Copiado!",
+        "providerLive": "Proveedor activo",
+        "sendingFrom": "Enviando desde",
+        "noDevice": "No hay ningún dispositivo conectado.",
+        "connectOne": "Conecta uno",
+        "thenBind": "y luego vincúlalo a esta tienda desde el",
+        "connectWizard": "asistente de conexión"
+      },
+      "dashboard": {
+        "eyebrow": "Tienda / Resumen",
+        "title": "Resumen de ventas",
+        "subtitle": "Últimos 30 días. Los pedidos se combinan de todos los canales: WABA, tienda online y Twilio.",
+        "addProduct": "Añadir producto",
+        "loading": "Cargando el resumen de la tienda",
+        "kpi": {
+          "revenue": "Ingresos (30 d)",
+          "orders": "Pedidos (30 d)",
+          "aov": "Pedido medio",
+          "products": "Productos",
+          "visits": "Visitas (30 d)"
+        },
+        "trend": {
+          "eyebrow": "Tendencia de ventas",
+          "title": "Ingresos a lo largo del tiempo"
+        },
+        "legendRevenue": "Ingresos ({symbol})",
+        "legendOrders": "Pedidos",
+        "dayReadout": "{day}: {revenue}, {orders, plural, one {# pedido} other {# pedidos}}",
+        "chartLabel": "Ingresos y pedidos por día, últimos 30 días",
+        "tableDay": "Día",
+        "tableRevenue": "Ingresos ({symbol})",
+        "tableOrders": "Pedidos",
+        "top": {
+          "eyebrow": "Productos más vendidos (30 d)",
+          "title": "Más vendidos",
+          "empty": "Aún no hay ventas: comparte el enlace de tu tienda."
+        },
+        "recent": {
+          "title": "Pedidos recientes",
+          "viewAll": "Ver todos",
+          "open": "Abrir",
+          "columns": {
+            "when": "Cuándo",
+            "customer": "Cliente",
+            "source": "Origen",
+            "items": "Artículos",
+            "total": "Total",
+            "status": "Estado",
+            "open": "Abrir"
+          },
+          "itemsCount": "{count, plural, one {# artículo} other {# artículos}}",
+          "emptyTitle": "Aún no hay pedidos",
+          "emptyMessage": "Cuando los clientes pidan desde tu escaparate o por WhatsApp, aparecerán aquí."
+        }
+      },
+      "settings": {
+        "eyebrow": "Tienda / Escaparate",
+        "title": "Diseño del escaparate",
+        "viewLive": "Ver en directo",
+        "noAccess": "Tu rol no tiene acceso a los ajustes del escaparate.",
+        "loading": "Cargando los ajustes del escaparate",
+        "saved": "Escaparate actualizado.",
+        "conflict": "Este escaparate se cambió en otro lugar mientras editabas. Recarga para obtener los ajustes más recientes y vuelve a hacer tus cambios.",
+        "reload": "Recargar",
+        "fixErrors": "Corrige los campos marcados y guarda de nuevo.",
+        "optional": "(opcional)",
+        "save": "Guardar",
+        "readOnly": "Puedes ver estos ajustes, pero no cambiarlos.",
+        "live": "Escaparate activo (desmarcar lo desactiva)",
+        "theme": {
+          "title": "Tema"
+        },
+        "slug": {
+          "label": "Slug del escaparate",
+          "hint": "Tu tienda estará en"
+        },
+        "domain": {
+          "label": "Dominio propio",
+          "placeholder": "shop.tunegocio.com",
+          "verifiedLive": "Verificado: tu dominio está activo",
+          "addCname": "Añade este CNAME en tu proveedor de DNS:",
+          "cname": "CNAME",
+          "verify": "Verificar ahora",
+          "verified": "Dominio verificado ✓",
+          "notPointing": "El CNAME no apunta a {expected}",
+          "notSet": "No hay ningún dominio propio configurado.",
+          "verifyFailed": "No se pudo comprobar el dominio. Inténtalo de nuevo."
+        },
+        "brand": {
+          "logoUrl": "URL del logotipo",
+          "color": "Color de marca (hex)",
+          "colorPicker": "Elige el color de marca",
+          "heroText": "Texto principal",
+          "heroPlaceholder": "Bienvenido a nuestra tienda",
+          "footerText": "Texto del pie",
+          "footerPlaceholder": "© 2026 Tu tienda"
+        },
+        "currency": {
+          "title": "Moneda",
+          "label": "Moneda",
+          "hint": "Predeterminada para los productos nuevos y símbolo que se muestra en el carrito."
+        },
+        "shipping": {
+          "title": "Envío",
+          "flat": "Tarifa fija de envío",
+          "flatHint": "Se añade a cada pedido. En blanco o 0 = gratis.",
+          "freeAbove": "Envío gratis a partir de",
+          "freeAboveHint": "Los carritos por encima de este importe tienen envío gratis.",
+          "note": "Nota de envío",
+          "noteHint": "Se muestra en el carrito y en la página del producto.",
+          "notePlaceholder": "2–5 días hábiles · Con seguimiento"
+        },
+        "payment": {
+          "title": "Enlace de pago",
+          "intro": "Elige un proveedor de pago y añadiremos el enlace de pago a cada mensaje de pedido de WhatsApp. El comprador paga con el enlace y tú confirmas en el chat. El escaparate no incluye un proceso de compra propio.",
+          "provider": "Proveedor",
+          "providers": {
+            "none": "Ninguno · contra entrega",
+            "upi": "UPI (India): VPA + nombre",
+            "razorpay_link": "Enlace de pago de Razorpay (pegar enlace fijo)",
+            "razorpay_api": "Razorpay (generar enlaces y confirmar automáticamente)",
+            "stripe_link": "Enlace de pago de Stripe",
+            "paypal_me": "Usuario de PayPal.me",
+            "bank_transfer": "Instrucciones de transferencia bancaria"
+          },
+          "handle": "Detalle del pago",
+          "handleHint": "VPA de UPI, URL del enlace de pago, usuario de PayPal.me o cuenta bancaria.",
+          "handlePlaceholder": "p. ej. tienda@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "API de Razorpay (enlaces automáticos)",
+            "keyId": "ID de clave",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "Clave secreta",
+            "webhookSecret": "Secreto del webhook",
+            "stored": "guardado: deja en blanco para mantenerlo",
+            "show": "Mostrar secreto",
+            "hide": "Ocultar secreto",
+            "webhookHelp": "En el panel de Razorpay, define la URL del webhook como",
+            "webhookEvent": "para el evento payment_link.paid."
+          }
+        },
+        "recovery": {
+          "title": "Recuperación de carritos abandonados",
+          "enable": "Envía un recordatorio por WhatsApp a los clientes que empiezan la compra pero no la terminan",
+          "enableHint": "Captura el teléfono al pagar; el recordatorio se cancela solo si el cliente compra. Requiere un dispositivo conectado.",
+          "delay": "Retraso (minutos)",
+          "message": "Mensaje",
+          "messageHint": "(en blanco = predeterminado; '{name}' '{shop}' '{url}' '{total}')",
+          "messagePlaceholder": "¡Hola '{name}'! Dejaste artículos en tu carrito de '{shop}'. Termina aquí: '{url}'"
+        },
+        "problems": {
+          "required": "Este campo es obligatorio.",
+          "tooLong": "Como máximo {max} caracteres.",
+          "slugPattern": "Usa solo letras minúsculas, números y guiones.",
+          "domainInvalid": "Eso no parece un dominio válido (p. ej. shop.tunegocio.com).",
+          "urlInvalid": "Introduce una dirección completa que empiece por http:// o https://.",
+          "colorInvalid": "Usa un color hexadecimal como #075E54.",
+          "amountInvalid": "Introduce un número, cero o más.",
+          "amountTooBig": "Como máximo {max}.",
+          "delayRange": "Introduce un número entero de {min} a {max}.",
+          "themeInvalid": "Elige uno de los temas.",
+          "currencyInvalid": "Elige una de las monedas de la lista.",
+          "providerInvalid": "Elige uno de los proveedores de la lista.",
+          "slugTaken": "Ese slug ya está en uso. Elige otro."
+        }
+      },
+      "share": {
+        "message": "Mira mi tienda: {name}",
+        "subject": "Mira mi tienda · {name}",
+        "eyebrow": "Comparte tu tienda",
+        "fallbackName": "Mi tienda",
+        "close": "Cerrar",
+        "link": "Enlace de la tienda",
+        "copy": "Copiar",
+        "copied": "Copiado ✓",
+        "copiedShort": "Copiado",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "Enviar a un chat",
+        "email": "Correo",
+        "emailHint": "Abrir app de correo",
+        "telegram": "Telegram",
+        "telegramHint": "Compartir en canal",
+        "more": "Más…",
+        "moreHint": "Menú de compartir del teléfono",
+        "nativeUnsupported": "No compatible con este navegador",
+        "showQr": "Mostrar código QR",
+        "qrAlt": "Código QR",
+        "qrCaption": "Escanea para abrir la tienda"
+      },
+      "wizard": {
+        "loading": "Cargando tus tiendas",
+        "back": "Atrás",
+        "breadcrumb": "Conexiones / Tienda de WhatsApp",
+        "manageConnections": "Gestionar todas las conexiones →",
+        "titles": {
+          "list": "Tus tiendas",
+          "add": "Configura tu tienda",
+          "edit": "Editar {name}",
+          "shopFallback": "tienda"
+        },
+        "gate": {
+          "step": "Paso 1 de 3",
+          "title": "Conecta primero WhatsApp",
+          "message": "Tu tienda necesita un número de WhatsApp conectado para enviar confirmaciones de pedido y permitir que los clientes chateen. Ve a tus canales para vincular uno; tarda 30 segundos.",
+          "action": "Ir a dispositivos"
+        },
+        "list": {
+          "headline": "{count, plural, one {# tienda} other {# tiendas}} en {workspace}",
+          "intro": "Cada tienda tiene su propia URL pública, tema y dispositivo de envío. Añade todas las que necesites: distintas marcas, idiomas o regiones.",
+          "add": "Añadir tienda",
+          "addAnother": "Añadir otra tienda",
+          "addAnotherHint": "Ten un escaparate independiente con su propia URL, tema y número de WhatsApp."
+        },
+        "share": {
+          "fallbackName": "Mi tienda"
+        },
+        "noAccess": {
+          "title": "No puedes cambiar las tiendas",
+          "message": "Tu rol puede ver las tiendas, pero no crearlas ni editarlas.",
+          "action": "Volver a las tiendas"
+        },
+        "delete": {
+          "title": "¿Eliminar {name}?",
+          "message": "Elimina de forma permanente el escaparate y sus pedidos. Los productos de tu espacio de trabajo no se ven afectados. No se puede deshacer.",
+          "confirm": "Sí, eliminar",
+          "cancel": "Cancelar",
+          "done": "Tienda eliminada.",
+          "thisShop": "esta tienda"
+        },
+        "reset": {
+          "open": "Borrar todos los datos de la tienda",
+          "title": "¿Borrar todos los datos de la tienda?",
+          "message": "Elimina de forma permanente todas las tiendas, pedidos y productos de este espacio de trabajo. No se puede deshacer.",
+          "confirm": "Sí, borrar todo",
+          "done": "Se han borrado todos los datos de la tienda de este espacio de trabajo.",
+          "notConfirmed": "Restablecimiento no confirmado."
+        },
+        "card": {
+          "live": "En directo",
+          "disabled": "Desactivada",
+          "theme": "Tema {theme}",
+          "untitled": "Tienda sin nombre",
+          "sendingFrom": "Enviando desde",
+          "noDevice": "Sin dispositivo",
+          "domain": "Dominio",
+          "pending": "pendiente",
+          "builtIn": "URL integrada",
+          "manage": "Gestionar",
+          "manageTitle": "Abrir panel de administración",
+          "preview": "Vista previa",
+          "previewTitle": "Abrir escaparate público en una pestaña nueva",
+          "edit": "Editar",
+          "editTitle": "Editar ajustes de la tienda",
+          "share": "Compartir",
+          "shareAria": "Compartir {name}",
+          "delete": "Eliminar tienda",
+          "deleteAria": "Eliminar {name}"
+        },
+        "form": {
+          "backToShops": "Volver a las tiendas",
+          "creatingShop": "Creando la tienda n.º {n}",
+          "progress": "Pasos",
+          "steps": {
+            "details": "Datos de la tienda",
+            "url": "URL pública",
+            "device": "Dispositivo de envío"
+          },
+          "optional": "(opcional)",
+          "details": {
+            "title": "Datos de la tienda",
+            "hint": "Nombre visible para el cliente y el slug de la URL bajo la que vivirán los productos.",
+            "name": "Nombre de la tienda",
+            "nameHint": "Se muestra en la cabecera del escaparate y en las confirmaciones de pedido.",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "p. ej. {workspace} · Madrid",
+            "slug": "Slug del escaparate",
+            "auto": "(automático)",
+            "slugLocked": "Se bloquea cuando la tienda está activa para que los enlaces compartidos sigan funcionando.",
+            "slugAuto": "Generado a partir del nombre de tu tienda; se confirma al guardar."
+          },
+          "url": {
+            "title": "URL pública",
+            "hint": "Elige cómo llegan los compradores a tu tienda: la URL integrada es gratis y un dominio propio se ve más profesional.",
+            "builtIn": "URL integrada · gratis",
+            "pathMode": "Funciona en cuanto guardas. URL basada en ruta porque no hay un host público de escaparate configurado.",
+            "subdomainMode": "Funciona en cuanto guardas. Alojada en el dominio de escaparate de la plataforma.",
+            "domain": "Dominio propio",
+            "domainHint": "Añadirás un CNAME en tu proveedor de DNS y lo verificarás desde la página de ajustes del escaparate tras guardar. Déjalo en blanco para usar la URL integrada.",
+            "domainPlaceholder": "shop.tunegocio.com",
+            "verified": "{domain} está verificado.",
+            "pending": "{domain} pendiente de verificación DNS."
+          },
+          "device": {
+            "title": "Dispositivo de envío",
+            "hint": "Qué número de WhatsApp envía las confirmaciones de pedido y las respuestas a los compradores.",
+            "none": "No hay dispositivos conectados en esta cuenta.",
+            "pair": "Vincula uno en tus canales →",
+            "official": "API oficial · Meta (WABA)",
+            "officialDetail": "Número de WhatsApp Business del espacio de trabajo",
+            "fallback": "Dispositivo",
+            "noNumber": "Sin número",
+            "connected": "conectado"
+          },
+          "cancel": "Cancelar",
+          "deleteThis": "Eliminar esta tienda",
+          "saveChanges": "Guardar cambios",
+          "create": "Crear tienda →",
+          "created": "Tienda “{name}” creada.",
+          "updated": "Tienda “{name}” actualizada.",
+          "problems": {
+            "nameRequired": "Introduce un nombre para la tienda.",
+            "nameTooLong": "Como máximo 191 caracteres.",
+            "domainInvalid": "Eso no parece un dominio válido (p. ej. shop.tunegocio.com).",
+            "domainTooLong": "Como máximo 191 caracteres.",
+            "deviceInvalid": "Elige uno de tus dispositivos conectados.",
+            "slugTaken": "Ese nombre de tienda genera una dirección que ya está en uso. Cambia un poco el nombre."
+          },
+          "live": {
+            "eyebrow": "Esta tienda está activa",
+            "fallbackName": "Tu tienda",
+            "hint": "Añade productos, elige un tema, consulta los pedidos y comparte tu enlace.",
+            "view": "Ver tienda",
+            "share": "Compartir tienda",
+            "dashboard": "Abrir panel"
+          }
+        }
+      }
+    }
+  }
+}

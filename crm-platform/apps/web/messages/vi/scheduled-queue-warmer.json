@@ -1,0 +1,531 @@
+{
+  "scheduled-queue-warmer": {
+    "nav": {
+      "scheduled": "Đã lên lịch",
+      "warmer": "Trình làm nóng"
+    },
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "status": {
+      "scheduled": "Đang chờ",
+      "running": "Đang chạy",
+      "paused": "Tạm dừng",
+      "completed": "Hoàn tất",
+      "failed": "Thất bại",
+      "cancelled": "Đã hủy"
+    },
+    "type": {
+      "plain": "Văn bản thuần",
+      "template": "Mẫu",
+      "media": "Phương tiện",
+      "location": "Vị trí"
+    },
+    "errors": {
+      "generic": "Đã xảy ra lỗi. Vui lòng thử lại.",
+      "FORBIDDEN": "Bạn không có quyền thực hiện thao tác này.",
+      "VALIDATION_FAILED": "Một số trường cần được xem lại.",
+      "ROW_VERSION_CONFLICT": "Lịch này đã thay đổi trong lúc bạn thao tác. Tải lại và thử lại.",
+      "PLAN_FEATURE_LOCKED": "Gói của bạn không bao gồm tính năng này.",
+      "PLAN_LIMIT_REACHED": "Bạn đã đạt giới hạn của gói.",
+      "WA_UNOFFICIAL_DISABLED": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn số WhatsApp Business API chính thức.",
+      "AUTH_SEND_HALTED": "Việc gửi tin đã bị tạm dừng cho không gian làm việc này.",
+      "upgrade": "Xem các gói và nâng cấp",
+      "requestId": "Yêu cầu {id}"
+    },
+    "actions": {
+      "done": {
+        "pause": "Đã tạm dừng lịch.",
+        "resume": "Đã tiếp tục lịch.",
+        "cancel": "Đã hủy lịch.",
+        "run-now": "Lịch đang chạy ngay bây giờ.",
+        "destroy": "Đã xóa lịch.",
+        "retry": "Đã đưa lịch vào hàng đợi với thời gian mới."
+      }
+    },
+    "confirm": {
+      "yes": "Có, tiếp tục",
+      "keep": "Giữ lại",
+      "cancel": {
+        "title": "Hủy lịch này?",
+        "body": "\"{name}\" sẽ không được gửi. Không thể hoàn tác."
+      },
+      "run-now": {
+        "title": "Chạy lịch này ngay?",
+        "body": "\"{name}\" sẽ bắt đầu gửi ngay thay vì vào thời gian đã đặt."
+      },
+      "destroy": {
+        "title": "Xóa lịch này?",
+        "body": "\"{name}\" và danh sách người nhận của lịch sẽ bị xóa."
+      }
+    },
+    "retry": {
+      "title": "Thử lại với thời gian mới",
+      "body": "Chọn thời gian gửi mới cho \"{name}\". Lịch sẽ quay lại trạng thái Đang chờ.",
+      "date": "Ngày gửi",
+      "time": "Giờ",
+      "timezone": "Múi giờ",
+      "keep": "Giữ mục thất bại",
+      "confirm": "Thử lại ngay"
+    },
+    "list": {
+      "crumb": "Chiến dịch / Tin nhắn đã lên lịch",
+      "title": "Tin nhắn đã lên lịch",
+      "queued": "{n} trong hàng đợi",
+      "create": "Lên lịch tin nhắn",
+      "stats": {
+        "total": "Tổng số đã lên lịch",
+        "totalHint": "trên mọi trạng thái",
+        "active": "Hàng đợi đang hoạt động",
+        "activeHint": "đang chờ gửi",
+        "sent": "Tổng đã gửi",
+        "sentHint": "tin đã gửi (trang này)",
+        "delivery": "Tỷ lệ gửi thành công",
+        "deliveryHint": "trên các lịch đã hoàn tất (trang này)"
+      },
+      "upNext": {
+        "eyebrow": "Sắp tới",
+        "title": "Lịch gửi tiếp theo",
+        "pending": "{n} đang chờ",
+        "empty": "Chưa có lịch nào.",
+        "createOne": "Tạo một lịch →",
+        "recurring": "định kỳ",
+        "queued": "trong hàng đợi"
+      },
+      "tip": {
+        "eyebrow": "Mẹo",
+        "title": "Gửi khi họ đọc",
+        "body": "Tỷ lệ mở tin cao nhất vào 9–11 giờ sáng và 6–8 giờ tối theo múi giờ địa phương của liên hệ. Hãy chọn thời gian gửi phù hợp với nhóm người nhận. Lịch định kỳ cho phép bạn thiết lập một lần rồi để tự chạy.",
+        "cta": "Tạo một lịch"
+      },
+      "tabs": {
+        "all": "Tất cả",
+        "upcoming": "Sắp tới",
+        "running": "Đang chạy",
+        "paused": "Tạm dừng",
+        "completed": "Đã hoàn tất",
+        "failed": "Thất bại"
+      },
+      "search": "Tìm theo tên…",
+      "cols": {
+        "schedule": "Lịch",
+        "type": "Loại",
+        "recipients": "Người nhận",
+        "sendTime": "Thời gian gửi",
+        "repeat": "Lặp lại",
+        "status": "Trạng thái",
+        "actions": "Thao tác"
+      },
+      "recipients": {
+        "group": "Nhóm",
+        "tag": "Thẻ",
+        "queue": "Hàng đợi",
+        "number": "Số"
+      },
+      "when": {
+        "overdue": "quá hạn",
+        "now": "ngay bây giờ",
+        "minutes": "sau {n} phút",
+        "hours": "sau {n} giờ",
+        "tomorrow": "ngày mai",
+        "date": "sau"
+      },
+      "completedAt": "đã hoàn tất {when}",
+      "once": "một lần",
+      "actions": {
+        "open": "Mở",
+        "pause": "Tạm dừng",
+        "resume": "Tiếp tục",
+        "runNow": "Chạy ngay",
+        "cancel": "Hủy",
+        "retry": "Thử lại với thời gian mới",
+        "delete": "Xóa",
+        "deleteHistory": "Xóa khỏi lịch sử"
+      },
+      "empty": {
+        "title": "Chưa có lịch nào",
+        "none": "Lên lịch tin nhắn đầu tiên của bạn.",
+        "filtered": "Không có lịch nào khớp với bộ lọc hiện tại. Thử xóa bộ lọc hoặc lên lịch tin nhắn đầu tiên.",
+        "reset": "Đặt lại bộ lọc"
+      },
+      "page": "Trang {page} / {pages}",
+      "prev": "Trước",
+      "next": "Sau"
+    },
+    "composer": {
+      "crumb": "Đã lên lịch / Mới",
+      "title": "Lên lịch tin nhắn",
+      "back": "Quay lại",
+      "forbidden": "Bạn không có quyền lên lịch tin nhắn.",
+      "steps": "Các bước",
+      "stepNames": {
+        "basics": "Cơ bản",
+        "audience": "Người nhận",
+        "message": "Nội dung",
+        "when": "Thời gian",
+        "review": "Xem lại"
+      },
+      "required": "bắt buộc",
+      "previous": "Trước",
+      "next": "Tiếp",
+      "submit": "Lên lịch tin nhắn",
+      "stepOf": "Bước {n} / {total}",
+      "engine": {
+        "baileys": "API không chính thức",
+        "waba": "WhatsApp Cloud API",
+        "twilio": "Twilio"
+      },
+      "types": {
+        "plain": {
+          "title": "Văn bản thuần",
+          "hint": "Chỉ có chữ và emoji.",
+          "pill": "văn bản thuần"
+        },
+        "template": {
+          "title": "Mẫu",
+          "hint": "Mẫu WhatsApp đã được duyệt.",
+          "pill": "mẫu"
+        },
+        "media": {
+          "title": "Có phương tiện",
+          "hint": "Hình ảnh, video, tài liệu, âm thanh.",
+          "pill": "phương tiện"
+        },
+        "location": {
+          "title": "Vị trí",
+          "hint": "Ghim vĩ độ/kinh độ.",
+          "pill": "vị trí"
+        }
+      },
+      "basics": {
+        "title": "Thông tin cơ bản của lịch",
+        "name": "Tên lịch",
+        "nameHint": "Chỉ là nhãn nội bộ, người nhận không thấy.",
+        "namePlaceholder": "VD: Khuyến mãi mùa xuân / Phân khúc VIP",
+        "sender": "Người gửi",
+        "senders": "Người gửi",
+        "tickAll": "Chọn tất cả những mục phù hợp",
+        "noSenders": "Chưa có người gửi nào được kết nối. Hãy kết nối một số trước.",
+        "warming": "Đang khởi động",
+        "splitHint": "Mỗi người gửi được chọn sẽ chạy lịch riêng với phần người nhận được chia đều.",
+        "messageType": "Loại tin nhắn"
+      },
+      "audience": {
+        "title": "Người nhận",
+        "source": "Nguồn người nhận",
+        "sources": {
+          "group": {
+            "title": "Nhóm",
+            "hint": "Chọn một hoặc nhiều nhóm liên hệ đã lưu."
+          },
+          "tag": {
+            "title": "Thẻ",
+            "hint": "Tất cả người có thẻ"
+          },
+          "queue": {
+            "title": "Hàng đợi đối tượng",
+            "hint": "Nhắm lại người nhận của một chiến dịch Gửi hàng loạt trước đây."
+          },
+          "number": {
+            "title": "Số điện thoại",
+            "hint": "Dán danh sách thủ công."
+          }
+        },
+        "chooseGroups": "Chọn nhóm",
+        "chooseTags": "Chọn một hoặc nhiều thẻ",
+        "chooseQueues": "Chọn một hoặc nhiều chiến dịch Gửi hàng loạt trước đây",
+        "tickAny": "(chọn bao nhiêu tùy ý)",
+        "noGroups": "Chưa có nhóm nào",
+        "noTags": "Chưa có thẻ nào",
+        "noQueues": "Chưa có chiến dịch Gửi hàng loạt nào hoàn tất",
+        "contacts": "Đến Liên hệ",
+        "broadcast": "Đến Gửi hàng loạt",
+        "tagsHint": "Người nhận được tính lại khi lịch chạy, nên các liên hệ mới được gắn thẻ cũng sẽ được đưa vào.",
+        "queuesHint": "Chọn bao nhiêu chiến dịch tùy ý. Người nhận sẽ được loại trùng tự động trước khi gửi.",
+        "paste": "Dán số điện thoại",
+        "pasteHint": "Nhập mã quốc gia trước, không có dấu +. Các mục cách nhau bằng xuống dòng hoặc dấu phẩy.",
+        "pastePlaceholder": "Mỗi dòng một số, kèm mã quốc gia, không có dấu +",
+        "total": "Tổng số người nhận:",
+        "optedOut": "{n} bị loại: đã từ chối nhận tin hoặc đã lưu trữ"
+      },
+      "message": {
+        "title": "Soạn tin nhắn",
+        "content": "Nội dung tin nhắn",
+        "caption": "Chú thích",
+        "placeholder": "Chào '{name}', cập nhật theo lịch của bạn đã có đây…",
+        "personalise": "Dùng '{name}', '{phone}', '{email}' để cá nhân hóa.",
+        "template": "Mẫu đã được duyệt",
+        "chooseTemplate": "Chọn một mẫu đã được duyệt",
+        "browse": "Nhấp để duyệt các mẫu của bạn",
+        "approved": "ĐÃ DUYỆT",
+        "change": "Đổi",
+        "mediaLink": "Liên kết phương tiện",
+        "mediaHint": "Liên kết tới tệp (https://…). Hình ảnh, video, âm thanh hoặc tài liệu.",
+        "pin": "Ghim vị trí",
+        "latitude": "Vĩ độ",
+        "longitude": "Kinh độ",
+        "estimate": "Thời gian gửi ước tính",
+        "minutes": "khoảng {n} phút",
+        "estimateHint": "với 60 tin/phút",
+        "estimateEmpty": "chọn người nhận trước.",
+        "variables": "Biến trong tin nhắn",
+        "variablesHint": "biến giữ chỗ được phát hiện.",
+        "pickerEyebrow": "mẫu",
+        "pickerTitle": "Chọn mẫu",
+        "pickerHint": "Chỉ hiển thị các mẫu đã được duyệt và đang hoạt động.",
+        "pickerSearch": "Tìm theo tên hoặc ngôn ngữ…",
+        "pickerEmpty": "Không có mẫu nào khớp.",
+        "manageTemplates": "Quản lý mẫu →",
+        "cancel": "Hủy"
+      },
+      "when": {
+        "title": "Thời điểm gửi",
+        "modes": {
+          "once": {
+            "title": "Gửi một lần",
+            "hint": "Một lần gửi duy nhất vào ngày và giờ đã chọn."
+          },
+          "recurring": {
+            "title": "Định kỳ",
+            "hint": "Lặp lại hằng ngày, hằng tuần hoặc hằng tháng theo chu kỳ cố định."
+          }
+        },
+        "date": "Ngày gửi",
+        "time": "Giờ",
+        "timezone": "Múi giờ",
+        "recurrence": "Lặp lại",
+        "every": "Lặp lại mỗi",
+        "interval": "Khoảng cách",
+        "intervals": {
+          "daily": "ngày",
+          "weekly": "tuần",
+          "monthly": "tháng"
+        },
+        "end": "Kết thúc",
+        "endNever": "Không bao giờ",
+        "endDate": "Vào một ngày cụ thể",
+        "endOn": "Ngày cuối",
+        "days": "Các ngày trong tuần",
+        "daysHint": "Nhấn vào ngày bất kỳ để bật/tắt. Lịch hằng tuần cần ít nhất một ngày.",
+        "lead": "Lịch phải được đặt trước ít nhất {n} phút."
+      },
+      "review": {
+        "title": "Xem lại và lên lịch",
+        "final": "cuối cùng",
+        "schedule": "Lên lịch",
+        "name": "Tên",
+        "sender": "Người gửi",
+        "type": "Loại",
+        "mode": "Chế độ",
+        "at": "Lần gửi đầu tiên",
+        "once": "Gửi một lần",
+        "recurring": "Mỗi {n} {interval}",
+        "delivery": "Gửi",
+        "source": "Nguồn người nhận",
+        "recipients": "Người nhận",
+        "estimated": "Thời gian dự kiến",
+        "testTitle": "Gửi thử trước",
+        "testHint": "Nhận một tin xem trước tại số bạn nhập trước khi gửi toàn bộ.",
+        "testNumber": "Gửi thử đến số này",
+        "testNumberHint": "Nhập mã quốc gia trước, không có dấu +."
+      },
+      "preview": {
+        "title": "Xem trước trực tiếp",
+        "channel": "WhatsApp",
+        "empty": "Tin nhắn của bạn sẽ hiển thị ở đây…",
+        "media": "[ đã đính kèm phương tiện ]",
+        "pin": "Ghim vị trí",
+        "noTemplate": "Chưa chọn mẫu"
+      },
+      "errors": {
+        "nameRequired": "Đặt tên cho lịch.",
+        "senderRequired": "Chọn ít nhất một người gửi.",
+        "wabaTemplate": "Số WhatsApp Cloud API không thể gửi lịch dùng mẫu. Bỏ chọn các số này hoặc chọn loại tin nhắn khác.",
+        "audienceRequired": "Chọn ít nhất một mục.",
+        "numbersRequired": "Dán ít nhất một số điện thoại.",
+        "messageRequired": "Nhập nội dung tin nhắn.",
+        "messageTooLong": "Tin nhắn vượt quá 1024 ký tự.",
+        "templateRequired": "Chọn một mẫu.",
+        "mediaLink": "Nhập liên kết bắt đầu bằng http:// hoặc https://.",
+        "latitude": "Nhập vĩ độ từ -90 đến 90.",
+        "longitude": "Nhập kinh độ từ -180 đến 180.",
+        "dateRequired": "Chọn ngày.",
+        "timeRequired": "Nhập giờ như 14:30.",
+        "timezoneRequired": "Chọn múi giờ.",
+        "tooSoon": "Chọn thời gian cách hiện tại ít nhất vài phút.",
+        "repeatEvery": "Nhập số nguyên từ 1 đến 365.",
+        "daysRequired": "Chọn các ngày trong tuần.",
+        "endDateRequired": "Chọn ngày cuối.",
+        "endBeforeStart": "Ngày kết thúc trước lần gửi đầu tiên.",
+        "testNumber": "Nhập số điện thoại kèm mã quốc gia."
+      }
+    },
+    "detail": {
+      "crumb": "Đã lên lịch / Phân tích",
+      "title": "Phân tích lịch gửi",
+      "back": "Quay lại danh sách tin nhắn đã lên lịch",
+      "eyebrow": "Tin nhắn đã lên lịch",
+      "untitled": "Chưa có tiêu đề",
+      "recurs": "Lặp · {interval} × {n}",
+      "fires": "Chạy {when}",
+      "actions": {
+        "pause": "Tạm dừng",
+        "resume": "Tiếp tục",
+        "runNow": "Chạy ngay",
+        "cancel": "Hủy",
+        "retry": "Thử lại với thời gian mới",
+        "delete": "Xóa"
+      },
+      "kpi": {
+        "recipients": "Người nhận",
+        "delivered": "Đã giao",
+        "read": "Đã đọc",
+        "sent": "Đã gửi",
+        "status": "Trạng thái",
+        "ofSent": "trên số đã gửi",
+        "failedCount": "{n} thất bại",
+        "pendingCount": "{n} đang chờ",
+        "fires": "chạy {when}",
+        "paused": "tạm dừng",
+        "done": "hoàn tất {when}"
+      },
+      "funnel": {
+        "eyebrow": "Phễu gửi tin",
+        "title": "Từ lúc gửi đến hành động",
+        "recipients": "Người nhận",
+        "sent": "Đã gửi",
+        "delivered": "Đã giao",
+        "read": "Đã đọc",
+        "failed": "Thất bại"
+      },
+      "mix": {
+        "eyebrow": "Cơ cấu trạng thái",
+        "title": "Trạng thái gửi",
+        "empty": "Chưa có hoạt động gửi nào.",
+        "delivered": "Đã giao",
+        "sentOnly": "Đã gửi · chưa giao",
+        "failed": "Thất bại",
+        "pending": "Đang chờ"
+      },
+      "recipients": {
+        "eyebrow": "Người nhận",
+        "title": "Ai đã nhận gì",
+        "none": "Chưa có người nhận nào cho lịch này.",
+        "emptyTab": "Chưa có người nhận trong tab này.",
+        "truncated": "Đang hiển thị {n} / {total} người nhận đầu tiên.",
+        "tabs": {
+          "all": "Tất cả",
+          "sent": "Đã gửi",
+          "delivered": "Đã giao",
+          "read": "Đã đọc",
+          "failed": "Thất bại",
+          "pending": "Đang chờ"
+        },
+        "cols": {
+          "recipient": "Người nhận",
+          "phone": "Số điện thoại",
+          "status": "Trạng thái",
+          "when": "Thời gian",
+          "note": "Ghi chú"
+        },
+        "status": {
+          "pending": "Đang chờ",
+          "processing": "Đang chờ",
+          "sent": "Đã gửi",
+          "delivered": "Đã giao",
+          "read": "Đã đọc",
+          "failed": "Thất bại"
+        }
+      },
+      "config": {
+        "eyebrow": "Chi tiết lịch",
+        "title": "Cấu hình",
+        "scheduleType": "Loại lịch",
+        "messageType": "Loại tin nhắn",
+        "scheduledAt": "Đặt lịch lúc",
+        "nextRun": "Lần chạy tiếp theo",
+        "lastRun": "Lần chạy gần nhất",
+        "repeats": "Lặp lại mỗi",
+        "until": "đến {date}",
+        "sender": "Từ người gửi",
+        "provider": "Bộ máy gửi",
+        "attempts": "Số lần thử gửi"
+      },
+      "preview": {
+        "eyebrow": "Xem trước tin nhắn",
+        "title": "Người nhận sẽ thấy gì",
+        "empty": "(nội dung trống)"
+      },
+      "another": "Lên lịch thêm"
+    },
+    "warmer": {
+      "warming": "{n} đang làm nóng",
+      "name": "Trình làm nóng WhatsApp",
+      "tagline": "Khởi động số",
+      "how": {
+        "title": "Cách hoạt động",
+        "one": "Bật làm nóng cho một số.",
+        "two": "Mỗi ngày, số có thể gửi nhiều hơn một chút so với ngày trước.",
+        "three": "Tin nhắn được gửi chậm, chỉ trong các khung giờ bạn chọn.",
+        "four": "Chiến dịch, Gửi hàng loạt và lịch gửi đều tuân theo giới hạn này."
+      },
+      "good": {
+        "title": "Cần biết",
+        "body": "Làm nóng giúp giảm nguy cơ bị khóa đối với số API không chính thức, nhưng không đảm bảo. Với khối lượng lớn, hãy dùng số WhatsApp Business (Cloud API) chính thức, không cần làm nóng."
+      },
+      "crumb": "Chiến dịch / Trình làm nóng",
+      "heading": "Làm nóng số của bạn",
+      "lead": "Tăng dần giới hạn gửi hằng ngày của mỗi số API không chính thức, với khoảng cách và giờ hoạt động giống người thật để giảm nguy cơ bị khóa. Mỗi số làm nóng theo lịch riêng.",
+      "tiles": {
+        "warming": "Các số đang làm nóng",
+        "warmingHint": "trên {n} số đã kết nối",
+        "budget": "Hạn mức hôm nay",
+        "budgetHint": "tin được phép gửi hôm nay",
+        "sent": "Đã gửi hôm nay",
+        "sentHint": "được tính vào quá trình làm nóng",
+        "health": "Sức khỏe trung bình",
+        "healthHint": "trên tất cả các số"
+      },
+      "empty": "Chưa có số nào được kết nối.",
+      "connect": "Kết nối số",
+      "number": "Số",
+      "engines": {
+        "baileys": "API không chính thức",
+        "waba": "WABA",
+        "twilio": "Twilio"
+      },
+      "health": "Sức khỏe {n}",
+      "healthTitle": "Điểm sức khỏe (cao hơn = an toàn hơn khi tăng dần)",
+      "switch": "Đang làm nóng",
+      "budgetToday": "Hạn mức hôm nay",
+      "remaining": "Còn lại hôm nay",
+      "sentToday": "Đã gửi hôm nay",
+      "fields": {
+        "dailyBase": "Hạn mức ban đầu/ngày",
+        "stepPct": "Tăng % / bước",
+        "stepDays": "Tăng mỗi (ngày)",
+        "maxDaily": "Hạn mức tối đa/ngày",
+        "gapMin": "Khoảng cách tối thiểu (giây)",
+        "gapMax": "Khoảng cách tối đa (giây)",
+        "activeStart": "Hoạt động từ (giờ)",
+        "activeEnd": "Hoạt động đến (giờ)"
+      },
+      "hints": {
+        "dailyBase": "Số này được phép gửi bao nhiêu tin trong ngày đầu tiên.",
+        "stepPct": "Tăng hạn mức ngày theo phần trăm này sau mỗi bước.",
+        "stepDays": "Hạn mức tăng bao lâu một lần (mỗi N ngày).",
+        "maxDaily": "Mức cao nhất mà hạn mức ngày có thể đạt tới.",
+        "gapMin": "Khoảng chờ ngắn nhất giữa hai tin nhắn.",
+        "gapMax": "Khoảng chờ dài nhất giữa hai tin nhắn.",
+        "activeStart": "Chỉ bắt đầu gửi sau giờ này (đồng hồ 24 giờ).",
+        "activeEnd": "Ngừng gửi sau giờ này."
+      },
+      "spintax": {
+        "title": "Biến thể spintax",
+        "hint": "Gửi cách diễn đạt hơi khác nhau cho mỗi người để tin nhắn không giống hệt nhau. Viết các lựa chọn như '{Hi|Hello|Hey}' tại đây."
+      },
+      "save": "Lưu cấu hình làm nóng",
+      "saved": "Đã lưu cấu hình làm nóng."
+    }
+  }
+}

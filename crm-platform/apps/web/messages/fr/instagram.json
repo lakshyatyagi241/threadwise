@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "Diffusion Instagram"
+    },
+    "common": {
+      "dismiss": "Ignorer"
+    },
+    "hub": {
+      "kicker": "Canal · Instagram",
+      "title": "Instagram",
+      "titleAccent": "comptes",
+      "intro": "Associez une fois votre compte Instagram Business ou Creator. Ses messages arrivent ensuite dans la boîte de réception de votre équipe, et vous répondez, lancez des flux et envoyez des messages aux personnes qui vous ont déjà écrit, depuis ici.",
+      "teamInbox": "Boîte de réception de l’équipe",
+      "broadcasts": "Diffusion en réponse uniquement",
+      "loadError": "Impossible de charger les comptes Instagram associés. Réessayez.",
+      "loadErrorDetail": "Impossible de charger les comptes Instagram associés (erreur {status}{code}). Réessayez.",
+      "engineOff": "{engine} n’est pas connecté. Un administrateur doit le connecter dans Admin → Extensions avant de pouvoir associer un compte Instagram.",
+      "connectedCount": "{count, plural, one {# compte associé} other {# comptes associés}}",
+      "notConnected": "Non connecté",
+      "cardTitle": "Ajouter un compte Instagram",
+      "cardBody": "Connectez un compte Business ou Creator. Votre compte Instagram se connecte une seule fois et apparaît ici : conversations, flux et réponses automatiques fonctionnent depuis cet espace de travail.",
+      "add": "Ajouter un compte Instagram",
+      "linkedAccounts": "Comptes associés",
+      "linked": "Compte Instagram associé.",
+      "linkFailed": "Impossible d’associer ce compte."
+    },
+    "dialog": {
+      "close": "Fermer",
+      "kicker": "Instagram",
+      "title": "Ajouter un compte Instagram",
+      "note": "Votre compte Instagram se connecte une seule fois via {engine} (il conserve la connexion et le webhook). Cet espace de travail s’y associe et affiche ici sa boîte de réception, ses flux et ses publicités : il s’agit toujours d’un seul compte, pas de deux.",
+      "connect": "Connecter Instagram",
+      "checking": "Vérification…",
+      "hint": "Association immédiate si vous l’avez déjà connecté sur {engine} ; sinon, une courte fenêtre de connexion s’ouvre.",
+      "pick": "Choisir un compte à associer",
+      "link": "Associer",
+      "connectDifferent": "Connecter un autre compte",
+      "linkFailed": "Impossible d’associer ce compte.",
+      "startFailed": "Impossible de démarrer la connexion à Instagram."
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "Connecté",
+      "needsReauth": "Réauthentification requise",
+      "live": "en ligne",
+      "manage": "Gérer sur {engine}",
+      "refresh": "Actualiser le profil depuis {engine}",
+      "unlink": "Dissocier",
+      "unlinkConfirm": "Déconnecter ce compte Instagram ? Ses conversations et données de boîte de réception seront supprimées, et Instagram disparaîtra de votre tableau de bord, de la boîte de réception, des flux, des modèles et des réponses automatiques jusqu’à ce que vous connectiez de nouveau un compte. Le compte lui-même reste sur {engine} ; vous pourrez l’associer à nouveau plus tard.",
+      "cancel": "Annuler",
+      "updated": "Compte Instagram {handle} mis à jour.",
+      "unlinked": "Compte Instagram déconnecté ; ses données ont été supprimées.",
+      "failed": "Échec. Réessayez."
+    },
+    "broadcast": {
+      "kicker": "Instagram · Réponse uniquement",
+      "title": "Instagram",
+      "titleAccent": "diffusion",
+      "intro": "Instagram n’autorise l’envoi de messages qu’aux personnes qui vous ont déjà écrit : choisissez parmi vos conversations existantes. Instagram applique sa fenêtre de 24 heures au moment de l’envoi de chaque message.",
+      "accounts": "Comptes Instagram",
+      "loadError": "Impossible de charger les conversations. Réessayez.",
+      "failed": "Échec. Réessayez.",
+      "noAccounts": "Aucun compte Instagram n’est encore associé et connecté.",
+      "name": "Nom de la diffusion",
+      "namePlaceholder": "Offre d’automne",
+      "account": "Compte Instagram",
+      "template": "Modèle",
+      "templateHint": "Facultatif. Remplit le message lorsqu’il est vide.",
+      "templateNone": "Aucun modèle",
+      "message": "Message",
+      "messageHint": "Utilisez {token} pour le nom de la personne. {max} caractères maximum.",
+      "messagePlaceholder": "Bonjour {token}, …",
+      "send": "{count, plural, =0 {Envoyer} one {Envoyer à # conversation} other {Envoyer à # conversations}}",
+      "sending": "Envoi…",
+      "recipients": "Destinataires",
+      "windowOpenCount": "{open} sur {total} dans la fenêtre de 24 heures",
+      "search": "Rechercher des conversations",
+      "selectAll": "Tout sélectionner",
+      "clear": "Effacer",
+      "capNote": "Un envoi atteint au maximum {max} conversations ; « Tout sélectionner » retient les {max} premières.",
+      "empty": "Aucune conversation pour l’instant. Les personnes apparaissent ici après vous avoir écrit.",
+      "inWindow": "Dans la fenêtre",
+      "outsideWindow": "Hors fenêtre de 24 h",
+      "selected": "{count, plural, one {# sélectionné} other {# sélectionnés}}",
+      "sent": "Diffusion Instagram envoyée : {sent} remis{failed, plural, =0 {} other {, # en échec}}.",
+      "sentNone": "Impossible d’envoyer à un destinataire. Vérifiez la connexion Instagram."
+    }
+  }
+}

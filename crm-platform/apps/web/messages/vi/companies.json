@@ -1,0 +1,218 @@
+{
+  "companies": {
+    "nav": {
+      "companies": "Công ty"
+    },
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "errors": {
+      "network": "Không thể kết nối đến máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "signedOut": "Phiên của bạn đã kết thúc. Hãy đăng nhập lại để tiếp tục.",
+      "conflict": "Người khác đã thay đổi công ty này khi bạn đang chỉnh sửa. Thay đổi của họ đã được tải; chỉnh sửa của bạn được giữ lại, hãy xem lại và lưu lần nữa.",
+      "validation": "Một số thông tin đã nhập không hợp lệ. Hãy kiểm tra các trường và thử lại.",
+      "unavailable": "Công ty chưa khả dụng trên máy chủ này.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "notFound": "Công ty đó không còn tồn tại.",
+      "planDisabled": "Gói của bạn không bao gồm công ty. Hãy nâng cấp để mở khóa.",
+      "ownerInvalid": "Người phụ trách phải là thành viên đang hoạt động của không gian làm việc này.",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại sau giây lát.",
+      "requestId": "Mã yêu cầu",
+      "retry": "Thử lại"
+    },
+    "list": {
+      "eyebrow": "CRM · Tổ chức",
+      "title": "Công ty",
+      "subtitle": "Nhóm liên hệ và giao dịch theo tổ chức, để thấy mọi liên hệ, giao dịch đang mở và doanh thu thắng ở cùng một nơi.",
+      "newCompany": "Công ty mới",
+      "tiles": {
+        "companies": "Công ty",
+        "withDeals": "Có giao dịch đang mở",
+        "wonRevenue": "Doanh thu thắng"
+      },
+      "bulk": {
+        "label": "Thao tác hàng loạt",
+        "selected": "{count, plural, other {Đã chọn # công ty}}",
+        "delete": "Xóa",
+        "clear": "Bỏ chọn"
+      },
+      "loading": "Đang tải công ty",
+      "unavailableTitle": "Công ty không khả dụng",
+      "unavailable": "Dịch vụ công ty chưa được triển khai trên máy chủ này.",
+      "emptyFilteredTitle": "Không có công ty phù hợp",
+      "emptyFiltered": "Hãy thử tìm kiếm khác hoặc xóa bộ lọc.",
+      "clearFilters": "Xóa bộ lọc",
+      "emptyTitle": "Chưa có công ty",
+      "empty": "Chưa có công ty nào. Hãy tạo công ty đầu tiên.",
+      "showing": "{count, plural, other {Đã tải # công ty}}",
+      "loadMore": "Tải thêm",
+      "allLoaded": "Đã tải tất cả công ty",
+      "deleteTitle": "Xóa công ty",
+      "deleteMessage": "Xóa công ty này? Các liên hệ và giao dịch của công ty được giữ lại và chỉ bị bỏ liên kết.",
+      "deleteManyTitle": "Xóa công ty",
+      "deleteManyMessage": "{count, plural, other {Xóa # công ty này? Các liên hệ và giao dịch của chúng được giữ lại và chỉ bị bỏ liên kết.}}",
+      "delete": "Xóa",
+      "keep": "Giữ lại"
+    },
+    "toolbar": {
+      "label": "Lọc công ty",
+      "search": "Tìm công ty…",
+      "industry": "Ngành",
+      "allIndustries": "Tất cả ngành",
+      "owner": "Người phụ trách",
+      "allOwners": "Tất cả người phụ trách",
+      "noOwner": "Chưa có người phụ trách",
+      "withOpenDeals": "Có giao dịch đang mở",
+      "sort": "Sắp xếp",
+      "sorts": {
+        "created": "Mới nhất trước",
+        "name": "Tên A đến Z"
+      },
+      "clear": "Xóa",
+      "refresh": "Làm mới"
+    },
+    "table": {
+      "label": "Công ty",
+      "selectAll": "Chọn tất cả công ty đã tải",
+      "select": "Chọn {name}",
+      "company": "Công ty",
+      "industry": "Ngành",
+      "contacts": "Liên hệ",
+      "openDeals": "Giao dịch đang mở",
+      "wonValue": "Giá trị thắng",
+      "actions": "Thao tác",
+      "delete": "Xóa công ty",
+      "deleteNamed": "Xóa công ty {name}"
+    },
+    "form": {
+      "eyebrow": "Công ty",
+      "newTitle": "Công ty mới",
+      "editTitle": "Sửa công ty",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "create": "Tạo",
+      "save": "Lưu thay đổi",
+      "name": "Tên công ty *",
+      "namePlaceholder": "Công ty Acme",
+      "industry": "Ngành",
+      "website": "Website",
+      "email": "Email",
+      "phone": "Điện thoại",
+      "notes": "Ghi chú",
+      "moreDetails": "Thêm chi tiết",
+      "sizeRange": "Quy mô",
+      "sizeHint": "Ví dụ 1-10 hoặc 11-50.",
+      "owner": "Người phụ trách",
+      "noOwner": "Chưa có người phụ trách",
+      "me": "{name} (bạn)",
+      "address": "Địa chỉ",
+      "problems": {
+        "required": "Cần nhập tên công ty.",
+        "tooLong": "Quá dài: tối đa {limit} ký tự.",
+        "email": "Hãy nhập địa chỉ email hợp lệ.",
+        "invalid": "Một số thông tin đã nhập không hợp lệ.",
+        "ownerInvalid": "Người phụ trách phải là thành viên đang hoạt động của không gian làm việc này."
+      }
+    },
+    "toast": {
+      "created": "Đã tạo công ty.",
+      "updated": "Đã cập nhật công ty.",
+      "deleted": "{count, plural, other {Đã xóa # công ty.}}",
+      "deletedSome": "{count, plural, other {Đã xóa # công ty}}, {failed, plural, other {# công ty không thể xóa.}}",
+      "deleteFailed": "Không thể xóa. Hãy thử lại.",
+      "contactUnlinked": "Đã gỡ liên hệ khỏi công ty.",
+      "contactAlreadyOut": "Liên hệ đó không còn thuộc công ty này.",
+      "contactUnlinkFailed": "Không thể gỡ liên hệ. Hãy thử lại.",
+      "contactsLinked": "{count, plural, other {Đã thêm # liên hệ vào công ty.}}",
+      "contactsLinkedSome": "{count, plural, other {Đã thêm # liên hệ}}, {failed, plural, other {# liên hệ không thể thêm.}}",
+      "contactsLinkFailed": "Không thể thêm các liên hệ. Hãy thử lại."
+    },
+    "detail": {
+      "back": "Tất cả công ty",
+      "loading": "Đang tải công ty",
+      "notFoundTitle": "Không tìm thấy công ty",
+      "notFound": "Công ty này không tồn tại hoặc đã bị xóa.",
+      "edit": "Sửa",
+      "delete": "Xóa",
+      "keep": "Giữ lại",
+      "tiles": {
+        "contacts": "Liên hệ",
+        "openDeals": "Giao dịch đang mở",
+        "wonRevenue": "Doanh thu thắng"
+      },
+      "notes": "Ghi chú",
+      "deleteTitle": "Xóa công ty",
+      "deleteMessage": "Xóa công ty này? Các liên hệ và giao dịch của công ty được giữ lại và chỉ bị bỏ liên kết.",
+      "details": "Chi tiết",
+      "owner": "Người phụ trách",
+      "sizeRange": "Quy mô",
+      "address": "Địa chỉ",
+      "createdBy": "Người tạo",
+      "created": "Ngày tạo",
+      "updated": "Thay đổi lần cuối"
+    },
+    "contacts": {
+      "title": "Liên hệ",
+      "add": "Thêm liên hệ",
+      "loading": "Đang tải liên hệ",
+      "empty": "Chưa có liên hệ nào được liên kết với công ty này.",
+      "unnamed": "(không có tên)",
+      "unlink": "Gỡ khỏi công ty",
+      "unlinkNamed": "Gỡ {name} khỏi công ty",
+      "loadMore": "Tải thêm",
+      "addModal": {
+        "title": "Thêm liên hệ vào công ty",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "add": "{count, plural, other {Thêm # liên hệ}}",
+        "search": "Tìm liên hệ theo tên, email hoặc số",
+        "loading": "Đang tìm liên hệ",
+        "noneTitle": "Không tìm thấy liên hệ",
+        "none": "Không có liên hệ nào khớp. Hãy thử tên, email hoặc số khác.",
+        "unnamed": "(không có tên)",
+        "already": "Đã có ở đây",
+        "willMove": "Thuộc công ty khác",
+        "hint": "Một liên hệ chỉ có thể thuộc một công ty. Thêm liên hệ đang ở công ty khác sẽ chuyển nó về đây."
+      }
+    },
+    "deals": {
+      "title": "Giao dịch",
+      "loading": "Đang tải giao dịch",
+      "empty": "Công ty này chưa có giao dịch.",
+      "loadMore": "Tải thêm",
+      "status": {
+        "open": "Đang mở",
+        "won": "Thắng",
+        "lost": "Thua"
+      }
+    },
+    "activity": {
+      "title": "Hoạt động",
+      "loading": "Đang tải hoạt động",
+      "none": "Chưa có hoạt động nào với công ty này.",
+      "loadMore": "Tải thêm",
+      "empty": "trống",
+      "system": "Hệ thống",
+      "actions": {
+        "insert": "đã tạo công ty",
+        "update": "đã thay đổi công ty",
+        "delete": "đã xóa công ty"
+      },
+      "contactLinked": "Đã thêm liên hệ",
+      "contactUnlinked": "Đã gỡ liên hệ",
+      "deletedContact": "một liên hệ đã xóa",
+      "fields": {
+        "name": "Tên",
+        "website": "Website",
+        "email": "Email",
+        "phone": "Điện thoại",
+        "industry": "Ngành",
+        "sizeRange": "Quy mô",
+        "address": "Địa chỉ",
+        "notes": "Ghi chú",
+        "owner": "Người phụ trách"
+      }
+    }
+  }
+}

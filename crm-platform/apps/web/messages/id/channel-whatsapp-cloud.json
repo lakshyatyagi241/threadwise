@@ -1,0 +1,513 @@
+{
+  "channel-whatsapp-cloud": {
+    "common": {
+      "dismiss": "Tutup",
+      "copy": "Salin",
+      "copied": "Tersalin",
+      "copyFailed": "Tidak dapat menyalin. Pilih teks lalu salin secara manual."
+    },
+    "screen": {
+      "title": "WhatsApp",
+      "intro": "Nomor WhatsApp Business yang terhubung ke workspace ini. Pelanggan yang menulis ke sebuah nomor akan muncul di kotak masuk Anda, dan balasan Anda dikirim dari nomor tersebut.",
+      "add": "Tambah nomor WhatsApp",
+      "readOnly": "Anda dapat melihat nomor yang terhubung. Hanya orang yang mengelola kanal yang dapat menambah, mengubah, atau menghapus nomor.",
+      "helpNote": "Panduan langkah demi langkah untuk menghubungkan nomor tersimpan di repositori:",
+      "providerLine": "Nomor Anda dilayani melalui penyedia WhatsApp platform.",
+      "loading": "Memuat nomor WhatsApp Anda",
+      "retry": "Coba lagi",
+      "listLabel": "Nomor WhatsApp yang terhubung",
+      "empty": {
+        "title": "Belum ada nomor WhatsApp yang terhubung",
+        "message": "Hubungkan nomor dan pelanggan Anda dapat mulai mengobrol dengan Anda di kotak masuk. Hanya butuh tiga langkah singkat.",
+        "messageReadOnly": "Belum ada nomor WhatsApp yang terhubung. Minta orang yang mengelola kanal untuk menambahkannya."
+      }
+    },
+    "state": {
+      "connected": "Terhubung",
+      "needs_reconnect": "Perlu dihubungkan ulang",
+      "error": "Kesalahan",
+      "not_connected": "Tidak terhubung",
+      "help": {
+        "needs_reconnect": "WhatsApp tidak lagi menerima kredensial untuk nomor ini, sehingga pesan tidak dapat dikirim atau diterima. Hubungkan ulang untuk melanjutkan.",
+        "error": "Ada masalah pada nomor ini. Jalankan pemeriksaan kesehatan untuk melihat penyebabnya.",
+        "not_connected": "Nomor ini dinonaktifkan atau belum lolos pemeriksaan pertamanya. Pesan tidak dikirim melaluinya."
+      }
+    },
+    "quality": {
+      "green": "Tinggi",
+      "yellow": "Sedang",
+      "red": "Rendah",
+      "unrated": "Belum dinilai"
+    },
+    "tier": {
+      "limited": "{label} pelanggan per hari",
+      "unlimited": "Tidak terbatas"
+    },
+    "card": {
+      "verifiedName": "Nama terverifikasi: {name}",
+      "phoneId": "Phone number ID",
+      "wabaId": "ID akun bisnis",
+      "quality": "Peringkat kualitas",
+      "tier": "Batas pesan",
+      "lastCheck": "Pemeriksaan kesehatan terakhir",
+      "neverChecked": "Belum pernah diperiksa",
+      "lastActivity": "Aktivitas terakhir",
+      "noActivity": "Belum ada",
+      "token": "Token akses",
+      "tokenEnds": "berakhir dengan {hint}",
+      "none": "Tidak tersedia",
+      "providerChanged": {
+        "title": "Penyedia untuk nomor ini berubah",
+        "message": "Platform memindahkan nomor ini ke penyedia WhatsApp yang berbeda. Tidak ada yang perlu Anda lakukan selain menjalankan pemeriksaan kesehatan untuk memastikan nomor berfungsi."
+      },
+      "actions": {
+        "check": "Periksa kesehatan",
+        "checking": "Memeriksa",
+        "edit": "Edit kredensial",
+        "reconnect": "Hubungkan ulang",
+        "editDetails": "Edit detail",
+        "more": "Lainnya",
+        "moreLabel": "Tindakan lainnya untuk {name}",
+        "subscribe": "Perbaiki pesan masuk",
+        "rotate": "Verify token baru",
+        "switchOff": "Nonaktifkan",
+        "switchOn": "Aktifkan",
+        "remove": "Hapus"
+      }
+    },
+    "health": {
+      "issuesTitle": "Hasil pemeriksaan",
+      "severity": {
+        "critical": "Masalah",
+        "warning": "Peringatan",
+        "info": "Catatan"
+      },
+      "phoneStatus": "Status nomor",
+      "webhook": "Pesan masuk",
+      "subscribed": "Berlangganan",
+      "notSubscribed": "Tidak berlangganan",
+      "token": "Token akses",
+      "tokenValid": "Valid",
+      "tokenInvalid": "Tidak valid",
+      "tokenExpires": "Token kedaluwarsa",
+      "issues": {
+        "TOKEN_INVALID": {
+          "title": "Token akses tidak lagi valid",
+          "detail": "Ganti dengan token permanen baru dari pengaturan bisnis Meta Anda."
+        },
+        "TOKEN_EXPIRED": {
+          "title": "Token akses telah kedaluwarsa",
+          "detail": "Ganti dengan token system user permanen agar tidak pernah kedaluwarsa."
+        },
+        "TOKEN_EXPIRING": {
+          "title": "Token akses kedaluwarsa dalam 7 hari",
+          "detail": "Gunakan token system user permanen agar pengiriman tidak berhenti."
+        },
+        "TOKEN_SCOPE_MISSING": {
+          "title": "Token tidak dapat mengirim pesan",
+          "detail": "Buat token yang menyertakan izin whatsapp_business_messaging."
+        },
+        "TOKEN_MANAGEMENT_SCOPE_MISSING": {
+          "title": "Token tidak dapat mengelola akun",
+          "detail": "Tambahkan izin whatsapp_business_management agar webhook dan template dapat disiapkan."
+        },
+        "NO_WEBHOOK_SUBSCRIPTION": {
+          "title": "Pesan masuk tidak sampai ke kotak masuk",
+          "detail": "Aplikasi tidak berlangganan ke akun ini. Gunakan Perbaiki pesan masuk di menu kartu."
+        },
+        "QUALITY_RED": {
+          "title": "Kualitas pesan rendah",
+          "detail": "WhatsApp dapat membatasi jumlah pelanggan yang bisa Anda kirimi pesan. Kirim lebih sedikit pesan yang tidak diminta."
+        },
+        "QUALITY_YELLOW": {
+          "title": "Kualitas pesan sedang",
+          "detail": "Pantau terus: pelanggan yang memblokir atau melaporkan nomor akan menurunkannya."
+        },
+        "NUMBER_NOT_VERIFIED": {
+          "title": "Nomor belum terverifikasi",
+          "detail": "Selesaikan verifikasi nomor ini di WhatsApp Manager."
+        },
+        "ON_PREMISE_NUMBER": {
+          "title": "Nomor masih di WhatsApp API lama",
+          "detail": "Daftarkan ke Cloud API di WhatsApp Manager, lalu hubungkan lagi."
+        },
+        "NO_ACCOUNT_ID": {
+          "title": "Tidak ada ID akun bisnis yang tersimpan",
+          "detail": "Tambahkan di Edit kredensial agar akun dan webhook-nya dapat diperiksa."
+        }
+      }
+    },
+    "errors": {
+      "tokenInvalid": "WhatsApp tidak menerima token akses. Mungkin sudah kedaluwarsa, dicabut, atau tersalin tidak lengkap.",
+      "permissionMissing": "Token akses tidak memiliki izin yang diperlukan, atau tidak dapat menjangkau nomor ini.",
+      "idNotFound": "WhatsApp tidak mengenali phone number ID ini, atau token tidak dapat melihatnya. Periksa kedua ID.",
+      "appSecretInvalid": "App secret tidak cocok dengan aplikasi. Salin ulang dari pengaturan aplikasi.",
+      "accountRestricted": "Akun WhatsApp dibatasi atau dikunci. Periksa statusnya di WhatsApp Manager.",
+      "numberNotRegistered": "Nomor belum terdaftar untuk WhatsApp Cloud API. Daftarkan dulu di WhatsApp Manager.",
+      "rateLimited": "WhatsApp sedang membatasi permintaan. Tunggu beberapa menit lalu coba lagi.",
+      "providerUnavailable": "WhatsApp tidak dapat dijangkau atau mengalami masalah sementara. Coba lagi sesaat lagi.",
+      "healthFailed": "Nomor tidak dapat diaktifkan karena pemeriksaan ke WhatsApp gagal.",
+      "alreadyConnected": "Nomor WhatsApp ini sudah terhubung di workspace ini.",
+      "kindUnavailable": "Koneksi WhatsApp belum diaktifkan untuk workspace ini. Hubungi administrator platform Anda.",
+      "inUse": "Nomor ini masih memiliki percakapan, sehingga tidak dapat dihapus.",
+      "conflict": "Orang lain mengubah nomor ini lebih dulu. Nomor telah dimuat ulang; tinjau lalu coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk mengelola kanal.",
+      "validation": "Sebagian yang Anda masukkan tidak valid. Periksa kolom yang ditandai.",
+      "notFound": "Nomor ini sudah tidak ada. Daftar telah disegarkan.",
+      "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "genericWithId": "Terjadi kesalahan. Coba lagi. Referensi: {id}",
+      "detail": "Detail: {detail}",
+      "fix": {
+        "tokenInvalid": "Buat token system user permanen di pengaturan bisnis Meta Anda lalu tempel di Edit kredensial.",
+        "permissionMissing": "Buat token dengan whatsapp_business_messaging dan whatsapp_business_management, dan pastikan system user memiliki akses ke akun.",
+        "idNotFound": "Kedua ID ada di halaman API Setup aplikasi Meta Anda, di bawah WhatsApp. Keduanya adalah angka yang berbeda.",
+        "appSecretInvalid": "Ada di halaman Basic pada pengaturan aplikasi Meta Anda.",
+        "accountRestricted": "Buka WhatsApp Manager, pilih akun dan baca pemberitahuan di bagian atas.",
+        "numberNotRegistered": "Di WhatsApp Manager, buka nomor dan selesaikan pendaftarannya."
+      }
+    },
+    "fieldErrors": {
+      "required": "Kolom ini wajib diisi.",
+      "digits": "Gunakan hanya angka, antara 5 dan 32.",
+      "tokenShort": "Itu terlalu pendek untuk token akses.",
+      "tokenLong": "Itu terlalu panjang untuk token akses.",
+      "secretShort": "App secret minimal 8 karakter.",
+      "secretLong": "Itu terlalu panjang untuk app secret.",
+      "nameLong": "Gunakan maksimal 120 karakter.",
+      "addressLong": "Gunakan maksimal 40 karakter.",
+      "sameAsPhoneId": "Ini sama dengan phone number ID. Keduanya adalah ID yang berbeda."
+    },
+    "credentials": {
+      "name": {
+        "label": "Nama",
+        "hint": "Sebutan Anda dan tim untuk nomor ini.",
+        "placeholder": "Jalur dukungan"
+      },
+      "displayAddress": {
+        "label": "Nomor telepon",
+        "hint": "Opsional. Ditampilkan di daftar agar nomor mudah dibedakan.",
+        "placeholder": "+91 98765 43210"
+      },
+      "phoneNumberId": {
+        "label": "Phone number ID",
+        "hint": "Temukan di WhatsApp Manager pada API Setup.",
+        "placeholder": "533524166787123",
+        "current": "Saat ini {value}. Kosongkan untuk mempertahankan."
+      },
+      "businessAccountId": {
+        "label": "WhatsApp Business Account ID",
+        "hint": "Di sebelah phone number ID pada halaman yang sama.",
+        "placeholder": "102938475647382"
+      },
+      "accessToken": {
+        "label": "Token akses",
+        "hint": "Token permanen dari system user. Disimpan terenkripsi dan tidak pernah ditampilkan lagi.",
+        "placeholder": "EAA...",
+        "current": "Token saat ini berakhir dengan {hint}. Kosongkan untuk mempertahankan.",
+        "unusual": "Token akses Meta biasanya diawali EAA. Pastikan Anda menyalin token, bukan yang lain."
+      },
+      "appSecret": {
+        "label": "App secret",
+        "hint": "Dari halaman Basic pada pengaturan aplikasi Meta Anda. Digunakan untuk menandatangani pesan yang dikirim Meta kepada kami.",
+        "placeholder": "0123456789abcdef...",
+        "current": "Secret saat ini berakhir dengan {hint}. Kosongkan untuk mempertahankan."
+      },
+      "keepPlaceholder": "Tidak berubah",
+      "show": "Tampilkan",
+      "hide": "Sembunyikan",
+      "privacy": "Secret disimpan terenkripsi dan tidak pernah ditampilkan lagi. Spasi, jeda baris, dan tanda kutip yang ikut tertempel akan dihapus otomatis.",
+      "privacyPlatform": "Hanya detail ini yang diperlukan. Platform mengurus kredensialnya."
+    },
+    "wizard": {
+      "close": "Tutup",
+      "cancel": "Batal",
+      "back": "Kembali",
+      "stepsLabel": "Langkah",
+      "stepOf": "Langkah {current} dari {total}",
+      "steps": {
+        "before": "Sebelum memulai",
+        "credentials": "Nomor Anda",
+        "webhook": "Hubungkan webhook Anda",
+        "webhookAutomatic": "Uji koneksi"
+      },
+      "before": {
+        "intro": {
+          "channel_token": "Menghubungkan nomor memerlukan beberapa hal dari Meta terlebih dahulu. Siapkan sekali, lalu kembali ke sini. Centang satu per satu; kotaknya hanya untuk Anda.",
+          "platform_token": "Dua hal diperlukan untuk menambah nomor: ID WhatsApp Business Account dan ID nomor telepon. Centang satu per satu; kotaknya hanya untuk Anda."
+        },
+        "items": {
+          "channel_token": {
+            "app": {
+              "title": "Aplikasi Meta dengan WhatsApp ditambahkan",
+              "detail": "Buat aplikasi bertipe Business di developers.facebook.com dan tambahkan produk WhatsApp ke dalamnya. Aplikasi ini yang mengirim dan menerima pesan Anda."
+            },
+            "number": {
+              "title": "Akun WhatsApp Business dan sebuah nomor",
+              "detail": "Nomor tidak boleh sedang dipakai di aplikasi WhatsApp biasa. Untuk mencoba dulu, gunakan nomor uji gratis yang diberikan Meta kepada setiap aplikasi baru."
+            },
+            "token": {
+              "title": "Token akses permanen",
+              "detail": "Di pengaturan Meta Business, tambahkan system user, berikan aplikasi dan akun WhatsApp Anda, lalu buat token dengan whatsapp_business_messaging dan whatsapp_business_management. Pilih tidak pernah kedaluwarsa: token 24 jam akan berhenti berfungsi besok."
+            },
+            "values": {
+              "title": "Tiga nilai untuk disalin",
+              "detail": "Phone number ID dan ID akun bisnis (WhatsApp, API Setup) serta app secret (App settings, Basic)."
+            },
+            "webhook": {
+              "title": "Akses ke pengaturan webhook aplikasi Anda",
+              "detail": "Di langkah terakhir kami menampilkan alamat dan verify token. Anda menempelkannya di WhatsApp, Configuration pada aplikasi Meta Anda."
+            }
+          },
+          "platform_token": {
+            "account": {
+              "title": "Sebuah WhatsApp Business Account",
+              "detail": "Buat di Meta Business Suite jika belum punya. Akun ini menyimpan nomor dan template pesan Anda."
+            },
+            "number": {
+              "title": "Nomor yang bebas untuk WhatsApp Business",
+              "detail": "Nomor tidak boleh sedang dipakai di aplikasi WhatsApp biasa. Hapus dari sana terlebih dahulu jika sedang dipakai."
+            },
+            "ids": {
+              "title": "Dua ID untuk disalin",
+              "detail": "Phone number ID dan ID akun bisnis, keduanya di halaman API Setup di WhatsApp Manager."
+            }
+          }
+        },
+        "providerLine": "Nomor Anda dilayani melalui penyedia WhatsApp platform. Anda tidak memerlukan token akses.",
+        "runbook": "Detail lebih lanjut, dengan menu yang tepat untuk dibuka, ada di panduan repositori:",
+        "continue": "Lanjutkan"
+      },
+      "embedded": {
+        "button": "Hubungkan dengan Facebook (embedded signup)",
+        "soon": "Segera hadir",
+        "help": "Nantinya Anda dapat masuk dengan Facebook dan memilih nomor tanpa menyalin ID apa pun. Sampai saat itu, masukkan kedua ID di bawah."
+      },
+      "credentials": {
+        "intro": {
+          "channel_token": "Masukkan detail nomor. Tempel langsung dari Meta: spasi dan jeda baris dibersihkan otomatis.",
+          "platform_token": "Masukkan kedua ID nomor yang ingin Anda hubungkan."
+        },
+        "save": "Simpan dan lanjutkan",
+        "saving": "Menyimpan"
+      },
+      "webhook": {
+        "done": "Selesai",
+        "finishLater": "Selesaikan nanti",
+        "test": {
+          "button": "Uji koneksi",
+          "running": "Menguji",
+          "again": "Uji lagi",
+          "passedToast": "Uji koneksi berhasil."
+        }
+      }
+    },
+    "webhook": {
+      "intro": "Langkah terakhir: beri tahu WhatsApp ke mana pesan Anda dikirim. Nomor sudah tersimpan, tetapi tetap tidak terhubung sampai ini selesai dan uji di bawah berhasil.",
+      "callbackUrl": "Callback URL",
+      "verifyToken": "Verify token",
+      "onceWarning": "Token ini hanya ditampilkan sekarang. Salin sebelum Anda menutup jendela ini. Jika hilang, Anda dapat membuat yang baru dari menu nomor.",
+      "placeholderWarning": "Alamat ini hanyalah placeholder. Setel NEXT_PUBLIC_API_PUBLIC_URL ke alamat publik API lalu muat ulang, atau salin alamat yang diberikan administrator platform Anda.",
+      "localWarning": "Alamat ini mengarah ke mesin di jaringan Anda sendiri. WhatsApp tidak dapat menjangkaunya. Gunakan alamat publik API.",
+      "httpWarning": "WhatsApp hanya menerima alamat yang diawali https.",
+      "tokenMissing": "Tidak ada verify token yang dikembalikan. Buat yang baru dari menu nomor.",
+      "steps": {
+        "open": "Buka aplikasi Anda di Meta for Developers, lalu WhatsApp, lalu Configuration.",
+        "paste": "Di Webhook pilih Edit, tempel callback URL dan verify token, lalu pilih Verify and save.",
+        "subscribe": "Di Webhook fields, berlangganan ke messages.",
+        "test": "Kembali ke sini dan pilih Uji koneksi."
+      },
+      "testTitle": "Uji koneksi",
+      "automatic": {
+        "title": "Pengiriman pesan sudah disiapkan untuk Anda",
+        "message": "Platform mengarahkan nomor ini ke kotak masuk Anda secara otomatis. Tidak ada alamat atau token untuk ditempel. Jalankan uji untuk memastikan nomor berfungsi."
+      },
+      "test": {
+        "hint": "Uji ini menanyakan nomor kepada WhatsApp dan menampilkan jawabannya.",
+        "running": "Menanyakan nomor ini kepada WhatsApp",
+        "okTitle": "Nomor terhubung",
+        "okMessage": "WhatsApp menjawab dan nomor dapat digunakan.",
+        "verifiedName": "Nama terverifikasi",
+        "quality": "Peringkat kualitas",
+        "tier": "Batas pesan",
+        "unknown": "Tidak dilaporkan"
+      }
+    },
+    "edit": {
+      "close": "Tutup",
+      "cancel": "Batal",
+      "save": "Simpan dan periksa",
+      "saving": "Menyimpan",
+      "nothing": "Tidak ada yang diubah. Ketik nilai baru untuk menyimpannya.",
+      "title": {
+        "channel_token": "Edit kredensial",
+        "platform_token": "Edit detail"
+      },
+      "intro": {
+        "channel_token": "Ganti token yang diperbarui atau secret yang dirotasi. Kolom yang dikosongkan mempertahankan nilai tersimpan. Setelah disimpan, nomor diperiksa dan diaktifkan kembali.",
+        "platform_token": "Ubah nama atau ID nomor ini. Kolom yang dikosongkan mempertahankan nilai tersimpan. Setelah disimpan, nomor diperiksa."
+      }
+    },
+    "rotate": {
+      "title": "Buat verify token baru?",
+      "message": "Verify token saat ini untuk {name} langsung berhenti berfungsi. Anda harus menempelkan yang baru ke aplikasi Meta Anda dan memverifikasi webhook lagi.",
+      "confirm": "Buat token baru",
+      "cancel": "Batal",
+      "close": "Tutup",
+      "done": "Selesai",
+      "resultTitle": "Verify token baru Anda",
+      "resultIntro": "Tempel kedua nilai di WhatsApp, Configuration pada aplikasi Meta Anda, lalu pilih Verify and save."
+    },
+    "remove": {
+      "title": "Hapus nomor ini?",
+      "message": "{name} akan dihapus dari workspace ini. Pesan tidak dapat lagi dikirim atau diterima melaluinya.",
+      "note": "Tindakan ini tidak dapat dibatalkan. Anda dapat menambahkan nomor ini lagi nanti.",
+      "confirm": "Hapus nomor",
+      "cancel": "Batal",
+      "inUse": {
+        "title": "Nomor ini memiliki percakapan",
+        "message": "{name} masih memiliki percakapan, sehingga tidak dapat dihapus. Percakapan tersebut akan tertinggal tanpa nomor.",
+        "hint": "Anda dapat menonaktifkan nomor ini sebagai gantinya. Semua percakapan tetap disimpan, tidak ada pesan yang dikirim melaluinya, dan Anda dapat mengaktifkannya lagi nanti.",
+        "switchOff": "Nonaktifkan saja"
+      }
+    },
+    "switchOff": {
+      "title": "Nonaktifkan nomor ini?",
+      "message": "Tidak ada pesan yang dikirim atau diterima melalui {name} saat nonaktif. Percakapan tetap disimpan dan Anda dapat mengaktifkannya lagi.",
+      "confirm": "Nonaktifkan",
+      "cancel": "Batal"
+    },
+    "toasts": {
+      "checkPassed": "{name} lolos pemeriksaan kesehatan.",
+      "saved": "Perubahan pada {name} disimpan.",
+      "reconnected": "{name} terhubung kembali.",
+      "switchedOn": "{name} diaktifkan.",
+      "switchedOff": "{name} dinonaktifkan.",
+      "removed": "{name} dihapus.",
+      "subscribed": "{name} berlangganan pesan masuk."
+    },
+    "inbox": {
+      "templatesSoon": "Template segera hadir, sehingga Anda akan dapat menghubungi pelanggan ini lagi dari sini.",
+      "reconnect": {
+        "needs_reconnect": {
+          "title": "Nomor WhatsApp ini perlu dihubungkan ulang.",
+          "message": "WhatsApp tidak lagi menerima kredensial untuk {name}, sehingga balasan tidak dapat dikirim. Catatan internal tetap berfungsi."
+        },
+        "error": {
+          "title": "Nomor WhatsApp ini mengalami masalah koneksi.",
+          "message": "{name} dalam kondisi error, sehingga balasan tidak dapat dikirim. Catatan internal tetap berfungsi."
+        },
+        "not_connected": {
+          "title": "Nomor WhatsApp ini dinonaktifkan.",
+          "message": "{name} tidak terhubung, sehingga balasan tidak dapat dikirim. Catatan internal tetap berfungsi."
+        },
+        "open": "Buka pengaturan WhatsApp",
+        "askAdmin": "Minta orang yang mengelola kanal untuk menghubungkannya kembali."
+      },
+      "failure": {
+        "openSettings": "Buka pengaturan WhatsApp",
+        "windowClosed": {
+          "title": "Jendela balasan 24 jam telah berakhir.",
+          "hint": "WhatsApp hanya mengizinkan balasan bebas dalam 24 jam sejak pesan terakhir pelanggan. Tunggu mereka menulis lagi."
+        },
+        "undeliverable": {
+          "title": "WhatsApp tidak dapat mengirimkan pesan ini.",
+          "hint": "Nomor mungkin tidak ada di WhatsApp, atau pelanggan belum menerima ketentuan terbarunya."
+        },
+        "recipientNotAllowed": {
+          "title": "Nomor ini tidak dapat dikirimi pesan dari sini.",
+          "hint": "Itu adalah nomor pengirim sendiri, atau tidak ada dalam daftar penerima uji."
+        },
+        "rateLimit": {
+          "title": "WhatsApp membatasi kecepatan pengiriman Anda.",
+          "hint": "Tunggu beberapa menit, lalu gunakan Coba lagi."
+        },
+        "spamLimited": {
+          "title": "Pengiriman dibatasi karena terlalu banyak pesan dilaporkan sebagai spam.",
+          "hint": "Tunggu beberapa saat sebelum mengirim lebih banyak, dan hanya kirim pesan kepada pelanggan yang mengharapkannya."
+        },
+        "engagementBlocked": {
+          "title": "WhatsApp memilih tidak mengirimkan pesan ini.",
+          "hint": "Hal ini dilakukan untuk melindungi pelanggan dari pesan yang mungkin tidak diinginkan."
+        },
+        "tokenExpired": {
+          "title": "WhatsApp menolak token akses nomor ini.",
+          "hint": "Token sudah kedaluwarsa atau kehilangan izin. Hubungkan ulang nomor, lalu gunakan Coba lagi."
+        },
+        "accountRestricted": {
+          "title": "Akun WhatsApp bermasalah.",
+          "hint": "Akun dibatasi, dikunci, atau belum terdaftar. Periksa di WhatsApp Manager."
+        },
+        "mediaRejected": {
+          "title": "WhatsApp tidak dapat menggunakan file atau jenis pesan ini.",
+          "hint": "Coba file lain, atau kirim informasi sebagai teks."
+        },
+        "templateProblem": {
+          "title": "Template tidak dapat dikirim.",
+          "hint": "Template tidak ditemukan, dijeda atau ditolak, atau variabelnya tidak cocok."
+        },
+        "providerDown": {
+          "title": "WhatsApp mengalami masalah sementara.",
+          "hint": "Gunakan Coba lagi sesaat lagi."
+        },
+        "sendPaused": {
+          "title": "Pengiriman dijeda untuk seluruh platform.",
+          "hint": "Gunakan Coba lagi setelah pengiriman aktif kembali."
+        },
+        "channelOff": {
+          "title": "Nomor ini tidak terhubung.",
+          "hint": "Hubungkan ulang, lalu gunakan Coba lagi."
+        },
+        "planLimit": {
+          "title": "Batas pesan bulanan paket Anda telah tercapai.",
+          "hint": "Upgrade paket atau tunggu periode berikutnya, lalu gunakan Coba lagi."
+        },
+        "groupSendUnavailable": {
+          "title": "Pengiriman ke grup WhatsApp belum tersedia.",
+          "hint": "Balas dari aplikasi WhatsApp Business."
+        }
+      },
+      "media": {
+        "downloading": "Mengunduh file",
+        "failed": "Tidak dapat mengunduh file ini",
+        "retry": "Coba lagi",
+        "retrying": "Mencoba lagi",
+        "reason": {
+          "expired": "WhatsApp sudah tidak menyimpannya. File disimpan sekitar 30 hari.",
+          "auth": "WhatsApp menolak token akses nomor ini. Hubungkan ulang nomor, lalu coba lagi.",
+          "tooLarge": "File lebih besar dari yang diizinkan kanal ini.",
+          "rejected": "File ditolak karena bukan jenis yang aman.",
+          "download": "WhatsApp tidak menjawab tepat waktu. Mencoba lagi biasanya berhasil."
+        }
+      },
+      "interactive": {
+        "button": "Memilih sebuah tombol",
+        "list": "Memilih dari daftar"
+      },
+      "contact": {
+        "unnamed": "Kontak yang dibagikan",
+        "shared": "Kartu kontak"
+      },
+      "attach": {
+        "limit": {
+          "image": "Gambar hingga {mb} MB",
+          "video": "Video hingga {mb} MB",
+          "audio": "Audio hingga {mb} MB",
+          "document": "Dokumen hingga {mb} MB"
+        },
+        "kind": {
+          "image": "Gambar",
+          "video": "Video",
+          "audio": "File audio",
+          "document": "Dokumen"
+        },
+        "errors": {
+          "tooLarge": "{kind} maksimal {mb} MB di WhatsApp. Pilih file yang lebih kecil.",
+          "kindNotAllowed": "Nomor ini tidak dapat mengirim {kind}.",
+          "unsupportedType": "WhatsApp tidak menerima jenis file ini. WhatsApp menerima gambar JPEG dan PNG, video MP4 dan 3GP, audio AAC, MP3, AMR, M4A dan OGG, serta dokumen PDF, Office dan teks.",
+          "empty": "File itu kosong."
+        }
+      }
+    }
+  }
+}

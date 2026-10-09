@@ -26,6 +26,12 @@ import {
   type SimpleDoc,
   type SimpleStep,
 } from './simple-model';
+import { translator } from '../test-utils/intl';
+import { nodeLabelMsg } from './contract-text';
+import { msg, renderMsg, type Msg } from './msg';
+
+/** A message in English, as the user would read it. */
+const en = (m: Msg): string => renderMsg(translator('flb'), m);
 
 const node = (
   id: string,
@@ -111,7 +117,7 @@ describe('graph to simple', () => {
     );
     expect(canvasOnly).toEqual({
       ok: false,
-      reasons: ['It uses the "Webhook" step, which the Simple builder does not have.'],
+      reasons: [msg('simpleModel.reasons.unsupportedStep', { node: nodeLabelMsg('webhook') })],
     });
     const merge = toSimple(
       graph(
@@ -150,7 +156,7 @@ describe('graph to simple', () => {
       ],
     );
     const r = toSimple(g);
-    if (!r.ok) throw new Error(r.reasons.join('; '));
+    if (!r.ok) throw new Error(r.reasons.map(en).join('; '));
     const steps = allSteps(r.doc);
     expect(steps.find((x) => x.id === 'a')!.goto).toBe('end');
     expect(steps.find((x) => x.id === 'x')!.goto).toBe('end');
@@ -255,7 +261,7 @@ describe('checks', () => {
 
   it('lists what is missing before a flow can be published', () => {
     const doc = emptyDoc();
-    expect(problems(doc, { senderRequired: true }).map((p) => p.message)).toEqual([
+    expect(problems(doc, { senderRequired: true }).map((p) => en(p.message))).toEqual([
       'The trigger needs at least one keyword (or choose any message).',
       'Pick the WhatsApp number this flow runs on.',
       'Add a first step: it is what the customer receives.',
@@ -265,7 +271,7 @@ describe('checks', () => {
       ...d2,
       trigger: { ...d2.trigger, data: { ...d2.trigger.data, keywords: 'hi', deviceId: 'waba:1' } },
     };
-    expect(problems(d2, { senderRequired: true }).map((p) => p.message)).toEqual([
+    expect(problems(d2, { senderRequired: true }).map((p) => en(p.message))).toEqual([
       'Step 1.1: write the message.',
     ]);
   });
@@ -276,7 +282,7 @@ describe('checks', () => {
     d = insertStep(d, 0, 0, b);
     d = updateStep(d, b.id, { data: { prompt: 'p', options: ['x'.repeat(21)] } });
     d.trigger.data.keywords = 'hi';
-    expect(problems(d, { senderRequired: false }).map((p) => p.message)).toEqual([
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
       'Step 1.1: a button label is longer than 20 characters.',
     ]);
     const a1 = newStep('ask', []);
@@ -287,7 +293,7 @@ describe('checks', () => {
     let e = emptyDoc();
     e.trigger.data.keywords = 'hi';
     e = insertStep(insertStep(e, 0, 0, { ...a1, data: { ...a1.data, prompt: 'q' } }), 0, 1, a2);
-    expect(problems(e, { senderRequired: false })[0]!.message).toContain(
+    expect(en(problems(e, { senderRequired: false })[0]!.message)).toContain(
       'is already used by step 1.1',
     );
   });
@@ -313,9 +319,9 @@ describe('questions that check the answer', () => {
   });
 
   it('the card says what a question checks', () => {
-    expect(stepLabel(newStep('ask', [], 'phone'))).toBe('Question · Phone number');
-    expect(stepLabel(newStep('ask', []))).toBe('Question');
-    expect(stepLabel(newStep('message', []))).toBe('Message');
+    expect(en(stepLabel(newStep('ask', [], 'phone')))).toBe('Question · Phone number');
+    expect(en(stepLabel(newStep('ask', [])))).toBe('Question');
+    expect(en(stepLabel(newStep('message', [])))).toBe('Message');
   });
 
   it('the menu has an entry for every step type and one per question check', () => {
@@ -364,7 +370,7 @@ describe('questions that check the answer', () => {
     );
     expect(toSimple(withOptions)).toEqual({
       ok: false,
-      reasons: ['A question has fixed answers or takes an uploaded file.'],
+      reasons: [msg('simpleModel.reasons.askFixed')],
     });
     const withMedia = graph(
       [node('t', 'trigger'), node('a', 'ask', { prompt: 'p', var: 'a', acceptMedia: true })],
@@ -386,7 +392,7 @@ describe('questions that check the answer', () => {
       },
     };
     d = insertStep(d, 0, 0, a);
-    expect(problems(d, { senderRequired: false }).map((p) => p.message)).toEqual([
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
       'Step 1.1: choose the contact property the answer is copied to.',
     ]);
     const f: SimpleStep = {
@@ -395,7 +401,7 @@ describe('questions that check the answer', () => {
     };
     const d2 = insertStep(updateStep(d, a.id, { data: { saveProperty: false } }), 0, 1, f);
     expect(
-      problems(d2, { senderRequired: false }).some((p) => p.message.includes('already used')),
+      problems(d2, { senderRequired: false }).some((p) => en(p.message).includes('already used')),
     ).toBe(true);
   });
 });
@@ -484,7 +490,7 @@ describe('the list of flows (groups)', () => {
       d = insertStep(d, 0, 0, step);
       const about = (doc: typeof d) =>
         problems(doc, { senderRequired: false })
-          .map((p) => p.message)
+          .map((p) => en(p.message))
           .filter((m) => m.includes('contact property'));
       expect(about(d)).toEqual([
         'Step 1.1: choose the contact property the picked option is copied to.',

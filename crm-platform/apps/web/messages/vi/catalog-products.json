@@ -1,0 +1,730 @@
+{
+  "catalogProducts": {
+    "nav": {
+      "catalog": "Danh mục",
+      "products": "Sản phẩm",
+      "reviews": "Đánh giá"
+    },
+    "common": {
+      "dismiss": "Đóng",
+      "retry": "Thử lại",
+      "requestId": "ID yêu cầu"
+    },
+    "errors": {
+      "network": "Không thể kết nối máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện việc đó.",
+      "signedOut": "Phiên của bạn đã kết thúc. Hãy đăng nhập lại để tiếp tục.",
+      "conflict": "Người khác đã thay đổi nội dung này trong lúc bạn chỉnh sửa. Hãy tải lại để xem phiên bản mới nhất.",
+      "validation": "Một số trường không hợp lệ. Hãy kiểm tra các trường được đánh dấu và thử lại.",
+      "unavailable": "Phần này của danh mục chưa khả dụng trên máy chủ này.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "notFound": "Không tìm thấy mục đó. Có thể nó đã bị xóa.",
+      "planLocked": "Gói của bạn không bao gồm danh mục WhatsApp. Hãy nâng cấp để mở khóa.",
+      "planLimit": "Đã đạt giới hạn tin nhắn của gói.",
+      "wallet": "Số dư ví quá thấp để gửi. Hãy nạp tiền và thử lại.",
+      "sendBlocked": "Hiện việc gửi đang bị chặn: {detail}",
+      "notConnected": "Chưa kết nối danh mục nào. Hãy kết nối ở tab Thiết lập trước.",
+      "metaRejected": "Meta đã từ chối yêu cầu: {detail}",
+      "noWaba": "Không tìm thấy số WhatsApp Business (WABA) nào đã kết nối. Hãy kết nối số WABA trước, hoặc liên kết danh mục thủ công.",
+      "wabaToken": "Số WABA của bạn đã kết nối nhưng không đọc được token. Hãy kết nối lại số, hoặc liên kết danh mục thủ công.",
+      "noCatalogLinked": "Chưa có danh mục sản phẩm nào được liên kết với tài khoản WhatsApp của bạn. Hãy tạo một danh mục trong Meta Commerce Manager rồi thử lại, hoặc liên kết thủ công.",
+      "noRecipients": "Hãy chọn ít nhất một liên hệ, nhóm hoặc dán một số.",
+      "tooManyRecipients": "Tối đa 500 người nhận mỗi lần gửi. Hãy chia thành các lô nhỏ hơn.",
+      "noProducts": "Hãy chọn ít nhất một sản phẩm trước.",
+      "noSender": "Chưa kết nối thiết bị nào. Hãy ghép nối một thiết bị trong Kênh trước.",
+      "sendFailed": "Không thể gửi tin nhắn: {detail}",
+      "collectionProducts": "Không có sản phẩm nào được chọn thuộc không gian làm việc này.",
+      "providerFailed": "WhatsApp hoặc Meta không thể hoàn tất yêu cầu: {detail}",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại sau giây lát."
+    },
+    "paywall": {
+      "kicker": "Tính năng cao cấp",
+      "title": "Gian hàng WhatsApp không có trong gói của bạn",
+      "message": "Hãy chọn gói có tính năng này. Nâng cấp và mở khóa tính năng ngay lập tức.",
+      "back": "Quay lại",
+      "compare": "So sánh tất cả gói"
+    },
+    "status": {
+      "unsynced": "chưa đồng bộ",
+      "pending": "đang chờ",
+      "synced": "đã đồng bộ",
+      "failed": "thất bại"
+    },
+    "pager": {
+      "showing": "Hiển thị {from} đến {to} trong tổng số {total} kết quả",
+      "label": "Trang",
+      "prev": "Trang trước",
+      "next": "Trang sau",
+      "goTo": "Đến trang {page}"
+    },
+    "shell": {
+      "back": "Quay lại tích hợp",
+      "breadcrumb": "Tích hợp / Danh mục WhatsApp",
+      "titleLead": "Đẩy sản phẩm vào",
+      "titleAccent": "Cuộc trò chuyện WhatsApp",
+      "connected": "{provider} · đã kết nối",
+      "notConnected": "Chưa kết nối",
+      "tabs": "Các phần của danh mục",
+      "tab": {
+        "setup": "Thiết lập",
+        "send": "Gửi",
+        "collections": "Bộ sưu tập",
+        "activity": "Hoạt động"
+      }
+    },
+    "connect": {
+      "provider": "Nhà cung cấp",
+      "providers": {
+        "meta_cloud": "Meta Cloud API (trực tiếp)",
+        "dialog_360": "360dialog (BSP)"
+      },
+      "catalogId": "ID danh mục",
+      "catalogName": "Tên danh mục",
+      "label": "(nhãn)",
+      "catalogNamePlaceholder": "vd: Danh mục chính",
+      "wabaId": "ID WABA",
+      "phoneNumberId": "ID số điện thoại",
+      "accessToken": "Token truy cập / khóa API",
+      "accessTokenHint": "Được lưu mã hóa. Được xác minh với Meta khi lưu.",
+      "accessTokenPlaceholder": "EAAxx... hoặc D360-API-KEY...",
+      "showToken": "Hiện token",
+      "hideToken": "Ẩn token",
+      "submit": "Kết nối và xác minh",
+      "connected": "Đã kết nối danh mục.",
+      "problem": {
+        "required": "Trường này là bắt buộc.",
+        "tooShort": "Token truy cập phải có ít nhất 20 ký tự.",
+        "tooLong": "Giá trị này quá dài."
+      }
+    },
+    "setup": {
+      "loading": "Đang tải danh mục",
+      "loadError": "Không thể tải danh mục",
+      "cancel": "Hủy",
+      "manage": "Quản lý →",
+      "view": "Xem →",
+      "advanced": {
+        "kicker": "Tùy chọn · nâng cao",
+        "titleManual": "Hoặc liên kết danh mục thủ công",
+        "titleAlso": "Liên kết thêm Danh mục Meta Commerce",
+        "intro": "Mở khóa nút danh mục chính thức trên hồ sơ WhatsApp Business của bạn, giỏ hàng và webhook \"đã đặt hàng\". Chỉ cần nếu bạn dùng WABA đã xác minh. API không chính thức vẫn hoạt động tốt mà không cần nó."
+      },
+      "noSender": {
+        "title": "Hãy kết nối thiết bị trước",
+        "message": "Gửi danh mục cần ít nhất một thiết bị WhatsApp trên tài khoản này: hoặc ghép nối QR API không chính thức (miễn phí) hoặc một số WABA đã được Meta xác minh. Chỉ mất 30 giây.",
+        "connect": "Kết nối thiết bị"
+      },
+      "ready": {
+        "kicker": "✓ Sẵn sàng gửi",
+        "officialTitle": "Chế độ danh mục WhatsApp chính thức",
+        "unofficialTitle": "Chế độ băng chuyền API không chính thức",
+        "officialBody": "Bạn có {count, plural, other {# số}} đã kết nối. Việc gửi danh mục được thực hiện qua số {engine} đã kết nối của bạn. Với tin nhắn sản phẩm tương tác, hãy liên kết Danh mục Meta Commerce bên dưới.",
+        "unofficialBody": "Bạn có {count, plural, other {# thiết bị}} đã kết nối. Việc gửi danh mục hiện hoạt động qua băng chuyền WhatsApp gốc thông qua API không chính thức, không cần thiết lập Meta và không phải chờ duyệt.",
+        "head": "Hãy vào <b>tab Gửi</b> để đẩy sản phẩm tới số của bất kỳ khách hàng nào.",
+        "openSend": "Mở tab Gửi"
+      },
+      "senders": {
+        "title": "Thiết bị đã kết nối",
+        "noNumber": "Không có số",
+        "connected": "đã kết nối"
+      },
+      "tiles": {
+        "products": "Sản phẩm",
+        "shops": "Cửa hàng",
+        "recentSends": "Lần gửi gần đây",
+        "total": "Tổng",
+        "synced": "Đã đồng bộ",
+        "pending": "Đang chờ",
+        "failed": "Thất bại"
+      },
+      "autodetect": {
+        "title": "Liên kết Danh mục Meta Commerce của bạn",
+        "intro": "Số WhatsApp của bạn đã được kết nối nên chúng tôi có thể lấy danh mục trực tiếp từ Meta, không cần dán ID danh mục, ID WABA hay token truy cập. Mở khóa nút danh mục chính thức, giỏ hàng và webhook \"đã đặt hàng\".",
+        "button": "Lấy từ tài khoản WhatsApp của tôi",
+        "linked": "Đã liên kết danh mục từ tài khoản WhatsApp của bạn."
+      },
+      "header": {
+        "connected": "Đã kết nối · {provider}",
+        "defaultName": "Danh mục Meta Commerce",
+        "sendProducts": "Gửi sản phẩm →",
+        "disconnect": "Ngắt kết nối"
+      },
+      "disconnectTitle": "Ngắt kết nối danh mục?",
+      "disconnectConfirm": "Sản phẩm vẫn ở trên Meta; chúng tôi chỉ ngừng đồng bộ.",
+      "disconnected": "Đã ngắt kết nối danh mục.",
+      "table": {
+        "title": "Sản phẩm",
+        "hint": "Cập nhật gần đây nhất · nhấp <b>Làm mới trạng thái</b> để hỏi Meta.",
+        "manage": "Quản lý sản phẩm →",
+        "product": "Sản phẩm",
+        "sku": "SKU",
+        "price": "Giá",
+        "availability": "Tình trạng còn hàng",
+        "metaStatus": "Trạng thái Meta",
+        "actions": "Thao tác",
+        "empty": "Chưa có sản phẩm nào.",
+        "addOne": "Thêm sản phẩm →",
+        "sync": {
+          "idle": "Đồng bộ",
+          "busy": "…",
+          "queued": "Đã xếp hàng ✓",
+          "skipped": "Chưa xếp hàng",
+          "failed": "Thất bại"
+        }
+      }
+    },
+    "sync": {
+      "title": "Đồng bộ sản phẩm lên Meta",
+      "intro": "Đẩy tối đa 1000 sản phẩm mỗi yêu cầu, lặp đến khi xong. {count} đang chờ.",
+      "syncButton": "Đồng bộ lên Meta",
+      "syncing": "Đang đồng bộ…",
+      "pollButton": "Làm mới trạng thái",
+      "polling": "Đang hỏi…",
+      "importButton": "Nhập từ Meta",
+      "importing": "Đang nhập…",
+      "importHint": "Kéo các sản phẩm được tạo trực tiếp trong Meta Commerce Manager vào danh mục.",
+      "progress": "Tiến trình đồng bộ",
+      "starting": "Đang bắt đầu…",
+      "pushed": "Đã đẩy {pushed} · đang chờ {pending} · đã đồng bộ {synced} · thất bại {failed}",
+      "stalled": "Không thể đẩy thêm gì trong lần chạy này. Hãy kiểm tra các sản phẩm được đánh dấu thất bại.",
+      "done": "xong · {count} đã xếp hàng",
+      "polled": "Đã hỏi · đồng bộ+{synced} · thất bại+{failed}",
+      "importStarting": "Nhập từ Meta · đang bắt đầu…",
+      "imported": "Đã nhập {imported} · đã cập nhật {updated} · đã bỏ qua {skipped} trong tổng số {total}"
+    },
+    "commerce": {
+      "title": "Cài đặt thương mại",
+      "visible": "Hiện danh mục trong hồ sơ doanh nghiệp",
+      "visibleHint": "Thêm nút \"Danh mục\" vào hồ sơ WhatsApp Business của bạn.",
+      "cart": "Bật giỏ hàng",
+      "cartHint": "Người mua có thể thêm nhiều sản phẩm trước khi gửi đơn hàng.",
+      "save": "Lưu",
+      "saved": "Đã cập nhật cài đặt thương mại."
+    },
+    "automation": {
+      "title": "Tự động hóa",
+      "ack": "Tự động trả lời khi khách hàng gửi giỏ hàng",
+      "ackHint": "Người mua nhận ngay tin nhắn xác nhận đã nhận đơn (sản phẩm + tổng tiền) thay vì im lặng, cách số 1 để tăng chuyển đổi danh mục.",
+      "payUrl": "Liên kết thanh toán gốc (tùy chọn)",
+      "payUrlHint": "Chúng tôi sẽ nối thêm ID đơn hàng; để trống để chỉ xác nhận đã nhận.",
+      "concierge": "Trợ lý danh mục: tự động trả lời câu hỏi về sản phẩm",
+      "conciergeHint": "Khi khách hàng gõ ví dụ \"giày đỏ dưới 2000\", tự động trả lời bằng Tin nhắn nhiều sản phẩm phù hợp. Mặc định tắt.",
+      "header": "Tiêu đề trả lời",
+      "headerPlaceholder": "Đây là những gì tôi tìm thấy",
+      "max": "Số sản phẩm tối đa",
+      "replyOnEmpty": "Trả lời kể cả khi không có gì khớp",
+      "replyOnEmptyHint": "Nếu không, trợ lý sẽ im lặng khi không có kết quả khớp (khuyến nghị).",
+      "emptyText": "Trả lời khi không khớp",
+      "emptyTextPlaceholder": "Xin lỗi, tôi không tìm thấy kết quả phù hợp. Hãy thử từ khóa hoặc ngân sách khác.",
+      "save": "Lưu tự động hóa",
+      "saved": "Đã lưu cài đặt tự động hóa.",
+      "problem": {
+        "badUrl": "Nhập liên kết đầy đủ bắt đầu bằng https://",
+        "tooLong": "Văn bản này quá dài.",
+        "range": "Nhập một số nguyên từ 1 đến 30."
+      }
+    },
+    "health": {
+      "title": "Tình trạng danh mục",
+      "needAttention": "{count, plural, other {# sản phẩm cần được xử lý trước khi có thể bán.}}",
+      "allGood": "Mọi sản phẩm đều sẵn sàng cho danh mục. Tuyệt vời.",
+      "noImage": "không có ảnh",
+      "noPrice": "không có giá",
+      "syncError": "lỗi đồng bộ",
+      "showFix": "Hiện sản phẩm cần sửa",
+      "fix": "Sửa →"
+    },
+    "send": {
+      "loading": "Đang tải biểu mẫu gửi",
+      "loadError": "Không thể tải biểu mẫu gửi",
+      "maxProducts": "Tối đa {max} sản phẩm mỗi băng chuyền.",
+      "noSender": {
+        "title": "Hãy kết nối thiết bị trước",
+        "message": "Bạn cần một thiết bị WhatsApp đã kết nối để gửi tin nhắn danh mục.",
+        "connect": "Kết nối thiết bị"
+      },
+      "feedback": {
+        "failed": "Chưa có gì được gửi.",
+        "sent": "{count, plural, other {Đã gửi tới # người nhận}}",
+        "someFailed": "{count} thất bại"
+      },
+      "recipients": {
+        "title": "Người nhận",
+        "count": "{count, plural, other {# người nhận}}",
+        "source": "Nguồn người nhận",
+        "modes": {
+          "groups": {
+            "title": "Nhóm liên hệ",
+            "hint": "Dùng các phân khúc đã lưu."
+          },
+          "contacts": {
+            "title": "Liên hệ riêng lẻ",
+            "hint": "Chọn từng người cụ thể."
+          },
+          "manual": {
+            "title": "Số nhập tay",
+            "hint": "Dán, mỗi số một dòng."
+          }
+        },
+        "noGroups": "Chưa có nhóm liên hệ nào. Hãy tạo một nhóm từ trang <link>Liên hệ</link> trước.",
+        "groupContacts": "{count, plural, other {# liên hệ}}",
+        "noContacts": "Chưa có liên hệ nào. Hãy thêm chúng ở trang <link>Liên hệ</link>.",
+        "searchContacts": "Tìm liên hệ…",
+        "noMatch": "Không có liên hệ nào khớp.",
+        "paste": "Dán số điện thoại",
+        "pastePlaceholder": "Mỗi dòng một số, kèm mã quốc gia",
+        "pasteHint": "Mỗi số một dòng, hoặc cách nhau bằng dấu phẩy hay chấm phẩy. Bắt buộc có mã quốc gia (có hoặc không có +).",
+        "overCap": "Tối đa {max} người nhận mỗi lần gửi. Hãy chia thành các lô nhỏ hơn."
+      },
+      "format": {
+        "title": "Định dạng và người gửi",
+        "spm": {
+          "title": "Một sản phẩm",
+          "hint": "Một thẻ sản phẩm"
+        },
+        "mpm": {
+          "title": "Danh sách sản phẩm (băng chuyền)",
+          "hint": "Tối đa 30 sản phẩm"
+        },
+        "link": {
+          "title": "Liên kết danh mục",
+          "hint": "Văn bản thuần · dùng được mọi lúc"
+        },
+        "sendFrom": "Gửi từ",
+        "fromShop": "Từ cửa hàng",
+        "brandingContext": "(ngữ cảnh thương hiệu)",
+        "shopFallback": "Cửa hàng {slug}"
+      },
+      "products": {
+        "title": "Sản phẩm",
+        "selected": "(đã chọn {count})",
+        "selectedOf": "(đã chọn {count} / {max})",
+        "search": "Tìm sản phẩm…",
+        "showingFrom": "Đang hiển thị sản phẩm từ <b>{shop}</b>. Hãy đổi bộ chọn <b>Từ cửa hàng</b> ở trên để xem danh mục của cửa hàng khác.",
+        "loading": "Đang tải sản phẩm…",
+        "loadError": "Không thể tải sản phẩm",
+        "other": "Khác",
+        "noMatch": "Không có sản phẩm nào khớp với tìm kiếm của bạn.",
+        "emptyShop": "Không có sản phẩm đang hoạt động nào trong cửa hàng này.",
+        "empty": "Chưa có sản phẩm đang hoạt động nào.",
+        "addOne": "Thêm sản phẩm →"
+      },
+      "message": {
+        "title": "Tin nhắn và gửi",
+        "text": "Nội dung tin nhắn",
+        "optional": "(tùy chọn)",
+        "placeholder": "vd: Đây là một số sản phẩm bạn có thể thích, nhấn vào bất kỳ sản phẩm nào để tìm hiểu thêm.",
+        "header": "Tiêu đề",
+        "headerPlaceholder": "vd: Xem thử những sản phẩm này",
+        "footer": "Chân trang",
+        "footerPlaceholder": "vd: Trả lời STOP để hủy nhận tin",
+        "counter": "{used} / {max}",
+        "viewRecent": "Xem các lần gửi gần đây →",
+        "sendProduct": "Gửi sản phẩm →",
+        "sendCarousel": "Gửi băng chuyền →",
+        "sendLink": "Gửi liên kết danh mục →",
+        "sending": "Đang gửi…",
+        "noPermission": "Bạn có thể xem biểu mẫu này nhưng không thể gửi tin nhắn danh mục."
+      },
+      "rail": {
+        "label": "Tóm tắt gửi",
+        "summary": "Tóm tắt",
+        "recipients": "Người nhận",
+        "products": "Sản phẩm",
+        "format": "Định dạng",
+        "formats": {
+          "spm": "Một sản phẩm",
+          "mpm": "Danh sách nhiều sản phẩm",
+          "link": "Liên kết danh mục"
+        },
+        "catalog": "Danh mục",
+        "metaCommerce": "Meta Commerce",
+        "productCount": "{count, plural, other {# sản phẩm}}",
+        "unofficial": "API không chính thức (băng chuyền)",
+        "linkMeta": "Liên kết Meta →",
+        "recent": "Lần gửi gần đây",
+        "windowTitle": "Khung 24 giờ",
+        "windowBody": "Chế độ SPM và danh sách yêu cầu người mua đã nhắn tin cho bạn trong 24 giờ qua. Chế độ <b>Liên kết danh mục</b> dùng được mọi lúc."
+      }
+    },
+    "collections": {
+      "loading": "Đang tải bộ sưu tập",
+      "loadError": "Không thể tải bộ sưu tập",
+      "title": "Bộ sưu tập",
+      "intro": "Lưu một nhóm sản phẩm một lần, rồi gửi dưới dạng Tin nhắn nhiều sản phẩm chỉ với một cú nhấp, không cần chọn lại mỗi lần.",
+      "new": "Bộ sưu tập mới",
+      "create": "Tạo bộ sưu tập",
+      "created": "Đã tạo bộ sưu tập.",
+      "updated": "Đã cập nhật bộ sưu tập.",
+      "deleted": "Đã xóa bộ sưu tập.",
+      "empty": "Chưa có bộ sưu tập nào. Hãy tạo bộ sưu tập đầu tiên ở trên.",
+      "productCount": "{count, plural, =0 {không có sản phẩm} other {# sản phẩm}}",
+      "edit": "Sửa",
+      "delete": "Xóa",
+      "cancel": "Hủy",
+      "saveChanges": "Lưu thay đổi",
+      "deleteTitle": "Xóa bộ sưu tập này?",
+      "deleteBody": "\"{name}\" sẽ bị xóa. Sản phẩm không bị ảnh hưởng.",
+      "send": {
+        "button": "Gửi",
+        "noLive": "Bộ sưu tập này không có sản phẩm đang hoạt động để gửi.",
+        "needNumber": "Hãy nhập số người nhận trước.",
+        "sending": "Đang gửi…",
+        "sent": "{count, plural, other {Đã gửi tới # người nhận}}",
+        "someFailed": "{count} thất bại",
+        "failed": "Chưa có gì được gửi.",
+        "number": "Số người nhận",
+        "numberPlaceholder": "Số kèm mã quốc gia",
+        "header": "Tiêu đề (tùy chọn)",
+        "headerPlaceholder": "Xem thử những sản phẩm này",
+        "from": "Gửi từ",
+        "auto": "Tự động (đang hoạt động)",
+        "go": "Gửi dưới dạng MPM"
+      },
+      "picker": {
+        "filter": "Lọc sản phẩm…",
+        "empty": "Chưa có sản phẩm đang hoạt động nào.",
+        "addOne": "Thêm sản phẩm →",
+        "noMatch": "Không có sản phẩm nào khớp.",
+        "max": "Một bộ sưu tập chứa tối đa {max} sản phẩm."
+      },
+      "form": {
+        "name": "Tên",
+        "namePlaceholder": "vd: Khuyến mãi mùa hè",
+        "description": "Mô tả (tùy chọn)",
+        "products": "Sản phẩm",
+        "upTo": "tối đa {max}",
+        "reload": "Tải lại",
+        "problem": {
+          "nameRequired": "Hãy nhập tên.",
+          "nameTooLong": "Tên quá dài.",
+          "descriptionTooLong": "Mô tả quá dài.",
+          "noProducts": "Hãy chọn ít nhất một sản phẩm."
+        }
+      }
+    },
+    "activity": {
+      "loading": "Đang tải hoạt động",
+      "loadError": "Không thể tải hoạt động",
+      "title": "Hoạt động gửi danh mục",
+      "subtitle": "Mọi tin nhắn danh mục mà không gian làm việc của bạn đã gửi (SPM · MPM · liên kết).",
+      "sendAnother": "Gửi thêm →",
+      "emptyTitle": "Chưa có lần gửi nào",
+      "emptyBody": "Hãy gửi danh mục đầu tiên từ <link>tab Gửi</link>.",
+      "failed": "Thất bại",
+      "col": {
+        "when": "Khi nào",
+        "to": "Tới",
+        "mode": "Chế độ",
+        "body": "Nội dung"
+      }
+    },
+    "products": {
+      "kicker": "Cửa hàng / Sản phẩm",
+      "title": "Danh mục",
+      "add": "Thêm sản phẩm",
+      "search": "Tìm theo tên hoặc SKU...",
+      "loading": "Đang tải sản phẩm",
+      "loadError": "Không thể tải sản phẩm",
+      "col": {
+        "image": "Hình ảnh",
+        "name": "Tên",
+        "sku": "SKU",
+        "price": "Giá",
+        "stock": "Tồn kho",
+        "actions": "Thao tác"
+      },
+      "noMatchTitle": "Không có sản phẩm nào khớp",
+      "noMatchBody": "Không có gì khớp \"{q}\" theo tên hoặc SKU.",
+      "clearSearch": "Xóa tìm kiếm",
+      "emptyTitle": "Chưa có sản phẩm nào",
+      "emptyBody": "Nhấp \"Thêm sản phẩm\" để tạo sản phẩm đầu tiên.",
+      "inStock": "Còn hàng",
+      "out": "Hết",
+      "share": "Chia sẻ",
+      "edit": "Sửa",
+      "delete": "Xóa",
+      "cancel": "Hủy",
+      "deleted": "Đã gỡ sản phẩm.",
+      "deleteTitle": "Xóa sản phẩm này?",
+      "deleteBody": "\"{name}\" sẽ bị xóa. Sản phẩm vẫn ở trên Meta cho đến khi bạn gỡ nó ở đó."
+    },
+    "share": {
+      "eyebrow": "Chia sẻ sản phẩm",
+      "product": "Sản phẩm",
+      "close": "Đóng",
+      "loading": "Đang tải liên kết",
+      "storefrontLink": "Liên kết cửa hàng",
+      "noStorefront": "(hãy thiết lập slug cửa hàng trước)",
+      "waLink": "Liên kết sâu WhatsApp",
+      "noPhone": "(hãy kết nối số điện thoại trước)",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép!",
+      "sendToCustomer": "Gửi cho khách hàng",
+      "phonePlaceholder": "Số WhatsApp, vd: +1 555…",
+      "send": "Gửi",
+      "sending": "Đang gửi…",
+      "sent": "Đã gửi.",
+      "invalidPhone": "Nhập số WhatsApp hợp lệ kèm mã quốc gia."
+    },
+    "form": {
+      "breadcrumb": "Đường dẫn điều hướng",
+      "products": "Sản phẩm",
+      "crumbNew": "Mới",
+      "crumbEdit": "Sửa",
+      "addTitle": "Thêm sản phẩm",
+      "editFallback": "Sửa sản phẩm",
+      "loading": "Đang tải sản phẩm",
+      "loadError": "Không thể tải sản phẩm",
+      "noPermissionTitle": "Bạn không thể thực hiện việc này",
+      "noPermission": "Vai trò của bạn không cho phép tạo hoặc sửa sản phẩm.",
+      "reload": "Tải lại",
+      "fixFields": "Một số trường không hợp lệ. Hãy kiểm tra các trường được đánh dấu.",
+      "basics": "Thông tin cơ bản",
+      "name": "Tên",
+      "namePlaceholder": "vd: Áo thun cotton mùa xuân",
+      "sku": "SKU",
+      "optional": "(tùy chọn)",
+      "shortDescription": "Mô tả ngắn",
+      "shortDescriptionPlaceholder": "Hiển thị trong thẻ danh mục và liên kết chia sẻ WhatsApp.",
+      "fullDescription": "Mô tả đầy đủ",
+      "fullDescriptionNote": "(nội dung trang sản phẩm)",
+      "fullDescriptionPlaceholder": "Kích cỡ, chất liệu, hướng dẫn bảo quản: bất cứ điều gì giúp người mua quyết định. Cho phép HTML.",
+      "media": "Phương tiện",
+      "primaryImage": "Ảnh chính · dán URL",
+      "imageUrl": "URL ảnh",
+      "imageUrlHint": "Dán bất kỳ URL ảnh trực tiếp nào.",
+      "photoTipsTitle": "Mẹo chụp ảnh sản phẩm đẹp",
+      "photoTips": "Dùng ảnh vuông (1:1) cỡ 1024×1024 px trở lên. Nền trơn chuyển đổi tốt hơn nền rối mắt.",
+      "gallery": "Thư viện ảnh",
+      "galleryHint": "Thêm nhiều ảnh hơn vào trang chi tiết sản phẩm. Người mua sẽ thấy chúng dưới dạng ảnh thu nhỏ.",
+      "addGalleryUrl": "Thêm URL ảnh",
+      "galleryRow": "URL ảnh thư viện {n}",
+      "removeGallery": "Gỡ ảnh thư viện {n}",
+      "galleryEmpty": "Chưa có ảnh thư viện nào. Nhấp \"Thêm URL ảnh\" ở trên để thêm.",
+      "pricing": "Giá",
+      "price": "Giá",
+      "comparePrice": "Giá so sánh",
+      "was": "(giá cũ)",
+      "comparePriceHint": "Giá gốc · hiển thị dưới dạng gạch ngang.",
+      "currency": "Tiền tệ",
+      "profit": "Chỉ báo lợi nhuận",
+      "profitHint": "Tự động · giá so với giá so sánh.",
+      "profitOff": "Giảm {percent}%",
+      "profitLower": "Giá so sánh < giá",
+      "profitSame": "0% · bằng nhau",
+      "inventory": "Tồn kho và vận chuyển",
+      "stockQty": "Số lượng tồn",
+      "stockPlaceholder": "Để trống = không giới hạn",
+      "weight": "Cân nặng",
+      "weightHint": "Dùng để tính phí vận chuyển.",
+      "weightPlaceholder": "vd: 250",
+      "available": "Có thể bán",
+      "availableHint": "Bỏ chọn để đánh dấu hết hàng nhưng vẫn hiển thị sản phẩm.",
+      "sortOrder": "Thứ tự sắp xếp",
+      "sortOrderHint": "Số nhỏ hơn hiển thị trước.",
+      "visibility": "Hiển thị",
+      "status": {
+        "active": "Hoạt động: hiển thị trên cửa hàng",
+        "draft": "Nháp: ẩn, có thể sửa",
+        "archived": "Lưu trữ: ẩn, giữ trong hồ sơ"
+      },
+      "organization": "Tổ chức",
+      "category": "Danh mục",
+      "categoryPlaceholder": "vd: Quần áo, Đồ ăn vặt",
+      "tags": "Thẻ",
+      "tagsNote": "(phân tách bằng dấu phẩy)",
+      "tagsPlaceholder": "cotton, mùa hè, bán chạy",
+      "preview": "Xem trước cửa hàng",
+      "noImage": "Chưa có ảnh",
+      "productName": "Tên sản phẩm",
+      "cancel": "Hủy",
+      "saveChanges": "Lưu thay đổi",
+      "createProduct": "Tạo sản phẩm",
+      "created": "Đã tạo sản phẩm.",
+      "updated": "Đã cập nhật sản phẩm.",
+      "problem": {
+        "required": "Trường này là bắt buộc.",
+        "tooLong": "Văn bản này quá dài.",
+        "notNumber": "Nhập một số, như 499 hoặc 499.50.",
+        "tooBig": "Số tiền quá lớn.",
+        "notWhole": "Nhập một số nguyên.",
+        "badUrl": "Nhập liên kết đầy đủ bắt đầu bằng https://",
+        "outOfRange": "Số này nằm ngoài phạm vi.",
+        "tooMany": "Quá nhiều ảnh."
+      }
+    },
+    "reviews": {
+      "rating": "{rating, plural, other {# sao trên 5}}",
+      "kicker": "Cửa hàng / Đánh giá",
+      "title": "Đánh giá sản phẩm",
+      "subtitle": "Duyệt đánh giá của khách hàng để hiển thị trên trang sản phẩm của cửa hàng.",
+      "tabs": "Trạng thái đánh giá",
+      "tab": {
+        "pending": "Đang chờ",
+        "approved": "Đã duyệt",
+        "rejected": "Đã từ chối"
+      },
+      "loading": "Đang tải đánh giá",
+      "loadError": "Không thể tải đánh giá",
+      "empty": {
+        "pending": "Không có đánh giá nào đang chờ.",
+        "approved": "Không có đánh giá nào đã duyệt.",
+        "rejected": "Không có đánh giá nào bị từ chối."
+      },
+      "anonymous": "Ẩn danh",
+      "on": "về",
+      "unknownProduct": "một sản phẩm đã bị xóa",
+      "approve": "Duyệt",
+      "reject": "Từ chối",
+      "delete": "Xóa",
+      "cancel": "Hủy",
+      "approved": "Đã duyệt đánh giá.",
+      "rejected": "Đã từ chối đánh giá.",
+      "deleted": "Đã xóa đánh giá.",
+      "deleteTitle": "Xóa đánh giá này?",
+      "deleteBody": "Đánh giá sẽ bị xóa vĩnh viễn."
+    },
+    "senderPicker": {
+      "none": "Chưa có người gửi nào được kết nối.",
+      "connectOne": "Kết nối ngay →",
+      "select": "— Chọn người gửi —",
+      "connectNew": "Kết nối thiết bị mới",
+      "engine": {
+        "waba": "Meta",
+        "twilio": "Twilio",
+        "baileys": "API không chính thức"
+      }
+    },
+    "admin": {
+      "nav": "Danh mục",
+      "pageTitle": "Cài đặt danh mục",
+      "loading": "Đang tải cài đặt danh mục",
+      "retry": "Thử lại",
+      "eyebrow": "Quản trị · Cài đặt dự án",
+      "titleLead": "WhatsApp",
+      "titleAccent": "Danh mục",
+      "intro": "Các thiết lập cấp nền tảng cho tính năng Danh mục WABA. Mỗi người bán tự kết nối danh mục Tài khoản Meta Commerce của mình từ trang <link>/catalog</link> phía không gian làm việc. Màn hình này đặt các giá trị mặc định mà mọi không gian làm việc kế thừa.",
+      "allSettings": "Tất cả cài đặt",
+      "openCatalog": "Mở danh mục người dùng",
+      "reset": "Đặt lại bản nháp",
+      "save": "Lưu thay đổi",
+      "saved": "Đã lưu cài đặt danh mục.",
+      "superOnly": "Chỉ quản trị viên cấp cao mới có thể thay đổi các cài đặt này. Bạn có thể xem các giá trị đã lưu.",
+      "fix": "Vui lòng sửa các trường được đánh dấu:",
+      "problems": {
+        "graphVersion": "Dùng phiên bản Graph API như v23.0.",
+        "currency": "Dùng mã tiền tệ gồm 3 chữ cái."
+      },
+      "errors": {
+        "conflict": "Người khác đã lưu các cài đặt này trước. Các giá trị mới nhất đang hiển thị; hãy thực hiện lại thay đổi của bạn.",
+        "forbidden": "Bạn không có quyền thay đổi các cài đặt này.",
+        "validation": "Một số trường không hợp lệ. Hãy kiểm tra các trường được đánh dấu và thử lại.",
+        "network": "Không thể kết nối đến máy chủ. Hãy kiểm tra kết nối và thử lại.",
+        "unexpected": "Đã xảy ra lỗi. Vui lòng thử lại sau giây lát."
+      },
+      "usage": {
+        "connected": "Không gian làm việc đã kết nối",
+        "connectedHint": "đã lưu Catalog ID của Meta",
+        "products": "Sản phẩm đã đồng bộ",
+        "productsHint": "trên tất cả danh mục của các không gian làm việc",
+        "sends": "Tin nhắn danh mục đã gửi",
+        "sendsHint": "SPM + MPM + CTA danh mục"
+      },
+      "gate": {
+        "kicker": "Công tắc tính năng",
+        "title": "Khả dụng của danh mục",
+        "enabled": "Đã bật",
+        "body": "Khi bật, chủ không gian làm việc có thể kết nối danh mục Meta Commerce tại <link>/catalog</link> và gửi tin nhắn Sản phẩm đơn, Nhiều sản phẩm và CTA danh mục từ khung chat và trình tạo luồng. Tắt để ẩn mục menu trên mọi không gian làm việc (các kết nối hiện có vẫn giữ nguyên nhưng chuyển sang chỉ đọc).",
+        "commerce": "Cho phép thanh toán Commerce",
+        "commerceHint": "Cho phép người bán nhận thanh toán ngay trong WhatsApp qua Tài khoản Commerce đã kết nối. Yêu cầu Tài khoản Commerce được Meta phê duyệt và khu vực được hỗ trợ."
+      },
+      "api": {
+        "kicker": "Cloud API",
+        "title": "Phiên bản Graph API",
+        "intro": "Mọi thao tác danh mục (gửi, đồng bộ, đẩy) đều đi qua phiên bản Graph API này. Meta phát hành phiên bản mới khoảng 3 tháng một lần và hỗ trợ phiên bản trước đó khoảng 2 năm.",
+        "version": "Phiên bản Graph API",
+        "versionHint": "Định dạng: v'{'major'}'.'{'minor'}', ví dụ v23.0. Để trống để dùng giá trị mặc định.",
+        "currency": "Tiền tệ mặc định",
+        "currencyHint": "Mã ISO-4217 (3 chữ cái). Dùng làm mặc định cho danh mục mới; mỗi danh mục Meta Commerce vẫn bị khóa ở một loại tiền tệ."
+      },
+      "app": {
+        "kicker": "Tùy chọn · Ứng dụng Meta",
+        "title": "Ứng dụng Meta toàn nền tảng",
+        "intro": "Chỉ cần nếu bạn định cung cấp trải nghiệm OAuth \"Cài đặt với Meta\". Luồng mặc định để mỗi người bán tự dán token người dùng hệ thống trên trang danh mục, nên không cần thông tin xác thực ứng dụng.",
+        "id": "Meta App ID",
+        "idHint": "Từ developers.facebook.com → ứng dụng của bạn → Settings → Basic.",
+        "secret": "Meta App Secret",
+        "secretPlaceholder": "App secret",
+        "secretSaved": "•••••••••••• (đã lưu, để trống để giữ nguyên)",
+        "secretHint": "Được mã hóa khi lưu trữ. Dùng để xác minh chữ ký payload Webhook (X-Hub-Signature-256)."
+      },
+      "walk": {
+        "kicker": "Hướng dẫn cho người bán",
+        "title": "Cách một không gian làm việc kết nối danh mục",
+        "intro": "Hiển thị cho người bán trên trang danh mục. Được sao chép ở đây để bạn kiểm tra lại luồng.",
+        "waba": {
+          "title": "Có WABA đang hoạt động + Phone Number ID",
+          "body": "Người bán cần một Tài khoản WhatsApp Business đã xác minh trong Meta Business Suite với ít nhất một số điện thoại đã được duyệt. Nếu không có, không thể gửi tin nhắn danh mục."
+        },
+        "catalog": {
+          "title": "Tạo danh mục trong Meta Commerce Manager",
+          "body": "Tại business.facebook.com/commerce → Tạo danh mục → chọn thương mại điện tử. Thêm sản phẩm thủ công, qua CSV hoặc lấy từ Shopify/Woo. Danh mục phải ở chế độ Công khai và khóa ở một loại tiền tệ."
+        },
+        "link": {
+          "title": "Kết nối danh mục với WABA",
+          "body": "Trong Business Suite → WhatsApp Manager → tab Danh mục → \"Chọn danh mục\" → chọn danh mục đã tạo ở Bước 2. Việc này kích hoạt tin nhắn sản phẩm qua Cloud API."
+        },
+        "token": {
+          "title": "Tạo token System User",
+          "body": "Business Settings → System Users → Add → Admin. Tạo token với whatsapp_business_messaging, whatsapp_business_management, catalog_management, business_management. Chọn \"Never\" cho thời hạn để tránh phải xác thực lại hằng quý."
+        },
+        "paste": {
+          "title": "Dán thông tin xác thực vào trang danh mục",
+          "body": "WABA ID, Catalog ID, Phone Number ID và token System User được nhập trên trang danh mục phía không gian làm việc. Sau đó hệ thống chạy thử GET /{CATALOG_ID}?fields=name,product_count để xác minh token có catalog_management trên danh mục đó."
+        }
+      },
+      "side": {
+        "archKicker": "Kiến trúc",
+        "archTitle": "Theo từng người bán so với nền tảng",
+        "here": "Tại đây (quản trị, một lần)",
+        "hereBody": "Công tắc tính năng, phiên bản Graph API, tiền tệ mặc định, thông tin xác thực Meta App tùy chọn.",
+        "merchant": "Trên trang danh mục (theo từng người bán)",
+        "merchantBody": "WABA ID, Catalog ID, Phone Number ID, token System User. Meta yêu cầu danh mục thuộc sở hữu của Tài khoản Commerce của người bán, nên không có danh mục dùng chung.",
+        "payloadsKicker": "Payload Cloud API",
+        "payloadsTitle": "Ba loại tin nhắn chúng tôi gửi",
+        "payload": {
+          "spm": {
+            "title": "SPM · Sản phẩm đơn",
+            "code": "interactive.type = \"product\""
+          },
+          "mpm": {
+            "title": "MPM · Nhiều sản phẩm",
+            "code": "interactive.type = \"product_list\" · tối đa 10 mục, 30 sản phẩm"
+          },
+          "cta": {
+            "title": "CTA danh mục",
+            "code": "interactive.type = \"catalog_message\""
+          }
+        },
+        "docsKicker": "Tài liệu chính thức",
+        "docsTitle": "Tham khảo",
+        "docs": {
+          "sell": "Bán sản phẩm và dịch vụ →",
+          "messages": "Tham khảo tin nhắn Cloud API →",
+          "batch": "Catalog Batch API (đẩy sản phẩm) →",
+          "changelog": "Nhật ký thay đổi Graph API →",
+          "policies": "Chính sách Commerce →"
+        },
+        "constraintsTitle": "Ràng buộc",
+        "constraints": {
+          "public": "Danh mục phải ở chế độ Công khai",
+          "currency": "Một loại tiền tệ cho mỗi danh mục",
+          "images": "Ảnh ≥ 500×500 px (JPG / PNG)",
+          "goods": "Không bán rượu / nội dung người lớn / hàng hóa bị quản lý",
+          "verification": "Cần xác minh doanh nghiệp để chạy chính thức"
+        }
+      }
+    }
+  }
+}

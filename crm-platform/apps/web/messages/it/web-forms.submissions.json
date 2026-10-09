@@ -1,0 +1,170 @@
+{
+  "web-forms": {
+    "submissions": {
+      "title": "Invii",
+      "backToForm": "Torna a {name}",
+      "formFallback": "Modulo",
+      "count": "{count, plural, =0 {Nessun invio} one {1 invio} other {# invii}} caricati",
+      "moreAvailable": "Ce ne sono altri disponibili",
+      "tabsLabel": "Gruppi di invii",
+      "tabs": {
+        "all": "Tutti",
+        "needs_attention": "Richiede attenzione",
+        "spam": "Spam"
+      },
+      "filters": {
+        "search": "Cerca",
+        "searchPlaceholder": "Nome, email o telefono",
+        "status": "Stato",
+        "allStatuses": "Qualsiasi stato",
+        "from": "Da",
+        "to": "A",
+        "clear": "Cancella filtri"
+      },
+      "status": {
+        "received": "Ricevuto",
+        "created": "Contatto creato",
+        "updated": "Contatto aggiornato",
+        "needs_review": "Da verificare",
+        "awaiting_payment": "In attesa di pagamento",
+        "paid": "Pagato",
+        "failed": "Non riuscito",
+        "spam": "Spam"
+      },
+      "reason": {
+        "label": "Motivo",
+        "todo": "Cosa fare",
+        "no_contact_point": {
+          "what": "Il visitatore non ha fornito un’email o un telefono utilizzabili, quindi non è stato possibile creare alcun contatto.",
+          "todo": "Apri le risposte, aggiungi a mano il dato mancante al contatto oppure correggi la mappatura del modulo e riprova."
+        },
+        "invalid_phone": {
+          "what": "Il numero di telefono non è stato riconosciuto come valido.",
+          "todo": "Apri le risposte, controlla il numero e riprova quando il modulo lo accetta, oppure aggiungi il contatto a mano."
+        },
+        "plan_limit_reached": {
+          "what": "Il limite di contatti del tuo piano è stato raggiunto, quindi non è stato creato un nuovo contatto.",
+          "todo": "Libera dei contatti o passa a un piano superiore, poi riprova."
+        },
+        "submissions_cap": {
+          "what": "Il limite mensile di invii del tuo piano è stato raggiunto, quindi questo invio è stato salvato per la verifica.",
+          "todo": "Passa a un piano superiore o attendi il mese successivo, poi riprova."
+        },
+        "spam_score": {
+          "what": "L’invio aveva l’aspetto di spam ed è stato messo da parte.",
+          "todo": "Se si tratta di una persona reale, aprilo e aggiungila a mano come contatto."
+        },
+        "too_fast": {
+          "what": "È stato inviato più velocemente di quanto una persona possa compilare il modulo, quindi è stato messo da parte come spam.",
+          "todo": "Se si tratta di una persona reale, aprilo e aggiungila a mano come contatto."
+        },
+        "internal_error": {
+          "what": "Durante l’elaborazione si è verificato un errore da parte nostra. Le risposte sono conservate.",
+          "todo": "Riprova. Se fallisce di nuovo, contatta il supporto indicando l’ora dell’invio."
+        },
+        "unknown": {
+          "what": "Questo invio è stato messo da parte per un motivo che questa versione dell’app non riconosce.",
+          "todo": "Aprilo per vedere i dettagli, poi riprova o gestiscilo a mano."
+        }
+      },
+      "table": {
+        "received": "Ricevuto",
+        "visitor": "Visitatore",
+        "status": "Stato",
+        "contact": "Contatto",
+        "company": "Azienda",
+        "version": "Versione",
+        "open": "Apri invio di {who}"
+      },
+      "anonymous": "Nessun nome indicato",
+      "answersRemovedShort": "Risposte rimosse",
+      "versionShort": "v{n}",
+      "noLink": "Nessuno",
+      "unnamedContact": "Apri contatto",
+      "unnamedCompany": "Apri azienda",
+      "drawer": {
+        "title": "Invio di {who}",
+        "close": "Chiudi",
+        "loading": "Apertura dell’invio",
+        "errorTitle": "Impossibile aprire questo invio.",
+        "errorBody": "Controlla la connessione e riprova.",
+        "retryLoad": "Riprova",
+        "auditNote": "L’apertura delle risposte di un invio viene registrata nel registro di controllo.",
+        "answers": "Risposte",
+        "noAnswers": "Questo invio non contiene risposte.",
+        "emptyAnswer": "Nessuna risposta",
+        "yes": "Sì",
+        "no": "No",
+        "removedTitle": "Risposte rimosse",
+        "removedBody": "Le risposte sono state cancellate o eliminate definitivamente. Resta solo questo record e il contatto è stato conservato.",
+        "summary": "Riepilogo",
+        "receivedAt": "Ricevuto",
+        "formVersion": "Versione del modulo",
+        "spamScore": "Punteggio spam",
+        "error": "Errore",
+        "attribution": "Provenienza",
+        "noAttribution": "Nessun dettaglio sulla provenienza è stato registrato.",
+        "utm": "Tag campagna",
+        "referrer": "Referrer",
+        "pageUrl": "Pagina",
+        "userAgent": "Browser",
+        "consent": "Consenso",
+        "consentGiven": "Consenso dato",
+        "consentText": "Testo visualizzato dal visitatore",
+        "consentVersion": "Versione del testo",
+        "consentAt": "Dato il",
+        "noConsent": "Questo modulo non chiedeva il consenso.",
+        "links": "Record",
+        "actions": "Azioni"
+      },
+      "actions": {
+        "retry": "Riprova",
+        "retrying": "Nuovo tentativo in corso",
+        "delete": "Elimina risposte",
+        "deleting": "Eliminazione in corso",
+        "export": "Esporta CSV",
+        "exporting": "Esportazione in corso",
+        "exportHintAttention": "Scegli un singolo stato da esportare da questo gruppo, oppure usa Tutti.",
+        "exportHintSearch": "L’esportazione ignora il testo di ricerca.",
+        "notSpam": "Non è spam: elaboralo"
+      },
+      "confirmDelete": {
+        "title": "Eliminare queste risposte?",
+        "message": "Questo cancella in modo definitivo le risposte di questo invio. Una riga resta nell’elenco come registro che l’invio è avvenuto, e il contatto non viene mai eliminato.",
+        "confirm": "Elimina risposte",
+        "cancel": "Annulla"
+      },
+      "toast": {
+        "retried": "Riprovato. L’invio ora è: {status}.",
+        "notRetryable": "Possono essere riprovati solo gli invii da verificare o non riusciti.",
+        "purged": "Le risposte erano già state rimosse, quindi non c’è nulla da riprovare.",
+        "retryFailed": "Il nuovo tentativo non è andato a buon fine. Riprova.",
+        "deleted": "Le risposte sono state eliminate. Il contatto è stato conservato.",
+        "deleteFailed": "Impossibile eliminare le risposte. Riprova.",
+        "exported": "Il CSV è stato scaricato.",
+        "exportTruncated": "L’esportazione è stata troncata alle {max} righe più recenti. Restringi le date per ottenere il resto.",
+        "exportFailed": "Impossibile creare l’esportazione. Riprova."
+      },
+      "state": {
+        "loading": "Caricamento degli invii",
+        "errorTitle": "Impossibile caricare gli invii.",
+        "errorBody": "Controlla la connessione e riprova.",
+        "retry": "Riprova",
+        "lockedTitle": "I Moduli non sono compresi nel tuo piano",
+        "lockedBody": "Aggiungi l’app Moduli al tuo workspace per raccogliere e verificare gli invii.",
+        "upgrade": "Vedi i piani",
+        "emptyTitle": "Nessun invio ancora",
+        "emptyBody": "Condividi il link del modulo o incorporalo nel tuo sito. Ogni invio compare qui non appena qualcuno lo manda.",
+        "emptyShare": "Condividi questo modulo",
+        "emptyFilteredTitle": "Nessun invio corrisponde",
+        "emptyFilteredBody": "Nessun elemento corrisponde a questi filtri. Cancellali per vedere tutto.",
+        "loadMore": "Carica altri",
+        "loadingMore": "Caricamento di altri"
+      },
+      "cap": {
+        "notice": "Alcuni invii sono stati salvati per la verifica perché è stato raggiunto il limite mensile di invii del tuo piano.",
+        "upgrade": "Passa a un piano superiore"
+      }
+    }
+  }
+}

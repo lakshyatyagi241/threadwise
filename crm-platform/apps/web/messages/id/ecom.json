@@ -1,0 +1,574 @@
+{
+  "ecom": {
+    "nav": {
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce"
+    },
+    "common": {
+      "dismiss": "Tutup",
+      "integrations": "Integrasi",
+      "back": "Kembali",
+      "docs": "Lihat dokumentasi",
+      "loadError": "Halaman ini tidak dapat dimuat. Coba lagi.",
+      "support": "Hubungi dukungan",
+      "integration": "Integrasi",
+      "notConnected": "Belum terhubung",
+      "setupSteps": "Langkah penyiapan",
+      "needHelp": "Butuh bantuan?",
+      "none": "tidak ada",
+      "optional": "opsional",
+      "yes": "Ya"
+    },
+    "connect": {
+      "shopify": {
+        "title": "Hubungkan",
+        "accent": "Shopify",
+        "intro": "Hubungkan toko Shopify Anda agar peristiwa pesanan, pemenuhan, pengembalian dana, dan keranjang otomatis memicu pesan WhatsApp — dan dasbor menampilkan jumlah pesanan, produk, dan pelanggan Anda.",
+        "step1": "Admin mengaktifkan aplikasi Shopify",
+        "step2": "Masukkan domain toko Anda",
+        "step3": "Setujui cakupan di Shopify",
+        "step4": "Petakan peristiwa → template WhatsApp",
+        "help": "Webhook dipasang otomatis setelah terhubung — tanpa langkah manual. Terkendala kredensial?",
+        "disabledTitle": "Shopify belum diaktifkan",
+        "disabledBody": "Administrator perlu menambahkan kredensial aplikasi Shopify sebelum workspace mana pun dapat menghubungkan toko. Setelah itu, formulir di bawah akan aktif.",
+        "formStep": "Langkah 2",
+        "formTitle": "Domain toko",
+        "urlLabel": "URL toko Shopify",
+        "urlPlaceholder": "my-store",
+        "urlSuffix": ".myshopify.com",
+        "urlHint": "Cukup handle toko — atau tempel URL lengkap, kami akan menormalkannya.",
+        "webhookLabel": "URL webhook · dikonfigurasi otomatis setelah terhubung",
+        "cancel": "Batal",
+        "continue": "Lanjut ke Shopify",
+        "continuing": "Mengalihkan…",
+        "guideKicker": "Panduan pengaturan",
+        "guideTitle": "Yang terjadi selanjutnya",
+        "guide1": "Kami mengalihkan Anda ke Shopify untuk mengotorisasi cakupan izin yang diminta.",
+        "guide2": "Shopify mengirim kembali token akses permanen yang ditandatangani dengan HMAC.",
+        "guide3": "Webhook untuk {count} peristiwa akan didaftarkan otomatis di toko Anda.",
+        "guide4": "Anda akan kembali ke sini untuk memetakan setiap peristiwa ke templat WhatsApp.",
+        "scopes": "Cakupan izin yang diminta",
+        "failed": "Tidak dapat memulai koneksi ke Shopify.",
+        "connected": "Shopify berhasil terhubung.",
+        "returnedError": "Shopify gagal terhubung."
+      },
+      "woocommerce": {
+        "title": "Hubungkan",
+        "accent": "WooCommerce",
+        "intro": "Tarik pesanan, pengembalian dana, produk, dan peristiwa pelanggan WooCommerce ke dalam utas chat. Konfirmasi pesanan, kirim pembaruan pengiriman, dan pulihkan keranjang di WhatsApp tanpa meninggalkan CRM.",
+        "step1": "Admin mengaktifkan WooCommerce",
+        "step2": "Buat kunci API di admin WC",
+        "step3": "Tempel URL toko + kunci di bawah",
+        "step4": "Petakan peristiwa → templat WhatsApp",
+        "help": "Webhook terpasang otomatis setelah Anda terhubung — tanpa langkah manual di WC. Mengalami kendala dengan kunci?",
+        "disabledTitle": "WooCommerce belum diaktifkan",
+        "disabledBody": "Administrator harus mengaktifkan integrasi WooCommerce sebelum ruang kerja mana pun dapat menghubungkan toko.",
+        "formStep": "Langkah 2",
+        "formTitle": "Kredensial toko",
+        "urlLabel": "URL toko",
+        "urlHint": "HTTPS wajib untuk Basic Auth. Kami akan mendeteksi WP REST secara otomatis.",
+        "keyLabel": "Consumer Key",
+        "secretLabel": "Consumer Secret",
+        "secretHint": "Disimpan terenkripsi saat diam. Hanya digunakan untuk memanggil REST API toko Anda.",
+        "webhookLabel": "URL webhook · dikonfigurasi otomatis setelah terhubung",
+        "test": "Uji koneksi",
+        "testing": "Menguji…",
+        "connect": "Hubungkan toko",
+        "connecting": "Menghubungkan…",
+        "guideKicker": "Cara membuat kunci",
+        "guideTitle": "Di admin WooCommerce Anda",
+        "g1": "Buka WooCommerce → Pengaturan → Lanjutan → REST API.",
+        "g2": "Klik Tambah kunci. Beri deskripsi seperti \"CRM\".",
+        "g3": "Pilih pengguna (admin disarankan) lalu atur Izin = Read/Write.",
+        "g4": "Klik Buat API key. Salin kedua kunci — secret hanya ditampilkan sekali.",
+        "g5": "Tempel di formulir sebelah kiri lalu klik Uji koneksi.",
+        "httpsTitle": "Hanya HTTPS",
+        "httpsBody": "Basic Auth memerlukan HTTPS. Jika toko Anda hanya HTTP, pasang sertifikat SSL terlebih dahulu (Let's Encrypt gratis).",
+        "connected": "WooCommerce berhasil terhubung.",
+        "failed": "Koneksi gagal.",
+        "networkError": "Kesalahan jaringan."
+      }
+    },
+    "shell": {
+      "status": {
+        "active": "Aktif",
+        "error": "Galat",
+        "other": "{status}"
+      },
+      "plan": "Paket:",
+      "store": "Toko",
+      "related": "Terkait",
+      "allIntegrations": "Semua integrasi",
+      "disconnect": "Putuskan",
+      "disconnectTitle": "Putuskan {name}?",
+      "disconnectShopify": "Ini menghapus webhook yang terdaftar tetapi tetap menyimpan pengaturan Anda.",
+      "disconnectWoo": "Ini menghapus webhook yang terdaftar.",
+      "disconnectDone": "Toko berhasil diputuskan.",
+      "healthy": "Webhook sehat",
+      "noRecent": "Tidak ada peristiwa terbaru",
+      "lastEvent": "Peristiwa terakhir:",
+      "triggerShopify": "Jalankan aksi di Shopify dan hasilnya akan muncul di sini.",
+      "triggerWoo": "Buat pesanan di WooCommerce dan hasilnya akan muncul di sini.",
+      "sync": "Sinkronkan sekarang",
+      "syncing": "Menyinkronkan…",
+      "syncQueued": "Sinkronisasi dimulai. Data baru akan muncul sebentar lagi.",
+      "syncFailed": "Sinkronisasi gagal.",
+      "tabs": {
+        "overview": "Ikhtisar",
+        "orders": "Pesanan",
+        "products": "Produk",
+        "offers": "Kirim penawaran",
+        "customers": "Pelanggan",
+        "events": "Otomatisasi",
+        "analytics": "Analitik",
+        "invoices": "Faktur",
+        "logs": "Aktivitas",
+        "settings": "Pengaturan"
+      },
+      "offersWoo": "Penawaran",
+      "desc": {
+        "shopify": {
+          "overview": "Cuplikan langsung toko Anda, disinkronkan dari Shopify.",
+          "orders": "Pesanan disinkronkan dari Shopify.",
+          "products": "Telusuri katalog yang telah disinkronkan — kirim produk apa pun atau kirim penawaran lewat WhatsApp.",
+          "offers": "Pilih produk + kupon, pilih segmen pelanggan, lalu siarkan penawaran lewat WhatsApp.",
+          "customers": "Pelanggan disinkronkan dari Shopify ke kontak Anda.",
+          "events": "Otomatisasi pemasaran — aktifkan salah satu, pilih templat, dan otomatisasi akan berjalan saat peristiwa toko yang sesuai terjadi.",
+          "analytics": "Pendapatan, tren pesanan, dan kinerja pesan untuk toko ini.",
+          "logs": "Log pengiriman webhook untuk toko ini.",
+          "settings": "Kelola koneksi — sinkronkan ulang, lihat cakupan izin, atau putuskan.",
+          "invoices": "Faktur yang diterbitkan untuk pesanan Shopify Anda."
+        },
+        "woocommerce": {
+          "overview": "Cuplikan langsung yang diambil dari REST API WooCommerce Anda.",
+          "orders": "10 pesanan terakhir yang diambil dari toko.",
+          "products": "Produk terbaru di katalog.",
+          "offers": "Siarkan penawaran produk atau raih kembali pelanggan yang sudah tidak aktif.",
+          "customers": "Akun pelanggan diurutkan berdasarkan pesanan terbaru.",
+          "events": "Aktifkan atau nonaktifkan otomatisasi pesanan, COD, keranjang, dan stok.",
+          "analytics": "Pendapatan, volume pesan, dan dampak COD untuk toko ini.",
+          "logs": "Log pengiriman webhook untuk toko ini.",
+          "settings": "Detail koneksi — verifikasi ulang atau putuskan.",
+          "invoices": "Faktur yang diterbitkan untuk pesanan WooCommerce Anda."
+        }
+      },
+      "loading": "Memuat toko…",
+      "flash": {
+        "success": "Selesai.",
+        "error": "Terjadi kesalahan."
+      },
+      "cancel": "Batal"
+    },
+    "overview": {
+      "revenueRecent": "Pendapatan (terbaru)",
+      "revenueRecentHint": "dari pesanan terbaru yang disinkronkan",
+      "ordersTotal": "Total pesanan",
+      "ordersMirrorHint": "disinkronkan ke CRM",
+      "products": "Produk",
+      "productsHint": "jumlah katalog yang disinkronkan",
+      "customers": "Pelanggan",
+      "activeAutomations": "{count} otomatisasi aktif",
+      "revenue30": "Pendapatan · 30 hari",
+      "revenue30Hint": "dari laporan penjualan WC",
+      "orders30": "Pesanan · 30 hari",
+      "ordersAllTime": "{count} total sepanjang waktu",
+      "customersNew": "{count} baru dalam 30 hari",
+      "itemsSold": "Item terjual · 30 hari",
+      "recentOrders": "Pesanan terbaru",
+      "viewAll": "Lihat semua →",
+      "noOrders": "Belum ada pesanan. Klik Sinkronkan sekarang.",
+      "recentActivity": "Aktivitas webhook terbaru",
+      "noActivity": "Belum ada peristiwa webhook yang diterima."
+    },
+    "orders": {
+      "order": "Pesanan",
+      "customer": "Pelanggan",
+      "status": "Status",
+      "total": "Total",
+      "placed": "Dibuat",
+      "none": "Pesanan tidak ditemukan."
+    },
+    "products": {
+      "search": "Cari produk…",
+      "offers": "Penawaran khusus",
+      "catalog": "Kirim katalog →",
+      "newArrivals": "Produk baru",
+      "all": "Semua produk",
+      "none": "Belum ada produk. Hubungkan toko atau klik Sinkronkan sekarang.",
+      "noImage": "tanpa gambar",
+      "save": "HEMAT {pct}%",
+      "send": "Kirim",
+      "offer": "Penawaran",
+      "noMatch": "Tidak ada produk yang cocok.",
+      "wooNone": "Produk tidak ditemukan.",
+      "inStock": "Tersedia",
+      "outOfStock": "Stok habis"
+    },
+    "offers": {
+      "choose": "Pilih produk",
+      "selected": "{count} dipilih",
+      "noProducts": "Belum ada produk yang disinkronkan.",
+      "template": "Templat pesan",
+      "pickTemplate": "Pilih templat",
+      "tokens": "Token yang dapat digunakan:",
+      "segment": "Kirim ke segmen",
+      "pickGroup": "Pilih grup kontak",
+      "coupon": "Kupon (opsional)",
+      "noCoupon": "Tanpa kupon",
+      "couponPercent": "{amount}%",
+      "send": "Kirim penawaran",
+      "sending": "Mengirim…",
+      "pickTemplateFirst": "Pilih templat terlebih dahulu.",
+      "pickSegmentFirst": "Pilih segmen terlebih dahulu.",
+      "note": "Hanya kontak yang sudah opt-in di segmen yang akan menerima pesan. Pengiriman WABA memerlukan templat yang disetujui; API Tidak Resmi merender templat sebagai teks + tombol.",
+      "queued": "Diantrekan untuk {total} kontak. Jumlahnya muncul di tab Aktivitas saat selesai.",
+      "failed": "Pengiriman gagal.",
+      "wooTitle": "Siaran penawaran produk",
+      "wooIntro": "Kirim templat yang disetujui ke setiap kontak yang sudah opt-in di segmen. Sisipkan produk + kupon.",
+      "wooTemplate": "Templat",
+      "choose2": "pilih",
+      "wooSegment": "Segmen (grup kontak)",
+      "wooProduct": "Produk unggulan",
+      "wooCoupon": "Kode kupon",
+      "wooCouponPlaceholder": "SAVE10",
+      "winTitle": "Siaran segmen pintar",
+      "winIntro": "Targetkan pelanggan dari riwayat pesanan — kebaruan (raih kembali), jumlah pesanan, dan total belanja (VIP). Melewati kontak yang berhenti berlangganan.",
+      "winLast": "Pesanan terakhir",
+      "winAny": "Kapan saja",
+      "winDays": "> {days} hari lalu",
+      "winMonths": "> 6 bulan",
+      "winYear": "> 1 tahun",
+      "winMinOrders": "Minimal pesanan",
+      "winAnyOrders": "Semua",
+      "winMinSpend": "Minimal belanja ({currency})",
+      "winTemplate": "Templat",
+      "winPick": "Pilih",
+      "winCoupon": "Kupon",
+      "winNone": "Tidak ada",
+      "winSend": "Kirim ajakan kembali",
+      "winConfirm": "Kirim siaran ini ke semua orang di segmen?",
+      "winQueued": "Diantrekan untuk {total} pelanggan yang tidak aktif. Jumlahnya muncul di tab Aktivitas saat selesai.",
+      "wooWinTitle": "Siaran segmen pintar",
+      "wooWinIntro": "Targetkan berdasarkan riwayat pesanan — raih kembali pembeli yang tidak aktif atau beri penghargaan kepada pelanggan terbaik.",
+      "wooLapsed": "Tidak aktif > hari",
+      "wooWinNote": "Hari = 0 menargetkan kapan saja (murni segmen). Belanja menggunakan mata uang toko. Kontak yang berhenti berlangganan selalu dilewati.",
+      "wooCouponPlaceholder2": "COMEBACK15",
+      "wooWinSend": "Kirim siaran",
+      "optional": "opsional",
+      "none": "tidak ada",
+      "cancel": "Batal"
+    },
+    "customers": {
+      "name": "Nama",
+      "email": "Email",
+      "phone": "Telepon",
+      "orders": "Pesanan",
+      "spent": "Belanja",
+      "none": "Belum ada pelanggan yang diambil.",
+      "noneWoo": "Belum ada pelanggan."
+    },
+    "events": {
+      "noTemplates": "Anda belum memiliki templat WhatsApp yang disetujui. Buat templat di Templat untuk mengaktifkan otomatisasi.",
+      "templatesLink": "Templat",
+      "sendFrom": "Kirim dari",
+      "sendFromHint": "Nomor terhubung mana yang mengirim otomatisasi ini.",
+      "auto": "Otomatis — nomor terhubung mana pun",
+      "fired": "{count} terpicu",
+      "logged": "{count} tercatat",
+      "template": "Templat",
+      "pickTemplate": "Pilih templat",
+      "noneOption": "tidak ada",
+      "sendTo": "Kirim ke",
+      "customer": "Pelanggan",
+      "admin": "Khusus admin",
+      "both": "Keduanya",
+      "adminNumber": "Nomor admin",
+      "delay": "Jeda",
+      "on": "Aktif",
+      "immediate": "Segera",
+      "min": "{n} menit",
+      "hour": "{n} jam",
+      "day": "{n, plural, other {# hari}}",
+      "mapTitle": "Petakan variabel templat → kolom pesanan",
+      "param": "Parameter {n}",
+      "blank": "— kosong —",
+      "field": {
+        "name": "Nama pelanggan",
+        "first_name": "Nama depan",
+        "order_name": "No. pesanan (mis. #1001)",
+        "order_number": "Nomor pesanan",
+        "total": "Total + mata uang",
+        "total_price": "Total (hanya jumlah)",
+        "currency": "Mata uang",
+        "email": "Email pelanggan",
+        "store_name": "Nama toko",
+        "financial_status": "Status pembayaran",
+        "fulfillment_status": "Status pemenuhan"
+      },
+      "advanced": "Lanjutan · urutan variabel",
+      "advancedHint": "Kolom yang dipisahkan koma dipetakan sesuai urutan ke placeholder templat bernomor Anda. Kosongkan untuk default cerdas: nama, pesanan, total.",
+      "advancedPlaceholder": "name, first_name, order_number, order_name, total, currency, order_url, tracking_number, tracking_url",
+      "save": "Simpan otomatisasi",
+      "saving": "Menyimpan…",
+      "saved": "✓ Tersimpan",
+      "saveFailed": "Gagal menyimpan",
+      "needTemplate": "Pilih templat untuk setiap otomatisasi yang Anda aktifkan."
+    },
+    "autoGroups": {
+      "lifecycle": {
+        "name": "Siklus hidup pesanan",
+        "desc": "Pembaruan transaksi — terpicu otomatis saat peristiwa toko terjadi."
+      },
+      "recovery": {
+        "name": "Pemulihan pendapatan",
+        "desc": "Raih kembali penjualan yang hilang."
+      },
+      "marketing": {
+        "name": "Pemasaran siklus hidup",
+        "desc": "Kembangkan dan pertahankan pelanggan."
+      }
+    },
+    "auto": {
+      "shopify": {
+        "orders_create": {
+          "name": "Konfirmasi pesanan",
+          "desc": "Ucapkan terima kasih kepada pelanggan saat mereka membuat pesanan."
+        },
+        "orders_paid": {
+          "name": "Pembayaran diterima",
+          "desc": "Konfirmasi setelah pembayaran berhasil."
+        },
+        "orders_fulfilled": {
+          "name": "Dikirim / Sedang diantar",
+          "desc": "Kirim catatan pengiriman — gunakan '{{'tracking_url'}}' untuk tautan pelacakan langsung."
+        },
+        "order_delivered": {
+          "name": "Terkirim",
+          "desc": "Konfirmasi pengiriman (meminta ulasan jika templat Anda memintanya). Terpicu saat kurir menandainya sebagai terkirim."
+        },
+        "orders_cancelled": {
+          "name": "Pesanan dibatalkan",
+          "desc": "Beri tahu pelanggan bahwa pesanan dibatalkan."
+        },
+        "refunds_create": {
+          "name": "Pengembalian dana diterbitkan",
+          "desc": "Konfirmasi bahwa pengembalian dana telah diproses."
+        },
+        "orders_updated": {
+          "name": "Pesanan diperbarui",
+          "desc": "Terpicu saat ada perubahan pada pesanan yang sudah ada."
+        },
+        "checkouts_create": {
+          "name": "Keranjang ditinggalkan · langkah 1",
+          "desc": "Terpicu segera setelah checkout ditinggalkan — sertakan '{{'checkout_url'}}' untuk mengajak mereka kembali."
+        },
+        "cart_step2": {
+          "name": "Keranjang ditinggalkan · langkah 2",
+          "desc": "Tindak lanjut terjadwal (atur jedanya, mis. 1 jam). Dibatalkan otomatis jika mereka membeli."
+        },
+        "cart_step3": {
+          "name": "Keranjang ditinggalkan · langkah 3",
+          "desc": "Pengingat terakhir (mis. 24 jam) — tambahkan kupon di templat untuk menutup penjualan."
+        },
+        "cod_confirm": {
+          "name": "Konfirmasi pesanan COD",
+          "desc": "Minta pelanggan COD mengonfirmasi dengan balasan Ya/Tidak — mengurangi pesanan palsu dan pengembalian (RTO)."
+        },
+        "cod_prepaid": {
+          "name": "Penawaran COD → Prabayar",
+          "desc": "Dorong pelanggan COD untuk membayar online sekarang (gunakan '{{'order_url'}}' + diskon di templat) — lebih sedikit pengembalian, arus kas lebih cepat."
+        },
+        "stock_back": {
+          "name": "Peringatan stok kembali tersedia",
+          "desc": "Pelanggan yang menanyakan barang yang habis akan diberi tahu otomatis saat barang tersebut di-restock."
+        },
+        "customers_create": {
+          "name": "Sambut pelanggan baru",
+          "desc": "Sambut pelanggan yang pertama kali berbelanja dengan hangat."
+        },
+        "customers_update": {
+          "name": "Pelanggan diperbarui",
+          "desc": "Terpicu saat profil pelanggan berubah."
+        },
+        "products_update": {
+          "name": "Produk diperbarui",
+          "desc": "Pemicu internal saat harga / stok berubah."
+        }
+      },
+      "woocommerce": {
+        "order_created": {
+          "name": "Pesanan dibuat",
+          "desc": "Dikirim saat pesanan baru masuk."
+        },
+        "order_processing": {
+          "name": "Pesanan dikonfirmasi",
+          "desc": "Pembayaran diterima — pesanan sedang disiapkan."
+        },
+        "order_completed": {
+          "name": "Pesanan terkirim",
+          "desc": "Pesanan ditandai selesai di WooCommerce."
+        },
+        "order_on_hold": {
+          "name": "Pesanan ditahan",
+          "desc": "Menunggu pembayaran atau stok — beri tahu pembeli."
+        },
+        "order_cancelled": {
+          "name": "Pesanan dibatalkan",
+          "desc": "Pesanan telah dibatalkan."
+        },
+        "order_refunded": {
+          "name": "Pesanan dikembalikan",
+          "desc": "Pengembalian dana telah diterbitkan."
+        },
+        "cod_confirm": {
+          "name": "Konfirmasi ganda COD",
+          "desc": "Minta pembeli COD mengonfirmasi Ya / Tidak sebelum Anda mengirim — cara utama mengurangi RTO."
+        },
+        "cod_prepaid": {
+          "name": "Dorongan COD → Prabayar",
+          "desc": "Tawarkan kepada pembeli COD tautan bayar online (templat dapat menyertakan '{{'order_url'}}' + insentif)."
+        },
+        "checkout_created": {
+          "name": "Keranjang ditinggalkan · langkah 1",
+          "desc": "Dorongan pertama saat checkout dimulai tetapi tidak ada pesanan masuk. Memerlukan plugin WooCommerce pendamping."
+        },
+        "cart_step2": {
+          "name": "Keranjang ditinggalkan · langkah 2",
+          "desc": "Tindak lanjut terjadwal setelah jeda di bawah."
+        },
+        "cart_step3": {
+          "name": "Keranjang ditinggalkan · langkah 3",
+          "desc": "Pengingat terakhir — tambahkan diskon di templat."
+        },
+        "stock_back": {
+          "name": "Kembali tersedia",
+          "desc": "Kirim pesan kepada semua orang di daftar tunggu saat produk yang habis di-restock."
+        },
+        "subscription_payment_failed": {
+          "name": "Dunning langganan",
+          "desc": "Saat pembayaran perpanjangan langganan gagal, kirim tautan \"perbarui pembayaran\" sekali ketuk. Memerlukan plugin WooCommerce pendamping."
+        },
+        "customer_created": {
+          "name": "Sambut pelanggan baru",
+          "desc": "Sapa pelanggan saat pertama kali mendaftar di toko."
+        },
+        "review_reward": {
+          "name": "Kupon bersyarat ulasan",
+          "desc": "Saat pembeli terbaru membalas dengan penilaian positif (4–5 / \"bagus\"), kirim templat hadiah ini secara otomatis — sertakan kupon di dalamnya. Pasangkan dengan templat \"Pesanan terkirim\" yang meminta mereka memberi penilaian."
+        }
+      }
+    },
+    "analytics": {
+      "revenue": "Pendapatan",
+      "orders": "Pesanan",
+      "avgOrder": "Rata-rata pesanan",
+      "messagesSent": "Pesan terkirim",
+      "offersSent": "Penawaran terkirim",
+      "codProtected": "Pendapatan COD terlindungi",
+      "codConfirmed": "{count} pesanan COD terkonfirmasi",
+      "rtoAvoided": "RTO dihindari",
+      "codCancelled": "{count} pesanan palsu/COD dihentikan",
+      "recovery": "Pesan pemulihan",
+      "recoveryHint": "keranjang / penawaran / ajakan kembali / stok",
+      "avgValue": "Rata-rata nilai pesanan",
+      "trend": "Pendapatan · 14 hari terakhir",
+      "perf": "Kinerja otomatisasi",
+      "event": "Peristiwa",
+      "fired": "Terpicu",
+      "noActivity": "Belum ada aktivitas otomatisasi.",
+      "revenueMirrored": "Pendapatan · tercermin",
+      "ordersSynced": "{count} pesanan disinkronkan",
+      "perOrder": "per pesanan",
+      "offerBroadcasts": "{count} siaran penawaran",
+      "recoverySends": "Pengiriman pemulihan",
+      "recoverySendsHint": "COD / keranjang / stok / penawaran",
+      "wouldBeRto": "RTO yang seharusnya terjadi dibatalkan lebih awal",
+      "activeAutomations": "Otomatisasi aktif",
+      "firingOn": "terpicu saat peristiwa toko"
+    },
+    "logs": {
+      "processed": "Diproses",
+      "sent": "Terkirim",
+      "skipped": "Dilewati",
+      "failed": "Gagal",
+      "event": "Peristiwa",
+      "recipient": "Penerima",
+      "status": "Status",
+      "when": "Waktu",
+      "none": "Belum ada peristiwa webhook yang masuk untuk toko ini."
+    },
+    "settings": {
+      "storeUrl": "URL toko",
+      "connectedAt": "Terhubung pada",
+      "lastVerified": "Terakhir diverifikasi",
+      "scopes": "Cakupan izin yang diberikan",
+      "wooVersion": "Versi WooCommerce",
+      "webhookUrl": "URL webhook",
+      "registered": "Webhook terdaftar",
+      "registeredCount": "{count, plural, other {# langganan aktif}}",
+      "copy": "Salin",
+      "copied": "Disalin",
+      "plugin": {
+        "title": "Plugin WordPress",
+        "body": "Pasang plugin kecil ini di toko Anda untuk memulihkan keranjang yang ditinggalkan sebelum pesanan dibuat, serta untuk meneruskan pembayaran langganan yang gagal dan status pesanan kustom.",
+        "step1": "Unduh plugin di bawah. Plugin ini dibuat khusus untuk toko ini.",
+        "step2": "Di WordPress, buka Plugin, Tambah Baru, Unggah Plugin, pilih file zip, lalu aktifkan.",
+        "step3": "Pastikan WP-Cron berjalan di situs Anda. Plugin memeriksa keranjang yang tidak aktif setiap 5 menit.",
+        "download": "Unduh plugin (.zip)",
+        "preparing": "Menyiapkan plugin…",
+        "started": "Plugin berhasil diunduh.",
+        "secretNote": "File ini berisi kunci rahasia toko ini. Jaga kerahasiaannya.",
+        "forbidden": "Anda tidak memiliki izin untuk mengunduh plugin.",
+        "failed": "Plugin tidak dapat diunduh. Coba lagi."
+      }
+    },
+    "embedded": {
+      "title": "Shopify",
+      "connected": "Terhubung",
+      "notConnected": "Tidak terhubung",
+      "store": "Toko",
+      "plan": "Paket Shopify",
+      "lastVerified": "Terakhir diverifikasi",
+      "openApp": "Buka aplikasi",
+      "openToConnect": "Buka aplikasi untuk terhubung",
+      "invalid": "Sesi Shopify tidak valid. Muat ulang aplikasi dari admin Shopify Anda.",
+      "off": "Integrasi Shopify tidak diaktifkan di instalasi ini. Hubungi dukungan.",
+      "error": "Terjadi kesalahan. Muat ulang aplikasi dari admin Shopify Anda."
+    },
+    "invoices": {
+      "policyTitle": "Faktur otomatis",
+      "autoInvoice": "Terbitkan faktur untuk pesanan toko ini secara otomatis",
+      "autoInvoiceHint": "Setiap faktur diantrekan ke pembeli lewat WhatsApp, atau lewat email jika tidak ada nomor telepon. Nonaktif sampai Anda mengaktifkannya.",
+      "trigger": "Terbitkan faktur saat pesanan",
+      "on_placed": "Dibuat",
+      "on_paid": "Dibayar",
+      "on_fulfilled": "Dipenuhi",
+      "saved": "Pengaturan faktur disimpan.",
+      "saveFailed": "Pengaturan faktur tidak dapat disimpan.",
+      "policyLoadFailed": "Pengaturan faktur tidak dapat dimuat.",
+      "listTitle": "Faktur dari toko ini",
+      "number": "Nomor",
+      "buyer": "Pembeli",
+      "type": "Jenis",
+      "status": "Status",
+      "total": "Total",
+      "issued": "Diterbitkan",
+      "draft": "Draf",
+      "tax_invoice": "Faktur pajak",
+      "receipt": "Kuitansi",
+      "proforma": "Proforma",
+      "status_draft": "Draf",
+      "status_issued": "Diterbitkan",
+      "status_partially_paid": "Dibayar sebagian",
+      "status_paid": "Lunas",
+      "status_overdue": "Jatuh tempo",
+      "status_void": "Dibatalkan",
+      "loading": "Memuat faktur…",
+      "none": "Belum ada faktur dari toko ini. Aktifkan faktur otomatis di atas dan pesanan lunas berikutnya akan mendapatkannya.",
+      "error": "Faktur tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "forbidden": "Anda tidak memiliki akses ke faktur.",
+      "viewAll": "Buka semua faktur"
+    }
+  }
+}

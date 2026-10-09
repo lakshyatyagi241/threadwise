@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "common": {
+      "dismiss": "Ausblenden"
+    },
+    "nav": {
+      "forms": "Formulare"
+    },
+    "kinds": {
+      "short_text": "Kurztext",
+      "long_text": "Langtext",
+      "email": "E-Mail",
+      "phone": "Telefonnummer",
+      "number": "Zahl",
+      "currency": "Betrag",
+      "date": "Datum",
+      "dropdown": "Auswahlliste",
+      "radio": "Einzelauswahl",
+      "checkbox_group": "Mehrfachauswahl",
+      "checkbox": "Kontrollkästchen",
+      "rating": "Bewertung",
+      "hidden": "Verstecktes Feld"
+    },
+    "errors": {
+      "network": "Der Server konnte nicht erreicht werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Sie haben keine Berechtigung dafür.",
+      "signedOut": "Ihre Sitzung ist beendet. Melden Sie sich erneut an, um fortzufahren.",
+      "conflict": "Jemand anderes hat dieses Formular geändert. Laden Sie die Seite neu, um die neueste Version zu sehen.",
+      "nameTaken": "Ein anderes Formular hat bereits diesen Namen. Wählen Sie einen anderen Namen.",
+      "stateInvalid": "Das ist im aktuellen Status des Formulars nicht möglich.",
+      "definitionInvalid": "Das Formular ist noch nicht gültig. Prüfen Sie die Felder und versuchen Sie es erneut.",
+      "publishInvalid": "Das Formular kann noch nicht veröffentlicht werden. Beheben Sie die aufgeführten Probleme und versuchen Sie es erneut.",
+      "planLimit": "Das Limit Ihres Tarifs wurde erreicht.",
+      "planLimitForms": "Sie haben die Anzahl Formulare erreicht, die Ihr Tarif erlaubt. Archivieren Sie ein nicht mehr benötigtes Formular oder erweitern Sie Ihren Tarif.",
+      "planLocked": "Formulare sind nicht Teil Ihres Workspaces.",
+      "notFound": "Dieses Formular wurde nicht gefunden. Es wurde möglicherweise gelöscht.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+      "upgrade": "Tarife ansehen"
+    }
+  }
+}

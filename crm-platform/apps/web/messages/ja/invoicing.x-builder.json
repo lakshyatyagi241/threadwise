@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "請求書の金額、数量、または税率が無効です。ハイライトされた項目を確認してください。",
+        "INV_TAX_RATE_INVALID": "使用できない税率があります。無効になっているか、適用期間外です。別の税率を選択してください。",
+        "INV_NOT_DRAFT": "この請求書は発行済みのため、編集できません。複製して訂正版を作成してください。",
+        "INV_ORDER_LINKED": "この請求書は販売注文に紐づいているため、その注文を変更してください。",
+        "SALESDOC_INVALID_TRANSITION": "見積書がまだ承認されていないため、請求書にできません。",
+        "SALESDOC_ALREADY_CONVERTED": "この書類はすでに請求書に変換されています。",
+        "SALESDOC_INVOICING_UNAVAILABLE": "このサーバーではまだ請求書機能を利用できません。",
+        "INV_LINK_UNAVAILABLE": "この請求書のリンクは利用できなくなりました。"
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "承認された書類から下書きを作成しています...",
+      "duplicating": "請求書を新しい下書きにコピーしています...",
+      "openExisting": "作成済みの請求書を開く",
+      "backToInvoices": "請求書一覧に戻る",
+      "backToInvoice": "請求書に戻る",
+      "issued": "請求書を発行しました。",
+      "savedNotIssued": "下書きは保存しましたが、発行できませんでした: {reason}",
+      "buyerCountry": "国",
+      "buyerCountryHint": "IN や GB などの2文字のコード。税番号の形式を決め、自動モードでは税額も決まります。",
+      "buyerTaxId": "税番号",
+      "buyerTaxIdNamed": "税番号（{label}）",
+      "taxIdHint": "GSTIN、VAT番号、EINなど。入力中に確認されます。",
+      "taxIdExpected": "想定形式: {label}（例: {example}）",
+      "taxIdUnchecked": "この国の形式は不明なため、入力どおりに保存されます。",
+      "taxIdValid": "{label}は正しいようです（{level, select, checksum {形式と検査数字を確認済み} other {形式のみ確認済み}}）。ただし、登録済みであることは証明されません。",
+      "taxIdInvalid": "この{label}は誤りのようです（{level, select, checksum {形式と検査数字を確認済み} other {形式のみ確認済み}}）。",
+      "taxIdStillSave": "それでも保存できます。",
+      "docType": "書類",
+      "docTypes": {
+        "tax_invoice": "税務請求書",
+        "proforma": "プロフォーマ請求書"
+      },
+      "noDueDate": "既定の支払条件",
+      "reference": "参照番号",
+      "referenceHint": "購入者の発注番号や、印刷する任意の参照情報。",
+      "tax": "税",
+      "taxMode": "税額の計算方法",
+      "taxModes": {
+        "rates": "税率",
+        "auto": "自動"
+      },
+      "taxModeHint": {
+        "rates": "明細ごとに税率を選択してください。既定のままの明細は、ワークスペースの既定税率が適用されます。",
+        "auto": "税計算エンジンが、自国、購入者の国と税番号、取引の内容、取引地に基づいて各明細の税額を決定します。保存されるのはサーバーの計算結果です。"
+      },
+      "sellerCountry": "自国（請求プロフィールより）",
+      "sellerCountryMissing": "自動税計算には、請求プロフィールに自国（税の初期設定がある国）が必要です。先にそこで設定してください。",
+      "supplyType": "取引の内容",
+      "supplyTypes": {
+        "goods": "商品",
+        "services": "サービス",
+        "digital": "デジタルサービス"
+      },
+      "placeOfSupply": "取引地",
+      "placeOfSupplyHint": "{country}の州または県。国全体の場合は最初の選択肢のままにしてください。",
+      "placeSameCountry": "国全体",
+      "placeRegionPlaceholder": "地域コード（任意）",
+      "reverseCharge": "リバースチャージ",
+      "reverseChargeHint": "購入者が税を申告するため、この請求書では税を請求しません。",
+      "shipping": "送料（{currency}）",
+      "shippingHint": "割引および課税の対象外です。",
+      "legalNotes": "法的注記",
+      "legalNotesHint": "リバースチャージの記載など、書類に必要な文言。法律で求められる場合、自動モードで自動入力されます。",
+      "problems": {
+        "contactRequired": "連絡先を選択するか、購入者名を入力してください。",
+        "currencyInvalid": "3文字の通貨コードを入力してください。",
+        "issueDateInvalid": "有効な発行日を入力してください。",
+        "dueBeforeIssue": "支払期限は発行日より前にできません。",
+        "dueInvalid": "有効な支払期限を入力してください。",
+        "noLines": "発行する前に、明細を1つ以上追加してください。",
+        "discountInvalid": "有効な割引を入力してください（0～100の割合、または金額）。",
+        "shippingInvalid": "有効な送料を入力してください。",
+        "emailInvalid": "有効なメールアドレスを入力してください。",
+        "amountZero": "請求書の合計は0より大きくしてください。",
+        "amountInvalid": "この通貨では金額が大きすぎるか、小数点以下の桁数が多すぎます。",
+        "countryInvalid": "2文字の国コードを使用してください。",
+        "regionInvalid": "3文字以内の英数字の地域コードを使用してください。",
+        "autoNeedsSellerCountry": "自動税計算を使用するには、請求プロフィールで自国を設定してください。",
+        "descriptionRequired": "この明細の内容を入力してください。",
+        "qtyInvalid": "0より大きい数量を入力してください（小数点以下4桁まで）。",
+        "priceInvalid": "この通貨で許可される小数桁数の有効な単価を入力してください。",
+        "lineDiscountInvalid": "有効な明細割引を入力してください。",
+        "hsnRequired": "HSN/SACコードを入力してください。お住まいの国では明細ごとに必要です。",
+        "hsnInvalid": "HSN/SACコードは2～12文字の英数字です。",
+        "taxRateRemoved": "この明細の税率が削除されました。現在の税率を選択してください。"
+      }
+    },
+    "lines": {
+      "discount": "割引",
+      "discountKind": "割引の種類",
+      "taxAuto": "自動",
+      "taxDefault": "既定（{rate}）",
+      "taxDefaultNone": "既定（税なし）",
+      "removedRateOption": "{rate}（削除済み）",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "コード"
+    },
+    "totals": {
+      "shipping": "送料",
+      "taxIncluded": "{name}（税込）",
+      "taxOn": "対象額 {base}",
+      "reverseCharge": "リバースチャージ: 税は請求しません。",
+      "includesTotal": "価格に税を含む"
+    },
+    "taxWhy": {
+      "title": "なぜこの税額になるのですか？",
+      "preview": "プレビュー",
+      "previewNote": "編集中にブラウザ上で計算されます。保存時にサーバーが決定した内容が正式な金額です。",
+      "taxFree": "この取引には税が課されません",
+      "warnings": "再確認してください",
+      "placeOfSupply": "取引地",
+      "reverseCharge": "リバースチャージ",
+      "reverseChargeNote": "購入者が税を申告するため、税は請求しません。",
+      "documentNotes": "書類に印字されます",
+      "disclaimer": "税率と規則は既定値です。会計士または税務当局でご確認ください。法律または税務上の助言ではありません。"
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "税務請求書",
+        "proforma": "見積請求書",
+        "receipt": "領収書"
+      },
+      "sellerTaxId": "税番号",
+      "registrationNo": "登録番号",
+      "buyerTaxId": "税番号",
+      "reference": "参照番号",
+      "placeOfSupply": "取引地",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "{amount}割引",
+      "shipping": "送料",
+      "credited": "貸方計上済み",
+      "taxSummary": "税額の概要",
+      "taxName": "税",
+      "taxBase": "課税対象額",
+      "taxAmount": "税額",
+      "taxInclusive": "税込",
+      "reverseCharge": "リバースチャージ: 税は購入者が申告します。",
+      "paymentsReceived": "受領した入金",
+      "refund": "返金",
+      "bankDetails": "銀行口座情報",
+      "voidReason": "キャンセル: {reason}"
+    },
+    "public": {
+      "notFoundTitle": "リンクが見つかりません",
+      "notFoundMessage": "この請求書のリンクは存在しません。リンク全体をコピーしたか確認するか、送信者に再度リンクを依頼してください。",
+      "unavailableTitle": "このリンクは利用できません",
+      "unavailableMessage": "請求書のリンクは取り消されたか、期限切れです。送信者に新しいリンクを依頼してください。",
+      "voidReason": "理由: {reason}",
+      "printable": "印刷用ページを開く",
+      "amountDueFooter": "お支払い金額: {amount}",
+      "noPayOptions": "販売者はオンライン決済を設定していません。支払い方法について販売者にお問い合わせください。",
+      "payAmount": "支払金額（{currency}）",
+      "payAmountHint": "残高全額が入力されています。一部のみ支払う場合は、金額を減らしてください。",
+      "amountErrors": {
+        "invalid": "0より大きい金額を入力してください。",
+        "tooMuch": "支払金額は支払期限の残高を超えられません。"
+      },
+      "linkUnavailable": "この請求書のリンクは利用できなくなったため、ここから支払うことはできません。",
+      "payFailed": "支払いを開始できませんでした。しばらくしてから再度お試しください。",
+      "payUnavailable": "現在、この請求書はオンラインで支払えません。",
+      "redirecting": "支払いページに移動しています...",
+      "payInstructions": "以下の説明に従って支払ってください。",
+      "bankTransfer": "銀行振込",
+      "copyInstructions": "手順をコピー",
+      "copyValue": "{label}をコピー"
+    }
+  }
+}

@@ -1,0 +1,330 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "Görevler"
+    },
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "hub": {
+      "title": "Görevler",
+      "subtitle": "Takipler ve yapılacaklar. Bunları atayın, öncelik ve son tarih belirleyin ve tamamlandı olarak işaretleyin.",
+      "newTask": "Yeni görev",
+      "tableLabel": "Görevler",
+      "loading": "Görevler yükleniyor",
+      "useSampleData": "Örnek verileri kullan (geliştirme)",
+      "emptyFilteredTitle": "Eşleşen görev yok",
+      "emptyFiltered": "Farklı bir arama deneyin veya filtreleri temizleyin.",
+      "resetFilters": "Filtreleri temizle",
+      "empty": {
+        "mine": {
+          "title": "Size atanmış bir şey yok",
+          "message": "Size atanan görevler burada görünecek. Yukarıdan bir tane ekleyin veya Tüm görevlere bakın."
+        },
+        "all": {
+          "title": "Henüz görev yok",
+          "message": "Yukarıdaki kutuyla bir takip veya yapılacak ekleyin; burada görünecek."
+        },
+        "overdue": {
+          "title": "Gecikmiş bir şey yok",
+          "message": "Açık olan tüm görevler zamanında."
+        },
+        "today": {
+          "title": "Bugün için görev yok",
+          "message": "Bugünün geri kalanında süresi dolacak açık görev yok."
+        },
+        "upcoming": {
+          "title": "Yaklaşan bir şey yok",
+          "message": "Daha sonraki bir güne ait açık görevler burada görünecek."
+        },
+        "completed": {
+          "title": "Henüz tamamlanmış görev yok",
+          "message": "Tamamladığınız görevler en yenisi önce olacak şekilde burada görünecek."
+        }
+      },
+      "showing": "{count, plural, other {# görev yüklendi}}",
+      "loadMore": "Daha fazla yükle",
+      "allLoaded": "Tüm görevler yüklendi",
+      "deleteTitle": "Bu görev silinsin mi?",
+      "deleteMessage": "\"{title}\" herkes için silinecek. Bu işlem geri alınamaz.",
+      "delete": "Sil",
+      "keep": "Vazgeç"
+    },
+    "tabs": {
+      "label": "Görev listeleri",
+      "mine": "Görevlerim",
+      "all": "Tüm görevler",
+      "overdue": "Gecikmiş",
+      "today": "Bugün",
+      "upcoming": "Yaklaşan",
+      "completed": "Tamamlandı",
+      "count": "{count, plural, other {# görev}}"
+    },
+    "toolbar": {
+      "label": "Görev filtreleri",
+      "search": "Görevlerde ara",
+      "status": "Durum",
+      "statusOpen": "Açık",
+      "statusDone": "Tamamlandı",
+      "statusAll": "Açık ve tamamlanmış",
+      "priority": "Öncelik",
+      "allPriorities": "Tüm öncelikler",
+      "priorities": {
+        "high": "Yüksek",
+        "medium": "Orta",
+        "low": "Düşük"
+      },
+      "assignee": "Atanan kişi",
+      "allAssignees": "Tüm atananlar",
+      "unassigned": "Atanmamış",
+      "linked": "Bağlı olduğu",
+      "anyLink": "Herhangi bir kayıt",
+      "linkContact": "Bir kişi",
+      "linkDeal": "Bir fırsat",
+      "clear": "Temizle",
+      "modifyColumns": "Sütunları düzenle",
+      "resetColumns": "Sütunları sıfırla",
+      "columns": {
+        "title": "Görev",
+        "priority": "Öncelik",
+        "due": "Son tarih",
+        "assignee": "Atanan kişi",
+        "contact": "Kişi",
+        "deal": "Fırsat",
+        "created": "Oluşturulma",
+        "completed": "Tamamlanma tarihi"
+      },
+      "refresh": "Yenile",
+      "shortcuts": "Klavye kısayolları",
+      "view": "Düzen",
+      "views": {
+        "list": "Liste",
+        "board": "Son tarihe göre pano"
+      }
+    },
+    "table": {
+      "scrollArea": "Görev tablosu",
+      "selectAll": "Yüklenen tüm görevleri seç",
+      "selectRow": "{title} seç",
+      "columns": {
+        "title": "Görev",
+        "priority": "Öncelik",
+        "due": "Son tarih",
+        "assignee": "Atanan kişi",
+        "contact": "Kişi",
+        "deal": "Fırsat",
+        "created": "Oluşturulma",
+        "completed": "Tamamlanma tarihi"
+      }
+    },
+    "row": {
+      "complete": "Tamamlandı olarak işaretle",
+      "reopen": "Yeniden aç",
+      "completeNamed": "\"{title}\" görevini tamamlandı olarak işaretle",
+      "reopenNamed": "\"{title}\" görevini yeniden aç",
+      "moreFor": "{title} için diğer işlemler",
+      "open": "Aç",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "unassigned": "Atanmamış"
+    },
+    "bulk": {
+      "label": "Seçili görevler için işlemler",
+      "selected": "{count, plural, other {# görev seçildi}}",
+      "working": "Çalışılıyor",
+      "complete": "Tamamla",
+      "assign": "Ata",
+      "assignTo": "Şuna ata",
+      "me": "{name} (ben)",
+      "unassign": "Atamayı kaldır",
+      "delete": "Sil",
+      "clear": "Seçimi temizle",
+      "failed": "Bu işe yaramadı.",
+      "someFailed": "{count, plural, other {# görev değiştirilemedi.}}",
+      "completed": "{count, plural, other {# görev tamamlandı.}}",
+      "assigned": "{count, plural, other {# görev {name} kişisine atandı.}}",
+      "unassigned": "{count, plural, other {# görevin ataması kaldırıldı.}}",
+      "deleted": "{count, plural, other {# görev silindi.}}",
+      "deleteTitle": "Seçili görevler silinsin mi?",
+      "deleteMessage": "{count, plural, other {# görev herkes için silinecek. Bu işlem geri alınamaz.}}",
+      "keep": "Vazgeç"
+    },
+    "quick": {
+      "label": "Görev ekle",
+      "placeholder": "Bir görev ekleyin ve Enter'a basın",
+      "priority": "Öncelik",
+      "priorities": {
+        "high": "Yüksek",
+        "medium": "Orta",
+        "low": "Düşük"
+      },
+      "due": "Son tarih ve saat",
+      "add": "Ekle",
+      "dueRequired": "Bir son tarih ve saat seçin.",
+      "titleRequired": "Yapılması gerekeni yazın.",
+      "options": "Daha fazla seçenek (öncelik ve son tarih)"
+    },
+    "form": {
+      "eyebrow": "Görev",
+      "newTitle": "Yeni görev",
+      "editTitle": "Görevi düzenle",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "create": "Görev oluştur",
+      "save": "Değişiklikleri kaydet",
+      "title": "Görev",
+      "titlePlaceholder": "örn. Acme'yi yenileme için ara",
+      "priority": "Öncelik",
+      "priorities": {
+        "high": "Yüksek",
+        "medium": "Orta",
+        "low": "Düşük"
+      },
+      "assignee": "Şuna ata",
+      "unassigned": "Kimse",
+      "me": "{name} (ben)",
+      "due": "Son tarih",
+      "presets": {
+        "today": "Bugün",
+        "tomorrow": "Yarın",
+        "nextWeek": "Gelecek hafta"
+      },
+      "clearDue": "Tarihi temizle",
+      "contact": "Kişi",
+      "deal": "Fırsat",
+      "notes": "Notlar",
+      "reminderHint": "Görev son tarihine geldiğinde atanan kişiye hatırlatma gönderilir.",
+      "assigneePick": "Bu görevin sahibini seçin.",
+      "problems": {
+        "dueRequired": "Bir son tarih ve saat seçin.",
+        "priorityRequired": "Bir öncelik seçin.",
+        "assigneeRequired": "Bu görevin kimin için olduğunu seçin.",
+        "titleRequired": "Yapılması gerekeni yazın.",
+        "titleTooLong": "Görev çok uzun (en fazla 255 karakter).",
+        "notesTooLong": "Notlar çok uzun (en fazla 5000 karakter).",
+        "dueInvalid": "Bu tarih geçerli değil.",
+        "assigneeInvalid": "Bu kişi bu çalışma alanının etkin bir üyesi değil."
+      }
+    },
+    "drawer": {
+      "loading": "Görev yükleniyor",
+      "close": "Kapat",
+      "eyebrow": "Görev",
+      "name": "Görev adı",
+      "titleRequired": "Bir görevin adı olmalı.",
+      "statusOpen": "Aç",
+      "statusDone": "Tamamlandı",
+      "complete": "Tamamlandı olarak işaretle",
+      "reopen": "Yeniden aç",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "details": "Ayrıntılar",
+      "notes": "Notlar",
+      "notesPlaceholder": "Bunu devralacak kişi için bağlam ekleyin",
+      "linked": "Bağlantılı kayıtlar",
+      "company": "Şirket",
+      "noLinks": "Bir kişi veya fırsatla bağlantılı değil.",
+      "activity": "Etkinlik",
+      "events": {
+        "created": "Görev oluşturuldu",
+        "createdBy": "{name} tarafından oluşturuldu",
+        "reminded": "Son tarih hatırlatıcısı gönderildi",
+        "completed": "Tamamlandı olarak işaretlendi"
+      },
+      "deleteTitle": "Bu görev silinsin mi?",
+      "deleteMessage": "\"{title}\" herkesten silinecek. Bu işlem geri alınamaz.",
+      "cancel": "Vazgeç"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "Gecikmiş",
+        "today": "Bugün",
+        "upcoming": "Yaklaşan",
+        "no_date": "Tarih yok"
+      },
+      "empty": "Burada hiçbir şey yok."
+    },
+    "due": {
+      "none": "Tarih yok",
+      "overdue": "Gecikmiş",
+      "today": "Bugün, {time}",
+      "tomorrow": "Yarın, {time}",
+      "yesterday": "Dün, {time}",
+      "date": "{date}, {time}"
+    },
+    "priority": {
+      "high": "Yüksek",
+      "medium": "Orta",
+      "low": "Düşük"
+    },
+    "link": {
+      "unnamedContact": "İsimsiz kişi",
+      "unnamedDeal": "Fırsat"
+    },
+    "picker": {
+      "searchContact": "Kişilerde ara",
+      "searchDeal": "Fırsatlarda ara",
+      "results": "Arama sonuçları",
+      "searching": "Aranıyor",
+      "unavailable": "Arama şu anda kullanılamıyor.",
+      "none": "Eşleşme yok.",
+      "unlink": "Bağlantıyı kaldır"
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
+      "forbidden": "Bunu yapmak için yetkiniz yok.",
+      "signedOut": "Oturumunuz sona erdi. Devam etmek için yeniden oturum açın.",
+      "conflict": "Bu görevi başka biri değiştirdi. Sayfayı yenileyip yeniden deneyin.",
+      "validation": "Bazı ayrıntılar geçerli değil.",
+      "unavailable": "Görevler hizmeti bu sunucuda henüz kullanılamıyor.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip yeniden deneyin.",
+      "notFound": "Bu görev bulunamadı. Silinmiş olabilir.",
+      "planDisabled": "Planınız görevleri içermiyor. Açmak için planınızı yükseltin.",
+      "assigneeInvalid": "Bu kişi bu çalışma alanının aktif bir üyesi değil.",
+      "unexpected": "Bir sorun oluştu. Biraz sonra yeniden deneyin.",
+      "requestId": "İstek kimliği",
+      "retry": "Yeniden dene"
+    },
+    "toast": {
+      "completed": "Görev tamamlandı.",
+      "reopened": "Görev yeniden açıldı.",
+      "created": "Görev oluşturuldu.",
+      "saved": "Görev kaydedildi.",
+      "deleted": "Görev silindi.",
+      "conflict": "Bu görevi başka biri değiştirdi. Liste yenilendi; yeniden deneyin.",
+      "failed": "Görev güncellenemedi.",
+      "saveFailed": "Görev kaydedilemedi.",
+      "deleteFailed": "Görev silinemedi.",
+      "createFailed": "Görev oluşturulamadı."
+    },
+    "shortcuts": {
+      "title": "Klavye kısayolları",
+      "close": "Kapat",
+      "intro": "Listeyi fare kullanmadan gözden geçirin. Bir alana yazarken kısayollar duraklatılır.",
+      "actions": {
+        "next": "Sonraki görev",
+        "prev": "Önceki görev",
+        "open": "Görevi aç",
+        "toggleComplete": "Tamamla veya yeniden aç",
+        "toggleSelect": "Seç veya seçimi kaldır",
+        "newTask": "Yeni görev",
+        "focusSearch": "Ara",
+        "clearSelection": "Seçimi temizle",
+        "help": "Bu listeyi göster"
+      }
+    },
+    "linked": {
+      "title": "Görevler",
+      "addPlaceholder": "Bir görev başlığı yazın, ardından ayrıntıları doldurmak için Ekle'ye tıklayın",
+      "viewAll": "Tümünü gör",
+      "loading": "Görevler yükleniyor",
+      "unavailableTitle": "Görevler henüz kullanılamıyor",
+      "unavailable": "Görevler hizmeti bu sunucuda henüz kullanılamıyor.",
+      "empty": "Açık görev yok.",
+      "loadMore": "Daha fazla yükle",
+      "loadMoreDone": "Tamamlananları daha fazla yükle",
+      "showDone": "Tamamlananları göster",
+      "hideDone": "Tamamlananları gizle"
+    }
+  }
+}

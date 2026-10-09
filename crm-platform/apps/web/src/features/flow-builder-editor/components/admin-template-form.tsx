@@ -24,6 +24,7 @@ const inputCls =
 
 /** `/admin/flow-templates/new` and `/{id}/edit` (TW-FLB-012). */
 export function AdminTemplateFormScreen({ id }: { id?: string }) {
+  const ts = useTranslations('flb.builder.shell.admin');
   const q = useQuery({
     queryKey: [...FLB_KEYS.admin, 'one', id],
     queryFn: () => adminTemplatesApi.get(id!),
@@ -35,7 +36,7 @@ export function AdminTemplateFormScreen({ id }: { id?: string }) {
   if (id && q.isError)
     return (
       <div role="alert" className="py-10 text-center text-sm">
-        Template not found.
+        {ts('notFound')}
       </div>
     );
   return <TemplateForm key={id ?? 'new'} template={q.data ?? null} />;
@@ -43,6 +44,7 @@ export function AdminTemplateFormScreen({ id }: { id?: string }) {
 
 function TemplateForm({ template }: { template: AdminFlowTemplateDetail | null }) {
   const t = useTranslations('flb.admin.form');
+  const ts = useTranslations('flb.builder.shell.admin');
   const router = useRouter();
   const editing = template !== null;
   const [name, setName] = useState(template?.name ?? '');
@@ -140,7 +142,7 @@ function TemplateForm({ template }: { template: AdminFlowTemplateDetail | null }
       noValidate
       data-testid="admin-template-form"
     >
-      <nav className="font-mono text-[12px] text-muted-foreground" aria-label="Breadcrumb">
+      <nav className="font-mono text-[12px] text-muted-foreground" aria-label={ts('breadcrumb')}>
         <span className="tracking-[0.16em] uppercase">{t('breadcrumbAdmin')}</span> ›{' '}
         <Link href="/admin/flow-templates" className="hover:text-foreground">
           {t('breadcrumbTemplates')}

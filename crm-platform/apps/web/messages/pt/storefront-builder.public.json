@@ -1,0 +1,336 @@
+{
+  "shopPublic": {
+    "common": {
+      "close": "Fechar",
+      "ok": "OK",
+      "done": "Concluído",
+      "skip": "Ir para o conteúdo"
+    },
+    "strip": "Peça pelo WhatsApp · Pagamento na entrega disponível · Chats gratuitos, respostas rápidas",
+    "header": {
+      "navLabel": "Seções da loja",
+      "shop": "Loja",
+      "categories": "Categorias",
+      "about": "Sobre",
+      "searchPlaceholder": "Pesquisar produtos…",
+      "searchLabel": "Pesquisar produtos",
+      "wishlist": "Lista de desejos",
+      "compare": "Comparar",
+      "cart": "Carrinho",
+      "withCount": "{label}, {count, plural, one {# item} other {# itens}}"
+    },
+    "hero": {
+      "welcome": "Bem-vindo à {shop}.",
+      "sub": "Produtos selecionados à mão. Peça qualquer item diretamente pelo WhatsApp — sem formulários de checkout, sem instalar apps.",
+      "trust": {
+        "cod": "Pagamento na entrega",
+        "chat": "Suporte por chat gratuito",
+        "returns": "Devoluções fáceis"
+      }
+    },
+    "catalog": {
+      "label": "Produtos",
+      "emptyTitle": "Nenhum produto ainda",
+      "emptyBody": "O proprietário ainda está configurando tudo — volte em breve.",
+      "count": "{count, plural, one {# produto} other {# produtos}}",
+      "sort": {
+        "label": "Ordenar produtos",
+        "featured": "Ordenar · Em destaque",
+        "priceAsc": "Preço · do menor para o maior",
+        "priceDesc": "Preço · do maior para o menor",
+        "nameAsc": "Nome · A → Z",
+        "nameDesc": "Nome · Z → A"
+      },
+      "view": {
+        "label": "Layout",
+        "grid": "Exibição em grade",
+        "list": "Exibição em lista"
+      },
+      "filters": {
+        "title": "Filtrar",
+        "category": "Categoria",
+        "price": "Preço",
+        "min": "Mín.",
+        "max": "Máx.",
+        "range": "Faixa: {min} — {max}",
+        "availability": "Disponibilidade",
+        "inStock": "Apenas em estoque",
+        "onSale": "Em promoção",
+        "reset": "Redefinir filtros",
+        "clear": "Limpar filtros"
+      },
+      "noMatch": "Nada corresponde a esses filtros",
+      "showMore": "Mostrar mais produtos",
+      "loading": "Carregando…",
+      "retry": "Tentar novamente",
+      "showing": "Mostrando {shown} de {total} produtos"
+    },
+    "card": {
+      "new": "Novo",
+      "soldOut": "Esgotado",
+      "soldOutNamed": "{name}: esgotado",
+      "addToCart": "Adicionar ao carrinho",
+      "addToCartNamed": "Adicionar {name} ao carrinho",
+      "addWish": "Adicionar {name} à lista de desejos",
+      "removeWish": "Remover {name} da lista de desejos",
+      "quickView": "Visualização rápida de {name}",
+      "quickViewTitle": "Visualização rápida",
+      "was": "De"
+    },
+    "quick": {
+      "details": "Detalhes completos →"
+    },
+    "product": {
+      "gallery": "Imagens do produto",
+      "showImage": "Mostrar imagem {n}",
+      "breadcrumb": "Você está aqui",
+      "save": "Economize {percent}%",
+      "onlyLeft": "Restam apenas {count}",
+      "inStock": "Em estoque · pronto para envio",
+      "quantity": "Quantidade",
+      "addCompare": "Adicionar para comparar",
+      "removeCompare": "Remover da comparação",
+      "share": "Compartilhar este produto",
+      "shareTitle": "Compartilhar este produto",
+      "ask": "Faça uma pergunta pelo WhatsApp",
+      "sku": "SKU",
+      "category": "Categoria",
+      "weight": "Peso",
+      "grams": "{count} g",
+      "delivery": "Entrega",
+      "deliveryTime": "2–5 dias úteis",
+      "tags": "Tags",
+      "tabs": {
+        "label": "Informações do produto",
+        "desc": "Descrição",
+        "ship": "Envio e devoluções",
+        "reviews": "Avaliações"
+      },
+      "noDescription": "Nenhuma descrição disponível ainda — envie uma mensagem ao vendedor pelo WhatsApp para saber mais.",
+      "shippingHeading": "Envio.",
+      "shippingBody": "Pedidos são despachados em 1–2 dias úteis. Os prazos de entrega dependem da sua localização — normalmente 2–5 dias úteis.",
+      "freeAbove": "Frete grátis em pedidos acima de {amount}.",
+      "returnsHeading": "Devoluções.",
+      "returnsBody": "Itens não utilizados podem ser devolvidos em até 7 dias após a entrega. Envie uma mensagem pelo WhatsApp para iniciar a devolução — organizaremos a coleta.",
+      "reviewCount": "{count, plural, one {# avaliação} other {# avaliações}}",
+      "anonymous": "Anônimo",
+      "ratingOf": "{rating} de 5",
+      "noReviews": "Nenhuma avaliação ainda — seja o primeiro a avaliar este produto.",
+      "related": "Você também pode gostar"
+    },
+    "review": {
+      "write": "Escrever uma avaliação",
+      "name": "Seu nome",
+      "rating": "Avaliação",
+      "ratings": {
+        "1": "Ruim",
+        "2": "Fraco",
+        "3": "Regular",
+        "4": "Bom",
+        "5": "Excelente"
+      },
+      "bodyLabel": "Sua avaliação",
+      "body": "Compartilhe sua experiência (opcional)",
+      "submit": "Enviar avaliação",
+      "nameRequired": "Adicione seu nome, por favor.",
+      "thanks": "Obrigado pela sua avaliação!",
+      "network": "Erro de rede. Tente novamente.",
+      "failed": "Não foi possível enviar sua avaliação."
+    },
+    "cart": {
+      "title": "Seu carrinho",
+      "subtotal": "Subtotal",
+      "shipping": "Frete",
+      "free": "GRÁTIS ✓",
+      "total": "Total",
+      "addForFree": "Adicione mais {amount} para ter frete grátis",
+      "order": "Pedir pelo WhatsApp →",
+      "payVia": "Pagar via {method} · Pagamento na entrega",
+      "methods": {
+        "upi": "UPI",
+        "razorpay": "Razorpay",
+        "card": "Cartão",
+        "paypal": "PayPal",
+        "bank": "Transferência bancária"
+      },
+      "codOnly": "Pagamento na entrega · Confirme no chat",
+      "emptyTitle": "Seu carrinho está vazio",
+      "emptyBody": "Navegue pelo catálogo e adicione seus favoritos.",
+      "keepBrowsing": "Continuar navegando",
+      "quantityOf": "Quantidade de {name}",
+      "decrease": "Diminuir quantidade",
+      "increase": "Aumentar quantidade",
+      "remove": "Remover {name} do carrinho",
+      "fullTitle": "Seu carrinho está cheio",
+      "fullBody": "Um carrinho comporta até 100 produtos diferentes. Faça estes pedidos primeiro e depois inicie um novo carrinho."
+    },
+    "wish": {
+      "title": "Lista de desejos",
+      "emptyTitle": "Nenhum favorito ainda",
+      "emptyBody": "Toque no coração de qualquer produto para salvá-lo para depois.",
+      "remove": "Remover {name} da lista de desejos"
+    },
+    "compare": {
+      "title": "Comparar produtos",
+      "emptyTitle": "Nada para comparar",
+      "emptyBody": "Toque em “Comparar” em dois produtos quaisquer para vê-los lado a lado.",
+      "attribute": "Atributo",
+      "rows": {
+        "image": "Imagem",
+        "name": "Nome",
+        "price": "Preço",
+        "sku": "SKU",
+        "category": "Categoria",
+        "description": "Descrição"
+      },
+      "remove": "Remover {name} da comparação",
+      "bar": "Produtos para comparar",
+      "open": "Comparar →",
+      "fullTitle": "Comparação cheia",
+      "fullBody": "Você pode comparar até {count} produtos por vez. Remova um da barra de comparação para adicionar outro."
+    },
+    "stock": {
+      "title": "Apenas {count} em estoque",
+      "soldOut": "Este produto está esgotado. Vamos repor em breve — envie uma mensagem pelo WhatsApp para ser avisado.",
+      "limit": "{count, plural, one {Há apenas 1 unidade disponível, e você já tem todas no carrinho.} other {Há apenas # unidades disponíveis, e você já tem todas no carrinho.}}",
+      "maxTitle": "Limite atingido",
+      "maxBody": "Você pode pedir até {count} unidades de um mesmo produto por vez."
+    },
+    "toast": {
+      "added": "{name} · adicionado ao carrinho",
+      "wishAdded": "Adicionado à lista de desejos ♡",
+      "wishRemoved": "Removido da lista de desejos",
+      "compareAdded": "Adicionado à comparação",
+      "compareRemoved": "Removido da comparação"
+    },
+    "checkout": {
+      "title": "Finalizar compra",
+      "summary": "{count, plural, one {# item} other {# itens}} · {total}",
+      "name": "Seu nome",
+      "phone": "Número do WhatsApp",
+      "phonePlaceholder": "+55 11 91234-5678",
+      "address": "Endereço de entrega",
+      "note": "Observação (opcional)",
+      "coupon": "Código de desconto",
+      "apply": "Aplicar",
+      "payment": "Pagamento",
+      "prepaid": "Detalhes de pagamento online / na entrega",
+      "cod": "Pagamento na entrega",
+      "place": "Fazer pedido",
+      "placing": "Enviando pedido…",
+      "opening": "Pedido feito! Abrindo o WhatsApp…",
+      "nameRequired": "Digite seu nome, por favor.",
+      "phoneInvalid": "Digite um número de WhatsApp válido, por favor.",
+      "cartEmpty": "Seu carrinho está vazio.",
+      "emptyTitle": "Seu carrinho está vazio",
+      "emptyBody": "Navegue pelo catálogo e adicione um produto antes de finalizar a compra.",
+      "failed": "Não foi possível fazer o pedido. Tente novamente.",
+      "network": "Erro de rede. Tente novamente.",
+      "couponSave": "Você economiza {discount} · Novo total {total}",
+      "couponFree": "Frete grátis aplicado · Novo total {total}",
+      "couponInvalid": "Este código não é válido para este carrinho.",
+      "couponNetwork": "Não foi possível verificar este código.",
+      "couponFallback": "Código inválido."
+    },
+    "errors": {
+      "itemsUnavailable": "Estes itens não estão mais disponíveis. Atualize a página e tente novamente.",
+      "notAvailable": "Esta loja não está disponível.",
+      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente."
+    },
+    "placed": {
+      "title": "Pedido feito",
+      "track": "Acompanhar pedido nº {orderNo} →"
+    },
+    "share": {
+      "title": "Compartilhar",
+      "url": "Link para compartilhar",
+      "copy": "Copiar",
+      "copied": "Copiado ✓",
+      "copyFailed": "Não foi possível copiar o link",
+      "linkCopied": "Link copiado",
+      "whatsapp": "WhatsApp",
+      "whatsappHint": "Enviar para um chat",
+      "email": "E-mail",
+      "emailHint": "Abrir app de e-mail",
+      "telegram": "Telegram",
+      "telegramHint": "Compartilhar no chat",
+      "more": "Mais…",
+      "moreHint": "Menu de compartilhamento do celular",
+      "showQr": "Mostrar QR code →",
+      "qrTitle": "QR code do link",
+      "scan": "Escaneie para abrir a loja"
+    },
+    "info": {
+      "freeAbove": "Frete grátis acima de {amount}.",
+      "shipping": {
+        "title": "Envio e entrega",
+        "body": "Os pedidos são confirmados pelo WhatsApp. Os prazos de entrega dependem da sua localização — normalmente 2 a 5 dias úteis."
+      },
+      "returns": {
+        "title": "Devoluções",
+        "body": "Itens não utilizados podem ser devolvidos em até 7 dias. Envie uma mensagem pelo WhatsApp para iniciar a devolução."
+      },
+      "howToOrder": {
+        "title": "Como pedir",
+        "body": "Navegue pelo catálogo, adicione ao carrinho e toque em “Pedir pelo WhatsApp”. Confirmamos seu pedido no chat e organizamos a entrega."
+      },
+      "privacy": {
+        "title": "Privacidade",
+        "body": "Coletamos apenas o que você compartilha no chat para atender ao seu pedido. Nunca vendemos seus dados."
+      }
+    },
+    "footer": {
+      "blurb": "Produtos selecionados à mão, pedidos pelo WhatsApp como uma ligação. Não precisa de app — basta conversar conosco para comprar.",
+      "paymentsLabel": "Formas de pagamento",
+      "pay": {
+        "whatsapp": "WhatsApp",
+        "upi": "UPI",
+        "cod": "Pagamento na entrega",
+        "bank": "Transferência bancária"
+      },
+      "shopHeading": "Loja",
+      "allProducts": "Todos os produtos",
+      "helpHeading": "Ajuda",
+      "help": {
+        "shipping": "Envio",
+        "returns": "Devoluções",
+        "howToOrder": "Como pedir",
+        "privacy": "Privacidade"
+      },
+      "contactHeading": "Contato",
+      "whatsappLink": "WhatsApp · {number}",
+      "hours": "Seg–Dom · 9h–21h",
+      "hoursToast": "Horário: 9h–21h",
+      "copyright": "© {year} {shop}"
+    },
+    "order": {
+      "title": "Pedido nº {orderNo}",
+      "progress": "Andamento do pedido",
+      "cancelled": "Este pedido foi cancelado. Entre em contato se isso for inesperado.",
+      "steps": {
+        "placed": "Realizado",
+        "confirmed": "Confirmado",
+        "paid": "Pago",
+        "shipped": "Enviado"
+      },
+      "stepDone": "concluído",
+      "stepTodo": "ainda não",
+      "items": "Itens",
+      "qty": "Qtd {qty} · {price}",
+      "free": "Grátis",
+      "deliveryTo": "Entrega para",
+      "payNow": "Pagar agora",
+      "message": "Enviar mensagem sobre este pedido"
+    },
+    "notFound": {
+      "kicker": "Perdido no espaço de trabalho",
+      "title": "Esta página tomou um caminho errado.",
+      "body": "Não encontramos o que você procurava. O link pode estar quebrado, a página pode ter sido movida ou talvez nunca tenha existido.",
+      "back": "Voltar",
+      "signIn": "Entrar",
+      "help": "Precisa de ajuda?",
+      "support": "Falar com o suporte",
+      "metaTitle": "Página não encontrada"
+    }
+  }
+}

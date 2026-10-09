@@ -113,7 +113,25 @@
       "instagram": "Instagram",
       "call": "Call",
       "enroll": "Enroll contacts",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "relative": {
+        "justNow": "just now",
+        "minute": "{n, plural, one {# minute ago} other {# minutes ago}}",
+        "hour": "{n, plural, one {# hour ago} other {# hours ago}}",
+        "day": "{n, plural, one {# day ago} other {# days ago}}",
+        "week": "{n, plural, one {# week ago} other {# weeks ago}}",
+        "month": "{n, plural, one {# month ago} other {# months ago}}",
+        "year": "{n, plural, one {# year ago} other {# years ago}}"
+      },
+      "purpose": {
+        "welcome": "Routes new subscribers into catalog, support, or first-order incentive paths.",
+        "cart": "Triggers after checkout drop-off with product context and a support fallback.",
+        "postPurchase": "Follows up after delivery to drive reviews, repeat orders, and feedback.",
+        "reEngagement": "Re-activates dormant contacts with a personalised offer or check-in.",
+        "lead": "Nurtures new leads with educational touches before handing to sales.",
+        "event": "Time-boxed broadcast around a launch, sale, or seasonal moment.",
+        "default": "Automated WhatsApp journey built in the flow editor."
+      }
     },
     "featured": {
       "category": "Uncategorized",
@@ -166,7 +184,8 @@
       "duplicated": "Flow duplicated.",
       "imported": "Flow imported — review it, then Publish when ready.",
       "cloned": "Template \"{name}\" cloned — customise it, then Publish.",
-      "failed": "{message}"
+      "failed": "{message}",
+      "cloneFailed": "Could not clone the template."
     },
     "admin": {
       "nav": {
@@ -372,7 +391,2096 @@
         "propertyLabel": "Contact property",
         "propertyChoose": "Choose a property...",
         "propertyRequired": "Choose the contact property to save to, or turn this off."
+      },
+      "shell": {
+        "admin": {
+          "notFound": "Template not found.",
+          "breadcrumb": "Breadcrumb",
+          "pagination": "Pagination",
+          "prev": "Prev",
+          "next": "Next"
+        },
+        "aiError": {
+          "fieldPrompt": "prompt",
+          "fieldModel": "model",
+          "fieldProvider": "provider",
+          "fieldFlowType": "flow type",
+          "tooLong": "The {label} may not be greater than {max} characters.",
+          "required": "The {label} field is required.",
+          "invalid": "The selected {label} is invalid.",
+          "network": "Network error",
+          "generationFailed": "Generation failed ({status})"
+        },
+        "canvas": {
+          "deleteEdge": "Delete"
+        },
+        "kit": {
+          "insertAttribute": "Insert attribute",
+          "noAttributes": "No attributes match. <link>Create one</link>.",
+          "systemBadge": "S",
+          "customBadge": "C",
+          "hidePassword": "Hide password",
+          "showPassword": "Show password",
+          "createKnowledgeBase": "+ Create knowledge base",
+          "refreshList": "Refresh list",
+          "previewWhatsApp": "Preview · WhatsApp",
+          "am": "AM",
+          "pm": "PM"
+        },
+        "modals": {
+          "close": "Close",
+          "saveFlow": "Save flow",
+          "saveTitle": "Confirm name, then save",
+          "saveBody": "Saving keeps your nodes + edges as a draft. Publish separately when you're ready to run it.",
+          "flowName": "Flow name",
+          "namePlaceholder": "e.g. Welcome flow",
+          "saving": "Saving…",
+          "aiEyebrow": "AI Flow Generator",
+          "aiTitle": "Generate a flow with AI",
+          "aiSubtitle": "Pick a model, describe what you want, and AI will build the nodes.",
+          "chooseModel": "Choose model",
+          "noProviders": "No AI providers enabled. Admin needs to add a key in <link>AI Keys</link> before this can run.",
+          "describe": "Describe your flow",
+          "promptPlaceholder": "Example: Create a customer support bot that asks for user name, email, and issue type, then sends a confirmation message…",
+          "quickExamples": "Quick examples",
+          "exampleSupport": "Customer support bot with name, email collection",
+          "exampleOrder": "Order tracking with order number verification",
+          "exampleLead": "Lead qualification bot with budget questions",
+          "exampleBooking": "Appointment booking with date and time selection",
+          "generating": "Generating…",
+          "replaceNote": "AI will replace the current flow.",
+          "generate": "Generate"
+        },
+        "nodeCard": {
+          "nodeFallback": "Node",
+          "input": "input",
+          "output": "output",
+          "outPort": "out: {label}",
+          "start": "START",
+          "flowEnds": "flow ends here"
+        },
+        "nodePreview": {
+          "when": "When",
+          "anyMessage": "— any message —",
+          "noKeywords": "⚠ no keywords set",
+          "typeMessage": "Type a message…",
+          "pickTemplateHint": "pick a template…",
+          "pickTemplate": "pick template",
+          "buttonCount": "{count} button(s)",
+          "noFile": "no file selected",
+          "noReplies": "No replies yet — open inspector to add",
+          "emptyText": "empty text",
+          "moreReplies": "+ {count} more…",
+          "prompt": "Prompt…",
+          "viewOptions": "View options",
+          "itemsAfterTap": "{count} item(s) — shown after tap",
+          "askDefault": "What's your name?",
+          "customerReply": "customer's reply → next node",
+          "if": "IF",
+          "noConditions": "No conditions set",
+          "opExists": "is set",
+          "wait": "Wait",
+          "saveTo": "save →",
+          "aiPromptDefault": "You are a friendly support assistant…",
+          "tagNew": "new",
+          "teamNumber": "Team #{id}",
+          "pickTeam": "— pick team —",
+          "agentNumber": "agent #{id}",
+          "team": "Team",
+          "agent": "Agent",
+          "flowNumber": "Flow #{id}",
+          "pickFlow": "pick flow…",
+          "run": "▶ run",
+          "ctaCopy": "Copy",
+          "ctaCall": "Call",
+          "ctaVisit": "Visit",
+          "location": "Location",
+          "pollQuestion": "Poll question",
+          "chatAgentNumber": "Agent #{id}",
+          "pickAgent": "pick agent…",
+          "noProducts": "No products picked — open inspector",
+          "productCount": "{count} product(s)",
+          "offer": "offer",
+          "slotCount": "{count} slot(s)",
+          "pickTime": "Pick a time…",
+          "meetTiming": "{duration} min · lead {lead} min",
+          "meeting": "Meeting",
+          "formNumber": "form #{id}",
+          "tapToOpenForm": "Tap to open form",
+          "pickSheet": "(pick sheet)",
+          "lookup": "lookup {column} = {value}",
+          "append": "append {count} col(s)",
+          "templateRef": "template {id}…",
+          "pickTemplateParen": "(pick template)",
+          "document": "Document",
+          "formRef": "form {id}…",
+          "pickForm": "(pick form)",
+          "sendFormLink": "Send form link",
+          "dealMove": "MOVE",
+          "dealCreate": "CREATE",
+          "stageRef": "stage {id}",
+          "pickStage": "(pick stage)",
+          "newDeal": "New deal",
+          "saySomething": "Say something…",
+          "listen": "listen →",
+          "aiLabel": "AI",
+          "aiAnswers": "AI answers…",
+          "voiceAgent": "voice agent",
+          "assistantNumber": "Assistant #{id}",
+          "pickAssistant": "— pick an assistant —",
+          "routeBy": "route by {mode} · ",
+          "branchCount": "{count} branch(es)",
+          "search": "search →",
+          "transfer": "transfer →",
+          "setNumber": "(set number)",
+          "endCall": "End the call",
+          "sendDm": "Send a DM…",
+          "pickOne": "Pick one…",
+          "quickReplyCount": "{count} quick reply(s)",
+          "buttonsDots": "Buttons…",
+          "publicReply": "public reply · ",
+          "productCarousel": "Product carousel",
+          "firstSynced": "first {count} synced",
+          "askSomething": "Ask something…",
+          "answerTo": "answer → {variable}",
+          "captureLead": "Capture lead",
+          "withDeal": "+ pipeline deal",
+          "leadOnly": "lead only",
+          "cardGallery": "Card gallery",
+          "cardCount": "{count} card(s)",
+          "payLink": "Pay link",
+          "invoice": "Invoice"
+        },
+        "overlays": {
+          "startPinned": "This is the start point (click to unpin)",
+          "startMake": "Make this the start point",
+          "startPoint": "Start point",
+          "editTitle": "Edit (open inspector)",
+          "edit": "Edit",
+          "duplicateTitle": "Duplicate (Ctrl+D)",
+          "duplicate": "Duplicate",
+          "deleteTitle": "Delete (⌫)",
+          "deleteNode": "Delete node",
+          "cantSave": "Can't save — {count, plural, one {# node needs} other {# nodes need}} fixing",
+          "andMore": "…and {count} more.",
+          "outlined": "The affected nodes are outlined in red. Connect them, then save again.",
+          "inspector": "Inspector",
+          "selectNode": "Select a node",
+          "hidePanel": "Hide panel",
+          "nothingSelected": "Nothing selected",
+          "nothingHint": "Click a node on the canvas to edit its properties,<br/>or drag a card from the left to add a new node.",
+          "nodeFallback": "Node",
+          "id": "id",
+          "noSettings": "This node has no settings."
+        },
+        "palette": {
+          "modeCall": "Call",
+          "modeEmail": "Email",
+          "ariaLabel": "Node palette",
+          "addNode": "Add a node",
+          "searchPlaceholder": "Search nodes…",
+          "searchLabel": "Search nodes",
+          "noMatch": "No nodes match.",
+          "tip": "<b>Tip ·</b> drag onto canvas, or double-click to add at center."
+        },
+        "screen": {
+          "loading": "Loading flow builder...",
+          "newFlow": "New flow",
+          "unknownError": "unknown",
+          "flowSaved": "Flow saved · \"{name}\"",
+          "saveFailed": "Save failed: {message}",
+          "retryFailed": "Retry failed: {message}",
+          "published": "Published",
+          "publishFailed": "Publish failed: {message}",
+          "generated": "Flow generated with {model}",
+          "hideSidebar": "Hide sidebar",
+          "showSidebar": "Show sidebar",
+          "addNodeTitle": "Add a node",
+          "addNode": "Add node",
+          "undoTitle": "Undo (Ctrl+Z)",
+          "undo": "Undo",
+          "redoTitle": "Redo (Ctrl+Shift+Z)",
+          "redo": "Redo",
+          "zoomIn": "Zoom in",
+          "zoomOut": "Zoom out",
+          "reset": "Reset",
+          "resetView": "Reset view"
+        },
+        "toolbar": {
+          "back": "Back to flows",
+          "eyebrow": "Flow Builder",
+          "flowName": "Flow name",
+          "generateAi": "Generate with AI",
+          "test": "Test",
+          "published": "Published",
+          "unsaved": "Unsaved",
+          "draft": "Draft",
+          "saveChanges": "Save changes",
+          "save": "Save",
+          "publish": "Publish"
+        }
+      },
+      "simple": {
+        "loading": "Loading the flow…",
+        "genericError": "Something went wrong.",
+        "defaultName": "New flow",
+        "backToFlows": "Back to flows",
+        "openAdvanced": "Open in Advanced",
+        "openOnCanvas": "Open this flow on the canvas",
+        "needsAdvanced": {
+          "title": "This flow needs the Advanced builder",
+          "intro": "The Simple builder shows a flow as steps one under another. This one uses something that does not fit that:",
+          "otherType": "It is a {type} flow.",
+          "advancedOff": "The Advanced builder is switched off for this workspace; ask your administrator."
+        },
+        "imported": "Imported {steps, plural, one {# step} other {# steps}} in {flows, plural, one {# flow} other {# flows}}. Check them, then Save.",
+        "invalidJson": "That file is not valid JSON.",
+        "saved": "Saved \"{name}\"",
+        "saveFailed": "Save failed: {error}",
+        "publishedToast": "Published",
+        "publishFailed": "Publish failed: {error}",
+        "status": {
+          "publishedUnsaved": "Published · unsaved changes",
+          "published": "Published",
+          "draftUnsaved": "Draft · unsaved",
+          "draft": "Draft"
+        },
+        "flowName": "Flow name",
+        "simpleBuilder": "Simple builder",
+        "toFix": "{count} to fix",
+        "notReachedTitle": "Parts of flows that no button or list row leads to. They do not stop you publishing.",
+        "notReachedCount": "{count} not reached",
+        "notReachedItem": "\"{summary}\" (step {stage}) starts a part nothing leads to, so it never runs.",
+        "importTitle": "Import a flow from a .json file: this app's export or a wabo console export",
+        "import": "Import",
+        "save": "Save",
+        "publishChanges": "Publish changes",
+        "publish": "Publish",
+        "importFailedTitle": "That file could not be imported:",
+        "importNotesTitle": "Imported. A few things did not come across:",
+        "fixBeforePublishing": "Fix these before publishing:",
+        "notReachedPanel": "Not reached: link a button or list row to them, or delete them.",
+        "hide": "Hide",
+        "flows": "Flows",
+        "newFlowSidebar": "+ New Flow",
+        "searchFlows": "Search flows",
+        "search": "Search",
+        "nothingLeadsHere": "Nothing leads to this flow yet",
+        "duplicateNamed": "Duplicate {name}",
+        "duplicateFlow": "Duplicate this flow",
+        "flowSelect": "Flow",
+        "newFlowMobile": "+ New flow",
+        "flowPlaceholder": "Flow {n}",
+        "deleteFlow": "Delete flow",
+        "anotherPart": "Another part of this flow. It runs when a button or list row leads here{lost, select, true {: nothing leads here yet, so it would never run.} other {.}}",
+        "addFirstStep": "Add the first step",
+        "branchingEnds": "This {kind, select, list {list} other {set of buttons}} ends this part: what is sent next depends on what the customer picks.",
+        "thenGoTo": "Then go to",
+        "confirmImport": {
+          "title": "Replace this flow with the file?",
+          "message": "The steps here are replaced by the ones in the file. The WhatsApp number and trigger words stay. Nothing is saved until you press Save.",
+          "confirm": "Replace"
+        },
+        "confirmDelete": {
+          "title": "Delete this flow?",
+          "message": "Its steps are removed, and any button that led to it ends the conversation instead."
+        },
+        "trigger": {
+          "aria": "Trigger",
+          "title": "When does this flow start?",
+          "otherKind": "This flow starts on “{kind}”. Change that in the Advanced builder; the number it runs on can be set here.",
+          "startsWhen": "Starts when the customer sends",
+          "oneOfWords": "One of these words",
+          "anyMessage": "Any message",
+          "words": "Words",
+          "wordsHint": "Separate with commas. Capital letters do not matter.",
+          "wordsPlaceholder": "hi, hello, menu",
+          "whatsappNumber": "WhatsApp number",
+          "noNumberHint": "No WhatsApp number is connected yet: connect one under Settings, then pick it here.",
+          "chooseNumber": "Choose a number…"
+        },
+        "add": {
+          "addStep": "Add a step",
+          "groups": {
+            "send": "Send",
+            "ask": "Ask the customer",
+            "handoff": "Hand off"
+          },
+          "blockedTitle": "Buttons and lists end a flow, so they can only go last."
+        },
+        "card": {
+          "branchLabel": "{title} → {target}",
+          "ends": "ends",
+          "empty": "Empty",
+          "moveUp": "Move up",
+          "moveDown": "Move down",
+          "duplicate": "Duplicate",
+          "deleteStep": "Delete step"
+        },
+        "editors": {
+          "linkLabel": "Where this leads",
+          "linkEnds": "Ends here (nothing more is sent)",
+          "linkOption": "{stage} · {label}{self, select, true { (this step)} other {}}{hasSummary, select, true { · {summary}} other {}}",
+          "linkNew": "+ Lead to a new flow…",
+          "question": "Question",
+          "retriesHint": "After this many wrong answers the flow moves on (or ends).",
+          "message": {
+            "label": "Message",
+            "hint": "*bold*  _italic_  ~strike~  — and {token} for the customer's name."
+          },
+          "media": {
+            "type": "Type",
+            "kinds": {
+              "image": "Image",
+              "video": "Video",
+              "audio": "Audio",
+              "document": "Document"
+            },
+            "fileLink": "File link",
+            "fileLinkHint": "A public https link to the file.",
+            "fileName": "File name shown to the customer",
+            "caption": "Caption (optional)"
+          },
+          "buttons": {
+            "above": "Message above the buttons",
+            "heading": "Buttons <muted>(up to {max}) — each one decides what is sent next</muted>",
+            "placeholder": "Button {n}",
+            "remove": "Remove button",
+            "add": "Add a button",
+            "saveIn": "Save the tapped button in"
+          },
+          "list": {
+            "above": "Message above the list",
+            "buttonText": "Text on the button that opens the list",
+            "heading": "Rows <muted>(up to {max})</muted>",
+            "rowPlaceholder": "Row {n}",
+            "remove": "Remove row",
+            "description": "Description (optional)",
+            "add": "Add a row",
+            "saveIn": "Save the chosen row in"
+          },
+          "wrong": {
+            "message": "Message for a wrong answer",
+            "messageHint": "Leave blank to use the ready-made one.",
+            "stopAfter": "Stop after wrong answers",
+            "then": "Then",
+            "continue": "Carry on without an answer",
+            "end": "End the flow"
+          },
+          "property": {
+            "label": "Contact property",
+            "copy": "Also copy {what, select, button {the tapped button} row {the chosen row} other {the answer}} to the contact",
+            "choose": "Choose a property…"
+          },
+          "ask": {
+            "accept": "Accept",
+            "checkedHint": "The answer is checked before the flow goes on.",
+            "anyTextHint": "Any text is accepted.",
+            "dateFormat": "Date format",
+            "dateFormatHint": "How the customer writes the date. It is saved as typed, and a copy as year-month-day in the _iso variable.",
+            "saveIn": "Save the answer in",
+            "retriesHint": "0 keeps asking until the answer is right."
+          },
+          "askFile": {
+            "accepted": "Files accepted",
+            "noneTicked": "None ticked: any file is accepted.",
+            "only": "Only: {list}",
+            "saveIn": "Save the file link in",
+            "wrongText": "That is not a file we can accept. Please send it as an attachment."
+          },
+          "askLocation": {
+            "saveIn": "Save the location link in",
+            "wrongText": "Please share your location with the attachment (+) menu, then Location."
+          },
+          "var": {
+            "hint": "Use it later as <code></code>. Give every question its own name."
+          },
+          "assign": {
+            "team": "Team",
+            "teamHint": "The conversation lands in this team's queue.",
+            "pickTeam": "— pick a team —",
+            "noTeams": "No teams yet",
+            "teamOption": "{name}{count, plural, =0 {} one { · # agent} other { · # agents}}",
+            "unknownTeam": "{team} (not in this workspace)",
+            "agent": "A specific agent (optional)",
+            "agentHint": "Any: the team's own assignment rule picks.",
+            "any": "Any",
+            "note": "Note for the agent",
+            "noteHint": "Shown on the conversation when it reaches the team."
+          },
+          "delay": {
+            "waitFor": "Wait for",
+            "unit": "Unit",
+            "sec": "seconds",
+            "min": "minutes",
+            "hour": "hours",
+            "day": "days"
+          },
+          "location": {
+            "placeName": "Place name",
+            "placePlaceholder": "Our office",
+            "address": "Address",
+            "latitude": "Latitude",
+            "longitude": "Longitude"
+          },
+          "template": {
+            "label": "Approved template",
+            "hint": "Only templates your WhatsApp number has approved are listed.",
+            "choose": "Choose a template…"
+          },
+          "cta": {
+            "buttonText": "Button text",
+            "opens": "Opens (link)"
+          }
+        }
+      },
+      "formsCore": {
+        "helpers": {
+          "flowFallback": "Flow",
+          "subflowLive": "{name} · live",
+          "subflowDraft": "{name} · draft",
+          "agentFallback": "Agent",
+          "agentWithModel": "{name} · {model}",
+          "senderEngine": "{label} · {engine}",
+          "senderPick": {
+            "chat": "— pick number —",
+            "instagram": "— pick Instagram account —",
+            "facebook": "— pick Facebook Page —",
+            "tiktok": "— pick TikTok account —",
+            "telegram": "— pick Telegram bot —",
+            "line": "— pick LINE channel —",
+            "wechat": "— pick WeChat account —",
+            "viber": "— pick Viber account —",
+            "email": "— pick mailbox —"
+          },
+          "senderEmpty": {
+            "chat": "No connected number",
+            "instagram": "No connected Instagram account",
+            "facebook": "No connected Facebook Page",
+            "tiktok": "No connected TikTok account",
+            "telegram": "No connected Telegram bot",
+            "line": "No connected LINE channel",
+            "wechat": "No connected WeChat account",
+            "viber": "No connected Viber account",
+            "email": "No linked mailbox"
+          },
+          "senderLabel": {
+            "listen": {
+              "instagram": "Listen on Instagram account",
+              "facebook": "Listen on Facebook Page",
+              "line": "Listen on LINE channel",
+              "wechat": "Listen on WeChat account",
+              "viber": "Listen on Viber account",
+              "email": "Listen on mailbox",
+              "chat": "Listen on number",
+              "tiktok": "Listen on number",
+              "telegram": "Listen on Telegram bot"
+            },
+            "send": {
+              "instagram": "Send from Instagram account",
+              "facebook": "Send from Facebook Page",
+              "line": "Send from LINE channel",
+              "wechat": "Send from WeChat account",
+              "viber": "Send from Viber account",
+              "email": "Send from mailbox",
+              "chat": "Send from number",
+              "tiktok": "Send from number",
+              "telegram": "Send from Telegram bot"
+            }
+          },
+          "senderHint": {
+            "instagram": "Required — which connected Instagram account this flow runs on. Connect one on <link></link>.",
+            "facebook": "Required — which connected Facebook Page this flow runs on. Connect one on <link></link>.",
+            "telegram": "Required — which connected Telegram bot this flow runs on. Connect one on <link></link>.",
+            "line": "Required — which connected LINE channel this flow runs on. Connect one on <link></link>.",
+            "wechat": "Required — which connected WeChat account this flow runs on. Connect one on <link></link>.",
+            "viber": "Required — which connected Viber account this flow runs on. Connect one on <link></link>.",
+            "email": "Required — which linked mailbox this flow runs on. Replies are sent from that address. Link one on <link></link>.",
+            "chatUnofficial": "Required — which connected number this flow runs on, across all your engines (Unofficial / WABA / Twilio). Connect one on <link></link>.",
+            "chatOfficial": "Required — which connected number this flow runs on, across your official engines (WhatsApp Business API / Twilio). Connect one on <link></link>."
+          },
+          "senderPickNotice": {
+            "instagram": "Pick an Instagram account before saving — without one the flow has no channel to run on.",
+            "facebook": "Pick a Facebook Page before saving — without one the flow has no channel to run on.",
+            "email": "Pick a mailbox before saving — without one the flow has no channel to run on.",
+            "telegram": "Pick a Telegram bot before saving — without one the flow has no channel to run on.",
+            "number": "Pick a number before saving — without one the flow has no channel to run on."
+          },
+          "senderNone": {
+            "instagram": "No Instagram account is connected to this workspace yet. You can still build and save this flow — connect one on <link></link> and pick it here before publishing.",
+            "facebook": "No Facebook Page is connected to this workspace yet. You can still build and save this flow — connect one on <link></link> and pick it here before publishing.",
+            "telegram": "No Telegram bot is connected to this workspace yet. You can still build and save this flow — connect one on <link></link> and pick it here before publishing.",
+            "email": "No mailbox is linked to this workspace yet. You can still build and save this flow — link one on <link></link> and pick it here before publishing.",
+            "number": "No connected number in this workspace yet — a disconnected phone can't send, so it isn't listed. You can still build and save this flow — reconnect on <link></link> and pick it here before publishing."
+          },
+          "ctaLabel": {
+            "url": "Visit website",
+            "phone": "Call us",
+            "call_now": "Call now",
+            "copy": "Copy code",
+            "other": "Tap"
+          }
+        },
+        "parts": {
+          "moveUp": "Move up",
+          "moveDown": "Move down",
+          "remove": "Remove",
+          "uploadFailed": "Upload failed: {message}",
+          "uploadedFallback": "uploaded"
+        },
+        "contact": {
+          "tagPick": "— pick existing tag —",
+          "tagNone": "No tags yet — type a new name below",
+          "tagDeleted": "(deleted tag {id})",
+          "actionLabel": "Action",
+          "actionAdd": "Add tag to contact",
+          "actionRemove": "Remove tag from contact",
+          "tagLabel": "Tag",
+          "tagHint": "Pick from existing tags or type a new name. The contact gets tagged (or untagged) when this node fires.",
+          "tagNewPlaceholder": "…or type a new tag",
+          "notInWorkspace": "{value} (not in workspace)",
+          "teamPick": "— pick team —",
+          "teamNone": "No teams yet — create one in /team-inbox",
+          "teamWithAgents": "{name} · {count, plural, one {# agent} other {# agents}}",
+          "agentAny": "Any (use team strategy)",
+          "teamLabel": "Team",
+          "teamHint": "Conversation lands in this team's queue. <link>Manage teams →</link>",
+          "agentLabel": "Assign to specific agent (optional)",
+          "agentHint": "Leave as <b>Any</b> to use the team's assignment strategy (round-robin / load-balanced / first-online).",
+          "noteLabel": "Note for agent",
+          "noteHint": "Internal note shown on the conversation when it lands in the team's inbox.",
+          "botPick": "— pick AI agent —",
+          "botNone": "No agents yet",
+          "botNotInWorkspace": "Agent {id} (not in workspace)",
+          "botLabel": "AI agent to trigger",
+          "botHint": "Pick a saved AI agent — its system prompt + model run when this node fires.",
+          "botHintNone": "You have no AI agents yet. You can also <link>manage agents in /team-inbox</link>."
+        },
+        "engage": {
+          "ctaType": {
+            "url": "Visit website",
+            "phone": "Call",
+            "call_now": "Call now",
+            "copy": "Copy code"
+          },
+          "ctaHint": {
+            "phone": "Include the country code (e.g. +1…). The customer taps to dial. Note: on WhatsApp Official (Cloud API), a Call in a flow shows as a tappable number, NOT a native button — WhatsApp only allows Call buttons inside approved Templates. Only URL buttons render as native buttons in a flow.",
+            "copy": "The customer long-presses the code to copy. Good for coupons, OTPs, referral codes. Note: on WhatsApp Official (Cloud API) this shows as tappable text in a flow, not a native button (Copy buttons are Template-only).",
+            "urlUnofficial": "The customer taps the button to open this URL. On WhatsApp Official this renders as a native tap button; on the Unofficial API it appears as a tappable link.",
+            "urlOfficial": "The customer taps the button to open this URL. On WhatsApp Official this renders as a native tap button."
+          },
+          "maxToast": "Max {max} buttons per CTA",
+          "info": "Add up to {max} CTA buttons in one message — mix Visit website, Call, and Copy code in any combination. Same cap WhatsApp template buttons have.",
+          "buttonLabel": "Button label",
+          "addButton": "Add button",
+          "maxReached": "Max {max} buttons reached.",
+          "locationTitle": "Title",
+          "locationTitlePlaceholder": "Our office",
+          "locationAddress": "Address",
+          "locationAddressPlaceholder": "Street, city, country",
+          "locationLatitude": "Latitude",
+          "locationLongitude": "Longitude"
+        },
+        "logic": {
+          "operator": {
+            "equals": "Equal to",
+            "not_equals": "Not equal to",
+            "contains": "Contains",
+            "not_contains": "Does not contain",
+            "gt": "Greater than",
+            "lt": "Less than",
+            "exists": "Is set"
+          },
+          "removeRule": "Remove rule",
+          "variablePlaceholder": "Variable name (e.g. plan)",
+          "pickVariable": "Pick the variable to test.",
+          "comparePlaceholder": "Compare against…",
+          "joinerAnd": "AND",
+          "joinerOr": "OR",
+          "emptyGroupSummary": "Empty group: always false",
+          "removeGroup": "Remove group",
+          "ruleLabel": "Rule {n}",
+          "emptyGroupWarning": "This group has no rules, so it is always false. Add a rule or remove the group.",
+          "addRule": "Add rule",
+          "addGroup": "Add group",
+          "conditionTreeInfo": "Rules are grouped. Each group combines its rules and sub-groups with <b>AND</b> (all must match) or <b>OR</b> (any can match). The whole tree either evaluates to TRUE (then the <ifPort>IF · true</ifPort> port fires) or FALSE (then the <elsePort>ELSE · false</elsePort> port fires). Groups nest up to {depth, plural, one {# level} other {# levels}}, with at most {rules, plural, one {# rule} other {# rules}} in total.{flat, select, true { This node still uses the old flat list until you edit it here.} other {}}",
+          "problemRules": "{count, plural, one {# rule has} other {# rules have}} no variable.",
+          "problemGroups": "{count, plural, one {# empty group.} other {# empty groups.}}",
+          "flatInfo": "All the rules below are combined into ONE expression using the <b>AND</b> / <b>OR</b> toggles. The whole expression either evaluates to TRUE (then the <ifPort>IF · true</ifPort> port fires) or FALSE (then the <elsePort>ELSE · false</elsePort> port fires). Add rules to make it more specific; chain with <b>AND</b> (all must match) or <b>OR</b> (any can match).",
+          "remove": "Remove",
+          "delayAmount": "Amount",
+          "delayUnit": "Unit",
+          "unitSec": "seconds",
+          "unitMin": "minutes",
+          "unitHour": "hours",
+          "unitDay": "days",
+          "webhookMethod": "Method",
+          "webhookUrl": "URL",
+          "webhookHeaders": "Headers",
+          "webhookHeadersHint": "e.g. Authorization → Bearer '{{'api_token'}}'. Values can use '{{'variables'}}'.",
+          "webhookHeaderName": "Header",
+          "webhookHeaderValue": "Value",
+          "webhookAddHeader": "Add header",
+          "webhookContentType": "Content type",
+          "contentJson": "JSON",
+          "contentForm": "Form URL-encoded",
+          "contentPlain": "Plain text",
+          "webhookBody": "Body",
+          "webhookBodyHint": "Sent for POST/PUT/PATCH. '{{'variables'}}' are substituted.",
+          "webhookSave": "Save response to",
+          "webhookSaveHint": "The API's response is stored in this variable for later nodes (e.g. <v>response</v>).",
+          "codeInfo": "Runs sandboxed JavaScript. Available: <code>previousResponse</code>, <code>allResponses</code>, <code>functionArgs</code>. <code>return</code> an object to save it.",
+          "codeLabel": "JavaScript",
+          "codeHint": "No file / network / require access. CPU + memory are capped.",
+          "codeSave": "Save return value to",
+          "codeSaveHint": "Later nodes read it as <v>{save}</v> (or <v>{path}</v> for object fields).",
+          "mysqlInfo": "Read-only — only <code>SELECT</code> queries run. Credentials are stored encrypted and only used to fetch data for the reply.",
+          "mysqlHost": "Host",
+          "mysqlPort": "Port",
+          "mysqlDatabase": "Database",
+          "mysqlUsername": "Username",
+          "mysqlPassword": "Password",
+          "mysqlSql": "SQL query",
+          "mysqlSqlHint": "SELECT only. Use '{{'variables'}}' from earlier nodes (e.g. an AI-extracted field code).",
+          "mysqlSave": "Save rows to",
+          "mysqlSaveHint": "Returned rows (JSON) are stored here — an AI / message node can then read <v>rows</v> and answer the customer.",
+          "aiModelPick": "— pick model —",
+          "aiModelNone": "No AI models enabled — ask admin to switch one on",
+          "aiModelNotEnabled": "{value} (not enabled)",
+          "aiAssistantNone": "— none (use the prompt above only) —",
+          "aiAssistantOption": "{name} · {count, plural, one {# source} other {# sources}}",
+          "aiAssistantMissing": "(assistant {id})",
+          "aiAssistantHintNone": "No knowledge bases yet. Create one in <link>AI Training</link>, then press Refresh list to pick it here.",
+          "aiAssistantHintEmpty": "Note: this assistant has 0 trained sources. Add some in <link>AI Training</link> or the reply uses the prompt only.",
+          "aiAssistantHint": "Pulls the chosen assistant's trained content into this reply. <link>Manage knowledge →</link>",
+          "aiModelLabel": "Model",
+          "aiModelHint": "Models the admin enabled — plus any provider you added your own key for (Settings → AI keys, on BYOK plans).",
+          "aiModelHintNone": "No provider available yet. Add your own key in <link>Settings → AI keys</link> (BYOK plans), or ask your admin to enable one.",
+          "aiPrompt": "System prompt",
+          "aiSave": "Save response to",
+          "aiSaveHint": "Later nodes read it as <v>{save}</v> — or <v>{path}</v> when extracting.",
+          "aiAssistantLabel": "Knowledge base (optional)",
+          "aiExtract": "<strong>Extract structured data (JSON)</strong> — turn the message into fields",
+          "aiFields": "Fields to extract",
+          "aiFieldsHint": "Comma-separated keys. The AI returns ONE JSON object; each key becomes <v>{key}</v> (and <v>{rows}</v> when several records are detected — e.g. for a Google Sheets node).",
+          "aiSilent": "<strong>Silent</strong> — don't send a reply to the customer (extraction only)",
+          "aiConversation": "<strong>Conversation mode</strong> — the AI keeps replying to every message (drives the whole chat) instead of answering once",
+          "aiExit": "Exit keyword (optional)",
+          "aiExitHint": "When the customer types exactly this, the AI hands back and the flow continues to the next node. Leave blank to let the AI run the whole conversation.",
+          "subflowLoading": "Loading flows…",
+          "subflowPick": "— pick flow —",
+          "subflowMissing": "Flow {id} (not in workspace)",
+          "subflowLabel": "Flow to run",
+          "subflowHint": "Pick another saved flow. When this node fires, that flow runs end-to-end before control returns to the next node here.",
+          "endInfo": "This node terminates the flow. Anything connected after it won't run."
+        },
+        "options": {
+          "prompt": "Prompt",
+          "buttonsOptions": "Options",
+          "buttonsOptionsHint": "Max {max} buttons. Each gets its own output port.",
+          "addButton": "Add button",
+          "listButtonLabel": "Button label",
+          "listButtonHint": "Text on the tap-to-open button under the bubble. Max {max} chars on WhatsApp.",
+          "listButtonPlaceholder": "View options",
+          "listItems": "Items",
+          "listItemsHint": "Up to {max} items total. Give two items the SAME section name to group them under one heading. Sections and descriptions render on WhatsApp Business API (Cloud).{unofficial, select, true { On the Unofficial API the list falls back to plain buttons showing the title only.} other {}}",
+          "itemTitle": "Item title",
+          "remove": "Remove",
+          "itemDescription": "Description (optional)",
+          "itemSection": "Section (optional)",
+          "addItem": "Add item",
+          "listSections": "Renders as <b>{count}</b> {count, plural, one {section} other {sections}}: {summary}",
+          "listSectionRow": "{title} × {count}",
+          "noHeading": "(no heading)",
+          "askQuestion": "Question",
+          "askValidate": "Validate as",
+          "askValidateChecked": "The answer is checked before the flow goes on; a wrong one gets the message below.",
+          "askValidateFree": "Free text takes any answer.",
+          "askDateFormat": "Date format",
+          "askDateFormatHint": "How the customer writes the date. It is saved as typed, with an ISO copy in the _iso variable.",
+          "askWrongLabel": "Wrong-answer message",
+          "askWrongHint": "Leave blank to use a ready-made one for this type.",
+          "askRetriesLabel": "Stop after wrong answers",
+          "askRetriesHint": "0 keeps asking until the answer is right (the run's idle limit still ends it).",
+          "askThen": "Then",
+          "askThenContinue": "Carry on without an answer",
+          "askThenEnd": "End the flow",
+          "askVarLabel": "Save answer to variable",
+          "askVarHint": "The customer's reply is stored here — reuse it later as <v>answer</v> (or whatever you name it) in a Send message. IMPORTANT: give each Ask question a UNIQUE name — e.g. <m>name</m>, <m>email</m> — otherwise a later question overwrites the earlier answer.",
+          "askMediaLabel": "Accept a file/photo upload",
+          "askMediaHint": "When on and the customer replies with a file instead of text, the variable holds a link to the stored file — reuse it in Sheets, a Webhook, or a template media header. Works on WhatsApp{unofficial, select, true { (official & unofficial)} other {}} and Twilio.",
+          "askMediaCheck": "Save an uploaded image / PDF / audio as this variable (a link)",
+          "askAnswersLabel": "Expected answers",
+          "askAnswersHint": "Max {max} answers, same as Quick replies. Each becomes its own output port; anything else goes through the <b>else</b> port. Leave empty for free-text answers.",
+          "addAnswer": "Add answer",
+          "maxReached": "Max {max} reached.",
+          "pollPlaceholder": "Pick one",
+          "pollOptionsHint": "Max {max} options. Each becomes its own output port.",
+          "addOption": "Add option",
+          "pollMulti": "Multiple choice",
+          "pollMultiCheck": "Allow multiple answers"
+        },
+        "previews": {
+          "messageEmpty": "Your message will appear here",
+          "templateMissing": "Template <code>{name}</code> not found in workspace",
+          "templatePick": "Pick an approved template to preview",
+          "attachment": "{kind} attachment",
+          "documentFallback": "document.pdf",
+          "voice": "Voice / audio",
+          "kindPreview": "({kind} preview will appear here)",
+          "buttonPrompt": "Button prompt",
+          "buttonsLabel": "Preview · WhatsApp · {count, plural, one {# button} other {# buttons}}",
+          "listPrompt": "List prompt",
+          "listButton": "View options",
+          "listLabel": "Preview · WhatsApp · {count, plural, one {# item} other {# items}}",
+          "bottomSheet": "After tap · bottom sheet",
+          "listEmpty": "Add items in the Options field below",
+          "ctaTapCopy": "Tap a button below — or long-press a code to copy.",
+          "ctaTap": "Tap a button below to continue.",
+          "ctaCopy": "Copy code",
+          "ctaCall": "Call us",
+          "ctaVisit": "Visit",
+          "locationFallback": "Pinned location",
+          "pollFallback": "Poll",
+          "repliesLabel": "Preview · WhatsApp · {count, plural, one {# reply} other {# replies}}",
+          "emptyText": "empty text",
+          "videoTile": "▶ video",
+          "audioFallback": "audio",
+          "documentName": "document",
+          "kindPreviewInline": "{kind} preview will appear here",
+          "noReplies": "No replies yet"
+        },
+        "send": {
+          "messageLabel": "Message text",
+          "messageHint": "Use <v>var</v> or press / to insert a variable.",
+          "messagePlaceholder": "Hi '{{'name'}}'! …",
+          "templateLoading": "Loading templates…",
+          "templatePick": "— pick template —",
+          "notInWorkspace": "{value} (not in workspace)",
+          "templateLabel": "Approved template",
+          "templateHint": "Only approved templates from the workspace appear here. <link>Create a new one →</link>",
+          "type": "Type",
+          "kindText": "Text",
+          "kindImage": "Image",
+          "kindVideo": "Video",
+          "kindDocument": "Document",
+          "kindAudio": "Audio",
+          "kindDocumentReport": "Document (PDF report, etc.)",
+          "upload": "Upload",
+          "uploadHint": "Up to {mb} MB. We host the file and give the flow a public URL.",
+          "replaceFile": "Replace file",
+          "chooseKind": {
+            "image": "Choose image (or drag here)",
+            "video": "Choose video (or drag here)",
+            "document": "Choose document (or drag here)",
+            "audio": "Choose audio (or drag here)"
+          },
+          "pasteUrl": "Or paste a URL",
+          "filename": "Filename (label)",
+          "caption": "Caption",
+          "captionPlaceholder": "Optional caption…",
+          "notifyInfo": "Sends a copy to a <b>fixed number</b> you set here — the flow's own contact still gets their normal messages. The second person just receives a normal WhatsApp message on their phone (no login/app needed). Use it to CC a doctor, clinic, or your own line with a report or alert.",
+          "notifyNumber": "Copy to number",
+          "notifyNumberHint": "Full international format, digits only (country code + number). Variables like <v>agent_number</v> are allowed.",
+          "notifySource": "What to send",
+          "notifySourceMirror": "Automatically forwards whatever the flow last sent to the customer (e.g. the report). No typing needed.",
+          "notifySourceCustom": "Type your own message or attach a report below.",
+          "notifyMirror": "Same message the customer just received (automatic)",
+          "notifyCustom": "A custom message / report",
+          "notifyMirrorInfo": "The doctor/clinic gets an exact copy of the last message the customer received — put this node right after the message or report you want copied.",
+          "notifyMessage": "Message",
+          "notifyMessageHint": "Supports '{{'variables'}}' captured earlier in the flow.",
+          "notifyMessagePlaceholder": "A copy of the report / alert…",
+          "notifyMediaUrl": "Media URL",
+          "notifyMediaUrlHint": "Public HTTPS link (can be a '{{'variable'}}' holding the file URL).",
+          "igInfo": "Sends the customer a WhatsApp message with a link that opens a DM to your Instagram. <b>Deep link only</b> — Instagram doesn't allow starting a DM to someone who hasn't messaged you first, so we can't auto-open the chat for them.",
+          "igUsername": "Your Instagram username",
+          "igUsernameHint": "Without the @. The link becomes ig.me/m/yourbrand — tapping it opens a DM to your account.",
+          "igMessage": "WhatsApp message",
+          "igMessageHint": "Sent to the customer on WhatsApp with the Instagram link. Supports '{{'variables'}}'.",
+          "igMessagePlaceholder": "Continue with us on Instagram 👇"
+        },
+        "sequence": {
+          "info": "Each reply is sent in order to the customer. Combine text, images, video, audio, and documents in one node — perfect for product cards or onboarding kits.",
+          "kind": {
+            "text": "Text",
+            "image": "Image",
+            "video": "Video",
+            "audio": "Audio",
+            "document": "Document"
+          },
+          "replace": {
+            "image": "Replace image",
+            "video": "Replace video",
+            "audio": "Replace audio",
+            "document": "Replace document"
+          },
+          "upload": {
+            "image": "Upload image",
+            "video": "Upload video",
+            "audio": "Upload audio",
+            "document": "Upload document"
+          },
+          "textPlaceholder": "Message text…",
+          "pasteUrl": "Or paste a URL",
+          "captionOptional": "Caption (optional)",
+          "empty": "No replies yet — click a button above to add one."
+        },
+        "trigger": {
+          "kind": {
+            "keyword": "Keyword match (customer messages us)",
+            "tag_added": "Audience: when a tag is added",
+            "group_join": "Audience: when contact joins a group",
+            "contact_created": "Audience: when a new contact is added",
+            "opt_in": "Audience: when a contact re-subscribes",
+            "order_placed": "Commerce: when an order is placed",
+            "deal_stage_changed": "Sales: when a deal enters a stage",
+            "away": "Availability: while Away mode is on",
+            "out_of_hours": "Availability: outside business hours",
+            "manual_enroll": "Manual: operator enrolls contacts",
+            "comment_to_dm": "Instagram: someone comments on a post → DM",
+            "group_leave": "Audience: when contact leaves a list",
+            "segment_join": "Audience: when contact enters a segment",
+            "contact_updated": "Audience: when a contact is updated",
+            "field_match": "Audience: when a contact field matches a value",
+            "date_field_match": "Schedule: relative to a date on the contact (birthday…)",
+            "schedule": "Schedule: at a date and time",
+            "shopify_event": "Commerce: a Shopify store event",
+            "woocommerce_event": "Commerce: a WooCommerce store event"
+          },
+          "tagsLoading": "Loading tags…",
+          "tagPick": "— pick tag —",
+          "tagFallback": "Tag",
+          "groupsLoading": "Loading groups…",
+          "groupPick": "— pick group —",
+          "groupFallback": "Group",
+          "stagesLoading": "Loading stages…",
+          "stagePick": "— pick stage —",
+          "channelLabel": "Channel",
+          "channelHint": "Switching channel re-filters the node palette and clears the sender below — a WhatsApp number is not a valid Instagram account or Facebook Page.",
+          "startLabel": "How does this flow start?",
+          "whenLabel": "When to run",
+          "whenHintAny": "Runs ONLY when no keyword flow matches. Keyword flows always win.",
+          "whenHintKeywords": "Pick \"any message\" for a catch-all fallback flow.",
+          "modeKeywords": "On specific keywords",
+          "modeAny": "On any message (default route)",
+          "keywordsLabel": "Keywords",
+          "keywordsHint": "Comma-separated. Match is fuzzy.",
+          "keywordsPlaceholder": "price, pricing, cost",
+          "tagLabel": "Tag that triggers enrollment",
+          "tagHint": "Every contact who gets this tag is auto-enrolled into this flow. Tag is added from /team-inbox or routing rules.",
+          "groupLabel": "Group that triggers enrollment",
+          "groupHint": "Every contact added to this group is auto-enrolled.",
+          "stageLabel": "Stage that triggers the flow",
+          "stageHint": "When a deal is moved INTO this pipeline stage, its linked contact is enrolled. Manage stages on the /deals board.",
+          "rulesLabel": "Bind to comment keyword rules",
+          "rulesHint": "Tick the rules that should launch this flow. Leave all unticked to run on any Comment → DM rule.",
+          "rulesNone": "No Comment → DM keyword rules yet. Create them on <link>/auto-reply</link> (Instagram · trigger \"Comment → DM\"), then pick them here.",
+          "ruleFallback": "Rule {id}",
+          "ruleOff": "off",
+          "orderPlaced": "Fires for every new order. The order's customer is matched to a saved contact and enrolled.",
+          "automatic": "Fires automatically — no extra config needed.",
+          "away": "Fires on any incoming message while <b>Away mode</b> is ON. Toggle Away mode from the <link>Auto Reply</link> page. Each contact is enrolled once.",
+          "outOfHours": "Fires on any incoming message that arrives <b>outside your workspace Business Hours</b>. Set Business Hours in your workspace settings. Each contact is enrolled once.",
+          "manualEnroll": "You'll enroll contacts manually from the <link>/flows list</link> via the <b>Enroll</b> button next to this flow.",
+          "ext": {
+            "segmentsLoading": "Loading segments…",
+            "segmentPick": "— pick segment —",
+            "segmentFallback": "Segment",
+            "groupLeaveLabel": "List that triggers the flow",
+            "groupLeaveHint": "Runs when a contact is taken out of this list by a person or an import. A flow that removes them itself does not start it.",
+            "segmentLabel": "Segment",
+            "segmentHint": "Runs once per contact, the first time they are found inside the segment after being created, tagged, listed or updated.",
+            "fieldLabel": "Contact field",
+            "fieldHint": "The field key: name, email, title, language, address, or a custom field's key.",
+            "test": "Test",
+            "value": "Value",
+            "valueHint": "Checked each time the contact is created or changed. A contact runs once for each value it takes.",
+            "when": "When",
+            "dirOn": "On the date",
+            "dirBefore": "Days before the date",
+            "dirAfter": "Days after the date",
+            "days": "Days",
+            "timeOfDay": "Time of day",
+            "timeZoneHint": "In your workspace's time zone. Checked once a day.",
+            "repeat": "Repeat",
+            "yearly": "Every year (month and day only)",
+            "fullDate": "Only on the full date",
+            "frequency": {
+              "once": "Once, on a date",
+              "daily": "Every day",
+              "weekly": "Every week",
+              "monthly": "Every month"
+            },
+            "date": "Date",
+            "dateHint": "YYYY-MM-DD.",
+            "weekdays": "Days of the week",
+            "monthDay": "Day of the month",
+            "monthDayHint": "31 means the last day of a shorter month.",
+            "time24Hint": "HH:MM, 24-hour.",
+            "tz": "Time zone (optional)",
+            "tzHint": "An IANA name such as Asia/Kolkata. Blank uses your workspace's time zone.",
+            "who": "Who",
+            "whoHint": "At most 5,000 people per run. Contacts who opted out, are archived or have no number are left out.",
+            "audience": {
+              "all": "Every contact with a number",
+              "group": "Contacts in a list",
+              "segment": "Contacts in a segment"
+            },
+            "list": "List",
+            "storeEvent": "Store event",
+            "storeEvents": {
+              "checkout_started": "Checkout started",
+              "abandoned_cart": "Abandoned cart (first reminder is due)",
+              "order_fulfilled": "Order fulfilled",
+              "order_refunded": "Order refunded",
+              "order_cancelled": "Order cancelled",
+              "ordered_product": "A product was ordered"
+            },
+            "productId": "Product id (optional)",
+            "productIdHint": "Blank = any product in the order.",
+            "storeNote": "The customer is matched to a saved contact by phone number; nobody is created for an order. “Added to cart” and “product viewed” are not offered: the store does not report them.",
+            "updatedNote": "Fires when a person or an import changes a contact, each time. A change made by another flow does not start it."
+          }
+        }
+      },
+      "formsChannels": {
+        "call": {
+          "sayLabel": "Say to caller",
+          "sayHint": "Spoken aloud (text-to-speech). '{{'variables'}}' are substituted.",
+          "sayPlaceholder": "Hello! Thanks for calling.",
+          "listenSave": "Save what they say to",
+          "listenSaveHint": "The caller's words are transcribed and stored here, e.g. {token}.",
+          "silenceLabel": "Stop after silence (seconds)",
+          "silenceHint": "How long to wait for them to finish talking before moving on.",
+          "model": "Model",
+          "instructions": "Instructions (system prompt)",
+          "aiPromptPlaceholder": "You are a helpful phone assistant. Keep answers short and natural.",
+          "knowledgeBase": "Knowledge base (optional)",
+          "knowledgeBaseHint": "Attach a trained assistant from AI Training to answer from your content.",
+          "saveSpoken": "Save spoken reply to",
+          "endOnGoodbye": "End the call when the caller says goodbye",
+          "voiceAssistant": "Voice assistant",
+          "voiceAssistantHint": "The AI voice agent that answers this turn — its own persona + model reply, spoken back. Put a Listen node before it to make it conversational.",
+          "pickVoiceAssistant": "— pick a voice assistant —",
+          "extraInstructions": "Extra instructions (optional)",
+          "extraInstructionsHint": "Appended to the assistant persona for this node only.",
+          "routeBy": "Route by",
+          "routeIntent": "What the caller says (AI intent)",
+          "routeKeyword": "Keyword match",
+          "routeDigit": "Key press (1,2,3…)",
+          "branches": "Branches",
+          "branchesHint": "Each branch becomes an output port. Unmatched calls take the \"no match\" port.",
+          "branchLabel": "Branch label",
+          "addBranch": "Add branch",
+          "searchQuery": "Search query",
+          "searchQueryHint": "What to look up. Use '{{'variables'}}' from earlier nodes.",
+          "saveResults": "Save results to",
+          "saveResultsHint": "Usually fed into the next AI Respond node via {token}.",
+          "sayWhileSearching": "Say while searching",
+          "sayWhileSearchingHint": "Spoken immediately so the caller never hears silence while the lookup runs.",
+          "fillerPlaceholder": "One moment, let me check that…",
+          "transferTo": "Transfer to number",
+          "transferToHint": "The call is bridged to this number (agent / queue).",
+          "sayBeforeTransfer": "Say before transferring",
+          "transferPlaceholder": "Connecting you to an agent now.",
+          "goodbye": "Goodbye message",
+          "goodbyeHint": "Spoken just before the call ends. Leave blank to hang up silently.",
+          "goodbyePlaceholder": "Thanks for calling. Goodbye!"
+        },
+        "commerce": {
+          "providers": {
+            "whatsapp_shop": {
+              "title": "WhatsApp catalog products",
+              "hint": "WhatsApp catalog connected via <link>/catalog</link>.",
+              "noStore": "No catalog linked — go to /catalog"
+            },
+            "woocommerce": {
+              "title": "WooCommerce products",
+              "hint": "WooCommerce stores connected via <link>/woocommerce</link>.",
+              "noStore": "No store connected — go to /woocommerce"
+            },
+            "shopify": {
+              "title": "Shopify products",
+              "hint": "Shopify stores connected via <link>/shopify</link>.",
+              "noStore": "No store connected — go to /shopify"
+            }
+          },
+          "waitMinutes": "{count, plural, one {# minute} other {# minutes}}",
+          "waitHours": "{count, plural, one {# hour} other {# hours}}",
+          "waitDays": "{count, plural, one {# day} other {# days}}",
+          "searchPlaceholder": "Search by name or SKU…",
+          "loadingProducts": "Loading products…",
+          "loadFailed": "Couldn't load products: {message}",
+          "noProducts": "No products found. {searching, select, yes {Try a different search.} other {Connect or sync the store first.}}",
+          "outOfStock": "out of stock",
+          "onNode": "on node",
+          "picked": "✓ picked",
+          "selected": "{count} selected",
+          "addToNode": "Add {count} to node",
+          "pickEyebrow": "Pick products",
+          "close": "Close",
+          "pickerHelp": "Tap products to add. Tap again to remove. Already-on-node items are skipped.",
+          "loadingStores": "Loading stores…",
+          "pickStore": "— pick store —",
+          "savedStore": "Store {id} (not in workspace)",
+          "portsHelp": "Ports: <purchased>purchased</purchased> fires when the order webhook lands; <abandoned>abandoned</abandoned> fires after the wait window with no purchase.",
+          "intro": "Pick a store, then pick the products this node will send. On a WABA conversation we send a native catalog message{unofficial, select, yes {; on Baileys we send each product as a card + a checkout link} other {}}.",
+          "store": "Store",
+          "products": "Products",
+          "productsHint": "Max {max} products per node. Tap × to remove.",
+          "noItems": "No products yet. Click below to add some.",
+          "pickProducts": "Pick products",
+          "pickMore": "Pick more products",
+          "header": "Header (optional)",
+          "headerPlaceholder": "Our spring picks",
+          "body": "Body",
+          "bodyPlaceholder": "Tap a product to see details",
+          "footer": "Footer (optional)",
+          "footerPlaceholder": "Free shipping over $50",
+          "abandonedWait": "Abandoned-cart wait",
+          "abandonedWaitHint": "If no purchase within this window, the <b>abandoned</b> port fires so you can route to a drip / follow-up."
+        },
+        "crm": {
+          "loadingServices": "Loading services…",
+          "allServices": "— all my services (customer picks) —",
+          "savedService": "Service {id} (not loaded)",
+          "bookingSub": "Manage services + hours at <link>/appointments</link>. The keyword lives in this flow's <b>Trigger</b>.",
+          "bookingIntro": "Books an appointment inside the chat. Pin this node to one <b>service</b> for a dedicated flow (e.g. keyword <mono>consult</mono> → 30-min Consultation), or leave it on <i>all services</i> to let the customer choose.",
+          "service": "Service",
+          "loadingYourServices": "Loading your services…",
+          "serviceHint": "Pick one service, or leave on “all” for a menu.",
+          "slots": "Slots to offer",
+          "prompt": "Prompt (sent before the list)",
+          "promptPlaceholder": "Pick a time that works for you:",
+          "confirmation": "Confirmation message",
+          "confirmationPlaceholder": "Booked! See you on '{{'slot'}}'.",
+          "aiCallSub": "Manage voice agents in <link>AI voice assistants</link>. Requires WABA calling enabled + the customer's call permission.",
+          "aiCallIntro": "Places a WhatsApp <b>voice call</b> to this contact, answered by an AI voice agent. Drop it after a keyword trigger (e.g. <mono>call me</mono>) so the customer is called automatically.",
+          "voiceAssistant": "Voice assistant",
+          "voiceAssistantHint": "The AI agent that talks on the call. Blank = the workspace default voice assistant.",
+          "workspaceDefaultAssistant": "— workspace default assistant —",
+          "meetSub": "Requires Google Calendar at <link>/appointments/settings</link>.",
+          "meetIntro": "Creates a Google Calendar event with a Meet link the moment this node fires, then sends the link to the customer.",
+          "meetingTitle": "Meeting title",
+          "meetingTitleHint": "Shown in Google Calendar. Use '{{'name'}}' or any flow variable.",
+          "meetingTitlePlaceholder": "WhatsApp consultation with '{{'name'}}'",
+          "duration": "Duration (minutes)",
+          "durationHint": "How long the calendar event lasts.",
+          "leadTime": "Lead time (minutes)",
+          "leadTimeHint": "Schedule the meeting N minutes from now, so the customer has time to read the message.",
+          "messageTemplate": "Message template",
+          "messageTemplateHint": "Sent to the customer with the link. '{{'meet_link'}}' and '{{'meet_start'}}' get substituted.",
+          "messageTemplatePlaceholder": "Your meeting link:\n'{{'meet_link'}}'\n\nStarts '{{'meet_start'}}'",
+          "sendInvite": "Send Google invite to attendees",
+          "sendInviteHint": "Only useful when the contact has an email saved.",
+          "inviteOn": "On — Google emails the attendees",
+          "inviteOff": "Off — link only via WhatsApp",
+          "loadingForms": "Loading forms…",
+          "pickForm": "— pick form —",
+          "savedForm": "Form {id} (not loaded)",
+          "formSub": "Build + publish forms at <link>/wa-forms</link>.",
+          "formIntro": "Sends a published WhatsApp Form to the customer. The flow pauses until they submit, then advances with each field available as <mono>{token}</mono>.",
+          "form": "Form",
+          "loading": "Loading…",
+          "formHint": "Only published forms appear here.",
+          "bodyBubble": "Body bubble text (above the form button)",
+          "bodyBubblePlaceholder": "Please tap below to fill out our quick form.",
+          "ctaLabel": "CTA label (on the button)",
+          "ctaPlaceholder": "Open form",
+          "saveSubmission": "Save submission under variable",
+          "saveSubmissionHint": "Field values land as <mono>{token}</mono> regardless — this is just a marker for the audit log.",
+          "loadingStages": "Loading stages…",
+          "pickStage": "— pick stage —",
+          "savedStage": "Stage {id} (not loaded)",
+          "dealIntro": "Creates a CRM deal (or moves the contact's open deal) into a pipeline stage — so a chatbot can qualify a lead and push it up the board. The deal id is saved as <mono>{token}</mono>. Moving into a stage fires the <b>deal stage</b> trigger on other flows.",
+          "action": "Action",
+          "actionMoveHint": "Re-stages the contact's most recent open deal. If they have none, a new deal is created.",
+          "actionCreateHint": "Always creates a fresh deal linked to this contact.",
+          "actionCreate": "Create a new deal",
+          "actionMove": "Move the contact's deal to a stage",
+          "stage": "Pipeline stage",
+          "stageHint": "Required. Manage stages on the <link>deals board</link>.",
+          "dealName": "Deal name",
+          "dealNameHint": "Supports '{{'contact_name'}}', '{{'phone'}}', and any flow variable.",
+          "dealNamePlaceholder": "'{{'contact_name'}}' — deal",
+          "dealValue": "Deal value (optional)",
+          "dealValueHint": "A number or a '{{'variable'}}'. Stored in the pipeline currency.",
+          "saveDealId": "Save deal id under variable",
+          "saveDealIdHint": "Use <mono>{token}</mono> in later nodes."
+        },
+        "engage": {
+          "loadingFlows": "Loading flows…",
+          "pickFlow": "— pick flow —",
+          "savedFlow": "Flow {id} (not in workspace)",
+          "flowToRun": "Flow to run",
+          "flowToRunHint": "Pick another saved flow. When this node fires, that flow runs end-to-end before control returns to the next node here.",
+          "pickAgent": "— pick AI agent —",
+          "noAgents": "No agents yet — add one in the team inbox",
+          "savedAgent": "Agent {id} (not in workspace)",
+          "agentToTrigger": "AI agent to trigger",
+          "agentHint": "Pick a saved AI agent — its system prompt + model run when this node fires.",
+          "noAgentsHint": "Add your first AI agent in the <link>team inbox</link>, then pick it here.",
+          "createUnavailableTitle": "Creating an AI agent from the builder is not available yet. Add one in the team inbox.",
+          "createAgent": "Create new AI agent",
+          "createUnavailable": "Creating agents from the builder is not available yet.",
+          "refresh": "Refresh list"
+        },
+        "facebook": {
+          "intro": "Intro message (optional)",
+          "galleryIntroHint": "Sent as a DM just before the carousel. Leave blank to send only the cards.",
+          "cards": "Cards (max {max})",
+          "cardsHint": "A Messenger generic-template carousel. Each card shows an image, title, subtitle and an optional URL button.",
+          "card": "Card {n}",
+          "title": "Title",
+          "subtitle": "Subtitle (optional)",
+          "imageUrl": "Image URL (https://…)",
+          "buttonLabel": "Button label",
+          "buttonUrl": "Button URL",
+          "addCard": "Add card",
+          "productsIntroHint": "Sent as a DM just before the product carousel.",
+          "productsIntroPlaceholder": "Here are some products you might like:",
+          "products": "Products (max {max})",
+          "productsHint": "Sends as a Messenger shoppable carousel.",
+          "product": "Product {n}",
+          "productName": "Product name",
+          "priceDescription": "Price / description (optional)",
+          "productUrl": "Product page URL (for the View button)",
+          "addProduct": "Add product",
+          "detailsHint": "Only appears on products that have a URL.",
+          "leadAskName": "Ask question",
+          "publicReply": "Public reply",
+          "publicReplyHint": "Posted as a public reply under the comment that triggered the flow.",
+          "replyPlaceholder": "Thanks! Just sent you a DM.",
+          "surface": "Messenger conversation",
+          "dmName": "Messenger",
+          "prefillDefault": "Hi! I came from Facebook"
+        },
+        "google": {
+          "kinds": {
+            "sheets": {
+              "pick": "— pick a sheet —",
+              "empty": "No spreadsheets found — paste a URL/ID below",
+              "loading": "Loading sheets…",
+              "notConnected": "Google isn't connected for this workspace, so your sheets can't be listed. Paste the sheet id or link instead.",
+              "idPlaceholder": "Sheet id",
+              "saved": "Sheet {id}… (not loaded)"
+            },
+            "docs": {
+              "pick": "— pick a template doc —",
+              "empty": "No docs found",
+              "loading": "Loading docs…",
+              "notConnected": "Google isn't connected for this workspace, so your docs can't be listed. Paste the doc id or link instead.",
+              "idPlaceholder": "Doc id",
+              "saved": "Doc {id}… (not loaded)"
+            },
+            "forms": {
+              "pick": "— pick a form —",
+              "empty": "No forms found",
+              "loading": "Loading forms…",
+              "notConnected": "Google isn't connected for this workspace, so your forms can't be listed. Paste the form id or link instead.",
+              "idPlaceholder": "Form id",
+              "saved": "Form {id}… (not loaded)"
+            }
+          },
+          "sheetsIntro": "Append a row to a Google Sheet (write mode) or look up a row by a key column (read mode). Uses the workspace's connected Google account at <link>/google-account</link>.",
+          "mode": "Mode",
+          "modeWrite": "Write — append a row",
+          "modeRead": "Read — look up a row",
+          "spreadsheet": "Spreadsheet",
+          "tabName": "Tab name (blank = first tab)",
+          "lookupColumn": "Lookup column (header)",
+          "lookupValue": "Lookup value",
+          "lookupValueHint": "Use a flow variable like '{{'phone'}}' or '{{'email'}}'.",
+          "saveRow": "Save row under variable",
+          "saveRowHint": "Cells become <mono>{nameToken}</mono>, <mono>{phoneToken}</mono> etc.",
+          "columnsByHeader": "Columns (matched by header name)",
+          "columnsByPosition": "Columns to append (in sheet order)",
+          "columnsByHeaderHint": "Each value is written under the sheet column whose header matches the Header field — any order. Values support '{{'merge_tags'}}'.",
+          "columnsByPositionHint": "Header is informational (the row is appended left-to-right by position). Values support '{{'merge_tags'}}'.",
+          "header": "Header",
+          "addColumn": "Add column",
+          "matchByHeader": "Match columns by header name",
+          "matchByHeaderHint": "Write each value into the sheet column with that header (any order). Leave off to append left-to-right by position — the default.",
+          "pasteLabel": "…or paste a Spreadsheet URL / ID",
+          "pasteHint": "Works even if the picker is empty — paste the sheet link and we extract its ID.",
+          "docsIntro": "Copy a template doc, fill <mono>{placeholders}</mono>, share anyone-with-link, send the URL to the customer. Place <mono>{key}</mono> in your template where the value should go.",
+          "templateDocument": "Template document",
+          "newCopyTitle": "New copy title",
+          "newCopyTitlePlaceholder": "Document for '{{'name'}}'",
+          "placeholdersToFill": "Placeholders to fill",
+          "placeholdersHint": "Every flow variable is also auto-injected — so <mono>{token}</mono> works in the template without listing it here.",
+          "addPlaceholder": "Add placeholder",
+          "makeViewable": "Make link viewable by anyone",
+          "viewableOn": "On — anyone with link can view",
+          "viewableOff": "Off — must be granted manually",
+          "messageTemplate": "Message template",
+          "messageTemplateHint": "The bot bubble sent to the customer. <mono>{token}</mono> gets the share link.",
+          "messageTemplatePlaceholder": "Here's your document:\n'{{'doc_url'}}'",
+          "saveUrl": "Save URL under variable",
+          "formIntro": "Sends the form URL via WhatsApp, pauses the flow, resumes via the <b>submitted</b> port when the customer fills it. Answers become flow variables.",
+          "googleForm": "Google Form",
+          "bodyBubble": "Body bubble (sent above the link)",
+          "bodyBubblePlaceholder": "Please fill out this short form:",
+          "saveResponses": "Save responses under variable",
+          "saveResponsesHint": "Individual answers also land as <mono>{token}</mono>.",
+          "expireAfter": "Expire after (seconds)",
+          "expireAfterHint": "How long to wait for a submission before timing out. 86400 = 24h.",
+          "setupTitle": "One-time setup — paste this into your Form's Script editor",
+          "setupOpen": "Open your form → <mono>⋮ menu</mono> → <mono>Script editor</mono>",
+          "setupDownload": "<link>Download the script (.gs)</link> and paste it",
+          "setupTrigger": "Add a trigger: <mono>onFormSubmit</mono> · From form · On form submit",
+          "setupWarning": "Without this script the form will still record answers in Google Forms, but the flow won't resume."
+        },
+        "helpers": {
+          "storeWithCurrency": "{name} · {currency}",
+          "flowLive": "{name} · live",
+          "flowDraft": "{name} · draft",
+          "flowFallback": "Flow",
+          "service": "{name}{active, select, yes {} other { (inactive)}}{minutes, plural, =0 {} other { · # min}}",
+          "form": "{title}{published, select, yes {} other { (draft)}}",
+          "stageInPipeline": "{pipeline} · {name}",
+          "agentFallback": "Agent {id}",
+          "agentWithModel": "{name} · {provider}/{model}"
+        },
+        "instagram": {
+          "message": "Message",
+          "sendDmHint": "The DM text. '{{'variables'}}' from earlier nodes are substituted.",
+          "sendDmPlaceholder": "Hi! Thanks for your message.",
+          "quickPlaceholder": "What can I help you with?",
+          "quickReplies": "Quick replies",
+          "quickRepliesHint": "Each becomes an output port — wire the next node off the one they tap.",
+          "buttonLabel": "Button label",
+          "addQuickReply": "Add quick reply",
+          "buttonsPlaceholder": "Tap a button below:",
+          "buttons": "Buttons (max 3)",
+          "buttonsHint": "Instagram allows up to 3 buttons per message.",
+          "openUrl": "Open URL",
+          "postback": "Postback",
+          "addButton": "Add button",
+          "publicReply": "Public reply",
+          "publicReplyHint": "Posted as a public reply under the comment that triggered the flow.",
+          "replyPlaceholder": "Thanks! Just sent you a DM.",
+          "model": "Model",
+          "instructions": "Instructions (system prompt)",
+          "aiPromptPlaceholder": "You are our friendly Instagram assistant. Answer briefly.",
+          "knowledgeBase": "Knowledge base (optional)",
+          "knowledgeBaseHint": "Attach a trained assistant from AI Training to answer from your content.",
+          "saveReply": "Save reply to",
+          "searchProducts": "Search products…",
+          "loadingSynced": "Loading synced products…",
+          "loadFailed": "Couldn't load: {message}",
+          "noSyncedTitle": "No products synced yet.",
+          "noSyncedHint": "Sync your catalog on the Instagram Commerce page first.",
+          "selectedInOrder": "{count} selected · sent in this order",
+          "whichProducts": "Which products",
+          "pickSpecific": "Pick specific",
+          "firstN": "First N synced",
+          "howMany": "How many",
+          "howManyHint": "Sends your most recently-synced products (max 10).",
+          "products": "Products",
+          "productsHint": "Tap to add / remove. They send in the order shown.",
+          "intro": "Intro message (optional)",
+          "introHint": "Sent as a DM just before the carousel. Leave blank to send only the cards.",
+          "introPlaceholder": "Here are some products you might like:",
+          "detailsHint": "Only appears on products that have a link in your catalog.",
+          "question": "Question",
+          "questionHint": "Sent as a DM. The next reply the customer sends is captured as the answer.",
+          "questionPlaceholder": "What is your name?",
+          "saveAnswer": "Save answer to variable",
+          "saveAnswerHint": "Reuse it later as <mono>{token}</mono> — e.g. in the Capture lead node.",
+          "leadAskName": "Ask a question",
+          "surface": "Instagram conversation",
+          "dmName": "IG",
+          "prefillDefault": "Hi! I came from Instagram"
+        },
+        "shared": {
+          "remove": "Remove",
+          "pickModel": "— pick model —",
+          "noModels": "No AI models enabled — ask admin",
+          "modelNotEnabled": "{model} (not enabled)",
+          "noKnowledgeBase": "— none (prompt only) —",
+          "knowledgeBase": "{name} · {sources} src",
+          "savedAssistant": "Assistant {id}",
+          "orderButton": "Order button",
+          "orderButtonHint": "Tapping it sends <mono>{token}</mono> — the ordering flow / keyword rule picks it up.",
+          "showOrder": "Show an “Order” button on each card",
+          "orderLabelPlaceholder": "Order",
+          "detailsButton": "Details button",
+          "showView": "Show a “View” link to the product page",
+          "viewLabelPlaceholder": "View",
+          "leadIntro": "Maps variables collected by earlier <mono>{askName}</mono> nodes into a saved lead. Leave a field blank to skip it.",
+          "nameFromVariable": "Name from variable",
+          "emailFromVariable": "Email from variable",
+          "phoneFromVariable": "Phone from variable",
+          "notesFromVariable": "Notes from variable (optional)",
+          "salesPipeline": "Sales Pipeline",
+          "salesPipelineHint": "The lead is added to your default pipeline so nothing slips through.",
+          "createDeal": "Create a pipeline deal for every lead",
+          "thankYou": "Thank-you message (optional)",
+          "thankYouHint": "Sent right after the lead is saved.",
+          "thankYouPlaceholder": "Thanks! Our team will reach out shortly.",
+          "pickWaFlow": "— pick WhatsApp flow —",
+          "noWaFlows": "No WhatsApp flows yet",
+          "savedFlow": "Flow {id}",
+          "handoffIntro": "Move this {surface} to WhatsApp. {platform} and WhatsApp identities aren't linked, so the person has to reach your WhatsApp themselves (deep link) or give you their number first.",
+          "handoffMethod": "Handoff method",
+          "methodDeeplink": "Deep link — send a wa.me link (recommended, safe)",
+          "methodDirect": "Direct — start a WhatsApp flow to a captured number",
+          "waNumber": "Your WhatsApp number",
+          "waNumberHint": "Digits only, country code first. The wa.me link opens a chat to this number.",
+          "prefill": "Pre-filled message",
+          "prefillHint": "Text WhatsApp pre-fills for the user. Make it match a WhatsApp keyword-trigger flow so it auto-starts.",
+          "dmShown": "DM shown on {platform}",
+          "dmHint": "The {dmName} DM sent with the wa.me link. Supports '{{'variables'}}'.",
+          "introPlaceholder": "Let's continue on WhatsApp 👇",
+          "directWarning": "⚠ Meta only lets you message a WhatsApp number that has opted in or messaged you in the last 24h. If it hasn't, the first message is blocked. Prefer the deep-link method unless you know the number opted in.",
+          "numberFromVariable": "WhatsApp number from variable",
+          "numberFromVariableHint": "A flow variable captured earlier (e.g. an Ask node \"What's your WhatsApp number?\").",
+          "waFlowToStart": "WhatsApp flow to start",
+          "waFlowToStartHint": "The WhatsApp flow that runs for that number once handed off."
+        },
+        "telegram": {
+          "intro": "Charge the customer inside Telegram. The bot needs a payment provider token (get one from <mono>@BotFather → /mybots → Payments</mono>). The paid confirmation lands back in your inbox.",
+          "type": "Type",
+          "typeInvoice": "Invoice — a native Pay button in the chat",
+          "typePaylink": "Pay link — a shareable URL sent as a message",
+          "title": "Title",
+          "titleHint": "Shown bold at the top of the invoice (max 32 chars).",
+          "titlePlaceholder": "Order payment",
+          "description": "Description",
+          "descriptionHint": "Supports '{{'variables'}}' from earlier nodes.",
+          "descriptionPlaceholder": "Complete your purchase",
+          "currency": "Currency",
+          "currencyHint": "ISO code, e.g. USD, EUR, IDR, INR.",
+          "amount": "Amount",
+          "amountHint": "Major units (9.99). Zero-decimal currencies like IDR/JPY are sent whole. Accepts '{{'variables'}}'.",
+          "lineItem": "Line-item label",
+          "lineItemHint": "The single price row label shown on the invoice.",
+          "lineItemPlaceholder": "Total",
+          "linkMessage": "Message before the link",
+          "linkMessagePlaceholder": "Tap to pay:",
+          "reconciliation": "Reconciliation id (optional)",
+          "reconciliationHint": "Stored on the payment so you can match it to an order. Leave blank to auto-generate.",
+          "afterSending": "After sending",
+          "afterSendingHint": "On: the flow pauses here and only continues down \"out\" once the customer pays (amount arrives as {paidAmount} {paidCurrency}). Off: the invoice is sent and the flow continues immediately.",
+          "waitUntilPaid": "Wait until paid, then continue"
+        }
+      },
+      "attrPicker": {
+        "system": {
+          "first_name": {
+            "name": "First name",
+            "description": "The contact's first name"
+          },
+          "name": {
+            "name": "Name",
+            "description": "The contact's full name"
+          },
+          "last_name": {
+            "name": "Last name",
+            "description": "The contact's last name"
+          },
+          "phone_number": {
+            "name": "Phone number",
+            "description": "Full number with country code"
+          },
+          "email": {
+            "name": "Email",
+            "description": "The contact's email address"
+          },
+          "country_code": {
+            "name": "Country code",
+            "description": "Dial code, like +91"
+          },
+          "address": {
+            "name": "Address",
+            "description": "The contact's address"
+          },
+          "language": {
+            "name": "Language",
+            "description": "The contact's language"
+          },
+          "business_name": {
+            "name": "Business name",
+            "description": "Your business name"
+          },
+          "today": {
+            "name": "Today",
+            "description": "Today's date"
+          }
+        }
+      },
+      "testRunner": {
+        "dialogLabel": "Test runner",
+        "title": "Test runner",
+        "subtitle": "Simulate a chat",
+        "restart": "Restart",
+        "close": "Close",
+        "typeReply": "Type a reply…",
+        "waitingForBot": "Waiting for bot…",
+        "send": "Send",
+        "choose": "Choose",
+        "location": {
+          "sampleName": "Test place",
+          "sampleAddress": "1 MG Road, Bengaluru"
+        }
       }
+    },
+    "contracts": {
+      "nodeTypes": {
+        "trigger": {
+          "label": "Trigger",
+          "description": "Where the flow starts"
+        },
+        "message": {
+          "label": "Send message",
+          "description": "Plain text message"
+        },
+        "template": {
+          "label": "Send template",
+          "description": "Approved template"
+        },
+        "media": {
+          "label": "Send media",
+          "description": "Image, video, doc, audio"
+        },
+        "notify_number": {
+          "label": "Copy to number",
+          "description": "Send a copy to a fixed number"
+        },
+        "wa_to_instagram": {
+          "label": "Hand off to Instagram",
+          "description": "Send the user an Instagram DM link"
+        },
+        "sequence": {
+          "label": "Send sequence",
+          "description": "Stack text + media in one node"
+        },
+        "buttons": {
+          "label": "Quick replies",
+          "description": "Tap-to-pick reply buttons"
+        },
+        "list": {
+          "label": "List message",
+          "description": "Interactive list picker"
+        },
+        "ask": {
+          "label": "Ask question",
+          "description": "Save user reply to a var"
+        },
+        "ask_file": {
+          "label": "Ask for file / image",
+          "description": "Wait for a photo, document, video or audio"
+        },
+        "ask_location": {
+          "label": "Ask for location",
+          "description": "Wait for the customer to share a location"
+        },
+        "condition": {
+          "label": "Condition",
+          "description": "If / else branch"
+        },
+        "delay": {
+          "label": "Wait",
+          "description": "Pause for X minutes"
+        },
+        "webhook": {
+          "label": "Webhook",
+          "description": "Call external HTTPS endpoint"
+        },
+        "code": {
+          "label": "Run code (JS)",
+          "description": "Sandboxed JavaScript transform"
+        },
+        "mysql": {
+          "label": "MySQL Query",
+          "description": "Run a read-only SQL query"
+        },
+        "ai": {
+          "label": "AI assistant",
+          "description": "Reply with ChatGPT or Gemini"
+        },
+        "tag": {
+          "label": "Tag contact",
+          "description": "Add or remove a tag"
+        },
+        "assign": {
+          "label": "Assign agent",
+          "description": "Hand off to a human"
+        },
+        "subflow": {
+          "label": "Run sub-flow",
+          "description": "Call another flow"
+        },
+        "end": {
+          "label": "End",
+          "description": "Stop the flow here"
+        },
+        "cta": {
+          "label": "Call to action",
+          "description": "Send a CTA button"
+        },
+        "location": {
+          "label": "Location",
+          "description": "Send a map pin"
+        },
+        "poll": {
+          "label": "Poll",
+          "description": "Send a poll"
+        },
+        "chatbot": {
+          "label": "Chatbot",
+          "description": "Trigger another chatbot"
+        },
+        "whatsapp_shop": {
+          "label": "WhatsApp Shop",
+          "description": "Open WhatsApp catalog"
+        },
+        "woocommerce": {
+          "label": "WooCommerce",
+          "description": "Send WooCommerce product"
+        },
+        "shopify": {
+          "label": "Shopify",
+          "description": "Send Shopify product"
+        },
+        "book_appointment": {
+          "label": "Book appointment",
+          "description": "Book one of your services in chat"
+        },
+        "ai_call": {
+          "label": "AI voice call",
+          "description": "Call the customer with an AI voice agent"
+        },
+        "google_meet": {
+          "label": "Google Meet",
+          "description": "Create + send a Meet link"
+        },
+        "wa_form": {
+          "label": "WhatsApp form",
+          "description": "Send a published Meta form"
+        },
+        "api_library": {
+          "label": "API (from library)",
+          "description": "Call a saved API from the API Library"
+        },
+        "google_sheets": {
+          "label": "Google Sheets",
+          "description": "Write or read a row"
+        },
+        "google_docs": {
+          "label": "Google Docs",
+          "description": "Generate from a template"
+        },
+        "google_form": {
+          "label": "Google Form",
+          "description": "Send link, capture answers"
+        },
+        "deal": {
+          "label": "Create / move deal",
+          "description": "Create or advance a CRM deal"
+        },
+        "cf_say": {
+          "label": "Say",
+          "description": "Speak a line (text-to-speech)"
+        },
+        "cf_listen": {
+          "label": "Listen",
+          "description": "Capture caller speech → variable"
+        },
+        "cf_ai": {
+          "label": "AI Respond",
+          "description": "AI answers, spoken back"
+        },
+        "cf_assistant": {
+          "label": "AI Assistant",
+          "description": "Answer with a voice agent"
+        },
+        "cf_menu": {
+          "label": "Menu / Branch",
+          "description": "Route by intent / digit"
+        },
+        "cf_search": {
+          "label": "Search web",
+          "description": "Look up the web → variable"
+        },
+        "cf_transfer": {
+          "label": "Transfer",
+          "description": "Hand the call to a human"
+        },
+        "cf_hangup": {
+          "label": "Hang up",
+          "description": "End the call"
+        },
+        "ig_send_dm": {
+          "label": "Send DM",
+          "description": "Send a direct message"
+        },
+        "ig_quick": {
+          "label": "Quick replies",
+          "description": "DM with tap-to-pick buttons"
+        },
+        "ig_buttons": {
+          "label": "Button message",
+          "description": "DM with URL / action buttons"
+        },
+        "ig_reply_comment": {
+          "label": "Reply to comment",
+          "description": "Public reply under the comment"
+        },
+        "ig_ai": {
+          "label": "AI Reply",
+          "description": "AI answers with your knowledge base"
+        },
+        "ig_products": {
+          "label": "Send products",
+          "description": "Shoppable carousel from your catalog"
+        },
+        "ig_ask": {
+          "label": "Ask a question",
+          "description": "Ask, then save the reply to a variable"
+        },
+        "ig_lead": {
+          "label": "Capture lead",
+          "description": "Save name / email / phone as a lead + deal"
+        },
+        "ig_to_whatsapp": {
+          "label": "Hand off to WhatsApp",
+          "description": "Move the conversation from Instagram to a WhatsApp flow"
+        },
+        "fb_gallery": {
+          "label": "Card gallery",
+          "description": "Generic-template carousel of custom cards"
+        },
+        "fb_products": {
+          "label": "Send products",
+          "description": "Shoppable carousel with Order buttons"
+        },
+        "fb_lead": {
+          "label": "Capture lead",
+          "description": "Save name / email / phone as a lead + deal"
+        },
+        "fb_reply_comment": {
+          "label": "Reply to comment",
+          "description": "Public reply under the triggering comment"
+        },
+        "fb_to_whatsapp": {
+          "label": "Hand off to WhatsApp",
+          "description": "Move the Messenger chat to a WhatsApp flow"
+        },
+        "tg_payment": {
+          "label": "Payment / Invoice",
+          "description": "Send a Telegram invoice or a shareable pay link"
+        },
+        "update_contact": {
+          "label": "Update contact field",
+          "description": "Set a contact field"
+        },
+        "list_member": {
+          "label": "Add / remove list",
+          "description": "Put the contact in a list or take them out"
+        },
+        "in_list": {
+          "label": "Is in list",
+          "description": "Yes / no: the contact is in a list"
+        },
+        "in_segment": {
+          "label": "Is in segment",
+          "description": "Yes / no: the contact is in a segment"
+        },
+        "sheet_check": {
+          "label": "Check Google Sheet cell",
+          "description": "Yes / no: a cell of the matching row"
+        },
+        "sheet_contact": {
+          "label": "Save contact from Sheet",
+          "description": "Copy a sheet row into the contact"
+        },
+        "wa_session": {
+          "label": "WhatsApp session active",
+          "description": "Yes / no: the customer wrote in the last 24 hours"
+        }
+      },
+      "groups": {
+        "start": "Start",
+        "send": "Send",
+        "listen": "Listen",
+        "logic": "Logic",
+        "ai": "AI",
+        "contact": "Contact",
+        "engage": "Engage",
+        "commerce": "Commerce",
+        "integrations": "Integrations",
+        "crm": "CRM",
+        "voice": "Voice",
+        "callRouting": "Call routing",
+        "callControl": "Call control",
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "telegram": "Telegram"
+      },
+      "askInput": {
+        "text": "Free text",
+        "name": "Name",
+        "email": "Email address",
+        "phone": "Phone number",
+        "number": "Number",
+        "alphanumeric": "Letters and numbers",
+        "date": "Date"
+      },
+      "askInputWrong": {
+        "text": "Please try again",
+        "name": "Please enter a valid name",
+        "email": "Please enter a valid email id",
+        "phone": "Please enter a valid phone number",
+        "number": "Please enter a valid number",
+        "alphanumeric": "Please use letters and numbers only",
+        "date": "Please enter a valid date ({format})"
+      },
+      "flowTypes": {
+        "chat": "WhatsApp",
+        "call": "Call",
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "tiktok": "TikTok",
+        "telegram": "Telegram",
+        "line": "LINE",
+        "wechat": "WeChat",
+        "viber": "Viber",
+        "email": "Email"
+      },
+      "dateFormats": {
+        "ddDmmDyyyy": "DD-MM-YYYY",
+        "ddSmmSyyyy": "DD/MM/YYYY",
+        "ddPmmPyyyy": "DD.MM.YYYY",
+        "mmSddSyyyy": "MM/DD/YYYY",
+        "mmDddDyyyy": "MM-DD-YYYY",
+        "yyyyDmmDdd": "YYYY-MM-DD",
+        "ddDmmDyy": "DD-MM-YY",
+        "ddSmmSyy": "DD/MM/YY",
+        "mmSddSyy": "MM/DD/YY"
+      },
+      "triggerPorts": {
+        "keyword": "on keyword",
+        "comment_to_dm": "on comment → DM",
+        "tag_added": "on tag added",
+        "group_join": "on group join",
+        "contact_created": "on new contact",
+        "opt_in": "on opt-in",
+        "order_placed": "on order",
+        "deal_stage_changed": "on deal stage",
+        "away": "while away",
+        "out_of_hours": "after hours",
+        "manual_enroll": "on enroll",
+        "group_leave": "on list leave",
+        "segment_join": "on segment join",
+        "contact_updated": "on contact update",
+        "field_match": "on field match",
+        "date_field_match": "on date match",
+        "schedule": "on schedule",
+        "shopify_event": "on Shopify event",
+        "woocommerce_event": "on WooCommerce event"
+      },
+      "ports": {
+        "manual": "manual",
+        "next": "next",
+        "sent": "sent",
+        "linkSent": "link sent",
+        "replyReceived": "reply received",
+        "elseNoMatch": "else / no match",
+        "fileReceived": "file received",
+        "locationReceived": "location received",
+        "ifTrue": "IF · true",
+        "elseFalse": "ELSE · false",
+        "afterWait": "after wait",
+        "response": "response",
+        "done": "done",
+        "rows": "rows",
+        "replyReady": "reply ready",
+        "afterRun": "after run",
+        "spoken": "spoken",
+        "heard": "heard",
+        "answered": "answered",
+        "results": "results",
+        "ifNoAnswer": "if no answer",
+        "noMatch": "no match",
+        "replied": "replied",
+        "saved": "saved",
+        "handedOff": "handed off",
+        "afterPaid": "after paid",
+        "invoiceSent": "invoice sent",
+        "purchased": "purchased",
+        "abandoned": "abandoned",
+        "booked": "booked",
+        "noSlots": "no slots",
+        "callPlaced": "call placed",
+        "rowLoaded": "row loaded",
+        "rowWritten": "row written",
+        "docSent": "doc sent",
+        "submitted": "submitted",
+        "timedOut": "timed out",
+        "moved": "moved",
+        "created": "created",
+        "error": "error",
+        "optionPlaceholder": "Option",
+        "itemPlaceholder": "Item",
+        "optionLower": "option",
+        "button": "Button {n}",
+        "answer": "Answer {n}",
+        "option": "Option {n}",
+        "item": "Item {n}"
+      },
+      "cond": {
+        "and": "AND",
+        "or": "OR",
+        "isSet": "is set"
+      },
+      "validation": {
+        "noIncoming": "\"{node}\" has no incoming connection — nothing leads into it.",
+        "notConnected": "\"{node}\" is not connected to anything.",
+        "wrongChannel": "\"{node}\" does not work on {channel} — delete it or switch the channel back on the Trigger node.",
+        "noSenderInstagram": "The Trigger node has no Instagram account selected — pick one on the Trigger step.",
+        "noSenderFacebook": "The Trigger node has no Facebook Page selected — pick one on the Trigger step.",
+        "noSenderNumber": "The Trigger node has no number selected — pick one on the Trigger step."
+      }
+    },
+    "simpleModel": {
+      "mainFlow": "Main flow",
+      "flowN": "Flow {n}",
+      "delaySummary": "{amount} {unit}",
+      "kinds": {
+        "assign": {
+          "label": "Assign to an agent",
+          "help": "Hand the conversation to a team or an agent"
+        },
+        "message": {
+          "label": "Message",
+          "help": "Send a text message"
+        },
+        "media": {
+          "label": "Media",
+          "help": "An image, video, audio or file"
+        },
+        "buttons": {
+          "label": "Buttons",
+          "help": "Up to 3 buttons. Ends this flow: each button decides what comes next"
+        },
+        "list": {
+          "label": "List",
+          "help": "A list of up to 10 choices. Ends this flow too"
+        },
+        "cta": {
+          "label": "Link button",
+          "help": "A message with a link button"
+        },
+        "template": {
+          "label": "Template",
+          "help": "An approved WhatsApp template"
+        },
+        "location": {
+          "label": "Send a location",
+          "help": "Send a map pin"
+        },
+        "delay": {
+          "label": "Wait",
+          "help": "Wait before the next step"
+        },
+        "ask": {
+          "label": "Question",
+          "help": "Ask anything and save the answer"
+        },
+        "askName": {
+          "label": "Name",
+          "help": "Ask for a name and check it"
+        },
+        "askEmail": {
+          "label": "Email",
+          "help": "Ask for an email address and check it"
+        },
+        "askPhone": {
+          "label": "Phone number",
+          "help": "Ask for a phone number and check it"
+        },
+        "askNumber": {
+          "label": "Number",
+          "help": "Ask for a number and check it"
+        },
+        "askAlphanumeric": {
+          "label": "Letters and numbers",
+          "help": "An ID or code, no spaces or symbols"
+        },
+        "askDate": {
+          "label": "Date",
+          "help": "Ask for a date in the shape you choose"
+        },
+        "askFile": {
+          "label": "File or image",
+          "help": "Wait for a photo, document, video or audio"
+        },
+        "askLocation": {
+          "label": "Their location",
+          "help": "Wait for the customer to share a location"
+        }
+      },
+      "typeLabel": {
+        "message": "Message",
+        "media": "Media",
+        "buttons": "Buttons",
+        "list": "List",
+        "ask": "Question",
+        "ask_file": "Ask for a file",
+        "ask_location": "Ask for a location",
+        "delay": "Wait",
+        "location": "Location",
+        "template": "Template",
+        "cta": "Link button",
+        "assign": "Assign to an agent"
+      },
+      "stepLabel": {
+        "questionOf": "Question · {kind}"
+      },
+      "reasons": {
+        "oneTrigger": "It does not have exactly one Trigger.",
+        "unsupportedStep": "It uses the \"{node}\" step, which the Simple builder does not have.",
+        "askFixed": "A question has fixed answers or takes an uploaded file.",
+        "intoTrigger": "Something leads back into the Trigger.",
+        "multiLink": "A button or list row leads to more than one place.",
+        "multiNext": "A step continues into more than one step.",
+        "badPort": "A wire leaves a \"{node}\" step from a port the Simple builder does not use."
+      },
+      "problems": {
+        "triggerKeyword": "The trigger needs at least one keyword (or choose any message).",
+        "triggerSender": "Pick the WhatsApp number this flow runs on.",
+        "firstStep": "Add a first step: it is what the customer receives.",
+        "writeMessage": "Step {stage}: write the message.",
+        "addFileLink": "Step {stage}: add the file link.",
+        "writeQuestion": "Step {stage}: write the question.",
+        "nameVariable": "Step {stage}: name the variable the answer is saved in.",
+        "chooseAnswerProperty": "Step {stage}: choose the contact property the answer is copied to.",
+        "setCoordinates": "Step {stage}: set the latitude and longitude.",
+        "chooseTemplate": "Step {stage}: choose a template.",
+        "chooseTeam": "Step {stage}: choose the team the conversation goes to.",
+        "ctaLabelLink": "Step {stage}: give the button a name and a link.",
+        "choosePickedProperty": "Step {stage}: choose the contact property the picked option is copied to.",
+        "buttonsPrompt": "Step {stage}: write the message above the buttons.",
+        "addButton": "Step {stage}: add at least one button.",
+        "buttonNeedsLabel": "Step {stage}: every button needs a label.",
+        "buttonTooLong": "Step {stage}: a button label is longer than {max} characters.",
+        "listPrompt": "Step {stage}: write the message above the list.",
+        "listButtonLabel": "Step {stage}: the list button needs a label of up to {max} characters.",
+        "addRow": "Step {stage}: add at least one row.",
+        "rowTitle": "Step {stage}: every row needs a title of up to {max} characters.",
+        "rowDescriptionTooLong": "Step {stage}: a row description is longer than {max} characters.",
+        "variableUsed": "Step {stage}: \"{name}\" is already used by step {other}; give each answer its own name."
+      }
+    },
+    "waboImport": {
+      "notes": {
+        "optInOut": "Left out the opt-in / opt-out messages: the console keeps them outside its list of flows.",
+        "buttonNoTarget": "A \"{type}\" button (\"{text}\") has no target in Simple.",
+        "skippedStep": "Skipped a \"{sub}\" step: Simple has nothing like it.",
+        "leadsOutside": "\"{text}\" leads to a flow that is not in this file; it ends there until you link it.",
+        "connectsOutside": "A step connects to a node that is not in this file ({id}); it stays unlinked."
+      },
+      "reasons": {
+        "notExport": "This file is not a flow export. Use a .json file exported from Flows, or a flow exported from the wabo console.",
+        "otherFlowType": "It is a {type} flow; Simple builds messaging flows."
+      }
+    },
+    "graphOps": {
+      "maxButtons": "Max 3 quick reply buttons",
+      "maxAnswers": "Max 3 expected answers",
+      "maxPollOptions": "Max 3 poll options",
+      "maxItems": "Max 10 items",
+      "unknownType": "Unknown node type \"{type}\".",
+      "singleton": "{node} can only exist once.",
+      "nodeNotFound": "Node not found.",
+      "cannotDuplicate": "{node} can only exist once — can’t duplicate."
+    },
+    "simulator": {
+      "flowEnded": "Flow ended.",
+      "noPath": "No path forward — stop.",
+      "noPathPort": "No path forward (port \"{port}\") — stop.",
+      "noNumber": "(no number set)",
+      "copySent": "Copy sent to {number}: {what}",
+      "noUsername": "(no username)",
+      "sequenceEmpty": "(empty sequence)",
+      "templateHead": "[template: {name}]\n{preview}",
+      "waitingFile": "(waiting for a file: {types} — use the attach button)",
+      "anyType": "any type",
+      "waitingLocation": "(waiting for a shared location)",
+      "locationButton": "(a \"Send location\" button is shown — use the location button)",
+      "ifYes": "if {summary} → YES",
+      "ifNo": "if {summary} → NO",
+      "waitSkipped": "wait {amount} {unit} (skipped in test)",
+      "webhookNoUrl": "webhook has no URL — skipped",
+      "calling": "Calling {method} {url} …",
+      "httpOk": "← HTTP {status} · saved to {ref}",
+      "httpNon2xx": "← HTTP {status} (non-2xx) · saved to {ref}",
+      "webhookFailed": "webhook failed: {error}",
+      "noResponse": "no response",
+      "webhookError": "webhook error: {error}",
+      "runJs": "run JS → {ref} (mocked — runs live only)",
+      "query": "query {database}: {sql}… (mocked)",
+      "aiReply": "[{model}] (simulated reply)",
+      "tagAdd": "add tag \"{tag}\"",
+      "tagRemove": "remove tag \"{tag}\"",
+      "assigned": "assigned to team \"{team}\"",
+      "assignedUser": "assigned to team \"{team}\" user {user}",
+      "subflow": "run sub-flow \"{name}\" (skipped in test)",
+      "cta": "(CTA)\n{lines}",
+      "location": "(location) {name}\n{address}",
+      "locationCoords": "(location) {name}\n{address}\nlat {lat}, lng {lng}",
+      "chatbot": "[chatbot: {bot}] (simulated)",
+      "noProducts": "No products on commerce node — taking abandoned port.",
+      "pickProduct": "Pick a product:",
+      "commerce": "[{type}] {body}\n{list}\n(Reply with a number to simulate purchase, or wait — abandon timer not run in test)",
+      "slot1": "Mon 20 May · 10:00 AM",
+      "slot2": "Mon 20 May · 11:30 AM",
+      "slot3": "Tue 21 May · 9:00 AM",
+      "slot4": "Tue 21 May · 4:00 PM",
+      "slot5": "Wed 22 May · 2:30 PM",
+      "pickTime": "Pick a time:",
+      "slotPicked": "(simulated) customer picks slot 1 → booked",
+      "noSheet": "(no sheet)",
+      "sheetsLookup": "Lookup row where {column}=\"{value}\" in {sheet}",
+      "sheetsAppend": "Append row to {sheet} — {count, plural, one {# column} other {# columns}}",
+      "sheetsLine": "[Google Sheets · {mode}] {summary} (skipped in test)",
+      "noTemplate": "(no template)",
+      "docsLine": "[Google Docs] copy template {template} → \"{title}\" (mocked URL)",
+      "docMessage": "Here's your document: {url}",
+      "formPrompt": "Please fill out this short form:",
+      "formSubmitted": "(simulated) form submitted → submitted port",
+      "noStage": "(none)",
+      "dealName": "deal",
+      "dealMove": "[CRM] move contact deal to stage {stage} — \"{name}\"{hasValue, select, yes { · {value}} other {}} (skipped in test)",
+      "dealCreate": "[CRM] create deal in stage {stage} — \"{name}\"{hasValue, select, yes { · {value}} other {}} (skipped in test)",
+      "waFormPrompt": "Please complete this form:",
+      "selectForm": "(select a form)",
+      "waFormLine": "(simulated) published Meta form {form} sent → out",
+      "unknownNode": "(unknown node type \"{type}\" — skipping)",
+      "nothingAfter": "Nothing connected after {type} — stop.",
+      "canvasEmpty": "Canvas is empty. Add a trigger and at least one node, then click Restart.",
+      "typeKeyword": "Type \"{first}\" (or any keyword: {list}) to start the flow.",
+      "typeAny": "Type any message to start the flow.",
+      "skippedByCustomer": "Skipped by the customer.",
+      "fileSaved": "File saved to {ref}.",
+      "locationSaved": "Location saved to {ref} (maps link).",
+      "wrongFile": "That is not a file we can accept. Please send it as an attachment.",
+      "wrongLocation": "Please share your location with the attachment (+) menu, then Location.",
+      "retriesEnd": "Retries used up — the flow ends here.",
+      "retriesMove": "Retries used up — moving on without an answer.",
+      "userFile": "📎 {name} ({mime})",
+      "userFileCaption": "📎 {name} ({mime})\n{caption}",
+      "userLocation": "📍 {hasName, select, yes {{name} · } other {}}{lat}, {lng}{hasAddress, select, yes {\n{address}} other {}}",
+      "keywordMiss": "(message didn't match any keyword — running anyway for testing)",
+      "portNotConnected": "Port \"{port}\" not connected — stop.",
+      "nothingAfterAsk": "Nothing connected after ask — stop.",
+      "optionNotConnected": "Port \"{port}\" (option {n}) not connected — stop.",
+      "buttonNotConnected": "Button \"{label}\" not connected — stop.",
+      "simPurchase": "Simulated purchase: {name} → port \"purchased\"",
+      "simAbandon": "Simulated abandon → port \"abandoned\""
     }
   }
 }

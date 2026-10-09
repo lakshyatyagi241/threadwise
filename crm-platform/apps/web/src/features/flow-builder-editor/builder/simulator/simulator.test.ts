@@ -6,6 +6,7 @@ import type {
 } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import { createSimulator, type LogEntry, type SimulatorOptions } from './simulator';
+import { translator } from '../../test-utils/intl';
 
 const node = (
   id: string,
@@ -32,6 +33,7 @@ function harness(nodes: FlowNode[], edges: FlowEdge[], over: Partial<SimulatorOp
   const queue: Array<() => void> = [];
   let awaiting = false;
   const sim = createSimulator({
+    t: translator('flb'),
     nodes,
     edges,
     callWebhook: () => Promise.resolve({ ok: false, error: 'unused' }),

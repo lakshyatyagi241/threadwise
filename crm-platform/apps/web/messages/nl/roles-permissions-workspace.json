@@ -1,0 +1,246 @@
+{
+  "roles-permissions-workspace": {
+    "nav": {
+      "team": "Teamleden",
+      "roles": "Rollen"
+    },
+    "common": {
+      "settings": "Instellingen",
+      "breadcrumb": "Broodkruimelpad",
+      "loading": "Laden…",
+      "retry": "Opnieuw proberen",
+      "requestId": "Verzoek-ID",
+      "cancel": "Annuleren",
+      "close": "Sluiten",
+      "dismiss": "Sluiten",
+      "required": "Dit veld is verplicht.",
+      "showPassword": "Wachtwoord tonen",
+      "hidePassword": "Wachtwoord verbergen",
+      "noAccess": {
+        "title": "Je hebt geen toegang",
+        "body": "Je rollen bevatten niet de machtiging die dit scherm nodig heeft. Vraag een workspace-eigenaar of -beheerder om die toe te kennen.",
+        "bodyWithKey": "Dit scherm vereist de machtiging {permission}. Vraag een workspace-eigenaar of -beheerder om die aan een van je rollen toe te voegen.",
+        "back": "Terug naar de workspace"
+      }
+    },
+    "blurb": {
+      "owner": "Eigenaar: alles, inclusief facturatie.",
+      "admin": "Beheerder: volledige toegang tot de workspace, geen facturatie.",
+      "manager": "Manager: ziet alles, kan toewijzen en oplossen.",
+      "agent": "Agent: behandelt toegewezen gesprekken.",
+      "viewer": "Kijker: alleen-lezen."
+    },
+    "errors": {
+      "unexpected": "Er ging iets mis aan onze kant. Probeer het opnieuw; blijft het probleem zich voordoen, vermeld dan het verzoek-ID.",
+      "request": "Het verzoek kon niet worden voltooid.",
+      "validation": "Controleer het formulier en probeer het opnieuw.",
+      "passwordPolicy": "Dit wachtwoord voldoet niet aan het wachtwoordbeleid van de workspace:",
+      "validationField": "Controleer dit veld en probeer het opnieuw.",
+      "forbidden": "Je hebt geen toestemming om dit te doen.",
+      "conflict": "Iemand anders heeft dit gewijzigd terwijl je bewerkte. Laad opnieuw om hun versie te zien en pas daarna je wijzigingen opnieuw toe.",
+      "grantRole": "Dit kan niet: die rol (of de huidige rol van het lid) staat boven de jouwe. Alleen een eigenaar kan eigenaren en beheerders toekennen, wijzigen of deactiveren.",
+      "grantPermission": "Je kunt {permission} niet toekennen: je hebt die zelf niet.",
+      "selfRoleChange": "Je kunt je eigen rol niet wijzigen.",
+      "lastOwner": "De workspace moet minstens één eigenaar houden. Maak eerst iemand anders eigenaar.",
+      "selfDeactivate": "Je kunt je eigen account niet deactiveren.",
+      "presetRole": "Eigenaar, Beheerder, Manager, Agent en Kijker zijn vooraf ingestelde rollen: ze kunnen niet worden hernoemd of verwijderd.",
+      "roleInUse": "Leden hebben deze rol nog. Verplaats hen eerst naar een andere rol en verwijder de rol daarna.",
+      "nameTaken": "Er bestaat al een rol met deze naam.",
+      "nameRequired": "De rolnaam is verplicht.",
+      "nameTooLong": "De rolnaam mag maximaal {max} tekens bevatten.",
+      "notFound": "Dit item bestaat niet meer. Het is mogelijk verwijderd."
+    },
+    "team": {
+      "crumb": "Teamleden",
+      "eyebrow": "Instellingen · Team",
+      "titleLead": "Team",
+      "titleAccent": "leden",
+      "description": "Voeg mensen toe aan deze workspace, kies wat ze mogen doen en schakel de toegang uit wanneer iemand vertrekt.",
+      "addMember": "Lid toevoegen",
+      "reload": "Opnieuw laden",
+      "you": "Jij",
+      "noRole": "Geen rol",
+      "changeRoleAction": "Rol wijzigen",
+      "reactivate": "Opnieuw activeren",
+      "selfRoleHint": "Je kunt je eigen rol niet wijzigen.",
+      "roleLockedHint": "Je kunt de rol van dit lid niet wijzigen: die staat boven de jouwe, of je mag geen rollen toewijzen.",
+      "selfDeactivateHint": "Je kunt je eigen account niet deactiveren.",
+      "rolesUnavailable": "Rollen konden niet worden geladen, daarom zijn leden toevoegen en rollen wijzigen niet beschikbaar. De rolchips worden samengesteld uit de getoonde leden.",
+      "footer": "{shown} van {total} getoond",
+      "status": {
+        "active": "Actief",
+        "inactive": "Inactief"
+      },
+      "filter": {
+        "label": "Leden filteren op rol",
+        "all": "Alle",
+        "preset": {
+          "owner": "Eigenaren",
+          "admin": "Beheerders",
+          "manager": "Managers",
+          "agent": "Agents",
+          "viewer": "Kijkers"
+        }
+      },
+      "search": {
+        "label": "Leden zoeken",
+        "placeholder": "Zoek op naam of e-mail…"
+      },
+      "table": {
+        "caption": "Workspaceleden",
+        "member": "Lid",
+        "roles": "Rollen",
+        "status": "Status",
+        "actions": "Acties"
+      },
+      "empty": {
+        "none": "Er zijn nog geen leden.",
+        "noMatch": "Geen leden die aan dit filter voldoen.",
+        "clear": "Filters wissen"
+      },
+      "toasts": {
+        "added": "{name} is toegevoegd aan de workspace.",
+        "rolesUpdated": "Rollen bijgewerkt voor {name}.",
+        "deactivated": "{name} is gedeactiveerd.",
+        "reactivated": "{name} is opnieuw geactiveerd."
+      },
+      "deactivate": {
+        "action": "Deactiveren",
+        "title": "Lid deactiveren",
+        "message": "{name} kan zich niet meer aanmelden. Je kunt het account altijd opnieuw activeren.",
+        "confirm": "Deactiveren",
+        "cancel": "Annuleren"
+      },
+      "add": {
+        "eyebrow": "Team",
+        "title": "Lid toevoegen",
+        "fullName": "Volledige naam",
+        "email": "E-mail",
+        "emailInvalid": "Voer een geldig e-mailadres in.",
+        "password": "Wachtwoord",
+        "passwordHint": "Minimaal 8 tekens. Deel het met de persoon; hij of zij kan het na aanmelden wijzigen.",
+        "passwordGenerated": "Gegenereerd wachtwoord: toon het met de oogknop en kopieer het voordat je opslaat.",
+        "passwordShort": "Het wachtwoord moet minimaal 8 tekens hebben.",
+        "generate": "Genereren",
+        "role": "Rol",
+        "submit": "Lid toevoegen"
+      },
+      "changeRole": {
+        "title": "Rollen van {name} wijzigen",
+        "legend": "Rollen",
+        "keptRole": "{name} blijft: je kunt deze niet toekennen of intrekken.",
+        "atLeastOne": "Kies minstens één rol.",
+        "save": "Rollen opslaan",
+        "reload": "Opnieuw laden"
+      }
+    },
+    "list": {
+      "crumb": "Rollen",
+      "eyebrow": "Instellingen · Team · Rollen",
+      "titleLead": "Rollen en",
+      "titleAccent": "machtigingen",
+      "description": "Rollen bepalen wat leden mogen doen. Kies een vooraf ingestelde rol of stel een eigen rol samen in de machtigingenmatrix.",
+      "teamLink": "Teamleden",
+      "addRole": "Rol toevoegen",
+      "empty": "Er zijn nog geen rollen.",
+      "preset": "Vooraf ingesteld",
+      "custom": "Aangepast",
+      "locked": "Vergrendeld",
+      "footer": "{count} rollen",
+      "membersLink": "{count} leden hebben {name}",
+      "table": {
+        "caption": "Workspacerollen",
+        "name": "Rol",
+        "type": "Type",
+        "members": "Leden",
+        "permissions": "Machtigingen",
+        "lastEdited": "Laatst bewerkt",
+        "actions": "Acties"
+      },
+      "row": {
+        "menu": "Acties voor {name}",
+        "edit": "Rol bewerken",
+        "view": "Rol bekijken",
+        "delete": "Rol verwijderen"
+      },
+      "toasts": {
+        "deleted": "Rol “{name}” verwijderd."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Rollen",
+      "crumbNew": "Nieuwe rol",
+      "eyebrowNew": "Instellingen · Rollen · Nieuw",
+      "eyebrowEdit": "Instellingen · Rollen · Bewerken",
+      "titleLead": "Maken",
+      "titleAccent": "rol",
+      "description": "Geef de rol een naam en kies wat hij mag doen.",
+      "summary": "{count, plural, =0 {Geen leden hebben deze rol.} one {1 lid heeft deze rol.} other {# leden hebben deze rol.}}",
+      "notFoundTitle": "Rol niet gevonden",
+      "notFoundBody": "Deze rol bestaat niet meer. Mogelijk is hij verwijderd.",
+      "backToRoles": "Terug naar rollen",
+      "back": "Terug",
+      "save": "Wijzigingen opslaan",
+      "create": "Rol aanmaken",
+      "saving": "Opslaan…",
+      "reload": "Opnieuw laden",
+      "discard": "Je hebt niet-opgeslagen wijzigingen. Weggaan zonder op te slaan?",
+      "lockedNotice": "De eigenarenrol heeft alle machtigingen en kan niet worden gewijzigd of verwijderd",
+      "adminNotice": "Alleen een eigenaar kan de machtigingen van de beheerdersrol wijzigen.",
+      "readOnlyNotice": "Je kunt de machtigingen van deze rol niet wijzigen.",
+      "details": "Roldetails",
+      "name": "Rolnaam",
+      "namePlaceholder": "bijv. Supportlead",
+      "presetNameHint": "Vooraf ingestelde rollen behouden hun naam.",
+      "template": "Beginnen vanuit rol",
+      "templateHint": "Kopieert de machtigingen van een andere rol naar de matrix hieronder.",
+      "templateBlank": "Leeg (geen machtigingen)",
+      "templateOption": "{name} ({count} machtigingen)",
+      "danger": {
+        "title": "Deze rol verwijderen",
+        "hint": "Niemand heeft deze rol, dus hij kan worden verwijderd.",
+        "inUse": "{count, plural, one {1 lid heeft deze rol nog.} other {# leden hebben deze rol nog.}} Verplaats hen eerst naar een andere rol.",
+        "action": "Rol verwijderen"
+      },
+      "toasts": {
+        "created": "Rol “{name}” aangemaakt.",
+        "updated": "Rol “{name}” bijgewerkt.",
+        "deleted": "Rol “{name}” verwijderd."
+      }
+    },
+    "matrix": {
+      "title": "Machtigingen",
+      "counter": "{count} / {total} geselecteerd",
+      "deniedCount": "{count} geweigerd",
+      "selectAll": "Alles selecteren",
+      "selectAllCategory": "Alles selecteren",
+      "selectAllOf": "Alles selecteren in {category}",
+      "search": "Machtigingen zoeken…",
+      "searchLabel": "Machtigingen zoeken",
+      "denyHint": "Weigeren gaat voor toestaan: een geweigerde machtiging wordt geblokkeerd, ook als een andere rol van het lid die wel toestaat.",
+      "emptyCatalogue": "Er zijn geen machtigingen beschikbaar.",
+      "noMatch": "Geen machtiging komt overeen met “{query}”.",
+      "allow": "Toestaan",
+      "deny": "Weigeren",
+      "effectLabel": "Toestaan of weigeren: {label}",
+      "scopeLabel": "Bereik van records: {label}",
+      "needsPlan": "Vereist abonnement {feature}",
+      "needsApp": "Vereist geïnstalleerde app {app}",
+      "lockedHint": "Deze machtiging is nog niet beschikbaar voor deze workspace. Ze wordt vrijgegeven zodra de abonnementsfunctie is ingeschakeld of de app is geïnstalleerd.",
+      "scope": {
+        "all": "Alle records",
+        "team": "Teamrecords",
+        "own": "Eigen records"
+      }
+    },
+    "delete": {
+      "title": "Rol verwijderen",
+      "message": "De rol “{name}” verwijderen? Dit kan niet ongedaan worden gemaakt.",
+      "confirm": "Rol verwijderen",
+      "cancel": "Annuleren",
+      "inUseTitle": "“{name}” is nog in gebruik",
+      "inUse": "{count, plural, =0 {Er hebben nog leden deze rol.} one {1 lid heeft deze rol nog.} other {# leden hebben deze rol nog.}} Verplaats hen eerst naar een andere rol en verwijder de rol daarna.",
+      "viewMembers": "Leden met deze rol bekijken"
+    }
+  }
+}

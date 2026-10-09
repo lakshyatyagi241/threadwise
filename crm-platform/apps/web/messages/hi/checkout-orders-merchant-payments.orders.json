@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "स्टोर / ऑर्डर",
+      "title": "सभी ऑर्डर",
+      "subtitle": "हर चैनल का हर ऑर्डर: WhatsApp, स्टोरफ़्रंट, Twilio और मैन्युअल।",
+      "loading": "ऑर्डर लोड हो रहे हैं",
+      "statusTabs": "ऑर्डर की स्थिति",
+      "searchLabel": "ऑर्डर खोजें",
+      "searchPlaceholder": "फ़ोन, नाम या ऑर्डर नंबर से खोजें",
+      "sourceLabel": "स्रोत",
+      "allSources": "सभी स्रोत",
+      "paymentLabel": "भुगतान",
+      "allPayments": "सभी भुगतान",
+      "fromLabel": "से",
+      "toLabel": "तक",
+      "shopLabel": "दुकान",
+      "invertedRange": "शुरुआती तारीख अंतिम तारीख के बाद की है, इसलिए कोई ऑर्डर मेल नहीं खा सकता।",
+      "clearFilters": "फ़िल्टर हटाएं",
+      "cols": {
+        "order": "ऑर्डर",
+        "customer": "ग्राहक",
+        "items": "आइटम",
+        "total": "कुल",
+        "payment": "भुगतान",
+        "status": "स्थिति",
+        "source": "स्रोत",
+        "created": "बनाया गया",
+        "actions": "कार्रवाइयां"
+      },
+      "itemsCount": "{count, plural, one {# आइटम} other {# आइटम}}",
+      "anonymous": "अज्ञात",
+      "openOrder": "ऑर्डर #{no} खोलें",
+      "changeStatus": "ऑर्डर #{no} की स्थिति बदलें",
+      "deleteOrder": "ऑर्डर #{no} हटाएं",
+      "deleteTitle": "ऑर्डर #{no} हटाएं?",
+      "deleteMessage": "ऑर्डर और उसके आइटम हमेशा के लिए हटा दिए जाएंगे। इसे पूर्ववत नहीं किया जा सकता।",
+      "deleteConfirm": "ऑर्डर हटाएं",
+      "deleted": "ऑर्डर #{no} हटा दिया गया।",
+      "statusChanged": "ऑर्डर #{no} अब {status} है।",
+      "buyerNotified": "खरीदार को संदेश भेजा गया।",
+      "confirmStatusTitle": "ऑर्डर #{no} को {status} के रूप में चिह्नित करें?",
+      "confirmStatusMessage": "खरीदार को नई स्थिति के बारे में बताया जाता है। आप बाद में भी ऑर्डर को दूसरी स्थिति में ले जा सकते हैं।",
+      "confirmStatusConfirm": "स्थिति अपडेट करें",
+      "emptyTitle": "अभी कोई ऑर्डर नहीं",
+      "emptyMessage": "जब ग्राहक आपके स्टोरफ़्रंट से या WhatsApp पर ऑर्डर करते हैं, वे यहां दिखते हैं। पहला ऑर्डर पाने के लिए अपना शॉप लिंक साझा करें।",
+      "emptyAction": "स्टोर ओवरव्यू खोलें",
+      "noMatchTitle": "कोई ऑर्डर इन फ़िल्टर से मेल नहीं खाता",
+      "noMatchMessage": "कोई दूसरी खोज, स्थिति या तारीख सीमा आज़माएं, या हर ऑर्डर देखने के लिए फ़िल्टर हटाएं।"
+    },
+    "orderDetail": {
+      "back": "ऑर्डर पर वापस जाएं",
+      "title": "ऑर्डर #{no}",
+      "placed": "{when} को दिया गया",
+      "loading": "ऑर्डर लोड हो रहा है",
+      "readOnly": "आप यह ऑर्डर देख सकते हैं लेकिन बदल नहीं सकते।",
+      "items": {
+        "title": "आइटम",
+        "empty": "इस ऑर्डर में कोई आइटम नहीं है।",
+        "qty": "मात्रा {qty}",
+        "retailerId": "ID {id}",
+        "unit": "{price} प्रत्येक"
+      },
+      "totals": {
+        "title": "कुल",
+        "subtotal": "उप-कुल",
+        "shipping": "शिपिंग",
+        "tax": "कर",
+        "taxInclusive": "कीमतों में शामिल",
+        "discount": "छूट",
+        "discountCoupon": "छूट ({code})",
+        "total": "कुल"
+      },
+      "customer": {
+        "title": "ग्राहक",
+        "anonymous": "अज्ञात",
+        "phone": "फ़ोन",
+        "email": "ईमेल",
+        "address": "शिपिंग पता",
+        "noAddress": "इस ऑर्डर के लिए कोई पता दर्ज नहीं हुआ।",
+        "notes": "नोट"
+      },
+      "meta": {
+        "title": "ऑर्डर विवरण",
+        "orderId": "ऑर्डर ID",
+        "source": "स्रोत",
+        "shop": "दुकान",
+        "paymentMethod": "भुगतान का तरीका",
+        "updated": "पिछला अपडेट"
+      },
+      "rto": {
+        "title": "रिटर्न-टू-ओरिजिन जोखिम",
+        "summary": "{band} ({score})",
+        "low": "कम",
+        "medium": "मध्यम",
+        "high": "उच्च"
+      },
+      "timeline": {
+        "title": "टाइमलाइन",
+        "empty": "इस ऑर्डर पर अभी कुछ नहीं हुआ है।",
+        "kind": {
+          "created": "ऑर्डर दिया गया",
+          "status_changed": "स्थिति बदली",
+          "payment_link": "पेमेंट लिंक",
+          "paid": "भुगतान प्राप्त हुआ",
+          "invoice": "इनवॉइस",
+          "note": "नोट",
+          "updated": "ऑर्डर अपडेट किया गया"
+        },
+        "actor": {
+          "user": "टीम के सदस्य द्वारा",
+          "system": "स्वचालित",
+          "customer": "ग्राहक द्वारा"
+        }
+      },
+      "payments": {
+        "title": "भुगतान",
+        "empty": "इस ऑर्डर के लिए कोई भुगतान दर्ज नहीं हुआ है।",
+        "kind": {
+          "gateway": "ऑनलाइन भुगतान",
+          "payment_link": "पेमेंट लिंक",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "कैश ऑन डिलीवरी",
+          "manual": "हाथ से दर्ज किया गया"
+        },
+        "reference": "संदर्भ {ref}",
+        "openLink": "लिंक खोलें"
+      },
+      "form": {
+        "title": "स्थिति अपडेट करें",
+        "status": "स्थिति",
+        "suggestion": "आमतौर पर अगला चरण: {status}",
+        "notes": "नोट",
+        "paymentLink": "पेमेंट लिंक",
+        "optional": "वैकल्पिक",
+        "paymentLinkHint": "अपडेट के साथ खरीदार को नया लिंक भेजा जाता है।",
+        "invalidLink": "http:// या https:// से शुरू होने वाला वेब लिंक दर्ज करें।",
+        "save": "बदलाव सहेजें",
+        "saving": "सहेजा जा रहा है",
+        "saved": "ऑर्डर #{no} अपडेट किया गया।",
+        "notified": "खरीदार को संदेश भेजा गया।",
+        "notNotified": "खरीदार को संदेश नहीं भेजा गया।",
+        "reload": "ऑर्डर रीलोड करें"
+      },
+      "pay": {
+        "title": "पेमेंट लिंक",
+        "current": "मौजूदा पेमेंट लिंक",
+        "sendTitle": "आपके पास पहले से मौजूद लिंक भेजें",
+        "sendLabel": "पेमेंट लिंक URL",
+        "sendButton": "पेमेंट लिंक भेजें",
+        "sent": "पेमेंट लिंक खरीदार को भेज दिया गया।",
+        "savedNotSent": "लिंक सहेजा गया, लेकिन उसे खरीदार को भेजा नहीं जा सका।",
+        "generateTitle": "चेकआउट लिंक बनाएं",
+        "generateHint": "आपके पेमेंट गेटवे पर होस्टेड पे लिंक बनाता है और उसे WhatsApp पर खरीदार को भेजता है।",
+        "gatewayLabel": "गेटवे",
+        "generateButton": "लिंक बनाएं और भेजें",
+        "noGatewayTitle": "कोई पेमेंट गेटवे सेट नहीं है",
+        "noGatewayMessage": "चेकआउट लिंक बनाने से पहले एक पेमेंट गेटवे सेट करना ज़रूरी है।",
+        "noGatewayAction": "गेटवे सेट करें",
+        "resultTitle": "पेमेंट लिंक तैयार",
+        "copyLink": "लिंक कॉपी करें",
+        "resultSent": "WhatsApp पर खरीदार को भेज दिया गया।",
+        "resultNotSent": "ऑर्डर पर सहेजा गया, लेकिन उसे खरीदार को भेजा नहीं जा सका। इसे खुद साझा करें।"
+      },
+      "invoice": {
+        "title": "इनवॉइस",
+        "description": "इस ऑर्डर को सेल्स में इनवॉइस और सेल्स ऑर्डर में बदलें।",
+        "create": "इनवॉइस बनाएं",
+        "creating": "बनाया जा रहा है",
+        "created": "इनवॉइस {number} बन गया।",
+        "createdNoNumber": "इनवॉइस बन गया।",
+        "existing": "इस ऑर्डर का इनवॉइस पहले ही बन चुका है।",
+        "viewInvoice": "इनवॉइस",
+        "viewSalesOrder": "सेल्स ऑर्डर"
+      },
+      "delete": {
+        "title": "ऑर्डर #{no} हटाएं?",
+        "message": "ऑर्डर और उसके आइटम हमेशा के लिए हटा दिए जाएंगे। इसे पूर्ववत नहीं किया जा सकता।",
+        "confirm": "ऑर्डर हटाएं",
+        "deleted": "ऑर्डर #{no} हटा दिया गया।"
+      }
+    }
+  }
+}

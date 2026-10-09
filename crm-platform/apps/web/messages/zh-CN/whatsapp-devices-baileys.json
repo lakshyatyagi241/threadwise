@@ -1,0 +1,312 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "devices": "个人 WhatsApp"
+    },
+    "area": {
+      "title": "非官方 WhatsApp API",
+      "numbers": "号码",
+      "warmer": "养号"
+    },
+    "common": {
+      "dismiss": "关闭",
+      "requestId": "请求 {id}",
+      "unofficial": "非官方",
+      "reminder": "非官方连接。WhatsApp 可能会限制此号码。",
+      "readGuide": "阅读指南",
+      "close": "关闭",
+      "cancel": "取消",
+      "back": "返回"
+    },
+    "list": {
+      "title": "个人 WhatsApp 号码",
+      "subtitle": "通过二维码或配对码关联 WhatsApp 号码。该号码上的聊天会显示在共享收件箱中。",
+      "connect": "连接号码",
+      "capCount": "已用 {used} / {limit} 个号码",
+      "capUnlimited": "{used, plural, other {# 个号码}}",
+      "capFull": "您的工作区在此引擎上最多可拥有 {limit, plural, other {# 个号码}}。请删除一个号码以连接其他号码。",
+      "capLabel": "正在使用的号码",
+      "loading": "正在加载您的号码…",
+      "retry": "重试",
+      "searchLabel": "按名称或号码搜索",
+      "searchPlaceholder": "搜索名称或号码",
+      "tabs": {
+        "all": "全部",
+        "connected": "已连接",
+        "disconnected": "已断开"
+      },
+      "noMatch": "没有匹配的号码。请清除搜索或选择其他标签。",
+      "empty": {
+        "title": "尚未关联个人号码",
+        "message": "关联您已在使用的 WhatsApp 号码。它的工作方式与 WhatsApp Web 相同，因此并非 WhatsApp 批准的自动化方式，WhatsApp 可能会限制该号码。如需长期或大量使用，官方 WhatsApp Business 渠道的风险较低。",
+        "action": "连接号码",
+        "noPermission": "请让工作区管理员连接号码。"
+      },
+      "columns": {
+        "name": "名称",
+        "lastSeen": "最近在线"
+      },
+      "lastSeenNever": "从未",
+      "assignedTo": "由 {name} 处理",
+      "noticeChanged": {
+        "title": "我们的通知已更改",
+        "body": "个人号码的风险通知已更新。已连接的号码将继续工作。下次连接号码时，系统会要求您重新阅读。",
+        "action": "阅读通知"
+      },
+      "action": {
+        "link": "连接",
+        "reconnect": "重新连接",
+        "relink": "重新关联",
+        "retry": "重试",
+        "details": "详情",
+        "disconnect": "断开连接",
+        "rename": "重命名",
+        "delete": "删除"
+      },
+      "sendingToggle": "使用 {name} 发送",
+      "sendingOn": "用于发送",
+      "sendingOff": "不用于发送",
+      "done": {
+        "disconnected": "{name} 已断开连接。",
+        "disconnectedNotUnlinked": "{name} 已在此处断开。请同时在 WhatsApp 的“已关联设备”中移除此设备。",
+        "deleted": "{name} 已删除。其聊天记录保留在收件箱中。",
+        "renamed": "已重命名为 {name}。",
+        "sendingSaved": "已保存。"
+      },
+      "workerDown": "连接服务未运行。在其恢复之前无法连接号码。"
+    },
+    "state": {
+      "created": "尚未关联",
+      "awaiting_qr": "等待扫码",
+      "awaiting_pairing_code": "等待验证码",
+      "connecting": "连接中",
+      "connected": "已连接",
+      "disconnected": "已断开",
+      "logged_out": "WhatsApp 已结束关联",
+      "error": "无法连接",
+      "unknown": "未知"
+    },
+    "reason": {
+      "unlinked_on_phone": "WhatsApp 已结束与此号码的关联。这种情况发生在设备在 WhatsApp 的“已关联设备”中被移除时，以及 WhatsApp 限制号码时。您在此处的聊天记录会保留。您可以重新关联。",
+      "forbidden": "WhatsApp 拒绝了此次连接。这可能意味着号码已被限制。您在此处的聊天记录会保留。",
+      "qr_timeout": "未及时扫描二维码。",
+      "pair_failed": "WhatsApp 无法完成此号码的关联。",
+      "code_failed": "配对码未被接受。",
+      "mismatch": "扫描的手机与您输入的号码不符。请检查号码后重试。",
+      "proxy_unreachable": "代理未响应。号码将保持离线，直到恢复正常。",
+      "session_conflict": "同一号码在其他地方也已关联，两者会不断互相替换。请移除其他关联，然后重新连接。",
+      "device_limit_reached": "WhatsApp 最多允许 4 个关联设备。请在 WhatsApp 的“已关联设备”中移除一个，然后重试。",
+      "worker_unavailable": "连接服务不可用。请几分钟后重试。",
+      "worker_silent": "连接服务对此号码停止响应。服务恢复后将自动重新连接。",
+      "user": "已从此工作区断开。",
+      "session_incomplete": "保存的会话未完成。请重新关联此号码。"
+    },
+    "notice": {
+      "title": "连接之前",
+      "intro": "请阅读。内容简短，且真实。",
+      "listLabel": "请逐项确认",
+      "notesTitle": "须知",
+      "version": "通知版本 {version}",
+      "accept": "我接受并继续",
+      "accepting": "正在保存...",
+      "mustTick": "请勾选全部三个框以继续。",
+      "pageTitle": "个人号码风险通知",
+      "pageIntro": "这是您在连接个人 WhatsApp 号码之前需要接受的通知。",
+      "acceptedOn": "您已于 {date} 接受版本 {version}。",
+      "notAccepted": "您尚未接受当前版本。连接号码时会要求您接受。",
+      "backToList": "返回号码列表",
+      "texts": {
+        "v2026_10_07_1": {
+          "items": {
+            "not_approved_ban_risk": "我了解此操作将以 WhatsApp Web 的方式连接我的 WhatsApp。这不是 WhatsApp 批准的自动化方式，并且违反 WhatsApp 的条款。WhatsApp 可能随时限制或永久封禁此号码，即使是正常使用也不例外；我们无法阻止，也无法找回该号码。",
+            "own_number_expected_contacts": "我只会连接我拥有或已获得所有者许可连接的号码，并且我能承受失去它的后果。我只会向期望收到我消息的人发送消息。",
+            "shared_inbox_disclosure": "我了解，一旦关联，此号码上的每个私人聊天（不仅是商务聊天）都会出现在本工作区的共享收件箱中，供有权查看收件箱的成员查看；我在手机上输入的消息也会被同步到此处。"
+          },
+          "notes": {
+            "official_route_lower_risk": "对于严肃或长期使用，官方 WhatsApp Business 渠道的风险较低。",
+            "warm_up": "请缓慢养号，并保持较低的发送量。",
+            "no_ban_support": "受限或被封禁的号码不在支持范围内：我们不会调查、恢复或退款。",
+            "shared_addresses": "在此试点中，号码通过我们服务器的共享地址连接（不使用代理），因此一个号码的限制可能会关联到其他号码。",
+            "disconnect_keeps_chats": "在此断开连接会移除关联和已保存的会话，但不会删除收件箱中的聊天记录。"
+          }
+        }
+      }
+    },
+    "wizard": {
+      "title": "连接号码",
+      "relinkTitle": "关联 {name}",
+      "stepOf": "第 {step} 步，共 {total} 步",
+      "continue": "继续",
+      "creating": "正在保存...",
+      "number": {
+        "title": "哪个号码？",
+        "name": "名称",
+        "namePlaceholder": "例如：销售专线",
+        "nameHelp": "只有您的团队能看到此名称。",
+        "phone": "WhatsApp 号码",
+        "phoneHelp": "请输入您要关联的号码（含国家代码）。它必须是用于扫码或输入代码的那部手机的号码。",
+        "activate": "关联后用于发送",
+        "activateHelp": "号码关联后，营销活动、定时消息和流程即可使用此号码。",
+        "nameError": {
+          "required": "请输入名称。",
+          "short": "名称至少需要 2 个字符。",
+          "long": "名称过长（最多 191 个字符）。"
+        },
+        "phoneError": {
+          "empty": "请输入号码。",
+          "invalid": "此号码对所选国家无效。"
+        },
+        "openExisting": "打开现有号码"
+      },
+      "link": {
+        "title": "关联手机",
+        "choose": "您想如何关联？",
+        "methodLabel": "关联方式",
+        "qr": "扫描二维码",
+        "qrHelp": "使用此号码所在的手机扫描。",
+        "code": "使用配对码",
+        "codeHelp": "在手机上输入 8 位代码。无法扫码时很有用。",
+        "numberLine": "号码：{phone}",
+        "startQr": "显示二维码",
+        "startCode": "获取配对码",
+        "starting": "正在开始...",
+        "needCountryCode": "使用配对码时需添加国家代码。",
+        "someoneElse": "请仅在您正在连接的号码的手机上输入此代码。切勿与他人分享。如果在他人的手机上输入配对码，该人的整个 WhatsApp 账号都会被关联到此工作区。",
+        "qrSteps": {
+          "one": "在手机上打开 WhatsApp。",
+          "two": "进入“已关联设备”，然后点击“关联设备”。",
+          "three": "将摄像头对准此二维码。"
+        },
+        "codeSteps": {
+          "one": "在手机上打开 WhatsApp。",
+          "two": "进入“已关联设备”，然后点击“关联设备”，再选择“使用手机号码关联”。",
+          "three": "输入此代码。"
+        },
+        "qrAlt": "用于关联号码的二维码",
+        "qrRefresh": "{seconds} 秒后生成新代码",
+        "qrExpires": "{time} 后过期",
+        "codeValid": "此代码约有效 3 分钟。",
+        "codeExpires": "有效期 {time}",
+        "codeLabel": "配对码",
+        "copy": "复制代码",
+        "copied": "已复制",
+        "copyFailed": "无法复制。请选中代码后复制。",
+        "strip": {
+          "shown": "已显示代码",
+          "scanned": "已扫描",
+          "ready": "就绪"
+        },
+        "stripLabel": "进度",
+        "linking": "正在关联。WhatsApp 正在同步，可能需要一些时间。",
+        "cancelAttempt": "停止并选择其他方式",
+        "reading": "正在等待第一个代码...",
+        "relinkAction": "忘记已保存的会话并重新关联"
+      },
+      "result": {
+        "connectedTitle": "已连接",
+        "connectedBody": "{phone} 已关联。此号码上的聊天现在会显示在共享收件箱中。",
+        "warmer": "设置养号",
+        "inbox": "打开收件箱",
+        "list": "返回号码列表",
+        "timedOutTitle": "未及时扫描代码",
+        "timedOutBody": "未关联任何内容。如果手机离线或已锁定，请使其上线后重新开始。",
+        "phoneOfflineTitle": "无法连接手机",
+        "phoneOfflineBody": "请检查手机是否在线，然后重新开始。",
+        "loggedOutTitle": "WhatsApp 已结束关联",
+        "loggedOutBody": "这种情况发生在设备在 WhatsApp 的“已关联设备”中被移除时，以及 WhatsApp 限制号码时。您在此处的聊天记录会保留。您可以重新关联。",
+        "replacedTitle": "另一个会话已替换此会话",
+        "replacedBody": "同一号码已关联到其他地方。请先移除其他关联，然后重新连接。",
+        "mismatchTitle": "这不是您输入的号码",
+        "mismatchBody": "扫码的手机与您输入的号码不一致。请检查号码后重试。",
+        "limitTitle": "该手机关联的设备过多",
+        "limitBody": "WhatsApp 最多允许关联 4 台设备。请在 WhatsApp 的“已关联的设备”中移除一台，然后重试。",
+        "proxyTitle": "代理未响应",
+        "proxyBody": "在代理恢复正常之前，该号码将保持离线。",
+        "serviceTitle": "连接服务不可用",
+        "serviceBody": "请几分钟后再试。",
+        "failedTitle": "无法关联该号码",
+        "failedBody": "WhatsApp 未完成关联，未关联任何内容。请重试。",
+        "tryAgain": "重试"
+      },
+      "discard": {
+        "title": "停止连接？",
+        "message": "您尚未完成操作。如果现在离开，已输入的内容将丢失，进行中的关联也会中断。",
+        "stay": "继续",
+        "leave": "离开"
+      }
+    },
+    "detail": {
+      "back": "所有号码",
+      "loading": "正在加载号码...",
+      "notFound": "该号码不存在或已被删除。",
+      "status": "状态",
+      "lastSeen": "最后在线",
+      "linkedSince": "处于此状态的时间",
+      "number": "号码",
+      "numberLocked": "关联存在时无法更改号码。请先断开连接。",
+      "assignedTo": "处理人",
+      "createdBy": "添加人",
+      "sending": "用于发送",
+      "editTitle": "编辑",
+      "name": "名称",
+      "save": "保存",
+      "saving": "正在保存...",
+      "saved": "已保存。",
+      "dangerTitle": "断开连接或删除",
+      "disconnectHelp": "取消号码关联并删除其已保存的会话。之后可以重新关联。",
+      "deleteHelp": "从此工作区移除该号码。聊天记录保留在收件箱中。",
+      "warmerLink": "为此号码设置养号"
+    },
+    "dialog": {
+      "disconnect": {
+        "title": "断开 {name} 的连接？",
+        "message": "此操作将取消号码关联并删除其已保存的会话。会话内容仍可查看，但在重新关联之前，无法通过此号码回复。",
+        "confirm": "断开连接"
+      },
+      "delete": {
+        "title": "删除 {name}？",
+        "message": "此操作将取消号码关联并删除其已保存的会话。会话内容仍可在收件箱中查看，但无法再通过此号码回复。此操作无法撤销。",
+        "confirm": "删除号码"
+      },
+      "rename": {
+        "title": "重命名号码",
+        "label": "名称",
+        "confirm": "保存"
+      },
+      "cancel": "取消"
+    },
+    "errors": {
+      "generic": "出现错误，请重试。",
+      "FORBIDDEN": "您没有执行此操作的权限。",
+      "UNAUTHENTICATED": "您的会话已结束，请重新登录。",
+      "NOT_FOUND": "该号码不存在或已被删除。",
+      "VALIDATION_FAILED": "部分字段需要检查。",
+      "ROW_VERSION_CONFLICT": "此号码已被他人修改。请刷新后重试。",
+      "WA_UNOFFICIAL_DISABLED": "此工作区已不再启用该功能。",
+      "PLAN_FEATURE_LOCKED": "您的套餐不包含此功能。",
+      "PLAN_LIMIT_REACHED": "您的套餐在此最多允许 {limit, plural, other {# 个 WhatsApp 号码}}。请删除一个或升级套餐以添加更多。",
+      "PLAN_LIMIT_REACHED_GENERIC": "您的套餐在此已无可添加的号码。请删除一个或升级套餐以添加更多。",
+      "DEVICE_ALREADY_EXISTS": "此工作区中已存在使用该手机号码的设备。",
+      "DEVICE_PHONE_INVALID": "使用配对码时请添加国家区号。",
+      "PERSONAL_WA_NOTICE_REQUIRED": "请先阅读并接受声明。",
+      "DEVICE_PAIRING_RATE_LIMITED": "该号码的尝试次数过多，请稍后再试。",
+      "DEVICE_PAIRING_RATE_LIMITED_WAIT": "该号码的尝试次数过多，请在 {minutes, plural, other {# 分钟}} 后重试。",
+      "DEVICE_PAIRING_IN_PROGRESS": "刚才有人发起了连接。请等待其完成或结束。",
+      "DEVICE_NOT_PAIRABLE": "该号码当前无法关联。请先断开连接。",
+      "WA_WORKER_UNAVAILABLE": "连接服务不可用，请几分钟后再试。",
+      "RATE_LIMITED": "请求过于频繁，请稍候。",
+      "upgrade": "查看套餐并升级",
+      "requestId": "请求 {id}",
+      "DEVICE_PILOT_CAP_REACHED": "您的工作区已达到试用期间允许的个人 WhatsApp 号码数量上限。请删除一个号码后再连接其他号码。",
+      "DEVICE_CREATE_RATE_LIMITED": "过去一小时内添加的号码过多，请稍后再试。",
+      "DEVICE_CREATE_RATE_LIMITED_WAIT": "过去一小时内添加的号码过多，请在 {minutes, plural, other {# 分钟}} 后重试。",
+      "DEVICE_PAIRING_IN_PROGRESS_BY": "{name} 刚才发起了连接。请等待其完成。",
+      "DEVICE_NO_PAIRING": "此次连接尝试已结束，请重新开始。",
+      "DEVICE_NUMBER_LOCKED": "关联存在时无法更改号码。请先断开连接。",
+      "DEVICE_PAIRING_TIMEOUT": "WhatsApp 未在规定时间内响应，请重试。",
+      "DEVICE_NOT_PAIRABLE_CONNECTED": "该号码已关联。请先断开连接，然后重新连接。",
+      "DEVICE_NOT_PAIRABLE_SESSION": "该号码仍保存有 WhatsApp 会话。请从头重新关联，以清除已保存的会话并重新开始。",
+      "DEVICE_NOT_PAIRABLE_LIVE": "该号码已有进行中的连接。请从头重新关联以重新开始。"
+    }
+  }
+}

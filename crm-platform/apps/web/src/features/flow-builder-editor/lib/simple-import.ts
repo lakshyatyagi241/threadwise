@@ -1,11 +1,12 @@
 import { flbNormalizeGraph } from '@crm/contracts';
+import { msg, type Msg } from './msg';
 import { toSimple, type SimpleDoc } from './simple-model';
 import { isWaboExport, waboToGraph } from './wabo-import';
 
 /** What the Simple builder's Import button reads: a file of this workspace's own flow export, or a wabo console export. */
 export type SimpleImport =
-  | { ok: true; doc: SimpleDoc; name: string | null; notes: string[]; source: 'crm' | 'wabo' }
-  | { ok: false; reasons: string[] };
+  | { ok: true; doc: SimpleDoc; name: string | null; notes: Msg[]; source: 'crm' | 'wabo' }
+  | { ok: false; reasons: Msg[] };
 
 const isRecord = (v: unknown): v is Record<string, unknown> =>
   !!v && typeof v === 'object' && !Array.isArray(v);
@@ -22,14 +23,12 @@ export function importToSimple(raw: unknown): SimpleImport {
   if (!Array.isArray(graphRaw.flowNodes))
     return {
       ok: false,
-      reasons: [
-        'This file is not a flow export. Use a .json file exported from Flows, or a flow exported from the wabo console.',
-      ],
+      reasons: [msg('waboImport.reasons.notExport')],
     };
   if (file.flow_type && file.flow_type !== 'chat')
     return {
       ok: false,
-      reasons: [`It is a ${String(file.flow_type)} flow; Simple builds messaging flows.`],
+      reasons: [msg('waboImport.reasons.otherFlowType', { type: String(file.flow_type) })],
     };
   const res = toSimple(flbNormalizeGraph(graphRaw));
   if (!res.ok) return { ok: false, reasons: res.reasons };

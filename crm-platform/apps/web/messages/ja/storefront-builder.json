@@ -1,0 +1,439 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "ストア"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "閉じる"
+      },
+      "errors": {
+        "requestId": "リクエストID",
+        "retry": "再試行",
+        "network": {
+          "title": "サーバーに接続できません",
+          "message": "接続を確認して、もう一度お試しください。"
+        },
+        "forbidden": {
+          "title": "アクセス権がありません",
+          "message": "お客様のロールではこの操作は許可されていません。"
+        },
+        "signedOut": {
+          "title": "サインアウトされました",
+          "message": "続行するには、もう一度サインインしてください。"
+        },
+        "conflict": {
+          "title": "別の場所で変更されました",
+          "message": "編集中に、別のユーザーがこれを変更しました。最新の内容を表示するには再読み込みしてください。"
+        },
+        "validation": {
+          "title": "フォームを確認してください",
+          "message": "いくつかの項目を確認してください。"
+        },
+        "unavailable": {
+          "title": "まだ利用できません",
+          "message": "このサーバーではストアサービスを利用できません。"
+        },
+        "rateLimited": {
+          "title": "リクエストが多すぎます",
+          "message": "しばらく待ってから、もう一度お試しください。"
+        },
+        "notFound": {
+          "title": "見つかりません",
+          "message": "このワークスペースに、そのショップは存在しません。"
+        },
+        "noShop": {
+          "title": "ショップがまだありません",
+          "message": "まずストアを設定してください。"
+        },
+        "slugTaken": {
+          "title": "アドレスは使用済みです",
+          "message": "そのストアのアドレスは既に使用されています。"
+        },
+        "deviceInvalid": {
+          "title": "接続済みのデバイスを選択",
+          "message": "接続済みのデバイスを1つ選択してください。"
+        },
+        "noSender": {
+          "title": "まず WhatsApp を接続してください",
+          "message": "ショップには接続済みの WhatsApp 番号が必要です。番号を接続してから、もう一度お試しください。"
+        },
+        "resetNotConfirmed": {
+          "title": "未確認",
+          "message": "リセットは確認されていません。"
+        },
+        "domainNotSet": {
+          "title": "カスタムドメインがありません",
+          "message": "カスタムドメインが設定されていません。"
+        },
+        "unexpected": {
+          "title": "問題が発生しました",
+          "message": "問題が発生しました。しばらくしてから、もう一度お試しください。"
+        }
+      },
+      "sidebar": {
+        "label": "ストア",
+        "navLabel": "ストアのセクション",
+        "section": "ストア",
+        "settings": "設定",
+        "items": {
+          "overview": "概要",
+          "orders": "注文",
+          "products": "商品",
+          "groups": "グループ",
+          "storefront": "ストアフロント",
+          "coupons": "クーポン",
+          "reviews": "レビュー",
+          "payments": "支払い",
+          "gateways": "決済ゲートウェイ",
+          "customers": "お客様",
+          "invoices": "請求書",
+          "connection": "接続"
+        },
+        "comingSoon": "近日公開",
+        "comingSoonHint": "近日公開",
+        "noShopTitle": "ショップがまだありません",
+        "noShopMessage": "ストアのツールを使うには、最初のショップを作成してください。",
+        "noShopAction": "ストアを設定",
+        "live": "公開中",
+        "setup": "セットアップ",
+        "yourStore": "お客様のストア",
+        "notConnected": "未接続",
+        "unofficialApi": "非公式 API",
+        "deviceConnected": "デバイス接続済み · /channels",
+        "switchShop": "ショップを切り替え",
+        "shopFallback": "ショップ",
+        "manageShops": "すべてのショップを管理 →",
+        "publicUrl": "公開 URL",
+        "open": "開く",
+        "copy": "コピー",
+        "copied": "コピーしました！",
+        "providerLive": "プロバイダー公開中",
+        "sendingFrom": "送信元",
+        "noDevice": "接続済みのデバイスはありません。",
+        "connectOne": "デバイスを接続",
+        "thenBind": "その後、このストアへの紐付けを",
+        "connectWizard": "接続ウィザードで行います"
+      },
+      "dashboard": {
+        "eyebrow": "ストア / 概要",
+        "title": "売上の概要",
+        "subtitle": "過去30日間。注文はすべてのチャネル（WABA、ストアフロント、Twilio）から集約されます。",
+        "addProduct": "商品を追加",
+        "loading": "ストアの概要を読み込んでいます",
+        "kpi": {
+          "revenue": "売上（30日）",
+          "orders": "注文（30日）",
+          "aov": "平均注文額",
+          "products": "商品",
+          "visits": "訪問数（30日）"
+        },
+        "trend": {
+          "eyebrow": "売上の推移",
+          "title": "期間ごとの売上"
+        },
+        "legendRevenue": "売上（{symbol}）",
+        "legendOrders": "注文",
+        "dayReadout": "{day}: {revenue}、{orders, plural, other {注文 #件}}",
+        "chartLabel": "過去30日間の日別の売上と注文",
+        "tableDay": "日付",
+        "tableRevenue": "売上（{symbol}）",
+        "tableOrders": "注文",
+        "top": {
+          "eyebrow": "人気商品（30日）",
+          "title": "ベストセラー",
+          "empty": "まだ売上はありません。ストアのリンクを共有しましょう。"
+        },
+        "recent": {
+          "title": "最近の注文",
+          "viewAll": "すべて表示",
+          "open": "開く",
+          "columns": {
+            "when": "日時",
+            "customer": "お客様",
+            "source": "ソース",
+            "items": "商品数",
+            "total": "合計",
+            "status": "ステータス",
+            "open": "開く"
+          },
+          "itemsCount": "{count, plural, other {# 点}}",
+          "emptyTitle": "注文はまだありません",
+          "emptyMessage": "お客様がストアフロントまたは WhatsApp から注文すると、ここに表示されます。"
+        }
+      },
+      "settings": {
+        "eyebrow": "ストア / ストアフロント",
+        "title": "ストアフロントのデザイン",
+        "viewLive": "公開ページを表示",
+        "noAccess": "お客様のロールにはストアフロントの設定へのアクセス権がありません。",
+        "loading": "ストアフロントの設定を読み込んでいます",
+        "saved": "ストアフロントを更新しました。",
+        "conflict": "編集中に、このストアフロントは別の場所で変更されました。最新の設定を取得するために再読み込みしてから、もう一度変更してください。",
+        "reload": "再読み込み",
+        "fixErrors": "ハイライトされた項目を修正して、もう一度保存してください。",
+        "optional": "（任意）",
+        "save": "保存",
+        "readOnly": "これらの設定は閲覧できますが、変更はできません。",
+        "live": "ストアフロントを公開（チェックを外すと非公開になります）",
+        "theme": {
+          "title": "テーマ"
+        },
+        "slug": {
+          "label": "ストアフロントのスラッグ",
+          "hint": "お客様のストアのURL"
+        },
+        "domain": {
+          "label": "カスタムドメイン",
+          "placeholder": "shop.yourbiz.com",
+          "verifiedLive": "確認済み — ドメインが公開されています",
+          "addCname": "DNS プロバイダーで、次の CNAME を追加してください：",
+          "cname": "CNAME",
+          "verify": "今すぐ確認",
+          "verified": "ドメインを確認しました ✓",
+          "notPointing": "CNAME が {expected} を指していません",
+          "notSet": "カスタムドメインが設定されていません。",
+          "verifyFailed": "ドメインを確認できませんでした。もう一度お試しください。"
+        },
+        "brand": {
+          "logoUrl": "ロゴの URL",
+          "color": "ブランドカラー（16進数）",
+          "colorPicker": "ブランドカラーを選択",
+          "heroText": "ヒーローテキスト",
+          "heroPlaceholder": "ようこそ、ストアへ",
+          "footerText": "フッターテキスト",
+          "footerPlaceholder": "© 2026 お客様のストア"
+        },
+        "currency": {
+          "title": "通貨",
+          "label": "通貨",
+          "hint": "新規商品の既定値、およびカートに表示される記号です。"
+        },
+        "shipping": {
+          "title": "配送",
+          "flat": "一律の送料",
+          "flatHint": "すべての注文に加算されます。空欄または 0 の場合は無料です。",
+          "freeAbove": "送料無料の下限金額",
+          "freeAboveHint": "この金額を超えるカートは送料無料になります。",
+          "note": "配送に関する注記",
+          "noteHint": "カートと商品ページに表示されます。",
+          "notePlaceholder": "2〜5営業日 · 追跡あり"
+        },
+        "payment": {
+          "title": "支払いリンク",
+          "intro": "支払いプロバイダーを選択すると、すべての WhatsApp 注文メッセージに支払いリンクが追加されます。購入者はリンクから支払い、チャットで確認します。ストアフロントには決済フローは組み込まれていません。",
+          "provider": "プロバイダー",
+          "providers": {
+            "none": "なし · 代金引換",
+            "upi": "UPI（インド）— VPA と名義",
+            "razorpay_link": "Razorpay 支払いリンク（固定リンクを貼り付け）",
+            "razorpay_api": "Razorpay（リンクを自動生成 + 自動確認）",
+            "stripe_link": "Stripe 支払いリンク",
+            "paypal_me": "PayPal.me ハンドル",
+            "bank_transfer": "銀行振込の案内"
+          },
+          "handle": "支払い情報",
+          "handleHint": "UPI VPA、支払いリンクの URL、PayPal.me ハンドル、または銀行口座。",
+          "handlePlaceholder": "例: shop@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "Razorpay API（リンクの自動生成）",
+            "keyId": "キー ID",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "キーのシークレット",
+            "webhookSecret": "Webhook シークレット",
+            "stored": "保存済み — 変更しない場合は空欄のままにしてください",
+            "show": "シークレットを表示",
+            "hide": "シークレットを非表示",
+            "webhookHelp": "Razorpay ダッシュボードで、Webhook URL を次に設定してください：",
+            "webhookEvent": "payment_link.paid イベント用です。"
+          }
+        },
+        "recovery": {
+          "title": "カゴ落ちの回収",
+          "enable": "チェックアウトを開始したものの完了しなかったお客様に、WhatsApp でリマインダーを送信します",
+          "enableHint": "チェックアウト時に電話番号を取得します。注文されるとリマインダーは自動でキャンセルされます。接続済みのデバイスが必要です。",
+          "delay": "遅延（分）",
+          "message": "メッセージ",
+          "messageHint": "（空欄の場合は既定値；'{name}' '{shop}' '{url}' '{total}'）",
+          "messagePlaceholder": "'{name}' 様、こんにちは！'{shop}' のカートに商品が残っています。こちらからご注文を完了してください: '{url}'"
+        },
+        "problems": {
+          "required": "この項目は必須です。",
+          "tooLong": "{max} 文字以内で入力してください。",
+          "slugPattern": "英小文字、数字、ハイフンのみを使用してください。",
+          "domainInvalid": "有効なドメインではないようです（例: shop.yourbiz.com）。",
+          "urlInvalid": "http:// または https:// で始まる完全なアドレスを入力してください。",
+          "colorInvalid": "#075E54 のような16進数のカラーコードを使用してください。",
+          "amountInvalid": "0以上の数値を入力してください。",
+          "amountTooBig": "{max} 以下にしてください。",
+          "delayRange": "{min} から {max} までの整数を入力してください。",
+          "themeInvalid": "テーマを1つ選択してください。",
+          "currencyInvalid": "一覧から通貨を1つ選択してください。",
+          "providerInvalid": "一覧からプロバイダーを1つ選択してください。",
+          "slugTaken": "そのスラッグは既に使われています。別のものを選択してください。"
+        }
+      },
+      "share": {
+        "message": "私のショップをチェック: {name}",
+        "subject": "私のショップをチェック · {name}",
+        "eyebrow": "ショップを共有",
+        "fallbackName": "マイショップ",
+        "close": "閉じる",
+        "link": "ショップのリンク",
+        "copy": "コピー",
+        "copied": "コピーしました ✓",
+        "copiedShort": "コピーしました",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "チャットに送信",
+        "email": "メール",
+        "emailHint": "メールアプリを開く",
+        "telegram": "Telegram",
+        "telegramHint": "チャンネルに共有",
+        "more": "その他…",
+        "moreHint": "端末の共有メニュー",
+        "nativeUnsupported": "このブラウザーではサポートされていません",
+        "showQr": "QR コードを表示",
+        "qrAlt": "QR コード",
+        "qrCaption": "スキャンしてショップを開く"
+      },
+      "wizard": {
+        "loading": "ショップを読み込んでいます",
+        "back": "戻る",
+        "breadcrumb": "連携 / WhatsApp ストア",
+        "manageConnections": "すべての接続を管理 →",
+        "titles": {
+          "list": "お客様のショップ",
+          "add": "ストアを設定",
+          "edit": "{name} を編集",
+          "shopFallback": "ショップ"
+        },
+        "gate": {
+          "step": "ステップ 1/3",
+          "title": "まず WhatsApp を接続してください",
+          "message": "ストアで注文確認を送信し、お客様とチャットするには、接続済みの WhatsApp 番号が必要です。チャネルページで番号をペアリングしてください。30秒ほどで完了します。",
+          "action": "デバイスへ移動"
+        },
+        "list": {
+          "headline": "{workspace} 内のショップ {count, plural, other {# 件}}",
+          "intro": "ショップごとに、公開 URL、テーマ、送信デバイスを個別に設定できます。ブランド、言語、地域ごとに、必要な数だけ追加できます。",
+          "add": "ショップを追加",
+          "addAnother": "ショップをさらに追加",
+          "addAnotherHint": "独自の URL、テーマ、WhatsApp 番号を持つ、別のストアフロントを運営します。"
+        },
+        "share": {
+          "fallbackName": "マイショップ"
+        },
+        "noAccess": {
+          "title": "ショップを変更できません",
+          "message": "お客様のロールではショップを閲覧できますが、作成や編集はできません。",
+          "action": "ショップ一覧に戻る"
+        },
+        "delete": {
+          "title": "{name} を削除しますか？",
+          "message": "ストアフロントとその注文を完全に削除します。ワークスペース内の商品には影響しません。この操作は元に戻せません。",
+          "confirm": "はい、削除します",
+          "cancel": "キャンセル",
+          "done": "ショップを削除しました。",
+          "thisShop": "このショップ"
+        },
+        "reset": {
+          "open": "ストアのデータをすべて削除",
+          "title": "ストアのデータをすべて削除しますか？",
+          "message": "このワークスペースのすべてのショップ、注文、商品を完全に削除します。この操作は元に戻せません。",
+          "confirm": "はい、すべて削除します",
+          "done": "このワークスペースのストアデータをすべて削除しました。",
+          "notConfirmed": "リセットは確認されていません。"
+        },
+        "card": {
+          "live": "公開中",
+          "disabled": "無効",
+          "theme": "{theme} テーマ",
+          "untitled": "無題のショップ",
+          "sendingFrom": "送信元",
+          "noDevice": "デバイスなし",
+          "domain": "ドメイン",
+          "pending": "保留中",
+          "builtIn": "標準の URL",
+          "manage": "管理",
+          "manageTitle": "管理ダッシュボードを開く",
+          "preview": "プレビュー",
+          "previewTitle": "公開ストアフロントを新しいタブで開く",
+          "edit": "編集",
+          "editTitle": "ショップの設定を編集",
+          "share": "共有",
+          "shareAria": "{name} を共有",
+          "delete": "ショップを削除",
+          "deleteAria": "{name} を削除"
+        },
+        "form": {
+          "backToShops": "ショップ一覧に戻る",
+          "creatingShop": "ショップ #{n} を作成中",
+          "progress": "手順",
+          "steps": {
+            "details": "ショップの詳細",
+            "url": "公開 URL",
+            "device": "送信デバイス"
+          },
+          "optional": "（任意）",
+          "details": {
+            "title": "ショップの詳細",
+            "hint": "お客様に表示される名前と、商品ページが置かれる URL スラッグです。",
+            "name": "ショップ名",
+            "nameHint": "ストアフロントのヘッダーと注文確認に表示されます。",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "例: {workspace} · ムンバイ",
+            "slug": "ストアフロントのスラッグ",
+            "auto": "（自動）",
+            "slugLocked": "共有リンクが引き続き機能するよう、ストアの公開後は変更できなくなります。",
+            "slugAuto": "ショップ名から生成され、保存時に確定します。"
+          },
+          "url": {
+            "title": "公開 URL",
+            "hint": "購入者がストアにアクセスする方法を選択してください。標準の URL は無料で、カスタムドメインはより本格的な印象になります。",
+            "builtIn": "標準の URL · 無料",
+            "pathMode": "保存後すぐに利用できます。公開ストアフロントのホストが設定されていないため、パス形式の URL になります。",
+            "subdomainMode": "保存後すぐに利用できます。プラットフォームのストアフロントのドメインでホストされます。",
+            "domain": "カスタムドメイン",
+            "domainHint": "保存後、DNS プロバイダーで CNAME を追加し、ストアフロントの設定ページで確認してください。標準の URL を使う場合は空欄のままにしてください。",
+            "domainPlaceholder": "shop.yourbiz.com",
+            "verified": "{domain} は確認済みです。",
+            "pending": "{domain} は DNS の確認待ちです。"
+          },
+          "device": {
+            "title": "送信デバイス",
+            "hint": "注文確認と購入者への返信を送信する WhatsApp 番号です。",
+            "none": "このアカウントには接続済みのデバイスがありません。",
+            "pair": "チャネルでデバイスをペアリング →",
+            "official": "公式 API · Meta（WABA）",
+            "officialDetail": "ワークスペースの WhatsApp Business 番号",
+            "fallback": "デバイス",
+            "noNumber": "番号なし",
+            "connected": "接続済み"
+          },
+          "cancel": "キャンセル",
+          "deleteThis": "このショップを削除",
+          "saveChanges": "変更を保存",
+          "create": "ショップを作成 →",
+          "created": "ショップ「{name}」を作成しました。",
+          "updated": "ショップ「{name}」を更新しました。",
+          "problems": {
+            "nameRequired": "ショップ名を入力してください。",
+            "nameTooLong": "191 文字以内で入力してください。",
+            "domainInvalid": "有効なドメインではないようです（例: shop.yourbiz.com）。",
+            "domainTooLong": "191 文字以内で入力してください。",
+            "deviceInvalid": "接続済みのデバイスを1つ選択してください。",
+            "slugTaken": "そのショップ名から作成されるアドレスは既に使われています。名前を少し変更してください。"
+          },
+          "live": {
+            "eyebrow": "このショップは公開中です",
+            "fallbackName": "お客様のショップ",
+            "hint": "商品を追加し、テーマを選択して、注文を確認し、リンクを共有しましょう。",
+            "view": "ショップを表示",
+            "share": "ショップを共有",
+            "dashboard": "ダッシュボードを開く"
+          }
+        }
+      }
+    }
+  }
+}

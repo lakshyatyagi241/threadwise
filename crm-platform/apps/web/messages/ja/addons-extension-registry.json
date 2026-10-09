@@ -1,0 +1,311 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "アドオンとモジュール",
+      "packs": "アドオン(課金)",
+      "extensions": "アドオン(コード)",
+      "workspace": "アドオン"
+    },
+    "common": {
+      "loading": "読み込み中",
+      "retry": "再試行",
+      "cancel": "キャンセル",
+      "save": "保存",
+      "saving": "保存中",
+      "close": "閉じる",
+      "dismiss": "閉じる",
+      "admin": "管理者",
+      "settings": "設定",
+      "optional": "任意",
+      "required": "必須",
+      "readOnly": "このページは閲覧のみ可能です。変更できるのはスーパー管理者だけです。",
+      "requestId": "リクエストID",
+      "errors": {
+        "forbidden": "このページにアクセスする権限がありません。",
+        "request": "リクエストを完了できませんでした。",
+        "unexpected": "問題が発生しました。しばらくしてからもう一度お試しください。",
+        "conflict": "他のユーザーがたった今これを変更しました。再読み込みしてもう一度お試しください。"
+      }
+    },
+    "packs": {
+      "crumbHere": "アドオン",
+      "eyebrow": "管理 · 課金とプラン · アドオン",
+      "titleLead": "アド",
+      "titleAccent": "オン",
+      "title": "アドオン",
+      "description": "お客様がプランに追加して購入する単品機能パックです(例:「キャンペーンアドオン」「WhatsApp番号+1」)。各アドオンは設定した機能の切り替えと上限を付与し、お客様のプランに統合されます。有効なプランを利用中のお客様のアカウントページに表示されます。",
+      "new": "新規アドオン",
+      "empty": {
+        "title": "アドオンはまだありません。",
+        "action": "最初のアドオンを作成"
+      },
+      "table": {
+        "label": "アドオン",
+        "name": "名前",
+        "price": "価格",
+        "period": "期間",
+        "grants": "付与内容",
+        "status": "ステータス",
+        "actions": "操作"
+      },
+      "price": {
+        "free": "無料",
+        "lifetime": "1回払い"
+      },
+      "period": {
+        "days": "{count}日",
+        "weeks": "{count}週間",
+        "months": "{count}か月",
+        "years": "{count}年"
+      },
+      "grants": {
+        "none": "未設定",
+        "unlimited": "{name}無制限",
+        "add": "{name} +{amount}",
+        "more": "+{count}"
+      },
+      "status": {
+        "active": "有効",
+        "off": "オフ"
+      },
+      "actions": {
+        "edit": "編集",
+        "enable": "有効にする",
+        "disable": "無効にする",
+        "delete": "削除"
+      },
+      "toasts": {
+        "created": "アドオンを作成しました。",
+        "updated": "アドオンを更新しました。",
+        "activated": "{name}を有効にしました",
+        "deactivated": "{name}を無効にしました",
+        "deleted": "{name}を削除しました"
+      },
+      "delete": {
+        "title": "{name}を削除しますか?",
+        "body": "このアドオンを削除しますか?購入済みのワークスペースでは有効期限まで引き続き利用できます。",
+        "confirm": "削除",
+        "inUse": "{count, plural, other {# 件のワークスペースがこのアドオンを所有しているため、削除できません。代わりに無効にしてください。所有者は終了まで引き続き利用できます。}}"
+      },
+      "errors": {
+        "generic": "アドオンを保存できませんでした。",
+        "forbidden": "アドオンを変更できるのはスーパー管理者だけです。",
+        "notFound": "このアドオンは存在しません。"
+      },
+      "editor": {
+        "crumbHere": "アドオン",
+        "crumbNew": "新規",
+        "crumbEdit": "編集",
+        "eyebrowNew": "管理 · アドオン · 新規",
+        "eyebrowEdit": "管理 · アドオン · 編集",
+        "titleNewLead": "新規",
+        "titleEditLead": "編集",
+        "titleAccent": "アドオン",
+        "intro": "アドオンはオンにしたものだけを付与し、それ以外は付与しません。空欄の上限は変更されないため、意図せず「無制限」になることはありません。",
+        "fixTitle": "次の点を修正してください:",
+        "cancel": "キャンセル",
+        "create": "アドオンを作成",
+        "saveChanges": "変更を保存",
+        "basics": "アドオンの基本情報",
+        "features": "このアドオンで解放される機能",
+        "featuresHint": "このアドオンが付与するものだけにチェックを入れてください。チェックのないものは引き続きお客様のプランに従います。",
+        "coreFeature": "全プラン共通",
+        "limits": "上限の追加",
+        "limitsHint": "空欄 = このアドオンはこの上限を変更しません。プランに加算する数値を入力してください(例:デバイス+2)。無制限は -1 を使用します。",
+        "fields": {
+          "name": "名前",
+          "namePlaceholder": "キャンペーンアドオン",
+          "subtitle": "サブタイトル",
+          "subtitlePlaceholder": "キャンペーンを解放",
+          "amount": "価格",
+          "offerAmount": "特別価格(任意)",
+          "currency": "通貨",
+          "billingDuration": "期間",
+          "billingUnit": "単位",
+          "billingMode": "課金",
+          "sortOrder": "並び順",
+          "isActive": "有効",
+          "isLifetime": "買い切り(1回払い)"
+        },
+        "modes": {
+          "one_time": "1回払い(終了後に再購入)",
+          "recurring": "定期(自動払いで更新)"
+        },
+        "units": {
+          "days": "日",
+          "weeks": "週",
+          "months": "月",
+          "years": "年"
+        },
+        "problems": {
+          "name": "名前を入力してください。",
+          "amount": "19 や 19.99 のような金額を入力してください。",
+          "offerAmount": "特別価格は通常価格より低くしてください。",
+          "currency": "3文字の通貨コードを使用してください。",
+          "billingDuration": "1以上の整数を入力してください。",
+          "sortOrder": "整数を入力してください。",
+          "limits": "上限は整数、または無制限の場合は -1 です。",
+          "form": "強調表示されている項目を確認してください。"
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "アドオン",
+      "eyebrow": "管理 · アドオン",
+      "titleLead": "アドオンを",
+      "titleAccent": "インストール",
+      "title": "アドオン",
+      "description": "アドオンは追加機能をこのインストールに統合します。最初のアドオンはInstagramです。購入コードを確認してパッケージをアップロードすると、その場でインストールされます。データと設定は変更されません。",
+      "coreVersion": "コア",
+      "packsLead": "プランに追加して購入する有料の機能パックをお探しですか?",
+      "packsLink": "それらはプランアドオン(課金)です",
+      "packsTail": "。このページではコードをインストールします。",
+      "installed": {
+        "title": "インストール済みのアドオン",
+        "empty": "インストール済みのアドオンはまだありません。上で購入コードを確認してから、パッケージをアップロードしてください。",
+        "version": "v{version}",
+        "files": "{count, plural, other {# 個のファイル}}",
+        "inPlace": "その場で統合するモジュール",
+        "filesKept": "ファイルはディスクに保持されます",
+        "active": "有効",
+        "disabled": "無効",
+        "inactive": "非アクティブ",
+        "enable": "有効にする",
+        "disable": "無効にする",
+        "remove": "削除",
+        "reactivate": "再有効化",
+        "footnote": "アドオンを削除すると、追加時から記録されたインストール済みのファイルのみが削除されるため、コアファイルには影響しません。データはデータベースに残ります。"
+      },
+      "verify": {
+        "title": "購入コードを確認",
+        "body": "アップデートを解放するのと同じ{brand}ライセンスです。アドオンはこれに紐づきます。",
+        "placeholder": "例: 8f2c1a44-...",
+        "label": "購入コード",
+        "action": "確認",
+        "checking": "確認中…",
+        "empty": "先に購入コードを入力してください。",
+        "failed": "確認に失敗しました。"
+      },
+      "upload": {
+        "title": "アドオンパッケージをアップロード",
+        "body": "何かを書き込む前にZIPが検査されます。不正または互換性のないパッケージは拒否され、インストール環境は変更されません。",
+        "choose": "アドオンの .zip を選択",
+        "max": "最大100 MB",
+        "action": "インストール",
+        "installing": "インストール中…",
+        "progress": "アップロードして統合しています。このタブを閉じないでください。"
+      },
+      "confirm": {
+        "removeTitle": "{name}を削除しますか?",
+        "removeBody": "インストールされたファイルが削除されます。データはデータベースに残ります。",
+        "remove": "削除",
+        "moduleOffTitle": "{name}を削除しますか?",
+        "moduleOffBody": "アドオンを無効化し、ページと自動化の動作が停止します。ファイルは保持されるため、いつでも再有効化できます。何も削除されず、データはデータベースに残ります。",
+        "moduleOnTitle": "{name}を再有効化しますか?",
+        "moduleOnBody": "アドオンを再び有効にします。ファイルはディスクに残っているため、すぐに動作を再開します。",
+        "reactivate": "再有効化"
+      },
+      "engines": {
+        "connected": "接続済み",
+        "notConnected": "未接続",
+        "connect": "接続",
+        "manage": "管理",
+        "disconnect": "切断",
+        "disconnectYes": "はい、切断する",
+        "save": "保存して接続",
+        "testing": "接続中…",
+        "displayName": "表示名",
+        "secret": "共有シークレットトークン",
+        "secretSaved": "•••••••• 保存済み。変更しない場合は空欄のまま",
+        "secretNew": "共有シークレットを貼り付け",
+        "lastChecked": "最終確認",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "別の{brand}デプロイとして動作します。アップロードは不要で、URLとシークレットで接続します。",
+          "blocked": "ブロック中: ネイティブアドオンが有効です",
+          "blockedNote": "ネイティブのInstagramアドオンがインストールされています。リモートの{brand}に接続するには、下から削除してください。",
+          "modalTitle": "Instagramを接続",
+          "modalBody": "{brand}デプロイのURLと共有シークレットトークンを貼り付けてください。{app}がAPIで接続を確認します。何もアップロードされません。",
+          "url": "{brand} URL",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "アプリ全体の「…から同期」「…で管理」「… URL」の各ラベルに表示されます。",
+          "disconnectTitle": "Instagramを切断しますか?",
+          "disconnectBody": "{app}からInstagramを切断します。Instagramは、すべてのワークスペースのダッシュボード、分析、受信トレイ、フロー、テンプレート、自動返信からただちに消え、再接続するまで利用できません。続行しますか?"
+        },
+        "email": {
+          "title": "メール",
+          "body": "接続すると{brand}メールプラットフォームがリンクされ、メールがチームの受信トレイに届きます。アップロードは不要で、URLとシークレットで接続します。",
+          "modalTitle": "メールを接続",
+          "modalBody": "{brand}デプロイのURLと共有シークレットトークンを貼り付けてください。{app}がAPIで接続を確認します。何もアップロードされません。",
+          "url": "{brand} URL",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "アプリ全体のメールのラベルに表示されます。",
+          "disconnectTitle": "メールを切断しますか?",
+          "disconnectBody": "{app}からメールプラットフォームを切断します。再接続するまで、すべてのワークスペースでメールがチームの受信トレイに届かなくなります。続行しますか?"
+        }
+      },
+      "errors": {
+        "generic": "うまくいきませんでした。",
+        "forbidden": "モジュールを変更できるのはスーパー管理者だけです。",
+        "invalidPackage": "パッケージが無効です。",
+        "tooLarge": "パッケージが大きすぎます。",
+        "coreTooOld": "このパッケージにはより新しいコアバージョンが必要です。",
+        "engineConflict": "Instagramは一度に1つのエンジンのみで動作します。先にもう一方を切断してください。"
+      }
+    },
+    "workspace": {
+      "title": "アドオン",
+      "description": "サブスクリプションに追加して購入する機能パックです。",
+      "needPlanTitle": "アドオンには有効なプランが必要です",
+      "needPlanBody": "アドオンは、サブスクリプションに追加して購入する機能パックです。まずプランを選択し、その後ここに戻って機能を追加してください。",
+      "viewPlans": "プランを見る",
+      "noneTitle": "利用可能なアドオンはありません",
+      "noneBody": "現在提供中のアドオンはありません。後でもう一度ご確認ください。",
+      "ownedTitle": "お客様のアドオン",
+      "ownedBody": "現在のプランに統合されている有効なパックです。",
+      "ends": "{date}に終了",
+      "lifetime": "買い切り",
+      "autoRenews": "自動更新",
+      "renewal": {
+        "cancel": "更新をキャンセル",
+        "confirmTitle": "更新をキャンセルしますか?",
+        "confirmBody": "このアドオンは、すでに支払い済みの期間が終わるまで有効で、その後は更新されません。",
+        "confirm": "更新をキャンセル",
+        "keep": "更新を続ける",
+        "forbidden": "プランを変更する権限がありません。",
+        "none": "キャンセルできる有効なサブスクリプションがありません。",
+        "failed": "更新をキャンセルできませんでした。もう一度お試しください。"
+      },
+      "active": "有効",
+      "cardEyebrow": "アドオン",
+      "catalogTitle": "アドオン",
+      "catalogBody": "現在のプランに追加の機能を解放します。プランの変更は不要です。",
+      "count": "{count, plural, other {# 個のアドオン}}",
+      "free": "無料",
+      "lifetimePrice": "1回払い",
+      "per": "/ {unit}",
+      "units": {
+        "days": "日",
+        "weeks": "週間",
+        "months": "か月",
+        "years": "年"
+      },
+      "buy": "プランに追加",
+      "buyAgain": "再購入",
+      "owned": "所有数 ×{count} · 再購入すると追加されます",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "{name}無制限",
+        "add": "{name} +{amount}"
+      },
+      "error": "アドオンを読み込めませんでした。"
+    },
+    "planFields": {
+      "fromModule": "インストール済みモジュール由来",
+      "unlimited": "無制限"
+    }
+  }
+}

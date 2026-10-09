@@ -1,0 +1,730 @@
+{
+  "catalogProducts": {
+    "nav": {
+      "catalog": "קטלוג",
+      "products": "מוצרים",
+      "reviews": "ביקורות"
+    },
+    "common": {
+      "dismiss": "סגור",
+      "retry": "נסה שוב",
+      "requestId": "מזהה בקשה"
+    },
+    "errors": {
+      "network": "לא ניתן היה להתחבר לשרת. בדקו את החיבור ונסו שוב.",
+      "forbidden": "אין לכם הרשאה לעשות זאת.",
+      "signedOut": "ההתחברות שלכם הסתיימה. התחברו שוב כדי להמשיך.",
+      "conflict": "מישהו אחר שינה זאת בזמן שערכתם. טענו מחדש כדי לראות את הגרסה העדכנית.",
+      "validation": "חלק מהשדות אינם תקינים. בדקו את השדות המסומנים ונסו שוב.",
+      "unavailable": "חלק זה של הקטלוג עדיין אינו זמין בשרת זה.",
+      "rateLimited": "יותר מדי בקשות. המתינו רגע ונסו שוב.",
+      "notFound": "הפריט לא נמצא. ייתכן שנמחק.",
+      "planLocked": "התוכנית שלכם אינה כוללת את קטלוג WhatsApp. שדרגו כדי לפתוח אותו.",
+      "planLimit": "הגעתם למגבלת ההודעות של התוכנית שלכם.",
+      "wallet": "יתרת הארנק נמוכה מדי לשליחה. הוסיפו כסף ונסו שוב.",
+      "sendBlocked": "השליחה חסומה כרגע: {detail}",
+      "notConnected": "לא מחובר קטלוג. חברו אחד תחילה בלשונית ההגדרה.",
+      "metaRejected": "Meta דחתה את הבקשה: {detail}",
+      "noWaba": "לא נמצא מספר WhatsApp Business (WABA) מחובר. חברו תחילה מספר WABA, או קשרו קטלוג ידנית.",
+      "wabaToken": "מספר ה-WABA שלכם מחובר אך לא ניתן היה לקרוא את האסימון שלו. חברו את המספר מחדש, או קשרו קטלוג ידנית.",
+      "noCatalogLinked": "עדיין לא מקושר קטלוג מוצרים לחשבון ה-WhatsApp שלכם. צרו אחד ב-Meta Commerce Manager ונסו שוב, או קשרו ידנית.",
+      "noRecipients": "בחרו לפחות איש קשר או קבוצה אחת, או הדביקו מספר.",
+      "tooManyRecipients": "עד 500 נמענים בכל שליחה. פצלו לאצוות קטנות יותר.",
+      "noProducts": "בחרו תחילה לפחות מוצר אחד.",
+      "noSender": "אין מכשיר מחובר. צרו תחילה צימוד תחת ערוצים.",
+      "sendFailed": "לא ניתן היה לשלוח את ההודעה: {detail}",
+      "collectionProducts": "אף אחד מהמוצרים שנבחרו אינו שייך לסביבת עבודה זו.",
+      "providerFailed": "WhatsApp או Meta לא הצליחו להשלים את הבקשה: {detail}",
+      "unexpected": "משהו השתבש. נסו שוב בעוד רגע."
+    },
+    "paywall": {
+      "kicker": "תכונת פרימיום",
+      "title": "חנות WhatsApp אינה כלולה בתוכנית שלכם",
+      "message": "בחרו תוכנית שכוללת אותה. שדרגו ופתחו את התכונה מיד.",
+      "back": "חזרה",
+      "compare": "השוואת כל התוכניות"
+    },
+    "status": {
+      "unsynced": "לא מסונכרן",
+      "pending": "ממתין",
+      "synced": "מסונכרן",
+      "failed": "נכשל"
+    },
+    "pager": {
+      "showing": "מציג {from} עד {to} מתוך {total} תוצאות",
+      "label": "עמודים",
+      "prev": "העמוד הקודם",
+      "next": "העמוד הבא",
+      "goTo": "מעבר לעמוד {page}"
+    },
+    "shell": {
+      "back": "חזרה לאינטגרציות",
+      "breadcrumb": "אינטגרציות / קטלוג WhatsApp",
+      "titleLead": "דחיפת מוצרים אל",
+      "titleAccent": "צ'אטים של WhatsApp",
+      "connected": "{provider} · מחובר",
+      "notConnected": "לא מחובר",
+      "tabs": "חלקי הקטלוג",
+      "tab": {
+        "setup": "הגדרה",
+        "send": "שליחה",
+        "collections": "אוספים",
+        "activity": "פעילות"
+      }
+    },
+    "connect": {
+      "provider": "ספק",
+      "providers": {
+        "meta_cloud": "Meta Cloud API (ישיר)",
+        "dialog_360": "360dialog (BSP)"
+      },
+      "catalogId": "מזהה קטלוג",
+      "catalogName": "שם הקטלוג",
+      "label": "(תווית)",
+      "catalogNamePlaceholder": "לדוגמה: קטלוג ראשי",
+      "wabaId": "מזהה WABA",
+      "phoneNumberId": "מזהה מספר טלפון",
+      "accessToken": "אסימון גישה / מפתח API",
+      "accessTokenHint": "נשמר מוצפן. מאומת מול Meta בעת השמירה.",
+      "accessTokenPlaceholder": "EAAxx... או D360-API-KEY...",
+      "showToken": "הצג אסימון",
+      "hideToken": "הסתר אסימון",
+      "submit": "חבר ואמת",
+      "connected": "הקטלוג חובר.",
+      "problem": {
+        "required": "שדה חובה.",
+        "tooShort": "אסימון הגישה חייב להכיל לפחות 20 תווים.",
+        "tooLong": "הערך ארוך מדי."
+      }
+    },
+    "setup": {
+      "loading": "טוען קטלוג",
+      "loadError": "לא ניתן היה לטעון את הקטלוג",
+      "cancel": "ביטול",
+      "manage": "ניהול ←",
+      "view": "הצג ←",
+      "advanced": {
+        "kicker": "אופציונלי · מתקדם",
+        "titleManual": "או קשרו קטלוג ידנית",
+        "titleAlso": "קשרו גם קטלוג Meta Commerce",
+        "intro": "פותח את כפתור הקטלוג הרשמי בפרופיל WhatsApp Business שלכם, את העגלה ואת ה-webhook של \"הזמנה בוצעה\". נדרש רק אם יש לכם WABA מאומת. ה-API הלא רשמי עובד היטב גם בלעדיו."
+      },
+      "noSender": {
+        "title": "חברו תחילה מכשיר",
+        "message": "שליחת קטלוג דורשת לפחות מכשיר WhatsApp אחד בחשבון זה: צימוד QR של ה-API הלא רשמי (חינם) או מספר WABA מאומת על ידי Meta. זה לוקח 30 שניות בלבד.",
+        "connect": "חבר מכשיר"
+      },
+      "ready": {
+        "kicker": "✓ מוכן לשליחה",
+        "officialTitle": "מצב קטלוג WhatsApp רשמי",
+        "unofficialTitle": "מצב קרוסלה של ה-API הלא רשמי",
+        "officialBody": "יש לכם {count, plural, one {מספר אחד} two {# מספרים} other {# מספרים}} מחוברים. שליחות קטלוג יוצאות דרך מספר ה-{engine} המחובר שלכם. להודעות מוצר אינטראקטיביות, קשרו קטלוג Meta Commerce למטה.",
+        "unofficialBody": "יש לכם {count, plural, one {מכשיר אחד} two {# מכשירים} other {# מכשירים}} מחוברים. שליחות קטלוג פועלות כעת באמצעות קרוסלות WhatsApp מקוריות דרך ה-API הלא רשמי, ללא הגדרות ב-Meta וללא המתנה לאישור.",
+        "head": "עברו ללשונית <b>שליחה</b> כדי לדחוף מוצרים למספר של כל לקוח.",
+        "openSend": "פתח את לשונית השליחה"
+      },
+      "senders": {
+        "title": "מכשירים מחוברים",
+        "noNumber": "אין מספר",
+        "connected": "מחובר"
+      },
+      "tiles": {
+        "products": "מוצרים",
+        "shops": "חנויות",
+        "recentSends": "שליחות אחרונות",
+        "total": "סך הכול",
+        "synced": "מסונכרנים",
+        "pending": "ממתינים",
+        "failed": "נכשלו"
+      },
+      "autodetect": {
+        "title": "קשרו את קטלוג Meta Commerce שלכם",
+        "intro": "מספר ה-WhatsApp שלכם כבר מחובר, ולכן אפשר למשוך את הקטלוג ישירות מ-Meta, בלי להדביק מזהה קטלוג, מזהה WABA או אסימון גישה. פותח את כפתור הקטלוג הרשמי, העגלה וה-webhook של \"הזמנה בוצעה\".",
+        "button": "משוך מחשבון ה-WhatsApp שלי",
+        "linked": "הקטלוג קושר מחשבון ה-WhatsApp שלכם."
+      },
+      "header": {
+        "connected": "מחובר · {provider}",
+        "defaultName": "קטלוג Meta Commerce",
+        "sendProducts": "שלח מוצרים ←",
+        "disconnect": "נתק"
+      },
+      "disconnectTitle": "לנתק את הקטלוג?",
+      "disconnectConfirm": "המוצרים נשארים ב-Meta; אנחנו רק מפסיקים לסנכרן.",
+      "disconnected": "הקטלוג נותק.",
+      "table": {
+        "title": "מוצרים",
+        "hint": "עודכנו לאחרונה · לחצו על <b>רענן סטטוס</b> כדי לשאול את Meta.",
+        "manage": "ניהול מוצרים ←",
+        "product": "מוצר",
+        "sku": "מק\"ט",
+        "price": "מחיר",
+        "availability": "זמינות",
+        "metaStatus": "סטטוס ב-Meta",
+        "actions": "פעולות",
+        "empty": "עדיין אין מוצרים.",
+        "addOne": "הוסיפו אחד ←",
+        "sync": {
+          "idle": "סנכרן",
+          "busy": "…",
+          "queued": "בתור ✓",
+          "skipped": "לא בתור",
+          "failed": "נכשל"
+        }
+      }
+    },
+    "sync": {
+      "title": "סנכרון מוצרים ל-Meta",
+      "intro": "דוחף עד 1000 בכל בקשה, וחוזר עד הסיום. {count} ממתינים.",
+      "syncButton": "סנכרן ל-Meta",
+      "syncing": "מסנכרן…",
+      "pollButton": "רענן סטטוס",
+      "polling": "בודק…",
+      "importButton": "ייבוא מ-Meta",
+      "importing": "מייבא…",
+      "importHint": "משכו לקטלוג מוצרים שנוצרו ישירות ב-Meta Commerce Manager.",
+      "progress": "התקדמות הסנכרון",
+      "starting": "מתחיל…",
+      "pushed": "נדחפו {pushed} · ממתינים {pending} · מסונכרנים {synced} · נכשלו {failed}",
+      "stalled": "לא ניתן היה לדחוף עוד בהרצה זו. בדקו את המוצרים המסומנים ככושלים.",
+      "done": "הושלם · {count} בתור",
+      "polled": "נבדק · מסונכרנים+{synced} · נכשלו+{failed}",
+      "importStarting": "ייבוא מ-Meta · מתחיל…",
+      "imported": "יובאו {imported} · עודכנו {updated} · דולגו {skipped} מתוך {total}"
+    },
+    "commerce": {
+      "title": "הגדרות מסחר",
+      "visible": "הצג את הקטלוג בפרופיל העסקי",
+      "visibleHint": "מוסיף את הכפתור \"קטלוג\" לפרופיל WhatsApp Business שלכם.",
+      "cart": "הפעל עגלה",
+      "cartHint": "קונים יכולים להוסיף כמה מוצרים לפני שליחת ההזמנה.",
+      "save": "שמור",
+      "saved": "הגדרות המסחר עודכנו."
+    },
+    "automation": {
+      "title": "אוטומציה",
+      "ack": "מענה אוטומטי כשלקוח שולח עגלה",
+      "ackHint": "הקונה מקבל מיד הודעת קבלת הזמנה (פריטים + סכום) במקום שתיקה, התיקון מס' 1 להמרות בקטלוג.",
+      "payUrl": "בסיס קישור תשלום (אופציונלי)",
+      "payUrlHint": "אנחנו מוסיפים את מזהה ההזמנה; השאירו ריק כדי רק לאשר קבלה.",
+      "concierge": "קונסיירז' קטלוג: מענה אוטומטי לשאלות על מוצרים",
+      "conciergeHint": "כשלקוח מקליד, למשל, \"נעליים אדומות עד 2000\", עונים אוטומטית בהודעת Multi-Product תואמת. כבוי כברירת מחדל.",
+      "header": "כותרת התשובה",
+      "headerPlaceholder": "הנה מה שמצאתי",
+      "max": "מקסימום מוצרים",
+      "replyOnEmpty": "השב גם כשאין התאמה",
+      "replyOnEmptyHint": "אחרת הקונסיירז' שותק כשאין התאמה (מומלץ).",
+      "emptyText": "תשובה כשאין התאמה",
+      "emptyTextPlaceholder": "מצטערים, לא מצאנו התאמה. נסו מילת מפתח או תקציב אחרים.",
+      "save": "שמור אוטומציה",
+      "saved": "הגדרות האוטומציה נשמרו.",
+      "problem": {
+        "badUrl": "הזינו קישור מלא המתחיל ב-https://",
+        "tooLong": "הטקסט ארוך מדי.",
+        "range": "הזינו מספר שלם בין 1 ל-30."
+      }
+    },
+    "health": {
+      "title": "תקינות הקטלוג",
+      "needAttention": "{count, plural, one {מוצר אחד דורש טיפול לפני שיוכל להימכר.} two {# מוצרים דורשים טיפול לפני שיוכלו להימכר.} other {# מוצרים דורשים טיפול לפני שיוכלו להימכר.}}",
+      "allGood": "כל המוצרים מוכנים לקטלוג. יפה.",
+      "noImage": "אין תמונה",
+      "noPrice": "אין מחיר",
+      "syncError": "שגיאת סנכרון",
+      "showFix": "הצג מוצרים לתיקון",
+      "fix": "תקן ←"
+    },
+    "send": {
+      "loading": "טוען את טופס השליחה",
+      "loadError": "לא ניתן היה לטעון את טופס השליחה",
+      "maxProducts": "עד {max} מוצרים בקרוסלה.",
+      "noSender": {
+        "title": "חברו תחילה מכשיר",
+        "message": "נדרש מכשיר WhatsApp מחובר כדי לשלוח הודעות קטלוג.",
+        "connect": "חבר מכשיר"
+      },
+      "feedback": {
+        "failed": "לא נשלח דבר.",
+        "sent": "{count, plural, one {נשלח לנמען אחד} two {נשלח ל-# נמענים} other {נשלח ל-# נמענים}}",
+        "someFailed": "{count} נכשלו"
+      },
+      "recipients": {
+        "title": "נמענים",
+        "count": "{count, plural, one {נמען אחד} two {# נמענים} other {# נמענים}}",
+        "source": "מהיכן מגיעים הנמענים",
+        "modes": {
+          "groups": {
+            "title": "קבוצות אנשי קשר",
+            "hint": "השתמשו בפלחים שמורים."
+          },
+          "contacts": {
+            "title": "אנשי קשר בודדים",
+            "hint": "בחרו אנשים מסוימים."
+          },
+          "manual": {
+            "title": "מספרים ידניים",
+            "hint": "הדביקו, אחד בכל שורה."
+          }
+        },
+        "noGroups": "עדיין אין קבוצות אנשי קשר. צרו אחת תחילה בדף <link>אנשי קשר</link>.",
+        "groupContacts": "{count, plural, one {איש קשר אחד} two {# אנשי קשר} other {# אנשי קשר}}",
+        "noContacts": "עדיין אין אנשי קשר. הוסיפו אותם בדף <link>אנשי קשר</link>.",
+        "searchContacts": "חיפוש אנשי קשר…",
+        "noMatch": "אין איש קשר תואם.",
+        "paste": "הדבקת מספרי טלפון",
+        "pastePlaceholder": "מספר אחד בכל שורה, כולל קידומת מדינה",
+        "pasteHint": "אחד בכל שורה, מופרדים בפסיק או בנקודה-פסיק. קידומת מדינה נדרשת (עם + או בלעדיו).",
+        "overCap": "עד {max} נמענים בכל שליחה. פצלו לאצוות קטנות יותר."
+      },
+      "format": {
+        "title": "פורמט ושולח",
+        "spm": {
+          "title": "מוצר בודד",
+          "hint": "כרטיס מוצר אחד"
+        },
+        "mpm": {
+          "title": "רשימת מוצרים (קרוסלה)",
+          "hint": "עד 30 מוצרים"
+        },
+        "link": {
+          "title": "קישור לקטלוג",
+          "hint": "טקסט פשוט · עובד בכל עת"
+        },
+        "sendFrom": "שליחה מ",
+        "fromShop": "מחנות",
+        "brandingContext": "(הקשר מיתוג)",
+        "shopFallback": "חנות {slug}"
+      },
+      "products": {
+        "title": "מוצרים",
+        "selected": "({count} נבחרו)",
+        "selectedOf": "({count} נבחרו / {max})",
+        "search": "חיפוש מוצרים…",
+        "showingFrom": "מציג מוצרים מהחנות <b>{shop}</b>. שנו את בורר <b>מחנות</b> למעלה כדי לראות את הקטלוג של חנות אחרת.",
+        "loading": "טוען מוצרים…",
+        "loadError": "לא ניתן היה לטעון את המוצרים",
+        "other": "אחר",
+        "noMatch": "אין מוצר התואם לחיפוש שלכם.",
+        "emptyShop": "אין מוצרים פעילים בחנות זו.",
+        "empty": "עדיין אין מוצרים פעילים.",
+        "addOne": "הוסיפו אחד ←"
+      },
+      "message": {
+        "title": "הודעה ושליחה",
+        "text": "טקסט ההודעה",
+        "optional": "(אופציונלי)",
+        "placeholder": "לדוגמה: הנה כמה מוצרים שעשויים לאהוב, הקישו על כל אחד לפרטים נוספים.",
+        "header": "כותרת",
+        "headerPlaceholder": "לדוגמה: תראו את אלה",
+        "footer": "כותרת תחתונה",
+        "footerPlaceholder": "לדוגמה: השיבו STOP כדי להפסיק לקבל הודעות",
+        "counter": "{used} / {max}",
+        "viewRecent": "הצג שליחות אחרונות ←",
+        "sendProduct": "שלח מוצר ←",
+        "sendCarousel": "שלח קרוסלה ←",
+        "sendLink": "שלח קישור לקטלוג ←",
+        "sending": "שולח…",
+        "noPermission": "אפשר לצפות בטופס זה אך לא לשלוח הודעות קטלוג."
+      },
+      "rail": {
+        "label": "סיכום שליחה",
+        "summary": "סיכום",
+        "recipients": "נמענים",
+        "products": "מוצרים",
+        "format": "פורמט",
+        "formats": {
+          "spm": "מוצר בודד",
+          "mpm": "רשימת מספר מוצרים",
+          "link": "קישור לקטלוג"
+        },
+        "catalog": "קטלוג",
+        "metaCommerce": "Meta Commerce",
+        "productCount": "{count, plural, one {מוצר אחד} two {# מוצרים} other {# מוצרים}}",
+        "unofficial": "API לא רשמי (קרוסלה)",
+        "linkMeta": "קשר את Meta ←",
+        "recent": "שליחות אחרונות",
+        "windowTitle": "חלון של 24 שעות",
+        "windowBody": "מצבי SPM ורשימה דורשים שהקונה שלח לכם הודעה ב-24 השעות האחרונות. מצב <b>קישור לקטלוג</b> עובד בכל עת."
+      }
+    },
+    "collections": {
+      "loading": "טוען אוספים",
+      "loadError": "לא ניתן היה לטעון את האוספים",
+      "title": "אוספים",
+      "intro": "שמרו קבוצת מוצרים פעם אחת, ואז שלחו אותה כהודעת Multi-Product בלחיצה אחת, בלי לבחור מחדש בכל פעם.",
+      "new": "אוסף חדש",
+      "create": "צור אוסף",
+      "created": "האוסף נוצר.",
+      "updated": "האוסף עודכן.",
+      "deleted": "האוסף נמחק.",
+      "empty": "עדיין אין אוספים. צרו את הראשון למעלה.",
+      "productCount": "{count, plural, =0 {אין מוצרים} one {מוצר אחד} other {# מוצרים}}",
+      "edit": "עריכה",
+      "delete": "מחק",
+      "cancel": "ביטול",
+      "saveChanges": "שמור שינויים",
+      "deleteTitle": "למחוק את האוסף הזה?",
+      "deleteBody": "\"{name}\" יימחק. המוצרים אינם מושפעים.",
+      "send": {
+        "button": "שלח",
+        "noLive": "באוסף זה אין מוצרים פעילים לשליחה.",
+        "needNumber": "הזינו תחילה מספר נמען.",
+        "sending": "שולח…",
+        "sent": "{count, plural, one {נשלח לנמען אחד} two {נשלח ל-# נמענים} other {נשלח ל-# נמענים}}",
+        "someFailed": "{count} נכשלו",
+        "failed": "לא נשלח דבר.",
+        "number": "מספר הנמען",
+        "numberPlaceholder": "מספר עם קידומת מדינה",
+        "header": "כותרת (אופציונלי)",
+        "headerPlaceholder": "תראו את אלה",
+        "from": "שליחה מ",
+        "auto": "אוטומטי (פעיל)",
+        "go": "שלח כ-MPM"
+      },
+      "picker": {
+        "filter": "סינון מוצרים…",
+        "empty": "עדיין אין מוצרים פעילים.",
+        "addOne": "הוסיפו אחד ←",
+        "noMatch": "אין מוצר תואם.",
+        "max": "אוסף מכיל לכל היותר {max} מוצרים."
+      },
+      "form": {
+        "name": "שם",
+        "namePlaceholder": "לדוגמה: מבצע קיץ",
+        "description": "תיאור (אופציונלי)",
+        "products": "מוצרים",
+        "upTo": "עד {max}",
+        "reload": "טען מחדש",
+        "problem": {
+          "nameRequired": "הזינו שם.",
+          "nameTooLong": "השם ארוך מדי.",
+          "descriptionTooLong": "התיאור ארוך מדי.",
+          "noProducts": "בחרו לפחות מוצר אחד."
+        }
+      }
+    },
+    "activity": {
+      "loading": "טוען פעילות",
+      "loadError": "לא ניתן היה לטעון את הפעילות",
+      "title": "פעילות שליחת קטלוג",
+      "subtitle": "כל הודעת קטלוג שסביבת העבודה שלכם שלחה (SPM · MPM · קישור).",
+      "sendAnother": "שלח עוד ←",
+      "emptyTitle": "עדיין אין שליחות",
+      "emptyBody": "שלחו את הקטלוג הראשון שלכם מ<link>לשונית השליחה</link>.",
+      "failed": "נכשל",
+      "col": {
+        "when": "מתי",
+        "to": "אל",
+        "mode": "מצב",
+        "body": "גוף"
+      }
+    },
+    "products": {
+      "kicker": "חנות / מוצרים",
+      "title": "קטלוג",
+      "add": "הוסף מוצר",
+      "search": "חיפוש לפי שם או מק\"ט...",
+      "loading": "טוען מוצרים",
+      "loadError": "לא ניתן היה לטעון את המוצרים",
+      "col": {
+        "image": "תמונה",
+        "name": "שם",
+        "sku": "מק\"ט",
+        "price": "מחיר",
+        "stock": "מלאי",
+        "actions": "פעולות"
+      },
+      "noMatchTitle": "אין מוצרים תואמים",
+      "noMatchBody": "שום דבר לא תואם ל-\"{q}\" לפי שם או מק\"ט.",
+      "clearSearch": "נקה חיפוש",
+      "emptyTitle": "עדיין אין מוצרים",
+      "emptyBody": "לחצו על \"הוסף מוצר\" כדי ליצור את הראשון.",
+      "inStock": "במלאי",
+      "out": "אזל",
+      "share": "שתף",
+      "edit": "עריכה",
+      "delete": "מחק",
+      "cancel": "ביטול",
+      "deleted": "המוצר הוסר.",
+      "deleteTitle": "למחוק את המוצר הזה?",
+      "deleteBody": "\"{name}\" יימחק. הוא יישאר ב-Meta עד שתסירו אותו משם."
+    },
+    "share": {
+      "eyebrow": "שיתוף מוצר",
+      "product": "מוצר",
+      "close": "סגור",
+      "loading": "טוען קישורים",
+      "storefrontLink": "קישור לחנות",
+      "noStorefront": "(הגדירו תחילה את מזהה החנות)",
+      "waLink": "קישור עומק ל-WhatsApp",
+      "noPhone": "(חברו תחילה מספר טלפון)",
+      "copy": "העתק",
+      "copied": "הועתק!",
+      "sendToCustomer": "שליחה ללקוח",
+      "phonePlaceholder": "מספר WhatsApp, לדוגמה +1 555…",
+      "send": "שלח",
+      "sending": "שולח…",
+      "sent": "נשלח.",
+      "invalidPhone": "הזינו מספר WhatsApp תקין עם קידומת מדינה."
+    },
+    "form": {
+      "breadcrumb": "נתיב ניווט",
+      "products": "מוצרים",
+      "crumbNew": "חדש",
+      "crumbEdit": "עריכה",
+      "addTitle": "הוספת מוצר",
+      "editFallback": "עריכת מוצר",
+      "loading": "טוען מוצר",
+      "loadError": "לא ניתן היה לטעון את המוצר",
+      "noPermissionTitle": "אין לכם אפשרות לעשות זאת",
+      "noPermission": "התפקיד שלכם אינו מאפשר ליצור או לערוך מוצרים.",
+      "reload": "טען מחדש",
+      "fixFields": "חלק מהשדות אינם תקינים. בדקו את השדות המסומנים.",
+      "basics": "בסיס",
+      "name": "שם",
+      "namePlaceholder": "לדוגמה: חולצת כותנה אביבית",
+      "sku": "מק\"ט",
+      "optional": "(אופציונלי)",
+      "shortDescription": "תיאור קצר",
+      "shortDescriptionPlaceholder": "מוצג בכרטיסי קטלוג ובקישורי שיתוף ב-WhatsApp.",
+      "fullDescription": "תיאור מלא",
+      "fullDescriptionNote": "(גוף דף המוצר)",
+      "fullDescriptionPlaceholder": "מידות, בד, הוראות טיפול: כל מה שעוזר לקונה להחליט. מותר HTML.",
+      "media": "מדיה",
+      "primaryImage": "תמונה ראשית · הדביקו כתובת URL",
+      "imageUrl": "כתובת URL של תמונה",
+      "imageUrlHint": "הדביקו כתובת URL ישירה של תמונה.",
+      "photoTipsTitle": "טיפים לתמונות מוצר מעולות",
+      "photoTips": "השתמשו בתמונות מרובעות (1:1) בגודל 1024×1024 פיקסלים ומעלה. רקעים חלקים ממירים טוב יותר מרקעים עמוסים.",
+      "gallery": "גלריה",
+      "galleryHint": "הוסיפו תמונות נוספות לדף פרטי המוצר. קונים רואים אותן כתמונות ממוזערות.",
+      "addGalleryUrl": "הוסף כתובת URL של תמונה",
+      "galleryRow": "כתובת URL של תמונת גלריה {n}",
+      "removeGallery": "הסר תמונת גלריה {n}",
+      "galleryEmpty": "עדיין אין תמונות גלריה. לחצו על \"הוסף כתובת URL של תמונה\" למעלה כדי להוסיף.",
+      "pricing": "תמחור",
+      "price": "מחיר",
+      "comparePrice": "מחיר להשוואה",
+      "was": "(היה)",
+      "comparePriceHint": "המחיר המקורי · מוצג עם קו חוצה.",
+      "currency": "מטבע",
+      "profit": "מדד רווחיות",
+      "profitHint": "אוטומטי · מחיר לעומת מחיר להשוואה.",
+      "profitOff": "-{percent}% הנחה",
+      "profitLower": "השוואה < מחיר",
+      "profitSame": "0% · זהה",
+      "inventory": "מלאי ומשלוח",
+      "stockQty": "כמות במלאי",
+      "stockPlaceholder": "ריק = ללא הגבלה",
+      "weight": "משקל",
+      "weightHint": "משמש לחישוב עלויות משלוח.",
+      "weightPlaceholder": "לדוגמה: 250",
+      "available": "זמין למכירה",
+      "availableHint": "בטלו את הסימון כדי לסמן כאזל תוך שמירת המוצר גלוי.",
+      "sortOrder": "סדר מיון",
+      "sortOrderHint": "מספרים נמוכים יותר מופיעים ראשונים.",
+      "visibility": "נראות",
+      "status": {
+        "active": "פעיל: חי בחנות",
+        "draft": "טיוטה: מוסתר, ניתן לעריכה",
+        "archived": "בארכיון: מוסתר, נשמר ברשומות"
+      },
+      "organization": "ארגון",
+      "category": "קטגוריה",
+      "categoryPlaceholder": "לדוגמה: ביגוד, חטיפים",
+      "tags": "תגיות",
+      "tagsNote": "(מופרדות בפסיקים)",
+      "tagsPlaceholder": "כותנה, קיץ, רב-מכר",
+      "preview": "תצוגה מקדימה של החנות",
+      "noImage": "עדיין אין תמונה",
+      "productName": "שם המוצר",
+      "cancel": "ביטול",
+      "saveChanges": "שמור שינויים",
+      "createProduct": "צור מוצר",
+      "created": "המוצר נוצר.",
+      "updated": "המוצר עודכן.",
+      "problem": {
+        "required": "שדה חובה.",
+        "tooLong": "הטקסט ארוך מדי.",
+        "notNumber": "הזינו מספר, כמו 499 או 499.50.",
+        "tooBig": "הסכום גדול מדי.",
+        "notWhole": "הזינו מספר שלם.",
+        "badUrl": "הזינו קישור מלא המתחיל ב-https://",
+        "outOfRange": "המספר מחוץ לטווח.",
+        "tooMany": "יותר מדי תמונות."
+      }
+    },
+    "reviews": {
+      "rating": "{rating, plural, one {כוכב אחד מתוך 5} two {# כוכבים מתוך 5} other {# כוכבים מתוך 5}}",
+      "kicker": "חנות / ביקורות",
+      "title": "ביקורות על מוצרים",
+      "subtitle": "אשרו ביקורות לקוחות כדי להציג אותן בדף המוצר בחנות.",
+      "tabs": "סטטוס ביקורת",
+      "tab": {
+        "pending": "ממתינות",
+        "approved": "מאושרות",
+        "rejected": "נדחו"
+      },
+      "loading": "טוען ביקורות",
+      "loadError": "לא ניתן היה לטעון את הביקורות",
+      "empty": {
+        "pending": "אין ביקורות ממתינות.",
+        "approved": "אין ביקורות מאושרות.",
+        "rejected": "אין ביקורות שנדחו."
+      },
+      "anonymous": "אנונימי",
+      "on": "על",
+      "unknownProduct": "מוצר שנמחק",
+      "approve": "אשר",
+      "reject": "דחה",
+      "delete": "מחק",
+      "cancel": "ביטול",
+      "approved": "הביקורת אושרה.",
+      "rejected": "הביקורת נדחתה.",
+      "deleted": "הביקורת נמחקה.",
+      "deleteTitle": "למחוק את הביקורת הזו?",
+      "deleteBody": "הביקורת תוסר לצמיתות."
+    },
+    "senderPicker": {
+      "none": "אין שולחים מחוברים.",
+      "connectOne": "חבר אחד ←",
+      "select": "— בחר שולח —",
+      "connectNew": "חיבור מכשיר חדש",
+      "engine": {
+        "waba": "Meta",
+        "twilio": "Twilio",
+        "baileys": "API לא רשמי"
+      }
+    },
+    "admin": {
+      "nav": "קטלוג",
+      "pageTitle": "הגדרות קטלוג",
+      "loading": "טוען את הגדרות הקטלוג",
+      "retry": "נסה שוב",
+      "eyebrow": "ניהול · הגדרות פרויקט",
+      "titleLead": "WhatsApp",
+      "titleAccent": "קטלוג",
+      "intro": "בקרות ברמת הפלטפורמה עבור תכונת הקטלוג של WABA. כל סוחר מחבר את קטלוג חשבון המסחר שלו ב-Meta מהעמוד <link>/catalog</link> בצד סביבת העבודה. מסך זה קובע את ברירות המחדל שכל סביבת עבודה יורשת.",
+      "allSettings": "כל ההגדרות",
+      "openCatalog": "פתח את קטלוג המשתמש",
+      "reset": "אפס טיוטה",
+      "save": "שמור שינויים",
+      "saved": "הגדרות הקטלוג נשמרו.",
+      "superOnly": "רק מנהל-על יכול לשנות הגדרות אלה. ניתן לצפות בערכים השמורים.",
+      "fix": "יש לתקן את השדות המסומנים:",
+      "problems": {
+        "graphVersion": "השתמש בגרסת Graph API כגון v23.0.",
+        "currency": "השתמש בקוד מטבע בן 3 אותיות."
+      },
+      "errors": {
+        "conflict": "מישהו אחר שמר הגדרות אלה קודם. מוצגים הערכים העדכניים; בצע את השינוי שוב.",
+        "forbidden": "אין לך הרשאה לשנות הגדרות אלה.",
+        "validation": "חלק מהשדות אינם תקינים. בדוק את השדות המסומנים ונסה שוב.",
+        "network": "לא ניתן להגיע לשרת. בדוק את החיבור ונסה שוב.",
+        "unexpected": "משהו השתבש. נסה שוב בעוד רגע."
+      },
+      "usage": {
+        "connected": "סביבות עבודה מחוברות",
+        "connectedHint": "עם מזהה קטלוג Meta שמור",
+        "products": "מוצרים שסונכרנו",
+        "productsHint": "בכל קטלוגי סביבות העבודה",
+        "sends": "הודעות קטלוג שנשלחו",
+        "sendsHint": "SPM + MPM + CTA של קטלוג"
+      },
+      "gate": {
+        "kicker": "מתג תכונה",
+        "title": "זמינות הקטלוג",
+        "enabled": "מופעל",
+        "body": "כשהאפשרות מופעלת, בעלי סביבות עבודה יכולים לחבר את קטלוג המסחר שלהם ב-Meta בכתובת <link>/catalog</link> ולשלוח הודעות מוצר בודד, מוצרים מרובים וקטלוג-CTA מהצ'אט ומבונה התהליכים. כבה כדי להסתיר את הערך בתפריט בכל סביבות העבודה (חיבורים קיימים נשארים שלמים אך הופכים לקריאה בלבד).",
+        "commerce": "אפשר תשלום Commerce",
+        "commerceHint": "מאפשר לסוחרים לקבל תשלום בתוך WhatsApp דרך חשבון Commerce מחובר. דורש חשבון Commerce שאושר על ידי Meta ואזור נתמך."
+      },
+      "api": {
+        "kicker": "Cloud API",
+        "title": "גרסת Graph API",
+        "intro": "כל פעולת קטלוג (שליחה, סנכרון, דחיפה) עוברת דרך גרסת Graph API זו. Meta מפרסמת גרסה חדשה כל כ-3 חודשים ותומכת בקודמת במשך כשנתיים.",
+        "version": "גרסת Graph API",
+        "versionHint": "פורמט: v'{'major'}'.'{'minor'}', לדוגמה v23.0. השאר ריק כדי להשתמש בברירת המחדל.",
+        "currency": "מטבע ברירת מחדל",
+        "currencyHint": "קוד ISO-4217 (3 אותיות). משמש כברירת מחדל לקטלוגים חדשים; כל קטלוג Meta Commerce עדיין ננעל על מטבע אחד."
+      },
+      "app": {
+        "kicker": "אופציונלי · אפליקציית Meta",
+        "title": "אפליקציית Meta ברמת הפלטפורמה",
+        "intro": "נדרש רק אם בכוונתך להציע חוויית OAuth של \"התקנה עם Meta\". בזרימת ברירת המחדל כל סוחר מדביק את אסימון משתמש-המערכת שלו בעמוד הקטלוג, ולכן אין צורך בפרטי אפליקציה.",
+        "id": "מזהה אפליקציית Meta",
+        "idHint": "מ-developers.facebook.com ← האפליקציה שלך ← הגדרות ← בסיסי.",
+        "secret": "סוד אפליקציית Meta",
+        "secretPlaceholder": "סוד האפליקציה",
+        "secretSaved": "•••••••••••• (שמור, השאר ריק כדי לשמור)",
+        "secretHint": "מוצפן באחסון. משמש לאימות חתימות מטען ה-Webhook (X-Hub-Signature-256)."
+      },
+      "walk": {
+        "kicker": "מדריך לסוחר",
+        "title": "איך סביבת עבודה מחברת את הקטלוג שלה",
+        "intro": "מוצג לסוחרים בעמוד הקטלוג. משוחזר כאן כדי שתוכל לבדוק את התהליך.",
+        "waba": {
+          "title": "חשבון WABA פעיל + מזהה מספר טלפון",
+          "body": "הסוחר זקוק לחשבון WhatsApp Business מאומת ב-Meta Business Suite עם מספר מאושר אחד לפחות. בלי זה לא ניתן לשלוח הודעות קטלוג."
+        },
+        "catalog": {
+          "title": "צור קטלוג ב-Meta Commerce Manager",
+          "body": "ב-business.facebook.com/commerce ← יצירת קטלוג ← בחר מסחר אלקטרוני. הוסף מוצרים ידנית, באמצעות CSV, או משוך מ-Shopify/Woo. הקטלוג חייב להיות ציבורי ונעול על מטבע אחד."
+        },
+        "link": {
+          "title": "חבר את הקטלוג ל-WABA",
+          "body": "ב-Business Suite ← WhatsApp Manager ← לשונית קטלוג ← \"בחר קטלוג\" ← בחר את הקטלוג שנוצר בשלב 2. זה מאפשר הודעות מוצר ב-Cloud API."
+        },
+        "token": {
+          "title": "צור אסימון System User",
+          "body": "הגדרות עסק ← System Users ← הוסף ← מנהל. צור אסימון עם whatsapp_business_messaging, whatsapp_business_management, catalog_management, business_management. בחר \"לעולם לא\" בתוקף כדי להימנע מאימות מחדש כל רבעון."
+        },
+        "paste": {
+          "title": "הדבק את פרטי הגישה בעמוד הקטלוג",
+          "body": "מזהה WABA, מזהה קטלוג, מזהה מספר טלפון ואסימון System User מוזנים בעמוד הקטלוג בצד סביבת העבודה. לאחר מכן מתבצעת בדיקת GET /{CATALOG_ID}?fields=name,product_count כדי לוודא שלאסימון יש catalog_management על הקטלוג."
+        }
+      },
+      "side": {
+        "archKicker": "ארכיטקטורה",
+        "archTitle": "לכל סוחר לעומת הפלטפורמה",
+        "here": "כאן (ניהול, חד-פעמי)",
+        "hereBody": "מתג תכונה, גרסת Graph API, מטבע ברירת מחדל, פרטי אפליקציית Meta אופציונליים.",
+        "merchant": "בעמוד הקטלוג (לכל סוחר)",
+        "merchantBody": "מזהה WABA, מזהה קטלוג, מזהה מספר טלפון, אסימון System User. Meta דורשת שהקטלוג יהיה בבעלות חשבון המסחר של הסוחר, ולכן אין קטלוג משותף.",
+        "payloadsKicker": "מטעני Cloud API",
+        "payloadsTitle": "שלושה סוגי הודעות שאנו שולחים",
+        "payload": {
+          "spm": {
+            "title": "SPM · מוצר בודד",
+            "code": "interactive.type = \"product\""
+          },
+          "mpm": {
+            "title": "MPM · מוצרים מרובים",
+            "code": "interactive.type = \"product_list\" · עד 10 קטעים, 30 פריטים"
+          },
+          "cta": {
+            "title": "CTA של קטלוג",
+            "code": "interactive.type = \"catalog_message\""
+          }
+        },
+        "docsKicker": "תיעוד רשמי",
+        "docsTitle": "מקור עזר",
+        "docs": {
+          "sell": "מכירת מוצרים ושירותים ←",
+          "messages": "מקור עזר להודעות Cloud API ←",
+          "batch": "Catalog Batch API (דחיפת מוצרים) ←",
+          "changelog": "יומן שינויים של Graph API ←",
+          "policies": "מדיניות Commerce ←"
+        },
+        "constraintsTitle": "מגבלות",
+        "constraints": {
+          "public": "הקטלוג חייב להיות ציבורי",
+          "currency": "מטבע אחד לכל קטלוג",
+          "images": "תמונות ≥ 500×500 px (JPG / PNG)",
+          "goods": "ללא אלכוהול / תוכן למבוגרים / סחורה מוסדרת",
+          "verification": "נדרש אימות עסק לסביבת ייצור"
+        }
+      }
+    }
+  }
+}

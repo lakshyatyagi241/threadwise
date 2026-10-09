@@ -1,0 +1,361 @@
+{
+  "message-templates": {
+    "nav": {
+      "title": "Mẫu"
+    },
+    "common": {
+      "dismiss": "Bỏ qua",
+      "requestId": "Mã yêu cầu"
+    },
+    "status": {
+      "draft": "Bản nháp",
+      "pending": "Đang xem xét",
+      "approved": "Đã duyệt",
+      "rejected": "Bị từ chối",
+      "paused": "Tạm dừng",
+      "disabled": "Đã vô hiệu hóa",
+      "deleted": "Không có trên Meta"
+    },
+    "category": {
+      "MARKETING": "Tiếp thị",
+      "UTILITY": "Tiện ích",
+      "AUTHENTICATION": "Xác thực"
+    },
+    "quality": {
+      "GREEN": "Chất lượng cao",
+      "YELLOW": "Chất lượng trung bình",
+      "RED": "Chất lượng thấp",
+      "UNKNOWN": "Đang chờ đánh giá chất lượng"
+    },
+    "errors": {
+      "generic": "Đã có lỗi xảy ra. Hãy thử lại, và cung cấp mã yêu cầu nếu lỗi vẫn tiếp diễn.",
+      "TPL_NOT_FOUND": "Mẫu này không còn tồn tại.",
+      "TPL_NAME_TAKEN": "Đã có mẫu với tên và ngôn ngữ này trên số này. Hãy chọn tên hoặc ngôn ngữ khác.",
+      "TPL_LINT_FAILED": "Kiểm tra phát hiện các lỗi mà Meta sẽ từ chối. Chưa có gì được gửi. Hãy sửa các lỗi được liệt kê bên phải.",
+      "TPL_META_REJECTED": "Meta đã từ chối mẫu. Lý do ở bên dưới; mẫu được giữ làm bản nháp để bạn có thể sửa và thử lại.",
+      "TPL_NO_CONNECTION": "Mẫu này không có số WhatsApp nào được kết nối để gửi. Hãy kết nối một số trước.",
+      "TPL_IN_USE": "Không thể xóa mẫu này vì có chiến dịch Gửi hàng loạt đang chạy hoặc đã lên lịch đang dùng nó.",
+      "TPL_NOT_EDITABLE": "Chỉ có thể chỉnh sửa mẫu chưa được Meta duyệt hoặc mẫu bị Meta từ chối.",
+      "ROW_VERSION_CONFLICT": "Người khác đã thay đổi mẫu này trong lúc bạn đang chỉnh sửa. Hãy tải lại để xem phiên bản mới nhất, rồi áp dụng lại thay đổi của bạn.",
+      "VALIDATION_FAILED": "Một số trường không hợp lệ. Hãy kiểm tra các trường bên dưới.",
+      "INTERNAL": "Máy chủ không xử lý được yêu cầu này. Hãy thử lại sau ít phút."
+    },
+    "preview": {
+      "title": "Xem trước",
+      "headerImageAlt": "Ảnh mẫu tiêu đề",
+      "header": {
+        "image": "Hình ảnh",
+        "video": "Video",
+        "document": "Tài liệu",
+        "location": "Vị trí"
+      },
+      "authBody": "là mã xác minh của bạn.",
+      "authExpiry": "{count, plural, other {Mã này hết hạn sau # phút.}}",
+      "bodyEmpty": "Nội dung tin nhắn của bạn sẽ hiện ở đây.",
+      "time": "10:30",
+      "copyCode": "Sao chép mã",
+      "buttonUnnamed": "Nút",
+      "moreButtons": "{count, plural, other {+# nút khác}}"
+    },
+    "card": {
+      "rejected": "Bị từ chối: {reason}",
+      "view": "Xem",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa"
+    },
+    "library": {
+      "title": "Thư viện mẫu",
+      "intro": "Mẫu tin nhắn WhatsApp: soạn mẫu, gửi Meta xét duyệt và theo dõi trạng thái tại đây.",
+      "sync": "Đồng bộ từ Meta",
+      "syncing": "Đang đồng bộ...",
+      "syncHint": "Lấy mẫu của bạn từ Meta",
+      "syncDone": "Đã đồng bộ từ Meta: {created} mới, {updated} đã cập nhật, {missing} không còn trên Meta.",
+      "syncNone": "Chưa tìm thấy mẫu nào trong tài khoản WhatsApp Business này.",
+      "syncFailed": "Đồng bộ từ Meta thất bại. Hãy kiểm tra kết nối của số và thử lại.",
+      "syncPartial": "{count, plural, other {# số không thể đồng bộ.}}",
+      "new": "Mẫu mới",
+      "filters": "Lọc mẫu",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Tên mẫu",
+      "status": "Trạng thái",
+      "allStatuses": "Mọi trạng thái",
+      "category": "Danh mục",
+      "allCategories": "Mọi danh mục",
+      "connection": "Số WhatsApp",
+      "allConnections": "Mọi số",
+      "loading": "Đang tải mẫu",
+      "retry": "Thử lại",
+      "emptyTitle": "Chưa có mẫu nào",
+      "emptyBody": "Tạo mẫu và gửi lên Meta, hoặc đồng bộ các mẫu bạn đã có trong Meta Business Manager.",
+      "emptyFilteredTitle": "Không có mẫu nào khớp",
+      "emptyFilteredBody": "Thay đổi hoặc xóa bộ lọc để xem thêm mẫu.",
+      "clearFilters": "Xóa bộ lọc",
+      "loadMore": "Tải thêm"
+    },
+    "delete": {
+      "title": "Xóa mẫu",
+      "message": "Xóa “{name}”? Mẫu sẽ bị xóa ở đây và trên Meta, và không thể gửi nữa.",
+      "confirm": "Xóa mẫu",
+      "cancel": "Hủy",
+      "done": "Đã xóa “{name}”.",
+      "inUseHelp": "Mở chiến dịch Gửi hàng loạt đang dùng mẫu này rồi hủy hoặc chọn mẫu khác, sau đó xóa mẫu này."
+    },
+    "lint": {
+      "title": "Kiểm tra trước khi gửi",
+      "checking": "Đang kiểm tra",
+      "unavailable": "Chưa thể chạy kiểm tra lúc này. Việc xét duyệt của Meta vẫn áp dụng, và máy chủ sẽ kiểm tra lại khi gửi.",
+      "clean": "Không phát hiện vấn đề nào.",
+      "summary": "{errors, plural, other {# lỗi}}, {warnings, plural, other {# cảnh báo}}",
+      "severity": {
+        "error": "Lỗi",
+        "warning": "Cảnh báo"
+      },
+      "field": {
+        "name": "Tên",
+        "language": "Ngôn ngữ",
+        "header": "Tiêu đề",
+        "body": "Nội dung",
+        "footer": "Chân trang",
+        "buttons": "Nút",
+        "template": "Mẫu"
+      }
+    },
+    "form": {
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "backToLibrary": "Quay lại thư viện",
+      "noPermission": "Bạn không có quyền tạo hoặc chỉnh sửa mẫu.",
+      "notEditableTitle": "Mẫu này không thể chỉnh sửa nữa",
+      "notEditableBody": "Chỉ có thể chỉnh sửa mẫu chưa được Meta duyệt hoặc mẫu bị từ chối. Hãy tạo mẫu mới để thay đổi mẫu đã được duyệt.",
+      "viewTemplate": "Xem mẫu",
+      "breadcrumb": "Đường dẫn",
+      "breadcrumbLibrary": "Mẫu",
+      "breadcrumbNew": "Mới",
+      "breadcrumbEdit": "Chỉnh sửa",
+      "titleNew": "Mẫu mới",
+      "titleEdit": "Chỉnh sửa {name}",
+      "saveDraft": "Lưu bản nháp",
+      "submit": "Gửi lên Meta",
+      "reload": "Tải lại mẫu",
+      "aside": "Xem trước và kiểm tra",
+      "why": {
+        "connection": "Chọn số WhatsApp để gửi.",
+        "name": "Nhập tên mẫu.",
+        "fields": "Một số trường không hợp lệ.",
+        "errors": "Hãy sửa lỗi trước khi gửi.",
+        "checking": "Đang kiểm tra mẫu."
+      },
+      "toast": {
+        "submitted": "Đã gửi mẫu lên Meta để xét duyệt.",
+        "saved": "Đã lưu mẫu dưới dạng bản nháp."
+      },
+      "errors": {
+        "name": "Nhập tên mẫu.",
+        "header": "Tiêu đề tối đa 60 ký tự.",
+        "body": "Nội dung tối đa {max} ký tự.",
+        "footer": "Chân trang tối đa 60 ký tự."
+      },
+      "identity": {
+        "title": "Thông tin nhận dạng",
+        "connection": "Số WhatsApp",
+        "connectionHint": "Phương tiện và việc gửi phải dùng cùng một số, nếu không Meta sẽ từ chối mẫu.",
+        "connectionUnknown": "Số không còn khả dụng",
+        "noConnection": "Không có số WhatsApp nào được kết nối để gửi.",
+        "connectNumber": "Kết nối số",
+        "category": "Danh mục",
+        "categoryHint": "Meta xét duyệt và định giá mẫu theo danh mục.",
+        "categories": {
+          "MARKETING": "Tiếp thị",
+          "UTILITY": "Tiện ích",
+          "AUTHENTICATION": "Xác thực"
+        },
+        "name": "Tên mẫu",
+        "nameHint": "Chỉ a-z, 0-9 và _, tối đa 60 ký tự.",
+        "nameTaken": "Tên này đã được dùng cho ngôn ngữ này trên số này.",
+        "language": "Ngôn ngữ"
+      },
+      "auth": {
+        "title": "Mã xác minh dùng một lần",
+        "hint": "Meta soạn nội dung tin nhắn và nút Sao chép mã của mẫu xác thực.",
+        "expiry": "Mã hết hạn sau (phút)",
+        "expiryHint": "Không bắt buộc. Từ {min} đến {max} phút.",
+        "expiryInvalid": "Nhập số nguyên từ {min} đến {max}.",
+        "fixedBody": "Nội dung tin nhắn gồm một mã, theo sau là “là mã xác minh của bạn” và lời nhắc bảo mật. Bạn không thể thay đổi nội dung này."
+      },
+      "header": {
+        "title": "Tiêu đề",
+        "hint": "Không bắt buộc. Văn bản, hoặc một hình ảnh, video, tài liệu hoặc vị trí.",
+        "type": "Loại tiêu đề",
+        "kind": {
+          "none": "Không có",
+          "text": "Văn bản",
+          "image": "Hình ảnh",
+          "video": "Video",
+          "document": "Tài liệu",
+          "location": "Vị trí"
+        },
+        "text": "Văn bản tiêu đề",
+        "textHint": "{used}/{max}. Tối đa một biến.",
+        "sample": "Tệp mẫu",
+        "uploading": "Đang tải lên",
+        "keptSample": "Tệp mẫu đã lưu được giữ lại. Chọn tệp để thay thế.",
+        "noFile": "Chưa chọn tệp",
+        "limits": "Hình ảnh tối đa 5 MB, video tối đa 16 MB, PDF tối đa 100 MB.",
+        "replace": "Thay tệp",
+        "choose": "Chọn tệp mẫu",
+        "tooBig": "{kind} này có dung lượng {size} MB. WhatsApp chỉ chấp nhận tối đa {max} MB. Hãy chọn tệp nhỏ hơn.",
+        "wrongType": "Loại tệp này không được chấp nhận cho tiêu đề này.",
+        "emptyFile": "Tệp này trống.",
+        "locationHelp": "Vị trí sẽ được điền khi gửi tin nhắn. Meta chỉ cần biết tiêu đề là một vị trí."
+      },
+      "body": {
+        "title": "Nội dung",
+        "hint": "Nội dung tin nhắn. Dùng biến dạng '{{name}}'; các biến sẽ được đánh số cho Meta khi bạn lưu.",
+        "toolbar": "Định dạng văn bản",
+        "format": {
+          "bold": "In đậm",
+          "italic": "In nghiêng",
+          "strike": "Gạch ngang",
+          "code": "Mã"
+        },
+        "variable": "Thêm biến",
+        "label": "Văn bản nội dung",
+        "counter": "{used}/{max}",
+        "wrapSample": "văn bản"
+      },
+      "variables": {
+        "title": "Ánh xạ biến",
+        "empty": "Chưa có biến nào. Nhập chỗ giữ như '{{name}}' trong nội dung, hoặc dùng Thêm biến.",
+        "help": "Với mỗi biến, hãy chọn thuộc tính liên hệ sẽ điền biến đó khi gửi, và nhập một giá trị mẫu để Meta xem xét.",
+        "attribute": "Thuộc tính liên hệ",
+        "sample": "Giá trị mẫu",
+        "header": "tiêu đề",
+        "body": "nội dung"
+      },
+      "footer": {
+        "title": "Chân trang",
+        "label": "Văn bản chân trang",
+        "hint": "Không bắt buộc. {used}/{max}. Không có biến."
+      },
+      "buttons": {
+        "title": "Nút",
+        "hint": "Không bắt buộc. Các nút trả lời nhanh phải nằm cùng nhau ở đầu hoặc cuối.",
+        "add": {
+          "quick_reply": "Trả lời nhanh",
+          "url": "Truy cập trang web",
+          "phone": "Gọi điện thoại",
+          "copy_code": "Sao chép mã"
+        },
+        "kind": {
+          "quick_reply": "Trả lời nhanh",
+          "url": "Truy cập trang web",
+          "phone": "Gọi điện thoại",
+          "copy_code": "Sao chép mã",
+          "other": "Khác"
+        },
+        "count": "{used}/{max} nút",
+        "limitReached": "Tối đa {max} nút loại này.",
+        "empty": "Chưa có nút. Hãy thêm nút bằng các nút phía trên.",
+        "moveUp": "Di chuyển nút {n} lên",
+        "moveDown": "Di chuyển nút {n} xuống",
+        "remove": "Xóa nút {n}",
+        "keptAsIs": "“{text}” được giữ nguyên. Trình chỉnh sửa này không thay đổi nội dung.",
+        "text": "Văn bản nút",
+        "textHint": "{used}/25",
+        "url": "Địa chỉ trang web",
+        "urlHint": "Thêm '{{1}}' vào cuối để có phần động.",
+        "urlExample": "Mẫu cho biến",
+        "phone": "Số điện thoại",
+        "phoneHint": "Kèm mã quốc gia.",
+        "code": "Mã mẫu",
+        "codeHint": "Ví dụ PROMO50.",
+        "limits": "Meta cho phép tối đa {quick} nút trả lời nhanh, {url} nút trang web, {phone} nút điện thoại và {copy} nút sao chép mã.",
+        "allUsed": "Mọi loại nút đều đã đạt giới hạn.",
+        "issue": {
+          "textRequired": "Nhập văn bản nút.",
+          "textTooLong": "Tối đa {max} ký tự.",
+          "urlRequired": "Nhập URL.",
+          "urlInvalid": "URL phải bắt đầu bằng http:// hoặc https://.",
+          "phoneRequired": "Nhập số điện thoại.",
+          "codeRequired": "Nhập mã mẫu.",
+          "quickReplyVariable": "Nút trả lời nhanh không thể chứa biến.",
+          "urlExampleRequired": "Nhập giá trị mẫu cho biến URL.",
+          "quickReplyPosition": "Các nút trả lời nhanh phải nằm cùng nhau, ở đầu hoặc cuối danh sách nút."
+        }
+      },
+      "result": {
+        "metaRefused": "Đã lưu, nhưng Meta từ chối mẫu.",
+        "metaRefusedHelp": "Mẫu được giữ làm bản nháp. Hãy sửa những gì Meta nêu, rồi gửi lại. Biểu mẫu của bạn không thay đổi.",
+        "submitted": "Đã gửi lên Meta để xét duyệt.",
+        "saved": "Đã lưu dưới dạng bản nháp.",
+        "warnings": "Nên xem lại trước khi Meta xét duyệt:",
+        "open": "Mở mẫu"
+      }
+    },
+    "detail": {
+      "loading": "Đang tải mẫu",
+      "retry": "Thử lại",
+      "back": "Quay lại thư viện",
+      "breadcrumb": "Đường dẫn",
+      "refresh": "Làm mới trạng thái",
+      "retrySubmit": "Gửi lên Meta",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa",
+      "refreshed": "Đã làm mới trạng thái từ Meta.",
+      "submittedToast": "Đã gửi mẫu lên Meta để xét duyệt.",
+      "never": "Chưa bao giờ",
+      "none": "Không có",
+      "banner": {
+        "metaFailed": "Meta đã từ chối mẫu",
+        "draft": "Mẫu này chưa được gửi lên Meta. Hãy gửi để bắt đầu xét duyệt.",
+        "pending": "Đã gửi để Meta xét duyệt. Trang này kiểm tra kết quả mỗi 15 giây.",
+        "pendingMeta": "Đã gửi {submitted}. Lần kiểm tra gần nhất {checked}.",
+        "polling": "Bạn có thể để trang này mở hoặc quay lại sau.",
+        "rejected": "Bị Meta từ chối",
+        "rejectedHelp": "Hãy chỉnh sửa mẫu để khắc phục lý do, rồi gửi lại.",
+        "paused": "Bị Meta tạm dừng. Không thể gửi cho đến khi Meta gỡ tạm dừng.",
+        "pausedUntil": "Bị Meta tạm dừng đến {when}.",
+        "disabled": "Bị Meta vô hiệu hóa. Không thể gửi.",
+        "deleted": "Meta không còn liệt kê mẫu này. Mẫu được giữ lại đây; hãy đồng bộ lại hoặc xóa."
+      },
+      "facts": {
+        "title": "Đồng bộ Meta",
+        "status": "Trạng thái Meta",
+        "quality": "Chất lượng",
+        "category": "Danh mục Meta",
+        "metaId": "Mã mẫu",
+        "number": "Số WhatsApp",
+        "numberUnknown": "Số không còn khả dụng",
+        "submitted": "Đã gửi",
+        "approved": "Đã duyệt",
+        "synced": "Đồng bộ gần nhất"
+      },
+      "components": {
+        "title": "Thành phần",
+        "header": "Tiêu đề",
+        "media": "Phương tiện tiêu đề",
+        "body": "Nội dung",
+        "footer": "Chân trang",
+        "buttons": "Nút",
+        "expiry": "Hết hạn mã",
+        "expiryValue": "{count, plural, other {# phút}}"
+      },
+      "attachment": {
+        "none": "Không có",
+        "image": "Hình ảnh",
+        "video": "Video",
+        "document": "Tài liệu",
+        "location": "Vị trí"
+      },
+      "lint": {
+        "title": "Kiểm tra",
+        "clean": "Không phát hiện vấn đề nào."
+      },
+      "payload": {
+        "title": "Dữ liệu gửi Meta",
+        "hint": "Nội dung gửi Meta để xét duyệt, đúng như đã tạo.",
+        "empty": "Chưa tạo gì."
+      }
+    }
+  }
+}

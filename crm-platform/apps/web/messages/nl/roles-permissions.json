@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "Rollen en machtigingen",
+      "roles": "Rollen",
+      "permissions": "Machtigingen",
+      "staff": "Medewerkersrollen"
+    },
+    "common": {
+      "admin": "Beheer",
+      "breadcrumb": "Broodkruimelpad",
+      "loading": "Laden…",
+      "retry": "Opnieuw proberen",
+      "requestId": "Verzoek-ID",
+      "cancel": "Annuleren",
+      "noAccess": {
+        "title": "Je hebt geen toegang tot dit scherm",
+        "body": "Je rollen bevatten niet de platformmachtiging die dit scherm nodig heeft. Vraag een superbeheerder om die toe te kennen.",
+        "bodyWithKey": "Dit scherm vereist de platformmachtiging {permission}. Vraag een superbeheerder om die aan een van je rollen toe te voegen.",
+        "back": "Terug naar de console"
+      },
+      "errors": {
+        "unexpected": "Er ging iets mis aan onze kant. Probeer het opnieuw; blijft het probleem zich voordoen, vermeld dan het verzoek-ID.",
+        "request": "Het verzoek kon niet worden voltooid.",
+        "validation": "Controleer het formulier en probeer het opnieuw.",
+        "validationField": "{message}",
+        "conflict": "Iemand anders heeft deze rol gewijzigd terwijl je bewerkte. Laad opnieuw om hun versie te zien en pas daarna je wijzigingen opnieuw toe.",
+        "noAccess": "Hiervoor heb je de platformmachtiging {permission} nodig.",
+        "nameTaken": "Deze naam is al in gebruik.",
+        "nameRequired": "De rolnaam is verplicht.",
+        "permissionNameRequired": "De naam van de machtiging is verplicht.",
+        "permissionNameFormat": "Gebruik kleine letters, cijfers en underscores, met punten tussen de delen.",
+        "locked": "Superbeheerder is systeemvergrendeld: de rol kan niet worden hernoemd, van machtigingen ontdaan of verwijderd.",
+        "lockedDelete": "De superbeheerdersrol is systeemvergrendeld en kan niet worden verwijderd.",
+        "permissionSystem": "Deze machtiging wordt door het platform gecontroleerd en kan niet worden verwijderd.",
+        "permissionUnknown": "Deze machtigingen staan niet in de catalogus: {names}.",
+        "reassignSame": "Kies een andere rol om gebruikers naar te verplaatsen.",
+        "lastSuperAdmin": "Er moet minstens één actieve superbeheerder zijn.",
+        "privilegedRole": "Alleen een superbeheerder kan de superbeheerdersrol toekennen of intrekken.",
+        "notFound": "Dit item bestaat niet meer. Het is mogelijk verwijderd."
+      }
+    },
+    "list": {
+      "crumb": "Rollen",
+      "eyebrow": "Beheer · Gebruikers en toegang · Rollen",
+      "titleLead": "Rollen en",
+      "titleAccent": "machtigingen",
+      "description": "Bepaal wat elke rol op het platform mag doen. Elke gebruiker krijgt één rol; machtigingen worden per rol gebundeld.",
+      "managePermissions": "Machtigingen beheren",
+      "addRole": "Rol toevoegen",
+      "kpi": {
+        "label": "Totalen rollen",
+        "total": "Totaal rollen",
+        "totalHint": "{system} systeem · {custom} aangepast",
+        "permissions": "Totaal machtigingen",
+        "permissionsHint": "over modules",
+        "users": "Gebruikers met rol",
+        "usersHint": "over alle rollen",
+        "noUsers": "Rollen zonder gebruikers",
+        "noUsersHint": "overweeg archiveren"
+      },
+      "filter": {
+        "label": "Rollen filteren op type",
+        "all": "Alle",
+        "system": "Systeem",
+        "custom": "Aangepast",
+        "search": "Rollen zoeken…",
+        "searchLabel": "Rollen zoeken"
+      },
+      "table": {
+        "caption": "Platformrollen",
+        "index": "#",
+        "name": "Rolnaam",
+        "type": "Type",
+        "users": "Gebruikers",
+        "permissions": "Machtigingen",
+        "lastEdited": "Laatst bewerkt",
+        "actions": "Acties"
+      },
+      "systemRole": "Systeemrol",
+      "customRole": "Aangepaste rol",
+      "systemBadge": "Systeem",
+      "customBadge": "Aangepast",
+      "row": {
+        "menu": "Acties voor {name}",
+        "edit": "Rol bewerken",
+        "delete": "Verwijderen"
+      },
+      "footer": {
+        "showing": "{shown} van {total} rollen getoond",
+        "add": "+ Rol toevoegen"
+      },
+      "empty": {
+        "none": "Nog geen rollen gedefinieerd. <link>Maak de eerste rol aan</link>.",
+        "noMatch": "Geen rollen die aan je filters voldoen.",
+        "clear": "Filters wissen"
+      },
+      "delete": {
+        "title": "Rol verwijderen",
+        "message": "Rol {name} verwijderen? Gebruikers met deze rol verliezen al hun machtigingen. Dit kan niet ongedaan worden gemaakt.",
+        "confirm": "Ja, verwijderen",
+        "cancel": "Annuleren"
+      },
+      "toasts": {
+        "deleted": "Rol “{name}” verwijderd."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Rollen",
+      "crumbNew": "Nieuw",
+      "eyebrowNew": "Beheer · Rollen · Nieuw",
+      "eyebrowEdit": "Beheer · Rol bewerken",
+      "titleLead": "Maak een nieuwe",
+      "titleAccent": "rol",
+      "description": "Kies een naam en vink daarna de vakjes aan om deze rol toegang te geven tot specifieke modules. Je kunt dit altijd wijzigen.",
+      "summary": "{count} / {total} machtigingen · laatst bewerkt op {date}.",
+      "userChip": "{count, plural, one {# gebruiker} other {# gebruikers}}",
+      "save": "Wijzigingen opslaan",
+      "create": "Rol aanmaken",
+      "saving": "Opslaan…",
+      "reload": "Rol opnieuw laden",
+      "discard": "Je hebt niet-opgeslagen wijzigingen. Weggaan zonder op te slaan?",
+      "duplicatedBanner": "Rol gedupliceerd als “{name}”. Bewerk de kopie hieronder.",
+      "lockedNotice": "{name} is systeemvergrendeld: de rol kan niet worden hernoemd, van machtigingen ontdaan of verwijderd.",
+      "details": "Roldetails",
+      "name": "Rolnaam",
+      "namePlaceholder": "bijv. Saleslead",
+      "template": "Beginnen met sjabloon",
+      "templateBlank": "Leeg · geen machtigingen",
+      "templateOption": "{name} · {count, plural, one {# machtiging} other {# machtigingen}}",
+      "templateBusy": "Sjabloon laden…",
+      "descriptionLabel": "Beschrijving",
+      "descriptionPlaceholder": "Wat doet deze rol? Zichtbaar voor beheerders.",
+      "toasts": {
+        "created": "Rol “{name}” aangemaakt.",
+        "updated": "Rol “{name}” bijgewerkt."
+      }
+    },
+    "matrix": {
+      "title": "Machtigingen toewijzen",
+      "counter": "{count, number} / {total, number} geselecteerd",
+      "selectAll": "Alle machtigingen selecteren",
+      "module": "Module",
+      "selectAllColumn": "Alles selecteren",
+      "available": "Beschikbare machtigingen",
+      "selectAllModule": "Alles selecteren",
+      "selectAllOf": "Alle machtigingen van {module} selecteren",
+      "empty": "Nog geen machtigingen gedefinieerd. <link>Maak er een aan</link>.",
+      "emptyPlain": "Nog geen machtigingen gedefinieerd."
+    },
+    "dangerZone": {
+      "title": "Gevarenzone",
+      "irreversible": "onomkeerbaar",
+      "duplicate": {
+        "title": "Rol dupliceren",
+        "hint": "Maak een kopie met dezelfde machtigingen",
+        "action": "Dupliceren",
+        "busy": "Dupliceren…"
+      },
+      "reassign": {
+        "title": "Alle gebruikers opnieuw toewijzen",
+        "hint": "{count, plural, one {# gebruiker} other {# gebruikers}} naar een andere rol verplaatsen",
+        "targetLabel": "Gebruikers verplaatsen naar",
+        "placeholder": "Naar…",
+        "action": "Verplaatsen",
+        "busy": "Verplaatsen…"
+      },
+      "moved": "{count} gebruiker(s) verplaatst van “{from}” naar “{to}”.",
+      "delete": {
+        "title": "Rol verwijderen",
+        "hint": "Verwijdert de rol en koppelt alle gebruikers los.",
+        "action": "Verwijderen",
+        "dialogTitle": "Rol verwijderen",
+        "dialogMessage": "Rol {name} verwijderen? Gebruikers met deze rol verliezen al hun machtigingen. Dit kan niet ongedaan worden gemaakt.",
+        "confirm": "Ja, verwijderen",
+        "cancel": "Annuleren"
+      },
+      "deleted": "Rol “{name}” verwijderd."
+    },
+    "permissions": {
+      "crumb": "Machtigingen",
+      "eyebrow": "Beheer · Gebruikers en toegang · Machtigingen",
+      "titleLead": "Alle",
+      "titleAccent": "machtigingen",
+      "description": "Alle machtigingsvlaggen die het platform herkent, gegroepeerd per module. Voeg hier een nieuwe vlag toe en koppel die daarna aan rollen in de roleditor.",
+      "backToRoles": "Terug naar rollen",
+      "add": "Machtiging toevoegen",
+      "kpi": {
+        "label": "Totalen machtigingen",
+        "total": "Totaal machtigingen",
+        "totalHint": "over {modules, plural, one {# module} other {# modules}}",
+        "used": "Gebruikt in rollen",
+        "usedHint": "gekoppeld aan ≥ 1 rol",
+        "orphans": "Verweesde machtigingen",
+        "orphansHint": "gekoppeld aan 0 rollen",
+        "last": "Laatst toegevoegd"
+      },
+      "filter": {
+        "search": "Naam van machtiging zoeken…",
+        "searchLabel": "Naam van machtiging zoeken",
+        "moduleLabel": "Module",
+        "allModules": "Alle modules",
+        "count": "{count, plural, one {# machtiging} other {# machtigingen}} in {modules, plural, one {# module} other {# modules}}"
+      },
+      "groupsLabel": "Machtigingen per module",
+      "groupCount": "{count, plural, one {# machtiging} other {# machtigingen}}",
+      "orphan": "verweesd",
+      "system": "systeem",
+      "systemHint": "Wordt door het platform gecontroleerd, daarom kan hij niet worden verwijderd.",
+      "inRoles": "in {count, plural, one {# rol} other {# rollen}}",
+      "deleteName": "Machtiging {name} verwijderen",
+      "empty": {
+        "none": "Nog geen machtigingen gedefinieerd. <link>Maak de eerste aan</link>.",
+        "noMatch": "Geen machtigingen die aan je zoekopdracht voldoen."
+      },
+      "delete": {
+        "action": "Verwijderen",
+        "title": "Machtiging verwijderen",
+        "message": "Machtiging {name} verwijderen? Elke rol die deze gebruikt, verliest die bevoegdheid meteen.",
+        "confirm": "Ja, verwijderen",
+        "cancel": "Annuleren"
+      },
+      "toasts": {
+        "deleted": "Machtiging “{name}” verwijderd."
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "Machtigingen",
+      "crumbNew": "Nieuw",
+      "eyebrow": "Beheer · Machtigingen · Nieuw",
+      "titleLead": "Maak een nieuwe",
+      "titleAccent": "machtiging",
+      "description": "Voeg een gedetailleerde bevoegdheidsvlag toe. Koppel die na het aanmaken aan een of meer rollen in de roleditor.",
+      "create": "Machtiging aanmaken",
+      "creating": "Aanmaken…",
+      "details": "Details machtiging",
+      "module": "Module",
+      "modulePlaceholder": "Kies een module",
+      "moduleHint": "Machtigingen worden in de roleditor per module gegroepeerd.",
+      "action": "Actie",
+      "actionHint": "Kleine letters, geen spaties. Wordt samengevoegd als",
+      "actionPlaceholder": "bijv. export · refund · approve",
+      "name": "Naam machtiging",
+      "namePlaceholder": "module.actie — automatisch ingevuld op basis van bovenstaande",
+      "nameHint": "Automatisch ingevuld op basis van module + actie. Pas dit alleen aan als je een eigen tekst nodig hebt.",
+      "tip": "<b>Naamgevingsconventie:</b> gebruik <code>module.actie</code> in kleine letters. Voorbeelden: <code>campaigns.send</code>, <code>billing.refund</code>, <code>audit.export</code>.",
+      "preview": {
+        "title": "Voorbeeld machtiging",
+        "appearsUnder": "Verschijnt onder <b>{module}</b> in de roleditor.",
+        "selectedModule": "geselecteerde module"
+      },
+      "code": {
+        "title": "Codeverwijzing",
+        "hint": "Gebruik <code>@PlatformPermission()</code> op een platformroute om deze machtiging te vereisen."
+      },
+      "tipCard": "<b>Tip:</b> machtigingen met een naam zoals <code>module.actie</code> worden in de roleditor automatisch samengevoegd.",
+      "toasts": {
+        "created": "Machtiging “{name}” aangemaakt."
+      }
+    },
+    "staff": {
+      "crumbRoles": "Rollen",
+      "crumb": "Medewerkersrollen",
+      "eyebrow": "Beheer · Gebruikers en toegang · Medewerkersrollen",
+      "titleLead": "Medewerkers",
+      "titleAccent": "rollen",
+      "description": "Geef elke operator van deze console de platformrollen die bepalen wat hij mag doen. Bij opslaan worden de rollen van de operator vervangen door precies de aangevinkte rollen.",
+      "backToRoles": "Terug naar rollen",
+      "caption": "Operators en hun platformrollen",
+      "table": {
+        "operator": "Operator",
+        "tier": "Consoletoegang",
+        "status": "Status",
+        "roles": "Platformrollen",
+        "actions": "Acties"
+      },
+      "tier": {
+        "super_admin": "Superbeheerder",
+        "support": "Support",
+        "auditor": "Auditor"
+      },
+      "status": {
+        "active": "Actief",
+        "suspended": "Geschorst"
+      },
+      "noRoles": "Geen rollen",
+      "rolesOf": "Rollen van {name}",
+      "assign": "Rollen toewijzen",
+      "assignFor": "Rollen toewijzen aan {name}",
+      "empty": "Nog geen operators.",
+      "dialog": {
+        "title": "Rollen toewijzen aan {name}",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "save": "Rollen opslaan",
+        "saving": "Opslaan…",
+        "hint": "Vink elke rol aan die deze operator moet hebben.",
+        "superOnly": "Alleen een superbeheerder kan deze rol toekennen of intrekken.",
+        "count": "{count, plural, =0 {Geen rollen geselecteerd} one {# rol geselecteerd} other {# rollen geselecteerd}}"
+      },
+      "toasts": {
+        "saved": "Rollen bijgewerkt voor “{name}”."
+      }
+    }
+  }
+}

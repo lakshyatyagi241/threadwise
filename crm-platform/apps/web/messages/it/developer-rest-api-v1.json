@@ -1,0 +1,93 @@
+{
+  "developer-rest-api-v1": {
+    "common": {
+      "dismiss": "Ignora",
+      "copy": "Copia",
+      "copied": "Copiato",
+      "copyFailed": "Impossibile copiare. Seleziona il testo e copialo a mano."
+    },
+    "rail": {
+      "name": "API per sviluppatori",
+      "tagline": "REST · /api/v1",
+      "keyActive": "Chiave attiva",
+      "noKey": "Ancora nessuna chiave",
+      "baseUrl": "URL di base",
+      "authHeader": "Intestazione di autenticazione",
+      "help": {
+        "title": "Serve aiuto?",
+        "body": "Riferimento completo di richieste e risposte, con esempi copiabili per ogni endpoint.",
+        "link": "Leggi la documentazione"
+      }
+    },
+    "page": {
+      "crumbLabel": "Breadcrumb",
+      "crumbSettings": "Impostazioni",
+      "crumbHere": "Sviluppatori",
+      "title": "Sviluppatore",
+      "titleAccent": "Chiavi API",
+      "lead": "Genera una chiave per chiamare l'API REST dalle tue app, dal CRM o dall'automazione: invia messaggi, gestisci contatti, Template, Broadcast e altro. Una chiave per Workspace.",
+      "back": "Indietro",
+      "openDocs": "Apri la documentazione",
+      "loading": "Caricamento della tua chiave API",
+      "forbidden": {
+        "title": "Non puoi vedere le chiavi API",
+        "body": "Il tuo ruolo non include l'accesso alle chiavi API. Chiedi a un admin del Workspace di darti il permesso per le chiavi API."
+      }
+    },
+    "banner": {
+      "title": "La tua nuova chiave API",
+      "warning": "Copiala adesso e conservala al sicuro. Per la tua sicurezza ne conserviamo solo un hash, quindi non verrà mai più mostrata."
+    },
+    "key": {
+      "title": "La tua chiave API",
+      "active": "Attiva",
+      "untitled": "Chiave senza titolo",
+      "created": "Creata {date}",
+      "lastUsed": "Ultimo utilizzo {when}",
+      "never": "mai",
+      "revoke": "Revoca",
+      "noRevoke": "Il tuo ruolo non può revocare le chiavi API.",
+      "revoked": "Chiave API revocata. Qualsiasi app che la usa smetterà di funzionare subito.",
+      "footer": "È consentita una sola chiave per Workspace. Revoca questa per emetterne una nuova.",
+      "confirm": {
+        "title": "Revocare questa chiave?",
+        "message": "Qualsiasi app o integrazione che usa questa chiave smetterà subito di funzionare. L'operazione non può essere annullata. Potrai creare una nuova chiave in seguito.",
+        "accept": "Revoca",
+        "cancel": "Annulla"
+      }
+    },
+    "create": {
+      "title": "Crea la tua chiave",
+      "help": "Dai un nome alla chiave per ricordare dove viene usata. La chiave viene mostrata una sola volta alla creazione.",
+      "name": "Nome della chiave",
+      "placeholder": "es. Backend di produzione",
+      "submit": "Crea chiave",
+      "submitting": "Creazione della chiave…",
+      "created": "Chiave API creata. Copiala adesso: non verrà mostrata di nuovo.",
+      "noCreate": "Il tuo ruolo non può creare chiavi API. Chiedi a un admin del Workspace.",
+      "planLocked": "Il tuo piano non include l'API REST.",
+      "errors": {
+        "required": "Inserisci un nome per la chiave.",
+        "tooLong": "Il nome può avere al massimo 120 caratteri."
+      }
+    },
+    "quickstart": {
+      "title": "Guida rapida",
+      "reference": "Riferimento completo",
+      "intro": "Invia il tuo primo messaggio. Sostituisci la chiave e il destinatario:"
+    },
+    "errors": {
+      "planLimit": "Hai già una chiave API attiva. Revocala prima di crearne una nuova: è consentita una sola chiave per Workspace.",
+      "planLocked": "Il tuo piano non include l'API REST. Passa a un piano superiore per creare chiavi API.",
+      "forbidden": "Non hai il permesso di farlo.",
+      "validation": "Il nome della chiave non è valido. Controllalo e riprova.",
+      "notFound": "Questa chiave non esiste più. L'elenco è stato aggiornato.",
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "unexpected": "Qualcosa è andato storto da parte nostra. Riprova tra un momento.",
+      "loadFailed": "Non è stato possibile caricare la tua chiave API.",
+      "retry": "Riprova",
+      "upgrade": "Vedi i piani",
+      "requestId": "ID richiesta: {id}"
+    }
+  }
+}

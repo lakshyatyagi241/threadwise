@@ -1,0 +1,326 @@
+{
+  "invoicing": {
+    "nav": {
+      "creditNotes": "Ghi chú tín dụng"
+    },
+    "errors": {
+      "codes": {
+        "CN_EXCEEDS_INVOICE": "Tổng các ghi chú tín dụng không được vượt quá hóa đơn. Hãy giảm số tiền hoặc ghi có phần còn lại.",
+        "CN_NOT_DRAFT": "Chỉ ghi chú tín dụng nháp mới có thể chỉnh sửa hoặc xóa. Tải lại để xem trạng thái hiện tại.",
+        "CN_ALREADY_VOID": "Ghi chú tín dụng này đã bị hủy.",
+        "CN_HAS_REFUND": "Ghi chú tín dụng này đã hoàn tiền mặt nên không thể hủy. Khoản hoàn tiền vẫn nằm trong sổ thanh toán.",
+        "CN_NOTHING_TO_CREDIT": "Không còn gì để ghi có ở đây. Hãy chọn dòng còn số lượng, hoặc thêm số tiền.",
+        "CN_LINE_INVALID": "Dòng ghi có không hợp lệ: số lượng vượt quá phần còn lại hoặc số tiền sai. Hãy kiểm tra các dòng được đánh dấu.",
+        "INV_NOT_ISSUED": "Ghi chú tín dụng chỉ có thể lập cho hóa đơn đã phát hành."
+      }
+    },
+    "creditNotes": {
+      "status": {
+        "draft": "Bản nháp",
+        "issued": "Đã phát hành",
+        "void": "Đã hủy"
+      },
+      "reasons": {
+        "return": "Trả hàng",
+        "price_adjustment": "Điều chỉnh giá",
+        "billing_error": "Lỗi xuất hóa đơn",
+        "cancellation": "Hủy đơn",
+        "goodwill": "Bồi thường thiện chí",
+        "other": "Khác"
+      },
+      "settlements": {
+        "balance": "Trừ vào số dư",
+        "refund": "Hoàn tiền mặt"
+      },
+      "tabs": {
+        "label": "Trạng thái ghi chú tín dụng",
+        "all": "Tất cả",
+        "draft": "Bản nháp",
+        "issued": "Đã phát hành",
+        "void": "Đã hủy"
+      },
+      "list": {
+        "title": "Ghi chú tín dụng",
+        "subtitle": "Chứng từ giảm số tiền người mua phải trả trên hóa đơn đã phát hành.",
+        "invoices": "Hóa đơn",
+        "newCreditNote": "Ghi chú tín dụng mới",
+        "search": "Tìm theo số hoặc người mua",
+        "reset": "Xóa bộ lọc",
+        "refresh": "Làm mới",
+        "tableLabel": "Ghi chú tín dụng",
+        "noAccessTitle": "Không có quyền truy cập",
+        "noAccess": "Bạn không có quyền xem ghi chú tín dụng.",
+        "emptyFilteredTitle": "Không có ghi chú tín dụng nào khớp",
+        "emptyFiltered": "Thử tìm kiếm khác hoặc xóa bộ lọc.",
+        "resetFilters": "Xóa bộ lọc",
+        "empty": {
+          "all": {
+            "title": "Chưa có ghi chú tín dụng nào",
+            "message": "Ghi có hóa đơn đã phát hành khi hàng bị trả lại, giá sai hoặc bạn muốn hoàn lại một khoản."
+          },
+          "draft": {
+            "title": "Không có bản nháp",
+            "message": "Ghi chú tín dụng đang soạn sẽ hiển thị ở đây."
+          },
+          "issued": {
+            "title": "Chưa phát hành",
+            "message": "Ghi chú tín dụng đã phát hành có số riêng và đã làm thay đổi hóa đơn."
+          },
+          "void": {
+            "title": "Chưa có mục nào bị hủy",
+            "message": "Ghi chú tín dụng đã hủy được lưu tại đây."
+          }
+        },
+        "showing": "{count, plural, other {# ghi chú tín dụng}} đã tải",
+        "loadMore": "Tải thêm",
+        "allLoaded": "Đã tải hết",
+        "loading": "Đang tải ghi chú tín dụng",
+        "contactLoading": "...",
+        "invoiceChip": "Hóa đơn {number}",
+        "clearInvoice": "Hiển thị ghi chú tín dụng của mọi hóa đơn"
+      },
+      "table": {
+        "draft": "Bản nháp",
+        "scrollArea": "Bảng ghi chú tín dụng, cuộn ngang",
+        "columns": {
+          "number": "Ghi chú tín dụng",
+          "invoice": "Hóa đơn",
+          "buyer": "Người mua",
+          "reason": "Lý do",
+          "settlement": "Cách tất toán",
+          "total": "Tổng cộng",
+          "applied": "Trừ vào số dư",
+          "refunded": "Đã hoàn tiền mặt",
+          "issued": "Ngày phát hành",
+          "status": "Trạng thái"
+        }
+      },
+      "row": {
+        "moreFor": "Thao tác khác cho {name}",
+        "draft": "bản nháp",
+        "open": "Mở",
+        "edit": "Chỉnh sửa bản nháp",
+        "issue": "Phát hành",
+        "pdf": "Tải PDF",
+        "print": "In",
+        "void": "Hủy",
+        "delete": "Xóa bản nháp"
+      },
+      "dialogs": {
+        "draftName": "bản nháp này",
+        "close": "Đóng",
+        "keep": "Giữ lại",
+        "done": {
+          "issue": "Đã phát hành ghi chú tín dụng {name}.",
+          "void": "Đã hủy ghi chú tín dụng {name}.",
+          "delete": "Đã xóa bản nháp."
+        },
+        "issue": {
+          "title": "Phát hành ghi chú tín dụng này?",
+          "message": "Ghi chú sẽ nhận số riêng và giảm số tiền người mua nợ trên hóa đơn. Nếu hoàn tiền mặt, số tiền được trả lại qua sổ thanh toán. Sau đó sẽ không thể chỉnh sửa.",
+          "confirm": "Phát hành ghi chú tín dụng"
+        },
+        "void": {
+          "title": "Hủy ghi chú tín dụng này?",
+          "warning": "Khoản ghi có sẽ không còn được tính: hóa đơn trở về trạng thái trước ghi chú tín dụng này.",
+          "reason": "Vì sao bị hủy?",
+          "reasonHint": "Bắt buộc. Lý do được lưu trên ghi chú tín dụng.",
+          "confirm": "Hủy ghi chú tín dụng"
+        },
+        "delete": {
+          "title": "Xóa bản nháp này?",
+          "message": "Bản nháp sẽ bị xóa vĩnh viễn. Chưa có gì được phát hành nên hóa đơn không thay đổi.",
+          "confirm": "Xóa bản nháp"
+        }
+      },
+      "picker": {
+        "total": "Tổng hóa đơn",
+        "paid": "Đã thanh toán",
+        "credited": "Đã ghi có đến nay",
+        "balance": "Số dư còn nợ",
+        "loading": "Đang tải hóa đơn",
+        "change": "Đổi hóa đơn",
+        "search": "Tìm hóa đơn đã phát hành theo số hoặc người mua",
+        "results": "Hóa đơn có thể ghi có",
+        "searching": "Đang tìm...",
+        "none": "Không tìm thấy hóa đơn đã phát hành nào.",
+        "more": "Xem thêm",
+        "totalShort": "Tổng cộng",
+        "notCreditable": "Ghi chú tín dụng chỉ có thể lập cho hóa đơn đã phát hành (đã phát hành, thanh toán một phần, quá hạn hoặc đã thanh toán). Hãy chọn hóa đơn khác."
+      },
+      "lines": {
+        "invoiceLines": "Các dòng của hóa đơn",
+        "creditLine": "Ghi có {name}",
+        "lineFacts": "Đã lập {qty} với {amount} trước thuế",
+        "tax": "Thuế",
+        "taxIncluded": "{name} {rate}% đã bao gồm trong giá",
+        "taxAdded": "{name} {rate}% cộng thêm",
+        "alreadyCredited": "Đã ghi có {qty}, còn {left}",
+        "fullyCredited": "Đã ghi có toàn bộ",
+        "qtyToCredit": "Số lượng cần ghi có",
+        "freeTitle": "Dòng tự do",
+        "freeHint": "Khoản bồi thường thiện chí hoặc điều chỉnh không gắn với dòng nào. Số tiền chưa gồm thuế.",
+        "description": "Mô tả",
+        "amount": "Số tiền trước thuế",
+        "taxRate": "Thuế suất",
+        "noTax": "Không thuế",
+        "inclusive": "đã bao gồm",
+        "removeFree": "Xóa dòng này",
+        "addFree": "Thêm dòng tự do"
+      },
+      "problems": {
+        "noInvoice": "Chọn hóa đơn cần ghi có.",
+        "nothing": "Chọn nội dung cần ghi có: một dòng hoặc một số tiền tự do.",
+        "qtyInvalid": "Nhập số lượng lớn hơn 0, tối đa 4 chữ số thập phân.",
+        "qtyExceeds": "Dòng này còn tối đa {max} có thể ghi có.",
+        "descriptionRequired": "Mô tả nội dung được ghi có.",
+        "amountInvalid": "Nhập số tiền lớn hơn 0.",
+        "noteTooLong": "Ghi chú dài hơn 2000 ký tự."
+      },
+      "estimate": {
+        "title": "Ước tính khoản ghi có",
+        "disclaimer": "Ước tính được tính tại đây theo giá và thuế của hóa đơn. Số liệu máy chủ lưu mới là số liệu cuối cùng.",
+        "empty": "Chưa có gì để ghi có. Hãy chọn toàn bộ hóa đơn hoặc đánh dấu các dòng.",
+        "lineQty": "Số lượng {qty}",
+        "taxSummary": "Tóm tắt thuế",
+        "included": "đã bao gồm",
+        "taxOn": "{tax} trên {base}",
+        "subtotal": "Trước thuế",
+        "tax": "Thuế",
+        "total": "Tổng ghi có",
+        "exceeds": "Số này vượt quá mức hóa đơn còn cho phép ghi có ({max}). Máy chủ sẽ từ chối.",
+        "money": "Số tiền sẽ được xử lý thế nào",
+        "balanceBefore": "Số dư còn nợ hiện tại",
+        "balanceAfter": "Số dư còn nợ sau khi ghi có",
+        "applied": "Trừ vào hóa đơn",
+        "refunded": "Hoàn tiền mặt",
+        "refundNote": "Hoàn tiền mặt: số tiền người mua đã trả vượt quá số còn nợ sẽ được hoàn lại qua sổ thanh toán khi bạn phát hành.",
+        "balanceNote": "Trừ vào số dư: không chi tiền. Khoản ghi có chỉ làm giảm số tiền người mua còn nợ."
+      },
+      "builder": {
+        "noAccess": "Bạn không có quyền tạo ghi chú tín dụng.",
+        "backToList": "Quay lại ghi chú tín dụng",
+        "loading": "Đang tải ghi chú tín dụng",
+        "notDraft": "Chỉ ghi chú tín dụng nháp mới có thể chỉnh sửa.",
+        "openIt": "Mở ghi chú tín dụng",
+        "back": "Quay lại",
+        "newTitle": "Ghi chú tín dụng mới",
+        "editTitle": "Chỉnh sửa bản nháp ghi chú tín dụng",
+        "conflict": "Trong lúc bạn chỉnh sửa, người khác đã thay đổi ghi chú tín dụng này. Hãy tải lại để xem phiên bản mới nhất; các thay đổi của bạn ở đây sẽ bị mất.",
+        "reload": "Tải lại",
+        "invoice": {
+          "title": "Hóa đơn cần ghi có",
+          "hint": "Một ghi chú tín dụng thuộc về một hóa đơn đã phát hành."
+        },
+        "details": {
+          "title": "Chi tiết",
+          "reason": "Lý do",
+          "issueDate": "Ngày phát hành",
+          "issueDateHint": "Để trống để dùng ngày bạn phát hành (hôm nay là {today}).",
+          "note": "Ghi chú",
+          "noteHint": "In trên ghi chú tín dụng. Không bắt buộc."
+        },
+        "settlement": {
+          "title": "Số tiền sẽ được xử lý thế nào",
+          "hint": "Chọn ngay bây giờ, áp dụng khi ghi chú tín dụng được phát hành.",
+          "balance": {
+            "title": "Trừ vào số dư hóa đơn",
+            "body": "Hóa đơn còn nợ ít hơn. Không chuyển tiền. Dùng khi người mua chưa thanh toán hoặc sẽ giữ khoản ghi có."
+          },
+          "refund": {
+            "title": "Hoàn tiền mặt",
+            "body": "Phần người mua đã trả vượt quá số còn nợ sẽ được hoàn lại qua sổ thanh toán."
+          }
+        },
+        "what": {
+          "title": "Nội dung cần ghi có",
+          "pickFirst": "Hãy chọn hóa đơn trước.",
+          "loadingCredits": "Đang kiểm tra các ghi chú tín dụng trước đó của hóa đơn này",
+          "full": {
+            "title": "Toàn bộ phần hóa đơn còn lại",
+            "body": "Ghi có mọi dòng và phí vận chuyển cùng ghi chú tín dụng đầu tiên. Vẫn còn có thể ghi có:"
+          },
+          "lines": {
+            "title": "Một số dòng hoặc số tiền",
+            "body": "Đánh dấu các dòng và số lượng cần ghi có, hoặc thêm số tiền tự do."
+          }
+        },
+        "saveDraft": "Lưu bản nháp",
+        "saveAndIssue": "Lưu và phát hành",
+        "cancel": "Hủy",
+        "estimateWaiting": "Chọn hóa đơn để xem ước tính khoản ghi có.",
+        "savedToast": "Đã lưu ghi chú tín dụng dưới dạng bản nháp.",
+        "issuedToast": "Đã phát hành ghi chú tín dụng {number}.",
+        "savedNotIssued": "Đã lưu dưới dạng bản nháp nhưng không thể phát hành: {reason}"
+      },
+      "detail": {
+        "noAccess": "Bạn không có quyền xem ghi chú tín dụng.",
+        "loading": "Đang tải ghi chú tín dụng",
+        "back": "Quay lại ghi chú tín dụng",
+        "backToList": "Quay lại ghi chú tín dụng",
+        "draft": "Bản nháp",
+        "againstInvoice": "Cho hóa đơn",
+        "edit": "Chỉnh sửa",
+        "issue": "Phát hành",
+        "pdf": "PDF",
+        "print": "In",
+        "void": "Hủy",
+        "delete": "Xóa",
+        "cannotVoidRefunded": "Ghi chú tín dụng này đã hoàn tiền mặt nên không thể hủy. Khoản hoàn tiền vẫn nằm trong sổ thanh toán.",
+        "voidedOn": "Đã hủy ngày {date}",
+        "voided": "Ghi chú tín dụng này đã bị hủy.",
+        "voidReason": "Lý do"
+      },
+      "money": {
+        "title": "Số tiền đã được xử lý thế nào",
+        "titleDraft": "Số tiền sẽ được xử lý thế nào",
+        "total": "Tổng ghi có",
+        "applied": "Trừ vào hóa đơn",
+        "refunded": "Hoàn tiền mặt",
+        "voidNote": "Ghi chú tín dụng này đã bị hủy nên không còn làm giảm hóa đơn.",
+        "draftNote": "Nếu phát hành ngay bây giờ:",
+        "estimate": "Chỉ là ước tính cho đến khi được phát hành.",
+        "balanceBody": "Tất toán: trừ vào số dư. Không chi tiền.",
+        "refundBody": "Tất toán: hoàn tiền mặt. Số tiền đã trả vượt quá số còn nợ sẽ được hoàn lại cho người mua qua sổ thanh toán."
+      },
+      "after": {
+        "title": "Hóa đơn sau ghi chú tín dụng này",
+        "titleNow": "Hóa đơn hiện tại",
+        "total": "Tổng hóa đơn",
+        "paid": "Đã thanh toán",
+        "credited": "Đã ghi có",
+        "balance": "Số dư còn nợ",
+        "credit": "Số dư có lợi cho người mua"
+      },
+      "paper": {
+        "label": "Ghi chú tín dụng {number}",
+        "labelDraft": "Ghi chú tín dụng nháp",
+        "void": "Đã hủy",
+        "sellerFallback": "Doanh nghiệp của bạn",
+        "title": "Ghi chú tín dụng",
+        "draftNumber": "Bản nháp",
+        "creditedTo": "Ghi có cho",
+        "buyerFallback": "Người mua",
+        "issued": "Đã phát hành",
+        "invoice": "Hóa đơn",
+        "item": "Mặt hàng",
+        "qty": "SL",
+        "unit": "Đơn giá",
+        "tax": "Thuế",
+        "net": "Thành tiền",
+        "taxAmount": "Tiền thuế",
+        "total": "Tổng cộng",
+        "taxFallback": "Thuế",
+        "taxSummary": "Tóm tắt thuế",
+        "taxRate": "Thuế suất",
+        "taxBase": "Số tiền chịu thuế",
+        "included": "đã bao gồm",
+        "subtotal": "Trước thuế",
+        "taxTotal": "Thuế",
+        "totalCredit": "Tổng ghi có",
+        "reason": "Lý do",
+        "note": "Ghi chú"
+      }
+    }
+  }
+}

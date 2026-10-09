@@ -1,0 +1,268 @@
+{
+  "invoicing": {
+    "method": {
+      "bank": "銀行振込",
+      "manual": "手動",
+      "wa_pay": "WhatsApp Pay",
+      "storefront": "オンラインストア"
+    },
+    "toolbar": {
+      "currency": "通貨",
+      "currencyPlaceholder": "USD",
+      "issued": "発行済み",
+      "issuedWindow": "発行日の範囲",
+      "due": "支払期限",
+      "dueWindow": "支払期限の範囲",
+      "dueFrom": "支払期限（開始）",
+      "dueTo": "支払期限（終了）",
+      "docType": "書類の種類",
+      "anyDocType": "すべての種類",
+      "mine": "自分の請求書",
+      "docTypes": {
+        "tax_invoice": "税務請求書",
+        "proforma": "見積請求書",
+        "receipt": "領収書"
+      }
+    },
+    "strip": {
+      "label": "未収金",
+      "outstanding": "未収（{currency}）",
+      "overdue": "うち期限超過"
+    },
+    "row": {
+      "creditNote": "クレジットノートを作成",
+      "downloadPdf": "PDFをダウンロード"
+    },
+    "bulk": {
+      "sendLink": "リンクを送信済みにする",
+      "someSkipped": "{count, plural, other {選択した#件の請求書は、この操作に対応していないためスキップされました。}}",
+      "done": {
+        "send": "{count, plural, other {#件の請求書を送信済みにしました。}}"
+      },
+      "confirm": {
+        "delete": {
+          "message": "{count, plural, other {#件の下書きを完全に削除します。下書き以外の請求書は変更されません。}}"
+        }
+      },
+      "voidDialog": {
+        "title": "選択した請求書を無効化",
+        "close": "閉じる",
+        "keep": "請求書を残す",
+        "confirm": "{count, plural, other {#件の請求書を無効化}}",
+        "warning": "{count, plural, other {#件の請求書を無効にします。番号は保持されますが、入金や編集はできなくなります。}}",
+        "skipped": "{count, plural, other {選択した#件の請求書はスキップされます。無効化できるのは、入金もクレジットノートもない発行済みの請求書のみです。}}",
+        "reason": "理由（すべての請求書に記録）",
+        "reasonRequired": "これらの請求書を無効にする理由を入力してください。"
+      }
+    },
+    "actions": {
+      "sentVia": {
+        "link": "リンク付きで送信済みとして記録しました。",
+        "email": "請求書をメールで送信しました。",
+        "whatsapp": "請求書をWhatsAppで送信しました。"
+      },
+      "markedPaid": "入金済みにしました。",
+      "linkRegenerated": "新しいリンクを作成しました。以前のリンクは使用できなくなります。",
+      "linkRevoked": "リンクを無効にしました。",
+      "linkUnavailable": "この請求書には有効なリンクがありません。請求書を開いて新しいリンクを作成してください。"
+    },
+    "voidDialog": {
+      "reasonHint": "必須。請求書の履歴に残ります。",
+      "reasonRequired": "この請求書を無効にする理由を入力してください。",
+      "refundFirst": "この請求書には入金があります。先に入金を返金（請求書の入金一覧から）してから、無効化してください。",
+      "creditsFirst": "この請求書にはクレジットノートがあります。先にクレジットノートを無効化してから、請求書を無効化してください。"
+    },
+    "sendDialog": {
+      "loading": "請求書を読み込み中",
+      "channel": "送付方法は？",
+      "channels": {
+        "link": "自分でリンクを共有",
+        "email": "メール",
+        "whatsapp": "WhatsApp"
+      },
+      "action": {
+        "link": "送信済みにする",
+        "email": "メールを送信",
+        "whatsapp": "WhatsAppで送信"
+      },
+      "linkOff": "この請求書には有効なリンクがありません。請求書のリンクカードから新しいリンクを作成してから共有してください。",
+      "linkRecords": "リンクを自分で共有した場合は、送信済みとして記録されるだけです。",
+      "noEmail": "この請求書にはメールアドレスがありません",
+      "noPhone": "この請求書には電話番号がありません",
+      "noEmailHelp": "この請求書には購入者のメールアドレスがありません。このウィンドウを閉じ、「詳細を編集」から追加してから、もう一度お試しください。",
+      "noPhoneHelp": "この請求書には購入者の電話番号がありません。このウィンドウを閉じ、「詳細を編集」から追加してから、もう一度お試しください。",
+      "message": "メッセージ",
+      "messageHint": "任意。請求書に添えるメッセージに追加されます。",
+      "deliveryNote": "請求書は購入者への配信待ちに入りました。送信日時は履歴に表示されます。"
+    },
+    "editDialog": {
+      "title": "詳細を編集",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "save": "変更を保存",
+      "saved": "請求書の詳細を保存しました。",
+      "reload": "請求書を再読み込み",
+      "conflict": "編集中に他のユーザーがこの請求書を変更しました。最新版を読み込み、変更をやり直してください。",
+      "intro": "発行済みの請求書は、明細、金額、番号体系が保持されます。これらの詳細は引き続き変更できます。",
+      "email": "購入者のメールアドレス",
+      "phone": "購入者の電話番号",
+      "phoneHint": "国番号付きで入力してください。例: +14155550123",
+      "contact": "連絡先",
+      "owner": "担当者",
+      "dueDate": "支払期限",
+      "dueHint": "支払条件を延長または短縮します。",
+      "reference": "参照番号",
+      "notes": "備考",
+      "terms": "条件"
+    },
+    "payDialog": {
+      "overpayNote": "残高より {extra} 多くなります。クレジットとして記録される前に確認が必要です。",
+      "overpayConfirm": "残高より {extra} 多い分は、クレジットとして記録され請求書に表示されます。確定するにはもう一度ボタンを押してください。",
+      "problems": {
+        "tooMuch": "この請求書の未払額を超えています。"
+      }
+    },
+    "markPaidDialog": {
+      "title": "入金済みにする",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "confirm": "入金を記録",
+      "message": "残高全額 {amount} を本日受領済みとして記録しますか？",
+      "method": "受領者"
+    },
+    "refundDialog": {
+      "problems": {
+        "dateFuture": "返金日は未来の日付にできません。"
+      }
+    },
+    "paymentsSection": {
+      "refundChip": "返金",
+      "receipt": "領収書",
+      "refundOf": "{receipt}を返金",
+      "refundedSoFar": "これまでに {amount} を返金済み"
+    },
+    "activity": {
+      "none": "まだ何も行われていません。",
+      "actors": {
+        "buyer": "購入者",
+        "gateway": "決済ゲートウェイ",
+        "system": "システム"
+      },
+      "events": {
+        "sent": "購入者に送信",
+        "overdue": "期限超過になりました",
+        "partially_paid": "一部入金済み",
+        "link_regenerated": "公開リンクを再発行",
+        "link_revoked": "公開リンクを無効化",
+        "pay_attempt": "オンライン決済を試行",
+        "credit_note_issued": "クレジットノート"
+      }
+    },
+    "linked": {
+      "invoiced": "請求済み",
+      "paid": "入金済み",
+      "outstanding": "未払い",
+      "overdue": "期限超過",
+      "latest": "{count, plural, other {最新の#件の請求書を表示しています。}}"
+    },
+    "detail": {
+      "editDetails": "詳細を編集",
+      "downloadPdf": "PDF",
+      "createCreditNote": "クレジットノートを作成",
+      "linkOffBanner": "購入者のリンクが無効になっているため、購入者はこの請求書を開けません。リンクカードから新しいリンクを作成してください。",
+      "refunded": "返金済み",
+      "credited": "貸方計上済み",
+      "credit": "クレジット",
+      "detailsLabel": "請求書の詳細",
+      "contact": "連絡先",
+      "company": "会社",
+      "quote": "見積",
+      "salesOrder": "販売注文",
+      "recurring": "定期スケジュール",
+      "makeRecurring": "定期請求にする",
+      "reference": "参照番号",
+      "owner": "担当者",
+      "createdBy": "作成者",
+      "overpaid": "この請求書で必要な額を超えて入金または貸方計上されています。超過分はクレジットとして表示されます。",
+      "voidNeedsRefund": "この請求書を無効化するには、先に入金を返金してください。また、クレジットノートがないことも必要です。",
+      "sources": {
+        "manual": "手動で作成",
+        "quote": "見積から作成",
+        "order": "注文から作成",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "オンラインストア",
+        "api": "API",
+        "ai": "AIアシスタント",
+        "recurring": "定期請求書",
+        "sales_order": "販売注文"
+      },
+      "creditNotes": {
+        "title": "クレジットノート",
+        "create": "クレジットノートを作成",
+        "loading": "クレジットノートを読み込み中",
+        "none": "この請求書に対するクレジットノートはありません。",
+        "draft": "下書き",
+        "status": {
+          "draft": "下書き",
+          "issued": "発行済み",
+          "void": "取消"
+        }
+      }
+    },
+    "linkCard": {
+      "title": "公開リンク",
+      "address": "リンクのアドレス",
+      "state": {
+        "active": "有効",
+        "revoked": "オフ",
+        "expired": "期限切れ"
+      },
+      "off": {
+        "revoked": "リンクはオフになっています。購入者には、この請求書は利用できないという内容のページが表示されます。",
+        "expired": "リンクの期限が切れています。購入者には、この請求書は利用できないという内容のページが表示されます。"
+      },
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "expires": "有効期限",
+      "revokedAt": "オフ",
+      "views": "表示回数",
+      "firstViewed": "初回表示",
+      "lastViewed": "最終表示",
+      "open": "購入者ページを開く",
+      "regenerate": "新しいリンク",
+      "revoke": "オフにする",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "regenerateTitle": "新しいリンクを作成",
+      "regenerateWarning": "現在のリンクはすぐに使えなくなります。リンクを持っている人には、この請求書は利用できないと表示されます。",
+      "regenerateConfirm": "新しいリンクを作成",
+      "expiry": "新しいリンクの有効期間",
+      "expiryNever": "無期限",
+      "expiryDays": "{count, plural, other {# 日}}",
+      "revokeTitle": "リンクをオフにしますか?",
+      "revokeMessage": "購入者はこのリンクから請求書を開いたり支払ったりできなくなります。後で新しいリンクを作成できます。",
+      "revokeConfirm": "リンクをオフにする"
+    },
+    "errors": {
+      "codes": {
+        "INV_NOT_DRAFT": "この請求書はすでに発行済みのため、明細と金額は変更できません。",
+        "INV_NOT_ISSUED": "これは発行済みの請求書のみ可能です。先に下書きを発行してください。",
+        "INV_ALREADY_VOID": "この請求書はすでに取消済みです。",
+        "INV_HAS_PAYMENTS": "この請求書にはまだ入金があります。先に返金してから、請求書を取り消してください。",
+        "INV_HAS_CREDITS": "この請求書にはクレジットノートが紐づいています。先にクレジットノートを取り消してから、請求書を取り消してください。",
+        "INV_NOT_DELETABLE": "削除できるのは下書きのみです。代わりにこの請求書を取り消してください。",
+        "INV_NO_RECIPIENT": "この請求書には、そのチャネル用のメールアドレスまたは電話番号がありません。「詳細を編集」から追加して、もう一度お試しください。",
+        "INV_LINK_UNAVAILABLE": "この請求書には有効なリンクがありません。リンクカードから新しいリンクを作成してください。",
+        "INV_OWNER_INVALID": "この人はこのワークスペースの有効なメンバーではありません。別の担当者を選んでください。",
+        "PAY_OVERPAYMENT": "未払い残高を超えています。金額を下げるか、クレジットとして記録することを確認してください。",
+        "PAY_FUTURE_DATE": "入金日は未来の日付にできません。",
+        "PAY_CURRENCY_MISMATCH": "入金は請求書と同じ通貨で行う必要があります。",
+        "PAY_REFUND_EXCEEDS": "この入金で返金できる金額を超えています。",
+        "PAY_NOT_REFUNDABLE": "この項目は返金できません。返金できるのは残高のある入金のみです。",
+        "PAY_NOTHING_TO_PAY": "この請求書に支払い残高はありません。",
+        "ROW_VERSION_CONFLICT": "他のユーザーがこの請求書を今変更しました。再読み込みして最新版を確認してから、もう一度お試しください。"
+      }
+    }
+  }
+}

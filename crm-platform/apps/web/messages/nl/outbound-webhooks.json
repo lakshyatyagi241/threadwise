@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "Negeren"
+    },
+    "events": {
+      "contact_created": "Contact aangemaakt",
+      "contact_updated": "Contact bijgewerkt",
+      "contact_deleted": "Contact verwijderd",
+      "contact_tag_added": "Tag toegevoegd aan een contact",
+      "contact_opted_in": "Contact heeft zich aangemeld",
+      "deal_stage_changed": "Deal naar een andere fase verplaatst",
+      "task_created": "Taak aangemaakt",
+      "task_assigned": "Taak toegewezen",
+      "template_status_changed": "Sjabloonstatus gewijzigd",
+      "device_status_changed": "Apparaatstatus gewijzigd",
+      "conversation_reopened": "Gesprek heropend"
+    },
+    "page": {
+      "title": "Webhooks",
+      "subtitle": "Stuur gebeurtenissen uit deze workspace direct door naar je eigen systemen. Elke aflevering is een ondertekende JSON-POST, die opnieuw wordt geprobeerd wanneer je server niet antwoordt.",
+      "back": "Integraties en ontwikkelaars",
+      "add": "Webhook toevoegen",
+      "list": "Webhooks",
+      "emptyTitle": "Nog geen webhooks",
+      "empty": "Voeg een endpoint toe om gebeurtenissen te ontvangen, zoals een nieuw contact of een deal die van fase verandert.",
+      "noAccess": "Je hebt geen toegang tot webhooks.",
+      "loadFailed": "De webhooks konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "allEvents": "Alle gebeurtenissen",
+      "signed": "Ondertekend",
+      "health": {
+        "off": "Uit",
+        "failing": "Faalt",
+        "healthy": "Gezond",
+        "idle": "Nog geen afleveringen"
+      },
+      "activeFor": "Actief: {name}",
+      "lastDelivery": "Laatste aflevering {when}, antwoord {status}",
+      "noDeliveries": "Nog niets afgeleverd",
+      "noAnswer": "geen antwoord",
+      "counts": "{ok} afgeleverd, {failed} mislukt",
+      "lastError": "Laatste fout: {error}",
+      "deliveries": "Afleveringen",
+      "test": "Test verzenden",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "cancel": "Annuleren",
+      "deleteTitle": "Deze webhook verwijderen?",
+      "deleteMessage": "{name} ontvangt geen gebeurtenissen meer en het afleveringslogboek wordt verwijderd. Dit kan niet ongedaan worden gemaakt.",
+      "created": "Webhook toegevoegd.",
+      "saved": "Webhook opgeslagen.",
+      "deleted": "Webhook verwijderd.",
+      "deleteFailed": "De webhook kon niet worden verwijderd. Probeer het opnieuw.",
+      "toggleFailed": "De wijziging kon niet worden opgeslagen. Probeer het opnieuw.",
+      "testOk": "De test is afgeleverd (antwoord {status}).",
+      "testFailed": "De test is mislukt: {reason}",
+      "testError": "De test kon niet worden verzonden. Probeer het opnieuw."
+    },
+    "dialog": {
+      "addTitle": "Een webhook toevoegen",
+      "editTitle": "Webhook bewerken",
+      "close": "Sluiten",
+      "name": "Naam",
+      "nameHint": "Optioneel: een label voor jezelf, zoals het systeem dat hem ontvangt.",
+      "url": "Endpoint-URL",
+      "urlHint": "Een https-adres dat via internet bereikbaar is. Privé- en interne adressen worden geweigerd.",
+      "urlProblem": {
+        "empty": "Voer de endpoint-URL in.",
+        "tooLong": "De URL is te lang.",
+        "notHttps": "De URL moet beginnen met https://.",
+        "invalid": "Dit is geen geldige URL."
+      },
+      "secret": "Ondertekeningsgeheim",
+      "secretHint": "Optioneel. Wanneer ingesteld, bevat elke aflevering een handtekening die je server kan controleren. Het wordt nooit opnieuw getoond.",
+      "secretSetHint": "Er is een geheim ingesteld. Laat dit leeg om het te behouden, of typ een nieuwe om het te vervangen.",
+      "secretKeep": "Ongewijzigd",
+      "removeSecret": "Het ondertekeningsgeheim verwijderen (afleveringen worden niet ondertekend)",
+      "events": "Gebeurtenissen",
+      "allEvents": "Alle gebeurtenissen",
+      "pickEvents": "Kies minstens één gebeurtenis of kies alle gebeurtenissen.",
+      "active": "Actief",
+      "cancel": "Annuleren",
+      "create": "Webhook toevoegen",
+      "save": "Wijzigingen opslaan",
+      "failed": "De webhook kon niet worden opgeslagen. Probeer het opnieuw."
+    },
+    "deliveries": {
+      "title": "Leveringen: {name}",
+      "close": "Sluiten",
+      "empty": "Nog geen leveringen. Gebruik Test verzenden om er een te maken.",
+      "failed": "De leveringen konden niet worden geladen.",
+      "when": "Wanneer",
+      "event": "Gebeurtenis",
+      "result": "Antwoord",
+      "time": "Tijd",
+      "attempt": "Poging",
+      "test": "Test",
+      "noAnswer": "Geen antwoord"
+    }
+  }
+}

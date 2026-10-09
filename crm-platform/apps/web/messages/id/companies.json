@@ -1,0 +1,218 @@
+{
+  "companies": {
+    "nav": {
+      "companies": "Perusahaan"
+    },
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "errors": {
+      "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukan itu.",
+      "signedOut": "Sesi Anda telah berakhir. Masuk lagi untuk melanjutkan.",
+      "conflict": "Orang lain mengubah perusahaan ini saat Anda mengeditnya. Perubahan mereka dimuat; suntingan Anda dipertahankan, jadi tinjau lalu simpan lagi.",
+      "validation": "Sebagian yang dimasukkan tidak valid. Periksa kolom lalu coba lagi.",
+      "unavailable": "Perusahaan belum tersedia di server ini.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "notFound": "Perusahaan itu sudah tidak ada.",
+      "planDisabled": "Paket Anda tidak menyertakan perusahaan. Upgrade untuk membukanya.",
+      "ownerInvalid": "Pemilik harus anggota aktif workspace ini.",
+      "unexpected": "Terjadi kesalahan. Coba lagi sesaat lagi.",
+      "requestId": "ID permintaan",
+      "retry": "Coba lagi"
+    },
+    "list": {
+      "eyebrow": "CRM · Organisasi",
+      "title": "Perusahaan",
+      "subtitle": "Kelompokkan kontak dan deal di bawah satu organisasi — lihat semua kontak, deal terbuka, dan pendapatan yang dimenangkan di satu tempat.",
+      "newCompany": "Perusahaan baru",
+      "tiles": {
+        "companies": "Perusahaan",
+        "withDeals": "Dengan deal terbuka",
+        "wonRevenue": "Pendapatan dimenangkan"
+      },
+      "bulk": {
+        "label": "Tindakan massal",
+        "selected": "{count, plural, other {# perusahaan dipilih}}",
+        "delete": "Hapus",
+        "clear": "Hapus pilihan"
+      },
+      "loading": "Memuat perusahaan",
+      "unavailableTitle": "Perusahaan tidak tersedia",
+      "unavailable": "Layanan perusahaan belum diterapkan di server ini.",
+      "emptyFilteredTitle": "Tidak ada perusahaan yang cocok",
+      "emptyFiltered": "Coba pencarian lain atau hapus filter.",
+      "clearFilters": "Hapus filter",
+      "emptyTitle": "Belum ada perusahaan",
+      "empty": "Belum ada perusahaan. Buat yang pertama.",
+      "showing": "{count, plural, other {# perusahaan dimuat}}",
+      "loadMore": "Muat lebih banyak",
+      "allLoaded": "Semua perusahaan dimuat",
+      "deleteTitle": "Hapus perusahaan",
+      "deleteMessage": "Hapus perusahaan ini? Kontak dan deal-nya tetap disimpan dan hanya dilepas tautannya.",
+      "deleteManyTitle": "Hapus perusahaan",
+      "deleteManyMessage": "{count, plural, one {Hapus perusahaan ini? Kontak dan deal-nya tetap disimpan dan hanya dilepas tautannya.} other {Hapus # perusahaan ini? Kontak dan deal mereka tetap disimpan dan hanya dilepas tautannya.}}",
+      "delete": "Hapus",
+      "keep": "Pertahankan"
+    },
+    "toolbar": {
+      "label": "Filter perusahaan",
+      "search": "Cari perusahaan…",
+      "industry": "Industri",
+      "allIndustries": "Semua industri",
+      "owner": "Pemilik",
+      "allOwners": "Semua pemilik",
+      "noOwner": "Tanpa pemilik",
+      "withOpenDeals": "Dengan deal terbuka",
+      "sort": "Urutan",
+      "sorts": {
+        "created": "Terbaru dulu",
+        "name": "Nama A sampai Z"
+      },
+      "clear": "Hapus",
+      "refresh": "Segarkan"
+    },
+    "table": {
+      "label": "Perusahaan",
+      "selectAll": "Pilih semua perusahaan yang dimuat",
+      "select": "Pilih {name}",
+      "company": "Perusahaan",
+      "industry": "Industri",
+      "contacts": "Kontak",
+      "openDeals": "Deal terbuka",
+      "wonValue": "Nilai dimenangkan",
+      "actions": "Tindakan",
+      "delete": "Hapus perusahaan",
+      "deleteNamed": "Hapus perusahaan {name}"
+    },
+    "form": {
+      "eyebrow": "Perusahaan",
+      "newTitle": "Perusahaan baru",
+      "editTitle": "Edit perusahaan",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "create": "Buat",
+      "save": "Simpan perubahan",
+      "name": "Nama perusahaan *",
+      "namePlaceholder": "Acme Ltd",
+      "industry": "Industri",
+      "website": "Situs web",
+      "email": "Email",
+      "phone": "Telepon",
+      "notes": "Catatan",
+      "moreDetails": "Detail lainnya",
+      "sizeRange": "Ukuran",
+      "sizeHint": "Misalnya 1-10 atau 11-50.",
+      "owner": "Pemilik",
+      "noOwner": "Tanpa pemilik",
+      "me": "{name} (Anda)",
+      "address": "Alamat",
+      "problems": {
+        "required": "Nama perusahaan wajib diisi.",
+        "tooLong": "Terlalu panjang: maksimal {limit} karakter.",
+        "email": "Masukkan alamat email yang valid.",
+        "invalid": "Sebagian yang dimasukkan tidak valid.",
+        "ownerInvalid": "Pemilik harus anggota aktif workspace ini."
+      }
+    },
+    "toast": {
+      "created": "Perusahaan dibuat.",
+      "updated": "Perusahaan diperbarui.",
+      "deleted": "{count, plural, one {Perusahaan dihapus.} other {# perusahaan dihapus.}}",
+      "deletedSome": "{count, plural, other {# perusahaan dihapus}}, {failed, plural, other {# tidak dapat dihapus.}}",
+      "deleteFailed": "Tidak dapat menghapus. Coba lagi.",
+      "contactUnlinked": "Kontak dikeluarkan dari perusahaan.",
+      "contactAlreadyOut": "Kontak itu sudah tidak ada di perusahaan ini.",
+      "contactUnlinkFailed": "Tidak dapat mengeluarkan kontak. Coba lagi.",
+      "contactsLinked": "{count, plural, other {# kontak ditambahkan ke perusahaan.}}",
+      "contactsLinkedSome": "{count, plural, other {# kontak ditambahkan}}, {failed, plural, other {# tidak dapat ditambahkan.}}",
+      "contactsLinkFailed": "Tidak dapat menambahkan kontak. Coba lagi."
+    },
+    "detail": {
+      "back": "Semua perusahaan",
+      "loading": "Memuat perusahaan",
+      "notFoundTitle": "Perusahaan tidak ditemukan",
+      "notFound": "Perusahaan ini tidak ada atau telah dihapus.",
+      "edit": "Edit",
+      "delete": "Hapus",
+      "keep": "Pertahankan",
+      "tiles": {
+        "contacts": "Kontak",
+        "openDeals": "Deal terbuka",
+        "wonRevenue": "Pendapatan dimenangkan"
+      },
+      "notes": "Catatan",
+      "deleteTitle": "Hapus perusahaan",
+      "deleteMessage": "Hapus perusahaan ini? Kontak dan deal-nya tetap disimpan dan hanya dilepas tautannya.",
+      "details": "Detail",
+      "owner": "Pemilik",
+      "sizeRange": "Ukuran",
+      "address": "Alamat",
+      "createdBy": "Dibuat oleh",
+      "created": "Dibuat",
+      "updated": "Terakhir diubah"
+    },
+    "contacts": {
+      "title": "Kontak",
+      "add": "Tambah kontak",
+      "loading": "Memuat kontak",
+      "empty": "Tidak ada kontak yang ditautkan ke perusahaan ini.",
+      "unnamed": "(tanpa nama)",
+      "unlink": "Keluarkan dari perusahaan",
+      "unlinkNamed": "Keluarkan {name} dari perusahaan",
+      "loadMore": "Muat lebih banyak",
+      "addModal": {
+        "title": "Tambah kontak ke perusahaan",
+        "close": "Tutup",
+        "cancel": "Batal",
+        "add": "{count, plural, other {Tambah # kontak}}",
+        "search": "Cari kontak berdasarkan nama, email, atau nomor",
+        "loading": "Mencari kontak",
+        "noneTitle": "Kontak tidak ditemukan",
+        "none": "Tidak ada kontak yang cocok. Coba nama, email, atau nomor lain.",
+        "unnamed": "(tanpa nama)",
+        "already": "Sudah ada di sini",
+        "willMove": "Di perusahaan lain",
+        "hint": "Satu kontak hanya dapat tergabung di satu perusahaan. Menambahkan kontak yang ada di perusahaan lain akan memindahkannya ke sini."
+      }
+    },
+    "deals": {
+      "title": "Deal",
+      "loading": "Memuat deal",
+      "empty": "Tidak ada deal untuk perusahaan ini.",
+      "loadMore": "Muat lebih banyak",
+      "status": {
+        "open": "Terbuka",
+        "won": "Menang",
+        "lost": "Kalah"
+      }
+    },
+    "activity": {
+      "title": "Aktivitas",
+      "loading": "Memuat aktivitas",
+      "none": "Belum ada yang terjadi pada perusahaan ini.",
+      "loadMore": "Muat lebih banyak",
+      "empty": "kosong",
+      "system": "Sistem",
+      "actions": {
+        "insert": "membuat perusahaan",
+        "update": "mengubah perusahaan",
+        "delete": "menghapus perusahaan"
+      },
+      "contactLinked": "Kontak ditambahkan",
+      "contactUnlinked": "Kontak dikeluarkan",
+      "deletedContact": "kontak yang dihapus",
+      "fields": {
+        "name": "Nama",
+        "website": "Situs web",
+        "email": "Email",
+        "phone": "Telepon",
+        "industry": "Industri",
+        "sizeRange": "Ukuran",
+        "address": "Alamat",
+        "notes": "Catatan",
+        "owner": "Pemilik"
+      }
+    }
+  }
+}

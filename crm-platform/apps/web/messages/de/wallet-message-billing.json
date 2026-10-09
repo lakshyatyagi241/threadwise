@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "tile": {
+      "label": "Ausgaben, Guthaben und Kontoauszug",
+      "description": "Behalten Sie Ihre Ausgaben im Blick: Ihr Nachrichtenguthaben, Aufladungen, alle Belastungen und den vollständigen Kontoauszug.",
+      "keywords": "Guthaben Aufladen Geld hinzufügen Kredit Kontoauszug Abrechnung Ausgaben Ausgabe Kosten Ausgaben Belastungen Nutzung Transaktionen Verlauf Hauptbuch"
+    },
+    "common": {
+      "loading": "Wird geladen",
+      "retry": "Erneut versuchen",
+      "requestId": "Anfrage-ID",
+      "cancel": "Abbrechen",
+      "back": "Zurück",
+      "close": "Schließen",
+      "dismiss": "Ausblenden",
+      "on": "Ein",
+      "off": "Aus",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "pagination": "Seitennavigation",
+      "pageN": "Seite {page}",
+      "deniedTitle": "Sie haben keinen Zugriff darauf",
+      "deniedBody": "Bitten Sie einen Workspace-Administrator um die Berechtigung „{permission}“."
+    },
+    "errors": {
+      "noteRequired": "Es ist ein Grund mit mindestens 5 Zeichen erforderlich.",
+      "amountInvalid": "Dieser Betrag wird nicht akzeptiert. Verwenden Sie einen positiven Betrag mit höchstens 2 Nachkommastellen.",
+      "insufficient": "Das Guthaben reicht dafür nicht aus.",
+      "notFound": "Dieser Workspace hat kein Guthaben-Konto.",
+      "rateInvalid": "Ein Tarif konnte nicht gespeichert werden. Prüfen Sie Land, Kategorie und Beträge.",
+      "importFailed": "Die Preisliste konnte nicht gelesen werden oder enthält keine verwendbare Zeile.",
+      "syncFailed": "Die Preisliste von Meta konnte nicht gelesen werden, und es ist keine mitgelieferte Liste verfügbar.",
+      "conflict": "Dies wurde von jemand anderem geändert. Laden Sie die Seite neu und versuchen Sie es erneut.",
+      "forbidden": "Nur Super-Administratoren können das tun.",
+      "validation": "Prüfen Sie die markierten Felder.",
+      "network": "Der Server konnte nicht erreicht werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "currencyUnsupported": "Diese Währung kann noch nicht verwendet werden: Importieren Sie zuerst die Meta-Preisliste dafür (Nachrichtenpreise, Meta-Preislisten)."
+    },
+    "types": {
+      "topup": "Aufladung",
+      "earn": "Gutschrift",
+      "refund": "Erstattung",
+      "spend": "Nachrichtenkosten",
+      "admin_adjust": "Korrektur"
+    },
+    "categories": {
+      "marketing": "Marketing",
+      "utility": "Service-Nachricht",
+      "authentication": "Authentifizierung",
+      "service": "Service"
+    },
+    "modes": {
+      "wallet": "Bezahlung pro Nachricht",
+      "plan": "Tarif"
+    },
+    "chip": {
+      "balance": "Guthaben",
+      "low": "Ihr Guthaben ist niedrig"
+    },
+    "wallet": {
+      "title": "Guthaben",
+      "subtitle": "Ihr Nachrichtenguthaben, Ihre Ausgaben und Einnahmen der letzten 30 Tage und wie Sie Geld aufladen.",
+      "fullStatement": "Vollständiger Kontoauszug",
+      "lowBalanceTitle": "Ihr Guthaben geht zur Neige",
+      "lowBalanceBody": "Es liegt bei oder unter {threshold}. Laden Sie Guthaben auf, damit Ihre Kampagnen und Antworten weiter gesendet werden.",
+      "kpi": {
+        "balance": "Guthaben",
+        "available": "Jetzt verfügbar",
+        "approx": "etwa {count, plural, one {# Nachricht} other {# Nachrichten}}",
+        "spent": "Ausgegeben",
+        "earned": "Verdient",
+        "last30": "Letzte 30 Tage"
+      },
+      "add": {
+        "title": "Geld aufladen",
+        "amount": "Betrag",
+        "hint": "Nur ganze Beträge, mindestens 1.",
+        "invalid": "Geben Sie einen ganzen Betrag von 1 oder mehr ein.",
+        "submit": "Geld aufladen",
+        "quick": "Schnellauswahl"
+      },
+      "how": {
+        "title": "So funktioniert die Abrechnung",
+        "wallet": {
+          "body": "Jede zugestellte Nachricht wird Ihrem Guthaben zu dem Preis für ihr Land und ihre Kategorie belastet. Fehlgeschlagene Nachrichten werden nicht berechnet.",
+          "funded": "Ist das Guthaben aufgebraucht, werden Massenversände angehalten, bis Sie Geld aufladen."
+        },
+        "plan": {
+          "allowance": "Ihr Tarif umfasst {limit} Nachrichten pro Monat.",
+          "used": "{used} in diesem Monat genutzt.",
+          "ends": "Ihr Tarif endet am {date}.",
+          "extra": "Nachrichten über das monatliche Kontingent hinaus werden Ihrem Guthaben belastet.",
+          "ended": "Ihr Tarif ist abgelaufen, daher ist der Versand pausiert, bis er verlängert wird."
+        },
+        "generic": "Ihre Nachrichten sind durch Ihren Tarif abgedeckt. Ihr Guthaben zahlt alles, was der Tarif nicht umfasst."
+      },
+      "activity": {
+        "title": "Letzte Aktivität",
+        "fullStatement": "Vollständigen Kontoauszug öffnen",
+        "emptyTitle": "Noch keine Aktivität",
+        "emptyBody": "Aufladungen, Nachrichtenkosten und Erstattungen erscheinen hier."
+      }
+    },
+    "activity": {
+      "description": "Beschreibung",
+      "type": "Typ",
+      "date": "Datum",
+      "amount": "Betrag",
+      "balance": "Saldo",
+      "noDescription": "Guthabenbewegung",
+      "reason": "Grund"
+    },
+    "pricingPanel": {
+      "title": "Nachrichtenpreise",
+      "badge": "Pro Nachricht",
+      "free": "Kostenlos",
+      "noCharge": "Keine Belastung",
+      "perMessage": "pro Nachricht",
+      "footer": "Wird belastet, wenn eine Nachricht zugestellt wird. Der Preis hängt vom Land des Empfängers und der Nachrichtenkategorie ab."
+    },
+    "statement": {
+      "title": "Kontoauszug",
+      "subtitle": "Jede Bewegung auf Ihrem Wallet. Die Summen umfassen alle Einträge, die den Filtern entsprechen, nicht nur diese Seite.",
+      "back": "Zurück zum Wallet",
+      "breadcrumbLabel": "Navigationspfad",
+      "breadcrumbWallet": "Wallet",
+      "breadcrumbStatement": "Kontoauszug",
+      "export": "CSV exportieren",
+      "exporting": "Wird exportiert",
+      "exported": "{fileName} gespeichert",
+      "emptyTitle": "Keine Transaktionen",
+      "emptyFiltered": "Keine Einträge entsprechen diesen Filtern. Ändern oder setzen Sie sie zurück.",
+      "emptyNone": "Bewegungen auf Ihrem Wallet werden hier aufgelistet.",
+      "filters": {
+        "type": "Typ",
+        "from": "Von",
+        "to": "Bis",
+        "rangeInverted": "Das Enddatum liegt vor dem Startdatum.",
+        "search": "Suchen",
+        "searchPlaceholder": "Beschreibung oder Grund",
+        "apply": "Anwenden",
+        "reset": "Zurücksetzen"
+      },
+      "typeFilter": {
+        "all": "Alle",
+        "topup": "Aufladungen",
+        "earn": "Erträge",
+        "spend": "Nachrichtengebühren",
+        "refund": "Erstattungen",
+        "admin_adjust": "Anpassungen"
+      },
+      "summary": {
+        "balance": "Aktuelles Guthaben",
+        "in": "Geldeingang",
+        "out": "Geldausgang",
+        "net": "Nettobewegung",
+        "count": "{count, plural, one {# Transaktion} other {# Transaktionen}}"
+      },
+      "columns": {
+        "label": "Wallet-Auszug",
+        "date": "Datum",
+        "description": "Beschreibung",
+        "type": "Typ",
+        "in": "Geldeingang",
+        "out": "Geldausgang",
+        "balance": "Saldo",
+        "none": "Keine"
+      },
+      "context": {
+        "reason": "Grund",
+        "to": "An",
+        "template": "Vorlage"
+      },
+      "channels": {
+        "campaign": "Kampagne",
+        "broadcast": "Broadcast",
+        "flow": "Flow",
+        "scheduled": "Geplant",
+        "auto_reply": "Automatische Antwort",
+        "chat": "Chat",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      }
+    },
+    "admin": {
+      "admin": "Administration",
+      "wallet": "Wallet",
+      "workspacesLabel": "Workspaces",
+      "breadcrumb": "Navigationspfad",
+      "readOnly": "Sie sind als {role} angemeldet. Nur Super-Admins können Wallet-Einstellungen, Preise oder Guthaben ändern.",
+      "nav": {
+        "overview": "Wallet",
+        "pricing": "Nachrichtenpreise",
+        "workspaces": "Workspace-Wallets",
+        "logs": "Wallet-Protokolle",
+        "margins": "Margen",
+        "packages": "Guthabenpakete"
+      },
+      "overview": {
+        "title": "Wallet-Übersicht",
+        "subtitle": "Das Guthaben in den Workspace-Wallets und die Bewegungen der letzten 30 Tage.",
+        "linkWorkspaces": "Workspace-Wallets",
+        "linkPricing": "Nachrichtenpreise",
+        "linkLogs": "Wallet-Protokolle",
+        "float": "Wallet-Bestand",
+        "floatHint": "Über alle Workspaces gehalten",
+        "holding": "Workspaces mit Guthaben",
+        "low": "Niedriges Guthaben",
+        "last30": "Letzte 30 Tage",
+        "toppedUp": "Aufgeladen",
+        "charged": "Berechnet",
+        "refunded": "Erstattet",
+        "adjustedIn": "Manuell hinzugefügt",
+        "adjustedOut": "Manuell abgezogen",
+        "chargedMessages": "Berechnete Nachrichten",
+        "freeMessages": "Kostenlose Nachrichten",
+        "reconcile": {
+          "title": "Guthaben mit Hauptbuch abgleichen",
+          "body": "Berechnet jedes Wallet anhand seines Hauptbuchs neu und listet jedes Guthaben auf, das nicht übereinstimmt.",
+          "button": "Guthaben mit Hauptbuch abgleichen",
+          "running": "Wird geprüft",
+          "ok": "{count, plural, one {# Wallet stimmt} other {# Wallets stimmen}} mit dem Hauptbuch überein.",
+          "mismatches": "{count} von {checked} Wallets stimmen nicht mit dem Hauptbuch überein.",
+          "workspace": "Workspace",
+          "balance": "Guthaben",
+          "ledger": "Hauptbuch",
+          "difference": "Differenz"
+        },
+        "otherCurrencies": "Wallets in anderen Währungen",
+        "otherCurrenciesNote": "Workspaces, die in einer anderen Währung abgerechnet werden, halten Geld in dieser Währung. Die obigen Zahlen gelten nur für {currency}. Jede andere Währung wird in einer eigenen Zeile gezählt.",
+        "other": {
+          "currency": "Währung",
+          "float": "Gehaltenes Geld",
+          "holding": "Workspaces mit Guthaben",
+          "toppedUp": "Aufgeladen, 30 Tage",
+          "charged": "Berechnet, 30 Tage"
+        }
+      },
+      "pricing": {
+        "title": "Nachrichtenpreise",
+        "crumb": "Nachrichtenpreise",
+        "subtitle": "Was eine Nachricht Ihre Kunden kostet, wie neue Wallets geschützt werden und die Preisliste je Land.",
+        "kpi": {
+          "signup": "Empfehlungsprämie",
+          "cost": "Kosten je Nachricht",
+          "costHint": "Pauschalpreis, wenn Preise je Land deaktiviert sind",
+          "spending": "Tatsächliche Ausgaben",
+          "spendingHint": "Nachrichten, die {amount} zum Pauschalpreis ergeben",
+          "lowBalance": "Warnung bei niedrigem Guthaben"
+        },
+        "economics": {
+          "title": "Wirtschaftlichkeit",
+          "liveKeys": "Wirkt sofort",
+          "flatPrice": "Pauschalpreis je Nachricht",
+          "flatPriceHint": "Mindestens 0.01. Für kostenlose Nachrichten die Preisliste verwenden.",
+          "referralSignup": "Empfehlungsprämie",
+          "referralSignupHint": "Wird einem Empfehlenden bei der ersten bezahlten Bestellung des Empfohlenen gutgeschrieben.",
+          "lowBalance": "Warnung bei niedrigem Guthaben ab",
+          "lowBalanceHint": "Workspaces mit diesem Guthaben oder darunter werden gewarnt.",
+          "coverage": "Abdeckung beim Start",
+          "coverageHint": "Ein Massenversand wird abgelehnt, sofern das Wallet nicht diesen Anteil der geschätzten Kosten deckt. Bei 0 wird nur ein leeres Wallet abgelehnt.",
+          "rewardSentence": "Eine Prämie von {reward} deckt {count, plural, one {# Nachricht} other {# Nachrichten}} zum Pauschalpreis.",
+          "save": "Wirtschaftlichkeit speichern",
+          "saving": "Wird gespeichert",
+          "saved": "Wirtschaftlichkeit gespeichert.",
+          "problems": {
+            "invalid": "Geben Sie einen Betrag mit höchstens 2 Dezimalstellen ein.",
+            "flatZero": "Der Pauschalpreis darf nicht 0 sein.",
+            "percent": "Geben Sie eine ganze Zahl von 0 bis 100 ein."
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "Preise je Land",
+            "on": "Ein: Jede Nachricht wird nach Land des Empfängers und Kategorie aus der Preisliste berechnet.",
+            "off": "Aus: Jede Nachricht wird zum Pauschalpreis berechnet.",
+            "save": "Speichern",
+            "confirmTitle": "Preise je Land ändern?",
+            "confirmOn": "Ab dem nächsten Versand werden Nachrichten nach Land und Kategorie berechnet.",
+            "confirmOff": "Ab dem nächsten Versand werden Nachrichten zum Pauschalpreis berechnet.",
+            "confirm": "Ja, ändern",
+            "savedOn": "Preise je Land sind aktiviert.",
+            "savedOff": "Preise je Land sind deaktiviert."
+          },
+          "payPerMessage": {
+            "label": "Abrechnung pro Nachricht",
+            "on": "Ein: Workspaces ohne Tarifkontingent zahlen jede zugestellte Nachricht aus ihrem Wallet.",
+            "off": "Aus: Nachrichten werden nicht von Wallets abgebucht.",
+            "save": "Speichern",
+            "confirmTitle": "Abrechnung pro Nachricht ändern?",
+            "confirmOn": "Zugestellte Nachrichten werden ab sofort von Wallets abgebucht.",
+            "confirmOff": "Wallets werden nicht mehr für Nachrichten belastet. Dies betrifft alle Workspaces.",
+            "confirm": "Ja, ändern",
+            "savedOn": "Abrechnung pro Nachricht ist aktiviert.",
+            "savedOff": "Abrechnung pro Nachricht ist deaktiviert."
+          }
+        },
+        "grid": {
+          "title": "Preisliste",
+          "modeOn": "Preise je Land sind aktiviert: Es gelten diese Preise.",
+          "modeOff": "Preise je Land sind deaktiviert: Diese Preise werden gespeichert, berechnet wird aber der Pauschalpreis.",
+          "empty": "Noch keine Preise. Fügen Sie eine Zeile hinzu, importieren Sie eine Preisliste oder spielen Sie die Startliste erneut ein.",
+          "country": "Land",
+          "category": "Kategorie",
+          "charge": "Ihr Preis",
+          "metaCost": "Meta berechnet Ihnen",
+          "margin": "Marge",
+          "marginUnknown": "Unbekannt",
+          "actions": "Aktionen",
+          "anyCountry": "Beliebiges Land",
+          "anyCategory": "Beliebige Kategorie",
+          "serviceFree": "Service (kostenlos)",
+          "addRow": "Zeile hinzufügen",
+          "remove": "Entfernen",
+          "cancel": "Abbrechen",
+          "removeTitle": "Diesen Preis entfernen?",
+          "removeBody": "Der Preis für {country} wird gelöscht. Nachrichten fallen auf den nächsten passenden Preis zurück.",
+          "removed": "Preis entfernt.",
+          "save": "Preise speichern",
+          "saving": "Wird gespeichert",
+          "saved": "{count, plural, one {# Preis gespeichert.} other {# Preise gespeichert.}}",
+          "savedSome": "{saved} gespeichert, {skipped} übersprungen. Den Grund finden Sie bei jeder übersprungenen Zeile.",
+          "unsaved": "{count, plural, one {# nicht gespeicherte Zeile} other {# nicht gespeicherte Zeilen}}",
+          "tooMany": "Zu viele geänderte Zeilen für ein Speichern. Speichern Sie in kleineren Gruppen.",
+          "problems": {
+            "price": "Geben Sie einen Preis mit höchstens 2 Dezimalstellen ein.",
+            "metaCost": "Geben Sie Kosten mit höchstens 6 Dezimalstellen ein.",
+            "country": "Verwenden Sie einen zweistelligen Ländercode oder lassen Sie das Feld für beliebige Länder leer.",
+            "empty": "Geben Sie einen Preis oder die Meta-Kosten ein.",
+            "duplicate": "Für dieses Land und diese Kategorie gibt es bereits eine Zeile."
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "Meta-Kosten synchronisieren",
+            "title": "Meta-Kosten synchronisieren",
+            "loading": "Preisliste von Meta wird gelesen",
+            "source": "Quelle",
+            "version": "Version",
+            "noVersion": "Keine",
+            "currency": "Währung",
+            "added": "Hinzuzufügende Zeilen",
+            "updated": "Zu aktualisierende Zeilen",
+            "untouched": "Ihre Preise werden nicht geändert. Nur die Kosten, die Meta Ihnen berechnet, werden aktualisiert.",
+            "bundledNote": "Es ist keine aktuelle Preisliste von Meta verbunden, daher wird die mitgelieferte Preisliste verwendet.",
+            "apply": "Anwenden",
+            "applying": "Wird angewendet",
+            "done": "Meta-Kosten synchronisiert: {added} hinzugefügt, {updated} aktualisiert."
+          },
+          "import": {
+            "button": "Preisliste importieren",
+            "title": "Preisliste importieren",
+            "intro": "Laden Sie eine CSV-Preisliste hoch. Sie sehen, was sich ändern würde, bevor etwas gespeichert wird.",
+            "file": "CSV-Datei",
+            "limit": "Bis zu 4 MB.",
+            "reading": "Datei wird gelesen",
+            "shape": "Aufbau",
+            "shapes": {
+              "wide": "Eine Spalte je Kategorie",
+              "long": "Eine Zeile je Kategorie"
+            },
+            "added": "Hinzufügen",
+            "updated": "Aktualisieren",
+            "skipped": "Übersprungen",
+            "currencyNote": "Preise werden in {currency} gelesen.",
+            "problems": "Zeilen, die übersprungen werden",
+            "line": "Zeile {line}:",
+            "fileProblems": {
+              "notCsv": "Wählen Sie eine .csv-Datei.",
+              "tooBig": "Die Datei ist größer als 4 MB.",
+              "unreadable": "Die Datei konnte nicht gelesen werden."
+            },
+            "apply": "Import anwenden",
+            "applying": "Wird importiert",
+            "done": "Preisliste importiert: {added} hinzugefügt, {updated} aktualisiert, {skipped} übersprungen."
+          },
+          "seed": {
+            "button": "Startpreisliste neu einspielen",
+            "title": "Startpreisliste neu einspielen?",
+            "warning": "Dabei werden die mitgelieferten Startpreise über bestehende Zeilen für dasselbe Land und dieselbe Kategorie geschrieben. Von Hand gesetzte Preise für diese Zeilen werden ersetzt.",
+            "confirm": "Neu einspielen",
+            "done": "{count, plural, one {# Preis} other {# Preise}} aus der Startpreisliste geschrieben."
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "Grenzüberschreitende Nachrichten",
+            "body": "Der Preis richtet sich nach dem Land des Empfängers, nicht nach dem des Workspaces. Fügen Sie für jedes Land, in das Sie senden, eine Zeile hinzu."
+          },
+          "how": {
+            "title": "So wird ein Preis gefunden",
+            "body": "Das Wallet sucht in dieser Preisliste das Land des Empfängers und die Nachrichtenkategorie. Eine leere Kategorie oder ein leeres Land passt auf alles."
+          },
+          "order": {
+            "title": "Welche Zeile gilt",
+            "body": "Zuerst wird eine genaue Übereinstimmung von Land und Kategorie verwendet, danach das Land mit beliebiger Kategorie, dann beliebiges Land und schließlich der Pauschalpreis."
+          }
+        },
+        "mode": {
+          "title": "So werden Kunden bepreist",
+          "current": "Aktuell: {mode}",
+          "intro": "Legen Sie fest, was eine Nachricht Ihre Kunden kostet. Dies gilt für alle Workspaces und wird separat gespeichert.",
+          "fixed": {
+            "label": "Festpreise",
+            "body": "Sie tragen für jedes Land und jede Kategorie in der unten stehenden Preisliste einen Preis ein. Margen werden gespeichert, aber nicht verwendet."
+          },
+          "margin": {
+            "label": "Meta-Kosten + Marge",
+            "body": "Der Kunde zahlt die Kosten von Meta plus Ihre Marge, je Land und Kategorie festgelegt. Wo die Kosten von Meta nicht bekannt sind, wird der eingetragene Festpreis berechnet."
+          },
+          "save": "Preismodus speichern",
+          "manage": "Margen festlegen",
+          "confirmTitle": "Bepreisung der Kunden ändern?",
+          "confirmFixed": "Ab der nächsten Nachricht wird jeder Workspace zu den Festpreisen aus der Preisliste berechnet. Margen bleiben gespeichert, gelten aber nicht mehr.",
+          "confirmMargin": "Ab der nächsten Nachricht wird jeder Workspace mit den Kosten von Meta plus der für ihn geltenden Marge berechnet (Workspace-Ausnahme, dann sein Tarif, dann der Plattformstandard). Wo die Kosten von Meta unbekannt sind, wird weiterhin der Festpreis berechnet.",
+          "confirm": "Ja, ändern",
+          "savedFixed": "Kunden werden jetzt mit Festpreisen bepreist.",
+          "savedMargin": "Kunden werden jetzt mit Meta-Kosten plus Marge bepreist."
+        },
+        "metaCards": {
+          "title": "Meta-Preislisten",
+          "intro": "Meta veröffentlicht für jede Währung eine eigene Preisliste und ändert sie nur am 1. Januar, 1. April, 1. Juli und 1. Oktober. Ein in INR abgerechneter Workspace wird nach der INR-Liste von Meta bepreist und seinem INR-Wallet belastet, niemals nach der umgerechneten USD-Liste. Importieren Sie jede Datei so, wie Meta sie veröffentlicht. Eingetragene Preise und der Pauschalpreis werden in der Plattformwährung geführt und für Workspaces in einer anderen Abrechnungswährung zum hinterlegten Wechselkurs umgerechnet.",
+          "none": "Es ist noch keine Meta-Preisliste hinterlegt. Importieren Sie die Datei, die Meta für Ihre Währung veröffentlicht.",
+          "view": "Anzeigen",
+          "hide": "Ausblenden",
+          "usedPricing": "Preise, Margen und die Reseller-GuV sowie Workspaces, die in der Plattformwährung abgerechnet werden",
+          "usedWorkspaces": "Preise für Workspaces, die in {currency} abgerechnet werden",
+          "columns": {
+            "currency": "Währung",
+            "effective": "Gültig ab",
+            "checked": "Zuletzt importiert",
+            "markets": "Märkte",
+            "usedFor": "Verwendet für",
+            "status": "Status",
+            "actions": "Aktionen"
+          },
+          "freshness": {
+            "current": "Aktuell",
+            "upcoming": "Bald prüfen",
+            "due": "Jetzt prüfen"
+          },
+          "reminder": {
+            "link": "Preisseite von Meta öffnen",
+            "current": "Aktuell. Meta könnte seine Preise das nächste Mal am {date} ändern.",
+            "dueTitle": "Ein neues Quartal hat am {date} begonnen: Meta hat die Preise möglicherweise geändert.",
+            "dueBody": "Laden Sie die neuen Preisdateien herunter (eine je verwendeter Währung) und importieren Sie sie hier. Bis dahin verwenden Kosten und Margen die ältere Preisliste.",
+            "upcomingTitle": "Meta könnte seine Preise am {date} ändern (in {days, plural, one {# Tag} other {# Tagen}}).",
+            "upcomingBody": "Halten Sie die neuen Dateien für den Import an diesem Tag bereit.",
+            "missingTitle": "Keine Meta-Preisliste für {currencies}.",
+            "missingBody": "Für Workspaces mit dieser Währung gibt es keine Meta-Preisliste anzuzeigen. Importieren Sie die Datei, die Meta dafür veröffentlicht."
+          },
+          "table": {
+            "heading": "Meta-Liste in {currency}",
+            "note": "Listenpreis je zugestellter Nachricht, wie Meta ihn veröffentlicht. Länder, die Meta nicht nennt, werden als Sonstige bepreist.",
+            "market": "Markt",
+            "everyOther": "Alle nicht genannten Länder",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utility",
+              "authentication": "Authentifizierung",
+              "authentication_international": "Authentifizierung international",
+              "service": "Service"
+            }
+          },
+          "import": {
+            "button": "Meta-Preisliste importieren",
+            "title": "Meta-Preisliste importieren",
+            "intro": "Wählen Sie die Datei, die Meta für eine Währung veröffentlicht (eine Excel-Arbeitsmappe, auch wenn der Link CSV angibt). Währung und Gültigkeitsdatum werden aus der Datei gelesen. Sie sehen, was sich ändern würde, bevor etwas gespeichert wird.",
+            "file": "Meta-Preisdatei (.xlsx oder .csv)",
+            "hint": "Eine Währung je Datei. Eine neue Datei ersetzt die Liste dieser Währung vollständig. Höchstens 2 MB.",
+            "reading": "Datei wird gelesen…",
+            "applying": "Wird importiert",
+            "apply": "Liste importieren",
+            "done": "Die Liste {currency} wurde importiert.",
+            "fileProblems": {
+              "wrongType": "Wählen Sie die von Meta veröffentlichte .xlsx-Datei oder eine daraus gespeicherte CSV-Datei.",
+              "tooBig": "Die Datei ist größer als 2 MB und daher keine Meta-Preisliste.",
+              "unreadable": "Die Datei konnte nicht gelesen werden."
+            },
+            "summary": {
+              "currency": "Währung",
+              "effective": "Gültig ab",
+              "added": "Neue Zeilen",
+              "changed": "Geändert",
+              "unchanged": "Unverändert",
+              "removed": "Entfallen"
+            },
+            "replaces": "Ersetzt die Liste, die ab {date} gilt.",
+            "appliesToPricing": "Dies ist die Liste {currency}, Ihre Plattformwährung. Der Import aktualisiert außerdem die Meta-Kosten, auf denen Preise, Margen und die Reseller-GuV beruhen ({added} neu, {updated} aktualisiert). Kundenpreise werden nicht geändert.",
+            "storedOnly": "Dies ist nicht die Plattformwährung. Sie wird gespeichert und angezeigt und bepreist jeden Workspace, der in {currency} abgerechnet wird. Die Meta-Kosten im Preisraster unten bleiben in der Plattformwährung.",
+            "biggest": "Größte Änderungen",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utility",
+              "authentication": "Authentifizierung",
+              "authentication_international": "Authentifizierung international",
+              "service": "Service"
+            },
+            "problems": "Übersprungene Zeilen"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "Workspace-Wallets",
+        "crumb": "Workspace-Wallets",
+        "subtitle": "Jeder Workspace mit seinem Guthaben. Öffnen Sie einen, um seine Einträge zu sehen oder das Guthaben anzupassen.",
+        "search": "Suchen",
+        "searchPlaceholder": "Workspace-Name oder Kurzname",
+        "lowOnly": "Nur niedriges Guthaben",
+        "apply": "Anwenden",
+        "totalWorkspaces": "Workspaces",
+        "totalFloat": "Insgesamt gehalten",
+        "totalLow": "Niedriges Guthaben",
+        "emptyTitle": "Keine Workspaces gefunden",
+        "emptyBody": "Ändern Sie die Suche oder entfernen Sie den Filter für niedriges Guthaben.",
+        "loadMore": "Mehr laden",
+        "loadingMore": "Weitere werden geladen",
+        "columns": {
+          "label": "Workspace-Wallets",
+          "workspace": "Workspace",
+          "mode": "Abrechnung",
+          "balance": "Guthaben",
+          "low": "Niedrig",
+          "activity": "Letzte Aktivität",
+          "never": "Nie"
+        },
+        "totalFloatIn": "Gehaltenes Geld ({currency})"
+      },
+      "detail": {
+        "crumb": "Workspace",
+        "adjust": "Guthaben anpassen",
+        "balance": "Guthaben",
+        "lowBalance": "Niedriges Guthaben",
+        "threshold": "Warnung bei {amount}",
+        "recent": "Letzte Einträge",
+        "emptyTitle": "Noch keine Einträge",
+        "emptyBody": "Bewegungen auf diesem Wallet werden hier aufgelistet.",
+        "columns": {
+          "label": "Letzte Wallet-Einträge",
+          "date": "Datum",
+          "type": "Typ",
+          "amount": "Betrag",
+          "balanceAfter": "Guthaben danach",
+          "who": "Erstellt von",
+          "reason": "Grund",
+          "customer": "Kunde",
+          "operator": "Bediener",
+          "system": "System"
+        },
+        "result": {
+          "appliedAdd": "{applied} hinzugefügt. Das Guthaben beträgt jetzt {balance}.",
+          "appliedDeduct": "{applied} abgezogen. Das Guthaben beträgt jetzt {balance}.",
+          "partial": "Nur {applied} von {requested} wurde angewendet, da das Guthaben nicht unter 0 fallen kann. Das Guthaben beträgt jetzt {balance}.",
+          "replayed": "(Diese Anfrage wurde bereits angewendet.)"
+        },
+        "pricing": {
+          "title": "Preise für diesen Workspace",
+          "subtitle": "Margenausnahmen haben Vorrang vor dem Tarif und dem Plattformstandard, und zwar nur für diesen Workspace.",
+          "plan": "Tarif",
+          "planLoading": "Tarif wird geladen",
+          "planUnknown": "Konnte nicht gelesen werden",
+          "noPlan": "Kein Tarif",
+          "overrides": "Margenausnahmen",
+          "overridesHint": "Nur die hier aufgeführten Zeilen werden überschrieben. Alles andere folgt dem Tarif und dem Plattformstandard.",
+          "empty": "Keine Ausnahmen. Dieser Workspace folgt seinem Tarif und dem Plattformstandard.",
+          "reason": {
+            "label": "Grund (wird im Prüfprotokoll gespeichert)",
+            "hint": "Für jede Änderung oder Entfernung erforderlich, 5 bis 500 Zeichen.",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "Begründen Sie dies mit mindestens 5 Zeichen.",
+              "long": "Halten Sie den Grund bei höchstens 500 Zeichen."
+            }
+          },
+          "save": "Ausnahmen speichern",
+          "saving": "Wird gespeichert",
+          "saveHint": "Korrigieren Sie die markierten Zeilen und geben Sie einen Grund an, um zu speichern.",
+          "saved": "{saved} gespeichert, {removed} entfernt.",
+          "savedSome": "{saved} gespeichert, {skipped} übersprungen. Den Grund finden Sie bei jeder übersprungenen Zeile.",
+          "preview": {
+            "title": "Preisvorschau",
+            "hint": "Zeigen Sie, wie eine Nachricht an diesen Workspace bepreist würde und welche Ebene den Preis festgelegt hat.",
+            "country": "Land",
+            "category": "Kategorie",
+            "run": "Preis vorschauen",
+            "running": "Preis wird berechnet",
+            "result": {
+              "label": "Ergebnis der Preisvorschau",
+              "metaCost": "Meta-Kosten",
+              "unknownCost": "Nicht bekannt",
+              "margin": "Marge",
+              "noMargin": "Keine",
+              "layer": "Festgelegt durch",
+              "noLayer": "Keine Marge passt",
+              "layers": {
+                "workspace": "Workspace-Ausnahme",
+                "plan": "Tarifmarge",
+                "platform": "Plattformstandard"
+              },
+              "price": "Kundenpreis",
+              "basis": "Grundlage",
+              "bases": {
+                "margin": "Meta-Kosten + Marge",
+                "fixed": "Festpreis"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "Abrechnungswährung",
+          "intro": "Nachrichten werden nach der Preisliste von Meta für diese Währung bepreist und dem Wallet des Workspaces in dieser Währung belastet. Aufladungen werden ebenfalls in dieser Währung erfasst und gutgeschrieben.",
+          "billedIn": "Abgerechnet in",
+          "change": "Währung ändern",
+          "otherWallets": "Weitere Wallets dieses Workspaces",
+          "notUsed": "Nicht für die Abrechnung verwendet, das Geld bleibt hier.",
+          "dialog": {
+            "title": "Abrechnungswährung ändern",
+            "currency": "Abrechnen in",
+            "effect": "Ab jetzt werden Nachrichten nach der Liste {to} von Meta bepreist und dem Wallet {to} belastet. Nichts wird umgerechnet: Das Wallet {from} behält sein Guthaben.",
+            "left": "{amount} bleibt im Wallet {from} und wird nicht verwendet, bis der Workspace zurückgestellt wird.",
+            "reason": "Grund",
+            "reasonHint": "Wird im Prüfprotokoll und im Wallet-Protokoll des Workspaces angezeigt. Mindestens 5 Zeichen.",
+            "confirm": "In {currency} abrechnen",
+            "saving": "Wird gespeichert",
+            "done": "Jetzt in {to} abgerechnet (vorher {from})."
+          }
+        }
+      },
+      "adjust": {
+        "title": "Guthaben anpassen",
+        "current": "Aktuelles Guthaben",
+        "direction": "Aktion",
+        "add": "Geld hinzufügen",
+        "deduct": "Abziehen",
+        "amount": "Betrag",
+        "amountHint": "Bis zu 2 Dezimalstellen.",
+        "reason": "Grund",
+        "reasonHint": "Erforderlich, 5 bis 500 Zeichen. Der Workspace sieht diesen Grund in seinem Kontoauszug.",
+        "counter": "{count} / {max}",
+        "cappedWarning": "Das ist mehr als das Guthaben von {balance}. Abgezogen wird nur der vorhandene Betrag, das Guthaben stoppt bei 0.",
+        "review": "Prüfen",
+        "confirmAdd": "Geld hinzufügen",
+        "confirmDeduct": "Abziehen",
+        "posting": "Buchung",
+        "summaryAdd": "{amount} zu {workspace} hinzufügen.",
+        "summaryDeduct": "{amount} von {workspace} abziehen.",
+        "newBalance": "Neues Guthaben: {balance}",
+        "summaryReason": "Grund: {reason}",
+        "visibleNote": "Der Grund wird dem Workspace angezeigt und im Prüfprotokoll gespeichert.",
+        "problems": {
+          "amount": {
+            "required": "Geben Sie einen Betrag ein.",
+            "invalid": "Geben Sie einen positiven Betrag mit höchstens 2 Dezimalstellen ein.",
+            "zero": "Der Betrag muss größer als 0 sein.",
+            "tooLarge": "Das liegt über dem Limit für eine einzelne Anpassung."
+          },
+          "note": {
+            "short": "Begründen Sie dies mit mindestens {min} Zeichen.",
+            "long": "Halten Sie den Grund unter {max} Zeichen."
+          }
+        }
+      },
+      "logs": {
+        "title": "Wallet-Protokolle",
+        "crumb": "Wallet-Protokolle",
+        "subtitle": "Was mit Wallets passiert ist und was Bediener geändert haben.",
+        "scope": "Umfang",
+        "scopes": {
+          "all": "Alle",
+          "workspace": "Workspace-Ereignisse",
+          "platform": "Plattformänderungen"
+        },
+        "event": "Ereignis",
+        "anyEvent": "Beliebiges Ereignis",
+        "severity": "Schweregrad",
+        "anySeverity": "Beliebiger Schweregrad",
+        "severities": {
+          "info": "Info",
+          "warning": "Warnung",
+          "error": "Fehler"
+        },
+        "workspaceId": "Workspace-ID",
+        "workspaceIdInvalid": "Geben Sie eine Workspace-ID (eine UUID) ein.",
+        "search": "Suchen",
+        "from": "Von",
+        "to": "Bis",
+        "apply": "Anwenden",
+        "reset": "Zurücksetzen",
+        "emptyTitle": "Keine Protokolleinträge",
+        "emptyBody": "Nichts entspricht diesen Filtern.",
+        "loadMore": "Mehr laden",
+        "loadingMore": "Weitere werden geladen",
+        "platform": "Plattform",
+        "showDetails": "Details anzeigen",
+        "hideDetails": "Details ausblenden",
+        "requestId": "Anfrage-ID",
+        "columns": {
+          "time": "Zeit",
+          "severity": "Schweregrad",
+          "event": "Ereignis",
+          "workspace": "Workspace",
+          "actor": "Akteur",
+          "message": "Nachricht"
+        },
+        "actors": {
+          "operator": "Bediener",
+          "customer": "Kunde",
+          "system": "System"
+        }
+      },
+      "margins": {
+        "title": "Margen",
+        "crumb": "Margen",
+        "subtitle": "Was Kunden über die Kosten von Meta hinaus zahlen, je Land und Nachrichtenkategorie.",
+        "retry": "Erneut versuchen",
+        "ratesFailed": "Die Kosten von Meta konnten nicht geladen werden, daher können die Preise für neue Zeilen nicht angezeigt werden.",
+        "mode": {
+          "current": "Kunden werden bepreist nach",
+          "inactive": "Der Preismodus ist Festpreise, daher gelten diese Margen noch nicht. Sie werden gespeichert und greifen, sobald Sie auf Meta-Kosten + Marge umstellen.",
+          "switchLink": "Zum Umschalter des Preismodus"
+        },
+        "scope": {
+          "label": "Margen für",
+          "hint": "Der Plattformstandard gilt für jeden Tarif. Die Marge eines Tarifs hat Vorrang davor.",
+          "platform": "Plattformstandard (gilt für jeden Tarif)"
+        },
+        "grid": {
+          "country": "Land",
+          "searchCountry": "Länder suchen",
+          "category": "Kategorie",
+          "margin": "Marge %",
+          "metaCost": "Meta-Kosten",
+          "price": "Kundenpreis",
+          "note": "Grund",
+          "setBy": "Festgelegt durch",
+          "actions": "Aktionen",
+          "anyCountry": "Beliebiges Land",
+          "anyCategory": "Beliebige Kategorie",
+          "unknownCost": "Die Kosten von Meta sind hier nicht bekannt, daher gilt der eingetragene Festpreis.",
+          "priceInvalid": "Geben Sie eine Marge von -100 bis 1000 mit höchstens 2 Dezimalstellen ein.",
+          "removedPending": "Wird beim Speichern entfernt.",
+          "addRow": "Zeile hinzufügen",
+          "remove": "Entfernen",
+          "undo": "Rückgängig",
+          "cancel": "Abbrechen",
+          "empty": "Noch keine Margen. Fügen Sie eine Zeile hinzu, um eine festzulegen.",
+          "removeTitle": "Diese Marge entfernen?",
+          "removeBody": "Die Marge für {country} wird gelöscht. Preise fallen auf die nächste passende Marge zurück.",
+          "removed": "Marge entfernt.",
+          "save": "Margen speichern",
+          "saving": "Wird gespeichert",
+          "saved": "{count, plural, one {# Marge gespeichert.} other {# Margen gespeichert.}}",
+          "savedSome": "{saved} gespeichert, {skipped} übersprungen. Den Grund finden Sie bei jeder übersprungenen Zeile.",
+          "unsaved": "{count, plural, one {# nicht gespeicherte Zeile} other {# nicht gespeicherte Zeilen}}",
+          "tooMany": "Zu viele geänderte Zeilen für ein Speichern. Speichern Sie in kleineren Gruppen.",
+          "problems": {
+            "margin": "Geben Sie einen Prozentsatz von -100 bis 1000 mit höchstens 2 Dezimalstellen ein. -100 bedeutet kostenlos.",
+            "duplicate": "Für dieses Land und diese Kategorie gibt es bereits eine Zeile."
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "Welche Marge gilt",
+            "body": "Eine Ausnahme des Workspaces hat Vorrang vor der Marge seines Tarifs, die wiederum Vorrang vor dem Plattformstandard hat. Eine Ebene wird vollständig gelesen, bevor die nächste folgt."
+          },
+          "specific": {
+            "title": "Das Spezifischste zuerst",
+            "body": "Innerhalb einer Ebene wird zuerst Land und Kategorie verwendet, dann das Land mit beliebiger Kategorie, dann die Kategorie in beliebigen Ländern und zuletzt die Standardzeile."
+          },
+          "unknown": {
+            "title": "Wenn die Kosten von Meta unbekannt sind",
+            "body": "Der Preis ist die Kosten von Meta plus die Marge, auf 0.01 gerundet und mindestens 0.01, außer die Marge beträgt -100 % (kostenlos). Wo die Kosten von Meta unbekannt sind, gilt stattdessen der eingetragene Festpreis."
+          }
+        }
+      },
+      "packages": {
+        "title": "Guthabenpakete",
+        "crumb": "Guthabenpakete",
+        "subtitle": "Optionale Angebote: Sie zahlen diesen Betrag und erhalten dieses Wallet-Guthaben. Ein Guthaben über dem Preis ist ein Aufladebonus.",
+        "new": "Neues Paket",
+        "edit": "Bearbeiten",
+        "enable": "Aktivieren",
+        "disable": "Deaktivieren",
+        "delete": "Löschen",
+        "cancel": "Abbrechen",
+        "enabled": "{name} ist aktiviert.",
+        "disabled": "{name} ist deaktiviert.",
+        "deleted": "Paket gelöscht.",
+        "deleteTitle": "Paket löschen?",
+        "deleteBody": "Dieses Paket löschen? Bestehende Käufe behalten ihre Hauptbuchzeilen.",
+        "bonus": "+{percent} % Bonus",
+        "status": {
+          "active": "Aktiv",
+          "inactive": "Inaktiv",
+          "featured": "Empfohlen"
+        },
+        "empty": {
+          "title": "Noch keine Guthabenpakete",
+          "body": "Es wurden keine Pakete angelegt.",
+          "bodyWrite": "Legen Sie das erste Paket an, um eine Wallet-Aufladung mit Bonus anzubieten."
+        },
+        "columns": {
+          "label": "Guthabenpakete",
+          "name": "Name",
+          "slug": "Kurzname",
+          "price": "Preis",
+          "credit": "Wallet-Guthaben",
+          "badge": "Kennzeichnung",
+          "status": "Status",
+          "actions": "Aktionen"
+        },
+        "form": {
+          "newTitle": "Neues Guthabenpaket",
+          "editTitle": "Guthabenpaket bearbeiten",
+          "newCrumb": "Neues Paket",
+          "editCrumb": "Paket bearbeiten",
+          "notFound": "Dieses Paket existiert nicht mehr.",
+          "back": "Zurück zu den Guthabenpaketen",
+          "sections": {
+            "identity": "Identität",
+            "pricing": "Preis",
+            "display": "Anzeige"
+          },
+          "name": "Name",
+          "slug": "Kurzname (optional)",
+          "slugHint": "Buchstaben, Zahlen, Bindestriche und Unterstriche. Leer lassen, um ihn aus dem Namen zu bilden.",
+          "description": "Beschreibung",
+          "price": "Preis",
+          "priceHint": "Was der Kunde zahlt.",
+          "currency": "Währung",
+          "walletCredit": "Wallet-Guthaben",
+          "walletCreditHint": "Was im Wallet landet.",
+          "bonusLine": "Ein Bonus von {percent} %: Der Kunde zahlt {price} und erhält {credit}.",
+          "badge": "Kennzeichnung",
+          "badgeHint": "Ein kurzer Hinweis wie „Bestes Angebot“.",
+          "sortOrder": "Sortierung",
+          "sortOrderHint": "Niedrigster zuerst.",
+          "active": "Aktiv",
+          "featured": "Empfohlen",
+          "create": "Paket anlegen",
+          "save": "Änderungen speichern",
+          "saving": "Wird gespeichert",
+          "created": "{name} angelegt.",
+          "saved": "{name} gespeichert.",
+          "stale": {
+            "title": "Dieses Paket wurde von jemand anderem geändert",
+            "body": "Ihre Änderungen wurden nicht gespeichert, daher wurde nichts überschrieben. Laden Sie die neueste Version neu und nehmen Sie Ihre Änderung erneut vor.",
+            "reload": "Neueste Version laden"
+          },
+          "problems": {
+            "name": "Geben Sie einen Namen mit bis zu 96 Zeichen ein.",
+            "slug": "Verwenden Sie nur Buchstaben, Zahlen, Bindestriche und Unterstriche.",
+            "description": "Halten Sie die Beschreibung bei höchstens 500 Zeichen.",
+            "price": "Geben Sie einen Betrag mit höchstens 2 Dezimalstellen ein.",
+            "currency": "Wählen Sie eine der aufgeführten Währungen.",
+            "walletCredit": "Geben Sie einen Betrag größer als 0 mit höchstens 2 Dezimalstellen ein.",
+            "badge": "Halten Sie die Kennzeichnung bei höchstens 32 Zeichen.",
+            "sortOrder": "Geben Sie eine ganze Zahl von 0 bis 9999 ein."
+          }
+        }
+      }
+    }
+  }
+}

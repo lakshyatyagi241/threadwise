@@ -1,0 +1,574 @@
+{
+  "ecom": {
+    "nav": {
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce"
+    },
+    "common": {
+      "dismiss": "Bỏ qua",
+      "integrations": "Tích hợp",
+      "back": "Quay lại",
+      "docs": "Xem tài liệu",
+      "loadError": "Không thể tải trang này. Hãy thử lại.",
+      "support": "Liên hệ hỗ trợ",
+      "integration": "Tích hợp",
+      "notConnected": "Chưa kết nối",
+      "setupSteps": "Các bước thiết lập",
+      "needHelp": "Cần trợ giúp?",
+      "none": "không có",
+      "optional": "tùy chọn",
+      "yes": "Có"
+    },
+    "connect": {
+      "shopify": {
+        "title": "Kết nối",
+        "accent": "Shopify",
+        "intro": "Kết nối cửa hàng Shopify của bạn để các sự kiện đơn hàng, giao hàng, hoàn tiền và giỏ hàng tự động kích hoạt tin nhắn WhatsApp - và bảng điều khiển hiển thị số đơn hàng, sản phẩm và khách hàng của bạn.",
+        "step1": "Quản trị viên bật ứng dụng Shopify",
+        "step2": "Nhập tên miền cửa hàng của bạn",
+        "step3": "Phê duyệt quyền trên Shopify",
+        "step4": "Ánh xạ sự kiện → mẫu WhatsApp",
+        "help": "Webhook được cài đặt tự động sau khi kết nối - không cần thao tác thủ công. Gặp khó với thông tin xác thực?",
+        "disabledTitle": "Shopify chưa được bật",
+        "disabledBody": "Quản trị viên cần thêm thông tin xác thực ứng dụng Shopify trước khi bất kỳ không gian làm việc nào có thể kết nối cửa hàng. Sau khi xong, biểu mẫu bên dưới sẽ được kích hoạt.",
+        "formStep": "Bước 2",
+        "formTitle": "Tên miền cửa hàng",
+        "urlLabel": "URL cửa hàng Shopify",
+        "urlPlaceholder": "my-store",
+        "urlSuffix": ".myshopify.com",
+        "urlHint": "Chỉ cần tên cửa hàng — hoặc dán toàn bộ URL, chúng tôi sẽ tự chuẩn hóa.",
+        "webhookLabel": "URL Webhook · tự động cấu hình sau khi kết nối",
+        "cancel": "Hủy",
+        "continue": "Tiếp tục đến Shopify",
+        "continuing": "Đang chuyển hướng…",
+        "guideKicker": "Hướng dẫn thiết lập",
+        "guideTitle": "Tiếp theo sẽ là gì",
+        "guide1": "Chúng tôi chuyển bạn đến Shopify để cấp quyền cho các phạm vi được yêu cầu.",
+        "guide2": "Shopify gửi lại cho chúng tôi một mã truy cập vĩnh viễn được ký bằng HMAC.",
+        "guide3": "Webhook cho {count} sự kiện sẽ tự động được đăng ký trên cửa hàng của bạn.",
+        "guide4": "Bạn sẽ quay lại đây để ánh xạ từng sự kiện với một Mẫu WhatsApp.",
+        "scopes": "Phạm vi được yêu cầu",
+        "failed": "Không thể bắt đầu kết nối với Shopify.",
+        "connected": "Đã kết nối Shopify.",
+        "returnedError": "Chưa kết nối được Shopify."
+      },
+      "woocommerce": {
+        "title": "Kết nối",
+        "accent": "WooCommerce",
+        "intro": "Đồng bộ đơn hàng, hoàn tiền, sản phẩm và sự kiện khách hàng từ WooCommerce vào các cuộc trò chuyện. Xác nhận đơn, cập nhật giao hàng và khôi phục giỏ hàng bị bỏ quên trên WhatsApp mà không cần rời CRM.",
+        "step1": "Quản trị viên bật WooCommerce",
+        "step2": "Tạo khóa API trong quản trị WC",
+        "step3": "Dán URL cửa hàng + khóa bên dưới",
+        "step4": "Ánh xạ sự kiện → Mẫu WhatsApp",
+        "help": "Webhook tự động cài sau khi bạn kết nối — không cần thao tác thủ công trong WC. Gặp khó khăn với khóa?",
+        "disabledTitle": "WooCommerce chưa được bật",
+        "disabledBody": "Quản trị viên phải bật tích hợp WooCommerce trước khi bất kỳ không gian làm việc nào có thể kết nối cửa hàng.",
+        "formStep": "Bước 2",
+        "formTitle": "Thông tin xác thực cửa hàng",
+        "urlLabel": "URL cửa hàng",
+        "urlHint": "Basic Auth yêu cầu HTTPS. Chúng tôi sẽ tự phát hiện WP REST.",
+        "keyLabel": "Consumer Key",
+        "secretLabel": "Consumer Secret",
+        "secretHint": "Được mã hóa khi lưu trữ. Chỉ dùng để gọi REST API của cửa hàng bạn.",
+        "webhookLabel": "URL Webhook · tự động cấu hình sau khi kết nối",
+        "test": "Kiểm tra kết nối",
+        "testing": "Đang kiểm tra…",
+        "connect": "Kết nối cửa hàng",
+        "connecting": "Đang kết nối…",
+        "guideKicker": "Cách tạo khóa",
+        "guideTitle": "Trong quản trị WooCommerce của bạn",
+        "g1": "Mở WooCommerce → Cài đặt → Nâng cao → REST API.",
+        "g2": "Nhấn Thêm khóa. Đặt mô tả như “CRM”.",
+        "g3": "Chọn một người dùng (quản trị viên là được) và đặt Quyền = Đọc/Ghi.",
+        "g4": "Nhấn Tạo khóa API. Sao chép cả hai khóa — khóa bí mật chỉ hiển thị một lần.",
+        "g5": "Dán vào biểu mẫu bên trái rồi nhấn Kiểm tra kết nối.",
+        "httpsTitle": "Chỉ HTTPS",
+        "httpsBody": "Basic Auth yêu cầu HTTPS. Nếu cửa hàng chỉ dùng HTTP, hãy cài chứng chỉ SSL trước (Let’s Encrypt miễn phí).",
+        "connected": "Đã kết nối WooCommerce.",
+        "failed": "Kết nối thất bại.",
+        "networkError": "Lỗi mạng."
+      }
+    },
+    "shell": {
+      "status": {
+        "active": "Đang hoạt động",
+        "error": "Lỗi",
+        "other": "{status}"
+      },
+      "plan": "Gói:",
+      "store": "Cửa hàng",
+      "related": "Liên quan",
+      "allIntegrations": "Tất cả tích hợp",
+      "disconnect": "Ngắt kết nối",
+      "disconnectTitle": "Ngắt kết nối {name}?",
+      "disconnectShopify": "Thao tác này xóa các webhook đã đăng ký nhưng giữ nguyên cài đặt của bạn.",
+      "disconnectWoo": "Thao tác này xóa các webhook đã đăng ký.",
+      "disconnectDone": "Đã ngắt kết nối cửa hàng.",
+      "healthy": "Webhook hoạt động tốt",
+      "noRecent": "Chưa có sự kiện gần đây",
+      "lastEvent": "Sự kiện gần nhất:",
+      "triggerShopify": "Hãy thực hiện một thao tác trong Shopify và nó sẽ xuất hiện ở đây.",
+      "triggerWoo": "Hãy tạo một đơn hàng trong WooCommerce và nó sẽ xuất hiện ở đây.",
+      "sync": "Đồng bộ ngay",
+      "syncing": "Đang đồng bộ…",
+      "syncQueued": "Đã bắt đầu đồng bộ. Dữ liệu mới sẽ xuất hiện sau ít phút.",
+      "syncFailed": "Đồng bộ thất bại.",
+      "tabs": {
+        "overview": "Tổng quan",
+        "orders": "Đơn hàng",
+        "products": "Sản phẩm",
+        "offers": "Gửi ưu đãi",
+        "customers": "Khách hàng",
+        "events": "Tự động hóa",
+        "analytics": "Phân tích",
+        "invoices": "Hóa đơn",
+        "logs": "Hoạt động",
+        "settings": "Cài đặt"
+      },
+      "offersWoo": "Ưu đãi",
+      "desc": {
+        "shopify": {
+          "overview": "Ảnh chụp trực tiếp cửa hàng của bạn, được đồng bộ từ Shopify.",
+          "orders": "Đơn hàng đã được đồng bộ từ Shopify.",
+          "products": "Duyệt danh mục đã đồng bộ — gửi bất kỳ sản phẩm nào hoặc đẩy ưu đãi qua WhatsApp.",
+          "offers": "Chọn sản phẩm + mã giảm giá, chọn phân khúc khách hàng và gửi ưu đãi qua WhatsApp.",
+          "customers": "Khách hàng từ Shopify đã được đồng bộ vào danh bạ liên hệ của bạn.",
+          "events": "Tự động hóa tiếp thị — bật một mục, chọn mẫu, và nó sẽ chạy khi có sự kiện cửa hàng tương ứng.",
+          "analytics": "Doanh thu, xu hướng đơn hàng và hiệu quả tin nhắn của cửa hàng này.",
+          "logs": "Nhật ký gửi webhook của cửa hàng này.",
+          "settings": "Quản lý kết nối — đồng bộ lại, xem phạm vi quyền hoặc ngắt kết nối.",
+          "invoices": "Hóa đơn đã phát hành cho đơn hàng Shopify của bạn."
+        },
+        "woocommerce": {
+          "overview": "Ảnh chụp trực tiếp lấy từ WooCommerce REST API của bạn.",
+          "orders": "10 đơn hàng gần nhất được lấy từ cửa hàng.",
+          "products": "Các sản phẩm mới nhất trong danh mục.",
+          "offers": "Gửi ưu đãi sản phẩm hoặc lôi kéo lại khách hàng đã lâu không mua.",
+          "customers": "Tài khoản khách hàng được sắp xếp theo thời gian mua gần nhất.",
+          "events": "Bật hoặc tắt tự động hóa đơn hàng, COD, giỏ hàng và tồn kho.",
+          "analytics": "Doanh thu, lượng tin nhắn và tác động COD của cửa hàng này.",
+          "logs": "Nhật ký gửi webhook của cửa hàng này.",
+          "settings": "Thông tin kết nối — xác minh lại hoặc ngắt kết nối.",
+          "invoices": "Hóa đơn đã phát hành cho đơn hàng WooCommerce của bạn."
+        }
+      },
+      "loading": "Đang tải cửa hàng…",
+      "flash": {
+        "success": "Xong.",
+        "error": "Đã xảy ra lỗi."
+      },
+      "cancel": "Hủy"
+    },
+    "overview": {
+      "revenueRecent": "Doanh thu (gần đây)",
+      "revenueRecentHint": "trên các đơn hàng đã đồng bộ gần đây",
+      "ordersTotal": "Tổng đơn hàng",
+      "ordersMirrorHint": "đã đồng bộ vào CRM",
+      "products": "Sản phẩm",
+      "productsHint": "số sản phẩm đã đồng bộ trong danh mục",
+      "customers": "Khách hàng",
+      "activeAutomations": "{count} tự động hóa đang hoạt động",
+      "revenue30": "Doanh thu · 30 ngày",
+      "revenue30Hint": "từ báo cáo bán hàng WC",
+      "orders30": "Đơn hàng · 30 ngày",
+      "ordersAllTime": "{count} tổng từ trước đến nay",
+      "customersNew": "{count} mới trong 30 ngày",
+      "itemsSold": "Số mặt hàng đã bán · 30 ngày",
+      "recentOrders": "Đơn hàng gần đây",
+      "viewAll": "Xem tất cả →",
+      "noOrders": "Chưa có đơn hàng. Nhấn Đồng bộ ngay.",
+      "recentActivity": "Hoạt động webhook gần đây",
+      "noActivity": "Chưa nhận được sự kiện webhook nào."
+    },
+    "orders": {
+      "order": "Đơn hàng",
+      "customer": "Khách hàng",
+      "status": "Trạng thái",
+      "total": "Tổng",
+      "placed": "Ngày đặt",
+      "none": "Không tìm thấy đơn hàng."
+    },
+    "products": {
+      "search": "Tìm sản phẩm…",
+      "offers": "Ưu đãi đặc biệt",
+      "catalog": "Gửi danh mục →",
+      "newArrivals": "Hàng mới về",
+      "all": "Tất cả sản phẩm",
+      "none": "Chưa có sản phẩm. Kết nối cửa hàng hoặc nhấn Đồng bộ ngay.",
+      "noImage": "không có ảnh",
+      "save": "TIẾT KIỆM {pct}%",
+      "send": "Gửi",
+      "offer": "Ưu đãi",
+      "noMatch": "Không có sản phẩm nào khớp.",
+      "wooNone": "Không tìm thấy sản phẩm.",
+      "inStock": "Còn hàng",
+      "outOfStock": "Hết hàng"
+    },
+    "offers": {
+      "choose": "Chọn sản phẩm",
+      "selected": "Đã chọn {count}",
+      "noProducts": "Chưa có sản phẩm nào được đồng bộ.",
+      "template": "Mẫu tin nhắn",
+      "pickTemplate": "Chọn một mẫu",
+      "tokens": "Các biến bạn có thể dùng:",
+      "segment": "Gửi đến phân khúc",
+      "pickGroup": "Chọn một nhóm liên hệ",
+      "coupon": "Mã giảm giá (không bắt buộc)",
+      "noCoupon": "Không có mã giảm giá",
+      "couponPercent": "{amount}%",
+      "send": "Gửi ưu đãi",
+      "sending": "Đang gửi…",
+      "pickTemplateFirst": "Hãy chọn mẫu trước.",
+      "pickSegmentFirst": "Hãy chọn phân khúc trước.",
+      "note": "Chỉ những liên hệ đã đồng ý nhận tin trong phân khúc mới nhận được tin nhắn. Gửi qua WABA cần mẫu đã được duyệt; API không chính thức sẽ hiển thị mẫu dưới dạng văn bản + nút.",
+      "queued": "Đã xếp hàng cho {total} liên hệ. Số liệu sẽ hiện ở tab Hoạt động khi hoàn tất.",
+      "failed": "Gửi thất bại.",
+      "wooTitle": "Gửi ưu đãi sản phẩm hàng loạt",
+      "wooIntro": "Gửi một mẫu đã duyệt đến mọi liên hệ đã đồng ý trong phân khúc. Chèn sản phẩm + mã giảm giá.",
+      "wooTemplate": "Mẫu",
+      "choose2": "chọn",
+      "wooSegment": "Phân khúc (nhóm liên hệ)",
+      "wooProduct": "Sản phẩm nổi bật",
+      "wooCoupon": "Mã giảm giá",
+      "wooCouponPlaceholder": "SAVE10",
+      "winTitle": "Gửi hàng loạt theo phân khúc thông minh",
+      "winIntro": "Nhắm đến khách hàng dựa trên lịch sử mua — thời gian mua gần nhất (lôi kéo lại), số đơn và tổng chi tiêu (khách VIP). Bỏ qua liên hệ đã từ chối nhận tin.",
+      "winLast": "Đơn gần nhất",
+      "winAny": "Bất kỳ lúc nào",
+      "winDays": "> {days} ngày trước",
+      "winMonths": "> 6 tháng",
+      "winYear": "> 1 năm",
+      "winMinOrders": "Số đơn tối thiểu",
+      "winAnyOrders": "Bất kỳ",
+      "winMinSpend": "Chi tiêu tối thiểu ({currency})",
+      "winTemplate": "Mẫu",
+      "winPick": "Chọn",
+      "winCoupon": "Mã giảm giá",
+      "winNone": "Không có",
+      "winSend": "Gửi tin lôi kéo lại",
+      "winConfirm": "Gửi chương trình này đến tất cả mọi người trong phân khúc?",
+      "winQueued": "Đã xếp hàng cho {total} khách hàng đã lâu không mua. Số liệu sẽ hiện ở tab Hoạt động khi hoàn tất.",
+      "wooWinTitle": "Gửi hàng loạt theo phân khúc thông minh",
+      "wooWinIntro": "Nhắm theo lịch sử mua — lôi kéo khách đã ngừng mua hoặc thưởng cho khách hàng tốt nhất.",
+      "wooLapsed": "Đã ngừng mua > ngày",
+      "wooWinNote": "Số ngày = 0 nhắm đến mọi thời điểm (chỉ theo phân khúc). Chi tiêu tính bằng đơn vị tiền tệ của cửa hàng. Liên hệ đã từ chối nhận tin luôn bị bỏ qua.",
+      "wooCouponPlaceholder2": "COMEBACK15",
+      "wooWinSend": "Gửi chương trình",
+      "optional": "không bắt buộc",
+      "none": "không có",
+      "cancel": "Hủy"
+    },
+    "customers": {
+      "name": "Tên",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "orders": "Đơn hàng",
+      "spent": "Đã chi",
+      "none": "Chưa tải khách hàng nào.",
+      "noneWoo": "Chưa có khách hàng nào."
+    },
+    "events": {
+      "noTemplates": "Bạn chưa có mẫu WhatsApp nào được duyệt. Hãy tạo một mẫu trong Mẫu để bật tự động hóa.",
+      "templatesLink": "Mẫu",
+      "sendFrom": "Gửi từ",
+      "sendFromHint": "Số đã kết nối nào sẽ gửi các tự động hóa này.",
+      "auto": "Tự động — bất kỳ số đã kết nối nào",
+      "fired": "{count} đã kích hoạt",
+      "logged": "{count} đã ghi nhật ký",
+      "template": "Mẫu",
+      "pickTemplate": "Chọn một mẫu",
+      "noneOption": "không có",
+      "sendTo": "Gửi đến",
+      "customer": "Khách hàng",
+      "admin": "Chỉ quản trị viên",
+      "both": "Cả hai",
+      "adminNumber": "Số quản trị viên",
+      "delay": "Độ trễ",
+      "on": "Bật",
+      "immediate": "Ngay lập tức",
+      "min": "{n} phút",
+      "hour": "{n} giờ",
+      "day": "{n, plural, other {# ngày}}",
+      "mapTitle": "Ánh xạ biến mẫu → trường đơn hàng",
+      "param": "Tham số {n}",
+      "blank": "— để trống —",
+      "field": {
+        "name": "Tên khách hàng",
+        "first_name": "Tên",
+        "order_name": "Số đơn (ví dụ #1001)",
+        "order_number": "Số đơn hàng",
+        "total": "Tổng + đơn vị tiền tệ",
+        "total_price": "Tổng (chỉ số tiền)",
+        "currency": "Đơn vị tiền tệ",
+        "email": "Email khách hàng",
+        "store_name": "Tên cửa hàng",
+        "financial_status": "Trạng thái thanh toán",
+        "fulfillment_status": "Trạng thái giao hàng"
+      },
+      "advanced": "Nâng cao · thứ tự biến",
+      "advancedHint": "Các trường cách nhau bằng dấu phẩy, ánh xạ theo thứ tự vào các chỗ giữ số trong mẫu. Để trống để dùng mặc định thông minh: tên, đơn hàng, tổng.",
+      "advancedPlaceholder": "name, first_name, order_number, order_name, total, currency, order_url, tracking_number, tracking_url",
+      "save": "Lưu tự động hóa",
+      "saving": "Đang lưu…",
+      "saved": "✓ Đã lưu",
+      "saveFailed": "Lưu thất bại",
+      "needTemplate": "Chọn một mẫu cho mỗi tự động hóa bạn bật."
+    },
+    "autoGroups": {
+      "lifecycle": {
+        "name": "Vòng đời đơn hàng",
+        "desc": "Cập nhật giao dịch — tự động chạy khi có sự kiện cửa hàng."
+      },
+      "recovery": {
+        "name": "Khôi phục doanh thu",
+        "desc": "Lấy lại các đơn hàng đã mất."
+      },
+      "marketing": {
+        "name": "Tiếp thị vòng đời",
+        "desc": "Phát triển và giữ chân khách hàng."
+      }
+    },
+    "auto": {
+      "shopify": {
+        "orders_create": {
+          "name": "Xác nhận đơn hàng",
+          "desc": "Cảm ơn khách hàng ngay khi họ đặt đơn."
+        },
+        "orders_paid": {
+          "name": "Đã nhận thanh toán",
+          "desc": "Xác nhận khi thanh toán đã được ghi nhận."
+        },
+        "orders_fulfilled": {
+          "name": "Đã giao cho vận chuyển / Đang giao",
+          "desc": "Gửi thông báo giao hàng — dùng '{{'tracking_url'}}' cho liên kết theo dõi trực tiếp."
+        },
+        "order_delivered": {
+          "name": "Đã giao",
+          "desc": "Xác nhận đã giao (sẽ yêu cầu đánh giá nếu mẫu của bạn có). Chạy khi đơn vị vận chuyển đánh dấu đã giao."
+        },
+        "orders_cancelled": {
+          "name": "Đơn hàng đã hủy",
+          "desc": "Thông báo cho khách hàng biết đơn hàng đã bị hủy."
+        },
+        "refunds_create": {
+          "name": "Đã hoàn tiền",
+          "desc": "Xác nhận khoản hoàn tiền đã được xử lý."
+        },
+        "orders_updated": {
+          "name": "Đơn hàng đã cập nhật",
+          "desc": "Chạy khi có bất kỳ thay đổi nào với đơn hàng hiện có."
+        },
+        "checkouts_create": {
+          "name": "Giỏ hàng bị bỏ quên · bước 1",
+          "desc": "Chạy ngay sau khi thanh toán bị bỏ dở — thêm '{{'checkout_url'}}' để đưa họ quay lại."
+        },
+        "cart_step2": {
+          "name": "Giỏ hàng bị bỏ quên · bước 2",
+          "desc": "Nhắc lại theo lịch (đặt độ trễ, ví dụ 1 giờ). Tự hủy nếu họ đã mua."
+        },
+        "cart_step3": {
+          "name": "Giỏ hàng bị bỏ quên · bước 3",
+          "desc": "Nhắc lần cuối (ví dụ 24 giờ) — thêm mã giảm giá vào mẫu để chốt đơn."
+        },
+        "cod_confirm": {
+          "name": "Xác nhận đơn COD",
+          "desc": "Yêu cầu khách hàng thanh toán khi nhận hàng xác nhận bằng cách trả lời Có/Không — giảm đơn ảo và hoàn hàng (RTO)."
+        },
+        "cod_prepaid": {
+          "name": "Ưu đãi COD → Trả trước",
+          "desc": "Nhắc khách COD thanh toán trực tuyến ngay (dùng '{{'order_url'}}' + mã giảm giá trong mẫu) — ít hoàn hàng hơn, thu tiền nhanh hơn."
+        },
+        "stock_back": {
+          "name": "Thông báo có hàng trở lại",
+          "desc": "Khách hàng nhắn tin về sản phẩm đã hết hàng sẽ được thông báo tự động khi hàng được nhập lại."
+        },
+        "customers_create": {
+          "name": "Chào khách hàng mới",
+          "desc": "Chào đón khách hàng lần đầu một cách thân thiện."
+        },
+        "customers_update": {
+          "name": "Khách hàng đã cập nhật",
+          "desc": "Chạy khi hồ sơ khách hàng thay đổi."
+        },
+        "products_update": {
+          "name": "Sản phẩm đã cập nhật",
+          "desc": "Trigger nội bộ khi giá hoặc tồn kho thay đổi."
+        }
+      },
+      "woocommerce": {
+        "order_created": {
+          "name": "Đơn hàng đã đặt",
+          "desc": "Gửi ngay khi có đơn hàng mới."
+        },
+        "order_processing": {
+          "name": "Đơn hàng đã xác nhận",
+          "desc": "Đã nhận thanh toán — đơn hàng đang được chuẩn bị."
+        },
+        "order_completed": {
+          "name": "Đơn hàng đã giao",
+          "desc": "Đơn hàng được đánh dấu hoàn tất trong WooCommerce."
+        },
+        "order_on_hold": {
+          "name": "Đơn hàng tạm giữ",
+          "desc": "Đang chờ thanh toán hoặc tồn kho — giữ người mua được thông báo."
+        },
+        "order_cancelled": {
+          "name": "Đơn hàng đã hủy",
+          "desc": "Đơn hàng đã bị hủy."
+        },
+        "order_refunded": {
+          "name": "Đơn hàng đã hoàn tiền",
+          "desc": "Một khoản hoàn tiền đã được thực hiện."
+        },
+        "cod_confirm": {
+          "name": "Xác nhận đôi COD",
+          "desc": "Yêu cầu người mua COD xác nhận Có / Không trước khi giao — cách hiệu quả nhất để giảm RTO."
+        },
+        "cod_prepaid": {
+          "name": "Nhắc COD → Trả trước",
+          "desc": "Gửi người mua COD đường link thanh toán trực tuyến (mẫu có thể kèm '{{'order_url'}}' + ưu đãi)."
+        },
+        "checkout_created": {
+          "name": "Giỏ hàng bị bỏ quên · bước 1",
+          "desc": "Nhắc đầu tiên khi bắt đầu thanh toán nhưng chưa có đơn hàng. Cần plugin WooCommerce đi kèm."
+        },
+        "cart_step2": {
+          "name": "Giỏ hàng bị bỏ quên · bước 2",
+          "desc": "Nhắc lại theo lịch sau độ trễ bên dưới."
+        },
+        "cart_step3": {
+          "name": "Giỏ hàng bị bỏ quên · bước 3",
+          "desc": "Nhắc cuối cùng — thêm mã giảm giá vào mẫu."
+        },
+        "stock_back": {
+          "name": "Đã có hàng trở lại",
+          "desc": "Gửi tin cho mọi người trong danh sách chờ khi sản phẩm hết hàng được nhập lại."
+        },
+        "subscription_payment_failed": {
+          "name": "Nhắc gia hạn đăng ký",
+          "desc": "Khi thanh toán gia hạn đăng ký thất bại, gửi một liên kết “cập nhật thanh toán” chỉ cần một chạm. Cần plugin WooCommerce đi kèm."
+        },
+        "customer_created": {
+          "name": "Chào khách hàng mới",
+          "desc": "Chào khách hàng lần đầu họ đăng ký trên cửa hàng."
+        },
+        "review_reward": {
+          "name": "Mã giảm giá có điều kiện đánh giá",
+          "desc": "Khi người mua gần đây trả lời với đánh giá tích cực (4–5 / “tuyệt vời”), tự động gửi mẫu phần thưởng này — đặt mã giảm giá trong đó. Kết hợp với mẫu “Đã giao hàng” yêu cầu họ đánh giá."
+        }
+      }
+    },
+    "analytics": {
+      "revenue": "Doanh thu",
+      "orders": "Đơn hàng",
+      "avgOrder": "Giá trị TB/đơn",
+      "messagesSent": "Tin nhắn đã gửi",
+      "offersSent": "Ưu đãi đã gửi",
+      "codProtected": "Doanh thu COD được bảo vệ",
+      "codConfirmed": "{count} đơn COD đã xác nhận",
+      "rtoAvoided": "Tránh được RTO",
+      "codCancelled": "{count} đơn ảo/COD đã được ngăn",
+      "recovery": "Tin nhắn khôi phục",
+      "recoveryHint": "giỏ hàng / ưu đãi / lôi kéo lại / tồn kho",
+      "avgValue": "Giá trị đơn trung bình",
+      "trend": "Doanh thu · 14 ngày qua",
+      "perf": "Hiệu quả tự động hóa",
+      "event": "Sự kiện",
+      "fired": "Đã kích hoạt",
+      "noActivity": "Chưa có hoạt động tự động hóa nào.",
+      "revenueMirrored": "Doanh thu · đã đồng bộ",
+      "ordersSynced": "{count} đơn đã đồng bộ",
+      "perOrder": "mỗi đơn",
+      "offerBroadcasts": "{count} đợt gửi ưu đãi",
+      "recoverySends": "Tin khôi phục đã gửi",
+      "recoverySendsHint": "COD / giỏ hàng / tồn kho / ưu đãi",
+      "wouldBeRto": "đơn có nguy cơ RTO đã được hủy sớm",
+      "activeAutomations": "Tự động hóa đang hoạt động",
+      "firingOn": "chạy khi có sự kiện cửa hàng"
+    },
+    "logs": {
+      "processed": "Đã xử lý",
+      "sent": "Đã gửi",
+      "skipped": "Đã bỏ qua",
+      "failed": "Thất bại",
+      "event": "Sự kiện",
+      "recipient": "Người nhận",
+      "status": "Trạng thái",
+      "when": "Thời gian",
+      "none": "Chưa có sự kiện webhook nào đến cho cửa hàng này."
+    },
+    "settings": {
+      "storeUrl": "URL cửa hàng",
+      "connectedAt": "Kết nối lúc",
+      "lastVerified": "Xác minh lần cuối",
+      "scopes": "Phạm vi đã cấp",
+      "wooVersion": "Phiên bản WooCommerce",
+      "webhookUrl": "URL Webhook",
+      "registered": "Webhook đã đăng ký",
+      "registeredCount": "{count, plural, other {# đăng ký đang hoạt động}}",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "plugin": {
+        "title": "Plugin WordPress",
+        "body": "Cài plugin nhỏ này trên cửa hàng để khôi phục giỏ hàng bị bỏ quên trước khi có đơn hàng, và để chuyển tiếp các thanh toán đăng ký thất bại cũng như trạng thái đơn tùy chỉnh.",
+        "step1": "Tải plugin bên dưới. Plugin được tạo riêng cho cửa hàng này.",
+        "step2": "Trong WordPress, mở Plugins, Add New, Upload Plugin, chọn tệp zip rồi kích hoạt.",
+        "step3": "Đảm bảo WP-Cron chạy trên trang của bạn. Plugin kiểm tra giỏ hàng nhàn rỗi mỗi 5 phút.",
+        "download": "Tải plugin (.zip)",
+        "preparing": "Đang chuẩn bị plugin…",
+        "started": "Đã tải plugin.",
+        "secretNote": "Tệp này chứa khóa bí mật của cửa hàng. Hãy giữ kín.",
+        "forbidden": "Bạn không có quyền tải plugin.",
+        "failed": "Không thể tải plugin. Vui lòng thử lại."
+      }
+    },
+    "embedded": {
+      "title": "Shopify",
+      "connected": "Đã kết nối",
+      "notConnected": "Chưa kết nối",
+      "store": "Cửa hàng",
+      "plan": "Gói Shopify",
+      "lastVerified": "Xác minh lần cuối",
+      "openApp": "Mở ứng dụng",
+      "openToConnect": "Mở ứng dụng để kết nối",
+      "invalid": "Phiên Shopify không hợp lệ. Hãy tải lại ứng dụng từ quản trị Shopify.",
+      "off": "Tích hợp Shopify chưa được bật trên bản cài đặt này. Liên hệ bộ phận hỗ trợ.",
+      "error": "Đã xảy ra lỗi. Hãy tải lại ứng dụng từ quản trị Shopify."
+    },
+    "invoices": {
+      "policyTitle": "Hóa đơn tự động",
+      "autoInvoice": "Lập hóa đơn tự động cho đơn hàng của cửa hàng này",
+      "autoInvoiceHint": "Mỗi hóa đơn được gửi cho người mua qua WhatsApp, hoặc qua email nếu không có số điện thoại. Tắt cho đến khi bạn bật.",
+      "trigger": "Lập hóa đơn khi đơn hàng",
+      "on_placed": "Đã đặt",
+      "on_paid": "Đã thanh toán",
+      "on_fulfilled": "Đã hoàn tất",
+      "saved": "Đã lưu cài đặt hóa đơn.",
+      "saveFailed": "Không thể lưu cài đặt hóa đơn.",
+      "policyLoadFailed": "Không thể tải cài đặt hóa đơn.",
+      "listTitle": "Hóa đơn từ cửa hàng này",
+      "number": "Số",
+      "buyer": "Người mua",
+      "type": "Loại",
+      "status": "Trạng thái",
+      "total": "Tổng",
+      "issued": "Ngày phát hành",
+      "draft": "Nháp",
+      "tax_invoice": "Hóa đơn thuế",
+      "receipt": "Biên nhận",
+      "proforma": "Hóa đơn tạm (Proforma)",
+      "status_draft": "Nháp",
+      "status_issued": "Đã phát hành",
+      "status_partially_paid": "Thanh toán một phần",
+      "status_paid": "Đã thanh toán",
+      "status_overdue": "Quá hạn",
+      "status_void": "Đã hủy",
+      "loading": "Đang tải hóa đơn…",
+      "none": "Chưa có hóa đơn nào từ cửa hàng này. Bật hóa đơn tự động ở trên, đơn đã thanh toán tiếp theo sẽ có hóa đơn.",
+      "error": "Không thể tải hóa đơn.",
+      "retry": "Thử lại",
+      "forbidden": "Bạn không có quyền truy cập hóa đơn.",
+      "viewAll": "Mở tất cả hóa đơn"
+    }
+  }
+}

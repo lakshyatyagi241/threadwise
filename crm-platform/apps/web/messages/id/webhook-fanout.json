@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhook",
+      "forwarding": "Penerusan webhook"
+    },
+    "common": {
+      "loading": "Memuat",
+      "retry": "Coba lagi",
+      "requestId": "ID permintaan",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Anda tidak memiliki izin untuk melakukan ini.",
+        "request": "Permintaan tersebut tidak dapat diselesaikan.",
+        "unexpected": "Terjadi kesalahan di sisi kami. Coba lagi sebentar lagi.",
+        "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.",
+        "conflict": "Orang lain telah mengubah target ini. Daftar dimuat ulang: terapkan perubahan Anda lagi.",
+        "validation": "Beberapa nilai tidak valid. Periksa kolom yang disorot.",
+        "notFound": "Item tersebut sudah tidak ada.",
+        "urlRejected": "URL ini tidak diizinkan. Gunakan alamat https yang dapat dijangkau dari internet."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin / Sistem / Webhook",
+      "title": "Penerusan webhook",
+      "description": "Daftar layanan operator platform yang menerima salinan setiap webhook Meta.",
+      "banner": "Meta hanya mengizinkan satu URL callback. Kami menerimanya sekali, memverifikasinya, dan meneruskan body mentah tanpa perubahan (dengan tanda tangan asli) ke setiap target yang aktif.",
+      "superOnly": "Hanya super admin yang dapat mengelola penerusan webhook.",
+      "add": "Tambah target",
+      "tabs": {
+        "targets": "Target",
+        "failures": "Pengiriman gagal"
+      }
+    },
+    "targets": {
+      "empty": "Belum ada target penerusan",
+      "emptyBody": "Tambahkan target untuk mulai meneruskan webhook Meta ke layanan lain.",
+      "columns": {
+        "target": "Target",
+        "active": "Aktif",
+        "fields": "Kolom",
+        "deliveries": "Pengiriman",
+        "last": "Pengiriman terakhir",
+        "actions": "Tindakan"
+      },
+      "allFields": "Semua kolom",
+      "success": "{count, number} berhasil",
+      "failure": "{count, number} gagal",
+      "pending": "{count, number} menunggu",
+      "pendingLabel": "{count, number} pengiriman gagal menunggu diputar ulang",
+      "neverDelivered": "Belum ada yang terkirim",
+      "lastStatus": "Status {status}",
+      "lastError": "Error: {error}",
+      "lastAt": "pada {time}",
+      "activeSwitch": "Teruskan ke {name}",
+      "on": "Target aktif",
+      "off": "Target nonaktif",
+      "edit": "Edit",
+      "test": "Uji",
+      "testing": "Menguji",
+      "testOk": "Uji berhasil: status {status} dalam {ms, number} ms",
+      "testFailed": "Uji gagal: {reason} ({ms, number} ms)",
+      "testNoStatus": "tidak ada jawaban",
+      "testStatus": "status {status}",
+      "delete": "Hapus",
+      "deleteTitle": "Hapus {name}?",
+      "deleteBody": "Target berhenti menerima webhook dan pengiriman gagal yang disimpan akan dihapus. Tindakan ini tidak dapat dibatalkan.",
+      "deleteConfirm": "Hapus target",
+      "cancel": "Batal",
+      "toasts": {
+        "created": "{name} ditambahkan",
+        "saved": "{name} disimpan",
+        "on": "{name} aktif",
+        "off": "{name} nonaktif",
+        "deleted": "{name} dihapus"
+      }
+    },
+    "dialog": {
+      "createTitle": "Tambah target penerusan",
+      "editTitle": "Edit {name}",
+      "close": "Tutup",
+      "name": "Nama",
+      "namePlaceholder": "Layanan analitik",
+      "url": "URL",
+      "urlHint": "Hanya https. Alamat di jaringan privat ditolak.",
+      "headerName": "Nama header (opsional)",
+      "headerNameHint": "Dikirim dengan setiap pengiriman, misalnya Authorization.",
+      "headerValue": "Nilai header",
+      "headerValueSaved": "Tersimpan, berakhir dengan ••••{last4}. Kosongkan untuk mempertahankannya.",
+      "headerValueSavedNoLast4": "Tersimpan. Kosongkan untuk mempertahankannya.",
+      "headerValueHint": "Hanya tulis: tidak pernah ditampilkan lagi setelah disimpan.",
+      "removeHeader": "Hapus header yang tersimpan",
+      "fieldFilter": "Filter kolom",
+      "fieldFilterHint": "Kosongkan untuk meneruskan semua kolom. Ketik nama kolom lalu tekan Enter, misalnya messages atau message_template_status_update.",
+      "fieldFilterPlaceholder": "Tambah kolom",
+      "fieldRemove": "Hapus {field}",
+      "timeout": "Batas waktu (detik)",
+      "timeoutHint": "1 sampai 30",
+      "maxAttempts": "Percobaan maksimal",
+      "maxAttemptsHint": "1 sampai 10",
+      "active": "Teruskan ke target ini",
+      "save": "Simpan",
+      "saving": "Menyimpan",
+      "cancel": "Batal",
+      "errors": {
+        "nameRequired": "Masukkan nama.",
+        "urlRequired": "Masukkan URL.",
+        "urlHttps": "URL harus diawali dengan https://.",
+        "headerNameInvalid": "Gunakan huruf, angka, dan tanda hubung saja.",
+        "headerValueRequired": "Header memerlukan nama dan nilai.",
+        "headerNameRequired": "Masukkan juga nama header.",
+        "timeout": "Masukkan bilangan bulat dari 1 sampai 30.",
+        "maxAttempts": "Masukkan bilangan bulat dari 1 sampai 10."
+      }
+    },
+    "failures": {
+      "empty": "Tidak ada pengiriman gagal",
+      "emptyBody": "Pengiriman yang kehabisan percobaan disimpan di sini selama 14 hari agar Anda dapat mengirimkannya lagi.",
+      "filterAll": "Semua target",
+      "filterLabel": "Target",
+      "columns": {
+        "target": "Target",
+        "when": "Gagal pada",
+        "attempts": "Percobaan",
+        "reason": "Alasan",
+        "size": "Ukuran",
+        "actions": "Tindakan"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} byte",
+      "replay": "Putar ulang",
+      "replaying": "Memutar ulang",
+      "replayed": "Diputar ulang {time}",
+      "replayOk": "Terkirim: status {status} dalam {ms, number} ms",
+      "replayFailed": "Tidak terkirim: {reason} ({ms, number} ms)",
+      "reasonStatus": "status {status}",
+      "reasonNone": "tidak ada jawaban"
+    }
+  }
+}

@@ -1,0 +1,1066 @@
+{
+  "appointments": {
+    "nav": {
+      "appointments": "Lịch hẹn"
+    },
+    "common": {
+      "dismiss": "Bỏ qua",
+      "loading": "Đang tải",
+      "cancel": "Hủy",
+      "save": "Lưu",
+      "close": "Đóng",
+      "back": "Quay lại",
+      "minutes": "{count, plural, other {# phút}}",
+      "minShort": "{count} phút",
+      "hoursMinutes": "{hours} giờ {minutes} phút",
+      "hours": "{hours} giờ"
+    },
+    "status": {
+      "pending": "Đang chờ",
+      "confirmed": "Đã xác nhận",
+      "cancelled": "Đã hủy",
+      "completed": "Đã hoàn tất",
+      "no_show": "Không đến",
+      "declined": "Đã từ chối"
+    },
+    "errors": {
+      "network": "Không thể kết nối máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác đó.",
+      "signedOut": "Phiên của bạn đã kết thúc. Hãy đăng nhập lại để tiếp tục.",
+      "conflict": "Nội dung này đã được người khác thay đổi. Hãy tải lại để xem phiên bản mới nhất.",
+      "validation": "Một số thông tin không hợp lệ. Hãy kiểm tra các trường được đánh dấu.",
+      "unavailable": "Máy chủ này chưa hỗ trợ lịch hẹn.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "notFound": "Không tìm thấy. Có thể nó đã bị xóa.",
+      "planDisabled": "Lịch hẹn không có trong gói của bạn.",
+      "slotTaken": "Giờ đó vừa có người đặt. Vui lòng chọn giờ khác.",
+      "gone": "Lịch đặt này không thể thay đổi nữa.",
+      "unexpected": "Đã xảy ra lỗi. Vui lòng thử lại sau giây lát.",
+      "requestId": "ID yêu cầu",
+      "retry": "Thử lại",
+      "invalidTransition": "Lịch đặt này không ở trạng thái cho phép thực hiện thao tác này. Hãy tải lại để xem trạng thái hiện tại.",
+      "notStarted": "Chỉ có thể thực hiện sau khi lịch đặt đã bắt đầu.",
+      "alreadyStarted": "Lịch đặt này đã bắt đầu nên không thể thay đổi nữa.",
+      "bookingOff": "Hiện không thể đặt lịch cho dịch vụ này.",
+      "notDeletable": "Không thể xóa khi còn các lịch đặt sắp tới."
+    },
+    "picker": {
+      "timeZone": "Múi giờ",
+      "previousMonth": "Tháng trước",
+      "nextMonth": "Tháng sau",
+      "pickDay": "Chọn một ngày",
+      "times": "Giờ trống",
+      "timesAvailable": "{count, plural, other {# giờ trống}}",
+      "seatsLeft": "còn {count}",
+      "noTimes": "Không có giờ trống trong những ngày tới.",
+      "noTimesDay": "Không có giờ nào trong ngày này. Hãy chọn ngày khác.",
+      "loading": "Đang tải các khung giờ",
+      "loadFailed": "Không thể tải các khung giờ.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "retry": "Thử lại",
+      "typeZone": "Dịch vụ này hoạt động theo múi giờ {zone}."
+    },
+    "hours": {
+      "openDay": "Mở vào {day}",
+      "daySummary": "{hours} giờ {minutes} phút",
+      "closed": "Đóng cửa",
+      "from": "{day}, khoảng {n}, giờ bắt đầu",
+      "to": "{day}, khoảng {n}, giờ kết thúc",
+      "removeInterval": "Gỡ khoảng {n} vào {day}",
+      "addInterval": "Thêm khoảng",
+      "copyTo": "Sao chép giờ {day} sang các ngày khác",
+      "copyDay": "Sao chép đến",
+      "copyWeekdays": "Thứ Hai đến Thứ Sáu",
+      "copyAll": "Tất cả các ngày",
+      "problems": {
+        "incomplete": "Hãy điền cả hai mốc giờ.",
+        "order": "Giờ kết thúc phải sau giờ bắt đầu.",
+        "overlap": "Khoảng này trùng với khoảng khác."
+      }
+    },
+    "hub": {
+      "breadcrumb": "Đường dẫn",
+      "integrations": "Tích hợp",
+      "appointments": "Lịch hẹn",
+      "title": "Lịch đặt của bạn",
+      "subtitle": "Cho phép khách hàng đặt lịch hẹn ngay trong chat. Tạo một loại lịch đặt với dịch vụ, giờ làm việc và lời nhắc, khách hàng chọn khung giờ và được xác nhận tự động.",
+      "newType": "Loại lịch đặt mới",
+      "types": "Loại lịch đặt",
+      "settings": "Cài đặt",
+      "weekTitle": "Tuần",
+      "monthTitle": "Tháng",
+      "inRange": "{count, plural, =0 {Không có lịch đặt} other {# lịch đặt}} trong chế độ xem",
+      "tableLabel": "Lịch đặt",
+      "loading": "Đang tải lịch đặt",
+      "useSampleData": "Dùng dữ liệu mẫu (phát triển)",
+      "empty": {
+        "upcoming": {
+          "title": "Không có lịch đặt sắp tới",
+          "message": "Tạo một loại lịch đặt với dịch vụ và giờ làm việc, rồi thả nút \"Đặt lịch hẹn\" vào bất kỳ luồng nào. Các lịch đặt đã xác nhận hiển thị ở đây."
+        },
+        "past": {
+          "title": "Không có lịch đặt trong quá khứ",
+          "message": "Các lịch đặt đã diễn ra hiển thị ở đây, cùng kết quả."
+        },
+        "filtered": {
+          "title": "Không có lịch đặt phù hợp",
+          "message": "Không có gì khớp với tìm kiếm và bộ lọc. Hãy xóa chúng để xem mọi lịch đặt."
+        }
+      },
+      "resetFilters": "Xóa bộ lọc",
+      "truncated": "Hiển thị {count} lịch đặt đầu tiên trong khoảng này. Hãy thu hẹp bộ lọc để xem phần còn lại.",
+      "showing": "{count, plural, other {Hiển thị # lịch đặt}}",
+      "loadMore": "Tải thêm",
+      "endOfList": "Hết danh sách",
+      "cancelTitle": "Hủy lịch hẹn này?",
+      "cancelMessage": "Lịch đặt bị hủy và khung giờ của nó trống trở lại. Khách hàng được thông báo và các lời nhắc bị gỡ bỏ.",
+      "cancelConfirm": "Hủy lịch hẹn",
+      "keep": "Giữ lại",
+      "declineTitle": "Từ chối yêu cầu này?",
+      "declineMessage": "Khách hàng được thông báo yêu cầu bị từ chối và khung giờ trống trở lại.",
+      "declineConfirm": "Từ chối yêu cầu"
+    },
+    "tabs": {
+      "label": "Danh sách lịch đặt",
+      "upcoming": "Sắp tới",
+      "past": "Đã qua",
+      "count": "{count, plural, other {# lịch đặt}}"
+    },
+    "toolbar": {
+      "label": "Bộ lọc và chế độ xem",
+      "search": "Tìm khách hàng, số điện thoại, email hoặc dịch vụ",
+      "status": "Trạng thái",
+      "allStatuses": "Tất cả trạng thái",
+      "type": "Loại lịch đặt",
+      "allTypes": "Tất cả loại lịch đặt",
+      "clear": "Xóa",
+      "navigate": "Điều hướng lịch",
+      "previous": "Trước",
+      "next": "Sau",
+      "today": "Hôm nay",
+      "refresh": "Làm mới",
+      "view": "Chế độ xem",
+      "views": {
+        "list": "Danh sách",
+        "week": "Tuần",
+        "month": "Tháng"
+      }
+    },
+    "table": {
+      "when": "Thời gian",
+      "customer": "Khách hàng",
+      "service": "Dịch vụ",
+      "status": "Trạng thái",
+      "actions": "Thao tác",
+      "today": "Hôm nay",
+      "tomorrow": "Ngày mai",
+      "yesterday": "Hôm qua",
+      "rowLabel": "Mở lịch đặt: {title}",
+      "noName": "Không có tên",
+      "needsReview": "Cần xem xét"
+    },
+    "row": {
+      "moreFor": "Thêm thao tác cho {title}",
+      "open": "Mở",
+      "confirm": "Xác nhận",
+      "complete": "Đánh dấu hoàn tất",
+      "noShow": "Đánh dấu không đến",
+      "reschedule": "Đổi lịch",
+      "copyLink": "Sao chép liên kết quản lý",
+      "cancel": "Hủy",
+      "decline": "Từ chối"
+    },
+    "calendar": {
+      "emptyWeek": "Không có lịch đặt nào trong tuần này.",
+      "monthGrid": "Lịch tháng",
+      "more": "+{count} nữa",
+      "dayAgenda": "Lịch đặt của ngày đã chọn",
+      "emptyDay": "Không có lịch đặt nào trong ngày này."
+    },
+    "drawer": {
+      "loading": "Đang tải lịch đặt",
+      "close": "Đóng",
+      "noType": "Loại lịch đặt đã xóa",
+      "pendingHint": "Đang chờ xác nhận",
+      "minutes": "{count} phút",
+      "customerTime": "Theo giờ của khách hàng: {time} ({zone})",
+      "confirm": "Xác nhận",
+      "complete": "Đánh dấu hoàn tất",
+      "noShow": "Không đến",
+      "reschedule": "Đổi lịch",
+      "cancel": "Hủy",
+      "customer": "Khách hàng",
+      "openContact": "Mở liên hệ",
+      "linkedContact": "Liên hệ đã liên kết",
+      "noName": "Không có tên",
+      "where": "Địa điểm",
+      "joinCall": "Tham gia cuộc gọi video",
+      "answers": "Câu trả lời cho các câu hỏi đặt lịch",
+      "noAnswers": "Dịch vụ này không đặt câu hỏi nào, hoặc khách hàng không trả lời câu nào.",
+      "payment": "Thanh toán",
+      "depositPaid": "Đã trả {amount}",
+      "notes": "Ghi chú",
+      "notesPlaceholder": "Ghi chú riêng về lịch đặt này",
+      "saveNotes": "Lưu ghi chú",
+      "reminders": "Lời nhắc",
+      "noReminders": "Chưa đặt lời nhắc nào cho dịch vụ này.",
+      "before": "{count, plural, other {Trước # phút}}",
+      "reminder": {
+        "scheduled": "Đã lên lịch",
+        "skipped": "Chưa gửi",
+        "due": "Đã đến giờ"
+      },
+      "manageLink": "Liên kết quản lý",
+      "manageHint": "Chia sẻ liên kết này với khách hàng để họ tự đổi lịch hoặc hủy.",
+      "copy": "Sao chép",
+      "openLink": "Mở trang quản lý",
+      "noManageLink": "Lịch đặt này không có liên kết quản lý.",
+      "source": "Đặt từ",
+      "bookedOn": "Đặt vào",
+      "cancelTitle": "Hủy lịch hẹn này?",
+      "cancelMessage": "Lịch đặt bị hủy và khung giờ của nó trống trở lại. Khách hàng được thông báo và các lời nhắc bị gỡ bỏ.",
+      "cancelConfirm": "Hủy lịch hẹn",
+      "keep": "Giữ lại",
+      "decline": "Từ chối",
+      "host": "Người chủ trì",
+      "needsReview": "Đã kết thúc, chưa đánh dấu",
+      "needsReviewHint": "Lịch đặt này đã kết thúc và chưa ai đánh dấu là hoàn tất hoặc không đến.",
+      "cancelledBy": "{who} đã hủy lịch đặt này",
+      "cancelledByStaff": "Nhân viên",
+      "cancelledByInvitee": "Khách hàng",
+      "cancelledBySystem": "Hệ thống",
+      "cancelReason": "Lý do",
+      "declineTitle": "Từ chối yêu cầu này?",
+      "declineMessage": "Khách hàng được thông báo yêu cầu bị từ chối và khung giờ trống trở lại.",
+      "declineConfirm": "Từ chối yêu cầu",
+      "remindersNote": "Lời nhắc theo loại lịch đặt. Việc gửi không được theo dõi theo từng lời nhắc."
+    },
+    "source": {
+      "chat": "Một luồng chat",
+      "manual": "Nhân viên",
+      "api": "API",
+      "link": "Trang đặt lịch"
+    },
+    "payment": {
+      "none": "Không thanh toán",
+      "pending": "Chờ thanh toán",
+      "paid": "Đã thanh toán",
+      "refunded": "Đã hoàn tiền",
+      "partial": "Thanh toán một phần"
+    },
+    "reschedule": {
+      "eyebrow": "Đổi lịch",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "confirm": "Xác nhận giờ mới",
+      "current": "Hiện tại: {day}, {time} {zone}",
+      "noType": "Loại lịch đặt của lịch đặt này đã bị xóa nên không có khung giờ trống để chuyển đến.",
+      "taken": "Giờ đó vừa có người đặt. Hãy chọn giờ khác.",
+      "newTime": "Giờ mới: {day}, {time}",
+      "notify": "Thông báo cho khách hàng về giờ mới"
+    },
+    "toast": {
+      "conflict": "Lịch đặt này đã được người khác thay đổi. Đã tải lại.",
+      "failed": "Không thành công.",
+      "confirmed": "Đã xác nhận lịch đặt.",
+      "cancelled": "Đã hủy lịch hẹn.",
+      "completed": "Đã đánh dấu hoàn tất.",
+      "noShow": "Đã đánh dấu không đến.",
+      "notesSaved": "Đã lưu ghi chú.",
+      "rescheduled": "Đã chuyển lịch đặt sang giờ mới.",
+      "linkCopied": "Đã sao chép liên kết quản lý.",
+      "copyFailed": "Không thể sao chép liên kết.",
+      "declined": "Đã từ chối yêu cầu."
+    },
+    "typesList": {
+      "breadcrumb": "Đường dẫn",
+      "appointments": "Lịch hẹn",
+      "services": "Dịch vụ",
+      "title": "Loại lịch đặt",
+      "subtitle": "Mỗi dịch vụ có thời lượng, lịch trống, giá, bảng câu hỏi và lời nhắc riêng. Khách hàng đặt từ chat hoặc từ trang đặt lịch riêng của dịch vụ.",
+      "newType": "Loại lịch đặt mới",
+      "allBookings": "Tất cả lịch đặt",
+      "settings": "Cài đặt",
+      "toolbar": "Bộ lọc",
+      "search": "Tìm loại lịch đặt",
+      "statusFilter": "Trạng thái",
+      "allStatuses": "Tất cả trạng thái",
+      "active": "Hoạt động",
+      "pausedLabel": "Tạm dừng",
+      "clear": "Xóa",
+      "tableLabel": "Loại lịch đặt",
+      "loading": "Đang tải loại lịch đặt",
+      "useSampleData": "Dùng dữ liệu mẫu (phát triển)",
+      "emptyFilteredTitle": "Không có loại lịch đặt phù hợp",
+      "emptyFiltered": "Không có gì khớp với tìm kiếm và bộ lọc.",
+      "emptyTitle": "Chưa có loại lịch đặt nào",
+      "emptyMessage": "Tạo dịch vụ đầu tiên của bạn. Đặt thời lượng, giờ làm việc và giá, khách hàng có thể đặt từ chat.",
+      "name": "Tên",
+      "details": "Chi tiết",
+      "price": "Giá",
+      "booked": "Đã đặt",
+      "status": "Trạng thái",
+      "actions": "Thao tác",
+      "minutes": "{count} phút",
+      "location": {
+        "address": "Trực tiếp",
+        "virtual": "Trực tuyến",
+        "phone": "Cuộc gọi điện thoại",
+        "whatsapp": "WhatsApp"
+      },
+      "capacity": "{count, plural, other {# chỗ}} mỗi khung giờ",
+      "approval": "Cần phê duyệt",
+      "free": "Miễn phí",
+      "toggle": "Hoạt động: {name}",
+      "moreFor": "Thêm thao tác cho {name}",
+      "edit": "Sửa",
+      "copyLink": "Sao chép liên kết công khai",
+      "openPage": "Mở trang đặt lịch",
+      "duplicate": "Nhân bản",
+      "delete": "Xóa",
+      "showing": "{count, plural, other {# loại lịch đặt}}",
+      "deleteTitle": "Xóa \"{name}\"?",
+      "deleteMessage": "Xóa loại lịch đặt này? Các lịch đặt hiện có vẫn được giữ.",
+      "deleteConfirm": "Xóa loại lịch đặt",
+      "keep": "Giữ lại",
+      "activated": "\"{name}\" đang hoạt động.",
+      "paused": "\"{name}\" đã tạm dừng.",
+      "duplicated": "Đã tạo \"{name}\" (tạm dừng).",
+      "deleted": "Đã xóa \"{name}\".",
+      "failed": "Không thành công.",
+      "linkCopied": "Đã sao chép liên kết công khai.",
+      "copyFailed": "Không thể sao chép liên kết.",
+      "copyLinkFor": "Sao chép liên kết công khai của {name}",
+      "copyLinkPaused": "Kích hoạt loại lịch đặt này để có liên kết công khai"
+    },
+    "editor": {
+      "forbidden": "Bạn không có quyền tạo hoặc sửa loại lịch đặt.",
+      "notFoundTitle": "Không tìm thấy loại lịch đặt",
+      "notFound": "Không tìm thấy loại lịch đặt đó. Có thể nó đã bị xóa.",
+      "loading": "Đang tải loại lịch đặt",
+      "header": {
+        "back": "Quay lại loại lịch đặt",
+        "kickerNew": "Lịch hẹn / Mới",
+        "kickerEdit": "Lịch hẹn / Sửa",
+        "titleNew": "Tạo loại lịch đặt",
+        "titleEdit": "Sửa loại lịch đặt",
+        "draft": "Bản nháp / chưa lưu",
+        "unsaved": "Thay đổi chưa lưu"
+      },
+      "steps": {
+        "label": "Các bước",
+        "service": "Dịch vụ",
+        "timing": "Thời gian",
+        "availability": "Lịch trống",
+        "pricing": "Giá",
+        "messaging": "Nhắn tin",
+        "hasProblem": "cần chú ý",
+        "stepOf": "Bước {n} trên {total}: {name}"
+      },
+      "nav": {
+        "back": "Quay lại",
+        "cancel": "Hủy",
+        "next": "Tiếp",
+        "create": "Tạo loại lịch đặt",
+        "save": "Lưu thay đổi",
+        "saving": "Đang lưu"
+      },
+      "toast": {
+        "created": "Đã tạo loại lịch đặt \"{name}\".",
+        "updated": "Đã cập nhật loại lịch đặt \"{name}\"."
+      },
+      "saveError": {
+        "conflict": "Loại lịch đặt này đã được người khác thay đổi khi bạn đang sửa. Hãy tải lại để xem phiên bản của họ. Các chỉnh sửa chưa lưu của bạn sẽ mất.",
+        "reload": "Tải lại phiên bản mới nhất"
+      },
+      "leave": {
+        "title": "Bỏ các thay đổi của bạn?",
+        "message": "Bạn có thay đổi chưa lưu. Nếu rời đi bây giờ, chúng sẽ bị mất.",
+        "discard": "Bỏ thay đổi",
+        "keep": "Tiếp tục sửa"
+      },
+      "problems": {
+        "nameRequired": "Nhập tên cho loại lịch đặt này.",
+        "nameTooLong": "Tên tối đa {nameMax} ký tự.",
+        "slugInvalid": "Dùng chữ thường, số và dấu gạch ngang đơn, tối đa {slugMax} ký tự.",
+        "durationInvalid": "Thời lượng phải là số nguyên từ {durationMin} đến {durationMax} phút.",
+        "incrementInvalid": "Bước bắt đầu phải là số nguyên từ {incrementMin} đến {incrementMax} phút.",
+        "bufferInvalid": "Nhập số phút nguyên từ 0 đến {bufferMax}.",
+        "minNoticeInvalid": "Nhập số phút nguyên từ 0 đến {minNoticeMax}.",
+        "maxAdvanceInvalid": "Nhập số ngày nguyên từ {maxAdvanceMin} đến {maxAdvanceMax}.",
+        "maxPerDayInvalid": "Để trống nếu không giới hạn, hoặc nhập số từ 1 đến {maxPerDayMax}.",
+        "capacityInvalid": "Sức chứa phải là số nguyên từ 1 đến {capacityMax}.",
+        "timezoneInvalid": "Chọn múi giờ hợp lệ.",
+        "colorInvalid": "Dùng màu hex như #075E54.",
+        "feeInvalid": "Nhập số tiền như 150.00.",
+        "taxInvalid": "Nhập phần trăm từ 0 đến 100 với tối đa hai chữ số thập phân.",
+        "depositInvalid": "Nhập số tiền đặt cọc lớn hơn 0.",
+        "depositTooHigh": "Tiền đặt cọc không được vượt quá tổng (phí cộng thuế).",
+        "cancelFeeInvalid": "Nhập số tiền như 25.00.",
+        "cancelWindowInvalid": "Nhập số phút nguyên từ 0 đến {cancelWindowMax}.",
+        "reminderInvalid": "Nhập số phút nguyên trước giờ bắt đầu, từ 1 đến {reminderMax}.",
+        "remindersDuplicate": "Mỗi lời nhắc cần một thời điểm khác nhau.",
+        "remindersTooMany": "Một loại lịch đặt có tối đa {reminders} lời nhắc.",
+        "questionLabelRequired": "Đặt nhãn cho câu hỏi (tối đa {questionLabelMax} ký tự).",
+        "questionsTooMany": "Một loại lịch đặt có tối đa {questions} câu hỏi.",
+        "questionOptionsRequired": "Thêm ít nhất một lựa chọn, mỗi dòng một lựa chọn.",
+        "hoursInvalid": "Sửa giờ làm việc hằng tuần được đánh dấu bên dưới.",
+        "overridesInvalid": "Sửa các ngày được đánh dấu trong danh sách ngày ngoại lệ.",
+        "descriptionTooLong": "Mô tả tối đa {descriptionMax} ký tự.",
+        "locationTooLong": "Địa điểm tối đa {locationMax} ký tự.",
+        "server": "Máy chủ không chấp nhận giá trị này. Hãy kiểm tra và thử lại."
+      },
+      "service": {
+        "title": "Chi tiết dịch vụ",
+        "hint": "Đặt tên cho dịch vụ và nơi diễn ra.",
+        "name": "Tên",
+        "namePlaceholder": "Demo 30 phút",
+        "description": "Mô tả",
+        "descriptionPlaceholder": "Nội dung người dùng đặt lịch, hiển thị trên trang đặt lịch.",
+        "locationType": "Loại địa điểm",
+        "locationTypes": {
+          "address": "Trực tiếp (địa chỉ)",
+          "virtual": "Trực tuyến (video)",
+          "phone": "Cuộc gọi điện thoại",
+          "whatsapp": "WhatsApp"
+        },
+        "locationValue": "Địa điểm / địa chỉ",
+        "locationPlaceholders": {
+          "address": "Địa chỉ đường phố",
+          "virtual": "Liên kết video (tùy chọn)",
+          "phone": "Số điện thoại để gọi (tùy chọn)",
+          "whatsapp": "Số WhatsApp (tùy chọn)"
+        },
+        "appearanceTitle": "Màu",
+        "appearanceHint": "Đánh dấu dịch vụ này trên lịch và trên trang đặt lịch.",
+        "color": "Màu",
+        "colorSwatches": "Chọn một màu",
+        "linkTitle": "Liên kết công khai",
+        "linkHint": "Khách truy cập đặt lịch tại địa chỉ này. Hoạt động sau khi loại lịch đặt được lưu và kích hoạt.",
+        "slug": "Tên liên kết",
+        "slugHint": "Được tạo từ tên cho đến khi bạn thay đổi. Chữ thường, số và dấu gạch ngang.",
+        "slugPlaceholder": "discovery-call",
+        "publicUrl": "Trang công khai",
+        "copy": "Sao chép liên kết",
+        "copied": "Đã sao chép liên kết.",
+        "copyFailed": "Không thể sao chép liên kết. Hãy chọn và sao chép thủ công.",
+        "rulesTitle": "Quy tắc đặt lịch",
+        "requiresApproval": "Yêu cầu phê duyệt",
+        "requiresApprovalHint": "Lịch đặt mới ở trạng thái Đang chờ cho đến khi một thành viên trong nhóm xác nhận.",
+        "isActive": "Hoạt động",
+        "isActiveHint": "Tắt để tạm dừng dịch vụ: trang công khai sẽ ngừng nhận lịch đặt."
+      },
+      "timing": {
+        "title": "Thời gian",
+        "hint": "Mỗi lịch đặt kéo dài bao lâu và có thể đặt trước bao xa.",
+        "duration": "Thời lượng (phút)",
+        "durationHint": "Một lịch đặt kéo dài bao lâu. 60 = 1 giờ.",
+        "increment": "Bước bắt đầu (phút)",
+        "incrementHint": "Khoảng cách giữa các giờ bắt đầu được đề xuất. 30 đề xuất 9:00, 9:30, 10:00.",
+        "capacity": "Sức chứa (mỗi khung giờ)",
+        "capacityHint": "Số người có thể dùng chung một khung giờ. 1 cho một-một.",
+        "bufferBefore": "Đệm trước (phút)",
+        "bufferAfter": "Đệm sau (phút)",
+        "bufferHint": "Thời gian trống giữ quanh mỗi lịch đặt.",
+        "minNotice": "Báo trước tối thiểu (phút)",
+        "minNoticeHint": "Phải đặt trước giờ bắt đầu bao lâu. 240 = 4 giờ.",
+        "maxAdvance": "Đặt trước tối đa (ngày)",
+        "maxAdvanceHint": "Có thể đặt trước bao xa. 30 = một tháng.",
+        "maxPerDay": "Tối đa mỗi ngày",
+        "maxPerDayHint": "Số lịch đặt nhiều nhất trong một ngày. Để trống nếu không giới hạn.",
+        "noLimit": "Không giới hạn",
+        "zoneTitle": "Múi giờ",
+        "zoneHint": "Giờ làm việc hằng tuần và các ngày được tính theo múi giờ này. Khách truy cập thấy giờ theo múi giờ của họ.",
+        "zone": "Múi giờ của dịch vụ này",
+        "zoneSearch": "Tìm múi giờ",
+        "zonePick": "Chọn múi giờ",
+        "zoneNone": "Không có múi giờ nào khớp với tìm kiếm."
+      },
+      "availability": {
+        "title": "Giờ làm việc hằng tuần",
+        "hint": "Thêm các khung giờ nhận lịch đặt mỗi ngày. Bảng bên phải xem trước các khung giờ thực tế có thể đặt.",
+        "empty": "Chưa đặt giờ nào nên chưa thể đặt lịch.",
+        "total": "{hours} giờ {minutes} phút thời gian có thể đặt trong một tuần."
+      },
+      "overrides": {
+        "title": "Ngày ngoại lệ và ngày lễ",
+        "hint": "Đóng cửa một ngày vì ngày lễ, hoặc đặt giờ riêng cho một ngày. Mọi ngày khác theo giờ làm việc hằng tuần.",
+        "previousMonth": "Tháng trước",
+        "nextMonth": "Tháng sau",
+        "legend": "Chú giải",
+        "status": {
+          "closed": "Đóng cửa",
+          "custom": "Giờ tùy chỉnh",
+          "open": "Mở (giờ hằng tuần)",
+          "off": "Đóng (giờ hằng tuần)"
+        },
+        "clickHint": "Nhấp vào một ngày để đóng. Nhấp lại vào ngày đã đánh dấu để trả về giờ hằng tuần.",
+        "rangeTitle": "Đóng một khoảng ngày",
+        "rangeHint": "Đóng nhiều ngày cùng lúc, như tuần nghỉ lễ. Các ngày đã có ngoại lệ vẫn giữ nguyên.",
+        "rangeFrom": "Từ",
+        "rangeTo": "Đến (tùy chọn)",
+        "reason": "Lý do",
+        "reasonPlaceholder": "Lý do (tùy chọn)",
+        "rangeProblems": {
+          "invalid": "Chọn ngày bắt đầu và ngày kết thúc không trước ngày bắt đầu.",
+          "tooLong": "Một khoảng chỉ có thể bao phủ tối đa một năm.",
+          "full": "Đã đạt giới hạn ngày ngoại lệ."
+        },
+        "closeRange": "Đóng các ngày này",
+        "listTitle": "Ngoại lệ",
+        "count": "{count, plural, =0 {Không có ngày} other {# ngày}}",
+        "limit": "Bạn đã đạt giới hạn {max} ngày. Hãy gỡ bớt để thêm.",
+        "empty": "Chưa có ngày nào. Nhấp vào một ngày trong lịch để đóng.",
+        "remove": "Gỡ ngoại lệ vào {date}",
+        "mode": "{date}: đóng cửa hoặc giờ tùy chỉnh",
+        "modeClosed": "Đóng cả ngày",
+        "modeCustom": "Giờ tùy chỉnh",
+        "from": "{date}, giờ bắt đầu",
+        "to": "{date}, giờ kết thúc",
+        "reasonOf": "{date}, lý do",
+        "problems": {
+          "incomplete": "Hãy điền cả hai mốc giờ.",
+          "order": "Giờ kết thúc phải sau giờ bắt đầu.",
+          "dayClosedHours": "Ngày đóng cửa không có giờ."
+        }
+      },
+      "pricing": {
+        "title": "Giá (tùy chọn)",
+        "hint": "Để phí là 0 cho lịch đặt miễn phí.",
+        "currency": "Tiền tệ",
+        "currencyHint": "Mặc định theo tiền tệ không gian làm việc của bạn.",
+        "fee": "Phí ({currency})",
+        "feeHint": "Nhập số tiền, ví dụ {example}.",
+        "tax": "Thuế %",
+        "taxHint": "Cộng thêm vào phí.",
+        "deposit": "Đặt cọc",
+        "depositModes": {
+          "none": "Không trả trước",
+          "partial": "Đặt cọc một phần",
+          "full": "Toàn bộ số tiền"
+        },
+        "depositAmount": "Số tiền đặt cọc ({currency})",
+        "paymentNote": "Chưa kết nối thu tiền trực tuyến. Khoản đặt cọc được ghi lại cùng mỗi lịch đặt nhưng không bị tính phí.",
+        "cancelFee": "Phí hủy ({currency})",
+        "noShowFee": "Phí không đến ({currency})",
+        "cancelWindow": "Thời hạn hủy (phút)",
+        "cancelWindowHint": "Được hủy miễn phí trước giờ bắt đầu bao lâu. 1440 = 24 giờ.",
+        "recordedOnly": "Phí hủy, phí không đến và thời hạn hủy chỉ được ghi lại.",
+        "totalsLabel": "Chi phí của một lịch đặt",
+        "totalFee": "Phí",
+        "totalTax": "Thuế",
+        "totalSum": "Tổng",
+        "totalDue": "Cần trả ngay"
+      },
+      "calendar": {
+        "title": "Google Calendar (tùy chọn)",
+        "hint": "Lịch đặt vẫn hoạt động mà không cần mục này. Kết nối Google Calendar trong Lịch hẹn, Cài đặt để đồng bộ giờ bận/rảnh và thêm liên kết Meet.",
+        "unavailable": "Google Calendar chưa được thiết lập cho nền tảng này. Các cài đặt này được giữ cùng loại lịch đặt để dùng khi nền tảng sẵn sàng.",
+        "calendarId": "Lịch",
+        "calendarPlaceholder": "chính",
+        "spreadsheetId": "Thêm vào bảng tính (tùy chọn)",
+        "spreadsheetPlaceholder": "ID bảng tính",
+        "createMeet": "Tạo liên kết Google Meet cho mỗi lịch đặt",
+        "calendarDefault": "Lịch của không gian làm việc"
+      },
+      "messages": {
+        "title": "Tin nhắn theo vòng đời",
+        "hint": "Nội dung gửi cho khách hàng khi lịch đặt được xác nhận, nhắc, hủy hoặc chuyển. Để trống một ô để dùng mặc định của không gian làm việc.",
+        "placeholdersTitle": "Biến giữ chỗ có thể dùng",
+        "placeholdersHint": "Nhấp vào một biến để chèn vào vị trí con trỏ trong tin nhắn bạn đang sửa ({event}).",
+        "placeholderMeaning": {
+          "type": "tên của loại lịch đặt",
+          "slot": "ngày và giờ của lịch đặt",
+          "name": "tên của khách hàng",
+          "manage_link": "liên kết để quản lý lịch đặt"
+        },
+        "events": {
+          "confirmation": "Xác nhận",
+          "reminder": "Lời nhắc",
+          "cancellation": "Hủy",
+          "reschedule": "Đổi lịch"
+        },
+        "placeholders": {
+          "confirmation": "Chào {name}, {type} của bạn đã được đặt vào {slot}. Quản lý tại đây: {manage_link}",
+          "reminder": "Chào {name}, nhắc bạn: {type} của bạn vào lúc {slot}.",
+          "cancellation": "Chào {name}, {type} của bạn vào {slot} đã bị hủy.",
+          "reschedule": "Chào {name}, {type} của bạn đã chuyển sang {slot}. Chi tiết: {manage_link}"
+        },
+        "templatesNote": "Chưa thể chọn mẫu WhatsApp đã duyệt. Tin nhắn được gửi dưới dạng văn bản thuần ở trên."
+      },
+      "reminders": {
+        "title": "Lời nhắc",
+        "hint": "Các mốc giờ phải khác nhau (1440 = trước 24 giờ, 180 = trước 3 giờ). Tối đa {max}.",
+        "add": "Thêm lời nhắc",
+        "quickAdd": "Thêm nhanh",
+        "quick": {
+          "h24": "24 giờ",
+          "h3": "3 giờ",
+          "h1": "1 giờ",
+          "m15": "15 phút"
+        },
+        "empty": "Không có lời nhắc. Khách hàng chỉ nhận xác nhận.",
+        "offsetOf": "Lời nhắc {n}, số phút trước giờ bắt đầu",
+        "minBefore": "phút trước",
+        "labelPlaceholder": "24 giờ",
+        "labelOf": "Lời nhắc {n}, nhãn",
+        "remove": "Gỡ lời nhắc {n}",
+        "count": "{count} trên {max} lời nhắc"
+      },
+      "questions": {
+        "title": "Bảng câu hỏi",
+        "hint": "Các câu hỏi đặt ra khi ai đó đặt lịch. Tối đa {max}.",
+        "add": "Thêm câu hỏi",
+        "intro": "Tin nhắn giới thiệu",
+        "introHint": "Hiển thị phía trên các câu hỏi.",
+        "empty": "Không có câu hỏi. Mọi người chỉ cung cấp tên, email và số điện thoại.",
+        "labelPlaceholder": "Nhãn câu hỏi",
+        "labelOf": "Câu hỏi {n}, nhãn",
+        "typeOf": "Câu hỏi {n}, kiểu câu trả lời",
+        "types": {
+          "text": "Văn bản",
+          "textarea": "Văn bản dài",
+          "select": "Lựa chọn",
+          "number": "Số",
+          "email": "Email",
+          "phone": "Điện thoại",
+          "date": "Ngày"
+        },
+        "optionsOf": "Câu hỏi {n}, các lựa chọn",
+        "optionsPlaceholder": "Mỗi dòng một lựa chọn",
+        "optionsHint": "Tối đa {max} lựa chọn.",
+        "map": "Lưu câu trả lời vào",
+        "mapOf": "Câu hỏi {n}, trường liên hệ",
+        "mapNone": "Không có",
+        "mapFields": {
+          "email": "Email",
+          "name": "Tên",
+          "mobile": "Di động"
+        },
+        "required": "Bắt buộc",
+        "moveUp": "Chuyển câu hỏi {n} lên",
+        "moveDown": "Chuyển câu hỏi {n} xuống",
+        "remove": "Gỡ câu hỏi {n}",
+        "count": "{count} trên {max} câu hỏi"
+      },
+      "rail": {
+        "title": "Tóm tắt trực tiếp",
+        "viewPublic": "Xem trang công khai",
+        "cardLabel": "Xem trước thẻ đặt lịch",
+        "newService": "Dịch vụ mới",
+        "needsApproval": "Lịch đặt chờ bạn phê duyệt.",
+        "fee": "Phí",
+        "free": "Miễn phí",
+        "tax": "Thuế",
+        "total": "Tổng",
+        "dueNow": "Cần trả ngay",
+        "slotsTitle": "Xem trước khung giờ",
+        "refresh": "Làm mới",
+        "loading": "Đang tải",
+        "slotsIdle": "Đặt giờ làm việc hằng tuần, thời lượng và múi giờ để xem trước các giờ có thể đặt thực tế.",
+        "slotsFailed": "Xem trước thất bại.",
+        "slotsNone": "Không có giờ có thể đặt cho cấu hình này trong {days} ngày tới.",
+        "slotsSummary": "{count, plural, other {# khung giờ}} · giờ theo {zone}"
+      }
+    },
+    "public": {
+      "brandFallback": "Đặt lịch trực tuyến",
+      "brandName": "CRM",
+      "poweredBy": "Cung cấp bởi {brand}",
+      "language": "Ngôn ngữ",
+      "loading": "Đang tải",
+      "problem": {
+        "retry": "Thử lại",
+        "back": "Xem tất cả dịch vụ",
+        "notFoundOrg": {
+          "title": "Chúng tôi không tìm thấy trang đặt lịch này",
+          "message": "Địa chỉ có thể bị gõ sai, hoặc doanh nghiệp này không nhận đặt lịch trực tuyến. Hãy hỏi họ để lấy liên kết."
+        },
+        "notFoundService": {
+          "title": "Dịch vụ này không khả dụng",
+          "message": "Có thể dịch vụ đã tạm dừng hoặc không còn được cung cấp. Bạn có thể xem các dịch vụ khác của doanh nghiệp này."
+        },
+        "notFoundLink": {
+          "title": "Liên kết này không hợp lệ",
+          "message": "Lịch đặt có thể đã bị xóa, hoặc liên kết chưa đầy đủ. Hãy dùng liên kết trong xác nhận của bạn, hoặc hỏi doanh nghiệp để lấy liên kết mới."
+        },
+        "paused": {
+          "title": "Dịch vụ này đã tạm dừng",
+          "message": "Hiện không nhận lịch đặt. Hãy thử lại sau, hoặc xem các dịch vụ khác của doanh nghiệp này."
+        },
+        "closed": {
+          "title": "Lịch đặt này không thể thay đổi nữa",
+          "message": "Lịch đặt đã bị hủy hoặc đã hoàn tất. Hãy liên hệ doanh nghiệp nếu bạn cần gì khác."
+        },
+        "rateLimited": {
+          "title": "Quá nhiều yêu cầu",
+          "message": "Vui lòng đợi một lát rồi thử lại."
+        },
+        "unavailable": {
+          "title": "Hiện không thể đặt lịch trực tuyến",
+          "message": "Không thể kết nối dịch vụ đặt lịch. Hãy thử lại sau vài phút."
+        },
+        "network": {
+          "title": "Chúng tôi không thể tải trang này",
+          "message": "Hãy kiểm tra kết nối và thử lại. Nếu vẫn tiếp diễn, hãy liên hệ doanh nghiệp."
+        }
+      },
+      "directory": {
+        "title": "Đặt lịch hẹn",
+        "subtitle": "Chọn một dịch vụ để xem giờ trống tại {name}.",
+        "services": "Dịch vụ",
+        "choose": "Chọn giờ",
+        "empty": {
+          "title": "Hiện chưa có gì để đặt",
+          "message": "Doanh nghiệp này hiện không có dịch vụ nào mở đặt lịch trực tuyến. Vui lòng quay lại sau."
+        }
+      },
+      "location": {
+        "address": "Trực tiếp",
+        "virtual": "Cuộc gọi video",
+        "phone": "Cuộc gọi điện thoại",
+        "whatsapp": "WhatsApp"
+      },
+      "service": {
+        "allServices": "Tất cả dịch vụ",
+        "approvalNote": "Doanh nghiệp xác nhận từng lịch đặt. Bạn sẽ nhận yêu cầu trước, rồi đến xác nhận."
+      },
+      "step": {
+        "time": "Chọn ngày và giờ",
+        "pickHint": "Chọn một ngày, rồi chọn giờ, để tiếp tục.",
+        "continue": "Tiếp tục",
+        "changeTime": "Đổi giờ",
+        "details": "Thông tin của bạn"
+      },
+      "when": {
+        "atService": "Nơi đặt dịch vụ: {day}, {range} ({zone})"
+      },
+      "where": {
+        "join": "Tham gia cuộc gọi video",
+        "videoLater": "Cuộc gọi video",
+        "phone": "Cuộc gọi điện thoại vào"
+      },
+      "form": {
+        "name": "Tên của bạn",
+        "email": "Email",
+        "phone": "Điện thoại",
+        "optional": "(tùy chọn)",
+        "choose": "Chọn một tùy chọn",
+        "required": "Trường này là bắt buộc.",
+        "tooLong": "Nội dung này quá dài.",
+        "serverInvalid": "Không thể chấp nhận nội dung này. Hãy kiểm tra và thử lại.",
+        "invalid": {
+          "text": "Hãy kiểm tra giá trị này.",
+          "textarea": "Hãy kiểm tra giá trị này.",
+          "email": "Nhập địa chỉ email hợp lệ.",
+          "phone": "Nhập số điện thoại hợp lệ, kèm mã quốc gia nếu không phải số trong nước.",
+          "number": "Nhập một số.",
+          "date": "Chọn ngày hợp lệ.",
+          "select": "Chọn một trong các tùy chọn."
+        }
+      },
+      "price": {
+        "title": "Giá",
+        "inclTax": "đã gồm {pct}% thuế",
+        "fee": "Phí",
+        "tax": "Thuế ({pct}%)",
+        "total": "Tổng",
+        "dueNow": "Cần trả khi đặt lịch",
+        "notCollected": "Không có khoản nào bị tính phí trên trang này. Chưa hỗ trợ thanh toán trực tuyến."
+      },
+      "book": {
+        "confirm": "Xác nhận đặt lịch",
+        "request": "Yêu cầu đặt lịch",
+        "sending": "Đang gửi lịch đặt của bạn",
+        "slotTaken": "Giờ đó vừa có người đặt. Vui lòng chọn giờ khác.",
+        "slotTakenHint": "Thông tin của bạn được giữ lại. Các giờ bên dưới đã được cập nhật.",
+        "notice": {
+          "validation": {
+            "title": "Một số thông tin không thể được chấp nhận",
+            "message": "Hãy kiểm tra các trường được đánh dấu và thử lại."
+          },
+          "rateLimited": {
+            "title": "Quá nhiều yêu cầu",
+            "message": "Vui lòng đợi một lát rồi nhấn nút lại."
+          },
+          "network": {
+            "title": "Không thể gửi lịch đặt",
+            "message": "Hãy kiểm tra kết nối và nhấn nút lại. Bạn sẽ không bị đặt hai lần."
+          },
+          "unavailable": {
+            "title": "Dịch vụ này không còn khả dụng",
+            "message": "Có thể dịch vụ đã tạm dừng. Hãy quay lại danh sách dịch vụ và thử dịch vụ khác."
+          }
+        }
+      },
+      "booked": {
+        "confirmedTitle": "Lịch đặt của bạn đã được xác nhận",
+        "confirmedMessage": "{name} đã nhận lịch đặt của bạn. Hãy giữ liên kết bên dưới để thay đổi hoặc hủy.",
+        "pendingTitle": "Đã nhận yêu cầu, đang chờ xác nhận",
+        "pendingMessage": "{name} sẽ xác nhận lịch đặt của bạn. Hãy giữ liên kết bên dưới để kiểm tra, thay đổi hoặc hủy.",
+        "pendingNote": "Cho đến khi được xác nhận, khung giờ được giữ cho bạn nhưng vẫn có thể thay đổi.",
+        "manage": "Quản lý lịch đặt",
+        "bookAnother": "Đặt dịch vụ khác"
+      },
+      "calendar": {
+        "title": "Thêm vào lịch",
+        "download": "Tải tệp .ics",
+        "google": "Google Calendar",
+        "opensNewTab": "(mở trong tab mới)"
+      },
+      "manageLink": {
+        "title": "Liên kết lịch đặt của bạn",
+        "hint": "Hãy lưu liên kết này. Đây là cách duy nhất để thay đổi hoặc hủy lịch đặt, và bất kỳ ai có nó đều có thể làm vậy.",
+        "copy": "Sao chép",
+        "copied": "Đã sao chép"
+      },
+      "manage": {
+        "title": "Lịch đặt của bạn",
+        "reschedule": "Đổi lịch",
+        "cancel": "Hủy",
+        "flash": {
+          "rescheduled": "Lịch đặt của bạn đã được đổi lịch.",
+          "cancelled": "Lịch đặt của bạn đã bị hủy."
+        },
+        "failure": {
+          "closed": "Lịch đặt này không thể thay đổi nữa.",
+          "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+          "network": "Không thể thay đổi lịch đặt. Hãy kiểm tra kết nối và thử lại."
+        },
+        "confirmCancel": {
+          "title": "Hủy lịch đặt này?",
+          "message": "Lịch đặt {what} của bạn sẽ bị hủy và khung giờ được trả lại. Không thể hoàn tác.",
+          "confirm": "Có, hủy lịch đặt",
+          "keep": "Giữ lịch đặt"
+        },
+        "state": {
+          "pending": {
+            "title": "Đang chờ xác nhận",
+            "message": "Doanh nghiệp chưa xác nhận lịch đặt này."
+          },
+          "cancelled": {
+            "title": "Lịch đặt này đã bị hủy",
+            "message": "Không thể thay đổi nữa."
+          },
+          "no_show": {
+            "title": "Lịch đặt này được đánh dấu là vắng mặt",
+            "message": "Không thể thay đổi nữa. Hãy liên hệ doanh nghiệp nếu đây là nhầm lẫn."
+          },
+          "completed": {
+            "title": "Lịch hẹn này đã hoàn tất",
+            "message": "Không thể thay đổi nữa."
+          },
+          "passed": {
+            "title": "Lịch hẹn này đã bắt đầu",
+            "message": "Không thể thay đổi trực tuyến nữa. Hãy liên hệ doanh nghiệp nếu cần."
+          }
+        }
+      },
+      "reschedule": {
+        "title": "Đổi lịch",
+        "back": "Quay lại lịch đặt của bạn",
+        "backToBooking": "Quay lại lịch đặt của bạn",
+        "current": "Giờ hiện tại",
+        "saving": "Đang lưu giờ mới",
+        "confirm": "Xác nhận giờ mới · {when}",
+        "failure": {
+          "slotTaken": "Giờ đó vừa có người đặt — vui lòng chọn giờ khác.",
+          "closed": "Lịch đặt này không thể thay đổi nữa.",
+          "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+          "validation": "Không thể chấp nhận giờ đó. Hãy chọn giờ khác.",
+          "network": "Không thể lưu giờ mới. Hãy kiểm tra kết nối và thử lại."
+        },
+        "closed": {
+          "closed": {
+            "title": "Lịch đặt này không thể thay đổi nữa",
+            "message": "Lịch đặt đã bị hủy hoặc đã hoàn tất nên không có giờ để chuyển."
+          },
+          "passed": {
+            "title": "Lịch hẹn này đã bắt đầu",
+            "message": "Không thể chuyển lịch đặt sau khi đã bắt đầu. Hãy liên hệ doanh nghiệp nếu cần."
+          }
+        }
+      },
+      "meta": {
+        "book": "Đặt lịch hẹn",
+        "manage": "Lịch đặt của bạn",
+        "reschedule": "Đổi lịch đặt"
+      }
+    },
+    "settings": {
+      "title": "Cài đặt lịch đặt",
+      "subtitle": "Mặc định, giờ làm việc và tin nhắn cho lịch đặt trong không gian làm việc này.",
+      "breadcrumb": {
+        "label": "Đường dẫn",
+        "integrations": "Tích hợp",
+        "appointments": "Lịch hẹn",
+        "settings": "Cài đặt"
+      },
+      "back": "Quay lại lịch đặt",
+      "save": "Lưu cài đặt",
+      "saving": "Đang lưu...",
+      "saved": "Đã lưu cài đặt lịch đặt.",
+      "discard": "Bỏ thay đổi",
+      "unsaved": "Bạn có thay đổi chưa lưu.",
+      "allSaved": "Đã lưu mọi thay đổi.",
+      "loading": "Đang tải cài đặt",
+      "forbidden": "Bạn không có quyền xem cài đặt lịch đặt.",
+      "readOnly": "Bạn có thể xem các cài đặt này nhưng không thể thay đổi.",
+      "fixFirst": "Hãy sửa các trường được đánh dấu trước.",
+      "issues": "{count, plural, other {# trường cần chú ý trước khi có thể lưu.}}",
+      "conflict": {
+        "message": "Các cài đặt này đã được thay đổi ở nơi khác kể từ khi bạn mở. Hãy tải lại để xem phiên bản mới nhất; các chỉnh sửa của bạn ở đây sẽ bị thay thế.",
+        "reload": "Tải lại bản mới nhất"
+      },
+      "leave": {
+        "title": "Rời đi mà không lưu?",
+        "message": "Các thay đổi của bạn với cài đặt lịch đặt chưa được lưu.",
+        "leave": "Rời đi",
+        "stay": "Tiếp tục sửa"
+      },
+      "calendar": {
+        "title": "Tích hợp lịch",
+        "description": "Kết nối lịch để lịch đặt và thời gian bận của bạn luôn đồng bộ.",
+        "provider": "Google Calendar",
+        "providerSub": "Đặt lịch hẹn",
+        "status": {
+          "unavailable": "Không khả dụng",
+          "disconnected": "Chưa kết nối",
+          "connected": "Đã kết nối",
+          "needs_reconnect": "Cần kết nối lại"
+        },
+        "loading": "Đang kiểm tra kết nối",
+        "unavailableTitle": "Google Calendar chưa được thiết lập cho nền tảng này",
+        "unavailableBody": "Quản trị viên nền tảng cần thêm Google OAuth client (Quản trị, Cài đặt, Google Calendar) trước khi không gian làm việc có thể kết nối. Lịch đặt của bạn không bị ảnh hưởng.",
+        "disconnectedBody": "Chưa kết nối. Khi kết nối sẽ mở Google, nơi bạn chọn tài khoản và đồng ý chia sẻ quyền truy cập lịch.",
+        "disconnectedReadOnly": "Chưa kết nối. Hãy nhờ quản trị viên không gian làm việc kết nối.",
+        "reconnectTitle": "Google đã ngừng chấp nhận kết nối",
+        "reconnectBody": "Quyền truy cập đã bị thu hồi hoặc hết hạn nên lịch đặt không được ghi vào lịch của bạn và thời gian bận không được đọc. Hãy kết nối lại để tiếp tục.",
+        "reconnectBodyAccount": "Quyền truy cập của {account} đã bị thu hồi hoặc hết hạn nên lịch đặt không được ghi vào lịch của bạn và thời gian bận không được đọc. Hãy kết nối lại để tiếp tục.",
+        "account": "Tài khoản Google",
+        "calendar": "Lịch",
+        "primaryCalendar": "Lịch chính của bạn",
+        "connectedAgo": "Đã kết nối {when}",
+        "errors": {
+          "notConfigured": "Google Calendar chưa được thiết lập cho nền tảng này. Hãy nhờ quản trị viên nền tảng thêm Google OAuth client.",
+          "notConnected": "Chưa kết nối Google Calendar nào. Hãy tải lại trang và kết nối lại.",
+          "providerFailed": "Google không phản hồi. Hãy thử lại sau giây lát."
+        },
+        "loadingCalendars": "Đang tải lịch của bạn",
+        "chooseLabel": "Ghi lịch đặt vào",
+        "chooseHint": "Chỉ liệt kê các lịch mà tài khoản này có thể sửa. Các sự kiện đã ghi vẫn ở nguyên vị trí.",
+        "choosePlaceholder": "Chọn một lịch",
+        "chooseOptionPrimary": "{name} (lịch chính)",
+        "chooseSave": "Dùng lịch này",
+        "chooseCancel": "Hủy",
+        "saving": "Đang lưu",
+        "connect": "Kết nối Google Calendar",
+        "reconnect": "Kết nối lại Google",
+        "redirecting": "Đang mở Google",
+        "choose": "Chọn lịch",
+        "disconnect": "Ngắt kết nối",
+        "disconnected": "Đã ngắt kết nối Google Calendar.",
+        "calendarSaved": "Đã lưu lịch.",
+        "confirmOff": {
+          "title": "Ngắt kết nối Google Calendar?",
+          "message": "Lịch đặt mới sẽ ngừng được ghi vào lịch của bạn và thời gian bận không còn được đọc. Các sự kiện đã có trong lịch vẫn giữ nguyên, và Google được yêu cầu thu hồi quyền truy cập này.",
+          "confirm": "Ngắt kết nối",
+          "cancel": "Giữ lại"
+        },
+        "outcome": {
+          "connected": "Đã kết nối Google Calendar. Các lịch đặt đã xác nhận giờ được ghi vào lịch của bạn.",
+          "denied": "Quyền truy cập chưa được cấp trên Google nên chưa kết nối được gì.",
+          "failed": "Việc kết nối chưa hoàn tất. Hãy thử lại; nếu vẫn thất bại, hãy nhờ quản trị viên nền tảng kiểm tra cấu hình Google.",
+          "expired": "Lần thử đó mất quá nhiều thời gian. Nhấn Kết nối để bắt đầu lại.",
+          "not_configured": "Google Calendar chưa được thiết lập cho nền tảng này. Hãy nhờ quản trị viên nền tảng thêm Google OAuth client.",
+          "missing_scope": "Google không cấp đủ mọi quyền lịch cần thiết. Hãy kết nối lại và giữ chọn tất cả các ô."
+        },
+        "whatTitle": "Chức năng này làm gì",
+        "what": {
+          "freeBusy": "Đọc thời gian rảnh và bận từ lịch của bạn.",
+          "nextSlots": "Đề xuất các khung giờ trống tiếp theo cho khách hàng.",
+          "writeBack": "Ghi các lịch đặt đã xác nhận vào lịch của bạn dưới dạng sự kiện, kèm liên kết Meet khi dịch vụ yêu cầu."
+        },
+        "hint": "Lịch đặt vẫn hoạt động mà không cần nó. Giờ trống lấy từ giờ làm việc và quy tắc đặt lịch bên dưới."
+      },
+      "timezone": {
+        "title": "Múi giờ",
+        "description": "Múi giờ dùng để đọc giờ làm việc và giờ đặt lịch của bạn.",
+        "label": "Múi giờ của không gian làm việc",
+        "hint": "Khách hàng thấy giờ theo múi giờ của họ; giờ của bạn hiển thị theo múi giờ này."
+      },
+      "hours": {
+        "title": "Giờ làm việc",
+        "description": "Khi nào khách hàng có thể đặt lịch. Tắt một ngày để đóng cửa, hoặc thêm khoảng để nghỉ giữa giờ.",
+        "noHours": "Không có ngày nào mở nên không ai có thể đặt lịch."
+      },
+      "defaults": {
+        "title": "Quy tắc đặt lịch",
+        "description": "Mặc định cho lịch đặt trong không gian làm việc này.",
+        "fields": {
+          "slotDurationMinutes": "Thời lượng khung giờ (phút)",
+          "maxPerDay": "Số lịch đặt tối đa mỗi ngày",
+          "bufferBeforeMinutes": "Đệm trước (phút)",
+          "bufferAfterMinutes": "Đệm sau (phút)",
+          "advanceDays": "Thời hạn đặt trước (ngày)",
+          "reminderMinutesBefore": "Lời nhắc (số phút trước)",
+          "defaultLocation": "Địa điểm mặc định (tùy chọn)"
+        },
+        "hints": {
+          "slotDurationMinutes": "Từ {min} đến {max} phút.",
+          "maxPerDay": "Từ {min} đến {max} lịch đặt.",
+          "bufferBeforeMinutes": "Từ {min} đến {max} phút.",
+          "bufferAfterMinutes": "Từ {min} đến {max} phút.",
+          "advanceDays": "Từ {min} đến {max} ngày tới.",
+          "reminderMinutesBefore": "Từ {min} đến {max} phút. 0 tắt lời nhắc."
+        },
+        "locationHint": "Tối đa 191 ký tự.",
+        "locationPlaceholder": "ví dụ: 12 MG Road, Bangalore"
+      },
+      "templates": {
+        "title": "Mẫu tin nhắn",
+        "description": "Các tin nhắn văn bản thuần khách hàng nhận được. Biến giữ chỗ được điền cho từng lịch đặt.",
+        "placeholders": "Biến giữ chỗ",
+        "placeholder": {
+          "type": "Tên của loại lịch đặt",
+          "slot": "Ngày và giờ",
+          "name": "Tên của khách hàng",
+          "manage_link": "Liên kết để quản lý lịch đặt"
+        },
+        "events": {
+          "confirmation": "Xác nhận",
+          "reminder": "Lời nhắc",
+          "cancellation": "Hủy",
+          "reschedule": "Đổi lịch"
+        },
+        "reset": "Đặt lại mặc định",
+        "unknown": "Không phải biến giữ chỗ đã biết, sẽ được gửi nguyên văn: {names}",
+        "counter": "{count} / {max}"
+      },
+      "v": {
+        "required": "Trường này là bắt buộc.",
+        "notInteger": "Nhập một số nguyên.",
+        "tooSmall": "Phải ít nhất {min}.",
+        "tooLarge": "Phải nhiều nhất {max}.",
+        "tooLong": "Tối đa {max} ký tự.",
+        "badZone": "Chọn múi giờ từ danh sách.",
+        "badHours": "Sửa các mốc giờ được đánh dấu trong giờ làm việc."
+      },
+      "notAvailable": "Máy chủ này không hỗ trợ cài đặt lịch đặt toàn không gian làm việc. Thay vào đó, mỗi loại lịch đặt có giờ, múi giờ, lời nhắc và tin nhắn riêng.",
+      "openTypes": "Mở loại lịch đặt"
+    },
+    "linked": {
+      "title": "Lịch hẹn",
+      "openBookings": "Mở lịch đặt",
+      "showPast": "Hiện lịch đã qua",
+      "hidePast": "Ẩn lịch đã qua",
+      "empty": "Không có lịch hẹn sắp tới.",
+      "emptyBoth": "Chưa có lịch hẹn nào.",
+      "loading": "Đang tải lịch hẹn",
+      "unavailable": "Máy chủ này chưa hỗ trợ lịch hẹn.",
+      "loadMore": "Tải thêm",
+      "loadMorePast": "Tải thêm lịch đã qua",
+      "noType": "Lịch hẹn"
+    }
+  }
+}

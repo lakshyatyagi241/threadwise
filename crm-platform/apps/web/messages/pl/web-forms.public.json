@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "Dalej",
+      "back": "Wstecz",
+      "sending": "Przetwarzanie...",
+      "optional": "opcjonalne",
+      "selectPlaceholder": "Wybierz opcję",
+      "stepOf": "Krok {n} z {total}",
+      "summaryTitle": "{count, plural, one {Popraw 1 pole} few {Popraw # pola} many {Popraw # pól} other {Popraw # pola}}",
+      "successTitle": "Dziękujemy",
+      "continue": "Dalej",
+      "previewNotice": "Podgląd: nic stąd nie jest wysyłane.",
+      "honeypot": "Zostaw to pole puste",
+      "privacyPolicy": "Polityka prywatności",
+      "poweredBy": "Obsługiwane przez {brand}",
+      "brandName": "Formularze",
+      "captchaNeeded": "Przed wysłaniem wypełnij poniższą weryfikację.",
+      "rateLimited": "Zbyt wiele prób. Poczekaj chwilę i spróbuj ponownie.",
+      "closed": "Ten formularz nie przyjmuje odpowiedzi.",
+      "genericError": "Coś poszło nie tak i Twoje odpowiedzi nie zostały wysłane. Spróbuj ponownie.",
+      "notAvailableTitle": "Ten formularz nie jest dostępny",
+      "notAvailableBody": "Link może być nieprawidłowy lub formularz został zamknięty.",
+      "errors": {
+        "required": "To pole jest wymagane.",
+        "consent_required": "Zaznacz to pole, aby kontynuować.",
+        "invalid_email": "Wpisz prawidłowy adres e-mail.",
+        "invalid_phone": "Wpisz prawidłowy numer telefonu, najlepiej z kodem kraju.",
+        "invalid_number": "Wpisz prawidłowy numer.",
+        "invalid_date": "Wpisz prawidłową datę.",
+        "too_small": "Wpisz wartość co najmniej {min}.",
+        "too_large": "Wpisz wartość co najwyżej {max}.",
+        "too_short": "Wpisz co najmniej {min} znaków.",
+        "too_long": "Wpisz co najwyżej {max} znaków.",
+        "pattern": "Ta wartość nie ma oczekiwanego formatu.",
+        "invalid_option": "Wybierz jedną z podanych opcji."
+      },
+      "closedTitle": "Ten formularz jest zamknięty"
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "플랫폼",
+      "inbox": "수신함 및 채팅",
+      "audience": "CRM",
+      "sales": "영업",
+      "campaigns": "캠페인",
+      "automation": "자동화",
+      "store": "스토어",
+      "apps": "마켓플레이스",
+      "help": "지원 및 도움말",
+      "settings": "설정"
+    },
+    "locked": "업그레이드",
+    "language": "언어",
+    "theme": "테마",
+    "themeLight": "라이트",
+    "themeDark": "다크",
+    "logout": "로그아웃",
+    "openMenu": "메뉴 열기",
+    "admin": {
+      "title": "플랫폼 콘솔",
+      "note": "최고 관리자 계정이 생성되면 플랫폼 관리자 화면이 여기에 표시됩니다."
+    },
+    "soon": "곧 제공",
+    "new": "신규",
+    "comingSoon": "곧 출시",
+    "appGate": {
+      "title": "{app}은(는) 워크스페이스에 포함되어 있지 않습니다",
+      "body": "{app}은(는) 선택 앱입니다. 마켓플레이스에서 추가하면 메뉴에 표시됩니다.",
+      "bodyNoMarketplace": "{app}은(는) 이 워크스페이스에 없는 선택 앱입니다. 워크스페이스 관리자에게 마켓플레이스에서 추가해 달라고 요청하세요.",
+      "browse": "마켓플레이스 둘러보기",
+      "back": "대시보드로 돌아가기",
+      "unofficialTitle": "{app}을(를) 사용할 수 없습니다",
+      "unofficialBody": "{app}은(는) 이 워크스페이스에서 사용하도록 설정되지 않은 QR 코드 연결 개인 WhatsApp 번호에서만 쓰입니다. WhatsApp은 공식 WhatsApp Business API를 통해 연결됩니다."
+    },
+    "closeMenu": "메뉴 닫기",
+    "mainMenu": "주 메뉴",
+    "userMenu": "계정 메뉴",
+    "account": "계정",
+    "balance": "잔액",
+    "pageSettings": {
+      "label": "이 페이지 설정",
+      "hint": "역할에서 변경이 허용되어 있으므로 이 설정이 표시됩니다."
+    },
+    "notifications": "알림",
+    "settings": "설정",
+    "pinned": "도움말 및 설정",
+    "nav": {
+      "analytics": "분석",
+      "notifications": "알림",
+      "inbox": "수신함",
+      "quickChat": "빠른 채팅",
+      "callLogs": "통화 기록",
+      "teamChat": "팀 채팅",
+      "leadFinder": "리드 찾기",
+      "campaigns": "캠페인",
+      "broadcasts": "대량 발송",
+      "scheduled": "예약됨",
+      "templates": "템플릿",
+      "history": "기록",
+      "flows": "플로우",
+      "aiAssistants": "AI 어시스턴트",
+      "appointments": "약속",
+      "crmDashboard": "CRM 대시보드",
+      "store": "스토어",
+      "catalog": "카탈로그",
+      "support": "지원",
+      "guidebook": "가이드북",
+      "pipelines": "파이프라인",
+      "tasks": "작업",
+      "companies": "회사",
+      "emailTemplates": "이메일 템플릿",
+      "proposals": "제안서",
+      "estimates": "견적",
+      "invoices": "인보이스",
+      "payments": "결제"
+    },
+    "help": "도움말",
+    "unreadCount": "{count, plural, other {읽지 않음 #개}}"
+  }
+}

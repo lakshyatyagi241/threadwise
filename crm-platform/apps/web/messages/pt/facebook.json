@@ -1,0 +1,491 @@
+{
+  "facebook": {
+    "nav": {
+      "hub": "Facebook",
+      "posts": "Publicações do Facebook",
+      "setup": "Configuração do Messenger",
+      "broadcasts": "Transmissões do Messenger"
+    },
+    "common": {
+      "dismiss": "Dispensar",
+      "cancel": "Cancelar"
+    },
+    "hub": {
+      "kicker": "Canal · Facebook",
+      "title": "Facebook",
+      "titleAccent": "Páginas",
+      "intro": "Faça login com o Facebook uma vez e todas as Páginas que sua conta gerencia são adicionadas. Depois publique posts, responda comentários e use o Messenger pela sua caixa de entrada.",
+      "teamInbox": "Caixa de entrada da equipe",
+      "posts": "Publicações",
+      "setup": "Configuração do Messenger",
+      "broadcasts": "Transmissões do Messenger",
+      "loadError": "Não foi possível carregar as Páginas conectadas. Tente novamente.",
+      "notConfigured": "O Facebook ainda não está configurado nesta instalação — um administrador precisa adicionar o app da Meta antes de conectar uma Página.",
+      "connectedCount": "{count, plural, one {# Página conectada} other {# Páginas conectadas}}",
+      "notConnected": "Não conectado",
+      "cardTitle": "Conecte sua conta do Facebook",
+      "cardBody": "Faça login com o Facebook uma vez — todas as Páginas que sua conta gerencia são adicionadas automaticamente, cada uma com seu próprio acesso. Ou adicione uma única Página com o token de acesso.",
+      "connect": "Conectar uma Página",
+      "connectAnother": "Conectar outra conta",
+      "connectedPages": "Páginas conectadas",
+      "webhookTitle": "Endereço do webhook",
+      "webhookBody": "Cole este endereço nas configurações de webhook do seu app da Meta (URL de callback) para que mensagens e comentários do Messenger cheguem à sua caixa de entrada. Ele usa o mesmo token de verificação do WhatsApp, a menos que um do Facebook esteja definido."
+    },
+    "connect": {
+      "close": "Fechar",
+      "kicker": "Facebook",
+      "title": "Conecte sua conta do Facebook",
+      "intro": "Faça login com o Facebook uma vez — todas as Páginas que sua conta gerencia são adicionadas automaticamente. Depois você pode publicar posts, responder comentários e usar o Messenger pela sua caixa de entrada.",
+      "continue": "Continuar com o Facebook",
+      "or": "ou",
+      "manualToggle": "Adicionar uma Página manualmente com um token de acesso",
+      "tokenLabel": "Token de acesso da Página",
+      "tokenHint": "Em Meta → Configurações do negócio → Usuários do sistema, ou no Graph API Explorer. Identificamos a Página pelo token.",
+      "connectPage": "Conectar Página",
+      "tokenShape": "Isso não parece um token de acesso de Página.",
+      "failed": "Não foi possível conectar. Tente novamente.",
+      "footerLeft": "Chega à sua caixa de entrada na hora",
+      "footerRight": "criptografado"
+    },
+    "page": {
+      "facebookPage": "Página do Facebook",
+      "failed": "Não funcionou. Tente novamente.",
+      "live": "Ao vivo",
+      "reconnect": "Reconectar",
+      "followers": "{count} seguidores",
+      "liveNoCount": "ao vivo",
+      "dataAccess": "O acesso da Meta aos dados termina {when}",
+      "refresh": "Atualizar perfil",
+      "refreshed": "Página do Facebook atualizada.",
+      "inboundFixed": "Webhooks do Facebook reinscritos para esta Página.",
+      "fixInbound": "Corrigir recebimento",
+      "remove": "Desconectar",
+      "removeConfirm": "Desconectar esta Página do Facebook? As conversas da caixa de entrada permanecem, mas o envio para até você reconectar.",
+      "cancel": "Cancelar",
+      "removed": "Página do Facebook desconectada."
+    },
+    "broadcasts": {
+      "kicker": "Facebook · Transmissões",
+      "title": "Messenger",
+      "titleAccent": "transmissões",
+      "intro": "Envie mensagem a quem conversou com sua Página recentemente. A Meta só permite que uma Página envie mensagem a alguém até 24 horas após a última mensagem da pessoa — a lista abaixo é o seu público alcançável agora.",
+      "inbox": "Caixa de entrada",
+      "loadError": "Não foi possível carregar as transmissões. Tente novamente.",
+      "connectFirst": "Conecte uma Página do Facebook primeiro.",
+      "connectPage": "Conectar uma Página",
+      "none": "Nenhuma transmissão ainda. Crie uma à direita.",
+      "recipients": "{count, plural, one {# destinatário} other {# destinatários}}",
+      "status": {
+        "sending": "Enviando",
+        "done": "Concluída",
+        "failed": "Com falha",
+        "draft": "Rascunho"
+      },
+      "counts": "{sent} enviadas · {failed} com falha · {blocked} bloqueadas",
+      "start": "Iniciar envio",
+      "started": "Envio iniciado. Ele continua mesmo que você saia desta página.",
+      "pause": "Pausar",
+      "paused": "Pausado. Os destinatários restantes continuam na fila.",
+      "retry": "Tentar novamente as falhas",
+      "retried": "{count, plural, one {# destinatário reenfileirado} other {# destinatários reenfileirados}}. Clique em Iniciar envio.",
+      "delete": "Excluir",
+      "deleted": "Transmissão excluída.",
+      "deleteConfirm": "Excluir esta transmissão?",
+      "cancel": "Cancelar",
+      "newBroadcast": "Nova transmissão",
+      "name": "Nome",
+      "namePlaceholder": "ex.: Promoção de fim de semana",
+      "page": "Página",
+      "template": "Template (opcional)",
+      "templateHint": "Preenche a mensagem e envia os botões do template.",
+      "templateNone": "— nenhum (escreva a sua) —",
+      "buttons": "{count, plural, one {# botão} other {# botões}}",
+      "message": "Mensagem",
+      "messageHint": "Use '{name}' para personalizar.",
+      "messagePlaceholder": "Oi '{name}'! …",
+      "recipientsLabel": "Destinatários",
+      "within24": "(nas últimas 24 h)",
+      "selectAll": "Selecionar todos",
+      "noAudience": "Ninguém está dentro da janela de 24 horas agora — alguém precisa enviar mensagem a esta Página primeiro.",
+      "messengerUser": "Usuário do Messenger",
+      "selected": "{count} selecionados",
+      "create": "Criar transmissão",
+      "created": "Transmissão criada com {count, plural, one {# destinatário} other {# destinatários}}. Clique em Iniciar envio quando estiver pronto.",
+      "failed": "Não funcionou. Tente novamente."
+    },
+    "setup": {
+      "kicker": "Facebook · Messenger",
+      "title": "Messenger",
+      "titleAccent": "configuração",
+      "intro": "Configure como seu chat do Messenger recebe e orienta os clientes — o botão Começar, uma saudação de boas-vindas, um menu sempre visível e perguntas frequentes tocáveis. Escolha um recurso, leia o que ele faz e depois preencha. As alterações são salvas direto no Facebook.",
+      "pagePicker": "Página",
+      "composer": "Editor",
+      "loadError": "Não foi possível carregar o perfil do Messenger. Tente novamente.",
+      "noPage": "Nenhuma Página do Facebook conectada ainda.",
+      "connect": "Conectar uma conta do Facebook",
+      "profile": "Perfil do Messenger",
+      "tabs": {
+        "getstarted": "Botão Começar",
+        "greeting": "Saudação",
+        "menu": "Menu fixo",
+        "icebreakers": "Quebra-gelos"
+      },
+      "isSet": "Configurado",
+      "notSet": "Não configurado",
+      "failed": "Não funcionou. Tente novamente.",
+      "footnote": "Estas configurações são gravadas no perfil do Facebook Messenger pela Graph API e valem para novas conversas. A Meta pode levar um instante para propagar as mudanças.",
+      "frame": {
+        "preview": "Pré-visualização",
+        "yourPage": "Sua Página",
+        "activeNow": "Ativa agora"
+      },
+      "explainer": {
+        "what": "O que é",
+        "customer": "Como seus clientes usam",
+        "how": "Como configurar"
+      },
+      "getstarted": {
+        "title": "Botão Começar",
+        "subtitle": "O botão que um cliente novo toca para iniciar a conversa.",
+        "what": "É a primeira coisa que a pessoa vê ao abrir seu Messenger — um único botão “Começar” na tela de boas-vindas.",
+        "customer": "Ela toca uma vez e a conversa começa. Ele só aparece antes da primeira mensagem.",
+        "how": "Defina um payload (uma palavra-chave como GET_STARTED). Depois, em Fluxos, adicione um gatilho que escute esse payload para que um fluxo de boas-vindas rode assim que tocarem.",
+        "payload": "Payload",
+        "payloadHint": "Esta palavra é enviada a você quando o botão é tocado. Associe-a a um gatilho de fluxo para iniciar a automação.",
+        "remove": "Remover",
+        "removeConfirm": "Remover o botão Começar?",
+        "save": "Salvar",
+        "yourPage": "Sua Página",
+        "typically": "Normalmente responde na hora",
+        "button": "Começar"
+      },
+      "greeting": {
+        "title": "Saudação",
+        "subtitle": "A frase de boas-vindas exibida antes de qualquer pessoa digitar.",
+        "what": "Uma breve mensagem de boas-vindas na primeira tela do chat, logo abaixo do nome da sua Página.",
+        "customer": "Elas leem assim que abrem seu Messenger — define o tom e diz em que você pode ajudar.",
+        "how": "Mantenha em uma linha acolhedora (máx. 160 caracteres). Dica: adicione uma tag de primeiro nome e o Messenger cumprimenta cada cliente pelo nome.",
+        "welcomeText": "Texto de boas-vindas",
+        "placeholder": "Olá! Como podemos ajudar você hoje?",
+        "remove": "Remover",
+        "removeConfirm": "Remover a saudação?",
+        "save": "Salvar",
+        "yourPage": "Sua Página",
+        "sample": "Olá! Como podemos ajudar você hoje?"
+      },
+      "menu": {
+        "title": "Menu fixo",
+        "subtitle": "O menu de atalhos sempre disponível na barra de mensagem.",
+        "what": "Um menu (o ícone ☰ ao lado da caixa de texto) que fica disponível durante toda a conversa — até 3 atalhos.",
+        "customer": "Elas tocam em ☰ a qualquer momento para ir direto ao que precisam — “Falar com um atendente”, “Rastrear meu pedido”, “Visitar a loja”.",
+        "how": "Adicione até 3 itens. Cada um executa um fluxo (envia um payload) ou abre um link (URL). Se quiser, oculte a caixa de texto para que as pessoas usem só o menu.",
+        "sample1": "Fale conosco",
+        "sample2": "Rastrear meu pedido",
+        "sample3": "Visitar a loja",
+        "menuLabel": "Menu",
+        "menuItem": "Item do menu",
+        "titleLabel": "Título",
+        "titlePlaceholder": "Fale conosco",
+        "action": "Ação",
+        "actionFlow": "Executar um fluxo (enviar payload)",
+        "actionLink": "Abrir um link (URL)",
+        "url": "URL",
+        "payload": "Payload",
+        "removeItem": "Remover item",
+        "add": "Adicionar item de menu",
+        "hideComposer": "Ocultar a caixa de texto (somente menu)",
+        "remove": "Remover menu",
+        "removeConfirm": "Remover o menu fixo?",
+        "save": "Salvar menu"
+      },
+      "ice": {
+        "title": "Quebra-gelos",
+        "subtitle": "Perguntas sugeridas exibidas antes da primeira mensagem.",
+        "what": "Até 4 perguntas tocáveis na tela de boas-vindas — as dúvidas mais comuns, prontas para tocar em vez de digitar.",
+        "customer": "Em vez de pensar no que escrever, tocam em uma pergunta como “Qual o horário de funcionamento?” e recebem uma resposta imediata.",
+        "how": "Adicione suas principais perguntas frequentes. Cada toque envia seu payload — associe esse payload a um gatilho de fluxo para responder automaticamente.",
+        "sample1": "Qual o horário de funcionamento?",
+        "sample2": "Para onde vocês enviam?",
+        "sample3": "Falar com um atendente",
+        "yourPage": "Sua Página",
+        "question": "Pergunta",
+        "questionLabel": "Pergunta",
+        "questionPlaceholder": "Qual o horário de funcionamento?",
+        "payload": "Payload",
+        "removeItem": "Remover quebra-gelo",
+        "add": "Adicionar quebra-gelo",
+        "remove": "Remover todos",
+        "removeConfirm": "Remover todos os quebra-gelos?",
+        "save": "Salvar quebra-gelos"
+      }
+    },
+    "posts": {
+      "kicker": "Facebook · Publicações",
+      "title": "Facebook",
+      "titleAccent": "publicações",
+      "intro": "Tudo o que você criou, agendou ou publicou daqui — acompanhe o status, tente novamente as falhas e gerencie sua fila.",
+      "allPages": "Todas as Páginas",
+      "pagePicker": "Página",
+      "myPosts": "Minhas publicações",
+      "insights": "Insights",
+      "create": "Criar publicação",
+      "loadError": "Não foi possível carregar as publicações. Tente novamente.",
+      "noPage": "Nenhuma Página do Facebook conectada ainda",
+      "noPageHint": "Conecte uma conta do Facebook para publicar e agendar posts de Página.",
+      "connect": "Conectar uma conta do Facebook",
+      "kpi": {
+        "total": "Total de publicações",
+        "scheduled": "Agendadas",
+        "published": "Publicadas",
+        "failed": "Com falha"
+      },
+      "tabs": {
+        "all": "Todas",
+        "scheduled": "Agendadas",
+        "published": "Publicadas",
+        "failed": "Com falha"
+      },
+      "ranges": {
+        "all": "Todo o período",
+        "7d": "7 d",
+        "30d": "30 d",
+        "90d": "90 d"
+      },
+      "search": "Buscar publicações…",
+      "cols": {
+        "post": "Publicação",
+        "page": "Página",
+        "type": "Tipo",
+        "status": "Status",
+        "when": "Quando",
+        "actions": "Ações"
+      },
+      "status": {
+        "scheduled": "Agendada",
+        "published": "Publicada",
+        "failed": "Com falha",
+        "draft": "Rascunho"
+      },
+      "publishNow": "Publicar agora",
+      "delete": "Excluir",
+      "noMatch": "Nenhuma publicação corresponde a estes filtros",
+      "none": "Nenhuma publicação ainda",
+      "noneHint": "Crie sua primeira publicação — publique agora ou agende.",
+      "pageOf": "Página {page} de {last}",
+      "prev": "Anterior",
+      "next": "Próxima",
+      "deleteTitle": "Excluir publicação",
+      "deleteLive": "Isso também exclui a publicação do Facebook — não pode ser desfeito.",
+      "deleteLocal": "Remover esta publicação?",
+      "deleteYes": "Sim, excluir",
+      "cancel": "Cancelar",
+      "rejected": "O Facebook rejeitou a publicação: {error}",
+      "published": "Publicação enviada ao Facebook.",
+      "removed": "Publicação removida.",
+      "failed": "Não funcionou. Tente novamente."
+    },
+    "compose": {
+      "kicker": "Facebook · Criar",
+      "title": "Criar uma",
+      "titleAccent": "publicação",
+      "intro": "Crie fotos, álbuns, links, vídeos e reels — publique agora ou agende direto nas suas Páginas conectadas. Acompanhe a montagem na pré-visualização ao vivo.",
+      "posts": "Publicações",
+      "myPosts": "Minhas publicações",
+      "insights": "Insights",
+      "loadError": "Não foi possível carregar as Páginas. Tente novamente.",
+      "noPage": "Nenhuma Página do Facebook conectada ainda",
+      "noPageHint": "Conecte uma conta do Facebook para publicar e agendar posts de Página.",
+      "noAccess": "Você não pode criar publicações",
+      "noAccessHint": "Peça permissão a um administrador para criar publicações no Facebook.",
+      "connect": "Conectar uma conta do Facebook",
+      "required": "obrigatório",
+      "steps": {
+        "page": "Página",
+        "type": "Tipo de publicação",
+        "media": "Mídia",
+        "message": "Mensagem",
+        "when": "Quando publicar"
+      },
+      "types": {
+        "photo": {
+          "label": "Foto",
+          "hint": "Uma publicação com uma única foto."
+        },
+        "multi_photo": {
+          "label": "Álbum",
+          "hint": "2 a 10 fotos em uma publicação."
+        },
+        "link": {
+          "label": "Link",
+          "hint": "Compartilhe um link com pré-visualização."
+        },
+        "video": {
+          "label": "Vídeo",
+          "hint": "Um vídeo do feed (MP4 / MOV)."
+        },
+        "reel": {
+          "label": "Reel",
+          "hint": "Um reel de vídeo curto vertical."
+        }
+      },
+      "photoUrls": "Cole URLs públicas de imagens",
+      "photoHint": "Uma por linha, até 10. O envio de arquivos exige o serviço de armazenamento, que ainda não está conectado; use endereços públicos de imagens.",
+      "linkUrl": "URL do link",
+      "linkHint": "O Facebook cria um cartão de pré-visualização a partir do link. Uma publicação pode ter um link ou fotos, não ambos.",
+      "videoUrl": "Cole uma URL pública HTTPS de vídeo",
+      "reelNote": "Reels são vídeos curtos verticais. A mensagem abaixo é usada como descrição do reel.",
+      "videoNote": "A Meta busca o arquivo por HTTPS público. A mensagem abaixo é usada como descrição do vídeo.",
+      "messagePlaceholder": "Escreva sua publicação…",
+      "ai": {
+        "title": "Ferramentas de IA do editor",
+        "caption": "Legenda",
+        "repurpose": "Reaproveitar",
+        "review": "Revisar",
+        "bestTime": "Melhor horário",
+        "image": "Imagem",
+        "unavailable": "As ferramentas de IA ainda não estão disponíveis: dependem das configurações do provedor de IA."
+      },
+      "when": {
+        "now": "Publicar agora",
+        "later": "Agendar para depois",
+        "label": "Data e hora de envio",
+        "hint": "Entre 10 minutos e 75 dias a partir de agora, no seu fuso horário ({tz}). O Facebook enfileira e publica no horário."
+      },
+      "submit": {
+        "publish": "Publicar",
+        "schedule": "Agendar"
+      },
+      "preview": {
+        "live": "Pré-visualização ao vivo",
+        "facebook": "Facebook",
+        "yourPage": "Sua Página",
+        "justNow": "Agora mesmo",
+        "empty": "O texto da sua publicação aparecerá aqui…",
+        "reel": "Reel",
+        "video": "Vídeo",
+        "like": "Curtir",
+        "comment": "Comentar",
+        "share": "Compartilhar",
+        "note": "Pré-visualização ao vivo — a publicação real pode ficar um pouco diferente no Facebook."
+      },
+      "help": {
+        "label": "Ajuda - {n}",
+        "help1": {
+          "title": "O que posso publicar?",
+          "body": "Fotos, álbuns, links, vídeos do feed e reels são publicados direto na sua Página conectada pela Graph API."
+        },
+        "help2": {
+          "title": "Como funciona o agendamento?",
+          "body": "Escolha um horário entre 10 minutos e 75 dias à frente e o Facebook enfileira — a publicação sai automaticamente no horário. Ou publique agora."
+        },
+        "help3": {
+          "title": "Uma publicação falhou — por quê?",
+          "body": "Em geral a URL da mídia não era HTTPS pública, ou a Página foi reconectada. Leia o erro na linha e tente de novo com Publicar agora."
+        }
+      },
+      "problem": {
+        "noPage": "Escolha uma Página do Facebook conectada.",
+        "scheduleMissing": "Escolha uma data e hora para agendar a publicação.",
+        "scheduleInvalid": "Não foi possível ler essa data e hora."
+      },
+      "rejected": "O Facebook rejeitou a publicação: {error}",
+      "scheduled": "Publicação agendada.",
+      "published": "Publicação enviada ao Facebook.",
+      "failed": "Não funcionou. Tente novamente."
+    },
+    "grid": {
+      "kicker": "Facebook · Minhas publicações",
+      "title": "Sua",
+      "titleAccent": "grade",
+      "intro": "Suas publicações de Página mais recentes — ao vivo do Facebook. Toque em qualquer uma para pré-visualizar.",
+      "posts": "Publicações",
+      "newPost": "Nova publicação",
+      "pagePicker": "Página",
+      "loadError": "Não foi possível carregar as publicações. Tente novamente.",
+      "noPage": "Nenhuma Página do Facebook conectada",
+      "noPageHint": "Conecte uma para ver sua grade aqui.",
+      "goHub": "Ir para o Facebook",
+      "empty": "Nada aqui ainda",
+      "emptyHint": "As publicações que você fizer aparecerão aqui.",
+      "firstPost": "Crie sua primeira publicação",
+      "noCaption": "(sem legenda)",
+      "view": "Ver publicação",
+      "close": "Fechar",
+      "postTitle": "Publicação",
+      "noImage": "Sem imagem",
+      "viewOnFacebook": "Ver no Facebook"
+    },
+    "insights": {
+      "kicker": "Facebook · Análises",
+      "title": "Página",
+      "titleAccent": "insights",
+      "intro": "Alcance e engajamento (28 dias, ao vivo do Facebook) combinados com sua atividade no Messenger e as publicações feitas daqui.",
+      "create": "Criar publicação",
+      "myPosts": "Minhas publicações",
+      "loadError": "Não foi possível carregar os insights. Tente novamente.",
+      "noPage": "Nenhuma Página do Facebook conectada ainda.",
+      "connect": "Conectar uma conta do Facebook",
+      "connected": "Conectada",
+      "viewing": "Conta em exibição",
+      "cards": {
+        "followers": "Seguidores",
+        "followersSub": "público total",
+        "reach": "Alcance · 28 d",
+        "reachSub": "pessoas alcançadas",
+        "impressions": "Impressões · 28 d",
+        "impressionsSub": "vezes exibida",
+        "engagements": "Engajamentos · 28 d",
+        "engagementsSub": "interações",
+        "convos": "Conversas",
+        "convosSub": "{n} abertas",
+        "messagesIn": "Mensagens recebidas · 28 d",
+        "messagesInSub": "{n} enviadas de volta",
+        "published": "Publicações feitas",
+        "publishedSub": "{n} agendadas",
+        "rate": "Taxa de engajamento",
+        "rateSub": "engaj. ÷ alcance"
+      },
+      "liveFromFacebook": "Ao vivo do Facebook",
+      "fromHere": "Deste espaço de trabalho",
+      "activity": "Atividade no Messenger · últimos 14 dias",
+      "received": "Recebidas",
+      "sent": "Enviadas",
+      "mix": {
+        "title": "Mix de conteúdo",
+        "posts": "{n} publicações",
+        "none": "Nenhuma publicação feita daqui ainda.",
+        "first": "Crie sua primeira publicação"
+      },
+      "types": {
+        "photo": "Foto",
+        "multi_photo": "Álbum",
+        "link": "Link",
+        "video": "Vídeo",
+        "reel": "Reel"
+      },
+      "convos": {
+        "title": "Conversas",
+        "total": "{n} no total",
+        "open": "Abrir caixa de entrada da equipe",
+        "none": "Nenhuma conversa do Facebook ainda. Elas aparecem aqui quando as pessoas enviarem mensagem à sua Página."
+      },
+      "status": {
+        "open": "Aberta",
+        "pending": "Pendente",
+        "resolved": "Resolvida",
+        "closed": "Fechada",
+        "snoozed": "Adiada"
+      },
+      "recent": {
+        "title": "Publicações recentes",
+        "none": "Nenhuma publicação ainda, ou os insights ainda estão sendo preparados.",
+        "noCaption": "(sem legenda)",
+        "impressions": "impressões",
+        "engaged": "engajaram",
+        "view": "Ver"
+      },
+      "legendLive": "Ao vivo do Facebook — métricas descontinuadas podem aparecer como —.",
+      "legendHere": "Deste espaço de trabalho — Messenger e publicações feitas."
+    }
+  }
+}

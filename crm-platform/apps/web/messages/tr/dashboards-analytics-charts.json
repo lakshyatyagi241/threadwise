@@ -1,0 +1,722 @@
+{
+  "dashboards-analytics-charts": {
+    "nav": {
+      "title": "Pano",
+      "analytics": "Analizler"
+    },
+    "home": {
+      "title": "Pano",
+      "welcome": "Çalışma alanınıza hoş geldiniz."
+    },
+    "chart": {
+      "empty": "Bu aralıkta henüz veri yok.",
+      "bucket": "Dönem",
+      "cell": "{day} {hour}:00 · {count, plural, one {# mesaj} other {# mesaj}}"
+    },
+    "range": {
+      "label": "Tarih aralığı",
+      "short": {
+        "24h": "24 sa",
+        "7d": "7 g",
+        "30d": "30 g",
+        "90d": "90 g",
+        "qtd": "Çeyrek başından beri",
+        "custom": "Özel"
+      },
+      "long": {
+        "24h": "Son 24 saat",
+        "7d": "Son 7 gün",
+        "30d": "Son 30 gün",
+        "qtd": "Çeyrek başından beri",
+        "custom": "Özel aralık"
+      },
+      "from": "Başlangıç tarihi",
+      "to": "Bitiş tarihi",
+      "apply": "Uygula"
+    },
+    "funnel": {
+      "listLabel": "Kişi hunisi",
+      "stageLabel": "{stage}: {n} kişi, mesaj gönderilen kişilerin %{pct}'si",
+      "stage": {
+        "messaged": "Mesaj gönderilen kişiler",
+        "delivered": "İletildi",
+        "replied": "Yanıtlandı",
+        "goalCompleted": "Hedef tamamlandı"
+      },
+      "goalCompletedHint": "Akışı tamamlanan kişiler",
+      "activity": {
+        "title": "Konuşma etkinliği",
+        "summary": "{inbound, plural, one {# gelen mesaj} other {# gelen mesaj}} · {contacts, plural, one {# yanıt veren kişi} other {# yanıt veren kişi}} · yanıt veren kişi başına {perContact} yanıt"
+      },
+      "comparison": {
+        "title": "Önceki dönemle karşılaştırma",
+        "replyRate": "Yanıt oranı"
+      }
+    },
+    "error": {
+      "locked": "Planınız analizleri içermiyor.",
+      "upgrade": "Planları gör",
+      "forbidden": "Bu sayfaya erişiminiz yok.",
+      "generic": "Sayılar yüklenemedi. Birazdan tekrar deneyin."
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "Günaydın, {name}.",
+        "afternoon": "İyi günler, {name}.",
+        "evening": "İyi akşamlar, {name}."
+      },
+      "subline": "{date} - {range}: {devices, plural, one {# bağlı cihazda} other {# bağlı cihazda}} {sent} giden mesaj, %{rate} iletilebilirlik.",
+      "kpis": "Temel sayılar",
+      "kpi": {
+        "sent": "Gönderilen mesajlar · {range}",
+        "sentLegend": "{delivered} iletildi · {failed} başarısız",
+        "readRate": "Okunma oranı",
+        "deliverability": "İletilebilirlik",
+        "deliveredOf": "{sent} mesajın {delivered} tanesi",
+        "replies": "Yanıtlar",
+        "replyRate": "%{rate} yanıt oranı",
+        "readMini": {
+          "sent": "Gönderildi",
+          "delivered": "İletildi",
+          "read": "Okundu"
+        }
+      },
+      "throughput": {
+        "title": "Mesaj hacmi",
+        "subtitle": {
+          "24h": "Giden, iletilen ve başarısız, saatlik, son 24 saat",
+          "7d": "Giden, iletilen ve başarısız, günlük, son 7 gün",
+          "30d": "Giden, iletilen ve başarısız, günlük, son 30 gün",
+          "qtd": "Giden, iletilen ve başarısız, günlük, çeyrek başından beri",
+          "custom": "Giden, iletilen ve başarısız, günlük, özel aralık"
+        },
+        "peak": "Yoğun saat {when} · {n} mesaj",
+        "sent": "Gönderildi",
+        "delivered": "İletildi",
+        "failed": "Başarısız",
+        "avgHour": "Saat başına ortalama",
+        "replies": "Yanıtlar",
+        "replyRate": "Yanıt oranı"
+      },
+      "sparkline": {
+        "title": "Son 20 saat",
+        "subtitle": "Saat başına gönderilen mesajlar, en eskiden başlayarak",
+        "inCard": "Son 20 saat"
+      },
+      "funnel": {
+        "title": "Etkileşim hunisi",
+        "viewAll": "Analizleri görüntüle"
+      },
+      "kicker": "Operatör panosu",
+      "calm": "Çalışma alanı sakin.",
+      "running": "{n, plural, one {# toplu gönderim çalışıyor.} other {# toplu gönderim çalışıyor.}}",
+      "export": "Dışa aktar",
+      "newCampaign": "Yeni kampanya",
+      "contacts": {
+        "title": "Etkin kişiler",
+        "subscribed": "Abone",
+        "optedIn": "İzin vermiş",
+        "blocked": "Engellenen"
+      },
+      "wallet": {
+        "title": "Cüzdan bakiyesi",
+        "payPerMessage": "mesaj başına ödeme",
+        "topUp": "Bakiye yükle",
+        "earn": "Ortaklıkla kazan"
+      },
+      "autopilot": {
+        "kicker": "Daha fazlasını yapın",
+        "title": "Yanıtları otomatiğe alın",
+        "body": "Daha fazla müşteriye otomatik ulaşmak için bir akış oluşturun veya kampanya başlatın.",
+        "flow": "Akış oluştur",
+        "campaign": "Yeni kampanya"
+      },
+      "pipeline": {
+        "kicker": "Satış hattı",
+        "open": "Açık hat",
+        "deals": "Açık fırsatlar",
+        "won": "Bu ay kazanılan",
+        "winRate": "Kazanma oranı",
+        "board": "Panoyu aç"
+      },
+      "inbox": {
+        "title": "Canlı gelen kutusu",
+        "unread": "{n} okunmamış",
+        "oldest": "en eskisi {when}",
+        "open": "Gelen kutusunu aç",
+        "recent": "Son konuşmalar",
+        "empty": "Henüz konuşma yok."
+      },
+      "campaigns": {
+        "title": "Etkin kampanyalar",
+        "summary": "{running} çalışıyor - {scheduled} zamanlanmış - {paused} duraklatılmış",
+        "viewAll": "Tümünü gör ({n})",
+        "untitled": "Adsız toplu gönderim",
+        "delivered": "{done} / {total} iletildi",
+        "emptyTitle": "Etkin toplu gönderim yok",
+        "emptyBody": "Bir kişi grubuna göndermeye başlamak için bir tane oluşturun.",
+        "new": "Yeni toplu gönderim",
+        "status": {
+          "processing": "Gönderiliyor",
+          "sending": "Gönderiliyor",
+          "running": "Gönderiliyor",
+          "active": "Gönderiliyor",
+          "scheduled": "Zamanlandı",
+          "pending": "Zamanlandı",
+          "queued": "Zamanlandı",
+          "paused": "Duraklatıldı",
+          "cancelled": "Duraklatıldı",
+          "failed": "Başarısız",
+          "completed": "Tamamlandı",
+          "completed_with_errors": "Tamamlandı",
+          "done": "Tamamlandı",
+          "sent": "Tamamlandı"
+        }
+      },
+      "devices": {
+        "title": "Bağlı cihazlar",
+        "summary": "{cap} yuvanın {total} tanesi kullanımda - {online} çevrimiçi",
+        "connect": "Bağlan",
+        "emptyTitle": "Bağlı cihaz yok",
+        "emptyBody": "Göndermeye başlamak için bir WhatsApp numarası eşleştirin.",
+        "connectDevice": "Cihaz bağla",
+        "unzoned": "bölgesiz",
+        "per24h": "{n}/24sa",
+        "deliv": "iletim",
+        "free": "{n, plural, one {# cihaz yuvası kullanılabilir} other {# cihaz yuvası kullanılabilir}}",
+        "freeHint": "WABA ekle",
+        "connectDeviceShort": "Cihaz bağla"
+      },
+      "templates": {
+        "title": "En iyi performanslı şablonlar",
+        "subtitle": "Gönderim hacmine göre - seçilen aralık",
+        "count": "{n, plural, one {# şablon} other {# şablon}}",
+        "new": "Yeni şablon",
+        "empty": "Henüz şablon yok.",
+        "create": "İlkini oluşturun",
+        "col": {
+          "template": "Şablon",
+          "type": "Tür",
+          "sent": "Gönderildi",
+          "delivered": "İletildi",
+          "read": "Okundu",
+          "readRate": "Okunma oranı",
+          "performance": "İletim oranı",
+          "status": "Durum"
+        },
+        "status": {
+          "approved": "Onaylandı",
+          "public": "Onaylandı",
+          "active": "Onaylandı",
+          "pending": "İncelemede",
+          "submitted": "İncelemede",
+          "in_review": "İncelemede",
+          "rejected": "Reddedildi",
+          "disabled": "Reddedildi"
+        }
+      },
+      "activity": {
+        "title": "Etkinlik günlüğü",
+        "subtitle": "Çalışma alanı olayları",
+        "empty": "Bu çalışma alanı için kayıtlı yakın zamanlı etkinlik yok.",
+        "by": "{actor} - {module} {action}"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "accounts": "{count, plural, one {# hesap} other {# hesap}}",
+        "connected": "Bağlı",
+        "openInbox": "Gelen kutusunu aç →",
+        "tile": {
+          "needReply": "Yanıt bekleyen",
+          "openChats": "Açık sohbetler",
+          "dmsIn": "Gelen DM · 7g",
+          "dmsOut": "Gönderilen DM · 7g",
+          "followers": "Takipçiler",
+          "replyRate": "Yanıt oranı"
+        }
+      },
+      "copilot": {
+        "title": "{brand} Copilot",
+        "tag": "Yapay zekâ destekli",
+        "headline": "Bir cümleden akış oluşturun.",
+        "body": "Bir müşteri yolculuğunu tarif edin; Copilot düğümleri, dalları ve şablon önerilerini taslak olarak hazırlasın.",
+        "try": "deneyin:",
+        "generate": "Akış oluştur ✦",
+        "examples": "Örnekler",
+        "stat": {
+          "flows": "akış",
+          "active": "etkin",
+          "subscribers": "abone"
+        }
+      },
+      "flows": {
+        "title": "Otomasyon akışları",
+        "summary": "{active} etkin · {subscribers} abone",
+        "open": "Aç",
+        "empty": "Henüz akış yok.",
+        "build": "İlk akışınızı oluşturun",
+        "meta": "{trigger} tetikleyici · {steps} adım · {subs} abone",
+        "statusActive": "Etkin",
+        "statusPaused": "Duraklatıldı",
+        "subs": "abone"
+      },
+      "quickActions": {
+        "title": "Hızlı işlemler",
+        "soon": "Yakında",
+        "broadcast": {
+          "label": "Yeni toplu gönderim",
+          "hint": "bir kişi grubuna"
+        },
+        "flow": {
+          "label": "Akış oluştur",
+          "hint": "sürükle ve bırak"
+        },
+        "template": {
+          "label": "Yeni şablon",
+          "hint": "Meta'ya gönder"
+        },
+        "autoReply": {
+          "label": "Otomatik yanıt",
+          "hint": "anahtar sözcük kuralı"
+        }
+      },
+      "integrations": {
+        "title": "Entegrasyonlar",
+        "name": {
+          "woocommerce": "WooCommerce",
+          "shopify": "Shopify",
+          "google_sheets": "Google Sheets",
+          "meta_catalog": "Meta Catalog"
+        },
+        "events": "{n} olay / 7g",
+        "connected": {
+          "woocommerce": "Bağlı",
+          "shopify": "Bağlı",
+          "google_sheets": "API anahtarı verildi",
+          "meta_catalog": "Katalog bağlandı"
+        },
+        "notConnected": "bağlı değil",
+        "connect": "Bağlan",
+        "connectedLabel": "Bağlı"
+      },
+      "sublineOfficial": "{date} - {range}: {sent} giden mesaj, %{rate} iletilebilirlik.",
+      "synced": "Canlı · {s} sn önce senkronize edildi"
+    },
+    "analytics": {
+      "title": "Analizler",
+      "headline": "Mesajların %{rate}'i {from} ile {to} arasında okuyucusuna ulaştı.",
+      "subline": "{sent, plural, one {# mesaj} other {# mesaj}} gönderildi, %{replyRate} yanıt oranı.",
+      "noSends": "Bu aralıkta henüz giden mesaj yok.",
+      "export": "CSV dışa aktar",
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "apply": "Uygula",
+      "kpis": "Temel sayılar",
+      "kpi": {
+        "sent": "Gönderildi",
+        "delivered": "İletildi",
+        "queued": "Sırada",
+        "failed": "Başarısız",
+        "replyRate": "Yanıt oranı"
+      },
+      "series": {
+        "sent": "Gönderildi",
+        "delivered": "İletildi",
+        "failed": "Başarısız",
+        "queued": "Sırada"
+      },
+      "empty": "Bu aralıkta gösterilecek bir şey yok.",
+      "volume": {
+        "title": "Zamana göre mesajlar",
+        "subtitle": "Günlük gönderilen, iletilen ve başarısız"
+      },
+      "rates": {
+        "title": "İletim oranları",
+        "subtitle": "İletilen, sıradaki ve başarısız payı"
+      },
+      "totals": {
+        "title": "Günlük toplamlar",
+        "subtitle": "Günlük iletilen, sıradaki ve başarısız, yığılmış"
+      },
+      "funnel": {
+        "title": "Etkileşim hunisi"
+      },
+      "types": {
+        "title": "Mesaj türleri",
+        "subtitle": "Giden dağılımı",
+        "byType": "Mesaj türüne göre gönderilen ve iletilen",
+        "kind": "Tür",
+        "sent": "Gönderildi",
+        "delivered": "İletildi",
+        "text": "Metin",
+        "template": "Şablon",
+        "media": "Medya",
+        "interactive": "Etkileşimli",
+        "location": "Konum"
+      },
+      "heatmap": {
+        "title": "En iyi saatler",
+        "subtitle": "Haftanın gününe ve saate göre mesaj hacmi, {zone}. Koyu renk daha yoğun demektir.",
+        "empty": "Bu aralıkta mesaj hacmi yok.",
+        "footer": "{total} mesajdan hesaplandı, saat dilimi {tz}"
+      },
+      "panels": {
+        "devices": {
+          "title": "Cihaza göre",
+          "subtitle": "Son 24 saatteki gönderimler",
+          "online": "{online}/{total} çevrimiçi",
+          "empty": "Henüz bağlı cihaz yok.",
+          "msg": "{n} mesaj"
+        },
+        "templates": {
+          "title": "Şablonlar",
+          "subtitle": "Gönderime göre en iyiler",
+          "empty": "Bu aralıkta şablon gönderimi yok."
+        },
+        "contacts": {
+          "title": "En aktif kişiler",
+          "subtitle": "En çok etkileşim alan konuşmalar",
+          "empty": "Bu aralıkta konuşma yok.",
+          "msgs": "{n} mesaj"
+        },
+        "team": {
+          "title": "Ekip performansı",
+          "subtitle": "Bu aralıktaki temsilciler",
+          "count": "{n, plural, one {# temsilci} other {# temsilci}}",
+          "col": {
+            "agent": "Temsilci",
+            "convos": "Konuşmalar",
+            "resolved": "Çözüldü",
+            "first": "Ort. ilk yanıt",
+            "resolution": "Ort. çözüm",
+            "csat": "CSAT"
+          }
+        },
+        "geo": {
+          "title": "Ülkeye göre",
+          "subtitle": "Erişim",
+          "markets": "{n, plural, one {# pazar} other {# pazar}}",
+          "unspecified": "Belirtilmemiş",
+          "empty": "Bu aralıkta ülkesi bilinen konuşma yok."
+        },
+        "events": {
+          "title": "Olay akışı",
+          "subtitle": "Bu aralıktaki en yeni mesajlar",
+          "sent": "Gönderildi → {peer}",
+          "received": "{peer} kişisinden alındı",
+          "empty": "Bu aralıkta yakın zamanlı etkinlik yok."
+        }
+      }
+    },
+    "health": {
+      "nav": "Sistem durumu",
+      "group": "Sistem",
+      "title": "Sistem durumu",
+      "kicker": "Platform",
+      "description": "Platformun çalıştığı hizmetlerin canlı kontrolleri.",
+      "banner": {
+        "up": "Tüm sistemler - Çalışıyor",
+        "warn": "Tüm sistemler - Performans düşük",
+        "down": "Tüm sistemler - Kapalı",
+        "checked": "Son kontrol {time} · 20 sn'de bir otomatik yenilenir",
+        "refresh": "Şimdi yenile",
+        "refreshing": "Kontrol ediliyor..."
+      },
+      "core": "Çekirdek hizmetler",
+      "activity": {
+        "messages": "Mesajlar · 24sa",
+        "aiCalls": "Yapay zekâ çağrıları · 24sa",
+        "conversations": "Konuşmalar · 24sa",
+        "webhooks": "Webhook'lar · 24sa"
+      },
+      "throughput": {
+        "title": "Mesaj hacmi · 14 gün",
+        "peak": "en yüksek {n}/gün",
+        "empty": "Son 14 günde mesaj etkinliği yok.",
+        "aria": "Günlük mesajlar, son 14 gün"
+      },
+      "state": {
+        "up": "Çalışıyor",
+        "warn": "Performans düşük",
+        "down": "Kapalı",
+        "idle": "Boşta"
+      },
+      "check": {
+        "database": "Veritabanı",
+        "cache": "Önbellek",
+        "queue": "Kuyruk",
+        "bridge": "Node köprüsü",
+        "storage": "Medya depolama"
+      },
+      "latency": {
+        "title": "Yanıt süresi",
+        "empty": "Zamanlama verisi yok.",
+        "ms": "{ms} ms"
+      },
+      "queues": {
+        "title": "Kuyruklar",
+        "name": "Kuyruk",
+        "pending": "Bekleyen",
+        "failed": "Başarısız"
+      },
+      "clear": {
+        "button": "Bekleyen işleri temizle",
+        "busy": "Temizleniyor...",
+        "confirmTitle": "Bekleyen ve başarısız işler temizlensin mi?",
+        "confirmBody": "Bekleyen ve ertelenen işler kaldırılır, başarısız işler her kuyruktan silinir. Çalışan işlere dokunulmaz.",
+        "confirm": "İşleri temizle",
+        "cancel": "İptal",
+        "done": "{pending} bekleyen ve {failed} başarısız iş temizlendi.",
+        "failed": "Başarısız: {message}",
+        "superOnly": "İşleri yalnızca süper yönetici temizleyebilir."
+      },
+      "vitals": {
+        "title": "Sunucu göstergeleri",
+        "node": "Node",
+        "app": "Uygulama sürümü",
+        "environment": "Ortam",
+        "uptime": "Çalışma süresi",
+        "memory": "Bellek (RSS)",
+        "heap": "Kullanılan heap",
+        "diskFree": "Boş disk",
+        "diskFreeValue": "{gb} GB",
+        "diskUsed": "Kullanılan disk %{pct}",
+        "noDisk": "Kullanılamıyor"
+      },
+      "error": "Sistem durumu kontrolleri yüklenemedi. Birazdan tekrar deneyin.",
+      "engines": {
+        "title": "WhatsApp motorları ve bağlı numaralar",
+        "empty": "Henüz yapılandırılmış motor yok.",
+        "caption": "toplam numaradan bağlı olanlar"
+      }
+    },
+    "admin": {
+      "nav": {
+        "analytics": "Analizler"
+      },
+      "window": {
+        "label": "Zaman aralığı",
+        "24h": "Son 24 saat",
+        "7d": "Son 7 gün",
+        "30d": "Son 30 gün",
+        "90d": "Son 90 gün",
+        "1y": "Son yıl"
+      },
+      "error": "Platform sayıları yüklenemedi.",
+      "retry": "Tekrar dene",
+      "vsPrevious": "önceki döneme göre",
+      "overview": {
+        "title": "Yönetici panosu.",
+        "kicker": "Yönetici / Genel bakış",
+        "subtitle": "Platform sağlığı, gelir, kullanım ve çalışma alanı etkinliği tek yerde.",
+        "addWorkspace": "Çalışma alanı ekle",
+        "kpi": {
+          "income": "Toplam gelir",
+          "profit": "Kâr",
+          "profitHint": "%32 marjla tahmin, muhasebe rakamı değildir",
+          "views": "Toplam görüntüleme",
+          "viewsHint": "Tüm çalışma alanlarının gönderdiği mesajlar",
+          "conversion": "Dönüşüm oranı"
+        },
+        "revenue": {
+          "title": "Zamana göre gelir",
+          "total": "Toplam gelir",
+          "target": "Toplam hedef",
+          "targetHint": "Hedef, kayıtlı bir hedef değil, önceki döneme göre %10 büyüme ölçütüdür.",
+          "revenue": "Gelir",
+          "aria": "Döneme göre gelir ve hedef"
+        },
+        "countries": {
+          "title": "Ülkeye göre oturumlar",
+          "subtitle": "Bölgeye göre en çok oturum",
+          "empty": "Henüz ülke verisi yok - kullanıcılar bölgelerini paylaşmadı."
+        },
+        "regions": {
+          "title": "Bölgeye göre satışlar",
+          "subtitle": "Platform gelir payı",
+          "aria": "Bölgeye göre yeni kullanıcılar"
+        },
+        "platform": {
+          "title": "Platforma göre satışlar",
+          "subtitle": "E-ticaret entegrasyonları",
+          "empty": "Bu aralıkta ücretli sipariş yok.",
+          "aria": "Ödeme geçidine göre ücretli gelir"
+        },
+        "users": {
+          "title": "Kayıtlı kullanıcılar",
+          "subtitle": "Kullanıcı koltuklarına genel bakış",
+          "total": "Toplam kullanıcı",
+          "premium": "Premium plan",
+          "basic": "Temel plan",
+          "aria": "Kullanıcıların %{pct}'i ücretli bir planda"
+        },
+        "workspaces": {
+          "title": "Çalışma alanı etkinliği",
+          "subtitle": "Son yüksek değerli yönetici olayları",
+          "viewAll": "Tümünü gör",
+          "empty": "Henüz çalışma alanı yok.",
+          "col": {
+            "workspace": "Çalışma alanı",
+            "owner": "Sahip",
+            "plan": "Plan",
+            "messages": "Mesajlar",
+            "health": "Sağlık",
+            "mrr": "MRR"
+          },
+          "health": {
+            "good": "İyi",
+            "active": "Etkin",
+            "low": "Düşük",
+            "idle": "Boşta"
+          }
+        },
+        "alerts": {
+          "title": "Yönetici uyarıları",
+          "subtitle": "Öncelik kuyruğu",
+          "open": "{n} açık",
+          "empty": "Tüm sistemler sağlıklı - uyarı yok."
+        },
+        "titleLead": "Yönetici",
+        "titleAccent": "panosu"
+      },
+      "analytics": {
+        "title": "Yönetici analizleri.",
+        "kicker": "Yönetici - Platform",
+        "subtitle": "Gelir, çalışma alanı büyümesi, WhatsApp kullanımı, kampanya iletimi, cihaz sağlığı ve destek yükünün eksiksiz kontrol odası görünümü.",
+        "days": {
+          "7": "Son 7 gün",
+          "30": "Son 30 gün",
+          "90": "Son 90 gün",
+          "365": "Bu yıl",
+          "custom": "Son {n} gün"
+        },
+        "daysLabel": "Gün",
+        "export": "Dışa aktar",
+        "tabs": {
+          "overview": "Genel bakış",
+          "revenue": "Gelir",
+          "usage": "Kullanım",
+          "workspaces": "Çalışma alanları",
+          "campaigns": "Kampanyalar",
+          "support": "Destek"
+        },
+        "kpi": {
+          "revenue": "Gelir",
+          "revenueSub": "{n, plural, one {# yeni çalışma alanı} other {# yeni çalışma alanı}}",
+          "workspaces": "Çalışma alanları",
+          "workspacesSub": "{n, plural, one {toplam # kullanıcı} other {toplam # kullanıcı}}",
+          "messages": "Mesajlar",
+          "messagesSub": "ort. {n} / gün",
+          "devices": "Çevrimiçi cihazlar",
+          "newUsers": "Yeni kullanıcılar",
+          "newUsersSub": "toplam {n}",
+          "tickets": "Açık talepler",
+          "watch": "izle",
+          "clear": "temiz"
+        },
+        "pulse": {
+          "title": "Platform nabzı",
+          "subtitle": "Kontrol odasının canlı doluluğu",
+          "workspaces": "Çalışma alanları",
+          "devices": "Bağlı cihazlar",
+          "tickets": "Açık talepler",
+          "signups": "Yeni kayıtlar",
+          "normal": "normal"
+        },
+        "growth": {
+          "title": "Büyüme komuta merkezi",
+          "subtitle": "Kullanıcı kayıtları, son {days} gün",
+          "aria": "Günlük kayıtlar",
+          "series": "Kayıtlar"
+        },
+        "plans": {
+          "title": "Plan dağılımı",
+          "subtitle": "Plana göre çalışma alanları",
+          "empty": "Henüz veri yok - plan dağılımı, en az bir çalışma alanına plan atandığında görünür.",
+          "aria": "Plana göre çalışma alanları"
+        },
+        "acquisition": {
+          "title": "Edinim",
+          "subtitle": "Kullanıcıdan çalışma alanına",
+          "users": "Toplam kullanıcı",
+          "newUsers": "Yeni kullanıcılar",
+          "workspaces": "Oluşturulan çalışma alanları",
+          "newWorkspaces": "Yeni çalışma alanları",
+          "devices": "Bağlı cihazlar"
+        },
+        "devices": {
+          "title": "En iyi cihazlar - 24sa",
+          "subtitle": "Gönderim hacmi",
+          "empty": "Henüz gönderim yok",
+          "devices": "Cihazlar",
+          "online": "Çevrimiçi",
+          "sends": "24sa gönderim",
+          "aria": "Cihaz başına son 24 saatteki gönderimler"
+        },
+        "leaderboard": {
+          "title": "Ücretli gelire göre en iyi çalışma alanları",
+          "subtitle": "Son {days} gün",
+          "workspace": "Çalışma alanı",
+          "orders": "Siparişler",
+          "revenue": "Ücretli gelir",
+          "open": "Aç",
+          "empty": "Bu aralıkta ücretli sipariş yok."
+        },
+        "cohort": {
+          "title": "Kayıt kohortları",
+          "subtitle": "Son {days} gün",
+          "aria": "Günlük kayıtlar"
+        },
+        "composition": {
+          "title": "Gelir bileşimi",
+          "subtitle": "En çok katkıda bulunanlar",
+          "empty": "Henüz ücretli gelir yok."
+        },
+        "support": {
+          "title": "Destek yükü",
+          "subtitle": "Talep durumu",
+          "empty": "Henüz talep yok.",
+          "open": "Açık",
+          "resolved": "Çözüldü",
+          "inbox": "Gelen kutusunu aç"
+        },
+        "queue": {
+          "title": "Yönetici dikkati",
+          "subtitle": "İşlem kuyruğu",
+          "tickets": "{n, plural, one {# açık talep} other {# açık talep}}",
+          "ticketsHint": "SLA ihlalinden önce destekte önceliklendirin",
+          "offline": "{n, plural, one {# cihaz çevrimdışı} other {# cihaz çevrimdışı}}",
+          "offlineHint": "Cihazların yarısından azı çevrimiçi",
+          "users": "{n, plural, one {# yeni kullanıcı} other {# yeni kullanıcı}}",
+          "usersHint": "Son kayıtları inceleyin",
+          "clear": "Her şey yolunda"
+        },
+        "titleLead": "Yönetici",
+        "titleAccent": "analizleri"
+      },
+      "kpiLabel": "KPI"
+    },
+    "quickAccess": {
+      "title": "Hızlı erişim",
+      "kicker": "Kısayollar",
+      "edit": "Kısayolları düzenle",
+      "empty": "Hızlı erişim kısayolları ekle",
+      "open": "{label} öğesini aç",
+      "modalTitle": "Hızlı erişim",
+      "modalEyebrow": "En fazla 10 kısayol sabitleyin",
+      "pages": "Uygulama sayfaları (en fazla 10)",
+      "custom": "Özel bağlantılar",
+      "labelPlaceholder": "Etiket",
+      "urlPlaceholder": "https://... veya /yol",
+      "addCustom": "+ Özel bağlantı ekle",
+      "removeCustom": "Bu bağlantıyı kaldır",
+      "counter": "{n} / 10 sabitlendi",
+      "cancel": "İptal",
+      "save": "Kısayolları kaydet",
+      "saving": "Kaydediliyor...",
+      "limit": "En fazla 10 kısayol sabitleyebilirsiniz.",
+      "saved": "Hızlı erişim güncellendi.",
+      "failed": "Kısayollarınız kaydedilemedi."
+    }
+  }
+}

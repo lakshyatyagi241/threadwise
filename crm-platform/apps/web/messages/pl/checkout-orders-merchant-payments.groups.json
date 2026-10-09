@@ -1,0 +1,54 @@
+{
+  "checkout-orders-merchant-payments": {
+    "groups": {
+      "eyebrow": "Sklep / Grupy",
+      "title": "Grupy WhatsApp",
+      "subtitle": "Grupy, do których należy Twój połączony numer. Po potwierdzeniu zamówienia jest ono publikowane w grupie klienta, a klient jest oznaczany przez @. Nadaj grupie kod zamówień, aby klienci mogli z niej zamawiać.",
+      "loading": "Wczytywanie grup",
+      "summary": {
+        "groups": "Zsynchronizowane grupy",
+        "coded": "Z kodem zamówień",
+        "bot": "Numer bota",
+        "noBot": "Żaden numer WhatsApp nie jest połączony.",
+        "connect": "Połącz numer w Kanałach",
+        "copyNumber": "Kopiuj numer"
+      },
+      "search": {
+        "label": "Szukaj grup",
+        "placeholder": "Szukaj nazwy grupy..."
+      },
+      "columns": {
+        "group": "Grupa",
+        "members": "Członkowie",
+        "device": "Urządzenie bota",
+        "synced": "Zsynchronizowano",
+        "code": "Kod zamówień"
+      },
+      "row": {
+        "unnamed": "(grupa bez nazwy)",
+        "noCode": "Brak kodu",
+        "placeholder": "np. ACME",
+        "label": "Kod zamówień dla {name}",
+        "copyLink": "Kopiuj link do zamawiania",
+        "saved": "Kod zamówień zapisany.",
+        "cleared": "Kod zamówień wyczyszczony.",
+        "tooLong": "Użyj maksymalnie {max} znaków.",
+        "badChars": "Użyj tylko liter, cyfr, kropek, myślników i podkreśleń.",
+        "taken": "Inna grupa używa już tego kodu."
+      },
+      "empty": {
+        "title": "Brak grup",
+        "message": "Lista grup jest kopiowana z Twojej połączonej sesji WhatsApp. Grupy pojawią się tutaj, gdy sesja je zsynchronizuje; nie obiecujemy jeszcze żadnego czasu.",
+        "action": "Otwórz Kanały"
+      },
+      "noMatch": {
+        "title": "Żadna grupa nie pasuje do wyszukiwania",
+        "message": "Spróbuj innej części nazwy grupy lub wyczyść wyszukiwanie."
+      },
+      "how": {
+        "title": "Jak działają kody zamówień",
+        "body": "Nadaj grupie krótki kod (na przykład ACME), a następnie udostępnij jej link do zamawiania. Gdy klient go otworzy i potwierdzi zamówienie, zamówienie zostanie opublikowane bezpośrednio w tej konkretnej grupie, a klient będzie oznaczony przez @, nawet jeśli należy do kilku grup."
+      }
+    }
+  }
+}

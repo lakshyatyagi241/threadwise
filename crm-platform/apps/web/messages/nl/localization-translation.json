@@ -1,0 +1,201 @@
+{
+  "localization-translation": {
+    "nav": {
+      "languages": "Talen",
+      "providers": "Vertaalproviders",
+      "usage": "Vertaalgebruik",
+      "group": "Lokalisatie"
+    },
+    "errors": {
+      "unexpected": "Er ging iets mis. Probeer het opnieuw.",
+      "conflict": "Iemand anders heeft dit gewijzigd. De lijst is opnieuw geladen, controleer hem en probeer het opnieuw.",
+      "languageIsDefault": "De standaardtaal kan niet worden uitgeschakeld of verwijderd. Stel eerst een andere taal als standaard in.",
+      "languageInactive": "Activeer de taal eerst voordat je hem als standaard instelt.",
+      "credentialsMissing": "Vul eerst de vereiste gegevens in.",
+      "providerInactive": "Alleen een actieve provider kan de standaard zijn.",
+      "lockdownNoOfficial": "Activeer en configureer minstens één officiële betaalde provider (DeepL of Google Cloud) voordat je de vergrendeling inschakelt.",
+      "planGate": "Je abonnement bevat geen vertaling."
+    },
+    "switcher": {
+      "label": "Taal wijzigen",
+      "menu": "Talen",
+      "failed": "De taal kon niet worden gewijzigd. Probeer het opnieuw."
+    },
+    "languages": {
+      "kicker": "Beheer · Systeem · Talen",
+      "titleLead": "Platform",
+      "titleEm": "talen",
+      "description": "Beheer welke talen nieuwe gebruikers en workspaces kunnen kiezen. De “standaard”-taal is de terugvaloptie voor elk nieuw aangemaakt account.",
+      "loading": "Talen worden geladen",
+      "stats": {
+        "total": "Totaal",
+        "totalHint": "geconfigureerd",
+        "active": "Actief",
+        "activeHint": "zichtbaar voor gebruikers",
+        "default": "Standaard",
+        "defaultHint": "terugvaloptie voor nieuwe accounts"
+      },
+      "catalog": "Catalogus",
+      "allLanguages": "Alle talen",
+      "columns": {
+        "name": "Naam",
+        "code": "Code",
+        "dir": "Richting",
+        "active": "Actief",
+        "default": "Standaard",
+        "actions": "Acties"
+      },
+      "on": "Aan",
+      "off": "Uit",
+      "defaultBadge": "Standaard",
+      "set": "Instellen",
+      "toggleLabel": "{name} aan- of uitzetten",
+      "delete": "Verwijderen",
+      "cancel": "Annuleren",
+      "empty": "Nog geen talen.",
+      "flash": {
+        "activated": "{name} geactiveerd.",
+        "disabled": "{name} uitgeschakeld.",
+        "nowDefault": "{name} is nu de standaardtaal.",
+        "removed": "Taal verwijderd."
+      },
+      "confirmDelete": {
+        "title": "Taal verwijderen",
+        "message": "{name} verwijderen?"
+      },
+      "pack": {
+        "kicker": "Taalpakket",
+        "title": "Vastgezet op {count} talen",
+        "body": "Elke actieve taal wordt ondersteund door een vertaal-JSON-bestand dat bij het platform wordt geleverd. Nieuwe taalplekken verschijnen hier zodra het vertaalpakket wordt uitgebreid.",
+        "note": "Je kunt nog steeds de actieve status aanpassen, de inheemse naam en richting bewerken, en de standaardtaal van het platform kiezen in de tabel links."
+      },
+      "usedFor": {
+        "title": "Zo wordt dit gebruikt",
+        "body": "Actieve talen verschijnen in de taalkiezer van het profiel van de gebruiker en in de sjabloon- en automatische-antwoordkiezers. De standaard geldt voor nieuwe accounts die nog geen taal hebben gekozen."
+      }
+    },
+    "providers": {
+      "kicker": "Beheer · Systeem",
+      "title": "Vertaalproviders",
+      "description": "Meertalig automatisch antwoord gebruikt een van deze providers om binnenkomende berichten te vertalen en antwoorden in de taal van de klant op te stellen. MyMemory is er standaard bij (gratis, zonder sleutel) — koppel DeepL / Google Cloud / LibreTranslate voor hogere kwaliteit of privacy via een eigen server.",
+      "loading": "Providers worden geladen",
+      "on": "Aan",
+      "off": "Uit",
+      "cancel": "Annuleren",
+      "lockdown": {
+        "title": "Nalevingsvergrendeling",
+        "description": "Als deze aan staat, slaat de terugvalketen <mono>{slugs}</mono> over en gaat vertaling van automatische antwoorden alleen via officiële betaalde API's (DeepL, Google Cloud). Vereist door sommige bedrijfsbeveiligingsbeleid dat niet-officiële externe endpoints verbiedt.",
+        "enable": "Vergrendeling inschakelen",
+        "disable": "Vergrendeling uitschakelen",
+        "confirmOn": "Vergrendeling AAN zetten? Gratis drivers worden overgeslagen — alleen betaalde API's vertalen.",
+        "confirmOff": "Vergrendeling UIT zetten? Gratis drivers keren terug in de terugvalketen."
+      },
+      "flash": {
+        "activated": "{name} geactiveerd.",
+        "disabled": "{name} uitgeschakeld.",
+        "nowDefault": "{name} is nu de standaardprovider.",
+        "saved": "{name} opgeslagen.",
+        "lockdownOn": "Nalevingsvergrendeling is aan.",
+        "lockdownOff": "Nalevingsvergrendeling is uit."
+      },
+      "empty": {
+        "title": "Geen vertaalproviders geconfigureerd",
+        "body": "Voer de seed voor vertaalproviders uit om deze lijst te vullen."
+      },
+      "active": "Actief",
+      "disabled": "Uitgeschakeld",
+      "defaultBadge": "Standaard",
+      "skipped": "Vergrendeling · overgeslagen",
+      "skippedTitle": "Overgeslagen omdat de nalevingsvergrendeling aan staat.",
+      "slug": "slug: {slug}",
+      "makeDefault": "Als standaard instellen",
+      "activate": "Activeren",
+      "disable": "Uitschakelen",
+      "keepSecret": "••••••• (leeg laten om te behouden)",
+      "noCredentials": "Geen gegevens nodig — deze provider werkt meteen.",
+      "sortOrder": "Sorteervolgorde",
+      "sortOrderHint": "Lager = hogere prioriteit in de terugvalketen.",
+      "save": "{name} opslaan"
+    },
+    "usage": {
+      "kicker": "Beheer · Systeem",
+      "title": "Vertaalgebruik",
+      "description": "Volume en geschatte kosten van elke vertaling van automatische antwoorden. Treffers uit het ingebouwde woordenboek en 24-uurscache-treffers zijn niet factureerbaar en verschijnen hier niet — dit zijn de daadwerkelijke aanroepen.",
+      "from": "Van",
+      "to": "Tot",
+      "apply": "Toepassen",
+      "badRange": "De startdatum mag niet na de einddatum liggen.",
+      "loading": "Gebruik wordt geladen",
+      "failed": "Gebruik kon niet worden geladen.",
+      "totals": {
+        "calls": "Daadwerkelijke aanroepen",
+        "chars": "Vertaalde tekens",
+        "charsOut": "uit: {count}",
+        "cost": "Geschatte kosten",
+        "costHint": "op basis van de gepubliceerde tarieven per teken",
+        "fallbackHits": "Terugvaltreffers",
+        "fallbackHint": "primaire driver mislukt, de keten heeft het opgevangen"
+      },
+      "byProvider": "Per provider",
+      "emptyProvider": "Geen vertaalaanroepen in dit bereik. Stuur een niet-Engels inkomend bericht naar een apparaat met automatisch antwoord en vernieuw daarna.",
+      "free": "gratis",
+      "last30": "Laatste 30 dagen",
+      "timelineHint": "beweeg over elke balk voor datum / tekens / kosten",
+      "topWorkspaces": "Workspaces met de meeste uitgaven",
+      "emptyWorkspaces": "Geen betaalde vertalingen in dit bereik.",
+      "cols": {
+        "provider": "Provider",
+        "workspace": "Workspace",
+        "calls": "Aanroepen",
+        "charsIn": "Tekens in",
+        "chars": "Tekens",
+        "cost": "Kosten",
+        "rate": "Tarief / 1 miljoen tekens"
+      }
+    },
+    "settings": {
+      "title": "Vertalen in realtime",
+      "description": "Chat met klanten in elke taal. Beide partijen lezen in hun eigen taal — automatisch.",
+      "loading": "Vertaalinstellingen worden geladen",
+      "failed": "Vertaalinstellingen konden niet worden geladen.",
+      "saved": "Vertaalinstellingen opgeslagen.",
+      "steps": {
+        "1": {
+          "title": "Berichten van klanten (elke taal)",
+          "body": "Hun bericht wordt automatisch naar de taal van je team vertaald en aan je agent getoond, met het origineel één klik verderop."
+        },
+        "2": {
+          "title": "Antwoorden van agents (jouw taal)",
+          "body": "Je antwoord wordt vlak voordat het via WhatsApp wordt verstuurd naar de taal van de klant vertaald."
+        },
+        "3": {
+          "title": "AI en widget ook",
+          "body": "De AI-agent en de chatwidget op de website antwoorden direct in de taal van de klant."
+        }
+      },
+      "engine": {
+        "kicker": "Vertaalengine",
+        "free": "MyMemory (gratis)",
+        "body": "Je voert hier GEEN API-sleutels in — vertaling wordt één keer platformbreed ingesteld en werkt automatisch. Een gratis engine staat standaard aan; het platform kan worden ingesteld om DeepL / Google Translate te gebruiken voor hogere kwaliteit."
+      },
+      "usage": {
+        "kicker": "Deze maand",
+        "line": "tekens vertaald · {count} berichten"
+      },
+      "enabled": {
+        "title": "Gesprekken automatisch vertalen",
+        "hint": "Zet dit geheel aan of uit voor deze workspace."
+      },
+      "teamLanguage": {
+        "label": "De taal van je team",
+        "hint": "De taal waarin JOUW agents lezen en schrijven. Berichten van klanten worden hiernaar vertaald; je antwoorden worden hiervandaan vertaald."
+      },
+      "save": "Vertaalinstellingen opslaan",
+      "upgrade": {
+        "title": "Upgrade om vertalen in realtime te ontgrendelen.",
+        "body": "Vertaal WhatsApp-gesprekken automatisch tussen de taal van je team en de talen van je klanten.",
+        "link": "Bekijk abonnementen →"
+      }
+    }
+  }
+}

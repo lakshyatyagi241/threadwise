@@ -1,0 +1,223 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "AI使用状況",
+      "keys": "AIプロバイダーキー"
+    },
+    "admin": {
+      "nav": {
+        "group": "AI",
+        "keys": "AIプロバイダーキー",
+        "dashboard": "AI使用状況"
+      }
+    },
+    "common": {
+      "loading": "読み込み中",
+      "retry": "再試行",
+      "requestId": "リクエストID",
+      "dismiss": "閉じる",
+      "tokens": "{count, number} トークン",
+      "dash": "-",
+      "errors": {
+        "forbidden": "これを表示する権限がありません。",
+        "request": "リクエストを完了できませんでした。",
+        "unexpected": "当社側で問題が発生しました。しばらくしてからもう一度お試しください。",
+        "network": "サーバーに接続できませんでした。接続を確認してもう一度お試しください。",
+        "conflict": "他のユーザーがこれを変更しました。ページを再読み込みしました。もう一度変更を適用してください。",
+        "keyRequired": "このプロバイダーをオンにする前にAPIキーを追加してください。",
+        "validation": "無効な値があります。強調表示されている項目を確認してください。",
+        "notFound": "その項目はもう存在しません。"
+      }
+    },
+    "windows": {
+      "label": "期間",
+      "7d": "7日間",
+      "30d": "30日間",
+      "90d": "90日間",
+      "1y": "1年",
+      "custom": "カスタム",
+      "from": "開始",
+      "to": "終了",
+      "pick": "開始日と終了日を選択してください。",
+      "invalid": "終了日が開始日より前になっています。",
+      "tooLong": "{days}日以内の期間を選択してください。"
+    },
+    "keys": {
+      "eyebrow": "管理 · システム · AIプロバイダー",
+      "title": "AI APIキー",
+      "description": "サポートされているすべてのAIプロバイダーのグローバルキーです。「独自キーの持ち込み」がないプランのワークスペースは、フォールバックとしてこれらを使用します。保存時に暗号化されます。",
+      "superOnly": "プラットフォームのAIキーを管理できるのはスーパー管理者だけです。",
+      "summary": {
+        "providers": "プロバイダー",
+        "providersHint": "初期登録済み",
+        "active": "有効",
+        "activeHint": "フォールバックで有効",
+        "ready": "準備完了",
+        "readyHint": "有効 + キーあり",
+        "noKey": "キー未設定",
+        "noKeyHint": "キーを貼り付けると準備完了"
+      },
+      "groups": {
+        "llm": "言語モデル",
+        "voice": "音声"
+      },
+      "card": {
+        "active": "有効",
+        "off": "無効",
+        "keySaved": "キー保存済み",
+        "keySavedLast4": "キー保存済み(末尾 {last4})",
+        "noKey": "キーなし",
+        "unreadable": "保存済みのキーを読み取れません。もう一度貼り付けてください",
+        "apiKey": "APIキー",
+        "apiKeyHint": "保存済みのキーを維持する場合は空欄のままにしてください。",
+        "apiKeyPlaceholder": "ここにキーを貼り付け",
+        "apiKeySavedPlaceholder": "•••••••••• (保存済み。変更しない場合は空欄のまま)",
+        "defaultModel": "デフォルトモデル",
+        "pickModel": "— デフォルトモデルを選択 —",
+        "customModel": "{model}(カスタム)",
+        "sortOrder": "並び順",
+        "maxTokens": "リクエストあたりの最大トークン数",
+        "maxTokensHint": "すべてのワークスペースの返信の長さの上限(任意)。空欄の場合は上限なしです。",
+        "extraModels": "追加モデル",
+        "extraModelsHint": "任意。デフォルトに加えて提供するモデルIDをカンマ区切りで入力してください。",
+        "save": "{name}を保存",
+        "saving": "保存中",
+        "turnOn": "有効化",
+        "turnOff": "無効化",
+        "removeKey": "キーを削除",
+        "removeTitle": "{name}のキーを削除しますか?",
+        "removeBody": "キーを再度追加するまで、ワークスペースは{name}を使用しなくなります。プロバイダーはオフになります。",
+        "removeConfirm": "キーを削除",
+        "cancel": "キャンセル",
+        "slug": "プロバイダー: {provider} · 既定のモデル: {model}",
+        "maxTokensPlaceholder": "例: 4096"
+      },
+      "toasts": {
+        "saved": "{name}を保存しました。",
+        "savedOn": "{name}を保存してオンにしました。",
+        "on": "{name}をオンにしました。",
+        "off": "{name}をオフにしました。",
+        "removed": "{name}のキーを削除しました。"
+      },
+      "help": {
+        "title": "これらのキーの使われ方",
+        "body": "ワークスペース独自のキーは、プランで許可されている場合にのみ優先されます。それ以外は、ここで有効な該当プロバイダーが使用されます。プロバイダーをオフにすると、独自キーのないワークスペースはそれを使用できません。",
+        "eyebrow": "これらのキーの使用方法"
+      }
+    },
+    "dashboard": {
+      "eyebrow": "管理 / AIダッシュボード",
+      "title": "AI使用状況とトークン消費",
+      "description": "プラットフォーム全体のすべてのAI呼び出し。プロバイダー、モデル、ワークスペース、プラットフォームキーか独自(BYOK)キーか、推定費用を確認できます。",
+      "kpis": {
+        "tokens": "消費トークン",
+        "tokensHint": "この期間",
+        "cost": "推定費用",
+        "costHint": "混合推定",
+        "calls": "AI呼び出し",
+        "callsHint": "記録されたリクエスト",
+        "workspaces": "AIを利用中のワークスペース",
+        "workspacesHint": "アクティブ"
+      },
+      "daily": "日別トークン消費",
+      "byProvider": "プロバイダー別トークン",
+      "split": "費用負担 — プラットフォーム vs BYOK",
+      "splitPlatform": "プラットフォームキー",
+      "splitOwn": "独自キー(BYOK)",
+      "topWorkspaces": "トークン消費の多いワークスペース",
+      "topModels": "上位モデル",
+      "keyHealth": "AIキーの状態",
+      "live": "稼働中",
+      "notLive": "オフ",
+      "peak": "ピーク {value}/日",
+      "dailyEmpty": "この期間に記録されたAI呼び出しはまだありません。",
+      "providerCalls": "{count, number} 回の呼び出し",
+      "providerEmpty": "使用実績はまだありません。",
+      "splitNote": "プランの月間AI上限に対してカウントされるのは、プラットフォームキーのトークンだけです。BYOKのワークスペースは、ご自身のプロバイダーアカウントで消費します。",
+      "workspaceEmpty": "ワークスペースのAI使用実績はまだありません。",
+      "workspaceMeta": "{count, number} 回の呼び出し",
+      "workspaceByok": "BYOK {tokens}",
+      "modelEmpty": "モデルの使用実績はまだありません。",
+      "modelMeta": "{provider} · {count, number} 回の呼び出し",
+      "manageKeys": "キーを管理",
+      "noDefaultModel": "デフォルトモデルなし",
+      "noPlatformKeys": "プラットフォームのAIキーが設定されていません。",
+      "byokKeys": "有効なBYOKキー",
+      "byokWorkspaces": "BYOKのワークスペース"
+    },
+    "usage": {
+      "title": "AI使用状況",
+      "description": "ワークスペースが行ったすべてのAI呼び出し。モデルとプロバイダー別の消費トークン、プランキーと独自キーの内訳、推定費用を確認できます。",
+      "kpis": {
+        "tokens": "使用トークン",
+        "calls": "{count, plural, other {AI呼び出し # 回}}",
+        "platform": "プランキー",
+        "ownKeys": "独自キー(BYOK)",
+        "cost": "推定費用",
+        "costHint": "プロバイダー混合レート",
+        "providers": "プロバイダー",
+        "models": "モデル"
+      },
+      "cap": {
+        "title": "今月 · プランのAI上限",
+        "used": "今月 {limit, number} トークン中 {used, number} トークンを使用",
+        "unlimited": "今月 {used, number} トークンを使用: ご利用のプランでは無制限",
+        "reached": "月間上限にもうすぐ達します。AIを引き続き使うには、プランをアップグレードするか独自キー(BYOK)を追加してください。",
+        "note": "BYOKのトークンはご自身のプロバイダーアカウントで消費され、プランの上限にはカウントされません。"
+      },
+      "daily": "日別トークン消費",
+      "byProvider": "プロバイダー別",
+      "split": "プランキーと独自キー",
+      "splitPlatform": "プランキー",
+      "splitOwn": "独自キー(BYOK)",
+      "models": "モデル別",
+      "columns": {
+        "model": "モデル",
+        "provider": "プロバイダー",
+        "tokens": "トークン",
+        "calls": "呼び出し",
+        "prompt": "プロンプト",
+        "completion": "補完"
+      },
+      "empty": "この期間のAI使用実績はまだありません。",
+      "costNote": "費用は公開されているプロバイダー別の混合トークンレートに基づく推定値で、プロバイダーの請求書と異なる場合があります。トークン数は正確です。"
+    },
+    "own": {
+      "title": "あなたのAIプロバイダーキー",
+      "description": "ベンダーごとに独自のキーを追加すると、AI機能が共有キーではなくご自身のアカウントを使用します。キーは暗号化され、再表示されません。",
+      "allowed": "ご利用のプランでは、独自キーが優先されます。",
+      "notAllowed": "ご利用のプランには独自キーが含まれていません。今は保存できますが、アップグレードするまで呼び出しは共有キーを使用します。",
+      "add": "キーを追加",
+      "provider": "プロバイダー",
+      "apiKey": "APIキー",
+      "apiKeyHint": "8文字以上で入力してください。",
+      "save": "キーを保存",
+      "replace": "キーを置き換え",
+      "saving": "保存中",
+      "on": "オン",
+      "off": "無効",
+      "ends": "末尾 {last4}",
+      "using": "呼び出しで使用",
+      "usingOwn": "あなたのキー",
+      "usingShared": "共有キー",
+      "usingNone": "キーなし(利用不可)",
+      "turnOn": "オンにする",
+      "turnOff": "オフにする",
+      "remove": "削除",
+      "removeTitle": "{name}のキーを削除しますか?",
+      "removeBody": "共有キーがある場合、呼び出しは共有キーに切り替わります。",
+      "removeConfirm": "キーを削除",
+      "cancel": "キャンセル",
+      "empty": "キーはまだ追加されていません。",
+      "toasts": {
+        "saved": "{name}のキーを保存しました。",
+        "on": "{name}のキーをオンにしました。",
+        "off": "{name}のキーをオフにしました。",
+        "removed": "{name}のキーを削除しました。"
+      },
+      "errors": {
+        "tooShort": "キーは8文字以上です。"
+      }
+    }
+  }
+}

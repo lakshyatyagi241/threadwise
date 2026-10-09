@@ -1,0 +1,48 @@
+{
+  "checkout-orders-merchant-payments": {
+    "invoices": {
+      "eyebrow": "Boutique / Factures",
+      "title": "Factures",
+      "subtitle": "Factures créées à partir des commandes de la boutique. Gérez-les dans Ventes.",
+      "allInvoices": "Toutes les factures",
+      "loading": "Chargement des factures",
+      "searching": "Recherche d’autres factures de la boutique...",
+      "search": {
+        "label": "Rechercher des factures",
+        "placeholder": "Rechercher par numéro, acheteur ou référence..."
+      },
+      "status": {
+        "label": "Statut",
+        "all": "Tous les statuts"
+      },
+      "columns": {
+        "number": "Facture",
+        "buyer": "Acheteur",
+        "status": "Statut",
+        "total": "Total",
+        "issued": "Émise le",
+        "due": "Échéance",
+        "actions": "Actions"
+      },
+      "row": {
+        "draft": "Brouillon",
+        "openInSales": "Ouvrir dans Ventes",
+        "openAria": "Ouvrir la facture {number} dans Ventes"
+      },
+      "empty": {
+        "title": "Aucune facture issue des commandes de la boutique pour l’instant",
+        "message": "Ouvrez une commande et sélectionnez Créer une facture.",
+        "action": "Aller aux commandes"
+      },
+      "noMatch": {
+        "title": "Aucune facture de la boutique ne correspond",
+        "message": "Modifiez la recherche ou le statut pour en voir davantage."
+      },
+      "capped": {
+        "title": "Aucune trouvée dans les dernières factures",
+        "message": "Les factures les plus récentes de Ventes ont été vérifiées et aucune ne provient d’une commande de la boutique. Chargez-en plus pour remonter plus loin.",
+        "note": "Seules les factures les plus récentes ont été vérifiées. Chargez-en plus pour remonter plus loin."
+      }
+    }
+  }
+}

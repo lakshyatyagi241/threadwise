@@ -1,0 +1,1066 @@
+{
+  "appointments": {
+    "nav": {
+      "appointments": "预约"
+    },
+    "common": {
+      "dismiss": "忽略",
+      "loading": "加载中",
+      "cancel": "取消",
+      "save": "保存",
+      "close": "关闭",
+      "back": "返回",
+      "minutes": "{count, plural, other {# 分钟}}",
+      "minShort": "{count} 分钟",
+      "hoursMinutes": "{hours} 小时 {minutes} 分钟",
+      "hours": "{hours} 小时"
+    },
+    "status": {
+      "pending": "待处理",
+      "confirmed": "已确认",
+      "cancelled": "已取消",
+      "completed": "已完成",
+      "no_show": "未到场",
+      "declined": "已拒绝"
+    },
+    "errors": {
+      "network": "无法连接服务器。请检查网络连接后重试。",
+      "forbidden": "你无权执行此操作。",
+      "signedOut": "你的会话已结束。请重新登录后继续。",
+      "conflict": "此内容已被其他人修改。请刷新查看最新版本。",
+      "validation": "部分信息无效。请检查高亮的字段。",
+      "unavailable": "此服务器暂不支持预约。",
+      "rateLimited": "请求过多。请稍等片刻后重试。",
+      "notFound": "未找到该内容，可能已被移除。",
+      "planDisabled": "你的套餐不包含预约功能。",
+      "slotTaken": "该时间刚被占用，请选择其他时间。",
+      "gone": "此预订已无法更改。",
+      "unexpected": "出了点问题，请稍后重试。",
+      "requestId": "请求 ID",
+      "retry": "重试",
+      "invalidTransition": "该预订当前状态无法执行此操作。请刷新查看其所处状态。",
+      "notStarted": "只有预订开始后才能执行此操作。",
+      "alreadyStarted": "此预订已经开始，无法再更改。",
+      "bookingOff": "此服务目前无法预订。",
+      "notDeletable": "仍有未来的预订，无法删除。"
+    },
+    "picker": {
+      "timeZone": "时区",
+      "previousMonth": "上个月",
+      "nextMonth": "下个月",
+      "pickDay": "选择日期",
+      "times": "可约时间",
+      "timesAvailable": "{count, plural, other {# 个可约时间}}",
+      "seatsLeft": "剩余 {count}",
+      "noTimes": "未来几天没有空闲时间。",
+      "noTimesDay": "这一天没有可约时间。请选择其他日期。",
+      "loading": "正在加载时间",
+      "loadFailed": "无法加载时间。",
+      "rateLimited": "请求过多。请稍等片刻后重试。",
+      "retry": "重试",
+      "typeZone": "此服务按 {zone} 时区运行。"
+    },
+    "hours": {
+      "openDay": "{day}营业",
+      "daySummary": "{hours} 小时 {minutes} 分钟",
+      "closed": "休息",
+      "from": "{day}，时段 {n}，开始时间",
+      "to": "{day}，时段 {n}，结束时间",
+      "removeInterval": "移除{day}的时段 {n}",
+      "addInterval": "添加时段",
+      "copyTo": "将{day}的时间复制到其他日期",
+      "copyDay": "复制到",
+      "copyWeekdays": "周一至周五",
+      "copyAll": "所有日期",
+      "problems": {
+        "incomplete": "请填写开始和结束时间。",
+        "order": "结束时间必须晚于开始时间。",
+        "overlap": "此时段与另一个时段重叠。"
+      }
+    },
+    "hub": {
+      "breadcrumb": "面包屑导航",
+      "integrations": "集成",
+      "appointments": "预约",
+      "title": "你的预订",
+      "subtitle": "让客户在聊天中预约。创建包含服务、时间和提醒的预订类型，客户选择时段后会自动确认。",
+      "newType": "新建预订类型",
+      "types": "预订类型",
+      "settings": "设置",
+      "weekTitle": "周",
+      "monthTitle": "月",
+      "inRange": "当前视图中{count, plural, =0 {没有预订} other {有 # 个预订}}",
+      "tableLabel": "预订",
+      "loading": "正在加载预订",
+      "useSampleData": "使用示例数据（开发）",
+      "empty": {
+        "upcoming": {
+          "title": "没有即将到来的预订",
+          "message": "创建包含服务和时间的预订类型，然后将“预约”节点拖入任意流程。已确认的预订会显示在这里。"
+        },
+        "past": {
+          "title": "没有过往预订",
+          "message": "已经发生的预订会连同结果显示在这里。"
+        },
+        "filtered": {
+          "title": "没有匹配的预订",
+          "message": "没有内容符合搜索和筛选条件。清除条件即可查看所有预订。"
+        }
+      },
+      "resetFilters": "清除筛选",
+      "truncated": "显示此范围内的前 {count} 个预订。缩小筛选条件以查看其余预订。",
+      "showing": "{count, plural, other {显示 # 个预订}}",
+      "loadMore": "加载更多",
+      "endOfList": "列表已到底",
+      "cancelTitle": "取消此预约？",
+      "cancelMessage": "预订将被取消，其时间将重新空出。客户会收到通知，提醒也会被移除。",
+      "cancelConfirm": "取消预约",
+      "keep": "保留",
+      "declineTitle": "拒绝此请求？",
+      "declineMessage": "客户会收到请求被拒绝的通知，该时间将重新空出。",
+      "declineConfirm": "拒绝请求"
+    },
+    "tabs": {
+      "label": "预订列表",
+      "upcoming": "即将到来",
+      "past": "过往",
+      "count": "{count, plural, other {# 个预订}}"
+    },
+    "toolbar": {
+      "label": "筛选和视图",
+      "search": "搜索客户、电话、邮箱或服务",
+      "status": "状态",
+      "allStatuses": "所有状态",
+      "type": "预订类型",
+      "allTypes": "所有预订类型",
+      "clear": "清除",
+      "navigate": "日历导航",
+      "previous": "上一个",
+      "next": "下一个",
+      "today": "今天",
+      "refresh": "刷新",
+      "view": "视图",
+      "views": {
+        "list": "列表",
+        "week": "周",
+        "month": "月"
+      }
+    },
+    "table": {
+      "when": "时间",
+      "customer": "客户",
+      "service": "服务",
+      "status": "状态",
+      "actions": "操作",
+      "today": "今天",
+      "tomorrow": "明天",
+      "yesterday": "昨天",
+      "rowLabel": "打开预订：{title}",
+      "noName": "无姓名",
+      "needsReview": "需审核"
+    },
+    "row": {
+      "moreFor": "{title} 的更多操作",
+      "open": "打开",
+      "confirm": "确认",
+      "complete": "标记为已完成",
+      "noShow": "标记为未到场",
+      "reschedule": "改期",
+      "copyLink": "复制管理链接",
+      "cancel": "取消",
+      "decline": "拒绝"
+    },
+    "calendar": {
+      "emptyWeek": "本周没有预订。",
+      "monthGrid": "月历",
+      "more": "还有 {count} 个",
+      "dayAgenda": "所选日期的预订",
+      "emptyDay": "这一天没有预订。"
+    },
+    "drawer": {
+      "loading": "正在加载预订",
+      "close": "关闭",
+      "noType": "已删除的预订类型",
+      "pendingHint": "等待确认",
+      "minutes": "{count} 分钟",
+      "customerTime": "客户当地时间：{time}（{zone}）",
+      "confirm": "确认",
+      "complete": "标记为已完成",
+      "noShow": "未到场",
+      "reschedule": "改期",
+      "cancel": "取消",
+      "customer": "客户",
+      "openContact": "打开联系人",
+      "linkedContact": "已关联的联系人",
+      "noName": "未提供姓名",
+      "where": "地点",
+      "joinCall": "加入视频通话",
+      "answers": "预订问题的回答",
+      "noAnswers": "此服务没有设置问题，或客户未作回答。",
+      "payment": "付款",
+      "depositPaid": "已付 {amount}",
+      "notes": "备注",
+      "notesPlaceholder": "关于此预订的私人备注",
+      "saveNotes": "保存备注",
+      "reminders": "提醒",
+      "noReminders": "此服务未设置提醒。",
+      "before": "{count, plural, other {提前 # 分钟}}",
+      "reminder": {
+        "scheduled": "已计划",
+        "skipped": "未发送",
+        "due": "已到时间"
+      },
+      "manageLink": "管理链接",
+      "manageHint": "将此链接分享给客户，他们即可自行改期或取消。",
+      "copy": "复制",
+      "openLink": "打开管理页面",
+      "noManageLink": "此预订没有管理链接。",
+      "source": "预订来源",
+      "bookedOn": "预订时间",
+      "cancelTitle": "取消此预约？",
+      "cancelMessage": "预订将被取消，其时间将重新空出。客户会收到通知，提醒也会被移除。",
+      "cancelConfirm": "取消预约",
+      "keep": "保留",
+      "decline": "拒绝",
+      "host": "主持人",
+      "needsReview": "已结束，尚未标记",
+      "needsReviewHint": "此预订已结束，但没有人将其标记为已完成或未到场。",
+      "cancelledBy": "{who}取消了此预订",
+      "cancelledByStaff": "员工",
+      "cancelledByInvitee": "客户",
+      "cancelledBySystem": "系统",
+      "cancelReason": "原因",
+      "declineTitle": "拒绝此请求？",
+      "declineMessage": "客户会收到请求被拒绝的通知，该时间将重新空出。",
+      "declineConfirm": "拒绝请求",
+      "remindersNote": "提醒遵循预订类型的设置。不会按单条提醒跟踪送达情况。"
+    },
+    "source": {
+      "chat": "聊天流程",
+      "manual": "员工",
+      "api": "API",
+      "link": "预订页面"
+    },
+    "payment": {
+      "none": "无需付款",
+      "pending": "待付款",
+      "paid": "已付款",
+      "refunded": "已退款",
+      "partial": "部分付款"
+    },
+    "reschedule": {
+      "eyebrow": "改期",
+      "close": "关闭",
+      "cancel": "取消",
+      "confirm": "确认新时间",
+      "current": "当前：{day}，{time} {zone}",
+      "noType": "此预订的预订类型已被删除，因此没有可改期的空闲时间。",
+      "taken": "该时间刚被占用，请选择其他时间。",
+      "newTime": "新时间：{day}，{time}",
+      "notify": "告知客户新时间"
+    },
+    "toast": {
+      "conflict": "此预订已被其他人修改，已重新加载。",
+      "failed": "操作未成功。",
+      "confirmed": "预订已确认。",
+      "cancelled": "预约已取消。",
+      "completed": "已标记为完成。",
+      "noShow": "已标记为未到场。",
+      "notesSaved": "备注已保存。",
+      "rescheduled": "预订已改到新时间。",
+      "linkCopied": "管理链接已复制。",
+      "copyFailed": "无法复制链接。",
+      "declined": "请求已拒绝。"
+    },
+    "typesList": {
+      "breadcrumb": "面包屑导航",
+      "appointments": "预约",
+      "services": "服务",
+      "title": "预订类型",
+      "subtitle": "每项服务都有各自的时长、可用时间、定价、问卷和提醒。客户可通过聊天或其专属预订页面预订。",
+      "newType": "新建预订类型",
+      "allBookings": "所有预订",
+      "settings": "设置",
+      "toolbar": "筛选",
+      "search": "搜索预订类型",
+      "statusFilter": "状态",
+      "allStatuses": "所有状态",
+      "active": "已启用",
+      "pausedLabel": "已暂停",
+      "clear": "清除",
+      "tableLabel": "预订类型",
+      "loading": "正在加载预订类型",
+      "useSampleData": "使用示例数据（开发）",
+      "emptyFilteredTitle": "没有匹配的预订类型",
+      "emptyFiltered": "没有内容符合搜索和筛选条件。",
+      "emptyTitle": "还没有预订类型",
+      "emptyMessage": "创建你的第一个服务。设置时长、时间和价格，客户即可通过聊天预订。",
+      "name": "名称",
+      "details": "详情",
+      "price": "价格",
+      "booked": "已预订",
+      "status": "状态",
+      "actions": "操作",
+      "minutes": "{count} 分钟",
+      "location": {
+        "address": "线下",
+        "virtual": "线上",
+        "phone": "电话",
+        "whatsapp": "WhatsApp"
+      },
+      "capacity": "每个时段 {count, plural, other {# 个名额}}",
+      "approval": "需要审批",
+      "free": "免费",
+      "toggle": "已启用：{name}",
+      "moreFor": "{name} 的更多操作",
+      "edit": "编辑",
+      "copyLink": "复制公开链接",
+      "openPage": "打开预订页面",
+      "duplicate": "复制",
+      "delete": "删除",
+      "showing": "{count, plural, other {# 个预订类型}}",
+      "deleteTitle": "删除“{name}”？",
+      "deleteMessage": "删除此预订类型？现有预订将保留。",
+      "deleteConfirm": "删除预订类型",
+      "keep": "保留",
+      "activated": "“{name}”已启用。",
+      "paused": "“{name}”已暂停。",
+      "duplicated": "已创建“{name}”（已暂停）。",
+      "deleted": "“{name}”已删除。",
+      "failed": "操作未成功。",
+      "linkCopied": "公开链接已复制。",
+      "copyFailed": "无法复制链接。",
+      "copyLinkFor": "复制 {name} 的公开链接",
+      "copyLinkPaused": "启用此预订类型以获取公开链接"
+    },
+    "editor": {
+      "forbidden": "你无权创建或编辑预订类型。",
+      "notFoundTitle": "未找到预订类型",
+      "notFound": "未找到该预订类型，可能已被删除。",
+      "loading": "正在加载预订类型",
+      "header": {
+        "back": "返回预订类型",
+        "kickerNew": "预约 / 新建",
+        "kickerEdit": "预约 / 编辑",
+        "titleNew": "创建预订类型",
+        "titleEdit": "编辑预订类型",
+        "draft": "草稿 / 未保存",
+        "unsaved": "有未保存的更改"
+      },
+      "steps": {
+        "label": "步骤",
+        "service": "服务",
+        "timing": "时间安排",
+        "availability": "可用时间",
+        "pricing": "定价",
+        "messaging": "消息",
+        "hasProblem": "需处理",
+        "stepOf": "第 {n} 步，共 {total} 步：{name}"
+      },
+      "nav": {
+        "back": "返回",
+        "cancel": "取消",
+        "next": "下一步",
+        "create": "创建预订类型",
+        "save": "保存更改",
+        "saving": "保存中"
+      },
+      "toast": {
+        "created": "预订类型“{name}”已创建。",
+        "updated": "预订类型“{name}”已更新。"
+      },
+      "saveError": {
+        "conflict": "你编辑期间，此预订类型已被其他人修改。请刷新查看他们的版本。你在此处未保存的修改将丢失。",
+        "reload": "重新加载最新版本"
+      },
+      "leave": {
+        "title": "放弃更改？",
+        "message": "你有未保存的更改。现在离开将会丢失。",
+        "discard": "放弃更改",
+        "keep": "继续编辑"
+      },
+      "problems": {
+        "nameRequired": "请输入此预订类型的名称。",
+        "nameTooLong": "名称最多 {nameMax} 个字符。",
+        "slugInvalid": "请使用小写字母、数字和单个连字符，最多 {slugMax} 个字符。",
+        "durationInvalid": "时长必须是 {durationMin} 到 {durationMax} 分钟之间的整数。",
+        "incrementInvalid": "起始间隔必须是 {incrementMin} 到 {incrementMax} 分钟之间的整数。",
+        "bufferInvalid": "请输入 0 到 {bufferMax} 之间的整数分钟数。",
+        "minNoticeInvalid": "请输入 0 到 {minNoticeMax} 之间的整数分钟数。",
+        "maxAdvanceInvalid": "请输入 {maxAdvanceMin} 到 {maxAdvanceMax} 之间的整数天数。",
+        "maxPerDayInvalid": "留空表示不限制，或输入 1 到 {maxPerDayMax} 之间的数字。",
+        "capacityInvalid": "容量必须是 1 到 {capacityMax} 之间的整数。",
+        "timezoneInvalid": "请选择有效的时区。",
+        "colorInvalid": "请使用十六进制颜色，例如 #075E54。",
+        "feeInvalid": "请输入金额，例如 150.00。",
+        "taxInvalid": "请输入 0 到 100 之间的百分比，最多两位小数。",
+        "depositInvalid": "请输入大于 0 的定金金额。",
+        "depositTooHigh": "定金不能超过总额（费用加税）。",
+        "cancelFeeInvalid": "请输入金额，例如 25.00。",
+        "cancelWindowInvalid": "请输入 0 到 {cancelWindowMax} 之间的整数分钟数。",
+        "reminderInvalid": "请输入开始前 1 到 {reminderMax} 之间的整数分钟数。",
+        "remindersDuplicate": "每条提醒的时间必须不同。",
+        "remindersTooMany": "一个预订类型最多可设置 {reminders} 条提醒。",
+        "questionLabelRequired": "请为问题设置标签（最多 {questionLabelMax} 个字符）。",
+        "questionsTooMany": "一个预订类型最多可设置 {questions} 个问题。",
+        "questionOptionsRequired": "请至少添加一个选项，每行一个。",
+        "hoursInvalid": "请修正下方标记的每周时间。",
+        "overridesInvalid": "请修正日期例外列表中标记的日期。",
+        "descriptionTooLong": "描述最多 {descriptionMax} 个字符。",
+        "locationTooLong": "地点最多 {locationMax} 个字符。",
+        "server": "服务器未接受此值。请检查后重试。"
+      },
+      "service": {
+        "title": "服务详情",
+        "hint": "为服务命名并说明在哪里进行。",
+        "name": "名称",
+        "namePlaceholder": "30 分钟演示",
+        "description": "描述",
+        "descriptionPlaceholder": "预订者所预订的内容，显示在预订页面上。",
+        "locationType": "地点类型",
+        "locationTypes": {
+          "address": "线下（地址）",
+          "virtual": "线上（视频）",
+          "phone": "电话",
+          "whatsapp": "WhatsApp"
+        },
+        "locationValue": "地点 / 地址",
+        "locationPlaceholders": {
+          "address": "街道地址",
+          "virtual": "视频链接（可选）",
+          "phone": "拨打的电话号码（可选）",
+          "whatsapp": "WhatsApp 号码（可选）"
+        },
+        "appearanceTitle": "颜色",
+        "appearanceHint": "在日历和预订页面上标记此服务。",
+        "color": "颜色",
+        "colorSwatches": "选择颜色",
+        "linkTitle": "公开链接",
+        "linkHint": "访客通过此地址预订。保存并启用预订类型后即可使用。",
+        "slug": "链接名称",
+        "slugHint": "默认由名称生成，直到你修改。使用小写字母、数字和连字符。",
+        "slugPlaceholder": "discovery-call",
+        "publicUrl": "公开页面",
+        "copy": "复制链接",
+        "copied": "链接已复制。",
+        "copyFailed": "无法复制链接。请选中后手动复制。",
+        "rulesTitle": "预订规则",
+        "requiresApproval": "需要审批",
+        "requiresApprovalHint": "新预订会保持“待处理”，直到团队成员确认。",
+        "isActive": "已启用",
+        "isActiveHint": "关闭后将暂停此服务：其公开页面将不再接受预订。"
+      },
+      "timing": {
+        "title": "时间安排",
+        "hint": "每次预订持续多久，以及可提前多久预订。",
+        "duration": "时长（分钟）",
+        "durationHint": "一次预订的时长。60 = 1 小时。",
+        "increment": "起始间隔（分钟）",
+        "incrementHint": "所提供开始时间之间的间隔。30 表示提供 9:00、9:30、10:00。",
+        "capacity": "容量（每个时段）",
+        "capacityHint": "可共享同一时间的人数。一对一填 1。",
+        "bufferBefore": "前缓冲（分钟）",
+        "bufferAfter": "后缓冲（分钟）",
+        "bufferHint": "每个预订前后预留的空闲时间。",
+        "minNotice": "最短提前时间（分钟）",
+        "minNoticeHint": "开始前多久起不能再预订。240 = 4 小时。",
+        "maxAdvance": "最多提前预订（天）",
+        "maxAdvanceHint": "可提前多久预订。30 = 一个月。",
+        "maxPerDay": "每天上限",
+        "maxPerDayHint": "一天内最多的预订数。留空表示不限。",
+        "noLimit": "不限",
+        "zoneTitle": "时区",
+        "zoneHint": "每周时间和日期按此时区解读。访客看到的是其自己时区的时间。",
+        "zone": "此服务的时区",
+        "zoneSearch": "搜索时区",
+        "zonePick": "选择时区",
+        "zoneNone": "没有匹配该搜索的时区。"
+      },
+      "availability": {
+        "title": "每周时间",
+        "hint": "添加你每天接受预订的时间。右侧面板会预览实际可预订的时段。",
+        "empty": "尚未设置时间，因此暂时无法预订。",
+        "total": "每周可预订时间共 {hours} 小时 {minutes} 分钟。"
+      },
+      "overrides": {
+        "title": "日期例外和节假日",
+        "hint": "可因节假日关闭某天，或为某个日期设置单独的时间。其余日期遵循每周时间。",
+        "previousMonth": "上个月",
+        "nextMonth": "下个月",
+        "legend": "图例",
+        "status": {
+          "closed": "休息",
+          "custom": "自定义时间",
+          "open": "营业（每周时间）",
+          "off": "休息（每周时间）"
+        },
+        "clickHint": "点击某天可将其关闭。再次点击已标记的日期，可恢复其每周时间。",
+        "rangeTitle": "关闭一个日期范围",
+        "rangeHint": "一次关闭多天，例如节假日周。已有例外的日期保持不变。",
+        "rangeFrom": "从",
+        "rangeTo": "至（可选）",
+        "reason": "原因",
+        "reasonPlaceholder": "原因（可选）",
+        "rangeProblems": {
+          "invalid": "请选择开始日期，以及不早于它的结束日期。",
+          "tooLong": "范围最长为一年。",
+          "full": "日期例外已达上限。"
+        },
+        "closeRange": "关闭这些日期",
+        "listTitle": "例外",
+        "count": "{count, plural, =0 {没有日期} other {# 个日期}}",
+        "limit": "你已达到 {max} 个日期的上限。请移除一些再添加。",
+        "empty": "还没有日期。点击日历中的某一天即可将其关闭。",
+        "remove": "移除 {date} 的例外",
+        "mode": "{date}：休息或自定义时间",
+        "modeClosed": "全天休息",
+        "modeCustom": "自定义时间",
+        "from": "{date}，开始时间",
+        "to": "{date}，结束时间",
+        "reasonOf": "{date}，原因",
+        "problems": {
+          "incomplete": "请填写开始和结束时间。",
+          "order": "结束时间必须晚于开始时间。",
+          "dayClosedHours": "休息日没有营业时间。"
+        }
+      },
+      "pricing": {
+        "title": "定价（可选）",
+        "hint": "免费预订请将费用保持为 0。",
+        "currency": "货币",
+        "currencyHint": "默认为工作区货币。",
+        "fee": "费用（{currency}）",
+        "feeHint": "请填写金额，例如 {example}。",
+        "tax": "税率 %",
+        "taxHint": "在费用基础上另加。",
+        "deposit": "定金",
+        "depositModes": {
+          "none": "无需预付",
+          "partial": "部分定金",
+          "full": "全额"
+        },
+        "depositAmount": "定金金额（{currency}）",
+        "paymentNote": "在线收款尚未连接。定金会随每个预订记录，但不会扣款。",
+        "cancelFee": "取消费（{currency}）",
+        "noShowFee": "未到场费（{currency}）",
+        "cancelWindow": "取消窗口（分钟）",
+        "cancelWindowHint": "开始前多久之内取消可免费。1440 = 24 小时。",
+        "recordedOnly": "取消费、未到场费和取消窗口仅作记录。",
+        "totalsLabel": "预订费用",
+        "totalFee": "费用",
+        "totalTax": "税费",
+        "totalSum": "总计",
+        "totalDue": "现在应付"
+      },
+      "calendar": {
+        "title": "Google 日历（可选）",
+        "hint": "没有它预订也能正常使用。在“预约 > 设置”中连接 Google 日历，可同步忙闲时间并添加 Meet 链接。",
+        "unavailable": "此平台尚未设置 Google 日历。这些设置会保存在预订类型中，待设置完成后生效。",
+        "calendarId": "日历",
+        "calendarPlaceholder": "主日历",
+        "spreadsheetId": "追加到表格（可选）",
+        "spreadsheetPlaceholder": "电子表格 ID",
+        "createMeet": "为每个预订创建 Google Meet 链接",
+        "calendarDefault": "工作区日历"
+      },
+      "messages": {
+        "title": "生命周期消息",
+        "hint": "预订确认、提醒、取消或改期时发送给客户的内容。留空则使用工作区默认值。",
+        "placeholdersTitle": "可用占位符",
+        "placeholdersHint": "点击其中一个，即可插入到你正在编辑的{event}中光标所在位置。",
+        "placeholderMeaning": {
+          "type": "预订类型的名称",
+          "slot": "预订的日期和时间",
+          "name": "客户的姓名",
+          "manage_link": "管理预订的链接"
+        },
+        "events": {
+          "confirmation": "确认",
+          "reminder": "提醒",
+          "cancellation": "取消",
+          "reschedule": "改期"
+        },
+        "placeholders": {
+          "confirmation": "你好 {name}，你的{type}已预订在 {slot}。在此管理：{manage_link}",
+          "reminder": "你好 {name}，温馨提醒：你的{type}将在 {slot} 进行。",
+          "cancellation": "你好 {name}，你在 {slot} 的{type}已取消。",
+          "reschedule": "你好 {name}，你的{type}已改到 {slot}。详情：{manage_link}"
+        },
+        "templatesNote": "暂时无法选择已审核的 WhatsApp 模板。消息将以上方的纯文本发送。"
+      },
+      "reminders": {
+        "title": "提醒",
+        "hint": "时间不能重复（1440 = 提前 24 小时，180 = 提前 3 小时）。最多 {max} 条。",
+        "add": "添加提醒",
+        "quickAdd": "快速添加",
+        "quick": {
+          "h24": "24 小时",
+          "h3": "3 小时",
+          "h1": "1 小时",
+          "m15": "15 分钟"
+        },
+        "empty": "没有提醒。客户只会收到确认消息。",
+        "offsetOf": "提醒 {n}，开始前的分钟数",
+        "minBefore": "分钟前",
+        "labelPlaceholder": "24 小时",
+        "labelOf": "提醒 {n}，标签",
+        "remove": "移除提醒 {n}",
+        "count": "{count} / {max} 条提醒"
+      },
+      "questions": {
+        "title": "问卷",
+        "hint": "预订时向客户提出的问题。最多 {max} 个。",
+        "add": "添加问题",
+        "intro": "引导语",
+        "introHint": "显示在问题上方。",
+        "empty": "没有问题。客户只需提供姓名、邮箱和电话。",
+        "labelPlaceholder": "问题标签",
+        "labelOf": "问题 {n}，标签",
+        "typeOf": "问题 {n}，回答类型",
+        "types": {
+          "text": "文本",
+          "textarea": "长文本",
+          "select": "选项",
+          "number": "数字",
+          "email": "邮箱",
+          "phone": "电话",
+          "date": "日期"
+        },
+        "optionsOf": "问题 {n}，选项",
+        "optionsPlaceholder": "每行一个选项",
+        "optionsHint": "最多 {max} 个选项。",
+        "map": "将答案保存到",
+        "mapOf": "问题 {n}，联系人字段",
+        "mapNone": "无",
+        "mapFields": {
+          "email": "邮箱",
+          "name": "姓名",
+          "mobile": "手机"
+        },
+        "required": "必填",
+        "moveUp": "上移问题 {n}",
+        "moveDown": "下移问题 {n}",
+        "remove": "移除问题 {n}",
+        "count": "{count} / {max} 个问题"
+      },
+      "rail": {
+        "title": "实时摘要",
+        "viewPublic": "查看公开页面",
+        "cardLabel": "预订卡片预览",
+        "newService": "新服务",
+        "needsApproval": "预订需等待你的审批。",
+        "fee": "费用",
+        "free": "免费",
+        "tax": "税费",
+        "total": "总计",
+        "dueNow": "现在应付",
+        "slotsTitle": "时段预览",
+        "refresh": "刷新",
+        "loading": "加载中",
+        "slotsIdle": "设置每周时间、时长和时区，即可预览实际可预订的时间。",
+        "slotsFailed": "预览失败。",
+        "slotsNone": "此配置在未来 {days} 天内没有可预订的时间。",
+        "slotsSummary": "{count, plural, other {# 个时段}} · 时间为 {zone}"
+      }
+    },
+    "public": {
+      "brandFallback": "在线预订",
+      "brandName": "CRM",
+      "poweredBy": "由 {brand} 提供支持",
+      "language": "语言",
+      "loading": "加载中",
+      "problem": {
+        "retry": "重试",
+        "back": "查看所有服务",
+        "notFoundOrg": {
+          "title": "找不到此预订页面",
+          "message": "地址可能输入有误，或该商家不接受在线预订。请向对方索取链接。"
+        },
+        "notFoundService": {
+          "title": "此服务不可用",
+          "message": "它可能已暂停，或不再提供。你可以看看该商家的其他服务。"
+        },
+        "notFoundLink": {
+          "title": "此链接无效",
+          "message": "预订可能已被移除，或链接不完整。请使用确认信息中的链接，或向商家索取新链接。"
+        },
+        "paused": {
+          "title": "此服务已暂停",
+          "message": "目前不接受预订。请稍后再试，或看看该商家的其他服务。"
+        },
+        "closed": {
+          "title": "此预订已无法更改",
+          "message": "它已被取消或已完成。如有其他需要，请联系商家。"
+        },
+        "rateLimited": {
+          "title": "请求过多",
+          "message": "请稍等片刻后重试。"
+        },
+        "unavailable": {
+          "title": "在线预订暂时不可用",
+          "message": "无法连接预订服务。请几分钟后重试。"
+        },
+        "network": {
+          "title": "无法加载此页面",
+          "message": "请检查网络连接后重试。如果问题持续，请联系商家。"
+        }
+      },
+      "directory": {
+        "title": "预约",
+        "subtitle": "选择服务以查看 {name} 的空闲时间。",
+        "services": "服务",
+        "choose": "选择时间",
+        "empty": {
+          "title": "目前没有可预订的内容",
+          "message": "该商家目前没有开放在线预订的服务。请稍后再来。"
+        }
+      },
+      "location": {
+        "address": "线下",
+        "virtual": "视频通话",
+        "phone": "电话",
+        "whatsapp": "WhatsApp"
+      },
+      "service": {
+        "allServices": "所有服务",
+        "approvalNote": "商家会逐一确认预订。你会先收到请求通知，然后收到确认。"
+      },
+      "step": {
+        "time": "选择日期和时间",
+        "pickHint": "请先选择日期，再选择时间以继续。",
+        "continue": "继续",
+        "changeTime": "更改时间",
+        "details": "你的信息"
+      },
+      "when": {
+        "atService": "服务所在地：{day}，{range}（{zone}）"
+      },
+      "where": {
+        "join": "加入视频通话",
+        "videoLater": "视频通话",
+        "phone": "电话通话于"
+      },
+      "form": {
+        "name": "你的姓名",
+        "email": "邮箱",
+        "phone": "电话",
+        "optional": "（可选）",
+        "choose": "请选择一个选项",
+        "required": "此字段为必填项。",
+        "tooLong": "内容过长。",
+        "serverInvalid": "无法接受此内容。请检查后重试。",
+        "invalid": {
+          "text": "请检查此值。",
+          "textarea": "请检查此值。",
+          "email": "请输入有效的邮箱地址。",
+          "phone": "请输入有效的电话号码，非本地号码请加国家区号。",
+          "number": "请输入数字。",
+          "date": "请选择有效的日期。",
+          "select": "请选择其中一个选项。"
+        }
+      },
+      "price": {
+        "title": "价格",
+        "inclTax": "含 {pct}% 税",
+        "fee": "费用",
+        "tax": "税费（{pct}%）",
+        "total": "总计",
+        "dueNow": "预订时应付",
+        "notCollected": "此页面不会扣款。在线支付暂不可用。"
+      },
+      "book": {
+        "confirm": "确认预订",
+        "request": "申请预订",
+        "sending": "正在发送你的预订",
+        "slotTaken": "该时间刚被占用，请选择其他时间。",
+        "slotTakenHint": "你的信息已保留。下方时间已是最新。",
+        "notice": {
+          "validation": {
+            "title": "部分信息无法接受",
+            "message": "请检查高亮的字段后重试。"
+          },
+          "rateLimited": {
+            "title": "请求过多",
+            "message": "请稍等片刻，然后再次点击按钮。"
+          },
+          "network": {
+            "title": "无法发送预订",
+            "message": "请检查网络连接后再次点击按钮。不会重复预订。"
+          },
+          "unavailable": {
+            "title": "此服务已不可用",
+            "message": "它可能已暂停。请返回服务列表选择其他服务。"
+          }
+        }
+      },
+      "booked": {
+        "confirmedTitle": "你的预订已确认",
+        "confirmedMessage": "{name} 已收到你的预订。请保留下方链接，以便更改或取消。",
+        "pendingTitle": "已收到请求，等待确认",
+        "pendingMessage": "{name} 将确认你的预订。请保留下方链接，以便查看进度、更改或取消。",
+        "pendingNote": "确认之前，该时间会为你保留，但仍可能变动。",
+        "manage": "管理预订",
+        "bookAnother": "预订其他服务"
+      },
+      "calendar": {
+        "title": "添加到日历",
+        "download": "下载 .ics 文件",
+        "google": "Google 日历",
+        "opensNewTab": "（在新标签页中打开）"
+      },
+      "manageLink": {
+        "title": "你的预订链接",
+        "hint": "请保存此链接。这是更改或取消预订的唯一方式，持有该链接的任何人都可以操作。",
+        "copy": "复制",
+        "copied": "已复制"
+      },
+      "manage": {
+        "title": "你的预订",
+        "reschedule": "改期",
+        "cancel": "取消",
+        "flash": {
+          "rescheduled": "你的预订已改期。",
+          "cancelled": "你的预订已取消。"
+        },
+        "failure": {
+          "closed": "此预订已无法更改。",
+          "rateLimited": "请求过多。请稍等片刻后重试。",
+          "network": "无法更改预订。请检查网络连接后重试。"
+        },
+        "confirmCancel": {
+          "title": "取消此预订？",
+          "message": "你的{what}预订将被取消并释放该时间。此操作无法撤销。",
+          "confirm": "是，取消预订",
+          "keep": "保留预订"
+        },
+        "state": {
+          "pending": {
+            "title": "等待确认",
+            "message": "商家尚未确认此预订。"
+          },
+          "cancelled": {
+            "title": "此预订已被取消",
+            "message": "已无法更改。"
+          },
+          "no_show": {
+            "title": "此预订已标记为爽约",
+            "message": "已无法更改。如有误，请联系商家。"
+          },
+          "completed": {
+            "title": "此预约已完成",
+            "message": "已无法更改。"
+          },
+          "passed": {
+            "title": "此预约已经开始",
+            "message": "已无法在线更改。如有需要，请联系商家。"
+          }
+        }
+      },
+      "reschedule": {
+        "title": "改期",
+        "back": "返回你的预订",
+        "backToBooking": "返回你的预订",
+        "current": "当前时间",
+        "saving": "正在保存新时间",
+        "confirm": "确认新时间 · {when}",
+        "failure": {
+          "slotTaken": "该时间刚被占用，请选择其他时间。",
+          "closed": "此预订已无法更改。",
+          "rateLimited": "请求过多。请稍等片刻后重试。",
+          "validation": "无法接受该时间。请选择其他时间。",
+          "network": "无法保存新时间。请检查网络连接后重试。"
+        },
+        "closed": {
+          "closed": {
+            "title": "此预订已无法更改",
+            "message": "它已被取消或已完成，因此没有可改的时间。"
+          },
+          "passed": {
+            "title": "此预约已经开始",
+            "message": "预订开始后无法改期。如有需要，请联系商家。"
+          }
+        }
+      },
+      "meta": {
+        "book": "预约",
+        "manage": "你的预订",
+        "reschedule": "预订改期"
+      }
+    },
+    "settings": {
+      "title": "预订设置",
+      "subtitle": "此工作区预订的默认值、营业时间和消息。",
+      "breadcrumb": {
+        "label": "面包屑导航",
+        "integrations": "集成",
+        "appointments": "预约",
+        "settings": "设置"
+      },
+      "back": "返回预订",
+      "save": "保存设置",
+      "saving": "保存中...",
+      "saved": "预订设置已保存。",
+      "discard": "放弃更改",
+      "unsaved": "你有未保存的更改。",
+      "allSaved": "所有更改已保存。",
+      "loading": "正在加载设置",
+      "forbidden": "你无权查看预订设置。",
+      "readOnly": "你可以查看这些设置，但无法更改。",
+      "fixFirst": "请先修正高亮的字段。",
+      "issues": "{count, plural, other {# 个字段需要处理后才能保存。}}",
+      "conflict": {
+        "message": "自你打开以来，这些设置已在别处被修改。请刷新查看最新版本；你在此处的修改将被替换。",
+        "reload": "重新加载最新版本"
+      },
+      "leave": {
+        "title": "不保存就离开？",
+        "message": "你对预订设置的更改尚未保存。",
+        "leave": "离开",
+        "stay": "继续编辑"
+      },
+      "calendar": {
+        "title": "日历集成",
+        "description": "连接日历，让预订与你的忙碌时间保持同步。",
+        "provider": "Google 日历",
+        "providerSub": "预约预订",
+        "status": {
+          "unavailable": "不可用",
+          "disconnected": "未连接",
+          "connected": "已连接",
+          "needs_reconnect": "需要重新连接"
+        },
+        "loading": "正在检查连接",
+        "unavailableTitle": "此平台尚未设置 Google 日历",
+        "unavailableBody": "工作区连接之前，平台管理员需要先添加 Google OAuth 客户端（管理员 > 设置 > Google 日历）。你的预订不受影响。",
+        "disconnectedBody": "未连接。点击连接将打开 Google，你可以选择账户并同意共享日历访问权限。",
+        "disconnectedReadOnly": "未连接。请让工作区管理员进行连接。",
+        "reconnectTitle": "Google 已不再接受该连接",
+        "reconnectBody": "访问权限已被撤回或已过期，因此预订不会写入你的日历，也不会读取其忙碌时间。请重新连接以恢复。",
+        "reconnectBodyAccount": "{account} 的访问权限已被撤回或已过期，因此预订不会写入你的日历，也不会读取其忙碌时间。请重新连接以恢复。",
+        "account": "Google 账户",
+        "calendar": "日历",
+        "primaryCalendar": "你的主日历",
+        "connectedAgo": "{when}连接",
+        "errors": {
+          "notConfigured": "此平台尚未设置 Google 日历。请让平台管理员添加 Google OAuth 客户端。",
+          "notConnected": "未连接 Google 日历。请刷新页面后重新连接。",
+          "providerFailed": "Google 未响应。请稍后重试。"
+        },
+        "loadingCalendars": "正在加载你的日历",
+        "chooseLabel": "将预订写入",
+        "chooseHint": "仅列出此账户可编辑的日历。已写入的事件保持原位。",
+        "choosePlaceholder": "选择日历",
+        "chooseOptionPrimary": "{name}（主日历）",
+        "chooseSave": "使用此日历",
+        "chooseCancel": "取消",
+        "saving": "保存中",
+        "connect": "连接 Google 日历",
+        "reconnect": "重新连接 Google",
+        "redirecting": "正在打开 Google",
+        "choose": "选择日历",
+        "disconnect": "断开连接",
+        "disconnected": "Google 日历已断开连接。",
+        "calendarSaved": "日历已保存。",
+        "confirmOff": {
+          "title": "断开 Google 日历？",
+          "message": "新预订将不再写入你的日历，也不再读取其忙碌时间。已在日历中的事件会保留，并会通知 Google 撤回此访问权限。",
+          "confirm": "断开连接",
+          "cancel": "保留"
+        },
+        "outcome": {
+          "connected": "Google 日历已连接。已确认的预订现在会写入你的日历。",
+          "denied": "Google 上未授予访问权限，因此未连接任何内容。",
+          "failed": "连接未完成。请重试；如果持续失败，请让平台管理员检查 Google 设置。",
+          "expired": "该次尝试耗时过长。请点击连接重新开始。",
+          "not_configured": "此平台尚未设置 Google 日历。请让平台管理员添加 Google OAuth 客户端。",
+          "missing_scope": "Google 未授予所需的全部日历权限。请重新连接并保持所有复选框勾选。"
+        },
+        "whatTitle": "功能说明",
+        "what": {
+          "freeBusy": "从你的日历读取空闲和忙碌时间。",
+          "nextSlots": "向客户提供接下来的空闲时段。",
+          "writeBack": "将已确认的预订作为事件写入你的日历，服务需要时附带 Meet 链接。"
+        },
+        "hint": "没有它预订也能正常使用。空闲时间取决于下方的营业时间和预订规则。"
+      },
+      "timezone": {
+        "title": "时区",
+        "description": "你的营业时间和预订时间所依据的时区。",
+        "label": "工作区时区",
+        "hint": "客户看到的是其自己时区的时间；你看到的则按此时区显示。"
+      },
+      "hours": {
+        "title": "营业时间",
+        "description": "客户可预订的时间。关闭某天即为休息，或添加时段以安排休息。",
+        "noHours": "没有任何一天营业，因此无人可预订。"
+      },
+      "defaults": {
+        "title": "预订规则",
+        "description": "此工作区预订的默认值。",
+        "fields": {
+          "slotDurationMinutes": "时段时长（分钟）",
+          "maxPerDay": "每天最多预订数",
+          "bufferBeforeMinutes": "前缓冲（分钟）",
+          "bufferAfterMinutes": "后缓冲（分钟）",
+          "advanceDays": "提前预订窗口（天）",
+          "reminderMinutesBefore": "提醒（提前分钟数）",
+          "defaultLocation": "默认地点（可选）"
+        },
+        "hints": {
+          "slotDurationMinutes": "{min} 到 {max} 分钟。",
+          "maxPerDay": "{min} 到 {max} 个预订。",
+          "bufferBeforeMinutes": "{min} 到 {max} 分钟。",
+          "bufferAfterMinutes": "{min} 到 {max} 分钟。",
+          "advanceDays": "提前 {min} 到 {max} 天。",
+          "reminderMinutesBefore": "{min} 到 {max} 分钟。0 表示关闭提醒。"
+        },
+        "locationHint": "最多 191 个字符。",
+        "locationPlaceholder": "例如 12 MG Road, Bangalore"
+      },
+      "templates": {
+        "title": "消息模板",
+        "description": "客户收到的纯文本消息。占位符会为每个预订自动填入。",
+        "placeholders": "占位符",
+        "placeholder": {
+          "type": "预订类型的名称",
+          "slot": "日期和时间",
+          "name": "客户的姓名",
+          "manage_link": "管理预订的链接"
+        },
+        "events": {
+          "confirmation": "确认",
+          "reminder": "提醒",
+          "cancellation": "取消",
+          "reschedule": "改期"
+        },
+        "reset": "恢复默认",
+        "unknown": "不是已知的占位符，将按原样发送：{names}",
+        "counter": "{count} / {max}"
+      },
+      "v": {
+        "required": "此项为必填。",
+        "notInteger": "请输入整数。",
+        "tooSmall": "必须至少为 {min}。",
+        "tooLarge": "必须至多为 {max}。",
+        "tooLong": "最多 {max} 个字符。",
+        "badZone": "请从列表中选择时区。",
+        "badHours": "请修正营业时间中高亮的时间。"
+      },
+      "notAvailable": "此服务器不支持工作区级预订设置。改为由每个预订类型各自管理时间、时区、提醒和消息。",
+      "openTypes": "打开预订类型"
+    },
+    "linked": {
+      "title": "预约",
+      "openBookings": "打开预订",
+      "showPast": "显示过往",
+      "hidePast": "隐藏过往",
+      "empty": "没有即将到来的预约。",
+      "emptyBoth": "还没有预约。",
+      "loading": "正在加载预约",
+      "unavailable": "此服务器暂不支持预约。",
+      "loadMore": "加载更多",
+      "loadMorePast": "加载更多过往",
+      "noType": "预约"
+    }
+  }
+}

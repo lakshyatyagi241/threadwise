@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "Siparişler",
+      "coupons": "Kuponlar"
+    },
+    "settingsTile": {
+      "label": "Ödeme ağ geçitleri",
+      "description": "Mağaza ödemenizin ve Satış faturalarınızın çevrimiçi ödeme almak için kullandığı tek ağ geçidi.",
+      "keywords": "ödeme ağ geçidi, razorpay, stripe, ödeme, ödeme bağlantısı, çevrimiçi ödeme, kart, upi"
+    },
+    "common": {
+      "noAccessTitle": "Bu sayfaya erişiminiz yok",
+      "noAccessMessage": "Çalışma alanı yöneticisinden rolünüze bunun için izin vermesini isteyin.",
+      "loading": "Yükleniyor",
+      "loadMore": "Daha fazla yükle",
+      "cancel": "İptal",
+      "close": "Kapat",
+      "save": "Kaydet",
+      "saving": "Kaydediliyor",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "remove": "Kaldır",
+      "open": "Aç",
+      "view": "Görüntüle",
+      "search": "Ara",
+      "clear": "Temizle",
+      "all": "Tümü",
+      "no": "Hayır",
+      "none": "Yok",
+      "actions": "İşlemler",
+      "retry": "Tekrar dene",
+      "dismiss": "Kapat",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "viewContact": "Kişiyi görüntüle",
+      "allShops": "Tüm mağazalar",
+      "shop": "Mağaza"
+    },
+    "status": {
+      "new": "Yeni",
+      "pending": "Beklemede",
+      "confirmed": "Onaylandı",
+      "paid": "Ödendi",
+      "processing": "İşleniyor",
+      "completed": "Tamamlandı",
+      "shipped": "Kargolandı",
+      "cancelled": "İptal edildi"
+    },
+    "paymentStatus": {
+      "paid": "Ödendi",
+      "awaiting": "Ödeme bekleniyor",
+      "cod": "Kapıda ödeme",
+      "unpaid": "Ödenmedi"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "Mağaza vitrini",
+      "twilio": "Twilio",
+      "manual": "Manuel",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "WhatsApp YZ"
+    },
+    "errors": {
+      "requestId": "İstek kimliği",
+      "retry": "Tekrar dene",
+      "network": {
+        "title": "Sunucuya ulaşılamıyor",
+        "message": "Bağlantınızı kontrol edip tekrar deneyin."
+      },
+      "forbidden": {
+        "title": "İzin verilmiyor",
+        "message": "Rolünüz buna izin vermiyor."
+      },
+      "signedOut": {
+        "title": "Oturumunuz kapandı",
+        "message": "Devam etmek için yeniden oturum açın."
+      },
+      "conflict": {
+        "title": "Başkası tarafından değiştirildi",
+        "message": "Siz açıkken bu kayıt değişti. Yeniden yükleyip tekrar deneyin."
+      },
+      "validation": {
+        "title": "Lütfen formu kontrol edin",
+        "message": "Bazı değerler geçerli değil. Vurgulanan alanları kontrol edin."
+      },
+      "unavailable": {
+        "title": "Henüz kullanılamıyor",
+        "message": "Mağazanın bu bölümü bu sunucuda henüz kullanılamıyor."
+      },
+      "rateLimited": {
+        "title": "Çok fazla istek",
+        "message": "Biraz bekleyip tekrar deneyin."
+      },
+      "notFound": {
+        "title": "Bulunamadı",
+        "message": "Kaldırıldı veya hiç var olmadı."
+      },
+      "planLocked": {
+        "title": "Planınızda yok",
+        "message": "Planınız mağazayı içermiyor. Kullanmak için yükseltin."
+      },
+      "couponCodeTaken": {
+        "title": "Kod zaten kullanılıyor",
+        "message": "Başka bir kupon bu kodu zaten kullanıyor. Farklı bir kod seçin."
+      },
+      "groupCodeTaken": {
+        "title": "Kod zaten kullanılıyor",
+        "message": "Başka bir grup bu sipariş kodunu zaten kullanıyor."
+      },
+      "orderNoPhone": {
+        "title": "Telefon numarası yok",
+        "message": "Bu siparişte alıcının telefon numarası yok, bu yüzden hiçbir şey gönderilemez."
+      },
+      "gatewayNotConfigured": {
+        "title": "Ödeme ağ geçidi kurulmadı",
+        "message": "Önce bir ödeme ağ geçidi kurun. Anahtarları eksik veya kapalı."
+      },
+      "gatewayUnavailable": {
+        "title": "Ağ geçidi kullanılamıyor",
+        "message": "Bu ağ geçidi, alıcının açabileceği bir ödeme bağlantısı oluşturamıyor."
+      },
+      "paymentLinkFailed": {
+        "title": "Ağ geçidi bağlantıyı reddetti",
+        "message": "Anahtarları ve tutarın ağ geçidinin asgari tutarının üzerinde olduğunu kontrol edin."
+      },
+      "unexpected": {
+        "title": "Bir şeyler ters gitti",
+        "message": "Tekrar deneyin. Devam ederse istek kimliğini destekle paylaşın."
+      }
+    }
+  }
+}

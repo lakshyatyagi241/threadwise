@@ -880,6 +880,11 @@
             "message": "A booking cannot be moved after it has started. Contact the business if you need to."
           }
         }
+      },
+      "meta": {
+        "book": "Book an appointment",
+        "manage": "Your booking",
+        "reschedule": "Reschedule booking"
       }
     },
     "settings": {

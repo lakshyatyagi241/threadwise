@@ -1,0 +1,258 @@
+{
+  "workspaces-hub": {
+    "nav": {
+      "group": "워크스페이스",
+      "workspaces": "워크스페이스"
+    },
+    "crumb": {
+      "admin": "관리자",
+      "workspaces": "워크스페이스",
+      "label": "경로 탐색"
+    },
+    "common": {
+      "loading": "불러오는 중",
+      "retry": "다시 시도",
+      "cancel": "취소",
+      "close": "닫기",
+      "none": "없음",
+      "never": "없음",
+      "unlimited": "무제한",
+      "noAccess": "현재 역할로는 이 작업을 할 수 없습니다."
+    },
+    "list": {
+      "title": "워크스페이스",
+      "subtitle": "모든 고객 워크스페이스를 한곳에서 확인하세요: 요금제, 공급자, 지갑, 소유자, 활동 및 각 항목에 필요한 작업.",
+      "kpi": {
+        "total": "워크스페이스",
+        "active": "활성",
+        "suspended": "일시 중지됨",
+        "trial": "체험판",
+        "newThisMonth": "이번 달 신규",
+        "lowBalance": "잔액 부족",
+        "mrr": "MRR"
+      },
+      "search": "검색",
+      "searchPlaceholder": "이름, 슬러그, 소유자 이름 또는 이메일",
+      "status": {
+        "label": "상태",
+        "all": "전체",
+        "active": "활성",
+        "suspended": "일시 중지됨"
+      },
+      "plan": "요금제",
+      "allPlans": "전체 요금제",
+      "state": "상태",
+      "allStates": "전체 상태",
+      "provider": "공급자",
+      "allProviders": "전체 공급자",
+      "lowOnly": "잔액 부족만",
+      "sort": {
+        "label": "정렬 기준",
+        "created": "최신순",
+        "last_active": "마지막 활동",
+        "name": "이름"
+      },
+      "clear": "필터 지우기",
+      "refresh": "새로고침",
+      "columns": {
+        "menu": "열",
+        "reset": "열 초기화",
+        "workspace": "워크스페이스",
+        "provider": "공급자",
+        "numbers": "번호",
+        "plan": "요금제",
+        "state": "상태",
+        "ends": "종료일",
+        "limits": "한도",
+        "wallet": "지갑",
+        "owner": "소유자",
+        "mrr": "MRR",
+        "messages7d": "7일 메시지",
+        "lastActive": "마지막 활동",
+        "actions": "작업"
+      },
+      "tableLabel": "워크스페이스",
+      "emptyTitle": "아직 워크스페이스가 없습니다",
+      "emptyMessage": "고객이 가입하면 워크스페이스가 여기에 표시됩니다.",
+      "noMatchTitle": "일치하는 워크스페이스가 없습니다",
+      "noMatchMessage": "검색어나 필터를 변경하여 더 많이 확인하세요.",
+      "loadMore": "더 보기",
+      "loadingMore": "더 불러오는 중",
+      "loaded": "{count, plural, other {워크스페이스 #개}} 표시됨"
+    },
+    "cell": {
+      "suspended": "일시 중지됨",
+      "suspendedBy": {
+        "frozen": "동결됨",
+        "tos_violation": "약관 위반",
+        "fraud": "사기 의심"
+      },
+      "providerSource": {
+        "override": "재정의",
+        "default": "기본",
+        "platform_setting": "플랫폼 설정"
+      },
+      "numbersCount": "{count, plural, other {번호 #개}}",
+      "platformOwned": "플랫폼",
+      "unknownPlan": "알 수 없는 요금제",
+      "health": {
+        "suspended": "일시 중지됨",
+        "good": "양호",
+        "active": "활성",
+        "low": "사용량 낮음",
+        "new": "신규",
+        "idle": "유휴"
+      },
+      "daysLeft": "{count, plural, other {#일 남음}}",
+      "expired": "만료됨",
+      "limits": {
+        "summary": "{messages}건/월 · 사용자 {users}명 · 연락처 {contacts}개 · 기기 {devices}대",
+        "override": "재정의",
+        "messages": "월간 메시지",
+        "users": "사용자",
+        "contacts": "연락처",
+        "devices": "기기"
+      },
+      "lowBalance": "낮음",
+      "noOwner": "소유자 없음",
+      "ago": {
+        "now": "방금 전",
+        "minutes": "{count, plural, other {#분 전}}",
+        "hours": "{count, plural, other {#시간 전}}",
+        "days": "{count, plural, other {#일 전}}"
+      }
+    },
+    "actions": {
+      "menu": "{name} 작업",
+      "dashboard": "워크스페이스 대시보드",
+      "editPlan": "편집 및 요금제 변경",
+      "planLimits": "요금제 및 한도",
+      "provider": "공급자 변경 및 설정",
+      "impersonate": "소유자로 로그인",
+      "suspend": "일시 중지",
+      "unsuspend": "재활성화",
+      "denied": "허용되지 않음"
+    },
+    "plan": {
+      "loading": "요금제를 불러오는 중",
+      "loadFailed": "요금제를 불러올 수 없습니다.",
+      "saved": "{name}의 요금제가 저장되었습니다."
+    },
+    "provider": {
+      "title": "{name}의 공급자",
+      "help": "이 워크스페이스의 새 번호는 선택한 공급자를 통해 연결됩니다. 이미 연결된 번호는 이동하기 전까지 그대로 유지됩니다.",
+      "current": "현재 사용 중: {name} ({source})",
+      "field": "공급자",
+      "note": "메모(선택)",
+      "noteHint": "다음 운영자가 이유를 알 수 있도록 재정의와 함께 저장됩니다.",
+      "noActive": "활성 공급자가 없습니다. 먼저 공급자 레지스트리에서 하나를 활성화하세요.",
+      "save": "재정의 설정",
+      "clear": "기본값 사용",
+      "switchLink": "연결된 번호를 다른 공급자로 이동",
+      "assignmentsLink": "공급자 레지스트리",
+      "saved": "{name}의 공급자가 설정되었습니다.",
+      "cleared": "{name}은(는) 다시 기본 공급자를 따릅니다."
+    },
+    "impersonate": {
+      "title": "{name}의 소유자로 로그인",
+      "help": "새 탭에서 소유자로 워크스페이스를 엽니다. 세션은 최대 {minutes}분 동안 유지되며 사유와 함께 기록됩니다.",
+      "reason": "사유",
+      "reasonHint": "최소 {min}자. 감사 기록에 저장됩니다.",
+      "readOnly": "읽기 전용 세션",
+      "readOnlyHint": "둘러볼 수는 있지만 모든 변경은 거부됩니다.",
+      "submit": "워크스페이스 열기",
+      "opened": "새 탭에서 {name} 여는 중.",
+      "popupBlocked": "브라우저가 새 탭을 차단했습니다. 이 페이지의 팝업을 허용한 후 다시 시도하세요.",
+      "reasonShort": "최소 {min}자 이상 입력하세요."
+    },
+    "suspend": {
+      "title": "{name} 일시 중지하시겠습니까?",
+      "message": "사용자는 워크스페이스에서 로그아웃되며, 재활성화할 때까지 메시지 발송이 중단됩니다.",
+      "reason": "사유(선택)",
+      "confirm": "워크스페이스 일시 중지",
+      "done": "{name} 일시 중지됨."
+    },
+    "unsuspend": {
+      "title": "{name} 재활성화하시겠습니까?",
+      "message": "사용자가 워크스페이스를 다시 사용할 수 있습니다.",
+      "reason": "메모(선택)",
+      "confirm": "워크스페이스 재활성화",
+      "done": "{name} 다시 활성화됨."
+    },
+    "errors": {
+      "unexpected": "문제가 발생했습니다. 다시 시도하세요.",
+      "forbidden": "현재 역할로는 이 작업을 할 수 없습니다.",
+      "conflict": "다른 사용자가 이 워크스페이스를 변경했습니다. 새로고침한 후 다시 시도하세요.",
+      "notFound": "이 워크스페이스는 더 이상 존재하지 않습니다.",
+      "reasonRequired": "사유는 최소 8자 이상이어야 합니다.",
+      "orgSuspended": "워크스페이스가 일시 중지되어 들어갈 수 없습니다.",
+      "validation": "값을 확인하고 다시 시도하세요.",
+      "requestId": "요청 ID"
+    },
+    "detail": {
+      "crumb": "워크스페이스",
+      "back": "전체 워크스페이스",
+      "loadFailed": "이 워크스페이스를 불러올 수 없습니다.",
+      "slug": "슬러그",
+      "created": "{date} 생성",
+      "kpi": {
+        "members": "멤버",
+        "contacts": "연락처",
+        "openTickets": "열린 티켓",
+        "delivered": "전달됨",
+        "wallet": "지갑",
+        "mrr": "MRR",
+        "messages7d": "메시지(7일)"
+      },
+      "chart": {
+        "title": "최근 30일",
+        "label": "최근 30일간 일별 발송 및 전달 메시지",
+        "sent": "발송됨",
+        "delivered": "전달됨",
+        "empty": "최근 30일간 메시지가 없습니다."
+      },
+      "tabs": {
+        "label": "워크스페이스 섹션",
+        "overview": "개요",
+        "plan": "요금제 및 한도",
+        "wallet": "지갑",
+        "provider": "공급자",
+        "support": "지원"
+      },
+      "overview": {
+        "owner": "소유자",
+        "adminNote": "관리자 메모",
+        "noNote": "메모 없음.",
+        "health": "상태",
+        "lastActive": "마지막 활동",
+        "suspendedBy": "보유자"
+      },
+      "planTab": {
+        "plan": "요금제",
+        "state": "상태",
+        "ends": "종료일",
+        "limits": "적용 중인 한도",
+        "edit": "편집 및 요금제 변경",
+        "overrideNote": "이 워크스페이스에는 요금제 한도를 대체하는 별도 한도가 있습니다."
+      },
+      "walletTab": {
+        "open": "전체 지갑 열기",
+        "balance": "잔액",
+        "adjust": "잔액 조정",
+        "adjusted": "잔액이 조정되었습니다."
+      },
+      "providerTab": {
+        "provider": "적용 중인 공급자",
+        "source": "선택 주체",
+        "numbers": "연결된 번호",
+        "change": "공급자 변경 및 설정",
+        "switch": "번호를 다른 공급자로 이동"
+      },
+      "supportTab": {
+        "text": "이 워크스페이스의 티켓, 대화 및 지원 기록.",
+        "open": "지원 기록 열기",
+        "openTickets": "{count, plural, other {열린 티켓 #개}}"
+      }
+    }
+  }
+}

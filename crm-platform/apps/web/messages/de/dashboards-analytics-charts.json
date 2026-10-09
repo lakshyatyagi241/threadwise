@@ -1,0 +1,722 @@
+{
+  "dashboards-analytics-charts": {
+    "nav": {
+      "title": "Dashboard",
+      "analytics": "Analysen"
+    },
+    "home": {
+      "title": "Dashboard",
+      "welcome": "Willkommen in Ihrem Arbeitsbereich."
+    },
+    "chart": {
+      "empty": "In diesem Zeitraum noch keine Daten.",
+      "bucket": "Zeitraum",
+      "cell": "{day} {hour}:00 · {count, plural, one {# Nachricht} other {# Nachrichten}}"
+    },
+    "range": {
+      "label": "Datumsbereich",
+      "short": {
+        "24h": "24 Std.",
+        "7d": "7 T.",
+        "30d": "30 T.",
+        "90d": "90 T.",
+        "qtd": "QTD",
+        "custom": "Benutzerdefiniert"
+      },
+      "long": {
+        "24h": "Letzte 24 Stunden",
+        "7d": "Letzte 7 Tage",
+        "30d": "Letzte 30 Tage",
+        "qtd": "Quartal bis heute",
+        "custom": "Benutzerdefinierter Zeitraum"
+      },
+      "from": "Von-Datum",
+      "to": "Bis-Datum",
+      "apply": "Anwenden"
+    },
+    "funnel": {
+      "listLabel": "Kontakt-Trichter",
+      "stageLabel": "{stage}: {n} Kontakte, {pct} % der angeschriebenen Kontakte",
+      "stage": {
+        "messaged": "Angeschriebene Kontakte",
+        "delivered": "Zugestellt",
+        "replied": "Beantwortet",
+        "goalCompleted": "Ziel erreicht"
+      },
+      "goalCompletedHint": "Kontakte, deren Flow abgeschlossen wurde",
+      "activity": {
+        "title": "Konversationsaktivität",
+        "summary": "{inbound, plural, one {# eingehende Nachricht} other {# eingehende Nachrichten}} · {contacts, plural, one {# antwortender Kontakt} other {# antwortende Kontakte}} · {perContact} Antworten je antwortendem Kontakt"
+      },
+      "comparison": {
+        "title": "Im Vergleich zur Vorperiode",
+        "replyRate": "Antwortrate"
+      }
+    },
+    "error": {
+      "locked": "Ihr Tarif enthält keine Analysen.",
+      "upgrade": "Tarife ansehen",
+      "forbidden": "Sie haben keinen Zugriff auf diese Seite.",
+      "generic": "Die Zahlen konnten nicht geladen werden. Versuchen Sie es gleich noch einmal."
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "Guten Morgen, {name}.",
+        "afternoon": "Guten Tag, {name}.",
+        "evening": "Guten Abend, {name}."
+      },
+      "subline": "{date} - {range}: {sent} ausgehend, {rate} % Zustellbarkeit über {devices, plural, one {# verbundenes Gerät} other {# verbundene Geräte}}.",
+      "kpis": "Kennzahlen",
+      "kpi": {
+        "sent": "Gesendete Nachrichten · {range}",
+        "sentLegend": "{delivered} zugestellt · {failed} fehlgeschlagen",
+        "readRate": "Leserate",
+        "deliverability": "Zustellbarkeit",
+        "deliveredOf": "{delivered} von {sent} Nachrichten",
+        "replies": "Antworten",
+        "replyRate": "{rate} % Antwortrate",
+        "readMini": {
+          "sent": "Gesendet",
+          "delivered": "Zugestellt",
+          "read": "Gelesen"
+        }
+      },
+      "throughput": {
+        "title": "Nachrichtendurchsatz",
+        "subtitle": {
+          "24h": "Ausgehend, zugestellt und fehlgeschlagen, stündlich, letzte 24 Stunden",
+          "7d": "Ausgehend, zugestellt und fehlgeschlagen, täglich, letzte 7 Tage",
+          "30d": "Ausgehend, zugestellt und fehlgeschlagen, täglich, letzte 30 Tage",
+          "qtd": "Ausgehend, zugestellt und fehlgeschlagen, täglich, Quartal bis heute",
+          "custom": "Ausgehend, zugestellt und fehlgeschlagen, täglich, benutzerdefinierter Zeitraum"
+        },
+        "peak": "Spitzenstunde {when} · {n} Nachrichten",
+        "sent": "Gesendet",
+        "delivered": "Zugestellt",
+        "failed": "Fehlgeschlagen",
+        "avgHour": "Durchschnitt pro Stunde",
+        "replies": "Antworten",
+        "replyRate": "Antwortrate"
+      },
+      "sparkline": {
+        "title": "Letzte 20 Stunden",
+        "subtitle": "Gesendete Nachrichten pro Stunde, älteste zuerst",
+        "inCard": "Letzte 20 Stunden"
+      },
+      "funnel": {
+        "title": "Engagement-Trichter",
+        "viewAll": "Analysen ansehen"
+      },
+      "kicker": "Operator-Dashboard",
+      "calm": "Im Arbeitsbereich ist es ruhig.",
+      "running": "{n, plural, one {# Broadcast läuft.} other {# Broadcasts laufen.}}",
+      "export": "Exportieren",
+      "newCampaign": "Neue Kampagne",
+      "contacts": {
+        "title": "Aktive Kontakte",
+        "subscribed": "Abonniert",
+        "optedIn": "Zugestimmt",
+        "blocked": "Blockiert"
+      },
+      "wallet": {
+        "title": "Guthaben",
+        "payPerMessage": "Bezahlung pro Nachricht",
+        "topUp": "Aufladen",
+        "earn": "Über Affiliate verdienen"
+      },
+      "autopilot": {
+        "kicker": "Mehr erledigen",
+        "title": "Antworten automatisieren",
+        "body": "Erstellen Sie einen Flow oder starten Sie eine Kampagne, um mehr Kunden automatisch zu erreichen.",
+        "flow": "Flow erstellen",
+        "campaign": "Neue Kampagne"
+      },
+      "pipeline": {
+        "kicker": "Sales-Pipeline",
+        "open": "Offene Pipeline",
+        "deals": "Offene Deals",
+        "won": "Diesen Monat gewonnen",
+        "winRate": "Gewinnrate",
+        "board": "Board öffnen"
+      },
+      "inbox": {
+        "title": "Live-Posteingang",
+        "unread": "{n} ungelesen",
+        "oldest": "älteste {when}",
+        "open": "Posteingang öffnen",
+        "recent": "Letzte Konversationen",
+        "empty": "Noch keine Konversationen."
+      },
+      "campaigns": {
+        "title": "Aktive Kampagnen",
+        "summary": "{running} laufend - {scheduled} geplant - {paused} pausiert",
+        "viewAll": "Alle {n} ansehen",
+        "untitled": "Unbenannter Broadcast",
+        "delivered": "{done} / {total} zugestellt",
+        "emptyTitle": "Keine aktiven Broadcasts",
+        "emptyBody": "Starten Sie einen, um an eine Kontaktgruppe zu senden.",
+        "new": "Neuer Broadcast",
+        "status": {
+          "processing": "Wird gesendet",
+          "sending": "Wird gesendet",
+          "running": "Wird gesendet",
+          "active": "Wird gesendet",
+          "scheduled": "Geplant",
+          "pending": "Geplant",
+          "queued": "Geplant",
+          "paused": "Pausiert",
+          "cancelled": "Pausiert",
+          "failed": "Fehlgeschlagen",
+          "completed": "Abgeschlossen",
+          "completed_with_errors": "Abgeschlossen",
+          "done": "Abgeschlossen",
+          "sent": "Abgeschlossen"
+        }
+      },
+      "devices": {
+        "title": "Verbundene Geräte",
+        "summary": "{total} von {cap} Plätzen belegt - {online} online",
+        "connect": "Verbinden",
+        "emptyTitle": "Keine Geräte verbunden",
+        "emptyBody": "Koppeln Sie eine WhatsApp-Nummer, um mit dem Senden zu beginnen.",
+        "connectDevice": "Gerät verbinden",
+        "unzoned": "ohne Zone",
+        "per24h": "{n}/24 Std.",
+        "deliv": "zugest.",
+        "free": "{n, plural, one {# Geräteplatz verfügbar} other {# Geräteplätze verfügbar}}",
+        "freeHint": "WABA hinzufügen",
+        "connectDeviceShort": "Gerät verbinden"
+      },
+      "templates": {
+        "title": "Leistungsstärkste Vorlagen",
+        "subtitle": "Nach Sendevolumen - gewählter Zeitraum",
+        "count": "{n, plural, one {# Vorlage} other {# Vorlagen}}",
+        "new": "Neue Vorlage",
+        "empty": "Noch keine Vorlagen.",
+        "create": "Erste erstellen",
+        "col": {
+          "template": "Vorlage",
+          "type": "Typ",
+          "sent": "Gesendet",
+          "delivered": "Zugestellt",
+          "read": "Gelesen",
+          "readRate": "Leserate",
+          "performance": "Zustellrate",
+          "status": "Status"
+        },
+        "status": {
+          "approved": "Genehmigt",
+          "public": "Genehmigt",
+          "active": "Genehmigt",
+          "pending": "In Prüfung",
+          "submitted": "In Prüfung",
+          "in_review": "In Prüfung",
+          "rejected": "Abgelehnt",
+          "disabled": "Abgelehnt"
+        }
+      },
+      "activity": {
+        "title": "Aktivitätsprotokoll",
+        "subtitle": "Ereignisse im Arbeitsbereich",
+        "empty": "Für diesen Arbeitsbereich wurde keine aktuelle Aktivität protokolliert.",
+        "by": "{actor} - {module} {action}"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "accounts": "{count, plural, one {# Konto} other {# Konten}}",
+        "connected": "Verbunden",
+        "openInbox": "Posteingang öffnen →",
+        "tile": {
+          "needReply": "Antwort nötig",
+          "openChats": "Offene Chats",
+          "dmsIn": "Eingehende DMs · 7 T.",
+          "dmsOut": "Gesendete DMs · 7 T.",
+          "followers": "Follower",
+          "replyRate": "Antwortrate"
+        }
+      },
+      "copilot": {
+        "title": "{brand} Copilot",
+        "tag": "KI-gestützt",
+        "headline": "Erstellen Sie einen Flow aus einem Satz.",
+        "body": "Beschreiben Sie eine Customer Journey, und Copilot entwirft Knoten, Verzweigungen und Vorlagenvorschläge.",
+        "try": "Versuchen Sie:",
+        "generate": "Flow generieren ✦",
+        "examples": "Beispiele",
+        "stat": {
+          "flows": "Flows",
+          "active": "aktiv",
+          "subscribers": "Abonnenten"
+        }
+      },
+      "flows": {
+        "title": "Automatisierungs-Flows",
+        "summary": "{active} aktiv · {subscribers} Abonnenten",
+        "open": "Öffnen",
+        "empty": "Noch keine Flows.",
+        "build": "Ersten Flow erstellen",
+        "meta": "{trigger}-Auslöser · {steps} Schritte · {subs} Abonnenten",
+        "statusActive": "Aktiv",
+        "statusPaused": "Pausiert",
+        "subs": "Abo."
+      },
+      "quickActions": {
+        "title": "Schnellaktionen",
+        "soon": "Bald",
+        "broadcast": {
+          "label": "Neuer Broadcast",
+          "hint": "an eine Kontaktgruppe"
+        },
+        "flow": {
+          "label": "Flow erstellen",
+          "hint": "Drag-and-drop"
+        },
+        "template": {
+          "label": "Neue Vorlage",
+          "hint": "bei Meta einreichen"
+        },
+        "autoReply": {
+          "label": "Automatische Antwort",
+          "hint": "Schlüsselwortregel"
+        }
+      },
+      "integrations": {
+        "title": "Integrationen",
+        "name": {
+          "woocommerce": "WooCommerce",
+          "shopify": "Shopify",
+          "google_sheets": "Google Sheets",
+          "meta_catalog": "Meta Catalog"
+        },
+        "events": "{n} Ereignisse / 7 T.",
+        "connected": {
+          "woocommerce": "Verbunden",
+          "shopify": "Verbunden",
+          "google_sheets": "API-Schlüssel ausgestellt",
+          "meta_catalog": "Katalog verknüpft"
+        },
+        "notConnected": "nicht verbunden",
+        "connect": "Verbinden",
+        "connectedLabel": "Verbunden"
+      },
+      "sublineOfficial": "{date} - {range}: {sent} ausgehend, {rate} % Zustellbarkeit.",
+      "synced": "Live · synchronisiert vor {s} s"
+    },
+    "analytics": {
+      "title": "Analysen",
+      "headline": "{rate} % der Nachrichten erreichten ihre Leser zwischen {from} und {to}.",
+      "subline": "{sent, plural, one {# Nachricht} other {# Nachrichten}} gesendet, {replyRate} % Antwortrate.",
+      "noSends": "In diesem Zeitraum noch keine ausgehenden Nachrichten.",
+      "export": "CSV exportieren",
+      "from": "Von",
+      "to": "Bis",
+      "apply": "Anwenden",
+      "kpis": "Kennzahlen",
+      "kpi": {
+        "sent": "Gesendet",
+        "delivered": "Zugestellt",
+        "queued": "In Warteschlange",
+        "failed": "Fehlgeschlagen",
+        "replyRate": "Antwortrate"
+      },
+      "series": {
+        "sent": "Gesendet",
+        "delivered": "Zugestellt",
+        "failed": "Fehlgeschlagen",
+        "queued": "In Warteschlange"
+      },
+      "empty": "In diesem Zeitraum gibt es nichts anzuzeigen.",
+      "volume": {
+        "title": "Nachrichten im Zeitverlauf",
+        "subtitle": "Gesendet, zugestellt und fehlgeschlagen pro Tag"
+      },
+      "rates": {
+        "title": "Zustellraten",
+        "subtitle": "Anteil zugestellt, in Warteschlange und fehlgeschlagen"
+      },
+      "totals": {
+        "title": "Tagessummen",
+        "subtitle": "Zugestellt, in Warteschlange und fehlgeschlagen pro Tag, gestapelt"
+      },
+      "funnel": {
+        "title": "Engagement-Trichter"
+      },
+      "types": {
+        "title": "Nachrichtentypen",
+        "subtitle": "Verteilung ausgehender Nachrichten",
+        "byType": "Gesendet und zugestellt nach Nachrichtentyp",
+        "kind": "Typ",
+        "sent": "Gesendet",
+        "delivered": "Zugestellt",
+        "text": "Text",
+        "template": "Vorlage",
+        "media": "Medien",
+        "interactive": "Interaktiv",
+        "location": "Standort"
+      },
+      "heatmap": {
+        "title": "Beste Zeiten",
+        "subtitle": "Nachrichtenvolumen nach Wochentag und Stunde, {zone}. Dunkler bedeutet mehr Betrieb.",
+        "empty": "Kein Nachrichtenvolumen in diesem Zeitraum.",
+        "footer": "Berechnet aus {total} Nachrichten, Zeitzone {tz}"
+      },
+      "panels": {
+        "devices": {
+          "title": "Nach Gerät",
+          "subtitle": "Sendungen in den letzten 24 Stunden",
+          "online": "{online}/{total} online",
+          "empty": "Noch keine verbundenen Geräte.",
+          "msg": "{n} Nachr."
+        },
+        "templates": {
+          "title": "Vorlagen",
+          "subtitle": "Top-Performer nach Sendungen",
+          "empty": "In diesem Zeitraum keine Vorlagen-Sendungen."
+        },
+        "contacts": {
+          "title": "Top-Kontakte",
+          "subtitle": "Aktivste Konversationen",
+          "empty": "In diesem Zeitraum keine Konversationen.",
+          "msgs": "{n} Nachr."
+        },
+        "team": {
+          "title": "Team-Leistung",
+          "subtitle": "Agenten in diesem Zeitraum",
+          "count": "{n, plural, one {# Agent} other {# Agenten}}",
+          "col": {
+            "agent": "Agent",
+            "convos": "Konv.",
+            "resolved": "Gelöst",
+            "first": "Ø 1. Antwort",
+            "resolution": "Ø Lösungszeit",
+            "csat": "CSAT"
+          }
+        },
+        "geo": {
+          "title": "Nach Land",
+          "subtitle": "Reichweite",
+          "markets": "{n, plural, one {# Markt} other {# Märkte}}",
+          "unspecified": "Nicht angegeben",
+          "empty": "Keine Konversationen mit bekanntem Land in diesem Zeitraum."
+        },
+        "events": {
+          "title": "Ereignisstrom",
+          "subtitle": "Neueste Nachrichten in diesem Zeitraum",
+          "sent": "Gesendet → {peer}",
+          "received": "Empfangen von {peer}",
+          "empty": "Keine aktuelle Aktivität in diesem Zeitraum."
+        }
+      }
+    },
+    "health": {
+      "nav": "Systemzustand",
+      "group": "System",
+      "title": "Systemzustand",
+      "kicker": "Plattform",
+      "description": "Live-Prüfungen der Dienste, auf denen die Plattform läuft.",
+      "banner": {
+        "up": "Alle Systeme - Betriebsbereit",
+        "warn": "Alle Systeme - Eingeschränkt",
+        "down": "Alle Systeme - Ausgefallen",
+        "checked": "Zuletzt geprüft {time} · aktualisiert sich alle 20 s",
+        "refresh": "Jetzt aktualisieren",
+        "refreshing": "Wird geprüft..."
+      },
+      "core": "Kerndienste",
+      "activity": {
+        "messages": "Nachrichten · 24 Std.",
+        "aiCalls": "KI-Aufrufe · 24 Std.",
+        "conversations": "Konversationen · 24 Std.",
+        "webhooks": "Webhooks · 24 Std."
+      },
+      "throughput": {
+        "title": "Nachrichtendurchsatz · 14 Tage",
+        "peak": "Spitze {n}/Tag",
+        "empty": "Keine Nachrichtenaktivität in den letzten 14 Tagen.",
+        "aria": "Nachrichten pro Tag, letzte 14 Tage"
+      },
+      "state": {
+        "up": "Betriebsbereit",
+        "warn": "Eingeschränkt",
+        "down": "Ausgefallen",
+        "idle": "Inaktiv"
+      },
+      "check": {
+        "database": "Datenbank",
+        "cache": "Cache",
+        "queue": "Warteschlange",
+        "bridge": "Node-Bridge",
+        "storage": "Medienspeicher"
+      },
+      "latency": {
+        "title": "Antwortzeit",
+        "empty": "Keine Zeitdaten.",
+        "ms": "{ms} ms"
+      },
+      "queues": {
+        "title": "Warteschlangen",
+        "name": "Warteschlange",
+        "pending": "Ausstehend",
+        "failed": "Fehlgeschlagen"
+      },
+      "clear": {
+        "button": "Ausstehende Jobs löschen",
+        "busy": "Wird gelöscht...",
+        "confirmTitle": "Ausstehende und fehlgeschlagene Jobs löschen?",
+        "confirmBody": "Wartende und verzögerte Jobs werden entfernt und fehlgeschlagene Jobs aus jeder Warteschlange gelöscht. Laufende Jobs bleiben unberührt.",
+        "confirm": "Jobs löschen",
+        "cancel": "Abbrechen",
+        "done": "{pending} ausstehende und {failed} fehlgeschlagene Job(s) gelöscht.",
+        "failed": "Fehlgeschlagen: {message}",
+        "superOnly": "Nur ein Super-Admin kann Jobs löschen."
+      },
+      "vitals": {
+        "title": "Host-Kennzahlen",
+        "node": "Node",
+        "app": "App-Version",
+        "environment": "Umgebung",
+        "uptime": "Laufzeit",
+        "memory": "Speicher (RSS)",
+        "heap": "Heap in Verwendung",
+        "diskFree": "Freier Speicherplatz",
+        "diskFreeValue": "{gb} GB",
+        "diskUsed": "Speicherplatz belegt {pct} %",
+        "noDisk": "Nicht verfügbar"
+      },
+      "error": "Die Systemprüfungen konnten nicht geladen werden. Versuchen Sie es gleich noch einmal.",
+      "engines": {
+        "title": "WhatsApp-Engines und verbundene Nummern",
+        "empty": "Noch keine Engines konfiguriert.",
+        "caption": "verbunden von insgesamt Nummern"
+      }
+    },
+    "admin": {
+      "nav": {
+        "analytics": "Analysen"
+      },
+      "window": {
+        "label": "Zeitfenster",
+        "24h": "Letzte 24 Stunden",
+        "7d": "Letzte 7 Tage",
+        "30d": "Letzte 30 Tage",
+        "90d": "Letzte 90 Tage",
+        "1y": "Letztes Jahr"
+      },
+      "error": "Die Plattformzahlen konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "vsPrevious": "ggü. Vorperiode",
+      "overview": {
+        "title": "Admin-Dashboard.",
+        "kicker": "Admin / Übersicht",
+        "subtitle": "Plattformzustand, Umsatz, Nutzung und Aktivität der Arbeitsbereiche an einem Ort.",
+        "addWorkspace": "Arbeitsbereich hinzufügen",
+        "kpi": {
+          "income": "Gesamteinnahmen",
+          "profit": "Gewinn",
+          "profitHint": "Schätzung bei 32 % Marge, keine buchhalterische Zahl",
+          "views": "Aufrufe gesamt",
+          "viewsHint": "Von allen Arbeitsbereichen gesendete Nachrichten",
+          "conversion": "Konversionsrate"
+        },
+        "revenue": {
+          "title": "Umsatz im Zeitverlauf",
+          "total": "Gesamtumsatz",
+          "target": "Gesamtziel",
+          "targetHint": "Das Ziel ist ein Wachstumsrichtwert von 10 % über der Vorperiode, kein gespeichertes Ziel.",
+          "revenue": "Umsatz",
+          "aria": "Umsatz pro Periode im Vergleich zum Ziel"
+        },
+        "countries": {
+          "title": "Sitzungen nach Land",
+          "subtitle": "Top-Sitzungen nach Region",
+          "empty": "Noch keine Länderdaten - Nutzer haben ihre Region nicht angegeben."
+        },
+        "regions": {
+          "title": "Umsatz nach Region",
+          "subtitle": "Umsatzanteil der Plattform",
+          "aria": "Neue Nutzer pro Region"
+        },
+        "platform": {
+          "title": "Umsatz nach Plattform",
+          "subtitle": "E-Commerce-Integrationen",
+          "empty": "Keine bezahlten Bestellungen in diesem Zeitraum.",
+          "aria": "Bezahlter Umsatz nach Zahlungsanbieter"
+        },
+        "users": {
+          "title": "Registrierte Nutzer",
+          "subtitle": "Übersicht der Nutzerplätze",
+          "total": "Nutzer gesamt",
+          "premium": "Premium-Tarif",
+          "basic": "Basic-Tarif",
+          "aria": "{pct} % der Nutzer haben einen kostenpflichtigen Tarif"
+        },
+        "workspaces": {
+          "title": "Aktivität der Arbeitsbereiche",
+          "subtitle": "Aktuelle wichtige Admin-Ereignisse",
+          "viewAll": "Alle ansehen",
+          "empty": "Noch keine Arbeitsbereiche.",
+          "col": {
+            "workspace": "Arbeitsbereich",
+            "owner": "Inhaber",
+            "plan": "Tarif",
+            "messages": "Nachrichten",
+            "health": "Zustand",
+            "mrr": "MRR"
+          },
+          "health": {
+            "good": "Gut",
+            "active": "Aktiv",
+            "low": "Niedrig",
+            "idle": "Inaktiv"
+          }
+        },
+        "alerts": {
+          "title": "Admin-Warnungen",
+          "subtitle": "Prioritätswarteschlange",
+          "open": "{n} offen",
+          "empty": "Alle Systeme in Ordnung - keine Warnungen."
+        },
+        "titleLead": "Admin",
+        "titleAccent": "Dashboard"
+      },
+      "analytics": {
+        "title": "Admin-Analysen.",
+        "kicker": "Admin - Plattform",
+        "subtitle": "Eine vollständige Kontrollraum-Ansicht von Umsatz, Wachstum der Arbeitsbereiche, WhatsApp-Nutzung, Kampagnenzustellung, Gerätezustand und Support-Belastung.",
+        "days": {
+          "7": "Letzte 7 Tage",
+          "30": "Letzte 30 Tage",
+          "90": "Letzte 90 Tage",
+          "365": "Dieses Jahr",
+          "custom": "Letzte {n} Tage"
+        },
+        "daysLabel": "Tage",
+        "export": "Exportieren",
+        "tabs": {
+          "overview": "Übersicht",
+          "revenue": "Umsatz",
+          "usage": "Nutzung",
+          "workspaces": "Arbeitsbereiche",
+          "campaigns": "Kampagnen",
+          "support": "Support"
+        },
+        "kpi": {
+          "revenue": "Umsatz",
+          "revenueSub": "{n, plural, one {# neuer Arbeitsbereich} other {# neue Arbeitsbereiche}}",
+          "workspaces": "Arbeitsbereiche",
+          "workspacesSub": "{n, plural, one {# Nutzer gesamt} other {# Nutzer gesamt}}",
+          "messages": "Nachrichten",
+          "messagesSub": "Ø {n} / Tag",
+          "devices": "Geräte online",
+          "newUsers": "Neue Nutzer",
+          "newUsersSub": "{n} gesamt",
+          "tickets": "Offene Tickets",
+          "watch": "beobachten",
+          "clear": "in Ordnung"
+        },
+        "pulse": {
+          "title": "Plattform-Puls",
+          "subtitle": "Live-Auslastung des Kontrollraums",
+          "workspaces": "Arbeitsbereiche",
+          "devices": "Verbundene Geräte",
+          "tickets": "Offene Tickets",
+          "signups": "Neue Anmeldungen",
+          "normal": "normal"
+        },
+        "growth": {
+          "title": "Wachstums-Kommandozentrale",
+          "subtitle": "Nutzeranmeldungen, letzte {days} Tage",
+          "aria": "Anmeldungen pro Tag",
+          "series": "Anmeldungen"
+        },
+        "plans": {
+          "title": "Tarifverteilung",
+          "subtitle": "Arbeitsbereiche nach Tarif",
+          "empty": "Noch keine Daten - die Tarifverteilung erscheint, sobald mindestens einem Arbeitsbereich ein Tarif zugewiesen wurde.",
+          "aria": "Arbeitsbereiche nach Tarif"
+        },
+        "acquisition": {
+          "title": "Akquise",
+          "subtitle": "Nutzer zu Arbeitsbereich",
+          "users": "Nutzer gesamt",
+          "newUsers": "Neue Nutzer",
+          "workspaces": "Erstellte Arbeitsbereiche",
+          "newWorkspaces": "Neue Arbeitsbereiche",
+          "devices": "Verbundene Geräte"
+        },
+        "devices": {
+          "title": "Top-Geräte - 24 Std.",
+          "subtitle": "Sendevolumen",
+          "empty": "Noch keine Sendungen",
+          "devices": "Geräte",
+          "online": "Online",
+          "sends": "Sendungen 24 Std.",
+          "aria": "Sendungen in den letzten 24 Stunden pro Gerät"
+        },
+        "leaderboard": {
+          "title": "Top-Arbeitsbereiche nach bezahltem Umsatz",
+          "subtitle": "Letzte {days} Tage",
+          "workspace": "Arbeitsbereich",
+          "orders": "Bestellungen",
+          "revenue": "Bezahlter Umsatz",
+          "open": "Öffnen",
+          "empty": "Keine bezahlten Bestellungen in diesem Zeitraum."
+        },
+        "cohort": {
+          "title": "Anmelde-Kohorten",
+          "subtitle": "Letzte {days} Tage",
+          "aria": "Tägliche Anmeldungen"
+        },
+        "composition": {
+          "title": "Umsatzzusammensetzung",
+          "subtitle": "Top-Beitragende",
+          "empty": "Noch kein bezahlter Umsatz."
+        },
+        "support": {
+          "title": "Support-Belastung",
+          "subtitle": "Ticket-Status",
+          "empty": "Noch keine Tickets.",
+          "open": "Offen",
+          "resolved": "Gelöst",
+          "inbox": "Posteingang öffnen"
+        },
+        "queue": {
+          "title": "Admin-Aufmerksamkeit",
+          "subtitle": "Aktionswarteschlange",
+          "tickets": "{n, plural, one {# offenes Ticket} other {# offene Tickets}}",
+          "ticketsHint": "Im Support vor einer SLA-Verletzung bearbeiten",
+          "offline": "{n, plural, one {# Gerät offline} other {# Geräte offline}}",
+          "offlineHint": "Weniger als die Hälfte der Geräte ist online",
+          "users": "{n, plural, one {# neuer Nutzer} other {# neue Nutzer}}",
+          "usersHint": "Neueste Anmeldungen prüfen",
+          "clear": "Alles in Ordnung"
+        },
+        "titleLead": "Admin",
+        "titleAccent": "Analysen"
+      },
+      "kpiLabel": "KPI"
+    },
+    "quickAccess": {
+      "title": "Schnellzugriff",
+      "kicker": "Verknüpfungen",
+      "edit": "Verknüpfungen bearbeiten",
+      "empty": "Schnellzugriff-Verknüpfungen hinzufügen",
+      "open": "{label} öffnen",
+      "modalTitle": "Schnellzugriff",
+      "modalEyebrow": "Bis zu 10 Verknüpfungen anheften",
+      "pages": "App-Seiten (max. 10)",
+      "custom": "Eigene Links",
+      "labelPlaceholder": "Bezeichnung",
+      "urlPlaceholder": "https://... oder /pfad",
+      "addCustom": "+ Eigenen Link hinzufügen",
+      "removeCustom": "Diesen Link entfernen",
+      "counter": "{n} / 10 angeheftet",
+      "cancel": "Abbrechen",
+      "save": "Verknüpfungen speichern",
+      "saving": "Wird gespeichert...",
+      "limit": "Sie können bis zu 10 Verknüpfungen anheften.",
+      "saved": "Schnellzugriff aktualisiert.",
+      "failed": "Ihre Verknüpfungen konnten nicht gespeichert werden."
+    }
+  }
+}

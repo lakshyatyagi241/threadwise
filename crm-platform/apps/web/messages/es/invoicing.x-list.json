@@ -1,0 +1,268 @@
+{
+  "invoicing": {
+    "method": {
+      "bank": "Transferencia bancaria",
+      "manual": "Manual",
+      "wa_pay": "WhatsApp Pay",
+      "storefront": "Tienda online"
+    },
+    "toolbar": {
+      "currency": "Moneda",
+      "currencyPlaceholder": "USD",
+      "issued": "Emitida",
+      "issuedWindow": "Rango de fechas de emisión",
+      "due": "Vencimiento",
+      "dueWindow": "Rango de fechas de vencimiento",
+      "dueFrom": "Vence desde",
+      "dueTo": "Vence hasta",
+      "docType": "Tipo de documento",
+      "anyDocType": "Todos los tipos",
+      "mine": "Mis facturas",
+      "docTypes": {
+        "tax_invoice": "Factura fiscal",
+        "proforma": "Proforma",
+        "receipt": "Recibo"
+      }
+    },
+    "strip": {
+      "label": "Dinero que aún se debe",
+      "outstanding": "Pendiente ({currency})",
+      "overdue": "De las cuales vencidas"
+    },
+    "row": {
+      "creditNote": "Crear nota de crédito",
+      "downloadPdf": "Descargar PDF"
+    },
+    "bulk": {
+      "sendLink": "Marcar enlace como enviado",
+      "someSkipped": "{count, plural, one {# factura seleccionada se omitió porque no admite esta acción.} other {# facturas seleccionadas se omitieron porque no admiten esta acción.}}",
+      "done": {
+        "send": "{count, plural, one {# factura marcada como enviada.} other {# facturas marcadas como enviadas.}}"
+      },
+      "confirm": {
+        "delete": {
+          "message": "{count, plural, one {# borrador se eliminará para siempre. Las facturas que no son borradores no se tocan.} other {# borradores se eliminarán para siempre. Las facturas que no son borradores no se tocan.}}"
+        }
+      },
+      "voidDialog": {
+        "title": "Anular facturas seleccionadas",
+        "close": "Cerrar",
+        "keep": "Conservar facturas",
+        "confirm": "{count, plural, one {Anular # factura} other {Anular # facturas}}",
+        "warning": "{count, plural, one {# factura se anulará. Conserva su número, pero ya no se puede cobrar ni editar.} other {# facturas se anularán. Conservan sus números, pero ya no se pueden cobrar ni editar.}}",
+        "skipped": "{count, plural, one {# factura seleccionada se omitirá: solo se pueden anular facturas emitidas sin pagos ni notas de crédito.} other {# facturas seleccionadas se omitirán: solo se pueden anular facturas emitidas sin pagos ni notas de crédito.}}",
+        "reason": "Motivo (se guarda en cada factura)",
+        "reasonRequired": "Indica por qué se anulan estas facturas."
+      }
+    },
+    "actions": {
+      "sentVia": {
+        "link": "Se registró como enviada con el enlace.",
+        "email": "Factura enviada por correo electrónico.",
+        "whatsapp": "Factura enviada por WhatsApp."
+      },
+      "markedPaid": "Marcada como pagada.",
+      "linkRegenerated": "Enlace nuevo creado. El anterior ya no funciona.",
+      "linkRevoked": "Enlace desactivado.",
+      "linkUnavailable": "Esta factura no tiene un enlace activo. Abre la factura para crear uno nuevo."
+    },
+    "voidDialog": {
+      "reasonHint": "Obligatorio. Se guarda en el historial de la factura.",
+      "reasonRequired": "Indica por qué se anula la factura.",
+      "refundFirst": "Esta factura ha recibido pagos. Reembólsalos primero (desde la lista de pagos de la factura) y luego anúlala.",
+      "creditsFirst": "Esta factura tiene notas de crédito. Anula primero las notas de crédito y luego la factura."
+    },
+    "sendDialog": {
+      "loading": "Cargando factura",
+      "channel": "¿Cómo la envías?",
+      "channels": {
+        "link": "Compartir el enlace yo mismo",
+        "email": "Correo electrónico",
+        "whatsapp": "WhatsApp"
+      },
+      "action": {
+        "link": "Marcar como enviada",
+        "email": "Enviar correo",
+        "whatsapp": "Enviar por WhatsApp"
+      },
+      "linkOff": "Esta factura no tiene un enlace activo. Crea uno nuevo desde la tarjeta de enlace de la factura y compártelo.",
+      "linkRecords": "Compartir el enlace tú mismo solo registra que se envió.",
+      "noEmail": "Esta factura no tiene correo electrónico",
+      "noPhone": "Esta factura no tiene número de teléfono",
+      "noEmailHelp": "Esta factura no tiene correo del comprador. Cierra esta ventana, usa Editar datos para añadir uno e inténtalo de nuevo.",
+      "noPhoneHelp": "Esta factura no tiene teléfono del comprador. Cierra esta ventana, usa Editar datos para añadir uno e inténtalo de nuevo.",
+      "message": "Mensaje",
+      "messageHint": "Opcional. Se añade al mensaje que acompaña a la factura.",
+      "deliveryNote": "La factura está en cola para enviarse al comprador. El historial muestra cuándo se envió."
+    },
+    "editDialog": {
+      "title": "Editar datos",
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "save": "Guardar cambios",
+      "saved": "Datos de la factura guardados.",
+      "reload": "Recargar la factura",
+      "conflict": "Otra persona cambió esta factura mientras la editabas. Recárgala para ver la versión más reciente y vuelve a hacer tu cambio.",
+      "intro": "Una factura emitida conserva sus líneas, importes y numeración. Estos datos aún pueden cambiar.",
+      "email": "Correo del comprador",
+      "phone": "Teléfono del comprador",
+      "phoneHint": "Con el prefijo del país, por ejemplo +34612345678",
+      "contact": "Contacto",
+      "owner": "Responsable",
+      "dueDate": "Fecha de vencimiento",
+      "dueHint": "Amplía o acorta las condiciones de pago.",
+      "reference": "Referencia",
+      "notes": "Notas",
+      "terms": "Condiciones"
+    },
+    "payDialog": {
+      "overpayNote": "Esto es {extra} más que el saldo. Se te pedirá confirmación antes de registrarlo como crédito.",
+      "overpayConfirm": "Se registrarán {extra} más que el saldo y aparecerán como crédito en la factura. Pulsa el botón de nuevo para confirmar.",
+      "problems": {
+        "tooMuch": "Es más de lo que la factura todavía debe."
+      }
+    },
+    "markPaidDialog": {
+      "title": "Marcar como pagada",
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "confirm": "Registrar pago",
+      "message": "¿Registrar el saldo completo de {amount} como recibido hoy?",
+      "method": "Recibido por"
+    },
+    "refundDialog": {
+      "problems": {
+        "dateFuture": "La fecha del reembolso no puede ser futura."
+      }
+    },
+    "paymentsSection": {
+      "refundChip": "Reembolso",
+      "receipt": "Recibo",
+      "refundOf": "devuelve {receipt}",
+      "refundedSoFar": "{amount} reembolsados hasta ahora"
+    },
+    "activity": {
+      "none": "Todavía no ha pasado nada.",
+      "actors": {
+        "buyer": "El comprador",
+        "gateway": "Pasarela de pago",
+        "system": "Sistema"
+      },
+      "events": {
+        "sent": "Enviada al comprador",
+        "overdue": "Pasó a vencida",
+        "partially_paid": "Pagada parcialmente",
+        "link_regenerated": "Enlace público reemplazado",
+        "link_revoked": "Enlace público desactivado",
+        "pay_attempt": "Intento de pago en línea",
+        "credit_note_issued": "Nota de crédito"
+      }
+    },
+    "linked": {
+      "invoiced": "Facturada",
+      "paid": "Pagada",
+      "outstanding": "Debe",
+      "overdue": "Vencida",
+      "latest": "{count, plural, one {Mostrando la factura más reciente.} other {Mostrando las # facturas más recientes.}}"
+    },
+    "detail": {
+      "editDetails": "Editar datos",
+      "downloadPdf": "PDF",
+      "createCreditNote": "Crear nota de crédito",
+      "linkOffBanner": "El enlace del comprador está desactivado, así que no puede abrir esta factura. Crea un enlace nuevo en la tarjeta de enlace.",
+      "refunded": "Reembolsado",
+      "credited": "Abonado",
+      "credit": "Abono",
+      "detailsLabel": "Datos de la factura",
+      "contact": "Contacto",
+      "company": "Empresa",
+      "quote": "Presupuesto",
+      "salesOrder": "Pedido de venta",
+      "recurring": "Programación recurrente",
+      "makeRecurring": "Hacer recurrente",
+      "reference": "Referencia",
+      "owner": "Responsable",
+      "createdBy": "Creado por",
+      "overpaid": "Se recibió o abonó más de lo que pide esta factura. El exceso aparece como crédito.",
+      "voidNeedsRefund": "Para anular esta factura, reembolsa antes sus pagos. Además, no debe tener notas de crédito.",
+      "sources": {
+        "manual": "Creada a mano",
+        "quote": "Desde un presupuesto",
+        "order": "Desde un pedido",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Tienda online",
+        "api": "API",
+        "ai": "Asistente de IA",
+        "recurring": "Factura recurrente",
+        "sales_order": "Pedido de venta"
+      },
+      "creditNotes": {
+        "title": "Notas de crédito",
+        "create": "Crear nota de crédito",
+        "loading": "Cargando notas de crédito",
+        "none": "No hay notas de crédito para esta factura.",
+        "draft": "Borrador",
+        "status": {
+          "draft": "Borrador",
+          "issued": "Emitida",
+          "void": "Anular"
+        }
+      }
+    },
+    "linkCard": {
+      "title": "Enlace público",
+      "address": "Dirección del enlace",
+      "state": {
+        "active": "Activo",
+        "revoked": "Desactivado",
+        "expired": "Caducado"
+      },
+      "off": {
+        "revoked": "El enlace se desactivó. El comprador ve una página que indica que la factura no está disponible.",
+        "expired": "El enlace ha caducado. El comprador ve una página que indica que la factura no está disponible."
+      },
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "expires": "Caduca",
+      "revokedAt": "Desactivado",
+      "views": "Veces abierto",
+      "firstViewed": "Primera apertura",
+      "lastViewed": "Última apertura",
+      "open": "Abrir la página del comprador",
+      "regenerate": "Nuevo enlace",
+      "revoke": "Desactivar",
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "regenerateTitle": "Crear un enlace nuevo",
+      "regenerateWarning": "El enlace actual deja de funcionar de inmediato. Quien lo tenga verá que la factura no está disponible.",
+      "regenerateConfirm": "Crear enlace nuevo",
+      "expiry": "El enlace nuevo funciona durante",
+      "expiryNever": "Sin caducidad",
+      "expiryDays": "{count, plural, one {# día} other {# días}}",
+      "revokeTitle": "¿Desactivar el enlace?",
+      "revokeMessage": "El comprador ya no podrá abrir ni pagar esta factura desde el enlace. Podrás crear un enlace nuevo más adelante.",
+      "revokeConfirm": "Desactivar enlace"
+    },
+    "errors": {
+      "codes": {
+        "INV_NOT_DRAFT": "Esta factura ya está emitida, así que sus líneas e importes ya no pueden cambiar.",
+        "INV_NOT_ISSUED": "Solo una factura emitida puede hacer eso. Emite primero el borrador.",
+        "INV_ALREADY_VOID": "Esta factura ya está anulada.",
+        "INV_HAS_PAYMENTS": "Esta factura todavía tiene pagos. Reembólsalos primero y luego anula la factura.",
+        "INV_HAS_CREDITS": "Esta factura tiene notas de crédito asociadas. Anula primero las notas de crédito y luego anula la factura.",
+        "INV_NOT_DELETABLE": "Solo se puede eliminar un borrador. Anula esta factura en su lugar.",
+        "INV_NO_RECIPIENT": "La factura no tiene correo electrónico ni número de teléfono para ese canal. Añade uno con Editar datos e inténtalo de nuevo.",
+        "INV_LINK_UNAVAILABLE": "Esta factura no tiene un enlace activo. Crea uno nuevo desde la tarjeta del enlace.",
+        "INV_OWNER_INVALID": "Esa persona no es miembro activo de este espacio de trabajo. Elige otro responsable.",
+        "PAY_OVERPAYMENT": "Es más de lo que la factura todavía debe. Reduce el importe o confirma que estás registrando un crédito.",
+        "PAY_FUTURE_DATE": "La fecha de pago no puede ser futura.",
+        "PAY_CURRENCY_MISMATCH": "El pago debe estar en la misma moneda que la factura.",
+        "PAY_REFUND_EXCEEDS": "Es más de lo que aún se puede reembolsar en este pago.",
+        "PAY_NOT_REFUNDABLE": "Esta entrada no se puede reembolsar. Solo se puede reembolsar un pago con saldo pendiente.",
+        "PAY_NOTHING_TO_PAY": "Esta factura no tiene nada pendiente de pago.",
+        "ROW_VERSION_CONFLICT": "Otra persona acaba de cambiar esta factura. Recarga para ver la versión más reciente y vuelve a intentarlo."
+      }
+    }
+  }
+}

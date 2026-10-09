@@ -1,0 +1,157 @@
+{
+  "whatsapp-cloud-api-waba": {
+    "nav": {
+      "groups": "Grup Meta"
+    },
+    "errors": {
+      "WABA_GROUPS_NOT_ELIGIBLE": "Nomor ini tidak memenuhi syarat untuk Grup. WhatsApp hanya membuka Grup untuk Akun Bisnis Resmi.",
+      "WABA_GROUPS_PROVIDER_UNSUPPORTED": "Grup hanya tersedia untuk nomor yang terhubung langsung ke Meta. Nomor ini dijangkau melalui penyedia lain.",
+      "WABA_GROUP_NOT_FOUND": "Grup tidak ditemukan.",
+      "WABA_GROUP_SUSPENDED": "WhatsApp menangguhkan grup ini karena pelanggaran kebijakan.",
+      "WABA_GROUP_LIMIT_REACHED": "Batas grup WhatsApp telah tercapai. Hapus grup atau minta tambahan kepada WhatsApp.",
+      "WABA_GROUP_RATE_LIMITED": "Terlalu banyak operasi grup dari nomor ini. Tunggu sebentar lalu coba lagi.",
+      "PLAN_FEATURE_LOCKED": "Paket Anda tidak mencakup grup WhatsApp. Tingkatkan paket untuk membukanya.",
+      "VALIDATION_FAILED": "Periksa kolom dan coba lagi."
+    },
+    "groups": {
+      "pageTitle": "Grup WhatsApp",
+      "eyebrow": "WhatsApp / Grup",
+      "headingA": "Grup",
+      "headingB": "perpesanan",
+      "intro": "Buat grup WhatsApp dari nomor bisnis Anda, bagikan tautan undangan, dan kelola permintaan bergabung. Percakapan muncul di kotak masuk Anda seperti chat lainnya.",
+      "loading": "Memuat grup…",
+      "loadFailed": "Grup tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "numbersDenied": "Anda dapat melihat grup tetapi tidak daftar nomor WhatsApp tempat grup tersebut berada. Minta admin untuk memberi akses ke nomor WhatsApp.",
+      "rail": {
+        "title": "Grup",
+        "noNumber": "Tidak ada nomor WhatsApp Business",
+        "eligible": "Memenuhi syarat",
+        "notEligible": "Tidak memenuhi syarat",
+        "numberLabel": "Nomor",
+        "howTitle": "Cara kerja grup",
+        "howInvite": "Grup hanya melalui undangan. Anda membuat grup, WhatsApp memberi tautan undangan, dan Anda membagikan tautan itu. Orang memilih untuk bergabung. Tidak ada cara untuk menambahkan seseorang secara langsung.",
+        "howCost": "Setiap pesan yang Anda kirim ditagih sekali untuk setiap orang yang menerimanya. Pesan ke 100 anggota berarti 100 pengiriman."
+      },
+      "state": {
+        "noNumber": {
+          "title": "Tidak ada nomor WhatsApp Business yang terhubung",
+          "message": "Grup memerlukan nomor WhatsApp yang terhubung melalui WhatsApp Business Platform resmi.",
+          "hint": "Hubungkan salah satu di bawah Pengaturan, Saluran, WhatsApp.",
+          "connect": "Buka nomor WhatsApp"
+        },
+        "notEligible": {
+          "title": "Nomor ini belum dapat menggunakan grup",
+          "message": "WhatsApp hanya membuka fitur Grup untuk Akun Bisnis Resmi, yaitu tingkat terverifikasi dengan lencana hijau. Nomor Anda terhubung dan berfungsi untuk chat biasa, tetapi belum diberi akses grup.",
+          "hint": "Ajukan status Akun Bisnis Resmi di WhatsApp Manager, lalu muat ulang halaman ini.",
+          "reload": "Periksa lagi",
+          "checking": "Memeriksa…"
+        },
+        "providerUnsupported": {
+          "title": "Grup tidak tersedia di rute ini",
+          "message": "Nomor ini dijangkau melalui penyedia lain, bukan langsung melalui Meta. Grup hanya disiapkan untuk nomor yang terhubung langsung ke Meta.",
+          "hint": "Hubungkan nomor langsung dengan Meta, atau tanyakan kepada penyedia apakah mereka mendukung Grup."
+        },
+        "missingCredentials": {
+          "title": "Nomor ini perlu dihubungkan ulang",
+          "message": "Tidak ada token akses tersimpan untuk nomor ini, sehingga WhatsApp tidak dapat ditanya tentang grup.",
+          "hint": "Ganti token di halaman kesehatan nomor."
+        },
+        "checkFailed": "WhatsApp tidak dapat ditanya apakah nomor ini dapat menggunakan grup saat ini. Semua di bawah tetap berfungsi jika bisa; jika suatu tindakan gagal, coba lagi sebentar lagi."
+      },
+      "kpi": {
+        "groups": "Grup",
+        "groupsSub": "di nomor ini",
+        "members": "Anggota",
+        "membersSub": "di semua grup",
+        "joinRequests": "Permintaan bergabung",
+        "joinRequestsSub": "menunggu Anda",
+        "suspended": "Ditangguhkan",
+        "suspendedSub": "diblokir oleh WhatsApp"
+      },
+      "create": {
+        "title": "Buat grup",
+        "name": "Nama grup",
+        "nameHint": "Yang dilihat anggota di bagian atas chat. Maksimal 128 karakter.",
+        "who": "Siapa yang dapat bergabung",
+        "whoAuto": "Siapa pun dengan tautan langsung bergabung",
+        "whoApproval": "Anda menyetujui setiap orang terlebih dahulu",
+        "whoHint": "Persetujuan memberi Anda antrean untuk ditinjau sebelum siapa pun diizinkan masuk.",
+        "description": "Deskripsi",
+        "descriptionHint": "Opsional. Ditampilkan di layar info grup.",
+        "submit": "Buat grup",
+        "submitting": "Membuat…"
+      },
+      "list": {
+        "title": "Grup Anda",
+        "empty": "Belum ada grup. Buat satu di atas untuk memulai.",
+        "untitled": "Grup tanpa nama",
+        "members": "{count, plural, =0 {Tidak ada anggota} other {# anggota}}",
+        "approvalRequired": "perlu persetujuan",
+        "suspended": "WhatsApp menangguhkan grup ini. Anda tidak dapat mengirim pesan ke grup hingga mereka memulihkannya.",
+        "creationFailed": "WhatsApp tidak dapat membuat grup ini: {message}",
+        "refresh": "Segarkan",
+        "refreshing": "Menyegarkan…",
+        "delete": "Hapus",
+        "edit": "Edit",
+        "membersButton": "Anggota",
+        "loadMore": "Tampilkan grup lainnya",
+        "loadingMore": "Memuat…"
+      },
+      "link": {
+        "awaiting": "Tautan undangan sedang dibuat oleh WhatsApp…",
+        "label": "Tautan undangan",
+        "copy": "Salin",
+        "copied": "Disalin",
+        "newLink": "Tautan baru"
+      },
+      "joinRequests": {
+        "title": "Menunggu untuk bergabung",
+        "approve": "Setujui",
+        "reject": "Tolak",
+        "working": "…",
+        "hidden": "{count, plural, other {# orang sedang menunggu untuk bergabung.}} Anda memerlukan izin untuk mengelola grup untuk melihat siapa mereka."
+      },
+      "confirm": {
+        "deleteTitle": "Hapus grup ini?",
+        "deleteMessage": "Hapus grup ini dan keluarkan semua anggotanya? Grup yang dihapus tidak dapat dipulihkan. Riwayat chatnya tetap ada di kotak masuk Anda.",
+        "deleteConfirm": "Hapus grup",
+        "linkTitle": "Buat tautan baru?",
+        "linkMessage": "Buat tautan baru? Semua orang yang sudah menerima tautan lama tidak akan dapat menggunakannya.",
+        "linkConfirm": "Buat tautan baru",
+        "cancel": "Batal"
+      },
+      "edit": {
+        "title": "Edit grup",
+        "subject": "Nama grup",
+        "description": "Deskripsi",
+        "hint": "Dikirim ke WhatsApp. Grup akan diperbarui di sini setelah Meta mengonfirmasinya.",
+        "save": "Kirim ke WhatsApp",
+        "saving": "Mengirim…"
+      },
+      "members": {
+        "title": "Anggota {name}",
+        "hint": "Dibaca dari WhatsApp saat Anda membuka jendela ini; tidak ada yang disimpan di sini. Anda dapat menghapus hingga {max} orang sekaligus.",
+        "loading": "Membaca anggota dari WhatsApp…",
+        "empty": "Belum ada anggota.",
+        "selected": "{count} dipilih",
+        "remove": "Hapus yang dipilih",
+        "removing": "Menghapus…",
+        "limit": "Anda hanya dapat menghapus maksimal {max} orang sekaligus.",
+        "removeConfirm": "Hapus {count, plural, other {# orang ini}} dari grup? Mereka tidak dapat bergabung kembali dengan tautan lama."
+      },
+      "notice": {
+        "created": "Grup dibuat. Tautan undangan muncul di sini segera setelah Meta mengeluarkannya.",
+        "refreshed": "Grup diperbarui.",
+        "linkReset": "Tautan undangan baru dibuat. Setiap tautan yang dibagikan sebelumnya tidak berfungsi lagi.",
+        "updateSent": "Pembaruan dikirim ke WhatsApp. Grup akan diperbarui di sini setelah Meta mengonfirmasinya.",
+        "deleted": "Grup dihapus dan setiap peserta dikeluarkan.",
+        "removed": "{count, plural, other {# orang dikeluarkan dari grup.}}",
+        "approved": "{count, plural, other {# orang disetujui.}}",
+        "rejected": "{count, plural, other {# permintaan ditolak.}}",
+        "copyFailed": "Tautan tidak dapat disalin. Pilih lalu salin secara manual."
+      },
+      "removeNumberWarning": "Nomor ini memiliki {count, plural, other {# catatan grup}} di sini. Menghapus nomor akan menghapusnya dari workspace ini. Grup tetap ada di WhatsApp dan chatnya tetap ada di kotak masuk Anda."
+    }
+  }
+}

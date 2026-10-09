@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "스토어 / 결제 게이트웨이",
+      "title": "결제 게이트웨이",
+      "subtitle": "본인의 게이트웨이 키를 추가하면 결제 금액이 내 계정으로 입금됩니다. 게이트웨이 대시보드에 표시된 키를 붙여넣으세요.",
+      "banner": "하나의 게이트웨이 설정이 스토어 결제와 판매 인보이스에 사용됩니다.",
+      "viewOnly": "게이트웨이 설정을 볼 수는 있지만 변경할 수는 없습니다. 워크스페이스 관리자에게 게이트웨이 관리 권한을 요청하세요.",
+      "scope": {
+        "label": "이 설정이 적용되는 범위",
+        "workspace": "워크스페이스(모든 스토어)",
+        "workspaceHint": "스토어에 자체 재정의가 없으면 모든 스토어와 판매 인보이스에서 사용됩니다.",
+        "store": "이 스토어만(재정의)",
+        "storeHint": "{shop}의 결제에서만 사용됩니다. 워크스페이스 설정보다 우선합니다.",
+        "storeNamed": "스토어: {shop}",
+        "noShop": "재정의를 설정하려면 먼저 스토어를 만드세요.",
+        "shop": "스토어"
+      },
+      "resolved": {
+        "used": "현재 사용 중: {name}(출처: {source})",
+        "none": "아직 설정된 게이트웨이가 없습니다",
+        "noneHint": "아래에서 게이트웨이를 설정하고 켜세요. 그때까지는 구매자가 온라인으로 결제할 수 없으며 인보이스에 결제 버튼이 표시되지 않습니다.",
+        "source": {
+          "store_override": "스토어 재정의",
+          "workspace_default": "워크스페이스 기본값",
+          "legacy_storefront": "스토어 키"
+        }
+      },
+      "mode": {
+        "live": "라이브",
+        "test": "테스트"
+      },
+      "catalogue": {
+        "title": "게이트웨이",
+        "count": "게이트웨이 {count, plural, other {#개}}",
+        "search": "게이트웨이 검색",
+        "searchPlaceholder": "이름, 국가 또는 통화로 검색",
+        "loading": "게이트웨이를 불러오는 중",
+        "noDriversTitle": "사용 가능한 게이트웨이가 없습니다",
+        "noDriversMessage": "이 서버에는 설정할 수 있는 결제 게이트웨이가 아직 없습니다.",
+        "noMatchTitle": "일치하는 게이트웨이가 없습니다",
+        "noMatchMessage": "다른 이름, 국가 또는 통화 코드를 시도해 보세요.",
+        "clearSearch": "검색 지우기"
+      },
+      "card": {
+        "available": "사용 가능",
+        "unavailable": "아직 사용할 수 없음",
+        "paymentLinks": "결제 링크",
+        "unavailableNote": "이 게이트웨이는 목록에 있지만 이 버전에서는 아직 결제를 받을 수 없습니다.",
+        "active": "활성",
+        "off": "꺼짐",
+        "incomplete": "키가 불완전함",
+        "default": "기본",
+        "migrated": "스토어프론트 키에서 이전되었습니다. 새 설정에 유지하려면 여기에서 한 번 저장하세요.",
+        "webhookMissing": "웹훅 시크릿이 없습니다. 추가하기 전까지 이 게이트웨이의 결제 알림이 거부됩니다.",
+        "notSetUp": "이 범위에는 아직 설정되지 않았습니다.",
+        "configure": "설정",
+        "edit": "수정",
+        "test": "연결 테스트",
+        "testing": "테스트 중",
+        "setDefault": "기본으로 설정",
+        "activeSwitch": "{name} 켜짐",
+        "remove": "삭제",
+        "removeTitle": "{name}을(를) 삭제할까요?",
+        "removeMessage": "이 범위({scope})에 저장된 키가 삭제됩니다. 구매자는 더 이상 이 게이트웨이로 결제할 수 없으며 진행 중인 결제는 확인되지 않을 수 있습니다.",
+        "removeConfirm": "게이트웨이 삭제"
+      },
+      "toast": {
+        "saved": "게이트웨이가 저장되었습니다",
+        "switchedOn": "{name}이(가) 켜졌습니다",
+        "switchedOff": "{name}이(가) 꺼졌습니다",
+        "defaultSet": "{name}이(가) 이제 기본값입니다",
+        "removed": "{name}이(가) 삭제되었습니다"
+      },
+      "test": {
+        "verified": "제공업체가 키를 승인했습니다.",
+        "fieldsTitle": "필수 필드가 입력되었습니다",
+        "fieldsOnly": "필수 필드만 확인했습니다. 이 게이트웨이에는 간단한 확인 호출이 없으므로 실제 결제가 진짜 테스트입니다.",
+        "missingTitle": "키가 불완전합니다",
+        "missing": "다음 필수 필드가 비어 있습니다: {fields}.",
+        "rejected": "제공업체가 키를 승인하지 않았습니다.",
+        "providerSaid": "제공업체 응답: {message}"
+      },
+      "drawer": {
+        "eyebrow": "게이트웨이 설정",
+        "save": "게이트웨이 저장",
+        "appliesTo": "적용 범위: {scope}",
+        "credentials": "자격 증명",
+        "noFields": "이 게이트웨이에는 키가 필요하지 않습니다.",
+        "secretsNote": "저장된 키는 다시 표시되지 않습니다. 확인용으로 각 키의 끝부분만 표시됩니다.",
+        "requiredField": "{field}은(는) 필수입니다.",
+        "invalidOption": "{field}에 대해 목록의 옵션 중 하나를 선택하세요.",
+        "mode": "모드",
+        "modeHint": "테스트 키로 게이트웨이를 시험하는 동안에는 테스트를, 실제 결제를 받으려면 라이브를 사용하세요.",
+        "active": "활성",
+        "activeHint": "꺼진 게이트웨이는 결제나 인보이스에서 사용되지 않습니다.",
+        "webhookTitle": "웹훅 주소",
+        "webhookHint": "결제가 자동으로 확인되도록 이 주소를 {name} 대시보드에 붙여넣으세요.",
+        "webhookAfterSave": "웹훅 주소는 처음 저장한 후에 여기에 표시됩니다.",
+        "willClear": "저장하면 저장된 값이 제거됩니다.",
+        "keepBlank": "저장된 값을 유지하려면 비워 두세요.",
+        "requiredMark": "(필수)",
+        "stored": "저장됨: {mask}",
+        "keepOption": "저장된 값 유지",
+        "chooseOption": "옵션 선택",
+        "clear": "저장된 값 지우기",
+        "show": "값 표시",
+        "hide": "값 숨기기"
+      }
+    }
+  }
+}

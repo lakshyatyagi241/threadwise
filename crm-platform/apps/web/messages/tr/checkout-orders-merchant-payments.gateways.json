@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "Mağaza / Ödeme ağ geçitleri",
+      "title": "Ödeme ağ geçitleri",
+      "subtitle": "Ödemelerin hesabınıza ulaşması için kendi ağ geçidi anahtarlarınızı ekleyin. Ağ geçidinin panelinde belirtilen anahtarları yapıştırın.",
+      "banner": "Mağaza ödemeniz ve Satış faturaları tek bir ağ geçidi kurulumunu kullanır.",
+      "viewOnly": "Ağ geçidi kurulumunu görebilir ancak değiştiremezsiniz. Ağ geçitlerini yönetme izni için çalışma alanı yöneticisine başvurun.",
+      "scope": {
+        "label": "Bu ayarların geçerli olduğu yer",
+        "workspace": "Çalışma alanı (tüm mağazalar)",
+        "workspaceHint": "Bir mağazanın kendi geçersiz kılması yoksa her mağaza ve Satış faturaları tarafından kullanılır.",
+        "store": "Yalnızca bu mağaza (geçersiz kılma)",
+        "storeHint": "Yalnızca {shop} mağazasının ödemesinde kullanılır. Çalışma alanı kurulumundan önceliklidir.",
+        "storeNamed": "Mağaza: {shop}",
+        "noShop": "Geçersiz kılma ayarlamak için önce bir mağaza oluşturun.",
+        "shop": "Mağaza"
+      },
+      "resolved": {
+        "used": "Şu anda kullanılan: {name} (kaynak: {source})",
+        "none": "Henüz ağ geçidi kurulmadı",
+        "noneHint": "Aşağıda bir ağ geçidi kurup açın. O zamana kadar alıcılar çevrimiçi ödeme yapamaz ve faturalarda ödeme düğmesi olmaz.",
+        "source": {
+          "store_override": "mağaza geçersiz kılması",
+          "workspace_default": "çalışma alanı varsayılanı",
+          "legacy_storefront": "mağaza anahtarları"
+        }
+      },
+      "mode": {
+        "live": "Canlı",
+        "test": "Test"
+      },
+      "catalogue": {
+        "title": "Ağ geçitleri",
+        "count": "{count, plural, one {# ağ geçidi} other {# ağ geçidi}}",
+        "search": "Ağ geçitlerinde ara",
+        "searchPlaceholder": "Ada, ülkeye veya para birimine göre ara",
+        "loading": "Ağ geçitleri yükleniyor",
+        "noDriversTitle": "Kullanılabilir ağ geçidi yok",
+        "noDriversMessage": "Bu sunucuda henüz kurulabilecek ödeme ağ geçidi yok.",
+        "noMatchTitle": "Eşleşen ağ geçidi yok",
+        "noMatchMessage": "Başka bir ad, ülke veya para birimi kodu deneyin.",
+        "clearSearch": "Aramayı temizle"
+      },
+      "card": {
+        "available": "Kullanılabilir",
+        "unavailable": "Henüz kullanılamıyor",
+        "paymentLinks": "Ödeme bağlantıları",
+        "unavailableNote": "Bu ağ geçidi listelenmiş ancak bu sürümde henüz ödeme alamıyor.",
+        "active": "Etkin",
+        "off": "Kapalı",
+        "incomplete": "Anahtarlar eksik",
+        "default": "Varsayılan",
+        "migrated": "Mağaza vitrini anahtarlarınızdan taşındı. Yeni kurulumda korumak için burada bir kez kaydedin.",
+        "webhookMissing": "Webhook gizli anahtarı eksik: siz bir tane ekleyene kadar bu ağ geçidinden gelen ödeme bildirimleri reddedilir.",
+        "notSetUp": "Bu kapsam için henüz kurulmadı.",
+        "configure": "Yapılandır",
+        "edit": "Düzenle",
+        "test": "Bağlantıyı test et",
+        "testing": "Test ediliyor",
+        "setDefault": "Varsayılan yap",
+        "activeSwitch": "{name} açık",
+        "remove": "Kaldır",
+        "removeTitle": "{name} kaldırılsın mı?",
+        "removeMessage": "Kayıtlı anahtarları bu kapsam için ({scope}) silinir. Alıcılar artık bunun üzerinden ödeme yapamaz ve devam eden ödemeler onaylanmayabilir.",
+        "removeConfirm": "Ağ geçidini kaldır"
+      },
+      "toast": {
+        "saved": "Ağ geçidi kaydedildi",
+        "switchedOn": "{name} açıldı",
+        "switchedOff": "{name} kapatıldı",
+        "defaultSet": "{name} artık varsayılan",
+        "removed": "{name} kaldırıldı"
+      },
+      "test": {
+        "verified": "Sağlayıcı anahtarları kabul etti.",
+        "fieldsTitle": "Gerekli alanlar dolu",
+        "fieldsOnly": "Yalnızca gerekli alanlar kontrol edildi: bu ağ geçidinin hafif bir kontrol çağrısı yok, bu yüzden gerçek test bir ödemedir.",
+        "missingTitle": "Anahtarlar eksik",
+        "missing": "Bu gerekli alanlar boş: {fields}.",
+        "rejected": "Sağlayıcı anahtarları kabul etmedi.",
+        "providerSaid": "Sağlayıcının yanıtı: {message}"
+      },
+      "drawer": {
+        "eyebrow": "Ağ geçidini yapılandır",
+        "save": "Ağ geçidini kaydet",
+        "appliesTo": "Geçerli olduğu yer: {scope}",
+        "credentials": "Kimlik bilgileri",
+        "noFields": "Bu ağ geçidi için anahtar gerekmez.",
+        "secretsNote": "Kayıtlı anahtarlar bir daha gösterilmez. Hatırlatma olarak yalnızca her birinin sonu görüntülenir.",
+        "requiredField": "{field} zorunludur.",
+        "invalidOption": "{field} için listelenen seçeneklerden birini seçin.",
+        "mode": "Mod",
+        "modeHint": "Ağ geçidini test anahtarlarıyla denerken Test'i, gerçek ödeme almak için Canlı'yı kullanın.",
+        "active": "Etkin",
+        "activeHint": "Kapalı bir ağ geçidi ödemede veya faturalarda asla kullanılmaz.",
+        "webhookTitle": "Webhook adresi",
+        "webhookHint": "Ödemelerin otomatik onaylanması için bunu {name} panelinize yapıştırın.",
+        "webhookAfterSave": "Webhook adresi ilk kayıttan sonra burada görünür.",
+        "willClear": "Kaydettiğinizde kayıtlı değer kaldırılacak.",
+        "keepBlank": "Kayıtlı değeri korumak için boş bırakın.",
+        "requiredMark": "(zorunlu)",
+        "stored": "Kayıtlı: {mask}",
+        "keepOption": "Kayıtlı değeri koru",
+        "chooseOption": "Bir seçenek seçin",
+        "clear": "Kayıtlı değeri temizle",
+        "show": "Değeri göster",
+        "hide": "Değeri gizle"
+      }
+    }
+  }
+}

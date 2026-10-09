@@ -1,0 +1,924 @@
+{
+  "marketplace": {
+    "operator": {
+      "nav": {
+        "group": "Marketplace",
+        "catalogue": "Katalog",
+        "categories": "Kategori",
+        "requests": "Permintaan",
+        "usage": "Penggunaan"
+      },
+      "common": {
+        "loading": "Memuat...",
+        "requestId": "ID permintaan",
+        "retry": "Coba lagi",
+        "noPermissions": "Tidak ada izin"
+      },
+      "enums": {
+        "kind": {
+          "mini_app": "Aplikasi mini",
+          "integration": "Integrasi"
+        },
+        "appStatus": {
+          "draft": "Draf",
+          "in_review": "Dalam tinjauan",
+          "published": "Dipublikasikan",
+          "hidden": "Disembunyikan",
+          "killed": "Dimatikan paksa"
+        },
+        "versionStatus": {
+          "draft": "Draf",
+          "in_review": "Dalam tinjauan",
+          "approved": "Disetujui",
+          "rejected": "Ditolak",
+          "published": "Dipublikasikan",
+          "retired": "Dipensiunkan"
+        },
+        "requestStatus": {
+          "open": "Terbuka",
+          "planned": "Direncanakan",
+          "building": "Sedang dibangun",
+          "shipped": "Dikirim",
+          "declined": "Ditolak"
+        },
+        "connector": {
+          "oauth": "Masuk OAuth",
+          "push": "Dorong (portal mengirim ke kami)",
+          "pull": "Tarik (kami melakukan polling ke portal)",
+          "email_parse": "Penguraian email",
+          "webhook_relay": "Relay webhook",
+          "client": "Klien (dipasang oleh anggota)"
+        },
+        "risk": {
+          "low": "Risiko rendah",
+          "medium": "Risiko sedang",
+          "high": "Risiko tinggi"
+        },
+        "subscriptionStatus": {
+          "active": "Membayar",
+          "trialing": "Uji coba",
+          "comped": "Diberikan gratis",
+          "canceling": "Akan berakhir",
+          "ended": "Berakhir"
+        },
+        "subscriptionSource": {
+          "purchase": "Pembelian",
+          "trial": "Uji coba",
+          "comp": "Gratis"
+        }
+      },
+      "errors": {
+        "conflict": "Orang lain mengubah ini saat Anda melihatnya. Muat ulang untuk melihat versi mereka, lalu lakukan perubahan lagi.",
+        "noAccess": "Anda memerlukan izin platform {permission} untuk ini.",
+        "manifestInvalid": "Manifes tidak mengikuti manifes v1. Setiap masalah ditampilkan beserta jalurnya.",
+        "recipeInvalid": "Resep tidak mengikuti format resep, atau tidak cocok dengan manifes. Setiap masalah ditampilkan beserta jalurnya.",
+        "urlRefused": "Sebuah alamat di resep ditolak: {detail}.",
+        "urlRefusedPlain": "Sebuah alamat di resep ditolak. Alamat harus https, nama DNS publik, pada port default, dan tanpa kredensial.",
+        "connectorNotAvailable": "Jenis konektor {type} belum diimplementasikan, sehingga daftar ini tidak dapat dipublikasikan. Tidak ada yang tidak berfungsi yang sampai ke workspace.",
+        "slugTaken": "Daftar atau kategori lain sudah menggunakan ID itu. Pilih yang berbeda.",
+        "categoryGone": "Kategori itu sudah tidak ada. Muat ulang daftar.",
+        "categoryUnknown": "Kategori yang disebut dalam manifes tidak ada untuk jenis aplikasi ini, atau dinonaktifkan. Pilih salah satu dari halaman Kategori.",
+        "categoryInUse": "Aplikasi dicantumkan di kategori ini. Pindahkan dulu ke kategori lain, atau nonaktifkan kategori untuk menyembunyikannya dari workspace.",
+        "versionState": "Ini tidak diizinkan selama daftar atau versi berstatus {status}. Muat ulang untuk melihat statusnya saat ini.",
+        "versionStatePlain": "Ini tidak diizinkan dalam status daftar atau versi saat ini. Muat ulang untuk melihat statusnya.",
+        "versionExists": "Nomor versi harus lebih tinggi dari {newest}, versi tertinggi sejauh ini.",
+        "versionExistsPlain": "Nomor versi itu sudah ada. Gunakan yang lebih tinggi.",
+        "appUnavailable": "Daftar yang dimatikan paksa tidak dapat dipublikasikan. Pulihkan dulu, lalu publikasikan.",
+        "appNotFound": "Daftar ini tidak ada. Mungkin sudah dihapus.",
+        "notFound": "Item itu tidak ditemukan. Mungkin sudah dihapus.",
+        "rateLimited": "Terlalu banyak permintaan. Tunggu {seconds} detik lalu coba lagi.",
+        "rateLimitedPlain": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+        "validationFields": "Beberapa kolom tidak valid. Setiap masalah ditampilkan beserta kolomnya.",
+        "validation": "Permintaan tidak valid.",
+        "request": "Permintaan tidak dapat diselesaikan.",
+        "unexpected": "Terjadi kesalahan di pihak kami. Coba lagi; jika terus terjadi, sertakan ID permintaan.",
+        "subscriptionState": "Itu tidak mungkin dilakukan dalam status langganan saat ini. Workspace yang sudah membayar tidak dapat diberi akses gratis (batalkan langganannya dulu), aplikasi gratis tidak punya yang perlu diberikan gratis, dan langganan yang sudah berakhir tidak dapat dibatalkan lagi.",
+        "subscriptionNotFound": "Langganan itu tidak ditemukan. Mungkin sudah dihapus. Muat ulang daftar."
+      },
+      "list": {
+        "title": "Katalog Marketplace",
+        "description": "Setiap daftar dalam status apa pun: aplikasi mini dan integrasi, versinya, dan berapa banyak workspace yang memasangnya.",
+        "new": "Daftar baru",
+        "subscriptionsLink": "Langganan dan pendapatan",
+        "kpi": {
+          "label": "Daftar menurut status",
+          "loaded": "Dimuat",
+          "published": "Dipublikasikan",
+          "inReview": "Dalam tinjauan",
+          "hidden": "Disembunyikan",
+          "killed": "Dimatikan paksa",
+          "note": "Jumlah ini mencakup {count} daftar yang sudah dimuat, bukan seluruh katalog.",
+          "noteMore": "Masih ada lagi: gunakan Muat lainnya."
+        },
+        "filters": {
+          "label": "Filter",
+          "search": "Cari",
+          "searchPlaceholder": "Nama atau ID",
+          "kind": "Jenis",
+          "allKinds": "Semua jenis",
+          "status": "Status",
+          "allStatuses": "Semua status",
+          "category": "Kategori",
+          "allCategories": "Semua kategori",
+          "categoryNote": "Memfilter daftar yang sudah dimuat: API tidak memiliki filter kategori.",
+          "pricing": "Harga",
+          "allPricing": "Semua harga",
+          "free": "Gratis",
+          "paid": "Berbayar"
+        },
+        "cols": {
+          "app": "Aplikasi",
+          "kind": "Jenis",
+          "category": "Kategori",
+          "status": "Status",
+          "versions": "Versi",
+          "installs": "Pemasangan",
+          "planFeature": "Fitur paket",
+          "pricing": "Harga",
+          "subscriptions": "Langganan aktif"
+        },
+        "badges": {
+          "firstParty": "Buatan kami",
+          "featured": "Unggulan"
+        },
+        "versionPublished": "Dipublikasikan",
+        "versionLatest": "Terbaru",
+        "dash": "-",
+        "everyPlan": "Semua paket",
+        "killedReason": "Dimatikan paksa: {reason}",
+        "loadMore": "Muat lainnya",
+        "clearFilters": "Hapus filter",
+        "emptyTitle": "Belum ada daftar",
+        "emptyMessage": "Buat daftar pertama untuk memulai katalog.",
+        "noMatchTitle": "Tidak ada daftar yang cocok",
+        "noMatchMessage": "Tidak ada yang cocok dengan filter ini. Coba filter lain.",
+        "noMatchMoreMessage": "Belum ada daftar yang dimuat cocok. Masih ada lagi: muat, atau ubah filter.",
+        "tableCaption": "Daftar Marketplace",
+        "viewSubscriptions": "Langganan ke {name}"
+      },
+      "new": {
+        "title": "Daftar baru",
+        "description": "Buat daftar draf dengan versi pertamanya. Tidak ada yang sampai ke workspace sampai peninjau menyetujui dan mempublikasikannya.",
+        "back": "Kembali ke katalog",
+        "sections": {
+          "docs": "Manifes dan resep",
+          "docsHelp": "Manifes menyatakan siapa aplikasinya, apa yang boleh dilakukannya, dan konektor mana yang digunakannya. Integrasi juga memerlukan resep. Keduanya diperiksa saat Anda mengetik, dengan aturan yang diterapkan server.",
+          "changelog": "Catatan versi pertama",
+          "changelogHelp": "Ditampilkan ke admin sebagai isi versi pertama."
+        },
+        "changelog": "Changelog",
+        "changelogHint": "Opsional, hingga {max} karakter. Jika dikosongkan, tertulis Versi pertama.",
+        "save": "Buat daftar",
+        "saving": "Membuat...",
+        "cancel": "Batal",
+        "created": "Daftar {name} dibuat sebagai draf.",
+        "draftNote": "Daftar dimulai sebagai draf. Ajukan versinya untuk ditinjau dari halaman daftar."
+      },
+      "editor": {
+        "cancel": "Batal",
+        "format": "Format",
+        "problemCount": "{count, plural, other {# masalah perlu diperbaiki}}",
+        "valid": {
+          "manifest": "Manifes v1 valid.",
+          "recipe": "Resep valid."
+        },
+        "manifest": {
+          "label": "Manifes (JSON)",
+          "hint": "Manifes v1: id, name, kind, category, version, description, scopes, pricing, support, connector."
+        },
+        "recipe": {
+          "label": "Resep (JSON)",
+          "hint": "Resep konektor sebuah integrasi: connector, authFields, mapping, rateLimits, errorMapping, setupInstructions, testPayloads.",
+          "insertStarter": "Sisipkan resep awal"
+        },
+        "scopes": {
+          "title": "Izin yang diminta versi ini",
+          "help": "Yang diminta dari admin untuk diterima, dalam bahasa sederhana. Minta yang paling sedikit yang masih berfungsi."
+        },
+        "templates": {
+          "title": "Mulai dari templat",
+          "help": "Mengisi kedua editor dengan titik awal yang valid untuk Anda ubah.",
+          "mini_app": "Aplikasi mini",
+          "webhook_relay": "Integrasi: relay webhook",
+          "push": "Integrasi: dorong",
+          "replaceTitle": "Ganti isi editor?",
+          "replaceBody": "Manifes dan resep yang Anda ketik akan diganti dengan templat.",
+          "replaceAction": "Ganti"
+        },
+        "problems": {
+          "listLabel": "Masalah",
+          "errorLabel": "Error:",
+          "warningLabel": "Peringatan:",
+          "syntax": "Bukan JSON yang valid.",
+          "syntaxAt": "Bukan JSON yang valid, dekat baris {line}, kolom {column}.",
+          "empty": "Dokumen ini kosong.",
+          "recipeNotAllowed": "Aplikasi mini tidak memiliki resep: kosongkan editor ini.",
+          "recipeMissing": "Integrasi memerlukan resep sebelum dapat diajukan untuk ditinjau.",
+          "recipeKeyMismatch": "Harus sama dengan ID manifes: {expected}.",
+          "recipeCategoryMismatch": "Harus sama dengan kategori manifes: {expected}.",
+          "recipeConnectorMismatch": "Harus sama dengan jenis konektor manifes: {expected}.",
+          "idChanged": "ID daftar yang sudah ada tidak dapat diubah: harus tetap {expected}.",
+          "kindChanged": "Jenis daftar yang sudah ada tidak dapat diubah: harus tetap {expected}.",
+          "versionNotHigher": "Versi harus lebih tinggi dari {newest}, versi tertinggi sejauh ini.",
+          "versionTaken": "Versi lain dari daftar ini sudah menggunakan {version}.",
+          "categoryUnknown": "Tidak ada kategori {kind} aktif {category}. Periksa halaman Kategori.",
+          "categoryRefused": "Server menolak kategori ini: tidak ada untuk jenis ini, atau dinonaktifkan.",
+          "recipeRequired": "Integrasi memerlukan resepnya.",
+          "slugTaken": "Daftar lain sudah menggunakan ID ini."
+        }
+      },
+      "fields": {
+        "sections": {
+          "page": "Halaman daftar",
+          "pageHelp": "Yang dibaca admin di halaman aplikasi.",
+          "screenshots": "Tangkapan layar",
+          "screenshotsHelp": "Hingga {max} gambar ditampilkan di halaman aplikasi. Hanya tautan https.",
+          "data": "Pengungkapan pemrosesan data",
+          "dataHelp": "Apa yang disimpan aplikasi, di mana, dan bagaimana penghapusannya: pernyataan yang ditampilkan di halaman aplikasi.",
+          "placement": "Penempatan dan akses",
+          "placementHelp": "Bagaimana peringkatnya, dan paket mana yang dapat memasangnya."
+        },
+        "tagline": "Tagline",
+        "taglineHint": "{count} dari {max} karakter (minimal 5).",
+        "logo": "Alamat logo",
+        "logoHint": "Tautan gambar https. Integrasi tanpa ini akan memakai logo dari resepnya.",
+        "longDescription": "Deskripsi panjang",
+        "longDescriptionHint": "Teks biasa; baris kosong memisahkan paragraf. Hingga {max} karakter.",
+        "highlights": "Sorotan",
+        "highlightsHint": "Satu per baris: hingga {max}, masing-masing hingga {length} karakter.",
+        "screenshotUrl": "Alamat tangkapan layar {n}",
+        "screenshotCaption": "Keterangan tangkapan layar {n}",
+        "screenshotRemove": "Hapus tangkapan layar {n}",
+        "screenshotAdd": "Tambah tangkapan layar",
+        "screenshotsNone": "Tidak ada tangkapan layar.",
+        "dataSummary": "Yang disimpan",
+        "dataSummaryHint": "Hingga {max} karakter.",
+        "dataRegions": "Wilayah",
+        "dataRegionsHint": "Dipisahkan koma, hingga {max}, misalnya India, EU.",
+        "dataDeletion": "Cara penghapusan data",
+        "dataDeletionHint": "Hingga {max} karakter.",
+        "firstParty": "Buatan kami",
+        "firstPartyHint": "Dibuat dan dijalankan oleh kami: ditampilkan dengan lencana buatan kami.",
+        "featured": "Unggulan",
+        "featuredHint": "Ditampilkan di rak unggulan.",
+        "planFeature": "Fitur paket",
+        "planFeatureHint": "Workspace memerlukan fitur ini di paketnya, atau melalui add-on, untuk memasang aplikasi. Label berasal dari katalog paket.",
+        "planFeatureNone": "Semua paket",
+        "sortOrder": "Urutan",
+        "sortOrderHint": "Bilangan bulat dari 0 hingga {max}; yang lebih kecil tampil lebih dulu.",
+        "problems": {
+          "required": "Ini wajib diisi.",
+          "tooShort": "Minimal {min} karakter.",
+          "tooLong": "Paling banyak {max} karakter.",
+          "https": "Gunakan alamat https:// lengkap.",
+          "tooMany": "Paling banyak {max} entri.",
+          "number": "Gunakan bilangan bulat dari 0 hingga {max}.",
+          "unknownFeature": "Gunakan huruf kecil, angka, dan garis bawah, dimulai dengan huruf.",
+          "slug": "Gunakan 2 hingga 48 huruf kecil, angka, atau tanda hubung, dimulai dengan huruf.",
+          "icon": "Gunakan 1 hingga 32 huruf kecil, angka, atau tanda hubung."
+        }
+      },
+      "summary": {
+        "title": "Perbaiki ini sebelum menyimpan",
+        "sentTitle": "Server tidak menyimpan ini",
+        "manifest": "{count, plural, other {# masalah di manifes}}",
+        "recipe": "{count, plural, other {# masalah di resep}}",
+        "fields": "{count, plural, other {# masalah di kolom daftar}}"
+      },
+      "detail": {
+        "title": "Daftar",
+        "back": "Kembali ke katalog",
+        "firstParty": "Buatan kami",
+        "featured": "Unggulan",
+        "none": "Tidak ada",
+        "everyPlan": "Semua paket",
+        "kpi": {
+          "installs": "Pemasangan",
+          "published": "Versi yang dipublikasikan",
+          "latest": "Versi terbaru",
+          "versions": "Versi"
+        },
+        "facts": {
+          "kind": "Jenis",
+          "category": "Kategori",
+          "connector": "Konektor",
+          "planFeature": "Fitur paket"
+        },
+        "tabs": {
+          "overview": "Daftar",
+          "versions": "Versi ({count})"
+        },
+        "operate": {
+          "title": "Operasikan",
+          "description": "Sembunyikan, matikan paksa, pulihkan, atau hapus daftar. Setiap tindakan meminta konfirmasi.",
+          "lacking": "Beberapa tindakan disembunyikan karena peran Anda tidak mencakup {permission}."
+        },
+        "killed": {
+          "title": "Daftar ini dimatikan paksa",
+          "reason": "Alasan",
+          "effect": "Setiap pemasangan dihentikan dan setiap alamat pengiriman menjawab 410. Workspace hanya dapat mencopot."
+        },
+        "notice": {
+          "killedTitle": "{name} dimatikan paksa",
+          "killedBody": "{count, plural, other {# pemasangan dinonaktifkan.}}",
+          "publishedTitle": "{name} {version} dipublikasikan",
+          "publishedUpgraded": "{count, plural, other {# pemasangan langsung pindah ke versi ini.}}",
+          "publishedWaiting": "{count, plural, other {# pemasangan tetap di versi saat ini sampai adminnya menerima izin baru.}}",
+          "dismiss": "Tutup"
+        }
+      },
+      "edit": {
+        "readOnly": "Hanya baca. Mengedit daftar memerlukan izin platform {permission}.",
+        "conflict": "Orang lain menyimpan daftar ini saat Anda mengeditnya. Muat ulang untuk melihat versi mereka, lalu lakukan perubahan lagi.",
+        "reload": "Muat ulang",
+        "save": "Simpan perubahan",
+        "saving": "Menyimpan...",
+        "discard": "Batalkan perubahan",
+        "nothingToSave": "Belum ada perubahan.",
+        "saved": "{name} disimpan."
+      },
+      "actions": {
+        "cancel": "Batal",
+        "hide": "Sembunyikan",
+        "unhide": "Tampilkan lagi",
+        "unkill": "Pulihkan",
+        "delete": "Hapus",
+        "kill": "Sakelar darurat",
+        "confirm": {
+          "hide": {
+            "title": "Sembunyikan {name}?",
+            "body": "{name} tidak lagi muncul saat menjelajah dan mencari, sehingga workspace baru tidak menemukannya. Pemasangan yang ada tetap berfungsi.",
+            "action": "Sembunyikan"
+          },
+          "unhide": {
+            "title": "Tampilkan {name} lagi?",
+            "body": "{name} muncul lagi saat menjelajah dan mencari dengan versi yang dipublikasikan.",
+            "action": "Tampilkan lagi"
+          },
+          "unkill": {
+            "title": "Pulihkan {name}?",
+            "body": "{name} menjadi tersembunyi agar dapat diperbaiki dan dipublikasikan lagi. Pemasangan yang dimatikan paksa tetap nonaktif: workspace harus memasangnya lagi.",
+            "action": "Pulihkan"
+          },
+          "delete": {
+            "title": "Hapus {name}?",
+            "body": "Ini menghapus permanen daftar draf beserta versinya. Daftar yang pernah dipublikasikan atau dipasang tidak dapat dihapus: sembunyikan saja.",
+            "action": "Hapus daftar"
+          }
+        },
+        "done": {
+          "hide": "{name} disembunyikan.",
+          "unhide": "{name} terlihat lagi.",
+          "unkill": "{name} dipulihkan sebagai tersembunyi.",
+          "kill": "{name} dimatikan paksa.",
+          "delete": "{name} dihapus."
+        }
+      },
+      "killDialog": {
+        "eyebrow": "Sakelar darurat",
+        "title": "Matikan paksa {name}?",
+        "close": "Tutup",
+        "cancel": "Batal",
+        "confirm": "Matikan paksa {name}",
+        "installs": "{name} dipasang di {count, plural, other {# workspace}}.",
+        "effects": {
+          "stop": "Setiap pemasangan langsung berhenti bekerja.",
+          "connections": "Setiap koneksi dinonaktifkan.",
+          "address": "Alamat pengiriman menjawab 410 Gone mulai dari permintaan berikutnya.",
+          "uninstall": "Workspace hanya dapat mencopotnya."
+        },
+        "undo": "Memulihkan daftar nanti akan membuatnya tersembunyi. Pemasangan yang dimatikan paksa tetap nonaktif dan workspace harus memasangnya lagi.",
+        "reason": "Alasan",
+        "reasonHint": "Antara {min} dan {max} karakter. Disimpan di jejak audit dan ditampilkan ke setiap workspace.",
+        "count": "{count} dari {max} karakter (minimal {min}).",
+        "typeSlug": "Ketik {slug} untuk mengonfirmasi",
+        "typeSlugHint": "ID daftar, persis seperti yang ditampilkan."
+      },
+      "versions": {
+        "title": "Versi",
+        "description": "Setiap versi daftar ini. Pilih satu untuk melihat manifes, resep, dan tindakannya.",
+        "newVersion": "Versi baru",
+        "newVersionHint": "Versi baru dimulai dari versi yang sedang Anda lihat ({version}) dengan nomor yang dinaikkan. Harus lebih tinggi dari setiap versi sebelumnya.",
+        "tableCaption": "Versi daftar ini",
+        "cols": {
+          "version": "Versi",
+          "status": "Status",
+          "changelog": "Changelog",
+          "scopes": "Izin",
+          "reviewNote": "Catatan tinjauan",
+          "dates": "Tanggal"
+        },
+        "viewing": "Melihat",
+        "none": "-",
+        "dates": {
+          "created": "Dibuat",
+          "submitted": "Diajukan",
+          "reviewed": "Ditinjau",
+          "published": "Dipublikasikan"
+        },
+        "selectedTitle": "Versi {version}",
+        "selectedHelp": "Izin, manifes, dan resepnya sebagaimana tersimpan. Tindakannya mengikuti status versi dan izin Anda.",
+        "edit": "Edit",
+        "newFrom": "Versi baru dari yang ini",
+        "submit": "Ajukan untuk ditinjau",
+        "approve": "Setujui",
+        "reject": "Tolak",
+        "publish": "Publikasikan",
+        "rejectedNote": "Alasan peninjau (ditampilkan ke pengembang)",
+        "recipeMissing": "Integrasi ini belum memiliki resep. Tambahkan dulu sebelum diajukan untuk ditinjau.",
+        "permissions": "Izin",
+        "manifest": "Manifes",
+        "recipe": "Resep",
+        "noRecipeIntegration": "Tidak ada resep yang tersimpan untuk versi ini.",
+        "noRecipeMiniApp": "Aplikasi mini tidak memiliki resep.",
+        "done": {
+          "submit": "Versi {version} diajukan untuk ditinjau.",
+          "approve": "Versi {version} disetujui.",
+          "reject": "Versi {version} ditolak.",
+          "publish": "Versi {version} dipublikasikan.",
+          "created": "Versi {version} disimpan sebagai draf.",
+          "updated": "Versi {version} diperbarui."
+        }
+      },
+      "versionEditor": {
+        "newTitle": "Versi baru",
+        "newHelp": "Dimulai dari versi yang Anda lihat, dengan nomor yang dinaikkan. Ubah manifes dan resep, lalu jelaskan apa yang berubah.",
+        "editTitle": "Edit versi",
+        "editHelp": "Menggantikan manifes dan resep versi ini. Versi yang ditolak kembali ke draf saat disimpan.",
+        "changelog": "Changelog",
+        "changelogHint": "Apa yang berubah di versi ini. Admin membacanya. Hingga {max} karakter.",
+        "saveNew": "Simpan versi baru",
+        "saveEdit": "Simpan perubahan",
+        "saving": "Menyimpan...",
+        "cancel": "Batal"
+      },
+      "versionDialogs": {
+        "approve": {
+          "title": "Setujui {name} {version}?",
+          "close": "Tutup",
+          "cancel": "Batal",
+          "confirm": "Setujui",
+          "body": "Versi yang disetujui kemudian dapat dipublikasikan. Menyetujui tidak mengubah apa yang dilihat workspace.",
+          "note": "Catatan (opsional)",
+          "noteHint": "Disimpan bersama versi. Hingga {max} karakter."
+        },
+        "reject": {
+          "title": "Tolak {name} {version}?",
+          "close": "Tutup",
+          "cancel": "Batal",
+          "confirm": "Tolak versi",
+          "body": "Alasannya ditampilkan ke pengembang. Mereka mengedit versi dan mengajukannya lagi.",
+          "note": "Alasan",
+          "noteHint": "Minimal {min} dan paling banyak {max} karakter.",
+          "count": "{count} dari {max} karakter (minimal {min})."
+        },
+        "publish": {
+          "title": "Publikasikan {name} {version}?",
+          "cancel": "Batal",
+          "confirm": "Publikasikan {version}",
+          "body": "{name} {version} menjadi versi yang didapat setiap pemasangan baru.",
+          "effects": {
+            "retire": "Versi yang dipublikasikan sebelumnya dipensiunkan.",
+            "moveSame": "Pemasangan yang izinnya sudah mencakup versi ini langsung pindah ke sana.",
+            "moveMore": "Pemasangan yang meminta lebih banyak tetap berjalan di versi saat ini sampai adminnya menerima daftar izin baru.",
+            "killed": "Pemasangan yang dimatikan paksa tidak tersentuh."
+          },
+          "installs": "{count, plural, other {# pemasangan terdampak.}}",
+          "first": "Ini adalah versi pertama yang dipublikasikan.",
+          "addedScopes": "{count, plural, other {Ia meminta # izin yang tidak dimiliki versi yang dipublikasikan:}}"
+        }
+      },
+      "categories": {
+        "title": "Kategori",
+        "description": "Kategori dari kedua tab Marketplace. Kategori yang dinonaktifkan disembunyikan dari workspace; yang masih memiliki aplikasi tidak dapat dihapus.",
+        "new": "Kategori baru",
+        "emptyTitle": "Belum ada kategori",
+        "emptyMessage": "Tambahkan kategori sebelum membuat daftar: setiap daftar termasuk satu kategori.",
+        "groupCount": "{count, plural, other {# kategori}}",
+        "groupEmpty": "Belum ada kategori untuk jenis ini.",
+        "tableCaption": "Kategori",
+        "cols": {
+          "name": "Nama",
+          "slug": "ID",
+          "icon": "Ikon",
+          "order": "Urutan",
+          "apps": "Aplikasi",
+          "status": "Status",
+          "actions": "Tindakan"
+        },
+        "dash": "-",
+        "active": "Aktif",
+        "inactive": "Disembunyikan dari workspace",
+        "edit": "Edit",
+        "delete": "Hapus",
+        "inUse": "Memiliki aplikasi",
+        "form": {
+          "createTitle": "Kategori baru",
+          "editTitle": "Edit {name}",
+          "close": "Tutup",
+          "cancel": "Batal",
+          "create": "Buat kategori",
+          "save": "Simpan perubahan",
+          "kind": "Jenis",
+          "kinds": {
+            "mini_app": "Aplikasi mini",
+            "integration": "Integrasi"
+          },
+          "kindLocked": "Jenis tidak dapat diubah.",
+          "slug": "ID (slug)",
+          "slugHint": "2 hingga 48 huruf kecil, angka, atau tanda hubung, dimulai dengan huruf. Tidak dapat diubah nanti.",
+          "slugLocked": "ID tidak dapat diubah setelah dibuat.",
+          "name": "Nama",
+          "nameHint": "{min} hingga {max} karakter.",
+          "descriptionField": "Deskripsi",
+          "descriptionHint": "Opsional, hingga {max} karakter.",
+          "icon": "Ikon",
+          "iconHint": "Nama ikon opsional: huruf kecil, angka, dan tanda hubung.",
+          "sortOrder": "Urutan",
+          "sortOrderHint": "Bilangan bulat dari 0 hingga {max}; yang lebih kecil tampil lebih dulu.",
+          "active": "Aktif",
+          "activeHint": "Dinonaktifkan, kategori disembunyikan dari workspace. Aplikasinya tetap menggunakannya.",
+          "conflict": "Orang lain mengubah kategori ini. Muat ulang untuk melihat versi mereka, lalu lakukan perubahan lagi.",
+          "reload": "Muat ulang",
+          "created": "Kategori {name} dibuat.",
+          "saved": "Kategori {name} disimpan."
+        },
+        "deleteDialog": {
+          "title": "Hapus {name}?",
+          "body": "{name} tidak memiliki aplikasi. Menghapusnya berarti menghapusnya selamanya.",
+          "action": "Hapus kategori",
+          "cancel": "Batal",
+          "done": "Kategori {name} dihapus."
+        }
+      },
+      "requests": {
+        "title": "Permintaan",
+        "description": "Yang diminta workspace, yang paling banyak dipilih dulu. Urutan pembuatan mengikuti daftar ini.",
+        "readOnly": "Hanya baca. Triase memerlukan izin platform {permission}.",
+        "filters": {
+          "label": "Filter",
+          "search": "Cari",
+          "searchPlaceholder": "Nama",
+          "kind": "Jenis",
+          "allKinds": "Semua jenis",
+          "status": "Status",
+          "allStatuses": "Semua status"
+        },
+        "clearFilters": "Hapus filter",
+        "emptyTitle": "Belum ada permintaan",
+        "emptyMessage": "Saat workspace meminta integrasi, itu akan muncul di sini beserta suaranya.",
+        "noMatchTitle": "Tidak ada permintaan yang cocok",
+        "noMatchMessage": "Tidak ada yang cocok dengan filter ini.",
+        "loadMore": "Muat lebih banyak",
+        "tableCaption": "Permintaan berdasarkan suara",
+        "cols": {
+          "votes": "Suara",
+          "request": "Permintaan",
+          "notes": "Catatan workspace",
+          "firstWorkspace": "Pertama ditanyakan oleh",
+          "status": "Status",
+          "actions": "Tindakan"
+        },
+        "votes": "{count, plural, other {# suara}}",
+        "noNotes": "Tidak ada catatan.",
+        "dash": "-",
+        "operatorNote": "Catatan Anda: {note}",
+        "triageAction": "Triase",
+        "triage": {
+          "title": "Triase {name}",
+          "close": "Tutup",
+          "cancel": "Batal",
+          "save": "Simpan",
+          "saved": "{name} disimpan.",
+          "votes": "{count, plural, other {# suara}}",
+          "status": "Status",
+          "note": "Catatan operator",
+          "noteHint": "Opsional, maksimal {max} karakter. Hanya operator yang dapat melihatnya.",
+          "noteTooLong": "Maksimal {max} karakter.",
+          "conflict": "Permintaan ini telah diperbarui orang lain. Muat ulang untuk melihat versinya, lalu ulangi perubahan Anda.",
+          "reload": "Muat ulang"
+        }
+      },
+      "usage": {
+        "title": "Penggunaan dan kondisi",
+        "description": "Per aplikasi: pemasangan menurut status dan kondisi, serta pengiriman yang diterima, diulang, ditolak, dan gagal dalam 24 jam dan 7 hari terakhir.",
+        "kpi": {
+          "apps": "Aplikasi",
+          "installs": "Pemasangan",
+          "activeHint": "{count} aktif",
+          "needsLook": "Perlu diperiksa",
+          "failed7d": "Pengiriman gagal (7 hari)"
+        },
+        "sort": {
+          "label": "Urutkan berdasarkan",
+          "failed": "Pengiriman gagal terbanyak",
+          "installs": "Pemasangan terbanyak",
+          "name": "Nama"
+        },
+        "emptyTitle": "Belum ada penggunaan",
+        "emptyMessage": "Aplikasi akan muncul di sini setelah ada di katalog.",
+        "tableCaption": "Penggunaan per aplikasi",
+        "cols": {
+          "app": "Aplikasi",
+          "installs": "Pemasangan",
+          "health": "Kondisi",
+          "events24h": "Pengiriman, 24 jam",
+          "events7d": "Pengiriman, 7 hari",
+          "attention": "Perhatian"
+        },
+        "installs": {
+          "active": "{count} aktif",
+          "disabled": "{count} dijeda",
+          "killed": "{count} dimatikan"
+        },
+        "health": {
+          "healthy": "{count} sehat",
+          "degraded": "{count} menurun",
+          "error": "{count} error",
+          "needsReauth": "{count} perlu masuk ulang",
+          "unknown": "{count} tidak diketahui"
+        },
+        "events": {
+          "accepted": "{count} diterima",
+          "duplicate": "{count} diulang",
+          "rejected": "{count} ditolak",
+          "failed": "{count} gagal"
+        },
+        "needsLook": "Perlu diperiksa",
+        "reasons": {
+          "installErrors": "Pemasangan dengan error",
+          "needsReauth": "Pemasangan yang perlu masuk ulang",
+          "failed24h": "Pengiriman gagal dalam 24 jam terakhir",
+          "failed7d": "Pengiriman gagal dalam 7 hari terakhir"
+        },
+        "recipeHint": "Resep kemungkinan rusak: portal mengubah formatnya atau kunci sudah kedaluwarsa. Perbaiki dengan versi resep yang baru.",
+        "fine": "Tidak ada masalah",
+        "runbookNote": "Integrasi dengan banyak pemasangan yang error atau perlu masuk ulang, atau jumlah kegagalan yang terus naik, sedang rusak. Perbaiki resepnya dalam versi baru (runbook, bagian 8)."
+      },
+      "price": {
+        "free": "Gratis",
+        "perMonth": "/ bulan",
+        "trial": "{count, plural, other {uji coba # hari}}",
+        "notOnSale": "Tidak dijual"
+      },
+      "pricing": {
+        "title": "Harga",
+        "description": "Tentukan apakah aplikasi ini gratis atau berbayar dan berapa biayanya. Harga Anda yang berlaku: manifes pengembang hanya mengusulkan.",
+        "billing": "Aplikasi berbayar dijual sebagai masa berlaku bulanan prabayar: add-on penagihan yang dibeli lewat checkout biasa. Belum ada perpanjangan kartu otomatis, jadi workspace membayar lagi saat masa bulannya hampir habis. Perubahan harga berlaku untuk langganan baru dan pembayaran berikutnya setiap pelanggan; masa yang sudah dibayar tidak pernah diubah.",
+        "readOnly": "Hanya baca. Mengubah harga memerlukan izin platform {permission}.",
+        "visibility": {
+          "label": "Status listing",
+          "note": "Sembunyikan, tampilkan kembali, atau matikan listing di bagian Operasi di atas. Panel ini tidak mengubahnya."
+        },
+        "subscribers": {
+          "label": "Langganan",
+          "count": "{count, plural, other {# langganan aktif}}",
+          "view": "Lihat langganan",
+          "hint": "Langganan berbayar, uji coba, dan gratis yang berlaku. Yang akan berakhir atau sudah berakhir tidak dihitung."
+        },
+        "changed": "Harga terakhir diubah",
+        "conflict": "Orang lain menyimpan listing ini saat Anda mengedit harga. Muat ulang untuk melihat versinya, lalu ulangi perubahan Anda.",
+        "reload": "Muat ulang",
+        "model": {
+          "legend": "Harga",
+          "free": "Gratis",
+          "freeHint": "Tanpa biaya. Setiap workspace dapat memasangnya.",
+          "paid": "Berbayar, per bulan",
+          "paidHint": "Workspace berlangganan lewat checkout dan membayar setiap bulan."
+        },
+        "fields": {
+          "amount": "Harga bulanan",
+          "amountHint": "Per workspace, per bulan: 9 atau 9.99.",
+          "currency": "Mata uang",
+          "currencyHint": "Kode tiga huruf seperti USD. Platform menolak mata uang yang belum diaktifkan.",
+          "trialDays": "Uji coba gratis (hari)",
+          "trialDaysHint": "0 untuk tanpa uji coba, maksimal {max}. Setiap workspace mendapat satu uji coba per aplikasi.",
+          "annualAmount": "Harga tahunan (opsional)",
+          "annualAmountHint": "Disimpan untuk nanti. Penagihan tahunan belum tersedia, jadi workspace belum bisa membayar setahun sekali.",
+          "purchasable": "Dijual",
+          "purchasableHint": "Jika mati, workspace baru tidak dapat berlangganan. Workspace yang sudah berlangganan tetap dapat memperpanjang."
+        },
+        "included": {
+          "title": "Termasuk dalam paket",
+          "help": "Opsional. Workspace yang memenuhi salah satu aturan mendapat aplikasi gratis. Kosongkan keduanya untuk menagih setiap workspace.",
+          "feature": "Fitur paket",
+          "featureHint": "Workspace yang paketnya (termasuk add-on-nya) memiliki fitur ini. Pilih saran atau ketik kunci fitur.",
+          "plan": "Paket minimum",
+          "planHint": "Workspace pada paket ini atau paket di atasnya. Paket diurutkan dari yang terendah.",
+          "planNone": "Tanpa aturan paket",
+          "planTyped": "Daftar paket tidak dapat dimuat. Ketik ID paket."
+        },
+        "grants": {
+          "title": "Memberikan fitur paket",
+          "help": "Opsional. Fitur paket yang diaktifkan oleh langganan aplikasi ini, sehingga fitur dapat dijual sebagai aplikasi sementara gerbang fitur saat ini tetap berfungsi. Hanya fitur yang nonaktif secara default yang dapat diberikan.",
+          "thirdParty": "Hanya aplikasi first-party yang dapat memberikan fitur paket. Tandai listing sebagai first-party di tab Listing untuk menggunakannya.",
+          "grandfather": "Pertahankan pengguna yang ada",
+          "grandfatherHint": "Memungkinkan Anda menggratiskan workspace yang sudah memiliki fitur yang diberikan, agar tidak ada yang kehilangannya. Simpan, lalu gunakan Gratiskan pengguna yang ada di bawah. Lakukan ini sebelum fitur dinonaktifkan pada paket.",
+          "compExisting": "Gratiskan pengguna yang ada",
+          "compExistingHint": "Workspace yang sudah memiliki fitur yang diberikan lewat paketnya dan belum punya langganan akan mendapat aplikasi ini gratis. Anda melihat siapa yang pertama.",
+          "compExistingAction": "Gratiskan pengguna yang ada..."
+        },
+        "proposal": {
+          "title": "Usulan pengembang",
+          "intro": "Dari manifes versi {version}. Ini hanya usulan dan tidak mengubah apa pun: harga di atas yang dilihat workspace.",
+          "note": "Catatan: {note}",
+          "models": {
+            "free": "Gratis",
+            "included": "Termasuk dalam paket",
+            "addon": "Add-on berbayar"
+          }
+        },
+        "save": "Simpan harga",
+        "saving": "Menyimpan...",
+        "discard": "Buang perubahan",
+        "nothingToSave": "Belum ada perubahan.",
+        "saved": "Harga {name} disimpan.",
+        "problems": {
+          "priceRequired": "Atur harga bulanan.",
+          "priceFormat": "Gunakan angka seperti 9 atau 9.99 (maksimal dua desimal).",
+          "pricePositive": "Harga harus lebih dari nol.",
+          "currencyRequired": "Pilih mata uang.",
+          "currencyFormat": "Gunakan kode mata uang tiga huruf.",
+          "yearlyFormat": "Gunakan angka seperti 90 atau 89.99, atau kosongkan.",
+          "yearlyPositive": "Harga tahunan harus lebih dari nol, atau kosong.",
+          "trialRange": "Gunakan hari bulat dari 0 sampai {max}.",
+          "featureFormat": "Gunakan huruf kecil, angka, dan garis bawah, dimulai dengan huruf.",
+          "planFormat": "Gunakan ID paket: huruf kecil, angka, dan garis bawah.",
+          "grantsInvalid": "Pilih setiap fitur paket sekali saja, maksimal 10 fitur.",
+          "grandfatherNeedsGrants": "Pilih minimal satu fitur paket yang diberikan aplikasi terlebih dahulu.",
+          "includedGranted": "Fitur yang diberikan aplikasi tidak boleh sekaligus menjadi yang menyertakannya."
+        },
+        "confirm": {
+          "cancel": "Lanjutkan mengedit",
+          "priceChange": {
+            "title": "Ubah harga {name}?",
+            "body": "Saat ini {count, plural, other {# workspace berlangganan}}. Harga bulanan berubah dari {from} menjadi {to}.",
+            "next": "Harga baru berlaku untuk langganan baru dan pembayaran berikutnya setiap pelanggan.",
+            "paid": "Masa yang sudah dibayar workspace tidak pernah diubah, dikembalikan, atau dihitung ulang harganya.",
+            "action": "Ubah harga"
+          },
+          "toFree": {
+            "title": "Jadikan {name} gratis?",
+            "body": "Saat ini {count, plural, other {# workspace berlangganan}}.",
+            "free": "Setiap workspace kemudian dapat menggunakan aplikasi tanpa membayar, dan tidak ada yang ditagih lagi.",
+            "paid": "Pelanggan tetap mendapat masa yang sudah dibayar. Tidak ada pengembalian dana.",
+            "action": "Jadikan gratis"
+          }
+        }
+      },
+      "grandfather": {
+        "eyebrow": "Pengguna yang ada",
+        "title": "Gratiskan pengguna yang ada di {name}",
+        "close": "Tutup",
+        "cancel": "Batal",
+        "change": "Ubah",
+        "run": "{count, plural, other {Gratiskan # workspace}}",
+        "preview": "Periksa siapa yang memenuhi syarat",
+        "intro": "Gratiskan setiap workspace yang sudah memiliki fitur paket yang diberikan {name}, lewat paketnya atau pengaturan khususnya, dan belum berlangganan. Pertama Anda melihat siapa yang akan digratiskan; tidak ada yang berubah sampai Anda mengonfirmasi.",
+        "timing": "Lakukan ini sebelum fitur dinonaktifkan pada paket atau default-nya berubah: ini membaca apa yang dimiliki setiap workspace saat ini.",
+        "note": "Catatan",
+        "matched": "{count, plural, =0 {Tidak ada workspace yang memenuhi syarat} other {# workspace memenuhi syarat}}",
+        "nobody": "Tidak ada yang memiliki fitur yang diberikan tanpa langganan, jadi tidak ada yang perlu digratiskan.",
+        "sample": "Sebagian di antaranya:",
+        "more": "dan {count} lainnya",
+        "confirm": "Periksa daftarnya, lalu konfirmasi untuk menggratiskan. Ini dicatat di jejak audit dan tidak dapat dibatalkan sekaligus: batalkan setiap langganan untuk mengakhiri gratis.",
+        "refused": "Ini hanya mungkin untuk listing berbayar yang memberikan fitur paket dan Pertahankan pengguna yang ada diaktifkan. Periksa harganya.",
+        "done": "{count, plural, other {# workspace digratiskan di {name}.}}"
+      },
+      "compFields": {
+        "duration": "Berapa lama?",
+        "months": "Untuk sejumlah bulan",
+        "monthsLabel": "Bulan",
+        "monthsHint": "Bulan penuh, 1 sampai {max}.",
+        "monthsInvalid": "Gunakan bulan penuh dari 1 sampai {max}.",
+        "open": "Sampai saya akhiri",
+        "noteHint": "Antara {min} dan {max} karakter. Disimpan di jejak audit.",
+        "count": "{count} dari {max} karakter (minimal {min})."
+      },
+      "cancelDialog": {
+        "eyebrow": "Langganan",
+        "title": "Batalkan langganan {workspace}?",
+        "close": "Tutup",
+        "back": "Pertahankan",
+        "summary": "{workspace} memiliki {app}.",
+        "when": "Kapan sebaiknya berakhir?",
+        "periodEnd": {
+          "label": "Di akhir masa berbayar",
+          "detail": "Perpanjangan dihentikan. {workspace} tetap memakai {app} sampai {date}, lalu pemasangan dijeda dan datanya disimpan."
+        },
+        "now": {
+          "label": "Sekarang juga",
+          "detail": "Akses langsung berakhir. Pemasangan dijeda dan datanya disimpan. Waktu yang sudah dibayar tidak dikembalikan."
+        },
+        "noEnd": "Langganan ini tidak punya tanggal akhir, jadi hanya bisa diakhiri sekarang juga.",
+        "ending": "Sudah diatur berakhir pada {date}. Anda tetap dapat mengakhirinya sekarang juga.",
+        "reason": "Alasan",
+        "confirmPeriod": "Hentikan perpanjangan",
+        "confirmNow": "Akhiri sekarang",
+        "done": {
+          "periodEnd": "Perpanjangan dihentikan untuk {workspace}. Akses berlaku sampai akhir masa berbayar.",
+          "now": "{workspace} tidak lagi memiliki {app}."
+        }
+      },
+      "compDialog": {
+        "eyebrow": "Gratiskan",
+        "title": "Gratiskan sebuah workspace",
+        "close": "Tutup",
+        "cancel": "Batal",
+        "submit": "Gratiskan workspace",
+        "intro": "Berikan aplikasi berbayar kepada workspace tanpa biaya. Dicatat di jejak audit dengan catatan Anda. Ditolak selama workspace membayar aplikasi ini: batalkan langganan itu terlebih dahulu.",
+        "app": "Aplikasi",
+        "appPlaceholder": "Pilih aplikasi berbayar",
+        "noPaidApps": "Belum ada aplikasi berbayar untuk digratiskan. Atur harga pada listing terlebih dahulu.",
+        "workspaceSearch": "Cari workspace",
+        "workspaceSearchPlaceholder": "Nama workspace",
+        "workspaceHint": "Menampilkan hingga {count} hasil. Ketik untuk mempersempit daftar.",
+        "workspaceChosen": "Dipilih: {name}",
+        "workspaceNone": "Tidak ada workspace yang cocok.",
+        "workspaceResults": "Workspace yang cocok",
+        "workspacePlan": "Paket: {plan}",
+        "workspaceLoading": "Memuat workspace...",
+        "note": "Catatan",
+        "effectMonths": "{count, plural, other {Workspace mendapat aplikasi gratis selama # bulan.}}",
+        "effectOpen": "Workspace mendapat aplikasi gratis sampai Anda mengakhirinya dengan membatalkan langganannya.",
+        "done": "{workspace} sekarang memiliki {app} secara gratis."
+      },
+      "subscriptions": {
+        "title": "Langganan",
+        "description": "Siapa membayar aplikasi berbayar yang mana, apa yang dimiliki setiap workspace, dan pendapatan bulanan yang dihasilkannya. Angka adalah harga daftar: belum termasuk pajak, kupon, atau uji coba.",
+        "readOnly": "Hanya baca. Menggratiskan workspace dan membatalkan langganan memerlukan izin platform {permission}.",
+        "comp": "Gratiskan sebuah workspace",
+        "kpi": {
+          "label": "Langganan menurut status",
+          "active": "Membayar",
+          "trialing": "Uji coba",
+          "comped": "Gratis",
+          "canceling": "Berakhir",
+          "ended": "Sudah berakhir",
+          "mrr": "Pendapatan bulanan",
+          "mrrNone": "Belum ada pelanggan berbayar",
+          "mrrCurrency": "Pendapatan bulanan, {currency}"
+        },
+        "summary": {
+          "emptyTitle": "Belum ada aplikasi berbayar",
+          "emptyMessage": "Atur harga pada listing untuk mulai menjualnya. Aplikasi akan muncul di sini beserta pelanggannya.",
+          "caption": "Langganan per aplikasi menurut status",
+          "cols": {
+            "app": "Aplikasi",
+            "price": "Harga",
+            "active": "Membayar",
+            "trialing": "Uji coba",
+            "comped": "Gratis",
+            "canceling": "Berakhir",
+            "ended": "Sudah berakhir",
+            "total": "Total",
+            "mrr": "Pendapatan bulanan"
+          },
+          "free": "Gratis",
+          "totals": "Semua aplikasi",
+          "note": "Pendapatan bulanan adalah harga daftar setiap langganan berbayar, dalam mata uangnya sendiri. Uji coba, gratis, dan langganan yang sudah berakhir tidak dihitung, dan mata uang tidak pernah dijumlahkan."
+        },
+        "filters": {
+          "label": "Filter",
+          "app": "Aplikasi",
+          "allApps": "Semua aplikasi",
+          "status": "Status",
+          "allStatuses": "Semua status",
+          "source": "Sumber",
+          "allSources": "Semua sumber",
+          "search": "Workspace",
+          "searchPlaceholder": "Nama workspace"
+        },
+        "cols": {
+          "workspace": "Workspace",
+          "app": "Aplikasi",
+          "status": "Status",
+          "source": "Sumber",
+          "started": "Dimulai",
+          "period": "Periode",
+          "amount": "Jumlah",
+          "actions": "Tindakan"
+        },
+        "period": {
+          "paidUntil": "Dibayar sampai {date}",
+          "trialEnds": "Uji coba berakhir {date}",
+          "endsOn": "Berakhir {date}",
+          "compUntil": "Gratis sampai {date}",
+          "compOpen": "Gratis sampai Anda mengakhirinya",
+          "endedOn": "Berakhir {date}",
+          "none": "Tanpa tanggal akhir"
+        },
+        "noCharge": "Tanpa biaya",
+        "compBy": "Digratiskan oleh {operator}: {note}",
+        "cancel": "Batalkan...",
+        "tableCaption": "Langganan",
+        "emptyTitle": "Belum ada langganan",
+        "emptyMessage": "Workspace muncul di sini saat berlangganan, memulai uji coba, atau digratiskan.",
+        "noMatchTitle": "Tidak ada langganan yang cocok",
+        "noMatchMessage": "Tidak ada yang cocok dengan filter ini. Coba filter lain.",
+        "clearFilters": "Hapus filter",
+        "loadMore": "Muat lebih banyak"
+      }
+    }
+  }
+}

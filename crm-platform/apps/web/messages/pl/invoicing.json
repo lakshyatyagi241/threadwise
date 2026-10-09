@@ -1,0 +1,662 @@
+{
+  "invoicing": {
+    "nav": {
+      "invoices": "Faktury",
+      "payments": "Płatności",
+      "taxRates": "Stawki podatku",
+      "recurring": "Faktury cykliczne",
+      "salesOrders": "Zamówienia sprzedaży"
+    },
+    "common": {
+      "unnamedContact": "Kontakt bez nazwy",
+      "dismiss": "Odrzuć"
+    },
+    "status": {
+      "draft": "Szkic",
+      "issued": "Wystawiona",
+      "partially_paid": "Częściowo opłacona",
+      "overdue": "Przeterminowana",
+      "paid": "Opłacona",
+      "void": "Anulowana"
+    },
+    "method": {
+      "bank_transfer": "Przelew bankowy",
+      "cash": "Gotówka",
+      "card": "Karta",
+      "upi": "UPI",
+      "cheque": "Czek",
+      "gateway": "Online",
+      "other": "Inne"
+    },
+    "errors": {
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "signedOut": "Sesja wygasła. Zaloguj się ponownie.",
+      "conflict": "Ktoś inny właśnie to zmienił. Przeładuj, aby zobaczyć najnowszą wersję.",
+      "validation": "Część informacji jest nieprawidłowa. Sprawdź wyróżnione pola.",
+      "unavailable": "Fakturowanie nie jest jeszcze dostępne na tym serwerze.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "notFound": "Ta faktura już nie istnieje.",
+      "planDisabled": "Twój plan nie obejmuje fakturowania.",
+      "invalidState": "Nie jest to możliwe w bieżącym stanie faktury. Przeładuj i sprawdź jej status.",
+      "unexpected": "Po naszej stronie coś poszło nie tak. Spróbuj ponownie.",
+      "requestId": "ID żądania",
+      "retry": "Spróbuj ponownie"
+    },
+    "picker": {
+      "unlink": "Usuń kontakt",
+      "searchContact": "Szukaj kontaktów po nazwie",
+      "results": "Pasujące kontakty",
+      "searching": "Wyszukiwanie...",
+      "unavailable": "Nie udało się wczytać kontaktów.",
+      "none": "Nie znaleziono kontaktów."
+    },
+    "actions": {
+      "failed": "Nie udało się.",
+      "issued": "Faktura {number} została wystawiona.",
+      "sent": "Oznaczono jako wysłane.",
+      "voided": "Faktura {number} została anulowana.",
+      "duplicated": "Kopia została utworzona jako szkic.",
+      "deleted": "Szkic usunięto.",
+      "linkCopied": "Skopiowano link.",
+      "linkCopyFailed": "Przeglądarka zablokowała kopiowanie. Zaznacz link i skopiuj go ręcznie."
+    },
+    "payDialog": {
+      "title": "Zarejestruj płatność",
+      "forInvoice": "Faktura {number}",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "record": "Zarejestruj płatność",
+      "markPaid": "Zarejestruj i oznacz jako opłaconą",
+      "recordAnyway": "Zarejestruj mimo to",
+      "balance": "Do zapłaty",
+      "amount": "Kwota ({currency})",
+      "method": "Metoda",
+      "paidOn": "Data płatności",
+      "reference": "Numer referencyjny",
+      "referenceHint": "Identyfikator transakcji lub numer czeku",
+      "note": "Notatka",
+      "recorded": "Zarejestrowano płatność w kwocie {amount}.",
+      "partialNote": "To płatność częściowa. Nadal do zapłaty: {left}.",
+      "overpayNote": "To o {extra} więcej niż saldo. Sprawdź kwotę przed zarejestrowaniem.",
+      "problems": {
+        "amountInvalid": "Wpisz kwotę, na przykład 125.50.",
+        "amountZero": "Kwota musi być większa od zera.",
+        "dateInvalid": "Wpisz prawidłową datę.",
+        "dateFuture": "Data płatności nie może być w przyszłości.",
+        "tooMuch": "To więcej, niż można zwrócić.",
+        "referenceTooLong": "Numer referencyjny jest za długi (najwyżej 191 znaków).",
+        "noteTooLong": "Notatka jest za długa (najwyżej 2000 znaków)."
+      }
+    },
+    "refundDialog": {
+      "title": "Zwróć płatność",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "refund": "Zwrot",
+      "available": "Można zwrócić najwyżej {amount}.",
+      "amount": "Kwota ({currency})",
+      "date": "Data zwrotu",
+      "reason": "Powód",
+      "effect": "Faktura znów będzie zobowiązywać do zapłaty zwróconą kwotę.",
+      "refunded": "Zwrócono {amount}.",
+      "problems": {
+        "amountInvalid": "Wpisz kwotę, na przykład 125.50.",
+        "amountZero": "Kwota musi być większa od zera.",
+        "tooMuch": "To więcej, niż można zwrócić."
+      }
+    },
+    "voidDialog": {
+      "title": "Anuluj fakturę",
+      "close": "Zamknij",
+      "keep": "Zachowaj fakturę",
+      "void": "Anuluj fakturę",
+      "warning": "Anulowana faktura zachowuje swój numer, ale nie można jej już opłacić, edytować ani ponownie otworzyć. Link kupującego pokaże ją jako anulowaną.",
+      "reason": "Powód",
+      "reasonHint": "Opcjonalnie. Zapisywane w historii faktury."
+    },
+    "sendDialog": {
+      "title": "Udostępnij fakturę",
+      "issueTitle": "Wystaw fakturę",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "issue": "Wystaw fakturę",
+      "done": "Gotowe",
+      "issueIntro": "Wystawienie czyni tę fakturę oficjalną:",
+      "issueNumber": "Otrzymuje kolejny numer faktury.",
+      "issueFrozen": "Jej pozycje, ceny i podatki nie mogą być już edytowane.",
+      "issueLink": "Staje się dostępny link dla Twojego klienta.",
+      "link": "Link dla klienta",
+      "linkHint": "Każdy, kto ma ten link, może zobaczyć fakturę i sposób jej opłacenia.",
+      "copy": "Kopiuj",
+      "copied": "Skopiowano",
+      "copyFailed": "Przeglądarka zablokowała kopiowanie. Zaznacz link i skopiuj go ręcznie.",
+      "open": "Otwórz stronę klienta",
+      "email": "Wyślij e-mailem do",
+      "emailHint": "Opcjonalnie. Pozostaw puste, aby udostępnić link samodzielnie i tylko oznaczyć fakturę jako wysłaną.",
+      "alreadySent": "Ta faktura została już oznaczona jako wysłana."
+    },
+    "deleteDialog": {
+      "title": "Usunąć szkic?",
+      "message": "{name} zostanie trwale usunięty. Można usuwać tylko szkice.",
+      "delete": "Usuń szkic",
+      "keep": "Zachowaj"
+    },
+    "row": {
+      "moreFor": "Działania dla: {name}",
+      "draft": "szkic",
+      "open": "Otwórz",
+      "edit": "Edytuj",
+      "issue": "Wystaw i wyślij",
+      "send": "Udostępnij link / oznacz jako wysłane",
+      "copyLink": "Kopiuj link",
+      "recordPayment": "Zarejestruj płatność",
+      "markPaid": "Oznacz jako opłaconą",
+      "duplicate": "Duplikuj",
+      "print": "Pobierz / drukuj",
+      "void": "Anuluj",
+      "delete": "Usuń szkic"
+    },
+    "table": {
+      "columns": {
+        "number": "Faktura",
+        "contact": "Klient",
+        "issued": "Wystawiona",
+        "due": "Termin",
+        "total": "Razem",
+        "paid": "Zapłacono",
+        "balance": "Saldo",
+        "status": "Status"
+      },
+      "draft": "Szkic",
+      "daysLate": "{count, plural, one {# dzień po terminie} few {# dni po terminie} many {# dni po terminie} other {# dnia po terminie}}",
+      "selectAll": "Zaznacz wszystkie wczytane faktury",
+      "selectRow": "Zaznacz: {name}",
+      "scrollArea": "Tabela faktur"
+    },
+    "tabs": {
+      "label": "Status faktury",
+      "all": "Wszystkie",
+      "draft": "Szkic",
+      "issued": "Wystawione",
+      "partially_paid": "Częściowo opłacone",
+      "overdue": "Przeterminowane",
+      "paid": "Opłacone",
+      "void": "Anulowane",
+      "count": "{count, plural, one {# faktura} few {# faktury} many {# faktur} other {# faktury}}"
+    },
+    "toolbar": {
+      "search": "Szukaj po numerze lub kliencie",
+      "contactLoading": "Klient",
+      "from": "Od",
+      "to": "Do",
+      "issuedFrom": "Wystawione od",
+      "issuedTo": "Wystawione do",
+      "sort": "Sortuj faktury",
+      "sorts": {
+        "newest": "Od najnowszych",
+        "oldest": "Od najstarszych",
+        "due": "Termin płatności",
+        "amount": "Najwyższa kwota"
+      },
+      "reset": "Wyczyść filtry",
+      "refresh": "Odśwież"
+    },
+    "bulk": {
+      "label": "Działania zbiorcze",
+      "selected": "{count, plural, one {Zaznaczono # fakturę} few {Zaznaczono # faktury} many {Zaznaczono # faktur} other {Zaznaczono # faktury}}",
+      "working": "Przetwarzanie...",
+      "issue": "Wystaw szkice",
+      "void": "Anuluj",
+      "delete": "Usuń szkice",
+      "clear": "Wyczyść zaznaczenie",
+      "failed": "Nie udało się.",
+      "keep": "Zachowaj",
+      "someFailed": "{count, plural, one {Nie udało się zmienić # faktury.} few {Nie udało się zmienić # faktur.} many {Nie udało się zmienić # faktur.} other {Nie udało się zmienić # faktury.}}",
+      "done": {
+        "issue": "{count, plural, one {Wystawiono # szkic.} few {Wystawiono # szkice.} many {Wystawiono # szkiców.} other {Wystawiono # szkica.}}",
+        "void": "{count, plural, one {Anulowano # fakturę.} few {Anulowano # faktury.} many {Anulowano # faktur.} other {Anulowano # faktury.}}",
+        "delete": "{count, plural, one {Usunięto # szkic.} few {Usunięto # szkice.} many {Usunięto # szkiców.} other {Usunięto # szkica.}}"
+      },
+      "confirm": {
+        "void": {
+          "title": "Anulować zaznaczone faktury?",
+          "message": "{count, plural, one {Zaznaczona # faktura zostanie anulowana. Faktury z płatnościami zostaną pominięte.} few {Zaznaczone # faktury zostaną anulowane. Faktury z płatnościami zostaną pominięte.} many {Zaznaczonych # faktur zostanie anulowanych. Faktury z płatnościami zostaną pominięte.} other {Zaznaczonych # faktur zostanie anulowanych. Faktury z płatnościami zostaną pominięte.}}",
+          "confirm": "Anuluj faktury"
+        },
+        "delete": {
+          "title": "Usunąć zaznaczone szkice?",
+          "message": "{count, plural, one {Zaznaczona # faktura zostanie uwzględniona. Trwale usunięte zostaną tylko szkice.} few {Zaznaczone # faktury zostaną uwzględnione. Trwale usunięte zostaną tylko szkice.} many {Zaznaczonych # faktur zostanie uwzględnionych. Trwale usunięte zostaną tylko szkice.} other {Zaznaczonych # faktur zostanie uwzględnionych. Trwale usunięte zostaną tylko szkice.}}",
+          "confirm": "Usuń szkice"
+        }
+      }
+    },
+    "list": {
+      "title": "Faktury",
+      "subtitle": "Wystawiaj faktury klientom i śledź, co zostało opłacone, a co jest przeterminowane.",
+      "payments": "Płatności",
+      "newInvoice": "Nowa faktura",
+      "tableLabel": "Lista faktur",
+      "empty": {
+        "all": {
+          "title": "Brak faktur",
+          "message": "Utwórz pierwszą fakturę albo rozpocznij ją od zaakceptowanej oferty lub kosztorysu."
+        },
+        "draft": {
+          "title": "Brak szkiców",
+          "message": "Faktury, nad którymi wciąż pracujesz, pojawią się tutaj."
+        },
+        "issued": {
+          "title": "Nic nie czeka na płatność",
+          "message": "Wystawione faktury bez płatności pojawią się tutaj."
+        },
+        "partially_paid": {
+          "title": "Brak częściowo opłaconych faktur",
+          "message": "Faktury z płatnością, ale z pozostałym saldem, pojawią się tutaj."
+        },
+        "overdue": {
+          "title": "Nic nie jest przeterminowane",
+          "message": "Faktury po terminie płatności z pozostałym saldem pojawią się tutaj."
+        },
+        "paid": {
+          "title": "Brak opłaconych faktur",
+          "message": "Faktury opłacone w całości pojawią się tutaj."
+        },
+        "void": {
+          "title": "Brak anulowanych faktur",
+          "message": "Anulowane faktury pojawiają się tutaj i zachowują swoje numery."
+        }
+      },
+      "emptyFilteredTitle": "Żadne faktury nie pasują",
+      "emptyFiltered": "Spróbuj innego wyszukiwania lub wyczyść filtry.",
+      "resetFilters": "Wyczyść filtry",
+      "loading": "Wczytywanie faktur",
+      "showing": "{count, plural, one {Wczytano # fakturę} few {Wczytano # faktury} many {Wczytano # faktur} other {Wczytano # faktury}}",
+      "loadMore": "Wczytaj więcej",
+      "allLoaded": "To wszystkie"
+    },
+    "lines": {
+      "lineN": "Pozycja {n}",
+      "description": "Opis",
+      "descriptionPlaceholder": "Za co wystawiasz fakturę?",
+      "removeLine": "Usuń pozycję {n}",
+      "qty": "Ilość",
+      "price": "Cena jedn. ({currency})",
+      "discount": "Rabat %",
+      "tax": "Podatek",
+      "noTax": "Bez podatku",
+      "inclusive": "wł.",
+      "removedRate": "Usunięto stawkę podatku",
+      "inactive": "nieaktywna",
+      "amount": "Kwota",
+      "addLine": "Dodaj pozycję",
+      "problems": {
+        "descriptionRequired": "Opisz tę pozycję.",
+        "qtyInvalid": "Wpisz ilość większą od zera.",
+        "priceInvalid": "Wpisz cenę, na przykład 49.90.",
+        "lineDiscountInvalid": "Wpisz procent od 0 do 100.",
+        "noLines": "Przed wystawieniem dodaj co najmniej jedną pozycję.",
+        "amountZero": "Suma faktury musi być większa od zera."
+      }
+    },
+    "totals": {
+      "label": "Podsumowanie faktury",
+      "title": "Sumy",
+      "subtotal": "Suma częściowa",
+      "discount": "Rabat",
+      "total": "Razem"
+    },
+    "builder": {
+      "creatingFromDocument": "Tworzenie faktury z dokumentu...",
+      "loading": "Wczytywanie",
+      "notEditable": "Ta faktura została wystawiona, więc nie można jej już edytować. Zduplikuj ją, aby utworzyć poprawioną.",
+      "openInvoice": "Otwórz fakturę",
+      "newTitle": "Nowa faktura",
+      "editTitle": "Edytuj szkic",
+      "back": "Wstecz",
+      "unsaved": "Niezapisane zmiany",
+      "cancel": "Anuluj",
+      "saveDraft": "Zapisz szkic",
+      "saveAndIssue": "Zapisz i wystaw",
+      "conflict": "Ktoś inny zmienił ten szkic podczas Twojej edycji. Przeładuj, aby zobaczyć jego wersję; Twoje zmiany tutaj zostaną utracone.",
+      "reload": "Przeładuj",
+      "viewLabel": "Widok kreatora",
+      "views": {
+        "edit": "Edycja",
+        "preview": "Podgląd"
+      },
+      "billTo": "Odbiorca",
+      "contact": "Kontakt",
+      "contactHint": "Wybierz kontakt, aby powiązać z nim fakturę, lub wpisz nabywcę poniżej.",
+      "buyerName": "Nazwa na fakturze",
+      "buyerEmail": "E-mail",
+      "buyerPhone": "Telefon",
+      "buyerAddress": "Adres rozliczeniowy",
+      "details": "Daty i waluta",
+      "currency": "Waluta",
+      "currencyHint": "Trzy litery, na przykład USD lub KWD. Miejsca dziesiętne zależą od waluty.",
+      "issueDate": "Data wystawienia",
+      "terms": "Termin płatności",
+      "noDueDate": "Bez terminu płatności",
+      "dueDate": "Termin płatności",
+      "lineItems": "Pozycje",
+      "orderLinkedNote": "Pozycje faktury utworzonej z zamówienia sprzedaży są stałe. Aby je zmienić, anuluj lub usuń tę fakturę i ponownie wystaw fakturę za zamówienie.",
+      "adjustments": "Rabat",
+      "discountKind": "Rabat na całą fakturę",
+      "discountNone": "Bez rabatu",
+      "discountPercent": "Procent",
+      "discountAmount": "Stała kwota ({currency})",
+      "discountValue": "Wartość rabatu",
+      "notesAndTerms": "Uwagi i warunki",
+      "notes": "Uwaga dla klienta",
+      "notesHint": "Wyświetlana na fakturze.",
+      "termsText": "Warunki",
+      "termsHint": "Wyświetlane na dole faktury.",
+      "preview": "Podgląd",
+      "saved": "Szkic zapisany.",
+      "fixProblems": "Najpierw popraw wyróżnione pola.",
+      "serverRejected": "Serwer nie zaakceptował części wartości. Sprawdź pola i spróbuj ponownie.",
+      "problems": {
+        "contactRequired": "Wybierz kontakt lub wpisz nazwę nabywcy.",
+        "currencyInvalid": "Wpisz trzyliterowy kod waluty.",
+        "issueDateInvalid": "Wpisz prawidłową datę wystawienia.",
+        "dueBeforeIssue": "Termin płatności nie może być wcześniejszy niż data wystawienia.",
+        "dueInvalid": "Wpisz prawidłowy termin płatności.",
+        "noLines": "Przed wystawieniem dodaj co najmniej jedną pozycję.",
+        "discountInvalid": "Wpisz prawidłowy rabat.",
+        "emailInvalid": "Wpisz prawidłowy adres e-mail.",
+        "amountZero": "Suma faktury musi być większa od zera.",
+        "descriptionRequired": "Opisz tę pozycję.",
+        "priceInvalid": "Wpisz prawidłową cenę.",
+        "qtyInvalid": "Wpisz ilość większą od zera.",
+        "lineDiscountInvalid": "Wpisz procent od 0 do 100."
+      }
+    },
+    "terms": {
+      "onReceipt": "Płatne przy odbiorze",
+      "net": "Netto {days} dni",
+      "custom": "Data niestandardowa"
+    },
+    "paper": {
+      "label": "Faktura {number}",
+      "labelDraft": "Podgląd szkicu faktury",
+      "sellerFallback": "Nazwa Twojej firmy",
+      "title": "Faktura",
+      "draftNumber": "Szkic",
+      "billedTo": "Odbiorca",
+      "buyerFallback": "Klient",
+      "issued": "Wystawiona",
+      "due": "Termin",
+      "onReceipt": "Przy odbiorze",
+      "item": "Pozycja",
+      "qty": "Ilość",
+      "price": "Cena",
+      "tax": "Podatek",
+      "amount": "Kwota",
+      "noLines": "Brak pozycji",
+      "noDescription": "Brak opisu",
+      "lineDiscount": "Rabat {percent}%",
+      "subtotal": "Suma częściowa",
+      "discount": "Rabat",
+      "discountPercent": "Rabat ({percent}%)",
+      "total": "Razem",
+      "includesTax": "Podatek wliczony w ceny",
+      "paid": "Zapłacono",
+      "balanceDue": "Do zapłaty",
+      "notes": "Uwagi",
+      "terms": "Warunki"
+    },
+    "detail": {
+      "loading": "Wczytywanie faktury",
+      "backToList": "Wróć do faktur",
+      "draftTitle": "Szkic faktury",
+      "edit": "Edytuj",
+      "issueAndSend": "Wystaw i wyślij",
+      "shareAgain": "Udostępnij ponownie",
+      "send": "Udostępnij i wyślij",
+      "recordPayment": "Zarejestruj płatność",
+      "markPaid": "Oznacz jako opłaconą",
+      "copyLink": "Kopiuj link",
+      "print": "Pobierz / drukuj",
+      "duplicate": "Duplikuj",
+      "void": "Anuluj",
+      "delete": "Usuń szkic",
+      "voidedBanner": "Ta faktura została anulowana {date}. Zachowuje swój numer, ale nie można jej już opłacić.",
+      "voidNeedsRefund": "Aby anulować tę fakturę, najpierw zwróć jej płatności.",
+      "overpaid": "Zapłacono więcej, niż wynosi ta faktura.",
+      "amountsLabel": "Kwoty",
+      "total": "Razem",
+      "paid": "Zapłacono",
+      "balance": "Do zapłaty",
+      "issued": "Wystawiona",
+      "due": "Termin",
+      "noDue": "Bez terminu płatności",
+      "daysLate": "{count, plural, one {# dzień po terminie} few {# dni po terminie} many {# dni po terminie} other {# dnia po terminie}}",
+      "sentAt": "Wysłana",
+      "paidAt": "Opłacona w całości",
+      "source": "Utworzona z",
+      "sourceKind": {
+        "proposal": "Oferta",
+        "estimate": "Kosztorys"
+      },
+      "deal": "Transakcja",
+      "dealFallback": "Otwórz transakcję"
+    },
+    "paymentsSection": {
+      "title": "Płatności",
+      "loading": "Wczytywanie płatności",
+      "none": "Brak zarejestrowanych płatności.",
+      "refund": "Zwrot"
+    },
+    "activity": {
+      "title": "Aktywność",
+      "loading": "Wczytywanie aktywności",
+      "events": {
+        "created": "Utworzono szkic",
+        "edited": "Edytowano szkic",
+        "issued": "Wystawiono fakturę",
+        "sent": "Oznaczono jako wysłane",
+        "viewed": "Otwarte przez klienta",
+        "payment_recorded": "Zarejestrowano płatność",
+        "payment_refunded": "Zwrócono płatność",
+        "paid": "Opłacono w całości",
+        "reminder_sent": "Wysłano przypomnienie",
+        "voided": "Anulowano fakturę"
+      }
+    },
+    "pickInvoice": {
+      "title": "Która faktura została opłacona?",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "search": "Szukaj po numerze lub kliencie",
+      "loading": "Wczytywanie faktur",
+      "noMatch": "Żadna nieopłacona faktura nie pasuje.",
+      "nothingOwed": "Obecnie nic nie jest do zapłaty.",
+      "balance": "Saldo",
+      "more": "Pokaż więcej"
+    },
+    "aging": {
+      "loading": "Wczytywanie raportu wiekowania należności",
+      "emptyTitle": "Brak zaległości",
+      "emptyMessage": "Wszystkie wystawione faktury są opłacone. Nieopłacone faktury pojawią się tutaj, pogrupowane według opóźnienia.",
+      "asOf": "Stan na {date}. Opóźnienie liczone jest od terminu płatności.",
+      "currencyLabel": "Do zapłaty w {currency}",
+      "outstanding": "Do zapłaty",
+      "invoices": "{count, plural, one {# faktura} few {# faktury} many {# faktur} other {# faktury}}",
+      "barLabel": "Udział kwoty do zapłaty w każdej grupie wiekowej",
+      "buckets": {
+        "current": "Termin jeszcze nie minął",
+        "d1_30": "1–30 dni po terminie",
+        "d31_60": "31–60 dni po terminie",
+        "d61_90": "61–90 dni po terminie",
+        "d90_plus": "Ponad 90 dni po terminie"
+      },
+      "total": "Razem",
+      "unnamed": "Kontakt bez nazwy",
+      "noContact": "Brak kontaktu"
+    },
+    "payments": {
+      "title": "Płatności",
+      "subtitle": "Pieniądze otrzymane za faktury oraz kwoty, które wciąż są do zapłaty.",
+      "invoices": "Faktury",
+      "record": "Zarejestruj płatność",
+      "viewLabel": "Widok płatności",
+      "views": {
+        "ledger": "Rejestr",
+        "aging": "Wiekowanie należności"
+      },
+      "tableLabel": "Rejestr płatności",
+      "loading": "Wczytywanie płatności",
+      "emptyFilteredTitle": "Brak pasujących płatności",
+      "emptyFiltered": "Spróbuj innego wyszukiwania lub wyczyść filtry.",
+      "emptyTitle": "Brak płatności",
+      "emptyMessage": "Gdy klient zapłaci fakturę, zarejestruj płatność tutaj lub na fakturze.",
+      "resetFilters": "Wyczyść filtry",
+      "showing": "{count, plural, one {Wczytano # płatność} few {Wczytano # płatności} many {Wczytano # płatności} other {Wczytano # płatności}}",
+      "loadMore": "Wczytaj więcej",
+      "allLoaded": "To wszystkie",
+      "strip": {
+        "loading": "Wczytywanie sum",
+        "label": "Sumy płatności",
+        "window": "od {from} do {to}",
+        "none": "Brak płatności w tym okresie.",
+        "collected": "Otrzymano ({currency})",
+        "count": "Płatności",
+        "refunded": "Zwrócono"
+      },
+      "toolbar": {
+        "search": "Szukaj po numerze referencyjnym, fakturze lub kliencie",
+        "method": "Metoda",
+        "allMethods": "Wszystkie metody",
+        "from": "Od",
+        "to": "Do",
+        "paidFrom": "Zapłacono od",
+        "paidTo": "Zapłacono do",
+        "reset": "Wyczyść filtry",
+        "refresh": "Odśwież"
+      },
+      "table": {
+        "scrollArea": "Tabela płatności",
+        "columns": {
+          "date": "Data",
+          "invoice": "Faktura",
+          "contact": "Klient",
+          "method": "Metoda",
+          "reference": "Numer referencyjny",
+          "amount": "Kwota",
+          "refunded": "Zwrócono",
+          "recordedBy": "Zarejestrował",
+          "actions": "Działania"
+        },
+        "moreFor": "Działania dla płatności z {date}",
+        "openInvoice": "Otwórz fakturę",
+        "refund": "Zwrot"
+      }
+    },
+    "taxRates": {
+      "title": "Stawki podatku",
+      "subtitle": "Podatki dodawane do pozycji faktury. Jedna jest domyślna dla nowych pozycji.",
+      "new": "Nowa stawka podatku",
+      "tableLabel": "Stawki podatku",
+      "loading": "Wczytywanie stawek podatku",
+      "emptyTitle": "Brak stawek podatku",
+      "emptyMessage": "Dodaj podatki, które naliczasz, np. VAT lub GST, aby wybierać je przy pozycjach faktury.",
+      "scrollArea": "Tabela stawek podatku",
+      "columns": {
+        "name": "Nazwa",
+        "rate": "Stawka",
+        "type": "Typ",
+        "status": "Status",
+        "effective": "Obowiązuje od",
+        "used": "Pozycje",
+        "actions": "Działania"
+      },
+      "default": "Domyślna",
+      "inclusive": "Wliczony",
+      "exclusive": "Doliczany",
+      "active": "Aktywna",
+      "inactive": "Nieaktywna",
+      "always": "Zawsze",
+      "moreFor": "Działania dla: {name}",
+      "edit": "Edytuj",
+      "makeDefault": "Ustaw jako domyślną",
+      "madeDefault": "{name} jest teraz domyślną stawką.",
+      "deactivate": "Dezaktywuj",
+      "activate": "Aktywuj",
+      "deactivated": "Dezaktywowano: {name}.",
+      "activated": "Aktywowano: {name}.",
+      "delete": "Usuń",
+      "deleteTitle": "Usunąć tę stawkę podatku?",
+      "keep": "Zachowaj",
+      "deleted": "Usunięto: {name}.",
+      "count": "{count, plural, one {# stawka podatku} few {# stawki podatku} many {# stawek podatku} other {# stawki podatku}}",
+      "hint": "Zmiana stawki nigdy nie zmienia wystawionych faktur: każda faktura zachowuje stawkę, z którą została wystawiona.",
+      "errors": {
+        "isDefault": "To jest stawka domyślna. Najpierw ustaw inną stawkę jako domyślną."
+      },
+      "form": {
+        "eyebrow": "Stawka podatku",
+        "editTitle": "Edytuj stawkę podatku",
+        "newTitle": "Nowa stawka podatku",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "save": "Zapisz",
+        "name": "Nazwa",
+        "namePlaceholder": "VAT, GST, podatek od sprzedaży",
+        "rate": "Stawka",
+        "type": "Sposób naliczania",
+        "exclusive": "Doliczany: dodawany do ceny",
+        "inclusive": "Wliczony: już zawarty w cenie",
+        "typeHint": {
+          "exclusive": "Klient płaci cenę plus podatek.",
+          "inclusive": "Cena już zawiera podatek; faktura pokazuje, ile z niej stanowi podatek."
+        },
+        "effectiveFrom": "Obowiązuje od",
+        "effectiveHint": "Opcjonalne. Użyj, jeśli stawka zmienia się od określonej daty.",
+        "description": "Opis",
+        "makeDefault": "Domyślna dla nowych pozycji",
+        "defaultHint": "Nowe pozycje faktury zaczynają się od tej stawki.",
+        "active": "Aktywna",
+        "activeHint": "Nieaktywnych stawek nie można wybrać przy nowych pozycjach.",
+        "saved": "Zapisano: {name}.",
+        "created": "Dodano: {name}.",
+        "problems": {
+          "nameRequired": "Wpisz nazwę.",
+          "nameTaken": "Stawka podatku o tej nazwie już istnieje.",
+          "rateInvalid": "Wpisz procent od 0 do 100.",
+          "dateInvalid": "Wpisz prawidłową datę.",
+          "conflict": "Ktoś inny zmienił tę stawkę. Zamknij ją i otwórz ponownie."
+        }
+      }
+    },
+    "public": {
+      "loading": "Wczytywanie faktury",
+      "errorTitle": "Nie udało się wczytać tej faktury",
+      "errorMessage": "Sprawdź połączenie i spróbuj ponownie.",
+      "retry": "Spróbuj ponownie",
+      "title": "Faktura od: {seller}",
+      "dueOn": "termin: {date}",
+      "print": "Drukuj",
+      "download": "Pobierz PDF",
+      "paidBanner": "Ta faktura została opłacona w całości. Dziękujemy.",
+      "voidBanner": "Ta faktura została anulowana i nie wymaga płatności.",
+      "payNow": "Jak zapłacić",
+      "amountDue": "Kwota do zapłaty:",
+      "bankIntro": "Zapłać przelewem bankowym i jako tytuł podaj {number}.",
+      "copied": "Skopiowano",
+      "payButton": "Zapłać {amount}",
+      "gatewayNote": "Zostaniesz przekierowany na stronę płatności dostawcy płatności sprzedawcy.",
+      "questions": "Pytania dotyczące tej faktury?",
+      "metaTitle": "Faktura"
+    },
+    "linked": {
+      "title": "Faktury",
+      "new": "Nowa faktura",
+      "viewAll": "Zobacz wszystkie",
+      "loading": "Wczytywanie faktur",
+      "none": "Brak faktur.",
+      "draft": "Szkic",
+      "owes": "do zapłaty"
+    }
+  }
+}

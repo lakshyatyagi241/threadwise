@@ -1,0 +1,107 @@
+{
+  "developer-rest-api-v1-docs": {
+    "metaTitle": "Référence de l’API {brand}",
+    "metaDescription": "La référence de l’API REST {brand} : authentification, limites de débit et chaque endpoint avec des exemples de requête et de réponse.",
+    "common": {
+      "copy": "Copier",
+      "copied": "Copié",
+      "copyFailed": "Impossible de copier. Sélectionnez le texte et copiez-le manuellement."
+    },
+    "topbar": {
+      "home": "Accueil {brand}",
+      "apiWord": "API",
+      "version": "v1",
+      "spec": "Spécification OpenAPI",
+      "getKey": "Obtenir une clé API"
+    },
+    "sidebar": {
+      "label": "Navigation de la référence",
+      "filterLabel": "Filtrer les endpoints",
+      "filterPlaceholder": "Filtrer les endpoints…",
+      "startHere": "Pour commencer",
+      "intro": "Introduction",
+      "auth": "Authentification",
+      "webhooks": "Webhooks"
+    },
+    "hero": {
+      "eyebrow": "Référence développeur",
+      "title": "L’<em>API REST</em> {brand}",
+      "lead": "Une seule API REST pour envoyer des messages WhatsApp, lancer des diffusions et des campagnes, gérer les contacts et les modèles, déclencher des flux d’automatisation et consulter votre compte : tout ce dont votre CRM, votre plateforme d’automatisation ou votre application a besoin.",
+      "baseUrl": "URL de base",
+      "copyBaseUrl": "Copier l’URL de base"
+    },
+    "capabilities": {
+      "title": "Ce que vous pouvez faire",
+      "send": {
+        "title": "Envoyer des messages",
+        "body": "Envois uniques, diffusions, campagnes et envois planifiés"
+      },
+      "receive": {
+        "title": "Recevoir des messages",
+        "body": "Lire les conversations entrantes et leurs messages"
+      },
+      "contacts": {
+        "title": "Contacts et leads",
+        "body": "Création, lecture, mise à jour et suppression complètes, groupes et attributs personnalisés"
+      },
+      "templates": {
+        "title": "Modèles",
+        "body": "Créer, mettre à jour et lister les modèles WhatsApp"
+      },
+      "flows": {
+        "title": "Flux d’automatisation",
+        "body": "Inscrire un contact dans un flux via l’API"
+      },
+      "status": {
+        "title": "Statut de remise",
+        "body": "Envoyé, remis, lu et échoué, message par message"
+      },
+      "devices": {
+        "title": "Appareils",
+        "body": "Lister les numéros connectés et leur statut"
+      },
+      "account": {
+        "title": "Compte et utilisation",
+        "body": "Forfait, limites et crédits de messages"
+      }
+    },
+    "auth": {
+      "title": "Authentification",
+      "intro": "Chaque requête est authentifiée par une <strong>clé API</strong> d’espace de travail. Créez-en une dans le tableau de bord sous <strong>Paramètres, API REST</strong>. Envoyez-la comme jeton Bearer :",
+      "copyHeader": "Copier l’en-tête",
+      "alt": "Vous pouvez aussi la transmettre dans un en-tête <code>X-Api-Key</code>. Les clés appartiennent à un seul espace de travail et seul leur hachage est stocké : copiez donc une clé à sa création, elle ne peut plus être affichée ensuite. Les clés peuvent être révoquées à tout moment et cessent alors de fonctionner immédiatement."
+    },
+    "webhooks": {
+      "title": "Webhooks et événements en temps réel",
+      "comingTitle": "La livraison par webhook arrive bientôt",
+      "comingBody": "L’enregistrement d’un webhook et la réception d’événements sur votre propre URL ne sont pas encore disponibles. Aucun événement n’est envoyé à votre serveur aujourd’hui, il n’y a donc rien à souscrire. Cette carte listera les événements et l’en-tête de signature lorsque la livraison sera activée.",
+      "rateLabel": "Limites de débit",
+      "rate": "Chaque clé est soumise à la limite par minute du forfait de l’espace de travail ; si le forfait n’en définit aucune, la valeur par défaut de la plateforme de {limit} requêtes par minute s’applique. Chaque réponse contient <code>X-RateLimit-Limit</code> et <code>X-RateLimit-Remaining</code>, et une requête au-delà de la limite reçoit une réponse HTTP 429 avec un en-tête <code>Retry-After</code>. Les envois sortants consomment aussi les crédits de messages de votre forfait."
+    },
+    "reference": {
+      "title": "Endpoints",
+      "count": "{count, plural, one {# endpoint} other {# endpoints}}",
+      "noMatch": "Aucun endpoint ne correspond à « {query} ».",
+      "clearFilter": "Effacer le filtre",
+      "empty": "Aucun endpoint n’est encore publié. Revenez bientôt.",
+      "unavailableTitle": "Impossible de charger la référence des endpoints",
+      "unavailableBody": "La spécification de l’API est injoignable pour le moment. L’introduction ci-dessus reste valable. Réessayez dans un instant.",
+      "retry": "Réessayer",
+      "general": "Général",
+      "toggle": "Afficher ou masquer les détails de {method} {path}",
+      "parameters": "Paramètres",
+      "bodyParameters": "Paramètres du corps",
+      "name": "Nom",
+      "field": "Champ",
+      "description": "Description",
+      "required": "obligatoire",
+      "exampleRequest": "Exemple de requête",
+      "requestBody": "Corps de la requête",
+      "responses": "Réponses",
+      "copyCurl": "Copier la requête",
+      "copyJson": "Copier le JSON",
+      "noExample": "La spécification ne fournit aucun exemple pour cette réponse."
+    },
+    "footer": "API REST {brand} · v1 · générée à partir de la spécification OpenAPI en direct"
+  }
+}

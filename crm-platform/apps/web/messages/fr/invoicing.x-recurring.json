@@ -1,0 +1,370 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "REC_ENDED": "Cette planification est terminée : il n’y a plus rien à modifier ni à exécuter.",
+        "REC_NOT_ACTIVE": "Cette planification n’est pas active. Reprenez-la d’abord.",
+        "REC_START_TOO_OLD": "La date de début est trop ancienne. 12 périodes passées au maximum sont créées ; choisissez une date plus récente.",
+        "INV_RECURRING_INVALID": "Le modèle n’a pas pu servir à créer une facture. Vérifiez l’acheteur, les lignes et la taxe, puis enregistrez à nouveau."
+      }
+    },
+    "recurring": {
+      "title": "Factures récurrentes",
+      "subtitle": "Planifications qui créent les factures automatiquement, aux dates que vous définissez.",
+      "new": "Nouvelle planification",
+      "invoices": "Factures",
+      "tabsLabel": "Statut de la planification",
+      "tabs": {
+        "all": "Toutes",
+        "active": "Active",
+        "paused": "En pause",
+        "ended": "Terminée"
+      },
+      "search": "Rechercher parmi les planifications chargées",
+      "refresh": "Actualiser",
+      "tableLabel": "Planifications de factures récurrentes",
+      "scrollArea": "Tableau des planifications, défilement horizontal",
+      "loading": "Chargement des planifications",
+      "empty": {
+        "all": {
+          "title": "Aucune facture récurrente pour l’instant",
+          "message": "Définissez une planification une fois, et la facture est créée pour vous chaque semaine, chaque mois ou chaque année."
+        },
+        "active": {
+          "title": "Aucune planification en cours",
+          "message": "Les planifications actives, celles qui créeront leur prochaine facture à temps, apparaissent ici."
+        },
+        "paused": {
+          "title": "Aucune planification en pause",
+          "message": "Une planification mise en pause ne crée plus de factures jusqu’à sa reprise."
+        },
+        "ended": {
+          "title": "Aucune planification terminée",
+          "message": "Une planification se termine après sa dernière exécution ou à sa date de fin."
+        }
+      },
+      "emptySearchTitle": "Aucune planification ne correspond",
+      "emptySearch": "Aucune ligne chargée ne correspond. Effacez la recherche ou chargez-en davantage.",
+      "clearSearch": "Effacer la recherche",
+      "showing": "{count, plural, one {Affichage de 1 planification} other {Affichage de # planifications}}",
+      "showingMatches": "{count} sur {loaded} planifications chargées correspondent",
+      "loadMore": "Charger plus",
+      "allLoaded": "Toutes les planifications sont chargées",
+      "searchLoadedOnly": "La recherche ne porte que sur les planifications déjà chargées. Chargez-en davantage pour élargir la recherche.",
+      "columns": {
+        "name": "Planification",
+        "buyer": "Acheteur",
+        "every": "Récurrence",
+        "next": "Prochaine exécution",
+        "last": "Dernière exécution",
+        "runs": "Exécutions",
+        "failures": "Échecs",
+        "amount": "Par facture",
+        "mode": "Chaque facture vaut",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "lineCount": "{count, plural, one {1 ligne} other {# lignes}}",
+      "onHold": "En attente",
+      "runsOf": "{done} sur {max}",
+      "failuresTitle": "{count, plural, one {1 période a échoué. Ouvrez l’historique.} other {# périodes ont échoué. Ouvrez l’historique.}}",
+      "channel": {
+        "link": "Lien",
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "moreFor": "Autres actions pour {name}",
+      "open": "Ouvrir",
+      "edit": "Modifier",
+      "pause": "Mettre en pause",
+      "resume": "Reprendre",
+      "cancel": "Annuler",
+      "runNow": {
+        "action": "Exécuter maintenant",
+        "title": "Exécuter {name} maintenant ?",
+        "confirm": "Exécuter",
+        "message": {
+          "draft": "Cette action crée maintenant la facture pour {date} sous forme de brouillon à vérifier, et la planification passe à la période suivante.",
+          "issue": "Cette action crée maintenant la facture pour {date} et l’émet (elle reçoit son numéro immédiatement). La planification passe à la période suivante.",
+          "issue_send": "Cette action crée maintenant la facture pour {date}, l’émet et l’envoie à l’acheteur. La planification passe à la période suivante."
+        }
+      },
+      "delete": {
+        "action": "Supprimer",
+        "title": "Supprimer {name} ?",
+        "message": "{name} ne crée plus de factures. Les factures déjà créées restent dans votre liste.",
+        "confirm": "Supprimer la planification",
+        "keep": "Conserver"
+      },
+      "toast": {
+        "paused": "{name} est en pause.",
+        "resumed": "{name} est de nouveau active. Prochaine facture : {date}.",
+        "resumedEnded": "{name} n’avait plus de périodes à traiter ; elle est donc terminée.",
+        "ran": "Une facture a été créée à partir de {name}.",
+        "runFailed": "L’exécution de {name} a échoué et a été enregistrée. Ouvrez l’historique pour en voir la raison.",
+        "deleted": "{name} a été supprimée."
+      },
+      "every": {
+        "day": "{interval, plural, one {Chaque jour} other {Tous les # jours}}",
+        "week": "{interval, plural, one {Chaque semaine} other {Toutes les # semaines}}",
+        "month": "{interval, plural, one {Chaque mois} other {Tous les # mois}}",
+        "year": "{interval, plural, one {Chaque année} other {Tous les # ans}}"
+      },
+      "status": {
+        "active": "Active",
+        "paused": "En pause",
+        "ended": "Terminée"
+      },
+      "runStatus": {
+        "created": "Créée",
+        "failed": "Échec"
+      },
+      "modeShort": {
+        "draft": "Un brouillon",
+        "issue": "Émise",
+        "issue_send": "Émise et envoyée"
+      },
+      "modeSent": {
+        "email": "Émise et envoyée par e-mail",
+        "link": "Émise, partagée par lien",
+        "whatsapp": "Émise et envoyée sur WhatsApp"
+      },
+      "frequency": {
+        "day": "Jours",
+        "week": "Semaines",
+        "month": "Mois",
+        "year": "Ans"
+      },
+      "modeCards": {
+        "draft": {
+          "title": "Laisser en brouillon",
+          "hint": "Chaque facture attend votre vérification avant d’être émise."
+        },
+        "issue": {
+          "title": "L’émettre",
+          "hint": "Chaque facture reçoit son numéro et est prête le jour de son échéance."
+        },
+        "issue_send": {
+          "title": "Émettre et envoyer",
+          "hint": "Chaque facture est émise et envoyée à l’acheteur automatiquement."
+        }
+      },
+      "warnings": {
+        "noBuyerEmail": "Le modèle ne contient pas d’e-mail acheteur : l’envoi par e-mail échouera. Ajoutez une adresse e-mail ou envoyez par lien."
+      },
+      "preview": {
+        "title": "Prochaines exécutions",
+        "incomplete": "Renseignez la planification pour voir à quelles dates les factures seront créées.",
+        "sentence": "{every} à partir du {start}{limit}. {outcome}",
+        "sentenceLimit": "{kind, select, runs {, {count, plural, one {1 facture} other {# factures}}} end {, jusqu’au {end}} both {, {count, plural, one {1 facture} other {# factures}}, jusqu’au {end}} other {}}",
+        "outcome": {
+          "draft": "Chaque facture reste en brouillon pour vérification.",
+          "issue": "Chaque facture est émise automatiquement.",
+          "issue_email": "Chaque facture est émise et envoyée par e-mail à l’acheteur.",
+          "issue_link": "Chaque facture est émise et enregistrée comme partagée par lien.",
+          "issue_whatsapp": "Chaque facture est émise et envoyée sur WhatsApp."
+        },
+        "eachInvoice": "Chaque facture s’élève à environ",
+        "lastDay": "Dernier jour du mois",
+        "noRuns": "Aucune exécution ne tombe dans cette planification.",
+        "endsMaxRuns": "{count, plural, one {Elle s’arrête après 1 facture.} other {Elle s’arrête après # factures.}}",
+        "endsEndDate": "{count, plural, one {Rien ne s’exécute après le {date} : 1 facture au total.} other {Rien ne s’exécute après le {date} : # factures au total.}}",
+        "moreBounded": "{count, plural, one {1 facture au total.} other {# factures au total, les suivantes suivent le même rythme.}}",
+        "moreForever": "Elle continue jusqu’à ce que vous la mettiez en pause ou la supprimiez.",
+        "clampNote": "Cette planification commence le jour {day}. Un mois sans le jour {day} s’exécute le dernier jour du mois à la place, et le mois suivant revient au jour {day}.",
+        "catchUp": "{count, plural, one {1 période est déjà passée : sa facture est créée immédiatement.} other {# périodes sont déjà passées : leurs factures sont créées immédiatement, une par période.}}",
+        "catchUpTooOld": "{count} périodes sont déjà passées, et {max} au maximum sont créées. Commencez à une date plus récente."
+      },
+      "builder": {
+        "loading": "Chargement",
+        "endedNoEdit": "Cette planification est terminée : elle ne peut plus être modifiée.",
+        "openSchedule": "Ouvrir la planification",
+        "back": "Retour",
+        "newTitle": "Nouvelle facture récurrente",
+        "editTitle": "Modifier {name}",
+        "newSubtitle": "Définissez la récurrence et la facture créée. Les prochaines exécutions s’affichent sur le côté.",
+        "editSubtitle": "Modifiez la récurrence ou la facture pour les périodes à venir.",
+        "cancel": "Annuler",
+        "save": "Enregistrer les modifications",
+        "create": "Créer la planification",
+        "conflict": "Quelqu’un d’autre a modifié cette planification pendant votre édition. Rechargez la page pour voir sa version. Vos modifications seront perdues.",
+        "reload": "Recharger",
+        "fixProblems": "Corrigez d’abord les champs signalés.",
+        "nothingToSave": "Aucune modification n’a été apportée.",
+        "saved": "Planification enregistrée.",
+        "created": "{name} créera désormais des factures selon la planification.",
+        "schedule": "Planification",
+        "name": "Nom",
+        "nameHint": "Vous seul la voyez, par exemple Forfait mensuel.",
+        "every": "Répéter tous les",
+        "frequency": "Unité",
+        "startDate": "Première facture le",
+        "startFixed": "La date de début ne peut pas être modifiée. Créez une nouvelle planification pour commencer à une autre date.",
+        "startHint": "Une date passée fait créer immédiatement les périodes déjà échues, jusqu’à 12.",
+        "endDate": "Arrêter après (facultatif)",
+        "endHint": "Aucune facture n’est créée après cette date.",
+        "maxRuns": "Nombre de factures (facultatif)",
+        "maxRunsHint": "La planification se termine après ce nombre de factures.",
+        "noLimit": "Sans limite",
+        "scheduleEditNote": "Une récurrence modifiée se poursuit à partir d’aujourd’hui et ne répète jamais une période déjà exécutée.",
+        "mode": "Ce qui arrive à chaque facture",
+        "sendChannel": "Envoyer par",
+        "sendChannelHint": "Lien : vous enregistrez que vous partagez le lien vous-même. E-mail et WhatsApp l’envoient à votre place.",
+        "templateTitle": "Modèle de facture",
+        "templateFuture": "Un nouveau modèle s’applique aux factures à venir. Les factures déjà créées ne sont pas modifiées.",
+        "replaceTemplate": "Remplacer le modèle",
+        "keepTemplate": "Conserver le modèle actuel"
+      },
+      "template": {
+        "title": "Modèle de facture",
+        "hint": "Chaque période reçoit une nouvelle facture créée à partir de celle-ci, datée pour cette période.",
+        "hintEdit": "Créez ici le nouveau modèle. Il remplace le modèle actuel pour les futures factures.",
+        "sourceLabel": "D’où vient le modèle",
+        "source": {
+          "invoice": {
+            "title": "Copier une facture",
+            "hint": "Utilisez l’acheteur et les lignes d’une facture déjà créée."
+          },
+          "build": {
+            "title": "Créer un modèle",
+            "hint": "Renseignez ici l’acheteur et les lignes."
+          }
+        },
+        "draftInvoice": "Facture en brouillon",
+        "copyOf": "Une copie de cette facture, d’un total de",
+        "change": "Modifier",
+        "choose": "Choisir une facture",
+        "copyNote": "L’acheteur, les lignes, la taxe et les notes sont copiés à l’enregistrement. Les modifications ultérieures de l’original n’atteignent pas la planification.",
+        "startFromInvoice": "Partir d’une facture",
+        "startFromInvoiceHint": "Charge ici son acheteur et ses lignes pour que vous puissiez les ajuster.",
+        "billTo": "Facturer à",
+        "contact": "Contact",
+        "contactHint": "Choisissez un contact pour lier chaque facture à lui, ou saisissez l’acheteur ci-dessous.",
+        "buyerName": "Nom sur la facture",
+        "buyerEmail": "E-mail",
+        "buyerPhone": "Téléphone",
+        "buyerCountry": "Pays",
+        "buyerCountryHint": "Deux lettres, par exemple IN ou DE.",
+        "buyerTaxId": "Numéro d’identification fiscale",
+        "buyerAddress": "Adresse de facturation",
+        "details": "Devise et taxes",
+        "currency": "Devise",
+        "docType": "Document",
+        "docTypes": {
+          "tax_invoice": "Facture",
+          "proforma": "Facture proforma"
+        },
+        "taxMode": "Taxe",
+        "taxModes": {
+          "rates": "Par taux de taxe",
+          "auto": "Automatique"
+        },
+        "taxModeAutoHint": "Le moteur de taxes détermine les taxes à partir des pays du vendeur et de l’acheteur.",
+        "supplyType": "Type de fourniture",
+        "supply": {
+          "goods": "Biens",
+          "services": "Services",
+          "digital": "Services numériques"
+        },
+        "paymentTerms": "Conditions de paiement",
+        "paymentTermsHint": "Comptées à partir du jour d’émission de chaque facture.",
+        "termsDefault": "Valeur par défaut de l’espace de travail",
+        "termsOnReceipt": "À réception",
+        "termsNet": "Échéance à {days} jours",
+        "lines": "Lignes",
+        "adjustments": "Remise et livraison",
+        "discountKind": "Remise sur la facture entière",
+        "discountNone": "Aucune remise",
+        "discountPercent": "Pourcentage",
+        "discountAmount": "Montant fixe ({currency})",
+        "discountValue": "Valeur de la remise",
+        "shipping": "Frais de port ({currency})",
+        "notes": "Note pour le client",
+        "notesHint": "Imprimée sur chaque facture.",
+        "termsText": "Conditions générales",
+        "termsTextHint": "Imprimées en bas de chaque facture.",
+        "kept": "{count, plural, one {Le modèle comporte 1 ligne, facturée à} other {Le modèle comporte # lignes, facturées à}}"
+      },
+      "problems": {
+        "generic": "Vérifiez ce champ.",
+        "nameRequired": "Donnez un nom à la planification.",
+        "nameTooLong": "Utilisez 120 caractères au maximum.",
+        "intervalInvalid": "Saisissez un nombre entier de 1 à 365.",
+        "startInvalid": "Saisissez une date de début valide.",
+        "startTooOld": "Cette date de début remonte à {count} périodes, et {max} périodes passées au maximum sont créées. Choisissez une date plus récente.",
+        "endInvalid": "Saisissez une date de fin valide.",
+        "endBeforeStart": "La date de fin est antérieure à la date de début.",
+        "maxRunsInvalid": "Saisissez un nombre entier de 1 à 1000, ou laissez vide.",
+        "invoiceRequired": "Choisissez la facture à copier.",
+        "termsInvalid": "Saisissez de 0 à 365 jours.",
+        "descriptionRequired": "Décrivez cette ligne.",
+        "qtyInvalid": "Saisissez une quantité supérieure à zéro.",
+        "priceInvalid": "Saisissez un prix valide.",
+        "lineDiscountInvalid": "Saisissez un pourcentage de 0 à 100.",
+        "hsnRequired": "Saisissez le code HSN ou SAC.",
+        "hsnInvalid": "Un code HSN ou SAC comporte de 2 à 12 lettres ou chiffres.",
+        "taxRateRemoved": "Ce taux de taxe n’existe plus. Choisissez-en un autre.",
+        "currencyInvalid": "Saisissez un code de devise à trois lettres.",
+        "noLines": "Ajoutez au moins une ligne.",
+        "discountInvalid": "Saisissez une remise valide.",
+        "shippingInvalid": "Saisissez un montant valide.",
+        "emailInvalid": "Saisissez une adresse e-mail valide.",
+        "amountZero": "Le total de la facture doit être supérieur à zéro.",
+        "amountInvalid": "Ce montant n’est pas valide.",
+        "contactRequired": "Choisissez un contact ou saisissez le nom de l’acheteur. Les factures émises automatiquement ont besoin d’un acheteur.",
+        "countryInvalid": "Utilisez un code pays à deux lettres.",
+        "regionInvalid": "Saisissez un code d’État ou de région valide.",
+        "autoNeedsSellerCountry": "La taxe automatique nécessite votre pays dans les paramètres de facturation."
+      },
+      "detail": {
+        "loading": "Chargement de la planification",
+        "backToList": "Retour aux factures récurrentes",
+        "back": "Retour aux factures récurrentes",
+        "failures": "{count, plural, one {1 période n’a pas pu créer sa facture.} other {# périodes n’ont pas pu créer leur facture.}}",
+        "seeHistory": "Voir la raison",
+        "pausedNote": "Cette planification est en pause. Les périodes tombant pendant la pause sont ignorées : à la reprise, la prochaine facture est datée d’aujourd’hui ou ultérieure.",
+        "endedNote": "Cette planification est terminée. Plus rien ne sera créé, et elle ne peut plus être modifiée.",
+        "nextRun": "Prochaine exécution",
+        "lastRun": "Dernière exécution",
+        "runs": "Factures créées",
+        "failedCount": "{count, plural, one {1 échec} other {# échecs}}",
+        "amount": "Par facture",
+        "amountNote": "Montant du modèle aujourd’hui",
+        "upcoming": "Dates à venir",
+        "noUpcoming": "Aucune autre exécution n’est prévue.",
+        "template": "Modèle",
+        "buyer": "Acheteur",
+        "lines": "Lignes",
+        "currency": "Devise",
+        "mode": "Chaque facture vaut",
+        "starts": "Début",
+        "ends": "Fin",
+        "never": "Sans date de fin",
+        "limit": "Limite",
+        "noLimit": "Sans limite",
+        "invoicesCount": "{count, plural, one {1 facture} other {# factures}}",
+        "templateNote": "Modifier le modèle change les factures à venir, jamais celles déjà créées."
+      },
+      "runs": {
+        "title": "Historique des exécutions",
+        "subtitle": "Une ligne par période, la plus récente en premier.",
+        "loading": "Chargement de l’historique",
+        "scrollArea": "Tableau de l’historique, défilement horizontal",
+        "emptyTitle": "Aucune exécution pour l’instant",
+        "emptyMessage": "La première facture est créée à la prochaine date d’exécution.",
+        "period": "Période {n}",
+        "draftInvoice": "Brouillon",
+        "showing": "{count, plural, one {Affichage de 1 exécution} other {Affichage de # exécutions}}",
+        "loadMore": "Charger plus",
+        "allLoaded": "Historique complet affiché",
+        "columns": {
+          "period": "Date de la période",
+          "status": "Résultat",
+          "invoice": "Facture",
+          "error": "Cause de l’échec",
+          "at": "Créée le"
+        }
+      }
+    }
+  }
+}

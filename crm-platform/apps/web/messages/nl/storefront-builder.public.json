@@ -1,0 +1,336 @@
+{
+  "shopPublic": {
+    "common": {
+      "close": "Sluiten",
+      "ok": "OK",
+      "done": "Klaar",
+      "skip": "Naar inhoud springen"
+    },
+    "strip": "Bestel via WhatsApp · Betaling bij levering mogelijk · Gratis chats, snelle antwoorden",
+    "header": {
+      "navLabel": "Winkelonderdelen",
+      "shop": "Winkel",
+      "categories": "Categorieën",
+      "about": "Over",
+      "searchPlaceholder": "Producten zoeken…",
+      "searchLabel": "Producten zoeken",
+      "wishlist": "Verlanglijst",
+      "compare": "Vergelijken",
+      "cart": "Winkelwagen",
+      "withCount": "{label}, {count, plural, one {# artikel} other {# artikelen}}"
+    },
+    "hero": {
+      "welcome": "Welkom bij {shop}.",
+      "sub": "Zorgvuldig gekozen producten. Bestel elk artikel direct via WhatsApp — geen afrekenformulieren, geen apps installeren.",
+      "trust": {
+        "cod": "Betaling bij levering",
+        "chat": "Gratis chatondersteuning",
+        "returns": "Eenvoudig retourneren"
+      }
+    },
+    "catalog": {
+      "label": "Producten",
+      "emptyTitle": "Nog geen producten",
+      "emptyBody": "De eigenaar is nog bezig met instellen — kom binnenkort terug.",
+      "count": "{count, plural, one {# product} other {# producten}}",
+      "sort": {
+        "label": "Producten sorteren",
+        "featured": "Sorteren · Uitgelicht",
+        "priceAsc": "Prijs · laag naar hoog",
+        "priceDesc": "Prijs · hoog naar laag",
+        "nameAsc": "Naam · A → Z",
+        "nameDesc": "Naam · Z → A"
+      },
+      "view": {
+        "label": "Weergave",
+        "grid": "Rasterweergave",
+        "list": "Lijstweergave"
+      },
+      "filters": {
+        "title": "Filteren",
+        "category": "Categorie",
+        "price": "Prijs",
+        "min": "Min",
+        "max": "Max",
+        "range": "Bereik: {min} — {max}",
+        "availability": "Beschikbaarheid",
+        "inStock": "Alleen op voorraad",
+        "onSale": "In de aanbieding",
+        "reset": "Filters resetten",
+        "clear": "Filters wissen"
+      },
+      "noMatch": "Niets voldoet aan die filters",
+      "showMore": "Meer producten tonen",
+      "loading": "Laden…",
+      "retry": "Opnieuw proberen",
+      "showing": "{shown} van {total} producten getoond"
+    },
+    "card": {
+      "new": "Nieuw",
+      "soldOut": "Uitverkocht",
+      "soldOutNamed": "{name}: uitverkocht",
+      "addToCart": "In winkelwagen",
+      "addToCartNamed": "{name} in winkelwagen",
+      "addWish": "{name} aan verlanglijst toevoegen",
+      "removeWish": "{name} van verlanglijst verwijderen",
+      "quickView": "Snelle weergave van {name}",
+      "quickViewTitle": "Snelle weergave",
+      "was": "Was"
+    },
+    "quick": {
+      "details": "Volledige details →"
+    },
+    "product": {
+      "gallery": "Productafbeeldingen",
+      "showImage": "Afbeelding {n} tonen",
+      "breadcrumb": "Je bent hier",
+      "save": "Bespaar {percent}%",
+      "onlyLeft": "Nog maar {count} over",
+      "inStock": "Op voorraad · klaar voor verzending",
+      "quantity": "Aantal",
+      "addCompare": "Toevoegen aan vergelijking",
+      "removeCompare": "Uit vergelijking verwijderen",
+      "share": "Dit product delen",
+      "shareTitle": "Dit product delen",
+      "ask": "Stel een vraag via WhatsApp",
+      "sku": "SKU",
+      "category": "Categorie",
+      "weight": "Gewicht",
+      "grams": "{count} g",
+      "delivery": "Levering",
+      "deliveryTime": "2–5 werkdagen",
+      "tags": "Tags",
+      "tabs": {
+        "label": "Productinformatie",
+        "desc": "Beschrijving",
+        "ship": "Verzending en retourneren",
+        "reviews": "Reviews"
+      },
+      "noDescription": "Nog geen beschrijving beschikbaar — stuur de verkoper een bericht via WhatsApp voor meer informatie.",
+      "shippingHeading": "Verzending.",
+      "shippingBody": "Bestellingen worden binnen 1–2 werkdagen verzonden. Levertijden hangen af van je locatie — meestal 2–5 werkdagen.",
+      "freeAbove": "Gratis verzending bij bestellingen boven {amount}.",
+      "returnsHeading": "Retourneren.",
+      "returnsBody": "Ongebruikte artikelen kunnen binnen 7 dagen na levering worden geretourneerd. Stuur ons een bericht via WhatsApp om een retour te starten — wij regelen de ophaling.",
+      "reviewCount": "{count, plural, one {# review} other {# reviews}}",
+      "anonymous": "Anoniem",
+      "ratingOf": "{rating} van 5",
+      "noReviews": "Nog geen reviews — wees de eerste die dit product beoordeelt.",
+      "related": "Misschien vind je dit ook leuk"
+    },
+    "review": {
+      "write": "Schrijf een review",
+      "name": "Je naam",
+      "rating": "Beoordeling",
+      "ratings": {
+        "1": "Slecht",
+        "2": "Matig",
+        "3": "Oké",
+        "4": "Goed",
+        "5": "Uitstekend"
+      },
+      "bodyLabel": "Je review",
+      "body": "Deel je ervaring (optioneel)",
+      "submit": "Review verzenden",
+      "nameRequired": "Voeg je naam toe.",
+      "thanks": "Bedankt voor je review!",
+      "network": "Netwerkfout. Probeer het opnieuw.",
+      "failed": "Je review kon niet worden verzonden."
+    },
+    "cart": {
+      "title": "Je winkelwagen",
+      "subtotal": "Subtotaal",
+      "shipping": "Verzending",
+      "free": "GRATIS ✓",
+      "total": "Totaal",
+      "addForFree": "Voeg nog {amount} toe voor gratis verzending",
+      "order": "Bestel via WhatsApp →",
+      "payVia": "Betalen via {method} · Betaling bij levering",
+      "methods": {
+        "upi": "UPI",
+        "razorpay": "Razorpay",
+        "card": "Kaart",
+        "paypal": "PayPal",
+        "bank": "Bankoverschrijving"
+      },
+      "codOnly": "Betaling bij levering · Bevestig in de chat",
+      "emptyTitle": "Je winkelwagen is leeg",
+      "emptyBody": "Blader door de catalogus en voeg je favorieten toe.",
+      "keepBrowsing": "Verder winkelen",
+      "quantityOf": "Aantal van {name}",
+      "decrease": "Aantal verlagen",
+      "increase": "Aantal verhogen",
+      "remove": "{name} uit winkelwagen verwijderen",
+      "fullTitle": "Je winkelwagen is vol",
+      "fullBody": "Een winkelwagen bevat maximaal 100 verschillende producten. Bestel deze eerst en start daarna een nieuwe winkelwagen."
+    },
+    "wish": {
+      "title": "Verlanglijst",
+      "emptyTitle": "Nog geen favorieten",
+      "emptyBody": "Tik op het hartje bij een product om het voor later op te slaan.",
+      "remove": "{name} van verlanglijst verwijderen"
+    },
+    "compare": {
+      "title": "Producten vergelijken",
+      "emptyTitle": "Niets om te vergelijken",
+      "emptyBody": "Tik op “Vergelijken” bij twee producten om ze naast elkaar te zien.",
+      "attribute": "Kenmerk",
+      "rows": {
+        "image": "Afbeelding",
+        "name": "Naam",
+        "price": "Prijs",
+        "sku": "SKU",
+        "category": "Categorie",
+        "description": "Beschrijving"
+      },
+      "remove": "{name} uit vergelijking verwijderen",
+      "bar": "Producten om te vergelijken",
+      "open": "Vergelijk →",
+      "fullTitle": "Vergelijking vol",
+      "fullBody": "Je kunt maximaal {count} producten tegelijk vergelijken. Verwijder er een uit de vergelijkingsbalk om een nieuwe toe te voegen."
+    },
+    "stock": {
+      "title": "Nog maar {count} op voorraad",
+      "soldOut": "Dit product is uitverkocht. We vullen binnenkort aan — stuur ons een bericht via WhatsApp om op de hoogte te worden gebracht.",
+      "limit": "{count, plural, one {Er is nog maar 1 stuk beschikbaar, en je hebt het al allemaal in je winkelwagen.} other {Er zijn nog maar # stuks beschikbaar, en je hebt ze al allemaal in je winkelwagen.}}",
+      "maxTitle": "Limiet bereikt",
+      "maxBody": "Je kunt maximaal {count} stuks van één product per keer bestellen."
+    },
+    "toast": {
+      "added": "{name} · toegevoegd aan winkelwagen",
+      "wishAdded": "Toegevoegd aan verlanglijst ♡",
+      "wishRemoved": "Verwijderd van verlanglijst",
+      "compareAdded": "Toegevoegd aan vergelijking",
+      "compareRemoved": "Verwijderd uit vergelijking"
+    },
+    "checkout": {
+      "title": "Afrekenen",
+      "summary": "{count, plural, one {# artikel} other {# artikelen}} · {total}",
+      "name": "Je naam",
+      "phone": "WhatsApp-nummer",
+      "phonePlaceholder": "+1 555 123 4567",
+      "address": "Bezorgadres",
+      "note": "Opmerking (optioneel)",
+      "coupon": "Kortingscode",
+      "apply": "Toepassen",
+      "payment": "Betaling",
+      "prepaid": "Gegevens online betalen / bij levering",
+      "cod": "Betaling bij levering",
+      "place": "Bestelling plaatsen",
+      "placing": "Bestelling plaatsen…",
+      "opening": "Bestelling geplaatst! WhatsApp wordt geopend…",
+      "nameRequired": "Vul je naam in.",
+      "phoneInvalid": "Vul een geldig WhatsApp-nummer in.",
+      "cartEmpty": "Je winkelwagen is leeg.",
+      "emptyTitle": "Je winkelwagen is leeg",
+      "emptyBody": "Blader door de catalogus en voeg een product toe voordat je afrekent.",
+      "failed": "De bestelling kon niet worden geplaatst. Probeer het opnieuw.",
+      "network": "Netwerkfout. Probeer het opnieuw.",
+      "couponSave": "Je bespaart {discount} · Nieuw totaal {total}",
+      "couponFree": "Gratis verzending toegepast · Nieuw totaal {total}",
+      "couponInvalid": "Die code is niet geldig voor deze winkelwagen.",
+      "couponNetwork": "Die code kon niet worden gecontroleerd.",
+      "couponFallback": "Ongeldige code."
+    },
+    "errors": {
+      "itemsUnavailable": "Die artikelen zijn niet meer beschikbaar. Ververs de pagina en probeer het opnieuw.",
+      "notAvailable": "Deze store is niet beschikbaar.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw."
+    },
+    "placed": {
+      "title": "Bestelling geplaatst",
+      "track": "Volg bestelling #{orderNo} →"
+    },
+    "share": {
+      "title": "Delen",
+      "url": "Link om te delen",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd ✓",
+      "copyFailed": "De link kon niet worden gekopieerd",
+      "linkCopied": "Link gekopieerd",
+      "whatsapp": "WhatsApp",
+      "whatsappHint": "Naar een chat sturen",
+      "email": "E-mail",
+      "emailHint": "Mailapp openen",
+      "telegram": "Telegram",
+      "telegramHint": "Delen in chat",
+      "more": "Meer…",
+      "moreHint": "Deelmenu van telefoon",
+      "showQr": "QR-code tonen →",
+      "qrTitle": "QR-code van de link",
+      "scan": "Scan om de winkel te openen"
+    },
+    "info": {
+      "freeAbove": "Gratis verzending vanaf {amount}.",
+      "shipping": {
+        "title": "Verzending en levering",
+        "body": "Bestellingen worden via WhatsApp bevestigd. Levertijden hangen af van je locatie — meestal 2-5 werkdagen."
+      },
+      "returns": {
+        "title": "Retourneren",
+        "body": "Ongebruikte artikelen kunnen binnen 7 dagen worden geretourneerd. Stuur ons een bericht via WhatsApp om een retour te starten."
+      },
+      "howToOrder": {
+        "title": "Zo bestel je",
+        "body": "Blader door de catalogus, voeg toe aan je winkelwagen en tik daarna op “Bestel via WhatsApp”. We bevestigen je bestelling in de chat en regelen de levering."
+      },
+      "privacy": {
+        "title": "Privacy",
+        "body": "We verzamelen alleen wat je in de chat deelt om je bestelling af te handelen. We verkopen je gegevens nooit."
+      }
+    },
+    "footer": {
+      "blurb": "Zorgvuldig gekozen producten, besteld via WhatsApp als een telefoontje. Geen app nodig — gewoon chatten om te kopen.",
+      "paymentsLabel": "Betaalmethoden",
+      "pay": {
+        "whatsapp": "WhatsApp",
+        "upi": "UPI",
+        "cod": "Betaling bij levering",
+        "bank": "Bankoverschrijving"
+      },
+      "shopHeading": "Winkel",
+      "allProducts": "Alle producten",
+      "helpHeading": "Hulp",
+      "help": {
+        "shipping": "Verzending",
+        "returns": "Retourneren",
+        "howToOrder": "Zo bestel je",
+        "privacy": "Privacy"
+      },
+      "contactHeading": "Contact",
+      "whatsappLink": "WhatsApp · {number}",
+      "hours": "Ma–zo · 9:00–21:00",
+      "hoursToast": "Openingstijden: 9:00–21:00",
+      "copyright": "© {year} {shop}"
+    },
+    "order": {
+      "title": "Bestelling #{orderNo}",
+      "progress": "Voortgang bestelling",
+      "cancelled": "Deze bestelling is geannuleerd. Neem contact met ons op als dat onverwacht is.",
+      "steps": {
+        "placed": "Geplaatst",
+        "confirmed": "Bevestigd",
+        "paid": "Betaald",
+        "shipped": "Verzonden"
+      },
+      "stepDone": "klaar",
+      "stepTodo": "nog niet",
+      "items": "Artikelen",
+      "qty": "Aantal {qty} · {price}",
+      "free": "Gratis",
+      "deliveryTo": "Bezorgen aan",
+      "payNow": "Nu betalen",
+      "message": "Stuur ons een bericht over deze bestelling"
+    },
+    "notFound": {
+      "kicker": "Verdwaald in de workspace",
+      "title": "Deze pagina is de verkeerde kant op gegaan.",
+      "body": "We konden niet vinden wat je zocht. De link is misschien kapot, de pagina is verplaatst of heeft er nooit gestaan.",
+      "back": "Terug",
+      "signIn": "Inloggen",
+      "help": "Hulp nodig?",
+      "support": "Neem contact op met support",
+      "metaTitle": "Pagina niet gevonden"
+    }
+  }
+}

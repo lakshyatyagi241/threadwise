@@ -1,0 +1,48 @@
+{
+  "checkout-orders-merchant-payments": {
+    "invoices": {
+      "eyebrow": "Storefront / Rechnungen",
+      "title": "Rechnungen",
+      "subtitle": "Aus Shop-Bestellungen erstellte Rechnungen. Verwalten Sie sie in Sales.",
+      "allInvoices": "Alle Rechnungen",
+      "loading": "Rechnungen werden geladen",
+      "searching": "Weitere Shop-Rechnungen werden gesucht...",
+      "search": {
+        "label": "Rechnungen suchen",
+        "placeholder": "Nach Nummer, Käufer oder Referenz suchen..."
+      },
+      "status": {
+        "label": "Status",
+        "all": "Alle Status"
+      },
+      "columns": {
+        "number": "Rechnung",
+        "buyer": "Käufer",
+        "status": "Status",
+        "total": "Gesamt",
+        "issued": "Ausgestellt",
+        "due": "Fällig",
+        "actions": "Aktionen"
+      },
+      "row": {
+        "draft": "Entwurf",
+        "openInSales": "In Sales öffnen",
+        "openAria": "Rechnung {number} in Sales öffnen"
+      },
+      "empty": {
+        "title": "Noch keine Rechnungen aus Shop-Bestellungen",
+        "message": "Öffnen Sie eine Bestellung und wählen Sie Rechnung erstellen.",
+        "action": "Zu den Bestellungen"
+      },
+      "noMatch": {
+        "title": "Keine passenden Shop-Rechnungen",
+        "message": "Ändern Sie die Suche oder den Status, um mehr zu sehen."
+      },
+      "capped": {
+        "title": "Keine in den neuesten Rechnungen gefunden",
+        "message": "Die neuesten Rechnungen in Sales wurden geprüft, und keine stammte aus einer Shop-Bestellung. Laden Sie mehr, um weiter zurückzusuchen.",
+        "note": "Es wurden nur die neuesten Rechnungen geprüft. Laden Sie mehr, um weiter zurückzusuchen."
+      }
+    }
+  }
+}

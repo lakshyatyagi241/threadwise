@@ -1,0 +1,1809 @@
+{
+  "auth-registration-security": {
+    "platform": {
+      "shell": {
+        "brand": "CRM",
+        "title": "Konsola platformy",
+        "skipToContent": "Przejdź do treści",
+        "navLabel": "Nawigacja konsoli",
+        "openMenu": "Otwórz menu",
+        "closeMenu": "Zamknij menu",
+        "language": "Język",
+        "themeToLight": "Przełącz na jasny motyw",
+        "themeToDark": "Przełącz na ciemny motyw",
+        "accountLink": "Konto i bezpieczeństwo ({email})",
+        "signOut": "Wyloguj się",
+        "signingOut": "Wylogowywanie",
+        "redirecting": "Otwieranie konfiguracji uwierzytelniania dwuskładnikowego",
+        "roles": {
+          "super_admin": "Superadministrator",
+          "support": "Wsparcie",
+          "auditor": "Audytor"
+        },
+        "mfaRequired": {
+          "title": "Wymagane jest uwierzytelnianie dwuskładnikowe",
+          "body": "Superadministratorzy muszą włączyć aplikację uwierzytelniającą, zanim zaczną korzystać z konsoli. Dokończ konfigurację poniżej, aby odblokować wszystkie strony."
+        }
+      },
+      "nav": {
+        "securityCenter": "Centrum bezpieczeństwa",
+        "securityEvents": "Zdarzenia bezpieczeństwa",
+        "registration": "Zasady rejestracji",
+        "socialLogin": "Logowanie społecznościowe i captcha",
+        "authPages": "Strony uwierzytelniania",
+        "plans": "Plany",
+        "account": "Konto i uwierzytelnianie dwuskładnikowe",
+        "groups": {
+          "security": "Bezpieczeństwo",
+          "guestPages": "Logowanie i rejestracja",
+          "plans": "Plany",
+          "account": "Twoje konto"
+        }
+      },
+      "common": {
+        "copy": "Kopiuj",
+        "copied": "Skopiowano",
+        "copyFailed": "Nie udało się skopiować",
+        "loading": "Ładowanie",
+        "retry": "Spróbuj ponownie",
+        "requestId": "Identyfikator żądania",
+        "errors": {
+          "forbidden": "Twoja rola na to nie zezwala.",
+          "request": "Żądanie zostało odrzucone. Odśwież stronę i spróbuj ponownie.",
+          "unexpected": "Coś poszło nie tak po naszej stronie. Spróbuj ponownie za chwilę."
+        },
+        "readOnly": {
+          "superAdmin": "Tylko superadministratorzy mogą zmieniać te ustawienia. Twoja rola ({role}) pozwala je tylko przeglądać.",
+          "superAdminSupport": "Tylko superadministratorzy i wsparcie mogą zmieniać te ustawienia. Twoja rola ({role}) pozwala je tylko przeglądać."
+        },
+        "copyWhat": "Kopiuj: {what}"
+      },
+      "login": {
+        "title": "Logowanie operatora",
+        "intro": "Ta konsola jest dla osób zarządzających platformą. Użytkownicy przestrzeni roboczych logują się na głównej stronie logowania.",
+        "requestId": "Identyfikator żądania",
+        "submit": "Zaloguj się",
+        "submitting": "Logowanie",
+        "fields": {
+          "email": "E-mail",
+          "emailPlaceholder": "ty@firma.com",
+          "password": "Hasło",
+          "showPassword": "Pokaż hasło",
+          "hidePassword": "Ukryj hasło"
+        },
+        "errors": {
+          "email": "Wpisz prawidłowy adres e-mail.",
+          "passwordRequired": "Wpisz swoje hasło.",
+          "captchaRequired": "Zaznacz pole, aby potwierdzić, że nie jesteś robotem.",
+          "codeFormat": "Wpisz 6 cyfr z aplikacji uwierzytelniającej.",
+          "recoveryFormat": "Kod odzyskiwania ma od 8 do 32 liter, cyfr lub myślników."
+        },
+        "notices": {
+          "expired": "Twoja sesja zakończyła się. Zaloguj się ponownie, aby kontynuować.",
+          "idle": "Zostałeś wylogowany po {minutes, plural, one {# minucie} few {# minutach} many {# minutach} other {# minuty}} bez aktywności. Zaloguj się ponownie, aby kontynuować."
+        },
+        "problems": {
+          "invalid": "Te dane logowania się nie zgadzają.",
+          "invalidCode": "Ten kod jest nieprawidłowy. Sprawdź kod i spróbuj ponownie.",
+          "locked": "Zbyt wiele nieudanych prób. Logowanie jest wstrzymane na jakiś czas.",
+          "tryAgainIn": "Spróbuj ponownie za {time}",
+          "ipBlocked": "Dostęp z adresu {ip} jest niedozwolony.",
+          "ipBlockedUnknown": "Dostęp z tego adresu jest niedozwolony.",
+          "ipBlockedHelp": "Lista dozwolonych operatorów nie zawiera tego adresu. Poproś superadministratora o jego dodanie.",
+          "captcha": "Weryfikacja captcha nie powiodła się. Ukończ ją i spróbuj ponownie.",
+          "challengeExpired": "To logowanie wygasło. Wpisz hasło ponownie.",
+          "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+          "unexpected": "Nie udało się Cię zalogować. Spróbuj ponownie za chwilę.",
+          "lockedWait": "Zbyt wiele nieudanych prób. Spróbuj ponownie za {minutes, plural, one {# minutę} few {# minuty} many {# minut} other {# minuty}}."
+        },
+        "captcha": {
+          "loadFailed": "Nie udało się załadować captcha. Sprawdź połączenie lub blokadę treści, a następnie spróbuj ponownie.",
+          "retry": "Ponów captcha",
+          "v3Notice": "Ta strona jest chroniona niewidoczną weryfikacją captcha."
+        },
+        "mfa": {
+          "title": "Weryfikacja dwuskładnikowa",
+          "intro": "Wpisz 6-cyfrowy kod z aplikacji uwierzytelniającej.",
+          "recoveryIntro": "Wpisz jeden ze swoich kodów odzyskiwania. Każdy kod działa raz.",
+          "codeLabel": "Kod uwierzytelniający",
+          "codeHint": "Kod zmienia się co 30 sekund.",
+          "recoveryLabel": "Kod odzyskiwania",
+          "recoveryHint": "Litery, cyfry i myślniki, dokładnie tak, jak zapisano.",
+          "windowLeft": "To logowanie pozostaje otwarte przez {time}.",
+          "windowClosed": "To okno logowania zostało zamknięte. Wróć i wpisz hasło ponownie.",
+          "verify": "Zweryfikuj i zaloguj się",
+          "verifying": "Sprawdzanie",
+          "useRecovery": "Użyj kodu odzyskiwania",
+          "useAuthenticator": "Użyj aplikacji uwierzytelniającej",
+          "back": "Wróć do logowania"
+        }
+      },
+      "mfa": {
+        "eyebrow": "Twoje konto",
+        "title": "Uwierzytelnianie dwuskładnikowe",
+        "description": "Chroń adres {email} za pomocą aplikacji uwierzytelniającej. Konta operatorów to konta o najwyższym poziomie zaufania na platformie.",
+        "requestId": "Identyfikator żądania",
+        "status": {
+          "title": "Aplikacja uwierzytelniająca",
+          "on": "Włączone",
+          "body": "Uwierzytelnianie dwuskładnikowe jest włączone dla tego konta. Przy każdym logowaniu będziesz proszony o kod. Kody odzyskiwania zostały pokazane raz, po jego włączeniu."
+        },
+        "intro": {
+          "title": "Skonfiguruj aplikację uwierzytelniającą",
+          "step1": "Zainstaluj aplikację uwierzytelniającą, taką jak Google Authenticator, Microsoft Authenticator lub 1Password.",
+          "step2": "Zeskanuj pokazany kod QR lub wpisz klucz konfiguracji ręcznie.",
+          "step3": "Wpisz 6-cyfrowy kod wyświetlany w aplikacji, aby potwierdzić. Następnie otrzymasz kody odzyskiwania.",
+          "begin": "Rozpocznij konfigurację",
+          "starting": "Przygotowywanie"
+        },
+        "setup": {
+          "qrLabel": "Kod QR dla Twojej aplikacji uwierzytelniającej",
+          "title": "Zeskanuj, a następnie potwierdź",
+          "scan": "Otwórz aplikację uwierzytelniającą, dodaj konto i zeskanuj ten kod. Jest rysowany w Twojej przeglądarce i nigdy nie jest wysyłany do innej witryny.",
+          "manualTitle": "Nie możesz zeskanować?",
+          "manualHint": "Wpisz zamiast tego ten klucz konfiguracji w aplikacji. Oparty na czasie, 6 cyfr.",
+          "codeLabel": "6-cyfrowy kod",
+          "codeHint": "Wpisz kod, który aplikacja pokazuje w tej chwili.",
+          "enable": "Włącz uwierzytelnianie dwuskładnikowe",
+          "enabling": "Włączanie",
+          "cancel": "Anuluj konfigurację"
+        },
+        "codes": {
+          "enabled": "Uwierzytelnianie dwuskładnikowe jest włączone.",
+          "title": "Zapisz swoje kody odzyskiwania",
+          "body": "Jeśli stracisz telefon, każdy z tych kodów pozwala zalogować się jednorazowo. Są pokazywane tylko teraz. Przechowuj je w bezpiecznym miejscu, osobno od hasła.",
+          "copyAll": "Kopiuj wszystko",
+          "download": "Pobierz jako plik tekstowy",
+          "saved": "Bezpiecznie zapisałem te kody odzyskiwania.",
+          "continue": "Przejdź do konsoli",
+          "fileHeader": "Kody odzyskiwania konsoli platformy dla {email}. Każdy kod działa raz."
+        },
+        "errors": {
+          "unexpected": "Nie udało się ukończyć tego kroku. Spróbuj ponownie za chwilę.",
+          "codeFormat": "Wpisz 6 cyfr pokazanych w aplikacji.",
+          "codeInvalid": "Ten kod jest nieprawidłowy. Sprawdź zegar w telefonie i spróbuj z następnym kodem.",
+          "setupExpired": "Konfiguracja wygasła. Zacznij od nowa.",
+          "locked": "Zbyt wiele nieudanych prób. Poczekaj chwilę, zanim spróbujesz ponownie.",
+          "lockedWait": "Zbyt wiele nieudanych prób. Spróbuj ponownie za {minutes, plural, one {# minutę} few {# minuty} many {# minut} other {# minuty}}."
+        }
+      },
+      "security": {
+        "kicker": "Centrum bezpieczeństwa",
+        "title": "Bezpieczeństwo i zgodność",
+        "description": "Chroń dostęp operatorów, wysyłanie WhatsApp, urządzenia i webhooki. Każda zmiana jest zapisywana jako jedna aktualizacja i trafia do dziennika zdarzeń bezpieczeństwa.",
+        "viewEvents": "Zobacz zdarzenia bezpieczeństwa",
+        "save": "Zapisz ustawienia",
+        "saving": "Zapisywanie",
+        "saved": "{count, plural, one {Zapisano # ustawienie} few {Zapisano # ustawienia} many {Zapisano # ustawień} other {Zapisano # ustawienia}}",
+        "rejected": "Nic nie zapisano. {count, plural, one {Odrzucono # pole.} few {Odrzucono # pola.} many {Odrzucono # pól.} other {Odrzucono # pola.}}",
+        "requestId": "Identyfikator żądania",
+        "unsaved": "{count, plural, one {# niezapisana zmiana} few {# niezapisane zmiany} many {# niezapisanych zmian} other {# niezapisanej zmiany}}",
+        "discard": "Odrzuć zmiany",
+        "errors": {
+          "forbidden": "Twoja rola nie pozwala na zmianę tych ustawień.",
+          "unexpected": "Nie udało się zapisać ustawień. Spróbuj ponownie za chwilę."
+        },
+        "tabs": {
+          "summary": "Podsumowanie",
+          "login": "Logowanie i MFA",
+          "whatsapp": "Zabezpieczenia WhatsApp",
+          "abuse": "Filtry nadużyć",
+          "api": "API i webhooki",
+          "devices": "Urządzenia",
+          "danger": "Strefa zagrożenia"
+        },
+        "common": {
+          "range": "Dozwolone: od {min} do {max}.",
+          "rangeWithZero": "Dozwolone: 0 (wyłączone) lub od {min} do {max}.",
+          "blankKeeps": "Puste pole zachowuje zapisaną wartość."
+        },
+        "problems": {
+          "range": "Wpisz liczbę całkowitą od {min} do {max}.",
+          "rangeWithZero": "Wpisz 0 lub liczbę całkowitą od {min} do {max}.",
+          "tooMany": "Nie więcej niż {max} wpisów.",
+          "tooLong": "Każdy wpis może mieć maksymalnie {max} znaków.",
+          "invalidEntry": "{entry} nie jest prawidłowym adresem ani zakresem.",
+          "totalTooLong": "Utrzymaj listę poniżej {max} znaków łącznie."
+        },
+        "kpis": {
+          "score": {
+            "label": "Wynik bezpieczeństwa",
+            "strong": "silne zabezpieczenia aktywne",
+            "attention": "wymaga uwagi"
+          },
+          "openRisks": {
+            "label": "Otwarte zagrożenia",
+            "note": "{count} o wysokim priorytecie"
+          },
+          "blocked": {
+            "label": "Zablokowane próby"
+          },
+          "last24h": "ostatnie 24 godziny",
+          "warnings": {
+            "label": "Ostrzeżenia"
+          },
+          "mfa": {
+            "label": "Pokrycie MFA operatorów",
+            "note": "Zarejestrowano {enrolled}/{total} operatorów"
+          },
+          "webhooks": {
+            "label": "Błędy webhooków",
+            "normal": "normalnie",
+            "review": "do sprawdzenia"
+          }
+        },
+        "risks": {
+          "kicker": "Kolejka priorytetowa",
+          "title": "Zagrożenia do sprawdzenia",
+          "seeAll": "Zobacz wszystkie błędy",
+          "empty": "Wszystko w porządku. Brak błędów i ostrzeżeń w ostatnich 7 dniach.",
+          "columns": {
+            "severity": "Waga",
+            "signal": "Sygnał",
+            "workspace": "Przestrzeń robocza",
+            "owner": "Właściciel",
+            "action": "Akcja"
+          },
+          "severity": {
+            "high": "Wysoka",
+            "medium": "Średnia",
+            "watch": "Obserwuj"
+          },
+          "platform": "Platforma",
+          "inspect": "Sprawdź",
+          "platformOf": "Platforma {app}",
+          "owner": {
+            "system": "System",
+            "types": {
+              "user": "Użytkownik",
+              "platform_operator": "Operator platformy"
+            }
+          },
+          "noWorkspace": "Brak przestrzeni roboczej"
+        },
+        "coverage": {
+          "kicker": "Pokrycie",
+          "title": "Włączone zabezpieczenia",
+          "buckets": {
+            "admin_access": "Dostęp administratora",
+            "send_abuse": "Zapobieganie nadużyciom WhatsApp",
+            "api_hardening": "Wzmocnienie API",
+            "incident_readiness": "Gotowość na incydenty"
+          }
+        },
+        "quickActions": {
+          "kicker": "Szybkie akcje",
+          "rotate": "Zmień sekrety webhooków",
+          "forceReset": "Wymuś reset hasła",
+          "resume": "Wznów wysyłanie",
+          "halt": "Awaryjnie zatrzymaj wysyłanie",
+          "scopeAll": "wszystko",
+          "scopeUsers": "wszyscy użytkownicy",
+          "scopeGlobal": "globalnie",
+          "halted": "obecnie wstrzymane",
+          "superAdminOnly": "Tylko superadministrator może uruchamiać te akcje."
+        },
+        "enforcement": {
+          "kicker": "Uczciwe zabezpieczenia",
+          "title": "Co każde zabezpieczenie robi dzisiaj",
+          "description": "Zapisanie ustawienia to nie to samo, co jego egzekwowanie przez platformę. Egzekwowane oznacza, że coś to teraz sprawdza, częściowe oznacza, że sprawdzają to tylko niektóre ścieżki, zarezerwowane oznacza, że jest zapisane na później.",
+          "show": "Pokaż",
+          "hide": "Ukryj",
+          "columns": {
+            "control": "Zabezpieczenie",
+            "consumer": "Co z tego korzysta",
+            "status": "Status"
+          },
+          "enforced": "Egzekwowane",
+          "partial": "Częściowe",
+          "reserved": "Zarezerwowane"
+        },
+        "controls": {
+          "requireMfaForAll": {
+            "label": "Wymagaj 2FA dla wszystkich użytkowników",
+            "hint": "Każdy użytkownik przestrzeni roboczej musi skonfigurować aplikację uwierzytelniającą, zanim przejdzie dalej."
+          },
+          "requireMfaForAdmins": {
+            "label": "Wymagaj 2FA dla administratorów",
+            "hint": "Użytkownicy z rolą administratora w dowolnej przestrzeni roboczej muszą skonfigurować aplikację uwierzytelniającą."
+          },
+          "requireMfaForSuperAdmins": {
+            "label": "Wymagaj 2FA dla superadministratorów",
+            "hint": "Superadministratorzy platformy logują się samym hasłem, gdy ta opcja jest wyłączona. Jej włączenie zmusza ich do rejestracji i używania aplikacji uwierzytelniającej."
+          },
+          "requireMfaForOwners": {
+            "label": "Wymagaj 2FA dla właścicieli przestrzeni roboczych",
+            "hint": "Właściciel każdej przestrzeni roboczej musi skonfigurować aplikację uwierzytelniającą."
+          },
+          "allowedMfaMethods": {
+            "label": "Dozwolone metody 2FA",
+            "hint": "Co najmniej jedna pozostaje wybrana: brak zaznaczenia zachowuje zapisaną listę. Obecnie istnieją tylko aplikacje uwierzytelniające.",
+            "methods": {
+              "totp": "Aplikacja uwierzytelniająca",
+              "email": "Kod e-mail",
+              "telegram": "Bot Telegram"
+            }
+          },
+          "sessionTimeoutMinutes": {
+            "label": "Limit czasu sesji (minuty)",
+            "hint": "Czas bezczynności, po którym kończy się logowanie sesji przeglądarki. Sesje utrzymywane przez 30 dni są wyłączone z tego limitu."
+          },
+          "maxConcurrentSessions": {
+            "label": "Maks. liczba równoczesnych sesji na użytkownika",
+            "hint": "Po przekroczeniu najstarsza sesja zostaje wylogowana."
+          },
+          "rememberMeEnabled": {
+            "label": "Zezwalaj na pozostanie zalogowanym",
+            "hint": "Wyłączone oznacza, że każda sesja kończy się po zamknięciu przeglądarki."
+          },
+          "lockoutAfterFailures": {
+            "label": "Maks. liczba prób logowania",
+            "hint": "Nieudane logowania w danym oknie, po których konto zostaje wstrzymane."
+          },
+          "lockoutWindowMinutes": {
+            "label": "Okno blokady (minuty)",
+            "hint": "Jak długo liczone są niepowodzenia i jak długo trwa wstrzymanie."
+          },
+          "passwordMinLength": {
+            "label": "Minimalna długość"
+          },
+          "passwordRequireUpper": {
+            "label": "Wymagaj wielkiej litery",
+            "short": "Wielka litera"
+          },
+          "passwordRequireNumber": {
+            "label": "Wymagaj cyfry",
+            "short": "Cyfra"
+          },
+          "passwordRequireSymbol": {
+            "label": "Wymagaj symbolu",
+            "short": "Symbol"
+          },
+          "passwordMaxAgeDays": {
+            "label": "Limit wieku hasła (dni)",
+            "hint": "0 oznacza, że hasła nigdy nie wygasają."
+          },
+          "waGuardrailsMode": {
+            "label": "Tryb",
+            "options": {
+              "off": "Wyłączone (bez kontroli)",
+              "monitor": "Monitorowanie (tylko dziennik)",
+              "enforce": "Egzekwowanie (blokowanie)"
+            },
+            "explain": {
+              "off": "Żadne kontrole nie działają. Limity i filtry na tych kartach nie mają efektu.",
+              "monitor": "Kontrole działają, a dopasowania trafiają do dziennika zdarzeń, ale żadna wiadomość nie jest zatrzymywana. Użyj tego, aby sprawdzić reguły przed ich egzekwowaniem.",
+              "enforce": "Pasujące wiadomości są blokowane przed wysłaniem."
+            }
+          },
+          "waMaxSendsPerMinute": {
+            "label": "Maks. wysyłek na minutę",
+            "hint": "Na przestrzeń roboczą. 0 oznacza bez limitu."
+          },
+          "waMaxSendsPerDay": {
+            "label": "Maks. wysyłek na dobę",
+            "hint": "Na przestrzeń roboczą. 0 oznacza bez limitu."
+          },
+          "waHoldOnLinksCount": {
+            "label": "Wstrzymaj, jeśli liczba linków przekracza",
+            "hint": "Wiadomości z większą liczbą linków są wstrzymywane. 0 oznacza brak limitu."
+          },
+          "waHoldOnScamPattern": {
+            "label": "Wstrzymuj wysyłki pasujące do wzorców oszustw",
+            "hint": "Sformułowania o nagrodach, pilnych sprawach konta i pułapkach weryfikacyjnych."
+          },
+          "waRequireTemplateReview": {
+            "label": "Wymagaj przeglądu szablonu przed wysłaniem",
+            "hint": "Liczy się tylko do wyniku bezpieczeństwa; nic jeszcze tego nie sprawdza."
+          },
+          "abuseBlockFinanceTerms": {
+            "label": "Blokuj terminy finansowe i szybkiego wzbogacenia",
+            "hint": "Fałszywe inwestycje, gwarantowane zyski i wzorce przekierowywania płatności."
+          },
+          "abuseBlockShortLinks": {
+            "label": "Blokuj krótkie i podejrzane linki",
+            "hint": "Skracacze linków, które ukrywają, dokąd prowadzi wiadomość."
+          },
+          "abuseBlockKeywordList": {
+            "label": "Własna lista zablokowanych słów kluczowych",
+            "hint": "Jedno na wiersz lub oddzielone przecinkami. Łącznie do 5000 znaków. Dopasowanie nie uwzględnia wielkości liter. Pasujące wiadomości są oznaczane lub blokowane zgodnie z trybem zabezpieczeń.",
+            "placeholder": "forex\nszybkie pieniądze\ngwarantowany zwrot"
+          },
+          "apiRateLimitPerMinute": {
+            "label": "Żądania API na minutę",
+            "hint": "Maksymalna liczba żądań na minutę, jaką może wykonać dowolny klucz API przestrzeni roboczej. Klucz może mieć własny, niższy limit, nigdy wyższy."
+          },
+          "webhookSignatureRequired": {
+            "label": "Wymagaj podpisów HMAC",
+            "hint": "Punktu końcowego webhooka nie można utworzyć bez sekretu podpisu."
+          },
+          "webhookReplayWindowSec": {
+            "label": "Okno powtórzeń webhooka (sekundy)",
+            "hint": "Zapisane na później; przychodzące webhooki dostawców są już sprawdzane pod kątem podpisu."
+          },
+          "deviceTrustRequired": {
+            "label": "Wymagaj zaufanej przeglądarki",
+            "hint": "Zapisane na później; nie ma jeszcze przepływu zaufania urządzeń."
+          },
+          "deviceLogoutOnInactiveDays": {
+            "label": "Automatyczne wylogowanie po nieaktywności (dni)",
+            "hint": "Połączone urządzenia WhatsApp niewidziane tak długo są oznaczane jako rozłączone. 0 oznacza nigdy."
+          },
+          "ipAllowlistEnabled": {
+            "label": "Włącz listę dozwolonych",
+            "hint": "Tylko poniższe adresy mogą uzyskać dostęp do tej konsoli."
+          },
+          "ipAllowlistCidrs": {
+            "label": "Dozwolone adresy"
+          },
+          "alertOnNewDevice": {
+            "label": "Alerty o nowych urządzeniach",
+            "hint": "Wyślij użytkownikowi e-mail, gdy logowanie pochodzi z nieznanego wcześniej urządzenia."
+          },
+          "alertOnNewCountry": {
+            "label": "Alerty o zmianie sieci",
+            "hint": "Wyślij użytkownikowi e-mail, gdy logowanie pochodzi z innej sieci niż zwykle."
+          },
+          "alertChannel": {
+            "label": "Dokąd trafiają alerty logowania",
+            "hint": "Obecnie wysyłany jest tylko e-mail; kanał WhatsApp jest zapisywany na później.",
+            "options": {
+              "email": "E-mail",
+              "whatsapp": "WhatsApp",
+              "both": "E-mail i WhatsApp"
+            }
+          },
+          "auditLogRetentionDays": {
+            "label": "Przechowuj zdarzenia bezpieczeństwa przez (dni)",
+            "hint": "0 oznacza przechowywanie bezterminowe."
+          }
+        },
+        "panels": {
+          "login": {
+            "lockout": {
+              "kicker": "Ochrona logowania",
+              "title": "Zasady blokady konta"
+            },
+            "password": {
+              "title": "Zasady nowych haseł",
+              "note": "Stosowane przy tworzeniu lub zmianie hasła, nigdy do istniejącego logowania, więc ich zaostrzenie nikogo nie zablokuje."
+            },
+            "mfa": {
+              "kicker": "Uwierzytelnianie wieloskładnikowe",
+              "title": "Egzekwowanie 2FA",
+              "description": "Dotyczy użytkowników przestrzeni roboczych. Operatorzy platformy będący superadministratorami zawsze potrzebują 2FA."
+            }
+          },
+          "whatsapp": {
+            "master": {
+              "kicker": "Główny przełącznik",
+              "title": "Egzekwowanie zabezpieczeń",
+              "description": "Limity i filtry na tych kartach działają tylko zgodnie z tym trybem. Wybierz tryb i przeczytaj, co robi."
+            },
+            "caps": {
+              "kicker": "Tempo wysyłania",
+              "title": "Twarde limity"
+            },
+            "spam": {
+              "kicker": "Reguły treści",
+              "title": "Kontrole antyspamowe"
+            },
+            "health": {
+              "kicker": "Jakość zaufania",
+              "title": "Kondycja przestrzeni roboczych",
+              "body": "Liczby blokad i oznaczeń dla każdej przestrzeni roboczej pojawią się tutaj, gdy potoki wysyłania zaczną je zgłaszać. Do tego czasu użyj dziennika zdarzeń bezpieczeństwa, aby zobaczyć, co wyłapały zabezpieczenia.",
+              "link": "Zobacz przestrzenie robocze"
+            }
+          },
+          "abuse": {
+            "kicker": "Filtry nadużyć",
+            "title": "Zapobieganie nielegalnemu użyciu",
+            "aside": {
+              "title": "Utrzymaj te zasady surowe",
+              "body": "Te filtry chronią kanały używane przez Twoich klientów przed oszustwami, phishingiem i nękaniem. Podlegają trybowi zabezpieczeń ustawionemu na karcie zabezpieczeń WhatsApp."
+            }
+          },
+          "api": {
+            "traffic": {
+              "kicker": "Kontrola ruchu",
+              "title": "Limity żądań"
+            },
+            "integrity": {
+              "kicker": "Ochrona webhooków",
+              "title": "Integralność"
+            },
+            "allowlist": {
+              "kicker": "Lista dozwolonych IP",
+              "title": "Dostęp do konsoli",
+              "description": "Ogranicza tylko tę konsolę operatora. Nie dotyczy użytkowników przestrzeni roboczych, publicznego API ani webhooków. Pusta lista wpuszcza wszystkich, więc nigdy nie zablokuje wszystkich operatorów.",
+              "cidrs": "Dozwolone adresy",
+              "cidrsHint": "Jeden adres lub zakres na wiersz, na przykład 203.0.113.9 lub 203.0.113.0/24. Przecinki także działają.",
+              "placeholder": "203.0.113.0/24\n2001:db8::/32",
+              "yourIp": "Twój adres widziany przez API:",
+              "yourIpUnknown": "Nie udało się wykryć Twojego adresu, więc nie możemy ostrzec przed zablokowaniem samego siebie.",
+              "addMine": "Dodaj mój IP",
+              "alreadyListed": "Już na liście",
+              "lockoutWarning": "Twojego adresu {ip} nie ma na tej liście. Zapisanie zablokowałoby Ci dostęp, więc serwer to odrzuci. Najpierw dodaj swój adres."
+            }
+          },
+          "devices": {
+            "trust": {
+              "kicker": "Integralność urządzeń",
+              "title": "Zasady zaufania i sesji"
+            },
+            "alerts": {
+              "kicker": "Kanał alertów logowania",
+              "title": "Dokąd trafiają alerty"
+            },
+            "audit": {
+              "kicker": "Ścieżka audytu",
+              "title": "Retencja",
+              "description": "Zdarzenia bezpieczeństwa starsze niż ten okres są usuwane, gdy zadanie czyszczenia zostanie wdrożone.",
+              "link": "Otwórz dziennik zdarzeń bezpieczeństwa"
+            }
+          }
+        },
+        "danger": {
+          "kicker": "Strefa zagrożenia",
+          "title": "Nieodwracalne akcje w całej platformie",
+          "description": "Każda akcja wymaga wpisania jej nazwy, zanim cokolwiek się stanie, i każda jest zapisywana w dzienniku zdarzeń bezpieczeństwa.",
+          "superAdminOnly": "Te akcje są tylko dla superadministratorów. Twoja rola to {role}.",
+          "haltState": "Wysyłki wychodzące:",
+          "haltOn": "Wstrzymane",
+          "haltOff": "Działają",
+          "revoke": {
+            "title": "Unieważnij wszystkie sesje",
+            "detail": "wylogowuje wszystkich"
+          },
+          "forceReset": {
+            "title": "Wymuś reset hasła dla wszystkich użytkowników",
+            "detail": "oznacza każdego użytkownika"
+          },
+          "rotate": {
+            "title": "Zmień wszystkie sekrety webhooków",
+            "detail": "istniejące integracje przestaną działać",
+            "note": "Sekrety podpisu webhooków należą do obszaru integracji, który jeszcze nie istnieje, więc na razie zgłasza 0 zmienionych."
+          },
+          "halt": {
+            "title": "Awaryjnie zatrzymaj wszystkie wysyłki",
+            "detail": "wyłącznik awaryjny całej platformy"
+          },
+          "resume": {
+            "title": "Wznów wysyłanie",
+            "detail": "obecnie wstrzymane"
+          },
+          "logged": {
+            "kicker": "Co jest rejestrowane",
+            "title": "Każda akcja zapisuje zdarzenie",
+            "events": {
+              "revoke": "platform.security.sessions_revoked",
+              "forceReset": "platform.security.force_password_reset_all",
+              "rotate": "platform.security.webhook_secrets_rotated",
+              "halt": "platform.security.emergency_halt_engaged",
+              "policy": "platform.security.policy_updated"
+            },
+            "notes": {
+              "revoke": "Gdy wszystkie sesje zostaną zakończone, łącznie z Twoją.",
+              "forceReset": "Gdy każdy użytkownik zostanie poproszony o wybór nowego hasła.",
+              "rotate": "Gdy sekrety zostaną zmienione, wraz z liczbą.",
+              "halt": "Gdy zatrzymanie zostanie włączone oraz ponownie, gdy wysyłanie zostanie wznowione.",
+              "policy": "Przy każdej zmianie ustawienia powyżej, ze starymi i nowymi wartościami."
+            },
+            "trail": "Zobacz ścieżkę audytu bezpieczeństwa"
+          },
+          "halted": {
+            "title": "Zatrzymanie awaryjne jest włączone",
+            "body": "Każda wiadomość wychodząca jest blokowana w całej platformie do czasu wznowienia wysyłania.",
+            "resume": "Wznów wysyłanie"
+          },
+          "dialog": {
+            "revoke_sessions": {
+              "title": "Unieważnij wszystkie sesje",
+              "body": "Wszyscy zalogowani do przestrzeni roboczej lub tej konsoli zostaną wylogowani, łącznie z Tobą.",
+              "effect1": "Każda osoba musi zalogować się ponownie, z dwuskładnikowym uwierzytelnianiem, jeśli jest włączone.",
+              "effect2": "Praca niezapisana w przeglądarce może zostać utracona.",
+              "confirm": "Unieważnij wszystkie sesje",
+              "done": "{count, plural, =0 {Żadne sesje nie były aktywne.} one {Unieważniono # sesję.} few {Unieważniono # sesje.} many {Unieważniono # sesji.} other {Unieważniono # sesji.}}",
+              "signedOut": "Ty także zostałeś wylogowany. Zaloguj się ponownie, aby kontynuować."
+            },
+            "force_password_reset": {
+              "title": "Wymuś reset hasła dla wszystkich użytkowników",
+              "body": "Każdy użytkownik przestrzeni roboczej zostanie poproszony o wybór nowego hasła przy następnym użyciu aplikacji.",
+              "effect1": "Nikt nie jest teraz wylogowywany; monit pojawi się przy następnym żądaniu.",
+              "effect2": "Osoby, które zignorują monit, nie będą mogły korzystać z aplikacji, dopóki nie zmienią hasła.",
+              "confirm": "Wymuś reset",
+              "done": "{count, plural, =0 {Nie oznaczono żadnych użytkowników.} one {# użytkownik musi wybrać nowe hasło.} few {# użytkowników musi wybrać nowe hasło.} many {# użytkowników musi wybrać nowe hasło.} other {# użytkownika musi wybrać nowe hasło.}}"
+            },
+            "rotate_webhook_secrets": {
+              "title": "Zmień wszystkie sekrety webhooków",
+              "body": "Każdy sekret podpisu webhooka zostanie zastąpiony nowym.",
+              "effect1": "Integracje weryfikujące podpisy przestaną działać, dopóki nie użyją nowego sekretu.",
+              "effect2": "Nie ma sposobu na przywrócenie starych sekretów.",
+              "confirm": "Zmień sekrety",
+              "done": "{count, plural, =0 {Zmieniono 0 sekretów.} one {Zmieniono # sekret.} few {Zmieniono # sekrety.} many {Zmieniono # sekretów.} other {Zmieniono # sekretu.}}",
+              "noneRotated": "Nic nie zmieniono, ponieważ obszar integracji nie przechowuje jeszcze sekretów webhooków."
+            },
+            "halt_sends": {
+              "title": "Awaryjnie zatrzymaj wszystkie wysyłki",
+              "body": "Każda wiadomość wychodząca we wszystkich przestrzeniach roboczych jest odrzucana do czasu wznowienia wysyłania.",
+              "effect1": "Klienci nie otrzymują niczego, w tym odpowiedzi, kampanii i automatyzacji.",
+              "effect2": "Użyj opcji wznowienia wysyłania, aby ponownie włączyć wiadomości.",
+              "confirm": "Wstrzymaj wszystkie wysyłki",
+              "done": "Zatrzymanie awaryjne jest włączone. Wszystkie wysyłki wychodzące są zablokowane."
+            },
+            "resume_sends": {
+              "title": "Wznów wysyłanie",
+              "body": "Wiadomości wychodzące zostaną ponownie włączone dla każdej przestrzeni roboczej.",
+              "effect1": "Wiadomości odrzucone podczas zatrzymania nie są wysyłane automatycznie.",
+              "effect2": "Jeśli zatrzymałeś wysyłanie z powodu incydentu, najpierw sprawdź dziennik zdarzeń.",
+              "confirm": "Wznów wysyłanie",
+              "done": "Wysyłanie zostało wznowione."
+            },
+            "typeToConfirm": "Wpisz <code>{phrase}</code>, aby potwierdzić",
+            "phraseHint": "Wielkie litery i dodatkowe spacje są ignorowane.",
+            "cancel": "Anuluj",
+            "working": "Przetwarzanie",
+            "close": "Zamknij",
+            "signInAgain": "Zaloguj się ponownie",
+            "requestId": "Identyfikator żądania",
+            "errors": {
+              "forbidden": "Tylko superadministrator może wykonać tę akcję.",
+              "unexpected": "Akcja nie została ukończona. Sprawdź dziennik zdarzeń, zanim spróbujesz ponownie."
+            }
+          }
+        },
+        "tabsLabel": "Sekcje Centrum bezpieczeństwa",
+        "search": {
+          "label": "Szukaj reguł bezpieczeństwa, adresów IP i aktorów",
+          "placeholder": "Szukaj reguł bezpieczeństwa, adresów IP, aktorów…",
+          "shortcut": "Cmd K"
+        }
+      },
+      "events": {
+        "kicker": "Centrum bezpieczeństwa",
+        "title": "Zdarzenia bezpieczeństwa",
+        "description": "Logowania, blokady, zmiany zasad i akcje w strefie zagrożenia, od najnowszych.",
+        "refresh": "Odśwież",
+        "refreshing": "Odświeżanie",
+        "filters": {
+          "label": "Filtruj zdarzenia",
+          "event": "Nazwa zdarzenia",
+          "eventHint": "Dokładna nazwa, na przykład auth.failed. Wybierz podpowiedź lub wpisz własną.",
+          "status": "Status",
+          "anyStatus": "Dowolny status",
+          "apply": "Zastosuj",
+          "clear": "Wyczyść filtry",
+          "q": "Szukany tekst",
+          "qHint": "Znajduje zdarzenia, których nazwa zawiera ten tekst, bez względu na wielkość liter."
+        },
+        "status": {
+          "success": "Sukces",
+          "failure": "Niepowodzenie",
+          "warning": "Ostrzeżenie",
+          "info": "Informacja"
+        },
+        "empty": "Nie zarejestrowano jeszcze żadnych zdarzeń bezpieczeństwa.",
+        "emptyFiltered": "Żadne zdarzenia nie pasują do tych filtrów.",
+        "listLabel": "Zdarzenia bezpieczeństwa",
+        "ip": "IP",
+        "showPayload": "Pokaż szczegóły",
+        "hidePayload": "Ukryj szczegóły",
+        "noPayload": "To zdarzenie nie ma dodatkowych szczegółów.",
+        "payloadLabel": "Szczegóły zdarzenia {event}",
+        "loadMore": "Załaduj więcej",
+        "loading": "Ładowanie",
+        "end": "{count, plural, one {Wyświetlono jedyne zdarzenie.} few {Wyświetlono wszystkie # zdarzenia.} many {Wyświetlono wszystkich # zdarzeń.} other {Wyświetlono wszystkie # zdarzenia.}}",
+        "export": "Eksportuj CSV",
+        "exported": "{count, plural, one {Zapisano # załadowane zdarzenie do pliku CSV.} few {Zapisano # załadowane zdarzenia do pliku CSV.} many {Zapisano # załadowanych zdarzeń do pliku CSV.} other {Zapisano # załadowanego zdarzenia do pliku CSV.}}",
+        "actorLabel": "Aktor",
+        "actorTypes": {
+          "user": "Użytkownik",
+          "platform_operator": "Operator platformy",
+          "system": "System"
+        },
+        "workspaceLabel": "Przestrzeń robocza",
+        "requestIdLabel": "Identyfikator żądania",
+        "userAgentLabel": "Przeglądarka",
+        "copyNames": {
+          "actorId": "identyfikator aktora",
+          "orgId": "identyfikator przestrzeni roboczej",
+          "requestId": "identyfikator żądania"
+        }
+      },
+      "registration": {
+        "kicker": "Strony dla gości",
+        "title": "Zasady rejestracji",
+        "description": "Zdecyduj, kto może się zarejestrować, jak weryfikowany jest e-mail, na jakim planie zaczynają nowe przestrzenie robocze i jak działa kod rejestracyjny.",
+        "save": "Zapisz ustawienia",
+        "saving": "Zapisywanie",
+        "saved": "{count, plural, one {Zapisano # ustawienie} few {Zapisano # ustawienia} many {Zapisano # ustawień} other {Zapisano # ustawienia}}",
+        "rejected": "Nic nie zapisano. {count, plural, one {Odrzucono # pole.} few {Odrzucono # pola.} many {Odrzucono # pól.} other {Odrzucono # pola.}}",
+        "requestId": "Identyfikator żądania",
+        "unsaved": "{count, plural, one {# niezapisana zmiana} few {# niezapisane zmiany} many {# niezapisanych zmian} other {# niezapisanej zmiany}}",
+        "discard": "Odrzuć zmiany",
+        "errors": {
+          "unexpected": "Nie udało się zapisać ustawień. Spróbuj ponownie za chwilę."
+        },
+        "problems": {
+          "range": "Wpisz liczbę całkowitą od {min} do {max}.",
+          "tooLong": "Maksymalnie {max} znaków.",
+          "required": "To pole jest wymagane.",
+          "link": "Użyj ścieżki witryny, takiej jak /legal/terms, lub pełnego adresu http albo https.",
+          "senderFormat": "Wybierz jednego z nadawców z listy.",
+          "countryFormat": "Użyj dwuliterowego kodu kraju.",
+          "senderRequired": "Wybierz kanał nadawcy przed utworzeniem szablonu."
+        },
+        "policy": {
+          "kicker": "Rejestracja",
+          "title": "Kto może się zarejestrować",
+          "description": "Te ustawienia dotyczą nowych rejestracji, także przez konta społecznościowe."
+        },
+        "fields": {
+          "publicRegistration": {
+            "label": "Rejestracja publiczna",
+            "hintOn": "Każdy może utworzyć przestrzeń roboczą ze strony rejestracji.",
+            "hintOff": "Strona rejestracji pokazuje komunikat o zamkniętej rejestracji. Istniejący użytkownicy nie są dotknięci."
+          },
+          "emailVerification": {
+            "label": "Weryfikacja e-maila",
+            "options": {
+              "off": "Wyłączona: konta są weryfikowane automatycznie",
+              "banner": "Baner: dozwolone, z przypomnieniem",
+              "block": "Blokada: zweryfikuj przed kontynuacją"
+            },
+            "explain": {
+              "off": "Nowe konta są od razu uznawane za zweryfikowane. E-mail weryfikacyjny nie jest potrzebny.",
+              "banner": "Ludzie mogą od razu korzystać z aplikacji i widzą przypomnienie do czasu weryfikacji.",
+              "block": "Ludzie muszą zweryfikować e-mail, zanim będą mogli korzystać z czegokolwiek innego."
+            }
+          },
+          "defaultPlanId": {
+            "label": "Plan domyślny",
+            "hint": "Plan, na którym zaczynają nowe przestrzenie robocze. Automatyczny używa planu oznaczonego jako domyślny przy rejestracji, w przeciwnym razie pierwszego aktywnego planu bezpłatnego.",
+            "placeholder": "identyfikator planu",
+            "auto": "Automatyczny",
+            "unavailable": "{slug} (nieaktywny plan)",
+            "loadFailed": "Nie udało się załadować listy planów.",
+            "kinds": {
+              "free": "Bezpłatny",
+              "paid": "Płatny",
+              "custom_quote": "Wycena indywidualna"
+            }
+          },
+          "trialDays": {
+            "label": "Okres próbny (dni)",
+            "hint": "Liczba całkowita od {min} do {max}. 0 oznacza brak okresu próbnego. Zostaw puste, aby zachować zapisaną wartość."
+          },
+          "defaultTimezone": {
+            "label": "Domyślna strefa czasowa",
+            "hint": "Używana dla nowych przestrzeni roboczych, dopóki nie wybiorą własnej."
+          },
+          "defaultCountryIso": {
+            "label": "Domyślny kraj",
+            "hint": "Wstępnie wybiera kraj telefonu przy rejestracji.",
+            "none": "Brak domyślnego"
+          },
+          "termsUrl": {
+            "label": "Link do regulaminu",
+            "hint": "Ścieżka witryny lub pełny adres, pokazywany na stronach rejestracji i logowania."
+          },
+          "privacyUrl": {
+            "label": "Link do polityki prywatności"
+          },
+          "cookiesUrl": {
+            "label": "Link do plików cookie",
+            "hint": "Opcjonalne. Zostaw puste, aby ukryć."
+          },
+          "otpEnabled": {
+            "label": "Kod rejestracyjny przez WhatsApp",
+            "hint": "Nowe konta muszą potwierdzić numer telefonu jednorazowym kodem, zanim zostanie utworzona przestrzeń robocza."
+          },
+          "otpSender": {
+            "label": "Nadawca",
+            "hint": "Podłączony numer, który wysyła kod. Dodaj go w sekcji Zarządzaj nadawcami."
+          },
+          "ttlMinutes": {
+            "label": "Ważność kodu (minuty)"
+          },
+          "length": {
+            "label": "Długość kodu (cyfry)"
+          },
+          "resendCooldownSec": {
+            "label": "Odstęp przed ponownym wysłaniem (sekundy)"
+          },
+          "maxAttempts": {
+            "label": "Maks. liczba prób"
+          }
+        },
+        "otp": {
+          "kicker": "Weryfikacja",
+          "title": "Kod rejestracyjny",
+          "description": "Ustawienia jednorazowego kodu wysyłanego podczas rejestracji.",
+          "knobHint": "Od {min} do {max}. Puste używa {default}.",
+          "status": {
+            "on": "Działa",
+            "off": "Nie działa",
+            "unsavedNote": "Pokazuje zapisane ustawienia. Zapisz zmiany, aby zobaczyć, jak są stosowane.",
+            "reason": {
+              "active": "Nowe rejestracje muszą potwierdzić numer telefonu kodem.",
+              "disabled": "Przełącznik jest wyłączony, więc rejestracja nie wymaga kodu.",
+              "no_sender": "Nie wybrano nadawcy, więc rejestracja pomija krok z kodem.",
+              "sender_missing": "Wybrany nadawca już nie istnieje, więc rejestracja pomija krok z kodem.",
+              "sender_incomplete": "Wybranemu nadawcy brakuje poświadczeń, więc rejestracja pomija krok z kodem.",
+              "dev_in_production": "Nadawca dziennika nie może działać w produkcji, więc rejestracja pomija krok z kodem.",
+              "template_missing": "Nadawca WhatsApp Business potrzebuje zatwierdzonego szablonu. Utwórz go i prześlij poniżej; do tego czasu rejestracja pomija krok z kodem.",
+              "template_pending": "Meta nadal sprawdza szablon, więc rejestracja pomija krok z kodem do czasu jego zatwierdzenia.",
+              "template_rejected": "Meta odrzuciła szablon, więc rejestracja pomija krok z kodem. Popraw go i prześlij ponownie."
+            }
+          },
+          "sender": {
+            "none": "Brak nadawcy",
+            "option": "{label} ({kind})",
+            "unknown": "Nieznany nadawca ({ref})",
+            "manage": "Zarządzaj nadawcami",
+            "empty": "Brak nadawców. Dodaj go w sekcji Zarządzaj nadawcami.",
+            "kinds": {
+              "waba": "WhatsApp Business",
+              "twilio": "Twilio",
+              "device": "Sesja nieoficjalna",
+              "dev": "Tylko dziennik"
+            },
+            "noneConnected": "Żaden z Twoich nadawców nie jest jeszcze połączony. Dokończ jednego w sekcji Zarządzaj nadawcami; można wybrać tylko połączonych nadawców.",
+            "unfinished": "{label} ({kind}, nieukończony)"
+          },
+          "template": {
+            "title": "Szablon wiadomości",
+            "states": {
+              "none": "Nie utworzono",
+              "pending": "Oczekiwanie na Meta",
+              "approved": "Zatwierdzony",
+              "rejected": "Odrzucony",
+              "local": "Gotowy"
+            },
+            "explain": {
+              "none": "Utwórz wiadomość, gdy nadawca i powyższe ustawienia kodu są poprawne. WhatsApp Business wymaga zatwierdzenia przez Meta; pozostałe kanały używają wiadomości od razu.",
+              "waba": "Przesłano do Meta jako szablon uwierzytelniania. Krok z kodem włączy się sam po zatwierdzeniu przez Meta, zwykle w ciągu kilku minut.",
+              "local": "Zapisano jako zwykły tekst dla tego kanału. Przegląd nie jest potrzebny, więc jest już używana."
+            },
+            "name": "Nazwa",
+            "metaId": "Identyfikator szablonu Meta",
+            "validFor": "Kod ważny przez",
+            "minutes": "{count, plural, one {# minutę} few {# minuty} many {# minut} other {# minuty}}",
+            "submitted": "Utworzono",
+            "checked": "Ostatnio sprawdzono",
+            "never": "Jeszcze nie",
+            "reason": "Powód",
+            "stale": "Ten szablon został utworzony dla kodu ważnego przez {count, plural, one {# minutę} few {# minuty} many {# minut} other {# minuty}}. Utwórz go i prześlij ponownie, aby odpowiadał powyższej ważności.",
+            "create": "Utwórz i prześlij szablon OTP",
+            "creating": "Przetwarzanie",
+            "refresh": "Odśwież status",
+            "refreshing": "Sprawdzanie",
+            "outcome": {
+              "submitted": "Szablon został przesłany do Meta do przeglądu. Krok z kodem włączy się sam po zatwierdzeniu przez Meta.",
+              "resubmitted": "Szablon został ponownie wysłany do Meta do przeglądu. Krok z kodem pozostaje wyłączony do czasu zatwierdzenia.",
+              "local_ready": "Wiadomość jest zapisana i już używana. Ten kanał nie wymaga przeglądu.",
+              "already_pending": "Szablon jest już w Meta do przeglądu. Użyj opcji Odśwież status, aby go sprawdzić.",
+              "already_approved": "Szablon jest już zatwierdzony. Nic nie trzeba było wysyłać.",
+              "refreshed": "Status sprawdzony.",
+              "approvedNow": "Meta od razu zatwierdziła szablon. Krok z kodem jest gotowy.",
+              "rejectedNow": "Meta odrzuciła szablon. Powód jest pokazany poniżej; popraw go i prześlij ponownie."
+            },
+            "refreshed": {
+              "pending": "Meta nadal sprawdza szablon.",
+              "approved": "Meta zatwierdziła szablon. Krok z kodem jest gotowy.",
+              "rejected": "Meta odrzuciła szablon.",
+              "local": "Ten szablon nie wymaga przeglądu."
+            },
+            "errors": {
+              "submit": "Meta nie przyjęła szablonu. Pozostałe ustawienia kodu zostały zapisane.",
+              "check": "Nie udało się odczytać statusu z Meta.",
+              "rejected": "Nie udało się utworzyć szablonu.",
+              "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
+            },
+            "createHint": "Tworzy wiadomość rejestracyjną dla wybranego nadawcy. WhatsApp Business trafia do Meta do przeglądu; pozostałe kanały są gotowe od razu.",
+            "picker": {
+              "label": "Szablon WhatsApp Business",
+              "hint": "Rejestracja wysyła szablon utworzony przyciskiem poniżej. Inne zatwierdzone szablony uwierzytelniania tego nadawcy są wymienione, abyś mógł je zobaczyć; nie można ich jeszcze tu wybrać.",
+              "none": "Brak (utwórz poniżej)",
+              "loading": "Ładowanie szablonów",
+              "option": "{name} ({language}), {status}",
+              "otherSender": "Zapisz nadawcę, aby zobaczyć jego szablony.",
+              "failed": "Nie udało się załadować listy szablonów.",
+              "unavailable": "Nie udało się odczytać listy szablonów Meta: {reason}"
+            }
+          },
+          "test": {
+            "about": "Wyślij prawdziwy kod na telefon, aby sprawdzić działanie nadawcy, zanim rejestracje będą od niego zależeć.",
+            "button": "Wyślij kod testowy",
+            "title": "Wyślij kod testowy",
+            "intro": "Prawdziwy kod trafia na wpisany numer przez poniższego nadawcę. Używa zapisanych ustawień kodu i szablonu. Możesz wysłać 5 na godzinę.",
+            "to": "Numer telefonu",
+            "toHint": "Z numerem kierunkowym kraju, na przykład +91 98765 43221.",
+            "sender": "Nadawca",
+            "senderHint": "Zostaw zapisanego nadawcę lub wybierz innego z listy.",
+            "savedSender": "Zapisany nadawca",
+            "send": "Wyślij kod",
+            "sending": "Wysyłanie",
+            "close": "Zamknij",
+            "sent": "Kod testowy został wysłany na {to}.",
+            "remaining": "{count, plural, one {Pozostał # test w tej godzinie.} few {Pozostały # testy w tej godzinie.} many {Pozostało # testów w tej godzinie.} other {Pozostało # testu w tej godzinie.}}",
+            "notShown": "Kod nie jest tu pokazywany; odczytaj go na telefonie.",
+            "requestId": "Identyfikator żądania",
+            "errors": {
+              "invalidNumber": "Wpisz numer z numerem kierunkowym kraju, na przykład +91 98765 43221.",
+              "rateLimited": "Zbyt wiele kodów testowych w tej godzinie. Spróbuj ponownie za {minutes, plural, one {# minutę} few {# minuty} many {# minut} other {# minuty}}.",
+              "failed": "Nie udało się wysłać kodu.",
+              "rejected": "Test nie został wysłany.",
+              "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
+            },
+            "reasons": {
+              "not_configured": "Nadawca nie istnieje lub jest niekompletny.",
+              "template_not_approved": "Szablon nie został jeszcze zatwierdzony.",
+              "invalid_number": "Ten numer jest nieprawidłowy.",
+              "auth_failed": "Dostawca odrzucił poświadczenia. Sprawdź sekret w sekcji Zarządzaj nadawcami.",
+              "rejected": "Dostawca odrzucił wiadomość.",
+              "provider_error": "Dostawca ma problem. Spróbuj ponownie wkrótce.",
+              "connection_refused": "Adres dostawcy odrzucił połączenie.",
+              "timeout": "Dostawca nie odpowiedział na czas.",
+              "transport_error": "Nie udało się połączyć z dostawcą."
+            }
+          }
+        },
+        "senders": {
+          "title": "Zarządzaj nadawcami",
+          "intro": "Połączenia, które mogą wysyłać kod rejestracyjny. Sekrety są przechowywane w formie zaszyfrowanej i nigdy więcej nie są pokazywane.",
+          "loading": "Ładowanie",
+          "working": "Przetwarzanie",
+          "empty": "Brak nadawców.",
+          "add": "Dodaj nadawcę",
+          "edit": "Edytuj",
+          "remove": "Usuń",
+          "close": "Zamknij",
+          "cancel": "Anuluj",
+          "save": "Zapisz nadawcę",
+          "keep": "Zachowaj",
+          "addTitle": "Nowy nadawca",
+          "editTitle": "Edytuj: {label}",
+          "kind": "Rodzaj",
+          "kinds": {
+            "waba": "WhatsApp Business (Meta Cloud API)",
+            "twilio": "Twilio WhatsApp",
+            "device": "Sesja nieoficjalna (most Node)",
+            "dev": "Tylko dziennik (rozwój)"
+          },
+          "kindHint": {
+            "waba": "Wysyła zatwierdzony szablon uwierzytelniania przez Meta. Wymaga przeglądu szablonu.",
+            "twilio": "Wysyła wiadomość WhatsApp przez Twilio. Bez przeglądu szablonu.",
+            "device": "Wysyła przez sesję sparowaną kodem QR na Twoim moście Node. Bez przeglądu szablonu.",
+            "dev": "Zapisuje kod w dzienniku serwera zamiast go wysyłać. Nigdy niedostępne w produkcji."
+          },
+          "fields": {
+            "label": "Nazwa",
+            "phoneNumberId": "Identyfikator numeru telefonu",
+            "wabaId": "Identyfikator konta WhatsApp Business",
+            "graphBaseUrl": "Adres Graph API",
+            "accountSid": "SID konta",
+            "fromNumber": "Numer WhatsApp (Od)",
+            "apiBaseUrl": "Adres API Twilio",
+            "bridgeUrl": "Adres mostu",
+            "senderNumber": "Numer sesji"
+          },
+          "hints": {
+            "waba": {
+              "phoneNumberId": "Z Meta, w konfiguracji API numeru WhatsApp.",
+              "wabaId": "Potrzebny do przesłania szablonu do Meta.",
+              "graphBaseUrl": "Zostaw puste, aby użyć adresu Meta."
+            },
+            "twilio": {
+              "accountSid": "Z konsoli Twilio.",
+              "fromNumber": "Numer z włączonym WhatsApp, z numerem kierunkowym kraju.",
+              "apiBaseUrl": "Zostaw puste, aby użyć adresu Twilio."
+            },
+            "device": {
+              "bridgeUrl": "Gdzie nasłuchuje Twój most Node, na przykład http://127.0.0.1:3003.",
+              "senderNumber": "Sparowany numer, z którego most wysyła, z numerem kierunkowym kraju."
+            }
+          },
+          "defaults": {
+            "graphBaseUrl": "https://graph.facebook.com/v23.0",
+            "apiBaseUrl": "https://api.twilio.com"
+          },
+          "secretLabel": {
+            "waba": "Token dostępu",
+            "twilio": "Token uwierzytelniania",
+            "device": "Token mostu",
+            "dev": "Sekret"
+          },
+          "secretHint": "Przechowywany w formie zaszyfrowanej i nigdy więcej nie pokazywany.",
+          "secretHintSaved": "Przechowywany w formie zaszyfrowanej. Zostaw puste, aby zachować zapisany.",
+          "secretSaved": "zapisano, zostaw puste, aby zachować",
+          "showSecret": "Pokaż sekret",
+          "hideSecret": "Ukryj sekret",
+          "removeSecret": "Usuń zapisany sekret",
+          "removeSecretBody": "Nadawca przestaje działać do czasu zapisania nowego sekretu.",
+          "removeSecretConfirm": "Usuń sekret",
+          "hasSecret": "Sekret zapisany",
+          "noSecret": "Brak sekretu",
+          "inUse": "Używany do rejestracji",
+          "removeBody": "Usunąć {label}? Jego zapisany sekret również zostanie usunięty.",
+          "removeBodyInUse": "Usunąć {label}? Rejestracja go używa, więc krok z kodem zostanie wyłączony. Jego zapisany sekret również zostanie usunięty.",
+          "removeConfirm": "Usuń nadawcę",
+          "added": "Nadawca dodany",
+          "saved": "Nadawca zapisany",
+          "removed": "Nadawca usunięty",
+          "secretRemoved": "Zapisany sekret usunięty",
+          "requestId": "Identyfikator żądania",
+          "problems": {
+            "required": "To pole jest wymagane.",
+            "tooLong": "Maksymalnie {max} znaków.",
+            "digits": "Tylko cyfry, od 5 do 24.",
+            "url": "Użyj pełnego adresu http lub https, bez nazwy użytkownika i hasła.",
+            "accountSid": "SID konta zaczyna się od AC i ma 34 znaki.",
+            "phone": "Wpisz numer z numerem kierunkowym kraju, od 7 do 15 cyfr."
+          },
+          "errors": {
+            "unexpected": "Nie udało się zapisać nadawcy. Spróbuj ponownie za chwilę."
+          }
+        },
+        "footer": {
+          "kicker": "Wiadomości wychodzące",
+          "title": "Stopka wiadomości platformy",
+          "description": "Dodawana na końcu wiadomości tekstowych i interaktywnych wysyłanych z przestrzeni roboczych, których plan nie pozwala usunąć oznaczeń. Szablony mają własny tekst i ją pomijają. Przestrzeń robocza z planem pozwalającym usunąć oznaczenia ustawia własną stopkę lub jej brak na swoim koncie.",
+          "builtIn": "Tekst wbudowany",
+          "label": "Tekst stopki",
+          "hint": "Do {max} znaków. Zostaw puste, aby w ogóle nie wysyłać stopki.",
+          "count": "{used}/{max}",
+          "preview": "Podgląd",
+          "noFooter": "(brak stopki)",
+          "save": "Zapisz stopkę",
+          "saving": "Zapisywanie",
+          "clear": "Wyczyść",
+          "saved": "Stopka platformy zapisana. Będzie stosowana od następnej wiadomości.",
+          "savedNone": "Stopka platformy usunięta. Wiadomości wychodzą bez niej.",
+          "errors": {
+            "invalid": "Ta stopka nie została zaakceptowana.",
+            "unexpected": "Nie udało się zapisać stopki. Spróbuj ponownie za chwilę."
+          },
+          "requestId": "Identyfikator żądania"
+        }
+      },
+      "social": {
+        "kicker": "Strony dla gości",
+        "title": "Logowanie społecznościowe i captcha",
+        "description": "Pozwól logować się przez Google lub Facebook i chroń strony logowania i rejestracji za pomocą reCAPTCHA. Każda z tych opcji pojawia się dopiero po włączeniu i zapisaniu jej kluczy.",
+        "save": "Zapisz zmiany",
+        "saving": "Zapisywanie",
+        "saved": "{count, plural, one {Zapisano # ustawienie} few {Zapisano # ustawienia} many {Zapisano # ustawień} other {Zapisano # ustawienia}}",
+        "rejected": "Nic nie zapisano. {count, plural, one {Odrzucono # pole.} few {Odrzucono # pola.} many {Odrzucono # pól.} other {Odrzucono # pola.}}",
+        "requestId": "Identyfikator żądania",
+        "unsaved": "{count, plural, one {# niezapisana zmiana} few {# niezapisane zmiany} many {# niezapisanych zmian} other {# niezapisanej zmiany}}",
+        "discard": "Odrzuć zmiany",
+        "errors": {
+          "unexpected": "Nie udało się zapisać ustawień. Spróbuj ponownie za chwilę."
+        },
+        "problems": {
+          "tooLong": "Maksymalnie {max} znaków.",
+          "threshold": "Wpisz liczbę od 0 do 1."
+        },
+        "labels": {
+          "google": {
+            "clientId": "Identyfikator klienta Google",
+            "clientSecret": "Sekret klienta Google",
+            "enabled": "Logowanie przez Google"
+          },
+          "facebook": {
+            "clientId": "Identyfikator aplikacji Facebook",
+            "clientSecret": "Sekret aplikacji Facebook",
+            "enabled": "Logowanie przez Facebook"
+          },
+          "recaptcha": {
+            "siteKey": "Klucz witryny reCAPTCHA",
+            "secret": "Klucz tajny reCAPTCHA",
+            "v3Threshold": "Próg wyniku reCAPTCHA",
+            "version": "Wersja reCAPTCHA",
+            "enabled": "reCAPTCHA"
+          }
+        },
+        "enable": "Włącz",
+        "secretSaved": "zapisano, zostaw puste, aby zachować",
+        "secretHint": "Przechowywany w formie zaszyfrowanej i nigdy więcej nie pokazywany. Zostaw puste, aby zachować zapisany.",
+        "showSecret": "Pokaż sekret",
+        "hideSecret": "Ukryj sekret",
+        "google": {
+          "kicker": "OAuth 2.0 z Google Cloud",
+          "title": "Logowanie przez Google",
+          "idLabel": "Identyfikator klienta",
+          "idHint": "Z Google Cloud, w poświadczeniach, klient OAuth typu aplikacja internetowa.",
+          "idPlaceholder": "000000000000-xxxx.apps.googleusercontent.com",
+          "secretLabel": "Sekret klienta",
+          "secretPlaceholder": "sekret klienta",
+          "redirectLabel": "Autoryzowany URI przekierowania",
+          "redirectHint": "Wklej to dokładnie do klienta OAuth, w przeciwnym razie Google odrzuci logowanie z powodu niezgodności przekierowania."
+        },
+        "facebook": {
+          "kicker": "Facebook Login w Meta for Developers",
+          "title": "Logowanie przez Facebook",
+          "idLabel": "Identyfikator aplikacji",
+          "idHint": "Z ustawień aplikacji, w sekcji podstawowe, identyfikator aplikacji.",
+          "idPlaceholder": "0000000000000000",
+          "secretLabel": "Sekret aplikacji",
+          "secretPlaceholder": "32-znakowy sekret aplikacji",
+          "redirectLabel": "Prawidłowy URI przekierowania OAuth",
+          "redirectHint": "Dodaj to w ustawieniach Facebook Login. Aplikacja potrzebuje uprawnień do adresu e-mail i profilu publicznego."
+        },
+        "recaptcha": {
+          "kicker": "Ochrona przed botami z Google reCAPTCHA",
+          "title": "reCAPTCHA",
+          "versionLabel": "Wersja",
+          "versionHint": "v2 pokazuje pole wyboru. v3 jest niewidoczna i ocenia każde żądanie.",
+          "versions": {
+            "v2": "v2: pole wyboru Nie jestem robotem",
+            "v3": "v3: niewidoczny wynik"
+          },
+          "thresholdLabel": "Próg wyniku v3",
+          "thresholdHint": "Tylko v3. 0 to najprawdopodobniej bot, 1 to najprawdopodobniej człowiek. Puste używa 0,5.",
+          "siteKeyLabel": "Klucz witryny",
+          "siteKeyHint": "Klucz publiczny wysyłany do przeglądarki, z konsoli reCAPTCHA.",
+          "secretLabel": "Klucz tajny"
+        },
+        "live": {
+          "kicker": "Status",
+          "title": "Co działa w tej chwili",
+          "google": "Google aktywny",
+          "facebook": "Facebook aktywny",
+          "recaptcha": "reCAPTCHA aktywna",
+          "yes": "aktywne",
+          "no": "nieaktywne",
+          "note": "Dostawca jest aktywny tylko wtedy, gdy jest włączony i oba jego klucze są zapisane. To pokazuje to, co jest zapisane, a nie niezapisane zmiany."
+        },
+        "guide": {
+          "kicker": "Szybka konfiguracja",
+          "google": {
+            "title": "Google w czterech krokach",
+            "step1": "Otwórz konsolę Google Cloud i wybierz lub utwórz projekt.",
+            "step2": "Skonfiguruj ekran zgody OAuth jako aplikację zewnętrzną z Twoim e-mailem pomocy.",
+            "step3": "Utwórz poświadczenia, wybierz identyfikator klienta OAuth, a następnie Aplikacja internetowa.",
+            "step4": "Dodaj URI przekierowania z formularza, a następnie wklej tutaj identyfikator klienta i sekret.",
+            "link": "Otwórz poświadczenia Google Cloud"
+          },
+          "facebook": {
+            "title": "Facebook w czterech krokach",
+            "step1": "Otwórz Meta for Developers i utwórz aplikację do uwierzytelniania użytkowników.",
+            "step2": "Dodaj do aplikacji produkt Facebook Login.",
+            "step3": "W jego ustawieniach dodaj URI przekierowania z formularza.",
+            "step4": "Skopiuj identyfikator aplikacji i sekret z ustawień podstawowych, wklej je tutaj, a następnie uruchom aplikację.",
+            "link": "Otwórz Meta for Developers"
+          },
+          "recaptcha": {
+            "title": "Klucze reCAPTCHA",
+            "body": "Zarejestruj witrynę w konsoli reCAPTCHA, wybierz v2 lub v3 i wklej tutaj klucz witryny i klucz tajny.",
+            "link": "Otwórz konsolę reCAPTCHA"
+          },
+          "noSdk": {
+            "badge": "Warto wiedzieć",
+            "body": "Logowanie korzysta bezpośrednio ze standardowych adresów OAuth, więc nic nie trzeba instalować. Wklej klucze i włącz."
+          }
+        },
+        "removeSecret": {
+          "action": "Usuń zapisany sekret",
+          "title": "Usuń zapisany sekret: {name}",
+          "body": "Zapisany sekret dla {name} zostanie usunięty z serwera i nie będzie można go pokazać ani odzyskać. Aby ponownie używać {name}, trzeba będzie zapisać nowy sekret.",
+          "liveWarning": "{name} działa teraz. Usunięcie jego sekretu wyłączy go do czasu zapisania nowego.",
+          "confirm": "Usuń sekret",
+          "cancel": "Anuluj",
+          "working": "Usuwanie",
+          "error": "Nie udało się usunąć sekretu. Spróbuj ponownie za chwilę.",
+          "requestId": "Identyfikator żądania",
+          "done": "Zapisany sekret {name} został usunięty.",
+          "names": {
+            "google": "Google",
+            "facebook": "Facebook",
+            "recaptcha": "reCAPTCHA"
+          }
+        },
+        "docs": {
+          "kicker": "Dokumentacja",
+          "title": "Oficjalna dokumentacja",
+          "opensNewTab": "(otwiera się w nowej karcie)",
+          "links": {
+            "google": "Konfiguracja Google OAuth",
+            "facebook": "Konfiguracja Facebook Login",
+            "recaptchaAdmin": "Konsola administracyjna reCAPTCHA",
+            "recaptchaDocs": "Dokumentacja reCAPTCHA"
+          }
+        }
+      },
+      "plans": {
+        "eyebrow": "Plany",
+        "title": "Plany",
+        "description": "Katalog, z którego wybierają przestrzenie robocze. Nowe rejestracje trafiają na plan domyślny; płatność za plan pojawi się wraz z rozliczeniami.",
+        "new": "Nowy plan",
+        "kpi": {
+          "label": "Podsumowanie katalogu",
+          "total": "Wszystkie plany",
+          "active": "Aktywne",
+          "free": "Bezpłatne",
+          "paid": "Płatne"
+        },
+        "empty": {
+          "title": "Brak planów",
+          "body": "Utwórz pierwszy plan. Dopóki żaden nie istnieje, nowe przestrzenie robocze zaczynają na planie o nazwie starter, który niczego nie ogranicza.",
+          "action": "Utwórz pierwszy plan"
+        },
+        "table": {
+          "label": "Plany",
+          "plan": "Plan",
+          "price": "Cena",
+          "messages": "Wiadomości",
+          "workspaces": "Przestrzenie robocze",
+          "entitlements": "W cenie",
+          "features": "Funkcje",
+          "limits": "Limity",
+          "addons": "Dodatki",
+          "status": "Status",
+          "actions": "Akcje"
+        },
+        "counts": {
+          "ratio": "{count}/{total}",
+          "features": "Włączone funkcje: {count} z {total}",
+          "limits": "Ustawione limity: {count} z {total}",
+          "addons": "{count, plural, one {# widoczny dodatek} few {# widoczne dodatki} many {# widocznych dodatków} other {# widocznego dodatku}}"
+        },
+        "badges": {
+          "popular": "Popularny",
+          "signupDefault": "Domyślny przy rejestracji"
+        },
+        "price": {
+          "free": "Bezpłatny",
+          "custom": "Wycena indywidualna",
+          "lifetime": "jednorazowo"
+        },
+        "period": {
+          "days": "{count, plural, one {/ dzień} few {/ # dni} many {/ # dni} other {/ # dnia}}",
+          "weeks": "{count, plural, one {/ tydzień} few {/ # tygodnie} many {/ # tygodni} other {/ # tygodnia}}",
+          "months": "{count, plural, one {/ miesiąc} few {/ # miesiące} many {/ # miesięcy} other {/ # miesiąca}}",
+          "years": "{count, plural, one {/ rok} few {/ # lata} many {/ # lat} other {/ # roku}}"
+        },
+        "messages": {
+          "unlimited": "Bez limitu",
+          "limited": "{count, number} / miesiąc"
+        },
+        "active": {
+          "on": "Aktywny",
+          "off": "Nieaktywny",
+          "toggle": "Aktywny: {name}"
+        },
+        "actions": {
+          "edit": "Edytuj",
+          "delete": "Usuń",
+          "editName": "Edytuj: {name}",
+          "deleteName": "Usuń: {name}"
+        },
+        "toasts": {
+          "created": "Plan {name} utworzony.",
+          "updated": "Plan {name} zapisany.",
+          "activated": "{name} jest teraz aktywny.",
+          "deactivated": "{name} jest teraz nieaktywny.",
+          "deleted": "Plan {name} usunięty."
+        },
+        "delete": {
+          "title": "Usunąć {name}?",
+          "body": "Tej operacji nie można cofnąć. Dezaktywacja planu ukrywa go przed kupującymi i zachowuje przestrzenie robocze, które na nim są.",
+          "inUseHint": "{count, plural, one {# przestrzeń robocza korzysta z tego planu.} few {# przestrzenie robocze korzystają z tego planu.} many {# przestrzeni roboczych korzysta z tego planu.} other {# przestrzeni roboczej korzysta z tego planu.}} Usunięcie jest odrzucane, dopóki nie zostaną przeniesione.",
+          "confirm": "Usuń plan",
+          "cancel": "Anuluj",
+          "deleting": "Usuwanie"
+        },
+        "errors": {
+          "inUse": "{count, plural, one {Nie można usunąć: # przestrzeń robocza obecnie korzysta z tego planu.} few {Nie można usunąć: # przestrzenie robocze obecnie korzystają z tego planu.} many {Nie można usunąć: # przestrzeni roboczych obecnie korzysta z tego planu.} other {Nie można usunąć: # przestrzeni roboczej obecnie korzysta z tego planu.}} Przenieś je na inny plan lub zamiast tego dezaktywuj ten.",
+          "defaultProtected": "Ten plan jest domyślny przy rejestracji, więc nie można go dezaktywować ani usunąć. Najpierw wybierz inny plan domyślny.",
+          "notFound": "Ten plan już nie istnieje. Odśwież listę.",
+          "forbidden": "Tylko superadministratorzy mogą zmieniać plany.",
+          "generic": "Coś poszło nie tak. Spróbuj ponownie."
+        },
+        "editor": {
+          "createTitle": "Nowy plan",
+          "editTitle": "Edytuj: {name}",
+          "slugLabel": "Identyfikator:",
+          "slugNote": "Ustawiany podczas tworzenia planu i nigdy się nie zmienia.",
+          "save": "Zapisz zmiany",
+          "create": "Utwórz plan",
+          "saving": "Zapisywanie",
+          "cancel": "Anuluj",
+          "discard": "Odrzucić zmiany?",
+          "failed": "Nie udało się zapisać planu. Spróbuj ponownie.",
+          "unlimited": "Bez limitu",
+          "errorsBanner": "Niektóre pola wymagają uwagi. Karty oznaczone kropką zawierają błędy.",
+          "tabs": {
+            "label": "Sekcje planu",
+            "details": "Szczegóły i cennik",
+            "features": "Funkcje",
+            "limits": "Limity",
+            "addons": "Dodatki"
+          },
+          "tabSummary": {
+            "features": "Włączone funkcje: {count} z {total}",
+            "limits": "Ustawione limity: {count} z {total}",
+            "addons": "Wybrane dodatki: {count}",
+            "error": "Zawiera błędy do poprawienia"
+          },
+          "featuresUi": {
+            "intro": "Wyłącz to, czego ten plan nie obejmuje. Przestrzeń robocza na tym planie nie może otworzyć obszaru, którego funkcja jest wyłączona.",
+            "search": "Szukaj funkcji",
+            "searchPlaceholder": "Szukaj funkcji",
+            "enableAll": "Włącz wszystkie",
+            "disableAll": "Wyłącz wszystkie",
+            "noMatch": "Żadne funkcje nie pasują do wyszukiwania.",
+            "groupCount": "Włączone: {count} z {total}"
+          },
+          "limitsUi": {
+            "intro": "Limit zatrzymuje akcję, gdy przestrzeń robocza go osiągnie. Zaznacz Bez limitu, aby go usunąć.",
+            "search": "Szukaj limitów",
+            "searchPlaceholder": "Szukaj limitów",
+            "noMatch": "Żadne limity nie pasują do wyszukiwania.",
+            "unlimited": "Bez limitu",
+            "platformDefault": "Domyślne platformy",
+            "groupCount": "Z limitem: {count} z {total}",
+            "valueFor": "Limit dla: {name}",
+            "unofficialOff": "Dotyczy tylko wtedy, gdy nieoficjalny WhatsApp jest włączony przez platformę (obecnie wyłączony)."
+          },
+          "limitUnits": {
+            "perMonth": "miesięcznie",
+            "perBroadcast": "na wiadomość masową",
+            "perMinute": "na minutę",
+            "perPlanPeriod": "na okres planu",
+            "total": "łącznie"
+          },
+          "addons": {
+            "intro": "Włączone dodatki są pokazywane przestrzeniom roboczym na tym planie w ich Marketplace; można ich używać dopiero po zakupie przez przestrzeń roboczą.",
+            "search": "Szukaj dodatków",
+            "searchPlaceholder": "Szukaj dodatków lub aplikacji",
+            "selectAll": "Zaznacz wszystko",
+            "clear": "Wyczyść",
+            "selected": "Wybrano {count} z {total}",
+            "loading": "Ładowanie dodatków",
+            "empty": "Nie istnieją jeszcze płatne dodatki",
+            "emptyHint": "Dodatki tworzy się w katalogu Marketplace konsoli operatora. Gdy aplikacja ma płatny pakiet, pojawia się tutaj.",
+            "loadFailed": "Nie udało się załadować dodatków.",
+            "loadFailedKept": "Nie udało się załadować dodatków, więc obecny wybór pozostaje bez zmian, chyba że zmienisz go tutaj.",
+            "retry": "Spróbuj ponownie",
+            "noMatch": "Żadne dodatki nie pasują do wyszukiwania.",
+            "unknown": "Nieznany dodatek",
+            "unknownHint": "Ten dodatek już nie istnieje. Odznacz go, aby usunąć z planu.",
+            "notOnSale": "Niedostępny w sprzedaży",
+            "packInactive": "Pakiet dodatku jest wyłączony, więc nikt nie może go kupić.",
+            "appUnpublished": "Aplikacja nie jest opublikowana, więc przestrzenie robocze jeszcze jej nie widzą.",
+            "appLabel": "Aplikacja: {name}",
+            "price": "{price} {period}"
+          },
+          "featureHints": {
+            "automation": "Kreator przepływów i automatyzacje, które odpowiadają na rozmowy i na nie reagują.",
+            "ai_assistants": "Asystenci AI, w tym tryb AI w widżecie chatbota na stronie.",
+            "calling": "Sekcja połączeń: połączenia głosowe i ustawienia połączeń.",
+            "woocommerce": "Połącz sklepy WooCommerce dla wiadomości o zamówieniach, odzyskiwania koszyków i wiadomości masowych sklepu.",
+            "shopify": "Połącz sklepy Shopify dla wiadomości o zamówieniach, odzyskiwania koszyków i wiadomości masowych sklepu.",
+            "analytics": "Pulpity analityczne i raporty.",
+            "remove_branding": "White-label: przestrzeń robocza może ukryć branding platformy w stopce.",
+            "sales_pipeline": "Transakcje, zadania i lejki oraz dane o lejkach na pulpicie.",
+            "appointment_booking": "Typy rezerwacji, spotkania i publiczne strony rezerwacji. Ten przełącznik należy do płatnej aplikacji Spotkania.",
+            "chatbot_widgets": "Kreator widżetu chatbota na stronie.",
+            "wa_storefront": "Obszar katalogu i sklepu WhatsApp.",
+            "inbox_sla": "Zasady i terminy SLA w skrzynce zespołu.",
+            "inbox_routing": "Reguły routingu, które automatycznie przypisują rozmowy ze skrzynki odbiorczej.",
+            "waba_calling": "Połączenia WhatsApp ze skrzynki odbiorczej: numery do połączeń, uprawnienia do połączeń, wykonywanie i odbieranie połączeń.",
+            "inbox_kanban": "Widok tablicy Kanban skrzynki zespołu.",
+            "team_performance": "Raporty wydajności zespołu.",
+            "scheduled_messages": "Planowanie wiadomości do wysłania później.",
+            "whatsapp_warmer": "Rozgrzewanie numeru WhatsApp.",
+            "marketplace": "Marketplace miniaplikacji i integracji.",
+            "lead_sources": "Źródła leadów: wejścia webhooków i konektorów, które zamieniają leady z reklam i portali w kontakty i transakcje.",
+            "team_chat": "Wewnętrzne kanały czatu zespołu i wiadomości bezpośrednie.",
+            "public_api": "Publiczne REST API i jego klucze API.",
+            "outbound_webhooks": "Wychodzące punkty końcowe webhooków, które informują inne systemy o zdarzeniach.",
+            "storefront_builder": "Kreator sklepu internetowego.",
+            "invoicing": "Faktury, noty kredytowe, płatności, zamówienia sprzedaży i stawki podatkowe.",
+            "forms_and_links": "Formularze pozyskiwania leadów i linki do udostępniania.",
+            "extra_channels": "Kanały Telegram, Facebook i Instagram.",
+            "form_builder": "Hostowane i osadzane formularze internetowe tworzące kontakty w CRM. Ten przełącznik należy do płatnej aplikacji Formularze.",
+            "waba_groups": "Tworzenie grup WhatsApp i zarządzanie nimi z numeru Cloud API: link zaproszenia, prośby o dołączenie, członkowie. Numer musi być Official Business Account."
+          },
+          "units": {
+            "days": "Dni",
+            "weeks": "Tygodnie",
+            "months": "Miesiące",
+            "years": "Lata"
+          },
+          "sections": {
+            "identity": {
+              "title": "Tożsamość",
+              "description": "Jak plan jest nazwany i pokazywany."
+            },
+            "pricing": {
+              "title": "Cennik",
+              "description": "Ile kosztuje i jak często jest rozliczany."
+            },
+            "limits": {
+              "title": "Limity",
+              "description": "Zostaw limit pusty, aby był nieograniczony."
+            },
+            "features": {
+              "title": "Funkcje",
+              "description": "Wyłącz to, czego plan nie obejmuje."
+            }
+          },
+          "fields": {
+            "name": {
+              "label": "Nazwa planu"
+            },
+            "subtitle": {
+              "label": "Podtytuł",
+              "hint": "Jeden krótki wiersz pod nazwą (do {max} znaków)."
+            },
+            "detail": {
+              "label": "Opis",
+              "hint": "Pokazywany na stronach z cennikiem (do {max} znaków)."
+            },
+            "ctaLabel": {
+              "label": "Etykieta przycisku",
+              "hint": "Do {max} znaków."
+            },
+            "sortOrder": {
+              "label": "Kolejność",
+              "hint": "Niższa wartość jest pierwsza."
+            },
+            "currency": {
+              "label": "Waluta",
+              "placeholder": "Szukaj walut",
+              "empty": "Żadna waluta nie pasuje do wyszukiwania."
+            },
+            "amount": {
+              "label": "Cena",
+              "hint": "Na przykład 19 lub 19,99.",
+              "locked": "Plany bezpłatne i z wyceną indywidualną nie mają ceny.",
+              "none": "brak"
+            },
+            "offerAmount": {
+              "label": "Cena promocyjna",
+              "hint": "Opcjonalnie. Musi być niższa niż cena."
+            },
+            "billingDuration": {
+              "label": "Okres rozliczeniowy",
+              "hint": "Od {min} do {max}."
+            },
+            "billingUnit": {
+              "label": "Jednostka"
+            },
+            "dataRetentionDays": {
+              "label": "Przechowywanie danych (dni po wygaśnięciu)",
+              "hint": "Liczba dni po wygaśnięciu płatnego planu, zanim dane przestrzeni roboczej zostaną usunięte. 0 = nigdy. Usunięcie jest trwałe."
+            }
+          },
+          "flags": {
+            "isActive": {
+              "label": "Aktywny",
+              "hint": "Nieaktywne plany są ukryte przed kupującymi; przestrzenie robocze, które już z nich korzystają, je zachowują."
+            },
+            "isDefault": {
+              "label": "Domyślny przy rejestracji",
+              "hint": "Nowe przestrzenie robocze zaczynają tutaj, chyba że zasady rejestracji wskazują inny plan. Tylko jeden plan może być domyślny."
+            },
+            "isHighlighted": {
+              "label": "Wyróżnij jako popularny",
+              "hint": "Pokazuje plakietkę Najpopularniejszy."
+            },
+            "isFree": {
+              "label": "Plan bezpłatny",
+              "hint": "Bez ceny. Nowe przestrzenie robocze na planie bezpłatnym otrzymują okres próbny."
+            },
+            "isCustomQuote": {
+              "label": "Wycena indywidualna",
+              "hint": "Cena nie jest pokazywana. Kupujący są kierowani do rozmowy z działem sprzedaży."
+            },
+            "isLifetime": {
+              "label": "Cena jednorazowa",
+              "hint": "Naliczana raz, a nie za każdy okres rozliczeniowy."
+            }
+          },
+          "limitGroups": {
+            "messaging": "Wiadomości",
+            "workspace": "Przestrzeń robocza",
+            "content": "Treść",
+            "sales": "Sprzedaż i rozliczenia",
+            "integrations": "Integracje",
+            "ai": "AI"
+          },
+          "limitKeys": {
+            "monthly_messages": "Wiadomości miesięcznie",
+            "broadcasts": "Wiadomości masowe",
+            "devices": "Połączone numery",
+            "users": "Miejsca w zespole",
+            "contacts": "Kontakty",
+            "tags": "Tagi",
+            "pipelines": "Lejki sprzedaży",
+            "appointments": "Spotkania miesięcznie",
+            "saved_replies": "Zapisane odpowiedzi",
+            "routing_rules": "Reguły routingu",
+            "templates": "Szablony wiadomości",
+            "flows": "Przepływy",
+            "autoreplies": "Automatyczne odpowiedzi na słowa kluczowe",
+            "total_campaigns": "Utworzone kampanie (usunięcie nie zwalnia miejsca)",
+            "api_rate_limit_per_minute": "Żądania API na minutę (0 = domyślne platformy)",
+            "installed_apps": "Zainstalowane aplikacje i integracje Marketplace",
+            "scheduled_messages": "Przechowywane zaplanowane wiadomości",
+            "lead_sources": "Źródła leadów",
+            "broadcast_recipients": "Odbiorcy w jednej wiadomości masowej",
+            "segments": "Zapisane segmenty",
+            "custom_fields": "Pola niestandardowe",
+            "team_chat_channels": "Kanały czatu zespołu",
+            "sla_policies": "Zasady SLA skrzynki odbiorczej",
+            "booking_types": "Typy rezerwacji",
+            "chatbot_widgets": "Widżety chatbota na stronie",
+            "catalog_products": "Produkty katalogu",
+            "invoices_monthly": "Faktury miesięcznie",
+            "recurring_invoices": "Faktury cykliczne",
+            "api_keys": "Klucze API",
+            "webhooks": "Webhooki wychodzące",
+            "ai_token_limit_monthly": "Tokeny AI miesięcznie (klucze platformy)",
+            "forms": "Formularze internetowe",
+            "form_submissions_monthly": "Zgłoszenia formularzy miesięcznie",
+            "ai_form_generations_monthly": "Generacje kreatora formularzy AI miesięcznie"
+          },
+          "featureGroups": {
+            "messaging": "Wiadomości",
+            "aiCalling": "AI i połączenia",
+            "integrations": "Integracje",
+            "advanced": "Zaawansowane"
+          },
+          "featureKeys": {
+            "automation": "Automatyzacja",
+            "ai_assistants": "Asystenci AI",
+            "calling": "Połączenia WhatsApp",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "analytics": "Analityka",
+            "remove_branding": "White-label (usuwa branding platformy)",
+            "sales_pipeline": "Lejek sprzedaży (transakcje i zadania)",
+            "appointment_booking": "Spotkania i strony rezerwacji",
+            "chatbot_widgets": "Widżety chatbota na stronie",
+            "wa_storefront": "Sklep i katalog WhatsApp",
+            "inbox_sla": "Zasady SLA skrzynki odbiorczej",
+            "inbox_routing": "Reguły routingu skrzynki odbiorczej i godziny pracy",
+            "waba_calling": "Wykonuj i odbieraj połączenia WhatsApp ze skrzynki odbiorczej",
+            "inbox_kanban": "Tablica Kanban skrzynki odbiorczej",
+            "team_performance": "Raporty wydajności zespołu",
+            "scheduled_messages": "Zaplanowane wiadomości",
+            "whatsapp_warmer": "Rozgrzewanie numeru WhatsApp",
+            "marketplace": "Marketplace (miniaplikacje i integracje)",
+            "lead_sources": "Źródła leadów (wejścia webhooków i konektorów tworzące kontakty)",
+            "team_chat": "Czat zespołu (kanały wewnętrzne i wiadomości bezpośrednie)",
+            "public_api": "Publiczne REST API i klucze API",
+            "outbound_webhooks": "Webhooki wychodzące",
+            "storefront_builder": "Kreator sklepu i strony internetowej",
+            "invoicing": "Fakturowanie (faktury, noty kredytowe, faktury cykliczne)",
+            "forms_and_links": "Formularze, linki click-to-chat i grupy",
+            "extra_channels": "Kanały Telegram, Facebook i Instagram",
+            "form_builder": "Formularze (kreator formularzy internetowych)",
+            "waba_groups": "Grupy WhatsApp (Cloud API)"
+          },
+          "problems": {
+            "required": "To pole jest wymagane.",
+            "tooLong": "Maksymalnie {max} znaków.",
+            "money": "Wpisz kwotę, na przykład 19 lub 19,99.",
+            "range": "Wpisz liczbę całkowitą od {min} do {max}.",
+            "whole": "Wpisz liczbę całkowitą lub zostaw puste, aby nie było limitu.",
+            "server": "Serwer odrzucił tę wartość.",
+            "unknownAddon": "Wybrane dodatki, które już nie istnieją: {count}. Odznacz je i zapisz ponownie.",
+            "free_needs_zero_price": "Plan bezpłatny musi mieć cenę 0.",
+            "free_no_offer": "Plan bezpłatny nie może mieć ceny promocyjnej.",
+            "custom_no_price": "Plan z wyceną indywidualną nie pokazuje ceny: zostaw cenę i cenę promocyjną puste.",
+            "custom_not_free": "Plan nie może być jednocześnie bezpłatny i z wyceną indywidualną.",
+            "paid_needs_price": "Ustaw cenę powyżej 0 lub oznacz plan jako bezpłatny.",
+            "offer_not_lower": "Cena promocyjna musi być niższa niż cena planu.",
+            "default_needs_active": "Plan domyślny przy rejestracji musi być aktywny."
+          },
+          "limitHints": {
+            "monthly_messages": "Wiadomości wychodzące wysłane w miesiącu kalendarzowym. Po przekroczeniu limitu naliczana jest opłata z portfela.",
+            "broadcasts": "Wiadomości masowe, które nie są zarchiwizowane.",
+            "scheduled_messages": "Zaplanowane wiadomości przechowywane przez przestrzeń roboczą, w dowolnym statusie. Usunięcie jednej zwalnia jej miejsce.",
+            "total_campaigns": "Kampanie utworzone w okresie planu. Usunięcie kampanii nie zwraca miejsca.",
+            "devices": "Połączone numery WhatsApp. Usunięcie jednego zwalnia jego miejsce.",
+            "users": "Członkowie zespołu, którzy nie są dezaktywowani.",
+            "contacts": "Kontakty w przestrzeni roboczej.",
+            "tags": "Tagi kontaktów.",
+            "pipelines": "Lejki sprzedaży.",
+            "appointments": "Spotkania zarezerwowane w miesiącu kalendarzowym (oczekujące, potwierdzone lub zakończone), według czasu rozpoczęcia.",
+            "saved_replies": "Zapisane odpowiedzi (szybkie odpowiedzi) skrzynki zespołu.",
+            "routing_rules": "Reguły routingu skrzynki zespołu.",
+            "templates": "Szablony wiadomości WhatsApp.",
+            "flows": "Przepływy w kreatorze.",
+            "autoreplies": "Automatyczne odpowiedzi na słowa kluczowe.",
+            "api_rate_limit_per_minute": "Żądania na minutę dla każdego klucza API. 0 używa domyślnej wartości platformy zamiast braku limitu.",
+            "installed_apps": "Aplikacje i integracje Marketplace zainstalowane teraz. Odinstalowanie zwalnia miejsce.",
+            "lead_sources": "Źródła leadów (wejścia webhooków i konektorów). Usunięcie jednego zwalnia jego miejsce.",
+            "broadcast_recipients": "Największa grupa odbiorców, do której można wysłać jedną wiadomość masową, sprawdzana przy tworzeniu lub edycji wiadomości masowej.",
+            "segments": "Zapisane segmenty kontaktów. Usunięcie jednego zwalnia jego miejsce.",
+            "custom_fields": "Pola niestandardowe dodane do dowolnego modułu. Wbudowane pola systemowe nie są liczone.",
+            "team_chat_channels": "Kanały czatu zespołu, publiczne i prywatne. Usunięcie jednego zwalnia jego miejsce.",
+            "sla_policies": "Zasady SLA skrzynki zespołu.",
+            "booking_types": "Typy rezerwacji stojące za publicznymi stronami rezerwacji.",
+            "chatbot_widgets": "Widżety chatbota na stronie.",
+            "catalog_products": "Produkty w katalogu WhatsApp. Usunięcie jednego zwalnia jego miejsce.",
+            "invoices_monthly": "Faktury utworzone w miesiącu kalendarzowym, w dowolnym statusie. Unieważnienie lub usunięcie jednej nie zwraca miesiąca.",
+            "recurring_invoices": "Harmonogramy faktur cyklicznych, w dowolnym statusie.",
+            "api_keys": "Aktywne klucze API. Unieważnienie klucza zwalnia jego miejsce.",
+            "webhooks": "Wychodzące punkty końcowe webhooków (webhooki skrzynki odbiorczej i webhooki API łącznie).",
+            "ai_token_limit_monthly": "Tokeny używane przez asystentów AI w miesiącu kalendarzowym na kluczach platformy. Przestrzenie robocze na własnych kluczach nie mają limitu.",
+            "forms": "Aktywne formularze internetowe (aplikacja Formularze). Archiwizacja formularza zwalnia jego miejsce. 0 = bez limitu.",
+            "form_submissions_monthly": "Zgłoszenia formularzy przyjęte w miesiącu kalendarzowym, z wyłączeniem spamu. Po przekroczeniu limitu zgłoszenie nadal jest zapisywane do przeglądu, nigdy odrzucane. 0 = bez limitu.",
+            "ai_form_generations_monthly": "Generacje kreatora formularzy AI w miesiącu kalendarzowym, łącznie z ponowną próbą naprawy. 0 = bez limitu."
+          }
+        }
+      },
+      "authPages": {
+        "kicker": "Strony dla gości",
+        "title": "Strony uwierzytelniania",
+        "description": "Wybierz projekt stron logowania, rejestracji i resetowania hasła, a następnie edytuj teksty i kolor każdej z nich. Podgląd pokazuje niezapisane zmiany tak, jak zobaczą je odwiedzający. Linki do Regulaminu i Polityki prywatności na tych stronach ustawia się w sekcji <link>Zasady rejestracji</link>.",
+        "save": "Zapisz zmiany",
+        "saving": "Zapisywanie",
+        "saved": "{count, plural, one {Zapisano # ustawienie} few {Zapisano # ustawienia} many {Zapisano # ustawień} other {Zapisano # ustawienia}}",
+        "rejected": "Nic nie zapisano. {count, plural, one {Odrzucono # pole.} few {Odrzucono # pola.} many {Odrzucono # pól.} other {Odrzucono # pola.}}",
+        "requestId": "Identyfikator żądania",
+        "unsaved": "{count, plural, one {# niezapisana zmiana} few {# niezapisane zmiany} many {# niezapisanych zmian} other {# niezapisanej zmiany}}",
+        "discard": "Odrzuć zmiany",
+        "errors": {
+          "unexpected": "Nie udało się zapisać ustawień. Spróbuj ponownie za chwilę."
+        },
+        "problems": {
+          "accent": "Użyj koloru w formacie #rrggbb.",
+          "mediaUrl": "Użyj pełnego adresu https."
+        },
+        "pages": {
+          "login": "Logowanie",
+          "register": "Rejestracja",
+          "forgot": "Nie pamiętam hasła"
+        },
+        "designs": {
+          "legend": "Szablon projektu",
+          "legendNote": "Jeden wybór dla wszystkich trzech stron",
+          "split": {
+            "name": "Podzielona prezentacja",
+            "description": "Panel marketingowy po jednej stronie, formularz po drugiej."
+          },
+          "cinematic": {
+            "name": "Filmowy",
+            "description": "Pełnoekranowy obraz lub wideo za wyśrodkowaną kartą."
+          },
+          "minimal": {
+            "name": "Minimalny",
+            "description": "Zwykła wyśrodkowana karta bez grafiki."
+          },
+          "spotlight": {
+            "name": "Wyróżnienie marki",
+            "description": "Wyrazisty panel w kolorze akcentu obok formularza."
+          },
+          "aurora": {
+            "name": "Zorza",
+            "description": "Miękka poświata koloru za matową kartą."
+          }
+        },
+        "fields": {
+          "accent": "Kolor akcentu",
+          "accentHint": "Sześciocyfrowy kolor szesnastkowy, taki jak #0f766e. Skrócone (#fff), ośmiocyfrowe i nazwane kolory nie są akceptowane. Używany dla wyróżnionego słowa, przycisków i panelu marki. Reset przywraca dostarczony kolor.",
+          "accentPicker": "Wybierz kolor akcentu",
+          "accentHex": "Kolor akcentu w formacie szesnastkowym",
+          "accentReset": "Przywróć domyślne",
+          "mediaUrl": "Adres multimediów",
+          "mediaType": "Typ multimediów",
+          "eyebrow": "Nadtytuł",
+          "heading": "Nagłówek",
+          "headingAccent": "Wyróżnione słowo nagłówka",
+          "subheading": "Tekst dodatkowy",
+          "emptyHint": "Do {max} znaków. Zostaw puste, aby użyć dostarczonego tekstu pokazanego na szaro."
+        },
+        "media": {
+          "title": "Multimedia boczne",
+          "description": "Obraz, GIF lub zapętlone wideo dla panelu projektu. Hosting na razie leży po Twojej stronie: wklej publiczny adres https.",
+          "url": "Adres multimediów",
+          "urlHint": "Musi zaczynać się od https. Zostaw puste, aby nie używać multimediów.",
+          "type": "Typ multimediów",
+          "types": {
+            "image": "Obraz",
+            "gif": "Animowany GIF",
+            "video": "Wideo w pętli"
+          },
+          "clear": "Usuń multimedia"
+        },
+        "showcase": {
+          "title": "Tekst panelu prezentacji",
+          "description": "Wyświetlany w układzie Split showcase. Puste pola zachowują dostarczony tekst.",
+          "groups": {
+            "hero": "Karta wyróżniona",
+            "stats": "Statystyki",
+            "features": "Karty funkcji",
+            "chips": "Etykiety",
+            "footer": "Wiersz stopki"
+          },
+          "keys": {
+            "hero_title": "Tytuł wyróżnienia",
+            "hero_desc": "Tekst wyróżnienia",
+            "stat1_num": "Wartość statystyki 1",
+            "stat1_label": "Etykieta statystyki 1",
+            "stat2_num": "Wartość statystyki 2",
+            "stat2_label": "Etykieta statystyki 2",
+            "stat3_num": "Wartość statystyki 3",
+            "stat3_label": "Etykieta statystyki 3",
+            "feat1_title": "Tytuł funkcji 1",
+            "feat1_desc": "Tekst funkcji 1",
+            "feat2_title": "Tytuł funkcji 2",
+            "feat2_desc": "Tekst funkcji 2",
+            "feat3_title": "Tytuł funkcji 3",
+            "feat3_desc": "Tekst funkcji 3",
+            "feat4_title": "Tytuł funkcji 4",
+            "feat4_desc": "Tekst funkcji 4",
+            "inside_heading": "Nagłówek etykiet",
+            "chip1": "Etykieta 1",
+            "chip2": "Etykieta 2",
+            "chip3": "Etykieta 3",
+            "chip4": "Etykieta 4",
+            "chip5": "Etykieta 5",
+            "chip6": "Etykieta 6",
+            "footer": "Tekst stopki"
+          }
+        },
+        "preview": {
+          "title": "Podgląd na żywo",
+          "note": "Strona {page} z niezapisanymi zmianami.",
+          "showcaseNote": "Tekst panelu prezentacji jest widoczny tylko w układzie Split showcase.",
+          "device": "Rozmiar podglądu",
+          "devices": {
+            "desktop": "Komputer",
+            "mobile": "Telefon"
+          },
+          "frameLabel": "Podgląd strony",
+          "frameTitle": "Podgląd strony {page}",
+          "form": {
+            "org": "Nazwa przestrzeni roboczej",
+            "name": "Twoje imię i nazwisko",
+            "email": "E-mail",
+            "password": "Hasło",
+            "remember": "Nie wylogowuj mnie przez 30 dni",
+            "submit": {
+              "login": "Zaloguj się",
+              "register": "Utwórz przestrzeń roboczą",
+              "forgot": "Wyślij link do resetu"
+            },
+            "workspace": "Adres przestrzeni roboczej",
+            "forgotLink": "Nie pamiętasz hasła?",
+            "newHere": "Nowy tutaj?",
+            "createAccount": "Utwórz przestrzeń roboczą",
+            "haveAccount": "Masz już konto?",
+            "signInLink": "Zaloguj się",
+            "backToSignIn": "Wróć do logowania",
+            "captchaV3": "Ta strona jest chroniona przez reCAPTCHA.",
+            "captchaV2": "Nie jestem robotem",
+            "captchaBrand": "reCAPTCHA"
+          },
+          "enlarge": "Powiększ podgląd",
+          "shrink": "Obok siebie",
+          "openReal": "Otwórz właściwą stronę",
+          "openRealNote": "Otwiera zapisaną wersję w nowej karcie. Niezapisane zmiany są widoczne tylko w tym podglądzie.",
+          "opensNewTab": "(otwiera się w nowej karcie)"
+        },
+        "pagesLabel": "Strona do edycji"
+      },
+      "ipBlocked": {
+        "kicker": "Dostęp zablokowany",
+        "title": "Ten adres jest niedozwolony",
+        "body": "Konsola operatora przyjmuje żądania tylko z adresów z listy dozwolonych. Adres, z którego pochodzą te żądania, nie znajduje się na liście, więc konsola je odrzuciła.",
+        "addressLabel": "Zablokowany adres",
+        "addressUnknown": "Serwer nie mógł odczytać Twojego adresu.",
+        "fixTitle": "Jak uzyskać dostęp",
+        "fixBody": "Superadministrator, który nadal ma dostęp do konsoli, dodaje ten adres do listy dozwolonych adresów IP. Nic innego w Twoim koncie się nie zmienia.",
+        "fixPath": "Centrum bezpieczeństwa › API i webhooki › Lista dozwolonych adresów IP",
+        "dashboard": "Przejdź do pulpitu",
+        "signOut": "Wyloguj się",
+        "signingOut": "Wylogowywanie"
+      }
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "developer-rest-api-v1-docs": {
+    "metaTitle": "Dokumentacja API {brand}",
+    "metaDescription": "Dokumentacja REST API {brand}: uwierzytelnianie, limity żądań i każdy endpoint z przykładami żądań i odpowiedzi.",
+    "common": {
+      "copy": "Kopiuj",
+      "copied": "Skopiowano",
+      "copyFailed": "Nie udało się skopiować. Zaznacz tekst i skopiuj go ręcznie."
+    },
+    "topbar": {
+      "home": "Strona główna {brand}",
+      "apiWord": "API",
+      "version": "v1",
+      "spec": "Specyfikacja OpenAPI",
+      "getKey": "Uzyskaj klucz API"
+    },
+    "sidebar": {
+      "label": "Nawigacja po dokumentacji",
+      "filterLabel": "Filtruj endpointy",
+      "filterPlaceholder": "Filtruj endpointy…",
+      "startHere": "Zacznij tutaj",
+      "intro": "Wprowadzenie",
+      "auth": "Uwierzytelnianie",
+      "webhooks": "Webhooki"
+    },
+    "hero": {
+      "eyebrow": "Dokumentacja dla programistów",
+      "title": "<em>REST API</em> {brand}",
+      "lead": "Jedno REST API do wysyłania wiadomości WhatsApp, prowadzenia wiadomości masowych i kampanii, zarządzania kontaktami i szablonami, uruchamiania przepływów automatyzacji i odczytu danych konta, czyli wszystkiego, czego potrzebuje Twój CRM, platforma automatyzacji lub aplikacja.",
+      "baseUrl": "Bazowy adres URL",
+      "copyBaseUrl": "Kopiuj bazowy adres URL"
+    },
+    "capabilities": {
+      "title": "Co możesz zrobić",
+      "send": {
+        "title": "Wysyłaj wiadomości",
+        "body": "Pojedyncze wysyłki, wiadomości masowe, kampanie i wysyłki zaplanowane"
+      },
+      "receive": {
+        "title": "Odbieraj wiadomości",
+        "body": "Odczytuj rozmowy przychodzące i ich wiadomości"
+      },
+      "contacts": {
+        "title": "Kontakty i leady",
+        "body": "Pełne tworzenie, odczyt, aktualizacja i usuwanie, grupy i atrybuty niestandardowe"
+      },
+      "templates": {
+        "title": "Szablony",
+        "body": "Twórz, aktualizuj i wyświetlaj szablony WhatsApp"
+      },
+      "flows": {
+        "title": "Przepływy automatyzacji",
+        "body": "Zapisz kontakt do przepływu przez API"
+      },
+      "status": {
+        "title": "Status dostarczenia",
+        "body": "Dla każdej wiadomości: wysłana, dostarczona, odczytana i nieudana"
+      },
+      "devices": {
+        "title": "Urządzenia",
+        "body": "Wyświetlaj połączone numery i ich status"
+      },
+      "account": {
+        "title": "Konto i użycie",
+        "body": "Plan, limity i kredyty na wiadomości"
+      }
+    },
+    "auth": {
+      "title": "Uwierzytelnianie",
+      "intro": "Każde żądanie jest uwierzytelniane <strong>kluczem API</strong> przestrzeni roboczej. Utwórz go na pulpicie w sekcji <strong>Ustawienia, REST API</strong>. Wysyłaj go jako token Bearer:",
+      "copyHeader": "Kopiuj nagłówek",
+      "alt": "Możesz też przekazać go w nagłówku <code>X-Api-Key</code>. Klucze należą do jednej przestrzeni roboczej i przechowywany jest tylko ich skrót, więc skopiuj klucz podczas tworzenia: nie można go wyświetlić ponownie. Klucze można w każdej chwili unieważnić i przestają działać natychmiast."
+    },
+    "webhooks": {
+      "title": "Webhooki i zdarzenia w czasie rzeczywistym",
+      "comingTitle": "Dostarczanie webhooków już wkrótce",
+      "comingBody": "Rejestrowanie webhooka i odbieranie zdarzeń pod własnym adresem URL nie jest jeszcze dostępne. Obecnie żadne zdarzenia nie są wysyłane na Twój serwer, więc nie ma czego subskrybować. Ta karta wyświetli zdarzenia i nagłówek podpisu po uruchomieniu dostarczania.",
+      "rateLabel": "Limity żądań",
+      "rate": "Każdy klucz podlega limitowi na minutę wynikającemu z planu przestrzeni roboczej; gdy plan go nie określa, obowiązuje domyślny limit platformy: {limit} żądań na minutę. Każda odpowiedź zawiera nagłówki <code>X-RateLimit-Limit</code> i <code>X-RateLimit-Remaining</code>, a żądanie ponad limit otrzymuje odpowiedź HTTP 429 z nagłówkiem <code>Retry-After</code>. Wysyłki wychodzące zużywają także kredyty na wiadomości z Twojego planu."
+    },
+    "reference": {
+      "title": "Endpointy",
+      "count": "{count, plural, one {# endpoint} few {# endpointy} many {# endpointów} other {# endpointu}}",
+      "noMatch": "Żaden endpoint nie pasuje do „{query}”.",
+      "clearFilter": "Wyczyść filtr",
+      "empty": "Nie opublikowano jeszcze żadnych endpointów. Zajrzyj wkrótce.",
+      "unavailableTitle": "Nie udało się wczytać dokumentacji endpointów",
+      "unavailableBody": "Specyfikacja API jest teraz niedostępna. Wprowadzenie powyżej nadal obowiązuje. Spróbuj ponownie za chwilę.",
+      "retry": "Spróbuj ponownie",
+      "general": "Ogólne",
+      "toggle": "Pokaż lub ukryj szczegóły: {method} {path}",
+      "parameters": "Parametry",
+      "bodyParameters": "Parametry treści",
+      "name": "Nazwa",
+      "field": "Pole",
+      "description": "Opis",
+      "required": "wymagane",
+      "exampleRequest": "Przykładowe żądanie",
+      "requestBody": "Treść żądania",
+      "responses": "Odpowiedzi",
+      "copyCurl": "Kopiuj żądanie",
+      "copyJson": "Kopiuj JSON",
+      "noExample": "Specyfikacja nie podaje przykładu dla tej odpowiedzi."
+    },
+    "footer": "REST API {brand} · v1 · wygenerowane z aktualnej specyfikacji OpenAPI"
+  }
+}

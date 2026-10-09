@@ -1,0 +1,484 @@
+{
+  "auth-registration-security": {
+    "guest": {
+      "shell": {
+        "appNameFallback": "CRM",
+        "header": {
+          "login": {
+            "eyebrow": "Inloggen",
+            "title": "Welkom",
+            "accent": "terug",
+            "subtitle": "Voer je gegevens in om terug te gaan naar je workspace."
+          },
+          "register": {
+            "eyebrow": "Stap 1 van 3 / Account aanmaken",
+            "title": "Maak je",
+            "accent": "account aan",
+            "subtitle": "Een paar gegevens en je workspace is klaar."
+          },
+          "forgot": {
+            "eyebrow": "Wachtwoord vergeten",
+            "title": "Stel je",
+            "accent": "wachtwoord opnieuw in",
+            "subtitle": "Vertel ons waar je inlogt en we sturen een eenmalige link."
+          }
+        },
+        "defaults": {
+          "login": {
+            "hero_title": "Alles op één plek",
+            "hero_desc": "Chats, campagnes en contacten blijven bij elkaar, zodat niemand naar context hoeft te zoeken.",
+            "stat1_num": "24/7",
+            "stat1_label": "gedeelde teaminbox",
+            "stat2_num": "5 min",
+            "stat2_label": "gebruikelijke installatie",
+            "stat3_num": "1 plek",
+            "stat3_label": "voor chats en contacten",
+            "feat1_title": "Gedeelde inbox",
+            "feat1_desc": "Wijs chats toe, beantwoord ze en draag ze over zonder de draad kwijt te raken.",
+            "feat2_title": "Broadcasts",
+            "feat2_desc": "Bereik veel contacten tegelijk met gespreide verzending en leveringsopvolging.",
+            "feat3_title": "Automatiseringen",
+            "feat3_desc": "Routeer, antwoord en volg op met flows die je zelf ontwerpt.",
+            "feat4_title": "Teambeheer",
+            "feat4_desc": "Rollen, rechten en auditlogs houden elke workspace onder controle.",
+            "inside_heading": "In je workspace",
+            "chip1": "Inbox",
+            "chip2": "Broadcasts",
+            "chip3": "Flows",
+            "chip4": "Contacten",
+            "chip5": "Rapporten",
+            "chip6": "Sjablonen"
+          },
+          "register": {
+            "hero_title": "Gratis beginnen",
+            "hero_desc": "Stel eerst je workspace in en kies een plan wanneer je er klaar voor bent.",
+            "stat1_num": "3 stappen",
+            "stat1_label": "naar een werkende workspace",
+            "stat2_num": "5 min",
+            "stat2_label": "gebruikelijke installatie",
+            "stat3_num": "Dag 1",
+            "stat3_label": "nodig je team uit",
+            "feat1_title": "Snelle installatie",
+            "feat1_desc": "Geef je workspace een naam, stel je tijdzone in en je bent binnen.",
+            "feat2_title": "Haal je team erbij",
+            "feat2_desc": "Nodig collega's uit en geef iedereen precies de toegang die nodig is.",
+            "feat3_title": "Kanalen koppelen",
+            "feat3_desc": "Koppel je berichtennummers en begin met klanten te praten.",
+            "feat4_title": "Houd de controle",
+            "feat4_desc": "Tweestapsverificatie en sessiebeheer beschermen elk account.",
+            "inside_heading": "Wat je krijgt",
+            "chip1": "Gedeelde inbox",
+            "chip2": "Broadcasts",
+            "chip3": "Flows",
+            "chip4": "Contacten",
+            "chip5": "Rapporten",
+            "chip6": "Teamrollen"
+          },
+          "forgot": {
+            "hero_title": "Een verse link, eenmalig te gebruiken",
+            "hero_desc": "We mailen een beveiligde link die maar één keer werkt en snel verloopt."
+          }
+        },
+        "contentDefaults": {
+          "login": {
+            "eyebrow": "Teaminbox voor WhatsApp",
+            "heading": "Elke klantchat,",
+            "headingAccent": "één rustige workspace",
+            "subheading": "Broadcasts, automatiseringen en een gedeelde inbox voor teams die snel antwoorden."
+          },
+          "register": {
+            "eyebrow": "Begin in een paar minuten",
+            "heading": "Stel je",
+            "headingAccent": "workspace in",
+            "subheading": "Maak je workspace aan en haal daarna je team en je eerste kanaal erbij."
+          },
+          "forgot": {
+            "eyebrow": "Accountherstel",
+            "heading": "Over een",
+            "headingAccent": "minuut weer binnen",
+            "subheading": "Voer je e-mailadres in en we sturen je een beveiligde link om een nieuw wachtwoord te kiezen."
+          }
+        }
+      },
+      "toolbar": {
+        "language": "Taal",
+        "theme": "Thema wisselen",
+        "themeToLight": "Licht",
+        "themeToDark": "Donker"
+      },
+      "pages": {
+        "login": {
+          "title": "Inloggen"
+        },
+        "signup": {
+          "title": "Maak je account aan"
+        },
+        "verifyOtp": {
+          "title": "Verifieer je nummer",
+          "eyebrow": "Verifieer je nummer",
+          "heading": "Controleer je",
+          "accent": "WhatsApp",
+          "subtitle": "Voer de eenmalige code in die we hebben gestuurd om het aanmaken van je workspace af te ronden."
+        },
+        "forgot": {
+          "title": "Je wachtwoord opnieuw instellen"
+        },
+        "reset": {
+          "title": "Kies een nieuw wachtwoord",
+          "eyebrow": "Wachtwoord opnieuw instellen",
+          "heading": "Kies een nieuw",
+          "accent": "wachtwoord",
+          "subtitle": "Kies een sterk wachtwoord. Je logt er direct daarna mee in.",
+          "panel": {
+            "heroTitle": "Een nieuw wachtwoord",
+            "heroDesc": "Kies een wachtwoord dat je onthoudt. Je workspace kan een minimumlengte vereisen.",
+            "eyebrow": "Accountherstel",
+            "heading": "Een nieuwe",
+            "accent": "start",
+            "subheading": "Zodra je nieuwe wachtwoord is opgeslagen, kun je er meteen mee inloggen."
+          }
+        },
+        "verifyEmail": {
+          "title": "Bevestig je e-mailadres",
+          "eyebrow": "E-mailbevestiging",
+          "heading": "Bevestig je",
+          "accent": "e-mailadres",
+          "subtitle": "Deze pagina controleert de link die je vanuit je inbox hebt geopend.",
+          "panel": {
+            "heroTitle": "Bevestig je adres",
+            "heroDesc": "Met één klik bewijs je dat deze inbox van jou is.",
+            "eyebrow": "E-mailbevestiging",
+            "heading": "Je link",
+            "accent": "wordt gecontroleerd",
+            "subheading": "We bevestigen het adres uit de e-mail die je hebt geopend."
+          }
+        },
+        "findWorkspace": {
+          "title": "Mijn workspace zoeken",
+          "eyebrow": "Mijn workspace zoeken",
+          "heading": "Zoek je",
+          "accent": "workspace",
+          "subtitle": "Voer je e-mailadres in en we mailen je de workspaceadressen waarmee je kunt inloggen."
+        },
+        "confirmEmailChange": {
+          "title": "Bevestig je nieuwe e-mailadres",
+          "eyebrow": "E-mailwijziging",
+          "heading": "Bevestig je",
+          "accent": "nieuwe e-mailadres",
+          "subtitle": "Deze pagina controleert de link die je vanuit je inbox hebt geopend.",
+          "panel": {
+            "heroTitle": "Nieuw inlogadres",
+            "heroDesc": "Je adres wordt gewijzigd zodra je het bevestigt.",
+            "eyebrow": "E-mailwijziging",
+            "heading": "Je nieuwe",
+            "accent": "e-mailadres wordt bevestigd",
+            "subheading": "We controleren de link uit het bericht dat je hebt geopend."
+          }
+        },
+        "socialCallback": {
+          "title": "Je wordt ingelogd",
+          "eyebrow": "Inloggen via sociale media",
+          "heading": "Je wordt",
+          "accent": "ingelogd",
+          "subtitle": "Je login wordt afgerond."
+        }
+      },
+      "errors": {
+        "invalidCredentials": "Die gegevens komen niet overeen. Controleer de workspace, het e-mailadres en het wachtwoord.",
+        "locked": "Te veel mislukte pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+        "rateLimited": "Te veel pogingen. Wacht even en probeer het opnieuw.",
+        "rateLimitedWait": "Te veel pogingen. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw.",
+        "suspended": "Dit account is geblokkeerd. Neem contact op met je workspacebeheerder.",
+        "captcha": "Voltooi de captcha en probeer het opnieuw.",
+        "signupClosed": "Registratie is gesloten. Vraag een beheerder om een uitnodiging.",
+        "slugTaken": "Dat workspaceadres is al in gebruik.",
+        "emailTaken": "Dat e-mailadres wordt al gebruikt in deze workspace.",
+        "passwordPolicy": "Dat wachtwoord voldoet niet aan het beveiligingsbeleid:",
+        "tokenInvalid": "Deze link is ongeldig of verlopen.",
+        "emailUnverified": "Bevestig eerst je e-mailadres.",
+        "mfaInvalid": "Die code is ongeldig. Controleer de code en probeer het opnieuw.",
+        "mfaExpired": "Je verificatie is verlopen. Log opnieuw in.",
+        "otpInvalid": "Die code is onjuist. Probeer het opnieuw.",
+        "otpExpired": "Die code is verlopen. Vraag een nieuwe aan.",
+        "otpTooMany": "Te veel pogingen. Vraag een nieuwe code aan.",
+        "otpCooldown": "Wacht even voordat je een nieuwe code aanvraagt.",
+        "otpSendFailed": "We kunnen de verificatiecode niet versturen. Controleer het nummer en probeer het opnieuw.",
+        "socialUnavailable": "Die inlogmethode is niet beschikbaar.",
+        "socialExpired": "Inloggen is verlopen. Probeer het opnieuw.",
+        "socialFailed": "We kunnen het inloggen via {provider} niet voltooien. Probeer het opnieuw.",
+        "socialNoEmail": "Dat account heeft geen e-mailadres gedeeld. Gebruik in plaats daarvan e-mail en wachtwoord.",
+        "ipBlocked": "Inloggen is vanaf dit netwerk niet toegestaan.",
+        "workspaceUnavailable": "Die workspace is niet beschikbaar.",
+        "workspaceRequired": "Dit e-mailadres wordt in meer dan één workspace gebruikt. Voer je workspace in om door te gaan.",
+        "validation": "Controleer de gemarkeerde velden.",
+        "sessionExpired": "Je sessie is om veiligheidsredenen verlopen. Probeer het opnieuw.",
+        "network": "We kunnen de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+        "unexpected": "Er is iets misgegaan aan onze kant. Probeer het opnieuw.",
+        "requestId": "Aanvraag-id",
+        "signupExpired": "Begin de registratie opnieuw.",
+        "policyRules": {
+          "min_length": "Gebruik minimaal {min, plural, one {# teken} other {# tekens}}.",
+          "upper_lower": "Combineer hoofdletters en kleine letters.",
+          "number": "Voeg minstens één cijfer toe.",
+          "symbol": "Voeg minstens één symbool toe.",
+          "common": "Dat wachtwoord is te makkelijk te raden."
+        },
+        "socialNoAccount": "Er is geen account dat bij deze {provider}-login hoort. Log in met je e-mailadres en wachtwoord, of maak een account aan.",
+        "forbidden": "Die aanvraag is geweigerd. Laad de pagina opnieuw en probeer het nog eens."
+      },
+      "validation": {
+        "orgSlug": "Voer je workspaceadres in (letters, cijfers, streepje of underscore).",
+        "orgSlugForSocial": "Voer eerst je workspaceadres in, zodat we weten waar we je moeten inloggen.",
+        "email": "Voer een geldig e-mailadres in.",
+        "password": "Voer een wachtwoord in dat aan de getoonde eisen voldoet.",
+        "passwordRequired": "Voer je wachtwoord in.",
+        "fullName": "Voer je volledige naam in.",
+        "orgName": "Geef je workspace een naam (minimaal 2 tekens).",
+        "orgNameForSocial": "Geef je workspace eerst een naam en ga daarna verder met Google of Facebook.",
+        "phoneRequired": "Voer je mobiele nummer in.",
+        "phone": "Voer een geldig mobiel nummer in voor het geselecteerde land.",
+        "newPassword": "Gebruik minimaal {min, plural, one {# teken} other {# tekens}}.",
+        "confirmPassword": "De twee wachtwoorden komen niet overeen.",
+        "acceptTerms": "Je moet de voorwaarden accepteren om door te gaan.",
+        "referralCode": "Verwijzingscodes bevatten alleen letters en cijfers.",
+        "code": "Voer de code van {length} cijfers in."
+      },
+      "legal": {
+        "login": "Door in te loggen ga je akkoord met onze <terms>Voorwaarden</terms> en ons <privacy>Privacybeleid</privacy>.",
+        "signup": "Ik ga akkoord met de <terms>Voorwaarden</terms> en het <privacy>Privacybeleid</privacy>.",
+        "cookies": "<cookies>Cookiebeleid</cookies>"
+      },
+      "captcha": {
+        "protected": "Deze site wordt beschermd door reCAPTCHA. Het <privacy>Privacybeleid</privacy> en de <terms>Servicevoorwaarden</terms> van Google zijn van toepassing."
+      },
+      "social": {
+        "divider": "of met e-mail",
+        "redirecting": "De provider wordt geopend",
+        "login": {
+          "google": "Doorgaan met Google",
+          "facebook": "Doorgaan met Facebook"
+        },
+        "signup": {
+          "google": "Aanmelden met Google",
+          "facebook": "Aanmelden met Facebook"
+        },
+        "google": "Google",
+        "facebook": "Facebook"
+      },
+      "login": {
+        "workspace": "Workspace",
+        "workspaceHint": "Het adres dat je team gebruikt, zoals acme.",
+        "chooseTitle": "Kies een workspace",
+        "chooseSubtitle": "Je e-mailadres staat in meer dan één workspace. Kies degene die je wilt openen.",
+        "chooseMembers": "{count, plural, one {# lid} other {# leden}}",
+        "chooseOpen": "Openen",
+        "chooseBack": "Een ander account gebruiken",
+        "chooseExpired": "Dat duurde te lang. Log opnieuw in.",
+        "workspacePlaceholder": "jouw-workspace",
+        "email": "E-mail",
+        "emailPlaceholder": "jij@bedrijf.com",
+        "password": "Wachtwoord",
+        "forgot": "Wachtwoord vergeten?",
+        "showPassword": "Wachtwoord tonen",
+        "hidePassword": "Wachtwoord verbergen",
+        "remember": "Houd me 30 dagen ingelogd",
+        "submit": "Inloggen",
+        "submitting": "Inloggen",
+        "newHere": "Nieuw hier?",
+        "createAccount": "Account aanmaken",
+        "lostWorkspace": "Weet je je workspaceadres niet zeker?",
+        "findWorkspace": "Mijn workspace zoeken",
+        "loggedOut": "Je bent uitgelogd.",
+        "flashReset": "Wachtwoord opnieuw ingesteld. Log in met je nieuwe wachtwoord.",
+        "flashExpired": "Je sessie is verlopen. Log opnieuw in.",
+        "flashIdle": "Je bent uitgelogd na {minutes, plural, one {# minuut} other {# minuten}} zonder activiteit. Log opnieuw in om door te gaan.",
+        "mfaExpired": "Je verificatie duurde te lang. Log opnieuw in.",
+        "flashDeleted": "Je account is verwijderd."
+      },
+      "mfa": {
+        "title": "Tweestapsverificatie",
+        "descriptionCode": "Voer de 6-cijferige code uit je authenticator-app in.",
+        "descriptionRecovery": "Voer een van je herstelcodes voor eenmalig gebruik in.",
+        "codeLabel": "Authenticatorcode",
+        "recoveryLabel": "Herstelcode",
+        "recoveryHint": "Elke herstelcode werkt één keer.",
+        "invalidCode": "Voer de 6-cijferige code in.",
+        "invalidRecovery": "Voer een herstelcode in (8 tot 32 tekens).",
+        "verify": "Verifiëren",
+        "verifying": "Verifiëren",
+        "useRecovery": "Gebruik in plaats daarvan een herstelcode",
+        "useApp": "Gebruik in plaats daarvan de authenticatorcode",
+        "back": "Terug naar inloggen",
+        "expiresIn": "Verificatie verloopt over {time}"
+      },
+      "signup": {
+        "steps": {
+          "label": "Voortgang van de aanmelding",
+          "account": "Account",
+          "workspace": "Workspace",
+          "plan": "Plan"
+        },
+        "fullName": "Volledige naam",
+        "fullNamePlaceholder": "Je naam",
+        "email": "Zakelijk e-mailadres",
+        "orgName": "Naam van de workspace",
+        "orgNamePlaceholder": "Acme Inc.",
+        "orgNameHint": "Je team logt in met het adres {slug}.",
+        "orgNameHintEmpty": "Dit is de naam die je team ziet.",
+        "customiseSlug": "Kies een eigen workspaceadres",
+        "orgSlug": "Workspaceadres",
+        "orgSlugHint": "Letters, cijfers, streepje of underscore. Je team voert dit in bij het inloggen.",
+        "orgSlugPlaceholder": "jouw-workspace",
+        "phone": "Mobiel nummer",
+        "phoneHint": "We gebruiken het om je account te verifiëren en voor belangrijke updates.",
+        "phonePlaceholder": "Nummer zonder landcode",
+        "country": "Land",
+        "referral": "Verwijzingscode",
+        "optional": "optioneel",
+        "referralPlaceholder": "Een code van een vriend?",
+        "password": "Wachtwoord",
+        "confirmPassword": "Wachtwoord bevestigen",
+        "submit": "Doorgaan",
+        "submitting": "Je account wordt aangemaakt",
+        "haveAccount": "Heb je al een account?",
+        "signIn": "Inloggen",
+        "closedBody": "Registratie is gesloten. Vraag een beheerder om een uitnodiging.",
+        "closedBack": "Terug naar inloggen",
+        "restart": "Begin de registratie opnieuw.",
+        "countryButton": "Landcode +{dial}",
+        "countrySearch": "Zoek landen",
+        "countryEmpty": "Geen land gevonden"
+      },
+      "otp": {
+        "sentTo": "We hebben een code gestuurd naar",
+        "code": "Verificatiecode",
+        "expiresIn": "De code verloopt over {time}.",
+        "expired": "Deze code is verlopen. Vraag een nieuwe aan.",
+        "verify": "Verifiëren en doorgaan",
+        "verifying": "Verifiëren",
+        "resend": "Code opnieuw versturen",
+        "resendIn": "Code opnieuw versturen over {time}",
+        "resending": "Versturen",
+        "resent": "Er is een nieuwe code onderweg naar je WhatsApp.",
+        "wrongNumber": "Verkeerd nummer?",
+        "goBack": "Terug",
+        "addressTakenHint": "Dat workspaceadres is bezet geraakt terwijl je verifieerde. Kies een ander adres, dan sturen we je een nieuwe code.",
+        "chooseAnotherAddress": "Kies een ander adres"
+      },
+      "forgot": {
+        "submit": "Resetlink mailen",
+        "submitting": "Versturen",
+        "remembered": "Weer ingevallen?",
+        "back": "Terug naar inloggen",
+        "doneTitle": "Controleer je inbox",
+        "doneBody": "Als dat e-mailadres bij een account in die workspace hoort, is er een resetlink onderweg. De link werkt één keer en verloopt snel.",
+        "doneHint": "Nog niets? Controleer je spammap of probeer het over een minuut opnieuw.",
+        "tryAnother": "Een ander e-mailadres gebruiken"
+      },
+      "reset": {
+        "password": "Nieuw wachtwoord",
+        "confirmPassword": "Nieuw wachtwoord bevestigen",
+        "submit": "Nieuw wachtwoord opslaan",
+        "submitting": "Opslaan",
+        "back": "Terug naar inloggen",
+        "invalidTitle": "Deze link werkt niet meer",
+        "invalidBody": "Resetlinks werken één keer en verlopen na korte tijd. Vraag een nieuwe aan om door te gaan.",
+        "requestNew": "Nieuwe link aanvragen"
+      },
+      "verifyEmail": {
+        "working": "Je e-mailadres wordt bevestigd",
+        "doneTitle": "E-mailadres bevestigd",
+        "doneBody": "Bedankt, je adres is geverifieerd. Log in om door te gaan.",
+        "failedTitle": "We kunnen je e-mailadres niet bevestigen",
+        "failedHint": "Log in en vraag een nieuwe verificatie-e-mail aan via de banner bovenaan de app.",
+        "signIn": "Naar inloggen"
+      },
+      "confirmEmailChange": {
+        "working": "Je nieuwe e-mailadres wordt bevestigd",
+        "doneTitle": "E-mailadres bijgewerkt",
+        "doneBody": "Gebruik je nieuwe adres de volgende keer dat je inlogt.",
+        "failedTitle": "We kunnen de wijziging niet bevestigen",
+        "failedHint": "Log in en start de e-mailwijziging opnieuw vanaf je accountpagina.",
+        "signIn": "Naar inloggen"
+      },
+      "findWorkspace": {
+        "submit": "Mail me mijn workspaces",
+        "submitting": "Versturen",
+        "back": "Terug naar inloggen",
+        "doneTitle": "Controleer je inbox",
+        "doneBody": "Als dat adres bij een geverifieerd account hoort, hebben we de workspaceadressen gemaild waarmee je kunt inloggen.",
+        "doneHint": "Nog niets? Controleer je spammap of probeer een ander e-mailadres.",
+        "tryAnother": "Een ander e-mailadres gebruiken"
+      },
+      "callback": {
+        "working": "Je login wordt afgerond",
+        "failedTitle": "Inloggen is niet voltooid",
+        "cancelled": "Inloggen is geannuleerd.",
+        "backToSignIn": "Terug naar inloggen",
+        "createAccount": "Maak in plaats daarvan een account aan"
+      },
+      "layout": {
+        "noscript": "JavaScript is uitgeschakeld in deze browser. Schakel het in om in te loggen of een account aan te maken."
+      },
+      "consent": {
+        "label": "Cookiemelding",
+        "title": "Wij gebruiken cookies",
+        "message": "We gebruiken cookies om je ingelogd te houden en om te begrijpen hoe deze site wordt gebruikt. Accepteer alles, weiger de optionele cookies of kies wat je toestaat.",
+        "learnMore": "Meer informatie",
+        "decline": "Weigeren",
+        "customize": "Aanpassen",
+        "acceptAll": "Alles accepteren",
+        "prefsTitle": "Je privacykeuzes",
+        "necessary": "Strikt noodzakelijk",
+        "necessaryHint": "Nodig voor inloggen en beveiliging. Altijd aan.",
+        "analytics": "Analyses",
+        "analyticsHint": "Helpt ons zien welke pagina's werken en welke niet.",
+        "marketing": "Marketing",
+        "marketingHint": "Wordt gebruikt om relevante aanbiedingen op andere websites te tonen.",
+        "rejectAll": "Alles weigeren",
+        "save": "Keuzes opslaan"
+      },
+      "policy": {
+        "minLength": "Minimaal {min, plural, one {# teken} other {# tekens}}.",
+        "mixedCase": "Combineer hoofdletters en kleine letters.",
+        "number": "Voeg een cijfer toe.",
+        "symbol": "Voeg een symbool toe.",
+        "placeholder": "Minimaal {min, plural, one {# teken} other {# tekens}}"
+      }
+    },
+    "gate": {
+      "suspended": {
+        "titleLead": "Je account is",
+        "titleAccent": "geblokkeerd"
+      },
+      "verify": {
+        "titleAccent": "verifieer je e-mailadres",
+        "titleLead": "Graag"
+      },
+      "onboarding": {
+        "header": {
+          "step2": {
+            "eyebrow": "Stap 2 van 3 / Workspace",
+            "title": "Maak je",
+            "accent": "workspace aan"
+          },
+          "step3": {
+            "eyebrow": "Stap 3 van 3 / Plan",
+            "title": "Kies een",
+            "accent": "plan",
+            "subtitle": "Elk plan bevat een maandelijks berichtenbudget. Begin met het gratis plan of kies een plan met meer ruimte."
+          }
+        },
+        "timezonePlaceholder": "Zoek tijdzone...",
+        "timezoneEmpty": "Geen tijdzone gevonden voor je zoekopdracht.",
+        "timezoneLabel": "Tijdzone",
+        "phonePlaceholder": "Nummer zonder landcode",
+        "plan": {
+          "credits": "Je plan bevat elke maand een vast aantal berichten. Als het budget opraakt terwijl het plan actief is, gebruiken extra verzendingen walletcredits tegen <rate>{credits, plural, one {# credit} other {# credits}} per bericht</rate>. Als het plan afloopt, wordt verzenden gepauzeerd totdat je verlengt.",
+          "topUpPrompt": "Je budget bijna op?",
+          "topUp": "Berichtcredits toevoegen"
+        }
+      }
+    }
+  }
+}

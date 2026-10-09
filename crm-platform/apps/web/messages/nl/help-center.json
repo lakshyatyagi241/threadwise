@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "Helpcentrum",
+    "searchLabel": "Help doorzoeken",
+    "searchPlaceholder": "Gidsen doorzoeken",
+    "resultsStatus": "{count, plural, =0 {Geen gidsen gevonden} one {# gids} other {# gidsen}}",
+    "none": {
+      "title": "Nog geen gidsen",
+      "message": "Gidsen voor de functies in je abonnement verschijnen hier."
+    },
+    "noResults": {
+      "title": "Geen gidsen die bij je zoekopdracht passen",
+      "message": "Probeer andere woorden, of wis de zoekopdracht om alle gidsen te zien."
+    },
+    "areas": {
+      "overview": "Platform",
+      "inbox": "Inbox & Chat",
+      "audience": "CRM",
+      "sales": "Verkoop",
+      "campaigns": "Campagnes",
+      "automation": "Automatisering",
+      "store": "Winkel",
+      "apps": "Marketplace",
+      "settings": "Instellingen",
+      "account": "Account",
+      "getting-started": "Aan de slag",
+      "troubleshooting": "Problemen oplossen"
+    },
+    "allHelp": "Terug naar help",
+    "onThisPage": "Op deze pagina",
+    "openScreen": "Open dit scherm",
+    "shownInEnglish": "Deze gids is nog niet in jouw taal vertaald, daarom wordt hij in het Engels getoond.",
+    "tip": {
+      "label": "Help: {title}",
+      "readMore": "Lees de gids"
+    },
+    "guideCount": "{count, plural, =0 {Geen gidsen} one {# gids} other {# gidsen}}",
+    "crumb": "Meer / Help",
+    "heading": "Help",
+    "headingRest": "& gidsen",
+    "back": "Terug",
+    "askSupport": "Niet gevonden? Vraag support",
+    "askSupportShort": "Support",
+    "categories": "Categorieën",
+    "allGuides": "Alle gidsen",
+    "needHuman": "Een mens nodig?",
+    "contactSupport": "Neem contact op met support",
+    "popular": "Populair",
+    "searchResults": "Zoekresultaten",
+    "read": "Gids lezen",
+    "readMinutes": "{count, plural, one {# min leestijd} other {# min leestijd}}",
+    "moreInArea": "Meer in {area}"
+  }
+}

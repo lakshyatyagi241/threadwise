@@ -1,0 +1,560 @@
+{
+  "lead-sources": {
+    "common": {
+      "dismiss": "Ignorer",
+      "loading": "Chargement",
+      "retry": "Réessayer",
+      "copied": "Copié",
+      "copyFailed": "Copie impossible : sélectionnez le texte et copiez-le manuellement",
+      "requestId": "Référence : {id}"
+    },
+    "states": {
+      "noAccessTitle": "Vous n’avez pas accès à Social leads",
+      "noAccessBody": "Votre rôle n’inclut pas l’autorisation requise pour cet écran ({permission}). Demandez à un administrateur de l’espace de travail de l’ajouter à votre rôle.",
+      "lockedTitle": "Social leads ne fait pas partie de votre offre",
+      "lockedBody": "Votre offre actuelle n’inclut pas les sources de leads : vous ne pouvez ni les consulter ni les créer. Passez à une offre supérieure pour ajouter les leads des publicités et des pages de destination à vos contacts.",
+      "upgrade": "Changer d’offre",
+      "manageNeeded": "Vous pouvez consulter mais rien modifier ici : modifier les sources nécessite l’autorisation {permission}."
+    },
+    "errors": {
+      "conflict": "Quelqu’un d’autre a modifié cette source pendant votre édition. Rechargez pour voir sa version ; vos modifications non enregistrées seraient perdues.",
+      "noAccess": "Votre rôle ne permet pas cette action.",
+      "signedOut": "Votre session a expiré. Reconnectez-vous pour continuer.",
+      "planLocked": "Votre offre ne comprend pas Social leads. Passez à une offre supérieure pour l’utiliser.",
+      "planLimit": "La limite de sources de leads de votre offre est atteinte. Passez à une offre supérieure ou supprimez une source que vous n’utilisez plus.",
+      "nameTaken": "Une autre source porte déjà ce nom. Choisissez-en un autre.",
+      "mappingInvalid": "Le mappage pointe vers des propriétés de contact qui ne peuvent pas être renseignées à partir d’un lead.",
+      "defaultsInvalid": "Un élément des règles ne fait pas partie de cet espace de travail (utilisateur, pipeline, étape ou étape du cycle de vie).",
+      "notRetryable": "Seuls les leads à vérifier ou en échec peuvent être relancés. Celui-ci est déjà traité ou en cours de traitement.",
+      "payloadPurged": "Le lead enregistré a été supprimé après sa période de conservation : il n’y a rien à relancer.",
+      "sourcePaused": "Cette source est en pause. Reprenez-la pour envoyer un lead de test ou relancer un lead.",
+      "notFound": "Introuvable. Il a peut-être été supprimé.",
+      "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+      "rateLimitedWait": "Trop de requêtes. Réessayez dans {seconds} secondes.",
+      "validation": "Certaines de vos saisies ne sont pas valides. Vérifiez les champs signalés.",
+      "validationField": "{message}",
+      "detailVerbatim": "{message}",
+      "badResponse": "Le serveur a répondu d’une façon que cette page ne comprend pas. Rechargez la page ; si le problème persiste, contactez le support.",
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "unexpected": "Une erreur s’est produite de notre côté. Réessayez dans un instant.",
+      "request": "La demande n’a pas été acceptée. Vérifiez vos saisies et réessayez.",
+      "details": {
+        "unknown_property": "Cette propriété de contact n’existe pas ou est désactivée.",
+        "not_mappable": "Cette propriété est calculée ou renvoie à un autre enregistrement : un lead ne peut donc pas la renseigner.",
+        "unknown_pipeline": "Ce pipeline ne fait pas partie de votre espace de travail.",
+        "unknown_stage": "Cette étape d’opportunité ne fait pas partie de votre espace de travail.",
+        "stage_not_in_pipeline": "Cette étape appartient à un autre pipeline.",
+        "pipeline_required": "Choisissez le pipeline auquel appartient cette étape.",
+        "unknown_or_lost_stage": "Cette étape du cycle de vie n’existe pas ou correspond à une perte.",
+        "unknown_or_inactive_user": "L’une des personnes sélectionnées n’est pas membre actif de cet espace de travail."
+      }
+    },
+    "problems": {
+      "nameRequired": "Donnez un nom à la source.",
+      "nameLength": "Utilisez {max} caractères au maximum.",
+      "platformLength": "Utilisez {max} caractères au maximum.",
+      "secretLength": "Un secret partagé comporte de {min} à {max} caractères.",
+      "pathLength": "Un chemin comporte {max} caractères au maximum.",
+      "pathCharacters": "Un chemin ne peut pas contenir de caractères de contrôle.",
+      "retentionRange": "Saisissez un nombre entier de jours de 1 à {max}.",
+      "countryCode": "Saisissez un indicatif de 1 à 4 chiffres, par exemple 91 ou 44.",
+      "textLength": "Utilisez {max} caractères au maximum.",
+      "ownerFixed": "Choisissez une seule personne.",
+      "ownerRoundRobin": "Choisissez au moins deux personnes pour une répartition à tour de rôle.",
+      "ownerTooMany": "Choisissez {max} personnes au maximum.",
+      "notifyTooMany": "Choisissez {max} personnes au maximum.",
+      "dealTitleLength": "Le titre de l’opportunité comporte {max} caractères au maximum.",
+      "propertyRequired": "Choisissez la propriété de contact à renseigner.",
+      "propertyKey": "Une clé de propriété commence par une lettre et utilise des minuscules, des chiffres et des tirets bas.",
+      "propertyDuplicate": "Cette propriété est mappée deux fois.",
+      "pathRequired": "Indiquez où se trouve la valeur dans la charge utile.",
+      "customFieldsTooMany": "Mappez {max} propriétés personnalisées au maximum.",
+      "contract": "{message}"
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Formulaires de leads Meta",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Connexion Marketplace"
+    },
+    "sourceStatus": {
+      "active": "Active",
+      "paused": "En pause"
+    },
+    "eventStatus": {
+      "received": "Reçu",
+      "created": "Contact créé",
+      "updated": "Contact mis à jour",
+      "duplicate": "Doublon",
+      "needs_review": "À vérifier",
+      "failed": "Échec"
+    },
+    "reasons": {
+      "no_contact_point": "Ni e-mail ni téléphone",
+      "invalid_phone": "Téléphone illisible",
+      "plan_limit_reached": "Limite de contacts atteinte",
+      "source_paused": "Source mise en pause",
+      "internal_error": "Erreur de traitement",
+      "identity_conflict": "L’e-mail ou le téléphone appartient à un autre contact"
+    },
+    "guidance": {
+      "noContactPoint": "Le lead n’avait ni e-mail ni numéro de téléphone exploitable. Corrigez le mappage ou l’indicatif pays par défaut, puis relancez.",
+      "invalidPhone": "Un numéro de téléphone a été envoyé mais n’a pas pu être lu, et il n’y avait pas d’e-mail. Vérifiez le mappage du téléphone et l’indicatif pays par défaut, puis relancez.",
+      "planLimit": "La limite de contacts de votre offre est atteinte : ce lead n’a pas pu devenir un contact. Passez à une offre supérieure, puis relancez.",
+      "sourcePaused": "La source était en pause. Reprenez-la, puis relancez.",
+      "internalError": "Une erreur s’est produite lors du traitement de ce lead. Relancez-le ; si l’échec se répète, transmettez la référence de l’erreur au support.",
+      "identityConflict": "Le lead a été rattaché à un contact existant, mais son e-mail ou son téléphone appartient déjà à un autre contact : ce détail n’a donc pas été déplacé.",
+      "generic": "Ce lead doit être vérifié. Consultez la raison et l’erreur, corrigez le mappage ou les valeurs par défaut si nécessaire, puis relancez.",
+      "upgrade": "Changer d’offre"
+    },
+    "eventFilters": {
+      "all": "Tous les leads",
+      "attention": "À traiter",
+      "needs_review": "À vérifier",
+      "failed": "Échec",
+      "created": "Contact créé",
+      "updated": "Contact mis à jour",
+      "duplicate": "Doublon",
+      "received": "En cours de traitement"
+    },
+    "testFilters": {
+      "all": "Leads réels et de test",
+      "only": "Leads de test uniquement",
+      "hide": "Masquer les leads de test"
+    },
+    "page": {
+      "title": "Social leads",
+      "description": "Ajoutez à vos contacts les leads de vos publicités et pages de destination, avec le responsable, le tag et l’opportunité de votre choix.",
+      "newSource": "Nouvelle source",
+      "loading": "Chargement des sources de leads",
+      "tabs": {
+        "ads": "Publicités",
+        "webhook": "Webhook",
+        "attention": "{count, plural, one {# lead à traiter} other {# leads à traiter}}"
+      }
+    },
+    "ads": {
+      "intro": "Choisissez d’où viennent vos leads. Chaque source aboutit au même endroit : un contact avec sa source enregistrée, un responsable, une opportunité facultative et une notification.",
+      "available": "Disponible",
+      "comingSoon": "Bientôt disponible",
+      "untilThen": "En attendant, envoyez ces leads via le Webhook avec Zapier ou Make.",
+      "sourceCount": "{count, plural, =0 {Aucune source pour l’instant} one {# source} other {# sources}}",
+      "setUpWebhook": "Configurer un webhook",
+      "openSources": "Ouvrir les sources",
+      "providers": {
+        "webhook": {
+          "name": "Webhook",
+          "body": "Envoyez des leads depuis n’importe quel outil capable d’émettre une requête web : Zapier, Make, un créateur de pages de destination ou votre propre formulaire. Il transmet aussi les leads LinkedIn, TikTok et Google Ads."
+        },
+        "meta": {
+          "name": "Formulaires de leads Meta",
+          "body": "Publicités de leads Facebook et Instagram, directement depuis votre Page."
+        },
+        "linkedin": {
+          "name": "LinkedIn",
+          "body": "Formulaires de génération de leads LinkedIn."
+        },
+        "tiktok": {
+          "name": "TikTok",
+          "body": "Formulaires de génération de leads TikTok."
+        },
+        "google": {
+          "name": "Google Ads",
+          "body": "Extensions de formulaires de leads Google Ads."
+        }
+      }
+    },
+    "sources": {
+      "emptyTitle": "Aucune source pour l’instant",
+      "empty": "Créez une source webhook pour obtenir une URL à coller dans Zapier, Make ou votre outil de formulaire. Les leads envoyés deviennent des contacts.",
+      "emptyNoManage": "Aucune source de leads n’a encore été créée. Demandez à une personne habilitée à gérer les sources de leads d’en créer une.",
+      "create": "Nouvelle source",
+      "caption": "Sources de leads",
+      "col": {
+        "name": "Nom",
+        "kind": "Type",
+        "status": "Statut",
+        "token": "URL",
+        "lastEvent": "Dernier lead",
+        "attention": "À traiter"
+      },
+      "connector": "Via la Marketplace",
+      "endsIn": "Se termine dans {hint}",
+      "noEvents": "Aucun lead pour l’instant",
+      "needsAttention": "{count, plural, one {# lead} other {# leads}}"
+    },
+    "wizard": {
+      "title": "Nouvelle source de leads",
+      "description": "Configurez un webhook qui transforme les leads entrants en contacts.",
+      "back": "Retour à Social leads",
+      "stepsLabel": "Étapes de création d’une source de leads",
+      "steps": {
+        "basics": "Informations de base",
+        "rules": "Ce qui arrive à un lead",
+        "connect": "Connecter votre expéditeur",
+        "mapping": "Mapper les champs"
+      },
+      "stepTitle": {
+        "basics": "Nommer votre source",
+        "rules": "Ce qui arrive à un lead",
+        "connect": "Connecter votre expéditeur",
+        "mapping": "Mapper les champs"
+      },
+      "stepHelp": {
+        "basics": "Indiquez le nom de cette source et la durée de conservation des données brutes des leads.",
+        "rules": "Choisissez le responsable, le tag, l’opportunité et la notification pour chaque lead reçu.",
+        "connect": "Votre source est créée. Copiez l’URL et le jeton maintenant : ils ne sont affichés qu’une fois.",
+        "mapping": "Indiquez où se trouve chaque valeur dans les données envoyées par votre outil. L’aperçu affiche le résultat au fur et à mesure de votre saisie."
+      },
+      "previous": "Retour",
+      "next": "Suivant",
+      "cancel": "Annuler",
+      "create": "Créer la source",
+      "created": "Source {name} créée",
+      "mappingSaved": "Mappage enregistré",
+      "planLimit": "La limite de sources de leads de votre forfait est atteinte : aucune nouvelle source ne peut être créée.",
+      "planLocked": "Votre forfait ne comprend pas les leads sociaux.",
+      "upgrade": "Passer à un forfait supérieur",
+      "skipMapping": "Ignorer pour l’instant",
+      "finish": "Enregistrer et terminer",
+      "revealGone": "L’URL et le jeton ne sont plus affichés. Si vous ne les avez pas conservés, ouvrez la source et régénérez le jeton pour obtenir une nouvelle URL.",
+      "toMapping": "Continuer vers le mappage"
+    },
+    "form": {
+      "name": "Nom de la source",
+      "nameHint": "Par exemple Zapier : publicités de leads Facebook. Les noms sont uniques.",
+      "platform": "Libellé de la plateforme",
+      "platformHint": "Ce qui apparaît comme source de vos contacts, par exemple Facebook ou IndiaMART. {max} caractères maximum.",
+      "platformPlaceholder": "Facebook",
+      "secret": {
+        "label": "Secret partagé",
+        "isSet": "Un secret partagé est défini. Les expéditeurs doivent l’envoyer dans l’en-tête X-Webhook-Secret.",
+        "notSet": "Aucun secret partagé. Toute personne disposant de l’URL peut envoyer des leads.",
+        "willRemove": "Le secret partagé sera supprimé à l’enregistrement.",
+        "willReplace": "Le secret partagé sera remplacé à l’enregistrement.",
+        "willSet": "Un secret partagé sera défini à l’enregistrement.",
+        "newValue": "Nouveau secret partagé",
+        "hint": "Facultatif. De {min} à {max} caractères. Il ne sera plus jamais affiché après l’enregistrement.",
+        "show": "Afficher le secret",
+        "hide": "Masquer le secret",
+        "replace": "Remplacer",
+        "remove": "Supprimer",
+        "keep": "Conserver le secret actuel"
+      },
+      "externalIdPath": "Chemin de l’identifiant du lead",
+      "externalIdPathHint": "Emplacement de l’identifiant propre à l’expéditeur pour un lead dans les données, par exemple lead.id. Il évite qu’un même lead soit ajouté deux fois. Facultatif.",
+      "retention": "Conserver les données brutes du lead pendant (jours)",
+      "retentionHint": "Ensuite, les données stockées sont supprimées ; le contact est conservé. De 1 à {max} jours.",
+      "sections": {
+        "contact": "Le contact",
+        "owner": "Responsable",
+        "deal": "Opportunité",
+        "notify": "Notifications"
+      },
+      "membersFailed": "Impossible de charger votre équipe : vous ne pouvez pas choisir de personnes pour le moment. Rechargez la page pour réessayer.",
+      "countryCode": "Indicatif pays par défaut",
+      "countryCodeHint": "Ajouté aux numéros de téléphone envoyés sans indicatif, par exemple 91. Sans lui, un numéro doit comporter son propre indicatif pays.",
+      "lifecycleStage": "Étape de cycle de vie initiale",
+      "lifecycleStageHint": "L’étape dans laquelle démarre un nouveau contact issu de cette source.",
+      "lifecycleDefault": "Valeur par défaut de l’espace de travail",
+      "tag": "Étiquette",
+      "tagHint": "Appliquée à chaque contact apporté par cette source. Laissez vide pour ne pas étiqueter.",
+      "ownerMode": "Responsable du contact",
+      "ownerModeHint": "S’applique uniquement à un contact sans responsable.",
+      "ownerModes": {
+        "unassigned": "Personne (non attribué)",
+        "fixed": "Une personne",
+        "round_robin": "Répartition entre plusieurs personnes"
+      },
+      "ownerFixed": "Responsable",
+      "ownerChoose": "Choisir une personne",
+      "unknownMember": "Une personne qui n’est plus disponible",
+      "ownerRoundRobin": "Personnes qui se relaient",
+      "ownerRoundRobinHint": "Choisissez au moins deux personnes. Les leads sont attribués à tour de rôle ; les personnes qui ne sont plus actives sont ignorées.",
+      "pickMembers": "Choisir des personnes",
+      "noMembers": "Plus personne à choisir",
+      "removeMember": "Retirer {name}",
+      "dealEnabled": "Créer une opportunité pour chaque nouveau contact",
+      "dealEnabledHint": "Désactivé tant que vous ne l’activez pas. Un contact qui a déjà une opportunité ouverte n’en reçoit pas une autre.",
+      "pipelinesFailed": "Impossible de charger vos pipelines. Le pipeline et l’étape ne peuvent pas être choisis pour le moment.",
+      "pipeline": "Pipeline",
+      "pipelineDefault": "Pipeline par défaut de l’espace de travail",
+      "dealStage": "Étape",
+      "dealStageNeedsPipeline": "Choisissez d’abord un pipeline pour sélectionner une étape.",
+      "dealStageFirst": "Première étape du pipeline",
+      "dealTitle": "Titre de l’opportunité",
+      "dealTitleHint": "Ces champs sont renseignés à partir du lead : {tokens}.",
+      "notifyOwner": "Prévenir le responsable du contact",
+      "notifyOwnerHint": "Une notification dans l’application à l’arrivée d’un nouveau lead. Les leads de test ne notifient jamais.",
+      "notifyUsers": "Prévenir aussi",
+      "notifyUsersHint": "Par exemple votre responsable commercial. 20 personnes maximum."
+    },
+    "mapping": {
+      "contact": "Champs du contact",
+      "contactHelp": "Saisissez une clé (phone_number) ou un chemin (lead.contact.phone, answers[0].value). Laissez un champ vide pour chercher sous les noms courants.",
+      "fields": {
+        "name": "Nom complet",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "E-mail",
+        "phone": "Téléphone"
+      },
+      "defaults": {
+        "name": "Recherche full_name, name, contact_name",
+        "firstName": "Recherche first_name, firstname",
+        "lastName": "Recherche last_name, lastname",
+        "email": "Recherche email, email_address, mail",
+        "phone": "Recherche phone, mobile, phone_number, whatsapp"
+      },
+      "custom": "Propriétés personnalisées",
+      "customHelp": "Renseignez vos propres propriétés de contact à partir des données envoyées par votre outil.",
+      "propertiesFailed": "Impossible de charger vos propriétés de contact : saisissez plutôt la clé de la propriété.",
+      "property": "Propriété du contact",
+      "propertyChoose": "Choisir une propriété",
+      "path": "Chemin dans les données envoyées",
+      "removeRow": "Supprimer la propriété personnalisée {number}",
+      "remove": "Supprimer",
+      "addRow": "Ajouter une propriété personnalisée",
+      "attribution": "Attribution",
+      "attributionHelp": "Emplacement des détails de la campagne. Tout champ laissé vide est recherché sous son propre nom.",
+      "attributionFields": {
+        "platform": "Plateforme",
+        "campaign": "Campagne",
+        "adset": "Ensemble de publicités",
+        "ad": "Publicité",
+        "form": "Formulaire"
+      },
+      "attributionDefaults": {
+        "platform": "Recherche platform, utm_source",
+        "campaign": "Recherche campaign, utm_campaign",
+        "adset": "Recherche adset, adgroup",
+        "ad": "Recherche ad",
+        "form": "Recherche form"
+      }
+    },
+    "preview": {
+      "title": "Aperçu en direct",
+      "updating": "Mise à jour",
+      "help": "Ce que le mappage ci-dessus fait d’un lead. L’aperçu n’enregistre ni ne crée rien.",
+      "paste": "Coller un exemple de lead (JSON)",
+      "pasteHint": "Un objet, 64 Ko maximum.",
+      "pasteProblems": {
+        "empty": "Collez le JSON envoyé par votre outil.",
+        "invalidJson": "Ce n’est pas du JSON valide. Vérifiez l’absence de guillemet, de virgule ou de crochet.",
+        "notObject": "Un lead doit être un objet JSON : un ensemble de clés et de valeurs entre accolades.",
+        "tooLarge": "Cela dépasse 64 Ko."
+      },
+      "useLast": "Utiliser le dernier lead reçu",
+      "pickStored": "Ou choisir un lead enregistré",
+      "storedOption": "{id} ({status})",
+      "auditNote": "La lecture d’un lead enregistré est consignée dans le journal d’audit. Un exemple collé ne l’est pas.",
+      "fixDraft": "Corrigez les champs de mappage en surbrillance pour voir un aperçu.",
+      "choose": "Collez un exemple ou utilisez le dernier lead reçu pour voir le résultat.",
+      "loading": "Lecture du lead",
+      "none": "Aucun lead reçu pour le moment : collez un exemple.",
+      "usable": "Ce lead serait traité",
+      "notUsable": "Ce lead nécessiterait une vérification",
+      "basedOnEvent": "À partir d’un lead enregistré",
+      "basedOnPayload": "À partir de votre exemple",
+      "externalId": "id {id}",
+      "reasonsLabel": "Pourquoi",
+      "reasons": {
+        "no_payload": "Il n’y a encore aucun lead à lire.",
+        "no_contact_point": "Aucun e-mail ni aucun téléphone trouvé.",
+        "invalid_phone": "Un téléphone a été trouvé mais ne peut pas être lu comme un numéro, et il n’y a pas d’e-mail.",
+        "phone_unreadable": "Le téléphone ne peut pas être lu comme un numéro ; l’e-mail sera utilisé.",
+        "email_invalid": "L’e-mail n’est pas une adresse valide et est ignoré."
+      },
+      "contact": {
+        "name": "Nom",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "E-mail",
+        "phone": "Téléphone"
+      },
+      "empty": "Rien trouvé",
+      "phoneUnreadable": "Impossible à lire comme un numéro",
+      "attribution": {
+        "platform": "Plateforme",
+        "campaign": "Campagne",
+        "adset": "Ensemble de publicités",
+        "ad": "Publicité",
+        "form": "Formulaire"
+      },
+      "paths": "Champs de ce lead",
+      "pathsPick": "Cliquez pour remplir : {field}",
+      "pathsFocusFirst": "Cliquez d’abord sur une case de mappage, puis sur un champ pour le remplir.",
+      "pathsMore": "{count, plural, one {# champ de plus} other {# champs de plus}}"
+    },
+    "reveal": {
+      "titleCreated": "Copiez maintenant votre URL et votre jeton",
+      "titleRotated": "Votre nouvelle URL et votre nouveau jeton",
+      "bodyCreated": "C’est la seule fois qu’ils sont affichés. Nous ne conservons qu’une empreinte, nous ne pourrons donc pas les réafficher.",
+      "bodyRotated": "L’ancienne URL a cessé de fonctionner immédiatement. Cette nouvelle URL n’est affichée qu’une seule fois.",
+      "url": "URL du webhook",
+      "copyUrl": "Copier l’URL",
+      "noOrigin": "Placez l’adresse de votre API devant ce chemin pour obtenir l’URL complète.",
+      "token": "Jeton",
+      "copyToken": "Copier le jeton",
+      "secretHint": "Cette source nécessite aussi un secret partagé : l’expéditeur doit l’envoyer dans l’en-tête {header}.",
+      "sample": "Essayer depuis un terminal",
+      "sampleHelp": "Dans Zapier ou Make, utilisez une action Webhooks qui envoie du JSON à l’URL. Cette commande envoie un exemple de lead.",
+      "copied": "J’ai copié l’URL et le jeton en lieu sûr",
+      "done": "Je l’ai copié, continuer",
+      "doneHint": "Cochez d’abord la case. Ensuite, le jeton ne pourra plus être affiché."
+    },
+    "test": {
+      "title": "Envoyer un lead de test",
+      "help": "Envoie un exemple de lead dans le pipeline réel, marqué comme test. Il crée un contact réel que vous pouvez supprimer, et personne n’est notifié.",
+      "paused": "Cette source est suspendue. Reprenez-la pour envoyer un lead de test.",
+      "useSample": "Utiliser plutôt l’exemple de lead",
+      "useOwn": "Envoyer mes propres données",
+      "payload": "Données envoyées (JSON)",
+      "payloadHint": "Un objet, 64 Ko maximum.",
+      "payloadProblems": {
+        "empty": "Collez le JSON à envoyer, ou utilisez l’exemple de lead.",
+        "invalidJson": "Ce n’est pas du JSON valide. Vérifiez l’absence de guillemet, de virgule ou de crochet.",
+        "notObject": "Un lead doit être un objet JSON : un ensemble de clés et de valeurs entre accolades.",
+        "tooLarge": "Cela dépasse 64 Ko."
+      },
+      "send": "Envoyer le lead de test",
+      "needsManage": "L’envoi d’un lead de test nécessite l’autorisation leads.sources.manage.",
+      "result": "Résultat",
+      "flag": "Test",
+      "openContact": "Ouvrir le contact"
+    },
+    "watch": {
+      "waiting": "En attente du premier lead. Collez l’URL dans votre outil et envoyez-en un.",
+      "received": "Premier lead reçu :",
+      "error": "Impossible de vérifier les leads pour le moment."
+    },
+    "detail": {
+      "loading": "Chargement de la source",
+      "backToList": "Retour aux sources",
+      "pageTitle": "Source de leads",
+      "needsAttention": "{count, plural, one {# lead nécessite une action} other {# leads nécessitent une action}}",
+      "lastEvent": "Dernier lead",
+      "noEvents": "aucun pour le moment",
+      "pause": "Suspendre",
+      "resume": "Reprendre",
+      "rotate": "Régénérer le jeton",
+      "delete": "Supprimer",
+      "conflict": "Quelqu’un d’autre a modifié cette source. Rechargez pour voir sa version ; vos modifications non enregistrées seront perdues.",
+      "reload": "Recharger",
+      "connection": "Connexion",
+      "connector": "Connectée via la Marketplace. Elle n’a ni URL ni jeton propre ; les leads arrivent par l’application installée.",
+      "connectorLink": "Ouvrir les applications installées",
+      "endsIn": "Le jeton de l’URL se termine par {hint}",
+      "noHint": "Aucun jeton enregistré.",
+      "urlOnce": "L’URL complète a été affichée une fois à la création de la source. Pour en obtenir une nouvelle, régénérez le jeton.",
+      "secretYes": "Un secret partagé est défini : les expéditeurs doivent l’envoyer dans l’en-tête X-Webhook-Secret.",
+      "secretNo": "Aucun secret partagé n’est défini.",
+      "pausedNote": "Cette source est suspendue : son URL répond 404, les expéditeurs voient donc une erreur jusqu’à ce que vous la repreniez.",
+      "settings": "Paramètres",
+      "settingsHelp": "Les modifications s’appliquent aux leads reçus après l’enregistrement. Relancer un ancien lead utilise les paramètres actuels.",
+      "basics": "Général",
+      "rules": "Ce qui arrive à un lead",
+      "mapping": "Mappage des champs",
+      "unsaved": "Vous avez des modifications non enregistrées",
+      "discard": "Abandonner les modifications",
+      "save": "Enregistrer les modifications",
+      "saved": "Modifications enregistrées",
+      "pausedToast": "Source suspendue",
+      "resumedToast": "Source reprise",
+      "deletedToast": "Source {name} supprimée",
+      "confirm": {
+        "cancel": "Annuler",
+        "pause": {
+          "title": "Suspendre cette source ?",
+          "body": "Pendant la suspension, son URL répond 404 et les leads qui lui sont envoyés ne sont pas reçus. Vous pouvez la reprendre à tout moment.",
+          "action": "Suspendre la source"
+        },
+        "rotate": {
+          "title": "Régénérer le jeton ?",
+          "body": "L’URL actuelle cesse de fonctionner immédiatement : mettez à jour votre outil avec la nouvelle. La nouvelle URL n’est affichée qu’une fois.",
+          "action": "Régénérer le jeton"
+        },
+        "delete": {
+          "title": "Supprimer {name} ?",
+          "body": "Son URL cesse de fonctionner et les leads qu’elle a stockés sont supprimés avec elle. Les contacts déjà créés sont conservés. Cette action est irréversible.",
+          "action": "Supprimer la source"
+        }
+      }
+    },
+    "events": {
+      "title": "Leads reçus",
+      "help": "Chaque lead arrivé à cette source et son devenir. Les plus récents en premier.",
+      "filterStatus": "Afficher",
+      "filterTests": "Tests",
+      "attentionTitle": "{count, plural, one {# lead nécessite une action} other {# leads nécessitent une action}}",
+      "attentionGroup": "{count, plural, one {# lead :} other {# leads :}}",
+      "showAttention": "N’afficher que ces leads",
+      "loading": "Chargement des leads",
+      "emptyTitle": "Aucun lead pour le moment",
+      "empty": "Envoyez un lead de test ou collez l’URL dans votre outil.",
+      "emptyFilteredTitle": "Aucun lead ne correspond",
+      "emptyFiltered": "Aucun lead ne correspond à ces filtres.",
+      "clearFilters": "Effacer les filtres",
+      "col": {
+        "status": "Statut",
+        "lead": "Lead",
+        "result": "Ce qui s’est passé",
+        "links": "Devenu",
+        "received": "Reçu",
+        "actions": "Actions"
+      },
+      "loadMore": "Charger plus",
+      "test": "Test",
+      "attempts": "{count, plural, one {# tentative} other {# tentatives}}",
+      "deliveredAgain": "{count, plural, one {Renvoyé une fois} other {Renvoyé # fois}}",
+      "contact": "Contact",
+      "deal": "Opportunité",
+      "retry": "Relancer",
+      "open": "Ouvrir",
+      "retriedToast": "Relancé : désormais {status}"
+    },
+    "event": {
+      "title": "Détails du lead",
+      "close": "Fermer",
+      "retry": "Relancer ce lead",
+      "auditNote": "L’ouverture des données envoyées est consignée dans le journal d’audit.",
+      "externalId": "Identifiant du lead",
+      "test": "Test",
+      "received": "Reçu",
+      "processed": "Traité",
+      "notProcessed": "pas encore",
+      "attempts": "Tentatives",
+      "duplicates": "Envois répétés",
+      "deliveredAgain": "{count, plural, one {Renvoyé une fois} other {Renvoyé # fois}}",
+      "reason": "Motif",
+      "contact": "Contact",
+      "openContact": "Ouvrir le contact",
+      "deal": "Opportunité",
+      "openDeal": "Ouvrir l’opportunité",
+      "error": "Erreur",
+      "retried": "Relancé. Le lead est désormais",
+      "payload": "Données enregistrées",
+      "loadingPayload": "Ouverture des données",
+      "purged": "Les données brutes ont été purgées après {days} jours. Le lead et son contact sont conservés."
+    },
+    "attribution": {
+      "title": "Attribution du lead",
+      "first": "Première interaction",
+      "latest": "Dernière interaction",
+      "firstAndLatest": "Première et dernière interactions",
+      "total": "{count} interactions au total",
+      "platform": "Plateforme",
+      "source": "Source",
+      "fields": {
+        "campaign": "Campagne",
+        "adset": "Ensemble de publicités",
+        "ad": "Publicité",
+        "form": "Formulaire"
+      },
+      "capturedAt": "Capturé",
+      "openSource": "Ouvrir la source de leads"
+    }
+  }
+}

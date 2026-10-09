@@ -1,0 +1,278 @@
+{
+  "web-forms": {
+    "share": {
+      "readOnly": "Możesz przeglądać te ustawienia, ale nie możesz ich zmieniać.",
+      "clipboardBlocked": "Twoja przeglądarka zablokowała kopiowanie. Zaznacz tekst i skopiuj go ręcznie.",
+      "copied": "Skopiowano",
+      "status": {
+        "archived": {
+          "title": "Ten formularz jest zarchiwizowany",
+          "body": "Publiczny link i wszystkie osadzenia są zamknięte. Przywróć formularz, aby znów z nich korzystać."
+        },
+        "draft": {
+          "title": "Opublikuj formularz, aby ten link działał",
+          "body": "Nikt nie może otworzyć linku ani osadzenia, dopóki formularz nie zostanie opublikowany co najmniej raz."
+        },
+        "paused": {
+          "title": "Ten formularz jest zamknięty",
+          "body": "Link i osadzenia pokazują komunikat o zamknięciu i nie przyjmują odpowiedzi. Wznów formularz, aby znów go otworzyć."
+        },
+        "live": {
+          "title": "Ten formularz jest aktywny",
+          "body": "Odwiedzający widzą wersję {version}. Zmiany wprowadzone w kreatorze trafią do nich dopiero po publikacji."
+        }
+      },
+      "hosted": {
+        "title": "Publiczny link",
+        "description": "Udostępnij ten adres gdziekolwiek: w wiadomości, e-mailu, w opisie profilu. Otwiera formularz na osobnej stronie.",
+        "label": "Adres formularza",
+        "copy": "Kopiuj link",
+        "copiedToast": "Link skopiowano.",
+        "open": "Otwórz",
+        "newTab": "(otworzy się w nowej karcie)"
+      },
+      "qr": {
+        "title": "Kod QR",
+        "description": "Do druku, plakatów i opakowań. Zeskanowanie otwiera publiczny link.",
+        "alt": "Kod QR otwierający formularz",
+        "tracking": "Kod dodaje do adresu parametr utm_source=qr, dzięki czemu zgłoszenia pochodzące z kodu są w atrybucji widoczne jako QR.",
+        "downloadPng": "Pobierz PNG",
+        "downloadSvg": "Pobierz SVG",
+        "downloadFailed": "Nie udało się pobrać kodu QR. Spróbuj ponownie."
+      },
+      "embed": {
+        "title": "Umieść formularz na swojej stronie",
+        "description": "Wklej jeden z tych fragmentów tam, gdzie ma się pojawić formularz. Osadzanie działa tylko na stronach wymienionych w sekcji Dozwolone strony poniżej.",
+        "copy": "Kopiuj kod",
+        "copiedToast": "Skopiowano {name}.",
+        "script": {
+          "title": "Osadzenie skryptem",
+          "description": "Zalecane. Formularz sam dopasowuje rozmiar do strony i może przekierować po wysłaniu."
+        },
+        "iframe": {
+          "title": "Osadzenie iframe",
+          "description": "Zwykła ramka dla kreatorów, które nie dopuszczają skryptów. Wysokość ustawiasz samodzielnie."
+        }
+      },
+      "domains": {
+        "title": "Dozwolone strony",
+        "description": "Tylko wymienione tutaj strony mogą osadzać ten formularz i wysyłać z przeglądarki odpowiedzi.",
+        "none": "Nie dodano jeszcze żadnej strony, więc formularz działa tylko pod publicznym linkiem i nie może być osadzony.",
+        "label": "Dodaj stronę",
+        "hint": "Użyj dokładnego adresu, np. https://www.example.com. Dozwolony jest jeden poziom symbolu wieloznacznego, np. https://*.example.com. Zwykły http działa tylko dla localhost.",
+        "count": "{count} z {max}",
+        "add": "Dodaj",
+        "remove": "Usuń {value}",
+        "empty": "Nie dodano stron.",
+        "issues": {
+          "empty": "Najpierw wpisz adres strony.",
+          "invalid": "To nieprawidłowy adres. Użyj postaci https://example.com lub https://*.example.com, bez ścieżki.",
+          "duplicate": "Ta strona jest już na liście.",
+          "max": "Można dozwolić najwyżej {max} stron."
+        }
+      },
+      "rotate": {
+        "title": "Zmień klucz publiczny",
+        "description": "Tworzy nowy klucz dla tego formularza. Użyj go, jeśli link lub kod osadzenia wyciekły albo chcesz je wycofać.",
+        "button": "Zmień klucz",
+        "readOnly": "Nie możesz zmienić tego formularza",
+        "confirmTitle": "Zmienić klucz publiczny?",
+        "confirmMessage": "Stary link, kody QR i kod osadzenia przestaną działać od razu. Trzeba będzie udostępnić nowy link i wymienić kod na każdej stronie, która osadza formularz.",
+        "confirmButton": "Zmień klucz",
+        "cancel": "Anuluj",
+        "success": "Klucz został zmieniony. Skopiuj nowy link i kod.",
+        "failed": "Nie udało się zmienić klucza. Nic się nie zmieniło. Spróbuj ponownie.",
+        "conflict": "Ktoś inny zmienił ten formularz. Odśwież stronę, aby zobaczyć najnowszą wersję, a potem spróbuj ponownie."
+      }
+    },
+    "settings": {
+      "readOnly": "Możesz przeglądać te ustawienia, ale nie możesz ich zmieniać.",
+      "usersFailed": "Nie udało się wczytać listy członków zespołu, więc nie można teraz wybrać opiekunów.",
+      "form": {
+        "title": "Formularz",
+        "description": "Nazwa widoczna na liście oraz podstawowe informacje, które widzą odwiedzający.",
+        "name": "Nazwa formularza",
+        "nameHint": "Tej nazwy nie widzi nikt poza Twoim zespołem.",
+        "issues": {
+          "nameRequired": "Podaj nazwę formularza.",
+          "submit_empty": "Przycisk wymaga etykiety.",
+          "submit_too_long": "Etykieta przycisku może mieć najwyżej {max} znaków."
+        },
+        "language": "Język formularza",
+        "languageHint": "Ustala język wbudowanych tekstów i kierunek czytania (arabski czyta się od prawej do lewej).",
+        "languages": {
+          "en": "Angielski",
+          "ar": "Arabski"
+        },
+        "submitLabel": "Etykieta przycisku wysyłania",
+        "submitLabelHint": "Od 1 do {max} znaków."
+      },
+      "after": {
+        "title": "Po wysłaniu",
+        "description": "Co odwiedzający zobaczy po wysłaniu odpowiedzi.",
+        "mode": "Co się stanie",
+        "modes": {
+          "message": "Pokaż wiadomość",
+          "redirect": "Przejdź do innej strony"
+        },
+        "modeHints": {
+          "message": "Formularz zostanie zastąpiony Twoją wiadomością z podziękowaniem.",
+          "redirect": "Odwiedzający zostanie przekierowany na Twoją stronę, np. podziękowania lub rezerwacji."
+        },
+        "message": "Wiadomość z podziękowaniem",
+        "messageHint": "Zwykły tekst. Dozwolone są proste znaczniki: b, i, u, br, ul, ol, li i a. Do {max} znaków.",
+        "messageTooLong": "Wiadomość jest dłuższa niż {max} znaków.",
+        "redirect": "Adres przekierowania",
+        "redirectHint": "Musi zaczynać się od https://. Strona bez https nigdy nie zostanie otwarta.",
+        "redirectIssues": {
+          "required": "Wpisz adres, na który mają trafiać odwiedzający.",
+          "https": "Użyj adresu zaczynającego się od https://."
+        },
+        "redirectKeepsMessage": "Wiadomość z podziękowaniem jest zapisana w formularzu i nie jest pokazywana, gdy ustawiono przekierowanie."
+      },
+      "consent": {
+        "title": "Zgoda",
+        "description": "Pole wyboru zapisujące, na co odwiedzający wyraził zgodę, wraz z dokładnym brzmieniem, wersją i czasem.",
+        "enabled": "Proś o zgodę",
+        "enabledHint": "Pokazuje linijkę zgody nad przyciskiem wysyłania.",
+        "text": "Tekst zgody",
+        "textHint": "Do {max} znaków. Odwiedzający zobaczy dokładnie to brzmienie.",
+        "textRequired": "Wpisz tekst zgody albo wyłącz zgodę.",
+        "textTooLong": "Tekst jest dłuższy niż {max} znaków.",
+        "version": "Wersja treści {version}",
+        "versionHintPublished": "Po opublikowaniu formularza zmiana treści automatycznie rozpoczyna nową wersję. Wcześniejsze zgłoszenia zachowują wersję, na którą wyrażono zgodę.",
+        "versionHintDraft": "Wersja pozostaje 1, dopóki formularz nie zostanie opublikowany. Potem zmiana treści rozpoczyna nową wersję.",
+        "privacyUrl": "Link do polityki prywatności",
+        "privacyUrlHint": "Opcjonalne. Pokazywane obok tekstu zgody. Musi zaczynać się od https://.",
+        "privacyUrlHttps": "Użyj adresu zaczynającego się od https://.",
+        "required": "Aby wysłać, trzeba zaznaczyć",
+        "requiredHint": "Wyłącz, jeśli zgoda jest dobrowolna.",
+        "marketing": "Zgoda marketingowa",
+        "marketingHint": "Zaznaczenie pola zapisuje na kontakcie zgodę na marketing. Niezaznaczone pole nigdy nikogo nie zapisuje."
+      },
+      "crm": {
+        "title": "W CRM",
+        "description": "Co każde zgłoszenie robi z kontaktem, który tworzy lub aktualizuje.",
+        "company": "Dopasuj firmę",
+        "companyOptions": {
+          "none": "Nie dopasowuj",
+          "email_domain": "Po domenie e-mail",
+          "name_or_domain": "Po nazwie lub domenie"
+        },
+        "companyHints": {
+          "none": "Odpowiedzi dotyczące firmy nie są używane do powiązania firmy.",
+          "email_domain": "Łączy kontakt z firmą, do której należy domena adresu e-mail.",
+          "name_or_domain": "Łączy firmę po nazwie lub domenie strony i tworzy ją, gdy nic nie pasuje."
+        },
+        "lifecycle": "Etap cyklu życia",
+        "lifecycleHint": "Ustawiane na kontakcie po wysłaniu formularza.",
+        "lifecycleNone": "Nie ustawiaj",
+        "stages": {
+          "new": "Nowy",
+          "contacted": "Skontaktowano",
+          "qualified": "Zakwalifikowany",
+          "application_started": "Rozpoczęto zgłoszenie",
+          "application_submitted": "Wysłano zgłoszenie",
+          "interview_scheduled": "Zaplanowano rozmowę",
+          "offer_received": "Otrzymano ofertę",
+          "admission_confirmed": "Potwierdzono przyjęcie",
+          "enrolled": "Zapisany",
+          "lost": "Utracony"
+        },
+        "tags": "Tagi do dodania",
+        "tagsHint": "Dodawane każdemu kontaktowi, który wysyła ten formularz. Do {max} tagów, każdy od 1 do 60 znaków.",
+        "tagsPlaceholder": "Na przykład: webinar",
+        "tagsCount": "{count} z {max}",
+        "tagAdd": "Dodaj tag",
+        "tagRemove": "Usuń tag {value}",
+        "tagsNone": "Brak tagów.",
+        "tagIssues": {
+          "empty": "Najpierw wpisz tag.",
+          "too_long": "Tag może mieć najwyżej 60 znaków.",
+          "duplicate": "Ten tag jest już na liście.",
+          "max": "Można dodać najwyżej {max} tagów."
+        },
+        "owner": "Opiekun nowych kontaktów",
+        "ownerHint": "Kto opiekuje się kontaktem utworzonym przez ten formularz.",
+        "ownerMode": "Reguła opiekuna",
+        "ownerModes": {
+          "unassigned": "Bez opiekuna",
+          "fixed": "Jedna osoba",
+          "round_robin": "Na zmianę"
+        },
+        "ownerModeHints": {
+          "unassigned": "Kontakt nie ma opiekuna, dopóki ktoś go nie przejmie.",
+          "fixed": "Każdy kontakt trafia do tej samej osoby.",
+          "round_robin": "Kontakty trafiają do wybranych osób po kolei. Osoby nieaktywne są pomijane."
+        },
+        "ownerFixed": "Opiekun",
+        "ownerRoundRobin": "Osoby na zmianę",
+        "ownerRoundRobinHint": "Wybierz co najmniej dwie osoby.",
+        "chooseUser": "Wybierz osobę",
+        "unknownUser": "Osoba, która nie jest już dostępna",
+        "pickUsers": "Wybierz osoby",
+        "noUsers": "Brak pasujących osób",
+        "removeUser": "Usuń {name}",
+        "ownerIssues": {
+          "fixed_one": "Wybierz dokładnie jedną osobę.",
+          "round_robin_two": "Rotacja wymaga co najmniej dwóch osób.",
+          "unassigned_none": "Reguła bez przypisania nie może mieć osób. Wybierz inną regułę albo wyczyść listę.",
+          "too_many": "Można wybrać najwyżej 50 osób."
+        }
+      },
+      "notify": {
+        "title": "Powiadomienia",
+        "description": "Kto dostaje informację, gdy nadejdzie zgłoszenie.",
+        "owner": "Powiadom opiekuna kontaktu",
+        "ownerHint": "Opiekun dostaje powiadomienie o każdym zgłoszeniu.",
+        "users": "Powiadom też te osoby",
+        "usersHint": "Do {max} członków zespołu również dostanie powiadomienie.",
+        "emails": "Wyślij też e-mail na te adresy",
+        "emailsHint": "Do {max} adresów dostaje e-mail przy każdym zgłoszeniu. Mogą należeć do osób spoza zespołu.",
+        "emailPlaceholder": "adres@example.com",
+        "emailsCount": "{count} z {max}",
+        "emailAdd": "Dodaj e-mail",
+        "emailRemove": "Usuń {value}",
+        "emailsNone": "Brak dodatkowych adresów.",
+        "emailIssues": {
+          "empty": "Najpierw wpisz adres e-mail.",
+          "invalid": "To nieprawidłowy adres e-mail.",
+          "duplicate": "Ten adres jest już na liście.",
+          "max": "Można dodać najwyżej {max} adresów."
+        }
+      },
+      "protection": {
+        "title": "Ochrona",
+        "description": "Blokuje spam i decyduje, jak długo przechowywane są odpowiedzi.",
+        "honeypot": "Ukryte pole pułapki",
+        "honeypotHint": "Dodaje pole, którego ludzie nie widzą. Boty je wypełniają, a ich zgłoszenia są oznaczane jako spam.",
+        "captcha": "CAPTCHA",
+        "captchaOptions": {
+          "inherit": "Zgodnie z ustawieniem platformy",
+          "on": "Zawsze włączona",
+          "off": "Wyłączona"
+        },
+        "captchaHints": {
+          "inherit": "Używa ustawienia przestrzeni roboczej dla formularzy publicznych.",
+          "on": "Odwiedzający muszą przejść weryfikację, zanim wyślą formularz.",
+          "off": "Brak weryfikacji. Polegaj na ukrytym polu pułapki i limitach częstotliwości."
+        },
+        "retention": "Przechowuj odpowiedzi (dni)",
+        "retentionHint": "Po tylu dniach odpowiedzi są usuwane. Pomaga to spełnić wymogi ochrony danych, np. RODO. Od 30 do 3650.",
+        "range": "Wpisz liczbę całkowitą od {min} do {max}.",
+        "keepForever": "Do ręcznego usunięcia",
+        "keepForeverHint": "Odpowiedzi zostają, dopóki ktoś ich nie usunie. Wybierz to tylko wtedy, gdy masz prawny powód, by je przechowywać.",
+        "advanced": "Zaawansowane: limity częstotliwości",
+        "advancedHint": "Limity spowalniające zalew zgłoszeń. Domyślne wartości pasują do większości formularzy.",
+        "rate": {
+          "perIpPerMinute": "Na adres, na minutę",
+          "perIpPerMinuteHint": "Zgłoszenia z jednego adresu internetowego.",
+          "perFormPerMinute": "Na formularz, na minutę",
+          "perFormPerMinuteHint": "Zgłoszenia do tego formularza z dowolnego miejsca.",
+          "perContactPerHour": "Na kontakt, na godzinę",
+          "perContactPerHourHint": "Zgłoszenia z tym samym e-mailem lub numerem telefonu."
+        }
+      }
+    }
+  }
+}

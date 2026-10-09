@@ -1,0 +1,201 @@
+{
+  "localization-translation": {
+    "nav": {
+      "languages": "Lingue",
+      "providers": "Fornitori di traduzione",
+      "usage": "Utilizzo della traduzione",
+      "group": "Localizzazione"
+    },
+    "errors": {
+      "unexpected": "Qualcosa è andato storto. Riprova.",
+      "conflict": "Qualcun altro ha modificato questo. L’elenco è stato ricaricato: controllalo e riprova.",
+      "languageIsDefault": "Non è possibile disattivare o eliminare la lingua predefinita. Imposta prima un’altra lingua come predefinita.",
+      "languageInactive": "Attiva prima la lingua, poi impostala come predefinita.",
+      "credentialsMissing": "Compila prima le credenziali richieste.",
+      "providerInactive": "Solo un fornitore attivo può essere quello predefinito.",
+      "lockdownNoOfficial": "Attiva e configura almeno un fornitore ufficiale a pagamento (DeepL o Google Cloud) prima di abilitare il blocco di conformità.",
+      "planGate": "Il tuo piano non include la traduzione."
+    },
+    "switcher": {
+      "label": "Cambia lingua",
+      "menu": "Lingue",
+      "failed": "Non è stato possibile cambiare la lingua. Riprova."
+    },
+    "languages": {
+      "kicker": "Admin · Sistema · Lingue",
+      "titleLead": "Piattaforma",
+      "titleEm": "lingue",
+      "description": "Gestisci quali lingue possono scegliere i nuovi utenti e workspace. La lingua «predefinita» è quella di riserva per ogni nuovo account creato.",
+      "loading": "Caricamento delle lingue",
+      "stats": {
+        "total": "Totale",
+        "totalHint": "configurate",
+        "active": "Attive",
+        "activeHint": "visibili agli utenti",
+        "default": "Predefinita",
+        "defaultHint": "di riserva per i nuovi account"
+      },
+      "catalog": "Catalogo",
+      "allLanguages": "Tutte le lingue",
+      "columns": {
+        "name": "Nome",
+        "code": "Codice",
+        "dir": "Dir",
+        "active": "Attiva",
+        "default": "Predefinita",
+        "actions": "Azioni"
+      },
+      "on": "Attiva",
+      "off": "Disattiva",
+      "defaultBadge": "Predefinita",
+      "set": "Imposta",
+      "toggleLabel": "Attiva o disattiva {name}",
+      "delete": "Elimina",
+      "cancel": "Annulla",
+      "empty": "Ancora nessuna lingua.",
+      "flash": {
+        "activated": "{name} attivata.",
+        "disabled": "{name} disattivata.",
+        "nowDefault": "{name} è ora la lingua predefinita.",
+        "removed": "Lingua rimossa."
+      },
+      "confirmDelete": {
+        "title": "Elimina lingua",
+        "message": "Rimuovere {name}?"
+      },
+      "pack": {
+        "kicker": "Pacchetto linguistico",
+        "title": "Fisso a {count} lingue",
+        "body": "Ogni lingua attiva è supportata da un file JSON di traduzione fornito con la piattaforma. Qui compariranno nuovi slot linguistici quando il pacchetto di traduzione verrà esteso.",
+        "note": "Puoi comunque attivare o disattivare le lingue, modificare il nome nativo e la direzione, e scegliere la lingua predefinita della piattaforma dalla tabella a sinistra."
+      },
+      "usedFor": {
+        "title": "Come viene usato",
+        "body": "Le lingue attive compaiono nel selettore lingua del profilo utente e nei selettori di template e risposte automatiche. La predefinita si applica ai nuovi account che non ne hanno scelta una."
+      }
+    },
+    "providers": {
+      "kicker": "Admin · Sistema",
+      "title": "Fornitori di traduzione",
+      "description": "La risposta automatica multilingue usa uno di questi fornitori per tradurre i messaggi in arrivo e redigere le risposte nella lingua del cliente. MyMemory è attivo di default (gratuito, senza chiave): collega DeepL / Google Cloud / LibreTranslate per una qualità superiore o una privacy con hosting proprio.",
+      "loading": "Caricamento dei fornitori",
+      "on": "Attivo",
+      "off": "Disattivo",
+      "cancel": "Annulla",
+      "lockdown": {
+        "title": "Blocco di conformità",
+        "description": "Quando è attivo, la catena di riserva salta <mono>{slugs}</mono> e instrada la traduzione delle risposte automatiche solo tramite API ufficiali a pagamento (DeepL, Google Cloud). Richiesto da alcune politiche di sicurezza aziendali che vietano endpoint di terze parti non ufficiali.",
+        "enable": "Abilita blocco",
+        "disable": "Disabilita blocco",
+        "confirmOn": "Attivare il blocco? I driver gratuiti verranno saltati: tradurranno solo le API a pagamento.",
+        "confirmOff": "Disattivare il blocco? I driver gratuiti torneranno nella catena di riserva."
+      },
+      "flash": {
+        "activated": "{name} attivato.",
+        "disabled": "{name} disattivato.",
+        "nowDefault": "{name} è ora il fornitore predefinito.",
+        "saved": "{name} salvato.",
+        "lockdownOn": "Il blocco di conformità è attivo.",
+        "lockdownOff": "Il blocco di conformità è disattivato."
+      },
+      "empty": {
+        "title": "Nessun fornitore di traduzione configurato",
+        "body": "Esegui il seed dei fornitori di traduzione per popolare questo elenco."
+      },
+      "active": "Attivo",
+      "disabled": "Disattivato",
+      "defaultBadge": "Predefinito",
+      "skipped": "Blocco · saltato",
+      "skippedTitle": "Saltato perché il blocco di conformità è attivo.",
+      "slug": "slug: {slug}",
+      "makeDefault": "Imposta come predefinito",
+      "activate": "Attiva",
+      "disable": "Disattiva",
+      "keepSecret": "••••••• (lascia vuoto per mantenere)",
+      "noCredentials": "Nessuna credenziale richiesta: questo fornitore funziona subito.",
+      "sortOrder": "Ordine",
+      "sortOrderHint": "Più basso = priorità più alta nella catena di riserva.",
+      "save": "Salva {name}"
+    },
+    "usage": {
+      "kicker": "Admin · Sistema",
+      "title": "Utilizzo della traduzione",
+      "description": "Volume e costo stimato di ogni traduzione di risposta automatica. I risultati del dizionario incluso e della cache di 24 ore non sono fatturabili e non compaiono qui: questi sono i soli richiami alle API.",
+      "from": "Da",
+      "to": "A",
+      "apply": "Applica",
+      "badRange": "La data di inizio non può essere successiva alla data di fine.",
+      "loading": "Caricamento dell’utilizzo",
+      "failed": "Impossibile caricare l’utilizzo.",
+      "totals": {
+        "calls": "Chiamate API",
+        "chars": "Caratteri tradotti",
+        "charsOut": "in uscita: {count}",
+        "cost": "Costo stimato",
+        "costHint": "in base alle tariffe pubblicate per carattere",
+        "fallbackHits": "Ricorsi di riserva",
+        "fallbackHint": "il driver principale è fallito, ha risposto la catena"
+      },
+      "byProvider": "Per fornitore",
+      "emptyProvider": "Nessuna chiamata di traduzione in questo intervallo. Invia un messaggio in arrivo non in inglese a un dispositivo con risposta automatica, poi aggiorna.",
+      "free": "gratuito",
+      "last30": "Ultimi 30 giorni",
+      "timelineHint": "passa il mouse su ogni barra per data / caratteri / costo",
+      "topWorkspaces": "Workspace con la spesa più alta",
+      "emptyWorkspaces": "Nessuna traduzione a pagamento in questo intervallo.",
+      "cols": {
+        "provider": "Fornitore",
+        "workspace": "Workspace",
+        "calls": "Chiamate",
+        "charsIn": "Caratteri in ingresso",
+        "chars": "Caratteri",
+        "cost": "Costo",
+        "rate": "Tariffa / 1M caratteri"
+      }
+    },
+    "settings": {
+      "title": "Traduzione in tempo reale",
+      "description": "Chatta con i clienti in qualsiasi lingua. Ciascuno legge nella propria lingua, automaticamente.",
+      "loading": "Caricamento delle impostazioni di traduzione",
+      "failed": "Impossibile caricare le impostazioni di traduzione.",
+      "saved": "Impostazioni di traduzione salvate.",
+      "steps": {
+        "1": {
+          "title": "Messaggi del cliente (qualsiasi lingua)",
+          "body": "Il loro messaggio viene tradotto automaticamente nella lingua del team e mostrato all’operatore, con l’originale a un clic di distanza."
+        },
+        "2": {
+          "title": "Risposte dell’operatore (lingua del team)",
+          "body": "La tua risposta viene tradotta nella lingua del cliente subito prima dell’invio su WhatsApp."
+        },
+        "3": {
+          "title": "Anche AI + widget",
+          "body": "L’agente AI e il widget della chat del sito rispondono nativamente nella lingua del cliente."
+        }
+      },
+      "engine": {
+        "kicker": "Motore di traduzione",
+        "free": "MyMemory (gratuito)",
+        "body": "Qui NON inserisci chiavi API: la traduzione si configura una volta per la piattaforma e funziona subito in automatico. Un motore gratuito è attivo di default; la piattaforma può essere configurata per usare DeepL / Google Translate per una qualità superiore."
+      },
+      "usage": {
+        "kicker": "Questo mese",
+        "line": "caratteri tradotti · {count} messaggi"
+      },
+      "enabled": {
+        "title": "Traduci automaticamente le conversazioni",
+        "hint": "Attiva o disattiva tutto per questo workspace."
+      },
+      "teamLanguage": {
+        "label": "La lingua del tuo team",
+        "hint": "La lingua in cui leggono e scrivono i TUOI operatori. I messaggi dei clienti vengono tradotti in questa; le tue risposte vengono tradotte da questa."
+      },
+      "save": "Salva impostazioni di traduzione",
+      "upgrade": {
+        "title": "Passa a un piano superiore per sbloccare la traduzione in tempo reale.",
+        "body": "Traduci automaticamente le conversazioni WhatsApp tra la lingua del tuo team e quelle dei tuoi clienti.",
+        "link": "Vedi i piani →"
+      }
+    }
+  }
+}

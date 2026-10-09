@@ -1,0 +1,107 @@
+{
+  "developer-rest-api-v1-docs": {
+    "metaTitle": "{brand} APIリファレンス",
+    "metaDescription": "{brand} REST APIリファレンス：認証、レート制限、リクエストとレスポンスの例付きの全エンドポイント。",
+    "common": {
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "copyFailed": "コピーできませんでした。テキストを選択して手動でコピーしてください。"
+    },
+    "topbar": {
+      "home": "{brand}ホーム",
+      "apiWord": "API",
+      "version": "v1",
+      "spec": "OpenAPI仕様",
+      "getKey": "APIキーを取得"
+    },
+    "sidebar": {
+      "label": "リファレンスナビゲーション",
+      "filterLabel": "エンドポイントを絞り込み",
+      "filterPlaceholder": "エンドポイントを絞り込み…",
+      "startHere": "はじめに",
+      "intro": "概要",
+      "auth": "認証",
+      "webhooks": "Webhook"
+    },
+    "hero": {
+      "eyebrow": "開発者向けリファレンス",
+      "title": "{brand}の<em>REST API</em>",
+      "lead": "WhatsAppメッセージの送信、一斉配信やキャンペーンの実行、連絡先とテンプレートの管理、自動化フローの起動、アカウント情報の取得を行える単一のREST API。CRM、自動化プラットフォーム、アプリに必要なすべてを備えています。",
+      "baseUrl": "ベースURL",
+      "copyBaseUrl": "ベースURLをコピー"
+    },
+    "capabilities": {
+      "title": "できること",
+      "send": {
+        "title": "メッセージを送信",
+        "body": "単発送信、一斉配信、キャンペーン、予約送信"
+      },
+      "receive": {
+        "title": "メッセージを受信",
+        "body": "受信した会話とそのメッセージを取得"
+      },
+      "contacts": {
+        "title": "連絡先とリード",
+        "body": "作成・取得・更新・削除、グループ、カスタム属性に完全対応"
+      },
+      "templates": {
+        "title": "テンプレート",
+        "body": "WhatsAppテンプレートの作成、更新、一覧取得"
+      },
+      "flows": {
+        "title": "自動化フロー",
+        "body": "APIから連絡先をフローに登録"
+      },
+      "status": {
+        "title": "配信ステータス",
+        "body": "メッセージごとの送信済み、配信済み、既読、失敗"
+      },
+      "devices": {
+        "title": "デバイス",
+        "body": "接続済み番号とそのステータスを一覧表示"
+      },
+      "account": {
+        "title": "アカウントと利用状況",
+        "body": "プラン、上限、メッセージクレジット"
+      }
+    },
+    "auth": {
+      "title": "認証",
+      "intro": "すべてのリクエストは、ワークスペースの<strong>APIキー</strong>で認証されます。ダッシュボードの<strong>設定、REST API</strong>で作成してください。Bearerトークンとして送信します：",
+      "copyHeader": "ヘッダーをコピー",
+      "alt": "代わりに <code>X-Api-Key</code> ヘッダーで渡すこともできます。キーは1つのワークスペースに属し、ハッシュのみが保存されるため、作成時にキーをコピーしてください。再表示はできません。キーはいつでも無効化でき、すぐに使えなくなります。"
+    },
+    "webhooks": {
+      "title": "Webhookとリアルタイムイベント",
+      "comingTitle": "Webhook配信は近日公開",
+      "comingBody": "Webhookの登録と独自URLでのイベント受信は、まだ利用できません。現時点でサーバーにイベントは送信されないため、購読できるものはありません。配信が開始されると、このカードにイベントと署名ヘッダーが表示されます。",
+      "rateLabel": "レート制限",
+      "rate": "各キーはワークスペースのプランの毎分制限に従います。プランに設定がない場合は、プラットフォームの既定である毎分{limit}リクエストが適用されます。すべてのレスポンスには <code>X-RateLimit-Limit</code> と <code>X-RateLimit-Remaining</code> が含まれ、制限を超えたリクエストにはHTTP 429と <code>Retry-After</code> ヘッダーが返されます。送信にはプランのメッセージクレジットも消費されます。"
+    },
+    "reference": {
+      "title": "エンドポイント",
+      "count": "{count, plural, other {#個のエンドポイント}}",
+      "noMatch": "「{query}」に一致するエンドポイントはありません。",
+      "clearFilter": "フィルターをクリア",
+      "empty": "公開されているエンドポイントはまだありません。後ほど再度ご確認ください。",
+      "unavailableTitle": "エンドポイントリファレンスを読み込めませんでした",
+      "unavailableBody": "現在、API仕様にアクセスできません。上の概要は引き続き有効です。しばらくしてからもう一度お試しください。",
+      "retry": "再試行",
+      "general": "一般",
+      "toggle": "{method} {path}の詳細を表示または非表示",
+      "parameters": "パラメーター",
+      "bodyParameters": "ボディパラメーター",
+      "name": "名前",
+      "field": "フィールド",
+      "description": "説明",
+      "required": "必須",
+      "exampleRequest": "リクエスト例",
+      "requestBody": "リクエストボディ",
+      "responses": "レスポンス",
+      "copyCurl": "リクエストをコピー",
+      "copyJson": "JSONをコピー",
+      "noExample": "仕様には、このレスポンスの例が記載されていません。"
+    },
+    "footer": "{brand} REST API · v1 · ライブのOpenAPI仕様から生成"
+  }
+}

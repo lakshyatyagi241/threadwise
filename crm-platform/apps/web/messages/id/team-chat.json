@@ -1,0 +1,208 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "Team Chat"
+    },
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "screen": {
+      "title": "Team Chat",
+      "back": "Kembali ke channel",
+      "search": "Cari di channel ini",
+      "pinned": "Pesan yang disematkan",
+      "members": "Anggota channel",
+      "deleteChannel": "Hapus channel ini",
+      "type": {
+        "public": "Channel",
+        "private": "Privat",
+        "dm": "Pesan langsung"
+      },
+      "olderMessage": "Pesan itu ada lebih jauh ke belakang. Muat pesan lama untuk melihatnya.",
+      "loading": "Memuat Team Chat",
+      "loadFailed": "Team Chat tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "deleteTitle": "Hapus channel ini?",
+      "deleteMessage": "#{name} dan semua pesannya akan dihapus untuk semua orang. Tindakan ini tidak dapat dibatalkan.",
+      "deleteConfirm": "Hapus channel",
+      "cancel": "Batal",
+      "defaultDescription": "Chat tim internal ruang kerja",
+      "customerChats": "Chat pelanggan"
+    },
+    "sidebar": {
+      "label": "Channel dan orang",
+      "channels": "Channel",
+      "createChannel": "Buat channel",
+      "loading": "Memuat channel",
+      "loadFailed": "Channel tidak dapat dimuat.",
+      "noChannels": "Belum ada channel",
+      "direct": "Pesan langsung",
+      "people": "Orang",
+      "invite": "Undang anggota tim",
+      "pending": "Permintaan tertunda",
+      "pendingCount": "{count, plural, other {# permintaan tertunda}}",
+      "unread": "{count, plural, other {# pesan belum dibaca}}",
+      "workspace": "Ruang kerja",
+      "mode": "Mode",
+      "customerChats": "Chat pelanggan",
+      "teamChat": "Chat tim",
+      "membersLink": "Anggota"
+    },
+    "members": {
+      "label": "Anggota",
+      "title": "Team chat",
+      "count": "{count, plural, other {# anggota}}",
+      "countUnknown": "Anggota",
+      "search": "Cari anggota",
+      "loading": "Memuat anggota",
+      "none": "Tidak ada anggota yang cocok",
+      "online": "Daring",
+      "offline": "Luring",
+      "you": "(Anda)",
+      "message": "Pesan {name}",
+      "titleAccent": "chat"
+    },
+    "panel": {
+      "searchTitle": "Cari pesan",
+      "pinnedTitle": "Pesan yang disematkan",
+      "searchPlaceholder": "Cari di channel ini",
+      "searchHint": "Ketik minimal dua karakter.",
+      "close": "Tutup",
+      "failed": "Itu tidak dapat dimuat.",
+      "noResults": "Tidak ada pesan yang cocok.",
+      "noPinned": "Tidak ada yang disematkan di channel ini."
+    },
+    "stream": {
+      "loading": "Memuat pesan",
+      "loadFailed": "Pesan tidak dapat dimuat.",
+      "loadOlder": "Muat pesan lama",
+      "emptyTitle": "Belum ada pesan di #{name}",
+      "emptyMessage": "Sapa dan mulai percakapan."
+    },
+    "message": {
+      "edited": "(diedit)",
+      "pinned": "Disematkan",
+      "editLabel": "Edit pesan Anda",
+      "cancel": "Batal",
+      "save": "Simpan",
+      "editConflict": "Pesan ini berubah saat Anda mengeditnya. Muat ulang lalu coba lagi.",
+      "reactions": "Reaksi",
+      "reactionChip": "{emoji}, {count, plural, other {# orang}}",
+      "reactionTray": "Pilih reaksi",
+      "reply": "Balas",
+      "react": "Beri reaksi",
+      "edit": "Edit",
+      "pin": "Sematkan",
+      "unpin": "Lepas sematan",
+      "delete": "Hapus",
+      "deleteTitle": "Hapus pesan ini?",
+      "deleteMessage": "Pesan akan dihapus untuk semua orang di channel.",
+      "uploading": "Mengunggah",
+      "retry": "Coba lagi",
+      "discard": "Buang"
+    },
+    "composer": {
+      "placeholder": "Pesan #{name}",
+      "attach": "Lampirkan file",
+      "send": "Kirim",
+      "hint": "Enter untuk mengirim, Shift+Enter untuk baris baru, @ untuk menyebut anggota tim.",
+      "replyingTo": "Membalas {name}",
+      "cancelReply": "Batalkan balasan",
+      "removeFile": "Hapus lampiran",
+      "fileTooLarge": "File tersebut lebih besar dari 20 MB.",
+      "mentionList": "Anggota tim untuk disebut",
+      "typingOne": "{name} sedang mengetik",
+      "typingMany": "{count} orang sedang mengetik",
+      "hintSend": "kirim",
+      "hintNewLine": "baris baru",
+      "hintMention": "sebut",
+      "hintShift": "Shift+↵"
+    },
+    "createChannel": {
+      "title": "Buat channel",
+      "close": "Tutup",
+      "name": "Nama",
+      "nameHint": "Huruf kecil, angka, tanda hubung dan garis bawah, tanpa spasi.",
+      "description": "Deskripsi (opsional)",
+      "privacy": "Privasi",
+      "public": {
+        "label": "Publik",
+        "hint": "Semua orang di workspace dapat membaca dan menulis."
+      },
+      "private": {
+        "label": "Privat",
+        "hint": "Hanya dengan undangan. Hanya anggotanya yang dapat melihatnya."
+      },
+      "cancel": "Batal",
+      "create": "Buat channel",
+      "namePlaceholder": "misalnya support",
+      "descriptionPlaceholder": "Untuk apa saluran ini?"
+    },
+    "invite": {
+      "title": "Undang anggota tim",
+      "close": "Tutup",
+      "email": "Email",
+      "name": "Nama (opsional)",
+      "note": "Catatan untuk admin (opsional)",
+      "noteHint": "Alasan orang ini perlu bergabung.",
+      "addToChannel": "Tambahkan juga ke #{name}",
+      "approved": "Selesai. Permintaan disetujui.",
+      "pending": "Undangan dikirim, menunggu persetujuan admin.",
+      "cancel": "Batal",
+      "submit": "Kirim undangan",
+      "emailPlaceholder": "rekan@perusahaan.com",
+      "namePlaceholder": "Nama mereka",
+      "notePlaceholder": "Mengapa mereka harus bergabung?"
+    },
+    "invitations": {
+      "title": "Undangan tertunda",
+      "close": "Tutup",
+      "loading": "Memuat",
+      "loadFailed": "Undangan tidak dapat dimuat.",
+      "empty": "Belum ada undangan",
+      "status": {
+        "pending": "Tertunda",
+        "approved": "Disetujui",
+        "declined": "Ditolak",
+        "expired": "Kedaluwarsa"
+      },
+      "requestedBy": "Diminta oleh {name} · {time}",
+      "decidedBy": "{status} oleh {name} · {time}",
+      "needsAccount": "Orang ini belum memiliki akun di workspace, jadi tidak ada yang ditambahkan.",
+      "approve": "Setujui",
+      "decline": "Tolak"
+    },
+    "channelMembers": {
+      "title": "Anggota #{name}",
+      "close": "Tutup",
+      "admin": "Admin",
+      "leave": "Keluar",
+      "remove": "Hapus",
+      "addLabel": "Tambahkan anggota tim",
+      "choose": "Pilih anggota tim",
+      "add": "Tambahkan"
+    },
+    "errors": {
+      "network": "Kesalahan jaringan. Periksa koneksi Anda lalu coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukan itu.",
+      "signedOut": "Anda telah keluar. Masuk lagi.",
+      "notFound": "Itu sudah tidak ada.",
+      "validation": "Periksa yang Anda masukkan lalu coba lagi.",
+      "conflict": "Ini telah berubah sementara itu. Muat ulang lalu coba lagi.",
+      "tooLarge": "File tersebut lebih besar dari 20 MB.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "emptyMessage": "Tulis pesan atau lampirkan file.",
+      "replyOtherChannel": "Anda hanya dapat membalas pesan di channel yang sama.",
+      "attachmentRejected": "File ini tidak dapat dilampirkan. Hanya file gambar, PDF, Word, Excel, teks, dan CSV hingga 20 MB yang diizinkan.",
+      "editExpired": "Pesan hanya dapat diedit selama 15 menit.",
+      "nameTaken": "Channel dengan nama ini sudah ada.",
+      "channelProtected": "#general tidak dapat dihapus.",
+      "alreadyMember": "Sudah menjadi anggota workspace.",
+      "alreadyDecided": "Sudah diputuskan.",
+      "notMember": "Anda bukan anggota channel ini.",
+      "notAuthor": "Anda hanya dapat mengubah pesan Anda sendiri.",
+      "kindInvalid": "Itu tidak berlaku untuk jenis channel ini.",
+      "unexpected": "Terjadi kesalahan. Coba lagi."
+    }
+  }
+}

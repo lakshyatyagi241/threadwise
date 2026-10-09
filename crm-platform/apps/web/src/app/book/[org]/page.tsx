@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { AppointmentsProviders } from '@/features/appointments/components/providers';
 import { PublicDirectory } from '@/features/appointments/components/public-directory';
 
@@ -6,11 +7,14 @@ import { PublicDirectory } from '@/features/appointments/components/public-direc
  * The visitor's service chooser. It lives outside the app shell (no menu, no session) and is never indexed; `next.config.ts`
  * adds `Cache-Control: no-store` and `Referrer-Policy: no-referrer` to everything under /book.
  */
-export const metadata: Metadata = {
-  title: 'Book an appointment',
-  robots: { index: false, follow: false, nocache: true },
-  referrer: 'no-referrer',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('appointments.public.meta');
+  return {
+    title: t('book'),
+    robots: { index: false, follow: false, nocache: true },
+    referrer: 'no-referrer',
+  };
+}
 
 export default async function PublicDirectoryPage({
   params,

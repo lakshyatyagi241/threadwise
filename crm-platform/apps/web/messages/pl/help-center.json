@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "Centrum pomocy",
+    "searchLabel": "Szukaj w pomocy",
+    "searchPlaceholder": "Szukaj przewodników",
+    "resultsStatus": "{count, plural, =0 {Nie znaleziono przewodników} one {# przewodnik} few {# przewodniki} many {# przewodników} other {# przewodnika}}",
+    "none": {
+      "title": "Brak przewodników",
+      "message": "Przewodniki dla funkcji w Twoim planie pojawią się tutaj."
+    },
+    "noResults": {
+      "title": "Żaden przewodnik nie pasuje do wyszukiwania",
+      "message": "Spróbuj innych słów lub wyczyść wyszukiwanie, aby zobaczyć wszystkie przewodniki."
+    },
+    "areas": {
+      "overview": "Platforma",
+      "inbox": "Skrzynka i czat",
+      "audience": "CRM",
+      "sales": "Sprzedaż",
+      "campaigns": "Kampanie",
+      "automation": "Automatyzacja",
+      "store": "Sklep",
+      "apps": "Marketplace",
+      "settings": "Ustawienia",
+      "account": "Konto",
+      "getting-started": "Pierwsze kroki",
+      "troubleshooting": "Rozwiązywanie problemów"
+    },
+    "allHelp": "Wróć do pomocy",
+    "onThisPage": "Na tej stronie",
+    "openScreen": "Otwórz ten ekran",
+    "shownInEnglish": "Ten przewodnik nie jest jeszcze przetłumaczony na Twój język, dlatego jest wyświetlany po angielsku.",
+    "tip": {
+      "label": "Pomoc: {title}",
+      "readMore": "Przeczytaj przewodnik"
+    },
+    "guideCount": "{count, plural, =0 {Brak przewodników} one {# przewodnik} few {# przewodniki} many {# przewodników} other {# przewodnika}}",
+    "crumb": "Więcej / Pomoc",
+    "heading": "Pomoc",
+    "headingRest": "i przewodniki",
+    "back": "Wstecz",
+    "askSupport": "Nie możesz tego znaleźć? Zapytaj pomoc techniczną",
+    "askSupportShort": "Pomoc techniczna",
+    "categories": "Kategorie",
+    "allGuides": "Wszystkie przewodniki",
+    "needHuman": "Potrzebujesz kontaktu z człowiekiem?",
+    "contactSupport": "Skontaktuj się z pomocą techniczną",
+    "popular": "Popularne",
+    "searchResults": "Wyniki wyszukiwania",
+    "read": "Czytaj przewodnik",
+    "readMinutes": "{count, plural, one {# min czytania} few {# min czytania} many {# min czytania} other {# min czytania}}",
+    "moreInArea": "Więcej w obszarze {area}"
+  }
+}

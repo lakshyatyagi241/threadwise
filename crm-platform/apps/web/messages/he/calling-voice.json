@@ -1,0 +1,113 @@
+{
+  "calling-voice": {
+    "nav": {
+      "title": "שיחות",
+      "description": "הפעילו או כבו שיחות WhatsApp לכל מספר.",
+      "keywords": "שיחה, שיחות, קול, טלפון, שיחות whatsapp, כפתור שיחה"
+    },
+    "common": {
+      "dismiss": "סגור"
+    },
+    "button": {
+      "label": "התקשר",
+      "tooltip": "התחל שיחת WhatsApp",
+      "working": "מעבד..."
+    },
+    "confirm": {
+      "title": "אין הרשאת שיחה מאושרת",
+      "body": "אין לנו הרשאת שיחה מאושרת מאיש הקשר הזה.",
+      "callAnyway": "התקשר בכל זאת",
+      "callAnywayHint": "עובד אם הוא כבר לחץ על \"אפשר\" ב-WhatsApp.",
+      "askPermission": "בקש הרשאה",
+      "askPermissionHint": "שולח לו בקשת הרשאה במקום זאת. לא מתבצעת שיחה.",
+      "close": "סגור"
+    },
+    "toast": {
+      "noPhone": "אין מספר טלפון לאיש קשר זה.",
+      "noNumber": "שיחות אינן מופעלות באף מספר WABA.",
+      "alreadyPermitted": "איש הקשר הזה כבר מאפשר שיחות - מתחיל את השיחה...",
+      "permissionSent": "בקשת ההרשאה נשלחה. הוא יראה אישור/דחייה ב-WhatsApp - נסו להתקשר שוב אחרי שיגיב.",
+      "permissionFailed": "לא ניתן היה לשלוח בקשת הרשאה: {message}",
+      "startFailed": "לא ניתן היה להתחיל שיחה: {message}",
+      "acceptInvalid": "לא ניתן היה לקבל את השיחה: נתוני שיחה לא תקינים מ-WhatsApp. נסו שוב.",
+      "acceptFailed": "לא ניתן היה לקבל את השיחה: {message}",
+      "alreadyAccepted": "השיחה כבר התקבלה על ידי חבר צוות אחר.",
+      "recordingStarted": "ההקלטה התחילה - היא תישמר ביומני השיחות בסיום השיחה.",
+      "recordingSaved": "הקלטת השיחה נשמרה ביומני השיחות.",
+      "recordUnsupported": "הקלטה אינה נתמכת בדפדפן זה.",
+      "noActiveCall": "אין שיחה פעילה להקלטה."
+    },
+    "incoming": {
+      "title": "שיחת WhatsApp נכנסת",
+      "caller": "מתקשר +{digits}",
+      "accept": "קבל",
+      "decline": "דחה",
+      "aiHandling": "הבינה המלאכותית מטפלת בשיחה זו..."
+    },
+    "panel": {
+      "label": "שיחה מתנהלת",
+      "title": "בשיחה",
+      "ringing": "מצלצל...",
+      "connected": "מחובר",
+      "timer": "משך השיחה",
+      "mute": "השתק",
+      "muted": "מושתק",
+      "end": "סיים",
+      "record": "הקלט",
+      "recording": "מקליט",
+      "recordTooltip": "הקלט שיחה זו",
+      "recordingTooltip": "מקליט שיחה זו",
+      "recordingNotice": "השיחה הזו מוקלטת"
+    },
+    "failures": {
+      "REJECTED": "הלקוח דחה את השיחה.",
+      "BUSY": "הלקוח בשיחה אחרת.",
+      "NO_ANSWER": "אין מענה - הלקוח לא ענה.",
+      "MISSED": "הלקוח פספס את השיחה.",
+      "CANCELLED": "השיחה בוטלה.",
+      "MIC_BLOCKED": "הגישה למיקרופון חסומה - המתקשר לא ישמע אתכם. אשרו הרשאת מיקרופון בדפדפן ונסו שוב.",
+      "BUSY_SLOT": "שיחה אחרת כבר פעילה בלשונית זו.",
+      "INVALID_SDP": "הצעת SDP לא תקינה - חסר v=0 או שורת מדיה",
+      "LOCAL_SDP_EMPTY": "SDP מקומי ריק - איסוף ICE נכשל",
+      "ENDED_EARLY": "השיחה הסתיימה לפני שהתחברה.",
+      "ANSWER_FAILED": "החלת התשובה של WhatsApp נכשלה"
+    },
+    "errors": {
+      "CALL_NUMBER_NOT_FOUND": "המספר הזה כבר אינו בסביבת העבודה שלכם. רעננו את הדף ונסו שוב.",
+      "CALL_NOT_FOUND": "לא ניתן למצוא את השיחה הזו. ייתכן שהיא כבר הסתיימה.",
+      "CALL_NOT_WABA": "שיחות עובדות רק במספרי WhatsApp Cloud API. מספר זה מחובר בדרך אחרת.",
+      "CALL_NUMBER_NOT_CONNECTED": "המספר הזה אינו מחובר כרגע ל-WhatsApp Cloud API. חברו אותו מחדש תחת ערוצים ונסו שוב.",
+      "CALL_COEXISTENCE_UNSUPPORTED": "מספר שבשימוש גם באפליקציית WhatsApp Business אינו יכול לקבל שיחות.",
+      "CALL_NOT_ENABLED": "שיחות כבויות עבור מספר זה. הפעילו אותן תחילה תחת שיחות.",
+      "CALL_META_REFUSED": "WhatsApp דחתה את הבקשה. נסו שוב בעוד רגע.",
+      "CALL_PERMISSION_REQUESTED": "בקשת ההרשאה נשלחה. הוא יראה אישור/דחייה ב-WhatsApp - נסו להתקשר שוב אחרי שיגיב.",
+      "CALL_STATE_CONFLICT": "השיחה כבר התקבלה על ידי חבר צוות אחר.",
+      "CALL_RECORDING_FAILED": "לא ניתן היה לשמור את ההקלטה.",
+      "FORBIDDEN": "אין לכם הרשאה להשתמש בשיחות.",
+      "PLAN_FEATURE_LOCKED": "התוכנית שלכם אינה כוללת שיחות WhatsApp.",
+      "NETWORK": "שגיאת רשת - נסו שוב.",
+      "UNEXPECTED": "משהו השתבש. נסו שוב."
+    },
+    "settings": {
+      "title": "שיחות",
+      "intro": "הפעילו שיחות WhatsApp למספר כדי להציג את כפתור השיחה הירוק בצ'אטים שלו בתיבת הדואר הנכנס.",
+      "cardTitle": "שיחות WhatsApp",
+      "numberFallback": "מספר WhatsApp",
+      "connection": "חיבור: {status}",
+      "enabledStatus": "מופעל - כפתור השיחה הירוק מוצג כעת בצ'אטים של מספר זה בתיבת הדואר הנכנס.",
+      "enabledSince": "הופעל ב-{date}",
+      "offStatus": "כבוי - הפעילו כדי שכפתור השיחה יופיע בצ'אטים עם מספר זה.",
+      "enable": "הפעל שיחות",
+      "disable": "כבה שיחות",
+      "asking": "שואל את WhatsApp...",
+      "enabledDone": "שיחות מופעלות כעת עבור מספר זה.",
+      "disabledDone": "שיחות כבויות כעת עבור מספר זה.",
+      "loading": "טוען מספרים",
+      "loadFailed": "לא ניתן היה לטעון את המספרים שלכם.",
+      "retry": "נסה שוב",
+      "emptyTitle": "עדיין אין מספרי WhatsApp",
+      "emptyMessage": "חברו מספר WhatsApp Cloud API תחת ערוצים, ואז חזרו כדי להפעיל שיחות.",
+      "viewOnly": "אפשר לראות את מצב השיחות של כל מספר. הפעלה או כיבוי דורשים הרשאת ניהול שיחות."
+    }
+  }
+}

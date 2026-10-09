@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "Broadcast Instagram"
+    },
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "hub": {
+      "kicker": "Channel · Instagram",
+      "title": "Instagram",
+      "titleAccent": "akun",
+      "intro": "Tautkan akun Instagram Business atau Creator sekali saja. Pesannya kemudian masuk ke kotak masuk tim, dan dari sini Anda dapat membalas, menjalankan alur, serta mengirim pesan ke orang yang sudah pernah mengirim pesan kepada Anda.",
+      "teamInbox": "Kotak masuk tim",
+      "broadcasts": "Broadcast khusus balasan",
+      "loadError": "Akun Instagram yang ditautkan tidak dapat dimuat. Coba lagi.",
+      "loadErrorDetail": "Akun Instagram yang ditautkan tidak dapat dimuat (error {status}{code}). Coba lagi.",
+      "engineOff": "{engine} belum terhubung. Administrator harus menghubungkannya di Admin → Add-on sebelum akun Instagram dapat ditautkan.",
+      "connectedCount": "{count, plural, other {# akun ditautkan}}",
+      "notConnected": "Belum terhubung",
+      "cardTitle": "Tambahkan akun Instagram",
+      "cardBody": "Hubungkan akun Business/Creator. Instagram Anda terhubung sekali dan muncul di sini — percakapan, alur, dan balasan otomatis semuanya dapat digunakan dari workspace ini.",
+      "add": "Tambahkan akun Instagram",
+      "linkedAccounts": "Akun tertaut",
+      "linked": "Akun Instagram ditautkan.",
+      "linkFailed": "Akun tersebut tidak dapat ditautkan."
+    },
+    "dialog": {
+      "close": "Tutup",
+      "kicker": "Instagram",
+      "title": "Tambahkan akun Instagram",
+      "note": "Instagram Anda terhubung sekali melalui {engine} (di sana disimpan login dan webhook). Workspace ini menautkan ke akun tersebut dan menampilkan kotak masuk, alur, dan iklannya di sini — selalu satu akun, bukan dua.",
+      "connect": "Hubungkan Instagram",
+      "checking": "Memeriksa…",
+      "hint": "Langsung tertaut jika Anda sudah menghubungkannya di {engine} — jika belum, jendela masuk singkat akan terbuka.",
+      "pick": "Pilih akun untuk ditautkan",
+      "link": "Tautkan",
+      "connectDifferent": "Hubungkan akun lain",
+      "linkFailed": "Akun tersebut tidak dapat ditautkan.",
+      "startFailed": "Koneksi Instagram tidak dapat dimulai."
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "Terhubung",
+      "needsReauth": "Perlu otorisasi ulang",
+      "live": "aktif",
+      "manage": "Kelola di {engine}",
+      "refresh": "Segarkan profil dari {engine}",
+      "unlink": "Lepas tautan",
+      "unlinkConfirm": "Putuskan akun Instagram ini? Percakapan dan data kotak masuknya akan dihapus, dan Instagram akan hilang dari dasbor, kotak masuk, alur, templat, dan balasan otomatis Anda hingga Anda menghubungkan akun lagi. Akun itu sendiri tetap ada di {engine} — Anda dapat menautkannya lagi nanti.",
+      "cancel": "Batal",
+      "updated": "Akun Instagram {handle} diperbarui.",
+      "unlinked": "Akun Instagram diputuskan — datanya telah dihapus.",
+      "failed": "Tindakan itu gagal. Coba lagi."
+    },
+    "broadcast": {
+      "kicker": "Instagram · Khusus balasan",
+      "title": "Instagram",
+      "titleAccent": "broadcast",
+      "intro": "Instagram hanya memungkinkan Anda mengirim pesan kepada orang yang sudah pernah mengirim pesan kepada Anda, jadi pilih dari percakapan yang ada. Instagram menerapkan jendela 24 jam saat setiap pesan dikirim.",
+      "accounts": "Akun Instagram",
+      "loadError": "Percakapan tidak dapat dimuat. Coba lagi.",
+      "failed": "Tindakan itu gagal. Coba lagi.",
+      "noAccounts": "Belum ada akun Instagram yang ditautkan dan terhubung.",
+      "name": "Nama broadcast",
+      "namePlaceholder": "Penawaran musim gugur",
+      "account": "Akun Instagram",
+      "template": "Templat",
+      "templateHint": "Opsional. Mengisi pesan saat kosong.",
+      "templateNone": "Tanpa templat",
+      "message": "Pesan",
+      "messageHint": "Gunakan {token} untuk nama orang tersebut. Maksimal {max} karakter.",
+      "messagePlaceholder": "Halo {token}, …",
+      "send": "{count, plural, =0 {Kirim} other {Kirim ke # percakapan}}",
+      "sending": "Mengirim…",
+      "recipients": "Penerima",
+      "windowOpenCount": "{open} dari {total} dalam jendela 24 jam",
+      "search": "Cari percakapan",
+      "selectAll": "Pilih semua",
+      "clear": "Hapus",
+      "capNote": "Satu pengiriman menjangkau maksimal {max} percakapan; pilih semua akan memilih {max} pertama.",
+      "empty": "Belum ada percakapan. Orang akan muncul di sini setelah mengirim pesan ke akun Anda.",
+      "inWindow": "Dalam jendela",
+      "outsideWindow": "Di luar 24 jam",
+      "selected": "{count, plural, other {# dipilih}}",
+      "sent": "Broadcast Instagram terkirim — {sent} terkirim{failed, plural, =0 {} other {, # gagal}}.",
+      "sentNone": "Tidak dapat mengirim ke penerima mana pun. Periksa koneksi Instagram."
+    }
+  }
+}

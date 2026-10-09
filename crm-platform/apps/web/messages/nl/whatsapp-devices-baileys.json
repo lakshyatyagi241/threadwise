@@ -1,0 +1,312 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "devices": "Persoonlijk WhatsApp"
+    },
+    "area": {
+      "title": "Niet-officiële WhatsApp API",
+      "numbers": "Nummers",
+      "warmer": "Warmer"
+    },
+    "common": {
+      "dismiss": "Sluiten",
+      "requestId": "Verzoek {id}",
+      "unofficial": "Niet-officieel",
+      "reminder": "Niet-officiële verbinding. WhatsApp kan dit nummer beperken.",
+      "readGuide": "Lees de gids",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "back": "Terug"
+    },
+    "list": {
+      "title": "Persoonlijke WhatsApp-nummers",
+      "subtitle": "Koppel een WhatsApp-nummer met een QR-code of koppelcode. Chats daarop verschijnen in de gedeelde inbox.",
+      "connect": "Een nummer koppelen",
+      "capCount": "{used} van {limit} nummers",
+      "capUnlimited": "{used, plural, one {# nummer} other {# nummers}}",
+      "capFull": "Je workspace kan {limit, plural, one {# nummer} other {# nummers}} op deze engine hebben. Verwijder er een om een ander te koppelen.",
+      "capLabel": "Nummers in gebruik",
+      "loading": "Je nummers laden...",
+      "retry": "Opnieuw proberen",
+      "searchLabel": "Zoeken op naam of nummer",
+      "searchPlaceholder": "Naam of nummer zoeken",
+      "tabs": {
+        "all": "Alle",
+        "connected": "Gekoppeld",
+        "disconnected": "Losgekoppeld"
+      },
+      "noMatch": "Geen nummers gevonden. Wis de zoekopdracht of kies een ander tabblad.",
+      "empty": {
+        "title": "Er is nog geen persoonlijk nummer gekoppeld",
+        "message": "Koppel het WhatsApp-nummer dat je al gebruikt. Het werkt zoals WhatsApp Web, dus het is geen goedgekeurde manier om WhatsApp te automatiseren en WhatsApp kan het nummer beperken. Voor serieus of langdurig gebruik is de officiële WhatsApp Business-route het veiligst.",
+        "action": "Een nummer koppelen",
+        "noPermission": "Vraag een workspacebeheerder om een nummer te koppelen."
+      },
+      "columns": {
+        "name": "Naam",
+        "lastSeen": "Laatst gezien"
+      },
+      "lastSeenNever": "Nooit",
+      "assignedTo": "Afgehandeld door {name}",
+      "noticeChanged": {
+        "title": "Onze melding is gewijzigd",
+        "body": "De risicomelding voor persoonlijke nummers is bijgewerkt. Je gekoppelde nummers blijven werken. Je wordt de volgende keer dat je er een koppelt gevraagd het opnieuw te lezen.",
+        "action": "Lees de melding"
+      },
+      "action": {
+        "link": "Koppelen",
+        "reconnect": "Opnieuw koppelen",
+        "relink": "Opnieuw koppelen",
+        "retry": "Opnieuw proberen",
+        "details": "Details",
+        "disconnect": "Loskoppelen",
+        "rename": "Hernoemen",
+        "delete": "Verwijderen"
+      },
+      "sendingToggle": "{name} gebruiken voor verzenden",
+      "sendingOn": "Gebruikt voor verzenden",
+      "sendingOff": "Niet gebruikt voor verzenden",
+      "done": {
+        "disconnected": "{name} is losgekoppeld.",
+        "disconnectedNotUnlinked": "{name} is hier losgekoppeld. Verwijder dit apparaat ook in WhatsApp, onder Gekoppelde apparaten.",
+        "deleted": "{name} is verwijderd. De chats blijven in de inbox.",
+        "renamed": "Hernoemd naar {name}.",
+        "sendingSaved": "Opgeslagen."
+      },
+      "workerDown": "De verbindingsdienst draait niet. Nummers kunnen niet koppelen totdat die weer werkt."
+    },
+    "state": {
+      "created": "Nog niet gekoppeld",
+      "awaiting_qr": "Wachten op scan",
+      "awaiting_pairing_code": "Wachten op code",
+      "connecting": "Verbinden",
+      "connected": "Verbonden",
+      "disconnected": "Losgekoppeld",
+      "logged_out": "Koppeling beëindigd door WhatsApp",
+      "error": "Kon niet verbinden",
+      "unknown": "Onbekend"
+    },
+    "reason": {
+      "unlinked_on_phone": "WhatsApp heeft de koppeling met dit nummer beëindigd. Dat gebeurt wanneer het apparaat in WhatsApp wordt verwijderd, onder Gekoppelde apparaten, en ook wanneer WhatsApp een nummer beperkt. Je chats hier blijven bewaard. Je kunt het opnieuw koppelen.",
+      "forbidden": "WhatsApp heeft de verbinding geweigerd. Dat kan betekenen dat het nummer is beperkt. Je chats hier blijven bewaard.",
+      "qr_timeout": "De code is niet op tijd gescand.",
+      "pair_failed": "WhatsApp kon het koppelen van dit nummer niet afronden.",
+      "code_failed": "De koppelcode is niet geaccepteerd.",
+      "mismatch": "De telefoon die scande is niet het nummer dat je hebt ingevoerd. Controleer het nummer en probeer opnieuw.",
+      "proxy_unreachable": "De proxy reageerde niet. Het nummer blijft offline totdat dit werkt.",
+      "session_conflict": "Hetzelfde nummer is ergens anders gekoppeld en de twee vervangen elkaar steeds. Verwijder de andere koppeling en koppel daarna opnieuw.",
+      "device_limit_reached": "WhatsApp staat 4 gekoppelde apparaten toe. Verwijder er één in WhatsApp, onder Gekoppelde apparaten, en probeer opnieuw.",
+      "worker_unavailable": "De verbindingsdienst is niet beschikbaar. Probeer het over een paar minuten opnieuw.",
+      "worker_silent": "De verbindingsdienst reageert niet meer voor dit nummer. Het verbindt zichzelf opnieuw zodra de dienst weer werkt.",
+      "user": "Losgekoppeld van deze workspace.",
+      "session_incomplete": "De opgeslagen sessie is niet afgerond. Koppel het nummer opnieuw."
+    },
+    "notice": {
+      "title": "Voordat je verbindt",
+      "intro": "Lees dit. Het is kort en het klopt.",
+      "listLabel": "Bevestig elk punt",
+      "notesTitle": "Goed om te weten",
+      "version": "Meldingsversie {version}",
+      "accept": "Ik accepteer en ga door",
+      "accepting": "Opslaan...",
+      "mustTick": "Vink alle drie de vakjes aan om door te gaan.",
+      "pageTitle": "Risicomelding voor persoonlijke nummers",
+      "pageIntro": "Dit is de melding die je accepteert voordat je een persoonlijk WhatsApp-nummer koppelt.",
+      "acceptedOn": "Je hebt versie {version} geaccepteerd op {date}.",
+      "notAccepted": "Je hebt de huidige versie nog niet geaccepteerd. Je wordt gevraagd wanneer je een nummer koppelt.",
+      "backToList": "Terug naar de nummers",
+      "texts": {
+        "v2026_10_07_1": {
+          "items": {
+            "not_approved_ban_risk": "Ik begrijp dat dit mijn WhatsApp koppelt op de manier waarop WhatsApp Web dat doet. Het is geen goedgekeurde manier om WhatsApp te automatiseren en het is in strijd met de voorwaarden van WhatsApp. WhatsApp kan dit nummer op elk moment beperken of permanent blokkeren, ook bij normaal gebruik, en wij kunnen dat niet voorkomen of het nummer terugkrijgen.",
+            "own_number_expected_contacts": "Ik koppel alleen een nummer dat ik bezit of waarvoor ik toestemming van de eigenaar heb, en ik kan het me veroorloven het te verliezen. Ik stuur alleen berichten naar mensen die verwachten van mij te horen.",
+            "shared_inbox_disclosure": "Ik begrijp dat vanaf het moment van koppelen elke privéchat op dit nummer (niet alleen zakelijke chats) in de gedeelde inbox van deze workspace verschijnt, voor leden die de inbox mogen lezen, en dat berichten die ik op mijn telefoon typ ook daarheen worden gekopieerd."
+          },
+          "notes": {
+            "official_route_lower_risk": "De officiële WhatsApp Business-route is de veiligste optie voor serieus of langdurig gebruik.",
+            "warm_up": "Warm het nummer langzaam op en houd de volumes laag.",
+            "no_ban_support": "Een beperkt of geblokkeerd nummer valt niet onder support: we onderzoeken het niet, herstellen het niet en betalen het niet terug.",
+            "shared_addresses": "In deze pilot worden nummers gekoppeld vanaf de gedeelde adressen van onze servers (geen proxy), dus een beperking op het ene nummer kan aan andere worden gekoppeld.",
+            "disconnect_keeps_chats": "Loskoppelen hier verwijdert de koppeling en de opgeslagen sessie, maar verwijdert de chats niet uit de inbox."
+          }
+        }
+      }
+    },
+    "wizard": {
+      "title": "Een nummer koppelen",
+      "relinkTitle": "{name} koppelen",
+      "stepOf": "Stap {step} van {total}",
+      "continue": "Doorgaan",
+      "creating": "Opslaan...",
+      "number": {
+        "title": "Welk nummer?",
+        "name": "Naam",
+        "namePlaceholder": "Bijvoorbeeld Verkooplijn",
+        "nameHelp": "Alleen je team ziet deze naam.",
+        "phone": "WhatsApp-nummer",
+        "phoneHelp": "Typ het nummer dat je gaat koppelen, met het landnummer. Het moet het nummer zijn van de telefoon die de code scant of invoert.",
+        "activate": "Gebruiken voor verzenden na koppelen",
+        "activateHelp": "Campagnes, geplande berichten en flows kunnen dit nummer gebruiken zodra het is gekoppeld.",
+        "nameError": {
+          "required": "Voer een naam in.",
+          "short": "De naam heeft minimaal 2 tekens nodig.",
+          "long": "De naam is te lang (maximaal 191 tekens)."
+        },
+        "phoneError": {
+          "empty": "Voer het nummer in.",
+          "invalid": "Dit nummer is niet geldig voor het gekozen land."
+        },
+        "openExisting": "Het bestaande nummer openen"
+      },
+      "link": {
+        "title": "De telefoon koppelen",
+        "choose": "Hoe wil je koppelen?",
+        "methodLabel": "Koppelmethode",
+        "qr": "Een QR-code scannen",
+        "qrHelp": "Scan met de telefoon die dit nummer heeft.",
+        "code": "Een koppelcode gebruiken",
+        "codeHelp": "Typ een code van 8 tekens op de telefoon. Handig als je niet kunt scannen.",
+        "numberLine": "Nummer: {phone}",
+        "startQr": "De QR-code tonen",
+        "startCode": "Een koppelcode ophalen",
+        "starting": "Starten...",
+        "needCountryCode": "Voeg het landnummer toe om een koppelcode te gebruiken.",
+        "someoneElse": "Voer deze code alleen in op de telefoon van het nummer dat je koppelt. Deel hem nooit met anderen. Een koppelcode die op de telefoon van iemand anders wordt ingevoerd, koppelt het hele WhatsApp-account van die persoon aan deze workspace.",
+        "qrSteps": {
+          "one": "Open WhatsApp op de telefoon.",
+          "two": "Ga naar Gekoppelde apparaten, en dan Apparaat koppelen.",
+          "three": "Richt de camera op deze code."
+        },
+        "codeSteps": {
+          "one": "Open WhatsApp op de telefoon.",
+          "two": "Ga naar Gekoppelde apparaten, dan Apparaat koppelen, en kies daarna Koppelen met telefoonnummer.",
+          "three": "Typ deze code."
+        },
+        "qrAlt": "QR-code om het nummer te koppelen",
+        "qrRefresh": "Nieuwe code over {seconds} s",
+        "qrExpires": "Verloopt over {time}",
+        "codeValid": "De code is ongeveer 3 minuten geldig.",
+        "codeExpires": "Geldig voor {time}",
+        "codeLabel": "Koppelcode",
+        "copy": "Code kopiëren",
+        "copied": "Gekopieerd",
+        "copyFailed": "Kon niet kopiëren. Selecteer de code en kopieer hem.",
+        "strip": {
+          "shown": "Code getoond",
+          "scanned": "Gescand",
+          "ready": "Gereed"
+        },
+        "stripLabel": "Voortgang",
+        "linking": "Koppelen. WhatsApp synchroniseert, dit kan even duren.",
+        "cancelAttempt": "Stoppen en een andere manier kiezen",
+        "reading": "Wachten op de eerste code...",
+        "relinkAction": "De opgeslagen sessie vergeten en opnieuw koppelen"
+      },
+      "result": {
+        "connectedTitle": "Verbonden",
+        "connectedBody": "{phone} is gekoppeld. Chats op dit nummer verschijnen nu in de gedeelde inbox.",
+        "warmer": "Opwarmen instellen",
+        "inbox": "De inbox openen",
+        "list": "Terug naar de nummers",
+        "timedOutTitle": "De code is niet op tijd gescand",
+        "timedOutBody": "Er is niets gekoppeld. Als de telefoon offline of vergrendeld was, zet hem dan online en begin opnieuw.",
+        "phoneOfflineTitle": "De telefoon kon niet worden bereikt",
+        "phoneOfflineBody": "Controleer of de telefoon online is en begin daarna opnieuw.",
+        "loggedOutTitle": "WhatsApp heeft de koppeling beëindigd",
+        "loggedOutBody": "Dit gebeurt wanneer het apparaat in WhatsApp wordt verwijderd, onder Gekoppelde apparaten, en ook wanneer WhatsApp een nummer beperkt. Je chats hier blijven bewaard. Je kunt het opnieuw koppelen.",
+        "replacedTitle": "Een andere sessie heeft deze vervangen",
+        "replacedBody": "Hetzelfde nummer is ergens anders gekoppeld. Verwijder de andere koppeling en koppel daarna opnieuw.",
+        "mismatchTitle": "Dat is niet het nummer dat je hebt ingevoerd",
+        "mismatchBody": "De telefoon die scande is niet het nummer dat je hebt ingevoerd. Controleer het nummer en probeer opnieuw.",
+        "limitTitle": "De telefoon heeft te veel gekoppelde apparaten",
+        "limitBody": "WhatsApp staat 4 gekoppelde apparaten toe. Verwijder er één in WhatsApp, onder Gekoppelde apparaten, en probeer opnieuw.",
+        "proxyTitle": "De proxy heeft niet geantwoord",
+        "proxyBody": "Het nummer blijft offline totdat de proxy werkt.",
+        "serviceTitle": "De verbindingsdienst is niet beschikbaar",
+        "serviceBody": "Probeer het over een paar minuten opnieuw.",
+        "failedTitle": "Het nummer kon niet worden gekoppeld",
+        "failedBody": "WhatsApp heeft het koppelen niet afgerond. Er is niets gekoppeld. Probeer opnieuw.",
+        "tryAgain": "Opnieuw proberen"
+      },
+      "discard": {
+        "title": "Stoppen met verbinden?",
+        "message": "Je bent nog niet klaar. Als je nu weggaat, gaat wat je hebt ingevoerd verloren en wordt een koppeling die bezig is afgebroken.",
+        "stay": "Doorgaan",
+        "leave": "Weggaan"
+      }
+    },
+    "detail": {
+      "back": "Alle nummers",
+      "loading": "Het nummer laden...",
+      "notFound": "Dit nummer bestaat niet of is verwijderd.",
+      "status": "Status",
+      "lastSeen": "Laatst gezien",
+      "linkedSince": "In deze status sinds",
+      "number": "Nummer",
+      "numberLocked": "Het nummer kan niet worden gewijzigd zolang er een koppeling bestaat. Koppel eerst los.",
+      "assignedTo": "Afgehandeld door",
+      "createdBy": "Toegevoegd door",
+      "sending": "Gebruiken voor verzenden",
+      "editTitle": "Bewerken",
+      "name": "Naam",
+      "save": "Opslaan",
+      "saving": "Opslaan...",
+      "saved": "Opgeslagen.",
+      "dangerTitle": "Loskoppelen of verwijderen",
+      "disconnectHelp": "Koppelt het nummer los en verwijdert de opgeslagen sessie. Je kunt het later opnieuw koppelen.",
+      "deleteHelp": "Verwijdert het nummer uit deze workspace. Chats blijven in de inbox.",
+      "warmerLink": "Opwarmen instellen voor dit nummer"
+    },
+    "dialog": {
+      "disconnect": {
+        "title": "{name} loskoppelen?",
+        "message": "Dit koppelt het nummer los en verwijdert de opgeslagen sessie. Gesprekken blijven leesbaar, maar er kan vanaf dit nummer niet meer op worden geantwoord totdat je het opnieuw koppelt.",
+        "confirm": "Loskoppelen"
+      },
+      "delete": {
+        "title": "{name} verwijderen?",
+        "message": "Dit koppelt het nummer los en verwijdert de opgeslagen sessie. Gesprekken blijven leesbaar in de inbox, maar er kan vanaf dit nummer niet meer op worden geantwoord. Dit kan niet ongedaan worden gemaakt.",
+        "confirm": "Nummer verwijderen"
+      },
+      "rename": {
+        "title": "Nummer hernoemen",
+        "label": "Naam",
+        "confirm": "Opslaan"
+      },
+      "cancel": "Annuleren"
+    },
+    "errors": {
+      "generic": "Er ging iets mis. Probeer het opnieuw.",
+      "FORBIDDEN": "Je hebt geen toestemming om dit te doen.",
+      "UNAUTHENTICATED": "Je sessie is beëindigd. Log opnieuw in.",
+      "NOT_FOUND": "Dit nummer bestaat niet of is verwijderd.",
+      "VALIDATION_FAILED": "Sommige velden hebben aandacht nodig.",
+      "ROW_VERSION_CONFLICT": "Iemand heeft dit nummer gewijzigd. Laad opnieuw en probeer het opnieuw.",
+      "WA_UNOFFICIAL_DISABLED": "Deze functie is niet meer ingeschakeld voor je workspace.",
+      "PLAN_FEATURE_LOCKED": "Je abonnement bevat deze functie niet.",
+      "PLAN_LIMIT_REACHED": "Je abonnement staat hier {limit, plural, one {# WhatsApp-nummer} other {# WhatsApp-nummers}} toe. Verwijder er één of upgrade om er een ander toe te voegen.",
+      "PLAN_LIMIT_REACHED_GENERIC": "Je abonnement staat hier geen nummers meer toe. Verwijder er één of upgrade om er een ander toe te voegen.",
+      "DEVICE_ALREADY_EXISTS": "Er bestaat al een apparaat met dit telefoonnummer in deze workspace.",
+      "DEVICE_PHONE_INVALID": "Voeg het landnummer toe om een koppelcode te gebruiken.",
+      "PERSONAL_WA_NOTICE_REQUIRED": "Lees en accepteer eerst de melding.",
+      "DEVICE_PAIRING_RATE_LIMITED": "Te veel pogingen voor dit nummer. Probeer het later opnieuw.",
+      "DEVICE_PAIRING_RATE_LIMITED_WAIT": "Te veel pogingen voor dit nummer. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+      "DEVICE_PAIRING_IN_PROGRESS": "Er is zojuist een verbinding gestart. Wacht tot die klaar is of beëindigd wordt.",
+      "DEVICE_NOT_PAIRABLE": "Dit nummer kan nu niet worden gekoppeld. Koppel het eerst los.",
+      "WA_WORKER_UNAVAILABLE": "De verbindingsdienst is niet beschikbaar. Probeer het over een paar minuten opnieuw.",
+      "RATE_LIMITED": "Te veel verzoeken. Wacht even.",
+      "upgrade": "Abonnementen bekijken en upgraden",
+      "requestId": "Verzoek {id}",
+      "DEVICE_PILOT_CAP_REACHED": "Je workspace heeft het aantal persoonlijke WhatsApp-nummers bereikt dat tijdens de pilot is toegestaan. Verwijder er één om een ander te koppelen.",
+      "DEVICE_CREATE_RATE_LIMITED": "Er zijn het afgelopen uur te veel nummers toegevoegd. Probeer het later opnieuw.",
+      "DEVICE_CREATE_RATE_LIMITED_WAIT": "Er zijn het afgelopen uur te veel nummers toegevoegd. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+      "DEVICE_PAIRING_IN_PROGRESS_BY": "{name} is zojuist gestart met verbinden. Wacht tot dat klaar is.",
+      "DEVICE_NO_PAIRING": "Deze koppelpoging is beëindigd. Begin opnieuw.",
+      "DEVICE_NUMBER_LOCKED": "Het nummer kan niet worden gewijzigd zolang er een koppeling bestaat. Koppel het eerst los.",
+      "DEVICE_PAIRING_TIMEOUT": "WhatsApp heeft niet op tijd geantwoord. Probeer opnieuw.",
+      "DEVICE_NOT_PAIRABLE_CONNECTED": "Dit nummer is al gekoppeld. Koppel het eerst los en koppel het daarna opnieuw.",
+      "DEVICE_NOT_PAIRABLE_SESSION": "Dit nummer heeft nog een opgeslagen WhatsApp-sessie. Koppel het helemaal opnieuw om de opgeslagen sessie te vergeten en opnieuw te beginnen.",
+      "DEVICE_NOT_PAIRABLE_LIVE": "Er is al een verbinding bezig voor dit nummer. Koppel het helemaal opnieuw om opnieuw te beginnen."
+    }
+  }
+}

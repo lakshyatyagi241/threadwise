@@ -1,0 +1,223 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "KI-Nutzung",
+      "keys": "KI-Anbieterschlüssel"
+    },
+    "admin": {
+      "nav": {
+        "group": "KI",
+        "keys": "KI-Anbieterschlüssel",
+        "dashboard": "KI-Nutzung"
+      }
+    },
+    "common": {
+      "loading": "Wird geladen",
+      "retry": "Erneut versuchen",
+      "requestId": "Anfrage-ID",
+      "dismiss": "Ausblenden",
+      "tokens": "{count, number} Token",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Sie haben keine Berechtigung, dies zu sehen.",
+        "request": "Diese Anfrage konnte nicht abgeschlossen werden.",
+        "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+        "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "conflict": "Jemand anderes hat dies geändert. Die Seite wurde neu geladen: Wenden Sie Ihre Änderung erneut an.",
+        "keyRequired": "Fügen Sie einen API-Schlüssel hinzu, bevor Sie diesen Anbieter aktivieren.",
+        "validation": "Einige Werte sind ungültig. Prüfen Sie die markierten Felder.",
+        "notFound": "Dieses Element existiert nicht mehr."
+      }
+    },
+    "windows": {
+      "label": "Zeitraum",
+      "7d": "7 Tage",
+      "30d": "30 Tage",
+      "90d": "90 Tage",
+      "1y": "1 Jahr",
+      "custom": "Benutzerdefiniert",
+      "from": "Von",
+      "to": "Bis",
+      "pick": "Wählen Sie ein Start- und Enddatum.",
+      "invalid": "Das Enddatum liegt vor dem Startdatum.",
+      "tooLong": "Wählen Sie einen Zeitraum von höchstens {days} Tagen."
+    },
+    "keys": {
+      "eyebrow": "Admin · System · KI-Anbieter",
+      "title": "KI-API-Schlüssel",
+      "description": "Globale Schlüssel für jeden unterstützten KI-Anbieter. Workspaces in Tarifen ohne „Eigenen Schlüssel mitbringen“ nutzen diese als Fallback. Verschlüsselt gespeichert.",
+      "superOnly": "Nur ein Super-Admin kann die KI-Schlüssel der Plattform verwalten.",
+      "summary": {
+        "providers": "Anbieter",
+        "providersHint": "vorbelegt",
+        "active": "Aktiv",
+        "activeHint": "für Fallback aktiviert",
+        "ready": "Bereit",
+        "readyHint": "aktiv + hat Schlüssel",
+        "noKey": "Kein Schlüssel festgelegt",
+        "noKeyHint": "Schlüssel einfügen, um bereit zu sein"
+      },
+      "groups": {
+        "llm": "Sprachmodelle",
+        "voice": "Sprache"
+      },
+      "card": {
+        "active": "Aktiv",
+        "off": "Deaktiviert",
+        "keySaved": "Schlüssel gespeichert",
+        "keySavedLast4": "Schlüssel gespeichert, endet auf {last4}",
+        "noKey": "Kein Schlüssel",
+        "unreadable": "Gespeicherter Schlüssel nicht lesbar, bitte erneut einfügen",
+        "apiKey": "API-Schlüssel",
+        "apiKeyHint": "Leer lassen, um den gespeicherten Schlüssel beizubehalten.",
+        "apiKeyPlaceholder": "Schlüssel hier einfügen",
+        "apiKeySavedPlaceholder": "•••••••••• (gespeichert — leer lassen zum Beibehalten)",
+        "defaultModel": "Standardmodell",
+        "pickModel": "— Standardmodell wählen —",
+        "customModel": "{model} (benutzerdefiniert)",
+        "sortOrder": "Sortierreihenfolge",
+        "maxTokens": "Max. Token pro Anfrage",
+        "maxTokensHint": "Optionale Obergrenze für die Antwortlänge in jedem Workspace. Leer bedeutet keine Obergrenze.",
+        "extraModels": "Weitere Modelle",
+        "extraModelsHint": "Optional. Modell-IDs, die neben dem Standard angeboten werden, durch Kommas getrennt.",
+        "save": "{name} speichern",
+        "saving": "Wird gespeichert",
+        "turnOn": "Aktivieren",
+        "turnOff": "Deaktivieren",
+        "removeKey": "Schlüssel entfernen",
+        "removeTitle": "Schlüssel für {name} entfernen?",
+        "removeBody": "Workspaces nutzen {name} nicht mehr, bis Sie wieder einen Schlüssel hinzufügen. Der Anbieter wird ausgeschaltet.",
+        "removeConfirm": "Schlüssel entfernen",
+        "cancel": "Abbrechen",
+        "slug": "Anbieter: {provider} · Standardmodell: {model}",
+        "maxTokensPlaceholder": "z. B. 4096"
+      },
+      "toasts": {
+        "saved": "{name} gespeichert.",
+        "savedOn": "{name} gespeichert und eingeschaltet.",
+        "on": "{name} eingeschaltet.",
+        "off": "{name} ausgeschaltet.",
+        "removed": "Schlüssel für {name} entfernt."
+      },
+      "help": {
+        "title": "So werden diese Schlüssel verwendet",
+        "body": "Der eigene Schlüssel eines Workspace hat nur Vorrang, wenn der Tarif es erlaubt. Andernfalls wird der passende aktive Anbieter hier verwendet. Wenn ein Anbieter ausgeschaltet ist, können Workspaces ohne eigenen Schlüssel ihn nicht nutzen.",
+        "eyebrow": "Wie diese Schlüssel verwendet werden"
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Admin / KI-Dashboard",
+      "title": "KI-Nutzung & Token-Verbrauch",
+      "description": "Jeder KI-Aufruf auf der Plattform — welcher Anbieter, welches Modell, welcher Workspace, mit Plattformschlüsseln oder eigenen (BYOK) Schlüsseln, mit geschätzten Kosten.",
+      "kpis": {
+        "tokens": "Verbrauchte Token",
+        "tokensHint": "in diesem Zeitraum",
+        "cost": "Geschätzte Kosten",
+        "costHint": "gemischte Schätzung",
+        "calls": "KI-Aufrufe",
+        "callsHint": "protokollierte Anfragen",
+        "workspaces": "Workspaces mit KI-Nutzung",
+        "workspacesHint": "aktiv"
+      },
+      "daily": "Täglicher Token-Verbrauch",
+      "byProvider": "Token nach Anbieter",
+      "split": "Wer zahlt — Plattform oder BYOK",
+      "splitPlatform": "Plattformschlüssel",
+      "splitOwn": "Eigene Schlüssel (BYOK)",
+      "topWorkspaces": "Workspaces mit dem höchsten Token-Verbrauch",
+      "topModels": "Top-Modelle",
+      "keyHealth": "Zustand der KI-Schlüssel",
+      "live": "Live",
+      "notLive": "Aus",
+      "peak": "Spitze {value}/Tag",
+      "dailyEmpty": "In diesem Zeitraum wurden noch keine KI-Aufrufe aufgezeichnet.",
+      "providerCalls": "{count, number} Aufrufe",
+      "providerEmpty": "Noch keine Nutzung.",
+      "splitNote": "Nur Token von Plattformschlüsseln zählen auf das monatliche KI-Limit eines Tarifs. BYOK-Workspaces zahlen über ihr eigenes Anbieterkonto.",
+      "workspaceEmpty": "Noch keine KI-Nutzung durch Workspaces.",
+      "workspaceMeta": "{count, number} Aufrufe",
+      "workspaceByok": "{tokens} BYOK",
+      "modelEmpty": "Noch keine Modellnutzung.",
+      "modelMeta": "{provider} · {count, number} Aufrufe",
+      "manageKeys": "Schlüssel verwalten",
+      "noDefaultModel": "kein Standardmodell",
+      "noPlatformKeys": "Keine Plattform-KI-Schlüssel konfiguriert.",
+      "byokKeys": "BYOK-Schlüssel aktiv",
+      "byokWorkspaces": "Workspaces mit BYOK"
+    },
+    "usage": {
+      "title": "KI-Nutzung",
+      "description": "Jeder KI-Aufruf Ihres Workspace — verbrauchte Token nach Modell und Anbieter, Tarifschlüssel oder eigene Schlüssel und geschätzte Kosten.",
+      "kpis": {
+        "tokens": "Verbrauchte Token",
+        "calls": "{count, plural, one {# KI-Aufruf} other {# KI-Aufrufe}}",
+        "platform": "Tarifschlüssel",
+        "ownKeys": "Ihre Schlüssel (BYOK)",
+        "cost": "Geschätzte Kosten",
+        "costHint": "gemischter Anbietertarif",
+        "providers": "Anbieter",
+        "models": "Modelle"
+      },
+      "cap": {
+        "title": "Dieser Monat · KI-Limit des Tarifs",
+        "used": "{used, number} von {limit, number} Token in diesem Monat verbraucht",
+        "unlimited": "{used, number} Token in diesem Monat verbraucht: unbegrenzt in Ihrem Tarif",
+        "reached": "Ihr Monatslimit ist fast erreicht. Führen Sie ein Upgrade durch oder fügen Sie eigene Schlüssel (BYOK) hinzu, um KI weiter zu nutzen.",
+        "note": "BYOK-Token laufen über Ihr eigenes Anbieterkonto und zählen nie auf das Limit Ihres Tarifs."
+      },
+      "daily": "Täglicher Token-Verbrauch",
+      "byProvider": "Nach Anbieter",
+      "split": "Tarifschlüssel vs. Ihre Schlüssel",
+      "splitPlatform": "Tarifschlüssel",
+      "splitOwn": "Ihre Schlüssel (BYOK)",
+      "models": "Nach Modell",
+      "columns": {
+        "model": "Modell",
+        "provider": "Anbieter",
+        "tokens": "Token",
+        "calls": "Aufrufe",
+        "prompt": "Prompt",
+        "completion": "Completion"
+      },
+      "empty": "In diesem Zeitraum noch keine KI-Nutzung.",
+      "costNote": "Die Kosten sind eine Schätzung auf Basis veröffentlichter gemischter Token-Preise pro Anbieter und können von Ihrer Anbieterrechnung abweichen. Die Token-Zahlen sind exakt."
+    },
+    "own": {
+      "title": "Ihre KI-Anbieterschlüssel",
+      "description": "Fügen Sie einen eigenen Schlüssel für einen Anbieter hinzu, damit Ihre KI-Funktionen Ihr Konto statt des gemeinsamen nutzen. Schlüssel werden verschlüsselt und nie wieder angezeigt.",
+      "allowed": "Ihr Tarif lässt Ihre eigenen Schlüssel Vorrang haben.",
+      "notAllowed": "Ihr Tarif enthält noch keine eigenen Schlüssel. Sie können sie jetzt speichern, Aufrufe nutzen aber bis zum Upgrade weiter den gemeinsamen Schlüssel.",
+      "add": "Schlüssel hinzufügen",
+      "provider": "Anbieter",
+      "apiKey": "API-Schlüssel",
+      "apiKeyHint": "Mindestens 8 Zeichen.",
+      "save": "Schlüssel speichern",
+      "replace": "Schlüssel ersetzen",
+      "saving": "Wird gespeichert",
+      "on": "An",
+      "off": "Deaktiviert",
+      "ends": "Endet auf {last4}",
+      "using": "Aufrufe nutzen",
+      "usingOwn": "Ihren Schlüssel",
+      "usingShared": "den gemeinsamen Schlüssel",
+      "usingNone": "keinen Schlüssel (nichts verfügbar)",
+      "turnOn": "Einschalten",
+      "turnOff": "Ausschalten",
+      "remove": "Entfernen",
+      "removeTitle": "Ihren Schlüssel für {name} entfernen?",
+      "removeBody": "Aufrufe greifen auf den gemeinsamen Schlüssel zurück, sofern vorhanden.",
+      "removeConfirm": "Schlüssel entfernen",
+      "cancel": "Abbrechen",
+      "empty": "Sie haben noch keine Schlüssel hinzugefügt.",
+      "toasts": {
+        "saved": "Schlüssel für {name} gespeichert.",
+        "on": "Schlüssel für {name} eingeschaltet.",
+        "off": "Schlüssel für {name} ausgeschaltet.",
+        "removed": "Schlüssel für {name} entfernt."
+      },
+      "errors": {
+        "tooShort": "Ein Schlüssel hat mindestens 8 Zeichen."
+      }
+    }
+  }
+}

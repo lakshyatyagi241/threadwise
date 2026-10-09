@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "tile": {
+      "label": "Spese, wallet ed estratto conto",
+      "description": "Tieni traccia delle spese: saldo messaggi, ricariche, ogni addebito ed estratto conto completo.",
+      "keywords": "wallet saldo ricarica aggiungi denaro crediti estratto conto fatturazione spese spesa spendere addebiti costi utilizzo transazioni cronologia registro"
+    },
+    "common": {
+      "loading": "Caricamento",
+      "retry": "Riprova",
+      "requestId": "ID richiesta",
+      "cancel": "Annulla",
+      "back": "Indietro",
+      "close": "Chiudi",
+      "dismiss": "Ignora",
+      "on": "Attivo",
+      "off": "Disattivo",
+      "previous": "Precedente",
+      "next": "Successivo",
+      "pagination": "Paginazione",
+      "pageN": "Pagina {page}",
+      "deniedTitle": "Non hai accesso a questa sezione",
+      "deniedBody": "Chiedi a un amministratore del Workspace l’autorizzazione «{permission}»."
+    },
+    "errors": {
+      "noteRequired": "È richiesta una motivazione di almeno 5 caratteri.",
+      "amountInvalid": "Importo non accettato. Usa un importo positivo con al massimo 2 decimali.",
+      "insufficient": "Il saldo è troppo basso per questa operazione.",
+      "notFound": "Questo Workspace non ha un wallet.",
+      "rateInvalid": "Impossibile salvare una tariffa. Controlla paese, categoria e importi.",
+      "importFailed": "Impossibile leggere il listino tariffe oppure non contiene righe utilizzabili.",
+      "syncFailed": "Impossibile leggere il listino prezzi di Meta e non è disponibile un listino incluso.",
+      "conflict": "Un’altra persona ha modificato questo elemento. Ricarica la pagina e riprova.",
+      "forbidden": "Solo i super amministratori possono eseguire questa operazione.",
+      "validation": "Controlla i campi evidenziati.",
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "generic": "Si è verificato un errore. Riprova.",
+      "currencyUnsupported": "Questa valuta non può ancora essere usata: importa prima il listino Meta per essa (Prezzi dei messaggi, listini Meta)."
+    },
+    "types": {
+      "topup": "Ricarica",
+      "earn": "Guadagno",
+      "refund": "Rimborso",
+      "spend": "Addebito messaggio",
+      "admin_adjust": "Rettifica"
+    },
+    "categories": {
+      "marketing": "Marketing",
+      "utility": "Utility",
+      "authentication": "Autenticazione",
+      "service": "Servizio"
+    },
+    "modes": {
+      "wallet": "Pagamento per messaggio",
+      "plan": "Piano"
+    },
+    "chip": {
+      "balance": "Saldo",
+      "low": "Il tuo saldo è basso"
+    },
+    "wallet": {
+      "title": "Wallet",
+      "subtitle": "Il saldo dei messaggi, cosa hai speso e guadagnato negli ultimi 30 giorni e come aggiungere denaro.",
+      "fullStatement": "Estratto conto completo",
+      "lowBalanceTitle": "Il saldo sta per esaurirsi",
+      "lowBalanceBody": "È pari o inferiore a {threshold}. Aggiungi denaro per continuare a inviare campagne e risposte.",
+      "kpi": {
+        "balance": "Saldo",
+        "available": "Disponibile ora",
+        "approx": "circa {count, plural, one {# messaggio} other {# messaggi}}",
+        "spent": "Speso",
+        "earned": "Guadagnato",
+        "last30": "Ultimi 30 giorni"
+      },
+      "add": {
+        "title": "Aggiungi denaro",
+        "amount": "Importo",
+        "hint": "Solo importi interi, minimo 1.",
+        "invalid": "Inserisci un importo intero pari o superiore a 1.",
+        "submit": "Aggiungi denaro",
+        "quick": "Importi rapidi"
+      },
+      "how": {
+        "title": "Come funziona la fatturazione",
+        "wallet": {
+          "body": "Ogni messaggio consegnato viene addebitato sul wallet al prezzo previsto per il suo paese e la sua categoria. I messaggi non riusciti non vengono addebitati.",
+          "funded": "Quando il saldo è esaurito, gli invii in blocco vengono sospesi finché non aggiungi denaro."
+        },
+        "plan": {
+          "allowance": "Il tuo piano include {limit} messaggi al mese.",
+          "used": "{used} utilizzati questo mese.",
+          "ends": "Il tuo piano termina il {date}.",
+          "extra": "I messaggi oltre il limite mensile vengono addebitati sul wallet.",
+          "ended": "Il tuo piano è terminato, quindi l’invio è sospeso fino al rinnovo."
+        },
+        "generic": "I tuoi messaggi sono coperti dal piano. Il wallet paga tutto ciò che il piano non include."
+      },
+      "activity": {
+        "title": "Attività recenti",
+        "fullStatement": "Apri l’estratto conto completo",
+        "emptyTitle": "Nessuna attività ancora",
+        "emptyBody": "Qui compaiono ricariche, addebiti di messaggi e rimborsi."
+      }
+    },
+    "activity": {
+      "description": "Descrizione",
+      "type": "Tipo",
+      "date": "Data",
+      "amount": "Importo",
+      "balance": "Saldo",
+      "noDescription": "Movimento del wallet",
+      "reason": "Motivo"
+    },
+    "pricingPanel": {
+      "title": "Prezzi dei messaggi",
+      "badge": "Per messaggio",
+      "free": "Gratis",
+      "noCharge": "Nessun addebito",
+      "perMessage": "per messaggio",
+      "footer": "Addebitato alla consegna di un messaggio. Il prezzo dipende dal paese del destinatario e dalla categoria del messaggio."
+    },
+    "statement": {
+      "title": "Estratto conto del wallet",
+      "subtitle": "Ogni movimento del tuo wallet. I totali comprendono tutto ciò che corrisponde ai filtri, non solo questa pagina.",
+      "back": "Torna al wallet",
+      "breadcrumbLabel": "Percorso di navigazione",
+      "breadcrumbWallet": "Wallet",
+      "breadcrumbStatement": "Estratto conto",
+      "export": "Esporta CSV",
+      "exporting": "Esportazione in corso",
+      "exported": "Salvato {fileName}",
+      "emptyTitle": "Nessuna transazione",
+      "emptyFiltered": "Nessun risultato corrisponde a questi filtri. Modificali o reimpostali.",
+      "emptyNone": "I movimenti sul wallet saranno elencati qui.",
+      "filters": {
+        "type": "Tipo",
+        "from": "Da",
+        "to": "A",
+        "rangeInverted": "La data di fine è precedente alla data di inizio.",
+        "search": "Cerca",
+        "searchPlaceholder": "Descrizione o motivo",
+        "apply": "Applica",
+        "reset": "Reimposta"
+      },
+      "typeFilter": {
+        "all": "Tutti",
+        "topup": "Ricariche",
+        "earn": "Guadagni",
+        "spend": "Addebiti messaggi",
+        "refund": "Rimborsi",
+        "admin_adjust": "Rettifiche"
+      },
+      "summary": {
+        "balance": "Saldo attuale",
+        "in": "Entrate",
+        "out": "Uscite",
+        "net": "Movimento netto",
+        "count": "{count, plural, one {# transazione} other {# transazioni}}"
+      },
+      "columns": {
+        "label": "Estratto conto del wallet",
+        "date": "Data",
+        "description": "Descrizione",
+        "type": "Tipo",
+        "in": "Entrate",
+        "out": "Uscite",
+        "balance": "Saldo",
+        "none": "Nessuno"
+      },
+      "context": {
+        "reason": "Motivo",
+        "to": "A",
+        "template": "Template"
+      },
+      "channels": {
+        "campaign": "Campagna",
+        "broadcast": "Broadcast",
+        "flow": "Flow",
+        "scheduled": "Pianificato",
+        "auto_reply": "Risposta automatica",
+        "chat": "Chat",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      }
+    },
+    "admin": {
+      "admin": "Admin",
+      "wallet": "Wallet",
+      "workspacesLabel": "Workspace",
+      "breadcrumb": "Percorso di navigazione",
+      "readOnly": "Hai effettuato l’accesso come {role}. Solo i super admin possono modificare impostazioni, prezzi o saldi dei wallet.",
+      "nav": {
+        "overview": "Wallet",
+        "pricing": "Prezzi dei messaggi",
+        "workspaces": "Wallet dei workspace",
+        "logs": "Log dei wallet",
+        "margins": "Margini",
+        "packages": "Pacchetti di crediti"
+      },
+      "overview": {
+        "title": "Panoramica dei wallet",
+        "subtitle": "Il denaro depositato nei wallet dei workspace e i movimenti degli ultimi 30 giorni.",
+        "linkWorkspaces": "Wallet dei workspace",
+        "linkPricing": "Prezzi dei messaggi",
+        "linkLogs": "Log dei wallet",
+        "float": "Fondo dei wallet",
+        "floatHint": "Depositato in tutti i workspace",
+        "holding": "Workspace con saldo",
+        "low": "Saldo basso",
+        "last30": "Ultimi 30 giorni",
+        "toppedUp": "Ricaricati",
+        "charged": "Addebitati",
+        "refunded": "Rimborsati",
+        "adjustedIn": "Aggiunti manualmente",
+        "adjustedOut": "Detratti manualmente",
+        "chargedMessages": "Messaggi addebitati",
+        "freeMessages": "Messaggi gratuiti",
+        "reconcile": {
+          "title": "Verifica i saldi rispetto ai registri",
+          "body": "Ricalcola ogni wallet dal suo registro ed elenca i saldi che non corrispondono.",
+          "button": "Verifica i saldi rispetto ai registri",
+          "running": "Verifica in corso",
+          "ok": "{count, plural, one {Il wallet corrisponde al proprio registro.} other {Tutti i # wallet corrispondono al proprio registro.}}",
+          "mismatches": "{count} di {checked} wallet non corrispondono al proprio registro.",
+          "workspace": "Workspace",
+          "balance": "Saldo",
+          "ledger": "Registro",
+          "difference": "Differenza"
+        },
+        "otherCurrencies": "Wallet in altre valute",
+        "otherCurrenciesNote": "I workspace fatturati in un’altra valuta detengono denaro in quella valuta. Le cifre sopra riportate sono solo in {currency}; ogni altra valuta è conteggiata su una riga a parte.",
+        "other": {
+          "currency": "Valuta",
+          "float": "Denaro depositato",
+          "holding": "Workspace con saldo",
+          "toppedUp": "Ricaricati, 30 giorni",
+          "charged": "Addebitati, 30 giorni"
+        }
+      },
+      "pricing": {
+        "title": "Prezzi dei messaggi",
+        "crumb": "Prezzi dei messaggi",
+        "subtitle": "Quanto costa un messaggio ai tuoi clienti, come vengono protetti i nuovi wallet e il listino per paese.",
+        "kpi": {
+          "signup": "Premio di referral",
+          "cost": "Costo per messaggio",
+          "costHint": "Prezzo fisso quando i prezzi per paese sono disattivati",
+          "spending": "Spesa effettiva",
+          "spendingHint": "Messaggi acquistabili con {amount} al prezzo fisso",
+          "lowBalance": "Avviso di saldo basso"
+        },
+        "economics": {
+          "title": "Economia",
+          "liveKeys": "Ha effetto immediato",
+          "flatPrice": "Prezzo fisso per messaggio",
+          "flatPriceHint": "Minimo 0.01. Usa la griglia tariffe per i messaggi gratuiti.",
+          "referralSignup": "Premio di referral",
+          "referralSignupHint": "Pagato al referrer sul primo ordine a pagamento del referito.",
+          "lowBalance": "Avviso di saldo basso a",
+          "lowBalanceHint": "I workspace con saldo pari o inferiore a questo valore ricevono un avviso.",
+          "coverage": "Copertura di lancio",
+          "coverageHint": "Un invio massivo viene rifiutato se il wallet non copre questa quota del costo stimato. 0 rifiuta solo un wallet vuoto.",
+          "rewardSentence": "Un premio di {reward} copre {count, plural, one {# messaggio} other {# messaggi}} al prezzo fisso.",
+          "save": "Salva economia",
+          "saving": "Salvataggio",
+          "saved": "Economia salvata.",
+          "problems": {
+            "invalid": "Inserisci un importo con al massimo 2 decimali.",
+            "flatZero": "Il prezzo fisso non può essere 0.",
+            "percent": "Inserisci un numero intero da 0 a 100."
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "Prezzi per paese",
+            "on": "Attivo: ogni messaggio viene addebitato in base al paese e alla categoria del destinatario secondo il listino.",
+            "off": "Disattivo: ogni messaggio viene addebitato al prezzo fisso.",
+            "save": "Salva",
+            "confirmTitle": "Modificare i prezzi per paese?",
+            "confirmOn": "I messaggi verranno addebitati per paese e categoria a partire dal prossimo invio.",
+            "confirmOff": "I messaggi verranno addebitati al prezzo fisso a partire dal prossimo invio.",
+            "confirm": "Sì, modifica",
+            "savedOn": "I prezzi per paese sono attivi.",
+            "savedOff": "I prezzi per paese sono disattivati."
+          },
+          "payPerMessage": {
+            "label": "Addebito per messaggio",
+            "on": "Attivo: i workspace senza una quota del piano pagano ogni messaggio consegnato dal proprio wallet.",
+            "off": "Disattivo: i messaggi non vengono addebitati sui wallet.",
+            "save": "Salva",
+            "confirmTitle": "Modificare l’addebito per messaggio?",
+            "confirmOn": "Da ora i messaggi consegnati verranno addebitati ai wallet.",
+            "confirmOff": "I wallet non verranno più addebitati per i messaggi. Questo riguarda ogni workspace.",
+            "confirm": "Sì, modifica",
+            "savedOn": "L’addebito per messaggio è attivo.",
+            "savedOff": "L’addebito per messaggio è disattivato."
+          }
+        },
+        "grid": {
+          "title": "Listino tariffe",
+          "modeOn": "I prezzi per paese sono attivi: vengono usati questi prezzi.",
+          "modeOff": "I prezzi per paese sono disattivati: questi prezzi sono salvati, ma si addebita il prezzo fisso.",
+          "empty": "Nessuna tariffa per ora. Aggiungi una riga, importa un listino o ripristina il listino iniziale.",
+          "country": "Paese",
+          "category": "Categoria",
+          "charge": "Addebiti",
+          "metaCost": "Meta ti addebita",
+          "margin": "Margine",
+          "marginUnknown": "Sconosciuto",
+          "actions": "Azioni",
+          "anyCountry": "Qualsiasi paese",
+          "anyCategory": "Qualsiasi categoria",
+          "serviceFree": "Servizio (gratuito)",
+          "addRow": "Aggiungi riga",
+          "remove": "Rimuovi",
+          "cancel": "Annulla",
+          "removeTitle": "Rimuovere questa tariffa?",
+          "removeBody": "La tariffa per {country} viene eliminata. I messaggi useranno la tariffa successiva corrispondente.",
+          "removed": "Tariffa rimossa.",
+          "save": "Salva tariffe",
+          "saving": "Salvataggio",
+          "saved": "{count, plural, one {# tariffa salvata.} other {# tariffe salvate.}}",
+          "savedSome": "{saved} salvate, {skipped} saltate. Vedi il motivo su ogni riga saltata.",
+          "unsaved": "{count, plural, one {# riga non salvata} other {# righe non salvate}}",
+          "tooMany": "Troppe righe modificate per un solo salvataggio. Salva in gruppi più piccoli.",
+          "problems": {
+            "price": "Inserisci un prezzo con al massimo 2 decimali.",
+            "metaCost": "Inserisci un costo con al massimo 6 decimali.",
+            "country": "Usa un codice paese di 2 lettere, o lascia vuoto per qualsiasi paese.",
+            "empty": "Inserisci un prezzo o un costo Meta.",
+            "duplicate": "Questo paese e questa categoria hanno già una riga."
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "Sincronizza costi Meta",
+            "title": "Sincronizza costi Meta",
+            "loading": "Lettura del listino prezzi Meta",
+            "source": "Fonte",
+            "version": "Versione",
+            "noVersion": "Nessuno",
+            "currency": "Valuta",
+            "added": "Righe da aggiungere",
+            "updated": "Righe da aggiornare",
+            "untouched": "I tuoi prezzi non cambiano. Viene aggiornato solo il costo che Meta ti addebita.",
+            "bundledNote": "Nessun listino prezzi Meta in tempo reale è collegato, quindi viene usato il listino incluso.",
+            "apply": "Applica",
+            "applying": "Applicazione in corso",
+            "done": "Costi Meta sincronizzati: {added} aggiunti, {updated} aggiornati."
+          },
+          "import": {
+            "button": "Importa listino",
+            "title": "Importa listino",
+            "intro": "Carica un listino CSV. Vedi cosa cambierebbe prima che venga salvato qualcosa.",
+            "file": "File CSV",
+            "limit": "Fino a 4 MB.",
+            "reading": "Lettura del file",
+            "shape": "Layout",
+            "shapes": {
+              "wide": "Una colonna per categoria",
+              "long": "Una riga per categoria"
+            },
+            "added": "Da aggiungere",
+            "updated": "Da aggiornare",
+            "skipped": "Saltate",
+            "currencyNote": "I prezzi sono letti in {currency}.",
+            "problems": "Righe che verranno saltate",
+            "line": "Riga {line}:",
+            "fileProblems": {
+              "notCsv": "Scegli un file .csv.",
+              "tooBig": "Il file supera i 4 MB.",
+              "unreadable": "Impossibile leggere il file."
+            },
+            "apply": "Applica importazione",
+            "applying": "Importazione in corso",
+            "done": "Listino importato: {added} aggiunte, {updated} aggiornate, {skipped} saltate."
+          },
+          "seed": {
+            "button": "Ripristina listino iniziale",
+            "title": "Ripristinare il listino iniziale?",
+            "warning": "Questo scrive i prezzi del listino iniziale sopra le righe esistenti per lo stesso paese e categoria. I prezzi che hai impostato manualmente per quelle righe verranno sostituiti.",
+            "confirm": "Ripristina",
+            "done": "{count, plural, one {# tariffa scritta} other {# tariffe scritte}} dal listino iniziale."
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "Invii transfrontalieri",
+            "body": "Il prezzo segue il paese del destinatario, non quello del workspace. Aggiungi una riga per ogni paese a cui invii."
+          },
+          "how": {
+            "title": "Come si trova un prezzo",
+            "body": "Il wallet cerca il paese del destinatario e la categoria del messaggio in questo listino. Una categoria o un paese vuoti corrispondono a qualsiasi valore."
+          },
+          "order": {
+            "title": "Quale riga prevale",
+            "body": "Si usa prima la corrispondenza esatta di paese e categoria, poi il paese con qualsiasi categoria, poi qualsiasi paese, infine il prezzo fisso."
+          }
+        },
+        "mode": {
+          "title": "Come vengono prezzati i clienti",
+          "current": "Attuale: {mode}",
+          "intro": "Scegli quanto costa un messaggio ai tuoi clienti. Vale per ogni workspace ed è salvato a sé.",
+          "fixed": {
+            "label": "Prezzi fissi",
+            "body": "Inserisci un prezzo per ogni paese e categoria nel listino qui sotto. I margini sono salvati ma non usati."
+          },
+          "margin": {
+            "label": "Costo Meta + margine",
+            "body": "Il cliente paga il costo Meta più il tuo margine, impostato per paese e categoria. Dove il costo Meta non è noto, si addebita il prezzo fisso inserito."
+          },
+          "save": "Salva modalità di prezzo",
+          "manage": "Imposta margini",
+          "confirmTitle": "Cambiare la modalità di prezzo dei clienti?",
+          "confirmFixed": "Ogni workspace verrà addebitato dai prezzi fissi del listino a partire dal prossimo messaggio. I margini restano salvati ma smettono di valere.",
+          "confirmMargin": "Ogni workspace verrà addebitato del costo Meta più il margine che gli si applica (eccezione del workspace, poi il suo piano, poi il valore predefinito della piattaforma) a partire dal prossimo messaggio. Dove il costo Meta è sconosciuto, si addebita comunque il prezzo fisso.",
+          "confirm": "Sì, modifica",
+          "savedFixed": "I clienti sono ora prezzati con prezzi fissi.",
+          "savedMargin": "I clienti sono ora prezzati con costo Meta più margine."
+        },
+        "metaCards": {
+          "title": "Listini Meta",
+          "intro": "Meta pubblica un listino per ogni valuta e lo cambia solo il 1 gennaio, il 1 aprile, il 1 luglio e il 1 ottobre. Un workspace fatturato in INR viene prezzato dal listino INR di Meta e addebitato sul proprio wallet INR, mai dal listino USD convertito. Importa ogni file così come Meta lo pubblica. I prezzi digitati e il prezzo fisso sono mantenuti nella valuta della piattaforma e convertiti al tasso di cambio registrato per un workspace fatturato in un’altra valuta.",
+          "none": "Nessun listino Meta è ancora salvato. Importa il file che Meta pubblica per la tua valuta.",
+          "view": "Visualizza",
+          "hide": "Nascondi",
+          "usedPricing": "Prezzi, margini e conto economico dei rivenditori, e workspace fatturati nella valuta della piattaforma",
+          "usedWorkspaces": "Prezzi per i workspace fatturati in {currency}",
+          "columns": {
+            "currency": "Valuta",
+            "effective": "In vigore",
+            "checked": "Ultima importazione",
+            "markets": "Mercati",
+            "usedFor": "Usato per",
+            "status": "Stato",
+            "actions": "Azioni"
+          },
+          "freshness": {
+            "current": "Aggiornato",
+            "upcoming": "Verifica presto",
+            "due": "Verifica ora"
+          },
+          "reminder": {
+            "link": "Apri la pagina dei prezzi di Meta",
+            "current": "Aggiornato. Meta potrebbe cambiare i prezzi di nuovo il {date}.",
+            "dueTitle": "Un nuovo trimestre è iniziato il {date}: Meta potrebbe aver cambiato i prezzi.",
+            "dueBody": "Scarica i nuovi file dei listini (uno per valuta in uso) e importali qui. Fino ad allora, costi e margini usano il listino precedente.",
+            "upcomingTitle": "Meta potrebbe cambiare i prezzi il {date} (tra {days, plural, one {# giorno} other {# giorni}}).",
+            "upcomingBody": "Tieni pronti i nuovi file da importare quel giorno.",
+            "missingTitle": "Nessun listino Meta per {currencies}.",
+            "missingBody": "I workspace impostati su quella valuta non hanno un listino Meta da mostrare. Importa il file che Meta pubblica per essa."
+          },
+          "table": {
+            "heading": "Listino {currency} di Meta",
+            "note": "Prezzo di listino per messaggio consegnato, così come lo pubblica Meta. I paesi non nominati da Meta sono prezzati come Altri.",
+            "market": "Mercato",
+            "everyOther": "Ogni paese non nominato",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utility",
+              "authentication": "Autenticazione",
+              "authentication_international": "Autenticazione internazionale",
+              "service": "Servizio"
+            }
+          },
+          "import": {
+            "button": "Importa listino Meta",
+            "title": "Importa listino Meta",
+            "intro": "Scegli il file che Meta pubblica per una valuta (una cartella Excel, anche se il link dice CSV). La valuta e la data di efficacia vengono lette dal file. Vedi cosa cambierebbe prima che venga salvato qualcosa.",
+            "file": "File listino Meta (.xlsx o .csv)",
+            "hint": "Una valuta per file. Un nuovo file sostituisce il listino di quella valuta per intero. Massimo 2 MB.",
+            "reading": "Lettura del file…",
+            "applying": "Importazione in corso",
+            "apply": "Importa listino",
+            "done": "Il listino {currency} è stato importato.",
+            "fileProblems": {
+              "wrongType": "Scegli il file .xlsx che Meta pubblica, oppure un CSV salvato da esso.",
+              "tooBig": "Il file supera 2 MB, il che non corrisponde a un listino Meta.",
+              "unreadable": "Impossibile leggere il file."
+            },
+            "summary": {
+              "currency": "Valuta",
+              "effective": "In vigore",
+              "added": "Nuove righe",
+              "changed": "Modificate",
+              "unchanged": "Invariate",
+              "removed": "Eliminate"
+            },
+            "replaces": "Sostituisce il listino in vigore dal {date}.",
+            "appliesToPricing": "Questo è il listino {currency}, la valuta della tua piattaforma. Importarlo aggiorna anche il costo Meta alla base di prezzi, margini e conto economico dei rivenditori ({added} nuove, {updated} aggiornate). I prezzi dei clienti non cambiano.",
+            "storedOnly": "Questa non è la valuta della piattaforma. Viene salvata e mostrata, e prezza ogni workspace fatturato in {currency}. Il costo Meta nella griglia tariffe qui sotto resta nella valuta della piattaforma.",
+            "biggest": "Variazioni maggiori",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utility",
+              "authentication": "Autenticazione",
+              "authentication_international": "Autenticazione internazionale",
+              "service": "Servizio"
+            },
+            "problems": "Righe saltate"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "Wallet dei workspace",
+        "crumb": "Wallet dei workspace",
+        "subtitle": "Ogni workspace con il proprio saldo. Aprine uno per vedere le sue voci o rettificarlo.",
+        "search": "Cerca",
+        "searchPlaceholder": "Nome o slug del workspace",
+        "lowOnly": "Solo saldo basso",
+        "apply": "Applica",
+        "totalWorkspaces": "Workspace",
+        "totalFloat": "Totale depositato",
+        "totalLow": "Saldo basso",
+        "emptyTitle": "Nessun workspace trovato",
+        "emptyBody": "Modifica la ricerca o rimuovi il filtro saldo basso.",
+        "loadMore": "Carica altri",
+        "loadingMore": "Caricamento di altri",
+        "columns": {
+          "label": "Wallet dei workspace",
+          "workspace": "Workspace",
+          "mode": "Fatturazione",
+          "balance": "Saldo",
+          "low": "Basso",
+          "activity": "Ultima attività",
+          "never": "Mai"
+        },
+        "totalFloatIn": "Denaro depositato ({currency})"
+      },
+      "detail": {
+        "crumb": "Workspace",
+        "adjust": "Rettifica saldo",
+        "balance": "Saldo",
+        "lowBalance": "Saldo basso",
+        "threshold": "Avviso a {amount}",
+        "recent": "Voci recenti",
+        "emptyTitle": "Nessuna voce ancora",
+        "emptyBody": "I movimenti di questo wallet saranno elencati qui.",
+        "columns": {
+          "label": "Voci recenti del wallet",
+          "date": "Data",
+          "type": "Tipo",
+          "amount": "Importo",
+          "balanceAfter": "Saldo dopo",
+          "who": "Eseguito da",
+          "reason": "Motivo",
+          "customer": "Cliente",
+          "operator": "Operatore",
+          "system": "Sistema"
+        },
+        "result": {
+          "appliedAdd": "{applied} aggiunti. Il saldo è ora {balance}.",
+          "appliedDeduct": "{applied} detratti. Il saldo è ora {balance}.",
+          "partial": "Applicati solo {applied} su {requested} perché il saldo non può scendere sotto 0. Il saldo è ora {balance}.",
+          "replayed": "(Questa richiesta era già stata applicata.)"
+        },
+        "pricing": {
+          "title": "Prezzi per questo workspace",
+          "subtitle": "Le eccezioni sui margini prevalgono sul piano del workspace e sul valore predefinito della piattaforma, solo per questo workspace.",
+          "plan": "Piano",
+          "planLoading": "Caricamento piano",
+          "planUnknown": "Impossibile leggere",
+          "noPlan": "Nessun piano",
+          "overrides": "Eccezioni sui margini",
+          "overridesHint": "Sono sostituite solo le righe elencate qui. Il resto segue il piano e il valore predefinito della piattaforma.",
+          "empty": "Nessuna eccezione. Questo workspace segue il suo piano e il valore predefinito della piattaforma.",
+          "reason": {
+            "label": "Motivo (conservato nel log di audit)",
+            "hint": "Obbligatorio per ogni modifica o rimozione, da 5 a 500 caratteri.",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "Spiega il motivo con almeno 5 caratteri.",
+              "long": "Mantieni il motivo entro 500 caratteri."
+            }
+          },
+          "save": "Salva eccezioni",
+          "saving": "Salvataggio",
+          "saveHint": "Correggi le righe evidenziate e inserisci un motivo per salvare.",
+          "saved": "{saved} salvate, {removed} rimosse.",
+          "savedSome": "{saved} salvate, {skipped} saltate. Vedi il motivo su ogni riga saltata.",
+          "preview": {
+            "title": "Anteprima prezzo",
+            "hint": "Vedi come verrebbe prezzato un messaggio a questo workspace e quale livello lo ha impostato.",
+            "country": "Paese",
+            "category": "Categoria",
+            "run": "Anteprima prezzo",
+            "running": "Calcolo del prezzo in corso",
+            "result": {
+              "label": "Risultato anteprima prezzo",
+              "metaCost": "Costo Meta",
+              "unknownCost": "Non noto",
+              "margin": "Margine",
+              "noMargin": "Nessuno",
+              "layer": "Impostato da",
+              "noLayer": "Nessun margine corrispondente",
+              "layers": {
+                "workspace": "Eccezione del workspace",
+                "plan": "Margine del piano",
+                "platform": "Valore predefinito della piattaforma"
+              },
+              "price": "Prezzo al cliente",
+              "basis": "Base",
+              "bases": {
+                "margin": "Costo Meta + margine",
+                "fixed": "Prezzo fisso"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "Valuta di fatturazione",
+          "intro": "I messaggi sono prezzati dal listino Meta per questa valuta e addebitati sul wallet del workspace in essa. Anche le ricariche vengono inserite e accreditate in questa valuta.",
+          "billedIn": "Fatturato in",
+          "change": "Cambia valuta",
+          "otherWallets": "Altri wallet detenuti da questo workspace",
+          "notUsed": "Non usati per la fatturazione; il denaro resta qui.",
+          "dialog": {
+            "title": "Cambia valuta di fatturazione",
+            "currency": "Fattura in",
+            "effect": "D’ora in poi i messaggi saranno prezzati dal listino {to} di Meta e addebitati sul wallet {to}. Nulla viene convertito: il wallet {from} mantiene il suo saldo.",
+            "left": "{amount} restano nel wallet {from} e non vengono usati finché il workspace non viene riportato indietro.",
+            "reason": "Motivo",
+            "reasonHint": "Mostrato nella traccia di audit e nel log del wallet del workspace. Almeno 5 caratteri.",
+            "confirm": "Fattura in {currency}",
+            "saving": "Salvataggio",
+            "done": "Ora fatturato in {to} (era {from})."
+          }
+        }
+      },
+      "adjust": {
+        "title": "Rettifica saldo",
+        "current": "Saldo attuale",
+        "direction": "Azione",
+        "add": "Aggiungi denaro",
+        "deduct": "Detrai",
+        "amount": "Importo",
+        "amountHint": "Fino a 2 decimali.",
+        "reason": "Motivo",
+        "reasonHint": "Obbligatorio, da 5 a 500 caratteri. Il workspace vede questo motivo nel proprio estratto conto.",
+        "counter": "{count} / {max}",
+        "cappedWarning": "Questo importo supera il saldo di {balance}. Viene detratto solo ciò che c’è; il saldo si ferma a 0.",
+        "review": "Verifica",
+        "confirmAdd": "Aggiungi denaro",
+        "confirmDeduct": "Detrai",
+        "posting": "Registrazione",
+        "summaryAdd": "Aggiungi {amount} a {workspace}.",
+        "summaryDeduct": "Detrai {amount} da {workspace}.",
+        "newBalance": "Nuovo saldo: {balance}",
+        "summaryReason": "Motivo: {reason}",
+        "visibleNote": "Il motivo viene mostrato al workspace e conservato nel log di audit.",
+        "problems": {
+          "amount": {
+            "required": "Inserisci un importo.",
+            "invalid": "Inserisci un importo positivo con al massimo 2 decimali.",
+            "zero": "L’importo deve essere maggiore di 0.",
+            "tooLarge": "Questo supera il limite per una singola rettifica."
+          },
+          "note": {
+            "short": "Spiega il motivo con almeno {min} caratteri.",
+            "long": "Mantieni il motivo sotto {max} caratteri."
+          }
+        }
+      },
+      "logs": {
+        "title": "Log dei wallet",
+        "crumb": "Log dei wallet",
+        "subtitle": "Cosa è successo ai wallet e cosa hanno modificato gli operatori.",
+        "scope": "Ambito",
+        "scopes": {
+          "all": "Tutti",
+          "workspace": "Eventi del workspace",
+          "platform": "Modifiche della piattaforma"
+        },
+        "event": "Evento",
+        "anyEvent": "Qualsiasi evento",
+        "severity": "Gravità",
+        "anySeverity": "Qualsiasi gravità",
+        "severities": {
+          "info": "Info",
+          "warning": "Avviso",
+          "error": "Errore"
+        },
+        "workspaceId": "ID workspace",
+        "workspaceIdInvalid": "Inserisci un ID workspace (un UUID).",
+        "search": "Cerca",
+        "from": "Da",
+        "to": "A",
+        "apply": "Applica",
+        "reset": "Reimposta",
+        "emptyTitle": "Nessuna voce di log",
+        "emptyBody": "Nulla corrisponde a questi filtri.",
+        "loadMore": "Carica altri",
+        "loadingMore": "Caricamento di altri",
+        "platform": "Piattaforma",
+        "showDetails": "Mostra dettagli",
+        "hideDetails": "Nascondi dettagli",
+        "requestId": "ID richiesta",
+        "columns": {
+          "time": "Ora",
+          "severity": "Gravità",
+          "event": "Evento",
+          "workspace": "Workspace",
+          "actor": "Attore",
+          "message": "Messaggio"
+        },
+        "actors": {
+          "operator": "Operatore",
+          "customer": "Cliente",
+          "system": "Sistema"
+        }
+      },
+      "margins": {
+        "title": "Margini",
+        "crumb": "Margini",
+        "subtitle": "Quanto pagano i clienti in più rispetto al costo Meta, per paese e categoria di messaggio.",
+        "retry": "Riprova",
+        "ratesFailed": "Impossibile caricare i costi Meta, quindi non è possibile mostrare i prezzi per le nuove righe.",
+        "mode": {
+          "current": "I clienti sono prezzati con",
+          "inactive": "La modalità di prezzo è Prezzi fissi, quindi questi margini non sono ancora in vigore. Sono salvati e si applicheranno quando passerai a Costo Meta + margine.",
+          "switchLink": "Vai al selettore della modalità di prezzo"
+        },
+        "scope": {
+          "label": "Margini per",
+          "hint": "Il valore predefinito della piattaforma vale per ogni piano. Il margine proprio di un piano lo sostituisce.",
+          "platform": "Valore predefinito della piattaforma (vale per ogni piano)"
+        },
+        "grid": {
+          "country": "Paese",
+          "searchCountry": "Cerca paesi",
+          "category": "Categoria",
+          "margin": "Margine %",
+          "metaCost": "Costo Meta",
+          "price": "Prezzo al cliente",
+          "note": "Motivo",
+          "setBy": "Impostato da",
+          "actions": "Azioni",
+          "anyCountry": "Qualsiasi paese",
+          "anyCategory": "Qualsiasi categoria",
+          "unknownCost": "Il costo Meta qui non è noto, quindi si applica il prezzo fisso inserito.",
+          "priceInvalid": "Inserisci un margine da -100 a 1000 con al massimo 2 decimali.",
+          "removedPending": "Verrà rimosso al salvataggio.",
+          "addRow": "Aggiungi riga",
+          "remove": "Rimuovi",
+          "undo": "Annulla rimozione",
+          "cancel": "Annulla",
+          "empty": "Nessun margine ancora. Aggiungi una riga per impostarne uno.",
+          "removeTitle": "Rimuovere questo margine?",
+          "removeBody": "Il margine per {country} viene eliminato. I prezzi useranno il margine successivo corrispondente.",
+          "removed": "Margine rimosso.",
+          "save": "Salva margini",
+          "saving": "Salvataggio",
+          "saved": "{count, plural, one {# margine salvato.} other {# margini salvati.}}",
+          "savedSome": "{saved} salvati, {skipped} saltati. Vedi il motivo su ogni riga saltata.",
+          "unsaved": "{count, plural, one {# riga non salvata} other {# righe non salvate}}",
+          "tooMany": "Troppe righe modificate per un solo salvataggio. Salva in gruppi più piccoli.",
+          "problems": {
+            "margin": "Inserisci una percentuale da -100 a 1000 con al massimo 2 decimali. -100 significa gratuito.",
+            "duplicate": "Questo paese e questa categoria hanno già una riga."
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "Quale margine prevale",
+            "body": "L’eccezione di un workspace prevale sul margine del suo piano, che prevale sul valore predefinito della piattaforma. Un livello viene letto per intero prima del successivo."
+          },
+          "specific": {
+            "title": "Prima il più specifico",
+            "body": "All’interno di un livello, si usa prima paese e categoria, poi il paese con qualsiasi categoria, poi la categoria in qualsiasi paese, infine la riga predefinita."
+          },
+          "unknown": {
+            "title": "Quando il costo Meta è sconosciuto",
+            "body": "Il prezzo è il costo Meta più il margine, arrotondato al centesimo più vicino e di almeno 0.01, a meno che il margine sia -100% (gratuito). Dove il costo Meta è sconosciuto, si applica invece il prezzo fisso inserito."
+          }
+        }
+      },
+      "packages": {
+        "title": "Pacchetti di crediti",
+        "crumb": "Pacchetti di crediti",
+        "subtitle": "Offerte facoltative: paghi questa cifra, ricevi questo credito nel wallet. Un credito superiore al prezzo è un bonus di ricarica.",
+        "new": "Nuovo pacchetto",
+        "edit": "Modifica",
+        "enable": "Attiva",
+        "disable": "Disattiva",
+        "delete": "Elimina",
+        "cancel": "Annulla",
+        "enabled": "{name} è attivato.",
+        "disabled": "{name} è disattivato.",
+        "deleted": "Pacchetto eliminato.",
+        "deleteTitle": "Eliminare il pacchetto?",
+        "deleteBody": "Eliminare questo pacchetto? Gli acquisti esistenti mantengono le proprie righe del registro.",
+        "bonus": "Bonus +{percent}%",
+        "status": {
+          "active": "Attivo",
+          "inactive": "Inattivo",
+          "featured": "In evidenza"
+        },
+        "empty": {
+          "title": "Nessun pacchetto di crediti ancora",
+          "body": "Non è stato creato alcun pacchetto.",
+          "bodyWrite": "Crea il primo pacchetto per offrire una ricarica del wallet con bonus."
+        },
+        "columns": {
+          "label": "Pacchetti di crediti",
+          "name": "Nome",
+          "slug": "Slug",
+          "price": "Prezzo",
+          "credit": "Credito wallet",
+          "badge": "Etichetta",
+          "status": "Stato",
+          "actions": "Azioni"
+        },
+        "form": {
+          "newTitle": "Nuovo pacchetto di crediti",
+          "editTitle": "Modifica pacchetto di crediti",
+          "newCrumb": "Nuovo pacchetto",
+          "editCrumb": "Modifica pacchetto",
+          "notFound": "Questo pacchetto non esiste più.",
+          "back": "Torna ai pacchetti di crediti",
+          "sections": {
+            "identity": "Identità",
+            "pricing": "Prezzo",
+            "display": "Visualizzazione"
+          },
+          "name": "Nome",
+          "slug": "Slug (facoltativo)",
+          "slugHint": "Lettere, numeri, trattini e underscore. Lascia vuoto per generarlo dal nome.",
+          "description": "Descrizione",
+          "price": "Prezzo",
+          "priceHint": "Quanto paga il cliente.",
+          "currency": "Valuta",
+          "walletCredit": "Credito wallet",
+          "walletCreditHint": "Quanto finisce nel wallet.",
+          "bonusLine": "Un bonus del {percent}%: il cliente paga {price} e riceve {credit}.",
+          "badge": "Etichetta",
+          "badgeHint": "Una breve etichetta, ad esempio Miglior rapporto qualità-prezzo.",
+          "sortOrder": "Ordine di visualizzazione",
+          "sortOrderHint": "Dal più basso.",
+          "active": "Attivo",
+          "featured": "In evidenza",
+          "create": "Crea pacchetto",
+          "save": "Salva modifiche",
+          "saving": "Salvataggio",
+          "created": "{name} creato.",
+          "saved": "{name} salvato.",
+          "stale": {
+            "title": "Questo pacchetto è stato modificato da qualcun altro",
+            "body": "Le tue modifiche non sono state salvate, quindi nulla è stato sovrascritto. Ricarica l’ultima versione, quindi ripeti la modifica.",
+            "reload": "Ricarica l’ultima versione"
+          },
+          "problems": {
+            "name": "Inserisci un nome di massimo 96 caratteri.",
+            "slug": "Usa solo lettere, numeri, trattini e underscore.",
+            "description": "Mantieni la descrizione entro 500 caratteri.",
+            "price": "Inserisci un importo con al massimo 2 decimali.",
+            "currency": "Scegli una delle valute elencate.",
+            "walletCredit": "Inserisci un importo maggiore di 0 con al massimo 2 decimali.",
+            "badge": "Mantieni l’etichetta entro 32 caratteri.",
+            "sortOrder": "Inserisci un numero intero da 0 a 9999."
+          }
+        }
+      }
+    }
+  }
+}

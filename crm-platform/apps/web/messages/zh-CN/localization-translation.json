@@ -1,0 +1,201 @@
+{
+  "localization-translation": {
+    "nav": {
+      "languages": "语言",
+      "providers": "翻译服务商",
+      "usage": "翻译用量",
+      "group": "本地化"
+    },
+    "errors": {
+      "unexpected": "出了点问题，请重试。",
+      "conflict": "其他人已修改此内容。列表已重新加载，请检查后再试。",
+      "languageIsDefault": "无法停用或删除默认语言。请先将其他语言设为默认。",
+      "languageInactive": "请先启用该语言，再将其设为默认。",
+      "credentialsMissing": "请先填写必需的凭据。",
+      "providerInactive": "只有已启用的服务商才能设为默认。",
+      "lockdownNoOfficial": "启用合规锁定前，请至少启用并配置一个官方付费服务商（DeepL 或 Google Cloud）。",
+      "planGate": "您的套餐不包含翻译功能。"
+    },
+    "switcher": {
+      "label": "更改语言",
+      "menu": "语言",
+      "failed": "无法更改语言，请重试。"
+    },
+    "languages": {
+      "kicker": "管理员 · 系统 · 语言",
+      "titleLead": "平台",
+      "titleEm": "种语言",
+      "description": "管理新用户和工作区可以选择的语言。\"默认\"语言是每个新建账户的备用语言。",
+      "loading": "正在加载语言",
+      "stats": {
+        "total": "总计",
+        "totalHint": "已配置",
+        "active": "已启用",
+        "activeHint": "对用户可见",
+        "default": "默认",
+        "defaultHint": "新账户的备用语言"
+      },
+      "catalog": "目录",
+      "allLanguages": "所有语言",
+      "columns": {
+        "name": "名称",
+        "code": "代码",
+        "dir": "方向",
+        "active": "已启用",
+        "default": "默认",
+        "actions": "操作"
+      },
+      "on": "开",
+      "off": "关",
+      "defaultBadge": "默认",
+      "set": "设置",
+      "toggleLabel": "开启或关闭 {name}",
+      "delete": "删除",
+      "cancel": "取消",
+      "empty": "暂无语言。",
+      "flash": {
+        "activated": "{name} 已启用。",
+        "disabled": "{name} 已停用。",
+        "nowDefault": "{name} 现已设为默认语言。",
+        "removed": "语言已移除。"
+      },
+      "confirmDelete": {
+        "title": "删除语言",
+        "message": "移除 {name}？"
+      },
+      "pack": {
+        "kicker": "语言包",
+        "title": "固定为 {count} 种语言",
+        "body": "每种已启用的语言都由随平台提供的翻译 JSON 文件支持。翻译包扩展后，新的语言位将显示在此处。",
+        "note": "您仍可以在左侧表格中切换启用状态、编辑本地名称和文字方向，并选择平台默认语言。"
+      },
+      "usedFor": {
+        "title": "使用方式",
+        "body": "已启用的语言会显示在用户端的个人资料语言切换器以及模板和自动回复的选择器中。默认语言适用于尚未选择语言的新账户。"
+      }
+    },
+    "providers": {
+      "kicker": "管理员 · 系统",
+      "title": "翻译服务商",
+      "description": "多语言自动回复使用以下服务商之一，将入站消息翻译并用客户的语言撰写回复。MyMemory 开箱即用（免费，无需密钥）。如需更高质量或自托管的隐私保护，可接入 DeepL、Google Cloud 或 LibreTranslate。",
+      "loading": "正在加载服务商",
+      "on": "开",
+      "off": "关",
+      "cancel": "取消",
+      "lockdown": {
+        "title": "合规锁定",
+        "description": "开启后，备用链将跳过 <mono>{slugs}</mono>，自动回复翻译仅通过官方付费 API（DeepL、Google Cloud）进行。部分企业安全政策禁止使用非官方第三方端点，需要此功能。",
+        "enable": "启用锁定",
+        "disable": "关闭锁定",
+        "confirmOn": "要开启锁定吗？免费驱动将被跳过，仅付费 API 进行翻译。",
+        "confirmOff": "要关闭锁定吗？免费驱动将重新加入备用链。"
+      },
+      "flash": {
+        "activated": "{name} 已启用。",
+        "disabled": "{name} 已停用。",
+        "nowDefault": "{name} 现已设为默认服务商。",
+        "saved": "{name} 已保存。",
+        "lockdownOn": "合规锁定已开启。",
+        "lockdownOff": "合规锁定已关闭。"
+      },
+      "empty": {
+        "title": "未配置翻译服务商",
+        "body": "请运行翻译服务商种子数据以填充此列表。"
+      },
+      "active": "已启用",
+      "disabled": "已停用",
+      "defaultBadge": "默认",
+      "skipped": "锁定 · 已跳过",
+      "skippedTitle": "因合规锁定已开启而跳过。",
+      "slug": "标识：{slug}",
+      "makeDefault": "设为默认",
+      "activate": "启用",
+      "disable": "停用",
+      "keepSecret": "••••••• （留空则保持不变）",
+      "noCredentials": "无需凭据，此服务商开箱即用。",
+      "sortOrder": "排序",
+      "sortOrderHint": "数值越小，在备用链中优先级越高。",
+      "save": "保存 {name}"
+    },
+    "usage": {
+      "kicker": "管理员 · 系统",
+      "title": "翻译用量",
+      "description": "每次自动回复翻译的用量和估算费用。内置词典命中和 24 小时缓存命中不计费，也不在此显示，这里只统计实际调用。",
+      "from": "起始",
+      "to": "截止",
+      "apply": "应用",
+      "badRange": "开始日期不能晚于结束日期。",
+      "loading": "正在加载用量",
+      "failed": "无法加载用量。",
+      "totals": {
+        "calls": "实际调用次数",
+        "chars": "已翻译字符数",
+        "charsOut": "输出：{count}",
+        "cost": "估算费用",
+        "costHint": "基于公布的每字符费率",
+        "fallbackHits": "备用命中",
+        "fallbackHint": "主驱动失败，由备用链接管"
+      },
+      "byProvider": "按服务商",
+      "emptyProvider": "此时间范围内没有翻译调用。请向已设置自动回复的设备发送一条非英文入站消息，然后刷新。",
+      "free": "免费",
+      "last30": "最近 30 天",
+      "timelineHint": "将鼠标悬停在每个柱形上可查看日期、字符数和费用",
+      "topWorkspaces": "消费最多的工作区",
+      "emptyWorkspaces": "此时间范围内没有付费层级的翻译。",
+      "cols": {
+        "provider": "服务商",
+        "workspace": "工作区",
+        "calls": "调用次数",
+        "charsIn": "输入字符",
+        "chars": "字符",
+        "cost": "费用",
+        "rate": "每百万字符费率"
+      }
+    },
+    "settings": {
+      "title": "实时翻译",
+      "description": "以任何语言与客户聊天。双方都以各自的语言阅读，自动完成。",
+      "loading": "正在加载翻译设置",
+      "failed": "无法加载翻译设置。",
+      "saved": "翻译设置已保存。",
+      "steps": {
+        "1": {
+          "title": "客户消息（任何语言）",
+          "body": "客户的消息会自动翻译成您团队的语言再显示给坐席，原文只需点击一下即可查看。"
+        },
+        "2": {
+          "title": "坐席回复（您的语言）",
+          "body": "您的回复会在通过 WhatsApp 发送前翻译成客户的语言。"
+        },
+        "3": {
+          "title": "AI 和小组件也适用",
+          "body": "AI 智能体和网站聊天小组件会直接以客户的语言回复。"
+        }
+      },
+      "engine": {
+        "kicker": "翻译引擎",
+        "free": "MyMemory（免费）",
+        "body": "您无需在此输入任何 API 密钥。翻译在平台范围内一次性配置，开箱即用。默认启用免费引擎；平台也可设置为使用 DeepL 或 Google 翻译以获得更高质量。"
+      },
+      "usage": {
+        "kicker": "本月",
+        "line": "已翻译字符 · {count} 条消息"
+      },
+      "enabled": {
+        "title": "自动翻译对话",
+        "hint": "为此工作区整体开启或关闭。"
+      },
+      "teamLanguage": {
+        "label": "您团队的语言",
+        "hint": "您的坐席阅读和撰写所用的语言。客户消息会翻译成此语言；您的回复会从此语言翻译出去。"
+      },
+      "save": "保存翻译设置",
+      "upgrade": {
+        "title": "升级以解锁实时翻译。",
+        "body": "在您团队的语言和客户的语言之间自动翻译 WhatsApp 对话。",
+        "link": "查看套餐 →"
+      }
+    }
+  }
+}

@@ -1,0 +1,574 @@
+{
+  "ecom": {
+    "nav": {
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce"
+    },
+    "common": {
+      "dismiss": "Sluiten",
+      "integrations": "Integraties",
+      "back": "Terug",
+      "docs": "Documentatie bekijken",
+      "loadError": "Deze pagina kon niet worden geladen. Probeer het opnieuw.",
+      "support": "Contact opnemen met support",
+      "integration": "Integratie",
+      "notConnected": "Niet verbonden",
+      "setupSteps": "Installatiestappen",
+      "needHelp": "Hulp nodig?",
+      "none": "geen",
+      "optional": "optioneel",
+      "yes": "Ja"
+    },
+    "connect": {
+      "shopify": {
+        "title": "Verbinden",
+        "accent": "Shopify",
+        "intro": "Verbind je Shopify-winkel zodat bestellings-, fulfilment-, terugbetalings- en winkelwagengebeurtenissen automatisch WhatsApp-berichten activeren, en het dashboard je aantallen bestellingen, producten en klanten toont.",
+        "step1": "Beheerder schakelt de Shopify-app in",
+        "step2": "Voer je winkeldomein in",
+        "step3": "Keur de scopes goed op Shopify",
+        "step4": "Koppel gebeurtenissen aan WhatsApp-sjablonen",
+        "help": "Webhooks worden na het verbinden automatisch geïnstalleerd - geen handmatige stappen. Problemen met inloggegevens?",
+        "disabledTitle": "Shopify is nog niet ingeschakeld",
+        "disabledBody": "Een beheerder moet de Shopify-appgegevens toevoegen voordat een workspace een winkel kan verbinden. Daarna wordt het onderstaande formulier actief.",
+        "formStep": "Stap 2",
+        "formTitle": "Winkeldomein",
+        "urlLabel": "Shopify-winkel-URL",
+        "urlPlaceholder": "mijn-winkel",
+        "urlSuffix": ".myshopify.com",
+        "urlHint": "Alleen de winkelnaam, of plak de volledige URL; wij maken er zelf een correcte van.",
+        "webhookLabel": "Webhook-URL · wordt automatisch ingesteld na het verbinden",
+        "cancel": "Annuleren",
+        "continue": "Doorgaan naar Shopify",
+        "continuing": "Doorverwijzen…",
+        "guideKicker": "Installatiehandleiding",
+        "guideTitle": "Wat er daarna gebeurt",
+        "guide1": "We sturen je door naar Shopify om de gevraagde rechten te autoriseren.",
+        "guide2": "Shopify stuurt ons daarna een permanent toegangstoken, ondertekend met HMAC.",
+        "guide3": "Webhooks voor {count} gebeurtenissen worden automatisch aan je winkel gekoppeld.",
+        "guide4": "Je komt daarna hier terug om elke gebeurtenis aan een WhatsApp-sjabloon te koppelen.",
+        "scopes": "Gevraagde rechten",
+        "failed": "De verbinding met Shopify kon niet worden gestart.",
+        "connected": "Shopify is verbonden.",
+        "returnedError": "Shopify is niet verbonden."
+      },
+      "woocommerce": {
+        "title": "Verbinden",
+        "accent": "WooCommerce",
+        "intro": "Haal WooCommerce-bestellingen, terugbetalingen, producten en klantgebeurtenissen op in chatgesprekken. Bevestig bestellingen, verstuur verzendupdates en herstel winkelwagens via WhatsApp, zonder de CRM te verlaten.",
+        "step1": "Beheerder schakelt WooCommerce in",
+        "step2": "Genereer API-sleutels in WC-beheer",
+        "step3": "Plak hieronder de winkel-URL en sleutels",
+        "step4": "Koppel gebeurtenissen aan WhatsApp-sjablonen",
+        "help": "Webhooks worden na het verbinden automatisch geïnstalleerd, zonder handmatige stappen in WC. Loop je vast bij de sleutels?",
+        "disabledTitle": "WooCommerce is nog niet ingeschakeld",
+        "disabledBody": "Een beheerder moet de WooCommerce-integratie inschakelen voordat een workspace een winkel kan koppelen.",
+        "formStep": "Stap 2",
+        "formTitle": "Winkelgegevens",
+        "urlLabel": "Winkel-URL",
+        "urlHint": "HTTPS is vereist voor Basic Auth. WP REST wordt automatisch gedetecteerd.",
+        "keyLabel": "Consumer Key",
+        "secretLabel": "Consumer Secret",
+        "secretHint": "Versleuteld opgeslagen. Wordt alleen gebruikt om de REST API van je winkel aan te roepen.",
+        "webhookLabel": "Webhook-URL · wordt automatisch ingesteld na het verbinden",
+        "test": "Verbinding testen",
+        "testing": "Testen…",
+        "connect": "Winkel verbinden",
+        "connecting": "Verbinden…",
+        "guideKicker": "Sleutels genereren",
+        "guideTitle": "In je WooCommerce-beheer",
+        "g1": "Open WooCommerce → Instellingen → Geavanceerd → REST API.",
+        "g2": "Klik op Sleutel toevoegen. Geef een beschrijving, bijvoorbeeld “CRM”.",
+        "g3": "Kies een gebruiker (een beheerder werkt) en zet Rechten op Lezen/schrijven.",
+        "g4": "Klik op API-sleutel genereren. Kopieer beide sleutels; het geheim wordt maar één keer getoond.",
+        "g5": "Plak ze in het formulier links en klik op Verbinding testen.",
+        "httpsTitle": "Alleen HTTPS",
+        "httpsBody": "Basic Auth vereist HTTPS. Als je winkel alleen HTTP gebruikt, installeer dan eerst een SSL-certificaat (Let’s Encrypt is gratis).",
+        "connected": "WooCommerce is verbonden.",
+        "failed": "Verbinding mislukt.",
+        "networkError": "Netwerkfout."
+      }
+    },
+    "shell": {
+      "status": {
+        "active": "Actief",
+        "error": "Fout",
+        "other": "{status}"
+      },
+      "plan": "Abonnement:",
+      "store": "Winkel",
+      "related": "Gerelateerd",
+      "allIntegrations": "Alle integraties",
+      "disconnect": "Ontkoppelen",
+      "disconnectTitle": "{name} ontkoppelen?",
+      "disconnectShopify": "Hiermee worden de geregistreerde webhooks verwijderd, maar blijven je instellingen bewaard.",
+      "disconnectWoo": "Hiermee worden de geregistreerde webhooks verwijderd.",
+      "disconnectDone": "Winkel ontkoppeld.",
+      "healthy": "Webhooks werken goed",
+      "noRecent": "Geen recente gebeurtenissen",
+      "lastEvent": "Laatste gebeurtenis:",
+      "triggerShopify": "Voer een actie uit in Shopify en die verschijnt hier.",
+      "triggerWoo": "Plaats een bestelling in WooCommerce en die verschijnt hier.",
+      "sync": "Nu synchroniseren",
+      "syncing": "Synchroniseren…",
+      "syncQueued": "Synchronisatie gestart. Nieuwe gegevens verschijnen zo.",
+      "syncFailed": "Synchronisatie mislukt.",
+      "tabs": {
+        "overview": "Overzicht",
+        "orders": "Bestellingen",
+        "products": "Producten",
+        "offers": "Aanbieding versturen",
+        "customers": "Klanten",
+        "events": "Automatiseringen",
+        "analytics": "Analyse",
+        "invoices": "Facturen",
+        "logs": "Activiteit",
+        "settings": "Instellingen"
+      },
+      "offersWoo": "Aanbiedingen",
+      "desc": {
+        "shopify": {
+          "overview": "Live overzicht van je winkel, gesynchroniseerd vanuit Shopify.",
+          "orders": "Bestellingen gesynchroniseerd vanuit Shopify.",
+          "products": "Blader door je gesynchroniseerde catalogus; stuur een product of een aanbieding via WhatsApp.",
+          "offers": "Kies producten en een coupon, selecteer een klantsegment en verstuur de aanbieding als broadcast via WhatsApp.",
+          "customers": "Klanten gesynchroniseerd vanuit Shopify naar je contacten.",
+          "events": "Marketingautomatiseringen: zet er één aan, kies een sjabloon en die wordt verstuurd bij de bijbehorende winkelgebeurtenis.",
+          "analytics": "Omzet, bestelverloop en berichtprestaties voor deze winkel.",
+          "logs": "Webhook-leveringslogboek voor deze winkel.",
+          "settings": "Beheer de verbinding: opnieuw synchroniseren, rechten bekijken of ontkoppelen.",
+          "invoices": "Facturen voor je Shopify-bestellingen."
+        },
+        "woocommerce": {
+          "overview": "Live overzicht, opgehaald uit je WooCommerce REST API.",
+          "orders": "Laatste 10 bestellingen, opgehaald uit de winkel.",
+          "products": "Meest recente producten in de catalogus.",
+          "offers": "Verstuur een productaanbieding als broadcast of win inactieve klanten terug.",
+          "customers": "Klantaccounts, gesorteerd op recentheid.",
+          "events": "Zet bestel-, COD-, winkelwagen- en voorraadautomatiseringen aan of uit.",
+          "analytics": "Omzet, berichtenvolume en COD-impact voor deze winkel.",
+          "logs": "Webhook-leveringslogboek voor deze winkel.",
+          "settings": "Verbindingsgegevens: opnieuw verifiëren of ontkoppelen.",
+          "invoices": "Facturen voor je WooCommerce-bestellingen."
+        }
+      },
+      "loading": "Winkel laden…",
+      "flash": {
+        "success": "Klaar.",
+        "error": "Er ging iets mis."
+      },
+      "cancel": "Annuleren"
+    },
+    "overview": {
+      "revenueRecent": "Omzet (recent)",
+      "revenueRecentHint": "over recente gesynchroniseerde bestellingen",
+      "ordersTotal": "Totaal bestellingen",
+      "ordersMirrorHint": "gesynchroniseerd naar de CRM",
+      "products": "Producten",
+      "productsHint": "gesynchroniseerde catalogusgrootte",
+      "customers": "Klanten",
+      "activeAutomations": "{count} actieve automatiseringen",
+      "revenue30": "Omzet · 30 dagen",
+      "revenue30Hint": "uit het WC-verkooprapport",
+      "orders30": "Bestellingen · 30 dagen",
+      "ordersAllTime": "{count} in totaal, ooit",
+      "customersNew": "{count} nieuw in 30 dagen",
+      "itemsSold": "Verkochte artikelen · 30 dagen",
+      "recentOrders": "Recente bestellingen",
+      "viewAll": "Alles bekijken →",
+      "noOrders": "Nog geen bestellingen. Klik op Nu synchroniseren.",
+      "recentActivity": "Recente webhook-activiteit",
+      "noActivity": "Nog geen webhook-gebeurtenissen ontvangen."
+    },
+    "orders": {
+      "order": "Bestelling",
+      "customer": "Klant",
+      "status": "Status",
+      "total": "Totaal",
+      "placed": "Geplaatst",
+      "none": "Geen bestellingen gevonden."
+    },
+    "products": {
+      "search": "Producten zoeken…",
+      "offers": "Speciale aanbiedingen",
+      "catalog": "Catalogus versturen →",
+      "newArrivals": "Nieuwe aanwinsten",
+      "all": "Alle producten",
+      "none": "Nog geen producten. Verbind een winkel of klik op Nu synchroniseren.",
+      "noImage": "geen afbeelding",
+      "save": "BESPAAR {pct}%",
+      "send": "Versturen",
+      "offer": "Aanbieding",
+      "noMatch": "Geen product gevonden.",
+      "wooNone": "Geen producten gevonden.",
+      "inStock": "Op voorraad",
+      "outOfStock": "Niet op voorraad"
+    },
+    "offers": {
+      "choose": "Producten kiezen",
+      "selected": "{count} geselecteerd",
+      "noProducts": "Nog geen producten gesynchroniseerd.",
+      "template": "Berichtsjabloon",
+      "pickTemplate": "Kies een sjabloon",
+      "tokens": "Tokens die je kunt gebruiken:",
+      "segment": "Versturen naar segment",
+      "pickGroup": "Kies een contactgroep",
+      "coupon": "Coupon (optioneel)",
+      "noCoupon": "Geen coupon",
+      "couponPercent": "{amount}%",
+      "send": "Aanbieding versturen",
+      "sending": "Versturen…",
+      "pickTemplateFirst": "Kies eerst een sjabloon.",
+      "pickSegmentFirst": "Kies eerst een segment.",
+      "note": "Alleen contacten in het segment die toestemming hebben gegeven, krijgen een bericht. WABA-verzendingen vereisen een goedgekeurd sjabloon; de niet-officiële API toont het als tekst met knoppen.",
+      "queued": "In de wachtrij voor {total} contacten. De aantallen verschijnen op het tabblad Activiteit zodra het klaar is.",
+      "failed": "Versturen mislukt.",
+      "wooTitle": "Productaanbieding-broadcast",
+      "wooIntro": "Verstuur een goedgekeurd sjabloon naar elk contact in een segment dat toestemming heeft gegeven. Voeg een product en een coupon toe.",
+      "wooTemplate": "Sjabloon",
+      "choose2": "kies",
+      "wooSegment": "Segment (contactgroep)",
+      "wooProduct": "Uitgelicht product",
+      "wooCoupon": "Couponcode",
+      "wooCouponPlaceholder": "SAVE10",
+      "winTitle": "Slimme segment-broadcast",
+      "winIntro": "Richt je op klanten op basis van bestelgeschiedenis: recentheid (terugwinnen), aantal bestellingen en totale uitgaven (VIP’s). Contacten die zich hebben afgemeld, worden overgeslagen.",
+      "winLast": "Laatste bestelling",
+      "winAny": "Altijd",
+      "winDays": "> {days} dagen geleden",
+      "winMonths": "> 6 maanden",
+      "winYear": "> 1 jaar",
+      "winMinOrders": "Min. bestellingen",
+      "winAnyOrders": "Alle",
+      "winMinSpend": "Min. uitgaven ({currency})",
+      "winTemplate": "Sjabloon",
+      "winPick": "Kiezen",
+      "winCoupon": "Coupon",
+      "winNone": "Geen",
+      "winSend": "Terugwinactie versturen",
+      "winConfirm": "Deze broadcast naar iedereen in het segment versturen?",
+      "winQueued": "In de wachtrij voor {total} inactieve klanten. De aantallen verschijnen op het tabblad Activiteit zodra het klaar is.",
+      "wooWinTitle": "Slimme segment-broadcast",
+      "wooWinIntro": "Richt je op basis van bestelgeschiedenis: win inactieve kopers terug of beloon je beste klanten.",
+      "wooLapsed": "Inactief > dagen",
+      "wooWinNote": "Dagen = 0 richt zich op alle tijdstippen (puur segment). Uitgaven worden in de winkelvaluta opgegeven. Contacten die zich hebben afgemeld, worden altijd overgeslagen.",
+      "wooCouponPlaceholder2": "COMEBACK15",
+      "wooWinSend": "Broadcast versturen",
+      "optional": "optioneel",
+      "none": "geen",
+      "cancel": "Annuleren"
+    },
+    "customers": {
+      "name": "Naam",
+      "email": "E-mail",
+      "phone": "Telefoon",
+      "orders": "Bestellingen",
+      "spent": "Uitgegeven",
+      "none": "Nog geen klanten opgehaald.",
+      "noneWoo": "Nog geen klanten."
+    },
+    "events": {
+      "noTemplates": "Je hebt nog geen goedgekeurde WhatsApp-sjablonen. Maak er een aan bij Sjablonen om een automatisering aan te zetten.",
+      "templatesLink": "Sjablonen",
+      "sendFrom": "Verzenden vanaf",
+      "sendFromHint": "Welk gekoppeld nummer deze automatiseringen verstuurt.",
+      "auto": "Automatisch: elk gekoppeld nummer",
+      "fired": "{count} verstuurd",
+      "logged": "{count} gelogd",
+      "template": "Sjabloon",
+      "pickTemplate": "Kies een sjabloon",
+      "noneOption": "geen",
+      "sendTo": "Versturen naar",
+      "customer": "Klant",
+      "admin": "Alleen beheerder",
+      "both": "Beide",
+      "adminNumber": "Beheerdersnummer",
+      "delay": "Vertraging",
+      "on": "Aan",
+      "immediate": "Direct",
+      "min": "{n} min",
+      "hour": "{n} u",
+      "day": "{n, plural, one {# dag} other {# dagen}}",
+      "mapTitle": "Koppel sjabloonvariabelen aan bestelvelden",
+      "param": "Parameter {n}",
+      "blank": "— leeg —",
+      "field": {
+        "name": "Klantnaam",
+        "first_name": "Voornaam",
+        "order_name": "Bestelnummer (bijv. #1001)",
+        "order_number": "Bestelnummer",
+        "total": "Totaal + valuta",
+        "total_price": "Totaal (alleen bedrag)",
+        "currency": "Valuta",
+        "email": "Klant-e-mail",
+        "store_name": "Winkelnaam",
+        "financial_status": "Betaalstatus",
+        "fulfillment_status": "Verwerkingsstatus"
+      },
+      "advanced": "Geavanceerd · variabele volgorde",
+      "advancedHint": "Komma-gescheiden velden, in volgorde gekoppeld aan de genummerde plaatshouders van je sjabloon. Laat leeg voor de slimme standaard: naam, bestelling, totaal.",
+      "advancedPlaceholder": "name, first_name, order_number, order_name, total, currency, order_url, tracking_number, tracking_url",
+      "save": "Automatiseringen opslaan",
+      "saving": "Opslaan…",
+      "saved": "✓ Opgeslagen",
+      "saveFailed": "Opslaan mislukt",
+      "needTemplate": "Kies een sjabloon voor elke automatisering die je aanzet."
+    },
+    "autoGroups": {
+      "lifecycle": {
+        "name": "Bestellevenscyclus",
+        "desc": "Transactionele updates; worden automatisch verstuurd bij winkelgebeurtenissen."
+      },
+      "recovery": {
+        "name": "Omzetherstel",
+        "desc": "Haal verloren verkopen terug."
+      },
+      "marketing": {
+        "name": "Levenscyclusmarketing",
+        "desc": "Laat klanten groeien en behoud ze."
+      }
+    },
+    "auto": {
+      "shopify": {
+        "orders_create": {
+          "name": "Bestelbevestiging",
+          "desc": "Bedank de klant zodra die een bestelling plaatst."
+        },
+        "orders_paid": {
+          "name": "Betaling ontvangen",
+          "desc": "Bevestig zodra de betaling is verwerkt."
+        },
+        "orders_fulfilled": {
+          "name": "Verzonden / onderweg",
+          "desc": "Stuur een verzendbericht; gebruik '{{'tracking_url'}}' voor de live tracking-link."
+        },
+        "order_delivered": {
+          "name": "Bezorgd",
+          "desc": "Bevestig de bezorging (vraagt om een beoordeling als je sjabloon dat doet). Wordt verstuurd zodra de koerier het als bezorgd markeert."
+        },
+        "orders_cancelled": {
+          "name": "Bestelling geannuleerd",
+          "desc": "Laat de klant weten dat een bestelling is geannuleerd."
+        },
+        "refunds_create": {
+          "name": "Terugbetaling verwerkt",
+          "desc": "Bevestig dat een terugbetaling is verwerkt."
+        },
+        "orders_updated": {
+          "name": "Bestelling bijgewerkt",
+          "desc": "Wordt verstuurd bij elke wijziging aan een bestaande bestelling."
+        },
+        "checkouts_create": {
+          "name": "Verlaten winkelwagen · stap 1",
+          "desc": "Wordt direct verstuurd nadat een afrekening is verlaten; neem '{{'checkout_url'}}' op om ze terug te halen."
+        },
+        "cart_step2": {
+          "name": "Verlaten winkelwagen · stap 2",
+          "desc": "Geplande opvolging (stel de vertraging in, bijv. 1 uur). Wordt automatisch geannuleerd als de klant koopt."
+        },
+        "cart_step3": {
+          "name": "Verlaten winkelwagen · stap 3",
+          "desc": "Laatste herinnering (bijv. 24 uur); voeg een coupon aan het sjabloon toe om de verkoop af te ronden."
+        },
+        "cod_confirm": {
+          "name": "Bevestiging COD-bestelling",
+          "desc": "Vraag klanten met betaling bij levering om te bevestigen met Ja/Nee; dit beperkt nepbestellingen en retouren (RTO)."
+        },
+        "cod_prepaid": {
+          "name": "COD → vooraf-betaaldaanbieding",
+          "desc": "Herinner COD-klanten eraan nu online te betalen (gebruik '{{'order_url'}}' en een korting in het sjabloon); minder retouren, sneller geld binnen."
+        },
+        "stock_back": {
+          "name": "Melding weer op voorraad",
+          "desc": "Klanten die berichten over een uitverkocht artikel krijgen automatisch een melding zodra het weer op voorraad is."
+        },
+        "customers_create": {
+          "name": "Welkom nieuwe klant",
+          "desc": "Heet een klant die voor het eerst koopt hartelijk welkom."
+        },
+        "customers_update": {
+          "name": "Klant bijgewerkt",
+          "desc": "Wordt verstuurd wanneer een klantprofiel wijzigt."
+        },
+        "products_update": {
+          "name": "Product bijgewerkt",
+          "desc": "Interne trigger bij een prijs- of voorraadwijziging."
+        }
+      },
+      "woocommerce": {
+        "order_created": {
+          "name": "Bestelling geplaatst",
+          "desc": "Wordt verstuurd zodra een nieuwe bestelling binnenkomt."
+        },
+        "order_processing": {
+          "name": "Bestelling bevestigd",
+          "desc": "Betaling ontvangen; de bestelling wordt voorbereid."
+        },
+        "order_completed": {
+          "name": "Bestelling bezorgd",
+          "desc": "Bestelling in WooCommerce als voltooid gemarkeerd."
+        },
+        "order_on_hold": {
+          "name": "Bestelling in de wacht",
+          "desc": "In afwachting van betaling of voorraad; houd de koper op de hoogte."
+        },
+        "order_cancelled": {
+          "name": "Bestelling geannuleerd",
+          "desc": "De bestelling is geannuleerd."
+        },
+        "order_refunded": {
+          "name": "Bestelling terugbetaald",
+          "desc": "Er is een terugbetaling verwerkt."
+        },
+        "cod_confirm": {
+          "name": "COD dubbele bevestiging",
+          "desc": "Vraag kopers met betaling bij levering om Ja / Nee te bevestigen voordat je verzendt; de belangrijkste manier om RTO te beperken."
+        },
+        "cod_prepaid": {
+          "name": "COD → vooraf-betalen-herinnering",
+          "desc": "Bied COD-kopers een link om online te betalen (het sjabloon kan '{{'order_url'}}' en een prikkel bevatten)."
+        },
+        "checkout_created": {
+          "name": "Verlaten winkelwagen · stap 1",
+          "desc": "Eerste herinnering wanneer de afrekening start maar er geen bestelling komt. Vereist de bijbehorende WooCommerce-plugin."
+        },
+        "cart_step2": {
+          "name": "Verlaten winkelwagen · stap 2",
+          "desc": "Geplande opvolging na de onderstaande vertraging."
+        },
+        "cart_step3": {
+          "name": "Verlaten winkelwagen · stap 3",
+          "desc": "Laatste herinnering; voeg een korting toe aan het sjabloon."
+        },
+        "stock_back": {
+          "name": "Weer op voorraad",
+          "desc": "Stuur iedereen op de wachtlijst een bericht zodra een uitverkocht product weer op voorraad is."
+        },
+        "subscription_payment_failed": {
+          "name": "Herinneringen abonnementsbetaling",
+          "desc": "Wanneer een betaling voor een abonnementsverlenging mislukt, stuur je een link om de betaling met één tik bij te werken. Vereist de bijbehorende WooCommerce-plugin."
+        },
+        "customer_created": {
+          "name": "Welkom nieuwe klant",
+          "desc": "Heet een klant welkom wanneer die zich voor het eerst in de winkel registreert."
+        },
+        "review_reward": {
+          "name": "Coupon gekoppeld aan beoordeling",
+          "desc": "Wanneer een recente koper reageert met een positieve beoordeling (4–5 / “geweldig”), wordt dit beloningssjabloon automatisch verstuurd; zet er een coupon in. Combineer het met een sjabloon ‘Bestelling bezorgd’ dat om een beoordeling vraagt."
+        }
+      }
+    },
+    "analytics": {
+      "revenue": "Omzet",
+      "orders": "Bestellingen",
+      "avgOrder": "Gem. bestelling",
+      "messagesSent": "Verzonden berichten",
+      "offersSent": "Verzonden aanbiedingen",
+      "codProtected": "COD-omzet beschermd",
+      "codConfirmed": "{count} COD-bestellingen bevestigd",
+      "rtoAvoided": "RTO voorkomen",
+      "codCancelled": "{count} nep-/COD-bestellingen gestopt",
+      "recovery": "Herstelberichten",
+      "recoveryHint": "winkelwagen / aanbieding / terugwinnen / voorraad",
+      "avgValue": "Gem. bestelwaarde",
+      "trend": "Omzet · afgelopen 14 dagen",
+      "perf": "Prestaties automatiseringen",
+      "event": "Gebeurtenis",
+      "fired": "Verzonden",
+      "noActivity": "Nog geen automatiseringsactiviteit.",
+      "revenueMirrored": "Omzet · gespiegeld",
+      "ordersSynced": "{count} bestellingen gesynchroniseerd",
+      "perOrder": "per bestelling",
+      "offerBroadcasts": "{count} aanbieding-broadcasts",
+      "recoverySends": "Herstelberichten verstuurd",
+      "recoverySendsHint": "COD / winkelwagen / voorraad / aanbiedingen",
+      "wouldBeRto": "vermoedelijke RTO's vroegtijdig geannuleerd",
+      "activeAutomations": "Actieve automatiseringen",
+      "firingOn": "worden verstuurd bij winkelgebeurtenissen"
+    },
+    "logs": {
+      "processed": "Verwerkt",
+      "sent": "Verzonden",
+      "skipped": "Overgeslagen",
+      "failed": "Mislukt",
+      "event": "Gebeurtenis",
+      "recipient": "Ontvanger",
+      "status": "Status",
+      "when": "Wanneer",
+      "none": "Er zijn nog geen webhook-gebeurtenissen voor deze winkel binnengekomen."
+    },
+    "settings": {
+      "storeUrl": "Winkel-URL",
+      "connectedAt": "Verbonden op",
+      "lastVerified": "Laatst geverifieerd",
+      "scopes": "Toegekende rechten",
+      "wooVersion": "WooCommerce-versie",
+      "webhookUrl": "Webhook-URL",
+      "registered": "Geregistreerde webhooks",
+      "registeredCount": "{count, plural, one {# actief abonnement} other {# actieve abonnementen}}",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "plugin": {
+        "title": "WordPress-plugin",
+        "body": "Installeer deze kleine plugin in je winkel om verlaten winkelwagens te herstellen voordat er een bestelling bestaat, en om mislukte abonnementsbetalingen en aangepaste bestelstatussen door te geven.",
+        "step1": "Download de plugin hieronder. Hij is speciaal voor deze winkel gemaakt.",
+        "step2": "Open in WordPress Plugins, Nieuwe toevoegen, Plugin uploaden, kies het zip-bestand en activeer het.",
+        "step3": "Zorg dat WP-Cron op je site draait. De plugin controleert elke 5 minuten op inactieve winkelwagens.",
+        "download": "Plugin downloaden (.zip)",
+        "preparing": "Plugin voorbereiden…",
+        "started": "Plugin gedownload.",
+        "secretNote": "Het bestand bevat de geheime sleutel van deze winkel. Houd het privé.",
+        "forbidden": "Je hebt geen toestemming om de plugin te downloaden.",
+        "failed": "De plugin kon niet worden gedownload. Probeer het opnieuw."
+      }
+    },
+    "embedded": {
+      "title": "Shopify",
+      "connected": "Verbonden",
+      "notConnected": "Niet verbonden",
+      "store": "Winkel",
+      "plan": "Shopify-abonnement",
+      "lastVerified": "Laatst geverifieerd",
+      "openApp": "De app openen",
+      "openToConnect": "Open de app om te verbinden",
+      "invalid": "De Shopify-sessie is niet geldig. Laad de app opnieuw vanuit je Shopify-beheer.",
+      "off": "De Shopify-integratie is niet ingeschakeld op deze installatie. Neem contact op met support.",
+      "error": "Er ging iets mis. Laad de app opnieuw vanuit je Shopify-beheer."
+    },
+    "invoices": {
+      "policyTitle": "Automatische facturen",
+      "autoInvoice": "Factureer de bestellingen van deze winkel automatisch",
+      "autoInvoiceHint": "Elke factuur wordt via WhatsApp naar de koper gestuurd, of per e-mail als er geen telefoonnummer is. Staat uit totdat je het aanzet.",
+      "trigger": "Factureer wanneer de bestelling",
+      "on_placed": "geplaatst is",
+      "on_paid": "betaald is",
+      "on_fulfilled": "verwerkt is",
+      "saved": "Factuurinstellingen opgeslagen.",
+      "saveFailed": "De factuurinstellingen konden niet worden opgeslagen.",
+      "policyLoadFailed": "De factuurinstellingen konden niet worden geladen.",
+      "listTitle": "Facturen van deze winkel",
+      "number": "Nummer",
+      "buyer": "Koper",
+      "type": "Type",
+      "status": "Status",
+      "total": "Totaal",
+      "issued": "Uitgereikt",
+      "draft": "Concept",
+      "tax_invoice": "Belastingfactuur",
+      "receipt": "Kassabon",
+      "proforma": "Proforma",
+      "status_draft": "Concept",
+      "status_issued": "Uitgereikt",
+      "status_partially_paid": "Deels betaald",
+      "status_paid": "Betaald",
+      "status_overdue": "Achterstallig",
+      "status_void": "Ongeldig",
+      "loading": "Facturen laden…",
+      "none": "Nog geen facturen van deze winkel. Zet hierboven automatische facturen aan en de volgende betaalde bestelling krijgt er een.",
+      "error": "De facturen konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "forbidden": "Je hebt geen toegang tot facturen.",
+      "viewAll": "Alle facturen openen"
+    }
+  }
+}

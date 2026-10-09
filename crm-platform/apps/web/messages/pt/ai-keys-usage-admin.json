@@ -1,0 +1,223 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "Uso de IA",
+      "keys": "Chaves de provedores de IA"
+    },
+    "admin": {
+      "nav": {
+        "group": "IA",
+        "keys": "Chaves de provedores de IA",
+        "dashboard": "Uso de IA"
+      }
+    },
+    "common": {
+      "loading": "Carregando",
+      "retry": "Tentar novamente",
+      "requestId": "ID da solicitação",
+      "dismiss": "Dispensar",
+      "tokens": "{count, number} tokens",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Você não tem permissão para ver isto.",
+        "request": "Não foi possível concluir essa solicitação.",
+        "unexpected": "Algo deu errado do nosso lado. Tente novamente em instantes.",
+        "network": "Não foi possível alcançar o servidor. Verifique sua conexão e tente novamente.",
+        "conflict": "Outra pessoa alterou isto. A página foi recarregada: aplique sua alteração novamente.",
+        "keyRequired": "Adicione uma chave de API antes de ativar este provedor.",
+        "validation": "Alguns valores não são válidos. Verifique os campos destacados.",
+        "notFound": "Esse item não existe mais."
+      }
+    },
+    "windows": {
+      "label": "Período",
+      "7d": "7 dias",
+      "30d": "30 dias",
+      "90d": "90 dias",
+      "1y": "1 ano",
+      "custom": "Personalizado",
+      "from": "De",
+      "to": "Até",
+      "pick": "Escolha uma data de início e de término.",
+      "invalid": "A data final é anterior à data inicial.",
+      "tooLong": "Escolha um intervalo de {days} dias ou menos."
+    },
+    "keys": {
+      "eyebrow": "Admin · Sistema · Provedores de IA",
+      "title": "Chaves de API de IA",
+      "description": "Chaves globais para todos os provedores de IA compatíveis. Os espaços de trabalho em planos sem “Traga sua própria chave” usam estas como alternativa. Criptografadas em repouso.",
+      "superOnly": "Somente um superadministrador pode gerenciar as chaves de IA da plataforma.",
+      "summary": {
+        "providers": "Provedores",
+        "providersHint": "pré-carregados",
+        "active": "Ativo",
+        "activeHint": "ativado como alternativa",
+        "ready": "Pronto",
+        "readyHint": "ativo + com chave",
+        "noKey": "Sem chave",
+        "noKeyHint": "cole uma chave para ficar pronto"
+      },
+      "groups": {
+        "llm": "Modelos de linguagem",
+        "voice": "Voz"
+      },
+      "card": {
+        "active": "Ativo",
+        "off": "Desativado",
+        "keySaved": "Chave salva",
+        "keySavedLast4": "Chave salva, termina em {last4}",
+        "noKey": "Sem chave",
+        "unreadable": "Não é possível ler a chave salva, cole-a novamente",
+        "apiKey": "Chave de API",
+        "apiKeyHint": "Deixe em branco para manter a chave salva.",
+        "apiKeyPlaceholder": "Cole a chave aqui",
+        "apiKeySavedPlaceholder": "•••••••••• (salva — deixe em branco para manter)",
+        "defaultModel": "Modelo padrão",
+        "pickModel": "— Escolha um modelo padrão —",
+        "customModel": "{model} (personalizado)",
+        "sortOrder": "Ordem de exibição",
+        "maxTokens": "Máx. de tokens por solicitação",
+        "maxTokensHint": "Limite opcional para o tamanho da resposta em todos os espaços de trabalho. Em branco significa sem limite.",
+        "extraModels": "Modelos extras",
+        "extraModelsHint": "Opcional. IDs de modelos a oferecer junto com o padrão, separados por vírgulas.",
+        "save": "Salvar {name}",
+        "saving": "Salvando",
+        "turnOn": "Ativar",
+        "turnOff": "Desativar",
+        "removeKey": "Remover chave",
+        "removeTitle": "Remover a chave de {name}?",
+        "removeBody": "Os espaços de trabalho deixarão de usar {name} até você adicionar uma chave novamente. O provedor será desativado.",
+        "removeConfirm": "Remover chave",
+        "cancel": "Cancelar",
+        "slug": "provedor: {provider} · modelo padrão: {model}",
+        "maxTokensPlaceholder": "ex.: 4096"
+      },
+      "toasts": {
+        "saved": "{name} salvo.",
+        "savedOn": "{name} salvo e ativado.",
+        "on": "{name} ativado.",
+        "off": "{name} desativado.",
+        "removed": "Chave de {name} removida."
+      },
+      "help": {
+        "title": "Como estas chaves são usadas",
+        "body": "A chave própria de um espaço de trabalho só prevalece quando o plano permite. Caso contrário, é usado o provedor ativo correspondente daqui. Desativar um provedor significa que os espaços de trabalho sem chave própria não podem usá-lo.",
+        "eyebrow": "Como essas chaves são usadas"
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Admin / Painel de IA",
+      "title": "Uso de IA e consumo de tokens",
+      "description": "Todas as chamadas de IA na plataforma: qual provedor, qual modelo, qual espaço de trabalho, com chaves da plataforma ou chaves próprias (BYOK), com uma estimativa de gasto.",
+      "kpis": {
+        "tokens": "Tokens consumidos",
+        "tokensHint": "neste período",
+        "cost": "Custo estimado",
+        "costHint": "est. combinada",
+        "calls": "Chamadas de IA",
+        "callsHint": "solicitações registradas",
+        "workspaces": "Espaços de trabalho usando IA",
+        "workspacesHint": "ativos"
+      },
+      "daily": "Consumo diário de tokens",
+      "byProvider": "Tokens por provedor",
+      "split": "Quem paga — plataforma ou BYOK",
+      "splitPlatform": "Chaves da plataforma",
+      "splitOwn": "Chaves próprias (BYOK)",
+      "topWorkspaces": "Espaços de trabalho que mais consomem tokens",
+      "topModels": "Principais modelos",
+      "keyHealth": "Saúde das chaves de IA",
+      "live": "Ativo",
+      "notLive": "Desativado",
+      "peak": "pico de {value}/dia",
+      "dailyEmpty": "Nenhuma chamada de IA registrada neste período ainda.",
+      "providerCalls": "{count, number} chamadas",
+      "providerEmpty": "Nenhum uso ainda.",
+      "splitNote": "Somente os tokens de chaves da plataforma contam para o limite mensal de IA de um plano. Os espaços de trabalho BYOK gastam na própria conta do provedor.",
+      "workspaceEmpty": "Nenhum uso de IA por espaços de trabalho ainda.",
+      "workspaceMeta": "{count, number} chamadas",
+      "workspaceByok": "{tokens} BYOK",
+      "modelEmpty": "Nenhum uso de modelos ainda.",
+      "modelMeta": "{provider} · {count, number} chamadas",
+      "manageKeys": "Gerenciar chaves",
+      "noDefaultModel": "sem modelo padrão",
+      "noPlatformKeys": "Nenhuma chave de IA da plataforma configurada.",
+      "byokKeys": "Chaves BYOK ativas",
+      "byokWorkspaces": "Espaços de trabalho com BYOK"
+    },
+    "usage": {
+      "title": "Uso de IA",
+      "description": "Todas as chamadas de IA feitas pelo seu espaço de trabalho: tokens consumidos, por modelo e provedor, chaves do plano ou chaves próprias, e um custo estimado.",
+      "kpis": {
+        "tokens": "Tokens usados",
+        "calls": "{count, plural, one {# chamada de IA} other {# chamadas de IA}}",
+        "platform": "Chaves do plano",
+        "ownKeys": "Suas chaves (BYOK)",
+        "cost": "Custo estimado",
+        "costHint": "tarifa combinada dos provedores",
+        "providers": "Provedores",
+        "models": "Modelos"
+      },
+      "cap": {
+        "title": "Este mês · limite de IA do plano",
+        "used": "{used, number} de {limit, number} tokens usados este mês",
+        "unlimited": "{used, number} tokens usados este mês: ilimitado no seu plano",
+        "reached": "Quase no limite mensal. Faça upgrade do plano ou adicione suas próprias chaves (BYOK) para continuar usando a IA.",
+        "note": "Os tokens BYOK rodam na sua própria conta de provedor e nunca contam para o limite do seu plano."
+      },
+      "daily": "Consumo diário de tokens",
+      "byProvider": "Por provedor",
+      "split": "Chaves do plano x suas chaves",
+      "splitPlatform": "Chaves do plano",
+      "splitOwn": "Suas chaves (BYOK)",
+      "models": "Por modelo",
+      "columns": {
+        "model": "Modelo",
+        "provider": "Provedor",
+        "tokens": "Tokens",
+        "calls": "Chamadas",
+        "prompt": "Prompt",
+        "completion": "Conclusão"
+      },
+      "empty": "Nenhum uso de IA neste período ainda.",
+      "costNote": "O custo é uma estimativa baseada nas tarifas combinadas publicadas por token de cada provedor e pode diferir da fatura do seu provedor. As contagens de tokens são exatas."
+    },
+    "own": {
+      "title": "Suas chaves de provedores de IA",
+      "description": "Adicione sua própria chave de um fornecedor para que os recursos de IA usem a sua conta em vez da compartilhada. As chaves são criptografadas e nunca mais são exibidas.",
+      "allowed": "Seu plano permite que suas próprias chaves tenham precedência.",
+      "notAllowed": "Seu plano ainda não inclui chaves próprias. Você pode salvá-las agora, mas as chamadas continuarão usando a chave compartilhada até você fazer upgrade.",
+      "add": "Adicionar uma chave",
+      "provider": "Provedor",
+      "apiKey": "Chave de API",
+      "apiKeyHint": "Pelo menos 8 caracteres.",
+      "save": "Salvar chave",
+      "replace": "Substituir chave",
+      "saving": "Salvando",
+      "on": "Ativada",
+      "off": "Desativada",
+      "ends": "Termina em {last4}",
+      "using": "As chamadas usam",
+      "usingOwn": "sua chave",
+      "usingShared": "a chave compartilhada",
+      "usingNone": "nenhuma chave (nada disponível)",
+      "turnOn": "Ativar",
+      "turnOff": "Desativar",
+      "remove": "Remover",
+      "removeTitle": "Remover sua chave de {name}?",
+      "removeBody": "As chamadas voltam a usar a chave compartilhada, se houver uma disponível.",
+      "removeConfirm": "Remover chave",
+      "cancel": "Cancelar",
+      "empty": "Você ainda não adicionou nenhuma chave.",
+      "toasts": {
+        "saved": "Chave de {name} salva.",
+        "on": "Chave de {name} ativada.",
+        "off": "Chave de {name} desativada.",
+        "removed": "Chave de {name} removida."
+      },
+      "errors": {
+        "tooShort": "Uma chave tem pelo menos 8 caracteres."
+      }
+    }
+  }
+}

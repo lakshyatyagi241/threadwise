@@ -1,0 +1,201 @@
+{
+  "localization-translation": {
+    "nav": {
+      "languages": "Diller",
+      "providers": "Çeviri sağlayıcıları",
+      "usage": "Çeviri kullanımı",
+      "group": "Yerelleştirme"
+    },
+    "errors": {
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "conflict": "Bunu başka biri değiştirdi. Liste yeniden yüklendi; kontrol edip tekrar deneyin.",
+      "languageIsDefault": "Varsayılan dil kapatılamaz veya silinemez. Önce başka bir dili varsayılan yapın.",
+      "languageInactive": "Bir dili varsayılan yapmadan önce etkinleştirin.",
+      "credentialsMissing": "Önce gerekli kimlik bilgilerini doldurun.",
+      "providerInactive": "Yalnızca etkin bir sağlayıcı varsayılan olabilir.",
+      "lockdownNoOfficial": "Kilitleme özelliğini açmadan önce en az bir resmi ücretli sağlayıcıyı (DeepL veya Google Cloud) etkinleştirin ve yapılandırın.",
+      "planGate": "Planınız çeviriyi içermiyor."
+    },
+    "switcher": {
+      "label": "Dili değiştir",
+      "menu": "Diller",
+      "failed": "Dil değiştirilemedi. Tekrar deneyin."
+    },
+    "languages": {
+      "kicker": "Yönetici · Sistem · Diller",
+      "titleLead": "Platform",
+      "titleEm": "diller",
+      "description": "Yeni kullanıcıların ve çalışma alanlarının seçebileceği dilleri yönetin. “Varsayılan” dil, oluşturulan her yeni hesap için yedek dildir.",
+      "loading": "Diller yükleniyor",
+      "stats": {
+        "total": "Toplam",
+        "totalHint": "yapılandırıldı",
+        "active": "Etkin",
+        "activeHint": "kullanıcılara görünür",
+        "default": "Varsayılan",
+        "defaultHint": "yeni hesaplar için yedek"
+      },
+      "catalog": "Katalog",
+      "allLanguages": "Tüm diller",
+      "columns": {
+        "name": "Ad",
+        "code": "Kod",
+        "dir": "Yön",
+        "active": "Etkin",
+        "default": "Varsayılan",
+        "actions": "İşlemler"
+      },
+      "on": "Açık",
+      "off": "Kapalı",
+      "defaultBadge": "Varsayılan",
+      "set": "Yap",
+      "toggleLabel": "{name} dilini aç veya kapat",
+      "delete": "Sil",
+      "cancel": "İptal",
+      "empty": "Henüz dil yok.",
+      "flash": {
+        "activated": "{name} etkinleştirildi.",
+        "disabled": "{name} devre dışı bırakıldı.",
+        "nowDefault": "{name} artık varsayılan dil.",
+        "removed": "Dil kaldırıldı."
+      },
+      "confirmDelete": {
+        "title": "Dili sil",
+        "message": "{name} kaldırılsın mı?"
+      },
+      "pack": {
+        "kicker": "Dil paketi",
+        "title": "{count} dille sabit",
+        "body": "Her etkin dil, platformla birlikte gelen bir çeviri JSON dosyasıyla desteklenir. Çeviri paketi genişletildiğinde yeni dil yuvaları burada görünür.",
+        "note": "Hâlâ soldaki tablodan etkin durumu değiştirebilir, yerel adı ve yönü düzenleyebilir ve platform varsayılanını seçebilirsiniz."
+      },
+      "usedFor": {
+        "title": "Bu nasıl kullanılıyor",
+        "body": "Etkin diller, kullanıcı tarafındaki profil dil değiştiricisinde ve şablon / otomatik yanıt seçicilerinde görünür. Varsayılan, henüz bir dil seçmemiş yeni hesaplara uygulanır."
+      }
+    },
+    "providers": {
+      "kicker": "Yönetici · Sistem",
+      "title": "Çeviri sağlayıcıları",
+      "description": "Çok dilli otomatik yanıt, gelen mesajları çevirmek ve müşterinin dilinde yanıt hazırlamak için bu sağlayıcılardan birini kullanır. MyMemory kutudan çıktığı haliyle etkindir (ücretsiz, anahtar gerekmez); daha yüksek kalite veya kendi sunucunuzda gizlilik için DeepL / Google Cloud / LibreTranslate ekleyin.",
+      "loading": "Sağlayıcılar yükleniyor",
+      "on": "Açık",
+      "off": "Kapalı",
+      "cancel": "İptal",
+      "lockdown": {
+        "title": "Uyumluluk kilidi",
+        "description": "Açıkken, yedek zincir <mono>{slugs}</mono> sağlayıcısını atlar ve otomatik yanıt çevirisini yalnızca resmi ücretli API'ler (DeepL, Google Cloud) üzerinden yönlendirir. Resmi olmayan üçüncü taraf uç noktalarını yasaklayan bazı kurumsal güvenlik politikalarının gereğidir.",
+        "enable": "Kilidi etkinleştir",
+        "disable": "Kilidi devre dışı bırak",
+        "confirmOn": "Kilit AÇIK olsun mu? Ücretsiz sürücüler atlanır; çevirmek için yalnızca ücretli API'ler kullanılır.",
+        "confirmOff": "Kilit KAPALI olsun mu? Ücretsiz sürücüler yedek zincire geri döner."
+      },
+      "flash": {
+        "activated": "{name} etkinleştirildi.",
+        "disabled": "{name} devre dışı bırakıldı.",
+        "nowDefault": "{name} artık varsayılan sağlayıcı.",
+        "saved": "{name} kaydedildi.",
+        "lockdownOn": "Uyumluluk kilidi açık.",
+        "lockdownOff": "Uyumluluk kilidi kapalı."
+      },
+      "empty": {
+        "title": "Yapılandırılmış çeviri sağlayıcısı yok",
+        "body": "Bu listeyi doldurmak için çeviri sağlayıcı tohumunu çalıştırın."
+      },
+      "active": "Etkin",
+      "disabled": "Devre dışı",
+      "defaultBadge": "Varsayılan",
+      "skipped": "Kilit · atlandı",
+      "skippedTitle": "Uyumluluk kilidi açık olduğu için atlandı.",
+      "slug": "slug: {slug}",
+      "makeDefault": "Varsayılan yap",
+      "activate": "Etkinleştir",
+      "disable": "Devre dışı bırak",
+      "keepSecret": "••••••• (saklamak için boş bırakın)",
+      "noCredentials": "Kimlik bilgisi gerekmez — bu sağlayıcı kutudan çıktığı haliyle çalışır.",
+      "sortOrder": "Sıralama",
+      "sortOrderHint": "Düşük değer = yedek zincirde daha yüksek öncelik.",
+      "save": "{name} kaydet"
+    },
+    "usage": {
+      "kicker": "Yönetici · Sistem",
+      "title": "Çeviri kullanımı",
+      "description": "Her otomatik yanıt çevirisinin hacmi ve tahmini maliyeti. Paketlenmiş sözlük eşleşmeleri ve 24 saatlik önbellek isabetleri faturalandırılmaz ve burada görünmez — burada yalnızca dış API çağrıları gösterilir.",
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "apply": "Uygula",
+      "badRange": "Başlangıç tarihi bitiş tarihinden sonra olamaz.",
+      "loading": "Kullanım yükleniyor",
+      "failed": "Kullanım yüklenemedi.",
+      "totals": {
+        "calls": "Dış API çağrıları",
+        "chars": "Çevrilen karakterler",
+        "charsOut": "çıkış: {count}",
+        "cost": "Tahmini maliyet",
+        "costHint": "yayımlanmış karakter başı ücretlere göre",
+        "fallbackHits": "Yedek çalışmaları",
+        "fallbackHint": "birincil sürücü başarısız oldu, zincir devraldı"
+      },
+      "byProvider": "Sağlayıcıya göre",
+      "emptyProvider": "Bu aralıkta çeviri çağrısı yok. Otomatik yanıtı olan bir cihaza İngilizce olmayan bir gelen mesaj gönderin, ardından yenileyin.",
+      "free": "ücretsiz",
+      "last30": "Son 30 gün",
+      "timelineHint": "tarih / karakter / maliyet için her çubuğun üzerine gelin",
+      "topWorkspaces": "En çok harcama yapan çalışma alanları",
+      "emptyWorkspaces": "Bu aralıkta ücretli katmanda çeviri yok.",
+      "cols": {
+        "provider": "Sağlayıcı",
+        "workspace": "Çalışma alanı",
+        "calls": "Çağrı",
+        "charsIn": "Girdi karakter",
+        "chars": "Karakter",
+        "cost": "Maliyet",
+        "rate": "1 milyon karakter başına ücret"
+      }
+    },
+    "settings": {
+      "title": "Gerçek zamanlı çeviri",
+      "description": "Müşterilerinizle her dilde sohbet edin. Her taraf kendi dilinde okur — otomatik olarak.",
+      "loading": "Çeviri ayarları yükleniyor",
+      "failed": "Çeviri ayarları yüklenemedi.",
+      "saved": "Çeviri ayarları kaydedildi.",
+      "steps": {
+        "1": {
+          "title": "Müşteri mesajları (her dilde)",
+          "body": "Mesajları otomatik olarak ekibinizin diline çevrilir ve temsilcinize gösterilir; orijinali bir tık uzaklıktadır."
+        },
+        "2": {
+          "title": "Temsilci yanıtları (sizin diliniz)",
+          "body": "Yanıtınız, WhatsApp'ta gönderilmeden hemen önce müşterinin diline çevrilir."
+        },
+        "3": {
+          "title": "AI + widget de",
+          "body": "AI temsilcisi ve web sitesi sohbet widget'ı müşterinin dilinde yerel olarak yanıt verir."
+        }
+      },
+      "engine": {
+        "kicker": "Çeviri motoru",
+        "free": "MyMemory (ücretsiz)",
+        "body": "Burada herhangi bir API anahtarı girmezsiniz — çeviri platform genelinde bir kez yapılandırılır ve kutudan çıktığı haliyle otomatik çalışır. Ücretsiz bir motor varsayılan olarak etkindir; daha yüksek kalite için platform DeepL / Google Translate kullanacak şekilde kurulabilir."
+      },
+      "usage": {
+        "kicker": "Bu ay",
+        "line": "çevrilen karakter · {count} mesaj"
+      },
+      "enabled": {
+        "title": "Konuşmaları otomatik çevir",
+        "hint": "Bu çalışma alanı için tümünü açın veya kapatın."
+      },
+      "teamLanguage": {
+        "label": "Ekibinizin dili",
+        "hint": "Temsilcilerinizin okuyup yazdığı dil. Müşteri mesajları buna çevrilir; yanıtlarınız bundan çevrilir."
+      },
+      "save": "Çeviri ayarlarını kaydet",
+      "upgrade": {
+        "title": "Gerçek zamanlı çeviri için yükseltin.",
+        "body": "Ekibinizin dili ile müşterilerinizin dilleri arasında WhatsApp konuşmalarını otomatik çevirin.",
+        "link": "Planları gör →"
+      }
+    }
+  }
+}

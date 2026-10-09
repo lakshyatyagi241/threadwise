@@ -1,0 +1,365 @@
+{
+  "install-update-licensing": {
+    "setup": {
+      "title": "安装向导",
+      "brand": "CRM",
+      "railEyebrow": "安装向导",
+      "railTitle": "您的 <i>WhatsApp 套件</i>，几分钟即可就绪。",
+      "railFooter": "平台安装程序 · v{version}",
+      "stepsLabel": "安装步骤",
+      "stepOf": "第 {n} 步，共 {total} 步",
+      "mobileStep": "第 {n}/{total} 步 · {name}",
+      "steps": {
+        "welcome": "欢迎",
+        "requirements": "环境要求",
+        "database": "数据库",
+        "application": "应用",
+        "admin": "管理员账户",
+        "node": "Node 桥接",
+        "install": "安装"
+      },
+      "screens": {
+        "licence": "许可证"
+      },
+      "disabled": "由于服务器未配置安装令牌，安装功能已关闭。请设置 SETUP_TOKEN，或通过命令行创建第一个操作员。",
+      "unavailable": "无法读取安装状态。请检查 API 是否正在运行，然后重新加载此页面。",
+      "welcome": {
+        "eyebrow": "欢迎",
+        "title": "让我们启动 <i>{app}</i>。",
+        "intro": "共七个简单步骤，约需三分钟。我们将验证您的服务器，检查数据库，确认管理控制台所需的各项默认设置，绑定 Node 桥接，并创建您的第一个超级管理员登录。",
+        "tiles": {
+          "database": "数据库",
+          "security": "安全",
+          "translations": "翻译",
+          "admin": "管理"
+        },
+        "beforeTitle": "开始之前",
+        "before": {
+          "database": "一个此部署可以访问且已应用迁移的 PostgreSQL 16 数据库。",
+          "runtime": "Node.js 22 或更高版本，并在 API 旁运行 Redis。",
+          "token": "部署配置中的安装令牌（SETUP_TOKEN）。"
+        },
+        "tokenLabel": "安装令牌",
+        "tokenHint": "证明您对此部署拥有控制权。每个步骤都会再次校验。",
+        "begin": "开始安装"
+      },
+      "licence": {
+        "eyebrow": "许可证",
+        "title": "验证您的 <i>购买凭证</i>。",
+        "intro": "请输入您的 CodeCanyon 购买代码。安装前我们会通过 Envato 进行验证，未提供有效代码则无法继续安装。",
+        "label": "购买代码",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "help": "在您的 CodeCanyon 账户中查找：<b>下载</b> → <b>许可证证书与购买代码</b>。",
+        "verified": "购买凭证已验证，您可以继续。",
+        "submit": "验证并继续"
+      },
+      "requirements": {
+        "eyebrow": "第 {n} 步，共 {total} 步",
+        "title": "服务器 <i>环境要求</i>。",
+        "intro": "安装前，我们正在检查主机是否满足最低要求。",
+        "runtimeOk": "Node.js {version}",
+        "runtimeOkDetail": "——满足 {required} 及以上的要求",
+        "runtimeBad": "Node.js {version}",
+        "runtimeBadDetail": "——{app} 需要 Node.js {required} 或更高版本。",
+        "modules": "运行时模块",
+        "services": "服务",
+        "directories": "目录",
+        "database": "数据库",
+        "noDatabase": "未检测到数据库。",
+        "databaseRequired": "需要 PostgreSQL。",
+        "extensionMissing": "缺少数据库扩展：{name}。",
+        "tiles": {
+          "database": "数据库",
+          "redis": "redis",
+          "migrations": "迁移",
+          "permissions": "权限",
+          "temp": "临时文件",
+          "migrationsDir": "迁移"
+        },
+        "fixNotice": "请先修复标为珊瑚色的项目再继续。只有全部检查通过后，“继续”按钮才会启用。",
+        "recheck": "重新检查",
+        "checking": "检查中…",
+        "loadFailed": "无法运行环境要求检查。"
+      },
+      "database": {
+        "eyebrow": "第 {n} 步，共 {total} 步",
+        "title": "数据库 <i>连接</i>。",
+        "intro": "检查此平台所用的 PostgreSQL 数据库。继续之前我们会先验证连接。",
+        "driver": "数据库驱动",
+        "driverName": "PostgreSQL",
+        "host": "主机",
+        "port": "端口",
+        "name": "数据库名称",
+        "namePlaceholder": "crm",
+        "user": "用户名",
+        "userPlaceholder": "postgres",
+        "password": "密码",
+        "passwordHint": "留空则使用此部署自身的密码。连接本身在服务器环境中设置，此步骤仅用于测试。",
+        "test": "测试连接",
+        "testing": "测试中…",
+        "ok": "连接成功。",
+        "unreachable": "无法通过任何路径连接到 PostgreSQL。请使用托管面板显示的确切主机，检查端口，确认数据库和用户存在，且服务器允许来自本机的连接，然后重试。",
+        "networkError": "网络错误：{detail}"
+      },
+      "application": {
+        "eyebrow": "第 {n} 步，共 {total} 步",
+        "title": "应用 <i>基本信息</i>。",
+        "intro": "为此次安装命名，设置公开 URL，并选择时区和默认语言。",
+        "name": "应用名称",
+        "url": "应用 URL",
+        "urlPlaceholder": "https://app.example.com",
+        "timezone": "时区",
+        "timezonePlaceholder": "搜索时区…",
+        "timezoneEmpty": "没有匹配的时区。",
+        "locale": "默认语言"
+      },
+      "admin": {
+        "eyebrow": "第 {n} 步，共 {total} 步",
+        "title": "管理员 <i>账户</i>。",
+        "intro": "您的第一个超级管理员登录及私有工作区。之后可在控制台中添加团队成员。",
+        "fullName": "全名",
+        "fullNamePlaceholder": "Vetrick R.",
+        "email": "邮箱",
+        "emailPlaceholder": "you@yourdomain.com",
+        "password": "密码",
+        "confirm": "确认密码",
+        "workspace": "工作区名称",
+        "workspacePlaceholder": "我的团队",
+        "note": "至少 12 个字符，包含大写字母、小写字母、数字和符号 · 采用 argon2id 哈希。此平台为多租户，已预先配置一个私有工作区；可稍后在“工作区”中重命名。您的密码不会以明文存储，首次登录时必须配合两步验证。"
+      },
+      "node": {
+        "eyebrow": "第 {n} 步，共 {total} 步",
+        "title": "Node <i>桥接</i>。",
+        "intro": "WhatsApp 消息通过一个小型 Node 服务发送。请将平台指向该服务并设置共享令牌，安装程序会为双方保存该令牌。",
+        "url": "Node 服务器 URL",
+        "urlHint": "Node 桥接的监听地址。API 通过此地址发送消息。",
+        "port": "Node 端口",
+        "portHint": "Node 桥接绑定的端口。",
+        "token": "Node 共享令牌",
+        "tokenHint": "自动填充。必须与 API 及 Node 桥接中的一致，安装程序会加密保存一次。",
+        "generate": "生成",
+        "info": "这些设置保存在平台设置中，而非 .env 文件中。该令牌将以 NODE_WEBHOOK_TOKEN 的名称与 Node 桥接共享。",
+        "submit": "继续并安装"
+      },
+      "install": {
+        "eyebrow": "第 {n} 步，共 {total} 步",
+        "title": "正在安装 <i>{app}</i>。",
+        "intro": "请稍候，我们正在配置一切。通常只需几秒钟。",
+        "preparing": "准备中…",
+        "complete": "已完成",
+        "failed": "失败，请见下方",
+        "paused": "安装已暂停",
+        "retry": "从失败步骤重试",
+        "success": "安装完成，正在跳转…",
+        "rows": {
+          "configuration": {
+            "done": "配置已保存",
+            "active": "正在保存应用及 Node 桥接配置…"
+          },
+          "migrations": {
+            "done": "数据库迁移已验证",
+            "active": "正在检查数据库迁移…"
+          },
+          "defaults": {
+            "done": "基础数据已验证",
+            "active": "正在检查角色、权限和默认设置…"
+          },
+          "account": {
+            "done": "管理员与工作区已就绪",
+            "active": "正在创建管理员账户和私有工作区…"
+          },
+          "storage": {
+            "done": "存储已就绪",
+            "active": "正在检查存储和临时目录…"
+          },
+          "finalize": {
+            "done": "安装已完成",
+            "active": "正在锁定安装并记录安装信息…"
+          }
+        }
+      },
+      "completed": {
+        "body": "此部署已完成安装。",
+        "login": "前往登录"
+      },
+      "back": "返回",
+      "continue": "继续",
+      "show": "显示",
+      "hide": "隐藏",
+      "working": "处理中",
+      "problems": {
+        "token": "安装令牌不正确。",
+        "disabled": "此服务器已禁用安装功能。",
+        "outOfOrder": "步骤顺序有误。请重新加载页面后再次开始。",
+        "step": "安装步骤失败。请检查您的信息和服务器日志，然后重试。",
+        "unknown": "出现问题，请重试。",
+        "requestId": "请求 ID {id}",
+        "prerequisites": "服务器尚未准备好进行安装：{items}。",
+        "licence": {
+          "empty": "请输入您的 CodeCanyon 购买代码。",
+          "not_configured": "未配置许可证检查（缺少 Envato 令牌）。",
+          "unreachable": "无法连接 Envato 验证代码，请检查服务器的互联网连接。",
+          "not_found": "购买代码无效，Envato 上没有对应的销售记录。",
+          "http_error": "Envato 验证失败。",
+          "other_product": "此购买代码属于其他产品。",
+          "unknown": "无法验证购买代码。"
+        },
+        "keys": {
+          "runtime": "Node.js 版本",
+          "database": "数据库",
+          "redis": "Redis",
+          "migrations": "数据库迁移",
+          "permissions": "权限定义",
+          "temp": "临时目录",
+          "storage": "存储",
+          "default": "{key}"
+        }
+      },
+      "errors": {
+        "tokenLength": "安装令牌至少为 {min} 个字符。",
+        "dbHost": "请输入数据库主机。",
+        "dbPort": "请输入 1 到 65535 之间的端口。",
+        "dbName": "请输入数据库名称。",
+        "dbUser": "请输入数据库用户名。",
+        "appNameRequired": "请输入应用名称。",
+        "appNameLong": "应用名称最多 {max} 个字符。",
+        "appUrl": "请输入以 http:// 或 https:// 开头的完整 URL。",
+        "timezone": "请从列表中选择时区。",
+        "locale": "请从列表中选择语言。",
+        "fullNameRequired": "请输入您的全名。",
+        "fullNameLong": "全名最多 {max} 个字符。",
+        "email": "请输入有效的邮箱地址。",
+        "passwordMismatch": "两次输入的密码不一致。",
+        "workspaceRequired": "请输入至少 2 个字符的工作区名称。",
+        "workspaceLong": "工作区名称最多 {max} 个字符。",
+        "nodeUrl": "请输入以 http:// 或 https:// 开头的 Node 服务器 URL。",
+        "nodePort": "请输入 1 到 65535 之间的端口。",
+        "nodeToken": "共享令牌至少为 {min} 个字符。",
+        "password": {
+          "length": "密码至少需要 12 个字符。",
+          "upper": "密码需要包含大写字母。",
+          "lower": "密码需要包含小写字母。",
+          "number": "密码需要包含数字。",
+          "symbol": "密码需要包含符号。",
+          "personal": "密码不得包含您的姓名或邮箱。"
+        }
+      }
+    },
+    "system": {
+      "nav": {
+        "group": "系统",
+        "item": "更新程序"
+      },
+      "title": "应用更新程序",
+      "titleRich": "应用 <i>更新程序</i>。",
+      "titleAccent": "更新程序",
+      "kicker": "管理 · 维护",
+      "description": "验证您的购买凭证，并查看此部署正在运行的确切版本。更新以新镜像的形式发布，迁移会在启动前运行。此页面不会触及您的数据库、存储和上传文件。",
+      "crumbAdmin": "管理",
+      "crumbSettings": "设置",
+      "crumbUpdater": "更新程序",
+      "version": "v{version} · 构建 {build}",
+      "buildNone": "不适用",
+      "allSettings": "全部设置",
+      "refresh": "刷新",
+      "loading": "加载中",
+      "errorForbidden": "您无权查看此页面。",
+      "errorUnexpected": "无法加载更新程序。",
+      "requestId": "请求 ID",
+      "retry": "重试",
+      "licence": {
+        "kicker": "第 1 步 · 许可证",
+        "title": "验证您的购买凭证",
+        "intro": "请输入您的 CodeCanyon 购买代码。更新前会通过 Envato 进行验证。",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "mask": "••••••••-••••-••••-••••-••••••••••••",
+        "verify": "验证",
+        "verifying": "验证中…",
+        "verified": "购买凭证已验证，您可以继续。",
+        "verifiedAt": "已于 {date} 验证。",
+        "notVerified": "尚未验证。",
+        "notEnabled": "此部署未强制要求购买代码，因此此处无需验证。",
+        "superAdminOnly": "只有超级管理员可以验证购买代码。",
+        "reasons": {
+          "empty": "请输入您的 CodeCanyon 购买代码。",
+          "not_configured": "未配置许可证检查（缺少 Envato 令牌）。",
+          "unreachable": "无法连接 Envato 验证代码，请检查服务器的互联网连接。",
+          "not_found": "购买代码无效，Envato 上没有对应的销售记录。",
+          "http_error": "Envato 验证失败。",
+          "other_product": "此购买代码属于其他产品。",
+          "unknown": "无法验证购买代码。"
+        }
+      },
+      "process": {
+        "kicker": "更新流程",
+        "title": "更新以镜像形式发布",
+        "step2": {
+          "title": "备份数据库",
+          "body": "部署前请先备份数据库（pg_dump 或时间点恢复）。此处的备份属于基础设施工作，而非按钮操作。"
+        },
+        "step3": {
+          "title": "部署新镜像",
+          "body": "发布新的容器镜像。当前运行的版本和构建信息如下所示。"
+        },
+        "step4": {
+          "title": "运行迁移",
+          "body": "pnpm db:migrate 会应用新的表和列，且从不删除数据。下方的台账列出了每项迁移及其状态。"
+        },
+        "step5": {
+          "title": "健康检查",
+          "body": "下方会实时检查依赖项。部署后请刷新此页面，以确认一切正常。"
+        }
+      },
+      "release": {
+        "kicker": "此部署",
+        "title": "发布版本",
+        "version": "版本",
+        "gitSha": "构建提交",
+        "buildNumber": "构建编号",
+        "builtAt": "构建时间",
+        "environment": "环境",
+        "uptime": "运行时长",
+        "none": "未记录",
+        "demo": "演示模式已开启：除非在允许列表中，否则拒绝写入。"
+      },
+      "setup": {
+        "title": "首次安装",
+        "open": "打开",
+        "completed": "已完成",
+        "completedAt": "已于 {date} 在版本 {version} 上完成"
+      },
+      "checks": {
+        "kicker": "健康",
+        "title": "健康检查",
+        "database": "数据库",
+        "redis": "Redis",
+        "migrations": "迁移",
+        "up": "正常",
+        "down": "异常",
+        "degraded": "降级",
+        "latency": "{ms} 毫秒"
+      },
+      "migrations": {
+        "kicker": "台账",
+        "title": "迁移",
+        "summary": "已应用 {count} 项",
+        "status": {
+          "current": "已是最新",
+          "pending": "待执行的迁移",
+          "drift": "迁移文件在应用后已被修改",
+          "unknown": "此构建未包含迁移文件"
+        },
+        "state": {
+          "applied": "已应用",
+          "pending": "待执行",
+          "modified": "已修改",
+          "missing-file": "文件缺失"
+        },
+        "id": "迁移",
+        "stateLabel": "状态",
+        "appliedAt": "应用时间"
+      },
+      "breadcrumb": "面包屑"
+    }
+  }
+}

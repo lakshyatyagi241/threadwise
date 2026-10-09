@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "Nền tảng",
+      "inbox": "Hộp thư & Chat",
+      "audience": "CRM",
+      "sales": "Bán hàng",
+      "campaigns": "Chiến dịch",
+      "automation": "Tự động hóa",
+      "store": "Cửa hàng",
+      "apps": "Chợ ứng dụng",
+      "help": "Hỗ trợ & Trợ giúp",
+      "settings": "Cài đặt"
+    },
+    "locked": "Nâng cấp",
+    "language": "Ngôn ngữ",
+    "theme": "Giao diện",
+    "themeLight": "Sáng",
+    "themeDark": "Tối",
+    "logout": "Đăng xuất",
+    "openMenu": "Mở menu",
+    "admin": {
+      "title": "Bảng điều khiển nền tảng",
+      "note": "Các màn hình quản trị nền tảng sẽ hiển thị tại đây khi có quản trị viên cấp cao."
+    },
+    "soon": "Sắp ra mắt",
+    "new": "Mới",
+    "comingSoon": "Sắp ra mắt",
+    "appGate": {
+      "title": "{app} không có trong không gian làm việc của bạn",
+      "body": "{app} là ứng dụng tùy chọn. Thêm từ Chợ ứng dụng và ứng dụng sẽ xuất hiện trong menu của bạn.",
+      "bodyNoMarketplace": "{app} là ứng dụng tùy chọn mà không gian làm việc này chưa có. Nhờ quản trị viên không gian làm việc thêm từ Chợ ứng dụng.",
+      "browse": "Xem Chợ ứng dụng",
+      "back": "Quay lại bảng điều khiển",
+      "unofficialTitle": "{app} không khả dụng",
+      "unofficialBody": "{app} chỉ dùng với số WhatsApp cá nhân ghép nối bằng mã QR, và các số này chưa được bật cho không gian làm việc của bạn. WhatsApp kết nối qua WhatsApp Business API chính thức."
+    },
+    "closeMenu": "Đóng menu",
+    "mainMenu": "Menu chính",
+    "userMenu": "Menu tài khoản",
+    "account": "Tài khoản",
+    "balance": "Số dư",
+    "pageSettings": {
+      "label": "Cài đặt cho trang này",
+      "hint": "Các cài đặt này chỉ hiển thị vì vai trò của bạn được phép thay đổi."
+    },
+    "notifications": "Thông báo",
+    "settings": "Cài đặt",
+    "pinned": "Trợ giúp và cài đặt",
+    "nav": {
+      "analytics": "Phân tích",
+      "notifications": "Thông báo",
+      "inbox": "Hộp thư đến",
+      "quickChat": "Chat nhanh",
+      "callLogs": "Nhật ký cuộc gọi",
+      "teamChat": "Chat nhóm",
+      "leadFinder": "Tìm khách tiềm năng",
+      "campaigns": "Chiến dịch",
+      "broadcasts": "Gửi hàng loạt",
+      "scheduled": "Đã lên lịch",
+      "templates": "Mẫu",
+      "history": "Lịch sử",
+      "flows": "Luồng",
+      "aiAssistants": "Trợ lý AI",
+      "appointments": "Lịch hẹn",
+      "crmDashboard": "Bảng điều khiển CRM",
+      "store": "Cửa hàng",
+      "catalog": "Danh mục sản phẩm",
+      "support": "Hỗ trợ",
+      "guidebook": "Sổ tay hướng dẫn",
+      "pipelines": "Pipeline",
+      "tasks": "Công việc",
+      "companies": "Công ty",
+      "emailTemplates": "Mẫu email",
+      "proposals": "Đề xuất",
+      "estimates": "Báo giá",
+      "invoices": "Hóa đơn",
+      "payments": "Thanh toán"
+    },
+    "help": "Trợ giúp",
+    "unreadCount": "{count, plural, other {# chưa đọc}}"
+  }
+}

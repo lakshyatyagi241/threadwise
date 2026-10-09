@@ -1,5 +1,11 @@
 import { flbListOption, type FlowType } from '@crm/contracts';
 
+/**
+ * A `useTranslations('flb.builder.formsCore.helpers')` function. The helpers below return text, so the component hands its
+ * translator in (a helper outside a component cannot call the hook).
+ */
+export type HelperT = (key: string, values?: Record<string, string | number>) => string;
+
 /** Pure helpers behind the core node forms (kept out of the components so they can be unit tested). */
 
 export const LIST_TITLE_MAX = 24;
@@ -49,17 +55,22 @@ export function withCurrent(
 }
 
 /** "<name> · live" / "<name> · draft": the Sub-flow picker marks each flow with its published state (Reference). */
-export const subflowLabel = (name: string, isPublished: boolean): string =>
-  `${name || 'Flow'}${isPublished ? ' · live' : ' · draft'}`;
+export const subflowLabel = (t: HelperT, name: string, isPublished: boolean): string =>
+  t(isPublished ? 'subflowLive' : 'subflowDraft', { name: name || t('flowFallback') });
 
-/** "<name> · <provider>/<model>" (the model alone when the provider is unknown): the Chatbot picker's agent label. */
-export function agentLabel(a: {
-  name: string;
-  provider?: string | null | undefined;
-  model?: string | null | undefined;
-}): string {
-  const tag = a.provider && a.model ? ` · ${a.provider}/${a.model}` : '';
-  return `${a.name || 'Agent'}${tag}`;
+/** "<name> · <provider>/<model>" (the name alone when the provider is unknown): the Chatbot picker's agent label. */
+export function agentLabel(
+  t: HelperT,
+  a: {
+    name: string;
+    provider?: string | null | undefined;
+    model?: string | null | undefined;
+  },
+): string {
+  const name = a.name || t('agentFallback');
+  return a.provider && a.model
+    ? t('agentWithModel', { name, model: `${a.provider}/${a.model}` })
+    : name;
 }
 
 // --- trigger -------------------------------------------------------------------------------------------------------
@@ -97,164 +108,80 @@ interface SenderLike {
   engineLabel?: string | null | undefined;
 }
 
-const SENDER_PLACEHOLDER: Record<SenderChannel, { pick: string; none: string }> = {
-  chat: { pick: '— pick number —', none: 'No connected number' },
-  instagram: { pick: '— pick Instagram account —', none: 'No connected Instagram account' },
-  facebook: { pick: '— pick Facebook Page —', none: 'No connected Facebook Page' },
-  tiktok: { pick: '— pick TikTok account —', none: 'No connected TikTok account' },
-  telegram: { pick: '— pick Telegram bot —', none: 'No connected Telegram bot' },
-  line: { pick: '— pick LINE channel —', none: 'No connected LINE channel' },
-  wechat: { pick: '— pick WeChat account —', none: 'No connected WeChat account' },
-  viber: { pick: '— pick Viber account —', none: 'No connected Viber account' },
-  email: { pick: '— pick mailbox —', none: 'No linked mailbox' },
-};
-
-export function senderOptions(channel: SenderChannel, senders: readonly SenderLike[]): SelectOpt[] {
-  const ph = SENDER_PLACEHOLDER[channel];
+export function senderOptions(
+  t: HelperT,
+  channel: SenderChannel,
+  senders: readonly SenderLike[],
+): SelectOpt[] {
   return [
-    { v: '', l: senders.length ? ph.pick : ph.none },
+    { v: '', l: senders.length ? t(`senderPick.${channel}`) : t(`senderEmpty.${channel}`) },
     ...senders.map((s) => ({
       v: s.key,
       l:
         channel === 'chat' && s.engineLabel && !s.label.includes(s.engineLabel)
-          ? `${s.label} · ${s.engineLabel}`
+          ? t('senderEngine', { label: s.label, engine: s.engineLabel })
           : s.label,
     })),
   ];
 }
 
+/** A translated sentence that ends in (or holds) a link: `key` is a rich message with a `<link/>` tag, `href` the path. */
 export interface LinkedCopy {
-  before: string;
+  key: string;
   href: string;
-  after: string;
 }
 
 /** The field label above the sender select ("Listen on ..." for keyword flows, "Send from ..." otherwise). */
-export function senderLabel(channel: SenderChannel, kind: unknown): string {
-  const listen = kind === 'keyword';
-  const noun: Record<SenderChannel, string> = {
-    instagram: 'Instagram account',
-    facebook: 'Facebook Page',
-    line: 'LINE channel',
-    wechat: 'WeChat account',
-    viber: 'Viber account',
-    email: 'mailbox',
-    // Reference has no dedicated copy for these two and falls back to the WhatsApp wording.
-    chat: 'number',
-    tiktok: 'number',
-    telegram: 'Telegram bot',
-  };
-  return `${listen ? 'Listen on' : 'Send from'} ${noun[channel]}`;
+export function senderLabel(t: HelperT, channel: SenderChannel, kind: unknown): string {
+  return t(`senderLabel.${kind === 'keyword' ? 'listen' : 'send'}.${channel}`);
 }
 
 export function senderHint(channel: SenderChannel, unofficial = false): LinkedCopy {
   switch (channel) {
     case 'instagram':
-      return {
-        before: 'Required — which connected Instagram account this flow runs on. Connect one on ',
-        href: '/instagram',
-        after: '.',
-      };
+      return { key: 'senderHint.instagram', href: '/instagram' };
     case 'facebook':
-      return {
-        before: 'Required — which connected Facebook Page this flow runs on. Connect one on ',
-        href: '/facebook',
-        after: '.',
-      };
+      return { key: 'senderHint.facebook', href: '/facebook' };
     case 'telegram':
-      return {
-        before: 'Required — which connected Telegram bot this flow runs on. Connect one on ',
-        href: '/telegram',
-        after: '.',
-      };
+      return { key: 'senderHint.telegram', href: '/telegram' };
     case 'line':
-      return {
-        before: 'Required — which connected LINE channel this flow runs on. Connect one on ',
-        href: '/settings/channels',
-        after: '.',
-      };
+      return { key: 'senderHint.line', href: '/settings/channels' };
     case 'wechat':
-      return {
-        before: 'Required — which connected WeChat account this flow runs on. Connect one on ',
-        href: '/settings/channels',
-        after: '.',
-      };
+      return { key: 'senderHint.wechat', href: '/settings/channels' };
     case 'viber':
-      return {
-        before: 'Required — which connected Viber account this flow runs on. Connect one on ',
-        href: '/settings/channels',
-        after: '.',
-      };
+      return { key: 'senderHint.viber', href: '/settings/channels' };
     case 'email':
-      return {
-        before:
-          'Required — which linked mailbox this flow runs on. Replies are sent from that address. Link one on ',
-        href: '/settings/channels',
-        after: '.',
-      };
+      return { key: 'senderHint.email', href: '/settings/channels' };
     default:
       // Only the official WhatsApp Business API (and Twilio) are offered unless the platform has switched the unofficial engine on.
       return unofficial
-        ? {
-            before:
-              'Required — which connected number this flow runs on, across all your engines (Unofficial / WABA / Twilio). Connect one on ',
-            href: '/devices',
-            after: '.',
-          }
-        : {
-            before:
-              'Required — which connected number this flow runs on, across your official engines (WhatsApp Business API / Twilio). Connect one on ',
-            href: '/channels/whatsapp',
-            after: '.',
-          };
+        ? { key: 'senderHint.chatUnofficial', href: '/devices' }
+        : { key: 'senderHint.chatOfficial', href: '/channels/whatsapp' };
   }
 }
 
-/** "Pick an Instagram account before saving ..." noun phrase (Reference's red note). */
-export function senderPickNoun(channel: SenderChannel): string {
-  if (channel === 'instagram') return 'an Instagram account';
-  if (channel === 'facebook') return 'a Facebook Page';
-  if (channel === 'email') return 'a mailbox';
-  if (channel === 'telegram') return 'a Telegram bot';
-  return 'a number';
+/** The key of Reference's red "Pick an Instagram account before saving ..." note for a channel. */
+export function senderPickKey(channel: SenderChannel): string {
+  if (channel === 'instagram' || channel === 'facebook' || channel === 'email') {
+    return `senderPickNotice.${channel}`;
+  }
+  return channel === 'telegram' ? 'senderPickNotice.telegram' : 'senderPickNotice.number';
 }
 
 export function senderNoneCopy(channel: SenderChannel, unofficial = false): LinkedCopy {
   switch (channel) {
     case 'instagram':
-      return {
-        before:
-          'No Instagram account is connected to this workspace yet. You can still build and save this flow — connect one on ',
-        href: '/instagram',
-        after: ' and pick it here before publishing.',
-      };
+      return { key: 'senderNone.instagram', href: '/instagram' };
     case 'facebook':
-      return {
-        before:
-          'No Facebook Page is connected to this workspace yet. You can still build and save this flow — connect one on ',
-        href: '/facebook',
-        after: ' and pick it here before publishing.',
-      };
+      return { key: 'senderNone.facebook', href: '/facebook' };
     case 'telegram':
-      return {
-        before:
-          'No Telegram bot is connected to this workspace yet. You can still build and save this flow — connect one on ',
-        href: '/telegram',
-        after: ' and pick it here before publishing.',
-      };
+      return { key: 'senderNone.telegram', href: '/telegram' };
     case 'email':
-      return {
-        before:
-          'No mailbox is linked to this workspace yet. You can still build and save this flow — link one on ',
-        href: '/settings/channels',
-        after: ' and pick it here before publishing.',
-      };
+      return { key: 'senderNone.email', href: '/settings/channels' };
     default:
       return {
-        before:
-          "No connected number in this workspace yet — a disconnected phone can't send, so it isn't listed. You can still build and save this flow — reconnect on ",
+        key: 'senderNone.number',
         href: unofficial ? '/devices' : '/channels/whatsapp',
-        after: ' and pick it here before publishing.',
       };
   }
 }
@@ -343,14 +270,9 @@ export function ctaActions(d: Record<string, unknown>): CtaAction[] {
   return [{ type: k, label: str(d.label) || 'CTA', value: v }];
 }
 
-export function suggestedCtaLabel(type: string): string {
-  return (
-    (
-      { url: 'Visit website', phone: 'Call us', call_now: 'Call now', copy: 'Copy code' } as Record<
-        string,
-        string
-      >
-    )[type] ?? 'Tap'
+export function suggestedCtaLabel(t: HelperT, type: string): string {
+  return t(
+    `ctaLabel.${type === 'url' || type === 'phone' || type === 'call_now' || type === 'copy' ? type : 'other'}`,
   );
 }
 
@@ -361,9 +283,10 @@ export function ctaPlaceholder(type: string): string {
 }
 
 /** Changing an action's type keeps a custom label but replaces the old suggested one; the value always resets. */
-export function changeCtaType(cur: CtaAction, newType: string): CtaAction {
-  const prevSuggested = suggestedCtaLabel(cur.type || 'url');
-  const label = !cur.label || cur.label === prevSuggested ? suggestedCtaLabel(newType) : cur.label;
+export function changeCtaType(t: HelperT, cur: CtaAction, newType: string): CtaAction {
+  const prevSuggested = suggestedCtaLabel(t, cur.type || 'url');
+  const label =
+    !cur.label || cur.label === prevSuggested ? suggestedCtaLabel(t, newType) : cur.label;
   return { ...cur, type: newType, label, value: '' };
 }
 

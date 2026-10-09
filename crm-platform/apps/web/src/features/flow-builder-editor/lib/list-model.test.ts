@@ -1,13 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import {
-  lastPage,
-  pageItems,
-  parseState,
-  plural,
-  purposeOf,
-  relativeTime,
-  toSearch,
-} from './list-model';
+import { lastPage, pageItems, parseState, purposeOf, relativeTime, toSearch } from './list-model';
+
+import { translator } from '../test-utils/intl';
+import { renderMsg, type Msg } from './msg';
+
+const en = (m: Msg): string => renderMsg(translator('flb'), m);
 
 describe('list state in the address (TW-FLB-001)', () => {
   const params = (s: string) => new URLSearchParams(s);
@@ -60,25 +57,19 @@ describe('pager (Reference pagination partial)', () => {
 
 describe('card copy', () => {
   it('the purpose sentence is chosen by category, with a generic fallback', () => {
-    expect(purposeOf('welcome')).toMatch(/new subscribers/);
-    expect(purposeOf('cart-recovery')).toBe(purposeOf('cart'));
-    expect(purposeOf('Showcase')).toBe('Automated WhatsApp journey built in the flow editor.');
-    expect(purposeOf(null)).toBe('Automated WhatsApp journey built in the flow editor.');
+    expect(en(purposeOf('welcome'))).toMatch(/new subscribers/);
+    expect(purposeOf('cart-recovery')).toEqual(purposeOf('cart'));
+    expect(en(purposeOf('Showcase'))).toBe('Automated WhatsApp journey built in the flow editor.');
+    expect(en(purposeOf(null))).toBe('Automated WhatsApp journey built in the flow editor.');
   });
 
   it('relative times read like Reference "Edited 5 minutes ago"', () => {
     const now = Date.parse('2026-10-02T12:00:00Z');
     const ago = (ms: number) => new Date(now - ms).toISOString();
-    expect(relativeTime(ago(10_000), now)).toBe('just now');
-    expect(relativeTime(ago(5 * 60_000), now)).toBe('5 minutes ago');
-    expect(relativeTime(ago(60_000), now)).toBe('1 minute ago');
-    expect(relativeTime(ago(3 * 3_600_000), now)).toBe('3 hours ago');
-    expect(relativeTime(ago(2 * 86_400_000), now)).toBe('2 days ago');
-  });
-
-  it('pluralises with thousands separators', () => {
-    expect(plural(1, 'node')).toBe('1 node');
-    expect(plural(1200, 'node')).toBe('1,200 nodes');
-    expect(plural(0, 'step')).toBe('0 steps');
+    expect(en(relativeTime(ago(10_000), now))).toBe('just now');
+    expect(en(relativeTime(ago(5 * 60_000), now))).toBe('5 minutes ago');
+    expect(en(relativeTime(ago(60_000), now))).toBe('1 minute ago');
+    expect(en(relativeTime(ago(3 * 3_600_000), now))).toBe('3 hours ago');
+    expect(en(relativeTime(ago(2 * 86_400_000), now))).toBe('2 days ago');
   });
 });

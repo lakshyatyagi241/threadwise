@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "Odrzuć"
+    },
+    "connect": {
+      "title": "Połącz bota Telegram",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "submit": "Połącz bota",
+      "intro": "Wpisz token bota HTTP API, aby skonfigurować webhook i zacząć obsługiwać czaty Telegram.",
+      "tokenLabel": "Token bota *",
+      "tokenPlaceholder": "np. 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "To nie wygląda na token z BotFather.",
+      "connected": "Bot Telegram połączony.",
+      "savedNeedsAttention": "Bot został zapisany, ale Telegram nie zaakceptował webhooka.",
+      "failed": "Nie udało się połączyć bota. Spróbuj ponownie.",
+      "howTitle": "Jak uzyskać token bota?",
+      "how1a": "Otwórz Telegram i wyszukaj zweryfikowanego",
+      "how1b": "konta BotFather.",
+      "how2a": "Wyślij",
+      "how2b": "i wybierz nazwę wyświetlaną oraz nazwę użytkownika.",
+      "how3": "Skopiuj wygenerowany token HTTP API i wklej go powyżej."
+    },
+    "bot": {
+      "failed": "Nie udało się. Spróbuj ponownie.",
+      "webhookFixed": "Odbiór wiadomości działa ponownie.",
+      "live": "Aktywny",
+      "paused": "Wstrzymany",
+      "needsAttention": "Wymaga uwagi",
+      "lastMessage": "Ostatnia wiadomość: {when}",
+      "payments": "Płatności",
+      "on": "włączone",
+      "paymentsSaved": "Zapisano ustawienia płatności.",
+      "paymentsHint": "Wklej token dostawcy płatności z @BotFather (/mybots → Payments), aby włączyć węzeł Płatność — natywne faktury w czacie.",
+      "paymentsSavedPlaceholder": "•••••••• (zapisano — pozostaw puste, aby zachować)",
+      "paymentsToken": "Token dostawcy płatności",
+      "removeToken": "Usuń token",
+      "save": "Zapisz",
+      "webhook": "Webhook",
+      "fixInbound": "Napraw odbiór (ponownie zarejestruj webhook)",
+      "pause": "Wstrzymaj",
+      "resume": "Wznów",
+      "pausedDone": "Bot wstrzymany.",
+      "resumedDone": "Bot wznowiony.",
+      "disconnect": "Rozłącz",
+      "disconnectConfirm": "Rozłączyć tego bota Telegram? Jego wątki w skrzynce pozostaną, ale przestanie wysyłać i odbierać wiadomości.",
+      "cancel": "Anuluj",
+      "disconnected": "Bot rozłączony."
+    },
+    "hub": {
+      "kicker": "Kanał · Telegram",
+      "title": "Telegram",
+      "titleAccent": "Połącz",
+      "intro": "Wdróż bota Telegram, aby automatyzować komunikację, obsługiwać klientów i wysyłać aktualizacje do subskrybentów na całym świecie.",
+      "teamInbox": "Skrzynka zespołu",
+      "flows": "Przepływy",
+      "broadcasts": "Wiadomości masowe",
+      "telegramBroadcasts": "Wiadomości masowe Telegram",
+      "loadError": "Nie udało się wczytać Twoich botów Telegram.",
+      "connectedCount": "Połączono: {count}",
+      "notConnected": "Niepołączone",
+      "botCardTitle": "Połączenie bota Telegram",
+      "botCardBody": "Wklej token bota z @BotFather, aby automatyzować wiadomości, obsługiwać klientów i wysyłać wiadomości masowe do subskrybentów.",
+      "connectAnother": "Połącz kolejnego bota",
+      "connectBot": "Połącz bota",
+      "accountCardTitle": "Połączenie konta Telegram",
+      "accountCardBody": "Połącz swoje konto Telegram, aby tworzyć boty bezpośrednio tutaj — zeskanuj kod QR lub użyj numeru telefonu, tak jak w WhatsApp.",
+      "connectAccount": "Połącz konto",
+      "accountUnavailable": "Niedostępne jeszcze: wymaga usługi konta Telegram, która nie jest skonfigurowana w tej przestrzeni roboczej.",
+      "connectedBots": "Połączone boty",
+      "guideTitle": "Przewodnik konfiguracji bota Telegram",
+      "guideBody": "Wykonaj te kroki, aby połączyć kanał Telegram i włączyć zautomatyzowane przepływy.",
+      "prerequisites": "Wymagania",
+      "pre": {
+        "account": "Aktywne konto Telegram",
+        "name": "Unikalna nazwa dla bota",
+        "app": "Dostęp do Telegram Web/aplikacji"
+      },
+      "stepsTitle": "Kroki połączenia",
+      "step": "Krok {n}",
+      "steps": {
+        "locate": {
+          "title": "Znajdź BotFather",
+          "body": "Otwórz Telegram i wyszukaj oficjalne konto @BotFather (szukaj znaku weryfikacji)."
+        },
+        "create": {
+          "title": "Utwórz nowego bota",
+          "body": "Wyślij /newbot do @BotFather i postępuj zgodnie z instrukcjami, aby nazwać bota i wybrać nazwę użytkownika."
+        },
+        "token": {
+          "title": "Pobierz token API",
+          "body": "BotFather generuje token HTTP API (np. 123456789:ABC…). Skopiuj go w bezpieczne miejsce."
+        },
+        "connect": {
+          "title": "Połącz bota tutaj",
+          "body": "Kliknij „Połącz bota”, wklej token w polu i zatwierdź, aby zakończyć połączenie."
+        }
+      },
+      "unlockedTitle": "Co zostaje odblokowane?",
+      "unlocked": {
+        "support": {
+          "title": "Automatyzacja obsługi",
+          "body": "Pozwól botom AI obsługiwać najczęstsze pytania i kierować rozmowy całą dobę."
+        },
+        "broadcast": {
+          "title": "Kampanie wiadomości masowych",
+          "body": "Wysyłaj promocje, alerty i newslettery do wszystkich subskrybentów naraz."
+        },
+        "media": {
+          "title": "Bogate interaktywne multimedia",
+          "body": "Angażuj użytkowników przyciskami, menu, fakturami i obrazami."
+        }
+      },
+      "tipTitle": "Wskazówka dotycząca konfiguracji",
+      "tipBody": "Nigdy nie udostępniaj publicznie tokenu API bota. Jeśli wyciekł, napisz do @BotFather i wykonaj /revoke, aby od razu wygenerować nowy. Na localhost adres tunelu zmienia się przy każdym uruchomieniu — kliknij „Napraw odbiór”, aby ponownie zarejestrować webhook."
+    },
+    "broadcasts": {
+      "kicker": "Telegram · Wiadomości masowe",
+      "title": "Telegram",
+      "titleAccent": "wiadomości masowe",
+      "intro": "Wyślij wiadomość do wszystkich, którzy pisali z Twoim botem, i śledź wysłane, nieudane i zablokowane wiadomości dla każdej wiadomości masowej.",
+      "bots": "Boty",
+      "newBroadcast": "Nowa wiadomość masowa",
+      "connectFirst": "Najpierw połącz bota Telegram.",
+      "connectBot": "Połącz bota",
+      "tile": {
+        "sent": "Wysłane",
+        "audience": "Odbiorcy",
+        "failed": "Nieudane",
+        "blocked": "Zablokowane",
+        "sending": "Wysyłanie",
+        "broadcasts": "Wiadomości masowe: {count}",
+        "audienceHint": "łącznie odbiorców",
+        "failedHint": "błędy dostarczenia",
+        "blockedHint": "bot zablokowany przez użytkownika",
+        "sendingHint": "w toku"
+      },
+      "listKicker": "Lista wiadomości masowych",
+      "listTitle": "Ostatnie wiadomości masowe",
+      "col": {
+        "broadcast": "Wiadomość masowa",
+        "bot": "Bot",
+        "recipients": "Odbiorcy",
+        "progress": "Postęp",
+        "status": "Status",
+        "actions": "Działania"
+      },
+      "counts": "Wysłano: {sent} · Nieudane: {failed} · Zablokowane: {blocked}",
+      "status": {
+        "draft": "Szkic",
+        "sending": "Wysyłanie",
+        "done": "Gotowe",
+        "failed": "Nieudane"
+      },
+      "start": "Rozpocznij",
+      "pause": "Wstrzymaj",
+      "retry": "Ponów",
+      "delete": "Usuń",
+      "deleteConfirm": "Usunąć tę wiadomość masową?",
+      "cancel": "Anuluj",
+      "empty": "Brak wiadomości masowych.",
+      "createFirst": "Utwórz pierwszą",
+      "failed": "Nie udało się. Spróbuj ponownie.",
+      "started": "Rozpoczęto wysyłanie.",
+      "paused": "Wstrzymano. Niewysłane czaty pozostają w kolejce.",
+      "retried": "{count} nieudanych czatów jest gotowych do ponownego wysłania. Naciśnij Rozpocznij.",
+      "deleted": "Wiadomość masowa usunięta."
+    },
+    "compose": {
+      "kicker": "Telegram · Nowa wiadomość masowa",
+      "title": "Utwórz",
+      "titleAccent": "wiadomość masową",
+      "back": "Wstecz",
+      "loadError": "Nie udało się wczytać botów i szablonów.",
+      "noPermission": "Możesz przeglądać tę stronę, ale nie masz uprawnień do tworzenia wiadomości masowych.",
+      "setup": "Konfiguracja wiadomości masowej",
+      "name": "Nazwa wiadomości masowej",
+      "namePlaceholder": "np. Wyprzedaż weekendowa",
+      "bot": "Bot",
+      "template": "Szablon (opcjonalnie)",
+      "templateHint": "Wypełnia wiadomość i wysyła przyciski szablonu.",
+      "templateNone": "— brak (napisz własną) —",
+      "buttonCount": "{count, plural, one {# przycisk} few {# przyciski} many {# przycisków} other {# przycisku}}",
+      "message": "Wiadomość",
+      "messageHint": "Użyj '{name}', aby spersonalizować.",
+      "messagePlaceholder": "Cześć '{name}'! …",
+      "attachment": "Załącznik (opcjonalnie)",
+      "attachmentHint": "Publiczny adres obrazu, wideo, pliku audio lub dokumentu. Przesyłanie pliku wymaga usługi przechowywania.",
+      "attachmentInvalid": "Wpisz pełny adres zaczynający się od http:// lub https://.",
+      "recipients": "Odbiorcy",
+      "selectAll": "Zaznacz wszystkie",
+      "clearAll": "Wyczyść wszystkie",
+      "noChats": "Nikt jeszcze nie pisał z tym botem.",
+      "type": {
+        "private": "prywatny",
+        "group": "grupa",
+        "channel": "kanał"
+      },
+      "selected": "Zaznaczono: {count}",
+      "submit": "Utwórz wiadomość masową",
+      "preview": "Podgląd na żywo",
+      "previewEmpty": "Podgląd wiadomości…",
+      "previewNote": "Tak będzie wyglądać Twoja wiadomość masowa w czacie każdego odbiorcy.",
+      "created": "Utworzono wiadomość masową dla odbiorców: {count}. Gdy będziesz gotowy, naciśnij Rozpocznij wysyłanie.",
+      "failed": "Nie udało się utworzyć wiadomości masowej. Spróbuj ponownie."
+    }
+  }
+}

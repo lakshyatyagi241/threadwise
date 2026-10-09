@@ -1,0 +1,218 @@
+{
+  "companies": {
+    "nav": {
+      "companies": "Aziende"
+    },
+    "common": {
+      "dismiss": "Chiudi"
+    },
+    "errors": {
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "forbidden": "Non hai il permesso di farlo.",
+      "signedOut": "La tua sessione è terminata. Accedi di nuovo per continuare.",
+      "conflict": "Qualcun altro ha modificato questa azienda mentre la modificavi. Le sue modifiche sono state caricate; le tue sono conservate, quindi controllale e salva di nuovo.",
+      "validation": "Alcuni dei dati inseriti non sono validi. Controlla i campi e riprova.",
+      "unavailable": "Le aziende non sono ancora disponibili su questo server.",
+      "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+      "notFound": "Questa azienda non esiste più.",
+      "planDisabled": "Il tuo piano non include le aziende. Passa a un piano superiore per sbloccarle.",
+      "ownerInvalid": "Il responsabile deve essere un membro attivo di questo Workspace.",
+      "unexpected": "Qualcosa è andato storto. Riprova tra un momento.",
+      "requestId": "ID richiesta",
+      "retry": "Riprova"
+    },
+    "list": {
+      "eyebrow": "CRM · Organizzazioni",
+      "title": "Aziende",
+      "subtitle": "Raggruppa contatti e trattative sotto un'organizzazione: vedi in un unico posto ogni contatto, trattativa aperta e ricavo conquistato.",
+      "newCompany": "Nuova azienda",
+      "tiles": {
+        "companies": "Aziende",
+        "withDeals": "Con trattative aperte",
+        "wonRevenue": "Ricavi conquistati"
+      },
+      "bulk": {
+        "label": "Azioni in blocco",
+        "selected": "{count, plural, one {# azienda selezionata} other {# aziende selezionate}}",
+        "delete": "Elimina",
+        "clear": "Deseleziona"
+      },
+      "loading": "Caricamento delle aziende",
+      "unavailableTitle": "Le aziende non sono disponibili",
+      "unavailable": "Il servizio aziende non è ancora distribuito su questo server.",
+      "emptyFilteredTitle": "Nessuna azienda corrisponde",
+      "emptyFiltered": "Prova una ricerca diversa o cancella i filtri.",
+      "clearFilters": "Cancella filtri",
+      "emptyTitle": "Ancora nessuna azienda",
+      "empty": "Ancora nessuna azienda. Crea la prima.",
+      "showing": "{count, plural, one {# azienda caricata} other {# aziende caricate}}",
+      "loadMore": "Carica altre",
+      "allLoaded": "Tutte le aziende caricate",
+      "deleteTitle": "Elimina azienda",
+      "deleteMessage": "Eliminare questa azienda? I suoi contatti e le sue trattative vengono conservati e semplicemente scollegati.",
+      "deleteManyTitle": "Elimina aziende",
+      "deleteManyMessage": "{count, plural, one {Eliminare questa azienda? I suoi contatti e le sue trattative vengono conservati e semplicemente scollegati.} other {Eliminare queste # aziende? I loro contatti e le loro trattative vengono conservati e semplicemente scollegati.}}",
+      "delete": "Elimina",
+      "keep": "Mantieni"
+    },
+    "toolbar": {
+      "label": "Filtra aziende",
+      "search": "Cerca aziende…",
+      "industry": "Settore",
+      "allIndustries": "Tutti i settori",
+      "owner": "Responsabile",
+      "allOwners": "Tutti i responsabili",
+      "noOwner": "Nessun responsabile",
+      "withOpenDeals": "Con trattative aperte",
+      "sort": "Ordina",
+      "sorts": {
+        "created": "Prima i più recenti",
+        "name": "Nome dalla A alla Z"
+      },
+      "clear": "Cancella",
+      "refresh": "Aggiorna"
+    },
+    "table": {
+      "label": "Aziende",
+      "selectAll": "Seleziona tutte le aziende caricate",
+      "select": "Seleziona {name}",
+      "company": "Azienda",
+      "industry": "Settore",
+      "contacts": "Contatti",
+      "openDeals": "Trattative aperte",
+      "wonValue": "Valore conquistato",
+      "actions": "Azioni",
+      "delete": "Elimina azienda",
+      "deleteNamed": "Elimina l'azienda {name}"
+    },
+    "form": {
+      "eyebrow": "Azienda",
+      "newTitle": "Nuova azienda",
+      "editTitle": "Modifica azienda",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "create": "Crea",
+      "save": "Salva modifiche",
+      "name": "Nome azienda *",
+      "namePlaceholder": "Acme Srl",
+      "industry": "Settore",
+      "website": "Sito web",
+      "email": "Email",
+      "phone": "Telefono",
+      "notes": "Note",
+      "moreDetails": "Altri dettagli",
+      "sizeRange": "Dimensione",
+      "sizeHint": "Ad esempio 1-10 o 11-50.",
+      "owner": "Responsabile",
+      "noOwner": "Nessun responsabile",
+      "me": "{name} (tu)",
+      "address": "Indirizzo",
+      "problems": {
+        "required": "Il nome dell'azienda è obbligatorio.",
+        "tooLong": "Troppo lungo: al massimo {limit} caratteri.",
+        "email": "Inserisci un indirizzo email valido.",
+        "invalid": "Alcuni dei dati inseriti non sono validi.",
+        "ownerInvalid": "Il responsabile deve essere un membro attivo di questo Workspace."
+      }
+    },
+    "toast": {
+      "created": "Azienda creata.",
+      "updated": "Azienda aggiornata.",
+      "deleted": "{count, plural, one {Azienda eliminata.} other {# aziende eliminate.}}",
+      "deletedSome": "{count, plural, one {# azienda eliminata} other {# aziende eliminate}}, {failed, plural, one {# non è stato possibile eliminarla.} other {# non è stato possibile eliminarle.}}",
+      "deleteFailed": "Impossibile eliminare. Riprova.",
+      "contactUnlinked": "Contatto rimosso dall'azienda.",
+      "contactAlreadyOut": "Quel contatto non fa più parte di questa azienda.",
+      "contactUnlinkFailed": "Impossibile rimuovere il contatto. Riprova.",
+      "contactsLinked": "{count, plural, one {# contatto aggiunto all'azienda.} other {# contatti aggiunti all'azienda.}}",
+      "contactsLinkedSome": "{count, plural, one {# contatto aggiunto} other {# contatti aggiunti}}, {failed, plural, one {# non è stato possibile aggiungerlo.} other {# non è stato possibile aggiungerli.}}",
+      "contactsLinkFailed": "Impossibile aggiungere i contatti. Riprova."
+    },
+    "detail": {
+      "back": "Tutte le aziende",
+      "loading": "Caricamento dell'azienda",
+      "notFoundTitle": "Azienda non trovata",
+      "notFound": "Questa azienda non esiste o è stata eliminata.",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "keep": "Mantieni",
+      "tiles": {
+        "contacts": "Contatti",
+        "openDeals": "Trattative aperte",
+        "wonRevenue": "Ricavi conquistati"
+      },
+      "notes": "Note",
+      "deleteTitle": "Elimina azienda",
+      "deleteMessage": "Eliminare questa azienda? I suoi contatti e le sue trattative vengono conservati e semplicemente scollegati.",
+      "details": "Dettagli",
+      "owner": "Responsabile",
+      "sizeRange": "Dimensione",
+      "address": "Indirizzo",
+      "createdBy": "Creata da",
+      "created": "Creata",
+      "updated": "Ultima modifica"
+    },
+    "contacts": {
+      "title": "Contatti",
+      "add": "Aggiungi contatti",
+      "loading": "Caricamento dei contatti",
+      "empty": "Nessun contatto collegato a questa azienda.",
+      "unnamed": "(senza nome)",
+      "unlink": "Rimuovi dall'azienda",
+      "unlinkNamed": "Rimuovi {name} dall'azienda",
+      "loadMore": "Carica altri",
+      "addModal": {
+        "title": "Aggiungi contatti all'azienda",
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "add": "{count, plural, one {Aggiungi # contatto} other {Aggiungi # contatti}}",
+        "search": "Cerca contatti per nome, email o numero",
+        "loading": "Ricerca dei contatti",
+        "noneTitle": "Nessun contatto trovato",
+        "none": "Nessun contatto corrisponde. Prova un altro nome, email o numero.",
+        "unnamed": "(senza nome)",
+        "already": "Già presente",
+        "willMove": "In un'altra azienda",
+        "hint": "Un contatto può appartenere a una sola azienda. Aggiungere un contatto che si trova in un'altra azienda lo sposta qui."
+      }
+    },
+    "deals": {
+      "title": "Trattative",
+      "loading": "Caricamento delle trattative",
+      "empty": "Nessuna trattativa per questa azienda.",
+      "loadMore": "Carica altre",
+      "status": {
+        "open": "Aperta",
+        "won": "Vinta",
+        "lost": "Persa"
+      }
+    },
+    "activity": {
+      "title": "Attività",
+      "loading": "Caricamento dell'attività",
+      "none": "Non è ancora successo nulla a questa azienda.",
+      "loadMore": "Carica altro",
+      "empty": "vuoto",
+      "system": "Il sistema",
+      "actions": {
+        "insert": "ha creato l'azienda",
+        "update": "ha modificato l'azienda",
+        "delete": "ha eliminato l'azienda"
+      },
+      "contactLinked": "Contatto aggiunto",
+      "contactUnlinked": "Contatto rimosso",
+      "deletedContact": "un contatto eliminato",
+      "fields": {
+        "name": "Nome",
+        "website": "Sito web",
+        "email": "Email",
+        "phone": "Telefono",
+        "industry": "Settore",
+        "sizeRange": "Dimensione",
+        "address": "Indirizzo",
+        "notes": "Note",
+        "owner": "Responsabile"
+      }
+    }
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "companies": {
+    "nav": {
+      "companies": "Şirketler"
+    },
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapma izniniz yok.",
+      "signedOut": "Oturumunuz sona erdi. Devam etmek için yeniden oturum açın.",
+      "conflict": "Siz düzenlerken bu şirketi başka biri değiştirdi. Onun değişiklikleri yüklendi; sizin düzenlemeleriniz korundu, gözden geçirip yeniden kaydedin.",
+      "validation": "Girilenlerin bir kısmı geçerli değil. Alanları kontrol edip tekrar deneyin.",
+      "unavailable": "Şirketler bu sunucuda henüz kullanılamıyor.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "notFound": "Bu şirket artık yok.",
+      "planDisabled": "Planınız şirketleri içermiyor. Kilidini açmak için yükseltin.",
+      "ownerInvalid": "Sahibi bu çalışma alanının etkin bir üyesi olmalıdır.",
+      "unexpected": "Bir şeyler ters gitti. Birazdan tekrar deneyin.",
+      "requestId": "İstek kimliği",
+      "retry": "Tekrar dene"
+    },
+    "list": {
+      "eyebrow": "CRM · Kuruluşlar",
+      "title": "Şirketler",
+      "subtitle": "Kişileri ve fırsatları bir kuruluş altında gruplayın; tüm kişileri, açık fırsatları ve kazanılan geliri tek yerde görün.",
+      "newCompany": "Yeni şirket",
+      "tiles": {
+        "companies": "Şirketler",
+        "withDeals": "Açık fırsatı olan",
+        "wonRevenue": "Kazanılan gelir"
+      },
+      "bulk": {
+        "label": "Toplu işlemler",
+        "selected": "{count, plural, one {# şirket seçildi} other {# şirket seçildi}}",
+        "delete": "Sil",
+        "clear": "Seçimi temizle"
+      },
+      "loading": "Şirketler yükleniyor",
+      "unavailableTitle": "Şirketler kullanılamıyor",
+      "unavailable": "Şirketler hizmeti bu sunucuda henüz dağıtılmadı.",
+      "emptyFilteredTitle": "Eşleşen şirket yok",
+      "emptyFiltered": "Farklı bir arama deneyin veya filtreleri temizleyin.",
+      "clearFilters": "Filtreleri temizle",
+      "emptyTitle": "Henüz şirket yok",
+      "empty": "Henüz şirket yok. İlkini oluşturun.",
+      "showing": "{count, plural, one {# şirket yüklendi} other {# şirket yüklendi}}",
+      "loadMore": "Daha fazla yükle",
+      "allLoaded": "Tüm şirketler yüklendi",
+      "deleteTitle": "Şirketi sil",
+      "deleteMessage": "Bu şirket silinsin mi? Kişileri ve fırsatları korunur, yalnızca bağlantıları kaldırılır.",
+      "deleteManyTitle": "Şirketleri sil",
+      "deleteManyMessage": "{count, plural, one {Bu şirket silinsin mi? Kişileri ve fırsatları korunur, yalnızca bağlantıları kaldırılır.} other {Bu # şirket silinsin mi? Kişileri ve fırsatları korunur, yalnızca bağlantıları kaldırılır.}}",
+      "delete": "Sil",
+      "keep": "Koru"
+    },
+    "toolbar": {
+      "label": "Şirketleri filtrele",
+      "search": "Şirketlerde ara…",
+      "industry": "Sektör",
+      "allIndustries": "Tüm sektörler",
+      "owner": "Sahip",
+      "allOwners": "Tüm sahipler",
+      "noOwner": "Sahip yok",
+      "withOpenDeals": "Açık fırsatı olan",
+      "sort": "Sıralama",
+      "sorts": {
+        "created": "Önce en yeni",
+        "name": "Ad A'dan Z'ye"
+      },
+      "clear": "Temizle",
+      "refresh": "Yenile"
+    },
+    "table": {
+      "label": "Şirketler",
+      "selectAll": "Yüklenen tüm şirketleri seç",
+      "select": "{name} seç",
+      "company": "Şirket",
+      "industry": "Sektör",
+      "contacts": "Kişiler",
+      "openDeals": "Açık fırsatlar",
+      "wonValue": "Kazanılan değer",
+      "actions": "İşlemler",
+      "delete": "Şirketi sil",
+      "deleteNamed": "{name} şirketini sil"
+    },
+    "form": {
+      "eyebrow": "Şirket",
+      "newTitle": "Yeni şirket",
+      "editTitle": "Şirketi düzenle",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "create": "Oluştur",
+      "save": "Değişiklikleri kaydet",
+      "name": "Şirket adı *",
+      "namePlaceholder": "Acme Ltd",
+      "industry": "Sektör",
+      "website": "Web sitesi",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "notes": "Notlar",
+      "moreDetails": "Daha fazla ayrıntı",
+      "sizeRange": "Büyüklük",
+      "sizeHint": "Örneğin 1-10 veya 11-50.",
+      "owner": "Sahip",
+      "noOwner": "Sahip yok",
+      "me": "{name} (siz)",
+      "address": "Adres",
+      "problems": {
+        "required": "Şirket adı zorunludur.",
+        "tooLong": "Çok uzun: en fazla {limit} karakter.",
+        "email": "Geçerli bir e-posta adresi girin.",
+        "invalid": "Girilenlerin bir kısmı geçerli değil.",
+        "ownerInvalid": "Sahibi bu çalışma alanının etkin bir üyesi olmalıdır."
+      }
+    },
+    "toast": {
+      "created": "Şirket oluşturuldu.",
+      "updated": "Şirket güncellendi.",
+      "deleted": "{count, plural, one {Şirket silindi.} other {# şirket silindi.}}",
+      "deletedSome": "{count, plural, one {# şirket silindi} other {# şirket silindi}}, {failed, plural, one {# tanesi silinemedi.} other {# tanesi silinemedi.}}",
+      "deleteFailed": "Silinemedi. Tekrar deneyin.",
+      "contactUnlinked": "Kişi şirketten çıkarıldı.",
+      "contactAlreadyOut": "Bu kişi artık bu şirkette değil.",
+      "contactUnlinkFailed": "Kişi çıkarılamadı. Tekrar deneyin.",
+      "contactsLinked": "{count, plural, one {# kişi şirkete eklendi.} other {# kişi şirkete eklendi.}}",
+      "contactsLinkedSome": "{count, plural, one {# kişi eklendi} other {# kişi eklendi}}, {failed, plural, one {# tanesi eklenemedi.} other {# tanesi eklenemedi.}}",
+      "contactsLinkFailed": "Kişiler eklenemedi. Tekrar deneyin."
+    },
+    "detail": {
+      "back": "Tüm şirketler",
+      "loading": "Şirket yükleniyor",
+      "notFoundTitle": "Şirket bulunamadı",
+      "notFound": "Bu şirket yok veya silindi.",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "keep": "Koru",
+      "tiles": {
+        "contacts": "Kişiler",
+        "openDeals": "Açık fırsatlar",
+        "wonRevenue": "Kazanılan gelir"
+      },
+      "notes": "Notlar",
+      "deleteTitle": "Şirketi sil",
+      "deleteMessage": "Bu şirket silinsin mi? Kişileri ve fırsatları korunur, yalnızca bağlantıları kaldırılır.",
+      "details": "Ayrıntılar",
+      "owner": "Sahip",
+      "sizeRange": "Büyüklük",
+      "address": "Adres",
+      "createdBy": "Oluşturan",
+      "created": "Oluşturulma",
+      "updated": "Son değişiklik"
+    },
+    "contacts": {
+      "title": "Kişiler",
+      "add": "Kişi ekle",
+      "loading": "Kişiler yükleniyor",
+      "empty": "Bu şirkete bağlı kişi yok.",
+      "unnamed": "(adsız)",
+      "unlink": "Şirketten çıkar",
+      "unlinkNamed": "{name} kişisini şirketten çıkar",
+      "loadMore": "Daha fazla yükle",
+      "addModal": {
+        "title": "Şirkete kişi ekle",
+        "close": "Kapat",
+        "cancel": "İptal",
+        "add": "{count, plural, one {# kişi ekle} other {# kişi ekle}}",
+        "search": "Kişileri ada, e-postaya veya numaraya göre ara",
+        "loading": "Kişiler aranıyor",
+        "noneTitle": "Kişi bulunamadı",
+        "none": "Eşleşen kişi yok. Başka bir ad, e-posta veya numara deneyin.",
+        "unnamed": "(adsız)",
+        "already": "Zaten burada",
+        "willMove": "Başka bir şirkette",
+        "hint": "Bir kişi yalnızca bir şirkete ait olabilir. Başka bir şirketteki kişiyi eklemek onu buraya taşır."
+      }
+    },
+    "deals": {
+      "title": "Fırsatlar",
+      "loading": "Fırsatlar yükleniyor",
+      "empty": "Bu şirket için fırsat yok.",
+      "loadMore": "Daha fazla yükle",
+      "status": {
+        "open": "Açık",
+        "won": "Kazanıldı",
+        "lost": "Kaybedildi"
+      }
+    },
+    "activity": {
+      "title": "Etkinlik",
+      "loading": "Etkinlik yükleniyor",
+      "none": "Bu şirkette henüz hiçbir şey olmadı.",
+      "loadMore": "Daha fazla yükle",
+      "empty": "boş",
+      "system": "Sistem",
+      "actions": {
+        "insert": "şirketi oluşturdu",
+        "update": "şirketi değiştirdi",
+        "delete": "şirketi sildi"
+      },
+      "contactLinked": "Kişi eklendi",
+      "contactUnlinked": "Kişi çıkarıldı",
+      "deletedContact": "silinmiş bir kişi",
+      "fields": {
+        "name": "Ad",
+        "website": "Web sitesi",
+        "email": "E-posta",
+        "phone": "Telefon",
+        "industry": "Sektör",
+        "sizeRange": "Büyüklük",
+        "address": "Adres",
+        "notes": "Notlar",
+        "owner": "Sahip"
+      }
+    }
+  }
+}

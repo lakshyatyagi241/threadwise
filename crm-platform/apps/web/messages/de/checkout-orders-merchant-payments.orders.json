@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "Storefront / Bestellungen",
+      "title": "Alle Bestellungen",
+      "subtitle": "Jede Bestellung aus jedem Kanal: WhatsApp, Storefront, Twilio und manuell.",
+      "loading": "Bestellungen werden geladen",
+      "statusTabs": "Bestellstatus",
+      "searchLabel": "Bestellungen suchen",
+      "searchPlaceholder": "Nach Telefon, Name oder Bestellnummer suchen",
+      "sourceLabel": "Quelle",
+      "allSources": "Alle Quellen",
+      "paymentLabel": "Zahlung",
+      "allPayments": "Alle Zahlungen",
+      "fromLabel": "Von",
+      "toLabel": "Bis",
+      "shopLabel": "Shop",
+      "invertedRange": "Das Startdatum liegt nach dem Enddatum, daher kann keine Bestellung passen.",
+      "clearFilters": "Filter zurücksetzen",
+      "cols": {
+        "order": "Bestellung",
+        "customer": "Kunde",
+        "items": "Artikel",
+        "total": "Gesamt",
+        "payment": "Zahlung",
+        "status": "Status",
+        "source": "Quelle",
+        "created": "Erstellt",
+        "actions": "Aktionen"
+      },
+      "itemsCount": "{count, plural, one {# Artikel} other {# Artikel}}",
+      "anonymous": "Anonym",
+      "openOrder": "Bestellung #{no} öffnen",
+      "changeStatus": "Status von Bestellung #{no} ändern",
+      "deleteOrder": "Bestellung #{no} löschen",
+      "deleteTitle": "Bestellung #{no} löschen?",
+      "deleteMessage": "Die Bestellung und ihre Artikel werden endgültig entfernt. Das kann nicht rückgängig gemacht werden.",
+      "deleteConfirm": "Bestellung löschen",
+      "deleted": "Bestellung #{no} wurde gelöscht.",
+      "statusChanged": "Bestellung #{no} hat jetzt den Status {status}.",
+      "buyerNotified": "Der Käufer wurde benachrichtigt.",
+      "confirmStatusTitle": "Bestellung #{no} als {status} markieren?",
+      "confirmStatusMessage": "Der Käufer wird über den neuen Status informiert. Sie können die Bestellung später noch in einen anderen Status setzen.",
+      "confirmStatusConfirm": "Status aktualisieren",
+      "emptyTitle": "Noch keine Bestellungen",
+      "emptyMessage": "Wenn Kunden in Ihrer Storefront oder über WhatsApp bestellen, erscheinen die Bestellungen hier. Teilen Sie Ihren Shop-Link, um die erste zu erhalten.",
+      "emptyAction": "Shop-Übersicht öffnen",
+      "noMatchTitle": "Keine Bestellungen entsprechen diesen Filtern",
+      "noMatchMessage": "Versuchen Sie eine andere Suche, einen anderen Status oder Zeitraum oder setzen Sie die Filter zurück, um alle Bestellungen zu sehen."
+    },
+    "orderDetail": {
+      "back": "Zurück zu den Bestellungen",
+      "title": "Bestellung #{no}",
+      "placed": "Aufgegeben {when}",
+      "loading": "Bestellung wird geladen",
+      "readOnly": "Sie können diese Bestellung ansehen, aber nicht ändern.",
+      "items": {
+        "title": "Artikel",
+        "empty": "Diese Bestellung hat keine Artikel.",
+        "qty": "Menge {qty}",
+        "retailerId": "ID {id}",
+        "unit": "{price} pro Stück"
+      },
+      "totals": {
+        "title": "Summen",
+        "subtotal": "Zwischensumme",
+        "shipping": "Versand",
+        "tax": "Steuer",
+        "taxInclusive": "In den Preisen enthalten",
+        "discount": "Rabatt",
+        "discountCoupon": "Rabatt ({code})",
+        "total": "Gesamt"
+      },
+      "customer": {
+        "title": "Kunde",
+        "anonymous": "Anonym",
+        "phone": "Telefon",
+        "email": "E-Mail",
+        "address": "Lieferadresse",
+        "noAddress": "Für diese Bestellung wurde keine Adresse erfasst.",
+        "notes": "Notizen"
+      },
+      "meta": {
+        "title": "Bestelldetails",
+        "orderId": "Bestell-ID",
+        "source": "Quelle",
+        "shop": "Shop",
+        "paymentMethod": "Zahlungsmethode",
+        "updated": "Zuletzt aktualisiert"
+      },
+      "rto": {
+        "title": "Retouren-Risiko",
+        "summary": "{band} ({score})",
+        "low": "Niedrig",
+        "medium": "Mittel",
+        "high": "Hoch"
+      },
+      "timeline": {
+        "title": "Verlauf",
+        "empty": "Bei dieser Bestellung ist noch nichts passiert.",
+        "kind": {
+          "created": "Bestellung aufgegeben",
+          "status_changed": "Status geändert",
+          "payment_link": "Zahlungslink",
+          "paid": "Zahlung eingegangen",
+          "invoice": "Rechnung",
+          "note": "Notiz",
+          "updated": "Bestellung aktualisiert"
+        },
+        "actor": {
+          "user": "Durch ein Teammitglied",
+          "system": "Automatisch",
+          "customer": "Durch den Kunden"
+        }
+      },
+      "payments": {
+        "title": "Zahlungen",
+        "empty": "Für diese Bestellung wurde keine Zahlung erfasst.",
+        "kind": {
+          "gateway": "Online-Zahlung",
+          "payment_link": "Zahlungslink",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "Nachnahme",
+          "manual": "Manuell erfasst"
+        },
+        "reference": "Referenz {ref}",
+        "openLink": "Link öffnen"
+      },
+      "form": {
+        "title": "Status aktualisieren",
+        "status": "Status",
+        "suggestion": "Üblicher nächster Schritt: {status}",
+        "notes": "Notizen",
+        "paymentLink": "Zahlungslink",
+        "optional": "optional",
+        "paymentLinkHint": "Mit der Aktualisierung wird dem Käufer ein neuer Link gesendet.",
+        "invalidLink": "Geben Sie einen Weblink ein, der mit http:// oder https:// beginnt.",
+        "save": "Änderungen speichern",
+        "saving": "Wird gespeichert",
+        "saved": "Bestellung #{no} aktualisiert.",
+        "notified": "Der Käufer wurde benachrichtigt.",
+        "notNotified": "Der Käufer wurde nicht benachrichtigt.",
+        "reload": "Bestellung neu laden"
+      },
+      "pay": {
+        "title": "Zahlungslink",
+        "current": "Aktueller Zahlungslink",
+        "sendTitle": "Einen vorhandenen Link senden",
+        "sendLabel": "URL des Zahlungslinks",
+        "sendButton": "Zahlungslink senden",
+        "sent": "Der Zahlungslink wurde an den Käufer gesendet.",
+        "savedNotSent": "Der Link wurde gespeichert, konnte aber nicht an den Käufer gesendet werden.",
+        "generateTitle": "Checkout-Link erzeugen",
+        "generateHint": "Erstellt einen gehosteten Zahlungslink bei Ihrem Zahlungs-Gateway und sendet ihn dem Käufer über WhatsApp.",
+        "gatewayLabel": "Gateway",
+        "generateButton": "Link erzeugen und senden",
+        "noGatewayTitle": "Kein Zahlungs-Gateway eingerichtet",
+        "noGatewayMessage": "Es muss ein Zahlungs-Gateway eingerichtet sein, bevor Sie einen Checkout-Link erzeugen können.",
+        "noGatewayAction": "Gateway einrichten",
+        "resultTitle": "Zahlungslink bereit",
+        "copyLink": "Link kopieren",
+        "resultSent": "Dem Käufer über WhatsApp gesendet.",
+        "resultNotSent": "In der Bestellung gespeichert, konnte aber nicht an den Käufer gesendet werden. Teilen Sie ihn selbst."
+      },
+      "invoice": {
+        "title": "Rechnung",
+        "description": "Wandeln Sie diese Bestellung in Sales in eine Rechnung und einen Verkaufsauftrag um.",
+        "create": "Rechnung erstellen",
+        "creating": "Wird erstellt",
+        "created": "Rechnung {number} erstellt.",
+        "createdNoNumber": "Rechnung erstellt.",
+        "existing": "Für diese Bestellung wurde bereits eine Rechnung erstellt.",
+        "viewInvoice": "Rechnung",
+        "viewSalesOrder": "Verkaufsauftrag"
+      },
+      "delete": {
+        "title": "Bestellung #{no} löschen?",
+        "message": "Die Bestellung und ihre Artikel werden endgültig entfernt. Das kann nicht rückgängig gemacht werden.",
+        "confirm": "Bestellung löschen",
+        "deleted": "Bestellung #{no} wurde gelöscht."
+      }
+    }
+  }
+}

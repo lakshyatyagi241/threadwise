@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "Personificando",
+      "viewing": "Visualizando {workspace} como {owner}",
+      "reason": "Motivo: {reason}",
+      "readOnly": "Somente leitura",
+      "timeLeft": "{minutes, plural, one {# minuto restante} other {# minutos restantes}}",
+      "endsSoon": "Resta menos de um minuto",
+      "stop": "Parar de personificar",
+      "stopping": "Parando",
+      "stopFailed": "Não foi possível encerrar a sessão. Tente novamente.",
+      "readOnlyRefused": "Esta sessão é somente leitura, então alterações não são permitidas.",
+      "forbiddenRefused": "Isto não está disponível enquanto você visualiza o espaço de trabalho como proprietário.",
+      "ended": {
+        "title": "Esta sessão de personificação foi encerrada",
+        "expired": "O link já foi usado ou expirou. Comece novamente pelo console.",
+        "body": "Nada mais pode ser feito no espaço de trabalho a partir daqui. Volte ao console para iniciar uma nova sessão.",
+        "back": "Voltar ao console"
+      }
+    }
+  }
+}
