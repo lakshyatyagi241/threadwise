@@ -183,7 +183,9 @@
         "unzoned": "tanpa zona",
         "per24h": "{n}/24j",
         "deliv": "terkirim",
-        "free": "{n, plural, other {# slot perangkat tersedia}}"
+        "free": "{n, plural, other {# slot perangkat tersedia}}",
+        "freeHint": "Tambah WABA",
+        "connectDeviceShort": "Hubungkan perangkat"
       },
       "templates": {
         "title": "Template berkinerja terbaik",
@@ -297,7 +299,8 @@
         "connect": "Hubungkan",
         "connectedLabel": "Terhubung"
       },
-      "sublineOfficial": "{date} - {range} menampilkan {sent} keluar, deliverabilitas {rate}%."
+      "sublineOfficial": "{date} - {range} menampilkan {sent} keluar, deliverabilitas {rate}%.",
+      "synced": "Langsung · disinkronkan {s} detik lalu"
     },
     "analytics": {
       "title": "Analitik",

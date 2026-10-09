@@ -120,11 +120,8 @@ export function BroadcastsScreen() {
     </button>
   );
 
-  const empty = !list.isPending && list.items.length === 0;
-  const filtered = state.status !== 'all' || state.range !== 'all' || state.q !== '';
-
   return (
-    <main className="mx-auto max-w-none px-4 py-7 sm:px-6 lg:px-7">
+    <div className="mx-auto max-w-none px-4 py-7 sm:px-6 lg:px-7">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
         <ListRail
           status={state.status}
@@ -204,33 +201,34 @@ export function BroadcastsScreen() {
                     }
                   />
                 </div>
-              ) : empty ? (
-                <div className="p-4">
-                  <EmptyState
-                    title={t('emptyTitle')}
-                    message={t('emptyBody')}
-                    actions={
-                      <>
-                        {filtered && (
-                          <Button variant="secondary" onClick={() => router.replace(pathname)}>
-                            {t('resetFilters')}
-                          </Button>
-                        )}
+              ) : (
+                <BroadcastsTable
+                  rows={list.items}
+                  empty={
+                    <div className="m-4 rounded-2xl border border-dashed border-border px-6 py-10 text-center">
+                      <h3 className="text-2xl">{t('emptyTitle')}</h3>
+                      <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
+                        {t('emptyBody')}
+                      </p>
+                      <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                        <Button
+                          variant="secondary"
+                          className="rounded-full"
+                          onClick={() => router.replace(pathname)}
+                        >
+                          {t('resetFilters')}
+                        </Button>
                         {canCreate && (
                           <Link
-                            href="/campaigns/wizard"
-                            className="inline-flex h-10 items-center rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground"
+                            href="/broadcasts/create"
+                            className="inline-flex h-10 items-center rounded-full bg-brand px-4 text-xs font-semibold text-brand-foreground hover:opacity-90"
                           >
                             {t('createBroadcast')}
                           </Link>
                         )}
-                      </>
-                    }
-                  />
-                </div>
-              ) : (
-                <BroadcastsTable
-                  rows={list.items}
+                      </div>
+                    </div>
+                  }
                   canExport={canExport}
                   canDeleteRows={canDelete}
                   onExport={(b) => void exportRows(b)}
@@ -272,6 +270,6 @@ export function BroadcastsScreen() {
         onConfirm={() => void confirmDelete()}
         onClose={() => setPendingDelete(null)}
       />
-    </main>
+    </div>
   );
 }

@@ -25,7 +25,9 @@
       "deleteTitle": "למחוק את הערוץ?",
       "deleteMessage": "הערוץ #{name} וכל ההודעות שבו יימחקו עבור כולם. לא ניתן לבטל פעולה זו.",
       "deleteConfirm": "מחק ערוץ",
-      "cancel": "ביטול"
+      "cancel": "ביטול",
+      "defaultDescription": "צ'אט פנימי של סביבת העבודה",
+      "customerChats": "צ'אטים עם לקוחות"
     },
     "sidebar": {
       "label": "ערוצים ואנשים",
@@ -39,7 +41,12 @@
       "invite": "הזמן חבר צוות",
       "pending": "בקשות ממתינות",
       "pendingCount": "{count, plural, one {בקשה ממתינה אחת} two {# בקשות ממתינות} other {# בקשות ממתינות}}",
-      "unread": "{count, plural, one {הודעה אחת שלא נקראה} two {# הודעות שלא נקראו} other {# הודעות שלא נקראו}}"
+      "unread": "{count, plural, one {הודעה אחת שלא נקראה} two {# הודעות שלא נקראו} other {# הודעות שלא נקראו}}",
+      "workspace": "סביבת עבודה",
+      "mode": "מצב",
+      "customerChats": "צ'אטים עם לקוחות",
+      "teamChat": "צ'אט צוות",
+      "membersLink": "חברים"
     },
     "members": {
       "label": "חברים",
@@ -52,7 +59,8 @@
       "online": "מחובר",
       "offline": "לא מחובר",
       "you": "(אתה)",
-      "message": "שלח הודעה ל-{name}"
+      "message": "שלח הודעה ל-{name}",
+      "titleAccent": "צ'אט"
     },
     "panel": {
       "searchTitle": "חיפוש הודעות",
@@ -104,7 +112,11 @@
       "fileTooLarge": "הקובץ גדול מ-20 MB.",
       "mentionList": "חברי צוות לאזכור",
       "typingOne": "{name} מקליד/ה",
-      "typingMany": "{count} אנשים מקלידים"
+      "typingMany": "{count} אנשים מקלידים",
+      "hintSend": "שליחה",
+      "hintNewLine": "שורה חדשה",
+      "hintMention": "אזכור",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "צור ערוץ",
@@ -122,7 +134,9 @@
         "hint": "בהזמנה בלבד. רק חבריו רואים אותו."
       },
       "cancel": "ביטול",
-      "create": "צור ערוץ"
+      "create": "צור ערוץ",
+      "namePlaceholder": "לדוגמה: תמיכה",
+      "descriptionPlaceholder": "למה הערוץ הזה מיועד?"
     },
     "invite": {
       "title": "הזמן חבר צוות",
@@ -135,7 +149,10 @@
       "approved": "בוצע. הבקשה אושרה.",
       "pending": "ההזמנה נשלחה וממתינה לאישור מנהל.",
       "cancel": "ביטול",
-      "submit": "שלח הזמנה"
+      "submit": "שלח הזמנה",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "השם שלהם",
+      "notePlaceholder": "מדוע כדאי להם להצטרף?"
     },
     "invitations": {
       "title": "הזמנות ממתינות",

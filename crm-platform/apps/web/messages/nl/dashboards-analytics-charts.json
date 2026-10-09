@@ -183,7 +183,9 @@
         "unzoned": "zonder zone",
         "per24h": "{n}/24u",
         "deliv": "bezorgd",
-        "free": "{n, plural, one {# apparaatslot beschikbaar} other {# apparaatslots beschikbaar}}"
+        "free": "{n, plural, one {# apparaatslot beschikbaar} other {# apparaatslots beschikbaar}}",
+        "freeHint": "WABA toevoegen",
+        "connectDeviceShort": "Apparaat koppelen"
       },
       "templates": {
         "title": "Best presterende sjablonen",
@@ -297,7 +299,8 @@
         "connect": "Verbinden",
         "connectedLabel": "Verbonden"
       },
-      "sublineOfficial": "{date} - {range} toont {sent} uitgaand, {rate}% bezorgbaarheid."
+      "sublineOfficial": "{date} - {range} toont {sent} uitgaand, {rate}% bezorgbaarheid.",
+      "synced": "Live · gesynchroniseerd {s} s geleden"
     },
     "analytics": {
       "title": "Analyses",

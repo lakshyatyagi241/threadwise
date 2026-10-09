@@ -15,7 +15,11 @@
         "total": "ゲートウェイ",
         "active": "有効",
         "india": "インド",
-        "crypto": "暗号資産"
+        "crypto": "暗号資産",
+        "totalHint": "利用可能なドライバー",
+        "activeHint": "決済受付中",
+        "indiaHint": "Razorpay、Paytm、Cashfree…",
+        "cryptoHint": "オンチェーン決済"
       },
       "tabsLabel": "地域で絞り込み",
       "all": "すべて",
@@ -32,7 +36,8 @@
         "africa": "アフリカ",
         "latam": "ラテンアメリカ",
         "crypto": "暗号資産",
-        "offline": "オフライン"
+        "offline": "オフライン",
+        "other": "その他"
       },
       "card": {
         "active": "有効",
@@ -57,11 +62,12 @@
         "webhookUrl": "Webhook URL",
         "webhookHint": "支払いの通知を受け取れるよう、このURLを決済プロバイダーのダッシュボードに貼り付けてください。",
         "saving": "保存中",
-        "save": "保存",
         "readOnly": "決済ゲートウェイを変更できるのはスーパー管理者のみです。",
         "saved": "{name}の設定を保存しました。",
         "activated": "{name}を有効化しました。",
-        "deactivated": "{name}を無効化しました。"
+        "deactivated": "{name}を無効化しました。",
+        "noCredentials": "認証情報は不要です。ゲートウェイは手動または別経路での確認を使用します。",
+        "save": "{name}を保存"
       },
       "errors": {
         "conflict": "このゲートウェイは別の人によって変更されました。再読み込みしました。内容を確認してから、もう一度保存してください。",
@@ -69,7 +75,10 @@
         "noDriver": "このゲートウェイのドライバーはこのリリースにはまだないため、設定はできますが有効化はできません。",
         "forbidden": "決済ゲートウェイを変更できるのはスーパー管理者のみです。",
         "generic": "問題が発生しました。もう一度お試しください。"
-      }
+      },
+      "eyebrow": "管理 · 請求 · ゲートウェイ",
+      "titleFirst": "決済",
+      "titleSecond": "ゲートウェイ"
     },
     "checkout": {
       "title": "注文を完了",
@@ -132,7 +141,28 @@
       "autoRenew": "期間ごとに自動更新されます。いつでも解約できます。",
       "addonRenews": "このアドオンは期間ごとに自動更新されます。いつでも解約でき、有料期間の終了までは引き続きご利用いただけます。",
       "cardTitle": "カードで支払う",
-      "payNow": "今すぐ支払う"
+      "payNow": "今すぐ支払う",
+      "titleFirst": "ご注文の",
+      "titleSecond": "完了",
+      "subtitleRefund": "{days}日間の返金保証。いつでも解約できます。クレジットカード、UPI、ネットバンキング、ウォレットに対応しています。",
+      "steps": {
+        "plan": "プランを選択",
+        "checkout": "チェックアウト",
+        "confirmation": "確認"
+      },
+      "step": "ステップ {n}",
+      "taxIdPlaceholder": "GSTIN / VAT / EIN",
+      "addressPlaceholder": "番地・建物名",
+      "cityPlaceholder": "ムンバイ",
+      "currencyTitle": "お客様の通貨で支払う",
+      "currencyHint": "料金は即時に換算されます。ご利用可能な決済方法が対応している通貨のみ表示されます。",
+      "couponPlaceholder": "クーポンコードをお持ちですか？",
+      "live": "ライブ",
+      "tlsNote": "決済は256ビットTLS接続で処理されます。カード情報を当社が閲覧することはありません。",
+      "change": "変更",
+      "terms": "お支払いにより、<terms>利用規約</terms>および<privacy>プライバシーポリシー</privacy>に同意したものとみなされます。",
+      "refundNote": "ご満足いただけない場合は、最初の{days}日以内にメールでご連絡ください。全額返金いたします。理由の確認や申請書類は不要です。",
+      "autoRenewTitle": "このプランを自動更新"
     },
     "orders": {
       "title": "注文履歴",

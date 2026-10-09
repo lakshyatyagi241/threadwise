@@ -25,7 +25,9 @@
       "deleteTitle": "Xóa kênh này?",
       "deleteMessage": "#{name} và toàn bộ tin nhắn trong đó sẽ bị xóa đối với mọi người. Không thể hoàn tác.",
       "deleteConfirm": "Xóa kênh",
-      "cancel": "Hủy"
+      "cancel": "Hủy",
+      "defaultDescription": "Trò chuyện nội bộ không gian làm việc",
+      "customerChats": "Trò chuyện với khách hàng"
     },
     "sidebar": {
       "label": "Kênh và người",
@@ -39,7 +41,12 @@
       "invite": "Mời đồng nghiệp",
       "pending": "Yêu cầu đang chờ",
       "pendingCount": "{count, plural, other {# yêu cầu đang chờ}}",
-      "unread": "{count, plural, other {# tin nhắn chưa đọc}}"
+      "unread": "{count, plural, other {# tin nhắn chưa đọc}}",
+      "workspace": "Không gian làm việc",
+      "mode": "Chế độ",
+      "customerChats": "Trò chuyện với khách hàng",
+      "teamChat": "Trò chuyện nhóm",
+      "membersLink": "Thành viên"
     },
     "members": {
       "label": "Thành viên",
@@ -52,7 +59,8 @@
       "online": "Trực tuyến",
       "offline": "Ngoại tuyến",
       "you": "(bạn)",
-      "message": "Nhắn tin cho {name}"
+      "message": "Nhắn tin cho {name}",
+      "titleAccent": "trò chuyện"
     },
     "panel": {
       "searchTitle": "Tìm tin nhắn",
@@ -104,7 +112,11 @@
       "fileTooLarge": "Tệp đó lớn hơn 20 MB.",
       "mentionList": "Đồng nghiệp để nhắc đến",
       "typingOne": "{name} đang nhập",
-      "typingMany": "{count} người đang nhập"
+      "typingMany": "{count} người đang nhập",
+      "hintSend": "gửi",
+      "hintNewLine": "xuống dòng",
+      "hintMention": "nhắc tên",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "Tạo kênh",
@@ -122,7 +134,9 @@
         "hint": "Chỉ theo lời mời. Chỉ thành viên mới thấy kênh."
       },
       "cancel": "Hủy",
-      "create": "Tạo kênh"
+      "create": "Tạo kênh",
+      "namePlaceholder": "ví dụ: hỗ trợ",
+      "descriptionPlaceholder": "Kênh này dùng để làm gì?"
     },
     "invite": {
       "title": "Mời đồng nghiệp",
@@ -135,7 +149,10 @@
       "approved": "Xong. Yêu cầu đã được chấp thuận.",
       "pending": "Đã gửi lời mời, đang chờ quản trị viên duyệt.",
       "cancel": "Hủy",
-      "submit": "Gửi lời mời"
+      "submit": "Gửi lời mời",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "Tên của họ",
+      "notePlaceholder": "Tại sao họ nên tham gia?"
     },
     "invitations": {
       "title": "Lời mời đang chờ",

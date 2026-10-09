@@ -25,7 +25,9 @@
       "deleteTitle": "Eliminare questo canale?",
       "deleteMessage": "#{name} e tutti i suoi messaggi verranno eliminati per tutti. L’operazione non è reversibile.",
       "deleteConfirm": "Elimina canale",
-      "cancel": "Annulla"
+      "cancel": "Annulla",
+      "defaultDescription": "Chat interna del workspace",
+      "customerChats": "Chat con i clienti"
     },
     "sidebar": {
       "label": "Canali e persone",
@@ -39,7 +41,12 @@
       "invite": "Invita un collega",
       "pending": "Richieste in sospeso",
       "pendingCount": "{count, plural, one {# richiesta in sospeso} other {# richieste in sospeso}}",
-      "unread": "{count, plural, one {# messaggio non letto} other {# messaggi non letti}}"
+      "unread": "{count, plural, one {# messaggio non letto} other {# messaggi non letti}}",
+      "workspace": "Workspace",
+      "mode": "Modalità",
+      "customerChats": "Chat con i clienti",
+      "teamChat": "Chat del team",
+      "membersLink": "Membri"
     },
     "members": {
       "label": "Membri",
@@ -52,7 +59,8 @@
       "online": "Online",
       "offline": "Offline",
       "you": "(tu)",
-      "message": "Scrivi a {name}"
+      "message": "Scrivi a {name}",
+      "titleAccent": "chat"
     },
     "panel": {
       "searchTitle": "Cerca messaggi",
@@ -104,7 +112,11 @@
       "fileTooLarge": "Il file supera i 20 MB.",
       "mentionList": "Colleghi da menzionare",
       "typingOne": "{name} sta scrivendo",
-      "typingMany": "{count} persone stanno scrivendo"
+      "typingMany": "{count} persone stanno scrivendo",
+      "hintSend": "invia",
+      "hintNewLine": "nuova riga",
+      "hintMention": "menzione",
+      "hintShift": "Maiusc+↵"
     },
     "createChannel": {
       "title": "Crea un canale",
@@ -122,7 +134,9 @@
         "hint": "Solo su invito. Lo vedono solo i membri."
       },
       "cancel": "Annulla",
-      "create": "Crea canale"
+      "create": "Crea canale",
+      "namePlaceholder": "es. supporto",
+      "descriptionPlaceholder": "A cosa serve questo canale?"
     },
     "invite": {
       "title": "Invita un collega",
@@ -135,7 +149,10 @@
       "approved": "Fatto. La richiesta è stata approvata.",
       "pending": "Invito inviato, in attesa dell’approvazione dell’amministratore.",
       "cancel": "Annulla",
-      "submit": "Invia invito"
+      "submit": "Invia invito",
+      "emailPlaceholder": "collega@azienda.com",
+      "namePlaceholder": "Il loro nome",
+      "notePlaceholder": "Perché dovrebbero unirsi?"
     },
     "invitations": {
       "title": "Inviti in sospeso",

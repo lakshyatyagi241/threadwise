@@ -55,7 +55,14 @@
       "webhook_lead": "Webhookリード",
       "handoff": "引き継ぎ",
       "inbox": "チーム受信トレイ",
-      "retry": "再試行"
+      "retry": "再試行",
+      "group_leave": "リストからの退会",
+      "segment_join": "セグメントへの参加",
+      "contact_updated": "連絡先の更新",
+      "field_match": "項目の一致",
+      "date_field_match": "日付の一致",
+      "schedule": "スケジュール",
+      "ecom_event": "ストアのイベント"
     },
     "endReason": {
       "end_node": "フローの最後に到達",

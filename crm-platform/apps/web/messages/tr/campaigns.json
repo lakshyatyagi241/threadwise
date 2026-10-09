@@ -22,10 +22,13 @@
         "read": "Okundu",
         "failed": "Başarısız",
         "processing": "İşleniyor",
-        "queued": "Sırada",
         "campaigns": "{count} kampanya",
         "inFlight": "yolda",
-        "awaiting": "bekliyor"
+        "awaiting": "bekliyor",
+        "queued": "{count} kuyrukta",
+        "deliveredRate": "{rate}% iletim",
+        "readRate": "{rate}% okunma oranı",
+        "failedCampaigns": "{count} başarısız kampanya"
       },
       "range": {
         "all": "Tüm zamanlar",
@@ -87,7 +90,13 @@
         "devices": "Hazır cihazlar",
         "retry": "Yeniden deneme birikimi",
         "createTitle": "Kampanya oluştur",
-        "createBody": "Bir gönderici seçin, mesajı yazın veya seçin, alıcıları belirleyin."
+        "createBody": "Bir gönderici seçin, mesajı yazın veya seçin, alıcıları belirleyin.",
+        "tipTitle": "İpucu",
+        "tip": "Kampanyaları müşterileriniz aktif olduğunda zamanlayın. Her toplu gönderimi onaylı bir şablonla eşleştirin; böylece başarısız gönderimler kuyruktan çıkmadan işaretlenir.",
+        "healthyTitle": "Tüm sistemler sağlıklı",
+        "attentionTitle": "İletimin ilgiye ihtiyacı var",
+        "healthLine": "Ortalama {rate}% iletim · {count} kampanya incelenmeli.",
+        "label": "Kampanya filtreleri"
       },
       "card": {
         "select": "{name} öğesini seç",
@@ -130,7 +139,27 @@
         "instant": "Gönderim: anında",
         "template": "Şablon {name}"
       },
-      "createBroadcast": "Toplu gönderim oluştur"
+      "createBroadcast": "Toplu gönderim oluştur",
+      "noData": "Veri bulunamadı",
+      "noDataHint": "Mevcut filtrelerle eşleşen WhatsApp kampanyası yok. Filtreleri temizlemeyi deneyin veya ilk toplu gönderiminizi başlatın.",
+      "createCampaign": "Kampanya oluştur",
+      "help": {
+        "label": "Yardım - {n}",
+        "items": {
+          "0": {
+            "title": "WhatsApp kampanyası nedir?",
+            "body": "Bağlı cihazınız üzerinden seçilen kişilere özel mesaj, onaylı şablon veya akış gönderen bir toplu gönderim kuyruğudur."
+          },
+          "1": {
+            "title": "İletimi nasıl iyileştirebilirim?",
+            "body": "Listelerinizi temiz tutun, giden gönderimlerde onaylı şablonlar kullanın ve tüm kişilere aynı anda göndermek yerine daha büyük toplu gönderimleri zamanlayın."
+          },
+          "2": {
+            "title": "Hangi kampanyayı önce başlatmalıyım?",
+            "body": "Bir şablon güncellemesi veya yeniden etkileşim toplu gönderimiyle başlayın; ölçeklendirmeden önce iletilen, okunan ve başarısız sayılarını karşılaştırın."
+          }
+        }
+      }
     },
     "builder": {
       "loadError": "Bu kampanya yüklenemedi.",
@@ -142,7 +171,28 @@
       "titleEdit": "Düzenle:",
       "titleAccent": "kampanya",
       "failed": "Kampanya kaydedilemedi. Tekrar deneyin.",
-      "preview": "Canlı önizleme",
+      "preview": {
+        "title": "Canlı önizleme",
+        "typeText": "Metin",
+        "type": {
+          "template": "Şablon",
+          "flow": "Akış"
+        },
+        "now": "Şimdi",
+        "scheduled": "Daha sonra",
+        "recurring": "Tekrarlayan",
+        "flow": "Her alıcı bu akışı başlatır.",
+        "emptyTitle": "Önizleme yok",
+        "emptyHint": "Bir cihaz seçin, mesaj gövdesini yazın veya bir şablon seçin — önizleme burada görünür.",
+        "from": "Gönderen: {sender}",
+        "note": "Kampanyanız her alıcının sohbetinde böyle görünecek.",
+        "recipients": "Alıcılar",
+        "schedule": "Zamanlama",
+        "typeLabel": "Tür",
+        "ab": "A/B",
+        "off": "Kapalı",
+        "step": "Adım {n} / {total}"
+      },
       "previewEmpty": "Mesaj önizlemeniz…",
       "previewTemplate": "Şablon",
       "previewFlow": "Her alıcı bu akışı başlatır.",
@@ -159,7 +209,8 @@
         "window": "Gönderim saatlerinin hem başlangıcını hem bitişini ayarlayın veya ikisini de boş bırakın.",
         "throttle": "En uzun aralık en az en kısa aralık kadar olmalıdır.",
         "expiry": "Bitiş tarihi gönderim tarihinden sonra olmalıdır; aksi hâlde kampanya hiç gönderilmeden süresi dolar.",
-        "media": "http:// veya https:// ile başlayan tam bir adres girin."
+        "media": "http:// veya https:// ile başlayan tam bir adres girin.",
+        "sender": "Bir gönderici seçin."
       },
       "submit": {
         "save": "Değişiklikleri kaydet",
@@ -174,7 +225,30 @@
         "namePlaceholder": "örn. Bayram fırsatı",
         "sender": "Gönderen",
         "senderHint": "Varsayılan bırakılırsa kampanya çalışma alanınızın ana altyapısı üzerinden gider.",
-        "defaultSender": "Varsayılan gönderici"
+        "defaultSender": "Varsayılan gönderici",
+        "nameHint": "Raporlar ve kuyruk geçmişi için dahili etiket.",
+        "noSenders": "Bağlı gönderici yok.",
+        "connectOne": "Bir tane bağlayın →",
+        "type": "Kampanya türü",
+        "types": {
+          "custom": {
+            "title": "Özel mesaj",
+            "hint": "Tek seferlik bir toplu gönderim için metin yazın ve medya ya da düğme ekleyin."
+          },
+          "template": {
+            "title": "Şablon kullan",
+            "hint": "Pazarlama veya bilgilendirme mesajları için onaylı bir Meta şablonu seçin."
+          },
+          "flow": {
+            "title": "Akış oluşturucu",
+            "hint": "Bu kuyruktaki her alıcı için kayıtlı bir akış başlatın."
+          }
+        },
+        "ab": "A/B testini etkinleştir",
+        "abHint": "Alıcıları iki mesaj varyantı arasında bölün.",
+        "split": "Varyant A payı {a}%",
+        "splitHint": "Varyant B kalan kitleye gönderilir. Varyant B içeriğini Oluştur adımında ayarlayın.",
+        "pickSender": "— Gönderici seçin —"
       },
       "audience": {
         "title": "Kitle",
@@ -184,7 +258,25 @@
         "sample": "Örnek indir",
         "csvTooBig": "Bu dosya 5 MB'tan büyük.",
         "csvHint": "Sütunlar: name, country_code, phone. Diğer her sütun, mesajda kullanabileceğiniz bir değişken olur.",
-        "selected": "{count} kişi seçildi"
+        "selected": "{count} kişi seçildi",
+        "tag": "kitle",
+        "modes": {
+          "audience": {
+            "title": "Kişi grupları",
+            "hint": "Kayıtlı segmentleri ve etiketleri kullanın."
+          },
+          "csv": {
+            "title": "CSV yükle",
+            "hint": "Bu kuyruk için numaraları içe aktarın."
+          },
+          "manual": {
+            "title": "Elle girilen numaralar",
+            "hint": "Her satıra bir numara yapıştırın."
+          }
+        },
+        "csvRows": "Dosyada {count} numara",
+        "numbersPlaceholder": "Her satırda bir numara — ülke kodunu ekleyin, artı işareti olmadan",
+        "numbersCount": "{count} numara"
       },
       "message": {
         "title": "Mesaj",
@@ -285,10 +377,235 @@
         "dailyHint": "Bu sayıya ulaşınca gün için durur; kalanı ertesi gün gider.",
         "windowStart": "Gönderim başlangıcı",
         "windowEnd": "Gönderim bitişi",
-        "windowHint": "Yalnızca yukarıdaki saat diliminde bu saatler içinde gönderin.",
-        "tracking": "Bağlantı tıklamalarını izle"
+        "tracking": "Bağlantı tıklamalarını izle",
+        "windowHint": "Yalnızca bu saatler içinde gönderin, saat dilimi: {zone} (yukarıda ayarlanan kampanya saat dilimi). Pencere dışında çalıştırma bir sonraki açılışı bekler. Her zaman göndermek için ikisini de boş bırakın.",
+        "title": "Zamanlama ve sınırlar",
+        "queue": "kuyruk",
+        "repeatHint": "Tekrarlayan bir kampanyanın ne sıklıkla yeniden gönderileceği.",
+        "smartTag": "engelleme önleme · isteğe bağlı",
+        "smartIntro": "Çalışma alanının varsayılan hızını kullanmak için boş bırakın. Bu kurallar gönderimleri aralıklandırır; böylece büyük bir liste insan gibi görünür ve WhatsApp'ın engelleme radarının altında kalır.",
+        "smartZone": "Saatler: {zone}.",
+        "throttleMaxHint": "Bir mesajdan önceki en uzun bekleme.",
+        "batchPauseHint": "Her gruptan sonra dinlenme süresi (dakika)."
       },
-      "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin."
+      "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin.",
+      "draftChip": "Taslak / kaydedilmemiş",
+      "steps": {
+        "label": "Kampanya adımları",
+        "required": "zorunlu",
+        "previous": "Önceki",
+        "next": "İleri",
+        "of": "Adım {n} / {total}",
+        "setup": {
+          "name": "Kurulum"
+        },
+        "compose": {
+          "name": "Oluştur"
+        },
+        "recipients": {
+          "name": "Alıcılar"
+        },
+        "schedule": {
+          "name": "Zamanlama"
+        },
+        "review": {
+          "name": "Gözden geçir"
+        }
+      },
+      "compose": {
+        "title": "Oluştur",
+        "kind": {
+          "custom": "Özel mesaj",
+          "template": "Şablon",
+          "flow": "Akış oluşturucu"
+        },
+        "header": "Üst bilgi",
+        "headerNote": "isteğe bağlı",
+        "headerText": "Üst bilgi metni",
+        "headerPlaceholder": "örn. Mayıs teklifi yayında",
+        "required": "zorunlu",
+        "body": "Gövde",
+        "bodyPlaceholder": "Merhaba '{{name}}'! …",
+        "bodyHint": "Kişiselleştirmek için '{{name}}' veya '{{first_name}}' kullanın. Herhangi bir öznitelik için / yazın.",
+        "variantB": "Varyant B mesajı",
+        "variantBNote": "A/B testi — Varyant A yukarıdaki mesajdır",
+        "variantBPlaceholder": "Varyant B kitlesi için alternatif mesaj…",
+        "variantBHint": "Varyant B yarısındaki alıcılar, yukarıdaki Varyant A mesajı yerine bu mesajı alır. Medya, düğmeler, üst bilgi ve alt bilgi iki varyant arasında ortaktır.",
+        "attachment": "Ek",
+        "attachmentNote": "isteğe bağlı / görsel, video veya belge",
+        "attachmentType": "Ek türü",
+        "attachments": {
+          "none": {
+            "name": "Yok"
+          },
+          "image": {
+            "name": "Görsel",
+            "title": "Bir görsel seçin",
+            "hint": "JPG veya PNG, en fazla 2 MB."
+          },
+          "video": {
+            "name": "Video",
+            "title": "Bir video seçin",
+            "hint": "MP4, en fazla 16 MB."
+          },
+          "document": {
+            "name": "Belge",
+            "title": "Bir belge seçin",
+            "hint": "PDF veya DOC, en fazla 16 MB."
+          }
+        },
+        "noAttachment": "Ek yok — yalnızca düz metin mesajı.",
+        "footer": "Alt bilgi",
+        "footerNote": "isteğe bağlı / en fazla 60",
+        "footerPlaceholder": "örn. Çıkmak için STOP yazın",
+        "footerHint": "Gövdenin altında düz metin. Değişken yok.",
+        "buttons": "Düğmeler",
+        "buttonsNote": "isteğe bağlı / en fazla 3",
+        "modes": {
+          "cta": "Eyleme çağrı",
+          "reply": "Hızlı yanıt",
+          "mix": "Karışık"
+        },
+        "buttonType": "Düğme türü",
+        "buttonTypes": {
+          "url": "Web sitesini ziyaret et",
+          "phone_number": "Telefonu ara",
+          "quick_reply": "Hızlı yanıt",
+          "copy_code": "Kodu kopyala"
+        },
+        "buttonText": "Düğme metni",
+        "buttonValue": "Değer",
+        "buttonPhone": "Ülke koduyla birlikte numara",
+        "removeButton": "Kaldır",
+        "addCta": "Eyleme çağrı düğmesi ekle",
+        "addReply": "Hızlı yanıt ekle",
+        "templateIntro": "Bir şablon seçin - Unofficial API etkin olduğu için her şablon çalışır (Meta onayı gerekmez). Değişkenler gönderim anında kişi özniteliklerinden doldurulur.",
+        "template": "Şablon",
+        "approvedOnly": "WABA'da yalnızca onaylı şablonlar başlatılabilir.",
+        "anyTemplate": "Unofficial API ile tüm şablonlar kullanılabilir.",
+        "pickTemplate": "Bir şablon seçin",
+        "noTemplates": "Henüz şablon yok.",
+        "createTemplate": "Şablon oluştur",
+        "variantBTemplate": "Varyant B şablonu",
+        "variantBTemplateHint": "A/B testi — Varyant A yukarıda seçili. Değişken değerleri bu şablon için ayrıca doldurulur.",
+        "sameTemplate": "— A ile aynı şablon —",
+        "flowIntro": "Her alıcı için kayıtlı bir akış çalıştırın. Akışın ilk mesajı kampanya tetikleyicisidir; sonraki düğümler her kişinin yanıtlarını izler.",
+        "flow": "Akış",
+        "pickFlow": "Bir akış seçin",
+        "noFlows": "Henüz akış yok.",
+        "createFlow": "Akış oluştur",
+        "variantBFlow": "Varyant B akışı",
+        "variantBFlowHint": "Varyant B yarısındaki alıcılar, yukarıdaki Varyant A akışı yerine bu akışı çalıştırır.",
+        "sameFlow": "— A ile aynı akış —",
+        "engineNotes": {
+          "twilio": "Twilio özel mesajları yalnızca metin ve medya gönderir. Düğmeler için bir Şablon kampanyası oluşturun (Twilio Content SID).",
+          "waba": "WABA özel mesajları yalnızca son 24 saatte size mesaj yazmış kişilere ulaşır. Soğuk veya toplu gönderimler ve düğmeler için bir Şablon kampanyası kullanın."
+        },
+        "templateEmpty": {
+          "twilio": "Henüz Twilio şablonu yok. Şablonlar sayfasında bir Content SID ile oluşturun.",
+          "waba": "Bu numara için henüz onaylı Meta (WABA) şablonu yok. Şablonlar sayfasında bir şablon oluşturun veya onaylatın.",
+          "baileys": "Henüz Unofficial API şablonu yok. Şablonlar sayfasında bir tane oluşturun."
+        },
+        "templateIntroApproved": "Onaylı bir Meta şablonu seçin. Kişiye özgü değişken değerleri gönderim anında kişi özniteliklerinden doldurulur.",
+        "templateApproved": "Onaylı şablon"
+      },
+      "review": {
+        "title": "Gözden geçir",
+        "tag": "onayla",
+        "device": "Cihaz",
+        "type": "Tür",
+        "recipients": "Alıcılar",
+        "schedule": "Zamanlama",
+        "types": {
+          "custom": "Özel mesaj",
+          "template": "Şablon",
+          "flow": "Akış oluşturucu"
+        },
+        "now": "Hemen gönderiliyor",
+        "recurring": "Tekrarlayan · {every}",
+        "checklist": "Doğrulama kontrol listesi",
+        "summary": "Alıcı özeti",
+        "groups": "Kişi grupları ve etiketler",
+        "contacts": "Tekil kişiler",
+        "numbers": "Elle / CSV numaraları",
+        "total": "Toplam alıcı",
+        "estimate": "Tahmini değerdir: iki grupta bulunan bir kişi iki kez sayılır. Kuyruk oluşturulurken yinelenenler kaldırılır.",
+        "checks": {
+          "name": "Kampanya adı ayarlandı",
+          "content": "Mesaj hazır",
+          "audience": "Alıcılar seçildi",
+          "schedule": "Zamanlama geçerli",
+          "sender": "Gönderici seçildi"
+        },
+        "problems": {
+          "name": "Kampanyaya bir ad verin.",
+          "message": "Mesajı yazın.",
+          "template": "Bir şablon seçin.",
+          "flow": "Bir akış seçin.",
+          "audience": "Kimlere gönderileceğini seçin: kişiler, bir grup, bir etiket, numaralar veya bir CSV.",
+          "date": "Gönderim tarihini seçin.",
+          "time": "Gönderim saatini seçin.",
+          "window": "Gönderim saatlerinin başlangıcını ve bitişini ikisini birden ayarlayın ya da hiçbirini ayarlamayın.",
+          "throttle": "En uzun aralık en kısa aralıktan az olamaz.",
+          "expiry": "Bitiş tarihi gönderim tarihinden sonra olmalıdır; aksi halde kampanya hiç gönderilmeden sona erer.",
+          "media": "http:// veya https:// ile başlayan tam bir adres girin.",
+          "sender": "Bir gönderici seçin."
+        }
+      },
+      "ai": {
+        "open": "Yapay zeka ile oluştur",
+        "eyebrow": "WA kampanyaları / yapay zeka",
+        "title": "Şununla oluştur:",
+        "titleAccent": "Yapay zeka",
+        "close": "Kapat",
+        "cancel": "İptal",
+        "generate": "Kampanya oluştur",
+        "intro": "Kampanya mesajını, alt bilgiyi, eyleme çağrıyı ve hızlı yanıtları saniyeler içinde taslak olarak hazırlayın.",
+        "model": "Yapay zeka modeli",
+        "modelsError": "Modeller yüklenemedi.",
+        "noModels": "Bu çalışma alanı için etkin bir yapay zeka sağlayıcısı yok.",
+        "loadingModels": "Modeller yükleniyor…",
+        "pickModel": "Bir model seçin",
+        "yourKey": "kendi anahtarınız",
+        "business": "İşletme adı",
+        "businessPlaceholder": "Bloomly Florals",
+        "product": "Ürün veya hizmet",
+        "productPlaceholder": "Mevsimlik buketler · aynı gün teslimat",
+        "goal": "Kampanya hedefi",
+        "pickGoal": "Hedef seçin",
+        "goals": {
+          "purchase": "Satın almayı teşvik et",
+          "booking": "Rezervasyonu teşvik et",
+          "sale": "Bir satışı tanıt",
+          "reengage": "Soğuk kişileri yeniden etkinleştir",
+          "feedback": "Geri bildirim topla",
+          "launch": "Bir lansmanı duyur",
+          "reminder": "Hatırlatma gönder",
+          "festival": "Bayram tebriği"
+        },
+        "tone": "Ton",
+        "pickTone": "Ton seçin",
+        "tones": {
+          "friendly": "Samimi",
+          "professional": "Profesyonel",
+          "urgent": "Acil",
+          "playful": "Neşeli",
+          "premium": "Premium",
+          "empathetic": "Empatik"
+        },
+        "ctaLabel": "Eyleme çağrı düğmesi metni",
+        "ctaLabelPlaceholder": "Hemen alışveriş yap",
+        "ctaUrl": "Eyleme çağrı hedef URL'si",
+        "audience": "Hedef kitle",
+        "audiencePlaceholder": "Son 90 günde buket satın alan tekrar eden müşteriler",
+        "offer": "Teklif / çekici unsur",
+        "offerPlaceholder": "Bu hafta sonu bahar buketlerinde %15 indirim, 40 $ üzeri ücretsiz teslimat",
+        "notes": "Ek notlar",
+        "notesNote": "isteğe bağlı / en fazla 2000",
+        "notesPlaceholder": "Belirli bir şey — mutlaka geçmesi gereken ifadeler, kaçınılacaklar, marka dili ipuçları…",
+        "failed": "Kampanya oluşturulamadı. Tekrar deneyin.",
+        "applied": "Kampanya metni dolduruldu. Devam etmeden önce gözden geçirin."
+      }
     },
     "detail": {
       "notFound": "Bu kampanya bulunamadı.",

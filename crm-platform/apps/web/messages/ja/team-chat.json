@@ -25,7 +25,9 @@
       "deleteTitle": "このチャンネルを削除しますか？",
       "deleteMessage": "#{name} とそのすべてのメッセージは全員から削除されます。この操作は元に戻せません。",
       "deleteConfirm": "チャンネルを削除",
-      "cancel": "キャンセル"
+      "cancel": "キャンセル",
+      "defaultDescription": "ワークスペース内部のチャット",
+      "customerChats": "顧客チャット"
     },
     "sidebar": {
       "label": "チャンネルと連絡先",
@@ -39,7 +41,12 @@
       "invite": "チームメイトを招待",
       "pending": "保留中のリクエスト",
       "pendingCount": "{count, plural, other {保留中のリクエスト #件}}",
-      "unread": "{count, plural, other {未読メッセージ #件}}"
+      "unread": "{count, plural, other {未読メッセージ #件}}",
+      "workspace": "ワークスペース",
+      "mode": "モード",
+      "customerChats": "顧客チャット",
+      "teamChat": "チームチャット",
+      "membersLink": "メンバー"
     },
     "members": {
       "label": "メンバー",
@@ -52,7 +59,8 @@
       "online": "オンライン",
       "offline": "オフライン",
       "you": "（あなた）",
-      "message": "{name} にメッセージ"
+      "message": "{name} にメッセージ",
+      "titleAccent": "チャット"
     },
     "panel": {
       "searchTitle": "メッセージを検索",
@@ -104,7 +112,11 @@
       "fileTooLarge": "そのファイルは 20 MB を超えています。",
       "mentionList": "メンションできるチームメイト",
       "typingOne": "{name} が入力中",
-      "typingMany": "{count} 人が入力中"
+      "typingMany": "{count} 人が入力中",
+      "hintSend": "送信",
+      "hintNewLine": "改行",
+      "hintMention": "メンション",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "チャンネルを作成",
@@ -122,7 +134,9 @@
         "hint": "招待された人のみ参加できます。メンバーだけが閲覧できます。"
       },
       "cancel": "キャンセル",
-      "create": "チャンネルを作成"
+      "create": "チャンネルを作成",
+      "namePlaceholder": "例: サポート",
+      "descriptionPlaceholder": "このチャネルの目的は何ですか？"
     },
     "invite": {
       "title": "チームメイトを招待",
@@ -135,7 +149,10 @@
       "approved": "完了しました。リクエストが承認されました。",
       "pending": "招待を送信しました。管理者の承認をお待ちください。",
       "cancel": "キャンセル",
-      "submit": "招待を送信"
+      "submit": "招待を送信",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "お名前",
+      "notePlaceholder": "参加する理由は何ですか？"
     },
     "invitations": {
       "title": "保留中の招待",

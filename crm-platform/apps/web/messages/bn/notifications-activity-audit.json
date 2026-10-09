@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, one {{author}-এর কাছ থেকে নতুন বার্তা} other {{author}-এর কাছ থেকে # টি নতুন বার্তা}}",
         "titleNoName": "{count, plural, one {নতুন সরাসরি বার্তা} other {# টি নতুন সরাসরি বার্তা}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {কেউ {name}-এ যোগ দিতে চায়} other {# জন {name}-এ যোগ দিতে চায়}}",
+        "titleNoName": "{count, plural, one {কেউ একটি WhatsApp গ্রুপে যোগ দিতে চায়} other {# জন একটি WhatsApp গ্রুপে যোগ দিতে চায়}}",
+        "body": "অনুমোদন বা প্রত্যাখ্যান করতে গ্রুপ খুলুন।"
+      },
+      "waba_group_suspended": {
+        "title": "{name} স্থগিত করা হয়েছে",
+        "titleNoName": "একটি WhatsApp গ্রুপ স্থগিত করা হয়েছে",
+        "body": "WhatsApp এই গ্রুপটি স্থগিত করেছে। পুনরুদ্ধার না করা পর্যন্ত আপনি এতে বার্তা পাঠাতে পারবেন না।"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} আবার সক্রিয়",
+        "titleNoName": "একটি WhatsApp গ্রুপ আবার সক্রিয়",
+        "body": "WhatsApp এই গ্রুপটি পুনরুদ্ধার করেছে। আপনি আবার এতে বার্তা পাঠাতে পারবেন।"
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "নির্ধারিত প্রেরণ পাঠানো হয়েছে",
         "scheduled_failed": "নির্ধারিত প্রেরণ ব্যর্থ হয়েছে",
         "teamchat_mention": "টিম চ্যাটে আপনাকে উল্লেখ করেছে",
-        "teamchat_message": "নতুন সরাসরি বার্তা"
+        "teamchat_message": "নতুন সরাসরি বার্তা",
+        "waba_group_join_request": "গ্রুপে যোগ দেওয়ার অনুরোধ",
+        "waba_group_suspended": "WhatsApp গ্রুপ স্থগিত",
+        "waba_group_suspension_cleared": "WhatsApp গ্রুপ আবার সক্রিয়"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "ওয়ালেট",
         "devices": "WhatsApp নম্বর",
         "broadcasts": "ব্রডকাস্ট ও ক্যাম্পেইন",
-        "team_chat": "টিম চ্যাট"
+        "team_chat": "টিম চ্যাট",
+        "whatsapp_groups": "WhatsApp গ্রুপ"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "ওয়ালেট টপ-আপ হয়েছে",
           "hint": "ওয়ার্কস্পেস ওয়ালেটে জমা হয়েছে।"
+        },
+        "waba_group_join_request": {
+          "label": "গ্রুপে যোগ দেওয়ার অনুরোধ",
+          "hint": "লোকজন আপনার ব্যবসার নম্বরের একটি WhatsApp গ্রুপে যোগ দিতে অনুরোধ করছে। দশটি অনুরোধে একটি সারি হয়।"
+        },
+        "waba_group_suspended": {
+          "label": "গ্রুপ স্থগিত",
+          "hint": "WhatsApp আপনার একটি গ্রুপ স্থগিত করেছে।"
+        },
+        "waba_group_suspension_cleared": {
+          "label": "গ্রুপ আবার সক্রিয়",
+          "hint": "WhatsApp একটি স্থগিত গ্রুপ পুনরুদ্ধার করেছে। শুধু তখনই, যদি স্থগিতের কথা আপনাকে জানানো হয়ে থাকে।"
         }
       },
       "loading": "আপনার পছন্দ লোড হচ্ছে",

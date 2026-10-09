@@ -183,7 +183,9 @@
         "unzoned": "ไม่ได้กำหนดโซน",
         "per24h": "{n}/24 ชม.",
         "deliv": "ส่งถึง",
-        "free": "{n, plural, one {# ช่องอุปกรณ์ที่ว่าง} other {# ช่องอุปกรณ์ที่ว่าง}}"
+        "free": "{n, plural, one {# ช่องอุปกรณ์ที่ว่าง} other {# ช่องอุปกรณ์ที่ว่าง}}",
+        "freeHint": "เพิ่ม WABA",
+        "connectDeviceShort": "เชื่อมต่ออุปกรณ์"
       },
       "templates": {
         "title": "เทมเพลตที่มีประสิทธิภาพสูงสุด",
@@ -297,7 +299,8 @@
         "connect": "เชื่อมต่อ",
         "connectedLabel": "เชื่อมต่อแล้ว"
       },
-      "sublineOfficial": "{date} - {range} แสดงข้อความขาออก {sent} รายการ อัตราการส่งถึง {rate}%"
+      "sublineOfficial": "{date} - {range} แสดงข้อความขาออก {sent} รายการ อัตราการส่งถึง {rate}%",
+      "synced": "ออนไลน์ · ซิงก์เมื่อ {s} วินาทีที่แล้ว"
     },
     "analytics": {
       "title": "การวิเคราะห์",

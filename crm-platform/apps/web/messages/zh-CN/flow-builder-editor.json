@@ -1238,7 +1238,15 @@
             "away": "可用性：离开模式开启时",
             "out_of_hours": "可用性：非营业时间",
             "manual_enroll": "手动：由操作员加入联系人",
-            "comment_to_dm": "Instagram：有人评论帖子 → 私信"
+            "comment_to_dm": "Instagram：有人评论帖子 → 私信",
+            "group_leave": "受众：联系人退出列表时",
+            "segment_join": "受众：联系人进入分组时",
+            "contact_updated": "受众：联系人信息被更新时",
+            "field_match": "受众：联系人字段与某值匹配时",
+            "date_field_match": "定时：相对于联系人的某个日期（如生日…）",
+            "schedule": "定时：在指定日期和时间",
+            "shopify_event": "电商：Shopify 店铺事件",
+            "woocommerce_event": "电商：WooCommerce 店铺事件"
           },
           "tagsLoading": "正在加载标签…",
           "tagPick": "— 选择标签 —",
@@ -1274,7 +1282,66 @@
           "automatic": "自动触发，无需额外配置。",
           "away": "在<b>离开模式</b>开启期间，任何收到的消息都会触发。请在<link>自动回复</link>页面切换离开模式。每位联系人只会被加入一次。",
           "outOfHours": "任何在<b>工作区营业时间之外</b>收到的消息都会触发。请在工作区设置中设置营业时间。每位联系人只会被加入一次。",
-          "manualEnroll": "您将通过此流程旁的<b>加入</b>按钮，从<link>/flows 列表</link>手动加入联系人。"
+          "manualEnroll": "您将通过此流程旁的<b>加入</b>按钮，从<link>/flows 列表</link>手动加入联系人。",
+          "ext": {
+            "segmentsLoading": "正在加载分组…",
+            "segmentPick": "— 选择分组 —",
+            "segmentFallback": "分组",
+            "groupLeaveLabel": "触发流程的列表",
+            "groupLeaveHint": "当联系人被人工或导入操作移出此列表时运行。由流程自身将其移出时不会触发。",
+            "segmentLabel": "分组",
+            "segmentHint": "每位联系人在创建、打标签、加入列表或更新之后，首次被发现位于此分组内时运行一次。",
+            "fieldLabel": "联系人字段",
+            "fieldHint": "字段键：name、email、title、language、address，或自定义字段的键。",
+            "test": "测试",
+            "value": "值",
+            "valueHint": "每次创建或更改联系人时检查。联系人每取得一个值，即运行一次。",
+            "when": "触发时间",
+            "dirOn": "在当天",
+            "dirBefore": "日期前的天数",
+            "dirAfter": "日期后的天数",
+            "days": "天数",
+            "timeOfDay": "时刻",
+            "timeZoneHint": "按工作区时区计算，每天检查一次。",
+            "repeat": "重复",
+            "yearly": "每年（仅按月和日）",
+            "fullDate": "仅在完整日期当天",
+            "frequency": {
+              "once": "仅一次，在指定日期",
+              "daily": "每天",
+              "weekly": "每周",
+              "monthly": "每月"
+            },
+            "date": "日期",
+            "dateHint": "YYYY-MM-DD。",
+            "weekdays": "星期",
+            "monthDay": "每月的日期",
+            "monthDayHint": "31 表示较短月份的最后一天。",
+            "time24Hint": "HH:MM，24 小时制。",
+            "tz": "时区（可选）",
+            "tzHint": "IANA 时区名称，例如 Asia/Kolkata。留空则使用工作区时区。",
+            "who": "对象",
+            "whoHint": "每次运行最多 5,000 人。已退订、已归档或没有号码的联系人将被排除。",
+            "audience": {
+              "all": "所有有号码的联系人",
+              "group": "列表中的联系人",
+              "segment": "分组中的联系人"
+            },
+            "list": "列表",
+            "storeEvent": "店铺事件",
+            "storeEvents": {
+              "checkout_started": "开始结账",
+              "abandoned_cart": "购物车已放弃（到期发送首次提醒）",
+              "order_fulfilled": "订单已完成",
+              "order_refunded": "订单已退款",
+              "order_cancelled": "订单已取消",
+              "ordered_product": "已下单某商品"
+            },
+            "productId": "商品 ID（可选）",
+            "productIdHint": "留空 = 订单中的任意商品。",
+            "storeNote": "客户按电话号码匹配已保存的联系人；订单不会创建新联系人。“加入购物车”和“查看商品”不提供：店铺不会上报这些事件。",
+            "updatedNote": "每次由人工或导入操作更改联系人时都会触发。其他流程所做的更改不会触发此流程。"
+          }
         }
       },
       "formsChannels": {
@@ -2001,6 +2068,34 @@
         "tg_payment": {
           "label": "付款 / 发票",
           "description": "发送 Telegram 发票或可分享的付款链接"
+        },
+        "update_contact": {
+          "label": "更新联系人字段",
+          "description": "设置联系人字段"
+        },
+        "list_member": {
+          "label": "添加 / 移出列表",
+          "description": "将联系人加入列表或移出列表"
+        },
+        "in_list": {
+          "label": "在列表中",
+          "description": "是 / 否：联系人在列表中"
+        },
+        "in_segment": {
+          "label": "在分组中",
+          "description": "是 / 否：联系人在分组中"
+        },
+        "sheet_check": {
+          "label": "检查 Google 表格单元格",
+          "description": "是 / 否：匹配行中的某个单元格"
+        },
+        "sheet_contact": {
+          "label": "从表格保存联系人",
+          "description": "将表格行复制到联系人中"
+        },
+        "wa_session": {
+          "label": "WhatsApp 会话有效",
+          "description": "是 / 否：客户在过去 24 小时内发过消息"
         }
       },
       "groups": {
@@ -2073,7 +2168,15 @@
         "deal_stage_changed": "交易阶段变更时触发",
         "away": "离开期间",
         "out_of_hours": "非营业时间",
-        "manual_enroll": "加入时触发"
+        "manual_enroll": "加入时触发",
+        "group_leave": "离开列表时",
+        "segment_join": "加入分组时",
+        "contact_updated": "联系人更新时",
+        "field_match": "字段匹配时",
+        "date_field_match": "日期匹配时",
+        "schedule": "按计划",
+        "shopify_event": "Shopify 事件触发时",
+        "woocommerce_event": "WooCommerce 事件触发时"
       },
       "ports": {
         "manual": "手动",

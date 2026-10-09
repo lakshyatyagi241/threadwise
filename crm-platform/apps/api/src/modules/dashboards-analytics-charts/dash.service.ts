@@ -82,7 +82,7 @@ export class DashService {
         campaigns: await this.widgetsRepo.campaigns(tx, orgId),
         devices: {
           ...devices,
-          slotCap: Math.max(devices.total, deviceCap > 0 ? deviceCap : DashService.DEFAULT_SLOTS),
+          slotCap: Math.max(devices.total, deviceCap > 0 ? Math.max(deviceCap, DashService.DEFAULT_SLOTS) : DashService.DEFAULT_SLOTS),
         },
         templates: await this.widgetsRepo.templates(tx, orgId, w.from, w.to),
         inbox: await this.widgetsRepo.inbox(tx, orgId),

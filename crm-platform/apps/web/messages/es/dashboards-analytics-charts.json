@@ -183,7 +183,9 @@
         "unzoned": "sin zona",
         "per24h": "{n}/24 h",
         "deliv": "entreg.",
-        "free": "{n, plural, one {# espacio de dispositivo disponible} other {# espacios de dispositivo disponibles}}"
+        "free": "{n, plural, one {# espacio de dispositivo disponible} other {# espacios de dispositivo disponibles}}",
+        "freeHint": "Añadir WABA",
+        "connectDeviceShort": "Conectar dispositivo"
       },
       "templates": {
         "title": "Plantillas con mejor rendimiento",
@@ -297,7 +299,8 @@
         "connect": "Conectar",
         "connectedLabel": "Conectado"
       },
-      "sublineOfficial": "{date} - {range} con {sent} salientes y {rate} % de entregabilidad."
+      "sublineOfficial": "{date} - {range} con {sent} salientes y {rate} % de entregabilidad.",
+      "synced": "En directo · sincronizado hace {s} s"
     },
     "analytics": {
       "title": "Analíticas",

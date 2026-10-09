@@ -68,7 +68,6 @@
         "keySavedLast4": "Schlüssel gespeichert, endet auf {last4}",
         "noKey": "Kein Schlüssel",
         "unreadable": "Gespeicherter Schlüssel nicht lesbar, bitte erneut einfügen",
-        "slug": "Anbieter-ID",
         "apiKey": "API-Schlüssel",
         "apiKeyHint": "Leer lassen, um den gespeicherten Schlüssel beizubehalten.",
         "apiKeyPlaceholder": "Schlüssel hier einfügen",
@@ -89,7 +88,9 @@
         "removeTitle": "Schlüssel für {name} entfernen?",
         "removeBody": "Workspaces nutzen {name} nicht mehr, bis Sie wieder einen Schlüssel hinzufügen. Der Anbieter wird ausgeschaltet.",
         "removeConfirm": "Schlüssel entfernen",
-        "cancel": "Abbrechen"
+        "cancel": "Abbrechen",
+        "slug": "Anbieter: {provider} · Standardmodell: {model}",
+        "maxTokensPlaceholder": "z. B. 4096"
       },
       "toasts": {
         "saved": "{name} gespeichert.",
@@ -100,7 +101,8 @@
       },
       "help": {
         "title": "So werden diese Schlüssel verwendet",
-        "body": "Der eigene Schlüssel eines Workspace hat nur Vorrang, wenn der Tarif es erlaubt. Andernfalls wird der passende aktive Anbieter hier verwendet. Wenn ein Anbieter ausgeschaltet ist, können Workspaces ohne eigenen Schlüssel ihn nicht nutzen."
+        "body": "Der eigene Schlüssel eines Workspace hat nur Vorrang, wenn der Tarif es erlaubt. Andernfalls wird der passende aktive Anbieter hier verwendet. Wenn ein Anbieter ausgeschaltet ist, können Workspaces ohne eigenen Schlüssel ihn nicht nutzen.",
+        "eyebrow": "Wie diese Schlüssel verwendet werden"
       }
     },
     "dashboard": {

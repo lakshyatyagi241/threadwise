@@ -68,7 +68,11 @@
           "autoAttachCurrency": "Meta không chấp nhận loại tiền tệ này.",
           "baseCurrency": "Dùng mã tiền tệ gồm ba chữ cái.",
           "businessId": "Nhập tối đa 64 ký tự."
-        }
+        },
+        "kicker": "kết nối Meta",
+        "businessIdHint": "Cài đặt doanh nghiệp → Thông tin doanh nghiệp → \"Business portfolio ID\". Một dãy số dài.",
+        "creditLinePlaceholder": "tự động phát hiện từ doanh nghiệp của bạn",
+        "tokenNote": "Mã thông báo được lưu mã hóa và không bao giờ hiển thị lại."
       },
       "step2": {
         "title": "2. Đính kèm từng khách hàng thủ công",
@@ -90,7 +94,10 @@
         "failed": "Đính kèm thất bại: {error}",
         "finishStep1": "Hãy hoàn tất bước 1 trước.",
         "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
-        "noPhone": "không có số"
+        "noPhone": "không có số",
+        "kicker": "đính kèm thủ công, không bắt buộc",
+        "numberHint": "Chọn khách hàng theo tên: chúng tôi tự xử lý các ID tài khoản phía sau.",
+        "currencyHint": "Đơn vị tiền tệ Meta lập hóa đơn cho số này."
       },
       "register": {
         "title": "Hạn mức tín dụng đang dùng",
@@ -119,7 +126,8 @@
         "revokeFailed": "Thu hồi thất bại: {error}",
         "loadMore": "Tải thêm",
         "loadingMore": "Đang tải",
-        "label": "Phân bổ tín dụng"
+        "label": "Phân bổ tín dụng",
+        "kicker": "tài khoản đã đính kèm"
       },
       "guide": {
         "title": "Hướng dẫn thiết lập",
@@ -133,13 +141,19 @@
         "good1": "Tiền tệ của hạn mức tín dụng bị khóa sau khi đính kèm.",
         "good2": "Đính kèm nghĩa là Meta tính phí bạn, nhưng bạn vẫn đặt giá cho khách hàng của mình.",
         "good3": "Bạn có thể thu hồi bất cứ lúc nào và khách hàng sẽ lại thanh toán trực tiếp cho Meta.",
-        "link": "Tổng quan Meta Solution Partner"
-      }
+        "link": "Tổng quan Meta Solution Partner",
+        "kicker": "Hướng dẫn thiết lập",
+        "step2Note": "Mã thông báo chỉ hiện một lần, hãy sao chép ngay.",
+        "step3Apply": "Đăng ký hạn mức tín dụng",
+        "step3Note": "Sau khi được duyệt, nền tảng tự đọc ID và bước 2 sẽ chia sẻ ID này với WABA của từng khách hàng.",
+        "metaDocs": "Tài liệu Meta",
+        "reference": "tham khảo"
+      },
+      "eyebrow": "Thanh toán đại lý · hạn mức tín dụng Meta"
     },
     "dashboard": {
       "title": "Lãi lỗ đại lý",
       "eyebrow": "Tháng này",
-      "intro": "Doanh thu là số tiền khách hàng bị tính cho các tin nhắn đã gửi tới, chi phí Meta là chi phí của chính các tin nhắn đó đối với bạn, biên lợi nhuận là phần chênh lệch. Tin nhắn đã hoàn tiền và miễn phí không được tính.",
       "linkRates": "Giá và biên lợi nhuận",
       "linkConnect": "Kết nối Meta",
       "revenue": "Doanh thu (đã tính phí)",
@@ -150,7 +164,6 @@
       "billed": "Tin nhắn tính phí",
       "free": "Tin nhắn miễn phí",
       "unpriced": "Chưa đặt chi phí Meta",
-      "unpricedBanner": "{count, plural, other {# tin nhắn tính phí chưa có}} chi phí Meta cho quốc gia và danh mục của chúng, nên biên lợi nhuận tính chúng là doanh thu thuần.",
       "perWorkspace": "Theo không gian làm việc (tháng này)",
       "columns": {
         "workspace": "Không gian làm việc",
@@ -163,7 +176,10 @@
       "empty": "Tháng này chưa có tin nhắn tính phí nào.",
       "more": "Chỉ liệt kê các không gian làm việc có doanh thu cao nhất.",
       "loadFailed": "Không thể tải báo cáo lãi lỗ.",
-      "currency": "Tiền tệ báo cáo"
+      "currency": "Tiền tệ báo cáo",
+      "intro": "Mỗi tin nhắn được tính phí sẽ trừ vào ví. Doanh thu là số tiền khách hàng đã trả; chi phí Meta là số tiền Meta tính cho bạn; phần chênh lệch là lợi nhuận của bạn. Giá & chi phí được đặt tại <link>Quy tắc ví</link>.",
+      "linkPnl": "P&L",
+      "unpricedBanner": "{count, plural, one {# tin nhắn được tính phí} other {# tin nhắn được tính phí}} chưa có chi phí Meta cho quốc gia/danh mục, nên lợi nhuận được tính là doanh thu thuần. Thêm các dòng đó tại <link>Quy tắc ví → Đồng bộ chi phí Meta</link>."
     }
   }
 }

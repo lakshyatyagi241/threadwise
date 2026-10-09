@@ -55,7 +55,14 @@
       "webhook_lead": "Lead da webhook",
       "handoff": "Passaggio",
       "inbox": "Inbox del team",
-      "retry": "Nuovo tentativo"
+      "retry": "Nuovo tentativo",
+      "group_leave": "Uscita dalla lista",
+      "segment_join": "Ingresso nel segmento",
+      "contact_updated": "Contatto aggiornato",
+      "field_match": "Corrispondenza campo",
+      "date_field_match": "Corrispondenza data",
+      "schedule": "Programmazione",
+      "ecom_event": "Evento dello store"
     },
     "endReason": {
       "end_node": "Raggiunta la fine del Flow",

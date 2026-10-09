@@ -68,7 +68,11 @@
           "autoAttachCurrency": "Meta nie akceptuje tej waluty.",
           "baseCurrency": "Użyj trzyliterowego kodu waluty.",
           "businessId": "Wpisz najwyżej 64 znaki."
-        }
+        },
+        "kicker": "połączenie Meta",
+        "businessIdHint": "Ustawienia biznesowe → Informacje o firmie → „Business portfolio ID”. Długi numer.",
+        "creditLinePlaceholder": "wykryte automatycznie z Twojej firmy",
+        "tokenNote": "Token jest przechowywany zaszyfrowany i nigdy nie jest pokazywany ponownie."
       },
       "step2": {
         "title": "2. Dołącz klienta ręcznie",
@@ -90,7 +94,10 @@
         "failed": "Dołączenie nie powiodło się: {error}",
         "finishStep1": "Najpierw dokończ krok 1.",
         "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
-        "noPhone": "brak numeru"
+        "noPhone": "brak numeru",
+        "kicker": "dołącz ręcznie, opcjonalnie",
+        "numberHint": "Wybierz klienta po nazwie — identyfikatorami kont zajmujemy się za kulisami.",
+        "currencyHint": "Waluta, w której Meta wystawia Ci faktury za ten numer."
       },
       "register": {
         "title": "Używane linie kredytowe",
@@ -119,7 +126,8 @@
         "revokeFailed": "Odwołanie nie powiodło się: {error}",
         "loadMore": "Załaduj więcej",
         "loadingMore": "Ładowanie",
-        "label": "Alokacje kredytu"
+        "label": "Alokacje kredytu",
+        "kicker": "podłączone konta"
       },
       "guide": {
         "title": "Przewodnik konfiguracji",
@@ -133,13 +141,19 @@
         "good1": "Waluta linii kredytowej jest blokowana po dołączeniu.",
         "good2": "Dołączenie oznacza, że Meta rozlicza się z Tobą, ale ceny dla klientów nadal ustalasz Ty.",
         "good3": "Możesz odwołać w dowolnym momencie, a klient znów płaci Meta bezpośrednio.",
-        "link": "Przegląd Meta Solution Partner"
-      }
+        "link": "Przegląd Meta Solution Partner",
+        "kicker": "Przewodnik konfiguracji",
+        "step2Note": "Token pojawia się tylko raz, więc skopiuj go od razu.",
+        "step3Apply": "Złóż wniosek o linię kredytową",
+        "step3Note": "Po zatwierdzeniu platforma automatycznie odczytuje jej ID, a krok 2 udostępnia je każdemu kontu WABA klienta.",
+        "metaDocs": "Dokumentacja Meta",
+        "reference": "referencja"
+      },
+      "eyebrow": "Rozliczenia resellera · linia kredytowa Meta"
     },
     "dashboard": {
       "title": "Rachunek zysków i strat resellera",
       "eyebrow": "Ten miesiąc",
-      "intro": "Przychód to kwota naliczona klientom za dostarczone wiadomości, koszt Meta to koszt tych samych wiadomości dla Ciebie, a marża to różnica. Wiadomości zwrócone i bezpłatne nie są wliczane.",
       "linkRates": "Stawki i marża",
       "linkConnect": "Połącz Meta",
       "revenue": "Przychód (naliczony)",
@@ -150,7 +164,6 @@
       "billed": "Rozliczone wiadomości",
       "free": "Bezpłatne wiadomości",
       "unpriced": "Nie ustawiono kosztu Meta",
-      "unpricedBanner": "{count, plural, one {# rozliczona wiadomość nie ma} few {# rozliczone wiadomości nie mają} many {# rozliczonych wiadomości nie ma} other {# rozliczonej wiadomości nie ma}} kosztu Meta dla swojego kraju i kategorii, więc marża traktuje je jako czysty przychód.",
       "perWorkspace": "Według przestrzeni roboczej (ten miesiąc)",
       "columns": {
         "workspace": "Przestrzeń robocza",
@@ -163,7 +176,10 @@
       "empty": "W tym miesiącu nie ma jeszcze rozliczonych wiadomości.",
       "more": "Wyświetlane są tylko przestrzenie robocze z najwyższym przychodem.",
       "loadFailed": "Nie udało się załadować rachunku zysków i strat.",
-      "currency": "Waluta raportu"
+      "currency": "Waluta raportu",
+      "intro": "Każda rozliczona wiadomość to obciążenie portfela. Przychód to to, co zapłacili klienci; koszt Meta to to, co Meta policzy Tobie; różnica to Twoja marża. Ceny i koszty ustawiasz w <link>Regułach portfela</link>.",
+      "linkPnl": "P&L",
+      "unpricedBanner": "{count, plural, one {# rozliczona wiadomość nie miała} few {# rozliczone wiadomości nie miały} many {# rozliczonych wiadomości nie miały} other {# rozliczonych wiadomości nie miały}} ustawionego kosztu Meta dla kraju i kategorii, więc ich marża jest liczona jako czysty przychód. Dodaj te wiersze w <link>Regułach portfela → Synchronizuj koszty Meta</link>."
     }
   }
 }

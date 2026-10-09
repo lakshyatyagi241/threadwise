@@ -170,6 +170,13 @@ export interface BaileysCatalogBridge {
 export const BAILEYS_CATALOG_BRIDGE = Symbol('BAILEYS_CATALOG_BRIDGE');
 
 /**
+ * Where the unofficial engine's own domain announces how it sends for the catalog. `CatalogProvidersModule` binds `BAILEYS_CATALOG_BRIDGE`
+ * to this when some (global) module provides it, and to the HTTP bridge otherwise: the catalog does not import the engine, the engine
+ * hands its sender in.
+ */
+export const BAILEYS_CATALOG_BRIDGE_OVERRIDE = Symbol('BAILEYS_CATALOG_BRIDGE_OVERRIDE');
+
+/**
  * What the live adapters read from the platform's settings at call time (TW-CAT-030, 034): the Graph API version and where the
  * Node bridge is. The catalog module implements it over the platform settings store (with the environment as the fallback), so
  * an adapter never reads settings itself.

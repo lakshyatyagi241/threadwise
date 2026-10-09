@@ -95,7 +95,9 @@
         "t3": "¿Cómo mejoro los resultados?",
         "b3": "Mantén la audiencia enfocada, elige la plantilla más relevante y revisa los fallos antes de volver a enviar."
       },
-      "unofficialDisabled": "No oficial (desactivado)"
+      "unofficialDisabled": "No oficial (desactivado)",
+      "noData": "No se encontraron datos",
+      "railLabel": "Filtros de difusión"
     },
     "detail": {
       "back": "Atrás",
@@ -293,7 +295,8 @@
       "later": "Más tarde",
       "media": "Vista previa de {kind}",
       "contactsDenied": "No tienes acceso a la lista de contactos. Elige contactos mediante grupos o etiquetas.",
-      "unofficialDisabled": "El envío mediante números personales de WhatsApp (la API no oficial) no está activado en tu espacio de trabajo. Elige un número oficial de la API de WhatsApp Business."
+      "unofficialDisabled": "El envío mediante números personales de WhatsApp (la API no oficial) no está activado en tu espacio de trabajo. Elige un número oficial de la API de WhatsApp Business.",
+      "previewLabel": "Vista previa de la plantilla"
     },
     "overrides": {
       "title": "Completa este envío",

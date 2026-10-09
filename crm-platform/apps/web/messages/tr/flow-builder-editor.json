@@ -1238,7 +1238,15 @@
             "away": "Erişilebilirlik: Uzakta modu açıkken",
             "out_of_hours": "Erişilebilirlik: çalışma saatleri dışında",
             "manual_enroll": "Manuel: operatör kişileri kaydeder",
-            "comment_to_dm": "Instagram: biri bir gönderiye yorum yapar → DM"
+            "comment_to_dm": "Instagram: biri bir gönderiye yorum yapar → DM",
+            "group_leave": "Kitle: kişi bir listeden ayrıldığında",
+            "segment_join": "Kitle: kişi bir segmente girdiğinde",
+            "contact_updated": "Kitle: bir kişi güncellendiğinde",
+            "field_match": "Kitle: bir kişi alanı bir değerle eşleştiğinde",
+            "date_field_match": "Zamanlama: kişideki bir tarihe göre (doğum günü…)",
+            "schedule": "Zamanlama: belirli bir tarih ve saatte",
+            "shopify_event": "Ticaret: bir Shopify mağaza olayı",
+            "woocommerce_event": "Ticaret: bir WooCommerce mağaza olayı"
           },
           "tagsLoading": "Etiketler yükleniyor…",
           "tagPick": "— etiket seçin —",
@@ -1274,7 +1282,66 @@
           "automatic": "Otomatik tetiklenir — ek bir ayar gerekmez.",
           "away": "<b>Uzakta modu</b> AÇIK iken gelen her mesajda tetiklenir. Uzakta modunu <link>Otomatik Yanıt</link> sayfasından değiştirin. Her kişi bir kez kaydedilir.",
           "outOfHours": "<b>Çalışma alanınızın iş saatleri dışında</b> gelen her mesajda tetiklenir. İş saatlerini çalışma alanı ayarlarınızda belirleyin. Her kişi bir kez kaydedilir.",
-          "manualEnroll": "Kişileri, <link>/flows listesinden</link> bu akışın yanındaki <b>Akışa ekle</b> düğmesiyle elle ekleyeceksiniz."
+          "manualEnroll": "Kişileri, <link>/flows listesinden</link> bu akışın yanındaki <b>Akışa ekle</b> düğmesiyle elle ekleyeceksiniz.",
+          "ext": {
+            "segmentsLoading": "Segmentler yükleniyor…",
+            "segmentPick": "— segment seçin —",
+            "segmentFallback": "Segment",
+            "groupLeaveLabel": "Akışı tetikleyen liste",
+            "groupLeaveHint": "Bir kişi, bir kişi tarafından ya da içe aktarma ile bu listeden çıkarıldığında çalışır. Akışın kendisinin kişiyi çıkarması akışı başlatmaz.",
+            "segmentLabel": "Segment",
+            "segmentHint": "Her kişi için bir kez çalışır: kişi oluşturulduktan, etiketlendikten, listelendikten veya güncellendikten sonra segmentte ilk bulunduğunda.",
+            "fieldLabel": "Kişi alanı",
+            "fieldHint": "Alan anahtarı: ad, e-posta, unvan, dil, adres veya özel bir alanın anahtarı.",
+            "test": "Koşul",
+            "value": "Değer",
+            "valueHint": "Kişi her oluşturulduğunda veya değiştiğinde kontrol edilir. Kişi aldığı her değer için bir kez çalışır.",
+            "when": "Ne zaman",
+            "dirOn": "Tarihinde",
+            "dirBefore": "Tarihten önceki günler",
+            "dirAfter": "Tarihten sonraki günler",
+            "days": "Gün",
+            "timeOfDay": "Günün saati",
+            "timeZoneHint": "Çalışma alanınızın saat diliminde. Günde bir kez kontrol edilir.",
+            "repeat": "Tekrar",
+            "yearly": "Her yıl (yalnızca ay ve gün)",
+            "fullDate": "Yalnızca tam tarihte",
+            "frequency": {
+              "once": "Bir tarihte bir kez",
+              "daily": "Her gün",
+              "weekly": "Her hafta",
+              "monthly": "Her ay"
+            },
+            "date": "Tarih",
+            "dateHint": "YYYY-AA-GG.",
+            "weekdays": "Haftanın günleri",
+            "monthDay": "Ayın günü",
+            "monthDayHint": "31, daha kısa olan ayların son günü anlamına gelir.",
+            "time24Hint": "SS:DD, 24 saat.",
+            "tz": "Saat dilimi (isteğe bağlı)",
+            "tzHint": "Asia/Kolkata gibi bir IANA adı. Boş bırakılırsa çalışma alanınızın saat dilimi kullanılır.",
+            "who": "Kimler",
+            "whoHint": "Çalıştırma başına en fazla 5.000 kişi. Vazgeçen, arşivlenmiş veya numarası olmayan kişiler dahil edilmez.",
+            "audience": {
+              "all": "Numarası olan her kişi",
+              "group": "Bir listedeki kişiler",
+              "segment": "Bir segmentteki kişiler"
+            },
+            "list": "Liste",
+            "storeEvent": "Mağaza olayı",
+            "storeEvents": {
+              "checkout_started": "Ödeme başlatıldı",
+              "abandoned_cart": "Terk edilmiş sepet (ilk hatırlatma zamanı)",
+              "order_fulfilled": "Sipariş tamamlandı",
+              "order_refunded": "Sipariş iade edildi",
+              "order_cancelled": "Sipariş iptal edildi",
+              "ordered_product": "Bir ürün sipariş edildi"
+            },
+            "productId": "Ürün kimliği (isteğe bağlı)",
+            "productIdHint": "Boş = siparişteki herhangi bir ürün.",
+            "storeNote": "Müşteri, telefon numarasına göre kayıtlı bir kişiyle eşleştirilir; sipariş için kimse oluşturulmaz. “Sepete eklendi” ve “ürün görüntülendi” sunulmaz: mağaza bunları bildirmez.",
+            "updatedNote": "Bir kişi ya da içe aktarma bir kişiyi her değiştirdiğinde tetiklenir. Başka bir akışın yaptığı değişiklik onu başlatmaz."
+          }
         }
       },
       "formsChannels": {
@@ -2001,6 +2068,34 @@
         "tg_payment": {
           "label": "Ödeme / Fatura",
           "description": "Bir Telegram faturası veya paylaşılabilir ödeme bağlantısı gönder"
+        },
+        "update_contact": {
+          "label": "Kişi alanını güncelle",
+          "description": "Bir kişi alanını ayarla"
+        },
+        "list_member": {
+          "label": "Listeye ekle / listeden çıkar",
+          "description": "Kişiyi bir listeye ekle veya listeden çıkar"
+        },
+        "in_list": {
+          "label": "Listede mi",
+          "description": "Evet / hayır: kişi bir listede"
+        },
+        "in_segment": {
+          "label": "Segmentte mi",
+          "description": "Evet / hayır: kişi bir segmentte"
+        },
+        "sheet_check": {
+          "label": "Google E-Tablo hücresini kontrol et",
+          "description": "Evet / hayır: eşleşen satırdaki bir hücre"
+        },
+        "sheet_contact": {
+          "label": "Kişiyi E-Tablo'dan kaydet",
+          "description": "Bir e-tablo satırını kişiye kopyala"
+        },
+        "wa_session": {
+          "label": "WhatsApp oturumu etkin",
+          "description": "Evet / hayır: müşteri son 24 saat içinde yazdı"
         }
       },
       "groups": {
@@ -2073,7 +2168,15 @@
         "deal_stage_changed": "fırsat aşamasında",
         "away": "uzakta iken",
         "out_of_hours": "mesai saatleri dışında",
-        "manual_enroll": "akışa eklendiğinde"
+        "manual_enroll": "akışa eklendiğinde",
+        "group_leave": "listeden ayrılınca",
+        "segment_join": "segmente katılınca",
+        "contact_updated": "kişi güncellenince",
+        "field_match": "alan eşleşince",
+        "date_field_match": "tarih eşleşince",
+        "schedule": "zamanlamaya göre",
+        "shopify_event": "Shopify etkinliğinde",
+        "woocommerce_event": "WooCommerce etkinliğinde"
       },
       "ports": {
         "manual": "manuel",

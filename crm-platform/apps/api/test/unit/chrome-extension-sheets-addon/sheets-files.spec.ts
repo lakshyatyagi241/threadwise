@@ -1,6 +1,6 @@
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { ConfigService } from '@nestjs/config';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { parseSheetsAddonEnv } from '../../../src/config/domains/chrome-extension-sheets-addon.env';
@@ -77,9 +77,10 @@ describe('add-on source files', () => {
   });
 
   it('looks in the shipped folders when no directory is configured, and refuses a bad address', () => {
+    // The source resolves relative folders with the platform's path rules (drive-letter paths on Windows), so expect the same.
     expect(parseSheetsAddonEnv({}, '/app').sourceDirs).toEqual([
-      '/app/assets/google-sheets-addon',
-      '/app/apps/api/assets/google-sheets-addon',
+      resolve('/app', 'assets/google-sheets-addon'),
+      resolve('/app', 'apps/api/assets/google-sheets-addon'),
     ]);
     expect(parseSheetsAddonEnv({ EXT_SHEETS_ADDON_DIR: '/x' }, '/app').sourceDirs).toEqual(['/x']);
     expect(parseSheetsAddonEnv({ APP_URL: 'https://a.test///' }).apiBase).toBe('https://a.test');

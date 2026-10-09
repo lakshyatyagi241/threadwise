@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, one {{author} का नया संदेश} other {{author} के # नए संदेश}}",
         "titleNoName": "{count, plural, one {नया सीधा संदेश} other {# नए सीधे संदेश}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {कोई {name} में शामिल होना चाहता है} other {# लोग {name} में शामिल होना चाहते हैं}}",
+        "titleNoName": "{count, plural, one {कोई WhatsApp समूह में शामिल होना चाहता है} other {# लोग WhatsApp समूह में शामिल होना चाहते हैं}}",
+        "body": "स्वीकृत या अस्वीकार करने के लिए समूह खोलें।"
+      },
+      "waba_group_suspended": {
+        "title": "{name} निलंबित किया गया",
+        "titleNoName": "एक WhatsApp समूह निलंबित किया गया",
+        "body": "WhatsApp ने इस समूह को निलंबित किया है। बहाल होने तक आप इसे संदेश नहीं भेज सकते।"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} फिर से सक्रिय है",
+        "titleNoName": "एक WhatsApp समूह फिर से सक्रिय है",
+        "body": "WhatsApp ने इस समूह को बहाल किया है। अब आप फिर से संदेश भेज सकते हैं।"
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "शेड्यूल्ड भेजना भेज दिया गया",
         "scheduled_failed": "शेड्यूल्ड भेजना विफल हुआ",
         "teamchat_mention": "टीम चैट में आपका ज़िक्र किया",
-        "teamchat_message": "नया सीधा संदेश"
+        "teamchat_message": "नया सीधा संदेश",
+        "waba_group_join_request": "समूह में शामिल होने का अनुरोध",
+        "waba_group_suspended": "WhatsApp समूह निलंबित",
+        "waba_group_suspension_cleared": "WhatsApp समूह फिर से सक्रिय"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "वॉलेट",
         "devices": "WhatsApp नंबर",
         "broadcasts": "ब्रॉडकास्ट और अभियान",
-        "team_chat": "टीम चैट"
+        "team_chat": "टीम चैट",
+        "whatsapp_groups": "WhatsApp समूह"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "वॉलेट में राशि जोड़ी गई",
           "hint": "वर्कस्पेस वॉलेट में राशि जमा की गई।"
+        },
+        "waba_group_join_request": {
+          "label": "समूह में शामिल होने का अनुरोध",
+          "hint": "लोग आपके बिज़नेस नंबर के WhatsApp समूह में शामिल होने का अनुरोध करते हैं। दस अनुरोध एक पंक्ति बनाते हैं।"
+        },
+        "waba_group_suspended": {
+          "label": "समूह निलंबित",
+          "hint": "WhatsApp ने आपका एक समूह निलंबित किया है।"
+        },
+        "waba_group_suspension_cleared": {
+          "label": "समूह फिर से सक्रिय",
+          "hint": "WhatsApp ने निलंबित किया गया एक समूह बहाल किया है। केवल तभी जब आपको निलंबन की सूचना दी गई थी।"
         }
       },
       "loading": "आपकी प्राथमिकताएँ लोड हो रही हैं",

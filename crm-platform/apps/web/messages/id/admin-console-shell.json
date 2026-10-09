@@ -60,7 +60,10 @@
       "expand": "Perluas sidebar",
       "backToApp": "Kembali ke aplikasi",
       "allAreas": "Semua area",
-      "switchArea": "Ganti area, saat ini di {area}"
+      "switchArea": "Ganti area, saat ini di {area}",
+      "railCaption": "Konsol",
+      "wallet": "Dompet",
+      "topUp": "Isi ulang →"
     },
     "overview": {
       "title": "Konsol platform",
@@ -337,7 +340,8 @@
       "railLabel": "Bagian pengaturan",
       "personal": {
         "title": "Akun Anda",
-        "body": "Profil, kata sandi, dan preferensi pribadi."
+        "body": "Profil, kata sandi, dan preferensi pribadi.",
+        "eyebrow": "Pribadi"
       },
       "api": {
         "restTitle": "REST API umum",
@@ -346,7 +350,19 @@
         "rest3": "Permintaan dibatasi per menit sesuai paket Anda.",
         "webhooksTitle": "Webhook",
         "webhooksBody": "Kirim peristiwa ke endpoint Anda sendiri dan terima peristiwa dari alat lain.",
-        "manage": "Kelola integrasi"
+        "manage": "Kelola integrasi",
+        "sheetsTitle": "Kunci API Google Sheets",
+        "sheetsBody": "Digunakan oleh add-on Sheets untuk mengirim baris kontak dan pesan ke sheet. Ini satu-satunya token pribadi yang tersedia saat ini.",
+        "manageInAccount": "Kelola di akun",
+        "active": "Aktif",
+        "keyTimes": "dibuat {created} · terakhir digunakan {used}",
+        "never": "belum pernah",
+        "noKey": "Belum ada kunci API Sheets yang dibuat. Buat di",
+        "noKeyLink": "akun Anda → add-on Sheets",
+        "outboundTitle": "Endpoint keluar",
+        "outboundBody": "Ruang kerja Anda → server Anda (hook CRM, event kirim / balas).",
+        "inboundTitle": "Webhook masuk",
+        "inboundBody": "Server Anda → ruang kerja Anda (pengiriman WABA / API Tidak Resmi yang masuk)."
       },
       "appearance": {
         "title": "Tampilan",
@@ -363,12 +379,91 @@
         },
         "save": "Simpan",
         "saved": "Tampilan diperbarui."
+      },
+      "branding": {
+        "ownerOnly": "Hanya pemilik ruang kerja yang dapat mengubah branding.",
+        "loadFailed": "Branding tidak dapat dimuat.",
+        "saved": "Branding diperbarui.",
+        "saveFailed": "Branding tidak dapat disimpan.",
+        "logoTitle": "Logo & favicon",
+        "logoBody": "Digunakan di header, faktur, email, dan portal pelanggan.",
+        "logo": "Logo",
+        "favicon": "Favicon",
+        "logoHint": "PNG / JPG / WebP · maks 2 MB · disarankan 240×80",
+        "faviconHint": "PNG 32×32 · maks 512 KB",
+        "click": "Klik untuk unggah",
+        "orDrag": "atau seret & lepas",
+        "currentTag": "Saat ini",
+        "current": {
+          "logo": "Logo saat ini",
+          "favicon": "Favicon saat ini"
+        },
+        "coloursTitle": "Warna brand",
+        "coloursBody": "Diterapkan pada tampilan dasbor, tombol, dan garis aksen. Simpan untuk melihatnya di setiap halaman.",
+        "colours": {
+          "primary": "Utama",
+          "accent": "Aksen",
+          "background": "Latar belakang"
+        },
+        "colourInvalid": "Gunakan warna #RRGGBB, misalnya #075E54.",
+        "save": "Simpan branding"
+      },
+      "residency": {
+        "loadFailed": "Pengaturan residensi data tidak dapat dimuat.",
+        "title": "Batasi transfer data lintas negara",
+        "body": "Atur mode perutean yang lebih ketat untuk ruang kerja ini. Terjemahan balasan otomatis hanya akan dirutekan melalui penyedia yang kompatibel dengan mode yang dipilih; sisanya dilewati secara diam-diam saat runtime.",
+        "ownerOnly": "Hanya pemilik ruang kerja yang dapat mengubah pengaturan ini.",
+        "saved": "Residensi data diperbarui. Perutean terjemahan akan mengikuti pengaturan baru pada pesan masuk berikutnya.",
+        "saveFailed": "Pengaturan residensi data tidak dapat disimpan.",
+        "save": "Simpan pengaturan residensi",
+        "modes": {
+          "any": {
+            "name": "Tanpa batasan",
+            "text": "Gunakan penyedia aktif mana pun yang dipilih rantai cadangan. Uptime terbaik, tanpa batasan kepatuhan."
+          },
+          "eu_only": {
+            "name": "Perutean khusus UE",
+            "text": "Hanya DeepL (Jerman) dan LibreTranslate yang di-host sendiri yang diizinkan. Sesuai dengan aturan transfer lintas negara Pasal 44 GDPR."
+          },
+          "local": {
+            "name": "Hanya on-premise",
+            "text": "Hanya driver LibreTranslate yang di-host sendiri yang diizinkan. Teks pesan pelanggan tidak pernah meninggalkan server Anda sendiri. Memerlukan LibreTranslate yang sudah dikonfigurasi."
+          }
+        }
       }
     },
     "topNav": {
       "more": "Lainnya",
       "search": "Cari",
-      "premium": "Fitur premium: upgrade paket Anda untuk membukanya"
+      "premium": "Fitur premium: upgrade paket Anda untuk membukanya",
+      "labels": {
+        "dashboard": "Dasbor",
+        "team-inbox": "Kotak Masuk Terpadu",
+        "wa-campaigns": "Kampanye",
+        "flows": "Alur",
+        "templates": "Templat",
+        "devices": "Saluran",
+        "metaads": "Meta Ads",
+        "broadcasts": "Siaran",
+        "contacts": "Kontak",
+        "deals": "Deal",
+        "chat": "Live Chat",
+        "analytics": "Analitik",
+        "auto-reply": "Balas otomatis",
+        "scheduled": "Terjadwal",
+        "message-history": "Riwayat",
+        "ai-assistants": "Asisten AI",
+        "ai-training": "Pelatihan AI",
+        "wa-links": "Tautan WA",
+        "chatbot-widgets": "Widget Chat",
+        "webhooks": "Webhook",
+        "integrations": "Integrasi",
+        "warmer": "Pemanas",
+        "call-logs": "Log Panggilan",
+        "support": "Dukungan",
+        "more": "Lainnya"
+      },
+      "workspaceLogo": "Logo ruang kerja"
     },
     "palette": {
       "title": "Cari halaman",
@@ -412,7 +507,9 @@
       "wallet": "Wallet",
       "orders": "Riwayat pesanan",
       "plans": "Harga dan paket",
-      "tour": "Ikuti tur"
+      "tour": "Ikuti tur",
+      "profile": "Profil",
+      "help": "Bantuan & dukungan"
     },
     "quickAccess": {
       "title": "Akses cepat",
@@ -599,23 +696,28 @@
         "pager": "Tips",
         "templates": {
           "title": "Gunakan template",
-          "body": "Template yang disetujui menjangkau pelanggan di luar jendela 24 jam."
+          "body": "Template yang disetujui menjangkau pelanggan di luar jendela 24 jam.",
+          "cta": "Kelola templat →"
         },
         "flows": {
           "title": "Otomatiskan balasan",
-          "body": "Sebuah flow dapat menjawab pertanyaan yang sama untuk Anda setiap saat."
+          "body": "Sebuah flow dapat menjawab pertanyaan yang sama untuk Anda setiap saat.",
+          "cta": "Buka pembuat alur →"
         },
         "palette": {
           "title": "Lompat ke mana saja",
-          "body": "Tekan Ctrl K untuk mencari semua halaman."
+          "body": "Tekan Ctrl K untuk mencari semua halaman.",
+          "cta": "Coba sekarang"
         },
         "scheduled": {
           "title": "Jadwalkan lebih awal",
-          "body": "Antrekan pesan sekarang dan biarkan terkirim pada waktu yang tepat."
+          "body": "Antrekan pesan sekarang dan biarkan terkirim pada waktu yang tepat.",
+          "cta": "Jadwal baru →"
         },
         "wallet": {
           "title": "Pantau saldo Anda",
-          "body": "Isi saldo sebelum habis agar pengiriman tidak pernah berhenti."
+          "body": "Isi saldo sebelum habis agar pengiriman tidak pernah berhenti.",
+          "cta": "Atur isi ulang otomatis →"
         }
       },
       "shortcuts": {
@@ -681,6 +783,339 @@
             "subtitle": "Tulis template pesan"
           }
         }
+      },
+      "cards": {
+        "meta-ads": {
+          "title": "Meta Ads",
+          "desc": "Buat dan kelola kampanye iklan Klik-ke-WhatsApp di Facebook & Instagram — setiap klik membuka obrolan di nomor terhubung Anda.",
+          "foot": "klik-ke-chat",
+          "open": "Buka Meta Ads",
+          "badge": "IKLAN"
+        },
+        "instagram-posts": {
+          "title": "Postingan Instagram",
+          "desc": "Susun dan jadwalkan postingan Instagram — gambar, reel, story, dan carousel. Terbitkan sekarang atau antrekan agar terkirim otomatis.",
+          "foot": "susun & jadwalkan",
+          "open": "Buka penyusun",
+          "badge": "IG"
+        },
+        "facebook-posts": {
+          "title": "Postingan Facebook",
+          "desc": "Susun dan jadwalkan postingan Facebook — teks, tautan, dan foto. Terbitkan sekarang atau antrekan ke Halaman yang terhubung.",
+          "foot": "susun & jadwalkan",
+          "open": "Buka penyusun",
+          "badge": "FB"
+        },
+        "sms": {
+          "title": "SMS",
+          "desc": "Hubungkan nomor SMS (Twilio / MSG91). Pesan teks masuk ke kotak masuk tim yang sama dengan WhatsApp, dan kampanye mendapat pengirim SMS.",
+          "foot": "hubungkan & kelola",
+          "open": "Buka SMS",
+          "badge": "SMS"
+        },
+        "line": {
+          "title": "LINE",
+          "desc": "Hubungkan Akun Resmi LINE (Messaging API). Pesan masuk ke kotak masuk tim yang sama, dengan siaran, rich menu, alur, dan insight.",
+          "foot": "hubungkan & kelola",
+          "open": "Buka LINE",
+          "badge": "LINE"
+        },
+        "wechat": {
+          "title": "WeChat",
+          "desc": "Hubungkan Akun Resmi WeChat (Service Account). Pesan masuk ke kotak masuk tim yang sama, dengan aturan kata kunci, balasan otomatis, dan alur.",
+          "foot": "hubungkan & kelola",
+          "open": "Buka WeChat",
+          "badge": "WeChat"
+        },
+        "viber": {
+          "title": "Viber",
+          "desc": "Hubungkan Akun Publik Viber (Bot). Pesan masuk ke kotak masuk tim yang sama, dengan aturan kata kunci, balasan otomatis, dan alur.",
+          "foot": "hubungkan & kelola",
+          "open": "Buka Viber",
+          "badge": "Viber"
+        },
+        "messenger-setup": {
+          "title": "Pengaturan Messenger",
+          "desc": "Atur profil Messenger — tombol Mulai, menu persisten, ice breaker, dan sapaan selamat datang untuk Halaman yang terhubung.",
+          "foot": "alat pertumbuhan",
+          "open": "Buka pengaturan",
+          "badge": "FB"
+        },
+        "tiktok": {
+          "title": "TikTok",
+          "desc": "Hubungkan akun TikTok, pantau insight profil & video, dan kirim video ke kotak masuk TikTok Anda. Kotak masuk DM bergantung pada kemitraan dan dibatasi wilayah.",
+          "foot": "hubungkan & posting",
+          "open": "Buka TikTok",
+          "badge": "TT"
+        },
+        "tiktok-posts": {
+          "title": "Postingan TikTok",
+          "desc": "Kirim video ke kotak masuk TikTok Anda untuk diselesaikan dan diterbitkan dari aplikasi, serta pantau statusnya dari sini.",
+          "foot": "susun & kirim",
+          "open": "Buka postingan",
+          "badge": "TT"
+        },
+        "quick-send": {
+          "title": "Kirim Cepat",
+          "desc": "Susun pesan, pilih satu atau banyak penerima dan pengirim, lalu kirim sekarang atau jadwalkan — antrean kirim manual dengan status pengiriman per pesan.",
+          "foot": "antrean kirim",
+          "open": "Buka"
+        },
+        "account": {
+          "title": "Akun",
+          "desc": "Profil, foto, kata sandi, riwayat pesanan, dompet, afiliasi, dan tiket dukungan — semua dalam satu tempat.",
+          "foot": "{plan} · {balance}",
+          "open": "Buka"
+        },
+        "pricing": {
+          "title": "Harga & paket",
+          "desc": "Bandingkan Starter, Growth, Pro, dan Enterprise. Ganti kapan saja — kami menghitung proporsi hingga harian.",
+          "foot": "Paket {plan} · tingkatkan untuk membuka",
+          "open": "Lihat paket"
+        },
+        "analytics": {
+          "title": "Analitik",
+          "desc": "Grafik pengiriman, baca, dan konversi di seluruh kampanye dan perangkat.",
+          "foot": "{count} pesan · 7 hari terakhir",
+          "open": "Buka"
+        },
+        "attributes": {
+          "title": "Atribut",
+          "desc": "Variabel untuk templat WhatsApp. Bawaan seperti first_name + atribut kustom Anda (order_id, dll.). Ketik / di pesan mana pun untuk menyisipkan.",
+          "foot": "{count} tersimpan",
+          "open": "Buka"
+        },
+        "contacts": {
+          "title": "Kontak",
+          "desc": "Semua kontak dan grup Anda dalam satu tempat. Impor dari CSV, beri tag, segmentasi, dan cari.",
+          "foot": "{people} orang / {groups} grup / {tags} tag",
+          "open": "Buka"
+        },
+        "broadcasts": {
+          "title": "Siaran",
+          "desc": "Siaran templat ke kontak terpilih dengan pelacakan terkirim, terbaca, gagal, dan antre.",
+          "foot": "{queued} antre{pct, select, none {} other { / {pct}% terkirim}}",
+          "open": "Buka"
+        },
+        "auto-reply": {
+          "title": "Balas Otomatis",
+          "desc": "Picu balasan berdasarkan kata kunci, jam kerja, atau saat agen sedang tidak ada.",
+          "foot": "{count} aturan{pct, select, none {} other { / {pct}% cocok}}",
+          "open": "Buka"
+        },
+        "warmer": {
+          "title": "Pemanas WhatsApp",
+          "desc": "Naikkan anggaran kirim harian setiap nomor dengan jeda menyerupai manusia dan jam aktif untuk mengurangi risiko pemblokiran.",
+          "foot": "API Tidak Resmi",
+          "open": "Buka"
+        },
+        "scheduled": {
+          "title": "Pesan Terjadwal",
+          "desc": "Antrekan pengiriman pada waktu yang tepat — berdasarkan zona waktu, segmen, atau pemicu.",
+          "foot": "{queued} antre / berikutnya {next}",
+          "open": "Buka"
+        },
+        "message-history": {
+          "title": "Riwayat Pesan",
+          "desc": "Arsip yang dapat dicari dari setiap pesan masuk dan keluar — dapat diekspor ke CSV.",
+          "foot": "{count} catatan",
+          "open": "Buka"
+        },
+        "notifications": {
+          "title": "Notifikasi",
+          "desc": "Arahkan peringatan ke email, Slack, atau dalam aplikasi — atur jam tenang per saluran.",
+          "foot": "{count} belum dibaca",
+          "open": "Buka"
+        },
+        "integrations": {
+          "title": "Integrasi",
+          "desc": "Hubungkan Shopify, HubSpot, Zapier, dan lainnya — sinkronkan kontak dan pesanan.",
+          "foot": "{connected} terhubung / {available} tersedia",
+          "open": "Buka"
+        },
+        "google-account": {
+          "title": "Akun Google",
+          "desc": "Hubungkan sekali — mendukung Kalender, tautan Meet di alur, dan tombol \"Kirim tautan Meet\" di penyusun kotak masuk.",
+          "foot": "Kalender dan Meet",
+          "open": "Buka"
+        },
+        "appointments": {
+          "title": "Janji temu",
+          "desc": "Biarkan pelanggan memesan layanan dari chat — pemilih hari/jam, pertanyaan, deposit, pengingat, dan sinkronisasi Google Calendar.",
+          "foot": "{count, plural, =0 {belum diatur} other {# layanan}}",
+          "open": "Kelola"
+        },
+        "ai-assistants": {
+          "title": "Asisten Panggilan AI",
+          "desc": "AI suara yang menjawab panggilan telepon — otak Gemini, suara ElevenLabs, dan alat Anda sendiri selama panggilan.",
+          "foot": "{configured} dikonfigurasi / {live} aktif",
+          "open": "Buka"
+        },
+        "call-logs": {
+          "title": "Log Panggilan",
+          "desc": "Transkrip, rekaman, dan linimasa pemanggilan alat untuk setiap panggilan suara yang ditangani AI.",
+          "foot": "{calls} panggilan / {minutes} menit · 24 jam",
+          "open": "Buka"
+        },
+        "forms": {
+          "title": "Formulir",
+          "desc": "Formulir interaktif WhatsApp asli — kumpulkan prospek, survei, dan pemesanan di dalam chat.",
+          "foot": "{drafted} draf / {live} aktif",
+          "open": "Buka"
+        },
+        "wa-links": {
+          "title": "Pembuat Tautan WhatsApp",
+          "desc": "Buat tautan pendek wa.me yang dapat dilacak dengan slug kustom, pesan yang sudah diketik, kode QR, dan analitik klik. Letakkan di bio, halaman arahan, atau kartu nama.",
+          "foot": "{links} tautan / {clicks} klik",
+          "open": "Buka"
+        },
+        "chatbot-widgets": {
+          "title": "Widget Chatbot",
+          "desc": "Sematkan gelembung chat mengambang di situs Anda. AI membalas di browser, dan dialihkan ke Kotak Masuk Terpadu bila perlu.",
+          "foot": "{built} dibuat / {live} aktif",
+          "open": "Buka"
+        },
+        "ai-training": {
+          "title": "Pelatihan AI",
+          "desc": "Latih asisten chat dengan konten Anda sendiri — URL, cuplikan teks, pasangan T&J, berkas teks biasa.",
+          "foot": "{count} asisten",
+          "open": "Buka"
+        },
+        "ai-usage": {
+          "title": "Penggunaan AI",
+          "desc": "Lihat ke mana biaya AI Anda pergi — token per model dan penyedia, kunci paket vs kunci Anda sendiri, dan batas bulanan.",
+          "foot": "{tokens} token bulan ini",
+          "open": "Lihat"
+        },
+        "flow-analytics": {
+          "title": "Analitik Alur",
+          "desc": "Setiap proses otomatisasi dari awal hingga akhir — riwayat eksekusi, error yang menghentikan proses, dan catatan percobaan ulang untuk yang Anda jalankan lagi.",
+          "foot": "{count} proses gagal",
+          "open": "Buka"
+        },
+        "lead-finder": {
+          "title": "Pencari Prospek",
+          "desc": "Temukan bisnis berdasarkan kategori & kota, ambil WhatsApp & email mereka, lalu masukkan ke Kontak atau kampanye.",
+          "foot": "prospeksi peta",
+          "open": "Buka"
+        },
+        "webhooks": {
+          "title": "Webhook",
+          "desc": "Kirim event pengiriman, baca, dan balasan ke endpoint HTTPS mana pun secara real-time.",
+          "foot": "{count} endpoint",
+          "open": "Buka"
+        },
+        "support": {
+          "title": "Dukungan",
+          "desc": "Hubungi staf, telusuri masalah yang diketahui, atau cek status layanan.",
+          "foot": "{total} tiket / {open} terbuka",
+          "open": "Buka"
+        },
+        "activity-log": {
+          "title": "Log Aktivitas",
+          "desc": "Setiap masuk, perpindahan ruang kerja, aksi kotak masuk, dan perubahan admin — dicatat dengan pengguna, IP, dan waktu.",
+          "foot": "{count} event · 24 jam",
+          "open": "Buka"
+        },
+        "channels": {
+          "title": "Saluran",
+          "desc": "Hubungkan WhatsApp, Instagram, Telegram & lainnya — satu kotak masuk, pantau kesehatan, rotasi pengirim.",
+          "foot": "{active} / {total} aktif",
+          "open": "Buka"
+        },
+        "team-members": {
+          "title": "Anggota tim",
+          "desc": "Undang rekan tim, tetapkan peran (pemilik / admin / anggota), dan atur akses per ruang kerja.",
+          "foot": "{count, plural, other {# kursi}} aktif",
+          "open": "Buka"
+        }
+      },
+      "eyebrow": "ruang kerja",
+      "sortedByUsage": "Diurutkan berdasarkan penggunaan",
+      "developers": "Developer / API",
+      "movedOffHeader": "dipindahkan dari header",
+      "open": "Buka",
+      "navDesc": {
+        "dashboard": "Beranda & ringkasan",
+        "wa-campaigns": "Pengiriman kampanye massal",
+        "flows": "Pembuat otomatisasi",
+        "templates": "Templat pesan"
+      },
+      "strip": {
+        "label": "Ringkasan ruang kerja",
+        "rules": "Aturan aktif",
+        "thisWeek": "+{count} minggu ini",
+        "noNew": "tidak ada yang baru",
+        "rulesCaption": "di semua alat",
+        "queued": "Antre",
+        "noUpcoming": "tidak ada proses terjadwal",
+        "queuedCaption": "pengiriman terjadwal",
+        "connected": "Terhubung",
+        "connectedCaption": "perangkat aktif",
+        "health": {
+          "healthy": "sehat",
+          "partial": "sebagian",
+          "offline": "luring",
+          "none": "tidak ada perangkat"
+        },
+        "notifications": "Notifikasi",
+        "unread": "belum dibaca",
+        "notificationsCaption": "menunggu perhatian"
+      },
+      "activity": {
+        "title": "Aktivitas terbaru",
+        "viewAll": "Lihat semua",
+        "empty": "Tidak ada aktivitas. Perubahan di ruang kerja Anda akan muncul di sini."
+      },
+      "affiliate": {
+        "badge": "PENDAPATAN",
+        "title": "Riwayat afiliasi",
+        "body": "Lacak setiap pendaftaran melalui kode Anda, kredit yang diperoleh, dan performa tautan berbagi Anda.",
+        "referrals": "Rujukan",
+        "payouts": "Pembayaran",
+        "payoutsNote": "lihat akun Anda",
+        "foot": "rujukan · kredit · pembayaran"
+      },
+      "quick": {
+        "title": "Akses cepat",
+        "body": "Alat yang jarang digunakan ada di sini agar header utama tetap fokus pada pekerjaan harian.",
+        "openChat": "Buka Chat",
+        "addRule": "Tambah aturan"
+      },
+      "planCard": {
+        "title": "Paket ruang kerja",
+        "seats": "{plan} / {count, plural, other {# kursi}}",
+        "messages": "Pesan bulan ini",
+        "sent": "{count} terkirim",
+        "manage": "Kelola penagihan"
+      },
+      "whatsNew": {
+        "title": "Yang baru",
+        "headline": "Kotak Masuk Terpadu + bantuan AI",
+        "changelog": "Baca catatan rilis",
+        "items": {
+          "inbox": "Kotak masuk bersama dengan penugasan & catatan",
+          "ai": "ChatGPT / Gemini / Claude di alur",
+          "forecast": "Prakiraan penjualan di dasbor Shopify"
+        }
+      },
+      "smallTips": {
+        "warm": {
+          "title": "Jaga nomor baru tetap hangat",
+          "body": "Mulai dengan 50 kirim/hari dan gandakan setiap minggu. Lonjakan mendadak akan ditandai."
+        },
+        "tag": {
+          "title": "Beri tag sekarang, segmentasi nanti",
+          "body": "Tambahkan tag saat kontak membalas — filter siaran jadi lebih mudah nantinya."
+        },
+        "templates": {
+          "title": "Templat mengalahkan teks bebas",
+          "body": "Templat yang disetujui membuka jendela 24 jam meski kontak sudah lama tidak aktif."
+        },
+        "signing": {
+          "title": "Verifikasi HMAC setiap kali",
+          "body": "Selalu periksa header tanda tangan sebelum memproses — satu baris kode, banyak manfaat keamanan."
+        }
       }
     },
     "inboxBell": {
@@ -704,6 +1139,19 @@
       "hintMove": "navigasi",
       "hintOpen": "buka",
       "hintToggle": "alihkan"
+    },
+    "flash": {
+      "dismiss": "Tutup",
+      "roleDenied": "Peran Anda ({role}) tidak memiliki akses ke halaman itu"
+    },
+    "hubSearch": {
+      "placeholder": "Cari pengaturan proyek...",
+      "empty": "Tidak ada pengaturan yang cocok dengan pencarian Anda."
+    },
+    "bell": {
+      "eyebrow": "Kotak Masuk",
+      "clearAll": "Hapus semua",
+      "viewAll": "Lihat semua →"
     }
   }
 }

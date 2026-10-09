@@ -183,7 +183,9 @@
         "unzoned": "bez strefy",
         "per24h": "{n}/24 godz.",
         "deliv": "dostarcz.",
-        "free": "{n, plural, one {Dostępne # miejsce na urządzenie} few {Dostępne # miejsca na urządzenia} many {Dostępnych # miejsc na urządzenia} other {Dostępnego # miejsca na urządzenia}}"
+        "free": "{n, plural, one {Dostępne # miejsce na urządzenie} few {Dostępne # miejsca na urządzenia} many {Dostępnych # miejsc na urządzenia} other {Dostępnego # miejsca na urządzenia}}",
+        "freeHint": "Dodaj WABA",
+        "connectDeviceShort": "Połącz urządzenie"
       },
       "templates": {
         "title": "Najskuteczniejsze szablony",
@@ -297,7 +299,8 @@
         "connect": "Połącz",
         "connectedLabel": "Połączono"
       },
-      "sublineOfficial": "{date} - {range}: {sent} wysłanych, {rate}% dostarczalności."
+      "sublineOfficial": "{date} - {range}: {sent} wysłanych, {rate}% dostarczalności.",
+      "synced": "Na żywo · zsynchronizowano {s} s temu"
     },
     "analytics": {
       "title": "Analityka",

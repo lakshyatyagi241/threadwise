@@ -337,14 +337,14 @@ export function OrderAnalyticsPage() {
         <Kpi
           tone="accent"
           label={t('kpi.newMrr')}
-          value={m(k.newMrr)}
+          value={`+${m(k.newMrr)}`}
           hint={t('kpi.paid', { count: k.paidCount })}
           hintTone="accent"
         />
         <Kpi
           tone="warning"
           label={t('kpi.lostMrr')}
-          value={m(k.lostMrr)}
+          value={`-${m(k.lostMrr)}`}
           hint={t('kpi.cancels', { count: k.cancels })}
         />
         <Kpi

@@ -25,7 +25,9 @@
       "deleteTitle": "Bu kanal silinsin mi?",
       "deleteMessage": "#{name} ve tüm mesajları herkesten silinecek. Bu işlem geri alınamaz.",
       "deleteConfirm": "Kanalı sil",
-      "cancel": "İptal"
+      "cancel": "İptal",
+      "defaultDescription": "Dahili çalışma alanı sohbeti",
+      "customerChats": "Müşteri sohbetleri"
     },
     "sidebar": {
       "label": "Kanallar ve kişiler",
@@ -39,7 +41,12 @@
       "invite": "Bir ekip arkadaşını davet et",
       "pending": "Bekleyen istekler",
       "pendingCount": "{count, plural, other {# bekleyen istek}}",
-      "unread": "{count, plural, other {# okunmamış mesaj}}"
+      "unread": "{count, plural, other {# okunmamış mesaj}}",
+      "workspace": "Çalışma alanı",
+      "mode": "Mod",
+      "customerChats": "Müşteri sohbetleri",
+      "teamChat": "Ekip sohbeti",
+      "membersLink": "Üyeler"
     },
     "members": {
       "label": "Üyeler",
@@ -52,7 +59,8 @@
       "online": "Çevrimiçi",
       "offline": "Çevrimdışı",
       "you": "(siz)",
-      "message": "{name} kişisine mesaj gönder"
+      "message": "{name} kişisine mesaj gönder",
+      "titleAccent": "sohbet"
     },
     "panel": {
       "searchTitle": "Mesajlarda ara",
@@ -104,7 +112,11 @@
       "fileTooLarge": "Bu dosya 20 MB'tan büyük.",
       "mentionList": "Anılacak ekip arkadaşları",
       "typingOne": "{name} yazıyor",
-      "typingMany": "{count} kişi yazıyor"
+      "typingMany": "{count} kişi yazıyor",
+      "hintSend": "gönder",
+      "hintNewLine": "yeni satır",
+      "hintMention": "bahset",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "Kanal oluştur",
@@ -122,7 +134,9 @@
         "hint": "Yalnızca davetliler. Yalnızca üyeleri görür."
       },
       "cancel": "İptal",
-      "create": "Kanal oluştur"
+      "create": "Kanal oluştur",
+      "namePlaceholder": "örn. destek",
+      "descriptionPlaceholder": "Bu kanal ne için?"
     },
     "invite": {
       "title": "Bir ekip arkadaşını davet et",
@@ -135,7 +149,10 @@
       "approved": "Tamamlandı. İstek onaylandı.",
       "pending": "Davet gönderildi, yönetici onayı bekleniyor.",
       "cancel": "İptal",
-      "submit": "Daveti gönder"
+      "submit": "Daveti gönder",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "Adı",
+      "notePlaceholder": "Neden katılmalılar?"
     },
     "invitations": {
       "title": "Bekleyen davetler",

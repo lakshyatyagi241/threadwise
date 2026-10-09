@@ -95,7 +95,9 @@
         "t3": "結果を改善するには?",
         "b3": "対象を絞り、最も関連性の高いテンプレートを選び、再送信する前に失敗数を確認してください。"
       },
-      "unofficialDisabled": "非公式(無効)"
+      "unofficialDisabled": "非公式(無効)",
+      "noData": "データが見つかりません",
+      "railLabel": "一斉配信のフィルター"
     },
     "detail": {
       "back": "戻る",
@@ -293,7 +295,8 @@
       "later": "後で",
       "media": "{kind}のプレビュー",
       "contactsDenied": "連絡先リストへのアクセス権がありません。グループまたはタグから連絡先を選択してください。",
-      "unofficialDisabled": "個人のWhatsApp番号(非公式API)での送信は、お使いのワークスペースでは有効になっていません。公式のWhatsApp Business API番号を選択してください。"
+      "unofficialDisabled": "個人のWhatsApp番号(非公式API)での送信は、お使いのワークスペースでは有効になっていません。公式のWhatsApp Business API番号を選択してください。",
+      "previewLabel": "テンプレートのプレビュー"
     },
     "overrides": {
       "title": "この送信の内容を入力",

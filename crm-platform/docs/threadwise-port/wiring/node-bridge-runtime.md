@@ -112,3 +112,16 @@ Read with [wiring/whatsapp-devices-baileys.md](whatsapp-devices-baileys.md); evi
 | Twilio                    | `outbound/twilio.transport.ts`                                                                  | Messages API with the number's own SID and token                                                                                  |
 
 Not outbox events: the outbox rules exclude individual messages and receipts (they would drown the drain), so inbound traffic uses in-process sinks.
+
+## Catalog sends through the unofficial engine (TW-NODE-024)
+
+The catalog domain sent through an external Node bridge over HTTP (`/api/send-message`, `/api/send-media-message`, `/api/send-product-catalog`); there is no such
+process here. `NodeCatalogBridgeModule` (global, in the API and the workers) provides `BAILEYS_CATALOG_BRIDGE_OVERRIDE`, which the catalog binds in place of its HTTP
+bridge: `NodeCatalogBridge` finds the connected device by the sender's number and sends through `OutboundRegistry` (so pacing, the pre-send screen and device ownership
+apply). Difference from Reference: the official library cannot send a product carousel, so a carousel is an intro text followed by one picture per card with the card as its
+caption (a card without a picture goes as text). Evidence: `catalog-bridge.spec.ts`.
+
+## Decision E: the bridge as an in-app worker (TW-NODE-001)
+
+The bridge's runtime shape is an in-app worker (device sockets live in the worker process, the API reaches them through `DeviceControlService`), not a separate process
+speaking HTTP. It is built and tested that way; recording the team's sign-off is what is left on TW-NODE-001.

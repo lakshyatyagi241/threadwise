@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "Add-on tidak dapat dimuat."
+    },
+    "planFields": {
+      "fromModule": "dari modul yang terpasang",
+      "unlimited": "Tak terbatas"
     }
   }
 }

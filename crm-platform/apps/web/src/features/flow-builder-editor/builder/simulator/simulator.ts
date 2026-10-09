@@ -74,6 +74,8 @@ export interface SimulatorOptions {
   edges: FlowEdge[];
   /** Quick-reply buttons of the template a Send-template node points at (resolved by the web from the template list). */
   templateButtons?: (node: FlowNode) => FlbTemplateButtonRef[];
+  /** Whether a Send template node's template exists in this workspace; when it does not, the test run says the real run skips it. */
+  templateExists?: (node: FlowNode) => boolean;
   /** Name of a flow by id, for the Sub-flow node log line. */
   flowName?: (id: string) => string | undefined;
   /** Fires the real, server-guarded webhook request (the one thing the test run does for real). */
@@ -234,6 +236,11 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         return advance('out');
       }
       case 'template': {
+        if (opts.templateExists && !opts.templateExists(node)) {
+          const msg = `Template "${str(d.tpl) || '?'}" is not a template of this workspace: the real run skips this node. Pick one of your approved templates in the node (the node holds the template's name).`;
+          console.warn(`[flow-test] node ${node.id}: ${msg}`);
+          sys(`⚠ ${msg}`);
+        }
         const qr = opts.templateButtons?.(node) ?? [];
         const head = tx('templateHead', { name: str(d.tpl) || '?', preview: interp(d.preview, v) });
         if (qr.length) {
@@ -248,6 +255,10 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       }
       case 'media': {
         const kind = (str(d.kind) || 'image').toLowerCase();
+        if (!str(d.url || d.data)) {
+          console.warn(`[flow-test] node ${node.id}: the media node has no link, nothing to send`);
+          sys('⚠ This media node has no link: the real run sends only the caption.');
+        }
         bot(d.caption ? interp(d.caption, v) : '', {
           kind,
           url: str(d.url || d.data),

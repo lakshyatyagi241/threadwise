@@ -99,15 +99,20 @@ export function fullFeatures(raw: unknown, opts?: { keepUnknown?: boolean }): Pl
 export function withStoredUnknownLimits(
   stored: unknown,
   edited: PlanLimits,
+  modules: Record<string, number> = {},
 ): Record<string, unknown> {
-  return { ...unknownKeys(stored, PLAN_LIMIT_KEYS), ...edited };
+  return { ...unknownKeys(stored, PLAN_LIMIT_KEYS), ...modules, ...edited };
 }
 export function withStoredUnknownFeatures(
   stored: unknown,
   edited: PlanFeatures,
+  modules: Record<string, boolean> = {},
 ): Record<string, unknown> {
-  return { ...unknownKeys(stored, PLAN_FEATURE_KEYS), ...edited };
+  return { ...unknownKeys(stored, PLAN_FEATURE_KEYS), ...modules, ...edited };
 }
+
+const ofType = (o: object, type: 'number' | 'boolean') =>
+  Object.fromEntries(Object.entries(o).filter(([, v]) => typeof v === type));
 
 const iso = (v: string | Date): string => new Date(v).toISOString();
 
@@ -139,6 +144,15 @@ export function toAdminItem(
     dataRetentionDays: Number(row.data_retention_days),
     limits: fullLimits(row.limits),
     features: fullFeatures(row.features),
+    // The keys installed modules contributed (TW-ADD-013), for the operator's form: only values of the right type.
+    moduleFeatures: ofType(unknownKeys(row.features, PLAN_FEATURE_KEYS), 'boolean') as Record<
+      string,
+      boolean
+    >,
+    moduleLimits: ofType(unknownKeys(row.limits, PLAN_LIMIT_KEYS), 'number') as Record<
+      string,
+      number
+    >,
     visibleAddons: extra.visibleAddons,
     inUse: extra.inUse,
     isRegistrationDefault: extra.isRegistrationDefault,

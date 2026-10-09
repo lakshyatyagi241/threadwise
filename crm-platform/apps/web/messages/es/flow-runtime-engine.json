@@ -55,7 +55,14 @@
       "webhook_lead": "Cliente potencial por webhook",
       "handoff": "Traspaso",
       "inbox": "Bandeja de equipo",
-      "retry": "Reintentar"
+      "retry": "Reintentar",
+      "group_leave": "Salida de lista",
+      "segment_join": "Entrada en segmento",
+      "contact_updated": "Contacto actualizado",
+      "field_match": "Coincidencia de campo",
+      "date_field_match": "Coincidencia de fecha",
+      "schedule": "Programación",
+      "ecom_event": "Evento de la tienda"
     },
     "endReason": {
       "end_node": "Llegó al final del flujo",

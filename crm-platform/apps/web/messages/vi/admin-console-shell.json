@@ -60,7 +60,10 @@
       "expand": "Mở rộng thanh bên",
       "backToApp": "Quay lại ứng dụng",
       "allAreas": "Tất cả khu vực",
-      "switchArea": "Chuyển khu vực, hiện đang ở {area}"
+      "switchArea": "Chuyển khu vực, hiện đang ở {area}",
+      "railCaption": "Console",
+      "wallet": "Ví",
+      "topUp": "Nạp tiền →"
     },
     "overview": {
       "title": "Bảng điều khiển nền tảng",
@@ -337,7 +340,8 @@
       "railLabel": "Các mục cài đặt",
       "personal": {
         "title": "Tài khoản của bạn",
-        "body": "Hồ sơ, mật khẩu và tùy chọn cá nhân."
+        "body": "Hồ sơ, mật khẩu và tùy chọn cá nhân.",
+        "eyebrow": "Cá nhân"
       },
       "api": {
         "restTitle": "REST API chung",
@@ -346,7 +350,19 @@
         "rest3": "Yêu cầu bị giới hạn theo phút tùy gói của bạn.",
         "webhooksTitle": "Webhook",
         "webhooksBody": "Gửi sự kiện đến endpoint của bạn và nhận sự kiện từ các công cụ khác.",
-        "manage": "Quản lý tích hợp"
+        "manage": "Quản lý tích hợp",
+        "sheetsTitle": "Khóa API Google Sheets",
+        "sheetsBody": "Tiện ích Sheets dùng khóa này để đẩy danh bạ và dòng tin nhắn vào bảng tính. Đây là mã thông báo cá nhân duy nhất hiện được hiển thị.",
+        "manageInAccount": "Quản lý trong tài khoản",
+        "active": "Đang hoạt động",
+        "keyTimes": "đã tạo {created} · dùng lần cuối {used}",
+        "never": "chưa bao giờ",
+        "noKey": "Chưa tạo khóa API Sheets nào. Tạo khóa trong",
+        "noKeyLink": "tài khoản của bạn → Tiện ích Sheets",
+        "outboundTitle": "Điểm cuối gửi ra",
+        "outboundBody": "Không gian làm việc → máy chủ của bạn (hook CRM, sự kiện gửi / trả lời).",
+        "inboundTitle": "Webhook đến",
+        "inboundBody": "Máy chủ của bạn → không gian làm việc (tin nhắn WABA / API không chính thức gửi đến)."
       },
       "appearance": {
         "title": "Giao diện",
@@ -363,12 +379,91 @@
         },
         "save": "Lưu",
         "saved": "Đã cập nhật giao diện."
+      },
+      "branding": {
+        "ownerOnly": "Chỉ chủ không gian làm việc mới có thể thay đổi thương hiệu.",
+        "loadFailed": "Không thể tải thông tin thương hiệu.",
+        "saved": "Đã cập nhật thương hiệu.",
+        "saveFailed": "Không thể lưu thương hiệu.",
+        "logoTitle": "Logo & favicon",
+        "logoBody": "Hiển thị ở tiêu đề, hóa đơn, email và cổng dành cho khách hàng.",
+        "logo": "Logo",
+        "favicon": "Favicon",
+        "logoHint": "PNG / JPG / WebP · tối đa 2 MB · khuyến nghị 240×80",
+        "faviconHint": "PNG 32×32 · tối đa 512 KB",
+        "click": "Nhấp để tải lên",
+        "orDrag": "hoặc kéo và thả",
+        "currentTag": "Hiện tại",
+        "current": {
+          "logo": "Logo hiện tại",
+          "favicon": "Favicon hiện tại"
+        },
+        "coloursTitle": "Màu thương hiệu",
+        "coloursBody": "Áp dụng cho khung bảng điều khiển, nút và các đường nhấn. Lưu để xem trên mọi trang.",
+        "colours": {
+          "primary": "Chính",
+          "accent": "Nhấn",
+          "background": "Nền"
+        },
+        "colourInvalid": "Dùng màu dạng #RRGGBB, ví dụ #075E54.",
+        "save": "Lưu thương hiệu"
+      },
+      "residency": {
+        "loadFailed": "Không thể tải cài đặt cư trú dữ liệu.",
+        "title": "Hạn chế chuyển dữ liệu xuyên biên giới",
+        "body": "Đặt chế độ định tuyến nghiêm ngặt hơn cho không gian làm việc này. Dịch tự động trả lời chỉ đi qua các nhà cung cấp tương thích với chế độ đã chọn; các nhà cung cấp khác sẽ bị bỏ qua khi chạy.",
+        "ownerOnly": "Chỉ chủ không gian làm việc mới có thể thay đổi cài đặt này.",
+        "saved": "Đã cập nhật cư trú dữ liệu. Việc định tuyến dịch sẽ áp dụng cài đặt mới ở tin nhắn đến tiếp theo.",
+        "saveFailed": "Không thể lưu cài đặt cư trú dữ liệu.",
+        "save": "Lưu cài đặt cư trú",
+        "modes": {
+          "any": {
+            "name": "Không hạn chế",
+            "text": "Dùng nhà cung cấp đang hoạt động mà chuỗi dự phòng chọn. Thời gian hoạt động tốt nhất, không có hạn chế tuân thủ."
+          },
+          "eu_only": {
+            "name": "Định tuyến chỉ trong EU",
+            "text": "Chỉ cho phép DeepL (Đức) và LibreTranslate tự lưu trữ. Tương thích với quy định chuyển dữ liệu xuyên biên giới Điều 44 GDPR."
+          },
+          "local": {
+            "name": "Chỉ tại chỗ",
+            "text": "Chỉ cho phép trình điều khiển LibreTranslate tự lưu trữ. Nội dung tin nhắn của khách hàng không bao giờ rời khỏi máy chủ của bạn. Yêu cầu cấu hình LibreTranslate."
+          }
+        }
       }
     },
     "topNav": {
       "more": "Thêm",
       "search": "Tìm kiếm",
-      "premium": "Tính năng cao cấp: nâng cấp gói để mở khóa"
+      "premium": "Tính năng cao cấp: nâng cấp gói để mở khóa",
+      "labels": {
+        "dashboard": "Bảng điều khiển",
+        "team-inbox": "Hộp thư hợp nhất",
+        "wa-campaigns": "Chiến dịch",
+        "flows": "Luồng",
+        "templates": "Mẫu",
+        "devices": "Kênh",
+        "metaads": "Meta Ads",
+        "broadcasts": "Gửi hàng loạt",
+        "contacts": "Danh bạ",
+        "deals": "Giao dịch",
+        "chat": "Chat trực tiếp",
+        "analytics": "Phân tích",
+        "auto-reply": "Trả lời tự động",
+        "scheduled": "Đã lên lịch",
+        "message-history": "Lịch sử",
+        "ai-assistants": "Trợ lý AI",
+        "ai-training": "Huấn luyện AI",
+        "wa-links": "Liên kết WA",
+        "chatbot-widgets": "Tiện ích chat",
+        "webhooks": "Webhook",
+        "integrations": "Tích hợp",
+        "warmer": "Làm nóng số",
+        "call-logs": "Nhật ký cuộc gọi",
+        "support": "Hỗ trợ",
+        "more": "Thêm"
+      },
+      "workspaceLogo": "Logo không gian làm việc"
     },
     "palette": {
       "title": "Tìm trang",
@@ -412,7 +507,9 @@
       "wallet": "Ví",
       "orders": "Lịch sử đơn hàng",
       "plans": "Giá và các gói",
-      "tour": "Xem hướng dẫn nhanh"
+      "tour": "Xem hướng dẫn nhanh",
+      "profile": "Hồ sơ",
+      "help": "Trợ giúp & hỗ trợ"
     },
     "quickAccess": {
       "title": "Truy cập nhanh",
@@ -599,23 +696,28 @@
         "pager": "Mẹo",
         "templates": {
           "title": "Dùng mẫu",
-          "body": "Mẫu đã duyệt tiếp cận được khách hàng ngoài khung 24 giờ."
+          "body": "Mẫu đã duyệt tiếp cận được khách hàng ngoài khung 24 giờ.",
+          "cta": "Quản lý mẫu →"
         },
         "flows": {
           "title": "Tự động trả lời",
-          "body": "Một luồng có thể trả lời cùng một câu hỏi thay bạn mỗi lần."
+          "body": "Một luồng có thể trả lời cùng một câu hỏi thay bạn mỗi lần.",
+          "cta": "Mở trình tạo luồng →"
         },
         "palette": {
           "title": "Chuyển đến bất cứ đâu",
-          "body": "Nhấn Ctrl K để tìm mọi trang."
+          "body": "Nhấn Ctrl K để tìm mọi trang.",
+          "cta": "Dùng thử ngay"
         },
         "scheduled": {
           "title": "Lên lịch trước",
-          "body": "Xếp hàng tin nhắn ngay bây giờ và để nó gửi đúng lúc."
+          "body": "Xếp hàng tin nhắn ngay bây giờ và để nó gửi đúng lúc.",
+          "cta": "Lịch mới →"
         },
         "wallet": {
           "title": "Theo dõi số dư",
-          "body": "Nạp tiền trước khi sắp hết để việc gửi không bao giờ bị gián đoạn."
+          "body": "Nạp tiền trước khi sắp hết để việc gửi không bao giờ bị gián đoạn.",
+          "cta": "Cấu hình tự động nạp tiền →"
         }
       },
       "shortcuts": {
@@ -681,6 +783,339 @@
             "subtitle": "Soạn một mẫu tin nhắn"
           }
         }
+      },
+      "cards": {
+        "meta-ads": {
+          "title": "Meta Ads",
+          "desc": "Tạo và quản lý chiến dịch quảng cáo Click-to-WhatsApp trên Facebook & Instagram — mỗi lượt nhấp mở một cuộc trò chuyện trên số đã kết nối của bạn.",
+          "foot": "nhấp để chat",
+          "open": "Mở Meta Ads",
+          "badge": "ADS"
+        },
+        "instagram-posts": {
+          "title": "Bài đăng Instagram",
+          "desc": "Soạn và lên lịch bài đăng Instagram — ảnh, reels, stories và carousel. Đăng ngay hoặc xếp hàng để tự động đăng.",
+          "foot": "soạn & lên lịch",
+          "open": "Mở trình soạn",
+          "badge": "IG"
+        },
+        "facebook-posts": {
+          "title": "Bài đăng Facebook",
+          "desc": "Soạn và lên lịch bài đăng Facebook — văn bản, liên kết và ảnh. Đăng ngay hoặc xếp hàng để gửi tới Trang đã kết nối.",
+          "foot": "soạn & lên lịch",
+          "open": "Mở trình soạn",
+          "badge": "FB"
+        },
+        "sms": {
+          "title": "SMS",
+          "desc": "Kết nối số SMS (Twilio / MSG91). Tin nhắn SMS đến cùng hộp thư nhóm với WhatsApp, và chiến dịch có thêm người gửi SMS.",
+          "foot": "kết nối & quản lý",
+          "open": "Mở SMS",
+          "badge": "SMS"
+        },
+        "line": {
+          "title": "LINE",
+          "desc": "Kết nối tài khoản LINE Official (Messaging API). Tin nhắn đến nằm trong cùng hộp thư nhóm, kèm gửi hàng loạt, menu, luồng và thống kê.",
+          "foot": "kết nối & quản lý",
+          "open": "Mở LINE",
+          "badge": "LINE"
+        },
+        "wechat": {
+          "title": "WeChat",
+          "desc": "Kết nối tài khoản WeChat Official (Service Account). Tin nhắn đến nằm trong cùng hộp thư nhóm, kèm quy tắc từ khóa, trả lời tự động và luồng.",
+          "foot": "kết nối & quản lý",
+          "open": "Mở WeChat",
+          "badge": "WeChat"
+        },
+        "viber": {
+          "title": "Viber",
+          "desc": "Kết nối tài khoản công khai Viber (Bot). Tin nhắn đến nằm trong cùng hộp thư nhóm, kèm quy tắc từ khóa, trả lời tự động và luồng.",
+          "foot": "kết nối & quản lý",
+          "open": "Mở Viber",
+          "badge": "Viber"
+        },
+        "messenger-setup": {
+          "title": "Thiết lập Messenger",
+          "desc": "Cấu hình hồ sơ Messenger — nút Bắt đầu, menu cố định, câu mở đầu và lời chào cho Trang đã kết nối.",
+          "foot": "công cụ tăng trưởng",
+          "open": "Mở thiết lập",
+          "badge": "FB"
+        },
+        "tiktok": {
+          "title": "TikTok",
+          "desc": "Kết nối tài khoản TikTok, theo dõi thống kê hồ sơ & video, và gửi video tới hộp thư TikTok. Hộp thư DM chỉ dành cho đối tác và giới hạn theo khu vực.",
+          "foot": "kết nối & đăng",
+          "open": "Mở TikTok",
+          "badge": "TT"
+        },
+        "tiktok-posts": {
+          "title": "Bài đăng TikTok",
+          "desc": "Gửi video tới hộp thư TikTok để hoàn tất và đăng từ ứng dụng, rồi theo dõi trạng thái tại đây.",
+          "foot": "soạn & gửi",
+          "open": "Mở bài đăng",
+          "badge": "TT"
+        },
+        "quick-send": {
+          "title": "Gửi nhanh",
+          "desc": "Soạn tin nhắn, chọn một hoặc nhiều người nhận và người gửi, rồi gửi ngay hoặc lên lịch — hàng đợi gửi thủ công với trạng thái giao từng tin nhắn.",
+          "foot": "hàng đợi gửi",
+          "open": "Mở"
+        },
+        "account": {
+          "title": "Tài khoản",
+          "desc": "Hồ sơ, ảnh, mật khẩu, lịch sử đơn hàng, ví, liên kết tiếp thị và phiếu hỗ trợ — tất cả ở một nơi.",
+          "foot": "{plan} · {balance}",
+          "open": "Mở"
+        },
+        "pricing": {
+          "title": "Giá & gói dịch vụ",
+          "desc": "So sánh Starter, Growth, Pro và Enterprise. Đổi gói bất cứ lúc nào — chúng tôi tính theo số ngày.",
+          "foot": "Gói {plan} · nâng cấp để mở khóa",
+          "open": "Xem gói"
+        },
+        "analytics": {
+          "title": "Phân tích",
+          "desc": "Biểu đồ giao, đọc và chuyển đổi trên các chiến dịch và thiết bị.",
+          "foot": "{count} tin nhắn · 7 ngày qua",
+          "open": "Mở"
+        },
+        "attributes": {
+          "title": "Thuộc tính",
+          "desc": "Biến cho mẫu WhatsApp. Gồm các biến có sẵn như first_name và biến tùy chỉnh của bạn (order_id, v.v.). Nhập / trong bất kỳ tin nhắn nào để chèn.",
+          "foot": "Đã lưu {count}",
+          "open": "Mở"
+        },
+        "contacts": {
+          "title": "Danh bạ",
+          "desc": "Toàn bộ liên hệ và nhóm ở một nơi. Nhập từ CSV, gắn thẻ, phân đoạn và tìm kiếm.",
+          "foot": "{people} người / {groups} nhóm / {tags} thẻ",
+          "open": "Mở"
+        },
+        "broadcasts": {
+          "title": "Gửi hàng loạt",
+          "desc": "Gửi hàng loạt bằng mẫu tới liên hệ đã chọn, theo dõi trạng thái đã gửi, đã giao, đã đọc, thất bại và đang chờ.",
+          "foot": "{queued} đang chờ{pct, select, none {} other { / {pct}% đã giao}}",
+          "open": "Mở"
+        },
+        "auto-reply": {
+          "title": "Trả lời tự động",
+          "desc": "Kích hoạt trả lời theo từ khóa, giờ làm việc hoặc khi nhân viên vắng mặt.",
+          "foot": "{count} quy tắc{pct, select, none {} other { / {pct}% khớp}}",
+          "open": "Mở"
+        },
+        "warmer": {
+          "title": "Làm nóng số WhatsApp",
+          "desc": "Tăng dần hạn mức gửi hằng ngày của mỗi số với khoảng nghỉ giống người thật và khung giờ hoạt động, để giảm nguy cơ bị khóa.",
+          "foot": "API không chính thức",
+          "open": "Mở"
+        },
+        "scheduled": {
+          "title": "Tin nhắn đã lên lịch",
+          "desc": "Xếp hàng gửi vào đúng thời điểm — theo múi giờ, phân đoạn hoặc sự kiện kích hoạt.",
+          "foot": "{queued} đang chờ / tiếp theo {next}",
+          "open": "Mở"
+        },
+        "message-history": {
+          "title": "Lịch sử tin nhắn",
+          "desc": "Kho lưu trữ có thể tìm kiếm mọi tin nhắn đến và đi — xuất được ra CSV.",
+          "foot": "{count} bản ghi",
+          "open": "Mở"
+        },
+        "notifications": {
+          "title": "Thông báo",
+          "desc": "Chuyển cảnh báo tới email, Slack hoặc trong ứng dụng — đặt giờ yên lặng cho từng kênh.",
+          "foot": "{count} chưa đọc",
+          "open": "Mở"
+        },
+        "integrations": {
+          "title": "Tích hợp",
+          "desc": "Kết nối Shopify, HubSpot, Zapier và nhiều hơn nữa — đồng bộ liên hệ và đơn hàng.",
+          "foot": "{connected} đã kết nối / {available} khả dụng",
+          "open": "Mở"
+        },
+        "google-account": {
+          "title": "Tài khoản Google",
+          "desc": "Kết nối một lần — dùng cho Lịch, liên kết Meet trong luồng và nút \"Gửi liên kết Meet\" trong hộp thư.",
+          "foot": "Lịch và Meet",
+          "open": "Mở"
+        },
+        "appointments": {
+          "title": "Lịch hẹn",
+          "desc": "Cho khách hàng đặt dịch vụ ngay trong chat — chọn ngày/giờ, câu hỏi, tiền cọc, nhắc nhở và đồng bộ Google Calendar.",
+          "foot": "{count, plural, =0 {chưa thiết lập} one {# dịch vụ} other {# dịch vụ}}",
+          "open": "Quản lý"
+        },
+        "ai-assistants": {
+          "title": "Trợ lý cuộc gọi AI",
+          "desc": "AI giọng nói trả lời cuộc gọi — bộ não Gemini, giọng ElevenLabs, và công cụ riêng của bạn ngay trong cuộc gọi.",
+          "foot": "{configured} đã cấu hình / {live} đang chạy",
+          "open": "Mở"
+        },
+        "call-logs": {
+          "title": "Nhật ký cuộc gọi",
+          "desc": "Bản ghi, bản ghi âm và dòng thời gian gọi công cụ cho mọi cuộc gọi AI đã xử lý.",
+          "foot": "{calls} cuộc gọi / {minutes} phút · 24 giờ",
+          "open": "Mở"
+        },
+        "forms": {
+          "title": "Biểu mẫu",
+          "desc": "Biểu mẫu tương tác WhatsApp gốc — thu thập khách hàng tiềm năng, khảo sát và đặt chỗ ngay trong chat.",
+          "foot": "{drafted} bản nháp / {live} đang chạy",
+          "open": "Mở"
+        },
+        "wa-links": {
+          "title": "Tạo liên kết WhatsApp",
+          "desc": "Tạo liên kết wa.me rút gọn có thể theo dõi, với slug tùy chỉnh, tin nhắn soạn sẵn, mã QR và thống kê lượt nhấp. Đặt trên tiểu sử, trang đích hoặc danh thiếp.",
+          "foot": "{links} liên kết / {clicks} lượt nhấp",
+          "open": "Mở"
+        },
+        "chatbot-widgets": {
+          "title": "Tiện ích chatbot",
+          "desc": "Nhúng bong bóng chat nổi trên trang web của bạn. AI trả lời ngay trên trình duyệt và chuyển sang Hộp thư hợp nhất khi cần.",
+          "foot": "{built} đã tạo / {live} đang hoạt động",
+          "open": "Mở"
+        },
+        "ai-training": {
+          "title": "Huấn luyện AI",
+          "desc": "Huấn luyện trợ lý chat bằng nội dung của bạn — URL, đoạn văn bản, cặp hỏi đáp và tệp văn bản thuần.",
+          "foot": "{count} trợ lý",
+          "open": "Mở"
+        },
+        "ai-usage": {
+          "title": "Mức sử dụng AI",
+          "desc": "Xem chi phí AI của bạn đi đâu — token theo mô hình và nhà cung cấp, khóa của gói so với khóa của bạn, và giới hạn hằng tháng.",
+          "foot": "{tokens} token trong tháng này",
+          "open": "Xem"
+        },
+        "flow-analytics": {
+          "title": "Phân tích luồng",
+          "desc": "Mọi lượt chạy tự động từ đầu đến cuối — lịch sử thực thi, các lỗi làm dừng lượt chạy và bản ghi thử lại cho những lượt bạn đã chạy lại.",
+          "foot": "{count} lượt chạy thất bại",
+          "open": "Mở"
+        },
+        "lead-finder": {
+          "title": "Tìm khách hàng tiềm năng",
+          "desc": "Tìm doanh nghiệp theo danh mục & thành phố, lấy WhatsApp & email của họ và đưa vào Danh bạ hoặc chiến dịch.",
+          "foot": "tìm kiếm trên bản đồ",
+          "open": "Mở"
+        },
+        "webhooks": {
+          "title": "Webhook",
+          "desc": "Đẩy sự kiện giao, đọc và trả lời tới bất kỳ điểm cuối HTTPS nào theo thời gian thực.",
+          "foot": "{count} điểm cuối",
+          "open": "Mở"
+        },
+        "support": {
+          "title": "Hỗ trợ",
+          "desc": "Trò chuyện với nhân viên, xem các sự cố đã biết hoặc kiểm tra trạng thái dịch vụ.",
+          "foot": "{total} phiếu / {open} đang mở",
+          "open": "Mở"
+        },
+        "activity-log": {
+          "title": "Nhật ký hoạt động",
+          "desc": "Mọi lần đăng nhập, chuyển không gian làm việc, thao tác hộp thư và thay đổi quản trị — gắn với người dùng, IP và thời gian.",
+          "foot": "{count} sự kiện · 24 giờ",
+          "open": "Mở"
+        },
+        "channels": {
+          "title": "Kênh",
+          "desc": "Kết nối WhatsApp, Instagram, Telegram và nhiều hơn nữa — một hộp thư, theo dõi tình trạng, luân phiên người gửi.",
+          "foot": "{active} / {total} đang chạy",
+          "open": "Mở"
+        },
+        "team-members": {
+          "title": "Thành viên nhóm",
+          "desc": "Mời đồng đội, phân vai trò (chủ sở hữu / quản trị / thành viên) và giới hạn quyền truy cập theo từng không gian làm việc.",
+          "foot": "{count, plural, one {# chỗ} other {# chỗ}} đang hoạt động",
+          "open": "Mở"
+        }
+      },
+      "eyebrow": "không gian làm việc",
+      "sortedByUsage": "Sắp xếp theo mức sử dụng",
+      "developers": "Nhà phát triển / API",
+      "movedOffHeader": "đã chuyển khỏi tiêu đề",
+      "open": "Mở",
+      "navDesc": {
+        "dashboard": "Trang chủ & tổng quan",
+        "wa-campaigns": "Gửi chiến dịch hàng loạt",
+        "flows": "Trình tạo tự động hóa",
+        "templates": "Mẫu tin nhắn"
+      },
+      "strip": {
+        "label": "Tổng quan không gian làm việc",
+        "rules": "Quy tắc đang hoạt động",
+        "thisWeek": "+{count} trong tuần này",
+        "noNew": "không có mới",
+        "rulesCaption": "trên tất cả công cụ",
+        "queued": "Đang chờ",
+        "noUpcoming": "không có lượt chạy sắp tới",
+        "queuedCaption": "lượt gửi đã lên lịch",
+        "connected": "Đã kết nối",
+        "connectedCaption": "thiết bị đang chạy",
+        "health": {
+          "healthy": "ổn định",
+          "partial": "một phần",
+          "offline": "ngoại tuyến",
+          "none": "không có thiết bị"
+        },
+        "notifications": "Thông báo",
+        "unread": "chưa đọc",
+        "notificationsCaption": "cần xử lý"
+      },
+      "activity": {
+        "title": "Hoạt động gần đây",
+        "viewAll": "Xem tất cả",
+        "empty": "Không có hoạt động nào. Các thay đổi trong không gian làm việc sẽ hiển thị tại đây."
+      },
+      "affiliate": {
+        "badge": "KIẾM",
+        "title": "Lịch sử liên kết tiếp thị",
+        "body": "Theo dõi mọi lượt đăng ký qua mã của bạn, số tín dụng kiếm được và hiệu quả liên kết chia sẻ.",
+        "referrals": "Giới thiệu",
+        "payouts": "Thanh toán",
+        "payoutsNote": "xem tài khoản của bạn",
+        "foot": "giới thiệu · tín dụng · thanh toán"
+      },
+      "quick": {
+        "title": "Truy cập nhanh",
+        "body": "Công cụ ít dùng nằm ở đây để tiêu đề chính tập trung vào công việc hằng ngày.",
+        "openChat": "Mở Chat",
+        "addRule": "Thêm quy tắc"
+      },
+      "planCard": {
+        "title": "Gói không gian làm việc",
+        "seats": "{plan} / {count, plural, one {# chỗ} other {# chỗ}}",
+        "messages": "Tin nhắn trong tháng này",
+        "sent": "Đã gửi {count}",
+        "manage": "Quản lý thanh toán"
+      },
+      "whatsNew": {
+        "title": "Có gì mới",
+        "headline": "Hộp thư hợp nhất + trợ giúp AI",
+        "changelog": "Đọc nhật ký thay đổi",
+        "items": {
+          "inbox": "Hộp thư dùng chung với phân công & ghi chú",
+          "ai": "ChatGPT / Gemini / Claude trong luồng",
+          "forecast": "Dự báo doanh số trong bảng điều khiển Shopify"
+        }
+      },
+      "smallTips": {
+        "warm": {
+          "title": "Làm nóng số mới",
+          "body": "Bắt đầu với 50 lượt gửi/ngày và tăng gấp đôi mỗi tuần. Các đợt gửi đột biến sẽ bị gắn cờ."
+        },
+        "tag": {
+          "title": "Gắn thẻ ngay, phân đoạn sau",
+          "body": "Thêm thẻ ngay khi liên hệ trả lời — bộ lọc gửi hàng loạt sau này sẽ dễ dàng hơn nhiều."
+        },
+        "templates": {
+          "title": "Mẫu tốt hơn văn bản tự do",
+          "body": "Mẫu đã duyệt sẵn vẫn mở cửa sổ 24 giờ ngay cả khi liên hệ đã im lặng."
+        },
+        "signing": {
+          "title": "Luôn xác minh HMAC",
+          "body": "Luôn kiểm tra tiêu đề chữ ký trước khi xử lý — chỉ một dòng mã nhưng rất an toàn."
+        }
       }
     },
     "inboxBell": {
@@ -704,6 +1139,19 @@
       "hintMove": "di chuyển",
       "hintOpen": "mở",
       "hintToggle": "bật/tắt"
+    },
+    "flash": {
+      "dismiss": "Bỏ qua",
+      "roleDenied": "Vai trò của bạn ({role}) không có quyền truy cập trang này"
+    },
+    "hubSearch": {
+      "placeholder": "Tìm cài đặt dự án...",
+      "empty": "Không có cài đặt nào khớp với tìm kiếm của bạn."
+    },
+    "bell": {
+      "eyebrow": "Hộp thư",
+      "clearAll": "Xóa tất cả",
+      "viewAll": "Xem tất cả →"
     }
   }
 }

@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, other {ข้อความใหม่ # ข้อความจาก {author}}}",
         "titleNoName": "{count, plural, other {ข้อความส่วนตัวใหม่ #}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, other {มี # คนต้องการเข้าร่วม {name}}}",
+        "titleNoName": "{count, plural, other {มี # คนต้องการเข้าร่วมกลุ่ม WhatsApp}}",
+        "body": "เปิดกลุ่มเพื่ออนุมัติหรือปฏิเสธ"
+      },
+      "waba_group_suspended": {
+        "title": "{name} ถูกระงับแล้ว",
+        "titleNoName": "กลุ่ม WhatsApp ถูกระงับแล้ว",
+        "body": "WhatsApp ระงับกลุ่มนี้ คุณจะส่งข้อความไปยังกลุ่มไม่ได้จนกว่าจะกู้คืน"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} กลับมาใช้งานได้อีกครั้ง",
+        "titleNoName": "กลุ่ม WhatsApp กลับมาใช้งานได้อีกครั้ง",
+        "body": "WhatsApp กู้คืนกลุ่มนี้แล้ว คุณส่งข้อความไปยังกลุ่มได้อีกครั้ง"
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "การส่งตามกำหนดเวลาถูกส่งแล้ว",
         "scheduled_failed": "การส่งตามกำหนดเวลาล้มเหลว",
         "teamchat_mention": "กล่าวถึงคุณในแชททีม",
-        "teamchat_message": "ข้อความส่วนตัวใหม่"
+        "teamchat_message": "ข้อความส่วนตัวใหม่",
+        "waba_group_join_request": "คำขอเข้าร่วมกลุ่ม",
+        "waba_group_suspended": "ระงับกลุ่ม WhatsApp",
+        "waba_group_suspension_cleared": "กลุ่ม WhatsApp กลับมาใช้งานได้อีกครั้ง"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "กระเป๋าเงิน",
         "devices": "หมายเลข WhatsApp",
         "broadcasts": "บรอดแคสต์และแคมเปญ",
-        "team_chat": "แชททีม"
+        "team_chat": "แชททีม",
+        "whatsapp_groups": "กลุ่ม WhatsApp"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "เติมเงินกระเป๋าเงินแล้ว",
           "hint": "กระเป๋าเงินของพื้นที่ทำงานได้รับเงินเข้าแล้ว"
+        },
+        "waba_group_join_request": {
+          "label": "คำขอเข้าร่วมกลุ่ม",
+          "hint": "มีผู้ขอเข้าร่วมกลุ่ม WhatsApp ของหมายเลขธุรกิจของคุณ คำขอ 10 รายการจะแสดงเป็นหนึ่งแถว"
+        },
+        "waba_group_suspended": {
+          "label": "ระงับกลุ่ม",
+          "hint": "WhatsApp ระงับกลุ่มหนึ่งของคุณ"
+        },
+        "waba_group_suspension_cleared": {
+          "label": "กลุ่มกลับมาใช้งานได้อีกครั้ง",
+          "hint": "WhatsApp กู้คืนกลุ่มที่เคยระงับ จะแจ้งเฉพาะเมื่อคุณเคยได้รับแจ้งเรื่องการระงับ"
         }
       },
       "loading": "กำลังโหลดการตั้งค่าของคุณ",

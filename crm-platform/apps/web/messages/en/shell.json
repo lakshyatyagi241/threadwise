@@ -1,15 +1,15 @@
 {
   "shell": {
     "groups": {
-      "overview": "Platform",
+      "overview": "Overview",
       "inbox": "Inbox & Chat",
-      "audience": "CRM",
-      "sales": "Sales",
+      "audience": "Audience",
+      "sales": "Sales & CRM",
       "campaigns": "Campaigns",
       "automation": "Automation",
       "store": "Store",
       "apps": "Marketplace",
-      "help": "Support & Help",
+      "help": "Help",
       "settings": "Settings"
     },
     "locked": "Upgrade",
@@ -67,7 +67,6 @@
       "store": "Store",
       "catalog": "Catalog",
       "support": "Support",
-      "guidebook": "Guidebook",
       "pipelines": "Pipelines",
       "tasks": "Tasks",
       "companies": "Companies",

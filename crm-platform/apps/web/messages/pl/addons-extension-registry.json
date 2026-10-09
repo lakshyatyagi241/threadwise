@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "Nie udało się załadować dodatków."
+    },
+    "planFields": {
+      "fromModule": "z zainstalowanego modułu",
+      "unlimited": "Bez limitu"
     }
   }
 }

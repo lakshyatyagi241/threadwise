@@ -107,6 +107,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: '/home', destination: '/', permanent: false },
+      // The guidebook was folded into the help center (guides written in the repo, gated by plan and role).
+      { source: '/guidebook', destination: '/help', permanent: false },
+      { source: '/guidebook/:slug', destination: '/help', permanent: false },
       { source: '/register/verify', destination: '/verify-otp', permanent: false },
       { source: '/register/workspace', destination: '/onboarding', permanent: false },
       { source: '/register/plan', destination: '/onboarding', permanent: false },

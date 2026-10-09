@@ -22,10 +22,13 @@
         "read": "已读",
         "failed": "失败",
         "processing": "处理中",
-        "queued": "排队中",
         "campaigns": "{count} 个营销活动",
         "inFlight": "发送中",
-        "awaiting": "等待中"
+        "awaiting": "等待中",
+        "queued": "{count} 条排队中",
+        "deliveredRate": "送达率 {rate}%",
+        "readRate": "已读率 {rate}%",
+        "failedCampaigns": "{count} 个营销活动失败"
       },
       "range": {
         "all": "全部时间",
@@ -87,7 +90,13 @@
         "devices": "就绪的设备",
         "retry": "待重试积压",
         "createTitle": "创建营销活动",
-        "createBody": "选择发送方，撰写或选择消息，选择接收对象。"
+        "createBody": "选择发送方，撰写或选择消息，选择接收对象。",
+        "tipTitle": "提示",
+        "tip": "在客户活跃时安排营销活动。每次群发都搭配已审核的模板，以便在消息离开队列前标记可能失败的发送。",
+        "healthyTitle": "所有系统运行正常",
+        "attentionTitle": "送达情况需要关注",
+        "healthLine": "平均送达率 {rate}% · {count} 个营销活动需要检查。",
+        "label": "营销活动筛选"
       },
       "card": {
         "select": "选择 {name}",
@@ -130,7 +139,27 @@
         "instant": "发送：即时",
         "template": "模板 {name}"
       },
-      "createBroadcast": "创建群发"
+      "createBroadcast": "创建群发",
+      "noData": "未找到数据",
+      "noDataHint": "没有符合当前筛选条件的 WhatsApp 营销活动。请尝试清除筛选条件，或创建你的第一次群发。",
+      "createCampaign": "创建营销活动",
+      "help": {
+        "label": "帮助 - {n}",
+        "items": {
+          "0": {
+            "title": "什么是 WhatsApp 营销活动？",
+            "body": "通过你已连接的设备，将自定义消息、已审核模板或流程发送给选定联系人的群发队列。"
+          },
+          "1": {
+            "title": "如何提高送达率？",
+            "body": "保持名单整洁，外发时使用已审核的模板，并分批安排较大规模的群发，而不是一次性发给所有联系人。"
+          },
+          "2": {
+            "title": "应该先发起哪个营销活动？",
+            "body": "先从模板更新或唤回群发开始，然后比较送达、已读和失败数量，再逐步扩大规模。"
+          }
+        }
+      }
     },
     "builder": {
       "loadError": "无法加载此营销活动。",
@@ -142,7 +171,28 @@
       "titleEdit": "编辑您的",
       "titleAccent": "营销活动",
       "failed": "无法保存营销活动，请重试。",
-      "preview": "实时预览",
+      "preview": {
+        "title": "实时预览",
+        "typeText": "文本",
+        "type": {
+          "template": "模板",
+          "flow": "流程"
+        },
+        "now": "立即",
+        "scheduled": "稍后",
+        "recurring": "周期性",
+        "flow": "每位收件人都会启动此流程。",
+        "emptyTitle": "暂无预览",
+        "emptyHint": "选择设备、编写消息正文或选择模板后，预览将显示在这里。",
+        "from": "发送方：{sender}",
+        "note": "这是营销活动在每位收件人聊天中的显示效果。",
+        "recipients": "收件人",
+        "schedule": "时间安排",
+        "typeLabel": "类型",
+        "ab": "A/B",
+        "off": "关闭",
+        "step": "第 {n} 步，共 {total} 步"
+      },
       "previewEmpty": "您的消息预览…",
       "previewTemplate": "模板",
       "previewFlow": "每位收件人都会启动此流程。",
@@ -159,7 +209,8 @@
         "window": "请同时设置发送时段的开始和结束，或都不设置。",
         "throttle": "最长间隔必须不小于最短间隔。",
         "expiry": "结束日期必须晚于发送日期，否则营销活动会在发送前过期。",
-        "media": "请输入以 http:// 或 https:// 开头的完整地址。"
+        "media": "请输入以 http:// 或 https:// 开头的完整地址。",
+        "sender": "请选择发送方。"
       },
       "submit": {
         "save": "保存更改",
@@ -174,7 +225,30 @@
         "namePlaceholder": "例如：排灯节优惠",
         "sender": "发送自",
         "senderHint": "保持默认时，营销活动将通过您工作区的主引擎发出。",
-        "defaultSender": "默认发送方"
+        "defaultSender": "默认发送方",
+        "nameHint": "用于报表和队列历史的内部标签。",
+        "noSenders": "没有已连接的发送方。",
+        "connectOne": "去连接 →",
+        "type": "营销活动类型",
+        "types": {
+          "custom": {
+            "title": "自定义消息",
+            "hint": "为一次性群发编写文本，并附加媒体或按钮。"
+          },
+          "template": {
+            "title": "使用模板",
+            "hint": "选择已审核的 Meta 模板，用于营销或通知类消息。"
+          },
+          "flow": {
+            "title": "流程构建器",
+            "hint": "为此队列中的每位收件人启动一个已保存的流程。"
+          }
+        },
+        "ab": "启用 A/B 测试",
+        "abHint": "将收件人分配到两个消息版本中。",
+        "split": "版本 A 占比 {a}%",
+        "splitHint": "版本 B 接收其余受众。请在撰写步骤中设置版本 B 的内容。",
+        "pickSender": "— 选择发送方 —"
       },
       "audience": {
         "title": "受众",
@@ -184,7 +258,25 @@
         "sample": "下载示例",
         "csvTooBig": "文件超过 5 MB。",
         "csvHint": "列：name、country_code、phone。其他任何列都会成为可在消息中使用的变量。",
-        "selected": "已选择 {count} 个联系人"
+        "selected": "已选择 {count} 个联系人",
+        "tag": "受众",
+        "modes": {
+          "audience": {
+            "title": "联系人分组",
+            "hint": "使用已保存的分组和标签。"
+          },
+          "csv": {
+            "title": "上传 CSV",
+            "hint": "为此队列导入号码。"
+          },
+          "manual": {
+            "title": "手动输入号码",
+            "hint": "每行粘贴一个号码。"
+          }
+        },
+        "csvRows": "文件中有 {count} 个号码",
+        "numbersPlaceholder": "每行一个号码，包含国家代码，不加加号",
+        "numbersCount": "{count} 个号码"
       },
       "message": {
         "title": "消息",
@@ -285,10 +377,235 @@
         "dailyHint": "达到此数量后当天停止，其余顺延到次日。",
         "windowStart": "发送开始时间",
         "windowEnd": "发送截止时间",
-        "windowHint": "仅在这些时段内发送，按上方时区计算。",
-        "tracking": "跟踪链接点击"
+        "tracking": "跟踪链接点击",
+        "windowHint": "仅在以下时段发送，时区为 {zone}（即上方设置的营销活动时区）。时段之外，任务会等待下一个开放时段。两项都留空则随时发送。",
+        "title": "时间安排与限制",
+        "queue": "队列",
+        "repeatHint": "周期性营销活动的重复发送频率。",
+        "smartTag": "防封 · 可选",
+        "smartIntro": "留空则使用工作区默认节奏。这些规则会拉开发送间隔，使大名单看起来更像真人操作，并避免触发 WhatsApp 的封号监测。",
+        "smartZone": "时间以 {zone} 为准。",
+        "throttleMaxHint": "每条消息之前的最长等待时间。",
+        "batchPauseHint": "每批发送后的休息分钟数。"
       },
-      "unofficialDisabled": "您的工作区未启用通过个人 WhatsApp 号码（非官方 API）发送。请选择官方 WhatsApp Business API 号码。"
+      "unofficialDisabled": "您的工作区未启用通过个人 WhatsApp 号码（非官方 API）发送。请选择官方 WhatsApp Business API 号码。",
+      "draftChip": "草稿 / 未保存",
+      "steps": {
+        "label": "营销活动步骤",
+        "required": "必填",
+        "previous": "上一步",
+        "next": "下一步",
+        "of": "第 {n} 步，共 {total} 步",
+        "setup": {
+          "name": "设置"
+        },
+        "compose": {
+          "name": "撰写"
+        },
+        "recipients": {
+          "name": "收件人"
+        },
+        "schedule": {
+          "name": "时间安排"
+        },
+        "review": {
+          "name": "检查"
+        }
+      },
+      "compose": {
+        "title": "撰写",
+        "kind": {
+          "custom": "自定义消息",
+          "template": "模板",
+          "flow": "流程构建器"
+        },
+        "header": "页眉",
+        "headerNote": "可选",
+        "headerText": "页眉文本",
+        "headerPlaceholder": "例如：五月优惠已上线",
+        "required": "必填",
+        "body": "正文",
+        "bodyPlaceholder": "你好 '{{name}}'！…",
+        "bodyHint": "使用 '{{name}}' 或 '{{first_name}}' 进行个性化。输入 / 可插入任意属性。",
+        "variantB": "版本 B 消息",
+        "variantBNote": "A/B 测试 — 版本 A 即上方的消息",
+        "variantBPlaceholder": "面向版本 B 受众的替代消息…",
+        "variantBHint": "版本 B 一半的收件人将收到此消息，而不是上方的版本 A 消息。媒体、按钮、页眉和页脚在两个版本之间共享。",
+        "attachment": "附件",
+        "attachmentNote": "可选 / 图片、视频或文档",
+        "attachmentType": "附件类型",
+        "attachments": {
+          "none": {
+            "name": "无"
+          },
+          "image": {
+            "name": "图片",
+            "title": "选择图片",
+            "hint": "JPG 或 PNG，最大 2 MB。"
+          },
+          "video": {
+            "name": "视频",
+            "title": "选择视频",
+            "hint": "MP4，最大 16 MB。"
+          },
+          "document": {
+            "name": "文档",
+            "title": "选择文档",
+            "hint": "PDF 或 DOC，最大 16 MB。"
+          }
+        },
+        "noAttachment": "无附件，仅为纯文本消息。",
+        "footer": "页脚",
+        "footerNote": "可选 / 最多 60 个字符",
+        "footerPlaceholder": "例如：回复 STOP 退订",
+        "footerHint": "正文下方的纯文本，不支持变量。",
+        "buttons": "按钮",
+        "buttonsNote": "可选 / 最多 3 个",
+        "modes": {
+          "cta": "行动号召",
+          "reply": "快速回复",
+          "mix": "混合"
+        },
+        "buttonType": "按钮类型",
+        "buttonTypes": {
+          "url": "访问网站",
+          "phone_number": "拨打电话",
+          "quick_reply": "快速回复",
+          "copy_code": "复制代码"
+        },
+        "buttonText": "按钮文本",
+        "buttonValue": "值",
+        "buttonPhone": "带国家代码的号码",
+        "removeButton": "移除",
+        "addCta": "添加行动按钮",
+        "addReply": "添加快速回复",
+        "templateIntro": "选择模板 — 非官方 API 已启用，因此任何模板均可使用（无需 Meta 审核）。变量会在发送时从联系人属性中自动填入。",
+        "template": "模板",
+        "approvedOnly": "只有已审核的模板才能在 WABA 上发起。",
+        "anyTemplate": "所有模板均可用于非官方 API。",
+        "pickTemplate": "选择模板",
+        "noTemplates": "暂无模板。",
+        "createTemplate": "创建模板",
+        "variantBTemplate": "版本 B 模板",
+        "variantBTemplateHint": "A/B 测试 — 上方已选择版本 A。此模板的变量值需单独填写。",
+        "sameTemplate": "— 与版本 A 相同的模板 —",
+        "flowIntro": "为每位收件人运行已保存的流程。流程的第一条消息即为营销活动的触发器，后续节点会根据每位联系人的回复继续执行。",
+        "flow": "流程",
+        "pickFlow": "选择流程",
+        "noFlows": "暂无流程。",
+        "createFlow": "创建流程",
+        "variantBFlow": "版本 B 流程",
+        "variantBFlowHint": "版本 B 一半的收件人将运行此流程，而不是上方的版本 A 流程。",
+        "sameFlow": "— 与版本 A 相同的流程 —",
+        "engineNotes": {
+          "twilio": "Twilio 自定义消息仅支持文本和媒体。如需按钮，请创建模板营销活动（Twilio Content SID）。",
+          "waba": "WABA 自定义消息仅能送达过去 24 小时内给你发过消息的联系人。如需向陌生联系人或批量发送，以及需要按钮时，请使用模板营销活动。"
+        },
+        "templateEmpty": {
+          "twilio": "暂无 Twilio 模板。请在模板页面使用 Content SID 创建一个。",
+          "waba": "此号码暂无已审核的 Meta（WABA）模板。请在模板页面创建或申请审核一个模板。",
+          "baileys": "暂无非官方 API 模板。请在模板页面创建一个。"
+        },
+        "templateIntroApproved": "选择已审核的 Meta 模板。每位联系人的变量值会在发送时从联系人属性中自动填入。",
+        "templateApproved": "已审核模板"
+      },
+      "review": {
+        "title": "检查",
+        "tag": "确认",
+        "device": "设备",
+        "type": "类型",
+        "recipients": "收件人",
+        "schedule": "时间安排",
+        "types": {
+          "custom": "自定义消息",
+          "template": "模板",
+          "flow": "流程构建器"
+        },
+        "now": "立即发送",
+        "recurring": "周期性 · {every}",
+        "checklist": "校验清单",
+        "summary": "收件人汇总",
+        "groups": "联系人分组和标签",
+        "contacts": "单个联系人",
+        "numbers": "手动 / CSV 号码",
+        "total": "收件人总数",
+        "estimate": "此为估算值：同时属于两个分组的联系人会被重复计算。队列生成时会去除重复项。",
+        "checks": {
+          "name": "已设置营销活动名称",
+          "content": "消息已准备就绪",
+          "audience": "已选择收件人",
+          "schedule": "时间安排有效",
+          "sender": "已选择发送方"
+        },
+        "problems": {
+          "name": "请为营销活动命名。",
+          "message": "请撰写消息。",
+          "template": "请选择模板。",
+          "flow": "请选择流程。",
+          "audience": "请选择发送对象：联系人、分组、标签、号码或 CSV。",
+          "date": "请选择发送日期。",
+          "time": "请选择发送时间。",
+          "window": "请同时设置发送时段的开始和结束时间，或两者都不设置。",
+          "throttle": "最长间隔不得小于最短间隔。",
+          "expiry": "结束日期必须晚于发送日期，否则营销活动会在发送前就已过期。",
+          "media": "请输入以 http:// 或 https:// 开头的完整地址。",
+          "sender": "请选择发送方。"
+        }
+      },
+      "ai": {
+        "open": "使用 AI 创建",
+        "eyebrow": "WA 营销活动 / AI",
+        "title": "使用以下方式创建",
+        "titleAccent": "AI",
+        "close": "关闭",
+        "cancel": "取消",
+        "generate": "生成营销活动",
+        "intro": "几秒钟内即可起草营销活动消息、页脚、行动按钮和快速回复。",
+        "model": "AI 模型",
+        "modelsError": "无法加载模型。",
+        "noModels": "此工作区未启用任何 AI 服务商。",
+        "loadingModels": "正在加载模型…",
+        "pickModel": "选择模型",
+        "yourKey": "你的密钥",
+        "business": "企业名称",
+        "businessPlaceholder": "Bloomly Florals",
+        "product": "产品或服务",
+        "productPlaceholder": "应季花束 · 当日送达",
+        "goal": "营销活动目标",
+        "pickGoal": "选择目标",
+        "goals": {
+          "purchase": "促成购买",
+          "booking": "促成预约",
+          "sale": "推广促销",
+          "reengage": "唤回沉默联系人",
+          "feedback": "收集反馈",
+          "launch": "宣布新品上线",
+          "reminder": "发送提醒",
+          "festival": "节日问候"
+        },
+        "tone": "语气",
+        "pickTone": "选择语气",
+        "tones": {
+          "friendly": "亲切",
+          "professional": "专业",
+          "urgent": "紧迫",
+          "playful": "俏皮",
+          "premium": "高端",
+          "empathetic": "体贴"
+        },
+        "ctaLabel": "行动按钮文字",
+        "ctaLabelPlaceholder": "立即购买",
+        "ctaUrl": "行动按钮目标网址",
+        "audience": "目标受众",
+        "audiencePlaceholder": "近 90 天内购买过花束的老客户",
+        "offer": "优惠 / 吸引点",
+        "offerPlaceholder": "本周末春季花束享 85 折，满 40 美元免运费",
+        "notes": "补充说明",
+        "notesNote": "可选 / 最多 2000 个字符",
+        "notesPlaceholder": "任何具体要求：必须包含的措辞、需避免的内容、品牌语气提示…",
+        "failed": "无法生成营销活动，请重试。",
+        "applied": "营销活动文案已填入。继续之前请先检查。"
+      }
     },
     "detail": {
       "notFound": "未找到该营销活动。",

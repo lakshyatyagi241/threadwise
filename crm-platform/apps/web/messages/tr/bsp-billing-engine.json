@@ -68,7 +68,11 @@
           "autoAttachCurrency": "Meta bu para birimini kabul etmiyor.",
           "baseCurrency": "Üç harfli bir para birimi kodu kullanın.",
           "businessId": "En fazla 64 karakter girin."
-        }
+        },
+        "kicker": "meta bağlantısı",
+        "businessIdHint": "İşletme ayarları → İşletme bilgileri → \"İşletme portföy kimliği\". Uzun bir sayı.",
+        "creditLinePlaceholder": "işletmenizden otomatik algılandı",
+        "tokenNote": "Belirteç şifreli saklanır ve bir daha gösterilmez."
       },
       "step2": {
         "title": "2. Bir müşteriyi elle bağlayın",
@@ -90,7 +94,10 @@
         "failed": "Bağlama başarısız: {error}",
         "finishStep1": "Önce 1. adımı tamamlayın.",
         "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
-        "noPhone": "numara yok"
+        "noPhone": "numara yok",
+        "kicker": "elle ekleyin, isteğe bağlı",
+        "numberHint": "Müşteriyi adına göre seçin: hesap kimliklerini arka planda biz yönetiriz.",
+        "currencyHint": "Meta'nın bu numara için faturalandırdığı para birimi."
       },
       "register": {
         "title": "Kullanımdaki kredi hatları",
@@ -119,7 +126,8 @@
         "revokeFailed": "İptal başarısız: {error}",
         "loadMore": "Daha fazla yükle",
         "loadingMore": "Yükleniyor",
-        "label": "Kredi tahsisleri"
+        "label": "Kredi tahsisleri",
+        "kicker": "bağlı hesaplar"
       },
       "guide": {
         "title": "Kurulum kılavuzu",
@@ -133,13 +141,19 @@
         "good1": "Bir kredi hattının para birimi bağlandıktan sonra kilitlenir.",
         "good2": "Bağlamak, Meta'nın size fatura kesmesi demektir; ancak müşterilerinizin fiyatlarını siz belirlemeye devam edersiniz.",
         "good3": "İstediğiniz zaman iptal edebilirsiniz; müşteri yeniden doğrudan Meta'ya öder.",
-        "link": "Meta Çözüm Ortağı genel bakış"
-      }
+        "link": "Meta Çözüm Ortağı genel bakış",
+        "kicker": "Kurulum kılavuzu",
+        "step2Note": "Belirteç yalnızca bir kez gösterilir, bu yüzden hemen kopyalayın.",
+        "step3Apply": "Kredi limiti için başvurun",
+        "step3Note": "Onaylandıktan sonra platform kimliğini otomatik okur ve 2. adım bunu her müşteri WABA'sıyla paylaşır.",
+        "metaDocs": "Meta belgeleri",
+        "reference": "referans"
+      },
+      "eyebrow": "Bayi faturalandırması · Meta kredi limiti"
     },
     "dashboard": {
       "title": "Bayi kâr ve zarar tablosu",
       "eyebrow": "Bu ay",
-      "intro": "Gelir, müşterilerden iletilen mesajlar için tahsil edilen tutardır; Meta maliyeti aynı mesajların size maliyetidir; marj ikisi arasındaki farktır. İade edilen ve ücretsiz mesajlar sayılmaz.",
       "linkRates": "Fiyatlar ve marj",
       "linkConnect": "Meta'yı bağla",
       "revenue": "Gelir (tahsil edilen)",
@@ -150,7 +164,6 @@
       "billed": "Faturalanan mesajlar",
       "free": "Ücretsiz mesajlar",
       "unpriced": "Meta maliyeti ayarlanmamış",
-      "unpricedBanner": "{count, plural, one {# faturalanan mesajın} other {# faturalanan mesajın}} ülke ve kategorisi için Meta maliyeti yok, bu yüzden marj bunları saf gelir sayar.",
       "perWorkspace": "Çalışma alanı başına (bu ay)",
       "columns": {
         "workspace": "Çalışma alanı",
@@ -163,7 +176,10 @@
       "empty": "Bu ay henüz faturalanan mesaj yok.",
       "more": "Yalnızca gelire göre en üstteki çalışma alanları listelenir.",
       "loadFailed": "Kâr ve zarar tablosu yüklenemedi.",
-      "currency": "Rapor para birimi"
+      "currency": "Rapor para birimi",
+      "intro": "Faturalandırılan her mesaj bir cüzdan ücretidir. Gelir, müşterilerinizin ödediği tutardır; Meta maliyeti, Meta'nın size faturaladığı tutardır; aradaki fark marjınızdır. Fiyat ve maliyetler <link>Cüzdan kuralları</link> bölümünde belirlenir.",
+      "linkPnl": "Kâr/Zarar",
+      "unpricedBanner": "{count, plural, one {# faturalandırılan mesajın} other {# faturalandırılan mesajın}} ülke/kategorisi için Meta maliyeti tanımlı değil; bu yüzden marjları tamamen gelir olarak sayılıyor. Bu satırları <link>Cüzdan kuralları → Meta maliyetlerini senkronize et</link> bölümünden ekleyin."
     }
   }
 }

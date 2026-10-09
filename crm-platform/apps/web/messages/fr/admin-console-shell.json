@@ -60,7 +60,10 @@
       "expand": "Développer la barre latérale",
       "backToApp": "Retour à l’application",
       "allAreas": "Toutes les zones",
-      "switchArea": "Changer de zone, actuellement dans {area}"
+      "switchArea": "Changer de zone, actuellement dans {area}",
+      "railCaption": "Console",
+      "wallet": "Portefeuille",
+      "topUp": "Recharger →"
     },
     "overview": {
       "title": "Console de la plateforme",
@@ -337,7 +340,8 @@
       "railLabel": "Sections des paramètres",
       "personal": {
         "title": "Votre compte",
-        "body": "Profil, mot de passe et préférences personnelles."
+        "body": "Profil, mot de passe et préférences personnelles.",
+        "eyebrow": "Personnel"
       },
       "api": {
         "restTitle": "API REST générale",
@@ -346,7 +350,19 @@
         "rest3": "Les requêtes sont limitées par minute selon votre forfait.",
         "webhooksTitle": "Webhooks",
         "webhooksBody": "Envoyez des événements vers vos propres points de terminaison et recevez ceux d’autres outils.",
-        "manage": "Gérer les intégrations"
+        "manage": "Gérer les intégrations",
+        "sheetsTitle": "Clé API Google Sheets",
+        "sheetsBody": "Utilisée par le module complémentaire Sheets pour envoyer les contacts et les lignes de messages dans une feuille. Seul jeton personnel exposé actuellement.",
+        "manageInAccount": "Gérer dans le compte",
+        "active": "Active",
+        "keyTimes": "générée le {created} · dernière utilisation {used}",
+        "never": "jamais",
+        "noKey": "Aucune clé API Sheets générée. Créez-en une dans",
+        "noKeyLink": "votre compte → module complémentaire Sheets",
+        "outboundTitle": "Points de terminaison sortants",
+        "outboundBody": "Votre espace de travail → votre serveur (hooks CRM, événements d'envoi / de réponse).",
+        "inboundTitle": "Webhooks entrants",
+        "inboundBody": "Votre serveur → votre espace de travail (livraisons WABA / API non officielle entrantes)."
       },
       "appearance": {
         "title": "Apparence",
@@ -363,12 +379,91 @@
         },
         "save": "Enregistrer",
         "saved": "Apparence mise à jour."
+      },
+      "branding": {
+        "ownerOnly": "Seul le propriétaire de l'espace de travail peut modifier l'image de marque.",
+        "loadFailed": "Impossible de charger l'image de marque.",
+        "saved": "Image de marque mise à jour.",
+        "saveFailed": "Impossible d'enregistrer l'image de marque.",
+        "logoTitle": "Logo et favicon",
+        "logoBody": "Utilisé dans l'en-tête, les factures, les e-mails et le portail client.",
+        "logo": "Logo",
+        "favicon": "Favicon",
+        "logoHint": "PNG / JPG / WebP · 2 Mo max · recommandé 240×80",
+        "faviconHint": "PNG 32×32 · 512 Ko max",
+        "click": "Cliquez pour téléverser",
+        "orDrag": "ou glissez-déposez",
+        "currentTag": "Actuel",
+        "current": {
+          "logo": "Logo actuel",
+          "favicon": "Favicon actuel"
+        },
+        "coloursTitle": "Couleurs de la marque",
+        "coloursBody": "Appliquées à l'interface du tableau de bord, aux boutons et aux accents. Enregistrez pour les voir sur chaque page.",
+        "colours": {
+          "primary": "Principale",
+          "accent": "Accent",
+          "background": "Arrière-plan"
+        },
+        "colourInvalid": "Utilisez une couleur #RRGGBB, par exemple #075E54.",
+        "save": "Enregistrer l'image de marque"
+      },
+      "residency": {
+        "loadFailed": "Impossible de charger le paramètre de résidence des données.",
+        "title": "Limiter le transfert de données transfrontalier",
+        "body": "Définissez un mode de routage plus strict pour cet espace de travail. La traduction des réponses automatiques ne passera que par les fournisseurs compatibles avec le mode choisi ; les autres sont ignorés silencieusement à l'exécution.",
+        "ownerOnly": "Seul le propriétaire de l'espace de travail peut modifier ce paramètre.",
+        "saved": "Résidence des données mise à jour. Le routage de traduction respectera le nouveau paramètre dès le prochain message entrant.",
+        "saveFailed": "Impossible d'enregistrer le paramètre de résidence des données.",
+        "save": "Enregistrer le paramètre de résidence",
+        "modes": {
+          "any": {
+            "name": "Aucune restriction",
+            "text": "Utilise le fournisseur actif choisi par la chaîne de secours. Meilleure disponibilité, sans restriction de conformité."
+          },
+          "eu_only": {
+            "name": "Routage UE uniquement",
+            "text": "Seuls DeepL (Allemagne) et LibreTranslate auto-hébergé sont autorisés. Compatible avec les règles de transfert transfrontalier de l'article 44 du RGPD."
+          },
+          "local": {
+            "name": "Sur site uniquement",
+            "text": "Seul le pilote LibreTranslate auto-hébergé est autorisé. Le texte des messages clients ne quitte jamais votre propre serveur. LibreTranslate doit être configuré."
+          }
+        }
       }
     },
     "topNav": {
       "more": "Plus",
       "search": "Rechercher",
-      "premium": "Fonctionnalité premium : passez à un forfait supérieur pour la débloquer"
+      "premium": "Fonctionnalité premium : passez à un forfait supérieur pour la débloquer",
+      "labels": {
+        "dashboard": "Tableau de bord",
+        "team-inbox": "Boîte de réception unifiée",
+        "wa-campaigns": "Campagnes",
+        "flows": "Flux",
+        "templates": "Modèles",
+        "devices": "Canaux",
+        "metaads": "Meta Ads",
+        "broadcasts": "Diffusions",
+        "contacts": "Contacts",
+        "deals": "Opportunités",
+        "chat": "Chat en direct",
+        "analytics": "Analyses",
+        "auto-reply": "Réponse automatique",
+        "scheduled": "Programmés",
+        "message-history": "Historique",
+        "ai-assistants": "Assistants IA",
+        "ai-training": "Entraînement IA",
+        "wa-links": "Liens WA",
+        "chatbot-widgets": "Widget de chat",
+        "webhooks": "Webhooks",
+        "integrations": "Intégrations",
+        "warmer": "Préchauffage",
+        "call-logs": "Journaux d'appels",
+        "support": "Support",
+        "more": "Plus"
+      },
+      "workspaceLogo": "Logo de l'espace de travail"
     },
     "palette": {
       "title": "Rechercher des pages",
@@ -412,7 +507,9 @@
       "wallet": "Portefeuille",
       "orders": "Historique des commandes",
       "plans": "Tarifs et forfaits",
-      "tour": "Faire la visite guidée"
+      "tour": "Faire la visite guidée",
+      "profile": "Profil",
+      "help": "Aide et support"
     },
     "quickAccess": {
       "title": "Accès rapide",
@@ -599,23 +696,28 @@
         "pager": "Astuces",
         "templates": {
           "title": "Utilisez des modèles",
-          "body": "Les modèles approuvés atteignent les clients en dehors de la fenêtre de 24 heures."
+          "body": "Les modèles approuvés atteignent les clients en dehors de la fenêtre de 24 heures.",
+          "cta": "Gérer les modèles →"
         },
         "flows": {
           "title": "Automatisez les réponses",
-          "body": "Un flux peut répondre à la même question à votre place à chaque fois."
+          "body": "Un flux peut répondre à la même question à votre place à chaque fois.",
+          "cta": "Ouvrir l'éditeur de flux →"
         },
         "palette": {
           "title": "Accédez à tout",
-          "body": "Appuyez sur Ctrl K pour rechercher dans toutes les pages."
+          "body": "Appuyez sur Ctrl K pour rechercher dans toutes les pages.",
+          "cta": "Essayer maintenant"
         },
         "scheduled": {
           "title": "Planifiez à l’avance",
-          "body": "Mettez un message en file d’attente maintenant et laissez-le partir au bon moment."
+          "body": "Mettez un message en file d’attente maintenant et laissez-le partir au bon moment.",
+          "cta": "Nouveau programmé →"
         },
         "wallet": {
           "title": "Surveillez votre solde",
-          "body": "Rechargez avant qu’il ne soit trop bas pour que les envois ne s’arrêtent jamais."
+          "body": "Rechargez avant qu’il ne soit trop bas pour que les envois ne s’arrêtent jamais.",
+          "cta": "Configurer la recharge automatique →"
         }
       },
       "shortcuts": {
@@ -681,6 +783,339 @@
             "subtitle": "Rédiger un modèle de message"
           }
         }
+      },
+      "cards": {
+        "meta-ads": {
+          "title": "Meta Ads",
+          "desc": "Créez et gérez des campagnes publicitaires Click-to-WhatsApp sur Facebook et Instagram : chaque clic ouvre une conversation sur votre numéro connecté.",
+          "foot": "clic-pour-discuter",
+          "open": "Ouvrir Meta Ads",
+          "badge": "PUB"
+        },
+        "instagram-posts": {
+          "title": "Publications Instagram",
+          "desc": "Rédigez et programmez des publications Instagram : images, reels, stories et carrousels. Publiez maintenant ou mettez-les en file d'attente pour un envoi automatique.",
+          "foot": "rédiger et programmer",
+          "open": "Ouvrir l'éditeur",
+          "badge": "IG"
+        },
+        "facebook-posts": {
+          "title": "Publications Facebook",
+          "desc": "Rédigez et programmez des publications Facebook : texte, liens et photos. Publiez maintenant ou mettez-les en file d'attente vers une Page connectée.",
+          "foot": "rédiger et programmer",
+          "open": "Ouvrir l'éditeur",
+          "badge": "FB"
+        },
+        "sms": {
+          "title": "SMS",
+          "desc": "Connectez un numéro SMS (Twilio / MSG91). Les messages arrivent dans la même boîte d'équipe que WhatsApp, et les campagnes disposent d'un expéditeur SMS.",
+          "foot": "connecter et gérer",
+          "open": "Ouvrir SMS",
+          "badge": "SMS"
+        },
+        "line": {
+          "title": "LINE",
+          "desc": "Connectez un compte officiel LINE (API de messagerie). Les messages entrants arrivent dans la même boîte d'équipe, avec diffusions, menus enrichis, flux et statistiques.",
+          "foot": "connecter et gérer",
+          "open": "Ouvrir LINE",
+          "badge": "LINE"
+        },
+        "wechat": {
+          "title": "WeChat",
+          "desc": "Connectez un compte officiel WeChat (compte de service). Les messages entrants arrivent dans la même boîte d'équipe, avec règles de mots-clés, réponses automatiques et flux.",
+          "foot": "connecter et gérer",
+          "open": "Ouvrir WeChat",
+          "badge": "WeChat"
+        },
+        "viber": {
+          "title": "Viber",
+          "desc": "Connectez un compte public Viber (bot). Les messages entrants arrivent dans la même boîte d'équipe, avec règles de mots-clés, réponses automatiques et flux.",
+          "foot": "connecter et gérer",
+          "open": "Ouvrir Viber",
+          "badge": "Viber"
+        },
+        "messenger-setup": {
+          "title": "Configuration Messenger",
+          "desc": "Configurez le profil Messenger : bouton Démarrer, menu persistant, questions d'accroche et message de bienvenue pour une Page connectée.",
+          "foot": "outils de croissance",
+          "open": "Ouvrir la configuration",
+          "badge": "FB"
+        },
+        "tiktok": {
+          "title": "TikTok",
+          "desc": "Connectez un compte TikTok, suivez les statistiques du profil et des vidéos, et envoyez des vidéos vers votre boîte TikTok. La boîte de messages privés est réservée aux partenaires et limitée par région.",
+          "foot": "connecter et publier",
+          "open": "Ouvrir TikTok",
+          "badge": "TT"
+        },
+        "tiktok-posts": {
+          "title": "Publications TikTok",
+          "desc": "Envoyez des vidéos vers votre boîte TikTok pour les finaliser et les publier depuis l'application, et suivez leur statut ici.",
+          "foot": "rédiger et envoyer",
+          "open": "Ouvrir les publications",
+          "badge": "TT"
+        },
+        "quick-send": {
+          "title": "Envoi rapide",
+          "desc": "Rédigez un message, choisissez un ou plusieurs destinataires et un expéditeur, puis envoyez-le maintenant ou programmez-le : une file d'envoi manuelle avec le statut de livraison de chaque message.",
+          "foot": "file d'envoi",
+          "open": "Ouvrir"
+        },
+        "account": {
+          "title": "Compte",
+          "desc": "Profil, photo, mot de passe, historique des commandes, portefeuille, affiliation et tickets de support, au même endroit.",
+          "foot": "{plan} · {balance}",
+          "open": "Ouvrir"
+        },
+        "pricing": {
+          "title": "Tarifs et forfaits",
+          "desc": "Comparez Starter, Growth, Pro et Enterprise. Changez à tout moment : facturation au prorata à la journée.",
+          "foot": "forfait {plan} · passez à un forfait supérieur pour débloquer",
+          "open": "Voir les forfaits"
+        },
+        "analytics": {
+          "title": "Analyses",
+          "desc": "Graphiques de livraison, de lecture et de conversion pour l'ensemble des campagnes et appareils.",
+          "foot": "{count} msgs · 7 derniers jours",
+          "open": "Ouvrir"
+        },
+        "attributes": {
+          "title": "Attributs",
+          "desc": "Variables pour les modèles WhatsApp. Attributs intégrés comme first_name, plus vos attributs personnalisés (order_id, etc.). Tapez / dans n'importe quel message pour insérer.",
+          "foot": "{count} enregistrés",
+          "open": "Ouvrir"
+        },
+        "contacts": {
+          "title": "Contacts",
+          "desc": "Tous vos contacts et groupes au même endroit. Importez depuis un CSV, étiquetez, segmentez et recherchez.",
+          "foot": "{people} personnes / {groups} groupes / {tags} étiquettes",
+          "open": "Ouvrir"
+        },
+        "broadcasts": {
+          "title": "Diffusions",
+          "desc": "Diffusions de modèles vers les contacts sélectionnés, avec suivi des envois, livraisons, lectures, échecs et files d'attente.",
+          "foot": "{queued} en file d'attente{pct, select, none {} other { / {pct} % livrés}}",
+          "open": "Ouvrir"
+        },
+        "auto-reply": {
+          "title": "Réponse automatique",
+          "desc": "Déclenchez des réponses sur mots-clés, pendant les heures d'ouverture ou lorsqu'un agent est absent.",
+          "foot": "{count} règles{pct, select, none {} other { / {pct} % correspondent}}",
+          "open": "Ouvrir"
+        },
+        "warmer": {
+          "title": "Préchauffage WhatsApp",
+          "desc": "Augmentez progressivement le volume d'envoi quotidien de chaque numéro, avec des pauses et des plages horaires naturelles pour réduire le risque de blocage.",
+          "foot": "API non officielle",
+          "open": "Ouvrir"
+        },
+        "scheduled": {
+          "title": "Messages programmés",
+          "desc": "Mettez les envois en file d'attente au bon moment : selon le fuseau horaire, le segment ou le déclencheur.",
+          "foot": "{queued} en file d'attente / prochain {next}",
+          "open": "Ouvrir"
+        },
+        "message-history": {
+          "title": "Historique des messages",
+          "desc": "Archive consultable de tous les messages entrants et sortants, exportable en CSV.",
+          "foot": "{count} enregistrements",
+          "open": "Ouvrir"
+        },
+        "notifications": {
+          "title": "Notifications",
+          "desc": "Routez les alertes vers l'e-mail, Slack ou l'application, et définissez des heures de silence par canal.",
+          "foot": "{count} non lues",
+          "open": "Ouvrir"
+        },
+        "integrations": {
+          "title": "Intégrations",
+          "desc": "Connectez Shopify, HubSpot, Zapier et d'autres : synchronisez contacts et commandes.",
+          "foot": "{connected} connectées / {available} disponibles",
+          "open": "Ouvrir"
+        },
+        "google-account": {
+          "title": "Compte Google",
+          "desc": "Connectez-le une fois : il alimente Agenda, les liens Meet dans les flux et le bouton « Envoyer un lien Meet » de la boîte de réception.",
+          "foot": "Agenda et Meet",
+          "open": "Ouvrir"
+        },
+        "appointments": {
+          "title": "Rendez-vous",
+          "desc": "Permettez aux clients de réserver vos services depuis le chat : choix du jour et de l'heure, questions, acomptes, rappels et synchronisation avec Google Agenda.",
+          "foot": "{count, plural, =0 {non configuré} one {# service} other {# services}}",
+          "open": "Gérer"
+        },
+        "ai-assistants": {
+          "title": "Assistant d'appels IA",
+          "desc": "IA vocale qui répond aux appels téléphoniques : cerveau Gemini, voix ElevenLabs, vos propres outils pendant l'appel.",
+          "foot": "{configured} configurés / {live} en ligne",
+          "open": "Ouvrir"
+        },
+        "call-logs": {
+          "title": "Journaux d'appels",
+          "desc": "Transcriptions, enregistrements et chronologies des appels d'outils pour chaque appel vocal traité par l'IA.",
+          "foot": "{calls} appels / {minutes} min · 24 h",
+          "open": "Ouvrir"
+        },
+        "forms": {
+          "title": "Formulaires",
+          "desc": "Formulaires interactifs WhatsApp natifs : collectez prospects, enquêtes et réservations directement dans le chat.",
+          "foot": "{drafted} brouillons / {live} en ligne",
+          "open": "Ouvrir"
+        },
+        "wa-links": {
+          "title": "Générateur de liens WhatsApp",
+          "desc": "Créez des liens wa.me courts et suivis, avec un slug personnalisé, un message prérédigé, un QR code et des statistiques de clics. Ajoutez-les à une bio, une page d'accueil ou une carte de visite.",
+          "foot": "{links} liens / {clicks} clics",
+          "open": "Ouvrir"
+        },
+        "chatbot-widgets": {
+          "title": "Widget chatbot",
+          "desc": "Intégrez une bulle de chat flottante sur votre site. L'IA répond dans le navigateur et transmet à la boîte de réception unifiée si nécessaire.",
+          "foot": "{built} créés / {live} actifs",
+          "open": "Ouvrir"
+        },
+        "ai-training": {
+          "title": "Entraînement IA",
+          "desc": "Entraînez les assistants de chat sur vos propres contenus : URL, extraits de texte, paires questions-réponses, fichiers texte brut.",
+          "foot": "{count} assistants",
+          "open": "Ouvrir"
+        },
+        "ai-usage": {
+          "title": "Utilisation de l'IA",
+          "desc": "Consultez la répartition de vos dépenses IA : jetons par modèle et fournisseur, clés du forfait ou vos propres clés, et plafond mensuel.",
+          "foot": "{tokens} jetons ce mois-ci",
+          "open": "Afficher"
+        },
+        "flow-analytics": {
+          "title": "Analyses des flux",
+          "desc": "Chaque exécution d'automatisation de bout en bout : historique, erreurs ayant interrompu une exécution et journaux de nouvelle tentative pour celles que vous avez relancées.",
+          "foot": "{count} exécutions en échec",
+          "open": "Ouvrir"
+        },
+        "lead-finder": {
+          "title": "Recherche de prospects",
+          "desc": "Trouvez des entreprises par catégorie et ville, récupérez leur WhatsApp et e-mail, et ajoutez-les aux contacts ou à une campagne.",
+          "foot": "prospection sur carte",
+          "open": "Ouvrir"
+        },
+        "webhooks": {
+          "title": "Webhooks",
+          "desc": "Envoyez en temps réel les événements de livraison, de lecture et de réponse vers n'importe quel point de terminaison HTTPS.",
+          "foot": "{count} points de terminaison",
+          "open": "Ouvrir"
+        },
+        "support": {
+          "title": "Support",
+          "desc": "Parlez à un conseiller, consultez les problèmes connus ou vérifiez l'état du service.",
+          "foot": "{total} tickets / {open} ouverts",
+          "open": "Ouvrir"
+        },
+        "activity-log": {
+          "title": "Journal d'activité",
+          "desc": "Chaque connexion, changement d'espace de travail, action de boîte de réception et modification d'administration, attribué à l'utilisateur, à l'adresse IP et à l'heure.",
+          "foot": "{count} événements · 24 h",
+          "open": "Ouvrir"
+        },
+        "channels": {
+          "title": "Canaux",
+          "desc": "Connectez WhatsApp, Instagram, Telegram et plus : une seule boîte de réception, suivi de l'état et rotation des expéditeurs.",
+          "foot": "{active} / {total} en ligne",
+          "open": "Ouvrir"
+        },
+        "team-members": {
+          "title": "Membres de l'équipe",
+          "desc": "Invitez des collègues, attribuez des rôles (propriétaire / administrateur / membre) et définissez les accès par espace de travail.",
+          "foot": "{count, plural, one {# siège actif} other {# sièges actifs}}",
+          "open": "Ouvrir"
+        }
+      },
+      "eyebrow": "espace de travail",
+      "sortedByUsage": "Trié par utilisation",
+      "developers": "Développeurs / API",
+      "movedOffHeader": "déplacé hors de l'en-tête",
+      "open": "Ouvrir",
+      "navDesc": {
+        "dashboard": "Accueil et vue d'ensemble",
+        "wa-campaigns": "Envois de campagnes en masse",
+        "flows": "Éditeur d'automatisations",
+        "templates": "Modèles de messages"
+      },
+      "strip": {
+        "label": "Espace de travail en un coup d'œil",
+        "rules": "Règles actives",
+        "thisWeek": "+{count} cette semaine",
+        "noNew": "aucune nouvelle",
+        "rulesCaption": "tous outils confondus",
+        "queued": "En file d'attente",
+        "noUpcoming": "aucune exécution à venir",
+        "queuedCaption": "envois programmés",
+        "connected": "Connecté",
+        "connectedCaption": "appareils en ligne",
+        "health": {
+          "healthy": "opérationnel",
+          "partial": "partiel",
+          "offline": "hors ligne",
+          "none": "aucun appareil"
+        },
+        "notifications": "Notifications",
+        "unread": "non lues",
+        "notificationsCaption": "en attente de traitement"
+      },
+      "activity": {
+        "title": "Activité récente",
+        "viewAll": "Tout afficher",
+        "empty": "Aucune activité trouvée. Les modifications de votre espace de travail apparaîtront ici."
+      },
+      "affiliate": {
+        "badge": "GAGNER",
+        "title": "Historique d'affiliation",
+        "body": "Suivez chaque inscription issue de votre code, les crédits gagnés et les performances de votre lien de partage.",
+        "referrals": "Parrainages",
+        "payouts": "Versements",
+        "payoutsNote": "voir votre compte",
+        "foot": "parrainages · crédits · versements"
+      },
+      "quick": {
+        "title": "Accès rapide",
+        "body": "Les outils moins utilisés sont ici pour que l'en-tête principal reste centré sur le travail quotidien.",
+        "openChat": "Ouvrir le chat",
+        "addRule": "Ajouter une règle"
+      },
+      "planCard": {
+        "title": "Forfait de l'espace de travail",
+        "seats": "{plan} / {count, plural, one {# siège} other {# sièges}}",
+        "messages": "Messages ce mois-ci",
+        "sent": "{count} envoyés",
+        "manage": "Gérer la facturation"
+      },
+      "whatsNew": {
+        "title": "Nouveautés",
+        "headline": "Boîte de réception unifiée + assistance IA",
+        "changelog": "Lire le journal des modifications",
+        "items": {
+          "inbox": "Boîte partagée avec attribution et notes",
+          "ai": "ChatGPT / Gemini / Claude dans les flux",
+          "forecast": "Prévisions de ventes dans le tableau de bord Shopify"
+        }
+      },
+      "smallTips": {
+        "warm": {
+          "title": "Faites chauffer les nouveaux numéros",
+          "body": "Commencez à 50 envois par jour et doublez chaque semaine. Les pics soudains sont signalés."
+        },
+        "tag": {
+          "title": "Étiquetez maintenant, segmentez plus tard",
+          "body": "Ajoutez une étiquette dès qu'un contact répond : les filtres de diffusion deviendront ensuite simples."
+        },
+        "templates": {
+          "title": "Les modèles valent mieux que le texte libre",
+          "body": "Les modèles pré-approuvés ouvrent la fenêtre de 24 h même lorsqu'un contact est resté silencieux."
+        },
+        "signing": {
+          "title": "Vérifiez le HMAC à chaque fois",
+          "body": "Vérifiez toujours l'en-tête de signature avant tout traitement : une seule ligne de code, beaucoup de sécurité."
+        }
       }
     },
     "inboxBell": {
@@ -704,6 +1139,19 @@
       "hintMove": "naviguer",
       "hintOpen": "ouvrir",
       "hintToggle": "basculer"
+    },
+    "flash": {
+      "dismiss": "Ignorer",
+      "roleDenied": "Votre rôle ({role}) n'a pas accès à cette page"
+    },
+    "hubSearch": {
+      "placeholder": "Rechercher dans les paramètres du projet...",
+      "empty": "Aucun paramètre ne correspond à votre recherche."
+    },
+    "bell": {
+      "eyebrow": "Boîte de réception",
+      "clearAll": "Tout effacer",
+      "viewAll": "Tout afficher →"
     }
   }
 }

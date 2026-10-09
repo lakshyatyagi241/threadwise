@@ -15,7 +15,11 @@
         "total": "Passerelles",
         "active": "Actif",
         "india": "Inde",
-        "crypto": "Crypto"
+        "crypto": "Crypto",
+        "totalHint": "pilotes disponibles",
+        "activeHint": "acceptant les paiements",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "règlement on-chain"
       },
       "tabsLabel": "Filtrer par région",
       "all": "Toutes",
@@ -32,7 +36,8 @@
         "africa": "Afrique",
         "latam": "Amérique latine",
         "crypto": "Crypto",
-        "offline": "Hors ligne"
+        "offline": "Hors ligne",
+        "other": "Autre"
       },
       "card": {
         "active": "Active",
@@ -57,11 +62,12 @@
         "webhookUrl": "URL du webhook",
         "webhookHint": "Collez ceci dans le tableau de bord du fournisseur afin qu’il puisse nous notifier des paiements.",
         "saving": "Enregistrement",
-        "save": "Enregistrer",
         "readOnly": "Seul un super administrateur peut modifier les passerelles.",
         "saved": "Paramètres de {name} enregistrés.",
         "activated": "{name} : activation effectuée.",
-        "deactivated": "{name} : désactivation effectuée."
+        "deactivated": "{name} : désactivation effectuée.",
+        "noCredentials": "Aucun identifiant requis : la passerelle utilise une confirmation manuelle ou hors bande.",
+        "save": "Enregistrer {name}"
       },
       "errors": {
         "conflict": "Quelqu’un d’autre a modifié cette passerelle. Elle a été rechargée ; vérifiez-la puis enregistrez à nouveau.",
@@ -69,7 +75,10 @@
         "noDriver": "Cette passerelle n’a pas encore de pilote dans cette version. Elle peut être configurée, mais pas activée.",
         "forbidden": "Seul un super administrateur peut modifier les passerelles.",
         "generic": "Une erreur s’est produite. Réessayez."
-      }
+      },
+      "eyebrow": "Admin · Facturation · Passerelles",
+      "titleFirst": "Paiement",
+      "titleSecond": "passerelles"
     },
     "checkout": {
       "title": "Finalisez votre commande",
@@ -132,7 +141,28 @@
       "autoRenew": "Renouvellement automatique à chaque période. Vous pouvez annuler à tout moment.",
       "addonRenews": "Ce module complémentaire se renouvelle automatiquement à chaque période. Vous pouvez l’annuler à tout moment et le conserver jusqu’à la fin de la période payée.",
       "cardTitle": "Payer par carte",
-      "payNow": "Payer maintenant"
+      "payNow": "Payer maintenant",
+      "titleFirst": "Finalisez votre",
+      "titleSecond": "commande",
+      "subtitleRefund": "Garantie de remboursement sous {days} jours. Annulation à tout moment. Cartes, UPI, banque en ligne et portefeuilles acceptés.",
+      "steps": {
+        "plan": "Choisir le forfait",
+        "checkout": "Paiement",
+        "confirmation": "Confirmation"
+      },
+      "step": "Étape {n}",
+      "taxIdPlaceholder": "GSTIN / TVA / EIN",
+      "addressPlaceholder": "Rue et numéro",
+      "cityPlaceholder": "Mumbai",
+      "currencyTitle": "Payer dans votre devise",
+      "currencyHint": "Les prix sont convertis instantanément. Seules les devises acceptées par vos moyens de paiement disponibles sont affichées.",
+      "couponPlaceholder": "Vous avez un code promo ?",
+      "live": "en ligne",
+      "tlsNote": "Les paiements sont traités via une connexion TLS 256 bits. Nous ne voyons jamais les données de votre carte.",
+      "change": "Modifier",
+      "terms": "En payant, vous acceptez nos <terms>Conditions</terms> et notre <privacy>Politique de confidentialité</privacy>.",
+      "refundNote": "Pas satisfait ? Écrivez-nous dans les {days} premiers jours et nous vous remboursons la totalité, sans question ni formulaire.",
+      "autoRenewTitle": "Renouveler automatiquement ce forfait"
     },
     "orders": {
       "title": "Historique des commandes",

@@ -15,7 +15,11 @@
         "total": "Betaalproviders",
         "active": "Actief",
         "india": "India",
-        "crypto": "Crypto"
+        "crypto": "Crypto",
+        "totalHint": "beschikbare drivers",
+        "activeHint": "accepteert betalingen",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "on-chain afwikkeling"
       },
       "tabsLabel": "Filteren op regio",
       "all": "Alle",
@@ -32,7 +36,8 @@
         "africa": "Afrika",
         "latam": "Latijns-Amerika",
         "crypto": "Crypto",
-        "offline": "Offline"
+        "offline": "Offline",
+        "other": "Overig"
       },
       "card": {
         "active": "Actief",
@@ -57,11 +62,12 @@
         "webhookUrl": "Webhook-URL",
         "webhookHint": "Plak dit in het dashboard van de provider zodat die ons over betalingen kan informeren.",
         "saving": "Opslaan",
-        "save": "Opslaan",
         "readOnly": "Alleen een superbeheerder kan betaalproviders wijzigen.",
         "saved": "Instellingen van {name} opgeslagen.",
         "activated": "{name} geactiveerd.",
-        "deactivated": "{name} gedeactiveerd."
+        "deactivated": "{name} gedeactiveerd.",
+        "noCredentials": "Geen inloggegevens nodig — de gateway gebruikt handmatige of out-of-band bevestiging.",
+        "save": "{name} opslaan"
       },
       "errors": {
         "conflict": "Iemand anders heeft deze betaalprovider gewijzigd. Hij is opnieuw geladen; controleer hem en sla opnieuw op.",
@@ -69,7 +75,10 @@
         "noDriver": "Deze betaalprovider heeft in deze release nog geen driver, dus hij kan wel worden ingesteld maar niet worden geactiveerd.",
         "forbidden": "Alleen een superbeheerder kan betaalproviders wijzigen.",
         "generic": "Er ging iets mis. Probeer het opnieuw."
-      }
+      },
+      "eyebrow": "Beheer · Facturatie · Gateways",
+      "titleFirst": "Betaling",
+      "titleSecond": "gateways"
     },
     "checkout": {
       "title": "Rond je bestelling af",
@@ -132,7 +141,28 @@
       "autoRenew": "Verleng automatisch per periode. Je kunt altijd annuleren.",
       "addonRenews": "Deze add-on wordt automatisch per periode verlengd. Je kunt hem altijd annuleren en behoud je hem tot het einde van de betaalde termijn.",
       "cardTitle": "Betalen met kaart",
-      "payNow": "Nu betalen"
+      "payNow": "Nu betalen",
+      "titleFirst": "Rond je",
+      "titleSecond": "bestelling af",
+      "subtitleRefund": "{days}-daagse geld-terug-garantie. Altijd opzegbaar. Creditcards, UPI, internetbankieren en wallets worden geaccepteerd.",
+      "steps": {
+        "plan": "Abonnement kiezen",
+        "checkout": "Afrekenen",
+        "confirmation": "Bevestiging"
+      },
+      "step": "Stap {n}",
+      "taxIdPlaceholder": "GSTIN / btw-nummer / EIN",
+      "addressPlaceholder": "Straat + huisnummer",
+      "cityPlaceholder": "Mumbai",
+      "currencyTitle": "Betaal in je valuta",
+      "currencyHint": "Prijzen worden direct omgerekend. Alleen valuta's die je beschikbare betaalmethoden accepteren, worden getoond.",
+      "couponPlaceholder": "Heb je een couponcode?",
+      "live": "live",
+      "tlsNote": "Betalingen worden verwerkt via een 256-bit TLS-verbinding. Wij zien je kaartgegevens nooit.",
+      "change": "Wijzigen",
+      "terms": "Door te betalen ga je akkoord met onze <terms>Voorwaarden</terms> en <privacy>Privacyverklaring</privacy>.",
+      "refundNote": "Niet tevreden? Mail ons binnen de eerste {days} dagen en we betalen het volledige bedrag terug — zonder vragen, zonder formulieren.",
+      "autoRenewTitle": "Dit abonnement automatisch verlengen"
     },
     "orders": {
       "title": "Bestelgeschiedenis",

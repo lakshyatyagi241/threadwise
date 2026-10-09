@@ -95,7 +95,9 @@
         "t3": "Como melhorar os resultados?",
         "b3": "Mantenha o público focado, escolha o modelo mais relevante e revise as contagens de falhas antes de enviar novamente."
       },
-      "unofficialDisabled": "Não oficial (desativado)"
+      "unofficialDisabled": "Não oficial (desativado)",
+      "noData": "Nenhum dado encontrado",
+      "railLabel": "Filtros de disparo"
     },
     "detail": {
       "back": "Voltar",
@@ -293,7 +295,8 @@
       "later": "Depois",
       "media": "Pré-visualização de {kind}",
       "contactsDenied": "Você não tem acesso à lista de contatos. Escolha contatos por meio de grupos ou tags.",
-      "unofficialDisabled": "O envio por números pessoais do WhatsApp (a API não oficial) não está ativado para o seu espaço de trabalho. Escolha um número oficial da API do WhatsApp Business."
+      "unofficialDisabled": "O envio por números pessoais do WhatsApp (a API não oficial) não está ativado para o seu espaço de trabalho. Escolha um número oficial da API do WhatsApp Business.",
+      "previewLabel": "Prévia do modelo"
     },
     "overrides": {
       "title": "Preencher este envio",

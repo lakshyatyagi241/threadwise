@@ -111,7 +111,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WABA-039 | backend-done |  | group messages are stored on a thread keyed g:<group id> with no contact, titled by the group subject, the participant in the message meta (WabaInboxSink.onGroupMessage); per-participant statuses fold into one bubble with delivered_to, billable and free counts and only move forward; waba-coexistence.e2e, waba-groups-handoff.spec. No hook fires for groups, so nothing auto-replies |
 | TW-WABA-040 | backend-done |  | the four Groups webhooks keep waba_groups in step: create, delete, participant count, join requests, settings by success flag, suspension; waba-groups-handoff.spec, waba-coexistence.e2e |
 | TW-WABA-041 | backend-done |  | template status, quality and category webhooks mirrored onto the template row scoped to the WABA; template-event-rules.spec |
-| TW-WABA-042 | backend-done |  | a catalog cart becomes one wa_orders row with lines (products by retailer id or SKU, unknown ids fall back to wsn-unknown-N, minor units, last-line currency), deduped by message id, and whatsapp.order.received goes through the outbox; the buyer acknowledgement, WhatsApp Pay charge and flow resume belong to CHK and FLR and listen to that event; waba-coexistence.e2e |
+| TW-WABA-042 | backend-done |  | a catalog cart becomes one wa_orders row with lines, deduped by message id; whatsapp.order.received goes through the outbox and is consumed twice: WabaOrderAckConsumer sends the buyer's order-received message through the catalog's CatalogOrderAckService, and the flow runtime's trigger consumer starts the order flow; waba-coexistence.e2e, waba-order-ack.consumer.spec, flow-runtime e2e |
 | TW-WABA-043 | backend-done |  | form submissions and payment statuses leave through the outbox (whatsapp.form.submitted, whatsapp.payment.updated) and never reach the inbox; calls reach the calling domain through WABA_CALLS_SINK; waba-coexistence.e2e |
 | TW-WABA-044 | backend-done |  | messages typed on the Business app (smb_message_echoes) become one outbound bubble with no unread, no routing, deduped by message id; a file or place is described, not copied (Reference downloaded echo media); e2e through the real webhook door |
 | TW-WABA-045 | backend-done |  | smb_app_state_sync adds the business app's contacts through ContactsService with quiet (no contact.created event, so no flow or notification), fills a blank name only, never applies remove; waba-coexistence.e2e |
@@ -132,7 +132,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-NODE-001 | blocked |  | no bridge process in this repo until decision E |
+| TW-NODE-001 | blocked |  | no bridge process in this repo: the bridge runs as an in-app worker (decision E, settled in practice by the build and recorded in the wiring map); waits only for the team's sign-off to close it as wontfix |
 | TW-NODE-002 | backend-done |  | NodeTokenGuard on the one bridge-facing route; the bridge's other routes became in-process commands (Redis), so no other route needs it |
 | TW-NODE-003 | wontfix |  | not needed: no browser client reaches the bridge; the API already has CORS and body limits (main.ts); inventory port note |
 | TW-NODE-004 | backend-done |  | worker heartbeat in Redis (one key per running worker, 90 s); the console health card's Node check reads it (workers and devices held), falling back to the saved-address probe when no worker reports; no HTTP surface on the worker by design |
@@ -155,7 +155,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-021 | backend-done |  | group commands (list, metadata, create, participants, subject, description, settings, leave, invite) and change snapshots delivered to consumers; the directory tables belong to WFL (not built) |
 | TW-NODE-022 | in-progress |  | text send and engine routing for Cloud API, Twilio and the unofficial engine; branding footer, buttons and carousel not built (the official library has no interactive buttons or carousel; they need the forked library or the template pipeline) |
 | TW-NODE-023 | backend-done |  | media on the unofficial engine, Twilio and the Cloud API (public https link, caption with footer, document file name, no caption on audio); inline attachment_base64 not ported: media comes from a URL or storage, never from a request body |
-| TW-NODE-024 | in-progress |  | location, contact card and group message with mentions done; product catalog sends blocked on the catalog domain (CAT) and the template pipeline |
+| TW-NODE-024 | backend-done |  | location, contact card and group message with mentions; product catalog sends go through NodeCatalogBridge (the catalog's CatalogSendService and order acknowledgement now send through the in-process unofficial engine): text, a picture with its caption, and a carousel as an intro text plus one picture per card because the official library cannot send a carousel (TW-NODE-022); catalog-bridge.spec |
 | TW-NODE-025 | backend-done |  | react, pin, star, edit, delete through the owning socket; pin keeps Reference's fixed 24 hours (its duration choice never had an effect) |
 | TW-NODE-026 | wontfix |  | intended: engine and credentials come from the device row, no settings hop or cache (inventory port note) |
 | TW-NODE-027 | backend-done |  | Cloud API text transport (shared Meta provider) and a Twilio transport (text, media with caption, location); templates by ContentSid belong to the template pipeline; Twilio status callback belongs to the WhatsApp provider domain |
@@ -178,7 +178,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-044 | in-progress |  | tag, assign, deal, AI, Meet and WhatsApp form are node executors (TW-FLR-030, 035 to 037, 043, 047); the MySQL node waits for a driver (TW-FLR-034); web search is not built |
 | TW-NODE-045 | backend-done |  | the ordering endpoints are TW-FLR-042 (parse, shipping, confirm, cancel, reply under /public/v1/flows/ordering); vishal/FLR |
 | TW-NODE-046 | in-progress |  | Google Sheets, Docs, Form and Meet nodes are built against GoogleWorkspacePort (TW-FLR-044 to 047); no Google account store exists yet, so they report no account |
-| TW-NODE-047 | in-progress |  | the Commerce shop node is built over FlowShopPort (TW-FLR-041); the store domains bind stock, native list and checkout link |
+| TW-NODE-047 | in-progress |  | the Commerce shop node's WhatsApp Shop stock and native list are served by the catalog (CatalogShopAdapter, TW-FLR-041); the checkout link for WooCommerce and Shopify waits for the store domains |
 | TW-NODE-048 | backend-done |  | booking for flows is the Book appointment node over the appointments domain (TW-FLR-040); vishal/FLR |
 | TW-NODE-049 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
 | TW-NODE-050 | backend-done |  | one flow engine serves every channel through channel profiles (TW-FLR-060 to 068): the per-channel Node engines and Laravel callbacks are not needed; vishal/FLR |
@@ -471,7 +471,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-SCHED-025 | backend-done |  | covered by TW-NODE-030: nothing to restore, state is in the database |
 | TW-SCHED-026 | backend-done |  | covered by TW-NODE-036: durable retry of failed one-offs |
 | TW-SCHED-027 | backend-done |  | covered: the broadcast retry policy is shared |
-| TW-SCHED-028 | blocked |  | needs the customer API domain; public-api here is a lead-intake skeleton; ScheduleCreateService is the use case to call |
+| TW-SCHED-028 | backend-done |  | built on main by the customer-API work: POST, GET and DELETE /v1/scheduled over ScheduleCreateService, ScheduleReadService and ScheduleActionsService (V1ScheduledAdapter), behind the public_api plan feature; the schedule keeps the staff form's gates (plan limit, 2-minute lead, halt, content, wallet, warmer budget) |
 | TW-SCHED-029 | blocked |  | needs the mobile domain |
 | TW-SCHED-030 | backend-done |  | ScheduleProducerService: ordinary schedules with source and external_key; a key replaces its old schedule; cancel by key; e2e |
 
@@ -621,11 +621,11 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-003 | backend-done |  | same inbound hook for every channel; consumed handshake returned to the pipeline; the auto reply and AI agent that must read it do not exist yet |
 | TW-FLR-004 | backend-done |  | no shadow keyword rows: keyword flows queried directly, catch-all spellings last; Auto reply can call matchKeywordFlow |
 | TW-FLR-005 | backend-done |  | tag, group, created, opt-in through outbox events; imports never fire contact_created; no producer yet for a contact re-subscribing |
-| TW-FLR-006 | backend-done |  | order placed (once per order) and deal stage changed (once per deal and stage); no producer yet for order.placed |
+| TW-FLR-006 | backend-done |  | order placed (once per order) and deal stage changed (once per deal and stage); the order trigger now hears the storefront checkout (store.order_placed) and a WhatsApp catalog cart (whatsapp.order.received) as well as order.placed; flow-runtime e2e |
 | TW-FLR-007 | backend-done |  | away and out of hours from the workspace settings; overnight ranges; re-arms after 12 h; unit-tested hours |
 | TW-FLR-008 | frontend-done |  | enroll API plus the Enroll panel on the subscribers page, runs, run detail and analytics screens; not opened in a browser; no Playwright parity run yet |
 | TW-FLR-009 | backend-done |  | GET/POST /public/v1/flows under the API-key guard; counts over every subscriber; not exercised with a real signed key in e2e |
-| TW-FLR-010 | backend-done |  | campaign (CAMPAIGN_FLOW_STARTER bound) and inbox start built; routing trigger_flow, lead webhook and hand-off call FlowLaunchService.start when their domains exist |
+| TW-FLR-010 | backend-done |  | campaign (CAMPAIGN_FLOW_STARTER bound) and inbox start built; routing trigger_flow, lead webhook and hand-off call FlowLaunchService.start when their domains exist; the Instagram and Messenger hand-off to WhatsApp is built too: deep link sends a wa.me link, direct mode makes the contact for the captured number and starts the chosen flow with source handoff (SocialHandoffNode, SocialHandoffConsumer; flow-runtime e2e) |
 | TW-FLR-011 | backend-done |  | FlowLaunchService: one door, run row on every path, failed launch marks the subscriber with the reason; queue instead of HTTP; retry via flow_retry_logs |
 | TW-FLR-012 | backend-done |  | intended: appointment_booked and comment_to_dm are not accepted; forced flowId path dropped |
 | TW-FLR-013 | backend-done |  | compileGraph (pure, unit-tested ports and handles); the editor must save flowNodes and flowEdges; runs keep a graph snapshot |
@@ -649,15 +649,15 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-031 | in-progress |  | Sub-flow built (same workspace, published flows only, depth cap 10); the Chatbot hand-off to an AI agent waits for the AI agents domain: the executor and port are built and the port answers unavailable |
 | TW-FLR-032 | backend-done |  | Webhook node through the guarded fetch (no private hosts, no redirects, 5 MB cap), JSON-escaped variables, saved response; integrations-nodes e2e |
 | TW-FLR-033 | backend-done |  | Code node in a worker-thread vm with a memory cap and a 2 s limit; the ceiling (vm is not a hard security boundary) is written in the file header; integrations-nodes spec |
-| TW-FLR-034 | blocked |  | MySQL node: the executor, the read-only guard and the 100-row cap are built against a port; there is no mysql2 driver in the repo, so the default adapter says so |
+| TW-FLR-034 | blocked |  | MySQL node: the executor, the read-only guard and the 100-row cap are built against a port; the driver is not installed: `pnpm add mysql2` was tried and makes pnpm resolve a second copy of drizzle-orm (mysql2 is its optional peer), which breaks the API typecheck, so it needs a decision (an isolated package for the driver, or a pinned peer setting) before it goes in |
 | TW-FLR-035 | backend-done |  | Tag node on the run's contact (add or remove, by id or name); actions-nodes e2e. Does not fire tag_added flows, as Reference |
 | TW-FLR-036 | backend-done |  | Assign agent node through AssignmentService with the flow actor; actions-nodes e2e |
 | TW-FLR-037 | backend-done |  | Deal node creates or moves the contact's open deal through the stage engine; actions-nodes e2e |
 | TW-FLR-038 | backend-done |  | Copy-to-number node through the run's channel, nothing recorded on the customer thread; actions-nodes e2e |
 | TW-FLR-039 | backend-done |  | WhatsApp-to-Instagram link node; actions-nodes e2e |
 | TW-FLR-040 | backend-done |  | Book appointment node through the appointments domain; commerce-book e2e |
-| TW-FLR-041 | backend-done |  | Commerce shop node over a store port (stock check, native product list, checkout link); the port says cannot until the store domains bind an adapter, which is Reference's own failure path; commerce-shop-form spec |
-| TW-FLR-042 | backend-done |  | Natural-language ordering endpoints (parse, shipping, confirm, cancel, reply) for text orders; voice, photo and group notification sit behind ports; ai-nodes e2e |
+| TW-FLR-041 | backend-done |  | Commerce shop node over FlowShopPort; CatalogShopAdapter binds the catalog behind it: WhatsApp Shop stock by retailer id and the native product list through CatalogSendService (card for one product, multi-product list for more); the single-use checkout link and WooCommerce and Shopify stock still answer cannot, because the store domains expose neither; commerce-shop-form spec, catalog-shop-adapter spec |
+| TW-FLR-042 | backend-done |  | Natural-language ordering endpoints (parse, shipping, confirm, cancel, reply) for text orders; voice, photo and group notification sit behind ports; ai-nodes e2e; a saved customer profile (written by the store at checkout, no company) no longer hides the company the flow's last order kept |
 | TW-FLR-043 | backend-done |  | WhatsApp Form node and the form-submission resume; commerce-shop-form spec |
 | TW-FLR-044 | backend-done |  | Google Sheets node against a workspace port; no Google account store exists yet, so the nodes report no account and move on; integrations-nodes e2e |
 | TW-FLR-045 | backend-done |  | Google Docs node against the same port; integrations-nodes spec |
@@ -676,8 +676,8 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-058 | frontend-done |  | Bulk retry of up to 50 named runs with a count per outcome; flow-runtime-read e2e |
 | TW-FLR-059 | backend-done |  | Compare-and-set on step_seq, one job id per step, sweeper for lost jobs; flow-runtime e2e |
 | TW-FLR-060 | backend-done |  | One engine for every channel: a channel profile (buttons, list, link, location, templates, pace) says what a kind can show, the rest degrades to numbered text; channel-render.spec |
-| TW-FLR-061 | backend-done |  | Facebook Messenger: profile with reply buttons and a link button, no list or location; the channel adapter joins by registering for the kind (branch punya/punyafix, PR 34) |
-| TW-FLR-062 | backend-done |  | Instagram: the same profile as Messenger; the channel adapter joins by registering for the kind (PR 34) |
+| TW-FLR-061 | backend-done |  | Facebook Messenger: profile with reply buttons and a link button, no list or location; the channel adapter joins by registering for the kind (branch punya/punyafix, PR 34); the Messenger editor nodes: the WhatsApp hand-off runs; card gallery, products, lead capture and public comment reply have no executor (they need the channel's carousel, comment and lead features) |
+| TW-FLR-062 | backend-done |  | Instagram: the same profile as Messenger; the channel adapter joins by registering for the kind (PR 34); Instagram editor nodes: send, ask, quick replies, link buttons and AI reply run on the shared executors (postback buttons are not kept in a single-exit node), the WhatsApp hand-off runs; products carousel, lead capture and comment reply have no executor |
 | TW-FLR-063 | backend-done |  | TikTok: text with numbered options through the default profile |
 | TW-FLR-064 | backend-done |  | Telegram: text with numbered options; the payment node is not built (needs the Telegram payment provider) |
 | TW-FLR-065 | backend-done |  | LINE: text with numbered options through the default profile |
@@ -687,6 +687,17 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-069 | blocked |  | Call-flow (voice IVR) is the calling domain's: vishal/CALL, PR 35, and its AI assistant rows |
 | TW-FLR-070 | wontfix |  | dead code in Reference: the per-channel session tables are replaced by flow_runs |
 | TW-FLR-071 | backend-done |  | the runtime regression suite is the unit and e2e specs of this domain (218 unit, 80 e2e) |
+| TW-FLR-072 | backend-done |  | Update contact field node (update_contact): a contact column or custom property by key; the value also goes into the run variables; emits contact.updated with via flow (webhooks hear it, flow triggers skip it). Beyond Reference (the team's workflow gap list); crm-nodes unit spec and flow-workflow-gaps e2e. Web form built; no Playwright run |
+| TW-FLR-073 | backend-done |  | Add / remove list node (list_member) over contact groups; the list change is announced with via flow so a flow cannot start itself through a list. Beyond Reference; unit spec and e2e. Web form built |
+| TW-FLR-074 | backend-done |  | Is in list condition (in_list), yes port 1, no port 2; a list that is gone answers no. Beyond Reference; unit and e2e. Web form built |
+| TW-FLR-075 | backend-done |  | Is in segment condition (in_segment) evaluated live by the segment's own rules (SegmentsService.containsContactFromFlow); a gone segment answers no. Beyond Reference; unit and e2e. Web form built |
+| TW-FLR-076 | backend-done |  | WhatsApp active session condition (wa_session): the customer's last message on the thread is inside the window (default 24 hours, set on the node). Beyond Reference; unit and e2e. Web form built |
+| TW-FLR-077 | backend-done |  | Contact-change triggers: group_leave (contact.group_removed), segment_join, contact_updated, field_match (each value once per contact). A list or field change made by a flow does not start list or update flows (loop guard). Needs migration 20261111100000 (trigger_config, the new kinds). Beyond Reference; flow-workflow-gaps e2e. Trigger form built |
+| TW-FLR-078 | backend-done |  | Clock triggers: schedule (once, daily, weekly, monthly, for everyone, a list or a segment, at most 5,000 people per run) and date_field_match (days before, on or after a date field, yearly or full date), swept each minute with a compare-and-set on flows.trigger_last_occurrence so two workers fire once. Date fields are custom contact fields only. Beyond Reference; schedule-rules unit spec and e2e. Trigger form built |
+| TW-FLR-079 | backend-done |  | Store event triggers shopify_event and woocommerce_event: checkout started, ordered product, fulfilled, cancelled, refunded (from the webhook pipeline, store.flow_event through the outbox) and abandoned cart (announced when a recovery's first follow-up comes due, so a store with no cart follow-ups configured never reports abandonment). Added to cart and product viewed are not offered: the stores send no such events. Beyond Reference; unit and e2e. Trigger form built |
+| TW-FLR-080 | backend-done |  | Check Google Sheet cell condition (sheet_check) and Save contact from Sheet (sheet_contact: copies the matching row's cells into the run's contact), over GoogleWorkspacePort. No Google account store exists, so both report no account until one is bound (the check answers no). Beyond Reference; unit spec. Web forms built |
+| TW-FLR-081 | blocked |  | Google Sheet events trigger (a row added or changed): needs a Google account store and a polling or push feed; not built |
+| TW-FLR-082 | done |  | Inbound webhook as a trigger, verified: an external system starts a flow with POST /public/v1/flows/:id/enroll (contact by id or phone), and a lead webhook that creates or updates a contact emits contact.created or contact.updated, which start contact_created and contact_updated flows. A webhook that creates the contact AND picks a flow in one call is not built (Reference's lead_config.flow_id) |
 
 ## chatbot-widget (wgt)
 
@@ -772,10 +783,10 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-CALL-006 | backend-done |  | ledger from permission_update, eligibility from the conversation's own number, lapsed grant reads expired |
 | TW-CALL-007 | frontend-done |  | CallButton with the modal flow, mounted in the inbox thread header (InboxProviders and thread-pane); component tests pass; not tried with a real number |
 | TW-CALL-008 | backend-done |  | permission first, calling must be on, refused dial is failed not ringing; e2e |
-| TW-CALL-009 | frontend-done |  | CallPeer with SDP rules and recording, 36 unit tests on fakes; no real microphone or Meta test |
+| TW-CALL-009 | frontend-done |  | CallPeer with SDP rules and recording, 36 unit tests on fakes; the provider asks the server for the operator's ICE list (CALLING_ICE_SERVERS, TURN included; calling.e2e) and falls back to public STUN; no real microphone or Meta test |
 | TW-CALL-010 | backend-done |  | progress poll returns the SDP answer only for an active call; e2e |
 | TW-CALL-011 | backend-done |  | connect: inbound ringing row matched to contact and thread, outbound answered; idempotent; AI answer and voicemail timer not built |
-| TW-CALL-012 | frontend-done |  | pending endpoint and IncomingCallToast, mounted by InboxProviders; poll only, no push |
+| TW-CALL-012 | frontend-done |  | pending endpoint and IncomingCallToast, mounted by InboxProviders; a call.changed push (outbox event, worker, workspace room) with the poll as fallback; calling.e2e covers the event and its push |
 | TW-CALL-013 | backend-done |  | atomic claim, pre_accept, 900 ms, accept, rollback to ringing on refusal; two simultaneous accepts e2e |
 | TW-CALL-014 | wontfix |  | dead code in Reference; pre_accept is a step of accept (inventory port note) |
 | TW-CALL-015 | backend-done |  | decline only a ringing call |

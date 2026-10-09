@@ -68,7 +68,11 @@
           "autoAttachCurrency": "Meta accepteert deze valuta niet.",
           "baseCurrency": "Gebruik een valutacode van drie letters.",
           "businessId": "Voer maximaal 64 tekens in."
-        }
+        },
+        "kicker": "meta-koppeling",
+        "businessIdHint": "Bedrijfsinstellingen → Bedrijfsinformatie → „Business portfolio-ID”. Een lang getal.",
+        "creditLinePlaceholder": "automatisch gedetecteerd op basis van je bedrijf",
+        "tokenNote": "Het token wordt versleuteld opgeslagen en nooit opnieuw getoond."
       },
       "step2": {
         "title": "2. Eén klant handmatig koppelen",
@@ -90,7 +94,10 @@
         "failed": "Koppelen mislukt: {error}",
         "finishStep1": "Rond eerst stap 1 af.",
         "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
-        "noPhone": "geen nummer"
+        "noPhone": "geen nummer",
+        "kicker": "handmatig koppelen, optioneel",
+        "numberHint": "Kies de klant op naam: we regelen de account-ID's op de achtergrond.",
+        "currencyHint": "De valuta waarin Meta je voor dit nummer factureert."
       },
       "register": {
         "title": "Kredietlijnen in gebruik",
@@ -119,7 +126,8 @@
         "revokeFailed": "Intrekken mislukt: {error}",
         "loadMore": "Meer laden",
         "loadingMore": "Laden",
-        "label": "Krediettoewijzingen"
+        "label": "Krediettoewijzingen",
+        "kicker": "gekoppelde accounts"
       },
       "guide": {
         "title": "Installatiegids",
@@ -133,13 +141,19 @@
         "good1": "De valuta van een kredietlijn wordt vergrendeld zodra deze is gekoppeld.",
         "good2": "Koppelen betekent dat Meta jou factureert, maar je stelt nog steeds zelf de prijzen voor je klanten in.",
         "good3": "Je kunt op elk moment intrekken en de klant betaalt Meta weer rechtstreeks.",
-        "link": "Overzicht Meta Solution Partner"
-      }
+        "link": "Overzicht Meta Solution Partner",
+        "kicker": "Installatiehandleiding",
+        "step2Note": "Het token wordt één keer getoond, dus kopieer het meteen.",
+        "step3Apply": "Vraag een kredietlimiet aan",
+        "step3Note": "Na goedkeuring leest het platform het ID automatisch uit en deelt stap 2 het met de WABA van elke klant.",
+        "metaDocs": "Meta-documentatie",
+        "reference": "referentie"
+      },
+      "eyebrow": "Wederverkoperfacturatie · Meta-kredietlimiet"
     },
     "dashboard": {
       "title": "Reseller-winst en -verlies",
       "eyebrow": "Deze maand",
-      "intro": "Omzet is wat klanten is gerekend voor afgeleverde berichten, Meta-kosten zijn wat dezelfde berichten jou kosten, marge is het verschil. Terugbetaalde en gratis berichten tellen niet mee.",
       "linkRates": "Tarieven en marge",
       "linkConnect": "Meta verbinden",
       "revenue": "Omzet (gefactureerd)",
@@ -150,7 +164,6 @@
       "billed": "Gefactureerde berichten",
       "free": "Gratis berichten",
       "unpriced": "Geen Meta-kosten ingesteld",
-      "unpricedBanner": "{count, plural, one {# gefactureerd bericht heeft} other {# gefactureerde berichten hebben}} geen Meta-kosten voor hun land en categorie, dus de marge telt ze als pure omzet.",
       "perWorkspace": "Per workspace (deze maand)",
       "columns": {
         "workspace": "Workspace",
@@ -163,7 +176,10 @@
       "empty": "Deze maand nog geen gefactureerde berichten.",
       "more": "Alleen de workspaces met de hoogste omzet worden getoond.",
       "loadFailed": "De winst-en-verliesrekening kon niet worden geladen.",
-      "currency": "Rapportvaluta"
+      "currency": "Rapportvaluta",
+      "intro": "Elk gefactureerd bericht is een afschrijving van de wallet. Omzet is wat je klanten betaalden; Meta-kosten zijn wat Meta je factureert; het verschil is je marge. Prijzen en kosten stel je in bij <link>Walletregels</link>.",
+      "linkPnl": "W&V",
+      "unpricedBanner": "{count, plural, one {# gefactureerd bericht heeft} other {# gefactureerde berichten hebben}} geen Meta-kosten ingesteld voor hun land of categorie, dus hun marge telt als pure omzet. Voeg die rijen toe bij <link>Walletregels → Meta-kosten synchroniseren</link>."
     }
   }
 }

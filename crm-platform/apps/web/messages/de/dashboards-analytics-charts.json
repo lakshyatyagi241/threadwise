@@ -183,7 +183,9 @@
         "unzoned": "ohne Zone",
         "per24h": "{n}/24 Std.",
         "deliv": "zugest.",
-        "free": "{n, plural, one {# Geräteplatz verfügbar} other {# Geräteplätze verfügbar}}"
+        "free": "{n, plural, one {# Geräteplatz verfügbar} other {# Geräteplätze verfügbar}}",
+        "freeHint": "WABA hinzufügen",
+        "connectDeviceShort": "Gerät verbinden"
       },
       "templates": {
         "title": "Leistungsstärkste Vorlagen",
@@ -297,7 +299,8 @@
         "connect": "Verbinden",
         "connectedLabel": "Verbunden"
       },
-      "sublineOfficial": "{date} - {range}: {sent} ausgehend, {rate} % Zustellbarkeit."
+      "sublineOfficial": "{date} - {range}: {sent} ausgehend, {rate} % Zustellbarkeit.",
+      "synced": "Live · synchronisiert vor {s} s"
     },
     "analytics": {
       "title": "Analysen",

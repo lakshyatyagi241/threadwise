@@ -68,7 +68,11 @@
           "autoAttachCurrency": "A Meta não aceita esta moeda.",
           "baseCurrency": "Use um código de moeda de três letras.",
           "businessId": "Informe no máximo 64 caracteres."
-        }
+        },
+        "kicker": "conexão Meta",
+        "businessIdHint": "Configurações da empresa → Informações da empresa → \"ID do portfólio empresarial\". Um número longo.",
+        "creditLinePlaceholder": "detectado automaticamente a partir da sua empresa",
+        "tokenNote": "O token é armazenado criptografado e nunca é exibido novamente."
       },
       "step2": {
         "title": "2. Anexar um cliente manualmente",
@@ -90,7 +94,10 @@
         "failed": "Falha ao anexar: {error}",
         "finishStep1": "Conclua primeiro a etapa 1.",
         "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
-        "noPhone": "sem número"
+        "noPhone": "sem número",
+        "kicker": "anexar manualmente, opcional",
+        "numberHint": "Escolha o cliente pelo nome: cuidamos dos IDs de conta nos bastidores.",
+        "currencyHint": "A moeda em que a Meta fatura este número."
       },
       "register": {
         "title": "Linhas de crédito em uso",
@@ -119,7 +126,8 @@
         "revokeFailed": "Falha ao revogar: {error}",
         "loadMore": "Carregar mais",
         "loadingMore": "Carregando",
-        "label": "Alocações de crédito"
+        "label": "Alocações de crédito",
+        "kicker": "contas anexadas"
       },
       "guide": {
         "title": "Guia de configuração",
@@ -133,13 +141,19 @@
         "good1": "A moeda de uma linha de crédito é bloqueada após a anexação.",
         "good2": "Anexar significa que a Meta cobra de você, mas você ainda define os preços dos seus clientes.",
         "good3": "Você pode revogar a qualquer momento e o cliente volta a pagar diretamente à Meta.",
-        "link": "Visão geral do Meta Solution Partner"
-      }
+        "link": "Visão geral do Meta Solution Partner",
+        "kicker": "Guia de configuração",
+        "step2Note": "O token aparece uma única vez, então copie-o imediatamente.",
+        "step3Apply": "Solicitar uma linha de crédito",
+        "step3Note": "Após a aprovação, a plataforma lê o ID automaticamente e o passo 2 o compartilha com a WABA de cada cliente.",
+        "metaDocs": "Documentação da Meta",
+        "reference": "referência"
+      },
+      "eyebrow": "Faturamento de revendedor · linha de crédito Meta"
     },
     "dashboard": {
       "title": "DRE do revendedor",
       "eyebrow": "Este mês",
-      "intro": "A receita é o que os clientes pagaram pelas mensagens entregues, o custo da Meta é o que as mesmas mensagens custaram a você e a margem é a diferença. Mensagens reembolsadas e gratuitas não são contadas.",
       "linkRates": "Tarifas e margem",
       "linkConnect": "Conectar Meta",
       "revenue": "Receita (cobrada)",
@@ -150,7 +164,6 @@
       "billed": "Mensagens cobradas",
       "free": "Mensagens gratuitas",
       "unpriced": "Sem custo da Meta definido",
-      "unpricedBanner": "{count, plural, one {# mensagem cobrada não tem} other {# mensagens cobradas não têm}} custo da Meta para o país e a categoria, então a margem as conta como receita pura.",
       "perWorkspace": "Por espaço de trabalho (este mês)",
       "columns": {
         "workspace": "Espaço de trabalho",
@@ -163,7 +176,10 @@
       "empty": "Nenhuma mensagem cobrada neste mês ainda.",
       "more": "Somente os principais espaços de trabalho por receita são listados.",
       "loadFailed": "Não foi possível carregar a DRE.",
-      "currency": "Moeda do relatório"
+      "currency": "Moeda do relatório",
+      "intro": "Cada mensagem faturada é uma cobrança na carteira. A receita é o que seus clientes pagaram; o custo Meta é o que a Meta cobra de você; a diferença é sua margem. Preços e custos são definidos em <link>Regras da carteira</link>.",
+      "linkPnl": "P&L",
+      "unpricedBanner": "{count, plural, one {# mensagem faturada não tinha} other {# mensagens faturadas não tinham}} custo Meta definido para o país/categoria, então a margem delas é contada como receita pura. Adicione essas linhas em <link>Regras da carteira → Sincronizar custos Meta</link>."
     }
   }
 }

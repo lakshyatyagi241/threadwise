@@ -68,7 +68,6 @@
         "keySavedLast4": "Chiave salvata, termina con {last4}",
         "noKey": "Nessuna chiave",
         "unreadable": "Impossibile leggere la chiave salvata, incollala di nuovo",
-        "slug": "ID provider",
         "apiKey": "Chiave API",
         "apiKeyHint": "Lascia vuoto per mantenere la chiave salvata.",
         "apiKeyPlaceholder": "Incolla qui la chiave",
@@ -89,7 +88,9 @@
         "removeTitle": "Rimuovere la chiave {name}?",
         "removeBody": "I workspace smetteranno di usare {name} finché non aggiungerai di nuovo una chiave. Il provider viene disattivato.",
         "removeConfirm": "Rimuovi chiave",
-        "cancel": "Annulla"
+        "cancel": "Annulla",
+        "slug": "provider: {provider} · modello predefinito: {model}",
+        "maxTokensPlaceholder": "es. 4096"
       },
       "toasts": {
         "saved": "{name} salvato.",
@@ -100,7 +101,8 @@
       },
       "help": {
         "title": "Come vengono usate queste chiavi",
-        "body": "La chiave propria di un workspace ha la precedenza solo se il suo piano lo consente. Altrimenti viene usato il provider attivo corrispondente qui. Disattivare un provider significa che i workspace senza una chiave propria non possono usarlo."
+        "body": "La chiave propria di un workspace ha la precedenza solo se il suo piano lo consente. Altrimenti viene usato il provider attivo corrispondente qui. Disattivare un provider significa che i workspace senza una chiave propria non possono usarlo.",
+        "eyebrow": "Come vengono usate queste chiavi"
       }
     },
     "dashboard": {

@@ -95,7 +95,9 @@
         "t3": "Wie verbessere ich die Ergebnisse?",
         "b3": "Halten Sie die Zielgruppe fokussiert, wählen Sie die passendste Vorlage und prüfen Sie die Zahl der Fehlschläge, bevor Sie erneut senden."
       },
-      "unofficialDisabled": "Inoffiziell (deaktiviert)"
+      "unofficialDisabled": "Inoffiziell (deaktiviert)",
+      "noData": "Keine Daten gefunden",
+      "railLabel": "Broadcast-Filter"
     },
     "detail": {
       "back": "Zurück",
@@ -293,7 +295,8 @@
       "later": "Später",
       "media": "Vorschau: {kind}",
       "contactsDenied": "Sie haben keinen Zugriff auf die Kontaktliste. Wählen Sie Kontakte über Gruppen oder Tags aus.",
-      "unofficialDisabled": "Der Versand über persönliche WhatsApp-Nummern (die inoffizielle API) ist für Ihren Workspace nicht aktiviert. Wählen Sie eine offizielle WhatsApp-Business-API-Nummer."
+      "unofficialDisabled": "Der Versand über persönliche WhatsApp-Nummern (die inoffizielle API) ist für Ihren Workspace nicht aktiviert. Wählen Sie eine offizielle WhatsApp-Business-API-Nummer.",
+      "previewLabel": "Vorlagenvorschau"
     },
     "overrides": {
       "title": "Diesen Versand ausfüllen",

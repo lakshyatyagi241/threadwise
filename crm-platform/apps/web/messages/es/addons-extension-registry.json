@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "No se pudieron cargar los complementos."
+    },
+    "planFields": {
+      "fromModule": "desde un módulo instalado",
+      "unlimited": "Ilimitado"
     }
   }
 }

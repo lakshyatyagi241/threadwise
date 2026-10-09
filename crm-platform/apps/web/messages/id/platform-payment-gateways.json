@@ -15,7 +15,11 @@
         "total": "Gateway",
         "active": "Aktif",
         "india": "India",
-        "crypto": "Kripto"
+        "crypto": "Kripto",
+        "totalHint": "driver tersedia",
+        "activeHint": "menerima pembayaran",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "penyelesaian on-chain"
       },
       "tabsLabel": "Filter berdasarkan wilayah",
       "all": "Semua",
@@ -32,7 +36,8 @@
         "africa": "Afrika",
         "latam": "Amerika Latin",
         "crypto": "Kripto",
-        "offline": "Offline"
+        "offline": "Offline",
+        "other": "Lainnya"
       },
       "card": {
         "active": "Aktif",
@@ -57,11 +62,12 @@
         "webhookUrl": "URL webhook",
         "webhookHint": "Tempelkan ini di dasbor penyedia agar mereka dapat memberi tahu kami tentang pembayaran.",
         "saving": "Menyimpan",
-        "save": "Simpan",
         "readOnly": "Hanya super admin yang dapat mengubah gateway.",
         "saved": "Pengaturan {name} disimpan.",
         "activated": "{name} diaktifkan.",
-        "deactivated": "{name} dinonaktifkan."
+        "deactivated": "{name} dinonaktifkan.",
+        "noCredentials": "Tidak perlu kredensial — gateway menggunakan konfirmasi manual / di luar sistem.",
+        "save": "Simpan {name}"
       },
       "errors": {
         "conflict": "Seseorang lain telah mengubah gateway ini. Gateway dimuat ulang; tinjau lalu simpan lagi.",
@@ -69,7 +75,10 @@
         "noDriver": "Gateway ini belum memiliki driver di rilis ini, sehingga hanya bisa dikonfigurasi, belum bisa diaktifkan.",
         "forbidden": "Hanya super admin yang dapat mengubah gateway.",
         "generic": "Terjadi kesalahan. Coba lagi."
-      }
+      },
+      "eyebrow": "Admin · Penagihan · Gateway",
+      "titleFirst": "Pembayaran",
+      "titleSecond": "gateway"
     },
     "checkout": {
       "title": "Selesaikan pesanan Anda",
@@ -132,7 +141,28 @@
       "autoRenew": "Diperpanjang otomatis setiap periode. Anda dapat membatalkan kapan saja.",
       "addonRenews": "Add-on ini diperpanjang otomatis setiap periode. Anda dapat membatalkannya kapan saja dan tetap memakainya sampai akhir masa berbayar.",
       "cardTitle": "Bayar dengan kartu",
-      "payNow": "Bayar sekarang"
+      "payNow": "Bayar sekarang",
+      "titleFirst": "Selesaikan",
+      "titleSecond": "pesanan Anda",
+      "subtitleRefund": "Garansi uang kembali {days} hari. Batalkan kapan saja. Kartu, UPI, netbanking, dan dompet digital diterima.",
+      "steps": {
+        "plan": "Pilih paket",
+        "checkout": "Checkout",
+        "confirmation": "Konfirmasi"
+      },
+      "step": "Langkah {n}",
+      "taxIdPlaceholder": "GSTIN / VAT / EIN",
+      "addressPlaceholder": "Nama jalan + nomor rumah",
+      "cityPlaceholder": "Mumbai",
+      "currencyTitle": "Bayar dengan mata uang Anda",
+      "currencyHint": "Harga dikonversi seketika. Hanya mata uang yang diterima metode pembayaran yang tersedia yang ditampilkan.",
+      "couponPlaceholder": "Punya kode kupon?",
+      "live": "aktif",
+      "tlsNote": "Pembayaran diproses melalui koneksi TLS 256-bit. Kami tidak pernah melihat detail kartu Anda.",
+      "change": "Ubah",
+      "terms": "Dengan membayar, Anda menyetujui <terms>Syarat</terms> dan <privacy>Kebijakan privasi</privacy> kami.",
+      "refundNote": "Tidak puas? Email kami dalam {days} hari pertama dan kami akan mengembalikan seluruh jumlahnya — tanpa pertanyaan, tanpa formulir.",
+      "autoRenewTitle": "Perpanjang paket ini otomatis"
     },
     "orders": {
       "title": "Riwayat pesanan",

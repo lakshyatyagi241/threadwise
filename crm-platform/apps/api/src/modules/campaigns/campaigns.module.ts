@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { CAMPAIGN_AI_PORT } from '../../infra/providers/campaigns/campaign-ai.port';
+import { HttpCampaignAiAdapter } from '../../infra/providers/campaigns/http-campaign-ai.adapter';
+import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlanCampaignGate } from './_shims/plan-gate';
 import { PlatformCampaignSettings } from './_shims/platform-campaign-settings';
@@ -17,6 +20,8 @@ import {
 } from './_shims/tokens';
 import { WalletCampaignBilling } from './_shims/wallet-billing';
 import { CampaignAudienceService } from './audience.service';
+import { CampaignAiController } from './campaign-ai.controller';
+import { CampaignAiService } from './campaign-ai.service';
 import { CampaignCallbacksController } from './campaign-callbacks.controller';
 import { CampaignCallbacksService } from './campaign-callbacks.service';
 import { CampaignEvents } from './campaign-events';
@@ -52,6 +57,7 @@ import { WizardRepository } from './wizard/wizard.repository';
  */
 @Module({
   imports: [
+    AiKeysUsageAdminModule,
     BroadcastsModule,
     ChatConversationsModule,
     CrmModule,
@@ -62,6 +68,7 @@ import { WizardRepository } from './wizard/wizard.repository';
   controllers: [
     // The wizard's own route base, so nothing it serves can be shadowed by `campaigns/:id`.
     WizardController,
+    CampaignAiController,
     CampaignsController,
     CampaignsReadController,
     CampaignsActionsController,
@@ -74,6 +81,7 @@ import { WizardRepository } from './wizard/wizard.repository';
     CampaignsService,
     CampaignsReadService,
     CampaignsActionsService,
+    CampaignAiService,
     CampaignEvents,
     CampaignJobs,
     CampaignMirrorService,
@@ -92,6 +100,7 @@ import { WizardRepository } from './wizard/wizard.repository';
     WizardBroadcastsService,
     FixtureReceiptQueue,
     FixtureRegistrar,
+    { provide: CAMPAIGN_AI_PORT, useClass: HttpCampaignAiAdapter },
     { provide: CAMPAIGN_PLAN_GATE, useClass: PlanCampaignGate },
     { provide: CAMPAIGN_BILLING, useClass: WalletCampaignBilling },
     { provide: CAMPAIGN_FLOW_STARTER, useClass: NoFlowStarter },

@@ -55,7 +55,14 @@
       "webhook_lead": "Webhook-lead",
       "handoff": "Overdracht",
       "inbox": "Teaminbox",
-      "retry": "Nieuwe poging"
+      "retry": "Nieuwe poging",
+      "group_leave": "Lijst verlaten",
+      "segment_join": "Segment binnengekomen",
+      "contact_updated": "Contact bijgewerkt",
+      "field_match": "Veld komt overeen",
+      "date_field_match": "Datum komt overeen",
+      "schedule": "Planning",
+      "ecom_event": "Winkelevent"
     },
     "endReason": {
       "end_node": "Einde van de flow bereikt",

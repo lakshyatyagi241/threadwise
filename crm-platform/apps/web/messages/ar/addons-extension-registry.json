@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "تعذّر تحميل الإضافات."
+    },
+    "planFields": {
+      "fromModule": "من وحدة مثبّتة",
+      "unlimited": "غير محدود"
     }
   }
 }

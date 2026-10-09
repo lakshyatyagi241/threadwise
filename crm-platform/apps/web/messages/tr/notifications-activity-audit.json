@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, other {{author} kişisinden # yeni mesaj}}",
         "titleNoName": "{count, plural, other {# yeni doğrudan mesaj}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {Biri {name} grubuna katılmak istiyor} other {# kişi {name} grubuna katılmak istiyor}}",
+        "titleNoName": "{count, plural, one {Bir WhatsApp grubuna katılmak isteyen biri var} other {Bir WhatsApp grubuna katılmak isteyen # kişi var}}",
+        "body": "Onaylamak veya reddetmek için Gruplar'ı açın."
+      },
+      "waba_group_suspended": {
+        "title": "{name} askıya alındı",
+        "titleNoName": "Bir WhatsApp grubu askıya alındı",
+        "body": "WhatsApp bu grubu askıya aldı. Geri yüklenene kadar gruba mesaj gönderemezsiniz."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} yeniden etkin",
+        "titleNoName": "Bir WhatsApp grubu yeniden etkin",
+        "body": "WhatsApp bu grubu geri yükledi. Gruba yeniden mesaj gönderebilirsiniz."
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "Zamanlanmış gönderim gönderildi",
         "scheduled_failed": "Zamanlanmış gönderim başarısız",
         "teamchat_mention": "Ekip sohbetinde sizi andı",
-        "teamchat_message": "Yeni doğrudan mesaj"
+        "teamchat_message": "Yeni doğrudan mesaj",
+        "waba_group_join_request": "Bir gruba katılma isteği",
+        "waba_group_suspended": "WhatsApp grubu askıya alındı",
+        "waba_group_suspension_cleared": "WhatsApp grubu yeniden etkin"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "Cüzdan",
         "devices": "WhatsApp numaraları",
         "broadcasts": "Toplu gönderimler ve kampanyalar",
-        "team_chat": "Ekip sohbeti"
+        "team_chat": "Ekip sohbeti",
+        "whatsapp_groups": "WhatsApp grupları"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "Cüzdana bakiye yüklendi",
           "hint": "Çalışma alanı cüzdanına bakiye yüklendi."
+        },
+        "waba_group_join_request": {
+          "label": "Bir gruba katılma isteği",
+          "hint": "Kişiler, işletme numaranızın bir WhatsApp grubuna katılmak istiyor. On istek tek bir satır oluşturur."
+        },
+        "waba_group_suspended": {
+          "label": "Grup askıya alındı",
+          "hint": "WhatsApp gruplarınızdan birini askıya aldı."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "Grup yeniden etkin",
+          "hint": "WhatsApp, askıya aldığı bir grubu geri yükledi. Yalnızca askıya alma hakkında bilgilendirildiyseniz."
         }
       },
       "loading": "Tercihleriniz yükleniyor",

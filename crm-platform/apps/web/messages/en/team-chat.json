@@ -25,34 +25,42 @@
       "deleteTitle": "Delete this channel?",
       "deleteMessage": "#{name} and all of its messages will be deleted for everyone. This cannot be undone.",
       "deleteConfirm": "Delete channel",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "defaultDescription": "Internal workspace chat",
+      "customerChats": "Customer chats"
     },
     "sidebar": {
       "label": "Channels and people",
       "channels": "Channels",
-      "createChannel": "Create a channel",
+      "createChannel": "Create channel",
       "loading": "Loading channels",
       "loadFailed": "Channels could not be loaded.",
       "noChannels": "No channels yet",
       "direct": "Direct messages",
       "people": "People",
-      "invite": "Invite a teammate",
+      "invite": "Invite teammate",
       "pending": "Pending requests",
       "pendingCount": "{count, plural, one {# pending request} other {# pending requests}}",
-      "unread": "{count, plural, one {# unread message} other {# unread messages}}"
+      "unread": "{count, plural, one {# unread message} other {# unread messages}}",
+      "workspace": "Workspace",
+      "mode": "Mode",
+      "customerChats": "Customer chats",
+      "teamChat": "Team chat",
+      "membersLink": "Members"
     },
     "members": {
       "label": "Members",
-      "title": "Team chat",
-      "count": "{count, plural, one {# member} other {# members}}",
-      "countUnknown": "Members",
-      "search": "Search members",
-      "loading": "Loading members",
+      "title": "Team",
+      "count": "{count} members",
+      "countUnknown": "— members",
+      "search": "Search members…",
+      "loading": "Loading…",
       "none": "No members match",
       "online": "Online",
       "offline": "Offline",
       "you": "(you)",
-      "message": "Message {name}"
+      "message": "Message {name}",
+      "titleAccent": "chat"
     },
     "panel": {
       "searchTitle": "Search messages",
@@ -65,11 +73,11 @@
       "noPinned": "Nothing is pinned in this channel."
     },
     "stream": {
-      "loading": "Loading messages",
+      "loading": "Loading messages…",
       "loadFailed": "Messages could not be loaded.",
       "loadOlder": "Load older messages",
       "emptyTitle": "No messages in #{name} yet",
-      "emptyMessage": "Say hello and start the conversation."
+      "emptyMessage": "Say hello to get the channel started."
     },
     "message": {
       "edited": "(edited)",
@@ -94,8 +102,8 @@
       "discard": "Discard"
     },
     "composer": {
-      "placeholder": "Message #{name}",
-      "attach": "Attach a file",
+      "placeholder": "Message #{name}… use @ to mention, drag images here",
+      "attach": "Attach file or image",
       "send": "Send",
       "hint": "Enter to send, Shift+Enter for a new line, @ to mention a teammate.",
       "replyingTo": "Replying to {name}",
@@ -104,38 +112,46 @@
       "fileTooLarge": "That file is larger than 20 MB.",
       "mentionList": "Teammates to mention",
       "typingOne": "{name} is typing",
-      "typingMany": "{count} people are typing"
+      "typingMany": "{count} people are typing",
+      "hintSend": "send",
+      "hintNewLine": "new line",
+      "hintMention": "mention",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "Create a channel",
       "close": "Close",
       "name": "Name",
-      "nameHint": "Lowercase letters, digits, dashes and underscores, no spaces.",
+      "nameHint": "Lowercase, no spaces. Letters, digits, dash, underscore.",
       "description": "Description (optional)",
       "privacy": "Privacy",
       "public": {
         "label": "Public",
-        "hint": "Everyone in the workspace can read and write."
+        "hint": "Everyone in workspace"
       },
       "private": {
         "label": "Private",
-        "hint": "Invite only. Only its members see it."
+        "hint": "Invite-only"
       },
       "cancel": "Cancel",
-      "create": "Create channel"
+      "create": "Create channel",
+      "namePlaceholder": "e.g. support",
+      "descriptionPlaceholder": "What's this channel for?"
     },
     "invite": {
       "title": "Invite a teammate",
       "close": "Close",
       "email": "Email",
       "name": "Name (optional)",
-      "note": "Note for the admin (optional)",
-      "noteHint": "Why this person should join.",
+      "note": "Note for the admin",
       "addToChannel": "Also add them to #{name}",
       "approved": "Done. The request was approved.",
       "pending": "Invitation submitted, waiting for admin approval.",
       "cancel": "Cancel",
-      "submit": "Submit invite"
+      "submit": "Submit invite",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "Their name",
+      "notePlaceholder": "Why should they join?"
     },
     "invitations": {
       "title": "Pending invitations",

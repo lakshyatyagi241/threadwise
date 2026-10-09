@@ -8,7 +8,8 @@ tier P0 done: TW-SUPP-001, 002, 004, 005, 007, 008, 009, 010, 011, 012 (API e2e 
 tier P1 done: TW-SUPP-003, 013, 014, 015, 016, 017, 018, 026, 027, 029, 030, 031, 033, 037, 038, 039, 040, 041, 042, 043, 044, 046 (API e2e `desk.e2e.spec.ts`).
 tier P2 done: TW-SUPP-020, 021, 022, 023, 024, 028, 032.
 
-Partial: TW-SUPP-045 (impersonation launcher: reason and target validated, session start answers 501 until the workspaces domain provides it).
+Round 3: TW-SUPP-045 done. `PlatformInboxService.impersonate` calls the auth barrel's `ImpersonationService.start` (same act-as session as the Workspaces hub; the route needs `platform.workspace.impersonate` and the super admin role). `desk.e2e.spec.ts` covers start, the audit event `platform.impersonation.started`, redeem of the one-time code, banner data and stop.
+In-app Help guides: one customer guide (`support-customer`, documents `nav:support`) and eight operator guides under `features/platform-support-desk/help/`; the stale `nav:support` pending entry was removed.
 
 ## Not ported on purpose
 
@@ -56,7 +57,7 @@ Intended differences, each on purpose:
   shell and the workspace shell, not to this domain.
 - Agents: the roster is of platform operators ("Operator", "pick an operator"); Reference promoted platform users. The Reference sentence about
   auto-assignment is dropped because it is docs-only (TW-SUPP-019).
-- Customers subtitle drops "+ impersonate": the impersonation session start belongs to the workspaces domain (TW-SUPP-045).
+- Customers subtitle drops "+ impersonate": the launcher lives in the platform inbox drawer and the Workspaces hub.
 - Customer form hint keeps Reference's wording but our thread renders plain text (so does Reference; its "Markdown supported" is untrue there).
 - Kanban keeps a keyboard "Move to" menu on every card and a one-line hint (accessibility; drag and drop works as in Reference).
 - Customer ticket confirmation banner after sending and the "Reopens when replied" hint on resolved tickets are kept.
@@ -65,9 +66,7 @@ Intended differences, each on purpose:
 
 ## Blocked
 
-TW-SUPP-045 (impersonate): the launcher modal, reason validation (8 to 500 characters) and the target check are built and tested;
-starting the session (minting the workspace owner's access, banner, audit start and stop) needs the workspaces and auth domains and
-answers 501 until they provide it. A shim inside this zone is not possible without editing auth session code.
+None.
 
 ## Not verified
 

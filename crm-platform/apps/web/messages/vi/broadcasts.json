@@ -95,7 +95,9 @@
         "t3": "Làm sao để cải thiện kết quả?",
         "b3": "Giữ nhóm đối tượng tập trung, chọn mẫu phù hợp nhất và xem lại số lượng thất bại trước khi gửi lại."
       },
-      "unofficialDisabled": "Không chính thức (đã tắt)"
+      "unofficialDisabled": "Không chính thức (đã tắt)",
+      "noData": "Không tìm thấy dữ liệu",
+      "railLabel": "Bộ lọc gửi hàng loạt"
     },
     "detail": {
       "back": "Quay lại",
@@ -293,7 +295,8 @@
       "later": "Sau",
       "media": "Xem trước {kind}",
       "contactsDenied": "Bạn không có quyền truy cập danh sách liên hệ. Hãy chọn liên hệ qua nhóm hoặc thẻ.",
-      "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức."
+      "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức.",
+      "previewLabel": "Xem trước mẫu"
     },
     "overrides": {
       "title": "Điền thông tin cho lần gửi này",

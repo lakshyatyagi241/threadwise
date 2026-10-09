@@ -2,6 +2,8 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
+  aiKeyHint,
+  aiTextExtra,
   findAiProvider,
   type PlatformAiKeyItem,
   type PlatformAiKeysResponse,
@@ -103,8 +105,9 @@ export class PlatformKeysService {
 
       const extras = mergeExtras(
         parseExtras(row.extra_config),
-        { maxTokens: input.maxTokens, extraModels: input.extraModels },
+        { maxTokens: input.maxTokens, extraModels: input.extraModels, textExtra: input.textExtra },
         def?.maxTokensField ?? false,
+        aiTextExtra(row.provider)?.key ?? null,
       );
       const defaultModel =
         input.defaultModel === undefined ? row.default_model : input.defaultModel;
@@ -131,6 +134,9 @@ export class PlatformKeysService {
         changes.ceiling = { from: before.maxTokens, to: extras.next.maxTokens };
       if (JSON.stringify(before.models) !== JSON.stringify(extras.next.models))
         changes.extraModels = { from: before.models, to: extras.next.models };
+      for (const k of ['organization', 'project_id', 'voice_id'] as const)
+        if (before.text[k] !== extras.next.text[k])
+          changes[k] = { from: before.text[k] ?? null, to: extras.next.text[k] ?? null };
       const keyEvent = input.removeKey ? 'removed' : newKey ? 'replaced' : null;
       if (keyEvent) changes.key = keyEvent;
 
@@ -205,6 +211,10 @@ export class PlatformKeysService {
       sortOrder: row.sort_order,
       maxTokens: extras.maxTokens,
       supportsMaxTokens: def?.maxTokensField ?? false,
+      keyHint: aiKeyHint(row.provider),
+      textExtra: ((x) => (x ? { ...x, value: extras.text[x.key] ?? '' } : null))(
+        aiTextExtra(row.provider),
+      ),
       extraModels: extras.models,
       modelChoices: [...(def?.models ?? [])],
       rowVersion: row.row_version,

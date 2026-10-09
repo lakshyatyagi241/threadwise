@@ -60,7 +60,10 @@
       "expand": "Kenar çubuğunu genişlet",
       "backToApp": "Uygulamaya dön",
       "allAreas": "Tüm alanlar",
-      "switchArea": "Alanı değiştir, şu an: {area}"
+      "switchArea": "Alanı değiştir, şu an: {area}",
+      "railCaption": "Konsol",
+      "wallet": "Cüzdan",
+      "topUp": "Bakiye yükle →"
     },
     "overview": {
       "title": "Platform konsolu",
@@ -337,7 +340,8 @@
       "railLabel": "Ayar bölümleri",
       "personal": {
         "title": "Hesabınız",
-        "body": "Profil, parola ve kişisel tercihler."
+        "body": "Profil, parola ve kişisel tercihler.",
+        "eyebrow": "Kişisel"
       },
       "api": {
         "restTitle": "Genel REST API",
@@ -346,7 +350,19 @@
         "rest3": "İstekler, planınıza göre dakika başına sınırlandırılır.",
         "webhooksTitle": "Webhook'lar",
         "webhooksBody": "Olayları kendi uç noktalarınıza gönderin ve diğer araçlardan olay alın.",
-        "manage": "Entegrasyonları yönet"
+        "manage": "Entegrasyonları yönet",
+        "sheetsTitle": "Google Sheets API anahtarı",
+        "sheetsBody": "Sheets eklentisinin kişi ve mesaj satırlarını bir tabloya göndermek için kullandığı anahtar. Bugün açığa çıkan tek kişisel belirteç budur.",
+        "manageInAccount": "Hesapta yönet",
+        "active": "Etkin",
+        "keyTimes": "oluşturulma: {created} · son kullanım: {used}",
+        "never": "hiçbir zaman",
+        "noKey": "Henüz Sheets API anahtarı oluşturulmadı. Bir tane oluşturun:",
+        "noKeyLink": "hesabınız → Sheets eklentisi",
+        "outboundTitle": "Giden uç noktalar",
+        "outboundBody": "Çalışma alanınız → sunucunuz (CRM kancaları, gönderme / yanıt olayları).",
+        "inboundTitle": "Gelen webhook'lar",
+        "inboundBody": "Sunucunuz → çalışma alanınız (gelen WABA / Unofficial API iletimleri)."
       },
       "appearance": {
         "title": "Görünüm",
@@ -363,12 +379,91 @@
         },
         "save": "Kaydet",
         "saved": "Görünüm güncellendi."
+      },
+      "branding": {
+        "ownerOnly": "Markayı yalnızca çalışma alanı sahibi değiştirebilir.",
+        "loadFailed": "Marka bilgileri yüklenemedi.",
+        "saved": "Marka güncellendi.",
+        "saveFailed": "Marka kaydedilemedi.",
+        "logoTitle": "Logo ve favicon",
+        "logoBody": "Üst bilgide, faturalarda, e-postalarda ve müşteriye dönük portalda kullanılır.",
+        "logo": "Logo",
+        "favicon": "Favicon",
+        "logoHint": "PNG / JPG / WebP · en fazla 2 MB · önerilen 240×80",
+        "faviconHint": "32×32 PNG · en fazla 512 KB",
+        "click": "Yüklemek için tıklayın",
+        "orDrag": "ya da sürükleyip bırakın",
+        "currentTag": "Mevcut",
+        "current": {
+          "logo": "Mevcut logo",
+          "favicon": "Mevcut favicon"
+        },
+        "coloursTitle": "Marka renkleri",
+        "coloursBody": "Panel çerçevesine, düğmelere ve vurgu çizgilerine uygulanır. Her sayfada görmek için kaydedin.",
+        "colours": {
+          "primary": "Birincil",
+          "accent": "Vurgu",
+          "background": "Arka plan"
+        },
+        "colourInvalid": "#RRGGBB biçiminde bir renk kullanın, örneğin #075E54.",
+        "save": "Markayı kaydet"
+      },
+      "residency": {
+        "loadFailed": "Veri konumu ayarı yüklenemedi.",
+        "title": "Sınır ötesi veri aktarımını kısıtla",
+        "body": "Bu çalışma alanı için daha sıkı bir yönlendirme modu ayarlayın. Otomatik yanıt çevirisi yalnızca seçilen modla uyumlu sağlayıcılar üzerinden yönlendirilir; diğerleri çalışma zamanında sessizce atlanır.",
+        "ownerOnly": "Bu ayarı yalnızca çalışma alanı sahibi değiştirebilir.",
+        "saved": "Veri konumu güncellendi. Çeviri yönlendirmesi bir sonraki gelen mesajda yeni ayarı uygulayacak.",
+        "saveFailed": "Veri konumu ayarı kaydedilemedi.",
+        "save": "Konum ayarını kaydet",
+        "modes": {
+          "any": {
+            "name": "Kısıtlama yok",
+            "text": "Yedek zincirin seçtiği etkin sağlayıcıyı kullanın. En yüksek çalışma süresi, uyum kısıtı yok."
+          },
+          "eu_only": {
+            "name": "Yalnızca AB yönlendirmesi",
+            "text": "Yalnızca DeepL (Almanya) ve kendi sunucunuzda barındırılan LibreTranslate'e izin verilir. GDPR 44. madde sınır ötesi aktarım kurallarına uygundur."
+          },
+          "local": {
+            "name": "Yalnızca kendi sunucuda",
+            "text": "Yalnızca kendi sunucunuzda barındırılan LibreTranslate sürücüsüne izin verilir. Müşteri mesaj metni hiçbir zaman kendi sunucunuzdan çıkmaz. LibreTranslate'in yapılandırılmış olması gerekir."
+          }
+        }
       }
     },
     "topNav": {
       "more": "Daha fazla",
       "search": "Ara",
-      "premium": "Premium özellik: kilidini açmak için planınızı yükseltin"
+      "premium": "Premium özellik: kilidini açmak için planınızı yükseltin",
+      "labels": {
+        "dashboard": "Panel",
+        "team-inbox": "Birleşik Gelen Kutusu",
+        "wa-campaigns": "Kampanyalar",
+        "flows": "Akışlar",
+        "templates": "Şablonlar",
+        "devices": "Kanallar",
+        "metaads": "Meta Reklamları",
+        "broadcasts": "Toplu gönderimler",
+        "contacts": "Kişiler",
+        "deals": "Fırsatlar",
+        "chat": "Canlı Sohbet",
+        "analytics": "Analizler",
+        "auto-reply": "Otomatik yanıt",
+        "scheduled": "Zamanlanmış",
+        "message-history": "Geçmiş",
+        "ai-assistants": "Yapay zeka asistanları",
+        "ai-training": "Yapay zeka eğitimi",
+        "wa-links": "WA Bağlantıları",
+        "chatbot-widgets": "Sohbet widget'ı",
+        "webhooks": "Webhook'lar",
+        "integrations": "Entegrasyonlar",
+        "warmer": "Isındırıcı",
+        "call-logs": "Arama kayıtları",
+        "support": "Destek",
+        "more": "Daha fazla"
+      },
+      "workspaceLogo": "Çalışma alanı logosu"
     },
     "palette": {
       "title": "Sayfalarda ara",
@@ -412,7 +507,9 @@
       "wallet": "Cüzdan",
       "orders": "Sipariş geçmişi",
       "plans": "Fiyatlandırma ve planlar",
-      "tour": "Turu başlat"
+      "tour": "Turu başlat",
+      "profile": "Profil",
+      "help": "Yardım ve destek"
     },
     "quickAccess": {
       "title": "Hızlı erişim",
@@ -599,23 +696,28 @@
         "pager": "İpuçları",
         "templates": {
           "title": "Şablon kullanın",
-          "body": "Onaylı şablonlar, 24 saatlik pencerenin dışında müşterilere ulaşır."
+          "body": "Onaylı şablonlar, 24 saatlik pencerenin dışında müşterilere ulaşır.",
+          "cta": "Şablonları yönet →"
         },
         "flows": {
           "title": "Yanıtları otomatikleştirin",
-          "body": "Bir akış, aynı soruyu her seferinde sizin yerinize yanıtlayabilir."
+          "body": "Bir akış, aynı soruyu her seferinde sizin yerinize yanıtlayabilir.",
+          "cta": "Akış oluşturucuyu aç →"
         },
         "palette": {
           "title": "Her yere atlayın",
-          "body": "Tüm sayfalarda aramak için Ctrl K tuşlarına basın."
+          "body": "Tüm sayfalarda aramak için Ctrl K tuşlarına basın.",
+          "cta": "Hemen deneyin"
         },
         "scheduled": {
           "title": "Önceden zamanlayın",
-          "body": "Bir mesajı şimdi sıraya alın, doğru zamanda gitsin."
+          "body": "Bir mesajı şimdi sıraya alın, doğru zamanda gitsin.",
+          "cta": "Yeni zamanlama →"
         },
         "wallet": {
           "title": "Bakiyenizi izleyin",
-          "body": "Gönderimler hiç durmasın diye bakiye azalmadan önce yükleyin."
+          "body": "Gönderimler hiç durmasın diye bakiye azalmadan önce yükleyin.",
+          "cta": "Otomatik bakiye yüklemeyi yapılandır →"
         }
       },
       "shortcuts": {
@@ -681,6 +783,339 @@
             "subtitle": "Bir mesaj şablonu yazın"
           }
         }
+      },
+      "cards": {
+        "meta-ads": {
+          "title": "Meta Reklamları",
+          "desc": "Facebook ve Instagram'da Click-to-WhatsApp reklam kampanyaları oluşturun ve yönetin — her tıklama bağlı numaranızda bir sohbet açar.",
+          "foot": "tıkla-sohbet et",
+          "open": "Meta Reklamlarını aç",
+          "badge": "REKLAM"
+        },
+        "instagram-posts": {
+          "title": "Instagram gönderileri",
+          "desc": "Instagram gönderilerini oluşturun ve zamanlayın — görseller, reels, hikayeler ve karusel. Hemen yayınlayın ya da otomatik gönderilmek üzere sıraya alın.",
+          "foot": "oluştur ve zamanla",
+          "open": "Düzenleyiciyi aç",
+          "badge": "IG"
+        },
+        "facebook-posts": {
+          "title": "Facebook gönderileri",
+          "desc": "Facebook gönderilerini oluşturun ve zamanlayın — metin, bağlantı ve fotoğraflar. Hemen yayınlayın ya da bağlı bir Sayfaya sıraya alın.",
+          "foot": "oluştur ve zamanla",
+          "open": "Düzenleyiciyi aç",
+          "badge": "FB"
+        },
+        "sms": {
+          "title": "SMS",
+          "desc": "Bir SMS numarası bağlayın (Twilio / MSG91). Mesajlar WhatsApp ile aynı ekip gelen kutusuna düşer ve kampanyalar bir SMS göndericisi kazanır.",
+          "foot": "bağla ve yönet",
+          "open": "SMS'i aç",
+          "badge": "SMS"
+        },
+        "line": {
+          "title": "LINE",
+          "desc": "Bir LINE Resmi Hesabı bağlayın (Messaging API). Gelen mesajlar aynı ekip gelen kutusuna düşer; toplu gönderimler, zengin menüler, akışlar ve içgörülerle birlikte.",
+          "foot": "bağla ve yönet",
+          "open": "LINE'ı aç",
+          "badge": "LINE"
+        },
+        "wechat": {
+          "title": "WeChat",
+          "desc": "Bir WeChat Resmi Hesabı bağlayın (Hizmet Hesabı). Gelen mesajlar aynı ekip gelen kutusuna düşer; anahtar kelime kuralları, otomatik yanıtlar ve akışlarla birlikte.",
+          "foot": "bağla ve yönet",
+          "open": "WeChat'i aç",
+          "badge": "WeChat"
+        },
+        "viber": {
+          "title": "Viber",
+          "desc": "Bir Viber Genel Hesabı (Bot) bağlayın. Gelen mesajlar aynı ekip gelen kutusuna düşer; anahtar kelime kuralları, otomatik yanıtlar ve akışlarla birlikte.",
+          "foot": "bağla ve yönet",
+          "open": "Viber'ı aç",
+          "badge": "Viber"
+        },
+        "messenger-setup": {
+          "title": "Messenger kurulumu",
+          "desc": "Messenger profilini yapılandırın — bağlı bir Sayfa için Başlayın düğmesi, kalıcı menü, buz kırıcılar ve karşılama mesajı.",
+          "foot": "büyüme araçları",
+          "open": "Kurulumu aç",
+          "badge": "FB"
+        },
+        "tiktok": {
+          "title": "TikTok",
+          "desc": "Bir TikTok hesabı bağlayın, profil ve video içgörülerini takip edin ve videoları TikTok gelen kutunuza gönderin. DM gelen kutusu iş ortağı onaylı ve bölgesel olarak sınırlıdır.",
+          "foot": "bağla ve paylaş",
+          "open": "TikTok'u aç",
+          "badge": "TT"
+        },
+        "tiktok-posts": {
+          "title": "TikTok gönderileri",
+          "desc": "Videoları TikTok gelen kutunuza gönderin; uygulamadan tamamlayıp yayınlayın ve durumlarını buradan takip edin.",
+          "foot": "oluştur ve gönder",
+          "open": "Gönderileri aç",
+          "badge": "TT"
+        },
+        "quick-send": {
+          "title": "Hızlı gönderim",
+          "desc": "Bir mesaj yazın, bir veya birden çok alıcı ve gönderici seçin, ardından hemen gönderin ya da zamanlayın — mesaj başına teslim durumu olan manuel bir gönderim kuyruğu.",
+          "foot": "gönderim kuyruğu",
+          "open": "Aç"
+        },
+        "account": {
+          "title": "Hesap",
+          "desc": "Profil, fotoğraf, şifre, sipariş geçmişi, cüzdan, ortaklık ve destek talepleri — hepsi tek bir yerde.",
+          "foot": "{plan} · {balance}",
+          "open": "Aç"
+        },
+        "pricing": {
+          "title": "Fiyatlandırma ve planlar",
+          "desc": "Starter, Growth, Pro ve Enterprise planlarını karşılaştırın. İstediğiniz zaman geçiş yapın — ücret gün bazında orantılanır.",
+          "foot": "{plan} planı · kilidi açmak için yükseltin",
+          "open": "Planları görüntüle"
+        },
+        "analytics": {
+          "title": "Analizler",
+          "desc": "Kampanyalar ve cihazlar genelinde iletim, okunma ve dönüşüm grafikleri.",
+          "foot": "{count} mesaj · son 7 gün",
+          "open": "Aç"
+        },
+        "attributes": {
+          "title": "Öznitelikler",
+          "desc": "WhatsApp şablonları için değişkenler. first_name gibi yerleşik değişkenler ve sizin özel değişkenleriniz (order_id vb.). Eklemek için herhangi bir mesajda / yazın.",
+          "foot": "{count} kayıtlı",
+          "open": "Aç"
+        },
+        "contacts": {
+          "title": "Kişiler",
+          "desc": "Tüm kişileriniz ve gruplarınız tek bir yerde. CSV'den içe aktarın, etiketleyin, segmentlere ayırın ve arayın.",
+          "foot": "{people} kişi / {groups} grup / {tags} etiket",
+          "open": "Aç"
+        },
+        "broadcasts": {
+          "title": "Toplu gönderimler",
+          "desc": "Seçilen kişilere şablonla toplu gönderimler; gönderildi, iletildi, okundu, başarısız ve kuyrukta takibi.",
+          "foot": "{queued} kuyrukta{pct, select, none {} other { / {pct}% iletildi}}",
+          "open": "Aç"
+        },
+        "auto-reply": {
+          "title": "Otomatik yanıt",
+          "desc": "Anahtar kelimelerde, çalışma saatlerinde veya temsilci yokken yanıtları tetikleyin.",
+          "foot": "{count} kural{pct, select, none {} other { / {pct}% eşleşme}}",
+          "open": "Aç"
+        },
+        "warmer": {
+          "title": "WhatsApp Isındırıcı",
+          "desc": "Her numaranın günlük gönderim bütçesini insan benzeri aralıklar ve aktif saatlerle kademeli artırarak engellenme riskini azaltın.",
+          "foot": "Unofficial API",
+          "open": "Aç"
+        },
+        "scheduled": {
+          "title": "Zamanlanmış mesajlar",
+          "desc": "Gönderimleri doğru ana göre sıraya alın — saat dilimine, segmente veya tetikleyiciye göre.",
+          "foot": "{queued} kuyrukta / sonraki {next}",
+          "open": "Aç"
+        },
+        "message-history": {
+          "title": "Mesaj geçmişi",
+          "desc": "Gelen ve giden tüm mesajların aranabilir arşivi — CSV olarak dışa aktarılabilir.",
+          "foot": "{count} kayıt",
+          "open": "Aç"
+        },
+        "notifications": {
+          "title": "Bildirimler",
+          "desc": "Uyarıları e-postaya, Slack'e veya uygulama içine yönlendirin — kanal başına sessiz saatler ayarlayın.",
+          "foot": "{count} okunmamış",
+          "open": "Aç"
+        },
+        "integrations": {
+          "title": "Entegrasyonlar",
+          "desc": "Shopify, HubSpot, Zapier ve daha fazlasını bağlayın — kişileri ve siparişleri senkronize edin.",
+          "foot": "{connected} bağlı / {available} kullanılabilir",
+          "open": "Aç"
+        },
+        "google-account": {
+          "title": "Google hesabı",
+          "desc": "Bir kez bağlayın — Takvim'i, akışlardaki Meet bağlantılarını ve gelen kutusundaki \"Meet bağlantısı gönder\" düğmesini destekler.",
+          "foot": "Takvim ve Meet",
+          "open": "Aç"
+        },
+        "appointments": {
+          "title": "Randevular",
+          "desc": "Müşterilerinizin hizmetlerinizi sohbetten rezerve etmesini sağlayın — gün/saat seçici, sorular, kapora, hatırlatmalar ve Google Takvim senkronizasyonu.",
+          "foot": "{count, plural, =0 {kurulmadı} one {# hizmet} other {# hizmet}}",
+          "open": "Yönet"
+        },
+        "ai-assistants": {
+          "title": "Yapay zeka çağrı asistanı",
+          "desc": "Telefon aramalarını yanıtlayan sesli yapay zeka — Gemini beyni, ElevenLabs sesi ve görüşme sırasında kendi araçlarınız.",
+          "foot": "{configured} yapılandırıldı / {live} canlı",
+          "open": "Aç"
+        },
+        "call-logs": {
+          "title": "Arama kayıtları",
+          "desc": "Yapay zekanın yönettiği her sesli görüşme için transkript, kayıt ve araç çağrısı zaman çizelgeleri.",
+          "foot": "{calls} arama / {minutes} dk · 24 sa",
+          "open": "Aç"
+        },
+        "forms": {
+          "title": "Formlar",
+          "desc": "Yerel WhatsApp etkileşimli formları — sohbet içinde potansiyel müşteri, anket ve rezervasyon toplayın.",
+          "foot": "{drafted} taslak / {live} canlı",
+          "open": "Aç"
+        },
+        "wa-links": {
+          "title": "WhatsApp bağlantı oluşturucu",
+          "desc": "Özel uzantılı, önceden yazılmış mesajlı, QR kodlu ve tıklama analizli izlenebilir wa.me kısa bağlantıları oluşturun. Biyografiye, açılış sayfasına veya iş kartına ekleyin.",
+          "foot": "{links} bağlantı / {clicks} tıklama",
+          "open": "Aç"
+        },
+        "chatbot-widgets": {
+          "title": "Sohbet botu widget'ı",
+          "desc": "Sitenize yüzen bir sohbet balonu ekleyin. Yapay zeka tarayıcıda yanıtlar, gerektiğinde Birleşik Gelen Kutusu'na devreder.",
+          "foot": "{built} oluşturuldu / {live} etkin",
+          "open": "Aç"
+        },
+        "ai-training": {
+          "title": "Yapay zeka eğitimi",
+          "desc": "Sohbet asistanlarını kendi içeriğinizle eğitin — URL'ler, metin parçaları, soru-cevap çiftleri, düz metin dosyaları.",
+          "foot": "{count} asistan",
+          "open": "Aç"
+        },
+        "ai-usage": {
+          "title": "Yapay zeka kullanımı",
+          "desc": "Yapay zeka harcamanızın nereye gittiğini görün — model ve sağlayıcıya göre token'lar, plan anahtarları ile kendi anahtarlarınız ve aylık limit.",
+          "foot": "Bu ay {tokens} token",
+          "open": "Görüntüle"
+        },
+        "flow-analytics": {
+          "title": "Akış analizleri",
+          "desc": "Her otomasyon çalışması baştan sona — çalıştırma geçmişi, bir çalışmayı durduran hatalar ve yeniden çalıştırdıklarınızın yeniden deneme kayıtları.",
+          "foot": "{count} başarısız çalıştırma",
+          "open": "Aç"
+        },
+        "lead-finder": {
+          "title": "Potansiyel müşteri bulucu",
+          "desc": "İşletmeleri kategori ve şehre göre bulun, WhatsApp ve e-posta adreslerini alın ve Kişilere ya da bir kampanyaya aktarın.",
+          "foot": "haritada potansiyel müşteri arama",
+          "open": "Aç"
+        },
+        "webhooks": {
+          "title": "Webhook'lar",
+          "desc": "İletim, okundu ve yanıt olaylarını herhangi bir HTTPS uç noktasına gerçek zamanlı gönderin.",
+          "foot": "{count} uç nokta",
+          "open": "Aç"
+        },
+        "support": {
+          "title": "Destek",
+          "desc": "Bir yetkiliyle konuşun, bilinen sorunlara göz atın veya hizmet durumunu kontrol edin.",
+          "foot": "{total} talep / {open} açık",
+          "open": "Aç"
+        },
+        "activity-log": {
+          "title": "Etkinlik günlüğü",
+          "desc": "Her oturum açma, çalışma alanı değişikliği, gelen kutusu işlemi ve yönetici değişikliği — kullanıcı, IP ve zamana göre kayıtlı.",
+          "foot": "{count} olay · 24 sa",
+          "open": "Aç"
+        },
+        "channels": {
+          "title": "Kanallar",
+          "desc": "WhatsApp, Instagram, Telegram ve daha fazlasını bağlayın — tek gelen kutusu, sağlık izleme, gönderici değiştirme.",
+          "foot": "{active} / {total} canlı",
+          "open": "Aç"
+        },
+        "team-members": {
+          "title": "Ekip üyeleri",
+          "desc": "Ekip arkadaşlarını davet edin, rolleri (sahip / yönetici / üye) atayın ve çalışma alanı başına erişimi sınırlayın.",
+          "foot": "{count, plural, one {# koltuk} other {# koltuk}} etkin",
+          "open": "Aç"
+        }
+      },
+      "eyebrow": "çalışma alanı",
+      "sortedByUsage": "Kullanıma göre sıralı",
+      "developers": "Geliştiriciler / API",
+      "movedOffHeader": "üst bilgiden taşındı",
+      "open": "Aç",
+      "navDesc": {
+        "dashboard": "Ana sayfa ve genel bakış",
+        "wa-campaigns": "Toplu kampanya gönderimleri",
+        "flows": "Otomasyon oluşturucu",
+        "templates": "Mesaj şablonları"
+      },
+      "strip": {
+        "label": "Çalışma alanına bir bakış",
+        "rules": "Etkin kurallar",
+        "thisWeek": "Bu hafta +{count}",
+        "noNew": "yeni yok",
+        "rulesCaption": "tüm araçlarda",
+        "queued": "Kuyrukta",
+        "noUpcoming": "yaklaşan çalıştırma yok",
+        "queuedCaption": "zamanlanmış gönderimler",
+        "connected": "Bağlı",
+        "connectedCaption": "cihaz canlı",
+        "health": {
+          "healthy": "sağlıklı",
+          "partial": "kısmi",
+          "offline": "çevrimdışı",
+          "none": "cihaz yok"
+        },
+        "notifications": "Bildirimler",
+        "unread": "okunmamış",
+        "notificationsCaption": "dikkat bekliyor"
+      },
+      "activity": {
+        "title": "Son etkinlik",
+        "viewAll": "Tümünü gör",
+        "empty": "Etkinlik bulunamadı. Çalışma alanınızdaki değişiklikler burada görünecek."
+      },
+      "affiliate": {
+        "badge": "KAZAN",
+        "title": "Ortaklık geçmişi",
+        "body": "Kodunuz üzerinden gelen her kayıt, kazanılan krediler ve paylaşım bağlantınızın performansını takip edin.",
+        "referrals": "Yönlendirmeler",
+        "payouts": "Ödemeler",
+        "payoutsNote": "hesabınızı görün",
+        "foot": "yönlendirmeler · krediler · ödemeler"
+      },
+      "quick": {
+        "title": "Hızlı erişim",
+        "body": "Daha az kullanılan araçlar burada; böylece ana üst bilgi günlük işlere odaklı kalır.",
+        "openChat": "Sohbeti aç",
+        "addRule": "Kural ekle"
+      },
+      "planCard": {
+        "title": "Çalışma alanı planı",
+        "seats": "{plan} / {count, plural, one {# koltuk} other {# koltuk}}",
+        "messages": "Bu ayki mesajlar",
+        "sent": "{count} gönderildi",
+        "manage": "Faturalandırmayı yönet"
+      },
+      "whatsNew": {
+        "title": "Yenilikler",
+        "headline": "Birleşik Gelen Kutusu + yapay zeka desteği",
+        "changelog": "Sürüm notlarını oku",
+        "items": {
+          "inbox": "Atama ve notlu ortak gelen kutusu",
+          "ai": "Akışlarda ChatGPT / Gemini / Claude",
+          "forecast": "Shopify panelinde satış tahmini"
+        }
+      },
+      "smallTips": {
+        "warm": {
+          "title": "Yeni numaraları ısıtarak tutun",
+          "body": "Günde 50 gönderimle başlayın ve haftalık olarak ikiye katlayın. Ani yoğunluklar işaretlenir."
+        },
+        "tag": {
+          "title": "Şimdi etiketleyin, sonra segmentlere ayırın",
+          "body": "Bir kişi yanıt verdiği anda etiket ekleyin — toplu gönderim filtreleri sonra kolaylaşır."
+        },
+        "templates": {
+          "title": "Şablonlar serbest metinden üstündür",
+          "body": "Onaylı şablonlar, bir kişi sessizleşse bile 24 saatlik pencereyi açar."
+        },
+        "signing": {
+          "title": "HMAC'i her seferinde doğrulayın",
+          "body": "İşlemeden önce her zaman imza başlığını kontrol edin — tek satır kod, büyük güvenlik."
+        }
       }
     },
     "inboxBell": {
@@ -704,6 +1139,19 @@
       "hintMove": "gezin",
       "hintOpen": "aç",
       "hintToggle": "aç/kapat"
+    },
+    "flash": {
+      "dismiss": "Kapat",
+      "roleDenied": "Rolünüz ({role}) bu sayfaya erişemiyor"
+    },
+    "hubSearch": {
+      "placeholder": "Proje ayarlarında ara...",
+      "empty": "Aramanızla eşleşen ayar yok."
+    },
+    "bell": {
+      "eyebrow": "Gelen kutusu",
+      "clearAll": "Tümünü temizle",
+      "viewAll": "Tümünü gör →"
     }
   }
 }

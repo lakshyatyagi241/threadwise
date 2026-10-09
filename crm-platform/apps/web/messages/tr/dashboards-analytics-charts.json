@@ -183,7 +183,9 @@
         "unzoned": "bölgesiz",
         "per24h": "{n}/24sa",
         "deliv": "iletim",
-        "free": "{n, plural, one {# cihaz yuvası kullanılabilir} other {# cihaz yuvası kullanılabilir}}"
+        "free": "{n, plural, one {# cihaz yuvası kullanılabilir} other {# cihaz yuvası kullanılabilir}}",
+        "freeHint": "WABA ekle",
+        "connectDeviceShort": "Cihaz bağla"
       },
       "templates": {
         "title": "En iyi performanslı şablonlar",
@@ -297,7 +299,8 @@
         "connect": "Bağlan",
         "connectedLabel": "Bağlı"
       },
-      "sublineOfficial": "{date} - {range}: {sent} giden mesaj, %{rate} iletilebilirlik."
+      "sublineOfficial": "{date} - {range}: {sent} giden mesaj, %{rate} iletilebilirlik.",
+      "synced": "Canlı · {s} sn önce senkronize edildi"
     },
     "analytics": {
       "title": "Analizler",

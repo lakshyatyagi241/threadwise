@@ -25,7 +25,9 @@
       "deleteTitle": "Excluir este canal?",
       "deleteMessage": "#{name} e todas as suas mensagens serão excluídos para todos. Esta ação não pode ser desfeita.",
       "deleteConfirm": "Excluir canal",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "defaultDescription": "Chat interno do workspace",
+      "customerChats": "Conversas com clientes"
     },
     "sidebar": {
       "label": "Canais e pessoas",
@@ -39,7 +41,12 @@
       "invite": "Convidar um membro da equipe",
       "pending": "Solicitações pendentes",
       "pendingCount": "{count, plural, one {# solicitação pendente} other {# solicitações pendentes}}",
-      "unread": "{count, plural, one {# mensagem não lida} other {# mensagens não lidas}}"
+      "unread": "{count, plural, one {# mensagem não lida} other {# mensagens não lidas}}",
+      "workspace": "Workspace",
+      "mode": "Modo",
+      "customerChats": "Conversas com clientes",
+      "teamChat": "Chat da equipe",
+      "membersLink": "Membros"
     },
     "members": {
       "label": "Membros",
@@ -52,7 +59,8 @@
       "online": "Online",
       "offline": "Offline",
       "you": "(você)",
-      "message": "Enviar mensagem para {name}"
+      "message": "Enviar mensagem para {name}",
+      "titleAccent": "chat"
     },
     "panel": {
       "searchTitle": "Pesquisar mensagens",
@@ -104,7 +112,11 @@
       "fileTooLarge": "Este arquivo tem mais de 20 MB.",
       "mentionList": "Membros da equipe para mencionar",
       "typingOne": "{name} está digitando",
-      "typingMany": "{count} pessoas estão digitando"
+      "typingMany": "{count} pessoas estão digitando",
+      "hintSend": "enviar",
+      "hintNewLine": "nova linha",
+      "hintMention": "mencionar",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "Criar um canal",
@@ -122,7 +134,9 @@
         "hint": "Somente por convite. Apenas os membros podem vê-lo."
       },
       "cancel": "Cancelar",
-      "create": "Criar canal"
+      "create": "Criar canal",
+      "namePlaceholder": "ex.: suporte",
+      "descriptionPlaceholder": "Para que serve este canal?"
     },
     "invite": {
       "title": "Convidar um membro da equipe",
@@ -135,7 +149,10 @@
       "approved": "Concluído. A solicitação foi aprovada.",
       "pending": "Convite enviado, aguardando aprovação do administrador.",
       "cancel": "Cancelar",
-      "submit": "Enviar convite"
+      "submit": "Enviar convite",
+      "emailPlaceholder": "colega@empresa.com",
+      "namePlaceholder": "Nome",
+      "notePlaceholder": "Por que devem entrar?"
     },
     "invitations": {
       "title": "Convites pendentes",

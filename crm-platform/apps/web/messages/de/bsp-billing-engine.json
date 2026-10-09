@@ -68,7 +68,11 @@
           "autoAttachCurrency": "Meta akzeptiert diese Währung nicht.",
           "baseCurrency": "Verwenden Sie einen dreistelligen Währungscode.",
           "businessId": "Geben Sie höchstens 64 Zeichen ein."
-        }
+        },
+        "kicker": "Meta-Verbindung",
+        "businessIdHint": "Business-Einstellungen → Unternehmensinformationen → „Business-Portfolio-ID“. Eine lange Zahl.",
+        "creditLinePlaceholder": "automatisch aus Ihrem Unternehmen erkannt",
+        "tokenNote": "Das Token wird verschlüsselt gespeichert und nie wieder angezeigt."
       },
       "step2": {
         "title": "2. Einen Kunden manuell zuordnen",
@@ -90,7 +94,10 @@
         "failed": "Zuordnung fehlgeschlagen: {error}",
         "finishStep1": "Schließen Sie zuerst Schritt 1 ab.",
         "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
-        "noPhone": "keine Nummer"
+        "noPhone": "keine Nummer",
+        "kicker": "manuell zuordnen, optional",
+        "numberHint": "Wählen Sie den Kunden nach Name: Die Konto-IDs im Hintergrund übernehmen wir.",
+        "currencyHint": "Die Währung, in der Meta Ihnen für diese Nummer in Rechnung stellt."
       },
       "register": {
         "title": "Verwendete Kreditlinien",
@@ -119,7 +126,8 @@
         "revokeFailed": "Widerruf fehlgeschlagen: {error}",
         "loadMore": "Mehr laden",
         "loadingMore": "Wird geladen",
-        "label": "Kreditzuteilungen"
+        "label": "Kreditzuteilungen",
+        "kicker": "zugeordnete Konten"
       },
       "guide": {
         "title": "Einrichtungsanleitung",
@@ -133,13 +141,19 @@
         "good1": "Die Währung einer Kreditlinie ist nach der Zuordnung gesperrt.",
         "good2": "Zuordnen bedeutet, dass Meta Ihnen Rechnung stellt, die Preise Ihrer Kunden legen Sie aber weiterhin selbst fest.",
         "good3": "Sie können jederzeit widerrufen, dann zahlt der Kunde wieder direkt an Meta.",
-        "link": "Übersicht zum Meta Solution Partner"
-      }
+        "link": "Übersicht zum Meta Solution Partner",
+        "kicker": "Einrichtungsanleitung",
+        "step2Note": "Das Token wird nur einmal angezeigt, daher sofort kopieren.",
+        "step3Apply": "Kreditlinie beantragen",
+        "step3Note": "Nach der Genehmigung liest die Plattform die ID automatisch aus, und Schritt 2 teilt sie mit jedem Kunden-WABA.",
+        "metaDocs": "Meta-Dokumentation",
+        "reference": "Referenz"
+      },
+      "eyebrow": "Reseller-Abrechnung · Meta-Kreditlinie"
     },
     "dashboard": {
       "title": "Reseller-GuV",
       "eyebrow": "Dieser Monat",
-      "intro": "Der Umsatz ist das, was Kunden für zugestellte Nachrichten berechnet wurde, die Meta-Kosten sind das, was dieselben Nachrichten Sie kosten, die Marge ist die Differenz. Erstattete und kostenlose Nachrichten werden nicht gezählt.",
       "linkRates": "Preise und Marge",
       "linkConnect": "Meta verbinden",
       "revenue": "Umsatz (berechnet)",
@@ -150,7 +164,6 @@
       "billed": "Abgerechnete Nachrichten",
       "free": "Kostenlose Nachrichten",
       "unpriced": "Keine Meta-Kosten festgelegt",
-      "unpricedBanner": "{count, plural, one {# abgerechnete Nachricht hat} other {# abgerechnete Nachrichten haben}} keine Meta-Kosten für Land und Kategorie, daher zählt die Marge sie als reinen Umsatz.",
       "perWorkspace": "Pro Workspace (dieser Monat)",
       "columns": {
         "workspace": "Workspace",
@@ -163,7 +176,10 @@
       "empty": "Diesen Monat noch keine abgerechneten Nachrichten.",
       "more": "Es werden nur die umsatzstärksten Workspaces aufgeführt.",
       "loadFailed": "Die GuV konnte nicht geladen werden.",
-      "currency": "Berichtswährung"
+      "currency": "Berichtswährung",
+      "intro": "Jede abgerechnete Nachricht ist eine Wallet-Belastung. Der Umsatz ist, was Ihre Kunden gezahlt haben; die Meta-Kosten sind, was Meta Ihnen berechnet; die Differenz ist Ihre Marge. Preise und Kosten legen Sie unter <link>Wallet-Regeln</link> fest.",
+      "linkPnl": "GuV",
+      "unpricedBanner": "{count, plural, one {# abgerechnete Nachricht hatte} other {# abgerechnete Nachrichten hatten}} keine Meta-Kosten für ihr Land bzw. ihre Kategorie hinterlegt, daher wird deren Marge als reiner Umsatz gezählt. Fügen Sie diese Zeilen unter <link>Wallet-Regeln → Meta-Kosten synchronisieren</link> hinzu."
     }
   }
 }

@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "לא ניתן היה לטעון את התוספים."
+    },
+    "planFields": {
+      "fromModule": "מתוך מודול מותקן",
+      "unlimited": "ללא הגבלה"
     }
   }
 }

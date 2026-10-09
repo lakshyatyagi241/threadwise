@@ -285,6 +285,14 @@ export const ERROR_CODES = {
   CAMP_TEMPLATE_NOT_ALLOWED: 'CAMP_TEMPLATE_NOT_ALLOWED',
   /** The auto-end date is not after the send date. */
   CAMP_EXPIRY_BEFORE_SEND: 'CAMP_EXPIRY_BEFORE_SEND',
+  /** "Build with AI": neither the workspace nor the platform has an active key for the vendor. */
+  CAMP_AI_NO_KEY: 'CAMP_AI_NO_KEY',
+  /** "Build with AI": the workspace used its monthly allowance on the platform's key. */
+  CAMP_AI_LIMIT_REACHED: 'CAMP_AI_LIMIT_REACHED',
+  /** "Build with AI": the vendor failed, timed out or returned nothing. */
+  CAMP_AI_PROVIDER_FAILED: 'CAMP_AI_PROVIDER_FAILED',
+  /** "Build with AI": the model's answer was not the JSON the builder expects. */
+  CAMP_AI_BAD_JSON: 'CAMP_AI_BAD_JSON',
   /** The campaign cannot be started or resumed in its current status. */
   CAMP_NOT_STARTABLE: 'CAMP_NOT_STARTABLE',
   /** The broadcast wizard's draft is incomplete or invalid at launch (`errors[]` names each step's problem). */

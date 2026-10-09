@@ -68,7 +68,6 @@
         "keySavedLast4": "Clave guardada, termina en {last4}",
         "noKey": "Sin clave",
         "unreadable": "No se puede leer la clave guardada, vuelve a pegarla",
-        "slug": "ID del proveedor",
         "apiKey": "Clave de API",
         "apiKeyHint": "Déjalo en blanco para conservar la clave guardada.",
         "apiKeyPlaceholder": "Pega la clave aquí",
@@ -89,7 +88,9 @@
         "removeTitle": "¿Quitar la clave de {name}?",
         "removeBody": "Los espacios de trabajo dejarán de usar {name} hasta que añadas una clave de nuevo. El proveedor se desactiva.",
         "removeConfirm": "Quitar clave",
-        "cancel": "Cancelar"
+        "cancel": "Cancelar",
+        "slug": "proveedor: {provider} · modelo predeterminado: {model}",
+        "maxTokensPlaceholder": "p. ej., 4096"
       },
       "toasts": {
         "saved": "{name} guardado.",
@@ -100,7 +101,8 @@
       },
       "help": {
         "title": "Cómo se usan estas claves",
-        "body": "La clave propia de un espacio de trabajo prevalece solo si su plan lo permite. En caso contrario se usa el proveedor activo correspondiente de aquí. Desactivar un proveedor significa que los espacios de trabajo sin clave propia no pueden usarlo."
+        "body": "La clave propia de un espacio de trabajo prevalece solo si su plan lo permite. En caso contrario se usa el proveedor activo correspondiente de aquí. Desactivar un proveedor significa que los espacios de trabajo sin clave propia no pueden usarlo.",
+        "eyebrow": "Cómo se usan estas claves"
       }
     },
     "dashboard": {

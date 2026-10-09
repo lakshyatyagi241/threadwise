@@ -55,7 +55,14 @@
       "webhook_lead": "عميل محتمل من webhook",
       "handoff": "التسليم",
       "inbox": "صندوق وارد الفريق",
-      "retry": "إعادة المحاولة"
+      "retry": "إعادة المحاولة",
+      "group_leave": "مغادرة القائمة",
+      "segment_join": "دخول الشريحة",
+      "contact_updated": "تحديث جهة اتصال",
+      "field_match": "تطابق حقل",
+      "date_field_match": "تطابق تاريخ",
+      "schedule": "الجدولة",
+      "ecom_event": "حدث المتجر"
     },
     "endReason": {
       "end_node": "وصل إلى نهاية التدفق",

@@ -22,10 +22,13 @@
         "read": "Terbaca",
         "failed": "Gagal",
         "processing": "Diproses",
-        "queued": "Dalam antrean",
         "campaigns": "{count} kampanye",
         "inFlight": "sedang berjalan",
-        "awaiting": "menunggu"
+        "awaiting": "menunggu",
+        "queued": "{count} antre",
+        "deliveredRate": "{rate}% pengiriman",
+        "readRate": "{rate}% tingkat baca",
+        "failedCampaigns": "{count} kampanye gagal"
       },
       "range": {
         "all": "Sepanjang waktu",
@@ -87,7 +90,13 @@
         "devices": "Perangkat siap",
         "retry": "Antrean percobaan ulang",
         "createTitle": "Buat kampanye",
-        "createBody": "Pilih pengirim, tulis atau pilih pesan, lalu pilih penerimanya."
+        "createBody": "Pilih pengirim, tulis atau pilih pesan, lalu pilih penerimanya.",
+        "tipTitle": "Tips",
+        "tip": "Jadwalkan kampanye saat pelanggan Anda aktif. Pasangkan setiap siaran dengan templat yang disetujui agar pengiriman yang gagal ditandai sebelum meninggalkan antrean.",
+        "healthyTitle": "Semua sistem sehat",
+        "attentionTitle": "Pengiriman perlu perhatian",
+        "healthLine": "rata-rata pengiriman {rate}% · {count} kampanye perlu ditinjau.",
+        "label": "Filter kampanye"
       },
       "card": {
         "select": "Pilih {name}",
@@ -130,7 +139,27 @@
         "instant": "Kirim: langsung",
         "template": "Template {name}"
       },
-      "createBroadcast": "Buat broadcast"
+      "createBroadcast": "Buat broadcast",
+      "noData": "Data tidak ditemukan",
+      "noDataHint": "Tidak ada kampanye WhatsApp yang cocok dengan filter saat ini. Coba hapus filter atau luncurkan siaran pertama Anda.",
+      "createCampaign": "Buat kampanye",
+      "help": {
+        "label": "Bantuan - {n}",
+        "items": {
+          "0": {
+            "title": "Apa itu kampanye WhatsApp?",
+            "body": "Antrean siaran yang mengirim pesan kustom, templat yang disetujui, atau alur ke kontak terpilih melalui perangkat Anda yang terhubung."
+          },
+          "1": {
+            "title": "Bagaimana cara meningkatkan pengiriman?",
+            "body": "Jaga daftar tetap bersih, gunakan templat yang disetujui untuk pengiriman keluar, dan jadwalkan siaran besar alih-alih mengirim ke semua kontak sekaligus."
+          },
+          "2": {
+            "title": "Kampanye mana yang sebaiknya diluncurkan lebih dulu?",
+            "body": "Mulailah dengan pembaruan templat atau siaran penarikan kembali, lalu bandingkan jumlah terkirim, terbaca, dan gagal sebelum memperbesar skala."
+          }
+        }
+      }
     },
     "builder": {
       "loadError": "Tidak dapat memuat kampanye ini.",
@@ -142,7 +171,28 @@
       "titleEdit": "Edit",
       "titleAccent": "kampanye",
       "failed": "Tidak dapat menyimpan kampanye. Coba lagi.",
-      "preview": "Pratinjau langsung",
+      "preview": {
+        "title": "Pratinjau langsung",
+        "typeText": "Teks",
+        "type": {
+          "template": "Templat",
+          "flow": "Alur"
+        },
+        "now": "Sekarang",
+        "scheduled": "Nanti",
+        "recurring": "Berulang",
+        "flow": "Setiap penerima akan memulai alur ini.",
+        "emptyTitle": "Pratinjau tidak tersedia",
+        "emptyHint": "Pilih perangkat, tulis isi pesan, atau pilih templat — pratinjau akan muncul di sini.",
+        "from": "Dikirim dari {sender}",
+        "note": "Beginilah tampilan kampanye Anda di chat setiap penerima.",
+        "recipients": "Penerima",
+        "schedule": "Jadwal",
+        "typeLabel": "Jenis",
+        "ab": "A/B",
+        "off": "Nonaktif",
+        "step": "Langkah {n} dari {total}"
+      },
       "previewEmpty": "Pratinjau pesan Anda…",
       "previewTemplate": "Template",
       "previewFlow": "Setiap penerima memulai flow ini.",
@@ -159,7 +209,8 @@
         "window": "Atur awal dan akhir jam pengiriman, atau kosongkan keduanya.",
         "throttle": "Jeda terpanjang harus setidaknya sama dengan jeda terpendek.",
         "expiry": "Tanggal akhir harus setelah tanggal kirim, jika tidak kampanye akan kedaluwarsa sebelum terkirim.",
-        "media": "Masukkan alamat lengkap yang diawali http:// atau https://."
+        "media": "Masukkan alamat lengkap yang diawali http:// atau https://.",
+        "sender": "Pilih pengirim."
       },
       "submit": {
         "save": "Simpan perubahan",
@@ -174,7 +225,30 @@
         "namePlaceholder": "mis. Penawaran Diwali",
         "sender": "Kirim dari",
         "senderHint": "Jika dibiarkan default, kampanye dikirim melalui mesin utama workspace Anda.",
-        "defaultSender": "Pengirim default"
+        "defaultSender": "Pengirim default",
+        "nameHint": "Label internal untuk laporan dan riwayat antrean.",
+        "noSenders": "Tidak ada pengirim yang terhubung.",
+        "connectOne": "Hubungkan satu →",
+        "type": "Jenis kampanye",
+        "types": {
+          "custom": {
+            "title": "Pesan kustom",
+            "hint": "Tulis teks dan lampirkan media atau tombol untuk siaran sekali kirim."
+          },
+          "template": {
+            "title": "Gunakan templat",
+            "hint": "Pilih templat Meta yang disetujui untuk pesan pemasaran atau utilitas."
+          },
+          "flow": {
+            "title": "Pembuat alur",
+            "hint": "Mulai alur yang tersimpan untuk setiap penerima dalam antrean ini."
+          }
+        },
+        "ab": "Aktifkan uji A/B",
+        "abHint": "Bagi penerima ke dalam dua varian pesan.",
+        "split": "Varian A {a}%",
+        "splitHint": "Varian B menerima sisa audiens. Atur konten Varian B pada langkah Susun.",
+        "pickSender": "— Pilih pengirim —"
       },
       "audience": {
         "title": "Audiens",
@@ -184,7 +258,25 @@
         "sample": "Unduh contoh",
         "csvTooBig": "File melebihi 5 MB.",
         "csvHint": "Kolom: name, country_code, phone. Kolom lain menjadi variabel yang dapat digunakan dalam pesan.",
-        "selected": "{count} kontak dipilih"
+        "selected": "{count} kontak dipilih",
+        "tag": "audiens",
+        "modes": {
+          "audience": {
+            "title": "Grup kontak",
+            "hint": "Gunakan segmen dan tag yang tersimpan."
+          },
+          "csv": {
+            "title": "Unggah CSV",
+            "hint": "Impor nomor untuk antrean ini."
+          },
+          "manual": {
+            "title": "Nomor manual",
+            "hint": "Tempel satu nomor per baris."
+          }
+        },
+        "csvRows": "{count} nomor dalam berkas",
+        "numbersPlaceholder": "Satu nomor per baris — sertakan kode negara, tanpa tanda plus",
+        "numbersCount": "{count} nomor"
       },
       "message": {
         "title": "Pesan",
@@ -285,10 +377,235 @@
         "dailyHint": "Berhenti untuk hari itu pada jumlah ini; sisanya dikirim keesokan hari.",
         "windowStart": "Kirim mulai",
         "windowEnd": "Kirim hingga",
-        "windowHint": "Hanya kirim dalam jam ini, sesuai zona waktu di atas.",
-        "tracking": "Lacak klik tautan"
+        "tracking": "Lacak klik tautan",
+        "windowHint": "Kirim hanya dalam jam ini, di {zone} (zona waktu kampanye yang diatur di atas). Di luar jendela tersebut, proses menunggu jam berikutnya. Kosongkan keduanya untuk mengirim kapan saja.",
+        "title": "Jadwal & batas",
+        "queue": "antrean",
+        "repeatHint": "Seberapa sering kampanye berulang dikirim ulang.",
+        "smartTag": "anti-blokir · opsional",
+        "smartIntro": "Kosongkan untuk memakai pengaturan kecepatan default ruang kerja. Aturan ini memberi jeda antar-pengiriman agar daftar besar terlihat manusiawi dan tetap di bawah radar pemblokiran WhatsApp.",
+        "smartZone": "Waktu dalam {zone}.",
+        "throttleMaxHint": "Jeda terpanjang sebelum sebuah pesan.",
+        "batchPauseHint": "Menit istirahat setelah setiap batch."
       },
-      "unofficialDisabled": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi."
+      "unofficialDisabled": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi.",
+      "draftChip": "Draf / belum disimpan",
+      "steps": {
+        "label": "Langkah kampanye",
+        "required": "wajib",
+        "previous": "Sebelumnya",
+        "next": "Berikutnya",
+        "of": "Langkah {n} dari {total}",
+        "setup": {
+          "name": "Pengaturan"
+        },
+        "compose": {
+          "name": "Susun"
+        },
+        "recipients": {
+          "name": "Penerima"
+        },
+        "schedule": {
+          "name": "Jadwal"
+        },
+        "review": {
+          "name": "Tinjau"
+        }
+      },
+      "compose": {
+        "title": "Susun",
+        "kind": {
+          "custom": "Pesan kustom",
+          "template": "Templat",
+          "flow": "Pembuat alur"
+        },
+        "header": "Header",
+        "headerNote": "opsional",
+        "headerText": "Teks header",
+        "headerPlaceholder": "misalnya penawaran Mei sudah aktif",
+        "required": "wajib",
+        "body": "Isi",
+        "bodyPlaceholder": "Hai '{{name}}'! …",
+        "bodyHint": "Gunakan '{{name}}' atau '{{first_name}}' untuk personalisasi. Ketik / untuk atribut apa pun.",
+        "variantB": "Pesan Varian B",
+        "variantBNote": "Uji A/B — Varian A adalah pesan di atas",
+        "variantBPlaceholder": "Pesan alternatif untuk audiens Varian B…",
+        "variantBHint": "Penerima di bagian Varian B menerima pesan ini, bukan pesan Varian A di atas. Media, tombol, header, dan footer dipakai bersama untuk kedua varian.",
+        "attachment": "Lampiran",
+        "attachmentNote": "opsional / gambar, video, atau dokumen",
+        "attachmentType": "Jenis lampiran",
+        "attachments": {
+          "none": {
+            "name": "Tidak ada"
+          },
+          "image": {
+            "name": "Gambar",
+            "title": "Pilih gambar",
+            "hint": "JPG atau PNG, maks 2 MB."
+          },
+          "video": {
+            "name": "Video",
+            "title": "Pilih video",
+            "hint": "MP4, maks 16 MB."
+          },
+          "document": {
+            "name": "Dokumen",
+            "title": "Pilih dokumen",
+            "hint": "PDF atau DOC, maks 16 MB."
+          }
+        },
+        "noAttachment": "Tanpa lampiran — pesan teks biasa.",
+        "footer": "Footer",
+        "footerNote": "opsional / maks 60",
+        "footerPlaceholder": "misalnya Balas STOP untuk berhenti",
+        "footerHint": "Teks biasa di bawah isi. Tanpa variabel.",
+        "buttons": "Tombol",
+        "buttonsNote": "opsional / hingga 3",
+        "modes": {
+          "cta": "Ajakan bertindak",
+          "reply": "Balasan cepat",
+          "mix": "Campuran"
+        },
+        "buttonType": "Jenis tombol",
+        "buttonTypes": {
+          "url": "Kunjungi situs",
+          "phone_number": "Telepon",
+          "quick_reply": "Balasan cepat",
+          "copy_code": "Salin kode"
+        },
+        "buttonText": "Teks tombol",
+        "buttonValue": "Nilai",
+        "buttonPhone": "Nomor dengan kode negara",
+        "removeButton": "Hapus",
+        "addCta": "Tambah tombol CTA",
+        "addReply": "Tambah balasan cepat",
+        "templateIntro": "Pilih templat - API Tidak Resmi aktif, jadi templat apa pun dapat digunakan (tanpa persetujuan Meta). Variabel diisi saat pengiriman dari atribut kontak.",
+        "template": "Templat",
+        "approvedOnly": "Hanya templat yang disetujui yang dapat diluncurkan di WABA.",
+        "anyTemplate": "Semua templat dapat digunakan dengan API Tidak Resmi.",
+        "pickTemplate": "Pilih templat",
+        "noTemplates": "Belum ada templat.",
+        "createTemplate": "Buat templat",
+        "variantBTemplate": "Templat Varian B",
+        "variantBTemplateHint": "Uji A/B — Varian A dipilih di atas. Nilai variabel diisi untuk templat ini secara terpisah.",
+        "sameTemplate": "— templat sama dengan A —",
+        "flowIntro": "Jalankan alur yang tersimpan untuk setiap penerima. Pesan pertama alur adalah pemicu kampanye; node berikutnya mengikuti balasan setiap kontak.",
+        "flow": "Alur",
+        "pickFlow": "Pilih alur",
+        "noFlows": "Belum ada alur.",
+        "createFlow": "Buat alur",
+        "variantBFlow": "Alur Varian B",
+        "variantBFlowHint": "Penerima di bagian Varian B menjalankan alur ini, bukan alur Varian A di atas.",
+        "sameFlow": "— alur sama dengan A —",
+        "engineNotes": {
+          "twilio": "Pesan kustom Twilio hanya mengirim teks + media. Untuk tombol, buat kampanye templat (Twilio Content SID).",
+          "waba": "Pesan kustom WABA hanya sampai ke kontak yang mengirim pesan kepada Anda dalam 24 jam terakhir. Untuk pengiriman dingin atau massal — dan untuk tombol — gunakan kampanye templat."
+        },
+        "templateEmpty": {
+          "twilio": "Belum ada templat Twilio. Buat dengan Content SID di halaman Templat.",
+          "waba": "Belum ada templat Meta (WABA) yang disetujui untuk nomor ini. Buat atau minta persetujuan di halaman Templat.",
+          "baileys": "Belum ada templat API Tidak Resmi. Buat di halaman Templat."
+        },
+        "templateIntroApproved": "Pilih templat Meta yang disetujui. Nilai variabel per kontak diisi saat pengiriman dari atribut kontak.",
+        "templateApproved": "Templat yang disetujui"
+      },
+      "review": {
+        "title": "Tinjau",
+        "tag": "konfirmasi",
+        "device": "Perangkat",
+        "type": "Jenis",
+        "recipients": "Penerima",
+        "schedule": "Jadwal",
+        "types": {
+          "custom": "Pesan kustom",
+          "template": "Templat",
+          "flow": "Pembuat alur"
+        },
+        "now": "Dikirim segera",
+        "recurring": "Berulang · {every}",
+        "checklist": "Daftar periksa validasi",
+        "summary": "Ringkasan penerima",
+        "groups": "Grup kontak dan tag",
+        "contacts": "Kontak individual",
+        "numbers": "Nomor manual / CSV",
+        "total": "Total penerima",
+        "estimate": "Perkiraan: kontak yang ada di dua grup dihitung dua kali. Antrean menghapus duplikat saat dibangun.",
+        "checks": {
+          "name": "Nama kampanye sudah diisi",
+          "content": "Pesan sudah siap",
+          "audience": "Penerima sudah dipilih",
+          "schedule": "Jadwal valid",
+          "sender": "Pengirim sudah dipilih"
+        },
+        "problems": {
+          "name": "Beri nama kampanye.",
+          "message": "Tulis pesannya.",
+          "template": "Pilih templat.",
+          "flow": "Pilih alur.",
+          "audience": "Pilih siapa yang akan dikirimi: kontak, grup, tag, nomor, atau CSV.",
+          "date": "Pilih tanggal pengiriman.",
+          "time": "Pilih waktu pengiriman.",
+          "window": "Atur awal dan akhir jam pengiriman, atau kosongkan keduanya.",
+          "throttle": "Jeda terpanjang harus sama dengan atau lebih dari jeda terpendek.",
+          "expiry": "Tanggal akhir harus setelah tanggal pengiriman, jika tidak kampanye akan kedaluwarsa sebelum terkirim.",
+          "media": "Masukkan alamat lengkap yang diawali http:// atau https://.",
+          "sender": "Pilih pengirim."
+        }
+      },
+      "ai": {
+        "open": "Buat dengan AI",
+        "eyebrow": "Kampanye WA / AI",
+        "title": "Buat dengan",
+        "titleAccent": "AI",
+        "close": "Tutup",
+        "cancel": "Batal",
+        "generate": "Buat kampanye",
+        "intro": "Susun pesan kampanye, footer, CTA, dan balasan cepat dalam hitungan detik.",
+        "model": "Model AI",
+        "modelsError": "Model tidak dapat dimuat.",
+        "noModels": "Tidak ada penyedia AI yang aktif untuk ruang kerja ini.",
+        "loadingModels": "Memuat model…",
+        "pickModel": "Pilih model",
+        "yourKey": "kunci Anda",
+        "business": "Nama bisnis",
+        "businessPlaceholder": "Bloomly Florals",
+        "product": "Produk atau layanan",
+        "productPlaceholder": "Rangkaian musiman · pengiriman di hari yang sama",
+        "goal": "Tujuan kampanye",
+        "pickGoal": "Pilih tujuan",
+        "goals": {
+          "purchase": "Dorong pembelian",
+          "booking": "Dorong pemesanan",
+          "sale": "Promosikan diskon",
+          "reengage": "Libatkan kembali kontak pasif",
+          "feedback": "Kumpulkan masukan",
+          "launch": "Umumkan peluncuran",
+          "reminder": "Kirim pengingat",
+          "festival": "Ucapan festival"
+        },
+        "tone": "Nada bicara",
+        "pickTone": "Pilih nada",
+        "tones": {
+          "friendly": "Ramah",
+          "professional": "Profesional",
+          "urgent": "Mendesak",
+          "playful": "Santai",
+          "premium": "Premium",
+          "empathetic": "Empatik"
+        },
+        "ctaLabel": "Label tombol CTA",
+        "ctaLabelPlaceholder": "Belanja sekarang",
+        "ctaUrl": "URL tujuan CTA",
+        "audience": "Target audiens",
+        "audiencePlaceholder": "Pelanggan tetap yang membeli rangkaian dalam 90 hari terakhir",
+        "offer": "Penawaran / daya tarik",
+        "offerPlaceholder": "Diskon 15% rangkaian musim semi akhir pekan ini, gratis ongkir di atas $40",
+        "notes": "Catatan tambahan",
+        "notesNote": "opsional / maks 2000",
+        "notesPlaceholder": "Hal khusus — frasa wajib, hal yang harus dihindari, ciri suara brand…",
+        "failed": "Kampanye tidak dapat dibuat. Coba lagi.",
+        "applied": "Teks kampanye sudah diisi. Tinjau sebelum melanjutkan."
+      }
     },
     "detail": {
       "notFound": "Kampanye itu tidak ditemukan.",

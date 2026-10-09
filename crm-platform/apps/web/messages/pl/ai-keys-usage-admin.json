@@ -68,7 +68,6 @@
         "keySavedLast4": "Klucz zapisany, kończy się na {last4}",
         "noKey": "Brak klucza",
         "unreadable": "Nie można odczytać zapisanego klucza, wklej go ponownie",
-        "slug": "Identyfikator dostawcy",
         "apiKey": "Klucz API",
         "apiKeyHint": "Zostaw puste, aby zachować zapisany klucz.",
         "apiKeyPlaceholder": "Wklej klucz tutaj",
@@ -89,7 +88,9 @@
         "removeTitle": "Usunąć klucz {name}?",
         "removeBody": "Przestrzenie robocze przestaną używać {name}, dopóki ponownie nie dodasz klucza. Dostawca zostanie wyłączony.",
         "removeConfirm": "Usuń klucz",
-        "cancel": "Anuluj"
+        "cancel": "Anuluj",
+        "slug": "dostawca: {provider} · model domyślny: {model}",
+        "maxTokensPlaceholder": "np. 4096"
       },
       "toasts": {
         "saved": "Zapisano {name}.",
@@ -100,7 +101,8 @@
       },
       "help": {
         "title": "Jak używane są te klucze",
-        "body": "Własny klucz przestrzeni roboczej wygrywa tylko wtedy, gdy pozwala na to jej plan. W przeciwnym razie używany jest odpowiadający mu aktywny dostawca stąd. Wyłączenie dostawcy oznacza, że przestrzenie robocze bez własnego klucza nie mogą z niego korzystać."
+        "body": "Własny klucz przestrzeni roboczej wygrywa tylko wtedy, gdy pozwala na to jej plan. W przeciwnym razie używany jest odpowiadający mu aktywny dostawca stąd. Wyłączenie dostawcy oznacza, że przestrzenie robocze bez własnego klucza nie mogą z niego korzystać.",
+        "eyebrow": "Jak używane są te klucze"
       }
     },
     "dashboard": {

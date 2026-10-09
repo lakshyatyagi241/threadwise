@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, one {Nieuw bericht van {author}} other {# nieuwe berichten van {author}}}",
         "titleNoName": "{count, plural, one {Nieuw direct bericht} other {# nieuwe directe berichten}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {Iemand wil {name} joinen} other {# personen willen {name} joinen}}",
+        "titleNoName": "{count, plural, one {Iemand wil een WhatsApp-groep joinen} other {# personen willen een WhatsApp-groep joinen}}",
+        "body": "Open Groepen om goed te keuren of af te wijzen."
+      },
+      "waba_group_suspended": {
+        "title": "{name} is geschorst",
+        "titleNoName": "Een WhatsApp-groep is geschorst",
+        "body": "WhatsApp heeft deze groep geschorst. Je kunt er geen berichten naartoe sturen totdat ze hersteld is."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} is weer actief",
+        "titleNoName": "Een WhatsApp-groep is weer actief",
+        "body": "WhatsApp heeft deze groep hersteld. Je kunt er weer berichten naartoe sturen."
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "Geplande verzending verstuurd",
         "scheduled_failed": "Geplande verzending mislukt",
         "teamchat_mention": "Heeft je genoemd in Teamchat",
-        "teamchat_message": "Nieuw direct bericht"
+        "teamchat_message": "Nieuw direct bericht",
+        "waba_group_join_request": "Verzoek om een groep te joinen",
+        "waba_group_suspended": "WhatsApp-groep geschorst",
+        "waba_group_suspension_cleared": "WhatsApp-groep weer actief"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "Wallet",
         "devices": "WhatsApp-nummers",
         "broadcasts": "Broadcasts en campagnes",
-        "team_chat": "Teamchat"
+        "team_chat": "Teamchat",
+        "whatsapp_groups": "WhatsApp-groepen"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "Wallet opgeladen",
           "hint": "Het walletsaldo van de workspace is bijgeschreven."
+        },
+        "waba_group_join_request": {
+          "label": "Verzoek om een groep te joinen",
+          "hint": "Personen vragen om lid te worden van een WhatsApp-groep van je zakelijke nummer. Tien verzoeken vormen één rij."
+        },
+        "waba_group_suspended": {
+          "label": "Groep geschorst",
+          "hint": "WhatsApp heeft een van je groepen geschorst."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "Groep weer actief",
+          "hint": "WhatsApp heeft een geschorste groep hersteld. Alleen als je over de schorsing bent geïnformeerd."
         }
       },
       "loading": "Je voorkeuren laden",

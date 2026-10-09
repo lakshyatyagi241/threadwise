@@ -15,7 +15,11 @@
         "total": "网关",
         "active": "已启用",
         "india": "印度",
-        "crypto": "加密货币"
+        "crypto": "加密货币",
+        "totalHint": "可用驱动",
+        "activeHint": "接受付款",
+        "indiaHint": "Razorpay、Paytm、Cashfree…",
+        "cryptoHint": "链上结算"
       },
       "tabsLabel": "按地区筛选",
       "all": "全部",
@@ -32,7 +36,8 @@
         "africa": "非洲",
         "latam": "拉丁美洲",
         "crypto": "加密货币",
-        "offline": "离线"
+        "offline": "离线",
+        "other": "其他"
       },
       "card": {
         "active": "已启用",
@@ -57,11 +62,12 @@
         "webhookUrl": "Webhook 网址",
         "webhookHint": "将此内容粘贴到支付服务商后台，以便其在付款时通知我们。",
         "saving": "保存中",
-        "save": "保存",
         "readOnly": "只有超级管理员可以更改网关。",
         "saved": "{name} 设置已保存。",
         "activated": "{name} 已启用。",
-        "deactivated": "{name} 已停用。"
+        "deactivated": "{name} 已停用。",
+        "noCredentials": "无需凭据，网关使用手动或带外确认。",
+        "save": "保存 {name}"
       },
       "errors": {
         "conflict": "此网关已被他人更改。已重新加载，请检查后再次保存。",
@@ -69,7 +75,10 @@
         "noDriver": "此网关在本版本中尚无驱动程序，可配置但无法启用。",
         "forbidden": "只有超级管理员可以更改网关。",
         "generic": "出错了，请重试。"
-      }
+      },
+      "eyebrow": "管理 · 账单 · 网关",
+      "titleFirst": "支付",
+      "titleSecond": "网关"
     },
     "checkout": {
       "title": "完成您的订单",
@@ -132,7 +141,28 @@
       "autoRenew": "每个周期自动续订。您可随时取消。",
       "addonRenews": "此附加包每个周期自动续订。您可随时取消，并在付费期满前继续使用。",
       "cardTitle": "使用银行卡支付",
-      "payNow": "立即付款"
+      "payNow": "立即付款",
+      "titleFirst": "完成你的",
+      "titleSecond": "订单",
+      "subtitleRefund": "{days} 天无理由退款保障。可随时取消。支持银行卡、UPI、网银和电子钱包。",
+      "steps": {
+        "plan": "选择套餐",
+        "checkout": "结账",
+        "confirmation": "确认"
+      },
+      "step": "第 {n} 步",
+      "taxIdPlaceholder": "GSTIN / VAT / EIN",
+      "addressPlaceholder": "街道 + 门牌号",
+      "cityPlaceholder": "孟买",
+      "currencyTitle": "以你的货币支付",
+      "currencyHint": "价格即时换算。仅显示你可用支付方式支持的货币。",
+      "couponPlaceholder": "有优惠码吗？",
+      "live": "正式环境",
+      "tlsNote": "付款通过 256 位 TLS 连接处理。我们不会获取你的银行卡信息。",
+      "change": "更改",
+      "terms": "付款即表示你同意我们的 <terms>服务条款</terms> 和 <privacy>隐私政策</privacy>。",
+      "refundNote": "不满意？请在前 {days} 天内给我们发邮件，我们将全额退款，无需理由，无需填写表格。",
+      "autoRenewTitle": "自动续订此套餐"
     },
     "orders": {
       "title": "订单记录",

@@ -22,10 +22,13 @@
         "read": "Đã đọc",
         "failed": "Thất bại",
         "processing": "Đang xử lý",
-        "queued": "Đang chờ",
         "campaigns": "{count} chiến dịch",
         "inFlight": "đang gửi",
-        "awaiting": "đang chờ"
+        "awaiting": "đang chờ",
+        "queued": "{count} đang chờ",
+        "deliveredRate": "{rate}% giao thành công",
+        "readRate": "tỷ lệ đọc {rate}%",
+        "failedCampaigns": "{count} chiến dịch thất bại"
       },
       "range": {
         "all": "Mọi lúc",
@@ -87,7 +90,13 @@
         "devices": "Thiết bị sẵn sàng",
         "retry": "Tồn đọng thử lại",
         "createTitle": "Tạo chiến dịch",
-        "createBody": "Chọn người gửi, viết hoặc chọn tin nhắn, chọn người nhận."
+        "createBody": "Chọn người gửi, viết hoặc chọn tin nhắn, chọn người nhận.",
+        "tipTitle": "Mẹo",
+        "tip": "Lên lịch chiến dịch khi khách hàng đang hoạt động. Ghép mỗi đợt gửi với một mẫu đã duyệt để các lượt gửi lỗi được gắn cờ trước khi rời hàng đợi.",
+        "healthyTitle": "Mọi hệ thống đều ổn định",
+        "attentionTitle": "Việc giao tin cần được xem xét",
+        "healthLine": "Trung bình giao {rate}% · {count} chiến dịch cần xem xét.",
+        "label": "Bộ lọc chiến dịch"
       },
       "card": {
         "select": "Chọn {name}",
@@ -130,7 +139,27 @@
         "instant": "Gửi: ngay lập tức",
         "template": "Mẫu {name}"
       },
-      "createBroadcast": "Tạo gửi hàng loạt"
+      "createBroadcast": "Tạo gửi hàng loạt",
+      "noData": "Không tìm thấy dữ liệu",
+      "noDataHint": "Không có chiến dịch WhatsApp nào khớp với bộ lọc hiện tại. Hãy thử xóa bộ lọc hoặc tạo đợt gửi đầu tiên.",
+      "createCampaign": "Tạo chiến dịch",
+      "help": {
+        "label": "Trợ giúp - {n}",
+        "items": {
+          "0": {
+            "title": "Chiến dịch WhatsApp là gì?",
+            "body": "Hàng đợi gửi hàng loạt, gửi tin nhắn tùy chỉnh, mẫu đã duyệt hoặc luồng tới các liên hệ đã chọn qua thiết bị đã kết nối."
+          },
+          "1": {
+            "title": "Làm thế nào để cải thiện việc giao tin?",
+            "body": "Giữ danh sách sạch, dùng mẫu đã duyệt cho tin gửi đi, và lên lịch các đợt gửi lớn thay vì gửi cho tất cả liên hệ cùng lúc."
+          },
+          "2": {
+            "title": "Nên khởi chạy chiến dịch nào trước?",
+            "body": "Bắt đầu bằng cập nhật mẫu hoặc đợt gửi tái tương tác, rồi so sánh số tin đã giao, đã đọc và thất bại trước khi mở rộng."
+          }
+        }
+      }
     },
     "builder": {
       "loadError": "Không thể tải chiến dịch này.",
@@ -142,7 +171,28 @@
       "titleEdit": "Sửa",
       "titleAccent": "chiến dịch",
       "failed": "Không thể lưu chiến dịch. Hãy thử lại.",
-      "preview": "Xem trước trực tiếp",
+      "preview": {
+        "title": "Xem trước trực tiếp",
+        "typeText": "Văn bản",
+        "type": {
+          "template": "Mẫu",
+          "flow": "Luồng"
+        },
+        "now": "Ngay",
+        "scheduled": "Sau",
+        "recurring": "Lặp lại",
+        "flow": "Mỗi người nhận sẽ bắt đầu luồng này.",
+        "emptyTitle": "Không có bản xem trước",
+        "emptyHint": "Chọn thiết bị, soạn nội dung tin nhắn hoặc chọn mẫu — bản xem trước sẽ hiển thị tại đây.",
+        "from": "Gửi từ {sender}",
+        "note": "Đây là cách chiến dịch của bạn sẽ hiển thị trong cuộc trò chuyện của mỗi người nhận.",
+        "recipients": "Người nhận",
+        "schedule": "Lịch gửi",
+        "typeLabel": "Loại",
+        "ab": "A/B",
+        "off": "Tắt",
+        "step": "Bước {n} / {total}"
+      },
       "previewEmpty": "Xem trước tin nhắn của bạn…",
       "previewTemplate": "Mẫu",
       "previewFlow": "Mỗi người nhận sẽ bắt đầu luồng này.",
@@ -159,7 +209,8 @@
         "window": "Hãy đặt cả giờ bắt đầu và giờ kết thúc gửi, hoặc không đặt cả hai.",
         "throttle": "Khoảng cách dài nhất phải bằng hoặc lớn hơn khoảng cách ngắn nhất.",
         "expiry": "Ngày kết thúc phải sau ngày gửi, nếu không chiến dịch sẽ hết hạn trước khi được gửi.",
-        "media": "Nhập địa chỉ đầy đủ bắt đầu bằng http:// hoặc https://."
+        "media": "Nhập địa chỉ đầy đủ bắt đầu bằng http:// hoặc https://.",
+        "sender": "Chọn người gửi."
       },
       "submit": {
         "save": "Lưu thay đổi",
@@ -174,7 +225,30 @@
         "namePlaceholder": "vd: Ưu đãi Tết",
         "sender": "Gửi từ",
         "senderHint": "Nếu để mặc định, chiến dịch sẽ được gửi qua công cụ chính của không gian làm việc của bạn.",
-        "defaultSender": "Người gửi mặc định"
+        "defaultSender": "Người gửi mặc định",
+        "nameHint": "Nhãn nội bộ cho báo cáo và lịch sử hàng đợi.",
+        "noSenders": "Chưa có người gửi nào được kết nối.",
+        "connectOne": "Kết nối một số →",
+        "type": "Loại chiến dịch",
+        "types": {
+          "custom": {
+            "title": "Tin nhắn tùy chỉnh",
+            "hint": "Viết văn bản và đính kèm phương tiện hoặc nút cho đợt gửi một lần."
+          },
+          "template": {
+            "title": "Dùng mẫu",
+            "hint": "Chọn mẫu Meta đã duyệt cho tin nhắn tiếp thị hoặc tiện ích."
+          },
+          "flow": {
+            "title": "Trình tạo luồng",
+            "hint": "Bắt đầu một luồng đã lưu cho mọi người nhận trong hàng đợi này."
+          }
+        },
+        "ab": "Bật thử nghiệm A/B",
+        "abHint": "Chia người nhận giữa hai biến thể tin nhắn.",
+        "split": "Biến thể A chiếm {a}%",
+        "splitHint": "Biến thể B nhận phần đối tượng còn lại. Đặt nội dung Biến thể B ở bước Soạn.",
+        "pickSender": "— Chọn người gửi —"
       },
       "audience": {
         "title": "Đối tượng",
@@ -184,7 +258,25 @@
         "sample": "Tải tệp mẫu",
         "csvTooBig": "Tệp đó vượt quá 5 MB.",
         "csvHint": "Các cột: name, country_code, phone. Mọi cột khác trở thành biến bạn có thể dùng trong tin nhắn.",
-        "selected": "Đã chọn {count} liên hệ"
+        "selected": "Đã chọn {count} liên hệ",
+        "tag": "đối tượng",
+        "modes": {
+          "audience": {
+            "title": "Nhóm liên hệ",
+            "hint": "Dùng phân đoạn và thẻ đã lưu."
+          },
+          "csv": {
+            "title": "Tải lên CSV",
+            "hint": "Nhập số cho hàng đợi này."
+          },
+          "manual": {
+            "title": "Số nhập thủ công",
+            "hint": "Dán mỗi số trên một dòng."
+          }
+        },
+        "csvRows": "{count} số trong tệp",
+        "numbersPlaceholder": "Mỗi số một dòng — gồm mã quốc gia, không có dấu cộng",
+        "numbersCount": "{count} số"
       },
       "message": {
         "title": "Tin nhắn",
@@ -285,10 +377,235 @@
         "dailyHint": "Dừng trong ngày khi đạt số này; phần còn lại gửi vào ngày hôm sau.",
         "windowStart": "Gửi từ",
         "windowEnd": "Gửi đến",
-        "windowHint": "Chỉ gửi trong khoảng giờ này, theo múi giờ ở trên.",
-        "tracking": "Theo dõi lượt nhấp liên kết"
+        "tracking": "Theo dõi lượt nhấp liên kết",
+        "windowHint": "Chỉ gửi trong khung giờ này, theo {zone} (múi giờ chiến dịch đặt ở trên). Ngoài khung giờ, lượt chạy sẽ chờ đến khung tiếp theo. Để trống cả hai để gửi bất cứ lúc nào.",
+        "title": "Lịch gửi & giới hạn",
+        "queue": "hàng đợi",
+        "repeatHint": "Tần suất chiến dịch lặp lại được gửi lại.",
+        "smartTag": "chống khóa · không bắt buộc",
+        "smartIntro": "Để trống để dùng nhịp gửi mặc định của không gian làm việc. Các quy tắc này giãn cách việc gửi để danh sách lớn trông tự nhiên và tránh bị WhatsApp phát hiện.",
+        "smartZone": "Thời gian theo {zone}.",
+        "throttleMaxHint": "Thời gian chờ lâu nhất trước một tin nhắn.",
+        "batchPauseHint": "Số phút nghỉ sau mỗi lô."
       },
-      "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức."
+      "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức.",
+      "draftChip": "Bản nháp / chưa lưu",
+      "steps": {
+        "label": "Các bước chiến dịch",
+        "required": "bắt buộc",
+        "previous": "Trước",
+        "next": "Tiếp",
+        "of": "Bước {n} / {total}",
+        "setup": {
+          "name": "Thiết lập"
+        },
+        "compose": {
+          "name": "Soạn"
+        },
+        "recipients": {
+          "name": "Người nhận"
+        },
+        "schedule": {
+          "name": "Lịch gửi"
+        },
+        "review": {
+          "name": "Xem lại"
+        }
+      },
+      "compose": {
+        "title": "Soạn",
+        "kind": {
+          "custom": "Tin nhắn tùy chỉnh",
+          "template": "Mẫu",
+          "flow": "Trình tạo luồng"
+        },
+        "header": "Tiêu đề",
+        "headerNote": "không bắt buộc",
+        "headerText": "Nội dung tiêu đề",
+        "headerPlaceholder": "ví dụ: Ưu đãi tháng 5 đang diễn ra",
+        "required": "bắt buộc",
+        "body": "Nội dung",
+        "bodyPlaceholder": "Chào '{{name}}'! …",
+        "bodyHint": "Dùng '{{name}}' hoặc '{{first_name}}' để cá nhân hóa. Nhập / để chọn bất kỳ thuộc tính nào.",
+        "variantB": "Tin nhắn Biến thể B",
+        "variantBNote": "Thử nghiệm A/B — Biến thể A là tin nhắn ở trên",
+        "variantBPlaceholder": "Tin nhắn thay thế cho đối tượng Biến thể B…",
+        "variantBHint": "Người nhận thuộc nửa Biến thể B sẽ nhận tin nhắn này thay vì tin nhắn Biến thể A ở trên. Phương tiện, nút, tiêu đề và chân trang được dùng chung cho cả hai biến thể.",
+        "attachment": "Tệp đính kèm",
+        "attachmentNote": "không bắt buộc / hình ảnh, video hoặc tài liệu",
+        "attachmentType": "Loại tệp đính kèm",
+        "attachments": {
+          "none": {
+            "name": "Không có"
+          },
+          "image": {
+            "name": "Hình ảnh",
+            "title": "Chọn hình ảnh",
+            "hint": "JPG hoặc PNG, tối đa 2 MB."
+          },
+          "video": {
+            "name": "Video",
+            "title": "Chọn video",
+            "hint": "MP4, tối đa 16 MB."
+          },
+          "document": {
+            "name": "Tài liệu",
+            "title": "Chọn tài liệu",
+            "hint": "PDF hoặc DOC, tối đa 16 MB."
+          }
+        },
+        "noAttachment": "Không có tệp đính kèm — tin nhắn văn bản thuần.",
+        "footer": "Chân trang",
+        "footerNote": "không bắt buộc / tối đa 60",
+        "footerPlaceholder": "ví dụ: Trả lời STOP để hủy đăng ký",
+        "footerHint": "Văn bản thuần bên dưới nội dung. Không có biến.",
+        "buttons": "Nút",
+        "buttonsNote": "không bắt buộc / tối đa 3",
+        "modes": {
+          "cta": "Kêu gọi hành động",
+          "reply": "Trả lời nhanh",
+          "mix": "Kết hợp"
+        },
+        "buttonType": "Loại nút",
+        "buttonTypes": {
+          "url": "Truy cập website",
+          "phone_number": "Gọi điện",
+          "quick_reply": "Trả lời nhanh",
+          "copy_code": "Sao chép mã"
+        },
+        "buttonText": "Nội dung nút",
+        "buttonValue": "Giá trị",
+        "buttonPhone": "Số có mã quốc gia",
+        "removeButton": "Xóa",
+        "addCta": "Thêm nút kêu gọi",
+        "addReply": "Thêm trả lời nhanh",
+        "templateIntro": "Chọn mẫu — API không chính thức đang bật, nên mọi mẫu đều dùng được (không cần Meta duyệt). Biến được điền khi gửi từ thuộc tính liên hệ.",
+        "template": "Mẫu",
+        "approvedOnly": "Chỉ mẫu đã duyệt mới có thể chạy trên WABA.",
+        "anyTemplate": "Mọi mẫu đều có thể dùng với API không chính thức.",
+        "pickTemplate": "Chọn mẫu",
+        "noTemplates": "Chưa có mẫu nào.",
+        "createTemplate": "Tạo mẫu",
+        "variantBTemplate": "Mẫu Biến thể B",
+        "variantBTemplateHint": "Thử nghiệm A/B — Biến thể A đã chọn ở trên. Giá trị biến được điền riêng cho mẫu này.",
+        "sameTemplate": "— cùng mẫu với A —",
+        "flowIntro": "Chạy một luồng đã lưu cho mọi người nhận. Tin nhắn đầu tiên của luồng là điểm kích hoạt chiến dịch; các nút tiếp theo đi theo phản hồi của từng liên hệ.",
+        "flow": "Luồng",
+        "pickFlow": "Chọn luồng",
+        "noFlows": "Chưa có luồng nào.",
+        "createFlow": "Tạo luồng",
+        "variantBFlow": "Luồng Biến thể B",
+        "variantBFlowHint": "Người nhận thuộc nửa Biến thể B sẽ chạy luồng này thay vì luồng Biến thể A ở trên.",
+        "sameFlow": "— cùng luồng với A —",
+        "engineNotes": {
+          "twilio": "Tin nhắn tùy chỉnh Twilio chỉ gửi văn bản + phương tiện. Với nút, hãy tạo chiến dịch Mẫu (Twilio Content SID).",
+          "waba": "Tin nhắn tùy chỉnh WABA chỉ đến các liên hệ đã nhắn cho bạn trong 24 giờ qua. Với gửi lạnh hoặc gửi hàng loạt — và với nút — hãy dùng chiến dịch Mẫu."
+        },
+        "templateEmpty": {
+          "twilio": "Chưa có mẫu Twilio nào. Tạo một mẫu với Content SID tại trang Mẫu.",
+          "waba": "Chưa có mẫu Meta (WABA) đã duyệt cho số này. Tạo hoặc nhận duyệt một mẫu tại trang Mẫu.",
+          "baileys": "Chưa có mẫu API không chính thức nào. Tạo một mẫu tại trang Mẫu."
+        },
+        "templateIntroApproved": "Chọn một mẫu Meta đã duyệt. Giá trị biến theo từng liên hệ được điền khi gửi từ thuộc tính liên hệ.",
+        "templateApproved": "Mẫu đã duyệt"
+      },
+      "review": {
+        "title": "Xem lại",
+        "tag": "xác nhận",
+        "device": "Thiết bị",
+        "type": "Loại",
+        "recipients": "Người nhận",
+        "schedule": "Lịch gửi",
+        "types": {
+          "custom": "Tin nhắn tùy chỉnh",
+          "template": "Mẫu",
+          "flow": "Trình tạo luồng"
+        },
+        "now": "Gửi ngay",
+        "recurring": "Lặp lại · {every}",
+        "checklist": "Danh sách kiểm tra",
+        "summary": "Tóm tắt người nhận",
+        "groups": "Nhóm liên hệ và thẻ",
+        "contacts": "Liên hệ riêng lẻ",
+        "numbers": "Số nhập thủ công / CSV",
+        "total": "Tổng người nhận",
+        "estimate": "Ước tính: một liên hệ ở hai nhóm sẽ được tính hai lần. Hàng đợi sẽ loại bỏ trùng lặp khi được tạo.",
+        "checks": {
+          "name": "Đã đặt tên chiến dịch",
+          "content": "Tin nhắn đã sẵn sàng",
+          "audience": "Đã chọn người nhận",
+          "schedule": "Lịch gửi hợp lệ",
+          "sender": "Đã chọn người gửi"
+        },
+        "problems": {
+          "name": "Đặt tên cho chiến dịch.",
+          "message": "Soạn tin nhắn.",
+          "template": "Chọn mẫu.",
+          "flow": "Chọn luồng.",
+          "audience": "Chọn người nhận: liên hệ, nhóm, thẻ, số hoặc CSV.",
+          "date": "Chọn ngày gửi.",
+          "time": "Chọn giờ gửi.",
+          "window": "Đặt cả giờ bắt đầu và giờ kết thúc của khung giờ gửi, hoặc không đặt cả hai.",
+          "throttle": "Khoảng nghỉ dài nhất phải lớn hơn hoặc bằng khoảng nghỉ ngắn nhất.",
+          "expiry": "Ngày kết thúc phải sau ngày gửi, nếu không chiến dịch sẽ hết hạn trước khi gửi.",
+          "media": "Nhập địa chỉ đầy đủ bắt đầu bằng http:// hoặc https://.",
+          "sender": "Chọn người gửi."
+        }
+      },
+      "ai": {
+        "open": "Tạo bằng AI",
+        "eyebrow": "Chiến dịch WA / AI",
+        "title": "Tạo bằng",
+        "titleAccent": "AI",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "generate": "Tạo chiến dịch",
+        "intro": "Soạn nhanh tin nhắn chiến dịch, chân trang, nút kêu gọi và trả lời nhanh chỉ trong vài giây.",
+        "model": "Mô hình AI",
+        "modelsError": "Không thể tải các mô hình.",
+        "noModels": "Không có nhà cung cấp AI nào được bật cho không gian làm việc này.",
+        "loadingModels": "Đang tải mô hình…",
+        "pickModel": "Chọn mô hình",
+        "yourKey": "khóa của bạn",
+        "business": "Tên doanh nghiệp",
+        "businessPlaceholder": "Bloomly Florals",
+        "product": "Sản phẩm hoặc dịch vụ",
+        "productPlaceholder": "Bó hoa theo mùa · giao trong ngày",
+        "goal": "Mục tiêu chiến dịch",
+        "pickGoal": "Chọn mục tiêu",
+        "goals": {
+          "purchase": "Thúc đẩy mua hàng",
+          "booking": "Thúc đẩy đặt chỗ",
+          "sale": "Quảng bá khuyến mãi",
+          "reengage": "Tái tương tác với liên hệ không hoạt động",
+          "feedback": "Thu thập phản hồi",
+          "launch": "Thông báo ra mắt",
+          "reminder": "Gửi nhắc nhở",
+          "festival": "Lời chúc lễ hội"
+        },
+        "tone": "Giọng điệu",
+        "pickTone": "Chọn giọng điệu",
+        "tones": {
+          "friendly": "Thân thiện",
+          "professional": "Chuyên nghiệp",
+          "urgent": "Khẩn cấp",
+          "playful": "Vui tươi",
+          "premium": "Cao cấp",
+          "empathetic": "Đồng cảm"
+        },
+        "ctaLabel": "Nhãn nút kêu gọi",
+        "ctaLabelPlaceholder": "Mua ngay",
+        "ctaUrl": "URL đích của nút kêu gọi",
+        "audience": "Đối tượng mục tiêu",
+        "audiencePlaceholder": "Khách hàng quay lại đã mua bó hoa trong 90 ngày qua",
+        "offer": "Ưu đãi / điểm nhấn",
+        "offerPlaceholder": "Giảm 15% bó hoa mùa xuân cuối tuần này, miễn phí giao hàng từ 40$",
+        "notes": "Ghi chú thêm",
+        "notesNote": "không bắt buộc / tối đa 2000",
+        "notesPlaceholder": "Bất kỳ điều gì cụ thể — cụm từ bắt buộc, điều cần tránh, giọng thương hiệu…",
+        "failed": "Không thể tạo chiến dịch. Vui lòng thử lại.",
+        "applied": "Nội dung chiến dịch đã được điền. Hãy xem lại trước khi tiếp tục."
+      }
     },
     "detail": {
       "notFound": "Không tìm thấy chiến dịch đó.",

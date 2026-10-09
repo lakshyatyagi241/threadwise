@@ -87,7 +87,6 @@ const BADGE_KEYS: Readonly<Record<string, string>> = {
   roles: 'roles',
   permissions: 'permissions',
   'cms-announcements': 'announcements',
-  'cms-guidebook': 'guidebook',
 };
 
 export interface StatusBadge {

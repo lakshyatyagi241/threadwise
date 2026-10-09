@@ -68,7 +68,11 @@
           "autoAttachCurrency": "Meta no acepta esta moneda.",
           "baseCurrency": "Usa un código de moneda de tres letras.",
           "businessId": "Introduce 64 caracteres como máximo."
-        }
+        },
+        "kicker": "conexión de Meta",
+        "businessIdHint": "Configuración de empresa → Información de la empresa → \"ID del portafolio comercial\". Es un número largo.",
+        "creditLinePlaceholder": "detectado automáticamente desde tu empresa",
+        "tokenNote": "El token se guarda cifrado y nunca se vuelve a mostrar."
       },
       "step2": {
         "title": "2. Asocia un cliente manualmente",
@@ -90,7 +94,10 @@
         "failed": "Error al asociar: {error}",
         "finishStep1": "Termina primero el paso 1.",
         "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
-        "noPhone": "sin número"
+        "noPhone": "sin número",
+        "kicker": "adjuntar manualmente, opcional",
+        "numberHint": "Elige el cliente por nombre: nosotros gestionamos los ID de cuenta por detrás.",
+        "currencyHint": "La moneda en la que Meta te factura este número."
       },
       "register": {
         "title": "Líneas de crédito en uso",
@@ -119,7 +126,8 @@
         "revokeFailed": "Error al revocar: {error}",
         "loadMore": "Cargar más",
         "loadingMore": "Cargando",
-        "label": "Asignaciones de crédito"
+        "label": "Asignaciones de crédito",
+        "kicker": "cuentas asociadas"
       },
       "guide": {
         "title": "Guía de configuración",
@@ -133,13 +141,19 @@
         "good1": "La moneda de una línea de crédito se bloquea una vez asociada.",
         "good2": "Asociar significa que Meta te factura a ti, pero tú sigues fijando los precios de tus clientes.",
         "good3": "Puedes revocar en cualquier momento y el cliente vuelve a pagar a Meta directamente.",
-        "link": "Resumen de Meta Solution Partner"
-      }
+        "link": "Resumen de Meta Solution Partner",
+        "kicker": "Guía de configuración",
+        "step2Note": "El token solo se muestra una vez, así que cópialo de inmediato.",
+        "step3Apply": "Solicitar una línea de crédito",
+        "step3Note": "Una vez aprobada, la plataforma lee su ID automáticamente y el paso 2 lo comparte con cada WABA de cliente.",
+        "metaDocs": "Documentación de Meta",
+        "reference": "referencia"
+      },
+      "eyebrow": "Facturación de revendedor · línea de crédito de Meta"
     },
     "dashboard": {
       "title": "Pérdidas y ganancias del revendedor",
       "eyebrow": "Este mes",
-      "intro": "Los ingresos son lo que se cobró a los clientes por los mensajes entregados, el coste de Meta es lo que esos mismos mensajes te costaron a ti, y el margen es la diferencia. No se cuentan los mensajes reembolsados ni los gratuitos.",
       "linkRates": "Tarifas y margen",
       "linkConnect": "Conectar Meta",
       "revenue": "Ingresos (cobrados)",
@@ -150,7 +164,6 @@
       "billed": "Mensajes facturados",
       "free": "Mensajes gratuitos",
       "unpriced": "Sin coste de Meta definido",
-      "unpricedBanner": "{count, plural, one {# mensaje facturado no tiene} other {# mensajes facturados no tienen}} coste de Meta para su país y categoría, por lo que el margen los cuenta como ingreso puro.",
       "perWorkspace": "Por espacio de trabajo (este mes)",
       "columns": {
         "workspace": "Espacio de trabajo",
@@ -163,7 +176,10 @@
       "empty": "Aún no hay mensajes facturados este mes.",
       "more": "Solo se muestran los espacios de trabajo con más ingresos.",
       "loadFailed": "No se pudieron cargar las pérdidas y ganancias.",
-      "currency": "Moneda del informe"
+      "currency": "Moneda del informe",
+      "intro": "Cada mensaje facturado es un cargo en el monedero. Los ingresos son lo que pagaron tus clientes; el coste de Meta es lo que Meta te factura; la diferencia es tu margen. Los precios y costes se definen en <link>Reglas del monedero</link>.",
+      "linkPnl": "PyG",
+      "unpricedBanner": "{count, plural, one {# mensaje facturado no tiene} other {# mensajes facturados no tienen}} coste de Meta definido para su país o categoría, así que su margen se cuenta como ingreso puro. Añade esas filas en <link>Reglas del monedero → Sincronizar costes de Meta</link>."
     }
   }
 }

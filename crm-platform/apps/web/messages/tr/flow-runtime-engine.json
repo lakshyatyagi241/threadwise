@@ -55,7 +55,14 @@
       "webhook_lead": "Webhook potansiyel müşterisi",
       "handoff": "Devir",
       "inbox": "Ekip gelen kutusu",
-      "retry": "Yeniden dene"
+      "retry": "Yeniden dene",
+      "group_leave": "Listeden ayrılma",
+      "segment_join": "Segmente katılma",
+      "contact_updated": "Kişi güncellendi",
+      "field_match": "Alan eşleşmesi",
+      "date_field_match": "Tarih eşleşmesi",
+      "schedule": "Zamanlama",
+      "ecom_event": "Mağaza olayı"
     },
     "endReason": {
       "end_node": "Akışın sonuna ulaşıldı",

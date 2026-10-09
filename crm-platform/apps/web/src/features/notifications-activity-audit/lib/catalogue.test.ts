@@ -170,3 +170,37 @@ describe('where a notification opens', () => {
     expect(link('broadcast_failed', { kind: 'campaign', id: ID(1) })).toBeNull();
   });
 });
+
+describe('the WhatsApp Groups types (BL-099)', () => {
+  it('belong to their own group with a group icon, and a problem is drawn in the danger tone', () => {
+    expect(typesOfGroup('whatsapp_groups')).toEqual([
+      'waba_group_join_request',
+      'waba_group_suspended',
+      'waba_group_suspension_cleared',
+    ]);
+    expect(typeMeta('waba_group_join_request')).toMatchObject({ icon: 'group', tone: 'info' });
+    expect(typeMeta('waba_group_suspended').tone).toBe('danger');
+    expect(typeMeta('waba_group_suspension_cleared').tone).toBe('success');
+  });
+
+  it('opens the Groups screen on the number, and plain /waba-groups when the row names none', () => {
+    const conn = '33333333-3333-4333-8333-333333333333';
+    expect(
+      notificationHref({
+        type: 'waba_group_join_request',
+        link: null,
+        data: { connectionId: conn },
+      }),
+    ).toBe(`/waba-groups?account=${conn}`);
+    expect(notificationHref({ type: 'waba_group_suspended', link: null, data: {} })).toBe(
+      '/waba-groups',
+    );
+    expect(
+      notificationHref({
+        type: 'waba_group_suspended',
+        link: '/waba-groups?account=x',
+        data: {},
+      }),
+    ).toBe('/waba-groups?account=x');
+  });
+});

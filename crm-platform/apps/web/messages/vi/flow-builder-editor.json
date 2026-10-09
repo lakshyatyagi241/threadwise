@@ -1238,7 +1238,15 @@
             "away": "Tình trạng: khi chế độ Vắng mặt đang bật",
             "out_of_hours": "Tình trạng: ngoài giờ làm việc",
             "manual_enroll": "Thủ công: người vận hành ghi danh liên hệ",
-            "comment_to_dm": "Instagram: có người bình luận vào bài viết → DM"
+            "comment_to_dm": "Instagram: có người bình luận vào bài viết → DM",
+            "group_leave": "Đối tượng: khi liên hệ rời khỏi danh sách",
+            "segment_join": "Đối tượng: khi liên hệ vào một phân đoạn",
+            "contact_updated": "Đối tượng: khi liên hệ được cập nhật",
+            "field_match": "Đối tượng: khi trường liên hệ khớp một giá trị",
+            "date_field_match": "Lịch: tương đối so với một ngày trên liên hệ (sinh nhật…)",
+            "schedule": "Lịch: vào một ngày và giờ",
+            "shopify_event": "Thương mại: một sự kiện cửa hàng Shopify",
+            "woocommerce_event": "Thương mại: một sự kiện cửa hàng WooCommerce"
           },
           "tagsLoading": "Đang tải thẻ…",
           "tagPick": "— chọn thẻ —",
@@ -1274,7 +1282,66 @@
           "automatic": "Tự động kích hoạt — không cần cấu hình thêm.",
           "away": "Kích hoạt cho mọi tin nhắn đến khi <b>chế độ Vắng mặt</b> đang BẬT. Bật chế độ Vắng mặt tại trang <link>Trả lời tự động</link>. Mỗi liên hệ được ghi danh một lần.",
           "outOfHours": "Kích hoạt cho mọi tin nhắn đến <b>ngoài giờ làm việc</b> của không gian làm việc. Đặt giờ làm việc trong cài đặt không gian làm việc. Mỗi liên hệ được ghi danh một lần.",
-          "manualEnroll": "Bạn sẽ ghi danh liên hệ thủ công từ <link>danh sách /flows</link> bằng nút <b>Ghi danh</b> cạnh luồng này."
+          "manualEnroll": "Bạn sẽ ghi danh liên hệ thủ công từ <link>danh sách /flows</link> bằng nút <b>Ghi danh</b> cạnh luồng này.",
+          "ext": {
+            "segmentsLoading": "Đang tải phân đoạn…",
+            "segmentPick": "— chọn phân đoạn —",
+            "segmentFallback": "Phân đoạn",
+            "groupLeaveLabel": "Danh sách kích hoạt luồng",
+            "groupLeaveHint": "Chạy khi một người hoặc một lần nhập đưa liên hệ ra khỏi danh sách này. Luồng tự xóa liên hệ sẽ không kích hoạt.",
+            "segmentLabel": "Phân đoạn",
+            "segmentHint": "Chạy một lần cho mỗi liên hệ, lần đầu tiên liên hệ được tìm thấy trong phân đoạn sau khi được tạo, gắn thẻ, thêm vào danh sách hoặc cập nhật.",
+            "fieldLabel": "Trường liên hệ",
+            "fieldHint": "Khóa trường: name, email, title, language, address hoặc khóa của trường tùy chỉnh.",
+            "test": "Kiểm tra",
+            "value": "Giá trị",
+            "valueHint": "Được kiểm tra mỗi khi liên hệ được tạo hoặc thay đổi. Liên hệ chạy một lần cho mỗi giá trị mà nó nhận.",
+            "when": "Khi",
+            "dirOn": "Vào ngày",
+            "dirBefore": "Số ngày trước ngày",
+            "dirAfter": "Số ngày sau ngày",
+            "days": "Ngày",
+            "timeOfDay": "Giờ trong ngày",
+            "timeZoneHint": "Theo múi giờ của không gian làm việc. Được kiểm tra mỗi ngày một lần.",
+            "repeat": "Lặp lại",
+            "yearly": "Hằng năm (chỉ tháng và ngày)",
+            "fullDate": "Chỉ vào ngày đầy đủ",
+            "frequency": {
+              "once": "Một lần, vào một ngày",
+              "daily": "Hằng ngày",
+              "weekly": "Hằng tuần",
+              "monthly": "Hằng tháng"
+            },
+            "date": "Ngày",
+            "dateHint": "YYYY-MM-DD.",
+            "weekdays": "Các ngày trong tuần",
+            "monthDay": "Ngày trong tháng",
+            "monthDayHint": "31 nghĩa là ngày cuối của tháng ngắn hơn.",
+            "time24Hint": "HH:MM, theo 24 giờ.",
+            "tz": "Múi giờ (không bắt buộc)",
+            "tzHint": "Tên IANA như Asia/Kolkata. Để trống sẽ dùng múi giờ của không gian làm việc.",
+            "who": "Ai",
+            "whoHint": "Tối đa 5.000 người mỗi lượt chạy. Liên hệ đã hủy đăng ký, đã lưu trữ hoặc không có số sẽ bị loại trừ.",
+            "audience": {
+              "all": "Mọi liên hệ có số điện thoại",
+              "group": "Liên hệ trong danh sách",
+              "segment": "Liên hệ trong phân đoạn"
+            },
+            "list": "Danh sách",
+            "storeEvent": "Sự kiện cửa hàng",
+            "storeEvents": {
+              "checkout_started": "Bắt đầu thanh toán",
+              "abandoned_cart": "Giỏ hàng bỏ dở (đến hạn nhắc lần đầu)",
+              "order_fulfilled": "Đơn hàng đã hoàn tất",
+              "order_refunded": "Đơn hàng đã hoàn tiền",
+              "order_cancelled": "Đơn hàng đã hủy",
+              "ordered_product": "Một sản phẩm đã được đặt"
+            },
+            "productId": "ID sản phẩm (không bắt buộc)",
+            "productIdHint": "Để trống = bất kỳ sản phẩm nào trong đơn hàng.",
+            "storeNote": "Khách hàng được khớp với liên hệ đã lưu theo số điện thoại; không tạo liên hệ mới cho đơn hàng. Không có các mục “Đã thêm vào giỏ” và “Đã xem sản phẩm”: cửa hàng không báo các sự kiện này.",
+            "updatedNote": "Kích hoạt mỗi khi một người hoặc một lần nhập thay đổi liên hệ. Thay đổi do luồng khác thực hiện sẽ không kích hoạt."
+          }
         }
       },
       "formsChannels": {
@@ -2001,6 +2068,34 @@
         "tg_payment": {
           "label": "Thanh toán / Hóa đơn",
           "description": "Gửi hóa đơn Telegram hoặc liên kết thanh toán có thể chia sẻ"
+        },
+        "update_contact": {
+          "label": "Cập nhật trường liên hệ",
+          "description": "Đặt trường liên hệ"
+        },
+        "list_member": {
+          "label": "Thêm / xóa khỏi danh sách",
+          "description": "Thêm liên hệ vào danh sách hoặc đưa ra khỏi danh sách"
+        },
+        "in_list": {
+          "label": "Có trong danh sách",
+          "description": "Có / không: liên hệ có trong danh sách"
+        },
+        "in_segment": {
+          "label": "Có trong phân khúc",
+          "description": "Có / không: liên hệ có trong phân khúc"
+        },
+        "sheet_check": {
+          "label": "Kiểm tra ô Google Sheet",
+          "description": "Có / không: một ô của hàng khớp"
+        },
+        "sheet_contact": {
+          "label": "Lưu liên hệ từ Sheet",
+          "description": "Sao chép một hàng Sheet vào liên hệ"
+        },
+        "wa_session": {
+          "label": "Phiên WhatsApp đang hoạt động",
+          "description": "Có / không: khách hàng đã nhắn trong 24 giờ qua"
         }
       },
       "groups": {
@@ -2073,7 +2168,15 @@
         "deal_stage_changed": "khi thương vụ chuyển giai đoạn",
         "away": "khi vắng mặt",
         "out_of_hours": "ngoài giờ làm việc",
-        "manual_enroll": "khi ghi danh"
+        "manual_enroll": "khi ghi danh",
+        "group_leave": "khi rời danh sách",
+        "segment_join": "khi tham gia phân khúc",
+        "contact_updated": "khi cập nhật liên hệ",
+        "field_match": "khi trường khớp",
+        "date_field_match": "khi ngày khớp",
+        "schedule": "theo lịch",
+        "shopify_event": "khi có sự kiện Shopify",
+        "woocommerce_event": "khi có sự kiện WooCommerce"
       },
       "ports": {
         "manual": "thủ công",

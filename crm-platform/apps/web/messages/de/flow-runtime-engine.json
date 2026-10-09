@@ -55,7 +55,14 @@
       "webhook_lead": "Webhook-Lead",
       "handoff": "Übergabe",
       "inbox": "Team-Posteingang",
-      "retry": "Wiederholung"
+      "retry": "Wiederholung",
+      "group_leave": "Listenaustritt",
+      "segment_join": "Segmenteintritt",
+      "contact_updated": "Kontakt aktualisiert",
+      "field_match": "Feldübereinstimmung",
+      "date_field_match": "Datumsübereinstimmung",
+      "schedule": "Zeitplan",
+      "ecom_event": "Shop-Ereignis"
     },
     "endReason": {
       "end_node": "Ende des Flows erreicht",

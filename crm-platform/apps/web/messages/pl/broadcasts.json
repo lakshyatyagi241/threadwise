@@ -95,7 +95,9 @@
         "t3": "Jak poprawić wyniki?",
         "b3": "Zawężaj grupę odbiorców, wybieraj najbardziej odpowiedni szablon i przed ponowną wysyłką sprawdź liczbę nieudanych."
       },
-      "unofficialDisabled": "Nieoficjalne (wyłączone)"
+      "unofficialDisabled": "Nieoficjalne (wyłączone)",
+      "noData": "Brak danych",
+      "railLabel": "Filtry wysyłek zbiorczych"
     },
     "detail": {
       "back": "Wstecz",
@@ -293,7 +295,8 @@
       "later": "Później",
       "media": "Podgląd: {kind}",
       "contactsDenied": "Nie masz dostępu do listy kontaktów. Wybierz kontakty przez grupy lub tagi.",
-      "unofficialDisabled": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone dla Twojej przestrzeni roboczej. Wybierz numer oficjalnego WhatsApp Business API."
+      "unofficialDisabled": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone dla Twojej przestrzeni roboczej. Wybierz numer oficjalnego WhatsApp Business API.",
+      "previewLabel": "Podgląd szablonu"
     },
     "overrides": {
       "title": "Uzupełnij tę wysyłkę",

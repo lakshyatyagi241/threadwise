@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, one {New message from {author}} other {# new messages from {author}}}",
         "titleNoName": "{count, plural, one {New direct message} other {# new direct messages}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {Someone wants to join {name}} other {# people want to join {name}}}",
+        "titleNoName": "{count, plural, one {Someone wants to join a WhatsApp group} other {# people want to join a WhatsApp group}}",
+        "body": "Open Groups to approve or reject."
+      },
+      "waba_group_suspended": {
+        "title": "{name} was suspended",
+        "titleNoName": "A WhatsApp group was suspended",
+        "body": "WhatsApp suspended this group. You cannot message it until they restore it."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} is active again",
+        "titleNoName": "A WhatsApp group is active again",
+        "body": "WhatsApp restored this group. You can message it again."
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "Scheduled send went out",
         "scheduled_failed": "Scheduled send failed",
         "teamchat_mention": "Mentioned you in Team chat",
-        "teamchat_message": "New direct message"
+        "teamchat_message": "New direct message",
+        "waba_group_join_request": "Request to join a group",
+        "waba_group_suspended": "WhatsApp group suspended",
+        "waba_group_suspension_cleared": "WhatsApp group active again"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "Wallet",
         "devices": "WhatsApp numbers",
         "broadcasts": "Broadcasts and campaigns",
-        "team_chat": "Team chat"
+        "team_chat": "Team chat",
+        "whatsapp_groups": "WhatsApp groups"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "Wallet topped up",
           "hint": "The workspace wallet was credited."
+        },
+        "waba_group_join_request": {
+          "label": "Request to join a group",
+          "hint": "People ask to join a WhatsApp group of your business number. Ten requests make one row."
+        },
+        "waba_group_suspended": {
+          "label": "Group suspended",
+          "hint": "WhatsApp suspended one of your groups."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "Group active again",
+          "hint": "WhatsApp restored a group it had suspended. Only if you were told about the suspension."
         }
       },
       "loading": "Loading your preferences",

@@ -22,10 +22,13 @@
         "read": "Lidas",
         "failed": "Com falha",
         "processing": "Em processamento",
-        "queued": "Na fila",
         "campaigns": "{count} campanhas",
         "inFlight": "em andamento",
-        "awaiting": "aguardando"
+        "awaiting": "aguardando",
+        "queued": "{count} na fila",
+        "deliveredRate": "{rate}% de entrega",
+        "readRate": "{rate}% de taxa de leitura",
+        "failedCampaigns": "{count} campanhas com falha"
       },
       "range": {
         "all": "Todo o período",
@@ -87,7 +90,13 @@
         "devices": "Dispositivos prontos",
         "retry": "Fila de novas tentativas",
         "createTitle": "Criar uma campanha",
-        "createBody": "Escolha um remetente, escreva ou escolha a mensagem e escolha quem vai recebê-la."
+        "createBody": "Escolha um remetente, escreva ou escolha a mensagem e escolha quem vai recebê-la.",
+        "tipTitle": "Dica",
+        "tip": "Agende as campanhas quando seus clientes estiverem ativos. Combine cada disparo com um modelo aprovado para que envios com falha sejam sinalizados antes de sair da fila.",
+        "healthyTitle": "Todos os sistemas saudáveis",
+        "attentionTitle": "A entrega precisa de atenção",
+        "healthLine": "{rate}% de entrega média · {count} campanhas precisam de revisão.",
+        "label": "Filtros de campanha"
       },
       "card": {
         "select": "Selecionar {name}",
@@ -130,7 +139,27 @@
         "instant": "Envio: imediato",
         "template": "Modelo {name}"
       },
-      "createBroadcast": "Criar transmissão"
+      "createBroadcast": "Criar transmissão",
+      "noData": "Nenhum dado encontrado",
+      "noDataHint": "Nenhuma campanha do WhatsApp corresponde aos filtros atuais. Limpe os filtros ou crie seu primeiro disparo.",
+      "createCampaign": "Criar campanha",
+      "help": {
+        "label": "Ajuda - {n}",
+        "items": {
+          "0": {
+            "title": "O que é uma campanha do WhatsApp?",
+            "body": "Uma fila de disparo que envia uma mensagem personalizada, um modelo aprovado ou um fluxo para os contatos selecionados pelo seu dispositivo conectado."
+          },
+          "1": {
+            "title": "Como melhorar a entrega?",
+            "body": "Mantenha as listas limpas, use modelos aprovados nos envios e programe disparos maiores em vez de enviar para todos os contatos de uma vez."
+          },
+          "2": {
+            "title": "Qual campanha devo lançar primeiro?",
+            "body": "Comece com uma atualização de modelo ou um disparo de reengajamento e compare as contagens de entregues, lidas e com falha antes de escalar."
+          }
+        }
+      }
     },
     "builder": {
       "loadError": "Não foi possível carregar esta campanha.",
@@ -142,7 +171,28 @@
       "titleEdit": "Editar sua",
       "titleAccent": "campanha",
       "failed": "Não foi possível salvar a campanha. Tente novamente.",
-      "preview": "Pré-visualização ao vivo",
+      "preview": {
+        "title": "Prévia ao vivo",
+        "typeText": "Texto",
+        "type": {
+          "template": "Modelo",
+          "flow": "Fluxo"
+        },
+        "now": "Agora",
+        "scheduled": "Depois",
+        "recurring": "Recorrente",
+        "flow": "Cada destinatário inicia este fluxo.",
+        "emptyTitle": "Nenhuma prévia disponível",
+        "emptyHint": "Escolha um dispositivo, escreva o corpo da mensagem ou selecione um modelo — a prévia aparece aqui.",
+        "from": "Enviado de {sender}",
+        "note": "É assim que sua campanha aparecerá no chat de cada destinatário.",
+        "recipients": "Destinatários",
+        "schedule": "Agendamento",
+        "typeLabel": "Tipo",
+        "ab": "A/B",
+        "off": "Desligado",
+        "step": "Etapa {n} de {total}"
+      },
       "previewEmpty": "Pré-visualização da sua mensagem…",
       "previewTemplate": "Modelo",
       "previewFlow": "Cada destinatário inicia este fluxo.",
@@ -159,7 +209,8 @@
         "window": "Defina o início e o fim do horário de envio, ou nenhum dos dois.",
         "throttle": "O intervalo máximo deve ser pelo menos igual ao mínimo.",
         "expiry": "A data de término deve ser posterior à data de envio, caso contrário a campanha expiraria antes de ser enviada.",
-        "media": "Informe um endereço completo começando com http:// ou https://."
+        "media": "Informe um endereço completo começando com http:// ou https://.",
+        "sender": "Escolha um remetente."
       },
       "submit": {
         "save": "Salvar alterações",
@@ -174,7 +225,30 @@
         "namePlaceholder": "ex.: Oferta de Diwali",
         "sender": "Enviar de",
         "senderHint": "Se ficar no padrão, a campanha sai pelo mecanismo principal do seu espaço de trabalho.",
-        "defaultSender": "Remetente padrão"
+        "defaultSender": "Remetente padrão",
+        "nameHint": "Rótulo interno para relatórios e histórico da fila.",
+        "noSenders": "Nenhum remetente conectado.",
+        "connectOne": "Conectar um →",
+        "type": "Tipo de campanha",
+        "types": {
+          "custom": {
+            "title": "Mensagem personalizada",
+            "hint": "Escreva o texto e anexe mídia ou botões para um disparo único."
+          },
+          "template": {
+            "title": "Usar modelo",
+            "hint": "Escolha um modelo aprovado pela Meta para mensagens de marketing ou utilidade."
+          },
+          "flow": {
+            "title": "Editor de fluxos",
+            "hint": "Inicie um fluxo salvo para cada destinatário desta fila."
+          }
+        },
+        "ab": "Ativar teste A/B",
+        "abHint": "Divida os destinatários entre duas variantes de mensagem.",
+        "split": "Variante A: {a}%",
+        "splitHint": "A variante B recebe o restante do público. Defina o conteúdo da variante B na etapa Compor.",
+        "pickSender": "— Selecione um remetente —"
       },
       "audience": {
         "title": "Público",
@@ -184,7 +258,25 @@
         "sample": "Baixar um exemplo",
         "csvTooBig": "Esse arquivo tem mais de 5 MB.",
         "csvHint": "Colunas: name, country_code, phone. Qualquer outra coluna se torna uma variável que você pode usar na mensagem.",
-        "selected": "{count} contatos selecionados"
+        "selected": "{count} contatos selecionados",
+        "tag": "público",
+        "modes": {
+          "audience": {
+            "title": "Grupos de contatos",
+            "hint": "Use segmentos e tags salvos."
+          },
+          "csv": {
+            "title": "Enviar CSV",
+            "hint": "Importe números para esta fila."
+          },
+          "manual": {
+            "title": "Números manuais",
+            "hint": "Cole um número por linha."
+          }
+        },
+        "csvRows": "{count} números no arquivo",
+        "numbersPlaceholder": "Um número por linha — inclua o código do país, sem o sinal de mais",
+        "numbersCount": "{count} números"
       },
       "message": {
         "title": "Mensagem",
@@ -285,10 +377,235 @@
         "dailyHint": "Para no dia ao atingir esta quantidade; o restante sai no dia seguinte.",
         "windowStart": "Enviar a partir de",
         "windowEnd": "Enviar até",
-        "windowHint": "Envia somente dentro destes horários, no fuso horário acima.",
-        "tracking": "Rastrear cliques em links"
+        "tracking": "Rastrear cliques em links",
+        "windowHint": "Envie apenas dentro destes horários, em {zone} (o fuso horário da campanha definido acima). Fora da janela, a execução aguarda a próxima abertura. Deixe ambos em branco para enviar a qualquer hora.",
+        "title": "Agendamento e limites",
+        "queue": "fila",
+        "repeatHint": "Com que frequência uma campanha recorrente é reenviada.",
+        "smartTag": "anti-bloqueio · opcional",
+        "smartIntro": "Deixe em branco para usar o ritmo padrão do workspace. Estas regras espaçam os envios para que uma lista grande pareça humana e fique abaixo do radar de bloqueio do WhatsApp.",
+        "smartZone": "Horários em {zone}.",
+        "throttleMaxHint": "A maior espera antes de uma mensagem.",
+        "batchPauseHint": "Minutos de pausa após cada lote."
       },
-      "unofficialDisabled": "O envio por números pessoais do WhatsApp (a API não oficial) não está ativado para o seu espaço de trabalho. Escolha um número oficial da API do WhatsApp Business."
+      "unofficialDisabled": "O envio por números pessoais do WhatsApp (a API não oficial) não está ativado para o seu espaço de trabalho. Escolha um número oficial da API do WhatsApp Business.",
+      "draftChip": "Rascunho / não salvo",
+      "steps": {
+        "label": "Etapas da campanha",
+        "required": "obrigatório",
+        "previous": "Anterior",
+        "next": "Próximo",
+        "of": "Etapa {n} de {total}",
+        "setup": {
+          "name": "Configuração"
+        },
+        "compose": {
+          "name": "Compor"
+        },
+        "recipients": {
+          "name": "Destinatários"
+        },
+        "schedule": {
+          "name": "Agendamento"
+        },
+        "review": {
+          "name": "Revisar"
+        }
+      },
+      "compose": {
+        "title": "Compor",
+        "kind": {
+          "custom": "Mensagem personalizada",
+          "template": "Modelo",
+          "flow": "Editor de fluxos"
+        },
+        "header": "Cabeçalho",
+        "headerNote": "opcional",
+        "headerText": "Texto do cabeçalho",
+        "headerPlaceholder": "ex.: Oferta de maio já disponível",
+        "required": "obrigatório",
+        "body": "Corpo",
+        "bodyPlaceholder": "Oi '{{name}}'! …",
+        "bodyHint": "Use '{{name}}' ou '{{first_name}}' para personalizar. Digite / para qualquer atributo.",
+        "variantB": "Mensagem da variante B",
+        "variantBNote": "Teste A/B — a variante A é a mensagem acima",
+        "variantBPlaceholder": "Mensagem alternativa para o público da variante B…",
+        "variantBHint": "Os destinatários da metade B recebem esta mensagem em vez da variante A acima. Mídia, botões, cabeçalho e rodapé são compartilhados entre as duas variantes.",
+        "attachment": "Anexo",
+        "attachmentNote": "opcional / imagem, vídeo ou documento",
+        "attachmentType": "Tipo de anexo",
+        "attachments": {
+          "none": {
+            "name": "Nenhum"
+          },
+          "image": {
+            "name": "Imagem",
+            "title": "Escolher uma imagem",
+            "hint": "JPG ou PNG, máx. 2 MB."
+          },
+          "video": {
+            "name": "Vídeo",
+            "title": "Escolher um vídeo",
+            "hint": "MP4, máx. 16 MB."
+          },
+          "document": {
+            "name": "Documento",
+            "title": "Escolher um documento",
+            "hint": "PDF ou DOC, máx. 16 MB."
+          }
+        },
+        "noAttachment": "Sem anexo — uma mensagem de texto simples.",
+        "footer": "Rodapé",
+        "footerNote": "opcional / máx. 60",
+        "footerPlaceholder": "ex.: Responda SAIR para cancelar",
+        "footerHint": "Texto simples abaixo do corpo. Sem variáveis.",
+        "buttons": "Botões",
+        "buttonsNote": "opcional / até 3",
+        "modes": {
+          "cta": "Chamada para ação",
+          "reply": "Resposta rápida",
+          "mix": "Misto"
+        },
+        "buttonType": "Tipo de botão",
+        "buttonTypes": {
+          "url": "Visitar site",
+          "phone_number": "Ligar",
+          "quick_reply": "Resposta rápida",
+          "copy_code": "Copiar código"
+        },
+        "buttonText": "Texto do botão",
+        "buttonValue": "Valor",
+        "buttonPhone": "Número com código do país",
+        "removeButton": "Remover",
+        "addCta": "Adicionar botão de CTA",
+        "addReply": "Adicionar resposta rápida",
+        "templateIntro": "Escolha um modelo — a API não oficial está ativa, então qualquer modelo funciona (sem necessidade de aprovação da Meta). As variáveis são preenchidas no envio com os atributos do contato.",
+        "template": "Modelo",
+        "approvedOnly": "Somente modelos aprovados podem ser lançados na WABA.",
+        "anyTemplate": "Todos os modelos podem ser usados com a API não oficial.",
+        "pickTemplate": "Selecione um modelo",
+        "noTemplates": "Ainda não há modelos.",
+        "createTemplate": "Criar um modelo",
+        "variantBTemplate": "Modelo da variante B",
+        "variantBTemplateHint": "Teste A/B — a variante A está selecionada acima. Os valores das variáveis são preenchidos para este modelo separadamente.",
+        "sameTemplate": "— mesmo modelo da A —",
+        "flowIntro": "Execute um fluxo salvo para cada destinatário. A primeira mensagem do fluxo é o gatilho da campanha; os nós seguintes acompanham as respostas de cada contato.",
+        "flow": "Fluxo",
+        "pickFlow": "Selecione um fluxo",
+        "noFlows": "Ainda não há fluxos.",
+        "createFlow": "Criar um fluxo",
+        "variantBFlow": "Fluxo da variante B",
+        "variantBFlowHint": "Os destinatários da metade B executam este fluxo em vez do fluxo da variante A acima.",
+        "sameFlow": "— mesmo fluxo da A —",
+        "engineNotes": {
+          "twilio": "As mensagens personalizadas do Twilio enviam apenas texto e mídia. Para botões, crie uma campanha de Modelo (Twilio Content SID).",
+          "waba": "As mensagens personalizadas da WABA só chegam a contatos que falaram com você nas últimas 24 horas. Para envios frios ou em massa — e para botões — use uma campanha de Modelo."
+        },
+        "templateEmpty": {
+          "twilio": "Ainda não há modelos do Twilio. Crie um com um Content SID na página de Modelos.",
+          "waba": "Ainda não há modelos aprovados da Meta (WABA) para este número. Crie um ou obtenha a aprovação na página de Modelos.",
+          "baileys": "Ainda não há modelos da API não oficial. Crie um na página de Modelos."
+        },
+        "templateIntroApproved": "Escolha um modelo aprovado pela Meta. Os valores das variáveis de cada contato são preenchidos no envio com os atributos do contato.",
+        "templateApproved": "Modelo aprovado"
+      },
+      "review": {
+        "title": "Revisar",
+        "tag": "confirmar",
+        "device": "Dispositivo",
+        "type": "Tipo",
+        "recipients": "Destinatários",
+        "schedule": "Agendamento",
+        "types": {
+          "custom": "Mensagem personalizada",
+          "template": "Modelo",
+          "flow": "Editor de fluxos"
+        },
+        "now": "Enviando imediatamente",
+        "recurring": "Recorrente · {every}",
+        "checklist": "Lista de validação",
+        "summary": "Resumo dos destinatários",
+        "groups": "Grupos de contatos e tags",
+        "contacts": "Contatos individuais",
+        "numbers": "Números manuais / CSV",
+        "total": "Total de destinatários",
+        "estimate": "Uma estimativa: um contato em dois grupos é contado duas vezes. A fila remove duplicados ao ser montada.",
+        "checks": {
+          "name": "Nome da campanha definido",
+          "content": "Mensagem pronta",
+          "audience": "Destinatários escolhidos",
+          "schedule": "Agendamento válido",
+          "sender": "Remetente escolhido"
+        },
+        "problems": {
+          "name": "Dê um nome à campanha.",
+          "message": "Escreva a mensagem.",
+          "template": "Escolha um modelo.",
+          "flow": "Escolha um fluxo.",
+          "audience": "Escolha para quem enviar: contatos, um grupo, uma tag, números ou um CSV.",
+          "date": "Escolha a data de envio.",
+          "time": "Escolha a hora de envio.",
+          "window": "Defina o início e o fim dos horários de envio, ou nenhum dos dois.",
+          "throttle": "A maior pausa deve ser maior ou igual à menor.",
+          "expiry": "A data final deve ser posterior à data de envio; caso contrário, a campanha expiraria antes de ser enviada.",
+          "media": "Digite um endereço completo começando com http:// ou https://.",
+          "sender": "Escolha um remetente."
+        }
+      },
+      "ai": {
+        "open": "Criar com IA",
+        "eyebrow": "Campanhas WA / IA",
+        "title": "Criar com",
+        "titleAccent": "IA",
+        "close": "Fechar",
+        "cancel": "Cancelar",
+        "generate": "Gerar campanha",
+        "intro": "Crie o texto da mensagem, o rodapé, o CTA e as respostas rápidas de uma campanha em segundos.",
+        "model": "Modelo de IA",
+        "modelsError": "Não foi possível carregar os modelos.",
+        "noModels": "Nenhum provedor de IA está ativado para este workspace.",
+        "loadingModels": "Carregando modelos…",
+        "pickModel": "Selecione um modelo",
+        "yourKey": "sua chave",
+        "business": "Nome da empresa",
+        "businessPlaceholder": "Bloomly Florals",
+        "product": "Produto ou serviço",
+        "productPlaceholder": "Buquês sazonais · entrega no mesmo dia",
+        "goal": "Objetivo da campanha",
+        "pickGoal": "Selecione o objetivo",
+        "goals": {
+          "purchase": "Gerar uma compra",
+          "booking": "Gerar um agendamento",
+          "sale": "Divulgar uma promoção",
+          "reengage": "Reengajar contatos inativos",
+          "feedback": "Coletar feedback",
+          "launch": "Anunciar um lançamento",
+          "reminder": "Enviar um lembrete",
+          "festival": "Saudação de festival"
+        },
+        "tone": "Tom",
+        "pickTone": "Selecione o tom",
+        "tones": {
+          "friendly": "Amigável",
+          "professional": "Profissional",
+          "urgent": "Urgente",
+          "playful": "Descontraído",
+          "premium": "Premium",
+          "empathetic": "Empático"
+        },
+        "ctaLabel": "Texto do botão de CTA",
+        "ctaLabelPlaceholder": "Comprar agora",
+        "ctaUrl": "URL de destino do CTA",
+        "audience": "Público-alvo",
+        "audiencePlaceholder": "Clientes recorrentes que compraram um buquê nos últimos 90 dias",
+        "offer": "Oferta / gancho",
+        "offerPlaceholder": "15% de desconto em buquês de primavera neste fim de semana, entrega grátis acima de $40",
+        "notes": "Observações adicionais",
+        "notesNote": "opcional / máx. 2000",
+        "notesPlaceholder": "Qualquer detalhe — frases obrigatórias, o que evitar, tom da marca…",
+        "failed": "Não foi possível gerar a campanha. Tente novamente.",
+        "applied": "O texto da campanha foi preenchido. Revise antes de continuar."
+      }
     },
     "detail": {
       "notFound": "Essa campanha não foi encontrada.",

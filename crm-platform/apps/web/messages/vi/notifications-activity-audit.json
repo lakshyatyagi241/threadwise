@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, other {# tin nhắn mới từ {author}}}",
         "titleNoName": "{count, plural, other {# tin nhắn trực tiếp mới}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {Có người muốn tham gia {name}} other {# người muốn tham gia {name}}}",
+        "titleNoName": "{count, plural, one {Có người muốn tham gia nhóm WhatsApp} other {# người muốn tham gia nhóm WhatsApp}}",
+        "body": "Mở Nhóm để duyệt hoặc từ chối."
+      },
+      "waba_group_suspended": {
+        "title": "{name} đã bị tạm ngưng",
+        "titleNoName": "Một nhóm WhatsApp đã bị tạm ngưng",
+        "body": "WhatsApp đã tạm ngưng nhóm này. Bạn không thể nhắn tin cho nhóm cho đến khi nhóm được khôi phục."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} đã hoạt động trở lại",
+        "titleNoName": "Một nhóm WhatsApp đã hoạt động trở lại",
+        "body": "WhatsApp đã khôi phục nhóm này. Bạn có thể nhắn tin lại."
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "Lịch gửi đã được gửi",
         "scheduled_failed": "Lịch gửi thất bại",
         "teamchat_mention": "Đã nhắc bạn trong Chat nhóm",
-        "teamchat_message": "Tin nhắn trực tiếp mới"
+        "teamchat_message": "Tin nhắn trực tiếp mới",
+        "waba_group_join_request": "Yêu cầu tham gia nhóm",
+        "waba_group_suspended": "Nhóm WhatsApp bị tạm ngưng",
+        "waba_group_suspension_cleared": "Nhóm WhatsApp hoạt động trở lại"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "Ví",
         "devices": "Số WhatsApp",
         "broadcasts": "Gửi hàng loạt và chiến dịch",
-        "team_chat": "Chat nhóm"
+        "team_chat": "Chat nhóm",
+        "whatsapp_groups": "Nhóm WhatsApp"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "Ví đã nạp tiền",
           "hint": "Ví của không gian làm việc đã được cộng tiền."
+        },
+        "waba_group_join_request": {
+          "label": "Yêu cầu tham gia nhóm",
+          "hint": "Mọi người yêu cầu tham gia nhóm WhatsApp của số doanh nghiệp bạn. Mười yêu cầu gộp thành một dòng."
+        },
+        "waba_group_suspended": {
+          "label": "Nhóm bị tạm ngưng",
+          "hint": "WhatsApp đã tạm ngưng một trong các nhóm của bạn."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "Nhóm hoạt động trở lại",
+          "hint": "WhatsApp đã khôi phục một nhóm trước đó bị tạm ngưng. Chỉ hiển thị nếu bạn đã được thông báo về việc tạm ngưng."
         }
       },
       "loading": "Đang tải tùy chọn của bạn",

@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "无法加载附加包。"
+    },
+    "planFields": {
+      "fromModule": "来自已安装的模块",
+      "unlimited": "无限制"
     }
   }
 }

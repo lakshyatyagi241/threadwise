@@ -68,7 +68,6 @@
         "keySavedLast4": "Đã lưu khóa, kết thúc bằng {last4}",
         "noKey": "Chưa có khóa",
         "unreadable": "Không thể đọc khóa đã lưu, hãy dán lại",
-        "slug": "ID nhà cung cấp",
         "apiKey": "Khóa API",
         "apiKeyHint": "Để trống để giữ khóa đã lưu.",
         "apiKeyPlaceholder": "Dán khóa vào đây",
@@ -89,7 +88,9 @@
         "removeTitle": "Gỡ khóa {name}?",
         "removeBody": "Các không gian làm việc sẽ ngừng dùng {name} cho đến khi bạn thêm khóa lại. Nhà cung cấp sẽ bị tắt.",
         "removeConfirm": "Gỡ khóa",
-        "cancel": "Hủy"
+        "cancel": "Hủy",
+        "slug": "nhà cung cấp: {provider} · mô hình mặc định: {model}",
+        "maxTokensPlaceholder": "ví dụ: 4096"
       },
       "toasts": {
         "saved": "Đã lưu {name}.",
@@ -100,7 +101,8 @@
       },
       "help": {
         "title": "Cách dùng các khóa này",
-        "body": "Khóa riêng của không gian làm việc chỉ được ưu tiên khi gói cho phép. Nếu không, nhà cung cấp đang hoạt động tương ứng ở đây sẽ được dùng. Tắt một nhà cung cấp nghĩa là các không gian làm việc không có khóa riêng không thể dùng nó."
+        "body": "Khóa riêng của không gian làm việc chỉ được ưu tiên khi gói cho phép. Nếu không, nhà cung cấp đang hoạt động tương ứng ở đây sẽ được dùng. Tắt một nhà cung cấp nghĩa là các không gian làm việc không có khóa riêng không thể dùng nó.",
+        "eyebrow": "Cách sử dụng các khóa này"
       }
     },
     "dashboard": {

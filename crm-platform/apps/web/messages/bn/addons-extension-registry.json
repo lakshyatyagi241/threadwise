@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "অ্যাড-অন লোড করা যায়নি।"
+    },
+    "planFields": {
+      "fromModule": "একটি ইনস্টল করা মডিউল থেকে",
+      "unlimited": "সীমাহীন"
     }
   }
 }

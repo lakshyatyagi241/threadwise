@@ -15,7 +15,11 @@
         "total": "Zahlungsanbieter",
         "active": "Aktiv",
         "india": "Indien",
-        "crypto": "Krypto"
+        "crypto": "Krypto",
+        "totalHint": "verfügbare Treiber",
+        "activeHint": "nimmt Zahlungen an",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "Abwicklung on-chain"
       },
       "tabsLabel": "Nach Region filtern",
       "all": "Alle",
@@ -32,7 +36,8 @@
         "africa": "Afrika",
         "latam": "Lateinamerika",
         "crypto": "Krypto",
-        "offline": "Offline"
+        "offline": "Offline",
+        "other": "Sonstige"
       },
       "card": {
         "active": "Aktiv",
@@ -57,11 +62,12 @@
         "webhookUrl": "Webhook-URL",
         "webhookHint": "Fügen Sie dies im Dashboard des Anbieters ein, damit er uns über Zahlungen informieren kann.",
         "saving": "Wird gespeichert",
-        "save": "Speichern",
         "readOnly": "Nur ein Super-Administrator kann Zahlungsanbieter ändern.",
         "saved": "Einstellungen für {name} gespeichert.",
         "activated": "{name} aktiviert.",
-        "deactivated": "{name} deaktiviert."
+        "deactivated": "{name} deaktiviert.",
+        "noCredentials": "Keine Zugangsdaten erforderlich — das Gateway nutzt eine manuelle bzw. externe Bestätigung.",
+        "save": "{name} speichern"
       },
       "errors": {
         "conflict": "Jemand anderes hat diesen Zahlungsanbieter geändert. Er wurde neu geladen; prüfen Sie ihn und speichern Sie erneut.",
@@ -69,7 +75,10 @@
         "noDriver": "Für diesen Zahlungsanbieter gibt es in dieser Version noch keinen Treiber. Er kann konfiguriert, aber nicht aktiviert werden.",
         "forbidden": "Nur ein Super-Administrator kann Zahlungsanbieter ändern.",
         "generic": "Etwas ist schiefgegangen. Versuchen Sie es erneut."
-      }
+      },
+      "eyebrow": "Admin · Abrechnung · Gateways",
+      "titleFirst": "Zahlung",
+      "titleSecond": "Gateways"
     },
     "checkout": {
       "title": "Schließen Sie Ihre Bestellung ab",
@@ -132,7 +141,28 @@
       "autoRenew": "Verlängert sich in jedem Zeitraum automatisch. Sie können jederzeit kündigen.",
       "addonRenews": "Dieses Add-on verlängert sich in jedem Zeitraum automatisch. Sie können es jederzeit kündigen und bis zum Ende der bezahlten Laufzeit behalten.",
       "cardTitle": "Mit Karte bezahlen",
-      "payNow": "Jetzt bezahlen"
+      "payNow": "Jetzt bezahlen",
+      "titleFirst": "Schließen Sie Ihre",
+      "titleSecond": "Bestellung ab",
+      "subtitleRefund": "{days}-tägige Geld-zurück-Garantie. Jederzeit kündbar. Karten, UPI, Netbanking und Wallets werden akzeptiert.",
+      "steps": {
+        "plan": "Tarif wählen",
+        "checkout": "Kasse",
+        "confirmation": "Bestätigung"
+      },
+      "step": "Schritt {n}",
+      "taxIdPlaceholder": "GSTIN / USt-IdNr. / EIN",
+      "addressPlaceholder": "Straße + Hausnummer",
+      "cityPlaceholder": "Mumbai",
+      "currencyTitle": "In Ihrer Währung bezahlen",
+      "currencyHint": "Preise werden sofort umgerechnet. Angezeigt werden nur Währungen, die Ihre verfügbaren Zahlungsmethoden akzeptieren.",
+      "couponPlaceholder": "Haben Sie einen Gutscheincode?",
+      "live": "live",
+      "tlsNote": "Zahlungen werden über eine 256-Bit-TLS-Verbindung verarbeitet. Wir sehen Ihre Kartendaten nie.",
+      "change": "Ändern",
+      "terms": "Mit der Zahlung stimmen Sie unseren <terms>Nutzungsbedingungen</terms> und unserer <privacy>Datenschutzerklärung</privacy> zu.",
+      "refundNote": "Nicht zufrieden? Schreiben Sie uns innerhalb der ersten {days} Tage, und wir erstatten den vollen Betrag — ohne Fragen und ohne Formulare.",
+      "autoRenewTitle": "Diesen Tarif automatisch verlängern"
     },
     "orders": {
       "title": "Bestellverlauf",

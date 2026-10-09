@@ -68,7 +68,6 @@
         "keySavedLast4": "Kunci tersimpan, berakhiran {last4}",
         "noKey": "Tanpa kunci",
         "unreadable": "Kunci tersimpan tidak dapat dibaca, tempel lagi",
-        "slug": "ID penyedia",
         "apiKey": "Kunci API",
         "apiKeyHint": "Kosongkan untuk mempertahankan kunci tersimpan.",
         "apiKeyPlaceholder": "Tempel kunci di sini",
@@ -89,7 +88,9 @@
         "removeTitle": "Hapus kunci {name}?",
         "removeBody": "Workspace akan berhenti menggunakan {name} sampai Anda menambahkan kunci lagi. Penyedia dimatikan.",
         "removeConfirm": "Hapus kunci",
-        "cancel": "Batal"
+        "cancel": "Batal",
+        "slug": "penyedia: {provider} · model default: {model}",
+        "maxTokensPlaceholder": "misalnya 4096"
       },
       "toasts": {
         "saved": "{name} disimpan.",
@@ -100,7 +101,8 @@
       },
       "help": {
         "title": "Cara kunci ini digunakan",
-        "body": "Kunci milik workspace hanya diutamakan jika paketnya mengizinkan. Jika tidak, penyedia aktif yang sesuai di sini yang digunakan. Mematikan penyedia berarti workspace tanpa kunci sendiri tidak dapat menggunakannya."
+        "body": "Kunci milik workspace hanya diutamakan jika paketnya mengizinkan. Jika tidak, penyedia aktif yang sesuai di sini yang digunakan. Mematikan penyedia berarti workspace tanpa kunci sendiri tidak dapat menggunakannya.",
+        "eyebrow": "Cara kunci ini digunakan"
       }
     },
     "dashboard": {

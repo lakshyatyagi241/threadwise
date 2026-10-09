@@ -183,7 +183,9 @@
         "unzoned": "बिना ज़ोन",
         "per24h": "{n}/24 घं.",
         "deliv": "डिलीवर",
-        "free": "{n, plural, one {# डिवाइस स्लॉट उपलब्ध} other {# डिवाइस स्लॉट उपलब्ध}}"
+        "free": "{n, plural, one {# डिवाइस स्लॉट उपलब्ध} other {# डिवाइस स्लॉट उपलब्ध}}",
+        "freeHint": "WABA जोड़ें",
+        "connectDeviceShort": "डिवाइस जोड़ें"
       },
       "templates": {
         "title": "सबसे अच्छा प्रदर्शन करने वाले टेम्पलेट",
@@ -297,7 +299,8 @@
         "connect": "कनेक्ट करें",
         "connectedLabel": "कनेक्टेड"
       },
-      "sublineOfficial": "{date} - {range}: {sent} आउटबाउंड, {rate}% डिलीवरेबिलिटी दिख रही है।"
+      "sublineOfficial": "{date} - {range}: {sent} आउटबाउंड, {rate}% डिलीवरेबिलिटी दिख रही है।",
+      "synced": "लाइव · {s} सेकंड पहले सिंक हुआ"
     },
     "analytics": {
       "title": "एनालिटिक्स",

@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "ایڈ آنز لوڈ نہیں ہو سکے۔"
+    },
+    "planFields": {
+      "fromModule": "انسٹال شدہ ماڈیول سے",
+      "unlimited": "لامحدود"
     }
   }
 }

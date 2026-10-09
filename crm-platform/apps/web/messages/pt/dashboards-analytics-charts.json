@@ -183,7 +183,9 @@
         "unzoned": "sem zona",
         "per24h": "{n}/24h",
         "deliv": "entreg.",
-        "free": "{n, plural, one {# vaga de dispositivo disponível} other {# vagas de dispositivo disponíveis}}"
+        "free": "{n, plural, one {# vaga de dispositivo disponível} other {# vagas de dispositivo disponíveis}}",
+        "freeHint": "Adicionar WABA",
+        "connectDeviceShort": "Conectar dispositivo"
       },
       "templates": {
         "title": "Modelos com melhor desempenho",
@@ -297,7 +299,8 @@
         "connect": "Conectar",
         "connectedLabel": "Conectado"
       },
-      "sublineOfficial": "{date} - {range} mostrando {sent} enviadas, {rate}% de entregabilidade."
+      "sublineOfficial": "{date} - {range} mostrando {sent} enviadas, {rate}% de entregabilidade.",
+      "synced": "Ao vivo · sincronizado há {s}s"
     },
     "analytics": {
       "title": "Análises",

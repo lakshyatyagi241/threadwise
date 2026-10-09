@@ -72,17 +72,20 @@ the reference source directly.
 | Retry one, bulk, retry records (`flow_retry_logs`)               | TW-FLR-056, 057, 058 |
 | Concurrency and idempotency                                      | TW-FLR-059           |
 
-| Not built (waits on another domain) | Id                | Why                                                                                                                                       |
-| ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Chatbot hand-off to an AI agent     | TW-FLR-031        | no AI agent engine exists; the executor and `AI_AGENT_HANDOFF_PORT` are built and answer unavailable                                      |
-| MySQL node driver                   | TW-FLR-034        | no `mysql2` in the repo; the executor, the read-only guard and the row cap are built against `MysqlQueryPort`                             |
-| AI voice call adapter               | TW-FLR-048        | `AiCallPort` is built; the calling domain (`vishal/CALL`) binds the real adapter                                                          |
-| Google nodes' account store         | TW-FLR-044 to 047 | `GoogleWorkspacePort` and an HTTP adapter are built; no Google account store exists, so every Google node reports no account and moves on |
-| Shop adapter                        | TW-FLR-041        | `FlowShopPort` (stock, native list, checkout link): the store domains bind it                                                             |
-| Voice and photo orders, group post  | TW-FLR-042        | behind `ORDER_MEDIA_PORT` and `ORDER_GROUP_NOTIFY_PORT`                                                                                   |
-| Telegram payment node               | TW-FLR-064        | needs the Telegram payment provider                                                                                                       |
-| Call flow (voice IVR)               | TW-FLR-069        | the calling domain's                                                                                                                      |
-| Dead session tables                 | TW-FLR-070        | dead code in Reference                                                                                                                       |
+| Not built (waits on another domain)                            | Id                | Why                                                                                                                                                                                                                                                    |
+| -------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Chatbot hand-off to an AI agent                                | TW-FLR-031        | no AI agent engine exists; the executor and `AI_AGENT_HANDOFF_PORT` are built and answer unavailable                                                                                                                                                   |
+| MySQL node driver                                              | TW-FLR-034        | no `mysql2` in the repo; the executor, the read-only guard and the row cap are built against `MysqlQueryPort`                                                                                                                                          |
+| AI voice call adapter                                          | TW-FLR-048        | `AiCallPort` is built; the calling domain (`vishal/CALL`) binds the real adapter                                                                                                                                                                       |
+| Google nodes' account store                                    | TW-FLR-044 to 047 | `GoogleWorkspacePort` and an HTTP adapter are built; no Google account store exists, so every Google node reports no account and moves on                                                                                                              |
+| Shop checkout link, WooCommerce and Shopify stock              | TW-FLR-041        | `FlowShopPort`: the catalog serves WhatsApp Shop stock and the native list (`CatalogShopAdapter`); the store domains expose no checkout link or stock lookup                                                                                           |
+| Voice and photo orders, group post                             | TW-FLR-042        | behind `ORDER_MEDIA_PORT` and `ORDER_GROUP_NOTIFY_PORT`                                                                                                                                                                                                |
+| Telegram payment node                                          | TW-FLR-064        | needs the Telegram payment provider                                                                                                                                                                                                                    |
+| Instagram and Messenger carousel, lead and comment-reply nodes | TW-FLR-061, 062   | `ig_products`, `fb_products`, `fb_gallery` need a card carousel on the channel adapters; `ig_lead`, `fb_lead` need a system-safe contact update and a default-pipeline deal; `ig_reply_comment`, `fb_reply_comment` need a comment API on the adapters |
+| Call flow (voice IVR)                                          | TW-FLR-069        | the calling domain's                                                                                                                                                                                                                                   |
+| Dead session tables                                            | TW-FLR-070        | dead code in Reference                                                                                                                                                                                                                                    |
+
+Instagram and Messenger editor nodes (TW-FLR-010 rule 6, 061, 062): `ig_send_dm`, `ig_ask`, `ig_quick`, `ig_buttons` and `ig_ai` compile onto the shared Message, Question, buttons, call-to-action and ChatGPT executors (`TYPE_MAP` and `shapeNode` in `compile-graph.ts`); only link buttons of `ig_buttons` are kept. `ig_to_whatsapp` and `fb_to_whatsapp` run `SocialHandoffNode`: deep-link mode sends a `wa.me` link; direct mode says the intro and announces `flow.whatsapp_handoff_requested`, which the worker's `SocialHandoffConsumer` turns into a contact for the captured number (named "WhatsApp <digits>") and `FlowLaunchService.start` with source `handoff` (the node cannot call the launch service: it needs the engine, which needs the node).
 
 A node type without an executor is not dropped: the run notes it in its log and moves on (TW-FLR-016 rule 4), and `compileGraph` keeps its raw data for the executor that will read it.
 
@@ -98,3 +101,35 @@ Screen `/flow-runtime/analytics` (tabs Overview, Execution history, Error logs, 
 | Retry records             | `GET /v2/flow-runtime/retries`                | `FlowRuntimeService.listRetries` | `flow_retry_logs`, `flow_subscribers`, `users`     | built |
 | Retry one                 | `POST /v2/flow-runtime/subscribers/:id/retry` | `FlowRuntimeService.retry`       | `flow_subscribers`, `flow_retry_logs`              | built |
 | Retry named runs (max 50) | `POST /v2/flow-runtime/retry`                 | `FlowRuntimeService.retryMany`   | same                                               | built |
+
+## Order events (TW-FLR-006)
+
+The order trigger starts on three events, all read back by the order's uuid from `wa_orders` and handled as `order.placed`, so a repeat is the same enrolment (`order:<uuid>`):
+`order.placed` (the commerce contract), `store.order_placed` (the storefront checkout) and `whatsapp.order.received` (a catalog cart on WhatsApp, TW-WABA-042).
+Before this, the storefront emitted `store.order_placed` and nothing turned it into a flow trigger. Evidence: `flow-runtime.e2e.spec.ts` (store checkout and catalog cart, once per order).
+
+## Wired to the catalog and the inbox (this change)
+
+- A WhatsApp catalog cart captured by the WABA domain (`whatsapp.order.received`) resumes a shop node waiting on `purchased`: the cart is no longer a chat bubble, so `CatalogCartResume`
+  (an outbox consumer) finds the customer's live run on the number's channel and calls `CommerceResume.catalogCart`.
+- The catalog concierge answers a free-text product question after the flows had their turn: `CatalogConciergeListener` is an inbound listener marked `after`, and the inbound hooks now
+  run those last and tell them through `prior.consumed` whether a flow already took the message.
+
+## Workflow additions (TW-FLR-072 to 082, beyond Reference)
+
+The team's gap list against the older workflow product. Each row below is in the tracker (`vedant.md`).
+
+| Gap                                                                  | Id             | Where it lives                                                                                                                                        |
+| -------------------------------------------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Update contact field                                                 | TW-FLR-072     | node `update_contact` -> `CrmNodes` -> `ContactsService.setFieldFromFlow`                                                                             |
+| Add to list / remove from list                                       | TW-FLR-073     | node `list_member` -> `ContactGroupsService.applyFromFlow` (events carry `via: 'flow'`)                                                               |
+| Is in list, Is in segment, WhatsApp session                          | TW-FLR-074-076 | nodes `in_list`, `in_segment`, `wa_session` (yes port 1, no port 2) -> `hasMemberFromFlow`, `SegmentsService.containsContactFromFlow`, thread         |
+| Remove from list, segment join, contact updated, contact field match | TW-FLR-077     | trigger kinds `group_leave`, `segment_join`, `contact_updated`, `field_match` -> `FlowTriggerEventsConsumer` -> `FlowTriggerService.onContactChanged` |
+| Date and time schedule, date field match                             | TW-FLR-078     | trigger kinds `schedule`, `date_field_match` -> `FlowScheduleSweeper` (every minute, claim on `flows.trigger_last_occurrence`)                        |
+| Shopify and WooCommerce events                                       | TW-FLR-079     | trigger kinds `shopify_event`, `woocommerce_event` <- `store.flow_event` (webhook pipeline `flowEvents`, cart recovery `announceAbandoned`)           |
+| Check Google Sheet cell, Save contact from Sheet                     | TW-FLR-080     | nodes `sheet_check`, `sheet_contact` -> `IntegrationNodes` over `GoogleWorkspacePort`                                                                 |
+| Inbound webhook trigger                                              | TW-FLR-082     | `POST /public/v1/flows/:id/enroll`; lead webhooks emit `contact.created` / `contact.updated`                                                          |
+
+Trigger settings that do not fit `trigger_value` (a field and value, a schedule, a store event) are kept as JSON in `flows.trigger_config`,
+written by the editor's save (`flbTriggerConfig` in `packages/contracts`) and read by the runtime. Not built: Google Sheet events (TW-FLR-081),
+"added to cart" and "product viewed" store events (the stores do not report them).

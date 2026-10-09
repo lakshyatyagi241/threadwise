@@ -183,7 +183,9 @@
         "unzoned": "غیر زون شدہ",
         "per24h": "{n}/24 گھنٹے",
         "deliv": "ڈیلیور",
-        "free": "{n, plural, one {# ڈیوائس سلاٹ دستیاب ہے} other {# ڈیوائس سلاٹ دستیاب ہیں}}"
+        "free": "{n, plural, one {# ڈیوائس سلاٹ دستیاب ہے} other {# ڈیوائس سلاٹ دستیاب ہیں}}",
+        "freeHint": "WABA شامل کریں",
+        "connectDeviceShort": "ڈیوائس منسلک کریں"
       },
       "templates": {
         "title": "بہترین کارکردگی والے ٹیمپلیٹس",
@@ -297,7 +299,8 @@
         "connect": "منسلک کریں",
         "connectedLabel": "منسلک"
       },
-      "sublineOfficial": "{date} - {range} میں {sent} آؤٹ باؤنڈ دکھائے گئے، {rate}% ترسیل۔"
+      "sublineOfficial": "{date} - {range} میں {sent} آؤٹ باؤنڈ دکھائے گئے، {rate}% ترسیل۔",
+      "synced": "لائیو · {s} سیکنڈ پہلے ہم آہنگ"
     },
     "analytics": {
       "title": "تجزیات",

@@ -76,12 +76,15 @@ describe('PinnacleOnboardingService', () => {
     expect(PinnacleOnboardingService.applies(null)).toBe(false);
   });
 
-  it('reads the route from the registry row and trims the slash', () => {
-    expect(pinnacleRouteOf(registry())).toEqual({
-      baseUrl: 'https://partners.example-bsp.com',
+  it("takes the partner key from the provider and the partner host from the platform, never the provider's sending address", () => {
+    // the provider's own baseUrl is where messages are sent (the white-label subdomain); the partner-key calls stay on Pinnacle's host
+    expect(pinnacleRouteOf(registry(), 'https://partnersv1.pinbot.ai/')).toEqual({
+      baseUrl: 'https://partnersv1.pinbot.ai',
       partnerKey: 'partner-key',
     });
-    expect(pinnacleRouteOf(registry({ providerToken: undefined }))).toBeNull();
+    expect(
+      pinnacleRouteOf(registry({ providerToken: undefined }), 'https://partnersv1.pinbot.ai'),
+    ).toBeNull();
   });
 
   it('creates the account, sends the embedded details, and hands back the client key', async () => {
@@ -91,7 +94,7 @@ describe('PinnacleOnboardingService', () => {
     // the platform's system user reads the namespace, not the client's token
     expect(http.graph).toHaveBeenCalledWith('sys-token', expect.objectContaining({ path: '/100' }));
     expect(pinnacle.createAccount).toHaveBeenCalledWith(
-      { baseUrl: 'https://partners.example-bsp.com', partnerKey: 'partner-key' },
+      { baseUrl: 'https://partnersv1.pinbot.ai', partnerKey: 'partner-key' },
       expect.objectContaining({
         templateNamespace: 'ns_1',
         wabaId: '100',
@@ -140,14 +143,14 @@ describe('PinnacleOnboardingService', () => {
       (e) => e,
     );
     expect((refused as AppError).code).toBe('WAP_PARTNER_REFUSED');
-    expect((refused as AppError).status).toBe(422);
+    expect((refused as AppError).getStatus()).toBe(422);
     expect((refused as AppError).message).toContain('WABA already onboarded');
     expect(a.pinnacle.sendEmbeddedDetails).not.toHaveBeenCalled();
 
     const b = setup();
     b.pinnacle.sendEmbeddedDetails.mockRejectedValueOnce(new PinnacleError('maintenance', true));
     const down = await RequestContextStore.run(ctx, () => b.svc.onboard(b.input)).catch((e) => e);
-    expect((down as AppError).status).toBe(502);
+    expect((down as AppError).getStatus()).toBe(502);
   });
 
   it('schedules the credit-line share delayed, once per number', async () => {

@@ -22,10 +22,13 @@
         "read": "Odczytane",
         "failed": "Nieudane",
         "processing": "W toku",
-        "queued": "W kolejce",
         "campaigns": "{count, plural, one {# kampania} few {# kampanie} many {# kampanii} other {# kampanii}}",
         "inFlight": "w trakcie wysyłki",
-        "awaiting": "oczekuje"
+        "awaiting": "oczekuje",
+        "queued": "{count} w kolejce",
+        "deliveredRate": "{rate}% dostarczenia",
+        "readRate": "{rate}% wskaźnik odczytu",
+        "failedCampaigns": "{count} nieudanych kampanii"
       },
       "range": {
         "all": "Cały czas",
@@ -87,7 +90,13 @@
         "devices": "Gotowe urządzenia",
         "retry": "Zaległe ponowienia",
         "createTitle": "Utwórz kampanię",
-        "createBody": "Wybierz nadawcę, napisz lub wybierz wiadomość i wskaż odbiorców."
+        "createBody": "Wybierz nadawcę, napisz lub wybierz wiadomość i wskaż odbiorców.",
+        "tipTitle": "Wskazówka",
+        "tip": "Planuj kampanie, gdy Twoi klienci są aktywni. Łącz każdą wysyłkę z zatwierdzonym szablonem, aby nieudane wysyłki były oznaczane, zanim opuszczą kolejkę.",
+        "healthyTitle": "Wszystkie systemy działają prawidłowo",
+        "attentionTitle": "Dostarczanie wymaga uwagi",
+        "healthLine": "{rate}% średnio dostarczone · {count} kampanii do przeglądu.",
+        "label": "Filtry kampanii"
       },
       "card": {
         "select": "Wybierz {name}",
@@ -130,7 +139,27 @@
         "instant": "Wysyłka: natychmiast",
         "template": "Szablon {name}"
       },
-      "createBroadcast": "Utwórz wiadomość masową"
+      "createBroadcast": "Utwórz wiadomość masową",
+      "noData": "Brak danych",
+      "noDataHint": "Żadne kampanie WhatsApp nie pasują do bieżących filtrów. Wyczyść filtry lub uruchom pierwszą wysyłkę zbiorczą.",
+      "createCampaign": "Utwórz kampanię",
+      "help": {
+        "label": "Pomoc - {n}",
+        "items": {
+          "0": {
+            "title": "Czym jest kampania WhatsApp?",
+            "body": "Kolejka wysyłek, która wysyła własną wiadomość, zatwierdzony szablon lub przepływ do wybranych kontaktów przez połączone urządzenie."
+          },
+          "1": {
+            "title": "Jak poprawić dostarczalność?",
+            "body": "Utrzymuj czyste listy, używaj zatwierdzonych szablonów do wysyłek i planuj większe wysyłki zamiast wysyłać do wszystkich kontaktów naraz."
+          },
+          "2": {
+            "title": "Którą kampanię uruchomić najpierw?",
+            "body": "Zacznij od aktualizacji szablonu lub wysyłki reaktywacyjnej, a następnie porównaj liczby dostarczonych, odczytanych i nieudanych, zanim zwiększysz skalę."
+          }
+        }
+      }
     },
     "builder": {
       "loadError": "Nie udało się załadować tej kampanii.",
@@ -142,7 +171,28 @@
       "titleEdit": "Edytuj",
       "titleAccent": "kampanię",
       "failed": "Nie udało się zapisać kampanii. Spróbuj ponownie.",
-      "preview": "Podgląd na żywo",
+      "preview": {
+        "title": "Podgląd na żywo",
+        "typeText": "Tekst",
+        "type": {
+          "template": "Szablon",
+          "flow": "Przepływ"
+        },
+        "now": "Teraz",
+        "scheduled": "Później",
+        "recurring": "Cyklicznie",
+        "flow": "Każdy odbiorca rozpoczyna ten przepływ.",
+        "emptyTitle": "Brak dostępnego podglądu",
+        "emptyHint": "Wybierz urządzenie, napisz treść wiadomości lub wybierz szablon — podgląd pojawi się tutaj.",
+        "from": "Wysłano z {sender}",
+        "note": "Tak będzie wyglądać Twoja kampania w czacie każdego odbiorcy.",
+        "recipients": "Odbiorcy",
+        "schedule": "Harmonogram",
+        "typeLabel": "Typ",
+        "ab": "A/B",
+        "off": "Wył.",
+        "step": "Krok {n} z {total}"
+      },
       "previewEmpty": "Podgląd Twojej wiadomości…",
       "previewTemplate": "Szablon",
       "previewFlow": "Każdy odbiorca rozpoczyna ten przepływ.",
@@ -159,7 +209,8 @@
         "window": "Ustaw początek i koniec godzin wysyłania albo żadne z nich.",
         "throttle": "Najdłuższy odstęp musi być co najmniej równy najkrótszemu.",
         "expiry": "Data zakończenia musi być późniejsza niż data wysyłki, w przeciwnym razie kampania wygasłaby, zanim cokolwiek wyśle.",
-        "media": "Wpisz pełny adres zaczynający się od http:// lub https://."
+        "media": "Wpisz pełny adres zaczynający się od http:// lub https://.",
+        "sender": "Wybierz nadawcę."
       },
       "submit": {
         "save": "Zapisz zmiany",
@@ -174,7 +225,30 @@
         "namePlaceholder": "np. Oferta na Diwali",
         "sender": "Wyślij z",
         "senderHint": "Przy ustawieniu domyślnym kampania zostanie wysłana głównym silnikiem Twojej przestrzeni roboczej.",
-        "defaultSender": "Domyślny nadawca"
+        "defaultSender": "Domyślny nadawca",
+        "nameHint": "Etykieta wewnętrzna do raportów i historii kolejki.",
+        "noSenders": "Brak połączonych nadawców.",
+        "connectOne": "Połącz jednego →",
+        "type": "Typ kampanii",
+        "types": {
+          "custom": {
+            "title": "Własna wiadomość",
+            "hint": "Napisz tekst i dołącz multimedia lub przyciski do jednorazowej wysyłki."
+          },
+          "template": {
+            "title": "Użyj szablonu",
+            "hint": "Wybierz zatwierdzony szablon Meta dla wiadomości marketingowych lub usługowych."
+          },
+          "flow": {
+            "title": "Kreator przepływów",
+            "hint": "Uruchom zapisany przepływ dla każdego odbiorcy w tej kolejce."
+          }
+        },
+        "ab": "Włącz test A/B",
+        "abHint": "Podziel odbiorców między dwa warianty wiadomości.",
+        "split": "Wariant A: {a}%",
+        "splitHint": "Wariant B otrzymuje pozostałych odbiorców. Ustaw treść wariantu B w kroku Tworzenie.",
+        "pickSender": "— wybierz nadawcę —"
       },
       "audience": {
         "title": "Odbiorcy",
@@ -184,7 +258,25 @@
         "sample": "Pobierz przykład",
         "csvTooBig": "Ten plik jest większy niż 5 MB.",
         "csvHint": "Kolumny: name, country_code, phone. Każda inna kolumna staje się zmienną, której możesz użyć w wiadomości.",
-        "selected": "Wybrane kontakty: {count}"
+        "selected": "Wybrane kontakty: {count}",
+        "tag": "odbiorcy",
+        "modes": {
+          "audience": {
+            "title": "Grupy kontaktów",
+            "hint": "Użyj zapisanych segmentów i tagów."
+          },
+          "csv": {
+            "title": "Prześlij CSV",
+            "hint": "Zaimportuj numery do tej kolejki."
+          },
+          "manual": {
+            "title": "Ręczne numery",
+            "hint": "Wklej jeden numer w wierszu."
+          }
+        },
+        "csvRows": "{count} numerów w pliku",
+        "numbersPlaceholder": "Jeden numer w wierszu — z kodem kraju, bez znaku plus",
+        "numbersCount": "{count} numerów"
       },
       "message": {
         "title": "Wiadomość",
@@ -285,10 +377,235 @@
         "dailyHint": "Wysyłka na dany dzień zatrzymuje się po osiągnięciu tej liczby; reszta zostanie wysłana następnego dnia.",
         "windowStart": "Wysyłaj od",
         "windowEnd": "Wysyłaj do",
-        "windowHint": "Wysyłaj tylko w tych godzinach, w strefie czasowej podanej powyżej.",
-        "tracking": "Śledź kliknięcia linków"
+        "tracking": "Śledź kliknięcia linków",
+        "windowHint": "Wysyłaj tylko w tych godzinach, w strefie {zone} (strefa kampanii ustawiona powyżej). Poza tym oknem uruchomienie czeka na kolejne otwarcie. Zostaw oba pola puste, aby wysyłać o dowolnej porze.",
+        "title": "Harmonogram i limity",
+        "queue": "kolejka",
+        "repeatHint": "Jak często cykliczna kampania wysyła ponownie.",
+        "smartTag": "anty-ban · opcjonalnie",
+        "smartIntro": "Zostaw puste, aby użyć domyślnego tempa przestrzeni roboczej. Te reguły rozkładają wysyłkę, aby duża lista wyglądała ludzko i pozostała poniżej progu wykrywania blokad WhatsApp.",
+        "smartZone": "Godziny w strefie {zone}.",
+        "throttleMaxHint": "Najdłuższa przerwa przed wiadomością.",
+        "batchPauseHint": "Minuty odpoczynku po każdej partii."
       },
-      "unofficialDisabled": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone dla Twojej przestrzeni roboczej. Wybierz numer oficjalnego WhatsApp Business API."
+      "unofficialDisabled": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone dla Twojej przestrzeni roboczej. Wybierz numer oficjalnego WhatsApp Business API.",
+      "draftChip": "Szkic / niezapisane",
+      "steps": {
+        "label": "Kroki kampanii",
+        "required": "wymagane",
+        "previous": "Wstecz",
+        "next": "Dalej",
+        "of": "Krok {n} z {total}",
+        "setup": {
+          "name": "Konfiguracja"
+        },
+        "compose": {
+          "name": "Tworzenie"
+        },
+        "recipients": {
+          "name": "Odbiorcy"
+        },
+        "schedule": {
+          "name": "Harmonogram"
+        },
+        "review": {
+          "name": "Przegląd"
+        }
+      },
+      "compose": {
+        "title": "Tworzenie",
+        "kind": {
+          "custom": "Własna wiadomość",
+          "template": "Szablon",
+          "flow": "Kreator przepływów"
+        },
+        "header": "Nagłówek",
+        "headerNote": "opcjonalnie",
+        "headerText": "Tekst nagłówka",
+        "headerPlaceholder": "np. Majowa oferta już dostępna",
+        "required": "wymagane",
+        "body": "Treść",
+        "bodyPlaceholder": "Cześć '{{name}}'! …",
+        "bodyHint": "Użyj '{{name}}' lub '{{first_name}}', aby personalizować. Wpisz /, aby wstawić dowolny atrybut.",
+        "variantB": "Wiadomość wariantu B",
+        "variantBNote": "Test A/B — wariant A to wiadomość powyżej",
+        "variantBPlaceholder": "Alternatywna wiadomość dla odbiorców wariantu B…",
+        "variantBHint": "Odbiorcy z połowy wariantu B otrzymają tę wiadomość zamiast wiadomości wariantu A powyżej. Multimedia, przyciski, nagłówek i stopka są wspólne dla obu wariantów.",
+        "attachment": "Załącznik",
+        "attachmentNote": "opcjonalnie / obraz, wideo lub dokument",
+        "attachmentType": "Typ załącznika",
+        "attachments": {
+          "none": {
+            "name": "Brak"
+          },
+          "image": {
+            "name": "Obraz",
+            "title": "Wybierz obraz",
+            "hint": "JPG lub PNG, maks. 2 MB."
+          },
+          "video": {
+            "name": "Wideo",
+            "title": "Wybierz wideo",
+            "hint": "MP4, maks. 16 MB."
+          },
+          "document": {
+            "name": "Dokument",
+            "title": "Wybierz dokument",
+            "hint": "PDF lub DOC, maks. 16 MB."
+          }
+        },
+        "noAttachment": "Brak załącznika — zwykła wiadomość tekstowa.",
+        "footer": "Stopka",
+        "footerNote": "opcjonalnie / maks. 60",
+        "footerPlaceholder": "np. Odpowiedz STOP, aby się wypisać",
+        "footerHint": "Zwykły tekst pod treścią. Bez zmiennych.",
+        "buttons": "Przyciski",
+        "buttonsNote": "opcjonalnie / do 3",
+        "modes": {
+          "cta": "Wezwanie do działania",
+          "reply": "Szybka odpowiedź",
+          "mix": "Mieszane"
+        },
+        "buttonType": "Typ przycisku",
+        "buttonTypes": {
+          "url": "Odwiedź stronę",
+          "phone_number": "Zadzwoń",
+          "quick_reply": "Szybka odpowiedź",
+          "copy_code": "Kopiuj kod"
+        },
+        "buttonText": "Tekst przycisku",
+        "buttonValue": "Wartość",
+        "buttonPhone": "Numer z kodem kraju",
+        "removeButton": "Usuń",
+        "addCta": "Dodaj przycisk CTA",
+        "addReply": "Dodaj szybką odpowiedź",
+        "templateIntro": "Wybierz szablon — Unofficial API jest aktywne, więc działa dowolny szablon (zatwierdzenie Meta nie jest wymagane). Zmienne są uzupełniane w chwili wysyłki z atrybutów kontaktu.",
+        "template": "Szablon",
+        "approvedOnly": "Tylko zatwierdzone szablony mogą być uruchamiane na WABA.",
+        "anyTemplate": "Wszystkie szablony można używać z Unofficial API.",
+        "pickTemplate": "Wybierz szablon",
+        "noTemplates": "Brak szablonów.",
+        "createTemplate": "Utwórz szablon",
+        "variantBTemplate": "Szablon wariantu B",
+        "variantBTemplateHint": "Test A/B — wariant A jest wybrany powyżej. Wartości zmiennych są uzupełniane dla tego szablonu osobno.",
+        "sameTemplate": "— ten sam szablon co A —",
+        "flowIntro": "Uruchom zapisany przepływ dla każdego odbiorcy. Pierwsza wiadomość przepływu jest wyzwalaczem kampanii; kolejne węzły podążają za odpowiedziami każdego kontaktu.",
+        "flow": "Przepływ",
+        "pickFlow": "Wybierz przepływ",
+        "noFlows": "Brak przepływów.",
+        "createFlow": "Utwórz przepływ",
+        "variantBFlow": "Przepływ wariantu B",
+        "variantBFlowHint": "Odbiorcy z połowy wariantu B uruchomią ten przepływ zamiast przepływu wariantu A powyżej.",
+        "sameFlow": "— ten sam przepływ co A —",
+        "engineNotes": {
+          "twilio": "Własne wiadomości Twilio wysyłają tylko tekst i multimedia. Dla przycisków utwórz kampanię z szablonu (Twilio Content SID).",
+          "waba": "Własne wiadomości WABA docierają tylko do kontaktów, które napisały do Ciebie w ciągu ostatnich 24 godzin. Do wysyłek zimnych lub masowych — oraz dla przycisków — użyj kampanii z szablonu."
+        },
+        "templateEmpty": {
+          "twilio": "Brak szablonów Twilio. Utwórz jeden z Content SID na stronie Szablony.",
+          "waba": "Brak zatwierdzonych szablonów Meta (WABA) dla tego numeru. Utwórz szablon lub uzyskaj jego zatwierdzenie na stronie Szablony.",
+          "baileys": "Brak szablonów Unofficial API. Utwórz jeden na stronie Szablony."
+        },
+        "templateIntroApproved": "Wybierz zatwierdzony szablon Meta. Wartości zmiennych dla kontaktu są uzupełniane w chwili wysyłki z atrybutów kontaktu.",
+        "templateApproved": "Zatwierdzony szablon"
+      },
+      "review": {
+        "title": "Przegląd",
+        "tag": "potwierdź",
+        "device": "Urządzenie",
+        "type": "Typ",
+        "recipients": "Odbiorcy",
+        "schedule": "Harmonogram",
+        "types": {
+          "custom": "Własna wiadomość",
+          "template": "Szablon",
+          "flow": "Kreator przepływów"
+        },
+        "now": "Wysyłka natychmiast",
+        "recurring": "Cykliczna · {every}",
+        "checklist": "Lista kontrolna walidacji",
+        "summary": "Podsumowanie odbiorców",
+        "groups": "Grupy kontaktów i tagi",
+        "contacts": "Pojedyncze kontakty",
+        "numbers": "Numery ręczne / CSV",
+        "total": "Łączna liczba odbiorców",
+        "estimate": "Szacunek: kontakt w dwóch grupach jest liczony dwukrotnie. Kolejka usuwa duplikaty podczas budowania.",
+        "checks": {
+          "name": "Nazwa kampanii jest ustawiona",
+          "content": "Wiadomość jest gotowa",
+          "audience": "Odbiorcy są wybrani",
+          "schedule": "Harmonogram jest poprawny",
+          "sender": "Nadawca jest wybrany"
+        },
+        "problems": {
+          "name": "Nadaj kampanii nazwę.",
+          "message": "Napisz wiadomość.",
+          "template": "Wybierz szablon.",
+          "flow": "Wybierz przepływ.",
+          "audience": "Wybierz odbiorców: kontakty, grupę, tag, numery lub CSV.",
+          "date": "Wybierz datę wysyłki.",
+          "time": "Wybierz godzinę wysyłki.",
+          "window": "Ustaw początek i koniec godzin wysyłki albo żadne z nich.",
+          "throttle": "Najdłuższa przerwa musi być nie krótsza niż najkrótsza.",
+          "expiry": "Data końcowa musi być późniejsza niż data wysyłki, inaczej kampania wygaśnie, zanim cokolwiek wyśle.",
+          "media": "Wpisz pełny adres zaczynający się od http:// lub https://.",
+          "sender": "Wybierz nadawcę."
+        }
+      },
+      "ai": {
+        "open": "Twórz z AI",
+        "eyebrow": "Kampanie WA / AI",
+        "title": "Twórz z",
+        "titleAccent": "AI",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "generate": "Generuj kampanię",
+        "intro": "Przygotuj treść kampanii, stopkę, CTA i szybkie odpowiedzi w kilka sekund.",
+        "model": "Model AI",
+        "modelsError": "Nie udało się wczytać modeli.",
+        "noModels": "Dla tej przestrzeni roboczej nie jest włączony żaden dostawca AI.",
+        "loadingModels": "Wczytywanie modeli…",
+        "pickModel": "Wybierz model",
+        "yourKey": "twój klucz",
+        "business": "Nazwa firmy",
+        "businessPlaceholder": "Bloomly Florals",
+        "product": "Produkt lub usługa",
+        "productPlaceholder": "Sezonowe bukiety · dostawa tego samego dnia",
+        "goal": "Cel kampanii",
+        "pickGoal": "Wybierz cel",
+        "goals": {
+          "purchase": "Zachęć do zakupu",
+          "booking": "Zachęć do rezerwacji",
+          "sale": "Promuj wyprzedaż",
+          "reengage": "Reaktywuj uśpione kontakty",
+          "feedback": "Zbierz opinie",
+          "launch": "Ogłoś premierę",
+          "reminder": "Wyślij przypomnienie",
+          "festival": "Życzenia świąteczne"
+        },
+        "tone": "Ton",
+        "pickTone": "Wybierz ton",
+        "tones": {
+          "friendly": "Przyjazny",
+          "professional": "Profesjonalny",
+          "urgent": "Pilny",
+          "playful": "Zabawny",
+          "premium": "Premium",
+          "empathetic": "Empatyczny"
+        },
+        "ctaLabel": "Etykieta przycisku CTA",
+        "ctaLabelPlaceholder": "Kup teraz",
+        "ctaUrl": "Adres URL przycisku CTA",
+        "audience": "Grupa docelowa",
+        "audiencePlaceholder": "Powracający klienci, którzy kupili bukiet w ostatnich 90 dniach",
+        "offer": "Oferta / haczyk",
+        "offerPlaceholder": "15% zniżki na wiosenne bukiety w ten weekend, darmowa dostawa powyżej 40 $",
+        "notes": "Dodatkowe uwagi",
+        "notesNote": "opcjonalnie / maks. 2000",
+        "notesPlaceholder": "Wszystko, co konieczne — wymagane zwroty, czego unikać, wskazówki dotyczące głosu marki…",
+        "failed": "Nie udało się wygenerować kampanii. Spróbuj ponownie.",
+        "applied": "Treść kampanii została uzupełniona. Przejrzyj ją przed dalszym krokiem."
+      }
     },
     "detail": {
       "notFound": "Nie znaleziono tej kampanii.",

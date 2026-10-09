@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, one {Neue Nachricht von {author}} other {# neue Nachrichten von {author}}}",
         "titleNoName": "{count, plural, one {Neue Direktnachricht} other {# neue Direktnachrichten}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {Jemand möchte {name} beitreten} other {# Personen möchten {name} beitreten}}",
+        "titleNoName": "{count, plural, one {Jemand möchte einer WhatsApp-Gruppe beitreten} other {# Personen möchten einer WhatsApp-Gruppe beitreten}}",
+        "body": "Unter Gruppen genehmigen oder ablehnen."
+      },
+      "waba_group_suspended": {
+        "title": "{name} wurde gesperrt",
+        "titleNoName": "Eine WhatsApp-Gruppe wurde gesperrt",
+        "body": "WhatsApp hat diese Gruppe gesperrt. Bis sie wiederhergestellt wird, können Sie ihr keine Nachrichten senden."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} ist wieder aktiv",
+        "titleNoName": "Eine WhatsApp-Gruppe ist wieder aktiv",
+        "body": "WhatsApp hat diese Gruppe wiederhergestellt. Sie können ihr wieder Nachrichten senden."
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "Geplanter Versand gesendet",
         "scheduled_failed": "Geplanter Versand fehlgeschlagen",
         "teamchat_mention": "Hat Sie im Team-Chat erwähnt",
-        "teamchat_message": "Neue Direktnachricht"
+        "teamchat_message": "Neue Direktnachricht",
+        "waba_group_join_request": "Anfrage zum Beitritt zu einer Gruppe",
+        "waba_group_suspended": "WhatsApp-Gruppe gesperrt",
+        "waba_group_suspension_cleared": "WhatsApp-Gruppe wieder aktiv"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "Wallet",
         "devices": "WhatsApp-Nummern",
         "broadcasts": "Broadcasts und Kampagnen",
-        "team_chat": "Team-Chat"
+        "team_chat": "Team-Chat",
+        "whatsapp_groups": "WhatsApp-Gruppen"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "Wallet aufgeladen",
           "hint": "Das Wallet des Workspace wurde gutgeschrieben."
+        },
+        "waba_group_join_request": {
+          "label": "Anfrage zum Beitritt zu einer Gruppe",
+          "hint": "Personen bitten darum, einer WhatsApp-Gruppe Ihrer Geschäftsnummer beizutreten. Zehn Anfragen ergeben eine Zeile."
+        },
+        "waba_group_suspended": {
+          "label": "Gruppe gesperrt",
+          "hint": "WhatsApp hat eine Ihrer Gruppen gesperrt."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "Gruppe wieder aktiv",
+          "hint": "WhatsApp hat eine zuvor gesperrte Gruppe wiederhergestellt. Nur, wenn Sie über die Sperre informiert wurden."
         }
       },
       "loading": "Ihre Einstellungen werden geladen",

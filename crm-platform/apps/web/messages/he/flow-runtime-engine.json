@@ -55,7 +55,14 @@
       "webhook_lead": "ליד מ-Webhook",
       "handoff": "העברה",
       "inbox": "תיבת הדואר של הצוות",
-      "retry": "ניסיון חוזר"
+      "retry": "ניסיון חוזר",
+      "group_leave": "יציאה מרשימה",
+      "segment_join": "הצטרפות לפלח",
+      "contact_updated": "איש קשר עודכן",
+      "field_match": "התאמת שדה",
+      "date_field_match": "התאמת תאריך",
+      "schedule": "תזמון",
+      "ecom_event": "אירוע בחנות"
     },
     "endReason": {
       "end_node": "הגיע לסוף התהליך",

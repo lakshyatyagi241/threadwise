@@ -25,7 +25,9 @@
       "deleteTitle": "Usunąć ten kanał?",
       "deleteMessage": "Kanał #{name} i wszystkie jego wiadomości zostaną usunięte dla wszystkich. Tej operacji nie można cofnąć.",
       "deleteConfirm": "Usuń kanał",
-      "cancel": "Anuluj"
+      "cancel": "Anuluj",
+      "defaultDescription": "Wewnętrzny czat przestrzeni roboczej",
+      "customerChats": "Czaty z klientami"
     },
     "sidebar": {
       "label": "Kanały i osoby",
@@ -39,7 +41,12 @@
       "invite": "Zaproś członka zespołu",
       "pending": "Oczekujące prośby",
       "pendingCount": "{count, plural, one {# oczekująca prośba} few {# oczekujące prośby} many {# oczekujących próśb} other {# oczekującej prośby}}",
-      "unread": "{count, plural, one {# nieprzeczytana wiadomość} few {# nieprzeczytane wiadomości} many {# nieprzeczytanych wiadomości} other {# nieprzeczytanej wiadomości}}"
+      "unread": "{count, plural, one {# nieprzeczytana wiadomość} few {# nieprzeczytane wiadomości} many {# nieprzeczytanych wiadomości} other {# nieprzeczytanej wiadomości}}",
+      "workspace": "Przestrzeń robocza",
+      "mode": "Tryb",
+      "customerChats": "Czaty z klientami",
+      "teamChat": "Czat zespołu",
+      "membersLink": "Członkowie"
     },
     "members": {
       "label": "Członkowie",
@@ -52,7 +59,8 @@
       "online": "Online",
       "offline": "Offline",
       "you": "(ty)",
-      "message": "Napisz do: {name}"
+      "message": "Napisz do: {name}",
+      "titleAccent": "czat"
     },
     "panel": {
       "searchTitle": "Szukaj wiadomości",
@@ -104,7 +112,11 @@
       "fileTooLarge": "Ten plik jest większy niż 20 MB.",
       "mentionList": "Członkowie zespołu do oznaczenia",
       "typingOne": "{name} pisze",
-      "typingMany": "Piszą osoby: {count}"
+      "typingMany": "Piszą osoby: {count}",
+      "hintSend": "wyślij",
+      "hintNewLine": "nowa linia",
+      "hintMention": "wzmianka",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "Utwórz kanał",
@@ -122,7 +134,9 @@
         "hint": "Tylko na zaproszenie. Widzą go wyłącznie jego członkowie."
       },
       "cancel": "Anuluj",
-      "create": "Utwórz kanał"
+      "create": "Utwórz kanał",
+      "namePlaceholder": "np. wsparcie",
+      "descriptionPlaceholder": "Do czego służy ten kanał?"
     },
     "invite": {
       "title": "Zaproś członka zespołu",
@@ -135,7 +149,10 @@
       "approved": "Gotowe. Prośba została zatwierdzona.",
       "pending": "Zaproszenie wysłane, czeka na zatwierdzenie przez administratora.",
       "cancel": "Anuluj",
-      "submit": "Wyślij zaproszenie"
+      "submit": "Wyślij zaproszenie",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "Ich imię",
+      "notePlaceholder": "Dlaczego mieliby dołączyć?"
     },
     "invitations": {
       "title": "Oczekujące zaproszenia",

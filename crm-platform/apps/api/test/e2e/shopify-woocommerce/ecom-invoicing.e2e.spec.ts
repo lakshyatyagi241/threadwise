@@ -53,7 +53,7 @@ async function store(t: Tenant, kind: 'shopify' | 'woocommerce', currency = 'USD
   return { id: Number(r[0].id), uuid: r[0].uuid as string };
 }
 
-const policy = (t: Tenant, kind: string, uuid: string, body: unknown) =>
+const policy = (t: Tenant, kind: string, uuid: string, body: object) =>
   api.http().put(`/v2/${kind}/stores/${uuid}/invoice-policy`).set(bearer(t.admin)).send(body);
 
 type Kind = 'shopify' | 'woocommerce';

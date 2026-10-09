@@ -55,7 +55,14 @@
       "webhook_lead": "Лид из вебхука",
       "handoff": "Передача",
       "inbox": "Командный инбокс",
-      "retry": "Повтор"
+      "retry": "Повтор",
+      "group_leave": "Выход из списка",
+      "segment_join": "Вход в сегмент",
+      "contact_updated": "Контакт обновлён",
+      "field_match": "Совпадение поля",
+      "date_field_match": "Совпадение даты",
+      "schedule": "Расписание",
+      "ecom_event": "Событие магазина"
     },
     "endReason": {
       "end_node": "Достигнут конец сценария",
