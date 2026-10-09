@@ -157,3 +157,34 @@ describe('toMessageResponse: the wire shape, ids and keys never leak', () => {
     expect(messageResponseSchema.parse(tpl)).toEqual(tpl);
   });
 });
+
+describe('toMessageResponse: rows stored before the adapter understood a type', () => {
+  it('an old call-permission placeholder reads as an interactive reply', () => {
+    const wire = toMessageResponse(
+      row({
+        direction: 'in',
+        kind: 'text',
+        body: '[Interactive · call_permission_reply]',
+        meta: { unsupported: true, rawType: 'interactive', interactiveType: 'call_permission_reply' },
+      }),
+      () => null,
+    );
+    expect(wire.kind).toBe('interactive');
+    expect(wire.interactive?.title).toBe('Call permission reply');
+    expect(wire.unsupported).toBeUndefined();
+  });
+
+  it('an old flow answer is read as lines; a forwarded flag is passed on', () => {
+    const wire = toMessageResponse(
+      row({
+        direction: 'in',
+        kind: 'interactive',
+        body: 'Sent',
+        meta: { flowResponse: '{"flow_token":"t","city":"Pune"}', forwarded: true },
+      }),
+      () => null,
+    );
+    expect(wire.body).toBe('city: Pune');
+    expect(wire.forwarded).toBe(true);
+  });
+});

@@ -117,6 +117,7 @@ const CHANNEL_META_KEYS = [
   'order',
   'animated',
   'interactiveType',
+  'callPermission',
   'reason',
 ] as const;
 const CHANNEL_META_MAX_BYTES = 16_384;
