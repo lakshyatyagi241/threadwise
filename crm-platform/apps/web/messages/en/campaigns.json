@@ -1,7 +1,10 @@
 {
   "campaigns": {
     "nav": {
-      "title": "Campaigns"
+      "title": "Campaigns",
+      "history": "Campaign history",
+      "scheduled": "Scheduled campaigns",
+      "recurring": "Recurring campaigns"
     },
     "common": {
       "dismiss": "Dismiss"
@@ -10,7 +13,7 @@
       "workspace": "Workspace",
       "title": "WhatsApp",
       "titleAccent": "campaigns",
-      "intro": "Broadcast queues, templates, flows, schedule status, and delivery outcomes in one place.",
+      "intro": "Campaign queues, templates, flows, schedule status, and delivery outcomes in one place.",
       "refresh": "Refresh",
       "newCampaign": "New WA campaign",
       "tile": {
@@ -80,7 +83,7 @@
           "flow": "Flow builder"
         },
         "tipTitle": "Tip",
-        "tip": "Schedule campaigns when your customers are active. Pair each broadcast with an approved template so failed sends are flagged before they leave the queue.",
+        "tip": "Schedule campaigns when your customers are active. Pair each campaign with an approved template so failed sends are flagged before they leave the queue.",
         "healthyTitle": "All systems healthy",
         "attentionTitle": "Delivery needs attention",
         "healthLine": "{rate}% avg delivery · {count} campaigns need review.",
@@ -128,26 +131,26 @@
         "template": "Template {name}"
       },
       "noData": "No data found",
-      "noDataHint": "No WhatsApp campaigns match the current filters. Try clearing filters or launch your first broadcast.",
+      "noDataHint": "No WhatsApp campaigns match the current filters. Try clearing filters or launch your first campaign.",
       "createCampaign": "Create campaign",
       "help": {
         "label": "Help - {n}",
         "items": {
           "0": {
             "title": "What is a WhatsApp campaign?",
-            "body": "A broadcast queue that sends a custom message, approved template, or flow to selected contacts through your connected device."
+            "body": "A campaign queue that sends a custom message, approved template, or flow to selected contacts through your connected device."
           },
           "1": {
             "title": "How do I improve delivery?",
-            "body": "Keep lists clean, use approved templates for outbound sends, and schedule larger broadcasts instead of pushing every contact at once."
+            "body": "Keep lists clean, use approved templates for outbound sends, and schedule larger campaigns instead of pushing every contact at once."
           },
           "2": {
             "title": "Which campaign should I launch first?",
-            "body": "Begin with a template update or re-engagement broadcast, then compare delivered, read, and failed counts before scaling."
+            "body": "Begin with a template update or re-engagement campaign, then compare delivered, read, and failed counts before scaling."
           }
         }
       },
-      "createBroadcast": "Create broadcast"
+      "createBroadcast": "Create campaign"
     },
     "builder": {
       "loadError": "Could not load this campaign.",
@@ -179,7 +182,13 @@
         "typeLabel": "Type",
         "ab": "A/B",
         "off": "Off",
-        "step": "Step {n} of {total}"
+        "step": "Step {n} of {total}",
+        "broadcastTitle": "Broadcast preview",
+        "templateMessage": "Template message",
+        "customMessage": "Custom message",
+        "flowTitle": "Flow",
+        "variants": "Variant shown",
+        "variant": "Variant {v}"
       },
       "previewEmpty": "Your message preview…",
       "previewTemplate": "Template",
@@ -221,7 +230,7 @@
         "types": {
           "custom": {
             "title": "Custom message",
-            "hint": "Write text and attach media or buttons for a one-off broadcast."
+            "hint": "Write text and attach media or buttons for a one-off campaign."
           },
           "template": {
             "title": "Use template",
@@ -236,7 +245,8 @@
         "abHint": "Split recipients between two message variants.",
         "split": "Variant A split {a}%",
         "splitHint": "Variant B receives the remaining audience. Set Variant B content in the Compose step.",
-        "pickSender": "— Select a sender —"
+        "pickSender": "— Select a sender —",
+        "notVerified": "Not verified yet: the guided flow is available once the number is verified."
       },
       "audience": {
         "title": "Audience",
@@ -593,6 +603,35 @@
         "notesPlaceholder": "Anything specific — must-have phrases, what to avoid, brand voice cues…",
         "failed": "Could not generate the campaign. Try again.",
         "applied": "The campaign copy was filled in. Review it before you go on."
+      },
+      "switch": {
+        "title": "Use the guided flow?",
+        "body": "A verified WhatsApp Cloud API (Meta) number is sent from the guided four-step flow, which starts fresh. What you entered here is not saved and will not be carried over. Use Save draft first if you want to keep it.",
+        "confirm": "Open the guided flow",
+        "cancel": "Stay here"
+      },
+      "guided": {
+        "template": "Template",
+        "pickTemplate": "— Select a template —",
+        "templateHint": "Only approved templates of the chosen number. Its variables are filled in below.",
+        "noTemplates": "This number has no approved templates yet. Create one and wait for its approval.",
+        "deliveryTitle": "Delivery",
+        "deliveryTag": "when",
+        "typeBlocked": "On the WhatsApp Cloud API (Meta) only an approved template can be sent from a campaign: a custom message or a flow would reach only people who wrote to you in the last 24 hours, and the Cloud API cannot send them in bulk. Use a template, or pick another kind of number.",
+        "templateA": "Variant A template",
+        "templateB": "Variant B template",
+        "variablesA": "Variant A variables",
+        "variablesB": "Variant B variables",
+        "splitNote": "Variant A goes to {a}% of the recipients, variant B to the rest.",
+        "costTitle": "Estimated cost",
+        "costNoTemplate": "Choose a template to see the cost.",
+        "costNoAudience": "Choose who receives it to see the cost.",
+        "costLoading": "Checking the cost",
+        "costError": "Could not check the balance.",
+        "balanceOk": "Balance is enough for the full cost of {full}",
+        "balanceShort": "Balance is not enough: you need {shortfall} more.",
+        "balanceLowFull": "Balance is lower than the full cost of {full}: your plan covers it now, but not once the plan runs out.",
+        "chargedNowLabel": "Charged to your wallet now"
       }
     },
     "detail": {
@@ -760,31 +799,31 @@
       }
     },
     "wizard": {
-      "title": "Create broadcast",
+      "title": "Create campaign",
       "backToCampaigns": "Back to campaigns",
       "loading": "Loading the draft",
-      "noAccessTitle": "You cannot create broadcasts",
+      "noAccessTitle": "You cannot create campaigns",
       "noAccess": "Ask a workspace admin for the permission to create campaigns.",
-      "launchedTitle": "This broadcast was already sent",
-      "launchedBody": "A launched broadcast cannot be edited. Its status page shows what it is doing.",
-      "viewStatus": "View broadcast status",
+      "launchedTitle": "This campaign was already sent",
+      "launchedBody": "A launched campaign cannot be edited. Its status page shows what it is doing.",
+      "viewStatus": "View campaign status",
       "conflict": "This draft was changed somewhere else, so your latest edits were not saved. Reload to continue from the latest version.",
       "reload": "Reload draft",
-      "launchWallet": "The wallet cannot cover this broadcast. Top up, then continue from the review step.",
-      "launchIncomplete": "The broadcast is not complete yet. Fix these and try again:",
-      "launchFailed": "The broadcast could not be started. Try again.",
+      "launchWallet": "The wallet cannot cover this campaign. Top up, then continue from the review step.",
+      "launchIncomplete": "The campaign is not complete yet. Fix these and try again:",
+      "launchFailed": "The campaign could not be started. Try again.",
       "leaveTitle": "Leave without saving?",
       "leaveBody": "Your latest changes have not been saved yet. If you leave now they may be lost.",
       "leave": "Leave",
       "stay": "Stay",
       "stepHint": {
-        "template": "Give the broadcast a name and choose the approved template to send.",
+        "template": "Give the campaign a name and choose the approved template to send.",
         "audience": "Choose who receives it: contacts, groups, segments or a CSV file.",
         "review": "Check the cost, fill the template variables and review everything.",
         "send": "Send a test, then choose when it goes out."
       },
       "steps": {
-        "navLabel": "Broadcast steps",
+        "navLabel": "Campaign steps",
         "template": "Name and template",
         "audience": "Audience",
         "review": "Check and variables",
@@ -796,9 +835,9 @@
         "back": "Back",
         "next": "Next",
         "moreIssues": "(+{count} more)",
-        "noLaunchPermission": "You do not have permission to start broadcasts.",
+        "noLaunchPermission": "You do not have permission to start campaigns.",
         "launch": {
-          "now": "Broadcast now",
+          "now": "Send now",
           "schedule": "Schedule",
           "recurring": "Start recurring"
         }
@@ -837,7 +876,7 @@
         "groups": "Groups"
       },
       "issues": {
-        "name_required": "Enter a name for the broadcast.",
+        "name_required": "Enter a name for the campaign.",
         "template_required": "Choose a template.",
         "audience_required": "Choose who receives it: contacts, groups, segments or a CSV file.",
         "variable_unmapped": "Map every template variable to a contact field or a fixed text.",
@@ -848,11 +887,16 @@
         "retry_end_before_send": "The retry end date must be after the first send.",
         "retry_end_in_past": "The retry end date has already passed.",
         "schedule_required": "Fill in the date and the time.",
-        "no_recipients": "No contacts would receive this broadcast. Widen the audience.",
-        "insufficient_balance": "Your wallet balance is too low for this broadcast.",
+        "no_recipients": "No contacts would receive this campaign. Widen the audience.",
+        "insufficient_balance": "Your wallet balance is too low for this campaign.",
         "checking_balance": "Checking your wallet balance...",
         "sender_required": "Pick the WhatsApp number to send from.",
-        "balance_unavailable": "We could not check your wallet balance. Try again before sending."
+        "balance_unavailable": "We could not check your wallet balance. Try again before sending.",
+        "template_b_required": "Choose the variant B template of the A/B test.",
+        "auto_end_in_past": "The auto-end date has already passed.",
+        "auto_end_before_send": "The auto-end date must be after the send time.",
+        "auto_end_recurring": "A recurring campaign ends by its own rule: clear the auto-end date.",
+        "pacing_range": "Check Smart Delivery: the longest delay is shorter than the shortest, or only one of the two sending hours is set."
       },
       "template": {
         "previewOnline": "online",
@@ -860,14 +904,14 @@
         "previewInput": "Message",
         "previewBusiness": "Your business",
         "livePreview": "Live preview",
-        "nameLabel": "Broadcast name",
+        "nameLabel": "Campaign name",
         "nameHint": "Only your team sees it.",
         "namePlaceholder": "For example: October offer",
         "pickTitle": "Template",
         "pickHint": "Only approved templates can be sent.",
         "loading": "Loading templates",
         "emptyTitle": "No approved templates yet",
-        "emptyHint": "A broadcast sends an approved WhatsApp template. Create one and wait for its approval.",
+        "emptyHint": "A campaign sends an approved WhatsApp template. Create one and wait for its approval.",
         "createTemplate": "Create a template",
         "search": "Search templates",
         "filterLanguage": "Filter by language",
@@ -884,9 +928,10 @@
         "previewVariables": "{count, plural, one {# variable is filled in the next steps.} other {# variables are filled in the next steps.}}",
         "previewEmpty": "Choose a template to see how the message looks.",
         "senderLabel": "Send from",
-        "senderHint": "The WhatsApp number this broadcast is sent from.",
+        "senderHint": "The WhatsApp number this campaign is sent from.",
         "pickSender": "Choose a number",
-        "noSenders": "No WhatsApp number is connected. Connect one first."
+        "noSenders": "No WhatsApp number is connected. Connect one first.",
+        "classicOption": "classic builder"
       },
       "audience": {
         "selectionTitle": "Chosen in the Contact Hub",
@@ -925,11 +970,11 @@
         "approximate": "This is an estimate: the audience is too large to count exactly in time.",
         "nobody": "No contact would be messaged.",
         "invalidConditions": "{count, plural, one {# condition points at something that was deleted and matches nothing.} other {# conditions point at something that was deleted and match nothing.}}",
-        "modesTitle": "Broadcast action",
-        "modeContacts": "Broadcast to contacts",
-        "modeGroups": "Broadcast to groups",
-        "modeSegments": "Broadcast to segments",
-        "modeCsv": "Broadcast via CSV",
+        "modesTitle": "Send to",
+        "modeContacts": "Send to contacts",
+        "modeGroups": "Send to groups",
+        "modeSegments": "Send to segments",
+        "modeCsv": "Send via CSV",
         "mode": {
           "contacts": "Contacts",
           "groups": "Groups",
@@ -1031,17 +1076,16 @@
         "csvIssuesMore": "{count} more are in the download."
       },
       "review": {
-        "intro": "Check the cost, tell us what each template variable is filled with, and review the broadcast.",
+        "intro": "Check the cost, tell us what each template variable is filled with, and review the campaign.",
         "creditTitle": "Credit check",
-        "creditHint": "Your wallet against the estimated cost of this broadcast.",
+        "creditHint": "Your wallet against the estimated cost of this campaign.",
         "creditLoading": "Checking your wallet",
-        "creditUnverified": "The balance could not be checked here. It is checked again when you start the broadcast.",
-        "creditOk": "Your balance covers this broadcast.",
+        "creditUnverified": "The balance could not be checked here. It is checked again when you start the campaign.",
+        "creditOk": "Your balance covers this campaign.",
         "insufficientTitle": "Insufficient balance",
         "insufficient": "You are short by {shortfall}. Top up to continue.",
         "topUp": "Top up",
         "balance": "Wallet balance",
-        "estimatedCost": "Estimated cost",
         "messages": "Messages",
         "modePlan": "{count, plural, one {Your plan covers the first messages; the wallet pays for # message beyond them.} other {Your plan covers the first messages; the wallet pays for # messages beyond them.}}",
         "modeWallet": "{count, plural, one {Every delivered message is charged to your wallet: # message.} other {Every delivered message is charged to your wallet: # messages.}}",
@@ -1101,7 +1145,10 @@
         "sumContacts": "{count, plural, one {# contact picked in the table} other {# contacts picked in the table}}",
         "sumAllMatching": "All contacts matching {what}",
         "sumAllContacts": "All contacts",
-        "sumCsv": "CSV file {name}: {count, plural, one {# valid number} other {# valid numbers}}"
+        "sumCsv": "CSV file {name}: {count, plural, one {# valid number} other {# valid numbers}}",
+        "estimatedCostFull": "Estimated cost (full)",
+        "chargedPlan": "Charged to your wallet now: {amount} (your plan covers {covered} of these messages)",
+        "chargedWallet": "Charged to your wallet: {amount}"
       },
       "test": {
         "title": "Send a test WhatsApp message",
@@ -1144,9 +1191,9 @@
       "send": {
         "whenTitle": "When to send",
         "mode": {
-          "now": "Broadcast now",
-          "scheduled": "Schedule Broadcast",
-          "recurring": "Recurring Broadcast"
+          "now": "Send now",
+          "scheduled": "Schedule campaign",
+          "recurring": "Recurring campaign"
         },
         "modeHint": {
           "now": "Sent right away, once.",
@@ -1156,7 +1203,7 @@
         "date": "Date",
         "time": "Time",
         "timezone": "Time zone",
-        "explainerTitle": "What is the difference between now, schedule and recurring broadcast?",
+        "explainerTitle": "What is the difference between now, schedule and recurring campaign?",
         "explainerNow": "Now: sent right away, once.",
         "explainerScheduled": "Schedule: sent once at the date and time you pick.",
         "explainerRecurring": "Recurring: sent again and again on the rule, each run to the audience as it is at that time.",
@@ -1194,7 +1241,7 @@
         "retriesInfoWhy": "Retries are only for messages that fail because of Meta's frequency capping (error {code}).",
         "retriesInfoWhen": "They run at exactly {hours}-hour intervals until the end date.",
         "retriesInfoCost": "No extra cost: you are only charged for a message when it is delivered.",
-        "recurringTitle": "Recurring broadcast",
+        "recurringTitle": "Recurring campaign",
         "recurringHint": "Send this on a recurring schedule",
         "occurrences": "runs"
       },
@@ -1214,12 +1261,12 @@
       },
       "launch": {
         "title": {
-          "now": "Broadcast now?",
-          "schedule": "Schedule this broadcast?",
-          "recurring": "Start this recurring broadcast?"
+          "now": "Send now?",
+          "schedule": "Schedule this campaign?",
+          "recurring": "Start this recurring campaign?"
         },
         "confirm": {
-          "now": "Broadcast now",
+          "now": "Send now",
           "schedule": "Schedule",
           "recurring": "Start recurring"
         },
@@ -1237,8 +1284,8 @@
       },
       "status": {
         "back": "Back to campaigns",
-        "loading": "Loading the broadcast",
-        "notFoundTitle": "Broadcast not found",
+        "loading": "Loading the campaign",
+        "notFoundTitle": "Campaign not found",
         "notFound": "It may have been deleted, or you may not have access to it.",
         "scheduleTitle": "Schedule",
         "schedule": "Schedule",
@@ -1247,7 +1294,7 @@
         "runsCount": "Runs so far",
         "none": "None",
         "retriesTitle": "Retries",
-        "retriesOff": "Retries are off for this broadcast.",
+        "retriesOff": "Retries are off for this campaign.",
         "retry": {
           "pending": "Waiting for a retry",
           "recovered": "Delivered by a retry",
@@ -1271,16 +1318,16 @@
         "action": {
           "pause": "Pause",
           "resume": "Resume",
-          "cancel": "Cancel broadcast"
+          "cancel": "Cancel campaign"
         },
         "done": {
-          "pause": "Broadcast paused.",
-          "resume": "Broadcast resumed.",
-          "cancel": "Broadcast cancelled."
+          "pause": "Campaign paused.",
+          "resume": "Campaign resumed.",
+          "cancel": "Campaign cancelled."
         },
         "failed": "That did not work. Try again.",
-        "noControl": "You do not have permission to pause, resume or cancel broadcasts.",
-        "cancelTitle": "Cancel this broadcast?",
+        "noControl": "You do not have permission to pause, resume or cancel campaigns.",
+        "cancelTitle": "Cancel this campaign?",
         "cancelSeries": "No further runs will start. Runs already sent are not affected.",
         "cancelOne": "Messages that were not sent yet will not be sent.",
         "keep": "Keep it",
@@ -1298,8 +1345,8 @@
         }
       },
       "panel": {
-        "title": "Created with Create broadcast",
-        "hint": "Broadcasts made with the four-step wizard, newest first.",
+        "title": "Created with the guided flow",
+        "hint": "Campaigns made with the four-step guided flow, newest first.",
         "mode": {
           "now": "Sent now",
           "scheduled": "Scheduled",
@@ -1320,7 +1367,90 @@
         "pm": "PM",
         "hour": "Hour",
         "minute": "Minute"
+      },
+      "switch": {
+        "title": "Use the classic builder?",
+        "body": "{number} ({engine}) is sent from the classic builder, which starts fresh. This campaign is saved as a draft and stays in your Campaigns list, so you can come back to it.",
+        "confirm": "Open the classic builder",
+        "cancel": "Stay here"
       }
+    },
+    "history": {
+      "create": "Create campaign",
+      "open": "Open",
+      "new": "New",
+      "loading": "Loading campaigns",
+      "pager": "Pages",
+      "page": "Page {page}",
+      "previous": "Previous",
+      "next": "Next",
+      "noMatchTitle": "Nothing matches",
+      "noMatch": "No campaign matches these filters. Change or clear them.",
+      "runNumber": "Run {n}",
+      "type": {
+        "now": "Send now",
+        "scheduled": "Scheduled",
+        "recurring": "Recurring run"
+      },
+      "filters": {
+        "search": "Search by name",
+        "searchPlaceholder": "Campaign name",
+        "type": "Type",
+        "allTypes": "All types",
+        "status": "Status",
+        "allStatuses": "All statuses",
+        "from": "From",
+        "to": "To",
+        "clear": "Clear filters"
+      },
+      "col": {
+        "name": "Name",
+        "type": "Type",
+        "template": "Template",
+        "audience": "Audience",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "failed": "Failed",
+        "status": "Status",
+        "started": "Started",
+        "finished": "Finished",
+        "sender": "Sent from",
+        "runAt": "Runs at",
+        "countdown": "Starts",
+        "actions": "Actions",
+        "rule": "Repeats",
+        "nextRun": "Next run",
+        "lastRun": "Last run",
+        "runs": "Runs",
+        "run": "Run"
+      },
+      "history": {
+        "title": "Campaign history",
+        "hint": "Every campaign that has run or is running, newest first: sent now, scheduled, and the runs of recurring campaigns.",
+        "empty": "No campaign has been sent yet."
+      },
+      "scheduled": {
+        "title": "Scheduled campaigns",
+        "hint": "Campaigns waiting for their time, soonest first. Each one starts by itself.",
+        "empty": "No campaign is waiting for its time.",
+        "zone": "Times are shown in {zone}."
+      },
+      "recurring": {
+        "title": "Recurring campaigns",
+        "hint": "Campaigns that repeat on a schedule. Open a row to see the runs it has started.",
+        "empty": "No recurring campaign yet.",
+        "showRuns": "Show runs",
+        "hideRuns": "Hide runs",
+        "runs": "Runs",
+        "noRuns": "No run has started yet.",
+        "cancel": "Cancel series"
+      },
+      "legacy": "Legacy broadcasts ({count})"
+    },
+    "create": {
+      "loading": "Loading your numbers",
+      "noAccessTitle": "You cannot create campaigns",
+      "noAccess": "Ask a workspace admin for permission to create campaigns."
     }
   }
 }

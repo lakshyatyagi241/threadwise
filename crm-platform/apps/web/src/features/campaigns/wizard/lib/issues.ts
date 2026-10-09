@@ -23,6 +23,8 @@ export interface StepIssue {
 
 export interface IssueContext {
   slots: readonly string[];
+  /** Variant B's placeholders (an A/B test). */
+  slotsB?: readonly string[];
   now: Date;
   /** The live count of step 2 (null until it answers). */
   count?: Pick<WizardAudienceCount, 'recipients'> | null;
@@ -36,9 +38,10 @@ export interface IssueContext {
 /** The step a draft path belongs to (also how the launch's `errors[].path` finds the screen to open). */
 export function stepOfPath(path: string): WizardView {
   const head = path.split('.')[0];
-  if (head === 'name' || head === 'templateId' || head === 'senderKey') return 1;
+  if (head === 'name' || head === 'templateId' || head === 'templateIdB' || head === 'senderKey')
+    return 1;
   if (head === 'audience') return 2;
-  if (head === 'variables') return 3;
+  if (head === 'variables' || head === 'variablesB') return 3;
   return 4;
 }
 
@@ -67,7 +70,11 @@ export function stepIssues(step: WizardView, draft: WizardDraft, ctx: IssueConte
   const incomplete = step === 4 ? scheduleIncomplete(draft) : [];
   if (incomplete.length === 0) {
     try {
-      shared = wizardStepIssues(step, draft, { slots: ctx.slots, now: ctx.now });
+      shared = wizardStepIssues(step, draft, {
+        slots: ctx.slots,
+        slotsB: ctx.slotsB ?? [],
+        now: ctx.now,
+      });
     } catch {
       shared = [{ path: 'schedule', code: 'schedule_required' }];
     }

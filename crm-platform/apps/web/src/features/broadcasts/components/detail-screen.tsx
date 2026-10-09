@@ -137,7 +137,7 @@ export function BroadcastDetailScreen({ id }: { id: string }) {
           actions={
             gone ? (
               <Link
-                href="/broadcasts"
+                href="/campaigns/history/legacy"
                 className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
               >
                 {t('backToList')}
@@ -191,7 +191,7 @@ export function BroadcastDetailScreen({ id }: { id: string }) {
     run(async () => {
       await deleteBroadcast(id);
       toast(t('deleted'), 'success');
-      router.replace('/broadcasts');
+      router.replace('/campaigns/history/legacy');
     });
   const doResume = () =>
     run(async () => {
@@ -224,7 +224,7 @@ export function BroadcastDetailScreen({ id }: { id: string }) {
         <div className="mx-auto flex max-w-none flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-7">
           <div className="flex min-w-0 items-center gap-3">
             <Link
-              href="/broadcasts"
+              href="/campaigns/history/legacy"
               title={t('back')}
               aria-label={t('back')}
               className="grid size-8 place-items-center rounded-full border border-border hover:bg-muted"

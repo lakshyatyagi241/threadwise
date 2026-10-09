@@ -17,17 +17,21 @@ export function BuilderHeader({
   canDraft,
   onAi,
   onDraft,
+  actions,
 }: {
   editing: boolean;
   backHref: string;
   busy: boolean;
   canDraft: boolean;
-  onAi: () => void;
+  /** Build with AI; left out, the button is not shown (the guided flow has no AI brief). */
+  onAi?: (() => void) | undefined;
   onDraft: () => void;
+  /** Extra controls at the right end (the guided flow's Back, Next and launch buttons). */
+  actions?: React.ReactNode;
 }) {
   const t = useTranslations('campaigns.builder');
   return (
-    <header className="sticky top-0 z-20 border-b border-border bg-background">
+    <header className="sticky top-14 z-20 border-b border-border bg-background">
       <div className="mx-auto flex max-w-none flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-7">
         <div className="flex min-w-0 items-center gap-3">
           <Link
@@ -54,16 +58,18 @@ export function BuilderHeader({
               {t('draftChip')}
             </span>
           )}
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            className="rounded-full border-brand/40 text-brand"
-            onClick={onAi}
-          >
-            <SparkIcon className="size-3.5" />
-            {t('ai.open')}
-          </Button>
+          {onAi && (
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              className="rounded-full border-brand/40 text-brand"
+              onClick={onAi}
+            >
+              <SparkIcon className="size-3.5" />
+              {t('ai.open')}
+            </Button>
+          )}
           {!editing && (
             <Button
               type="button"
@@ -76,6 +82,7 @@ export function BuilderHeader({
               {t('submit.draft')}
             </Button>
           )}
+          {actions}
         </div>
       </div>
     </header>

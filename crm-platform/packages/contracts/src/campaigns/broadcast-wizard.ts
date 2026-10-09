@@ -209,6 +209,28 @@ export const wizardRetriesSchema = z.object({
 });
 export type WizardRetries = z.infer<typeof wizardRetriesSchema>;
 
+/**
+ * Smart Delivery, as the campaign builder has it: a random gap per recipient, batches with a pause, a daily limit and the hours a send
+ * may run in (read in the campaign's zone). Every value is optional; blank means the platform default. Same bounds as a campaign.
+ */
+export const wizardPacingSchema = z.object({
+  throttleMinSec: z.number().int().min(0).max(3600).nullish(),
+  throttleMaxSec: z.number().int().min(0).max(3600).nullish(),
+  batchSize: z.number().int().min(1).max(10_000).nullish(),
+  batchPauseMin: z.number().int().min(0).max(1440).nullish(),
+  dailyLimit: z.number().int().min(1).max(100_000).nullish(),
+  windowStart: timeOfDay.nullish(),
+  windowEnd: timeOfDay.nullish(),
+});
+export type WizardPacing = z.infer<typeof wizardPacingSchema>;
+
+/** The hard end date of a send: after it nothing more goes out. `at` is `YYYY-MM-DDTHH:mm` on the clock of `timezone`. */
+export const wizardAutoEndSchema = z.object({
+  at: z.string().regex(/^\d{4}-\d{2}-\d{2}T([01]\d|2[0-3]):[0-5]\d$/, 'must be YYYY-MM-DDTHH:mm'),
+  timezone: zone,
+});
+export type WizardAutoEnd = z.infer<typeof wizardAutoEndSchema>;
+
 // ---------------------------------------------------------------------------------------- the draft
 
 export const wizardDraftSchema = z.object({
@@ -224,6 +246,18 @@ export const wizardDraftSchema = z.object({
   /** Step 4. */
   schedule: wizardScheduleSchema.default({ mode: 'now' }),
   retries: wizardRetriesSchema.default({ enabled: false }),
+  /**
+   * What the campaign builder adds to a guided send. A/B test: variant A is `templateId`, variant B `templateIdB` with its own variable
+   * mapping, and `abSplit` is the percent that gets A. `autoEnd` stops the send at that moment; `pacing` is Smart Delivery;
+   * `trackLinks` wraps links to count clicks. All are carried to every run of a recurring series.
+   */
+  abTesting: z.boolean().default(false),
+  abSplit: z.number().int().min(0).max(100).default(50),
+  templateIdB: uuidSchema.nullable().default(null),
+  variablesB: wizardVariablesSchema.default({}),
+  autoEnd: wizardAutoEndSchema.nullable().default(null),
+  pacing: wizardPacingSchema.default({}),
+  trackLinks: z.boolean().default(true),
   /** The furthest step the person reached (1 to 4), so a resumed draft opens where they stopped. */
   step: z.number().int().min(1).max(WIZARD_STEP_COUNT).default(1),
 });
@@ -435,7 +469,10 @@ export const wizardCreditLineSchema = z.object({
   messages: z.number().int(),
   /** One message to this country in this template's category, in the workspace's billing currency (hundredths). */
   unitPriceMinor: z.number().int(),
+  /** What the wallet is charged for this country now (the plan's allowance already taken off). */
   subtotalMinor: z.number().int(),
+  /** The message count at the unit price, whatever the plan covers: what these messages cost. */
+  fullSubtotalMinor: z.number().int(),
 });
 
 export const wizardCreditCheckSchema = z.object({
@@ -447,7 +484,10 @@ export const wizardCreditCheckSchema = z.object({
   recipients: z.number().int(),
   /** Messages the wallet is charged for (the rest are covered by the plan's allowance). */
   chargeableMessages: z.number().int(),
+  /** What the wallet is charged now: the full cost less the part the plan's allowance covers. */
   estimatedCostMinor: z.number().int(),
+  /** Every message at its price, independent of the plan (shown beside what is charged now). */
+  fullCostMinor: z.number().int(),
   lines: z.array(wizardCreditLineSchema),
   /** The wallet's own launch rule says this send may start. Sending is blocked when false. */
   sufficient: z.boolean(),
@@ -734,7 +774,12 @@ export interface WizardIssue {
     | 'recurrence_invalid'
     | 'retry_end_required'
     | 'retry_end_before_send'
-    | 'retry_end_in_past';
+    | 'retry_end_in_past'
+    | 'template_b_required'
+    | 'auto_end_in_past'
+    | 'auto_end_before_send'
+    | 'auto_end_recurring'
+    | 'pacing_range';
 }
 
 const ruleOf = (s: WizardSchedule): RecurrenceRule | null =>
@@ -763,13 +808,15 @@ export function draftTimeZone(d: Pick<WizardDraft, 'schedule' | 'retries'>): str
 export function wizardStepIssues(
   step: 1 | 2 | 3 | 4,
   draft: WizardDraft,
-  ctx: { slots?: readonly string[]; now: Date },
+  ctx: { slots?: readonly string[]; slotsB?: readonly string[]; now: Date },
 ): WizardIssue[] {
   const out: WizardIssue[] = [];
   if (step === 1) {
     if (draft.name.trim() === '') out.push({ path: 'name', code: 'name_required' });
     if (draft.templateId === null) out.push({ path: 'templateId', code: 'template_required' });
     if (draft.senderKey === null) out.push({ path: 'senderKey', code: 'sender_required' });
+    if (draft.abTesting && draft.templateIdB === null)
+      out.push({ path: 'templateIdB', code: 'template_b_required' });
   }
   if (step === 2) {
     if (!wizardAudienceHasSource(draft.audience))
@@ -779,6 +826,12 @@ export function wizardStepIssues(
     for (const slot of ctx.slots ?? []) {
       if (!draft.variables[slot])
         out.push({ path: `variables.${slot}`, code: 'variable_unmapped' });
+    }
+    if (draft.abTesting) {
+      for (const slot of ctx.slotsB ?? []) {
+        if (!draft.variablesB[slot])
+          out.push({ path: `variablesB.${slot}`, code: 'variable_unmapped' });
+      }
     }
   }
   if (step === 4) {
@@ -796,6 +849,26 @@ export function wizardStepIssues(
         ctx.now.getTime()
       ) {
         out.push({ path: 'schedule.rule.startDate', code: 'schedule_in_past' });
+      }
+    }
+    const p = draft.pacing;
+    if (p.throttleMinSec != null && p.throttleMaxSec != null && p.throttleMaxSec < p.throttleMinSec)
+      out.push({ path: 'pacing.throttleMaxSec', code: 'pacing_range' });
+    if ((p.windowStart == null) !== (p.windowEnd == null))
+      out.push({ path: 'pacing.windowEnd', code: 'pacing_range' });
+    if (draft.autoEnd) {
+      if (s.mode === 'recurring') {
+        // A series has its own end (the rule's); one instant for every run would silently cut it short.
+        out.push({ path: 'autoEnd', code: 'auto_end_recurring' });
+      } else {
+        const [d, t] = draft.autoEnd.at.split('T') as [string, string];
+        const endAt = zonedTimeToUtc(d, t, draft.autoEnd.timezone).getTime();
+        if (endAt <= ctx.now.getTime()) out.push({ path: 'autoEnd', code: 'auto_end_in_past' });
+        else {
+          const first = firstRunInstant(s);
+          if (first && endAt <= first.getTime())
+            out.push({ path: 'autoEnd', code: 'auto_end_before_send' });
+        }
       }
     }
     if (draft.retries.enabled) {
@@ -824,7 +897,7 @@ export function wizardStepIssues(
 /** Every step's issues in order, for a launch. */
 export function wizardLaunchIssues(
   draft: WizardDraft,
-  ctx: { slots?: readonly string[]; now: Date },
+  ctx: { slots?: readonly string[]; slotsB?: readonly string[]; now: Date },
 ): WizardIssue[] {
   return ([1, 2, 3, 4] as const).flatMap((s) => wizardStepIssues(s, draft, ctx));
 }
@@ -862,6 +935,12 @@ export const wizardSenderSchema = z.object({
   engineLabel: z.string(),
   /** The workspace's default engine: the one preselected. */
   isDefault: z.boolean(),
+  /**
+   * The guided flow can send from this number: a Meta (WhatsApp Cloud API) number whose connection is verified (connected, its code
+   * verified, its display name not declined, and not banned, restricted, deleted, migrated or pending at Meta). False for every
+   * other engine, and for a Meta number that is not verified.
+   */
+  guided: z.boolean(),
 });
 export type WizardSender = z.infer<typeof wizardSenderSchema>;
 export const wizardSendersResponseSchema = z.object({ data: z.array(wizardSenderSchema) });

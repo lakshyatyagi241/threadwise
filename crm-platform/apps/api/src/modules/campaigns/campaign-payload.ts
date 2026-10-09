@@ -19,10 +19,15 @@ export interface PayloadDeps {
 }
 
 /** The wizard's variable mapping stored on a campaign, or null for a campaign the classic builder made. */
-export function wizardVariablesOf(wizard: { draft?: unknown } | null): WizardVariables | null {
+export function wizardVariablesOf(
+  wizard: { draft?: unknown } | null,
+  variant: string | null = null,
+): WizardVariables | null {
   if (!wizard?.draft || typeof wizard.draft !== 'object') return null;
+  // Variant B of an A/B test has its own template, so its own mapping.
+  const key = variant === 'B' ? 'variablesB' : 'variables';
   const parsed = wizardVariablesSchema.safeParse(
-    (wizard.draft as { variables?: unknown }).variables ?? {},
+    (wizard.draft as Record<string, unknown>)[key] ?? {},
   );
   return parsed.success ? parsed.data : null;
 }

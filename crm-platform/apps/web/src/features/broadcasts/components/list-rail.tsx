@@ -82,7 +82,7 @@ export function ListRail({
             <p className="mt-1 text-xs text-muted-foreground">{t('recentEmpty')}</p>
             {canCreate && (
               <Link
-                href="/broadcasts/create"
+                href="/campaigns/create"
                 className="mt-3 inline-flex h-9 items-center rounded-full bg-brand px-4 text-xs font-semibold text-brand-foreground hover:opacity-90"
               >
                 {t('createBroadcast')}
@@ -116,7 +116,7 @@ export function ListRail({
           <div className="text-2xl leading-tight">{t('createBroadcast')}</div>
           <p className="mt-2 text-xs leading-relaxed opacity-80">{t('getStartedBody')}</p>
           <Link
-            href="/broadcasts/create"
+            href="/campaigns/create"
             className="mt-3 inline-flex items-center gap-2 rounded-full bg-background px-3.5 py-1.5 text-xs font-semibold text-brand"
           >
             {t('newBroadcast')}

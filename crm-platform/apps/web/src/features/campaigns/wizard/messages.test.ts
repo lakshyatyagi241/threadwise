@@ -69,7 +69,7 @@ describe('wizard messages', () => {
 
   it('the entry point has a label in both languages', () => {
     const list = (l: string) => flatten(load(l))['list.createBroadcast'];
-    expect(list('en')).toBe('Create broadcast');
+    expect(list('en')).toBe('Create campaign');
     expect(list('ar')).toBeTruthy();
   });
 
@@ -153,6 +153,11 @@ const DYNAMIC = [
     'insufficient_balance',
     'checking_balance',
     'balance_unavailable',
+    'template_b_required',
+    'auto_end_in_past',
+    'auto_end_before_send',
+    'auto_end_recurring',
+    'pacing_range',
   ].map((c) => `campaigns.wizard.issues.${c}`),
   ...['header', 'body', 'button'].map((s) => `campaigns.wizard.review.slotSection.${s}`),
   ...['multiple', 'tracking', 'credits', 'format'].map((n) => `campaigns.wizard.test.notes.${n}`),

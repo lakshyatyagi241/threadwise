@@ -322,7 +322,7 @@ export function ContactsScreen() {
   async function onSendCampaign() {
     setBusy(true);
     try {
-      router.push(`/campaigns/wizard/${await startCampaignDraft(target())}`);
+      router.push(`/campaigns/create?draft=${await startCampaignDraft(target())}`);
     } catch {
       toast(tb('failed'), 'danger');
     } finally {

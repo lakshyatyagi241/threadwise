@@ -26,7 +26,7 @@ export function selectionBody(target: BulkTarget) {
 
 /**
  * "Send campaign" from the Hub: a broadcast draft whose audience is this selection (ticked rows open in the wizard's Contacts mode), created so the wizard opens on it. Returns the draft's
- * id (the wizard resumes at `/campaigns/wizard/<id>`).
+ * id (the guided flow resumes at `/campaigns/create?draft=<id>`).
  */
 export async function startCampaignDraft(target: BulkTarget): Promise<string> {
   const draft = await apiFetch('/broadcast-wizard/drafts', {

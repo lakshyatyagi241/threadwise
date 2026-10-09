@@ -53,6 +53,40 @@ export function StepAudience({
   disabled?: boolean;
   onAudience: (patch: Partial<WizardAudience>) => void;
 }) {
+  return (
+    <div className="grid gap-4 lg:h-[calc(100dvh-15.5rem)] lg:min-h-[28rem] lg:grid-cols-[minmax(0,1fr)_25rem]">
+      <AudienceBody
+        audience={audience}
+        sources={sources}
+        issues={issues}
+        disabled={disabled}
+        onAudience={onAudience}
+      />
+      <aside className="flex min-h-0 min-w-0 flex-col gap-3 lg:overflow-y-auto">
+        <CountPanel count={count} hasSource={hasSource} updating={countUpdating} compact />
+        <TemplatePreview template={template} senderName={senderName} compact />
+      </aside>
+    </div>
+  );
+}
+
+/**
+ * The four ways to choose the audience, each holding its own selection (the audience is the union of them, opted-out contacts and
+ * invalid numbers always left out). Used by the wizard's step 2 and by the guided campaign's Recipients step.
+ */
+export function AudienceBody({
+  audience,
+  sources,
+  issues,
+  disabled,
+  onAudience,
+}: {
+  audience: WizardAudience;
+  sources: SourcesQuery;
+  issues: StepIssue[];
+  disabled?: boolean | undefined;
+  onAudience: (patch: Partial<WizardAudience>) => void;
+}) {
   const t = useTranslations('campaigns.wizard.audience');
   const ti = useTranslations('campaigns.wizard.issues');
   const panelId = useId();
@@ -61,81 +95,71 @@ export function StepAudience({
   const issue = issueFor(issues, 'audience');
   const tally = audienceTally(audience);
   return (
-    <div className="grid gap-4 lg:h-[calc(100dvh-15.5rem)] lg:min-h-[28rem] lg:grid-cols-[minmax(0,1fr)_25rem]">
-      <div className="flex min-h-0 min-w-0 flex-col gap-3">
-        <AudienceModes mode={mode} tally={tally} onMode={setMode} panelId={panelId} />
-        <AudienceSummary tally={tally} allTotal={audience.allMatching ? allTotal : null} />
-        {issue && <Alert tone="danger">{ti(issue.code)}</Alert>}
-        {audience.selection && (
-          <WizardCard title={t('selectionTitle')} hint={t('selectionHint')} id="audience-selection">
-            <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
-              <SelectionText selection={audience.selection} />
-              <Button
-                variant="secondary"
-                size="sm"
-                disabled={disabled}
-                onClick={() => onAudience({ selection: null })}
-              >
-                {t('selectionRemove')}
-              </Button>
-            </div>
-          </WizardCard>
+    <div className="flex min-h-0 min-w-0 flex-col gap-3">
+      <AudienceModes mode={mode} tally={tally} onMode={setMode} panelId={panelId} />
+      <AudienceSummary tally={tally} allTotal={audience.allMatching ? allTotal : null} />
+      {issue && <Alert tone="danger">{ti(issue.code)}</Alert>}
+      {audience.selection && (
+        <WizardCard title={t('selectionTitle')} hint={t('selectionHint')} id="audience-selection">
+          <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
+            <SelectionText selection={audience.selection} />
+            <Button
+              variant="secondary"
+              size="sm"
+              disabled={disabled}
+              onClick={() => onAudience({ selection: null })}
+            >
+              {t('selectionRemove')}
+            </Button>
+          </div>
+        </WizardCard>
+      )}
+      <section
+        id={panelId}
+        role="tabpanel"
+        aria-label={t(`mode.${mode}`)}
+        className="flex min-h-[24rem] flex-1 flex-col overflow-hidden rounded-xl border border-border bg-background lg:min-h-0"
+      >
+        {mode === 'contacts' && (
+          <ContactsTable
+            audience={audience}
+            onAudience={onAudience}
+            onTotal={setAllTotal}
+            disabled={disabled}
+          />
         )}
-        <section
-          id={panelId}
-          role="tabpanel"
-          aria-label={t(`mode.${mode}`)}
-          className="flex min-h-[24rem] flex-1 flex-col overflow-hidden rounded-xl border border-border bg-background lg:min-h-0"
-        >
-          {mode === 'contacts' && (
-            <ContactsTable
-              audience={audience}
-              onAudience={onAudience}
-              onTotal={setAllTotal}
+        {mode === 'groups' && (
+          <>
+            <p className="border-b border-border px-4 py-2.5 text-sm text-muted-foreground">
+              {t('groupsHint')}
+            </p>
+            <SourcePicker
+              kind="groups"
+              sources={sources}
+              chosen={audience.groupIds}
+              onChange={(groupIds) => onAudience({ groupIds })}
               disabled={disabled}
             />
-          )}
-          {mode === 'groups' && (
-            <>
-              <p className="border-b border-border px-4 py-2.5 text-sm text-muted-foreground">
-                {t('groupsHint')}
-              </p>
-              <SourcePicker
-                kind="groups"
-                sources={sources}
-                chosen={audience.groupIds}
-                onChange={(groupIds) => onAudience({ groupIds })}
-                disabled={disabled}
-              />
-            </>
-          )}
-          {mode === 'segments' && (
-            <>
-              <p className="border-b border-border px-4 py-2.5 text-sm text-muted-foreground">
-                {t('segmentsHint')}
-              </p>
-              <SourcePicker
-                kind="segments"
-                sources={sources}
-                chosen={audience.segmentIds}
-                onChange={(segmentIds) => onAudience({ segmentIds })}
-                disabled={disabled}
-              />
-            </>
-          )}
-          {mode === 'csv' && (
-            <CsvUpload
-              csv={audience.csv}
-              onCsv={(csv) => onAudience({ csv })}
+          </>
+        )}
+        {mode === 'segments' && (
+          <>
+            <p className="border-b border-border px-4 py-2.5 text-sm text-muted-foreground">
+              {t('segmentsHint')}
+            </p>
+            <SourcePicker
+              kind="segments"
+              sources={sources}
+              chosen={audience.segmentIds}
+              onChange={(segmentIds) => onAudience({ segmentIds })}
               disabled={disabled}
             />
-          )}
-        </section>
-      </div>
-      <aside className="flex min-h-0 min-w-0 flex-col gap-3 lg:overflow-y-auto">
-        <CountPanel count={count} hasSource={hasSource} updating={countUpdating} compact />
-        <TemplatePreview template={template} senderName={senderName} compact />
-      </aside>
+          </>
+        )}
+        {mode === 'csv' && (
+          <CsvUpload csv={audience.csv} onCsv={(csv) => onAudience({ csv })} disabled={disabled} />
+        )}
+      </section>
     </div>
   );
 }

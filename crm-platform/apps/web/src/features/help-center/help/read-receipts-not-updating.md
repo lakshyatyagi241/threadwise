@@ -4,7 +4,7 @@ title: Delivery ticks and read receipts not updating
 summary: Understand the ticks under your messages and what to check when a message stays on Sent or never turns to Delivered or Read.
 area: troubleshooting
 order: 30
-documents: [nav:inbox, nav:broadcasts, nav:campaigns]
+documents: [nav:inbox, nav:campaigns]
 keywords: [ticks, read receipts, delivered, read, sent, status, blue ticks, delivery report]
 ---
 

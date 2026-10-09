@@ -248,7 +248,8 @@ export function FlowsCard({ data }: { data: DashWidgets['flows'] }) {
                   <span className="block truncate font-medium leading-tight">{f.name}</span>
                   <span className="mt-0.5 block truncate font-mono text-[10px] text-muted-foreground">
                     {t('meta', {
-                      trigger: f.trigger.charAt(0).toUpperCase() + f.trigger.slice(1).replaceAll('_', ' '),
+                      trigger:
+                        f.trigger.charAt(0).toUpperCase() + f.trigger.slice(1).replaceAll('_', ' '),
                       steps: f.steps,
                       subs: f.subscribers,
                     })}
@@ -277,7 +278,7 @@ export function FlowsCard({ data }: { data: DashWidgets['flows'] }) {
 
 /** `live: false` = the screen is not built yet (auto-reply, WD-AR): the tile shows "Soon" instead of linking to a 404. */
 const QUICK_ACTIONS = [
-  { key: 'broadcast', href: '/broadcasts/create', tone: 'bg-primary', live: true },
+  { key: 'broadcast', href: '/campaigns/create', tone: 'bg-primary', live: true },
   { key: 'flow', href: '/flows', tone: 'bg-foreground', live: true },
   { key: 'template', href: '/templates/new', tone: 'bg-warning', live: true },
   { key: 'autoReply', href: '/auto-reply', tone: 'bg-danger', live: false },

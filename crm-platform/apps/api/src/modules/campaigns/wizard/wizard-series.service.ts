@@ -14,7 +14,7 @@ import { PacingRuntime } from '../../broadcasts';
 import { asSystem } from '../campaign-events';
 import { CampaignJobs } from '../campaign-jobs';
 import { CampaignsRepository } from '../campaigns.repository';
-import { blankCampaignFor } from './wizard-blank';
+import { blankCampaignFor, campaignColumnsOf } from './wizard-blank';
 import { WizardRunService } from './wizard-run.service';
 import { WizardRepository, type SeriesRow } from './wizard.repository';
 
@@ -217,6 +217,7 @@ export class WizardSeriesService {
       occurrenceNo: index,
       retryEnabled: false,
       retryUntil: null,
+      options: campaignColumnsOf(common.draft, null),
     });
     const row = await this.campaigns.findById(tx, orgId, id);
     this.logger.warn(
