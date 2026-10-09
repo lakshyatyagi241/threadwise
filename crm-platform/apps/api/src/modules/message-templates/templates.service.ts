@@ -4,6 +4,9 @@ import {
   type CreateTemplateInput,
   type LintTemplateInput,
   type LintTemplateResult,
+  type SubmitTemplateInput,
+  type TemplateCounts,
+  type TemplateCountsQuery,
   type ListTemplatesQuery,
   type ListTemplatesResponse,
   type TemplateDetail,
@@ -42,14 +45,21 @@ import {
   type PreparedTemplate,
 } from './template-input';
 import type { LintIssue } from './template-linter';
-import { buildMetaTemplate } from './template-payload';
+import { buildMetaTemplate, normalizeTemplateName } from './template-payload';
 import { columnsOfState, sameLanguage, statePatchFrom, type CurrentState } from './template-remote';
 import { draftOf, lintOf, statusOf, toDetail, toSummary } from './templates.mapper';
-import { TemplatesRepository, type TemplatePatch, type TemplateRow } from './templates.repository';
+import {
+  TemplatesRepository,
+  encodeNameCursor,
+  type TemplatePatch,
+  type TemplateRow,
+} from './templates.repository';
 
 const MODULE = 'wa_templates';
 /** Statuses a template can still be edited in (WD-TPL-018, and Geta's "locked once approved"). */
-const EDITABLE = new Set(['pending', 'rejected', 'draft']);
+/** An approved or paused template is edited in place on Meta (Meta's own edit endpoint), as WaDesk does; the rest are replaced. */
+const EDITABLE = new Set(['pending', 'rejected', 'draft', 'approved', 'paused']);
+const IN_PLACE = new Set(['approved', 'paused']);
 
 /** Header example files Meta takes, and the size it allows for each (WD-TPL-009: 5 MB image, 16 MB video, 100 MB document). */
 const MEDIA_TYPES: Record<string, { kind: 'image' | 'media' | 'document'; maxBytes: number }> = {
@@ -61,6 +71,8 @@ const MEDIA_TYPES: Record<string, { kind: 'image' | 'media' | 'document'; maxByt
   pdf: { kind: 'document', maxBytes: 100 * 1024 * 1024 },
 };
 export const MEDIA_UPLOAD_MAX_BYTES = 100 * 1024 * 1024;
+
+const inPlace = (r: TemplateRow): boolean => Boolean(r.metaTemplateId) && IN_PLACE.has(statusOf(r));
 
 const toIssue = (i: LintIssue): TplLintIssue => i;
 
@@ -96,16 +108,41 @@ export class TemplatesService {
         limit: query.limit,
         cursor: query.cursor,
         status: query.status,
+        statusGroup: query.statusGroup,
+        sort: query.sort,
         category: query.category,
         connectionUuid: query.connectionId,
         q: query.q,
       }),
     );
     const { items, page } = buildPage(rows, query.limit);
+    const byName = query.sort === 'name-asc' || query.sort === 'name-desc';
+    const last = items[items.length - 1];
     return {
       data: items.map(toSummary),
-      page,
+      // The name sorts page on (name, id), not on the creation time buildPage reads.
+      page:
+        byName && last
+          ? {
+              ...page,
+              nextCursor: page.hasMore ? encodeNameCursor(last.templateName, last.id) : null,
+            }
+          : page,
     };
+  }
+
+  /** The numbers on the library's tabs and "Showing N of M" (one read, no totals on the list itself). */
+  async counts(query: TemplateCountsQuery): Promise<TemplateCounts> {
+    const { orgId } = RequestContextStore.require();
+    return this.db.tx((tx) =>
+      this.repo.counts(tx, orgId, {
+        status: query.status,
+        statusGroup: query.statusGroup,
+        category: query.category,
+        connectionUuid: query.connectionId,
+        q: query.q,
+      }),
+    );
   }
 
   async get(uuid: string): Promise<TemplateDetail> {
@@ -199,6 +236,7 @@ export class TemplatesService {
         attachmentType: prepared.attachmentType,
         attachmentFile: prepared.headerHandle,
         headerSampleUrl: prepared.headerSampleUrl,
+        headerLocation: prepared.headerLocation,
         parameterFormat: prepared.parameterFormat,
         status: input.submit ? 'pending' : 'draft',
         providerConfigId: target.id,
@@ -231,13 +269,13 @@ export class TemplatesService {
     if (input.submit) this.requireSubmitRight();
     const prepared = prepareTemplate(input);
 
-    const { row, issues } = await this.db.tx(async (tx) => {
+    const { row, issues, edit } = await this.db.tx(async (tx) => {
       const current = await this.repo.findByUuid(tx, ctx.orgId, uuid, true);
       if (!current) throw this.notFound();
       if (!EDITABLE.has(statusOf(current)) || !BUILDABLE_TYPES.has(current.templateType))
         throw new AppError(
           ERROR_CODES.TPL_NOT_EDITABLE,
-          'Only a template that Meta has not approved yet, or one that was rejected, can be edited. Copy it into a new template instead.',
+          'Only a template that is a draft, in review, rejected, approved or paused can be edited. Copy it into a new template instead.',
           HttpStatus.CONFLICT,
         );
       if (current.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Template');
@@ -247,6 +285,16 @@ export class TemplatesService {
           'This template has no WhatsApp number.',
           HttpStatus.CONFLICT,
         );
+      // Meta keeps the name and language of a template it holds: an in-place edit cannot rename it.
+      if (
+        IN_PLACE.has(statusOf(current)) &&
+        current.metaTemplateId &&
+        (normalizeTemplateName(prepared.name) !== current.templateName.toLowerCase() ||
+          prepared.language !== current.language)
+      )
+        throw AppError.validation('The name and the language of a live template cannot change', [
+          { path: 'name', message: 'Create a new template to use another name or language.' },
+        ]);
 
       // The same media type keeps the handle already stored unless a new one came with the form.
       const sameMedia = prepared.attachmentType === (current.attachmentType ?? null);
@@ -290,8 +338,10 @@ export class TemplatesService {
           attachmentType: effective.attachmentType,
           attachmentFile: effective.headerHandle,
           headerSampleUrl: effective.headerSampleUrl,
+          headerLocation: effective.headerLocation,
           parameterFormat: effective.parameterFormat,
-          ...(input.submit ? { status: 'pending' } : {}),
+          // An in-place edit keeps its live status until Meta takes the edit.
+          ...(input.submit && !inPlace(current) ? { status: 'pending' } : {}),
         },
         input.rowVersion,
       );
@@ -308,16 +358,16 @@ export class TemplatesService {
         eventType: 'template.updated',
         payload: { templateId: saved.uuid, name: saved.templateName },
       });
-      return { row: saved, issues: found };
+      return { row: saved, issues: found, edit: inPlace(current) };
     });
 
     const target = input.submit ? await this.connection({ id: row.providerConfigId! }) : null;
     if (target) this.requireUsable(target);
-    return this.finish(row, target, input.submit, true, issues);
+    return this.finish(row, target, input.submit, true, issues, edit);
   }
 
   /** Sends a saved template to Meta, or sends it again after a refusal (WD-TPL-025). A template already on Meta is left as it is. */
-  async submit(uuid: string): Promise<TemplateSubmitResult> {
+  async submit(uuid: string, input: SubmitTemplateInput = {}): Promise<TemplateSubmitResult> {
     const { orgId } = RequestContextStore.require();
     const row = await this.require(uuid);
     if (row.metaTemplateId) return this.result(row, [], null);
@@ -327,12 +377,27 @@ export class TemplatesService {
         'This template type cannot be sent from here.',
         HttpStatus.CONFLICT,
       );
-    if (row.providerConfigId === null) throw this.noConnection();
-    const target = await this.connection({ id: row.providerConfigId });
+    // Several numbers: the one the author picks (the media handle and the submit must come from the same account).
+    const target = input.connectionId
+      ? await this.connection({ uuid: input.connectionId })
+      : row.providerConfigId === null
+        ? null
+        : await this.connection({ id: row.providerConfigId });
+    if (!target) throw this.noConnection();
     this.requireUsable(target);
     const issues = lintOf(row, true);
     this.throwIfErrors(issues);
-    await this.db.tx((tx) => this.repo.update(tx, orgId, row.id, { status: 'pending' }));
+    await this.db.tx(async (tx) => {
+      if (target.id !== row.providerConfigId) {
+        // A template moves to another number only while Meta has never held it, and must not clash with a name already there.
+        if (await this.repo.nameTaken(tx, orgId, target.id, row.templateName, row.language, row.id))
+          throw this.nameTaken();
+      }
+      await this.repo.update(tx, orgId, row.id, {
+        status: 'pending',
+        providerConfigId: target.id,
+      });
+    });
     return this.finish(row, target, true, false, issues);
   }
 
@@ -436,9 +501,11 @@ export class TemplatesService {
     send: boolean,
     replace: boolean,
     issues: LintIssue[],
+    inPlaceEdit = false,
   ): Promise<TemplateSubmitResult> {
     const warnings = issues.filter((i) => i.severity === 'warning').map(toIssue);
     if (!send || !target) return this.result(await this.reload(saved), warnings, null);
+    if (inPlaceEdit && saved.metaTemplateId) return this.pushEdit(saved, target, warnings);
     return this.push(saved, target, replace, warnings);
   }
 
@@ -547,6 +614,60 @@ export class TemplatesService {
         payload: {
           templateId: row.uuid,
           metaTemplateId: created.id,
+          status: updated.status,
+          metaStatus: updated.metaStatus,
+        },
+      });
+      return updated;
+    });
+    return this.result(next, warnings, null);
+  }
+
+  /**
+   * Sends an edit of an approved or paused template to Meta's edit endpoint (WaDesk `editOnMeta`). The edit is saved first; if
+   * Meta refuses it the template keeps its live status and the reason comes back as `metaError` ("saved here, Meta said no").
+   * Meta takes it back into review, so a success reads as pending.
+   */
+  private async pushEdit(
+    row: TemplateRow,
+    target: ResolvedWabaConnection,
+    warnings: TplLintIssue[],
+  ): Promise<TemplateSubmitResult> {
+    const { orgId } = RequestContextStore.require();
+    const payload = buildMetaTemplate(draftOf(row));
+    try {
+      await this.remote.edit(target.conn!, row.metaTemplateId!, {
+        category: payload.category,
+        components: payload.components,
+      });
+    } catch (e) {
+      const failure = describeTemplateFailure(e);
+      this.logger.warn({ err: e, templateId: row.id }, '[TPL] Meta refused the edit');
+      return this.result(await this.reload(row), warnings, failure.message);
+    }
+    const now = new Date();
+    const next = await this.db.tx(async (tx) => {
+      const updated =
+        (await this.repo.update(tx, orgId, row.id, {
+          status: 'pending',
+          metaStatus: 'PENDING',
+          submittedAt: now,
+          lastSyncedAt: now,
+          rejectionReason: null,
+        })) ?? row;
+      await this.audit.record(tx, {
+        module: MODULE,
+        recordId: row.id,
+        action: 'update',
+        delta: this.audit.diff({ status: row.status }, { status: updated.status }),
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: MODULE,
+        aggregateId: row.id,
+        eventType: 'template.submitted',
+        payload: {
+          templateId: row.uuid,
+          metaTemplateId: row.metaTemplateId,
           status: updated.status,
           metaStatus: updated.metaStatus,
         },

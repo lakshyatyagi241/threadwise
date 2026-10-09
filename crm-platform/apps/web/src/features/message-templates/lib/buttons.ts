@@ -15,6 +15,26 @@ export const BUTTON_LIMITS = {
   copy_code: 1,
 } as const;
 export const BUTTON_TEXT_MAX = 25;
+/** WaDesk's editor stops at three buttons ("WhatsApp reliably renders only 3"); Meta's own limit above still applies to imports. */
+export const EDITOR_BUTTON_MAX = 3;
+
+/** The three ways WaDesk's editor groups buttons: calls to action, quick replies, or a mix of both. */
+export const BUTTON_MODES = ['cta', 'reply', 'mix'] as const;
+export type ButtonMode = (typeof BUTTON_MODES)[number];
+
+/** The kinds a row may take in each mode (a call to action is a website, a phone or a copy-code button). */
+export const MODE_KINDS: Record<ButtonMode, readonly AddableKind[]> = {
+  cta: ['url', 'phone', 'copy_code'],
+  reply: ['quick_reply'],
+  mix: ['url', 'quick_reply', 'phone', 'copy_code'],
+};
+
+/** The mode a saved set of buttons reads as: only quick replies, only calls to action, or both. */
+export function modeOf(rows: Pick<ButtonRow, 'kind'>[]): ButtonMode {
+  const quick = rows.some((r) => r.kind === 'quick_reply');
+  const other = rows.some((r) => r.kind !== 'quick_reply');
+  return quick && other ? 'mix' : quick ? 'reply' : 'cta';
+}
 
 export interface ButtonRow {
   /** Client-only identity for React keys and focus. Never sent. */
@@ -40,8 +60,14 @@ export const count = (rows: ButtonRow[], kind: ButtonKind): number =>
   rows.filter((r) => r.kind === kind).length;
 
 /** Whether one more button of this kind fits under Meta's limits. */
-export function canAdd(rows: ButtonRow[], kind: AddableKind): boolean {
-  return rows.length < BUTTON_LIMITS.total && count(rows, kind) < BUTTON_LIMITS[kind];
+export function canAdd(
+  rows: ButtonRow[],
+  kind: AddableKind,
+  max: number = BUTTON_LIMITS.total,
+): boolean {
+  return (
+    rows.length < Math.min(max, BUTTON_LIMITS.total) && count(rows, kind) < BUTTON_LIMITS[kind]
+  );
 }
 
 export const addableKinds = (rows: ButtonRow[]): AddableKind[] =>
