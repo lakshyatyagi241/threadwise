@@ -91,3 +91,75 @@ export const ArrowDownIcon = (p: IconProps) => (
     <path d="M8 3v10M4 9l4 4 4-4" />
   </Svg>
 );
+export const ArrowLeftIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M13 8H3M7 4 3 8l4 4" />
+  </Svg>
+);
+/** The double tick WhatsApp draws next to the time of a sent message. */
+export const CheckIcon = (p: IconProps) => (
+  <svg
+    viewBox="0 0 18 12"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    {...p}
+  >
+    <path d="M1 6.5 4 9.5 9.5 3M7.5 9.5l1-1M9 6.5 13.5 2" />
+  </svg>
+);
+export const TickIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="m3.5 8.5 3 3 6-6" />
+  </Svg>
+);
+export const CloseIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M4 4l8 8M12 4l-8 8" />
+  </Svg>
+);
+export const EyeIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M1.5 8s2.5-4.5 6.5-4.5S14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z" />
+    <circle cx="8" cy="8" r="1.8" />
+  </Svg>
+);
+export const PencilIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="m11 3 2 2-7 7H4v-2z" />
+  </Svg>
+);
+export const TemplateIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="2.5" y="2.5" width="11" height="11" rx="1.5" />
+    <path d="M2.5 6h11M6 6v7.5" />
+  </Svg>
+);
+export const ChatIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M2.6 11.2 2 14l2.9-.6A6 6 0 1 0 2.6 11.2Z" />
+  </Svg>
+);
+export const AlertIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M8 2.5 14 13H2L8 2.5zM8 7v3M8 11.5v.01" />
+  </Svg>
+);
+export const ClockIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <circle cx="8" cy="8" r="6" strokeDasharray="20 8" />
+  </Svg>
+);
+export const SendIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M2 6v4l8 3V3L2 6Zm8-1 3-1v8l-3-1" />
+  </Svg>
+);
+export const DotIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <circle cx="8" cy="8" r="5.5" />
+  </Svg>
+);

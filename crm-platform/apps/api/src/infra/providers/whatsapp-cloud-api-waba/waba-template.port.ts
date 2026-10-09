@@ -19,6 +19,13 @@ export interface CreateRemoteTemplate {
   messageSendTtlSeconds?: number;
 }
 
+/** An edit of a template Meta already holds (Meta keeps its name and language; it takes the category and the components). */
+export interface EditRemoteTemplate {
+  category?: string;
+  components: unknown[];
+  parameterFormat?: TemplateParameterFormat;
+}
+
 export interface CreatedRemoteTemplate {
   id: string;
   status: string;
@@ -52,6 +59,8 @@ export interface MediaUpload {
 
 export interface WabaTemplatePort {
   create(conn: WabaConnection, input: CreateRemoteTemplate): Promise<CreatedRemoteTemplate>;
+  /** Edits a template in place (`POST /{id}`); Meta sends it back to review. */
+  edit(conn: WabaConnection, metaTemplateId: string, input: EditRemoteTemplate): Promise<void>;
   list(
     conn: WabaConnection,
     opts?: { name?: string; status?: string; limit?: number; after?: string },

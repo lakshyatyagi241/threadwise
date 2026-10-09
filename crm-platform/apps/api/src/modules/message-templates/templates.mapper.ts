@@ -1,9 +1,11 @@
 import {
+  tplHeaderLocationSchema,
   tplMetaCategorySchema,
   tplStatusSchema,
   type TemplateDetail,
   type TemplateSummary,
   type TplButton,
+  type TplHeaderLocation,
   type TplLintIssue,
   type TplMetaCategory,
   type TplStatus,
@@ -40,6 +42,12 @@ const attachmentOf = (row: TemplateRow): 'none' | 'image' | 'video' | 'document'
   const a = (row.attachmentType ?? 'none').toLowerCase();
   return a === 'image' || a === 'video' || a === 'document' || a === 'location' ? a : 'none';
 };
+
+/** A stored pin read back through the contract's range check; anything else (an import never sets one) is none. */
+export function locationOf(row: Pick<TemplateRow, 'headerLocation'>): TplHeaderLocation | null {
+  const parsed = tplHeaderLocationSchema.safeParse(row.headerLocation);
+  return parsed.success ? parsed.data : null;
+}
 
 const parameterFormatOf = (row: TemplateRow): 'POSITIONAL' | 'NAMED' =>
   row.parameterFormat === 'NAMED' ? 'NAMED' : 'POSITIONAL';
@@ -104,6 +112,10 @@ export function toSummary(row: TemplateRow): TemplateSummary {
     metaStatus: row.metaStatus,
     qualityScore: row.qualityScore,
     rejectionReason: rejectionOf(row),
+    rejectionReasonCode:
+      row.rejectionReasonCode && row.rejectionReasonCode !== 'NONE'
+        ? row.rejectionReasonCode
+        : null,
     metaTemplateId: row.metaTemplateId,
     connectionId: row.connectionUuid,
     pausedUntil: iso(row.pausedUntil),
@@ -112,6 +124,12 @@ export function toSummary(row: TemplateRow): TemplateSummary {
     lastSyncedAt: iso(row.lastSyncedAt),
     bodyPreview:
       row.templateBody.length > 140 ? `${row.templateBody.slice(0, 137)}...` : row.templateBody,
+    header: row.header,
+    attachmentType: attachmentOf(row),
+    headerSampleUrl: row.headerSampleUrl,
+    body: row.templateBody,
+    footer: row.footer,
+    buttons: buttonsOf(row),
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
@@ -125,12 +143,7 @@ export function lintOf(row: TemplateRow, strict = false): TplLintIssue[] {
 export function toDetail(row: TemplateRow): TemplateDetail {
   return {
     ...toSummary(row),
-    header: row.header,
-    attachmentType: attachmentOf(row),
-    headerSampleUrl: row.headerSampleUrl,
-    body: row.templateBody,
-    footer: row.footer,
-    buttons: buttonsOf(row),
+    headerLocation: locationOf(row),
     variableMap: variableMapOf(row),
     codeExpirationMinutes: row.codeExpirationMinutes,
     parameterFormat: parameterFormatOf(row),

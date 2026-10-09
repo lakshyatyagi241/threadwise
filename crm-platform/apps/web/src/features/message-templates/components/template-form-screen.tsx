@@ -55,7 +55,7 @@ import {
   type FormState,
 } from '../lib/form-model';
 import { languageOptions } from '../lib/languages';
-import { CATEGORIES, canEdit } from '../lib/status-model';
+import { CATEGORIES, canEdit, isLive } from '../lib/status-model';
 import { connectionLabel, usableConnections } from '../lib/sync';
 import { tokensOf } from '../lib/variables';
 import { ButtonsEditor } from './buttons-editor';
@@ -202,6 +202,8 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
   const checking = !hasContractIssues && (settledKey !== payloadKey || lint.isFetching);
   const localButtonIssues = isAuth(current) ? [] : buttonIssues(current.buttons);
 
+  // A template live on Meta is edited in place there: Meta keeps its name and language.
+  const live = detail ? isLive(detail.status, detail.metaTemplateId) : false;
   const auth = isAuth(current);
   const nameOk = current.name.trim() !== '';
   const canDraft = nameOk && current.connectionId !== '' && !hasContractIssues && !busy;
@@ -266,8 +268,8 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
   const bodyCount = counter(current.body, BODY_MAX);
 
   return (
-    <main className="mx-auto max-w-7xl px-4 pb-10 sm:px-6">
-      <div className="sticky top-0 z-10 -mx-4 mb-5 flex flex-wrap items-center gap-3 border-b border-border bg-background/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
+    <main className="max-w-none px-4 pb-10 sm:px-6 lg:px-7">
+      <div className="sticky top-14 z-30 -mx-4 mb-5 flex flex-wrap items-center gap-3 border-b border-border bg-background/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-7 lg:px-7">
         <nav aria-label={t('breadcrumb')} className="text-xs text-muted-foreground">
           <Link href="/templates" className="hover:underline">
             {t('breadcrumbLibrary')}
@@ -326,7 +328,7 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="space-y-4">
           <Section title={t('identity.title')}>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -405,6 +407,7 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
                   autoComplete="off"
                   spellCheck={false}
                   invalid={Boolean(nameError) || nameTaken}
+                  disabled={live}
                   onChange={(e) => set({ name: sanitizeName(e.target.value) })}
                   onBlur={() => set({ name: tidyName(current.name) })}
                 />
@@ -414,6 +417,7 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
                 <Select
                   id={`${base}-lang`}
                   value={current.language}
+                  disabled={live}
                   onChange={(e) => set({ language: e.target.value })}
                 >
                   {languageOptions(locale, current.language).map((o) => (
@@ -540,7 +544,10 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
           <IssueList issues={issues} field="template" />
         </div>
 
-        <aside className="space-y-4 lg:sticky lg:top-20 lg:self-start" aria-label={t('aside')}>
+        <aside
+          className="space-y-4 lg:sticky lg:top-[8.5rem] lg:max-h-[calc(100dvh-9.5rem)] lg:self-start lg:overflow-y-auto"
+          aria-label={t('aside')}
+        >
           <PhonePreview model={previewOf(current)} />
           <LintPanel
             issues={issues}
