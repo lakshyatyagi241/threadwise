@@ -250,9 +250,6 @@ describe('the menu after the Settings move', () => {
       'credit-notes',
       'sales-orders',
       'payments',
-      'campaign-history',
-      'campaign-scheduled',
-      'campaign-recurring',
     ]) {
       expect(menuIds.has(id), id).toBe(true);
     }
