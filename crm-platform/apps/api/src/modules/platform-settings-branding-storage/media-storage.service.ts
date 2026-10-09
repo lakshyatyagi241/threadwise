@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import type { Env } from '../../config/env.schema';
 import {
   presignS3Get,
   resolveStorageTarget,
@@ -35,7 +37,36 @@ export function normaliseKey(path: string): string {
 
 @Injectable()
 export class MediaStorageService {
-  constructor(private readonly settings: SettingsService) {}
+  /** Buckets this process has already made sure exist (the first write to a fresh MinIO creates it). */
+  private readonly ensured = new Set<string>();
+
+  constructor(
+    private readonly settings: SettingsService,
+    @Optional() private readonly config?: ConfigService<Env, true>,
+  ) {}
+
+  /**
+   * The deployment's own bucket (`S3_*`, MinIO in the compose stack), used when the saved settings give none and
+   * `MEDIA_STORAGE_DRIVER=s3`. Without it every container keeps media on its own disk, so the worker that sends a file
+   * cannot find what the API stored.
+   */
+  private envTarget(): StorageTarget | null {
+    const c = this.config;
+    if (!c || c.get('MEDIA_STORAGE_DRIVER', { infer: true }) !== 's3') return null;
+    const endpoint = c.get('S3_ENDPOINT', { infer: true });
+    const accessKeyId = c.get('S3_ACCESS_KEY_ID', { infer: true });
+    const secret = c.get('S3_SECRET_ACCESS_KEY', { infer: true });
+    if (!endpoint || !accessKeyId || !secret) return null;
+    return {
+      endpoint: endpoint.replace(/\/+$/, ''),
+      region: c.get('S3_REGION', { infer: true }),
+      bucket: c.get('S3_BUCKET_MEDIA', { infer: true }),
+      accessKeyId,
+      secret,
+      pathStyle: c.get('S3_FORCE_PATH_STYLE', { infer: true }),
+      prefix: '',
+    };
+  }
 
   async destination(): Promise<MediaDestination> {
     const v = await this.settings.values('storage');
@@ -53,6 +84,10 @@ export class MediaStorageService {
           storagePassword: await this.settings.secret('storage', 'storagePassword'),
         })
       : null;
+    if (!target) {
+      const fallback = this.envTarget();
+      if (fallback) return { disk: 'cloud', target: fallback, visibility: 'private', cdnUrl: '' };
+    }
     return {
       disk: target ? 'cloud' : 'local',
       target,
@@ -80,15 +115,33 @@ export class MediaStorageService {
     const d = await this.destination();
     if (d.disk !== 'cloud' || !d.target) return null;
     const objectKey = this.fullKey(d, key);
-    const req = signS3Request(d.target, 'PUT', objectKey, body);
-    const res = await fetch(req.url, {
-      method: 'PUT',
-      headers: { ...req.headers, 'content-type': contentType },
-      body,
-      signal: AbortSignal.timeout(30_000),
-    });
+    const send = () => {
+      const req = signS3Request(d.target!, 'PUT', objectKey, body);
+      return fetch(req.url, {
+        method: 'PUT',
+        headers: { ...req.headers, 'content-type': contentType },
+        body,
+        signal: AbortSignal.timeout(30_000),
+      });
+    };
+    let res = await send();
+    if (res.status === 404 && (await this.ensureBucket(d.target))) res = await send();
     if (!res.ok) throw new Error(`Object storage refused the upload (HTTP ${res.status})`);
     return { key: objectKey };
+  }
+
+  /** Creates the bucket when the store says it is missing (a fresh MinIO has none). True when it now exists. */
+  private async ensureBucket(t: StorageTarget): Promise<boolean> {
+    if (this.ensured.has(t.bucket)) return false;
+    const req = signS3Request(t, 'PUT', '', Buffer.alloc(0));
+    const res = await fetch(req.url, {
+      method: 'PUT',
+      headers: req.headers,
+      signal: AbortSignal.timeout(15_000),
+    });
+    if (!res.ok && res.status !== 409) return false;
+    this.ensured.add(t.bucket);
+    return true;
   }
 
   async remove(key: string): Promise<void> {
