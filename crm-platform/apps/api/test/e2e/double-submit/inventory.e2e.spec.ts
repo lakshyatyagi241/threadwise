@@ -33,7 +33,7 @@ describe('which mutating routes accept an Idempotency-Key', () => {
     );
     if (process.env.QA_OUT) writeFileSync(process.env.QA_OUT, JSON.stringify(routes, null, 1));
     if (process.env.QA_UPDATE) {
-      writeFileSync(BASELINE, JSON.stringify(lacking, null, 1) + '\n');
+      writeFileSync(BASELINE, JSON.stringify(lacking, null, 2) + '\n');
       return;
     }
     const known = new Set<string>(JSON.parse(readFileSync(BASELINE, 'utf8')) as string[]);

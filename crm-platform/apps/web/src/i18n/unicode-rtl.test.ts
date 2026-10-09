@@ -153,7 +153,7 @@ describe('layout classes that do not flip in right-to-left', () => {
       if (n > 0) counts[relative(SRC, file)] = n;
     }
     if (process.env.QA_UPDATE) {
-      writeFileSync(BASELINE, JSON.stringify(counts, null, 1) + '\n');
+      writeFileSync(BASELINE, JSON.stringify(counts, null, 2) + '\n');
       return;
     }
     const base = JSON.parse(readFileSync(BASELINE, 'utf8')) as Record<string, number>;
