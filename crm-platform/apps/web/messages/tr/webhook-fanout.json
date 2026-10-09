@@ -46,6 +46,7 @@
       "allFields": "Tüm alanlar",
       "success": "{count, number} başarılı",
       "failure": "{count, number} başarısız",
+      "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
       "pending": "{count, number} beklemede",
       "pendingLabel": "Yeniden oynatılmayı bekleyen {count, number} başarısız iletim",
       "neverDelivered": "Henüz iletim yapılmadı",

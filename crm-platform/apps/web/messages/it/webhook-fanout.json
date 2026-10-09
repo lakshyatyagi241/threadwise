@@ -46,6 +46,7 @@
       "allFields": "Tutti i campi",
       "success": "{count, number} ok",
       "failure": "{count, number} non riuscite",
+      "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
       "pending": "{count, number} in attesa",
       "pendingLabel": "{count, number} consegne non riuscite in attesa di nuovo invio",
       "neverDelivered": "Nessuna consegna ancora",

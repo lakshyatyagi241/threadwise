@@ -46,6 +46,7 @@
       "allFields": "ทุกฟิลด์",
       "success": "{count, number} สำเร็จ",
       "failure": "{count, number} ล้มเหลว",
+      "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
       "pending": "{count, number} รอดำเนินการ",
       "pendingLabel": "การส่งที่ล้มเหลว {count, number} รายการรอการส่งซ้ำ",
       "neverDelivered": "ยังไม่มีการส่ง",
