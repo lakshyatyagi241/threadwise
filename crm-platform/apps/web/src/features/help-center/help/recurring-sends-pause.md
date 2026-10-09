@@ -39,7 +39,7 @@ A schedule uses one time zone, and the send starts for everyone on it at the sam
 1. Put each region's contacts in its own [group](help:contact-groups).
 2. Create one schedule per group, each with the time zone of that region.
 
-The same applies to [Campaigns](help:campaigns-overview) and [Broadcasts](help:broadcasts-overview), which also take a single time zone. A campaign can repeat too, with **Recurring** under **When to send**, but it has no Pause button. See [Stop, resume or resend a campaign](help:campaign-stop-resume).
+The same applies to [Campaigns](help:campaigns-overview), which also take a single time zone. A campaign can repeat too, with **Recurring** under **When to send**, but it has no Pause button. See [Stop, resume or resend a campaign](help:campaign-stop-resume).
 
 ## Pause, resume or cancel
 

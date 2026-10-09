@@ -57,7 +57,7 @@ export function FormattedText({ text }: { text: string }) {
   return <>{renderSegments(parseMarkup(text))}</>;
 }
 
-function ButtonIcon({ kind }: { kind: PreviewModel['buttons'][number]['kind'] }) {
+export function ButtonIcon({ kind }: { kind: PreviewModel['buttons'][number]['kind'] }) {
   const cls = 'size-3.5 shrink-0';
   if (kind === 'url') return <LinkIcon className={cls} />;
   if (kind === 'phone') return <PhoneIcon className={cls} />;

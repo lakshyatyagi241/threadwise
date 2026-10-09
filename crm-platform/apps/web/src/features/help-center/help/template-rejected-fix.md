@@ -31,7 +31,7 @@ Every template you submit is reviewed by Meta, and the answer is not always yes.
 
 - **Draft.** Saved here, never sent to Meta.
 - **In review.** Waiting for Meta.
-- **Approved.** Ready to use in [Broadcasts](help:broadcasts-overview) and [Campaigns](help:campaigns-overview). A quality rating (High, Medium, Low or pending) appears next to it.
+- **Approved.** Ready to use in [Campaigns](help:campaigns-overview). A quality rating (High, Medium, Low or pending) appears next to it.
 - **Paused.** Meta has paused the template, often because of its quality rating. It cannot be sent until the pause ends. The banner says until when, if Meta gave a date.
 - **Disabled.** Meta has disabled it and it cannot be sent. Create a new template instead.
 - **Missing on Meta.** Meta no longer lists the template. We keep our copy. Use **Sync from Meta** on the library to check again, or delete it.

@@ -91,6 +91,45 @@ describe('wizard reducer', () => {
   });
 });
 
+describe('the campaign builder options', () => {
+  it('sets the A/B test, auto-end, Smart Delivery and link tracking, and saves only what changed', () => {
+    const s = initialState();
+    const n = wizardReducer(s, {
+      type: 'options',
+      patch: {
+        abTesting: true,
+        abSplit: 30,
+        trackLinks: false,
+        autoEnd: { at: '2027-01-01T10:00', timezone: 'UTC' },
+        pacing: { throttleMinSec: 1, windowStart: '08:00', windowEnd: '20:00' },
+      },
+    });
+    expect(n.draft).toMatchObject({ abTesting: true, abSplit: 30, trackLinks: false });
+    expect(Object.keys(draftPatch(s.draft, n.draft)).sort()).toEqual(
+      ['abSplit', 'abTesting', 'autoEnd', 'pacing', 'trackLinks'].sort(),
+    );
+  });
+
+  it('variant B has its own template and mapping; changing the template keeps the placeholders that still exist', () => {
+    let s = initialState(draft({ abTesting: true }));
+    s = wizardReducer(s, { type: 'templateB', template: template({ id: uuid(2) }) });
+    expect(s.draft.templateIdB).toBe(uuid(2));
+    s = wizardReducer(s, {
+      type: 'variableB',
+      slot: 'body.1',
+      source: { kind: 'fixed', text: 'B-1' },
+    });
+    s = wizardReducer(s, {
+      type: 'variableB',
+      slot: 'body.9',
+      source: { kind: 'fixed', text: 'gone' },
+    });
+    s = wizardReducer(s, { type: 'templateB', template: template({ id: uuid(3) }) });
+    expect(Object.keys(s.draft.variablesB)).toEqual(['body.1']);
+    expect(s.draft.variables).toEqual({});
+  });
+});
+
 describe('draftPatch', () => {
   it('is empty when nothing changed and names only the changed keys otherwise', () => {
     expect(draftPatch(EMPTY_WIZARD_DRAFT, { ...EMPTY_WIZARD_DRAFT })).toEqual({});

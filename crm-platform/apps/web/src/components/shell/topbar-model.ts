@@ -15,7 +15,6 @@ export const BAR_TARGETS: Partial<Record<NavLayoutKey, { nav?: string; tile?: st
   flows: { nav: 'flows' },
   templates: { nav: 'templates' },
   devices: { tile: 'whatsapp' },
-  broadcasts: { nav: 'broadcasts' },
   contacts: { nav: 'contacts' },
   deals: { nav: 'deals' },
   chat: { nav: 'quick-chat' },

@@ -25,7 +25,7 @@ Once Meta approves a template, this build locks it: there is no **Edit** button 
 Switch each place that used the old template:
 
 - **Campaigns.** Open the campaign and select **Edit**, then pick the new template. A campaign can be edited only while it is a draft, scheduled or paused.
-- **Broadcasts.** A broadcast cannot change its template after it is created. Delete a scheduled one and create it again with the new template. See [Broadcasts](help:broadcasts-overview).
+- **Guided campaigns.** A launched campaign cannot change its template. Cancel a scheduled one and create it again with the new template. See [Create a campaign](help:campaigns-create).
 - **Scheduled messages.** Cancel the schedule and create a new one with the new template. See [Scheduled messages](help:scheduled-messages-overview).
 
 Then retire the old one:

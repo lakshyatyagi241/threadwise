@@ -99,14 +99,6 @@ export const CATALOGUE: readonly CatalogueCard[] = [
     badge: false,
   },
   {
-    id: 'broadcasts',
-    hrefs: ['/broadcasts'],
-    cat: 'automation',
-    tone: 'bubble',
-    icon: 'broadcast',
-    badge: false,
-  },
-  {
     id: 'auto-reply',
     hrefs: ['/auto-reply'],
     cat: 'automation',

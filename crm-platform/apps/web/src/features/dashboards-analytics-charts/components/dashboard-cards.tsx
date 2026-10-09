@@ -214,7 +214,7 @@ export function CampaignsCard({ data }: { data: DashWidgets['campaigns'] }) {
         paused: data.paused,
       })}
       action={
-        <Link href="/broadcasts" className="text-sm font-medium text-primary hover:underline">
+        <Link href="/campaigns" className="text-sm font-medium text-primary hover:underline">
           {t('viewAll', { n: data.total })}
         </Link>
       }
@@ -224,7 +224,7 @@ export function CampaignsCard({ data }: { data: DashWidgets['campaigns'] }) {
           <p className="text-sm font-medium">{t('emptyTitle')}</p>
           <p className="text-xs text-muted-foreground">{t('emptyBody')}</p>
           <Link
-            href="/broadcasts/create"
+            href="/campaigns/create"
             className="inline-flex h-9 items-center rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground"
           >
             + {t('new')}

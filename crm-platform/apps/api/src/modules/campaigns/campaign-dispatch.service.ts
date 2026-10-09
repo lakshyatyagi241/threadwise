@@ -588,7 +588,7 @@ export class CampaignDispatchService {
       {
         orgId: o.orgId,
         campaign: { id: o.c.id, trackingEnabled: o.c.trackingEnabled },
-        wizardVariables: wizardVariablesOf(o.c.wizard),
+        wizardVariables: wizardVariablesOf(o.c.wizard, r.variant),
         tpl,
         overrides: content.overrides,
         contactId: r.contactId,

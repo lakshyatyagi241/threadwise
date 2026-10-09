@@ -148,6 +148,7 @@ export const sender = (over: Partial<WizardSender> = {}): WizardSender => ({
   engine: 'waba',
   engineLabel: 'Meta',
   isDefault: true,
+  guided: true,
   ...over,
 });
 
@@ -179,9 +180,16 @@ export const credit = (over: Partial<WizardCreditCheck> = {}): WizardCreditCheck
   recipients: 950,
   chargeableMessages: 950,
   estimatedCostMinor: 9_500,
+  fullCostMinor: 9_500,
   lines: [
-    { country: 'IN', messages: 900, unitPriceMinor: 10, subtotalMinor: 9_000 },
-    { country: null, messages: 50, unitPriceMinor: 10, subtotalMinor: 500 },
+    {
+      country: 'IN',
+      messages: 900,
+      unitPriceMinor: 10,
+      subtotalMinor: 9_000,
+      fullSubtotalMinor: 9_000,
+    },
+    { country: null, messages: 50, unitPriceMinor: 10, subtotalMinor: 500, fullSubtotalMinor: 500 },
   ],
   sufficient: true,
   shortfallMinor: 0,

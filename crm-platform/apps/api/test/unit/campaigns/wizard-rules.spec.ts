@@ -11,6 +11,7 @@ import {
   resolveMapping,
   resolveSource,
   scheduleColumns,
+  senderGuided,
   templateSlots,
   tokensOf,
   unmappedSlots,
@@ -303,6 +304,12 @@ describe('cost', () => {
     expect(estimateCost(lines, 110)).toEqual({ subtotals: [8000, 3500], totalMinor: 11_500 });
   });
 
+  it('the full cost is every message at its price, whatever the plan covers', () => {
+    const all = lines.reduce((n, l) => n + l.messages, 0);
+    expect(estimateCost(lines, all)).toEqual({ subtotals: [8000, 3500], totalMinor: 11_500 });
+    expect(estimateCost(lines, all).totalMinor).toBeGreaterThan(estimateCost(lines, 0).totalMinor);
+  });
+
   it('only the chargeable share when the plan covers part of the send, rounded up', () => {
     const r = estimateCost(lines, 55);
     expect(r.totalMinor).toBe(Math.ceil(100 * 80 * 0.5) + Math.ceil(10 * 350 * 0.5));
@@ -341,5 +348,34 @@ describe('schedule columns', () => {
       runAt: at,
     });
     expect(scheduleColumns({ mode: 'now' }, null).scheduleType).toBe('now');
+  });
+});
+
+describe('senderGuided', () => {
+  const ok = { engine: 'waba', status: 'connected', meta: null };
+  it('is only for a connected Meta number', () => {
+    expect(senderGuided(ok)).toBe(true);
+    expect(senderGuided({ ...ok, engine: 'twilio' })).toBe(false);
+    expect(senderGuided({ ...ok, status: 'pending' })).toBe(false);
+    expect(senderGuided({ ...ok, status: 'disconnected' })).toBe(false);
+  });
+  it('reads what Meta reported', () => {
+    const meta = (m: Record<string, unknown>) => senderGuided({ ...ok, meta: m });
+    expect(
+      meta({
+        code_verification_status: 'VERIFIED',
+        name_status: 'APPROVED',
+        phone_status: 'CONNECTED',
+      }),
+    ).toBe(true);
+    // Not code-verified blocks only while the phone is not CONNECTED (Meta's own test number stays NOT_VERIFIED yet sends fine).
+    expect(meta({ code_verification_status: 'NOT_VERIFIED' })).toBe(false);
+    expect(meta({ code_verification_status: 'NOT_VERIFIED', phone_status: 'CONNECTED' })).toBe(
+      true,
+    );
+    expect(meta({ code_verification_status: 'EXPIRED', phone_status: 'CONNECTED' })).toBe(false);
+    expect(meta({ name_status: 'DECLINED' })).toBe(false);
+    for (const s of ['BANNED', 'restricted', 'DELETED', 'MIGRATED', 'PENDING'])
+      expect(meta({ phone_status: s })).toBe(false);
   });
 });

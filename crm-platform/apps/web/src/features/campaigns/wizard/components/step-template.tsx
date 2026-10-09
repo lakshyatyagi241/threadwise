@@ -83,6 +83,7 @@ export function StepTemplate({
               <option key={s.key} value={s.key}>
                 {s.label}
                 {s.phone ? ` (${s.phone})` : ''} - {s.engineLabel}
+                {s.guided ? '' : ` - ${t('classicOption')}`}
               </option>
             ))}
           </Select>

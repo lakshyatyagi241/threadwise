@@ -96,7 +96,7 @@ describe('step 1: the sender', () => {
     const res = await wiz(lab, w.t.admin).get('/senders');
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(res.body.data).toMatchObject([
-      { key: `waba:${w.config}`, label: 'Main number', engine: 'waba' },
+      { key: `waba:${w.config}`, label: 'Main number', engine: 'waba', guided: true },
     ]);
   });
 
@@ -828,6 +828,10 @@ describe('step 3: credit check and variables', () => {
     ]);
     expect(c.estimatedCostMinor).toBeGreaterThan(0);
     expect(c.estimatedCostMinor).toBe(c.lines.reduce((n, l) => n + l.subtotalMinor, 0));
+    // The full cost is every message at its price; with nothing covered by a plan it is what is charged.
+    expect(c.fullCostMinor).toBe(c.lines.reduce((n, l) => n + l.messages * l.unitPriceMinor, 0));
+    expect(c.fullCostMinor).toBe(c.lines.reduce((n, l) => n + l.fullSubtotalMinor, 0));
+    expect(c.fullCostMinor).toBe(c.estimatedCostMinor);
     expect(c.shortfallMinor).toBe(c.estimatedCostMinor);
   });
 
@@ -870,6 +874,11 @@ describe('step 3: credit check and variables', () => {
       estimatedCostMinor: 0,
       sufficient: true,
     });
+    // The plan covers the send, so the wallet is charged nothing now, but the real cost is still shown.
+    expect(c.fullCostMinor).toBeGreaterThan(0);
+    expect(c.fullCostMinor).toBe(
+      c.lines.reduce((n: number, l: { fullSubtotalMinor: number }) => n + l.fullSubtotalMinor, 0),
+    );
   });
 
   it('resolves the message for real contacts: a field, its fallback, and flags the placeholder still without a source', async () => {
@@ -1213,6 +1222,244 @@ describe('step 4: launch', () => {
         .rows[0].n,
     ).toBe(0);
     expect((await wiz(lab, w.t.admin).get(`/drafts/${d.id}`)).status).toBe(404);
+  });
+});
+
+describe('the campaign builder options ride on a guided send', () => {
+  /** A second approved template of the same number, for variant B. */
+  async function templateB(
+    w: Awaited<ReturnType<typeof world>>,
+  ): Promise<{ uuid: string; name: string }> {
+    const cfg = (
+      await owner().query(`SELECT id FROM wa_provider_configs WHERE uuid = $1`, [w.config])
+    ).rows[0];
+    const r = await owner().query(
+      `INSERT INTO wa_templates (org_id, template_name, template_body, template_type, status, language, meta_category, category,
+                                 provider_config_id, variable_map)
+       VALUES ($1, $2, 'Hello {{1}}, variant B here.', 'standard', 'approved', 'en_US', 'marketing', 'marketing', $3, $4::jsonb)
+       RETURNING uuid, template_name`,
+      [
+        w.t.orgId,
+        `variantb_${Math.random().toString(36).slice(2, 8)}`,
+        cfg.id,
+        JSON.stringify({ body: [{ num: 1, key: 'first_name', example: 'Asha' }] }),
+      ],
+    );
+    return { uuid: r.rows[0].uuid as string, name: r.rows[0].template_name as string };
+  }
+  const in5Days = () =>
+    new Date(lab.clock.now.getTime() + 5 * 86_400_000).toISOString().slice(0, 16);
+  const options = (b: { uuid: string }, o: Record<string, unknown> = {}) => ({
+    abTesting: true,
+    abSplit: 50,
+    templateIdB: b.uuid,
+    variablesB: { 'body.1': { kind: 'field', field: 'first_name', fallback: 'friend' } },
+    autoEnd: { at: in5Days(), timezone: 'UTC' },
+    pacing: {
+      throttleMinSec: 1,
+      throttleMaxSec: 3,
+      batchSize: 50,
+      batchPauseMin: 2,
+      dailyLimit: 500,
+      windowStart: '08:00',
+      windowEnd: '20:00',
+    },
+    trackLinks: false,
+    ...o,
+  });
+
+  it('an A/B send with auto-end, Smart Delivery and no link tracking reaches the campaign row, splits the recipients and sends each variant its own template', async () => {
+    lab.clock.now = new Date();
+    const w = await world(lab, 'bwo1');
+    await payPerMessage(lab, w.t, 1_000_000);
+    const b = await templateB(w);
+    const ids = await people(lab, w.t, [{}, {}, {}, {}]);
+    const g = await group(owner(), w.t, 'G', ids);
+    const d = await makeDraft(lab, w, readyDraft(w, g, options(b)));
+    const res = await wiz(lab, w.t.admin).post(`/drafts/${d.id}/launch`, {
+      rowVersion: d.rowVersion,
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+
+    const c = (
+      await owner().query(
+        `SELECT ab_testing, ab_split, tracking_enabled, throttle_min_sec, throttle_max_sec, batch_size, batch_pause_min,
+                daily_limit, window_start AS ws, window_end AS we, expires_at,
+                (SELECT uuid FROM wa_templates t WHERE t.org_id = c.org_id AND t.id = c.template_id_b) AS b
+         FROM wpcampaigns c WHERE uuid = $1`,
+        [d.id],
+      )
+    ).rows[0];
+    expect(c).toMatchObject({
+      ab_testing: true,
+      ab_split: 50,
+      tracking_enabled: false,
+      throttle_min_sec: 1,
+      throttle_max_sec: 3,
+      batch_size: 50,
+      batch_pause_min: 2,
+      daily_limit: 500,
+      ws: '08:00',
+      we: '20:00',
+      b: b.uuid,
+    });
+    expect(new Date(c.expires_at).toISOString().slice(0, 16)).toBe(in5Days());
+    const variants = (
+      await owner().query(
+        `SELECT r.variant, count(*)::int AS n FROM wp_campaign_contacts r JOIN wpcampaigns k ON k.org_id = r.org_id AND k.id = r.campaign_id
+         WHERE k.uuid = $1 GROUP BY r.variant ORDER BY r.variant`,
+        [d.id],
+      )
+    ).rows;
+    expect(variants).toEqual([
+      { variant: 'A', n: 2 },
+      { variant: 'B', n: 2 },
+    ]);
+
+    const { id, orgId } = await idOfCampaign(owner(), d.id);
+    lab.sent.length = 0;
+    expect(await lab.run(orgId, id)).toBe('finished');
+    expect(lab.sent).toHaveLength(4);
+    expect(lab.sent.filter((m) => m.templateName === b.name)).toHaveLength(2);
+    expect(lab.sent.filter((m) => m.templateName !== b.name)).toHaveLength(2);
+  });
+
+  it('a send without the builder options keeps the classic defaults (no A/B, links tracked, nothing paced)', async () => {
+    const w = await world(lab, 'bwo2');
+    await payPerMessage(lab, w.t, 1_000_000);
+    const g = await group(owner(), w.t, 'G', await people(lab, w.t, [{}, {}]));
+    const d = await makeDraft(lab, w, readyDraft(w, g));
+    await wiz(lab, w.t.admin).post(`/drafts/${d.id}/launch`, { rowVersion: d.rowVersion });
+    const c = (
+      await owner().query(
+        `SELECT ab_testing, tracking_enabled, throttle_min_sec, expires_at, template_id_b FROM wpcampaigns WHERE uuid = $1`,
+        [d.id],
+      )
+    ).rows[0];
+    expect(c).toMatchObject({
+      ab_testing: false,
+      tracking_enabled: true,
+      throttle_min_sec: null,
+      expires_at: null,
+      template_id_b: null,
+    });
+  });
+
+  it('refuses, by path, an A/B test with no variant B template, an unmapped variant B placeholder, a pacing range that is backwards, an auto-end in the past or on a recurring series', async () => {
+    lab.clock.now = new Date();
+    const w = await world(lab, 'bwo3');
+    await payPerMessage(lab, w.t, 1_000_000);
+    const b = await templateB(w);
+    const g = await group(owner(), w.t, 'G', await people(lab, w.t, [{}, {}]));
+    const launch = async (o: Record<string, unknown>) => {
+      const d = await makeDraft(lab, w, readyDraft(w, g, o));
+      const res = await wiz(lab, w.t.admin).post(`/drafts/${d.id}/launch`, {
+        rowVersion: d.rowVersion,
+      });
+      expect(res.status, JSON.stringify(res.body)).toBe(422);
+      return problem(res).errors.map(
+        (e: { path: string; message: string }) => `${e.path}:${e.message}`,
+      );
+    };
+    expect(await launch({ abTesting: true })).toContain('templateIdB:template_b_required');
+    expect(await launch(options(b, { variablesB: {} }))).toContain(
+      'variablesB.body.1:variable_unmapped',
+    );
+    expect(
+      await launch({ pacing: { throttleMinSec: 9, throttleMaxSec: 2, windowStart: '08:00' } }),
+    ).toEqual(
+      expect.arrayContaining([
+        'pacing.throttleMaxSec:pacing_range',
+        'pacing.windowEnd:pacing_range',
+      ]),
+    );
+    expect(await launch({ autoEnd: { at: '2020-01-01T00:00', timezone: 'UTC' } })).toContain(
+      'autoEnd:auto_end_in_past',
+    );
+    expect(
+      await launch({
+        autoEnd: { at: in5Days(), timezone: 'UTC' },
+        schedule: {
+          mode: 'recurring',
+          rule: {
+            frequency: 'daily',
+            interval: 1,
+            startDate: new Date(lab.clock.now.getTime() + 86_400_000).toISOString().slice(0, 10),
+            timeOfDay: '09:00',
+            timezone: 'UTC',
+            weekdays: [],
+            ends: { kind: 'never' },
+          },
+        },
+      }),
+    ).toContain('autoEnd:auto_end_recurring');
+  });
+
+  it('a recurring series freezes the options: each run it plans carries the A/B test, the pacing and the link setting', async () => {
+    lab.clock.now = new Date();
+    const w = await world(lab, 'bwo4');
+    await payPerMessage(lab, w.t, 1_000_000);
+    const b = await templateB(w);
+    const g = await group(owner(), w.t, 'G', await people(lab, w.t, [{}, {}, {}, {}]));
+    const start = new Date(lab.clock.now.getTime() + 2 * 86_400_000).toISOString().slice(0, 10);
+    const d = await makeDraft(
+      lab,
+      w,
+      readyDraft(
+        w,
+        g,
+        options(b, {
+          autoEnd: null,
+          schedule: {
+            mode: 'recurring',
+            rule: {
+              frequency: 'daily',
+              interval: 1,
+              startDate: start,
+              timeOfDay: '09:00',
+              timezone: 'UTC',
+              weekdays: [],
+              ends: { kind: 'after', occurrences: 2 },
+            },
+          },
+        }),
+      ),
+    );
+    const res = await wiz(lab, w.t.admin).post(`/drafts/${d.id}/launch`, {
+      rowVersion: d.rowVersion,
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    const series = (
+      await owner().query(`SELECT id, org_id FROM camp_series WHERE uuid = $1`, [res.body.id])
+    ).rows[0];
+    lab.clock.now = new Date(`${start}T09:00:00Z`);
+    expect(await lab.series.tick()).toBe(1);
+    const run = (
+      await owner().query(
+        `SELECT id, ab_testing, ab_split, tracking_enabled, daily_limit, throttle_max_sec, status, template_id_b IS NOT NULL AS has_b
+         FROM wpcampaigns WHERE series_id = $1`,
+        [series.id],
+      )
+    ).rows[0];
+    expect(run).toMatchObject({
+      ab_testing: true,
+      ab_split: 50,
+      tracking_enabled: false,
+      daily_limit: 500,
+      throttle_max_sec: 3,
+      status: 'running',
+      has_b: true,
+    });
+    const variants = (
+      await owner().query(
+        `SELECT variant, count(*)::int AS n FROM wp_campaign_contacts WHERE campaign_id = $1 GROUP BY variant ORDER BY variant`,
+        [run.id],
+      )
+    ).rows;
+    expect(variants).toEqual([
+      { variant: 'A', n: 2 },
+      { variant: 'B', n: 2 },
+    ]);
   });
 });
 

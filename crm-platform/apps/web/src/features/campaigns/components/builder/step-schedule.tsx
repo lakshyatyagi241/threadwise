@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Field, Input, Select } from '@crm/ui';
 import { timezoneList } from '@/lib/timezones';
 import type { BuilderForm } from '../../lib/builder-model';
+import { AutoEndField, SmartDelivery, TrackClicks } from './delivery-extras';
 import { ChoiceCard, StepCard } from './parts';
 
 const SCHEDULES = ['now', 'scheduled', 'recurring'] as const;
@@ -26,21 +27,6 @@ export function StepSchedule({
   const t = useTranslations('campaigns.builder.delivery');
   const later = form.scheduleType !== 'now';
   const zones = useMemo(() => timezoneList(form.timezone), [form.timezone]);
-  const num = (key: keyof BuilderForm, label: string, hint: string, max: number, min = 0) => (
-    <Field label={label} htmlFor={`camp-${key}`} hint={hint}>
-      <Input
-        id={`camp-${key}`}
-        type="number"
-        inputMode="numeric"
-        min={min}
-        max={max}
-        value={form[key] as string}
-        onChange={(e) => patch({ [key]: e.target.value } as Partial<BuilderForm>)}
-        placeholder={t('default')}
-      />
-    </Field>
-  );
-
   return (
     <StepCard index="04" title={t('title')} tag={t('queue')}>
       <div
@@ -95,14 +81,7 @@ export function StepSchedule({
         </div>
       )}
 
-      <Field label={t('expires')} htmlFor="camp-expires" hint={t('expiresHint')}>
-        <Input
-          id="camp-expires"
-          type="datetime-local"
-          value={form.expiresAt}
-          onChange={(e) => patch({ expiresAt: e.target.value })}
-        />
-      </Field>
+      <AutoEndField value={form.expiresAt} onChange={(expiresAt) => patch({ expiresAt })} />
 
       {form.scheduleType === 'recurring' && (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -133,55 +112,16 @@ export function StepSchedule({
         </div>
       )}
 
-      <div className="rounded-xl border border-border p-4">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h3 className="text-[15px] font-semibold">{t('smart')}</h3>
-          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-            {t('smartTag')}
-          </span>
-        </div>
-        <p className="mt-1 text-[11.5px] text-muted-foreground">
-          {t('smartIntro')} {t('smartZone', { zone: form.timezone })}
-        </p>
-        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {num('throttleMinSec', t('throttleMin'), t('throttleHint'), 3600)}
-          {num('throttleMaxSec', t('throttleMax'), t('throttleMaxHint'), 3600)}
-          {num('dailyLimit', t('dailyLimit'), t('dailyHint'), 100000, 1)}
-          {num('batchSize', t('batchSize'), t('batchHint'), 10000, 1)}
-          {num('batchPauseMin', t('batchPause'), t('batchPauseHint'), 1440)}
-        </div>
-        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <Field label={t('windowStart')} htmlFor="camp-wstart">
-            <Input
-              id="camp-wstart"
-              type="time"
-              value={form.windowStart}
-              onChange={(e) => patch({ windowStart: e.target.value })}
-            />
-          </Field>
-          <Field label={t('windowEnd')} htmlFor="camp-wend">
-            <Input
-              id="camp-wend"
-              type="time"
-              value={form.windowEnd}
-              onChange={(e) => patch({ windowEnd: e.target.value })}
-            />
-          </Field>
-        </div>
-        <p className="mt-2 text-[11px] text-muted-foreground">
-          {t('windowHint', { zone: form.timezone })}
-        </p>
-      </div>
+      <SmartDelivery
+        zone={form.timezone}
+        values={form}
+        onChange={(key, value) => patch({ [key]: value } as Partial<BuilderForm>)}
+      />
 
-      <label className="flex cursor-pointer items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          className="size-4 accent-[var(--primary)]"
-          checked={form.trackingEnabled}
-          onChange={(e) => patch({ trackingEnabled: e.target.checked })}
-        />
-        {t('tracking')}
-      </label>
+      <TrackClicks
+        checked={form.trackingEnabled}
+        onChange={(trackingEnabled) => patch({ trackingEnabled })}
+      />
     </StepCard>
   );
 }

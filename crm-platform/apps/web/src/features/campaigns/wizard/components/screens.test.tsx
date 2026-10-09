@@ -60,9 +60,9 @@ describe('wizard screen: resume', () => {
     qc.setQueryData(KEYS.templates, { data: templates() });
     const out = html(<WizardScreen />, { qc });
     expect(out).toContain('Step 1 of 4 - Name and template');
-    expect(out).toContain('Broadcast name');
+    expect(out).toContain('Campaign name');
     expect(out).toMatch(/<button[^>]* disabled=""[^>]*>Back/);
-    expect(out).toContain('Create broadcast');
+    expect(out).toContain('Create campaign');
     expect(out).not.toContain('Draft saved');
   });
 
@@ -90,10 +90,10 @@ describe('wizard screen: final button by schedule mode', () => {
       ),
     });
 
-  it('reads Broadcast now for "now"', () => {
+  it('reads Send now for "now"', () => {
     const out = last({ mode: 'now' });
     expect(out).toContain('Step 4 of 4 - Test and send');
-    expect(out).toContain('Broadcast now');
+    expect(out).toContain('Send now');
     expect(out).not.toContain('Start recurring');
   });
 
@@ -110,7 +110,7 @@ describe('wizard screen: final button by schedule mode', () => {
 
   it('has the launch confirm dialog ready with the summary', () => {
     const out = last({ mode: 'now' });
-    expect(out).toContain('Broadcast now?');
+    expect(out).toContain('Send now?');
     expect(out).toContain('>Cancel<');
   });
 });
@@ -126,14 +126,14 @@ describe('wizard screen: step 3 gating', () => {
   it('an insufficient balance blocks Next and says why, in the card and next to the button', () => {
     const out = review(credit({ sufficient: false, shortfallMinor: 1_000 }));
     expect(out).toContain('Insufficient balance');
-    expect(out).toContain('Your wallet balance is too low for this broadcast.');
+    expect(out).toContain('Your wallet balance is too low for this campaign.');
     expect(out).toContain('aria-disabled="true"');
     expect(out).toContain('href="/billing/top-up"');
   });
 
   it('a covered balance leaves Next open', () => {
     const out = review(credit());
-    expect(out).toContain('Your balance covers this broadcast.');
+    expect(out).toContain('Your balance covers this campaign.');
     expect(out).not.toContain('aria-disabled="true"');
   });
 
@@ -145,8 +145,8 @@ describe('wizard screen: step 3 gating', () => {
 describe('wizard screen: access and states', () => {
   it('shows a no-access state without the create permission', () => {
     const out = html(<WizardScreen />, { perms: ['camp.campaigns.read'] });
-    expect(out).toContain('You cannot create broadcasts');
-    expect(out).not.toContain('Broadcast name');
+    expect(out).toContain('You cannot create campaigns');
+    expect(out).not.toContain('Campaign name');
   });
 
   it('shows a loading state while the draft loads', () => {
@@ -157,9 +157,9 @@ describe('wizard screen: access and states', () => {
     const qc = new QueryClient();
     qc.setQueryData(KEYS.draft(ID), draftResponse({}, { status: 'scheduled' }));
     const out = html(<WizardScreen draftId={ID} />, { qc });
-    expect(out).toContain('This broadcast was already sent');
+    expect(out).toContain('This campaign was already sent');
     expect(out).toContain(`href="/campaigns/wizard/broadcasts/${ID}"`);
-    expect(out).not.toContain('Broadcast name');
+    expect(out).not.toContain('Campaign name');
     expect(out).not.toContain('Next');
   });
 });
@@ -221,7 +221,7 @@ describe('status page', () => {
     const out = page(detail());
     expect(out).toContain('Weekly digest');
     expect(out).toContain('Active');
-    expect(out).toContain('Recurring Broadcast');
+    expect(out).toContain('Recurring campaign');
     expect(out).toContain('Repeats every week on Monday at 09:00 (Asia/Kolkata)');
     expect(out).toContain('Oct 12, 2026, 9:00 AM'); // shown on the schedule's own clock
     expect(out).toContain('940');
@@ -244,7 +244,7 @@ describe('status page', () => {
   it('shows Pause and Cancel for an active series, Resume and Cancel for a paused one', () => {
     const active = page(detail());
     expect(active).toContain('>Pause<');
-    expect(active).toContain('Cancel broadcast');
+    expect(active).toContain('Cancel campaign');
     expect(active).not.toContain('>Resume<');
     const paused = page(detail({ status: 'paused' }));
     expect(paused).toContain('>Resume<');
@@ -272,15 +272,15 @@ describe('status page', () => {
       }),
     );
     expect(out).toContain('Sent once on Oct 9, 2026 at 10:30 (UTC).');
-    expect(out).toContain('Retries are off for this broadcast.');
+    expect(out).toContain('Retries are off for this campaign.');
     expect(out).toContain('No run has started yet.');
-    expect(out).toContain('Cancel broadcast');
+    expect(out).toContain('Cancel campaign');
   });
 
   it('has a loading state and a confirm dialog for cancel', () => {
-    expect(html(<BroadcastScreen id={ID} />)).toContain('Loading the broadcast');
+    expect(html(<BroadcastScreen id={ID} />)).toContain('Loading the campaign');
     const out = page(detail());
-    expect(out).toContain('Cancel this broadcast?');
+    expect(out).toContain('Cancel this campaign?');
     expect(out).toContain('No further runs will start.');
   });
 });
@@ -323,7 +323,7 @@ describe('campaign list card', () => {
 
   it('a wizard draft opens in the wizard', () => {
     const out = card(campaign({ wizard: true }));
-    expect(out).toContain(`href="/campaigns/wizard/${ID}"`);
+    expect(out).toContain(`href="/campaigns/create?draft=${ID}"`);
     expect(out).not.toContain(`/campaigns/${ID}/edit`);
   });
 
@@ -333,7 +333,7 @@ describe('campaign list card', () => {
     expect(out).not.toContain('/campaigns/wizard/');
   });
 
-  it('a launched wizard broadcast goes to the campaign page and has no classic edit', () => {
+  it('a launched wizard campaign goes to the campaign page and has no classic edit', () => {
     const out = card(campaign({ wizard: true, status: 'scheduled' }));
     expect(out).toContain(`href="/campaigns/${ID}"`);
     expect(out).not.toContain('/edit');

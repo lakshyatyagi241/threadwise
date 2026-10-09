@@ -31,6 +31,7 @@ interface Claimed {
   id: number;
   campaignId: number;
   contactId: number | null;
+  variant: string | null;
   retryCount: number;
   firstSentAt: Date;
   nextAt: Date;
@@ -234,12 +235,13 @@ export class WizardRetryService {
             AND r2.status = 'failed' AND c.retry_enabled AND c.status NOT IN ('cancelled', 'paused')
           ORDER BY r2.retry_next_at, r2.id LIMIT ${MAX_PER_PASS} FOR UPDATE OF r2 SKIP LOCKED)
         AND r.retry_state = 'scheduled' AND r.status = 'failed'
-        RETURNING r.org_id, r.id, r.campaign_id, r.contact_id, r.retry_count, r.retry_first_sent_at, r.retry_next_at`);
+        RETURNING r.org_id, r.id, r.campaign_id, r.contact_id, r.variant, r.retry_count, r.retry_first_sent_at, r.retry_next_at`);
       return (res.rows as Array<Record<string, unknown>>).map((r) => ({
         orgId: Number(r.org_id),
         id: Number(r.id),
         campaignId: Number(r.campaign_id),
         contactId: r.contact_id === null ? null : Number(r.contact_id),
+        variant: r.variant === null || r.variant === undefined ? null : String(r.variant),
         retryCount: Number(r.retry_count),
         firstSentAt: when(r.retry_first_sent_at),
         nextAt: when(r.retry_next_at),
@@ -256,9 +258,12 @@ export class WizardRetryService {
 
     const prep = await this.db.txAs({ orgId }, async (tx) => {
       const camp = await this.campaigns.findById(tx, orgId, c.campaignId);
-      if (!camp || c.contactId === null || camp.templateId === null)
+      // A recipient of variant B gets variant B's template again, with its own mapping.
+      const templateId =
+        c.variant === 'B' ? (camp?.templateIdB ?? camp?.templateId) : camp?.templateId;
+      if (!camp || c.contactId === null || templateId === null || templateId === undefined)
         return { skip: 'gone' as const };
-      const tpl = await this.templates.findById(tx, orgId, camp.templateId);
+      const tpl = await this.templates.findById(tx, orgId, templateId);
       if (!tpl) return { skip: 'gone' as const };
       const contactRow = (
         await tx.execute(
@@ -308,7 +313,7 @@ export class WizardRetryService {
         {
           orgId,
           campaign: { id: prep.camp.id, trackingEnabled: prep.camp.trackingEnabled },
-          wizardVariables: wizardVariablesOf(prep.camp.wizard),
+          wizardVariables: wizardVariablesOf(prep.camp.wizard, c.variant),
           tpl: prep.tpl,
           overrides: sanitizeOverrides(prep.camp.templateOverrides),
           contactId: c.contactId!,
