@@ -3,20 +3,20 @@
 :root {
   --background: #ffffff;
   --foreground: #0f172a;
-  --muted: #f1f5f9;
+  --muted: #f4f3ff;
   --muted-foreground: #64748b;
   --border: #e2e8f0;
-  --primary: #0f766e;
+  --primary: #3214db;
   --primary-foreground: #ffffff;
-  --brand: #0b5a45;
+  --brand: #3214db;
   --brand-foreground: #ffffff;
   --danger: #b91c1c;
   --danger-foreground: #ffffff;
   --success: #15803d;
   --warning: #b45309;
-  --sidebar: #0b1220;
+  --sidebar: #0d0b2e;
   --sidebar-foreground: #cbd5e1;
-  --sidebar-active: #134e4a;
+  --sidebar-active: #1e1b4b;
   --radius: 0.5rem;
   /* Navigation panel: light in the light theme, dark in the dark theme. Text pairs are AA on --nav-bg. */
   --nav-bg: #ffffff;
@@ -24,11 +24,11 @@
   --nav-muted: #64748b;
   --nav-disabled: #94a3b8;
   --nav-border: #e2e8f0;
-  --nav-hover: #f1f5f9;
-  --nav-active: #e3f2ee;
-  --nav-active-foreground: #0b3d33;
-  --nav-ring: #0f766e;
-  --nav-accent: #25d366;
+  --nav-hover: #f4f3ff;
+  --nav-active: #f0efff;
+  --nav-active-foreground: #1b0d95;
+  --nav-ring: #3214db;
+  --nav-accent: #7c3aed;
   --nav-badge: #f59e0b;
   --nav-badge-foreground: #1c1303;
 }
@@ -39,27 +39,27 @@
   --muted: #111a2e;
   --muted-foreground: #94a3b8;
   --border: #1e293b;
-  --primary: #2dd4bf;
-  --primary-foreground: #04211f;
-  --brand: #0f766e;
+  --primary: #8b7cf6;
+  --primary-foreground: #0d0b2e;
+  --brand: #3214db;
   --brand-foreground: #ffffff;
   --danger: #f87171;
   --danger-foreground: #2b0a0a;
   --success: #4ade80;
   --warning: #fbbf24;
-  --sidebar: #060b16;
+  --sidebar: #07061f;
   --sidebar-foreground: #94a3b8;
-  --sidebar-active: #134e4a;
+  --sidebar-active: #1e1b4b;
   --nav-bg: #0a111f;
   --nav-foreground: #cbd5e1;
   --nav-muted: #94a3b8;
   --nav-disabled: #64748b;
   --nav-border: #1e293b;
   --nav-hover: #131c30;
-  --nav-active: #1b2a47;
+  --nav-active: #25205a;
   --nav-active-foreground: #ffffff;
-  --nav-ring: #5eead4;
-  --nav-accent: #25d366;
+  --nav-ring: #a78bfa;
+  --nav-accent: #a78bfa;
   --nav-badge: #fbbf24;
   --nav-badge-foreground: #1c1303;
 }
