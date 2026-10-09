@@ -1,0 +1,491 @@
+{
+  "facebook": {
+    "nav": {
+      "hub": "Facebook",
+      "posts": "Posty na Facebooku",
+      "setup": "Konfiguracja Messengera",
+      "broadcasts": "Wiadomości masowe Messengera"
+    },
+    "common": {
+      "dismiss": "Odrzuć",
+      "cancel": "Anuluj"
+    },
+    "hub": {
+      "kicker": "Kanał · Facebook",
+      "title": "Facebook",
+      "titleAccent": "Strony",
+      "intro": "Zaloguj się przez Facebooka raz, a każda Strona, którą zarządza Twoje konto, zostanie dodana. Następnie publikuj posty, odpowiadaj na komentarze i obsługuj Messengera ze skrzynki odbiorczej.",
+      "teamInbox": "Skrzynka zespołu",
+      "posts": "Posty",
+      "setup": "Konfiguracja Messengera",
+      "broadcasts": "Wiadomości masowe Messengera",
+      "loadError": "Nie udało się wczytać połączonych Stron. Spróbuj ponownie.",
+      "notConfigured": "Facebook nie jest jeszcze skonfigurowany w tej instalacji — administrator musi dodać aplikację Meta, zanim będzie można połączyć Stronę.",
+      "connectedCount": "{count, plural, one {Połączono # Stronę} few {Połączono # Strony} many {Połączono # Stron} other {Połączono # Strony}}",
+      "notConnected": "Niepołączono",
+      "cardTitle": "Połącz swoje konto Facebook",
+      "cardBody": "Zaloguj się przez Facebooka raz — każda Strona, którą zarządza Twoje konto, zostanie dodana automatycznie, z własnym dostępem. Możesz też dodać pojedynczą Stronę za pomocą jej tokenu dostępu.",
+      "connect": "Połącz Stronę",
+      "connectAnother": "Połącz inne konto",
+      "connectedPages": "Połączone Strony",
+      "webhookTitle": "Adres webhooka",
+      "webhookBody": "Wklej ten adres w ustawieniach webhooka swojej aplikacji Meta (adres wywołania zwrotnego), aby wiadomości i komentarze z Messengera trafiały do skrzynki odbiorczej. Używa tego samego tokenu weryfikacji co WhatsApp, chyba że ustawiono token dla Facebooka."
+    },
+    "connect": {
+      "close": "Zamknij",
+      "kicker": "Facebook",
+      "title": "Połącz swoje konto Facebook",
+      "intro": "Zaloguj się przez Facebooka raz — każda Strona, którą zarządza Twoje konto, zostanie dodana automatycznie. Następnie możesz publikować posty, odpowiadać na komentarze i obsługiwać Messengera ze skrzynki odbiorczej.",
+      "continue": "Kontynuuj z Facebookiem",
+      "or": "lub",
+      "manualToggle": "Dodaj Stronę ręcznie za pomocą tokenu dostępu",
+      "tokenLabel": "Token dostępu do Strony",
+      "tokenHint": "Z Meta → Ustawienia firmy → Użytkownicy systemowi lub z Graph API Explorer. Stronę ustalimy na podstawie tokenu.",
+      "connectPage": "Połącz Stronę",
+      "tokenShape": "To nie wygląda na token dostępu do Strony.",
+      "failed": "Nie udało się połączyć. Spróbuj ponownie.",
+      "footerLeft": "Trafia od razu do skrzynki odbiorczej",
+      "footerRight": "zaszyfrowany"
+    },
+    "page": {
+      "facebookPage": "Strona na Facebooku",
+      "failed": "Nie udało się. Spróbuj ponownie.",
+      "live": "Aktywna",
+      "reconnect": "Połącz ponownie",
+      "followers": "Obserwujących: {count}",
+      "liveNoCount": "aktywna",
+      "dataAccess": "Dostęp Meta do danych kończy się {when}",
+      "refresh": "Odśwież profil",
+      "refreshed": "Strona na Facebooku odświeżona.",
+      "inboundFixed": "Webhooki Facebooka ponownie zasubskrybowane dla tej Strony.",
+      "fixInbound": "Napraw odbiór",
+      "remove": "Rozłącz",
+      "removeConfirm": "Rozłączyć tę Stronę na Facebooku? Wątki w skrzynce pozostaną, ale wysyłanie zostanie wstrzymane do ponownego połączenia.",
+      "cancel": "Anuluj",
+      "removed": "Strona na Facebooku rozłączona."
+    },
+    "broadcasts": {
+      "kicker": "Facebook · Wiadomości masowe",
+      "title": "Messenger",
+      "titleAccent": "wiadomości masowe",
+      "intro": "Pisz do osób, które niedawno rozmawiały z Twoją Stroną. Meta pozwala Stronie napisać do kogoś tylko w ciągu 24 godzin od jego ostatniej wiadomości — poniższa lista to Twoi aktualnie osiągalni odbiorcy.",
+      "inbox": "Skrzynka odbiorcza",
+      "loadError": "Nie udało się wczytać wiadomości masowych. Spróbuj ponownie.",
+      "connectFirst": "Najpierw połącz Stronę na Facebooku.",
+      "connectPage": "Połącz Stronę",
+      "none": "Nie ma jeszcze wiadomości masowych. Utwórz pierwszą po prawej.",
+      "recipients": "{count, plural, one {# odbiorca} few {# odbiorcy} many {# odbiorców} other {# odbiorcy}}",
+      "status": {
+        "sending": "Wysyłanie",
+        "done": "Gotowe",
+        "failed": "Nieudane",
+        "draft": "Szkic"
+      },
+      "counts": "{sent} wysłanych · {failed} nieudanych · {blocked} zablokowanych",
+      "start": "Rozpocznij wysyłkę",
+      "started": "Wysyłka rozpoczęta. Będzie kontynuowana, nawet jeśli opuścisz tę stronę.",
+      "pause": "Wstrzymaj",
+      "paused": "Wstrzymano. Pozostali odbiorcy nadal czekają w kolejce.",
+      "retry": "Ponów nieudane",
+      "retried": "Ponownie dodano do kolejki: {count, plural, one {# odbiorca} few {# odbiorcy} many {# odbiorców} other {# odbiorcy}}. Naciśnij Rozpocznij wysyłkę.",
+      "delete": "Usuń",
+      "deleted": "Usunięto wiadomość masową.",
+      "deleteConfirm": "Usunąć tę wiadomość masową?",
+      "cancel": "Anuluj",
+      "newBroadcast": "Nowa wiadomość masowa",
+      "name": "Nazwa",
+      "namePlaceholder": "np. Wyprzedaż weekendowa",
+      "page": "Strona",
+      "template": "Szablon (opcjonalnie)",
+      "templateHint": "Wypełnia treść wiadomości i wysyła przyciski szablonu.",
+      "templateNone": "— brak (napisz własną) —",
+      "buttons": "{count, plural, one {# przycisk} few {# przyciski} many {# przycisków} other {# przycisku}}",
+      "message": "Wiadomość",
+      "messageHint": "Użyj '{name}', aby spersonalizować.",
+      "messagePlaceholder": "Cześć '{name}'! …",
+      "recipientsLabel": "Odbiorcy",
+      "within24": "(w ciągu 24 h)",
+      "selectAll": "Zaznacz wszystkich",
+      "noAudience": "Nikt nie mieści się teraz w 24-godzinnym oknie — ktoś musi najpierw napisać do tej Strony.",
+      "messengerUser": "Użytkownik Messengera",
+      "selected": "Wybrano: {count}",
+      "create": "Utwórz wiadomość masową",
+      "created": "Utworzono wiadomość masową dla {count, plural, one {# odbiorcy} few {# odbiorców} many {# odbiorców} other {# odbiorców}}. Gdy będzie gotowa, naciśnij Rozpocznij wysyłkę.",
+      "failed": "Nie udało się. Spróbuj ponownie."
+    },
+    "setup": {
+      "kicker": "Facebook · Messenger",
+      "title": "Messenger",
+      "titleAccent": "konfiguracja",
+      "intro": "Ustaw, jak czat w Messengerze wita klientów i ich prowadzi — przycisk Rozpocznij, powitanie, stałe menu i klikalne pytania. Wybierz funkcję, przeczytaj, co robi, i uzupełnij ją. Zmiany zapisują się od razu w Facebooku.",
+      "pagePicker": "Strona",
+      "composer": "Edytor",
+      "loadError": "Nie udało się wczytać profilu Messengera. Spróbuj ponownie.",
+      "noPage": "Nie połączono jeszcze żadnej Strony na Facebooku.",
+      "connect": "Połącz konto Facebook",
+      "profile": "Profil Messengera",
+      "tabs": {
+        "getstarted": "Przycisk Rozpocznij",
+        "greeting": "Powitanie",
+        "menu": "Menu stałe",
+        "icebreakers": "Pytania startowe"
+      },
+      "isSet": "Konfiguracja",
+      "notSet": "Nieskonfigurowane",
+      "failed": "Nie udało się. Spróbuj ponownie.",
+      "footnote": "Te ustawienia zapisują się w profilu Messengera w Facebooku przez Graph API i obowiązują w nowych rozmowach. Meta może potrzebować chwili na wdrożenie zmian.",
+      "frame": {
+        "preview": "Podgląd",
+        "yourPage": "Twoja Strona",
+        "activeNow": "Aktywna teraz"
+      },
+      "explainer": {
+        "what": "Co to jest",
+        "customer": "Jak klienci z tego korzystają",
+        "how": "Jak to skonfigurować"
+      },
+      "getstarted": {
+        "title": "Przycisk Rozpocznij",
+        "subtitle": "Przycisk, który nowy klient naciska, aby rozpocząć czat.",
+        "what": "To pierwsza rzecz, jaką ktoś widzi, otwierając Messengera — pojedynczy przycisk „Rozpocznij” na ekranie powitalnym.",
+        "customer": "Klika go raz i rozmowa się zaczyna. Pojawia się tylko przed pierwszą wiadomością.",
+        "how": "Nadaj mu payload (słowo kluczowe, np. GET_STARTED). Następnie w Przepływach dodaj wyzwalacz nasłuchujący tego payloadu, aby przepływ powitalny uruchomił się po kliknięciu.",
+        "payload": "Payload",
+        "payloadHint": "To słowo jest wysyłane, gdy przycisk zostanie kliknięty. Dopasuj je we wyzwalaczu przepływu, aby uruchomić automatyzację.",
+        "remove": "Usuń",
+        "removeConfirm": "Usunąć przycisk Rozpocznij?",
+        "save": "Zapisz",
+        "yourPage": "Twoja Strona",
+        "typically": "Zwykle odpowiada natychmiast",
+        "button": "Rozpocznij"
+      },
+      "greeting": {
+        "title": "Powitanie",
+        "subtitle": "Przyjazne przywitanie widoczne, zanim ktokolwiek coś napisze.",
+        "what": "Krótka wiadomość powitalna na pierwszym ekranie czatu, tuż pod nazwą Strony.",
+        "customer": "Klienci czytają ją od razu po otwarciu Messengera — nadaje ton i mówi, w czym możesz pomóc.",
+        "how": "Trzymaj ją w jednym ciepłym zdaniu (maks. 160 znaków). Wskazówka: dodaj znacznik imienia, a Messenger przywita każdego klienta po imieniu.",
+        "welcomeText": "Tekst powitania",
+        "placeholder": "Cześć! W czym możemy dziś pomóc?",
+        "remove": "Usuń",
+        "removeConfirm": "Usunąć powitanie?",
+        "save": "Zapisz",
+        "yourPage": "Twoja Strona",
+        "sample": "Cześć! W czym możemy dziś pomóc?"
+      },
+      "menu": {
+        "title": "Menu stałe",
+        "subtitle": "Stałe menu skrótów w pasku wiadomości.",
+        "what": "Menu (ikona ☰ obok pola tekstowego), które jest dostępne przez cały czat — do 3 skrótów.",
+        "customer": "Klikając ☰ w dowolnym momencie, przechodzą od razu do tego, czego potrzebują — „Porozmawiaj z człowiekiem”, „Śledź moje zamówienie”, „Odwiedź sklep”.",
+        "how": "Dodaj do 3 pozycji. Każda uruchamia przepływ (wysyła payload) albo otwiera link (URL). Opcjonalnie ukryj pole tekstowe, aby osoby korzystały tylko z menu.",
+        "sample1": "Napisz do nas",
+        "sample2": "Śledź moje zamówienie",
+        "sample3": "Odwiedź sklep",
+        "menuLabel": "Menu",
+        "menuItem": "Pozycja menu",
+        "titleLabel": "Tytuł",
+        "titlePlaceholder": "Napisz do nas",
+        "action": "Akcja",
+        "actionFlow": "Uruchom przepływ (wyślij payload)",
+        "actionLink": "Otwórz link (URL)",
+        "url": "URL",
+        "payload": "Payload",
+        "removeItem": "Usuń pozycję",
+        "add": "Dodaj pozycję menu",
+        "hideComposer": "Ukryj pole tekstowe (tylko menu)",
+        "remove": "Usuń menu",
+        "removeConfirm": "Usunąć stałe menu?",
+        "save": "Zapisz menu"
+      },
+      "ice": {
+        "title": "Pytania startowe",
+        "subtitle": "Sugerowane pytania widoczne przed pierwszą wiadomością.",
+        "what": "Do 4 klikalnych pytań na ekranie powitalnym — najczęstsze pytania gotowe do kliknięcia zamiast pisania.",
+        "customer": "Zamiast zastanawiać się, co napisać, klikają pytanie, np. „Jakie są godziny otwarcia?”, i od razu dostają odpowiedź.",
+        "how": "Dodaj najczęstsze pytania. Każde kliknięcie wysyła swój payload — dopasuj go we wyzwalaczu przepływu, aby odpowiadać automatycznie.",
+        "sample1": "Jakie są godziny otwarcia?",
+        "sample2": "Dokąd wysyłacie?",
+        "sample3": "Porozmawiaj z człowiekiem",
+        "yourPage": "Twoja Strona",
+        "question": "Pytanie",
+        "questionLabel": "Pytanie",
+        "questionPlaceholder": "Jakie są godziny otwarcia?",
+        "payload": "Payload",
+        "removeItem": "Usuń pytanie startowe",
+        "add": "Dodaj pytanie startowe",
+        "remove": "Usuń wszystkie",
+        "removeConfirm": "Usunąć wszystkie pytania startowe?",
+        "save": "Zapisz pytania startowe"
+      }
+    },
+    "posts": {
+      "kicker": "Facebook · Posty",
+      "title": "Facebook",
+      "titleAccent": "posty",
+      "intro": "Wszystko, co utworzysz, zaplanujesz lub opublikujesz stąd — śledź status, ponawiaj błędy i zarządzaj kolejką.",
+      "allPages": "Wszystkie Strony",
+      "pagePicker": "Strona",
+      "myPosts": "Moje posty",
+      "insights": "Statystyki",
+      "create": "Utwórz post",
+      "loadError": "Nie udało się wczytać postów. Spróbuj ponownie.",
+      "noPage": "Nie połączono jeszcze żadnej Strony na Facebooku",
+      "noPageHint": "Połącz konto Facebook, aby publikować i planować posty na Stronach.",
+      "connect": "Połącz konto Facebook",
+      "kpi": {
+        "total": "Wszystkie posty",
+        "scheduled": "Zaplanowane",
+        "published": "Opublikowane",
+        "failed": "Nieudane"
+      },
+      "tabs": {
+        "all": "Wszystkie",
+        "scheduled": "Zaplanowane",
+        "published": "Opublikowane",
+        "failed": "Nieudane"
+      },
+      "ranges": {
+        "all": "Cały czas",
+        "7d": "7 dni",
+        "30d": "30 dni",
+        "90d": "90 dni"
+      },
+      "search": "Szukaj postów…",
+      "cols": {
+        "post": "Post",
+        "page": "Strona",
+        "type": "Typ",
+        "status": "Status",
+        "when": "Kiedy",
+        "actions": "Akcje"
+      },
+      "status": {
+        "scheduled": "Zaplanowany",
+        "published": "Opublikowany",
+        "failed": "Nieudany",
+        "draft": "Szkic"
+      },
+      "publishNow": "Opublikuj teraz",
+      "delete": "Usuń",
+      "noMatch": "Żaden post nie pasuje do tych filtrów",
+      "none": "Nie ma jeszcze postów",
+      "noneHint": "Utwórz pierwszy post — opublikuj od razu lub zaplanuj.",
+      "pageOf": "Strona {page} z {last}",
+      "prev": "Poprzednia",
+      "next": "Następna",
+      "deleteTitle": "Usuń post",
+      "deleteLive": "To usunie post także z Facebooka — tej operacji nie można cofnąć.",
+      "deleteLocal": "Usunąć ten post?",
+      "deleteYes": "Tak, usuń",
+      "cancel": "Anuluj",
+      "rejected": "Facebook odrzucił post: {error}",
+      "published": "Post opublikowano na Facebooku.",
+      "removed": "Post usunięto.",
+      "failed": "Nie udało się. Spróbuj ponownie."
+    },
+    "compose": {
+      "kicker": "Facebook · Tworzenie",
+      "title": "Utwórz",
+      "titleAccent": "post",
+      "intro": "Twórz zdjęcia, albumy, linki, filmy i rolki — publikuj od razu lub planuj je bezpośrednio na połączonych Stronach. Obserwuj, jak powstaje, w podglądzie na żywo.",
+      "posts": "Posty",
+      "myPosts": "Moje posty",
+      "insights": "Statystyki",
+      "loadError": "Nie udało się wczytać Stron. Spróbuj ponownie.",
+      "noPage": "Nie połączono jeszcze żadnej Strony na Facebooku",
+      "noPageHint": "Połącz konto Facebook, aby publikować i planować posty na Stronach.",
+      "noAccess": "Nie możesz tworzyć postów",
+      "noAccessHint": "Poproś administratora o uprawnienie do tworzenia postów na Facebooku.",
+      "connect": "Połącz konto Facebook",
+      "required": "wymagane",
+      "steps": {
+        "page": "Strona",
+        "type": "Typ posta",
+        "media": "Media",
+        "message": "Wiadomość",
+        "when": "Kiedy publikować"
+      },
+      "types": {
+        "photo": {
+          "label": "Zdjęcie",
+          "hint": "Pojedynczy post ze zdjęciem."
+        },
+        "multi_photo": {
+          "label": "Album",
+          "hint": "Od 2 do 10 zdjęć w jednym poście."
+        },
+        "link": {
+          "label": "Link",
+          "hint": "Udostępnij link z podglądem."
+        },
+        "video": {
+          "label": "Wideo",
+          "hint": "Wideo do kanału (MP4 / MOV)."
+        },
+        "reel": {
+          "label": "Rolka",
+          "hint": "Pionowe krótkie wideo — rolka."
+        }
+      },
+      "photoUrls": "Wklej publiczne adresy zdjęć",
+      "photoHint": "Jeden w wierszu, maks. 10. Przesyłanie pliku wymaga usługi pamięci, która nie jest jeszcze połączona, więc użyj publicznych adresów zdjęć.",
+      "linkUrl": "Adres URL linku",
+      "linkHint": "Facebook tworzy kartę podglądu z linku. Post może zawierać link lub zdjęcia, ale nie oba naraz.",
+      "videoUrl": "Wklej publiczny adres wideo HTTPS",
+      "reelNote": "Rolki to pionowe krótkie filmy. Poniższa wiadomość jest używana jako opis rolki.",
+      "videoNote": "Meta pobiera plik przez publiczny HTTPS. Poniższa wiadomość jest używana jako opis wideo.",
+      "messagePlaceholder": "Napisz swój post…",
+      "ai": {
+        "title": "Narzędzia AI",
+        "caption": "Podpis",
+        "repurpose": "Przerób",
+        "review": "Sprawdź",
+        "bestTime": "Najlepsza pora",
+        "image": "Obraz",
+        "unavailable": "Narzędzia AI nie są jeszcze dostępne: czekają na ustawienia dostawcy AI."
+      },
+      "when": {
+        "now": "Opublikuj teraz",
+        "later": "Zaplanuj na później",
+        "label": "Data i godzina publikacji",
+        "hint": "Między 10 minutami a 75 dniami od teraz, w Twojej strefie czasowej ({tz}). Facebook ustawia go w kolejce i publikuje o wyznaczonym czasie."
+      },
+      "submit": {
+        "publish": "Opublikuj",
+        "schedule": "Zaplanuj"
+      },
+      "preview": {
+        "live": "Podgląd na żywo",
+        "facebook": "Facebook",
+        "yourPage": "Twoja Strona",
+        "justNow": "Przed chwilą",
+        "empty": "Tekst posta pojawi się tutaj…",
+        "reel": "Rolka",
+        "video": "Wideo",
+        "like": "Lubię to",
+        "comment": "Komentarz",
+        "share": "Udostępnij",
+        "note": "Podgląd na żywo — prawdziwy post na Facebooku może wyglądać nieco inaczej."
+      },
+      "help": {
+        "label": "Pomoc - {n}",
+        "help1": {
+          "title": "Co mogę opublikować?",
+          "body": "Zdjęcia, albumy, linki, wideo do kanału i rolki są publikowane bezpośrednio na połączonej Stronie przez Graph API."
+        },
+        "help2": {
+          "title": "Jak działa planowanie?",
+          "body": "Wybierz czas między 10 minutami a 75 dniami od teraz, a Facebook ustawi post w kolejce — opublikuje go automatycznie o wyznaczonym czasie. Możesz też opublikować od razu."
+        },
+        "help3": {
+          "title": "Post się nie powiódł — dlaczego?",
+          "body": "Zwykle adres multimediów nie był publiczny HTTPS albo Strona została połączona ponownie. Przeczytaj błąd w wierszu, a następnie ponów, klikając Opublikuj teraz."
+        }
+      },
+      "problem": {
+        "noPage": "Wybierz połączoną Stronę na Facebooku.",
+        "scheduleMissing": "Wybierz datę i godzinę, aby zaplanować post.",
+        "scheduleInvalid": "Nie udało się odczytać tej daty i godziny."
+      },
+      "rejected": "Facebook odrzucił post: {error}",
+      "scheduled": "Post zaplanowano.",
+      "published": "Post opublikowano na Facebooku.",
+      "failed": "Nie udało się. Spróbuj ponownie."
+    },
+    "grid": {
+      "kicker": "Facebook · Moje posty",
+      "title": "Twoja",
+      "titleAccent": "siatka",
+      "intro": "Ostatnio opublikowane posty ze Strony — na żywo z Facebooka. Kliknij dowolny post, aby go podejrzeć.",
+      "posts": "Posty",
+      "newPost": "Nowy post",
+      "pagePicker": "Strona",
+      "loadError": "Nie udało się wczytać postów. Spróbuj ponownie.",
+      "noPage": "Nie połączono Strony na Facebooku",
+      "noPageHint": "Połącz ją, aby zobaczyć tutaj swoją siatkę.",
+      "goHub": "Przejdź do Facebooka",
+      "empty": "Na razie nic tu nie ma",
+      "emptyHint": "Opublikowane posty pojawią się tutaj.",
+      "firstPost": "Utwórz pierwszy post",
+      "noCaption": "(bez podpisu)",
+      "view": "Zobacz post",
+      "close": "Zamknij",
+      "postTitle": "Post",
+      "noImage": "Brak zdjęcia",
+      "viewOnFacebook": "Zobacz na Facebooku"
+    },
+    "insights": {
+      "kicker": "Facebook · Analityka",
+      "title": "Strona",
+      "titleAccent": "statystyki",
+      "intro": "Zasięg i zaangażowanie (28 dni, na żywo z Facebooka) połączone z aktywnością w Messengerze i postami opublikowanymi stąd.",
+      "create": "Utwórz post",
+      "myPosts": "Moje posty",
+      "loadError": "Nie udało się wczytać statystyk. Spróbuj ponownie.",
+      "noPage": "Nie połączono jeszcze żadnej Strony na Facebooku.",
+      "connect": "Połącz konto Facebook",
+      "connected": "Połączono",
+      "viewing": "Przeglądane konto",
+      "cards": {
+        "followers": "Obserwujący",
+        "followersSub": "łączna publiczność",
+        "reach": "Zasięg · 28 dni",
+        "reachSub": "osób dotarło",
+        "impressions": "Wyświetlenia · 28 dni",
+        "impressionsSub": "razy wyświetlono",
+        "engagements": "Zaangażowania · 28 dni",
+        "engagementsSub": "interakcje",
+        "convos": "Rozmowy",
+        "convosSub": "{n} otwartych",
+        "messagesIn": "Wiadomości przychodzące · 28 dni",
+        "messagesInSub": "{n} wysłanych w odpowiedzi",
+        "published": "Opublikowane posty",
+        "publishedSub": "{n} zaplanowanych",
+        "rate": "Współczynnik zaangażowania",
+        "rateSub": "zaangażowania ÷ zasięg"
+      },
+      "liveFromFacebook": "Na żywo z Facebooka",
+      "fromHere": "Z tej przestrzeni roboczej",
+      "activity": "Aktywność w Messengerze · ostatnie 14 dni",
+      "received": "Odebrane",
+      "sent": "Wysłane",
+      "mix": {
+        "title": "Rodzaje treści",
+        "posts": "{n, plural, one {# post} few {# posty} many {# postów} other {# posta}}",
+        "none": "Nie opublikowano stąd jeszcze żadnych postów.",
+        "first": "Utwórz pierwszy post"
+      },
+      "types": {
+        "photo": "Zdjęcie",
+        "multi_photo": "Album",
+        "link": "Link",
+        "video": "Wideo",
+        "reel": "Rolka"
+      },
+      "convos": {
+        "title": "Rozmowy",
+        "total": "łącznie: {n}",
+        "open": "Otwórz skrzynkę zespołu",
+        "none": "Brak rozmów na Facebooku. Pojawią się tutaj, gdy ktoś napisze do Strony."
+      },
+      "status": {
+        "open": "Otwarta",
+        "pending": "Oczekująca",
+        "resolved": "Rozwiązana",
+        "closed": "Zamknięta",
+        "snoozed": "Odłożona"
+      },
+      "recent": {
+        "title": "Ostatnie posty",
+        "none": "Brak postów lub statystyki są jeszcze w przygotowaniu.",
+        "noCaption": "(bez podpisu)",
+        "impressions": "wyświetlenia",
+        "engaged": "zaangażowani",
+        "view": "Zobacz"
+      },
+      "legendLive": "Na żywo z Facebooka — wycofane metryki mogą pokazywać —.",
+      "legendHere": "Z tej przestrzeni roboczej — wiadomości Messengera i opublikowane posty."
+    }
+  }
+}

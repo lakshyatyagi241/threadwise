@@ -1,0 +1,132 @@
+{
+  "web-forms": {
+    "list": {
+      "title": "Formulieren",
+      "subtitle": "Bouw formulieren, zet ze op je site of deel een link, en elk antwoord komt in je CRM terecht als contact.",
+      "templates": "Sjablonen",
+      "newForm": "Nieuw formulier",
+      "statsLabel": "Totalen voor de getoonde formulieren",
+      "stats": {
+        "forms": "Formulieren",
+        "published": "Gepubliceerd",
+        "submissions": "Inzendingen",
+        "needsReview": "Aandacht nodig"
+      },
+      "views": {
+        "label": "Tonen",
+        "all": "Alle",
+        "published": "Gepubliceerd",
+        "draft": "Concepten",
+        "paused": "Gepauzeerd",
+        "archived": "Gearchiveerd"
+      },
+      "search": "Formulieren zoeken",
+      "loading": "Formulieren laden",
+      "loadFailed": "De formulieren konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "empty": {
+        "title": "Nog geen formulieren",
+        "message": "Begin met een sjabloon of een leeg formulier, publiceer het en deel de link, of plak de embedcode op je site.",
+        "fromTemplate": "Begin met een sjabloon",
+        "blank": "Leeg formulier"
+      },
+      "noMatch": {
+        "title": "Geen formulieren gevonden",
+        "message": "Probeer een andere zoekopdracht of weergave.",
+        "clear": "Filters wissen"
+      },
+      "col": {
+        "name": "Formulier",
+        "status": "Status",
+        "submissions": "Inzendingen",
+        "views": "Weergaven",
+        "conversion": "Conversie",
+        "last": "Laatste inzending"
+      },
+      "unpublished": "Niet-gepubliceerde wijzigingen",
+      "version": "Versie {n}",
+      "needsReview": "{count, plural, one {# vraagt aandacht} other {# vragen aandacht}}",
+      "status": {
+        "draft": "Concept",
+        "published": "Gepubliceerd",
+        "paused": "Gepauzeerd",
+        "archived": "Gearchiveerd"
+      },
+      "noRate": "-",
+      "never": "Nooit",
+      "actionsFor": "Acties voor {name}",
+      "action": {
+        "edit": "Bewerken",
+        "submissions": "Inzendingen",
+        "copyLink": "Link kopiëren",
+        "embed": "Op een site insluiten",
+        "duplicate": "Dupliceren",
+        "pause": "Pauzeren",
+        "resume": "Hervatten",
+        "archive": "Archiveren",
+        "delete": "Verwijderen",
+        "restore": "Herstellen"
+      },
+      "loadMore": "Meer laden",
+      "copied": "Link gekopieerd",
+      "copyBlocked": "Kopiëren is geblokkeerd in deze browser. De link is {url}",
+      "paused": "Formulier gepauzeerd. Bezoekers zien dat het gesloten is.",
+      "resumed": "Formulier hervat",
+      "archived": "Formulier gearchiveerd",
+      "deleted": "Formulier verwijderd",
+      "cancel": "Annuleren",
+      "archive": {
+        "title": "Dit formulier archiveren?",
+        "message": "De publieke link en alle insluitingen van \"{name}\" werken niet meer. De inzendingen blijven bewaard en je kunt ze nog lezen.",
+        "confirm": "Archiveren"
+      },
+      "delete": {
+        "title": "Dit formulier verwijderen?",
+        "message": "\"{name}\" wordt definitief verwijderd. Contacten die het heeft aangemaakt blijven in je CRM.",
+        "confirm": "Verwijderen"
+      },
+      "restored": "Formulier hersteld"
+    },
+    "newForm": {
+      "eyebrow": "Formulieren",
+      "title": "Nieuw formulier",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "create": "Formulier aanmaken",
+      "startFrom": "Begin met",
+      "mode": {
+        "template": "Een sjabloon",
+        "blank": "Leeg"
+      },
+      "loadingTemplates": "Sjablonen laden",
+      "templatesFailed": "De sjablonen konden niet worden geladen. Je kunt nog steeds met een leeg formulier beginnen.",
+      "templates": "Sjablonen",
+      "fieldCount": "{count, plural, one {# veld} other {# velden}}",
+      "pickTemplate": "Kies een sjabloon om door te gaan.",
+      "name": "Formuliernaam",
+      "nameHint": "Alleen je team ziet deze naam.",
+      "nameRequired": "Voer een naam voor het formulier in."
+    },
+    "templates": {
+      "breadcrumb": "Kruimelpad",
+      "back": "Terug naar formulieren",
+      "title": "Formuliersjablonen",
+      "subtitle": "Begin met een kant-en-klaar formulier en pas alles aan wat je wilt.",
+      "blank": "Leeg formulier",
+      "loading": "Sjablonen laden",
+      "loadFailed": "De sjablonen konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "empty": "Er zijn geen sjablonen beschikbaar.",
+      "category": {
+        "lead": "Leadverzameling",
+        "contact": "Contact",
+        "event": "Evenement",
+        "order": "Bestelling",
+        "survey": "Enquête"
+      },
+      "fields": "Velden in dit sjabloon",
+      "more": "+{count} meer",
+      "use": "Dit sjabloon gebruiken"
+    }
+  }
+}

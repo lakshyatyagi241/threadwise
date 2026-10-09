@@ -1,0 +1,1742 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "إعدادات المنصة",
+      "hub": "مركز الإعدادات",
+      "general": "عام",
+      "appearance": "المظهر والألوان",
+      "siteInfo": "معلومات الموقع",
+      "footer": "التذييل",
+      "mail": "البريد",
+      "seo": "تحسين محركات البحث",
+      "privacy": "الخصوصية وGDPR وADA",
+      "analytics": "التحليلات",
+      "custom": "كود مخصص",
+      "pwa": "PWA",
+      "storage": "التخزين السحابي",
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "الحملات",
+      "googleCalendar": "Google Calendar",
+      "flowBuilder": "منشئ التدفقات"
+    },
+    "hub": {
+      "kicker": "الإدارة - إعدادات المشروع",
+      "title": "إعدادات المشروع",
+      "description": "اضبط هوية التطبيق ومزوّدي المراسلة والبريد وتكاملات التجارة الإلكترونية وبيانات المتجر الوصفية ومحتوى التذييل وPWA وتحسين محركات البحث والكود المخصص.",
+      "export": "تصدير الإعدادات",
+      "exporting": "جارٍ التصدير",
+      "exportHint": "ينزّل كل الإعدادات المحفوظة. تُستبدل الأسرار ومعرّفات الحسابات.",
+      "tiles": {
+        "saved": "الإعدادات المحفوظة",
+        "savedHint": "مجموعات من أصل {total} محفوظة",
+        "healthy": "سليم",
+        "healthyHint": "بقيمة غير فارغة",
+        "needsTest": "يحتاج اختبارًا",
+        "needsTestNone": "تم التحقق من الكل",
+        "secrets": "حقول سرية",
+        "secretsHint": "مشفّرة / مخفية",
+        "lastUpdated": "آخر تحديث",
+        "lastUpdatedNone": "لا تعديلات بعد",
+        "lastUpdatedHint": "آخر حفظ"
+      },
+      "card": {
+        "saved": "محفوظ",
+        "defaults": "الافتراضيات",
+        "needsTest": "يحتاج اختبارًا",
+        "updated": "حُدّث {when}",
+        "open": "فتح"
+      },
+      "others": "تظهر هنا إعدادات العملات والكتالوج وShopify وWooCommerce وHubSpot وGoogle وSlack والإشعارات الفورية للجوال وTrello عند تثبيت وحداتها.",
+      "actions": {
+        "addons": "الإضافات",
+        "updater": "المحدّث",
+        "legal": "الصفحات القانونية",
+        "general": "فتح الإعدادات العامة"
+      }
+    },
+    "common": {
+      "save": "حفظ التغييرات",
+      "saving": "جارٍ الحفظ",
+      "saved": "{count, plural, one {تم حفظ تغيير واحد.} two {تم حفظ تغييرين.} few {تم حفظ # تغييرات.} many {تم حفظ # تغييرًا.} other {تم حفظ # تغيير.}}",
+      "rejected": "{count, plural, one {حقل واحد يحتاج انتباهًا} two {حقلان يحتاجان انتباهًا} few {# حقول تحتاج انتباهًا} many {# حقلًا يحتاج انتباهًا} other {# حقل يحتاج انتباهًا}}",
+      "conflict": "حفظ شخص آخر هذه الإعدادات بعد أن فتحتها. أعد التحميل لرؤية تغييراته، ثم طبّق تغييراتك مرة أخرى.",
+      "reload": "إعادة تحميل الإعدادات",
+      "unexpected": "حدث خطأ ولم يتم حفظ أي شيء.",
+      "requestId": "معرّف الطلب",
+      "readOnly": "يمكنك قراءة هذه الإعدادات لكن يمكن لمشرف عام فقط تغييرها.",
+      "secretSet": "تم الحفظ. اتركه فارغًا للإبقاء عليه.",
+      "secretUnset": "غير مضبوط.",
+      "secretClear": "إزالة القيمة المحفوظة",
+      "secretShow": "إظهار",
+      "secretHide": "إخفاء",
+      "numberRequired": "أدخل عددًا صحيحًا.",
+      "numberInteger": "استخدم عددًا صحيحًا.",
+      "updated": "آخر حفظ {when}",
+      "neverSaved": "لم يُحفظ من قبل: تُعرض الافتراضيات.",
+      "back": "كل الإعدادات",
+      "invalidGroup": "صفحة الإعدادات هذه غير موجودة.",
+      "eyebrow": "الإدارة - إعدادات المشروع",
+      "guide": "دليل سريع",
+      "resetDraft": "إعادة ضبط المسودة",
+      "cancel": "إلغاء",
+      "applyAfterSave": "لا تُطبَّق التغييرات إلا بعد الحفظ.",
+      "saveAndTest": "حفظ واختبار الاتصال",
+      "custom": "مخصص",
+      "manageLanguages": "إدارة اللغات"
+    },
+    "test": {
+      "title": "إرسال بريد إلكتروني تجريبي",
+      "saveFirst": "احفظ تغييراتك أولًا: يستخدم الفحص الإعدادات المحفوظة.",
+      "mailTo": "إرسال البريد التجريبي إلى",
+      "mailRun": "إرسال بريد تجريبي",
+      "run": "اختبار الاتصال",
+      "running": "جارٍ الاختبار",
+      "ok": "نجح",
+      "failed": "فشل",
+      "lastOk": "آخر فحص ناجح {when}",
+      "neverTested": "لم يُفحص بعد."
+    },
+    "groups": {
+      "general": {
+        "title": "الإعدادات العامة",
+        "description": "هوية التطبيق وافتراضيات المنصة ومفتاح الصيانة.",
+        "sections": {
+          "identity": {
+            "title": "هوية التطبيق"
+          },
+          "defaults": {
+            "title": "افتراضيات المنصة"
+          },
+          "platform": {
+            "title": "مفاتيح المنصة"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "اسم التطبيق",
+            "hint": "يظهر في عناوين الصفحات والرسائل الإلكترونية وعلامة تبويب المتصفح."
+          },
+          "appUrl": {
+            "label": "رابط التطبيق"
+          },
+          "supportEmail": {
+            "label": "البريد الإلكتروني للدعم",
+            "placeholder": "support@…"
+          },
+          "fromEmail": {
+            "label": "البريد الإلكتروني للمرسِل",
+            "placeholder": "hello@…"
+          },
+          "contactNumber": {
+            "label": "رقم التواصل",
+            "placeholder": "+91 …"
+          },
+          "address": {
+            "label": "العنوان"
+          },
+          "mapIframeUrl": {
+            "label": "رابط iframe للخريطة",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
+          },
+          "platformFooter": {
+            "label": "تذييل المنصة",
+            "hint": "يُضاف إلى رسائل المنصة الصادرة. اتركه فارغًا لعدم الإضافة."
+          },
+          "defaultTimezone": {
+            "label": "المنطقة الزمنية الافتراضية",
+            "hint": "تُستخدم عندما لا تختار مساحة العمل أو الشخص منطقة زمنية."
+          },
+          "defaultLanguage": {
+            "label": "اللغة الافتراضية"
+          },
+          "defaultCurrency": {
+            "label": "العملة الافتراضية"
+          },
+          "defaultCountryCode": {
+            "label": "رمز الدولة الافتراضي",
+            "hint": "رمز الاتصال مع علامة الزائد، مثل +91."
+          },
+          "defaultCountryIso": {
+            "label": "الدولة الافتراضية (منتقيات الهاتف)",
+            "hint": "تُطبَّق على كل منتقي إدخال هاتف في المنصة."
+          },
+          "fontFamily": {
+            "label": "عائلة الخط"
+          },
+          "maintenanceMode": {
+            "label": "وضع الصيانة",
+            "hint": "يوقف تطبيق العملاء مع الرمز 503. يستمر عمل المشغّلين وتسجيل الدخول واستدعاءات الأجهزة."
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "السمة الافتراضية"
+          }
+        }
+      },
+      "branding": {
+        "title": "العلامة التجارية والمظهر",
+        "description": "الأيقونة المصغّرة وشعارات كل سمة ورموز الألوان وحجم الواجهة.",
+        "sections": {
+          "assets": {
+            "title": "أصول العلامة التجارية"
+          },
+          "colors": {
+            "title": "رموز الألوان"
+          },
+          "interface": {
+            "title": "الواجهة"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "رابط الأيقونة المصغّرة"
+          },
+          "logos": {
+            "paper": {
+              "label": "ورقي"
+            },
+            "bright": {
+              "label": "ساطع"
+            },
+            "dark": {
+              "label": "داكن"
+            },
+            "doodle": {
+              "label": "رسومي"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "الأساسي",
+              "hint": "ضبط اللون الأساسي يعيد تلوين درجات الأزرق المخضر والأخضر والنعناعي وفقاعة المحادثة أيضًا ما لم تضبطها."
+            },
+            "wa-teal": {
+              "label": "الأساسي (عند التمرير)"
+            },
+            "wa-green": {
+              "label": "اللون المميز / النجاح"
+            },
+            "wa-mint": {
+              "label": "تعبئة مميزة ناعمة"
+            },
+            "wa-bubble": {
+              "label": "فقاعة المحادثة"
+            },
+            "paper-0": {
+              "label": "خلفية الصفحة"
+            },
+            "paper-50": {
+              "label": "خلفية البطاقة / الخافتة"
+            },
+            "paper-100": {
+              "label": "خلفية التمرير"
+            },
+            "paper-200": {
+              "label": "الحدود"
+            },
+            "ink-500": {
+              "label": "النص الخافت"
+            },
+            "ink-700": {
+              "label": "نص المحتوى"
+            },
+            "ink-900": {
+              "label": "العناوين"
+            },
+            "accent-coral": {
+              "label": "مميز - مرجاني"
+            },
+            "accent-amber": {
+              "label": "مميز - كهرماني"
+            },
+            "accent-plum": {
+              "label": "مميز - برقوقي"
+            },
+            "accent-sky": {
+              "label": "مميز - سماوي"
+            }
+          },
+          "fontScale": {
+            "label": "حجم الخط",
+            "hint": "حجم نص الواجهة بالكامل بالنسبة المئوية، من 80 إلى 130."
+          },
+          "uiOpacity": {
+            "label": "الشفافية",
+            "hint": "شفافية الواجهة بالكامل بالنسبة المئوية، من 55 إلى 100."
+          },
+          "dashboardLayout": {
+            "label": "تخطيط التنقل"
+          },
+          "sidebarColor": {
+            "label": "الخلفية"
+          },
+          "sidebarTextColor": {
+            "label": "لون النص"
+          },
+          "sidebarAccentColor": {
+            "label": "اللون المميز"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "الشريط العلوي",
+            "sidebar": "الشريط الجانبي"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "الحالي: قائمة في الأعلى مع صفحة المزيد للعناصر الزائدة.",
+            "sidebar": "شريط جانبي أيسر بنمط الإدارة تُجمَّع فيه كل الميزات. بدون قائمة علوية."
+          }
+        }
+      },
+      "site": {
+        "title": "معلومات الموقع",
+        "description": "بيانات الشركة وعناوين التواصل والملفات الاجتماعية والتذييل العام.",
+        "sections": {
+          "company": {
+            "title": "الشركة"
+          },
+          "contact": {
+            "title": "عناوين التواصل"
+          },
+          "social": {
+            "title": "الملفات الاجتماعية"
+          },
+          "footer": {
+            "title": "التذييل العام"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "اسم الشركة"
+          },
+          "tagline": {
+            "label": "الشعار النصي"
+          },
+          "foundedYear": {
+            "label": "سنة التأسيس"
+          },
+          "address": {
+            "label": "العنوان"
+          },
+          "cityCountry": {
+            "label": "المدينة والدولة"
+          },
+          "emailGeneral": {
+            "label": "البريد الإلكتروني العام"
+          },
+          "emailSupport": {
+            "label": "البريد الإلكتروني للدعم"
+          },
+          "emailSales": {
+            "label": "البريد الإلكتروني للمبيعات"
+          },
+          "emailSecurity": {
+            "label": "البريد الإلكتروني للأمان"
+          },
+          "emailCareers": {
+            "label": "البريد الإلكتروني للوظائف"
+          },
+          "phone": {
+            "label": "الهاتف"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "X الاجتماعي"
+          },
+          "socialLinkedin": {
+            "label": "LinkedIn الاجتماعي"
+          },
+          "socialInstagram": {
+            "label": "Instagram الاجتماعي"
+          },
+          "socialYoutube": {
+            "label": "YouTube الاجتماعي"
+          },
+          "socialFacebook": {
+            "label": "Facebook الاجتماعي"
+          },
+          "socialGithub": {
+            "label": "GitHub الاجتماعي"
+          },
+          "footerTitle": {
+            "label": "عنوان التذييل"
+          },
+          "footerDescription": {
+            "label": "وصف التذييل"
+          },
+          "footerCopyright": {
+            "label": "حقوق نشر التذييل"
+          }
+        }
+      },
+      "mail": {
+        "title": "إعدادات البريد",
+        "description": "البريد الإلكتروني الصادر. تتجاوز القيم المحفوظة افتراضيات الخادم عند كل إرسال.",
+        "sections": {
+          "sender": {
+            "title": "المرسِل"
+          },
+          "smtp": {
+            "title": "خادم البريد"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "اسم المرسِل",
+            "placeholder": "Acme Inc.",
+            "hint": "يظهر للمستلمين كاسم \"من\"."
+          },
+          "fromAddress": {
+            "label": "عنوان المرسِل",
+            "placeholder": "hello@yourdomain.com",
+            "hint": "يجب أن يحتوي النطاق على SPF وDKIM صالحين وإلا ستصل الرسائل إلى البريد العشوائي."
+          },
+          "mailer": {
+            "label": "أداة الإرسال",
+            "hint": "يعمل SMTP وأداة السجل اليوم؛ لم يتم ربط أدوات الإرسال المعتمدة على API بعد."
+          },
+          "host": {
+            "label": "المضيف",
+            "placeholder": "smtp.mailgun.org",
+            "hint": "اتركه فارغًا للإبقاء على افتراضي الخادم."
+          },
+          "port": {
+            "label": "المنفذ",
+            "hint": "587 لـ TLS، و465 لـ SSL، و25 (تجنّبه)."
+          },
+          "encryption": {
+            "label": "التشفير",
+            "hint": "ssl يعني TLS ضمنيًا (عادةً المنفذ 465)؛ وtls وstarttls يرقّيان الاتصال على المنفذ 587."
+          },
+          "username": {
+            "label": "اسم المستخدم",
+            "placeholder": "postmaster@mg.example.com"
+          },
+          "password": {
+            "label": "كلمة المرور",
+            "placeholder": "أدخل كلمة مرور SMTP",
+            "hint": "تُخزَّن مشفّرة ولا تُعرض مرة أخرى."
+          }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls (المنفذ 587)",
+            "ssl": "ssl (المنفذ 465)",
+            "starttls": "starttls",
+            "none": "بدون"
+          }
+        }
+      },
+      "seo": {
+        "title": "إعدادات تحسين محركات البحث",
+        "description": "وسوم البحث والمشاركة الاجتماعية للموقع العام.",
+        "sections": {
+          "search": {
+            "title": "نتائج البحث"
+          },
+          "social": {
+            "title": "المشاركة الاجتماعية"
+          },
+          "verification": {
+            "title": "التحقق من الموقع"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "عنوان Meta",
+            "hint": "ابدأ بالعلامة التجارية."
+          },
+          "metaDescription": {
+            "label": "وصف Meta",
+            "hint": "يظهر أسفل العنوان في Google.",
+            "placeholder": "تعريف من جملة أو جملتين يظهر أسفل العنوان في Google."
+          },
+          "metaKeywords": {
+            "label": "كلمات Meta المفتاحية",
+            "placeholder": "تسويق whatsapp, whatsapp crm, حملات, أتمتة, صندوق الوارد"
+          },
+          "robots": {
+            "label": "توجيه الروبوتات",
+            "hint": "أخبر برامج الزحف هل تُدرج الصفحات وتتبع الروابط."
+          },
+          "canonical": {
+            "label": "الرابط الأساسي",
+            "placeholder": "https://app.example.com"
+          },
+          "author": {
+            "label": "المؤلف"
+          },
+          "ogTitle": {
+            "label": "عنوان Open Graph",
+            "placeholder": "الافتراضي هو عنوان Meta"
+          },
+          "ogDescription": {
+            "label": "وصف Open Graph",
+            "placeholder": "الافتراضي هو وصف Meta"
+          },
+          "ogType": {
+            "label": "نوع Open Graph"
+          },
+          "ogUrl": {
+            "label": "رابط Open Graph",
+            "placeholder": "https://app.example.com"
+          },
+          "ogImage": {
+            "label": "صورة Open Graph",
+            "hint": "الموصى به 1200x630. تستخدمها Slack وX وWhatsApp وDiscord.",
+            "placeholder": "https://app.example.com/og.png"
+          },
+          "twitterCard": {
+            "label": "بطاقة Twitter"
+          },
+          "twitterSite": {
+            "label": "موقع Twitter",
+            "placeholder": "@yourbrand"
+          },
+          "twitterCreator": {
+            "label": "منشئ Twitter",
+            "placeholder": "@author"
+          },
+          "googleVerification": {
+            "label": "التحقق من Google",
+            "placeholder": "google-site-verification=…"
+          },
+          "bingVerification": {
+            "label": "التحقق من Bing",
+            "placeholder": "msvalidate.01=…"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "فهرسة وتتبع الروابط — الموقع العام",
+            "index, nofollow": "فهرسة دون تتبع الروابط",
+            "noindex, follow": "بدون فهرسة مع تتبع الروابط",
+            "noindex, nofollow": "بدون فهرسة ودون تتبع الروابط — إخفاء من البحث"
+          }
+        }
+      },
+      "privacy": {
+        "title": "الخصوصية وملفات تعريف الارتباط",
+        "description": "شريط موافقة ملفات تعريف الارتباط والروابط القانونية وعلامات الامتثال.",
+        "sections": {
+          "banner": {
+            "title": "شريط ملفات تعريف الارتباط"
+          },
+          "links": {
+            "title": "الروابط القانونية"
+          },
+          "compliance": {
+            "title": "علامات الامتثال"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "تفعيل الشريط"
+          },
+          "cookieBannerStyle": {
+            "label": "نمط الشريط"
+          },
+          "cookieMessage": {
+            "label": "رسالة الموافقة"
+          },
+          "respectDoNotTrack": {
+            "label": "احترام عدم التتبع",
+            "hint": "يرسل المتصفح DNT=1 ← رفض الكل"
+          },
+          "policyUrl": {
+            "label": "رابط سياسة الخصوصية",
+            "placeholder": "https://example.com/privacy"
+          },
+          "termsUrl": {
+            "label": "رابط شروط الخدمة",
+            "placeholder": "https://example.com/terms"
+          },
+          "cookiesPolicyUrl": {
+            "label": "رابط سياسة ملفات تعريف الارتباط (اعرف المزيد)",
+            "placeholder": "https://example.com/cookies"
+          },
+          "gdprCompliance": {
+            "label": "الامتثال لـ GDPR (الاتحاد الأوروبي)",
+            "hint": "يُخزَّن لسجلاتك. لا يغيّر السلوك حتى الآن."
+          },
+          "ccpaCompliance": {
+            "label": "الامتثال لـ CCPA (كاليفورنيا)",
+            "hint": "يُخزَّن لسجلاتك. لا يغيّر السلوك حتى الآن."
+          },
+          "adaSkipLink": {
+            "label": "رابط التخطي إلى المحتوى",
+            "hint": "يُخزَّن لسجلاتك. لا يغيّر السلوك حتى الآن."
+          },
+          "adaHighContrast": {
+            "label": "إتاحة وضع التباين العالي",
+            "hint": "يُخزَّن لسجلاتك. لا يغيّر السلوك حتى الآن."
+          },
+          "adaLargeText": {
+            "label": "إتاحة وضع النص الكبير",
+            "hint": "يُخزَّن لسجلاتك. لا يغيّر السلوك حتى الآن."
+          },
+          "adaReducedMotion": {
+            "label": "احترام prefers-reduced-motion",
+            "hint": "يُخزَّن لسجلاتك. لا يغيّر السلوك حتى الآن."
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "شريط سفلي ثابت — موصى به",
+            "top-bar": "شريط علوي ثابت",
+            "modal": "نافذة منبثقة في المنتصف"
+          }
+        }
+      },
+      "analytics": {
+        "title": "التحليلات",
+        "description": "معرّفات المتتبعات. لا تُحمَّل المتتبعات إلا بعد موافقة الزائر.",
+        "sections": {
+          "trackers": {
+            "title": "معرّفات المتتبعات"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "بكسل Meta"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft Clarity"
+          },
+          "tiktokPixel": {
+            "label": "بكسل TikTok"
+          },
+          "linkedinPartner": {
+            "label": "شريك LinkedIn"
+          },
+          "twitterPixel": {
+            "label": "بكسل Twitter"
+          },
+          "plausibleDomain": {
+            "label": "نطاق Plausible"
+          },
+          "posthogKey": {
+            "label": "مفتاح PostHog"
+          },
+          "mixpanelToken": {
+            "label": "رمز Mixpanel"
+          },
+          "hotjarSiteId": {
+            "label": "معرّف موقع Hotjar"
+          },
+          "posthogHost": {
+            "label": "مضيف PostHog"
+          }
+        }
+      },
+      "customCode": {
+        "title": "كود مخصص",
+        "description": "CSS وJavaScript يُحقنان في الموقع العام.",
+        "sections": {
+          "code": {
+            "title": "كود مخصص"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "الحقن في الإنتاج",
+            "hint": "لا يعمل أي شيء أدناه في الموقع العام حتى يتم تفعيل هذا."
+          },
+          "css": {
+            "label": "CSS مخصص"
+          },
+          "js": {
+            "label": "JS مخصص",
+            "hint": "يعمل لكل زائر. الصق كودًا تثق به فقط."
+          }
+        }
+      },
+      "pwa": {
+        "title": "تطبيق قابل للتثبيت",
+        "description": "ملف بيان تطبيق الويب وسلوك التثبيت.",
+        "sections": {
+          "app": {
+            "title": "تطبيق قابل للتثبيت"
+          },
+          "look": {
+            "title": "المظهر والسلوك"
+          },
+          "install": {
+            "title": "التثبيت وبدون اتصال"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "مفعّل"
+          },
+          "appName": {
+            "label": "اسم التطبيق"
+          },
+          "shortName": {
+            "label": "الاسم القصير"
+          },
+          "description": {
+            "label": "الوصف"
+          },
+          "startUrl": {
+            "label": "رابط البدء"
+          },
+          "scope": {
+            "label": "النطاق"
+          },
+          "display": {
+            "label": "العرض"
+          },
+          "orientation": {
+            "label": "الاتجاه"
+          },
+          "themeColor": {
+            "label": "لون السمة"
+          },
+          "backgroundColor": {
+            "label": "لون الخلفية"
+          },
+          "icon192": {
+            "label": "أيقونة 192"
+          },
+          "icon512": {
+            "label": "أيقونة 512"
+          },
+          "installPrompt": {
+            "label": "مطالبة التثبيت"
+          },
+          "offlineEnabled": {
+            "label": "تفعيل وضع بدون اتصال"
+          }
+        }
+      },
+      "storage": {
+        "title": "التخزين السحابي",
+        "description": "حاوية متوافقة مع S3 للوسائط. اختبر الاتصال قبل تفعيلها.",
+        "sections": {
+          "provider": {
+            "title": "المزوّد"
+          },
+          "credentials": {
+            "title": "بيانات اعتماد الحاوية"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "مفعّل"
+          },
+          "provider": {
+            "label": "المزوّد"
+          },
+          "visibility": {
+            "label": "رؤية الملفات",
+            "hint": "تحتاج الكائنات الخاصة إلى روابط موقّعة؛ استخدم عامًا أو رابط CDN للوسائط التي يفتحها الناس مباشرة."
+          },
+          "basePath": {
+            "label": "مسار المجلد الأساسي (اختياري)",
+            "hint": "بادئة كائن الفحص. ستستخدمها عمليات الرفع بعد وصول وحدة الملفات."
+          },
+          "accessKeyId": {
+            "label": "معرّف مفتاح الوصول *"
+          },
+          "secret": {
+            "label": "مفتاح الوصول السري *",
+            "hint": "يُخزَّن مشفّرًا ولا يُعرض مرة أخرى.",
+            "placeholder": "الصق السر"
+          },
+          "region": {
+            "label": "المنطقة",
+            "placeholder": "us-east-1"
+          },
+          "bucket": {
+            "label": "الحاوية *"
+          },
+          "endpoint": {
+            "label": "نقطة النهاية",
+            "hint": "مطلوبة لـ Spaces وR2 وMinIO. تُزال /bucket اللاحقة.",
+            "placeholder": "https://… (مطلوب لـ Spaces / R2 / MinIO؛ تلقائي لـ Wasabi وBunny)"
+          },
+          "cdnUrl": {
+            "label": "رابط عام / CDN (اختياري)",
+            "placeholder": "https://cdn.example.com"
+          },
+          "pathStyle": {
+            "label": "استخدام نقطة نهاية بنمط المسار (MinIO / بعض مخازن S3 المتوافقة)"
+          },
+          "storageZone": {
+            "label": "منطقة التخزين",
+            "hint": "لـ Bunny فقط."
+          },
+          "storagePassword": {
+            "label": "كلمة مرور التخزين (مفتاح الوصول)",
+            "hint": "لـ Bunny فقط: كلمة مرور منطقة التخزين. تُخزَّن مشفّرة.",
+            "placeholder": "الصق كلمة المرور"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net Storage",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO / متوافق مع S3"
+          },
+          "visibility": {
+            "private": "خاص (روابط موقّعة)",
+            "public": "عام"
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "إعدادات WhatsApp",
+        "description": "تطبيق Meta وشريك Interakt المستخدمان لإعداد أرقام WhatsApp.",
+        "sections": {
+          "metaApp": {
+            "title": "واجهة الأعمال (WABA)"
+          },
+          "interakt": {
+            "title": "مسار Interakt"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "معرّف تطبيق Meta",
+            "hint": "الفارغ يعود إلى بيئة الخادم."
+          },
+          "appSecret": {
+            "label": "سر التطبيق",
+            "hint": "يُخزَّن مشفّرًا ولا يُعرض مرة أخرى. اتركه فارغًا للإبقاء على السر المخزَّن."
+          },
+          "configId": {
+            "label": "معرّف إعداد التسجيل المضمّن",
+            "hint": "الفارغ يعني أن مساحات العمل تلصق الرمز يدويًا."
+          },
+          "graphVersion": {
+            "label": "إصدار Graph API",
+            "hint": "يشبه v25.0. الفارغ يبقي افتراضي الخادم."
+          },
+          "coexistence": {
+            "label": "التعايش",
+            "hint": "عرض \"ربط رقم تطبيق الأعمال الحالي\" في التسجيل المضمّن."
+          },
+          "defaultProvider": {
+            "label": "المسار الافتراضي",
+            "hint": "أي واجهة API تستخدمها الأرقام المتصلة حديثًا."
+          },
+          "solutionId": {
+            "label": "معرّف حل Interakt",
+            "hint": "يُرسل إلى Meta باسم extras.setup.solutionID وإلى Interakt عند التسجيل."
+          },
+          "partnerAuthKey": {
+            "label": "مفتاح شريك Interakt",
+            "hint": "مفتاح شريك التقنية المشترك. يُخزَّن مشفّرًا."
+          },
+          "systemUserId": {
+            "label": "معرّف مستخدم النظام",
+            "hint": "يُعيَّن لكل WABA متصل بمهمة MANAGE."
+          },
+          "systemUserToken": {
+            "label": "رمز مستخدم النظام",
+            "hint": "يُستخدم لفحص الرموز وتعيين مستخدم النظام. يُخزَّن مشفّرًا."
+          },
+          "businessId": {
+            "label": "معرّف النشاط التجاري",
+            "hint": "بديل يُستخدم لإيجاد WABA عندما لا يسرد الرمز أحدًا."
+          },
+          "verifyToken": {
+            "label": "رمز التحقق من Webhook",
+            "hint": "أي نص عشوائي. اتركه فارغًا لاستخدام المولَّد المعروض أعلاه."
+          },
+          "requireSignature": {
+            "label": "اشتراط توقيع في كل webhook",
+            "hint": "يرفض الأحداث المحوَّلة من Interakt التي لا تحمل توقيع Meta صالحًا. فعّله فقط إذا كان Interakt يوقّعها."
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt (وكيل Meta)",
+            "meta": "Meta (مباشر)"
+          }
+        }
+      },
+      "campaigns": {
+        "title": "الحملات",
+        "description": "كيف تعيد الحملة محاولة إرسال رسالة فاشلة ومتى تنتهي الحملة غير المكتملة.",
+        "sections": {
+          "retry": {
+            "title": "إعادات المحاولة"
+          },
+          "expiry": {
+            "title": "الإنهاء التلقائي"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "محاولات الإعادة",
+            "hint": "عدد المحاولات لكل مستلم قبل وسمه بالفشل (من 0 إلى 10)."
+          },
+          "retryBackoffSec": {
+            "label": "انتظار الإعادة (ثوانٍ)",
+            "hint": "الفاصل قبل المحاولة التالية؛ ويزداد مع كل محاولة."
+          },
+          "autoExpiryEnabled": {
+            "label": "إنهاء الحملات غير المكتملة",
+            "hint": "ينهي الحملة التي لا تزال تعمل بعد الساعات أدناه."
+          },
+          "defaultExpiryHours": {
+            "label": "الإنهاء بعد (ساعات)"
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "عميل Google OAuth الذي تربط كل مساحة عمل تقويمها من خلاله.",
+        "sections": {
+          "oauth": {
+            "title": "عميل Google OAuth"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "السماح لمساحات العمل بربط Google Calendar",
+            "hint": "متوقف: لا يمكن لأي مساحة عمل الربط، ولا يُكتب شيء في التقويم ولا يُقرأ منه."
+          },
+          "clientId": {
+            "label": "معرّف العميل",
+            "hint": "من Google Cloud، بيانات الاعتماد، معرّف عميل OAuth 2.0 (تطبيق ويب). الفارغ يستخدم GOOGLE_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "سر العميل",
+            "hint": "يُخزَّن مشفّرًا ولا يُعرض مرة أخرى. الفارغ يبقي المحفوظ؛ والبديل هو GOOGLE_CALENDAR_CLIENT_SECRET."
+          },
+          "redirectUri": {
+            "label": "تجاوز عنوان إعادة التوجيه",
+            "hint": "اتركه فارغًا لاستخدام العنوان أعلاه. يجب أن يطابق تمامًا عنوان إعادة توجيه مصرّحًا به في العميل."
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "منشئ التدفقات",
+        "description": "أي منشئ تدفقات يُعرض لمساحات العمل.",
+        "sections": {
+          "mode": {
+            "title": "المنشئ"
+          }
+        },
+        "fields": {
+          "mode": {
+            "label": "المنشئ الافتراضي لمساحات العمل",
+            "hint": "البسيط هو منشئ القائمة خطوة بخطوة، والمتقدم هو منشئ اللوحة. يمكن لمساحة العمل تجاوز ذلك من صفحة التدفقات الخاصة بها."
+          }
+        },
+        "options": {
+          "mode": {
+            "simple": "البسيط فقط",
+            "advanced": "المتقدم فقط"
+          }
+        }
+      }
+    },
+    "cards": {
+      "appearance": {
+        "title": "المظهر والألوان",
+        "description": "أعد تلوين كل صفحة في لوحتي المستخدم والإدارة: العلامة والأسطح والنص والألوان المميزة. يُطبَّق مباشرة.",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "الإعدادات العامة",
+        "description": "اسم التطبيق وبيانات التواصل والشعارات والرابط والعنوان ومفاتيح الخدمات العامة.",
+        "tags": "APP_NAME / APP_URL / الشعارات"
+      },
+      "paymentGateways": {
+        "title": "بوابات الدفع",
+        "description": "Stripe وRazorpay وPayPal وPaystack وFlutterwave وغيرها: المفاتيح والعملات ومفاتيح التشغيل المباشر.",
+        "tags": "مباشر / تجريبي - مفاتيح كل بوابة"
+      },
+      "aiKeys": {
+        "title": "مفاتيح AI / API",
+        "description": "بيانات اعتماد المزوّدين لـ OpenAI وAnthropic وGoogle وغيرهم. تشغّل كل ميزات الذكاء الاصطناعي في المنصة.",
+        "tags": "BYOK / النماذج الافتراضية"
+      },
+      "mail": {
+        "title": "إعدادات البريد",
+        "description": "برنامج SMTP والمضيف والمنفذ واسم المرسِل والتشفير والإرسال التجريبي.",
+        "tags": "SMTP / تحقق / ترحيب"
+      },
+      "auditLog": {
+        "title": "سجل التدقيق",
+        "description": "سجل قابل للبحث لكل إجراء إداري: تعديلات مساحات العمل وتغييرات المستخدمين وأحداث الفوترة والحوادث الأمنية وتحديثات الإعدادات.",
+        "tags": "تصفية / تفاصيل / تصدير CSV"
+      },
+      "privacy": {
+        "title": "الخصوصية وGDPR وADA",
+        "description": "شريط موافقة ملفات تعريف الارتباط، والامتثال لـ GDPR / CCPA، ومفاتيح إتاحة ADA / WCAG، وروابط السياسات.",
+        "tags": "الموافقة / السياسات / الإتاحة"
+      },
+      "menuOrder": {
+        "title": "ترتيب القائمة",
+        "description": "حدّد تسلسل عناصر التنقل العلوي المعروضة في كل مساحة عمل للمستخدمين.",
+        "tags": "إعادة الترتيب"
+      },
+      "authPages": {
+        "title": "صفحات المصادقة",
+        "description": "عدّل صفحات تسجيل الدخول والتسجيل ونسيان كلمة المرور: العنوان الرئيسي والنص الفرعي واللون المميز والصورة أو الفيديو الجانبي. معاينة مباشرة.",
+        "tags": "دخول / تسجيل / نسيان"
+      },
+      "analytics": {
+        "title": "تكاملات التحليلات",
+        "description": "Google Analytics وGTM وMeta Pixel وClarity وPlausible وPostHog وHotjar وTikTok وLinkedIn وX: الصق المعرّف ونحن نعرض السكربت.",
+        "tags": "GA4 / Pixel / Clarity / GTM"
+      },
+      "seo": {
+        "title": "إعدادات تحسين محركات البحث",
+        "description": "عنوان Meta ووصفه وOpenGraph وبطاقات Twitter والروبوتات والرابط الأساسي والتحقق من الموقع في Google وBing.",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "اللغات",
+        "description": "اللغات المتاحة واللغة الافتراضية وعلامة RTL ومفتاح التفعيل لكل لغة. يشغّل منتقي اللغة.",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "إعدادات PWA",
+        "description": "اسم التطبيق وأيقونات التثبيت ولون السمة ولون الخلفية ووضع العرض ومفتاح تفعيل PWA.",
+        "tags": "أيقونات / ألوان / تثبيت"
+      },
+      "footer": {
+        "title": "إعدادات التذييل",
+        "description": "عنوان التذييل والروابط الاجتماعية ونص حقوق النشر ووصف التذييل العام.",
+        "tags": "الشعار / الشبكات الاجتماعية / حقوق النشر"
+      },
+      "siteInfo": {
+        "title": "معلومات الموقع",
+        "description": "البريد الإلكتروني للتواصل والهاتف وWhatsApp والعنوان والروابط الاجتماعية المشتركة في التذييل العام وصفحتي التواصل ونبذة عنا.",
+        "tags": "بريد / هاتف / شبكات اجتماعية"
+      },
+      "socialLogin": {
+        "title": "تسجيل الدخول الاجتماعي وكابتشا",
+        "description": "فعّل تسجيل الدخول عبر Google وFacebook في صفحتي الدخول والتسجيل، والصق مفاتيح OAuth، وفعّل reCAPTCHA.",
+        "tags": "غير مضبوط"
+      },
+      "registration": {
+        "title": "التسجيل",
+        "description": "التسجيل العام والتحقق من البريد الإلكتروني والباقة الافتراضية ومدة التجربة لمساحات العمل الجديدة.",
+        "tags": "تسجيل / تجربة / باقة"
+      },
+      "custom": {
+        "title": "كود مخصص",
+        "description": "CSS وJavaScript للإنتاج يُحقنان في الصفحات العامة عند تفعيل المفتاح.",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "التخزين السحابي",
+        "description": "أرسل وسائط العملاء إلى حاويتك الخاصة: Amazon S3 أو Wasabi أو Bunny.net أو DigitalOcean Spaces أو Cloudflare R2 أو MinIO.",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "تطبيق Meta الذي تربط كل مساحة عمل أرقام WhatsApp من خلاله: معرّف التطبيق وسره والتسجيل المضمّن وwebhook ومسار Interakt.",
+        "tags": "Meta / التسجيل المضمّن / Interakt"
+      },
+      "campaigns": {
+        "title": "الحملات",
+        "description": "إعادات المحاولة والإنهاء التلقائي للحملة التي لم تكتمل.",
+        "tags": "إعادة المحاولة / انتهاء الصلاحية"
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "عميل Google OAuth الذي تستخدمه مساحات العمل لربط تقويمها للحجوزات وأوقات الانشغال.",
+        "tags": "Google / OAuth / التقويم"
+      },
+      "flowBuilder": {
+        "title": "منشئ التدفقات",
+        "description": "منشئ التدفقات الافتراضي لكل مساحة عمل: البسيط خطوة بخطوة أو المتقدم باللوحة. يمكن لمساحة العمل تجاوزه.",
+        "tags": "بسيط / متقدم / أتمتة"
+      }
+    },
+    "signup": {
+      "body": "يتم تعديل التسجيل العام والتحقق التلقائي من البريد والباقة الافتراضية للتسجيلات الجديدة ومدة التجربة المجانية في صفحة التسجيل.",
+      "link": "فتح إعدادات التسجيل"
+    },
+    "brandAssets": {
+      "intro": "الأيقونة المصغّرة مشتركة بين كل السمات. الشعار لكل سمة: ارفع نسخة معكوسة أو فاتحة للوضع الداكن، ونسخة تناسب السمة الرسومية.",
+      "favicon": {
+        "title": "الأيقونة المصغّرة",
+        "note": "تظهر في علامات تبويب المتصفح والإشارات المرجعية. يوصى بـ 35x35 بكسل. PNG أو ICO أو JPG أو SVG أو WebP، حتى 512 KB. الرفع يستبدلها."
+      },
+      "logos": {
+        "title": "شعار لكل سمة",
+        "note": "تستخدم كل سمة شعارها الخاص. يُستخدم شعار الورقي إذا لم يُرفع شعار خاص بالسمة."
+      },
+      "themes": {
+        "paper": {
+          "label": "ورقي (افتراضي)",
+          "note": "فاتح بلون أبيض مائل للرمادي. المظهر الافتراضي."
+        },
+        "bright": {
+          "label": "أبيض ساطع",
+          "note": "خلفية بيضاء بتباين أعلى."
+        },
+        "dark": {
+          "label": "داكن (تجريبي)",
+          "note": "استخدم نسخة فاتحة أو معكوسة من شعارك."
+        },
+        "doodle": {
+          "label": "رسومي (مميز)",
+          "note": "خلفية نعناعية باستيل."
+        }
+      },
+      "noFile": "لا يوجد ملف",
+      "upload": "رفع",
+      "uploading": "جارٍ الرفع",
+      "remove": "إزالة",
+      "loading": "جارٍ التحميل",
+      "loadFailed": "تعذّر تحميل ملفات العلامة التجارية.",
+      "failed": "فشل الرفع.",
+      "tooLarge": "هذا الملف يتجاوز {kb} KB.",
+      "wrongType": "نوع الملف هذا غير مسموح هنا."
+    },
+    "teamInbox": {
+      "intro": "تطبيق قابل للتثبيت منفصل خاص بصندوق وارد الفريق. يفتح الوكلاء الرابط ويضيفونه إلى الشاشة الرئيسية ويتلقون إشعارات فورية بالرسائل الجديدة حتى عند إغلاق التطبيق.",
+      "enabled": {
+        "label": "تفعيل تطبيق صندوق وارد الفريق",
+        "hint": "يفعّل ملف البيان المنفصل ومطالبة التثبيت والإشعارات على /team-inbox."
+      },
+      "name": {
+        "label": "اسم التطبيق"
+      },
+      "shortName": {
+        "label": "الاسم القصير",
+        "hint": "حتى 12 حرفًا."
+      },
+      "icon192": {
+        "label": "أيقونة التطبيق (PNG بحجم 192x192)",
+        "note": "تُستخدم أيقونة التطبيق إذا تُرك فارغًا. أيقونة الشاشة الرئيسية لتطبيق صندوق الوارد."
+      },
+      "icon512": {
+        "label": "أيقونة كبيرة / شاشة بداية (PNG بحجم 512x512)",
+        "note": "تُستخدم أيقونة التطبيق إذا تُرك فارغًا. شاشة بداية التثبيت والشاشات عالية الكثافة."
+      },
+      "push": {
+        "ready": {
+          "title": "الإشعارات الفورية: جاهزة",
+          "body": "تم توليد المفاتيح. يمكن للوكلاء تفعيل الإشعارات من صندوق الوارد."
+        },
+        "todo": {
+          "title": "الإشعارات الفورية: تبقّت خطوة واحدة",
+          "body": "انقر على توليد المفاتيح لإعداد الإشعارات الفورية. لا حاجة للوصول إلى الخادم."
+        },
+        "generate": "توليد المفاتيح",
+        "generating": "جارٍ التوليد",
+        "generated": "تم توليد مفاتيح الإشعارات."
+      },
+      "manifestLink": "ملف بيان صندوق وارد الفريق",
+      "save": "حفظ تطبيق صندوق وارد الفريق",
+      "saving": "جارٍ الحفظ",
+      "saved": "تم حفظ تطبيق صندوق وارد الفريق.",
+      "conflict": "حفظ شخص آخر هذا بعد أن فتحته. أعد تحميل الصفحة وحاول مرة أخرى.",
+      "failed": "حدث خطأ ولم يتم حفظ أي شيء.",
+      "loading": "جارٍ التحميل",
+      "loadFailed": "تعذّر تحميل إعدادات تطبيق صندوق وارد الفريق."
+    },
+    "seoPreview": {
+      "google": "نتيجة Google",
+      "noDescription": "لا يوجد وصف Meta بعد.",
+      "noImage": "لا توجد صورة OG",
+      "sitemapKicker": "خريطة الموقع وملف الروبوتات",
+      "sitemapTitle": "ملفات الزواحف",
+      "sitemapFile": "تُولَّد تلقائيًا من الصفحات العامة ومقالات المدونة المنشورة. أرسل /sitemap.xml إلى Google Search Console.",
+      "download": "تنزيل sitemap.xml"
+    },
+    "pages": {
+      "general": {
+        "title": "الإعدادات العامة",
+        "description": "هوية التطبيق الأساسية ومعلومات التواصل واللغة والعملة الافتراضيتان ومفاتيح خدمات المنصة.",
+        "sections": {
+          "identity": {
+            "title": "هوية التطبيق"
+          },
+          "brandAssets": {
+            "title": "أصول العلامة التجارية"
+          },
+          "platform": {
+            "title": "مفاتيح المنصة"
+          },
+          "signup": {
+            "title": "التسجيلات والتجربة المجانية"
+          }
+        },
+        "guide": {
+          "title": "إلى أين تذهب الأشياء",
+          "items": {
+            "appName": {
+              "title": "اسم التطبيق",
+              "body": "يُستخدم في عناوين الصفحات والرسائل الإلكترونية وعلامة التطبيق. اجعله قصيرًا: يفضل كلمة أو كلمتان."
+            },
+            "appUrl": {
+              "title": "رابط التطبيق",
+              "body": "العنوان المعتمد. تُشتق منه كل الاستدعاءات والرسائل الإلكترونية وعمليات إعادة توجيه OAuth."
+            },
+            "language": {
+              "title": "اللغة الافتراضية",
+              "body": "تُطبَّق على الحسابات الجديدة. يحتفظ المستخدمون الحاليون بما اختاروه."
+            },
+            "currency": {
+              "title": "العملة الافتراضية",
+              "body": "تُستخدم للفواتير والمحافظ التي ليس لها تجاوز صريح."
+            },
+            "maintenance": {
+              "title": "وضع الصيانة",
+              "body": "عند التفعيل يعرض كل مسار لغير المشرفين عنصرًا نائبًا. لا يزال بإمكان المشرف الوصول إلى وحدة التحكم."
+            }
+          }
+        },
+        "tip": {
+          "title": "قاعدة الإنتاج",
+          "body": "احفظ فقط بعد اختبار مسار المستخدم المتأثر. تنتقل تغييرات الهوية إلى الفواتير والرسائل الإلكترونية الصادرة."
+        }
+      },
+      "appearance": {
+        "title": "ألوان لوحة التحكم",
+        "description": "أعد تلوين التطبيق بالكامل، وكل صفحة في لوحة المستخدم ولوحة الإدارة، بتغيير ألوان السمة هذه. يُطبَّق الحفظ فورًا على الجميع؛ اترك اللون على افتراضيه للإبقاء على المظهر المرفق.",
+        "sections": {
+          "layout": {
+            "title": "تخطيط التنقل",
+            "description": "اختر تخطيط لوحة المستخدم. ينقل الشريط الجانبي كل القوائم إلى شريط أيسر (بدون رأس علوي ولا صفحة المزيد)."
+          },
+          "sidebar": {
+            "title": "لون الشريط الجانبي",
+            "description": "خلفية الشريط الأيسر الداكن (تخطيط الشريط الجانبي فقط). اترك الافتراضي للون الأسود القريب المرفق."
+          },
+          "interface": {
+            "title": "الواجهة"
+          },
+          "brand": {
+            "title": "العلامة"
+          },
+          "surfaces": {
+            "title": "الأسطح"
+          },
+          "text": {
+            "title": "النص"
+          },
+          "accents": {
+            "title": "الألوان المميزة"
+          }
+        },
+        "guide": {
+          "title": "كيف تعمل الألوان",
+          "items": {
+            "how": {
+              "title": "يُطبَّق فورًا",
+              "body": "يعيد الحفظ كتابة رموز السمة المباشرة للجميع."
+            },
+            "tokens": {
+              "title": "رمز واحد لمهمة واحدة",
+              "body": "كل عينة لون ترتبط بمتغير CSS واحد يُستخدم في لوحة المستخدم ولوحة الإدارة."
+            },
+            "primary": {
+              "title": "غيّر الأساسي وسيتبعه الباقي",
+              "body": "الأساسي (عند التمرير) واللون المميز والتعبئة الناعمة وفقاعة المحادثة مشتقة من الأساسي ما لم تضبطها بنفسك."
+            },
+            "defaults": {
+              "title": "اترك الافتراضيات كما هي",
+              "body": "أي لون يُترك على قيمته المرفقة يبقي المظهر الأصلي؛ تُتجاوز الرموز المتغيرة فقط."
+            }
+          }
+        },
+        "tip": {
+          "title": "نصيحة",
+          "body": "افحص التباين بعد التغييرات الكبيرة. ألوان النص والخلفية تأتي كلها من هذه الرموز."
+        },
+        "eyebrow": "الإدارة - المظهر"
+      },
+      "siteInfo": {
+        "title": "معلومات الموقع",
+        "description": "بيانات التواصل والروابط الاجتماعية المشتركة في التذييل وصفحتي التواصل ونبذة عنا. عدّلها مرة واحدة وتتحدّث في كل مكان.",
+        "sections": {
+          "company": {
+            "title": "الشركة"
+          },
+          "contact": {
+            "title": "البريد الإلكتروني للتواصل"
+          },
+          "phone": {
+            "title": "الهاتف وWhatsApp"
+          },
+          "social": {
+            "title": "الروابط الاجتماعية"
+          }
+        },
+        "guide": {
+          "title": "ما يذهب إلى أين",
+          "items": {
+            "shared": {
+              "title": "مشترك في كل مكان",
+              "body": "تغذي هذه القيم التذييل العام وصفحة التواصل والصفحات القانونية."
+            },
+            "frontend": {
+              "title": "نصوص الصفحات وألوانها",
+              "body": "تُعدَّل في محرر الواجهة الأمامية، وليس هنا."
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "إعدادات التذييل",
+        "description": "عنوان التذييل والروابط الاجتماعية ونص حقوق النشر ووصف التذييل العام.",
+        "sections": {
+          "footer": {
+            "title": "التذييل العام"
+          }
+        },
+        "guide": {
+          "title": "ما يذهب إلى أين",
+          "items": {
+            "what": {
+              "title": "عنوان التذييل وحقوق النشر",
+              "body": "العنوان الفارغ يستخدم اسم المنصة. نص حقوق النشر الفارغ يُولَّد من السنة والعلامة."
+            },
+            "social": {
+              "title": "روابط التواصل الاجتماعي",
+              "body": "الحقول الفارغة تخفي الأيقونة. تشترك هذه مع الروابط الاجتماعية في معلومات الموقع: التعديل هنا يحدّثها في كل مكان."
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "إعدادات البريد",
+        "description": "مضيف SMTP والمنفذ والتشفير وبيانات الاعتماد. تُطبَّق القيم المحفوظة عند كل إرسال، فتستخدمها رسائل الترحيب والتحقق والإيصالات والدعم دون إعادة تشغيل.",
+        "sections": {
+          "smtp": {
+            "title": "بيانات اعتماد SMTP"
+          }
+        },
+        "guide": {
+          "title": "مضيفو المزوّدين الشائعون",
+          "items": {
+            "hosts": {
+              "title": "إعدادات نموذجية",
+              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.REGION.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls مع كلمة مرور تطبيق."
+            },
+            "used": {
+              "title": "الرسائل في النظام",
+              "body": "رسائل الترحيب والتحقق وإعادة تعيين كلمة المرور والفواتير والإيصالات وردود الدعم والتنبيهات الأمنية ودعوات مساحة العمل."
+            }
+          }
+        },
+        "tip": {
+          "title": "نصيحة",
+          "body": "أرسل رسالة تجريبية دائمًا بعد التعديل. خطأ مطبعي واحد في المضيف أو المنفذ يعطّل بصمت كل الرسائل الإلكترونية للمعاملات في المنصة."
+        }
+      },
+      "seo": {
+        "title": "إعدادات تحسين محركات البحث",
+        "description": "وسوم Meta الافتراضية للموقع كله: العنوان والوصف وOpenGraph وبطاقات Twitter والروبوتات والرابط الأساسي والتحقق من محركات البحث.",
+        "sections": {
+          "search": {
+            "title": "وسوم Meta"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "بطاقات Twitter"
+          },
+          "verification": {
+            "title": "التحقق من الموقع"
+          },
+          "preview": {
+            "title": "معاينة مباشرة"
+          }
+        },
+        "guide": {
+          "title": "أساسيات تحسين محركات البحث",
+          "items": {
+            "basics": {
+              "title": "العناوين والأوصاف",
+              "body": "عنوان Meta: ابدأ بالعلامة ومُوصِّف قوي واحد، من 50 إلى 60 حرفًا. وصف Meta: تعريف من جملة أو جملتين، من 140 إلى 160 حرفًا."
+            },
+            "where": {
+              "title": "أين يظهر هذا",
+              "body": "صفحات الإدارة والصفحات بعد تسجيل الدخول والصفحات العامة ومعاينات الروابط (WhatsApp وSlack وDiscord وX). الروبوتات: استخدم noindex لبيئات الاختبار أو عمليات النشر الخاصة."
+            },
+            "sitemap": {
+              "title": "التحقق",
+              "body": "opengraph.xyz واختبار Google Rich Results ومدقق بطاقات Twitter."
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "الخصوصية وGDPR وADA",
+        "eyebrow": "الإدارة - الامتثال",
+        "description": "شريط موافقة ملفات تعريف الارتباط وروابط السياسات والامتثال لـ GDPR/CCPA ومفاتيح إتاحة WCAG. يغذي الإعداد نفسه واجهة الموافقة ويتحكم في كل تكامل تحليلات.",
+        "sections": {
+          "banner": {
+            "title": "الشريط والسياسة"
+          },
+          "compliance": {
+            "title": "GDPR وCCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG",
+            "description": "قانون الأمريكيين ذوي الإعاقة (ADA) في الولايات المتحدة وتسهيلات بمستوى WCAG 2.1 AA يمكن للزوار تبديلها."
+          }
+        },
+        "guide": {
+          "title": "كيف تعمل الموافقة",
+          "items": {
+            "order": {
+              "title": "ترتيب العمليات",
+              "body": "1. يصل الزائر ويظهر شريط ملفات تعريف الارتباط (يُتخطى عند احترام عدم التتبع). 2. يُحفظ الاختيار في ملف تعريف الارتباط crm_cookie_consent لمدة سنة. 3. تُحمَّل المتتبعات المسموح بها فقط. 4. يمكن للزائر إعادة فتح المنتقي من أي عنصر يحمل data-cookie-prefs-open."
+            },
+            "linked": {
+              "title": "إعدادات مرتبطة",
+              "body": "تكاملات التحليلات (GA4 وGTM وPixel وClarity وغيرها) وإعدادات PWA."
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "تكاملات التحليلات",
+        "eyebrow": "الإدارة - التتبع",
+        "description": "الصق معرّف كل مزوّد مرة واحدة. يُعرض المقتطف الرسمي للمزوّد في كل صفحة عامة، لكن فقط بعد موافقة الزائر على فئة ملفات تعريف الارتباط المطابقة.",
+        "sections": {
+          "site": {
+            "title": "تحليلات الموقع"
+          },
+          "marketing": {
+            "title": "بكسلات الإعلانات"
+          }
+        },
+        "guide": {
+          "title": "المتتبع -> الفئة",
+          "items": {
+            "categories": {
+              "title": "متى يعمل كل منها",
+              "body": "التحليلات: GA4 وGTM وClarity وPlausible وPostHog وHotjar وMixpanel. التسويق: Meta Pixel وTikTok وLinkedIn وX Pixel. قد تتضمن سكربتات حاوية GTM متتبعات إضافية؛ أوقفها بمشغّلات الفئات داخل GTM."
+            },
+            "where": {
+              "title": "أين يُحمَّل",
+              "body": "الصفحات العامة وصفحات تسجيل الدخول. صفحات الإدارة مستثناة عمدًا."
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "كود مخصص",
+        "description": "أنماط وسكربتات مخصصة للإنتاج للعلامة التجارية والسلوك المتقدمين. تُحقن في الصفحات العامة عند التفعيل.",
+        "sections": {
+          "code": {
+            "title": "كود مخصص"
+          }
+        },
+        "guide": {
+          "title": "قواعد عامة",
+          "items": {
+            "scope": {
+              "title": "حدِّد نطاق CSS",
+              "body": "غلِّف القواعد بفئة العلامة. تجنب لمس body أو * أو فئات الأدوات الخاصة بالإطار."
+            },
+            "block": {
+              "title": "لا تحجب",
+              "body": "غلِّف JS في DOMContentLoaded. بلا استدعاءات شبكة متزامنة."
+            },
+            "dark": {
+              "title": "اختبر الوضع الداكن",
+              "body": "بدّل السمة وافحص محددات html[data-theme=\"dark\"] قبل الحفظ."
+            },
+            "sensitive": {
+              "title": "حساس للإنتاج",
+              "body": "أي حفظ سيئ يصل إلى كل صفحة عامة فورًا. اطلب من زميل مراجعة الفروقات الكبيرة."
+            }
+          }
+        },
+        "tip": {
+          "title": "احذر",
+          "body": "يعمل الكود المخصص في كل صفحة عامة ولا يمكن عزله. يمكن لمشرف عام فقط تغييره."
+        }
+      },
+      "pwa": {
+        "title": "إعدادات PWA",
+        "description": "ملف بيان التطبيق القابل للتثبيت: الاسم والأيقونات والألوان ووضع العرض. يشغّل ملف البيان ومطالبة التثبيت.",
+        "sections": {
+          "app": {
+            "title": "ملف بيان PWA"
+          },
+          "teamInbox": {
+            "title": "PWA لصندوق وارد الفريق"
+          }
+        },
+        "guide": {
+          "title": "تطبيق قابل للتثبيت",
+          "items": {
+            "manifest": {
+              "title": "ملف البيان المباشر",
+              "body": "يُقدَّم ملف البيان على /api/v2/public/manifest.webmanifest ولا يوجد إلا أثناء تفعيل المفتاح."
+            },
+            "install": {
+              "title": "الأيقونات",
+              "body": "ارفع أيقونات PNG مربعة في صفحة المظهر أو الصق روابط مستضافة. 192 بكسل للشاشة الرئيسية و512 بكسل لشاشة البداية."
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "التخزين السحابي",
+        "eyebrow": "الإدارة - تخزين الوسائط",
+        "description": "أرسل كل مرفقات وسائط العملاء إلى حاويتك الخاصة — Amazon S3 أو Wasabi أو Bunny.net أو DigitalOcean Spaces أو Cloudflare R2 أو أي مخزن متوافق مع S3 — بدلًا من خادم التطبيق. عند الإيقاف تبقى الوسائط على القرص المحلي، فلا ينكسر شيء حتى تفعّله.",
+        "status": {
+          "active": "نشط: {provider}. تذهب عمليات الرفع الجديدة إلى حاويتك.",
+          "configured": "مضبوط لكنه متوقف. الوسائط ما زالت على القرص المحلي. اختبر ثم فعّل.",
+          "local": "القرص المحلي (لم يُعدّ مزوّد سحابي بعد).",
+          "enabled": "مفعّل",
+          "disabled": "معطّل"
+        },
+        "sections": {
+          "provider": {
+            "title": "توجيه الوسائط السحابية"
+          },
+          "credentials": {
+            "title": "اتصال الحاوية"
+          }
+        },
+        "guide": {
+          "title": "أعدّه",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "مفتاح الوصول + السر + المنطقة + الحاوية. يُشتق نقطة نهاية Wasabi من المنطقة."
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "استخدم حقول Bunny: منطقة التخزين وكلمة المرور. المنطقة هي منطقة التخزين (de وny وla...)."
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "املأ حقول S3 والصق رابط نقطة النهاية. حدد نمط المسار لـ MinIO."
+            },
+            "test": {
+              "title": "اختبر دائمًا أولًا",
+              "body": "\"حفظ واختبار الاتصال\" يكتب ملف فحص ثم يحذفه قبل أن تفعّل الخيار."
+            }
+          }
+        },
+        "tip": {
+          "title": "آمن افتراضيًا",
+          "body": "تبقى الملفات الحالية حيث هي. عمليات الرفع الجديدة فقط تذهب إلى الحاوية؛ لا شيء يُنقل أو يُحذف."
+        }
+      },
+      "whatsapp": {
+        "title": "إعدادات WhatsApp",
+        "eyebrow": "الإدارة - الإعدادات - القنوات - WhatsApp",
+        "description": "تطبيق Meta الواحد (وشريك Interakt) الذي تُسجَّل من خلاله أرقام WhatsApp لكل مساحة عمل. بدون معرّف التطبيق وسره لا يعمل التسجيل المضمّن وتجديد الرموز؛ وبدون معرّف الإعداد تلصق مساحات العمل الرمز يدويًا. تتجاوز القيم المحفوظة افتراضيات الخادم خلال ثوانٍ في كل العمليات.",
+        "sections": {
+          "metaApp": {
+            "title": "واجهة الأعمال (WABA)",
+            "description": "واجهة Cloud API الرسمية من Meta. مطلوبة لحركة المرور الكبيرة ورسائل القوالب وملف نشاط تجاري موثّق. تدعم لصق الرمز يدويًا والتسجيل المضمّن (تسجيل الدخول عبر WhatsApp)."
+          },
+          "interakt": {
+            "title": "مسار Interakt",
+            "description": "الأرقام المتصلة عبر التسجيل المضمّن تُرسل وتُستقبل افتراضيًا عبر وكيل Meta لدى Interakt. انتقل إلى Meta (مباشر) لتجاوز Interakt. تحتفظ الأرقام الحالية بالمسار الذي اتصلت به."
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "واجهة الأعمال (WABA)",
+          "items": {
+            "api": {
+              "title": "Meta Cloud API",
+              "body": "واجهة Cloud API الرسمية من Meta. مطلوبة لحركة المرور الكبيرة ورسائل القوالب وملف نشاط تجاري موثّق. تدعم لصق الرمز يدويًا والتسجيل المضمّن (تسجيل الدخول عبر WhatsApp)."
+            },
+            "app": {
+              "title": "معرّف تطبيق Facebook وسره",
+              "body": "developers.facebook.com/apps، الإعدادات الأساسية. تغيير التطبيق يبطل الرموز الصادرة عن القديم، لذا يجب على مساحات العمل إعادة الاتصال."
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "لوحة التطبيق، WhatsApp، الإعداد: الصق عنوان الاستدعاء ورمز التحقق من هذه الصفحة، ثم اشترك في messages وmessage_template_status_update."
+            },
+            "perWorkspace": {
+              "title": "لكل مساحة عمل",
+              "body": "تربط كل مساحة عمل رقمها الخاص من القنوات، أرقام WhatsApp. يُجمع هناك معرّف رقم الهاتف ورمز دائم."
+            },
+            "login": {
+              "title": "تسجيل الدخول عبر WABA (اختياري)",
+              "body": "املأ معرّف إعداد التسجيل المضمّن لتفعيل تسجيل الدخول بنقرة واحدة عبر Meta. يتطلب دور مزوّد التقنية على التطبيق. اتركه فارغًا لاستخدام اللصق اليدوي فقط."
+            }
+          }
+        },
+        "tip": {
+          "title": "نصيحة",
+          "body": "تغيير المسار الافتراضي أو التطبيق أثناء حركة المرور يؤثر فقط على الأرقام المتصلة بعد ذلك. أوقف الحملات مؤقتًا قبل تغيير تطبيق Meta."
+        }
+      },
+      "campaigns": {
+        "title": "تسليم الحملات",
+        "eyebrow": "الإدارة - الحملات",
+        "description": "قواعد على مستوى المنصة لحملات كل مساحة عمل: عدد مرات إعادة محاولة الرسالة الفاشلة ومتى تنتهي الحملة غير المكتملة.",
+        "sections": {
+          "retry": {
+            "title": "إعادات المحاولة"
+          },
+          "expiry": {
+            "title": "الإنهاء التلقائي"
+          }
+        },
+        "guide": {
+          "title": "كيف يعمل",
+          "items": {
+            "retry": {
+              "title": "إعادات المحاولة",
+              "body": "المستلم الذي يفشل إرساله تُعاد محاولته بعد الانتظار، حتى عدد المحاولات المحدد هنا."
+            },
+            "expiry": {
+              "title": "الإنهاء التلقائي",
+              "body": "الحملة التي لا تزال تعمل بعد الساعات المحددة هنا تُنهى حتى لا تحتجز مرسِلًا إلى الأبد."
+            }
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "eyebrow": "الإدارة - المواعيد",
+        "description": "عميل Google Cloud OAuth واحد للمنصة بأكملها. ثم تربط كل مساحة عمل حساب Google الخاص بها من المواعيد، الإعدادات؛ ولا ترى مساحة العمل معرّف العميل أو سره أبدًا.",
+        "sections": {
+          "oauth": {
+            "title": "عميل Google OAuth",
+            "description": "بدون معرّف العميل وسره ترى مساحات العمل Google Calendar غير متاح وتستمر الحجوزات بدون تقويم."
+          }
+        },
+        "guide": {
+          "title": "أعدّه في Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. المشروع وواجهة API",
+              "body": "في Google Cloud Console أنشئ مشروعًا وفعّل Google Calendar API."
+            },
+            "redirect": {
+              "title": "2. عميل OAuth",
+              "body": "أنشئ معرّف عميل OAuth 2.0 من نوع تطبيق ويب وأضف عنوان إعادة التوجيه المعروض في هذه الصفحة ضمن عناوين إعادة التوجيه المصرّح بها."
+            },
+            "consent": {
+              "title": "3. شاشة الموافقة",
+              "body": "أضف النطاقات calendar.events وcalendar.freebusy وcalendar.calendarlist.readonly، ثم انشر التطبيق: في وضع الاختبار تنهي Google كل منح بعد 7 أيام وستحتاج مساحات العمل إلى إعادة الاتصال."
+            },
+            "workspaces": {
+              "title": "4. تربط مساحات العمل",
+              "body": "الصق معرّف العميل وسره هنا واحفظ. ثم يربط المشرفون من المواعيد، الإعدادات، Google Calendar."
+            }
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "منشئ التدفقات",
+        "eyebrow": "الإدارة - الأتمتة",
+        "description": "اختر منشئ التدفقات الافتراضي لكل مساحة عمل: المنشئ البسيط خطوة بخطوة أو منشئ اللوحة المتقدم. يمكن لمساحة العمل تجاوزه من صفحة التدفقات الخاصة بها.",
+        "sections": {
+          "mode": {
+            "title": "المنشئ"
+          }
+        },
+        "guide": {
+          "title": "كيف يعمل",
+          "items": {
+            "modes": {
+              "title": "المنشئان",
+              "body": "البسيط يعرض التدفق كخطوات تحت بعضها مع علامة زائد بين الخطوات. المتقدم هو اللوحة بالعُقد والأسلاك. كلاهما يحفظ التدفق نفسه، فيعمل التدفق بالطريقة نفسها."
+            },
+            "existing": {
+              "title": "التدفقات الموجودة بالفعل",
+              "body": "تغيير هذا الإعداد لا يغيّر أي تدفق ولا يحذفه. يستمر التدفق في العمل؛ ويُفتح فقط في المنشئ المفعّل. مساحة العمل التي اختارت منشئها تحتفظ به حتى تختار افتراضي المنصة مرة أخرى."
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "نستخدم ملفات تعريف الارتباط",
+      "learnMore": "اعرف المزيد",
+      "decline": "رفض",
+      "customize": "تخصيص",
+      "acceptAll": "قبول الكل",
+      "rejectAll": "رفض الكل",
+      "save": "حفظ التفضيلات",
+      "preferences": "تفضيلات ملفات تعريف الارتباط",
+      "categories": {
+        "necessary": {
+          "title": "الضرورية للغاية",
+          "body": "لازمة لعمل الموقع: تسجيل الدخول والأمان واختياراتك. مفعّلة دائمًا."
+        },
+        "analytics": {
+          "title": "ملفات التحليلات",
+          "body": "تساعدنا على فهم كيفية استخدام الموقع لتحسينه."
+        },
+        "marketing": {
+          "title": "ملفات التسويق",
+          "body": "تُستخدم لقياس الإعلانات وعرض حملات ذات صلة بك في أماكن أخرى."
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "معاينة مباشرة",
+      "previewTitle": "قبل الحفظ",
+      "previewNote": "تتحدث الألوان والحجم والشفافية أثناء السحب. لا يُطبَّق شيء على أحد حتى تحفظ.",
+      "resetTitle": "إعادة الضبط إلى الافتراضيات",
+      "resetBody": "يمسح كل التجاوزات ويستعيد لوحة الألوان الأصلية.",
+      "reset": "إعادة ضبط كل الألوان",
+      "tokens": "{count} رموز",
+      "controls": "{count} عناصر تحكم",
+      "primary": "الأساسي",
+      "cancel": "إلغاء",
+      "active": "نشط"
+    },
+    "wabaCallback": {
+      "loading": "جارٍ تحميل تفاصيل webhook…",
+      "unavailable": "تفاصيل webhook تظهر للمشرفين العامين فقط.",
+      "webhookUrl": "رابط Webhook",
+      "noUrl": "اضبط APP_URL أو WABA_WEBHOOK_PUBLIC_URL",
+      "webhookHint": "الصقه في تطبيق Meta (WhatsApp، الإعداد، عنوان الاستدعاء). اشترك في: {fields}.",
+      "verifyToken": "رمز التحقق",
+      "verifyHint": "الصقه في الشاشة نفسها كرمز التحقق.",
+      "copy": "نسخ",
+      "copied": "تم النسخ",
+      "connected": "حسابات WABA المتصلة (كل مساحات العمل)",
+      "fieldsTitle": "حقول Webhook (التعايش والمجموعات)",
+      "fieldsHint": "يتطلب التعايش اشتراك تطبيق Meta في messages وsmb_message_echoes وsmb_app_state_sync وhistory. وتتطلب مجموعات WhatsApp group_lifecycle_update وgroup_participants_update وgroup_settings_update وgroup_status_update.",
+      "fieldsCheck": "فحص حقول webhook",
+      "fieldsChecking": "جارٍ سؤال Meta…",
+      "fieldsOk": "كل الحقول مشترَك بها: ستتم مزامنة الردود المكتوبة على الهاتف وستصل أحداث مجموعات WhatsApp.",
+      "fieldsMissing": "بعض الحقول غير مشترَك بها بعد.",
+      "fieldsSubscribed": "تم الاشتراك. ستتم الآن مزامنة الردود المكتوبة على الهاتف وستصل أحداث مجموعات WhatsApp.",
+      "fieldsMissingTag": "مفقود",
+      "fieldsGroupTag": "المجموعات",
+      "fieldsSubscribe": "الاشتراك في الحقول المفقودة",
+      "fieldsSubscribing": "جارٍ الاشتراك…"
+    },
+    "googleCallback": {
+      "redirectTitle": "عنوان إعادة التوجيه",
+      "redirectHint": "سجّل هذا العنوان بالضبط كعنوان إعادة توجيه مصرّح به في عميل OAuth. إليه تحوّل Google المتصفح بعد موافقة مشرف مساحة العمل.",
+      "copy": "نسخ",
+      "copied": "تم النسخ"
+    }
+  }
+}

@@ -1,0 +1,647 @@
+{
+  "sales-docs": {
+    "common": {
+      "dismiss": "닫기"
+    },
+    "nav": {
+      "proposals": "제안서",
+      "estimates": "견적"
+    },
+    "kind": {
+      "proposal": {
+        "singular": "제안서",
+        "plural": "제안서"
+      },
+      "estimate": {
+        "singular": "견적",
+        "plural": "견적"
+      }
+    },
+    "status": {
+      "draft": "초안",
+      "sent": "발송됨",
+      "viewed": "열람됨",
+      "accepted": "수락됨",
+      "declined": "거절됨",
+      "expired": "만료됨",
+      "converted": "전환됨"
+    },
+    "tabs": {
+      "label": "상태",
+      "all": "전체",
+      "draft": "초안",
+      "sent": "발송됨",
+      "viewed": "열람됨",
+      "accepted": "수락됨",
+      "declined": "거절됨",
+      "expired": "만료됨",
+      "converted": "전환됨",
+      "count": "{count, plural, other {문서 #개}}"
+    },
+    "list": {
+      "proposal": {
+        "title": "제안서",
+        "subtitle": "범위와 가격을 제안하고, 구매자의 활동을 추적하며, 선택된 제안을 인보이스로 전환하세요.",
+        "new": "신규 제안서",
+        "emptyTitle": "아직 제안서가 없습니다",
+        "emptyMessage": "첫 제안서를 만들고 링크를 구매자에게 보낸 후 발송에서 수락까지 진행 상황을 확인하세요."
+      },
+      "estimate": {
+        "title": "견적",
+        "subtitle": "인보이스를 발행하기 전에 가격을 견적하세요. 발송하고, 수락받은 후 한 번의 클릭으로 전환하세요.",
+        "new": "신규 견적",
+        "emptyTitle": "아직 견적이 없습니다",
+        "emptyMessage": "첫 견적을 만들고 링크를 구매자에게 보낸 후 수락되면 인보이스로 전환하세요."
+      },
+      "openValue": "미결 금액",
+      "tableLabel": "문서",
+      "loading": "불러오는 중",
+      "showing": "{count, plural, other {문서 #개 표시 중}}",
+      "loadMore": "더 보기",
+      "allLoaded": "모두 불러옴",
+      "useSampleData": "샘플 데이터 사용",
+      "emptyFilteredTitle": "일치하는 항목 없음",
+      "emptyFiltered": "검색 및 필터와 일치하는 문서가 없습니다. 필터를 줄이거나 다른 단어로 검색해 보세요.",
+      "resetFilters": "필터 지우기",
+      "emptyTabTitle": "{status} 문서 없음",
+      "emptyTab": "{kind} 중 하나가 이 상태가 되면 여기에 표시됩니다.",
+      "statusWord": {
+        "all": "전체",
+        "draft": "초안",
+        "sent": "발송됨",
+        "viewed": "열람됨",
+        "accepted": "수락됨",
+        "declined": "거절됨",
+        "expired": "만료됨",
+        "converted": "전환됨"
+      }
+    },
+    "toolbar": {
+      "label": "필터",
+      "search": "번호, 제목 또는 구매자 검색",
+      "owner": "담당자",
+      "allOwners": "모든 담당자",
+      "validity": "유효 기한",
+      "anyValidity": "모든 날짜",
+      "validWeek": "7일 이내 만료",
+      "validLapsed": "기한 경과",
+      "clear": "지우기",
+      "refresh": "새로고침",
+      "shortcuts": "키보드 단축키",
+      "contactFilter": "연락처",
+      "dealFilter": "거래",
+      "removeFilter": "이 필터 제거",
+      "mine": "내 문서"
+    },
+    "table": {
+      "scrollArea": "문서 표",
+      "selectAll": "불러온 문서 전체 선택",
+      "selectRow": "{number} 선택",
+      "columns": {
+        "number": "번호",
+        "title": "제목 / 구매자",
+        "contact": "연락처",
+        "amount": "금액",
+        "status": "상태",
+        "validUntil": "유효 기한",
+        "owner": "담당자",
+        "created": "생성일"
+      }
+    },
+    "row": {
+      "moreFor": "{number} 작업",
+      "untitled": "제목 없음",
+      "noBuyer": "구매자 없음",
+      "unowned": "담당자 없음"
+    },
+    "bulk": {
+      "label": "일괄 작업",
+      "selected": "{count, plural, other {#개 선택됨}}",
+      "working": "작업 중",
+      "delete": "삭제",
+      "clear": "선택 해제",
+      "deleteTitle": "선택한 문서를 삭제하시겠습니까?",
+      "deleteMessage": "{count, plural, other {문서 #개가 영구 삭제되며 공개 링크도 작동을 멈춥니다.}} 전환된 문서는 유지됩니다.",
+      "deleteConfirm": "삭제",
+      "keep": "유지",
+      "deleted": "{count, plural, other {문서 #개가 삭제되었습니다}}",
+      "someFailed": "{count, plural, other {문서 #개를 삭제하지 못했습니다}}",
+      "failed": "삭제에 실패했습니다."
+    },
+    "shortcuts": {
+      "title": "키보드 단축키",
+      "close": "닫기",
+      "list": "목록에서",
+      "builder": "작성기에서",
+      "actions": {
+        "next": "다음 행",
+        "prev": "이전 행",
+        "open": "행 열기",
+        "toggleSelect": "행 선택 또는 선택 해제",
+        "newDoc": "신규 문서",
+        "focusSearch": "검색",
+        "clearSelection": "선택 해제",
+        "help": "이 목록 표시",
+        "save": "초안 저장",
+        "send": "보내기",
+        "addRow": "항목 추가"
+      }
+    },
+    "actions": {
+      "open": "열기",
+      "edit": "편집",
+      "send": "보내기",
+      "copyLink": "공개 링크 복사",
+      "markSent": "발송됨으로 표시",
+      "convertInvoice": "인보이스로 전환",
+      "createSalesOrder": "판매 주문 만들기",
+      "convertDeal": "거래 만들기",
+      "duplicate": "복제",
+      "print": "인쇄 / PDF",
+      "activity": "활동",
+      "delete": "삭제",
+      "accept": "수락으로 기록",
+      "decline": "거절로 기록",
+      "revise": "수정(초안으로 되돌리기)",
+      "extend": "유효 기한 연장"
+    },
+    "confirm": {
+      "cancel": "취소",
+      "linkCopied": "링크가 복사되었습니다",
+      "copyFailed": "링크를 복사하지 못했습니다. 선택한 후 직접 복사하세요.",
+      "markSent": {
+        "title": "{number}을(를) 발송됨으로 표시하시겠습니까?",
+        "message": "{kind}을(를) 구매자에게 직접 공유했음(링크 복사)을 기록합니다. 아무것도 전송되지 않습니다. 전송하려면 보내기를 사용하세요.",
+        "confirm": "발송됨으로 표시"
+      },
+      "convertInvoice": {
+        "title": "{number}을(를) 인보이스로 전환하시겠습니까?",
+        "message": "같은 항목과 합계로 인보이스 초안이 만들어지고 이 {kind}은(는) 전환됨으로 잠깁니다. 이 작업은 되돌릴 수 없습니다.",
+        "confirm": "인보이스로 전환"
+      },
+      "convertDeal": {
+        "title": "{number}(으)로 거래를 만드시겠습니까?",
+        "message": "이 {kind}의 합계와 연락처로 거래가 만들어지고 해당 {kind}과(와) 연결됩니다.",
+        "confirm": "거래 만들기"
+      },
+      "delete": {
+        "title": "{number}을(를) 삭제하시겠습니까?",
+        "message": "{kind}이(가) 영구 삭제되며 공개 링크도 작동을 멈춥니다. 번호는 다시 사용되지 않습니다.",
+        "confirm": "삭제"
+      },
+      "close": "닫기",
+      "theBuyer": "구매자",
+      "linkCopiedInactive": "링크가 복사되었습니다. 문서를 발송하기 전까지 구매자는 열 수 없습니다.",
+      "accept": {
+        "title": "{number}을(를) 수락으로 기록하시겠습니까?",
+        "message": "{name}님이 링크 외부에서(전화 또는 서명본으로) 동의한 경우에 사용하세요. 구매자 본인의 서명이 아니라 직접 입력한 내용으로 활동에 기록됩니다.",
+        "confirm": "수락으로 기록"
+      },
+      "decline": {
+        "title": "{number}을(를) 거절로 기록하시겠습니까?",
+        "message": "{name}님이 링크 외부에서 거절한 경우에 사용하세요. {kind}은(는) 거절됨으로 종료되며, 나중에 수정하여 새 초안으로 만들 수 있습니다.",
+        "confirm": "거절로 기록"
+      },
+      "extend": {
+        "title": "{number} 기한 연장",
+        "message": "이 {kind}에 새 유효 기한을 설정하세요. 만료된 경우 {name}님이 다시 열람할 수 있습니다.",
+        "confirm": "연장",
+        "date": "새 유효 기한",
+        "past": "과거 날짜는 선택할 수 없습니다."
+      },
+      "revise": {
+        "title": "{number}을(를) 수정하시겠습니까?",
+        "message": "{kind}이(가) 수정할 수 있도록 초안으로 되돌아갑니다(개정 번호가 올라가고 이전 내용은 보관됩니다). 내용을 변경하면 구매자는 이전 버전을 수락할 수 없습니다.",
+        "confirm": "수정"
+      },
+      "note": "메모(선택)",
+      "noteHint": "이 결정과 함께 활동에 보관됩니다."
+    },
+    "toast": {
+      "created": "{number} 생성됨",
+      "saved": "{number} 저장됨",
+      "duplicated": "초안 {number} 생성됨",
+      "convertedInvoice": "{number}이(가) 인보이스로 전환됨",
+      "convertedDeal": "{number}(으)로부터 거래 {deal} 생성됨",
+      "deleted": "{number} 삭제됨",
+      "accepted": "{number}이(가) 수락으로 기록됨",
+      "declined": "{number}이(가) 거절로 기록됨",
+      "revised": "{number}이(가) 다시 초안이 되었습니다(개정 {revision})",
+      "extended": "{number} 기한 연장됨",
+      "delivery": {
+        "sent": "{number}을(를) 구매자에게 이메일로 보냄",
+        "queued": "{number}이(가) WhatsApp 발송 대기열에 추가됨",
+        "shared": "{number}이(가) 발송됨으로 표시됨"
+      }
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없습니다. 연결을 확인한 후 다시 시도하세요.",
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "signedOut": "세션이 종료되었습니다. 다시 로그인하세요.",
+      "conflict": "다른 사용자가 이 문서를 변경했습니다. 문서를 다시 불러왔으니 확인한 후 다시 시도하세요.",
+      "validation": "일부 값이 허용되지 않았습니다. 강조 표시된 항목을 확인하세요.",
+      "unavailable": "이 서버에서는 아직 제안서와 견적을 사용할 수 없습니다.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 후 다시 시도하세요.",
+      "notFound": "문서를 찾을 수 없습니다. 삭제되었을 수 있습니다.",
+      "planDisabled": "현재 요금제에는 제안서와 견적이 포함되어 있지 않습니다.",
+      "invalidTransition": "문서의 현재 상태에서는 해당 변경이 허용되지 않습니다. 문서를 다시 불러왔습니다.",
+      "notEditable": "초안만 편집할 수 있습니다. 문서를 수정하여 초안으로 되돌리세요.",
+      "notDeletable": "수락되었거나 전환된 문서는 기록으로 보관되며 삭제할 수 없습니다.",
+      "alreadyDecided": "이 문서는 이미 결정되었습니다. 문서를 다시 불러왔습니다.",
+      "alreadyConverted": "이 문서는 이미 인보이스로 전환되었습니다.",
+      "alreadyLinkedDeal": "이 문서에는 이미 거래가 연결되어 있습니다.",
+      "linkUnavailable": "공개 링크가 취소되었거나 만료되었습니다. 먼저 새 링크를 만드세요.",
+      "noRecipient": "먼저 구매자의 이메일 또는 전화번호를 추가한 후 보내세요.",
+      "sendFailed": "메시지를 전달하지 못해 문서가 발송됨으로 표시되지 않았습니다. 다시 시도하세요.",
+      "expired": "이 문서의 유효 기한이 지났습니다. 먼저 기한을 연장하세요.",
+      "ownerInvalid": "담당자는 워크스페이스의 활성 멤버여야 합니다.",
+      "invoicingUnavailable": "인보이싱은 아직 사용할 수 없어 이 문서를 전환할 수 없습니다.",
+      "unexpected": "문제가 발생했습니다. 다시 시도하세요.",
+      "requestId": "요청 ID",
+      "retry": "다시 시도"
+    },
+    "link": {
+      "unnamedContact": "이름 없는 연락처"
+    },
+    "picker": {
+      "unnamed": "이름 없음",
+      "unlinkContact": "연락처 연결 해제",
+      "unlinkDeal": "거래 연결 해제",
+      "searchContact": "이름, 이메일 또는 전화번호로 연락처 검색",
+      "searchDeal": "거래 검색",
+      "results": "결과",
+      "searching": "검색 중",
+      "unavailable": "목록을 불러오지 못했습니다.",
+      "none": "일치하는 항목이 없습니다.",
+      "create": "연락처 만들기",
+      "createNamed": "“{name}” 연락처 만들기",
+      "createTitle": "연락처 만들기",
+      "createEyebrow": "신규 연락처",
+      "close": "닫기",
+      "cancel": "취소",
+      "createConfirm": "만들고 연결",
+      "nameLabel": "이름",
+      "emailLabel": "이메일",
+      "phoneLabel": "전화번호",
+      "phoneHint": "국가 번호를 포함해 입력하세요. 예: +971 50 123 4567.",
+      "nameInvalid": "이름을 입력하세요.",
+      "emailInvalid": "올바른 이메일을 입력하세요.",
+      "phoneInvalid": "올바른 전화번호를 입력하세요.",
+      "forbidden": "연락처를 만들 권한이 없습니다.",
+      "createFailed": "연락처를 만들지 못했습니다. 다시 시도하세요.",
+      "contactCreated": "연락처 {name} 생성됨"
+    },
+    "send": {
+      "eyebrow": "구매자에게 보내기",
+      "title": "{number} 보내기",
+      "close": "닫기",
+      "done": "완료",
+      "channels": "보내는 방법",
+      "tabs": {
+        "link": "링크",
+        "email": "이메일",
+        "whatsapp": "WhatsApp"
+      },
+      "linkLabel": "공개 링크",
+      "linkHint": "이 링크가 있는 사람은 누구나 문서를 보고 수락하거나 거절할 수 있습니다. 구매자에게만 공유하세요.",
+      "copy": "복사",
+      "copied": "복사됨",
+      "copiedToast": "링크가 복사되었습니다",
+      "copyFailed": "링크를 복사하지 못했습니다. 선택한 후 직접 복사하세요.",
+      "to": "받는 사람",
+      "emailInvalid": "올바른 이메일 주소를 입력하세요.",
+      "noEmail": "이 문서에는 구매자 이메일이 없습니다. 여기에 입력하세요.",
+      "message": "메시지",
+      "messageDefault": "안녕하세요 {name}님, 문서를 보내드립니다. 범위와 가격이 나와 있으며 온라인에서 수락하실 수 있습니다.",
+      "messageHint": "문서 링크는 메시지 아래에 추가됩니다.",
+      "sendEmail": "이메일 보내기",
+      "waTo": "보낼 대상",
+      "noPhone": "이 문서에는 구매자 전화번호가 없습니다. 먼저 구매자 정보에서 추가하세요.",
+      "waPreview": "메시지",
+      "waTotal": "합계",
+      "waView": "보고 수락하기",
+      "sendWhatsapp": "WhatsApp으로 보내기",
+      "openWhatsapp": "WhatsApp에서 열기",
+      "markSent": "공유했습니다: 발송됨으로 표시",
+      "linkLoading": "링크 불러오는 중",
+      "linkUnavailable": "이 서버에서는 아직 링크를 사용할 수 없습니다.",
+      "stateDraft": "링크는 문서가 발송되면 열립니다. 그 전까지 구매자에게는 아무것도 표시되지 않습니다.",
+      "stateRevoked": "이 링크는 취소되었습니다. 구매자가 열 수 없습니다. 다시 공유하려면 새 링크를 만드세요.",
+      "stateActive": "{views, plural, =0 {아직 열람되지 않았습니다.} other {#번 열람되었습니다.}}",
+      "stateInactive": "이 링크는 만료되어 구매자가 열 수 없습니다. 새 링크를 만드세요.",
+      "regenerate": "새 링크 만들기",
+      "revoke": "링크 취소",
+      "regenerateWarning": "기존 링크는 즉시 작동을 멈춥니다. 링크를 가진 사람은 더 이상 사용할 수 없다는 안내를 보게 됩니다.",
+      "keepLink": "현재 링크 유지",
+      "regenerateConfirm": "새 링크 만들기",
+      "regenerated": "새 링크가 만들어졌습니다",
+      "revoked": "링크가 취소되었습니다",
+      "waHint": "보내기는 연결된 WhatsApp에서 메시지를 대기열에 넣고 문서를 발송됨으로 표시합니다. WhatsApp에서 열기를 사용하면 직접 보낼 수 있으며, 그 후 링크 탭에서 발송됨으로 표시하세요."
+    },
+    "activity": {
+      "title": "{number} 활동",
+      "subtitle": "이 문서에 일어난 모든 일을 최신순으로 보여줍니다.",
+      "close": "닫기",
+      "loading": "불러오는 중",
+      "unavailable": "이 서버에서는 아직 활동 이력을 사용할 수 없습니다.",
+      "empty": "이 문서에 아직 아무 일도 일어나지 않았습니다.",
+      "buyer": "구매자",
+      "system": "시스템",
+      "someone": "누군가",
+      "via": "{channel}(으)로 발송됨",
+      "signedBy": "{name} 서명",
+      "reason": "사유: {reason}",
+      "channels": {
+        "link": "링크",
+        "email": "이메일",
+        "whatsapp": "WhatsApp"
+      },
+      "events": {
+        "created": "{who} 생성",
+        "edited": "{who} 편집",
+        "sent": "{who} 발송",
+        "viewed": "{who} 열람",
+        "accepted": "{who} 수락",
+        "declined": "{who} 거절",
+        "expired": "만료됨",
+        "duplicated": "{who} 복제",
+        "revised": "{who} 수정",
+        "extended": "{who} 유효 기한 연장",
+        "converted_invoice": "{who} 인보이스로 전환",
+        "converted_deal": "{who} 거래 생성",
+        "link_regenerated": "{who} 새 링크 생성",
+        "link_revoked": "{who}님이 링크를 해지했습니다"
+      },
+      "withSignature": "직접 그린 서명이 기록되었습니다",
+      "recordedByStaff": "구매자를 대신해 팀원이 기록했습니다",
+      "note": "메모: {note}",
+      "revision": "개정 {revision}",
+      "fromAddress": "네트워크 주소 {ip}에서"
+    },
+    "paper": {
+      "label": "{kind} {number}",
+      "sellerFallback": "귀사",
+      "numberPending": "저장 시 번호가 부여됩니다",
+      "untitled": "제목 없는 {kind}",
+      "preparedFor": "수신처",
+      "noBuyer": "아직 구매자가 없습니다",
+      "issued": "발행일",
+      "validUntil": "유효 기간",
+      "description": "설명",
+      "qty": "수량",
+      "unit": "단가",
+      "discount": "할인",
+      "tax": "세금",
+      "amount": "금액",
+      "noItems": "항목이 없습니다.",
+      "subtotal": "소계",
+      "discountPercent": "할인 ({percent}%)",
+      "discountRow": "할인",
+      "taxRow": "세금 ({percent}%)",
+      "total": "합계",
+      "notes": "메모",
+      "terms": "약관"
+    },
+    "builder": {
+      "loading": "불러오는 중",
+      "notFoundTitle": "문서를 찾을 수 없습니다",
+      "notFound": "이 문서는 존재하지 않거나 삭제되었습니다.",
+      "back": {
+        "proposal": "모든 제안서",
+        "estimate": "모든 견적서"
+      },
+      "formLabel": "문서 상세",
+      "newTitle": {
+        "proposal": "새 제안서",
+        "estimate": "새 견적서"
+      },
+      "newSubtitle": "구매자와 품목을 입력하세요. 이 {kind}를 저장하면 번호가 부여됩니다.",
+      "untitledSub": "제목 없음",
+      "unsaved": "저장되지 않은 변경 사항",
+      "leaveTitle": "저장하지 않고 나가시겠습니까?",
+      "leaveMessage": "이 페이지에 저장되지 않은 변경 사항이 있습니다. 지금 나가면 변경 사항이 사라집니다.",
+      "leave": "저장하지 않고 나가기",
+      "keepEditing": "계속 편집",
+      "save": "임시 저장",
+      "send": "보내기",
+      "more": "기타 작업",
+      "fixErrors": "저장하기 전에 일부 항목을 확인하세요.",
+      "panes": "양식 또는 미리보기",
+      "pane": {
+        "edit": "편집",
+        "preview": "미리보기"
+      },
+      "locked": {
+        "sent": "이 문서는 구매자에게 발송되어 편집할 수 없습니다. 임시 상태로 되돌리려면 수정하거나, 새 문서로 복제하세요.",
+        "accepted": "이 문서는 수락되어 기록으로 보관됩니다. 인보이스로 전환하거나 새 문서로 복제하세요.",
+        "converted": "이 문서는 인보이스로 전환되어 잠겨 있습니다.",
+        "openInvoice": "인보이스 열기",
+        "revise": "수정",
+        "duplicate": "임시 문서로 복제"
+      },
+      "buyer": {
+        "title": "구매자",
+        "hint": "연락처를 선택하거나 구매자 정보를 입력하세요. 이메일과 전화번호로 발송됩니다.",
+        "contact": "연락처",
+        "name": "구매자 이름",
+        "email": "구매자 이메일",
+        "phone": "구매자 전화번호",
+        "phoneHint": "국가 번호를 포함하세요. WhatsApp 발송에 필요합니다."
+      },
+      "details": {
+        "title": "상세 정보",
+        "docTitle": "제목",
+        "titlePlaceholder": {
+          "proposal": "예: 웹사이트 리뉴얼 1단계",
+          "estimate": "예: 주방 인테리어 간편 견적"
+        },
+        "deal": "거래",
+        "currency": "통화",
+        "validUntil": "유효 기간",
+        "plusDays": "+{days}일",
+        "noExpiry": "만료 없음"
+      },
+      "items": {
+        "title": "품목",
+        "hint": "수량에는 소수점을 쓸 수 있습니다. 할인은 비율 또는 금액으로 입력할 수 있으며(칸의 기호를 눌러 전환), 세금을 비워 두면 문서의 세율이 적용됩니다.",
+        "description": "설명",
+        "qty": "수량",
+        "unit": "단가",
+        "discount": "할인 %",
+        "tax": "세금 %",
+        "amount": "금액",
+        "drag": "끌어서 순서 변경",
+        "row": "{n}번 행",
+        "descriptionPlaceholder": "청구할 항목을 입력하세요",
+        "descriptionFor": "{n}번 행 설명",
+        "qtyFor": "{n}번 행 수량",
+        "unitFor": "{n}번 행 단가",
+        "discountFor": "{n}번 행 할인 비율",
+        "taxFor": "{n}번 행 세금 비율",
+        "amountFor": "{n}번 행 금액",
+        "moveUp": "{n}번 행 위로 이동",
+        "moveDown": "{n}번 행 아래로 이동",
+        "duplicate": "{n}번 행 복제",
+        "remove": "{n}번 행 삭제",
+        "add": "행 추가",
+        "discountToAmount": "{n}번 행: 할인은 비율입니다. 금액으로 전환하세요",
+        "discountToPercent": "{n}번 행: 할인은 금액입니다. 비율로 전환하세요"
+      },
+      "problems": {
+        "noItems": "설명과 가격이 있는 품목을 하나 이상 추가하세요.",
+        "descriptionRequired": "설명을 입력하세요.",
+        "descriptionTooLong": "설명이 너무 깁니다(최대 500자).",
+        "qtyInvalid": "수량은 0 이상의 숫자이며 소수점 넷째 자리까지 입력할 수 있습니다.",
+        "priceInvalid": "단가를 0 이상의 숫자로 입력하세요.",
+        "discountInvalid": "할인은 0에서 100 사이의 비율이어야 합니다.",
+        "taxInvalid": "세금은 0에서 100 사이의 비율이어야 합니다.",
+        "docDiscountInvalid": "할인을 0 이상의 숫자로 입력하세요.",
+        "docTaxInvalid": "세금은 0에서 100 사이의 비율이어야 합니다.",
+        "emailInvalid": "올바른 이메일 주소를 입력하세요.",
+        "phoneInvalid": "국가 번호를 포함해 전화번호를 입력하세요(예: +971 50 123 4567).",
+        "titleTooLong": "제목이 너무 깁니다(최대 255자).",
+        "notesTooLong": "메모가 너무 깁니다(최대 5,000자).",
+        "termsTooLong": "약관이 너무 깁니다(최대 10,000자).",
+        "dateInvalid": "올바른 날짜를 입력하세요.",
+        "tooLarge": "금액이 너무 큽니다. 수량이나 단가를 줄이세요."
+      },
+      "totals": {
+        "defaultTax": "세율",
+        "defaultTaxHint": "자체 세금이 없는 모든 행에 적용됩니다.",
+        "discount": "문서 전체 할인",
+        "discountKind": "할인 유형",
+        "subtotal": "소계",
+        "discountRow": "할인",
+        "taxRow": "세금 ({percent}%)",
+        "total": "합계"
+      },
+      "notes": {
+        "title": "메모 및 약관",
+        "notes": "구매자에게 전달할 메모",
+        "terms": "약관",
+        "insertTemplate": "템플릿 사용",
+        "count": "{count} / {max}"
+      },
+      "preview": {
+        "title": "미리보기",
+        "print": "인쇄 / PDF",
+        "hint": "구매자가 보는 화면이자 인쇄될 내용입니다. 합계는 저장된 문서와 같은 방식으로 반올림됩니다."
+      }
+    },
+    "templates": {
+      "notes": {
+        "thanks": {
+          "label": "감사합니다",
+          "text": "함께 일할 기회를 주셔서 감사합니다. 곧 시작하기를 기대하고 있습니다."
+        },
+        "scope": {
+          "label": "업무 범위 안내",
+          "text": "이 문서는 위에 나열된 항목만 다룹니다. 이 범위 밖의 업무는 별도로 견적드리겠습니다."
+        },
+        "followUp": {
+          "label": "다음 단계",
+          "text": "진행하시려면 이 문서를 온라인으로 수락해 주세요. 영업일 기준 1일 이내에 시작일을 확정해 드리겠습니다."
+        }
+      },
+      "terms": {
+        "net14": {
+          "label": "14일 이내 결제",
+          "text": "결제는 인보이스 날짜로부터 14일 이내에 해야 합니다."
+        },
+        "net30": {
+          "label": "30일 이내 결제",
+          "text": "결제는 인보이스 날짜로부터 30일 이내에 해야 합니다."
+        },
+        "deposit50": {
+          "label": "50% 선금",
+          "text": "수락 시 50% 선금을 결제해야 합니다. 잔액은 완료 시 결제합니다."
+        },
+        "warranty": {
+          "label": "보증",
+          "text": "작업 결함에 대해 납품일로부터 90일 동안 보증합니다."
+        }
+      }
+    },
+    "linked": {
+      "title": "제안서 및 견적서",
+      "newProposal": "제안서",
+      "newEstimate": "견적서",
+      "loading": "불러오는 중",
+      "unavailableTitle": "아직 사용할 수 없음",
+      "unavailable": "이 서버에서는 아직 제안서 및 견적서를 사용할 수 없습니다.",
+      "empty": "아직 제안서나 견적서가 없습니다.",
+      "kind": {
+        "proposal": "제안서",
+        "estimate": "견적서"
+      },
+      "viewProposals": "모든 제안서",
+      "viewEstimates": "모든 견적서"
+    },
+    "signature": {
+      "area": "서명란: 손가락, 펜 또는 마우스로 서명을 그리세요",
+      "placeholder": "여기에 서명",
+      "clear": "서명 지우기"
+    },
+    "public": {
+      "loading": "문서를 불러오는 중",
+      "brandFallback": "공급업체",
+      "language": "언어",
+      "print": "인쇄 / PDF",
+      "invalid": {
+        "title": "이 링크는 유효하지 않습니다",
+        "message": "문서가 삭제되었거나 링크가 불완전할 수 있습니다. 보낸 사람에게 새 링크를 요청하세요."
+      },
+      "error": {
+        "title": "문서를 불러올 수 없습니다",
+        "message": "연결 상태를 확인한 후 다시 시도하세요. 계속 발생하면 보낸 사람에게 문의하세요.",
+        "retry": "다시 시도"
+      },
+      "banner": {
+        "accepted": "이 {kind}을(를) 수락하셨습니다. {seller}에게 알림이 전달되었으며 곧 연락드릴 예정입니다.",
+        "signedBy": "{name} 서명",
+        "declined": "이 {kind}은(는) 거절되었습니다.",
+        "declinedHint": "실수로 거절하신 경우 {seller}에게 문의하세요.",
+        "converted": "수락되었습니다. 이 {kind}에 대한 인보이스가 발행되었습니다.",
+        "expired": "이 {kind}은(는) {date}에 만료되었습니다.",
+        "expiredHint": "더 이상 수락할 수 없습니다. 새로 받으려면 {seller}에게 문의하세요."
+      },
+      "footer": "이 {kind}은(는) {seller}가 생성했습니다.",
+      "decision": {
+        "title": "고객님의 결정",
+        "intro": "{total} 금액의 이 {kind}을(를) 수락하면 위의 업무 범위와 가격이 {seller}와 확정됩니다.",
+        "name": "성명",
+        "nameHint": "기록에 남을 이름으로 입력하세요(2자 이상).",
+        "nameRequired": "성명을 입력하세요.",
+        "signature": "서명",
+        "typedPlaceholder": "이름이 여기에 표시됩니다",
+        "useTyped": "그리는 대신 입력한 이름으로 서명",
+        "signatureRequired": "서명을 그리거나 입력한 이름으로 서명을 선택하세요.",
+        "agree": "이 {kind}을(를) 읽었으며 업무 범위, 가격 및 약관에 동의합니다.",
+        "agreeRequired": "확인하려면 체크박스를 선택하세요.",
+        "accept": "이 {kind} 수락",
+        "decline": "거절",
+        "note": "결정과 함께 이름, 서명, 시간 및 네트워크 주소가 기록됩니다.",
+        "declineTitle": "이 {kind}을(를) 거절하시겠습니까?",
+        "declineMessage": "{seller}에게 거절 사실이 전달됩니다. 이후에는 변경할 수 없습니다.",
+        "reason": "사유 (선택)",
+        "reasonHint": "간단한 메모는 {seller}가 무엇을 수정해야 할지 이해하는 데 도움이 됩니다.",
+        "keep": "뒤로 가기",
+        "declineConfirm": "거절",
+        "close": "닫기",
+        "problem": {
+          "expired": "이 문서는 만료되어 더 이상 수락할 수 없습니다.",
+          "closed": "이 문서는 이미 결정되었습니다. 페이지를 새로 고쳤습니다.",
+          "rateLimited": "시도 횟수가 너무 많습니다. 1분 후 다시 시도하세요.",
+          "validation": "일부 정보가 허용되지 않았습니다. 이름을 확인한 후 다시 시도하세요.",
+          "generic": "결정을 기록할 수 없습니다. 연결 상태를 확인한 후 다시 시도하세요.",
+          "gone": "이 링크는 더 이상 유효하지 않습니다."
+        }
+      },
+      "gone": {
+        "title": "이 링크는 더 이상 유효하지 않습니다",
+        "message": "보낸 사람이 이 링크를 끄거나 기간이 만료되었습니다. 새 링크를 요청하세요."
+      },
+      "metaTitle": "견적"
+    }
+  }
+}

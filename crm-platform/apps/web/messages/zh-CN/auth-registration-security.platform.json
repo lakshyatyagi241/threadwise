@@ -1,0 +1,1809 @@
+{
+  "auth-registration-security": {
+    "platform": {
+      "shell": {
+        "brand": "CRM",
+        "title": "平台控制台",
+        "skipToContent": "跳到内容",
+        "navLabel": "控制台导航",
+        "openMenu": "打开菜单",
+        "closeMenu": "关闭菜单",
+        "language": "语言",
+        "themeToLight": "切换到浅色主题",
+        "themeToDark": "切换到深色主题",
+        "accountLink": "账户与安全（{email}）",
+        "signOut": "退出登录",
+        "signingOut": "正在退出登录",
+        "redirecting": "正在打开双重验证设置",
+        "roles": {
+          "super_admin": "超级管理员",
+          "support": "支持",
+          "auditor": "审计员"
+        },
+        "mfaRequired": {
+          "title": "需要双重验证",
+          "body": "超级管理员必须先启用验证器应用，才能使用控制台。请完成下方设置以解锁所有页面。"
+        }
+      },
+      "nav": {
+        "securityCenter": "安全中心",
+        "securityEvents": "安全事件",
+        "registration": "注册策略",
+        "socialLogin": "社交登录与验证码",
+        "authPages": "认证页面",
+        "plans": "套餐",
+        "account": "账户与双重验证",
+        "groups": {
+          "security": "安全",
+          "guestPages": "登录与注册",
+          "plans": "套餐",
+          "account": "你的账户"
+        }
+      },
+      "common": {
+        "copy": "复制",
+        "copied": "已复制",
+        "copyFailed": "无法复制",
+        "loading": "加载中",
+        "retry": "重试",
+        "requestId": "请求 ID",
+        "errors": {
+          "forbidden": "你的角色无权执行此操作。",
+          "request": "请求被拒绝。请刷新页面后重试。",
+          "unexpected": "我们这边出了点问题，请稍后重试。"
+        },
+        "readOnly": {
+          "superAdmin": "只有超级管理员可以更改这些设置。你的角色（{role}）仅可查看。",
+          "superAdminSupport": "只有超级管理员和支持人员可以更改这些设置。你的角色（{role}）仅可查看。"
+        },
+        "copyWhat": "复制{what}"
+      },
+      "login": {
+        "title": "运维人员登录",
+        "intro": "此控制台供平台运维人员使用。工作区用户请在主登录页面登录。",
+        "requestId": "请求 ID",
+        "submit": "登录",
+        "submitting": "正在登录",
+        "fields": {
+          "email": "邮箱",
+          "emailPlaceholder": "you@company.com",
+          "password": "密码",
+          "showPassword": "显示密码",
+          "hidePassword": "隐藏密码"
+        },
+        "errors": {
+          "email": "请输入有效的邮箱地址。",
+          "passwordRequired": "请输入密码。",
+          "captchaRequired": "请勾选复选框，证明你不是机器人。",
+          "codeFormat": "请输入验证器应用中的 6 位数字。",
+          "recoveryFormat": "恢复码由 8 到 32 个字母、数字或短横线组成。"
+        },
+        "notices": {
+          "expired": "你的会话已结束。请重新登录以继续。",
+          "idle": "你因 {minutes, plural, other {# 分钟}}未操作而被退出登录。请重新登录以继续。"
+        },
+        "problems": {
+          "invalid": "凭据不匹配。",
+          "invalidCode": "验证码无效。请检查后重试。",
+          "locked": "失败次数过多，登录已暂停一段时间。",
+          "tryAgainIn": "请在 {time} 后重试",
+          "ipBlocked": "不允许从 {ip} 访问。",
+          "ipBlockedUnknown": "不允许从此地址访问。",
+          "ipBlockedHelp": "运维人员白名单中不包含此地址。请联系超级管理员添加。",
+          "captcha": "验证码校验失败。请完成后重试。",
+          "challengeExpired": "该登录已过期。请重新输入密码。",
+          "rateLimited": "请求过多。请稍候再试。",
+          "unexpected": "无法为你登录。请稍后重试。",
+          "lockedWait": "失败次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
+        },
+        "captcha": {
+          "loadFailed": "验证码无法加载。请检查网络连接或内容拦截器，然后重试。",
+          "retry": "重试验证码",
+          "v3Notice": "此页面受隐形验证码保护。"
+        },
+        "mfa": {
+          "title": "双重验证检查",
+          "intro": "输入验证器应用中的 6 位验证码。",
+          "recoveryIntro": "输入你的一个恢复码。每个恢复码仅可使用一次。",
+          "codeLabel": "验证码",
+          "codeHint": "验证码每 30 秒更换一次。",
+          "recoveryLabel": "恢复码",
+          "recoveryHint": "字母、数字和短横线，与保存时完全一致。",
+          "windowLeft": "此登录将保持开启 {time}。",
+          "windowClosed": "此登录窗口已关闭。请返回并重新输入密码。",
+          "verify": "验证并登录",
+          "verifying": "正在检查",
+          "useRecovery": "使用恢复码",
+          "useAuthenticator": "使用验证器应用",
+          "back": "返回登录"
+        }
+      },
+      "mfa": {
+        "eyebrow": "你的账户",
+        "title": "双重验证",
+        "description": "使用验证器应用保护 {email}。运维人员账户是平台上信任级别最高的账户。",
+        "requestId": "请求 ID",
+        "status": {
+          "title": "验证器应用",
+          "on": "已开启",
+          "body": "此账户已开启双重验证。每次登录时都会要求你输入验证码。恢复码在你开启时已显示过一次。"
+        },
+        "intro": {
+          "title": "设置验证器应用",
+          "step1": "安装验证器应用，例如 Google Authenticator、Microsoft Authenticator 或 1Password。",
+          "step2": "扫描我们显示的二维码，或手动输入设置密钥。",
+          "step3": "输入应用显示的 6 位验证码进行确认。之后你将收到恢复码。",
+          "begin": "开始设置",
+          "starting": "正在准备"
+        },
+        "setup": {
+          "qrLabel": "验证器应用二维码",
+          "title": "扫描后确认",
+          "scan": "打开验证器应用，添加账户并扫描此二维码。二维码在你的浏览器中生成，绝不会发送到其他网站。",
+          "manualTitle": "无法扫描？",
+          "manualHint": "请改为在应用中输入此设置密钥。基于时间，6 位数字。",
+          "codeLabel": "6 位验证码",
+          "codeHint": "输入应用当前显示的验证码。",
+          "enable": "开启双重验证",
+          "enabling": "正在开启",
+          "cancel": "取消设置"
+        },
+        "codes": {
+          "enabled": "双重验证已开启。",
+          "title": "保存你的恢复码",
+          "body": "如果手机丢失，每个恢复码都可用于登录一次。它们仅在此时显示。请存放在安全的地方，并与密码分开保管。",
+          "copyAll": "全部复制",
+          "download": "下载为文本文件",
+          "saved": "我已妥善保存这些恢复码。",
+          "continue": "继续前往控制台",
+          "fileHeader": "{email} 的平台控制台恢复码。每个恢复码仅可使用一次。"
+        },
+        "errors": {
+          "unexpected": "无法完成该步骤。请稍后重试。",
+          "codeFormat": "请输入应用中显示的 6 位数字。",
+          "codeInvalid": "验证码无效。请检查手机时间，并尝试下一个验证码。",
+          "setupExpired": "设置已过期。请重新开始。",
+          "locked": "失败次数过多。请稍等一段时间后再试。",
+          "lockedWait": "失败次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
+        }
+      },
+      "security": {
+        "kicker": "安全中心",
+        "title": "安全与合规",
+        "description": "保护运维人员访问、WhatsApp 发送、设备和 Webhook。每次更改都会作为一次更新保存，并写入安全事件日志。",
+        "viewEvents": "查看安全事件",
+        "save": "保存设置",
+        "saving": "正在保存",
+        "saved": "{count, plural, other {已保存 # 项设置}}",
+        "rejected": "未保存任何内容。{count, plural, other {# 个字段}}被拒绝。",
+        "requestId": "请求 ID",
+        "unsaved": "{count, plural, other {# 项未保存的更改}}",
+        "discard": "放弃更改",
+        "errors": {
+          "forbidden": "你的角色无权更改这些设置。",
+          "unexpected": "无法保存设置。请稍后重试。"
+        },
+        "tabs": {
+          "summary": "摘要",
+          "login": "登录与多重验证",
+          "whatsapp": "WhatsApp 防护",
+          "abuse": "滥用过滤",
+          "api": "API 与 Webhook",
+          "devices": "设备",
+          "danger": "危险操作区"
+        },
+        "common": {
+          "range": "允许范围：{min} 到 {max}。",
+          "rangeWithZero": "允许：0（关闭），或 {min} 到 {max}。",
+          "blankKeeps": "留空则保留已保存的值。"
+        },
+        "problems": {
+          "range": "请输入 {min} 到 {max} 之间的整数。",
+          "rangeWithZero": "请输入 0，或 {min} 到 {max} 之间的整数。",
+          "tooMany": "最多 {max} 项。",
+          "tooLong": "每项最多 {max} 个字符。",
+          "invalidEntry": "{entry} 不是有效的地址或地址段。",
+          "totalTooLong": "列表总长度请控制在 {max} 个字符以内。"
+        },
+        "kpis": {
+          "score": {
+            "label": "安全评分",
+            "strong": "强力管控已启用",
+            "attention": "需要关注"
+          },
+          "openRisks": {
+            "label": "未解决风险",
+            "note": "{count} 项高优先级"
+          },
+          "blocked": {
+            "label": "已拦截的尝试"
+          },
+          "last24h": "过去 24 小时",
+          "warnings": {
+            "label": "警告"
+          },
+          "mfa": {
+            "label": "运维人员多重验证覆盖率",
+            "note": "已启用 {enrolled}/{total} 名运维人员"
+          },
+          "webhooks": {
+            "label": "Webhook 失败",
+            "normal": "正常",
+            "review": "待审核"
+          }
+        },
+        "risks": {
+          "kicker": "优先队列",
+          "title": "待审核的风险项",
+          "seeAll": "查看所有失败",
+          "empty": "一切正常。过去 7 天内没有失败或警告。",
+          "columns": {
+            "severity": "严重程度",
+            "signal": "信号",
+            "workspace": "工作区",
+            "owner": "所有者",
+            "action": "操作"
+          },
+          "severity": {
+            "high": "高",
+            "medium": "中",
+            "watch": "关注"
+          },
+          "platform": "平台",
+          "inspect": "检查",
+          "platformOf": "{app} 平台",
+          "owner": {
+            "system": "系统",
+            "types": {
+              "user": "用户",
+              "platform_operator": "平台运维人员"
+            }
+          },
+          "noWorkspace": "无工作区"
+        },
+        "coverage": {
+          "kicker": "覆盖范围",
+          "title": "已启用的管控",
+          "buckets": {
+            "admin_access": "管理员访问",
+            "send_abuse": "WhatsApp 滥用防范",
+            "api_hardening": "API 加固",
+            "incident_readiness": "事件响应准备"
+          }
+        },
+        "quickActions": {
+          "kicker": "快捷操作",
+          "rotate": "轮换 Webhook 密钥",
+          "forceReset": "强制重置密码",
+          "resume": "恢复发送",
+          "halt": "紧急停止发送",
+          "scopeAll": "全部",
+          "scopeUsers": "所有用户",
+          "scopeGlobal": "全局",
+          "halted": "当前已暂停",
+          "superAdminOnly": "只有超级管理员可以执行这些操作。"
+        },
+        "enforcement": {
+          "kicker": "如实说明的管控",
+          "title": "每项管控目前的作用",
+          "description": "保存设置并不等于平台已据此执行。已强制表示当前已有检查，部分表示仅部分路径会检查，预留表示仅保存以备日后使用。",
+          "show": "显示",
+          "hide": "隐藏",
+          "columns": {
+            "control": "管控",
+            "consumer": "使用位置",
+            "status": "状态"
+          },
+          "enforced": "已强制",
+          "partial": "部分",
+          "reserved": "预留"
+        },
+        "controls": {
+          "requireMfaForAll": {
+            "label": "要求所有用户启用双重验证",
+            "hint": "每位工作区用户都必须先设置验证器应用才能继续。"
+          },
+          "requireMfaForAdmins": {
+            "label": "要求管理员启用双重验证",
+            "hint": "在任何工作区中拥有管理员角色的用户都必须设置验证器应用。"
+          },
+          "requireMfaForSuperAdmins": {
+            "label": "要求超级管理员启用双重验证",
+            "hint": "关闭时，平台超级管理员仅凭密码登录。开启后，他们必须注册并使用验证器应用。"
+          },
+          "requireMfaForOwners": {
+            "label": "要求工作区所有者启用双重验证",
+            "hint": "每个工作区的所有者都必须设置验证器应用。"
+          },
+          "allowedMfaMethods": {
+            "label": "允许的双重验证方式",
+            "hint": "至少保留一项：全部不勾选时将保留已保存的列表。目前仅支持验证器应用。",
+            "methods": {
+              "totp": "验证器应用",
+              "email": "邮件验证码",
+              "telegram": "Telegram 机器人"
+            }
+          },
+          "sessionTimeoutMinutes": {
+            "label": "会话超时（分钟）",
+            "hint": "浏览器会话登录在空闲多久后结束。保持 30 天登录的会话不受影响。"
+          },
+          "maxConcurrentSessions": {
+            "label": "每位用户的最大并发会话数",
+            "hint": "超出时，最早的会话将被退出登录。"
+          },
+          "rememberMeEnabled": {
+            "label": "允许保持登录",
+            "hint": "关闭表示浏览器关闭时每个会话都会结束。"
+          },
+          "lockoutAfterFailures": {
+            "label": "最大登录尝试次数",
+            "hint": "在时间窗口内登录失败达到该次数后，账户将被暂停。"
+          },
+          "lockoutWindowMinutes": {
+            "label": "锁定时间窗口（分钟）",
+            "hint": "失败次数的统计时长，以及暂停持续的时长。"
+          },
+          "passwordMinLength": {
+            "label": "最小长度"
+          },
+          "passwordRequireUpper": {
+            "label": "要求包含大写字母",
+            "short": "大写字母"
+          },
+          "passwordRequireNumber": {
+            "label": "要求包含数字",
+            "short": "数字"
+          },
+          "passwordRequireSymbol": {
+            "label": "要求包含符号",
+            "short": "符号"
+          },
+          "passwordMaxAgeDays": {
+            "label": "密码有效期（天）",
+            "hint": "0 表示密码永不过期。"
+          },
+          "waGuardrailsMode": {
+            "label": "模式",
+            "options": {
+              "off": "关闭（不检查）",
+              "monitor": "监控（仅记录）",
+              "enforce": "强制（拦截）"
+            },
+            "explain": {
+              "off": "不执行任何检查。这些标签页上的上限和过滤器不会生效。",
+              "monitor": "执行检查并将匹配项写入事件日志，但不会拦截任何消息。可在强制执行前用它确认规则。",
+              "enforce": "匹配的消息会在发送前被拦截。"
+            }
+          },
+          "waMaxSendsPerMinute": {
+            "label": "每分钟最大发送数",
+            "hint": "按工作区计算。0 表示不限制。"
+          },
+          "waMaxSendsPerDay": {
+            "label": "每日最大发送数",
+            "hint": "按工作区计算。0 表示不限制。"
+          },
+          "waHoldOnLinksCount": {
+            "label": "链接数超过以下值时扣留",
+            "hint": "链接数超过此值的消息将被扣留。0 表示不限制。"
+          },
+          "waHoldOnScamPattern": {
+            "label": "扣留符合诈骗模式的发送",
+            "hint": "中奖、账户紧急和验证陷阱类措辞。"
+          },
+          "waRequireTemplateReview": {
+            "label": "发送前要求审核模板",
+            "hint": "仅计入安全评分；目前尚无检查。"
+          },
+          "abuseBlockFinanceTerms": {
+            "label": "拦截金融和暴富类词语",
+            "hint": "虚假投资、保证回报和付款重定向等模式。"
+          },
+          "abuseBlockShortLinks": {
+            "label": "拦截短链接和可疑链接",
+            "hint": "会隐藏消息指向位置的短链接服务。"
+          },
+          "abuseBlockKeywordList": {
+            "label": "自定义关键词黑名单",
+            "hint": "每行一个，或用逗号分隔。总计最多 5,000 个字符。匹配不区分大小写。匹配的消息将根据防护模式被标记或拦截。",
+            "placeholder": "forex\nquick money\nguaranteed return"
+          },
+          "apiRateLimitPerMinute": {
+            "label": "每分钟 API 请求数",
+            "hint": "任何一个工作区 API 密钥每分钟可发起的最大请求数。单个密钥可设置更低的限制，但不能更高。"
+          },
+          "webhookSignatureRequired": {
+            "label": "要求 HMAC 签名",
+            "hint": "没有签名密钥就无法创建 Webhook 端点。"
+          },
+          "webhookReplayWindowSec": {
+            "label": "Webhook 重放窗口（秒）",
+            "hint": "仅保存以备日后使用；传入的服务商 Webhook 已进行签名校验。"
+          },
+          "deviceTrustRequired": {
+            "label": "要求受信任的浏览器",
+            "hint": "仅保存以备日后使用；目前尚无设备信任流程。"
+          },
+          "deviceLogoutOnInactiveDays": {
+            "label": "不活跃自动退出（天）",
+            "hint": "已关联的 WhatsApp 设备超过该时长未出现，将被标记为已断开。0 表示永不。"
+          },
+          "ipAllowlistEnabled": {
+            "label": "启用白名单",
+            "hint": "只有以下地址可以访问此控制台。"
+          },
+          "ipAllowlistCidrs": {
+            "label": "允许的地址"
+          },
+          "alertOnNewDevice": {
+            "label": "新设备提醒",
+            "hint": "当有用户从未见过的设备登录时，向其发送邮件。"
+          },
+          "alertOnNewCountry": {
+            "label": "网络变更提醒",
+            "hint": "当有用户从与平时不同的网络登录时，向其发送邮件。"
+          },
+          "alertChannel": {
+            "label": "登录提醒的发送渠道",
+            "hint": "目前仅发送邮件；WhatsApp 渠道仅作记录，留待日后使用。",
+            "options": {
+              "email": "邮件",
+              "whatsapp": "WhatsApp",
+              "both": "邮件和 WhatsApp"
+            }
+          },
+          "auditLogRetentionDays": {
+            "label": "安全事件保留天数",
+            "hint": "0 表示永久保留。"
+          }
+        },
+        "panels": {
+          "login": {
+            "lockout": {
+              "kicker": "登录保护",
+              "title": "账户锁定规则"
+            },
+            "password": {
+              "title": "新密码规则",
+              "note": "在创建或更改密码时生效，不影响现有登录，因此收紧规则不会让任何人被锁在外面。"
+            },
+            "mfa": {
+              "kicker": "多重验证",
+              "title": "双重验证强制策略",
+              "description": "适用于工作区用户。身为超级管理员的平台运维人员始终需要双重验证。"
+            }
+          },
+          "whatsapp": {
+            "master": {
+              "kicker": "总开关",
+              "title": "防护强制执行",
+              "description": "这些标签页上的上限和过滤器仅按此模式生效。请选择模式并阅读其作用。"
+            },
+            "caps": {
+              "kicker": "发送速率",
+              "title": "硬性上限"
+            },
+            "spam": {
+              "kicker": "内容规则",
+              "title": "反垃圾信息控制"
+            },
+            "health": {
+              "kicker": "信任质量",
+              "title": "工作区健康状况",
+              "body": "待发送管道上报后，每个工作区的拦截和标记数量将显示在此处。在此之前，请通过安全事件日志查看防护拦截了什么。",
+              "link": "查看工作区"
+            }
+          },
+          "abuse": {
+            "kicker": "滥用过滤",
+            "title": "非法用途防范",
+            "aside": {
+              "title": "请保持此策略严格",
+              "body": "这些过滤器可防止诈骗、钓鱼和骚扰进入客户使用的渠道。它们遵循 WhatsApp 防护标签页中设置的防护模式。"
+            }
+          },
+          "api": {
+            "traffic": {
+              "kicker": "流量控制",
+              "title": "速率限制"
+            },
+            "integrity": {
+              "kicker": "Webhook 防御",
+              "title": "完整性"
+            },
+            "allowlist": {
+              "kicker": "IP 白名单",
+              "title": "控制台访问",
+              "description": "仅限制此运维控制台。工作区用户、公开 API 和 Webhook 不受影响。列表为空时允许所有人访问，因此永远不会把所有运维人员锁在外面。",
+              "cidrs": "允许的地址",
+              "cidrsHint": "每行一个地址或地址段，例如 203.0.113.9 或 203.0.113.0/24。也可使用逗号分隔。",
+              "placeholder": "203.0.113.0/24\n2001:db8::/32",
+              "yourIp": "API 看到的你的地址：",
+              "yourIpUnknown": "无法检测到你的地址，因此无法提醒你避免把自己锁在外面。",
+              "addMine": "添加我的 IP",
+              "alreadyListed": "已在列表中",
+              "lockoutWarning": "你的地址 {ip} 不在此列表中。保存会把你锁在外面，因此服务器会拒绝保存。请先添加你的地址。"
+            }
+          },
+          "devices": {
+            "trust": {
+              "kicker": "设备完整性",
+              "title": "信任与会话策略"
+            },
+            "alerts": {
+              "kicker": "登录提醒渠道",
+              "title": "提醒发送位置"
+            },
+            "audit": {
+              "kicker": "审计日志",
+              "title": "保留期限",
+              "description": "早于此期限的安全事件将在清理任务上线后被清除。",
+              "link": "打开安全事件日志"
+            }
+          }
+        },
+        "danger": {
+          "kicker": "危险操作区",
+          "title": "不可逆的全平台操作",
+          "description": "每项操作都要求你先输入其名称才会执行，且每项操作都会写入安全事件日志。",
+          "superAdminOnly": "这些操作仅限超级管理员。你的角色是 {role}。",
+          "haltState": "出站发送：",
+          "haltOn": "已暂停",
+          "haltOff": "运行中",
+          "revoke": {
+            "title": "撤销所有会话",
+            "detail": "让所有人退出登录"
+          },
+          "forceReset": {
+            "title": "强制所有用户重置密码",
+            "detail": "标记每位用户"
+          },
+          "rotate": {
+            "title": "轮换所有 Webhook 密钥",
+            "detail": "现有集成将失效",
+            "note": "Webhook 签名密钥属于尚未上线的集成区域，因此目前报告已轮换 0 个。"
+          },
+          "halt": {
+            "title": "紧急停止所有发送",
+            "detail": "全平台紧急开关"
+          },
+          "resume": {
+            "title": "恢复发送",
+            "detail": "当前已暂停"
+          },
+          "logged": {
+            "kicker": "记录内容",
+            "title": "每项操作都会写入一条事件",
+            "events": {
+              "revoke": "platform.security.sessions_revoked",
+              "forceReset": "platform.security.force_password_reset_all",
+              "rotate": "platform.security.webhook_secrets_rotated",
+              "halt": "platform.security.emergency_halt_engaged",
+              "policy": "platform.security.policy_updated"
+            },
+            "notes": {
+              "revoke": "当所有会话结束时，包括你自己的会话。",
+              "forceReset": "当所有用户被告知需选择新密码时。",
+              "rotate": "当密钥被轮换时，并附带数量。",
+              "halt": "当停止发送生效时，以及发送恢复时再次记录。",
+              "policy": "当上方任何设置发生更改时，记录旧值和新值。"
+            },
+            "trail": "查看安全审计日志"
+          },
+          "halted": {
+            "title": "紧急停止已开启",
+            "body": "在恢复发送之前，全平台所有出站消息均被拦截。",
+            "resume": "恢复发送"
+          },
+          "dialog": {
+            "revoke_sessions": {
+              "title": "撤销所有会话",
+              "body": "登录到工作区或此控制台的所有人都将退出登录，包括你自己。",
+              "effect1": "每个人都必须重新登录；若已开启双重验证，还需进行双重验证。",
+              "effect2": "他们尚未在浏览器中保存的内容可能会丢失。",
+              "confirm": "撤销所有会话",
+              "done": "{count, plural, =0 {没有活跃的会话。} other {已撤销 # 个会话。}}",
+              "signedOut": "你也已退出登录。请重新登录以继续。"
+            },
+            "force_password_reset": {
+              "title": "强制所有用户重置密码",
+              "body": "每位工作区用户下次使用应用时，都将被要求选择新密码。",
+              "effect1": "目前不会让任何人退出登录；提示将在他们的下一次请求时出现。",
+              "effect2": "忽略提示的用户在更改密码之前无法使用应用。",
+              "confirm": "强制重置",
+              "done": "{count, plural, =0 {没有用户被标记。} other {# 位用户必须选择新密码。}}"
+            },
+            "rotate_webhook_secrets": {
+              "title": "轮换所有 Webhook 密钥",
+              "body": "每个 Webhook 签名密钥都将被替换为新密钥。",
+              "effect1": "验证签名的集成将无法使用，直到它们改用新密钥。",
+              "effect2": "无法找回旧密钥。",
+              "confirm": "轮换密钥",
+              "done": "{count, plural, =0 {已轮换 0 个密钥。} other {已轮换 # 个密钥。}}",
+              "noneRotated": "未轮换任何密钥，因为集成区域尚未存储 Webhook 密钥。"
+            },
+            "halt_sends": {
+              "title": "紧急停止所有发送",
+              "body": "在你恢复发送之前，所有工作区的每条出站消息都会被拒绝。",
+              "effect1": "客户将收不到任何内容，包括回复、营销活动和自动化消息。",
+              "effect2": "使用恢复发送即可重新开启消息发送。",
+              "confirm": "暂停所有发送",
+              "done": "紧急停止已开启。所有出站发送均被拦截。"
+            },
+            "resume_sends": {
+              "title": "恢复发送",
+              "body": "所有工作区的出站消息将重新开启。",
+              "effect1": "停止期间被拒绝的消息不会自动发送。",
+              "effect2": "如果你是因事故而停止发送，请先查看事件日志。",
+              "confirm": "恢复发送",
+              "done": "发送已恢复。"
+            },
+            "typeToConfirm": "输入 <code>{phrase}</code> 以确认",
+            "phraseHint": "大写字母和多余的空格会被忽略。",
+            "cancel": "取消",
+            "working": "处理中",
+            "close": "关闭",
+            "signInAgain": "重新登录",
+            "requestId": "请求 ID",
+            "errors": {
+              "forbidden": "只有超级管理员可以执行此操作。",
+              "unexpected": "操作未完成。重试之前请先查看事件日志。"
+            }
+          }
+        },
+        "tabsLabel": "安全中心分区",
+        "search": {
+          "label": "搜索安全规则、IP 和操作者",
+          "placeholder": "搜索安全规则、IP、操作者…",
+          "shortcut": "Cmd K"
+        }
+      },
+      "events": {
+        "kicker": "安全中心",
+        "title": "安全事件",
+        "description": "登录、锁定、策略更改和危险操作，按时间倒序排列。",
+        "refresh": "刷新",
+        "refreshing": "正在刷新",
+        "filters": {
+          "label": "筛选事件",
+          "event": "事件名称",
+          "eventHint": "精确名称，例如 auth.failed。可选择建议项或自行输入。",
+          "status": "状态",
+          "anyStatus": "任意状态",
+          "apply": "应用",
+          "clear": "清除筛选",
+          "q": "搜索文本",
+          "qHint": "查找名称包含此文本的事件，不区分大小写。"
+        },
+        "status": {
+          "success": "成功",
+          "failure": "失败",
+          "warning": "警告",
+          "info": "信息"
+        },
+        "empty": "尚未记录任何安全事件。",
+        "emptyFiltered": "没有符合这些筛选条件的事件。",
+        "listLabel": "安全事件",
+        "ip": "IP",
+        "showPayload": "显示详情",
+        "hidePayload": "隐藏详情",
+        "noPayload": "此事件没有更多详情。",
+        "payloadLabel": "{event} 的详情",
+        "loadMore": "加载更多",
+        "loading": "加载中",
+        "end": "{count, plural, other {显示全部 # 个事件。}}",
+        "export": "导出 CSV",
+        "exported": "{count, plural, other {已将 # 个已加载的事件保存到 CSV 文件。}}",
+        "actorLabel": "操作者",
+        "actorTypes": {
+          "user": "用户",
+          "platform_operator": "平台运维人员",
+          "system": "系统"
+        },
+        "workspaceLabel": "工作区",
+        "requestIdLabel": "请求 ID",
+        "userAgentLabel": "浏览器",
+        "copyNames": {
+          "actorId": "操作者 ID",
+          "orgId": "工作区 ID",
+          "requestId": "请求 ID"
+        }
+      },
+      "registration": {
+        "kicker": "访客页面",
+        "title": "注册策略",
+        "description": "决定谁可以注册、如何验证邮箱、新工作区使用哪个套餐，以及注册验证码如何运作。",
+        "save": "保存设置",
+        "saving": "正在保存",
+        "saved": "{count, plural, other {已保存 # 项设置}}",
+        "rejected": "未保存任何内容。{count, plural, other {# 个字段}}被拒绝。",
+        "requestId": "请求 ID",
+        "unsaved": "{count, plural, other {# 项未保存的更改}}",
+        "discard": "放弃更改",
+        "errors": {
+          "unexpected": "无法保存设置。请稍后重试。"
+        },
+        "problems": {
+          "range": "请输入 {min} 到 {max} 之间的整数。",
+          "tooLong": "最多 {max} 个字符。",
+          "required": "此字段为必填项。",
+          "link": "请使用站内路径，例如 /legal/terms，或完整的 http 或 https 地址。",
+          "senderFormat": "请从列表中选择一个发送方。",
+          "countryFormat": "请使用两位字母的国家/地区代码。",
+          "senderRequired": "创建模板之前，请先选择发送渠道。"
+        },
+        "policy": {
+          "kicker": "注册",
+          "title": "谁可以注册",
+          "description": "这些设置适用于新注册用户，包括社交账号注册。"
+        },
+        "fields": {
+          "publicRegistration": {
+            "label": "公开注册",
+            "hintOn": "任何人都可以在注册页面创建工作区。",
+            "hintOff": "注册页面将显示注册已关闭的提示。现有用户不受影响。"
+          },
+          "emailVerification": {
+            "label": "邮箱验证",
+            "options": {
+              "off": "关闭：账户自动视为已验证",
+              "banner": "横幅：允许使用，并显示提醒",
+              "block": "拦截：验证后才能继续"
+            },
+            "explain": {
+              "off": "新账户立即视为已验证，无需验证邮件。",
+              "banner": "用户可以立即使用应用，并在验证之前看到提醒。",
+              "block": "用户必须先验证邮箱，才能使用其他任何功能。"
+            }
+          },
+          "defaultPlanId": {
+            "label": "默认套餐",
+            "hint": "新工作区起始使用的套餐。自动模式会使用标记为注册默认的套餐，否则使用第一个有效的免费套餐。",
+            "placeholder": "套餐标识",
+            "auto": "自动",
+            "unavailable": "{slug}（不是有效套餐）",
+            "loadFailed": "无法加载套餐列表。",
+            "kinds": {
+              "free": "免费",
+              "paid": "付费",
+              "custom_quote": "定制报价"
+            }
+          },
+          "trialDays": {
+            "label": "免费试用（天）",
+            "hint": "{min} 到 {max} 之间的整数。0 表示无试用。留空则保留已保存的值。"
+          },
+          "defaultTimezone": {
+            "label": "默认时区",
+            "hint": "新工作区在选择自己的时区之前使用此时区。"
+          },
+          "defaultCountryIso": {
+            "label": "默认国家/地区",
+            "hint": "在注册时预先选定手机号的国家/地区。",
+            "none": "无默认值"
+          },
+          "termsUrl": {
+            "label": "条款链接",
+            "hint": "站内路径或完整地址，显示在注册和登录页面。"
+          },
+          "privacyUrl": {
+            "label": "隐私链接"
+          },
+          "cookiesUrl": {
+            "label": "Cookie 链接",
+            "hint": "选填。留空则隐藏。"
+          },
+          "otpEnabled": {
+            "label": "通过 WhatsApp 发送注册验证码",
+            "hint": "新账户必须先用一次性验证码确认手机号码，才能创建工作区。"
+          },
+          "otpSender": {
+            "label": "发送方",
+            "hint": "发送验证码的已连接号码。可通过管理发送方添加。"
+          },
+          "ttlMinutes": {
+            "label": "验证码有效期（分钟）"
+          },
+          "length": {
+            "label": "验证码长度（位数）"
+          },
+          "resendCooldownSec": {
+            "label": "重新发送冷却时间（秒）"
+          },
+          "maxAttempts": {
+            "label": "最大尝试次数"
+          }
+        },
+        "otp": {
+          "kicker": "验证",
+          "title": "注册验证码",
+          "description": "有人注册时所发送一次性验证码的设置。",
+          "knobHint": "{min} 到 {max}。留空则使用 {default}。",
+          "status": {
+            "on": "运行中",
+            "off": "未运行",
+            "unsavedNote": "这里显示的是已保存的设置。请保存更改以查看其生效情况。",
+            "reason": {
+              "active": "新注册用户必须用验证码确认手机号码。",
+              "disabled": "开关已关闭，因此注册时不会要求验证码。",
+              "no_sender": "尚未选择发送方，因此注册会跳过验证码步骤。",
+              "sender_missing": "所选发送方已不存在，因此注册会跳过验证码步骤。",
+              "sender_incomplete": "所选发送方缺少凭据，因此注册会跳过验证码步骤。",
+              "dev_in_production": "日志发送方无法在生产环境运行，因此注册会跳过验证码步骤。",
+              "template_missing": "WhatsApp Business 发送方需要一个已通过审核的模板。请在下方创建并提交；在此之前，注册会跳过验证码步骤。",
+              "template_pending": "Meta 仍在审核该模板，因此在审核通过之前，注册会跳过验证码步骤。",
+              "template_rejected": "Meta 拒绝了该模板，因此注册会跳过验证码步骤。请修改后重新提交。"
+            }
+          },
+          "sender": {
+            "none": "无发送方",
+            "option": "{label}（{kind}）",
+            "unknown": "未知发送方（{ref}）",
+            "manage": "管理发送方",
+            "empty": "尚无发送方。请通过管理发送方添加。",
+            "kinds": {
+              "waba": "WhatsApp Business",
+              "twilio": "Twilio",
+              "device": "非官方会话",
+              "dev": "仅日志"
+            },
+            "noneConnected": "你的发送方都尚未连接。请在管理发送方中完成一个；只有已连接的发送方才能被选择。",
+            "unfinished": "{label}（{kind}，未完成）"
+          },
+          "template": {
+            "title": "消息模板",
+            "states": {
+              "none": "未创建",
+              "pending": "等待 Meta 审核",
+              "approved": "已通过",
+              "rejected": "已拒绝",
+              "local": "就绪"
+            },
+            "explain": {
+              "none": "请在上方的发送方和验证码设置确认无误后再创建消息。WhatsApp Business 需要 Meta 的批准；其他渠道会立即使用该消息。",
+              "waba": "已作为身份验证模板提交给 Meta。Meta 批准后，验证码步骤会自动开启，通常在几分钟内。",
+              "local": "已为此渠道保存为纯文本。无需审核，现已投入使用。"
+            },
+            "name": "名称",
+            "metaId": "Meta 模板 ID",
+            "validFor": "验证码有效期",
+            "minutes": "{count, plural, other {# 分钟}}",
+            "submitted": "创建时间",
+            "checked": "上次检查",
+            "never": "尚未",
+            "reason": "原因",
+            "stale": "此模板是为有效期 {count, plural, other {# 分钟}}的验证码创建的。请重新创建并提交，以匹配上方的有效期。",
+            "create": "创建并提交 OTP 模板",
+            "creating": "处理中",
+            "refresh": "刷新状态",
+            "refreshing": "正在检查",
+            "outcome": {
+              "submitted": "模板已提交给 Meta 审核。Meta 批准后，验证码步骤会自动开启。",
+              "resubmitted": "模板已再次发送给 Meta 审核。在获得批准之前，验证码步骤保持关闭。",
+              "local_ready": "消息已保存并已投入使用。此渠道无需审核。",
+              "already_pending": "模板已在 Meta 审核中。请使用刷新状态查看进度。",
+              "already_approved": "模板已通过审核，无需再次发送。",
+              "refreshed": "状态已检查。",
+              "approvedNow": "Meta 已立即批准该模板。验证码步骤已就绪。",
+              "rejectedNow": "Meta 拒绝了该模板。原因显示在下方；请修改后重新提交。"
+            },
+            "refreshed": {
+              "pending": "Meta 仍在审核该模板。",
+              "approved": "Meta 已批准该模板。验证码步骤已就绪。",
+              "rejected": "Meta 拒绝了该模板。",
+              "local": "此模板无需审核。"
+            },
+            "errors": {
+              "submit": "Meta 未接受该模板。你的其他验证码设置已保存。",
+              "check": "无法从 Meta 读取状态。",
+              "rejected": "无法创建模板。",
+              "unexpected": "出了点问题，请稍后重试。"
+            },
+            "createHint": "为所选发送方构建注册消息。WhatsApp Business 需提交 Meta 审核；其他渠道可立即使用。",
+            "picker": {
+              "label": "WhatsApp Business 模板",
+              "hint": "注册时会发送通过下方按钮创建的模板。此发送方其他已通过审核的身份验证模板也会列出供你查看；目前还无法在此选择。",
+              "none": "暂无（请在下方创建）",
+              "loading": "正在加载模板",
+              "option": "{name}（{language}），{status}",
+              "otherSender": "保存发送方后即可查看其模板。",
+              "failed": "无法加载模板列表。",
+              "unavailable": "无法读取 Meta 的模板列表：{reason}"
+            }
+          },
+          "test": {
+            "about": "向手机发送真实验证码，以便在注册依赖它之前检查发送方是否可用。",
+            "button": "发送测试验证码",
+            "title": "发送测试验证码",
+            "intro": "真实验证码将通过下方的发送方发送到你输入的号码。它使用已保存的验证码设置和模板。每小时可发送 5 次。",
+            "to": "手机号码",
+            "toHint": "包含国家/地区区号，例如 +91 98765 43221。",
+            "sender": "发送方",
+            "senderHint": "保持为已保存的发送方，或从列表中试用其他发送方。",
+            "savedSender": "已保存的发送方",
+            "send": "发送验证码",
+            "sending": "正在发送",
+            "close": "关闭",
+            "sent": "测试验证码已发送至 {to}。",
+            "remaining": "{count, plural, other {本小时还剩 # 次测试。}}",
+            "notShown": "验证码不在此处显示；请在手机上查看。",
+            "requestId": "请求 ID",
+            "errors": {
+              "invalidNumber": "请输入带国家/地区区号的号码，例如 +91 98765 43221。",
+              "rateLimited": "本小时测试验证码过多。请在 {minutes, plural, other {# 分钟}}后重试。",
+              "failed": "无法发送验证码。",
+              "rejected": "测试未发送。",
+              "unexpected": "出了点问题，请稍后重试。"
+            },
+            "reasons": {
+              "not_configured": "发送方缺失或不完整。",
+              "template_not_approved": "模板尚未通过审核。",
+              "invalid_number": "该号码无效。",
+              "auth_failed": "服务商拒绝了凭据。请检查管理发送方中的密钥。",
+              "rejected": "服务商拒绝了该消息。",
+              "provider_error": "服务商出现问题。请稍后重试。",
+              "connection_refused": "服务商地址拒绝了连接。",
+              "timeout": "服务商响应超时。",
+              "transport_error": "无法连接服务商。"
+            }
+          }
+        },
+        "senders": {
+          "title": "管理发送方",
+          "intro": "可用于发送注册验证码的连接。密钥经加密存储，之后不会再显示。",
+          "loading": "加载中",
+          "working": "处理中",
+          "empty": "尚无发送方。",
+          "add": "添加发送方",
+          "edit": "编辑",
+          "remove": "移除",
+          "close": "关闭",
+          "cancel": "取消",
+          "save": "保存发送方",
+          "keep": "保留",
+          "addTitle": "新建发送方",
+          "editTitle": "编辑 {label}",
+          "kind": "类型",
+          "kinds": {
+            "waba": "WhatsApp Business（Meta Cloud API）",
+            "twilio": "Twilio WhatsApp",
+            "device": "非官方会话（Node 桥接）",
+            "dev": "仅日志（开发用）"
+          },
+          "kindHint": {
+            "waba": "通过 Meta 发送已通过审核的身份验证模板。需要模板审核。",
+            "twilio": "通过 Twilio 发送 WhatsApp 消息。无需模板审核。",
+            "device": "通过你的 Node 桥接上扫码配对的会话发送。无需模板审核。",
+            "dev": "将验证码写入服务器日志而不发送。生产环境中永不可用。"
+          },
+          "fields": {
+            "label": "名称",
+            "phoneNumberId": "手机号码 ID",
+            "wabaId": "WhatsApp Business 账户 ID",
+            "graphBaseUrl": "Graph API 地址",
+            "accountSid": "账户 SID",
+            "fromNumber": "WhatsApp 号码（发件）",
+            "apiBaseUrl": "Twilio API 地址",
+            "bridgeUrl": "桥接地址",
+            "senderNumber": "会话号码"
+          },
+          "hints": {
+            "waba": {
+              "phoneNumberId": "来自 Meta，位于该 WhatsApp 号码的 API 设置中。",
+              "wabaId": "向 Meta 提交模板时需要。",
+              "graphBaseUrl": "留空则使用 Meta 的地址。"
+            },
+            "twilio": {
+              "accountSid": "来自 Twilio 控制台。",
+              "fromNumber": "已启用 WhatsApp 的号码，含国家/地区区号。",
+              "apiBaseUrl": "留空则使用 Twilio 的地址。"
+            },
+            "device": {
+              "bridgeUrl": "你的 Node 桥接所监听的地址，例如 http://127.0.0.1:3003。",
+              "senderNumber": "桥接用于发送的已配对号码，含国家/地区区号。"
+            }
+          },
+          "defaults": {
+            "graphBaseUrl": "https://graph.facebook.com/v23.0",
+            "apiBaseUrl": "https://api.twilio.com"
+          },
+          "secretLabel": {
+            "waba": "访问令牌",
+            "twilio": "认证令牌",
+            "device": "桥接令牌",
+            "dev": "密钥"
+          },
+          "secretHint": "经加密存储，之后不会再显示。",
+          "secretHintSaved": "经加密存储。留空则保留已保存的密钥。",
+          "secretSaved": "已保存，留空则保留",
+          "showSecret": "显示密钥",
+          "hideSecret": "隐藏密钥",
+          "removeSecret": "移除已保存的密钥",
+          "removeSecretBody": "在保存新密钥之前，该发送方将无法使用。",
+          "removeSecretConfirm": "移除密钥",
+          "hasSecret": "密钥已保存",
+          "noSecret": "无密钥",
+          "inUse": "用于注册",
+          "removeBody": "移除 {label}？其已保存的密钥也会一并删除。",
+          "removeBodyInUse": "移除 {label}？注册正在使用它，因此验证码步骤将关闭。其已保存的密钥也会一并删除。",
+          "removeConfirm": "移除发送方",
+          "added": "发送方已添加",
+          "saved": "发送方已保存",
+          "removed": "发送方已移除",
+          "secretRemoved": "已保存的密钥已移除",
+          "requestId": "请求 ID",
+          "problems": {
+            "required": "此字段为必填项。",
+            "tooLong": "最多 {max} 个字符。",
+            "digits": "仅限数字，5 到 24 位。",
+            "url": "请使用完整的 http 或 https 地址，不含用户名或密码。",
+            "accountSid": "账户 SID 以 AC 开头，共 34 个字符。",
+            "phone": "请输入含国家/地区区号的号码，7 到 15 位数字。"
+          },
+          "errors": {
+            "unexpected": "无法保存发送方。请稍后重试。"
+          }
+        },
+        "footer": {
+          "kicker": "出站消息",
+          "title": "平台消息页脚",
+          "description": "添加在套餐无法移除品牌标识的工作区所发送的纯文本和交互式消息末尾。模板自带文本，不会添加页脚。套餐可移除品牌标识的工作区可在其账户中设置自己的页脚，或不设页脚。",
+          "builtIn": "内置文本",
+          "label": "页脚文本",
+          "hint": "最多 {max} 个字符。留空则完全不带页脚。",
+          "count": "{used}/{max}",
+          "preview": "预览",
+          "noFooter": "（无页脚）",
+          "save": "保存页脚",
+          "saving": "正在保存",
+          "clear": "清除",
+          "saved": "平台页脚已保存，将从下一条消息起生效。",
+          "savedNone": "平台页脚已移除。消息将不带页脚发送。",
+          "errors": {
+            "invalid": "该页脚未被接受。",
+            "unexpected": "无法保存页脚。请稍后重试。"
+          },
+          "requestId": "请求 ID"
+        }
+      },
+      "social": {
+        "kicker": "访客页面",
+        "title": "社交登录与验证码",
+        "description": "允许用户使用 Google 或 Facebook 登录，并用 reCAPTCHA 保护登录和注册页面。每一项只有在启用且已保存密钥后才会显示。",
+        "save": "保存更改",
+        "saving": "正在保存",
+        "saved": "{count, plural, other {已保存 # 项设置}}",
+        "rejected": "未保存任何内容。{count, plural, other {# 个字段}}被拒绝。",
+        "requestId": "请求 ID",
+        "unsaved": "{count, plural, other {# 项未保存的更改}}",
+        "discard": "放弃更改",
+        "errors": {
+          "unexpected": "无法保存设置。请稍后重试。"
+        },
+        "problems": {
+          "tooLong": "最多 {max} 个字符。",
+          "threshold": "请输入 0 到 1 之间的数字。"
+        },
+        "labels": {
+          "google": {
+            "clientId": "Google 客户端 ID",
+            "clientSecret": "Google 客户端密钥",
+            "enabled": "Google 登录"
+          },
+          "facebook": {
+            "clientId": "Facebook 应用 ID",
+            "clientSecret": "Facebook 应用密钥",
+            "enabled": "Facebook 登录"
+          },
+          "recaptcha": {
+            "siteKey": "reCAPTCHA 站点密钥",
+            "secret": "reCAPTCHA 密钥",
+            "v3Threshold": "reCAPTCHA 分数阈值",
+            "version": "reCAPTCHA 版本",
+            "enabled": "reCAPTCHA"
+          }
+        },
+        "enable": "启用",
+        "secretSaved": "已保存，留空则保留",
+        "secretHint": "经加密存储，之后不会再显示。留空则保留已保存的密钥。",
+        "showSecret": "显示密钥",
+        "hideSecret": "隐藏密钥",
+        "google": {
+          "kicker": "使用 Google Cloud 的 OAuth 2.0",
+          "title": "Google 登录",
+          "idLabel": "客户端 ID",
+          "idHint": "来自 Google Cloud 的凭据页面，类型为 Web 应用的 OAuth 客户端。",
+          "idPlaceholder": "000000000000-xxxx.apps.googleusercontent.com",
+          "secretLabel": "客户端密钥",
+          "secretPlaceholder": "客户端密钥",
+          "redirectLabel": "已授权的重定向 URI",
+          "redirectHint": "请原样粘贴到 OAuth 客户端中，否则 Google 会因重定向不匹配而拒绝登录。"
+        },
+        "facebook": {
+          "kicker": "使用 Meta for Developers 的 Facebook 登录",
+          "title": "Facebook 登录",
+          "idLabel": "应用 ID",
+          "idHint": "来自应用设置的基本信息中的应用 ID。",
+          "idPlaceholder": "0000000000000000",
+          "secretLabel": "应用密钥",
+          "secretPlaceholder": "32 位字符的应用密钥",
+          "redirectLabel": "有效的 OAuth 重定向 URI",
+          "redirectHint": "请将其添加到 Facebook 登录设置下。应用需要电子邮件和公开个人资料权限。"
+        },
+        "recaptcha": {
+          "kicker": "使用 Google reCAPTCHA 的机器人防护",
+          "title": "reCAPTCHA",
+          "versionLabel": "版本",
+          "versionHint": "v2 显示复选框。v3 不可见，并对每个请求打分。",
+          "versions": {
+            "v2": "v2：我不是机器人复选框",
+            "v3": "v3：隐形评分"
+          },
+          "thresholdLabel": "v3 分数阈值",
+          "thresholdHint": "仅适用于 v3。0 最可能是机器人，1 最可能是真人。留空则使用 0.5。",
+          "siteKeyLabel": "站点密钥",
+          "siteKeyHint": "发送到浏览器的公开密钥，来自 reCAPTCHA 控制台。",
+          "secretLabel": "密钥"
+        },
+        "live": {
+          "kicker": "状态",
+          "title": "当前已生效的内容",
+          "google": "Google 已生效",
+          "facebook": "Facebook 已生效",
+          "recaptcha": "reCAPTCHA 已生效",
+          "yes": "已生效",
+          "no": "未生效",
+          "note": "只有在启用且两项密钥均已保存时，服务商才会生效。这里显示的是已保存的内容，而非未保存的编辑。"
+        },
+        "guide": {
+          "kicker": "快速设置",
+          "google": {
+            "title": "四步配置 Google",
+            "step1": "打开 Google Cloud 控制台，选择或创建一个项目。",
+            "step2": "将 OAuth 同意屏幕设置为外部应用，并填写你的支持邮箱。",
+            "step3": "创建凭据，选择 OAuth 客户端 ID，然后选择 Web 应用。",
+            "step4": "添加表单中的重定向 URI，然后将客户端 ID 和密钥粘贴到此处。",
+            "link": "打开 Google Cloud 凭据"
+          },
+          "facebook": {
+            "title": "四步配置 Facebook",
+            "step1": "打开 Meta for Developers，创建一个用于用户认证的应用。",
+            "step2": "向应用添加 Facebook 登录产品。",
+            "step3": "在其设置中添加表单里的重定向 URI。",
+            "step4": "从基本设置中复制应用 ID 和密钥，粘贴到此处，然后将应用设为上线。",
+            "link": "打开 Meta for Developers"
+          },
+          "recaptcha": {
+            "title": "reCAPTCHA 密钥",
+            "body": "在 reCAPTCHA 控制台注册你的网站，选择 v2 或 v3，然后将站点密钥和密钥粘贴到此处。",
+            "link": "打开 reCAPTCHA 控制台"
+          },
+          "noSdk": {
+            "badge": "须知",
+            "body": "登录直接使用标准的 OAuth 地址，因此无需安装任何东西。粘贴密钥并开启即可。"
+          }
+        },
+        "removeSecret": {
+          "action": "移除已保存的密钥",
+          "title": "移除已保存的 {name} 密钥",
+          "body": "已保存的 {name} 密钥将从服务器删除，且无法显示或恢复。若要再次使用 {name}，你需要保存新的密钥。",
+          "liveWarning": "{name} 目前正在运行。移除其密钥会将其关闭，直至保存新的密钥。",
+          "confirm": "移除密钥",
+          "cancel": "取消",
+          "working": "正在移除",
+          "error": "无法移除密钥。请稍后重试。",
+          "requestId": "请求 ID",
+          "done": "已保存的 {name} 密钥已移除。",
+          "names": {
+            "google": "Google",
+            "facebook": "Facebook",
+            "recaptcha": "reCAPTCHA"
+          }
+        },
+        "docs": {
+          "kicker": "参考",
+          "title": "官方文档",
+          "opensNewTab": "（在新标签页中打开）",
+          "links": {
+            "google": "Google OAuth 设置",
+            "facebook": "Facebook 登录设置",
+            "recaptchaAdmin": "reCAPTCHA 管理控制台",
+            "recaptchaDocs": "reCAPTCHA 文档"
+          }
+        }
+      },
+      "plans": {
+        "eyebrow": "套餐",
+        "title": "套餐",
+        "description": "供工作区选择的套餐目录。新注册用户会进入默认套餐；套餐付费将随计费功能上线。",
+        "new": "新建套餐",
+        "kpi": {
+          "label": "目录摘要",
+          "total": "套餐总数",
+          "active": "启用中",
+          "free": "免费",
+          "paid": "付费"
+        },
+        "empty": {
+          "title": "尚无套餐",
+          "body": "创建第一个套餐。在此之前，新工作区将使用名为 starter 且无任何限制的套餐。",
+          "action": "创建第一个套餐"
+        },
+        "table": {
+          "label": "套餐",
+          "plan": "套餐",
+          "price": "价格",
+          "messages": "消息",
+          "workspaces": "工作区",
+          "entitlements": "包含",
+          "features": "功能",
+          "limits": "限制",
+          "addons": "附加组件",
+          "status": "状态",
+          "actions": "操作"
+        },
+        "counts": {
+          "ratio": "{count}/{total}",
+          "features": "已开启 {count}/{total} 项功能",
+          "limits": "已设置 {count}/{total} 项限制",
+          "addons": "{count, plural, other {可见 # 个附加组件}}"
+        },
+        "badges": {
+          "popular": "热门",
+          "signupDefault": "注册默认"
+        },
+        "price": {
+          "free": "免费",
+          "custom": "定制报价",
+          "lifetime": "一次性"
+        },
+        "period": {
+          "days": "{count, plural, other {/ # 天}}",
+          "weeks": "{count, plural, other {/ # 周}}",
+          "months": "{count, plural, other {/ # 个月}}",
+          "years": "{count, plural, other {/ # 年}}"
+        },
+        "messages": {
+          "unlimited": "不限",
+          "limited": "{count, number} / 月"
+        },
+        "active": {
+          "on": "启用",
+          "off": "停用",
+          "toggle": "启用中：{name}"
+        },
+        "actions": {
+          "edit": "编辑",
+          "delete": "删除",
+          "editName": "编辑 {name}",
+          "deleteName": "删除 {name}"
+        },
+        "toasts": {
+          "created": "套餐 {name} 已创建。",
+          "updated": "套餐 {name} 已保存。",
+          "activated": "{name} 现已启用。",
+          "deactivated": "{name} 现已停用。",
+          "deleted": "套餐 {name} 已删除。"
+        },
+        "delete": {
+          "title": "删除 {name}？",
+          "body": "此操作无法撤销。改为停用套餐会对购买者隐藏该套餐，并保留使用它的工作区。",
+          "inUseHint": "{count, plural, other {有 # 个工作区使用此套餐。}}在它们被迁移之前，删除操作会被拒绝。",
+          "confirm": "删除套餐",
+          "cancel": "取消",
+          "deleting": "正在删除"
+        },
+        "errors": {
+          "inUse": "{count, plural, other {无法删除：当前有 # 个工作区正在使用此套餐。}}请将它们迁移到其他套餐，或改为停用此套餐。",
+          "defaultProtected": "此套餐是注册默认套餐，因此无法停用或删除。请先选择其他默认套餐。",
+          "notFound": "此套餐已不存在。请刷新列表。",
+          "forbidden": "只有超级管理员可以更改套餐。",
+          "generic": "出了点问题，请重试。"
+        },
+        "editor": {
+          "createTitle": "新建套餐",
+          "editTitle": "编辑 {name}",
+          "slugLabel": "标识：",
+          "slugNote": "在创建套餐时设定，之后不会更改。",
+          "save": "保存更改",
+          "create": "创建套餐",
+          "saving": "正在保存",
+          "cancel": "取消",
+          "discard": "放弃你的更改？",
+          "failed": "无法保存套餐。请重试。",
+          "unlimited": "不限",
+          "errorsBanner": "部分字段需要处理。带圆点的标签页存在错误。",
+          "tabs": {
+            "label": "套餐分区",
+            "details": "详情与定价",
+            "features": "功能",
+            "limits": "限制",
+            "addons": "附加组件"
+          },
+          "tabSummary": {
+            "features": "已开启 {count}/{total} 项功能",
+            "limits": "已设置 {count}/{total} 项限制",
+            "addons": "已选择 {count} 个附加组件",
+            "error": "有待修复的错误"
+          },
+          "featuresUi": {
+            "intro": "关闭此套餐不包含的功能。使用该套餐的工作区无法打开功能已关闭的区域。",
+            "search": "搜索功能",
+            "searchPlaceholder": "搜索功能",
+            "enableAll": "全部启用",
+            "disableAll": "全部停用",
+            "noMatch": "没有匹配的功能。",
+            "groupCount": "已开启 {count}/{total}"
+          },
+          "limitsUi": {
+            "intro": "工作区达到上限后，相应操作将被阻止。勾选不限可取消上限。",
+            "search": "搜索限制",
+            "searchPlaceholder": "搜索限制",
+            "noMatch": "没有匹配的限制。",
+            "unlimited": "不限",
+            "platformDefault": "平台默认",
+            "groupCount": "已设上限 {count}/{total}",
+            "valueFor": "{name}的上限",
+            "unofficialOff": "仅当平台启用非官方 WhatsApp 时适用（目前已禁用）。"
+          },
+          "limitUnits": {
+            "perMonth": "每月",
+            "perBroadcast": "每次群发",
+            "perMinute": "每分钟",
+            "perPlanPeriod": "每个套餐周期",
+            "total": "总计"
+          },
+          "addons": {
+            "intro": "已启用的附加组件会显示在使用此套餐的工作区的应用市场中；工作区购买后才能使用。",
+            "search": "搜索附加组件",
+            "searchPlaceholder": "搜索附加组件或应用",
+            "selectAll": "全选",
+            "clear": "清除",
+            "selected": "已选择 {count}/{total}",
+            "loading": "正在加载附加组件",
+            "empty": "尚无付费附加组件",
+            "emptyHint": "附加组件在运维控制台的应用市场目录中创建。应用拥有付费包后，会在此处列出。",
+            "loadFailed": "无法加载附加组件。",
+            "loadFailedKept": "无法加载附加组件，因此除非你在此更改，否则当前选择保持不变。",
+            "retry": "重试",
+            "noMatch": "没有匹配的附加组件。",
+            "unknown": "未知附加组件",
+            "unknownHint": "此附加组件已不存在。取消勾选即可将其从套餐中移除。",
+            "notOnSale": "未上架",
+            "packInactive": "该附加组件包已关闭，因此无人可以购买。",
+            "appUnpublished": "该应用尚未发布，因此工作区暂时无法看到。",
+            "appLabel": "应用：{name}",
+            "price": "{price} {period}"
+          },
+          "featureHints": {
+            "automation": "用于回复对话并根据对话执行操作的流程构建器和自动化。",
+            "ai_assistants": "AI 助手，包括网站聊天机器人小组件中的 AI 模式。",
+            "calling": "通话板块：语音通话和通话设置。",
+            "woocommerce": "连接 WooCommerce 店铺，用于订单消息、购物车挽回和店铺群发。",
+            "shopify": "连接 Shopify 店铺，用于订单消息、购物车挽回和店铺群发。",
+            "analytics": "数据分析仪表板和报表。",
+            "remove_branding": "白标：工作区可在页脚隐藏平台品牌标识。",
+            "sales_pipeline": "交易、任务和销售管道，以及仪表板上的管道数据。",
+            "appointment_booking": "预约类型、预约及公开预约页面。此开关由付费的预约应用掌管。",
+            "chatbot_widgets": "网站聊天机器人小组件构建器。",
+            "wa_storefront": "WhatsApp 商品目录和店铺区域。",
+            "inbox_sla": "团队收件箱中的 SLA 策略和截止时间。",
+            "inbox_routing": "自动分配收件箱对话的路由规则。",
+            "waba_calling": "收件箱中的 WhatsApp 通话：通话号码、通话权限、拨打和接听电话。",
+            "inbox_kanban": "团队收件箱的看板视图。",
+            "team_performance": "团队绩效报表。",
+            "scheduled_messages": "安排消息稍后发送。",
+            "whatsapp_warmer": "WhatsApp 号码养号功能。",
+            "marketplace": "迷你应用和集成的应用市场。",
+            "lead_sources": "线索来源：将广告和门户线索转为联系人和交易的 Webhook 与连接器入口。",
+            "team_chat": "内部团队聊天频道和私信。",
+            "public_api": "公开 REST API 及其 API 密钥。",
+            "outbound_webhooks": "向其他系统通知事件的出站 Webhook 端点。",
+            "storefront_builder": "在线店铺构建器。",
+            "invoicing": "发票、贷项通知单、付款、销售订单和税率。",
+            "forms_and_links": "线索收集表单和可分享的链接。",
+            "extra_channels": "Telegram、Facebook 和 Instagram 渠道。",
+            "form_builder": "托管和嵌入式网页表单，可在 CRM 中创建联系人。此开关由付费的表单应用掌管。",
+            "waba_groups": "通过 Cloud API 号码创建和管理 WhatsApp 群组：邀请链接、加入请求、成员。该号码必须是官方商业账号。"
+          },
+          "units": {
+            "days": "天",
+            "weeks": "周",
+            "months": "月",
+            "years": "年"
+          },
+          "sections": {
+            "identity": {
+              "title": "标识",
+              "description": "套餐的命名和显示方式。"
+            },
+            "pricing": {
+              "title": "定价",
+              "description": "费用及计费频率。"
+            },
+            "limits": {
+              "title": "限制",
+              "description": "上限留空表示不限。"
+            },
+            "features": {
+              "title": "功能",
+              "description": "关闭套餐不包含的功能。"
+            }
+          },
+          "fields": {
+            "name": {
+              "label": "套餐名称"
+            },
+            "subtitle": {
+              "label": "副标题",
+              "hint": "名称下方的一行简短说明（最多 {max} 个字符）。"
+            },
+            "detail": {
+              "label": "描述",
+              "hint": "显示在定价页面上（最多 {max} 个字符）。"
+            },
+            "ctaLabel": {
+              "label": "按钮文字",
+              "hint": "最多 {max} 个字符。"
+            },
+            "sortOrder": {
+              "label": "排序",
+              "hint": "数字越小越靠前。"
+            },
+            "currency": {
+              "label": "币种",
+              "placeholder": "搜索币种",
+              "empty": "没有匹配的币种。"
+            },
+            "amount": {
+              "label": "价格",
+              "hint": "例如 19 或 19.99。",
+              "locked": "免费和定制报价套餐没有价格。",
+              "none": "无"
+            },
+            "offerAmount": {
+              "label": "优惠价",
+              "hint": "选填。必须低于价格。"
+            },
+            "billingDuration": {
+              "label": "计费周期",
+              "hint": "从 {min} 到 {max}。"
+            },
+            "billingUnit": {
+              "label": "单位"
+            },
+            "dataRetentionDays": {
+              "label": "数据保留期（到期后天数）",
+              "hint": "付费套餐失效后，工作区数据被删除前的天数。0 表示永不删除。删除后无法恢复。"
+            }
+          },
+          "flags": {
+            "isActive": {
+              "label": "启用",
+              "hint": "停用的套餐对购买者隐藏；已使用该套餐的工作区仍保留它。"
+            },
+            "isDefault": {
+              "label": "注册默认",
+              "hint": "除非注册策略指定了其他套餐，否则新工作区从此套餐开始。只能有一个默认套餐。"
+            },
+            "isHighlighted": {
+              "label": "突出显示为热门",
+              "hint": "显示最受欢迎徽章。"
+            },
+            "isFree": {
+              "label": "免费套餐",
+              "hint": "无价格。使用免费套餐的新工作区可获得免费试用。"
+            },
+            "isCustomQuote": {
+              "label": "定制报价",
+              "hint": "不显示价格。购买者将被引导联系销售。"
+            },
+            "isLifetime": {
+              "label": "一次性价格",
+              "hint": "仅收费一次，而非每个计费周期都收费。"
+            }
+          },
+          "limitGroups": {
+            "messaging": "消息",
+            "workspace": "工作区",
+            "content": "内容",
+            "sales": "销售与计费",
+            "integrations": "集成",
+            "ai": "AI"
+          },
+          "limitKeys": {
+            "monthly_messages": "每月消息数",
+            "broadcasts": "群发",
+            "devices": "已连接号码",
+            "users": "团队席位",
+            "contacts": "联系人",
+            "tags": "标签",
+            "pipelines": "销售管道",
+            "appointments": "每月预约数",
+            "saved_replies": "快捷回复",
+            "routing_rules": "路由规则",
+            "templates": "消息模板",
+            "flows": "流程",
+            "autoreplies": "关键词自动回复",
+            "total_campaigns": "已创建的营销活动（删除后不释放名额）",
+            "api_rate_limit_per_minute": "每分钟 API 请求数（0 = 平台默认）",
+            "installed_apps": "已安装的应用市场应用和集成",
+            "scheduled_messages": "待发送的定时消息",
+            "lead_sources": "线索来源",
+            "broadcast_recipients": "单次群发的收件人数",
+            "segments": "已保存的细分",
+            "custom_fields": "自定义字段",
+            "team_chat_channels": "团队聊天频道",
+            "sla_policies": "收件箱 SLA 策略",
+            "booking_types": "预约类型",
+            "chatbot_widgets": "网站聊天机器人小组件",
+            "catalog_products": "商品目录中的商品",
+            "invoices_monthly": "每月发票数",
+            "recurring_invoices": "定期发票",
+            "api_keys": "API 密钥",
+            "webhooks": "出站 Webhook",
+            "ai_token_limit_monthly": "每月 AI 令牌数（平台密钥）",
+            "forms": "网页表单",
+            "form_submissions_monthly": "每月表单提交数",
+            "ai_form_generations_monthly": "每月 AI 表单构建器生成次数"
+          },
+          "featureGroups": {
+            "messaging": "消息",
+            "aiCalling": "AI 与通话",
+            "integrations": "集成",
+            "advanced": "高级"
+          },
+          "featureKeys": {
+            "automation": "自动化",
+            "ai_assistants": "AI 助手",
+            "calling": "WhatsApp 通话",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "analytics": "数据分析",
+            "remove_branding": "白标（移除平台品牌标识）",
+            "sales_pipeline": "销售管道（交易和任务）",
+            "appointment_booking": "预约和预约页面",
+            "chatbot_widgets": "网站聊天机器人小组件",
+            "wa_storefront": "WhatsApp 店铺和商品目录",
+            "inbox_sla": "收件箱 SLA 策略",
+            "inbox_routing": "收件箱路由规则和营业时间",
+            "waba_calling": "在收件箱中拨打和接听 WhatsApp 电话",
+            "inbox_kanban": "收件箱看板",
+            "team_performance": "团队绩效报表",
+            "scheduled_messages": "定时消息",
+            "whatsapp_warmer": "WhatsApp 号码养号",
+            "marketplace": "应用市场（迷你应用和集成）",
+            "lead_sources": "线索来源（创建联系人的 Webhook 和连接器入口）",
+            "team_chat": "团队聊天（内部频道和私信）",
+            "public_api": "公开 REST API 和 API 密钥",
+            "outbound_webhooks": "出站 Webhook",
+            "storefront_builder": "店铺和网站构建器",
+            "invoicing": "开具发票（发票、贷项通知单、定期发票）",
+            "forms_and_links": "表单、点击聊天链接和群组",
+            "extra_channels": "Telegram、Facebook 和 Instagram 渠道",
+            "form_builder": "表单（网页表单构建器）",
+            "waba_groups": "WhatsApp 群组（Cloud API）"
+          },
+          "problems": {
+            "required": "此字段为必填项。",
+            "tooLong": "最多 {max} 个字符。",
+            "money": "请输入金额，例如 19 或 19.99。",
+            "range": "请输入 {min} 到 {max} 之间的整数。",
+            "whole": "请输入整数，或留空表示不限。",
+            "server": "服务器拒绝了此值。",
+            "unknownAddon": "已选择的附加组件中有 {count} 个已不存在。请取消勾选后重新保存。",
+            "free_needs_zero_price": "免费套餐的价格必须为 0。",
+            "free_no_offer": "免费套餐不能设置优惠价。",
+            "custom_no_price": "定制报价套餐不显示价格：请将价格和优惠价留空。",
+            "custom_not_free": "套餐不能同时是免费和定制报价。",
+            "paid_needs_price": "请设置大于 0 的价格，或将套餐标记为免费。",
+            "offer_not_lower": "优惠价必须低于套餐价格。",
+            "default_needs_active": "注册默认套餐必须处于启用状态。"
+          },
+          "limitHints": {
+            "monthly_messages": "日历月内发送的出站消息。超出额度后将从钱包扣费。",
+            "broadcasts": "未归档的群发。",
+            "scheduled_messages": "工作区持有的定时消息，不论状态。删除一条即可释放其名额。",
+            "total_campaigns": "套餐周期内创建的营销活动。删除营销活动不会归还名额。",
+            "devices": "已连接的 WhatsApp 号码。移除一个即可释放其名额。",
+            "users": "未被停用的团队成员。",
+            "contacts": "工作区中的联系人。",
+            "tags": "联系人标签。",
+            "pipelines": "销售管道。",
+            "appointments": "日历月内预约的数量（待确认、已确认或已完成），按开始时间计算。",
+            "saved_replies": "团队收件箱的快捷回复。",
+            "routing_rules": "团队收件箱的路由规则。",
+            "templates": "WhatsApp 消息模板。",
+            "flows": "构建器中的流程。",
+            "autoreplies": "关键词自动回复。",
+            "api_rate_limit_per_minute": "每个 API 密钥每分钟的请求数。0 表示使用平台默认值，而非不限。",
+            "installed_apps": "当前已安装的应用市场应用和集成。卸载即可释放名额。",
+            "lead_sources": "线索来源（Webhook 和连接器入口）。删除一个即可释放其名额。",
+            "broadcast_recipients": "单次群发可发送的最大受众规模，在创建或编辑群发时检查。",
+            "segments": "已保存的联系人细分。删除一个即可释放其名额。",
+            "custom_fields": "添加到任一模块的自定义字段。内置系统字段不计入。",
+            "team_chat_channels": "团队聊天频道，包括公开和私有。删除一个即可释放其名额。",
+            "sla_policies": "团队收件箱的 SLA 策略。",
+            "booking_types": "公开预约页面所对应的预约类型。",
+            "chatbot_widgets": "网站聊天机器人小组件。",
+            "catalog_products": "WhatsApp 商品目录中的商品。删除一个即可释放其名额。",
+            "invoices_monthly": "日历月内创建的发票，不论状态。作废或删除发票不会归还当月名额。",
+            "recurring_invoices": "定期发票计划，不论状态。",
+            "api_keys": "有效的 API 密钥。撤销密钥即可释放其名额。",
+            "webhooks": "出站 Webhook 端点（收件箱 Webhook 与 API Webhook 合计）。",
+            "ai_token_limit_monthly": "AI 助手在日历月内使用平台密钥消耗的令牌数。使用自有密钥的工作区不受限制。",
+            "forms": "有效的网页表单（表单应用）。归档表单即可释放其名额。0 = 不限。",
+            "form_submissions_monthly": "日历月内接受的表单提交数，不含垃圾信息。超出上限后，提交仍会保存以供审核，不会被丢弃。0 = 不限。",
+            "ai_form_generations_monthly": "日历月内 AI 表单构建器的生成次数，包括修复重试。0 = 不限。"
+          }
+        }
+      },
+      "authPages": {
+        "kicker": "访客页面",
+        "title": "认证页面",
+        "description": "为登录、注册和忘记密码页面选择设计，然后编辑每页的文字和颜色。预览会按访客所见效果显示你尚未保存的更改。这些页面上的条款和隐私链接在<link>注册策略</link>中设置。",
+        "save": "保存更改",
+        "saving": "正在保存",
+        "saved": "{count, plural, other {已保存 # 项设置}}",
+        "rejected": "未保存任何内容。{count, plural, other {# 个字段}}被拒绝。",
+        "requestId": "请求 ID",
+        "unsaved": "{count, plural, other {# 项未保存的更改}}",
+        "discard": "放弃更改",
+        "errors": {
+          "unexpected": "无法保存设置。请稍后重试。"
+        },
+        "problems": {
+          "accent": "请使用 #rrggbb 格式的颜色。",
+          "mediaUrl": "请使用完整的 https 地址。"
+        },
+        "pages": {
+          "login": "登录",
+          "register": "注册",
+          "forgot": "忘记密码"
+        },
+        "designs": {
+          "legend": "设计模板",
+          "legendNote": "三个页面统一选择",
+          "split": {
+            "name": "分栏展示",
+            "description": "一侧是营销面板，另一侧是表单。"
+          },
+          "cinematic": {
+            "name": "电影感",
+            "description": "居中卡片后方是全屏图片或视频。"
+          },
+          "minimal": {
+            "name": "极简",
+            "description": "简洁的居中卡片，无装饰图。"
+          },
+          "spotlight": {
+            "name": "品牌聚焦",
+            "description": "表单旁是以主题色呈现的醒目面板。"
+          },
+          "aurora": {
+            "name": "极光",
+            "description": "磨砂卡片后方是柔和的发光色彩。"
+          }
+        },
+        "fields": {
+          "accent": "主题色",
+          "accentHint": "六位十六进制颜色，例如 #0f766e。不接受简写（#fff）、八位和颜色名称。用于高亮词、按钮和品牌面板。重置将恢复为出厂颜色。",
+          "accentPicker": "选择主题色",
+          "accentHex": "十六进制主题色",
+          "accentReset": "恢复默认",
+          "mediaUrl": "媒体地址",
+          "mediaType": "媒体类型",
+          "eyebrow": "眉标",
+          "heading": "标题",
+          "headingAccent": "标题强调词",
+          "subheading": "副文本",
+          "emptyHint": "最多 {max} 个字符。留空则使用以灰色显示的出厂文本。"
+        },
+        "media": {
+          "title": "侧边媒体",
+          "url": "媒体地址",
+          "urlHint": "必须以 https 开头。留空表示不使用媒体。",
+          "type": "媒体类型",
+          "types": {
+            "image": "图片",
+            "gif": "动态 GIF",
+            "video": "循环视频"
+          },
+          "clear": "清除媒体",
+          "description": "用于设计面板的图片、GIF 或循环视频。目前需自行托管：请粘贴公开的 https 地址。"
+        },
+        "showcase": {
+          "title": "展示面板文字",
+          "description": "由“分屏展示”设计显示。留空的字段将保留默认文字。",
+          "groups": {
+            "hero": "亮点卡片",
+            "stats": "统计数据",
+            "features": "功能卡片",
+            "chips": "标签",
+            "footer": "页脚文字行"
+          },
+          "keys": {
+            "hero_title": "亮点标题",
+            "hero_desc": "亮点文字",
+            "stat1_num": "统计 1 数值",
+            "stat1_label": "统计 1 标签",
+            "stat2_num": "统计 2 数值",
+            "stat2_label": "统计 2 标签",
+            "stat3_num": "统计 3 数值",
+            "stat3_label": "统计 3 标签",
+            "feat1_title": "功能 1 标题",
+            "feat1_desc": "功能 1 文字",
+            "feat2_title": "功能 2 标题",
+            "feat2_desc": "功能 2 文字",
+            "feat3_title": "功能 3 标题",
+            "feat3_desc": "功能 3 文字",
+            "feat4_title": "功能 4 标题",
+            "feat4_desc": "功能 4 文字",
+            "inside_heading": "标签标题",
+            "chip1": "标签 1",
+            "chip2": "标签 2",
+            "chip3": "标签 3",
+            "chip4": "标签 4",
+            "chip5": "标签 5",
+            "chip6": "标签 6",
+            "footer": "页脚文字"
+          }
+        },
+        "preview": {
+          "title": "实时预览",
+          "note": "正在显示包含未保存更改的{page}页面。",
+          "showcaseNote": "只有“分屏展示”设计会显示展示面板文字。",
+          "device": "预览尺寸",
+          "devices": {
+            "desktop": "桌面",
+            "mobile": "手机"
+          },
+          "frameLabel": "页面预览",
+          "frameTitle": "{page}页面预览",
+          "form": {
+            "org": "工作区名称",
+            "name": "您的姓名",
+            "email": "电子邮箱",
+            "password": "密码",
+            "remember": "30 天内保持登录",
+            "submit": {
+              "login": "登录",
+              "register": "创建工作区",
+              "forgot": "发送重置链接"
+            },
+            "workspace": "工作区地址",
+            "forgotLink": "忘记密码？",
+            "newHere": "初次使用？",
+            "createAccount": "创建工作区",
+            "haveAccount": "已经注册？",
+            "signInLink": "登录",
+            "backToSignIn": "返回登录",
+            "captchaV3": "此页面受 reCAPTCHA 保护。",
+            "captchaV2": "我不是机器人",
+            "captchaBrand": "reCAPTCHA"
+          },
+          "enlarge": "放大预览",
+          "shrink": "并排显示",
+          "openReal": "打开真实页面",
+          "openRealNote": "在新标签页中打开已保存的版本。未保存的更改仅显示在此预览中。",
+          "opensNewTab": "（在新标签页中打开）"
+        },
+        "pagesLabel": "要编辑的页面"
+      },
+      "ipBlocked": {
+        "kicker": "访问被阻止",
+        "title": "此地址不被允许",
+        "body": "运营控制台只接受来自允许列表中地址的请求。这些请求所来自的地址不在列表中，因此控制台拒绝了它们。",
+        "addressLabel": "被阻止的地址",
+        "addressUnknown": "服务器无法读取您的地址。",
+        "fixTitle": "如何获取访问权限",
+        "fixBody": "仍可访问控制台的超级管理员需将此地址添加到 IP 允许列表。您账户的其他设置不会改变。",
+        "fixPath": "安全中心 › API 与 Webhook › IP 允许列表",
+        "dashboard": "前往仪表盘",
+        "signOut": "退出登录",
+        "signingOut": "正在退出登录"
+      }
+    }
+  }
+}

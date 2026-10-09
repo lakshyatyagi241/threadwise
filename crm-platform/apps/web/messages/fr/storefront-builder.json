@@ -1,0 +1,439 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "Boutique"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "Ignorer"
+      },
+      "errors": {
+        "requestId": "ID de la requête",
+        "retry": "Réessayer",
+        "network": {
+          "title": "Impossible de joindre le serveur",
+          "message": "Vérifiez votre connexion et réessayez."
+        },
+        "forbidden": {
+          "title": "Accès refusé",
+          "message": "Votre rôle ne permet pas cette action."
+        },
+        "signedOut": {
+          "title": "Vous êtes déconnecté",
+          "message": "Reconnectez-vous pour continuer."
+        },
+        "conflict": {
+          "title": "Modifié ailleurs",
+          "message": "Quelqu’un d’autre a modifié ceci pendant votre édition. Rechargez pour voir la dernière version."
+        },
+        "validation": {
+          "title": "Vérifiez le formulaire",
+          "message": "Certains champs nécessitent votre attention."
+        },
+        "unavailable": {
+          "title": "Pas encore disponible",
+          "message": "Le service boutique n’est pas disponible sur ce serveur."
+        },
+        "rateLimited": {
+          "title": "Trop de requêtes",
+          "message": "Patientez un instant puis réessayez."
+        },
+        "notFound": {
+          "title": "Introuvable",
+          "message": "Cette boutique n’existe pas dans cet espace de travail."
+        },
+        "noShop": {
+          "title": "Aucune boutique pour l’instant",
+          "message": "Configurez d’abord votre boutique."
+        },
+        "slugTaken": {
+          "title": "Adresse déjà utilisée",
+          "message": "Cette adresse de boutique est déjà utilisée."
+        },
+        "deviceInvalid": {
+          "title": "Choisissez un appareil connecté",
+          "message": "Choisissez l’un de vos appareils connectés."
+        },
+        "noSender": {
+          "title": "Connectez d’abord WhatsApp",
+          "message": "Une boutique nécessite un numéro WhatsApp connecté. Connectez-en un, puis réessayez."
+        },
+        "resetNotConfirmed": {
+          "title": "Non confirmé",
+          "message": "Réinitialisation non confirmée."
+        },
+        "domainNotSet": {
+          "title": "Aucun domaine personnalisé",
+          "message": "Aucun domaine personnalisé défini."
+        },
+        "unexpected": {
+          "title": "Une erreur s’est produite",
+          "message": "Une erreur s’est produite. Réessayez dans un instant."
+        }
+      },
+      "sidebar": {
+        "label": "Boutique",
+        "navLabel": "Sections de la boutique",
+        "section": "Boutique",
+        "settings": "Paramètres",
+        "items": {
+          "overview": "Vue d’ensemble",
+          "orders": "Commandes",
+          "products": "Produits",
+          "groups": "Groupes",
+          "storefront": "Vitrine",
+          "coupons": "Coupons",
+          "reviews": "Avis",
+          "payments": "Paiements",
+          "gateways": "Passerelles de paiement",
+          "customers": "Clients",
+          "invoices": "Factures",
+          "connection": "Connexion"
+        },
+        "comingSoon": "Bientôt disponible",
+        "comingSoonHint": "Bientôt disponible",
+        "noShopTitle": "Aucune boutique pour l’instant",
+        "noShopMessage": "Créez votre première boutique pour utiliser les outils de vente.",
+        "noShopAction": "Configurer votre boutique",
+        "live": "En ligne",
+        "setup": "Configuration",
+        "yourStore": "Votre boutique",
+        "notConnected": "Non connectée",
+        "unofficialApi": "API non officielle",
+        "deviceConnected": "Appareil connecté · /channels",
+        "switchShop": "Changer de boutique",
+        "shopFallback": "Boutique",
+        "manageShops": "Gérer toutes les boutiques →",
+        "publicUrl": "URL publique",
+        "open": "Ouvrir",
+        "copy": "Copier",
+        "copied": "Copié !",
+        "providerLive": "Fournisseur en ligne",
+        "sendingFrom": "Envoi depuis",
+        "noDevice": "Aucun appareil connecté.",
+        "connectOne": "En connecter un",
+        "thenBind": "puis l’associer à cette boutique depuis l’",
+        "connectWizard": "assistant de connexion"
+      },
+      "dashboard": {
+        "eyebrow": "Boutique / Vue d’ensemble",
+        "title": "Vue d’ensemble des ventes",
+        "subtitle": "30 derniers jours. Les commandes sont fusionnées depuis tous les canaux : WABA, vitrine, Twilio.",
+        "addProduct": "Ajouter un produit",
+        "loading": "Chargement de la vue d’ensemble de la boutique",
+        "kpi": {
+          "revenue": "Chiffre d’affaires (30 j)",
+          "orders": "Commandes (30 j)",
+          "aov": "Panier moyen",
+          "products": "Produits",
+          "visits": "Visites (30 j)"
+        },
+        "trend": {
+          "eyebrow": "Tendance des ventes",
+          "title": "Chiffre d’affaires dans le temps"
+        },
+        "legendRevenue": "Chiffre d’affaires ({symbol})",
+        "legendOrders": "Commandes",
+        "dayReadout": "{day} : {revenue}, {orders, plural, one {# commande} other {# commandes}}",
+        "chartLabel": "Chiffre d’affaires et commandes par jour, 30 derniers jours",
+        "tableDay": "Jour",
+        "tableRevenue": "Chiffre d’affaires ({symbol})",
+        "tableOrders": "Commandes",
+        "top": {
+          "eyebrow": "Meilleurs produits (30 j)",
+          "title": "Meilleures ventes",
+          "empty": "Aucune vente pour l’instant : partagez le lien de votre boutique."
+        },
+        "recent": {
+          "title": "Commandes récentes",
+          "viewAll": "Tout voir",
+          "open": "Ouvrir",
+          "columns": {
+            "when": "Quand",
+            "customer": "Client",
+            "source": "Source",
+            "items": "Articles",
+            "total": "Total",
+            "status": "Statut",
+            "open": "Ouvrir"
+          },
+          "itemsCount": "{count, plural, one {# article} other {# articles}}",
+          "emptyTitle": "Aucune commande pour l’instant",
+          "emptyMessage": "Dès que des clients commanderont depuis votre vitrine ou WhatsApp, ils apparaîtront ici."
+        }
+      },
+      "settings": {
+        "eyebrow": "Boutique / Vitrine",
+        "title": "Design de la vitrine",
+        "viewLive": "Voir en ligne",
+        "noAccess": "Votre rôle n’a pas accès aux paramètres de la vitrine.",
+        "loading": "Chargement des paramètres de la vitrine",
+        "saved": "Vitrine mise à jour.",
+        "conflict": "Cette vitrine a été modifiée ailleurs pendant votre édition. Rechargez pour obtenir les derniers paramètres, puis refaites vos modifications.",
+        "reload": "Recharger",
+        "fixErrors": "Corrigez les champs en surbrillance puis enregistrez à nouveau.",
+        "optional": "(facultatif)",
+        "save": "Enregistrer",
+        "readOnly": "Vous pouvez consulter ces paramètres mais pas les modifier.",
+        "live": "Vitrine en ligne (décocher la met hors ligne)",
+        "theme": {
+          "title": "Thème"
+        },
+        "slug": {
+          "label": "Identifiant de la vitrine",
+          "hint": "Votre boutique sera à l’adresse"
+        },
+        "domain": {
+          "label": "Domaine personnalisé",
+          "placeholder": "shop.votreentreprise.com",
+          "verifiedLive": "Vérifié : votre domaine est en ligne",
+          "addCname": "Ajoutez ce CNAME chez votre fournisseur DNS :",
+          "cname": "CNAME",
+          "verify": "Vérifier maintenant",
+          "verified": "Domaine vérifié ✓",
+          "notPointing": "Le CNAME ne pointe pas vers {expected}",
+          "notSet": "Aucun domaine personnalisé défini.",
+          "verifyFailed": "Impossible de vérifier le domaine. Réessayez."
+        },
+        "brand": {
+          "logoUrl": "URL du logo",
+          "color": "Couleur de marque (hex)",
+          "colorPicker": "Choisir la couleur de marque",
+          "heroText": "Texte d’accroche",
+          "heroPlaceholder": "Bienvenue dans notre boutique",
+          "footerText": "Texte du pied de page",
+          "footerPlaceholder": "© 2026 Votre boutique"
+        },
+        "currency": {
+          "title": "Devise",
+          "label": "Devise",
+          "hint": "Par défaut pour les nouveaux produits et symbole affiché dans le panier."
+        },
+        "shipping": {
+          "title": "Livraison",
+          "flat": "Frais de livraison forfaitaires",
+          "flatHint": "Ajoutés à chaque commande. Vide ou 0 = gratuit.",
+          "freeAbove": "Livraison gratuite à partir de",
+          "freeAboveHint": "Les paniers au-delà de ce montant sont livrés gratuitement.",
+          "note": "Note de livraison",
+          "noteHint": "Affichée dans le panier et sur la page produit.",
+          "notePlaceholder": "2 à 5 jours ouvrés · Suivi inclus"
+        },
+        "payment": {
+          "title": "Lien de paiement",
+          "intro": "Choisissez un fournisseur de paiement et nous ajouterons le lien de paiement à chaque message de commande WhatsApp. L’acheteur paie via le lien et vous confirmez dans la discussion. Aucun tunnel de commande n’est intégré à la vitrine.",
+          "provider": "Fournisseur",
+          "providers": {
+            "none": "Aucun · paiement à la livraison",
+            "upi": "UPI (Inde) : VPA + nom",
+            "razorpay_link": "Lien de paiement Razorpay (coller un lien statique)",
+            "razorpay_api": "Razorpay (génération automatique des liens et confirmation automatique)",
+            "stripe_link": "Lien de paiement Stripe",
+            "paypal_me": "Identifiant PayPal.me",
+            "bank_transfer": "Instructions de virement bancaire"
+          },
+          "handle": "Détail du paiement",
+          "handleHint": "VPA UPI, URL du lien de paiement, identifiant PayPal.me ou compte bancaire.",
+          "handlePlaceholder": "ex. boutique@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "API Razorpay (liens automatiques)",
+            "keyId": "ID de clé",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "Clé secrète",
+            "webhookSecret": "Secret du webhook",
+            "stored": "enregistré : laisser vide pour conserver",
+            "show": "Afficher le secret",
+            "hide": "Masquer le secret",
+            "webhookHelp": "Dans le tableau de bord Razorpay, définissez l’URL du webhook sur",
+            "webhookEvent": "pour l’événement payment_link.paid."
+          }
+        },
+        "recovery": {
+          "title": "Récupération des paniers abandonnés",
+          "enable": "Envoyez un rappel WhatsApp aux clients qui commencent le paiement sans le finaliser",
+          "enableHint": "Enregistre le téléphone au moment du paiement ; le rappel s’annule automatiquement si le client commande. Nécessite un appareil connecté.",
+          "delay": "Délai (minutes)",
+          "message": "Message",
+          "messageHint": "(vide = par défaut ; '{name}' '{shop}' '{url}' '{total}')",
+          "messagePlaceholder": "Bonjour '{name}' ! Vous avez laissé des articles dans votre panier sur '{shop}'. Finalisez ici : '{url}'"
+        },
+        "problems": {
+          "required": "Ce champ est obligatoire.",
+          "tooLong": "{max} caractères maximum.",
+          "slugPattern": "Utilisez uniquement des lettres minuscules, des chiffres et des tirets.",
+          "domainInvalid": "Ce ne ressemble pas à un domaine valide (ex. shop.votreentreprise.com).",
+          "urlInvalid": "Saisissez une adresse complète commençant par http:// ou https://.",
+          "colorInvalid": "Utilisez une couleur hexadécimale comme #075E54.",
+          "amountInvalid": "Saisissez un nombre, zéro ou plus.",
+          "amountTooBig": "{max} maximum.",
+          "delayRange": "Saisissez un nombre entier de {min} à {max}.",
+          "themeInvalid": "Choisissez l’un des thèmes.",
+          "currencyInvalid": "Choisissez l’une des devises de la liste.",
+          "providerInvalid": "Choisissez l’un des fournisseurs de la liste.",
+          "slugTaken": "Cet identifiant est déjà pris. Choisissez-en un autre."
+        }
+      },
+      "share": {
+        "message": "Découvrez ma boutique : {name}",
+        "subject": "Découvrez ma boutique · {name}",
+        "eyebrow": "Partager votre boutique",
+        "fallbackName": "Ma boutique",
+        "close": "Fermer",
+        "link": "Lien de la boutique",
+        "copy": "Copier",
+        "copied": "Copié ✓",
+        "copiedShort": "Copié",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "Envoyer dans une discussion",
+        "email": "E-mail",
+        "emailHint": "Ouvrir l’application de messagerie",
+        "telegram": "Telegram",
+        "telegramHint": "Partager dans un canal",
+        "more": "Plus…",
+        "moreHint": "Menu de partage du téléphone",
+        "nativeUnsupported": "Non pris en charge par ce navigateur",
+        "showQr": "Afficher le code QR",
+        "qrAlt": "Code QR",
+        "qrCaption": "Scannez pour ouvrir la boutique"
+      },
+      "wizard": {
+        "loading": "Chargement de vos boutiques",
+        "back": "Retour",
+        "breadcrumb": "Connexion / Boutique WhatsApp",
+        "manageConnections": "Gérer toutes les connexions →",
+        "titles": {
+          "list": "Vos boutiques",
+          "add": "Configurer votre boutique",
+          "edit": "Modifier {name}",
+          "shopFallback": "boutique"
+        },
+        "gate": {
+          "step": "Étape 1 sur 3",
+          "title": "Connectez d’abord WhatsApp",
+          "message": "Votre boutique a besoin d’un numéro WhatsApp connecté pour envoyer les confirmations de commande et permettre aux clients de discuter. Rendez-vous dans vos canaux pour en associer un : cela prend 30 secondes.",
+          "action": "Aller aux appareils"
+        },
+        "list": {
+          "headline": "{count, plural, one {# boutique} other {# boutiques}} dans {workspace}",
+          "intro": "Chaque boutique a sa propre URL publique, son thème et son appareil d’envoi. Ajoutez-en autant que nécessaire : marques, langues ou régions différentes.",
+          "add": "Ajouter une boutique",
+          "addAnother": "Ajouter une autre boutique",
+          "addAnotherHint": "Gérez une vitrine distincte avec sa propre URL, son thème et son numéro WhatsApp."
+        },
+        "share": {
+          "fallbackName": "Ma boutique"
+        },
+        "noAccess": {
+          "title": "Vous ne pouvez pas modifier les boutiques",
+          "message": "Votre rôle permet de consulter les boutiques mais pas de les créer ni de les modifier.",
+          "action": "Retour aux boutiques"
+        },
+        "delete": {
+          "title": "Supprimer {name} ?",
+          "message": "Supprime définitivement la vitrine et ses commandes. Les produits de votre espace de travail ne sont pas affectés. Cette action est irréversible.",
+          "confirm": "Oui, supprimer",
+          "cancel": "Annuler",
+          "done": "Boutique supprimée.",
+          "thisShop": "cette boutique"
+        },
+        "reset": {
+          "open": "Effacer toutes les données de la boutique",
+          "title": "Effacer toutes les données de la boutique ?",
+          "message": "Supprime définitivement toutes les boutiques, commandes et produits de cet espace de travail. Cette action est irréversible.",
+          "confirm": "Oui, tout effacer",
+          "done": "Toutes les données de la boutique ont été effacées pour cet espace de travail.",
+          "notConfirmed": "Réinitialisation non confirmée."
+        },
+        "card": {
+          "live": "En ligne",
+          "disabled": "Désactivé",
+          "theme": "Thème {theme}",
+          "untitled": "Boutique sans titre",
+          "sendingFrom": "Envoi depuis",
+          "noDevice": "Aucun appareil",
+          "domain": "Domaine",
+          "pending": "en attente",
+          "builtIn": "URL intégrée",
+          "manage": "Gérer",
+          "manageTitle": "Ouvrir le tableau de bord d’administration",
+          "preview": "Aperçu",
+          "previewTitle": "Ouvrir la vitrine publique dans un nouvel onglet",
+          "edit": "Modifier",
+          "editTitle": "Modifier les paramètres de la boutique",
+          "share": "Partager",
+          "shareAria": "Partager {name}",
+          "delete": "Supprimer la boutique",
+          "deleteAria": "Supprimer {name}"
+        },
+        "form": {
+          "backToShops": "Retour aux boutiques",
+          "creatingShop": "Création de la boutique n° {n}",
+          "progress": "Étapes",
+          "steps": {
+            "details": "Détails de la boutique",
+            "url": "URL publique",
+            "device": "Appareil d’envoi"
+          },
+          "optional": "(facultatif)",
+          "details": {
+            "title": "Détails de la boutique",
+            "hint": "Nom affiché aux clients et identifiant d’URL sous lequel les produits seront accessibles.",
+            "name": "Nom de la boutique",
+            "nameHint": "Affiché dans l’en-tête de la vitrine et sur les confirmations de commande.",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "ex. {workspace} · Mumbai",
+            "slug": "Identifiant de la vitrine",
+            "auto": "(auto)",
+            "slugLocked": "Verrouillé une fois la boutique en ligne afin que les liens partagés continuent de fonctionner.",
+            "slugAuto": "Généré à partir du nom de votre boutique, finalisé à l’enregistrement."
+          },
+          "url": {
+            "title": "URL publique",
+            "hint": "Choisissez comment les acheteurs accèdent à votre boutique : l’URL intégrée est gratuite, un domaine personnalisé est plus professionnel.",
+            "builtIn": "URL intégrée · gratuite",
+            "pathMode": "Fonctionne dès l’enregistrement. URL basée sur le chemin car aucun hôte public de vitrine n’est configuré.",
+            "subdomainMode": "Fonctionne dès l’enregistrement. Hébergée sur le domaine de vitrine de la plateforme.",
+            "domain": "Domaine personnalisé",
+            "domainHint": "Vous ajouterez un CNAME chez votre fournisseur DNS, puis vérifierez depuis la page des paramètres de la vitrine après l’enregistrement. Laissez vide pour utiliser l’URL intégrée.",
+            "domainPlaceholder": "shop.votreentreprise.com",
+            "verified": "{domain} est vérifié.",
+            "pending": "{domain} en attente de vérification DNS."
+          },
+          "device": {
+            "title": "Appareil d’envoi",
+            "hint": "Le numéro WhatsApp qui envoie les confirmations de commande et les réponses aux acheteurs.",
+            "none": "Aucun appareil connecté sur ce compte.",
+            "pair": "Associez-en un dans vos canaux →",
+            "official": "API officielle · Meta (WABA)",
+            "officialDetail": "Numéro WhatsApp Business de l’espace de travail",
+            "fallback": "Appareil",
+            "noNumber": "Aucun numéro",
+            "connected": "connecté"
+          },
+          "cancel": "Annuler",
+          "deleteThis": "Supprimer cette boutique",
+          "saveChanges": "Enregistrer les modifications",
+          "create": "Créer la boutique →",
+          "created": "Boutique « {name} » créée.",
+          "updated": "Boutique « {name} » mise à jour.",
+          "problems": {
+            "nameRequired": "Saisissez un nom de boutique.",
+            "nameTooLong": "191 caractères maximum.",
+            "domainInvalid": "Ce ne ressemble pas à un domaine valide (ex. shop.votreentreprise.com).",
+            "domainTooLong": "191 caractères maximum.",
+            "deviceInvalid": "Choisissez l’un de vos appareils connectés.",
+            "slugTaken": "Ce nom de boutique produit une adresse déjà utilisée. Modifiez légèrement le nom."
+          },
+          "live": {
+            "eyebrow": "Cette boutique est en ligne",
+            "fallbackName": "Votre boutique",
+            "hint": "Ajoutez des produits, choisissez un thème, consultez les commandes et partagez votre lien.",
+            "view": "Voir la boutique",
+            "share": "Partager la boutique",
+            "dashboard": "Ouvrir le tableau de bord"
+          }
+        }
+      }
+    }
+  }
+}

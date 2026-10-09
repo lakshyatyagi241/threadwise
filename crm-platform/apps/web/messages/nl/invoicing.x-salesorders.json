@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "Alleen een conceptorder kan worden gewijzigd. Een bevestigde order is vastgezet: annuleer hem en start een nieuwe om de regels of prijzen te wijzigen.",
+        "SO_NOT_CONFIRMED": "Bevestig de order eerst. Alleen een bevestigde order kan worden gefactureerd of waarvan de levering kan worden vastgelegd.",
+        "SO_CANCELLED": "Deze order is geannuleerd, dus er kan niets meer mee gedaan worden.",
+        "SO_QUOTE_NOT_ACCEPTED": "Alleen een geaccepteerd voorstel of een geaccepteerde offerte kan een verkooporder worden. Markeer het eerst als geaccepteerd.",
+        "SO_QUOTE_TAKEN": "Dit voorstel of deze offerte heeft al een verkooporder.",
+        "SO_QUANTITY_EXCEEDS": "Een hoeveelheid is meer dan wat er nog op die regel staat. Verlaag hem en probeer opnieuw.",
+        "SO_NOTHING_TO_INVOICE": "Hier is niets meer te doen: alles is al gefactureerd of geleverd.",
+        "SO_HAS_INVOICES": "Er bestaat nog een actieve factuur voor deze order. Maak de factuur eerst ongeldig of verwijder hem, en annuleer daarna de order."
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "Verkooporders",
+        "subtitle": "Geaccepteerde offertes omgezet in orders, in één keer of in delen gefactureerd, en geleverd.",
+        "newOrder": "Nieuwe verkooporder",
+        "search": "Zoek op nummer, koper of referentie",
+        "reset": "Resetten",
+        "refresh": "Vernieuwen",
+        "tableLabel": "Verkooporders",
+        "noAccessTitle": "Geen toegang",
+        "noAccess": "Je hebt geen toestemming om verkooporders te zien.",
+        "emptyFilteredTitle": "Geen orders gevonden",
+        "emptyFiltered": "Niets komt overeen met deze filters. Wijzig ze of reset ze.",
+        "resetFilters": "Filters resetten",
+        "loading": "Verkooporders laden",
+        "showing": "{count} getoond",
+        "loadMore": "Meer laden",
+        "allLoaded": "Alles geladen",
+        "contactLoading": "Laden...",
+        "empty": {
+          "all": {
+            "title": "Nog geen verkooporders",
+            "message": "Maak van een geaccepteerd voorstel of een geaccepteerde offerte een order, of begin helemaal opnieuw."
+          },
+          "draft": {
+            "title": "Geen conceptorders",
+            "message": "Orders die je nog voorbereidt, verschijnen hier."
+          },
+          "confirmed": {
+            "title": "Geen bevestigde orders",
+            "message": "Bevestigde orders die nog gefactureerd of geleverd moeten worden, verschijnen hier."
+          },
+          "cancelled": {
+            "title": "Geen geannuleerde orders",
+            "message": "Orders die je annuleert, verschijnen hier met de reden."
+          },
+          "closed": {
+            "title": "Geen afgesloten orders",
+            "message": "Een order wordt afgesloten als alles erop gefactureerd en geleverd is."
+          }
+        }
+      },
+      "strip": {
+        "label": "Waarde van open orders",
+        "openValue": "Open orders ({currency})"
+      },
+      "tabs": {
+        "label": "Orderstatus",
+        "all": "Alle",
+        "draft": "Concept",
+        "confirmed": "Bevestigd",
+        "cancelled": "Geannuleerd",
+        "closed": "Afgesloten",
+        "count": "{count} orders"
+      },
+      "quick": {
+        "label": "Snelfilters",
+        "toInvoice": "Te factureren",
+        "toFulfil": "Te leveren"
+      },
+      "table": {
+        "scrollArea": "Tabel verkooporders",
+        "columns": {
+          "number": "Order",
+          "buyer": "Koper",
+          "quote": "Offerte",
+          "deal": "Deal",
+          "expected": "Verwacht",
+          "status": "Status",
+          "invoicing": "Facturatie",
+          "fulfilment": "Levering",
+          "total": "Totaal",
+          "invoices": "Facturen"
+        }
+      },
+      "row": {
+        "moreFor": "Acties voor {name}",
+        "open": "Openen",
+        "edit": "Bewerken",
+        "confirm": "Order bevestigen",
+        "invoiceAll": "Al het overige factureren",
+        "fulfilAll": "Alles als geleverd markeren",
+        "cancel": "Order annuleren",
+        "delete": "Concept verwijderen"
+      },
+      "status": {
+        "draft": "Concept",
+        "confirmed": "Bevestigd",
+        "cancelled": "Geannuleerd",
+        "closed": "Afgesloten"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "Niet gefactureerd",
+        "partially_invoiced": "Deels gefactureerd",
+        "invoiced": "Gefactureerd"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "Niet geleverd",
+        "partially_fulfilled": "Deels geleverd",
+        "fulfilled": "Geleverd"
+      },
+      "actions": {
+        "failed": "Dat is niet gelukt.",
+        "confirmed": "Order {number} bevestigd.",
+        "invoicedDraft": "Conceptfactuur gemaakt van de order.",
+        "invoicedIssued": "Factuur {number} uitgegeven.",
+        "fulfilled": "Levering vastgelegd.",
+        "cancelled": "Order {number} geannuleerd.",
+        "deleted": "Conceptorder verwijderd."
+      },
+      "dialog": {
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "how": "Welke hoeveelheden",
+        "mode": {
+          "all": "Alles wat er nog is",
+          "lines": "Kies hoeveelheden"
+        },
+        "left": "{qty} over",
+        "qtyExceeds": "Er staat maximaal {max} open op deze regel.",
+        "qtyInvalid": "Voer een hoeveelheid in met maximaal 4 decimalen, of 0 om deze regel over te slaan.",
+        "nothingHint": "Alles op deze order is al gefactureerd."
+      },
+      "confirmDialog": {
+        "title": "Deze order bevestigen?",
+        "message": "Bevestigen vergrendelt de regels en prijzen. Daarna kun je de order in één keer of in delen factureren en leveringen vastleggen. Je kunt hem nog annuleren zolang er geen factuur bestaat.",
+        "confirm": "Order bevestigen"
+      },
+      "cancelDialog": {
+        "title": "Deze order annuleren?",
+        "warning": "Een geannuleerde order kan niet meer worden gefactureerd of geleverd, en niet meer worden heropend.",
+        "reason": "Reden",
+        "reasonHint": "Wordt bij de order bewaard voor je team.",
+        "reasonRequired": "Geef aan waarom de order wordt geannuleerd.",
+        "reasonTooLong": "Houd de reden onder {max} tekens.",
+        "cancelOrder": "Order annuleren",
+        "hasInvoices": "Deze order heeft nog een factuur. Maak de factuur eerst ongeldig of verwijder hem (een ongeldige factuur geeft zijn hoeveelheden terug), en annuleer daarna de order.",
+        "seeInvoices": "Bekijk de facturen"
+      },
+      "deleteDialog": {
+        "title": "Dit concept verwijderen?",
+        "message": "Het conceptorder wordt definitief verwijderd. Een bevestigde order kan niet worden verwijderd, alleen geannuleerd.",
+        "delete": "Concept verwijderen"
+      },
+      "invoiceDialog": {
+        "title": "Deze order factureren",
+        "intro": "Factureer de order tegen de vastgezette prijzen. Je kunt in delen factureren: wat nu niet gefactureerd wordt, blijft op de order staan.",
+        "invoiceAndIssue": "Factuur maken en uitgeven",
+        "createDraft": "Conceptfactuur maken",
+        "issueDate": "Uitgiftedatum",
+        "issueDateHint": "Laat leeg voor vandaag ({today}).",
+        "dueDate": "Vervaldatum",
+        "terms": "Betaaltermijn",
+        "termsDefault": "Standaard van de workspace",
+        "termsOnIssue": "Direct bij uitgifte",
+        "termsDays": "{count} dagen",
+        "issueNow": "Factuur nu uitgeven",
+        "issueNowHint": "De factuur krijgt een nummer en kan meteen worden verstuurd.",
+        "draftHint": "Laat hem als concept staan om hem te controleren voordat hij wordt uitgegeven.",
+        "includeShipping": "Verzendkosten op deze factuur zetten",
+        "problems": {
+          "nothing": "Kies op minstens één regel een hoeveelheid groter dan nul.",
+          "issueDateInvalid": "Voer een geldige uitgiftedatum in.",
+          "dueDateInvalid": "Voer een geldige vervaldatum in.",
+          "dueBeforeIssue": "De vervaldatum kan niet vóór de uitgiftedatum liggen."
+        }
+      },
+      "fulfilDialog": {
+        "title": "Levering vastleggen",
+        "intro": "Leg vast wat er aan de koper is geleverd. Levering wordt los van facturatie bijgehouden: het ene kan eerder komen dan het andere.",
+        "record": "Levering vastleggen",
+        "note": "Notitie",
+        "noteHint": "Optioneel, bijvoorbeeld een nummer van een pakbon.",
+        "problems": {
+          "nothing": "Kies op minstens één regel een hoeveelheid groter dan nul.",
+          "noteTooLong": "Houd de notitie onder {max} tekens."
+        }
+      },
+      "detail": {
+        "noAccessTitle": "Geen toegang",
+        "noAccess": "Je hebt geen toestemming om verkooporders te zien.",
+        "loading": "Order laden",
+        "back": "Terug naar verkooporders",
+        "noBuyer": "Geen koper",
+        "edit": "Bewerken",
+        "confirm": "Order bevestigen",
+        "recordDelivery": "Levering vastleggen",
+        "invoice": "Factureren...",
+        "more": "Meer acties",
+        "cancel": "Order annuleren",
+        "delete": "Concept verwijderen",
+        "cancelledOn": "Geannuleerd op {date}",
+        "draftHint": "Deze order is een concept. Bevestig hem om de prijzen vast te zetten en facturatie en levering te starten.",
+        "notes": "Notities",
+        "terms": "Voorwaarden",
+        "progress": "Voortgang",
+        "invoiced": "Gefactureerd",
+        "fulfilled": "Geleverd"
+      },
+      "lines": {
+        "title": "Regels",
+        "scrollArea": "Orderregels",
+        "item": "Artikel",
+        "ordered": "Besteld",
+        "invoiced": "Gefactureerd",
+        "fulfilled": "Geleverd",
+        "toInvoice": "Te factureren",
+        "unitPrice": "Eenheidsprijs",
+        "amount": "Bedrag",
+        "taxLine": "{name} {rate}%",
+        "taxRate": "Belasting {rate}%",
+        "invoicedBar": "Gefactureerd aandeel van {name}",
+        "fulfilledBar": "Geleverd aandeel van {name}"
+      },
+      "totals": {
+        "title": "Totalen",
+        "subtotal": "Subtotaal",
+        "discount": "Korting",
+        "shipping": "Verzendkosten",
+        "shippingBilled": "Gefactureerd",
+        "shippingPending": "Gefactureerd met de eerste factuur",
+        "tax": "Belasting",
+        "total": "Totaal"
+      },
+      "info": {
+        "title": "Details",
+        "buyer": "Koper",
+        "email": "E-mail",
+        "phone": "Telefoon",
+        "quote": "Offerte",
+        "deal": "Deal",
+        "owner": "Eigenaar",
+        "reference": "Referentie",
+        "expected": "Verwacht",
+        "created": "Aangemaakt",
+        "confirmed": "Bevestigd"
+      },
+      "invoices": {
+        "title": "Facturen van deze order",
+        "none": "Er is nog geen factuur van deze order gemaakt.",
+        "noneDraft": "Facturen kunnen worden gemaakt zodra de order is bevestigd.",
+        "draft": "Concept",
+        "voidNote": "Een ongeldige factuur geeft zijn hoeveelheden terug aan de order."
+      },
+      "builder": {
+        "noAccessTitle": "Geen toegang",
+        "noAccess": "Je hebt geen toestemming om verkooporders te wijzigen.",
+        "loading": "Laden",
+        "frozen": "Deze order is bevestigd, dus de regels en prijzen zijn vastgezet. Annuleer hem en start een nieuwe om ze te wijzigen.",
+        "openOrder": "Order openen",
+        "back": "Terug",
+        "editTitle": "{number} bewerken",
+        "newTitle": "Nieuwe verkooporder",
+        "unsaved": "Niet-opgeslagen wijzigingen",
+        "cancel": "Annuleren",
+        "saveChanges": "Wijzigingen opslaan",
+        "createDraft": "Concept maken",
+        "conflict": "Iemand anders heeft dit concept gewijzigd terwijl je aan het bewerken was. Laad de pagina opnieuw om hun versie te zien; je wijzigingen hier gaan verloren.",
+        "reload": "Opnieuw laden",
+        "saved": "Concept opgeslagen.",
+        "created": "Order {number} aangemaakt als concept.",
+        "fixProblems": "Corrigeer eerst de gemarkeerde velden.",
+        "serverRejected": "De server heeft sommige waarden niet geaccepteerd. Controleer de velden en probeer opnieuw.",
+        "startFrom": "Beginnen vanaf",
+        "source": {
+          "scratch": "Een lege order",
+          "quote": "Een geaccepteerd voorstel of een geaccepteerde offerte"
+        },
+        "loadingQuote": "Offerte laden...",
+        "buyer": "Koper",
+        "contact": "Contact",
+        "contactHint": "Kies een contact om de order daaraan te koppelen, of typ de koper hieronder.",
+        "buyerName": "Naam koper",
+        "fromQuoteHint": "Leeg gelaten, dan wordt de koper van de offerte gebruikt.",
+        "buyerEmail": "E-mail",
+        "buyerPhone": "Telefoon",
+        "details": "Orderdetails",
+        "currency": "Valuta",
+        "currencyHint": "Drie letters, zoals USD of KWD.",
+        "currencyLocked": "Vastgezet zodra de order bestaat.",
+        "expectedDate": "Verwachte datum",
+        "expectedHint": "Wanneer de koper levering verwacht.",
+        "reference": "Referentie",
+        "referenceHint": "Het inkoopordernummer van de koper, bijvoorbeeld.",
+        "linesFromQuote": "Regels",
+        "linesFromQuoteHint": "De order neemt de regels, prijzen en belastingen van de geaccepteerde offerte over, met de documentkorting verwerkt in de regels. Je kunt de regels van het concept na het aanmaken nog bewerken.",
+        "lineItems": "Regels",
+        "shippingNotes": "Verzending, notities en voorwaarden",
+        "shipping": "Verzendkosten ({currency})",
+        "shippingHint": "Gefactureerd met de eerste factuur.",
+        "notes": "Notities",
+        "notesHint": "Wordt op de order getoond.",
+        "terms": "Voorwaarden",
+        "termsHint": "Wordt overgenomen op de facturen die van deze order worden gemaakt.",
+        "draftNote": "De order blijft een concept tot je hem bevestigt. Bij bevestigen worden de prijzen vastgezet.",
+        "quoteTotals": "Offertetotalen",
+        "quoteTotalsNote": "Zoals op de geaccepteerde offerte. De eigen bedragen van de order verschijnen zodra hij is aangemaakt.",
+        "subtotal": "Subtotaal",
+        "discount": "Korting",
+        "tax": "Belasting",
+        "total": "Totaal",
+        "openExisting": "Open order {number}",
+        "viewOrders": "Alle orders bekijken",
+        "pickAnother": "Kies een andere offerte",
+        "problems": {
+          "buyerRequired": "Kies een contact of typ de naam van de koper.",
+          "emailInvalid": "Voer een geldig e-mailadres in.",
+          "currencyInvalid": "Voer een valutacode van drie letters in.",
+          "expectedDateInvalid": "Voer een geldige datum in.",
+          "shippingInvalid": "Voer een geldig bedrag in.",
+          "noLines": "Voeg minstens één regel toe.",
+          "referenceTooLong": "Houd de referentie onder 191 tekens."
+        },
+        "lineProblems": {
+          "descriptionRequired": "Beschrijf deze regel.",
+          "qtyInvalid": "Voer een hoeveelheid groter dan nul in.",
+          "priceInvalid": "Voer een geldige prijs in.",
+          "lineDiscountInvalid": "Voer een geldige korting in.",
+          "hsnRequired": "Voer de HSN/SAC-code in.",
+          "hsnInvalid": "Voer een geldige HSN/SAC-code in.",
+          "taxRateRemoved": "Het belastingtarief van deze regel bestaat niet meer. Kies een actueel tarief."
+        }
+      },
+      "quotePicker": {
+        "search": "Geaccepteerde offertes zoeken",
+        "results": "Geaccepteerde voorstellen en offertes",
+        "loading": "Offertes laden",
+        "noMatch": "Geen geaccepteerde offerte gevonden.",
+        "none": "Er is nog geen geaccepteerd voorstel of geaccepteerde offerte.",
+        "kind": {
+          "proposal": "Voorstel",
+          "estimate": "Schatting"
+        },
+        "untitled": "Naamloos",
+        "accepted": "Geaccepteerd op {date}"
+      }
+    }
+  }
+}

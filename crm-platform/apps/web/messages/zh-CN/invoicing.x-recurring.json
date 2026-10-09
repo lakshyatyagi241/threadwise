@@ -1,0 +1,370 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "REC_ENDED": "此计划已结束，无法再修改或运行。",
+        "REC_NOT_ACTIVE": "此计划未启用。请先恢复。",
+        "REC_START_TOO_OLD": "开始日期距今太远。最多只生成 12 个过去周期，请选择更晚的开始日期。",
+        "INV_RECURRING_INVALID": "无法使用此模板生成发票。请检查买方、明细和税费，然后重新保存。"
+      }
+    },
+    "recurring": {
+      "title": "定期发票",
+      "subtitle": "按您设定的日期自动生成发票的计划。",
+      "new": "新建计划",
+      "invoices": "发票",
+      "tabsLabel": "计划状态",
+      "tabs": {
+        "all": "全部",
+        "active": "有效",
+        "paused": "已暂停",
+        "ended": "已结束"
+      },
+      "search": "搜索已加载的计划",
+      "refresh": "刷新",
+      "tableLabel": "定期发票计划",
+      "scrollArea": "计划表格，可横向滚动",
+      "loading": "正在加载计划",
+      "empty": {
+        "all": {
+          "title": "暂无定期发票",
+          "message": "设置一次计划，之后每周、每月或每年都会自动为您生成发票。"
+        },
+        "active": {
+          "title": "没有正在运行的计划",
+          "message": "有效的计划（会按时生成下一张发票）会显示在这里。"
+        },
+        "paused": {
+          "title": "没有已暂停的计划",
+          "message": "暂停的计划在恢复之前不会生成发票。"
+        },
+        "ended": {
+          "title": "没有已结束的计划",
+          "message": "计划会在最后一次运行或结束日期后结束。"
+        }
+      },
+      "emptySearchTitle": "没有匹配的计划",
+      "emptySearch": "已加载的记录中没有匹配项。请清除搜索或加载更多。",
+      "clearSearch": "清除搜索",
+      "showing": "{count, plural, other {显示 # 个计划}}",
+      "showingMatches": "已加载的 {loaded} 个计划中有 {count} 个匹配",
+      "loadMore": "加载更多",
+      "allLoaded": "已加载全部计划",
+      "searchLoadedOnly": "搜索仅针对已加载的计划。如需进一步搜索，请加载更多。",
+      "columns": {
+        "name": "计划",
+        "buyer": "买方",
+        "every": "重复周期",
+        "next": "下次运行",
+        "last": "上次运行",
+        "runs": "运行次数",
+        "failures": "失败次数",
+        "amount": "每张发票金额",
+        "mode": "每张发票为",
+        "status": "状态",
+        "actions": "操作"
+      },
+      "lineCount": "{count, plural, other {# 行}}",
+      "onHold": "暂挂",
+      "runsOf": "已完成 {done} / {max}",
+      "failuresTitle": "{count, plural, other {# 个周期失败。请打开历史记录。}}",
+      "channel": {
+        "link": "链接",
+        "email": "邮件",
+        "whatsapp": "WhatsApp"
+      },
+      "moreFor": "{name} 的更多操作",
+      "open": "打开",
+      "edit": "编辑",
+      "pause": "暂停",
+      "resume": "恢复",
+      "cancel": "取消",
+      "runNow": {
+        "action": "立即运行",
+        "title": "立即运行 {name}？",
+        "confirm": "立即运行",
+        "message": {
+          "draft": "现在为 {date} 生成发票（草稿，供您检查），计划将进入下一个周期。",
+          "issue": "现在为 {date} 生成并开具发票（立即获得编号）。计划将进入下一个周期。",
+          "issue_send": "现在为 {date} 生成、开具并发送给买方。计划将进入下一个周期。"
+        }
+      },
+      "delete": {
+        "action": "删除",
+        "title": "删除 {name}？",
+        "message": "{name} 将停止生成发票。已生成的发票仍会保留在列表中。",
+        "confirm": "删除计划",
+        "keep": "保留"
+      },
+      "toast": {
+        "paused": "{name} 已暂停。",
+        "resumed": "{name} 已恢复运行。下一张发票：{date}。",
+        "resumedEnded": "{name} 已没有剩余周期，因此已结束。",
+        "ran": "已根据 {name} 生成一张发票。",
+        "runFailed": "{name} 的运行失败，已记录。请打开历史记录查看原因。",
+        "deleted": "{name} 已删除。"
+      },
+      "every": {
+        "day": "{interval, plural, =1 {每天} other {每 # 天}}",
+        "week": "{interval, plural, =1 {每周} other {每 # 周}}",
+        "month": "{interval, plural, =1 {每月} other {每 # 个月}}",
+        "year": "{interval, plural, =1 {每年} other {每 # 年}}"
+      },
+      "status": {
+        "active": "有效",
+        "paused": "已暂停",
+        "ended": "已结束"
+      },
+      "runStatus": {
+        "created": "已创建",
+        "failed": "失败"
+      },
+      "modeShort": {
+        "draft": "草稿",
+        "issue": "已开具",
+        "issue_send": "已开具并发送"
+      },
+      "modeSent": {
+        "email": "已开具并通过邮件发送",
+        "link": "已开具，通过链接分享",
+        "whatsapp": "已开具并通过 WhatsApp 发送"
+      },
+      "frequency": {
+        "day": "天",
+        "week": "周",
+        "month": "月",
+        "year": "年"
+      },
+      "modeCards": {
+        "draft": {
+          "title": "保留为草稿",
+          "hint": "每张发票开具前都需要您先审核。"
+        },
+        "issue": {
+          "title": "开具发票",
+          "hint": "每张发票会立即编号并开具。"
+        },
+        "issue_send": {
+          "title": "开具并发送",
+          "hint": "每张发票将自动开具并发送给买方。"
+        }
+      },
+      "warnings": {
+        "noBuyerEmail": "模板中没有买方邮箱，因此邮件发送会失败。请添加邮箱，或改用链接发送。"
+      },
+      "preview": {
+        "title": "后续运行",
+        "incomplete": "填写计划后可查看发票的生成时间。",
+        "sentence": "自 {start} 起，{every}{limit}。{outcome}",
+        "sentenceLimit": "{kind, select, runs {，{count, plural, other {# 张发票}}} end {，直至 {end}} both {，{count, plural, other {# 张发票}}，直至 {end}} other {}}",
+        "outcome": {
+          "draft": "每张发票将保留为草稿供您审核。",
+          "issue": "每张发票将自动开具。",
+          "issue_email": "每张发票将开具并通过邮件发送给买方。",
+          "issue_link": "每张发票将开具并记录为通过链接分享。",
+          "issue_whatsapp": "每张发票将开具并通过 WhatsApp 发送。"
+        },
+        "eachInvoice": "每张发票金额约为",
+        "lastDay": "月末最后一天",
+        "noRuns": "此计划内没有任何运行时间点。",
+        "endsMaxRuns": "{count, plural, other {生成 # 张发票后停止。}}",
+        "endsEndDate": "{count, plural, other {{date} 之后不再运行：共 # 张发票。}}",
+        "moreBounded": "{count, plural, other {共 # 张发票，其余按相同节奏继续。}}",
+        "moreForever": "将持续运行，直至您暂停或删除它。",
+        "clampNote": "此计划从每月 {day} 日开始。没有 {day} 日的月份将改在当月最后一天运行，下个月恢复为 {day} 日。",
+        "catchUp": "{count, plural, other {# 个周期已过：将立即为每个周期各生成一张发票。}}",
+        "catchUpTooOld": "已有 {count} 个周期已过，最多只生成 {max} 个。请选择更晚的开始日期。"
+      },
+      "builder": {
+        "loading": "加载中",
+        "endedNoEdit": "此计划已结束，无法再编辑。",
+        "openSchedule": "打开计划",
+        "back": "返回",
+        "newTitle": "新建定期发票",
+        "editTitle": "编辑 {name}",
+        "newSubtitle": "设置重复节奏及生成的发票。右侧会显示后续运行时间。",
+        "editSubtitle": "更改后续周期的节奏或发票内容。",
+        "cancel": "取消",
+        "save": "保存更改",
+        "create": "创建计划",
+        "conflict": "您编辑时，其他人修改了此计划。请重新加载查看其版本。您在此处的编辑将会丢失。",
+        "reload": "重新加载",
+        "fixProblems": "请先修正高亮显示的字段。",
+        "nothingToSave": "未作任何更改。",
+        "saved": "计划已保存。",
+        "created": "{name} 现在将按计划生成发票。",
+        "schedule": "计划",
+        "name": "名称",
+        "nameHint": "仅您可见，例如“月度服务费”。",
+        "every": "重复间隔",
+        "frequency": "单位",
+        "startDate": "首张发票日期",
+        "startFixed": "开始日期无法更改。如需从其他日期开始，请新建计划。",
+        "startHint": "过去的日期会立即生成已到期的周期，最多 12 个。",
+        "endDate": "结束日期（可选）",
+        "endHint": "此日期之后不再生成发票。",
+        "maxRuns": "发票数量（可选）",
+        "maxRunsHint": "生成此数量的发票后，计划结束。",
+        "noLimit": "不限",
+        "scheduleEditNote": "修改后的节奏从今天开始生效，且不会重复已运行过的周期。",
+        "mode": "每张发票的处理方式",
+        "sendChannel": "发送方式",
+        "sendChannelHint": "“链接”仅记录您自行分享链接。邮件和 WhatsApp 会替您发送。",
+        "templateTitle": "发票模板",
+        "templateFuture": "新模板将应用于后续发票，已生成的发票不会更改。",
+        "replaceTemplate": "替换模板",
+        "keepTemplate": "保留当前模板"
+      },
+      "template": {
+        "title": "发票模板",
+        "hint": "每个周期都会以此为基础生成一张新发票，并标注该周期日期。",
+        "hintEdit": "在此创建新模板，它将替换当前模板用于后续发票。",
+        "sourceLabel": "模板来源",
+        "source": {
+          "invoice": {
+            "title": "复制发票",
+            "hint": "使用已生成发票中的买方和明细。"
+          },
+          "build": {
+            "title": "创建模板",
+            "hint": "在此填写买方和明细。"
+          }
+        },
+        "draftInvoice": "发票草稿",
+        "copyOf": "此发票的副本，合计",
+        "change": "更改",
+        "choose": "选择发票",
+        "copyNote": "保存时将复制买方、明细、税费和备注。之后对原发票的更改不会同步到计划中。",
+        "startFromInvoice": "从发票开始",
+        "startFromInvoiceHint": "将在此加载其买方和明细，供您调整。",
+        "billTo": "开票对象",
+        "contact": "联系人",
+        "contactHint": "选择联系人以将每张发票关联到该联系人，或在下方直接输入买方信息。",
+        "buyerName": "发票上的名称",
+        "buyerEmail": "邮箱",
+        "buyerPhone": "电话",
+        "buyerCountry": "国家/地区",
+        "buyerCountryHint": "两位字母，例如 IN 或 DE。",
+        "buyerTaxId": "税号",
+        "buyerAddress": "账单地址",
+        "details": "币种和税费",
+        "currency": "币种",
+        "docType": "单据类型",
+        "docTypes": {
+          "tax_invoice": "税务发票",
+          "proforma": "形式发票"
+        },
+        "taxMode": "税费",
+        "taxModes": {
+          "rates": "按税率",
+          "auto": "自动"
+        },
+        "taxModeAutoHint": "税费引擎将根据卖方和买方所在国家/地区决定税费。",
+        "supplyType": "供应类型",
+        "supply": {
+          "goods": "货物",
+          "services": "服务",
+          "digital": "数字服务"
+        },
+        "paymentTerms": "付款条件",
+        "paymentTermsHint": "从每张发票开具之日起计算。",
+        "termsDefault": "工作区默认",
+        "termsOnReceipt": "收到即付",
+        "termsNet": "{days} 天内付款",
+        "lines": "明细项目",
+        "adjustments": "折扣和运费",
+        "discountKind": "整张发票折扣",
+        "discountNone": "无折扣",
+        "discountPercent": "百分比",
+        "discountAmount": "固定金额（{currency}）",
+        "discountValue": "折扣值",
+        "shipping": "运费（{currency}）",
+        "notes": "给客户的备注",
+        "notesHint": "将打印在每张发票上。",
+        "termsText": "条款与条件",
+        "termsTextHint": "打印在每张发票底部。",
+        "kept": "{count, plural, other {模板共 # 行，开票对象为}}"
+      },
+      "problems": {
+        "generic": "请检查此字段。",
+        "nameRequired": "请为计划命名。",
+        "nameTooLong": "最多使用 120 个字符。",
+        "intervalInvalid": "请输入 1 到 365 之间的整数。",
+        "startInvalid": "请输入有效的开始日期。",
+        "startTooOld": "该开始日期已超过 {count} 个周期，最多只生成 {max} 个过去周期。请选择更晚的日期。",
+        "endInvalid": "请输入有效的结束日期。",
+        "endBeforeStart": "结束日期早于开始日期。",
+        "maxRunsInvalid": "请输入 1 到 1000 之间的整数，或留空。",
+        "invoiceRequired": "请选择要复制的发票。",
+        "termsInvalid": "请输入 0 到 365 天。",
+        "descriptionRequired": "请描述此明细项目。",
+        "qtyInvalid": "请输入大于零的数量。",
+        "priceInvalid": "请输入有效的价格。",
+        "lineDiscountInvalid": "请输入 0 到 100 之间的百分比。",
+        "hsnRequired": "请输入 HSN 或 SAC 代码。",
+        "hsnInvalid": "HSN 或 SAC 代码为 2 到 12 位字母或数字。",
+        "taxRateRemoved": "该税率已不存在。请选择其他税率。",
+        "currencyInvalid": "请输入三位字母的币种代码。",
+        "noLines": "请至少添加一行明细。",
+        "discountInvalid": "请输入有效的折扣。",
+        "shippingInvalid": "请输入有效的金额。",
+        "emailInvalid": "请输入有效的邮箱地址。",
+        "amountZero": "发票总额必须大于零。",
+        "amountInvalid": "此金额无效。",
+        "contactRequired": "请选择联系人或输入买方名称。自动开具的发票需要买方信息。",
+        "countryInvalid": "请使用两位国家/地区代码。",
+        "regionInvalid": "请输入有效的州/地区代码。",
+        "autoNeedsSellerCountry": "自动税费需要在开票设置中填写您的国家/地区。"
+      },
+      "detail": {
+        "loading": "正在加载计划",
+        "backToList": "返回定期发票",
+        "back": "返回定期发票",
+        "failures": "{count, plural, other {# 个周期未能生成发票。}}",
+        "seeHistory": "查看原因",
+        "pausedNote": "此计划已暂停。暂停期间的周期将被跳过：恢复后，下一张发票的日期为今天或之后。",
+        "endedNote": "此计划已结束。将不再生成发票，且无法再编辑。",
+        "nextRun": "下次运行",
+        "lastRun": "上次运行",
+        "runs": "已生成发票",
+        "failedCount": "{count, plural, other {# 次失败}}",
+        "amount": "每张发票金额",
+        "amountNote": "按今天计算的模板金额",
+        "upcoming": "即将运行的日期",
+        "noUpcoming": "没有更多待运行的日期。",
+        "template": "模板",
+        "buyer": "买方",
+        "lines": "明细",
+        "currency": "币种",
+        "mode": "每张发票为",
+        "starts": "开始日期",
+        "ends": "结束日期",
+        "never": "无结束日期",
+        "limit": "数量上限",
+        "noLimit": "不限",
+        "invoicesCount": "{count, plural, other {# 张发票}}",
+        "templateNote": "编辑模板只会影响后续发票，不会改变已生成的发票。"
+      },
+      "runs": {
+        "title": "运行历史",
+        "subtitle": "每个周期一行，最新的在前。",
+        "loading": "正在加载历史记录",
+        "scrollArea": "运行历史表格，可横向滚动",
+        "emptyTitle": "尚无运行记录",
+        "emptyMessage": "首张发票将在下一个运行日期生成。",
+        "period": "第 {n} 个周期",
+        "draftInvoice": "草稿",
+        "showing": "{count, plural, other {显示 # 条运行记录}}",
+        "loadMore": "加载更多",
+        "allLoaded": "已显示全部历史记录",
+        "columns": {
+          "period": "周期日期",
+          "status": "结果",
+          "invoice": "发票",
+          "error": "失败原因",
+          "at": "生成时间"
+        }
+      }
+    }
+  }
+}

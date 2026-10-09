@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "Impersonificazione",
+      "viewing": "Stai visualizzando {workspace} come {owner}",
+      "reason": "Motivo: {reason}",
+      "readOnly": "Sola lettura",
+      "timeLeft": "{minutes, plural, one {# minuto rimasto} other {# minuti rimasti}}",
+      "endsSoon": "Meno di un minuto rimasto",
+      "stop": "Interrompi impersonificazione",
+      "stopping": "Interruzione in corso",
+      "stopFailed": "Impossibile interrompere la sessione. Riprova.",
+      "readOnlyRefused": "Questa sessione è in sola lettura, quindi le modifiche non sono consentite.",
+      "forbiddenRefused": "Non disponibile mentre visualizzi il workspace come proprietario.",
+      "ended": {
+        "title": "Questa sessione di impersonificazione è terminata",
+        "expired": "Il link è già stato usato o è scaduto. Ricomincia dalla console.",
+        "body": "Da qui non si può fare altro nel workspace. Torna alla console per avviare una nuova sessione.",
+        "back": "Torna alla console"
+      }
+    }
+  }
+}

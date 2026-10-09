@@ -1,0 +1,686 @@
+{
+  "platform-payment-gateways": {
+    "nav": {
+      "gateways": "Passerelles de paiement",
+      "group": "Facturation",
+      "orders": "Historique des commandes",
+      "billingHistory": "Historique de facturation",
+      "invoices": "Factures",
+      "billingSettings": "Paramètres de facturation"
+    },
+    "admin": {
+      "title": "Passerelles de paiement",
+      "description": "{count} passerelles. Les identifiants sont chiffrés au repos et ne sont plus jamais affichés après enregistrement.",
+      "kpi": {
+        "total": "Passerelles",
+        "active": "Actif",
+        "india": "Inde",
+        "crypto": "Crypto"
+      },
+      "tabsLabel": "Filtrer par région",
+      "all": "Toutes",
+      "search": "Filtrer par nom ou slug",
+      "emptyTitle": "Aucune passerelle ici",
+      "emptyMessage": "Aucun résultat pour cette région et cette recherche. Essayez un autre onglet ou effacez la recherche.",
+      "regions": {
+        "popular": "Populaires",
+        "india": "Inde",
+        "asia": "Asie",
+        "mena": "MENA",
+        "europe": "Europe",
+        "us": "États-Unis et Canada",
+        "africa": "Afrique",
+        "latam": "Amérique latine",
+        "crypto": "Crypto",
+        "offline": "Hors ligne"
+      },
+      "card": {
+        "active": "Active",
+        "disabled": "Désactivée",
+        "mode": {
+          "sandbox": "Bac à sable",
+          "live": "Production"
+        },
+        "keysSaved": "Clés enregistrées",
+        "noDriverBadge": "Pilote non encore disponible",
+        "activate": "Activer",
+        "disable": "Désactiver",
+        "savedPlaceholder": "Enregistré. Laissez vide pour le conserver.",
+        "clear": "Supprimer la valeur enregistrée",
+        "undoClear": "Conserver la valeur enregistrée",
+        "modeLabel": "Mode",
+        "sortOrder": "Ordre de tri",
+        "currencies": "Devises prises en charge",
+        "currenciesAll": "Aucune sélection : toutes les devises sont acceptées",
+        "currenciesSelected": "{count, plural, one {# sélectionnée} other {# sélectionnées}}",
+        "currenciesHint": "Les acheteurs ne voient cette passerelle que dans les devises cochées. Laissez tout décoché pour accepter toutes les devises.",
+        "webhookUrl": "URL du webhook",
+        "webhookHint": "Collez ceci dans le tableau de bord du fournisseur afin qu’il puisse nous notifier des paiements.",
+        "saving": "Enregistrement",
+        "save": "Enregistrer",
+        "readOnly": "Seul un super administrateur peut modifier les passerelles.",
+        "saved": "Paramètres de {name} enregistrés.",
+        "activated": "{name} : activation effectuée.",
+        "deactivated": "{name} : désactivation effectuée."
+      },
+      "errors": {
+        "conflict": "Quelqu’un d’autre a modifié cette passerelle. Elle a été rechargée ; vérifiez-la puis enregistrez à nouveau.",
+        "notConfigured": "Configurez d’abord les champs obligatoires : {fields}",
+        "noDriver": "Cette passerelle n’a pas encore de pilote dans cette version. Elle peut être configurée, mais pas activée.",
+        "forbidden": "Seul un super administrateur peut modifier les passerelles.",
+        "generic": "Une erreur s’est produite. Réessayez."
+      }
+    },
+    "checkout": {
+      "title": "Finalisez votre commande",
+      "walletTitle": "Ajouter de l’argent à votre portefeuille",
+      "subtitle": "Vérifiez le prix, indiquez qui paie et choisissez le mode de paiement.",
+      "loading": "Chargement du paiement",
+      "account": "Compte",
+      "name": "Nom complet",
+      "email": "E-mail",
+      "billingAddress": "Adresse de facturation",
+      "company": "Société",
+      "taxId": "Numéro fiscal",
+      "taxIdHint": "GSTIN, VAT ou EIN, si vous en avez un.",
+      "address": "Adresse",
+      "city": "Ville",
+      "postal": "Code postal",
+      "country": "Pays",
+      "currency": "Devise",
+      "period": "Période de facturation",
+      "periods": {
+        "monthly": "Mensuel",
+        "yearly": "Annuel"
+      },
+      "paymentMethod": "Moyen de paiement",
+      "noGateway": "Aucune passerelle de paiement n’est encore configurée pour {currency}. Demandez à votre administrateur d’en activer une.",
+      "noGatewayButton": "Aucune passerelle configurée",
+      "sandbox": "bac à sable",
+      "pay": "Payer {amount}",
+      "processing": "Démarrage du paiement",
+      "summary": "Récapitulatif de la commande",
+      "billed": {
+        "monthly": "Facturé pour une période",
+        "yearly": "Facturé pour 12 mois"
+      },
+      "subtotal": "Sous-total",
+      "tax": "{label} ({rate} %)",
+      "total": "Total du jour",
+      "updating": "Mise à jour du prix",
+      "errors": {
+        "gatewayUnavailable": "Cette passerelle n’est pas disponible actuellement.",
+        "currencyUnsupported": "Cette passerelle n’accepte pas cette devise. Choisissez une autre passerelle ou devise.",
+        "providerError": "Erreur du fournisseur de paiement. Réessayez ou choisissez une autre passerelle.",
+        "notPurchasable": "Ce forfait ne peut pas être acheté en ligne.",
+        "downgrade": "Les passages à un forfait inférieur ne sont pas disponibles en ligne. Contactez le support pour passer à un forfait inférieur.",
+        "amountTooLow": "Saisissez un montant plus élevé à ajouter à votre portefeuille.",
+        "couponUnavailable": "Les coupons ne sont pas encore disponibles.",
+        "forbidden": "Vous n’avez pas l’autorisation d’acheter.",
+        "notFound": "Nous n’avons pas trouvé ce forfait.",
+        "widgetBlocked": "La fenêtre de paiement n’a pas pu s’ouvrir. Vérifiez que votre navigateur l’autorise, puis réessayez.",
+        "generic": "Une erreur s’est produite. Réessayez.",
+        "couponRejected": "Ce coupon ne peut pas être utilisé."
+      },
+      "coupon": "Code promo",
+      "couponApply": "Appliquer",
+      "couponApplied": "Coupon {code} appliqué : {amount} de réduction.",
+      "couponRemove": "Retirer",
+      "couponDiscount": "Remise ({code})",
+      "refundGuarantee": "Garantie de remboursement de {days} jours",
+      "countryPlaceholder": "Choisissez un pays",
+      "autoRenew": "Renouvellement automatique à chaque période. Vous pouvez annuler à tout moment.",
+      "addonRenews": "Ce module complémentaire se renouvelle automatiquement à chaque période. Vous pouvez l’annuler à tout moment et le conserver jusqu’à la fin de la période payée.",
+      "cardTitle": "Payer par carte",
+      "payNow": "Payer maintenant"
+    },
+    "orders": {
+      "title": "Historique des commandes",
+      "lifetime": "Dépenses totales : {total}",
+      "loading": "Chargement des commandes",
+      "loadFailed": "Impossible de charger vos commandes. Rechargez la page pour réessayer.",
+      "emptyTitle": "Aucune commande pour le moment",
+      "emptyMessage": "Vos achats apparaîtront ici.",
+      "browsePlans": "Parcourir les forfaits",
+      "loadMore": "Charger plus",
+      "outcome": {
+        "success": "Paiement reçu. Merci.",
+        "failed": "Le paiement n’a pas abouti. Réessayez ou choisissez une autre passerelle.",
+        "cancelled": "Vous avez annulé le paiement.",
+        "pending": "Nous attendons la confirmation de votre paiement par le fournisseur. Cette page se mettra à jour dès qu’elle sera reçue.",
+        "notfound": "Nous n’avons pas trouvé cette commande.",
+        "proof": "Justificatif de paiement envoyé. Nous le vérifierons et activerons votre forfait sous peu."
+      },
+      "col": {
+        "order": "Commande",
+        "item": "Article",
+        "date": "Date",
+        "amount": "Montant",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "status": {
+        "pending": "En attente",
+        "awaiting_approval": "En attente d’approbation",
+        "paid": "Payée",
+        "failed": "Échouée",
+        "cancelled": "Annulée",
+        "refunded": "Remboursée"
+      },
+      "uploadProof": "Justificatif de paiement",
+      "invoice": "Facture"
+    },
+    "billing": {
+      "common": {
+        "admin": "Admin",
+        "breadcrumb": "Fil d’Ariane",
+        "billingHistory": "Historique de facturation",
+        "analytics": "Analyses",
+        "exportCsv": "Exporter en CSV",
+        "exportTruncated": "L’export s’est arrêté à {rows} lignes. Affinez les filtres pour exporter le reste.",
+        "exportFailed": "L’export n’a pas pu être créé. Réessayez.",
+        "actionFailed": "Échec de l’opération. Rechargez la page et réessayez.",
+        "cancel": "Annuler",
+        "back": "Conserver",
+        "close": "Fermer",
+        "openWorkspace": "Ouvrir l’espace de travail",
+        "showing": "Affichage de {from} à {to} sur {total} {noun}",
+        "pager": "Pages",
+        "previous": "Précédent",
+        "next": "Suivant",
+        "chartEmpty": "Aucune donnée sur cette période.",
+        "periods": {
+          "monthly": "mensuel",
+          "yearly": "annuel"
+        },
+        "status": {
+          "pending": "en attente",
+          "awaiting_approval": "en attente d’approbation",
+          "paid": "payée",
+          "failed": "échouée",
+          "cancelled": "annulée",
+          "refunded": "remboursée"
+        },
+        "windows": {
+          "7d": "7 derniers jours",
+          "30d": "30 derniers jours",
+          "90d": "90 derniers jours",
+          "1y": "Dernière année",
+          "all": "Depuis le début"
+        }
+      },
+      "orders": {
+        "title": "Historique des commandes",
+        "eyebrow": "Admin · Facturation et forfaits · Historique des commandes",
+        "titleFirst": "Commandes",
+        "titleSecond": "historique",
+        "description": "Commandes d’abonnement, passages de forfait supérieur et inférieur, achats de modules complémentaires et recharges uniques : chaque décision commerciale prise par un espace de travail.",
+        "window": "Période",
+        "windows": {
+          "90d": "90 derniers jours",
+          "this_year": "Cette année",
+          "all": "Depuis le début"
+        },
+        "kpi": {
+          "total": "Total des commandes",
+          "vsPrevious": "vs période précédente",
+          "upgrades": "Passages supérieurs",
+          "mrrAdded": "+{amount} de MRR ajouté",
+          "downgrades": "Passages inférieurs",
+          "mrrLowered": "{amount} sur des forfaits inférieurs",
+          "addons": "Lots de modules complémentaires",
+          "attached": "{amount} rattachés",
+          "cancellations": "Annulations",
+          "mrrLost": "-{amount} de MRR perdu"
+        },
+        "typeFilter": "Filtrer par type de commande",
+        "types": {
+          "all": "Toutes",
+          "new": "Nouvel abonnement",
+          "upgrade": "Passage supérieur",
+          "downgrade": "Passage inférieur",
+          "addon": "Module complémentaire",
+          "cancel": "Annulation"
+        },
+        "rowTypes": {
+          "new": "Nouveau",
+          "renewal": "Renouvellement",
+          "upgrade": "Passage supérieur",
+          "downgrade": "Passage inférieur",
+          "addon": "Module complémentaire",
+          "wallet_topup": "Recharge du portefeuille",
+          "manual": "Manuelle"
+        },
+        "search": "Rechercher par n° de commande, espace de travail, forfait…",
+        "noun": "commandes",
+        "col": {
+          "order": "N° de commande",
+          "date": "Date",
+          "workspace": "Espace de travail",
+          "type": "Type",
+          "item": "Forfait / article",
+          "mrr": "Δ MRR",
+          "total": "Total",
+          "status": "Statut"
+        },
+        "empty": "Aucune commande sur cette période.",
+        "awaitingApproval": "en attente d’approbation",
+        "actions": {
+          "markPaid": "Marquer comme payée",
+          "cancelOrder": "Annuler",
+          "approve": "Approuver",
+          "reject": "Rejeter"
+        },
+        "confirm": {
+          "approveTitle": "Marquer cette commande comme payée ?",
+          "approve": "Marquer cette commande comme payée et activer le forfait ?",
+          "cancelTitle": "Annuler cette commande ?",
+          "cancel": "Annuler cette commande en attente ? Elle sera marquée comme annulée et ne figurera plus dans les montants dus."
+        },
+        "reject": {
+          "title": "Rejeter {order}",
+          "reason": "Motif (facultatif)"
+        },
+        "awaiting": {
+          "title": "En attente d’approbation",
+          "ref": "Réf. :",
+          "proofAttached": "Justificatif de paiement joint"
+        }
+      },
+      "orderAnalytics": {
+        "title": "Analyses des commandes",
+        "eyebrow": "Admin · Facturation et forfaits · Analyses des commandes",
+        "titleFirst": "Commandes",
+        "titleSecond": "analyses",
+        "description": "Abonnements, passages de forfait, modules complémentaires et annulations : ce qui fait évoluer le revenu net sur la plateforme.",
+        "window": "Période",
+        "viewLedger": "Voir le journal",
+        "kpi": {
+          "total": "Total des commandes",
+          "newMrr": "Nouveau MRR net",
+          "paid": "{count} payées",
+          "lostMrr": "MRR perdu",
+          "cancels": "{count} annulations",
+          "aov": "Panier moyen",
+          "paidOrders": "commandes payées",
+          "attach": "Taux d’adoption des modules complémentaires",
+          "attachLabel": "{addons} modules complémentaires / {total}",
+          "conversion": "Taux de conversion",
+          "conversionHint": "commandes payées pour {signups} inscriptions"
+        },
+        "motion": {
+          "kicker": "Évolution des commandes",
+          "title": "Commandes payées et annulations",
+          "paid": "Payées",
+          "cancelled": "Annulées ou échouées"
+        },
+        "typeMix": {
+          "kicker": "Répartition par type de commande",
+          "title": "Par type"
+        },
+        "addons": {
+          "kicker": "Modules complémentaires vendus",
+          "title": "Meilleurs résultats",
+          "empty": "Aucune commande de module complémentaire sur cette période."
+        },
+        "funnel": {
+          "kicker": "Entonnoir de conversion",
+          "title": "De l’inscription au paiement",
+          "note": "Seules les étapes comptabilisées sont affichées."
+        },
+        "countries": {
+          "kicker": "Par pays",
+          "title": "Principaux marchés",
+          "empty": "Aucun pays de facturation n’a encore été renseigné."
+        },
+        "cohorts": {
+          "kicker": "Rétention par cohorte",
+          "title": "% d’espaces de travail encore actifs N mois plus tard",
+          "last": "6 dernières cohortes",
+          "emptyTitle": "Aucune inscription d’espace de travail pour le moment",
+          "empty": "Les cohortes apparaissent dès que des espaces de travail se sont inscrits."
+        }
+      },
+      "history": {
+        "title": "Historique de facturation",
+        "eyebrow": "Admin · Facturation et forfaits · Historique de facturation",
+        "titleFirst": "Facturation",
+        "titleSecond": "historique",
+        "description": "Tous les événements de paiement traités par la plateforme : débits, remboursements et nouvelles tentatives, pour tous les espaces de travail.",
+        "window": "Période",
+        "kpi": {
+          "gross": "Revenu brut",
+          "vsPrev": "vs période préc.",
+          "charges": "Débits réussis",
+          "successRate": "Taux de réussite de {pct} %",
+          "failed": "Échoués",
+          "dunning": "à relancer / relances de paiement",
+          "refunds": "Remboursements émis",
+          "refundsTotal": "{amount} au total",
+          "chargebacks": "Contestations",
+          "disputed": "{amount} contesté(s)"
+        },
+        "trend": {
+          "kicker": "Tendance",
+          "title": "Débits et remboursements quotidiens",
+          "charges": "Débits",
+          "refunds": "Remboursements"
+        },
+        "statusFilter": "Filtrer par statut de paiement",
+        "statuses": {
+          "all": "Tous",
+          "paid": "Réussis",
+          "failed": "Échoués",
+          "refunded": "Remboursés",
+          "pending": "En attente"
+        },
+        "gateway": "Passerelle",
+        "allGateways": "Toutes les passerelles",
+        "search": "Rechercher par n° de commande, espace de travail, client…",
+        "noun": "événements",
+        "col": {
+          "date": "Date",
+          "order": "N° de commande",
+          "workspace": "Espace de travail",
+          "gateway": "Passerelle",
+          "plan": "Forfait",
+          "amount": "Montant",
+          "status": "Statut",
+          "actions": "Actions"
+        },
+        "empty": "Aucun événement de paiement ne correspond."
+      },
+      "billingAnalytics": {
+        "title": "Analyses de facturation",
+        "eyebrow": "Admin · Facturation et forfaits · Analyses de facturation",
+        "titleFirst": "Facturation",
+        "titleSecond": "analyses",
+        "description": "Flux de trésorerie, taux de réussite des paiements, répartition par passerelle et tendances des remboursements sur la plateforme.",
+        "window": "Période",
+        "viewLedger": "Voir le journal",
+        "kpi": {
+          "gross": "Revenu brut",
+          "net": "Revenu net",
+          "netPct": "{pct} % net",
+          "success": "Autorisations réussies",
+          "failed": "Échouées",
+          "events": "{count, plural, one {# événement} other {# événements}}",
+          "refunds": "Remboursements",
+          "chargebacks": "Contestations",
+          "disputes": "{count, plural, one {# contestation} other {# contestations}}"
+        },
+        "cashFlow": {
+          "kicker": "Flux de trésorerie",
+          "title": "Débits, remboursements et échecs",
+          "charges": "Débits",
+          "refunds": "Remboursements",
+          "failed": "Échecs"
+        },
+        "gatewayShare": {
+          "title": "Part par passerelle",
+          "hint": "Répartition du revenu payé par fournisseur"
+        },
+        "topPayers": {
+          "title": "Espaces de travail les plus payants",
+          "hint": "Dépenses les plus élevées sur la période",
+          "all": "Tous les espaces de travail",
+          "workspace": "Espace de travail",
+          "orders": "Commandes",
+          "total": "Total",
+          "empty": "Aucune commande payée sur cette période.",
+          "unknown": "Espace de travail supprimé"
+        },
+        "statusMix": {
+          "title": "Répartition des statuts de commande",
+          "hint": "Nombre par état du cycle de vie"
+        }
+      },
+      "invoices": {
+        "title": "Factures",
+        "eyebrow": "Admin · Facturation et forfaits · Factures",
+        "titleFirst": "Toutes",
+        "titleSecond": "factures",
+        "description": "Chaque commande sous forme de document de facturation. Filtrez par statut, ouvrez et imprimez une facture, marquez-la comme payée, invalidez-la ou créez-en une manuellement.",
+        "window": "Période",
+        "windows": {
+          "all": "Depuis le début",
+          "this_month": "Ce mois-ci",
+          "last_month": "Le mois dernier",
+          "this_quarter": "Ce trimestre",
+          "this_year": "Cette année"
+        },
+        "kpi": {
+          "total": "Total des factures",
+          "allTime": "depuis le début",
+          "paid": "Payées",
+          "outstanding": "Montants dus",
+          "due": "{amount} dû(s)",
+          "overdue": "En retard",
+          "overdueHint": "En retard de plus de 15 jours",
+          "thisMonth": "Ce mois-ci",
+          "mom": "MoM"
+        },
+        "statusFilter": "Filtrer par statut de facture",
+        "statuses": {
+          "all": "Toutes",
+          "paid": "Payées",
+          "outstanding": "Montants dus",
+          "overdue": "En retard",
+          "refunded": "Remboursées",
+          "void": "Invalidée"
+        },
+        "badges": {
+          "paid": "payées",
+          "outstanding": "dues",
+          "overdue": "en retard",
+          "refunded": "remboursées",
+          "void": "invalidées"
+        },
+        "search": "Rechercher par n° de facture, espace de travail, propriétaire…",
+        "noun": "factures",
+        "col": {
+          "number": "N° de facture",
+          "issued": "Date d’émission",
+          "due": "Date d’échéance",
+          "workspace": "Espace de travail",
+          "item": "Article",
+          "amount": "Montant",
+          "status": "Statut",
+          "view": "Voir",
+          "actions": "Actions"
+        },
+        "daysLate": "{days} j de retard",
+        "refunded": "remboursée",
+        "viewInvoice": "Voir la facture",
+        "rowMenu": "Actions pour {number}",
+        "empty": "Aucune facture sur cette période.",
+        "actions": {
+          "view": "Voir",
+          "markPaid": "Marquer comme payée",
+          "void": "Invalider",
+          "delete": "Supprimer"
+        },
+        "confirm": {
+          "markPaidTitle": "Marquer cette facture comme payée ?",
+          "markPaid": "Marquer cette facture comme payée ? Le forfait, le module complémentaire ou le crédit de portefeuille pour lequel elle a été émise est également appliqué.",
+          "markPaidManual": "Marquer cette facture manuelle comme payée ? Seul le paiement est enregistré.",
+          "voidTitle": "Invalider cette facture ?",
+          "void": "Invalider cette facture ? Elle reste enregistrée mais est annulée.",
+          "deleteTitle": "Supprimer cette facture ?",
+          "delete": "Supprimer définitivement cette facture ? Cette action est irréversible."
+        },
+        "manual": {
+          "tag": "manuelle",
+          "open": "Facture manuelle",
+          "eyebrow": "Factures",
+          "title": "Facture manuelle",
+          "workspace": "Espace de travail",
+          "chooseWorkspace": "Choisissez un espace de travail",
+          "customerName": "Nom du client",
+          "customerNameHint": "Par défaut, le nom de l’espace de travail.",
+          "customerEmail": "E-mail du client",
+          "description": "Description",
+          "amount": "Montant",
+          "currency": "Devise",
+          "status": "Statut",
+          "statuses": {
+            "pending": "En attente",
+            "paid": "Payée"
+          },
+          "issuedAt": "Date d’émission",
+          "issuedAtHint": "Laissez vide pour aujourd’hui. Une date passée antidate la facture.",
+          "submit": "Créer la facture",
+          "created": "Facture manuelle {number} créée."
+        }
+      },
+      "invoice": {
+        "title": "Facture",
+        "print": "Imprimer",
+        "downloadPdf": "Télécharger le PDF",
+        "banner": {
+          "invoice": "Facture n° {number}",
+          "issued": "Émise le {date}",
+          "settled": "réglée le {date}",
+          "paidInFull": "payée intégralement"
+        },
+        "taxInvoice": "Facture fiscale",
+        "invoiceWord": "FACTURE",
+        "taxIdLabel": "GSTIN/TVA",
+        "number": "N° de facture",
+        "issueDate": "Date d’émission",
+        "paidDate": "Date de paiement",
+        "status": "Statut",
+        "billTo": "Facturé à",
+        "payment": "Paiement",
+        "method": "Moyen",
+        "txn": "ID de transaction",
+        "captured": "Encaissé le",
+        "currency": "Devise",
+        "coupon": "Coupon",
+        "description": "Description",
+        "qty": "Qté",
+        "unit": "Unitaire",
+        "total": "Total",
+        "discount": "Remise",
+        "code": "code",
+        "subtotal": "Sous-total",
+        "amountPaid": "Montant payé",
+        "balanceDue": "Solde dû",
+        "notes": "Remarques",
+        "notesText": "Merci de votre confiance. Cette facture couvre la commande mentionnée ci-dessus. Indiquez le numéro de facture pour toute question de facturation.",
+        "help": "Besoin d’aide ?",
+        "helpFallback": "Contactez l’administrateur de la plateforme.",
+        "refundNote": "Pour le support ou les remboursements, écrivez-nous dans les {days} jours suivant le paiement.",
+        "regNo": "N° d’immatriculation",
+        "computerGenerated": "Cette facture est générée par ordinateur et ne nécessite pas de signature."
+      },
+      "settings": {
+        "title": "Paramètres de facturation",
+        "eyebrow": "Admin · Facturation et forfaits · Paramètres",
+        "titleFirst": "Facturation",
+        "titleSecond": "paramètres",
+        "description": "Tout ce que lisent les pages tarifs et de paiement : taxes, délai de remboursement, remise annuelle, renouvellement automatique, identité de vos factures et liste des pays. Les modifications s’appliquent au prochain chargement de page.",
+        "previewPlans": "Aperçu de la page des forfaits",
+        "readOnly": "Seul un super administrateur peut modifier les paramètres de facturation.",
+        "conflict": "Quelqu’un d’autre a modifié ces paramètres. Ils ont été rechargés ; vérifiez-les puis enregistrez à nouveau.",
+        "saved": "Paramètres de facturation enregistrés.",
+        "save": "Enregistrer les paramètres",
+        "tax": {
+          "title": "Taxe",
+          "hint": "Appliquée à chaque sous-total du paiement. Désactivez cette option si vos prix affichés sont en taxe incluse.",
+          "rate": "Taux (%)",
+          "label": "Libellé",
+          "labelPlaceholder": "GST / TVA / Taxe de vente"
+        },
+        "company": {
+          "title": "Identité de la société et de facturation",
+          "hint": "Les informations de votre entité juridique. Elles figurent sur chaque facture : bloc « facturé par », numéro de taxe et pied de page.",
+          "name": "Raison sociale",
+          "taxId": "Numéro de taxe (GSTIN / TVA)",
+          "address": "Adresse du siège",
+          "regNo": "N° d’enregistrement / CIN",
+          "email": "E-mail de facturation",
+          "phone": "Téléphone du support"
+        },
+        "logo": {
+          "title": "Logo de la facture",
+          "hint": "Affiché en haut de chaque facture et reçu. PNG, JPG, SVG ou WebP, jusqu’à {kb} Ko. Laissez vide pour utiliser le logo de votre site.",
+          "none": "Aucun logo",
+          "choose": "Choisir un fichier de logo",
+          "remove": "Supprimer le logo actuel (utiliser le logo du site)",
+          "fallback": "Le logo de marque du site est actuellement utilisé par défaut.",
+          "tooBig": "Le logo ne doit pas dépasser {kb} Ko."
+        },
+        "refund": {
+          "title": "Garantie de remboursement",
+          "hint": "Lorsqu’elle est activée, le paiement affiche la période de garantie sous le récapitulatif de commande. Désactivez pour la masquer partout.",
+          "days": "Délai (jours)"
+        },
+        "yearly": {
+          "title": "Bascule de facturation annuelle",
+          "hint": "Affiche le sélecteur Mensuel / Annuel sur la page tarifs. Masquez-le entièrement si tous les forfaits sont mensuels uniquement.",
+          "discount": "Remise annuelle (%)",
+          "formula": "Prix annuel = mensuel × 12 × (1 − remise %)."
+        },
+        "recurring": {
+          "title": "Abonnements à renouvellement automatique",
+          "hint": "Lorsqu’elle est activée, les forfaits payants à durée (mensuels ou annuels) se renouvellent automatiquement : la passerelle débite la carte à chaque cycle et la validité du forfait se prolonge d’elle-même. Les forfaits gratuits, à vie ou sur devis ne se renouvellent jamais, et toute passerelle sans renouvellement récurrent reste un paiement unique. Désactivez pour facturer chaque achat une seule fois.",
+          "graceDays": "Période de grâce (jours)",
+          "graceHint": "Lorsqu’un débit de renouvellement échoue, le forfait ou le module complémentaire reste actif ce nombre de jours après la fin de sa période, le temps que la passerelle réessaie. 0 désactive la période de grâce.",
+          "gateways": "Passerelles prenant en charge le renouvellement automatique",
+          "note": "Braintree ne renouvelle automatiquement qu’après avoir défini un identifiant de forfait dans les identifiants de sa passerelle. Square facture chaque cycle en envoyant au client une facture par e-mail (aucun débit silencieux de carte). Chaque renouvellement nécessite l’URL du webhook de la passerelle, à définir dans le tableau de bord du fournisseur."
+        },
+        "countries": {
+          "title": "Liste des pays du paiement",
+          "hint": "Les options du sélecteur de pays du formulaire de facturation, utilisées pour l’adresse de facturation. Un pays par ligne ; l’ordre est conservé."
+        },
+        "links": {
+          "coupons": "Coupons",
+          "couponsTitle": "Gérer les codes de réduction",
+          "couponsHint": "Ajoutez, modifiez ou désactivez n’importe quel coupon.",
+          "faqs": "FAQ",
+          "faqsTitle": "Modifier les FAQ de la page tarifs",
+          "faqsHint": "Éléments en accordéon affichés sous les forfaits.",
+          "configured": "{count} configuré(s)."
+        }
+      }
+    },
+    "offline": {
+      "eyebrow": {
+        "bank_transfer": "Paiement / Virement bancaire",
+        "offline": "Caisse / Hors ligne"
+      },
+      "title": {
+        "bank_transfer": "Effectuer le virement",
+        "offline": "Contactez-nous pour finaliser cette commande"
+      },
+      "intro": {
+        "bank_transfer": "Envoyez <strong>{amount}</strong> sur le compte ci-dessous. Utilisez <mono>{ref}</mono> comme référence afin que nous puissions rapprocher le paiement de votre commande.",
+        "offline": "Commande <mono>{ref}</mono> · <strong>{amount}</strong> · facturée en {currency}"
+      },
+      "instructions": "Instructions",
+      "referenceNote": "<strong>Référence :</strong> indiquez <mono>{ref}</mono> sur le virement, puis envoyez ci-dessous la preuve de paiement. Votre forfait sera activé dès que notre équipe aura vérifié le paiement.",
+      "proofTitle": "Envoyer la preuve de paiement",
+      "proofHelp": "Déjà payé ? Téléversez votre reçu et votre référence afin que nous puissions vérifier et activer votre forfait.",
+      "later": {
+        "bank_transfer": "J’ai envoyé le paiement, j’enverrai la preuve plus tard",
+        "offline": "Compris, j’enverrai la preuve plus tard"
+      }
+    },
+    "proof": {
+      "file": "Capture d’écran / reçu du paiement",
+      "fileHint": "JPG, PNG, WEBP ou PDF · 4 Mo maximum",
+      "reference": "Numéro de référence / UTR",
+      "referencePlaceholder": "ex. UTR / identifiant de transaction",
+      "note": "Note (facultatif)",
+      "notePlaceholder": "Tout élément utile concernant ce paiement",
+      "submit": "Envoyer la preuve de paiement",
+      "sending": "Téléversement",
+      "chooseFile": "Choisissez un reçu à téléverser.",
+      "tooLarge": "Ce fichier dépasse 4 Mo.",
+      "rejected": "Ce type de fichier n’est pas autorisé. Utilisez un fichier JPG, PNG, WEBP ou PDF.",
+      "closed": "La preuve de paiement ne peut plus être envoyée pour cette commande.",
+      "failed": "Impossible de téléverser le fichier. Réessayez."
+    }
+  }
+}

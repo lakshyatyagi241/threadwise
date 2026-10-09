@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "Weiter",
+      "back": "Zurück",
+      "sending": "Wird gesendet…",
+      "optional": "optional",
+      "selectPlaceholder": "Eine Option auswählen",
+      "stepOf": "Schritt {n} von {total}",
+      "summaryTitle": "{count, plural, one {Bitte korrigieren Sie 1 Feld} other {Bitte korrigieren Sie # Felder}}",
+      "successTitle": "Vielen Dank",
+      "continue": "Weiter",
+      "previewNotice": "Vorschau: Von hier wird nichts gesendet.",
+      "honeypot": "Dieses Feld leer lassen",
+      "privacyPolicy": "Datenschutzerklärung",
+      "poweredBy": "Bereitgestellt von {brand}",
+      "brandName": "Formulare",
+      "captchaNeeded": "Bitte lösen Sie die Prüfung unten, bevor Sie senden.",
+      "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+      "closed": "Dieses Formular nimmt im Moment keine Antworten an.",
+      "genericError": "Etwas ist schiefgelaufen, Ihre Antworten wurden nicht gesendet. Bitte versuchen Sie es erneut.",
+      "notAvailableTitle": "Dieses Formular ist nicht verfügbar",
+      "notAvailableBody": "Der Link ist möglicherweise falsch oder das Formular wurde geschlossen.",
+      "errors": {
+        "required": "Dieses Feld ist ein Pflichtfeld.",
+        "consent_required": "Bitte setzen Sie den Haken, um fortzufahren.",
+        "invalid_email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+        "invalid_phone": "Geben Sie eine gültige Telefonnummer ein, wenn möglich mit Ländervorwahl.",
+        "invalid_number": "Geben Sie eine gültige Zahl ein.",
+        "invalid_date": "Geben Sie ein gültiges Datum ein.",
+        "too_small": "Geben Sie einen Wert von mindestens {min} ein.",
+        "too_large": "Geben Sie einen Wert von höchstens {max} ein.",
+        "too_short": "Geben Sie mindestens {min} Zeichen ein.",
+        "too_long": "Geben Sie höchstens {max} Zeichen ein.",
+        "pattern": "Dies entspricht nicht dem erwarteten Format.",
+        "invalid_option": "Wählen Sie eine der aufgelisteten Optionen."
+      },
+      "closedTitle": "Dieses Formular ist geschlossen"
+    }
+  }
+}

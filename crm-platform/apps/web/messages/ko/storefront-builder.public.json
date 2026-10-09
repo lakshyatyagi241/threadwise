@@ -1,0 +1,336 @@
+{
+  "shopPublic": {
+    "common": {
+      "close": "닫기",
+      "ok": "확인",
+      "done": "완료",
+      "skip": "본문으로 건너뛰기"
+    },
+    "strip": "WhatsApp으로 주문 · 착불 결제 가능 · 무료 채팅, 빠른 답변",
+    "header": {
+      "navLabel": "샵 섹션",
+      "shop": "샵",
+      "categories": "카테고리",
+      "about": "소개",
+      "searchPlaceholder": "상품 검색…",
+      "searchLabel": "상품 검색",
+      "wishlist": "위시리스트",
+      "compare": "비교",
+      "cart": "장바구니",
+      "withCount": "{label}, {count, plural, other {품목 #개}}"
+    },
+    "hero": {
+      "welcome": "{shop}에 오신 것을 환영합니다.",
+      "sub": "엄선된 상품. 어떤 상품이든 WhatsApp에서 바로 주문하세요. 결제 양식도, 앱 설치도 필요 없습니다.",
+      "trust": {
+        "cod": "착불 결제",
+        "chat": "무료 채팅 지원",
+        "returns": "간편 반품"
+      }
+    },
+    "catalog": {
+      "label": "상품",
+      "emptyTitle": "아직 상품이 없습니다",
+      "emptyBody": "운영자가 아직 설정 중입니다. 잠시 후 다시 확인해 주세요.",
+      "count": "{count, plural, other {상품 #개}}",
+      "sort": {
+        "label": "상품 정렬",
+        "featured": "정렬 · 추천순",
+        "priceAsc": "가격 · 낮은 순",
+        "priceDesc": "가격 · 높은 순",
+        "nameAsc": "이름 · A → Z",
+        "nameDesc": "이름 · Z → A"
+      },
+      "view": {
+        "label": "보기 방식",
+        "grid": "그리드 보기",
+        "list": "목록 보기"
+      },
+      "filters": {
+        "title": "필터",
+        "category": "카테고리",
+        "price": "가격",
+        "min": "최소",
+        "max": "최대",
+        "range": "범위: {min} — {max}",
+        "availability": "재고 상태",
+        "inStock": "재고 있는 상품만",
+        "onSale": "할인 중",
+        "reset": "필터 초기화",
+        "clear": "필터 지우기"
+      },
+      "noMatch": "필터 조건에 맞는 상품이 없습니다",
+      "showMore": "상품 더 보기",
+      "loading": "불러오는 중…",
+      "retry": "다시 시도",
+      "showing": "전체 {total}개 상품 중 {shown}개 표시"
+    },
+    "card": {
+      "new": "신상품",
+      "soldOut": "품절",
+      "soldOutNamed": "{name}: 품절",
+      "addToCart": "장바구니에 담기",
+      "addToCartNamed": "{name}을(를) 장바구니에 담기",
+      "addWish": "{name}을(를) 위시리스트에 추가",
+      "removeWish": "위시리스트에서 {name} 제거",
+      "quickView": "{name} 간편 보기",
+      "quickViewTitle": "간편 보기",
+      "was": "이전 가격"
+    },
+    "quick": {
+      "details": "상세 정보 →"
+    },
+    "product": {
+      "gallery": "상품 이미지",
+      "showImage": "이미지 {n} 표시",
+      "breadcrumb": "현재 위치",
+      "save": "{percent}% 할인",
+      "onlyLeft": "{count}개만 남았습니다",
+      "inStock": "재고 있음 · 즉시 발송 가능",
+      "quantity": "수량",
+      "addCompare": "비교에 추가",
+      "removeCompare": "비교에서 제거",
+      "share": "이 상품 공유",
+      "shareTitle": "이 상품 공유",
+      "ask": "WhatsApp으로 문의하기",
+      "sku": "SKU",
+      "category": "카테고리",
+      "weight": "무게",
+      "grams": "{count}g",
+      "delivery": "배송",
+      "deliveryTime": "영업일 2–5일",
+      "tags": "태그",
+      "tabs": {
+        "label": "상품 정보",
+        "desc": "설명",
+        "ship": "배송 및 반품",
+        "reviews": "리뷰"
+      },
+      "noDescription": "아직 설명이 없습니다. 자세한 내용은 WhatsApp으로 판매자에게 문의하세요.",
+      "shippingHeading": "배송.",
+      "shippingBody": "주문은 영업일 1–2일 이내에 발송됩니다. 배송 기간은 지역에 따라 다르며 보통 영업일 2–5일입니다.",
+      "freeAbove": "{amount} 이상 주문 시 무료 배송.",
+      "returnsHeading": "반품.",
+      "returnsBody": "사용하지 않은 상품은 배송 후 7일 이내에 반품할 수 있습니다. WhatsApp으로 메시지를 보내 반품을 요청하시면 수거를 준비해 드립니다.",
+      "reviewCount": "{count, plural, other {리뷰 #개}}",
+      "anonymous": "익명",
+      "ratingOf": "5점 만점에 {rating}점",
+      "noReviews": "아직 리뷰가 없습니다. 이 상품의 첫 리뷰를 남겨 주세요.",
+      "related": "이런 상품도 추천합니다"
+    },
+    "review": {
+      "write": "리뷰 작성",
+      "name": "이름",
+      "rating": "평점",
+      "ratings": {
+        "1": "나쁨",
+        "2": "미흡",
+        "3": "보통",
+        "4": "좋음",
+        "5": "매우 좋음"
+      },
+      "bodyLabel": "리뷰 내용",
+      "body": "경험을 공유해 주세요 (선택)",
+      "submit": "리뷰 등록",
+      "nameRequired": "이름을 입력해 주세요.",
+      "thanks": "리뷰를 남겨 주셔서 감사합니다!",
+      "network": "네트워크 오류입니다. 다시 시도해 주세요.",
+      "failed": "리뷰를 등록할 수 없습니다."
+    },
+    "cart": {
+      "title": "장바구니",
+      "subtotal": "소계",
+      "shipping": "배송비",
+      "free": "무료 ✓",
+      "total": "합계",
+      "addForFree": "{amount} 더 담으면 무료 배송",
+      "order": "WhatsApp으로 주문 →",
+      "payVia": "{method}로 결제 · 착불 결제",
+      "methods": {
+        "upi": "UPI",
+        "razorpay": "Razorpay",
+        "card": "카드",
+        "paypal": "PayPal",
+        "bank": "계좌이체"
+      },
+      "codOnly": "착불 결제 · 채팅에서 확인",
+      "emptyTitle": "장바구니가 비어 있습니다",
+      "emptyBody": "카탈로그를 둘러보고 마음에 드는 상품을 담아 보세요.",
+      "keepBrowsing": "계속 둘러보기",
+      "quantityOf": "{name} 수량",
+      "decrease": "수량 줄이기",
+      "increase": "수량 늘리기",
+      "remove": "장바구니에서 {name} 제거",
+      "fullTitle": "장바구니가 가득 찼습니다",
+      "fullBody": "장바구니에는 최대 100개의 서로 다른 상품을 담을 수 있습니다. 먼저 이 상품을 주문한 후 새 장바구니를 시작하세요."
+    },
+    "wish": {
+      "title": "위시리스트",
+      "emptyTitle": "아직 찜한 상품이 없습니다",
+      "emptyBody": "상품의 하트를 눌러 나중에 볼 수 있도록 저장하세요.",
+      "remove": "위시리스트에서 {name} 제거"
+    },
+    "compare": {
+      "title": "상품 비교",
+      "emptyTitle": "비교할 상품이 없습니다",
+      "emptyBody": "두 상품에서 “비교”를 눌러 나란히 확인하세요.",
+      "attribute": "속성",
+      "rows": {
+        "image": "이미지",
+        "name": "이름",
+        "price": "가격",
+        "sku": "SKU",
+        "category": "카테고리",
+        "description": "설명"
+      },
+      "remove": "비교에서 {name} 제거",
+      "bar": "비교할 상품",
+      "open": "비교 →",
+      "fullTitle": "비교 가득 참",
+      "fullBody": "한 번에 최대 {count}개 상품을 비교할 수 있습니다. 새 상품을 추가하려면 비교 바에서 하나를 제거하세요."
+    },
+    "stock": {
+      "title": "재고 {count}개만 남음",
+      "soldOut": "이 상품은 품절되었습니다. 곧 재입고될 예정입니다. 알림을 받으려면 WhatsApp으로 문의하세요.",
+      "limit": "{count, plural, other {판매 가능한 수량은 #개뿐이며 이미 모두 장바구니에 담겨 있습니다.}}",
+      "maxTitle": "한도에 도달했습니다",
+      "maxBody": "한 번에 한 상품을 최대 {count}개까지 주문할 수 있습니다."
+    },
+    "toast": {
+      "added": "{name} · 장바구니에 추가됨",
+      "wishAdded": "위시리스트에 추가됨 ♡",
+      "wishRemoved": "위시리스트에서 제거됨",
+      "compareAdded": "비교에 추가됨",
+      "compareRemoved": "비교에서 제거됨"
+    },
+    "checkout": {
+      "title": "결제",
+      "summary": "{count, plural, other {품목 #개}} · {total}",
+      "name": "이름",
+      "phone": "WhatsApp 번호",
+      "phonePlaceholder": "+1 555 123 4567",
+      "address": "배송 주소",
+      "note": "메모 (선택)",
+      "coupon": "할인 코드",
+      "apply": "적용",
+      "payment": "결제",
+      "prepaid": "온라인 결제 / 착불 결제 안내",
+      "cod": "착불 결제",
+      "place": "주문하기",
+      "placing": "주문 중…",
+      "opening": "주문이 접수되었습니다! WhatsApp을 여는 중…",
+      "nameRequired": "이름을 입력해 주세요.",
+      "phoneInvalid": "올바른 WhatsApp 번호를 입력해 주세요.",
+      "cartEmpty": "장바구니가 비어 있습니다.",
+      "emptyTitle": "장바구니가 비어 있습니다",
+      "emptyBody": "결제하기 전에 카탈로그를 둘러보고 상품을 담아 주세요.",
+      "failed": "주문을 처리할 수 없습니다. 다시 시도해 주세요.",
+      "network": "네트워크 오류입니다. 다시 시도해 주세요.",
+      "couponSave": "{discount} 할인 · 새 합계 {total}",
+      "couponFree": "무료 배송 적용 · 새 합계 {total}",
+      "couponInvalid": "이 장바구니에는 사용할 수 없는 코드입니다.",
+      "couponNetwork": "해당 코드를 확인할 수 없습니다.",
+      "couponFallback": "유효하지 않은 코드입니다."
+    },
+    "errors": {
+      "itemsUnavailable": "일부 상품은 더 이상 구매할 수 없습니다. 새로고침한 후 다시 시도해 주세요.",
+      "notAvailable": "이 스토어는 사용할 수 없습니다.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도해 주세요."
+    },
+    "placed": {
+      "title": "주문이 접수되었습니다",
+      "track": "주문 #{orderNo} 배송 조회 →"
+    },
+    "share": {
+      "title": "공유",
+      "url": "공유할 링크",
+      "copy": "복사",
+      "copied": "복사됨 ✓",
+      "copyFailed": "링크를 복사할 수 없습니다",
+      "linkCopied": "링크가 복사되었습니다",
+      "whatsapp": "WhatsApp",
+      "whatsappHint": "채팅으로 보내기",
+      "email": "이메일",
+      "emailHint": "메일 앱 열기",
+      "telegram": "Telegram",
+      "telegramHint": "채팅으로 공유",
+      "more": "더보기…",
+      "moreHint": "휴대폰 공유 메뉴",
+      "showQr": "QR 코드 보기 →",
+      "qrTitle": "링크의 QR 코드",
+      "scan": "스캔하여 샵 열기"
+    },
+    "info": {
+      "freeAbove": "{amount} 이상 무료 배송.",
+      "shipping": {
+        "title": "배송 안내",
+        "body": "주문은 WhatsApp으로 확인됩니다. 배송 기간은 지역에 따라 다르며 보통 영업일 2–5일입니다."
+      },
+      "returns": {
+        "title": "반품",
+        "body": "사용하지 않은 상품은 7일 이내에 반품할 수 있습니다. WhatsApp으로 메시지를 보내 반품을 요청하세요."
+      },
+      "howToOrder": {
+        "title": "주문 방법",
+        "body": "카탈로그를 둘러보고 장바구니에 담은 후 “WhatsApp으로 주문”을 누르세요. 채팅으로 주문을 확인하고 배송을 준비합니다."
+      },
+      "privacy": {
+        "title": "개인정보",
+        "body": "주문 처리를 위해 채팅으로 공유하신 정보만 수집합니다. 개인정보를 판매하지 않습니다."
+      }
+    },
+    "footer": {
+      "blurb": "엄선된 상품을 전화 통화하듯 WhatsApp으로 주문하세요. 앱이 필요 없으며 채팅으로 구매하시면 됩니다.",
+      "paymentsLabel": "결제 방법",
+      "pay": {
+        "whatsapp": "WhatsApp",
+        "upi": "UPI",
+        "cod": "착불 결제",
+        "bank": "계좌이체"
+      },
+      "shopHeading": "샵",
+      "allProducts": "전체 상품",
+      "helpHeading": "도움말",
+      "help": {
+        "shipping": "배송",
+        "returns": "반품",
+        "howToOrder": "주문 방법",
+        "privacy": "개인정보"
+      },
+      "contactHeading": "문의",
+      "whatsappLink": "WhatsApp · {number}",
+      "hours": "월–일 · 오전 9시–오후 9시",
+      "hoursToast": "운영 시간: 오전 9시–오후 9시",
+      "copyright": "© {year} {shop}"
+    },
+    "order": {
+      "title": "주문 #{orderNo}",
+      "progress": "주문 진행 상황",
+      "cancelled": "이 주문은 취소되었습니다. 예상치 못한 경우 문의해 주세요.",
+      "steps": {
+        "placed": "접수",
+        "confirmed": "확인됨",
+        "paid": "결제 완료",
+        "shipped": "발송됨"
+      },
+      "stepDone": "완료",
+      "stepTodo": "아직",
+      "items": "품목",
+      "qty": "수량 {qty} · {price}",
+      "free": "무료",
+      "deliveryTo": "배송지",
+      "payNow": "지금 결제",
+      "message": "이 주문에 대해 문의하기"
+    },
+    "notFound": {
+      "kicker": "워크스페이스에서 길을 잃었습니다",
+      "title": "페이지를 잘못 찾아오셨습니다.",
+      "body": "찾으시는 내용을 찾을 수 없습니다. 링크가 깨졌거나 페이지가 이동했거나 처음부터 존재하지 않았을 수 있습니다.",
+      "back": "뒤로 가기",
+      "signIn": "로그인",
+      "help": "도움이 필요하신가요?",
+      "support": "지원팀에 문의",
+      "metaTitle": "페이지를 찾을 수 없음"
+    }
+  }
+}

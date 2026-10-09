@@ -5,6 +5,7 @@ import {
   type FlowGraph,
   type FlowNode,
 } from '@crm/contracts';
+import { dedupeMsgs, msg, type Msg } from './msg';
 import { LIMITS, MAIN_NAME } from './simple-model';
 
 /**
@@ -23,7 +24,7 @@ import { LIMITS, MAIN_NAME } from './simple-model';
 export interface WaboImport {
   graph: FlowGraph;
   /** What did not come across, in words for the person importing. */
-  notes: string[];
+  notes: Msg[];
   /** Words that start the flow, from the file's Intent / FAQ records. */
   keywords: string;
 }
@@ -93,16 +94,14 @@ export interface WaboOptions {
 }
 
 export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
-  const notes: string[] = [];
+  const notes: Msg[] = [];
   const records = waboRecords(raw);
   const seen = new Set<string>();
   const all = records.filter((r) => {
     if (!isFlowNode(r) || seen.has(str(r.nodeId))) return false;
     // The console's built-in opt-in / opt-out messages are not in its list of flows (they belong to subscription settings).
     if (/^OPT-(IN|OUT)\b/i.test(str(r.qid))) {
-      notes.push(
-        'Left out the opt-in / opt-out messages: the console keeps them outside its list of flows.',
-      );
+      notes.push(msg('waboImport.notes.optInOut'));
       return false;
     }
     seen.add(str(r.nodeId));
@@ -276,7 +275,10 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
         for (const b of buttons)
           if (b.type !== 'flow' && !(opts.exact && b.type === 'live_agent'))
             notes.push(
-              `A "${str(b.type)}" button ("${str(rec(b.value).text)}") has no target in Simple.`,
+              msg('waboImport.notes.buttonNoTarget', {
+                type: str(b.type),
+                text: str(rec(b.value).text),
+              }),
             );
         return {
           type: 'buttons',
@@ -328,7 +330,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
       default: {
         const validate = ASK_TYPES[sub];
         if (!validate) {
-          notes.push(`Skipped a "${sub}" step: Simple has nothing like it.`);
+          notes.push(msg('waboImport.notes.skippedStep', { sub }));
           return null;
         }
         const key = str(rec(rec(r.property).property).value);
@@ -412,9 +414,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
         edge(id, `p${i}`, to);
         if (!leadTitle.has(to)) leadTitle.set(to, str(v.text).trim());
       } else if (rec(t).type === 'flow' && str(v.nodeId))
-        notes.push(
-          `"${str(v.text).trim()}" leads to a flow that is not in this file; it ends there until you link it.`,
-        );
+        notes.push(msg('waboImport.notes.leadsOutside', { text: str(v.text).trim() }));
     });
   }
 
@@ -459,9 +459,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
         if (a.type !== 'connect_node') continue;
         const to = idByNode.get(str(a.nodeId));
         if (!to) {
-          notes.push(
-            `A step connects to a node that is not in this file (${str(a.nodeId).slice(0, 8)}); it stays unlinked.`,
-          );
+          notes.push(msg('waboImport.notes.connectsOutside', { id: str(a.nodeId).slice(0, 8) }));
           continue;
         }
         if (c.type === 'buttons' || c.type === 'list') continue;
@@ -533,7 +531,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
 
   return {
     graph: { flowNodes: [trigger, ...nodes], flowEdges: edges, vars },
-    notes: Array.from(new Set(notes)),
+    notes: dedupeMsgs(notes),
     keywords,
   };
 }

@@ -1,0 +1,686 @@
+{
+  "platform-payment-gateways": {
+    "nav": {
+      "gateways": "Gateway pembayaran",
+      "group": "Penagihan",
+      "orders": "Riwayat pesanan",
+      "billingHistory": "Riwayat penagihan",
+      "invoices": "Faktur",
+      "billingSettings": "Pengaturan penagihan"
+    },
+    "admin": {
+      "title": "Gateway pembayaran",
+      "description": "{count} gateway. Kredensial dienkripsi saat disimpan dan tidak pernah ditampilkan lagi setelah disimpan.",
+      "kpi": {
+        "total": "Gateway",
+        "active": "Aktif",
+        "india": "India",
+        "crypto": "Kripto"
+      },
+      "tabsLabel": "Filter berdasarkan wilayah",
+      "all": "Semua",
+      "search": "Filter berdasarkan nama atau slug",
+      "emptyTitle": "Tidak ada gateway di sini",
+      "emptyMessage": "Tidak ada yang cocok dengan wilayah dan pencarian ini. Coba tab lain atau hapus pencarian.",
+      "regions": {
+        "popular": "Populer",
+        "india": "India",
+        "asia": "Asia",
+        "mena": "MENA",
+        "europe": "Eropa",
+        "us": "AS dan Kanada",
+        "africa": "Afrika",
+        "latam": "Amerika Latin",
+        "crypto": "Kripto",
+        "offline": "Offline"
+      },
+      "card": {
+        "active": "Aktif",
+        "disabled": "Nonaktif",
+        "mode": {
+          "sandbox": "Sandbox",
+          "live": "Live"
+        },
+        "keysSaved": "Kunci tersimpan",
+        "noDriverBadge": "Driver belum tersedia",
+        "activate": "Aktifkan",
+        "disable": "Nonaktifkan",
+        "savedPlaceholder": "Tersimpan. Kosongkan untuk mempertahankannya.",
+        "clear": "Hapus nilai tersimpan",
+        "undoClear": "Pertahankan nilai tersimpan",
+        "modeLabel": "Mode",
+        "sortOrder": "Urutan",
+        "currencies": "Mata uang yang didukung",
+        "currenciesAll": "Tidak ada yang dipilih: semua mata uang diterima",
+        "currenciesSelected": "{count, plural, other {# dipilih}}",
+        "currenciesHint": "Pembeli hanya melihat gateway ini dalam mata uang yang Anda centang. Biarkan semua tidak dicentang untuk menerima mata uang apa pun.",
+        "webhookUrl": "URL webhook",
+        "webhookHint": "Tempelkan ini di dasbor penyedia agar mereka dapat memberi tahu kami tentang pembayaran.",
+        "saving": "Menyimpan",
+        "save": "Simpan",
+        "readOnly": "Hanya super admin yang dapat mengubah gateway.",
+        "saved": "Pengaturan {name} disimpan.",
+        "activated": "{name} diaktifkan.",
+        "deactivated": "{name} dinonaktifkan."
+      },
+      "errors": {
+        "conflict": "Seseorang lain telah mengubah gateway ini. Gateway dimuat ulang; tinjau lalu simpan lagi.",
+        "notConfigured": "Isi kolom wajib terlebih dahulu: {fields}",
+        "noDriver": "Gateway ini belum memiliki driver di rilis ini, sehingga hanya bisa dikonfigurasi, belum bisa diaktifkan.",
+        "forbidden": "Hanya super admin yang dapat mengubah gateway.",
+        "generic": "Terjadi kesalahan. Coba lagi."
+      }
+    },
+    "checkout": {
+      "title": "Selesaikan pesanan Anda",
+      "walletTitle": "Tambahkan uang ke dompet Anda",
+      "subtitle": "Tinjau harga, beri tahu kami siapa yang membayar, dan pilih caranya.",
+      "loading": "Memuat checkout",
+      "account": "Akun",
+      "name": "Nama lengkap",
+      "email": "Email",
+      "billingAddress": "Alamat penagihan",
+      "company": "Perusahaan",
+      "taxId": "NPWP / Tax ID",
+      "taxIdHint": "GSTIN, VAT, atau EIN, jika Anda punya.",
+      "address": "Alamat",
+      "city": "Kota",
+      "postal": "Kode pos",
+      "country": "Negara",
+      "currency": "Mata uang",
+      "period": "Periode penagihan",
+      "periods": {
+        "monthly": "Bulanan",
+        "yearly": "Tahunan"
+      },
+      "paymentMethod": "Metode pembayaran",
+      "noGateway": "Belum ada gateway pembayaran yang dikonfigurasi untuk {currency}. Minta administrator Anda untuk mengaktifkan salah satu.",
+      "noGatewayButton": "Belum ada gateway yang dikonfigurasi",
+      "sandbox": "sandbox",
+      "pay": "Bayar {amount}",
+      "processing": "Memulai pembayaran",
+      "summary": "Ringkasan pesanan",
+      "billed": {
+        "monthly": "Ditagih untuk satu periode",
+        "yearly": "Ditagih untuk 12 bulan"
+      },
+      "subtotal": "Subtotal",
+      "tax": "{label} ({rate}%)",
+      "total": "Total hari ini",
+      "updating": "Memperbarui harga",
+      "errors": {
+        "gatewayUnavailable": "Gateway itu tidak tersedia saat ini.",
+        "currencyUnsupported": "Gateway itu tidak menerima mata uang ini. Pilih gateway atau mata uang lain.",
+        "providerError": "Kesalahan penyedia pembayaran. Coba lagi atau pilih gateway lain.",
+        "notPurchasable": "Paket ini tidak dapat dibeli secara online.",
+        "downgrade": "Downgrade tidak tersedia secara online. Hubungi dukungan untuk pindah ke paket yang lebih rendah.",
+        "amountTooLow": "Masukkan jumlah yang lebih besar untuk ditambahkan ke dompet Anda.",
+        "couponUnavailable": "Kupon belum tersedia.",
+        "forbidden": "Anda tidak memiliki izin untuk membeli.",
+        "notFound": "Paket itu tidak dapat ditemukan.",
+        "widgetBlocked": "Jendela pembayaran tidak dapat dibuka. Pastikan browser Anda mengizinkannya lalu coba lagi.",
+        "generic": "Terjadi kesalahan. Coba lagi.",
+        "couponRejected": "Kupon itu tidak dapat digunakan."
+      },
+      "coupon": "Kode kupon",
+      "couponApply": "Terapkan",
+      "couponApplied": "Kupon {code} diterapkan: diskon {amount}.",
+      "couponRemove": "Hapus",
+      "couponDiscount": "Diskon ({code})",
+      "refundGuarantee": "Garansi uang kembali {days} hari",
+      "countryPlaceholder": "Pilih negara",
+      "autoRenew": "Diperpanjang otomatis setiap periode. Anda dapat membatalkan kapan saja.",
+      "addonRenews": "Add-on ini diperpanjang otomatis setiap periode. Anda dapat membatalkannya kapan saja dan tetap memakainya sampai akhir masa berbayar.",
+      "cardTitle": "Bayar dengan kartu",
+      "payNow": "Bayar sekarang"
+    },
+    "orders": {
+      "title": "Riwayat pesanan",
+      "lifetime": "Total belanja: {total}",
+      "loading": "Memuat pesanan",
+      "loadFailed": "Pesanan Anda tidak dapat dimuat. Muat ulang halaman untuk mencoba lagi.",
+      "emptyTitle": "Belum ada pesanan",
+      "emptyMessage": "Pembelian Anda akan muncul di sini.",
+      "browsePlans": "Jelajahi paket",
+      "loadMore": "Muat lagi",
+      "outcome": {
+        "success": "Pembayaran diterima. Terima kasih.",
+        "failed": "Pembayaran belum selesai. Coba lagi atau pilih gateway lain.",
+        "cancelled": "Anda membatalkan pembayaran.",
+        "pending": "Kami menunggu penyedia pembayaran mengonfirmasi pembayaran Anda. Halaman ini akan diperbarui setelah dikonfirmasi.",
+        "notfound": "Pesanan itu tidak dapat ditemukan.",
+        "proof": "Bukti pembayaran dikirim. Kami akan memverifikasi dan mengaktifkan paket Anda segera."
+      },
+      "col": {
+        "order": "Pesanan",
+        "item": "Item",
+        "date": "Tanggal",
+        "amount": "Jumlah",
+        "status": "Status",
+        "actions": "Tindakan"
+      },
+      "status": {
+        "pending": "Menunggu",
+        "awaiting_approval": "Menunggu persetujuan",
+        "paid": "Dibayar",
+        "failed": "Gagal",
+        "cancelled": "Dibatalkan",
+        "refunded": "Dikembalikan"
+      },
+      "uploadProof": "Bukti pembayaran",
+      "invoice": "Faktur"
+    },
+    "billing": {
+      "common": {
+        "admin": "Admin",
+        "breadcrumb": "Breadcrumb",
+        "billingHistory": "Riwayat penagihan",
+        "analytics": "Analitik",
+        "exportCsv": "Ekspor CSV",
+        "exportTruncated": "Ekspor berhenti di {rows} baris. Persempit filter untuk mengekspor sisanya.",
+        "exportFailed": "Ekspor tidak dapat dibuat. Coba lagi.",
+        "actionFailed": "Itu tidak berhasil. Muat ulang halaman dan coba lagi.",
+        "cancel": "Batal",
+        "back": "Pertahankan",
+        "close": "Tutup",
+        "openWorkspace": "Buka workspace",
+        "showing": "Menampilkan {from}–{to} dari {total} {noun}",
+        "pager": "Halaman",
+        "previous": "Sebelumnya",
+        "next": "Berikutnya",
+        "chartEmpty": "Tidak ada data dalam rentang ini.",
+        "periods": {
+          "monthly": "bulanan",
+          "yearly": "tahunan"
+        },
+        "status": {
+          "pending": "menunggu",
+          "awaiting_approval": "menunggu persetujuan",
+          "paid": "dibayar",
+          "failed": "gagal",
+          "cancelled": "dibatalkan",
+          "refunded": "dikembalikan"
+        },
+        "windows": {
+          "7d": "7 hari terakhir",
+          "30d": "30 hari terakhir",
+          "90d": "90 hari terakhir",
+          "1y": "Tahun terakhir",
+          "all": "Sepanjang waktu"
+        }
+      },
+      "orders": {
+        "title": "Riwayat pesanan",
+        "eyebrow": "Admin · Paket & penagihan · Riwayat pesanan",
+        "titleFirst": "Pesanan",
+        "titleSecond": "riwayat",
+        "description": "Pesanan langganan, upgrade dan downgrade paket, pembelian add-on, dan top-up dompet sekali: setiap keputusan komersial yang dibuat workspace.",
+        "window": "Rentang waktu",
+        "windows": {
+          "90d": "90 hari terakhir",
+          "this_year": "Tahun ini",
+          "all": "Sepanjang waktu"
+        },
+        "kpi": {
+          "total": "Total pesanan",
+          "vsPrevious": "vs periode sebelumnya",
+          "upgrades": "Upgrade",
+          "mrrAdded": "+{amount} MRR ditambahkan",
+          "downgrades": "Downgrade",
+          "mrrLowered": "{amount} pada paket lebih rendah",
+          "addons": "Paket add-on",
+          "attached": "{amount} terlampir",
+          "cancellations": "Pembatalan",
+          "mrrLost": "-{amount} MRR hilang"
+        },
+        "typeFilter": "Filter berdasarkan jenis pesanan",
+        "types": {
+          "all": "Semua",
+          "new": "Langganan baru",
+          "upgrade": "Upgrade",
+          "downgrade": "Downgrade",
+          "addon": "Add-on",
+          "cancel": "Batal"
+        },
+        "rowTypes": {
+          "new": "Baru",
+          "renewal": "Perpanjangan",
+          "upgrade": "Upgrade",
+          "downgrade": "Downgrade",
+          "addon": "Add-on",
+          "wallet_topup": "Top-up dompet",
+          "manual": "Manual"
+        },
+        "search": "Cari berdasarkan # pesanan, workspace, paket…",
+        "noun": "pesanan",
+        "col": {
+          "order": "Pesanan #",
+          "date": "Tanggal",
+          "workspace": "Workspace",
+          "type": "Jenis",
+          "item": "Paket / item",
+          "mrr": "Δ MRR",
+          "total": "Total",
+          "status": "Status"
+        },
+        "empty": "Tidak ada pesanan dalam rentang ini.",
+        "awaitingApproval": "menunggu persetujuan",
+        "actions": {
+          "markPaid": "Tandai dibayar",
+          "cancelOrder": "Batal",
+          "approve": "Setujui",
+          "reject": "Tolak"
+        },
+        "confirm": {
+          "approveTitle": "Tandai pesanan ini sebagai dibayar?",
+          "approve": "Tandai pesanan ini sebagai dibayar dan aktifkan paket?",
+          "cancelTitle": "Batalkan pesanan ini?",
+          "cancel": "Batalkan pesanan menunggu ini? Pesanan akan ditandai dibatalkan dan keluar dari daftar belum dibayar."
+        },
+        "reject": {
+          "title": "Tolak {order}",
+          "reason": "Alasan (opsional)"
+        },
+        "awaiting": {
+          "title": "Menunggu persetujuan",
+          "ref": "Ref:",
+          "proofAttached": "Bukti pembayaran terlampir"
+        }
+      },
+      "orderAnalytics": {
+        "title": "Analitik pesanan",
+        "eyebrow": "Admin · Paket & penagihan · Analitik pesanan",
+        "titleFirst": "Pesanan",
+        "titleSecond": "analitik",
+        "description": "Langganan, upgrade, downgrade, add-on, dan pembatalan: apa yang mendorong pergerakan pendapatan bersih di seluruh platform.",
+        "window": "Rentang waktu",
+        "viewLedger": "Lihat buku besar",
+        "kpi": {
+          "total": "Total pesanan",
+          "newMrr": "Net MRR baru",
+          "paid": "{count} berbayar",
+          "lostMrr": "MRR hilang",
+          "cancels": "{count} pembatalan",
+          "aov": "Rata-rata nilai pesanan",
+          "paidOrders": "pesanan berbayar",
+          "attach": "Keterikatan add-on",
+          "attachLabel": "{addons} add-on / {total}",
+          "conversion": "Tingkat konversi",
+          "conversionHint": "pesanan berbayar dari {signups} pendaftaran"
+        },
+        "motion": {
+          "kicker": "Pergerakan pesanan",
+          "title": "Pesanan berbayar dan pembatalan",
+          "paid": "Berbayar",
+          "cancelled": "Dibatalkan atau gagal"
+        },
+        "typeMix": {
+          "kicker": "Komposisi jenis pesanan",
+          "title": "Menurut jenis"
+        },
+        "addons": {
+          "kicker": "Add-on terjual",
+          "title": "Performa teratas",
+          "empty": "Tidak ada pesanan add-on dalam rentang ini."
+        },
+        "funnel": {
+          "kicker": "Corong konversi",
+          "title": "Dari pendaftaran ke berbayar",
+          "note": "Hanya tahap yang dihitung yang ditampilkan."
+        },
+        "countries": {
+          "kicker": "Menurut negara",
+          "title": "Pasar teratas",
+          "empty": "Belum ada negara penagihan yang diisi."
+        },
+        "cohorts": {
+          "kicker": "Retensi kohort",
+          "title": "% workspace yang masih aktif N bulan kemudian",
+          "last": "6 kohort terakhir",
+          "emptyTitle": "Belum ada pendaftaran workspace",
+          "empty": "Kohort muncul setelah workspace mendaftar."
+        }
+      },
+      "history": {
+        "title": "Riwayat penagihan",
+        "eyebrow": "Admin · Paket & penagihan · Riwayat penagihan",
+        "titleFirst": "Penagihan",
+        "titleSecond": "riwayat",
+        "description": "Setiap peristiwa pembayaran yang telah diproses platform: tagihan, pengembalian dana, dan percobaan ulang di setiap workspace.",
+        "window": "Rentang waktu",
+        "kpi": {
+          "gross": "Pendapatan kotor",
+          "vsPrev": "vs periode sebelumnya",
+          "charges": "Tagihan berhasil",
+          "successRate": "tingkat keberhasilan {pct}%",
+          "failed": "Gagal",
+          "dunning": "untuk dicoba ulang / penagihan",
+          "refunds": "Pengembalian dana",
+          "refundsTotal": "{amount} total",
+          "chargebacks": "Chargeback",
+          "disputed": "{amount} disengketakan"
+        },
+        "trend": {
+          "kicker": "Tren",
+          "title": "Tagihan & pengembalian dana harian",
+          "charges": "Tagihan",
+          "refunds": "Pengembalian dana"
+        },
+        "statusFilter": "Filter berdasarkan status pembayaran",
+        "statuses": {
+          "all": "Semua",
+          "paid": "Berhasil",
+          "failed": "Gagal",
+          "refunded": "Dikembalikan",
+          "pending": "Menunggu"
+        },
+        "gateway": "Gateway",
+        "allGateways": "Semua gateway",
+        "search": "Cari # pesanan, workspace, pelanggan…",
+        "noun": "peristiwa",
+        "col": {
+          "date": "Tanggal",
+          "order": "Pesanan #",
+          "workspace": "Workspace",
+          "gateway": "Gateway",
+          "plan": "Paket",
+          "amount": "Jumlah",
+          "status": "Status",
+          "actions": "Tindakan"
+        },
+        "empty": "Tidak ada peristiwa pembayaran yang cocok."
+      },
+      "billingAnalytics": {
+        "title": "Analitik penagihan",
+        "eyebrow": "Admin · Paket & penagihan · Analitik penagihan",
+        "titleFirst": "Penagihan",
+        "titleSecond": "analitik",
+        "description": "Arus kas, keberhasilan pembayaran, pembagian gateway, dan tren pengembalian dana di seluruh platform.",
+        "window": "Rentang waktu",
+        "viewLedger": "Lihat buku besar",
+        "kpi": {
+          "gross": "Pendapatan kotor",
+          "net": "Pendapatan bersih",
+          "netPct": "{pct}% bersih",
+          "success": "Keberhasilan otorisasi",
+          "failed": "Gagal",
+          "events": "{count, plural, other {# peristiwa}}",
+          "refunds": "Pengembalian dana",
+          "chargebacks": "Chargeback",
+          "disputes": "{count, plural, other {# sengketa}}"
+        },
+        "cashFlow": {
+          "kicker": "Arus kas",
+          "title": "Tagihan, pengembalian dana & kegagalan",
+          "charges": "Tagihan",
+          "refunds": "Pengembalian dana",
+          "failed": "Gagal"
+        },
+        "gatewayShare": {
+          "title": "Porsi gateway",
+          "hint": "Pendapatan berbayar dibagi per penyedia"
+        },
+        "topPayers": {
+          "title": "Workspace pembayar teratas",
+          "hint": "Pengeluaran tertinggi dalam rentang",
+          "all": "Semua workspace",
+          "workspace": "Workspace",
+          "orders": "Pesanan",
+          "total": "Total",
+          "empty": "Belum ada pesanan berbayar dalam rentang ini.",
+          "unknown": "Workspace yang dihapus"
+        },
+        "statusMix": {
+          "title": "Komposisi status pesanan",
+          "hint": "Jumlah menurut status siklus hidup"
+        }
+      },
+      "invoices": {
+        "title": "Faktur",
+        "eyebrow": "Admin · Paket & penagihan · Faktur",
+        "titleFirst": "Semua",
+        "titleSecond": "faktur",
+        "description": "Setiap pesanan sebagai dokumen penagihan. Filter berdasarkan status, buka dan cetak faktur, tandai dibayar, batalkan, atau terbitkan faktur manual.",
+        "window": "Rentang waktu",
+        "windows": {
+          "all": "Sepanjang waktu",
+          "this_month": "Bulan ini",
+          "last_month": "Bulan lalu",
+          "this_quarter": "Kuartal ini",
+          "this_year": "Tahun ini"
+        },
+        "kpi": {
+          "total": "Total faktur",
+          "allTime": "sepanjang waktu",
+          "paid": "Dibayar",
+          "outstanding": "Belum dibayar",
+          "due": "{amount} jatuh tempo",
+          "overdue": "Terlambat",
+          "overdueHint": ">15 hari terlambat",
+          "thisMonth": "Bulan ini",
+          "mom": "MoM"
+        },
+        "statusFilter": "Filter berdasarkan status faktur",
+        "statuses": {
+          "all": "Semua",
+          "paid": "Dibayar",
+          "outstanding": "Belum dibayar",
+          "overdue": "Terlambat",
+          "refunded": "Dikembalikan",
+          "void": "Batal"
+        },
+        "badges": {
+          "paid": "dibayar",
+          "outstanding": "belum dibayar",
+          "overdue": "terlambat",
+          "refunded": "dikembalikan",
+          "void": "batal"
+        },
+        "search": "Cari berdasarkan # faktur, workspace, pemilik…",
+        "noun": "faktur",
+        "col": {
+          "number": "Faktur #",
+          "issued": "Tanggal terbit",
+          "due": "Jatuh tempo",
+          "workspace": "Workspace",
+          "item": "Item",
+          "amount": "Jumlah",
+          "status": "Status",
+          "view": "Lihat",
+          "actions": "Tindakan"
+        },
+        "daysLate": "{days} hari terlambat",
+        "refunded": "dikembalikan",
+        "viewInvoice": "Lihat faktur",
+        "rowMenu": "Tindakan untuk {number}",
+        "empty": "Tidak ada faktur dalam rentang ini.",
+        "actions": {
+          "view": "Lihat",
+          "markPaid": "Tandai dibayar",
+          "void": "Batalkan",
+          "delete": "Hapus"
+        },
+        "confirm": {
+          "markPaidTitle": "Tandai faktur ini sebagai dibayar?",
+          "markPaid": "Tandai faktur ini sebagai dibayar? Paket, add-on, atau kredit dompet yang dibeli untuknya juga diterapkan.",
+          "markPaidManual": "Tandai faktur manual ini sebagai dibayar? Hanya pembayaran yang dicatat.",
+          "voidTitle": "Batalkan faktur ini?",
+          "void": "Batalkan faktur ini? Faktur tetap tercatat tetapi dibatalkan.",
+          "deleteTitle": "Hapus faktur ini?",
+          "delete": "Hapus faktur ini secara permanen? Tindakan ini tidak dapat dibatalkan."
+        },
+        "manual": {
+          "tag": "manual",
+          "open": "Faktur manual",
+          "eyebrow": "Faktur",
+          "title": "Faktur manual",
+          "workspace": "Workspace",
+          "chooseWorkspace": "Pilih workspace",
+          "customerName": "Nama pelanggan",
+          "customerNameHint": "Default ke nama workspace.",
+          "customerEmail": "Email pelanggan",
+          "description": "Deskripsi",
+          "amount": "Jumlah",
+          "currency": "Mata uang",
+          "status": "Status",
+          "statuses": {
+            "pending": "Menunggu",
+            "paid": "Dibayar"
+          },
+          "issuedAt": "Tanggal terbit",
+          "issuedAtHint": "Kosongkan untuk hari ini. Tanggal lampau akan memundurkan faktur.",
+          "submit": "Buat faktur",
+          "created": "Faktur manual {number} dibuat."
+        }
+      },
+      "invoice": {
+        "title": "Faktur",
+        "print": "Cetak",
+        "downloadPdf": "Unduh PDF",
+        "banner": {
+          "invoice": "Faktur #{number}",
+          "issued": "Diterbitkan {date}",
+          "settled": "dilunasi {date}",
+          "paidInFull": "lunas"
+        },
+        "taxInvoice": "Faktur pajak",
+        "invoiceWord": "FAKTUR",
+        "taxIdLabel": "GSTIN/VAT",
+        "number": "Faktur #",
+        "issueDate": "Tanggal terbit",
+        "paidDate": "Tanggal bayar",
+        "status": "Status",
+        "billTo": "Tagihan kepada",
+        "payment": "Pembayaran",
+        "method": "Metode",
+        "txn": "ID transaksi",
+        "captured": "Waktu pencatatan",
+        "currency": "Mata uang",
+        "coupon": "Kupon",
+        "description": "Deskripsi",
+        "qty": "Jml",
+        "unit": "Satuan",
+        "total": "Total",
+        "discount": "Diskon",
+        "code": "kode",
+        "subtotal": "Subtotal",
+        "amountPaid": "Jumlah dibayar",
+        "balanceDue": "Sisa tagihan",
+        "notes": "Catatan",
+        "notesText": "Terima kasih atas bisnis Anda. Faktur ini mencakup pesanan yang dirujuk di atas. Sebutkan nomor faktur untuk pertanyaan penagihan apa pun.",
+        "help": "Butuh bantuan?",
+        "helpFallback": "Hubungi administrator platform.",
+        "refundNote": "Untuk dukungan atau pengembalian dana, hubungi kami dalam {days} hari sejak pembayaran.",
+        "regNo": "No. reg.",
+        "computerGenerated": "Ini adalah faktur yang dibuat komputer, tidak memerlukan tanda tangan."
+      },
+      "settings": {
+        "title": "Pengaturan penagihan",
+        "eyebrow": "Admin · Paket & penagihan · Pengaturan",
+        "titleFirst": "Penagihan",
+        "titleSecond": "pengaturan",
+        "description": "Semua yang dibaca halaman harga dan checkout: pajak, jendela pengembalian dana, diskon tahunan, perpanjangan otomatis, identitas faktur Anda, dan daftar negara. Perubahan berlaku pada muat halaman berikutnya.",
+        "previewPlans": "Pratinjau halaman paket",
+        "readOnly": "Hanya super admin yang dapat mengubah pengaturan penagihan.",
+        "conflict": "Seseorang lain telah mengubah pengaturan ini. Pengaturan dimuat ulang; tinjau lalu simpan lagi.",
+        "saved": "Pengaturan penagihan disimpan.",
+        "save": "Simpan pengaturan",
+        "tax": {
+          "title": "Pajak",
+          "hint": "Diterapkan pada setiap subtotal checkout. Matikan jika harga yang ditampilkan sudah termasuk pajak.",
+          "rate": "Tarif (%)",
+          "label": "Label",
+          "labelPlaceholder": "GST / VAT / Pajak penjualan"
+        },
+        "company": {
+          "title": "Identitas perusahaan & penagihan",
+          "hint": "Detail badan hukum Anda. Ini dicetak di setiap faktur: blok “tagihan dari”, nomor pajak, dan footer.",
+          "name": "Nama perusahaan resmi",
+          "taxId": "Nomor pajak (GSTIN / VAT)",
+          "address": "Alamat terdaftar",
+          "regNo": "No. registrasi / CIN",
+          "email": "Email penagihan",
+          "phone": "Telepon dukungan"
+        },
+        "logo": {
+          "title": "Logo faktur",
+          "hint": "Ditampilkan di bagian atas setiap faktur dan kwitansi. PNG, JPG, SVG, atau WebP, hingga {kb} KB. Kosongkan untuk memakai logo situs Anda.",
+          "none": "Tanpa logo",
+          "choose": "Pilih file logo",
+          "remove": "Hapus logo saat ini (kembali ke logo situs)",
+          "fallback": "Saat ini memakai logo merek situs sebagai cadangan.",
+          "tooBig": "Logo maksimal {kb} KB."
+        },
+        "refund": {
+          "title": "Garansi uang kembali",
+          "hint": "Jika diaktifkan, checkout menampilkan jendela garansi di bawah ringkasan pesanan. Matikan untuk menyembunyikannya di mana pun.",
+          "days": "Jendela (hari)"
+        },
+        "yearly": {
+          "title": "Sakelar penagihan tahunan",
+          "hint": "Menampilkan sakelar Bulanan / Tahunan di halaman harga. Sembunyikan sepenuhnya jika semua paket hanya bulanan.",
+          "discount": "Diskon tahunan (%)",
+          "formula": "Harga tahunan = bulanan × 12 × (1 − diskon%)."
+        },
+        "recurring": {
+          "title": "Langganan dengan perpanjangan otomatis",
+          "hint": "Jika aktif, paket berbayar berjangka (bulanan atau tahunan) diperpanjang otomatis: gateway menagih kartu setiap siklus dan masa berlaku paket diperpanjang dengan sendirinya. Paket gratis, seumur hidup, dan penawaran kustom tidak berulang, dan gateway tanpa dukungan berulang tetap sebagai tagihan sekali. Matikan untuk menagih setiap pembelian sekali saja.",
+          "graceDays": "Masa tenggang (hari)",
+          "graceHint": "Saat tagihan perpanjangan otomatis gagal, paket atau add-on tetap aktif selama jumlah hari ini setelah periodenya berakhir sementara gateway mencoba ulang. 0 mematikan masa tenggang.",
+          "gateways": "Gateway yang mendukung perpanjangan otomatis",
+          "note": "Braintree hanya diperpanjang otomatis setelah Anda mengatur Plan ID di kredensial gateway. Square menagih setiap siklus dengan mengirim faktur ke pelanggan lewat email (tanpa tagihan kartu diam-diam). Setiap perpanjangan memerlukan URL webhook gateway yang diatur di dasbor penyedia."
+        },
+        "countries": {
+          "title": "Daftar negara checkout",
+          "hint": "Pilihan di pemilih Negara pada formulir penagihan checkout, dipakai untuk alamat faktur. Satu negara per baris; urutan dipertahankan."
+        },
+        "links": {
+          "coupons": "Kupon",
+          "couponsTitle": "Kelola kode diskon",
+          "couponsHint": "Tambah, ubah, atau nonaktifkan kupon mana pun.",
+          "faqs": "FAQ",
+          "faqsTitle": "Ubah FAQ halaman harga",
+          "faqsHint": "Item akordion yang ditampilkan di bawah paket.",
+          "configured": "{count} dikonfigurasi."
+        }
+      }
+    },
+    "offline": {
+      "eyebrow": {
+        "bank_transfer": "Checkout / Transfer bank",
+        "offline": "Checkout / Offline"
+      },
+      "title": {
+        "bank_transfer": "Transfer pembayaran",
+        "offline": "Hubungi kami untuk menyelesaikan pesanan ini"
+      },
+      "intro": {
+        "bank_transfer": "Kirim <strong>{amount}</strong> ke rekening di bawah. Gunakan <mono>{ref}</mono> sebagai referensi agar kami dapat mencocokkannya dengan pesanan Anda.",
+        "offline": "Pesanan <mono>{ref}</mono> · <strong>{amount}</strong> · ditagih dalam {currency}"
+      },
+      "instructions": "Petunjuk",
+      "referenceNote": "<strong>Referensi:</strong> sertakan <mono>{ref}</mono> pada transfer, lalu kirim bukti pembayaran Anda di bawah. Paket Anda akan aktif setelah tim kami memverifikasi pembayaran.",
+      "proofTitle": "Kirim bukti pembayaran",
+      "proofHelp": "Sudah membayar? Unggah struk dan referensi Anda agar kami dapat memverifikasi dan mengaktifkan paket Anda.",
+      "later": {
+        "bank_transfer": "Pembayaran sudah dikirim — kirim bukti nanti",
+        "offline": "Mengerti — saya akan mengirim bukti nanti"
+      }
+    },
+    "proof": {
+      "file": "Tangkapan layar / struk pembayaran",
+      "fileHint": "JPG, PNG, WEBP atau PDF · maks. 4 MB",
+      "reference": "Nomor referensi / UTR",
+      "referencePlaceholder": "mis. UTR / ID transaksi",
+      "note": "Catatan (opsional)",
+      "notePlaceholder": "Hal lain yang perlu kami ketahui tentang pembayaran ini",
+      "submit": "Kirim bukti pembayaran",
+      "sending": "Mengunggah",
+      "chooseFile": "Pilih struk untuk diunggah.",
+      "tooLarge": "File itu lebih besar dari 4 MB.",
+      "rejected": "Jenis file itu tidak diizinkan. Gunakan JPG, PNG, WEBP atau PDF.",
+      "closed": "Bukti pembayaran tidak dapat lagi dikirim untuk pesanan ini.",
+      "failed": "File tidak dapat diunggah. Coba lagi."
+    }
+  }
+}

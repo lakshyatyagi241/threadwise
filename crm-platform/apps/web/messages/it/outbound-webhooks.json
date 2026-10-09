@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "Ignora"
+    },
+    "events": {
+      "contact_created": "Contatto creato",
+      "contact_updated": "Contatto aggiornato",
+      "contact_deleted": "Contatto eliminato",
+      "contact_tag_added": "Tag aggiunto a un contatto",
+      "contact_opted_in": "Contatto con opt-in",
+      "deal_stage_changed": "Trattativa spostata in un’altra fase",
+      "task_created": "Attività creata",
+      "task_assigned": "Attività assegnata",
+      "template_status_changed": "Stato del template modificato",
+      "device_status_changed": "Stato del dispositivo modificato",
+      "conversation_reopened": "Conversazione riaperta"
+    },
+    "page": {
+      "title": "Webhook",
+      "subtitle": "Invia gli eventi di questo workspace ai tuoi sistemi non appena accadono. Ogni consegna è un POST JSON firmato, ritentato se il tuo server non risponde.",
+      "back": "Integrazioni e sviluppatori",
+      "add": "Aggiungi webhook",
+      "list": "Webhook",
+      "emptyTitle": "Nessun webhook ancora",
+      "empty": "Aggiungi un endpoint per ricevere eventi come un nuovo contatto o una trattativa che cambia fase.",
+      "noAccess": "Non hai accesso ai webhook.",
+      "loadFailed": "Impossibile caricare i webhook.",
+      "retry": "Riprova",
+      "allEvents": "Tutti gli eventi",
+      "signed": "Firmato",
+      "health": {
+        "off": "Disattivato",
+        "failing": "In errore",
+        "healthy": "Attivo",
+        "idle": "Nessuna consegna ancora"
+      },
+      "activeFor": "Attivo: {name}",
+      "lastDelivery": "Ultima consegna {when}, risposta {status}",
+      "noDeliveries": "Nulla ancora consegnato",
+      "noAnswer": "nessuna risposta",
+      "counts": "{ok} consegnati, {failed} non riusciti",
+      "lastError": "Ultimo errore: {error}",
+      "deliveries": "Consegne",
+      "test": "Invia prova",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "cancel": "Annulla",
+      "deleteTitle": "Eliminare questo webhook?",
+      "deleteMessage": "{name} smette di ricevere eventi e il suo registro di consegna viene rimosso. Non si può annullare.",
+      "created": "Webhook aggiunto.",
+      "saved": "Webhook salvato.",
+      "deleted": "Webhook eliminato.",
+      "deleteFailed": "Impossibile eliminare il webhook. Riprova.",
+      "toggleFailed": "Impossibile salvare la modifica. Riprova.",
+      "testOk": "La prova è stata consegnata (risposta {status}).",
+      "testFailed": "La prova non è riuscita: {reason}",
+      "testError": "Impossibile inviare la prova. Riprova."
+    },
+    "dialog": {
+      "addTitle": "Aggiungi un webhook",
+      "editTitle": "Modifica webhook",
+      "close": "Chiudi",
+      "name": "Nome",
+      "nameHint": "Facoltativo: un’etichetta per te, come il sistema che lo riceve.",
+      "url": "URL dell’endpoint",
+      "urlHint": "Un indirizzo https raggiungibile da internet. Gli indirizzi privati e interni vengono rifiutati.",
+      "urlProblem": {
+        "empty": "Inserisci l’URL dell’endpoint.",
+        "tooLong": "L’URL è troppo lungo.",
+        "notHttps": "L’URL deve iniziare con https://.",
+        "invalid": "Questo non è un URL valido."
+      },
+      "secret": "Segreto di firma",
+      "secretHint": "Facoltativo. Se impostato, ogni consegna include una firma che il tuo server può verificare. Non viene mostrato di nuovo.",
+      "secretSetHint": "Un segreto è impostato. Lascia vuoto per mantenerlo, oppure digitane uno nuovo per sostituirlo.",
+      "secretKeep": "Invariato",
+      "removeSecret": "Rimuovi il segreto di firma (le consegne non saranno firmate)",
+      "events": "Eventi",
+      "allEvents": "Tutti gli eventi",
+      "pickEvents": "Seleziona almeno un evento oppure scegli tutti gli eventi.",
+      "active": "Attivo",
+      "cancel": "Annulla",
+      "create": "Aggiungi webhook",
+      "save": "Salva modifiche",
+      "failed": "Impossibile salvare il webhook. Riprova."
+    },
+    "deliveries": {
+      "title": "Consegne: {name}",
+      "close": "Chiudi",
+      "empty": "Nessuna consegna finora. Usa Invia test per crearne una.",
+      "failed": "Impossibile caricare le consegne.",
+      "when": "Quando",
+      "event": "Evento",
+      "result": "Risposta",
+      "time": "Ora",
+      "attempt": "Prova",
+      "test": "Test",
+      "noAnswer": "Nessuna risposta"
+    }
+  }
+}

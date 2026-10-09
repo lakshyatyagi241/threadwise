@@ -1,0 +1,663 @@
+{
+  "whatsapp-providers": {
+    "nav": {
+      "group": "WhatsApp 服务商",
+      "providers": "服务商",
+      "assignments": "工作区分配",
+      "switch": "切换服务商"
+    },
+    "common": {
+      "loading": "正在加载...",
+      "retry": "重试",
+      "requestId": "请求 ID"
+    },
+    "errors": {
+      "conflict": "您编辑期间，此服务商已被他人修改。已加载最新版本，请检查后重新应用您的更改。",
+      "noAccess": "您缺少此操作所需的平台权限（{permission}）。请让超级管理员在“角色”中授予该权限。",
+      "keyTaken": "已存在使用此键的服务商。请选择其他键。",
+      "baseUrlRefused": "此地址已被拒绝：{detail}。",
+      "baseUrlRefusedPlain": "此地址已被拒绝。请使用公共主机名的 https 地址。",
+      "inUse": "仍有号码或工作区在使用此服务商。请先将它们切换到其他服务商（通过该服务商连接号码时无法更改凭据模式）。",
+      "disabled": "必须先启用服务商才能执行此操作。请先启用它。",
+      "credentialsMissing": "此服务商尚未存储令牌。请添加其服务商令牌、保存，然后再启用。",
+      "isDefault": "这是默认服务商。请先将其他服务商设为默认，或清除默认设置。",
+      "builtin": "这是内置服务商。其地址、版本和密钥请在平台设置 > WhatsApp 中编辑。",
+      "nothingToDo": "无需切换：此工作区中所有已连接的号码均已在该服务商上。",
+      "partnerNotConfigured": "此服务商缺少合作伙伴计划所需的内容：合作伙伴密钥（服务商令牌）、解决方案 ID 或嵌入式注册配置。请检查服务商设置并保存。",
+      "partnerRefused": "合作伙伴拒绝了此请求：{message}",
+      "partnerRefusedPlain": "合作伙伴拒绝了此请求。请重试，或检查服务商设置。",
+      "unavailable": "此服务商不可用。它可能已被归档，或缺少凭据。",
+      "notFound": "此服务商或工作区已不存在。请返回并刷新列表。",
+      "tooManyNumbers": "一次将有超过 50 个号码被迁移。请选择源服务商以缩小范围，然后对其余号码再次执行切换。",
+      "validationField": "{message}",
+      "validation": "部分值未被接受。请检查表单后重试。",
+      "request": "请求被拒绝。请检查值后重试。",
+      "unexpected": "服务端出现错误，请稍后重试。"
+    },
+    "status": {
+      "active": "已启用",
+      "disabled": "已停用",
+      "archived": "已归档",
+      "default": "默认",
+      "builtin": "内置"
+    },
+    "secret": {
+      "show": "显示您输入的值",
+      "hide": "隐藏您输入的值",
+      "placeholderKeep": "留空则保留已存储的值",
+      "placeholderNew": "粘贴值",
+      "undoClear": "保留",
+      "clear": "移除已存储的值",
+      "setWithHint": "已设置，以 {last4} 结尾",
+      "set": "已设置",
+      "notSet": "未设置",
+      "willClear": "保存时将被移除",
+      "willReplace": "保存时将替换已存储的值"
+    },
+    "enums": {
+      "authScheme": {
+        "bearer": {
+          "label": "Bearer 令牌",
+          "help": "使用该凭据模式的令牌发送 Authorization: Bearer 请求头。"
+        },
+        "custom_headers": {
+          "label": "自定义请求头",
+          "help": "发送您定义的请求头，每次调用时自动填入令牌、WABA ID 和电话号码 ID。"
+        }
+      },
+      "credentialMode": {
+        "platform_token": {
+          "label": "平台令牌",
+          "help": "服务商平台的一个令牌（合作伙伴令牌）。客户不持有任何令牌。"
+        },
+        "channel_token": {
+          "label": "号码令牌",
+          "help": "每个已连接的号码持有各自的访问令牌。"
+        }
+      },
+      "webhookMode": {
+        "meta_app_level": {
+          "label": "应用级回调",
+          "help": "平台仅订阅 WABA。回调在 Meta 应用上设置一次。"
+        },
+        "number_level_override": {
+          "label": "按号码回调",
+          "help": "订阅后，平台通过服务商为每个号码设置回调。"
+        }
+      },
+      "signatureScheme": {
+        "meta_app_secret_sha256": {
+          "label": "Meta 签名（应用密钥）",
+          "help": "投递内容携带 X-Hub-Signature-256，使用服务商应用密钥进行校验。"
+        },
+        "shared_secret_header": {
+          "label": "请求头中的共享密钥",
+          "help": "您指定的请求头携带服务商的 Webhook 密钥本身。"
+        },
+        "none": {
+          "label": "无签名",
+          "help": "服务商不对内容签名。仅回调 URL 中的密钥用于验证投递。"
+        }
+      },
+      "billingMode": {
+        "provider_credit_line": {
+          "label": "服务商信用额度",
+          "help": "服务商通过其自有的信用额度向平台计费。"
+        },
+        "customer_direct": {
+          "label": "客户直接向 Meta 付款",
+          "help": "客户的付款方式位于 Meta 上（转售引擎模式 meta_direct）。"
+        },
+        "meta_reseller": {
+          "label": "Meta 转售信用额度",
+          "help": "平台的 Meta 信用额度共享到客户的 WABA 上（转售引擎模式 reseller）。"
+        }
+      },
+      "onboarding": {
+        "manual": {
+          "label": "手动",
+          "help": "工作区粘贴其 WABA 和电话号码 ID。"
+        },
+        "embedded_signup": {
+          "label": "嵌入式注册",
+          "help": "工作区通过平台 Meta 应用的嵌入式注册进行连接。"
+        }
+      },
+      "partnerProgram": {
+        "none": {
+          "label": "无"
+        },
+        "pinnacle": {
+          "label": "Pinnacle"
+        }
+      }
+    },
+    "gaps": {
+      "providerToken": "未存储服务商令牌。启用此服务商需要该令牌。",
+      "appSecret": "未存储应用密钥。在存储之前，此服务商的每次 Webhook 投递都会被拒绝。",
+      "webhookSecret": "未存储 Webhook 密钥。在存储之前，此服务商的每次 Webhook 投递都会被拒绝。"
+    },
+    "headers": {
+      "intro": "每次调用此服务商时发送的请求头。若某次调用时请求头的值未知，则将其省略，绝不会以字面占位符形式发送。",
+      "listLabel": "请求头模板",
+      "name": "请求头名称",
+      "value": "值",
+      "insertFor": "在请求头 {n} 中插入占位符",
+      "insert": "插入占位符",
+      "removeFor": "移除请求头 {n}",
+      "remove": "移除",
+      "add": "添加请求头",
+      "placeholdersTitle": "占位符与规则",
+      "leftOut": "若某次调用时使用的占位符没有值，则省略该请求头。无法设置逐跳和帧相关的请求头（如 host、content-length、transfer-encoding 等）。",
+      "channelTokenNeverKnown": "此服务商使用平台令牌，因此客户不持有号码令牌：使用号码令牌占位符的请求头将始终被省略。",
+      "problems": {
+        "tooMany": "最多允许 {max} 个请求头。",
+        "nameInvalid": "请求头名称只能使用字母、数字和连字符。",
+        "nameDenied": "请求头 {name} 由连接管理，无法设置。",
+        "nameDuplicate": "请求头 {name} 出现了两次。",
+        "valueEmpty": "请求头 {name} 需要一个值。",
+        "valueTooLong": "{name} 的值超过了 {max} 个字符。",
+        "valueCharacters": "{name} 的值包含控制字符或非 ASCII 字符。",
+        "placeholderUnknown": "请求头 {name} 使用了未知占位符：{names}。",
+        "strayBrace": "请求头 {name} 含有多余的花括号。占位符应以名称两侧的双花括号表示。",
+        "credentialNotCarried": "必须有一个请求头携带占位符 {placeholder}，凭据由此传递给服务商。"
+      },
+      "placeholders": {
+        "providerToken": "服务商平台的令牌。",
+        "channelToken": "此次调用所针对号码的访问令牌。",
+        "wabaId": "该号码的 WhatsApp Business 账户 ID。",
+        "phoneNumberId": "该号码的电话号码 ID。"
+      },
+      "preview": {
+        "title": "调用预览",
+        "urlPending": "（请输入有效地址）",
+        "note": "显示的是占位值。真实的令牌和 ID 在每次调用时填入，且绝不在此处显示。"
+      }
+    },
+    "form": {
+      "wizardLabel": "添加 WhatsApp 服务商",
+      "editLabel": "更改 WhatsApp 服务商",
+      "stepsLabel": "步骤",
+      "steps": {
+        "basics": "基本信息",
+        "connection": "连接",
+        "credentials": "凭据",
+        "webhooks": "Webhook",
+        "billing": "计费与入驻",
+        "review": "检查"
+      },
+      "stepHelp": {
+        "basics": "一个稳定的键、运营人员能识别的名称以及可选备注。",
+        "connection": "服务商的响应地址，以及平台如何向其进行身份验证。",
+        "credentials": "由谁执行操作的凭据，以及服务商令牌。",
+        "webhooks": "服务商如何投递入站消息，以及如何验证其真实性。",
+        "billing": "由谁向 Meta 付款、是否支持文件上传，以及工作区如何入驻。",
+        "review": "请检查所有内容。在您创建服务商之前，不会发送任何内容。"
+      },
+      "fields": {
+        "key": "键",
+        "label": "名称",
+        "notes": "备注",
+        "baseUrl": "基础 URL",
+        "apiVersion": "API 版本",
+        "authScheme": "身份验证",
+        "credentialMode": "凭据模式",
+        "providerToken": "服务商令牌",
+        "webhookMode": "Webhook 模式",
+        "signatureScheme": "Webhook 签名",
+        "appSecret": "应用密钥",
+        "webhookSecret": "Webhook 密钥",
+        "verifyToken": "验证令牌",
+        "signatureHeaderName": "签名请求头名称",
+        "billingMode": "计费模式",
+        "mediaUpload": "支持上传媒体",
+        "onboarding": "入驻",
+        "onboardingAppId": "Meta 应用 ID",
+        "onboardingConfigId": "嵌入式注册配置 ID",
+        "partnerProgram": "合作伙伴计划",
+        "partnerSolutionId": "解决方案 ID"
+      },
+      "hints": {
+        "key": "小写字母、数字、下划线和连字符，2 至 40 个字符，以字母开头。创建后无法更改。",
+        "keyFixed": "此键无法更改。",
+        "notes": "仅运营人员可见。",
+        "baseUrl": "https://host 或 https://host/prefix。平台仅调用公共 https 主机。",
+        "credentialModeLocked": "已有 {count, plural, other {# 个号码}}通过此服务商连接，因此无法更改凭据模式。请先将其切换走。",
+        "providerTokenNeeded": "启用此服务商前必须填写。",
+        "providerTokenOptional": "此处可选：每个号码可携带自己的令牌。",
+        "appSecret": "校验每次投递的 X-Hub-Signature-256。未设置时，此服务商的每次投递都会被拒绝。",
+        "webhookSecret": "服务商在签名请求头中放入的值。未设置时，每次投递都会被拒绝。",
+        "signatureHeaderName": "字母、数字和连字符，例如 x-bsp-secret。",
+        "verifyToken": "用于响应服务商的订阅验证请求。可选。",
+        "billingMode": "指向转售计费引擎的标签。不会改变任何计费行为。",
+        "mediaUpload": "关闭时，文件通过公共链接发送，而非上传。",
+        "onboardingIds": "仅限数字。这些是平台 Meta 应用的公共 ID。",
+        "partnerPinnacle": "Pinnacle 为每个号码分配各自的密钥。请将合作伙伴密钥存为服务商令牌，将 Meta 应用密钥存为应用密钥（入站 Webhook 使用它进行验证）。",
+        "partnerSolutionId": "仅限数字，5 至 32 位。来自 Pinnacle 控制台的合作伙伴解决方案 ID。"
+      },
+      "devLoopback": "仅在开发环境、服务器标志允许时，才接受环回地址上的明文 http。在生产环境中，此地址会被拒绝。",
+      "ssrfNote": "服务器会再次检查该地址：仅限 https、公共主机名、默认端口，且其解析出的每个地址都必须是公共地址。",
+      "secretsNote": "密钥只写不读。保存后仅显示是否已设置，以及最后四个字符。",
+      "signatureNoneNote": "没有签名时，只有回调 URL 中的密钥用于验证投递。仅当服务商无法签名时才使用此项。",
+      "builtinNotice": "这是内置服务商。其地址、版本和密钥位于平台设置 > WhatsApp 中。此处只能修改名称、备注和计费模式。",
+      "openConsoleSettings": "打开平台设置 > WhatsApp",
+      "conflictHint": "您的更改未保存。表单已显示最新的值。",
+      "fixProblems": "{count, plural, other {# 个值需要处理。}}请修正标记的字段。",
+      "save": "保存更改",
+      "nothingToSave": "尚无更改",
+      "back": "返回",
+      "next": "下一步",
+      "cancel": "取消",
+      "create": "创建服务商",
+      "saved": "已保存 {name}。",
+      "created": "已创建 {name}。它初始为停用状态：请先测试，然后再启用。",
+      "review": {
+        "headers": "请求头",
+        "yes": "是",
+        "no": "否",
+        "secrets": "需要存储的密钥",
+        "noSecrets": "无",
+        "gapsTitle": "此服务商正常工作前仍缺少的内容",
+        "startsDisabled": "新服务商初始为停用状态。创建后，请运行“测试连接”并启用它。"
+      },
+      "problems": {
+        "labelRequired": "请输入名称。",
+        "labelLength": "名称最多 {max} 个字符。",
+        "notesLength": "备注最多 {max} 个字符。",
+        "keyRequired": "请输入键。",
+        "keyBuiltin": "meta 和 interakt 是内置服务商。请选择其他键。",
+        "keyFormat": "以字母开头，之后可使用字母、数字、下划线或连字符，总长 2 至 40 个字符。",
+        "baseUrl": {
+          "empty": "请输入服务商的基础 URL。",
+          "length": "地址长度必须在 1 至 200 个字符之间。",
+          "characters": "地址不得包含空格或控制字符。",
+          "invalid": "这不是有效的 URL。",
+          "credentials": "地址不得包含用户名或密码。",
+          "queryOrFragment": "地址不得包含查询参数或片段。",
+          "notHttps": "地址必须以 https:// 开头。",
+          "port": "只允许默认的 https 端口。",
+          "host": "请使用公共主机名，而非 IP 地址或单标签名称。",
+          "internal": "请使用公共主机名，而非内部主机名。"
+        },
+        "apiVersion": "请使用类似 v25.0 的版本号。",
+        "headers": "{count, plural, other {# 个请求头问题。}}请参见上方列表。",
+        "signatureHeaderRequired": "请填写携带密钥的请求头名称。",
+        "signatureHeaderFormat": "仅限字母、数字和连字符。",
+        "digits": "仅限数字，5 至 32 位。",
+        "partnerSolutionIdRequired": "请输入解决方案 ID。",
+        "partnerCredentialMode": "合作伙伴计划会为每个号码分配各自的令牌：请使用渠道令牌模式。",
+        "secretCharacters": "不得包含空格或控制字符。",
+        "secretLength": "长度在 {min} 至 {max} 个字符之间。"
+      }
+    },
+    "actions": {
+      "activate": "启用",
+      "makeDefault": "设为默认",
+      "clearDefault": "清除默认",
+      "disable": "停用",
+      "archive": "归档",
+      "cancel": "取消",
+      "menu": "操作",
+      "menuLabel": "{name} 的操作",
+      "manage": "管理",
+      "open": "打开",
+      "switchTo": "在此切换号码",
+      "blocked": {
+        "default": "它是默认服务商",
+        "builtin": "内置",
+        "inUse": "使用中"
+      },
+      "done": {
+        "activate": "{name} 已启用。",
+        "disable": "{name} 已停用。已在其上的号码仍可继续发送。",
+        "archive": "{name} 已归档。",
+        "default": "{name} 现已成为新号码的默认服务商。",
+        "clearDefault": "已清除默认设置。新号码将遵循控制台的 WhatsApp 设置。"
+      },
+      "confirm": {
+        "disable": {
+          "title": "停用 {name}？",
+          "body": "此服务商将不再可用于新号码或分配。已在其上的号码仍可继续发送，因此不会造成服务中断。",
+          "inUse": "仍有 {count, plural, other {# 个号码}}在此服务商上。准备好时请将它们切换走。",
+          "action": "停用"
+        },
+        "archive": {
+          "title": "归档 {name}？",
+          "body": "已归档的服务商将被弃用。只要有任何号码或工作区设置在使用它，此操作就会被拒绝。您之后可以重新启用它。",
+          "action": "归档"
+        },
+        "default": {
+          "title": "将 {name} 设为默认？",
+          "body": "没有单独设置的工作区将通过此服务商连接新号码。已连接的号码不会被移动。",
+          "action": "设为默认"
+        },
+        "clearDefault": {
+          "title": "清除默认设置？",
+          "body": "新号码将再次遵循控制台的 WhatsApp 设置。已连接的号码不会被移动。",
+          "action": "清除默认"
+        }
+      }
+    },
+    "test": {
+      "title": "测试连接",
+      "description": "使用存储的凭据向服务商发起一次经过身份验证的读取请求。服务商端不会有任何更改。",
+      "path": "要读取的路径",
+      "pathHint": "以斜杠开头。默认为 /me。",
+      "willCall": "将调用 {url}",
+      "pathInvalid": "以 / 开头，且仅可使用字母、数字以及 . _ / -。",
+      "wabaId": "WABA ID（可选）",
+      "idsHint": "仅用于填充此次调用的请求头占位符，不会被存储。",
+      "idInvalid": "仅可使用字母、数字以及 . _ : -。",
+      "phoneNumberId": "电话号码 ID（可选）",
+      "channelToken": "测试号码令牌（可选）",
+      "channelTokenHint": "用于每个号码各自持有令牌的服务商。仅用于此次调用，之后会从此表单中清除。",
+      "tokenInvalid": "至少 8 个可打印字符，不含空格。",
+      "show": "显示您输入的值",
+      "hide": "隐藏您输入的值",
+      "run": "运行测试",
+      "running": "测试中...",
+      "forgotten": "此处输入的 ID 和令牌仅用于一次调用，之后即被丢弃。",
+      "needManage": "您可以查看上次的结果。运行测试需要管理权限。",
+      "ok": "已连接",
+      "failed": "失败",
+      "justNow": "刚刚",
+      "lastTest": "上次测试",
+      "httpStatus": "HTTP 状态",
+      "noResponse": "无响应",
+      "latency": "延迟",
+      "ms": "{ms} 毫秒",
+      "errorCode": "错误代码",
+      "message": "服务商的返回内容",
+      "redactedNote": "服务器在返回前会将所有密钥替换为 [redacted]。",
+      "never": "此服务商尚未测试。",
+      "hints": {
+        "ok": "服务商已响应经过身份验证的读取请求，可以安全启用。",
+        "addressRefused": "该地址被拒绝（非 https、非公共名称，或解析为私有地址）。请修正基础 URL。",
+        "credentialsMissing": "服务商未存储令牌。请添加其服务商令牌并保存。",
+        "unauthorized": "服务商拒绝了该凭据。请检查令牌以及请求头的名称和值。",
+        "notFound": "未找到该路径。请尝试服务商支持的读取操作，或检查基础 URL 和 API 版本。",
+        "rateLimited": "服务商正在限流。请稍候片刻后再次测试。",
+        "providerError": "服务商返回了服务器错误。请稍后再试。",
+        "unreachable": "无应答：主机未响应或连接失败。请检查地址。",
+        "other": "服务商返回了意外的状态。请参阅上方的返回内容。"
+      }
+    },
+    "list": {
+      "title": "WhatsApp 服务商",
+      "description": "选择平台发送消息所使用的 WhatsApp Business 解决方案服务商，添加服务商，并在它们之间迁移工作区。",
+      "consoleSettings": "Meta 应用与 Interakt 凭据",
+      "switchWorkspace": "切换工作区",
+      "add": "添加服务商",
+      "kpi": {
+        "providers": "服务商",
+        "active": "已启用",
+        "numbers": "已连接号码",
+        "overrides": "工作区覆盖设置"
+      },
+      "defaultIs": "新号码将通过 {name} 连接，除非某个工作区有自己的覆盖设置。",
+      "noDefault": "未设置注册表默认值。新号码将遵循控制台的 WhatsApp 设置。",
+      "defaultHelp": "更改默认值或覆盖设置永远不会移动已连接的号码。若要移动，请使用“切换”。",
+      "filterLabel": "按状态筛选",
+      "filters": {
+        "all": "全部",
+        "active": "已启用",
+        "disabled": "已停用",
+        "archived": "已归档"
+      },
+      "search": "按名称或键筛选",
+      "emptyTitle": "暂无服务商",
+      "emptyMessage": "添加服务商以通过其他 BSP 路由 WhatsApp。内置的 Meta 和 Interakt 路由始终可用。",
+      "noMatchTitle": "没有匹配的服务商",
+      "noMatchMessage": "没有符合此状态和搜索条件的内容。请尝试其他筛选条件或清除搜索。",
+      "tableCaption": "WhatsApp 服务商",
+      "cols": {
+        "provider": "服务商",
+        "status": "状态",
+        "billing": "计费模式",
+        "credentials": "凭据模式",
+        "usage": "使用中",
+        "lastTest": "上次测试",
+        "actions": "操作"
+      },
+      "usage": {
+        "numbers": "{count, plural, other {# 个号码}}",
+        "workspaces": "{count, plural, other {# 个工作区}}"
+      },
+      "test": {
+        "ok": "已连接",
+        "failed": "失败",
+        "never": "未测试"
+      },
+      "officialLabel": "WhatsApp 官方（受支持）"
+    },
+    "detail": {
+      "title": "WhatsApp 服务商",
+      "back": "返回服务商列表",
+      "gapsTitle": "此服务商正常工作前仍缺少的内容",
+      "lifecycle": {
+        "title": "状态与默认设置",
+        "description": "启用后，该服务商可供新号码和分配选择。停用不会停止已在其上的号码。"
+      },
+      "edit": {
+        "title": "编辑",
+        "readOnly": "您可以查看此服务商。修改需要管理权限。"
+      },
+      "overview": {
+        "title": "概览",
+        "headers": "请求头名称",
+        "none": "无",
+        "engineMode": "转售引擎模式：{mode}",
+        "yes": "是",
+        "no": "否",
+        "usage": "使用中",
+        "numbers": "{count, plural, other {# 个号码}}",
+        "workspaces": "{count, plural, other {# 个工作区覆盖设置}}",
+        "updated": "上次修改",
+        "builtinNote": "这是内置服务商。其地址、版本和密钥将实时从平台设置 > WhatsApp 读取。",
+        "openConsoleSettings": "打开平台设置 > WhatsApp",
+        "credentialsTitle": "已存储的密钥",
+        "credentialsNote": "密钥只写不读。保存后不再显示，仅显示是否已设置及其最后四个字符。",
+        "webhookTitle": "Webhook",
+        "webhookNote": "请将您的公共 API 地址加上此路径注册到服务商。一个 URL 服务于所有服务商和所有工作区。"
+      }
+    },
+    "new": {
+      "title": "添加 WhatsApp 服务商",
+      "back": "返回服务商列表",
+      "description": "注册兼容 Graph 的 BSP。它初始为停用状态；请先测试，然后启用。"
+    },
+    "assignments": {
+      "title": "工作区分配",
+      "description": "每个工作区通过哪个服务商连接新号码。没有覆盖设置的工作区将遵循默认值。",
+      "defaultIs": "注册表默认值：{name}。",
+      "noDefault": "未设置注册表默认值。没有覆盖设置的工作区将遵循控制台的 WhatsApp 设置。",
+      "existingNote": "更改覆盖设置不会移动现有号码。若要移动，请使用“切换”。",
+      "search": "搜索工作区",
+      "overrideOnly": "仅显示有覆盖设置的工作区",
+      "noMatchTitle": "没有匹配的工作区",
+      "noMatchMessage": "请尝试其他搜索或清除筛选条件。",
+      "emptyTitle": "暂无工作区",
+      "emptyMessage": "工作区存在后将显示在此处。",
+      "loadMore": "加载更多",
+      "tableCaption": "工作区服务商分配",
+      "cols": {
+        "workspace": "工作区",
+        "override": "覆盖设置",
+        "effective": "新号码将通过",
+        "numbers": "号码",
+        "actions": "操作"
+      },
+      "followsDefault": "遵循默认值",
+      "source": {
+        "override": "工作区覆盖设置",
+        "default": "注册表默认值",
+        "platform_setting": "控制台 WhatsApp 设置"
+      },
+      "numberCount": "{count, plural, other {# 个号码}}",
+      "onOther": "{count} 个在其他服务商上",
+      "change": "更改",
+      "setOverride": "设置覆盖",
+      "clear": "清除覆盖",
+      "switch": "切换号码",
+      "common": {
+        "close": "关闭",
+        "cancel": "取消"
+      },
+      "set": {
+        "title": "{name} 的覆盖设置",
+        "help": "此工作区的新号码将通过您选择的服务商连接。已连接的号码保持不变。",
+        "noActive": "没有已启用的服务商。请先启用一个。",
+        "provider": "服务商",
+        "note": "备注（可选）",
+        "noteHint": "说明此工作区为何使用自己的服务商。最多 500 个字符。",
+        "save": "保存覆盖设置",
+        "done": "{workspace} 现在通过 {provider} 连接新号码。"
+      },
+      "clearDialog": {
+        "title": "清除 {name} 的覆盖设置？",
+        "body": "{name} 将重新遵循默认值。已通过 {provider} 连接的号码不会被移动。",
+        "action": "清除覆盖设置",
+        "done": "{workspace} 已重新遵循默认值。"
+      }
+    },
+    "switch": {
+      "title": "切换服务商",
+      "description": "将工作区已连接的 WhatsApp 号码迁移到另一服务商。请先进行试运行：它只检查，不做任何更改，也不调用任何服务。",
+      "choose": {
+        "title": "工作区与目标",
+        "description": "请选择工作区，以及其号码应迁移到的服务商。",
+        "target": "迁移到",
+        "targetHint": "只有已启用的服务商才能作为目标。",
+        "pick": "选择服务商",
+        "from": "仅限以下服务商上的号码：",
+        "fromHint": "可选。保持为任意服务商，即可迁移所有不在目标服务商上的号码。",
+        "anyProvider": "任意服务商",
+        "setOverride": "同时将其设为此工作区的覆盖设置",
+        "setOverrideHint": "工作区之后连接的号码将遵循此设置。仅在应用切换时生效，试运行时不生效。",
+        "reason": "原因（可选）",
+        "reasonHint": "将记录到审计日志中。最多 500 个字符。",
+        "targetNotActive": "此服务商未启用。在启用之前，切换将被拒绝。",
+        "dryRun": "检查将发生的变更",
+        "dryRunNote": "试运行：不做任何更改，也不调用任何服务商。"
+      },
+      "workspace": {
+        "selected": "工作区",
+        "unnamed": "已选择的工作区",
+        "change": "更改工作区",
+        "label": "工作区",
+        "search": "搜索工作区",
+        "none": "没有匹配的工作区。",
+        "numbers": "{count, plural, other {# 个号码}}",
+        "onOther": "{count} 个在其他服务商上",
+        "narrow": "还有更多工作区。请缩小搜索范围。"
+      },
+      "plan": {
+        "stale": "试运行后您更改了选项。请在应用前重新检查。",
+        "title": "将发生的变更",
+        "description": "勾选要迁移的号码。被阻止的号码不会被改动。",
+        "nothingReady": "目前没有可迁移的号码。请处理列出的问题，然后重新检查。",
+        "headline": "试运行共评估 {total, plural, other {# 个号码}}，其中 {ready} 个可迁移到 {provider}。",
+        "ready": "{count} 个可迁移",
+        "blocked": "{count} 个被阻止",
+        "failed": "{count} 个无法评估",
+        "reconnect": "{count} 个已断开"
+      },
+      "requirements": {
+        "title": "需要人工处理的事项",
+        "blocks": "阻止迁移",
+        "advice": "需要后续跟进",
+        "numberToken": {
+          "label": "需要号码访问令牌",
+          "help": "目标服务商使用每个号码各自的令牌，而此号码没有令牌。请让工作区在号码健康页面粘贴一个令牌，或重新连接该号码，然后再次检查。"
+        },
+        "providerToken": {
+          "label": "需要服务商令牌",
+          "help": "目标服务商未存储合作伙伴令牌。请先在服务商页面添加。"
+        },
+        "idsMissing": {
+          "label": "缺少 WABA ID 或电话号码 ID",
+          "help": "此连接的记录中没有 WABA ID 或电话号码 ID。请重新连接。"
+        },
+        "reconnect": {
+          "label": "号码已断开",
+          "help": "仅会重新指向，不会恢复连接。工作区必须先重新连接此号码才能发送。"
+        }
+      },
+      "numbers": {
+        "captionPlan": "试运行评估的号码",
+        "captionResult": "切换的逐号码结果",
+        "cols": {
+          "move": "迁移",
+          "number": "号码",
+          "from": "当前服务商",
+          "state": "状态",
+          "details": "详情"
+        },
+        "moveNumber": "迁移 {name}",
+        "unknownProvider": "未知",
+        "state": {
+          "ready": "可迁移",
+          "blocked": "已阻止",
+          "switched": "已切换",
+          "repointed": "已重新指向",
+          "failed": "失败"
+        },
+        "willResubscribe": "将先通过新服务商重新订阅 Webhook。",
+        "willRepoint": "仅会重新指向。",
+        "inboundNotWired": "服务商未接受按号码的回调设置。请在服务商或 Meta 应用上将回调设置为平台 Webhook。",
+        "inboundWired": "已设置入站回调。"
+      },
+      "apply": {
+        "title": "应用切换",
+        "summary": "{count, plural, other {# 个号码}}将迁移到 {provider}。",
+        "understood": "我已了解此操作会重新指向工作区中的在线号码，并重新订阅它们的 Webhook。",
+        "action": "应用切换",
+        "tickOne": "请至少勾选一个号码。"
+      },
+      "confirm": {
+        "title": "迁移号码？",
+        "body": "{workspace} 的 {count, plural, other {# 个号码}}将迁移到 {provider}。每个号码都会先重新订阅，只有在成功后才会被重新指向。",
+        "rollback": "如需回滚，请切换回原服务商。消息记录、消息 ID 和回执不受影响。",
+        "action": "迁移号码",
+        "cancel": "取消"
+      },
+      "errorHints": {
+        "nothingToDo": "请选择其他目标或其他源服务商。",
+        "tooMany": "请选择源服务商以缩小范围。",
+        "disabled": "请先在服务商页面启用目标服务商，然后重试。"
+      },
+      "result": {
+        "title": "结果",
+        "allMoved": "{count, plural, other {# 个号码}}现已全部位于 {provider}。",
+        "noneMoved": "没有迁移任何号码。请参阅下方详情。",
+        "partial": "{total} 个号码中已迁移 {moved} 个。请参阅下方详情。",
+        "switched": "{count} 个已切换",
+        "repointed": "{count} 个已重新指向",
+        "failed": "{count} 个失败",
+        "blocked": "{count} 个被阻止",
+        "overrideSet": "{provider} 现已成为此工作区的覆盖设置。",
+        "repointedNote": "已断开的号码仅被重新指向。工作区必须先重新连接它们才能发送。",
+        "inboundNote": "{count, plural, other {# 个号码}}已迁移，但其按号码的回调未被接受。请在服务商或 Meta 应用上将回调设置为平台 Webhook。",
+        "rollback": {
+          "title": "回滚",
+          "description": "回滚即切换回去。号码保留其所有凭据，因此使用号码令牌的路由无需任何新配置；使用平台令牌的路由需要已存储其令牌。",
+          "action": "准备切换回 {provider}",
+          "unknown": "无法得知这些号码之前的服务商，因此无法在此准备回滚。"
+        },
+        "another": "切换其他工作区",
+        "toAssignments": "返回分配页面"
+      }
+    },
+    "workspaceNote": {
+      "title": "您的 WhatsApp 服务商",
+      "newNumbers": "新号码将通过 {provider} 连接。",
+      "ownToken": "每个号码使用其各自的访问令牌。",
+      "platformToken": "平台持有凭据；您只需使用 ID 进行连接。",
+      "mediaYes": "支持文件上传。",
+      "mediaNo": "不支持文件上传：文件通过公共链接发送。",
+      "none": "目前没有可用于连接新号码的服务商。请联系平台管理员。",
+      "numberOn": "{name} 使用的是 {provider}。",
+      "numberNoMedia": "不支持文件上传。"
+    }
+  }
+}

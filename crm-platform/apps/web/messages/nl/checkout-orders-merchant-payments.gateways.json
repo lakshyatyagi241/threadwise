@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "Winkel / Betaalproviders",
+      "title": "Betaalproviders",
+      "subtitle": "Voeg je eigen providersleutels toe zodat betalingen op jouw rekening binnenkomen. Plak de sleutels die de provider in zijn dashboard noemt.",
+      "banner": "Eén provideropzet wordt gebruikt voor het afrekenen in je winkel en voor facturen in Sales.",
+      "viewOnly": "Je kunt de provideropzet bekijken maar niet wijzigen. Vraag een workspace-beheerder om toestemming om providers te beheren.",
+      "scope": {
+        "label": "Waar deze instellingen gelden",
+        "workspace": "Workspace (alle winkels)",
+        "workspaceHint": "Wordt gebruikt door elke winkel en door facturen in Sales, tenzij een winkel een eigen override heeft.",
+        "store": "Alleen deze winkel (override)",
+        "storeHint": "Wordt alleen gebruikt bij het afrekenen van {shop}. Heeft voorrang op de workspace-opzet.",
+        "storeNamed": "Winkel: {shop}",
+        "noShop": "Maak eerst een winkel om een override in te stellen.",
+        "shop": "Winkel"
+      },
+      "resolved": {
+        "used": "Momenteel in gebruik: {name} (bron: {source})",
+        "none": "Nog geen provider ingesteld",
+        "noneHint": "Stel hieronder een provider in en schakel hem in. Tot dan kunnen kopers niet online betalen en hebben facturen geen betaalknop.",
+        "source": {
+          "store_override": "winkeloverride",
+          "workspace_default": "workspace-standaard",
+          "legacy_storefront": "winkelsleutels"
+        }
+      },
+      "mode": {
+        "live": "Live",
+        "test": "Test"
+      },
+      "catalogue": {
+        "title": "Providers",
+        "count": "{count, plural, one {# provider} other {# providers}}",
+        "search": "Providers zoeken",
+        "searchPlaceholder": "Zoeken op naam, land of valuta",
+        "loading": "Providers laden",
+        "noDriversTitle": "Geen providers beschikbaar",
+        "noDriversMessage": "Deze server heeft nog geen betaalproviders om in te stellen.",
+        "noMatchTitle": "Geen provider gevonden",
+        "noMatchMessage": "Probeer een andere naam, ander land of andere valutacode.",
+        "clearSearch": "Zoekopdracht wissen"
+      },
+      "card": {
+        "available": "Beschikbaar",
+        "unavailable": "Nog niet beschikbaar",
+        "paymentLinks": "Betaallinks",
+        "unavailableNote": "Deze provider staat in de lijst maar kan in deze versie nog geen betalingen verwerken.",
+        "active": "Actief",
+        "off": "Uit",
+        "incomplete": "Sleutels onvolledig",
+        "default": "Standaard",
+        "migrated": "Gemigreerd vanuit je winkelsleutels. Sla hier één keer op om ze in de nieuwe opzet te behouden.",
+        "webhookMissing": "Webhook-geheim ontbreekt: betaalmeldingen van deze provider worden geweigerd totdat je er een toevoegt.",
+        "notSetUp": "Voor dit bereik nog niet ingesteld.",
+        "configure": "Configureren",
+        "edit": "Bewerken",
+        "test": "Verbinding testen",
+        "testing": "Testen",
+        "setDefault": "Als standaard instellen",
+        "activeSwitch": "{name} staat aan",
+        "remove": "Verwijderen",
+        "removeTitle": "{name} verwijderen?",
+        "removeMessage": "De opgeslagen sleutels worden voor dit bereik ({scope}) verwijderd. Kopers kunnen er niet meer mee betalen en betalingen die al lopen worden mogelijk niet bevestigd.",
+        "removeConfirm": "Provider verwijderen"
+      },
+      "toast": {
+        "saved": "Provider opgeslagen",
+        "switchedOn": "{name} ingeschakeld",
+        "switchedOff": "{name} uitgeschakeld",
+        "defaultSet": "{name} is nu de standaard",
+        "removed": "{name} verwijderd"
+      },
+      "test": {
+        "verified": "De provider heeft de sleutels geaccepteerd.",
+        "fieldsTitle": "Verplichte velden zijn ingevuld",
+        "fieldsOnly": "Alleen de verplichte velden zijn gecontroleerd: deze provider heeft geen eenvoudige controleaanroep, dus een betaling is de echte test.",
+        "missingTitle": "Sleutels zijn onvolledig",
+        "missing": "Deze verplichte velden zijn leeg: {fields}.",
+        "rejected": "De provider heeft de sleutels niet geaccepteerd.",
+        "providerSaid": "De provider meldde: {message}"
+      },
+      "drawer": {
+        "eyebrow": "Provider configureren",
+        "save": "Provider opslaan",
+        "appliesTo": "Geldt voor: {scope}",
+        "credentials": "Inloggegevens",
+        "noFields": "Deze provider heeft geen sleutels nodig.",
+        "secretsNote": "Opgeslagen sleutels worden nooit meer getoond. Alleen het einde van elke sleutel wordt ter herinnering weergegeven.",
+        "requiredField": "{field} is verplicht.",
+        "invalidOption": "Kies een van de beschikbare opties voor {field}.",
+        "mode": "Modus",
+        "modeHint": "Gebruik Test terwijl je de provider met testsleutels uitprobeert, en Live om echte betalingen te ontvangen.",
+        "active": "Actief",
+        "activeHint": "Een provider die uit staat wordt nooit gebruikt bij het afrekenen of door facturen.",
+        "webhookTitle": "Webhook-adres",
+        "webhookHint": "Plak dit in je {name}-dashboard zodat betalingen automatisch worden bevestigd.",
+        "webhookAfterSave": "Het webhook-adres verschijnt hier na de eerste keer opslaan.",
+        "willClear": "De opgeslagen waarde wordt verwijderd wanneer je opslaat.",
+        "keepBlank": "Laat leeg om de opgeslagen waarde te behouden.",
+        "requiredMark": "(verplicht)",
+        "stored": "Opgeslagen: {mask}",
+        "keepOption": "Opgeslagen waarde behouden",
+        "chooseOption": "Kies een optie",
+        "clear": "Opgeslagen waarde wissen",
+        "show": "Waarde tonen",
+        "hide": "Waarde verbergen"
+      }
+    }
+  }
+}

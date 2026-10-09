@@ -1,0 +1,54 @@
+{
+  "checkout-orders-merchant-payments": {
+    "groups": {
+      "eyebrow": "Toko / Grup",
+      "title": "Grup WhatsApp",
+      "subtitle": "Grup tempat nomor Anda yang terhubung menjadi anggota. Saat pesanan dikonfirmasi, pesanan diposting ke grup pelanggan dan pelanggan di-@mention. Beri grup kode pemesanan agar pelanggan dapat memesan darinya.",
+      "loading": "Memuat grup",
+      "summary": {
+        "groups": "Grup disinkronkan",
+        "coded": "Dengan kode pemesanan",
+        "bot": "Nomor bot",
+        "noBot": "Tidak ada nomor WhatsApp yang terhubung.",
+        "connect": "Hubungkan nomor di Kanal",
+        "copyNumber": "Salin nomor"
+      },
+      "search": {
+        "label": "Cari grup",
+        "placeholder": "Cari nama grup..."
+      },
+      "columns": {
+        "group": "Grup",
+        "members": "Anggota",
+        "device": "Perangkat bot",
+        "synced": "Disinkronkan",
+        "code": "Kode pemesanan"
+      },
+      "row": {
+        "unnamed": "(grup tanpa nama)",
+        "noCode": "Tanpa kode",
+        "placeholder": "mis. ACME",
+        "label": "Kode pemesanan untuk {name}",
+        "copyLink": "Salin tautan pemesanan",
+        "saved": "Kode pemesanan disimpan.",
+        "cleared": "Kode pemesanan dihapus.",
+        "tooLong": "Gunakan {max} karakter atau kurang.",
+        "badChars": "Gunakan hanya huruf, angka, titik, tanda hubung, dan garis bawah.",
+        "taken": "Grup lain sudah memakai kode ini."
+      },
+      "empty": {
+        "title": "Belum ada grup",
+        "message": "Daftar grup disalin dari sesi WhatsApp Anda yang terhubung. Grup muncul di sini setelah sesi tersebut menyinkronkannya; belum ada waktu yang dijanjikan.",
+        "action": "Buka Kanal"
+      },
+      "noMatch": {
+        "title": "Tidak ada grup yang cocok dengan pencarian Anda",
+        "message": "Coba bagian lain dari nama grup, atau hapus pencarian."
+      },
+      "how": {
+        "title": "Cara kerja kode pemesanan",
+        "body": "Beri grup kode singkat (misalnya ACME), lalu bagikan tautan pemesanannya. Saat pelanggan mengetuknya dan mengonfirmasi pesanan, pesanan diposting langsung ke grup tersebut dan pelanggan di-@mention, meskipun mereka tergabung di beberapa grup."
+      }
+    }
+  }
+}

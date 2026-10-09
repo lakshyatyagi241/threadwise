@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "Publikowanie na żywo…",
+        "live": "Na żywo",
+        "liveTitle": "Na żywo w Geta",
+        "push": "Opublikuj na żywo",
+        "pushHint": "Opublikowano tutaj; wyślij teraz na żywo do Geta",
+        "failed": "Nieudane",
+        "failedConfiguration": "Błąd przy aktualizacji konfiguracji",
+        "failedPublish": "Błąd przy publikacji",
+        "retry": "Ponów",
+        "retrying": "Ponawianie…",
+        "reasonLabel": "Przyczyna",
+        "failedNote": "Przepływ jest nadal opublikowany tutaj. Ponowienie kontynuuje od kroku, w którym wystąpił błąd.",
+        "notConfigured": "Opublikowano tutaj; skonfiguruj publikowanie w Geta w ustawieniach, aby wysłać go na żywo.",
+        "openSettings": "Otwórz ustawienia",
+        "dismiss": "Odrzuć"
+      },
+      "settings": {
+        "title": "Publikowanie w Geta",
+        "intro": "Gdy naciśniesz Opublikuj w kreatorze przepływów, Twój bot zostanie też wysłany na żywo do konsoli Geta. Wpisz dane połączenia raz dla tej przestrzeni roboczej. Sekrety są przechowywane w postaci zaszyfrowanej i nigdy nie są ponownie pokazywane.",
+        "viewOnly": "Możesz zobaczyć stan tych ustawień, ale nie możesz ich zmieniać.",
+        "loading": "Ładowanie…",
+        "loadFailed": "Nie udało się wczytać ustawień.",
+        "retry": "Spróbuj ponownie",
+        "fixtureNotice": "Ten serwer działa w trybie fixture: publikowanie jest symulowane i nic nie jest wysyłane do Geta.",
+        "ready": "Gotowe",
+        "incomplete": "Niekompletne",
+        "readyNote": "Publikacja przepływu wyśle też Twojego bota na żywo do Geta.",
+        "incompleteNote": "Wypełnij wszystkie pola poniżej, aby publikować opublikowane przepływy na żywo w Geta.",
+        "baseUrl": {
+          "label": "Adres bazowy",
+          "hint": "Adres API Geta, np. https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "Źródło konsoli (opcjonalnie)",
+          "hint": "Wysyłane jako origin i referer każdego żądania. Pozostaw puste, aby nie wysyłać żadnego z nich."
+        },
+        "authorization": {
+          "label": "Token autoryzacji",
+          "hint": "Wysyłany dokładnie tak, jak go wpiszesz, bez dodawania „Bearer ”."
+        },
+        "getaHost": {
+          "label": "Token geta-host",
+          "hint": "Wysyłany w nagłówku geta-host."
+        },
+        "secretKept": "Zapisano. Pozostaw pole puste, aby zachować wartość, lub wpisz nową, aby ją zastąpić.",
+        "secretPlaceholder": "Zapisano (ukryte)",
+        "show": "Pokaż",
+        "hide": "Ukryj",
+        "remove": "Usuń",
+        "record": {
+          "label": "Rekord chatbota Geta",
+          "paste": "Wklej rekord chatbota (JSON)",
+          "replace": "Zastąp rekord chatbota (JSON)",
+          "hint": "Obiekt chatbota dokładnie tak, jak ma być wysłany do Geta, lub całe ciało żądania z kluczem chatbot. Wymaga co najmniej id i bot_id. Odświeżane jest tylko modified_time, gdy zostanie wysłane.",
+          "keepPlaceholder": "Pozostaw puste, aby zachować zapisany rekord",
+          "id": "ID chatbota",
+          "name": "Nazwa",
+          "botId": "ID bota",
+          "remove": "Usuń zapisany rekord"
+        },
+        "saved": "Zapisano",
+        "notSet": "Nieustawione",
+        "save": "Zapisz",
+        "saving": "Zapisywanie…",
+        "saveFailed": "Nie udało się zapisać.",
+        "removed": "Usunięto.",
+        "clear": "Wyczyść wszystko",
+        "cleared": "Wyczyszczono ustawienia publikowania w Geta.",
+        "clearConfirm": {
+          "title": "Wyczyścić publikowanie w Geta?",
+          "message": "To usunie adres bazowy, oba tokeny i rekord chatbota. Opublikowane przepływy pozostaną opublikowane tutaj, ale nie będą już wysyłane do Geta.",
+          "confirm": "Wyczyść wszystko",
+          "cancel": "Anuluj"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "nav": {
+      "forms": "Formulir"
+    },
+    "kinds": {
+      "short_text": "Teks singkat",
+      "long_text": "Teks panjang",
+      "email": "Email",
+      "phone": "Nomor telepon",
+      "number": "Angka",
+      "currency": "Jumlah",
+      "date": "Tanggal",
+      "dropdown": "Dropdown",
+      "radio": "Pilihan tunggal",
+      "checkbox_group": "Pilihan ganda",
+      "checkbox": "Kotak centang",
+      "rating": "Peringkat",
+      "hidden": "Kolom tersembunyi"
+    },
+    "errors": {
+      "network": "Server tidak dapat dihubungi. Periksa koneksi Anda dan coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukan itu.",
+      "signedOut": "Sesi Anda telah berakhir. Masuk lagi untuk melanjutkan.",
+      "conflict": "Orang lain telah mengubah formulir ini. Muat ulang halaman untuk melihat versi terbaru.",
+      "nameTaken": "Formulir lain sudah memakai nama ini. Pilih nama yang berbeda.",
+      "stateInvalid": "Itu tidak mungkin dilakukan dengan status formulir saat ini.",
+      "definitionInvalid": "Formulir belum valid. Periksa kolom dan coba lagi.",
+      "publishInvalid": "Formulir belum dapat diterbitkan. Perbaiki masalah yang tercantum dan coba lagi.",
+      "planLimit": "Batas paket Anda telah tercapai.",
+      "planLimitForms": "Anda telah mencapai jumlah formulir yang diizinkan paket Anda. Arsipkan formulir yang tidak lagi digunakan, atau tingkatkan paket Anda.",
+      "planLocked": "Formulir bukan bagian dari workspace Anda.",
+      "notFound": "Formulir ini tidak ditemukan. Mungkin telah dihapus.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi.",
+      "upgrade": "Lihat paket"
+    }
+  }
+}

@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "Funções e permissões",
+      "roles": "Funções",
+      "permissions": "Permissões",
+      "staff": "Funções da equipe"
+    },
+    "common": {
+      "admin": "Admin",
+      "breadcrumb": "Trilha de navegação",
+      "loading": "Carregando…",
+      "retry": "Tentar novamente",
+      "requestId": "ID da solicitação",
+      "cancel": "Cancelar",
+      "noAccess": {
+        "title": "Você não tem acesso a esta tela",
+        "body": "Suas funções não incluem a permissão da plataforma necessária para esta tela. Peça a um Super Admin para concedê-la.",
+        "bodyWithKey": "Esta tela precisa da permissão da plataforma {permission}. Peça a um Super Admin para adicioná-la a uma de suas funções.",
+        "back": "Voltar ao console"
+      },
+      "errors": {
+        "unexpected": "Algo deu errado do nosso lado. Tente novamente; se continuar, informe o ID da solicitação.",
+        "request": "Não foi possível concluir a solicitação.",
+        "validation": "Verifique o formulário e tente novamente.",
+        "validationField": "{message}",
+        "conflict": "Outra pessoa alterou esta função enquanto você editava. Recarregue para ver a versão dela e aplique suas alterações novamente.",
+        "noAccess": "Você precisa da permissão da plataforma {permission} para isto.",
+        "nameTaken": "Este nome já está em uso.",
+        "nameRequired": "O nome da função é obrigatório.",
+        "permissionNameRequired": "O nome da permissão é obrigatório.",
+        "permissionNameFormat": "Use letras minúsculas, dígitos e sublinhados, com pontos entre as partes.",
+        "locked": "Super Admin é bloqueado pelo sistema: não pode ser renomeado, ter permissões removidas nem excluído.",
+        "lockedDelete": "A função Super Admin é bloqueada pelo sistema e não pode ser excluída.",
+        "permissionSystem": "Esta permissão é verificada pela plataforma e não pode ser excluída.",
+        "permissionUnknown": "Estas permissões não estão no catálogo: {names}.",
+        "reassignSame": "Escolha outra função para mover os usuários.",
+        "lastSuperAdmin": "Deve haver pelo menos um Super Admin ativo.",
+        "privilegedRole": "Somente um Super Admin pode conceder ou revogar a função Super Admin.",
+        "notFound": "Este item não existe mais. Pode ter sido excluído."
+      }
+    },
+    "list": {
+      "crumb": "Funções",
+      "eyebrow": "Admin · Usuários e acesso · Funções",
+      "titleLead": "Funções e",
+      "titleAccent": "permissões",
+      "description": "Defina o que cada função pode fazer na plataforma. Cada usuário recebe uma função; as permissões são agrupadas por função.",
+      "managePermissions": "Gerenciar permissões",
+      "addRole": "Adicionar função",
+      "kpi": {
+        "label": "Totais de funções",
+        "total": "Total de funções",
+        "totalHint": "{system} do sistema · {custom} personalizadas",
+        "permissions": "Total de permissões",
+        "permissionsHint": "em módulos",
+        "users": "Usuários com a função",
+        "usersHint": "em todas as funções",
+        "noUsers": "Funções sem usuários",
+        "noUsersHint": "considere arquivar"
+      },
+      "filter": {
+        "label": "Filtrar funções por tipo",
+        "all": "Todas",
+        "system": "Sistema",
+        "custom": "Personalizada",
+        "search": "Pesquisar funções…",
+        "searchLabel": "Pesquisar funções"
+      },
+      "table": {
+        "caption": "Funções da plataforma",
+        "index": "#",
+        "name": "Nome da função",
+        "type": "Tipo",
+        "users": "Usuários",
+        "permissions": "Permissões",
+        "lastEdited": "Última edição",
+        "actions": "Ações"
+      },
+      "systemRole": "Função do sistema",
+      "customRole": "Função personalizada",
+      "systemBadge": "Sistema",
+      "customBadge": "Personalizada",
+      "row": {
+        "menu": "Ações para {name}",
+        "edit": "Editar função",
+        "delete": "Excluir"
+      },
+      "footer": {
+        "showing": "Mostrando {shown} de {total} funções",
+        "add": "+ Adicionar função"
+      },
+      "empty": {
+        "none": "Nenhuma função definida ainda. <link>Crie a primeira função</link>.",
+        "noMatch": "Nenhuma função corresponde aos filtros.",
+        "clear": "Limpar filtros"
+      },
+      "delete": {
+        "title": "Excluir função",
+        "message": "Excluir a função {name}? Os usuários atribuídos a ela perderão todas as suas permissões. Esta ação não pode ser desfeita.",
+        "confirm": "Sim, excluir",
+        "cancel": "Cancelar"
+      },
+      "toasts": {
+        "deleted": "Função “{name}” excluída."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Funções",
+      "crumbNew": "Nova",
+      "eyebrowNew": "Admin · Funções · Nova",
+      "eyebrowEdit": "Admin · Editando função",
+      "titleLead": "Criar uma nova",
+      "titleAccent": "função",
+      "description": "Escolha um nome e marque as caixas para conceder a esta função acesso a módulos específicos. Você pode editar isto a qualquer momento.",
+      "summary": "{count} / {total} permissões · última edição em {date}.",
+      "userChip": "{count, plural, one {# usuário} other {# usuários}}",
+      "save": "Salvar alterações",
+      "create": "Criar função",
+      "saving": "Salvando…",
+      "reload": "Recarregar a função",
+      "discard": "Você tem alterações não salvas. Sair sem salvar?",
+      "duplicatedBanner": "Função duplicada como “{name}”. Edite a cópia abaixo.",
+      "lockedNotice": "{name} é bloqueada pelo sistema: não pode ser renomeada, ter permissões removidas nem excluída.",
+      "details": "Detalhes da função",
+      "name": "Nome da função",
+      "namePlaceholder": "ex.: Líder de vendas",
+      "template": "Começar com um modelo",
+      "templateBlank": "Em branco · sem permissões",
+      "templateOption": "{name} · {count, plural, one {# permissão} other {# permissões}}",
+      "templateBusy": "Carregando o modelo…",
+      "descriptionLabel": "Descrição",
+      "descriptionPlaceholder": "O que esta função faz? Visível para administradores.",
+      "toasts": {
+        "created": "Função “{name}” criada.",
+        "updated": "Função “{name}” atualizada."
+      }
+    },
+    "matrix": {
+      "title": "Atribuir permissões",
+      "counter": "{count, number} / {total, number} selecionadas",
+      "selectAll": "Selecionar todas as permissões",
+      "module": "Módulo",
+      "selectAllColumn": "Selecionar tudo",
+      "available": "Permissões disponíveis",
+      "selectAllModule": "Selecionar tudo",
+      "selectAllOf": "Selecionar todas as permissões de {module}",
+      "empty": "Nenhuma permissão definida ainda. <link>Crie uma</link>.",
+      "emptyPlain": "Nenhuma permissão definida ainda."
+    },
+    "dangerZone": {
+      "title": "Zona de perigo",
+      "irreversible": "irreversível",
+      "duplicate": {
+        "title": "Duplicar função",
+        "hint": "Criar uma cópia com as mesmas permissões",
+        "action": "Duplicar",
+        "busy": "Duplicando…"
+      },
+      "reassign": {
+        "title": "Reatribuir todos os usuários",
+        "hint": "Mover {count, plural, one {# usuário} other {# usuários}} para outra função",
+        "targetLabel": "Mover usuários para",
+        "placeholder": "Para…",
+        "action": "Mover",
+        "busy": "Movendo…"
+      },
+      "moved": "{count} usuário(s) movido(s) de “{from}” para “{to}”.",
+      "delete": {
+        "title": "Excluir função",
+        "hint": "Remove a função e desvincula todos os usuários.",
+        "action": "Excluir",
+        "dialogTitle": "Excluir função",
+        "dialogMessage": "Excluir a função {name}? Os usuários atribuídos a ela perderão todas as suas permissões. Esta ação não pode ser desfeita.",
+        "confirm": "Sim, excluir",
+        "cancel": "Cancelar"
+      },
+      "deleted": "Função “{name}” excluída."
+    },
+    "permissions": {
+      "crumb": "Permissões",
+      "eyebrow": "Admin · Usuários e acesso · Permissões",
+      "titleLead": "Todas",
+      "titleAccent": "permissões",
+      "description": "Todas as permissões que a plataforma reconhece, agrupadas por módulo. Adicione uma nova permissão aqui e depois atribua-a a funções no editor de funções.",
+      "backToRoles": "Voltar às funções",
+      "add": "Adicionar permissão",
+      "kpi": {
+        "label": "Totais de permissões",
+        "total": "Total de permissões",
+        "totalHint": "em {modules, plural, one {# módulo} other {# módulos}}",
+        "used": "Usadas em funções",
+        "usedHint": "vinculada a ≥ 1 função",
+        "orphans": "Permissões órfãs",
+        "orphansHint": "vinculada a 0 funções",
+        "last": "Última adicionada"
+      },
+      "filter": {
+        "search": "Pesquisar nome da permissão…",
+        "searchLabel": "Pesquisar nome da permissão",
+        "moduleLabel": "Módulo",
+        "allModules": "Todos os módulos",
+        "count": "{count, plural, one {# permissão} other {# permissões}} em {modules, plural, one {# módulo} other {# módulos}}"
+      },
+      "groupsLabel": "Permissões por módulo",
+      "groupCount": "{count, plural, one {# permissão} other {# permissões}}",
+      "orphan": "órfã",
+      "system": "sistema",
+      "systemHint": "Verificada pela plataforma, por isso não pode ser excluída.",
+      "inRoles": "em {count, plural, one {# função} other {# funções}}",
+      "deleteName": "Excluir permissão {name}",
+      "empty": {
+        "none": "Nenhuma permissão definida ainda. <link>Crie a primeira</link>.",
+        "noMatch": "Nenhuma permissão corresponde à sua pesquisa."
+      },
+      "delete": {
+        "action": "Excluir",
+        "title": "Excluir permissão",
+        "message": "Excluir a permissão {name}? Qualquer função que a use perde essa capacidade imediatamente.",
+        "confirm": "Sim, excluir",
+        "cancel": "Cancelar"
+      },
+      "toasts": {
+        "deleted": "Permissão “{name}” excluída."
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "Permissões",
+      "crumbNew": "Nova",
+      "eyebrow": "Admin · Permissões · Nova",
+      "titleLead": "Criar uma nova",
+      "titleAccent": "permissão",
+      "description": "Adicione uma permissão de capacidade detalhada. Depois de criada, vincule-a a uma ou mais funções no editor de funções.",
+      "create": "Criar permissão",
+      "creating": "Criando…",
+      "details": "Detalhes da permissão",
+      "module": "Módulo",
+      "modulePlaceholder": "Escolha um módulo",
+      "moduleHint": "As permissões são agrupadas por módulo no editor de funções.",
+      "action": "Ação",
+      "actionHint": "Minúsculas, sem espaços. Será combinada como",
+      "actionPlaceholder": "ex.: exportar · reembolsar · aprovar",
+      "name": "Nome da permissão",
+      "namePlaceholder": "module.action — preenchido automaticamente acima",
+      "nameHint": "Preenchido automaticamente a partir do módulo e da ação. Edite somente se precisar de um texto personalizado.",
+      "tip": "<b>Convenção de nomes:</b> use <code>module.action</code> em minúsculas. Exemplos: <code>campaigns.send</code>, <code>billing.refund</code>, <code>audit.export</code>.",
+      "preview": {
+        "title": "Prévia da permissão",
+        "appearsUnder": "Aparecerá em <b>{module}</b> no editor de funções.",
+        "selectedModule": "módulo selecionado"
+      },
+      "code": {
+        "title": "Referência no código",
+        "hint": "Use <code>@PlatformPermission()</code> em uma rota da plataforma para exigir esta permissão."
+      },
+      "tipCard": "<b>Dica:</b> permissões nomeadas como <code>module.action</code> são agrupadas automaticamente no editor de funções.",
+      "toasts": {
+        "created": "Permissão “{name}” criada."
+      }
+    },
+    "staff": {
+      "crumbRoles": "Funções",
+      "crumb": "Funções da equipe",
+      "eyebrow": "Admin · Usuários e acesso · Funções da equipe",
+      "titleLead": "Equipe",
+      "titleAccent": "funções",
+      "description": "Atribua a cada operador deste console as funções da plataforma que definem o que ele pode fazer. Ao salvar, as funções do operador são substituídas exatamente pelas marcadas.",
+      "backToRoles": "Voltar às funções",
+      "caption": "Operadores e suas funções na plataforma",
+      "table": {
+        "operator": "Operador",
+        "tier": "Acesso ao console",
+        "status": "Status",
+        "roles": "Funções da plataforma",
+        "actions": "Ações"
+      },
+      "tier": {
+        "super_admin": "Super admin",
+        "support": "Suporte",
+        "auditor": "Auditor"
+      },
+      "status": {
+        "active": "Ativo",
+        "suspended": "Suspenso"
+      },
+      "noRoles": "Sem funções",
+      "rolesOf": "Funções de {name}",
+      "assign": "Atribuir funções",
+      "assignFor": "Atribuir funções a {name}",
+      "empty": "Nenhum operador ainda.",
+      "dialog": {
+        "title": "Atribuir funções a {name}",
+        "close": "Fechar",
+        "cancel": "Cancelar",
+        "save": "Salvar funções",
+        "saving": "Salvando…",
+        "hint": "Marque todas as funções que este operador deve ter.",
+        "superOnly": "Somente um Super Admin pode conceder ou revogar esta função.",
+        "count": "{count, plural, =0 {Nenhuma função selecionada} one {# função selecionada} other {# funções selecionadas}}"
+      },
+      "toasts": {
+        "saved": "Funções atualizadas para “{name}”."
+      }
+    }
+  }
+}

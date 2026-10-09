@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "Un montant, une quantité ou un taux de la facture est invalide. Vérifiez les champs en surbrillance.",
+        "INV_TAX_RATE_INVALID": "L’un des taux de taxe ne peut pas être utilisé aujourd’hui : il est inactif ou hors de sa période de validité. Choisissez un autre taux.",
+        "INV_NOT_DRAFT": "Cette facture a été émise et ne peut plus être modifiée. Dupliquez-la pour en créer une version corrigée.",
+        "INV_ORDER_LINKED": "Cette facture est liée à une commande client : c’est cette commande qu’il faut modifier.",
+        "SALESDOC_INVALID_TRANSITION": "Le devis ou la proposition n’a pas encore été accepté, il ne peut donc pas devenir une facture.",
+        "SALESDOC_ALREADY_CONVERTED": "Ce document a déjà été transformé en facture.",
+        "SALESDOC_INVOICING_UNAVAILABLE": "La facturation n’est pas encore disponible sur ce serveur.",
+        "INV_LINK_UNAVAILABLE": "Ce lien vers la facture n’est plus disponible."
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "Création d’un brouillon à partir du document accepté...",
+      "duplicating": "Copie de la facture dans un nouveau brouillon...",
+      "openExisting": "Ouvrir la facture déjà créée",
+      "backToInvoices": "Retour aux factures",
+      "backToInvoice": "Retour à la facture",
+      "issued": "Facture émise.",
+      "savedNotIssued": "Le brouillon a été enregistré, mais la facture n’a pas pu être émise : {reason}",
+      "buyerCountry": "Pays",
+      "buyerCountryHint": "Deux lettres, comme IN ou GB. Détermine le format du numéro fiscal et, en mode automatique, la taxe.",
+      "buyerTaxId": "Numéro fiscal",
+      "buyerTaxIdNamed": "Numéro fiscal ({label})",
+      "taxIdHint": "GSTIN, numéro de TVA, EIN... Vérifié à la saisie.",
+      "taxIdExpected": "Attendu : {label}, par exemple {example}.",
+      "taxIdUnchecked": "Aucun format connu pour ce pays : le numéro est enregistré tel que saisi.",
+      "taxIdValid": "{label} semble correct ({level, select, checksum {format et clés de contrôle vérifiés} other {seul le format vérifié}}). Cela ne prouve pas qu’il est enregistré.",
+      "taxIdInvalid": "Ce {label} semble incorrect ({level, select, checksum {format et clés de contrôle vérifiés} other {seul le format vérifié}}).",
+      "taxIdStillSave": "Vous pouvez tout de même l’enregistrer.",
+      "docType": "Document",
+      "docTypes": {
+        "tax_invoice": "Facture",
+        "proforma": "Facture proforma"
+      },
+      "noDueDate": "Conditions de paiement par défaut",
+      "reference": "Référence",
+      "referenceHint": "Le numéro de bon de commande de l’acheteur ou toute référence à imprimer.",
+      "tax": "Taxe",
+      "taxMode": "Mode de calcul de la taxe",
+      "taxModes": {
+        "rates": "Taux de taxe",
+        "auto": "Automatique"
+      },
+      "taxModeHint": {
+        "rates": "Choisissez un taux de taxe pour chaque ligne. Une ligne laissée sur la valeur par défaut utilise le taux par défaut de votre espace de travail.",
+        "auto": "Le moteur fiscal détermine la taxe de chaque ligne à partir de votre pays, du pays et du numéro fiscal de l’acheteur, de la nature de la livraison et du lieu de livraison. C’est la réponse du serveur qui est enregistrée."
+      },
+      "sellerCountry": "Votre pays (d’après le profil de facturation)",
+      "sellerCountryMissing": "La taxe automatique nécessite votre pays dans le profil de facturation (un pays disposant d’un paramétrage fiscal). Renseignez-le d’abord.",
+      "supplyType": "Nature de la livraison",
+      "supplyTypes": {
+        "goods": "Biens",
+        "services": "Services",
+        "digital": "Services numériques"
+      },
+      "placeOfSupply": "Lieu de livraison",
+      "placeOfSupplyHint": "Un état ou une province de {country} ; laissez le premier choix pour tout le pays.",
+      "placeSameCountry": "Tout le pays",
+      "placeRegionPlaceholder": "Code région, facultatif",
+      "reverseCharge": "Autoliquidation",
+      "reverseChargeHint": "C’est l’acheteur qui déclare la taxe : aucune taxe n’est facturée sur cette facture.",
+      "shipping": "Frais de port ({currency})",
+      "shippingHint": "Jamais remisés ni taxés.",
+      "legalNotes": "Mentions légales",
+      "legalNotesHint": "Mentions requises sur le document, comme une mention d’autoliquidation. Le mode automatique les renseigne lorsque la loi l’exige.",
+      "problems": {
+        "contactRequired": "Choisissez un contact ou saisissez le nom de l’acheteur.",
+        "currencyInvalid": "Saisissez un code devise à trois lettres.",
+        "issueDateInvalid": "Saisissez une date d’émission valide.",
+        "dueBeforeIssue": "La date d’échéance ne peut pas être antérieure à la date d’émission.",
+        "dueInvalid": "Saisissez une date d’échéance valide.",
+        "noLines": "Ajoutez au moins une ligne avant l’émission.",
+        "discountInvalid": "Saisissez une remise valide (un pourcentage entre 0 et 100, ou un montant).",
+        "shippingInvalid": "Saisissez un montant de frais de port valide.",
+        "emailInvalid": "Saisissez une adresse e-mail valide.",
+        "amountZero": "Le total de la facture doit être supérieur à zéro.",
+        "amountInvalid": "Le montant est trop grand ou comporte trop de décimales pour cette devise.",
+        "countryInvalid": "Utilisez un code pays à deux lettres.",
+        "regionInvalid": "Utilisez un code région court, de trois lettres ou chiffres au maximum.",
+        "autoNeedsSellerCountry": "Renseignez votre pays dans le profil de facturation pour utiliser la taxe automatique.",
+        "descriptionRequired": "Décrivez cette ligne.",
+        "qtyInvalid": "Saisissez une quantité supérieure à zéro, avec 4 décimales au maximum.",
+        "priceInvalid": "Saisissez un prix valide avec le nombre de décimales autorisé pour cette devise.",
+        "lineDiscountInvalid": "Saisissez une remise de ligne valide.",
+        "hsnRequired": "Saisissez le code HSN/SAC. Votre pays l’exige sur chaque ligne.",
+        "hsnInvalid": "Un code HSN/SAC comporte de 2 à 12 lettres ou chiffres.",
+        "taxRateRemoved": "Le taux de taxe de cette ligne a été supprimé. Choisissez un taux en vigueur."
+      }
+    },
+    "lines": {
+      "discount": "Remise",
+      "discountKind": "Type de remise",
+      "taxAuto": "Automatique",
+      "taxDefault": "Par défaut ({rate})",
+      "taxDefaultNone": "Par défaut (sans taxe)",
+      "removedRateOption": "{rate}, supprimé",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "Code"
+    },
+    "totals": {
+      "shipping": "Frais de port",
+      "taxIncluded": "{name}, incluse",
+      "taxOn": "sur {base}",
+      "reverseCharge": "Autoliquidation : aucune taxe n’est facturée.",
+      "includesTotal": "Taxe incluse dans les prix"
+    },
+    "taxWhy": {
+      "title": "Pourquoi cette taxe ?",
+      "preview": "Aperçu",
+      "previewNote": "Calculé dans votre navigateur pendant la saisie. Ce qui fait foi est la décision du serveur à l’enregistrement.",
+      "taxFree": "Aucune taxe n’est facturée sur cette livraison",
+      "warnings": "À vérifier",
+      "placeOfSupply": "Lieu de livraison",
+      "reverseCharge": "Autoliquidation",
+      "reverseChargeNote": "C’est l’acheteur qui déclare la taxe, aucune taxe n’est donc facturée.",
+      "documentNotes": "Imprimé sur le document",
+      "disclaimer": "Les taux et règles sont des valeurs par défaut à vérifier auprès de votre expert-comptable ou de l’administration fiscale. Ceci ne constitue pas un conseil juridique ou fiscal."
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "Facture",
+        "proforma": "Facture proforma",
+        "receipt": "Reçu"
+      },
+      "sellerTaxId": "Numéro fiscal",
+      "registrationNo": "N° d’immatriculation",
+      "buyerTaxId": "Numéro fiscal",
+      "reference": "Référence",
+      "placeOfSupply": "Lieu de livraison",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "Remise de {amount}",
+      "shipping": "Frais de port",
+      "credited": "Avoir",
+      "taxSummary": "Récapitulatif des taxes",
+      "taxName": "Taxe",
+      "taxBase": "Base imposable",
+      "taxAmount": "Taxe",
+      "taxInclusive": "incluse",
+      "reverseCharge": "Autoliquidation : c’est l’acheteur qui déclare la taxe.",
+      "paymentsReceived": "Paiements reçus",
+      "refund": "remboursement",
+      "bankDetails": "Coordonnées bancaires",
+      "voidReason": "Annulée : {reason}"
+    },
+    "public": {
+      "notFoundTitle": "Lien introuvable",
+      "notFoundMessage": "Ce lien de facture n’existe pas. Vérifiez que vous l’avez copié en entier ou demandez à l’expéditeur de vous le renvoyer.",
+      "unavailableTitle": "Ce lien n’est pas disponible",
+      "unavailableMessage": "Le lien de facture a été retiré ou a expiré. Demandez un nouveau lien à l’expéditeur.",
+      "voidReason": "Motif : {reason}",
+      "printable": "Ouvrir la page imprimable",
+      "amountDueFooter": "Montant dû : {amount}",
+      "noPayOptions": "Le vendeur n’a pas configuré de paiement en ligne. Veuillez le contacter pour organiser le règlement.",
+      "payAmount": "Montant à payer ({currency})",
+      "payAmountHint": "Le solde complet est renseigné. Saisissez un montant inférieur pour ne payer qu’une partie.",
+      "amountErrors": {
+        "invalid": "Saisissez un montant supérieur à zéro.",
+        "tooMuch": "Le montant ne peut pas dépasser le montant dû."
+      },
+      "linkUnavailable": "Ce lien de facture n’est plus disponible : le paiement ne peut pas être effectué ici.",
+      "payFailed": "Impossible de lancer le paiement. Réessayez dans un instant.",
+      "payUnavailable": "Le paiement en ligne n’est pas disponible pour cette facture pour le moment.",
+      "redirecting": "Redirection vers la page de paiement...",
+      "payInstructions": "Payez comme indiqué ci-dessous.",
+      "bankTransfer": "Virement bancaire",
+      "copyInstructions": "Copier les instructions",
+      "copyValue": "Copier {label}"
+    }
+  }
+}

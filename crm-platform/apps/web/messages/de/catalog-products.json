@@ -1,0 +1,730 @@
+{
+  "catalogProducts": {
+    "nav": {
+      "catalog": "Katalog",
+      "products": "Produkte",
+      "reviews": "Bewertungen"
+    },
+    "common": {
+      "dismiss": "Schließen",
+      "retry": "Erneut versuchen",
+      "requestId": "Anfrage-ID"
+    },
+    "errors": {
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Sie haben keine Berechtigung dafür.",
+      "signedOut": "Ihre Sitzung ist beendet. Melden Sie sich erneut an, um fortzufahren.",
+      "conflict": "Jemand anderes hat dies während Ihrer Bearbeitung geändert. Laden Sie neu, um die neueste Version zu sehen.",
+      "validation": "Einige Felder sind ungültig. Prüfen Sie die markierten Felder und versuchen Sie es erneut.",
+      "unavailable": "Dieser Teil des Katalogs ist auf diesem Server noch nicht verfügbar.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "notFound": "Dieser Eintrag wurde nicht gefunden. Möglicherweise wurde er gelöscht.",
+      "planLocked": "Ihr Tarif enthält den WhatsApp-Katalog nicht. Führen Sie ein Upgrade durch, um ihn freizuschalten.",
+      "planLimit": "Das Nachrichtenlimit Ihres Tarifs ist erreicht.",
+      "wallet": "Ihr Wallet-Guthaben ist zu niedrig zum Senden. Laden Sie Guthaben auf und versuchen Sie es erneut.",
+      "sendBlocked": "Das Senden ist derzeit blockiert: {detail}",
+      "notConnected": "Es ist kein Katalog verbunden. Verbinden Sie zuerst einen auf dem Tab Einrichtung.",
+      "metaRejected": "Von Meta abgelehnt: {detail}",
+      "noWaba": "Keine verbundene WhatsApp-Business-Nummer (WABA) gefunden. Verbinden Sie zuerst eine WABA-Nummer oder verknüpfen Sie einen Katalog manuell.",
+      "wabaToken": "Ihre WABA-Nummer ist verbunden, aber ihr Token konnte nicht gelesen werden. Verbinden Sie die Nummer erneut oder verknüpfen Sie einen Katalog manuell.",
+      "noCatalogLinked": "Mit Ihrem WhatsApp-Konto ist noch kein Produktkatalog verknüpft. Erstellen Sie einen im Meta Commerce Manager und versuchen Sie es dann erneut, oder verknüpfen Sie ihn manuell.",
+      "noRecipients": "Wählen Sie mindestens einen Kontakt oder eine Gruppe aus oder fügen Sie eine Nummer ein.",
+      "tooManyRecipients": "Maximal 500 Empfänger pro Versand. Teilen Sie sie in kleinere Batches auf.",
+      "noProducts": "Wählen Sie zuerst mindestens ein Produkt aus.",
+      "noSender": "Kein verbundenes Gerät. Koppeln Sie zuerst eines unter Kanäle.",
+      "sendFailed": "Die Nachricht konnte nicht gesendet werden: {detail}",
+      "collectionProducts": "Keines der ausgewählten Produkte gehört zu diesem Workspace.",
+      "providerFailed": "WhatsApp oder Meta konnte die Anfrage nicht abschließen: {detail}",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal."
+    },
+    "paywall": {
+      "kicker": "Premium-Funktion",
+      "title": "WhatsApp-Storefront ist nicht in Ihrem Tarif enthalten",
+      "message": "Wählen Sie einen Tarif, der sie enthält. Führen Sie ein Upgrade durch und schalten Sie diese Funktion sofort frei.",
+      "back": "Zurück",
+      "compare": "Alle Tarife vergleichen"
+    },
+    "status": {
+      "unsynced": "nicht synchronisiert",
+      "pending": "ausstehend",
+      "synced": "synchronisiert",
+      "failed": "fehlgeschlagen"
+    },
+    "pager": {
+      "showing": "Ergebnisse {from} bis {to} von {total}",
+      "label": "Seiten",
+      "prev": "Vorherige Seite",
+      "next": "Nächste Seite",
+      "goTo": "Zu Seite {page}"
+    },
+    "shell": {
+      "back": "Zurück zu Integrationen",
+      "breadcrumb": "Integrationen / WhatsApp-Katalog",
+      "titleLead": "Produkte senden an",
+      "titleAccent": "WhatsApp-Chats",
+      "connected": "{provider} · verbunden",
+      "notConnected": "Nicht verbunden",
+      "tabs": "Katalogbereiche",
+      "tab": {
+        "setup": "Einrichtung",
+        "send": "Senden",
+        "collections": "Kollektionen",
+        "activity": "Aktivität"
+      }
+    },
+    "connect": {
+      "provider": "Anbieter",
+      "providers": {
+        "meta_cloud": "Meta Cloud API (direkt)",
+        "dialog_360": "360dialog (BSP)"
+      },
+      "catalogId": "Katalog-ID",
+      "catalogName": "Katalogname",
+      "label": "(Bezeichnung)",
+      "catalogNamePlaceholder": "z. B. Hauptkatalog",
+      "wabaId": "WABA-ID",
+      "phoneNumberId": "Telefonnummern-ID",
+      "accessToken": "Zugriffstoken / API-Schlüssel",
+      "accessTokenHint": "Verschlüsselt gespeichert. Beim Speichern bei Meta verifiziert.",
+      "accessTokenPlaceholder": "EAAxx... oder D360-API-KEY...",
+      "showToken": "Token anzeigen",
+      "hideToken": "Token ausblenden",
+      "submit": "Verbinden und verifizieren",
+      "connected": "Katalog verbunden.",
+      "problem": {
+        "required": "Dieses Feld ist erforderlich.",
+        "tooShort": "Das Zugriffstoken muss mindestens 20 Zeichen lang sein.",
+        "tooLong": "Dieser Wert ist zu lang."
+      }
+    },
+    "setup": {
+      "loading": "Katalog wird geladen",
+      "loadError": "Der Katalog konnte nicht geladen werden",
+      "cancel": "Abbrechen",
+      "manage": "Verwalten →",
+      "view": "Ansehen →",
+      "advanced": {
+        "kicker": "Optional · erweitert",
+        "titleManual": "Oder einen Katalog manuell verknüpfen",
+        "titleAlso": "Außerdem einen Meta-Commerce-Katalog verknüpfen",
+        "intro": "Schaltet den offiziellen Katalog-Button in Ihrem WhatsApp-Business-Profil, den Warenkorb und den Webhook „Bestellung aufgegeben“ frei. Nur erforderlich, wenn Sie eine verifizierte WABA nutzen. Die inoffizielle API funktioniert auch ohne."
+      },
+      "noSender": {
+        "title": "Verbinden Sie zuerst ein Gerät",
+        "message": "Der Katalogversand erfordert mindestens ein WhatsApp-Gerät in diesem Konto: entweder eine inoffizielle API-QR-Kopplung (kostenlos) oder eine von Meta verifizierte WABA-Nummer. Es dauert nur 30 Sekunden.",
+        "connect": "Gerät verbinden"
+      },
+      "ready": {
+        "kicker": "✓ Bereit zum Senden",
+        "officialTitle": "Modus Offizieller WhatsApp-Katalog",
+        "unofficialTitle": "Modus Karussell der inoffiziellen API",
+        "officialBody": "Sie haben {count, plural, one {# Nummer} other {# Nummern}} verbunden. Katalogversände gehen über Ihre verbundene {engine}-Nummer. Für interaktive Produktnachrichten verknüpfen Sie unten einen Meta-Commerce-Katalog.",
+        "unofficialBody": "Sie haben {count, plural, one {# Gerät} other {# Geräte}} verbunden. Katalogversände funktionieren jetzt sofort über native WhatsApp-Karussells der inoffiziellen API, ohne Meta-Einrichtung und ohne auf eine Genehmigung zu warten.",
+        "head": "Wechseln Sie zum <b>Tab Senden</b>, um Produkte an die Nummer eines beliebigen Kunden zu senden.",
+        "openSend": "Tab Senden öffnen"
+      },
+      "senders": {
+        "title": "Verbundene Geräte",
+        "noNumber": "Keine Nummer",
+        "connected": "verbunden"
+      },
+      "tiles": {
+        "products": "Produkte",
+        "shops": "Shops",
+        "recentSends": "Letzte Versände",
+        "total": "Gesamt",
+        "synced": "Synchronisiert",
+        "pending": "Ausstehend",
+        "failed": "Fehlgeschlagen"
+      },
+      "autodetect": {
+        "title": "Meta-Commerce-Katalog verknüpfen",
+        "intro": "Ihre WhatsApp-Nummer ist bereits verbunden, daher können wir den Katalog direkt von Meta abrufen, ohne dass Sie Katalog-ID, WABA-ID oder Zugriffstoken einfügen müssen. Schaltet den offiziellen Katalog-Button, den Warenkorb und den Webhook „Bestellung aufgegeben“ frei.",
+        "button": "Aus meinem WhatsApp-Konto abrufen",
+        "linked": "Katalog aus Ihrem WhatsApp-Konto verknüpft."
+      },
+      "header": {
+        "connected": "Verbunden · {provider}",
+        "defaultName": "Meta-Commerce-Katalog",
+        "sendProducts": "Produkte senden →",
+        "disconnect": "Trennen"
+      },
+      "disconnectTitle": "Katalog trennen?",
+      "disconnectConfirm": "Die Produkte bleiben bei Meta; wir beenden nur die Synchronisierung.",
+      "disconnected": "Katalog getrennt.",
+      "table": {
+        "title": "Produkte",
+        "hint": "Zuletzt aktualisiert · klicken Sie auf <b>Status aktualisieren</b>, um Meta abzufragen.",
+        "manage": "Produkte verwalten →",
+        "product": "Produkt",
+        "sku": "SKU",
+        "price": "Preis",
+        "availability": "Verfügbarkeit",
+        "metaStatus": "Meta-Status",
+        "actions": "Aktionen",
+        "empty": "Noch keine Produkte.",
+        "addOne": "Eines hinzufügen →",
+        "sync": {
+          "idle": "Synchronisieren",
+          "busy": "…",
+          "queued": "In Warteschlange ✓",
+          "skipped": "Nicht in Warteschlange",
+          "failed": "Fehlgeschlagen"
+        }
+      }
+    },
+    "sync": {
+      "title": "Produkte mit Meta synchronisieren",
+      "intro": "Überträgt bis zu 1000 pro Anfrage und läuft, bis alles erledigt ist. {count} warten.",
+      "syncButton": "Mit Meta synchronisieren",
+      "syncing": "Wird synchronisiert…",
+      "pollButton": "Status aktualisieren",
+      "polling": "Wird abgefragt…",
+      "importButton": "Aus Meta importieren",
+      "importing": "Wird importiert…",
+      "importHint": "Direkt im Meta Commerce Manager erstellte Produkte in den Katalog übernehmen.",
+      "progress": "Synchronisierungsfortschritt",
+      "starting": "Wird gestartet…",
+      "pushed": "Übertragen {pushed} · ausstehend {pending} · synchronisiert {synced} · fehlgeschlagen {failed}",
+      "stalled": "In diesem Durchlauf konnte nichts mehr übertragen werden. Prüfen Sie die als fehlgeschlagen markierten Produkte.",
+      "done": "fertig · {count} in Warteschlange",
+      "polled": "Abgefragt · synchronisiert+{synced} · fehlgeschlagen+{failed}",
+      "importStarting": "Import aus Meta · wird gestartet…",
+      "imported": "Importiert {imported} · aktualisiert {updated} · übersprungen {skipped} von {total}"
+    },
+    "commerce": {
+      "title": "Commerce-Einstellungen",
+      "visible": "Katalog im Unternehmensprofil anzeigen",
+      "visibleHint": "Fügt Ihrem WhatsApp-Business-Profil den Button „Katalog“ hinzu.",
+      "cart": "Warenkorb aktivieren",
+      "cartHint": "Käufer können mehrere Produkte hinzufügen, bevor sie die Bestellung senden.",
+      "save": "Speichern",
+      "saved": "Commerce-Einstellungen aktualisiert."
+    },
+    "automation": {
+      "title": "Automatisierung",
+      "ack": "Automatische Antwort, wenn ein Kunde einen Warenkorb sendet",
+      "ackHint": "Der Käufer erhält sofort eine Bestelleingangsnachricht (Artikel und Summe) statt Stille, die wichtigste Maßnahme für die Katalog-Conversion.",
+      "payUrl": "Basis des Zahlungslinks (optional)",
+      "payUrlHint": "Wir hängen die Bestell-ID an; leer lassen, um nur den Eingang zu bestätigen.",
+      "concierge": "Katalog-Concierge: Produktfragen automatisch beantworten",
+      "conciergeHint": "Wenn ein Kunde z. B. „rote Schuhe unter 2000“ eintippt, antwortet das System automatisch mit einer passenden Multi-Product-Nachricht. Standardmäßig aus.",
+      "header": "Antwort-Header",
+      "headerPlaceholder": "Das habe ich gefunden",
+      "max": "Maximale Produktanzahl",
+      "replyOnEmpty": "Auch antworten, wenn nichts passt",
+      "replyOnEmptyHint": "Andernfalls bleibt der Concierge ohne Treffer stumm (empfohlen).",
+      "emptyText": "Antwort ohne Treffer",
+      "emptyTextPlaceholder": "Leider habe ich keinen Treffer gefunden. Versuchen Sie ein anderes Stichwort oder Budget.",
+      "save": "Automatisierung speichern",
+      "saved": "Automatisierungseinstellungen gespeichert.",
+      "problem": {
+        "badUrl": "Geben Sie einen vollständigen Link ein, der mit https:// beginnt",
+        "tooLong": "Dieser Text ist zu lang.",
+        "range": "Geben Sie eine ganze Zahl von 1 bis 30 ein."
+      }
+    },
+    "health": {
+      "title": "Katalogzustand",
+      "needAttention": "{count, plural, one {# Produkt braucht Aufmerksamkeit, bevor es verkauft werden kann.} other {# Produkte brauchen Aufmerksamkeit, bevor sie verkauft werden können.}}",
+      "allGood": "Jedes Produkt ist katalogbereit. Gut gemacht.",
+      "noImage": "kein Bild",
+      "noPrice": "kein Preis",
+      "syncError": "Synchronisierungsfehler",
+      "showFix": "Zu korrigierende Produkte anzeigen",
+      "fix": "Korrigieren →"
+    },
+    "send": {
+      "loading": "Sendeformular wird geladen",
+      "loadError": "Das Sendeformular konnte nicht geladen werden",
+      "maxProducts": "Maximal {max} Produkte pro Karussell.",
+      "noSender": {
+        "title": "Verbinden Sie zuerst ein Gerät",
+        "message": "Zum Senden von Katalognachrichten benötigen Sie ein verbundenes WhatsApp-Gerät.",
+        "connect": "Gerät verbinden"
+      },
+      "feedback": {
+        "failed": "Es wurde nichts gesendet.",
+        "sent": "{count, plural, one {An # Empfänger gesendet} other {An # Empfänger gesendet}}",
+        "someFailed": "{count} fehlgeschlagen"
+      },
+      "recipients": {
+        "title": "Empfänger",
+        "count": "{count, plural, one {# Empfänger} other {# Empfänger}}",
+        "source": "Woher die Empfänger kommen",
+        "modes": {
+          "groups": {
+            "title": "Kontaktgruppen",
+            "hint": "Gespeicherte Segmente verwenden."
+          },
+          "contacts": {
+            "title": "Einzelne Kontakte",
+            "hint": "Bestimmte Personen auswählen."
+          },
+          "manual": {
+            "title": "Manuelle Nummern",
+            "hint": "Einfügen, eine pro Zeile."
+          }
+        },
+        "noGroups": "Noch keine Kontaktgruppen. Erstellen Sie zuerst eine auf der Seite <link>Kontakte</link>.",
+        "groupContacts": "{count, plural, one {# Kontakt} other {# Kontakte}}",
+        "noContacts": "Noch keine Kontakte. Fügen Sie sie auf der Seite <link>Kontakte</link> hinzu.",
+        "searchContacts": "Kontakte durchsuchen…",
+        "noMatch": "Kein Kontakt passt.",
+        "paste": "Telefonnummern einfügen",
+        "pastePlaceholder": "Eine Nummer pro Zeile, mit Ländervorwahl",
+        "pasteHint": "Eine pro Zeile, Komma oder Semikolon. Ländervorwahl erforderlich (mit oder ohne +).",
+        "overCap": "Maximal {max} Empfänger pro Versand. Teilen Sie sie in kleinere Batches auf."
+      },
+      "format": {
+        "title": "Format und Absender",
+        "spm": {
+          "title": "Einzelprodukt",
+          "hint": "Eine Produktkarte"
+        },
+        "mpm": {
+          "title": "Produktliste (Karussell)",
+          "hint": "Bis zu 30 Produkte"
+        },
+        "link": {
+          "title": "Katalog-Link",
+          "hint": "Nur Text · jederzeit möglich"
+        },
+        "sendFrom": "Senden von",
+        "fromShop": "Von Shop",
+        "brandingContext": "(Branding-Kontext)",
+        "shopFallback": "Shop {slug}"
+      },
+      "products": {
+        "title": "Produkte",
+        "selected": "({count} ausgewählt)",
+        "selectedOf": "({count} ausgewählt / {max})",
+        "search": "Produkte durchsuchen…",
+        "showingFrom": "Es werden Produkte von <b>{shop}</b> angezeigt. Ändern Sie oben die Auswahl <b>Von Shop</b>, um den Katalog eines anderen Shops zu sehen.",
+        "loading": "Produkte werden geladen…",
+        "loadError": "Die Produkte konnten nicht geladen werden",
+        "other": "Sonstige",
+        "noMatch": "Kein Produkt entspricht Ihrer Suche.",
+        "emptyShop": "Keine aktiven Produkte in diesem Shop.",
+        "empty": "Noch keine aktiven Produkte.",
+        "addOne": "Eines hinzufügen →"
+      },
+      "message": {
+        "title": "Nachricht und Versand",
+        "text": "Nachrichtentext",
+        "optional": "(optional)",
+        "placeholder": "z. B. Hier sind einige Produkte, die Ihnen gefallen könnten. Tippen Sie auf eines, um mehr zu erfahren.",
+        "header": "Header",
+        "headerPlaceholder": "z. B. Schauen Sie sich diese an",
+        "footer": "Fußzeile",
+        "footerPlaceholder": "z. B. Antworten Sie mit STOP, um sich abzumelden",
+        "counter": "{used} / {max}",
+        "viewRecent": "Letzte Versände ansehen →",
+        "sendProduct": "Produkt senden →",
+        "sendCarousel": "Karussell senden →",
+        "sendLink": "Katalog-Link senden →",
+        "sending": "Wird gesendet…",
+        "noPermission": "Sie können dieses Formular ansehen, aber keine Katalognachrichten senden."
+      },
+      "rail": {
+        "label": "Versandübersicht",
+        "summary": "Zusammenfassung",
+        "recipients": "Empfänger",
+        "products": "Produkte",
+        "format": "Format",
+        "formats": {
+          "spm": "Einzelprodukt",
+          "mpm": "Multi-Product-Liste",
+          "link": "Katalog-Link"
+        },
+        "catalog": "Katalog",
+        "metaCommerce": "Meta Commerce",
+        "productCount": "{count, plural, one {# Produkt} other {# Produkte}}",
+        "unofficial": "Inoffizielle API (Karussell)",
+        "linkMeta": "Meta verknüpfen →",
+        "recent": "Letzte Versände",
+        "windowTitle": "24-Stunden-Fenster",
+        "windowBody": "SPM- und Listenmodus setzen voraus, dass der Käufer Ihnen in den letzten 24 Stunden geschrieben hat. Der Modus <b>Katalog-Link</b> funktioniert jederzeit."
+      }
+    },
+    "collections": {
+      "loading": "Kollektionen werden geladen",
+      "loadError": "Die Kollektionen konnten nicht geladen werden",
+      "title": "Kollektionen",
+      "intro": "Speichern Sie eine Produktgruppe einmal und senden Sie sie dann mit einem Klick als Multi-Product-Nachricht, ohne jedes Mal neu auszuwählen.",
+      "new": "Neue Kollektion",
+      "create": "Kollektion erstellen",
+      "created": "Kollektion erstellt.",
+      "updated": "Kollektion aktualisiert.",
+      "deleted": "Kollektion gelöscht.",
+      "empty": "Noch keine Kollektionen. Erstellen Sie oben Ihre erste.",
+      "productCount": "{count, plural, =0 {keine Produkte} one {# Produkt} other {# Produkte}}",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "cancel": "Abbrechen",
+      "saveChanges": "Änderungen speichern",
+      "deleteTitle": "Diese Kollektion löschen?",
+      "deleteBody": "„{name}“ wird gelöscht. Produkte sind davon nicht betroffen.",
+      "send": {
+        "button": "Senden",
+        "noLive": "Diese Kollektion enthält keine aktiven Produkte zum Senden.",
+        "needNumber": "Geben Sie zuerst eine Empfängernummer ein.",
+        "sending": "Wird gesendet…",
+        "sent": "{count, plural, one {An # Empfänger gesendet} other {An # Empfänger gesendet}}",
+        "someFailed": "{count} fehlgeschlagen",
+        "failed": "Es wurde nichts gesendet.",
+        "number": "Empfängernummer",
+        "numberPlaceholder": "Nummer mit Ländervorwahl",
+        "header": "Header (optional)",
+        "headerPlaceholder": "Schauen Sie sich diese an",
+        "from": "Senden von",
+        "auto": "Auto (aktiv)",
+        "go": "Als MPM senden"
+      },
+      "picker": {
+        "filter": "Produkte filtern…",
+        "empty": "Noch keine aktiven Produkte.",
+        "addOne": "Eines hinzufügen →",
+        "noMatch": "Kein Produkt passt.",
+        "max": "Eine Kollektion enthält höchstens {max} Produkte."
+      },
+      "form": {
+        "name": "Name",
+        "namePlaceholder": "z. B. Sommerschlussverkauf",
+        "description": "Beschreibung (optional)",
+        "products": "Produkte",
+        "upTo": "bis zu {max}",
+        "reload": "Neu laden",
+        "problem": {
+          "nameRequired": "Geben Sie einen Namen ein.",
+          "nameTooLong": "Der Name ist zu lang.",
+          "descriptionTooLong": "Die Beschreibung ist zu lang.",
+          "noProducts": "Wählen Sie mindestens ein Produkt aus."
+        }
+      }
+    },
+    "activity": {
+      "loading": "Aktivität wird geladen",
+      "loadError": "Die Aktivität konnte nicht geladen werden",
+      "title": "Aktivität beim Katalogversand",
+      "subtitle": "Jede Katalognachricht, die Ihr Workspace gesendet hat (SPM · MPM · Link).",
+      "sendAnother": "Weitere senden →",
+      "emptyTitle": "Noch keine Versände",
+      "emptyBody": "Senden Sie Ihren ersten Katalog über den <link>Tab Senden</link>.",
+      "failed": "Fehlgeschlagen",
+      "col": {
+        "when": "Wann",
+        "to": "An",
+        "mode": "Modus",
+        "body": "Text"
+      }
+    },
+    "products": {
+      "kicker": "Shop / Produkte",
+      "title": "Katalog",
+      "add": "Produkt hinzufügen",
+      "search": "Nach Name oder SKU suchen...",
+      "loading": "Produkte werden geladen",
+      "loadError": "Die Produkte konnten nicht geladen werden",
+      "col": {
+        "image": "Bild",
+        "name": "Name",
+        "sku": "SKU",
+        "price": "Preis",
+        "stock": "Bestand",
+        "actions": "Aktionen"
+      },
+      "noMatchTitle": "Keine Produkte gefunden",
+      "noMatchBody": "Nichts entspricht „{q}“ nach Name oder SKU.",
+      "clearSearch": "Suche löschen",
+      "emptyTitle": "Noch keine Produkte",
+      "emptyBody": "Klicken Sie auf „Produkt hinzufügen“, um Ihr erstes zu erstellen.",
+      "inStock": "Auf Lager",
+      "out": "Ausverkauft",
+      "share": "Teilen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "cancel": "Abbrechen",
+      "deleted": "Produkt entfernt.",
+      "deleteTitle": "Dieses Produkt löschen?",
+      "deleteBody": "„{name}“ wird gelöscht. Es bleibt bei Meta, bis Sie es dort entfernen."
+    },
+    "share": {
+      "eyebrow": "Produkt teilen",
+      "product": "Produkt",
+      "close": "Schließen",
+      "loading": "Links werden geladen",
+      "storefrontLink": "Storefront-Link",
+      "noStorefront": "(richten Sie zuerst Ihren Storefront-Slug ein)",
+      "waLink": "WhatsApp-Deep-Link",
+      "noPhone": "(verbinden Sie zuerst eine Telefonnummer)",
+      "copy": "Kopieren",
+      "copied": "Kopiert!",
+      "sendToCustomer": "An einen Kunden senden",
+      "phonePlaceholder": "WhatsApp-Nummer, z. B. +1 555…",
+      "send": "Senden",
+      "sending": "Wird gesendet…",
+      "sent": "Gesendet.",
+      "invalidPhone": "Geben Sie eine gültige WhatsApp-Nummer mit Ländervorwahl ein."
+    },
+    "form": {
+      "breadcrumb": "Brotkrumennavigation",
+      "products": "Produkte",
+      "crumbNew": "Neu",
+      "crumbEdit": "Bearbeiten",
+      "addTitle": "Produkt hinzufügen",
+      "editFallback": "Produkt bearbeiten",
+      "loading": "Produkt wird geladen",
+      "loadError": "Das Produkt konnte nicht geladen werden",
+      "noPermissionTitle": "Sie können dies nicht tun",
+      "noPermission": "Ihre Rolle erlaubt das Erstellen oder Bearbeiten von Produkten nicht.",
+      "reload": "Neu laden",
+      "fixFields": "Einige Felder sind ungültig. Prüfen Sie die markierten Felder.",
+      "basics": "Grundlagen",
+      "name": "Name",
+      "namePlaceholder": "z. B. Frühlings-T-Shirt aus Baumwolle",
+      "sku": "SKU",
+      "optional": "(optional)",
+      "shortDescription": "Kurzbeschreibung",
+      "shortDescriptionPlaceholder": "Wird in Katalogkarten und WhatsApp-Freigabelinks angezeigt.",
+      "fullDescription": "Vollständige Beschreibung",
+      "fullDescriptionNote": "(Text der Produktseite)",
+      "fullDescriptionPlaceholder": "Größen, Stoff, Pflegehinweise: alles, was dem Käufer bei der Entscheidung hilft. HTML erlaubt.",
+      "media": "Medien",
+      "primaryImage": "Hauptbild · URL einfügen",
+      "imageUrl": "Bild-URL",
+      "imageUrlHint": "Fügen Sie eine beliebige direkte Bild-URL ein.",
+      "photoTipsTitle": "Tipps für gute Produktfotos",
+      "photoTips": "Verwenden Sie quadratische Bilder (1:1) mit mindestens 1024×1024 px. Einfarbige Hintergründe konvertieren besser als unruhige.",
+      "gallery": "Galerie",
+      "galleryHint": "Fügen Sie der Produktdetailseite weitere Bilder hinzu. Käufer sehen diese als Vorschaubilder.",
+      "addGalleryUrl": "Bild-URL hinzufügen",
+      "galleryRow": "URL von Galeriebild {n}",
+      "removeGallery": "Galeriebild {n} entfernen",
+      "galleryEmpty": "Noch keine Galeriebilder. Klicken Sie oben auf „Bild-URL hinzufügen“, um eines hinzuzufügen.",
+      "pricing": "Preise",
+      "price": "Preis",
+      "comparePrice": "Vergleichspreis",
+      "was": "(vorher)",
+      "comparePriceHint": "Ursprünglicher Preis · wird durchgestrichen angezeigt.",
+      "currency": "Währung",
+      "profit": "Gewinnanzeige",
+      "profitHint": "Automatisch · Preis im Vergleich zum Vergleichspreis.",
+      "profitOff": "-{percent} %",
+      "profitLower": "Vergleich < Preis",
+      "profitSame": "0 % · gleich",
+      "inventory": "Bestand und Versand",
+      "stockQty": "Lagerbestand",
+      "stockPlaceholder": "Leer = unbegrenzt",
+      "weight": "Gewicht",
+      "weightHint": "Wird für die Berechnung der Versandkosten verwendet.",
+      "weightPlaceholder": "z. B. 250",
+      "available": "Zum Verkauf verfügbar",
+      "availableHint": "Deaktivieren, um das Produkt als ausverkauft zu markieren und sichtbar zu lassen.",
+      "sortOrder": "Sortierreihenfolge",
+      "sortOrderHint": "Kleinere Zahlen erscheinen zuerst.",
+      "visibility": "Sichtbarkeit",
+      "status": {
+        "active": "Aktiv: im Storefront live",
+        "draft": "Entwurf: ausgeblendet, bearbeitbar",
+        "archived": "Archiviert: ausgeblendet, in den Unterlagen behalten"
+      },
+      "organization": "Organisation",
+      "category": "Kategorie",
+      "categoryPlaceholder": "z. B. Bekleidung, Snacks",
+      "tags": "Tags",
+      "tagsNote": "(durch Kommas getrennt)",
+      "tagsPlaceholder": "Baumwolle, Sommer, Bestseller",
+      "preview": "Storefront-Vorschau",
+      "noImage": "Noch kein Bild",
+      "productName": "Produktname",
+      "cancel": "Abbrechen",
+      "saveChanges": "Änderungen speichern",
+      "createProduct": "Produkt erstellen",
+      "created": "Produkt erstellt.",
+      "updated": "Produkt aktualisiert.",
+      "problem": {
+        "required": "Dieses Feld ist erforderlich.",
+        "tooLong": "Dieser Text ist zu lang.",
+        "notNumber": "Geben Sie eine Zahl ein, z. B. 499 oder 499,50.",
+        "tooBig": "Der Betrag ist zu groß.",
+        "notWhole": "Geben Sie eine ganze Zahl ein.",
+        "badUrl": "Geben Sie einen vollständigen Link ein, der mit https:// beginnt",
+        "outOfRange": "Diese Zahl liegt außerhalb des zulässigen Bereichs.",
+        "tooMany": "Zu viele Bilder."
+      }
+    },
+    "reviews": {
+      "rating": "{rating, plural, one {# Stern von 5} other {# Sterne von 5}}",
+      "kicker": "Shop / Bewertungen",
+      "title": "Produktbewertungen",
+      "subtitle": "Genehmigen Sie Kundenbewertungen, damit sie auf der Produktseite des Storefronts angezeigt werden.",
+      "tabs": "Bewertungsstatus",
+      "tab": {
+        "pending": "Ausstehend",
+        "approved": "Genehmigt",
+        "rejected": "Abgelehnt"
+      },
+      "loading": "Bewertungen werden geladen",
+      "loadError": "Die Bewertungen konnten nicht geladen werden",
+      "empty": {
+        "pending": "Keine ausstehenden Bewertungen.",
+        "approved": "Keine genehmigten Bewertungen.",
+        "rejected": "Keine abgelehnten Bewertungen."
+      },
+      "anonymous": "Anonym",
+      "on": "zu",
+      "unknownProduct": "einem gelöschten Produkt",
+      "approve": "Genehmigen",
+      "reject": "Ablehnen",
+      "delete": "Löschen",
+      "cancel": "Abbrechen",
+      "approved": "Bewertung genehmigt.",
+      "rejected": "Bewertung abgelehnt.",
+      "deleted": "Bewertung gelöscht.",
+      "deleteTitle": "Diese Bewertung löschen?",
+      "deleteBody": "Die Bewertung wird endgültig entfernt."
+    },
+    "senderPicker": {
+      "none": "Keine verbundenen Absender.",
+      "connectOne": "Jetzt verbinden →",
+      "select": "— Absender auswählen —",
+      "connectNew": "Neues Gerät verbinden",
+      "engine": {
+        "waba": "Meta",
+        "twilio": "Twilio",
+        "baileys": "Inoffizielle API"
+      }
+    },
+    "admin": {
+      "nav": "Katalog",
+      "pageTitle": "Katalogeinstellungen",
+      "loading": "Katalogeinstellungen werden geladen",
+      "retry": "Erneut versuchen",
+      "eyebrow": "Admin · Projekteinstellungen",
+      "titleLead": "WhatsApp",
+      "titleAccent": "Katalog",
+      "intro": "Plattformweite Steuerung für die WABA-Katalogfunktion. Jeder Händler verbindet seinen eigenen Meta-Commerce-Account-Katalog über die Seite <link>/catalog</link> im Workspace. Auf diesem Bildschirm legen Sie die Standardwerte fest, die jeder Workspace übernimmt.",
+      "allSettings": "Alle Einstellungen",
+      "openCatalog": "Benutzerkatalog öffnen",
+      "reset": "Entwurf zurücksetzen",
+      "save": "Änderungen speichern",
+      "saved": "Katalogeinstellungen gespeichert.",
+      "superOnly": "Nur ein Super-Admin kann diese Einstellungen ändern. Sie sehen die gespeicherten Werte.",
+      "fix": "Bitte korrigieren Sie die markierten Felder:",
+      "problems": {
+        "graphVersion": "Verwenden Sie eine Graph-API-Version wie v23.0.",
+        "currency": "Verwenden Sie einen Währungscode mit 3 Buchstaben."
+      },
+      "errors": {
+        "conflict": "Jemand anderes hat diese Einstellungen zuerst gespeichert. Die aktuellen Werte werden angezeigt; nehmen Sie Ihre Änderung erneut vor.",
+        "forbidden": "Sie haben keine Berechtigung, diese Einstellungen zu ändern.",
+        "validation": "Einige Felder sind ungültig. Prüfen Sie die markierten Felder und versuchen Sie es erneut.",
+        "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal."
+      },
+      "usage": {
+        "connected": "Verbundene Workspaces",
+        "connectedHint": "mit gespeicherter Meta-Katalog-ID",
+        "products": "Synchronisierte Produkte",
+        "productsHint": "über alle Workspace-Kataloge hinweg",
+        "sends": "Gesendete Katalognachrichten",
+        "sendsHint": "SPM + MPM + Katalog-CTA"
+      },
+      "gate": {
+        "kicker": "Funktionsschalter",
+        "title": "Katalogverfügbarkeit",
+        "enabled": "Aktiviert",
+        "body": "Wenn aktiviert, können Workspace-Inhaber ihren Meta-Commerce-Katalog unter <link>/catalog</link> verbinden und Single-Product-, Multi-Product- und Katalog-CTA-Nachrichten aus dem Chat und dem Flow-Builder senden. Schalten Sie die Funktion aus, um den Menüeintrag in allen Workspaces auszublenden (bestehende Verbindungen bleiben erhalten, sind aber schreibgeschützt).",
+        "commerce": "Commerce-Checkout zulassen",
+        "commerceHint": "Ermöglicht Händlern, Zahlungen direkt in WhatsApp über einen verbundenen Commerce Account anzunehmen. Erfordert einen von Meta genehmigten Commerce Account und eine unterstützte Region."
+      },
+      "api": {
+        "kicker": "Cloud API",
+        "title": "Graph-API-Version",
+        "intro": "Jeder Katalogvorgang (Senden, Synchronisieren, Übertragen) läuft über diese Graph-API-Version. Meta veröffentlicht etwa alle 3 Monate eine neue Version und unterstützt die vorherige etwa 2 Jahre lang.",
+        "version": "Graph-API-Version",
+        "versionHint": "Format: v'{'major'}'.'{'minor'}', zum Beispiel v23.0. Lassen Sie das Feld leer, um den Standard zu verwenden.",
+        "currency": "Standardwährung",
+        "currencyHint": "ISO-4217-Code (3 Buchstaben). Wird als Standard für neue Kataloge verwendet; jeder Meta-Commerce-Katalog ist weiterhin an eine einzige Währung gebunden."
+      },
+      "app": {
+        "kicker": "Optional · Meta-App",
+        "title": "Plattformweite Meta-App",
+        "intro": "Nur nötig, wenn Sie eine OAuth-Funktion „Mit Meta installieren“ anbieten möchten. Im Standardablauf fügt jeder Händler sein eigenes System-User-Token auf der Katalogseite ein, daher sind keine App-Zugangsdaten erforderlich.",
+        "id": "Meta-App-ID",
+        "idHint": "Zu finden unter developers.facebook.com → Ihre App → Einstellungen → Allgemein.",
+        "secret": "Meta-App-Geheimnis",
+        "secretPlaceholder": "App-Geheimnis",
+        "secretSaved": "•••••••••••• (gespeichert, leer lassen zum Beibehalten)",
+        "secretHint": "Verschlüsselt gespeichert. Wird zur Prüfung der Webhook-Signaturen verwendet (X-Hub-Signature-256)."
+      },
+      "walk": {
+        "kicker": "Anleitung für Händler",
+        "title": "So verbindet ein Workspace seinen Katalog",
+        "intro": "Wird Händlern auf der Katalogseite angezeigt. Hier zur Kontrolle des Ablaufs nachgebildet.",
+        "waba": {
+          "title": "Ein aktives WABA und eine Phone Number ID haben",
+          "body": "Der Händler benötigt ein verifiziertes WhatsApp Business Account in der Meta Business Suite mit mindestens einer genehmigten Telefonnummer. Ohne dies kann keine Katalognachricht gesendet werden."
+        },
+        "catalog": {
+          "title": "Einen Katalog im Meta Commerce Manager erstellen",
+          "body": "Unter business.facebook.com/commerce → Katalog erstellen → E-Commerce wählen. Produkte manuell, per CSV oder aus Shopify/Woo hinzufügen. Der Katalog muss öffentlich und an eine Währung gebunden sein."
+        },
+        "link": {
+          "title": "Den Katalog mit dem WABA verbinden",
+          "body": "In der Business Suite → WhatsApp Manager → Tab Katalog → „Katalog auswählen“ → den in Schritt 2 erstellten wählen. Dadurch werden Produktnachrichten der Cloud API aktiviert."
+        },
+        "token": {
+          "title": "Ein System-User-Token erstellen",
+          "body": "Business-Einstellungen → Systembenutzer → Hinzufügen → Admin. Erstellen Sie ein Token mit whatsapp_business_messaging, whatsapp_business_management, catalog_management, business_management. Wählen Sie „Nie“ als Ablauf, um vierteljährliche Neuanmeldungen zu vermeiden."
+        },
+        "paste": {
+          "title": "Zugangsdaten auf der Katalogseite einfügen",
+          "body": "WABA-ID, Katalog-ID, Phone Number ID und das System-User-Token gehören auf die Katalogseite im Workspace. Danach wird ein Test GET /{CATALOG_ID}?fields=name,product_count ausgeführt, um zu prüfen, ob das Token für diesen Katalog catalog_management besitzt."
+        }
+      },
+      "side": {
+        "archKicker": "Architektur",
+        "archTitle": "Pro Händler oder plattformweit",
+        "here": "Hier (Admin, einmalig)",
+        "hereBody": "Funktionsschalter, Graph-API-Version, Standardwährung, optionale Meta-App-Zugangsdaten.",
+        "merchant": "Auf der Katalogseite (pro Händler)",
+        "merchantBody": "WABA-ID, Katalog-ID, Phone Number ID, System-User-Token. Meta verlangt, dass der Katalog dem Commerce Account des Händlers gehört, daher gibt es keinen gemeinsamen Katalog.",
+        "payloadsKicker": "Cloud-API-Payloads",
+        "payloadsTitle": "Drei Nachrichtentypen, die wir senden",
+        "payload": {
+          "spm": {
+            "title": "SPM · Single Product",
+            "code": "interactive.type = \"product\""
+          },
+          "mpm": {
+            "title": "MPM · Multi-Product",
+            "code": "interactive.type = \"product_list\" · max. 10 Abschnitte, 30 Artikel"
+          },
+          "cta": {
+            "title": "Katalog-CTA",
+            "code": "interactive.type = \"catalog_message\""
+          }
+        },
+        "docsKicker": "Offizielle Dokumentation",
+        "docsTitle": "Referenz",
+        "docs": {
+          "sell": "Produkte und Dienstleistungen verkaufen →",
+          "messages": "Referenz der Cloud-API-Nachrichten →",
+          "batch": "Catalog Batch API (Produkte übertragen) →",
+          "changelog": "Graph-API-Änderungsprotokoll →",
+          "policies": "Commerce-Richtlinien →"
+        },
+        "constraintsTitle": "Einschränkungen",
+        "constraints": {
+          "public": "Der Katalog muss öffentlich sein",
+          "currency": "Eine Währung pro Katalog",
+          "images": "Bilder ≥ 500×500 px (JPG / PNG)",
+          "goods": "Keine Alkohol-, Erwachsenen- oder regulierten Waren",
+          "verification": "Business-Verifizierung für den Produktivbetrieb erforderlich"
+        }
+      }
+    }
+  }
+}

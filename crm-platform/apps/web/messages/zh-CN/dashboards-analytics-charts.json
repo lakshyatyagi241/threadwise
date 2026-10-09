@@ -1,0 +1,719 @@
+{
+  "dashboards-analytics-charts": {
+    "nav": {
+      "title": "仪表盘",
+      "analytics": "分析"
+    },
+    "home": {
+      "title": "仪表盘",
+      "welcome": "欢迎来到您的工作区。"
+    },
+    "chart": {
+      "empty": "此时间段内暂无数据。",
+      "bucket": "时段",
+      "cell": "{day} {hour}:00 · {count, plural, other {# 条消息}}"
+    },
+    "range": {
+      "label": "日期范围",
+      "short": {
+        "24h": "24 小时",
+        "7d": "7 天",
+        "30d": "30 天",
+        "90d": "90 天",
+        "qtd": "本季至今",
+        "custom": "自定义"
+      },
+      "long": {
+        "24h": "最近 24 小时",
+        "7d": "最近 7 天",
+        "30d": "最近 30 天",
+        "qtd": "本季至今",
+        "custom": "自定义范围"
+      },
+      "from": "起始日期",
+      "to": "截止日期",
+      "apply": "应用"
+    },
+    "funnel": {
+      "listLabel": "联系人漏斗",
+      "stageLabel": "{stage}：{n} 个联系人，占已发送消息联系人的 {pct}%",
+      "stage": {
+        "messaged": "已发送消息的联系人",
+        "delivered": "已送达",
+        "replied": "已回复",
+        "goalCompleted": "目标已完成"
+      },
+      "goalCompletedHint": "流程已完成的联系人",
+      "activity": {
+        "title": "会话活动",
+        "summary": "{inbound, plural, other {# 条入站消息}} · {contacts, plural, other {# 位回复联系人}} · 每位回复联系人 {perContact} 条回复"
+      },
+      "comparison": {
+        "title": "与上一时段相比",
+        "replyRate": "回复率"
+      }
+    },
+    "error": {
+      "locked": "您的套餐不包含分析功能。",
+      "upgrade": "查看套餐",
+      "forbidden": "您无权访问此页面。",
+      "generic": "无法加载数据。请稍后重试。"
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "早上好，{name}。",
+        "afternoon": "下午好，{name}。",
+        "evening": "晚上好，{name}。"
+      },
+      "subline": "{date} - {range}：共发送 {sent} 条，{devices, plural, other {# 台已连接设备}}的送达率为 {rate}%。",
+      "kpis": "关键数据",
+      "kpi": {
+        "sent": "已发送消息 · {range}",
+        "sentLegend": "{delivered} 条已送达 · {failed} 条失败",
+        "readRate": "已读率",
+        "deliverability": "送达率",
+        "deliveredOf": "{delivered} / {sent} 条消息",
+        "replies": "回复",
+        "replyRate": "回复率 {rate}%",
+        "readMini": {
+          "sent": "已发送",
+          "delivered": "已送达",
+          "read": "已读"
+        }
+      },
+      "throughput": {
+        "title": "消息吞吐量",
+        "subtitle": {
+          "24h": "发出、送达和失败的消息，按小时，最近 24 小时",
+          "7d": "发出、送达和失败的消息，按天，最近 7 天",
+          "30d": "发出、送达和失败的消息，按天，最近 30 天",
+          "qtd": "发出、送达和失败的消息，按天，本季至今",
+          "custom": "发出、送达和失败的消息，按天，自定义范围"
+        },
+        "peak": "高峰时段 {when} · {n} 条消息",
+        "sent": "已发送",
+        "delivered": "已送达",
+        "failed": "失败",
+        "avgHour": "每小时平均",
+        "replies": "回复",
+        "replyRate": "回复率"
+      },
+      "sparkline": {
+        "title": "最近 20 小时",
+        "subtitle": "每小时发送的消息数，最早的在前",
+        "inCard": "最近 20 小时"
+      },
+      "funnel": {
+        "title": "互动漏斗",
+        "viewAll": "查看分析"
+      },
+      "kicker": "运营仪表盘",
+      "calm": "工作区一切平静。",
+      "running": "{n, plural, other {# 个群发正在运行。}}",
+      "export": "导出",
+      "newCampaign": "新建营销活动",
+      "contacts": {
+        "title": "活跃联系人",
+        "subscribed": "已订阅",
+        "optedIn": "已授权",
+        "blocked": "已屏蔽"
+      },
+      "wallet": {
+        "title": "钱包余额",
+        "payPerMessage": "按条付费",
+        "topUp": "充值",
+        "earn": "通过联盟推广赚取"
+      },
+      "autopilot": {
+        "kicker": "提升效率",
+        "title": "让回复自动运行",
+        "body": "构建流程或发起营销活动，自动触达更多客户。",
+        "flow": "构建流程",
+        "campaign": "新建营销活动"
+      },
+      "pipeline": {
+        "kicker": "销售管道",
+        "open": "进行中的管道",
+        "deals": "进行中的交易",
+        "won": "本月成交",
+        "winRate": "成交率",
+        "board": "打开看板"
+      },
+      "inbox": {
+        "title": "实时收件箱",
+        "unread": "{n} 条未读",
+        "oldest": "最早 {when}",
+        "open": "打开收件箱",
+        "recent": "最近会话",
+        "empty": "暂无会话。"
+      },
+      "campaigns": {
+        "title": "进行中的营销活动",
+        "summary": "{running} 个运行中 - {scheduled} 个已排期 - {paused} 个已暂停",
+        "viewAll": "查看全部 {n} 个",
+        "untitled": "未命名群发",
+        "delivered": "已送达 {done} / {total}",
+        "emptyTitle": "没有进行中的群发",
+        "emptyBody": "创建一个，开始向联系人群组发送。",
+        "new": "新建群发",
+        "status": {
+          "processing": "发送中",
+          "sending": "发送中",
+          "running": "发送中",
+          "active": "发送中",
+          "scheduled": "已排期",
+          "pending": "已排期",
+          "queued": "已排期",
+          "paused": "已暂停",
+          "cancelled": "已暂停",
+          "failed": "失败",
+          "completed": "已完成",
+          "completed_with_errors": "已完成",
+          "done": "已完成",
+          "sent": "已完成"
+        }
+      },
+      "devices": {
+        "title": "已连接设备",
+        "summary": "已使用 {total} / {cap} 个名额 - {online} 台在线",
+        "connect": "连接",
+        "emptyTitle": "未连接设备",
+        "emptyBody": "配对一个 WhatsApp 号码即可开始发送。",
+        "connectDevice": "连接设备",
+        "unzoned": "未分区",
+        "per24h": "{n}/24h",
+        "deliv": "送达",
+        "free": "{n, plural, other {还有 # 个设备名额可用}}"
+      },
+      "templates": {
+        "title": "表现最佳的模板",
+        "subtitle": "按发送量 - 所选范围",
+        "count": "{n, plural, other {# 个模板}}",
+        "new": "新建模板",
+        "empty": "暂无模板。",
+        "create": "创建您的第一个",
+        "col": {
+          "template": "模板",
+          "type": "类型",
+          "sent": "已发送",
+          "delivered": "已送达",
+          "read": "已读",
+          "readRate": "已读率",
+          "performance": "送达率",
+          "status": "状态"
+        },
+        "status": {
+          "approved": "已通过",
+          "public": "已通过",
+          "active": "已通过",
+          "pending": "审核中",
+          "submitted": "审核中",
+          "in_review": "审核中",
+          "rejected": "已拒绝",
+          "disabled": "已拒绝"
+        }
+      },
+      "activity": {
+        "title": "活动日志",
+        "subtitle": "工作区事件",
+        "empty": "此工作区暂无近期活动记录。",
+        "by": "{actor} - {module} {action}"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "accounts": "{count, plural, other {# 个账号}}",
+        "connected": "已连接",
+        "openInbox": "打开收件箱 →",
+        "tile": {
+          "needReply": "需要回复",
+          "openChats": "进行中的聊天",
+          "dmsIn": "收到私信 · 7 天",
+          "dmsOut": "发出私信 · 7 天",
+          "followers": "粉丝",
+          "replyRate": "回复率"
+        }
+      },
+      "copilot": {
+        "title": "{brand} Copilot",
+        "tag": "AI 驱动",
+        "headline": "一句话生成流程。",
+        "body": "描述客户旅程，Copilot 会起草节点、分支和模板建议。",
+        "try": "试试：",
+        "generate": "生成流程 ✦",
+        "examples": "示例",
+        "stat": {
+          "flows": "个流程",
+          "active": "启用",
+          "subscribers": "位订阅者"
+        }
+      },
+      "flows": {
+        "title": "自动化流程",
+        "summary": "{active} 个启用 · {subscribers} 位订阅者",
+        "open": "打开",
+        "empty": "暂无流程。",
+        "build": "构建您的第一个流程",
+        "meta": "{trigger} 触发 · {steps} 个步骤 · {subs} 位订阅者",
+        "statusActive": "启用",
+        "statusPaused": "已暂停",
+        "subs": "订阅者"
+      },
+      "quickActions": {
+        "title": "快捷操作",
+        "soon": "即将推出",
+        "broadcast": {
+          "label": "新建群发",
+          "hint": "发送给联系人群组"
+        },
+        "flow": {
+          "label": "构建流程",
+          "hint": "拖放操作"
+        },
+        "template": {
+          "label": "新建模板",
+          "hint": "提交至 Meta"
+        },
+        "autoReply": {
+          "label": "自动回复",
+          "hint": "关键词规则"
+        }
+      },
+      "integrations": {
+        "title": "集成",
+        "name": {
+          "woocommerce": "WooCommerce",
+          "shopify": "Shopify",
+          "google_sheets": "Google Sheets",
+          "meta_catalog": "Meta Catalog"
+        },
+        "events": "{n} 个事件 / 7 天",
+        "connected": {
+          "woocommerce": "已连接",
+          "shopify": "已连接",
+          "google_sheets": "已签发 API 密钥",
+          "meta_catalog": "商品目录已关联"
+        },
+        "notConnected": "未连接",
+        "connect": "连接",
+        "connectedLabel": "已连接"
+      },
+      "sublineOfficial": "{date} - {range}：共发送 {sent} 条，送达率 {rate}%。"
+    },
+    "analytics": {
+      "title": "分析",
+      "headline": "{from} 至 {to} 期间，{rate}% 的消息已送达收件人。",
+      "subline": "已发送 {sent, plural, other {# 条消息}}，回复率 {replyRate}%。",
+      "noSends": "此时间段内暂无发出的消息。",
+      "export": "导出 CSV",
+      "from": "从",
+      "to": "至",
+      "apply": "应用",
+      "kpis": "关键数据",
+      "kpi": {
+        "sent": "已发送",
+        "delivered": "已送达",
+        "queued": "排队中",
+        "failed": "失败",
+        "replyRate": "回复率"
+      },
+      "series": {
+        "sent": "已发送",
+        "delivered": "已送达",
+        "failed": "失败",
+        "queued": "排队中"
+      },
+      "empty": "此时间段内没有可显示的内容。",
+      "volume": {
+        "title": "消息趋势",
+        "subtitle": "每天已发送、已送达和失败的消息"
+      },
+      "rates": {
+        "title": "送达率",
+        "subtitle": "已送达、排队中和失败的占比"
+      },
+      "totals": {
+        "title": "每日总量",
+        "subtitle": "每天已送达、排队中和失败的消息，堆叠显示"
+      },
+      "funnel": {
+        "title": "互动漏斗"
+      },
+      "types": {
+        "title": "消息类型",
+        "subtitle": "发出分布",
+        "byType": "按消息类型统计的已发送和已送达",
+        "kind": "类型",
+        "sent": "已发送",
+        "delivered": "已送达",
+        "text": "文本",
+        "template": "模板",
+        "media": "媒体",
+        "interactive": "互动",
+        "location": "位置"
+      },
+      "heatmap": {
+        "title": "最佳时段",
+        "subtitle": "按星期和小时统计的消息量，{zone}。颜色越深表示越繁忙。",
+        "empty": "此时间段内没有消息量。",
+        "footer": "基于 {total} 条消息计算，时区 {tz}"
+      },
+      "panels": {
+        "devices": {
+          "title": "按设备",
+          "subtitle": "最近 24 小时的发送量",
+          "online": "{online}/{total} 在线",
+          "empty": "暂无已连接设备。",
+          "msg": "{n} 条消息"
+        },
+        "templates": {
+          "title": "模板",
+          "subtitle": "按发送量排名靠前",
+          "empty": "此时间段内没有模板发送记录。"
+        },
+        "contacts": {
+          "title": "热门联系人",
+          "subtitle": "互动最多的会话",
+          "empty": "此时间段内没有会话。",
+          "msgs": "{n} 条消息"
+        },
+        "team": {
+          "title": "团队表现",
+          "subtitle": "此时间段内的客服",
+          "count": "{n, plural, other {# 位客服}}",
+          "col": {
+            "agent": "客服",
+            "convos": "会话",
+            "resolved": "已解决",
+            "first": "平均首次响应",
+            "resolution": "平均解决时间",
+            "csat": "客户满意度"
+          }
+        },
+        "geo": {
+          "title": "按国家/地区",
+          "subtitle": "触达",
+          "markets": "{n, plural, other {# 个市场}}",
+          "unspecified": "未指定",
+          "empty": "此时间段内没有已知国家/地区的会话。"
+        },
+        "events": {
+          "title": "事件流",
+          "subtitle": "此时间段内的最新消息",
+          "sent": "发送至 {peer}",
+          "received": "收到来自 {peer} 的消息",
+          "empty": "此时间段内没有近期活动。"
+        }
+      }
+    },
+    "health": {
+      "nav": "系统健康",
+      "group": "系统",
+      "title": "系统健康",
+      "kicker": "平台",
+      "description": "对平台所依赖服务的实时检查。",
+      "banner": {
+        "up": "所有系统 - 运行正常",
+        "warn": "所有系统 - 性能下降",
+        "down": "所有系统 - 已宕机",
+        "checked": "上次检查于 {time} · 每 20 秒自动刷新",
+        "refresh": "立即刷新",
+        "refreshing": "检查中..."
+      },
+      "core": "核心服务",
+      "activity": {
+        "messages": "消息 · 24 小时",
+        "aiCalls": "AI 调用 · 24 小时",
+        "conversations": "会话 · 24 小时",
+        "webhooks": "Webhook · 24 小时"
+      },
+      "throughput": {
+        "title": "消息吞吐量 · 14 天",
+        "peak": "峰值 {n}/天",
+        "empty": "最近 14 天没有消息活动。",
+        "aria": "每天消息数，最近 14 天"
+      },
+      "state": {
+        "up": "运行正常",
+        "warn": "性能下降",
+        "down": "已宕机",
+        "idle": "空闲"
+      },
+      "check": {
+        "database": "数据库",
+        "cache": "缓存",
+        "queue": "队列",
+        "bridge": "Node 桥接",
+        "storage": "媒体存储"
+      },
+      "latency": {
+        "title": "响应时间",
+        "empty": "暂无计时数据。",
+        "ms": "{ms} 毫秒"
+      },
+      "queues": {
+        "title": "队列",
+        "name": "队列",
+        "pending": "待处理",
+        "failed": "失败"
+      },
+      "clear": {
+        "button": "清除待处理任务",
+        "busy": "清除中...",
+        "confirmTitle": "清除待处理和失败的任务？",
+        "confirmBody": "将移除所有队列中等待和延迟的任务，并删除失败的任务。正在运行的任务不受影响。",
+        "confirm": "清除任务",
+        "cancel": "取消",
+        "done": "已清除 {pending} 个待处理任务和 {failed} 个失败任务。",
+        "failed": "失败：{message}",
+        "superOnly": "只有超级管理员可以清除任务。"
+      },
+      "vitals": {
+        "title": "主机指标",
+        "node": "Node",
+        "app": "应用版本",
+        "environment": "环境",
+        "uptime": "运行时长",
+        "memory": "内存 (RSS)",
+        "heap": "堆内存使用量",
+        "diskFree": "磁盘剩余",
+        "diskFreeValue": "{gb} GB",
+        "diskUsed": "磁盘已用 {pct}%",
+        "noDisk": "不可用"
+      },
+      "error": "无法加载健康检查。请稍后重试。",
+      "engines": {
+        "title": "WhatsApp 引擎与已连接号码",
+        "empty": "尚未配置引擎。",
+        "caption": "已连接 / 号码总数"
+      }
+    },
+    "admin": {
+      "nav": {
+        "analytics": "分析"
+      },
+      "window": {
+        "label": "时间范围",
+        "24h": "最近 24 小时",
+        "7d": "最近 7 天",
+        "30d": "最近 30 天",
+        "90d": "最近 90 天",
+        "1y": "最近一年"
+      },
+      "error": "无法加载平台数据。",
+      "retry": "重试",
+      "vsPrevious": "较上一时段",
+      "overview": {
+        "title": "管理员仪表盘。",
+        "kicker": "管理员 / 概览",
+        "subtitle": "平台健康、收入、使用情况和工作区活动，一目了然。",
+        "addWorkspace": "添加工作区",
+        "kpi": {
+          "income": "总收入",
+          "profit": "利润",
+          "profitHint": "按 32% 利润率估算，非会计数据",
+          "views": "总浏览量",
+          "viewsHint": "所有工作区发送的消息",
+          "conversion": "转化率"
+        },
+        "revenue": {
+          "title": "收入趋势",
+          "total": "总收入",
+          "target": "总目标",
+          "targetHint": "目标是比上一时段增长 10% 的增长基准，并非已存储的目标。",
+          "revenue": "收入",
+          "aria": "各时段收入与目标对比"
+        },
+        "countries": {
+          "title": "按国家/地区的会话",
+          "subtitle": "按地区的热门会话",
+          "empty": "暂无国家/地区数据 - 用户尚未提供所在地区。"
+        },
+        "regions": {
+          "title": "按地区的销售额",
+          "subtitle": "平台收入占比",
+          "aria": "各地区新用户"
+        },
+        "platform": {
+          "title": "按平台的销售额",
+          "subtitle": "电商集成",
+          "empty": "此时间段内没有已付款订单。",
+          "aria": "按支付网关统计的已付款收入"
+        },
+        "users": {
+          "title": "注册用户",
+          "subtitle": "用户席位概览",
+          "total": "用户总数",
+          "premium": "高级套餐",
+          "basic": "基础套餐",
+          "aria": "{pct}% 的用户使用付费套餐"
+        },
+        "workspaces": {
+          "title": "工作区活动",
+          "subtitle": "近期高价值管理员事件",
+          "viewAll": "查看全部",
+          "empty": "暂无工作区。",
+          "col": {
+            "workspace": "工作区",
+            "owner": "所有者",
+            "plan": "套餐",
+            "messages": "消息",
+            "health": "健康度",
+            "mrr": "月度经常性收入"
+          },
+          "health": {
+            "good": "良好",
+            "active": "活跃",
+            "low": "较低",
+            "idle": "空闲"
+          }
+        },
+        "alerts": {
+          "title": "管理员告警",
+          "subtitle": "优先队列",
+          "open": "{n} 个待处理",
+          "empty": "所有系统运行良好 - 无告警。"
+        },
+        "titleLead": "管理员",
+        "titleAccent": "仪表盘"
+      },
+      "analytics": {
+        "title": "管理员分析。",
+        "kicker": "管理员 - 平台",
+        "subtitle": "控制室全景视图：收入、工作区增长、WhatsApp 使用情况、营销活动送达、设备健康和支持压力。",
+        "days": {
+          "7": "最近 7 天",
+          "30": "最近 30 天",
+          "90": "最近 90 天",
+          "365": "今年",
+          "custom": "最近 {n} 天"
+        },
+        "daysLabel": "天数",
+        "export": "导出",
+        "tabs": {
+          "overview": "概览",
+          "revenue": "收入",
+          "usage": "使用情况",
+          "workspaces": "工作区",
+          "campaigns": "营销活动",
+          "support": "支持"
+        },
+        "kpi": {
+          "revenue": "收入",
+          "revenueSub": "{n, plural, other {# 个新工作区}}",
+          "workspaces": "工作区",
+          "workspacesSub": "{n, plural, other {共 # 位用户}}",
+          "messages": "消息",
+          "messagesSub": "日均 {n} 条",
+          "devices": "在线设备",
+          "newUsers": "新用户",
+          "newUsersSub": "共 {n}",
+          "tickets": "待处理工单",
+          "watch": "关注",
+          "clear": "正常"
+        },
+        "pulse": {
+          "title": "平台脉搏",
+          "subtitle": "控制室实时负载",
+          "workspaces": "工作区",
+          "devices": "已连接设备",
+          "tickets": "待处理工单",
+          "signups": "新注册",
+          "normal": "正常"
+        },
+        "growth": {
+          "title": "增长指挥中心",
+          "subtitle": "用户注册，最近 {days} 天",
+          "aria": "每日注册数",
+          "series": "注册数"
+        },
+        "plans": {
+          "title": "套餐分布",
+          "subtitle": "按套餐的工作区",
+          "empty": "暂无数据 - 至少有一个工作区被分配套餐后才会显示套餐分布。",
+          "aria": "按套餐的工作区"
+        },
+        "acquisition": {
+          "title": "获客",
+          "subtitle": "用户转工作区",
+          "users": "用户总数",
+          "newUsers": "新用户",
+          "workspaces": "已创建工作区",
+          "newWorkspaces": "新工作区",
+          "devices": "已连接设备"
+        },
+        "devices": {
+          "title": "热门设备 - 24 小时",
+          "subtitle": "发送量",
+          "empty": "暂无发送",
+          "devices": "设备",
+          "online": "在线",
+          "sends": "24 小时发送量",
+          "aria": "每台设备最近 24 小时的发送量"
+        },
+        "leaderboard": {
+          "title": "已付款收入最高的工作区",
+          "subtitle": "最近 {days} 天",
+          "workspace": "工作区",
+          "orders": "订单",
+          "revenue": "已付款收入",
+          "open": "打开",
+          "empty": "此时间段内没有已付款订单。"
+        },
+        "cohort": {
+          "title": "注册群组",
+          "subtitle": "最近 {days} 天",
+          "aria": "每日注册"
+        },
+        "composition": {
+          "title": "收入构成",
+          "subtitle": "主要贡献者",
+          "empty": "暂无已付款收入。"
+        },
+        "support": {
+          "title": "支持负载",
+          "subtitle": "工单状态",
+          "empty": "暂无工单。",
+          "open": "待处理",
+          "resolved": "已解决",
+          "inbox": "打开收件箱"
+        },
+        "queue": {
+          "title": "管理员关注",
+          "subtitle": "待办队列",
+          "tickets": "{n, plural, other {# 个待处理工单}}",
+          "ticketsHint": "请在 SLA 违约前到支持中分诊",
+          "offline": "{n, plural, other {# 台设备离线}}",
+          "offlineHint": "在线设备不足一半",
+          "users": "{n, plural, other {# 位新用户}}",
+          "usersHint": "查看最新注册",
+          "clear": "一切正常"
+        },
+        "titleLead": "管理员",
+        "titleAccent": "分析"
+      },
+      "kpiLabel": "KPI"
+    },
+    "quickAccess": {
+      "title": "快速访问",
+      "kicker": "快捷方式",
+      "edit": "编辑快捷方式",
+      "empty": "添加快速访问快捷方式",
+      "open": "打开 {label}",
+      "modalTitle": "快速访问",
+      "modalEyebrow": "最多固定 10 个快捷方式",
+      "pages": "应用页面（最多 10 个）",
+      "custom": "自定义链接",
+      "labelPlaceholder": "标签",
+      "urlPlaceholder": "https://... 或 /path",
+      "addCustom": "+ 添加自定义链接",
+      "removeCustom": "移除此链接",
+      "counter": "已固定 {n} / 10",
+      "cancel": "取消",
+      "save": "保存快捷方式",
+      "saving": "保存中...",
+      "limit": "最多可固定 10 个快捷方式。",
+      "saved": "快速访问已更新。",
+      "failed": "无法保存您的快捷方式。"
+    }
+  }
+}

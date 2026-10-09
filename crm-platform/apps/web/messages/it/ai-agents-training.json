@@ -1,0 +1,316 @@
+{
+  "aiTraining": {
+    "nav": {
+      "title": "Addestramento AI"
+    },
+    "common": {
+      "dismiss": "Ignora"
+    },
+    "paywall": {
+      "kicker": "Piano",
+      "title": "L'addestramento AI non è incluso nel tuo piano",
+      "body": "Il tuo piano non include gli assistenti AI. Passa a un piano superiore per sbloccare questa funzione.",
+      "upgrade": "Vedi i piani"
+    },
+    "responder": {
+      "title": "Chi risponde sul tuo WhatsApp?",
+      "body": "Se attivi il Business Agent di Meta, la nostra AI e le risposte automatiche per parole chiave si fanno da parte per questo workspace, così il cliente non riceve mai due risposte allo stesso messaggio.",
+      "metaCheck": "Uso Meta Business Agent",
+      "mode": {
+        "wadesk_only": {
+          "label": "Risponde la nostra AI",
+          "desc": "La nostra AI e le risposte automatiche per parole chiave gestiscono le chat (predefinito)."
+        },
+        "meta_agent_only": {
+          "label": "Risponde l'agente Meta",
+          "desc": "Risponde il Business Agent di Meta. Registriamo solo la conversazione, la nostra AI resta in silenzio."
+        },
+        "meta_agent_then_handoff": {
+          "label": "Agente Meta, poi passaggio a un operatore",
+          "desc": "Meta gestisce le prime domande. Quando passa la mano, la chat arriva nella tua Inbox del team per una persona. La nostra AI automatica resta in silenzio."
+        }
+      },
+      "save": "Salva",
+      "hint": "L'agente Meta richiede un numero WhatsApp Business (Cloud API). I numeri sul motore non ufficiale usano sempre la nostra AI.",
+      "readOnly": "Puoi vedere questa impostazione ma non modificarla.",
+      "saved": "Modalità del risponditore AI salvata.",
+      "saveFailed": "Impossibile salvare la modalità del risponditore.",
+      "loadError": "Impossibile caricare la modalità del risponditore.",
+      "retry": "Riprova",
+      "loading": "Caricamento della modalità del risponditore"
+    },
+    "list": {
+      "tip": "Suggerimento",
+      "tipBody": "Gli agenti intelligenti alimentano i tuoi <link>widget chatbot</link> e il passaggio AI dei tuoi flow. Il builder in cinque passaggi ti guida attraverso identità, personalità, cervello, sicurezza e conoscenza.",
+      "statusViews": "Stato dell'agente",
+      "view": {
+        "all": "Tutti gli agenti",
+        "active": "Attivi",
+        "paused": "In pausa"
+      },
+      "status": {
+        "all": "Tutti",
+        "active": "Attivi",
+        "paused": "In pausa"
+      },
+      "knowledgeTip": "Suggerimento sulla conoscenza",
+      "knowledgeTipBody": "Spesso basta una domanda e risposta FAQ. Pochi URL di pagine di aiuto coprono la maggior parte delle domande di supporto, quindi non serve caricare l'intero sito.",
+      "workspace": "Workspace",
+      "title": "AI",
+      "titleAccent": "Training",
+      "intro": "Crea agenti intelligenti che parlano con la voce del tuo brand. Addestrali con URL, testo, coppie domanda-risposta e file.",
+      "activePill": "{count} attivi",
+      "newAgent": "Nuovo agente intelligente",
+      "card": {
+        "total": "Agenti totali",
+        "knowledge": "Voci di conoscenza",
+        "avg": "Media / agente",
+        "health": "Stato di salute",
+        "activeHint": "{count} attivi",
+        "indexedHint": "{count} indicizzate",
+        "entriesUnit": "voci"
+      },
+      "health": {
+        "healthy": "in salute",
+        "empty": "vuoto",
+        "attention": "richiede attenzione"
+      },
+      "col": {
+        "agent": "Agente",
+        "provider": "Provider",
+        "knowledge": "Conoscenza",
+        "tone": "Tono",
+        "updated": "Aggiornato",
+        "actions": "Azioni"
+      },
+      "search": "Cerca per nome o slug…",
+      "loading": "Caricamento degli agenti",
+      "loadError": "Impossibile caricare gli agenti",
+      "retry": "Riprova",
+      "emptyTitle": "Ancora nessun agente intelligente",
+      "emptyBody": "Crea il tuo primo agente. Il builder in cinque passaggi ti guida attraverso identità, personalità, cervello, sicurezza e la conoscenza che deve avere.",
+      "buildAgent": "Crea agente intelligente",
+      "noMatch": "Nessun agente corrisponde alla ricerca o al filtro di stato.",
+      "entries": "{count, plural, one {# voce} other {# voci}}",
+      "edit": "Modifica agente",
+      "editNamed": "Modifica {name}",
+      "duplicate": "Duplica agente",
+      "duplicateNamed": "Duplica {name}",
+      "deleteAgent": "Elimina agente",
+      "deleteNamed": "Elimina {name}",
+      "deleteTitle": "Eliminare «{name}»?",
+      "deleteBody": "L'agente e le sue voci di conoscenza verranno rimossi. I widget e i flow che lo usano smetteranno di rispondere con questo agente finché non ne sceglierai un altro.",
+      "delete": "Elimina agente",
+      "keep": "Mantieni",
+      "deleted": "Agente eliminato.",
+      "deleteFailed": "Eliminazione non riuscita: {reason}",
+      "duplicateFailed": "Impossibile duplicare l'agente.",
+      "networkError": "errore di rete",
+      "showing": "Mostrati",
+      "of": "di",
+      "agentsCount": "{count, plural, one {# agente} other {# agenti}}",
+      "loadMore": "Carica altro"
+    },
+    "builder": {
+      "back": "Torna ad Addestramento AI",
+      "crumb": "Addestramento AI",
+      "crumbNew": "Nuovo",
+      "crumbEdit": "Modifica",
+      "titleNew": "Crea un agente",
+      "titleEdit": "Modifica agente",
+      "titleAccent": "intelligente",
+      "stateSaved": "Salvato",
+      "stateDraft": "Bozza / non salvato",
+      "saveDraft": "Salva bozza",
+      "stepper": "Passaggi del builder",
+      "steps": {
+        "identity": "Identità",
+        "persona": "Personalità",
+        "brain": "Cervello",
+        "safety": "Sicurezza",
+        "knowledge": "Conoscenza"
+      },
+      "stepOf": "Passaggio {n} di {total}",
+      "previous": "Indietro",
+      "next": "Avanti",
+      "finish": "Termina e chiudi",
+      "loading": "Caricamento dell'agente",
+      "loadError": "Impossibile caricare l'agente",
+      "notFoundTitle": "Agente non trovato",
+      "notFoundBody": "Questo agente non esiste nel tuo workspace oppure è stato eliminato.",
+      "backToList": "Torna ad Addestramento AI",
+      "saved": "Agente salvato.",
+      "saveFailed": "Salvataggio non riuscito. Controlla i campi e riprova.",
+      "conflict": "Questo agente è stato modificato altrove. Ricarica la pagina per ottenere l'ultima versione, poi salva di nuovo.",
+      "problem": {
+        "name": "Dai un nome al tuo assistente.",
+        "greeting": "Scrivi una frase di apertura.",
+        "model": "Scegli un modello.",
+        "tokens": "La lunghezza della risposta deve essere tra 50 e 4000 token.",
+        "temperature": "La creatività deve essere compresa tra 0 e 2."
+      },
+      "identity": {
+        "title": "Identità dell'agente",
+        "required": "obbligatorio",
+        "name": "Nome visualizzato dell'agente",
+        "namePlaceholder": "es. Concierge prezzi",
+        "nameHint": "Per i tuoi archivi. I visitatori non vedono questa etichetta.",
+        "status": "Stato di rilascio",
+        "statusActive": "Attivo: scegli questo agente in widget e flow",
+        "statusPaused": "In pausa: nascosto dai selettori",
+        "statusHint": "Gli agenti in pausa restano nell'elenco ma non possono essere collegati a nuovi widget.",
+        "language": "Lingua preferita",
+        "languageHint": "Codice ISO 639-1. Si adatta alla lingua del visitatore quando è diversa.",
+        "tone": "Tono conversazionale",
+        "toneHint": "Imposta lo stile di scrittura, indipendentemente dalla descrizione della personalità.",
+        "tones": {
+          "helpful": "Disponibile · calmo e puntuale",
+          "friendly": "Amichevole · caloroso e informale",
+          "formal": "Formale · neutro e preciso",
+          "playful": "Giocoso · leggero e spiritoso"
+        }
+      },
+      "persona": {
+        "title": "Personalità e frase di apertura",
+        "tag": "contenuto",
+        "greeting": "Frase di apertura",
+        "greetingPlaceholder": "Ciao! Sono qui per aiutarti. Chiedimi qualsiasi cosa su prezzi o piani.",
+        "greetingHint": "Visibile ai visitatori. Mostrata come primo fumetto all'apertura della chat.",
+        "brief": "Descrizione del carattere (istruzioni di sistema)",
+        "briefPlaceholder": "Sei l'amichevole agente di supporto di Acme Inc. Rispondi sempre con frasi brevi e passa la conversazione a una persona per qualsiasi questione sui rimborsi.",
+        "briefHint": "Interna, mai mostrata ai visitatori. Includi cosa fare, cosa non fare e regole di escalation."
+      },
+      "brain": {
+        "title": "Modello e controlli delle risposte",
+        "tag": "cervello",
+        "provider": "Provider del modello",
+        "providerHint": "Le chiavi dei provider sono configurate dal tuo admin. Compaiono anche i provider per cui hai aggiunto la tua chiave, sui piani che lo consentono.",
+        "notEnabled": "{name} (non abilitato)",
+        "model": "Nome del modello",
+        "modelHint": "Scegli uno dei modelli abilitati per te, oppure digita un altro ID modello.",
+        "noModels": "Nessun modello AI è ancora abilitato per il tuo workspace. Chiedi al tuo admin di attivarne uno, oppure aggiungi la tua chiave in Impostazioni, Chiavi AI.",
+        "tokens": "Limite di lunghezza della risposta (token)",
+        "tokensHint": "Circa 1 token equivale a 4 caratteri. 400 bastano per un paragrafo.",
+        "temperature": "Creatività (0 = rigoroso, 2 = libero)",
+        "temperatureHint": "Valori bassi danno risposte coerenti e fattuali. Valori alti danno formulazioni più varie."
+      },
+      "safety": {
+        "title": "Risposta di riserva e passaggio a un operatore",
+        "tag": "sicurezza",
+        "fallback": "Risposta di riserva (usata quando il modello va in errore)",
+        "fallbackPlaceholder": "Un collega ti risponderà a breve. Grazie per la pazienza.",
+        "fallbackHint": "Inviata così com'è se il modello non restituisce nulla o la chiamata fallisce.",
+        "handoff": "Abilita il passaggio a una persona",
+        "handoffHint": "Il visitatore digita la frase di attivazione, l'agente smette di rispondere e l'inbox del tuo team si illumina.",
+        "keyword": "Frase di attivazione",
+        "keywordPlaceholder": "parlare con un operatore",
+        "keywordHint": "Quando un visitatore scrive questa frase in un punto qualsiasi di un messaggio, scatta il passaggio.",
+        "ack": "Conferma del passaggio",
+        "ackPlaceholder": "Certo, coinvolgo subito un collega. Resta in linea.",
+        "ackHint": "L'ultimo messaggio prima che l'agente smetta di rispondere."
+      }
+    },
+    "knowledge": {
+      "title": "Addestra l'agente",
+      "tag": "conoscenza",
+      "saveFirst": "Salva prima l'agente. Le voci di conoscenza si collegano a un agente salvato.",
+      "addLabel": "Aggiungi conoscenza",
+      "add": {
+        "url": {
+          "title": "URL live",
+          "body": "Recupera una pagina pubblica e conserva il testo."
+        },
+        "text": {
+          "title": "Testo libero",
+          "body": "Incolla un frammento di aiuto o una policy."
+        },
+        "qa": {
+          "title": "Coppia D&R",
+          "body": "Una domanda con la sua risposta canonica."
+        },
+        "file": {
+          "title": "PDF, DOCX, TXT e altro",
+          "body": "Carica un file. Il testo viene estratto per te."
+        }
+      },
+      "panel": {
+        "url": "Recupera un URL pubblico",
+        "text": "Incolla testo semplice",
+        "qa": "Singola D&R",
+        "file": "Carica un file di conoscenza"
+      },
+      "label": "Etichetta",
+      "url": "URL",
+      "content": "Testo",
+      "question": "Domanda",
+      "answer": "Risposta",
+      "file": "File",
+      "placeholder": {
+        "label": {
+          "url": "Etichetta (es. Pagina dei prezzi)",
+          "text": "Etichetta (es. Riepilogo policy rimborsi)",
+          "qa": "Etichetta (es. Tempi di rimborso)",
+          "file": "Etichetta (es. Manuale del prodotto)"
+        },
+        "content": "Incolla qualsiasi testo che l'agente deve conoscere…",
+        "question": "Domanda, es. Quanto tempo richiedono i rimborsi?",
+        "answer": "Risposta, es. I rimborsi vengono accreditati entro 3-5 giorni lavorativi."
+      },
+      "urlHint": "Vengono lette solo pagine pubbliche http e https. La pagina viene recuperata in background, quindi la voce mostra In elaborazione per un momento.",
+      "fileHint": "PDF, DOCX, TXT, Markdown, CSV o HTML, fino a 10 MB. Il testo viene estratto automaticamente.",
+      "uploading": "Avanzamento del caricamento",
+      "submit": {
+        "url": "Recupera e addestra",
+        "text": "Salva testo",
+        "qa": "Salva coppia",
+        "file": "Carica"
+      },
+      "cancel": "Annulla",
+      "added": "Conoscenza aggiunta.",
+      "addFailed": "Impossibile aggiungere la voce.",
+      "problem": {
+        "label": "Aggiungi un'etichetta per ritrovare questa voce in seguito.",
+        "url": "Aggiungi l'indirizzo della pagina.",
+        "content": "Incolla prima del testo.",
+        "question": "Aggiungi la domanda.",
+        "answer": "Aggiungi la risposta.",
+        "file": "Scegli un file (PDF, DOCX, TXT, Markdown, CSV o HTML).",
+        "file_type": "Tipi di file accettati: TXT, Markdown, CSV, HTML, PDF, DOCX. Per qualsiasi altro tipo, incolla il testo in una voce di tipo Testo.",
+        "file_legacyDoc": "I vecchi file .doc non sono supportati. Salvalo di nuovo come .docx (oppure esportalo in .pdf) e ricaricalo.",
+        "file_size": "Il file supera i 10 MB.",
+        "file_empty": "Il file è vuoto.",
+        "tooLarge": "Troppo testo per un solo incolla. Caricalo invece come file."
+      },
+      "col": {
+        "kind": "Tipo",
+        "label": "Etichetta",
+        "state": "Stato",
+        "actions": "Azioni"
+      },
+      "kind": {
+        "url": "url",
+        "text": "testo",
+        "qa": "d&r",
+        "file": "file"
+      },
+      "state": {
+        "ready": "pronto",
+        "processing": "in elaborazione",
+        "failed": "non riuscito"
+      },
+      "tokens": "circa {count} token",
+      "workspaceWide": "a livello di workspace",
+      "loading": "Caricamento delle voci",
+      "loadError": "Impossibile caricare le voci.",
+      "retry": "Riprova",
+      "empty": "Ancora nessuna conoscenza. Scegli un tipo qui sopra per aggiungere la prima voce.",
+      "remove": "Rimuovi",
+      "removeNamed": "Rimuovi {label}",
+      "removeTitle": "Rimuovere questa voce di conoscenza?",
+      "removeBody": "L'agente smetterà di usarla per le nuove risposte. Le conversazioni precedenti restano invariate.",
+      "keep": "Mantieni",
+      "removed": "Rimossa.",
+      "removeFailed": "Rimozione non riuscita."
+    }
+  }
+}

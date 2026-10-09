@@ -1,0 +1,412 @@
+{
+  "coupons-credits-referral-currency": {
+    "nav": {
+      "group": "Facturation et forfaits",
+      "coupons": "Coupons",
+      "currencies": "Devises",
+      "currenciesGroup": "Localisation",
+      "affiliate": "Affiliation"
+    },
+    "common": {
+      "loading": "Chargement",
+      "retry": "Réessayer",
+      "cancel": "Annuler",
+      "dismiss": "Ignorer",
+      "admin": "Admin",
+      "readOnly": "Vous pouvez consulter cette page, mais seul un super administrateur peut la modifier.",
+      "requestId": "ID de requête",
+      "errors": {
+        "forbidden": "Vous n’avez pas accès à cette page.",
+        "request": "La requête n’a pas pu aboutir.",
+        "unexpected": "Une erreur s’est produite. Réessayez dans un instant."
+      },
+      "pager": {
+        "label": "Pagination",
+        "previous": "Précédent",
+        "next": "Suivant",
+        "page": "Page {n}"
+      }
+    },
+    "errors": {
+      "generic": "Une erreur s’est produite. Réessayez dans un instant.",
+      "forbidden": "Seul un super administrateur peut modifier ceci.",
+      "notFound": "Cet élément n’existe plus. Il a peut-être été supprimé.",
+      "conflict": "Quelqu’un d’autre vient de modifier ceci. Rechargez la page et réessayez.",
+      "validation": "Certaines valeurs ne sont pas valides. Vérifiez le formulaire et réessayez.",
+      "codeTaken": "Un autre coupon utilise déjà ce code.",
+      "planUnknown": "Un ou plusieurs des forfaits sélectionnés n’existent plus.",
+      "currencyUnknown": "Choisissez l’une des devises actives.",
+      "currencyTaken": "Une devise avec ce code existe déjà.",
+      "defaultProtected": "Ceci est la devise par défaut du système. Choisissez d’abord une autre devise par défaut.",
+      "inUse": "Cette devise est encore utilisée par {used}. Désactivez-la plutôt.",
+      "ratesFailed": "Le fournisseur de taux est injoignable ou n’a renvoyé aucun taux. Aucun taux n’a été modifié."
+    },
+    "coupons": {
+      "title": "Coupons de réduction",
+      "titleLead": "Réductions",
+      "titleAccent": "coupons",
+      "crumbHere": "Coupons",
+      "eyebrow": "Admin · Facturation · Codes promo",
+      "description": "Codes promo saisis par les acheteurs au paiement. Choisissez un pourcentage ou un montant fixe, définissez une période de validité, limitez-les à certains forfaits et plafonnez le nombre total d’utilisations.",
+      "new": "Nouveau coupon",
+      "kpi": {
+        "total": "Total des coupons",
+        "totalHint": "au catalogue",
+        "active": "Actifs",
+        "activeHint": "acceptent des utilisations",
+        "expired": "Expirés",
+        "expiredHint": "date d’expiration dépassée",
+        "redeemed": "Total des utilisations",
+        "redeemedHint": "utilisations cumulées"
+      },
+      "filters": {
+        "label": "Filtrer les coupons",
+        "all": "Tous",
+        "active": "Actifs",
+        "disabled": "Désactivés",
+        "expired": "Expirés",
+        "search": "Rechercher par code ou description…",
+        "searchLabel": "Rechercher des coupons"
+      },
+      "table": {
+        "label": "Coupons",
+        "code": "Code",
+        "discount": "Réduction",
+        "uses": "Utilisations",
+        "validity": "Validité",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "validity": {
+        "forever": "illimitée",
+        "now": "maintenant",
+        "range": "{from} → {to}"
+      },
+      "empty": {
+        "title": "Aucun coupon ne correspond.",
+        "hint": "Ajustez ou réinitialisez les filtres, ou",
+        "create": "créez le premier"
+      },
+      "footer": "Affichage de {from} à {to} sur {total} coupons",
+      "pager": {
+        "label": "Pagination",
+        "previous": "Précédent",
+        "next": "Suivant",
+        "page": "Page {n}"
+      },
+      "actions": {
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "menu": "Actions",
+        "toggle": "Activer ou désactiver {code}"
+      },
+      "toasts": {
+        "created": "Coupon créé.",
+        "updated": "Coupon mis à jour.",
+        "activated": "Activé.",
+        "deactivated": "Désactivé.",
+        "deleted": "Coupon supprimé."
+      },
+      "delete": {
+        "title": "Supprimer le coupon",
+        "body": "Supprimer le coupon {code} ? Les espaces de travail qui l’ont déjà utilisé conservent leur réduction.",
+        "confirm": "Oui, supprimer"
+      },
+      "editor": {
+        "notFoundTitle": "Coupon introuvable",
+        "notFoundBody": "Aucun coupon n’existe à cette adresse. Il a peut-être été supprimé, ou le lien est incorrect.",
+        "backToList": "Retour aux coupons",
+        "crumbNew": "Nouveau",
+        "eyebrowNew": "Admin · Facturation · Codes promo · Créer",
+        "eyebrowEdit": "Admin · Facturation · Codes promo · Modifier",
+        "titleLead": "Nouveau",
+        "titleAccent": "coupon",
+        "descriptionNew": "Codes promo utilisés pendant /checkout. Choisissez un pourcentage ou un montant fixe, associez-le à un forfait ou à tous, et donnez-lui éventuellement une période de validité.",
+        "redeemed": "Utilisé {used}{max} fois",
+        "redeemedMax": " / {max}",
+        "expires": "expire {when}",
+        "active": "Actif",
+        "disabled": "Désactivé",
+        "create": "Créer le coupon",
+        "saveChanges": "Enregistrer les modifications",
+        "saving": "Enregistrement",
+        "cancel": "Annuler",
+        "problemsTitle": "Certains champs demandent votre attention :",
+        "problems": {
+          "code": "Code : saisissez un code de 64 caractères au maximum.",
+          "description": "Description : 255 caractères au maximum.",
+          "adminNote": "Note admin : 1 000 caractères au maximum.",
+          "type": "Type : choisissez pourcentage ou montant fixe.",
+          "amount": "Montant : saisissez un nombre comme 10 ou 12.5.",
+          "maxDiscountAmount": "Plafond de réduction : saisissez un nombre ou laissez vide.",
+          "currencyCode": "Devise imposée : 8 caractères au maximum.",
+          "minOrderAmount": "Montant minimum de commande : saisissez un nombre ou laissez vide.",
+          "applicablePlans": "Forfaits applicables : choisissez des forfaits dans la liste.",
+          "startsAt": "Début : saisissez une date et une heure valides.",
+          "expiresAt": "Expiration : saisissez une date et une heure valides, non antérieures au début.",
+          "maxUses": "Utilisations totales max. : un nombre entier supérieur ou égal à 1, ou vide.",
+          "perUserLimit": "Limite par utilisateur : un nombre entier supérieur ou égal à 1, ou vide."
+        },
+        "sections": {
+          "identity": "Identité",
+          "discount": "Réduction",
+          "eligibility": "Éligibilité",
+          "limits": "Limites et comportement"
+        },
+        "fields": {
+          "code": "Code",
+          "codeHint": "Enregistré en majuscules. Les clients saisissent exactement ce code au paiement.",
+          "codePlaceholder": "WELCOME10",
+          "description": "Description",
+          "descriptionNote": "(visible par le client)",
+          "descriptionPlaceholder": "Offre de bienvenue : 10 % de réduction le premier mois",
+          "adminNote": "Note admin",
+          "adminNoteNote": "(interne, non affichée)",
+          "adminNotePlaceholder": "Lot soldes de fin d’année · Slack #marketing · se termine avec la campagne",
+          "activeTitle": "Actif",
+          "activeHint": "Les acheteurs peuvent l’appliquer au paiement",
+          "type": "Type",
+          "typePercent": "Pourcentage (%)",
+          "typeFixed": "Montant fixe",
+          "amount": "Montant",
+          "amountHint": "Pour les coupons en pourcentage, 10 signifie 10 %. Pour les coupons à montant fixe, 10 signifie 10 unités de devise.",
+          "maxDiscount": "Plafond de réduction",
+          "maxDiscountNote": "(type % uniquement)",
+          "maxDiscountPlaceholder": "vide = aucun plafond",
+          "maxDiscountHint": "Par exemple, 20 % de réduction plafonnés à 50 $.",
+          "currency": "Devise imposée",
+          "currencyAny": "Toute devise",
+          "currencyHint": "Limite l’utilisation à une seule devise (s’applique aux coupons à montant fixe).",
+          "minOrder": "Montant minimum de commande",
+          "minOrderPlaceholder": "0 = aucun minimum",
+          "plans": "Forfaits applicables",
+          "plansNote": "(vide = tout forfait)",
+          "plansPlaceholder": "Choisissez un ou plusieurs forfaits (vide = tout forfait)...",
+          "plansHint": "Commencez à saisir pour filtrer la liste, sélectionnez pour ajouter et utilisez le × de la pastille pour en retirer un.",
+          "plansEmpty": "Aucun autre forfait à choisir.",
+          "plansRemove": "Retirer {name}",
+          "plansClear": "Retirer tous les forfaits",
+          "startsAt": "Début",
+          "startsAtHint": "Vide = disponible immédiatement.",
+          "expiresAt": "Expiration",
+          "expiresAtHint": "Vide = n’expire jamais.",
+          "maxUses": "Utilisations totales max.",
+          "unlimitedPlaceholder": "vide = illimité",
+          "maxUsesHint": "Tous clients confondus.",
+          "perUser": "Limite par utilisateur",
+          "perUserHint": "Nombre d’utilisations autorisées pour chaque client.",
+          "firstPurchaseTitle": "Premier achat uniquement",
+          "firstPurchaseHint": "Uniquement les espaces de travail qui n’ont passé aucune commande payante",
+          "stackableTitle": "Cumulable avec d’autres coupons",
+          "stackableHint": "Permet aux acheteurs de l’utiliser avec un autre code actif au paiement"
+        }
+      }
+    },
+    "currencies": {
+      "title": "Devises de la plateforme",
+      "titleLead": "Devises de la",
+      "titleAccent": "plateforme",
+      "crumbGroup": "Système",
+      "crumbGroup2": "Localisation",
+      "crumbHere": "Devises",
+      "eyebrow": "Admin · Plateforme · Localisation",
+      "description": "Gérez les devises que les espaces de travail peuvent choisir. Les taux de change sont stockés par rapport à l’USD. Modifier la devise par défaut se répercute sur chaque tableau de bord, facture et affichage de portefeuille.",
+      "fetchRates": "Récupérer les taux en direct",
+      "fetching": "Récupération",
+      "add": "Ajouter une devise",
+      "kpi": {
+        "total": "Total",
+        "totalHint": "devises configurées",
+        "active": "Actives",
+        "activeHint": "visibles pour les espaces de travail",
+        "default": "Défaut du système",
+        "defaultHint": "utilisée pour les nouveaux espaces de travail",
+        "inactive": "Inactives",
+        "inactiveHint": "non proposées dans les paramètres de l’espace de travail"
+      },
+      "defaultCard": {
+        "eyebrow": "Défaut du système",
+        "title": "Devise de repli pour toute la plateforme",
+        "body": "Tout espace de travail qui n’a pas choisi de devise utilise celle-ci. L’enregistrement vide immédiatement le cache : le changement apparaît dès le prochain chargement de page dans toute l’application.",
+        "select": "Devise par défaut",
+        "set": "Définir par défaut",
+        "setting": "Enregistrement"
+      },
+      "search": "Code, nom ou symbole…",
+      "searchLabel": "Rechercher des devises",
+      "searchButton": "Rechercher",
+      "table": {
+        "label": "Devises",
+        "code": "Code",
+        "name": "Nom",
+        "symbol": "Symbole",
+        "rate": "Taux (1 USD →)",
+        "decimals": "Décimales",
+        "active": "Active",
+        "actions": "Actions"
+      },
+      "defaultBadge": "Par défaut",
+      "rate": "1 USD → {rate}",
+      "on": "Activée",
+      "off": "Désactivée",
+      "empty": {
+        "none": "Aucune devise pour le moment.",
+        "noMatch": "Aucun résultat pour « {q} »."
+      },
+      "footer": "Affichage de {from} à {to} sur {total} devises",
+      "actions": {
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "toggle": "Activer ou désactiver {code}"
+      },
+      "toasts": {
+        "added": "Devise ajoutée.",
+        "updated": "Devise mise à jour.",
+        "activated": "Activée.",
+        "deactivated": "Désactivée.",
+        "deleted": "Devise supprimée.",
+        "defaultSet": "Devise par défaut définie sur {code}.",
+        "ratesUpdated": "{count} devises mises à jour depuis {provider}."
+      },
+      "delete": {
+        "title": "Supprimer la devise",
+        "body": "Supprimer {code} ? Les prix enregistrés dans cette devise deviendront orphelins.",
+        "confirm": "Oui, supprimer"
+      },
+      "form": {
+        "addTitle": "Ajouter une devise",
+        "editTitle": "Modifier {code}",
+        "name": "Nom *",
+        "namePlaceholder": "Franc suisse",
+        "code": "Code ISO *",
+        "codePlaceholder": "CHF",
+        "codeLocked": "Le code ne change jamais une fois la devise créée.",
+        "symbol": "Symbole",
+        "symbolPlaceholder": "Fr",
+        "precision": "Décimales *",
+        "rate": "Taux de conversion (1 USD = ?) *",
+        "active": "Activer immédiatement",
+        "save": "Ajouter la devise",
+        "saveChanges": "Enregistrer les modifications",
+        "cancel": "Annuler",
+        "problemsTitle": "Certains champs demandent votre attention :",
+        "problems": {
+          "name": "Nom : saisissez un nom de 120 caractères au maximum.",
+          "code": "Code ISO : trois lettres, comme CHF.",
+          "symbol": "Symbole : 20 caractères au maximum.",
+          "precision": "Décimales : un nombre entier de 0 à 6.",
+          "exchangeRate": "Taux de change : un nombre supérieur ou égal à 0.000001."
+        },
+        "eyebrow": "Nouvelle entrée",
+        "rateHint": "Utilisez « Récupérer les taux en direct » ci-dessus pour préremplir les valeurs depuis open.er-api.com.",
+        "editEyebrow": "Modifier l’entrée"
+      },
+      "catalog": {
+        "eyebrow": "Catalogue",
+        "title": "Toutes les devises"
+      }
+    },
+    "affiliate": {
+      "title": "Affiliation",
+      "subtitle": "Partagez votre lien et suivez les espaces de travail que vous apportez.",
+      "common": {
+        "dismiss": "Ignorer"
+      },
+      "states": {
+        "loading": "Chargement de vos données d’affiliation"
+      },
+      "header": {
+        "codeLabel": "Votre code de parrainage",
+        "noCode": "Pas encore de code",
+        "linkLabel": "Votre lien de parrainage",
+        "copyLink": "Copier le lien",
+        "copied": "Lien copié.",
+        "copyFailed": "Impossible de copier le lien. Sélectionnez-le et copiez-le manuellement.",
+        "reward": "Chaque espace de travail parrainé qui effectue un premier paiement vous rapporte {amount}.",
+        "rewardMessages": "Cela couvre {count, plural, one {# message} other {# messages}}.",
+        "rewardNone": "Le programme ne rémunère actuellement aucun nouveau parrainage. Votre code et votre historique restent ici."
+      },
+      "filters": {
+        "label": "Période et exportation",
+        "range": "Période",
+        "ranges": {
+          "7d": "7 derniers jours",
+          "30d": "30 derniers jours",
+          "90d": "90 derniers jours",
+          "all": "Depuis toujours"
+        },
+        "search": "Rechercher des parrainages",
+        "searchPlaceholder": "Nom, e-mail ou code",
+        "reset": "Réinitialiser",
+        "export": "Exporter en CSV",
+        "exporting": "Préparation du fichier",
+        "exported": "{fileName} téléchargé."
+      },
+      "kpi": {
+        "inRange": "Parrainages sur la période",
+        "vsPrevious": "{delta} par rapport à la période précédente",
+        "earned": "Gagné, au total",
+        "last30": "Parrainages, 30 derniers jours",
+        "last30Earned": "{amount} gagnés au cours des 30 derniers jours",
+        "average": "Moyenne par parrainage"
+      },
+      "chart": {
+        "title": "Parrainages au fil du temps",
+        "label": "Parrainages en barres et crédits gagnés en courbe, par période",
+        "buckets": {
+          "daily": "Quotidien",
+          "weekly": "Hebdomadaire",
+          "monthly": "Mensuel"
+        },
+        "signups": "Parrainages",
+        "credits": "Crédits gagnés",
+        "bucket": "Période",
+        "empty": "Aucun parrainage sur cette période pour le moment."
+      },
+      "topCodes": {
+        "title": "Meilleurs codes",
+        "referrals": "{count, plural, one {# parrainage} other {# parrainages}}",
+        "empty": "Aucun code n’a été utilisé sur cette période."
+      },
+      "payouts": {
+        "title": "Derniers versements",
+        "balanceAfter": "Solde après {amount}",
+        "empty": "Aucun versement pour le moment. Une récompense arrive dans votre portefeuille lorsqu’un espace de travail parrainé effectue son premier paiement."
+      },
+      "table": {
+        "title": "Parrainages",
+        "label": "Parrainages sur la période sélectionnée",
+        "when": "Date",
+        "referee": "Filleul",
+        "code": "Code utilisé",
+        "credits": "Crédits gagnés",
+        "status": "Statut",
+        "transaction": "Transaction du portefeuille",
+        "noName": "Utilisateur sans nom",
+        "paid": "Payé",
+        "pending": "En attente",
+        "noTransaction": "Aucune transaction du portefeuille",
+        "pagination": "Pages de parrainages",
+        "previous": "Précédent",
+        "next": "Suivant",
+        "showing": "Affichage de {from} à {to} sur {total}"
+      },
+      "empty": {
+        "noneTitle": "Aucun parrainage pour le moment",
+        "noneBody": "Partagez votre lien. Les personnes qui s’inscrivent avec celui-ci apparaissent ici.",
+        "filteredTitle": "Aucun parrainage ne correspond",
+        "filteredBody": "Essayez une autre période ou effacez la recherche."
+      },
+      "errors": {
+        "unauthenticated": "Votre session a expiré. Reconnectez-vous pour voir vos données d’affiliation.",
+        "forbidden": "Vous n’avez pas accès à cette page.",
+        "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+        "validation": "Impossible d’appliquer ces filtres. Réinitialisez-les et réessayez.",
+        "network": "Le serveur est injoignable. Vérifiez votre connexion et réessayez.",
+        "generic": "Une erreur s’est produite. Réessayez dans un instant.",
+        "requestId": "ID de requête",
+        "retry": "Réessayer"
+      }
+    }
+  }
+}

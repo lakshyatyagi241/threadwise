@@ -1,0 +1,571 @@
+{
+  "auth-registration-security": {
+    "account": {
+      "nav": {
+        "title": "账户"
+      },
+      "common": {
+        "cancel": "取消",
+        "loading": "加载中",
+        "reset": "重置",
+        "retry": "重试",
+        "save": "保存更改",
+        "saving": "保存中",
+        "showPassword": "显示密码",
+        "hidePassword": "隐藏密码",
+        "signOut": "退出登录"
+      },
+      "errors": {
+        "unexpected": "我们这边出了点问题，请重试。",
+        "network": "无法连接服务器。请检查网络连接后重试。",
+        "forbidden": "你无权执行此操作。",
+        "signedOut": "你的会话已结束。请重新登录。",
+        "rateLimited": "尝试次数过多。请稍等片刻后重试。",
+        "rateLimitedWait": "尝试次数过多。请在 {seconds, plural, other {# 秒}}后重试。",
+        "requestId": "请求 ID",
+        "locked": "失败次数过多。请稍等一段时间后再试。",
+        "lockedWait": "失败次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
+      },
+      "hub": {
+        "railLabel": "账户",
+        "menuLabel": "账户分区",
+        "groups": {
+          "account": "账户",
+          "security": "安全"
+        },
+        "tabs": {
+          "profile": "个人资料",
+          "security": "密码与安全",
+          "delete": "删除账户",
+          "plan": "套餐"
+        },
+        "pages": {
+          "profile": {
+            "title": "个人资料",
+            "description": "更新你的照片、姓名和联系方式。"
+          },
+          "security": {
+            "title": "密码与安全",
+            "description": "修改密码、开启双重验证，并查看你的登录位置。"
+          },
+          "delete": {
+            "title": "删除账户",
+            "description": "从此工作区永久移除你的账户。"
+          }
+        },
+        "breadcrumbLabel": "面包屑导航",
+        "breadcrumbRoot": "账户",
+        "planBadge": "{plan}套餐",
+        "planFree": "免费版",
+        "upgrade": {
+          "title": "需要更多额度？",
+          "body": "升级套餐，解锁更多营销活动、设备和 AI 辅助功能。",
+          "cta": "查看套餐"
+        },
+        "lockedHint": "请先完成此账户的安全步骤。"
+      },
+      "avatar": {
+        "alt": "{name}的照片",
+        "change": "更换照片",
+        "remove": "移除照片",
+        "uploading": "正在上传照片",
+        "removing": "正在移除照片",
+        "updated": "照片已更新。",
+        "removed": "照片已移除。",
+        "errors": {
+          "type": "请选择 JPG、PNG、WebP 或 GIF 图片。",
+          "too-large": "图片压缩后仍超过 {size} 的限制，请换一张更小的图片。",
+          "decode": "无法读取该图片，请换一个文件。",
+          "encode": "无法处理该图片，请换一个文件。",
+          "rejected": "该文件未被接受，请使用 JPG、PNG、WebP 或 GIF 图片。",
+          "source-too-large": "图片过大，无法打开。请选择 20 MB 以内的图片。",
+          "forbidden": "你无权更改此账户的照片。",
+          "expired": "你的会话已结束。请刷新页面，重新登录后再试。"
+        },
+        "hint": "JPG、PNG、WebP 或 GIF。我们会将其压缩至 {size} 以内。"
+      },
+      "timezone": {
+        "label": "时区",
+        "placeholder": "搜索时区，例如 Kolkata 或 UTC+05:30",
+        "empty": "没有匹配的时区。"
+      },
+      "phone": {
+        "country": "国家/地区",
+        "countryPlaceholder": "搜索国家/地区",
+        "countryEmpty": "没有匹配的国家/地区。",
+        "number": "手机号码",
+        "numberPlaceholder": "手机号码"
+      },
+      "profile": {
+        "personalInfo": "个人信息",
+        "fullName": "姓名",
+        "displayName": "显示名称",
+        "displayNameHint": "队友看到的你的名称。默认使用你的名字。",
+        "email": "邮箱",
+        "changeEmail": "更改邮箱",
+        "verified": "已验证",
+        "unverified": "未验证",
+        "pendingEmail": "我们已向 {email} 发送确认链接。打开链接后，你的登录邮箱才会更改。",
+        "phone": "手机",
+        "phoneHint": "选填。请先选择国家/地区，再输入号码。",
+        "language": "语言",
+        "languageHint": "应用对你显示的语言。",
+        "languageDefault": "使用默认设置",
+        "theme": "主题",
+        "themes": {
+          "paper": "纸张",
+          "bright": "明亮",
+          "dark": "深色"
+        },
+        "workspaceTimezone": "时区",
+        "workspaceTimezoneHint": "适用于 {workspace}。仅所有者和管理员可以更改。",
+        "saved": "个人资料已保存。",
+        "errors": {
+          "fullNameRequired": "请输入你的姓名。",
+          "phoneInvalid": "请输入与所选国家/地区相符的有效手机号码。",
+          "invalid": "此值无效。",
+          "timezoneInvalid": "请从列表中选择时区。",
+          "timezoneForbidden": "仅所有者和管理员可以更改工作区时区。"
+        },
+        "workspaceTag": "（工作区）"
+      },
+      "emailChange": {
+        "title": "更改你的邮箱",
+        "intro": "请输入新邮箱地址和你当前的密码。我们会向新地址发送确认链接；打开链接后，你的登录邮箱才会更改。",
+        "newEmail": "新邮箱地址",
+        "password": "当前密码",
+        "passwordHint": "新地址将成为你的登录账号，因此需要验证你的密码。",
+        "showPassword": "显示密码",
+        "hidePassword": "隐藏密码",
+        "cancel": "取消",
+        "submit": "发送确认链接",
+        "sending": "正在发送",
+        "errors": {
+          "invalidEmail": "请输入有效的邮箱地址。",
+          "same": "这已经是你的邮箱地址。",
+          "taken": "该邮箱地址已在此工作区中使用。",
+          "passwordRequired": "请输入当前密码。",
+          "passwordWrong": "密码不正确。"
+        }
+      },
+      "messageFooterPage": {
+        "title": "消息页脚",
+        "titleLead": "消息",
+        "titleAccent": "页脚",
+        "description": "工作区通过自动化、定时发送和团队收件箱回复所发送消息的结尾内容。"
+      },
+      "branding": {
+        "title": "消息页脚",
+        "description": "添加在自动化、定时发送和团队收件箱回复所发送的纯文本及交互式消息底部的内容。已审核通过的模板自带文本，不会添加页脚。",
+        "label": "自定义页脚（最多 {max} 个字符）",
+        "hint": "留空则发送的消息不带任何页脚。",
+        "preview": "预览",
+        "sampleMessage": "你好！这是你所需要的信息。",
+        "noFooter": "（无页脚）",
+        "save": "保存页脚",
+        "saving": "正在保存",
+        "saved": "页脚已更新，将从你发送的下一条消息起生效。",
+        "tooLong": "页脚最多 {max} 个字符。",
+        "forbidden": "你无权更改页脚。",
+        "current": "当前页脚",
+        "currentDefault": "当前页脚（平台默认）",
+        "planLocked": "你的套餐在发出的消息上使用平台默认页脚。升级套餐后可使用自定义页脚，或完全不带页脚。",
+        "permissionLocked": "只有工作区管理员可以更改页脚。你可以在此查看，但无法编辑。",
+        "upgrade": "查看套餐",
+        "upgradeTitle": "升级即可移除平台页脚。",
+        "placeholder": "通过 {name} 发送",
+        "remove": "移除我的页脚",
+        "removed": "页脚已移除。从下一次发送起，你的消息将不带页脚。"
+      },
+      "password": {
+        "title": "修改密码",
+        "subtitle": "请选择一个未在其他地方使用过的强密码。",
+        "current": "当前密码",
+        "new": "新密码",
+        "newHint": "至少 {count} 个字符。",
+        "confirm": "确认新密码",
+        "submit": "更新密码",
+        "updating": "正在更新",
+        "forcedBanner": "继续之前，你需要设置新密码。请在下方选择一个。",
+        "forcedDone": "密码已更新。欢迎回来。",
+        "success": "密码已更新。{count, plural, =0 {你在此设备上保持登录。} other {另外 # 台设备已退出登录。}}",
+        "errors": {
+          "currentRequired": "请输入当前密码。",
+          "currentWrong": "密码不正确。",
+          "tooShort": "请至少使用 {count} 个字符。",
+          "tooLong": "最多使用 256 个字符。",
+          "sameAsCurrent": "请选择与当前密码不同的密码。",
+          "mismatch": "两次输入的密码不一致。",
+          "policy": "该密码不符合你的工作区规则："
+        },
+        "rules": {
+          "min_length": "请至少使用 {count} 个字符。",
+          "upper_lower": "请混合使用大小写字母。",
+          "number": "请至少包含一个数字。",
+          "symbol": "请至少包含一个符号。",
+          "common": "该密码过于简单，容易被猜到。"
+        },
+        "currentPlaceholder": "输入当前密码",
+        "newPlaceholder": "至少 {count} 个字符",
+        "confirmPlaceholder": "再次输入",
+        "tips": {
+          "title": "密码提示",
+          "mix": "混合使用大小写字母、数字和符号。",
+          "reuse": "不要重复使用其他网站的密码。",
+          "manager": "可以考虑使用密码管理器。"
+        },
+        "newHintRequires": "必须包含{rules}。",
+        "requirement": {
+          "mixedCase": "大小写字母",
+          "number": "数字",
+          "symbol": "符号"
+        },
+        "resetLink": {
+          "title": "没有当前密码可输入？",
+          "body": "如果你是通过 Google 或 Facebook 登录，或者记不起密码，我们可以向 {email} 发送链接，让你无需旧密码即可设置新密码。",
+          "send": "给我发送重置链接",
+          "sending": "正在发送",
+          "sent": "如果 {email} 可以接收邮件，重置链接已在路上。打开链接即可设置新密码。你将在所有设备上退出登录，之后可使用新密码重新登录。",
+          "captchaFailed": "请完成验证码校验后重试。"
+        }
+      },
+      "passwordConfirm": {
+        "password": "当前密码",
+        "required": "请输入当前密码。",
+        "wrong": "密码不正确。",
+        "show": "显示密码",
+        "hide": "隐藏密码",
+        "cancel": "取消",
+        "working": "处理中"
+      },
+      "mfa": {
+        "title": "双重验证",
+        "subtitle": "每次登录时都要求输入验证器应用中的验证码。",
+        "forcedBanner": "你的组织要求启用双重验证。请先完成设置，才能继续使用应用。",
+        "forcedDone": "双重验证已开启。欢迎回来。",
+        "offDescription": "双重验证已关闭。开启后，即使密码泄露也能保护你的账户。",
+        "starting": "正在准备设置",
+        "step1": "在手机上打开验证器应用（Google Authenticator、Microsoft Authenticator、1Password 等）。",
+        "step2": "扫描二维码，或手动输入设置密钥。",
+        "step3": "输入应用显示的六位验证码即可完成。",
+        "qrLabel": "验证器应用二维码",
+        "manualKey": "设置密钥",
+        "manualKeyHint": "无法扫描二维码时使用。请妥善保密。",
+        "copy": "复制",
+        "copied": "已复制",
+        "codeLabel": "六位验证码",
+        "codeHint": "验证码每 30 秒更换一次。",
+        "codeInvalid": "请输入应用中的六位数字。",
+        "codeWrong": "验证码不正确或已过期。请等待新的验证码后重试。",
+        "enable": "开启",
+        "enabling": "正在开启",
+        "expired": "此次设置已过期。请重新开始以获取新的验证码。",
+        "restart": "重新开始",
+        "on": "已开启",
+        "since": "自 {date} 起",
+        "onDescription": "每次登录时，系统都会要求你输入验证器应用中的验证码。",
+        "remaining": "{count, plural, =0 {你已没有剩余的恢复码。} other {还剩 # 个恢复码。}}",
+        "remainingLow": "请尽快生成新的恢复码。",
+        "regenerate": "替换恢复码",
+        "regenerateTitle": "替换恢复码",
+        "regenerateDescription": "这将生成十个新的恢复码，旧恢复码将失效。请输入密码以继续。",
+        "regenerateConfirm": "替换恢复码",
+        "disable": "关闭",
+        "disableTitle": "关闭双重验证",
+        "disableDescription": "关闭后，你的账户将仅受密码保护。请输入密码确认。",
+        "disableConfirm": "关闭",
+        "disabledDone": "双重验证已关闭。",
+        "codesTitleEnabled": "双重验证已开启。请保存你的恢复码。",
+        "codesTitleRegenerated": "你的新恢复码",
+        "scanTitle": "扫描此二维码"
+      },
+      "recovery": {
+        "intro": "如果手机丢失，每个恢复码都可用于登录一次。",
+        "onlyOnce": "这些恢复码仅显示一次。请存放在安全的地方，例如密码管理器。",
+        "listLabel": "恢复码",
+        "copy": "复制恢复码",
+        "copied": "已复制",
+        "copyFailed": "你的浏览器不允许复制。请选中恢复码手动复制，或下载保存。",
+        "download": "下载",
+        "fileHeader": "恢复码。每个仅可使用一次。",
+        "confirmSaved": "我已将这些恢复码保存在安全的地方。",
+        "done": "我已保存"
+      },
+      "sessions": {
+        "title": "你的登录位置",
+        "subtitle": "已登录你账户的设备。如有不认识的设备，请将其撤销。",
+        "thisDevice": "此设备",
+        "remembered": "保持登录",
+        "ipUnknown": "地址未知",
+        "signOutOthers": "退出所有其他设备",
+        "signingOut": "正在退出登录",
+        "empty": "没有活跃的会话。",
+        "confirmOneTitle": "退出此设备？",
+        "confirmOneBody": "{device} 将退出登录，再次登录时需要输入你的密码。",
+        "confirmOthersTitle": "退出所有其他设备？",
+        "confirmOthersBody": "{count, plural, other {另外 # 台设备}}将退出登录。此设备保持登录。",
+        "revoked": "{device} 已退出登录。",
+        "revokedOthers": "{count, plural, =0 {没有其他已登录的设备。} other {# 台设备已退出登录。}}",
+        "columns": {
+          "device": "设备",
+          "ip": "IP 地址",
+          "lastActive": "最近活跃",
+          "actions": "操作"
+        },
+        "revoke": "撤销",
+        "showing": "显示第 {from}–{to} 条，共 {total} 条",
+        "prev": "上一页",
+        "next": "下一页",
+        "lifetimes": "登录会在 {session} 后自动结束；若选择了保持登录，则在 {remembered} 后结束。",
+        "idle": "未选择保持登录时，无操作 {idle} 后也会结束。"
+      },
+      "delete": {
+        "title": "删除你的账户",
+        "warning": "此操作将永久删除你的账户，包括登录信息、个人资料、照片和设备。",
+        "irreversible": "此操作无法撤销。",
+        "consequencesTitle": "将会发生什么",
+        "consequence1": "你将在所有设备上退出登录，且无法再使用此账户登录。",
+        "consequence2": "工作区及其其他成员会保留。你完成的工作仍归工作区所有。",
+        "consequence3": "账户已被删除的记录会保留用于审计。",
+        "blocked": {
+          "sole_member": {
+            "title": "你是此工作区的唯一成员。",
+            "body": "无法单独删除该账户。请联系平台团队关闭工作区。"
+          },
+          "sole_admin": {
+            "title": "你是唯一的管理员。",
+            "body": "请先将另一位成员设为管理员，再回来删除你的账户。"
+          }
+        },
+        "phraseLabel": "输入 {phrase} 以确认",
+        "phraseHint": "请与显示内容完全一致，包括大小写。",
+        "password": "当前密码",
+        "showPassword": "显示密码",
+        "hidePassword": "隐藏密码",
+        "cancel": "取消",
+        "submit": "永久删除账户",
+        "deleting": "正在删除",
+        "errors": {
+          "phrase": "请完全按照显示内容输入该短语。",
+          "passwordRequired": "请输入当前密码。",
+          "passwordWrong": "密码不正确。"
+        },
+        "considerTitle": "删除之前，请考虑",
+        "considerPlanLink": "降级为免费套餐",
+        "considerPlanRest": "，而不是删除。",
+        "considerSupportLink": "联系支持团队",
+        "considerSupportRest": "，如果是某个问题让你想要离开。我们或许能帮你解决。",
+        "reasonLabel": "你为什么要离开？（选填）",
+        "reasonHint": "内容仅保留在此表单中，不会发送到任何地方。",
+        "reasonPlaceholder": "告诉我们哪些方面可以做得更好"
+      },
+      "switcher": {
+        "heading": "工作区",
+        "label": "工作区：{name}。切换工作区",
+        "switching": "正在切换工作区",
+        "switched": "已切换到 {name}",
+        "failed": "无法切换工作区，请重试。",
+        "notAvailable": "你无法切换到该工作区。",
+        "rateLimited": "尝试次数过多，请稍候再试。",
+        "rateLimitedWait": "尝试次数过多，请在 {seconds, plural, other {# 秒}}后重试。"
+      },
+      "mfaChallenge": {
+        "title": "确认是你本人",
+        "intro": "{name} 使用双重验证。请输入验证器应用中的验证码以切换。",
+        "codeLabel": "六位验证码",
+        "codeHint": "验证码每 30 秒更换一次。",
+        "codeInvalid": "请输入应用中的六位数字。",
+        "codeWrong": "验证码不正确或已过期。请尝试下一个。",
+        "recoveryLabel": "恢复码",
+        "recoveryHint": "每个恢复码仅可使用一次。",
+        "recoveryInvalid": "请输入恢复码。",
+        "recoveryWrong": "该恢复码无效。",
+        "expired": "此登录步骤已过期。请关闭此窗口并重新选择工作区。",
+        "useRecovery": "改用恢复码",
+        "useCode": "改用验证器验证码",
+        "cancel": "取消",
+        "confirm": "确认",
+        "verifying": "正在验证"
+      },
+      "banners": {
+        "dismiss": "忽略",
+        "verifyMessage": "请验证你的邮箱地址（{email}）。注册时我们已向你发送链接。",
+        "resend": "重新发送邮件",
+        "resendIn": "{seconds} 秒后可重新发送",
+        "resendWait": "稍后你可以再次请求发送邮件。",
+        "sending": "正在发送",
+        "sent": "邮件已发送。",
+        "notSent": "暂时无法发送邮件。",
+        "throttled": "请稍候再重新请求。",
+        "alreadyVerified": "你的邮箱已验证。"
+      },
+      "suspended": {
+        "title": "你的账户已被停用",
+        "greeting": "{name}，你好，管理员已停用此账户。你仍可登录，但在账户重新启用之前，应用的其余部分将被锁定。",
+        "support": "如果你认为这是误操作，请联系工作区所有者或管理员重新启用你的账户。",
+        "signOut": "退出登录",
+        "checking": "正在检查"
+      },
+      "verifyRequired": {
+        "title": "请验证你的邮箱",
+        "body": "我们已向下方地址发送验证链接。打开链接即可解锁你的工作区。",
+        "resend": "重新发送验证邮件",
+        "resendIn": "{seconds} 秒后可重新发送",
+        "sending": "正在发送",
+        "sent": "我们已向 {email} 发送新的链接。",
+        "notSent": "暂时无法发送邮件。",
+        "throttled": "刚刚已发送过链接，请稍候再重新请求。",
+        "alreadyVerified": "你的邮箱已验证。正在带你进入。",
+        "signOut": "退出登录",
+        "help": "没收到？请检查垃圾邮件文件夹。如果你在其他设备上打开了链接，请回到此标签页，我们会自动识别。"
+      },
+      "onboarding": {
+        "metaTitle": "设置你的工作区",
+        "notAllowed": {
+          "title": "设置尚未完成",
+          "body": "你的工作区仍在设置中。需要由管理员完成设置后你才能继续。"
+        },
+        "stepper": {
+          "label": "第 {current} 步，共 {total} 步 / {name}",
+          "progress": "设置进度",
+          "account": "账户",
+          "workspace": "工作区",
+          "plan": "套餐"
+        },
+        "workspace": {
+          "title": "设置你的工作区",
+          "subtitle": "填写一些信息，让应用更适合你的团队。",
+          "name": "工作区名称",
+          "nameHint": "显示在应用顶部、团队成员可见的易记名称。",
+          "namePlaceholder": "例如 Bloomly Marketing",
+          "industry": "行业",
+          "industryPlaceholder": "选择行业",
+          "industries": {
+            "ecommerce": "电子商务",
+            "saas": "SaaS",
+            "agency": "代理机构",
+            "education": "教育",
+            "healthcare": "医疗健康",
+            "finance": "金融",
+            "travel": "旅游",
+            "hospitality": "酒店餐饮",
+            "other": "其他"
+          },
+          "size": "团队规模",
+          "sizePlaceholder": "选择团队规模",
+          "timezone": "时区",
+          "timezoneHint": "输入以搜索任意时区。日程和报表将使用该时区。",
+          "currency": "币种",
+          "currencyHint": "消息钱包的计费币种。印度默认为 INR，其他国家默认为 USD。钱包一旦使用后便无法更改。",
+          "currencyNone": "未设置",
+          "currencyPlaceholder": "搜索币种",
+          "currencyEmpty": "没有匹配的币种。",
+          "phone": "手机号码",
+          "phoneHint": "我们会用它就账户和重要更新与你联系。",
+          "continue": "继续",
+          "saving": "正在保存",
+          "errors": {
+            "nameInvalid": "请输入 2 到 120 个字符的工作区名称。",
+            "timezoneRequired": "请选择时区。",
+            "timezoneInvalid": "请从列表中选择时区。",
+            "phoneRequired": "请输入你的手机号码。",
+            "phoneInvalid": "请输入与所选国家/地区相符的有效手机号码。",
+            "invalid": "此值无效。",
+            "forbidden": "只有工作区管理员才能设置工作区。",
+            "countryRequired": "请选择国家/地区。",
+            "countryInvalid": "请从列表中选择国家/地区。",
+            "currencyInvalid": "该币种不可用，或计费币种已在使用中。如需更改，请联系支持团队。"
+          },
+          "country": "国家/地区",
+          "countryHint": "你的企业所在地。",
+          "countryPlaceholder": "搜索国家/地区",
+          "countryEmpty": "没有匹配的国家/地区。"
+        },
+        "plan": {
+          "title": "选择套餐",
+          "intro": "每个套餐都包含每月消息额度。可先免费开始，也可选择套餐解锁更多功能。你之后可以更改。",
+          "empty": "尚未设置任何套餐。你可以先免费开始，稍后再选择套餐。",
+          "listLabel": "可选套餐",
+          "free": "免费版",
+          "back": "返回",
+          "startFree": "免费开始 / 暂时跳过",
+          "finishing": "正在完成",
+          "welcome": "一切就绪。欢迎！"
+        }
+      },
+      "plans": {
+        "title": "套餐",
+        "description": "选择你的工作区可使用的功能范围。",
+        "currentPlan": "你的套餐",
+        "noPlan": "无套餐",
+        "trialEnds": "免费试用将于 {date} 结束",
+        "comingSoon": "选择套餐和付费功能将随计费功能上线，本版本暂未包含。在此之前，请联系支持团队，我们会将你的工作区迁移到你需要的套餐。",
+        "contactSupport": "联系支持团队",
+        "back": "返回账户",
+        "card": {
+          "popular": "最受欢迎",
+          "current": "当前套餐",
+          "free": "免费",
+          "custom": "自定义",
+          "lifetime": "一次性",
+          "messagesUnlimited": "不限消息数量",
+          "messagesLimited": "{count, number} 条消息 / 月",
+          "chipsLabel": "包含的功能",
+          "period": {
+            "days": "{count, plural, other {/ # 天}}",
+            "weeks": "{count, plural, other {/ # 周}}",
+            "months": "{count, plural, other {/ # 个月}}",
+            "years": "{count, plural, other {/ # 年}}"
+          },
+          "chips": {
+            "analytics": "数据分析",
+            "automation": "自动化",
+            "ai_assistants": "AI 助手",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "calling": "WhatsApp 通话",
+            "remove_branding": "白标",
+            "sales_pipeline": "销售管道",
+            "appointment_booking": "预约",
+            "chatbot_widgets": "聊天机器人小组件",
+            "wa_storefront": "WhatsApp 商品目录",
+            "inbox_sla": "收件箱 SLA",
+            "inbox_routing": "收件箱路由",
+            "waba_calling": "WhatsApp 通话",
+            "inbox_kanban": "收件箱看板",
+            "team_performance": "团队绩效",
+            "scheduled_messages": "定时消息",
+            "whatsapp_warmer": "WhatsApp 养号",
+            "marketplace": "应用市场",
+            "lead_sources": "线索来源",
+            "team_chat": "团队聊天",
+            "public_api": "公开 API",
+            "outbound_webhooks": "出站 Webhook",
+            "storefront_builder": "店铺构建器",
+            "invoicing": "开具发票",
+            "forms_and_links": "表单和链接",
+            "extra_channels": "Telegram、Facebook 和 Instagram",
+            "form_builder": "表单",
+            "waba_groups": "WhatsApp 群组"
+          },
+          "cta": {
+            "continueFree": "继续免费使用",
+            "talkToSales": "联系销售",
+            "upgrade": "升级到 {name}",
+            "downgradeUnavailable": "无法降级",
+            "downgradeHint": "无法在线降级。如需切换到更低的套餐，请联系支持团队。",
+            "working": "处理中"
+          }
+        }
+      },
+      "mailFailure": {
+        "not_configured": "此平台尚未设置邮件发送功能。请联系你的管理员。",
+        "auth_failed": "邮件服务器拒绝了我们的登录。请联系管理员检查邮件设置。",
+        "connection_refused": "邮件服务器未接受连接。请稍后重试，或联系你的管理员。",
+        "timeout": "邮件服务器响应超时。你可以立即重试。",
+        "transport_error": "邮件无法提交给邮件服务器。你可以立即重试。",
+        "unknown": "邮件发送失败，原因不明。你可以立即重试。"
+      }
+    }
+  }
+}

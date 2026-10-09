@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "关闭"
+    },
+    "events": {
+      "contact_created": "联系人已创建",
+      "contact_updated": "联系人已更新",
+      "contact_deleted": "联系人已删除",
+      "contact_tag_added": "为联系人添加了标签",
+      "contact_opted_in": "联系人已同意订阅",
+      "deal_stage_changed": "交易已移至其他阶段",
+      "task_created": "任务已创建",
+      "task_assigned": "任务已分配",
+      "template_status_changed": "模板状态已更改",
+      "device_status_changed": "设备状态已更改",
+      "conversation_reopened": "会话已重新打开"
+    },
+    "page": {
+      "title": "Webhook",
+      "subtitle": "将此工作区的事件实时发送到你自己的系统。每次投递都是带签名的 JSON POST 请求,若服务器未响应则会重试。",
+      "back": "集成与开发者",
+      "add": "添加 Webhook",
+      "list": "Webhook",
+      "emptyTitle": "暂无 Webhook",
+      "empty": "添加端点以接收事件,例如新联系人或交易阶段变更。",
+      "noAccess": "你没有访问 Webhook 的权限。",
+      "loadFailed": "无法加载 Webhook。",
+      "retry": "重试",
+      "allEvents": "所有事件",
+      "signed": "已签名",
+      "health": {
+        "off": "关闭",
+        "failing": "失败中",
+        "healthy": "正常",
+        "idle": "暂无投递"
+      },
+      "activeFor": "已启用:{name}",
+      "lastDelivery": "上次投递 {when},响应 {status}",
+      "noDeliveries": "尚未投递任何内容",
+      "noAnswer": "无响应",
+      "counts": "已投递 {ok},失败 {failed}",
+      "lastError": "上次错误:{error}",
+      "deliveries": "投递",
+      "test": "发送测试",
+      "edit": "编辑",
+      "delete": "删除",
+      "cancel": "取消",
+      "deleteTitle": "删除此 Webhook?",
+      "deleteMessage": "{name} 将不再接收事件,其投递日志也将被删除。此操作无法撤销。",
+      "created": "已添加 Webhook。",
+      "saved": "Webhook 已保存。",
+      "deleted": "Webhook 已删除。",
+      "deleteFailed": "无法删除该 Webhook。请重试。",
+      "toggleFailed": "无法保存更改。请重试。",
+      "testOk": "测试已投递(响应 {status})。",
+      "testFailed": "测试失败:{reason}",
+      "testError": "无法发送测试。请重试。"
+    },
+    "dialog": {
+      "addTitle": "添加 Webhook",
+      "editTitle": "编辑 Webhook",
+      "close": "关闭",
+      "name": "名称",
+      "nameHint": "可选:为此 Webhook 设置一个标签,例如接收它的系统。",
+      "url": "端点网址",
+      "urlHint": "可从互联网访问的 https 地址。将拒绝私有及内部地址。",
+      "urlProblem": {
+        "empty": "请输入端点网址。",
+        "tooLong": "网址过长。",
+        "notHttps": "网址必须以 https:// 开头。",
+        "invalid": "这不是有效的网址。"
+      },
+      "secret": "签名密钥",
+      "secretHint": "可选。设置后,每次投递都会附带可供你的服务器验证的签名。此密钥之后将不再显示。",
+      "secretSetHint": "已设置密钥。留空即可保留,或输入新密钥以替换。",
+      "secretKeep": "未更改",
+      "removeSecret": "移除签名密钥(投递将不再签名)",
+      "events": "事件",
+      "allEvents": "所有事件",
+      "pickEvents": "请至少选择一个事件,或选择所有事件。",
+      "active": "已启用",
+      "cancel": "取消",
+      "create": "添加 Webhook",
+      "save": "保存更改",
+      "failed": "无法保存 Webhook，请重试。"
+    },
+    "deliveries": {
+      "title": "投递记录：{name}",
+      "close": "关闭",
+      "empty": "暂无投递记录。点击“发送测试”即可生成一条。",
+      "failed": "无法加载投递记录。",
+      "when": "时间",
+      "event": "事件",
+      "result": "响应",
+      "time": "时间",
+      "attempt": "尝试",
+      "test": "测试",
+      "noAnswer": "无响应"
+    }
+  }
+}

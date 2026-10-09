@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Field } from '../kit';
 import type { FormComponent } from '../types';
 import {
@@ -13,10 +14,13 @@ import {
   readRows,
 } from './shared';
 
+const NS = 'flb.builder.formsChannels.facebook';
+
 /** Facebook Messenger limits: a generic-template carousel holds up to 10 elements. */
 const MAX_CARDS = 10;
 
 export const FbGalleryForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
   const cards = readRows(p.data.cards);
   const setC = (i: number, k: string, val: string) =>
     p.set(
@@ -25,20 +29,16 @@ export const FbGalleryForm: FormComponent = (p) => {
     );
   return (
     <>
-      <Field
-        label="Intro message (optional)"
-        hint="Sent as a DM just before the carousel. Leave blank to send only the cards."
-      >
+      <Field label={t('intro')} hint={t('galleryIntroHint')}>
         {Ta(p, 'intro', '', 2)}
       </Field>
-      <Field
-        label="Cards (max 10)"
-        hint="A Messenger generic-template carousel. Each card shows an image, title, subtitle and an optional URL button."
-      >
+      <Field label={t('cards', { max: MAX_CARDS })} hint={t('cardsHint')}>
         {cards.map((c, i) => (
           <div key={i} className="mb-2 space-y-1.5 rounded-lg border border-border p-2">
             <div className="flex items-center gap-2">
-              <span className="font-mono text-[10px] text-muted-foreground">Card {i + 1}</span>
+              <span className="font-mono text-[10px] text-muted-foreground">
+                {t('card', { n: i + 1 })}
+              </span>
               <span className="ml-auto">
                 <RemoveButton
                   onClick={() =>
@@ -50,28 +50,32 @@ export const FbGalleryForm: FormComponent = (p) => {
                 />
               </span>
             </div>
-            <RowInput value={c.title} onChange={(v) => setC(i, 'title', v)} placeholder="Title" />
+            <RowInput
+              value={c.title}
+              onChange={(v) => setC(i, 'title', v)}
+              placeholder={t('title')}
+            />
             <RowInput
               value={c.subtitle}
               onChange={(v) => setC(i, 'subtitle', v)}
-              placeholder="Subtitle (optional)"
+              placeholder={t('subtitle')}
             />
             <RowInput
               value={c.imageUrl}
               onChange={(v) => setC(i, 'imageUrl', v)}
-              placeholder="Image URL (https://…)"
+              placeholder={t('imageUrl')}
             />
             <div className="flex gap-2">
               <RowInput
                 value={c.buttonLabel}
                 onChange={(v) => setC(i, 'buttonLabel', v)}
-                placeholder="Button label"
+                placeholder={t('buttonLabel')}
                 className="flex-1"
               />
               <RowInput
                 value={c.buttonUrl}
                 onChange={(v) => setC(i, 'buttonUrl', v)}
-                placeholder="Button URL"
+                placeholder={t('buttonUrl')}
                 className="flex-1"
               />
             </div>
@@ -88,7 +92,7 @@ export const FbGalleryForm: FormComponent = (p) => {
               )
             }
           >
-            Add card
+            {t('addCard')}
           </AddLink>
         ) : null}
       </Field>
@@ -97,6 +101,7 @@ export const FbGalleryForm: FormComponent = (p) => {
 };
 
 export const FbProductsForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
   const items = readRows(p.data.products);
   const setP = (i: number, k: string, val: string) =>
     p.set(
@@ -105,14 +110,16 @@ export const FbProductsForm: FormComponent = (p) => {
     );
   return (
     <>
-      <Field label="Intro message (optional)" hint="Sent as a DM just before the product carousel.">
-        {Ta(p, 'intro', 'Here are some products you might like:', 2)}
+      <Field label={t('intro')} hint={t('productsIntroHint')}>
+        {Ta(p, 'intro', t('productsIntroPlaceholder'), 2)}
       </Field>
-      <Field label="Products (max 10)" hint="Sends as a Messenger shoppable carousel.">
+      <Field label={t('products', { max: MAX_CARDS })} hint={t('productsHint')}>
         {items.map((it, i) => (
           <div key={i} className="mb-2 space-y-1.5 rounded-lg border border-border p-2">
             <div className="flex items-center gap-2">
-              <span className="font-mono text-[10px] text-muted-foreground">Product {i + 1}</span>
+              <span className="font-mono text-[10px] text-muted-foreground">
+                {t('product', { n: i + 1 })}
+              </span>
               <span className="ml-auto">
                 <RemoveButton
                   onClick={() =>
@@ -127,22 +134,22 @@ export const FbProductsForm: FormComponent = (p) => {
             <RowInput
               value={it.title}
               onChange={(v) => setP(i, 'title', v)}
-              placeholder="Product name"
+              placeholder={t('productName')}
             />
             <RowInput
               value={it.subtitle}
               onChange={(v) => setP(i, 'subtitle', v)}
-              placeholder="Price / description (optional)"
+              placeholder={t('priceDescription')}
             />
             <RowInput
               value={it.imageUrl}
               onChange={(v) => setP(i, 'imageUrl', v)}
-              placeholder="Image URL (https://…)"
+              placeholder={t('imageUrl')}
             />
             <RowInput
               value={it.url}
               onChange={(v) => setP(i, 'url', v)}
-              placeholder="Product page URL (for the View button)"
+              placeholder={t('productUrl')}
             />
           </div>
         ))}
@@ -152,34 +159,40 @@ export const FbProductsForm: FormComponent = (p) => {
               p.set('products', items.concat([{ title: '', subtitle: '', imageUrl: '', url: '' }]))
             }
           >
-            Add product
+            {t('addProduct')}
           </AddLink>
         ) : null}
       </Field>
-      <OrderDetailsFields p={p} detailsHint="Only appears on products that have a URL." />
+      <OrderDetailsFields p={p} detailsHint={t('detailsHint')} />
     </>
   );
 };
 
-export const FbLeadForm: FormComponent = (p) => <LeadForm p={p} askName="Ask question" />;
+export const FbLeadForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  return <LeadForm p={p} askName={t('leadAskName')} />;
+};
 
-export const FbReplyCommentForm: FormComponent = (p) => (
-  <Field
-    label="Public reply"
-    hint="Posted as a public reply under the comment that triggered the flow."
-  >
-    {Ta(p, 'text', 'Thanks! Just sent you a DM.', 2)}
-  </Field>
-);
+export const FbReplyCommentForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  return (
+    <Field label={t('publicReply')} hint={t('publicReplyHint')}>
+      {Ta(p, 'text', t('replyPlaceholder'), 2)}
+    </Field>
+  );
+};
 
-export const FbToWhatsappForm: FormComponent = (p) => (
-  <WhatsappHandoffForm
-    p={p}
-    platform="Facebook"
-    surface="Messenger conversation"
-    dmName="Messenger"
-    // WaDesk's exclusion list: LINE, WeChat and Viber flows stay offered (QUIRK).
-    excludeChannels={['instagram', 'facebook', 'tiktok', 'telegram', 'email']}
-    prefillDefault="Hi! I came from Facebook"
-  />
-);
+export const FbToWhatsappForm: FormComponent = (p) => {
+  const t = useTranslations(NS);
+  return (
+    <WhatsappHandoffForm
+      p={p}
+      platform="Facebook"
+      surface={t('surface')}
+      dmName={t('dmName')}
+      // WaDesk's exclusion list: LINE, WeChat and Viber flows stay offered (QUIRK).
+      excludeChannels={['instagram', 'facebook', 'tiktok', 'telegram', 'email']}
+      prefillDefault={t('prefillDefault')}
+    />
+  );
+};

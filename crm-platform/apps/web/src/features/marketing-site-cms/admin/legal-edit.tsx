@@ -23,9 +23,10 @@ export function LegalEdit({ slug }: { slug: string }) {
 
 /** A section row can be previewed as the HTML it holds, in a frame that cannot run scripts or reach the app. */
 function SectionPreview({ html }: { html: string }) {
+  const t = useTranslations(`${NS}.legal`);
   return (
     <iframe
-      title="preview"
+      title={t('previewTitle')}
       sandbox=""
       srcDoc={`<!doctype html><meta charset="utf-8"><body style="font:14px/1.6 system-ui;margin:12px">${html}</body>`}
       className="h-48 w-full rounded-md border border-border bg-white"
@@ -146,7 +147,7 @@ function Editor({ page }: { page: LegalPageAdmin }) {
               id="lp-upd"
               value={updatedLabel}
               onChange={(e) => setUpdatedLabel(e.target.value)}
-              placeholder="March 14, 2026"
+              placeholder={t('updatedPlaceholder')}
             />
           </Field>
           <Field label={t('effectiveLabel')} htmlFor="lp-eff">
@@ -154,7 +155,7 @@ function Editor({ page }: { page: LegalPageAdmin }) {
               id="lp-eff"
               value={effectiveLabel}
               onChange={(e) => setEffectiveLabel(e.target.value)}
-              placeholder="April 1, 2026"
+              placeholder={t('effectivePlaceholder')}
             />
           </Field>
         </div>

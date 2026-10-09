@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "Nie można użyć kwoty, ilości ani stawki na fakturze. Sprawdź zaznaczone pola.",
+        "INV_TAX_RATE_INVALID": "Jednej ze stawek podatku nie można dziś użyć: jest nieaktywna lub poza swoim okresem obowiązywania. Wybierz inną stawkę.",
+        "INV_NOT_DRAFT": "Ta faktura została wystawiona, więc nie można jej już edytować. Zduplikuj ją, aby utworzyć poprawioną.",
+        "INV_ORDER_LINKED": "Ta faktura należy do zamówienia sprzedaży, dlatego trzeba zmienić to zamówienie.",
+        "SALESDOC_INVALID_TRANSITION": "Oferta lub kosztorys nie zostały jeszcze zaakceptowane, więc nie mogą zostać zamienione na fakturę.",
+        "SALESDOC_ALREADY_CONVERTED": "Ten dokument został już zamieniony na fakturę.",
+        "SALESDOC_INVOICING_UNAVAILABLE": "Fakturowanie nie jest jeszcze dostępne na tym serwerze.",
+        "INV_LINK_UNAVAILABLE": "Ten link do faktury nie jest już dostępny."
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "Tworzenie szkicu z zaakceptowanego dokumentu...",
+      "duplicating": "Kopiowanie faktury do nowego szkicu...",
+      "openExisting": "Otwórz fakturę, która już została utworzona",
+      "backToInvoices": "Wróć do faktur",
+      "backToInvoice": "Wróć do faktury",
+      "issued": "Faktura została wystawiona.",
+      "savedNotIssued": "Szkic został zapisany, ale nie udało się wystawić faktury: {reason}",
+      "buyerCountry": "Kraj",
+      "buyerCountryHint": "Dwie litery, np. PL lub DE. Określa format numeru podatkowego, a w trybie automatycznym także podatek.",
+      "buyerTaxId": "Numer podatkowy",
+      "buyerTaxIdNamed": "Numer podatkowy ({label})",
+      "taxIdHint": "GSTIN, numer VAT, EIN... Sprawdzane podczas wpisywania.",
+      "taxIdExpected": "Oczekiwano: {label}, np. {example}.",
+      "taxIdUnchecked": "Nie znamy formatu dla tego kraju, więc numer zostanie zapisany tak, jak wpisano.",
+      "taxIdValid": "{label} wygląda poprawnie (sprawdzono {level, select, checksum {format i cyfry kontrolne} other {tylko format}}). To nie potwierdza, że numer jest zarejestrowany.",
+      "taxIdInvalid": "{label} wygląda nieprawidłowo (sprawdzono {level, select, checksum {format i cyfry kontrolne} other {tylko format}}).",
+      "taxIdStillSave": "Nadal możesz go zapisać.",
+      "docType": "Dokument",
+      "docTypes": {
+        "tax_invoice": "Faktura VAT",
+        "proforma": "Faktura proforma"
+      },
+      "noDueDate": "Domyślne warunki płatności",
+      "reference": "Numer referencyjny",
+      "referenceHint": "Numer zamówienia nabywcy lub inne oznaczenie do wydruku.",
+      "tax": "Podatek",
+      "taxMode": "Sposób obliczania podatku",
+      "taxModes": {
+        "rates": "Stawki podatku",
+        "auto": "Automatyczny"
+      },
+      "taxModeHint": {
+        "rates": "Wybierz stawkę podatku dla każdej pozycji. Pozycja pozostawiona jako domyślna używa domyślnej stawki przestrzeni roboczej.",
+        "auto": "Silnik podatkowy ustala podatek każdej pozycji na podstawie kraju, kraju nabywcy i numeru podatkowego, rodzaju dostawy oraz miejsca dostawy. Zapisywany jest wynik serwera."
+      },
+      "sellerCountry": "Twój kraj (z profilu fakturowania)",
+      "sellerCountryMissing": "Automatyczny podatek wymaga kraju w profilu fakturowania (kraju z gotowymi ustawieniami podatkowymi). Najpierw ustaw go tam.",
+      "supplyType": "Rodzaj dostawy",
+      "supplyTypes": {
+        "goods": "Towary",
+        "services": "Usługi",
+        "digital": "Usługi cyfrowe"
+      },
+      "placeOfSupply": "Miejsce dostawy",
+      "placeOfSupplyHint": "Województwo lub region kraju {country}; pozostaw pierwszy wybór, aby obejmowało cały kraj.",
+      "placeSameCountry": "Cały kraj",
+      "placeRegionPlaceholder": "Kod regionu (opcjonalnie)",
+      "reverseCharge": "Odwrotne obciążenie",
+      "reverseChargeHint": "Podatek rozlicza nabywca, dlatego na tej fakturze nie jest naliczany.",
+      "shipping": "Wysyłka ({currency})",
+      "shippingHint": "Nigdy nie jest objęta rabatem ani podatkiem.",
+      "legalNotes": "Uwagi prawne",
+      "legalNotesHint": "Treść wymagana na dokumencie, np. oświadczenie o odwrotnym obciążeniu. Tryb automatyczny wypełnia ją, gdy wymaga tego prawo.",
+      "problems": {
+        "contactRequired": "Wybierz kontakt lub wpisz nazwę nabywcy.",
+        "currencyInvalid": "Wpisz trzyliterowy kod waluty.",
+        "issueDateInvalid": "Wpisz prawidłową datę wystawienia.",
+        "dueBeforeIssue": "Termin płatności nie może być wcześniejszy niż data wystawienia.",
+        "dueInvalid": "Wpisz prawidłowy termin płatności.",
+        "noLines": "Przed wystawieniem dodaj co najmniej jedną pozycję.",
+        "discountInvalid": "Wpisz prawidłowy rabat (procent od 0 do 100 lub kwotę).",
+        "shippingInvalid": "Wpisz prawidłową kwotę wysyłki.",
+        "emailInvalid": "Wpisz prawidłowy adres e-mail.",
+        "amountZero": "Suma faktury musi być większa od zera.",
+        "amountInvalid": "Kwota jest zbyt duża lub ma za dużo miejsc po przecinku dla tej waluty.",
+        "countryInvalid": "Użyj dwuliterowego kodu kraju.",
+        "regionInvalid": "Użyj krótkiego kodu regionu, do trzech liter lub cyfr.",
+        "autoNeedsSellerCountry": "Ustaw swój kraj w profilu fakturowania, aby korzystać z automatycznego podatku.",
+        "descriptionRequired": "Opisz tę pozycję.",
+        "qtyInvalid": "Wpisz ilość większą od zera, z najwyżej 4 miejscami po przecinku.",
+        "priceInvalid": "Wpisz prawidłową cenę z miejscami po przecinku dozwolonymi dla tej waluty.",
+        "lineDiscountInvalid": "Wpisz prawidłowy rabat dla pozycji.",
+        "hsnRequired": "Wpisz kod HSN/SAC. Twój kraj wymaga go przy każdej pozycji.",
+        "hsnInvalid": "Kod HSN/SAC ma od 2 do 12 liter lub cyfr.",
+        "taxRateRemoved": "Stawka podatku tej pozycji została usunięta. Wybierz aktualną."
+      }
+    },
+    "lines": {
+      "discount": "Rabat",
+      "discountKind": "Rodzaj rabatu",
+      "taxAuto": "Automatyczny",
+      "taxDefault": "Domyślna ({rate})",
+      "taxDefaultNone": "Domyślna (bez podatku)",
+      "removedRateOption": "{rate}, usunięta",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "Kod"
+    },
+    "totals": {
+      "shipping": "Wysyłka",
+      "taxIncluded": "{name}, wliczony",
+      "taxOn": "od {base}",
+      "reverseCharge": "Odwrotne obciążenie: podatek nie jest naliczany.",
+      "includesTotal": "Podatek wliczony w ceny"
+    },
+    "taxWhy": {
+      "title": "Dlaczego ten podatek?",
+      "preview": "Podgląd",
+      "previewNote": "Obliczane w przeglądarce podczas edycji. Liczy się to, co serwer ustali przy zapisie.",
+      "taxFree": "Od tej dostawy nie jest naliczany podatek",
+      "warnings": "Sprawdź ponownie",
+      "placeOfSupply": "Miejsce dostawy",
+      "reverseCharge": "Odwrotne obciążenie",
+      "reverseChargeNote": "Podatek rozlicza nabywca, dlatego nie jest naliczany.",
+      "documentNotes": "Drukowane na dokumencie",
+      "disclaimer": "Stawki i zasady są wartościami domyślnymi, które należy sprawdzić u księgowego lub w urzędzie skarbowym. To nie jest porada prawna ani podatkowa."
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "Faktura VAT",
+        "proforma": "Faktura proforma",
+        "receipt": "Paragon"
+      },
+      "sellerTaxId": "Numer podatkowy",
+      "registrationNo": "Nr rej.",
+      "buyerTaxId": "Numer podatkowy",
+      "reference": "Numer referencyjny",
+      "placeOfSupply": "Miejsce dostawy",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "Rabat {amount}",
+      "shipping": "Wysyłka",
+      "credited": "Skorygowano",
+      "taxSummary": "Podsumowanie podatku",
+      "taxName": "Podatek",
+      "taxBase": "Podstawa opodatkowania",
+      "taxAmount": "Podatek",
+      "taxInclusive": "wliczony",
+      "reverseCharge": "Odwrotne obciążenie: podatek rozlicza nabywca.",
+      "paymentsReceived": "Otrzymane płatności",
+      "refund": "zwrot",
+      "bankDetails": "Dane bankowe",
+      "voidReason": "Anulowano: {reason}"
+    },
+    "public": {
+      "notFoundTitle": "Nie znaleziono linku",
+      "notFoundMessage": "Ten link do faktury nie istnieje. Sprawdź, czy skopiowano go w całości, lub poproś nadawcę o ponowne wysłanie linku.",
+      "unavailableTitle": "Ten link jest niedostępny",
+      "unavailableMessage": "Link do faktury został wycofany lub wygasł. Poproś nadawcę o nowy link.",
+      "voidReason": "Powód: {reason}",
+      "printable": "Otwórz stronę do wydruku",
+      "amountDueFooter": "Kwota do zapłaty: {amount}",
+      "noPayOptions": "Sprzedawca nie skonfigurował płatności online. Skontaktuj się z nim, aby ustalić płatność.",
+      "payAmount": "Kwota do zapłaty ({currency})",
+      "payAmountHint": "Wpisano całe saldo. Wpisz mniejszą kwotę, aby zapłacić część.",
+      "amountErrors": {
+        "invalid": "Wpisz kwotę większą od zera.",
+        "tooMuch": "Kwota nie może być większa niż kwota do zapłaty."
+      },
+      "linkUnavailable": "Ten link do faktury nie jest już dostępny, więc nie można z niego zapłacić.",
+      "payFailed": "Nie udało się rozpocząć płatności. Spróbuj ponownie za chwilę.",
+      "payUnavailable": "Płatność online dla tej faktury jest obecnie niedostępna.",
+      "redirecting": "Przekierowujemy na stronę płatności...",
+      "payInstructions": "Zapłać zgodnie z opisem poniżej.",
+      "bankTransfer": "Przelew bankowy",
+      "copyInstructions": "Skopiuj instrukcje",
+      "copyValue": "Kopiuj: {label}"
+    }
+  }
+}

@@ -1,0 +1,1066 @@
+{
+  "appointments": {
+    "nav": {
+      "appointments": "Randevular"
+    },
+    "common": {
+      "dismiss": "Gizle",
+      "loading": "Yükleniyor",
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "close": "Kapat",
+      "back": "Geri",
+      "minutes": "{count, plural, one {# dakika} other {# dakika}}",
+      "minShort": "{count} dk",
+      "hoursMinutes": "{hours} sa {minutes} dk",
+      "hours": "{hours} sa"
+    },
+    "status": {
+      "pending": "Beklemede",
+      "confirmed": "Onaylandı",
+      "cancelled": "İptal edildi",
+      "completed": "Tamamlandı",
+      "no_show": "Gelmedi",
+      "declined": "Reddedildi"
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapma izniniz yok.",
+      "signedOut": "Oturumunuz sona erdi. Devam etmek için tekrar oturum açın.",
+      "conflict": "Bu başka biri tarafından değiştirildi. En son sürümü görmek için sayfayı yenileyin.",
+      "validation": "Bazı bilgiler geçerli değil. Vurgulanan alanları kontrol edin.",
+      "unavailable": "Randevular bu sunucuda henüz kullanılamıyor.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "notFound": "Bulunamadı. Kaldırılmış olabilir.",
+      "planDisabled": "Randevular planınıza dahil değil.",
+      "slotTaken": "Bu saat az önce alındı. Lütfen başka bir saat seçin.",
+      "gone": "Bu rezervasyon artık değiştirilemez.",
+      "unexpected": "Bir şeyler ters gitti. Birazdan tekrar deneyin.",
+      "requestId": "İstek kimliği",
+      "retry": "Tekrar dene",
+      "invalidTransition": "Bu rezervasyon, bu işlemin yapılabileceği bir durumda değil. Nerede olduğunu görmek için sayfayı yenileyin.",
+      "notStarted": "Bu işlem yalnızca rezervasyon başladıktan sonra yapılabilir.",
+      "alreadyStarted": "Bu rezervasyon zaten başladı, bu yüzden artık değiştirilemez.",
+      "bookingOff": "Bu hizmet için şu anda rezervasyon yapılamıyor.",
+      "notDeletable": "Gelecek rezervasyonları olduğu sürece bu silinemez."
+    },
+    "picker": {
+      "timeZone": "Saat dilimi",
+      "previousMonth": "Önceki ay",
+      "nextMonth": "Sonraki ay",
+      "pickDay": "Bir gün seçin",
+      "times": "Uygun saatler",
+      "timesAvailable": "{count, plural, one {# saat uygun} other {# saat uygun}}",
+      "seatsLeft": "{count} kaldı",
+      "noTimes": "Önümüzdeki günlerde boş saat yok.",
+      "noTimesDay": "Bu gün için saat yok. Başka bir gün seçin.",
+      "loading": "Saatler yükleniyor",
+      "loadFailed": "Saatler yüklenemedi.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "retry": "Tekrar dene",
+      "typeZone": "Bu hizmet {zone} diliminde çalışır."
+    },
+    "hours": {
+      "openDay": "{day} günü açık",
+      "daySummary": "{hours} sa {minutes} dk",
+      "closed": "Kapalı",
+      "from": "{day}, {n}. aralık, başlangıç saati",
+      "to": "{day}, {n}. aralık, bitiş saati",
+      "removeInterval": "{day} günündeki {n}. aralığı kaldır",
+      "addInterval": "Aralık ekle",
+      "copyTo": "{day} saatlerini diğer günlere kopyala",
+      "copyDay": "Şuraya kopyala",
+      "copyWeekdays": "Pazartesi - Cuma",
+      "copyAll": "Tüm günler",
+      "problems": {
+        "incomplete": "Her iki saati de doldurun.",
+        "order": "Bitiş, başlangıçtan sonra olmalıdır.",
+        "overlap": "Bu, başka bir aralıkla çakışıyor."
+      }
+    },
+    "hub": {
+      "breadcrumb": "Gezinti yolu",
+      "integrations": "Entegrasyonlar",
+      "appointments": "Randevular",
+      "title": "Rezervasyonlarınız",
+      "subtitle": "Müşterilerin sohbet içinde randevu almasını sağlayın. Hizmetleriniz, saatleriniz ve hatırlatmalarınızla bir rezervasyon türü oluşturun; müşteriler bir zaman dilimi seçer ve otomatik olarak onaylanır.",
+      "newType": "Yeni rezervasyon türü",
+      "types": "Rezervasyon türleri",
+      "settings": "Ayarlar",
+      "weekTitle": "Hafta",
+      "monthTitle": "Ay",
+      "inRange": "{count, plural, =0 {Rezervasyon yok} one {# rezervasyon} other {# rezervasyon}} görünümde",
+      "tableLabel": "Rezervasyonlar",
+      "loading": "Rezervasyonlar yükleniyor",
+      "useSampleData": "Örnek verileri kullan (geliştirme)",
+      "empty": {
+        "upcoming": {
+          "title": "Yaklaşan rezervasyon yok",
+          "message": "Hizmetleriniz ve saatlerinizle bir rezervasyon türü oluşturun, ardından herhangi bir akışa \"Randevu al\" düğümü ekleyin. Onaylanan rezervasyonlar burada görünür."
+        },
+        "past": {
+          "title": "Geçmiş rezervasyon yok",
+          "message": "Gerçekleşmiş rezervasyonlar sonuçlarıyla birlikte burada görünür."
+        },
+        "filtered": {
+          "title": "Eşleşen rezervasyon yok",
+          "message": "Arama ve filtrelerle eşleşen bir şey yok. Tüm rezervasyonları görmek için bunları temizleyin."
+        }
+      },
+      "resetFilters": "Filtreleri temizle",
+      "truncated": "Bu aralığın ilk {count} rezervasyonu gösteriliyor. Gerisini görmek için filtreleri daraltın.",
+      "showing": "{count, plural, one {# rezervasyon gösteriliyor} other {# rezervasyon gösteriliyor}}",
+      "loadMore": "Daha fazla yükle",
+      "endOfList": "Listenin sonu",
+      "cancelTitle": "Bu randevu iptal edilsin mi?",
+      "cancelMessage": "Rezervasyon iptal edilir ve saati yeniden boşa çıkar. Müşteriye bildirilir ve hatırlatmalar kaldırılır.",
+      "cancelConfirm": "Randevuyu iptal et",
+      "keep": "Koru",
+      "declineTitle": "Bu talep reddedilsin mi?",
+      "declineMessage": "Müşteriye talebin reddedildiği bildirilir ve saat yeniden boşa çıkar.",
+      "declineConfirm": "Talebi reddet"
+    },
+    "tabs": {
+      "label": "Rezervasyon listeleri",
+      "upcoming": "Yaklaşan",
+      "past": "Geçmiş",
+      "count": "{count, plural, one {# rezervasyon} other {# rezervasyon}}"
+    },
+    "toolbar": {
+      "label": "Filtreler ve görünümler",
+      "search": "Müşteri, telefon, e-posta veya hizmet ara",
+      "status": "Durum",
+      "allStatuses": "Tüm durumlar",
+      "type": "Rezervasyon türü",
+      "allTypes": "Tüm rezervasyon türleri",
+      "clear": "Temizle",
+      "navigate": "Takvim gezintisi",
+      "previous": "Önceki",
+      "next": "Sonraki",
+      "today": "Bugün",
+      "refresh": "Yenile",
+      "view": "Görünüm",
+      "views": {
+        "list": "Liste",
+        "week": "Hafta",
+        "month": "Ay"
+      }
+    },
+    "table": {
+      "when": "Zaman",
+      "customer": "Müşteri",
+      "service": "Hizmet",
+      "status": "Durum",
+      "actions": "İşlemler",
+      "today": "Bugün",
+      "tomorrow": "Yarın",
+      "yesterday": "Dün",
+      "rowLabel": "Rezervasyonu aç: {title}",
+      "noName": "Ad yok",
+      "needsReview": "İnceleme gerekiyor"
+    },
+    "row": {
+      "moreFor": "{title} için diğer işlemler",
+      "open": "Aç",
+      "confirm": "Onayla",
+      "complete": "Tamamlandı olarak işaretle",
+      "noShow": "Gelmedi olarak işaretle",
+      "reschedule": "Yeniden zamanla",
+      "copyLink": "Yönetim bağlantısını kopyala",
+      "cancel": "İptal",
+      "decline": "Reddet"
+    },
+    "calendar": {
+      "emptyWeek": "Bu hafta rezervasyon yok.",
+      "monthGrid": "Aylık takvim",
+      "more": "+{count} daha",
+      "dayAgenda": "Seçilen günün rezervasyonları",
+      "emptyDay": "Bu gün rezervasyon yok."
+    },
+    "drawer": {
+      "loading": "Rezervasyon yükleniyor",
+      "close": "Kapat",
+      "noType": "Silinmiş rezervasyon türü",
+      "pendingHint": "Onay bekleniyor",
+      "minutes": "{count} dk",
+      "customerTime": "Müşteri için: {time} ({zone})",
+      "confirm": "Onayla",
+      "complete": "Tamamlandı olarak işaretle",
+      "noShow": "Gelmedi",
+      "reschedule": "Yeniden zamanla",
+      "cancel": "İptal",
+      "customer": "Müşteri",
+      "openContact": "Kişiyi aç",
+      "linkedContact": "Bağlı kişi",
+      "noName": "Ad verilmedi",
+      "where": "Yer",
+      "joinCall": "Görüntülü görüşmeye katıl",
+      "answers": "Rezervasyon sorularının yanıtları",
+      "noAnswers": "Bu hizmet soru sormadı veya müşteri hiçbirini yanıtlamadı.",
+      "payment": "Ödeme",
+      "depositPaid": "{amount} ödendi",
+      "notes": "Notlar",
+      "notesPlaceholder": "Bu rezervasyon hakkında özel notlar",
+      "saveNotes": "Notları kaydet",
+      "reminders": "Hatırlatmalar",
+      "noReminders": "Bu hizmet için hatırlatma ayarlanmamış.",
+      "before": "{count, plural, one {# dakika önce} other {# dakika önce}}",
+      "reminder": {
+        "scheduled": "Zamanlandı",
+        "skipped": "Gönderilmedi",
+        "due": "Zamanı geldi"
+      },
+      "manageLink": "Yönetim bağlantısı",
+      "manageHint": "Müşterinin kendi başına yeniden zamanlayabilmesi veya iptal edebilmesi için bu bağlantıyı onunla paylaşın.",
+      "copy": "Kopyala",
+      "openLink": "Yönetim sayfasını aç",
+      "noManageLink": "Bu rezervasyonun yönetim bağlantısı yok.",
+      "source": "Rezervasyon kaynağı",
+      "bookedOn": "Rezervasyon tarihi",
+      "cancelTitle": "Bu randevu iptal edilsin mi?",
+      "cancelMessage": "Rezervasyon iptal edilir ve saati yeniden boşa çıkar. Müşteriye bildirilir ve hatırlatmalar kaldırılır.",
+      "cancelConfirm": "Randevuyu iptal et",
+      "keep": "Koru",
+      "decline": "Reddet",
+      "host": "Ev sahibi",
+      "needsReview": "Bitti, henüz işaretlenmedi",
+      "needsReviewHint": "Bu rezervasyon sona erdi ve kimse onu tamamlandı veya gelmedi olarak işaretlemedi.",
+      "cancelledBy": "Bu rezervasyonu {who} iptal etti",
+      "cancelledByStaff": "Personel",
+      "cancelledByInvitee": "Müşteri",
+      "cancelledBySystem": "Sistem",
+      "cancelReason": "Neden",
+      "declineTitle": "Bu talep reddedilsin mi?",
+      "declineMessage": "Müşteriye talebin reddedildiği bildirilir ve saat yeniden boşa çıkar.",
+      "declineConfirm": "Talebi reddet",
+      "remindersNote": "Hatırlatmalar rezervasyon türünü izler. Teslimat hatırlatma bazında izlenmez."
+    },
+    "source": {
+      "chat": "Bir sohbet akışı",
+      "manual": "Personel",
+      "api": "API",
+      "link": "Rezervasyon sayfası"
+    },
+    "payment": {
+      "none": "Ödeme yok",
+      "pending": "Ödeme bekleniyor",
+      "paid": "Ödendi",
+      "refunded": "İade edildi",
+      "partial": "Kısmen ödendi"
+    },
+    "reschedule": {
+      "eyebrow": "Yeniden zamanla",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "confirm": "Yeni saati onayla",
+      "current": "Şu an: {day}, {time} {zone}",
+      "noType": "Bu rezervasyonun rezervasyon türü silindiği için taşınabilecek boş saat yok.",
+      "taken": "Bu saat az önce alındı. Başka birini seçin.",
+      "newTime": "Yeni saat: {day}, {time}",
+      "notify": "Müşteriye yeni saati bildir"
+    },
+    "toast": {
+      "conflict": "Bu rezervasyon başka biri tarafından değiştirildi. Yeniden yüklendi.",
+      "failed": "Bu işe yaramadı.",
+      "confirmed": "Rezervasyon onaylandı.",
+      "cancelled": "Randevu iptal edildi.",
+      "completed": "Tamamlandı olarak işaretlendi.",
+      "noShow": "Gelmedi olarak işaretlendi.",
+      "notesSaved": "Notlar kaydedildi.",
+      "rescheduled": "Rezervasyon yeni saate taşındı.",
+      "linkCopied": "Yönetim bağlantısı kopyalandı.",
+      "copyFailed": "Bağlantı kopyalanamadı.",
+      "declined": "Talep reddedildi."
+    },
+    "typesList": {
+      "breadcrumb": "Gezinti yolu",
+      "appointments": "Randevular",
+      "services": "Hizmetler",
+      "title": "Rezervasyon türleri",
+      "subtitle": "Her hizmetin kendi süresi, müsaitliği, fiyatlandırması, anketi ve hatırlatmaları vardır. Müşteriler sohbetten veya kendi rezervasyon sayfasından rezervasyon yapar.",
+      "newType": "Yeni rezervasyon türü",
+      "allBookings": "Tüm rezervasyonlar",
+      "settings": "Ayarlar",
+      "toolbar": "Filtreler",
+      "search": "Rezervasyon türlerinde ara",
+      "statusFilter": "Durum",
+      "allStatuses": "Tüm durumlar",
+      "active": "Etkin",
+      "pausedLabel": "Duraklatıldı",
+      "clear": "Temizle",
+      "tableLabel": "Rezervasyon türleri",
+      "loading": "Rezervasyon türleri yükleniyor",
+      "useSampleData": "Örnek verileri kullan (geliştirme)",
+      "emptyFilteredTitle": "Eşleşen rezervasyon türü yok",
+      "emptyFiltered": "Arama ve filtreyle eşleşen bir şey yok.",
+      "emptyTitle": "Henüz rezervasyon türü yok",
+      "emptyMessage": "İlk hizmetinizi oluşturun. Süresini, saatlerini ve fiyatını ayarlayın; müşteriler sohbetten rezervasyon yapabilir.",
+      "name": "Ad",
+      "details": "Ayrıntılar",
+      "price": "Fiyat",
+      "booked": "Rezerve edilen",
+      "status": "Durum",
+      "actions": "İşlemler",
+      "minutes": "{count} dk",
+      "location": {
+        "address": "Yüz yüze",
+        "virtual": "Sanal",
+        "phone": "Telefon görüşmesi",
+        "whatsapp": "WhatsApp"
+      },
+      "capacity": "zaman dilimi başına {count, plural, one {# kontenjan} other {# kontenjan}}",
+      "approval": "Onay gerekir",
+      "free": "Ücretsiz",
+      "toggle": "Etkin: {name}",
+      "moreFor": "{name} için diğer işlemler",
+      "edit": "Düzenle",
+      "copyLink": "Herkese açık bağlantıyı kopyala",
+      "openPage": "Rezervasyon sayfasını aç",
+      "duplicate": "Çoğalt",
+      "delete": "Sil",
+      "showing": "{count, plural, one {# rezervasyon türü} other {# rezervasyon türü}}",
+      "deleteTitle": "\"{name}\" silinsin mi?",
+      "deleteMessage": "Bu rezervasyon türü silinsin mi? Mevcut rezervasyonlar kalır.",
+      "deleteConfirm": "Rezervasyon türünü sil",
+      "keep": "Koru",
+      "activated": "\"{name}\" etkin.",
+      "paused": "\"{name}\" duraklatıldı.",
+      "duplicated": "\"{name}\" oluşturuldu (duraklatıldı).",
+      "deleted": "\"{name}\" silindi.",
+      "failed": "Bu işe yaramadı.",
+      "linkCopied": "Herkese açık bağlantı kopyalandı.",
+      "copyFailed": "Bağlantı kopyalanamadı.",
+      "copyLinkFor": "{name} herkese açık bağlantısını kopyala",
+      "copyLinkPaused": "Herkese açık bağlantı almak için bu rezervasyon türünü etkinleştirin"
+    },
+    "editor": {
+      "forbidden": "Rezervasyon türü oluşturma veya düzenleme izniniz yok.",
+      "notFoundTitle": "Rezervasyon türü bulunamadı",
+      "notFound": "Bu rezervasyon türü bulunamadı. Silinmiş olabilir.",
+      "loading": "Rezervasyon türü yükleniyor",
+      "header": {
+        "back": "Rezervasyon türlerine dön",
+        "kickerNew": "Randevular / Yeni",
+        "kickerEdit": "Randevular / Düzenle",
+        "titleNew": "Rezervasyon türü oluştur",
+        "titleEdit": "Rezervasyon türünü düzenle",
+        "draft": "Taslak / kaydedilmedi",
+        "unsaved": "Kaydedilmemiş değişiklikler"
+      },
+      "steps": {
+        "label": "Adımlar",
+        "service": "Hizmet",
+        "timing": "Zamanlama",
+        "availability": "Müsaitlik",
+        "pricing": "Fiyatlandırma",
+        "messaging": "Mesajlaşma",
+        "hasProblem": "dikkat gerekiyor",
+        "stepOf": "Adım {n} / {total}: {name}"
+      },
+      "nav": {
+        "back": "Geri",
+        "cancel": "İptal",
+        "next": "İleri",
+        "create": "Rezervasyon türü oluştur",
+        "save": "Değişiklikleri kaydet",
+        "saving": "Kaydediliyor"
+      },
+      "toast": {
+        "created": "\"{name}\" rezervasyon türü oluşturuldu.",
+        "updated": "\"{name}\" rezervasyon türü güncellendi."
+      },
+      "saveError": {
+        "conflict": "Bu rezervasyon türü siz düzenlerken başka biri tarafından değiştirildi. Onların sürümünü görmek için sayfayı yenileyin. Buradaki kaydedilmemiş düzenlemeleriniz kaybolacak.",
+        "reload": "En son sürümü yükle"
+      },
+      "leave": {
+        "title": "Değişiklikler silinsin mi?",
+        "message": "Kaydedilmemiş değişiklikleriniz var. Şimdi ayrılırsanız kaybolacaklar.",
+        "discard": "Değişiklikleri sil",
+        "keep": "Düzenlemeye devam et"
+      },
+      "problems": {
+        "nameRequired": "Bu rezervasyon türü için bir ad girin.",
+        "nameTooLong": "Ad en fazla {nameMax} karakter olabilir.",
+        "slugInvalid": "Küçük harf, rakam ve tek tire kullanın; en fazla {slugMax} karakter.",
+        "durationInvalid": "Süre, {durationMin} ile {durationMax} dakika arasında bir tam sayı olmalıdır.",
+        "incrementInvalid": "Başlangıç adımı, {incrementMin} ile {incrementMax} dakika arasında bir tam sayı olmalıdır.",
+        "bufferInvalid": "0 ile {bufferMax} arasında tam sayı olarak dakika girin.",
+        "minNoticeInvalid": "0 ile {minNoticeMax} arasında tam sayı olarak dakika girin.",
+        "maxAdvanceInvalid": "{maxAdvanceMin} ile {maxAdvanceMax} arasında tam sayı olarak gün girin.",
+        "maxPerDayInvalid": "Sınır istemiyorsanız boş bırakın veya 1 ile {maxPerDayMax} arasında bir sayı girin.",
+        "capacityInvalid": "Kapasite, 1 ile {capacityMax} arasında bir tam sayı olmalıdır.",
+        "timezoneInvalid": "Geçerli bir saat dilimi seçin.",
+        "colorInvalid": "#075E54 gibi bir onaltılık renk kullanın.",
+        "feeInvalid": "150,00 gibi bir tutar girin.",
+        "taxInvalid": "En fazla iki ondalık basamakla 0 ile 100 arasında bir yüzde girin.",
+        "depositInvalid": "0'dan büyük bir kapora tutarı girin.",
+        "depositTooHigh": "Kapora toplamdan (ücret artı vergi) fazla olamaz.",
+        "cancelFeeInvalid": "25,00 gibi bir tutar girin.",
+        "cancelWindowInvalid": "0 ile {cancelWindowMax} arasında tam sayı olarak dakika girin.",
+        "reminderInvalid": "Başlangıçtan önce 1 ile {reminderMax} arasında tam dakika girin.",
+        "remindersDuplicate": "Her hatırlatmanın farklı bir zamanı olmalıdır.",
+        "remindersTooMany": "Bir rezervasyon türünde en fazla {reminders} hatırlatma olabilir.",
+        "questionLabelRequired": "Soruya bir etiket verin (en fazla {questionLabelMax} karakter).",
+        "questionsTooMany": "Bir rezervasyon türünde en fazla {questions} soru olabilir.",
+        "questionOptionsRequired": "Satır başına bir tane olacak şekilde en az bir seçenek ekleyin.",
+        "hoursInvalid": "Aşağıda işaretlenen haftalık saatleri düzeltin.",
+        "overridesInvalid": "Tarih istisnaları listesinde işaretlenen tarihleri düzeltin.",
+        "descriptionTooLong": "Açıklama en fazla {descriptionMax} karakter olabilir.",
+        "locationTooLong": "Konum en fazla {locationMax} karakter olabilir.",
+        "server": "Sunucu bu değeri kabul etmedi. Kontrol edip tekrar deneyin."
+      },
+      "service": {
+        "title": "Hizmet ayrıntıları",
+        "hint": "Hizmete ve gerçekleşeceği yere bir ad verin.",
+        "name": "Ad",
+        "namePlaceholder": "30 dk'lık demo",
+        "description": "Açıklama",
+        "descriptionPlaceholder": "Kişinin neyi rezerve ettiği, rezervasyon sayfasında gösterilir.",
+        "locationType": "Konum türü",
+        "locationTypes": {
+          "address": "Yüz yüze (adres)",
+          "virtual": "Sanal (video)",
+          "phone": "Telefon görüşmesi",
+          "whatsapp": "WhatsApp"
+        },
+        "locationValue": "Konum / adres",
+        "locationPlaceholders": {
+          "address": "Açık adres",
+          "virtual": "Video bağlantısı (isteğe bağlı)",
+          "phone": "Aranacak telefon numarası (isteğe bağlı)",
+          "whatsapp": "WhatsApp numarası (isteğe bağlı)"
+        },
+        "appearanceTitle": "Renk",
+        "appearanceHint": "Bu hizmeti takvimde ve rezervasyon sayfasında işaretler.",
+        "color": "Renk",
+        "colorSwatches": "Bir renk seçin",
+        "linkTitle": "Herkese açık bağlantı",
+        "linkHint": "Ziyaretçiler bu adresten rezervasyon yapar. Rezervasyon türü kaydedilip etkinleştirildiğinde çalışır.",
+        "slug": "Bağlantı adı",
+        "slugHint": "Siz değiştirene kadar addan oluşturulur. Küçük harf, rakam ve tire.",
+        "slugPlaceholder": "tanisma-gorusmesi",
+        "publicUrl": "Herkese açık sayfa",
+        "copy": "Bağlantıyı kopyala",
+        "copied": "Bağlantı kopyalandı.",
+        "copyFailed": "Bağlantı kopyalanamadı. Seçip elle kopyalayın.",
+        "rulesTitle": "Rezervasyon kuralları",
+        "requiresApproval": "Onay iste",
+        "requiresApprovalHint": "Yeni rezervasyonlar, ekibinizden biri onaylayana kadar Beklemede kalır.",
+        "isActive": "Etkin",
+        "isActiveHint": "Hizmeti duraklatmak için bunu kapatın: herkese açık sayfası rezervasyon almayı bırakır."
+      },
+      "timing": {
+        "title": "Zamanlama",
+        "hint": "Her rezervasyonun ne kadar süreceği ve insanların ne kadar önceden rezervasyon yapabileceği.",
+        "duration": "Süre (dk)",
+        "durationHint": "Bir rezervasyonun ne kadar sürdüğü. 60 = 1 saat.",
+        "increment": "Başlangıç adımı (dk)",
+        "incrementHint": "Sunulan başlangıç saatleri arasındaki boşluk. 30, 9:00, 9:30, 10:00 sunar.",
+        "capacity": "Kapasite (zaman dilimi başına)",
+        "capacityHint": "Aynı saati paylaşabilecek kişi sayısı. Bire bir için 1.",
+        "bufferBefore": "Önce tampon (dk)",
+        "bufferAfter": "Sonra tampon (dk)",
+        "bufferHint": "Her rezervasyonun çevresinde bırakılan boş süre.",
+        "minNotice": "Asgari bildirim (dk)",
+        "minNoticeHint": "İnsanların başlangıçtan en geç ne kadar önce rezervasyon yapabileceği. 240 = 4 saat.",
+        "maxAdvance": "En fazla şu kadar önceden (gün)",
+        "maxAdvanceHint": "İnsanların ne kadar önceden rezervasyon yapabileceği. 30 = bir ay.",
+        "maxPerDay": "Günlük en fazla",
+        "maxPerDayHint": "Bir günde en fazla rezervasyon sayısı. Sınır istemiyorsanız boş bırakın.",
+        "noLimit": "Sınır yok",
+        "zoneTitle": "Saat dilimi",
+        "zoneHint": "Haftalık saatler ve tarihler bu dilimde okunur. Ziyaretçiler saatleri kendi dilimlerinde görür.",
+        "zone": "Bu hizmetin saat dilimi",
+        "zoneSearch": "Dilimlerde ara",
+        "zonePick": "Bir saat dilimi seçin",
+        "zoneNone": "Bu aramayla eşleşen dilim yok."
+      },
+      "availability": {
+        "title": "Haftalık saatler",
+        "hint": "Her gün rezervasyon aldığınız saatleri ekleyin. Sağ panel gerçek rezerve edilebilir zaman dilimlerini önizler.",
+        "empty": "Hiç saat ayarlanmadığından henüz hiçbir şey rezerve edilemez.",
+        "total": "Haftada {hours} sa {minutes} dk rezerve edilebilir süre."
+      },
+      "overrides": {
+        "title": "Tarih istisnaları ve tatiller",
+        "hint": "Bir günü tatil için kapatın veya bir tarihe kendi saatlerini verin. Diğer her şey haftalık saatleri izler.",
+        "previousMonth": "Önceki ay",
+        "nextMonth": "Sonraki ay",
+        "legend": "Açıklama",
+        "status": {
+          "closed": "Kapalı",
+          "custom": "Özel saatler",
+          "open": "Açık (haftalık saatler)",
+          "off": "Kapalı (haftalık saatler)"
+        },
+        "clickHint": "Kapatmak için bir güne tıklayın. Haftalık saatlerini geri vermek için işaretli güne tekrar tıklayın.",
+        "rangeTitle": "Bir aralığı kapat",
+        "rangeHint": "Tatil haftası gibi birkaç günü tek seferde kapatın. Zaten istisnası olan günler onu korur.",
+        "rangeFrom": "Başlangıç",
+        "rangeTo": "Bitiş (isteğe bağlı)",
+        "reason": "Neden",
+        "reasonPlaceholder": "Neden (isteğe bağlı)",
+        "rangeProblems": {
+          "invalid": "Bir başlangıç tarihi ve ondan önce olmayan bir bitiş tarihi seçin.",
+          "tooLong": "Bir aralık en fazla bir yılı kapsayabilir.",
+          "full": "Tarih istisnası sınırına ulaşıldı."
+        },
+        "closeRange": "Bu günleri kapat",
+        "listTitle": "İstisnalar",
+        "count": "{count, plural, =0 {Tarih yok} one {# tarih} other {# tarih}}",
+        "limit": "{max} tarih sınırına ulaştınız. Daha fazla eklemek için bazılarını kaldırın.",
+        "empty": "Henüz tarih yok. Kapatmak için takvimde bir güne tıklayın.",
+        "remove": "{date} tarihindeki istisnayı kaldır",
+        "mode": "{date}: kapalı veya özel saatler",
+        "modeClosed": "Tüm gün kapalı",
+        "modeCustom": "Özel saatler",
+        "from": "{date}, başlangıç saati",
+        "to": "{date}, bitiş saati",
+        "reasonOf": "{date}, neden",
+        "problems": {
+          "incomplete": "Her iki saati de doldurun.",
+          "order": "Bitiş, başlangıçtan sonra olmalıdır.",
+          "dayClosedHours": "Kapalı günün saati olmaz."
+        }
+      },
+      "pricing": {
+        "title": "Fiyatlandırma (isteğe bağlı)",
+        "hint": "Ücretsiz rezervasyonlar için ücreti 0 bırakın.",
+        "currency": "Para birimi",
+        "currencyHint": "Varsayılan olarak çalışma alanınızın para birimi kullanılır.",
+        "fee": "Ücret ({currency})",
+        "feeHint": "Tutarı yazın, örn. {example}.",
+        "tax": "Vergi %",
+        "taxHint": "Ücretin üzerine eklenir.",
+        "deposit": "Kapora",
+        "depositModes": {
+          "none": "Ön ödeme yok",
+          "partial": "Kısmi kapora",
+          "full": "Tam tutar"
+        },
+        "depositAmount": "Kapora tutarı ({currency})",
+        "paymentNote": "Çevrimiçi ödeme tahsilatı henüz bağlı değil. Kapora her rezervasyonla birlikte kaydedilir ancak hiçbir şey tahsil edilmez.",
+        "cancelFee": "İptal ücreti ({currency})",
+        "noShowFee": "Gelmeme ücreti ({currency})",
+        "cancelWindow": "İptal süresi (dk)",
+        "cancelWindowHint": "Bir rezervasyonun başlangıçtan ne kadar önce ücretsiz iptal edilebileceği. 1440 = 24 saat.",
+        "recordedOnly": "İptal ve gelmeme ücretleri ile iptal süresi yalnızca kaydedilir.",
+        "totalsLabel": "Bir rezervasyonun maliyeti",
+        "totalFee": "Ücret",
+        "totalTax": "Vergi",
+        "totalSum": "Toplam",
+        "totalDue": "Şimdi ödenecek"
+      },
+      "calendar": {
+        "title": "Google Takvim (isteğe bağlı)",
+        "hint": "Rezervasyonlar bu olmadan da çalışır. Müsait/meşgul saatleri eşitlemek ve Meet bağlantıları eklemek için Randevular, Ayarlar altında Google Takvim'i bağlayın.",
+        "unavailable": "Google Takvim bu platform için henüz kurulmadı. Bu ayarlar, kurulduğunda kullanılmak üzere rezervasyon türüyle birlikte saklanır.",
+        "calendarId": "Takvim",
+        "calendarPlaceholder": "birincil",
+        "spreadsheetId": "Sayfaya satır ekleme (isteğe bağlı)",
+        "spreadsheetPlaceholder": "Elektronik tablo kimliği",
+        "createMeet": "Her rezervasyon için bir Google Meet bağlantısı oluştur",
+        "calendarDefault": "Çalışma alanı takvimi"
+      },
+      "messages": {
+        "title": "Yaşam döngüsü mesajları",
+        "hint": "Bir rezervasyon onaylandığında, hatırlatıldığında, iptal edildiğinde veya taşındığında müşteriye gönderilenler. Çalışma alanı varsayılanını kullanmak için kutuyu boş bırakın.",
+        "placeholdersTitle": "Kullanabileceğiniz yer tutucular",
+        "placeholdersHint": "Düzenlediğiniz mesajda imlecin bulunduğu yere eklemek için birine tıklayın ({event}).",
+        "placeholderMeaning": {
+          "type": "rezervasyon türünün adı",
+          "slot": "rezervasyonun tarihi ve saati",
+          "name": "müşterinin adı",
+          "manage_link": "rezervasyonu yönetme bağlantısı"
+        },
+        "events": {
+          "confirmation": "Onay",
+          "reminder": "Hatırlatma",
+          "cancellation": "İptal",
+          "reschedule": "Yeniden zamanlama"
+        },
+        "placeholders": {
+          "confirmation": "Merhaba {name}, {type} rezervasyonunuz {slot} için yapıldı. Buradan yönetin: {manage_link}",
+          "reminder": "Merhaba {name}, hatırlatma: {type} randevunuz {slot} tarihinde.",
+          "cancellation": "Merhaba {name}, {slot} tarihindeki {type} randevunuz iptal edildi.",
+          "reschedule": "Merhaba {name}, {type} randevunuz {slot} tarihine taşındı. Ayrıntılar: {manage_link}"
+        },
+        "templatesNote": "Onaylı WhatsApp şablonları henüz seçilemiyor. Mesajlar yukarıdaki düz metin olarak gönderilir."
+      },
+      "reminders": {
+        "title": "Hatırlatmalar",
+        "hint": "Süreler farklı olmalıdır (1440 = 24 sa önce, 180 = 3 sa önce). En fazla {max}.",
+        "add": "Hatırlatma ekle",
+        "quickAdd": "Hızlı ekle",
+        "quick": {
+          "h24": "24 sa",
+          "h3": "3 sa",
+          "h1": "1 sa",
+          "m15": "15 dk"
+        },
+        "empty": "Hatırlatma yok. Müşteriler yalnızca onayı alır.",
+        "offsetOf": "Hatırlatma {n}, başlangıçtan kaç dakika önce",
+        "minBefore": "dk önce",
+        "labelPlaceholder": "24sa",
+        "labelOf": "Hatırlatma {n}, etiket",
+        "remove": "{n}. hatırlatmayı kaldır",
+        "count": "{count} / {max} hatırlatma"
+      },
+      "questions": {
+        "title": "Anket",
+        "hint": "Biri rezervasyon yaparken sorulan sorular. En fazla {max}.",
+        "add": "Soru ekle",
+        "intro": "Giriş mesajı",
+        "introHint": "Soruların üstünde gösterilir.",
+        "empty": "Soru yok. Kişiler yalnızca adını, e-postasını ve telefonunu verir.",
+        "labelPlaceholder": "Soru etiketi",
+        "labelOf": "Soru {n}, etiket",
+        "typeOf": "Soru {n}, yanıt türü",
+        "types": {
+          "text": "Metin",
+          "textarea": "Uzun metin",
+          "select": "Seçenek",
+          "number": "Sayı",
+          "email": "E-posta",
+          "phone": "Telefon",
+          "date": "Tarih"
+        },
+        "optionsOf": "Soru {n}, seçenekler",
+        "optionsPlaceholder": "Satır başına bir seçenek",
+        "optionsHint": "En fazla {max} seçenek.",
+        "map": "Yanıtı şuraya kaydet",
+        "mapOf": "Soru {n}, kişi alanı",
+        "mapNone": "Hiçbiri",
+        "mapFields": {
+          "email": "E-posta",
+          "name": "Ad",
+          "mobile": "Cep telefonu"
+        },
+        "required": "Zorunlu",
+        "moveUp": "{n}. soruyu yukarı taşı",
+        "moveDown": "{n}. soruyu aşağı taşı",
+        "remove": "{n}. soruyu kaldır",
+        "count": "{count} / {max} soru"
+      },
+      "rail": {
+        "title": "Canlı özet",
+        "viewPublic": "Herkese açık sayfayı görüntüle",
+        "cardLabel": "Rezervasyon kartı önizlemesi",
+        "newService": "Yeni hizmet",
+        "needsApproval": "Rezervasyonlar onayınızı bekler.",
+        "fee": "Ücret",
+        "free": "Ücretsiz",
+        "tax": "Vergi",
+        "total": "Toplam",
+        "dueNow": "Şimdi ödenecek",
+        "slotsTitle": "Zaman dilimi önizlemesi",
+        "refresh": "Yenile",
+        "loading": "Yükleniyor",
+        "slotsIdle": "Gerçek rezerve edilebilir saatleri önizlemek için haftalık saatlerinizi, süreyi ve saat dilimini ayarlayın.",
+        "slotsFailed": "Önizleme başarısız oldu.",
+        "slotsNone": "Bu yapılandırma için önümüzdeki {days} gün içinde rezerve edilebilir saat yok.",
+        "slotsSummary": "{count, plural, one {# zaman dilimi} other {# zaman dilimi}} · saatler {zone} diliminde"
+      }
+    },
+    "public": {
+      "brandFallback": "Çevrimiçi rezervasyon",
+      "brandName": "CRM",
+      "poweredBy": "{brand} tarafından desteklenmektedir",
+      "language": "Dil",
+      "loading": "Yükleniyor",
+      "problem": {
+        "retry": "Tekrar dene",
+        "back": "Tüm hizmetleri gör",
+        "notFoundOrg": {
+          "title": "Bu rezervasyon sayfası bulunamadı",
+          "message": "Adres yanlış yazılmış olabilir veya bu işletme çevrimiçi rezervasyon almıyor. Bağlantıyı işletmeden isteyin."
+        },
+        "notFoundService": {
+          "title": "Bu hizmet kullanılamıyor",
+          "message": "Duraklatılmış olabilir veya artık sunulmuyor. İşletmenin diğer hizmetlerine göz atabilirsiniz."
+        },
+        "notFoundLink": {
+          "title": "Bu bağlantı geçerli değil",
+          "message": "Rezervasyon kaldırılmış veya bağlantı eksik olabilir. Onayınızdaki bağlantıyı kullanın veya işletmeden yeni bir bağlantı isteyin."
+        },
+        "paused": {
+          "title": "Bu hizmet duraklatıldı",
+          "message": "Şu anda rezervasyon almıyor. Daha sonra tekrar deneyin veya işletmenin diğer hizmetlerine göz atın."
+        },
+        "closed": {
+          "title": "Bu rezervasyon artık değiştirilemez",
+          "message": "Zaten iptal edilmiş veya tamamlanmış. Başka bir şeye ihtiyacınız varsa işletmeyle iletişime geçin."
+        },
+        "rateLimited": {
+          "title": "Çok fazla istek",
+          "message": "Lütfen biraz bekleyip tekrar deneyin."
+        },
+        "unavailable": {
+          "title": "Çevrimiçi rezervasyon şu anda kullanılamıyor",
+          "message": "Rezervasyon hizmetine ulaşılamadı. Birkaç dakika sonra tekrar deneyin."
+        },
+        "network": {
+          "title": "Bu sayfa yüklenemedi",
+          "message": "Bağlantınızı kontrol edip tekrar deneyin. Sorun devam ederse işletmeyle iletişime geçin."
+        }
+      },
+      "directory": {
+        "title": "Randevu al",
+        "subtitle": "{name} işletmesindeki boş saatleri görmek için bir hizmet seçin.",
+        "services": "Hizmetler",
+        "choose": "Bir saat seçin",
+        "empty": {
+          "title": "Şu anda rezerve edilecek bir şey yok",
+          "message": "Bu işletmenin şu anda çevrimiçi rezervasyona açık hizmeti yok. Lütfen daha sonra tekrar kontrol edin."
+        }
+      },
+      "location": {
+        "address": "Yüz yüze",
+        "virtual": "Görüntülü görüşme",
+        "phone": "Telefon görüşmesi",
+        "whatsapp": "WhatsApp"
+      },
+      "service": {
+        "allServices": "Tüm hizmetler",
+        "approvalNote": "İşletme her rezervasyonu onaylar. Önce bir talep, ardından onay alırsınız."
+      },
+      "step": {
+        "time": "Bir gün ve saat seçin",
+        "pickHint": "Devam etmek için bir gün, ardından bir saat seçin.",
+        "continue": "Devam",
+        "changeTime": "Saati değiştir",
+        "details": "Bilgileriniz"
+      },
+      "when": {
+        "atService": "Hizmetin bulunduğu yer: {day}, {range} ({zone})"
+      },
+      "where": {
+        "join": "Görüntülü görüşmeye katıl",
+        "videoLater": "Görüntülü görüşme",
+        "phone": "Telefon görüşmesi tarihi"
+      },
+      "form": {
+        "name": "Adınız",
+        "email": "E-posta",
+        "phone": "Telefon",
+        "optional": "(isteğe bağlı)",
+        "choose": "Bir seçenek belirleyin",
+        "required": "Bu alan zorunludur.",
+        "tooLong": "Bu çok uzun.",
+        "serverInvalid": "Bu kabul edilemedi. Kontrol edip tekrar deneyin.",
+        "invalid": {
+          "text": "Bu değeri kontrol edin.",
+          "textarea": "Bu değeri kontrol edin.",
+          "email": "Geçerli bir e-posta adresi girin.",
+          "phone": "Geçerli bir telefon numarası girin; yerel değilse ülke koduyla birlikte.",
+          "number": "Bir sayı girin.",
+          "date": "Geçerli bir tarih seçin.",
+          "select": "Seçeneklerden birini belirleyin."
+        }
+      },
+      "price": {
+        "title": "Fiyat",
+        "inclTax": "%{pct} vergi dahil",
+        "fee": "Ücret",
+        "tax": "Vergi (%{pct})",
+        "total": "Toplam",
+        "dueNow": "Rezervasyonda ödenecek",
+        "notCollected": "Bu sayfada hiçbir şey tahsil edilmez. Çevrimiçi ödeme henüz kullanılamıyor."
+      },
+      "book": {
+        "confirm": "Rezervasyonu onayla",
+        "request": "Rezervasyon talep et",
+        "sending": "Rezervasyonunuz gönderiliyor",
+        "slotTaken": "Bu saat az önce alındı. Lütfen başka bir saat seçin.",
+        "slotTakenHint": "Bilgileriniz korundu. Aşağıdaki saatler günceldir.",
+        "notice": {
+          "validation": {
+            "title": "Bazı bilgiler kabul edilemedi",
+            "message": "Vurgulanan alanları kontrol edip tekrar deneyin."
+          },
+          "rateLimited": {
+            "title": "Çok fazla istek",
+            "message": "Lütfen biraz bekleyip düğmeye tekrar basın."
+          },
+          "network": {
+            "title": "Rezervasyon gönderilemedi",
+            "message": "Bağlantınızı kontrol edip düğmeye tekrar basın. İki kez rezervasyon yapılmaz."
+          },
+          "unavailable": {
+            "title": "Bu hizmet artık kullanılamıyor",
+            "message": "Duraklatılmış olabilir. Hizmet listesine dönüp başka birini deneyin."
+          }
+        }
+      },
+      "booked": {
+        "confirmedTitle": "Rezervasyonunuz onaylandı",
+        "confirmedMessage": "{name} rezervasyonunuzu aldı. Değiştirmek veya iptal etmek için aşağıdaki bağlantıyı saklayın.",
+        "pendingTitle": "Talep alındı, onay bekleniyor",
+        "pendingMessage": "{name} rezervasyonunuzu onaylayacak. Durumunu kontrol etmek, değiştirmek veya iptal etmek için aşağıdaki bağlantıyı saklayın.",
+        "pendingNote": "Onaylanana kadar saat sizin için ayrılır ancak yine de değişebilir.",
+        "manage": "Rezervasyonu yönet",
+        "bookAnother": "Başka bir hizmet rezerve et"
+      },
+      "calendar": {
+        "title": "Takvime ekle",
+        "download": ".ics dosyasını indir",
+        "google": "Google Takvim",
+        "opensNewTab": "(yeni sekmede açılır)"
+      },
+      "manageLink": {
+        "title": "Rezervasyon bağlantınız",
+        "hint": "Bu bağlantıyı kaydedin. Rezervasyonunuzu değiştirmenin veya iptal etmenin tek yolu budur ve bağlantıya sahip olan herkes bunu yapabilir.",
+        "copy": "Kopyala",
+        "copied": "Kopyalandı"
+      },
+      "manage": {
+        "title": "Rezervasyonunuz",
+        "reschedule": "Yeniden zamanla",
+        "cancel": "İptal",
+        "flash": {
+          "rescheduled": "Rezervasyonunuz yeniden zamanlandı.",
+          "cancelled": "Rezervasyonunuz iptal edildi."
+        },
+        "failure": {
+          "closed": "Bu rezervasyon artık değiştirilemez.",
+          "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+          "network": "Rezervasyon değiştirilemedi. Bağlantınızı kontrol edip tekrar deneyin."
+        },
+        "confirmCancel": {
+          "title": "Bu rezervasyon iptal edilsin mi?",
+          "message": "{what} için rezervasyonunuz iptal edilecek ve saat bırakılacak. Bu işlem geri alınamaz.",
+          "confirm": "Evet, rezervasyonu iptal et",
+          "keep": "Rezervasyonu koru"
+        },
+        "state": {
+          "pending": {
+            "title": "Onay bekleniyor",
+            "message": "İşletme bu rezervasyonu henüz onaylamadı."
+          },
+          "cancelled": {
+            "title": "Bu rezervasyon iptal edildi",
+            "message": "Artık değiştirilemez."
+          },
+          "no_show": {
+            "title": "Bu rezervasyon kaçırıldı olarak işaretlendi",
+            "message": "Artık değiştirilemez. Bu bir hataysa işletmeyle iletişime geçin."
+          },
+          "completed": {
+            "title": "Bu randevu tamamlandı",
+            "message": "Artık değiştirilemez."
+          },
+          "passed": {
+            "title": "Bu randevu zaten başladı",
+            "message": "Artık çevrimiçi değiştirilemez. Gerekirse işletmeyle iletişime geçin."
+          }
+        }
+      },
+      "reschedule": {
+        "title": "Yeniden zamanla",
+        "back": "Rezervasyonunuza dön",
+        "backToBooking": "Rezervasyonunuza dön",
+        "current": "Mevcut saat",
+        "saving": "Yeni saat kaydediliyor",
+        "confirm": "Yeni saati onayla · {when}",
+        "failure": {
+          "slotTaken": "Bu saat az önce alındı — lütfen başka bir saat seçin.",
+          "closed": "Bu rezervasyon artık değiştirilemez.",
+          "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+          "validation": "Bu saat kabul edilemedi. Başka birini seçin.",
+          "network": "Yeni saat kaydedilemedi. Bağlantınızı kontrol edip tekrar deneyin."
+        },
+        "closed": {
+          "closed": {
+            "title": "Bu rezervasyon artık değiştirilemez",
+            "message": "Zaten iptal edilmiş veya tamamlanmış, bu yüzden taşınacak bir saat yok."
+          },
+          "passed": {
+            "title": "Bu randevu zaten başladı",
+            "message": "Bir rezervasyon başladıktan sonra taşınamaz. Gerekirse işletmeyle iletişime geçin."
+          }
+        }
+      },
+      "meta": {
+        "book": "Randevu al",
+        "manage": "Rezervasyonunuz",
+        "reschedule": "Rezervasyonu yeniden zamanla"
+      }
+    },
+    "settings": {
+      "title": "Rezervasyon ayarları",
+      "subtitle": "Bu çalışma alanındaki rezervasyonlar için varsayılanlar, çalışma saatleri ve mesajlar.",
+      "breadcrumb": {
+        "label": "Gezinti yolu",
+        "integrations": "Entegrasyonlar",
+        "appointments": "Randevular",
+        "settings": "Ayarlar"
+      },
+      "back": "Rezervasyonlara dön",
+      "save": "Ayarları kaydet",
+      "saving": "Kaydediliyor...",
+      "saved": "Rezervasyon ayarları kaydedildi.",
+      "discard": "Değişiklikleri sil",
+      "unsaved": "Kaydedilmemiş değişiklikleriniz var.",
+      "allSaved": "Tüm değişiklikler kaydedildi.",
+      "loading": "Ayarlar yükleniyor",
+      "forbidden": "Rezervasyon ayarlarını görüntüleme izniniz yok.",
+      "readOnly": "Bu ayarları görüntüleyebilirsiniz ancak değiştiremezsiniz.",
+      "fixFirst": "Önce vurgulanan alanları düzeltin.",
+      "issues": "{count, plural, one {Kaydetmeden önce # alanın düzeltilmesi gerekiyor.} other {Kaydetmeden önce # alanın düzeltilmesi gerekiyor.}}",
+      "conflict": {
+        "message": "Bu ayarlar, siz açtıktan sonra başka bir yerde değiştirildi. En son sürümü görmek için sayfayı yenileyin; buradaki düzenlemeleriniz değiştirilecek.",
+        "reload": "Sonuncuyu yükle"
+      },
+      "leave": {
+        "title": "Kaydetmeden ayrılınsın mı?",
+        "message": "Rezervasyon ayarlarında yaptığınız değişiklikler kaydedilmedi.",
+        "leave": "Ayrıl",
+        "stay": "Düzenlemeye devam et"
+      },
+      "calendar": {
+        "title": "Takvim entegrasyonu",
+        "description": "Rezervasyonlarınızın ve meşgul saatlerinizin uyumlu kalması için bir takvim bağlayın.",
+        "provider": "Google Takvim",
+        "providerSub": "Randevu rezervasyonu",
+        "status": {
+          "unavailable": "Kullanılamıyor",
+          "disconnected": "Bağlı değil",
+          "connected": "Bağlı",
+          "needs_reconnect": "Yeniden bağlanması gerekiyor"
+        },
+        "loading": "Bağlantı kontrol ediliyor",
+        "unavailableTitle": "Google Takvim bu platform için henüz kurulmadı",
+        "unavailableBody": "Bir çalışma alanının bağlanabilmesi için platform yöneticinizin Google OAuth istemcisini (Yönetici, Ayarlar, Google Takvim) eklemesi gerekir. Rezervasyonlarınız etkilenmez.",
+        "disconnectedBody": "Bağlı değil. Bağlanmak, hesabı seçip takvim erişimini paylaşmayı kabul ettiğiniz Google'ı açar.",
+        "disconnectedReadOnly": "Bağlı değil. Bir çalışma alanı yöneticisinden bağlamasını isteyin.",
+        "reconnectTitle": "Google bağlantıyı kabul etmeyi bıraktı",
+        "reconnectBody": "Erişim geri çekildi veya süresi doldu, bu yüzden rezervasyonlar takviminize yazılmıyor ve meşgul saatleri okunmuyor. Devam etmek için tekrar bağlanın.",
+        "reconnectBodyAccount": "{account} için erişim geri çekildi veya süresi doldu, bu yüzden rezervasyonlar takviminize yazılmıyor ve meşgul saatleri okunmuyor. Devam etmek için tekrar bağlanın.",
+        "account": "Google hesabı",
+        "calendar": "Takvim",
+        "primaryCalendar": "Ana takviminiz",
+        "connectedAgo": "Bağlanma zamanı: {when}",
+        "errors": {
+          "notConfigured": "Google Takvim bu platform için kurulmadı. Platform yöneticinizden Google OAuth istemcisini eklemesini isteyin.",
+          "notConnected": "Bağlı bir Google Takvim yok. Sayfayı yenileyip tekrar bağlanın.",
+          "providerFailed": "Google yanıt vermedi. Birazdan tekrar deneyin."
+        },
+        "loadingCalendars": "Takvimleriniz yükleniyor",
+        "chooseLabel": "Rezervasyonların yazılacağı yer",
+        "chooseHint": "Yalnızca bu hesabın düzenleyebildiği takvimler listelenir. Zaten yazılmış etkinlikler olduğu yerde kalır.",
+        "choosePlaceholder": "Bir takvim seçin",
+        "chooseOptionPrimary": "{name} (ana takvim)",
+        "chooseSave": "Bu takvimi kullan",
+        "chooseCancel": "İptal",
+        "saving": "Kaydediliyor",
+        "connect": "Google Takvim'i bağla",
+        "reconnect": "Google'ı yeniden bağla",
+        "redirecting": "Google açılıyor",
+        "choose": "Takvim seç",
+        "disconnect": "Bağlantıyı kes",
+        "disconnected": "Google Takvim bağlantısı kesildi.",
+        "calendarSaved": "Takvim kaydedildi.",
+        "confirmOff": {
+          "title": "Google Takvim bağlantısı kesilsin mi?",
+          "message": "Yeni rezervasyonlar takviminize gitmeyi bırakır ve meşgul saatleri artık okunmaz. Takviminizdeki mevcut etkinlikler orada kalır ve Google'a bu erişimi geri çekmesi bildirilir.",
+          "confirm": "Bağlantıyı kes",
+          "cancel": "Koru"
+        },
+        "outcome": {
+          "connected": "Google Takvim bağlandı. Onaylanan rezervasyonlar artık takviminize gidiyor.",
+          "denied": "Google'da erişim verilmedi, bu yüzden hiçbir şey bağlanmadı.",
+          "failed": "Bağlanma tamamlanmadı. Tekrar deneyin; başarısız olmaya devam ederse platform yöneticinizden Google kurulumunu kontrol etmesini isteyin.",
+          "expired": "Bu deneme çok uzun sürdü. Yeniden başlamak için Bağlan'a basın.",
+          "not_configured": "Google Takvim bu platform için kurulmadı. Platform yöneticinizden Google OAuth istemcisini eklemesini isteyin.",
+          "missing_scope": "Google gereken tüm takvim izinlerini vermedi. Tekrar bağlanın ve tüm kutuları işaretli tutun."
+        },
+        "whatTitle": "Bunun yaptığı",
+        "what": {
+          "freeBusy": "Takviminizden boş ve meşgul saatleri okur.",
+          "nextSlots": "Müşterilere sıradaki boş zaman dilimlerini sunar.",
+          "writeBack": "Onaylanan rezervasyonları takviminize etkinlik olarak yazar; hizmet istediğinde Meet bağlantısı ekler."
+        },
+        "hint": "Rezervasyonlar bu olmadan da çalışır. Boş saatler, aşağıdaki çalışma saatlerinizden ve rezervasyon kurallarınızdan gelir."
+      },
+      "timezone": {
+        "title": "Saat dilimi",
+        "description": "Çalışma saatlerinizin ve rezervasyon saatlerinizin okunduğu dilim.",
+        "label": "Çalışma alanı saat dilimi",
+        "hint": "Müşteriler saatleri kendi dilimlerinde görür; sizinkiler bu dilimde gösterilir."
+      },
+      "hours": {
+        "title": "Çalışma saatleri",
+        "description": "Müşterilerin ne zaman rezervasyon yapabileceği. Bir günü kapatmak için kapatın veya mola için aralıklar ekleyin.",
+        "noHours": "Hiçbir gün açık değil, bu yüzden kimse rezervasyon yapamaz."
+      },
+      "defaults": {
+        "title": "Rezervasyon kuralları",
+        "description": "Bu çalışma alanındaki rezervasyonlar için varsayılanlar.",
+        "fields": {
+          "slotDurationMinutes": "Zaman dilimi süresi (dakika)",
+          "maxPerDay": "Günlük en fazla rezervasyon",
+          "bufferBeforeMinutes": "Önce tampon (dakika)",
+          "bufferAfterMinutes": "Sonra tampon (dakika)",
+          "advanceDays": "Önceden rezervasyon penceresi (gün)",
+          "reminderMinutesBefore": "Hatırlatma (dakika önce)",
+          "defaultLocation": "Varsayılan konum (isteğe bağlı)"
+        },
+        "hints": {
+          "slotDurationMinutes": "{min} ile {max} dakika arası.",
+          "maxPerDay": "{min} ile {max} rezervasyon arası.",
+          "bufferBeforeMinutes": "{min} ile {max} dakika arası.",
+          "bufferAfterMinutes": "{min} ile {max} dakika arası.",
+          "advanceDays": "{min} ile {max} gün öncesi arası.",
+          "reminderMinutesBefore": "{min} ile {max} dakika arası. 0 hatırlatmaları kapatır."
+        },
+        "locationHint": "En fazla 191 karakter.",
+        "locationPlaceholder": "örn. Atatürk Cad. No: 12, İstanbul"
+      },
+      "templates": {
+        "title": "Mesaj şablonları",
+        "description": "Müşterilerin aldığı düz metin mesajlar. Yer tutucular her rezervasyon için doldurulur.",
+        "placeholders": "Yer tutucular",
+        "placeholder": {
+          "type": "Rezervasyon türünün adı",
+          "slot": "Tarih ve saat",
+          "name": "Müşterinin adı",
+          "manage_link": "Rezervasyonu yönetme bağlantısı"
+        },
+        "events": {
+          "confirmation": "Onay",
+          "reminder": "Hatırlatma",
+          "cancellation": "İptal",
+          "reschedule": "Yeniden zamanlama"
+        },
+        "reset": "Varsayılana sıfırla",
+        "unknown": "Bilinen bir yer tutucu değil, yazıldığı gibi gönderilir: {names}",
+        "counter": "{count} / {max}"
+      },
+      "v": {
+        "required": "Bu alan zorunludur.",
+        "notInteger": "Bir tam sayı girin.",
+        "tooSmall": "En az {min} olmalıdır.",
+        "tooLarge": "En fazla {max} olmalıdır.",
+        "tooLong": "En fazla {max} karakter olmalıdır.",
+        "badZone": "Listeden bir saat dilimi seçin.",
+        "badHours": "Çalışma saatlerindeki vurgulanan saatleri düzeltin."
+      },
+      "notAvailable": "Çalışma alanı genelinde rezervasyon ayarları bu sunucuda kullanılamıyor. Bunun yerine her rezervasyon türünün kendi saatleri, saat dilimi, hatırlatmaları ve mesajları vardır.",
+      "openTypes": "Rezervasyon türlerini aç"
+    },
+    "linked": {
+      "title": "Randevular",
+      "openBookings": "Rezervasyonları aç",
+      "showPast": "Geçmişi göster",
+      "hidePast": "Geçmişi gizle",
+      "empty": "Yaklaşan randevu yok.",
+      "emptyBoth": "Henüz randevu yok.",
+      "loading": "Randevular yükleniyor",
+      "unavailable": "Randevular bu sunucuda henüz kullanılamıyor.",
+      "loadMore": "Daha fazla yükle",
+      "loadMorePast": "Daha fazla geçmiş yükle",
+      "noType": "Randevu"
+    }
+  }
+}

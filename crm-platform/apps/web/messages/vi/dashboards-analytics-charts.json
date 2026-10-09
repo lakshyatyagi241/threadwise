@@ -1,0 +1,719 @@
+{
+  "dashboards-analytics-charts": {
+    "nav": {
+      "title": "Bảng điều khiển",
+      "analytics": "Phân tích"
+    },
+    "home": {
+      "title": "Bảng điều khiển",
+      "welcome": "Chào mừng bạn đến với không gian làm việc của mình."
+    },
+    "chart": {
+      "empty": "Chưa có dữ liệu trong khoảng này.",
+      "bucket": "Kỳ",
+      "cell": "{day} {hour}:00 · {count, plural, other {# tin nhắn}}"
+    },
+    "range": {
+      "label": "Khoảng ngày",
+      "short": {
+        "24h": "24 giờ",
+        "7d": "7 ngày",
+        "30d": "30 ngày",
+        "90d": "90 ngày",
+        "qtd": "Từ đầu quý",
+        "custom": "Tùy chỉnh"
+      },
+      "long": {
+        "24h": "24 giờ qua",
+        "7d": "7 ngày qua",
+        "30d": "30 ngày qua",
+        "qtd": "Từ đầu quý đến nay",
+        "custom": "Khoảng tùy chỉnh"
+      },
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "apply": "Áp dụng"
+    },
+    "funnel": {
+      "listLabel": "Phễu liên hệ",
+      "stageLabel": "{stage}: {n} liên hệ, {pct}% số liên hệ đã được nhắn tin",
+      "stage": {
+        "messaged": "Liên hệ đã nhắn tin",
+        "delivered": "Đã gửi đến",
+        "replied": "Đã phản hồi",
+        "goalCompleted": "Hoàn thành mục tiêu"
+      },
+      "goalCompletedHint": "Liên hệ đã hoàn thành luồng",
+      "activity": {
+        "title": "Hoạt động hội thoại",
+        "summary": "{inbound, plural, other {# tin nhắn đến}} · {contacts, plural, other {# liên hệ phản hồi}} · {perContact} phản hồi/liên hệ phản hồi"
+      },
+      "comparison": {
+        "title": "So với kỳ trước",
+        "replyRate": "Tỷ lệ phản hồi"
+      }
+    },
+    "error": {
+      "locked": "Gói của bạn không bao gồm phân tích.",
+      "upgrade": "Xem các gói",
+      "forbidden": "Bạn không có quyền truy cập trang này.",
+      "generic": "Không thể tải các số liệu. Hãy thử lại sau giây lát."
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "Chào buổi sáng, {name}.",
+        "afternoon": "Chào buổi chiều, {name}.",
+        "evening": "Chào buổi tối, {name}."
+      },
+      "subline": "{date} - {range} cho thấy {sent} tin gửi đi, tỷ lệ gửi thành công {rate}% trên {devices, plural, other {# thiết bị đã kết nối}}.",
+      "kpis": "Số liệu chính",
+      "kpi": {
+        "sent": "Tin nhắn đã gửi · {range}",
+        "sentLegend": "{delivered} đã gửi đến · {failed} thất bại",
+        "readRate": "Tỷ lệ đã đọc",
+        "deliverability": "Tỷ lệ gửi thành công",
+        "deliveredOf": "{delivered}/{sent} tin nhắn",
+        "replies": "Phản hồi",
+        "replyRate": "Tỷ lệ phản hồi {rate}%",
+        "readMini": {
+          "sent": "Đã gửi",
+          "delivered": "Đã gửi đến",
+          "read": "Đã đọc"
+        }
+      },
+      "throughput": {
+        "title": "Lưu lượng tin nhắn",
+        "subtitle": {
+          "24h": "Tin gửi đi, đã gửi đến và thất bại, theo giờ, 24 giờ qua",
+          "7d": "Tin gửi đi, đã gửi đến và thất bại, theo ngày, 7 ngày qua",
+          "30d": "Tin gửi đi, đã gửi đến và thất bại, theo ngày, 30 ngày qua",
+          "qtd": "Tin gửi đi, đã gửi đến và thất bại, theo ngày, từ đầu quý đến nay",
+          "custom": "Tin gửi đi, đã gửi đến và thất bại, theo ngày, khoảng tùy chỉnh"
+        },
+        "peak": "Giờ cao điểm {when} · {n} tin nhắn",
+        "sent": "Đã gửi",
+        "delivered": "Đã gửi đến",
+        "failed": "Thất bại",
+        "avgHour": "Trung bình mỗi giờ",
+        "replies": "Phản hồi",
+        "replyRate": "Tỷ lệ phản hồi"
+      },
+      "sparkline": {
+        "title": "20 giờ qua",
+        "subtitle": "Tin nhắn đã gửi mỗi giờ, cũ nhất trước",
+        "inCard": "20 giờ qua"
+      },
+      "funnel": {
+        "title": "Phễu tương tác",
+        "viewAll": "Xem phân tích"
+      },
+      "kicker": "Bảng điều khiển vận hành",
+      "calm": "Không gian làm việc đang yên ắng.",
+      "running": "{n, plural, other {# chiến dịch gửi hàng loạt đang chạy.}}",
+      "export": "Xuất",
+      "newCampaign": "Chiến dịch mới",
+      "contacts": {
+        "title": "Liên hệ đang hoạt động",
+        "subscribed": "Đã đăng ký",
+        "optedIn": "Đã đồng ý nhận tin",
+        "blocked": "Đã chặn"
+      },
+      "wallet": {
+        "title": "Số dư ví",
+        "payPerMessage": "trả theo tin nhắn",
+        "topUp": "Nạp tiền",
+        "earn": "Kiếm tiền qua tiếp thị liên kết"
+      },
+      "autopilot": {
+        "kicker": "Làm được nhiều hơn",
+        "title": "Tự động hóa phản hồi",
+        "body": "Xây dựng luồng hoặc khởi chạy chiến dịch để tiếp cận nhiều khách hàng hơn một cách tự động.",
+        "flow": "Xây dựng luồng",
+        "campaign": "Chiến dịch mới"
+      },
+      "pipeline": {
+        "kicker": "Quy trình bán hàng",
+        "open": "Mở quy trình",
+        "deals": "Giao dịch đang mở",
+        "won": "Thành công trong tháng này",
+        "winRate": "Tỷ lệ thắng",
+        "board": "Mở bảng"
+      },
+      "inbox": {
+        "title": "Hộp thư trực tiếp",
+        "unread": "{n} chưa đọc",
+        "oldest": "cũ nhất {when}",
+        "open": "Mở hộp thư",
+        "recent": "Hội thoại gần đây",
+        "empty": "Chưa có hội thoại nào."
+      },
+      "campaigns": {
+        "title": "Chiến dịch đang hoạt động",
+        "summary": "{running} đang chạy - {scheduled} đã lên lịch - {paused} tạm dừng",
+        "viewAll": "Xem tất cả {n}",
+        "untitled": "Chiến dịch gửi hàng loạt chưa đặt tên",
+        "delivered": "{done} / {total} đã gửi đến",
+        "emptyTitle": "Không có chiến dịch gửi hàng loạt đang hoạt động",
+        "emptyBody": "Hãy tạo một chiến dịch để bắt đầu gửi tới một nhóm liên hệ.",
+        "new": "Gửi hàng loạt mới",
+        "status": {
+          "processing": "Đang gửi",
+          "sending": "Đang gửi",
+          "running": "Đang gửi",
+          "active": "Đang gửi",
+          "scheduled": "Đã lên lịch",
+          "pending": "Đã lên lịch",
+          "queued": "Đã lên lịch",
+          "paused": "Tạm dừng",
+          "cancelled": "Tạm dừng",
+          "failed": "Thất bại",
+          "completed": "Hoàn tất",
+          "completed_with_errors": "Hoàn tất",
+          "done": "Hoàn tất",
+          "sent": "Hoàn tất"
+        }
+      },
+      "devices": {
+        "title": "Thiết bị đã kết nối",
+        "summary": "Đã dùng {total}/{cap} vị trí - {online} trực tuyến",
+        "connect": "Kết nối",
+        "emptyTitle": "Chưa kết nối thiết bị nào",
+        "emptyBody": "Ghép nối một số WhatsApp để bắt đầu gửi.",
+        "connectDevice": "Kết nối thiết bị",
+        "unzoned": "chưa phân vùng",
+        "per24h": "{n}/24h",
+        "deliv": "đã gửi đến",
+        "free": "{n, plural, other {# vị trí thiết bị còn trống}}"
+      },
+      "templates": {
+        "title": "Mẫu hiệu quả nhất",
+        "subtitle": "Theo lượng gửi - khoảng đã chọn",
+        "count": "{n, plural, other {# mẫu}}",
+        "new": "Mẫu mới",
+        "empty": "Chưa có mẫu nào.",
+        "create": "Tạo mẫu đầu tiên",
+        "col": {
+          "template": "Mẫu",
+          "type": "Loại",
+          "sent": "Đã gửi",
+          "delivered": "Đã gửi đến",
+          "read": "Đã đọc",
+          "readRate": "Tỷ lệ đã đọc",
+          "performance": "Tỷ lệ gửi thành công",
+          "status": "Trạng thái"
+        },
+        "status": {
+          "approved": "Đã duyệt",
+          "public": "Đã duyệt",
+          "active": "Đã duyệt",
+          "pending": "Đang xem xét",
+          "submitted": "Đang xem xét",
+          "in_review": "Đang xem xét",
+          "rejected": "Bị từ chối",
+          "disabled": "Bị từ chối"
+        }
+      },
+      "activity": {
+        "title": "Nhật ký hoạt động",
+        "subtitle": "Sự kiện không gian làm việc",
+        "empty": "Không có hoạt động gần đây nào được ghi lại cho không gian làm việc này.",
+        "by": "{actor} - {module} {action}"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "accounts": "{count, plural, other {# tài khoản}}",
+        "connected": "Đã kết nối",
+        "openInbox": "Mở hộp thư →",
+        "tile": {
+          "needReply": "Cần trả lời",
+          "openChats": "Mở cuộc trò chuyện",
+          "dmsIn": "DM nhận · 7 ngày",
+          "dmsOut": "DM gửi · 7 ngày",
+          "followers": "Người theo dõi",
+          "replyRate": "Tỷ lệ phản hồi"
+        }
+      },
+      "copilot": {
+        "title": "{brand} Copilot",
+        "tag": "Hỗ trợ bởi AI",
+        "headline": "Xây dựng luồng từ một câu.",
+        "body": "Mô tả hành trình khách hàng và Copilot sẽ soạn các nút, nhánh và gợi ý mẫu.",
+        "try": "thử:",
+        "generate": "Tạo luồng ✦",
+        "examples": "Ví dụ",
+        "stat": {
+          "flows": "luồng",
+          "active": "đang hoạt động",
+          "subscribers": "người đăng ký"
+        }
+      },
+      "flows": {
+        "title": "Luồng tự động hóa",
+        "summary": "{active} đang hoạt động · {subscribers} người đăng ký",
+        "open": "Mở",
+        "empty": "Chưa có luồng nào.",
+        "build": "Xây dựng luồng đầu tiên của bạn",
+        "meta": "Kích hoạt {trigger} · {steps} bước · {subs} người đăng ký",
+        "statusActive": "Đang hoạt động",
+        "statusPaused": "Tạm dừng",
+        "subs": "người đăng ký"
+      },
+      "quickActions": {
+        "title": "Thao tác nhanh",
+        "soon": "Sắp có",
+        "broadcast": {
+          "label": "Gửi hàng loạt mới",
+          "hint": "tới một nhóm liên hệ"
+        },
+        "flow": {
+          "label": "Xây dựng luồng",
+          "hint": "kéo và thả"
+        },
+        "template": {
+          "label": "Mẫu mới",
+          "hint": "gửi lên Meta"
+        },
+        "autoReply": {
+          "label": "Tự động trả lời",
+          "hint": "quy tắc từ khóa"
+        }
+      },
+      "integrations": {
+        "title": "Tích hợp",
+        "name": {
+          "woocommerce": "WooCommerce",
+          "shopify": "Shopify",
+          "google_sheets": "Google Sheets",
+          "meta_catalog": "Meta Catalog"
+        },
+        "events": "{n} sự kiện / 7 ngày",
+        "connected": {
+          "woocommerce": "Đã kết nối",
+          "shopify": "Đã kết nối",
+          "google_sheets": "Đã cấp khóa API",
+          "meta_catalog": "Đã liên kết danh mục"
+        },
+        "notConnected": "chưa kết nối",
+        "connect": "Kết nối",
+        "connectedLabel": "Đã kết nối"
+      },
+      "sublineOfficial": "{date} - {range} cho thấy {sent} tin gửi đi, tỷ lệ gửi thành công {rate}%."
+    },
+    "analytics": {
+      "title": "Phân tích",
+      "headline": "{rate}% tin nhắn đã đến tay người đọc từ {from} đến {to}.",
+      "subline": "Đã gửi {sent, plural, other {# tin nhắn}}, tỷ lệ phản hồi {replyRate}%.",
+      "noSends": "Chưa có tin nhắn gửi đi nào trong khoảng này.",
+      "export": "Xuất CSV",
+      "from": "Từ",
+      "to": "Đến",
+      "apply": "Áp dụng",
+      "kpis": "Số liệu chính",
+      "kpi": {
+        "sent": "Đã gửi",
+        "delivered": "Đã gửi đến",
+        "queued": "Đang chờ gửi",
+        "failed": "Thất bại",
+        "replyRate": "Tỷ lệ phản hồi"
+      },
+      "series": {
+        "sent": "Đã gửi",
+        "delivered": "Đã gửi đến",
+        "failed": "Thất bại",
+        "queued": "Đang chờ gửi"
+      },
+      "empty": "Không có gì để hiển thị trong khoảng này.",
+      "volume": {
+        "title": "Tin nhắn theo thời gian",
+        "subtitle": "Đã gửi, đã gửi đến và thất bại theo ngày"
+      },
+      "rates": {
+        "title": "Tỷ lệ gửi thành công",
+        "subtitle": "Tỷ trọng đã gửi đến, đang chờ gửi và thất bại"
+      },
+      "totals": {
+        "title": "Tổng theo ngày",
+        "subtitle": "Đã gửi đến, đang chờ gửi và thất bại theo ngày, dạng chồng"
+      },
+      "funnel": {
+        "title": "Phễu tương tác"
+      },
+      "types": {
+        "title": "Loại tin nhắn",
+        "subtitle": "Phân bố tin gửi đi",
+        "byType": "Đã gửi và đã gửi đến theo loại tin nhắn",
+        "kind": "Loại",
+        "sent": "Đã gửi",
+        "delivered": "Đã gửi đến",
+        "text": "Văn bản",
+        "template": "Mẫu",
+        "media": "Phương tiện",
+        "interactive": "Tương tác",
+        "location": "Vị trí"
+      },
+      "heatmap": {
+        "title": "Giờ tốt nhất",
+        "subtitle": "Lượng tin nhắn theo ngày trong tuần và giờ, {zone}. Màu đậm hơn nghĩa là bận hơn.",
+        "empty": "Không có lượng tin nhắn trong khoảng này.",
+        "footer": "Tính từ {total} tin nhắn, múi giờ {tz}"
+      },
+      "panels": {
+        "devices": {
+          "title": "Theo thiết bị",
+          "subtitle": "Số tin gửi trong 24 giờ qua",
+          "online": "{online}/{total} trực tuyến",
+          "empty": "Chưa có thiết bị nào được kết nối.",
+          "msg": "{n} tin"
+        },
+        "templates": {
+          "title": "Mẫu",
+          "subtitle": "Hiệu quả nhất theo lượt gửi",
+          "empty": "Không có lượt gửi mẫu nào trong khoảng này."
+        },
+        "contacts": {
+          "title": "Liên hệ nổi bật",
+          "subtitle": "Các hội thoại tương tác nhiều nhất",
+          "empty": "Không có hội thoại nào trong khoảng này.",
+          "msgs": "{n} tin"
+        },
+        "team": {
+          "title": "Hiệu suất nhóm",
+          "subtitle": "Nhân viên trong khoảng này",
+          "count": "{n, plural, other {# nhân viên}}",
+          "col": {
+            "agent": "Nhân viên",
+            "convos": "Hội thoại",
+            "resolved": "Đã giải quyết",
+            "first": "Phản hồi đầu TB",
+            "resolution": "Giải quyết TB",
+            "csat": "CSAT"
+          }
+        },
+        "geo": {
+          "title": "Theo quốc gia",
+          "subtitle": "Phạm vi tiếp cận",
+          "markets": "{n, plural, other {# thị trường}}",
+          "unspecified": "Chưa xác định",
+          "empty": "Không có hội thoại nào có quốc gia xác định trong khoảng này."
+        },
+        "events": {
+          "title": "Luồng sự kiện",
+          "subtitle": "Tin nhắn mới nhất trong khoảng này",
+          "sent": "Gửi → {peer}",
+          "received": "Nhận từ {peer}",
+          "empty": "Không có hoạt động gần đây trong khoảng này."
+        }
+      }
+    },
+    "health": {
+      "nav": "Tình trạng hệ thống",
+      "group": "Hệ thống",
+      "title": "Tình trạng hệ thống",
+      "kicker": "Nền tảng",
+      "description": "Kiểm tra trực tiếp các dịch vụ mà nền tảng đang chạy.",
+      "banner": {
+        "up": "Tất cả hệ thống - Hoạt động bình thường",
+        "warn": "Tất cả hệ thống - Suy giảm",
+        "down": "Tất cả hệ thống - Ngừng hoạt động",
+        "checked": "Kiểm tra lần cuối {time} · tự làm mới mỗi 20 giây",
+        "refresh": "Làm mới ngay",
+        "refreshing": "Đang kiểm tra..."
+      },
+      "core": "Dịch vụ cốt lõi",
+      "activity": {
+        "messages": "Tin nhắn · 24 giờ",
+        "aiCalls": "Lượt gọi AI · 24 giờ",
+        "conversations": "Hội thoại · 24 giờ",
+        "webhooks": "Webhook · 24 giờ"
+      },
+      "throughput": {
+        "title": "Lưu lượng tin nhắn · 14 ngày",
+        "peak": "đỉnh {n}/ngày",
+        "empty": "Không có hoạt động tin nhắn trong 14 ngày qua.",
+        "aria": "Tin nhắn mỗi ngày, 14 ngày qua"
+      },
+      "state": {
+        "up": "Hoạt động bình thường",
+        "warn": "Suy giảm",
+        "down": "Ngừng hoạt động",
+        "idle": "Nhàn rỗi"
+      },
+      "check": {
+        "database": "Cơ sở dữ liệu",
+        "cache": "Bộ nhớ đệm",
+        "queue": "Hàng đợi",
+        "bridge": "Node bridge",
+        "storage": "Lưu trữ phương tiện"
+      },
+      "latency": {
+        "title": "Thời gian phản hồi",
+        "empty": "Không có dữ liệu thời gian.",
+        "ms": "{ms} ms"
+      },
+      "queues": {
+        "title": "Hàng đợi",
+        "name": "Hàng đợi",
+        "pending": "Đang chờ",
+        "failed": "Thất bại"
+      },
+      "clear": {
+        "button": "Xóa các công việc đang chờ",
+        "busy": "Đang xóa...",
+        "confirmTitle": "Xóa các công việc đang chờ và thất bại?",
+        "confirmBody": "Các công việc đang chờ và bị hoãn sẽ bị gỡ, các công việc thất bại sẽ bị xóa khỏi mọi hàng đợi. Các công việc đang chạy được giữ nguyên.",
+        "confirm": "Xóa công việc",
+        "cancel": "Hủy",
+        "done": "Đã xóa {pending} công việc đang chờ và {failed} công việc thất bại.",
+        "failed": "Thất bại: {message}",
+        "superOnly": "Chỉ quản trị viên cấp cao mới có thể xóa công việc."
+      },
+      "vitals": {
+        "title": "Thông số máy chủ",
+        "node": "Node",
+        "app": "Phiên bản ứng dụng",
+        "environment": "Môi trường",
+        "uptime": "Thời gian hoạt động",
+        "memory": "Bộ nhớ (RSS)",
+        "heap": "Heap đang dùng",
+        "diskFree": "Ổ đĩa còn trống",
+        "diskFreeValue": "{gb} GB",
+        "diskUsed": "Ổ đĩa đã dùng {pct}%",
+        "noDisk": "Không khả dụng"
+      },
+      "error": "Không thể tải các kiểm tra tình trạng. Hãy thử lại sau giây lát.",
+      "engines": {
+        "title": "Công cụ WhatsApp và số đã kết nối",
+        "empty": "Chưa cấu hình công cụ nào.",
+        "caption": "số đã kết nối trên tổng số"
+      }
+    },
+    "admin": {
+      "nav": {
+        "analytics": "Phân tích"
+      },
+      "window": {
+        "label": "Khoảng thời gian",
+        "24h": "24 giờ qua",
+        "7d": "7 ngày qua",
+        "30d": "30 ngày qua",
+        "90d": "90 ngày qua",
+        "1y": "Năm qua"
+      },
+      "error": "Không thể tải số liệu nền tảng.",
+      "retry": "Thử lại",
+      "vsPrevious": "so với kỳ trước",
+      "overview": {
+        "title": "Bảng điều khiển quản trị.",
+        "kicker": "Quản trị / Tổng quan",
+        "subtitle": "Tình trạng nền tảng, doanh thu, mức sử dụng và hoạt động không gian làm việc ở một nơi.",
+        "addWorkspace": "Thêm không gian làm việc",
+        "kpi": {
+          "income": "Tổng thu nhập",
+          "profit": "Lợi nhuận",
+          "profitHint": "Ước tính với biên lợi nhuận 32%, không phải số liệu kế toán",
+          "views": "Tổng lượt xem",
+          "viewsHint": "Tin nhắn do mọi không gian làm việc gửi",
+          "conversion": "Tỷ lệ chuyển đổi"
+        },
+        "revenue": {
+          "title": "Doanh thu theo thời gian",
+          "total": "Tổng doanh thu",
+          "target": "Tổng mục tiêu",
+          "targetHint": "Mục tiêu là mức tăng trưởng chuẩn 10% so với kỳ trước, không phải mục tiêu được lưu.",
+          "revenue": "Doanh thu",
+          "aria": "Doanh thu mỗi kỳ so với mục tiêu"
+        },
+        "countries": {
+          "title": "Phiên theo quốc gia",
+          "subtitle": "Các phiên hàng đầu theo khu vực",
+          "empty": "Chưa có dữ liệu quốc gia - người dùng chưa chia sẻ khu vực của họ."
+        },
+        "regions": {
+          "title": "Doanh số theo khu vực",
+          "subtitle": "Tỷ trọng doanh thu nền tảng",
+          "aria": "Người dùng mới theo khu vực"
+        },
+        "platform": {
+          "title": "Doanh số theo nền tảng",
+          "subtitle": "Tích hợp thương mại điện tử",
+          "empty": "Không có đơn hàng đã thanh toán nào trong khoảng này.",
+          "aria": "Doanh thu đã thanh toán theo cổng thanh toán"
+        },
+        "users": {
+          "title": "Người dùng đã đăng ký",
+          "subtitle": "Tổng quan số lượng người dùng",
+          "total": "Tổng người dùng",
+          "premium": "Gói cao cấp",
+          "basic": "Gói cơ bản",
+          "aria": "{pct}% người dùng đang dùng gói trả phí"
+        },
+        "workspaces": {
+          "title": "Hoạt động không gian làm việc",
+          "subtitle": "Các sự kiện quản trị giá trị cao gần đây",
+          "viewAll": "Xem tất cả",
+          "empty": "Chưa có không gian làm việc nào.",
+          "col": {
+            "workspace": "Không gian làm việc",
+            "owner": "Chủ sở hữu",
+            "plan": "Gói",
+            "messages": "Tin nhắn",
+            "health": "Tình trạng",
+            "mrr": "MRR"
+          },
+          "health": {
+            "good": "Tốt",
+            "active": "Đang hoạt động",
+            "low": "Thấp",
+            "idle": "Nhàn rỗi"
+          }
+        },
+        "alerts": {
+          "title": "Cảnh báo quản trị",
+          "subtitle": "Hàng đợi ưu tiên",
+          "open": "{n} đang mở",
+          "empty": "Mọi hệ thống đều ổn định - không có cảnh báo."
+        },
+        "titleLead": "Bảng điều khiển",
+        "titleAccent": "quản trị"
+      },
+      "analytics": {
+        "title": "Phân tích quản trị.",
+        "kicker": "Quản trị - Nền tảng",
+        "subtitle": "Góc nhìn phòng điều khiển đầy đủ về doanh thu, tăng trưởng không gian làm việc, mức dùng WhatsApp, kết quả gửi chiến dịch, tình trạng thiết bị và áp lực hỗ trợ.",
+        "days": {
+          "7": "7 ngày qua",
+          "30": "30 ngày qua",
+          "90": "90 ngày qua",
+          "365": "Năm nay",
+          "custom": "{n} ngày qua"
+        },
+        "daysLabel": "Ngày",
+        "export": "Xuất",
+        "tabs": {
+          "overview": "Tổng quan",
+          "revenue": "Doanh thu",
+          "usage": "Mức sử dụng",
+          "workspaces": "Không gian làm việc",
+          "campaigns": "Chiến dịch",
+          "support": "Hỗ trợ"
+        },
+        "kpi": {
+          "revenue": "Doanh thu",
+          "revenueSub": "{n, plural, other {# không gian làm việc mới}}",
+          "workspaces": "Không gian làm việc",
+          "workspacesSub": "{n, plural, other {# người dùng tổng cộng}}",
+          "messages": "Tin nhắn",
+          "messagesSub": "Trung bình {n} / ngày",
+          "devices": "Thiết bị trực tuyến",
+          "newUsers": "Người dùng mới",
+          "newUsersSub": "{n} tổng cộng",
+          "tickets": "Phiếu hỗ trợ đang mở",
+          "watch": "theo dõi",
+          "clear": "ổn"
+        },
+        "pulse": {
+          "title": "Nhịp nền tảng",
+          "subtitle": "Mức tải trực tiếp của phòng điều khiển",
+          "workspaces": "Không gian làm việc",
+          "devices": "Thiết bị đã kết nối",
+          "tickets": "Phiếu hỗ trợ đang mở",
+          "signups": "Đăng ký mới",
+          "normal": "bình thường"
+        },
+        "growth": {
+          "title": "Trung tâm chỉ huy tăng trưởng",
+          "subtitle": "Đăng ký của người dùng, {days} ngày qua",
+          "aria": "Đăng ký mỗi ngày",
+          "series": "Đăng ký"
+        },
+        "plans": {
+          "title": "Phân bố gói",
+          "subtitle": "Không gian làm việc theo gói",
+          "empty": "Chưa có dữ liệu - phân bố gói sẽ hiển thị khi có ít nhất một không gian làm việc được gán gói.",
+          "aria": "Không gian làm việc theo gói"
+        },
+        "acquisition": {
+          "title": "Thu hút người dùng",
+          "subtitle": "Từ người dùng đến không gian làm việc",
+          "users": "Tổng người dùng",
+          "newUsers": "Người dùng mới",
+          "workspaces": "Không gian làm việc đã tạo",
+          "newWorkspaces": "Không gian làm việc mới",
+          "devices": "Thiết bị đã kết nối"
+        },
+        "devices": {
+          "title": "Thiết bị hàng đầu - 24 giờ",
+          "subtitle": "Lượng gửi",
+          "empty": "Chưa có lượt gửi nào",
+          "devices": "Thiết bị",
+          "online": "Trực tuyến",
+          "sends": "Gửi 24 giờ",
+          "aria": "Số tin gửi trong 24 giờ qua theo thiết bị"
+        },
+        "leaderboard": {
+          "title": "Không gian làm việc hàng đầu theo doanh thu đã thanh toán",
+          "subtitle": "{days} ngày qua",
+          "workspace": "Không gian làm việc",
+          "orders": "Đơn hàng",
+          "revenue": "Doanh thu đã thanh toán",
+          "open": "Mở",
+          "empty": "Không có đơn hàng đã thanh toán nào trong khoảng này."
+        },
+        "cohort": {
+          "title": "Nhóm đăng ký",
+          "subtitle": "{days} ngày gần đây",
+          "aria": "Đăng ký hàng ngày"
+        },
+        "composition": {
+          "title": "Cơ cấu doanh thu",
+          "subtitle": "Đóng góp hàng đầu",
+          "empty": "Chưa có doanh thu đã thanh toán."
+        },
+        "support": {
+          "title": "Tải hỗ trợ",
+          "subtitle": "Trạng thái phiếu hỗ trợ",
+          "empty": "Chưa có phiếu hỗ trợ nào.",
+          "open": "Đang mở",
+          "resolved": "Đã giải quyết",
+          "inbox": "Mở hộp thư"
+        },
+        "queue": {
+          "title": "Cần quản trị chú ý",
+          "subtitle": "Hàng đợi hành động",
+          "tickets": "{n, plural, other {# phiếu hỗ trợ đang mở}}",
+          "ticketsHint": "Phân loại trong hỗ trợ trước khi vi phạm SLA",
+          "offline": "{n, plural, other {# thiết bị ngoại tuyến}}",
+          "offlineHint": "Chưa đến một nửa số thiết bị đang trực tuyến",
+          "users": "{n, plural, other {# người dùng mới}}",
+          "usersHint": "Xem lại các đăng ký mới nhất",
+          "clear": "Mọi thứ đều ổn"
+        },
+        "titleLead": "Phân tích",
+        "titleAccent": "quản trị"
+      },
+      "kpiLabel": "KPI"
+    },
+    "quickAccess": {
+      "title": "Truy cập nhanh",
+      "kicker": "Lối tắt",
+      "edit": "Sửa lối tắt",
+      "empty": "Thêm lối tắt truy cập nhanh",
+      "open": "Mở {label}",
+      "modalTitle": "Truy cập nhanh",
+      "modalEyebrow": "Ghim tối đa 10 lối tắt",
+      "pages": "Trang ứng dụng (tối đa 10)",
+      "custom": "Liên kết tùy chỉnh",
+      "labelPlaceholder": "Nhãn",
+      "urlPlaceholder": "https://... hoặc /path",
+      "addCustom": "+ Thêm liên kết tùy chỉnh",
+      "removeCustom": "Xóa liên kết này",
+      "counter": "Đã ghim {n} / 10",
+      "cancel": "Hủy",
+      "save": "Lưu lối tắt",
+      "saving": "Đang lưu...",
+      "limit": "Bạn có thể ghim tối đa 10 lối tắt.",
+      "saved": "Đã cập nhật truy cập nhanh.",
+      "failed": "Không thể lưu lối tắt của bạn."
+    }
+  }
+}

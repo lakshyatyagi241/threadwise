@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "订单",
+      "coupons": "优惠券"
+    },
+    "settingsTile": {
+      "label": "支付网关",
+      "description": "您的店铺结账和销售发票用于收取在线付款的唯一网关。",
+      "keywords": "支付网关, payment gateway, razorpay, stripe, 结账, 支付链接, 在线支付, 银行卡, upi"
+    },
+    "common": {
+      "noAccessTitle": "您没有访问此页面的权限",
+      "noAccessMessage": "请联系工作区管理员，为您的角色授予相应权限。",
+      "loading": "加载中",
+      "loadMore": "加载更多",
+      "cancel": "取消",
+      "close": "关闭",
+      "save": "保存",
+      "saving": "保存中",
+      "edit": "编辑",
+      "delete": "删除",
+      "remove": "移除",
+      "open": "打开",
+      "view": "查看",
+      "search": "搜索",
+      "clear": "清除",
+      "all": "全部",
+      "no": "否",
+      "none": "无",
+      "actions": "操作",
+      "retry": "重试",
+      "dismiss": "关闭",
+      "copy": "复制",
+      "copied": "已复制",
+      "viewContact": "查看联系人",
+      "allShops": "全部店铺",
+      "shop": "店铺"
+    },
+    "status": {
+      "new": "新订单",
+      "pending": "待处理",
+      "confirmed": "已确认",
+      "paid": "已支付",
+      "processing": "处理中",
+      "completed": "已完成",
+      "shipped": "已发货",
+      "cancelled": "已取消"
+    },
+    "paymentStatus": {
+      "paid": "已支付",
+      "awaiting": "待支付",
+      "cod": "货到付款",
+      "unpaid": "未支付"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "店面",
+      "twilio": "Twilio",
+      "manual": "手动",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "WhatsApp AI"
+    },
+    "errors": {
+      "requestId": "请求 ID",
+      "retry": "重试",
+      "network": {
+        "title": "无法连接到服务器",
+        "message": "请检查网络连接后重试。"
+      },
+      "forbidden": {
+        "title": "不允许",
+        "message": "您的角色无权执行此操作。"
+      },
+      "signedOut": {
+        "title": "您已退出登录",
+        "message": "请重新登录以继续。"
+      },
+      "conflict": {
+        "title": "已被其他人更改",
+        "message": "您打开期间此记录已被更改。请重新加载后重试。"
+      },
+      "validation": {
+        "title": "请检查表单",
+        "message": "部分值无效。请检查高亮的字段。"
+      },
+      "unavailable": {
+        "title": "暂不可用",
+        "message": "此服务器上暂不提供店铺的这一部分功能。"
+      },
+      "rateLimited": {
+        "title": "请求过多",
+        "message": "请稍候再试。"
+      },
+      "notFound": {
+        "title": "未找到",
+        "message": "它已被移除或从未存在。"
+      },
+      "planLocked": {
+        "title": "不在您的套餐内",
+        "message": "您的套餐不包含店铺功能。升级后即可使用。"
+      },
+      "couponCodeTaken": {
+        "title": "代码已被使用",
+        "message": "另一张优惠券已使用此代码。请选择其他代码。"
+      },
+      "groupCodeTaken": {
+        "title": "代码已被使用",
+        "message": "另一个群组已使用此下单代码。"
+      },
+      "orderNoPhone": {
+        "title": "没有电话号码",
+        "message": "此订单没有买家电话号码，因此无法发送任何内容。"
+      },
+      "gatewayNotConfigured": {
+        "title": "未设置支付网关",
+        "message": "请先设置支付网关。其密钥缺失或已关闭。"
+      },
+      "gatewayUnavailable": {
+        "title": "网关不可用",
+        "message": "此网关无法生成买家可打开的支付链接。"
+      },
+      "paymentLinkFailed": {
+        "title": "网关拒绝了该链接",
+        "message": "请检查密钥，并确认金额高于网关的最低限额。"
+      },
+      "unexpected": {
+        "title": "出了点问题",
+        "message": "请重试。如果问题持续出现，请将请求 ID 提供给支持团队。"
+      }
+    }
+  }
+}

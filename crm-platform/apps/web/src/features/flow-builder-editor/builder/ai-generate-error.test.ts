@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError } from '@/lib/api/errors';
-import { aiGenerateError } from './ai-generate-error';
+import { aiGenerateError as rawAiGenerateError } from './ai-generate-error';
+import { translator } from '../test-utils/intl';
+
+const t = translator('flb.builder.shell.aiError');
+const aiGenerateError = (e: unknown) =>
+  rawAiGenerateError(e, t as Parameters<typeof rawAiGenerateError>[1]);
 
 const validation = (path: string, message: string) =>
   new ApiError(422, 'VALIDATION_FAILED', 'Request payload failed validation', undefined, [

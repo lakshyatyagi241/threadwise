@@ -1,0 +1,719 @@
+{
+  "dashboards-analytics-charts": {
+    "nav": {
+      "title": "Panel",
+      "analytics": "Analíticas"
+    },
+    "home": {
+      "title": "Panel",
+      "welcome": "Te damos la bienvenida a tu espacio de trabajo."
+    },
+    "chart": {
+      "empty": "Aún no hay datos en este periodo.",
+      "bucket": "Periodo",
+      "cell": "{day} {hour}:00 · {count, plural, one {# mensaje} other {# mensajes}}"
+    },
+    "range": {
+      "label": "Rango de fechas",
+      "short": {
+        "24h": "24 h",
+        "7d": "7 d",
+        "30d": "30 d",
+        "90d": "90 d",
+        "qtd": "Trimestre",
+        "custom": "Personalizado"
+      },
+      "long": {
+        "24h": "Últimas 24 horas",
+        "7d": "Últimos 7 días",
+        "30d": "Últimos 30 días",
+        "qtd": "Trimestre hasta hoy",
+        "custom": "Rango personalizado"
+      },
+      "from": "Fecha de inicio",
+      "to": "Fecha de fin",
+      "apply": "Aplicar"
+    },
+    "funnel": {
+      "listLabel": "Embudo de contactos",
+      "stageLabel": "{stage}: {n} contactos, {pct} % de los contactos a los que se escribió",
+      "stage": {
+        "messaged": "Contactos a los que se escribió",
+        "delivered": "Entregados",
+        "replied": "Respondieron",
+        "goalCompleted": "Objetivo cumplido"
+      },
+      "goalCompletedHint": "Contactos cuyo flujo terminó",
+      "activity": {
+        "title": "Actividad de conversaciones",
+        "summary": "{inbound, plural, one {# mensaje entrante} other {# mensajes entrantes}} · {contacts, plural, one {# contacto que responde} other {# contactos que responden}} · {perContact} respuestas por contacto que responde"
+      },
+      "comparison": {
+        "title": "En comparación con el periodo anterior",
+        "replyRate": "Tasa de respuesta"
+      }
+    },
+    "error": {
+      "locked": "Tu plan no incluye analíticas.",
+      "upgrade": "Ver planes",
+      "forbidden": "No tienes acceso a esta página.",
+      "generic": "No se pudieron cargar las cifras. Inténtalo de nuevo en un momento."
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "Buenos días, {name}.",
+        "afternoon": "Buenas tardes, {name}.",
+        "evening": "Buenas noches, {name}."
+      },
+      "subline": "{date} - {range} con {sent} salientes y {rate} % de entregabilidad en {devices, plural, one {# dispositivo conectado} other {# dispositivos conectados}}.",
+      "kpis": "Cifras clave",
+      "kpi": {
+        "sent": "Mensajes enviados · {range}",
+        "sentLegend": "{delivered} entregados · {failed} fallidos",
+        "readRate": "Tasa de lectura",
+        "deliverability": "Entregabilidad",
+        "deliveredOf": "{delivered} de {sent} mensajes",
+        "replies": "Respuestas",
+        "replyRate": "{rate} % de tasa de respuesta",
+        "readMini": {
+          "sent": "Enviados",
+          "delivered": "Entregados",
+          "read": "Leídos"
+        }
+      },
+      "throughput": {
+        "title": "Volumen de mensajes",
+        "subtitle": {
+          "24h": "Salientes, entregados y fallidos, por hora, últimas 24 horas",
+          "7d": "Salientes, entregados y fallidos, por día, últimos 7 días",
+          "30d": "Salientes, entregados y fallidos, por día, últimos 30 días",
+          "qtd": "Salientes, entregados y fallidos, por día, trimestre hasta hoy",
+          "custom": "Salientes, entregados y fallidos, por día, rango personalizado"
+        },
+        "peak": "Hora pico {when} · {n} mensajes",
+        "sent": "Enviados",
+        "delivered": "Entregados",
+        "failed": "Fallidos",
+        "avgHour": "Promedio por hora",
+        "replies": "Respuestas",
+        "replyRate": "Tasa de respuesta"
+      },
+      "sparkline": {
+        "title": "Últimas 20 horas",
+        "subtitle": "Mensajes enviados por hora, del más antiguo al más reciente",
+        "inCard": "Últimas 20 horas"
+      },
+      "funnel": {
+        "title": "Embudo de interacción",
+        "viewAll": "Ver analíticas"
+      },
+      "kicker": "Panel del operador",
+      "calm": "El espacio de trabajo está tranquilo.",
+      "running": "{n, plural, one {Hay # difusión en curso.} other {Hay # difusiones en curso.}}",
+      "export": "Exportar",
+      "newCampaign": "Nueva campaña",
+      "contacts": {
+        "title": "Contactos activos",
+        "subscribed": "Suscritos",
+        "optedIn": "Con consentimiento",
+        "blocked": "Bloqueados"
+      },
+      "wallet": {
+        "title": "Saldo del monedero",
+        "payPerMessage": "pago por mensaje",
+        "topUp": "Recargar",
+        "earn": "Gana como afiliado"
+      },
+      "autopilot": {
+        "kicker": "Haz más en menos tiempo",
+        "title": "Pon las respuestas en piloto automático",
+        "body": "Crea un flujo o lanza una campaña para llegar a más clientes de forma automática.",
+        "flow": "Crear un flujo",
+        "campaign": "Nueva campaña"
+      },
+      "pipeline": {
+        "kicker": "Embudo de ventas",
+        "open": "Embudo abierto",
+        "deals": "Negocios abiertos",
+        "won": "Ganados este mes",
+        "winRate": "Tasa de éxito",
+        "board": "Abrir tablero"
+      },
+      "inbox": {
+        "title": "Bandeja en vivo",
+        "unread": "{n} sin leer",
+        "oldest": "el más antiguo {when}",
+        "open": "Abrir bandeja",
+        "recent": "Conversaciones recientes",
+        "empty": "Aún no hay conversaciones."
+      },
+      "campaigns": {
+        "title": "Campañas activas",
+        "summary": "{running} en curso - {scheduled} programadas - {paused} en pausa",
+        "viewAll": "Ver las {n}",
+        "untitled": "Difusión sin título",
+        "delivered": "{done} / {total} entregados",
+        "emptyTitle": "No hay difusiones activas",
+        "emptyBody": "Crea una para empezar a enviar a un grupo de contactos.",
+        "new": "Nueva difusión",
+        "status": {
+          "processing": "Enviando",
+          "sending": "Enviando",
+          "running": "Enviando",
+          "active": "Enviando",
+          "scheduled": "Programada",
+          "pending": "Programada",
+          "queued": "Programada",
+          "paused": "En pausa",
+          "cancelled": "En pausa",
+          "failed": "Fallida",
+          "completed": "Completada",
+          "completed_with_errors": "Completada",
+          "done": "Completada",
+          "sent": "Completada"
+        }
+      },
+      "devices": {
+        "title": "Dispositivos conectados",
+        "summary": "{total} de {cap} espacios usados - {online} en línea",
+        "connect": "Conectar",
+        "emptyTitle": "No hay dispositivos conectados",
+        "emptyBody": "Vincula un número de WhatsApp para empezar a enviar.",
+        "connectDevice": "Conectar un dispositivo",
+        "unzoned": "sin zona",
+        "per24h": "{n}/24 h",
+        "deliv": "entreg.",
+        "free": "{n, plural, one {# espacio de dispositivo disponible} other {# espacios de dispositivo disponibles}}"
+      },
+      "templates": {
+        "title": "Plantillas con mejor rendimiento",
+        "subtitle": "Por volumen de envío - rango seleccionado",
+        "count": "{n, plural, one {# plantilla} other {# plantillas}}",
+        "new": "Nueva plantilla",
+        "empty": "Aún no hay plantillas.",
+        "create": "Crea la primera",
+        "col": {
+          "template": "Plantilla",
+          "type": "Tipo",
+          "sent": "Enviados",
+          "delivered": "Entregados",
+          "read": "Leídos",
+          "readRate": "Tasa de lectura",
+          "performance": "Tasa de entrega",
+          "status": "Estado"
+        },
+        "status": {
+          "approved": "Aprobada",
+          "public": "Aprobada",
+          "active": "Aprobada",
+          "pending": "En revisión",
+          "submitted": "En revisión",
+          "in_review": "En revisión",
+          "rejected": "Rechazada",
+          "disabled": "Rechazada"
+        }
+      },
+      "activity": {
+        "title": "Registro de actividad",
+        "subtitle": "Eventos del espacio de trabajo",
+        "empty": "No hay actividad reciente registrada en este espacio de trabajo.",
+        "by": "{actor} - {module} {action}"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "accounts": "{count, plural, one {# cuenta} other {# cuentas}}",
+        "connected": "Conectado",
+        "openInbox": "Abrir bandeja →",
+        "tile": {
+          "needReply": "Necesitan respuesta",
+          "openChats": "Abrir chats",
+          "dmsIn": "DM recibidos · 7 d",
+          "dmsOut": "DM enviados · 7 d",
+          "followers": "Seguidores",
+          "replyRate": "Tasa de respuesta"
+        }
+      },
+      "copilot": {
+        "title": "{brand} Copilot",
+        "tag": "Con IA",
+        "headline": "Crea un flujo a partir de una frase.",
+        "body": "Describe un recorrido del cliente y Copilot redacta nodos, ramas y sugerencias de plantillas.",
+        "try": "prueba:",
+        "generate": "Generar flujo ✦",
+        "examples": "Ejemplos",
+        "stat": {
+          "flows": "flujos",
+          "active": "activos",
+          "subscribers": "suscriptores"
+        }
+      },
+      "flows": {
+        "title": "Flujos de automatización",
+        "summary": "{active} activos · {subscribers} suscriptores",
+        "open": "Abrir",
+        "empty": "Aún no hay flujos.",
+        "build": "Crea tu primer flujo",
+        "meta": "Disparador: {trigger} · {steps} pasos · {subs} suscriptores",
+        "statusActive": "Activo",
+        "statusPaused": "En pausa",
+        "subs": "susc."
+      },
+      "quickActions": {
+        "title": "Acciones rápidas",
+        "soon": "Pronto",
+        "broadcast": {
+          "label": "Nueva difusión",
+          "hint": "a un grupo de contactos"
+        },
+        "flow": {
+          "label": "Crear flujo",
+          "hint": "arrastrar y soltar"
+        },
+        "template": {
+          "label": "Nueva plantilla",
+          "hint": "enviar a Meta"
+        },
+        "autoReply": {
+          "label": "Respuesta automática",
+          "hint": "regla por palabra clave"
+        }
+      },
+      "integrations": {
+        "title": "Integraciones",
+        "name": {
+          "woocommerce": "WooCommerce",
+          "shopify": "Shopify",
+          "google_sheets": "Google Sheets",
+          "meta_catalog": "Meta Catalog"
+        },
+        "events": "{n} eventos / 7 d",
+        "connected": {
+          "woocommerce": "Conectado",
+          "shopify": "Conectado",
+          "google_sheets": "Clave de API emitida",
+          "meta_catalog": "Catálogo vinculado"
+        },
+        "notConnected": "no conectado",
+        "connect": "Conectar",
+        "connectedLabel": "Conectado"
+      },
+      "sublineOfficial": "{date} - {range} con {sent} salientes y {rate} % de entregabilidad."
+    },
+    "analytics": {
+      "title": "Analíticas",
+      "headline": "El {rate} % de los mensajes llegó a su destinatario entre {from} y {to}.",
+      "subline": "{sent, plural, one {# mensaje enviado} other {# mensajes enviados}}, {replyRate} % de tasa de respuesta.",
+      "noSends": "Aún no hay mensajes salientes en este periodo.",
+      "export": "Exportar CSV",
+      "from": "Desde",
+      "to": "Hasta",
+      "apply": "Aplicar",
+      "kpis": "Cifras clave",
+      "kpi": {
+        "sent": "Enviados",
+        "delivered": "Entregados",
+        "queued": "En cola",
+        "failed": "Fallidos",
+        "replyRate": "Tasa de respuesta"
+      },
+      "series": {
+        "sent": "Enviados",
+        "delivered": "Entregados",
+        "failed": "Fallidos",
+        "queued": "En cola"
+      },
+      "empty": "No hay nada que mostrar en este periodo.",
+      "volume": {
+        "title": "Mensajes a lo largo del tiempo",
+        "subtitle": "Enviados, entregados y fallidos por día"
+      },
+      "rates": {
+        "title": "Tasas de entrega",
+        "subtitle": "Proporción de entregados, en cola y fallidos"
+      },
+      "totals": {
+        "title": "Totales diarios",
+        "subtitle": "Entregados, en cola y fallidos por día, apilados"
+      },
+      "funnel": {
+        "title": "Embudo de interacción"
+      },
+      "types": {
+        "title": "Tipos de mensaje",
+        "subtitle": "Distribución de salientes",
+        "byType": "Enviados y entregados por tipo de mensaje",
+        "kind": "Tipo",
+        "sent": "Enviados",
+        "delivered": "Entregados",
+        "text": "Texto",
+        "template": "Plantilla",
+        "media": "Multimedia",
+        "interactive": "Interactivo",
+        "location": "Ubicación"
+      },
+      "heatmap": {
+        "title": "Mejores horas",
+        "subtitle": "Volumen de mensajes por día de la semana y hora, {zone}. Más oscuro significa más actividad.",
+        "empty": "No hay volumen de mensajes en este periodo.",
+        "footer": "Calculado a partir de {total} mensajes, zona horaria {tz}"
+      },
+      "panels": {
+        "devices": {
+          "title": "Por dispositivo",
+          "subtitle": "Envíos en las últimas 24 horas",
+          "online": "{online}/{total} en línea",
+          "empty": "Aún no hay dispositivos conectados.",
+          "msg": "{n} msj."
+        },
+        "templates": {
+          "title": "Plantillas",
+          "subtitle": "Las mejores por envíos",
+          "empty": "No hay envíos de plantillas en este periodo."
+        },
+        "contacts": {
+          "title": "Contactos principales",
+          "subtitle": "Conversaciones con más interacción",
+          "empty": "No hay conversaciones en este periodo.",
+          "msgs": "{n} msj."
+        },
+        "team": {
+          "title": "Rendimiento del equipo",
+          "subtitle": "Agentes en este periodo",
+          "count": "{n, plural, one {# agente} other {# agentes}}",
+          "col": {
+            "agent": "Agente",
+            "convos": "Conv.",
+            "resolved": "Resueltas",
+            "first": "1.ª resp. media",
+            "resolution": "Resolución media",
+            "csat": "CSAT"
+          }
+        },
+        "geo": {
+          "title": "Por país",
+          "subtitle": "Alcance",
+          "markets": "{n, plural, one {# mercado} other {# mercados}}",
+          "unspecified": "Sin especificar",
+          "empty": "No hay conversaciones con un país conocido en este periodo."
+        },
+        "events": {
+          "title": "Flujo de eventos",
+          "subtitle": "Mensajes más recientes de este periodo",
+          "sent": "Enviado → {peer}",
+          "received": "Recibido de {peer}",
+          "empty": "No hay actividad reciente en este periodo."
+        }
+      }
+    },
+    "health": {
+      "nav": "Estado del sistema",
+      "group": "Sistema",
+      "title": "Estado del sistema",
+      "kicker": "Plataforma",
+      "description": "Comprobaciones en vivo de los servicios en los que funciona la plataforma.",
+      "banner": {
+        "up": "Todos los sistemas - Operativos",
+        "warn": "Todos los sistemas - Degradados",
+        "down": "Todos los sistemas - Caídos",
+        "checked": "Última comprobación {time} · se actualiza solo cada 20 s",
+        "refresh": "Actualizar ahora",
+        "refreshing": "Comprobando..."
+      },
+      "core": "Servicios principales",
+      "activity": {
+        "messages": "Mensajes · 24 h",
+        "aiCalls": "Llamadas de IA · 24 h",
+        "conversations": "Conversaciones · 24 h",
+        "webhooks": "Webhooks · 24 h"
+      },
+      "throughput": {
+        "title": "Volumen de mensajes · 14 días",
+        "peak": "pico {n}/día",
+        "empty": "No hay actividad de mensajes en los últimos 14 días.",
+        "aria": "Mensajes por día, últimos 14 días"
+      },
+      "state": {
+        "up": "Operativo",
+        "warn": "Degradado",
+        "down": "Caído",
+        "idle": "Inactivo"
+      },
+      "check": {
+        "database": "Base de datos",
+        "cache": "Caché",
+        "queue": "Cola",
+        "bridge": "Puente de Node",
+        "storage": "Almacenamiento multimedia"
+      },
+      "latency": {
+        "title": "Tiempo de respuesta",
+        "empty": "No hay datos de tiempos.",
+        "ms": "{ms} ms"
+      },
+      "queues": {
+        "title": "Colas",
+        "name": "Cola",
+        "pending": "Pendientes",
+        "failed": "Fallidos"
+      },
+      "clear": {
+        "button": "Borrar trabajos pendientes",
+        "busy": "Borrando...",
+        "confirmTitle": "¿Borrar los trabajos pendientes y fallidos?",
+        "confirmBody": "Los trabajos en espera y retrasados se quitan y los fallidos se eliminan de todas las colas. Los trabajos en ejecución no se tocan.",
+        "confirm": "Borrar trabajos",
+        "cancel": "Cancelar",
+        "done": "Se borraron {pending} trabajos pendientes y {failed} fallidos.",
+        "failed": "Error: {message}",
+        "superOnly": "Solo un superadministrador puede borrar trabajos."
+      },
+      "vitals": {
+        "title": "Estado del host",
+        "node": "Node",
+        "app": "Versión de la app",
+        "environment": "Entorno",
+        "uptime": "Tiempo activo",
+        "memory": "Memoria (RSS)",
+        "heap": "Heap en uso",
+        "diskFree": "Disco libre",
+        "diskFreeValue": "{gb} GB",
+        "diskUsed": "Disco usado {pct} %",
+        "noDisk": "No disponible"
+      },
+      "error": "No se pudieron cargar las comprobaciones de estado. Inténtalo de nuevo en un momento.",
+      "engines": {
+        "title": "Motores de WhatsApp y números conectados",
+        "empty": "Aún no hay motores configurados.",
+        "caption": "números conectados del total"
+      }
+    },
+    "admin": {
+      "nav": {
+        "analytics": "Analíticas"
+      },
+      "window": {
+        "label": "Periodo",
+        "24h": "Últimas 24 horas",
+        "7d": "Últimos 7 días",
+        "30d": "Últimos 30 días",
+        "90d": "Últimos 90 días",
+        "1y": "Último año"
+      },
+      "error": "No se pudieron cargar las cifras de la plataforma.",
+      "retry": "Reintentar",
+      "vsPrevious": "frente al periodo anterior",
+      "overview": {
+        "title": "Panel de administración.",
+        "kicker": "Administración / Resumen",
+        "subtitle": "Estado de la plataforma, ingresos, uso y actividad de los espacios de trabajo en un solo lugar.",
+        "addWorkspace": "Añadir espacio de trabajo",
+        "kpi": {
+          "income": "Ingresos totales",
+          "profit": "Beneficio",
+          "profitHint": "Estimación con un margen del 32 %, no es una cifra contable",
+          "views": "Vistas totales",
+          "viewsHint": "Mensajes enviados por todos los espacios de trabajo",
+          "conversion": "Tasa de conversión"
+        },
+        "revenue": {
+          "title": "Ingresos a lo largo del tiempo",
+          "total": "Ingresos totales",
+          "target": "Objetivo total",
+          "targetHint": "El objetivo es una referencia de crecimiento del 10 % sobre el periodo anterior, no una meta guardada.",
+          "revenue": "Ingresos",
+          "aria": "Ingresos por periodo frente al objetivo"
+        },
+        "countries": {
+          "title": "Sesiones por país",
+          "subtitle": "Principales sesiones por región",
+          "empty": "Aún no hay datos de país: los usuarios no han compartido su región."
+        },
+        "regions": {
+          "title": "Ventas por región",
+          "subtitle": "Participación en los ingresos de la plataforma",
+          "aria": "Usuarios nuevos por región"
+        },
+        "platform": {
+          "title": "Ventas por plataforma",
+          "subtitle": "Integraciones de comercio electrónico",
+          "empty": "No hay pedidos pagados en este periodo.",
+          "aria": "Ingresos cobrados por pasarela de pago"
+        },
+        "users": {
+          "title": "Usuarios registrados",
+          "subtitle": "Resumen de licencias de usuario",
+          "total": "Usuarios totales",
+          "premium": "Plan Premium",
+          "basic": "Plan Básico",
+          "aria": "El {pct} % de los usuarios tiene un plan de pago"
+        },
+        "workspaces": {
+          "title": "Actividad de los espacios de trabajo",
+          "subtitle": "Eventos de administración recientes de alto valor",
+          "viewAll": "Ver todo",
+          "empty": "Aún no hay espacios de trabajo.",
+          "col": {
+            "workspace": "Espacio de trabajo",
+            "owner": "Propietario",
+            "plan": "Plan",
+            "messages": "Mensajes",
+            "health": "Salud",
+            "mrr": "MRR"
+          },
+          "health": {
+            "good": "Buena",
+            "active": "Activo",
+            "low": "Baja",
+            "idle": "Inactivo"
+          }
+        },
+        "alerts": {
+          "title": "Alertas de administración",
+          "subtitle": "Cola prioritaria",
+          "open": "{n} abiertas",
+          "empty": "Todos los sistemas funcionan bien: sin alertas."
+        },
+        "titleLead": "Panel de",
+        "titleAccent": "administración"
+      },
+      "analytics": {
+        "title": "Analíticas de administración.",
+        "kicker": "Administración - Plataforma",
+        "subtitle": "Una vista completa de la sala de control con ingresos, crecimiento de espacios de trabajo, uso de WhatsApp, entrega de campañas, estado de dispositivos y carga de soporte.",
+        "days": {
+          "7": "Últimos 7 días",
+          "30": "Últimos 30 días",
+          "90": "Últimos 90 días",
+          "365": "Este año",
+          "custom": "Últimos {n} días"
+        },
+        "daysLabel": "Días",
+        "export": "Exportar",
+        "tabs": {
+          "overview": "Resumen",
+          "revenue": "Ingresos",
+          "usage": "Uso",
+          "workspaces": "Espacios de trabajo",
+          "campaigns": "Campañas",
+          "support": "Soporte"
+        },
+        "kpi": {
+          "revenue": "Ingresos",
+          "revenueSub": "{n, plural, one {# espacio de trabajo nuevo} other {# espacios de trabajo nuevos}}",
+          "workspaces": "Espacios de trabajo",
+          "workspacesSub": "{n, plural, one {# usuario en total} other {# usuarios en total}}",
+          "messages": "Mensajes",
+          "messagesSub": "{n} / día de media",
+          "devices": "Dispositivos en línea",
+          "newUsers": "Usuarios nuevos",
+          "newUsersSub": "{n} en total",
+          "tickets": "Tickets abiertos",
+          "watch": "vigilar",
+          "clear": "despejado"
+        },
+        "pulse": {
+          "title": "Pulso de la plataforma",
+          "subtitle": "Saturación en vivo de la sala de control",
+          "workspaces": "Espacios de trabajo",
+          "devices": "Dispositivos conectados",
+          "tickets": "Tickets abiertos",
+          "signups": "Registros nuevos",
+          "normal": "normal"
+        },
+        "growth": {
+          "title": "Centro de mando de crecimiento",
+          "subtitle": "Registros de usuarios, últimos {days} días",
+          "aria": "Registros por día",
+          "series": "Registros"
+        },
+        "plans": {
+          "title": "Distribución de planes",
+          "subtitle": "Espacios de trabajo por plan",
+          "empty": "Aún no hay datos: la distribución de planes aparece cuando se ha asignado un plan al menos a un espacio de trabajo.",
+          "aria": "Espacios de trabajo por plan"
+        },
+        "acquisition": {
+          "title": "Captación",
+          "subtitle": "De usuarios a espacio de trabajo",
+          "users": "Usuarios totales",
+          "newUsers": "Usuarios nuevos",
+          "workspaces": "Espacios de trabajo creados",
+          "newWorkspaces": "Espacios de trabajo nuevos",
+          "devices": "Dispositivos conectados"
+        },
+        "devices": {
+          "title": "Dispositivos principales - 24 h",
+          "subtitle": "Volumen de envío",
+          "empty": "Aún no hay envíos",
+          "devices": "Dispositivos",
+          "online": "En línea",
+          "sends": "Envíos 24 h",
+          "aria": "Envíos en las últimas 24 horas por dispositivo"
+        },
+        "leaderboard": {
+          "title": "Espacios de trabajo con más ingresos cobrados",
+          "subtitle": "Últimos {days} días",
+          "workspace": "Espacio de trabajo",
+          "orders": "Pedidos",
+          "revenue": "Ingresos cobrados",
+          "open": "Abrir",
+          "empty": "No hay pedidos pagados en este periodo."
+        },
+        "cohort": {
+          "title": "Cohortes de registro",
+          "subtitle": "Últimos {days} días",
+          "aria": "Registros diarios"
+        },
+        "composition": {
+          "title": "Composición de los ingresos",
+          "subtitle": "Principales contribuyentes",
+          "empty": "Aún no hay ingresos cobrados."
+        },
+        "support": {
+          "title": "Carga de soporte",
+          "subtitle": "Estado de los tickets",
+          "empty": "Aún no hay tickets.",
+          "open": "Abiertos",
+          "resolved": "Resueltos",
+          "inbox": "Abrir bandeja"
+        },
+        "queue": {
+          "title": "Atención de administración",
+          "subtitle": "Cola de acciones",
+          "tickets": "{n, plural, one {# ticket abierto} other {# tickets abiertos}}",
+          "ticketsHint": "Clasifícalos en soporte antes de incumplir el SLA",
+          "offline": "{n, plural, one {# dispositivo sin conexión} other {# dispositivos sin conexión}}",
+          "offlineHint": "Menos de la mitad de los dispositivos están en línea",
+          "users": "{n, plural, one {# usuario nuevo} other {# usuarios nuevos}}",
+          "usersHint": "Revisa los últimos registros",
+          "clear": "Todo en orden"
+        },
+        "titleLead": "Analíticas de",
+        "titleAccent": "administración"
+      },
+      "kpiLabel": "KPI"
+    },
+    "quickAccess": {
+      "title": "Acceso rápido",
+      "kicker": "Atajos",
+      "edit": "Editar atajos",
+      "empty": "Añadir atajos de acceso rápido",
+      "open": "Abrir {label}",
+      "modalTitle": "Acceso rápido",
+      "modalEyebrow": "Fija hasta 10 atajos",
+      "pages": "Páginas de la app (máx. 10)",
+      "custom": "Enlaces personalizados",
+      "labelPlaceholder": "Etiqueta",
+      "urlPlaceholder": "https://... o /ruta",
+      "addCustom": "+ Añadir un enlace personalizado",
+      "removeCustom": "Quitar este enlace",
+      "counter": "{n} / 10 fijados",
+      "cancel": "Cancelar",
+      "save": "Guardar atajos",
+      "saving": "Guardando...",
+      "limit": "Puedes fijar hasta 10 atajos.",
+      "saved": "Acceso rápido actualizado.",
+      "failed": "No se pudieron guardar tus atajos."
+    }
+  }
+}

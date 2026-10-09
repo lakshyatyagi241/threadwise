@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "店铺 / 支付网关",
+      "title": "支付网关",
+      "subtitle": "添加您自己的网关密钥，让款项直接进入您的账户。请粘贴网关在其后台中提供的密钥。",
+      "banner": "您的店铺结账和销售发票共用同一个网关设置。",
+      "viewOnly": "您可以查看网关设置，但无法更改。请联系工作区管理员获取管理网关的权限。",
+      "scope": {
+        "label": "这些设置的适用范围",
+        "workspace": "工作区（所有店铺）",
+        "workspaceHint": "供所有店铺和销售发票使用，除非某个店铺有自己的覆盖设置。",
+        "store": "仅此店铺（覆盖）",
+        "storeHint": "仅用于 {shop} 的结账。优先于工作区设置。",
+        "storeNamed": "店铺：{shop}",
+        "noShop": "请先创建店铺，再设置覆盖。",
+        "shop": "店铺"
+      },
+      "resolved": {
+        "used": "当前使用：{name}（来源：{source}）",
+        "none": "尚未设置网关",
+        "noneHint": "请在下方设置网关并开启。在此之前，买家无法在线支付，发票也没有支付按钮。",
+        "source": {
+          "store_override": "店铺覆盖",
+          "workspace_default": "工作区默认",
+          "legacy_storefront": "店铺密钥"
+        }
+      },
+      "mode": {
+        "live": "正式",
+        "test": "测试"
+      },
+      "catalogue": {
+        "title": "网关",
+        "count": "{count, plural, other {# 个网关}}",
+        "search": "搜索网关",
+        "searchPlaceholder": "按名称、国家/地区或货币搜索",
+        "loading": "正在加载网关",
+        "noDriversTitle": "没有可用的网关",
+        "noDriversMessage": "此服务器暂无可设置的支付网关。",
+        "noMatchTitle": "没有匹配的网关",
+        "noMatchMessage": "请尝试其他名称、国家/地区或货币代码。",
+        "clearSearch": "清除搜索"
+      },
+      "card": {
+        "available": "可用",
+        "unavailable": "暂不可用",
+        "paymentLinks": "支付链接",
+        "unavailableNote": "此网关已列出，但在当前版本中暂时无法收款。",
+        "active": "启用中",
+        "off": "已关闭",
+        "incomplete": "密钥不完整",
+        "default": "默认",
+        "migrated": "已从您的店面密钥迁移。请在此保存一次，以便在新设置中保留。",
+        "webhookMissing": "缺少 Webhook 密钥：在添加之前，来自此网关的支付通知将被拒绝。",
+        "notSetUp": "此范围尚未设置。",
+        "configure": "配置",
+        "edit": "编辑",
+        "test": "测试连接",
+        "testing": "测试中",
+        "setDefault": "设为默认",
+        "activeSwitch": "{name} 已开启",
+        "remove": "移除",
+        "removeTitle": "移除 {name}？",
+        "removeMessage": "将删除其在此范围（{scope}）下已保存的密钥。买家将无法再通过它支付，正在进行的支付可能无法确认。",
+        "removeConfirm": "移除网关"
+      },
+      "toast": {
+        "saved": "网关已保存",
+        "switchedOn": "{name} 已开启",
+        "switchedOff": "{name} 已关闭",
+        "defaultSet": "{name} 现已设为默认",
+        "removed": "{name} 已移除"
+      },
+      "test": {
+        "verified": "服务商已接受这些密钥。",
+        "fieldsTitle": "必填字段已填写",
+        "fieldsOnly": "仅检查了必填字段：此网关没有低成本的检查调用，因此实际支付才是真正的测试。",
+        "missingTitle": "密钥不完整",
+        "missing": "以下必填字段为空：{fields}。",
+        "rejected": "服务商未接受这些密钥。",
+        "providerSaid": "服务商返回：{message}"
+      },
+      "drawer": {
+        "eyebrow": "配置网关",
+        "save": "保存网关",
+        "appliesTo": "适用于：{scope}",
+        "credentials": "凭据",
+        "noFields": "此网关无需密钥。",
+        "secretsNote": "已保存的密钥不会再次显示，仅显示每个密钥的末尾作为提示。",
+        "requiredField": "{field} 为必填项。",
+        "invalidOption": "请为 {field} 选择列出的选项之一。",
+        "mode": "模式",
+        "modeHint": "使用网关测试密钥试用时选择“测试”，收取真实款项时选择“正式”。",
+        "active": "启用",
+        "activeHint": "已关闭的网关不会被结账或发票使用。",
+        "webhookTitle": "Webhook 地址",
+        "webhookHint": "请将其粘贴到您的 {name} 后台，使支付自动确认。",
+        "webhookAfterSave": "首次保存后，Webhook 地址会显示在这里。",
+        "willClear": "保存时将移除已保存的值。",
+        "keepBlank": "留空则保留已保存的值。",
+        "requiredMark": "（必填）",
+        "stored": "已保存：{mask}",
+        "keepOption": "保留已保存的值",
+        "chooseOption": "选择一个选项",
+        "clear": "清除已保存的值",
+        "show": "显示值",
+        "hide": "隐藏值"
+      }
+    }
+  }
+}

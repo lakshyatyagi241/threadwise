@@ -1,0 +1,170 @@
+{
+  "web-forms": {
+    "submissions": {
+      "title": "Inzendingen",
+      "backToForm": "Terug naar {name}",
+      "formFallback": "Formulier",
+      "count": "{count, plural, =0 {Geen inzendingen} one {1 inzending} other {# inzendingen}} geladen",
+      "moreAvailable": "Er zijn er meer beschikbaar",
+      "tabsLabel": "Groepen van inzendingen",
+      "tabs": {
+        "all": "Alle",
+        "needs_attention": "Aandacht nodig",
+        "spam": "Spam"
+      },
+      "filters": {
+        "search": "Zoeken",
+        "searchPlaceholder": "Naam, e-mail of telefoon",
+        "status": "Status",
+        "allStatuses": "Elke status",
+        "from": "Van",
+        "to": "Tot",
+        "clear": "Filters wissen"
+      },
+      "status": {
+        "received": "Ontvangen",
+        "created": "Contact aangemaakt",
+        "updated": "Contact bijgewerkt",
+        "needs_review": "Moet worden bekeken",
+        "awaiting_payment": "Wacht op betaling",
+        "paid": "Betaald",
+        "failed": "Mislukt",
+        "spam": "Spam"
+      },
+      "reason": {
+        "label": "Waarom",
+        "todo": "Wat te doen",
+        "no_contact_point": {
+          "what": "De bezoeker gaf geen bruikbaar e-mailadres of telefoonnummer, dus er kon geen contact worden aangemaakt.",
+          "todo": "Open de antwoorden, voeg het ontbrekende gegeven handmatig aan het contact toe, of repareer de koppeling van het formulier en probeer opnieuw."
+        },
+        "invalid_phone": {
+          "what": "Het telefoonnummer kon niet als geldig nummer worden gelezen.",
+          "todo": "Open de antwoorden, controleer het nummer en probeer opnieuw zodra het formulier het accepteert, of voeg het contact handmatig toe."
+        },
+        "plan_limit_reached": {
+          "what": "De contactlimiet van je abonnement is bereikt, dus er is geen nieuw contact aangemaakt.",
+          "todo": "Maak contacten vrij of upgrade je abonnement en probeer opnieuw."
+        },
+        "submissions_cap": {
+          "what": "De maandelijkse inzendinglimiet van je abonnement is bereikt, dus dit is opgeslagen om te bekijken.",
+          "todo": "Upgrade je abonnement of wacht tot de volgende maand en probeer opnieuw."
+        },
+        "spam_score": {
+          "what": "De inzending leek op spam en is apart gezet.",
+          "todo": "Als het een echte persoon is, open hem dan en voeg die handmatig toe als contact."
+        },
+        "too_fast": {
+          "what": "Hij is sneller verzonden dan een persoon het formulier kan invullen, dus is hij als spam apart gezet.",
+          "todo": "Als het een echte persoon is, open hem dan en voeg die handmatig toe als contact."
+        },
+        "internal_error": {
+          "what": "Er ging iets mis aan onze kant bij het verwerken. De antwoorden zijn bewaard.",
+          "todo": "Probeer het opnieuw. Als het weer mislukt, neem dan contact op met support met het tijdstip van de inzending."
+        },
+        "unknown": {
+          "what": "Deze inzending is apart gezet om een reden die deze versie van de app niet herkent.",
+          "todo": "Open hem om de details te zien en probeer het opnieuw of behandel hem handmatig."
+        }
+      },
+      "table": {
+        "received": "Ontvangen",
+        "visitor": "Bezoeker",
+        "status": "Status",
+        "contact": "Contact",
+        "company": "Bedrijf",
+        "version": "Versie",
+        "open": "Open inzending van {who}"
+      },
+      "anonymous": "Geen naam opgegeven",
+      "answersRemovedShort": "Antwoorden verwijderd",
+      "versionShort": "v{n}",
+      "noLink": "Geen",
+      "unnamedContact": "Contact openen",
+      "unnamedCompany": "Bedrijf openen",
+      "drawer": {
+        "title": "Inzending van {who}",
+        "close": "Sluiten",
+        "loading": "Inzending openen",
+        "errorTitle": "Deze inzending kon niet worden geopend.",
+        "errorBody": "Controleer je verbinding en probeer het opnieuw.",
+        "retryLoad": "Opnieuw proberen",
+        "auditNote": "Het openen van de antwoorden van een inzending wordt vastgelegd in het auditlogboek.",
+        "answers": "Antwoorden",
+        "noAnswers": "Deze inzending heeft geen antwoorden.",
+        "emptyAnswer": "Geen antwoord",
+        "yes": "Ja",
+        "no": "Nee",
+        "removedTitle": "Antwoorden verwijderd",
+        "removedBody": "De antwoorden zijn gewist of definitief verwijderd. Alleen deze registratie blijft over, en het contact is bewaard gebleven.",
+        "summary": "Samenvatting",
+        "receivedAt": "Ontvangen",
+        "formVersion": "Formulierversie",
+        "spamScore": "Spamscore",
+        "error": "Fout",
+        "attribution": "Waar het vandaan kwam",
+        "noAttribution": "Er zijn geen bronnagegevens vastgelegd.",
+        "utm": "Campagnetags",
+        "referrer": "Verwijzer",
+        "pageUrl": "Pagina",
+        "userAgent": "Browser",
+        "consent": "Toestemming",
+        "consentGiven": "Toestemming gegeven",
+        "consentText": "Tekst die de bezoeker zag",
+        "consentVersion": "Tekstversie",
+        "consentAt": "Gegeven op",
+        "noConsent": "Dit formulier vroeg niet om toestemming.",
+        "links": "Registraties",
+        "actions": "Acties"
+      },
+      "actions": {
+        "retry": "Opnieuw proberen",
+        "retrying": "Opnieuw proberen",
+        "delete": "Antwoorden verwijderen",
+        "deleting": "Verwijderen",
+        "export": "CSV exporteren",
+        "exporting": "Exporteren",
+        "exportHintAttention": "Kies één status om uit deze groep te exporteren, of gebruik Alle.",
+        "exportHintSearch": "De export negeert de zoektekst.",
+        "notSpam": "Geen spam: verwerken"
+      },
+      "confirmDelete": {
+        "title": "Deze antwoorden verwijderen?",
+        "message": "Dit wist de antwoorden van deze inzending definitief. Er blijft een rij in de lijst staan als bewijs dat het gebeurd is, en het contact wordt nooit verwijderd.",
+        "confirm": "Antwoorden verwijderen",
+        "cancel": "Annuleren"
+      },
+      "toast": {
+        "retried": "Opnieuw geprobeerd. De inzending heeft nu de status: {status}.",
+        "notRetryable": "Alleen inzendingen die beoordeling nodig hebben of mislukt zijn, kunnen opnieuw worden geprobeerd.",
+        "purged": "De antwoorden zijn al verwijderd, dus er is niets om opnieuw te proberen.",
+        "retryFailed": "De nieuwe poging is niet gelukt. Probeer het opnieuw.",
+        "deleted": "De antwoorden zijn verwijderd. Het contact is bewaard gebleven.",
+        "deleteFailed": "De antwoorden konden niet worden verwijderd. Probeer het opnieuw.",
+        "exported": "De CSV is gedownload.",
+        "exportTruncated": "De export is afgekapt op de nieuwste {max} rijen. Beperk de data om de rest te krijgen.",
+        "exportFailed": "De export kon niet worden gemaakt. Probeer het opnieuw."
+      },
+      "state": {
+        "loading": "Inzendingen laden",
+        "errorTitle": "Inzendingen konden niet worden geladen.",
+        "errorBody": "Controleer je verbinding en probeer het opnieuw.",
+        "retry": "Opnieuw proberen",
+        "lockedTitle": "Formulieren is niet onderdeel van je abonnement",
+        "lockedBody": "Voeg de app Formulieren toe aan je workspace om inzendingen te verzamelen en te bekijken.",
+        "upgrade": "Abonnementen bekijken",
+        "emptyTitle": "Nog geen inzendingen",
+        "emptyBody": "Deel de link van het formulier of zet het op je site. Elke inzending verschijnt hier zodra iemand hem verstuurt.",
+        "emptyShare": "Dit formulier delen",
+        "emptyFilteredTitle": "Geen inzendingen gevonden",
+        "emptyFilteredBody": "Niets past bij deze filters. Wis ze om alles te zien.",
+        "loadMore": "Meer laden",
+        "loadingMore": "Meer laden"
+      },
+      "cap": {
+        "notice": "Sommige inzendingen zijn opgeslagen om te bekijken omdat de maandelijkse inzendinglimiet van je abonnement is bereikt.",
+        "upgrade": "Upgrade je abonnement"
+      }
+    }
+  }
+}

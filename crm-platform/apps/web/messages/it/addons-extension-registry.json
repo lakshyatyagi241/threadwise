@@ -1,0 +1,307 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "Add-on e moduli",
+      "packs": "Add-on (fatturazione)",
+      "extensions": "Add-on (codice)",
+      "workspace": "Add-on"
+    },
+    "common": {
+      "loading": "Caricamento",
+      "retry": "Riprova",
+      "cancel": "Annulla",
+      "save": "Salva",
+      "saving": "Salvataggio",
+      "close": "Chiudi",
+      "dismiss": "Ignora",
+      "admin": "Admin",
+      "settings": "Impostazioni",
+      "optional": "facoltativo",
+      "required": "obbligatorio",
+      "readOnly": "Puoi vedere questa pagina, ma solo un super admin può modificarla.",
+      "requestId": "ID richiesta",
+      "errors": {
+        "forbidden": "Non hai accesso a questa pagina.",
+        "request": "Impossibile completare la richiesta.",
+        "unexpected": "Qualcosa è andato storto. Riprova tra un attimo.",
+        "conflict": "Qualcun altro ha appena modificato questo elemento. Ricarica e riprova."
+      }
+    },
+    "packs": {
+      "crumbHere": "Add-on",
+      "eyebrow": "Admin · Fatturazione e piani · Add-on",
+      "titleLead": "Add",
+      "titleAccent": "-on",
+      "title": "Add-on",
+      "description": "Pacchetti di funzionalità à la carte che un cliente acquista in aggiunta al proprio piano, come «Add-on Campagne» o «+1 numero WhatsApp». Ogni add-on concede le funzionalità e i limiti che imposti, uniti al piano del cliente. Compaiono nella pagina Account del cliente quando ha un piano attivo.",
+      "new": "Nuovo add-on",
+      "empty": {
+        "title": "Ancora nessun add-on.",
+        "action": "Crea il tuo primo add-on"
+      },
+      "table": {
+        "label": "Add-on",
+        "name": "Nome",
+        "price": "Prezzo",
+        "period": "Periodo",
+        "grants": "Include",
+        "status": "Stato",
+        "actions": "Azioni"
+      },
+      "price": {
+        "free": "Gratis",
+        "lifetime": "una tantum"
+      },
+      "period": {
+        "days": "{count} giorni",
+        "weeks": "{count} settimane",
+        "months": "{count} mesi",
+        "years": "{count} anni"
+      },
+      "grants": {
+        "none": "nulla impostato",
+        "unlimited": "{name} illimitati",
+        "add": "+{amount} {name}",
+        "more": "+{count}"
+      },
+      "status": {
+        "active": "Attivo",
+        "off": "Off"
+      },
+      "actions": {
+        "edit": "Modifica",
+        "enable": "Abilita",
+        "disable": "Disabilita",
+        "delete": "Elimina"
+      },
+      "toasts": {
+        "created": "Add-on creato.",
+        "updated": "Add-on aggiornato.",
+        "activated": "{name} abilitato",
+        "deactivated": "{name} disabilitato",
+        "deleted": "{name} eliminato"
+      },
+      "delete": {
+        "title": "Eliminare {name}?",
+        "body": "Eliminare questo add-on? I workspace che lo hanno acquistato lo mantengono fino alla scadenza.",
+        "confirm": "Elimina",
+        "inUse": "{count, plural, one {# workspace possiede questo add-on, quindi non può essere eliminato. Disabilitalo: i proprietari lo mantengono fino alla scadenza.} many {# workspace possiedono questo add-on, quindi non può essere eliminato. Disabilitalo: i proprietari lo mantengono fino alla scadenza.} other {# workspace possiedono questo add-on, quindi non può essere eliminato. Disabilitalo: i proprietari lo mantengono fino alla scadenza.}}"
+      },
+      "errors": {
+        "generic": "Impossibile salvare l'add-on.",
+        "forbidden": "Solo un super admin può modificare gli add-on.",
+        "notFound": "Questo add-on non esiste più."
+      },
+      "editor": {
+        "crumbHere": "Add-on",
+        "crumbNew": "Nuovo",
+        "crumbEdit": "Modifica",
+        "eyebrowNew": "Admin · Add-on · Nuovo",
+        "eyebrowEdit": "Admin · Add-on · Modifica",
+        "titleNewLead": "Crea un",
+        "titleEditLead": "Modifica",
+        "titleAccent": "add-on",
+        "intro": "Un add-on concede SOLO ciò che attivi e nient'altro. Un limite lasciato vuoto non viene toccato, quindi non c'è alcun «illimitato» accidentale.",
+        "fixTitle": "Correggi quanto segue:",
+        "cancel": "Annulla",
+        "create": "Crea add-on",
+        "saveChanges": "Salva modifiche",
+        "basics": "Dati di base dell'add-on",
+        "features": "Funzionalità sbloccate da questo add-on",
+        "featuresHint": "Seleziona solo ciò che questo add-on concede. Tutto ciò che non è selezionato resta regolato dal piano del cliente.",
+        "coreFeature": "in ogni piano",
+        "limits": "Aumenti dei limiti",
+        "limitsHint": "Vuoto = l'add-on non tocca questo limite. Inserisci un numero per AGGIUNGERLO al piano (ad esempio +2 dispositivi). Usa -1 per illimitato.",
+        "fields": {
+          "name": "Nome",
+          "namePlaceholder": "Add-on Campagne",
+          "subtitle": "Sottotitolo",
+          "subtitlePlaceholder": "Sblocca le campagne",
+          "amount": "Prezzo",
+          "offerAmount": "Prezzo in offerta (facoltativo)",
+          "currency": "Valuta",
+          "billingDuration": "Durata",
+          "billingUnit": "Unità",
+          "billingMode": "Fatturazione",
+          "sortOrder": "Ordine",
+          "isActive": "Attivo",
+          "isLifetime": "A vita (una tantum)"
+        },
+        "modes": {
+          "one_time": "Una tantum (riacquistabile alla scadenza)",
+          "recurring": "Ricorrente (si rinnova con pagamento automatico)"
+        },
+        "units": {
+          "days": "Giorni",
+          "weeks": "Settimane",
+          "months": "Mesi",
+          "years": "Anni"
+        },
+        "problems": {
+          "name": "Inserisci un nome.",
+          "amount": "Inserisci un importo come 19 o 19.99.",
+          "offerAmount": "L'offerta deve essere inferiore al prezzo.",
+          "currency": "Usa un codice valuta di tre lettere.",
+          "billingDuration": "Inserisci un numero intero pari o superiore a 1.",
+          "sortOrder": "Inserisci un numero intero.",
+          "limits": "I limiti sono numeri interi, oppure -1 per illimitato.",
+          "form": "Controlla i campi evidenziati."
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "Add-on",
+      "eyebrow": "Admin · Add-on",
+      "titleLead": "Installa un",
+      "titleAccent": "add-on",
+      "title": "Add-on",
+      "description": "Gli add-on uniscono funzionalità extra a questa installazione. Instagram è il primo. Verifica il codice di acquisto, carica il pacchetto e si installa sul posto. I tuoi dati e le tue impostazioni restano intatti.",
+      "coreVersion": "Core",
+      "packsLead": "Cerchi i pacchetti di funzionalità a pagamento che i clienti acquistano in aggiunta a un piano?",
+      "packsLink": "Sono gli add-on del piano (fatturazione)",
+      "packsTail": ". Questa pagina installa codice.",
+      "installed": {
+        "title": "Add-on installati",
+        "empty": "Nessun add-on installato. Verifica il codice di acquisto qui sopra, poi carica un pacchetto.",
+        "version": "v{version}",
+        "files": "{count, plural, one {# file} many {# file} other {# file}}",
+        "inPlace": "Modulo sul posto",
+        "filesKept": "file conservati su disco",
+        "active": "Attivo",
+        "disabled": "Disabilitato",
+        "inactive": "Inattivo",
+        "enable": "Abilita",
+        "disable": "Disabilita",
+        "remove": "Rimuovi",
+        "reactivate": "Riattiva",
+        "footnote": "La rimozione di un add-on elimina solo i file che ha installato, tracciati dal momento in cui è stato aggiunto, quindi i file del core non vengono mai toccati. I dati restano nel database."
+      },
+      "verify": {
+        "title": "Verifica il tuo codice di acquisto",
+        "body": "La stessa licenza {brand} che sblocca gli aggiornamenti. Gli add-on sono legati ad essa.",
+        "placeholder": "es. 8f2c1a44-...",
+        "label": "Codice di acquisto",
+        "action": "Verifica",
+        "checking": "Verifica in corso…",
+        "empty": "Inserisci prima il tuo codice di acquisto.",
+        "failed": "Verifica non riuscita."
+      },
+      "upload": {
+        "title": "Carica il pacchetto dell'add-on",
+        "body": "Lo ZIP viene ispezionato prima di scrivere qualsiasi cosa. Un pacchetto malformato o incompatibile viene rifiutato senza toccare la tua installazione.",
+        "choose": "Scegli un .zip dell'add-on",
+        "max": "Max 100 MB",
+        "action": "Installa",
+        "installing": "Installazione in corso…",
+        "progress": "Caricamento e unione in corso. Non chiudere questa scheda."
+      },
+      "confirm": {
+        "removeTitle": "Rimuovere {name}?",
+        "removeBody": "Questo elimina i file che ha installato. I suoi dati restano nel database.",
+        "remove": "Rimuovi",
+        "moduleOffTitle": "Rimuovere {name}?",
+        "moduleOffBody": "Questo disattiva l'add-on, quindi le sue pagine e automazioni smettono di funzionare. I file vengono conservati, così puoi riattivarlo quando vuoi. Non viene eliminato nulla e i suoi dati restano nel database.",
+        "moduleOnTitle": "Riattivare {name}?",
+        "moduleOnBody": "Questo riattiva l'add-on. I suoi file sono ancora su disco, quindi riprende a funzionare subito.",
+        "reactivate": "Riattiva"
+      },
+      "engines": {
+        "connected": "Connesso",
+        "notConnected": "Non connesso",
+        "connect": "Connetti",
+        "manage": "Gestisci",
+        "disconnect": "Disconnetti",
+        "disconnectYes": "Sì, disconnetti",
+        "save": "Salva e connetti",
+        "testing": "Connessione in corso…",
+        "displayName": "Nome visualizzato",
+        "secret": "Token segreto condiviso",
+        "secretSaved": "•••••••• salvato, lascia vuoto per mantenerlo",
+        "secretNew": "incolla il segreto condiviso",
+        "lastChecked": "Ultimo controllo",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "Funziona come deployment {brand} separato. Connessione tramite URL + segreto, senza caricare file.",
+          "blocked": "Bloccato: add-on nativo attivo",
+          "blockedNote": "L'add-on Instagram nativo è installato. Rimuovilo qui sotto per connettere un {brand} remoto.",
+          "modalTitle": "Connetti Instagram",
+          "modalBody": "Incolla l'URL del tuo deployment {brand} e il token segreto condiviso. {app} verifica la connessione tramite API. Non viene caricato nulla.",
+          "url": "URL {brand}",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "Mostrato in ogni etichetta «Sincronizza da …», «Gestisci su …» e «URL …» nell'app.",
+          "disconnectTitle": "Disconnettere Instagram?",
+          "disconnectBody": "Questo disconnette Instagram da {app}. Instagram scomparirà subito da dashboard, analisi, inbox, flow, template e risposte automatiche per ogni workspace e non potrà essere usato finché non ti riconnetti. Continuare?"
+        },
+        "email": {
+          "title": "Email",
+          "body": "La connessione collega la piattaforma email {brand} così la posta arriva nell'inbox del team, tramite URL + segreto, senza caricare file.",
+          "modalTitle": "Connetti email",
+          "modalBody": "Incolla l'URL del tuo deployment {brand} e il token segreto condiviso. {app} verifica la connessione tramite API. Non viene caricato nulla.",
+          "url": "URL {brand}",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "Mostrato in ogni etichetta email nell'app.",
+          "disconnectTitle": "Disconnettere l'email?",
+          "disconnectBody": "Questo disconnette la piattaforma email da {app}. La posta smette di arrivare nell'inbox del team per ogni workspace finché non ti riconnetti. Continuare?"
+        }
+      },
+      "errors": {
+        "generic": "Non ha funzionato.",
+        "forbidden": "Solo un super admin può modificare i moduli.",
+        "invalidPackage": "Il pacchetto non è valido.",
+        "tooLarge": "Il pacchetto è troppo grande.",
+        "coreTooOld": "Questo pacchetto richiede una versione più recente del core.",
+        "engineConflict": "Instagram usa un solo motore alla volta. Disconnetti prima l'altro."
+      }
+    },
+    "workspace": {
+      "title": "Add-on",
+      "description": "Pacchetti di funzionalità extra da acquistare in aggiunta al tuo abbonamento.",
+      "needPlanTitle": "Gli add-on richiedono un piano attivo",
+      "needPlanBody": "Gli add-on sono pacchetti di funzionalità extra da acquistare in aggiunta al tuo abbonamento. Scegli prima un piano, poi torna qui per aggiungere funzionalità.",
+      "viewPlans": "Vedi i piani",
+      "noneTitle": "Nessun add-on disponibile",
+      "noneBody": "Al momento non ci sono add-on in offerta. Riprova più tardi.",
+      "ownedTitle": "I tuoi add-on",
+      "ownedBody": "Pacchetti attivi uniti al tuo piano attuale.",
+      "ends": "Scade il {date}",
+      "lifetime": "A vita",
+      "autoRenews": "Rinnovo automatico",
+      "renewal": {
+        "cancel": "Annulla rinnovo",
+        "confirmTitle": "Annullare il rinnovo?",
+        "confirmBody": "Questo add-on resta attivo fino alla fine del periodo già pagato, poi non verrà rinnovato.",
+        "confirm": "Annulla rinnovo",
+        "keep": "Mantieni il rinnovo",
+        "forbidden": "Non hai l'autorizzazione per modificare il piano.",
+        "none": "Non c'è alcun abbonamento attivo da annullare.",
+        "failed": "Non è stato possibile annullare il rinnovo. Riprova."
+      },
+      "active": "Attivo",
+      "cardEyebrow": "Add-on",
+      "catalogTitle": "Add-on",
+      "catalogBody": "Sblocca funzionalità extra in aggiunta al tuo piano attuale. Nessun cambio di piano necessario.",
+      "count": "{count, plural, one {# add-on} many {# add-on} other {# add-on}}",
+      "free": "Gratis",
+      "lifetimePrice": "una tantum",
+      "per": "/ {unit}",
+      "units": {
+        "days": "giorni",
+        "weeks": "settimane",
+        "months": "mesi",
+        "years": "anni"
+      },
+      "buy": "Aggiungi al piano",
+      "buyAgain": "Riacquista",
+      "owned": "Posseduto ×{count} · riacquistando se ne aggiungono altri",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "{name} illimitati",
+        "add": "+{amount} {name}"
+      },
+      "error": "Impossibile caricare gli add-on."
+    }
+  }
+}

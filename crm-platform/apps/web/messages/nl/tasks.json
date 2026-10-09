@@ -1,0 +1,330 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "Taken"
+    },
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "hub": {
+      "title": "Taken",
+      "subtitle": "Opvolgacties en to-do's. Wijs ze toe, stel een prioriteit en vervaldatum in en vink ze af.",
+      "newTask": "Nieuwe taak",
+      "tableLabel": "Taken",
+      "loading": "Taken laden",
+      "useSampleData": "Voorbeeldgegevens gebruiken (ontwikkeling)",
+      "emptyFilteredTitle": "Geen taken gevonden",
+      "emptyFiltered": "Probeer een andere zoekopdracht of wis de filters.",
+      "resetFilters": "Filters wissen",
+      "empty": {
+        "mine": {
+          "title": "Niets aan jou toegewezen",
+          "message": "Aan jou toegewezen taken verschijnen hier. Voeg er hierboven een toe of bekijk Alle taken."
+        },
+        "all": {
+          "title": "Nog geen taken",
+          "message": "Voeg hierboven een opvolgactie of to-do toe en die verschijnt hier."
+        },
+        "overdue": {
+          "title": "Niets over tijd",
+          "message": "Elke open taak is op tijd."
+        },
+        "today": {
+          "title": "Niets vandaag",
+          "message": "Geen open taak heeft een vervaldatum voor de rest van vandaag."
+        },
+        "upcoming": {
+          "title": "Niets aankomend",
+          "message": "Open taken met een latere vervaldatum verschijnen hier."
+        },
+        "completed": {
+          "title": "Nog geen afgeronde taken",
+          "message": "Taken die je afvinkt verschijnen hier, de nieuwste eerst."
+        }
+      },
+      "showing": "{count, plural, one {# taak geladen} other {# taken geladen}}",
+      "loadMore": "Meer laden",
+      "allLoaded": "Alle taken geladen",
+      "deleteTitle": "Deze taak verwijderen?",
+      "deleteMessage": "\"{title}\" wordt voor iedereen verwijderd. Dit kan niet ongedaan worden gemaakt.",
+      "delete": "Verwijderen",
+      "keep": "Behouden"
+    },
+    "tabs": {
+      "label": "Takenlijsten",
+      "mine": "Mijn taken",
+      "all": "Alle taken",
+      "overdue": "Achterstallig",
+      "today": "Vandaag",
+      "upcoming": "Aankomend",
+      "completed": "Afgerond",
+      "count": "{count, plural, one {# taak} other {# taken}}"
+    },
+    "toolbar": {
+      "label": "Taakfilters",
+      "search": "Taken zoeken",
+      "status": "Status",
+      "statusOpen": "Open",
+      "statusDone": "Afgerond",
+      "statusAll": "Open en afgerond",
+      "priority": "Prioriteit",
+      "allPriorities": "Alle prioriteiten",
+      "priorities": {
+        "high": "Hoog",
+        "medium": "Middel",
+        "low": "Laag"
+      },
+      "assignee": "Toegewezen aan",
+      "allAssignees": "Alle toegewezen personen",
+      "unassigned": "Niet toegewezen",
+      "linked": "Gekoppeld aan",
+      "anyLink": "Elk record",
+      "linkContact": "Een contact",
+      "linkDeal": "Een deal",
+      "clear": "Wissen",
+      "modifyColumns": "Kolommen aanpassen",
+      "resetColumns": "Kolommen resetten",
+      "columns": {
+        "title": "Taak",
+        "priority": "Prioriteit",
+        "due": "Vervaldatum",
+        "assignee": "Toegewezen aan",
+        "contact": "Contact",
+        "deal": "Deal",
+        "created": "Aangemaakt",
+        "completed": "Afgerond op"
+      },
+      "refresh": "Vernieuwen",
+      "shortcuts": "Sneltoetsen",
+      "view": "Weergave",
+      "views": {
+        "list": "Lijst",
+        "board": "Bord op vervaldatum"
+      }
+    },
+    "table": {
+      "scrollArea": "Takentabel",
+      "selectAll": "Alle geladen taken selecteren",
+      "selectRow": "{title} selecteren",
+      "columns": {
+        "title": "Taak",
+        "priority": "Prioriteit",
+        "due": "Vervaldatum",
+        "assignee": "Toegewezen aan",
+        "contact": "Contact",
+        "deal": "Deal",
+        "created": "Aangemaakt",
+        "completed": "Afgerond op"
+      }
+    },
+    "row": {
+      "complete": "Markeren als afgerond",
+      "reopen": "Heropenen",
+      "completeNamed": "\"{title}\" markeren als afgerond",
+      "reopenNamed": "\"{title}\" heropenen",
+      "moreFor": "Meer acties voor {title}",
+      "open": "Openen",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "unassigned": "Niet toegewezen"
+    },
+    "bulk": {
+      "label": "Acties voor de geselecteerde taken",
+      "selected": "{count, plural, one {# taak geselecteerd} other {# taken geselecteerd}}",
+      "working": "Bezig",
+      "complete": "Afronden",
+      "assign": "Toewijzen",
+      "assignTo": "Toewijzen aan",
+      "me": "{name} (ik)",
+      "unassign": "Toewijzing ongedaan maken",
+      "delete": "Verwijderen",
+      "clear": "Selectie wissen",
+      "failed": "Dat is niet gelukt.",
+      "someFailed": "{count, plural, one {# taak kon niet worden gewijzigd.} other {# taken konden niet worden gewijzigd.}}",
+      "completed": "{count, plural, one {# taak afgerond.} other {# taken afgerond.}}",
+      "assigned": "{count, plural, one {# taak toegewezen aan {name}.} other {# taken toegewezen aan {name}.}}",
+      "unassigned": "{count, plural, one {# taak niet meer toegewezen.} other {# taken niet meer toegewezen.}}",
+      "deleted": "{count, plural, one {# taak verwijderd.} other {# taken verwijderd.}}",
+      "deleteTitle": "De geselecteerde taken verwijderen?",
+      "deleteMessage": "{count, plural, one {# taak wordt voor iedereen verwijderd. Dit kan niet ongedaan worden gemaakt.} other {# taken worden voor iedereen verwijderd. Dit kan niet ongedaan worden gemaakt.}}",
+      "keep": "Behouden"
+    },
+    "quick": {
+      "label": "Taak toevoegen",
+      "placeholder": "Voeg een taak toe en druk op Enter",
+      "priority": "Prioriteit",
+      "priorities": {
+        "high": "Hoog",
+        "medium": "Middel",
+        "low": "Laag"
+      },
+      "due": "Vervaldatum en -tijd",
+      "add": "Toevoegen",
+      "dueRequired": "Kies een vervaldatum en -tijd.",
+      "titleRequired": "Typ wat er moet gebeuren.",
+      "options": "Meer opties (prioriteit en vervaldatum)"
+    },
+    "form": {
+      "eyebrow": "Taak",
+      "newTitle": "Nieuwe taak",
+      "editTitle": "Taak bewerken",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "create": "Taak aanmaken",
+      "save": "Wijzigingen opslaan",
+      "title": "Taak",
+      "titlePlaceholder": "bijv. Acme bellen over de verlenging",
+      "priority": "Prioriteit",
+      "priorities": {
+        "high": "Hoog",
+        "medium": "Middel",
+        "low": "Laag"
+      },
+      "assignee": "Toewijzen aan",
+      "unassigned": "Niemand",
+      "me": "{name} (ik)",
+      "due": "Vervaldatum",
+      "presets": {
+        "today": "Vandaag",
+        "tomorrow": "Morgen",
+        "nextWeek": "Volgende week"
+      },
+      "clearDue": "Datum wissen",
+      "contact": "Contact",
+      "deal": "Deal",
+      "notes": "Notities",
+      "reminderHint": "De toegewezen persoon krijgt een herinnering zodra de vervaldatum is bereikt.",
+      "assigneePick": "Kies wie deze taak beheert.",
+      "problems": {
+        "dueRequired": "Kies een vervaldatum en -tijd.",
+        "priorityRequired": "Kies een prioriteit.",
+        "assigneeRequired": "Kies voor wie deze taak is.",
+        "titleRequired": "Typ wat er moet gebeuren.",
+        "titleTooLong": "De taak is te lang (maximaal 255 tekens).",
+        "notesTooLong": "De notities zijn te lang (maximaal 5000 tekens).",
+        "dueInvalid": "Die datum is niet geldig.",
+        "assigneeInvalid": "Die persoon is geen actief lid van deze workspace."
+      }
+    },
+    "drawer": {
+      "loading": "Taak laden",
+      "close": "Sluiten",
+      "eyebrow": "Taak",
+      "name": "Taaknaam",
+      "titleRequired": "Een taak heeft een naam nodig.",
+      "statusOpen": "Open",
+      "statusDone": "Voltooid",
+      "complete": "Markeren als voltooid",
+      "reopen": "Heropenen",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "details": "Details",
+      "notes": "Notities",
+      "notesPlaceholder": "Voeg context toe voor wie dit oppakt",
+      "linked": "Gekoppelde records",
+      "company": "Bedrijf",
+      "noLinks": "Niet gekoppeld aan een contact of deal.",
+      "activity": "Activiteit",
+      "events": {
+        "created": "Taak aangemaakt",
+        "createdBy": "Aangemaakt door {name}",
+        "reminded": "Herinnering voor de deadline verzonden",
+        "completed": "Als voltooid gemarkeerd"
+      },
+      "deleteTitle": "Deze taak verwijderen?",
+      "deleteMessage": "\"{title}\" wordt voor iedereen verwijderd. Dit kan niet ongedaan worden gemaakt.",
+      "cancel": "Behouden"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "Verlopen",
+        "today": "Vandaag",
+        "upcoming": "Aankomend",
+        "no_date": "Geen datum"
+      },
+      "empty": "Hier is niets."
+    },
+    "due": {
+      "none": "Geen datum",
+      "overdue": "Verlopen",
+      "today": "Vandaag, {time}",
+      "tomorrow": "Morgen, {time}",
+      "yesterday": "Gisteren, {time}",
+      "date": "{date}, {time}"
+    },
+    "priority": {
+      "high": "Hoog",
+      "medium": "Gemiddeld",
+      "low": "Laag"
+    },
+    "link": {
+      "unnamedContact": "Naamloos contact",
+      "unnamedDeal": "Deal"
+    },
+    "picker": {
+      "searchContact": "Contacten zoeken",
+      "searchDeal": "Deals zoeken",
+      "results": "Zoekresultaten",
+      "searching": "Zoeken",
+      "unavailable": "Zoeken is op dit moment niet beschikbaar.",
+      "none": "Geen resultaten.",
+      "unlink": "Koppeling verwijderen"
+    },
+    "errors": {
+      "network": "We konden de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt geen toestemming om dit te doen.",
+      "signedOut": "Je sessie is beëindigd. Log opnieuw in om door te gaan.",
+      "conflict": "Iemand anders heeft deze taak gewijzigd. Laad opnieuw en probeer het opnieuw.",
+      "validation": "Sommige gegevens zijn niet geldig.",
+      "unavailable": "De taakservice is op deze server nog niet beschikbaar.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "notFound": "Deze taak kon niet worden gevonden. Mogelijk is hij verwijderd.",
+      "planDisabled": "Je abonnement bevat geen taken. Upgrade om ze te ontgrendelen.",
+      "assigneeInvalid": "Deze persoon is geen actief lid van deze workspace.",
+      "unexpected": "Er ging iets mis. Probeer het zo meteen opnieuw.",
+      "requestId": "Verzoek-id",
+      "retry": "Opnieuw proberen"
+    },
+    "toast": {
+      "completed": "Taak voltooid.",
+      "reopened": "Taak heropend.",
+      "created": "Taak aangemaakt.",
+      "saved": "Taak opgeslagen.",
+      "deleted": "Taak verwijderd.",
+      "conflict": "Iemand anders heeft deze taak gewijzigd. De lijst is opnieuw geladen; probeer het opnieuw.",
+      "failed": "De taak kon niet worden bijgewerkt.",
+      "saveFailed": "De taak kon niet worden opgeslagen.",
+      "deleteFailed": "De taak kon niet worden verwijderd.",
+      "createFailed": "De taak kon niet worden aangemaakt."
+    },
+    "shortcuts": {
+      "title": "Sneltoetsen",
+      "close": "Sluiten",
+      "intro": "Werk de lijst af zonder muis. Sneltoetsen worden onderbroken terwijl je in een veld typt.",
+      "actions": {
+        "next": "Volgende taak",
+        "prev": "Vorige taak",
+        "open": "Taak openen",
+        "toggleComplete": "Voltooien of heropenen",
+        "toggleSelect": "Selecteren of deselecteren",
+        "newTask": "Nieuwe taak",
+        "focusSearch": "Zoeken",
+        "clearSelection": "Selectie wissen",
+        "help": "Deze lijst tonen"
+      }
+    },
+    "linked": {
+      "title": "Taken",
+      "addPlaceholder": "Typ een taaktitel en klik op Toevoegen om de details in te vullen",
+      "viewAll": "Alles bekijken",
+      "loading": "Taken laden",
+      "unavailableTitle": "Taken zijn nog niet beschikbaar",
+      "unavailable": "De taakservice is op deze server nog niet beschikbaar.",
+      "empty": "Geen openstaande taken.",
+      "loadMore": "Meer laden",
+      "loadMoreDone": "Meer voltooide laden",
+      "showDone": "Voltooide tonen",
+      "hideDone": "Voltooide verbergen"
+    }
+  }
+}

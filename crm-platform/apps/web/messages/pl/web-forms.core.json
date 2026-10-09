@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "common": {
+      "dismiss": "Odrzuć"
+    },
+    "nav": {
+      "forms": "Formularze"
+    },
+    "kinds": {
+      "short_text": "Krótki tekst",
+      "long_text": "Długi tekst",
+      "email": "E-mail",
+      "phone": "Numer telefonu",
+      "number": "Liczba",
+      "currency": "Kwota",
+      "date": "Data",
+      "dropdown": "Lista rozwijana",
+      "radio": "Wybór pojedynczy",
+      "checkbox_group": "Wybór wielokrotny",
+      "checkbox": "Pole wyboru",
+      "rating": "Ocena",
+      "hidden": "Ukryte pole"
+    },
+    "errors": {
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "signedOut": "Sesja wygasła. Zaloguj się ponownie, aby kontynuować.",
+      "conflict": "Ktoś inny zmienił ten formularz. Odśwież stronę, aby zobaczyć najnowszą wersję.",
+      "nameTaken": "Inny formularz ma już taką nazwę. Wybierz inną.",
+      "stateInvalid": "Nie jest to możliwe w bieżącym statusie formularza.",
+      "definitionInvalid": "Formularz nie jest jeszcze poprawny. Sprawdź pola i spróbuj ponownie.",
+      "publishInvalid": "Formularza nie można jeszcze opublikować. Napraw wymienione problemy i spróbuj ponownie.",
+      "planLimit": "Osiągnięto limit planu.",
+      "planLimitForms": "Osiągnięto liczbę formularzy dozwoloną w Twoim planie. Zarchiwizuj formularz, którego już nie używasz, lub ulepsz plan.",
+      "planLocked": "Formularze nie wchodzą w skład Twojej przestrzeni roboczej.",
+      "notFound": "Nie znaleziono tego formularza. Mógł zostać usunięty.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
+      "upgrade": "Zobacz plany"
+    }
+  }
+}

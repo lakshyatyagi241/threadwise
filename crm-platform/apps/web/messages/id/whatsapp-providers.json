@@ -1,0 +1,663 @@
+{
+  "whatsapp-providers": {
+    "nav": {
+      "group": "Provider WhatsApp",
+      "providers": "Provider",
+      "assignments": "Penugasan workspace",
+      "switch": "Ganti provider"
+    },
+    "common": {
+      "loading": "Memuat...",
+      "retry": "Coba lagi",
+      "requestId": "ID permintaan"
+    },
+    "errors": {
+      "conflict": "Orang lain mengubah provider ini saat Anda sedang mengeditnya. Versi terbaru sudah dimuat; tinjau lalu terapkan perubahan Anda lagi.",
+      "noAccess": "Anda tidak memiliki izin platform yang diperlukan ({permission}). Minta Super Admin untuk memberikannya di Peran.",
+      "keyTaken": "Provider dengan kunci ini sudah ada. Pilih kunci lain.",
+      "baseUrlRefused": "Alamat ini ditolak: {detail}.",
+      "baseUrlRefusedPlain": "Alamat ini ditolak. Gunakan alamat https pada nama host publik.",
+      "inUse": "Nomor atau workspace masih menggunakan provider ini. Ganti ke provider lain terlebih dahulu (mode kredensial tidak dapat diubah selama nomor terhubung melalui provider ini).",
+      "disabled": "Provider harus aktif untuk ini. Aktifkan terlebih dahulu.",
+      "credentialsMissing": "Provider belum memiliki token tersimpan. Tambahkan token provider, simpan, lalu aktifkan.",
+      "isDefault": "Ini adalah provider default. Jadikan provider lain sebagai default, atau hapus default, terlebih dahulu.",
+      "builtin": "Ini adalah provider bawaan. Alamat, versi, dan rahasianya diedit di Pengaturan platform, WhatsApp.",
+      "nothingToDo": "Tidak ada yang perlu diganti: setiap nomor terhubung di workspace ini sudah menggunakan provider tersebut.",
+      "partnerNotConfigured": "Provider ini kekurangan sesuatu yang dibutuhkan program mitranya: kunci mitra (token provider), ID solusi, atau konfigurasi signup tertanam. Periksa provider dan simpan.",
+      "partnerRefused": "Mitra menolak permintaan ini: {message}",
+      "partnerRefusedPlain": "Mitra menolak permintaan ini. Coba lagi, atau periksa pengaturan provider.",
+      "unavailable": "Provider ini tidak tersedia. Mungkin diarsipkan atau kredensialnya belum ada.",
+      "notFound": "Provider atau workspace ini tidak lagi ada. Kembali dan muat ulang daftar.",
+      "tooManyNumbers": "Lebih dari 50 nomor akan dipindahkan sekaligus. Pilih provider sumber untuk mempersempit, lalu jalankan pemindahan lagi untuk sisanya.",
+      "validationField": "{message}",
+      "validation": "Beberapa nilai tidak diterima. Periksa formulir dan coba lagi.",
+      "request": "Permintaan ditolak. Periksa nilainya dan coba lagi.",
+      "unexpected": "Terjadi kesalahan di pihak kami. Coba lagi sebentar lagi."
+    },
+    "status": {
+      "active": "Aktif",
+      "disabled": "Nonaktif",
+      "archived": "Diarsipkan",
+      "default": "Default",
+      "builtin": "Bawaan"
+    },
+    "secret": {
+      "show": "Tampilkan nilai yang Anda ketik",
+      "hide": "Sembunyikan nilai yang Anda ketik",
+      "placeholderKeep": "Kosongkan untuk mempertahankan nilai tersimpan",
+      "placeholderNew": "Tempel nilainya",
+      "undoClear": "Pertahankan",
+      "clear": "Hapus nilai tersimpan",
+      "setWithHint": "Sudah diatur, berakhiran {last4}",
+      "set": "Sudah diatur",
+      "notSet": "Belum diatur",
+      "willClear": "Akan dihapus saat Anda menyimpan",
+      "willReplace": "Akan mengganti nilai tersimpan saat Anda menyimpan"
+    },
+    "enums": {
+      "authScheme": {
+        "bearer": {
+          "label": "Bearer token",
+          "help": "Mengirim Authorization: Bearer dengan token dari mode kredensial."
+        },
+        "custom_headers": {
+          "label": "Header kustom",
+          "help": "Mengirim header yang Anda tentukan, dengan token, ID WABA, dan ID nomor telepon diisi per panggilan."
+        }
+      },
+      "credentialMode": {
+        "platform_token": {
+          "label": "Token platform",
+          "help": "Satu token platform di provider (token mitra). Pelanggan tidak memilikinya."
+        },
+        "channel_token": {
+          "label": "Token nomor",
+          "help": "Setiap nomor yang terhubung memiliki access token sendiri."
+        }
+      },
+      "webhookMode": {
+        "meta_app_level": {
+          "label": "Callback tingkat aplikasi",
+          "help": "Platform hanya berlangganan WABA. Callback diatur sekali di aplikasi Meta."
+        },
+        "number_level_override": {
+          "label": "Callback per nomor",
+          "help": "Setelah berlangganan, platform mengatur callback untuk setiap nomor melalui provider."
+        }
+      },
+      "signatureScheme": {
+        "meta_app_secret_sha256": {
+          "label": "Tanda tangan Meta (app secret)",
+          "help": "Pengiriman membawa X-Hub-Signature-256, diperiksa dengan app secret provider."
+        },
+        "shared_secret_header": {
+          "label": "Rahasia bersama di header",
+          "help": "Header yang Anda namai membawa rahasia webhook provider itu sendiri."
+        },
+        "none": {
+          "label": "Tanpa tanda tangan",
+          "help": "Provider tidak menandatangani apa pun. Hanya rahasia di URL callback yang mengautentikasi pengiriman."
+        }
+      },
+      "billingMode": {
+        "provider_credit_line": {
+          "label": "Jalur kredit provider",
+          "help": "Provider menagih platform dari jalur kreditnya sendiri."
+        },
+        "customer_direct": {
+          "label": "Pelanggan membayar Meta secara langsung",
+          "help": "Metode pembayaran pelanggan ada di Meta (mode engine reseller meta_direct)."
+        },
+        "meta_reseller": {
+          "label": "Jalur kredit reseller Meta",
+          "help": "Jalur kredit Meta platform dibagikan ke WABA pelanggan (mode engine reseller)."
+        }
+      },
+      "onboarding": {
+        "manual": {
+          "label": "Manual",
+          "help": "Workspace menempelkan ID WABA dan ID nomor telepon mereka."
+        },
+        "embedded_signup": {
+          "label": "Signup tertanam",
+          "help": "Workspace terhubung melalui signup tertanam Meta dari aplikasi Meta platform."
+        }
+      },
+      "partnerProgram": {
+        "none": {
+          "label": "Tidak ada"
+        },
+        "pinnacle": {
+          "label": "Pinnacle"
+        }
+      }
+    },
+    "gaps": {
+      "providerToken": "Token provider tidak disimpan. Mengaktifkan provider ini membutuhkannya.",
+      "appSecret": "App secret tidak disimpan. Setiap pengiriman webhook dari provider ini ditolak sampai disimpan.",
+      "webhookSecret": "Rahasia webhook tidak disimpan. Setiap pengiriman webhook dari provider ini ditolak sampai disimpan."
+    },
+    "headers": {
+      "intro": "Header yang dikirim dengan setiap panggilan ke provider ini. Header yang nilainya tidak diketahui pada suatu panggilan akan dihilangkan, tidak pernah dikirim sebagai placeholder harfiah.",
+      "listLabel": "Template header",
+      "name": "Nama header",
+      "value": "Nilai",
+      "insertFor": "Sisipkan placeholder ke header {n}",
+      "insert": "Sisipkan placeholder",
+      "removeFor": "Hapus header {n}",
+      "remove": "Hapus",
+      "add": "Tambah header",
+      "placeholdersTitle": "Placeholder dan aturan",
+      "leftOut": "Header yang memakai placeholder tanpa nilai pada panggilan itu akan dihilangkan. Header hop-by-hop dan framing (host, content-length, transfer-encoding, dan sejenisnya) tidak dapat diatur.",
+      "channelTokenNeverKnown": "Provider ini memakai token platform, sehingga pelanggan tidak memiliki token nomor: header yang memakai placeholder token nomor akan selalu dihilangkan.",
+      "problems": {
+        "tooMany": "Paling banyak {max} header diizinkan.",
+        "nameInvalid": "Nama header hanya boleh berisi huruf, angka, dan tanda hubung.",
+        "nameDenied": "Header {name} dikelola oleh koneksi dan tidak dapat diatur.",
+        "nameDuplicate": "Header {name} muncul dua kali.",
+        "valueEmpty": "Header {name} memerlukan nilai.",
+        "valueTooLong": "Nilai {name} lebih panjang dari {max} karakter.",
+        "valueCharacters": "Nilai {name} berisi karakter kontrol atau non-ASCII.",
+        "placeholderUnknown": "Header {name} memakai placeholder yang tidak dikenal: {names}.",
+        "strayBrace": "Header {name} memiliki kurung kurawal yang salah. Placeholder ditulis dengan kurung kurawal ganda di sekitar nama.",
+        "credentialNotCarried": "Satu header harus membawa placeholder {placeholder}, yaitu cara kredensial sampai ke provider."
+      },
+      "placeholders": {
+        "providerToken": "Token platform di provider.",
+        "channelToken": "Access token nomor yang dituju panggilan ini.",
+        "wabaId": "ID WhatsApp Business Account dari nomor tersebut.",
+        "phoneNumberId": "ID nomor telepon dari nomor tersebut."
+      },
+      "preview": {
+        "title": "Pratinjau panggilan",
+        "urlPending": "(masukkan alamat yang valid)",
+        "note": "Nilai pengganti yang ditampilkan. Token dan ID asli diisi per panggilan dan tidak pernah ditampilkan di sini."
+      }
+    },
+    "form": {
+      "wizardLabel": "Tambah provider WhatsApp",
+      "editLabel": "Ubah provider WhatsApp",
+      "stepsLabel": "Langkah",
+      "steps": {
+        "basics": "Dasar",
+        "connection": "Koneksi",
+        "credentials": "Kredensial",
+        "webhooks": "Webhook",
+        "billing": "Penagihan dan onboarding",
+        "review": "Tinjau"
+      },
+      "stepHelp": {
+        "basics": "Kunci yang stabil, nama yang mudah dikenali operator, dan catatan opsional.",
+        "connection": "Di mana provider merespons, dan bagaimana platform melakukan autentikasi kepadanya.",
+        "credentials": "Kredensial siapa yang bekerja, dan token provider.",
+        "webhooks": "Bagaimana provider mengirim pesan masuk dan membuktikan keasliannya.",
+        "billing": "Siapa yang membayar Meta, apakah file dapat diunggah, dan bagaimana workspace melakukan onboarding.",
+        "review": "Periksa semuanya. Tidak ada yang dikirim sampai Anda membuat provider."
+      },
+      "fields": {
+        "key": "Kunci",
+        "label": "Nama",
+        "notes": "Catatan",
+        "baseUrl": "URL dasar",
+        "apiVersion": "Versi API",
+        "authScheme": "Autentikasi",
+        "credentialMode": "Mode kredensial",
+        "providerToken": "Token provider",
+        "webhookMode": "Mode webhook",
+        "signatureScheme": "Tanda tangan webhook",
+        "appSecret": "App secret",
+        "webhookSecret": "Rahasia webhook",
+        "verifyToken": "Verify token",
+        "signatureHeaderName": "Nama header tanda tangan",
+        "billingMode": "Mode penagihan",
+        "mediaUpload": "Dukungan unggah media",
+        "onboarding": "Onboarding",
+        "onboardingAppId": "ID aplikasi Meta",
+        "onboardingConfigId": "ID konfigurasi signup tertanam",
+        "partnerProgram": "Program mitra",
+        "partnerSolutionId": "ID solusi"
+      },
+      "hints": {
+        "key": "Huruf kecil, angka, garis bawah, dan tanda hubung, 2 sampai 40 karakter, diawali huruf. Tidak dapat diubah nanti.",
+        "keyFixed": "Kunci tidak dapat diubah.",
+        "notes": "Hanya operator yang melihat ini.",
+        "baseUrl": "https://host atau https://host/prefix. Platform hanya memanggil host https publik.",
+        "credentialModeLocked": "{count, plural, other {# nomor terhubung}} melalui provider ini, sehingga mode kredensial tidak dapat diubah. Pindahkan dulu.",
+        "providerTokenNeeded": "Diperlukan sebelum provider ini dapat diaktifkan.",
+        "providerTokenOptional": "Opsional di sini: setiap nomor membawa token sendiri.",
+        "appSecret": "Memeriksa X-Hub-Signature-256 setiap pengiriman. Tanpa ini, setiap pengiriman dari provider ini ditolak.",
+        "webhookSecret": "Nilai yang dimasukkan provider ke header tanda tangan. Tanpa ini, setiap pengiriman ditolak.",
+        "signatureHeaderName": "Huruf, angka, dan tanda hubung, misalnya x-bsp-secret.",
+        "verifyToken": "Menjawab tantangan langganan provider. Opsional.",
+        "billingMode": "Label yang mengarah ke engine penagihan reseller. Tidak mengubah perilaku penagihan apa pun.",
+        "mediaUpload": "Saat nonaktif, file dikirim melalui tautan publik, bukan unggahan.",
+        "onboardingIds": "Hanya angka. Ini adalah ID publik dari aplikasi Meta platform.",
+        "partnerPinnacle": "Pinnacle memberikan setiap nomor kuncinya sendiri. Simpan kunci mitra sebagai token provider, dan app secret Meta sebagai app secret (webhook masuk diverifikasi dengannya).",
+        "partnerSolutionId": "Hanya angka, 5 sampai 32. ID solusi mitra dari dasbor Pinnacle."
+      },
+      "devLoopback": "HTTP biasa pada alamat loopback hanya diterima di development, di balik flag server. Di produksi alamat ini ditolak.",
+      "ssrfNote": "Alamat diperiksa lagi oleh server: hanya https, nama host publik, port default, dan setiap alamat yang diselesaikan harus publik.",
+      "secretsNote": "Rahasia hanya dapat ditulis. Setelah disimpan, rahasia hanya ditampilkan sebagai sudah diatur, dengan empat karakter terakhir.",
+      "signatureNoneNote": "Tanpa tanda tangan, hanya rahasia di URL callback yang mengautentikasi pengiriman. Gunakan ini hanya jika provider tidak dapat menandatangani.",
+      "builtinNotice": "Ini adalah provider bawaan. Alamat, versi, dan rahasianya ada di Pengaturan platform, WhatsApp. Hanya nama, catatan, dan mode penagihan yang dapat diubah di sini.",
+      "openConsoleSettings": "Buka Pengaturan platform, WhatsApp",
+      "conflictHint": "Perubahan Anda belum disimpan. Formulir menampilkan nilai terbaru.",
+      "fixProblems": "{count, plural, other {# nilai perlu perhatian.}} Perbaiki kolom yang ditandai.",
+      "save": "Simpan perubahan",
+      "nothingToSave": "Belum ada perubahan",
+      "back": "Kembali",
+      "next": "Lanjut",
+      "cancel": "Batal",
+      "create": "Buat provider",
+      "saved": "{name} disimpan.",
+      "created": "{name} dibuat. Dimulai dalam keadaan nonaktif: uji, lalu aktifkan.",
+      "review": {
+        "headers": "Header",
+        "yes": "Ya",
+        "no": "Tidak",
+        "secrets": "Rahasia untuk disimpan",
+        "noSecrets": "Tidak ada",
+        "gapsTitle": "Masih kurang sebelum provider ini berfungsi",
+        "startsDisabled": "Provider baru dimulai dalam keadaan nonaktif. Setelah membuatnya, jalankan Uji koneksi dan aktifkan."
+      },
+      "problems": {
+        "labelRequired": "Masukkan nama.",
+        "labelLength": "Nama maksimal {max} karakter.",
+        "notesLength": "Catatan maksimal {max} karakter.",
+        "keyRequired": "Masukkan kunci.",
+        "keyBuiltin": "meta dan interakt adalah provider bawaan. Pilih kunci lain.",
+        "keyFormat": "Diawali huruf, lalu huruf, angka, garis bawah, atau tanda hubung, 2 sampai 40 karakter secara keseluruhan.",
+        "baseUrl": {
+          "empty": "Masukkan URL dasar provider.",
+          "length": "Alamat harus antara 1 dan 200 karakter.",
+          "characters": "Alamat tidak boleh berisi spasi atau karakter kontrol.",
+          "invalid": "URL ini tidak valid.",
+          "credentials": "Alamat tidak boleh berisi nama pengguna atau kata sandi.",
+          "queryOrFragment": "Alamat tidak boleh berisi query atau fragment.",
+          "notHttps": "Alamat harus diawali dengan https://.",
+          "port": "Hanya port https default yang diizinkan.",
+          "host": "Gunakan nama host publik, bukan alamat IP atau nama satu label.",
+          "internal": "Gunakan nama host publik, bukan host internal."
+        },
+        "apiVersion": "Gunakan versi seperti v25.0.",
+        "headers": "{count, plural, other {# masalah header.}} Lihat daftar di atas.",
+        "signatureHeaderRequired": "Beri nama header yang membawa rahasia.",
+        "signatureHeaderFormat": "Hanya huruf, angka, dan tanda hubung.",
+        "digits": "Hanya angka, 5 sampai 32.",
+        "partnerSolutionIdRequired": "Masukkan ID solusi.",
+        "partnerCredentialMode": "Program mitra memberikan setiap nomor token sendiri: gunakan mode token channel.",
+        "secretCharacters": "Tanpa spasi atau karakter kontrol.",
+        "secretLength": "Antara {min} dan {max} karakter."
+      }
+    },
+    "actions": {
+      "activate": "Aktifkan",
+      "makeDefault": "Jadikan default",
+      "clearDefault": "Hapus default",
+      "disable": "Nonaktifkan",
+      "archive": "Arsipkan",
+      "cancel": "Batal",
+      "menu": "Tindakan",
+      "menuLabel": "Tindakan untuk {name}",
+      "manage": "Kelola",
+      "open": "Buka",
+      "switchTo": "Ganti nomor di sini",
+      "blocked": {
+        "default": "ini adalah default",
+        "builtin": "bawaan",
+        "inUse": "digunakan"
+      },
+      "done": {
+        "activate": "{name} aktif.",
+        "disable": "{name} nonaktif. Nomor yang sudah menggunakannya tetap dapat mengirim.",
+        "archive": "{name} diarsipkan.",
+        "default": "{name} sekarang menjadi default untuk nomor baru.",
+        "clearDefault": "Default dihapus. Nomor baru mengikuti pengaturan WhatsApp konsol."
+      },
+      "confirm": {
+        "disable": {
+          "title": "Nonaktifkan {name}?",
+          "body": "Provider tidak lagi ditawarkan untuk nomor atau penugasan baru. Nomor yang sudah menggunakannya tetap dapat mengirim, jadi ini bukan gangguan.",
+          "inUse": "{count, plural, other {# nomor masih menggunakan provider ini.}} Pindahkan saat Anda siap.",
+          "action": "Nonaktifkan"
+        },
+        "archive": {
+          "title": "Arsipkan {name}?",
+          "body": "Provider yang diarsipkan dihentikan penggunaannya. Ini ditolak selama ada nomor atau override workspace yang memakainya. Anda dapat mengaktifkannya lagi nanti.",
+          "action": "Arsipkan"
+        },
+        "default": {
+          "title": "Jadikan {name} default?",
+          "body": "Workspace tanpa override akan menghubungkan nomor BARU melalui provider ini. Nomor yang sudah terhubung tidak akan berpindah.",
+          "action": "Jadikan default"
+        },
+        "clearDefault": {
+          "title": "Hapus default?",
+          "body": "Nomor baru akan kembali mengikuti pengaturan WhatsApp konsol. Nomor yang sudah terhubung tidak akan berpindah.",
+          "action": "Hapus default"
+        }
+      }
+    },
+    "test": {
+      "title": "Uji koneksi",
+      "description": "Melakukan satu pembacaan terautentikasi ke provider dengan kredensial tersimpan. Tidak ada yang diubah di provider.",
+      "path": "Path yang dibaca",
+      "pathHint": "Diawali garis miring. Defaultnya adalah /me.",
+      "willCall": "Akan memanggil {url}",
+      "pathInvalid": "Mulai dengan / dan gunakan huruf, angka, dan . _ / - saja.",
+      "wabaId": "ID WABA (opsional)",
+      "idsHint": "Hanya mengisi placeholder header untuk panggilan ini. Tidak disimpan.",
+      "idInvalid": "Hanya huruf, angka, dan . _ : -.",
+      "phoneNumberId": "ID nomor telepon (opsional)",
+      "channelToken": "Token nomor uji (opsional)",
+      "channelTokenHint": "Untuk provider yang setiap nomornya memiliki token sendiri. Digunakan hanya untuk panggilan ini, lalu dihapus dari formulir ini.",
+      "tokenInvalid": "Minimal 8 karakter yang dapat dicetak, tanpa spasi.",
+      "show": "Tampilkan nilai yang Anda ketik",
+      "hide": "Sembunyikan nilai yang Anda ketik",
+      "run": "Jalankan uji",
+      "running": "Menguji...",
+      "forgotten": "ID dan token yang diketik di sini digunakan untuk satu panggilan lalu dilupakan.",
+      "needManage": "Anda dapat melihat hasil terakhir. Menjalankan uji membutuhkan izin kelola.",
+      "ok": "Terhubung",
+      "failed": "Gagal",
+      "justNow": "Baru saja",
+      "lastTest": "Uji terakhir",
+      "httpStatus": "Status HTTP",
+      "noResponse": "Tidak ada respons",
+      "latency": "Latensi",
+      "ms": "{ms} ms",
+      "errorCode": "Kode error",
+      "message": "Yang dikatakan provider",
+      "redactedNote": "Server mengganti setiap rahasia dengan [redacted] sebelum menjawab.",
+      "never": "Provider ini belum pernah diuji.",
+      "hints": {
+        "ok": "Provider menjawab pembacaan terautentikasi. Aman untuk diaktifkan.",
+        "addressRefused": "Alamat ditolak (bukan https, bukan nama publik, atau mengarah ke alamat privat). Perbaiki URL dasar.",
+        "credentialsMissing": "Provider belum memiliki token tersimpan. Tambahkan token provider dan simpan.",
+        "unauthorized": "Provider menolak kredensial. Periksa token dan nama serta nilai header.",
+        "notFound": "Path tidak ditemukan. Coba pembacaan yang didukung provider, atau periksa URL dasar dan versi API.",
+        "rateLimited": "Provider membatasi laju permintaan. Tunggu sebentar lalu uji lagi.",
+        "providerError": "Provider menjawab dengan error server. Coba lagi nanti.",
+        "unreachable": "Tidak ada jawaban: host tidak merespons atau koneksi gagal. Periksa alamatnya.",
+        "other": "Provider menjawab dengan status tak terduga. Lihat apa yang dikatakannya di atas."
+      }
+    },
+    "list": {
+      "title": "Provider WhatsApp",
+      "description": "Pilih BSP WhatsApp Business yang digunakan platform untuk mengirim pesan, tambahkan provider, dan pindahkan workspace di antara mereka.",
+      "consoleSettings": "Kredensial aplikasi Meta dan Interakt",
+      "switchWorkspace": "Ganti workspace",
+      "add": "Tambah provider",
+      "kpi": {
+        "providers": "Provider",
+        "active": "Aktif",
+        "numbers": "Nomor terhubung",
+        "overrides": "Override workspace"
+      },
+      "defaultIs": "Nomor baru terhubung melalui {name} kecuali workspace memiliki override sendiri.",
+      "noDefault": "Tidak ada default registri yang diatur. Nomor baru mengikuti pengaturan WhatsApp konsol.",
+      "defaultHelp": "Mengubah default atau override tidak pernah memindahkan nomor yang sudah terhubung. Gunakan Ganti untuk itu.",
+      "filterLabel": "Filter berdasarkan status",
+      "filters": {
+        "all": "Semua",
+        "active": "Aktif",
+        "disabled": "Nonaktif",
+        "archived": "Diarsipkan"
+      },
+      "search": "Filter berdasarkan nama atau kunci",
+      "emptyTitle": "Belum ada provider",
+      "emptyMessage": "Tambahkan provider untuk mengarahkan WhatsApp melalui BSP lain. Rute Meta dan Interakt bawaan selalu berfungsi.",
+      "noMatchTitle": "Tidak ada provider yang cocok",
+      "noMatchMessage": "Tidak ada yang cocok dengan status dan pencarian ini. Coba filter lain atau hapus pencarian.",
+      "tableCaption": "Provider WhatsApp",
+      "cols": {
+        "provider": "Provider",
+        "status": "Status",
+        "billing": "Mode penagihan",
+        "credentials": "Mode kredensial",
+        "usage": "Digunakan",
+        "lastTest": "Uji terakhir",
+        "actions": "Tindakan"
+      },
+      "usage": {
+        "numbers": "{count, plural, other {# nomor}}",
+        "workspaces": "{count, plural, other {# workspace}}"
+      },
+      "test": {
+        "ok": "Terhubung",
+        "failed": "Gagal",
+        "never": "Belum diuji"
+      },
+      "officialLabel": "WhatsApp resmi (didukung)"
+    },
+    "detail": {
+      "title": "Provider WhatsApp",
+      "back": "Kembali ke provider",
+      "gapsTitle": "Masih kurang sebelum provider ini berfungsi",
+      "lifecycle": {
+        "title": "Status dan default",
+        "description": "Mengaktifkan membuat provider dapat dipilih untuk nomor dan penugasan baru. Menonaktifkan tidak pernah menghentikan nomor yang sudah menggunakannya."
+      },
+      "edit": {
+        "title": "Edit",
+        "readOnly": "Anda dapat melihat provider ini. Mengubahnya membutuhkan izin kelola."
+      },
+      "overview": {
+        "title": "Ringkasan",
+        "headers": "Nama header",
+        "none": "tidak ada",
+        "engineMode": "Mode engine reseller: {mode}",
+        "yes": "Ya",
+        "no": "Tidak",
+        "usage": "Digunakan",
+        "numbers": "{count, plural, other {# nomor}}",
+        "workspaces": "{count, plural, other {# override workspace}}",
+        "updated": "Terakhir diubah",
+        "builtinNote": "Ini adalah provider bawaan. Alamat, versi, dan rahasianya dibaca langsung dari Pengaturan platform, WhatsApp.",
+        "openConsoleSettings": "Buka Pengaturan platform, WhatsApp",
+        "credentialsTitle": "Rahasia tersimpan",
+        "credentialsNote": "Rahasia hanya dapat ditulis. Setelah disimpan, rahasia tidak pernah ditampilkan lagi, hanya apakah masing-masing sudah diatur dan empat karakter terakhirnya.",
+        "webhookTitle": "Webhook",
+        "webhookNote": "Daftarkan alamat API publik Anda ditambah path ini ke provider. Satu URL melayani setiap provider dan setiap workspace."
+      }
+    },
+    "new": {
+      "title": "Tambah provider WhatsApp",
+      "back": "Kembali ke provider",
+      "description": "Daftarkan BSP yang kompatibel dengan Graph. Dimulai dalam keadaan nonaktif; uji, lalu aktifkan."
+    },
+    "assignments": {
+      "title": "Penugasan workspace",
+      "description": "Provider tempat setiap workspace menghubungkan nomor BARU. Workspace tanpa override mengikuti default.",
+      "defaultIs": "Default registri: {name}.",
+      "noDefault": "Tidak ada default registri. Workspace tanpa override mengikuti pengaturan WhatsApp konsol.",
+      "existingNote": "Nomor yang ada tidak berpindah saat Anda mengubah override. Gunakan Ganti untuk memindahkannya.",
+      "search": "Cari workspace",
+      "overrideOnly": "Hanya workspace dengan override",
+      "noMatchTitle": "Tidak ada workspace yang cocok",
+      "noMatchMessage": "Coba pencarian lain atau hapus filter.",
+      "emptyTitle": "Belum ada workspace",
+      "emptyMessage": "Workspace akan muncul di sini setelah dibuat.",
+      "loadMore": "Muat lainnya",
+      "tableCaption": "Penugasan provider workspace",
+      "cols": {
+        "workspace": "Workspace",
+        "override": "Override",
+        "effective": "Nomor baru melalui",
+        "numbers": "Nomor",
+        "actions": "Tindakan"
+      },
+      "followsDefault": "Mengikuti default",
+      "source": {
+        "override": "Override workspace",
+        "default": "Default registri",
+        "platform_setting": "Pengaturan WhatsApp konsol"
+      },
+      "numberCount": "{count, plural, other {# nomor}}",
+      "onOther": "{count} di provider lain",
+      "change": "Ubah",
+      "setOverride": "Atur override",
+      "clear": "Hapus override",
+      "switch": "Ganti nomor",
+      "common": {
+        "close": "Tutup",
+        "cancel": "Batal"
+      },
+      "set": {
+        "title": "Override untuk {name}",
+        "help": "Nomor baru dari workspace ini akan terhubung melalui provider yang Anda pilih. Nomor yang sudah terhubung tetap di tempatnya.",
+        "noActive": "Tidak ada provider yang aktif. Aktifkan satu terlebih dahulu.",
+        "provider": "Provider",
+        "note": "Catatan (opsional)",
+        "noteHint": "Alasan workspace ini memiliki provider sendiri. Maksimal 500 karakter.",
+        "save": "Simpan override",
+        "done": "{workspace} sekarang menghubungkan nomor baru melalui {provider}."
+      },
+      "clearDialog": {
+        "title": "Hapus override untuk {name}?",
+        "body": "{name} akan kembali mengikuti default. Nomor yang sudah terhubung melalui {provider} tidak akan berpindah.",
+        "action": "Hapus override",
+        "done": "{workspace} kembali mengikuti default."
+      }
+    },
+    "switch": {
+      "title": "Ganti provider",
+      "description": "Pindahkan nomor WhatsApp yang terhubung dari workspace ke provider lain. Jalankan uji coba terlebih dahulu: tidak mengubah dan tidak memanggil apa pun.",
+      "choose": {
+        "title": "Workspace dan tujuan",
+        "description": "Pilih workspace dan provider tujuan nomornya.",
+        "target": "Pindahkan ke",
+        "targetHint": "Hanya provider aktif yang dapat menjadi tujuan.",
+        "pick": "Pilih provider",
+        "from": "Hanya nomor pada",
+        "fromHint": "Opsional. Biarkan pada provider mana pun untuk memindahkan setiap nomor yang belum ada di tujuan.",
+        "anyProvider": "Provider mana pun",
+        "setOverride": "Jadikan juga override workspace ini",
+        "setOverrideHint": "Nomor yang dihubungkan workspace nanti akan mengikuti. Hanya diterapkan saat Anda menerapkan pengalihan, bukan pada uji coba.",
+        "reason": "Alasan (opsional)",
+        "reasonHint": "Masuk ke jejak audit. Maksimal 500 karakter.",
+        "targetNotActive": "Provider ini tidak aktif. Pengalihan ditolak sampai diaktifkan.",
+        "dryRun": "Periksa apa yang akan berubah",
+        "dryRunNote": "Uji coba: tidak ada yang diubah dan tidak ada provider yang dipanggil."
+      },
+      "workspace": {
+        "selected": "Workspace",
+        "unnamed": "Workspace yang dipilih",
+        "change": "Ubah workspace",
+        "label": "Workspace",
+        "search": "Cari workspace",
+        "none": "Tidak ada workspace yang cocok.",
+        "numbers": "{count, plural, other {# nomor}}",
+        "onOther": "{count} di provider lain",
+        "narrow": "Ada workspace lain. Persempit pencarian."
+      },
+      "plan": {
+        "stale": "Anda mengubah pilihan setelah uji coba. Jalankan pemeriksaan lagi sebelum menerapkan.",
+        "title": "Yang akan berubah",
+        "description": "Centang nomor yang akan dipindahkan. Nomor yang diblokir tidak disentuh.",
+        "nothingReady": "Belum ada nomor yang dapat dipindahkan. Selesaikan yang tercantum, lalu jalankan pemeriksaan lagi.",
+        "headline": "{total, plural, other {# nomor}} dinilai, {ready} dapat dipindahkan ke {provider}.",
+        "ready": "{count} siap",
+        "blocked": "{count} diblokir",
+        "failed": "{count} tidak dapat dinilai",
+        "reconnect": "{count} terputus"
+      },
+      "requirements": {
+        "title": "Yang membutuhkan tindakan",
+        "blocks": "Memblokir pemindahan",
+        "advice": "Membutuhkan tindak lanjut",
+        "numberToken": {
+          "label": "Dibutuhkan token akses nomor",
+          "help": "Tujuan menggunakan token masing-masing nomor dan nomor ini tidak memilikinya. Minta workspace menempelkan satu di halaman kesehatan nomor, atau hubungkan ulang, lalu jalankan pemeriksaan lagi."
+        },
+        "providerToken": {
+          "label": "Dibutuhkan token provider",
+          "help": "Provider tujuan belum memiliki token mitra tersimpan. Tambahkan di halaman provider terlebih dahulu."
+        },
+        "idsMissing": {
+          "label": "ID WABA atau ID nomor telepon tidak ada",
+          "help": "Koneksi tidak memiliki ID WABA atau ID nomor telepon tercatat. Hubungkan ulang."
+        },
+        "reconnect": {
+          "label": "Nomor terputus",
+          "help": "Hanya diarahkan ulang, tidak dihidupkan kembali. Workspace harus menghubungkannya kembali sebelum dapat mengirim."
+        }
+      },
+      "numbers": {
+        "captionPlan": "Nomor yang dinilai oleh uji coba",
+        "captionResult": "Hasil per nomor dari pengalihan",
+        "cols": {
+          "move": "Pindahkan",
+          "number": "Nomor",
+          "from": "Sekarang di",
+          "state": "Status",
+          "details": "Detail"
+        },
+        "moveNumber": "Pindahkan {name}",
+        "unknownProvider": "Tidak diketahui",
+        "state": {
+          "ready": "Siap",
+          "blocked": "Diblokir",
+          "switched": "Dialihkan",
+          "repointed": "Diarahkan ulang",
+          "failed": "Gagal"
+        },
+        "willResubscribe": "Webhook akan didaftarkan ulang melalui provider baru terlebih dahulu.",
+        "willRepoint": "Hanya akan diarahkan ulang.",
+        "inboundNotWired": "Provider tidak menerima callback per nomor. Atur callback di provider atau aplikasi Meta ke webhook platform.",
+        "inboundWired": "Callback masuk diatur."
+      },
+      "apply": {
+        "title": "Terapkan pengalihan",
+        "summary": "{count, plural, other {# nomor akan}} dipindahkan ke {provider}.",
+        "understood": "Saya memahami ini mengarahkan ulang nomor aktif workspace dan mendaftarkan ulang webhook-nya.",
+        "action": "Terapkan pengalihan",
+        "tickOne": "Centang setidaknya satu nomor."
+      },
+      "confirm": {
+        "title": "Pindahkan nomor?",
+        "body": "{count, plural, other {# nomor dari}} {workspace} akan dipindahkan ke {provider}. Setiap nomor didaftarkan ulang terlebih dahulu dan hanya diarahkan ulang jika itu berhasil.",
+        "rollback": "Untuk kembali, alihkan lagi. Riwayat pesan, ID pesan, dan tanda terima tidak terpengaruh.",
+        "action": "Pindahkan nomor",
+        "cancel": "Batal"
+      },
+      "errorHints": {
+        "nothingToDo": "Pilih tujuan atau provider sumber yang berbeda.",
+        "tooMany": "Pilih provider sumber untuk mempersempit kumpulan.",
+        "disabled": "Aktifkan provider tujuan di halamannya, lalu coba lagi."
+      },
+      "result": {
+        "title": "Hasil",
+        "allMoved": "Semua {count, plural, other {# nomor}} sekarang berada di {provider}.",
+        "noneMoved": "Tidak ada nomor yang dipindahkan. Lihat detailnya di bawah.",
+        "partial": "{moved} dari {total} nomor dipindahkan. Lihat detailnya di bawah.",
+        "switched": "{count} dialihkan",
+        "repointed": "{count} diarahkan ulang",
+        "failed": "{count} gagal",
+        "blocked": "{count} diblokir",
+        "overrideSet": "{provider} sekarang menjadi override workspace ini.",
+        "repointedNote": "Nomor yang terputus hanya diarahkan ulang. Workspace harus menghubungkannya kembali sebelum dapat mengirim.",
+        "inboundNote": "{count, plural, other {# nomor sudah dipindahkan tetapi callback per nomornya tidak diterima. Atur callback di provider atau aplikasi Meta ke webhook platform.}}",
+        "rollback": {
+          "title": "Kembalikan",
+          "description": "Mengembalikan berarti mengalihkan kembali. Nomor mempertahankan setiap kredensial yang dimilikinya, sehingga rute token nomor tidak membutuhkan apa pun yang baru; rute token platform membutuhkan tokennya tersimpan.",
+          "action": "Siapkan pengalihan kembali ke {provider}",
+          "unknown": "Provider sebelumnya dari nomor-nomor ini tidak diketahui, sehingga pengembalian tidak dapat disiapkan dari sini."
+        },
+        "another": "Alihkan workspace lain",
+        "toAssignments": "Kembali ke penugasan"
+      }
+    },
+    "workspaceNote": {
+      "title": "Provider WhatsApp Anda",
+      "newNumbers": "Nomor baru terhubung melalui {provider}.",
+      "ownToken": "Setiap nomor menggunakan access token-nya sendiri.",
+      "platformToken": "Platform menyimpan kredensial; Anda hanya terhubung dengan ID.",
+      "mediaYes": "Unggah file didukung.",
+      "mediaNo": "Unggah file tidak didukung: file dikirim melalui tautan publik.",
+      "none": "Tidak ada provider yang tersedia untuk menghubungkan nomor baru saat ini. Hubungi administrator platform Anda.",
+      "numberOn": "{name} ada di {provider}.",
+      "numberNoMedia": "Unggah file tidak didukung."
+    }
+  }
+}

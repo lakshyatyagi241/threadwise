@@ -1,0 +1,513 @@
+{
+  "channel-whatsapp-cloud": {
+    "common": {
+      "dismiss": "Sluiten",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "copyFailed": "Kopiëren mislukt. Selecteer de tekst en kopieer deze handmatig."
+    },
+    "screen": {
+      "title": "WhatsApp",
+      "intro": "De WhatsApp Business-nummers die aan deze workspace zijn gekoppeld. Klanten die een nummer berichten verschijnen in je inbox en je antwoorden gaan via dat nummer de deur uit.",
+      "add": "WhatsApp-nummer toevoegen",
+      "readOnly": "Je ziet de gekoppelde nummers. Alleen mensen die kanalen beheren kunnen er een toevoegen, wijzigen of verwijderen.",
+      "helpNote": "Een stapsgewijze handleiding voor het koppelen van een nummer staat in de repository:",
+      "providerLine": "Je nummers lopen via de WhatsApp-provider van het platform.",
+      "loading": "Je WhatsApp-nummers laden",
+      "retry": "Opnieuw proberen",
+      "listLabel": "Gekoppelde WhatsApp-nummers",
+      "empty": {
+        "title": "Nog geen WhatsApp-nummer gekoppeld",
+        "message": "Koppel een nummer en je klanten kunnen in de inbox met je chatten. Het duurt drie korte stappen.",
+        "messageReadOnly": "Er is nog geen WhatsApp-nummer gekoppeld. Vraag iemand die kanalen beheert er een toe te voegen."
+      }
+    },
+    "state": {
+      "connected": "Gekoppeld",
+      "needs_reconnect": "Opnieuw koppelen nodig",
+      "error": "Fout",
+      "not_connected": "Niet gekoppeld",
+      "help": {
+        "needs_reconnect": "WhatsApp accepteert de inloggegevens voor dit nummer niet meer, dus berichten kunnen niet worden verzonden of ontvangen. Koppel het opnieuw om verder te gaan.",
+        "error": "Er is iets mis met dit nummer. Voer een statuscontrole uit om te zien wat.",
+        "not_connected": "Dit nummer is uitgeschakeld of heeft de eerste controle nog niet doorstaan. Er worden geen berichten via verzonden."
+      }
+    },
+    "quality": {
+      "green": "Hoog",
+      "yellow": "Gemiddeld",
+      "red": "Laag",
+      "unrated": "Niet beoordeeld"
+    },
+    "tier": {
+      "limited": "{label} klanten per dag",
+      "unlimited": "Onbeperkt"
+    },
+    "card": {
+      "verifiedName": "Geverifieerde naam: {name}",
+      "phoneId": "Telefoonnummer-ID",
+      "wabaId": "Business account-ID",
+      "quality": "Kwaliteitsbeoordeling",
+      "tier": "Berichtlimiet",
+      "lastCheck": "Laatste statuscontrole",
+      "neverChecked": "Nooit gecontroleerd",
+      "lastActivity": "Laatste activiteit",
+      "noActivity": "Nog geen",
+      "token": "Toegangstoken",
+      "tokenEnds": "eindigt op {hint}",
+      "none": "Niet beschikbaar",
+      "providerChanged": {
+        "title": "De provider voor dit nummer is gewijzigd",
+        "message": "Het platform heeft dit nummer naar een andere WhatsApp-provider verplaatst. Je hoeft niets te doen, behalve een statuscontrole uitvoeren om te bevestigen dat het werkt."
+      },
+      "actions": {
+        "check": "Status controleren",
+        "checking": "Controleren",
+        "edit": "Inloggegevens bewerken",
+        "reconnect": "Opnieuw koppelen",
+        "editDetails": "Gegevens bewerken",
+        "more": "Meer",
+        "moreLabel": "Meer acties voor {name}",
+        "subscribe": "Inkomende berichten herstellen",
+        "rotate": "Nieuw verificatietoken",
+        "switchOff": "Uitschakelen",
+        "switchOn": "Inschakelen",
+        "remove": "Verwijderen"
+      }
+    },
+    "health": {
+      "issuesTitle": "Wat de controle heeft gevonden",
+      "severity": {
+        "critical": "Probleem",
+        "warning": "Waarschuwing",
+        "info": "Opmerking"
+      },
+      "phoneStatus": "Nummerstatus",
+      "webhook": "Inkomende berichten",
+      "subscribed": "Geabonneerd",
+      "notSubscribed": "Niet geabonneerd",
+      "token": "Toegangstoken",
+      "tokenValid": "Geldig",
+      "tokenInvalid": "Ongeldig",
+      "tokenExpires": "Token verloopt",
+      "issues": {
+        "TOKEN_INVALID": {
+          "title": "Het toegangstoken is niet meer geldig",
+          "detail": "Vervang het door een nieuw permanent token uit je Meta-bedrijfsinstellingen."
+        },
+        "TOKEN_EXPIRED": {
+          "title": "Het toegangstoken is verlopen",
+          "detail": "Vervang het door een permanent systeemgebruikerstoken zodat het nooit verloopt."
+        },
+        "TOKEN_EXPIRING": {
+          "title": "Het toegangstoken verloopt binnen 7 dagen",
+          "detail": "Gebruik een permanent systeemgebruikerstoken zodat het verzenden niet stopt."
+        },
+        "TOKEN_SCOPE_MISSING": {
+          "title": "Het token kan geen berichten verzenden",
+          "detail": "Genereer een token met de machtiging whatsapp_business_messaging."
+        },
+        "TOKEN_MANAGEMENT_SCOPE_MISSING": {
+          "title": "Het token kan het account niet beheren",
+          "detail": "Voeg de machtiging whatsapp_business_management toe zodat webhooks en sjablonen kunnen worden ingesteld."
+        },
+        "NO_WEBHOOK_SUBSCRIPTION": {
+          "title": "Inkomende berichten bereiken de inbox niet",
+          "detail": "De app is niet geabonneerd op dit account. Gebruik Inkomende berichten herstellen in het kaartmenu."
+        },
+        "QUALITY_RED": {
+          "title": "De berichtkwaliteit is laag",
+          "detail": "WhatsApp kan beperken aan hoeveel klanten je berichten kunt sturen. Stuur minder ongevraagde berichten."
+        },
+        "QUALITY_YELLOW": {
+          "title": "De berichtkwaliteit is gemiddeld",
+          "detail": "Houd het in de gaten: klanten die het nummer blokkeren of melden verlagen de kwaliteit."
+        },
+        "NUMBER_NOT_VERIFIED": {
+          "title": "Het nummer is niet geverifieerd",
+          "detail": "Rond de verificatie van dit nummer af in WhatsApp Manager."
+        },
+        "ON_PREMISE_NUMBER": {
+          "title": "Het nummer staat nog op de oude WhatsApp API",
+          "detail": "Registreer het in WhatsApp Manager op de Cloud API en koppel het daarna opnieuw."
+        },
+        "NO_ACCOUNT_ID": {
+          "title": "Er is geen business account-ID opgeslagen",
+          "detail": "Voeg het toe onder Inloggegevens bewerken zodat het account en de webhook kunnen worden gecontroleerd."
+        }
+      }
+    },
+    "errors": {
+      "tokenInvalid": "WhatsApp accepteert het toegangstoken niet. Het kan verlopen, ingetrokken of onvolledig gekopieerd zijn.",
+      "permissionMissing": "Het toegangstoken mist een benodigde machtiging of heeft geen toegang tot dit nummer.",
+      "idNotFound": "WhatsApp kent deze telefoonnummer-ID niet, of het token kan hem niet zien. Controleer beide ID's.",
+      "appSecretInvalid": "Het app-geheim komt niet overeen met de app. Kopieer het opnieuw uit de app-instellingen.",
+      "accountRestricted": "Het WhatsApp-account is beperkt of vergrendeld. Controleer de status in WhatsApp Manager.",
+      "numberNotRegistered": "Het nummer is nog niet geregistreerd voor de WhatsApp Cloud API. Registreer het eerst in WhatsApp Manager.",
+      "rateLimited": "WhatsApp beperkt op dit moment het aantal verzoeken. Wacht een paar minuten en probeer het opnieuw.",
+      "providerUnavailable": "WhatsApp was niet bereikbaar of had een tijdelijk probleem. Probeer het zo meteen opnieuw.",
+      "healthFailed": "Het nummer kon niet worden ingeschakeld omdat de controle bij WhatsApp is mislukt.",
+      "alreadyConnected": "Dit WhatsApp-nummer is al gekoppeld in deze workspace.",
+      "kindUnavailable": "WhatsApp-koppelingen zijn voor deze workspace nog niet ingeschakeld. Vraag het aan je platformbeheerder.",
+      "inUse": "Dit nummer heeft nog gesprekken, dus het kan niet worden verwijderd.",
+      "conflict": "Iemand anders heeft dit nummer eerder gewijzigd. Het is opnieuw geladen; bekijk het en probeer het opnieuw.",
+      "forbidden": "Je hebt geen toestemming om kanalen te beheren.",
+      "validation": "Een deel van wat je hebt ingevuld is ongeldig. Controleer de gemarkeerde velden.",
+      "notFound": "Dit nummer bestaat niet meer. De lijst is vernieuwd.",
+      "network": "De server kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
+      "generic": "Er is iets misgegaan. Probeer het opnieuw.",
+      "genericWithId": "Er is iets misgegaan. Probeer het opnieuw. Referentie: {id}",
+      "detail": "Details: {detail}",
+      "fix": {
+        "tokenInvalid": "Maak in je Meta-bedrijfsinstellingen een permanent systeemgebruikerstoken en plak het onder Inloggegevens bewerken.",
+        "permissionMissing": "Genereer het token met whatsapp_business_messaging en whatsapp_business_management en zorg dat de systeemgebruiker toegang heeft tot het account.",
+        "idNotFound": "Beide ID's staan op de API Setup-pagina van je Meta-app, onder WhatsApp. Het zijn verschillende nummers.",
+        "appSecretInvalid": "Je vindt het op de pagina Basis in de instellingen van je Meta-app.",
+        "accountRestricted": "Open WhatsApp Manager, selecteer het account en lees de melding bovenaan.",
+        "numberNotRegistered": "Open het nummer in WhatsApp Manager en rond de registratie af."
+      }
+    },
+    "fieldErrors": {
+      "required": "Dit veld is verplicht.",
+      "digits": "Gebruik alleen cijfers, tussen 5 en 32.",
+      "tokenShort": "Dit lijkt te kort voor een toegangstoken.",
+      "tokenLong": "Dit is te lang voor een toegangstoken.",
+      "secretShort": "Het app-geheim moet minstens 8 tekens bevatten.",
+      "secretLong": "Dit is te lang voor een app-geheim.",
+      "nameLong": "Gebruik maximaal 120 tekens.",
+      "addressLong": "Gebruik maximaal 40 tekens.",
+      "sameAsPhoneId": "Dit is hetzelfde als de telefoonnummer-ID. Het zijn twee verschillende ID's."
+    },
+    "credentials": {
+      "name": {
+        "label": "Naam",
+        "hint": "Hoe jij en je team dit nummer noemen.",
+        "placeholder": "Supportlijn"
+      },
+      "displayAddress": {
+        "label": "Telefoonnummer",
+        "hint": "Optioneel. Wordt in de lijst getoond zodat nummers makkelijk te onderscheiden zijn.",
+        "placeholder": "+91 98765 43210"
+      },
+      "phoneNumberId": {
+        "label": "Telefoonnummer-ID",
+        "hint": "Te vinden in WhatsApp Manager onder API Setup.",
+        "placeholder": "533524166787123",
+        "current": "Nu {value}. Laat leeg om te behouden."
+      },
+      "businessAccountId": {
+        "label": "WhatsApp Business Account-ID",
+        "hint": "Naast de telefoonnummer-ID op dezelfde pagina.",
+        "placeholder": "102938475647382"
+      },
+      "accessToken": {
+        "label": "Toegangstoken",
+        "hint": "Een permanent token van een systeemgebruiker. Het wordt versleuteld opgeslagen en nooit meer getoond.",
+        "placeholder": "EAA...",
+        "current": "Huidig token eindigt op {hint}. Laat leeg om te behouden.",
+        "unusual": "Meta-toegangstokens beginnen meestal met EAA. Controleer of je het token hebt gekopieerd en niet iets anders."
+      },
+      "appSecret": {
+        "label": "App-geheim",
+        "hint": "Van de pagina Basis in de instellingen van je Meta-app. Hiermee worden de berichten ondertekend die Meta ons stuurt.",
+        "placeholder": "0123456789abcdef...",
+        "current": "Huidig geheim eindigt op {hint}. Laat leeg om te behouden."
+      },
+      "keepPlaceholder": "Ongewijzigd",
+      "show": "Tonen",
+      "hide": "Verbergen",
+      "privacy": "Geheimen worden versleuteld opgeslagen en nooit meer getoond. Spaties, regeleinden en aanhalingstekens die je meeplakt worden automatisch verwijderd.",
+      "privacyPlatform": "Alleen deze gegevens zijn nodig. Het platform regelt de inloggegevens."
+    },
+    "wizard": {
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "back": "Terug",
+      "stepsLabel": "Stappen",
+      "stepOf": "Stap {current} van {total}",
+      "steps": {
+        "before": "Voordat je begint",
+        "credentials": "Je nummer",
+        "webhook": "Koppel je webhook",
+        "webhookAutomatic": "Test de verbinding"
+      },
+      "before": {
+        "intro": {
+          "channel_token": "Voor het koppelen van een nummer heb je eerst een paar dingen van Meta nodig. Regel ze één keer en kom dan terug. Vink ze af terwijl je bezig bent; de vakjes zijn alleen voor jezelf.",
+          "platform_token": "Om een nummer toe te voegen heb je twee dingen nodig: de ID van het WhatsApp Business Account en de ID van het telefoonnummer. Vink ze af terwijl je bezig bent; de vakjes zijn alleen voor jezelf."
+        },
+        "items": {
+          "channel_token": {
+            "app": {
+              "title": "Een Meta-app met WhatsApp toegevoegd",
+              "detail": "Maak een app van het type Business op developers.facebook.com en voeg er het WhatsApp-product aan toe. Dit is de app die je berichten verstuurt en ontvangt."
+            },
+            "number": {
+              "title": "Een WhatsApp Business-account en een nummer",
+              "detail": "Het nummer mag niet in gebruik zijn in de gewone WhatsApp-app. Gebruik om eerst te proberen het gratis testnummer dat Meta bij elke nieuwe app geeft."
+            },
+            "token": {
+              "title": "Een permanent toegangstoken",
+              "detail": "Voeg in de Meta-bedrijfsinstellingen een systeemgebruiker toe, geef die toegang tot je app en je WhatsApp-account en genereer een token met whatsapp_business_messaging en whatsapp_business_management. Kies verloopt nooit: een token van 24 uur werkt morgen niet meer."
+            },
+            "values": {
+              "title": "Drie waarden om te kopiëren",
+              "detail": "De telefoonnummer-ID en de business account-ID (WhatsApp, API Setup) en het app-geheim (App-instellingen, Basis)."
+            },
+            "webhook": {
+              "title": "Toegang tot de webhook-instellingen van je app",
+              "detail": "In de laatste stap tonen we een adres en een verificatietoken. Die plak je in WhatsApp, Configuratie in je Meta-app."
+            }
+          },
+          "platform_token": {
+            "account": {
+              "title": "Een WhatsApp Business Account",
+              "detail": "Maak er een in Meta Business Suite als je er geen hebt. Het bevat je nummers en je berichtsjablonen."
+            },
+            "number": {
+              "title": "Een nummer dat vrij is voor WhatsApp Business",
+              "detail": "Het nummer mag niet in gebruik zijn in de gewone WhatsApp-app. Verwijder het daar eerst als dat wel zo is."
+            },
+            "ids": {
+              "title": "Twee ID's om te kopiëren",
+              "detail": "De telefoonnummer-ID en de business account-ID, beide op de API Setup-pagina in WhatsApp Manager."
+            }
+          }
+        },
+        "providerLine": "Je nummers lopen via de WhatsApp-provider van het platform. Je hebt geen toegangstoken nodig.",
+        "runbook": "Meer details, met de exacte menu's om te openen, staan in de handleiding in de repository:",
+        "continue": "Doorgaan"
+      },
+      "embedded": {
+        "button": "Koppelen met Facebook (embedded signup)",
+        "soon": "Binnenkort beschikbaar",
+        "help": "Binnenkort kun je inloggen met Facebook en je nummer kiezen zonder ID's te kopiëren. Tot dan voer je de twee ID's hieronder in."
+      },
+      "credentials": {
+        "intro": {
+          "channel_token": "Voer de gegevens van het nummer in. Plak rechtstreeks uit Meta: spaties en regeleinden worden voor je opgeschoond.",
+          "platform_token": "Voer de twee ID's in van het nummer dat je wilt koppelen."
+        },
+        "save": "Opslaan en doorgaan",
+        "saving": "Opslaan"
+      },
+      "webhook": {
+        "done": "Klaar",
+        "finishLater": "Later afronden",
+        "test": {
+          "button": "Verbinding testen",
+          "running": "Testen",
+          "again": "Opnieuw testen",
+          "passedToast": "Verbindingstest geslaagd."
+        }
+      }
+    },
+    "webhook": {
+      "intro": "Laatste stap: vertel WhatsApp waar je berichten naartoe moeten. Het nummer is al opgeslagen, maar blijft niet gekoppeld totdat dit is gedaan en de test hieronder slaagt.",
+      "callbackUrl": "Callback-URL",
+      "verifyToken": "Verificatietoken",
+      "onceWarning": "Dit token wordt alleen nu getoond. Kopieer het voordat je dit venster sluit. Als je het kwijtraakt, kun je via het menu van het nummer een nieuw token aanmaken.",
+      "placeholderWarning": "Dit adres is een plaatshouder. Stel NEXT_PUBLIC_API_PUBLIC_URL in op het openbare adres van de API en laad opnieuw, of kopieer het adres dat je platformbeheerder je heeft gegeven.",
+      "localWarning": "Dit adres verwijst naar een machine in je eigen netwerk. WhatsApp kan er niet bij. Gebruik het openbare adres van de API.",
+      "httpWarning": "WhatsApp accepteert alleen adressen die met https beginnen.",
+      "tokenMissing": "Er is geen verificatietoken teruggekomen. Maak een nieuw token aan via het menu van het nummer.",
+      "steps": {
+        "open": "Open je app in Meta for Developers, dan WhatsApp, dan Configuratie.",
+        "paste": "Kies onder Webhook voor Bewerken, plak de callback-URL en het verificatietoken en kies Verifiëren en opslaan.",
+        "subscribe": "Abonneer je onder Webhook-velden op messages.",
+        "test": "Kom hier terug en kies Verbinding testen."
+      },
+      "testTitle": "Test de verbinding",
+      "automatic": {
+        "title": "Berichtbezorging is voor je geregeld",
+        "message": "Het platform koppelt dit nummer zelf aan je inbox. Je hoeft geen adres of token te plakken. Voer de test uit om te bevestigen dat het nummer werkt."
+      },
+      "test": {
+        "hint": "De test vraagt WhatsApp naar het nummer en toont wat het antwoordt.",
+        "running": "WhatsApp naar dit nummer vragen",
+        "okTitle": "Het nummer is gekoppeld",
+        "okMessage": "WhatsApp heeft geantwoord en het nummer kan worden gebruikt.",
+        "verifiedName": "Geverifieerde naam",
+        "quality": "Kwaliteitsbeoordeling",
+        "tier": "Berichtlimiet",
+        "unknown": "Niet gerapporteerd"
+      }
+    },
+    "edit": {
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "save": "Opslaan en controleren",
+      "saving": "Opslaan",
+      "nothing": "Er is niets gewijzigd. Typ een nieuwe waarde om op te slaan.",
+      "title": {
+        "channel_token": "Inloggegevens bewerken",
+        "platform_token": "Gegevens bewerken"
+      },
+      "intro": {
+        "channel_token": "Vervang een vernieuwd token of een geroteerd geheim. Lege velden behouden wat is opgeslagen. Na het opslaan wordt het nummer gecontroleerd en weer ingeschakeld.",
+        "platform_token": "Wijzig de naam of de ID's van dit nummer. Lege velden behouden wat is opgeslagen. Na het opslaan wordt het nummer gecontroleerd."
+      }
+    },
+    "rotate": {
+      "title": "Nieuw verificatietoken aanmaken?",
+      "message": "Het huidige verificatietoken voor {name} werkt meteen niet meer. Je moet het nieuwe token in je Meta-app plakken en de webhook opnieuw verifiëren.",
+      "confirm": "Nieuw token aanmaken",
+      "cancel": "Annuleren",
+      "close": "Sluiten",
+      "done": "Klaar",
+      "resultTitle": "Je nieuwe verificatietoken",
+      "resultIntro": "Plak beide waarden in WhatsApp, Configuratie in je Meta-app, en kies dan Verifiëren en opslaan."
+    },
+    "remove": {
+      "title": "Dit nummer verwijderen?",
+      "message": "{name} wordt uit deze workspace verwijderd. Er kunnen geen berichten meer via worden verzonden of ontvangen.",
+      "note": "Dit kan niet ongedaan worden gemaakt. Je kunt het nummer later opnieuw toevoegen.",
+      "confirm": "Nummer verwijderen",
+      "cancel": "Annuleren",
+      "inUse": {
+        "title": "Dit nummer heeft gesprekken",
+        "message": "{name} heeft nog gesprekken, dus het kan niet worden verwijderd. Ze zouden zonder nummer achterblijven.",
+        "hint": "Je kunt het nummer in plaats daarvan uitschakelen. Alle gesprekken blijven bewaard, er wordt niets via verzonden en je kunt het later weer inschakelen.",
+        "switchOff": "In plaats daarvan uitschakelen"
+      }
+    },
+    "switchOff": {
+      "title": "Dit nummer uitschakelen?",
+      "message": "Zolang {name} uit staat, wordt er niets via verzonden of ontvangen. Gesprekken blijven bewaard en je kunt het weer inschakelen.",
+      "confirm": "Uitschakelen",
+      "cancel": "Annuleren"
+    },
+    "toasts": {
+      "checkPassed": "{name} heeft de statuscontrole doorstaan.",
+      "saved": "Wijzigingen aan {name} opgeslagen.",
+      "reconnected": "{name} is weer gekoppeld.",
+      "switchedOn": "{name} is ingeschakeld.",
+      "switchedOff": "{name} is uitgeschakeld.",
+      "removed": "{name} is verwijderd.",
+      "subscribed": "{name} geabonneerd op inkomende berichten."
+    },
+    "inbox": {
+      "templatesSoon": "Sjablonen komen binnenkort, zodat je deze klant hier opnieuw kunt bereiken.",
+      "reconnect": {
+        "needs_reconnect": {
+          "title": "Dit WhatsApp-nummer moet opnieuw worden gekoppeld.",
+          "message": "WhatsApp accepteert de inloggegevens voor {name} niet meer, dus antwoorden kunnen niet worden verzonden. Interne notities werken nog."
+        },
+        "error": {
+          "title": "Dit WhatsApp-nummer heeft een verbindingsprobleem.",
+          "message": "{name} heeft een fout, dus antwoorden kunnen niet worden verzonden. Interne notities werken nog."
+        },
+        "not_connected": {
+          "title": "Dit WhatsApp-nummer is uitgeschakeld.",
+          "message": "{name} is niet gekoppeld, dus antwoorden kunnen niet worden verzonden. Interne notities werken nog."
+        },
+        "open": "De WhatsApp-instellingen openen",
+        "askAdmin": "Vraag iemand die kanalen beheert het opnieuw te koppelen."
+      },
+      "failure": {
+        "openSettings": "De WhatsApp-instellingen openen",
+        "windowClosed": {
+          "title": "Het antwoordvenster van 24 uur was gesloten.",
+          "hint": "WhatsApp staat vrije antwoorden alleen toe binnen 24 uur na het laatste bericht van de klant. Wacht tot de klant opnieuw schrijft."
+        },
+        "undeliverable": {
+          "title": "WhatsApp kon dit bericht niet bezorgen.",
+          "hint": "Het nummer staat mogelijk niet op WhatsApp, of de klant heeft de nieuwste voorwaarden niet geaccepteerd."
+        },
+        "recipientNotAllowed": {
+          "title": "Dit nummer kan vanaf hier niet worden benaderd.",
+          "hint": "Het is het eigen nummer van de afzender, of het staat niet op de lijst met testontvangers."
+        },
+        "rateLimit": {
+          "title": "WhatsApp beperkt hoe snel je kunt verzenden.",
+          "hint": "Wacht een paar minuten en gebruik dan Opnieuw proberen."
+        },
+        "spamLimited": {
+          "title": "Verzenden is beperkt omdat te veel berichten als spam zijn gemeld.",
+          "hint": "Wacht een tijdje voordat je meer verstuurt en bericht alleen klanten die het verwachten."
+        },
+        "engagementBlocked": {
+          "title": "WhatsApp heeft ervoor gekozen dit bericht niet te bezorgen.",
+          "hint": "Dit doet het om klanten te beschermen tegen berichten die ze mogelijk niet willen."
+        },
+        "tokenExpired": {
+          "title": "WhatsApp heeft het toegangstoken van het nummer geweigerd.",
+          "hint": "Het is verlopen of mist een machtiging. Koppel het nummer opnieuw en gebruik dan Opnieuw proberen."
+        },
+        "accountRestricted": {
+          "title": "Het WhatsApp-account heeft een probleem.",
+          "hint": "Het is beperkt, vergrendeld of niet geregistreerd. Controleer het in WhatsApp Manager."
+        },
+        "mediaRejected": {
+          "title": "WhatsApp kon dit bestand of dit berichttype niet gebruiken.",
+          "hint": "Probeer een ander bestand, of stuur de informatie als tekst."
+        },
+        "templateProblem": {
+          "title": "Het sjabloon kon niet worden verzonden.",
+          "hint": "Het is niet gevonden, gepauzeerd of afgewezen, of de variabelen komen niet overeen."
+        },
+        "providerDown": {
+          "title": "WhatsApp had een tijdelijk probleem.",
+          "hint": "Gebruik zo meteen Opnieuw proberen."
+        },
+        "sendPaused": {
+          "title": "Verzenden is voor het hele platform gepauzeerd.",
+          "hint": "Gebruik Opnieuw proberen zodra het weer aan staat."
+        },
+        "channelOff": {
+          "title": "Dit nummer is niet gekoppeld.",
+          "hint": "Koppel het opnieuw en gebruik dan Opnieuw proberen."
+        },
+        "planLimit": {
+          "title": "De maandelijkse berichtlimiet van je abonnement is bereikt.",
+          "hint": "Upgrade je abonnement of wacht tot de volgende periode en gebruik dan Opnieuw proberen."
+        },
+        "groupSendUnavailable": {
+          "title": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar.",
+          "hint": "Antwoord vanuit de WhatsApp Business-app."
+        }
+      },
+      "media": {
+        "downloading": "Bestand downloaden",
+        "failed": "Kan dit bestand niet downloaden",
+        "retry": "Opnieuw proberen",
+        "retrying": "Opnieuw proberen",
+        "reason": {
+          "expired": "WhatsApp heeft het niet meer. Bestanden worden ongeveer 30 dagen bewaard.",
+          "auth": "WhatsApp heeft het toegangstoken van het nummer geweigerd. Koppel het nummer opnieuw en probeer het dan nog eens.",
+          "tooLarge": "Het bestand is groter dan dit kanaal toestaat.",
+          "rejected": "Het bestand is geweigerd omdat het geen veilig type is.",
+          "download": "WhatsApp reageerde niet op tijd. Opnieuw proberen helpt meestal."
+        }
+      },
+      "interactive": {
+        "button": "Koos een knop",
+        "list": "Koos uit de lijst"
+      },
+      "contact": {
+        "unnamed": "Gedeeld contact",
+        "shared": "Contactkaart"
+      },
+      "attach": {
+        "limit": {
+          "image": "Afbeeldingen tot {mb} MB",
+          "video": "Video tot {mb} MB",
+          "audio": "Audio tot {mb} MB",
+          "document": "Documenten tot {mb} MB"
+        },
+        "kind": {
+          "image": "Afbeeldingen",
+          "video": "Video's",
+          "audio": "Audiobestanden",
+          "document": "Documenten"
+        },
+        "errors": {
+          "tooLarge": "{kind} mogen op WhatsApp maximaal {mb} MB zijn. Kies een kleiner bestand.",
+          "kindNotAllowed": "Dit nummer kan geen {kind} verzenden.",
+          "unsupportedType": "WhatsApp accepteert dit bestandstype niet. Het ondersteunt JPEG- en PNG-afbeeldingen, MP4- en 3GP-video, AAC-, MP3-, AMR-, M4A- en OGG-audio, en PDF-, Office- en tekstdocumenten.",
+          "empty": "Dat bestand is leeg."
+        }
+      }
+    }
+  }
+}

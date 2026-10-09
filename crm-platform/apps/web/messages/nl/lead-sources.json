@@ -1,0 +1,560 @@
+{
+  "lead-sources": {
+    "common": {
+      "dismiss": "Sluiten",
+      "loading": "Laden",
+      "retry": "Opnieuw proberen",
+      "copied": "Gekopieerd",
+      "copyFailed": "Kopiëren mislukt: selecteer de tekst en kopieer hem met de hand",
+      "requestId": "Referentie: {id}"
+    },
+    "states": {
+      "noAccessTitle": "Je hebt geen toegang tot Social leads",
+      "noAccessBody": "Je rol heeft niet de toestemming die dit scherm nodig heeft ({permission}). Vraag een workspace-beheerder die aan je rol toe te voegen.",
+      "lockedTitle": "Social leads zit niet in je abonnement",
+      "lockedBody": "Je huidige abonnement omvat geen leadbronnen, dus je kunt ze niet bekijken of aanmaken. Upgrade om advertentie- en landingspaginaleads in je contacten te krijgen.",
+      "upgrade": "Abonnement upgraden",
+      "manageNeeded": "Je kunt hier alleen kijken en niets wijzigen: bronnen wijzigen vereist de toestemming {permission}."
+    },
+    "errors": {
+      "conflict": "Iemand anders heeft deze bron gewijzigd terwijl je hem bewerkte. Laad de pagina opnieuw om hun versie te zien; je niet-opgeslagen wijzigingen gaan verloren.",
+      "noAccess": "Je rol staat deze actie niet toe.",
+      "signedOut": "Je sessie is verlopen. Log opnieuw in om verder te gaan.",
+      "planLocked": "Je abonnement bevat geen Social leads. Upgrade om het te gebruiken.",
+      "planLimit": "Je abonnement heeft de limiet voor leadbronnen bereikt. Upgrade je abonnement of verwijder een bron die je niet meer gebruikt.",
+      "nameTaken": "Een andere bron heeft deze naam al. Kies een andere.",
+      "mappingInvalid": "De koppeling wijst naar contacteigenschappen die niet met een lead ingevuld kunnen worden.",
+      "defaultsInvalid": "Iets in de regels hoort niet bij deze workspace (een gebruiker, pipeline, fase of levenscyclusfase).",
+      "notRetryable": "Alleen leads die controle nodig hebben of mislukt zijn, kunnen opnieuw worden geprobeerd. Deze is al verwerkt of wordt verwerkt.",
+      "payloadPurged": "De opgeslagen lead is na de bewaartermijn verwijderd, dus er valt niets opnieuw te proberen.",
+      "sourcePaused": "Deze bron is gepauzeerd. Hervat hem om een testlead te sturen of een lead opnieuw te proberen.",
+      "notFound": "We konden hem niet vinden. Misschien is hij verwijderd.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer opnieuw.",
+      "rateLimitedWait": "Te veel verzoeken. Probeer het over {seconds} seconden opnieuw.",
+      "validation": "Een deel van wat je invoerde is niet geldig. Controleer de gemarkeerde velden.",
+      "validationField": "{message}",
+      "detailVerbatim": "{message}",
+      "badResponse": "De server antwoordde op een manier die deze pagina niet begrijpt. Laad de pagina opnieuw; blijft het gebeuren, neem dan contact op met support.",
+      "network": "We konden de server niet bereiken. Controleer je verbinding en probeer opnieuw.",
+      "unexpected": "Er ging iets mis aan onze kant. Probeer het zo meteen opnieuw.",
+      "request": "Het verzoek is niet geaccepteerd. Controleer wat je hebt ingevoerd en probeer opnieuw.",
+      "details": {
+        "unknown_property": "Deze contacteigenschap bestaat niet of is uitgeschakeld.",
+        "not_mappable": "Deze eigenschap wordt berekend of verwijst naar een ander record, dus een lead kan hem niet invullen.",
+        "unknown_pipeline": "Deze pipeline zit niet in je workspace.",
+        "unknown_stage": "Deze dealfase zit niet in je workspace.",
+        "stage_not_in_pipeline": "Deze fase hoort bij een andere pipeline.",
+        "pipeline_required": "Kies de pipeline waar deze fase bij hoort.",
+        "unknown_or_lost_stage": "Deze levenscyclusfase bestaat niet of is een verloren fase.",
+        "unknown_or_inactive_user": "Een van de geselecteerde personen is geen actief lid van deze workspace."
+      }
+    },
+    "problems": {
+      "nameRequired": "Geef de bron een naam.",
+      "nameLength": "Maximaal {max} tekens.",
+      "platformLength": "Maximaal {max} tekens.",
+      "secretLength": "Een gedeeld geheim is {min} tot {max} tekens.",
+      "pathLength": "Een pad is maximaal {max} tekens.",
+      "pathCharacters": "Een pad mag geen besturingstekens bevatten.",
+      "retentionRange": "Voer een geheel aantal dagen in van 1 tot {max}.",
+      "countryCode": "Voer een landnummer in van 1 tot 4 cijfers, zoals 31 of 44.",
+      "textLength": "Maximaal {max} tekens.",
+      "ownerFixed": "Kies precies één persoon.",
+      "ownerRoundRobin": "Kies minstens twee personen om om de beurt te nemen.",
+      "ownerTooMany": "Kies maximaal {max} personen.",
+      "notifyTooMany": "Kies maximaal {max} personen.",
+      "dealTitleLength": "De titel van de deal is maximaal {max} tekens.",
+      "propertyRequired": "Kies het contactkenmerk dat je wilt invullen.",
+      "propertyKey": "Een eigenschapssleutel begint met een letter en gebruikt kleine letters, cijfers en underscores.",
+      "propertyDuplicate": "Deze eigenschap is dubbel gekoppeld.",
+      "pathRequired": "Geef aan waar in de payload de waarde staat.",
+      "customFieldsTooMany": "Koppel maximaal {max} aangepaste eigenschappen.",
+      "contract": "{message}"
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Meta-leadformulieren",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Marketplace-verbinding"
+    },
+    "sourceStatus": {
+      "active": "Actief",
+      "paused": "Gepauzeerd"
+    },
+    "eventStatus": {
+      "received": "Ontvangen",
+      "created": "Contact aangemaakt",
+      "updated": "Contact bijgewerkt",
+      "duplicate": "Duplicaat",
+      "needs_review": "Controle nodig",
+      "failed": "Mislukt"
+    },
+    "reasons": {
+      "no_contact_point": "Geen e-mail of telefoon",
+      "invalid_phone": "Telefoonnummer kon niet worden gelezen",
+      "plan_limit_reached": "Contactlimiet bereikt",
+      "source_paused": "Bron was gepauzeerd",
+      "internal_error": "Verwerkingsfout",
+      "identity_conflict": "E-mail of telefoon hoort bij een ander contact"
+    },
+    "guidance": {
+      "noContactPoint": "De lead had geen bruikbaar e-mailadres en geen telefoonnummer. Corrigeer de koppeling of de standaard landcode en probeer opnieuw.",
+      "invalidPhone": "Er is een telefoonnummer verstuurd dat niet als zodanig gelezen kon worden, en er was geen e-mail. Controleer de telefoonkoppeling en de standaard landcode en probeer opnieuw.",
+      "planLimit": "De contactlimiet van je abonnement is bereikt, dus deze lead kon geen contact worden. Upgrade je abonnement en probeer opnieuw.",
+      "sourcePaused": "De bron was gepauzeerd. Hervat hem en probeer opnieuw.",
+      "internalError": "Er ging iets mis bij het verwerken van deze lead. Probeer opnieuw; mislukt het weer, deel dan de referentie uit de fout met support.",
+      "identityConflict": "De lead is gekoppeld aan een bestaand contact, maar het e-mailadres of telefoonnummer hoort al bij een ander contact, dus dat gegeven is niet verplaatst.",
+      "generic": "Deze lead heeft aandacht nodig. Controleer de reden en de fout, corrigeer indien nodig de koppeling of standaardwaarden en probeer opnieuw.",
+      "upgrade": "Abonnement upgraden"
+    },
+    "eventFilters": {
+      "all": "Alle leads",
+      "attention": "Aandacht nodig",
+      "needs_review": "Controle nodig",
+      "failed": "Mislukt",
+      "created": "Contact aangemaakt",
+      "updated": "Contact bijgewerkt",
+      "duplicate": "Duplicaat",
+      "received": "Wordt verwerkt"
+    },
+    "testFilters": {
+      "all": "Echte en testleads",
+      "only": "Alleen testleads",
+      "hide": "Testleads verbergen"
+    },
+    "page": {
+      "title": "Social leads",
+      "description": "Breng leads uit je advertenties en landingspagina's naar je contacten, met de eigenaar, tag en deal die je kiest.",
+      "newSource": "Nieuwe bron",
+      "loading": "Leadbronnen laden",
+      "tabs": {
+        "ads": "Advertenties",
+        "webhook": "Webhook",
+        "attention": "{count, plural, one {# lead heeft aandacht nodig} other {# leads hebben aandacht nodig}}"
+      }
+    },
+    "ads": {
+      "intro": "Kies waar je leads vandaan komen. Elke bron eindigt op dezelfde plek: een contact met de bron vastgelegd, een eigenaar, een optionele deal en een melding.",
+      "available": "Beschikbaar",
+      "comingSoon": "Binnenkort",
+      "untilThen": "Stuur deze leads tot die tijd via de webhook met Zapier of Make.",
+      "sourceCount": "{count, plural, =0 {Nog geen bronnen} one {# bron} other {# bronnen}}",
+      "setUpWebhook": "Een webhook instellen",
+      "openSources": "Bronnen openen",
+      "providers": {
+        "webhook": {
+          "name": "Webhook",
+          "body": "Stuur leads vanuit elke tool die een webaanvraag kan sturen: Zapier, Make, een landingspagina-builder of je eigen formulier. Ook LinkedIn-, TikTok- en Google Ads-leads komen zo binnen."
+        },
+        "meta": {
+          "name": "Meta-leadformulieren",
+          "body": "Facebook- en Instagram-leadadvertenties, rechtstreeks vanaf je pagina."
+        },
+        "linkedin": {
+          "name": "LinkedIn",
+          "body": "LinkedIn-leadformulieren."
+        },
+        "tiktok": {
+          "name": "TikTok",
+          "body": "TikTok-leadformulieren."
+        },
+        "google": {
+          "name": "Google Ads",
+          "body": "Google Ads-leadformulierextensies."
+        }
+      }
+    },
+    "sources": {
+      "emptyTitle": "Nog geen bronnen",
+      "empty": "Maak een webhookbron aan om een URL te krijgen die je in Zapier, Make of je formuliertool kunt plakken. Leads die ernaar worden gestuurd, worden contacten.",
+      "emptyNoManage": "Er is nog geen leadbron aangemaakt. Vraag iemand die leadbronnen mag beheren er een aan te maken.",
+      "create": "Nieuwe bron",
+      "caption": "Leadbronnen",
+      "col": {
+        "name": "Naam",
+        "kind": "Type",
+        "status": "Status",
+        "token": "URL",
+        "lastEvent": "Laatste lead",
+        "attention": "Aandacht nodig"
+      },
+      "connector": "Via de Marketplace",
+      "endsIn": "Eindigt over {hint}",
+      "noEvents": "Nog geen leads",
+      "needsAttention": "{count, plural, one {# lead} other {# leads}}"
+    },
+    "wizard": {
+      "title": "Nieuwe leadbron",
+      "description": "Stel een webhook in die binnenkomende leads omzet in contacten.",
+      "back": "Terug naar Social leads",
+      "stepsLabel": "Stappen om een leadbron aan te maken",
+      "steps": {
+        "basics": "Basis",
+        "rules": "Wat er met een lead gebeurt",
+        "connect": "Verbind je afzender",
+        "mapping": "Velden koppelen"
+      },
+      "stepTitle": {
+        "basics": "Geef je bron een naam",
+        "rules": "Wat er met een lead gebeurt",
+        "connect": "Verbind je afzender",
+        "mapping": "Velden koppelen"
+      },
+      "stepHelp": {
+        "basics": "Zeg hoe deze bron heet en hoe lang de ruwe leaddata bewaard blijft.",
+        "rules": "Kies de eigenaar, tag, deal en melding voor elke binnenkomende lead.",
+        "connect": "Je bron bestaat. Kopieer de URL en het token nu: ze worden maar één keer getoond.",
+        "mapping": "Geef aan waar elke waarde staat in de data die je tool verstuurt. De voorbeeldweergave toont het resultaat terwijl je typt."
+      },
+      "previous": "Terug",
+      "next": "Volgende",
+      "cancel": "Annuleren",
+      "create": "Bron aanmaken",
+      "created": "Bron {name} aangemaakt",
+      "mappingSaved": "Koppeling opgeslagen",
+      "planLimit": "Het limiet van je abonnement voor leadbronnen is bereikt, dus er kan geen nieuwe bron worden aangemaakt.",
+      "planLocked": "Je abonnement bevat geen Social leads.",
+      "upgrade": "Abonnement upgraden",
+      "skipMapping": "Nu overslaan",
+      "finish": "Opslaan en afronden",
+      "revealGone": "De URL en het token worden niet meer getoond. Als je ze niet hebt bewaard, open je de bron en vernieuw je het token om een nieuwe URL te krijgen.",
+      "toMapping": "Doorgaan naar koppelen"
+    },
+    "form": {
+      "name": "Naam bron",
+      "nameHint": "Bijvoorbeeld Zapier: Facebook lead ads. Namen zijn uniek.",
+      "platform": "Platformlabel",
+      "platformHint": "Wat je contacten als hun bron zien, bijvoorbeeld Facebook of IndiaMART. Tot {max} tekens.",
+      "platformPlaceholder": "Facebook",
+      "secret": {
+        "label": "Gedeeld geheim",
+        "isSet": "Er is een gedeeld geheim ingesteld. Verzenders moeten het meesturen in de header X-Webhook-Secret.",
+        "notSet": "Geen gedeeld geheim. Iedereen met de URL kan leads sturen.",
+        "willRemove": "Het gedeelde geheim wordt verwijderd bij het opslaan.",
+        "willReplace": "Het gedeelde geheim wordt vervangen bij het opslaan.",
+        "willSet": "Bij het opslaan wordt een gedeeld geheim ingesteld.",
+        "newValue": "Nieuw gedeeld geheim",
+        "hint": "Optioneel. {min} tot {max} tekens. Na het opslaan wordt het nooit meer getoond.",
+        "show": "Geheim tonen",
+        "hide": "Geheim verbergen",
+        "replace": "Vervangen",
+        "remove": "Verwijderen",
+        "keep": "Huidig geheim behouden"
+      },
+      "externalIdPath": "Pad lead-id",
+      "externalIdPathHint": "Waar het eigen id van de verzender voor een lead in de data staat, bijvoorbeeld lead.id. Zo wordt dezelfde lead niet twee keer toegevoegd. Optioneel.",
+      "retention": "Ruwe leaddata bewaren voor (dagen)",
+      "retentionHint": "Daarna wordt de opgeslagen data verwijderd; het contact blijft bestaan. 1 tot {max} dagen.",
+      "sections": {
+        "contact": "Het contact",
+        "owner": "Eigenaar",
+        "deal": "Deal",
+        "notify": "Meldingen"
+      },
+      "membersFailed": "We konden je team niet laden, daardoor kun je nu niemand kiezen. Laad de pagina opnieuw om het opnieuw te proberen.",
+      "countryCode": "Standaard landcode",
+      "countryCodeHint": "Wordt toegevoegd aan telefoonnummers die zonder landcode worden verstuurd, bijvoorbeeld 91. Zonder deze instelling moet een nummer zijn eigen landcode bevatten.",
+      "lifecycleStage": "Startfase levenscyclus",
+      "lifecycleStageHint": "De fase waarin een nieuw contact van deze bron begint.",
+      "lifecycleDefault": "Standaard van de workspace",
+      "tag": "Tag",
+      "tagHint": "Wordt aan elk contact van deze bron toegevoegd. Laat leeg voor geen tag.",
+      "ownerMode": "Wie de eigenaar van het contact is",
+      "ownerModeHint": "Geldt alleen voor een contact dat nog geen eigenaar heeft.",
+      "ownerModes": {
+        "unassigned": "Niemand (niet toegewezen)",
+        "fixed": "Eén persoon",
+        "round_robin": "Om de beurt tussen personen"
+      },
+      "ownerFixed": "Eigenaar",
+      "ownerChoose": "Kies een persoon",
+      "unknownMember": "Een persoon die niet meer beschikbaar is",
+      "ownerRoundRobin": "Personen die om de beurt aan bod komen",
+      "ownerRoundRobinHint": "Kies er minstens twee. Leads gaan om de beurt naar elk van hen; personen die niet meer actief zijn worden overgeslagen.",
+      "pickMembers": "Personen kiezen",
+      "noMembers": "Niemand meer om te kiezen",
+      "removeMember": "{name} verwijderen",
+      "dealEnabled": "Maak voor elk nieuw contact een deal aan",
+      "dealEnabledHint": "Uit tot je het aanzet. Een contact dat al een open deal heeft, krijgt er geen nieuwe.",
+      "pipelinesFailed": "We konden je pipelines niet laden. Pipeline en fase kunnen nu niet gekozen worden.",
+      "pipeline": "Pipeline",
+      "pipelineDefault": "Standaardpipeline van de workspace",
+      "dealStage": "Fase",
+      "dealStageNeedsPipeline": "Kies eerst een pipeline om een fase te kiezen.",
+      "dealStageFirst": "Eerste fase van de pipeline",
+      "dealTitle": "Titel van de deal",
+      "dealTitleHint": "Deze worden ingevuld vanuit de lead: {tokens}.",
+      "notifyOwner": "Het contact van de eigenaar laten weten",
+      "notifyOwnerHint": "Een melding in de app wanneer een nieuwe lead binnenkomt. Testleads sturen nooit een melding.",
+      "notifyUsers": "Ook laten weten aan",
+      "notifyUsersHint": "Bijvoorbeeld je salesmanager. Tot 20 personen."
+    },
+    "mapping": {
+      "contact": "Contactvelden",
+      "contactHelp": "Typ een sleutel (phone_number) of een pad (lead.contact.phone, answers[0].value). Laat een vak leeg om onder de gangbare namen te zoeken.",
+      "fields": {
+        "name": "Volledige naam",
+        "firstName": "Voornaam",
+        "lastName": "Achternaam",
+        "email": "E-mail",
+        "phone": "Telefoon"
+      },
+      "defaults": {
+        "name": "Zoekt naar full_name, name, contact_name",
+        "firstName": "Zoekt naar first_name, firstname",
+        "lastName": "Zoekt naar last_name, lastname",
+        "email": "Zoekt naar email, email_address, mail",
+        "phone": "Zoekt naar phone, mobile, phone_number, whatsapp"
+      },
+      "custom": "Eigen contactvelden",
+      "customHelp": "Vul je eigen contacteigenschappen in met de data die je tool verstuurt.",
+      "propertiesFailed": "We konden je contacteigenschappen niet laden, typ daarom de sleutel van de eigenschap.",
+      "property": "Contacteigenschap",
+      "propertyChoose": "Kies een eigenschap",
+      "path": "Pad in de payload",
+      "removeRow": "Eigen veld {number} verwijderen",
+      "remove": "Verwijderen",
+      "addRow": "Eigen veld toevoegen",
+      "attribution": "Toeschrijving",
+      "attributionHelp": "Waar de campagnegegevens staan. Wat leeg blijft, wordt gezocht onder de eigen naam.",
+      "attributionFields": {
+        "platform": "Platform",
+        "campaign": "Campagne",
+        "adset": "Advertentieset",
+        "ad": "Advertentie",
+        "form": "Formulier"
+      },
+      "attributionDefaults": {
+        "platform": "Zoekt naar platform, utm_source",
+        "campaign": "Zoekt naar campaign, utm_campaign",
+        "adset": "Zoekt naar adset, adgroup",
+        "ad": "Zoekt naar ad",
+        "form": "Zoekt naar form"
+      }
+    },
+    "preview": {
+      "title": "Live voorbeeld",
+      "updating": "Bijwerken",
+      "help": "Wat de koppeling hierboven van een lead maakt. De preview slaat niets op en maakt niets aan.",
+      "paste": "Plak een voorbeeldlead (JSON)",
+      "pasteHint": "Een object, tot 64 KB.",
+      "pasteProblems": {
+        "empty": "Plak de JSON die je tool verstuurt.",
+        "invalidJson": "Dit is geen geldige JSON. Controleer op een ontbrekend aanhalingsteken, komma of haakje.",
+        "notObject": "Een lead moet een JSON-object zijn: een reeks sleutels en waarden tussen accolades.",
+        "tooLarge": "Dit is groter dan 64 KB."
+      },
+      "useLast": "Gebruik de laatst ontvangen lead",
+      "pickStored": "Of kies een opgeslagen lead",
+      "storedOption": "{id} ({status})",
+      "auditNote": "Het lezen van een opgeslagen lead wordt in het auditlogboek vastgelegd. Een geplakt voorbeeld niet.",
+      "fixDraft": "Corrigeer de gemarkeerde koppelingsvelden om een preview te zien.",
+      "choose": "Plak een voorbeeld of gebruik de laatst ontvangen lead om het resultaat te zien.",
+      "loading": "Lead wordt gelezen",
+      "none": "Nog geen lead ontvangen: plak een voorbeeld.",
+      "usable": "Deze lead zou worden verwerkt",
+      "notUsable": "Deze lead zou gecontroleerd moeten worden",
+      "basedOnEvent": "Uit een opgeslagen lead",
+      "basedOnPayload": "Uit je voorbeeld",
+      "externalId": "id {id}",
+      "reasonsLabel": "Waarom",
+      "reasons": {
+        "no_payload": "Er is nog geen lead om te lezen.",
+        "no_contact_point": "Er zijn geen e-mail en geen telefoon gevonden.",
+        "invalid_phone": "Er is een telefoon gevonden, maar die kan niet als nummer worden gelezen, en er is geen e-mail.",
+        "phone_unreadable": "Het telefoonnummer kan niet als nummer worden gelezen; de e-mail wordt gebruikt.",
+        "email_invalid": "Het e-mailadres is niet geldig en wordt genegeerd."
+      },
+      "contact": {
+        "name": "Naam",
+        "firstName": "Voornaam",
+        "lastName": "Achternaam",
+        "email": "E-mail",
+        "phone": "Telefoon"
+      },
+      "empty": "Niets gevonden",
+      "phoneUnreadable": "Kon niet als nummer worden gelezen",
+      "attribution": {
+        "platform": "Platform",
+        "campaign": "Campagne",
+        "adset": "Advertentieset",
+        "ad": "Advertentie",
+        "form": "Formulier"
+      },
+      "paths": "Velden in deze lead",
+      "pathsPick": "Klik er een aan om in te vullen: {field}",
+      "pathsFocusFirst": "Klik eerst een koppelingsvak aan en klik daarna op een veld om het in te vullen.",
+      "pathsMore": "{count, plural, one {# extra veld} other {# extra velden}}"
+    },
+    "reveal": {
+      "titleCreated": "Kopieer nu je URL en token",
+      "titleRotated": "Je nieuwe URL en token",
+      "bodyCreated": "Dit is de enige keer dat ze worden getoond. We bewaren alleen een vingerafdruk, daarom kunnen we ze niet opnieuw tonen.",
+      "bodyRotated": "De oude URL werkt meteen niet meer. Deze nieuwe wordt alleen nu getoond.",
+      "url": "Webhook-URL",
+      "copyUrl": "URL kopiëren",
+      "noOrigin": "Zet je API-adres voor dit pad om de volledige URL te krijgen.",
+      "token": "Token",
+      "copyToken": "Token kopiëren",
+      "secretHint": "Deze bron heeft ook een gedeeld geheim nodig: de verzender moet het meesturen in de header {header}.",
+      "sample": "Probeer het vanuit een terminal",
+      "sampleHelp": "Gebruik in Zapier of Make een Webhooks-actie die JSON naar de URL post. Dit commando stuurt één voorbeeldlead.",
+      "copied": "Ik heb de URL en het token ergens veilig gekopieerd",
+      "done": "Ik heb het gekopieerd, doorgaan",
+      "doneHint": "Vink eerst het vakje aan. Daarna kan het token niet meer worden getoond."
+    },
+    "test": {
+      "title": "Stuur een testlead",
+      "help": "Stuurt een voorbeeldlead door de echte verwerking, gemarkeerd als test. Er wordt een echt contact aangemaakt dat je kunt verwijderen, en niemand krijgt een melding.",
+      "paused": "Deze bron is gepauzeerd. Hervat hem om een testlead te sturen.",
+      "useSample": "Gebruik in plaats daarvan de voorbeeldlead",
+      "useOwn": "Mijn eigen payload posten",
+      "payload": "Payload (JSON)",
+      "payloadHint": "Een object, tot 64 KB.",
+      "payloadProblems": {
+        "empty": "Plak de JSON om te sturen, of gebruik de voorbeeldlead.",
+        "invalidJson": "Dit is geen geldige JSON. Controleer op een ontbrekend aanhalingsteken, komma of haakje.",
+        "notObject": "Een lead moet een JSON-object zijn: een reeks sleutels en waarden tussen accolades.",
+        "tooLarge": "Dit is groter dan 64 KB."
+      },
+      "send": "Testlead versturen",
+      "needsManage": "Voor het versturen van een testlead is de rechte leads.sources.manage nodig.",
+      "result": "Resultaat",
+      "flag": "Test",
+      "openContact": "Open het contact"
+    },
+    "watch": {
+      "waiting": "Wachten op de eerste lead. Plak de URL in je tool en stuur er een.",
+      "received": "Eerste lead ontvangen:",
+      "error": "We konden nu niet controleren op leads."
+    },
+    "detail": {
+      "loading": "Bron wordt geladen",
+      "backToList": "Terug naar bronnen",
+      "pageTitle": "Leadbron",
+      "needsAttention": "{count, plural, one {# lead vraagt aandacht} other {# leads vragen aandacht}}",
+      "lastEvent": "Laatste lead",
+      "noEvents": "nog geen",
+      "pause": "Pauzeren",
+      "resume": "Hervatten",
+      "rotate": "Token vernieuwen",
+      "delete": "Verwijderen",
+      "conflict": "Iemand anders heeft deze bron gewijzigd. Laad de pagina opnieuw om hun versie te zien; je niet-opgeslagen wijzigingen gaan verloren.",
+      "reload": "Opnieuw laden",
+      "connection": "Verbinding",
+      "connector": "Verbonden via de Marketplace. Hij heeft geen eigen URL of token; leads komen binnen via de geïnstalleerde app.",
+      "connectorLink": "Geïnstalleerde apps openen",
+      "endsIn": "Het URL-token eindigt op {hint}",
+      "noHint": "Geen token bekend.",
+      "urlOnce": "De volledige URL is één keer getoond toen de bron werd aangemaakt. Vernieuw het token om een nieuwe te krijgen.",
+      "secretYes": "Er is een gedeeld geheim ingesteld: verzenders moeten het meesturen in de header X-Webhook-Secret.",
+      "secretNo": "Er is geen gedeeld geheim ingesteld.",
+      "pausedNote": "Deze bron is gepauzeerd: de URL geeft 404, dus verzenders krijgen een fout tot je hem hervat.",
+      "settings": "Instellingen",
+      "settingsHelp": "Wijzigingen gelden voor leads die binnenkomen na het opslaan. Het opnieuw proberen van een oude lead gebruikt de huidige instellingen.",
+      "basics": "Basis",
+      "rules": "Wat er met een lead gebeurt",
+      "mapping": "Veldkoppeling",
+      "unsaved": "Je hebt niet-opgeslagen wijzigingen",
+      "discard": "Wijzigingen verwerpen",
+      "save": "Wijzigingen opslaan",
+      "saved": "Wijzigingen opgeslagen",
+      "pausedToast": "Bron gepauzeerd",
+      "resumedToast": "Bron hervat",
+      "deletedToast": "Bron {name} verwijderd",
+      "confirm": {
+        "cancel": "Annuleren",
+        "pause": {
+          "title": "Deze bron pauzeren?",
+          "body": "Zolang hij gepauzeerd is, geeft de URL 404 en worden leads die ernaartoe worden gestuurd niet ontvangen. Je kunt hem altijd hervatten.",
+          "action": "Bron pauzeren"
+        },
+        "rotate": {
+          "title": "Het token vernieuwen?",
+          "body": "De huidige URL werkt meteen niet meer, dus werk je tool bij met de nieuwe. De nieuwe URL wordt maar één keer getoond.",
+          "action": "Token vernieuwen"
+        },
+        "delete": {
+          "title": "{name} verwijderen?",
+          "body": "De URL werkt niet meer en de leads die erin zijn opgeslagen worden mee verwijderd. Contacten die al zijn aangemaakt blijven bestaan. Dit kan niet ongedaan worden gemaakt.",
+          "action": "Bron verwijderen"
+        }
+      }
+    },
+    "events": {
+      "title": "Ontvangen leads",
+      "help": "Elke lead die bij deze bron is binnengekomen en wat ermee is gebeurd. Nieuwste eerst.",
+      "filterStatus": "Tonen",
+      "filterTests": "Tests",
+      "attentionTitle": "{count, plural, one {# lead vraagt aandacht} other {# leads vragen aandacht}}",
+      "attentionGroup": "{count, plural, one {# lead:} other {# leads:}}",
+      "showAttention": "Toon alleen deze leads",
+      "loading": "Leads worden geladen",
+      "emptyTitle": "Nog geen leads",
+      "empty": "Stuur een testlead of plak de URL in je tool.",
+      "emptyFilteredTitle": "Geen leads gevonden",
+      "emptyFiltered": "Geen leads voldoen aan deze filters.",
+      "clearFilters": "Filters wissen",
+      "col": {
+        "status": "Status",
+        "lead": "Lead",
+        "result": "Wat er gebeurde",
+        "links": "Geworden",
+        "received": "Ontvangen",
+        "actions": "Acties"
+      },
+      "loadMore": "Meer laden",
+      "test": "Test",
+      "attempts": "{count, plural, one {# poging} other {# pogingen}}",
+      "deliveredAgain": "{count, plural, one {Nogmaals afgeleverd, één keer} other {Nogmaals afgeleverd, # keer}}",
+      "contact": "Contact",
+      "deal": "Deal",
+      "retry": "Opnieuw proberen",
+      "open": "Openen",
+      "retriedToast": "Opnieuw geprobeerd: nu {status}"
+    },
+    "event": {
+      "title": "Leaddetails",
+      "close": "Sluiten",
+      "retry": "Deze lead opnieuw proberen",
+      "auditNote": "Het openen van de payload wordt in het auditlogboek vastgelegd.",
+      "externalId": "Lead-id",
+      "test": "Test",
+      "received": "Ontvangen",
+      "processed": "Verwerkt",
+      "notProcessed": "nog niet",
+      "attempts": "Pogingen",
+      "duplicates": "Herhaalde leveringen",
+      "deliveredAgain": "{count, plural, one {Nogmaals afgeleverd, één keer} other {Nogmaals afgeleverd, # keer}}",
+      "reason": "Reden",
+      "contact": "Contact",
+      "openContact": "Open het contact",
+      "deal": "Deal",
+      "openDeal": "Open de deal",
+      "error": "Fout",
+      "retried": "Opnieuw geprobeerd. De lead is nu",
+      "payload": "Opgeslagen payload",
+      "loadingPayload": "De payload wordt geopend",
+      "purged": "De ruwe payload is na {days} dagen opgeschoond. De lead en het contact blijven bestaan."
+    },
+    "attribution": {
+      "title": "Leadtoeschrijving",
+      "first": "Eerste contactpunt",
+      "latest": "Laatste contactpunt",
+      "firstAndLatest": "Eerste en laatste contactpunt",
+      "total": "{count} contactpunten in totaal",
+      "platform": "Platform",
+      "source": "Bron",
+      "fields": {
+        "campaign": "Campagne",
+        "adset": "Advertentieset",
+        "ad": "Advertentie",
+        "form": "Formulier"
+      },
+      "capturedAt": "Vastgelegd",
+      "openSource": "Open de leadbron"
+    }
+  }
+}

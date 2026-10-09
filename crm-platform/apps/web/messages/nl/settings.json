@@ -1,0 +1,315 @@
+{
+  "settings": {
+    "emptySection": {
+      "title": "Niets om hier in te stellen",
+      "message": "Geen van de instellingen in dit gedeelte is beschikbaar voor je rol."
+    },
+    "inSection": "In {section}",
+    "soon": "Binnenkort",
+    "upgrade": "Upgraden",
+    "comingSoon": "Binnenkort beschikbaar",
+    "sections": {
+      "channels": {
+        "title": "Kanalen",
+        "description": "Verbind de plekken waar je klanten je berichten sturen."
+      },
+      "data": {
+        "title": "Gegevens en aanpassing",
+        "description": "Bepaal hoe contacten, deals en gesprekken worden omschreven."
+      },
+      "business": {
+        "title": "Bedrijf en facturatie",
+        "description": "Je bedrijfsgegevens, belastingen, abonnement en betalingen."
+      },
+      "people": {
+        "title": "Team en rechten",
+        "description": "Wie wat mag doen in je workspace."
+      },
+      "automation": {
+        "title": "Automatisering en AI",
+        "description": "Antwoorden, boekingen, de website-widget en AI."
+      },
+      "integrations": {
+        "title": "Integraties en ontwikkelaars",
+        "description": "Verbind andere tools en breid het product uit."
+      },
+      "security": {
+        "title": "Gegevens en beveiliging",
+        "description": "Inloggen, privacy, export en het auditlogboek."
+      }
+    },
+    "tiles": {
+      "channels": {
+        "label": "Alle kanalen",
+        "description": "Bekijk alle kanalen die je hebt verbonden en voeg een nieuwe toe.",
+        "keywords": "verbindingen, inboxen, nummers, accounts"
+      },
+      "whatsapp": {
+        "label": "WhatsApp",
+        "description": "Verbind je WhatsApp Business-nummer om met klanten te chatten.",
+        "keywords": "wa, whatsapp business, cloud api, nummer, qr"
+      },
+      "unofficial-whatsapp": {
+        "label": "Onofficiële WhatsApp API",
+        "description": "Koppel een persoonlijk WhatsApp-nummer via QR-code en warm het op voor veilig verzenden.",
+        "keywords": "persoonlijke whatsapp, qr, koppelcode, apparaten, baileys, warmer, opwarmen, onofficieel"
+      },
+      "warmer": {
+        "label": "Warmer",
+        "description": "Warm je WhatsApp-nummers op zodat geplande berichten in een veilig tempo worden verzonden.",
+        "keywords": "opwarmen, warmen, nummer, reputatie, verzendlimiet, wachtrij, tempo, gepland"
+      },
+      "facebook": {
+        "label": "Facebook Messenger",
+        "description": "Beantwoord berichten die naar je Facebook-pagina worden gestuurd.",
+        "keywords": "meta, messenger, pagina, fb"
+      },
+      "instagram": {
+        "label": "Instagram",
+        "description": "Beantwoord directe berichten die naar je Instagram-account worden gestuurd.",
+        "keywords": "meta, dm, insta, directe berichten"
+      },
+      "telegram": {
+        "label": "Telegram",
+        "description": "Verbind een Telegram-bot om met klanten te chatten.",
+        "keywords": "bot, botfather, tg"
+      },
+      "tiktok": {
+        "label": "TikTok",
+        "description": "Beantwoord berichten die naar je TikTok-zakelijke account worden gestuurd.",
+        "keywords": "tik tok, dm, video"
+      },
+      "sms": {
+        "label": "SMS",
+        "description": "Verstuur en ontvang sms-berichten met je eigen afzender.",
+        "keywords": "sms, afzender-id, dlt, twilio, mobiel"
+      },
+      "email": {
+        "label": "E-mail",
+        "description": "Verbind een mailbox om e-mail te verzenden en ontvangen in de inbox.",
+        "keywords": "mailbox, smtp, imap, gmail, outlook, afzender"
+      },
+      "line": {
+        "label": "LINE",
+        "description": "Verbind je LINE-officiële account.",
+        "keywords": "line officieel account, berichten"
+      },
+      "viber": {
+        "label": "Viber",
+        "description": "Verbind je Viber-zakelijke account.",
+        "keywords": "viber bot, berichten"
+      },
+      "wechat": {
+        "label": "WeChat",
+        "description": "Verbind je WeChat-officiële account.",
+        "keywords": "weixin, officieel account"
+      },
+      "wa-links": {
+        "label": "WhatsApp-links",
+        "description": "Maak klik-om-te-chatten-links en QR-codes die een WhatsApp-chat openen.",
+        "keywords": "klik om te chatten, qr-code, korte link, wa.me"
+      },
+      "contact-stages": {
+        "label": "Contactfases",
+        "description": "Stel de fases en statussen in waarlangs een contact beweegt.",
+        "keywords": "levenscyclus, status, lead, klant, gewonnen, verloren, funnel"
+      },
+      "contact-properties": {
+        "label": "Contacteigenschappen",
+        "description": "Voeg de velden toe die je bij elk contact wilt bewaren.",
+        "keywords": "aangepaste velden, velden, verplicht, keuzelijst, kolommen, kenmerken, variabelen, samenvoegvelden"
+      },
+      "attributes": {
+        "label": "Kenmerken",
+        "description": "Tags en de andere labels die je aan contacten toekent.",
+        "keywords": "tags, labels, bronnen, aangepaste kenmerken"
+      },
+      "deal-pipelines": {
+        "label": "Pijplijnen en fases",
+        "description": "Bewerk je dealpijplijnen, fases en redenen voor verlies.",
+        "keywords": "deals, verkoopfases, bord, reden verloren, funnel"
+      },
+      "tags": {
+        "label": "Tags",
+        "description": "Maak en orden de tags die bij contacten en chats worden gebruikt.",
+        "keywords": "labels, kleur, color"
+      },
+      "saved-replies": {
+        "label": "Opgeslagen antwoorden",
+        "description": "Schrijf herbruikbare antwoorden die je team met één klik kan versturen.",
+        "keywords": "kant-en-klare antwoorden, snelkoppelingen, fragmenten, sjablonen"
+      },
+      "business-profile": {
+        "label": "Bedrijfsprofiel",
+        "description": "Je bedrijfsnaam, adres, btw-nummer en logo voor documenten.",
+        "keywords": "bedrijf, adres, gst, btw, belastingnummer, logo, factuurkop"
+      },
+      "tax-rates": {
+        "label": "Belastingtarieven",
+        "description": "Stel de belastingen in die aan je facturen en schattingen worden toegevoegd.",
+        "keywords": "btw, gst, omzetbelasting, procent, tarieven, land"
+      },
+      "plans": {
+        "label": "Abonnementen",
+        "description": "Bekijk je abonnement en gebruik, wat erin zit, en upgrade.",
+        "keywords": "abonnement, upgraden, limieten, prijzen, proefperiode, gebruik, abonnement en gebruik, meters"
+      },
+      "wallet": {
+        "label": "Wallet",
+        "description": "Vul het saldo op dat je berichten betaalt.",
+        "keywords": "tegoed, saldo, opwaarderen, bijvullen, geld"
+      },
+      "billing-orders": {
+        "label": "Bestelgeschiedenis",
+        "description": "Je abonnements- en wallet-aankopen, met bonnen.",
+        "keywords": "betalingen, bonnen, facturen, aankopen, bestellingen"
+      },
+      "account": {
+        "label": "Account",
+        "description": "Je naam, e-mail, wachtwoord en taal.",
+        "keywords": "profiel, ik, avatar, e-mail, wachtwoord, voorkeuren"
+      },
+      "branding": {
+        "label": "Berichtvoettekst",
+        "description": "De regel die onderaan berichten wordt toegevoegd die via automatiseringen, geplande verzendingen en teaminbox-antwoorden worden verstuurd.",
+        "keywords": "branding, voettekst, handtekening, white label, branding verwijderen, verzonden via"
+      },
+      "team-members": {
+        "label": "Teamleden",
+        "description": "Nodig mensen uit en beheer wie er in je workspace zit.",
+        "keywords": "gebruikers, personeel, uitnodigen, agenten, medewerkers, zitplaatsen"
+      },
+      "roles": {
+        "label": "Rollen en rechten",
+        "description": "Bepaal wat elke rol kan zien en doen.",
+        "keywords": "toegang, admin, manager, agent, rbac, rechten"
+      },
+      "teams": {
+        "label": "Teams",
+        "description": "Groepeer mensen in teams voor routering en rapportage.",
+        "keywords": "groepen, afdelingen, toewijzing, routering"
+      },
+      "ai-keys": {
+        "label": "AI-providersleutels",
+        "description": "Voeg je eigen AI-providersleutel toe om AI-functies aan te drijven.",
+        "keywords": "openai, gemini, claude, api-sleutel, model, token"
+      },
+      "ai-training": {
+        "label": "AI-training",
+        "description": "Train chatassistenten op je eigen content voor flows en de websitechat.",
+        "keywords": "kennisbank, assistent, slimme agent, faq, trainen, bronnen, meta business agent, responder"
+      },
+      "booking-types": {
+        "label": "Boekingstypen",
+        "description": "De diensten die klanten kunnen boeken, met openingstijden en regels.",
+        "keywords": "afspraken, diensten, beschikbaarheid, tijdsloten, planning, agenda"
+      },
+      "appointment-settings": {
+        "label": "Afspraakinstellingen",
+        "description": "Boekingsregels, herinneringen en de openbare boekingspagina.",
+        "keywords": "boekingspagina, herinneringen, buffer, termijn, annulering"
+      },
+      "google-calendar": {
+        "label": "Google Agenda",
+        "description": "Verbind je agenda zodat boekingen en bezette tijden synchroon blijven.",
+        "keywords": "google, agenda, meet, synchroniseren, bezet, afspraken"
+      },
+      "chat-widget": {
+        "label": "Chatwidget",
+        "description": "Voeg een chatbubbel toe aan je website, ook wel webchat genoemd.",
+        "keywords": "webchat, websitechat, livechat, widget, insluiten, bubbel"
+      },
+      "auto-reply": {
+        "label": "Automatisch antwoord",
+        "description": "Begroet klanten en antwoord als je weg bent.",
+        "keywords": "afwezigheidsbericht, welkom, begroeting, buiten kantoor, trefwoorden"
+      },
+      "lead-sources": {
+        "label": "Social leads",
+        "description": "Haal leads uit advertenties en landingspagina's binnen via een webhook.",
+        "keywords": "leadadvertenties, facebook leads, meta, linkedin, tiktok, google ads, webhook, zapier, vastleggen, formulieren"
+      },
+      "rest-api": {
+        "label": "REST API",
+        "description": "Sleutels en documentatie om bovenop het product te bouwen.",
+        "keywords": "api-sleutels, ontwikkelaars, tokens, documentatie, openapi"
+      },
+      "webhooks": {
+        "label": "Webhooks",
+        "description": "Stuur gebeurtenissen naar je eigen systemen zodra ze zich voordoen.",
+        "keywords": "callbacks, gebeurtenissen, http, endpoint, melden"
+      },
+      "addons": {
+        "label": "Add-ons",
+        "description": "Schakel optionele functies voor je workspace in of uit.",
+        "keywords": "extensies, modules, plug-ins, marktplaats"
+      },
+      "shopify": {
+        "label": "Shopify",
+        "description": "Verbind je Shopify-winkel om producten en bestellingen te synchroniseren en klanten te berichten.",
+        "keywords": "shop, winkel, ecommerce, producten, bestellingen, synchronisatie, verlaten winkelwagen"
+      },
+      "woocommerce": {
+        "label": "WooCommerce",
+        "description": "Verbind je WooCommerce-winkel om producten en bestellingen te synchroniseren en klanten te berichten.",
+        "keywords": "woo, wordpress, shop, winkel, ecommerce, producten, bestellingen, synchronisatie"
+      },
+      "i18n-translation": {
+        "label": "Vertaling",
+        "description": "Talen en automatische vertaling van berichten.",
+        "keywords": "taal, talen, locale, vertalen, automatisch vertalen"
+      },
+      "account-security": {
+        "label": "Wachtwoord en tweestapsaanmelding",
+        "description": "Wijzig je wachtwoord en beveilig het inloggen met een tweede stap.",
+        "keywords": "mfa, 2fa, authenticator, sessies, apparaten, aanmelden, inloggen"
+      },
+      "import-export": {
+        "label": "Importeren en exporteren",
+        "description": "Haal gegevens uit een bestand binnen of neem een kopie mee.",
+        "keywords": "csv, excel, downloaden, back-up, uploaden, migreren"
+      },
+      "activity-log": {
+        "label": "Auditlogboek",
+        "description": "Een overzicht van wie wat wanneer heeft gewijzigd.",
+        "keywords": "activiteit, geschiedenis, wijzigingen, audittrail, beveiligingslogboek"
+      },
+      "privacy": {
+        "label": "Privacy en gegevens",
+        "description": "Toestemming, bewaartermijnen en verzoeken om gegevens te verwijderen.",
+        "keywords": "avg, toestemming, bewaren, gegevens verwijderen, verwerkersovereenkomst, persoonsgegevens"
+      },
+      "whatsapp-customers": {
+        "label": "Opgeslagen klanten",
+        "description": "Vul vooraf de naam en het bezorgadres van een klant in voor WhatsApp-bestellingen.",
+        "keywords": "klanten, adres, bezorging, bestelling, winkel"
+      },
+      "geta-publishing": {
+        "label": "Geta publiceren",
+        "description": "Zet gepubliceerde flows live in de Geta-console.",
+        "keywords": "geta, publiceren, bot, console, live zetten, chatbot"
+      },
+      "auto-assignment": {
+        "label": "Automatisch toewijzen",
+        "description": "Wijs nieuwe gesprekken automatisch aan de juiste agent toe, op beurt of op basis van regels.",
+        "keywords": "routering, round robin, toewijzen, agenten, inboxregels, verdelen, eigenaar"
+      }
+    },
+    "title": "Instellingen",
+    "breadcrumb": "Kruimelpad",
+    "backToSettings": "Terug naar Instellingen",
+    "sectionsLabel": "Instellingsecties",
+    "searchLabel": "Instellingen zoeken",
+    "searchPlaceholder": "Instellingen zoeken",
+    "searchHint": "Typ om elke instelling op naam of trefwoord te filteren. Druk op Escape om te wissen, of op de pijl omlaag om naar de resultaten te gaan.",
+    "clearSearch": "Zoekopdracht wissen",
+    "results": {
+      "title": "{count, plural, one {# instelling komt overeen met “{query}”} other {# instellingen komen overeen met “{query}”}}",
+      "status": "{count, plural, =0 {Geen resultaten} one {# resultaat} other {# resultaten}}"
+    },
+    "noResults": {
+      "title": "Geen instellingen komen overeen met “{query}”",
+      "message": "Controleer de spelling of probeer een breder woord, zoals “btw”, “team” of “WhatsApp”."
+    }
+  }
+}

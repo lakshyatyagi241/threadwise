@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "웹훅",
+      "forwarding": "웹훅 전달"
+    },
+    "common": {
+      "loading": "불러오는 중",
+      "retry": "다시 시도",
+      "requestId": "요청 ID",
+      "dash": "-",
+      "errors": {
+        "forbidden": "이 작업을 수행할 권한이 없습니다.",
+        "request": "요청을 완료하지 못했습니다.",
+        "unexpected": "서버 측에서 문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+        "network": "서버에 연결할 수 없습니다. 연결 상태를 확인한 후 다시 시도하세요.",
+        "conflict": "다른 사용자가 이 대상을 변경했습니다. 목록을 새로 불러왔으니 변경 사항을 다시 적용하세요.",
+        "validation": "일부 값이 올바르지 않습니다. 강조 표시된 필드를 확인하세요.",
+        "notFound": "해당 항목이 더 이상 존재하지 않습니다.",
+        "urlRejected": "이 URL은 허용되지 않습니다. 인터넷에서 접근 가능한 https 주소를 사용하세요."
+      }
+    },
+    "page": {
+      "eyebrow": "관리자 / 시스템 / 웹훅",
+      "title": "웹훅 전달",
+      "description": "플랫폼 운영자가 관리하는, 모든 Meta 웹훅 사본을 받는 서비스 목록입니다.",
+      "banner": "Meta는 콜백 URL을 하나만 허용합니다. 저희가 한 번 수신하고 검증한 후, 원본 본문을 원래 서명과 함께 변경 없이 활성 대상 모두에 전달합니다.",
+      "superOnly": "슈퍼 관리자만 웹훅 전달을 관리할 수 있습니다.",
+      "add": "대상 추가",
+      "tabs": {
+        "targets": "대상",
+        "failures": "전달 실패"
+      }
+    },
+    "targets": {
+      "empty": "아직 전달 대상이 없습니다",
+      "emptyBody": "Meta 웹훅을 다른 서비스로 전달하려면 대상을 추가하세요.",
+      "columns": {
+        "target": "대상",
+        "active": "활성",
+        "fields": "필드",
+        "deliveries": "전달",
+        "last": "마지막 전달",
+        "actions": "작업"
+      },
+      "allFields": "모든 필드",
+      "success": "{count, number}건 성공",
+      "failure": "{count, number}건 실패",
+      "pending": "{count, number}건 대기 중",
+      "pendingLabel": "재전송 대기 중인 실패 전달 {count, number}건",
+      "neverDelivered": "아직 전달된 항목이 없습니다",
+      "lastStatus": "상태 {status}",
+      "lastError": "오류: {error}",
+      "lastAt": "{time}",
+      "activeSwitch": "{name} 대상으로 전달",
+      "on": "대상 켜짐",
+      "off": "대상 꺼짐",
+      "edit": "편집",
+      "test": "테스트",
+      "testing": "테스트 중",
+      "testOk": "테스트 통과: 상태 {status}, {ms, number}ms 소요",
+      "testFailed": "테스트 실패: {reason} ({ms, number}ms)",
+      "testNoStatus": "응답 없음",
+      "testStatus": "상태 {status}",
+      "delete": "삭제",
+      "deleteTitle": "{name} 대상을 삭제하시겠습니까?",
+      "deleteBody": "이 대상은 웹훅 수신을 멈추며, 보관 중인 실패 전달도 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+      "deleteConfirm": "대상 삭제",
+      "cancel": "취소",
+      "toasts": {
+        "created": "{name} 추가됨",
+        "saved": "{name} 저장됨",
+        "on": "{name} 켜짐",
+        "off": "{name} 꺼짐",
+        "deleted": "{name} 삭제됨"
+      }
+    },
+    "dialog": {
+      "createTitle": "전달 대상 추가",
+      "editTitle": "{name} 편집",
+      "close": "닫기",
+      "name": "이름",
+      "namePlaceholder": "분석 서비스",
+      "url": "URL",
+      "urlHint": "https만 사용할 수 있습니다. 사설 네트워크 주소는 거부됩니다.",
+      "headerName": "헤더 이름(선택 사항)",
+      "headerNameHint": "모든 전달에 함께 전송됩니다. 예: Authorization",
+      "headerValue": "헤더 값",
+      "headerValueSaved": "저장됨, 끝자리 ••••{last4}. 변경하지 않으려면 비워 두세요.",
+      "headerValueSavedNoLast4": "저장됨. 변경하지 않으려면 비워 두세요.",
+      "headerValueHint": "쓰기 전용입니다. 저장 후에는 다시 표시되지 않습니다.",
+      "removeHeader": "저장된 헤더 삭제",
+      "fieldFilter": "필드 필터",
+      "fieldFilterHint": "모든 필드를 전달하려면 비워 두세요. 필드 이름을 입력하고 Enter를 누르세요. 예: messages, message_template_status_update",
+      "fieldFilterPlaceholder": "필드 추가",
+      "fieldRemove": "{field} 삭제",
+      "timeout": "제한 시간(초)",
+      "timeoutHint": "1~30",
+      "maxAttempts": "최대 시도 횟수",
+      "maxAttemptsHint": "1~10",
+      "active": "이 대상으로 전달",
+      "save": "저장",
+      "saving": "저장 중",
+      "cancel": "취소",
+      "errors": {
+        "nameRequired": "이름을 입력하세요.",
+        "urlRequired": "URL을 입력하세요.",
+        "urlHttps": "URL은 https://로 시작해야 합니다.",
+        "headerNameInvalid": "영문자, 숫자, 하이픈만 사용하세요.",
+        "headerValueRequired": "헤더에는 이름과 값이 모두 필요합니다.",
+        "headerNameRequired": "헤더 이름도 입력하세요.",
+        "timeout": "1~30 사이의 정수를 입력하세요.",
+        "maxAttempts": "1~10 사이의 정수를 입력하세요."
+      }
+    },
+    "failures": {
+      "empty": "실패한 전달이 없습니다",
+      "emptyBody": "재시도 횟수를 모두 소진한 전달은 14일 동안 여기에 보관되어 다시 보낼 수 있습니다.",
+      "filterAll": "모든 대상",
+      "filterLabel": "대상",
+      "columns": {
+        "target": "대상",
+        "when": "실패 시각",
+        "attempts": "시도 횟수",
+        "reason": "사유",
+        "size": "크기",
+        "actions": "작업"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} 바이트",
+      "replay": "재전송",
+      "replaying": "재전송 중",
+      "replayed": "{time}에 재전송됨",
+      "replayOk": "전달됨: 상태 {status}, {ms, number}ms 소요",
+      "replayFailed": "전달되지 않음: {reason} ({ms, number}ms)",
+      "reasonStatus": "상태 {status}",
+      "reasonNone": "응답 없음"
+    }
+  }
+}

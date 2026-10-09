@@ -1,0 +1,924 @@
+{
+  "marketplace": {
+    "operator": {
+      "nav": {
+        "group": "Chợ ứng dụng",
+        "catalogue": "Danh mục sản phẩm",
+        "categories": "Danh mục",
+        "requests": "Yêu cầu",
+        "usage": "Mức sử dụng"
+      },
+      "common": {
+        "loading": "Đang tải...",
+        "requestId": "Mã yêu cầu",
+        "retry": "Thử lại",
+        "noPermissions": "Không có quyền"
+      },
+      "enums": {
+        "kind": {
+          "mini_app": "Ứng dụng mini",
+          "integration": "Tích hợp"
+        },
+        "appStatus": {
+          "draft": "Bản nháp",
+          "in_review": "Đang xem xét",
+          "published": "Đã xuất bản",
+          "hidden": "Đã ẩn",
+          "killed": "Đã khóa"
+        },
+        "versionStatus": {
+          "draft": "Bản nháp",
+          "in_review": "Đang xem xét",
+          "approved": "Đã duyệt",
+          "rejected": "Bị từ chối",
+          "published": "Đã xuất bản",
+          "retired": "Đã gỡ"
+        },
+        "requestStatus": {
+          "open": "Mở",
+          "planned": "Đã lên kế hoạch",
+          "building": "Đang xây dựng",
+          "shipped": "Đã phát hành",
+          "declined": "Từ chối"
+        },
+        "connector": {
+          "oauth": "Đăng nhập OAuth",
+          "push": "Đẩy (cổng gửi đến chúng tôi)",
+          "pull": "Kéo (chúng tôi truy vấn cổng)",
+          "email_parse": "Phân tích email",
+          "webhook_relay": "Chuyển tiếp webhook",
+          "client": "Client (thành viên tự cài đặt)"
+        },
+        "risk": {
+          "low": "Rủi ro thấp",
+          "medium": "Rủi ro trung bình",
+          "high": "Rủi ro cao"
+        },
+        "subscriptionStatus": {
+          "active": "Trả phí",
+          "trialing": "Đang dùng thử",
+          "comped": "Được tặng",
+          "canceling": "Sắp kết thúc",
+          "ended": "Đã kết thúc"
+        },
+        "subscriptionSource": {
+          "purchase": "Mua",
+          "trial": "Dùng thử",
+          "comp": "Tặng"
+        }
+      },
+      "errors": {
+        "conflict": "Ai đó đã thay đổi việc này trong lúc bạn đang xem. Tải lại để xem phiên bản của họ, rồi thực hiện thay đổi lại.",
+        "noAccess": "Bạn cần quyền nền tảng {permission} để làm việc này.",
+        "manifestInvalid": "Manifest không tuân theo manifest v1. Mỗi vấn đề được liệt kê kèm đường dẫn.",
+        "recipeInvalid": "Công thức không tuân theo định dạng công thức, hoặc không khớp với manifest. Mỗi vấn đề được liệt kê kèm đường dẫn.",
+        "urlRefused": "Một địa chỉ trong công thức bị từ chối: {detail}.",
+        "urlRefusedPlain": "Một địa chỉ trong công thức bị từ chối. Địa chỉ phải là https, một tên DNS công khai, dùng cổng mặc định và không có thông tin xác thực.",
+        "connectorNotAvailable": "Loại kết nối {type} chưa được triển khai, nên danh sách này không thể xuất bản. Không có gì không hoạt động được đưa đến không gian làm việc.",
+        "slugTaken": "Một danh sách hoặc danh mục khác đã dùng mã đó. Chọn mã khác.",
+        "categoryGone": "Danh mục đó không còn tồn tại. Tải lại danh sách.",
+        "categoryUnknown": "Danh mục được nêu trong manifest không tồn tại cho loại ứng dụng này, hoặc đã bị tắt. Chọn một danh mục trong trang Danh mục.",
+        "categoryInUse": "Có ứng dụng được liệt kê trong danh mục này. Hãy chuyển chúng sang danh mục khác trước, hoặc tắt danh mục để ẩn khỏi các không gian làm việc.",
+        "versionState": "Không được phép khi danh sách hoặc phiên bản đang {status}. Tải lại để xem trạng thái hiện tại.",
+        "versionStatePlain": "Không được phép ở trạng thái hiện tại của danh sách hoặc phiên bản. Tải lại để xem trạng thái hiện tại.",
+        "versionExists": "Số phiên bản phải lớn hơn {newest}, phiên bản cao nhất hiện có.",
+        "versionExistsPlain": "Số phiên bản đó đã tồn tại. Dùng số lớn hơn.",
+        "appUnavailable": "Danh sách đã bị khóa không thể xuất bản. Khôi phục trước, rồi xuất bản.",
+        "appNotFound": "Danh sách này không tồn tại. Có thể đã bị xóa.",
+        "notFound": "Không tìm thấy mục đó. Có thể đã bị xóa.",
+        "rateLimited": "Quá nhiều yêu cầu. Chờ {seconds} giây rồi thử lại.",
+        "rateLimitedPlain": "Quá nhiều yêu cầu. Chờ một lát rồi thử lại.",
+        "validationFields": "Một số trường không hợp lệ. Mỗi vấn đề được liệt kê kèm trường.",
+        "validation": "Yêu cầu không hợp lệ.",
+        "request": "Không thể hoàn tất yêu cầu.",
+        "unexpected": "Có lỗi xảy ra phía chúng tôi. Thử lại; nếu vẫn tiếp diễn, hãy trích mã yêu cầu.",
+        "subscriptionState": "Không thể thực hiện ở trạng thái hiện tại của gói đăng ký. Không gian làm việc đã trả tiền không thể được tặng (hãy hủy đăng ký trước), ứng dụng miễn phí không có gì để tặng, và gói đã kết thúc không thể hủy lại.",
+        "subscriptionNotFound": "Không tìm thấy gói đăng ký đó. Có thể đã bị xóa. Tải lại danh sách."
+      },
+      "list": {
+        "title": "Danh mục Chợ ứng dụng",
+        "description": "Mọi danh sách ở bất kỳ trạng thái nào: ứng dụng mini và tích hợp, các phiên bản và số không gian làm việc đã cài đặt.",
+        "new": "Danh sách mới",
+        "subscriptionsLink": "Đăng ký và doanh thu",
+        "kpi": {
+          "label": "Danh sách theo trạng thái",
+          "loaded": "Đã tải",
+          "published": "Đã xuất bản",
+          "inReview": "Đang xem xét",
+          "hidden": "Đã ẩn",
+          "killed": "Đã khóa",
+          "note": "Số liệu chỉ tính {count} danh sách đã tải, không phải toàn bộ danh mục.",
+          "noteMore": "Còn nữa: dùng Tải thêm."
+        },
+        "filters": {
+          "label": "Bộ lọc",
+          "search": "Tìm kiếm",
+          "searchPlaceholder": "Tên hoặc mã",
+          "kind": "Loại",
+          "allKinds": "Mọi loại",
+          "status": "Trạng thái",
+          "allStatuses": "Mọi trạng thái",
+          "category": "Danh mục",
+          "allCategories": "Mọi danh mục",
+          "categoryNote": "Lọc các danh sách đã tải: API không có bộ lọc danh mục.",
+          "pricing": "Giá",
+          "allPricing": "Mọi mức giá",
+          "free": "Miễn phí",
+          "paid": "Trả phí"
+        },
+        "cols": {
+          "app": "Ứng dụng",
+          "kind": "Loại",
+          "category": "Danh mục",
+          "status": "Trạng thái",
+          "versions": "Phiên bản",
+          "installs": "Lượt cài đặt",
+          "planFeature": "Tính năng gói",
+          "pricing": "Giá",
+          "subscriptions": "Đăng ký đang hoạt động"
+        },
+        "badges": {
+          "firstParty": "Của chúng tôi",
+          "featured": "Nổi bật"
+        },
+        "versionPublished": "Đã xuất bản",
+        "versionLatest": "Mới nhất",
+        "dash": "-",
+        "everyPlan": "Mọi gói",
+        "killedReason": "Đã khóa: {reason}",
+        "loadMore": "Tải thêm",
+        "clearFilters": "Xóa bộ lọc",
+        "emptyTitle": "Chưa có danh sách nào",
+        "emptyMessage": "Tạo danh sách đầu tiên để bắt đầu danh mục.",
+        "noMatchTitle": "Không có danh sách nào khớp",
+        "noMatchMessage": "Không có gì khớp với bộ lọc này. Thử bộ lọc khác.",
+        "noMatchMoreMessage": "Chưa có danh sách nào đã tải khớp. Còn nữa: tải thêm, hoặc đổi bộ lọc.",
+        "tableCaption": "Danh sách Chợ ứng dụng",
+        "viewSubscriptions": "Đăng ký {name}"
+      },
+      "new": {
+        "title": "Danh sách mới",
+        "description": "Tạo danh sách nháp với phiên bản đầu tiên. Không có gì đến không gian làm việc cho đến khi người duyệt phê duyệt và xuất bản.",
+        "back": "Quay lại danh mục",
+        "sections": {
+          "docs": "Manifest và công thức",
+          "docsHelp": "Manifest cho biết ứng dụng là gì, được làm gì và dùng kết nối nào. Tích hợp còn cần một công thức. Cả hai được kiểm tra khi bạn gõ, theo quy tắc máy chủ áp dụng.",
+          "changelog": "Ghi chú phiên bản đầu tiên",
+          "changelogHelp": "Hiển thị cho quản trị viên như nội dung của phiên bản đầu tiên."
+        },
+        "changelog": "Nhật ký thay đổi",
+        "changelogHint": "Không bắt buộc, tối đa {max} ký tự. Nếu để trống, sẽ là Phiên bản đầu tiên.",
+        "save": "Tạo danh sách",
+        "saving": "Đang tạo...",
+        "cancel": "Hủy",
+        "created": "Đã tạo danh sách {name} dạng nháp.",
+        "draftNote": "Danh sách bắt đầu ở dạng nháp. Gửi phiên bản để xem xét từ trang danh sách."
+      },
+      "editor": {
+        "cancel": "Hủy",
+        "format": "Định dạng",
+        "problemCount": "{count, plural, other {# vấn đề cần sửa}}",
+        "valid": {
+          "manifest": "Manifest v1 hợp lệ.",
+          "recipe": "Công thức hợp lệ."
+        },
+        "manifest": {
+          "label": "Manifest (JSON)",
+          "hint": "Manifest v1: id, name, kind, category, version, description, scopes, pricing, support, connector."
+        },
+        "recipe": {
+          "label": "Công thức (JSON)",
+          "hint": "Công thức kết nối của một tích hợp: connector, authFields, mapping, rateLimits, errorMapping, setupInstructions, testPayloads.",
+          "insertStarter": "Chèn công thức mẫu"
+        },
+        "scopes": {
+          "title": "Quyền phiên bản này yêu cầu",
+          "help": "Những gì quản trị viên được yêu cầu chấp nhận, nói bằng ngôn ngữ đơn giản. Yêu cầu ít nhất những gì cần để hoạt động."
+        },
+        "templates": {
+          "title": "Bắt đầu từ mẫu",
+          "help": "Điền cả hai trình soạn thảo bằng một điểm bắt đầu hợp lệ để bạn chỉnh sửa tiếp.",
+          "mini_app": "Ứng dụng mini",
+          "webhook_relay": "Tích hợp: chuyển tiếp webhook",
+          "push": "Tích hợp: đẩy",
+          "replaceTitle": "Thay thế nội dung trong trình soạn thảo?",
+          "replaceBody": "Manifest và công thức bạn đã nhập sẽ bị thay bằng mẫu.",
+          "replaceAction": "Thay thế"
+        },
+        "problems": {
+          "listLabel": "Vấn đề",
+          "errorLabel": "Lỗi:",
+          "warningLabel": "Cảnh báo:",
+          "syntax": "Không phải JSON hợp lệ.",
+          "syntaxAt": "Không phải JSON hợp lệ, gần dòng {line}, cột {column}.",
+          "empty": "Tài liệu này trống.",
+          "recipeNotAllowed": "Ứng dụng mini không có công thức: hãy xóa trình soạn thảo này.",
+          "recipeMissing": "Tích hợp cần công thức trước khi gửi để xem xét.",
+          "recipeKeyMismatch": "Phải bằng id của manifest: {expected}.",
+          "recipeCategoryMismatch": "Phải bằng danh mục của manifest: {expected}.",
+          "recipeConnectorMismatch": "Phải bằng loại kết nối của manifest: {expected}.",
+          "idChanged": "Mã của danh sách hiện có không thể đổi: phải giữ là {expected}.",
+          "kindChanged": "Loại của danh sách hiện có không thể đổi: phải giữ là {expected}.",
+          "versionNotHigher": "Phiên bản phải lớn hơn {newest}, phiên bản cao nhất hiện có.",
+          "versionTaken": "Một phiên bản khác của danh sách này đã dùng {version}.",
+          "categoryUnknown": "Không có danh mục {category} loại {kind} đang hoạt động. Kiểm tra trang Danh mục.",
+          "categoryRefused": "Máy chủ từ chối danh mục này: nó không tồn tại cho loại này, hoặc đã bị tắt.",
+          "recipeRequired": "Tích hợp cần công thức của nó.",
+          "slugTaken": "Một danh sách khác đã dùng mã này."
+        }
+      },
+      "fields": {
+        "sections": {
+          "page": "Trang danh sách",
+          "pageHelp": "Quản trị viên đọc gì trên trang ứng dụng.",
+          "screenshots": "Ảnh chụp màn hình",
+          "screenshotsHelp": "Tối đa {max} ảnh hiển thị trên trang ứng dụng. Chỉ liên kết https.",
+          "data": "Thông báo xử lý dữ liệu",
+          "dataHelp": "Ứng dụng lưu gì, ở đâu, và cách xóa: nội dung hiển thị trên trang ứng dụng.",
+          "placement": "Vị trí và quyền truy cập",
+          "placementHelp": "Cách xếp hạng, và gói nào có thể cài đặt."
+        },
+        "tagline": "Khẩu hiệu",
+        "taglineHint": "{count} trên {max} ký tự (ít nhất 5).",
+        "logo": "Địa chỉ logo",
+        "logoHint": "Liên kết ảnh https. Tích hợp không có thì dùng logo trong công thức của nó.",
+        "longDescription": "Mô tả dài",
+        "longDescriptionHint": "Văn bản thuần; dòng trống phân tách đoạn. Tối đa {max} ký tự.",
+        "highlights": "Điểm nổi bật",
+        "highlightsHint": "Mỗi dòng một mục: tối đa {max}, mỗi mục tối đa {length} ký tự.",
+        "screenshotUrl": "Địa chỉ ảnh chụp màn hình {n}",
+        "screenshotCaption": "Chú thích ảnh chụp màn hình {n}",
+        "screenshotRemove": "Xóa ảnh chụp màn hình {n}",
+        "screenshotAdd": "Thêm ảnh chụp màn hình",
+        "screenshotsNone": "Không có ảnh chụp màn hình.",
+        "dataSummary": "Dữ liệu được lưu",
+        "dataSummaryHint": "Tối đa {max} ký tự.",
+        "dataRegions": "Khu vực",
+        "dataRegionsHint": "Phân tách bằng dấu phẩy, tối đa {max}, ví dụ India, EU.",
+        "dataDeletion": "Cách xóa dữ liệu",
+        "dataDeletionHint": "Tối đa {max} ký tự.",
+        "firstParty": "Của chúng tôi",
+        "firstPartyHint": "Do chúng tôi xây dựng và vận hành: hiển thị với huy hiệu của chúng tôi.",
+        "featured": "Nổi bật",
+        "featuredHint": "Hiển thị ở khu vực nổi bật.",
+        "planFeature": "Tính năng gói",
+        "planFeatureHint": "Một không gian làm việc cần tính năng này trong gói, hoặc qua tiện ích bổ sung, để cài đặt ứng dụng. Nhãn lấy từ danh mục gói.",
+        "planFeatureNone": "Mọi gói",
+        "sortOrder": "Thứ tự sắp xếp",
+        "sortOrderHint": "Số nguyên từ 0 đến {max}; số nhỏ hơn hiển thị trước.",
+        "problems": {
+          "required": "Mục này bắt buộc.",
+          "tooShort": "Ít nhất {min} ký tự.",
+          "tooLong": "Tối đa {max} ký tự.",
+          "https": "Nhập địa chỉ https:// đầy đủ.",
+          "tooMany": "Tối đa {max} mục.",
+          "number": "Nhập số nguyên từ 0 đến {max}.",
+          "unknownFeature": "Dùng chữ thường, chữ số và gạch dưới, bắt đầu bằng chữ cái.",
+          "slug": "Dùng 2 đến 48 chữ thường, chữ số hoặc gạch ngang, bắt đầu bằng chữ cái.",
+          "icon": "Dùng 1 đến 32 chữ thường, chữ số hoặc gạch ngang."
+        }
+      },
+      "summary": {
+        "title": "Sửa các mục này trước khi lưu",
+        "sentTitle": "Máy chủ không lưu được mục này",
+        "manifest": "{count, plural, other {# vấn đề trong manifest}}",
+        "recipe": "{count, plural, other {# vấn đề trong công thức}}",
+        "fields": "{count, plural, other {# vấn đề trong các trường danh sách}}"
+      },
+      "detail": {
+        "title": "Danh sách",
+        "back": "Quay lại danh mục",
+        "firstParty": "Của chúng tôi",
+        "featured": "Nổi bật",
+        "none": "Không có",
+        "everyPlan": "Mọi gói",
+        "kpi": {
+          "installs": "Lượt cài đặt",
+          "published": "Phiên bản đã xuất bản",
+          "latest": "Phiên bản mới nhất",
+          "versions": "Phiên bản"
+        },
+        "facts": {
+          "kind": "Loại",
+          "category": "Danh mục",
+          "connector": "Kết nối",
+          "planFeature": "Tính năng gói"
+        },
+        "tabs": {
+          "overview": "Danh sách",
+          "versions": "Phiên bản ({count})"
+        },
+        "operate": {
+          "title": "Vận hành",
+          "description": "Ẩn, khóa, khôi phục hoặc xóa danh sách. Mỗi thao tác đều yêu cầu xác nhận.",
+          "lacking": "Một số thao tác bị ẩn vì vai trò của bạn không có {permission}."
+        },
+        "killed": {
+          "title": "Danh sách này đã bị khóa",
+          "reason": "Lý do",
+          "effect": "Mọi bản cài đặt bị dừng và mọi địa chỉ nhận dữ liệu trả về 410. Không gian làm việc chỉ có thể gỡ cài đặt."
+        },
+        "notice": {
+          "killedTitle": "{name} đã bị khóa",
+          "killedBody": "{count, plural, other {# bản cài đặt đã bị tắt.}}",
+          "publishedTitle": "{name} {version} đã được xuất bản",
+          "publishedUpgraded": "{count, plural, other {# bản cài đặt đã chuyển sang ngay.}}",
+          "publishedWaiting": "{count, plural, other {# bản cài đặt giữ phiên bản hiện tại cho đến khi quản trị viên chấp nhận quyền mới.}}",
+          "dismiss": "Bỏ qua"
+        }
+      },
+      "edit": {
+        "readOnly": "Chỉ đọc. Chỉnh sửa danh sách cần quyền nền tảng {permission}.",
+        "conflict": "Ai đó đã lưu danh sách này trong lúc bạn đang chỉnh sửa. Tải lại để xem phiên bản của họ, rồi thực hiện thay đổi lại.",
+        "reload": "Tải lại",
+        "save": "Lưu thay đổi",
+        "saving": "Đang lưu...",
+        "discard": "Hủy thay đổi",
+        "nothingToSave": "Chưa có thay đổi.",
+        "saved": "Đã lưu {name}."
+      },
+      "actions": {
+        "cancel": "Hủy",
+        "hide": "Ẩn",
+        "unhide": "Hiện lại",
+        "unkill": "Khôi phục",
+        "delete": "Xóa",
+        "kill": "Công tắc khẩn cấp",
+        "confirm": {
+          "hide": {
+            "title": "Ẩn {name}?",
+            "body": "{name} sẽ không còn trong duyệt và tìm kiếm, nên không có không gian làm việc mới nào tìm thấy. Các bản cài đặt hiện có vẫn hoạt động.",
+            "action": "Ẩn"
+          },
+          "unhide": {
+            "title": "Hiện {name} lại?",
+            "body": "{name} sẽ xuất hiện lại trong duyệt và tìm kiếm với phiên bản đã xuất bản.",
+            "action": "Hiện lại"
+          },
+          "unkill": {
+            "title": "Khôi phục {name}?",
+            "body": "{name} sẽ bị ẩn để có thể sửa và xuất bản lại. Các bản cài đặt đã bị khóa vẫn tắt: không gian làm việc phải cài đặt lại.",
+            "action": "Khôi phục"
+          },
+          "delete": {
+            "title": "Xóa {name}?",
+            "body": "Thao tác này xóa vĩnh viễn danh sách nháp và các phiên bản của nó. Danh sách đã xuất bản hoặc đã cài đặt không thể xóa: hãy ẩn thay thế.",
+            "action": "Xóa danh sách"
+          }
+        },
+        "done": {
+          "hide": "{name} đã bị ẩn.",
+          "unhide": "{name} hiển thị lại.",
+          "unkill": "{name} đã được khôi phục ở trạng thái ẩn.",
+          "kill": "{name} đã bị khóa.",
+          "delete": "{name} đã bị xóa."
+        }
+      },
+      "killDialog": {
+        "eyebrow": "Công tắc khẩn cấp",
+        "title": "Khóa {name}?",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "confirm": "Khóa {name}",
+        "installs": "{name} đã được cài đặt trong {count, plural, other {# không gian làm việc}}.",
+        "effects": {
+          "stop": "Mọi bản cài đặt ngừng hoạt động ngay lập tức.",
+          "connections": "Mọi kết nối bị vô hiệu hóa.",
+          "address": "Địa chỉ nhận dữ liệu trả về 410 Gone từ yêu cầu tiếp theo.",
+          "uninstall": "Không gian làm việc chỉ có thể gỡ cài đặt."
+        },
+        "undo": "Khôi phục danh sách sau này sẽ khiến nó ở trạng thái ẩn. Các bản cài đặt đã khóa vẫn tắt và không gian làm việc phải cài đặt lại.",
+        "reason": "Lý do",
+        "reasonHint": "Từ {min} đến {max} ký tự. Được lưu trong nhật ký kiểm toán và hiển thị cho mỗi không gian làm việc.",
+        "count": "{count} trên {max} ký tự (ít nhất {min}).",
+        "typeSlug": "Nhập {slug} để xác nhận",
+        "typeSlugHint": "Mã của danh sách, đúng như hiển thị."
+      },
+      "versions": {
+        "title": "Phiên bản",
+        "description": "Mọi phiên bản của danh sách này. Chọn một để xem manifest, công thức và thao tác.",
+        "newVersion": "Phiên bản mới",
+        "newVersionHint": "Phiên bản mới bắt đầu từ phiên bản bạn đang xem ({version}) với số được tăng lên. Phải lớn hơn mọi phiên bản trước đó.",
+        "tableCaption": "Các phiên bản của danh sách này",
+        "cols": {
+          "version": "Phiên bản",
+          "status": "Trạng thái",
+          "changelog": "Nhật ký thay đổi",
+          "scopes": "Quyền",
+          "reviewNote": "Ghi chú xét duyệt",
+          "dates": "Ngày"
+        },
+        "viewing": "Đang xem",
+        "none": "-",
+        "dates": {
+          "created": "Đã tạo",
+          "submitted": "Đã gửi",
+          "reviewed": "Đã xem xét",
+          "published": "Đã xuất bản"
+        },
+        "selectedTitle": "Phiên bản {version}",
+        "selectedHelp": "Quyền, manifest và công thức như đã lưu. Các thao tác theo trạng thái phiên bản và quyền của bạn.",
+        "edit": "Chỉnh sửa",
+        "newFrom": "Phiên bản mới từ phiên bản này",
+        "submit": "Gửi để xem xét",
+        "approve": "Duyệt",
+        "reject": "Từ chối",
+        "publish": "Xuất bản",
+        "rejectedNote": "Lý do của người duyệt (hiển thị cho nhà phát triển)",
+        "recipeMissing": "Tích hợp này chưa có công thức. Thêm công thức trước khi gửi để xem xét.",
+        "permissions": "Quyền",
+        "manifest": "Manifest",
+        "recipe": "Công thức",
+        "noRecipeIntegration": "Không có công thức nào được lưu cho phiên bản này.",
+        "noRecipeMiniApp": "Ứng dụng mini không có công thức.",
+        "done": {
+          "submit": "Đã gửi phiên bản {version} để xem xét.",
+          "approve": "Đã duyệt phiên bản {version}.",
+          "reject": "Đã từ chối phiên bản {version}.",
+          "publish": "Đã xuất bản phiên bản {version}.",
+          "created": "Đã lưu phiên bản {version} dạng nháp.",
+          "updated": "Đã cập nhật phiên bản {version}."
+        }
+      },
+      "versionEditor": {
+        "newTitle": "Phiên bản mới",
+        "newHelp": "Bắt đầu từ phiên bản bạn đang xem, với số được tăng lên. Thay đổi manifest và công thức, rồi mô tả những gì đã thay đổi.",
+        "editTitle": "Chỉnh sửa phiên bản",
+        "editHelp": "Thay thế manifest và công thức của phiên bản này. Khi lưu, phiên bản bị từ chối sẽ quay lại dạng nháp.",
+        "changelog": "Nhật ký thay đổi",
+        "changelogHint": "Những gì đã thay đổi trong phiên bản này. Quản trị viên đọc nội dung này. Tối đa {max} ký tự.",
+        "saveNew": "Lưu phiên bản mới",
+        "saveEdit": "Lưu thay đổi",
+        "saving": "Đang lưu...",
+        "cancel": "Hủy"
+      },
+      "versionDialogs": {
+        "approve": {
+          "title": "Duyệt {name} {version}?",
+          "close": "Đóng",
+          "cancel": "Hủy",
+          "confirm": "Duyệt",
+          "body": "Phiên bản đã duyệt sau đó có thể xuất bản. Duyệt không thay đổi những gì không gian làm việc nhìn thấy.",
+          "note": "Ghi chú (không bắt buộc)",
+          "noteHint": "Được lưu cùng phiên bản. Tối đa {max} ký tự."
+        },
+        "reject": {
+          "title": "Từ chối {name} {version}?",
+          "close": "Đóng",
+          "cancel": "Hủy",
+          "confirm": "Từ chối phiên bản",
+          "body": "Lý do được hiển thị cho nhà phát triển. Họ sửa phiên bản và gửi lại.",
+          "note": "Lý do",
+          "noteHint": "Ít nhất {min} và tối đa {max} ký tự.",
+          "count": "{count} trên {max} ký tự (ít nhất {min})."
+        },
+        "publish": {
+          "title": "Xuất bản {name} {version}?",
+          "cancel": "Hủy",
+          "confirm": "Xuất bản {version}",
+          "body": "{name} {version} trở thành phiên bản mà mọi bản cài đặt mới nhận được.",
+          "effects": {
+            "retire": "Phiên bản đã xuất bản trước đó sẽ được gỡ.",
+            "moveSame": "Các bản cài đặt có quyền đã cấp bao trùm phiên bản này sẽ chuyển sang ngay.",
+            "moveMore": "Các bản cài đặt mà phiên bản này yêu cầu thêm sẽ tiếp tục chạy trên phiên bản hiện tại cho đến khi quản trị viên chấp nhận danh sách quyền mới.",
+            "killed": "Các bản cài đặt đã khóa không bị ảnh hưởng."
+          },
+          "installs": "{count, plural, other {# bản cài đặt bị ảnh hưởng.}}",
+          "first": "Đây là phiên bản đầu tiên được xuất bản.",
+          "addedScopes": "{count, plural, other {Phiên bản này yêu cầu thêm # quyền mà phiên bản đã xuất bản không có:}}"
+        }
+      },
+      "categories": {
+        "title": "Danh mục",
+        "description": "Các danh mục của cả hai tab Chợ ứng dụng. Danh mục đã tắt sẽ bị ẩn khỏi các không gian làm việc; danh mục đang có ứng dụng không thể xóa.",
+        "new": "Danh mục mới",
+        "emptyTitle": "Chưa có danh mục",
+        "emptyMessage": "Thêm danh mục trước khi tạo danh sách: mỗi danh sách thuộc một danh mục.",
+        "groupCount": "{count, plural, other {# danh mục}}",
+        "groupEmpty": "Chưa có danh mục cho loại này.",
+        "tableCaption": "Danh mục",
+        "cols": {
+          "name": "Tên",
+          "slug": "Mã",
+          "icon": "Biểu tượng",
+          "order": "Thứ tự",
+          "apps": "Ứng dụng",
+          "status": "Trạng thái",
+          "actions": "Thao tác"
+        },
+        "dash": "-",
+        "active": "Đang hoạt động",
+        "inactive": "Ẩn khỏi không gian làm việc",
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa",
+        "inUse": "Có ứng dụng",
+        "form": {
+          "createTitle": "Danh mục mới",
+          "editTitle": "Chỉnh sửa {name}",
+          "close": "Đóng",
+          "cancel": "Hủy",
+          "create": "Tạo danh mục",
+          "save": "Lưu thay đổi",
+          "kind": "Loại",
+          "kinds": {
+            "mini_app": "Ứng dụng mini",
+            "integration": "Tích hợp"
+          },
+          "kindLocked": "Không thể đổi loại.",
+          "slug": "Mã (slug)",
+          "slugHint": "2 đến 48 chữ thường, chữ số hoặc gạch ngang, bắt đầu bằng chữ cái. Sau này không thể đổi.",
+          "slugLocked": "Mã không thể đổi sau khi tạo.",
+          "name": "Tên",
+          "nameHint": "{min} đến {max} ký tự.",
+          "descriptionField": "Mô tả",
+          "descriptionHint": "Không bắt buộc, tối đa {max} ký tự.",
+          "icon": "Biểu tượng",
+          "iconHint": "Tên biểu tượng không bắt buộc: chữ thường, chữ số và gạch ngang.",
+          "sortOrder": "Thứ tự sắp xếp",
+          "sortOrderHint": "Số nguyên từ 0 đến {max}; số nhỏ hơn hiển thị trước.",
+          "active": "Đang hoạt động",
+          "activeHint": "Đã tắt, danh mục bị ẩn khỏi không gian làm việc. Các ứng dụng của danh mục vẫn giữ nó.",
+          "conflict": "Ai đó đã thay đổi danh mục này. Tải lại để xem phiên bản của họ, rồi thực hiện thay đổi lại.",
+          "reload": "Tải lại",
+          "created": "Đã tạo danh mục {name}.",
+          "saved": "Đã lưu danh mục {name}."
+        },
+        "deleteDialog": {
+          "title": "Xóa {name}?",
+          "body": "{name} không có ứng dụng nào. Xóa sẽ loại bỏ hẳn.",
+          "action": "Xóa danh mục",
+          "cancel": "Hủy",
+          "done": "Đã xóa danh mục {name}."
+        }
+      },
+      "requests": {
+        "title": "Yêu cầu",
+        "description": "Những gì các không gian làm việc đã yêu cầu, nhiều phiếu nhất xếp trước. Thứ tự xây dựng theo danh sách này.",
+        "readOnly": "Chỉ đọc. Phân loại cần quyền nền tảng {permission}.",
+        "filters": {
+          "label": "Bộ lọc",
+          "search": "Tìm kiếm",
+          "searchPlaceholder": "Tên",
+          "kind": "Loại",
+          "allKinds": "Mọi loại",
+          "status": "Trạng thái",
+          "allStatuses": "Mọi trạng thái"
+        },
+        "clearFilters": "Xóa bộ lọc",
+        "emptyTitle": "Chưa có yêu cầu nào",
+        "emptyMessage": "Khi một không gian làm việc yêu cầu tích hợp, nó sẽ xuất hiện ở đây cùng số phiếu.",
+        "noMatchTitle": "Không có yêu cầu nào khớp",
+        "noMatchMessage": "Không có gì khớp với bộ lọc này.",
+        "loadMore": "Tải thêm",
+        "tableCaption": "Yêu cầu theo số phiếu",
+        "cols": {
+          "votes": "Phiếu bầu",
+          "request": "Yêu cầu",
+          "notes": "Ghi chú không gian làm việc",
+          "firstWorkspace": "Người hỏi đầu tiên",
+          "status": "Trạng thái",
+          "actions": "Thao tác"
+        },
+        "votes": "{count, plural, other {# phiếu bầu}}",
+        "noNotes": "Chưa có ghi chú.",
+        "dash": "-",
+        "operatorNote": "Ghi chú của bạn: {note}",
+        "triageAction": "Phân loại",
+        "triage": {
+          "title": "Phân loại {name}",
+          "close": "Đóng",
+          "cancel": "Hủy",
+          "save": "Lưu",
+          "saved": "Đã lưu {name}.",
+          "votes": "{count, plural, other {# phiếu bầu}}",
+          "status": "Trạng thái",
+          "note": "Ghi chú vận hành",
+          "noteHint": "Không bắt buộc, tối đa {max} ký tự. Chỉ người vận hành mới thấy.",
+          "noteTooLong": "Tối đa {max} ký tự.",
+          "conflict": "Người khác vừa cập nhật yêu cầu này. Hãy tải lại trang để xem phiên bản của họ, rồi thực hiện lại thay đổi.",
+          "reload": "Tải lại"
+        }
+      },
+      "usage": {
+        "title": "Mức sử dụng và tình trạng",
+        "description": "Theo từng ứng dụng: số lượt cài đặt theo trạng thái và tình trạng, cùng số lượt gửi được chấp nhận, lặp lại, bị từ chối và thất bại trong 24 giờ và 7 ngày qua.",
+        "kpi": {
+          "apps": "Ứng dụng",
+          "installs": "Lượt cài đặt",
+          "activeHint": "{count} đang hoạt động",
+          "needsLook": "Cần kiểm tra",
+          "failed7d": "Gửi thất bại (7 ngày)"
+        },
+        "sort": {
+          "label": "Sắp xếp theo",
+          "failed": "Gửi thất bại nhiều nhất",
+          "installs": "Nhiều lượt cài đặt nhất",
+          "name": "Tên"
+        },
+        "emptyTitle": "Chưa có dữ liệu sử dụng",
+        "emptyMessage": "Ứng dụng sẽ hiện ở đây khi đã có trong danh mục.",
+        "tableCaption": "Mức sử dụng theo ứng dụng",
+        "cols": {
+          "app": "Ứng dụng",
+          "installs": "Lượt cài đặt",
+          "health": "Tình trạng",
+          "events24h": "Gửi, 24 giờ",
+          "events7d": "Gửi, 7 ngày",
+          "attention": "Cần chú ý"
+        },
+        "installs": {
+          "active": "{count} đang hoạt động",
+          "disabled": "{count} đã tạm dừng",
+          "killed": "{count} đã ngừng hẳn"
+        },
+        "health": {
+          "healthy": "{count} bình thường",
+          "degraded": "{count} suy giảm",
+          "error": "{count} đang lỗi",
+          "needsReauth": "{count} cần đăng nhập lại",
+          "unknown": "{count} không rõ"
+        },
+        "events": {
+          "accepted": "{count} được chấp nhận",
+          "duplicate": "{count} lặp lại",
+          "rejected": "{count} bị từ chối",
+          "failed": "{count} thất bại"
+        },
+        "needsLook": "Cần kiểm tra",
+        "reasons": {
+          "installErrors": "Lượt cài đặt bị lỗi",
+          "needsReauth": "Lượt cài đặt cần đăng nhập lại",
+          "failed24h": "Gửi thất bại trong 24 giờ qua",
+          "failed7d": "Gửi thất bại trong 7 ngày qua"
+        },
+        "recipeHint": "Công thức có thể đang bị hỏng: một cổng dịch vụ đã đổi định dạng hoặc một khóa đã hết hạn. Hãy sửa bằng một phiên bản mới của công thức.",
+        "fine": "Chưa thấy sự cố nào",
+        "runbookNote": "Một tích hợp có nhiều lượt cài đặt bị lỗi hoặc cần đăng nhập lại, hoặc số lần gửi thất bại tăng, là đang hỏng. Hãy vá công thức trong một phiên bản mới (sổ tay vận hành, mục 8)."
+      },
+      "price": {
+        "free": "Miễn phí",
+        "perMonth": "/ tháng",
+        "trial": "{count, plural, other {dùng thử # ngày}}",
+        "notOnSale": "Không bán"
+      },
+      "pricing": {
+        "title": "Giá",
+        "description": "Quyết định ứng dụng này miễn phí hay trả phí, và giá là bao nhiêu. Giá của bạn là giá có hiệu lực: manifest của nhà phát triển chỉ đề xuất một mức giá.",
+        "billing": "Ứng dụng trả phí được bán theo kỳ hạn trả trước hằng tháng: một tiện ích thanh toán được mua qua quy trình thanh toán thông thường. Hiện chưa có gia hạn thẻ tự động, nên không gian làm việc sẽ phải trả lại khi kỳ sắp hết. Thay đổi giá áp dụng cho đăng ký mới và lần thanh toán kế tiếp của mỗi người đăng ký; kỳ đã thanh toán không bị ảnh hưởng.",
+        "readOnly": "Chỉ xem. Thay đổi giá cần quyền nền tảng {permission}.",
+        "visibility": {
+          "label": "Trạng thái niêm yết",
+          "note": "Ẩn, hiện lại hoặc ngừng niêm yết trong mục Vận hành phía trên. Bảng này không thay đổi trạng thái đó."
+        },
+        "subscribers": {
+          "label": "Đăng ký",
+          "count": "{count, plural, other {# đăng ký đang hoạt động}}",
+          "view": "Xem đăng ký",
+          "hint": "Các đăng ký trả phí, dùng thử và được tặng đang có hiệu lực. Đăng ký sắp kết thúc hoặc đã kết thúc không được tính."
+        },
+        "changed": "Lần đổi giá gần nhất",
+        "conflict": "Người khác vừa lưu niêm yết này trong lúc bạn đang chỉnh giá. Hãy tải lại trang để xem phiên bản của họ, rồi thực hiện lại thay đổi.",
+        "reload": "Tải lại",
+        "model": {
+          "legend": "Giá",
+          "free": "Miễn phí",
+          "freeHint": "Không tính phí. Mọi không gian làm việc đều có thể cài đặt.",
+          "paid": "Trả phí, theo tháng",
+          "paidHint": "Không gian làm việc đăng ký qua thanh toán và trả theo từng tháng."
+        },
+        "fields": {
+          "amount": "Giá hằng tháng",
+          "amountHint": "Cho mỗi không gian làm việc, mỗi tháng: 9 hoặc 9.99.",
+          "currency": "Tiền tệ",
+          "currencyHint": "Mã ba ký tự như USD. Nền tảng từ chối loại tiền tệ chưa được bật.",
+          "trialDays": "Số ngày dùng thử miễn phí",
+          "trialDaysHint": "0 nghĩa là không dùng thử, tối đa {max}. Mỗi không gian làm việc được dùng thử một lần cho mỗi ứng dụng.",
+          "annualAmount": "Giá hằng năm (không bắt buộc)",
+          "annualAmountHint": "Lưu để dùng sau. Thanh toán hằng năm chưa được xây dựng, nên hiện không gian làm việc chưa thể trả theo năm.",
+          "purchasable": "Đang bán",
+          "purchasableHint": "Khi tắt, không gian làm việc mới không thể đăng ký. Các không gian làm việc đã đăng ký vẫn có thể gia hạn."
+        },
+        "included": {
+          "title": "Có trong gói",
+          "help": "Không bắt buộc. Không gian làm việc khớp với một trong hai quy tắc sẽ dùng ứng dụng miễn phí. Để trống cả hai để tính phí mọi không gian làm việc.",
+          "feature": "Tính năng gói",
+          "featureHint": "Các không gian làm việc có gói (kể cả tiện ích bổ sung) bao gồm tính năng này. Chọn một gợi ý hoặc nhập khóa tính năng.",
+          "plan": "Gói tối thiểu",
+          "planHint": "Không gian làm việc dùng gói này hoặc gói cao hơn. Các gói được liệt kê từ thấp đến cao.",
+          "planNone": "Không có quy tắc gói",
+          "planTyped": "Không tải được danh sách gói. Hãy nhập mã gói."
+        },
+        "grants": {
+          "title": "Cấp tính năng gói",
+          "help": "Không bắt buộc. Các tính năng gói mà đăng ký ứng dụng này sẽ bật, để một tính năng có thể được bán như ứng dụng trong khi các điều kiện hiện tại vẫn hoạt động. Chỉ tính năng đang tắt mặc định mới có thể cấp.",
+          "thirdParty": "Chỉ ứng dụng của bên thứ nhất mới có thể cấp tính năng gói. Hãy đánh dấu niêm yết là bên thứ nhất ở tab Niêm yết để dùng.",
+          "grandfather": "Giữ quyền cho người dùng hiện có",
+          "grandfatherHint": "Cho phép tặng các không gian làm việc đã có tính năng được cấp, để không ai mất quyền. Hãy lưu, rồi dùng Tặng người dùng hiện có bên dưới. Làm việc này trước khi tính năng bị tắt trong các gói.",
+          "compExisting": "Tặng người dùng hiện có",
+          "compExistingHint": "Các không gian làm việc đã có tính năng được cấp qua gói nhưng chưa có đăng ký sẽ dùng ứng dụng này miễn phí. Bạn sẽ thấy danh sách trước.",
+          "compExistingAction": "Tặng người dùng hiện có..."
+        },
+        "proposal": {
+          "title": "Đề xuất của nhà phát triển",
+          "intro": "Từ manifest phiên bản {version}. Đây chỉ là đề xuất và không thay đổi gì: giá phía trên là giá mà không gian làm việc nhìn thấy.",
+          "note": "Ghi chú: {note}",
+          "models": {
+            "free": "Miễn phí",
+            "included": "Có trong gói",
+            "addon": "Tiện ích trả phí"
+          }
+        },
+        "save": "Lưu giá",
+        "saving": "Đang lưu...",
+        "discard": "Hủy thay đổi",
+        "nothingToSave": "Chưa có thay đổi.",
+        "saved": "Đã lưu giá của {name}.",
+        "problems": {
+          "priceRequired": "Hãy đặt giá hằng tháng.",
+          "priceFormat": "Nhập số như 9 hoặc 9.99 (tối đa hai chữ số thập phân).",
+          "pricePositive": "Giá phải lớn hơn 0.",
+          "currencyRequired": "Hãy chọn tiền tệ.",
+          "currencyFormat": "Nhập mã tiền tệ gồm ba ký tự.",
+          "yearlyFormat": "Nhập số như 90 hoặc 89.99, hoặc để trống.",
+          "yearlyPositive": "Giá hằng năm phải lớn hơn 0, hoặc để trống.",
+          "trialRange": "Nhập số ngày nguyên từ 0 đến {max}.",
+          "featureFormat": "Dùng chữ thường, chữ số và dấu gạch dưới, bắt đầu bằng một chữ cái.",
+          "planFormat": "Nhập mã gói: chữ thường, chữ số và dấu gạch dưới.",
+          "grantsInvalid": "Mỗi tính năng gói chỉ chọn một lần, tối đa 10 tính năng.",
+          "grandfatherNeedsGrants": "Hãy chọn ít nhất một tính năng gói mà ứng dụng cấp trước.",
+          "includedGranted": "Tính năng do ứng dụng cấp không thể đồng thời là tính năng bao gồm nó."
+        },
+        "confirm": {
+          "cancel": "Tiếp tục chỉnh sửa",
+          "priceChange": {
+            "title": "Đổi giá của {name}?",
+            "body": "Hiện có {count, plural, other {# không gian làm việc đăng ký}}. Giá hằng tháng đổi từ {from} thành {to}.",
+            "next": "Giá mới áp dụng cho các đăng ký mới và lần thanh toán kế tiếp của từng người đăng ký.",
+            "paid": "Kỳ mà không gian làm việc đã thanh toán sẽ không bị chạm tới, không hoàn tiền và không tính lại giá.",
+            "action": "Đổi giá"
+          },
+          "toFree": {
+            "title": "Đặt {name} miễn phí?",
+            "body": "Hiện có {count, plural, other {# không gian làm việc đăng ký}}.",
+            "free": "Khi đó mọi không gian làm việc đều có thể dùng ứng dụng mà không cần trả tiền, và sẽ không ai bị tính phí thêm.",
+            "paid": "Người đăng ký giữ phần thời gian đã thanh toán. Không hoàn tiền.",
+            "action": "Đặt miễn phí"
+          }
+        }
+      },
+      "grandfather": {
+        "eyebrow": "Người dùng hiện có",
+        "title": "Tặng người dùng hiện có của {name}",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "change": "Thay đổi",
+        "run": "{count, plural, other {Tặng # không gian làm việc}}",
+        "preview": "Kiểm tra ai đủ điều kiện",
+        "intro": "Tặng mọi không gian làm việc đã có tính năng gói mà {name} cấp, qua gói hoặc ghi đè, và chưa đăng ký ứng dụng này. Bạn sẽ thấy ai sẽ được tặng trước; không có gì thay đổi cho đến khi bạn xác nhận.",
+        "timing": "Thực hiện trước khi tính năng bị tắt trong các gói hoặc mặc định của nó thay đổi: thao tác này đọc những gì mỗi không gian làm việc đang có.",
+        "note": "Ghi chú",
+        "matched": "{count, plural, =0 {Không có không gian làm việc nào đủ điều kiện} other {# không gian làm việc đủ điều kiện}}",
+        "nobody": "Không ai có tính năng được cấp mà chưa có đăng ký, nên không có gì để tặng.",
+        "sample": "Một số trong đó:",
+        "more": "và {count} khác",
+        "confirm": "Kiểm tra danh sách rồi xác nhận để tặng. Thao tác được ghi vào nhật ký kiểm toán và không hoàn tác được chỉ bằng một bước: muốn kết thúc việc tặng, hãy hủy từng đăng ký.",
+        "refused": "Chỉ thực hiện được với niêm yết trả phí có cấp tính năng gói và đã bật Giữ quyền cho người dùng hiện có. Hãy kiểm tra giá của niêm yết.",
+        "done": "{count, plural, other {Đã tặng # không gian làm việc dùng {name}.}}"
+      },
+      "compFields": {
+        "duration": "Trong bao lâu?",
+        "months": "Trong một số tháng",
+        "monthsLabel": "Tháng",
+        "monthsHint": "Số tháng nguyên, từ 1 đến {max}.",
+        "monthsInvalid": "Nhập số tháng nguyên từ 1 đến {max}.",
+        "open": "Cho đến khi tôi kết thúc",
+        "noteHint": "Từ {min} đến {max} ký tự. Nội dung được lưu trong nhật ký kiểm toán.",
+        "count": "{count} / {max} ký tự (tối thiểu {min})."
+      },
+      "cancelDialog": {
+        "eyebrow": "Đăng ký",
+        "title": "Hủy đăng ký của {workspace}?",
+        "close": "Đóng",
+        "back": "Giữ lại",
+        "summary": "{workspace} đang dùng {app}.",
+        "when": "Khi nào thì kết thúc?",
+        "periodEnd": {
+          "label": "Khi hết kỳ đã trả phí",
+          "detail": "Dừng gia hạn. {workspace} vẫn giữ {app} đến {date}, sau đó lượt cài đặt được tạm dừng và dữ liệu được giữ lại."
+        },
+        "now": {
+          "label": "Ngay bây giờ",
+          "detail": "Quyền truy cập kết thúc ngay. Lượt cài đặt được tạm dừng và dữ liệu được giữ lại. Thời gian đã trả trước không được hoàn lại."
+        },
+        "noEnd": "Đăng ký này không có ngày kết thúc, nên chỉ có thể kết thúc ngay.",
+        "ending": "Đăng ký đã được đặt kết thúc vào {date}. Bạn vẫn có thể kết thúc ngay.",
+        "reason": "Lý do",
+        "confirmPeriod": "Dừng gia hạn",
+        "confirmNow": "Kết thúc ngay",
+        "done": {
+          "periodEnd": "Đã dừng gia hạn cho {workspace}. Quyền truy cập được giữ đến hết kỳ đã trả phí.",
+          "now": "{workspace} không còn {app}."
+        }
+      },
+      "compDialog": {
+        "eyebrow": "Tặng",
+        "title": "Tặng một không gian làm việc",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "submit": "Tặng không gian làm việc",
+        "intro": "Tặng một không gian làm việc một ứng dụng trả phí miễn phí. Thao tác được ghi vào nhật ký kiểm toán cùng ghi chú của bạn. Sẽ bị từ chối khi không gian làm việc đang trả phí cho ứng dụng này: hãy hủy đăng ký đó trước.",
+        "app": "Ứng dụng",
+        "appPlaceholder": "Chọn ứng dụng trả phí",
+        "noPaidApps": "Chưa có ứng dụng trả phí nào để tặng. Hãy đặt giá cho một niêm yết trước.",
+        "workspaceSearch": "Tìm không gian làm việc",
+        "workspaceSearchPlaceholder": "Tên không gian làm việc",
+        "workspaceHint": "Hiển thị tối đa {count} kết quả. Nhập để thu hẹp danh sách.",
+        "workspaceChosen": "Đã chọn: {name}",
+        "workspaceNone": "Không có không gian làm việc nào khớp.",
+        "workspaceResults": "Không gian làm việc phù hợp",
+        "workspacePlan": "Gói: {plan}",
+        "workspaceLoading": "Đang tải không gian làm việc...",
+        "note": "Ghi chú",
+        "effectMonths": "{count, plural, other {Không gian làm việc được dùng ứng dụng miễn phí trong # tháng.}}",
+        "effectOpen": "Không gian làm việc được dùng ứng dụng miễn phí cho đến khi bạn kết thúc bằng cách hủy đăng ký.",
+        "done": "{workspace} hiện được dùng {app} miễn phí."
+      },
+      "subscriptions": {
+        "title": "Đăng ký",
+        "description": "Ai trả tiền cho ứng dụng trả phí nào, mỗi không gian làm việc đang dùng gì và doanh thu hằng tháng mang lại. Số liệu là giá niêm yết: chưa gồm thuế, mã giảm giá hoặc dùng thử.",
+        "readOnly": "Chỉ xem. Tặng không gian làm việc và hủy đăng ký cần quyền nền tảng {permission}.",
+        "comp": "Tặng một không gian làm việc",
+        "kpi": {
+          "label": "Đăng ký theo trạng thái",
+          "active": "Đang trả phí",
+          "trialing": "Đang dùng thử",
+          "comped": "Được tặng",
+          "canceling": "Sắp kết thúc",
+          "ended": "Đã kết thúc",
+          "mrr": "Doanh thu hằng tháng",
+          "mrrNone": "Chưa có người đăng ký trả phí",
+          "mrrCurrency": "Doanh thu hằng tháng, {currency}"
+        },
+        "summary": {
+          "emptyTitle": "Chưa có ứng dụng trả phí",
+          "emptyMessage": "Đặt giá cho một niêm yết để bắt đầu bán. Ứng dụng sẽ xuất hiện ở đây cùng người đăng ký.",
+          "caption": "Đăng ký theo ứng dụng và trạng thái",
+          "cols": {
+            "app": "Ứng dụng",
+            "price": "Giá",
+            "active": "Đang trả phí",
+            "trialing": "Đang dùng thử",
+            "comped": "Được tặng",
+            "canceling": "Sắp kết thúc",
+            "ended": "Đã kết thúc",
+            "total": "Tổng",
+            "mrr": "Doanh thu hằng tháng"
+          },
+          "free": "Miễn phí",
+          "totals": "Mọi ứng dụng",
+          "note": "Doanh thu hằng tháng là giá niêm yết của mọi đăng ký trả phí, theo đơn vị tiền tệ riêng. Dùng thử, tặng và đăng ký đã kết thúc không được tính, và các loại tiền tệ không bao giờ được cộng với nhau."
+        },
+        "filters": {
+          "label": "Bộ lọc",
+          "app": "Ứng dụng",
+          "allApps": "Mọi ứng dụng",
+          "status": "Trạng thái",
+          "allStatuses": "Mọi trạng thái",
+          "source": "Nguồn",
+          "allSources": "Mọi nguồn",
+          "search": "Không gian làm việc",
+          "searchPlaceholder": "Tên không gian làm việc"
+        },
+        "cols": {
+          "workspace": "Không gian làm việc",
+          "app": "Ứng dụng",
+          "status": "Trạng thái",
+          "source": "Nguồn",
+          "started": "Bắt đầu",
+          "period": "Kỳ",
+          "amount": "Số tiền",
+          "actions": "Thao tác"
+        },
+        "period": {
+          "paidUntil": "Đã trả đến {date}",
+          "trialEnds": "Dùng thử kết thúc {date}",
+          "endsOn": "Kết thúc {date}",
+          "compUntil": "Tặng đến {date}",
+          "compOpen": "Tặng cho đến khi bạn kết thúc",
+          "endedOn": "Đã kết thúc {date}",
+          "none": "Không có ngày kết thúc"
+        },
+        "noCharge": "Không tính phí",
+        "compBy": "Được tặng bởi {operator}: {note}",
+        "cancel": "Hủy...",
+        "tableCaption": "Đăng ký",
+        "emptyTitle": "Chưa có đăng ký nào",
+        "emptyMessage": "Không gian làm việc sẽ xuất hiện ở đây khi đăng ký, bắt đầu dùng thử hoặc được tặng.",
+        "noMatchTitle": "Không có đăng ký nào khớp",
+        "noMatchMessage": "Không có kết quả nào khớp với bộ lọc này. Hãy thử bộ lọc khác.",
+        "clearFilters": "Xóa bộ lọc",
+        "loadMore": "Tải thêm"
+      }
+    }
+  }
+}

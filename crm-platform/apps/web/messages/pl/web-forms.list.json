@@ -1,0 +1,132 @@
+{
+  "web-forms": {
+    "list": {
+      "title": "Formularze",
+      "subtitle": "Twórz formularze, umieszczaj je na stronie lub udostępniaj link, a każda odpowiedź trafi do CRM jako kontakt.",
+      "templates": "Szablony",
+      "newForm": "Nowy formularz",
+      "statsLabel": "Sumy dla wyświetlanych formularzy",
+      "stats": {
+        "forms": "Formularze",
+        "published": "Opublikowane",
+        "submissions": "Zgłoszenia",
+        "needsReview": "Wymaga uwagi"
+      },
+      "views": {
+        "label": "Pokaż",
+        "all": "Wszystkie",
+        "published": "Opublikowane",
+        "draft": "Szkice",
+        "paused": "Wstrzymane",
+        "archived": "Zarchiwizowane"
+      },
+      "search": "Szukaj formularzy",
+      "loading": "Wczytywanie formularzy",
+      "loadFailed": "Nie udało się wczytać formularzy.",
+      "retry": "Spróbuj ponownie",
+      "empty": {
+        "title": "Brak formularzy",
+        "message": "Zacznij od szablonu lub pustego formularza, opublikuj go i udostępnij link albo wklej kod osadzenia na swojej stronie.",
+        "fromTemplate": "Zacznij od szablonu",
+        "blank": "Pusty formularz"
+      },
+      "noMatch": {
+        "title": "Brak pasujących formularzy",
+        "message": "Spróbuj innego wyszukiwania lub widoku.",
+        "clear": "Wyczyść filtry"
+      },
+      "col": {
+        "name": "Formularz",
+        "status": "Status",
+        "submissions": "Zgłoszenia",
+        "views": "Wyświetlenia",
+        "conversion": "Konwersja",
+        "last": "Ostatnie zgłoszenie"
+      },
+      "unpublished": "Niepublikowane zmiany",
+      "version": "Wersja {n}",
+      "needsReview": "{count, plural, one {# wymaga uwagi} few {# wymagają uwagi} many {# wymaga uwagi} other {# wymaga uwagi}}",
+      "status": {
+        "draft": "Szkic",
+        "published": "Opublikowany",
+        "paused": "Wstrzymany",
+        "archived": "Zarchiwizowany"
+      },
+      "noRate": "-",
+      "never": "Nigdy",
+      "actionsFor": "Działania dla {name}",
+      "action": {
+        "edit": "Edytuj",
+        "submissions": "Zgłoszenia",
+        "copyLink": "Kopiuj link",
+        "embed": "Osadź na stronie",
+        "duplicate": "Duplikuj",
+        "pause": "Wstrzymaj",
+        "resume": "Wznów",
+        "archive": "Zarchiwizuj",
+        "delete": "Usuń",
+        "restore": "Przywróć"
+      },
+      "loadMore": "Wczytaj więcej",
+      "copied": "Link skopiowany",
+      "copyBlocked": "Kopiowanie jest zablokowane w tej przeglądarce. Link to {url}",
+      "paused": "Formularz wstrzymany. Odwiedzający widzą, że jest zamknięty.",
+      "resumed": "Wznowiono formularz",
+      "archived": "Formularz zarchiwizowany",
+      "deleted": "Formularz usunięty",
+      "cancel": "Anuluj",
+      "archive": {
+        "title": "Zarchiwizować formularz?",
+        "message": "Publiczny link i wszystkie osadzenia „{name}” przestaną działać. Jego zgłoszenia zostaną zachowane i nadal można je czytać.",
+        "confirm": "Zarchiwizuj"
+      },
+      "delete": {
+        "title": "Usunąć formularz?",
+        "message": "„{name}” zostanie usunięty na stałe. Kontakty, które utworzył, pozostaną w CRM.",
+        "confirm": "Usuń"
+      },
+      "restored": "Formularz przywrócony"
+    },
+    "newForm": {
+      "eyebrow": "Formularze",
+      "title": "Nowy formularz",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "create": "Utwórz formularz",
+      "startFrom": "Zacznij od",
+      "mode": {
+        "template": "Szablonu",
+        "blank": "Pustego"
+      },
+      "loadingTemplates": "Wczytywanie szablonów",
+      "templatesFailed": "Nie udało się wczytać szablonów. Nadal możesz zacząć od pustego formularza.",
+      "templates": "Szablony",
+      "fieldCount": "{count, plural, one {# pole} few {# pola} many {# pól} other {# pola}}",
+      "pickTemplate": "Wybierz szablon, aby kontynuować.",
+      "name": "Nazwa formularza",
+      "nameHint": "Tę nazwę widzi tylko Twój zespół.",
+      "nameRequired": "Wpisz nazwę formularza."
+    },
+    "templates": {
+      "breadcrumb": "Ścieżka nawigacji",
+      "back": "Wróć do formularzy",
+      "title": "Szablony formularzy",
+      "subtitle": "Zacznij od gotowego formularza i zmień, co chcesz.",
+      "blank": "Pusty formularz",
+      "loading": "Wczytywanie szablonów",
+      "loadFailed": "Nie udało się wczytać szablonów.",
+      "retry": "Spróbuj ponownie",
+      "empty": "Brak dostępnych szablonów.",
+      "category": {
+        "lead": "Pozyskiwanie leadów",
+        "contact": "Kontakt",
+        "event": "Wydarzenie",
+        "order": "Zamówienie",
+        "survey": "Ankieta"
+      },
+      "fields": "Pola w tym szablonie",
+      "more": "+{count} więcej",
+      "use": "Użyj tego szablonu"
+    }
+  }
+}

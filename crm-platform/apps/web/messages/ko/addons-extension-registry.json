@@ -1,0 +1,307 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "애드온 및 모듈",
+      "packs": "애드온 (결제)",
+      "extensions": "애드온 (코드)",
+      "workspace": "애드온"
+    },
+    "common": {
+      "loading": "로딩 중",
+      "retry": "다시 시도",
+      "cancel": "취소",
+      "save": "저장",
+      "saving": "저장 중",
+      "close": "닫기",
+      "dismiss": "무시",
+      "admin": "관리자",
+      "settings": "설정",
+      "optional": "선택",
+      "required": "필수",
+      "readOnly": "이 페이지는 볼 수만 있으며, 슈퍼 관리자만 변경할 수 있습니다.",
+      "requestId": "요청 ID",
+      "errors": {
+        "forbidden": "이 페이지에 접근할 권한이 없습니다.",
+        "request": "요청을 완료할 수 없습니다.",
+        "unexpected": "문제가 발생했습니다. 잠시 후 다시 시도해 주세요.",
+        "conflict": "방금 다른 사용자가 이 내용을 변경했습니다. 새로고침 후 다시 시도해 주세요."
+      }
+    },
+    "packs": {
+      "crumbHere": "애드온",
+      "eyebrow": "관리자 · 결제 및 요금제 · 애드온",
+      "titleLead": "애드",
+      "titleAccent": "온",
+      "title": "애드온",
+      "description": "고객이 요금제에 추가로 구매하는 개별 기능 팩입니다. 예: \"캠페인 애드온\" 또는 \"WhatsApp 번호 +1\". 각 애드온은 설정한 기능 토글과 한도를 고객의 요금제에 합쳐 제공합니다. 활성 요금제를 사용 중인 고객의 계정 페이지에 표시됩니다.",
+      "new": "새 애드온",
+      "empty": {
+        "title": "아직 애드온이 없습니다.",
+        "action": "첫 애드온 만들기"
+      },
+      "table": {
+        "label": "애드온",
+        "name": "이름",
+        "price": "가격",
+        "period": "기간",
+        "grants": "제공 내용",
+        "status": "상태",
+        "actions": "작업"
+      },
+      "price": {
+        "free": "무료",
+        "lifetime": "1회성"
+      },
+      "period": {
+        "days": "{count}일",
+        "weeks": "{count}주",
+        "months": "{count}개월",
+        "years": "{count}년"
+      },
+      "grants": {
+        "none": "설정 없음",
+        "unlimited": "{name} 무제한",
+        "add": "{name} +{amount}",
+        "more": "+{count}"
+      },
+      "status": {
+        "active": "활성",
+        "off": "꺼짐"
+      },
+      "actions": {
+        "edit": "수정",
+        "enable": "사용",
+        "disable": "사용 중지",
+        "delete": "삭제"
+      },
+      "toasts": {
+        "created": "애드온을 만들었습니다.",
+        "updated": "애드온을 업데이트했습니다.",
+        "activated": "{name} 사용 설정됨",
+        "deactivated": "{name} 사용 중지됨",
+        "deleted": "{name} 삭제됨"
+      },
+      "delete": {
+        "title": "{name} 삭제할까요?",
+        "body": "이 애드온을 삭제할까요? 이미 구매한 워크스페이스는 만료될 때까지 계속 사용할 수 있습니다.",
+        "confirm": "삭제",
+        "inUse": "{count, plural, other {워크스페이스 #개가 이 애드온을 보유하고 있어 삭제할 수 없습니다. 대신 사용 중지하세요. 보유자는 종료일까지 계속 사용할 수 있습니다.}}"
+      },
+      "errors": {
+        "generic": "애드온을 저장할 수 없습니다.",
+        "forbidden": "슈퍼 관리자만 애드온을 변경할 수 있습니다.",
+        "notFound": "이 애드온은 더 이상 존재하지 않습니다."
+      },
+      "editor": {
+        "crumbHere": "애드온",
+        "crumbNew": "새로 만들기",
+        "crumbEdit": "수정",
+        "eyebrowNew": "관리자 · 애드온 · 새로 만들기",
+        "eyebrowEdit": "관리자 · 애드온 · 수정",
+        "titleNewLead": "새",
+        "titleEditLead": "기존",
+        "titleAccent": "애드온",
+        "intro": "애드온은 켜 둔 항목만 제공하며 그 외에는 아무것도 제공하지 않습니다. 비워 둔 한도는 변경되지 않으므로 실수로 \"무제한\"이 되지 않습니다.",
+        "fixTitle": "다음 항목을 수정해 주세요.",
+        "cancel": "취소",
+        "create": "애드온 만들기",
+        "saveChanges": "변경 사항 저장",
+        "basics": "애드온 기본 정보",
+        "features": "이 애드온이 잠금 해제하는 기능",
+        "featuresHint": "이 애드온이 제공하는 항목만 선택하세요. 선택하지 않은 항목은 고객의 요금제에 따릅니다.",
+        "coreFeature": "모든 요금제에 포함",
+        "limits": "한도 증가",
+        "limitsHint": "비워 두면 애드온이 이 한도를 변경하지 않습니다. 숫자를 입력하면 요금제에 추가됩니다 (예: 기기 +2). 무제한은 -1을 사용하세요.",
+        "fields": {
+          "name": "이름",
+          "namePlaceholder": "캠페인 애드온",
+          "subtitle": "부제목",
+          "subtitlePlaceholder": "캠페인 잠금 해제",
+          "amount": "가격",
+          "offerAmount": "할인 가격 (선택)",
+          "currency": "통화",
+          "billingDuration": "기간",
+          "billingUnit": "단위",
+          "billingMode": "결제",
+          "sortOrder": "정렬 순서",
+          "isActive": "활성",
+          "isLifetime": "평생 (1회성)"
+        },
+        "modes": {
+          "one_time": "1회성 (종료 후 다시 구매)",
+          "recurring": "정기 (자동 결제로 갱신)"
+        },
+        "units": {
+          "days": "일",
+          "weeks": "주",
+          "months": "개월",
+          "years": "년"
+        },
+        "problems": {
+          "name": "이름을 입력하세요.",
+          "amount": "19 또는 19.99와 같은 금액을 입력하세요.",
+          "offerAmount": "할인 가격은 정가보다 낮아야 합니다.",
+          "currency": "세 글자 통화 코드를 사용하세요.",
+          "billingDuration": "1 이상의 정수를 입력하세요.",
+          "sortOrder": "정수를 입력하세요.",
+          "limits": "한도는 정수이거나 무제한을 뜻하는 -1이어야 합니다.",
+          "form": "강조 표시된 필드를 확인하세요."
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "애드온",
+      "eyebrow": "관리자 · 애드온",
+      "titleLead": "새",
+      "titleAccent": "애드온 설치",
+      "title": "애드온",
+      "description": "애드온은 이 설치본에 추가 기능을 합칩니다. Instagram이 첫 번째입니다. 구매 코드를 인증하고 패키지를 업로드하면 그 자리에서 설치됩니다. 데이터와 설정은 그대로 유지됩니다.",
+      "coreVersion": "코어",
+      "packsLead": "요금제에 추가로 구매하는 유료 기능 팩을 찾으시나요?",
+      "packsLink": "그것은 요금제 애드온(결제)입니다",
+      "packsTail": ". 이 페이지에서는 코드를 설치합니다.",
+      "installed": {
+        "title": "설치된 애드온",
+        "empty": "아직 설치된 애드온이 없습니다. 위에서 구매 코드를 인증한 다음 패키지를 업로드하세요.",
+        "version": "v{version}",
+        "files": "{count, plural, other {파일 #개}}",
+        "inPlace": "인플레이스 모듈",
+        "filesKept": "디스크에 유지된 파일",
+        "active": "활성",
+        "disabled": "사용 중지됨",
+        "inactive": "비활성",
+        "enable": "사용",
+        "disable": "사용 중지",
+        "remove": "제거",
+        "reactivate": "다시 활성화",
+        "footnote": "애드온을 제거하면 추가된 시점부터 추적한 설치 파일만 삭제되므로 코어 파일은 절대 건드리지 않습니다. 데이터는 데이터베이스에 남습니다."
+      },
+      "verify": {
+        "title": "구매 코드 인증",
+        "body": "업데이트를 잠금 해제하는 {brand} 라이선스와 동일합니다. 애드온은 이 라이선스에 연결됩니다.",
+        "placeholder": "예: 8f2c1a44-...",
+        "label": "구매 코드",
+        "action": "인증",
+        "checking": "인증 중…",
+        "empty": "먼저 구매 코드를 입력하세요.",
+        "failed": "인증에 실패했습니다."
+      },
+      "upload": {
+        "title": "애드온 패키지 업로드",
+        "body": "ZIP 파일은 기록되기 전에 먼저 검사됩니다. 형식이 잘못되었거나 호환되지 않는 패키지는 설치를 변경하지 않고 거부됩니다.",
+        "choose": "애드온 .zip 선택",
+        "max": "최대 100 MB",
+        "action": "설치",
+        "installing": "설치 중…",
+        "progress": "업로드 및 병합 중입니다. 이 탭을 닫지 마세요."
+      },
+      "confirm": {
+        "removeTitle": "{name} 제거할까요?",
+        "removeBody": "설치된 파일이 삭제됩니다. 데이터는 데이터베이스에 남습니다.",
+        "remove": "제거",
+        "moduleOffTitle": "{name} 제거할까요?",
+        "moduleOffBody": "애드온이 비활성화되어 해당 페이지와 자동화가 중지됩니다. 파일은 유지되므로 언제든 다시 활성화할 수 있습니다. 아무것도 삭제되지 않으며 데이터는 데이터베이스에 남습니다.",
+        "moduleOnTitle": "{name} 다시 활성화할까요?",
+        "moduleOnBody": "애드온을 다시 켭니다. 파일이 디스크에 그대로 있으므로 즉시 다시 작동합니다.",
+        "reactivate": "다시 활성화"
+      },
+      "engines": {
+        "connected": "연결됨",
+        "notConnected": "연결 안 됨",
+        "connect": "연결",
+        "manage": "관리",
+        "disconnect": "연결 해제",
+        "disconnectYes": "예, 연결 해제",
+        "save": "저장 후 연결",
+        "testing": "연결 중…",
+        "displayName": "표시 이름",
+        "secret": "공유 비밀 토큰",
+        "secretSaved": "•••••••• 저장됨, 유지하려면 비워 두세요",
+        "secretNew": "공유 비밀을 붙여넣으세요",
+        "lastChecked": "마지막 확인",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "별도의 {brand} 배포로 실행됩니다. URL과 비밀 값으로 연결하며 업로드는 필요 없습니다.",
+          "blocked": "차단됨: 네이티브 애드온 활성 상태",
+          "blockedNote": "네이티브 Instagram 애드온이 설치되어 있습니다. 원격 {brand}에 연결하려면 아래에서 제거하세요.",
+          "modalTitle": "Instagram 연결",
+          "modalBody": "{brand} 배포 URL과 공유 비밀 토큰을 붙여넣으세요. {app}이(가) API로 연결을 확인합니다. 아무것도 업로드되지 않습니다.",
+          "url": "{brand} URL",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "앱 전체의 모든 \"… 동기화\", \"… 에서 관리\", \"… URL\" 라벨에 표시됩니다.",
+          "disconnectTitle": "Instagram 연결을 해제할까요?",
+          "disconnectBody": "{app}에서 Instagram 연결이 해제됩니다. 모든 워크스페이스의 대시보드, 분석, 인박스, 플로우, 템플릿, 자동 응답에서 Instagram이 즉시 사라지며 다시 연결하기 전에는 아무것도 사용할 수 없습니다. 계속할까요?"
+        },
+        "email": {
+          "title": "이메일",
+          "body": "연결하면 {brand} 이메일 플랫폼이 연동되어 메일이 팀 인박스로 들어옵니다. URL과 비밀 값으로 연결하며 업로드는 필요 없습니다.",
+          "modalTitle": "이메일 연결",
+          "modalBody": "{brand} 배포 URL과 공유 비밀 토큰을 붙여넣으세요. {app}이(가) API로 연결을 확인합니다. 아무것도 업로드되지 않습니다.",
+          "url": "{brand} URL",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "앱 전체의 모든 이메일 라벨에 표시됩니다.",
+          "disconnectTitle": "이메일 연결을 해제할까요?",
+          "disconnectBody": "{app}에서 이메일 플랫폼 연결이 해제됩니다. 다시 연결하기 전까지 모든 워크스페이스에서 메일이 팀 인박스로 들어오지 않습니다. 계속할까요?"
+        }
+      },
+      "errors": {
+        "generic": "작동하지 않았습니다.",
+        "forbidden": "슈퍼 관리자만 모듈을 변경할 수 있습니다.",
+        "invalidPackage": "패키지가 올바르지 않습니다.",
+        "tooLarge": "패키지가 너무 큽니다.",
+        "coreTooOld": "이 패키지에는 더 최신 코어 버전이 필요합니다.",
+        "engineConflict": "Instagram은 한 번에 하나의 엔진만 실행합니다. 다른 엔진의 연결을 먼저 해제하세요."
+      }
+    },
+    "workspace": {
+      "title": "애드온",
+      "description": "구독에 추가로 구매하는 추가 기능 팩입니다.",
+      "needPlanTitle": "애드온을 사용하려면 활성 요금제가 필요합니다",
+      "needPlanBody": "애드온은 구독에 추가로 구매하는 추가 기능 팩입니다. 먼저 요금제를 선택한 다음 다시 돌아와 기능을 추가하세요.",
+      "viewPlans": "요금제 보기",
+      "noneTitle": "사용 가능한 애드온 없음",
+      "noneBody": "현재 제공되는 애드온이 없습니다. 나중에 다시 확인하세요.",
+      "ownedTitle": "내 애드온",
+      "ownedBody": "현재 요금제에 합쳐진 활성 팩입니다.",
+      "ends": "{date} 종료",
+      "lifetime": "평생",
+      "autoRenews": "자동 갱신",
+      "renewal": {
+        "cancel": "갱신 취소",
+        "confirmTitle": "갱신을 취소할까요?",
+        "confirmBody": "이 애드온은 이미 결제한 이용 기간이 끝날 때까지 활성 상태로 유지되며 이후에는 갱신되지 않습니다.",
+        "confirm": "갱신 취소",
+        "keep": "계속 갱신",
+        "forbidden": "요금제를 변경할 권한이 없습니다.",
+        "none": "취소할 활성 구독이 없습니다.",
+        "failed": "갱신을 취소할 수 없습니다. 다시 시도해 주세요."
+      },
+      "active": "활성",
+      "cardEyebrow": "애드온",
+      "catalogTitle": "애드온",
+      "catalogBody": "현재 요금제에 추가 기능을 더하세요. 요금제를 변경할 필요가 없습니다.",
+      "count": "{count, plural, other {애드온 #개}}",
+      "free": "무료",
+      "lifetimePrice": "1회성",
+      "per": "/ {unit}",
+      "units": {
+        "days": "일",
+        "weeks": "주",
+        "months": "개월",
+        "years": "년"
+      },
+      "buy": "요금제에 추가",
+      "buyAgain": "다시 구매",
+      "owned": "×{count} 보유 · 다시 구매하면 추가됩니다",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "{name} 무제한",
+        "add": "{name} +{amount}"
+      },
+      "error": "애드온을 불러올 수 없습니다."
+    }
+  }
+}

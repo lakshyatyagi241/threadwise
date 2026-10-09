@@ -1,0 +1,730 @@
+{
+  "catalogProducts": {
+    "nav": {
+      "catalog": "カタログ",
+      "products": "商品",
+      "reviews": "レビュー"
+    },
+    "common": {
+      "dismiss": "閉じる",
+      "retry": "再試行",
+      "requestId": "リクエストID"
+    },
+    "errors": {
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "forbidden": "その操作を行う権限がありません。",
+      "signedOut": "セッションが終了しました。続けるには再度ログインしてください。",
+      "conflict": "編集中に他のユーザーがこれを変更しました。再読み込みして最新バージョンを確認してください。",
+      "validation": "無効な項目があります。強調表示された項目を確認して、もう一度お試しください。",
+      "unavailable": "カタログのこの部分は、このサーバーではまだ利用できません。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
+      "notFound": "その項目が見つかりませんでした。削除された可能性があります。",
+      "planLocked": "お使いのプランにはWhatsAppカタログが含まれていません。アップグレードして利用を開始してください。",
+      "planLimit": "プランのメッセージ上限に達しました。",
+      "wallet": "ウォレット残高が少なすぎて送信できません。資金を追加して、もう一度お試しください。",
+      "sendBlocked": "現在、送信がブロックされています: {detail}",
+      "notConnected": "カタログが接続されていません。先に「セットアップ」タブで接続してください。",
+      "metaRejected": "Metaがリクエストを拒否しました: {detail}",
+      "noWaba": "接続済みのWhatsApp Business(WABA)番号が見つかりません。先にWABA番号を接続するか、カタログを手動でリンクしてください。",
+      "wabaToken": "WABA番号は接続されていますが、トークンを読み取れませんでした。番号を再接続するか、カタログを手動でリンクしてください。",
+      "noCatalogLinked": "WhatsAppアカウントにリンクされた商品カタログがまだありません。Meta Commerce Managerで作成してからもう一度お試しいただくか、手動でリンクしてください。",
+      "noRecipients": "連絡先またはグループを少なくとも1つ選択するか、番号を貼り付けてください。",
+      "tooManyRecipients": "1回の送信につき最大500人の受信者です。小さなバッチに分けてください。",
+      "noProducts": "先に商品を少なくとも1つ選択してください。",
+      "noSender": "接続されているデバイスがありません。先に「チャンネル」でペアリングしてください。",
+      "sendFailed": "メッセージを送信できませんでした: {detail}",
+      "collectionProducts": "選択した商品は、このワークスペースのものではありません。",
+      "providerFailed": "WhatsAppまたはMetaがリクエストを完了できませんでした: {detail}",
+      "unexpected": "問題が発生しました。しばらくしてからもう一度お試しください。"
+    },
+    "paywall": {
+      "kicker": "プレミアム機能",
+      "title": "WhatsAppストアフロントはお使いのプランに含まれていません",
+      "message": "これを含むプランを選択してください。アップグレードすると、この機能がすぐに利用できます。",
+      "back": "戻る",
+      "compare": "すべてのプランを比較"
+    },
+    "status": {
+      "unsynced": "未同期",
+      "pending": "保留中",
+      "synced": "同期済み",
+      "failed": "失敗"
+    },
+    "pager": {
+      "showing": "{total}件中{from}~{to}件を表示",
+      "label": "ページ",
+      "prev": "前のページ",
+      "next": "次のページ",
+      "goTo": "{page}ページへ移動"
+    },
+    "shell": {
+      "back": "連携に戻る",
+      "breadcrumb": "連携 / WhatsAppカタログ",
+      "titleLead": "商品の送信先",
+      "titleAccent": "WhatsAppチャット",
+      "connected": "{provider} · 接続済み",
+      "notConnected": "未接続",
+      "tabs": "カタログのセクション",
+      "tab": {
+        "setup": "セットアップ",
+        "send": "送信",
+        "collections": "コレクション",
+        "activity": "アクティビティ"
+      }
+    },
+    "connect": {
+      "provider": "プロバイダー",
+      "providers": {
+        "meta_cloud": "Meta Cloud API(直接)",
+        "dialog_360": "360dialog(BSP)"
+      },
+      "catalogId": "カタログID",
+      "catalogName": "カタログ名",
+      "label": "(ラベル)",
+      "catalogNamePlaceholder": "例: メインカタログ",
+      "wabaId": "WABA ID",
+      "phoneNumberId": "電話番号ID",
+      "accessToken": "アクセストークン / APIキー",
+      "accessTokenHint": "保存時に暗号化されます。保存時にMetaで検証されます。",
+      "accessTokenPlaceholder": "EAAxx... または D360-API-KEY...",
+      "showToken": "トークンを表示",
+      "hideToken": "トークンを非表示",
+      "submit": "接続して検証",
+      "connected": "カタログを接続しました。",
+      "problem": {
+        "required": "この項目は必須です。",
+        "tooShort": "アクセストークンは20文字以上にしてください。",
+        "tooLong": "この値は長すぎます。"
+      }
+    },
+    "setup": {
+      "loading": "カタログを読み込み中",
+      "loadError": "カタログを読み込めませんでした",
+      "cancel": "キャンセル",
+      "manage": "管理 →",
+      "view": "表示 →",
+      "advanced": {
+        "kicker": "任意 · 詳細設定",
+        "titleManual": "またはカタログを手動でリンク",
+        "titleAlso": "Meta Commerceカタログもリンクする",
+        "intro": "WhatsApp Businessプロフィールの公式カタログボタン、カート、「注文が確定しました」Webhookが使えるようになります。認証済みのWABAをお使いの場合にのみ必要です。非公式APIはこれがなくても問題なく動作します。"
+      },
+      "noSender": {
+        "title": "先にデバイスを接続してください",
+        "message": "カタログの送信には、このアカウントに少なくとも1台のWhatsAppデバイスが必要です。非公式APIのQRペアリング(無料)か、Meta認証済みのWABA番号のいずれかです。所要時間は30秒ほどです。",
+        "connect": "デバイスを接続"
+      },
+      "ready": {
+        "kicker": "✓ 送信の準備ができました",
+        "officialTitle": "公式WhatsAppカタログモード",
+        "unofficialTitle": "非公式APIカルーセルモード",
+        "officialBody": "{count, plural, other {#個の番号}}が接続されています。カタログは、接続済みの{engine}番号から送信されます。インタラクティブな商品メッセージを使うには、以下でMeta Commerceカタログをリンクしてください。",
+        "unofficialBody": "{count, plural, other {#台のデバイス}}が接続されています。カタログの送信は、Metaの設定や承認待ちなしで、非公式APIを介したネイティブのWhatsAppカルーセルですぐに利用できます。",
+        "head": "<b>「送信」タブ</b>に移動して、任意のお客様の番号に商品を送信しましょう。",
+        "openSend": "「送信」タブを開く"
+      },
+      "senders": {
+        "title": "接続済みのデバイス",
+        "noNumber": "番号なし",
+        "connected": "接続済み"
+      },
+      "tiles": {
+        "products": "商品",
+        "shops": "ショップ",
+        "recentSends": "最近の送信",
+        "total": "合計",
+        "synced": "同期済み",
+        "pending": "保留中",
+        "failed": "失敗"
+      },
+      "autodetect": {
+        "title": "Meta Commerceカタログをリンク",
+        "intro": "WhatsApp番号はすでに接続されているため、カタログID、WABA ID、アクセストークンを貼り付けなくても、Metaから直接カタログを取得できます。公式カタログボタン、カート、「注文が確定しました」Webhookが利用できるようになります。",
+        "button": "自分のWhatsAppアカウントから取得",
+        "linked": "WhatsAppアカウントからカタログをリンクしました。"
+      },
+      "header": {
+        "connected": "接続済み · {provider}",
+        "defaultName": "Meta Commerceカタログ",
+        "sendProducts": "商品を送信 →",
+        "disconnect": "接続を解除"
+      },
+      "disconnectTitle": "カタログの接続を解除しますか?",
+      "disconnectConfirm": "商品はMeta上に残ります。同期のみ停止します。",
+      "disconnected": "カタログの接続を解除しました。",
+      "table": {
+        "title": "商品",
+        "hint": "最近更新された順 · <b>ステータスを更新</b>をクリックするとMetaに問い合わせます。",
+        "manage": "商品を管理 →",
+        "product": "商品",
+        "sku": "SKU",
+        "price": "価格",
+        "availability": "在庫状況",
+        "metaStatus": "Metaのステータス",
+        "actions": "操作",
+        "empty": "商品がまだありません。",
+        "addOne": "追加する →",
+        "sync": {
+          "idle": "同期",
+          "busy": "…",
+          "queued": "キュー登録済み ✓",
+          "skipped": "キュー未登録",
+          "failed": "失敗"
+        }
+      }
+    },
+    "sync": {
+      "title": "商品をMetaに同期",
+      "intro": "1回のリクエストで最大1000件を送信し、完了するまで繰り返します。{count}件待機中。",
+      "syncButton": "Metaに同期",
+      "syncing": "同期中…",
+      "pollButton": "ステータスを更新",
+      "polling": "確認中…",
+      "importButton": "Metaからインポート",
+      "importing": "インポート中…",
+      "importHint": "Meta Commerce Managerで直接作成した商品をカタログに取り込みます。",
+      "progress": "同期の進行状況",
+      "starting": "開始中…",
+      "pushed": "送信{pushed}件 · 保留{pending}件 · 同期済み{synced}件 · 失敗{failed}件",
+      "stalled": "今回の実行でこれ以上送信できるものはありませんでした。失敗とマークされた商品を確認してください。",
+      "done": "完了 · {count}件キュー登録",
+      "polled": "確認済み · 同期済み+{synced} · 失敗+{failed}",
+      "importStarting": "Metaからインポート · 開始中…",
+      "imported": "インポート{imported}件 · 更新{updated}件 · スキップ{skipped}件(全{total}件)"
+    },
+    "commerce": {
+      "title": "コマースの設定",
+      "visible": "ビジネスプロフィールにカタログを表示",
+      "visibleHint": "WhatsApp Businessプロフィールに「カタログ」ボタンを追加します。",
+      "cart": "カートを有効にする",
+      "cartHint": "購入者は、注文を送信する前に複数の商品を追加できます。",
+      "save": "保存",
+      "saved": "コマースの設定を更新しました。"
+    },
+    "automation": {
+      "title": "自動化",
+      "ack": "お客様がカートを送信したときに自動返信",
+      "ackHint": "購入者には無反応ではなく、注文受付メッセージ(商品と合計)がすぐに届きます。カタログのコンバージョン改善策の第一歩です。",
+      "payUrl": "支払いリンクのベース(任意)",
+      "payUrlHint": "注文IDを末尾に追加します。空欄の場合は受付の確認のみ行います。",
+      "concierge": "カタログコンシェルジュ: 商品の質問に自動で回答",
+      "conciergeHint": "お客様が「2000円以下の赤い靴」などと入力すると、一致するマルチプロダクトメッセージで自動的に返信します。既定ではオフです。",
+      "header": "返信のヘッダー",
+      "headerPlaceholder": "こちらが見つかりました",
+      "max": "最大商品数",
+      "replyOnEmpty": "一致するものがなくても返信する",
+      "replyOnEmptyHint": "オフの場合、一致するものがないときコンシェルジュは何も返信しません(推奨)。",
+      "emptyText": "一致なしの返信",
+      "emptyTextPlaceholder": "申し訳ありません。一致するものが見つかりませんでした。別のキーワードや予算でお試しください。",
+      "save": "自動化を保存",
+      "saved": "自動化の設定を保存しました。",
+      "problem": {
+        "badUrl": "https://で始まる完全なリンクを入力してください",
+        "tooLong": "このテキストは長すぎます。",
+        "range": "1~30の整数を入力してください。"
+      }
+    },
+    "health": {
+      "title": "カタログの状態",
+      "needAttention": "{count, plural, other {#件の商品は、販売できるようになる前に対応が必要です。}}",
+      "allGood": "すべての商品がカタログ対応済みです。",
+      "noImage": "画像なし",
+      "noPrice": "価格なし",
+      "syncError": "同期エラー",
+      "showFix": "修正が必要な商品を表示",
+      "fix": "修正 →"
+    },
+    "send": {
+      "loading": "送信フォームを読み込み中",
+      "loadError": "送信フォームを読み込めませんでした",
+      "maxProducts": "1つのカルーセルにつき最大{max}件の商品です。",
+      "noSender": {
+        "title": "先にデバイスを接続してください",
+        "message": "カタログメッセージを送信するには、接続済みのWhatsAppデバイスが必要です。",
+        "connect": "デバイスを接続"
+      },
+      "feedback": {
+        "failed": "何も送信されませんでした。",
+        "sent": "{count, plural, other {#人の受信者に送信しました}}",
+        "someFailed": "{count}件失敗"
+      },
+      "recipients": {
+        "title": "受信者",
+        "count": "{count, plural, other {#人の受信者}}",
+        "source": "受信者の取得元",
+        "modes": {
+          "groups": {
+            "title": "連絡先グループ",
+            "hint": "保存済みのセグメントを使用します。"
+          },
+          "contacts": {
+            "title": "個別の連絡先",
+            "hint": "特定の人を選択します。"
+          },
+          "manual": {
+            "title": "手入力の番号",
+            "hint": "貼り付け、1行に1件。"
+          }
+        },
+        "noGroups": "連絡先グループがまだありません。先に<link>連絡先</link>ページで作成してください。",
+        "groupContacts": "{count, plural, other {#件の連絡先}}",
+        "noContacts": "連絡先がまだありません。<link>連絡先</link>ページで追加してください。",
+        "searchContacts": "連絡先を検索…",
+        "noMatch": "一致する連絡先がありません。",
+        "paste": "電話番号を貼り付け",
+        "pastePlaceholder": "1行に1件、国コードを含めてください",
+        "pasteHint": "1行ごと、カンマ、またはセミコロン区切り。国コードが必要です(+の有無は問いません)。",
+        "overCap": "1回の送信につき最大{max}人の受信者です。小さなバッチに分けてください。"
+      },
+      "format": {
+        "title": "形式と送信者",
+        "spm": {
+          "title": "単一の商品",
+          "hint": "商品カード1枚"
+        },
+        "mpm": {
+          "title": "商品リスト(カルーセル)",
+          "hint": "最大30件の商品"
+        },
+        "link": {
+          "title": "カタログリンク",
+          "hint": "プレーンテキスト · いつでも利用可能"
+        },
+        "sendFrom": "送信元",
+        "fromShop": "ショップから",
+        "brandingContext": "(ブランドの文脈)",
+        "shopFallback": "ショップ {slug}"
+      },
+      "products": {
+        "title": "商品",
+        "selected": "({count}件選択中)",
+        "selectedOf": "({count}件選択中 / 最大{max}件)",
+        "search": "商品を検索…",
+        "showingFrom": "<b>{shop}</b>の商品を表示しています。別のショップのカタログを見るには、上の<b>ショップから</b>の選択を変更してください。",
+        "loading": "商品を読み込み中…",
+        "loadError": "商品を読み込めませんでした",
+        "other": "その他",
+        "noMatch": "検索に一致する商品がありません。",
+        "emptyShop": "このショップに有効な商品がありません。",
+        "empty": "有効な商品がまだありません。",
+        "addOne": "追加する →"
+      },
+      "message": {
+        "title": "メッセージと送信",
+        "text": "メッセージ本文",
+        "optional": "(任意)",
+        "placeholder": "例: おすすめの商品をご紹介します。タップして詳細をご覧ください。",
+        "header": "ヘッダー",
+        "headerPlaceholder": "例: こちらをご覧ください",
+        "footer": "フッター",
+        "footerPlaceholder": "例: 配信停止はSTOPと返信",
+        "counter": "{used} / {max}",
+        "viewRecent": "最近の送信を表示 →",
+        "sendProduct": "商品を送信 →",
+        "sendCarousel": "カルーセルを送信 →",
+        "sendLink": "カタログリンクを送信 →",
+        "sending": "送信中…",
+        "noPermission": "このフォームは閲覧できますが、カタログメッセージは送信できません。"
+      },
+      "rail": {
+        "label": "送信の概要",
+        "summary": "概要",
+        "recipients": "受信者",
+        "products": "商品",
+        "format": "形式",
+        "formats": {
+          "spm": "単一の商品",
+          "mpm": "複数商品リスト",
+          "link": "カタログリンク"
+        },
+        "catalog": "カタログ",
+        "metaCommerce": "Meta Commerce",
+        "productCount": "{count, plural, other {#件の商品}}",
+        "unofficial": "非公式API(カルーセル)",
+        "linkMeta": "Metaをリンク →",
+        "recent": "最近の送信",
+        "windowTitle": "24時間ウィンドウ",
+        "windowBody": "SPMとリストモードは、購入者が過去24時間以内にメッセージを送っている必要があります。<b>カタログリンク</b>モードはいつでも利用できます。"
+      }
+    },
+    "collections": {
+      "loading": "コレクションを読み込み中",
+      "loadError": "コレクションを読み込めませんでした",
+      "title": "コレクション",
+      "intro": "商品のグループを一度保存しておけば、毎回選び直すことなく、ワンクリックでマルチプロダクトメッセージとして送信できます。",
+      "new": "新規コレクション",
+      "create": "コレクションを作成",
+      "created": "コレクションを作成しました。",
+      "updated": "コレクションを更新しました。",
+      "deleted": "コレクションを削除しました。",
+      "empty": "コレクションがまだありません。上で最初のコレクションを作成してください。",
+      "productCount": "{count, plural, =0 {商品なし} other {#件の商品}}",
+      "edit": "編集",
+      "delete": "削除",
+      "cancel": "キャンセル",
+      "saveChanges": "変更を保存",
+      "deleteTitle": "このコレクションを削除しますか?",
+      "deleteBody": "「{name}」を削除します。商品には影響しません。",
+      "send": {
+        "button": "送信",
+        "noLive": "このコレクションには送信できる公開中の商品がありません。",
+        "needNumber": "先に受信者の番号を入力してください。",
+        "sending": "送信中…",
+        "sent": "{count, plural, other {#人の受信者に送信しました}}",
+        "someFailed": "{count}件失敗",
+        "failed": "何も送信されませんでした。",
+        "number": "受信者の番号",
+        "numberPlaceholder": "国コード付きの番号",
+        "header": "ヘッダー(任意)",
+        "headerPlaceholder": "こちらをご覧ください",
+        "from": "送信元",
+        "auto": "自動(有効なもの)",
+        "go": "MPMとして送信"
+      },
+      "picker": {
+        "filter": "商品を絞り込み…",
+        "empty": "有効な商品がまだありません。",
+        "addOne": "追加する →",
+        "noMatch": "一致する商品がありません。",
+        "max": "1つのコレクションに含められる商品は最大{max}件です。"
+      },
+      "form": {
+        "name": "名前",
+        "namePlaceholder": "例: サマーセール",
+        "description": "説明(任意)",
+        "products": "商品",
+        "upTo": "最大{max}件",
+        "reload": "再読み込み",
+        "problem": {
+          "nameRequired": "名前を入力してください。",
+          "nameTooLong": "名前が長すぎます。",
+          "descriptionTooLong": "説明が長すぎます。",
+          "noProducts": "商品を少なくとも1つ選択してください。"
+        }
+      }
+    },
+    "activity": {
+      "loading": "アクティビティを読み込み中",
+      "loadError": "アクティビティを読み込めませんでした",
+      "title": "カタログ送信アクティビティ",
+      "subtitle": "ワークスペースが送信したすべてのカタログメッセージ(SPM · MPM · リンク)。",
+      "sendAnother": "もう一度送信 →",
+      "emptyTitle": "送信はまだありません",
+      "emptyBody": "<link>「送信」タブ</link>から最初のカタログを送信しましょう。",
+      "failed": "失敗",
+      "col": {
+        "when": "日時",
+        "to": "宛先",
+        "mode": "モード",
+        "body": "本文"
+      }
+    },
+    "products": {
+      "kicker": "ストア / 商品",
+      "title": "カタログ",
+      "add": "商品を追加",
+      "search": "名前またはSKUで検索...",
+      "loading": "商品を読み込み中",
+      "loadError": "商品を読み込めませんでした",
+      "col": {
+        "image": "画像",
+        "name": "名前",
+        "sku": "SKU",
+        "price": "価格",
+        "stock": "在庫",
+        "actions": "操作"
+      },
+      "noMatchTitle": "一致する商品がありません",
+      "noMatchBody": "名前またはSKUに「{q}」を含むものがありません。",
+      "clearSearch": "検索をクリア",
+      "emptyTitle": "商品がまだありません",
+      "emptyBody": "「商品を追加」をクリックして最初の商品を作成しましょう。",
+      "inStock": "在庫あり",
+      "out": "在庫切れ",
+      "share": "共有",
+      "edit": "編集",
+      "delete": "削除",
+      "cancel": "キャンセル",
+      "deleted": "商品を削除しました。",
+      "deleteTitle": "この商品を削除しますか?",
+      "deleteBody": "「{name}」を削除します。Meta上では、そちらで削除するまで残ります。"
+    },
+    "share": {
+      "eyebrow": "商品を共有",
+      "product": "商品",
+      "close": "閉じる",
+      "loading": "リンクを読み込み中",
+      "storefrontLink": "ストアフロントのリンク",
+      "noStorefront": "(先にストアフロントのスラッグを設定してください)",
+      "waLink": "WhatsAppディープリンク",
+      "noPhone": "(先に電話番号を接続してください)",
+      "copy": "コピー",
+      "copied": "コピーしました!",
+      "sendToCustomer": "お客様に送信",
+      "phonePlaceholder": "WhatsApp番号 例: +1 555…",
+      "send": "送信",
+      "sending": "送信中…",
+      "sent": "送信しました。",
+      "invalidPhone": "国コード付きの有効なWhatsApp番号を入力してください。"
+    },
+    "form": {
+      "breadcrumb": "パンくずリスト",
+      "products": "商品",
+      "crumbNew": "新規",
+      "crumbEdit": "編集",
+      "addTitle": "商品を追加",
+      "editFallback": "商品を編集",
+      "loading": "商品を読み込み中",
+      "loadError": "商品を読み込めませんでした",
+      "noPermissionTitle": "この操作はできません",
+      "noPermission": "お使いのロールでは、商品の作成や編集はできません。",
+      "reload": "再読み込み",
+      "fixFields": "無効な項目があります。強調表示された項目を確認してください。",
+      "basics": "基本情報",
+      "name": "名前",
+      "namePlaceholder": "例: スプリングコットンTシャツ",
+      "sku": "SKU",
+      "optional": "(任意)",
+      "shortDescription": "短い説明",
+      "shortDescriptionPlaceholder": "カタログカードとWhatsApp共有リンクに表示されます。",
+      "fullDescription": "詳しい説明",
+      "fullDescriptionNote": "(商品ページの本文)",
+      "fullDescriptionPlaceholder": "サイズ、素材、お手入れ方法など、購入者の判断に役立つ情報。HTMLが使用できます。",
+      "media": "メディア",
+      "primaryImage": "メイン画像 · URLを貼り付け",
+      "imageUrl": "画像URL",
+      "imageUrlHint": "画像への直接URLを貼り付けてください。",
+      "photoTipsTitle": "商品写真のコツ",
+      "photoTips": "1024×1024 px以上の正方形(1:1)の画像を使用してください。無地の背景の方が、雑然とした背景よりも成約につながります。",
+      "gallery": "ギャラリー",
+      "galleryHint": "商品詳細ページに画像を追加します。購入者にはサムネイルとして表示されます。",
+      "addGalleryUrl": "画像URLを追加",
+      "galleryRow": "ギャラリー画像{n}のURL",
+      "removeGallery": "ギャラリー画像{n}を削除",
+      "galleryEmpty": "ギャラリー画像がまだありません。上の「画像URLを追加」をクリックして追加してください。",
+      "pricing": "価格設定",
+      "price": "価格",
+      "comparePrice": "比較価格",
+      "was": "(元の価格)",
+      "comparePriceHint": "元の価格 · 取り消し線で表示されます。",
+      "currency": "通貨",
+      "profit": "利益インジケーター",
+      "profitHint": "自動 · 価格と比較価格から算出。",
+      "profitOff": "{percent}%オフ",
+      "profitLower": "比較価格 < 価格",
+      "profitSame": "0% · 同額",
+      "inventory": "在庫と配送",
+      "stockQty": "在庫数",
+      "stockPlaceholder": "空欄 = 無制限",
+      "weight": "重量",
+      "weightHint": "送料の計算に使用されます。",
+      "weightPlaceholder": "例: 250",
+      "available": "販売可能",
+      "availableHint": "チェックを外すと、商品を表示したまま売り切れにできます。",
+      "sortOrder": "並び順",
+      "sortOrderHint": "小さい数字ほど先に表示されます。",
+      "visibility": "公開設定",
+      "status": {
+        "active": "有効: ストアフロントに公開",
+        "draft": "下書き: 非表示、編集可能",
+        "archived": "アーカイブ: 非表示、記録として保持"
+      },
+      "organization": "整理",
+      "category": "カテゴリー",
+      "categoryPlaceholder": "例: アパレル、スナック",
+      "tags": "タグ",
+      "tagsNote": "(カンマ区切り)",
+      "tagsPlaceholder": "コットン, 夏, ベストセラー",
+      "preview": "ストアフロントのプレビュー",
+      "noImage": "画像がまだありません",
+      "productName": "商品名",
+      "cancel": "キャンセル",
+      "saveChanges": "変更を保存",
+      "createProduct": "商品を作成",
+      "created": "商品を作成しました。",
+      "updated": "商品を更新しました。",
+      "problem": {
+        "required": "この項目は必須です。",
+        "tooLong": "このテキストは長すぎます。",
+        "notNumber": "499や499.50のように数値を入力してください。",
+        "tooBig": "金額が大きすぎます。",
+        "notWhole": "整数を入力してください。",
+        "badUrl": "https://で始まる完全なリンクを入力してください",
+        "outOfRange": "この数値は範囲外です。",
+        "tooMany": "画像が多すぎます。"
+      }
+    },
+    "reviews": {
+      "rating": "{rating, plural, other {5つ星中#つ星}}",
+      "kicker": "ストア / レビュー",
+      "title": "商品レビュー",
+      "subtitle": "お客様のレビューを承認すると、ストアフロントの商品ページに表示されます。",
+      "tabs": "レビューのステータス",
+      "tab": {
+        "pending": "保留中",
+        "approved": "承認済み",
+        "rejected": "却下"
+      },
+      "loading": "レビューを読み込み中",
+      "loadError": "レビューを読み込めませんでした",
+      "empty": {
+        "pending": "保留中のレビューはありません。",
+        "approved": "承認済みのレビューはありません。",
+        "rejected": "却下されたレビューはありません。"
+      },
+      "anonymous": "匿名",
+      "on": "対象:",
+      "unknownProduct": "削除された商品",
+      "approve": "承認",
+      "reject": "却下",
+      "delete": "削除",
+      "cancel": "キャンセル",
+      "approved": "レビューを承認しました。",
+      "rejected": "レビューを却下しました。",
+      "deleted": "レビューを削除しました。",
+      "deleteTitle": "このレビューを削除しますか?",
+      "deleteBody": "レビューは完全に削除されます。"
+    },
+    "senderPicker": {
+      "none": "接続済みの送信元がありません。",
+      "connectOne": "接続する →",
+      "select": "— 送信元を選択 —",
+      "connectNew": "新しいデバイスを接続",
+      "engine": {
+        "waba": "Meta",
+        "twilio": "Twilio",
+        "baileys": "非公式API"
+      }
+    },
+    "admin": {
+      "nav": "カタログ",
+      "pageTitle": "カタログ設定",
+      "loading": "カタログ設定を読み込み中",
+      "retry": "再試行",
+      "eyebrow": "管理 · プロジェクト設定",
+      "titleLead": "WhatsApp",
+      "titleAccent": "カタログ",
+      "intro": "WABAカタログ機能のプラットフォームレベルの設定です。各販売者は、ワークスペース側の<link>/catalog</link>ページから自分のMetaコマースアカウントのカタログを接続します。この画面では、すべてのワークスペースが継承する既定値を設定します。",
+      "allSettings": "すべての設定",
+      "openCatalog": "ユーザーのカタログを開く",
+      "reset": "下書きをリセット",
+      "save": "変更を保存",
+      "saved": "カタログ設定を保存しました。",
+      "superOnly": "これらの設定を変更できるのはスーパー管理者のみです。保存済みの値は確認できます。",
+      "fix": "強調表示されている項目を修正してください:",
+      "problems": {
+        "graphVersion": "v23.0 のようなGraph APIバージョンを入力してください。",
+        "currency": "3文字の通貨コードを入力してください。"
+      },
+      "errors": {
+        "conflict": "他のユーザーが先にこの設定を保存しました。最新の値を表示しています。もう一度変更してください。",
+        "forbidden": "これらの設定を変更する権限がありません。",
+        "validation": "無効な項目があります。強調表示されている項目を確認して、もう一度お試しください。",
+        "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+        "unexpected": "問題が発生しました。しばらくしてからもう一度お試しください。"
+      },
+      "usage": {
+        "connected": "接続済みワークスペース",
+        "connectedHint": "MetaカタログIDが保存されたもの",
+        "products": "同期済み商品",
+        "productsHint": "すべてのワークスペースのカタログ合計",
+        "sends": "送信したカタログメッセージ",
+        "sendsHint": "SPM + MPM + カタログCTA"
+      },
+      "gate": {
+        "kicker": "機能ゲート",
+        "title": "カタログの利用可否",
+        "enabled": "有効",
+        "body": "有効にすると、ワークスペースのオーナーは<link>/catalog</link>でMetaコマースカタログを接続し、チャットやフロービルダーから単一商品、複数商品、カタログCTAのメッセージを送信できます。オフにすると、すべてのワークスペースでメニュー項目が非表示になります(既存の接続は維持されますが、読み取り専用になります)。",
+        "commerce": "コマースチェックアウトを許可",
+        "commerceHint": "接続済みのコマースアカウントを通じて、販売者がWhatsApp内で支払いを受け付けられるようにします。Metaに承認されたコマースアカウントと対応地域が必要です。"
+      },
+      "api": {
+        "kicker": "Cloud API",
+        "title": "Graph APIバージョン",
+        "intro": "カタログの操作(送信、同期、プッシュ)はすべてこのGraph APIバージョン経由で行われます。Metaは約3か月ごとに新バージョンをリリースし、直前のバージョンを約2年間サポートします。",
+        "version": "Graph APIバージョン",
+        "versionHint": "形式: v'{'major'}'.'{'minor'}'(例: v23.0)。空欄の場合は既定値を使用します。",
+        "currency": "既定の通貨",
+        "currencyHint": "ISO-4217コード(3文字)。新しいカタログの既定値として使用されます。Metaコマースカタログは、それぞれ1つの通貨に固定されます。"
+      },
+      "app": {
+        "kicker": "任意 · Metaアプリ",
+        "title": "プラットフォーム共通のMetaアプリ",
+        "intro": "「Metaでインストール」のOAuth体験を提供する場合にのみ必要です。既定のフローでは、各販売者がカタログページに自分のシステムユーザートークンを貼り付けるため、アプリの認証情報は不要です。",
+        "id": "MetaアプリID",
+        "idHint": "developers.facebook.com → 該当のアプリ → 設定 → ベーシック から取得します。",
+        "secret": "Metaアプリシークレット",
+        "secretPlaceholder": "アプリシークレット",
+        "secretSaved": "•••••••••••• (保存済み、変更しない場合は空欄)",
+        "secretHint": "保存時に暗号化されます。Webhookペイロードの署名(X-Hub-Signature-256)の検証に使用されます。"
+      },
+      "walk": {
+        "kicker": "販売者向けガイド",
+        "title": "ワークスペースがカタログを接続する方法",
+        "intro": "販売者にはカタログページで表示されます。流れを確認できるよう、ここにも掲載しています。",
+        "waba": {
+          "title": "有効なWABAと電話番号IDを用意する",
+          "body": "販売者は、Meta Business Suiteで認証済みのWhatsApp Businessアカウントと、承認済みの電話番号を1つ以上用意する必要があります。これがないと、カタログメッセージは送信できません。"
+        },
+        "catalog": {
+          "title": "Meta Commerce Managerでカタログを作成する",
+          "body": "business.facebook.com/commerce → カタログを作成 → Eコマースを選択します。商品は手動、CSV、またはShopify/Wooから取り込んで追加できます。カタログは公開で、1つの通貨に固定されている必要があります。"
+        },
+        "link": {
+          "title": "カタログをWABAに接続する",
+          "body": "Business Suite → WhatsApp Manager → カタログタブ →「カタログを選択」→ ステップ2で作成したカタログを選びます。これでCloud APIの商品メッセージが有効になります。"
+        },
+        "token": {
+          "title": "システムユーザートークンを生成する",
+          "body": "ビジネス設定 → システムユーザー → 追加 → 管理者。whatsapp_business_messaging、whatsapp_business_management、catalog_management、business_management を含むトークンを生成します。四半期ごとの再認証を避けるため、有効期限は「なし」を選択してください。"
+        },
+        "paste": {
+          "title": "カタログページに認証情報を貼り付ける",
+          "body": "WABA ID、カタログID、電話番号ID、システムユーザートークンを、ワークスペース側のカタログページに入力します。その後、テストとして GET /{CATALOG_ID}?fields=name,product_count を実行し、そのカタログに対してトークンが catalog_management 権限を持っているか確認します。"
+        }
+      },
+      "side": {
+        "archKicker": "アーキテクチャ",
+        "archTitle": "販売者ごととプラットフォーム共通",
+        "here": "ここ(管理者、初回のみ)",
+        "hereBody": "機能の切り替え、Graph APIバージョン、既定の通貨、任意のMetaアプリ認証情報。",
+        "merchant": "カタログページ(販売者ごと)",
+        "merchantBody": "WABA ID、カタログID、電話番号ID、システムユーザートークン。Metaの仕様上、カタログは販売者のコマースアカウントが所有する必要があるため、共有カタログはありません。",
+        "payloadsKicker": "Cloud APIペイロード",
+        "payloadsTitle": "送信する3種類のメッセージ",
+        "payload": {
+          "spm": {
+            "title": "SPM · 単一商品",
+            "code": "interactive.type = \"product\""
+          },
+          "mpm": {
+            "title": "MPM · 複数商品",
+            "code": "interactive.type = \"product_list\" · 最大10セクション、30アイテム"
+          },
+          "cta": {
+            "title": "カタログCTA",
+            "code": "interactive.type = \"catalog_message\""
+          }
+        },
+        "docsKicker": "公式ドキュメント",
+        "docsTitle": "リファレンス",
+        "docs": {
+          "sell": "商品とサービスを販売する →",
+          "messages": "Cloud APIメッセージのリファレンス →",
+          "batch": "カタログバッチAPI(商品のプッシュ) →",
+          "changelog": "Graph APIの変更履歴 →",
+          "policies": "コマースポリシー →"
+        },
+        "constraintsTitle": "制約",
+        "constraints": {
+          "public": "カタログは公開である必要があります",
+          "currency": "1つのカタログにつき1つの通貨",
+          "images": "画像は500×500px以上(JPG / PNG)",
+          "goods": "アルコール/アダルト/規制対象商品は不可",
+          "verification": "本番環境ではビジネス認証が必須"
+        }
+      }
+    }
+  }
+}

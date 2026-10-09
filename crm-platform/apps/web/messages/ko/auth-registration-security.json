@@ -1,0 +1,484 @@
+{
+  "auth-registration-security": {
+    "guest": {
+      "shell": {
+        "appNameFallback": "CRM",
+        "header": {
+          "login": {
+            "eyebrow": "로그인",
+            "title": "다시 오신 것을",
+            "accent": "환영합니다",
+            "subtitle": "워크스페이스로 돌아가려면 정보를 입력하세요."
+          },
+          "register": {
+            "eyebrow": "1/3단계 / 계정 만들기",
+            "title": "계정을",
+            "accent": "만드세요",
+            "subtitle": "몇 가지 정보만 입력하면 워크스페이스가 준비됩니다."
+          },
+          "forgot": {
+            "eyebrow": "비밀번호 찾기",
+            "title": "비밀번호를",
+            "accent": "재설정하세요",
+            "subtitle": "로그인하는 곳을 알려주시면 일회용 링크를 보내 드립니다."
+          }
+        },
+        "defaults": {
+          "login": {
+            "hero_title": "모든 것을 한곳에서",
+            "hero_desc": "채팅, 캠페인, 연락처가 한곳에 모여 있어 맥락을 찾아 헤매지 않아도 됩니다.",
+            "stat1_num": "24/7",
+            "stat1_label": "공유 팀 인박스",
+            "stat2_num": "5분",
+            "stat2_label": "일반적인 설정 시간",
+            "stat3_num": "1곳",
+            "stat3_label": "채팅과 연락처를 한곳에서",
+            "feat1_title": "공유 인박스",
+            "feat1_desc": "대화 흐름을 놓치지 않고 채팅을 배정하고, 답장하고, 인계하세요.",
+            "feat2_title": "브로드캐스트",
+            "feat2_desc": "발송 속도 조절과 전달 추적으로 많은 연락처에 한 번에 도달하세요.",
+            "feat3_title": "자동화",
+            "feat3_desc": "직접 설계한 플로우로 라우팅, 답장, 후속 조치를 처리하세요.",
+            "feat4_title": "팀 관리",
+            "feat4_desc": "역할, 권한, 감사 기록으로 모든 워크스페이스를 관리하세요.",
+            "inside_heading": "워크스페이스 내부",
+            "chip1": "인박스",
+            "chip2": "브로드캐스트",
+            "chip3": "플로우",
+            "chip4": "연락처",
+            "chip5": "보고서",
+            "chip6": "템플릿"
+          },
+          "register": {
+            "hero_title": "무료로 시작",
+            "hero_desc": "먼저 워크스페이스를 설정하고, 준비되면 요금제를 선택하세요.",
+            "stat1_num": "3단계",
+            "stat1_label": "로 완성되는 워크스페이스",
+            "stat2_num": "5분",
+            "stat2_label": "일반적인 설정 시간",
+            "stat3_num": "1일차",
+            "stat3_label": "팀원 초대",
+            "feat1_title": "빠른 설정",
+            "feat1_desc": "워크스페이스 이름과 시간대를 설정하면 바로 시작할 수 있습니다.",
+            "feat2_title": "팀 초대",
+            "feat2_desc": "동료를 초대하고 각자에게 필요한 만큼의 권한만 부여하세요.",
+            "feat3_title": "채널 연결",
+            "feat3_desc": "메시징 번호를 연결하고 고객과 대화를 시작하세요.",
+            "feat4_title": "완벽한 통제",
+            "feat4_desc": "2단계 로그인과 세션 관리로 모든 계정을 보호합니다.",
+            "inside_heading": "제공 기능",
+            "chip1": "공유 인박스",
+            "chip2": "브로드캐스트",
+            "chip3": "플로우",
+            "chip4": "연락처",
+            "chip5": "보고서",
+            "chip6": "팀 역할"
+          },
+          "forgot": {
+            "hero_title": "한 번만 쓰는 새 링크",
+            "hero_desc": "한 번만 사용할 수 있고 곧 만료되는 보안 링크를 이메일로 보내 드립니다."
+          }
+        },
+        "contentDefaults": {
+          "login": {
+            "eyebrow": "WhatsApp 팀 인박스",
+            "heading": "모든 고객 채팅을",
+            "headingAccent": "하나의 차분한 워크스페이스에서",
+            "subheading": "빠르게 응답하는 팀을 위한 브로드캐스트, 자동화, 공유 인박스."
+          },
+          "register": {
+            "eyebrow": "몇 분 만에 시작",
+            "heading": "워크스페이스를",
+            "headingAccent": "설정하세요",
+            "subheading": "워크스페이스를 만든 다음 팀과 첫 번째 채널을 가져오세요."
+          },
+          "forgot": {
+            "eyebrow": "계정 복구",
+            "heading": "잠시 후",
+            "headingAccent": "다시 로그인",
+            "subheading": "이메일을 입력하면 새 비밀번호를 설정할 수 있는 보안 링크를 보내 드립니다."
+          }
+        }
+      },
+      "toolbar": {
+        "language": "언어",
+        "theme": "테마 전환",
+        "themeToLight": "라이트",
+        "themeToDark": "다크"
+      },
+      "pages": {
+        "login": {
+          "title": "로그인"
+        },
+        "signup": {
+          "title": "계정 만들기"
+        },
+        "verifyOtp": {
+          "title": "번호 인증",
+          "eyebrow": "번호 인증",
+          "heading": "확인하세요",
+          "accent": "WhatsApp",
+          "subtitle": "워크스페이스 생성을 완료하려면 보내 드린 일회용 코드를 입력하세요."
+        },
+        "forgot": {
+          "title": "비밀번호 재설정"
+        },
+        "reset": {
+          "title": "새 비밀번호 선택",
+          "eyebrow": "비밀번호 재설정",
+          "heading": "새",
+          "accent": "비밀번호 선택",
+          "subtitle": "강력한 비밀번호를 선택하세요. 바로 이어서 이 비밀번호로 로그인합니다.",
+          "panel": {
+            "heroTitle": "새 비밀번호",
+            "heroDesc": "기억하기 쉬운 비밀번호를 선택하세요. 워크스페이스에서 최소 길이를 요구할 수 있습니다.",
+            "eyebrow": "계정 복구",
+            "heading": "새로운",
+            "accent": "시작",
+            "subheading": "새 비밀번호를 저장하면 바로 그 비밀번호로 로그인할 수 있습니다."
+          }
+        },
+        "verifyEmail": {
+          "title": "이메일 확인",
+          "eyebrow": "이메일 확인",
+          "heading": "이메일을",
+          "accent": "확인하세요",
+          "subtitle": "이 페이지는 받은편지함에서 연 링크를 확인합니다.",
+          "panel": {
+            "heroTitle": "주소 확인",
+            "heroDesc": "한 번의 클릭으로 이 받은편지함이 본인 것임을 확인합니다.",
+            "eyebrow": "이메일 확인",
+            "heading": "링크를",
+            "accent": "확인하는 중",
+            "subheading": "열어 본 이메일의 주소를 확인하는 중입니다."
+          }
+        },
+        "findWorkspace": {
+          "title": "내 워크스페이스 찾기",
+          "eyebrow": "내 워크스페이스 찾기",
+          "heading": "워크스페이스를",
+          "accent": "찾으세요",
+          "subtitle": "이메일을 입력하면 로그인할 수 있는 워크스페이스 주소를 메일로 보내 드립니다."
+        },
+        "confirmEmailChange": {
+          "title": "새 이메일 확인",
+          "eyebrow": "이메일 변경",
+          "heading": "새 이메일을",
+          "accent": "확인하세요",
+          "subtitle": "이 페이지는 받은편지함에서 연 링크를 확인합니다.",
+          "panel": {
+            "heroTitle": "새 로그인 이메일",
+            "heroDesc": "확인하는 즉시 주소가 변경됩니다.",
+            "eyebrow": "이메일 변경",
+            "heading": "새 이메일을",
+            "accent": "확인하는 중",
+            "subheading": "열어 본 메시지의 링크를 확인하는 중입니다."
+          }
+        },
+        "socialCallback": {
+          "title": "로그인 중",
+          "eyebrow": "소셜 로그인",
+          "heading": "로그인",
+          "accent": "하는 중",
+          "subtitle": "로그인을 마무리하는 중입니다."
+        }
+      },
+      "errors": {
+        "invalidCredentials": "입력한 정보가 일치하지 않습니다. 워크스페이스, 이메일, 비밀번호를 확인하세요.",
+        "locked": "실패한 시도가 너무 많습니다. {minutes, plural, other {#분}} 후에 다시 시도하세요.",
+        "rateLimited": "시도 횟수가 너무 많습니다. 잠시 후 다시 시도하세요.",
+        "rateLimitedWait": "시도 횟수가 너무 많습니다. {seconds, plural, other {#초}} 후에 다시 시도하세요.",
+        "suspended": "이 계정은 정지되었습니다. 워크스페이스 관리자에게 문의하세요.",
+        "captcha": "캡차를 완료한 후 다시 시도하세요.",
+        "signupClosed": "가입이 마감되었습니다. 관리자에게 초대를 요청하세요.",
+        "slugTaken": "이미 사용 중인 워크스페이스 주소입니다.",
+        "emailTaken": "이 이메일은 이미 이 워크스페이스에서 사용 중입니다.",
+        "passwordPolicy": "비밀번호가 보안 정책을 충족하지 않습니다:",
+        "tokenInvalid": "유효하지 않거나 만료된 링크입니다.",
+        "emailUnverified": "먼저 이메일 주소를 확인하세요.",
+        "mfaInvalid": "유효하지 않은 코드입니다. 코드를 확인하고 다시 시도하세요.",
+        "mfaExpired": "인증이 만료되었습니다. 다시 로그인하세요.",
+        "otpInvalid": "코드가 올바르지 않습니다. 다시 시도하세요.",
+        "otpExpired": "코드가 만료되었습니다. 새 코드를 요청하세요.",
+        "otpTooMany": "시도 횟수가 너무 많습니다. 새 코드를 요청하세요.",
+        "otpCooldown": "다른 코드를 요청하기 전에 잠시 기다려 주세요.",
+        "otpSendFailed": "인증 코드를 보내지 못했습니다. 번호를 확인하고 다시 시도하세요.",
+        "socialUnavailable": "사용할 수 없는 로그인 방식입니다.",
+        "socialExpired": "로그인이 만료되었습니다. 다시 시도하세요.",
+        "socialFailed": "{provider} 로그인을 완료하지 못했습니다. 다시 시도하세요.",
+        "socialNoEmail": "해당 계정에서 이메일 주소를 공유하지 않았습니다. 이메일과 비밀번호로 로그인하세요.",
+        "ipBlocked": "이 네트워크에서는 로그인할 수 없습니다.",
+        "workspaceUnavailable": "사용할 수 없는 워크스페이스입니다.",
+        "workspaceRequired": "이 이메일은 둘 이상의 워크스페이스에서 사용 중입니다. 계속하려면 워크스페이스를 입력하세요.",
+        "validation": "강조 표시된 필드를 확인하세요.",
+        "sessionExpired": "보안을 위해 세션이 만료되었습니다. 다시 시도하세요.",
+        "network": "서버에 연결할 수 없습니다. 연결을 확인하고 다시 시도하세요.",
+        "unexpected": "서버에 문제가 발생했습니다. 다시 시도하세요.",
+        "requestId": "요청 ID",
+        "signupExpired": "가입을 처음부터 다시 시작하세요.",
+        "policyRules": {
+          "min_length": "{min, plural, other {#자}} 이상 입력하세요.",
+          "upper_lower": "대문자와 소문자를 함께 사용하세요.",
+          "number": "숫자를 하나 이상 포함하세요.",
+          "symbol": "기호를 하나 이상 포함하세요.",
+          "common": "추측하기 너무 쉬운 비밀번호입니다."
+        },
+        "socialNoAccount": "해당 {provider} 로그인과 일치하는 계정이 없습니다. 이메일과 비밀번호로 로그인하거나 계정을 만드세요.",
+        "forbidden": "요청이 거부되었습니다. 페이지를 새로고침하고 다시 시도하세요."
+      },
+      "validation": {
+        "orgSlug": "워크스페이스 주소를 입력하세요(문자, 숫자, 대시 또는 밑줄).",
+        "orgSlugForSocial": "로그인할 위치를 알 수 있도록 먼저 워크스페이스 주소를 입력하세요.",
+        "email": "올바른 이메일 주소를 입력하세요.",
+        "password": "표시된 요구 사항을 충족하는 비밀번호를 입력하세요.",
+        "passwordRequired": "비밀번호를 입력하세요.",
+        "fullName": "이름을 입력하세요.",
+        "orgName": "워크스페이스 이름을 입력하세요(2자 이상).",
+        "orgNameForSocial": "먼저 워크스페이스 이름을 입력한 후 Google 또는 Facebook으로 계속하세요.",
+        "phoneRequired": "휴대폰 번호를 입력하세요.",
+        "phone": "선택한 국가에 맞는 올바른 휴대폰 번호를 입력하세요.",
+        "newPassword": "{min, plural, other {#자}} 이상 입력하세요.",
+        "confirmPassword": "두 비밀번호가 일치하지 않습니다.",
+        "acceptTerms": "계속하려면 약관에 동의해야 합니다.",
+        "referralCode": "추천 코드는 문자와 숫자만 사용할 수 있습니다.",
+        "code": "{length}자리 코드를 입력하세요."
+      },
+      "legal": {
+        "login": "로그인하면 <terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의하는 것으로 간주됩니다.",
+        "signup": "<terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의합니다.",
+        "cookies": "<cookies>쿠키 정책</cookies>"
+      },
+      "captcha": {
+        "protected": "이 사이트는 reCAPTCHA로 보호되며 Google <privacy>개인정보처리방침</privacy> 및 <terms>서비스 약관</terms>이 적용됩니다."
+      },
+      "social": {
+        "divider": "또는 이메일로",
+        "redirecting": "제공업체를 여는 중",
+        "login": {
+          "google": "Google로 계속",
+          "facebook": "Facebook으로 계속"
+        },
+        "signup": {
+          "google": "Google로 가입",
+          "facebook": "Facebook으로 가입"
+        },
+        "google": "Google",
+        "facebook": "Facebook"
+      },
+      "login": {
+        "workspace": "워크스페이스",
+        "workspaceHint": "팀에서 사용하는 주소입니다(예: acme).",
+        "chooseTitle": "워크스페이스 선택",
+        "chooseSubtitle": "이 이메일이 여러 워크스페이스에 등록되어 있습니다. 열려는 워크스페이스를 선택하세요.",
+        "chooseMembers": "{count, plural, other {멤버 #명}}",
+        "chooseOpen": "열기",
+        "chooseBack": "다른 계정 사용",
+        "chooseExpired": "시간이 너무 오래 걸렸습니다. 다시 로그인하세요.",
+        "workspacePlaceholder": "your-workspace",
+        "email": "이메일",
+        "emailPlaceholder": "you@company.com",
+        "password": "비밀번호",
+        "forgot": "비밀번호를 잊으셨나요?",
+        "showPassword": "비밀번호 표시",
+        "hidePassword": "비밀번호 숨기기",
+        "remember": "30일 동안 로그인 유지",
+        "submit": "로그인",
+        "submitting": "로그인 중",
+        "newHere": "처음이신가요?",
+        "createAccount": "계정 만들기",
+        "lostWorkspace": "워크스페이스 주소를 잘 모르시나요?",
+        "findWorkspace": "내 워크스페이스 찾기",
+        "loggedOut": "로그아웃되었습니다.",
+        "flashReset": "비밀번호가 재설정되었습니다. 새 비밀번호로 로그인하세요.",
+        "flashExpired": "세션이 만료되었습니다. 다시 로그인하세요.",
+        "flashIdle": "{minutes, plural, other {#분}} 동안 활동이 없어 로그아웃되었습니다. 계속하려면 다시 로그인하세요.",
+        "mfaExpired": "인증 시간이 너무 오래 걸렸습니다. 다시 로그인하세요.",
+        "flashDeleted": "계정이 삭제되었습니다."
+      },
+      "mfa": {
+        "title": "2단계 인증",
+        "descriptionCode": "인증 앱의 6자리 코드를 입력하세요.",
+        "descriptionRecovery": "일회용 복구 코드 중 하나를 입력하세요.",
+        "codeLabel": "인증 앱 코드",
+        "recoveryLabel": "복구 코드",
+        "recoveryHint": "각 복구 코드는 한 번만 사용할 수 있습니다.",
+        "invalidCode": "6자리 코드를 입력하세요.",
+        "invalidRecovery": "복구 코드를 입력하세요(8~32자).",
+        "verify": "인증",
+        "verifying": "인증 중",
+        "useRecovery": "복구 코드 사용",
+        "useApp": "인증 앱 코드 사용",
+        "back": "로그인으로 돌아가기",
+        "expiresIn": "인증 만료까지 {time}"
+      },
+      "signup": {
+        "steps": {
+          "label": "가입 진행률",
+          "account": "계정",
+          "workspace": "워크스페이스",
+          "plan": "요금제"
+        },
+        "fullName": "이름",
+        "fullNamePlaceholder": "이름 입력",
+        "email": "업무용 이메일",
+        "orgName": "워크스페이스 이름",
+        "orgNamePlaceholder": "Acme Inc.",
+        "orgNameHint": "팀원은 {slug} 주소로 로그인합니다.",
+        "orgNameHintEmpty": "팀원에게 표시되는 이름입니다.",
+        "customiseSlug": "사용자 지정 워크스페이스 주소 선택",
+        "orgSlug": "워크스페이스 주소",
+        "orgSlugHint": "문자, 숫자, 대시 또는 밑줄. 팀원이 로그인할 때 이 주소를 입력합니다.",
+        "orgSlugPlaceholder": "your-workspace",
+        "phone": "휴대폰 번호",
+        "phoneHint": "계정 인증 및 중요 업데이트에 사용합니다.",
+        "phonePlaceholder": "국가 번호 제외 번호",
+        "country": "국가",
+        "referral": "추천 코드",
+        "optional": "선택 사항",
+        "referralPlaceholder": "친구 코드가 있나요?",
+        "password": "비밀번호",
+        "confirmPassword": "비밀번호 확인",
+        "submit": "계속",
+        "submitting": "계정 생성 중",
+        "haveAccount": "이미 계정이 있으신가요?",
+        "signIn": "로그인",
+        "closedBody": "가입이 마감되었습니다. 관리자에게 초대를 요청하세요.",
+        "closedBack": "로그인으로 돌아가기",
+        "restart": "가입을 처음부터 다시 시작하세요.",
+        "countryButton": "국가 코드 +{dial}",
+        "countrySearch": "국가 검색",
+        "countryEmpty": "일치하는 국가 없음"
+      },
+      "otp": {
+        "sentTo": "코드를 보낸 곳:",
+        "code": "인증 코드",
+        "expiresIn": "코드는 {time} 후 만료됩니다.",
+        "expired": "코드가 만료되었습니다. 새 코드를 요청하세요.",
+        "verify": "인증하고 계속",
+        "verifying": "인증 중",
+        "resend": "코드 다시 보내기",
+        "resendIn": "{time} 후 코드 다시 보내기",
+        "resending": "보내는 중",
+        "resent": "새 코드가 WhatsApp으로 전송되고 있습니다.",
+        "wrongNumber": "번호가 잘못되었나요?",
+        "goBack": "뒤로 가기",
+        "addressTakenHint": "인증하는 동안 해당 워크스페이스 주소가 다른 사람에게 사용되었습니다. 다른 주소를 선택하면 새 코드를 보내 드립니다.",
+        "chooseAnotherAddress": "다른 주소 선택"
+      },
+      "forgot": {
+        "submit": "재설정 링크 이메일 보내기",
+        "submitting": "보내는 중",
+        "remembered": "기억나셨나요?",
+        "back": "로그인으로 돌아가기",
+        "doneTitle": "받은편지함을 확인하세요",
+        "doneBody": "해당 이메일이 그 워크스페이스의 계정에 속해 있다면 재설정 링크가 발송됩니다. 링크는 한 번만 사용할 수 있고 곧 만료됩니다.",
+        "doneHint": "아직 오지 않았나요? 스팸 폴더를 확인하거나 1분 후 다시 시도하세요.",
+        "tryAnother": "다른 이메일 사용"
+      },
+      "reset": {
+        "password": "새 비밀번호",
+        "confirmPassword": "새 비밀번호 확인",
+        "submit": "새 비밀번호 저장",
+        "submitting": "저장 중",
+        "back": "로그인으로 돌아가기",
+        "invalidTitle": "이 링크는 더 이상 사용할 수 없습니다",
+        "invalidBody": "재설정 링크는 한 번만 사용할 수 있고 잠시 후 만료됩니다. 계속하려면 새 링크를 요청하세요.",
+        "requestNew": "새 링크 요청"
+      },
+      "verifyEmail": {
+        "working": "이메일 확인 중",
+        "doneTitle": "이메일이 확인되었습니다",
+        "doneBody": "감사합니다. 주소가 인증되었습니다. 계속하려면 로그인하세요.",
+        "failedTitle": "이메일을 확인할 수 없습니다",
+        "failedHint": "로그인한 후 앱 상단 배너에서 새 인증 이메일을 요청하세요.",
+        "signIn": "로그인으로 이동"
+      },
+      "confirmEmailChange": {
+        "working": "새 이메일 확인 중",
+        "doneTitle": "이메일 주소가 업데이트되었습니다",
+        "doneBody": "다음 로그인부터 새 주소를 사용하세요.",
+        "failedTitle": "변경 사항을 확인할 수 없습니다",
+        "failedHint": "로그인한 후 계정 페이지에서 이메일 변경을 다시 시작하세요.",
+        "signIn": "로그인으로 이동"
+      },
+      "findWorkspace": {
+        "submit": "내 워크스페이스를 이메일로 받기",
+        "submitting": "보내는 중",
+        "back": "로그인으로 돌아가기",
+        "doneTitle": "받은편지함을 확인하세요",
+        "doneBody": "해당 주소가 인증된 계정에 속해 있다면 로그인할 수 있는 워크스페이스 주소를 이메일로 보냈습니다.",
+        "doneHint": "아직 오지 않았나요? 스팸 폴더를 확인하거나 다른 이메일을 사용해 보세요.",
+        "tryAnother": "다른 이메일 사용"
+      },
+      "callback": {
+        "working": "로그인을 마무리하는 중",
+        "failedTitle": "로그인이 완료되지 않았습니다",
+        "cancelled": "로그인이 취소되었습니다.",
+        "backToSignIn": "로그인으로 돌아가기",
+        "createAccount": "대신 계정 만들기"
+      },
+      "layout": {
+        "noscript": "이 브라우저에서 JavaScript가 꺼져 있습니다. 로그인하거나 계정을 만들려면 JavaScript를 켜세요."
+      },
+      "consent": {
+        "label": "쿠키 안내",
+        "title": "쿠키를 사용합니다",
+        "message": "로그인 상태를 유지하고 사이트 이용 방식을 파악하기 위해 쿠키를 사용합니다. 모두 수락하거나, 선택 쿠키를 거부하거나, 허용할 항목을 직접 선택할 수 있습니다.",
+        "learnMore": "자세히 알아보기",
+        "decline": "거부",
+        "customize": "사용자 지정",
+        "acceptAll": "모두 수락",
+        "prefsTitle": "개인정보 선택",
+        "necessary": "필수",
+        "necessaryHint": "로그인과 보안에 필요합니다. 항상 켜져 있습니다.",
+        "analytics": "분석",
+        "analyticsHint": "어떤 페이지가 효과적인지 파악하는 데 도움이 됩니다.",
+        "marketing": "마케팅",
+        "marketingHint": "다른 웹사이트에서 관련 혜택을 표시하는 데 사용됩니다.",
+        "rejectAll": "모두 거부",
+        "save": "선택 저장"
+      },
+      "policy": {
+        "minLength": "{min, plural, other {#자}} 이상.",
+        "mixedCase": "대문자와 소문자를 함께 사용하세요.",
+        "number": "숫자를 포함하세요.",
+        "symbol": "기호를 포함하세요.",
+        "placeholder": "{min, plural, other {#자}} 이상"
+      }
+    },
+    "gate": {
+      "suspended": {
+        "titleLead": "계정이",
+        "titleAccent": "정지되었습니다"
+      },
+      "verify": {
+        "titleLead": "먼저",
+        "titleAccent": "이메일을 인증하세요"
+      },
+      "onboarding": {
+        "header": {
+          "step2": {
+            "eyebrow": "2/3단계 / 워크스페이스",
+            "title": "워크스페이스를",
+            "accent": "만드세요"
+          },
+          "step3": {
+            "eyebrow": "3/3단계 / 요금제",
+            "title": "요금제를",
+            "accent": "선택하세요",
+            "subtitle": "모든 요금제에는 월간 메시지 제공량이 포함됩니다. 무료 요금제로 시작하거나 더 여유 있는 요금제를 선택하세요."
+          }
+        },
+        "timezonePlaceholder": "시간대 검색...",
+        "timezoneEmpty": "검색과 일치하는 시간대가 없습니다.",
+        "timezoneLabel": "시간대",
+        "phonePlaceholder": "국가 번호 제외 번호",
+        "plan": {
+          "credits": "요금제에는 매월 정해진 수의 메시지가 포함됩니다. 요금제가 활성 상태일 때 제공량이 소진되면 추가 발송은 메시지당 <rate>{credits, plural, other {#크레딧}}</rate>의 지갑 크레딧을 사용합니다. 요금제가 종료되면 갱신할 때까지 발송이 일시 중지됩니다.",
+          "topUpPrompt": "제공량을 초과하고 있나요?",
+          "topUp": "메시지 크레딧 추가"
+        }
+      }
+    }
+  }
+}

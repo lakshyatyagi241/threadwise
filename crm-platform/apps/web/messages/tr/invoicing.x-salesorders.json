@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "Yalnızca taslak sipariş değiştirilebilir. Onaylanmış bir sipariş kilitlidir: kalemlerini veya fiyatlarını değiştirmek için iptal edip yeni bir sipariş başlatın.",
+        "SO_NOT_CONFIRMED": "Önce siparişi onaylayın. Yalnızca onaylanmış bir sipariş faturalandırılabilir veya teslimatı kaydedilebilir.",
+        "SO_CANCELLED": "Bu sipariş iptal edildi, bu nedenle üzerinde başka bir işlem yapılamaz.",
+        "SO_QUOTE_NOT_ACCEPTED": "Yalnızca kabul edilmiş bir teklif veya tahmin satış siparişine dönüşebilir. Önce kabul edildi olarak işaretleyin.",
+        "SO_QUOTE_TAKEN": "Bu teklif veya tahminin zaten bir satış siparişi var.",
+        "SO_QUANTITY_EXCEEDS": "Bir miktar, o kalemde kalanı aşıyor. Düşürüp yeniden deneyin.",
+        "SO_NOTHING_TO_INVOICE": "Burada yapılacak bir şey kalmadı: her şey zaten faturalandırıldı veya teslim edildi.",
+        "SO_HAS_INVOICES": "Bu siparişten oluşturulmuş bir fatura hâlâ geçerli. Önce faturayı iptal edin veya silin, sonra siparişi iptal edin."
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "Satış siparişleri",
+        "subtitle": "Kabul edilen tekliflerin siparişe dönüştürülmesi, tek seferde veya parça parça faturalandırılması ve teslim edilmesi.",
+        "newOrder": "Yeni satış siparişi",
+        "search": "Numara, alıcı veya referansa göre ara",
+        "reset": "Sıfırla",
+        "refresh": "Yenile",
+        "tableLabel": "Satış siparişleri",
+        "noAccessTitle": "Erişim yok",
+        "noAccess": "Satış siparişlerini görme izniniz yok.",
+        "emptyFilteredTitle": "Eşleşen sipariş yok",
+        "emptyFiltered": "Bu filtrelerle eşleşen bir şey yok. Değiştirin veya sıfırlayın.",
+        "resetFilters": "Filtreleri sıfırla",
+        "loading": "Satış siparişleri yükleniyor",
+        "showing": "{count} gösteriliyor",
+        "loadMore": "Daha fazla yükle",
+        "allLoaded": "Tümü yüklendi",
+        "contactLoading": "Yükleniyor...",
+        "empty": {
+          "all": {
+            "title": "Henüz satış siparişi yok",
+            "message": "Kabul edilmiş bir teklifi veya tahmini siparişe dönüştürün ya da sıfırdan bir sipariş başlatın."
+          },
+          "draft": {
+            "title": "Taslak sipariş yok",
+            "message": "Hâlâ hazırladığınız siparişler burada görünür."
+          },
+          "confirmed": {
+            "title": "Onaylanmış sipariş yok",
+            "message": "Faturalandırılmayı veya teslim edilmeyi bekleyen onaylanmış siparişler burada görünür."
+          },
+          "cancelled": {
+            "title": "İptal edilmiş sipariş yok",
+            "message": "İptal ettiğiniz siparişler nedenleriyle burada görünür."
+          },
+          "closed": {
+            "title": "Kapatılmış sipariş yok",
+            "message": "Bir sipariş, içindeki her şey faturalandırılıp teslim edildiğinde kapanır."
+          }
+        }
+      },
+      "strip": {
+        "label": "Açık siparişlerin değeri",
+        "openValue": "Açık siparişler ({currency})"
+      },
+      "tabs": {
+        "label": "Sipariş durumu",
+        "all": "Tümü",
+        "draft": "Taslak",
+        "confirmed": "Onaylandı",
+        "cancelled": "İptal edildi",
+        "closed": "Kapatıldı",
+        "count": "{count} sipariş"
+      },
+      "quick": {
+        "label": "Hızlı filtreler",
+        "toInvoice": "Faturalandırılacak",
+        "toFulfil": "Yerine getirilecek"
+      },
+      "table": {
+        "scrollArea": "Satış siparişleri tablosu",
+        "columns": {
+          "number": "Sipariş",
+          "buyer": "Alıcı",
+          "quote": "Teklif",
+          "deal": "Fırsat",
+          "expected": "Beklenen",
+          "status": "Durum",
+          "invoicing": "Faturalandırma",
+          "fulfilment": "Teslimat",
+          "total": "Toplam",
+          "invoices": "Faturalar"
+        }
+      },
+      "row": {
+        "moreFor": "{name} için işlemler",
+        "open": "Aç",
+        "edit": "Düzenle",
+        "confirm": "Siparişi onayla",
+        "invoiceAll": "Kalan her şeyi faturalandır",
+        "fulfilAll": "Tümünü teslim edildi olarak işaretle",
+        "cancel": "Siparişi iptal et",
+        "delete": "Taslağı sil"
+      },
+      "status": {
+        "draft": "Taslak",
+        "confirmed": "Onaylandı",
+        "cancelled": "İptal edildi",
+        "closed": "Kapatıldı"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "Faturalandırılmadı",
+        "partially_invoiced": "Kısmen faturalandırıldı",
+        "invoiced": "Faturalandırıldı"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "Teslim edilmedi",
+        "partially_fulfilled": "Kısmen teslim edildi",
+        "fulfilled": "Teslim edildi"
+      },
+      "actions": {
+        "failed": "İşlem başarısız oldu.",
+        "confirmed": "{number} numaralı sipariş onaylandı.",
+        "invoicedDraft": "Siparişten taslak fatura oluşturuldu.",
+        "invoicedIssued": "{number} numaralı fatura düzenlendi.",
+        "fulfilled": "Teslimat kaydedildi.",
+        "cancelled": "{number} numaralı sipariş iptal edildi.",
+        "deleted": "Taslak sipariş silindi."
+      },
+      "dialog": {
+        "close": "Kapat",
+        "cancel": "Vazgeç",
+        "how": "Hangi miktarlar",
+        "mode": {
+          "all": "Kalan her şey",
+          "lines": "Miktarları seçin"
+        },
+        "left": "{qty} kaldı",
+        "qtyExceeds": "Bu kalemde en fazla {max} kaldı.",
+        "qtyInvalid": "En fazla 4 ondalık basamaklı bir miktar girin veya bu kalemi atlamak için 0 girin.",
+        "nothingHint": "Bu siparişin her şeyi zaten faturalandırıldı."
+      },
+      "confirmDialog": {
+        "title": "Bu sipariş onaylansın mı?",
+        "message": "Onaylamak kalemleri ve fiyatları kilitler. Bundan sonra siparişi tek seferde veya parça parça faturalandırabilir ve teslimatları kaydedebilirsiniz. Fatura bulunmadığı sürece siparişi yine iptal edebilirsiniz.",
+        "confirm": "Siparişi onayla"
+      },
+      "cancelDialog": {
+        "title": "Bu sipariş iptal edilsin mi?",
+        "warning": "İptal edilen bir sipariş artık faturalandırılamaz veya teslim edilemez ve yeniden açılamaz.",
+        "reason": "Neden",
+        "reasonHint": "Ekibiniz için siparişte saklanır.",
+        "reasonRequired": "Siparişin neden iptal edildiğini yazın.",
+        "reasonTooLong": "Nedeni {max} karakterin altında tutun.",
+        "cancelOrder": "Siparişi iptal et",
+        "hasInvoices": "Bu siparişin hâlâ bir faturası var. Önce faturayı iptal edin veya silin (iptal edilen fatura miktarları siparişe geri verir), sonra siparişi iptal edin.",
+        "seeInvoices": "Faturaları gör"
+      },
+      "deleteDialog": {
+        "title": "Bu taslak silinsin mi?",
+        "message": "Taslak sipariş kalıcı olarak kaldırılır. Onaylanmış bir sipariş silinemez, yalnızca iptal edilebilir.",
+        "delete": "Taslağı sil"
+      },
+      "invoiceDialog": {
+        "title": "Bu siparişi faturalandır",
+        "intro": "Siparişi kilitli fiyatlarıyla faturalandırın. Parça parça faturalandırabilirsiniz: şimdi faturalanmayan kısım siparişte kalır.",
+        "invoiceAndIssue": "Faturayı oluştur ve düzenle",
+        "createDraft": "Taslak fatura oluştur",
+        "issueDate": "Düzenleme tarihi",
+        "issueDateHint": "Bugün ({today}) için boş bırakın.",
+        "dueDate": "Vade tarihi",
+        "terms": "Ödeme koşulları",
+        "termsDefault": "Çalışma alanı varsayılanı",
+        "termsOnIssue": "Düzenlemede vade",
+        "termsDays": "{count} gün",
+        "issueNow": "Faturayı şimdi düzenle",
+        "issueNowHint": "Fatura bir numara alır ve hemen gönderilebilir.",
+        "draftHint": "Düzenlemeden önce kontrol etmek için taslak olarak bırakın.",
+        "includeShipping": "Kargoyu bu faturayla faturalandır",
+        "problems": {
+          "nothing": "En az bir kalemde sıfırdan büyük bir miktar seçin.",
+          "issueDateInvalid": "Geçerli bir düzenleme tarihi girin.",
+          "dueDateInvalid": "Geçerli bir vade tarihi girin.",
+          "dueBeforeIssue": "Vade tarihi, düzenleme tarihinden önce olamaz."
+        }
+      },
+      "fulfilDialog": {
+        "title": "Teslimatı kaydet",
+        "intro": "Alıcıya teslim edilen şeyi kaydedin. Teslimat, faturalandırmadan ayrı izlenir: hangisi önce gelirse gelsin.",
+        "record": "Teslimatı kaydet",
+        "note": "Not",
+        "noteHint": "İsteğe bağlı, örneğin bir irsaliye numarası.",
+        "problems": {
+          "nothing": "En az bir kalemde sıfırdan büyük bir miktar seçin.",
+          "noteTooLong": "Notu {max} karakterin altında tutun."
+        }
+      },
+      "detail": {
+        "noAccessTitle": "Erişim yok",
+        "noAccess": "Satış siparişlerini görme izniniz yok.",
+        "loading": "Sipariş yükleniyor",
+        "back": "Satış siparişlerine dön",
+        "noBuyer": "Alıcı yok",
+        "edit": "Düzenle",
+        "confirm": "Siparişi onayla",
+        "recordDelivery": "Teslimatı kaydet",
+        "invoice": "Faturala...",
+        "more": "Diğer işlemler",
+        "cancel": "Siparişi iptal et",
+        "delete": "Taslağı sil",
+        "cancelledOn": "{date} tarihinde iptal edildi",
+        "draftHint": "Bu sipariş bir taslak. Fiyatlarını kilitlemek ve faturalandırma ile teslimata başlamak için onaylayın.",
+        "notes": "Notlar",
+        "terms": "Şartlar",
+        "progress": "İlerleme",
+        "invoiced": "Faturalandırıldı",
+        "fulfilled": "Teslim edildi"
+      },
+      "lines": {
+        "title": "Kalemler",
+        "scrollArea": "Sipariş kalemleri",
+        "item": "Ürün",
+        "ordered": "Sipariş edilen",
+        "invoiced": "Faturalandırılan",
+        "fulfilled": "Teslim edilen",
+        "toInvoice": "Faturalandırılacak",
+        "unitPrice": "Birim fiyat",
+        "amount": "Tutar",
+        "taxLine": "{name} {rate}%",
+        "taxRate": "Vergi {rate}%",
+        "invoicedBar": "{name} faturalandırılan payı",
+        "fulfilledBar": "{name} teslim edilen payı"
+      },
+      "totals": {
+        "title": "Toplamlar",
+        "subtotal": "Ara toplam",
+        "discount": "İndirim",
+        "shipping": "Kargo",
+        "shippingBilled": "Faturalandırılan",
+        "shippingPending": "İlk faturayla birlikte faturalandırıldı",
+        "tax": "Vergi",
+        "total": "Toplam"
+      },
+      "info": {
+        "title": "Ayrıntılar",
+        "buyer": "Alıcı",
+        "email": "E-posta",
+        "phone": "Telefon",
+        "quote": "Teklif",
+        "deal": "Fırsat",
+        "owner": "Sahip",
+        "reference": "Referans",
+        "expected": "Beklenen",
+        "created": "Oluşturuldu",
+        "confirmed": "Onaylandı"
+      },
+      "invoices": {
+        "title": "Bu siparişten oluşturulan faturalar",
+        "none": "Bu siparişten henüz bir fatura oluşturulmadı.",
+        "noneDraft": "Faturalar, sipariş onaylandıktan sonra oluşturulabilir.",
+        "draft": "Taslak",
+        "voidNote": "İptal edilen bir fatura, miktarlarını siparişe geri verir."
+      },
+      "builder": {
+        "noAccessTitle": "Erişim yok",
+        "noAccess": "Satış siparişlerini değiştirme izniniz yok.",
+        "loading": "Yükleniyor",
+        "frozen": "Bu sipariş onaylandığı için kalemleri ve fiyatları kilitli. Bunları değiştirmek için siparişi iptal edip yeni bir sipariş başlatın.",
+        "openOrder": "Siparişi aç",
+        "back": "Geri",
+        "editTitle": "{number} düzenle",
+        "newTitle": "Yeni satış siparişi",
+        "unsaved": "Kaydedilmemiş değişiklikler",
+        "cancel": "Vazgeç",
+        "saveChanges": "Değişiklikleri kaydet",
+        "createDraft": "Taslak oluştur",
+        "conflict": "Siz düzenlerken bu taslağı başka biri değiştirdi. Onların sürümünü görmek için yenileyin; buradaki düzenlemeleriniz kaybolur.",
+        "reload": "Yenile",
+        "saved": "Taslak kaydedildi.",
+        "created": "{number} numaralı sipariş taslak olarak oluşturuldu.",
+        "fixProblems": "Önce vurgulanan alanları düzeltin.",
+        "serverRejected": "Sunucu bazı değerleri kabul etmedi. Alanları kontrol edip yeniden deneyin.",
+        "startFrom": "Şuradan başla",
+        "source": {
+          "scratch": "Boş bir sipariş",
+          "quote": "Kabul edilmiş bir teklif veya tahmin"
+        },
+        "loadingQuote": "Teklif yükleniyor...",
+        "buyer": "Alıcı",
+        "contact": "Kişi",
+        "contactHint": "Siparişi bir kişiye bağlamak için kişi seçin veya alıcıyı aşağıya yazın.",
+        "buyerName": "Alıcı adı",
+        "fromQuoteHint": "Boş bırakılırsa teklifin alıcısı kullanılır.",
+        "buyerEmail": "E-posta",
+        "buyerPhone": "Telefon",
+        "details": "Sipariş ayrıntıları",
+        "currency": "Para birimi",
+        "currencyHint": "USD veya KWD gibi üç harf.",
+        "currencyLocked": "Sipariş oluşturulduktan sonra sabitlenir.",
+        "expectedDate": "Beklenen tarih",
+        "expectedHint": "Alıcının teslimat beklediği tarih.",
+        "reference": "Referans",
+        "referenceHint": "Örneğin alıcının satın alma sipariş numarası.",
+        "linesFromQuote": "Kalemler",
+        "linesFromQuoteHint": "Sipariş, kabul edilen teklifin kalemlerini, fiyatlarını ve vergilerini alır; teklifin belge indirimi kalemlere işlenir. Taslak oluşturulduktan sonra kalemlerini yine düzenleyebilirsiniz.",
+        "lineItems": "Kalemler",
+        "shippingNotes": "Kargo, notlar ve şartlar",
+        "shipping": "Kargo ({currency})",
+        "shippingHint": "İlk faturayla birlikte faturalandırılır.",
+        "notes": "Notlar",
+        "notesHint": "Siparişte gösterilir.",
+        "terms": "Şartlar",
+        "termsHint": "Bu siparişten oluşturulan faturalara aktarılır.",
+        "draftNote": "Onaylayana kadar sipariş taslak kalır. Onaylamak fiyatlarını kilitler.",
+        "quoteTotals": "Teklif toplamları",
+        "quoteTotalsNote": "Kabul edilen teklifteki gibi. Siparişin kendi tutarları oluşturulduktan sonra görünür.",
+        "subtotal": "Ara toplam",
+        "discount": "İndirim",
+        "tax": "Vergi",
+        "total": "Toplam",
+        "openExisting": "{number} numaralı siparişi aç",
+        "viewOrders": "Tüm siparişleri gör",
+        "pickAnother": "Başka bir teklif seç",
+        "problems": {
+          "buyerRequired": "Bir kişi seçin veya alıcının adını yazın.",
+          "emailInvalid": "Geçerli bir e-posta adresi girin.",
+          "currencyInvalid": "Üç harfli bir para birimi kodu girin.",
+          "expectedDateInvalid": "Geçerli bir tarih girin.",
+          "shippingInvalid": "Geçerli bir tutar girin.",
+          "noLines": "En az bir kalem ekleyin.",
+          "referenceTooLong": "Referansı 191 karakterin altında tutun."
+        },
+        "lineProblems": {
+          "descriptionRequired": "Bu kalemi açıklayın.",
+          "qtyInvalid": "Sıfırdan büyük bir miktar girin.",
+          "priceInvalid": "Geçerli bir fiyat girin.",
+          "lineDiscountInvalid": "Geçerli bir indirim girin.",
+          "hsnRequired": "HSN/SAC kodunu girin.",
+          "hsnInvalid": "Geçerli bir HSN/SAC kodu girin.",
+          "taxRateRemoved": "Bu kalemin vergi oranı artık yok. Güncel bir oran seçin."
+        }
+      },
+      "quotePicker": {
+        "search": "Kabul edilen tekliflerde ara",
+        "results": "Kabul edilen teklifler ve tahminler",
+        "loading": "Teklifler yükleniyor",
+        "noMatch": "Eşleşen kabul edilmiş teklif yok.",
+        "none": "Henüz kabul edilmiş bir teklif veya tahmin yok.",
+        "kind": {
+          "proposal": "Teklif",
+          "estimate": "Tahmin"
+        },
+        "untitled": "Adsız",
+        "accepted": "Kabul tarihi {date}"
+      }
+    }
+  }
+}

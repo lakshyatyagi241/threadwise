@@ -1,0 +1,446 @@
+{
+  "team-inbox-conversations": {
+    "nav": {
+      "inbox": "受信箱"
+    },
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "screen": {
+      "listRegion": "会話",
+      "panelRegion": "連絡先とメモ",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "conflict": "先に別のユーザーがこの会話を変更しました。会話を再読み込みしました。もう一度お試しください。",
+      "assigned": "会話を担当者に割り当てました。",
+      "assignedToYou": "あなたに割り当てられました。",
+      "unassigned": "会話の担当を解除しました。",
+      "resolved": "会話を解決済みにしました。",
+      "reopened": "会話を再開しました。",
+      "deleteNoteTitle": "このメモを削除しますか？",
+      "deleteNoteMessage": "このメモはチーム全員から削除されます。この操作は元に戻せません。",
+      "deleteNoteConfirm": "メモを削除",
+      "pickTitle": "会話を選択",
+      "pickMessage": "リストから会話を選ぶと内容を確認して返信できます。新しいメッセージはここに自動で表示されます。",
+      "shortcuts": "ショートカット: j と k でリストを移動、e で解決、/ で検索。",
+      "teamChanged": "チームを更新しました。"
+    },
+    "list": {
+      "title": "受信箱",
+      "refresh": "リストを更新",
+      "openSimulator": "カスタマーシミュレーターを開く",
+      "search": "会話を検索",
+      "searchPlaceholder": "名前または番号を検索",
+      "tabsLabel": "会話ビュー",
+      "tabs": {
+        "all": "すべて",
+        "mine": "自分の会話",
+        "unassigned": "未割り当て",
+        "unread": "未読"
+      },
+      "statusFilter": "ステータス",
+      "statusOpen": "未対応",
+      "statusAll": "すべてのステータス",
+      "status": {
+        "open": "未対応",
+        "pending": "保留中",
+        "snoozed": "スヌーズ中",
+        "resolved": "解決済み",
+        "closed": "解決済み",
+        "spam": "スパム"
+      },
+      "priority": {
+        "low": "低",
+        "normal": "通常",
+        "high": "高",
+        "urgent": "緊急"
+      },
+      "channelFilter": "チャネル",
+      "allChannels": "すべてのチャネル",
+      "archived": "アーカイブ",
+      "backToInbox": "受信箱に戻る",
+      "loading": "会話を読み込んでいます",
+      "retry": "再試行",
+      "listLabel": "会話",
+      "loadMore": "さらに読み込む",
+      "moreFailed": "追加の会話を読み込めませんでした。",
+      "unreadCount": "{count, plural, other {未読メッセージ #件}}",
+      "you": "あなた:",
+      "noMessages": "まだメッセージはありません",
+      "windowClosed": "返信期間が終了",
+      "windowLeftHours": "残り {hours}時間 {minutes}分",
+      "windowLeftMinutes": "残り {minutes}分",
+      "unassigned": "未割り当て",
+      "needsContact": "連絡先の記録がありません",
+      "gettingStarted": {
+        "title": "チャネルを接続して開始",
+        "message": "お客様が接続済みのチャネルにメッセージを送ると、受信箱に表示されます。チャネルを接続すると、すべての会話がここに届きます。",
+        "connect": "チャネルを接続"
+      },
+      "emptyFiltered": {
+        "title": "一致する会話はありません",
+        "message": "条件に一致するものがありません。フィルターをクリアするとすべての会話が表示されます。",
+        "clear": "フィルターをクリア"
+      },
+      "empty": {
+        "all": {
+          "title": "会話はまだありません",
+          "message": "お客様がいずれかのチャネルにメッセージを送ると、会話がここに表示されます。"
+        },
+        "mine": {
+          "title": "あなたに割り当てられた会話はありません",
+          "message": "あなたに割り当てられた会話がここに表示されます。「すべて」から会話を開き、自分に割り当ててください。"
+        },
+        "unassigned": {
+          "title": "すべての会話に担当者がいます",
+          "message": "まだ誰も対応していない新しい会話がここに表示されます。"
+        },
+        "unread": {
+          "title": "すべて確認済みです",
+          "message": "お客様から新しいメッセージが届いた会話がここに表示されます。"
+        }
+      }
+    },
+    "status": {
+      "received": "受信済み",
+      "queued": "送信中",
+      "sent": "送信済み",
+      "delivered": "配信済み",
+      "read": "既読",
+      "failed": "未送信"
+    },
+    "errors": {
+      "conflict": "先に別のユーザーがこの内容を変更しました。再読み込みしました。もう一度お試しください。",
+      "windowClosed": "24時間の返信期間が終了したため、自由形式のメッセージは送信できません。",
+      "planLimit": "ご利用のプランの月間メッセージ上限に達しました。",
+      "channelDisconnected": "このチャネルは切断されています。メッセージを送信するには再接続してください。",
+      "sendHalted": "現在、プラットフォーム全体で送信が一時停止中です。しばらくしてから、もう一度お試しください。",
+      "notFound": "この会話は存在しないか、閲覧する権限がありません。",
+      "notRetryable": "送信に失敗したメッセージのみ再送できます。",
+      "mediaNotFound": "添付ファイルの有効期限が切れたか、削除されました。もう一度添付してください。",
+      "statusInvalid": "会話の現在のステータスからは、その変更は行えません。",
+      "assigneeInvalid": "その人はこの会話の担当者に指定できません。",
+      "forbidden": "その操作を行う権限がありません。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
+      "simulatorDisabled": "このサーバーではチャネルシミュレーターは無効になっています。",
+      "channelInUse": "このチャネルには会話が残っています。削除せず、切断してください。",
+      "validation": "入力内容の一部が正しくありません。",
+      "tooLarge": "ファイルが大きすぎます。",
+      "unsupported": "このチャネルではその種類のメッセージやファイルは送信できません。",
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "generic": "問題が発生しました。もう一度お試しください。",
+      "genericWithId": "問題が発生しました。もう一度お試しください。参照: {id}",
+      "templateNotSendable": "そのテンプレートはこの会話には送信できません。別のテンプレートを選択してください。",
+      "groupSendUnavailable": "WhatsApp グループへの送信はまだ利用できません。WhatsApp Business アプリから返信してください。"
+    },
+    "bubble": {
+      "kind": {
+        "image": "写真",
+        "text": "メッセージ",
+        "attachment": "添付ファイル"
+      },
+      "template": "テンプレートメッセージ: {name}",
+      "unavailable": "メッセージを表示できません",
+      "sentIn": "{lang} で送信されました。入力したテキストを表示",
+      "translatedFrom": "{lang} から翻訳されました。原文を表示",
+      "bot": "ボット",
+      "broadcast": "一斉配信",
+      "reacted": "リアクション {emoji}",
+      "edited": "編集済み",
+      "failed": "このメッセージは配信されませんでした。",
+      "retry": "再試行",
+      "sending": "送信中",
+      "dismiss": "閉じる",
+      "noteLabel": "内部メモ",
+      "unknownAuthor": "チームメイト",
+      "deleteNote": "このメモを削除",
+      "templateHeader": {
+        "image": "画像",
+        "video": "動画",
+        "document": "ドキュメント",
+        "location": "位置情報"
+      },
+      "templateCopyCode": "コードをコピー",
+      "templateButtonUnnamed": "ボタン",
+      "templateButtonPrefix": "ボタン: "
+    },
+    "media": {
+      "openImage": "画像 {name} を開く",
+      "video": "動画",
+      "voice": "ボイスメッセージ",
+      "audio": "音声",
+      "document": "ドキュメント",
+      "download": "{name} をダウンロード",
+      "location": "共有された位置情報",
+      "openMap": "OpenStreetMap で開く"
+    },
+    "thread": {
+      "title": "会話",
+      "back": "会話一覧に戻る",
+      "loading": "会話を読み込んでいます",
+      "retry": "再試行",
+      "notFound": {
+        "title": "会話が見つかりません",
+        "message": "削除されたか、閲覧できない会話です。一覧から別の会話を選択してください。"
+      },
+      "status": {
+        "resolved": "解決済み",
+        "closed": "終了",
+        "spam": "スパム",
+        "snoozed": "スヌーズ中"
+      },
+      "assignToMe": "自分に割り当てる",
+      "resolve": "解決",
+      "reopen": "再開",
+      "resolveShortcut": "解決または再開 (e)",
+      "showPanel": "連絡先とメモを表示",
+      "hidePanel": "連絡先とメモを非表示",
+      "window": {
+        "closed": "返信期間が終了",
+        "closesInHours": "残り {hours}時間 {minutes}分で終了",
+        "closesInMinutes": "残り {minutes}分で終了"
+      },
+      "windowBanner": {
+        "title": "24時間の返信期間が終了しました。",
+        "message": "このチャネルでは、お客様の最後のメッセージから24時間を過ぎると、承認済みのテンプレートメッセージのみ送信できます。内部メモは引き続き追加できます。お客様から新しいメッセージが届くと、返信期間が再開されます。",
+        "sendTemplate": "テンプレートを送信"
+      },
+      "readOnly": "この会話は閲覧できますが、返信する権限がありません。",
+      "typing": "{count, plural, other {# 人のチームメイトが入力中}}",
+      "messagesLabel": "メッセージ",
+      "loadOlder": "以前のメッセージを読み込む",
+      "empty": "この会話にはまだメッセージがありません。",
+      "newMessageAnnounce": "新しいメッセージ: {text}",
+      "attachment": "添付ファイル",
+      "jumpLatest": "最新へ移動",
+      "jumpLatestNew": "{count, plural, other {新しいメッセージ #件}}"
+    },
+    "composer": {
+      "modeLabel": "メッセージの種類",
+      "mode": {
+        "reply": "返信",
+        "note": "内部メモ"
+      },
+      "attach": "ファイルを添付",
+      "removeAttachment": "添付ファイルを削除",
+      "replyLabel": "お客様へ返信",
+      "noteLabel": "内部メモ",
+      "replyPlaceholder": "メッセージを入力",
+      "notePlaceholder": "チームだけが見られるメモを入力",
+      "replyDisabledPlaceholder": "この会話では返信は無効になっています",
+      "send": "送信",
+      "addNote": "メモを追加",
+      "hint": "Enterで送信、Shift+Enterで改行します。",
+      "template": "テンプレートを送信",
+      "groupSendUnavailable": "WhatsApp グループへの送信はまだ利用できません。WhatsApp Business アプリから返信してください。"
+    },
+    "panel": {
+      "tabsLabel": "メモとタイムライン",
+      "contact": "連絡先",
+      "openContact": "連絡先を開く",
+      "needsContact": "連絡先の上限に達したため、この番号の連絡先レコードはありません。",
+      "noContact": "この会話は連絡先にリンクされていません。",
+      "email": "メールアドレス",
+      "stage": "ステージ",
+      "status": "ステータス",
+      "source": "ソース",
+      "since": "連絡先登録日",
+      "optedOut": "マーケティングの配信停止済み",
+      "resolve": "解決",
+      "reopen": "再開",
+      "assignee": {
+        "title": "担当者",
+        "unknown": "不明なチームメイト",
+        "none": "この会話の担当者はいません",
+        "team": "チーム: {name}",
+        "pick": "この会話の担当者を選択",
+        "unassigned": "未割り当て",
+        "you": "あなた",
+        "loadFailed": "チームメイトの一覧を読み込めませんでした。",
+        "assignToMe": "自分に割り当てる",
+        "unassign": "割り当てを解除",
+        "open": "未対応 {count} 件",
+        "pickTeam": "この会話のチームを選択",
+        "noTeam": "チームなし"
+      },
+      "presence": {
+        "online": "オンライン",
+        "away": "離席中",
+        "busy": "取り込み中",
+        "offline": "オフライン"
+      },
+      "notes": {
+        "tab": "メモ",
+        "label": "新しい内部メモ",
+        "placeholder": "チームだけが見られるメモを入力",
+        "hint": "Ctrl+Enter でメモを追加します。",
+        "add": "メモを追加",
+        "addFailed": "メモを保存できませんでした。",
+        "loading": "メモを読み込んでいます",
+        "empty": "メモはまだありません。",
+        "unknownAuthor": "チームメイト",
+        "delete": "このメモを削除"
+      },
+      "timeline": {
+        "tab": "タイムライン",
+        "loading": "タイムラインを読み込んでいます",
+        "failed": "タイムラインを読み込めませんでした。",
+        "retry": "再試行",
+        "empty": "この会話ではまだ何も起きていません。",
+        "events": {
+          "created": "会話が開始されました",
+          "assigned": "{actor} が割り当て",
+          "reassigned": "{actor} が担当者を変更",
+          "unassigned": "{actor} が割り当てを解除",
+          "ai_handoff": "{actor} が担当者に引き継ぎ",
+          "resolved": "{actor} が解決",
+          "closed": "{actor} が終了",
+          "reopened": "{actor} が再開",
+          "status_changed": "{actor} がステータスを変更",
+          "note_added": "{actor} がメモを追加",
+          "snoozed": "{actor} がスヌーズ",
+          "auto_unsnoozed": "スヌーズが終了しました",
+          "priority_changed": "{actor} が優先度を変更",
+          "tag_added": "{actor} がラベルを追加",
+          "tag_removed": "{actor} がラベルを削除",
+          "first_response": "最初の返信を送信しました",
+          "sla_breach": "返信期限を超過しました",
+          "unknown": "{actor} による{what}"
+        },
+        "actors": {
+          "user": "チームメイト",
+          "system": "システム",
+          "bot": "ボット",
+          "flow": "オートメーション",
+          "ai": "AI アシスタント"
+        }
+      },
+      "owner": "担当者",
+      "past": {
+        "title": "過去の会話",
+        "noMessages": "メッセージなし",
+        "status": {
+          "open": "未対応",
+          "pending": "保留中",
+          "snoozed": "スヌーズ中",
+          "resolved": "解決済み",
+          "closed": "終了",
+          "spam": "スパム"
+        }
+      }
+    },
+    "simulator": {
+      "title": "カスタマーシミュレーター",
+      "close": "シミュレーターを閉じる",
+      "devOnly": "開発専用です。シミュレートされたチャネルでお客様を装います。実際の電話には何も届きません。",
+      "noChannel": "シミュレーター用のチャネルはまだありません。",
+      "createChannel": "シミュレーター用チャネルを作成",
+      "disabled": "このサーバーではシミュレーターが無効になっています。",
+      "channel": "シミュレーター用チャネル",
+      "customer": "お客様",
+      "name": "名前",
+      "number": "番号",
+      "numberHint": "数字のみ、5〜15桁。",
+      "kind": "メッセージの種類",
+      "kinds": {
+        "text": "テキスト",
+        "image": "画像",
+        "document": "ドキュメント",
+        "audio": "音声",
+        "video": "動画",
+        "location": "位置情報"
+      },
+      "file": "ファイル",
+      "fileHint": "任意。ファイル名と種類が使われます。指定しない場合はサンプルファイルが送信されます。",
+      "message": "メッセージ",
+      "caption": "キャプション",
+      "placeName": "場所の名前",
+      "send": "お客様として送信",
+      "sent": "{count, plural, other {# 回配信されました。保存は 1 件です。}}",
+      "duplicate": "重複配信",
+      "duplicateHint": "同じメッセージを3回配信し、1件のみ保存されることを確認します。",
+      "nextSend": "次の返信",
+      "nextSendHint": "コンポーザーから次に送信するメッセージに適用され、その後は通常に戻ります。",
+      "faults": {
+        "none": "通常",
+        "fail": "失敗",
+        "flaky": "2回失敗後に成功",
+        "slow": "遅延 (10秒)",
+        "ooo": "配信通知の順序が不正"
+      },
+      "window": "24時間の返信期間",
+      "windows": {
+        "auto": "自動",
+        "open": "強制的に開く",
+        "closed": "強制的に閉じる"
+      },
+      "windowHint": "「閉じる」は、テンプレートのみ送信できる場合にコンポーザーがどう動作するかを示します。"
+    },
+    "channels": {
+      "title": "チャネル",
+      "intro": "お客様があなたに連絡する際のアカウントです。各チャネルの会話が受信箱に届きます。",
+      "backToInbox": "受信箱に戻る",
+      "simulatorNote": "開発用: 実際のアカウントを使わずに受信箱を試せるよう、シミュレートされたチャネルを追加します。",
+      "addSimulator": "シミュレーター用チャネルを追加",
+      "simulatorAdded": "シミュレーター用チャネルを追加しました。",
+      "simulatorDisabled": "このサーバーではシミュレーターが無効になっています。",
+      "loading": "チャネルを読み込んでいます",
+      "loadFailed": "チャネルを読み込めませんでした。",
+      "retry": "再試行",
+      "empty": {
+        "title": "接続済みのチャネルはありません",
+        "message": "チャネルを接続すると、お客様からのメッセージが受信箱に届き始めます。"
+      },
+      "listLabel": "接続済みのチャネル",
+      "status": {
+        "connected": "接続済み",
+        "disconnected": "切断済み",
+        "error": "エラー"
+      },
+      "capWindow": "{hours} 時間の返信期間",
+      "capTemplates": "テンプレート",
+      "capMedia": "メディア",
+      "capReceipts": "配信通知",
+      "lastEvent": "最終アクティビティ {when}",
+      "noEvents": "アクティビティはまだありません",
+      "remove": "削除",
+      "removeTitle": "このチャネルを削除しますか？",
+      "removeMessage": "{name} が削除されます。会話が残っているチャネルは削除できません。その場合は切断してください。",
+      "removeConfirm": "チャネルを削除",
+      "cancel": "キャンセル"
+    },
+    "templates": {
+      "eyebrow": "WhatsApp",
+      "title": "テンプレートを送信",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "back": "テンプレートに戻る",
+      "search": "名前またはテキストで検索",
+      "searchLabel": "テンプレートを検索",
+      "loading": "テンプレートを読み込んでいます",
+      "loadError": "テンプレートを読み込めませんでした。",
+      "retry": "再試行",
+      "empty": "この WhatsApp 番号には承認済みのテンプレートがまだありません。テンプレートで作成し、Meta の承認をお待ちください。",
+      "noResults": "検索に一致するテンプレートはありません。",
+      "windowHint": "テンプレートは、24時間の返信期間が終了していても送信できます。",
+      "variables": "変数を入力",
+      "preview": "お客様に表示される内容",
+      "send": "テンプレートを送信",
+      "sending": "送信中",
+      "sent": "テンプレートを送信しました",
+      "problem": {
+        "required": "{label} は必須です。",
+        "format": "{label} に改行、タブ、連続する4つのスペースを含めることはできません。"
+      },
+      "reason": {
+        "paused": "WhatsApp により一時停止されています。一時停止が解除されると再送信できます。",
+        "media_header": "画像、動画、ドキュメントのヘッダーがあります。受信箱からはまだ送信できません。",
+        "header_variable": "ヘッダーに変数があります。受信箱からはまだ入力できません。",
+        "dynamic_button": "変数を含むボタンリンクがあります。受信箱からはまだ入力できません。",
+        "authentication": "ワンタイムパスワードのテンプレートはシステムが送信するもので、受信箱からは送信しません。",
+        "named_variables": "名前付き変数を使用しています。受信箱ではまだサポートされていません。"
+      },
+      "hasMore": "最初の {count} 件のテンプレートを表示しています。他のテンプレートは名前またはテキストで検索してください。"
+    }
+  }
+}

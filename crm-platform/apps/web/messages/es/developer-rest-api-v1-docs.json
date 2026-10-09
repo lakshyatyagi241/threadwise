@@ -1,0 +1,107 @@
+{
+  "developer-rest-api-v1-docs": {
+    "metaTitle": "Referencia de la API de {brand}",
+    "metaDescription": "La referencia de la API REST de {brand}: autenticación, límites de uso y todos los endpoints con ejemplos de solicitud y respuesta.",
+    "common": {
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "copyFailed": "No se pudo copiar. Selecciona el texto y cópialo manualmente."
+    },
+    "topbar": {
+      "home": "Inicio de {brand}",
+      "apiWord": "API",
+      "version": "v1",
+      "spec": "Especificación OpenAPI",
+      "getKey": "Obtener una clave de API"
+    },
+    "sidebar": {
+      "label": "Navegación de la referencia",
+      "filterLabel": "Filtrar endpoints",
+      "filterPlaceholder": "Filtrar endpoints…",
+      "startHere": "Empieza aquí",
+      "intro": "Introducción",
+      "auth": "Autenticación",
+      "webhooks": "Webhooks"
+    },
+    "hero": {
+      "eyebrow": "Referencia para desarrolladores",
+      "title": "La <em>API REST</em> de {brand}",
+      "lead": "Una única API REST para enviar mensajes de WhatsApp, lanzar difusiones y campañas, administrar contactos y plantillas, activar flujos de automatización y consultar tu cuenta: todo lo que tu CRM, plataforma de automatización o app necesita.",
+      "baseUrl": "URL base",
+      "copyBaseUrl": "Copiar la URL base"
+    },
+    "capabilities": {
+      "title": "Qué puedes hacer",
+      "send": {
+        "title": "Enviar mensajes",
+        "body": "Envíos individuales, difusiones, campañas y envíos programados"
+      },
+      "receive": {
+        "title": "Recibir mensajes",
+        "body": "Leer conversaciones entrantes y sus mensajes"
+      },
+      "contacts": {
+        "title": "Contactos y leads",
+        "body": "Crear, leer, actualizar y eliminar, grupos y atributos personalizados"
+      },
+      "templates": {
+        "title": "Plantillas",
+        "body": "Crear, actualizar y listar plantillas de WhatsApp"
+      },
+      "flows": {
+        "title": "Flujos de automatización",
+        "body": "Inscribir un contacto en un flujo mediante la API"
+      },
+      "status": {
+        "title": "Estado de entrega",
+        "body": "Enviado, entregado, leído y fallido por mensaje"
+      },
+      "devices": {
+        "title": "Dispositivos",
+        "body": "Listar los números conectados y su estado"
+      },
+      "account": {
+        "title": "Cuenta y uso",
+        "body": "Plan, límites y créditos de mensajes"
+      }
+    },
+    "auth": {
+      "title": "Autenticación",
+      "intro": "Cada solicitud se autentica con una <strong>clave de API</strong> del espacio de trabajo. Crea una en el panel, en <strong>Ajustes, API REST</strong>. Envíala como token Bearer:",
+      "copyHeader": "Copiar el encabezado",
+      "alt": "También puedes pasarla en un encabezado <code>X-Api-Key</code>. Las claves pertenecen a un solo espacio de trabajo y solo se guarda su hash, así que copia la clave al crearla: no se puede volver a mostrar. Las claves se pueden revocar en cualquier momento y dejan de funcionar de inmediato."
+    },
+    "webhooks": {
+      "title": "Webhooks y eventos en tiempo real",
+      "comingTitle": "La entrega por webhook llegará pronto",
+      "comingBody": "Aún no es posible registrar un webhook ni recibir eventos en tu propia URL. Hoy no se envía ningún evento a tu servidor, así que no hay nada a lo que suscribirse. Esta tarjeta mostrará los eventos y el encabezado de firma cuando la entrega esté activa.",
+      "rateLabel": "Límites de uso",
+      "rate": "Cada clave está sujeta al límite por minuto del plan del espacio de trabajo; cuando el plan no define ninguno, se aplica el valor predeterminado de la plataforma de {limit} solicitudes por minuto. Cada respuesta incluye <code>X-RateLimit-Limit</code> y <code>X-RateLimit-Remaining</code>, y una solicitud que supera el límite recibe HTTP 429 y un encabezado <code>Retry-After</code>. Los envíos salientes también consumen los créditos de mensajes de tu plan."
+    },
+    "reference": {
+      "title": "Endpoints",
+      "count": "{count, plural, one {# endpoint} other {# endpoints}}",
+      "noMatch": "Ningún endpoint coincide con “{query}”.",
+      "clearFilter": "Borrar el filtro",
+      "empty": "Aún no hay endpoints publicados. Vuelve pronto.",
+      "unavailableTitle": "No se pudo cargar la referencia de endpoints",
+      "unavailableBody": "La especificación de la API no está disponible en este momento. La introducción anterior sigue vigente. Inténtalo de nuevo en un momento.",
+      "retry": "Reintentar",
+      "general": "General",
+      "toggle": "Mostrar u ocultar los detalles de {method} {path}",
+      "parameters": "Parámetros",
+      "bodyParameters": "Parámetros del cuerpo",
+      "name": "Nombre",
+      "field": "Campo",
+      "description": "Descripción",
+      "required": "obligatorio",
+      "exampleRequest": "Ejemplo de solicitud",
+      "requestBody": "Cuerpo de la solicitud",
+      "responses": "Respuestas",
+      "copyCurl": "Copiar la solicitud",
+      "copyJson": "Copiar el JSON",
+      "noExample": "La especificación no incluye un ejemplo para esta respuesta."
+    },
+    "footer": "API REST de {brand} · v1 · generada a partir de la especificación OpenAPI en vivo"
+  }
+}

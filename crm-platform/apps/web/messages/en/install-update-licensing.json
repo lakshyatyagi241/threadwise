@@ -246,7 +246,10 @@
       }
     },
     "system": {
-      "nav": { "group": "System", "item": "Updater" },
+      "nav": {
+        "group": "System",
+        "item": "Updater"
+      },
       "title": "Application updater",
       "titleRich": "Application <i>updater</i>.",
       "titleAccent": "updater",
@@ -355,7 +358,8 @@
         "id": "Migration",
         "stateLabel": "State",
         "appliedAt": "Applied at"
-      }
+      },
+      "breadcrumb": "Breadcrumb"
     }
   }
 }

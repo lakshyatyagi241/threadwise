@@ -1,0 +1,1742 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "การตั้งค่าแพลตฟอร์ม",
+      "hub": "ศูนย์การตั้งค่า",
+      "general": "ทั่วไป",
+      "appearance": "รูปลักษณ์และสี",
+      "siteInfo": "ข้อมูลเว็บไซต์",
+      "footer": "ส่วนท้ายหน้า",
+      "mail": "อีเมล",
+      "seo": "SEO",
+      "privacy": "ความเป็นส่วนตัว, GDPR และ ADA",
+      "analytics": "การวิเคราะห์ข้อมูล",
+      "custom": "โค้ดที่กำหนดเอง",
+      "pwa": "PWA",
+      "storage": "พื้นที่จัดเก็บบนคลาวด์",
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "แคมเปญ",
+      "googleCalendar": "Google Calendar",
+      "flowBuilder": "ตัวสร้างโฟลว์"
+    },
+    "hub": {
+      "kicker": "ผู้ดูแลระบบ - การตั้งค่าโปรเจกต์",
+      "title": "การตั้งค่าโปรเจกต์",
+      "description": "กำหนดค่าข้อมูลแอป ผู้ให้บริการข้อความ อีเมล การเชื่อมต่ออีคอมเมิร์ซ ข้อมูลหน้าร้าน เนื้อหาส่วนท้ายหน้า PWA SEO และโค้ดที่กำหนดเอง",
+      "export": "ส่งออกการตั้งค่า",
+      "exporting": "กำลังส่งออก",
+      "exportHint": "ดาวน์โหลดการตั้งค่าที่บันทึกไว้ทั้งหมด ข้อมูลลับและรหัสบัญชีจะถูกแทนที่",
+      "tiles": {
+        "saved": "การตั้งค่าที่บันทึกไว้",
+        "savedHint": "กลุ่มจาก {total} รายการที่บันทึกไว้",
+        "healthy": "ปกติ",
+        "healthyHint": "ที่มีค่าที่ไม่ว่าง",
+        "needsTest": "ต้องทดสอบ",
+        "needsTestNone": "ตรวจสอบแล้วทั้งหมด",
+        "secrets": "ฟิลด์ข้อมูลลับ",
+        "secretsHint": "เข้ารหัส / ซ่อนไว้",
+        "lastUpdated": "อัปเดตล่าสุด",
+        "lastUpdatedNone": "ยังไม่มีการแก้ไข",
+        "lastUpdatedHint": "บันทึกล่าสุด"
+      },
+      "card": {
+        "saved": "บันทึกแล้ว",
+        "defaults": "ค่าเริ่มต้น",
+        "needsTest": "ต้องทดสอบ",
+        "updated": "อัปเดต {when}",
+        "open": "เปิด"
+      },
+      "others": "การตั้งค่าสกุลเงิน แคตตาล็อก Shopify WooCommerce HubSpot Google Slack การแจ้งเตือนมือถือ และ Trello จะปรากฏที่นี่เมื่อมีการติดตั้งโมดูลนั้นๆ",
+      "actions": {
+        "addons": "ส่วนเสริม",
+        "updater": "ตัวอัปเดต",
+        "legal": "หน้ากฎหมาย",
+        "general": "เปิดการตั้งค่าทั่วไป"
+      }
+    },
+    "common": {
+      "save": "บันทึกการเปลี่ยนแปลง",
+      "saving": "กำลังบันทึก",
+      "saved": "{count, plural, one {บันทึกการเปลี่ยนแปลง 1 รายการแล้ว} other {บันทึกการเปลี่ยนแปลง # รายการแล้ว}}",
+      "rejected": "{count, plural, one {มี 1 ฟิลด์ที่ต้องแก้ไข} other {มี # ฟิลด์ที่ต้องแก้ไข}}",
+      "conflict": "มีผู้อื่นบันทึกการตั้งค่าเหล่านี้หลังจากที่คุณเปิดหน้านี้ โปรดโหลดใหม่เพื่อดูการเปลี่ยนแปลงของเขา แล้วนำการเปลี่ยนแปลงของคุณไปใช้อีกครั้ง",
+      "reload": "โหลดการตั้งค่าใหม่",
+      "unexpected": "เกิดข้อผิดพลาดบางอย่าง และยังไม่ได้บันทึกอะไรเลย",
+      "requestId": "รหัสคำขอ",
+      "readOnly": "คุณสามารถดูการตั้งค่าเหล่านี้ได้ แต่มีเพียงผู้ดูแลระบบสูงสุดเท่านั้นที่เปลี่ยนแปลงได้",
+      "secretSet": "บันทึกแล้ว เว้นว่างไว้เพื่อคงค่าเดิม",
+      "secretUnset": "ยังไม่ได้ตั้งค่า",
+      "secretClear": "ลบค่าที่บันทึกไว้",
+      "secretShow": "แสดง",
+      "secretHide": "ซ่อน",
+      "numberRequired": "กรอกจำนวนเต็ม",
+      "numberInteger": "ใช้จำนวนเต็ม",
+      "updated": "บันทึกล่าสุดเมื่อ {when}",
+      "neverSaved": "ยังไม่เคยบันทึก: กำลังแสดงค่าเริ่มต้น",
+      "back": "การตั้งค่าทั้งหมด",
+      "invalidGroup": "ไม่มีหน้าการตั้งค่านี้",
+      "eyebrow": "ผู้ดูแลระบบ - การตั้งค่าโปรเจกต์",
+      "guide": "คู่มือย่อ",
+      "resetDraft": "รีเซ็ตฉบับร่าง",
+      "cancel": "ยกเลิก",
+      "applyAfterSave": "การเปลี่ยนแปลงจะมีผลหลังจากที่คุณบันทึกเท่านั้น",
+      "saveAndTest": "บันทึกและทดสอบการเชื่อมต่อ",
+      "custom": "กำหนดเอง",
+      "manageLanguages": "จัดการภาษา"
+    },
+    "test": {
+      "title": "ส่งอีเมลทดสอบ",
+      "saveFirst": "โปรดบันทึกการเปลี่ยนแปลงก่อน: การตรวจสอบจะใช้การตั้งค่าที่บันทึกไว้",
+      "mailTo": "ส่งอีเมลทดสอบไปยัง",
+      "mailRun": "ส่งอีเมลทดสอบ",
+      "run": "ทดสอบการเชื่อมต่อ",
+      "running": "กำลังทดสอบ",
+      "ok": "ผ่าน",
+      "failed": "ไม่ผ่าน",
+      "lastOk": "การตรวจสอบสำเร็จล่าสุดเมื่อ {when}",
+      "neverTested": "ยังไม่ได้ตรวจสอบ"
+    },
+    "groups": {
+      "general": {
+        "title": "การตั้งค่าทั่วไป",
+        "description": "ข้อมูลประจำแอปพลิเคชัน ค่าเริ่มต้นของแพลตฟอร์ม และสวิตช์โหมดปิดปรับปรุง",
+        "sections": {
+          "identity": {
+            "title": "ข้อมูลประจำแอปพลิเคชัน"
+          },
+          "defaults": {
+            "title": "ค่าเริ่มต้นของแพลตฟอร์ม"
+          },
+          "platform": {
+            "title": "สวิตช์ของแพลตฟอร์ม"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "ชื่อแอป",
+            "hint": "แสดงในชื่อหน้า อีเมล และแท็บเบราว์เซอร์"
+          },
+          "appUrl": {
+            "label": "URL ของแอป"
+          },
+          "supportEmail": {
+            "label": "อีเมลฝ่ายสนับสนุน",
+            "placeholder": "support@…"
+          },
+          "fromEmail": {
+            "label": "อีเมลผู้ส่ง",
+            "placeholder": "hello@…"
+          },
+          "contactNumber": {
+            "label": "หมายเลขติดต่อ",
+            "placeholder": "+91 …"
+          },
+          "address": {
+            "label": "ที่อยู่"
+          },
+          "mapIframeUrl": {
+            "label": "URL iframe แผนที่",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
+          },
+          "platformFooter": {
+            "label": "ส่วนท้ายของแพลตฟอร์ม",
+            "hint": "จะถูกเพิ่มในข้อความที่แพลตฟอร์มส่งออก เว้นว่างไว้หากไม่ต้องการ"
+          },
+          "defaultTimezone": {
+            "label": "เขตเวลาเริ่มต้น",
+            "hint": "ใช้เมื่อพื้นที่ทำงานหรือบุคคลยังไม่ได้เลือกเขตเวลา"
+          },
+          "defaultLanguage": {
+            "label": "ภาษาเริ่มต้น"
+          },
+          "defaultCurrency": {
+            "label": "สกุลเงินเริ่มต้น"
+          },
+          "defaultCountryCode": {
+            "label": "รหัสประเทศเริ่มต้น",
+            "hint": "รหัสโทรศัพท์ที่มีเครื่องหมายบวก เช่น +91"
+          },
+          "defaultCountryIso": {
+            "label": "ประเทศเริ่มต้น (ตัวเลือกหมายเลขโทรศัพท์)",
+            "hint": "มีผลกับตัวเลือกหมายเลขโทรศัพท์ทุกช่องในแพลตฟอร์ม"
+          },
+          "fontFamily": {
+            "label": "ตระกูลฟอนต์"
+          },
+          "maintenanceMode": {
+            "label": "โหมดปิดปรับปรุง",
+            "hint": "ปิดแอปฝั่งลูกค้าด้วยสถานะ 503 ผู้ดูแล การเข้าสู่ระบบ และการเรียกกลับของเครื่องยังคงทำงานต่อไป"
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "ธีมเริ่มต้น"
+          }
+        }
+      },
+      "branding": {
+        "title": "แบรนด์และรูปลักษณ์",
+        "description": "ไอคอนแท็บ โลโก้แยกตามธีม โทเค็นสี และขนาดอินเทอร์เฟซ",
+        "sections": {
+          "assets": {
+            "title": "ทรัพยากรแบรนด์"
+          },
+          "colors": {
+            "title": "โทเค็นสี"
+          },
+          "interface": {
+            "title": "อินเทอร์เฟซ"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "URL ไอคอนแท็บ (Favicon)"
+          },
+          "logos": {
+            "paper": {
+              "label": "กระดาษ"
+            },
+            "bright": {
+              "label": "สว่างจ้า"
+            },
+            "dark": {
+              "label": "มืด"
+            },
+            "doodle": {
+              "label": "ดูเดิล"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "หลัก",
+              "hint": "การตั้งค่าสีหลักจะเปลี่ยนสีของเฉดสีเขียวน้ำเงิน เขียว มินต์ และฟองแชทด้วย เว้นแต่คุณจะตั้งค่าสีเหล่านั้นด้วย"
+            },
+            "wa-teal": {
+              "label": "หลัก (เมื่อวางเมาส์)"
+            },
+            "wa-green": {
+              "label": "เน้น / สำเร็จ"
+            },
+            "wa-mint": {
+              "label": "พื้นหลังเน้นอ่อน"
+            },
+            "wa-bubble": {
+              "label": "ฟองแชท"
+            },
+            "paper-0": {
+              "label": "พื้นหลังหน้า"
+            },
+            "paper-50": {
+              "label": "พื้นหลังการ์ด / ส่วนรอง"
+            },
+            "paper-100": {
+              "label": "พื้นหลังเมื่อวางเมาส์"
+            },
+            "paper-200": {
+              "label": "เส้นขอบ"
+            },
+            "ink-500": {
+              "label": "ข้อความรอง"
+            },
+            "ink-700": {
+              "label": "ข้อความเนื้อหา"
+            },
+            "ink-900": {
+              "label": "หัวข้อ"
+            },
+            "accent-coral": {
+              "label": "สีเน้น - ส้มปะการัง"
+            },
+            "accent-amber": {
+              "label": "สีเน้น - อำพัน"
+            },
+            "accent-plum": {
+              "label": "สีเน้น - ม่วงพลัม"
+            },
+            "accent-sky": {
+              "label": "สีเน้น - ฟ้าอ่อน"
+            }
+          },
+          "fontScale": {
+            "label": "ขนาดตัวอักษร",
+            "hint": "ขนาดตัวอักษรทั้งอินเทอร์เฟซเป็นเปอร์เซ็นต์ ตั้งแต่ 80 ถึง 130"
+          },
+          "uiOpacity": {
+            "label": "ความทึบ",
+            "hint": "ความทึบของทั้งอินเทอร์เฟซเป็นเปอร์เซ็นต์ ตั้งแต่ 55 ถึง 100"
+          },
+          "dashboardLayout": {
+            "label": "รูปแบบการนำทาง"
+          },
+          "sidebarColor": {
+            "label": "พื้นหลัง"
+          },
+          "sidebarTextColor": {
+            "label": "สีข้อความ"
+          },
+          "sidebarAccentColor": {
+            "label": "สีเน้น"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "แถบด้านบน",
+            "sidebar": "แถบด้านข้าง"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "ปัจจุบัน: เมนูอยู่ด้านบนพร้อมหน้า เพิ่มเติม สำหรับรายการที่ล้นออกมา",
+            "sidebar": "แถบด้านซ้ายแบบผู้ดูแลระบบ จัดกลุ่มฟีเจอร์ทั้งหมดไว้ ไม่มีเมนูด้านบน"
+          }
+        }
+      },
+      "site": {
+        "title": "ข้อมูลเว็บไซต์",
+        "description": "ข้อมูลบริษัท ที่อยู่ติดต่อ โปรไฟล์โซเชียล และส่วนท้ายหน้าสาธารณะ",
+        "sections": {
+          "company": {
+            "title": "บริษัท"
+          },
+          "contact": {
+            "title": "ที่อยู่ติดต่อ"
+          },
+          "social": {
+            "title": "โปรไฟล์โซเชียล"
+          },
+          "footer": {
+            "title": "ส่วนท้ายหน้าสาธารณะ"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "ชื่อบริษัท"
+          },
+          "tagline": {
+            "label": "สโลแกน"
+          },
+          "foundedYear": {
+            "label": "ปีที่ก่อตั้ง"
+          },
+          "address": {
+            "label": "ที่อยู่"
+          },
+          "cityCountry": {
+            "label": "เมือง ประเทศ"
+          },
+          "emailGeneral": {
+            "label": "อีเมลทั่วไป"
+          },
+          "emailSupport": {
+            "label": "อีเมลฝ่ายสนับสนุน"
+          },
+          "emailSales": {
+            "label": "อีเมลฝ่ายขาย"
+          },
+          "emailSecurity": {
+            "label": "อีเมลความปลอดภัย"
+          },
+          "emailCareers": {
+            "label": "อีเมลฝ่ายสมัครงาน"
+          },
+          "phone": {
+            "label": "โทรศัพท์"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "โซเชียล X"
+          },
+          "socialLinkedin": {
+            "label": "โซเชียล LinkedIn"
+          },
+          "socialInstagram": {
+            "label": "โซเชียล Instagram"
+          },
+          "socialYoutube": {
+            "label": "โซเชียล YouTube"
+          },
+          "socialFacebook": {
+            "label": "โซเชียล Facebook"
+          },
+          "socialGithub": {
+            "label": "โซเชียล GitHub"
+          },
+          "footerTitle": {
+            "label": "หัวข้อส่วนท้ายหน้า"
+          },
+          "footerDescription": {
+            "label": "คำอธิบายส่วนท้ายหน้า"
+          },
+          "footerCopyright": {
+            "label": "ข้อความลิขสิทธิ์ส่วนท้ายหน้า"
+          }
+        }
+      },
+      "mail": {
+        "title": "การตั้งค่าอีเมล",
+        "description": "อีเมลขาออก ค่าที่บันทึกไว้จะแทนที่ค่าเริ่มต้นของเซิร์ฟเวอร์ในทุกการส่ง",
+        "sections": {
+          "sender": {
+            "title": "ผู้ส่ง"
+          },
+          "smtp": {
+            "title": "เซิร์ฟเวอร์อีเมล"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "ชื่อผู้ส่ง",
+            "placeholder": "Acme Inc.",
+            "hint": "แสดงให้ผู้รับเห็นเป็นชื่อในช่อง \"จาก\""
+          },
+          "fromAddress": {
+            "label": "อีเมลผู้ส่ง",
+            "placeholder": "hello@yourdomain.com",
+            "hint": "โดเมนต้องมี SPF + DKIM ที่ถูกต้อง มิฉะนั้นอีเมลอาจเข้าสแปม"
+          },
+          "mailer": {
+            "label": "ตัวส่งอีเมล",
+            "hint": "ปัจจุบันใช้งานได้กับ SMTP และ log mailer ส่วนตัวส่งอีเมลผ่าน API ยังไม่ได้เชื่อมต่อ"
+          },
+          "host": {
+            "label": "โฮสต์",
+            "placeholder": "smtp.mailgun.org",
+            "hint": "เว้นว่างไว้เพื่อคงค่าเริ่มต้นของเซิร์ฟเวอร์"
+          },
+          "port": {
+            "label": "พอร์ต",
+            "hint": "587 สำหรับ TLS, 465 สำหรับ SSL, 25 (ไม่แนะนำ)"
+          },
+          "encryption": {
+            "label": "การเข้ารหัส",
+            "hint": "ssl หมายถึง TLS โดยนัย (มักใช้พอร์ต 465) ส่วน tls และ starttls จะอัปเกรดบนพอร์ต 587"
+          },
+          "username": {
+            "label": "ชื่อผู้ใช้",
+            "placeholder": "postmaster@mg.example.com"
+          },
+          "password": {
+            "label": "รหัสผ่าน",
+            "placeholder": "กรอกรหัสผ่าน SMTP",
+            "hint": "เก็บไว้แบบเข้ารหัสและจะไม่แสดงอีก"
+          }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls (พอร์ต 587)",
+            "ssl": "ssl (พอร์ต 465)",
+            "starttls": "starttls",
+            "none": "ไม่มี"
+          }
+        }
+      },
+      "seo": {
+        "title": "การตั้งค่า SEO",
+        "description": "แท็กการค้นหาและการแชร์บนโซเชียลสำหรับเว็บไซต์สาธารณะ",
+        "sections": {
+          "search": {
+            "title": "ผลการค้นหา"
+          },
+          "social": {
+            "title": "การแชร์บนโซเชียล"
+          },
+          "verification": {
+            "title": "การยืนยันเว็บไซต์"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "ชื่อ Meta",
+            "hint": "ขึ้นต้นด้วยชื่อแบรนด์"
+          },
+          "metaDescription": {
+            "label": "คำอธิบาย Meta",
+            "hint": "แสดงใต้ชื่อใน Google",
+            "placeholder": "คำอธิบายสั้นๆ 1–2 ประโยคที่แสดงใต้ชื่อใน Google"
+          },
+          "metaKeywords": {
+            "label": "คีย์เวิร์ด Meta",
+            "placeholder": "whatsapp marketing, whatsapp crm, campaigns, automation, inbox"
+          },
+          "robots": {
+            "label": "คำสั่งสำหรับโรบ็อตการค้นหา",
+            "hint": "บอกโรบ็อตการค้นหาว่าควรแสดงและติดตามลิงก์หรือไม่"
+          },
+          "canonical": {
+            "label": "URL canonical",
+            "placeholder": "https://app.example.com"
+          },
+          "author": {
+            "label": "ผู้เขียน"
+          },
+          "ogTitle": {
+            "label": "ชื่อ Open Graph",
+            "placeholder": "ค่าเริ่มต้นคือชื่อ Meta"
+          },
+          "ogDescription": {
+            "label": "คำอธิบาย Open Graph",
+            "placeholder": "ค่าเริ่มต้นคือคำอธิบาย Meta"
+          },
+          "ogType": {
+            "label": "ประเภท Open Graph"
+          },
+          "ogUrl": {
+            "label": "URL Open Graph",
+            "placeholder": "https://app.example.com"
+          },
+          "ogImage": {
+            "label": "รูปภาพ Open Graph",
+            "hint": "รูปขนาดแนะนำ 1200x630 ใช้โดย Slack, X, WhatsApp, Discord",
+            "placeholder": "https://app.example.com/og.png"
+          },
+          "twitterCard": {
+            "label": "การ์ด Twitter"
+          },
+          "twitterSite": {
+            "label": "เว็บไซต์ Twitter",
+            "placeholder": "@yourbrand"
+          },
+          "twitterCreator": {
+            "label": "ผู้สร้างบน Twitter",
+            "placeholder": "@author"
+          },
+          "googleVerification": {
+            "label": "การยืนยันของ Google",
+            "placeholder": "google-site-verification=…"
+          },
+          "bingVerification": {
+            "label": "การยืนยันของ Bing",
+            "placeholder": "msvalidate.01=…"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "Index, follow — เว็บไซต์สาธารณะ",
+            "index, nofollow": "Index, nofollow",
+            "noindex, follow": "Noindex, follow",
+            "noindex, nofollow": "Noindex, nofollow — ซ่อนจากการค้นหา"
+          }
+        }
+      },
+      "privacy": {
+        "title": "ความเป็นส่วนตัวและคุกกี้",
+        "description": "แบนเนอร์ยินยอมใช้คุกกี้ ลิงก์กฎหมาย และตัวบ่งชี้การปฏิบัติตามกฎระเบียบ",
+        "sections": {
+          "banner": {
+            "title": "แบนเนอร์คุกกี้"
+          },
+          "links": {
+            "title": "ลิงก์กฎหมาย"
+          },
+          "compliance": {
+            "title": "ตัวบ่งชี้การปฏิบัติตามกฎระเบียบ"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "เปิดใช้แบนเนอร์"
+          },
+          "cookieBannerStyle": {
+            "label": "รูปแบบแบนเนอร์"
+          },
+          "cookieMessage": {
+            "label": "ข้อความขอความยินยอม"
+          },
+          "respectDoNotTrack": {
+            "label": "เคารพ Do-Not-Track",
+            "hint": "เมื่อเบราว์เซอร์ส่ง DNT=1 → ปฏิเสธทั้งหมด"
+          },
+          "policyUrl": {
+            "label": "URL นโยบายความเป็นส่วนตัว",
+            "placeholder": "https://example.com/privacy"
+          },
+          "termsUrl": {
+            "label": "URL ข้อกำหนดการให้บริการ",
+            "placeholder": "https://example.com/terms"
+          },
+          "cookiesPolicyUrl": {
+            "label": "URL นโยบายคุกกี้ (ดูเพิ่มเติม)",
+            "placeholder": "https://example.com/cookies"
+          },
+          "gdprCompliance": {
+            "label": "การปฏิบัติตาม GDPR (EU)",
+            "hint": "เก็บไว้เพื่อบันทึกของคุณ ยังไม่เปลี่ยนพฤติกรรมการทำงาน"
+          },
+          "ccpaCompliance": {
+            "label": "การปฏิบัติตาม CCPA (แคลิฟอร์เนีย)",
+            "hint": "เก็บไว้เพื่อบันทึกของคุณ ยังไม่เปลี่ยนพฤติกรรมการทำงาน"
+          },
+          "adaSkipLink": {
+            "label": "ลิงก์ข้ามไปยังเนื้อหา",
+            "hint": "เก็บไว้เพื่อบันทึกของคุณ ยังไม่เปลี่ยนพฤติกรรมการทำงาน"
+          },
+          "adaHighContrast": {
+            "label": "เสนอโหมดคอนทราสต์สูง",
+            "hint": "เก็บไว้เพื่อบันทึกของคุณ ยังไม่เปลี่ยนพฤติกรรมการทำงาน"
+          },
+          "adaLargeText": {
+            "label": "เสนอโหมดตัวอักษรขนาดใหญ่",
+            "hint": "เก็บไว้เพื่อบันทึกของคุณ ยังไม่เปลี่ยนพฤติกรรมการทำงาน"
+          },
+          "adaReducedMotion": {
+            "label": "เคารพ prefers-reduced-motion",
+            "hint": "เก็บไว้เพื่อบันทึกของคุณ ยังไม่เปลี่ยนพฤติกรรมการทำงาน"
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "แถบติดด้านล่าง — แนะนำ",
+            "top-bar": "แถบติดด้านบน",
+            "modal": "กล่องโมดัลตรงกลาง"
+          }
+        }
+      },
+      "analytics": {
+        "title": "การวิเคราะห์ข้อมูล",
+        "description": "รหัสตัวติดตาม ตัวติดตามจะโหลดหลังผู้เข้าชมยินยอมเท่านั้น",
+        "sections": {
+          "trackers": {
+            "title": "รหัสตัวติดตาม"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "Meta Pixel"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft Clarity"
+          },
+          "tiktokPixel": {
+            "label": "TikTok Pixel"
+          },
+          "linkedinPartner": {
+            "label": "พาร์ทเนอร์ LinkedIn"
+          },
+          "twitterPixel": {
+            "label": "Pixel Twitter"
+          },
+          "plausibleDomain": {
+            "label": "โดเมน Plausible"
+          },
+          "posthogKey": {
+            "label": "คีย์ PostHog"
+          },
+          "mixpanelToken": {
+            "label": "โทเค็น Mixpanel"
+          },
+          "hotjarSiteId": {
+            "label": "รหัสไซต์ Hotjar"
+          },
+          "posthogHost": {
+            "label": "โฮสต์ PostHog"
+          }
+        }
+      },
+      "customCode": {
+        "title": "โค้ดที่กำหนดเอง",
+        "description": "CSS และ JavaScript ที่แทรกลงในเว็บไซต์สาธารณะ",
+        "sections": {
+          "code": {
+            "title": "โค้ดที่กำหนดเอง"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "แทรกในการใช้งานจริง",
+            "hint": "ไม่มีรายการด้านล่างที่ทำงานบนเว็บไซต์สาธารณะจนกว่าจะเปิดสวิตช์นี้"
+          },
+          "css": {
+            "label": "CSS ที่กำหนดเอง"
+          },
+          "js": {
+            "label": "JS ที่กำหนดเอง",
+            "hint": "ทำงานกับผู้เข้าชมทุกคน วางเฉพาะโค้ดที่คุณเชื่อถือเท่านั้น"
+          }
+        }
+      },
+      "pwa": {
+        "title": "แอปที่ติดตั้งได้",
+        "description": "Web app manifest และพฤติกรรมการติดตั้ง",
+        "sections": {
+          "app": {
+            "title": "แอปที่ติดตั้งได้"
+          },
+          "look": {
+            "title": "รูปลักษณ์และพฤติกรรม"
+          },
+          "install": {
+            "title": "การติดตั้งและออฟไลน์"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "เปิดใช้งาน"
+          },
+          "appName": {
+            "label": "ชื่อแอป"
+          },
+          "shortName": {
+            "label": "ชื่อสั้น"
+          },
+          "description": {
+            "label": "คำอธิบาย"
+          },
+          "startUrl": {
+            "label": "URL เริ่มต้น"
+          },
+          "scope": {
+            "label": "ขอบเขต"
+          },
+          "display": {
+            "label": "การแสดงผล"
+          },
+          "orientation": {
+            "label": "การวางแนว"
+          },
+          "themeColor": {
+            "label": "สีธีม"
+          },
+          "backgroundColor": {
+            "label": "สีพื้นหลัง"
+          },
+          "icon192": {
+            "label": "ไอคอน 192"
+          },
+          "icon512": {
+            "label": "ไอคอน 512"
+          },
+          "installPrompt": {
+            "label": "พรอมต์การติดตั้ง"
+          },
+          "offlineEnabled": {
+            "label": "เปิดใช้งานออฟไลน์"
+          }
+        }
+      },
+      "storage": {
+        "title": "พื้นที่จัดเก็บบนคลาวด์",
+        "description": "บัคเก็ต S3-compatible สำหรับสื่อ ทดสอบการเชื่อมต่อก่อนเปิดใช้งาน",
+        "sections": {
+          "provider": {
+            "title": "ผู้ให้บริการ"
+          },
+          "credentials": {
+            "title": "ข้อมูลรับรองของบัคเก็ต"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "เปิดใช้งาน"
+          },
+          "provider": {
+            "label": "ผู้ให้บริการ"
+          },
+          "visibility": {
+            "label": "การมองเห็นไฟล์",
+            "hint": "อ็อบเจ็กต์ส่วนตัวต้องใช้ลิงก์ที่ลงนามแล้ว ใช้ public หรือ URL ของ CDN สำหรับสื่อที่ผู้คนเปิดดูโดยตรง"
+          },
+          "basePath": {
+            "label": "พาธโฟลเดอร์หลัก (ไม่บังคับ)",
+            "hint": "คำนำหน้าสำหรับอ็อบเจ็กต์ทดสอบการเชื่อมต่อ การอัปโหลดจะใช้คำนำหน้านี้เมื่อโมดูลไฟล์พร้อมใช้งาน"
+          },
+          "accessKeyId": {
+            "label": "Access key ID *"
+          },
+          "secret": {
+            "label": "Secret access key *",
+            "hint": "เก็บไว้แบบเข้ารหัสและจะไม่แสดงอีก",
+            "placeholder": "วางข้อมูลลับ"
+          },
+          "region": {
+            "label": "ภูมิภาค",
+            "placeholder": "us-east-1"
+          },
+          "bucket": {
+            "label": "บัคเก็ต *"
+          },
+          "endpoint": {
+            "label": "Endpoint",
+            "hint": "จำเป็นสำหรับ Spaces, R2 และ MinIO ระบบจะตัด /bucket ที่ท้ายออก",
+            "placeholder": "https://… (จำเป็นสำหรับ Spaces / R2 / MinIO; อัตโนมัติสำหรับ Wasabi และ Bunny)"
+          },
+          "cdnUrl": {
+            "label": "URL สาธารณะ / CDN (ไม่บังคับ)",
+            "placeholder": "https://cdn.example.com"
+          },
+          "pathStyle": {
+            "label": "ใช้ endpoint แบบพาธ (MinIO / ที่เก็บแบบ S3-compatible บางรายการ)"
+          },
+          "storageZone": {
+            "label": "โซนจัดเก็บ",
+            "hint": "สำหรับ Bunny เท่านั้น"
+          },
+          "storagePassword": {
+            "label": "รหัสผ่านการจัดเก็บ (access key)",
+            "hint": "สำหรับ Bunny เท่านั้น: รหัสผ่านโซนจัดเก็บ เก็บไว้แบบเข้ารหัส",
+            "placeholder": "วางรหัสผ่าน"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net Storage",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO / S3-compatible"
+          },
+          "visibility": {
+            "private": "ส่วนตัว (URL ที่ลงนามแล้ว)",
+            "public": "สาธารณะ"
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "การตั้งค่า WhatsApp",
+        "description": "แอป Meta และพาร์ทเนอร์ Interakt ที่ใช้เชื่อมหมายเลข WhatsApp",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)"
+          },
+          "interakt": {
+            "title": "เส้นทาง Interakt"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "Meta App ID",
+            "hint": "หากว่างจะใช้ค่าจากสภาพแวดล้อมของเซิร์ฟเวอร์"
+          },
+          "appSecret": {
+            "label": "App Secret",
+            "hint": "เก็บไว้แบบเข้ารหัสและจะไม่แสดงอีก เว้นว่างไว้เพื่อคงข้อมูลลับที่บันทึกไว้"
+          },
+          "configId": {
+            "label": "Embedded Signup Config ID",
+            "hint": "หากว่างจะให้พื้นที่ทำงานวาง token ด้วยตนเอง"
+          },
+          "graphVersion": {
+            "label": "เวอร์ชัน Graph API",
+            "hint": "เช่น v25.0 หากว่างจะใช้ค่าเริ่มต้นของเซิร์ฟเวอร์"
+          },
+          "coexistence": {
+            "label": "Coexistence",
+            "hint": "แสดงตัวเลือก \"เชื่อมหมายเลข Business App ที่มีอยู่\" ใน Embedded Signup"
+          },
+          "defaultProvider": {
+            "label": "เส้นทางเริ่มต้น",
+            "hint": "หมายเลขที่เชื่อมใหม่จะใช้ API ใด"
+          },
+          "solutionId": {
+            "label": "Interakt solution ID",
+            "hint": "ส่งไปยัง Meta เป็น extras.setup.solutionID และส่งไปยัง Interakt ตอนลงทะเบียน"
+          },
+          "partnerAuthKey": {
+            "label": "คีย์พาร์ทเนอร์ Interakt",
+            "hint": "คีย์พาร์ทเนอร์เทคนิคที่ใช้ร่วมกัน เก็บไว้แบบเข้ารหัส"
+          },
+          "systemUserId": {
+            "label": "System user ID",
+            "hint": "กำหนดให้แต่ละ WABA ที่เชื่อมต่อด้วยสิทธิ์ MANAGE"
+          },
+          "systemUserToken": {
+            "label": "System user token",
+            "hint": "ใช้ตรวจสอบโทเค็นและกำหนด system user เก็บไว้แบบเข้ารหัส"
+          },
+          "businessId": {
+            "label": "Business ID",
+            "hint": "ค่าสำรองสำหรับค้นหา WABA เมื่อโทเค็นไม่แสดงรายการ WABA"
+          },
+          "verifyToken": {
+            "label": "Webhook verify token",
+            "hint": "สตริงสุ่มอะไรก็ได้ เว้นว่างเพื่อใช้ค่าที่สร้างขึ้นซึ่งแสดงด้านบน"
+          },
+          "requireSignature": {
+            "label": "ต้องมีลายเซ็นในทุก webhook",
+            "hint": "ปฏิเสธเหตุการณ์ที่ Interakt ส่งต่อซึ่งไม่มีลายเซ็น Meta ที่ถูกต้อง เปิดใช้เฉพาะเมื่อ Interakt ลงลายเซ็นให้"
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt (พร็อกซีของ Meta)",
+            "meta": "Meta (โดยตรง)"
+          }
+        }
+      },
+      "campaigns": {
+        "title": "แคมเปญ",
+        "description": "แคมเปญจะลองส่งข้อความที่ล้มเหลวซ้ำอย่างไร และเมื่อใดจะปิดแคมเปญที่ยังไม่เสร็จ",
+        "sections": {
+          "retry": {
+            "title": "การลองซ้ำ"
+          },
+          "expiry": {
+            "title": "ปิดอัตโนมัติ"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "จำนวนครั้งที่ลองซ้ำ",
+            "hint": "จำนวนครั้งต่อผู้รับก่อนทำเครื่องหมายว่าล้มเหลว (0 ถึง 10)"
+          },
+          "retryBackoffSec": {
+            "label": "เวลารอก่อนลองซ้ำ (วินาที)",
+            "hint": "ระยะพักก่อนลองครั้งถัดไป ระยะเวลาจะเพิ่มขึ้นทุกครั้ง"
+          },
+          "autoExpiryEnabled": {
+            "label": "ปิดแคมเปญที่ยังไม่เสร็จ",
+            "hint": "ปิดแคมเปญที่ยังทำงานอยู่หลังจากผ่านจำนวนชั่วโมงด้านล่าง"
+          },
+          "defaultExpiryHours": {
+            "label": "ปิดหลังจาก (ชั่วโมง)"
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "ไคลเอนต์ Google OAuth ที่ทุกพื้นที่ทำงานใช้เชื่อมต่อปฏิทิน",
+        "sections": {
+          "oauth": {
+            "title": "ไคลเอนต์ Google OAuth"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "อนุญาตให้พื้นที่ทำงานเชื่อมต่อ Google Calendar",
+            "hint": "ปิดอยู่: ไม่มีพื้นที่ทำงานใดเชื่อมต่อได้ และจะไม่มีการเขียนหรืออ่านปฏิทินใดๆ"
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "จาก Google Cloud > Credentials > OAuth 2.0 Client ID (Web application) หากว่างจะใช้ GOOGLE_CALENDAR_CLIENT_ID"
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "เก็บไว้แบบเข้ารหัสและจะไม่แสดงอีก หากว่างจะคงค่าที่บันทึกไว้; GOOGLE_CALENDAR_CLIENT_SECRET เป็นค่าสำรอง"
+          },
+          "redirectUri": {
+            "label": "แทนที่ Redirect URI",
+            "hint": "เว้นว่างเพื่อใช้ที่อยู่ด้านบน ต้องตรงกับ Authorised redirect URI ในไคลเอนต์ทุกประการ"
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "ตัวสร้างโฟลว์",
+        "description": "ตัวสร้างโฟลว์ใดที่เสนอให้พื้นที่ทำงาน",
+        "sections": {
+          "mode": {
+            "title": "ตัวสร้าง"
+          }
+        },
+        "fields": {
+          "mode": {
+            "label": "ตัวสร้างเริ่มต้นสำหรับพื้นที่ทำงาน",
+            "hint": "Simple คือตัวสร้างแบบรายการทีละขั้นตอน Advanced คือตัวสร้างแบบแคนวาส พื้นที่ทำงานสามารถแทนที่ค่านี้ได้ในหน้าโฟลว์"
+          }
+        },
+        "options": {
+          "mode": {
+            "simple": "Simple เท่านั้น",
+            "advanced": "Advanced เท่านั้น"
+          }
+        }
+      }
+    },
+    "cards": {
+      "appearance": {
+        "title": "รูปลักษณ์และสี",
+        "description": "เปลี่ยนสีทุกหน้าของแดชบอร์ดผู้ใช้และผู้ดูแลระบบ ได้แก่ แบรนด์ พื้นผิว ข้อความ และสีเน้น มีผลทันที",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "การตั้งค่าทั่วไป",
+        "description": "ชื่อแอป ข้อมูลติดต่อ โลโก้ URL ที่อยู่ และสวิตช์บริการระดับโกลบอล",
+        "tags": "APP_NAME / APP_URL / โลโก้"
+      },
+      "paymentGateways": {
+        "title": "เกตเวย์การชำระเงิน",
+        "description": "Stripe, Razorpay, PayPal, Paystack, Flutterwave และอื่นๆ: คีย์ สกุลเงิน และสวิตช์ใช้งานจริง",
+        "tags": "Live / sandbox - คีย์แยกตามเกตเวย์"
+      },
+      "aiKeys": {
+        "title": "คีย์ AI / API",
+        "description": "ข้อมูลรับรองผู้ให้บริการสำหรับ OpenAI, Anthropic, Google และอื่นๆ ใช้กับทุกฟีเจอร์ AI ในแพลตฟอร์ม",
+        "tags": "BYOK / โมเดลเริ่มต้น"
+      },
+      "mail": {
+        "title": "การตั้งค่าอีเมล",
+        "description": "ไดรเวอร์ SMTP โฮสต์ พอร์ต ชื่อผู้ส่ง การเข้ารหัส และการส่งทดสอบ",
+        "tags": "SMTP / ยืนยัน / ต้อนรับ"
+      },
+      "auditLog": {
+        "title": "บันทึกการตรวจสอบ",
+        "description": "ประวัติการทำงานของผู้ดูแลระบบทุกรายการที่ค้นหาได้: การแก้ไขพื้นที่ทำงาน การเปลี่ยนแปลงผู้ใช้ เหตุการณ์การเรียกเก็บเงิน เหตุการณ์ด้านความปลอดภัย การอัปเดตการตั้งค่า",
+        "tags": "ตัวกรอง / รายละเอียด / ส่งออก CSV"
+      },
+      "privacy": {
+        "title": "ความเป็นส่วนตัว, GDPR และ ADA",
+        "description": "แบนเนอร์ยินยอมใช้คุกกี้ การปฏิบัติตาม GDPR / CCPA การสลับการเข้าถึง ADA / WCAG และ URL นโยบาย",
+        "tags": "ความยินยอม / นโยบาย / ally"
+      },
+      "menuOrder": {
+        "title": "ลำดับเมนู",
+        "description": "กำหนดลำดับของรายการเมนูด้านบนที่แสดงในทุกพื้นที่ทำงานของผู้ใช้",
+        "tags": "จัดเรียงใหม่"
+      },
+      "authPages": {
+        "title": "หน้ายืนยันตัวตน",
+        "description": "แก้ไขหน้าเข้าสู่ระบบ สมัครสมาชิก และลืมรหัสผ่าน: หัวข้อ ข้อความรอง สีเน้น และรูปภาพหรือวิดีโอด้านข้าง พร้อมตัวอย่างสด",
+        "tags": "เข้าสู่ระบบ / สมัคร / ลืมรหัส"
+      },
+      "analytics": {
+        "title": "การเชื่อมต่อการวิเคราะห์ข้อมูล",
+        "description": "Google Analytics, GTM, Meta Pixel, Clarity, Plausible, PostHog, Hotjar, TikTok, LinkedIn, X: วาง ID แล้วเราจะแสดงสคริปต์ให้",
+        "tags": "GA4 / Pixel / Clarity / GTM"
+      },
+      "seo": {
+        "title": "การตั้งค่า SEO",
+        "description": "ชื่อ Meta คำอธิบาย OpenGraph การ์ด Twitter robots canonical และการยืนยันเว็บไซต์ของ Google และ Bing",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "ภาษา",
+        "description": "ภาษาที่ใช้ได้ ภาษาเริ่มต้น แฟล็ก RTL และสวิตช์เปิดใช้รายภาษา ใช้ควบคุมตัวเลือกภาษา",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "การตั้งค่า PWA",
+        "description": "ชื่อแอป ไอคอนติดตั้ง สีธีม สีพื้นหลัง โหมดการแสดงผล และสวิตช์เปิดใช้ PWA",
+        "tags": "ไอคอน / สี / การติดตั้ง"
+      },
+      "footer": {
+        "title": "การตั้งค่าส่วนท้ายหน้า",
+        "description": "หัวข้อส่วนท้าย ลิงก์โซเชียล ข้อความลิขสิทธิ์ และคำอธิบายส่วนท้ายหน้าสาธารณะ",
+        "tags": "โลโก้ / โซเชียล / ลิขสิทธิ์"
+      },
+      "siteInfo": {
+        "title": "ข้อมูลเว็บไซต์",
+        "description": "อีเมลติดต่อ โทรศัพท์ WhatsApp ที่อยู่ และลิงก์โซเชียล ที่ใช้ร่วมกันในส่วนท้ายหน้าสาธารณะ หน้าติดต่อ และหน้าเกี่ยวกับ",
+        "tags": "อีเมล / โทรศัพท์ / โซเชียล"
+      },
+      "socialLogin": {
+        "title": "เข้าสู่ระบบด้วยโซเชียลและ captcha",
+        "description": "เปิดปิดการเข้าสู่ระบบด้วย Google และ Facebook ในหน้าเข้าสู่ระบบและสมัครสมาชิก วางคีย์ OAuth และเปิดใช้ reCAPTCHA",
+        "tags": "ยังไม่ได้ตั้งค่า"
+      },
+      "registration": {
+        "title": "การสมัครสมาชิก",
+        "description": "การสมัครสาธารณะ การยืนยันอีเมล แพ็กเกจเริ่มต้น และระยะเวลาทดลองใช้สำหรับพื้นที่ทำงานใหม่",
+        "tags": "การสมัคร / ทดลองใช้ / แพ็กเกจ"
+      },
+      "custom": {
+        "title": "โค้ดที่กำหนดเอง",
+        "description": "CSS และ JavaScript สำหรับใช้งานจริงที่แทรกในหน้าสาธารณะเมื่อเปิดสวิตช์",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "พื้นที่จัดเก็บบนคลาวด์",
+        "description": "ส่งสื่อของลูกค้าไปยังบัคเก็ตของคุณเอง: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 หรือ MinIO",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "แอป Meta ที่พื้นที่ทำงานทุกแห่งใช้เชื่อมหมายเลข WhatsApp: app id และ secret, Embedded Signup, webhook และเส้นทาง Interakt",
+        "tags": "Meta / Embedded Signup / Interakt"
+      },
+      "campaigns": {
+        "title": "แคมเปญ",
+        "description": "การลองซ้ำและการปิดอัตโนมัติของแคมเปญที่ไม่ได้ดำเนินการจนเสร็จ",
+        "tags": "การลองซ้ำ / หมดอายุ"
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "description": "ไคลเอนต์ Google OAuth ที่พื้นที่ทำงานใช้เชื่อมปฏิทินเพื่อการจองและช่วงเวลาที่ไม่ว่าง",
+        "tags": "Google / OAuth / Calendar"
+      },
+      "flowBuilder": {
+        "title": "ตัวสร้างโฟลว์",
+        "description": "ตัวสร้างโฟลว์เริ่มต้นสำหรับทุกพื้นที่ทำงาน: Simple แบบทีละขั้นตอน หรือ Advanced แบบแคนวาส พื้นที่ทำงานสามารถแทนที่ได้",
+        "tags": "Simple / Advanced / Automation"
+      }
+    },
+    "signup": {
+      "body": "การลงทะเบียนสาธารณะ การยืนยันอีเมลอัตโนมัติ แพ็กเกจเริ่มต้นสำหรับผู้สมัครใหม่ และระยะเวลาทดลองใช้ฟรี แก้ไขได้ในหน้าการสมัครสมาชิก",
+      "link": "เปิดการตั้งค่าการสมัครสมาชิก"
+    },
+    "brandAssets": {
+      "intro": "ไอคอนแท็บ (favicon) ใช้ร่วมกันทุกธีม โลโก้แยกตามธีม: อัปโหลดรุ่นสีกลับด้านหรือสว่างสำหรับโหมดมืด และรุ่นที่เหมาะกับธีม doodle สำหรับธีม doodle",
+      "favicon": {
+        "title": "ไอคอนแท็บ",
+        "note": "แสดงในแท็บเบราว์เซอร์และบุ๊กมาร์ก แนะนำขนาด 35x35 px รองรับ PNG, ICO, JPG, SVG หรือ WebP ขนาดไม่เกิน 512 KB การอัปโหลดจะแทนที่ไฟล์เดิม"
+      },
+      "logos": {
+        "title": "โลโก้แยกตามธีม",
+        "note": "แต่ละธีมใช้โลโก้ของตัวเอง หากไม่ได้อัปโหลดโลโก้เฉพาะธีม จะใช้ Paper แทน"
+      },
+      "themes": {
+        "paper": {
+          "label": "Paper (ค่าเริ่มต้น)",
+          "note": "สีอ่อนเฉดขาวนวล เป็นลุคเริ่มต้น"
+        },
+        "bright": {
+          "label": "ขาวสว่าง",
+          "note": "พื้นหลังสีขาวที่มีคอนทราสต์สูงกว่า"
+        },
+        "dark": {
+          "label": "มืด (เบต้า)",
+          "note": "ใช้โลโก้รุ่นสีอ่อนหรือสีกลับด้าน"
+        },
+        "doodle": {
+          "label": "Doodle (แฟนซี)",
+          "note": "พื้นหลังสีมินต์พาสเทล"
+        }
+      },
+      "noFile": "ไม่มีไฟล์",
+      "upload": "อัปโหลด",
+      "uploading": "กำลังอัปโหลด",
+      "remove": "ลบ",
+      "loading": "กำลังโหลด",
+      "loadFailed": "ไม่สามารถโหลดไฟล์แบรนด์ได้",
+      "failed": "การอัปโหลดไม่สำเร็จ",
+      "tooLarge": "ไฟล์นี้มีขนาดเกิน {kb} KB",
+      "wrongType": "ไม่อนุญาตให้ใช้ไฟล์ประเภทนี้ที่นี่"
+    },
+    "teamInbox": {
+      "intro": "แอปที่ติดตั้งได้แยกต่างหากสำหรับกล่องข้อความทีม เอเจนต์เปิดลิงก์ เพิ่มลงหน้าจอหลัก และรับการแจ้งเตือนแบบพุชเมื่อมีข้อความใหม่แม้ปิดแอปแล้ว",
+      "enabled": {
+        "label": "เปิดใช้แอปกล่องข้อความทีม",
+        "hint": "เปิด manifest แยก พรอมต์การติดตั้ง และการแจ้งเตือนที่ /team-inbox"
+      },
+      "name": {
+        "label": "ชื่อแอป"
+      },
+      "shortName": {
+        "label": "ชื่อสั้น",
+        "hint": "ไม่เกิน 12 ตัวอักษร"
+      },
+      "icon192": {
+        "label": "ไอคอนแอป (PNG 192x192)",
+        "note": "ใช้ไอคอนแอปหากว่าง ไอคอนบนหน้าจอหลักสำหรับแอปกล่องข้อความ"
+      },
+      "icon512": {
+        "label": "ไอคอนขนาดใหญ่ / splash (PNG 512x512)",
+        "note": "ใช้ไอคอนแอปหากว่าง ใช้แสดงหน้า splash เมื่อติดตั้งและหน้าจอความละเอียดสูง"
+      },
+      "push": {
+        "ready": {
+          "title": "การแจ้งเตือนแบบพุช: พร้อมแล้ว",
+          "body": "สร้างคีย์แล้ว เอเจนต์สามารถเปิดการแจ้งเตือนจากกล่องข้อความได้"
+        },
+        "todo": {
+          "title": "การแจ้งเตือนแบบพุช: เหลืออีกขั้นตอนเดียว",
+          "body": "คลิกสร้างคีย์เพื่อตั้งค่าการแจ้งเตือนแบบพุช ไม่ต้องเข้าถึงเซิร์ฟเวอร์"
+        },
+        "generate": "สร้างคีย์",
+        "generating": "กำลังสร้าง",
+        "generated": "สร้างคีย์พุชแล้ว"
+      },
+      "manifestLink": "Manifest ของกล่องข้อความทีม",
+      "save": "บันทึกแอปกล่องข้อความทีม",
+      "saving": "กำลังบันทึก",
+      "saved": "บันทึกแอปกล่องข้อความทีมแล้ว",
+      "conflict": "มีคนอื่นบันทึกหลังจากที่คุณเปิดหน้านี้ โปรดโหลดหน้าใหม่แล้วลองอีกครั้ง",
+      "failed": "เกิดข้อผิดพลาดบางอย่าง และยังไม่ได้บันทึกอะไรเลย",
+      "loading": "กำลังโหลด",
+      "loadFailed": "ไม่สามารถโหลดการตั้งค่าแอปกล่องข้อความทีมได้"
+    },
+    "seoPreview": {
+      "google": "ผลลัพธ์ Google",
+      "noDescription": "ยังไม่มีคำอธิบาย Meta",
+      "noImage": "ไม่มีรูป OG",
+      "sitemapKicker": "Sitemap และ robots",
+      "sitemapTitle": "ไฟล์สำหรับโรบ็อต",
+      "sitemapFile": "สร้างอัตโนมัติจากหน้าสาธารณะและบล็อกที่เผยแพร่แล้ว ส่ง /sitemap.xml ไปยัง Google Search Console",
+      "download": "ดาวน์โหลด sitemap.xml"
+    },
+    "pages": {
+      "general": {
+        "title": "การตั้งค่าทั่วไป",
+        "description": "ข้อมูลประจำแอปหลัก ข้อมูลติดต่อ ภาษาและสกุลเงินเริ่มต้น และสวิตช์บริการระดับแพลตฟอร์ม",
+        "sections": {
+          "identity": {
+            "title": "ข้อมูลประจำแอป"
+          },
+          "brandAssets": {
+            "title": "ทรัพยากรแบรนด์"
+          },
+          "platform": {
+            "title": "สวิตช์แพลตฟอร์ม"
+          },
+          "signup": {
+            "title": "การสมัครและทดลองใช้ฟรี"
+          }
+        },
+        "guide": {
+          "title": "ข้อมูลไปไว้ที่ไหน",
+          "items": {
+            "appName": {
+              "title": "ชื่อแอป",
+              "body": "ใช้ในชื่อหน้า อีเมล และแบรนด์ในแอป ควรสั้น: แนะนำให้มีหนึ่งหรือสองคำ"
+            },
+            "appUrl": {
+              "title": "URL ของแอป",
+              "body": "ที่อยู่หลักที่ใช้อ้างอิง callback อีเมล และ OAuth redirect ทั้งหมดจะอิงจากค่านี้"
+            },
+            "language": {
+              "title": "ภาษาเริ่มต้น",
+              "body": "ใช้กับบัญชีใหม่ ผู้ใช้เดิมจะคงภาษาที่เลือกไว้"
+            },
+            "currency": {
+              "title": "สกุลเงินเริ่มต้น",
+              "body": "ใช้กับใบแจ้งหนี้และกระเป๋าเงินที่ไม่ได้กำหนดค่าเฉพาะ"
+            },
+            "maintenance": {
+              "title": "โหมดปิดปรับปรุง",
+              "body": "เมื่อเปิด เส้นทางที่ไม่ใช่ผู้ดูแลทั้งหมดจะแสดงหน้าว่างแทน ผู้ดูแลยังเข้าคอนโซลได้"
+            }
+          }
+        },
+        "tip": {
+          "title": "กฎสำหรับการใช้งานจริง",
+          "body": "บันทึกหลังจากทดสอบขั้นตอนการใช้งานของผู้ใช้ที่เกี่ยวข้องแล้วเท่านั้น การเปลี่ยนข้อมูลประจำแอปจะส่งผลต่อใบแจ้งหนี้และอีเมลขาออก"
+        }
+      },
+      "appearance": {
+        "title": "สีแดชบอร์ด",
+        "description": "ปรับสีของทั้งแอป ทุกหน้าของแดชบอร์ดผู้ใช้ และแผงผู้ดูแลระบบ โดยการเปลี่ยนสีธีมเหล่านี้ เมื่อบันทึกจะมีผลกับทุกคนทันที หากปล่อยสีเป็นค่าเริ่มต้นจะคงลุคเดิม",
+        "sections": {
+          "layout": {
+            "title": "รูปแบบการนำทาง",
+            "description": "เลือกการจัดวางของแดชบอร์ดผู้ใช้ Sidebar จะย้ายทุกเมนูไปไว้ในแถบด้านซ้าย (ไม่มีส่วนหัวด้านบน ไม่มีหน้า เพิ่มเติม)"
+          },
+          "sidebar": {
+            "title": "สีแถบด้านข้าง",
+            "description": "สีพื้นหลังของแถบด้านซ้ายที่เข้ม (เฉพาะรูปแบบ sidebar) ปล่อยค่าเริ่มต้นเพื่อใช้สีเกือบดำที่มาพร้อมระบบ"
+          },
+          "interface": {
+            "title": "อินเทอร์เฟซ"
+          },
+          "brand": {
+            "title": "แบรนด์"
+          },
+          "surfaces": {
+            "title": "พื้นผิว"
+          },
+          "text": {
+            "title": "ข้อความ"
+          },
+          "accents": {
+            "title": "สีเน้น"
+          }
+        },
+        "guide": {
+          "title": "สีทำงานอย่างไร",
+          "items": {
+            "how": {
+              "title": "มีผลทันที",
+              "body": "การบันทึกจะเขียนโทเค็นธีมที่ใช้งานอยู่ใหม่สำหรับทุกคน"
+            },
+            "tokens": {
+              "title": "หนึ่งโทเค็น หนึ่งหน้าที่",
+              "body": "แต่ละช่องสีแมปกับตัวแปร CSS เพียงหนึ่งตัวที่ใช้ทั่วทั้งแดชบอร์ดผู้ใช้และแผงผู้ดูแลระบบ"
+            },
+            "primary": {
+              "title": "เปลี่ยนสีหลัก สีอื่นจะตามมา",
+              "body": "หลัก (เมื่อวางเมาส์) สีเน้น พื้นหลังเน้นอ่อน และฟองแชท จะได้มาจากสีหลักหากคุณไม่ได้ตั้งค่าเอง"
+            },
+            "defaults": {
+              "title": "ปล่อยค่าเริ่มต้นไว้",
+              "body": "สีใดที่ไม่ได้เปลี่ยนจากค่าที่มาพร้อมระบบจะคงลุคเดิมไว้ เฉพาะโทเค็นที่เปลี่ยนเท่านั้นที่ถูกแทนที่"
+            }
+          }
+        },
+        "tip": {
+          "title": "เคล็ดลับ",
+          "body": "ตรวจสอบคอนทราสต์หลังจากเปลี่ยนแปลงครั้งใหญ่ ทั้งสีข้อความและสีพื้นหลังมาจากโทเค็นเหล่านี้"
+        },
+        "eyebrow": "ผู้ดูแล - รูปลักษณ์"
+      },
+      "siteInfo": {
+        "title": "ข้อมูลเว็บไซต์",
+        "description": "ข้อมูลติดต่อและลิงก์โซเชียลที่ใช้ร่วมกันในส่วนท้ายหน้า หน้าติดต่อ และหน้าเกี่ยวกับ แก้ไขครั้งเดียว อัปเดตทุกที่",
+        "sections": {
+          "company": {
+            "title": "บริษัท"
+          },
+          "contact": {
+            "title": "อีเมลติดต่อ"
+          },
+          "phone": {
+            "title": "โทรศัพท์และ WhatsApp"
+          },
+          "social": {
+            "title": "ลิงก์โซเชียล"
+          }
+        },
+        "guide": {
+          "title": "ข้อมูลไปไว้ที่ไหน",
+          "items": {
+            "shared": {
+              "title": "ใช้ร่วมกันทุกที่",
+              "body": "ค่าเหล่านี้ใช้กับส่วนท้ายหน้าสาธารณะ หน้าติดต่อ และหน้ากฎหมาย"
+            },
+            "frontend": {
+              "title": "ข้อความและสีของหน้า",
+              "body": "แก้ไขในตัวแก้ไขหน้าบ้าน ไม่ใช่ที่นี่"
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "การตั้งค่าส่วนท้ายหน้า",
+        "description": "หัวข้อส่วนท้าย ลิงก์โซเชียล ข้อความลิขสิทธิ์ และคำอธิบายส่วนท้ายหน้าสาธารณะ",
+        "sections": {
+          "footer": {
+            "title": "ส่วนท้ายหน้าสาธารณะ"
+          }
+        },
+        "guide": {
+          "title": "ข้อมูลไปไว้ที่ไหน",
+          "items": {
+            "what": {
+              "title": "หัวข้อส่วนท้ายและลิขสิทธิ์",
+              "body": "หากหัวข้อว่างจะใช้ชื่อแพลตฟอร์ม หากข้อความลิขสิทธิ์ว่างจะสร้างจากปีและแบรนด์"
+            },
+            "social": {
+              "title": "URL โซเชียล",
+              "body": "ช่องที่ว่างจะซ่อนไอคอน ช่องเหล่านี้ใช้ร่วมกับลิงก์โซเชียลในข้อมูลเว็บไซต์: การแก้ไขที่นี่จะอัปเดตทุกที่"
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "การตั้งค่าอีเมล",
+        "description": "โฮสต์ SMTP พอร์ต การเข้ารหัส และข้อมูลรับรอง ค่าที่บันทึกไว้จะถูกใช้ในทุกการส่ง ดังนั้นอีเมลต้อนรับ การยืนยัน ใบเสร็จ และการสนับสนุนจะใช้ค่าเหล่านี้โดยไม่ต้องรีสตาร์ต",
+        "sections": {
+          "smtp": {
+            "title": "ข้อมูลรับรอง SMTP"
+          }
+        },
+        "guide": {
+          "title": "โฮสต์ของผู้ให้บริการที่พบบ่อย",
+          "items": {
+            "hosts": {
+              "title": "การตั้งค่าทั่วไป",
+              "body": "Mailgun smtp.mailgun.org 587 / tls SendGrid smtp.sendgrid.net 587 / tls Amazon SES email-smtp.REGION.amazonaws.com 587 / tls Postmark smtp.postmarkapp.com 587 / tls Resend smtp.resend.com 587 / tls Gmail smtp.gmail.com 587 / tls พร้อมรหัสผ่านแอป"
+            },
+            "used": {
+              "title": "เมลที่ใช้ในระบบ",
+              "body": "อีเมลต้อนรับและการยืนยัน การรีเซ็ตรหัสผ่าน ใบแจ้งหนี้และใบเสร็จ การตอบกลับฝ่ายสนับสนุน การแจ้งเตือนความปลอดภัย และคำเชิญเข้าพื้นที่ทำงาน"
+            }
+          }
+        },
+        "tip": {
+          "title": "เคล็ดลับ",
+          "body": "ส่งอีเมลทดสอบทุกครั้งหลังแก้ไข ความผิดพลาดเพียงคำเดียวในโฮสต์หรือพอร์ตจะทำให้อีเมลธุรกรรมทั้งหมดของแพลตฟอร์มใช้ไม่ได้โดยไม่มีการแจ้งเตือน"
+        }
+      },
+      "seo": {
+        "title": "การตั้งค่า SEO",
+        "description": "แท็ก Meta เริ่มต้นทั้งเว็บไซต์: ชื่อ คำอธิบาย OpenGraph การ์ด Twitter robots canonical และการยืนยันกับเครื่องมือค้นหา",
+        "sections": {
+          "search": {
+            "title": "แท็ก Meta"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "การ์ด Twitter"
+          },
+          "verification": {
+            "title": "การยืนยันเว็บไซต์"
+          },
+          "preview": {
+            "title": "ตัวอย่างสด"
+          }
+        },
+        "guide": {
+          "title": "พื้นฐาน SEO",
+          "items": {
+            "basics": {
+              "title": "ชื่อและคำอธิบาย",
+              "body": "ชื่อ Meta: ขึ้นต้นด้วยแบรนด์และคำอธิบายที่โดดเด่นหนึ่งคำ ประมาณ 50-60 ตัวอักษร คำอธิบาย Meta: ประโยคโน้มน้าวสั้นๆ 1-2 ประโยค ประมาณ 140-160 ตัวอักษร"
+            },
+            "where": {
+              "title": "แสดงที่ไหนบ้าง",
+              "body": "หน้าผู้ดูแล หน้าที่ลงชื่อเข้าใช้แล้ว หน้าสาธารณะ และตัวอย่างลิงก์ (WhatsApp, Slack, Discord, X) Robots: ใช้ noindex สำหรับสเตจจิงหรือการใช้งานแบบส่วนตัว"
+            },
+            "sitemap": {
+              "title": "ตรวจสอบ",
+              "body": "opengraph.xyz, เครื่องมือทดสอบ Google Rich Results และเครื่องมือตรวจ Twitter Card"
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "ความเป็นส่วนตัว, GDPR และ ADA",
+        "eyebrow": "ผู้ดูแล - การปฏิบัติตามกฎ",
+        "description": "แบนเนอร์ยินยอมใช้คุกกี้ URL นโยบาย การปฏิบัติตาม GDPR/CCPA และสวิตช์การเข้าถึง WCAG การตั้งค่าเดียวกันนี้ป้อน UI การยินยอมและควบคุมการผสานรวมการวิเคราะห์ข้อมูลทุกตัว",
+        "sections": {
+          "banner": {
+            "title": "แบนเนอร์และนโยบาย"
+          },
+          "compliance": {
+            "title": "GDPR และ CCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG",
+            "description": "ฟีเจอร์ความช่วยเหลือตามมาตรฐาน US Americans-with-Disabilities-Act และ WCAG 2.1 AA ที่ผู้เข้าชมสลับเปิดปิดได้"
+          }
+        },
+        "guide": {
+          "title": "การยินยอมทำงานอย่างไร",
+          "items": {
+            "order": {
+              "title": "ลำดับการทำงาน",
+              "body": "1. ผู้เข้าชมเปิดหน้าและแบนเนอร์คุกกี้จะปรากฏ (ข้ามเมื่อเปิด Do-Not-Track) 2. บันทึกตัวเลือกในคุกกี้ crm_cookie_consent เป็นเวลาหนึ่งปี 3. โหลดเฉพาะตัวติดตามที่ได้รับอนุญาตเท่านั้น 4. ผู้เข้าชมเปิดตัวเลือกใหม่ได้จากองค์ประกอบใดก็ได้ที่มี data-cookie-prefs-open"
+            },
+            "linked": {
+              "title": "การตั้งค่าที่เชื่อมโยง",
+              "body": "การผสานรวมการวิเคราะห์ข้อมูล (GA4, GTM, Pixel, Clarity และอื่นๆ) และการตั้งค่า PWA"
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "การผสานรวมการวิเคราะห์ข้อมูล",
+        "eyebrow": "ผู้ดูแล - การติดตาม",
+        "description": "วาง ID ของผู้ให้บริการแต่ละรายครั้งเดียว สคริปต์ทางการของผู้ให้บริการจะแสดงทุกหน้าสาธารณะ แต่จะทำงานหลังผู้เข้าชมยินยอมในหมวดคุกกี้ที่ตรงกันเท่านั้น",
+        "sections": {
+          "site": {
+            "title": "การวิเคราะห์ไซต์"
+          },
+          "marketing": {
+            "title": "พิกเซลโฆษณา"
+          }
+        },
+        "guide": {
+          "title": "ตัวติดตาม -> หมวด",
+          "items": {
+            "categories": {
+              "title": "เมื่อไหร่แต่ละตัวทำงาน",
+              "body": "การวิเคราะห์: GA4, GTM, Clarity, Plausible, PostHog, Hotjar, Mixpanel การตลาด: Meta Pixel, TikTok, LinkedIn, X Pixel สคริปต์คอนเทนเนอร์ GTM อาจมีตัวติดตามเพิ่มเติม สามารถหยุดชั่วคราวด้วยทริกเกอร์หมวดภายใน GTM"
+            },
+            "where": {
+              "title": "โหลดที่ไหน",
+              "body": "หน้าสาธารณะและหน้าเข้าสู่ระบบ หน้าผู้ดูแลตั้งใจปิดไว้"
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "โค้ดที่กำหนดเอง",
+        "description": "CSS และสคริปต์สำหรับใช้งานจริงเพื่อการแบรนด์และพฤติกรรมขั้นสูง แทรกในหน้าสาธารณะเมื่อเปิดใช้งาน",
+        "sections": {
+          "code": {
+            "title": "โค้ดที่กำหนดเอง"
+          }
+        },
+        "guide": {
+          "title": "หลักการโดยทั่วไป",
+          "items": {
+            "scope": {
+              "title": "จำกัดขอบเขต CSS",
+              "body": "ครอบกฎด้วยคลาสแบรนด์ หลีกเลี่ยงการแตะ body, * หรือคลาส utility ของเฟรมเวิร์ก"
+            },
+            "block": {
+              "title": "ห้ามบล็อก",
+              "body": "ห่อ JS ด้วย DOMContentLoaded ห้ามเรียกเครือข่ายแบบซิงโครนัส"
+            },
+            "dark": {
+              "title": "ทดสอบโหมดมืด",
+              "body": "สลับธีมและตรวจสอบตัวเลือก html[data-theme=\"dark\"] ก่อนบันทึก"
+            },
+            "sensitive": {
+              "title": "ระวังการใช้งานจริง",
+              "body": "การบันทึกที่ผิดพลาดจะส่งถึงทุกหน้าสาธารณะทันที ให้เพื่อนร่วมทีมตรวจสอบการเปลี่ยนแปลงครั้งใหญ่"
+            }
+          }
+        },
+        "tip": {
+          "title": "ระวัง",
+          "body": "โค้ดที่กำหนดเองทำงานทุกหน้าสาธารณะและไม่สามารถแยกกล่องทรายได้ มีเพียงผู้ดูแลระบบสูงสุดเท่านั้นที่เปลี่ยนแปลงได้"
+        }
+      },
+      "pwa": {
+        "title": "การตั้งค่า PWA",
+        "description": "manifest แอปที่ติดตั้งได้: ชื่อ ไอคอน สี และโหมดการแสดงผล ขับเคลื่อน manifest และพรอมต์การติดตั้ง",
+        "sections": {
+          "app": {
+            "title": "manifest ของ PWA"
+          },
+          "teamInbox": {
+            "title": "PWA กล่องข้อความทีม"
+          }
+        },
+        "guide": {
+          "title": "แอปที่ติดตั้งได้",
+          "items": {
+            "manifest": {
+              "title": "manifest ที่ใช้งานอยู่",
+              "body": "manifest ให้บริการที่ /api/v2/public/manifest.webmanifest และมีเฉพาะเมื่อเปิดสวิตช์"
+            },
+            "install": {
+              "title": "ไอคอน",
+              "body": "อัปโหลดไอคอน PNG รูปสี่เหลี่ยมในหน้ารูปลักษณ์ หรือวาง URL ที่โฮสต์ไว้ 192 px สำหรับหน้าจอหลัก 512 px สำหรับหน้า splash"
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "พื้นที่จัดเก็บบนคลาวด์",
+        "eyebrow": "ผู้ดูแล - การจัดเก็บสื่อ",
+        "description": "ส่งไฟล์แนบสื่อทั้งหมดของลูกค้าไปยังบัคเก็ตของคุณเอง ได้แก่ Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 หรือที่เก็บแบบ S3-compatible ใดก็ได้ แทนการใช้เซิร์ฟเวอร์แอป เมื่อปิดไว้ สื่อจะอยู่ในดิสก์ในเครื่อง จึงไม่มีอะไรเสียจนกว่าคุณจะเปิดใช้",
+        "status": {
+          "active": "กำลังใช้งาน: {provider} การอัปโหลดใหม่จะไปยังบัคเก็ตของคุณ",
+          "configured": "ตั้งค่าแล้วแต่ปิดอยู่ สื่อยังอยู่ในดิสก์ในเครื่อง ทดสอบแล้วจึงเปิดใช้งาน",
+          "local": "ดิสก์ในเครื่อง (ยังไม่ได้ตั้งค่าผู้ให้บริการคลาวด์)",
+          "enabled": "เปิดใช้งาน",
+          "disabled": "ปิดใช้งาน"
+        },
+        "sections": {
+          "provider": {
+            "title": "การส่งสื่อไปคลาวด์"
+          },
+          "credentials": {
+            "title": "การเชื่อมต่อบัคเก็ต"
+          }
+        },
+        "guide": {
+          "title": "ตั้งค่า",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "Access key + secret + region + bucket ปลายทาง Wasabi คำนวณจาก region"
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "ใช้ฟิลด์ Bunny: โซนจัดเก็บและรหัสผ่าน region คือ region ของโซน (de, ny, la...)"
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "กรอกฟิลด์ S3 และวาง Endpoint URL ทำเครื่องหมาย path-style สำหรับ MinIO"
+            },
+            "test": {
+              "title": "ทดสอบก่อนเสมอ",
+              "body": "\"บันทึกและทดสอบการเชื่อมต่อ\" จะเขียนและลบไฟล์ทดสอบก่อนที่คุณจะเปิดใช้งาน"
+            }
+          }
+        },
+        "tip": {
+          "title": "ปลอดภัยโดยค่าเริ่มต้น",
+          "body": "ไฟล์ที่มีอยู่จะคงที่เดิม มีเพียงการอัปโหลดใหม่เท่านั้นที่ไปยังบัคเก็ต ไม่มีการย้ายหรือลบไฟล์ใดๆ"
+        }
+      },
+      "whatsapp": {
+        "title": "การตั้งค่า WhatsApp",
+        "eyebrow": "ผู้ดูแล - การตั้งค่า - ช่องทาง - WhatsApp",
+        "description": "แอป Meta เดียว (และพาร์ทเนอร์ Interakt) ที่หมายเลข WhatsApp ของทุกพื้นที่ทำงานถูกนำขึ้นระบบ หากไม่มี app id และ secret, Embedded Signup และการต่ออายุโทเค็นจะไม่ทำงาน หากไม่มี config id พื้นที่ทำงานต้องวางโทเค็นด้วยตนเอง ค่าที่บันทึกไว้จะแทนที่ค่าเริ่มต้นของเซิร์ฟเวอร์ภายในไม่กี่วินาทีในทุกโพรเซส",
+        "sections": {
+          "metaApp": {
+            "title": "Business API (WABA)",
+            "description": "Cloud API ทางการของ Meta จำเป็นสำหรับทราฟฟิกปริมาณสูง เทมเพลตข้อความ และโปรไฟล์ธุรกิจที่ยืนยันแล้ว รองรับทั้งการวางโทเค็นด้วยตนเองและ Embedded Signup (เข้าสู่ระบบ WhatsApp)"
+          },
+          "interakt": {
+            "title": "เส้นทาง Interakt",
+            "description": "หมายเลขที่เชื่อมผ่าน Embedded Signup จะส่งและรับผ่านพร็อกซี Meta ของ Interakt เป็นค่าเริ่มต้น เปลี่ยนเป็น Meta (โดยตรง) เพื่อข้าม Interakt หมายเลขที่มีอยู่จะคงเส้นทางที่เชื่อมไว้"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "Business API (WABA)",
+          "items": {
+            "api": {
+              "title": "Meta Cloud API",
+              "body": "Cloud API ทางการของ Meta จำเป็นสำหรับทราฟฟิกปริมาณสูง เทมเพลตข้อความ และโปรไฟล์ธุรกิจที่ยืนยันแล้ว รองรับทั้งการวางโทเค็นด้วยตนเองและ Embedded Signup (เข้าสู่ระบบ WhatsApp)"
+            },
+            "app": {
+              "title": "App ID + secret ของ Facebook",
+              "body": "developers.facebook.com/apps, Basic settings การเปลี่ยนแอปจะทำให้โทเค็นที่ออกโดยแอปเดิมใช้ไม่ได้ พื้นที่ทำงานจึงต้องเชื่อมต่อใหม่"
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "แดชบอร์ดแอป, WhatsApp, Configuration: วาง Callback URL และ Verify token จากหน้านี้ แล้วสมัครรับ messages และ message_template_status_update"
+            },
+            "perWorkspace": {
+              "title": "ต่อพื้นที่ทำงาน",
+              "body": "แต่ละพื้นที่ทำงานเชื่อมหมายเลขของตนเองจาก ช่องทาง > หมายเลข WhatsApp โดยจะขอ Phone number ID และโทเค็นถาวรที่นั่น"
+            },
+            "login": {
+              "title": "เข้าสู่ระบบ WABA (ไม่บังคับ)",
+              "body": "กรอก Embedded Signup Config ID เพื่อเปิดใช้ \"เข้าสู่ระบบด้วย Meta\" ในคลิกเดียว ต้องมีบทบาท Tech Provider ในแอป เว้นว่างเพื่อใช้การวางด้วยตนเองเท่านั้น"
+            }
+          }
+        },
+        "tip": {
+          "title": "เคล็ดลับ",
+          "body": "การเปลี่ยนเส้นทางเริ่มต้นหรือแอปขณะมีทราฟฟิกจะมีผลเฉพาะหมายเลขที่เชื่อมหลังจากนั้น หยุดแคมเปญชั่วคราวก่อนเปลี่ยนแอป Meta"
+        }
+      },
+      "campaigns": {
+        "title": "การส่งแคมเปญ",
+        "eyebrow": "ผู้ดูแล - แคมเปญ",
+        "description": "กฎระดับแพลตฟอร์มสำหรับแคมเปญของทุกพื้นที่ทำงาน: ความถี่ในการลองส่งข้อความที่ล้มเหลวซ้ำและเมื่อใดจะปิดแคมเปญที่ยังไม่เสร็จ",
+        "sections": {
+          "retry": {
+            "title": "การลองซ้ำ"
+          },
+          "expiry": {
+            "title": "ปิดอัตโนมัติ"
+          }
+        },
+        "guide": {
+          "title": "การทำงาน",
+          "items": {
+            "retry": {
+              "title": "การลองซ้ำ",
+              "body": "ผู้รับที่ส่งไม่สำเร็จจะถูกลองส่งอีกครั้งหลังจากรอ ตามจำนวนครั้งที่ตั้งไว้ที่นี่"
+            },
+            "expiry": {
+              "title": "ปิดอัตโนมัติ",
+              "body": "แคมเปญที่ยังทำงานเกินจำนวนชั่วโมงที่ตั้งไว้จะถูกปิด เพื่อไม่ให้ตัวส่งถูกยึดตลอดไป"
+            }
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Calendar",
+        "eyebrow": "ผู้ดูแล - การนัดหมาย",
+        "description": "ไคลเอนต์ OAuth ของ Google Cloud หนึ่งตัวสำหรับทั้งแพลตฟอร์ม จากนั้นพื้นที่ทำงานแต่ละแห่งเชื่อมบัญชี Google ของตนเองจาก การนัดหมาย > การตั้งค่า พื้นที่ทำงานจะไม่เห็น client id หรือ secret",
+        "sections": {
+          "oauth": {
+            "title": "ไคลเอนต์ Google OAuth",
+            "description": "หากไม่มี client id และ secret พื้นที่ทำงานจะเห็น Google Calendar เป็นไม่พร้อมใช้งาน และการจองจะดำเนินต่อไปโดยไม่มีปฏิทิน"
+          }
+        },
+        "guide": {
+          "title": "ตั้งค่าใน Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. โปรเจกต์และ API",
+              "body": "ในคอนโซล Google Cloud สร้างโปรเจกต์และเปิดใช้ Google Calendar API"
+            },
+            "redirect": {
+              "title": "2. ไคลเอนต์ OAuth",
+              "body": "สร้าง OAuth 2.0 Client ID ประเภท Web application และเพิ่ม redirect URI ที่แสดงในหน้านี้ภายใต้ Authorised redirect URIs"
+            },
+            "consent": {
+              "title": "3. หน้าจอยินยอม",
+              "body": "เพิ่มขอบเขต calendar.events, calendar.freebusy และ calendar.calendarlist.readonly แล้วเผยแพร่แอป: ในโหมด Testing Google จะยกเลิกการอนุญาตทุก 7 วัน และพื้นที่ทำงานต้องเชื่อมต่อใหม่"
+            },
+            "workspaces": {
+              "title": "4. พื้นที่ทำงานเชื่อมต่อ",
+              "body": "วาง client id และ secret ที่นี่แล้วบันทึก จากนั้นผู้ดูแลจะเชื่อมต่อจาก การนัดหมาย > การตั้งค่า > Google Calendar"
+            }
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "ตัวสร้างโฟลว์",
+        "eyebrow": "ผู้ดูแล - ระบบอัตโนมัติ",
+        "description": "เลือกตัวสร้างโฟลว์เริ่มต้นสำหรับทุกพื้นที่ทำงาน: ตัวสร้างแบบ Simple ทีละขั้นตอนหรือแคนวาส Advanced พื้นที่ทำงานสามารถแทนที่ได้ในหน้าโฟลว์",
+        "sections": {
+          "mode": {
+            "title": "ตัวสร้าง"
+          }
+        },
+        "guide": {
+          "title": "การทำงาน",
+          "items": {
+            "modes": {
+              "title": "ตัวสร้างทั้งสองแบบ",
+              "body": "Simple แสดงโฟลว์เป็นขั้นตอนเรียงลงมา มีเครื่องหมายบวกคั่นระหว่างขั้นตอน Advanced คือแคนวาสที่มีโหนดและเส้นเชื่อม ทั้งสองแบบบันทึกโฟลว์เดียวกัน จึงทำงานเหมือนกัน"
+            },
+            "existing": {
+              "title": "โฟลว์ที่มีอยู่แล้ว",
+              "body": "การเปลี่ยนการตั้งค่านี้จะไม่เปลี่ยนหรือลบโฟลว์ใดๆ โฟลว์จะทำงานต่อไป เพียงแต่จะเปิดในตัวสร้างที่เปิดใช้อยู่ พื้นที่ทำงานที่เลือกตัวสร้างของตนเองจะคงไว้จนกว่าจะเลือกค่าเริ่มต้นของแพลตฟอร์มอีกครั้ง"
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "เราใช้คุกกี้",
+      "learnMore": "ดูเพิ่มเติม",
+      "decline": "ปฏิเสธ",
+      "customize": "ปรับแต่ง",
+      "acceptAll": "ยอมรับทั้งหมด",
+      "rejectAll": "ปฏิเสธทั้งหมด",
+      "save": "บันทึกการตั้งค่า",
+      "preferences": "การตั้งค่าคุกกี้",
+      "categories": {
+        "necessary": {
+          "title": "จำเป็นอย่างยิ่ง",
+          "body": "จำเป็นให้เว็บไซต์ทำงานได้: การลงชื่อเข้าใช้ ความปลอดภัย และตัวเลือกของคุณ เปิดตลอด"
+        },
+        "analytics": {
+          "title": "คุกกี้การวิเคราะห์",
+          "body": "ช่วยให้เราเข้าใจการใช้งานเว็บไซต์เพื่อปรับปรุง"
+        },
+        "marketing": {
+          "title": "คุกกี้การตลาด",
+          "body": "ใช้วัดผลโฆษณาและแสดงแคมเปญที่เกี่ยวข้องกับคุณในที่อื่น"
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "ตัวอย่างสด",
+      "previewTitle": "ก่อนบันทึก",
+      "previewNote": "สี ขนาด และความทึบจะอัปเดตขณะที่คุณลาก ยังไม่มีการใช้ค่าใดกับใครจนกว่าคุณจะบันทึก",
+      "resetTitle": "รีเซ็ตเป็นค่าเริ่มต้น",
+      "resetBody": "ล้างการปรับแต่งทั้งหมดและคืนค่าชุดสีเดิม",
+      "reset": "รีเซ็ตสีทั้งหมด",
+      "tokens": "{count} โทเค็น",
+      "controls": "{count} ตัวควบคุม",
+      "primary": "หลัก",
+      "cancel": "ยกเลิก",
+      "active": "ใช้งาน"
+    },
+    "wabaCallback": {
+      "loading": "กำลังโหลดรายละเอียด webhook…",
+      "unavailable": "รายละเอียด webhook แสดงเฉพาะผู้ดูแลระบบสูงสุด",
+      "webhookUrl": "URL ของ Webhook",
+      "noUrl": "ตั้งค่า APP_URL หรือ WABA_WEBHOOK_PUBLIC_URL",
+      "webhookHint": "วางในแอป Meta (WhatsApp, Configuration, Callback URL) สมัครรับ: {fields}",
+      "verifyToken": "Verify token",
+      "verifyHint": "วางในหน้าเดียวกับ Verify token",
+      "copy": "คัดลอก",
+      "copied": "คัดลอกแล้ว",
+      "connected": "WABA ที่เชื่อมต่อ (ทุกพื้นที่ทำงาน)",
+      "fieldsTitle": "ฟิลด์ Webhook (coexistence และ Groups)",
+      "fieldsHint": "Coexistence ต้องให้แอป Meta สมัครรับ messages, smb_message_echoes, smb_app_state_sync และ history WhatsApp Groups ต้องการ group_lifecycle_update, group_participants_update, group_settings_update และ group_status_update",
+      "fieldsCheck": "ตรวจสอบฟิลด์ Webhook",
+      "fieldsChecking": "กำลังถาม Meta…",
+      "fieldsOk": "สมัครรับทุกฟิลด์แล้ว: ข้อความตอบกลับที่พิมพ์บนโทรศัพท์จะซิงก์ และเหตุการณ์กลุ่ม WhatsApp จะเข้ามา",
+      "fieldsMissing": "บางฟิลด์ยังไม่ได้สมัครรับ",
+      "fieldsSubscribed": "สมัครรับแล้ว ข้อความตอบกลับที่พิมพ์บนโทรศัพท์จะซิงก์ และเหตุการณ์กลุ่ม WhatsApp จะเข้ามา",
+      "fieldsMissingTag": "ขาดหาย",
+      "fieldsGroupTag": "กลุ่ม",
+      "fieldsSubscribe": "สมัครรับฟิลด์ที่ขาดหาย",
+      "fieldsSubscribing": "กำลังสมัครรับ…"
+    },
+    "googleCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "ลงทะเบียนที่อยู่นี้ตรงๆ เป็น Authorised redirect URI ในไคลเอนต์ OAuth เป็นที่ที่ Google ส่งเบราว์เซอร์ไปหลังผู้ดูแลพื้นที่ทำงานยินยอม",
+      "copy": "คัดลอก",
+      "copied": "คัดลอกแล้ว"
+    }
+  }
+}

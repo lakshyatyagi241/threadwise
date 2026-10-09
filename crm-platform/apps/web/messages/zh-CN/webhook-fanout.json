@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhooks",
+      "forwarding": "Webhook 转发"
+    },
+    "common": {
+      "loading": "加载中",
+      "retry": "重试",
+      "requestId": "请求 ID",
+      "dash": "-",
+      "errors": {
+        "forbidden": "您没有执行此操作的权限。",
+        "request": "无法完成该请求。",
+        "unexpected": "我方出现错误。请稍后重试。",
+        "network": "无法连接服务器。请检查网络连接后重试。",
+        "conflict": "此目标已被其他人更改。列表已重新加载：请重新应用您的更改。",
+        "validation": "部分值无效。请检查高亮显示的字段。",
+        "notFound": "该项目已不存在。",
+        "urlRejected": "此 URL 不被允许。请使用可从互联网访问的 https 地址。"
+      }
+    },
+    "page": {
+      "eyebrow": "管理 / 系统 / Webhooks",
+      "title": "Webhook 转发",
+      "description": "平台运营方提供的服务列表，这些服务会接收每条 Meta webhook 的副本。",
+      "banner": "Meta 只允许一个回调 URL。我们接收一次、验证后，将原始请求体（带原始签名）原样转发给每个启用的目标。",
+      "superOnly": "只有超级管理员可以管理 Webhook 转发。",
+      "add": "添加目标",
+      "tabs": {
+        "targets": "目标",
+        "failures": "失败的投递"
+      }
+    },
+    "targets": {
+      "empty": "还没有转发目标",
+      "emptyBody": "添加目标，开始将 Meta webhook 转发到其他服务。",
+      "columns": {
+        "target": "目标",
+        "active": "已启用",
+        "fields": "字段",
+        "deliveries": "投递",
+        "last": "最近一次投递",
+        "actions": "操作"
+      },
+      "allFields": "所有字段",
+      "success": "{count, number} 成功",
+      "failure": "{count, number} 失败",
+      "pending": "{count, number} 待处理",
+      "pendingLabel": "{count, number} 条失败的投递等待重放",
+      "neverDelivered": "尚未投递任何内容",
+      "lastStatus": "状态 {status}",
+      "lastError": "错误：{error}",
+      "lastAt": "于 {time}",
+      "activeSwitch": "转发到 {name}",
+      "on": "目标已开启",
+      "off": "目标已关闭",
+      "edit": "编辑",
+      "test": "测试",
+      "testing": "测试中",
+      "testOk": "测试通过：状态 {status}，耗时 {ms, number} 毫秒",
+      "testFailed": "测试失败：{reason}（耗时 {ms, number} 毫秒）",
+      "testNoStatus": "无响应",
+      "testStatus": "状态 {status}",
+      "delete": "删除",
+      "deleteTitle": "删除 {name}？",
+      "deleteBody": "该目标将停止接收 webhook，其保留的失败投递也会被删除。此操作无法撤销。",
+      "deleteConfirm": "删除目标",
+      "cancel": "取消",
+      "toasts": {
+        "created": "已添加 {name}",
+        "saved": "已保存 {name}",
+        "on": "{name} 已开启",
+        "off": "{name} 已关闭",
+        "deleted": "已删除 {name}"
+      }
+    },
+    "dialog": {
+      "createTitle": "添加转发目标",
+      "editTitle": "编辑 {name}",
+      "close": "关闭",
+      "name": "名称",
+      "namePlaceholder": "分析服务",
+      "url": "URL",
+      "urlHint": "仅支持 https。拒绝内网地址。",
+      "headerName": "标头名称（可选）",
+      "headerNameHint": "随每次投递发送，例如 Authorization。",
+      "headerValue": "标头值",
+      "headerValueSaved": "已保存，以 ••••{last4} 结尾。留空则保留原值。",
+      "headerValueSavedNoLast4": "已保存。留空则保留原值。",
+      "headerValueHint": "只写：保存后不会再次显示。",
+      "removeHeader": "移除已保存的标头",
+      "fieldFilter": "字段过滤",
+      "fieldFilterHint": "留空则转发所有字段。输入字段名后按 Enter，例如 messages 或 message_template_status_update。",
+      "fieldFilterPlaceholder": "添加字段",
+      "fieldRemove": "移除 {field}",
+      "timeout": "超时（秒）",
+      "timeoutHint": "1 到 30",
+      "maxAttempts": "最大尝试次数",
+      "maxAttemptsHint": "1 到 10",
+      "active": "转发到此目标",
+      "save": "保存",
+      "saving": "正在保存",
+      "cancel": "取消",
+      "errors": {
+        "nameRequired": "请输入名称。",
+        "urlRequired": "请输入 URL。",
+        "urlHttps": "URL 必须以 https:// 开头。",
+        "headerNameInvalid": "仅可使用字母、数字和短横线。",
+        "headerValueRequired": "标头需要同时填写名称和值。",
+        "headerNameRequired": "请同时输入标头名称。",
+        "timeout": "请输入 1 到 30 之间的整数。",
+        "maxAttempts": "请输入 1 到 10 之间的整数。"
+      }
+    },
+    "failures": {
+      "empty": "没有失败的投递",
+      "emptyBody": "重试次数用尽的投递会保留在这里 14 天，以便您重新发送。",
+      "filterAll": "所有目标",
+      "filterLabel": "目标",
+      "columns": {
+        "target": "目标",
+        "when": "失败时间",
+        "attempts": "尝试次数",
+        "reason": "原因",
+        "size": "大小",
+        "actions": "操作"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} 字节",
+      "replay": "重放",
+      "replaying": "正在重放",
+      "replayed": "已于 {time} 重放",
+      "replayOk": "已投递：状态 {status}，耗时 {ms, number} 毫秒",
+      "replayFailed": "未投递：{reason}（耗时 {ms, number} 毫秒）",
+      "reasonStatus": "状态 {status}",
+      "reasonNone": "无响应"
+    }
+  }
+}

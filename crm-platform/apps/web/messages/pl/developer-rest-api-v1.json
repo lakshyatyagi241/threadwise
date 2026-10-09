@@ -1,0 +1,93 @@
+{
+  "developer-rest-api-v1": {
+    "common": {
+      "dismiss": "Odrzuć",
+      "copy": "Kopiuj",
+      "copied": "Skopiowano",
+      "copyFailed": "Nie udało się skopiować. Zaznacz tekst i skopiuj go ręcznie."
+    },
+    "rail": {
+      "name": "API dla programistów",
+      "tagline": "REST · /api/v1",
+      "keyActive": "Klucz aktywny",
+      "noKey": "Brak klucza",
+      "baseUrl": "Bazowy adres URL",
+      "authHeader": "Nagłówek uwierzytelniania",
+      "help": {
+        "title": "Potrzebujesz pomocy?",
+        "body": "Pełna dokumentacja żądań i odpowiedzi, z przykładami do skopiowania dla każdego endpointu.",
+        "link": "Czytaj dokumentację"
+      }
+    },
+    "page": {
+      "crumbLabel": "Ścieżka nawigacji",
+      "crumbSettings": "Ustawienia",
+      "crumbHere": "Programiści",
+      "title": "Programista",
+      "titleAccent": "Klucze API",
+      "lead": "Wygeneruj klucz, aby wywoływać REST API z własnych aplikacji, CRM lub automatyzacji: wysyłać wiadomości, zarządzać kontaktami, szablonami, wiadomościami masowymi i nie tylko. Jeden klucz na przestrzeń roboczą.",
+      "back": "Wstecz",
+      "openDocs": "Otwórz dokumentację",
+      "loading": "Wczytywanie klucza API",
+      "forbidden": {
+        "title": "Nie możesz wyświetlać kluczy API",
+        "body": "Twoja rola nie obejmuje dostępu do kluczy API. Poproś administratora przestrzeni roboczej o nadanie uprawnienia do kluczy API."
+      }
+    },
+    "banner": {
+      "title": "Twój nowy klucz API",
+      "warning": "Skopiuj go teraz i przechowaj w bezpiecznym miejscu. Ze względów bezpieczeństwa przechowujemy tylko skrót, więc nie zostanie ponownie wyświetlony."
+    },
+    "key": {
+      "title": "Twój klucz API",
+      "active": "Aktywny",
+      "untitled": "Klucz bez nazwy",
+      "created": "Utworzono {date}",
+      "lastUsed": "Ostatnio użyty {when}",
+      "never": "nigdy",
+      "revoke": "Unieważnij",
+      "noRevoke": "Twoja rola nie pozwala unieważniać kluczy API.",
+      "revoked": "Klucz API został unieważniony. Każda aplikacja, która go używa, natychmiast przestanie działać.",
+      "footer": "Dozwolony jest tylko jeden klucz na przestrzeń roboczą. Unieważnij ten, aby wydać nowy.",
+      "confirm": {
+        "title": "Unieważnić ten klucz?",
+        "message": "Każda aplikacja lub integracja używająca tego klucza natychmiast przestanie działać. Tej operacji nie można cofnąć. Potem możesz utworzyć nowy klucz.",
+        "accept": "Unieważnij",
+        "cancel": "Anuluj"
+      }
+    },
+    "create": {
+      "title": "Utwórz klucz",
+      "help": "Nadaj kluczowi nazwę, aby pamiętać, gdzie jest używany. Klucz jest wyświetlany raz, podczas tworzenia.",
+      "name": "Nazwa klucza",
+      "placeholder": "np. Backend produkcyjny",
+      "submit": "Utwórz klucz",
+      "submitting": "Tworzenie klucza…",
+      "created": "Klucz API został utworzony. Skopiuj go teraz - nie zostanie ponownie wyświetlony.",
+      "noCreate": "Twoja rola nie pozwala tworzyć kluczy API. Zapytaj administratora przestrzeni roboczej.",
+      "planLocked": "Twój plan nie obejmuje REST API.",
+      "errors": {
+        "required": "Wpisz nazwę klucza.",
+        "tooLong": "Nazwa może mieć maksymalnie 120 znaków."
+      }
+    },
+    "quickstart": {
+      "title": "Szybki start",
+      "reference": "Pełna dokumentacja",
+      "intro": "Wyślij pierwszą wiadomość. Zastąp klucz i odbiorcę:"
+    },
+    "errors": {
+      "planLimit": "Masz już aktywny klucz API. Unieważnij go przed utworzeniem nowego - dozwolony jest tylko jeden klucz na przestrzeń roboczą.",
+      "planLocked": "Twój plan nie obejmuje REST API. Zmień plan, aby tworzyć klucze API.",
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "validation": "Nazwa klucza jest nieprawidłowa. Sprawdź ją i spróbuj ponownie.",
+      "notFound": "Ten klucz już nie istnieje. Lista została odświeżona.",
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "unexpected": "Po naszej stronie coś poszło nie tak. Spróbuj ponownie za chwilę.",
+      "loadFailed": "Nie udało się wczytać klucza API.",
+      "retry": "Ponów",
+      "upgrade": "Zobacz plany",
+      "requestId": "Identyfikator żądania: {id}"
+    }
+  }
+}

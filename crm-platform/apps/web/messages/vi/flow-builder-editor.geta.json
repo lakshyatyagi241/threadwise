@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "Đang đưa lên trực tiếp…",
+        "live": "Trực tiếp",
+        "liveTitle": "Đang chạy trên Geta",
+        "push": "Đưa lên trực tiếp",
+        "pushHint": "Đã đăng tại đây; đưa lên trực tiếp trên Geta ngay",
+        "failed": "Thất bại",
+        "failedConfiguration": "Lỗi khi cập nhật cấu hình",
+        "failedPublish": "Lỗi khi đăng",
+        "retry": "Thử lại",
+        "retrying": "Đang thử lại…",
+        "reasonLabel": "Lý do",
+        "failedNote": "Luồng vẫn được đăng tại đây. Thử lại sẽ tiếp tục từ bước bị lỗi.",
+        "notConfigured": "Đã đăng tại đây; thiết lập đăng bài Geta trong cài đặt để đưa lên trực tiếp.",
+        "openSettings": "Mở cài đặt",
+        "dismiss": "Bỏ qua"
+      },
+      "settings": {
+        "title": "Đăng bài Geta",
+        "intro": "Khi bạn nhấn Đăng trong trình tạo luồng, bot cũng sẽ được đưa lên trực tiếp trên bảng điều khiển Geta. Nhập thông tin kết nối một lần cho không gian làm việc này. Khóa bí mật được mã hóa và sẽ không hiển thị lại.",
+        "viewOnly": "Bạn có thể xem trạng thái của các cài đặt này nhưng không thể thay đổi.",
+        "loading": "Đang tải…",
+        "loadFailed": "Không thể tải cài đặt.",
+        "retry": "Thử lại",
+        "fixtureNotice": "Máy chủ này đang ở chế độ fixture: việc đăng bài được mô phỏng và không có gì được gửi đến Geta.",
+        "ready": "Sẵn sàng",
+        "incomplete": "Chưa hoàn tất",
+        "readyNote": "Đăng một luồng cũng sẽ đưa bot lên trực tiếp trên Geta.",
+        "incompleteNote": "Điền đầy đủ mọi trường bên dưới để đưa các luồng đã đăng lên trực tiếp trên Geta.",
+        "baseUrl": {
+          "label": "URL cơ sở",
+          "hint": "Địa chỉ API Geta, ví dụ https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "Nguồn bảng điều khiển (không bắt buộc)",
+          "hint": "Gửi làm origin và referer của mỗi yêu cầu. Để trống thì không gửi gì cả."
+        },
+        "authorization": {
+          "label": "Mã ủy quyền",
+          "hint": "Gửi đúng như bạn nhập, không thêm “Bearer ”."
+        },
+        "getaHost": {
+          "label": "Mã geta-host",
+          "hint": "Gửi trong tiêu đề geta-host."
+        },
+        "secretKept": "Đã lưu. Để trống ô để giữ nguyên, hoặc nhập giá trị mới để thay thế.",
+        "secretPlaceholder": "Đã lưu (ẩn)",
+        "show": "Hiện",
+        "hide": "Ẩn",
+        "remove": "Xóa",
+        "record": {
+          "label": "Bản ghi chatbot Geta",
+          "paste": "Dán bản ghi chatbot (JSON)",
+          "replace": "Thay thế bản ghi chatbot (JSON)",
+          "hint": "Đối tượng chatbot đúng như cần gửi đến Geta, hoặc toàn bộ nội dung yêu cầu có khóa chatbot. Cần ít nhất id và bot_id. Chỉ modified_time được làm mới khi gửi.",
+          "keepPlaceholder": "Để trống để giữ bản ghi đã lưu",
+          "id": "ID chatbot",
+          "name": "Tên",
+          "botId": "ID bot",
+          "remove": "Xóa bản ghi đã lưu"
+        },
+        "saved": "Đã lưu",
+        "notSet": "Chưa đặt",
+        "save": "Lưu",
+        "saving": "Đang lưu…",
+        "saveFailed": "Không thể lưu.",
+        "removed": "Đã xóa.",
+        "clear": "Xóa tất cả",
+        "cleared": "Đã xóa cài đặt đăng bài Geta.",
+        "clearConfirm": {
+          "title": "Xóa đăng bài Geta?",
+          "message": "Thao tác này xóa URL cơ sở, cả hai mã và bản ghi chatbot. Các luồng đã đăng vẫn được giữ đăng tại đây nhưng sẽ không còn được đưa lên Geta.",
+          "confirm": "Xóa tất cả",
+          "cancel": "Hủy"
+        }
+      }
+    }
+  }
+}

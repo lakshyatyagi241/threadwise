@@ -1,0 +1,268 @@
+{
+  "invoicing": {
+    "method": {
+      "bank": "Banküberweisung",
+      "manual": "Manuell",
+      "wa_pay": "WhatsApp Pay",
+      "storefront": "Onlineshop"
+    },
+    "toolbar": {
+      "currency": "Währung",
+      "currencyPlaceholder": "USD",
+      "issued": "Ausgestellt",
+      "issuedWindow": "Ausstellungszeitraum",
+      "due": "Fällig",
+      "dueWindow": "Fälligkeitszeitraum",
+      "dueFrom": "Fällig ab",
+      "dueTo": "Fällig bis",
+      "docType": "Dokumentart",
+      "anyDocType": "Alle Arten",
+      "mine": "Meine Rechnungen",
+      "docTypes": {
+        "tax_invoice": "Steuerrechnung",
+        "proforma": "Proforma",
+        "receipt": "Quittung"
+      }
+    },
+    "strip": {
+      "label": "Noch offener Betrag",
+      "outstanding": "Offen ({currency})",
+      "overdue": "Davon überfällig"
+    },
+    "row": {
+      "creditNote": "Gutschrift erstellen",
+      "downloadPdf": "PDF herunterladen"
+    },
+    "bulk": {
+      "sendLink": "Link als gesendet markieren",
+      "someSkipped": "{count, plural, one {# ausgewählte Rechnung wurde übersprungen, weil sie diese Aktion nicht zulässt.} other {# ausgewählte Rechnungen wurden übersprungen, weil sie diese Aktion nicht zulassen.}}",
+      "done": {
+        "send": "{count, plural, one {# Rechnung als gesendet markiert.} other {# Rechnungen als gesendet markiert.}}"
+      },
+      "confirm": {
+        "delete": {
+          "message": "{count, plural, one {# Entwurf wird endgültig gelöscht. Rechnungen, die keine Entwürfe sind, bleiben unverändert.} other {# Entwürfe werden endgültig gelöscht. Rechnungen, die keine Entwürfe sind, bleiben unverändert.}}"
+        }
+      },
+      "voidDialog": {
+        "title": "Ausgewählte Rechnungen stornieren",
+        "close": "Schließen",
+        "keep": "Rechnungen behalten",
+        "confirm": "{count, plural, one {# Rechnung stornieren} other {# Rechnungen stornieren}}",
+        "warning": "{count, plural, one {# Rechnung wird storniert. Sie behält ihre Nummer, kann aber nicht mehr bezahlt oder bearbeitet werden.} other {# Rechnungen werden storniert. Sie behalten ihre Nummern, können aber nicht mehr bezahlt oder bearbeitet werden.}}",
+        "skipped": "{count, plural, one {# ausgewählte Rechnung wird übersprungen: Storniert werden können nur ausgestellte Rechnungen ohne Zahlung und ohne Gutschrift.} other {# ausgewählte Rechnungen werden übersprungen: Storniert werden können nur ausgestellte Rechnungen ohne Zahlung und ohne Gutschrift.}}",
+        "reason": "Grund (wird auf jeder Rechnung gespeichert)",
+        "reasonRequired": "Geben Sie an, warum diese Rechnungen storniert werden."
+      }
+    },
+    "actions": {
+      "sentVia": {
+        "link": "Zusammen mit dem Link als gesendet erfasst.",
+        "email": "Rechnung per E-Mail gesendet.",
+        "whatsapp": "Rechnung über WhatsApp gesendet."
+      },
+      "markedPaid": "Als bezahlt markiert.",
+      "linkRegenerated": "Neuer Link erstellt. Der alte funktioniert nicht mehr.",
+      "linkRevoked": "Link deaktiviert.",
+      "linkUnavailable": "Diese Rechnung hat keinen aktiven Link. Öffnen Sie die Rechnung, um einen neuen zu erstellen."
+    },
+    "voidDialog": {
+      "reasonHint": "Pflichtfeld. Wird in der Zeitleiste der Rechnung gespeichert.",
+      "reasonRequired": "Geben Sie an, warum die Rechnung storniert wird.",
+      "refundFirst": "Für diese Rechnung sind Zahlungen eingegangen. Erstatten Sie diese zuerst über die Zahlungsliste der Rechnung und stornieren Sie danach die Rechnung.",
+      "creditsFirst": "Zu dieser Rechnung gibt es Gutschriften. Stornieren Sie zuerst die Gutschriften und danach die Rechnung."
+    },
+    "sendDialog": {
+      "loading": "Rechnung wird geladen",
+      "channel": "Wie möchten Sie sie senden?",
+      "channels": {
+        "link": "Link selbst teilen",
+        "email": "E-Mail",
+        "whatsapp": "WhatsApp"
+      },
+      "action": {
+        "link": "Als gesendet markieren",
+        "email": "E-Mail senden",
+        "whatsapp": "Über WhatsApp senden"
+      },
+      "linkOff": "Diese Rechnung hat keinen aktiven Link. Erstellen Sie auf der Link-Karte der Rechnung einen neuen und teilen Sie ihn.",
+      "linkRecords": "Wenn Sie den Link selbst teilen, wird nur erfasst, dass er gesendet wurde.",
+      "noEmail": "Auf dieser Rechnung ist keine E-Mail-Adresse hinterlegt",
+      "noPhone": "Auf dieser Rechnung ist keine Telefonnummer hinterlegt",
+      "noEmailHelp": "Für diese Rechnung ist keine E-Mail-Adresse des Käufers hinterlegt. Schließen Sie dieses Fenster, fügen Sie unter Details bearbeiten eine hinzu und versuchen Sie es erneut.",
+      "noPhoneHelp": "Für diese Rechnung ist keine Telefonnummer des Käufers hinterlegt. Schließen Sie dieses Fenster, fügen Sie unter Details bearbeiten eine hinzu und versuchen Sie es erneut.",
+      "message": "Nachricht",
+      "messageHint": "Optional. Wird der Nachricht zur Rechnung hinzugefügt.",
+      "deliveryNote": "Die Rechnung wird zur Zustellung an den Käufer eingereiht. Die Zeitleiste zeigt, wann sie gesendet wurde."
+    },
+    "editDialog": {
+      "title": "Details bearbeiten",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "save": "Änderungen speichern",
+      "saved": "Rechnungsdetails gespeichert.",
+      "reload": "Rechnung neu laden",
+      "conflict": "Während Ihrer Bearbeitung hat jemand anderes diese Rechnung geändert. Laden Sie sie neu, um die neueste Version zu sehen, und nehmen Sie Ihre Änderung dann erneut vor.",
+      "intro": "Eine ausgestellte Rechnung behält ihre Positionen, Beträge und Nummerierung. Diese Angaben können sich noch ändern.",
+      "email": "E-Mail des Käufers",
+      "phone": "Telefon des Käufers",
+      "phoneHint": "Mit Ländervorwahl, z. B. +14155550123",
+      "contact": "Kontakt",
+      "owner": "Verantwortlich",
+      "dueDate": "Fälligkeitsdatum",
+      "dueHint": "Verlängern oder verkürzen Sie die Zahlungsfrist.",
+      "reference": "Referenz",
+      "notes": "Notizen",
+      "terms": "Bedingungen"
+    },
+    "payDialog": {
+      "overpayNote": "Das ist {extra} mehr als der Saldo. Sie werden gebeten, dies zu bestätigen, bevor es als Guthaben erfasst wird.",
+      "overpayConfirm": "{extra} mehr als der Saldo werden als Guthaben erfasst und auf der Rechnung angezeigt. Drücken Sie die Schaltfläche erneut zur Bestätigung.",
+      "problems": {
+        "tooMuch": "Das ist mehr als die Rechnung noch offen hat."
+      }
+    },
+    "markPaidDialog": {
+      "title": "Als bezahlt markieren",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "confirm": "Zahlung erfassen",
+      "message": "Den gesamten Saldo von {amount} heute als eingegangen erfassen?",
+      "method": "Entgegengenommen von"
+    },
+    "refundDialog": {
+      "problems": {
+        "dateFuture": "Das Erstattungsdatum darf nicht in der Zukunft liegen."
+      }
+    },
+    "paymentsSection": {
+      "refundChip": "Erstattung",
+      "receipt": "Beleg",
+      "refundOf": "erstattet {receipt}",
+      "refundedSoFar": "Bisher {amount} erstattet"
+    },
+    "activity": {
+      "none": "Noch nichts passiert.",
+      "actors": {
+        "buyer": "Der Käufer",
+        "gateway": "Zahlungsdienstleister",
+        "system": "System"
+      },
+      "events": {
+        "sent": "An den Käufer gesendet",
+        "overdue": "Überfällig geworden",
+        "partially_paid": "Teilweise bezahlt",
+        "link_regenerated": "Öffentlicher Link ersetzt",
+        "link_revoked": "Öffentlicher Link deaktiviert",
+        "pay_attempt": "Online-Zahlung versucht",
+        "credit_note_issued": "Gutschrift"
+      }
+    },
+    "linked": {
+      "invoiced": "Berechnet",
+      "paid": "Bezahlt",
+      "outstanding": "Offen",
+      "overdue": "Überfällig",
+      "latest": "{count, plural, one {Es wird die neueste Rechnung angezeigt.} other {Es werden die neuesten # Rechnungen angezeigt.}}"
+    },
+    "detail": {
+      "editDetails": "Details bearbeiten",
+      "downloadPdf": "PDF",
+      "createCreditNote": "Gutschrift erstellen",
+      "linkOffBanner": "Der Link des Käufers ist deaktiviert, daher kann der Käufer diese Rechnung nicht öffnen. Erstellen Sie in der Link-Karte einen neuen Link.",
+      "refunded": "Erstattet",
+      "credited": "Gutgeschrieben",
+      "credit": "Gutschrift",
+      "detailsLabel": "Rechnungsdetails",
+      "contact": "Kontakt",
+      "company": "Unternehmen",
+      "quote": "Angebot",
+      "salesOrder": "Auftrag",
+      "recurring": "Wiederkehrender Plan",
+      "makeRecurring": "Wiederkehrend machen",
+      "reference": "Referenz",
+      "owner": "Verantwortlich",
+      "createdBy": "Erstellt von",
+      "overpaid": "Es wurde mehr eingegangen oder gutgeschrieben, als die Rechnung verlangt. Der Überschuss wird als Guthaben angezeigt.",
+      "voidNeedsRefund": "Um diese Rechnung zu stornieren, erstatten Sie zuerst ihre Zahlungen. Außerdem darf sie keine Gutschriften haben.",
+      "sources": {
+        "manual": "Manuell erstellt",
+        "quote": "Aus einem Angebot",
+        "order": "Aus einem Auftrag",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Onlineshop",
+        "api": "API",
+        "ai": "AI Assistant",
+        "recurring": "Wiederkehrende Rechnung",
+        "sales_order": "Auftrag"
+      },
+      "creditNotes": {
+        "title": "Gutschriften",
+        "create": "Gutschrift erstellen",
+        "loading": "Gutschriften werden geladen",
+        "none": "Zu dieser Rechnung gibt es keine Gutschriften.",
+        "draft": "Entwurf",
+        "status": {
+          "draft": "Entwurf",
+          "issued": "Ausgestellt",
+          "void": "Stornieren"
+        }
+      }
+    },
+    "linkCard": {
+      "title": "Öffentlicher Link",
+      "address": "Link-Adresse",
+      "state": {
+        "active": "Aktiv",
+        "revoked": "Deaktiviert",
+        "expired": "Abgelaufen"
+      },
+      "off": {
+        "revoked": "Der Link wurde deaktiviert. Der Käufer sieht eine Seite, auf der steht, dass die Rechnung nicht verfügbar ist.",
+        "expired": "Der Link ist abgelaufen. Der Käufer sieht eine Seite, auf der steht, dass die Rechnung nicht verfügbar ist."
+      },
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "expires": "Läuft ab",
+      "revokedAt": "Deaktiviert",
+      "views": "Aufrufe",
+      "firstViewed": "Erster Aufruf",
+      "lastViewed": "Letzter Aufruf",
+      "open": "Seite des Käufers öffnen",
+      "regenerate": "Neuer Link",
+      "revoke": "Deaktivieren",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "regenerateTitle": "Neuen Link erstellen",
+      "regenerateWarning": "Der aktuelle Link funktioniert sofort nicht mehr. Wer ihn hat, sieht, dass die Rechnung nicht verfügbar ist.",
+      "regenerateConfirm": "Neuen Link erstellen",
+      "expiry": "Der neue Link ist gültig für",
+      "expiryNever": "Kein Ablauf",
+      "expiryDays": "{count, plural, one {# Tag} other {# Tage}}",
+      "revokeTitle": "Link deaktivieren?",
+      "revokeMessage": "Der Käufer kann diese Rechnung über den Link nicht mehr öffnen oder bezahlen. Sie können später einen neuen Link erstellen.",
+      "revokeConfirm": "Link deaktivieren"
+    },
+    "errors": {
+      "codes": {
+        "INV_NOT_DRAFT": "Diese Rechnung ist bereits ausgestellt, daher können sich ihre Positionen und Beträge nicht mehr ändern.",
+        "INV_NOT_ISSUED": "Das ist nur bei einer ausgestellten Rechnung möglich. Stellen Sie zuerst den Entwurf aus.",
+        "INV_ALREADY_VOID": "Diese Rechnung ist bereits storniert.",
+        "INV_HAS_PAYMENTS": "Für diese Rechnung sind noch Zahlungen vorhanden. Erstatten Sie diese zuerst und stornieren Sie dann die Rechnung.",
+        "INV_HAS_CREDITS": "Zu dieser Rechnung gibt es Gutschriften. Stornieren Sie zuerst die Gutschriften und dann die Rechnung.",
+        "INV_NOT_DELETABLE": "Nur ein Entwurf kann gelöscht werden. Stornieren Sie stattdessen diese Rechnung.",
+        "INV_NO_RECIPIENT": "Die Rechnung hat für diesen Kanal keine E-Mail-Adresse und keine Telefonnummer. Fügen Sie eine über Details bearbeiten hinzu und versuchen Sie es erneut.",
+        "INV_LINK_UNAVAILABLE": "Diese Rechnung hat keinen aktiven Link. Erstellen Sie über die Link-Karte einen neuen.",
+        "INV_OWNER_INVALID": "Diese Person ist kein aktives Mitglied dieses Workspace. Wählen Sie einen anderen Verantwortlichen.",
+        "PAY_OVERPAYMENT": "Das ist mehr als der offene Saldo der Rechnung. Senken Sie den Betrag oder bestätigen Sie, dass Sie ein Guthaben erfassen.",
+        "PAY_FUTURE_DATE": "Das Zahlungsdatum darf nicht in der Zukunft liegen.",
+        "PAY_CURRENCY_MISMATCH": "Die Zahlung muss in derselben Währung wie die Rechnung erfolgen.",
+        "PAY_REFUND_EXCEEDS": "Das ist mehr, als bei dieser Zahlung noch erstattet werden kann.",
+        "PAY_NOT_REFUNDABLE": "Dieser Eintrag kann nicht erstattet werden. Erstattet werden kann nur eine Zahlung mit einem Restbetrag.",
+        "PAY_NOTHING_TO_PAY": "Für diese Rechnung ist nichts mehr offen.",
+        "ROW_VERSION_CONFLICT": "Diese Rechnung wurde gerade von einer anderen Person geändert. Laden Sie neu, um die aktuelle Version zu sehen, und versuchen Sie es dann erneut."
+      }
+    }
+  }
+}

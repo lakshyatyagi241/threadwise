@@ -119,7 +119,9 @@ test.describe('rail (desktop)', () => {
       await open(page, '/admin');
       await page.getByTestId(`home-hub-${id}`).click();
       await expect(menu(page)).toBeVisible();
-      await expect(page.getByTestId('hub-switcher')).toBeVisible();
+      await expect(page.getByTestId('hub-pages')).toBeVisible();
+      // The main menu stays: every area is still listed beside the open one's pages.
+      await expect(aside(page).locator('[data-testid^="hub-"][href]')).toHaveCount(HUBS.length + 1);
       const hrefs = await menu(page)
         .locator('[data-testid^="menu-"]')
         .evaluateAll((els) => els.map((el) => el.getAttribute('href')!));
@@ -146,20 +148,19 @@ test.describe('rail (desktop)', () => {
     await expect(menuItem(page, 'roles')).toHaveAttribute('aria-current', 'page');
   });
 
-  test('a long area groups its pages under small headings, and All areas leads back to Home', async ({
+  test('a long area groups its pages under small headings, and Home stays in the main menu', async ({
     page,
   }) => {
     await open(page, '/admin/settings/general');
     await expect(menuItem(page, 'settings-general')).toHaveAttribute('aria-current', 'page');
     await expect(menu(page).getByText('Integrations', { exact: true })).toBeVisible();
     await expect(menu(page).getByText('Infrastructure', { exact: true })).toBeVisible();
-    await page.getByTestId('hub-all-areas').click();
+    await page.getByTestId('hub-home').click();
     await expect(page).toHaveURL(/\/admin$/);
   });
 
-  test('the area switcher moves to a neighbouring area', async ({ page }) => {
+  test('the main menu moves to a neighbouring area', async ({ page }) => {
     await open(page, '/admin/invoices');
-    await page.getByTestId('hub-switcher').click();
     await hub(page, 'support').click();
     await expect(page).toHaveURL(/\/admin\/support/);
     await expect(menuItem(page, 'support-inbox')).toHaveAttribute('aria-current', 'page');

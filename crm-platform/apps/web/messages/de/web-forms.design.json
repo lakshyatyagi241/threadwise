@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "Design",
+        "custom": "Individuell: Sie haben eine Farbe, Ecke oder Schrift des Designs geändert, von dem Sie gestartet sind.",
+        "classic": "Klassisch",
+        "ocean": "Ozean",
+        "forest": "Wald",
+        "sunset": "Sonnenuntergang",
+        "berry": "Beere",
+        "slate": "Schiefer",
+        "noir": "Noir",
+        "paper": "Papier"
+      },
+      "colours": {
+        "title": "Farben",
+        "hint": "Verwenden Sie sechsstellige Hex-Farben wie #2563eb. Ein unvollständiger Wert wird nicht übernommen.",
+        "swatch": "{name} (Farbauswahl)",
+        "primary": "Primär (Schaltflächen und Akzente)",
+        "background": "Seitenhintergrund",
+        "surface": "Formularhintergrund",
+        "text": "Text",
+        "mutedText": "Sekundärer Text",
+        "border": "Rahmen",
+        "error": "Fehler"
+      },
+      "contrast": {
+        "title": "Einige Farben sind schwer lesbar. Streben Sie einen Kontrast von mindestens 4.5:1 an.",
+        "item": "{pair}: {ratio}:1",
+        "ok": "Alle geprüften Farbpaare sind gut lesbar.",
+        "text": "Text auf dem Formularhintergrund",
+        "muted": "Sekundärer Text auf dem Formularhintergrund",
+        "button": "Schaltflächentext auf der Schaltfläche"
+      },
+      "shape": {
+        "title": "Form und Abstand",
+        "radius": "Ecken",
+        "none": "Keine",
+        "sm": "Klein",
+        "md": "Mittel",
+        "lg": "Groß",
+        "pill": "Rund",
+        "density": "Abstand",
+        "compact": "Kompakt",
+        "comfortable": "Komfortabel",
+        "spacious": "Weit",
+        "shadow": "Schatten",
+        "shadowNone": "Keiner"
+      },
+      "type": {
+        "title": "Typografie",
+        "font": "Schrift",
+        "fontHint": "Webschriften werden nur geladen, wenn Sie eine auswählen.",
+        "sample": "Franz jagt im komplett verwahrlosten Taxi quer durch Bayern.",
+        "scale": "Textgröße"
+      },
+      "fonts": {
+        "system": "Systemstandard",
+        "serif": "Serifen",
+        "mono": "Nichtproportional"
+      },
+      "layout": {
+        "title": "Layout und Schaltflächen",
+        "preset": "Layout",
+        "classic": "Klassische Karte",
+        "fullWidth": "Volle Breite",
+        "split": "Geteilt mit Titelbild",
+        "minimal": "Minimal",
+        "labelPosition": "Position der Beschriftung",
+        "labelTop": "Über dem Feld",
+        "labelLeft": "Neben dem Feld",
+        "buttonStyle": "Schaltflächenstil",
+        "filled": "Gefüllt",
+        "outline": "Umrandet",
+        "buttonWidth": "Schaltflächenbreite",
+        "widthAuto": "An die Beschriftung anpassen",
+        "widthFull": "Volle Breite",
+        "maxWidth": "Maximale Breite",
+        "maxWidthHint": "Zwischen 320 und 960 Pixel.",
+        "maxWidthInvalid": "Geben Sie eine ganze Zahl von 320 bis 960 ein.",
+        "maxWidthSlider": "Schieberegler für maximale Breite",
+        "mode": "Farbmodus",
+        "light": "Hell",
+        "dark": "Dunkel",
+        "auto": "Gerät des Besuchers übernehmen"
+      },
+      "images": {
+        "title": "Bilder",
+        "logo": "Logo",
+        "logoHint": "Eine https-Adresse. Leer lassen für kein Logo.",
+        "cover": "Titelbild",
+        "coverHint": "Wird im geteilten Layout neben dem Formular angezeigt.",
+        "background": "Hintergrundbild",
+        "backgroundHint": "Eine https-Adresse. Leer lassen für einen einfachen Hintergrund.",
+        "invalid": "Geben Sie eine https-Adresse ein oder lassen Sie das Feld leer."
+      },
+      "reset": "Auf Standardwerte zurücksetzen",
+      "readOnly": "Sie können das Design ansehen, aber nicht ändern.",
+      "preview": {
+        "title": "Vorschau",
+        "device": "Vorschaugröße",
+        "desktop": "Desktop",
+        "mobile": "Mobil",
+        "scheme": "Farbmodus der Vorschau",
+        "light": "Hell",
+        "dark": "Dunkel",
+        "schemeHint": "Der Farbmodus ist auf Hell gesetzt, daher gibt es keine dunkle Version zur Vorschau.",
+        "frameTitle": "Live-Vorschau des Formulars"
+      }
+    }
+  }
+}

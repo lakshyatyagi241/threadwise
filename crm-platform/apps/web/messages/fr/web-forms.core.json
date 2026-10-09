@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "common": {
+      "dismiss": "Ignorer"
+    },
+    "nav": {
+      "forms": "Formulaires"
+    },
+    "kinds": {
+      "short_text": "Texte court",
+      "long_text": "Texte long",
+      "email": "E-mail",
+      "phone": "Numéro de téléphone",
+      "number": "Nombre",
+      "currency": "Montant",
+      "date": "Date",
+      "dropdown": "Liste déroulante",
+      "radio": "Choix unique",
+      "checkbox_group": "Choix multiple",
+      "checkbox": "Case à cocher",
+      "rating": "Note",
+      "hidden": "Champ masqué"
+    },
+    "errors": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Vous n’avez pas l’autorisation de faire cela.",
+      "signedOut": "Votre session a pris fin. Reconnectez-vous pour continuer.",
+      "conflict": "Quelqu’un d’autre a modifié ce formulaire. Rechargez la page pour voir la dernière version.",
+      "nameTaken": "Un autre formulaire porte déjà ce nom. Choisissez un nom différent.",
+      "stateInvalid": "Ce n’est pas possible dans le statut actuel du formulaire.",
+      "definitionInvalid": "Le formulaire n’est pas encore valide. Vérifiez les champs et réessayez.",
+      "publishInvalid": "Le formulaire ne peut pas encore être publié. Corrigez les problèmes listés et réessayez.",
+      "planLimit": "La limite de votre forfait a été atteinte.",
+      "planLimitForms": "Vous avez atteint le nombre de formulaires autorisé par votre forfait. Archivez un formulaire que vous n’utilisez plus, ou passez à un forfait supérieur.",
+      "planLocked": "Les formulaires ne font pas partie de votre espace de travail.",
+      "notFound": "Ce formulaire est introuvable. Il a peut-être été supprimé.",
+      "rateLimited": "Trop de requêtes. Patientez un instant puis réessayez.",
+      "unexpected": "Une erreur est survenue. Réessayez dans un instant.",
+      "upgrade": "Voir les forfaits"
+    }
+  }
+}

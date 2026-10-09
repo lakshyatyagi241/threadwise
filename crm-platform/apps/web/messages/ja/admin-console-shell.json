@@ -1,0 +1,709 @@
+{
+  "admin-console-shell": {
+    "nav": {
+      "overview": "ホーム",
+      "menuOrder": "メニュー順序",
+      "groups": {
+        "shell": "インターフェース"
+      },
+      "sections": {
+        "reports": "レポート",
+        "plans": "ワークスペースとプラン",
+        "billing": "課金",
+        "messaging": "メッセージ課金",
+        "support": "サポート",
+        "website": "ウェブサイト",
+        "whatsapp": "WhatsApp",
+        "apps": "アプリ",
+        "team": "チームとセキュリティ",
+        "settings": "設定",
+        "system": "システム"
+      },
+      "badges": {
+        "notSupported": "非対応",
+        "noWorkspaces": "ワークスペースなし"
+      },
+      "labels": {
+        "addonPacks": "アドオンパック",
+        "extensions": "拡張機能",
+        "trackingCode": "トラッキングコード",
+        "planPricingSettings": "プラン料金設定",
+        "checkoutSettings": "チェックアウト設定",
+        "walletOverview": "ウォレット概要",
+        "flowTemplates": "フローテンプレート"
+      },
+      "hubNotes": {
+        "reports": "売上、プラン、AI、システムのレポート。",
+        "plans": "ワークスペース、プラン、アドオンパック、クーポン、料金ページ。",
+        "billing": "注文、請求書、支払い、チェックアウト設定。",
+        "messaging": "メッセージ料金、マージン、クレジットパッケージ、Metaリセラー収益。",
+        "support": "チケット、チームとプラットフォームの受信トレイ、エージェント、SLA、プレイブック、お問い合わせメッセージ。",
+        "website": "サイトエディター、ブログ、法務ページ、お知らせ、ガイドブック。",
+        "whatsapp": "プロバイダー、番号切り替え、Nodeブリッジ、Webhook、WABA、カタログ設定。",
+        "apps": "マーケットプレイス、拡張機能、フローテンプレート。",
+        "team": "ロール、権限、セキュリティ、サインインルール。",
+        "settings": "ブランディング、メール、連携、プライバシー、ストレージなど。",
+        "system": "アップデート、言語、通貨、翻訳。"
+      },
+      "captions": {
+        "branding": "ブランディングとインターフェース",
+        "integrations": "連携",
+        "privacy": "プライバシーとトラッキング",
+        "infrastructure": "インフラ",
+        "roles": "ロール",
+        "security": "セキュリティ",
+        "signin": "サインインとサインアップ"
+      }
+    },
+    "shell": {
+      "collapse": "サイドバーを折りたたむ",
+      "expand": "サイドバーを展開",
+      "backToApp": "アプリに戻る",
+      "allAreas": "すべてのエリア",
+      "switchArea": "エリアを切り替え(現在: {area})"
+    },
+    "overview": {
+      "title": "プラットフォームコンソール",
+      "note": "エリアを選択してください。各エリアは左のメニューにページが表示され、Ctrl+K で名前からページを検索できます。",
+      "open": "開く",
+      "attentionTitle": "要対応",
+      "attentionAll": "{count, plural, other {未読の通知が # 件}}",
+      "attentionEmpty": "現在対応が必要なものはありません。",
+      "pages": "{count, plural, other {# ページ}}"
+    },
+    "menuOrder": {
+      "title": "メニュー順序",
+      "note": "すべてのお客様に表示されるトップバーに表示する項目とその順序を選択します。その他の項目は「その他」の中に表示されます。ユーザーには次回のページ読み込み時に反映されます。",
+      "barZone": "トップバー",
+      "moreZone": "その他",
+      "locked": "常に最後",
+      "save": "レイアウトを保存",
+      "reset": "デフォルトに戻す",
+      "saved": "メニューレイアウトを保存しました。ユーザーには次回のページ読み込み時に反映されます。",
+      "saveFailed": "レイアウトを保存できませんでした。",
+      "loadFailed": "レイアウトを読み込めませんでした。",
+      "moveUp": "{item}を上へ移動",
+      "moveDown": "{item}を下へ移動",
+      "remove": "{item}を「その他」へ移動",
+      "add": "{item}をトップバーに追加",
+      "removeShort": "削除",
+      "addShort": "追加",
+      "items": {
+        "dashboard": "ダッシュボード",
+        "team-inbox": "チーム受信トレイ",
+        "wa-campaigns": "キャンペーン",
+        "flows": "フロー",
+        "templates": "テンプレート",
+        "devices": "デバイス",
+        "metaads": "Meta広告",
+        "broadcasts": "ブロードキャスト",
+        "contacts": "コンタクト",
+        "deals": "取引",
+        "chat": "ライブチャット",
+        "analytics": "分析",
+        "auto-reply": "自動返信",
+        "scheduled": "予約済み",
+        "message-history": "履歴",
+        "ai-assistants": "AIアシスタント",
+        "ai-training": "AIトレーニング",
+        "wa-links": "WAリンク",
+        "chatbot-widgets": "チャットウィジェット",
+        "webhooks": "Webhook",
+        "integrations": "連携",
+        "warmer": "ウォーマー",
+        "call-logs": "通話ログ",
+        "support": "サポート",
+        "more": "その他"
+      }
+    },
+    "header": {
+      "health": {
+        "title": "プラットフォームの状態",
+        "ok": "すべて正常です",
+        "stuck": "{count, plural, other {停止中のジョブ # 件}}",
+        "down": "データベースに接続できません"
+      },
+      "bell": {
+        "title": "通知",
+        "labelUnread": "通知(未読 {count} 件)",
+        "inbox": "受信トレイ",
+        "markAllRead": "すべて既読にする",
+        "clearAll": "すべてクリア",
+        "viewAll": "すべて表示",
+        "loading": "読み込み中...",
+        "empty": "通知はまだありません。"
+      },
+      "account": {
+        "menu": "アカウントメニュー",
+        "open": "{name}のアカウントメニュー",
+        "myAccount": "マイアカウント",
+        "settings": "設定",
+        "overview": "管理の概要",
+        "signOut": "サインアウト"
+      },
+      "feed": {
+        "signup": "新規サインアップ",
+        "paymentReceived": "支払いを受領",
+        "newOrder": "新規注文",
+        "newTicket": "新規サポートチケット",
+        "newContactMessage": "新規お問い合わせメッセージ",
+        "newWorkspace": "新規ワークスペース"
+      }
+    },
+    "notificationsPage": {
+      "eyebrow": "管理 - プラットフォームのアクティビティ - 通知",
+      "title": "管理者向け通知",
+      "note": "プラットフォーム全体で起きているすべての出来事:新規サインアップ、支払い、サポートチケット、お問い合わせメッセージ、新規ワークスペース。ワークスペースメンバーの個人通知とは別です。",
+      "tiles": {
+        "all": "すべてのイベント",
+        "signup": "サインアップ",
+        "payment": "支払い",
+        "ticket": "サポート",
+        "contact": "メッセージ",
+        "workspace": "ワークスペース"
+      },
+      "pills": {
+        "all": "すべて",
+        "signup": "サインアップ",
+        "payment": "支払い",
+        "ticket": "サポート",
+        "contact": "メッセージ",
+        "workspace": "ワークスペース"
+      },
+      "kinds": {
+        "signup": "サインアップ",
+        "payment": "支払い",
+        "ticket": "サポート",
+        "contact": "メッセージ",
+        "workspace": "ワークスペース"
+      },
+      "last30": "過去30日間",
+      "search": "イベントを検索...",
+      "empty": "このビューにはプラットフォームのアクティビティがありません。",
+      "loadFailed": "フィードを読み込めませんでした。",
+      "cols": {
+        "type": "種類",
+        "event": "イベント",
+        "detail": "詳細",
+        "when": "日時",
+        "open": "開く"
+      },
+      "showing": "{count, plural, other {最近のイベント # 件を表示中}}",
+      "live": "ライブフィード(新しい順)"
+    },
+    "settings": {
+      "workspace": {
+        "label": "ワークスペース設定",
+        "description": "名前、タイムゾーン、通貨、通知、データのエクスポート、ワークスペースの削除。",
+        "keywords": "ワークスペース, 名前, タイムゾーン, 通貨, 通知, エクスポート, 削除, slack"
+      }
+    },
+    "workspaceSettings": {
+      "titleLead": "ワークスペース",
+      "titleTail": "設定",
+      "subtitle": "ワークスペース、チーム、連携を設定します。",
+      "tabs": {
+        "general": "一般",
+        "branding": "ブランディング",
+        "team": "チームとロール",
+        "notifications": "通知",
+        "aikeys": "AIキー",
+        "security": "セキュリティ",
+        "api": "APIとWebhook",
+        "data": "データとエクスポート",
+        "appearance": "外観"
+      },
+      "general": {
+        "workspace": "ワークスペース",
+        "ownerOnly": "タイムゾーン、通貨、ワークスペース名を変更できるのはワークスペースのオーナーだけです。",
+        "name": "ワークスペース名",
+        "url": "ワークスペースURL",
+        "urlHint": "URLスラッグはここでは編集できません。変更するにはサポートにお問い合わせください。",
+        "timezone": "デフォルトのタイムゾーン",
+        "timezoneHint": "すべての予約送信、営業時間の確認、SLAタイマーはこのタイムゾーンで実行されます。",
+        "currency": "通貨",
+        "currencyHint": "プランのチェックアウト、請求書、ウォレット表示に使用されます。",
+        "save": "保存",
+        "saved": "設定を保存しました。",
+        "saveFailed": "設定を保存できませんでした。",
+        "loadFailed": "設定を読み込めませんでした。",
+        "hours": {
+          "title": "営業時間",
+          "note": "参考表示です。営業時間はまだ適用されないため、これらの項目は読み取り専用です。",
+          "weekdays": "月〜金",
+          "saturday": "土曜日",
+          "sunday": "日曜日",
+          "from": "開始",
+          "to": "終了"
+        },
+        "preferences": {
+          "title": "AI自動要約",
+          "note": "メッセージ本文のテキスト入力欄すべてでAIによるレビューをリアルタイムに表示します。良い点は緑、修正点は赤で示し、ワンタップで貼り付けられる「ベストバージョン」も提案します。オフの場合は、ツールバー内のスパークルアイコンから必要なときに同じレビューを実行できます。",
+          "save": "保存",
+          "saved": "設定を保存しました。",
+          "saveFailed": "設定を保存できませんでした。"
+        }
+      },
+      "notifications": {
+        "title": "ワークスペースの通知",
+        "note": "チャンネルごとに配信を切り替えます。ここでオフにしたものは、アプリ内ベル、メール、Slackメッセージのいずれも生成されません。",
+        "readOnly": "読み取り専用です。ワークスペースのオーナーが編集できます。",
+        "save": "設定を保存",
+        "saved": "通知設定を保存しました。",
+        "saveFailed": "設定を保存できませんでした。",
+        "loadFailed": "設定を読み込めませんでした。",
+        "specificEvents": "個別のイベント",
+        "byCategory": "カテゴリ別",
+        "event": "イベント",
+        "category": "カテゴリ",
+        "channels": {
+          "inapp": "アプリ内",
+          "email": "メール",
+          "slack": "Slack"
+        },
+        "events": {
+          "device_connected": "デバイス接続",
+          "device_disconnected": "デバイス切断",
+          "campaign_completed": "キャンペーン完了",
+          "campaign_failed": "キャンペーン失敗",
+          "broadcast_completed": "ブロードキャスト完了",
+          "new_customer_reply": "お客様からの新しい返信",
+          "mention_in_inbox": "@メンションされました",
+          "conversation_assigned": "会話があなたに割り当てられました",
+          "sla_breached": "SLA違反",
+          "wallet_low_balance": "ウォレット残高不足",
+          "plan_changed": "プランのアップグレード / ダウングレード",
+          "payment_failed": "支払い失敗",
+          "webhook_delivery_failed": "Webhookの配信失敗",
+          "flow_started": "フロー開始",
+          "flow_failed": "フロー失敗",
+          "integration_disconnected": "連携が切断されました",
+          "appointment_booked": "予約が確定しました",
+          "weekly_summary": "週次サマリー"
+        },
+        "categories": {
+          "device": "デバイス",
+          "contact": "コンタクト",
+          "campaign": "キャンペーン",
+          "broadcast": "ブロードキャスト",
+          "template": "テンプレート",
+          "chat": "チャット",
+          "webhook": "Webhook",
+          "billing": "課金",
+          "system": "システム"
+        },
+        "slackLabel": "Slack受信Webhook URL",
+        "slackHint": "SlackのアプリのIncoming Webhooksで作成してください。Slackがオンのイベントはここに投稿されます。",
+        "channelStatus": "チャンネルの状態",
+        "statusInapp": "アプリ内ベル: 有効。上部ヘッダーのバッジに反映されます。",
+        "statusEmailLive": "メール: 有効。プラットフォームのメール設定経由で送信されます。",
+        "statusEmailOff": "メール: プラットフォーム管理者がSMTPを設定すると送信されます。",
+        "statusSlackOn": "Slack: Webhookを保存しました。",
+        "statusSlackOff": "Slack: オンにするにはWebhook URLを追加してください。"
+      },
+      "data": {
+        "loadFailed": "エクスポート件数を読み込めませんでした。",
+        "exportTitle": "データのエクスポート",
+        "exportNote": "ワークスペースのデータをCSVでダウンロードします。各リンクは最新のエクスポートをストリーミングします。",
+        "exportOwnerOnly": "エクスポートをダウンロードできるのはワークスペースのオーナーだけです。",
+        "types": {
+          "contacts": "コンタクト",
+          "conversations": "会話",
+          "messages": "メッセージ"
+        },
+        "count": {
+          "contacts": "{count, plural, other {# 件のレコード}} · CSV",
+          "conversations": "{count, plural, other {# 件のスレッド}} · CSV",
+          "messages": "{count, plural, other {# 件のメッセージ}} · CSV"
+        },
+        "delete": {
+          "title": "ワークスペースを削除",
+          "note": "このワークスペース、すべての会話、自動化、課金履歴を完全に削除します。",
+          "irreversible": "元に戻せません。",
+          "ownerOnly": "ワークスペースを削除できるのはワークスペースのオーナーだけです。",
+          "typeName": "ワークスペース名を入力してください:",
+          "password": "パスワードで確認",
+          "submit": "ワークスペースを完全に削除",
+          "cancel": "キャンセル",
+          "confirmTitle": "このワークスペースを削除しますか?",
+          "confirmMessage": "「{name}」とその中のすべてが削除され、全員がサインアウトされます。この操作は元に戻せません。",
+          "failed": "ワークスペースを削除できませんでした。"
+        }
+      },
+      "groups": {
+        "workspace": "ワークスペース",
+        "system": "システム"
+      },
+      "railLabel": "設定セクション",
+      "personal": {
+        "title": "あなたのアカウント",
+        "body": "プロフィール、パスワード、個人設定。"
+      },
+      "api": {
+        "restTitle": "汎用REST API",
+        "rest1": "APIキーを作成すると、自社のシステムからコンタクト、会話、メッセージの読み取りと書き込みができます。",
+        "rest2": "すべてのキーはこのワークスペースに限定され、いつでも無効化できます。",
+        "rest3": "リクエストはプランに応じて1分あたりの回数が制限されます。",
+        "webhooksTitle": "Webhook",
+        "webhooksBody": "イベントを自社のエンドポイントに送信し、他のツールからイベントを受信します。",
+        "manage": "連携を管理"
+      },
+      "appearance": {
+        "title": "外観",
+        "note": "アプリの見た目を選択します。ヘッダーの太陽と月のボタンと同じ設定です。",
+        "choices": {
+          "light": {
+            "label": "ライト",
+            "body": "やわらかな紙のような色合いの明るいページ。"
+          },
+          "dark": {
+            "label": "ダーク",
+            "body": "夜でも目に優しい暗めのページ。"
+          }
+        },
+        "save": "保存",
+        "saved": "外観を更新しました。"
+      }
+    },
+    "topNav": {
+      "more": "その他",
+      "search": "検索",
+      "premium": "プレミアム機能: プランをアップグレードして解放"
+    },
+    "palette": {
+      "title": "ページを検索",
+      "placeholder": "ページ、設定、ツールを検索...",
+      "empty": "「{query}」に該当する結果はありません",
+      "hintNavigate": "上下キーで移動",
+      "hintOpen": "Enterで開く",
+      "hintToggle": "Ctrl K で切り替え",
+      "tags": {
+        "page": "ページ",
+        "account": "アカウント",
+        "plan": "プラン",
+        "help": "ヘルプ",
+        "system": "システム"
+      },
+      "entries": {
+        "profile": "プロフィール",
+        "profileHint": "名前、写真、連絡先の詳細",
+        "password": "パスワードとセキュリティ",
+        "passwordHint": "パスワード、2要素認証によるサインイン、アクティブなセッション"
+      }
+    },
+    "strip": {
+      "jump": "検索または移動...",
+      "account": {
+        "group": "アカウント",
+        "account": "アカウント",
+        "wallet": "ウォレット",
+        "notifications": "通知"
+      },
+      "greeting": {
+        "midnightOil": "夜更かしお疲れさまです",
+        "morning": "おはようございます",
+        "afternoon": "こんにちは",
+        "evening": "こんばんは",
+        "night": "おやすみなさい"
+      }
+    },
+    "profileMenu": {
+      "chip": "{plan}プラン - {role}",
+      "wallet": "ウォレット",
+      "orders": "注文履歴",
+      "plans": "料金とプラン",
+      "tour": "ツアーを開始"
+    },
+    "quickAccess": {
+      "title": "クイックアクセス",
+      "open": "クイックアクセスを開く",
+      "close": "閉じる",
+      "edit": "ショートカットを編集",
+      "editTitle": "クイックアクセスを編集",
+      "editNote": "ページや独自のリンクを最大10個までピン留めできます。ダッシュボードとサイドドロワーに表示されます。",
+      "dashboard": "ダッシュボード",
+      "allApps": "すべてのアプリ",
+      "limit": "ショートカットは最大{max}個までピン留めできます。",
+      "saveFailed": "ショートカットを保存できませんでした。",
+      "customLinks": "カスタムリンク",
+      "linkLabel": "ラベル",
+      "linkUrl": "リンク",
+      "addLink": "リンクを追加",
+      "removeLink": "このリンクを削除",
+      "counter": "{count} / {max} 個をピン留め中",
+      "cancel": "キャンセル",
+      "save": "ショートカットを保存",
+      "problem": {
+        "incomplete": "リンクにはラベルとアドレスが必要です。",
+        "unsafe": "このアプリ内のアドレス(スラッシュ1つで始まる)、またはhttpもしくはhttpsのアドレスを使用してください。"
+      },
+      "catalog": {
+        "inbox": {
+          "label": "統合受信トレイ",
+          "desc": "すべての会話を1か所に"
+        },
+        "contacts": {
+          "label": "コンタクト",
+          "desc": "オーディエンスとその詳細"
+        },
+        "campaigns": {
+          "label": "キャンペーン",
+          "desc": "キャンペーンの計画と送信"
+        },
+        "broadcasts": {
+          "label": "ブロードキャスト",
+          "desc": "多数のコンタクトに1つのメッセージを送信"
+        },
+        "templates": {
+          "label": "テンプレート",
+          "desc": "承認済みのメッセージテンプレート"
+        },
+        "flows": {
+          "label": "フロー",
+          "desc": "会話を自動化"
+        },
+        "scheduled": {
+          "label": "予約済み",
+          "desc": "送信待ちのメッセージ"
+        },
+        "catalog": {
+          "label": "カタログ",
+          "desc": "WhatsAppで販売する商品"
+        },
+        "store": {
+          "label": "ストア",
+          "desc": "ストアフロントと注文"
+        },
+        "deals": {
+          "label": "セールスパイプライン",
+          "desc": "ステージ別の取引"
+        },
+        "analytics": {
+          "label": "分析",
+          "desc": "配信数と返信数"
+        },
+        "auto-reply": {
+          "label": "自動返信",
+          "desc": "キーワード返信と営業時間外の返信"
+        },
+        "devices": {
+          "label": "デバイス",
+          "desc": "接続済みのWhatsApp番号"
+        },
+        "chatbots": {
+          "label": "チャットウィジェット",
+          "desc": "ウェブサイト用のチャットウィジェット"
+        },
+        "ai": {
+          "label": "AIアシスタント",
+          "desc": "代わりに応答するアシスタント"
+        },
+        "appointments": {
+          "label": "予約",
+          "desc": "予約と空き状況"
+        },
+        "webhooks": {
+          "label": "Webhook",
+          "desc": "他のシステムにイベントを送信"
+        },
+        "history": {
+          "label": "メッセージログ",
+          "desc": "送受信したすべてのメッセージ"
+        },
+        "account": {
+          "label": "アカウント",
+          "desc": "プロフィール、プラン、ウォレット"
+        },
+        "more": {
+          "label": "その他のアプリ",
+          "desc": "すべてのツールを1ページに"
+        }
+      }
+    },
+    "announcements": {
+      "label": "お知らせ",
+      "dismiss": "閉じる"
+    },
+    "tour": {
+      "close": "ツアーを閉じる",
+      "back": "戻る",
+      "next": "次へ",
+      "done": "完了",
+      "progress": "{current} / {total}",
+      "steps": {
+        "welcome": {
+          "title": "{app}へようこそ",
+          "body": "よく使う場所をざっとご案内します。1分もかかりません。"
+        },
+        "navbar": {
+          "title": "メニュー",
+          "body": "日常の操作はすべてトップバーからワンクリックで行えます。"
+        },
+        "metaads": {
+          "title": "Meta広告",
+          "body": "WhatsAppへのクリック広告を配信し、成果を確認します。"
+        },
+        "campaigns": {
+          "title": "キャンペーン",
+          "body": "WhatsAppキャンペーンを計画、送信、追跡します。"
+        },
+        "flows": {
+          "title": "フロー",
+          "body": "代わりに返信する自動化を作成します。"
+        },
+        "templates": {
+          "title": "テンプレート",
+          "body": "承認済みのメッセージテンプレートをここで管理します。"
+        },
+        "devices": {
+          "title": "チャンネル",
+          "body": "送信元の番号やアカウントを接続します。"
+        },
+        "more": {
+          "title": "その他",
+          "body": "その他のツールはすべてここにまとまっており、検索もできます。"
+        },
+        "kpi": {
+          "title": "あなたの番号",
+          "body": "メッセージ、返信、配信状況をひと目で確認できます。"
+        },
+        "newCampaign": {
+          "title": "キャンペーンを開始",
+          "body": "最初のキャンペーンをここから作成します。"
+        },
+        "pipeline": {
+          "title": "セールスパイプライン",
+          "body": "最初のメッセージから成約まで取引を追跡します。"
+        }
+      }
+    },
+    "more": {
+      "titleLead": "その他",
+      "titleTail": "機能",
+      "subtitle": "すべてのツールを1か所に。",
+      "navigation": "ナビゲーション",
+      "allTools": "すべてのツール",
+      "noTools": "ここにはまだ何もありません。",
+      "tabs": {
+        "all": "すべて",
+        "automation": "自動化",
+        "data": "データ",
+        "help": "ヘルプ"
+      },
+      "plan": "あなたのプラン",
+      "managePlan": "プランを管理",
+      "wallet": "ウォレット",
+      "topUp": "チャージ",
+      "tips": {
+        "title": "ヒント",
+        "pager": "ヒント",
+        "templates": {
+          "title": "テンプレートを使う",
+          "body": "承認済みのテンプレートは、24時間のウィンドウ外のお客様にも届きます。"
+        },
+        "flows": {
+          "title": "返信を自動化",
+          "body": "フローなら、同じ質問に毎回代わりに答えられます。"
+        },
+        "palette": {
+          "title": "どこへでも移動",
+          "body": "Ctrl K を押すとすべてのページを検索できます。"
+        },
+        "scheduled": {
+          "title": "先に予約",
+          "body": "今メッセージをキューに入れておけば、最適なタイミングで送信されます。"
+        },
+        "wallet": {
+          "title": "残高を確認",
+          "body": "送信が止まらないよう、残高が少なくなる前にチャージしましょう。"
+        }
+      },
+      "shortcuts": {
+        "title": "ショートカット",
+        "customise": "カスタマイズ",
+        "empty": "ショートカットが選択されていません。「カスタマイズ」から追加してください。",
+        "editTitle": "ショートカットをカスタマイズ",
+        "emptyEditor": "ショートカットが選択されていません",
+        "up": "{item}を上へ移動",
+        "down": "{item}を下へ移動",
+        "remove": "{item}を削除",
+        "customTitle": "タイトル",
+        "customSubtitle": "サブタイトル",
+        "customUrl": "リンク",
+        "customProblem": "カスタムショートカットにはタイトルとリンクが必要です。",
+        "addCustom": "カスタムショートカットを追加",
+        "reset": "デフォルトに戻す",
+        "cancel": "キャンセル",
+        "save": "保存",
+        "presets": {
+          "new-auto-reply": {
+            "title": "新規自動返信",
+            "subtitle": "よくある質問に自動で回答"
+          },
+          "schedule-send": {
+            "title": "送信を予約",
+            "subtitle": "メッセージを後で送るようキューに入れる"
+          },
+          "test-webhook": {
+            "title": "Webhook",
+            "subtitle": "他のシステムにイベントを送信"
+          },
+          "export-history": {
+            "title": "メッセージ履歴",
+            "subtitle": "送信内容の確認とエクスポート"
+          },
+          "contact-support": {
+            "title": "サポートに問い合わせる",
+            "subtitle": "チームにサポートを依頼"
+          },
+          "new-broadcast": {
+            "title": "新規ブロードキャスト",
+            "subtitle": "多数のコンタクトに一度にメッセージを送信"
+          },
+          "open-contacts": {
+            "title": "コンタクト",
+            "subtitle": "オーディエンス"
+          },
+          "pair-device": {
+            "title": "番号を接続",
+            "subtitle": "WhatsApp番号をペアリング"
+          },
+          "team-inbox": {
+            "title": "受信トレイ",
+            "subtitle": "すべての会話"
+          },
+          "create-flow": {
+            "title": "フローを作成",
+            "subtitle": "自動化を作成"
+          },
+          "new-template": {
+            "title": "新規テンプレート",
+            "subtitle": "メッセージテンプレートを作成"
+          }
+        }
+      }
+    },
+    "inboxBell": {
+      "label": "{count, plural, other {未読の会話 # 件}}",
+      "pill": "{count, plural, other {新着メッセージ}}",
+      "dismiss": "新しいものが届くまで非表示にする",
+      "title": "新着メッセージ",
+      "viewInbox": "受信トレイを開く"
+    },
+    "connectDevice": {
+      "title": "番号を接続",
+      "close": "閉じる",
+      "connected": "番号を接続しました"
+    },
+    "search": {
+      "label": "コンソールを検索",
+      "trigger": "管理を検索…",
+      "placeholder": "ページと設定を検索…",
+      "noResults": "「{query}」に該当する結果はありません",
+      "count": "{count, plural, other {# 件の結果}}",
+      "hintMove": "移動",
+      "hintOpen": "開く",
+      "hintToggle": "切り替え"
+    }
+  }
+}

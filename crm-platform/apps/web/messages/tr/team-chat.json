@@ -1,0 +1,191 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "Ekip Sohbeti"
+    },
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "screen": {
+      "title": "Ekip Sohbeti",
+      "back": "Kanallara dön",
+      "search": "Bu kanalda ara",
+      "pinned": "Sabitlenmiş mesajlar",
+      "members": "Kanal üyeleri",
+      "deleteChannel": "Bu kanalı sil",
+      "type": {
+        "public": "Kanal",
+        "private": "Özel",
+        "dm": "Doğrudan mesaj"
+      },
+      "olderMessage": "Bu mesaj daha eskide. Görmek için eski mesajları yükleyin.",
+      "loading": "Ekip Sohbeti yükleniyor",
+      "loadFailed": "Ekip Sohbeti yüklenemedi.",
+      "retry": "Yeniden dene",
+      "deleteTitle": "Bu kanal silinsin mi?",
+      "deleteMessage": "#{name} ve tüm mesajları herkesten silinecek. Bu işlem geri alınamaz.",
+      "deleteConfirm": "Kanalı sil",
+      "cancel": "İptal"
+    },
+    "sidebar": {
+      "label": "Kanallar ve kişiler",
+      "channels": "Kanallar",
+      "createChannel": "Kanal oluştur",
+      "loading": "Kanallar yükleniyor",
+      "loadFailed": "Kanallar yüklenemedi.",
+      "noChannels": "Henüz kanal yok",
+      "direct": "Doğrudan mesajlar",
+      "people": "Kişiler",
+      "invite": "Bir ekip arkadaşını davet et",
+      "pending": "Bekleyen istekler",
+      "pendingCount": "{count, plural, other {# bekleyen istek}}",
+      "unread": "{count, plural, other {# okunmamış mesaj}}"
+    },
+    "members": {
+      "label": "Üyeler",
+      "title": "Ekip sohbeti",
+      "count": "{count, plural, other {# üye}}",
+      "countUnknown": "Üyeler",
+      "search": "Üyelerde ara",
+      "loading": "Üyeler yükleniyor",
+      "none": "Eşleşen üye yok",
+      "online": "Çevrimiçi",
+      "offline": "Çevrimdışı",
+      "you": "(siz)",
+      "message": "{name} kişisine mesaj gönder"
+    },
+    "panel": {
+      "searchTitle": "Mesajlarda ara",
+      "pinnedTitle": "Sabitlenmiş mesajlar",
+      "searchPlaceholder": "Bu kanalda ara",
+      "searchHint": "En az iki karakter yazın.",
+      "close": "Kapat",
+      "failed": "Bu yüklenemedi.",
+      "noResults": "Eşleşen mesaj yok.",
+      "noPinned": "Bu kanalda sabitlenmiş bir şey yok."
+    },
+    "stream": {
+      "loading": "Mesajlar yükleniyor",
+      "loadFailed": "Mesajlar yüklenemedi.",
+      "loadOlder": "Eski mesajları yükle",
+      "emptyTitle": "#{name} kanalında henüz mesaj yok",
+      "emptyMessage": "Merhaba deyip sohbeti başlatın."
+    },
+    "message": {
+      "edited": "(düzenlendi)",
+      "pinned": "Sabitlendi",
+      "editLabel": "Mesajınızı düzenleyin",
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "editConflict": "Bu mesaj siz düzenlerken değişti. Sayfayı yenileyip yeniden deneyin.",
+      "reactions": "Tepkiler",
+      "reactionChip": "{emoji}, {count, plural, other {# kişi}}",
+      "reactionTray": "Bir tepki seçin",
+      "reply": "Yanıtla",
+      "react": "Tepki ver",
+      "edit": "Düzenle",
+      "pin": "Sabitle",
+      "unpin": "Sabitlemeyi kaldır",
+      "delete": "Sil",
+      "deleteTitle": "Bu mesaj silinsin mi?",
+      "deleteMessage": "Kanaldaki herkesten kaldırılacak.",
+      "uploading": "Yükleniyor",
+      "retry": "Yeniden dene",
+      "discard": "At"
+    },
+    "composer": {
+      "placeholder": "#{name} kanalına mesaj",
+      "attach": "Dosya ekle",
+      "send": "Gönder",
+      "hint": "Göndermek için Enter, yeni satır için Shift+Enter, bir ekip arkadaşını anmak için @ kullanın.",
+      "replyingTo": "{name} kişisine yanıt veriliyor",
+      "cancelReply": "Yanıtı iptal et",
+      "removeFile": "Eki kaldır",
+      "fileTooLarge": "Bu dosya 20 MB'tan büyük.",
+      "mentionList": "Anılacak ekip arkadaşları",
+      "typingOne": "{name} yazıyor",
+      "typingMany": "{count} kişi yazıyor"
+    },
+    "createChannel": {
+      "title": "Kanal oluştur",
+      "close": "Kapat",
+      "name": "Ad",
+      "nameHint": "Küçük harf, rakam, tire ve alt çizgi; boşluk yok.",
+      "description": "Açıklama (isteğe bağlı)",
+      "privacy": "Gizlilik",
+      "public": {
+        "label": "Herkese açık",
+        "hint": "Çalışma alanındaki herkes okuyup yazabilir."
+      },
+      "private": {
+        "label": "Özel",
+        "hint": "Yalnızca davetliler. Yalnızca üyeleri görür."
+      },
+      "cancel": "İptal",
+      "create": "Kanal oluştur"
+    },
+    "invite": {
+      "title": "Bir ekip arkadaşını davet et",
+      "close": "Kapat",
+      "email": "E-posta",
+      "name": "Ad (isteğe bağlı)",
+      "note": "Yönetici için not (isteğe bağlı)",
+      "noteHint": "Bu kişinin neden katılması gerektiği.",
+      "addToChannel": "Ayrıca #{name} kanalına da ekle",
+      "approved": "Tamamlandı. İstek onaylandı.",
+      "pending": "Davet gönderildi, yönetici onayı bekleniyor.",
+      "cancel": "İptal",
+      "submit": "Daveti gönder"
+    },
+    "invitations": {
+      "title": "Bekleyen davetler",
+      "close": "Kapat",
+      "loading": "Yükleniyor",
+      "loadFailed": "Davetler yüklenemedi.",
+      "empty": "Henüz davet yok",
+      "status": {
+        "pending": "Beklemede",
+        "approved": "Onaylandı",
+        "declined": "Reddedildi",
+        "expired": "Süresi doldu"
+      },
+      "requestedBy": "{name} tarafından istendi · {time}",
+      "decidedBy": "{name} tarafından {status} · {time}",
+      "needsAccount": "Bu kişinin çalışma alanında henüz hesabı yok, bu yüzden kimse eklenmedi.",
+      "approve": "Onayla",
+      "decline": "Reddet"
+    },
+    "channelMembers": {
+      "title": "#{name} kanalının üyeleri",
+      "close": "Kapat",
+      "admin": "Yönetici",
+      "leave": "Ayrıl",
+      "remove": "Kaldır",
+      "addLabel": "Ekip arkadaşı ekle",
+      "choose": "Bir ekip arkadaşı seçin",
+      "add": "Ekle"
+    },
+    "errors": {
+      "network": "Ağ hatası. Bağlantınızı kontrol edip yeniden deneyin.",
+      "forbidden": "Bunu yapmak için yetkiniz yok.",
+      "signedOut": "Oturumunuz kapatıldı. Yeniden oturum açın.",
+      "notFound": "Bu artık mevcut değil.",
+      "validation": "Girdiğiniz bilgileri kontrol edip yeniden deneyin.",
+      "conflict": "Bu arada değişti. Sayfayı yenileyip yeniden deneyin.",
+      "tooLarge": "Bu dosya 20 MB'tan büyük.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip yeniden deneyin.",
+      "emptyMessage": "Bir mesaj yazın veya dosya ekleyin.",
+      "replyOtherChannel": "Yalnızca aynı kanaldaki bir mesaja yanıt verebilirsiniz.",
+      "attachmentRejected": "Bu dosya eklenemedi. Yalnızca 20 MB'a kadar görseller, PDF, Word, Excel, metin ve CSV dosyalarına izin verilir.",
+      "editExpired": "Mesajlar yalnızca 15 dakika içinde düzenlenebilir.",
+      "nameTaken": "Bu adla bir kanal zaten var.",
+      "channelProtected": "#general silinemez.",
+      "alreadyMember": "Zaten çalışma alanı üyesi.",
+      "alreadyDecided": "Karar zaten verildi.",
+      "notMember": "Bu kanalın üyesi değilsiniz.",
+      "notAuthor": "Yalnızca kendi mesajlarınızı değiştirebilirsiniz.",
+      "kindInvalid": "Bu, bu tür kanal için geçerli değil.",
+      "unexpected": "Bir sorun oluştu. Yeniden deneyin."
+    }
+  }
+}

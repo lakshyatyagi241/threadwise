@@ -1,0 +1,221 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "Yapay zekâ kullanımı",
+      "keys": "Yapay zekâ sağlayıcı anahtarları"
+    },
+    "admin": {
+      "nav": {
+        "group": "Yapay zekâ",
+        "keys": "Yapay zekâ sağlayıcı anahtarları",
+        "dashboard": "Yapay zekâ kullanımı"
+      }
+    },
+    "common": {
+      "loading": "Yükleniyor",
+      "retry": "Tekrar dene",
+      "requestId": "İstek kimliği",
+      "dismiss": "Gizle",
+      "tokens": "{count, number} token",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Bunu görme izniniz yok.",
+        "request": "Bu istek tamamlanamadı.",
+        "unexpected": "Bizim tarafımızda bir şeyler ters gitti. Birazdan tekrar deneyin.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+        "conflict": "Başka biri bunu değiştirdi. Sayfa yenilendi: değişikliğinizi tekrar uygulayın.",
+        "keyRequired": "Bu sağlayıcıyı açmadan önce bir API anahtarı ekleyin.",
+        "validation": "Bazı değerler geçerli değil. Vurgulanan alanları kontrol edin.",
+        "notFound": "Bu öğe artık mevcut değil."
+      }
+    },
+    "windows": {
+      "label": "Zaman aralığı",
+      "7d": "7 gün",
+      "30d": "30 gün",
+      "90d": "90 gün",
+      "1y": "1 yıl",
+      "custom": "Özel",
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "pick": "Bir başlangıç ve bitiş tarihi seçin.",
+      "invalid": "Bitiş tarihi başlangıç tarihinden önce.",
+      "tooLong": "En fazla {days} günlük bir aralık seçin."
+    },
+    "keys": {
+      "eyebrow": "Yönetici · Sistem · Yapay zekâ sağlayıcıları",
+      "title": "Yapay zekâ API anahtarları",
+      "description": "Desteklenen her yapay zekâ sağlayıcısı için genel anahtarlar. \"Kendi anahtarını getir\" özelliği olmayan planlardaki çalışma alanları bunları yedek olarak kullanır. Depolamada şifrelenir.",
+      "superOnly": "Platformun yapay zekâ anahtarlarını yalnızca süper yönetici yönetebilir.",
+      "summary": {
+        "providers": "Sağlayıcılar",
+        "providersHint": "hazır tanımlı",
+        "active": "Etkin",
+        "activeHint": "yedek için etkin",
+        "ready": "Hazır",
+        "readyHint": "etkin + anahtarı var",
+        "noKey": "Anahtar yok",
+        "noKeyHint": "hazır olması için anahtar yapıştırın"
+      },
+      "groups": {
+        "llm": "Dil modelleri",
+        "voice": "Ses"
+      },
+      "card": {
+        "active": "Etkin",
+        "off": "Devre dışı",
+        "keySaved": "Anahtar kaydedildi",
+        "keySavedLast4": "Anahtar kaydedildi, son hane: {last4}",
+        "noKey": "Anahtar yok",
+        "unreadable": "Kaydedilen anahtar okunamıyor, tekrar yapıştırın",
+        "slug": "Sağlayıcı kimliği",
+        "apiKey": "API anahtarı",
+        "apiKeyHint": "Kayıtlı anahtarı korumak için boş bırakın.",
+        "apiKeyPlaceholder": "Anahtarı buraya yapıştırın",
+        "apiKeySavedPlaceholder": "•••••••••• (kayıtlı — korumak için boş bırakın)",
+        "defaultModel": "Varsayılan model",
+        "pickModel": "— Varsayılan model seçin —",
+        "customModel": "{model} (özel)",
+        "sortOrder": "Sıralama",
+        "maxTokens": "İstek başına en fazla token",
+        "maxTokensHint": "Tüm çalışma alanları için yanıt uzunluğunda isteğe bağlı üst sınır. Boş bırakılırsa sınır yoktur.",
+        "extraModels": "Ek modeller",
+        "extraModelsHint": "İsteğe bağlı. Varsayılanın yanında sunulacak model kimlikleri, virgülle ayrılır.",
+        "save": "{name} öğesini kaydet",
+        "saving": "Kaydediliyor",
+        "turnOn": "Etkinleştir",
+        "turnOff": "Devre dışı bırak",
+        "removeKey": "Anahtarı kaldır",
+        "removeTitle": "{name} anahtarı kaldırılsın mı?",
+        "removeBody": "Siz tekrar bir anahtar ekleyene kadar çalışma alanları {name} kullanmayı bırakır. Sağlayıcı kapatılır.",
+        "removeConfirm": "Anahtarı kaldır",
+        "cancel": "İptal"
+      },
+      "toasts": {
+        "saved": "{name} kaydedildi.",
+        "savedOn": "{name} kaydedildi ve açıldı.",
+        "on": "{name} açıldı.",
+        "off": "{name} kapatıldı.",
+        "removed": "{name} anahtarı kaldırıldı."
+      },
+      "help": {
+        "title": "Bu anahtarlar nasıl kullanılır",
+        "body": "Bir çalışma alanının kendi anahtarı yalnızca planı izin verdiğinde geçerli olur. Aksi halde buradaki eşleşen etkin sağlayıcı kullanılır. Bir sağlayıcıyı kapatmak, kendi anahtarı olmayan çalışma alanlarının onu kullanamayacağı anlamına gelir."
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Yönetici / Yapay zekâ paneli",
+      "title": "Yapay zekâ kullanımı ve token tüketimi",
+      "description": "Platformdaki her yapay zekâ çağrısı: hangi sağlayıcı, hangi model, hangi çalışma alanı, platform anahtarları mı kendi (BYOK) anahtarları mı, tahmini harcamayla birlikte.",
+      "kpis": {
+        "tokens": "Tüketilen token",
+        "tokensHint": "bu aralıkta",
+        "cost": "Tahmini maliyet",
+        "costHint": "karma tahmin",
+        "calls": "Yapay zekâ çağrıları",
+        "callsHint": "kaydedilen istek",
+        "workspaces": "Yapay zekâ kullanan çalışma alanları",
+        "workspacesHint": "etkin"
+      },
+      "daily": "Günlük token tüketimi",
+      "byProvider": "Sağlayıcıya göre token",
+      "split": "Kim ödüyor: platform mu BYOK mu",
+      "splitPlatform": "Platform anahtarları",
+      "splitOwn": "Kendi anahtarları (BYOK)",
+      "topWorkspaces": "En çok token tüketen çalışma alanları",
+      "topModels": "En çok kullanılan modeller",
+      "keyHealth": "Yapay zekâ anahtarı sağlığı",
+      "live": "Canlı",
+      "notLive": "Kapalı",
+      "peak": "zirve {value}/gün",
+      "dailyEmpty": "Bu aralıkta henüz kaydedilmiş yapay zekâ çağrısı yok.",
+      "providerCalls": "{count, number} çağrı",
+      "providerEmpty": "Henüz kullanım yok.",
+      "splitNote": "Bir planın aylık yapay zekâ kotasına yalnızca platform anahtarı token'ları sayılır. BYOK çalışma alanları kendi sağlayıcı hesaplarından harcar.",
+      "workspaceEmpty": "Henüz çalışma alanı yapay zekâ kullanımı yok.",
+      "workspaceMeta": "{count, number} çağrı",
+      "workspaceByok": "{tokens} BYOK",
+      "modelEmpty": "Henüz model kullanımı yok.",
+      "modelMeta": "{provider} · {count, number} çağrı",
+      "manageKeys": "Anahtarları yönet",
+      "noDefaultModel": "varsayılan model yok",
+      "noPlatformKeys": "Yapılandırılmış platform yapay zekâ anahtarı yok.",
+      "byokKeys": "Etkin BYOK anahtarları",
+      "byokWorkspaces": "BYOK kullanan çalışma alanları"
+    },
+    "usage": {
+      "title": "Yapay zekâ kullanımı",
+      "description": "Çalışma alanınızın yaptığı her yapay zekâ çağrısı: tüketilen token, model ve sağlayıcıya göre, plan anahtarları mı kendi anahtarlarınız mı ve tahmini maliyet.",
+      "kpis": {
+        "tokens": "Kullanılan token",
+        "calls": "{count, plural, one {# yapay zekâ çağrısı} other {# yapay zekâ çağrısı}}",
+        "platform": "Plan anahtarları",
+        "ownKeys": "Anahtarlarınız (BYOK)",
+        "cost": "Tahmini maliyet",
+        "costHint": "karma sağlayıcı oranı",
+        "providers": "Sağlayıcılar",
+        "models": "Modeller"
+      },
+      "cap": {
+        "title": "Bu ay · plan yapay zekâ kotası",
+        "used": "Bu ay {limit, number} token'dan {used, number} kullanıldı",
+        "unlimited": "Bu ay {used, number} token kullanıldı: planınızda sınırsız",
+        "reached": "Aylık kotanıza yaklaşıyorsunuz. Yapay zekâyı kullanmaya devam etmek için planınızı yükseltin veya kendi anahtarlarınızı (BYOK) ekleyin.",
+        "note": "BYOK token'ları kendi sağlayıcı hesabınızda çalışır ve plan kotanıza asla sayılmaz."
+      },
+      "daily": "Günlük token tüketimi",
+      "byProvider": "Sağlayıcıya göre",
+      "split": "Plan anahtarları ve kendi anahtarlarınız",
+      "splitPlatform": "Plan anahtarları",
+      "splitOwn": "Anahtarlarınız (BYOK)",
+      "models": "Modele göre",
+      "columns": {
+        "model": "Model",
+        "provider": "Sağlayıcı",
+        "tokens": "Token",
+        "calls": "Çağrı",
+        "prompt": "İstem",
+        "completion": "Tamamlama"
+      },
+      "empty": "Bu aralıkta henüz yapay zekâ kullanımı yok.",
+      "costNote": "Maliyet, yayımlanmış karma sağlayıcı başına token oranlarına dayalı bir tahmindir ve sağlayıcı faturanızdan farklı olabilir. Token sayıları kesindir."
+    },
+    "own": {
+      "title": "Yapay zekâ sağlayıcı anahtarlarınız",
+      "description": "Yapay zekâ özelliklerinizin ortak hesap yerine sizin hesabınızı kullanması için bir sağlayıcıya kendi anahtarınızı ekleyin. Anahtarlar şifrelenir ve bir daha gösterilmez.",
+      "allowed": "Planınız kendi anahtarlarınızın öncelikli olmasına izin verir.",
+      "notAllowed": "Planınız henüz kendi anahtarlarınızı içermiyor. Şimdi kaydedebilirsiniz ancak yükseltene kadar çağrılar ortak anahtarı kullanmaya devam eder.",
+      "add": "Anahtar ekle",
+      "provider": "Sağlayıcı",
+      "apiKey": "API anahtarı",
+      "apiKeyHint": "En az 8 karakter.",
+      "save": "Anahtarı kaydet",
+      "replace": "Anahtarı değiştir",
+      "saving": "Kaydediliyor",
+      "on": "Açık",
+      "off": "Devre dışı",
+      "ends": "Son hane: {last4}",
+      "using": "Çağrılar şunu kullanır:",
+      "usingOwn": "anahtarınız",
+      "usingShared": "ortak anahtar",
+      "usingNone": "anahtar yok (kullanılabilir bir şey yok)",
+      "turnOn": "Aç",
+      "turnOff": "Kapat",
+      "remove": "Kaldır",
+      "removeTitle": "{name} anahtarınız kaldırılsın mı?",
+      "removeBody": "Varsa çağrılar ortak anahtara döner.",
+      "removeConfirm": "Anahtarı kaldır",
+      "cancel": "İptal",
+      "empty": "Henüz anahtar eklemediniz.",
+      "toasts": {
+        "saved": "{name} anahtarı kaydedildi.",
+        "on": "{name} anahtarı açıldı.",
+        "off": "{name} anahtarı kapatıldı.",
+        "removed": "{name} anahtarı kaldırıldı."
+      },
+      "errors": {
+        "tooShort": "Bir anahtar en az 8 karakterdir."
+      }
+    }
+  }
+}

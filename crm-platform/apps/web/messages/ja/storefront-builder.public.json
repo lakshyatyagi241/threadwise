@@ -1,0 +1,336 @@
+{
+  "shopPublic": {
+    "common": {
+      "close": "閉じる",
+      "ok": "OK",
+      "done": "完了",
+      "skip": "コンテンツへスキップ"
+    },
+    "strip": "WhatsApp で注文 · 代金引換対応 · チャットは無料、迅速な返信",
+    "header": {
+      "navLabel": "ショップのセクション",
+      "shop": "ショップ",
+      "categories": "カテゴリー",
+      "about": "ショップについて",
+      "searchPlaceholder": "商品を検索…",
+      "searchLabel": "商品を検索",
+      "wishlist": "お気に入り",
+      "compare": "比較",
+      "cart": "カート",
+      "withCount": "{label}、{count, plural, other {# 点}}"
+    },
+    "hero": {
+      "welcome": "{shop} へようこそ。",
+      "sub": "厳選された商品です。どの商品も WhatsApp から直接注文できます。購入手続きのフォームもアプリのインストールも不要です。",
+      "trust": {
+        "cod": "代金引換",
+        "chat": "無料のチャットサポート",
+        "returns": "簡単返品"
+      }
+    },
+    "catalog": {
+      "label": "商品",
+      "emptyTitle": "商品はまだありません",
+      "emptyBody": "ショップのオーナーが準備中です。しばらくしてから、もう一度ご確認ください。",
+      "count": "{count, plural, other {# 件の商品}}",
+      "sort": {
+        "label": "商品を並べ替え",
+        "featured": "並べ替え · おすすめ順",
+        "priceAsc": "価格 · 安い順",
+        "priceDesc": "価格 · 高い順",
+        "nameAsc": "名前 · A → Z",
+        "nameDesc": "名前 · Z → A"
+      },
+      "view": {
+        "label": "表示形式",
+        "grid": "グリッド表示",
+        "list": "リスト表示"
+      },
+      "filters": {
+        "title": "絞り込み",
+        "category": "カテゴリー",
+        "price": "価格",
+        "min": "最小",
+        "max": "最大",
+        "range": "範囲: {min} — {max}",
+        "availability": "在庫状況",
+        "inStock": "在庫ありのみ",
+        "onSale": "セール中",
+        "reset": "絞り込みをリセット",
+        "clear": "絞り込みを解除"
+      },
+      "noMatch": "条件に一致する商品はありません",
+      "showMore": "商品をさらに表示",
+      "loading": "読み込み中…",
+      "retry": "再試行",
+      "showing": "{total} 件中 {shown} 件の商品を表示中"
+    },
+    "card": {
+      "new": "新着",
+      "soldOut": "売り切れ",
+      "soldOutNamed": "{name}: 売り切れ",
+      "addToCart": "カートに追加",
+      "addToCartNamed": "{name} をカートに追加",
+      "addWish": "{name} をお気に入りに追加",
+      "removeWish": "{name} をお気に入りから削除",
+      "quickView": "{name} のクイックビュー",
+      "quickViewTitle": "クイックビュー",
+      "was": "元の価格"
+    },
+    "quick": {
+      "details": "詳細を見る →"
+    },
+    "product": {
+      "gallery": "商品画像",
+      "showImage": "画像 {n} を表示",
+      "breadcrumb": "現在の位置",
+      "save": "{percent}% お得",
+      "onlyLeft": "残り {count} 点",
+      "inStock": "在庫あり · 発送準備完了",
+      "quantity": "数量",
+      "addCompare": "比較に追加",
+      "removeCompare": "比較から削除",
+      "share": "この商品を共有",
+      "shareTitle": "この商品を共有",
+      "ask": "WhatsApp で質問する",
+      "sku": "SKU",
+      "category": "カテゴリー",
+      "weight": "重量",
+      "grams": "{count} g",
+      "delivery": "配送",
+      "deliveryTime": "2〜5営業日",
+      "tags": "タグ",
+      "tabs": {
+        "label": "商品情報",
+        "desc": "説明",
+        "ship": "配送と返品",
+        "reviews": "レビュー"
+      },
+      "noDescription": "説明はまだありません。詳しくは WhatsApp で販売者にお問い合わせください。",
+      "shippingHeading": "配送について。",
+      "shippingBody": "注文は1〜2営業日以内に発送されます。配送日数はお住まいの地域によって異なり、通常は2〜5営業日です。",
+      "freeAbove": "{amount} を超える注文は送料無料です。",
+      "returnsHeading": "返品について。",
+      "returnsBody": "未使用の商品は、配達から7日以内に返品いただけます。返品のお手続きは WhatsApp でお問い合わせください。集荷を手配いたします。",
+      "reviewCount": "{count, plural, other {# 件のレビュー}}",
+      "anonymous": "匿名",
+      "ratingOf": "5点満点中 {rating}",
+      "noReviews": "レビューはまだありません。この商品の最初のレビューを投稿しましょう。",
+      "related": "こちらもおすすめ"
+    },
+    "review": {
+      "write": "レビューを書く",
+      "name": "お名前",
+      "rating": "評価",
+      "ratings": {
+        "1": "悪い",
+        "2": "不満",
+        "3": "普通",
+        "4": "良い",
+        "5": "非常に良い"
+      },
+      "bodyLabel": "レビュー内容",
+      "body": "体験を共有してください（任意）",
+      "submit": "レビューを投稿",
+      "nameRequired": "お名前を入力してください。",
+      "thanks": "レビューをありがとうございます！",
+      "network": "ネットワークエラーです。もう一度お試しください。",
+      "failed": "レビューを投稿できませんでした。"
+    },
+    "cart": {
+      "title": "お客様のカート",
+      "subtotal": "小計",
+      "shipping": "送料",
+      "free": "無料 ✓",
+      "total": "合計",
+      "addForFree": "あと {amount} で送料無料",
+      "order": "WhatsApp で注文 →",
+      "payVia": "{method} で支払い · 代金引換",
+      "methods": {
+        "upi": "UPI",
+        "razorpay": "Razorpay",
+        "card": "カード",
+        "paypal": "PayPal",
+        "bank": "銀行振込"
+      },
+      "codOnly": "代金引換 · チャットで確認",
+      "emptyTitle": "カートは空です",
+      "emptyBody": "カタログを見て、お気に入りの商品を追加してください。",
+      "keepBrowsing": "買い物を続ける",
+      "quantityOf": "{name} の数量",
+      "decrease": "数量を減らす",
+      "increase": "数量を増やす",
+      "remove": "{name} をカートから削除",
+      "fullTitle": "カートがいっぱいです",
+      "fullBody": "カートには最大100種類の商品を入れられます。先にこちらを注文してから、新しいカートを作成してください。"
+    },
+    "wish": {
+      "title": "お気に入り",
+      "emptyTitle": "お気に入りはまだありません",
+      "emptyBody": "商品のハートをタップすると、後で見られるように保存されます。",
+      "remove": "{name} をお気に入りから削除"
+    },
+    "compare": {
+      "title": "商品を比較",
+      "emptyTitle": "比較する商品がありません",
+      "emptyBody": "2つの商品で「比較」をタップすると、並べて表示されます。",
+      "attribute": "項目",
+      "rows": {
+        "image": "画像",
+        "name": "名前",
+        "price": "価格",
+        "sku": "SKU",
+        "category": "カテゴリー",
+        "description": "説明"
+      },
+      "remove": "{name} を比較から削除",
+      "bar": "比較する商品",
+      "open": "比較する →",
+      "fullTitle": "比較は満杯です",
+      "fullBody": "一度に比較できる商品は最大 {count} 点です。比較バーから1つ削除すると、新しい商品を追加できます。"
+    },
+    "stock": {
+      "title": "在庫は残り {count} 点のみ",
+      "soldOut": "この商品は売り切れです。近日入荷予定です。入荷時に通知を受け取るには、WhatsApp でお問い合わせください。",
+      "limit": "{count, plural, other {在庫はあと # 点のみで、すべてカートに入っています。}}",
+      "maxTitle": "上限に達しました",
+      "maxBody": "1つの商品は一度に最大 {count} 個まで注文できます。"
+    },
+    "toast": {
+      "added": "{name} · カートに追加しました",
+      "wishAdded": "お気に入りに追加しました ♡",
+      "wishRemoved": "お気に入りから削除しました",
+      "compareAdded": "比較に追加しました",
+      "compareRemoved": "比較から削除しました"
+    },
+    "checkout": {
+      "title": "購入手続き",
+      "summary": "{count, plural, other {# 点}} · {total}",
+      "name": "お名前",
+      "phone": "WhatsApp 番号",
+      "phonePlaceholder": "+1 555 123 4567",
+      "address": "配送先住所",
+      "note": "備考（任意）",
+      "coupon": "割引コード",
+      "apply": "適用",
+      "payment": "支払い",
+      "prepaid": "オンライン決済 / 代金引換の詳細",
+      "cod": "代金引換",
+      "place": "注文する",
+      "placing": "注文を送信しています…",
+      "opening": "注文を受け付けました。WhatsApp を開いています…",
+      "nameRequired": "お名前を入力してください。",
+      "phoneInvalid": "有効な WhatsApp 番号を入力してください。",
+      "cartEmpty": "カートは空です。",
+      "emptyTitle": "カートは空です",
+      "emptyBody": "購入手続きの前に、カタログを見て商品を追加してください。",
+      "failed": "注文できませんでした。もう一度お試しください。",
+      "network": "ネットワークエラーです。もう一度お試しください。",
+      "couponSave": "{discount} お得 · 新しい合計 {total}",
+      "couponFree": "送料無料が適用されました · 新しい合計 {total}",
+      "couponInvalid": "このカートではそのコードは使用できません。",
+      "couponNetwork": "コードを確認できませんでした。",
+      "couponFallback": "無効なコードです。"
+    },
+    "errors": {
+      "itemsUnavailable": "これらの商品はもう購入できません。再読み込みして、もう一度お試しください。",
+      "notAvailable": "このストアは利用できません。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。"
+    },
+    "placed": {
+      "title": "注文を受け付けました",
+      "track": "注文 #{orderNo} を追跡 →"
+    },
+    "share": {
+      "title": "共有",
+      "url": "共有するリンク",
+      "copy": "コピー",
+      "copied": "コピーしました ✓",
+      "copyFailed": "リンクをコピーできませんでした",
+      "linkCopied": "リンクをコピーしました",
+      "whatsapp": "WhatsApp",
+      "whatsappHint": "チャットに送信",
+      "email": "メール",
+      "emailHint": "メールアプリを開く",
+      "telegram": "Telegram",
+      "telegramHint": "チャットに共有",
+      "more": "その他…",
+      "moreHint": "端末の共有メニュー",
+      "showQr": "QR コードを表示 →",
+      "qrTitle": "リンクの QR コード",
+      "scan": "スキャンしてショップを開く"
+    },
+    "info": {
+      "freeAbove": "{amount} 以上で送料無料です。",
+      "shipping": {
+        "title": "配送について",
+        "body": "注文は WhatsApp で確定します。配送日数はお住まいの地域によって異なり、通常は2〜5営業日です。"
+      },
+      "returns": {
+        "title": "返品について",
+        "body": "未使用の商品は7日以内に返品いただけます。返品の手続きは WhatsApp でお問い合わせください。"
+      },
+      "howToOrder": {
+        "title": "ご注文方法",
+        "body": "カタログを見て、カートに追加し、「WhatsApp で注文」をタップしてください。チャットで注文を確認し、配送を手配します。"
+      },
+      "privacy": {
+        "title": "プライバシー",
+        "body": "注文を処理するために、チャットでお客様がご提供いただいた情報のみを収集します。お客様のデータを販売することはありません。"
+      }
+    },
+    "footer": {
+      "blurb": "厳選された商品を、電話のように WhatsApp で注文できます。アプリは不要です。チャットでご注文ください。",
+      "paymentsLabel": "お支払い方法",
+      "pay": {
+        "whatsapp": "WhatsApp",
+        "upi": "UPI",
+        "cod": "代金引換",
+        "bank": "銀行振込"
+      },
+      "shopHeading": "ショップ",
+      "allProducts": "すべての商品",
+      "helpHeading": "ヘルプ",
+      "help": {
+        "shipping": "配送",
+        "returns": "返品",
+        "howToOrder": "ご注文方法",
+        "privacy": "プライバシー"
+      },
+      "contactHeading": "お問い合わせ",
+      "whatsappLink": "WhatsApp · {number}",
+      "hours": "月〜日 · 9:00〜21:00",
+      "hoursToast": "営業時間: 9:00〜21:00",
+      "copyright": "© {year} {shop}"
+    },
+    "order": {
+      "title": "注文 #{orderNo}",
+      "progress": "注文の進捗",
+      "cancelled": "この注文はキャンセルされました。予期しない場合はお問い合わせください。",
+      "steps": {
+        "placed": "注文済み",
+        "confirmed": "確定",
+        "paid": "支払い済み",
+        "shipped": "発送済み"
+      },
+      "stepDone": "完了",
+      "stepTodo": "未完了",
+      "items": "商品",
+      "qty": "数量 {qty} · {price}",
+      "free": "無料",
+      "deliveryTo": "配送先",
+      "payNow": "今すぐ支払う",
+      "message": "この注文についてメッセージを送る"
+    },
+    "notFound": {
+      "kicker": "ワークスペースで迷子になりました",
+      "title": "このページは道を間違えたようです。",
+      "body": "お探しのページが見つかりませんでした。リンクが壊れているか、ページが移動したか、もともと存在しなかった可能性があります。",
+      "back": "戻る",
+      "signIn": "サインイン",
+      "help": "お困りですか？",
+      "support": "サポートに問い合わせる",
+      "metaTitle": "ページが見つかりません"
+    }
+  }
+}

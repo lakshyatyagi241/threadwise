@@ -1,0 +1,370 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "REC_ENDED": "Lịch này đã kết thúc nên không còn gì để thay đổi hoặc chạy.",
+        "REC_NOT_ACTIVE": "Lịch này không hoạt động. Hãy tiếp tục lịch trước.",
+        "REC_START_TOO_OLD": "Ngày bắt đầu quá xa trong quá khứ. Tối đa chỉ tạo 12 kỳ đã qua, nên hãy chọn ngày bắt đầu muộn hơn.",
+        "INV_RECURRING_INVALID": "Không thể dùng mẫu này để tạo hóa đơn. Hãy kiểm tra người mua, các dòng và thuế, rồi lưu lại."
+      }
+    },
+    "recurring": {
+      "title": "Hóa đơn định kỳ",
+      "subtitle": "Các lịch tự động tạo hóa đơn vào những ngày bạn đặt.",
+      "new": "Lịch mới",
+      "invoices": "Hóa đơn",
+      "tabsLabel": "Trạng thái lịch",
+      "tabs": {
+        "all": "Tất cả",
+        "active": "Đang hoạt động",
+        "paused": "Tạm dừng",
+        "ended": "Đã kết thúc"
+      },
+      "search": "Tìm trong các lịch đã tải",
+      "refresh": "Làm mới",
+      "tableLabel": "Lịch hóa đơn định kỳ",
+      "scrollArea": "Bảng lịch, cuộn ngang",
+      "loading": "Đang tải lịch",
+      "empty": {
+        "all": {
+          "title": "Chưa có hóa đơn định kỳ nào",
+          "message": "Thiết lập lịch một lần, hóa đơn sẽ được tạo cho bạn mỗi tuần, mỗi tháng hoặc mỗi năm."
+        },
+        "active": {
+          "title": "Chưa có lịch nào đang chạy",
+          "message": "Các lịch đang hoạt động, tức là các lịch sẽ tạo hóa đơn tiếp theo đúng hạn, sẽ hiện ở đây."
+        },
+        "paused": {
+          "title": "Không có lịch tạm dừng",
+          "message": "Lịch bạn tạm dừng sẽ không tạo hóa đơn cho đến khi bạn tiếp tục lại."
+        },
+        "ended": {
+          "title": "Không có lịch đã kết thúc",
+          "message": "Lịch kết thúc sau lần chạy cuối hoặc ngày kết thúc."
+        }
+      },
+      "emptySearchTitle": "Không có lịch nào khớp",
+      "emptySearch": "Không có dòng đã tải nào khớp. Hãy xóa tìm kiếm hoặc tải thêm.",
+      "clearSearch": "Xóa tìm kiếm",
+      "showing": "{count, plural, other {Đang hiển thị # lịch}}",
+      "showingMatches": "{count} trên {loaded} lịch đã tải khớp",
+      "loadMore": "Tải thêm",
+      "allLoaded": "Đã tải toàn bộ lịch",
+      "searchLoadedOnly": "Tìm kiếm chỉ xét các lịch đã tải. Hãy tải thêm để tìm rộng hơn.",
+      "columns": {
+        "name": "Lịch",
+        "buyer": "Người mua",
+        "every": "Lặp lại",
+        "next": "Lần chạy tiếp theo",
+        "last": "Lần chạy gần nhất",
+        "runs": "Số lần chạy",
+        "failures": "Lỗi",
+        "amount": "Mỗi hóa đơn",
+        "mode": "Mỗi hóa đơn sẽ",
+        "status": "Trạng thái",
+        "actions": "Thao tác"
+      },
+      "lineCount": "{count, plural, other {# dòng}}",
+      "onHold": "Đang tạm giữ",
+      "runsOf": "{done} trên {max}",
+      "failuresTitle": "{count, plural, other {# kỳ bị lỗi. Mở lịch sử.}}",
+      "channel": {
+        "link": "Liên kết",
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "moreFor": "Thao tác khác cho {name}",
+      "open": "Mở",
+      "edit": "Chỉnh sửa",
+      "pause": "Tạm dừng",
+      "resume": "Tiếp tục",
+      "cancel": "Hủy",
+      "runNow": {
+        "action": "Chạy ngay",
+        "title": "Chạy {name} ngay bây giờ?",
+        "confirm": "Chạy ngay",
+        "message": {
+          "draft": "Thao tác này tạo ngay hóa đơn cho {date} dưới dạng bản nháp để bạn xem lại, rồi lịch chuyển sang kỳ tiếp theo.",
+          "issue": "Thao tác này tạo ngay hóa đơn cho {date} và phát hành luôn (được cấp số ngay). Lịch sẽ chuyển sang kỳ tiếp theo.",
+          "issue_send": "Thao tác này tạo ngay hóa đơn cho {date}, phát hành và gửi cho người mua. Lịch sẽ chuyển sang kỳ tiếp theo."
+        }
+      },
+      "delete": {
+        "action": "Xóa",
+        "title": "Xóa {name}?",
+        "message": "{name} sẽ ngừng tạo hóa đơn. Các hóa đơn đã tạo sẽ vẫn còn trong danh sách của bạn.",
+        "confirm": "Xóa lịch",
+        "keep": "Giữ lại"
+      },
+      "toast": {
+        "paused": "{name} đã được tạm dừng.",
+        "resumed": "{name} đã chạy lại. Hóa đơn tiếp theo: {date}.",
+        "resumedEnded": "{name} không còn kỳ nào, nên đã kết thúc.",
+        "ran": "Đã tạo một hóa đơn từ {name}.",
+        "runFailed": "Lần chạy của {name} bị lỗi và đã được ghi lại. Mở lịch sử để xem nguyên nhân.",
+        "deleted": "Đã xóa {name}."
+      },
+      "every": {
+        "day": "{interval, plural, other {Mỗi # ngày}}",
+        "week": "{interval, plural, other {Mỗi # tuần}}",
+        "month": "{interval, plural, other {Mỗi # tháng}}",
+        "year": "{interval, plural, other {Mỗi # năm}}"
+      },
+      "status": {
+        "active": "Đang hoạt động",
+        "paused": "Tạm dừng",
+        "ended": "Đã kết thúc"
+      },
+      "runStatus": {
+        "created": "Đã tạo",
+        "failed": "Lỗi"
+      },
+      "modeShort": {
+        "draft": "Bản nháp",
+        "issue": "Đã phát hành",
+        "issue_send": "Đã phát hành và gửi"
+      },
+      "modeSent": {
+        "email": "Đã phát hành và gửi email",
+        "link": "Đã phát hành, chia sẻ qua liên kết",
+        "whatsapp": "Đã phát hành và gửi qua WhatsApp"
+      },
+      "frequency": {
+        "day": "Ngày",
+        "week": "Tuần",
+        "month": "Tháng",
+        "year": "Năm"
+      },
+      "modeCards": {
+        "draft": {
+          "title": "Để ở dạng bản nháp",
+          "hint": "Mỗi hóa đơn sẽ chờ bạn xem lại trước khi phát hành."
+        },
+        "issue": {
+          "title": "Phát hành",
+          "hint": "Mỗi hóa đơn được cấp số và sẵn sàng vào ngày đến hạn."
+        },
+        "issue_send": {
+          "title": "Phát hành và gửi",
+          "hint": "Mỗi hóa đơn sẽ tự động được phát hành và gửi cho người mua."
+        }
+      },
+      "warnings": {
+        "noBuyerEmail": "Mẫu không có email người mua, nên việc gửi email sẽ thất bại. Hãy thêm email hoặc gửi qua liên kết."
+      },
+      "preview": {
+        "title": "Các lần chạy tiếp theo",
+        "incomplete": "Hãy điền lịch để xem khi nào hóa đơn sẽ được tạo.",
+        "sentence": "{every} kể từ {start}{limit}. {outcome}",
+        "sentenceLimit": "{kind, select, runs {, {count, plural, other {# hóa đơn}}} end {, đến {end}} both {, {count, plural, other {# hóa đơn}}, đến {end}} other {}}",
+        "outcome": {
+          "draft": "Mỗi hóa đơn sẽ để ở dạng bản nháp để bạn xem lại.",
+          "issue": "Mỗi hóa đơn sẽ được phát hành tự động.",
+          "issue_email": "Mỗi hóa đơn sẽ được phát hành và gửi email cho người mua.",
+          "issue_link": "Mỗi hóa đơn sẽ được phát hành và ghi nhận là đã chia sẻ qua liên kết.",
+          "issue_whatsapp": "Mỗi hóa đơn sẽ được phát hành và gửi qua WhatsApp."
+        },
+        "eachInvoice": "Mỗi hóa đơn có giá trị khoảng",
+        "lastDay": "Ngày cuối cùng của tháng",
+        "noRuns": "Không có lần chạy nào nằm trong lịch này.",
+        "endsMaxRuns": "{count, plural, other {Lịch sẽ dừng sau # hóa đơn.}}",
+        "endsEndDate": "{count, plural, other {Sau {date} không có lần chạy nào: tổng cộng # hóa đơn.}}",
+        "moreBounded": "{count, plural, other {Tổng cộng # hóa đơn, các kỳ còn lại theo cùng nhịp.}}",
+        "moreForever": "Lịch sẽ tiếp tục chạy cho đến khi bạn tạm dừng hoặc xóa.",
+        "clampNote": "Lịch này bắt đầu vào ngày {day}. Tháng nào không có ngày {day} sẽ chạy vào ngày cuối tháng, và tháng sau lại quay về ngày {day}.",
+        "catchUp": "{count, plural, other {# kỳ đã qua: hóa đơn của các kỳ này được tạo ngay, mỗi kỳ một hóa đơn.}}",
+        "catchUpTooOld": "{count} kỳ đã qua, và tối đa chỉ tạo {max} kỳ. Hãy chọn ngày bắt đầu muộn hơn."
+      },
+      "builder": {
+        "loading": "Đang tải",
+        "endedNoEdit": "Lịch này đã kết thúc nên không thể chỉnh sửa nữa.",
+        "openSchedule": "Mở lịch",
+        "back": "Quay lại",
+        "newTitle": "Hóa đơn định kỳ mới",
+        "editTitle": "Chỉnh sửa {name}",
+        "newSubtitle": "Đặt nhịp lặp và hóa đơn sẽ được tạo. Các lần chạy tiếp theo hiển thị ở bên cạnh.",
+        "editSubtitle": "Thay đổi nhịp hoặc hóa đơn cho các kỳ sắp tới.",
+        "cancel": "Hủy",
+        "save": "Lưu thay đổi",
+        "create": "Tạo lịch",
+        "conflict": "Có người khác đã thay đổi lịch này khi bạn đang chỉnh sửa. Hãy tải lại để xem phiên bản của họ. Các chỉnh sửa của bạn sẽ bị mất.",
+        "reload": "Tải lại",
+        "fixProblems": "Hãy sửa các trường được đánh dấu trước.",
+        "nothingToSave": "Không có gì thay đổi.",
+        "saved": "Đã lưu lịch.",
+        "created": "{name} giờ sẽ tạo hóa đơn theo lịch.",
+        "schedule": "Lịch",
+        "name": "Tên",
+        "nameHint": "Chỉ bạn thấy, ví dụ Phí giữ chỗ hằng tháng.",
+        "every": "Lặp lại mỗi",
+        "frequency": "Đơn vị",
+        "startDate": "Hóa đơn đầu tiên vào",
+        "startFixed": "Không thể thay đổi ngày bắt đầu. Hãy tạo lịch mới để bắt đầu từ ngày khác.",
+        "startHint": "Ngày trong quá khứ sẽ làm các kỳ đã đến hạn được tạo ngay, tối đa 12 kỳ.",
+        "endDate": "Dừng sau (không bắt buộc)",
+        "endHint": "Không tạo hóa đơn nào sau ngày này.",
+        "maxRuns": "Số hóa đơn (không bắt buộc)",
+        "maxRunsHint": "Lịch sẽ kết thúc sau chừng này hóa đơn.",
+        "noLimit": "Không giới hạn",
+        "scheduleEditNote": "Nhịp đã thay đổi sẽ tiếp tục từ hôm nay và không bao giờ lặp lại kỳ đã chạy.",
+        "mode": "Cách xử lý từng hóa đơn",
+        "sendChannel": "Gửi qua",
+        "sendChannelHint": "Liên kết chỉ ghi nhận rằng bạn tự chia sẻ liên kết. Email và WhatsApp sẽ gửi thay bạn.",
+        "templateTitle": "Mẫu hóa đơn",
+        "templateFuture": "Mẫu mới áp dụng cho các hóa đơn sắp tới. Hóa đơn đã tạo sẽ không thay đổi.",
+        "replaceTemplate": "Thay mẫu",
+        "keepTemplate": "Giữ mẫu hiện tại"
+      },
+      "template": {
+        "title": "Mẫu hóa đơn",
+        "hint": "Mỗi kỳ sẽ có một hóa đơn mới được tạo từ mẫu này, ghi ngày theo kỳ đó.",
+        "hintEdit": "Tạo mẫu mới tại đây. Mẫu này sẽ thay thế mẫu hiện tại cho các hóa đơn sau này.",
+        "sourceLabel": "Nguồn của mẫu",
+        "source": {
+          "invoice": {
+            "title": "Sao chép một hóa đơn",
+            "hint": "Dùng người mua và các dòng của một hóa đơn đã tạo."
+          },
+          "build": {
+            "title": "Tạo mẫu mới",
+            "hint": "Điền người mua và các dòng tại đây."
+          }
+        },
+        "draftInvoice": "Bản nháp hóa đơn",
+        "copyOf": "Bản sao của hóa đơn này, tổng cộng",
+        "change": "Đổi",
+        "choose": "Chọn một hóa đơn",
+        "copyNote": "Người mua, các dòng, thuế và ghi chú sẽ được sao chép khi bạn lưu. Thay đổi về sau trên hóa đơn gốc sẽ không ảnh hưởng đến lịch.",
+        "startFromInvoice": "Bắt đầu từ một hóa đơn",
+        "startFromInvoiceHint": "Tải người mua và các dòng vào đây để bạn có thể điều chỉnh.",
+        "billTo": "Thông tin người mua",
+        "contact": "Liên hệ",
+        "contactHint": "Chọn một liên hệ để gắn mỗi hóa đơn với người đó, hoặc nhập người mua bên dưới.",
+        "buyerName": "Tên trên hóa đơn",
+        "buyerEmail": "Email",
+        "buyerPhone": "Số điện thoại",
+        "buyerCountry": "Quốc gia",
+        "buyerCountryHint": "Hai ký tự, ví dụ IN hoặc DE.",
+        "buyerTaxId": "Mã số thuế",
+        "buyerAddress": "Địa chỉ thanh toán",
+        "details": "Tiền tệ và thuế",
+        "currency": "Tiền tệ",
+        "docType": "Chứng từ",
+        "docTypes": {
+          "tax_invoice": "Hóa đơn thuế",
+          "proforma": "Hóa đơn chiếu lệ"
+        },
+        "taxMode": "Thuế",
+        "taxModes": {
+          "rates": "Theo thuế suất",
+          "auto": "Tự động"
+        },
+        "taxModeAutoHint": "Công cụ thuế sẽ xác định thuế dựa trên quốc gia của người bán và người mua.",
+        "supplyType": "Loại cung cấp",
+        "supply": {
+          "goods": "Hàng hóa",
+          "services": "Dịch vụ",
+          "digital": "Dịch vụ số"
+        },
+        "paymentTerms": "Điều khoản thanh toán",
+        "paymentTermsHint": "Tính từ ngày phát hành mỗi hóa đơn.",
+        "termsDefault": "Mặc định của không gian làm việc",
+        "termsOnReceipt": "Thanh toán khi nhận",
+        "termsNet": "Trong {days} ngày",
+        "lines": "Các dòng hàng hóa",
+        "adjustments": "Chiết khấu và vận chuyển",
+        "discountKind": "Chiết khấu cho toàn bộ hóa đơn",
+        "discountNone": "Không chiết khấu",
+        "discountPercent": "Phần trăm",
+        "discountAmount": "Số tiền cố định ({currency})",
+        "discountValue": "Giá trị chiết khấu",
+        "shipping": "Phí vận chuyển ({currency})",
+        "notes": "Ghi chú cho khách hàng",
+        "notesHint": "In trên mọi hóa đơn.",
+        "termsText": "Điều khoản và điều kiện",
+        "termsTextHint": "In ở cuối mọi hóa đơn.",
+        "kept": "{count, plural, other {Mẫu có # dòng, lập hóa đơn cho}}"
+      },
+      "problems": {
+        "generic": "Kiểm tra trường này.",
+        "nameRequired": "Hãy đặt tên cho lịch.",
+        "nameTooLong": "Dùng tối đa 120 ký tự.",
+        "intervalInvalid": "Nhập số nguyên từ 1 đến 365.",
+        "startInvalid": "Nhập ngày bắt đầu hợp lệ.",
+        "startTooOld": "Ngày bắt đầu này lùi {count} kỳ, và tối đa chỉ tạo {max} kỳ đã qua. Hãy chọn ngày muộn hơn.",
+        "endInvalid": "Nhập ngày kết thúc hợp lệ.",
+        "endBeforeStart": "Ngày kết thúc trước ngày bắt đầu.",
+        "maxRunsInvalid": "Nhập số nguyên từ 1 đến 1000, hoặc để trống.",
+        "invoiceRequired": "Chọn hóa đơn cần sao chép.",
+        "termsInvalid": "Nhập từ 0 đến 365 ngày.",
+        "descriptionRequired": "Mô tả dòng này.",
+        "qtyInvalid": "Nhập số lượng lớn hơn 0.",
+        "priceInvalid": "Nhập giá hợp lệ.",
+        "lineDiscountInvalid": "Nhập phần trăm từ 0 đến 100.",
+        "hsnRequired": "Nhập mã HSN hoặc SAC.",
+        "hsnInvalid": "Mã HSN hoặc SAC gồm 2 đến 12 chữ cái hoặc chữ số.",
+        "taxRateRemoved": "Thuế suất này không còn tồn tại. Hãy chọn thuế suất khác.",
+        "currencyInvalid": "Nhập mã tiền tệ gồm 3 ký tự.",
+        "noLines": "Thêm ít nhất một dòng.",
+        "discountInvalid": "Nhập chiết khấu hợp lệ.",
+        "shippingInvalid": "Nhập số tiền hợp lệ.",
+        "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+        "amountZero": "Tổng hóa đơn phải lớn hơn 0.",
+        "amountInvalid": "Số tiền này không hợp lệ.",
+        "contactRequired": "Chọn một liên hệ hoặc nhập tên người mua. Hóa đơn phát hành tự động cần có người mua.",
+        "countryInvalid": "Dùng mã quốc gia gồm hai ký tự.",
+        "regionInvalid": "Nhập mã bang hoặc khu vực hợp lệ.",
+        "autoNeedsSellerCountry": "Thuế tự động cần quốc gia của bạn trong cài đặt hóa đơn."
+      },
+      "detail": {
+        "loading": "Đang tải lịch",
+        "backToList": "Quay lại hóa đơn định kỳ",
+        "back": "Quay lại hóa đơn định kỳ",
+        "failures": "{count, plural, other {# kỳ không tạo được hóa đơn.}}",
+        "seeHistory": "Xem nguyên nhân",
+        "pausedNote": "Lịch đang tạm dừng. Các kỳ rơi vào thời gian tạm dừng sẽ bị bỏ qua: khi bạn tiếp tục, hóa đơn tiếp theo sẽ là từ hôm nay trở đi.",
+        "endedNote": "Lịch đã kết thúc. Sẽ không tạo thêm hóa đơn nào và không thể chỉnh sửa nữa.",
+        "nextRun": "Lần chạy tiếp theo",
+        "lastRun": "Lần chạy gần nhất",
+        "runs": "Hóa đơn đã tạo",
+        "failedCount": "{count, plural, other {# lỗi}}",
+        "amount": "Mỗi hóa đơn",
+        "amountNote": "Giá trị mẫu hôm nay",
+        "upcoming": "Các ngày sắp tới",
+        "noUpcoming": "Không còn lần chạy nào đến hạn.",
+        "template": "Mẫu",
+        "buyer": "Người mua",
+        "lines": "Dòng",
+        "currency": "Tiền tệ",
+        "mode": "Mỗi hóa đơn là",
+        "starts": "Bắt đầu",
+        "ends": "Kết thúc",
+        "never": "Không có ngày kết thúc",
+        "limit": "Giới hạn",
+        "noLimit": "Không giới hạn",
+        "invoicesCount": "{count, plural, other {# hóa đơn}}",
+        "templateNote": "Chỉnh sửa mẫu sẽ thay đổi các hóa đơn sắp tới, không bao giờ thay đổi các hóa đơn đã tạo."
+      },
+      "runs": {
+        "title": "Lịch sử chạy",
+        "subtitle": "Một dòng cho mỗi kỳ, mới nhất lên đầu.",
+        "loading": "Đang tải lịch sử",
+        "scrollArea": "Bảng lịch sử chạy, cuộn ngang",
+        "emptyTitle": "Chưa có lần chạy nào",
+        "emptyMessage": "Hóa đơn đầu tiên sẽ được tạo vào ngày chạy tiếp theo.",
+        "period": "Kỳ {n}",
+        "draftInvoice": "Bản nháp",
+        "showing": "{count, plural, other {Đang hiển thị # lần chạy}}",
+        "loadMore": "Tải thêm",
+        "allLoaded": "Đã hiển thị toàn bộ lịch sử",
+        "columns": {
+          "period": "Ngày của kỳ",
+          "status": "Kết quả",
+          "invoice": "Hóa đơn",
+          "error": "Nguyên nhân lỗi",
+          "at": "Tạo lúc"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "প্ল্যাটফর্ম",
+      "inbox": "ইনবক্স ও চ্যাট",
+      "audience": "CRM",
+      "sales": "সেলস",
+      "campaigns": "ক্যাম্পেইন",
+      "automation": "অটোমেশন",
+      "store": "স্টোর",
+      "apps": "মার্কেটপ্লেস",
+      "help": "সাপোর্ট ও হেল্প",
+      "settings": "সেটিংস"
+    },
+    "locked": "আপগ্রেড",
+    "language": "ভাষা",
+    "theme": "থিম",
+    "themeLight": "লাইট",
+    "themeDark": "ডার্ক",
+    "logout": "লগ আউট",
+    "openMenu": "মেনু খুলুন",
+    "admin": {
+      "title": "প্ল্যাটফর্ম কনসোল",
+      "note": "সুপার-অ্যাডমিন অ্যাক্টর চালু হলে প্ল্যাটফর্ম-অ্যাডমিনের স্ক্রিনগুলো এখানে আসবে।"
+    },
+    "soon": "শীঘ্রই",
+    "new": "নতুন",
+    "comingSoon": "শীঘ্রই আসছে",
+    "appGate": {
+      "title": "{app} আপনার ওয়ার্কস্পেসের অংশ নয়।",
+      "body": "{app} একটি ঐচ্ছিক অ্যাপ। মার্কেটপ্লেস থেকে যোগ করুন, তাহলে এটি আপনার মেনুতে দেখা যাবে।",
+      "bodyNoMarketplace": "{app} একটি ঐচ্ছিক অ্যাপ, যা এই ওয়ার্কস্পেসে নেই। মার্কেটপ্লেস থেকে যোগ করতে ওয়ার্কস্পেস অ্যাডমিনকে বলুন।",
+      "browse": "মার্কেটপ্লেস ব্রাউজ করুন",
+      "back": "ড্যাশবোর্ডে ফিরে যান",
+      "unofficialTitle": "{app} উপলব্ধ নয়",
+      "unofficialBody": "{app} শুধু QR কোড দিয়ে যুক্ত করা ব্যক্তিগত WhatsApp নম্বরের সঙ্গে ব্যবহৃত হয়, যা আপনার ওয়ার্কস্পেসে চালু নেই। WhatsApp অফিশিয়াল WhatsApp Business API-এর মাধ্যমে সংযুক্ত হয়।"
+    },
+    "closeMenu": "মেনু বন্ধ করুন",
+    "mainMenu": "মূল মেনু",
+    "userMenu": "অ্যাকাউন্ট মেনু",
+    "account": "অ্যাকাউন্ট",
+    "balance": "ব্যালেন্স",
+    "pageSettings": {
+      "label": "এই পেজের সেটিংস",
+      "hint": "আপনার ভূমিকায় বদলানোর অনুমতি থাকায় এই সেটিংসগুলো দেখানো হচ্ছে।"
+    },
+    "notifications": "নোটিফিকেশন",
+    "settings": "সেটিংস",
+    "pinned": "হেল্প ও সেটিংস",
+    "nav": {
+      "analytics": "অ্যানালিটিক্স",
+      "notifications": "নোটিফিকেশন",
+      "inbox": "ইনবক্স",
+      "quickChat": "কুইক চ্যাট",
+      "callLogs": "কল লগ",
+      "teamChat": "টিম চ্যাট",
+      "leadFinder": "লিড ফাইন্ডার",
+      "campaigns": "ক্যাম্পেইন",
+      "broadcasts": "ব্রডকাস্ট",
+      "scheduled": "নির্ধারিত",
+      "templates": "টেমপ্লেট",
+      "history": "ইতিহাস",
+      "flows": "ফ্লো",
+      "aiAssistants": "AI অ্যাসিস্ট্যান্ট",
+      "appointments": "অ্যাপয়েন্টমেন্ট",
+      "crmDashboard": "CRM ড্যাশবোর্ড",
+      "store": "স্টোর",
+      "catalog": "ক্যাটালগ",
+      "support": "সাপোর্ট",
+      "guidebook": "গাইডবুক",
+      "pipelines": "পাইপলাইন",
+      "tasks": "টাস্ক",
+      "companies": "কোম্পানি",
+      "emailTemplates": "ইমেইল টেমপ্লেট",
+      "proposals": "প্রস্তাব",
+      "estimates": "এস্টিমেট",
+      "invoices": "ইনভয়েস",
+      "payments": "পেমেন্ট"
+    },
+    "help": "হেল্প",
+    "unreadCount": "{count, plural, one {# টি অপঠিত} other {# টি অপঠিত}}"
+  }
+}

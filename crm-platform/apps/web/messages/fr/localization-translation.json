@@ -1,0 +1,201 @@
+{
+  "localization-translation": {
+    "nav": {
+      "languages": "Langues",
+      "providers": "Fournisseurs de traduction",
+      "usage": "Utilisation de la traduction",
+      "group": "Localisation"
+    },
+    "errors": {
+      "unexpected": "Une erreur s’est produite. Réessayez.",
+      "conflict": "Quelqu’un d’autre a modifié ceci. La liste a été rechargée : vérifiez-la et réessayez.",
+      "languageIsDefault": "Impossible de désactiver ou de supprimer la langue par défaut. Définissez d’abord une autre langue par défaut.",
+      "languageInactive": "Activez d’abord la langue avant de la définir par défaut.",
+      "credentialsMissing": "Renseignez d’abord les identifiants requis.",
+      "providerInactive": "Seul un fournisseur actif peut être par défaut.",
+      "lockdownNoOfficial": "Activez et configurez au moins un fournisseur officiel payant (DeepL ou Google Cloud) avant d’activer le verrouillage.",
+      "planGate": "Votre forfait ne comprend pas la traduction."
+    },
+    "switcher": {
+      "label": "Changer de langue",
+      "menu": "Langues",
+      "failed": "La langue n’a pas pu être modifiée. Réessayez."
+    },
+    "languages": {
+      "kicker": "Admin · Système · Langues",
+      "titleLead": "Plateforme",
+      "titleEm": "langues",
+      "description": "Gérez les langues que les nouveaux utilisateurs et espaces de travail peuvent choisir. La langue « par défaut » sert de repli pour chaque compte créé.",
+      "loading": "Chargement des langues",
+      "stats": {
+        "total": "Total",
+        "totalHint": "configurées",
+        "active": "Actives",
+        "activeHint": "visibles par les utilisateurs",
+        "default": "Par défaut",
+        "defaultHint": "repli pour les nouveaux comptes"
+      },
+      "catalog": "Catalogue",
+      "allLanguages": "Toutes les langues",
+      "columns": {
+        "name": "Nom",
+        "code": "Code",
+        "dir": "Sens",
+        "active": "Active",
+        "default": "Par défaut",
+        "actions": "Actions"
+      },
+      "on": "Activée",
+      "off": "Désactivée",
+      "defaultBadge": "Par défaut",
+      "set": "Définir",
+      "toggleLabel": "Activer ou désactiver {name}",
+      "delete": "Supprimer",
+      "cancel": "Annuler",
+      "empty": "Aucune langue pour le moment.",
+      "flash": {
+        "activated": "{name} activée.",
+        "disabled": "{name} désactivée.",
+        "nowDefault": "{name} est désormais la langue par défaut.",
+        "removed": "Langue supprimée."
+      },
+      "confirmDelete": {
+        "title": "Supprimer la langue",
+        "message": "Supprimer {name} ?"
+      },
+      "pack": {
+        "kicker": "Pack de langue",
+        "title": "Fixé à {count} langues",
+        "body": "Chaque langue active s’appuie sur un fichier de traduction JSON fourni avec la plateforme. De nouveaux emplacements de langue apparaîtront ici lorsque le pack de traduction sera étendu.",
+        "note": "Vous pouvez toujours activer ou désactiver une langue, modifier son nom natif et son sens d’écriture, et choisir la valeur par défaut de la plateforme dans le tableau de gauche."
+      },
+      "usedFor": {
+        "title": "Utilisation",
+        "body": "Les langues actives apparaissent dans le sélecteur de langue du profil utilisateur et dans les sélecteurs de modèles et de réponses automatiques. La valeur par défaut s’applique aux comptes neufs qui n’en ont pas choisi."
+      }
+    },
+    "providers": {
+      "kicker": "Admin · Système",
+      "title": "Fournisseurs de traduction",
+      "description": "La réponse automatique multilingue utilise l’un de ces fournisseurs pour traduire les messages entrants et rédiger les réponses dans la langue du client. MyMemory est actif par défaut (gratuit, sans clé) : branchez DeepL, Google Cloud ou LibreTranslate pour une meilleure qualité ou une confidentialité auto-hébergée.",
+      "loading": "Chargement des fournisseurs",
+      "on": "Activé",
+      "off": "Désactivé",
+      "cancel": "Annuler",
+      "lockdown": {
+        "title": "Verrouillage de conformité",
+        "description": "Lorsqu’il est activé, la chaîne de repli ignore <mono>{slugs}</mono> et n’achemine la traduction des réponses automatiques que par les API officielles payantes (DeepL, Google Cloud). Requis par certaines politiques de sécurité d’entreprise qui interdisent les points d’accès tiers non officiels.",
+        "enable": "Activer le verrouillage",
+        "disable": "Désactiver le verrouillage",
+        "confirmOn": "Activer le verrouillage ? Les pilotes gratuits seront ignorés : seules les API payantes traduiront.",
+        "confirmOff": "Désactiver le verrouillage ? Les pilotes gratuits réintégreront la chaîne de repli."
+      },
+      "flash": {
+        "activated": "{name} activé.",
+        "disabled": "{name} désactivé.",
+        "nowDefault": "{name} est désormais le fournisseur par défaut.",
+        "saved": "{name} enregistré.",
+        "lockdownOn": "Le verrouillage de conformité est activé.",
+        "lockdownOff": "Le verrouillage de conformité est désactivé."
+      },
+      "empty": {
+        "title": "Aucun fournisseur de traduction configuré",
+        "body": "Exécutez le seed des fournisseurs de traduction pour remplir cette liste."
+      },
+      "active": "Actif",
+      "disabled": "Désactivé",
+      "defaultBadge": "Par défaut",
+      "skipped": "Verrouillage · ignoré",
+      "skippedTitle": "Ignoré car le verrouillage de conformité est activé.",
+      "slug": "slug : {slug}",
+      "makeDefault": "Définir par défaut",
+      "activate": "Activer",
+      "disable": "Désactiver",
+      "keepSecret": "••••••• (laisser vide pour conserver)",
+      "noCredentials": "Aucun identifiant requis : ce fournisseur fonctionne immédiatement.",
+      "sortOrder": "Ordre de tri",
+      "sortOrderHint": "Plus la valeur est basse, plus la priorité est élevée dans la chaîne de repli.",
+      "save": "Enregistrer {name}"
+    },
+    "usage": {
+      "kicker": "Admin · Système",
+      "title": "Utilisation de la traduction",
+      "description": "Volume et coût estimé de chaque traduction de réponse automatique. Les correspondances du dictionnaire intégré et les hits du cache de 24 h ne sont pas facturables et n’apparaissent pas ici : seuls les appels réseau sont comptés.",
+      "from": "Du",
+      "to": "Au",
+      "apply": "Appliquer",
+      "badRange": "La date de début ne doit pas être postérieure à la date de fin.",
+      "loading": "Chargement de l’utilisation",
+      "failed": "Impossible de charger l’utilisation.",
+      "totals": {
+        "calls": "Appels réseau",
+        "chars": "Caractères traduits",
+        "charsOut": "sortie : {count}",
+        "cost": "Coût estimé",
+        "costHint": "d’après les tarifs publiés par caractère",
+        "fallbackHits": "Recours au repli",
+        "fallbackHint": "pilote principal en échec, la chaîne a pris le relais"
+      },
+      "byProvider": "Par fournisseur",
+      "emptyProvider": "Aucun appel de traduction sur cette période. Envoyez un message entrant non anglais vers un appareil doté d’une réponse automatique, puis actualisez.",
+      "free": "gratuit",
+      "last30": "30 derniers jours",
+      "timelineHint": "survolez chaque barre pour voir la date, les caractères et le coût",
+      "topWorkspaces": "Espaces de travail les plus dépensiers",
+      "emptyWorkspaces": "Aucune traduction payante sur cette période.",
+      "cols": {
+        "provider": "Fournisseur",
+        "workspace": "Espace de travail",
+        "calls": "Appels",
+        "charsIn": "Caractères entrants",
+        "chars": "Caractères",
+        "cost": "Coût",
+        "rate": "Tarif / 1 M caractères"
+      }
+    },
+    "settings": {
+      "title": "Traduction en temps réel",
+      "description": "Discutez avec vos clients dans n’importe quelle langue. Chacun lit dans sa propre langue, automatiquement.",
+      "loading": "Chargement des paramètres de traduction",
+      "failed": "Impossible de charger les paramètres de traduction.",
+      "saved": "Paramètres de traduction enregistrés.",
+      "steps": {
+        "1": {
+          "title": "Le client écrit (toute langue)",
+          "body": "Son message est automatiquement traduit DANS la langue de votre équipe et affiché à votre agent, l’original à un clic."
+        },
+        "2": {
+          "title": "Réponses de l’agent (votre langue)",
+          "body": "Votre réponse est traduite DANS la langue du client juste avant d’être envoyée sur WhatsApp."
+        },
+        "3": {
+          "title": "IA et widget aussi",
+          "body": "L’agent IA et le widget de chat du site répondent nativement dans la langue du client."
+        }
+      },
+      "engine": {
+        "kicker": "Moteur de traduction",
+        "free": "MyMemory (gratuit)",
+        "body": "Vous NE saisissez AUCUNE clé API ici : la traduction est configurée une seule fois, pour toute la plateforme, et fonctionne automatiquement. Un moteur gratuit est activé par défaut ; la plateforme peut être configurée pour utiliser DeepL / Google Translate pour une meilleure qualité."
+      },
+      "usage": {
+        "kicker": "Ce mois-ci",
+        "line": "caractères traduits · {count} messages"
+      },
+      "enabled": {
+        "title": "Traduction automatique des conversations",
+        "hint": "Activez ou désactivez l’ensemble pour cet espace de travail."
+      },
+      "teamLanguage": {
+        "label": "Langue de votre équipe",
+        "hint": "La langue dans laquelle VOS agents lisent et écrivent. Les messages des clients y sont traduits ; vos réponses en sont traduites."
+      },
+      "save": "Enregistrer les paramètres de traduction",
+      "upgrade": {
+        "title": "Passez à un forfait supérieur pour débloquer la traduction en temps réel.",
+        "body": "Traduisez automatiquement les conversations WhatsApp entre la langue de votre équipe et celles de vos clients.",
+        "link": "Voir les forfaits →"
+      }
+    }
+  }
+}

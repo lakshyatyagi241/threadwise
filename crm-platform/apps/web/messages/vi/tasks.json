@@ -1,0 +1,330 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "Công việc"
+    },
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "hub": {
+      "title": "Công việc",
+      "subtitle": "Việc cần theo dõi và việc cần làm. Phân công, đặt mức ưu tiên và hạn chót, rồi đánh dấu hoàn thành.",
+      "newTask": "Công việc mới",
+      "tableLabel": "Công việc",
+      "loading": "Đang tải công việc",
+      "useSampleData": "Dùng dữ liệu mẫu (môi trường phát triển)",
+      "emptyFilteredTitle": "Không có công việc nào khớp",
+      "emptyFiltered": "Thử tìm kiếm khác hoặc xóa bộ lọc.",
+      "resetFilters": "Xóa bộ lọc",
+      "empty": {
+        "mine": {
+          "title": "Chưa có công việc nào được giao cho bạn",
+          "message": "Công việc được giao cho bạn sẽ hiển thị tại đây. Thêm công việc ở trên hoặc xem Tất cả công việc."
+        },
+        "all": {
+          "title": "Chưa có công việc nào",
+          "message": "Thêm việc cần theo dõi hoặc việc cần làm bằng ô phía trên, và việc đó sẽ hiển thị tại đây."
+        },
+        "overdue": {
+          "title": "Không có công việc quá hạn",
+          "message": "Mọi công việc đang mở đều đúng hạn."
+        },
+        "today": {
+          "title": "Không có công việc đến hạn hôm nay",
+          "message": "Không có công việc đang mở nào đến hạn trong phần còn lại của hôm nay."
+        },
+        "upcoming": {
+          "title": "Chưa có công việc sắp tới",
+          "message": "Công việc đang mở đến hạn vào ngày sau sẽ hiển thị tại đây."
+        },
+        "completed": {
+          "title": "Chưa có công việc đã hoàn thành",
+          "message": "Công việc bạn đánh dấu hoàn thành sẽ hiển thị tại đây, mới nhất trước."
+        }
+      },
+      "showing": "{count, plural, other {Đã tải # công việc}}",
+      "loadMore": "Tải thêm",
+      "allLoaded": "Đã tải tất cả công việc",
+      "deleteTitle": "Xóa công việc này?",
+      "deleteMessage": "“{title}” sẽ bị xóa với tất cả mọi người. Không thể hoàn tác.",
+      "delete": "Xóa",
+      "keep": "Giữ lại"
+    },
+    "tabs": {
+      "label": "Danh sách công việc",
+      "mine": "Công việc của tôi",
+      "all": "Tất cả công việc",
+      "overdue": "Quá hạn",
+      "today": "Hôm nay",
+      "upcoming": "Sắp tới",
+      "completed": "Đã hoàn thành",
+      "count": "{count, plural, other {# công việc}}"
+    },
+    "toolbar": {
+      "label": "Bộ lọc công việc",
+      "search": "Tìm công việc",
+      "status": "Trạng thái",
+      "statusOpen": "Đang mở",
+      "statusDone": "Đã hoàn thành",
+      "statusAll": "Đang mở và đã hoàn thành",
+      "priority": "Mức ưu tiên",
+      "allPriorities": "Tất cả mức ưu tiên",
+      "priorities": {
+        "high": "Cao",
+        "medium": "Trung bình",
+        "low": "Thấp"
+      },
+      "assignee": "Người được giao",
+      "allAssignees": "Tất cả người được giao",
+      "unassigned": "Chưa giao",
+      "linked": "Liên kết với",
+      "anyLink": "Bất kỳ bản ghi nào",
+      "linkContact": "Một liên hệ",
+      "linkDeal": "Một thương vụ",
+      "clear": "Xóa",
+      "modifyColumns": "Chỉnh sửa cột",
+      "resetColumns": "Đặt lại cột",
+      "columns": {
+        "title": "Công việc",
+        "priority": "Ưu tiên",
+        "due": "Hạn",
+        "assignee": "Người được giao",
+        "contact": "Liên hệ",
+        "deal": "Thương vụ",
+        "created": "Ngày tạo",
+        "completed": "Hoàn thành ngày"
+      },
+      "refresh": "Làm mới",
+      "shortcuts": "Phím tắt",
+      "view": "Bố cục",
+      "views": {
+        "list": "Danh sách",
+        "board": "Bảng theo hạn chót"
+      }
+    },
+    "table": {
+      "scrollArea": "Bảng công việc",
+      "selectAll": "Chọn tất cả công việc đã tải",
+      "selectRow": "Chọn {title}",
+      "columns": {
+        "title": "Công việc",
+        "priority": "Ưu tiên",
+        "due": "Hạn",
+        "assignee": "Người được giao",
+        "contact": "Liên hệ",
+        "deal": "Thương vụ",
+        "created": "Ngày tạo",
+        "completed": "Hoàn thành ngày"
+      }
+    },
+    "row": {
+      "complete": "Đánh dấu hoàn thành",
+      "reopen": "Mở lại",
+      "completeNamed": "Đánh dấu “{title}” là hoàn thành",
+      "reopenNamed": "Mở lại “{title}”",
+      "moreFor": "Thêm thao tác cho {title}",
+      "open": "Mở",
+      "edit": "Sửa",
+      "delete": "Xóa",
+      "unassigned": "Chưa giao"
+    },
+    "bulk": {
+      "label": "Thao tác với các công việc đã chọn",
+      "selected": "{count, plural, other {Đã chọn # công việc}}",
+      "working": "Đang xử lý",
+      "complete": "Hoàn thành",
+      "assign": "Giao việc",
+      "assignTo": "Giao cho",
+      "me": "{name} (tôi)",
+      "unassign": "Bỏ giao",
+      "delete": "Xóa",
+      "clear": "Bỏ chọn",
+      "failed": "Không thành công.",
+      "someFailed": "{count, plural, other {Không thể thay đổi # công việc.}}",
+      "completed": "{count, plural, other {Đã hoàn thành # công việc.}}",
+      "assigned": "{count, plural, other {Đã giao # công việc cho {name}.}}",
+      "unassigned": "{count, plural, other {Đã bỏ giao # công việc.}}",
+      "deleted": "{count, plural, other {Đã xóa # công việc.}}",
+      "deleteTitle": "Xóa các công việc đã chọn?",
+      "deleteMessage": "{count, plural, other {# công việc sẽ bị xóa với tất cả mọi người. Không thể hoàn tác.}}",
+      "keep": "Giữ lại"
+    },
+    "quick": {
+      "label": "Thêm công việc",
+      "placeholder": "Thêm công việc và nhấn Enter",
+      "priority": "Ưu tiên",
+      "priorities": {
+        "high": "Cao",
+        "medium": "Trung bình",
+        "low": "Thấp"
+      },
+      "due": "Ngày và giờ đến hạn",
+      "add": "Thêm",
+      "dueRequired": "Chọn ngày và giờ đến hạn.",
+      "titleRequired": "Nhập nội dung cần làm.",
+      "options": "Thêm tùy chọn (mức ưu tiên và hạn chót)"
+    },
+    "form": {
+      "eyebrow": "Công việc",
+      "newTitle": "Công việc mới",
+      "editTitle": "Sửa công việc",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "create": "Tạo công việc",
+      "save": "Lưu thay đổi",
+      "title": "Công việc",
+      "titlePlaceholder": "vd. Gọi Acme về việc gia hạn",
+      "priority": "Ưu tiên",
+      "priorities": {
+        "high": "Cao",
+        "medium": "Trung bình",
+        "low": "Thấp"
+      },
+      "assignee": "Giao cho",
+      "unassigned": "Không ai",
+      "me": "{name} (tôi)",
+      "due": "Hạn",
+      "presets": {
+        "today": "Hôm nay",
+        "tomorrow": "Ngày mai",
+        "nextWeek": "Tuần sau"
+      },
+      "clearDue": "Xóa ngày",
+      "contact": "Liên hệ",
+      "deal": "Thương vụ",
+      "notes": "Ghi chú",
+      "reminderHint": "Người được giao sẽ nhận nhắc nhở khi công việc đến hạn.",
+      "assigneePick": "Chọn người phụ trách công việc này.",
+      "problems": {
+        "dueRequired": "Chọn ngày và giờ đến hạn.",
+        "priorityRequired": "Chọn mức ưu tiên.",
+        "assigneeRequired": "Chọn người mà công việc này dành cho.",
+        "titleRequired": "Nhập nội dung cần làm.",
+        "titleTooLong": "Công việc quá dài (tối đa 255 ký tự).",
+        "notesTooLong": "Ghi chú quá dài (tối đa 5000 ký tự).",
+        "dueInvalid": "Ngày này không hợp lệ.",
+        "assigneeInvalid": "Người này không phải thành viên đang hoạt động của không gian làm việc."
+      }
+    },
+    "drawer": {
+      "loading": "Đang tải công việc",
+      "close": "Đóng",
+      "eyebrow": "Công việc",
+      "name": "Tên công việc",
+      "titleRequired": "Công việc cần có tên.",
+      "statusOpen": "Mở",
+      "statusDone": "Đã hoàn thành",
+      "complete": "Đánh dấu hoàn thành",
+      "reopen": "Mở lại",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa",
+      "details": "Chi tiết",
+      "notes": "Ghi chú",
+      "notesPlaceholder": "Thêm ngữ cảnh cho người sẽ xử lý việc này",
+      "linked": "Bản ghi liên kết",
+      "company": "Công ty",
+      "noLinks": "Chưa liên kết với liên hệ hoặc thương vụ nào.",
+      "activity": "Hoạt động",
+      "events": {
+        "created": "Đã tạo tác vụ",
+        "createdBy": "Tạo bởi {name}",
+        "reminded": "Đã gửi nhắc nhở đến hạn",
+        "completed": "Đã đánh dấu hoàn thành"
+      },
+      "deleteTitle": "Xóa tác vụ này?",
+      "deleteMessage": "“{title}” sẽ bị xóa đối với mọi người. Không thể hoàn tác.",
+      "cancel": "Giữ lại"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "Quá hạn",
+        "today": "Hôm nay",
+        "upcoming": "Sắp tới",
+        "no_date": "Chưa có ngày"
+      },
+      "empty": "Không có gì ở đây."
+    },
+    "due": {
+      "none": "Chưa có ngày",
+      "overdue": "Quá hạn",
+      "today": "Hôm nay, {time}",
+      "tomorrow": "Ngày mai, {time}",
+      "yesterday": "Hôm qua, {time}",
+      "date": "{date}, {time}"
+    },
+    "priority": {
+      "high": "Cao",
+      "medium": "Trung bình",
+      "low": "Thấp"
+    },
+    "link": {
+      "unnamedContact": "Liên hệ chưa đặt tên",
+      "unnamedDeal": "Thương vụ"
+    },
+    "picker": {
+      "searchContact": "Tìm liên hệ",
+      "searchDeal": "Tìm thương vụ",
+      "results": "Kết quả tìm kiếm",
+      "searching": "Đang tìm",
+      "unavailable": "Hiện chưa thể tìm kiếm.",
+      "none": "Không có kết quả phù hợp.",
+      "unlink": "Gỡ liên kết"
+    },
+    "errors": {
+      "network": "Không thể kết nối đến máy chủ. Kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "signedOut": "Phiên làm việc đã kết thúc. Đăng nhập lại để tiếp tục.",
+      "conflict": "Có người khác vừa thay đổi tác vụ này. Tải lại và thử lại.",
+      "validation": "Một số thông tin không hợp lệ.",
+      "unavailable": "Dịch vụ tác vụ chưa sẵn sàng trên máy chủ này.",
+      "rateLimited": "Quá nhiều yêu cầu. Chờ một lát rồi thử lại.",
+      "notFound": "Không tìm thấy tác vụ đó. Có thể đã bị xóa.",
+      "planDisabled": "Gói của bạn không bao gồm tác vụ. Nâng cấp để mở khóa.",
+      "assigneeInvalid": "Người này không phải thành viên đang hoạt động của không gian làm việc này.",
+      "unexpected": "Đã xảy ra lỗi. Thử lại sau ít phút.",
+      "requestId": "Mã yêu cầu",
+      "retry": "Thử lại"
+    },
+    "toast": {
+      "completed": "Đã hoàn thành tác vụ.",
+      "reopened": "Đã mở lại tác vụ.",
+      "created": "Đã tạo tác vụ.",
+      "saved": "Đã lưu tác vụ.",
+      "deleted": "Đã xóa tác vụ.",
+      "conflict": "Có người khác vừa thay đổi tác vụ này. Danh sách đã được tải lại; hãy thử lại.",
+      "failed": "Không thể cập nhật tác vụ.",
+      "saveFailed": "Không thể lưu tác vụ.",
+      "deleteFailed": "Không thể xóa tác vụ.",
+      "createFailed": "Không thể tạo tác vụ."
+    },
+    "shortcuts": {
+      "title": "Phím tắt",
+      "close": "Đóng",
+      "intro": "Xử lý danh sách mà không cần chuột. Phím tắt tạm dừng khi bạn đang gõ trong ô nhập.",
+      "actions": {
+        "next": "Tác vụ tiếp theo",
+        "prev": "Tác vụ trước",
+        "open": "Mở tác vụ",
+        "toggleComplete": "Hoàn thành hoặc mở lại",
+        "toggleSelect": "Chọn hoặc bỏ chọn",
+        "newTask": "Tác vụ mới",
+        "focusSearch": "Tìm kiếm",
+        "clearSelection": "Bỏ chọn tất cả",
+        "help": "Hiện danh sách này"
+      }
+    },
+    "linked": {
+      "title": "Tác vụ",
+      "addPlaceholder": "Nhập tiêu đề tác vụ, rồi nhấn Thêm để điền chi tiết",
+      "viewAll": "Xem tất cả",
+      "loading": "Đang tải tác vụ",
+      "unavailableTitle": "Chưa có tác vụ",
+      "unavailable": "Dịch vụ tác vụ chưa sẵn sàng trên máy chủ này.",
+      "empty": "Không có tác vụ đang mở.",
+      "loadMore": "Tải thêm",
+      "loadMoreDone": "Tải thêm mục đã hoàn thành",
+      "showDone": "Hiện đã hoàn thành",
+      "hideDone": "Ẩn đã hoàn thành"
+    }
+  }
+}

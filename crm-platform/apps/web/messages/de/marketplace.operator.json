@@ -1,0 +1,924 @@
+{
+  "marketplace": {
+    "operator": {
+      "nav": {
+        "group": "Marketplace",
+        "catalogue": "Katalog",
+        "categories": "Kategorien",
+        "requests": "Anfragen",
+        "usage": "Nutzung"
+      },
+      "common": {
+        "loading": "Wird geladen...",
+        "requestId": "Anfrage-ID",
+        "retry": "Erneut versuchen",
+        "noPermissions": "Keine Berechtigungen"
+      },
+      "enums": {
+        "kind": {
+          "mini_app": "Mini-App",
+          "integration": "Integration"
+        },
+        "appStatus": {
+          "draft": "Entwurf",
+          "in_review": "In Prüfung",
+          "published": "Veröffentlicht",
+          "hidden": "Ausgeblendet",
+          "killed": "Gesperrt"
+        },
+        "versionStatus": {
+          "draft": "Entwurf",
+          "in_review": "In Prüfung",
+          "approved": "Freigegeben",
+          "rejected": "Abgelehnt",
+          "published": "Veröffentlicht",
+          "retired": "Außer Betrieb"
+        },
+        "requestStatus": {
+          "open": "Offen",
+          "planned": "Geplant",
+          "building": "In Entwicklung",
+          "shipped": "Veröffentlicht",
+          "declined": "Abgelehnt"
+        },
+        "connector": {
+          "oauth": "OAuth-Anmeldung",
+          "push": "Push (das Portal sendet an uns)",
+          "pull": "Pull (wir fragen das Portal ab)",
+          "email_parse": "E-Mail-Auswertung",
+          "webhook_relay": "Webhook-Weiterleitung",
+          "client": "Client (von Mitgliedern installiert)"
+        },
+        "risk": {
+          "low": "Geringes Risiko",
+          "medium": "Mittleres Risiko",
+          "high": "Hohes Risiko"
+        },
+        "subscriptionStatus": {
+          "active": "Zahlend",
+          "trialing": "In Testphase",
+          "comped": "Kostenlos bereitgestellt",
+          "canceling": "Läuft aus",
+          "ended": "Beendet"
+        },
+        "subscriptionSource": {
+          "purchase": "Kauf",
+          "trial": "Testphase",
+          "comp": "Kostenlos"
+        }
+      },
+      "errors": {
+        "conflict": "Jemand anderes hat dies geändert, während Sie es angesehen haben. Laden Sie neu, um dessen Version zu sehen, und nehmen Sie Ihre Änderung dann erneut vor.",
+        "noAccess": "Dafür benötigen Sie die Plattformberechtigung {permission}.",
+        "manifestInvalid": "Das Manifest entspricht nicht Manifest v1. Jedes Problem ist mit seinem Pfad aufgeführt.",
+        "recipeInvalid": "Das Rezept entspricht nicht dem Rezeptformat oder passt nicht zum Manifest. Jedes Problem ist mit seinem Pfad aufgeführt.",
+        "urlRefused": "Eine Adresse im Rezept wird abgelehnt: {detail}.",
+        "urlRefusedPlain": "Eine Adresse im Rezept wird abgelehnt. Adressen müssen https verwenden, einen öffentlichen DNS-Namen haben, den Standardport nutzen und ohne Zugangsdaten sein.",
+        "connectorNotAvailable": "Der Connector-Typ {type} ist noch nicht implementiert, daher kann dieser Eintrag nicht veröffentlicht werden. Nichts, was nicht funktioniert, gelangt in einen Workspace.",
+        "slugTaken": "Ein anderer Eintrag oder eine andere Kategorie verwendet bereits diese ID. Wählen Sie eine andere.",
+        "categoryGone": "Diese Kategorie existiert nicht mehr. Laden Sie die Liste neu.",
+        "categoryUnknown": "Die im Manifest genannte Kategorie existiert für diese App-Art nicht oder ist deaktiviert. Wählen Sie eine auf der Seite Kategorien aus.",
+        "categoryInUse": "In dieser Kategorie sind Apps aufgeführt. Verschieben Sie sie zuerst in eine andere Kategorie oder deaktivieren Sie die Kategorie, um sie vor Workspaces zu verbergen.",
+        "versionState": "Dies ist nicht zulässig, solange der Eintrag oder die Version {status} ist. Laden Sie neu, um den aktuellen Status zu sehen.",
+        "versionStatePlain": "Dies ist im aktuellen Zustand des Eintrags oder der Version nicht zulässig. Laden Sie neu, um den aktuellen Status zu sehen.",
+        "versionExists": "Die Versionsnummer muss höher als {newest} sein, die bisher höchste Version.",
+        "versionExistsPlain": "Diese Versionsnummer existiert bereits. Verwenden Sie eine höhere.",
+        "appUnavailable": "Ein gesperrter Eintrag kann nicht veröffentlicht werden. Stellen Sie ihn zuerst wieder her und veröffentlichen Sie ihn dann.",
+        "appNotFound": "Dieser Eintrag existiert nicht. Er wurde möglicherweise gelöscht.",
+        "notFound": "Dieses Element wurde nicht gefunden. Es wurde möglicherweise gelöscht.",
+        "rateLimited": "Zu viele Anfragen. Warten Sie {seconds} Sekunden und versuchen Sie es erneut.",
+        "rateLimitedPlain": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+        "validationFields": "Einige Felder sind ungültig. Jedes Problem ist mit seinem Feld aufgeführt.",
+        "validation": "Die Anfrage war ungültig.",
+        "request": "Die Anfrage konnte nicht abgeschlossen werden.",
+        "unexpected": "Auf unserer Seite ist ein Fehler aufgetreten. Versuchen Sie es erneut; falls das Problem bestehen bleibt, nennen Sie die Anfrage-ID.",
+        "subscriptionState": "Dies ist im aktuellen Zustand des Abonnements nicht möglich. Ein Workspace, der bereits zahlt, kann nicht kostenlos bereitgestellt werden (kündigen Sie zuerst sein Abonnement), eine kostenlose App hat nichts kostenlos bereitzustellen, und ein beendetes Abonnement kann nicht erneut gekündigt werden.",
+        "subscriptionNotFound": "Dieses Abonnement wurde nicht gefunden. Es wurde möglicherweise entfernt. Laden Sie die Liste neu."
+      },
+      "list": {
+        "title": "Marketplace-Katalog",
+        "description": "Alle Einträge in jedem Status: Mini-Apps und Integrationen, ihre Versionen und wie viele Workspaces sie installiert haben.",
+        "new": "Neuer Eintrag",
+        "subscriptionsLink": "Abonnements und Umsatz",
+        "kpi": {
+          "label": "Einträge nach Status",
+          "loaded": "Geladen",
+          "published": "Veröffentlicht",
+          "inReview": "In Prüfung",
+          "hidden": "Ausgeblendet",
+          "killed": "Gesperrt",
+          "note": "Die Zählungen beziehen sich auf die bisher geladenen {count} Einträge, nicht auf den gesamten Katalog.",
+          "noteMore": "Weitere sind verfügbar: Verwenden Sie Mehr laden."
+        },
+        "filters": {
+          "label": "Filter",
+          "search": "Suche",
+          "searchPlaceholder": "Name oder ID",
+          "kind": "Art",
+          "allKinds": "Alle Arten",
+          "status": "Status",
+          "allStatuses": "Alle Status",
+          "category": "Kategorie",
+          "allCategories": "Alle Kategorien",
+          "categoryNote": "Filtert die bereits geladenen Einträge: Die API hat keinen Kategoriefilter.",
+          "pricing": "Preise",
+          "allPricing": "Alle Preise",
+          "free": "Kostenlos",
+          "paid": "Kostenpflichtig"
+        },
+        "cols": {
+          "app": "App",
+          "kind": "Art",
+          "category": "Kategorie",
+          "status": "Status",
+          "versions": "Versionen",
+          "installs": "Installationen",
+          "planFeature": "Tarif-Funktion",
+          "pricing": "Preise",
+          "subscriptions": "Aktive Abonnements"
+        },
+        "badges": {
+          "firstParty": "Von uns entwickelt",
+          "featured": "Empfohlen"
+        },
+        "versionPublished": "Veröffentlicht",
+        "versionLatest": "Neueste",
+        "dash": "-",
+        "everyPlan": "Alle Tarife",
+        "killedReason": "Gesperrt: {reason}",
+        "loadMore": "Mehr laden",
+        "clearFilters": "Filter zurücksetzen",
+        "emptyTitle": "Noch keine Einträge",
+        "emptyMessage": "Erstellen Sie den ersten Eintrag, um den Katalog zu starten.",
+        "noMatchTitle": "Kein Eintrag passt",
+        "noMatchMessage": "Diese Filter ergeben keine Treffer. Versuchen Sie andere.",
+        "noMatchMoreMessage": "Keiner der bisher geladenen Einträge passt. Weitere sind verfügbar: Laden Sie sie oder ändern Sie die Filter.",
+        "tableCaption": "Marketplace-Einträge",
+        "viewSubscriptions": "Abonnements für {name}"
+      },
+      "new": {
+        "title": "Neuer Eintrag",
+        "description": "Erstellen Sie einen Entwurf für einen Eintrag mit seiner ersten Version. Nichts gelangt in einen Workspace, bis ein Prüfer es freigibt und veröffentlicht.",
+        "back": "Zurück zum Katalog",
+        "sections": {
+          "docs": "Manifest und Rezept",
+          "docsHelp": "Das Manifest beschreibt, wer die App ist, was sie tun darf und welchen Connector sie verwendet. Eine Integration benötigt außerdem ein Rezept. Beide werden während der Eingabe nach den Regeln des Servers geprüft.",
+          "changelog": "Notizen zur ersten Version",
+          "changelogHelp": "Wird Administratoren als Inhalt der ersten Version angezeigt."
+        },
+        "changelog": "Changelog",
+        "changelogHint": "Optional, bis zu {max} Zeichen. Bleibt es leer, wird Erste Version angezeigt.",
+        "save": "Eintrag erstellen",
+        "saving": "Wird erstellt...",
+        "cancel": "Abbrechen",
+        "created": "Eintrag {name} als Entwurf erstellt.",
+        "draftNote": "Der Eintrag beginnt als Entwurf. Reichen Sie seine Version über die Eintragsseite zur Prüfung ein."
+      },
+      "editor": {
+        "cancel": "Abbrechen",
+        "format": "Format",
+        "problemCount": "{count, plural, one {# Problem zu beheben} other {# Probleme zu beheben}}",
+        "valid": {
+          "manifest": "Gültiges Manifest v1.",
+          "recipe": "Gültiges Rezept."
+        },
+        "manifest": {
+          "label": "Manifest (JSON)",
+          "hint": "Manifest v1: id, name, kind, category, version, description, scopes, pricing, support, connector."
+        },
+        "recipe": {
+          "label": "Rezept (JSON)",
+          "hint": "Das Connector-Rezept einer Integration: connector, authFields, mapping, rateLimits, errorMapping, setupInstructions, testPayloads.",
+          "insertStarter": "Starter-Rezept einfügen"
+        },
+        "scopes": {
+          "title": "Berechtigungen, die diese Version anfordert",
+          "help": "Was ein Administrator in einfachen Worten akzeptieren soll. Fordern Sie so wenige wie möglich an, die funktionieren."
+        },
+        "templates": {
+          "title": "Mit einer Vorlage beginnen",
+          "help": "Füllt beide Editoren mit einem gültigen Ausgangspunkt, den Sie anschließend bearbeiten.",
+          "mini_app": "Mini-App",
+          "webhook_relay": "Integration: Webhook-Weiterleitung",
+          "push": "Integration: Push",
+          "replaceTitle": "Inhalte der Editoren ersetzen?",
+          "replaceBody": "Das von Ihnen eingegebene Manifest und Rezept werden durch die Vorlage ersetzt.",
+          "replaceAction": "Ersetzen"
+        },
+        "problems": {
+          "listLabel": "Probleme",
+          "errorLabel": "Fehler:",
+          "warningLabel": "Warnung:",
+          "syntax": "Kein gültiges JSON.",
+          "syntaxAt": "Kein gültiges JSON, nahe Zeile {line}, Spalte {column}.",
+          "empty": "Dieses Dokument ist leer.",
+          "recipeNotAllowed": "Eine Mini-App hat kein Rezept: Leeren Sie diesen Editor.",
+          "recipeMissing": "Eine Integration benötigt ein Rezept, bevor sie zur Prüfung eingereicht werden kann.",
+          "recipeKeyMismatch": "Muss der Manifest-ID entsprechen: {expected}.",
+          "recipeCategoryMismatch": "Muss der Manifest-Kategorie entsprechen: {expected}.",
+          "recipeConnectorMismatch": "Muss dem Manifest-Connector-Typ entsprechen: {expected}.",
+          "idChanged": "Die ID eines bestehenden Eintrags kann nicht geändert werden: Sie muss {expected} bleiben.",
+          "kindChanged": "Die Art eines bestehenden Eintrags kann nicht geändert werden: Sie muss {expected} bleiben.",
+          "versionNotHigher": "Die Version muss höher als {newest} sein, die bisher höchste Version.",
+          "versionTaken": "Eine andere Version dieses Eintrags verwendet bereits {version}.",
+          "categoryUnknown": "Es gibt keine aktive {kind}-Kategorie {category}. Prüfen Sie die Seite Kategorien.",
+          "categoryRefused": "Der Server hat diese Kategorie abgelehnt: Sie existiert für diese Art nicht oder ist deaktiviert.",
+          "recipeRequired": "Eine Integration benötigt ihr Rezept.",
+          "slugTaken": "Ein anderer Eintrag verwendet bereits diese ID."
+        }
+      },
+      "fields": {
+        "sections": {
+          "page": "Eintragsseite",
+          "pageHelp": "Was ein Administrator auf der App-Seite liest.",
+          "screenshots": "Screenshots",
+          "screenshotsHelp": "Bis zu {max} Bilder auf der App-Seite. Nur https-Links.",
+          "data": "Angaben zur Datenverarbeitung",
+          "dataHelp": "Was die App speichert, wo und wie es gelöscht wird: die Angabe auf der App-Seite.",
+          "placement": "Platzierung und Zugriff",
+          "placementHelp": "Wie sie gereiht wird und welcher Tarif sie installieren kann."
+        },
+        "tagline": "Slogan",
+        "taglineHint": "{count} von {max} Zeichen (mindestens 5).",
+        "logo": "Logo-Adresse",
+        "logoHint": "Ein https-Bildlink. Eine Integration ohne Link verwendet das Logo aus ihrem Rezept.",
+        "longDescription": "Lange Beschreibung",
+        "longDescriptionHint": "Reiner Text; Leerzeilen trennen Absätze. Bis zu {max} Zeichen.",
+        "highlights": "Highlights",
+        "highlightsHint": "Eine pro Zeile: bis zu {max}, jeweils bis zu {length} Zeichen.",
+        "screenshotUrl": "Adresse von Screenshot {n}",
+        "screenshotCaption": "Beschriftung von Screenshot {n}",
+        "screenshotRemove": "Screenshot {n} entfernen",
+        "screenshotAdd": "Screenshot hinzufügen",
+        "screenshotsNone": "Keine Screenshots.",
+        "dataSummary": "Was gespeichert wird",
+        "dataSummaryHint": "Bis zu {max} Zeichen.",
+        "dataRegions": "Regionen",
+        "dataRegionsHint": "Durch Kommas getrennt, bis zu {max}, zum Beispiel Indien, EU.",
+        "dataDeletion": "Wie Daten gelöscht werden",
+        "dataDeletionHint": "Bis zu {max} Zeichen.",
+        "firstParty": "Von uns entwickelt",
+        "firstPartyHint": "Von uns entwickelt und betrieben: wird mit einem Badge „Von uns entwickelt“ angezeigt.",
+        "featured": "Empfohlen",
+        "featuredHint": "Wird im Bereich Empfohlen angezeigt.",
+        "planFeature": "Tarif-Funktion",
+        "planFeatureHint": "Ein Workspace benötigt diese Funktion in seinem Tarif oder über ein Add-on, um die App zu installieren. Die Bezeichnungen stammen aus dem Tarifkatalog.",
+        "planFeatureNone": "Alle Tarife",
+        "sortOrder": "Sortierreihenfolge",
+        "sortOrderHint": "Eine ganze Zahl von 0 bis {max}; niedrigere werden zuerst angezeigt.",
+        "problems": {
+          "required": "Dies ist ein Pflichtfeld.",
+          "tooShort": "Mindestens {min} Zeichen.",
+          "tooLong": "Höchstens {max} Zeichen.",
+          "https": "Verwenden Sie eine vollständige https://-Adresse.",
+          "tooMany": "Höchstens {max} Einträge.",
+          "number": "Verwenden Sie eine ganze Zahl von 0 bis {max}.",
+          "unknownFeature": "Verwenden Sie Kleinbuchstaben, Ziffern und Unterstriche, beginnend mit einem Buchstaben.",
+          "slug": "Verwenden Sie 2 bis 48 Kleinbuchstaben, Ziffern oder Bindestriche, beginnend mit einem Buchstaben.",
+          "icon": "Verwenden Sie 1 bis 32 Kleinbuchstaben, Ziffern oder Bindestriche."
+        }
+      },
+      "summary": {
+        "title": "Beheben Sie diese vor dem Speichern",
+        "sentTitle": "Der Server hat dies nicht gespeichert",
+        "manifest": "{count, plural, one {# Problem im Manifest} other {# Probleme im Manifest}}",
+        "recipe": "{count, plural, one {# Problem im Rezept} other {# Probleme im Rezept}}",
+        "fields": "{count, plural, one {# Problem in den Eintragsfeldern} other {# Probleme in den Eintragsfeldern}}"
+      },
+      "detail": {
+        "title": "Eintrag",
+        "back": "Zurück zum Katalog",
+        "firstParty": "Von uns entwickelt",
+        "featured": "Empfohlen",
+        "none": "Keine",
+        "everyPlan": "Alle Tarife",
+        "kpi": {
+          "installs": "Installationen",
+          "published": "Veröffentlichte Version",
+          "latest": "Neueste Version",
+          "versions": "Versionen"
+        },
+        "facts": {
+          "kind": "Art",
+          "category": "Kategorie",
+          "connector": "Connector",
+          "planFeature": "Tarif-Funktion"
+        },
+        "tabs": {
+          "overview": "Eintrag",
+          "versions": "Versionen ({count})"
+        },
+        "operate": {
+          "title": "Betrieb",
+          "description": "Eintrag ausblenden, sperren, wiederherstellen oder löschen. Jede Aktion erfordert eine Bestätigung.",
+          "lacking": "Einige Aktionen sind ausgeblendet, weil Ihre Rollen {permission} nicht umfassen."
+        },
+        "killed": {
+          "title": "Dieser Eintrag ist gesperrt",
+          "reason": "Grund",
+          "effect": "Jede Installation ist angehalten und jede Zustelladresse antwortet mit 410. Workspaces können die App nur deinstallieren."
+        },
+        "notice": {
+          "killedTitle": "{name} wurde gesperrt",
+          "killedBody": "{count, plural, one {# Installation wurde deaktiviert.} other {# Installationen wurden deaktiviert.}}",
+          "publishedTitle": "{name} {version} ist veröffentlicht",
+          "publishedUpgraded": "{count, plural, one {# Installation wurde sofort darauf umgestellt.} other {# Installationen wurden sofort darauf umgestellt.}}",
+          "publishedWaiting": "{count, plural, one {# Installation behält ihre aktuelle Version, bis ihr Administrator die neuen Berechtigungen akzeptiert.} other {# Installationen behalten ihre aktuelle Version, bis ihre Administratoren die neuen Berechtigungen akzeptieren.}}",
+          "dismiss": "Schließen"
+        }
+      },
+      "edit": {
+        "readOnly": "Nur Lesezugriff. Zum Bearbeiten des Eintrags benötigen Sie die Plattformberechtigung {permission}.",
+        "conflict": "Jemand anderes hat diesen Eintrag gespeichert, während Sie ihn bearbeitet haben. Laden Sie neu, um dessen Version zu sehen, und nehmen Sie Ihre Änderung dann erneut vor.",
+        "reload": "Neu laden",
+        "save": "Änderungen speichern",
+        "saving": "Wird gespeichert...",
+        "discard": "Änderungen verwerfen",
+        "nothingToSave": "Noch keine Änderungen.",
+        "saved": "{name} gespeichert."
+      },
+      "actions": {
+        "cancel": "Abbrechen",
+        "hide": "Ausblenden",
+        "unhide": "Wieder einblenden",
+        "unkill": "Wiederherstellen",
+        "delete": "Löschen",
+        "kill": "Kill-Switch",
+        "confirm": {
+          "hide": {
+            "title": "{name} ausblenden?",
+            "body": "{name} wird aus Durchsuchen und Suche entfernt, daher findet kein neuer Workspace sie. Bestehende Installationen funktionieren weiter.",
+            "action": "Ausblenden"
+          },
+          "unhide": {
+            "title": "{name} wieder einblenden?",
+            "body": "{name} erscheint mit seiner veröffentlichten Version wieder in Durchsuchen und Suche.",
+            "action": "Wieder einblenden"
+          },
+          "unkill": {
+            "title": "{name} wiederherstellen?",
+            "body": "{name} wird ausgeblendet, damit es korrigiert und erneut veröffentlicht werden kann. Gesperrte Installationen bleiben deaktiviert: Workspaces müssen die App erneut installieren.",
+            "action": "Wiederherstellen"
+          },
+          "delete": {
+            "title": "{name} löschen?",
+            "body": "Dies löscht den Entwurfseintrag und seine Versionen dauerhaft. Ein veröffentlichter oder installierter Eintrag kann nicht gelöscht werden: Blenden Sie ihn stattdessen aus.",
+            "action": "Eintrag löschen"
+          }
+        },
+        "done": {
+          "hide": "{name} ist ausgeblendet.",
+          "unhide": "{name} ist wieder sichtbar.",
+          "unkill": "{name} wurde als ausgeblendet wiederhergestellt.",
+          "kill": "{name} wurde gesperrt.",
+          "delete": "{name} wurde gelöscht."
+        }
+      },
+      "killDialog": {
+        "eyebrow": "Kill-Switch",
+        "title": "{name} sperren?",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "confirm": "{name} sperren",
+        "installs": "{name} ist in {count, plural, one {# Workspace} other {# Workspaces}} installiert.",
+        "effects": {
+          "stop": "Jede Installation funktioniert sofort nicht mehr.",
+          "connections": "Jede Verbindung wird deaktiviert.",
+          "address": "Die Zustelladresse antwortet ab der nächsten Anfrage mit 410 Gone.",
+          "uninstall": "Workspaces können sie nur deinstallieren."
+        },
+        "undo": "Eine spätere Wiederherstellung des Eintrags macht ihn ausgeblendet. Gesperrte Installationen bleiben deaktiviert, und Workspaces müssen die App erneut installieren.",
+        "reason": "Grund",
+        "reasonHint": "Zwischen {min} und {max} Zeichen. Er wird im Audit-Protokoll gespeichert und jedem Workspace angezeigt.",
+        "count": "{count} von {max} Zeichen (mindestens {min}).",
+        "typeSlug": "Zur Bestätigung {slug} eingeben",
+        "typeSlugHint": "Die ID des Eintrags, genau wie angezeigt."
+      },
+      "versions": {
+        "title": "Versionen",
+        "description": "Alle Versionen dieses Eintrags. Wählen Sie eine aus, um ihr Manifest, Rezept und Aktionen anzuzeigen.",
+        "newVersion": "Neue Version",
+        "newVersionHint": "Eine neue Version basiert auf der angezeigten Version ({version}) mit erhöhter Nummer. Sie muss höher sein als alle früheren Versionen.",
+        "tableCaption": "Versionen dieses Eintrags",
+        "cols": {
+          "version": "Version",
+          "status": "Status",
+          "changelog": "Changelog",
+          "scopes": "Berechtigungen",
+          "reviewNote": "Prüfnotiz",
+          "dates": "Daten"
+        },
+        "viewing": "Anzeige",
+        "none": "-",
+        "dates": {
+          "created": "Erstellt",
+          "submitted": "Eingereicht",
+          "reviewed": "Geprüft",
+          "published": "Veröffentlicht"
+        },
+        "selectedTitle": "Version {version}",
+        "selectedHelp": "Ihre Berechtigungen, Manifest und Rezept wie gespeichert. Die Aktionen richten sich nach dem Status der Version und Ihren Berechtigungen.",
+        "edit": "Bearbeiten",
+        "newFrom": "Neue Version aus dieser",
+        "submit": "Zur Prüfung einreichen",
+        "approve": "Freigeben",
+        "reject": "Ablehnen",
+        "publish": "Veröffentlichen",
+        "rejectedNote": "Begründung des Prüfers (wird dem Entwickler angezeigt)",
+        "recipeMissing": "Diese Integration hat noch kein Rezept. Fügen Sie eines hinzu, bevor Sie sie zur Prüfung einreichen.",
+        "permissions": "Berechtigungen",
+        "manifest": "Manifest",
+        "recipe": "Rezept",
+        "noRecipeIntegration": "Für diese Version ist kein Rezept gespeichert.",
+        "noRecipeMiniApp": "Eine Mini-App hat kein Rezept.",
+        "done": {
+          "submit": "Version {version} zur Prüfung eingereicht.",
+          "approve": "Version {version} freigegeben.",
+          "reject": "Version {version} abgelehnt.",
+          "publish": "Version {version} veröffentlicht.",
+          "created": "Version {version} als Entwurf gespeichert.",
+          "updated": "Version {version} aktualisiert."
+        }
+      },
+      "versionEditor": {
+        "newTitle": "Neue Version",
+        "newHelp": "Basiert auf der angezeigten Version, mit erhöhter Nummer. Ändern Sie Manifest und Rezept und beschreiben Sie dann, was sich geändert hat.",
+        "editTitle": "Version bearbeiten",
+        "editHelp": "Ersetzt Manifest und Rezept dieser Version. Eine abgelehnte Version wird beim Speichern wieder auf Entwurf gesetzt.",
+        "changelog": "Changelog",
+        "changelogHint": "Was sich in dieser Version geändert hat. Administratoren lesen es. Bis zu {max} Zeichen.",
+        "saveNew": "Neue Version speichern",
+        "saveEdit": "Änderungen speichern",
+        "saving": "Wird gespeichert...",
+        "cancel": "Abbrechen"
+      },
+      "versionDialogs": {
+        "approve": {
+          "title": "{name} {version} freigeben?",
+          "close": "Schließen",
+          "cancel": "Abbrechen",
+          "confirm": "Freigeben",
+          "body": "Eine freigegebene Version kann danach veröffentlicht werden. Die Freigabe ändert nicht, was Workspaces sehen.",
+          "note": "Notiz (optional)",
+          "noteHint": "Wird mit der Version gespeichert. Bis zu {max} Zeichen."
+        },
+        "reject": {
+          "title": "{name} {version} ablehnen?",
+          "close": "Schließen",
+          "cancel": "Abbrechen",
+          "confirm": "Version ablehnen",
+          "body": "Die Begründung wird dem Entwickler angezeigt. Er bearbeitet die Version und reicht sie erneut ein.",
+          "note": "Grund",
+          "noteHint": "Mindestens {min} und höchstens {max} Zeichen.",
+          "count": "{count} von {max} Zeichen (mindestens {min})."
+        },
+        "publish": {
+          "title": "{name} {version} veröffentlichen?",
+          "cancel": "Abbrechen",
+          "confirm": "Version {version} veröffentlichen",
+          "body": "{name} {version} wird zur Version, die jede neue Installation erhält.",
+          "effects": {
+            "retire": "Die zuvor veröffentlichte Version wird außer Betrieb genommen.",
+            "moveSame": "Installationen, deren erteilte Berechtigungen diese Version bereits abdecken, wechseln sofort zu ihr.",
+            "moveMore": "Installationen, für die sie mehr Berechtigungen anfordert, laufen auf ihrer aktuellen Version weiter, bis ihr Administrator die neue Berechtigungsliste akzeptiert.",
+            "killed": "Gesperrte Installationen bleiben unverändert."
+          },
+          "installs": "{count, plural, one {# Installation ist betroffen.} other {# Installationen sind betroffen.}}",
+          "first": "Dies ist die erste veröffentlichte Version.",
+          "addedScopes": "{count, plural, one {Diese Version fordert # Berechtigung an, die die veröffentlichte Version nicht anfordert:} other {Diese Version fordert # Berechtigungen an, die die veröffentlichte Version nicht anfordert:}}"
+        }
+      },
+      "categories": {
+        "title": "Kategorien",
+        "description": "Die Kategorien beider Marketplace-Tabs. Eine deaktivierte Kategorie wird vor Workspaces ausgeblendet; eine Kategorie mit Apps darin kann nicht gelöscht werden.",
+        "new": "Neue Kategorie",
+        "emptyTitle": "Keine Kategorien",
+        "emptyMessage": "Fügen Sie eine Kategorie hinzu, bevor Sie Einträge erstellen: Jeder Eintrag gehört zu einer Kategorie.",
+        "groupCount": "{count, plural, one {# Kategorie} other {# Kategorien}}",
+        "groupEmpty": "Noch keine Kategorien für diese Art.",
+        "tableCaption": "Kategorien",
+        "cols": {
+          "name": "Name",
+          "slug": "ID",
+          "icon": "Symbol",
+          "order": "Reihenfolge",
+          "apps": "Apps",
+          "status": "Status",
+          "actions": "Aktionen"
+        },
+        "dash": "-",
+        "active": "Aktiv",
+        "inactive": "Vor Workspaces ausgeblendet",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "inUse": "Hat Apps",
+        "form": {
+          "createTitle": "Neue Kategorie",
+          "editTitle": "{name} bearbeiten",
+          "close": "Schließen",
+          "cancel": "Abbrechen",
+          "create": "Kategorie erstellen",
+          "save": "Änderungen speichern",
+          "kind": "Art",
+          "kinds": {
+            "mini_app": "Mini-App",
+            "integration": "Integration"
+          },
+          "kindLocked": "Die Art kann nicht geändert werden.",
+          "slug": "ID (Slug)",
+          "slugHint": "2 bis 48 Kleinbuchstaben, Ziffern oder Bindestriche, beginnend mit einem Buchstaben. Sie kann später nicht geändert werden.",
+          "slugLocked": "Die ID kann nach der Erstellung nicht geändert werden.",
+          "name": "Name",
+          "nameHint": "{min} bis {max} Zeichen.",
+          "descriptionField": "Beschreibung",
+          "descriptionHint": "Optional, bis zu {max} Zeichen.",
+          "icon": "Symbol",
+          "iconHint": "Optionaler Symbolname: Kleinbuchstaben, Ziffern und Bindestriche.",
+          "sortOrder": "Sortierreihenfolge",
+          "sortOrderHint": "Eine ganze Zahl von 0 bis {max}; niedrigere werden zuerst angezeigt.",
+          "active": "Aktiv",
+          "activeHint": "Bei Deaktivierung wird die Kategorie vor Workspaces ausgeblendet. Ihre Apps behalten sie.",
+          "conflict": "Jemand anderes hat diese Kategorie geändert. Laden Sie neu, um dessen Version zu sehen, und nehmen Sie Ihre Änderung dann erneut vor.",
+          "reload": "Neu laden",
+          "created": "Kategorie {name} erstellt.",
+          "saved": "Kategorie {name} gespeichert."
+        },
+        "deleteDialog": {
+          "title": "{name} löschen?",
+          "body": "{name} hat keine Apps. Durch das Löschen wird sie endgültig entfernt.",
+          "action": "Kategorie löschen",
+          "cancel": "Abbrechen",
+          "done": "Kategorie {name} gelöscht."
+        }
+      },
+      "requests": {
+        "title": "Anfragen",
+        "description": "Was Workspaces angefragt haben, am meisten gewählte zuerst. Die Reihenfolge der Umsetzung folgt dieser Liste.",
+        "readOnly": "Nur Lesezugriff. Die Triage erfordert die Plattformberechtigung {permission}.",
+        "filters": {
+          "label": "Filter",
+          "search": "Suche",
+          "searchPlaceholder": "Name",
+          "kind": "Art",
+          "allKinds": "Alle Arten",
+          "status": "Status",
+          "allStatuses": "Alle Status"
+        },
+        "clearFilters": "Filter zurücksetzen",
+        "emptyTitle": "Noch keine Anfragen",
+        "emptyMessage": "Wenn ein Workspace eine Integration anfragt, erscheint sie hier mit ihren Stimmen.",
+        "noMatchTitle": "Keine Anfrage passt",
+        "noMatchMessage": "Diese Filter ergeben keine Treffer.",
+        "loadMore": "Mehr laden",
+        "tableCaption": "Anfragen nach Stimmen",
+        "cols": {
+          "votes": "Stimmen",
+          "request": "Anfrage",
+          "notes": "Notizen des Workspaces",
+          "firstWorkspace": "Erstmals angefragt von",
+          "status": "Status",
+          "actions": "Aktionen"
+        },
+        "votes": "{count, plural, one {# Stimme} other {# Stimmen}}",
+        "noNotes": "Keine Notizen.",
+        "dash": "-",
+        "operatorNote": "Ihre Notiz: {note}",
+        "triageAction": "Sichten",
+        "triage": {
+          "title": "{name} sichten",
+          "close": "Schließen",
+          "cancel": "Abbrechen",
+          "save": "Speichern",
+          "saved": "{name} gespeichert.",
+          "votes": "{count, plural, one {# Stimme} other {# Stimmen}}",
+          "status": "Status",
+          "note": "Betreiber-Notiz",
+          "noteHint": "Optional, bis zu {max} Zeichen. Nur Betreiber sehen sie.",
+          "noteTooLong": "Höchstens {max} Zeichen.",
+          "conflict": "Jemand anderes hat diese Anfrage aktualisiert. Laden Sie neu, um die aktuelle Version zu sehen, und nehmen Sie Ihre Änderung dann erneut vor.",
+          "reload": "Neu laden"
+        }
+      },
+      "usage": {
+        "title": "Nutzung und Zustand",
+        "description": "Pro App: Installationen nach Status und Zustand sowie angenommene, wiederholte, abgelehnte und fehlgeschlagene Zustellungen der letzten 24 Stunden und 7 Tage.",
+        "kpi": {
+          "apps": "Apps",
+          "installs": "Installationen",
+          "activeHint": "{count} aktiv",
+          "needsLook": "Prüfung nötig",
+          "failed7d": "Fehlgeschlagene Zustellungen (7 Tage)"
+        },
+        "sort": {
+          "label": "Sortieren nach",
+          "failed": "Meiste fehlgeschlagene Zustellungen",
+          "installs": "Meiste Installationen",
+          "name": "Name"
+        },
+        "emptyTitle": "Noch keine Nutzung",
+        "emptyMessage": "Apps erscheinen hier, sobald sie im Katalog vorhanden sind.",
+        "tableCaption": "Nutzung pro App",
+        "cols": {
+          "app": "App",
+          "installs": "Installationen",
+          "health": "Zustand",
+          "events24h": "Zustellungen, 24 Stunden",
+          "events7d": "Zustellungen, 7 Tage",
+          "attention": "Aufmerksamkeit"
+        },
+        "installs": {
+          "active": "{count} aktiv",
+          "disabled": "{count} pausiert",
+          "killed": "{count} gesperrt"
+        },
+        "health": {
+          "healthy": "{count} fehlerfrei",
+          "degraded": "{count} eingeschränkt",
+          "error": "{count} mit Fehler",
+          "needsReauth": "{count} müssen sich erneut anmelden",
+          "unknown": "{count} unbekannt"
+        },
+        "events": {
+          "accepted": "{count} angenommen",
+          "duplicate": "{count} wiederholt",
+          "rejected": "{count} abgelehnt",
+          "failed": "{count} fehlgeschlagen"
+        },
+        "needsLook": "Prüfung nötig",
+        "reasons": {
+          "installErrors": "Installationen mit Fehler",
+          "needsReauth": "Installationen, die sich erneut anmelden müssen",
+          "failed24h": "Fehlgeschlagene Zustellungen in den letzten 24 Stunden",
+          "failed7d": "Fehlgeschlagene Zustellungen in den letzten 7 Tagen"
+        },
+        "recipeHint": "Das Rezept funktioniert womöglich nicht mehr: Ein Portal hat sein Format geändert oder ein Schlüssel ist abgelaufen. Beheben Sie es mit einer neuen Version des Rezepts.",
+        "fine": "Keine Probleme erkannt",
+        "runbookNote": "Eine Integration mit vielen Installationen mit Fehler oder mit Anmeldebedarf bzw. einer steigenden Zahl fehlgeschlagener Zustellungen ist defekt. Korrigieren Sie ihr Rezept in einer neuen Version (Runbook, Abschnitt 8)."
+      },
+      "price": {
+        "free": "Kostenlos",
+        "perMonth": "/ Monat",
+        "trial": "{count, plural, one {# Testtag} other {# Testtage}}",
+        "notOnSale": "Nicht im Verkauf"
+      },
+      "pricing": {
+        "title": "Preisgestaltung",
+        "description": "Legen Sie fest, ob diese App kostenlos oder kostenpflichtig ist und was sie kostet. Gültig ist Ihre Preisgestaltung: Das Manifest des Entwicklers schlägt lediglich einen Preis vor.",
+        "billing": "Eine kostenpflichtige App wird als monatlicher Vorauszahlungszeitraum verkauft: ein Abrechnungs-Add-on, das über den normalen Checkout gekauft wird. Eine automatische Kartenverlängerung gibt es noch nicht, daher zahlt ein Workspace erneut, wenn sein Monat fast abgelaufen ist. Eine Preisänderung gilt für neue Abonnements und für die nächste Zahlung aller Abonnenten; ein bereits bezahlter Zeitraum bleibt unberührt.",
+        "readOnly": "Nur Lesezugriff. Zum Ändern der Preisgestaltung ist die Plattformberechtigung {permission} erforderlich.",
+        "visibility": {
+          "label": "Status des Eintrags",
+          "note": "Eintrag oben unter Betrieb ausblenden, wieder einblenden oder sperren. Dieses Feld ändert ihn nicht."
+        },
+        "subscribers": {
+          "label": "Abonnements",
+          "count": "{count, plural, one {# aktives Abonnement} other {# aktive Abonnements}}",
+          "view": "Abonnements anzeigen",
+          "hint": "Gültige bezahlte, Test- und kostenlose Abonnements. Abonnements, die enden oder beendet sind, werden nicht mitgezählt."
+        },
+        "changed": "Preis zuletzt geändert",
+        "conflict": "Jemand anderes hat diesen Eintrag gespeichert, während Sie die Preisgestaltung bearbeitet haben. Laden Sie neu, um die aktuelle Version zu sehen, und nehmen Sie Ihre Änderung dann erneut vor.",
+        "reload": "Neu laden",
+        "model": {
+          "legend": "Preis",
+          "free": "Kostenlos",
+          "freeHint": "Keine Gebühr. Jeder Workspace kann sie installieren.",
+          "paid": "Kostenpflichtig, pro Monat",
+          "paidHint": "Workspaces abonnieren über den Checkout und zahlen monatlich."
+        },
+        "fields": {
+          "amount": "Monatspreis",
+          "amountHint": "Pro Workspace und Monat, z. B. 9 oder 9.99.",
+          "currency": "Währung",
+          "currencyHint": "Ein dreistelliger Code wie USD. Die Plattform lehnt eine Währung ab, die nicht aktiviert ist.",
+          "trialDays": "Testzeitraum (Tage)",
+          "trialDaysHint": "0 für keinen Testzeitraum, höchstens {max}. Ein Workspace erhält pro App einen Testzeitraum.",
+          "annualAmount": "Jahrespreis (optional)",
+          "annualAmountHint": "Wird für später gespeichert. Die jährliche Abrechnung ist noch nicht verfügbar, daher können Workspaces derzeit nicht jährlich zahlen.",
+          "purchasable": "Im Verkauf",
+          "purchasableHint": "Ist die Option ausgeschaltet, kann kein neuer Workspace abonnieren. Bestehende Abonnenten können weiterhin verlängern."
+        },
+        "included": {
+          "title": "In Tarifen enthalten",
+          "help": "Optional. Ein Workspace, auf den eine der beiden Regeln zutrifft, erhält die App kostenlos. Lassen Sie beide leer, um jeden Workspace zu berechnen.",
+          "feature": "Tarif-Funktion",
+          "featureHint": "Workspaces, deren Tarif (einschließlich Add-ons) diese Funktion enthält. Wählen Sie einen Vorschlag oder geben Sie einen Funktionsschlüssel ein.",
+          "plan": "Mindesttarif",
+          "planHint": "Workspaces mit diesem Tarif oder einem höheren Tarif. Die Tarife sind vom niedrigsten zum höchsten aufgelistet.",
+          "planNone": "Keine Tarifregel",
+          "planTyped": "Die Tarifliste konnte nicht geladen werden. Geben Sie eine Tarif-ID ein."
+        },
+        "grants": {
+          "title": "Gewährt Tarif-Funktionen",
+          "help": "Optional. Tarif-Funktionen, die ein Abonnement dieser App aktiviert. So kann eine Funktion als App verkauft werden, während ihre bisherigen Zugangsregeln weiter funktionieren. Gewährt werden können nur Funktionen, die standardmäßig ausgeschaltet sind.",
+          "thirdParty": "Nur First-Party-Apps können Tarif-Funktionen gewähren. Markieren Sie den Eintrag im Tab Eintrag als First-Party, um dies zu nutzen.",
+          "grandfather": "Bestandsnutzer schützen",
+          "grandfatherHint": "Ermöglicht es, Workspaces mit bereits gewährter Funktion kostenlos freizuschalten, damit niemand sie verliert. Speichern Sie, und verwenden Sie dann unten Bestehende Nutzer kostenlos freischalten. Tun Sie dies, bevor die Funktion in Tarifen ausgeschaltet wird.",
+          "compExisting": "Bestehende Nutzer kostenlos freischalten",
+          "compExistingHint": "Workspaces, die eine gewährte Funktion bereits über ihren Tarif haben und noch kein Abonnement besitzen, erhalten diese App kostenlos. Sie sehen vorab, wer betroffen ist.",
+          "compExistingAction": "Bestehende Nutzer kostenlos freischalten..."
+        },
+        "proposal": {
+          "title": "Vorschlag des Entwicklers",
+          "intro": "Aus dem Manifest von Version {version}. Es ist nur ein Vorschlag und ändert nichts: Maßgeblich für Workspaces ist die oben genannte Preisgestaltung.",
+          "note": "Hinweis: {note}",
+          "models": {
+            "free": "Kostenlos",
+            "included": "Im Tarif enthalten",
+            "addon": "Kostenpflichtiges Add-on"
+          }
+        },
+        "save": "Preisgestaltung speichern",
+        "saving": "Wird gespeichert...",
+        "discard": "Änderungen verwerfen",
+        "nothingToSave": "Noch keine Änderungen.",
+        "saved": "Preisgestaltung von {name} gespeichert.",
+        "problems": {
+          "priceRequired": "Legen Sie einen Monatspreis fest.",
+          "priceFormat": "Verwenden Sie eine Zahl wie 9 oder 9.99 (höchstens zwei Nachkommastellen).",
+          "pricePositive": "Der Preis muss über null liegen.",
+          "currencyRequired": "Wählen Sie eine Währung.",
+          "currencyFormat": "Verwenden Sie einen dreistelligen Währungscode.",
+          "yearlyFormat": "Verwenden Sie eine Zahl wie 90 oder 89.99, oder lassen Sie das Feld leer.",
+          "yearlyPositive": "Der Jahrespreis muss über null liegen oder leer sein.",
+          "trialRange": "Verwenden Sie ganze Tage von 0 bis {max}.",
+          "featureFormat": "Verwenden Sie Kleinbuchstaben, Ziffern und Unterstriche, beginnend mit einem Buchstaben.",
+          "planFormat": "Verwenden Sie eine Tarif-ID: Kleinbuchstaben, Ziffern und Unterstriche.",
+          "grantsInvalid": "Wählen Sie jede Tarif-Funktion nur einmal, höchstens 10 Funktionen.",
+          "grandfatherNeedsGrants": "Wählen Sie zuerst mindestens eine Tarif-Funktion, die die App gewährt.",
+          "includedGranted": "Eine Funktion, die die App gewährt, kann nicht gleichzeitig die Einbeziehung in den Tarif auslösen."
+        },
+        "confirm": {
+          "cancel": "Weiter bearbeiten",
+          "priceChange": {
+            "title": "Preis von {name} ändern?",
+            "body": "{count, plural, one {# Workspace abonniert} other {# Workspaces abonnieren}} die App aktuell. Der Monatspreis ändert sich von {from} auf {to}.",
+            "next": "Der neue Preis gilt für neue Abonnements und für die nächste Zahlung aller Abonnenten.",
+            "paid": "Ein bereits bezahlter Zeitraum eines Workspace wird nie verändert, erstattet oder neu bepreist.",
+            "action": "Preis ändern"
+          },
+          "toFree": {
+            "title": "{name} kostenlos machen?",
+            "body": "{count, plural, one {# Workspace abonniert} other {# Workspaces abonnieren}} die App aktuell.",
+            "free": "Danach kann jeder Workspace die App ohne Zahlung nutzen, und niemandem wird sie erneut berechnet.",
+            "paid": "Abonnenten behalten die bereits bezahlte Zeit. Sie wird nicht erstattet.",
+            "action": "Kostenlos machen"
+          }
+        }
+      },
+      "grandfather": {
+        "eyebrow": "Bestehende Nutzer",
+        "title": "Bestehende Nutzer von {name} kostenlos freischalten",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "change": "Ändern",
+        "run": "{count, plural, one {# Workspace kostenlos freischalten} other {# Workspaces kostenlos freischalten}}",
+        "preview": "Berechtigte prüfen",
+        "intro": "Schalten Sie jeden Workspace kostenlos frei, der bereits eine Tarif-Funktion hat, die {name} gewährt, über seinen Tarif oder seine Ausnahmen, und der dafür noch kein Abonnement hat. Zuerst sehen Sie, wer freigeschaltet würde; bis zur Bestätigung ändert sich nichts.",
+        "timing": "Tun Sie dies, bevor die Funktion in Tarifen ausgeschaltet oder ihr Standard geändert wird: Es liest aus, was jeder Workspace gerade hat.",
+        "note": "Notiz",
+        "matched": "{count, plural, =0 {Kein Workspace ist berechtigt} one {# Workspace ist berechtigt} other {# Workspaces sind berechtigt}}",
+        "nobody": "Niemand hat eine gewährte Funktion ohne Abonnement, daher gibt es nichts freizuschalten.",
+        "sample": "Einige davon:",
+        "more": "und {count} weitere",
+        "confirm": "Prüfen Sie die Liste und bestätigen Sie anschließend die kostenlose Freischaltung. Sie wird im Prüfprotokoll festgehalten und lässt sich nicht mit einem Schritt rückgängig machen: Beenden Sie eine kostenlose Freischaltung, indem Sie das Abonnement kündigen.",
+        "refused": "Dies ist nur für einen kostenpflichtigen Eintrag möglich, der Tarif-Funktionen gewährt und bei dem Bestandsnutzer schützen gespeichert ist. Prüfen Sie seine Preisgestaltung.",
+        "done": "{count, plural, one {# Workspace bei {name} kostenlos freigeschaltet.} other {# Workspaces bei {name} kostenlos freigeschaltet.}}"
+      },
+      "compFields": {
+        "duration": "Wie lange?",
+        "months": "Für eine Anzahl Monate",
+        "monthsLabel": "Monate",
+        "monthsHint": "Ganze Monate, 1 bis {max}.",
+        "monthsInvalid": "Verwenden Sie ganze Monate von 1 bis {max}.",
+        "open": "Bis Sie es beenden",
+        "noteHint": "Zwischen {min} und {max} Zeichen. Sie wird im Prüfprotokoll gespeichert.",
+        "count": "{count} von {max} Zeichen (mindestens {min})."
+      },
+      "cancelDialog": {
+        "eyebrow": "Abonnement",
+        "title": "Abonnement von {workspace} kündigen?",
+        "close": "Schließen",
+        "back": "Behalten",
+        "summary": "{workspace} hat {app}.",
+        "when": "Wann soll es enden?",
+        "periodEnd": {
+          "label": "Zum Ende des bezahlten Zeitraums",
+          "detail": "Die Verlängerung endet. {workspace} behält {app} bis {date}, danach wird die Installation pausiert und ihre Daten bleiben erhalten."
+        },
+        "now": {
+          "label": "Sofort",
+          "detail": "Der Zugriff endet sofort. Die Installation wird pausiert und ihre Daten bleiben erhalten. Bereits bezahlte Zeit wird nicht erstattet."
+        },
+        "noEnd": "Dieses Abonnement hat kein Enddatum und kann daher nur sofort beendet werden.",
+        "ending": "Es ist bereits zum {date} beendet. Sie können es dennoch sofort beenden.",
+        "reason": "Grund",
+        "confirmPeriod": "Verlängerung beenden",
+        "confirmNow": "Jetzt beenden",
+        "done": {
+          "periodEnd": "Verlängerung für {workspace} beendet. Der Zugriff gilt bis zum Ende des bezahlten Zeitraums.",
+          "now": "{workspace} hat {app} nicht mehr."
+        }
+      },
+      "compDialog": {
+        "eyebrow": "Kostenlos freischalten",
+        "title": "Workspace kostenlos freischalten",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "submit": "Workspace kostenlos freischalten",
+        "intro": "Geben Sie einem Workspace eine kostenpflichtige App ohne Gebühr. Dies wird mit Ihrer Notiz im Prüfprotokoll festgehalten. Es wird abgelehnt, solange der Workspace die App bezahlt: Kündigen Sie zuerst dieses Abonnement.",
+        "app": "App",
+        "appPlaceholder": "Wählen Sie eine kostenpflichtige App",
+        "noPaidApps": "Es gibt noch keine kostenpflichtige App, die kostenlos freigeschaltet werden kann. Legen Sie zuerst einen Preis für einen Eintrag fest.",
+        "workspaceSearch": "Workspace suchen",
+        "workspaceSearchPlaceholder": "Workspace-Name",
+        "workspaceHint": "Es werden bis zu {count} Treffer angezeigt. Geben Sie weitere Zeichen ein, um die Liste einzugrenzen.",
+        "workspaceChosen": "Ausgewählt: {name}",
+        "workspaceNone": "Kein Workspace passt.",
+        "workspaceResults": "Passende Workspaces",
+        "workspacePlan": "Tarif: {plan}",
+        "workspaceLoading": "Workspaces werden geladen...",
+        "note": "Notiz",
+        "effectMonths": "{count, plural, one {Der Workspace erhält die App # Monat kostenlos.} other {Der Workspace erhält die App # Monate kostenlos.}}",
+        "effectOpen": "Der Workspace erhält die App kostenlos, bis Sie dies beenden, indem Sie sein Abonnement kündigen.",
+        "done": "{workspace} hat {app} jetzt kostenlos."
+      },
+      "subscriptions": {
+        "title": "Abonnements",
+        "description": "Wer welche kostenpflichtige App bezahlt, was jeder Workspace hat und welchen monatlichen Umsatz er bringt. Die Zahlen sind Listenpreise: ohne MwSt., Gutscheine oder Testzeiträume.",
+        "readOnly": "Nur Lesezugriff. Einen Workspace kostenlos freischalten und Abonnements kündigen erfordern die Plattformberechtigung {permission}.",
+        "comp": "Workspace kostenlos freischalten",
+        "kpi": {
+          "label": "Abonnements nach Status",
+          "active": "Zahlend",
+          "trialing": "Im Test",
+          "comped": "Kostenlos freigeschaltet",
+          "canceling": "Endend",
+          "ended": "Beendet",
+          "mrr": "Monatlicher Umsatz",
+          "mrrNone": "Noch keine zahlenden Abonnenten",
+          "mrrCurrency": "Monatlicher Umsatz, {currency}"
+        },
+        "summary": {
+          "emptyTitle": "Noch keine kostenpflichtigen Apps",
+          "emptyMessage": "Legen Sie einen Preis für einen Eintrag fest, um mit dem Verkauf zu beginnen. Er erscheint hier mit seinen Abonnenten.",
+          "caption": "Abonnements pro App nach Status",
+          "cols": {
+            "app": "App",
+            "price": "Preis",
+            "active": "Zahlend",
+            "trialing": "Im Test",
+            "comped": "Kostenlos freigeschaltet",
+            "canceling": "Endend",
+            "ended": "Beendet",
+            "total": "Gesamt",
+            "mrr": "Monatlicher Umsatz"
+          },
+          "free": "Kostenlos",
+          "totals": "Alle Apps",
+          "note": "Der monatliche Umsatz ist der Listenpreis jedes zahlenden Abonnements in seiner eigenen Währung. Testzeiträume, kostenlose Freischaltungen und beendete Abonnements zählen nicht mit, und Währungen werden niemals addiert."
+        },
+        "filters": {
+          "label": "Filter",
+          "app": "App",
+          "allApps": "Alle Apps",
+          "status": "Status",
+          "allStatuses": "Alle Status",
+          "source": "Quelle",
+          "allSources": "Alle Quellen",
+          "search": "Workspace",
+          "searchPlaceholder": "Workspace-Name"
+        },
+        "cols": {
+          "workspace": "Workspace",
+          "app": "App",
+          "status": "Status",
+          "source": "Quelle",
+          "started": "Begonnen",
+          "period": "Zeitraum",
+          "amount": "Betrag",
+          "actions": "Aktionen"
+        },
+        "period": {
+          "paidUntil": "Bezahlt bis {date}",
+          "trialEnds": "Test endet am {date}",
+          "endsOn": "Endet am {date}",
+          "compUntil": "Kostenlos bis {date}",
+          "compOpen": "Kostenlos, bis Sie es beenden",
+          "endedOn": "Beendet am {date}",
+          "none": "Kein Enddatum"
+        },
+        "noCharge": "Keine Gebühr",
+        "compBy": "Kostenlos freigeschaltet von {operator}: {note}",
+        "cancel": "Kündigen...",
+        "tableCaption": "Abonnements",
+        "emptyTitle": "Noch keine Abonnements",
+        "emptyMessage": "Ein Workspace erscheint hier, wenn er ein Abonnement abschließt, einen Test startet oder kostenlos freigeschaltet wird.",
+        "noMatchTitle": "Kein Abonnement passt",
+        "noMatchMessage": "Diese Filter ergeben keine Treffer. Versuchen Sie andere.",
+        "clearFilters": "Filter zurücksetzen",
+        "loadMore": "Mehr laden"
+      }
+    }
+  }
+}

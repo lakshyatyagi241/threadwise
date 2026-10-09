@@ -1,0 +1,686 @@
+{
+  "platform-payment-gateways": {
+    "nav": {
+      "gateways": "Ödeme geçitleri",
+      "group": "Faturalandırma",
+      "orders": "Sipariş geçmişi",
+      "billingHistory": "Faturalandırma geçmişi",
+      "invoices": "Faturalar",
+      "billingSettings": "Faturalandırma ayarları"
+    },
+    "admin": {
+      "title": "Ödeme geçitleri",
+      "description": "{count} geçit. Kimlik bilgileri depolamada şifrelenir ve kaydedildikten sonra bir daha gösterilmez.",
+      "kpi": {
+        "total": "Geçitler",
+        "active": "Etkin",
+        "india": "Hindistan",
+        "crypto": "Kripto"
+      },
+      "tabsLabel": "Bölgeye göre filtrele",
+      "all": "Tümü",
+      "search": "Ada veya slug'a göre filtrele",
+      "emptyTitle": "Burada geçit yok",
+      "emptyMessage": "Bu bölge ve aramayla eşleşen bir şey yok. Başka bir sekme deneyin veya aramayı temizleyin.",
+      "regions": {
+        "popular": "Popüler",
+        "india": "Hindistan",
+        "asia": "Asya",
+        "mena": "MENA",
+        "europe": "Avrupa",
+        "us": "ABD ve Kanada",
+        "africa": "Afrika",
+        "latam": "Latin Amerika",
+        "crypto": "Kripto",
+        "offline": "Çevrimdışı"
+      },
+      "card": {
+        "active": "Etkin",
+        "disabled": "Devre dışı",
+        "mode": {
+          "sandbox": "Sandbox",
+          "live": "Canlı"
+        },
+        "keysSaved": "Anahtarlar kaydedildi",
+        "noDriverBadge": "Sürücü henüz kullanılamıyor",
+        "activate": "Etkinleştir",
+        "disable": "Devre dışı bırak",
+        "savedPlaceholder": "Kaydedildi. Korumak için boş bırakın.",
+        "clear": "Kayıtlı değeri kaldır",
+        "undoClear": "Kayıtlı değeri koru",
+        "modeLabel": "Mod",
+        "sortOrder": "Sıralama",
+        "currencies": "Desteklenen para birimleri",
+        "currenciesAll": "Seçilmedi: her para birimi kabul edilir",
+        "currenciesSelected": "{count, plural, other {# seçili}}",
+        "currenciesHint": "Alıcılar bu geçidi yalnızca işaretlediğiniz para birimlerinde görür. Herhangi bir para birimini kabul etmek için hiçbirini işaretlemeyin.",
+        "webhookUrl": "Webhook URL",
+        "webhookHint": "Ödemeleri bize bildirebilmesi için bunu sağlayıcı panelinize yapıştırın.",
+        "saving": "Kaydediliyor",
+        "save": "Kaydet",
+        "readOnly": "Geçitleri yalnızca süper yönetici değiştirebilir.",
+        "saved": "{name} ayarları kaydedildi.",
+        "activated": "{name} etkinleştirildi.",
+        "deactivated": "{name} devre dışı bırakıldı."
+      },
+      "errors": {
+        "conflict": "Bu geçit başka biri tarafından değiştirildi. Yeniden yüklendi; gözden geçirip yeniden kaydedin.",
+        "notConfigured": "Önce zorunlu alanları yapılandırın: {fields}",
+        "noDriver": "Bu geçidin bu sürümde henüz sürücüsü yok; yapılandırılabilir ama etkinleştirilemez.",
+        "forbidden": "Geçitleri yalnızca süper yönetici değiştirebilir.",
+        "generic": "Bir hata oluştu. Lütfen yeniden deneyin."
+      }
+    },
+    "checkout": {
+      "title": "Siparişinizi tamamlayın",
+      "walletTitle": "Cüzdanınıza bakiye ekleyin",
+      "subtitle": "Fiyatı gözden geçirin, ödemeyi kimin yaptığını belirtin ve ödeme yöntemini seçin.",
+      "loading": "Ödeme yükleniyor",
+      "account": "Hesap",
+      "name": "Ad soyad",
+      "email": "E-posta",
+      "billingAddress": "Fatura adresi",
+      "company": "Şirket",
+      "taxId": "Vergi numarası",
+      "taxIdHint": "Varsa GSTIN, KDV veya EIN numaranız.",
+      "address": "Adres",
+      "city": "Şehir",
+      "postal": "Posta kodu",
+      "country": "Ülke",
+      "currency": "Para birimi",
+      "period": "Faturalama dönemi",
+      "periods": {
+        "monthly": "Aylık",
+        "yearly": "Yıllık"
+      },
+      "paymentMethod": "Ödeme yöntemi",
+      "noGateway": "{currency} için henüz ödeme geçidi yapılandırılmadı. Yöneticinizden bir tanesini etkinleştirmesini isteyin.",
+      "noGatewayButton": "Geçit yapılandırılmadı",
+      "sandbox": "sandbox",
+      "pay": "{amount} öde",
+      "processing": "Ödeme başlatılıyor",
+      "summary": "Sipariş özeti",
+      "billed": {
+        "monthly": "Bir dönem için faturalandırılır",
+        "yearly": "12 ay için faturalandırılır"
+      },
+      "subtotal": "Ara toplam",
+      "tax": "{label} (%{rate})",
+      "total": "Bugün toplam",
+      "updating": "Fiyat güncelleniyor",
+      "errors": {
+        "gatewayUnavailable": "Bu geçit şu anda kullanılamıyor.",
+        "currencyUnsupported": "Bu geçit bu para birimini kabul etmiyor. Başka bir geçit veya para birimi seçin.",
+        "providerError": "Ödeme sağlayıcı hatası. Yeniden deneyin veya farklı bir geçit seçin.",
+        "notPurchasable": "Bu plan çevrimiçi satın alınamaz.",
+        "downgrade": "Düşürme işlemleri çevrimiçi yapılamaz. Daha düşük bir plana geçmek için destekle iletişime geçin.",
+        "amountTooLow": "Cüzdanınıza eklemek için daha yüksek bir tutar girin.",
+        "couponUnavailable": "Kuponlar henüz kullanılamıyor.",
+        "forbidden": "Satın alma yetkiniz yok.",
+        "notFound": "Bu planı bulamadık.",
+        "widgetBlocked": "Ödeme penceresi açılamadı. Tarayıcınızın buna izin verdiğini kontrol edip yeniden deneyin.",
+        "generic": "Bir hata oluştu. Lütfen yeniden deneyin.",
+        "couponRejected": "Bu kupon kullanılamaz."
+      },
+      "coupon": "Kupon kodu",
+      "couponApply": "Uygula",
+      "couponApplied": "{code} kuponu uygulandı: {amount} indirim.",
+      "couponRemove": "Kaldır",
+      "couponDiscount": "İndirim ({code})",
+      "refundGuarantee": "{days} günlük para iade garantisi",
+      "countryPlaceholder": "Ülke seçin",
+      "autoRenew": "Her dönemde otomatik yenilenir. İstediğiniz zaman iptal edebilirsiniz.",
+      "addonRenews": "Bu eklenti her dönemde otomatik yenilenir. İstediğiniz zaman iptal edip ücretli sürenin sonuna kadar kullanmaya devam edebilirsiniz.",
+      "cardTitle": "Kartla öde",
+      "payNow": "Şimdi öde"
+    },
+    "orders": {
+      "title": "Sipariş geçmişi",
+      "lifetime": "Toplam harcama: {total}",
+      "loading": "Siparişler yükleniyor",
+      "loadFailed": "Siparişleriniz yüklenemedi. Yeniden denemek için sayfayı yenileyin.",
+      "emptyTitle": "Henüz sipariş yok",
+      "emptyMessage": "Satın almalarınız burada görünecek.",
+      "browsePlans": "Planlara göz at",
+      "loadMore": "Daha fazla yükle",
+      "outcome": {
+        "success": "Ödeme alındı. Teşekkür ederiz.",
+        "failed": "Ödeme tamamlanmadı. Yeniden deneyin veya başka bir geçit seçin.",
+        "cancelled": "Ödemeyi iptal ettiniz.",
+        "pending": "Ödemenizin ödeme sağlayıcı tarafından onaylanması bekleniyor. Onaylandığında bu sayfa güncellenir.",
+        "notfound": "Bu siparişi bulamadık.",
+        "proof": "Ödeme kanıtı gönderildi. Kısa süre içinde doğrulayıp planınızı etkinleştireceğiz."
+      },
+      "col": {
+        "order": "Sipariş",
+        "item": "Öğe",
+        "date": "Tarih",
+        "amount": "Tutar",
+        "status": "Durum",
+        "actions": "İşlemler"
+      },
+      "status": {
+        "pending": "Beklemede",
+        "awaiting_approval": "Onay bekleniyor",
+        "paid": "Ödendi",
+        "failed": "Başarısız",
+        "cancelled": "İptal edildi",
+        "refunded": "İade edildi"
+      },
+      "uploadProof": "Ödeme kanıtı",
+      "invoice": "Fatura"
+    },
+    "billing": {
+      "common": {
+        "admin": "Yönetici",
+        "breadcrumb": "Gezinti yolu",
+        "billingHistory": "Faturalandırma geçmişi",
+        "analytics": "Analitik",
+        "exportCsv": "CSV dışa aktar",
+        "exportTruncated": "Dışa aktarma {rows} satırda durdu. Kalanı dışa aktarmak için filtreleri daraltın.",
+        "exportFailed": "Dışa aktarma oluşturulamadı. Yeniden deneyin.",
+        "actionFailed": "İşlem başarısız oldu. Sayfayı yenileyip yeniden deneyin.",
+        "cancel": "İptal",
+        "back": "Vazgeç",
+        "close": "Kapat",
+        "openWorkspace": "Çalışma alanını aç",
+        "showing": "{total} {noun} içinden {from}–{to} gösteriliyor",
+        "pager": "Sayfalar",
+        "previous": "Önceki",
+        "next": "Sonraki",
+        "chartEmpty": "Bu zaman aralığında veri yok.",
+        "periods": {
+          "monthly": "aylık",
+          "yearly": "yıllık"
+        },
+        "status": {
+          "pending": "beklemede",
+          "awaiting_approval": "onay bekleniyor",
+          "paid": "ödendi",
+          "failed": "başarısız",
+          "cancelled": "iptal edildi",
+          "refunded": "iade edildi"
+        },
+        "windows": {
+          "7d": "Son 7 gün",
+          "30d": "Son 30 gün",
+          "90d": "Son 90 gün",
+          "1y": "Son bir yıl",
+          "all": "Tüm zamanlar"
+        }
+      },
+      "orders": {
+        "title": "Sipariş geçmişi",
+        "eyebrow": "Yönetici · Faturalandırma ve planlar · Sipariş geçmişi",
+        "titleFirst": "Sipariş",
+        "titleSecond": "geçmişi",
+        "description": "Abonelik siparişleri, plan yükseltmeleri ve düşürmeleri, eklenti satın almaları ve tek seferlik bakiye yüklemeleri: bir çalışma alanının verdiği tüm ticari kararlar.",
+        "window": "Zaman aralığı",
+        "windows": {
+          "90d": "Son 90 gün",
+          "this_year": "Bu yıl",
+          "all": "Tüm zamanlar"
+        },
+        "kpi": {
+          "total": "Toplam sipariş",
+          "vsPrevious": "önceki dönemle karşılaştırma",
+          "upgrades": "Yükseltmeler",
+          "mrrAdded": "+{amount} MRR eklendi",
+          "downgrades": "Düşürmeler",
+          "mrrLowered": "Daha düşük planlarda {amount}",
+          "addons": "Eklenti paketleri",
+          "attached": "{amount} eklendi",
+          "cancellations": "İptaller",
+          "mrrLost": "-{amount} MRR kaybedildi"
+        },
+        "typeFilter": "Sipariş türüne göre filtrele",
+        "types": {
+          "all": "Tümü",
+          "new": "Yeni abonelik",
+          "upgrade": "Yükseltme",
+          "downgrade": "Düşürme",
+          "addon": "Eklenti",
+          "cancel": "İptal"
+        },
+        "rowTypes": {
+          "new": "Yeni",
+          "renewal": "Yenileme",
+          "upgrade": "Yükseltme",
+          "downgrade": "Düşürme",
+          "addon": "Eklenti",
+          "wallet_topup": "Cüzdan yükleme",
+          "manual": "Manuel"
+        },
+        "search": "Sipariş no, çalışma alanı veya plana göre ara…",
+        "noun": "sipariş",
+        "col": {
+          "order": "Sipariş no",
+          "date": "Tarih",
+          "workspace": "Çalışma alanı",
+          "type": "Tür",
+          "item": "Plan / öğe",
+          "mrr": "MRR Δ",
+          "total": "Toplam",
+          "status": "Durum"
+        },
+        "empty": "Bu zaman aralığında sipariş yok.",
+        "awaitingApproval": "onay bekleniyor",
+        "actions": {
+          "markPaid": "Ödendi olarak işaretle",
+          "cancelOrder": "İptal",
+          "approve": "Onayla",
+          "reject": "Reddet"
+        },
+        "confirm": {
+          "approveTitle": "Bu sipariş ödendi olarak işaretlensin mi?",
+          "approve": "Bu sipariş ödendi olarak işaretlensin ve plan etkinleştirilsin mi?",
+          "cancelTitle": "Bu sipariş iptal edilsin mi?",
+          "cancel": "Bu bekleyen sipariş iptal edilsin mi? İptal edildi olarak işaretlenecek ve tahsil edilecekler listesinden çıkacak."
+        },
+        "reject": {
+          "title": "{order} reddet",
+          "reason": "Neden (isteğe bağlı)"
+        },
+        "awaiting": {
+          "title": "Onay bekleniyor",
+          "ref": "Ref:",
+          "proofAttached": "Ödeme kanıtı eklendi"
+        }
+      },
+      "orderAnalytics": {
+        "title": "Sipariş analitiği",
+        "eyebrow": "Yönetici · Faturalandırma ve planlar · Sipariş analitiği",
+        "titleFirst": "Sipariş",
+        "titleSecond": "analitiği",
+        "description": "Abonelikler, yükseltmeler, düşürmeler, eklentiler ve iptaller: platform genelinde net gelir hareketini neyin yönlendirdiği.",
+        "window": "Zaman aralığı",
+        "viewLedger": "Defteri görüntüle",
+        "kpi": {
+          "total": "Toplam sipariş",
+          "newMrr": "Net yeni MRR",
+          "paid": "{count} ödendi",
+          "lostMrr": "Kaybedilen MRR",
+          "cancels": "{count} iptal",
+          "aov": "Ortalama sipariş değeri",
+          "paidOrders": "ödenen sipariş",
+          "attach": "Eklenti ekleme oranı",
+          "attachLabel": "{addons} eklenti / {total}",
+          "conversion": "Dönüşüm oranı",
+          "conversionHint": "{signups} kayıt üzerinden ödenen sipariş"
+        },
+        "motion": {
+          "kicker": "Sipariş hareketi",
+          "title": "Ödenen siparişler ve iptaller",
+          "paid": "Ödendi",
+          "cancelled": "İptal edildi veya başarısız"
+        },
+        "typeMix": {
+          "kicker": "Sipariş türü dağılımı",
+          "title": "Türe göre"
+        },
+        "addons": {
+          "kicker": "Satılan eklentiler",
+          "title": "En iyi performanslar",
+          "empty": "Bu zaman aralığında eklenti siparişi yok."
+        },
+        "funnel": {
+          "kicker": "Dönüşüm hunisi",
+          "title": "Kayıttan ücretliye",
+          "note": "Yalnızca sayılan aşamalar gösterilir."
+        },
+        "countries": {
+          "kicker": "Ülkeye göre",
+          "title": "En iyi pazarlar",
+          "empty": "Henüz fatura ülkesi girilmedi."
+        },
+        "cohorts": {
+          "kicker": "Kohort elde tutma",
+          "title": "N ay sonra hâlâ etkin olan çalışma alanlarının %'si",
+          "last": "son 6 kohort",
+          "emptyTitle": "Henüz çalışma alanı kaydı yok",
+          "empty": "Çalışma alanları kayıt olduğunda kohortlar görünür."
+        }
+      },
+      "history": {
+        "title": "Faturalandırma geçmişi",
+        "eyebrow": "Yönetici · Faturalandırma ve planlar · Faturalandırma geçmişi",
+        "titleFirst": "Faturalandırma",
+        "titleSecond": "geçmişi",
+        "description": "Platformun işlediği her ödeme olayı: tüm çalışma alanlarındaki tahsilatlar, iadeler ve yeniden denemeler.",
+        "window": "Zaman aralığı",
+        "kpi": {
+          "gross": "Brüt gelir",
+          "vsPrev": "önceki dönemle karşılaştırma",
+          "charges": "Başarılı tahsilatlar",
+          "successRate": "%{pct} başarı oranı",
+          "failed": "Başarısız",
+          "dunning": "yeniden deneme / tahsilat takibi",
+          "refunds": "Yapılan iadeler",
+          "refundsTotal": "Toplam {amount}",
+          "chargebacks": "Chargeback'ler",
+          "disputed": "{amount} itiraz edildi"
+        },
+        "trend": {
+          "kicker": "Eğilim",
+          "title": "Günlük tahsilatlar ve iadeler",
+          "charges": "Tahsilatlar",
+          "refunds": "İadeler"
+        },
+        "statusFilter": "Ödeme durumuna göre filtrele",
+        "statuses": {
+          "all": "Tümü",
+          "paid": "Başarılı",
+          "failed": "Başarısız",
+          "refunded": "İade edildi",
+          "pending": "Beklemede"
+        },
+        "gateway": "Geçit",
+        "allGateways": "Tüm geçitler",
+        "search": "Sipariş no, çalışma alanı, müşteri ara…",
+        "noun": "olay",
+        "col": {
+          "date": "Tarih",
+          "order": "Sipariş no",
+          "workspace": "Çalışma alanı",
+          "gateway": "Geçit",
+          "plan": "Plan",
+          "amount": "Tutar",
+          "status": "Durum",
+          "actions": "İşlemler"
+        },
+        "empty": "Eşleşen ödeme olayı yok."
+      },
+      "billingAnalytics": {
+        "title": "Faturalandırma analitiği",
+        "eyebrow": "Yönetici · Faturalandırma ve planlar · Faturalandırma analitiği",
+        "titleFirst": "Faturalandırma",
+        "titleSecond": "analitiği",
+        "description": "Platform genelinde nakit akışı, ödeme başarısı, geçit dağılımı ve iade eğilimleri.",
+        "window": "Zaman aralığı",
+        "viewLedger": "Defteri görüntüle",
+        "kpi": {
+          "gross": "Brüt gelir",
+          "net": "Net gelir",
+          "netPct": "%{pct} net",
+          "success": "Yetkilendirme başarısı",
+          "failed": "Başarısız",
+          "events": "{count, plural, other {# olay}}",
+          "refunds": "İadeler",
+          "chargebacks": "Chargeback'ler",
+          "disputes": "{count, plural, other {# itiraz}}"
+        },
+        "cashFlow": {
+          "kicker": "Nakit akışı",
+          "title": "Tahsilatlar, iadeler ve başarısızlıklar",
+          "charges": "Tahsilatlar",
+          "refunds": "İadeler",
+          "failed": "Başarısız"
+        },
+        "gatewayShare": {
+          "title": "Geçit payı",
+          "hint": "Ödenen gelirin sağlayıcıya göre dağılımı"
+        },
+        "topPayers": {
+          "title": "En çok ödeme yapan çalışma alanları",
+          "hint": "Zaman aralığındaki en yüksek harcama",
+          "all": "Tüm çalışma alanları",
+          "workspace": "Çalışma alanı",
+          "orders": "Siparişler",
+          "total": "Toplam",
+          "empty": "Bu zaman aralığında henüz ücretli sipariş yok.",
+          "unknown": "Silinmiş çalışma alanı"
+        },
+        "statusMix": {
+          "title": "Sipariş durumu dağılımı",
+          "hint": "Yaşam döngüsü durumuna göre sayı"
+        }
+      },
+      "invoices": {
+        "title": "Faturalar",
+        "eyebrow": "Yönetici · Faturalandırma ve planlar · Faturalar",
+        "titleFirst": "Tümü",
+        "titleSecond": "fatura",
+        "description": "Her sipariş bir faturalandırma belgesi olarak. Duruma göre filtreleyin, bir faturayı açıp yazdırın, ödendi olarak işaretleyin, iptal edin veya manuel fatura düzenleyin.",
+        "window": "Zaman aralığı",
+        "windows": {
+          "all": "Tüm zamanlar",
+          "this_month": "Bu ay",
+          "last_month": "Geçen ay",
+          "this_quarter": "Bu çeyrek",
+          "this_year": "Bu yıl"
+        },
+        "kpi": {
+          "total": "Toplam fatura",
+          "allTime": "tüm zamanlar",
+          "paid": "Ödendi",
+          "outstanding": "Tahsil edilecek",
+          "due": "{amount} vadesi geldi",
+          "overdue": "Gecikmiş",
+          "overdueHint": "15 günden fazla gecikmiş",
+          "thisMonth": "Bu ay",
+          "mom": "Aylık değişim"
+        },
+        "statusFilter": "Fatura durumuna göre filtrele",
+        "statuses": {
+          "all": "Tümü",
+          "paid": "Ödendi",
+          "outstanding": "Tahsil edilecek",
+          "overdue": "Gecikmiş",
+          "refunded": "İade edildi",
+          "void": "İptal"
+        },
+        "badges": {
+          "paid": "ödendi",
+          "outstanding": "tahsil edilecek",
+          "overdue": "gecikmiş",
+          "refunded": "iade edildi",
+          "void": "iptal"
+        },
+        "search": "Fatura no, çalışma alanı veya sahibine göre ara…",
+        "noun": "fatura",
+        "col": {
+          "number": "Fatura no",
+          "issued": "Düzenleme tarihi",
+          "due": "Vade tarihi",
+          "workspace": "Çalışma alanı",
+          "item": "Öğe",
+          "amount": "Tutar",
+          "status": "Durum",
+          "view": "Görüntüle",
+          "actions": "İşlemler"
+        },
+        "daysLate": "{days} gün gecikmiş",
+        "refunded": "iade edildi",
+        "viewInvoice": "Faturayı görüntüle",
+        "rowMenu": "{number} için işlemler",
+        "empty": "Bu zaman aralığında fatura yok.",
+        "actions": {
+          "view": "Görüntüle",
+          "markPaid": "Ödendi olarak işaretle",
+          "void": "İptal et",
+          "delete": "Sil"
+        },
+        "confirm": {
+          "markPaidTitle": "Bu fatura ödendi olarak işaretlensin mi?",
+          "markPaid": "Bu fatura ödendi olarak işaretlensin mi? Satın alındığı plan, eklenti veya cüzdan kredisi de uygulanır.",
+          "markPaidManual": "Bu manuel fatura ödendi olarak işaretlensin mi? Yalnızca ödeme kaydedilir.",
+          "voidTitle": "Bu fatura iptal edilsin mi?",
+          "void": "Bu fatura iptal edilsin mi? Kayıtta kalır ancak iptal edilmiş olarak işaretlenir.",
+          "deleteTitle": "Bu fatura silinsin mi?",
+          "delete": "Bu fatura kalıcı olarak silinsin mi? Bu işlem geri alınamaz."
+        },
+        "manual": {
+          "tag": "manuel",
+          "open": "Manuel fatura",
+          "eyebrow": "Faturalar",
+          "title": "Manuel fatura",
+          "workspace": "Çalışma alanı",
+          "chooseWorkspace": "Bir çalışma alanı seçin",
+          "customerName": "Müşteri adı",
+          "customerNameHint": "Varsayılan olarak çalışma alanı adıdır.",
+          "customerEmail": "Müşteri e-postası",
+          "description": "Açıklama",
+          "amount": "Tutar",
+          "currency": "Para birimi",
+          "status": "Durum",
+          "statuses": {
+            "pending": "Beklemede",
+            "paid": "Ödendi"
+          },
+          "issuedAt": "Düzenleme tarihi",
+          "issuedAtHint": "Bugün için boş bırakın. Geçmiş bir tarih faturayı geriye tarihler.",
+          "submit": "Fatura oluştur",
+          "created": "{number} numaralı manuel fatura oluşturuldu."
+        }
+      },
+      "invoice": {
+        "title": "Fatura",
+        "print": "Yazdır",
+        "downloadPdf": "PDF indir",
+        "banner": {
+          "invoice": "Fatura no {number}",
+          "issued": "{date} tarihinde düzenlendi",
+          "settled": "{date} tarihinde tahsil edildi",
+          "paidInFull": "tamamı ödendi"
+        },
+        "taxInvoice": "Vergi faturası",
+        "invoiceWord": "FATURA",
+        "taxIdLabel": "GSTIN/KDV",
+        "number": "Fatura no",
+        "issueDate": "Düzenleme tarihi",
+        "paidDate": "Ödeme tarihi",
+        "status": "Durum",
+        "billTo": "Fatura alıcısı",
+        "payment": "Ödeme",
+        "method": "Yöntem",
+        "txn": "İşlem no",
+        "captured": "Tahsil edildiği zaman",
+        "currency": "Para birimi",
+        "coupon": "Kupon",
+        "description": "Açıklama",
+        "qty": "Adet",
+        "unit": "Birim",
+        "total": "Toplam",
+        "discount": "İndirim",
+        "code": "kod",
+        "subtotal": "Ara toplam",
+        "amountPaid": "Ödenen tutar",
+        "balanceDue": "Kalan borç",
+        "notes": "Notlar",
+        "notesText": "Bizi tercih ettiğiniz için teşekkür ederiz. Bu fatura yukarıda belirtilen siparişi kapsar. Faturalandırma sorularınız için fatura numarasını belirtin.",
+        "help": "Yardım mı gerekiyor?",
+        "helpFallback": "Platform yöneticisiyle iletişime geçin.",
+        "refundNote": "Destek veya iade için ödemeden itibaren {days} gün içinde bize yazın.",
+        "regNo": "Sicil no.",
+        "computerGenerated": "Bu bilgisayar tarafından oluşturulan bir faturadır, imza gerekmez."
+      },
+      "settings": {
+        "title": "Faturalandırma ayarları",
+        "eyebrow": "Yönetici · Faturalandırma ve planlar · Ayarlar",
+        "titleFirst": "Faturalandırma",
+        "titleSecond": "ayarları",
+        "description": "Fiyatlandırma ve ödeme sayfalarının okuduğu her şey: vergi, iade süresi, yıllık indirim, otomatik yenileme, fatura kimliğiniz ve ülke listesi. Değişiklikler bir sonraki sayfa yüklemesinde uygulanır.",
+        "previewPlans": "Planlar sayfasını önizle",
+        "readOnly": "Faturalandırma ayarlarını yalnızca süper yönetici değiştirebilir.",
+        "conflict": "Bu ayarlar başka biri tarafından değiştirildi. Yeniden yüklendi; gözden geçirip yeniden kaydedin.",
+        "saved": "Faturalandırma ayarları kaydedildi.",
+        "save": "Ayarları kaydet",
+        "tax": {
+          "title": "Vergi",
+          "hint": "Her ödeme ara toplamına uygulanır. Gösterilen fiyatlarınız vergi dahilse kapatın.",
+          "rate": "Oran (%)",
+          "label": "Etiket",
+          "labelPlaceholder": "GST / KDV / Satış vergisi"
+        },
+        "company": {
+          "title": "Şirket ve faturalandırma kimliği",
+          "hint": "Yasal tüzel kişilik bilgileriniz. Her faturada yazdırılır: “fatura gönderen” bloğu, vergi numarası ve alt bilgi.",
+          "name": "Yasal şirket adı",
+          "taxId": "Vergi numarası (GSTIN / KDV)",
+          "address": "Kayıtlı adres",
+          "regNo": "Kayıt / CIN no.",
+          "email": "Faturalandırma e-postası",
+          "phone": "Destek telefonu"
+        },
+        "logo": {
+          "title": "Fatura logosu",
+          "hint": "Her fatura ve makbuzun üst kısmında gösterilir. PNG, JPG, SVG veya WebP, en fazla {kb} KB. Site logonuzu kullanmak için boş bırakın.",
+          "none": "Logo yok",
+          "choose": "Logo dosyası seçin",
+          "remove": "Mevcut logoyu kaldır (site logosuna dön)",
+          "fallback": "Şu anda yedek olarak site marka logosu kullanılıyor.",
+          "tooBig": "Logo en fazla {kb} KB olmalıdır."
+        },
+        "refund": {
+          "title": "Para iade garantisi",
+          "hint": "Etkinleştirildiğinde ödeme sayfasında sipariş özetinin altında garanti süresi gösterilir. Her yerde gizlemek için kapatın.",
+          "days": "Süre (gün)"
+        },
+        "yearly": {
+          "title": "Yıllık faturalandırma geçişi",
+          "hint": "Fiyatlandırma sayfasında Aylık / Yıllık geçişini gösterir. Her plan yalnızca aylıksa tamamen gizleyin.",
+          "discount": "Yıllık indirim (%)",
+          "formula": "Yıllık fiyat = aylık × 12 × (1 − indirim%)."
+        },
+        "recurring": {
+          "title": "Otomatik yenilenen abonelikler",
+          "hint": "Açıkken süreli ücretli planlar (aylık veya yıllık) otomatik yenilenir: geçit her dönemde kartı tahsil eder ve planın geçerlilik süresi kendiliğinden uzar. Ücretsiz, ömür boyu ve özel teklifli planlar hiçbir zaman yinelenmez; yinelemeyi desteklemeyen geçitler tek seferlik tahsilat olarak kalır. Her satın almanın bir kez faturalanması için bunu kapatın.",
+          "graceDays": "Ek süre (gün)",
+          "graceHint": "Otomatik yenileme tahsilatı başarısız olduğunda, geçit yeniden denerken plan veya eklenti dönemi bittikten sonra bu kadar gün etkin kalır. 0 ek süreyi kapatır.",
+          "gateways": "Otomatik yenilemeyi destekleyen geçitler",
+          "note": "Braintree, geçit kimlik bilgilerinde bir Plan ID ayarladığınızda otomatik yenilenir. Square her dönemi müşteriye fatura e-postasıyla faturalandırır (karttan sessizce tahsilat yapılmaz). Her yenileme için sağlayıcı panelinde geçit webhook URL'sinin ayarlanması gerekir."
+        },
+        "countries": {
+          "title": "Ödeme ülke listesi",
+          "hint": "Fatura adresi için kullanılan ödeme faturalandırma formundaki Ülke seçicisinin seçenekleri. Her satıra bir ülke yazın; sıra korunur."
+        },
+        "links": {
+          "coupons": "Kuponlar",
+          "couponsTitle": "İndirim kodlarını yönet",
+          "couponsHint": "Herhangi bir kuponu ekleyin, düzenleyin veya devre dışı bırakın.",
+          "faqs": "SSS",
+          "faqsTitle": "Fiyatlandırma sayfası SSS'lerini düzenle",
+          "faqsHint": "Planların altında gösterilen açılır öğeler.",
+          "configured": "{count} yapılandırıldı."
+        }
+      }
+    },
+    "offline": {
+      "eyebrow": {
+        "bank_transfer": "Ödeme / Banka havalesi",
+        "offline": "Ödeme / Çevrimdışı"
+      },
+      "title": {
+        "bank_transfer": "Ödemeyi havale ile yapın",
+        "offline": "Bu siparişi tamamlamak için bizimle iletişime geçin"
+      },
+      "intro": {
+        "bank_transfer": "Aşağıdaki hesaba <strong>{amount}</strong> gönderin. Ödemenizi siparişinizle eşleştirebilmemiz için açıklama alanına <mono>{ref}</mono> yazın.",
+        "offline": "Sipariş <mono>{ref}</mono> · <strong>{amount}</strong> · {currency} cinsinden faturalandırılır"
+      },
+      "instructions": "Talimatlar",
+      "referenceNote": "<strong>Referans:</strong> havalenize <mono>{ref}</mono> ifadesini ekleyin, ardından aşağıdan ödeme kanıtınızı gönderin. Planınız, ekibimiz ödemeyi doğruladıktan sonra etkinleşir.",
+      "proofTitle": "Ödeme kanıtını gönder",
+      "proofHelp": "Zaten ödediniz mi? Planınızı doğrulayıp etkinleştirebilmemiz için dekontunuzu ve referansınızı yükleyin.",
+      "later": {
+        "bank_transfer": "Ödemeyi gönderdim — kanıtı daha sonra göndereceğim",
+        "offline": "Anladım — kanıtı daha sonra göndereceğim"
+      }
+    },
+    "proof": {
+      "file": "Ödeme ekran görüntüsü / dekont",
+      "fileHint": "JPG, PNG, WEBP veya PDF · en fazla 4 MB",
+      "reference": "Referans / UTR numarası",
+      "referencePlaceholder": "ör. UTR / işlem kimliği",
+      "note": "Not (isteğe bağlı)",
+      "notePlaceholder": "Bu ödemeyle ilgili bilmemiz gereken her şey",
+      "submit": "Ödeme kanıtını gönder",
+      "sending": "Yükleniyor",
+      "chooseFile": "Yüklemek için bir dekont seçin.",
+      "tooLarge": "Bu dosya 4 MB'tan büyük.",
+      "rejected": "Bu dosya türüne izin verilmiyor. JPG, PNG, WEBP veya PDF kullanın.",
+      "closed": "Bu sipariş için artık ödeme kanıtı gönderilemez.",
+      "failed": "Dosya yüklenemedi. Tekrar deneyin."
+    }
+  }
+}

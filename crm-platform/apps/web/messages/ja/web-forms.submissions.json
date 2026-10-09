@@ -1,0 +1,170 @@
+{
+  "web-forms": {
+    "submissions": {
+      "title": "送信",
+      "backToForm": "{name} に戻る",
+      "formFallback": "フォーム",
+      "count": "{count, plural, =0 {送信はありません} other {# 件の送信を読み込みました}}",
+      "moreAvailable": "さらに読み込めます",
+      "tabsLabel": "送信グループ",
+      "tabs": {
+        "all": "すべて",
+        "needs_attention": "要対応",
+        "spam": "スパム"
+      },
+      "filters": {
+        "search": "検索",
+        "searchPlaceholder": "名前、メール、電話番号",
+        "status": "ステータス",
+        "allStatuses": "すべてのステータス",
+        "from": "開始日",
+        "to": "終了日",
+        "clear": "フィルターをクリア"
+      },
+      "status": {
+        "received": "受信日時",
+        "created": "連絡先を作成",
+        "updated": "連絡先を更新",
+        "needs_review": "確認が必要",
+        "awaiting_payment": "支払い待ち",
+        "paid": "支払い済み",
+        "failed": "失敗",
+        "spam": "スパム"
+      },
+      "reason": {
+        "label": "理由",
+        "todo": "対処方法",
+        "no_contact_point": {
+          "what": "訪問者から有効なメールアドレスも電話番号も得られなかったため、連絡先を作成できませんでした。",
+          "todo": "回答を開き、不足している情報を連絡先に手動で追加するか、フォームの項目の割り当てを修正してから再試行してください。"
+        },
+        "invalid_phone": {
+          "what": "電話番号を有効な番号として読み取れませんでした。",
+          "todo": "回答を開いて番号を確認し、フォームがその番号を受け付けるように修正してから再試行するか、連絡先を手動で追加してください。"
+        },
+        "plan_limit_reached": {
+          "what": "プランの連絡先上限に達したため、新しい連絡先は作成されませんでした。",
+          "todo": "連絡先を整理するか、プランをアップグレードしてから再試行してください。"
+        },
+        "submissions_cap": {
+          "what": "プランの月間送信上限に達したため、確認用に保存されました。",
+          "todo": "プランをアップグレードするか、翌月まで待ってから再試行してください。"
+        },
+        "spam_score": {
+          "what": "この送信はスパムと判定され、除外されました。",
+          "todo": "実際の人からの送信であれば、回答を開いて手動で連絡先として追加してください。"
+        },
+        "too_fast": {
+          "what": "人がフォームに入力できる速さよりも速く送信されたため、スパムとして除外されました。",
+          "todo": "実際の人からの送信であれば、回答を開いて手動で連絡先として追加してください。"
+        },
+        "internal_error": {
+          "what": "処理中に当方側で問題が発生しました。回答は保持されています。",
+          "todo": "再試行してください。それでも失敗する場合は、送信日時を添えてサポートにお問い合わせください。"
+        },
+        "unknown": {
+          "what": "この送信は、このバージョンのアプリが認識できない理由により除外されています。",
+          "todo": "回答を開いて詳細を確認し、再試行するか手動で対応してください。"
+        }
+      },
+      "table": {
+        "received": "受信日時",
+        "visitor": "訪問者",
+        "status": "ステータス",
+        "contact": "連絡先",
+        "company": "会社",
+        "version": "バージョン",
+        "open": "{who} からの送信を開く"
+      },
+      "anonymous": "名前が入力されていません",
+      "answersRemovedShort": "回答を削除しました",
+      "versionShort": "v{n}",
+      "noLink": "なし",
+      "unnamedContact": "連絡先を開く",
+      "unnamedCompany": "会社を開く",
+      "drawer": {
+        "title": "{who} からの送信",
+        "close": "閉じる",
+        "loading": "送信を開いています",
+        "errorTitle": "この送信を開くことができませんでした。",
+        "errorBody": "接続を確認して、もう一度お試しください。",
+        "retryLoad": "再試行",
+        "auditNote": "送信内容の表示は監査ログに記録されます。",
+        "answers": "回答",
+        "noAnswers": "この送信には回答がありません。",
+        "emptyAnswer": "回答なし",
+        "yes": "はい",
+        "no": "いいえ",
+        "removedTitle": "回答は削除されました",
+        "removedBody": "回答は消去またはパージされています。この記録のみが残り、連絡先は保持されています。",
+        "summary": "概要",
+        "receivedAt": "受信日時",
+        "formVersion": "フォームのバージョン",
+        "spamScore": "スパムスコア",
+        "error": "エラー",
+        "attribution": "流入元",
+        "noAttribution": "流入元の詳細は取得されていません。",
+        "utm": "キャンペーンタグ",
+        "referrer": "参照元",
+        "pageUrl": "ページ",
+        "userAgent": "ブラウザ",
+        "consent": "同意",
+        "consentGiven": "同意済み",
+        "consentText": "訪問者に表示された文言",
+        "consentVersion": "文言のバージョン",
+        "consentAt": "同意日時",
+        "noConsent": "このフォームでは同意を求めていません。",
+        "links": "件数",
+        "actions": "操作"
+      },
+      "actions": {
+        "retry": "再試行",
+        "retrying": "再試行中",
+        "delete": "回答を削除",
+        "deleting": "削除中",
+        "export": "CSV を書き出し",
+        "exporting": "書き出し中",
+        "exportHintAttention": "このグループから書き出すには、単一のステータスを選択するか、「すべて」を使用してください。",
+        "exportHintSearch": "書き出しでは検索テキストは無視されます。",
+        "notSpam": "スパムではない: 処理する"
+      },
+      "confirmDelete": {
+        "title": "これらの回答を削除しますか？",
+        "message": "この送信の回答は完全に消去されます。一覧には、送信があった記録として行が残り、連絡先は削除されません。",
+        "confirm": "回答を削除",
+        "cancel": "キャンセル"
+      },
+      "toast": {
+        "retried": "再試行しました。送信のステータスは「{status}」になりました。",
+        "notRetryable": "再試行できるのは、確認が必要な送信または失敗した送信のみです。",
+        "purged": "回答はすでに削除されているため、再試行するものがありません。",
+        "retryFailed": "再試行できませんでした。もう一度お試しください。",
+        "deleted": "回答を削除しました。連絡先は保持されています。",
+        "deleteFailed": "回答を削除できませんでした。もう一度お試しください。",
+        "exported": "CSV をダウンロードしました。",
+        "exportTruncated": "書き出しは新しい順の {max} 行で打ち切られました。残りを取得するには日付の範囲を狭めてください。",
+        "exportFailed": "書き出せませんでした。もう一度お試しください。"
+      },
+      "state": {
+        "loading": "送信を読み込んでいます",
+        "errorTitle": "送信を読み込めませんでした。",
+        "errorBody": "接続を確認して、もう一度お試しください。",
+        "retry": "再試行",
+        "lockedTitle": "フォームはお使いのプランに含まれていません",
+        "lockedBody": "回答の収集と確認を行うには、ワークスペースにフォームアプリを追加してください。",
+        "upgrade": "プランを見る",
+        "emptyTitle": "まだ送信はありません",
+        "emptyBody": "フォームのリンクを共有するか、サイトに埋め込んでください。送信されるとすぐに、ここに表示されます。",
+        "emptyShare": "このフォームを共有",
+        "emptyFilteredTitle": "一致する送信はありません",
+        "emptyFilteredBody": "これらのフィルターに一致するものはありません。フィルターをクリアするとすべて表示されます。",
+        "loadMore": "さらに読み込む",
+        "loadingMore": "読み込み中"
+      },
+      "cap": {
+        "notice": "プランの月間送信上限に達したため、一部の送信は確認用に保存されました。",
+        "upgrade": "プランをアップグレード"
+      }
+    }
+  }
+}

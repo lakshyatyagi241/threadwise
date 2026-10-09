@@ -1,0 +1,157 @@
+{
+  "whatsapp-cloud-api-waba": {
+    "nav": {
+      "groups": "Meta グループ"
+    },
+    "errors": {
+      "WABA_GROUPS_NOT_ELIGIBLE": "この番号はグループを利用できません。WhatsApp がグループを開放しているのは公式ビジネスアカウントのみです。",
+      "WABA_GROUPS_PROVIDER_UNSUPPORTED": "グループは Meta に直接接続された番号でのみ利用できます。この番号は別のプロバイダー経由で接続されています。",
+      "WABA_GROUP_NOT_FOUND": "グループが見つかりません。",
+      "WABA_GROUP_SUSPENDED": "ポリシー違反のため、WhatsApp によりこのグループは停止されています。",
+      "WABA_GROUP_LIMIT_REACHED": "WhatsApp のグループ上限に達しました。グループを削除するか、WhatsApp に上限の引き上げを依頼してください。",
+      "WABA_GROUP_RATE_LIMITED": "この番号からのグループ操作が多すぎます。しばらく待ってから再試行してください。",
+      "PLAN_FEATURE_LOCKED": "お使いのプランには WhatsApp グループが含まれていません。アップグレードすると利用できます。",
+      "VALIDATION_FAILED": "入力内容を確認して、もう一度お試しください。"
+    },
+    "groups": {
+      "pageTitle": "WhatsApp グループ",
+      "eyebrow": "WhatsApp / グループ",
+      "headingA": "グループ",
+      "headingB": "メッセージ",
+      "intro": "事業用の番号から WhatsApp グループを作成し、招待リンクを共有して参加リクエストを処理できます。会話は他のチャットと同様に受信トレイに表示されます。",
+      "loading": "グループを読み込んでいます…",
+      "loadFailed": "グループを読み込めませんでした。",
+      "retry": "再試行",
+      "numbersDenied": "グループは閲覧できますが、グループが属する WhatsApp 番号の一覧は表示できません。WhatsApp 番号へのアクセス権について管理者に確認してください。",
+      "rail": {
+        "title": "グループ",
+        "noNumber": "WhatsApp Business 番号がありません",
+        "eligible": "対象",
+        "notEligible": "対象外",
+        "numberLabel": "番号",
+        "howTitle": "グループの仕組み",
+        "howInvite": "グループは招待制です。グループを作成すると WhatsApp が招待リンクを発行します。そのリンクを共有すると、参加するかどうかは相手が選びます。個人を直接追加する方法はありません。",
+        "howCost": "送信するメッセージは、受信者 1 人ごとに 1 回課金されます。メンバー 100 人へのメッセージは 100 回の送信として扱われます。"
+      },
+      "state": {
+        "noNumber": {
+          "title": "接続されている WhatsApp Business 番号がありません",
+          "message": "グループを利用するには、公式の WhatsApp Business Platform を通じて接続された WhatsApp 番号が必要です。",
+          "hint": "設定、チャネル、WhatsApp から接続してください。",
+          "connect": "WhatsApp 番号を開く"
+        },
+        "notEligible": {
+          "title": "この番号はまだグループを利用できません",
+          "message": "WhatsApp がグループ機能を開放しているのは、公式ビジネスアカウント（緑のバッジが付いた認証済みのティア）のみです。お使いの番号は接続されており通常のチャットには使えますが、グループへのアクセス権は付与されていません。",
+          "hint": "WhatsApp Manager で公式ビジネスアカウントの申請を行い、このページを再読み込みしてください。",
+          "reload": "再確認",
+          "checking": "確認中…"
+        },
+        "providerUnsupported": {
+          "title": "このルートではグループは利用できません",
+          "message": "この番号は Meta に直接接続されておらず、別のプロバイダー経由で接続されています。グループは Meta に直接接続された番号でのみ設定されています。",
+          "hint": "番号を Meta に直接接続するか、プロバイダーにグループ対応の可否を確認してください。"
+        },
+        "missingCredentials": {
+          "title": "この番号は再接続が必要です",
+          "message": "この番号にはアクセストークンが保存されていないため、WhatsApp にグループの可否を問い合わせできません。",
+          "hint": "番号のヘルスページでトークンを差し替えてください。"
+        },
+        "checkFailed": "現在、WhatsApp にこの番号がグループを利用できるかを問い合わせできませんでした。利用可能であれば、以下の機能はすべて動作します。操作が失敗した場合は、しばらくしてから再試行してください。"
+      },
+      "kpi": {
+        "groups": "グループ",
+        "groupsSub": "この番号で",
+        "members": "メンバー",
+        "membersSub": "全グループの合計",
+        "joinRequests": "参加リクエスト",
+        "joinRequestsSub": "対応待ち",
+        "suspended": "停止中",
+        "suspendedSub": "WhatsApp によりブロックされています"
+      },
+      "create": {
+        "title": "グループを作成",
+        "name": "グループ名",
+        "nameHint": "メンバーがチャットの上部に表示する名前です。128 文字以内で入力してください。",
+        "who": "参加できる人",
+        "whoAuto": "リンクを知っている人は、すぐに参加できます",
+        "whoApproval": "参加する前に、一人ずつ承認します",
+        "whoHint": "承認を有効にすると、参加を許可する前に確認できるキューが表示されます。",
+        "description": "説明",
+        "descriptionHint": "任意です。グループ情報の画面に表示されます。",
+        "submit": "グループを作成",
+        "submitting": "作成中…"
+      },
+      "list": {
+        "title": "あなたのグループ",
+        "empty": "グループはまだありません。上で作成して始めてください。",
+        "untitled": "無題のグループ",
+        "members": "{count, plural, =0 {メンバーなし} other {メンバー # 人}}",
+        "approvalRequired": "承認が必要",
+        "suspended": "WhatsApp によりこのグループは停止されています。復元されるまでメッセージを送信できません。",
+        "creationFailed": "WhatsApp でグループを作成できませんでした: {message}",
+        "refresh": "更新",
+        "refreshing": "更新中…",
+        "delete": "削除",
+        "edit": "編集",
+        "membersButton": "メンバー",
+        "loadMore": "さらにグループを表示",
+        "loadingMore": "読み込み中…"
+      },
+      "link": {
+        "awaiting": "WhatsApp が招待リンクを作成しています…",
+        "label": "招待リンク",
+        "copy": "コピー",
+        "copied": "コピーしました",
+        "newLink": "新しいリンク"
+      },
+      "joinRequests": {
+        "title": "参加待ち",
+        "approve": "承認",
+        "reject": "拒否",
+        "working": "…",
+        "hidden": "{count, plural, other {# 人が参加を待っています。}} 誰が待っているかを確認するには、グループを管理する権限が必要です。"
+      },
+      "confirm": {
+        "deleteTitle": "このグループを削除しますか？",
+        "deleteMessage": "このグループを削除し、全員を退出させますか？ 削除したグループは復元できません。チャット履歴は受信トレイに残ります。",
+        "deleteConfirm": "グループを削除",
+        "linkTitle": "新しいリンクを作成しますか？",
+        "linkMessage": "新しいリンクを作成しますか？ 古いリンクを送信済みの相手は、そのリンクを使用できなくなります。",
+        "linkConfirm": "新しいリンクを作成",
+        "cancel": "キャンセル"
+      },
+      "edit": {
+        "title": "グループを編集",
+        "subject": "グループ名",
+        "description": "説明",
+        "hint": "WhatsApp に送信しました。Meta が確認すると、ここでグループが更新されます。",
+        "save": "WhatsApp に送信",
+        "saving": "送信中…"
+      },
+      "members": {
+        "title": "{name} のメンバー",
+        "hint": "このウィンドウを開くと WhatsApp から読み込まれます。ここには保存されません。一度に最大 {max} 人まで削除できます。",
+        "loading": "WhatsApp からメンバーを読み込んでいます…",
+        "empty": "メンバーはまだいません。",
+        "selected": "{count} 件選択中",
+        "remove": "選択したメンバーを削除",
+        "removing": "削除中…",
+        "limit": "一度に削除できるのは最大 {max} 人までです。",
+        "removeConfirm": "{count, plural, other {これらの # 人}} をグループから削除しますか？ 古いリンクでは再参加できなくなります。"
+      },
+      "notice": {
+        "created": "グループを作成しました。Meta が発行すると、招待リンクがここに表示されます。",
+        "refreshed": "グループを更新しました。",
+        "linkReset": "新しい招待リンクを作成しました。これまでに共有されたリンクはすべて使用できなくなりました。",
+        "updateSent": "WhatsApp に更新を送信しました。Meta が確認すると、ここでグループが更新されます。",
+        "deleted": "グループを削除し、全参加者を退出させました。",
+        "removed": "{count, plural, other {# 人をグループから削除しました。}}",
+        "approved": "{count, plural, other {# 人を承認しました。}}",
+        "rejected": "{count, plural, other {# 件のリクエストを拒否しました。}}",
+        "copyFailed": "リンクをコピーできませんでした。リンクを選択して手動でコピーしてください。"
+      },
+      "removeNumberWarning": "この番号には、ここで {count, plural, other {# 件のグループ記録}} があります。番号を削除すると、このワークスペースからこれらの記録も削除されます。グループ自体は WhatsApp に残り、チャットも受信トレイに残ります。"
+    }
+  }
+}

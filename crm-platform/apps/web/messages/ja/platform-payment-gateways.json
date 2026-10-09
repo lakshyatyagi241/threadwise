@@ -1,0 +1,686 @@
+{
+  "platform-payment-gateways": {
+    "nav": {
+      "gateways": "決済ゲートウェイ",
+      "group": "請求",
+      "orders": "注文履歴",
+      "billingHistory": "請求履歴",
+      "invoices": "請求書",
+      "billingSettings": "請求設定"
+    },
+    "admin": {
+      "title": "決済ゲートウェイ",
+      "description": "ゲートウェイ{count}件。認証情報は保存時に暗号化され、保存後は再表示されません。",
+      "kpi": {
+        "total": "ゲートウェイ",
+        "active": "有効",
+        "india": "インド",
+        "crypto": "暗号資産"
+      },
+      "tabsLabel": "地域で絞り込み",
+      "all": "すべて",
+      "search": "名前またはスラッグで検索",
+      "emptyTitle": "ここにゲートウェイはありません",
+      "emptyMessage": "この地域と検索条件に一致するものはありません。別のタブを選ぶか、検索をクリアしてください。",
+      "regions": {
+        "popular": "人気",
+        "india": "インド",
+        "asia": "アジア",
+        "mena": "MENA",
+        "europe": "ヨーロッパ",
+        "us": "米国・カナダ",
+        "africa": "アフリカ",
+        "latam": "ラテンアメリカ",
+        "crypto": "暗号資産",
+        "offline": "オフライン"
+      },
+      "card": {
+        "active": "有効",
+        "disabled": "無効",
+        "mode": {
+          "sandbox": "サンドボックス",
+          "live": "本番"
+        },
+        "keysSaved": "キーを保存済み",
+        "noDriverBadge": "ドライバーはまだ利用できません",
+        "activate": "有効化",
+        "disable": "無効化",
+        "savedPlaceholder": "保存済みです。そのままにする場合は空欄のままにしてください。",
+        "clear": "保存済みの値を削除",
+        "undoClear": "保存済みの値を保持",
+        "modeLabel": "モード",
+        "sortOrder": "並び順",
+        "currencies": "対応通貨",
+        "currenciesAll": "未選択: すべての通貨を受け付けます",
+        "currenciesSelected": "{count, plural, other {#件選択中}}",
+        "currenciesHint": "購入者には、チェックした通貨の場合のみこのゲートウェイが表示されます。すべてをチェックしないままにすると、どの通貨でも受け付けます。",
+        "webhookUrl": "Webhook URL",
+        "webhookHint": "支払いの通知を受け取れるよう、このURLを決済プロバイダーのダッシュボードに貼り付けてください。",
+        "saving": "保存中",
+        "save": "保存",
+        "readOnly": "決済ゲートウェイを変更できるのはスーパー管理者のみです。",
+        "saved": "{name}の設定を保存しました。",
+        "activated": "{name}を有効化しました。",
+        "deactivated": "{name}を無効化しました。"
+      },
+      "errors": {
+        "conflict": "このゲートウェイは別の人によって変更されました。再読み込みしました。内容を確認してから、もう一度保存してください。",
+        "notConfigured": "先に必須項目を入力してください: {fields}",
+        "noDriver": "このゲートウェイのドライバーはこのリリースにはまだないため、設定はできますが有効化はできません。",
+        "forbidden": "決済ゲートウェイを変更できるのはスーパー管理者のみです。",
+        "generic": "問題が発生しました。もう一度お試しください。"
+      }
+    },
+    "checkout": {
+      "title": "注文を完了",
+      "walletTitle": "ウォレットに入金",
+      "subtitle": "価格を確認し、お支払い者を入力して、支払い方法を選んでください。",
+      "loading": "決済を読み込み中",
+      "account": "アカウント",
+      "name": "氏名",
+      "email": "メールアドレス",
+      "billingAddress": "請求先住所",
+      "company": "会社名",
+      "taxId": "税番号",
+      "taxIdHint": "GSTIN、VAT、EINをお持ちの場合は入力してください。",
+      "address": "住所",
+      "city": "市区町村",
+      "postal": "郵便番号",
+      "country": "国",
+      "currency": "通貨",
+      "period": "請求期間",
+      "periods": {
+        "monthly": "月払い",
+        "yearly": "年払い"
+      },
+      "paymentMethod": "支払い方法",
+      "noGateway": "{currency}の決済ゲートウェイはまだ設定されていません。管理者に有効化を依頼してください。",
+      "noGatewayButton": "決済ゲートウェイが未設定です",
+      "sandbox": "サンドボックス",
+      "pay": "{amount}を支払う",
+      "processing": "支払いを開始しています",
+      "summary": "注文の概要",
+      "billed": {
+        "monthly": "1期間分の請求",
+        "yearly": "12か月分の請求"
+      },
+      "subtotal": "小計",
+      "tax": "{label}（{rate}%）",
+      "total": "本日のお支払い合計",
+      "updating": "価格を更新中",
+      "errors": {
+        "gatewayUnavailable": "そのゲートウェイは現在利用できません。",
+        "currencyUnsupported": "そのゲートウェイはこの通貨に対応していません。別のゲートウェイか通貨を選んでください。",
+        "providerError": "決済プロバイダーでエラーが発生しました。もう一度試すか、別のゲートウェイを選んでください。",
+        "notPurchasable": "このプランはオンラインで購入できません。",
+        "downgrade": "ダウングレードはオンラインでは利用できません。下位プランへの変更はサポートにお問い合わせください。",
+        "amountTooLow": "ウォレットに追加する金額をより大きく入力してください。",
+        "couponUnavailable": "クーポンはまだ利用できません。",
+        "forbidden": "購入する権限がありません。",
+        "notFound": "そのプランが見つかりませんでした。",
+        "widgetBlocked": "支払いウィンドウを開けませんでした。ブラウザで許可されているか確認して、もう一度お試しください。",
+        "generic": "問題が発生しました。もう一度お試しください。",
+        "couponRejected": "そのクーポンは使用できません。"
+      },
+      "coupon": "クーポンコード",
+      "couponApply": "適用",
+      "couponApplied": "クーポン{code}を適用しました：{amount}割引",
+      "couponRemove": "削除",
+      "couponDiscount": "割引（{code}）",
+      "refundGuarantee": "{days}日間の返金保証",
+      "countryPlaceholder": "国を選択",
+      "autoRenew": "期間ごとに自動更新されます。いつでも解約できます。",
+      "addonRenews": "このアドオンは期間ごとに自動更新されます。いつでも解約でき、有料期間の終了までは引き続きご利用いただけます。",
+      "cardTitle": "カードで支払う",
+      "payNow": "今すぐ支払う"
+    },
+    "orders": {
+      "title": "注文履歴",
+      "lifetime": "累計のお支払い額：{total}",
+      "loading": "注文を読み込み中",
+      "loadFailed": "注文を読み込めませんでした。ページを再読み込みしてもう一度お試しください。",
+      "emptyTitle": "まだ注文はありません",
+      "emptyMessage": "購入履歴がここに表示されます。",
+      "browsePlans": "プランを見る",
+      "loadMore": "もっと読み込む",
+      "outcome": {
+        "success": "お支払いを受け付けました。ありがとうございます。",
+        "failed": "支払いが完了しませんでした。もう一度試すか、別のゲートウェイを選んでください。",
+        "cancelled": "お支払いをキャンセルしました。",
+        "pending": "支払いプロバイダーによる確認を待っています。確認が取れると、このページが更新されます。",
+        "notfound": "その注文は見つかりませんでした。",
+        "proof": "支払いの証明を送信しました。内容を確認し、まもなくプランを有効化します。"
+      },
+      "col": {
+        "order": "注文",
+        "item": "商品",
+        "date": "日付",
+        "amount": "金額",
+        "status": "ステータス",
+        "actions": "操作"
+      },
+      "status": {
+        "pending": "保留中",
+        "awaiting_approval": "承認待ち",
+        "paid": "支払い済み",
+        "failed": "失敗",
+        "cancelled": "キャンセル",
+        "refunded": "返金済み"
+      },
+      "uploadProof": "支払いの証明",
+      "invoice": "請求書"
+    },
+    "billing": {
+      "common": {
+        "admin": "管理者",
+        "breadcrumb": "パンくずリスト",
+        "billingHistory": "請求履歴",
+        "analytics": "分析",
+        "exportCsv": "CSVをエクスポート",
+        "exportTruncated": "エクスポートは{rows}行で停止しました。残りをエクスポートするには絞り込み条件を狭めてください。",
+        "exportFailed": "エクスポートを作成できませんでした。もう一度お試しください。",
+        "actionFailed": "うまくいきませんでした。ページを再読み込みしてもう一度お試しください。",
+        "cancel": "キャンセル",
+        "back": "そのまま残す",
+        "close": "閉じる",
+        "openWorkspace": "ワークスペースを開く",
+        "showing": "{total}件中{from}〜{to}件の{noun}を表示",
+        "pager": "ページ",
+        "previous": "前へ",
+        "next": "次へ",
+        "chartEmpty": "この期間のデータはありません。",
+        "periods": {
+          "monthly": "月次",
+          "yearly": "年次"
+        },
+        "status": {
+          "pending": "保留中",
+          "awaiting_approval": "承認待ち",
+          "paid": "支払い済み",
+          "failed": "失敗",
+          "cancelled": "キャンセル",
+          "refunded": "返金済み"
+        },
+        "windows": {
+          "7d": "過去7日間",
+          "30d": "過去30日間",
+          "90d": "過去90日間",
+          "1y": "過去1年",
+          "all": "全期間"
+        }
+      },
+      "orders": {
+        "title": "注文履歴",
+        "eyebrow": "管理者 · 請求とプラン · 注文履歴",
+        "titleFirst": "注文",
+        "titleSecond": "履歴",
+        "description": "サブスクリプションの注文、プランのアップグレードとダウングレード、アドオンの購入、一回限りのチャージ：ワークスペースが行ったすべての取引判断です。",
+        "window": "期間",
+        "windows": {
+          "90d": "過去90日間",
+          "this_year": "今年",
+          "all": "全期間"
+        },
+        "kpi": {
+          "total": "注文の合計",
+          "vsPrevious": "前期間との比較",
+          "upgrades": "アップグレード",
+          "mrrAdded": "MRRに+{amount}追加",
+          "downgrades": "ダウングレード",
+          "mrrLowered": "下位プランで{amount}",
+          "addons": "アドオンのセット",
+          "attached": "{amount}を追加",
+          "cancellations": "解約",
+          "mrrLost": "MRRで-{amount}の損失"
+        },
+        "typeFilter": "注文の種類で絞り込み",
+        "types": {
+          "all": "すべて",
+          "new": "新規サブスクリプション",
+          "upgrade": "アップグレード",
+          "downgrade": "ダウングレード",
+          "addon": "アドオン",
+          "cancel": "キャンセル"
+        },
+        "rowTypes": {
+          "new": "新規",
+          "renewal": "更新",
+          "upgrade": "アップグレード",
+          "downgrade": "ダウングレード",
+          "addon": "アドオン",
+          "wallet_topup": "ウォレットへのチャージ",
+          "manual": "手動"
+        },
+        "search": "注文番号、ワークスペース、プランで検索…",
+        "noun": "件の注文",
+        "col": {
+          "order": "注文番号",
+          "date": "日付",
+          "workspace": "ワークスペース",
+          "type": "種類",
+          "item": "プラン / 商品",
+          "mrr": "MRRの増減",
+          "total": "合計",
+          "status": "ステータス"
+        },
+        "empty": "この期間に注文はありません。",
+        "awaitingApproval": "承認待ち",
+        "actions": {
+          "markPaid": "支払い済みにする",
+          "cancelOrder": "キャンセル",
+          "approve": "承認",
+          "reject": "却下"
+        },
+        "confirm": {
+          "approveTitle": "この注文を支払い済みにしますか？",
+          "approve": "この注文を支払い済みにしてプランを有効化しますか？",
+          "cancelTitle": "この注文をキャンセルしますか？",
+          "cancel": "この保留中の注文をキャンセルしますか？ キャンセル済みとしてマークされ、未収金から除外されます。"
+        },
+        "reject": {
+          "title": "{order}を却下",
+          "reason": "理由（任意）"
+        },
+        "awaiting": {
+          "title": "承認待ち",
+          "ref": "参照:",
+          "proofAttached": "支払いの証明を添付済み"
+        }
+      },
+      "orderAnalytics": {
+        "title": "注文分析",
+        "eyebrow": "管理者 · 請求とプラン · 注文分析",
+        "titleFirst": "注文",
+        "titleSecond": "分析",
+        "description": "サブスクリプション、アップグレード、ダウングレード、アドオン、キャンセル：プラットフォーム全体で純売上の動きを左右している要因です。",
+        "window": "期間",
+        "viewLedger": "台帳を表示",
+        "kpi": {
+          "total": "注文の合計",
+          "newMrr": "MRRの純増",
+          "paid": "有料{count}件",
+          "lostMrr": "失われたMRR",
+          "cancels": "解約{count}件",
+          "aov": "平均注文額",
+          "paidOrders": "有料の注文",
+          "attach": "アドオンの付帯率",
+          "attachLabel": "{addons}件のアドオン / 全{total}件",
+          "conversion": "転換率",
+          "conversionHint": "新規登録{signups}件中の有料の注文"
+        },
+        "motion": {
+          "kicker": "注文の動向",
+          "title": "有料の注文と解約",
+          "paid": "有料",
+          "cancelled": "解約または失敗"
+        },
+        "typeMix": {
+          "kicker": "注文種類の内訳",
+          "title": "種類別"
+        },
+        "addons": {
+          "kicker": "販売されたアドオン",
+          "title": "上位の実績",
+          "empty": "この期間にアドオンの注文はありません。"
+        },
+        "funnel": {
+          "kicker": "転換ファネル",
+          "title": "新規登録から有料へ",
+          "note": "集計対象の段階のみ表示しています。"
+        },
+        "countries": {
+          "kicker": "国別",
+          "title": "主な市場",
+          "empty": "請求先の国がまだ入力されていません。"
+        },
+        "cohorts": {
+          "kicker": "コホート継続率",
+          "title": "N か月後も利用中のワークスペースの割合",
+          "last": "直近6コホート",
+          "emptyTitle": "新規登録のワークスペースはまだありません",
+          "empty": "ワークスペースが登録されると、コホートが表示されます。"
+        }
+      },
+      "history": {
+        "title": "請求履歴",
+        "eyebrow": "管理者 · 請求とプラン · 請求履歴",
+        "titleFirst": "請求",
+        "titleSecond": "履歴",
+        "description": "プラットフォームが処理したすべての支払いイベントです。全ワークスペースにわたる請求、返金、再試行を含みます。",
+        "window": "期間",
+        "kpi": {
+          "gross": "総売上",
+          "vsPrev": "前期間との比較",
+          "charges": "成功した請求",
+          "successRate": "成功率{pct}%",
+          "failed": "失敗",
+          "dunning": "再請求または督促の対象",
+          "refunds": "発行された返金",
+          "refundsTotal": "合計{amount}",
+          "chargebacks": "チャージバック",
+          "disputed": "{amount}が係争中"
+        },
+        "trend": {
+          "kicker": "推移",
+          "title": "日別の請求と返金",
+          "charges": "請求",
+          "refunds": "返金"
+        },
+        "statusFilter": "支払いステータスで絞り込み",
+        "statuses": {
+          "all": "すべて",
+          "paid": "成功",
+          "failed": "失敗",
+          "refunded": "返金済み",
+          "pending": "保留中"
+        },
+        "gateway": "ゲートウェイ",
+        "allGateways": "すべてのゲートウェイ",
+        "search": "注文番号、ワークスペース、顧客で検索…",
+        "noun": "件のイベント",
+        "col": {
+          "date": "日付",
+          "order": "注文番号",
+          "workspace": "ワークスペース",
+          "gateway": "ゲートウェイ",
+          "plan": "プラン",
+          "amount": "金額",
+          "status": "ステータス",
+          "actions": "操作"
+        },
+        "empty": "一致する支払いイベントはありません。"
+      },
+      "billingAnalytics": {
+        "title": "請求分析",
+        "eyebrow": "管理者 · 請求とプラン · 請求分析",
+        "titleFirst": "請求",
+        "titleSecond": "分析",
+        "description": "プラットフォーム全体のキャッシュフロー、支払い成功率、ゲートウェイの分担、返金の推移です。",
+        "window": "期間",
+        "viewLedger": "台帳を表示",
+        "kpi": {
+          "gross": "総売上",
+          "net": "純売上",
+          "netPct": "純額{pct}%",
+          "success": "認証成功率",
+          "failed": "失敗",
+          "events": "{count}件のイベント",
+          "refunds": "返金",
+          "chargebacks": "チャージバック",
+          "disputes": "{count}件の紛争"
+        },
+        "cashFlow": {
+          "kicker": "キャッシュフロー",
+          "title": "請求、返金、失敗",
+          "charges": "請求",
+          "refunds": "返金",
+          "failed": "失敗"
+        },
+        "gatewayShare": {
+          "title": "ゲートウェイの分担",
+          "hint": "プロバイダー別の有料売上の内訳"
+        },
+        "topPayers": {
+          "title": "支払額の多いワークスペース上位",
+          "hint": "期間内の最高支払額",
+          "all": "すべてのワークスペース",
+          "workspace": "ワークスペース",
+          "orders": "注文",
+          "total": "合計",
+          "empty": "この期間に有料の注文はまだありません。",
+          "unknown": "削除されたワークスペース"
+        },
+        "statusMix": {
+          "title": "注文ステータスの内訳",
+          "hint": "ライフサイクルの状態別の件数"
+        }
+      },
+      "invoices": {
+        "title": "請求書",
+        "eyebrow": "管理者 · 請求とプラン · 請求書",
+        "titleFirst": "すべて",
+        "titleSecond": "件の請求書",
+        "description": "すべての注文を請求書として表示します。ステータスで絞り込み、請求書を開いて印刷し、支払い済みにしたり、無効化したり、手動で発行したりできます。",
+        "window": "期間",
+        "windows": {
+          "all": "全期間",
+          "this_month": "今月",
+          "last_month": "先月",
+          "this_quarter": "今四半期",
+          "this_year": "今年"
+        },
+        "kpi": {
+          "total": "請求書の合計",
+          "allTime": "全期間",
+          "paid": "支払い済み",
+          "outstanding": "未収金",
+          "due": "{amount}の未払い",
+          "overdue": "期限超過",
+          "overdueHint": "15日超の遅延",
+          "thisMonth": "今月",
+          "mom": "前月比"
+        },
+        "statusFilter": "請求書のステータスで絞り込み",
+        "statuses": {
+          "all": "すべて",
+          "paid": "支払い済み",
+          "outstanding": "未収金",
+          "overdue": "期限超過",
+          "refunded": "返金済み",
+          "void": "無効"
+        },
+        "badges": {
+          "paid": "支払い済み",
+          "outstanding": "未収金",
+          "overdue": "期限超過",
+          "refunded": "返金済み",
+          "void": "無効"
+        },
+        "search": "請求書番号、ワークスペース、オーナーで検索…",
+        "noun": "件の請求書",
+        "col": {
+          "number": "請求書番号",
+          "issued": "発行日",
+          "due": "支払期限",
+          "workspace": "ワークスペース",
+          "item": "商品",
+          "amount": "金額",
+          "status": "ステータス",
+          "view": "表示",
+          "actions": "操作"
+        },
+        "daysLate": "{days}日遅延",
+        "refunded": "返金済み",
+        "viewInvoice": "請求書を表示",
+        "rowMenu": "{number}の操作",
+        "empty": "この期間に請求書はありません。",
+        "actions": {
+          "view": "表示",
+          "markPaid": "支払い済みにする",
+          "void": "無効化",
+          "delete": "削除"
+        },
+        "confirm": {
+          "markPaidTitle": "この請求書を支払い済みにしますか？",
+          "markPaid": "この請求書を支払い済みにしますか？ 購入されたプラン、アドオン、ウォレット残高も適用されます。",
+          "markPaidManual": "この手動発行の請求書を支払い済みにしますか？ 支払いのみが記録されます。",
+          "voidTitle": "この請求書を無効化しますか？",
+          "void": "この請求書を無効化しますか？ 記録は残りますが、キャンセル扱いになります。",
+          "deleteTitle": "この請求書を削除しますか？",
+          "delete": "この請求書を完全に削除しますか？ この操作は元に戻せません。"
+        },
+        "manual": {
+          "tag": "手動",
+          "open": "手動の請求書",
+          "eyebrow": "請求書",
+          "title": "手動の請求書",
+          "workspace": "ワークスペース",
+          "chooseWorkspace": "ワークスペースを選択",
+          "customerName": "顧客名",
+          "customerNameHint": "空欄の場合はワークスペース名が使われます。",
+          "customerEmail": "顧客のメールアドレス",
+          "description": "説明",
+          "amount": "金額",
+          "currency": "通貨",
+          "status": "ステータス",
+          "statuses": {
+            "pending": "保留中",
+            "paid": "支払い済み"
+          },
+          "issuedAt": "発行日",
+          "issuedAtHint": "空欄の場合は本日の日付になります。過去の日付を指定すると、請求書の日付が遡って設定されます。",
+          "submit": "請求書を作成",
+          "created": "手動の請求書{number}を作成しました。"
+        }
+      },
+      "invoice": {
+        "title": "請求書",
+        "print": "印刷",
+        "downloadPdf": "PDFをダウンロード",
+        "banner": {
+          "invoice": "請求書番号{number}",
+          "issued": "発行日: {date}",
+          "settled": "{date}に決済済み",
+          "paidInFull": "全額支払い済み"
+        },
+        "taxInvoice": "税務請求書",
+        "invoiceWord": "請求書",
+        "taxIdLabel": "GSTIN/VAT",
+        "number": "請求書番号",
+        "issueDate": "発行日",
+        "paidDate": "支払日",
+        "status": "ステータス",
+        "billTo": "請求先",
+        "payment": "支払い",
+        "method": "支払い方法",
+        "txn": "取引ID",
+        "captured": "決済日時",
+        "currency": "通貨",
+        "coupon": "クーポン",
+        "description": "説明",
+        "qty": "数量",
+        "unit": "単価",
+        "total": "合計",
+        "discount": "割引",
+        "code": "コード",
+        "subtotal": "小計",
+        "amountPaid": "支払済み金額",
+        "balanceDue": "請求残高",
+        "notes": "備考",
+        "notesText": "ご利用ありがとうございます。この請求書は上記の注文に対するものです。請求に関するお問い合わせには、請求書番号をご記載ください。",
+        "help": "お困りですか？",
+        "helpFallback": "プラットフォーム管理者にお問い合わせください。",
+        "refundNote": "サポートや返金については、お支払いから{days}日以内にご連絡ください。",
+        "regNo": "登録番号",
+        "computerGenerated": "本請求書はコンピューターで生成されたものであり、署名は不要です。"
+      },
+      "settings": {
+        "title": "請求設定",
+        "eyebrow": "管理者 · 請求とプラン · 設定",
+        "titleFirst": "請求",
+        "titleSecond": "設定",
+        "description": "料金ページと決済ページが参照するすべての設定です：税金、返金期間、年払い割引、自動更新、請求書の発行者情報、国の一覧。変更は次回のページ読み込み時に反映されます。",
+        "previewPlans": "プランページをプレビュー",
+        "readOnly": "請求設定を変更できるのはスーパー管理者のみです。",
+        "conflict": "この設定は別の人によって変更されました。再読み込みしました。内容を確認してから、もう一度保存してください。",
+        "saved": "請求設定を保存しました。",
+        "save": "設定を保存",
+        "tax": {
+          "title": "税金",
+          "hint": "すべての決済の小計に適用されます。表示価格が税込みの場合はオフにしてください。",
+          "rate": "税率（%）",
+          "label": "ラベル",
+          "labelPlaceholder": "GST / VAT / 売上税"
+        },
+        "company": {
+          "title": "会社情報と請求情報",
+          "hint": "法人の詳細情報です。すべての請求書に印刷されます：「請求元」欄、税番号、フッター。",
+          "name": "正式な会社名",
+          "taxId": "税番号（GSTIN / VAT）",
+          "address": "登録住所",
+          "regNo": "登記番号 / CIN",
+          "email": "請求用メールアドレス",
+          "phone": "サポート電話番号"
+        },
+        "logo": {
+          "title": "請求書のロゴ",
+          "hint": "すべての請求書と領収書の上部に表示されます。PNG、JPG、SVG、WebP形式で、{kb}KBまで。空欄の場合はサイトのロゴを使用します。",
+          "none": "ロゴなし",
+          "choose": "ロゴファイルを選択",
+          "remove": "現在のロゴを削除（サイトのロゴに戻します）",
+          "fallback": "現在はサイトのブランドロゴを代わりに使用しています。",
+          "tooBig": "ロゴは{kb}KB以下にしてください。"
+        },
+        "refund": {
+          "title": "返金保証",
+          "hint": "有効にすると、決済画面の注文概要の下に保証期間が表示されます。オフにすると、すべての場所で非表示になります。",
+          "days": "保証期間（日数）"
+        },
+        "yearly": {
+          "title": "年払いの切り替え",
+          "hint": "料金ページに月払い/年払いの切り替えを表示します。すべてのプランが月払いのみの場合は、完全に非表示にしてください。",
+          "discount": "年払い割引（%）",
+          "formula": "年払いの価格 = 月額 × 12 × (1 − 割引率%)"
+        },
+        "recurring": {
+          "title": "自動更新のサブスクリプション",
+          "hint": "オンにすると、期間付きの有料プラン（月払いまたは年払い）が自動更新されます。決済ゲートウェイが各期間でカードに請求し、プランの有効期限も自動で延長されます。無料プラン、無期限プラン、見積もりによるカスタムプランは更新されず、定期課金に対応していないゲートウェイでは一回払いのままです。すべての購入を一回限りの請求にするにはオフにしてください。",
+          "graceDays": "猶予期間（日数）",
+          "graceHint": "自動更新の請求が失敗した場合、ゲートウェイが再試行している間、期間終了後もプランまたはアドオンはこの日数だけ有効なままになります。0にすると猶予期間は無効になります。",
+          "gateways": "自動更新に対応しているゲートウェイ",
+          "note": "Braintreeは、ゲートウェイの認証情報でプランIDを設定した場合にのみ自動更新されます。Squareは、顧客に請求書をメールで送信して各期間の請求を行います（カードへの自動請求はありません）。すべての更新には、決済プロバイダーのダッシュボードでゲートウェイのWebhook URLを設定する必要があります。"
+        },
+        "countries": {
+          "title": "決済画面の国のリスト",
+          "hint": "請求フォームの国の選択肢で、請求書の住所に使用されます。1行に1か国を入力してください。順序は保持されます。"
+        },
+        "links": {
+          "coupons": "クーポン",
+          "couponsTitle": "割引コードを管理",
+          "couponsHint": "クーポンを追加、編集、または無効化します。",
+          "faqs": "よくある質問",
+          "faqsTitle": "料金ページのよくある質問を編集",
+          "faqsHint": "プランの下に表示されるアコーディオン項目です。",
+          "configured": "{count}件設定済み。"
+        }
+      }
+    },
+    "offline": {
+      "eyebrow": {
+        "bank_transfer": "決済画面 / 銀行振込",
+        "offline": "チェックアウト / オフライン"
+      },
+      "title": {
+        "bank_transfer": "銀行振込で支払う",
+        "offline": "この注文を完了するにはお問い合わせください"
+      },
+      "intro": {
+        "bank_transfer": "下記の口座に<strong>{amount}</strong>をお振り込みください。振込人名には<mono>{ref}</mono>をご記入ください。注文と照合できます。",
+        "offline": "注文 <mono>{ref}</mono> · <strong>{amount}</strong> · 請求通貨 {currency}"
+      },
+      "instructions": "手順",
+      "referenceNote": "<strong>参照番号:</strong>振込時に<mono>{ref}</mono>を含めてから、下記で支払い証明を提出してください。当社が入金を確認するとプランが有効になります。",
+      "proofTitle": "支払い証明を提出",
+      "proofHelp": "お支払い済みですか?領収書と参照番号をアップロードしてください。確認のうえプランを有効化します。",
+      "later": {
+        "bank_transfer": "振込済みです。証明は後で提出します",
+        "offline": "わかりました。証明は後で提出します"
+      }
+    },
+    "proof": {
+      "file": "支払いのスクリーンショット / 領収書",
+      "fileHint": "JPG、PNG、WEBP、PDF · 最大 4 MB",
+      "reference": "参照番号 / UTR番号",
+      "referencePlaceholder": "例: UTR / 取引ID",
+      "note": "メモ(任意)",
+      "notePlaceholder": "この支払いについてお知らせいただきたいことがあれば",
+      "submit": "支払い証明を提出",
+      "sending": "アップロード中",
+      "chooseFile": "アップロードする領収書を選択してください。",
+      "tooLarge": "そのファイルは 4 MB を超えています。",
+      "rejected": "そのファイル形式は使用できません。JPG、PNG、WEBP、PDF を使用してください。",
+      "closed": "この注文については支払い証明を提出できなくなりました。",
+      "failed": "ファイルをアップロードできませんでした。もう一度お試しください。"
+    }
+  }
+}

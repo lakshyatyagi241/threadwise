@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "ويب هوك",
+      "forwarding": "إعادة توجيه ويب هوك"
+    },
+    "common": {
+      "loading": "جارٍ التحميل",
+      "retry": "حاول مرة أخرى",
+      "requestId": "معرّف الطلب",
+      "dash": "-",
+      "errors": {
+        "forbidden": "ليست لديك صلاحية لتنفيذ هذا.",
+        "request": "تعذّر إكمال هذا الطلب.",
+        "unexpected": "حدث خطأ من جهتنا. حاول مرة أخرى بعد قليل.",
+        "network": "تعذّر الوصول إلى الخادم. تحقق من اتصالك ثم حاول مرة أخرى.",
+        "conflict": "غيّر شخص آخر هذا الهدف. أُعيد تحميل القائمة: طبّق تغييرك مرة أخرى.",
+        "validation": "بعض القيم غير صالحة. تحقق من الحقول المميزة.",
+        "notFound": "هذا العنصر لم يعد موجودًا.",
+        "urlRejected": "هذا الرابط غير مسموح. استخدم عنوان https يمكن الوصول إليه من الإنترنت."
+      }
+    },
+    "page": {
+      "eyebrow": "الإدارة / النظام / ويب هوك",
+      "title": "إعادة توجيه ويب هوك",
+      "description": "قائمة الخدمات التي يتلقى كل منها نسخة من كل ويب هوك من Meta، ويُديرها مشغّل المنصة.",
+      "banner": "تسمح Meta بعنوان استدعاء واحد فقط. نستقبله مرة واحدة، ونتحقق منه، ثم نعيد توجيه المحتوى الخام دون تغيير (مع التوقيع الأصلي) إلى كل هدف نشط.",
+      "superOnly": "لا يمكن إدارة إعادة توجيه الويب هوك إلا من قِبل المشرف العام.",
+      "add": "إضافة هدف",
+      "tabs": {
+        "targets": "الأهداف",
+        "failures": "عمليات التسليم الفاشلة"
+      }
+    },
+    "targets": {
+      "empty": "لا توجد أهداف لإعادة التوجيه بعد",
+      "emptyBody": "أضف هدفًا لبدء إعادة توجيه ويب هوك Meta إلى خدمة أخرى.",
+      "columns": {
+        "target": "الهدف",
+        "active": "نشط",
+        "fields": "الحقول",
+        "deliveries": "عمليات التسليم",
+        "last": "آخر تسليم",
+        "actions": "الإجراءات"
+      },
+      "allFields": "كل الحقول",
+      "success": "{count, number} ناجح",
+      "failure": "{count, number} فاشل",
+      "pending": "{count, number} قيد الانتظار",
+      "pendingLabel": "{count, number} عمليات تسليم فاشلة بانتظار إعادة الإرسال",
+      "neverDelivered": "لم يُسلَّم شيء بعد",
+      "lastStatus": "الحالة {status}",
+      "lastError": "خطأ: {error}",
+      "lastAt": "في {time}",
+      "activeSwitch": "إعادة التوجيه إلى {name}",
+      "on": "الهدف مفعّل",
+      "off": "الهدف متوقف",
+      "edit": "تعديل",
+      "test": "اختبار",
+      "testing": "جارٍ الاختبار",
+      "testOk": "نجح الاختبار: الحالة {status} في {ms, number} مللي ثانية",
+      "testFailed": "فشل الاختبار: {reason} ({ms, number} مللي ثانية)",
+      "testNoStatus": "لا توجد استجابة",
+      "testStatus": "الحالة {status}",
+      "delete": "حذف",
+      "deleteTitle": "حذف {name}؟",
+      "deleteBody": "سيتوقف الهدف عن استقبال الويب هوك، وستُحذف عمليات التسليم الفاشلة المحفوظة له. لا يمكن التراجع عن هذا.",
+      "deleteConfirm": "حذف الهدف",
+      "cancel": "إلغاء",
+      "toasts": {
+        "created": "تمت إضافة {name}",
+        "saved": "تم حفظ {name}",
+        "on": "{name} مفعّل",
+        "off": "{name} متوقف",
+        "deleted": "تم حذف {name}"
+      }
+    },
+    "dialog": {
+      "createTitle": "إضافة هدف إعادة التوجيه",
+      "editTitle": "تعديل {name}",
+      "close": "إغلاق",
+      "name": "الاسم",
+      "namePlaceholder": "خدمة التحليلات",
+      "url": "الرابط",
+      "urlHint": "https فقط. تُرفض العناوين الموجودة على الشبكات الخاصة.",
+      "headerName": "اسم الترويسة (اختياري)",
+      "headerNameHint": "تُرسل مع كل عملية تسليم، مثل Authorization.",
+      "headerValue": "قيمة الترويسة",
+      "headerValueSaved": "محفوظة وتنتهي بـ ••••{last4}. اتركها فارغة للإبقاء عليها.",
+      "headerValueSavedNoLast4": "محفوظة. اتركها فارغة للإبقاء عليها.",
+      "headerValueHint": "للكتابة فقط: لا تُعرض مرة أخرى بعد الحفظ.",
+      "removeHeader": "إزالة الترويسة المحفوظة",
+      "fieldFilter": "فلتر الحقول",
+      "fieldFilterHint": "اتركه فارغًا لإعادة توجيه كل الحقول. اكتب اسم حقل ثم اضغط Enter، مثل messages أو message_template_status_update.",
+      "fieldFilterPlaceholder": "إضافة حقل",
+      "fieldRemove": "إزالة {field}",
+      "timeout": "المهلة (بالثواني)",
+      "timeoutHint": "من 1 إلى 30",
+      "maxAttempts": "أقصى عدد للمحاولات",
+      "maxAttemptsHint": "من 1 إلى 10",
+      "active": "إعادة التوجيه إلى هذا الهدف",
+      "save": "حفظ",
+      "saving": "جارٍ الحفظ",
+      "cancel": "إلغاء",
+      "errors": {
+        "nameRequired": "أدخل اسمًا.",
+        "urlRequired": "أدخل الرابط.",
+        "urlHttps": "يجب أن يبدأ الرابط بـ https://.",
+        "headerNameInvalid": "استخدم الأحرف والأرقام والشرطات فقط.",
+        "headerValueRequired": "تحتاج الترويسة إلى اسم وقيمة معًا.",
+        "headerNameRequired": "أدخل اسم الترويسة أيضًا.",
+        "timeout": "أدخل عددًا صحيحًا من 1 إلى 30.",
+        "maxAttempts": "أدخل عددًا صحيحًا من 1 إلى 10."
+      }
+    },
+    "failures": {
+      "empty": "لا توجد عمليات تسليم فاشلة",
+      "emptyBody": "تُحفظ هنا عمليات التسليم التي نفدت محاولاتها لمدة 14 يومًا حتى تتمكن من إعادة إرسالها.",
+      "filterAll": "كل الأهداف",
+      "filterLabel": "الهدف",
+      "columns": {
+        "target": "الهدف",
+        "when": "وقت الفشل",
+        "attempts": "المحاولات",
+        "reason": "السبب",
+        "size": "الحجم",
+        "actions": "الإجراء"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} بايت",
+      "replay": "إعادة الإرسال",
+      "replaying": "جارٍ إعادة الإرسال",
+      "replayed": "أُعيد الإرسال {time}",
+      "replayOk": "تم التسليم: الحالة {status} في {ms, number} مللي ثانية",
+      "replayFailed": "لم يُسلَّم: {reason} ({ms, number} مللي ثانية)",
+      "reasonStatus": "الحالة {status}",
+      "reasonNone": "لا توجد استجابة"
+    }
+  }
+}

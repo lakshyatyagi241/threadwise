@@ -1,0 +1,446 @@
+{
+  "team-inbox-conversations": {
+    "nav": {
+      "inbox": "Skrzynka odbiorcza"
+    },
+    "common": {
+      "dismiss": "Odrzuć"
+    },
+    "screen": {
+      "listRegion": "Rozmowy",
+      "panelRegion": "Kontakt i notatki",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "conflict": "Ktoś inny jako pierwszy zmienił tę rozmowę. Została odświeżona; spróbuj ponownie.",
+      "assigned": "Rozmowa przypisana.",
+      "assignedToYou": "Przypisano do Ciebie.",
+      "unassigned": "Rozmowa nieprzypisana.",
+      "resolved": "Rozmowa zakończona.",
+      "reopened": "Rozmowa otwarta ponownie.",
+      "deleteNoteTitle": "Usunąć tę notatkę?",
+      "deleteNoteMessage": "Notatka zostanie usunięta dla wszystkich w zespole. Tej operacji nie można cofnąć.",
+      "deleteNoteConfirm": "Usuń notatkę",
+      "pickTitle": "Wybierz rozmowę",
+      "pickMessage": "Wybierz rozmowę z listy, aby ją przeczytać i odpowiedzieć. Nowe wiadomości pojawiają się tutaj automatycznie.",
+      "shortcuts": "Skróty: j i k przechodzą po liście, e kończy rozmowę, / wyszukuje.",
+      "teamChanged": "Zespół zaktualizowany."
+    },
+    "list": {
+      "title": "Skrzynka odbiorcza",
+      "refresh": "Odśwież listę",
+      "openSimulator": "Otwórz symulator klienta",
+      "search": "Szukaj rozmów",
+      "searchPlaceholder": "Szukaj po nazwie lub numerze",
+      "tabsLabel": "Widoki rozmów",
+      "tabs": {
+        "all": "Wszystkie",
+        "mine": "Moje",
+        "unassigned": "Nieprzypisane",
+        "unread": "Nieprzeczytane"
+      },
+      "statusFilter": "Status",
+      "statusOpen": "Otwarte",
+      "statusAll": "Wszystkie statusy",
+      "status": {
+        "open": "Otwarte",
+        "pending": "Oczekujące",
+        "snoozed": "Odroczone",
+        "resolved": "Zakończone",
+        "closed": "Zakończone",
+        "spam": "Spam"
+      },
+      "priority": {
+        "low": "Niski",
+        "normal": "Normalny",
+        "high": "Wysoki",
+        "urgent": "Pilny"
+      },
+      "channelFilter": "Kanał",
+      "allChannels": "Wszystkie kanały",
+      "archived": "Zarchiwizowane",
+      "backToInbox": "Wróć do skrzynki odbiorczej",
+      "loading": "Wczytywanie rozmów",
+      "retry": "Spróbuj ponownie",
+      "listLabel": "Rozmowy",
+      "loadMore": "Wczytaj więcej",
+      "moreFailed": "Nie udało się wczytać kolejnych rozmów.",
+      "unreadCount": "{count, plural, one {# nieprzeczytana wiadomość} few {# nieprzeczytane wiadomości} many {# nieprzeczytanych wiadomości} other {# nieprzeczytanej wiadomości}}",
+      "you": "Ty:",
+      "noMessages": "Brak wiadomości",
+      "windowClosed": "Okno zamknięte",
+      "windowLeftHours": "Pozostało {hours} g {minutes} min",
+      "windowLeftMinutes": "Pozostało {minutes} min",
+      "unassigned": "Nieprzypisane",
+      "needsContact": "Brak karty kontaktu",
+      "gettingStarted": {
+        "title": "Połącz kanał, aby zacząć",
+        "message": "Skrzynka odbiorcza zapełnia się, gdy klienci piszą na połączony kanał. Połącz kanał, a każda rozmowa trafi tutaj.",
+        "connect": "Połącz kanał"
+      },
+      "emptyFiltered": {
+        "title": "Brak pasujących rozmów",
+        "message": "Żadna rozmowa nie pasuje do tych filtrów. Wyczyść je, aby zobaczyć wszystkie rozmowy.",
+        "clear": "Wyczyść filtry"
+      },
+      "empty": {
+        "all": {
+          "title": "Brak rozmów",
+          "message": "Gdy klient napisze na jeden z Twoich kanałów, rozmowa pojawi się tutaj."
+        },
+        "mine": {
+          "title": "Brak rozmów przypisanych do Ciebie",
+          "message": "Rozmowy przypisane do Ciebie pojawią się tutaj. Otwórz rozmowę z listy Wszystkie i przypisz ją sobie."
+        },
+        "unassigned": {
+          "title": "Każda rozmowa ma właściciela",
+          "message": "Tutaj wyświetlane są nowe rozmowy, których nikt jeszcze nie przejął."
+        },
+        "unread": {
+          "title": "Wszystko przeczytane",
+          "message": "Tutaj wyświetlane są rozmowy z nowymi wiadomościami od klientów."
+        }
+      }
+    },
+    "status": {
+      "received": "Odebrano",
+      "queued": "Wysyłanie",
+      "sent": "Wysłano",
+      "delivered": "Dostarczono",
+      "read": "Przeczytano",
+      "failed": "Nie wysłano"
+    },
+    "errors": {
+      "conflict": "Ktoś inny zmienił to jako pierwszy. Odświeżono; spróbuj ponownie.",
+      "windowClosed": "Okno odpowiedzi 24-godzinne zostało zamknięte, więc nie można wysłać wiadomości dowolnej.",
+      "planLimit": "Osiągnięto miesięczny limit wiadomości w Twoim planie.",
+      "channelDisconnected": "Ten kanał jest rozłączony. Połącz go ponownie, aby wysyłać wiadomości.",
+      "sendHalted": "Wysyłanie jest obecnie wstrzymane dla całej platformy. Spróbuj ponownie później.",
+      "notFound": "Ta rozmowa już nie istnieje lub nie masz do niej dostępu.",
+      "notRetryable": "Ponownie można wysłać tylko wiadomość, która się nie powiodła.",
+      "mediaNotFound": "Załącznik wygasł lub został usunięty. Dołącz go ponownie.",
+      "statusInvalid": "Ta zmiana nie jest dozwolona przy obecnym statusie rozmowy.",
+      "assigneeInvalid": "Tej osoby nie można przypisać do tej rozmowy.",
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "simulatorDisabled": "Symulator kanałów jest wyłączony na tym serwerze.",
+      "channelInUse": "Ten kanał nadal ma rozmowy. Zamiast go usuwać, rozłącz go.",
+      "validation": "Niektóre wprowadzone dane są nieprawidłowe.",
+      "tooLarge": "Ten plik jest zbyt duży.",
+      "unsupported": "Ten kanał nie może wysłać tego typu wiadomości ani pliku.",
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+      "genericWithId": "Coś poszło nie tak. Spróbuj ponownie. Numer referencyjny: {id}",
+      "templateNotSendable": "Tego szablonu nie można wysłać do tej rozmowy. Wybierz inny.",
+      "groupSendUnavailable": "Wysyłanie do grup WhatsApp nie jest jeszcze dostępne. Odpowiedz w aplikacji WhatsApp Business."
+    },
+    "bubble": {
+      "kind": {
+        "image": "Zdjęcie",
+        "text": "Wiadomość",
+        "attachment": "Załącznik"
+      },
+      "template": "Wiadomość z szablonu: {name}",
+      "unavailable": "Wiadomość niedostępna",
+      "sentIn": "Wysłano w języku: {lang}. Pokaż tekst, który napisałeś",
+      "translatedFrom": "Przetłumaczono z języka: {lang}. Pokaż oryginał",
+      "bot": "Bot",
+      "broadcast": "Wiadomość masowa",
+      "reacted": "Reakcja {emoji}",
+      "edited": "Edytowano",
+      "failed": "Nie dostarczono tej wiadomości.",
+      "retry": "Ponów",
+      "sending": "Wysyłanie",
+      "dismiss": "Odrzuć",
+      "noteLabel": "Notatka wewnętrzna",
+      "unknownAuthor": "Członek zespołu",
+      "deleteNote": "Usuń tę notatkę",
+      "templateHeader": {
+        "image": "Obraz",
+        "video": "Wideo",
+        "document": "Dokument",
+        "location": "Lokalizacja"
+      },
+      "templateCopyCode": "Kopiuj kod",
+      "templateButtonUnnamed": "Przycisk",
+      "templateButtonPrefix": "Przycisk: "
+    },
+    "media": {
+      "openImage": "Otwórz obraz {name}",
+      "video": "Wideo",
+      "voice": "Wiadomość głosowa",
+      "audio": "Audio",
+      "document": "Dokument",
+      "download": "Pobierz {name}",
+      "location": "Udostępniona lokalizacja",
+      "openMap": "Otwórz w OpenStreetMap"
+    },
+    "thread": {
+      "title": "Rozmowa",
+      "back": "Wróć do listy rozmów",
+      "loading": "Wczytywanie rozmowy",
+      "retry": "Spróbuj ponownie",
+      "notFound": {
+        "title": "Nie znaleziono rozmowy",
+        "message": "Została usunięta lub nie masz do niej dostępu. Wybierz inną z listy."
+      },
+      "status": {
+        "resolved": "Zakończona",
+        "closed": "Zamknięta",
+        "spam": "Spam",
+        "snoozed": "Odroczona"
+      },
+      "assignToMe": "Przypisz do mnie",
+      "resolve": "Zakończ",
+      "reopen": "Otwórz ponownie",
+      "resolveShortcut": "Zakończ lub otwórz ponownie (e)",
+      "showPanel": "Pokaż kontakt i notatki",
+      "hidePanel": "Ukryj kontakt i notatki",
+      "window": {
+        "closed": "Okno zamknięte",
+        "closesInHours": "Zamknie się za {hours} g {minutes} min",
+        "closesInMinutes": "Zamknie się za {minutes} min"
+      },
+      "windowBanner": {
+        "title": "Okno odpowiedzi 24-godzinne zostało zamknięte.",
+        "message": "Ten kanał pozwala na wysłanie wyłącznie zatwierdzonej wiadomości z szablonu, więcej niż 24 godziny po ostatniej wiadomości klienta. Nadal możesz dodawać notatki wewnętrzne. Nowa wiadomość od klienta ponownie otwiera okno.",
+        "sendTemplate": "Wyślij szablon"
+      },
+      "readOnly": "Możesz czytać tę rozmowę, ale nie masz uprawnień do odpowiadania.",
+      "typing": "{count, plural, one {Członek zespołu pisze} few {# członkowie zespołu piszą} many {# członków zespołu pisze} other {# członka zespołu pisze}}",
+      "messagesLabel": "Wiadomości",
+      "loadOlder": "Wczytaj wcześniejsze wiadomości",
+      "empty": "Brak wiadomości w tej rozmowie.",
+      "newMessageAnnounce": "Nowa wiadomość: {text}",
+      "attachment": "załącznik",
+      "jumpLatest": "Przejdź do najnowszych",
+      "jumpLatestNew": "{count, plural, one {# nowa wiadomość} few {# nowe wiadomości} many {# nowych wiadomości} other {# nowej wiadomości}}"
+    },
+    "composer": {
+      "modeLabel": "Typ wiadomości",
+      "mode": {
+        "reply": "Odpowiedź",
+        "note": "Notatka wewnętrzna"
+      },
+      "attach": "Dołącz plik",
+      "removeAttachment": "Usuń załącznik",
+      "replyLabel": "Odpowiedz klientowi",
+      "noteLabel": "Notatka wewnętrzna",
+      "replyPlaceholder": "Wpisz wiadomość",
+      "notePlaceholder": "Napisz notatkę widoczną tylko dla zespołu",
+      "replyDisabledPlaceholder": "Odpowiedzi są wyłączone dla tej rozmowy",
+      "send": "Wyślij",
+      "addNote": "Dodaj notatkę",
+      "hint": "Enter wysyła. Shift+Enter dodaje nowy wiersz.",
+      "template": "Wyślij szablon",
+      "groupSendUnavailable": "Wysyłanie do grup WhatsApp nie jest jeszcze dostępne. Odpowiedz w aplikacji WhatsApp Business."
+    },
+    "panel": {
+      "tabsLabel": "Notatki i oś czasu",
+      "contact": "Kontakt",
+      "openContact": "Otwórz kontakt",
+      "needsContact": "Ten numer nie ma karty kontaktu, ponieważ osiągnięto limit kontaktów.",
+      "noContact": "Ta rozmowa nie jest powiązana z kontaktem.",
+      "email": "E-mail",
+      "stage": "Etap",
+      "status": "Status",
+      "source": "Źródło",
+      "since": "Kontakt od",
+      "optedOut": "Zrezygnował z marketingu",
+      "resolve": "Zakończ",
+      "reopen": "Otwórz ponownie",
+      "assignee": {
+        "title": "Przypisane do",
+        "unknown": "Nieznany członek zespołu",
+        "none": "Nikt nie prowadzi tej rozmowy",
+        "team": "Zespół: {name}",
+        "pick": "Wybierz, kto prowadzi tę rozmowę",
+        "unassigned": "Nieprzypisane",
+        "you": "ty",
+        "loadFailed": "Nie udało się wczytać listy członków zespołu.",
+        "assignToMe": "Przypisz do mnie",
+        "unassign": "Cofnij przypisanie",
+        "open": "{count} otwartych",
+        "pickTeam": "Wybierz zespół dla tej rozmowy",
+        "noTeam": "Brak zespołu"
+      },
+      "presence": {
+        "online": "Online",
+        "away": "Nieobecny",
+        "busy": "Zajęty",
+        "offline": "Offline"
+      },
+      "notes": {
+        "tab": "Notatki",
+        "label": "Nowa notatka wewnętrzna",
+        "placeholder": "Napisz notatkę widoczną tylko dla zespołu",
+        "hint": "Ctrl+Enter dodaje notatkę.",
+        "add": "Dodaj notatkę",
+        "addFailed": "Nie udało się zapisać notatki.",
+        "loading": "Wczytywanie notatek",
+        "empty": "Brak notatek.",
+        "unknownAuthor": "Członek zespołu",
+        "delete": "Usuń tę notatkę"
+      },
+      "timeline": {
+        "tab": "Oś czasu",
+        "loading": "Wczytywanie osi czasu",
+        "failed": "Nie udało się wczytać osi czasu.",
+        "retry": "Spróbuj ponownie",
+        "empty": "W tej rozmowie nic jeszcze się nie wydarzyło.",
+        "events": {
+          "created": "Rozpoczęto rozmowę",
+          "assigned": "Przypisane przez {actor}",
+          "reassigned": "Ponownie przypisane przez {actor}",
+          "unassigned": "Cofnięte przypisanie przez {actor}",
+          "ai_handoff": "Przekazane osobie przez {actor}",
+          "resolved": "Zakończone przez {actor}",
+          "closed": "Zamknięte przez {actor}",
+          "reopened": "Otwarte ponownie przez {actor}",
+          "status_changed": "Status zmieniony przez {actor}",
+          "note_added": "Notatka dodana przez {actor}",
+          "snoozed": "Odroczone przez {actor}",
+          "auto_unsnoozed": "Odroczenie zakończone",
+          "priority_changed": "Priorytet zmieniony przez {actor}",
+          "tag_added": "Etykieta dodana przez {actor}",
+          "tag_removed": "Etykieta usunięta przez {actor}",
+          "first_response": "Wysłano pierwszą odpowiedź",
+          "sla_breach": "Przekroczono termin odpowiedzi",
+          "unknown": "{what}, przez {actor}"
+        },
+        "actors": {
+          "user": "Członek zespołu",
+          "system": "System",
+          "bot": "Bot",
+          "flow": "Automatyzacja",
+          "ai": "Asystent AI"
+        }
+      },
+      "owner": "Właściciel",
+      "past": {
+        "title": "Poprzednie rozmowy",
+        "noMessages": "Brak wiadomości",
+        "status": {
+          "open": "Otwarte",
+          "pending": "Oczekujące",
+          "snoozed": "Odroczone",
+          "resolved": "Zakończone",
+          "closed": "Zamknięte",
+          "spam": "Spam"
+        }
+      }
+    },
+    "simulator": {
+      "title": "Symulator klienta",
+      "close": "Zamknij symulator",
+      "devOnly": "Tylko do celów deweloperskich. Udaje klienta na symulowanym kanale; nic nie trafia na prawdziwy telefon.",
+      "noChannel": "Nie ma jeszcze kanału symulatora.",
+      "createChannel": "Utwórz kanał symulatora",
+      "disabled": "Symulator jest wyłączony na tym serwerze.",
+      "channel": "Kanał symulatora",
+      "customer": "Klient",
+      "name": "Nazwa",
+      "number": "Numer",
+      "numberHint": "Tylko cyfry, od 5 do 15.",
+      "kind": "Typ wiadomości",
+      "kinds": {
+        "text": "Tekst",
+        "image": "Obraz",
+        "document": "Dokument",
+        "audio": "Audio",
+        "video": "Wideo",
+        "location": "Lokalizacja"
+      },
+      "file": "Plik",
+      "fileHint": "Opcjonalnie. Używana jest jego nazwa i typ; w przeciwnym razie wysyłany jest przykładowy plik.",
+      "message": "Wiadomość",
+      "caption": "Podpis",
+      "placeName": "Nazwa miejsca",
+      "send": "Wyślij jako klient",
+      "sent": "{count, plural, one {Wysłano raz.} few {Dostarczono # razy, zapisano raz.} many {Dostarczono # razy, zapisano raz.} other {Dostarczono # razy, zapisano raz.}}",
+      "duplicate": "Podwójne dostarczenie",
+      "duplicateHint": "Dostarcza tę samą wiadomość trzy razy, aby sprawdzić, czy zapisuje się tylko raz.",
+      "nextSend": "Twoja następna odpowiedź",
+      "nextSendHint": "Dotyczy następnej wiadomości wysłanej z edytora, a potem wraca do trybu normalnego.",
+      "faults": {
+        "none": "Normalny",
+        "fail": "Błąd",
+        "flaky": "Dwa razy błąd, potem działa",
+        "slow": "Wolno (10 s)",
+        "ooo": "Potwierdzenia w złej kolejności"
+      },
+      "window": "Okno 24-godzinne",
+      "windows": {
+        "auto": "Automatycznie",
+        "open": "Wymuś otwarcie",
+        "closed": "Wymuś zamknięcie"
+      },
+      "windowHint": "Zamknięte pokazuje, jak zachowuje się edytor, gdy można wysłać tylko szablon."
+    },
+    "channels": {
+      "title": "Kanały",
+      "intro": "Konta, przez które klienci się z Tobą kontaktują. Każde z nich zasila skrzynkę odbiorczą.",
+      "backToInbox": "Wróć do skrzynki odbiorczej",
+      "simulatorNote": "Tryb deweloperski: dodaj symulowany kanał, aby wypróbować skrzynkę bez prawdziwego konta.",
+      "addSimulator": "Dodaj kanał symulatora",
+      "simulatorAdded": "Dodano kanał symulatora.",
+      "simulatorDisabled": "Symulator jest wyłączony na tym serwerze.",
+      "loading": "Wczytywanie kanałów",
+      "loadFailed": "Nie udało się wczytać kanałów.",
+      "retry": "Spróbuj ponownie",
+      "empty": {
+        "title": "Brak połączonych kanałów",
+        "message": "Połącz kanał, a wiadomości od klientów zaczną trafiać do skrzynki odbiorczej."
+      },
+      "listLabel": "Połączone kanały",
+      "status": {
+        "connected": "Połączony",
+        "disconnected": "Rozłączony",
+        "error": "Błąd"
+      },
+      "capWindow": "Okno odpowiedzi: {hours} godz.",
+      "capTemplates": "Szablony",
+      "capMedia": "Multimedia",
+      "capReceipts": "Potwierdzenia dostarczenia",
+      "lastEvent": "Ostatnia aktywność: {when}",
+      "noEvents": "Brak aktywności",
+      "remove": "Usuń",
+      "removeTitle": "Usunąć ten kanał?",
+      "removeMessage": "{name} zostanie usunięty. Kanału, który nadal ma rozmowy, nie można usunąć; zamiast tego go rozłącz.",
+      "removeConfirm": "Usuń kanał",
+      "cancel": "Anuluj"
+    },
+    "templates": {
+      "eyebrow": "WhatsApp",
+      "title": "Wyślij szablon",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "back": "Wróć do szablonów",
+      "search": "Szukaj po nazwie lub treści",
+      "searchLabel": "Szukaj szablonów",
+      "loading": "Wczytywanie szablonów",
+      "loadError": "Nie udało się wczytać szablonów.",
+      "retry": "Spróbuj ponownie",
+      "empty": "Dla tego numeru WhatsApp nie ma jeszcze zatwierdzonych szablonów. Utwórz szablon w sekcji Szablony i poczekaj, aż Meta go zatwierdzi.",
+      "noResults": "Żaden szablon nie pasuje do wyszukiwania.",
+      "windowHint": "Szablon działa nawet wtedy, gdy okno odpowiedzi 24-godzinne jest zamknięte.",
+      "variables": "Uzupełnij zmienne",
+      "preview": "Co przeczyta klient",
+      "send": "Wyślij szablon",
+      "sending": "Wysyłanie",
+      "sent": "Szablon wysłany",
+      "problem": {
+        "required": "Pole {label} jest wymagane.",
+        "format": "Pole {label} nie może zawierać znaku nowego wiersza, tabulatora ani czterech spacji z rzędu."
+      },
+      "reason": {
+        "paused": "Wstrzymany przez WhatsApp. Można go wysłać ponownie po zakończeniu wstrzymania.",
+        "media_header": "Ma nagłówek z obrazem, wideo lub dokumentem, którego nie można jeszcze wysłać ze skrzynki odbiorczej.",
+        "header_variable": "Ma zmienną w nagłówku, której nie można jeszcze uzupełnić ze skrzynki odbiorczej.",
+        "dynamic_button": "Ma link przycisku ze zmienną, której nie można jeszcze uzupełnić ze skrzynki odbiorczej.",
+        "authentication": "Szablony jednorazowego hasła są wysyłane przez system, a nie ze skrzynki odbiorczej.",
+        "named_variables": "Używa nazwanych zmiennych, których skrzynka odbiorcza jeszcze nie obsługuje."
+      },
+      "hasMore": "Pokazano pierwsze {count} szablonów. Wyszukaj po nazwie lub treści, aby znaleźć pozostałe."
+    }
+  }
+}

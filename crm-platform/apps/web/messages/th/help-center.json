@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "ศูนย์ช่วยเหลือ",
+    "searchLabel": "ค้นหาความช่วยเหลือ",
+    "searchPlaceholder": "ค้นหาคู่มือ",
+    "resultsStatus": "{count, plural, =0 {ไม่พบคู่มือ} other {# คู่มือ}}",
+    "none": {
+      "title": "ยังไม่มีคู่มือ",
+      "message": "คู่มือสำหรับฟีเจอร์ในแพ็กเกจของคุณจะแสดงที่นี่"
+    },
+    "noResults": {
+      "title": "ไม่มีคู่มือที่ตรงกับการค้นหาของคุณ",
+      "message": "ลองใช้คำอื่น หรือล้างการค้นหาเพื่อดูคู่มือทั้งหมด"
+    },
+    "areas": {
+      "overview": "แพลตฟอร์ม",
+      "inbox": "กล่องข้อความและแชท",
+      "audience": "CRM",
+      "sales": "การขาย",
+      "campaigns": "แคมเปญ",
+      "automation": "ระบบอัตโนมัติ",
+      "store": "ร้านค้า",
+      "apps": "มาร์เก็ตเพลส",
+      "settings": "การตั้งค่า",
+      "account": "บัญชี",
+      "getting-started": "เริ่มต้นใช้งาน",
+      "troubleshooting": "การแก้ไขปัญหา"
+    },
+    "allHelp": "กลับไปที่ความช่วยเหลือ",
+    "onThisPage": "ในหน้านี้",
+    "openScreen": "เปิดหน้าจอนี้",
+    "shownInEnglish": "คู่มือนี้ยังไม่ได้แปลเป็นภาษาของคุณ จึงแสดงเป็นภาษาอังกฤษ",
+    "tip": {
+      "label": "ความช่วยเหลือ: {title}",
+      "readMore": "อ่านคู่มือ"
+    },
+    "guideCount": "{count, plural, =0 {ไม่มีคู่มือ} other {# คู่มือ}}",
+    "crumb": "เพิ่มเติม / ความช่วยเหลือ",
+    "heading": "ความช่วยเหลือ",
+    "headingRest": "และคู่มือ",
+    "back": "กลับ",
+    "askSupport": "หาไม่เจอใช่ไหม ติดต่อฝ่ายสนับสนุน",
+    "askSupportShort": "ฝ่ายสนับสนุน",
+    "categories": "หมวดหมู่",
+    "allGuides": "คู่มือทั้งหมด",
+    "needHuman": "ต้องการคุยกับเจ้าหน้าที่ไหม",
+    "contactSupport": "ติดต่อฝ่ายสนับสนุน",
+    "popular": "ยอดนิยม",
+    "searchResults": "ผลการค้นหา",
+    "read": "อ่านคู่มือ",
+    "readMinutes": "{count, plural, other {อ่าน # นาที}}",
+    "moreInArea": "เพิ่มเติมใน {area}"
+  }
+}

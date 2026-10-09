@@ -20,7 +20,7 @@ const FONTS =
 const SEP = <span className="text-paper-0/40">·</span>;
 
 /** The dark marquee above the navigation: live announcements, or the five editable lines when none is live (WD-CMS-017). */
-function Ticker({ items, ctx }: { items: LiveAnnouncement[]; ctx: SiteCtx }) {
+function Ticker({ items, ctx, label }: { items: LiveAnnouncement[]; ctx: SiteCtx; label: string }) {
   const { fc, edit } = ctx;
   const lines = [1, 2, 3, 4, 5].filter((i) => edit || fc(`ticker.message${i}`) !== '');
   if (items.length === 0 && lines.length === 0) return null;
@@ -65,7 +65,7 @@ function Ticker({ items, ctx }: { items: LiveAnnouncement[]; ctx: SiteCtx }) {
       data-fc-section="ticker"
       className="mono overflow-hidden bg-ink-950 text-[11px] text-paper-0"
       role="region"
-      aria-label="Announcements"
+      aria-label={label}
     >
       <div className="marquee whitespace-nowrap py-2.5">{copy}</div>
     </div>
@@ -184,7 +184,7 @@ export async function SiteFrame({
       >
         {t('skip')}
       </a>
-      <Ticker items={announcements?.data ?? []} ctx={ctx} />
+      <Ticker items={announcements?.data ?? []} ctx={ctx} label={t('announcementsLabel')} />
       <header
         data-fc-section="nav"
         className="hairline-b sticky top-0 z-40 bg-white/92 backdrop-blur"

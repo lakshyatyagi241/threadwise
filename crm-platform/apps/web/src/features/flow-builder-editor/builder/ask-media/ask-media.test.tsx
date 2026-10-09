@@ -13,6 +13,7 @@ import { EMOJIS, FORMAT_MARKS, insertAt, wrapSelection } from './prompt-box';
 import { AskFileForm, AskLocationForm } from '../inspector/forms-core/ask-media';
 import { NODE_FORMS } from '../inspector/registry';
 import { filterPalette } from '../palette';
+import { plainFlbTranslator as tf } from '../../test-utils/plain-translator';
 import { NodeCard } from '../node-card';
 
 // Messages are not loaded here: the key is the text. A param-carrying key keeps its params so a hint can be read.
@@ -49,7 +50,7 @@ const formProps = (n: FlowNode) => ({
 
 describe('palette entries', () => {
   it('both nodes are in the WhatsApp palette, group Listen, next to Ask question, and nowhere else', () => {
-    const listen = filterPalette('chat', '').find(([g]) => g === 'Listen')![1];
+    const listen = filterPalette('chat', '', tf).find(([g]) => g === 'Listen')![1];
     expect(listen.map((d) => d.id)).toEqual(['ask', 'ask_file', 'ask_location']);
     expect(listen.map((d) => d.label)).toEqual([
       'Ask question',
@@ -63,10 +64,10 @@ describe('palette entries', () => {
   });
 
   it('search finds them by label and by description', () => {
-    expect(filterPalette('chat', 'file / image').flatMap(([, i]) => i.map((d) => d.id))).toEqual([
-      'ask_file',
-    ]);
-    expect(filterPalette('chat', 'location').flatMap(([, i]) => i.map((d) => d.id))).toContain(
+    expect(
+      filterPalette('chat', 'file / image', tf).flatMap(([, i]) => i.map((d) => d.id)),
+    ).toEqual(['ask_file']);
+    expect(filterPalette('chat', 'location', tf).flatMap(([, i]) => i.map((d) => d.id))).toContain(
       'ask_location',
     );
   });

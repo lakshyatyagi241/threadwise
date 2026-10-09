@@ -97,7 +97,7 @@ function Overview({ data }: { data: AdminOverview }) {
   ];
   return (
     <div className="space-y-6">
-      <section aria-label="KPI" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <section aria-label={t('kpiLabel')} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {kpis.map((c) => (
           <Card key={c.id} className="space-y-2" data-testid={`kpi-${c.id}`}>
             <p className="text-sm text-muted-foreground">{c.label}</p>

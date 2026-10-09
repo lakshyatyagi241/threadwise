@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhook'lar",
+      "forwarding": "Webhook iletimi"
+    },
+    "common": {
+      "loading": "Yükleniyor",
+      "retry": "Yeniden dene",
+      "requestId": "İstek kimliği",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Bunu yapmaya yetkiniz yok.",
+        "request": "Bu istek tamamlanamadı.",
+        "unexpected": "Tarafımızda bir sorun oluştu. Birazdan yeniden deneyin.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
+        "conflict": "Bu hedefi başka biri değiştirdi. Liste yeniden yüklendi: değişikliğinizi yeniden uygulayın.",
+        "validation": "Bazı değerler geçersiz. Vurgulanan alanları kontrol edin.",
+        "notFound": "Bu öğe artık mevcut değil.",
+        "urlRejected": "Bu URL'ye izin verilmiyor. İnternetten erişilebilen bir https adresi kullanın."
+      }
+    },
+    "page": {
+      "eyebrow": "Yönetici / Sistem / Webhook'lar",
+      "title": "Webhook iletimi",
+      "description": "Platform operatörünün, her Meta webhook'unun bir kopyasını alan hizmetlerin listesi.",
+      "banner": "Meta tek bir geri çağırma URL'sine izin verir. Bunu bir kez alır, doğrular ve ham gövdeyi değiştirmeden (özgün imzayla birlikte) etkin olan her hedefe iletiriz.",
+      "superOnly": "Webhook iletimini yalnızca süper yönetici yönetebilir.",
+      "add": "Hedef ekle",
+      "tabs": {
+        "targets": "Hedefler",
+        "failures": "Başarısız iletimler"
+      }
+    },
+    "targets": {
+      "empty": "Henüz iletim hedefi yok",
+      "emptyBody": "Meta webhook'larını başka bir hizmete iletmeye başlamak için bir hedef ekleyin.",
+      "columns": {
+        "target": "Hedef",
+        "active": "Etkin",
+        "fields": "Alanlar",
+        "deliveries": "İletimler",
+        "last": "Son iletim",
+        "actions": "İşlemler"
+      },
+      "allFields": "Tüm alanlar",
+      "success": "{count, number} başarılı",
+      "failure": "{count, number} başarısız",
+      "pending": "{count, number} beklemede",
+      "pendingLabel": "Yeniden oynatılmayı bekleyen {count, number} başarısız iletim",
+      "neverDelivered": "Henüz iletim yapılmadı",
+      "lastStatus": "Durum {status}",
+      "lastError": "Hata: {error}",
+      "lastAt": "{time} tarihinde",
+      "activeSwitch": "{name} hedefine ilet",
+      "on": "Hedef açık",
+      "off": "Hedef kapalı",
+      "edit": "Düzenle",
+      "test": "Test",
+      "testing": "Test ediliyor",
+      "testOk": "Test başarılı: durum {status}, {ms, number} ms",
+      "testFailed": "Test başarısız: {reason} ({ms, number} ms)",
+      "testNoStatus": "yanıt yok",
+      "testStatus": "durum {status}",
+      "delete": "Sil",
+      "deleteTitle": "{name} silinsin mi?",
+      "deleteBody": "Hedef webhook almayı durdurur ve tutulan başarısız iletimleri silinir. Bu geri alınamaz.",
+      "deleteConfirm": "Hedefi sil",
+      "cancel": "Vazgeç",
+      "toasts": {
+        "created": "{name} eklendi",
+        "saved": "{name} kaydedildi",
+        "on": "{name} açık",
+        "off": "{name} kapalı",
+        "deleted": "{name} silindi"
+      }
+    },
+    "dialog": {
+      "createTitle": "İletim hedefi ekle",
+      "editTitle": "{name} düzenle",
+      "close": "Kapat",
+      "name": "Ad",
+      "namePlaceholder": "Analitik hizmeti",
+      "url": "URL",
+      "urlHint": "Yalnızca https. Özel ağlardaki adreslere izin verilmez.",
+      "headerName": "Başlık adı (isteğe bağlı)",
+      "headerNameHint": "Her iletimle birlikte gönderilir, örneğin Authorization.",
+      "headerValue": "Başlık değeri",
+      "headerValueSaved": "Kaydedildi, ••••{last4} ile bitiyor. Olduğu gibi bırakmak için boş bırakın.",
+      "headerValueSavedNoLast4": "Kaydedildi. Olduğu gibi bırakmak için boş bırakın.",
+      "headerValueHint": "Yalnızca yazılabilir: kaydettikten sonra bir daha gösterilmez.",
+      "removeHeader": "Kayıtlı başlığı kaldır",
+      "fieldFilter": "Alan filtresi",
+      "fieldFilterHint": "Tüm alanları iletmek için boş bırakın. Bir alan yazıp Enter'a basın, örneğin messages veya message_template_status_update.",
+      "fieldFilterPlaceholder": "Alan ekle",
+      "fieldRemove": "{field} alanını kaldır",
+      "timeout": "Zaman aşımı (saniye)",
+      "timeoutHint": "1 ile 30 arası",
+      "maxAttempts": "En fazla deneme",
+      "maxAttemptsHint": "1 ile 10 arası",
+      "active": "Bu hedefe ilet",
+      "save": "Kaydet",
+      "saving": "Kaydediliyor",
+      "cancel": "Vazgeç",
+      "errors": {
+        "nameRequired": "Bir ad girin.",
+        "urlRequired": "URL'yi girin.",
+        "urlHttps": "URL https:// ile başlamalıdır.",
+        "headerNameInvalid": "Yalnızca harf, rakam ve tire kullanın.",
+        "headerValueRequired": "Bir başlık için hem ad hem de değer gerekir.",
+        "headerNameRequired": "Başlık adını da girin.",
+        "timeout": "1 ile 30 arasında bir tam sayı girin.",
+        "maxAttempts": "1 ile 10 arasında bir tam sayı girin."
+      }
+    },
+    "failures": {
+      "empty": "Başarısız iletim yok",
+      "emptyBody": "Yeniden deneme hakkı tükenen iletimler, yeniden gönderebilmeniz için 14 gün burada saklanır.",
+      "filterAll": "Tüm hedefler",
+      "filterLabel": "Hedef",
+      "columns": {
+        "target": "Hedef",
+        "when": "Başarısız oldu",
+        "attempts": "Denemeler",
+        "reason": "Neden",
+        "size": "Boyut",
+        "actions": "İşlem"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} bayt",
+      "replay": "Yeniden oynat",
+      "replaying": "Yeniden oynatılıyor",
+      "replayed": "{time} tarihinde yeniden oynatıldı",
+      "replayOk": "İletildi: durum {status}, {ms, number} ms",
+      "replayFailed": "İletilemedi: {reason} ({ms, number} ms)",
+      "reasonStatus": "durum {status}",
+      "reasonNone": "yanıt yok"
+    }
+  }
+}

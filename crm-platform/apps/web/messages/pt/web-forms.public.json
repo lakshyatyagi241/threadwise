@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "Próximo",
+      "back": "Voltar",
+      "sending": "Enviando...",
+      "optional": "opcional",
+      "selectPlaceholder": "Selecione uma opção",
+      "stepOf": "Etapa {n} de {total}",
+      "summaryTitle": "{count, plural, one {Corrija 1 campo, por favor} other {Corrija # campos, por favor}}",
+      "successTitle": "Obrigado",
+      "continue": "Continuar",
+      "previewNotice": "Visualização: nada é enviado daqui.",
+      "honeypot": "Deixe este campo vazio",
+      "privacyPolicy": "Política de privacidade",
+      "poweredBy": "Desenvolvido por {brand}",
+      "brandName": "Formulários",
+      "captchaNeeded": "Preencha a verificação abaixo antes de enviar.",
+      "rateLimited": "Muitas tentativas. Aguarde um momento e tente novamente.",
+      "closed": "Este formulário não está aceitando respostas no momento.",
+      "genericError": "Algo deu errado e suas respostas não foram enviadas. Tente novamente.",
+      "notAvailableTitle": "Este formulário não está disponível",
+      "notAvailableBody": "O link pode estar errado ou o formulário foi fechado.",
+      "errors": {
+        "required": "Este campo é obrigatório.",
+        "consent_required": "Marque esta caixa para continuar.",
+        "invalid_email": "Informe um endereço de e-mail válido.",
+        "invalid_phone": "Informe um número de telefone válido, com o código do país, se possível.",
+        "invalid_number": "Informe um número válido.",
+        "invalid_date": "Informe uma data válida.",
+        "too_small": "Informe um valor de pelo menos {min}.",
+        "too_large": "Informe um valor de no máximo {max}.",
+        "too_short": "Informe pelo menos {min} caracteres.",
+        "too_long": "Informe no máximo {max} caracteres.",
+        "pattern": "Não corresponde ao formato esperado.",
+        "invalid_option": "Escolha uma das opções listadas."
+      },
+      "closedTitle": "Este formulário está fechado"
+    }
+  }
+}

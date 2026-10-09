@@ -1,0 +1,531 @@
+{
+  "scheduled-queue-warmer": {
+    "nav": {
+      "scheduled": "Gepland",
+      "warmer": "Warmer"
+    },
+    "common": {
+      "dismiss": "Verbergen"
+    },
+    "status": {
+      "scheduled": "In wachtrij",
+      "running": "Bezig",
+      "paused": "Gepauzeerd",
+      "completed": "Klaar",
+      "failed": "Mislukt",
+      "cancelled": "Geannuleerd"
+    },
+    "type": {
+      "plain": "Gewoon",
+      "template": "Sjabloon",
+      "media": "Media",
+      "location": "Locatie"
+    },
+    "errors": {
+      "generic": "Er ging iets mis. Probeer het opnieuw.",
+      "FORBIDDEN": "Je hebt geen toestemming om dit te doen.",
+      "VALIDATION_FAILED": "Sommige velden hebben aandacht nodig.",
+      "ROW_VERSION_CONFLICT": "Deze planning is inmiddels gewijzigd. Laad opnieuw en probeer het nog eens.",
+      "PLAN_FEATURE_LOCKED": "Je abonnement omvat deze functie niet.",
+      "PLAN_LIMIT_REACHED": "Je hebt de limiet van je abonnement bereikt.",
+      "WA_UNOFFICIAL_DISABLED": "Verzenden via persoonlijke WhatsApp-nummers (de niet-officiële API) is niet ingeschakeld voor je workspace. Kies een officieel WhatsApp Business API-nummer.",
+      "AUTH_SEND_HALTED": "Verzenden is gestopt voor deze workspace.",
+      "upgrade": "Bekijk abonnementen en upgrade",
+      "requestId": "Verzoek {id}"
+    },
+    "actions": {
+      "done": {
+        "pause": "Planning gepauzeerd.",
+        "resume": "Planning hervat.",
+        "cancel": "Planning geannuleerd.",
+        "run-now": "Planning wordt nu uitgevoerd.",
+        "destroy": "Planning verwijderd.",
+        "retry": "Planning in de wachtrij gezet met het nieuwe tijdstip."
+      }
+    },
+    "confirm": {
+      "yes": "Ja, doorgaan",
+      "keep": "Behouden",
+      "cancel": {
+        "title": "Deze planning annuleren?",
+        "body": "“{name}” wordt niet verzonden. Dit kan niet ongedaan worden gemaakt."
+      },
+      "run-now": {
+        "title": "Deze planning nu uitvoeren?",
+        "body": "“{name}” wordt meteen verzonden in plaats van op het ingestelde tijdstip."
+      },
+      "destroy": {
+        "title": "Deze planning verwijderen?",
+        "body": "“{name}” en de ontvangerslijst worden verwijderd."
+      }
+    },
+    "retry": {
+      "title": "Opnieuw proberen met nieuw tijdstip",
+      "body": "Kies een nieuw verzendtijdstip voor “{name}”. Het gaat terug naar In wachtrij.",
+      "date": "Verzenddatum",
+      "time": "Tijd",
+      "timezone": "Tijdzone",
+      "keep": "Mislukt behouden",
+      "confirm": "Nu opnieuw proberen"
+    },
+    "list": {
+      "crumb": "Campagnes / Geplande berichten",
+      "title": "Geplande berichten",
+      "queued": "{n} in wachtrij",
+      "create": "Bericht plannen",
+      "stats": {
+        "total": "Totaal gepland",
+        "totalHint": "over alle statussen",
+        "active": "Actieve wachtrij",
+        "activeHint": "wacht om te worden verzonden",
+        "sent": "Totaal verzonden",
+        "sentHint": "berichten verzonden (deze pagina)",
+        "delivery": "Afleverpercentage",
+        "deliveryHint": "over voltooide (deze pagina)"
+      },
+      "upNext": {
+        "eyebrow": "Volgende",
+        "title": "Volgende om te verzenden",
+        "pending": "{n} in behandeling",
+        "empty": "Nog niets gepland.",
+        "createOne": "Maak er een →",
+        "recurring": "terugkerend",
+        "queued": "in wachtrij"
+      },
+      "tip": {
+        "eyebrow": "Tip",
+        "title": "Verzenden wanneer ze lezen",
+        "body": "Openpercentages piek tussen 9–11 uur 's ochtends en 18–20 uur 's avonds in de lokale tijdzones van je contacten. Kies een verzendtijd die bij de ontvangersgroep past. Met terugkerende planningen stel je dit één keer in en vergeet je het daarna.",
+        "cta": "Plan er één"
+      },
+      "tabs": {
+        "all": "Alle",
+        "upcoming": "Komend",
+        "running": "Bezig",
+        "paused": "Gepauzeerd",
+        "completed": "Voltooid",
+        "failed": "Mislukt"
+      },
+      "search": "Zoeken op naam…",
+      "cols": {
+        "schedule": "Planning",
+        "type": "Type",
+        "recipients": "Ontvangers",
+        "sendTime": "Verzendtijd",
+        "repeat": "Herhaling",
+        "status": "Status",
+        "actions": "Acties"
+      },
+      "recipients": {
+        "group": "Groep",
+        "tag": "Tag",
+        "queue": "Wachtrij",
+        "number": "Nummers"
+      },
+      "when": {
+        "overdue": "te laat",
+        "now": "nu",
+        "minutes": "over {n} min",
+        "hours": "over {n} u",
+        "tomorrow": "morgen",
+        "date": "later"
+      },
+      "completedAt": "voltooid {when}",
+      "once": "eenmalig",
+      "actions": {
+        "open": "Openen",
+        "pause": "Pauzeren",
+        "resume": "Hervatten",
+        "runNow": "Nu uitvoeren",
+        "cancel": "Annuleren",
+        "retry": "Opnieuw proberen met nieuw tijdstip",
+        "delete": "Verwijderen",
+        "deleteHistory": "Verwijderen uit geschiedenis"
+      },
+      "empty": {
+        "title": "Geen planningen",
+        "none": "Plan je eerste bericht.",
+        "filtered": "Geen planningen die aan de huidige filters voldoen. Wis de filters of plan je eerste bericht.",
+        "reset": "Filters resetten"
+      },
+      "page": "Pagina {page} van {pages}",
+      "prev": "Vorige",
+      "next": "Volgende"
+    },
+    "composer": {
+      "crumb": "Gepland / Nieuw",
+      "title": "Een bericht plannen",
+      "back": "Terug",
+      "forbidden": "Je hebt geen toestemming om berichten te plannen.",
+      "steps": "Stappen",
+      "stepNames": {
+        "basics": "Basis",
+        "audience": "Ontvangers",
+        "message": "Bericht",
+        "when": "Wanneer",
+        "review": "Controleren"
+      },
+      "required": "verplicht",
+      "previous": "Vorige",
+      "next": "Volgende",
+      "submit": "Bericht plannen",
+      "stepOf": "Stap {n} van {total}",
+      "engine": {
+        "baileys": "Niet-officiële API",
+        "waba": "WhatsApp Cloud API",
+        "twilio": "Twilio"
+      },
+      "types": {
+        "plain": {
+          "title": "Platte tekst",
+          "hint": "Alleen woorden en emoji's.",
+          "pill": "platte tekst"
+        },
+        "template": {
+          "title": "Sjabloon",
+          "hint": "Goedgekeurd WhatsApp-sjabloon.",
+          "pill": "sjabloon"
+        },
+        "media": {
+          "title": "Met media",
+          "hint": "Afbeelding, video, document, audio.",
+          "pill": "media"
+        },
+        "location": {
+          "title": "Locatie",
+          "hint": "Lat/long-pin.",
+          "pill": "locatie"
+        }
+      },
+      "basics": {
+        "title": "Basis van de planning",
+        "name": "Naam van de planning",
+        "nameHint": "Alleen intern label. Ontvangers zien dit niet.",
+        "namePlaceholder": "bijv. Lentepromo / VIP-segment",
+        "sender": "Afzender",
+        "senders": "Afzenders",
+        "tickAll": "Vink alles aan wat van toepassing is",
+        "noSenders": "Geen verbonden afzender. Verbind eerst een nummer.",
+        "warming": "Opwarmen",
+        "splitHint": "Elke aangevinkte afzender draait zijn eigen planning met een eerlijk deel van het publiek.",
+        "messageType": "Berichttype"
+      },
+      "audience": {
+        "title": "Ontvangers",
+        "source": "Bron van ontvangers",
+        "sources": {
+          "group": {
+            "title": "Groep",
+            "hint": "Kies een of meer opgeslagen contactgroepen."
+          },
+          "tag": {
+            "title": "Tags",
+            "hint": "Iedereen met een tag"
+          },
+          "queue": {
+            "title": "Doelgroepwachtrij",
+            "hint": "Ontvangers van een eerdere broadcast opnieuw kiezen."
+          },
+          "number": {
+            "title": "Nummers",
+            "hint": "Plak handmatig een lijst."
+          }
+        },
+        "chooseGroups": "Kies groep(en)",
+        "chooseTags": "Kies een of meer tags",
+        "chooseQueues": "Kies een of meer eerdere broadcasts",
+        "tickAny": "(vink zoveel nummers aan als je wilt)",
+        "noGroups": "Nog geen groepen",
+        "noTags": "Nog geen tags",
+        "noQueues": "Nog geen voltooide broadcasts",
+        "contacts": "Ga naar Contacten",
+        "broadcast": "Ga naar Broadcasts",
+        "tagsHint": "Ontvangers worden opnieuw berekend wanneer de planning start, dus nieuw getagde contacten worden meegenomen.",
+        "queuesHint": "Vink zoveel broadcasts aan als je wilt. Ontvangers worden vóór het verzenden automatisch ontdubbeld.",
+        "paste": "Plak nummers",
+        "pasteHint": "Eerst de landcode, zonder + ervoor. Nieuwe regels of komma's scheiden de invoer.",
+        "pastePlaceholder": "Één nummer per regel, met landcode, zonder plusteken",
+        "total": "Totaal ontvangers:",
+        "optedOut": "{n} weggelaten: afgemeld of gearchiveerd"
+      },
+      "message": {
+        "title": "Bericht opstellen",
+        "content": "Inhoud bericht",
+        "caption": "Bijschrift",
+        "placeholder": "Hoi '{name}', je geplande update staat klaar…",
+        "personalise": "Gebruik '{name}', '{phone}', '{email}' voor personalisatie.",
+        "template": "Goedgekeurd sjabloon",
+        "chooseTemplate": "Kies een goedgekeurd sjabloon",
+        "browse": "Klik om door je sjablonen te bladeren",
+        "approved": "GOEDGEKEURD",
+        "change": "Wijzigen",
+        "mediaLink": "Medialink",
+        "mediaHint": "Een link naar het bestand (https://…). Afbeelding, video, audio of document.",
+        "pin": "Locatie-pin",
+        "latitude": "Breedtegraad",
+        "longitude": "Lengtegraad",
+        "estimate": "Geschatte verzendtijd",
+        "minutes": "ongeveer {n} min",
+        "estimateHint": "bij 60 berichten/min",
+        "estimateEmpty": "kies eerst ontvangers.",
+        "variables": "Variabelen in bericht",
+        "variablesHint": "plaatsaanduidingen gevonden.",
+        "pickerEyebrow": "sjablonen",
+        "pickerTitle": "Kies een sjabloon",
+        "pickerHint": "Alleen goedgekeurde, actieve sjablonen worden getoond.",
+        "pickerSearch": "Zoeken op naam of taal…",
+        "pickerEmpty": "Geen sjablonen gevonden.",
+        "manageTemplates": "Sjablonen beheren →",
+        "cancel": "Annuleren"
+      },
+      "when": {
+        "title": "Wanneer verzenden",
+        "modes": {
+          "once": {
+            "title": "Eenmalig verzenden",
+            "hint": "Eén verzending op de gekozen datum en het gekozen tijdstip."
+          },
+          "recurring": {
+            "title": "Terugkerend",
+            "hint": "Dagelijks, wekelijks of maandelijks herhalen op een vast ritme."
+          }
+        },
+        "date": "Verzenddatum",
+        "time": "Tijd",
+        "timezone": "Tijdzone",
+        "recurrence": "Herhaling",
+        "every": "Herhaal elke",
+        "interval": "Interval",
+        "intervals": {
+          "daily": "dag(en)",
+          "weekly": "week(en)",
+          "monthly": "maand(en)"
+        },
+        "end": "Einde",
+        "endNever": "Nooit",
+        "endDate": "Op een specifieke datum",
+        "endOn": "Laatste dag",
+        "days": "Dagen van de week",
+        "daysHint": "Klik op een dag om te wisselen. Wekelijkse planningen hebben minstens één dag nodig.",
+        "lead": "Een planning moet minstens {n} minuten vooruit liggen."
+      },
+      "review": {
+        "title": "Controleren en plannen",
+        "final": "definitief",
+        "schedule": "Plannen",
+        "name": "Naam",
+        "sender": "Afzender",
+        "type": "Type",
+        "mode": "Modus",
+        "at": "Eerste verzending",
+        "once": "Eenmalig verzenden",
+        "recurring": "Elke {n} {interval}",
+        "delivery": "Levering",
+        "source": "Bron van ontvangers",
+        "recipients": "Ontvangers",
+        "estimated": "Geschatte tijd",
+        "testTitle": "Eerst een test versturen",
+        "testHint": "Ontvang één voorbeeldbericht op een nummer dat je invoert, voordat de volledige verzending begint.",
+        "testNumber": "Stuur een test naar dit nummer",
+        "testNumberHint": "Eerst de landcode, zonder +."
+      },
+      "preview": {
+        "title": "Live voorbeeld",
+        "channel": "WhatsApp",
+        "empty": "Je bericht verschijnt hier…",
+        "media": "[ media bijgevoegd ]",
+        "pin": "Locatie-pin",
+        "noTemplate": "Geen sjabloon gekozen"
+      },
+      "errors": {
+        "nameRequired": "Geef de planning een naam.",
+        "senderRequired": "Kies minstens één afzender.",
+        "wabaTemplate": "WhatsApp Cloud API-nummers kunnen geen sjabloonplanningen verzenden. Vink ze uit of kies een ander berichttype.",
+        "audienceRequired": "Kies minstens één.",
+        "numbersRequired": "Plak minstens één nummer.",
+        "messageRequired": "Schrijf het bericht.",
+        "messageTooLong": "Het bericht is langer dan 1024 tekens.",
+        "templateRequired": "Kies een sjabloon.",
+        "mediaLink": "Voer een link in die begint met http:// of https://.",
+        "latitude": "Voer een breedtegraad in tussen -90 en 90.",
+        "longitude": "Voer een lengtegraad in tussen -180 en 180.",
+        "dateRequired": "Kies een datum.",
+        "timeRequired": "Voer een tijd in, zoals 14:30.",
+        "timezoneRequired": "Kies een tijdzone.",
+        "tooSoon": "Kies een tijdstip dat minstens een paar minuten vanaf nu ligt.",
+        "repeatEvery": "Voer een geheel getal in van 1 tot 365.",
+        "daysRequired": "Kies de dagen van de week.",
+        "endDateRequired": "Kies de laatste dag.",
+        "endBeforeStart": "De einddatum ligt vóór de eerste verzending.",
+        "testNumber": "Voer het nummer in met landcode."
+      }
+    },
+    "detail": {
+      "crumb": "Gepland / Analyse",
+      "title": "Analyse van planningen",
+      "back": "Terug naar geplande berichten",
+      "eyebrow": "Gepland bericht",
+      "untitled": "Naamloos",
+      "recurs": "Herhaalt · {interval} × {n}",
+      "fires": "Verzendt {when}",
+      "actions": {
+        "pause": "Pauzeren",
+        "resume": "Hervatten",
+        "runNow": "Nu uitvoeren",
+        "cancel": "Annuleren",
+        "retry": "Opnieuw proberen met nieuw tijdstip",
+        "delete": "Verwijderen"
+      },
+      "kpi": {
+        "recipients": "Ontvangers",
+        "delivered": "Afgeleverd",
+        "read": "Gelezen",
+        "sent": "Verzonden",
+        "status": "Status",
+        "ofSent": "van verzonden",
+        "failedCount": "{n} mislukt",
+        "pendingCount": "{n} in behandeling",
+        "fires": "verzendt {when}",
+        "paused": "gepauzeerd",
+        "done": "klaar {when}"
+      },
+      "funnel": {
+        "eyebrow": "Afleverings-funnel",
+        "title": "Van verzending tot actie",
+        "recipients": "Ontvangers",
+        "sent": "Verzonden",
+        "delivered": "Afgeleverd",
+        "read": "Gelezen",
+        "failed": "Mislukt"
+      },
+      "mix": {
+        "eyebrow": "Statusverdeling",
+        "title": "Afleverstatus",
+        "empty": "Nog geen verzendactiviteit.",
+        "delivered": "Afgeleverd",
+        "sentOnly": "Verzonden · niet afgeleverd",
+        "failed": "Mislukt",
+        "pending": "In behandeling"
+      },
+      "recipients": {
+        "eyebrow": "Ontvangers",
+        "title": "Wie wat kreeg",
+        "none": "Geen ontvangers bekend voor deze planning.",
+        "emptyTab": "Nog geen ontvangers in dit tabblad.",
+        "truncated": "De eerste {n} van {total} ontvangers worden getoond.",
+        "tabs": {
+          "all": "Alle",
+          "sent": "Verzonden",
+          "delivered": "Afgeleverd",
+          "read": "Gelezen",
+          "failed": "Mislukt",
+          "pending": "In behandeling"
+        },
+        "cols": {
+          "recipient": "Ontvanger",
+          "phone": "Telefoon",
+          "status": "Status",
+          "when": "Wanneer",
+          "note": "Opmerking"
+        },
+        "status": {
+          "pending": "In behandeling",
+          "processing": "In behandeling",
+          "sent": "Verzonden",
+          "delivered": "Afgeleverd",
+          "read": "Gelezen",
+          "failed": "Mislukt"
+        }
+      },
+      "config": {
+        "eyebrow": "Plandetails",
+        "title": "Configuratie",
+        "scheduleType": "Plantype",
+        "messageType": "Berichttype",
+        "scheduledAt": "Gepland op",
+        "nextRun": "Volgende run",
+        "lastRun": "Laatste run",
+        "repeats": "Herhaalt elke",
+        "until": "tot {date}",
+        "sender": "Van afzender",
+        "provider": "Engine",
+        "attempts": "Verzendpogingen"
+      },
+      "preview": {
+        "eyebrow": "Berichtvoorbeeld",
+        "title": "Wat ontvangers zien",
+        "empty": "(lege tekst)"
+      },
+      "another": "Nog een planning maken"
+    },
+    "warmer": {
+      "warming": "{n} aan het opwarmen",
+      "name": "WhatsApp Warmer",
+      "tagline": "Nummeropwarming",
+      "how": {
+        "title": "Hoe het werkt",
+        "one": "Zet opwarmen aan voor een nummer.",
+        "two": "Elke dag mag er iets meer worden verstuurd dan de dag ervoor.",
+        "three": "Berichten gaan langzaam uit, alleen tijdens de uren die je kiest.",
+        "four": "Campagnes, broadcasts en geplande verzendingen houden allemaal rekening met de limiet."
+      },
+      "good": {
+        "title": "Goed om te weten",
+        "body": "Opwarmen verkleint het risico op een blokkade van nummers van de niet-officiële API, maar het is geen garantie. Voor veel volume gebruik je een officieel WhatsApp Business (Cloud API)-nummer; dat hoeft niet op te warmen."
+      },
+      "crumb": "Campagnes / Warmer",
+      "heading": "Warm je nummers op",
+      "lead": "Verhoog het dagelijkse verzendlimiet van elk nummer van de niet-officiële API geleidelijk, met menselijke pauzes en actieve uren, om het risico op een blokkade te verkleinen. Elk nummer warmt op via zijn eigen planning.",
+      "tiles": {
+        "warming": "Nummers aan het opwarmen",
+        "warmingHint": "van {n} verbonden",
+        "budget": "Budget van vandaag",
+        "budgetHint": "berichten vandaag toegestaan",
+        "sent": "Vandaag verzonden",
+        "sentHint": "telt mee voor opwarmen",
+        "health": "Gem. gezondheid",
+        "healthHint": "over alle nummers"
+      },
+      "empty": "Nog geen verbonden nummers.",
+      "connect": "Verbind een nummer",
+      "number": "Nummer",
+      "engines": {
+        "baileys": "Niet-officiële API",
+        "waba": "WABA",
+        "twilio": "Twilio"
+      },
+      "health": "Gezondheid {n}",
+      "healthTitle": "Gezondheidsscore (hoger = veiliger om op te warmen)",
+      "switch": "Opwarmen",
+      "budgetToday": "Budget van vandaag",
+      "remaining": "Resterend vandaag",
+      "sentToday": "Vandaag verzonden",
+      "fields": {
+        "dailyBase": "Startbudget/dag",
+        "stepPct": "Verhoging % / stap",
+        "stepDays": "Verhogen elke (dagen)",
+        "maxDaily": "Max. budget/dag",
+        "gapMin": "Min. pauze (sec)",
+        "gapMax": "Max. pauze (sec)",
+        "activeStart": "Actief vanaf (uur)",
+        "activeEnd": "Actief tot (uur)"
+      },
+      "hints": {
+        "dailyBase": "Hoeveel berichten dit nummer op dag één mag versturen.",
+        "stepPct": "Verhoog die dagelijkse limiet met dit percentage per stap.",
+        "stepDays": "Hoe vaak de limiet groeit (elke N dagen).",
+        "maxDaily": "Het hoogste wat de dagelijkse limiet ooit bereikt.",
+        "gapMin": "Kortste wachttijd tussen twee berichten.",
+        "gapMax": "Langste wachttijd tussen twee berichten.",
+        "activeStart": "Begin pas met verzenden na dit uur (24-uursklok).",
+        "activeEnd": "Stop met verzenden na dit uur."
+      },
+      "spintax": {
+        "title": "Spintax-variatie",
+        "hint": "Stuur iedereen iets andere bewoording, zodat berichten niet identiek lijken. Schrijf keuzes zoals '{Hoi|Hallo|Hey}' erin."
+      },
+      "save": "Opwarming opslaan",
+      "saved": "Opwarming opgeslagen."
+    }
+  }
+}

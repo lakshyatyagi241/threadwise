@@ -1,0 +1,709 @@
+{
+  "admin-console-shell": {
+    "nav": {
+      "overview": "Trang chủ",
+      "menuOrder": "Thứ tự menu",
+      "groups": {
+        "shell": "Giao diện"
+      },
+      "sections": {
+        "reports": "Báo cáo",
+        "plans": "Không gian làm việc & gói",
+        "billing": "Thanh toán",
+        "messaging": "Thanh toán nhắn tin",
+        "support": "Hỗ trợ",
+        "website": "Website",
+        "whatsapp": "WhatsApp",
+        "apps": "Ứng dụng",
+        "team": "Nhóm & bảo mật",
+        "settings": "Cài đặt",
+        "system": "Hệ thống"
+      },
+      "badges": {
+        "notSupported": "Không được hỗ trợ",
+        "noWorkspaces": "Không có không gian làm việc"
+      },
+      "labels": {
+        "addonPacks": "Gói tiện ích bổ sung",
+        "extensions": "Tiện ích mở rộng",
+        "trackingCode": "Mã theo dõi",
+        "planPricingSettings": "Cài đặt giá gói",
+        "checkoutSettings": "Cài đặt thanh toán",
+        "walletOverview": "Tổng quan ví",
+        "flowTemplates": "Mẫu luồng"
+      },
+      "hubNotes": {
+        "reports": "Báo cáo doanh thu, gói, AI và hệ thống.",
+        "plans": "Không gian làm việc, gói, gói tiện ích bổ sung, phiếu giảm giá và trang bảng giá.",
+        "billing": "Đơn hàng, hóa đơn, thanh toán và cài đặt thanh toán.",
+        "messaging": "Giá tin nhắn, biên lợi nhuận, gói tín dụng và thu nhập đại lý Meta.",
+        "support": "Phiếu hỗ trợ, hộp thư của nhóm và nền tảng, nhân viên, SLA, kịch bản và tin nhắn liên hệ.",
+        "website": "Trình chỉnh sửa trang web, blog, trang pháp lý, thông báo và sổ tay hướng dẫn.",
+        "whatsapp": "Nhà cung cấp, chuyển đổi số, cầu nối Node, webhook, WABA và cài đặt danh mục sản phẩm.",
+        "apps": "Chợ ứng dụng, tiện ích mở rộng và mẫu luồng.",
+        "team": "Vai trò, quyền, bảo mật và quy tắc đăng nhập.",
+        "settings": "Thương hiệu, thư, tích hợp, quyền riêng tư, lưu trữ và nhiều hơn nữa.",
+        "system": "Cập nhật, ngôn ngữ, tiền tệ và bản dịch."
+      },
+      "captions": {
+        "branding": "Thương hiệu và giao diện",
+        "integrations": "Tích hợp",
+        "privacy": "Quyền riêng tư và theo dõi",
+        "infrastructure": "Hạ tầng",
+        "roles": "Vai trò",
+        "security": "Bảo mật",
+        "signin": "Đăng nhập và đăng ký"
+      }
+    },
+    "shell": {
+      "collapse": "Thu gọn thanh bên",
+      "expand": "Mở rộng thanh bên",
+      "backToApp": "Quay lại ứng dụng",
+      "allAreas": "Tất cả khu vực",
+      "switchArea": "Chuyển khu vực, hiện đang ở {area}"
+    },
+    "overview": {
+      "title": "Bảng điều khiển nền tảng",
+      "note": "Chọn một khu vực. Mỗi khu vực mở ra với các trang trong menu bên trái, và Ctrl+K tìm bất kỳ trang nào theo tên.",
+      "open": "Mở",
+      "attentionTitle": "Cần chú ý",
+      "attentionAll": "{count, plural, other {# thông báo chưa đọc}}",
+      "attentionEmpty": "Hiện không có gì cần chú ý.",
+      "pages": "{count, plural, other {# trang}}"
+    },
+    "menuOrder": {
+      "title": "Thứ tự menu",
+      "note": "Chọn các mục hiển thị trên thanh trên cùng mà mọi khách hàng thấy, và thứ tự của chúng. Mọi mục còn lại nằm trong Thêm. Người dùng thấy thay đổi ở lần tải trang tiếp theo.",
+      "barZone": "Thanh trên cùng",
+      "moreZone": "Thêm",
+      "locked": "Luôn ở cuối",
+      "save": "Lưu bố cục",
+      "reset": "Đặt lại mặc định",
+      "saved": "Đã lưu bố cục menu. Người dùng thấy thay đổi ở lần tải trang tiếp theo.",
+      "saveFailed": "Không thể lưu bố cục.",
+      "loadFailed": "Không thể tải bố cục.",
+      "moveUp": "Chuyển {item} lên",
+      "moveDown": "Chuyển {item} xuống",
+      "remove": "Chuyển {item} vào Thêm",
+      "add": "Thêm {item} vào thanh trên cùng",
+      "removeShort": "Gỡ bỏ",
+      "addShort": "Thêm",
+      "items": {
+        "dashboard": "Bảng điều khiển",
+        "team-inbox": "Hộp thư nhóm",
+        "wa-campaigns": "Chiến dịch",
+        "flows": "Luồng",
+        "templates": "Mẫu",
+        "devices": "Thiết bị",
+        "metaads": "Quảng cáo Meta",
+        "broadcasts": "Gửi hàng loạt",
+        "contacts": "Liên hệ",
+        "deals": "Giao dịch",
+        "chat": "Live Chat",
+        "analytics": "Phân tích",
+        "auto-reply": "Trả lời tự động",
+        "scheduled": "Đã lên lịch",
+        "message-history": "Lịch sử",
+        "ai-assistants": "Trợ lý AI",
+        "ai-training": "Huấn luyện AI",
+        "wa-links": "Liên kết WA",
+        "chatbot-widgets": "Widget chat",
+        "webhooks": "Webhook",
+        "integrations": "Tích hợp",
+        "warmer": "Warmer",
+        "call-logs": "Nhật ký cuộc gọi",
+        "support": "Hỗ trợ",
+        "more": "Thêm"
+      }
+    },
+    "header": {
+      "health": {
+        "title": "Tình trạng nền tảng",
+        "ok": "Mọi hệ thống bình thường",
+        "stuck": "{count, plural, other {# tác vụ bị kẹt}}",
+        "down": "Không thể truy cập cơ sở dữ liệu"
+      },
+      "bell": {
+        "title": "Thông báo",
+        "labelUnread": "Thông báo, {count} chưa đọc",
+        "inbox": "Hộp thư",
+        "markAllRead": "Đánh dấu tất cả đã đọc",
+        "clearAll": "Xóa tất cả",
+        "viewAll": "Xem tất cả",
+        "loading": "Đang tải...",
+        "empty": "Chưa có thông báo nào."
+      },
+      "account": {
+        "menu": "Menu tài khoản",
+        "open": "Menu tài khoản của {name}",
+        "myAccount": "Tài khoản của tôi",
+        "settings": "Cài đặt",
+        "overview": "Tổng quan quản trị",
+        "signOut": "Đăng xuất"
+      },
+      "feed": {
+        "signup": "Đăng ký mới",
+        "paymentReceived": "Đã nhận thanh toán",
+        "newOrder": "Đơn hàng mới",
+        "newTicket": "Phiếu hỗ trợ mới",
+        "newContactMessage": "Tin nhắn liên hệ mới",
+        "newWorkspace": "Không gian làm việc mới"
+      }
+    },
+    "notificationsPage": {
+      "eyebrow": "Quản trị - Hoạt động nền tảng - Thông báo",
+      "title": "Thông báo quản trị",
+      "note": "Mọi diễn biến trên nền tảng: đăng ký mới, thanh toán, phiếu hỗ trợ, tin nhắn liên hệ và không gian làm việc mới. Tách biệt với thông báo cá nhân của thành viên không gian làm việc.",
+      "tiles": {
+        "all": "Tất cả sự kiện",
+        "signup": "Đăng ký",
+        "payment": "Thanh toán",
+        "ticket": "Hỗ trợ",
+        "contact": "Tin nhắn",
+        "workspace": "Không gian làm việc"
+      },
+      "pills": {
+        "all": "Tất cả",
+        "signup": "Đăng ký",
+        "payment": "Thanh toán",
+        "ticket": "Hỗ trợ",
+        "contact": "Tin nhắn",
+        "workspace": "Không gian làm việc"
+      },
+      "kinds": {
+        "signup": "Đăng ký",
+        "payment": "Thanh toán",
+        "ticket": "Hỗ trợ",
+        "contact": "Tin nhắn",
+        "workspace": "Không gian làm việc"
+      },
+      "last30": "30 ngày qua",
+      "search": "Tìm sự kiện...",
+      "empty": "Không có hoạt động nền tảng nào trong chế độ xem này.",
+      "loadFailed": "Không thể tải nguồn cấp.",
+      "cols": {
+        "type": "Loại",
+        "event": "Sự kiện",
+        "detail": "Chi tiết",
+        "when": "Thời gian",
+        "open": "Mở"
+      },
+      "showing": "Hiển thị {count, plural, other {# sự kiện gần đây}}",
+      "live": "Nguồn cấp trực tiếp, mới nhất trước"
+    },
+    "settings": {
+      "workspace": {
+        "label": "Cài đặt không gian làm việc",
+        "description": "Tên, múi giờ, tiền tệ, thông báo, xuất dữ liệu và xóa không gian làm việc.",
+        "keywords": "không gian làm việc, tên, múi giờ, tiền tệ, thông báo, xuất, xóa, slack"
+      }
+    },
+    "workspaceSettings": {
+      "titleLead": "Không gian làm việc",
+      "titleTail": "cài đặt",
+      "subtitle": "Cấu hình không gian làm việc, nhóm và tích hợp của bạn.",
+      "tabs": {
+        "general": "Chung",
+        "branding": "Thương hiệu",
+        "team": "Nhóm & vai trò",
+        "notifications": "Thông báo",
+        "aikeys": "Khóa AI",
+        "security": "Bảo mật",
+        "api": "API & webhook",
+        "data": "Dữ liệu & xuất",
+        "appearance": "Giao diện"
+      },
+      "general": {
+        "workspace": "Không gian làm việc",
+        "ownerOnly": "Chỉ chủ sở hữu không gian làm việc mới có thể đổi múi giờ, tiền tệ hoặc tên không gian làm việc.",
+        "name": "Tên không gian làm việc",
+        "url": "URL không gian làm việc",
+        "urlHint": "Không thể sửa slug URL tại đây. Hãy liên hệ bộ phận hỗ trợ để thay đổi.",
+        "timezone": "Múi giờ mặc định",
+        "timezoneHint": "Mọi lượt gửi theo lịch, kiểm tra giờ làm việc và bộ đếm SLA đều chạy theo múi giờ này.",
+        "currency": "Tiền tệ",
+        "currencyHint": "Dùng khi thanh toán gói, hóa đơn và hiển thị ví.",
+        "save": "Lưu",
+        "saved": "Đã lưu cài đặt.",
+        "saveFailed": "Không thể lưu cài đặt.",
+        "loadFailed": "Không thể tải cài đặt.",
+        "hours": {
+          "title": "Giờ làm việc",
+          "note": "Chỉ hiển thị để tham khảo. Giờ làm việc chưa được áp dụng nên các mục này ở chế độ chỉ đọc.",
+          "weekdays": "Thứ 2 - Thứ 6",
+          "saturday": "Thứ Bảy",
+          "sunday": "Chủ Nhật",
+          "from": "Từ",
+          "to": "Đến"
+        },
+        "preferences": {
+          "title": "Tự động tóm tắt bằng AI",
+          "note": "Nhận đánh giá AI trực tiếp trên mọi ô nhập nội dung tin nhắn: điểm tốt màu xanh, điểm cần sửa màu đỏ, kèm \"phiên bản tốt nhất\" chỉ một chạm để dán lại. Khi tắt, đánh giá tương tự chạy theo yêu cầu từ biểu tượng lấp lánh trên thanh công cụ.",
+          "save": "Lưu",
+          "saved": "Đã lưu tùy chọn.",
+          "saveFailed": "Không thể lưu tùy chọn."
+        }
+      },
+      "notifications": {
+        "title": "Thông báo không gian làm việc",
+        "note": "Bật/tắt gửi theo từng kênh. Mục nào tắt ở đây sẽ không bao giờ tạo thông báo chuông trong ứng dụng, email hay tin nhắn Slack.",
+        "readOnly": "Chỉ đọc. Chủ sở hữu không gian làm việc có thể chỉnh sửa.",
+        "save": "Lưu tùy chọn",
+        "saved": "Đã lưu tùy chọn thông báo.",
+        "saveFailed": "Không thể lưu tùy chọn.",
+        "loadFailed": "Không thể tải tùy chọn.",
+        "specificEvents": "Sự kiện cụ thể",
+        "byCategory": "Theo danh mục",
+        "event": "Sự kiện",
+        "category": "Danh mục",
+        "channels": {
+          "inapp": "Trong ứng dụng",
+          "email": "Email",
+          "slack": "Slack"
+        },
+        "events": {
+          "device_connected": "Thiết bị đã kết nối",
+          "device_disconnected": "Thiết bị đã ngắt kết nối",
+          "campaign_completed": "Chiến dịch hoàn tất",
+          "campaign_failed": "Chiến dịch thất bại",
+          "broadcast_completed": "Gửi hàng loạt hoàn tất",
+          "new_customer_reply": "Khách hàng trả lời mới",
+          "mention_in_inbox": "Bạn được @nhắc đến",
+          "conversation_assigned": "Cuộc trò chuyện được giao cho bạn",
+          "sla_breached": "Vi phạm SLA",
+          "wallet_low_balance": "Số dư ví thấp",
+          "plan_changed": "Nâng cấp / hạ cấp gói",
+          "payment_failed": "Thanh toán thất bại",
+          "webhook_delivery_failed": "Gửi webhook thất bại",
+          "flow_started": "Luồng bắt đầu",
+          "flow_failed": "Luồng thất bại",
+          "integration_disconnected": "Tích hợp bị ngắt kết nối",
+          "appointment_booked": "Đã đặt lịch hẹn",
+          "weekly_summary": "Tóm tắt hằng tuần"
+        },
+        "categories": {
+          "device": "Thiết bị",
+          "contact": "Liên hệ",
+          "campaign": "Chiến dịch",
+          "broadcast": "Gửi hàng loạt",
+          "template": "Mẫu",
+          "chat": "Chat",
+          "webhook": "Webhook",
+          "billing": "Thanh toán",
+          "system": "Hệ thống"
+        },
+        "slackLabel": "URL webhook đến của Slack",
+        "slackHint": "Tạo một webhook trong Slack tại Apps, Incoming Webhooks. Các sự kiện bật Slack sẽ được đăng ở đây.",
+        "channelStatus": "Trạng thái kênh",
+        "statusInapp": "Chuông trong ứng dụng: hoạt động, điều khiển huy hiệu trên thanh trên cùng.",
+        "statusEmailLive": "Email: hoạt động, gửi qua cài đặt thư của nền tảng.",
+        "statusEmailOff": "Email: gửi sau khi quản trị viên nền tảng cấu hình SMTP.",
+        "statusSlackOn": "Slack: đã lưu webhook.",
+        "statusSlackOff": "Slack: thêm URL webhook để bật."
+      },
+      "data": {
+        "loadFailed": "Không thể tải số lượng xuất.",
+        "exportTitle": "Xuất dữ liệu",
+        "exportNote": "Tải dữ liệu không gian làm việc của bạn dưới dạng CSV. Mỗi liên kết tạo một bản xuất mới.",
+        "exportOwnerOnly": "Chỉ chủ sở hữu không gian làm việc mới có thể tải bản xuất.",
+        "types": {
+          "contacts": "Liên hệ",
+          "conversations": "Cuộc trò chuyện",
+          "messages": "Tin nhắn"
+        },
+        "count": {
+          "contacts": "{count, plural, other {# bản ghi}} · CSV",
+          "conversations": "{count, plural, other {# hội thoại}} · CSV",
+          "messages": "{count, plural, other {# tin nhắn}} · CSV"
+        },
+        "delete": {
+          "title": "Xóa không gian làm việc",
+          "note": "Xóa vĩnh viễn không gian làm việc này, mọi cuộc trò chuyện, tự động hóa và lịch sử thanh toán.",
+          "irreversible": "Không thể hoàn tác.",
+          "ownerOnly": "Chỉ chủ sở hữu không gian làm việc mới có thể xóa không gian làm việc.",
+          "typeName": "Nhập tên không gian làm việc:",
+          "password": "Xác nhận bằng mật khẩu",
+          "submit": "Xóa vĩnh viễn không gian làm việc",
+          "cancel": "Hủy",
+          "confirmTitle": "Xóa không gian làm việc này?",
+          "confirmMessage": "\"{name}\" và mọi thứ trong đó sẽ bị xóa và mọi người sẽ bị đăng xuất. Không thể hoàn tác.",
+          "failed": "Không thể xóa không gian làm việc."
+        }
+      },
+      "groups": {
+        "workspace": "Không gian làm việc",
+        "system": "Hệ thống"
+      },
+      "railLabel": "Các mục cài đặt",
+      "personal": {
+        "title": "Tài khoản của bạn",
+        "body": "Hồ sơ, mật khẩu và tùy chọn cá nhân."
+      },
+      "api": {
+        "restTitle": "REST API chung",
+        "rest1": "Tạo khóa API để đọc và ghi liên hệ, cuộc trò chuyện và tin nhắn từ hệ thống của riêng bạn.",
+        "rest2": "Mỗi khóa chỉ áp dụng cho không gian làm việc này và có thể thu hồi bất cứ lúc nào.",
+        "rest3": "Yêu cầu bị giới hạn theo phút tùy gói của bạn.",
+        "webhooksTitle": "Webhook",
+        "webhooksBody": "Gửi sự kiện đến endpoint của bạn và nhận sự kiện từ các công cụ khác.",
+        "manage": "Quản lý tích hợp"
+      },
+      "appearance": {
+        "title": "Giao diện",
+        "note": "Chọn giao diện ứng dụng cho bạn. Đây cũng là lựa chọn của nút mặt trời và mặt trăng trên thanh trên cùng.",
+        "choices": {
+          "light": {
+            "label": "Sáng",
+            "body": "Trang sáng với tông màu giấy dịu."
+          },
+          "dark": {
+            "label": "Tối",
+            "body": "Trang tối dễ nhìn hơn vào ban đêm."
+          }
+        },
+        "save": "Lưu",
+        "saved": "Đã cập nhật giao diện."
+      }
+    },
+    "topNav": {
+      "more": "Thêm",
+      "search": "Tìm kiếm",
+      "premium": "Tính năng cao cấp: nâng cấp gói để mở khóa"
+    },
+    "palette": {
+      "title": "Tìm trang",
+      "placeholder": "Tìm trang, cài đặt, công cụ...",
+      "empty": "Không có kết quả cho \"{query}\"",
+      "hintNavigate": "Lên và xuống để di chuyển",
+      "hintOpen": "Enter để mở",
+      "hintToggle": "Ctrl K để bật/tắt",
+      "tags": {
+        "page": "trang",
+        "account": "tài khoản",
+        "plan": "gói",
+        "help": "trợ giúp",
+        "system": "hệ thống"
+      },
+      "entries": {
+        "profile": "Hồ sơ",
+        "profileHint": "Tên, ảnh và thông tin liên hệ của bạn",
+        "password": "Mật khẩu và bảo mật",
+        "passwordHint": "Mật khẩu, đăng nhập hai bước và phiên đang hoạt động"
+      }
+    },
+    "strip": {
+      "jump": "Tìm kiếm hoặc chuyển đến...",
+      "account": {
+        "group": "Tài khoản",
+        "account": "Tài khoản",
+        "wallet": "Ví",
+        "notifications": "Thông báo"
+      },
+      "greeting": {
+        "midnightOil": "Làm việc khuya",
+        "morning": "Chào buổi sáng",
+        "afternoon": "Chào buổi chiều",
+        "evening": "Chào buổi tối",
+        "night": "Chúc ngủ ngon"
+      }
+    },
+    "profileMenu": {
+      "chip": "Gói {plan} - {role}",
+      "wallet": "Ví",
+      "orders": "Lịch sử đơn hàng",
+      "plans": "Giá và các gói",
+      "tour": "Xem hướng dẫn nhanh"
+    },
+    "quickAccess": {
+      "title": "Truy cập nhanh",
+      "open": "Mở truy cập nhanh",
+      "close": "Đóng",
+      "edit": "Sửa lối tắt",
+      "editTitle": "Sửa truy cập nhanh",
+      "editNote": "Ghim tối đa mười trang hoặc liên kết của riêng bạn. Chúng hiển thị trên bảng điều khiển và trong ngăn bên.",
+      "dashboard": "Bảng điều khiển",
+      "allApps": "Tất cả ứng dụng",
+      "limit": "Bạn có thể ghim tối đa {max} lối tắt.",
+      "saveFailed": "Không thể lưu lối tắt.",
+      "customLinks": "Liên kết tùy chỉnh",
+      "linkLabel": "Nhãn",
+      "linkUrl": "Liên kết",
+      "addLink": "Thêm liên kết",
+      "removeLink": "Gỡ liên kết này",
+      "counter": "Đã ghim {count} / {max}",
+      "cancel": "Hủy",
+      "save": "Lưu lối tắt",
+      "problem": {
+        "incomplete": "Liên kết cần có nhãn và địa chỉ.",
+        "unsafe": "Dùng địa chỉ trong ứng dụng này (bắt đầu bằng một dấu gạch chéo) hoặc địa chỉ http hay https."
+      },
+      "catalog": {
+        "inbox": {
+          "label": "Hộp thư hợp nhất",
+          "desc": "Mọi cuộc trò chuyện ở một nơi"
+        },
+        "contacts": {
+          "label": "Liên hệ",
+          "desc": "Đối tượng của bạn và thông tin của họ"
+        },
+        "campaigns": {
+          "label": "Chiến dịch",
+          "desc": "Lập kế hoạch và gửi chiến dịch"
+        },
+        "broadcasts": {
+          "label": "Gửi hàng loạt",
+          "desc": "Gửi một tin nhắn đến nhiều liên hệ"
+        },
+        "templates": {
+          "label": "Mẫu",
+          "desc": "Mẫu tin nhắn đã được duyệt"
+        },
+        "flows": {
+          "label": "Luồng",
+          "desc": "Tự động hóa cuộc trò chuyện"
+        },
+        "scheduled": {
+          "label": "Đã lên lịch",
+          "desc": "Tin nhắn đang chờ gửi"
+        },
+        "catalog": {
+          "label": "Danh mục sản phẩm",
+          "desc": "Sản phẩm bạn bán trên WhatsApp"
+        },
+        "store": {
+          "label": "Cửa hàng",
+          "desc": "Gian hàng và đơn hàng của bạn"
+        },
+        "deals": {
+          "label": "Quy trình bán hàng",
+          "desc": "Giao dịch theo giai đoạn"
+        },
+        "analytics": {
+          "label": "Phân tích",
+          "desc": "Số liệu gửi và phản hồi"
+        },
+        "auto-reply": {
+          "label": "Trả lời tự động",
+          "desc": "Trả lời theo từ khóa và ngoài giờ"
+        },
+        "devices": {
+          "label": "Thiết bị",
+          "desc": "Các số WhatsApp đã kết nối"
+        },
+        "chatbots": {
+          "label": "Widget chat",
+          "desc": "Widget chat cho website của bạn"
+        },
+        "ai": {
+          "label": "Trợ lý AI",
+          "desc": "Trợ lý trả lời thay bạn"
+        },
+        "appointments": {
+          "label": "Lịch hẹn",
+          "desc": "Đặt lịch và lịch trống"
+        },
+        "webhooks": {
+          "label": "Webhook",
+          "desc": "Gửi sự kiện đến các hệ thống khác"
+        },
+        "history": {
+          "label": "Nhật ký tin nhắn",
+          "desc": "Mọi tin nhắn đã gửi và nhận"
+        },
+        "account": {
+          "label": "Tài khoản",
+          "desc": "Hồ sơ, gói và ví"
+        },
+        "more": {
+          "label": "Thêm ứng dụng",
+          "desc": "Mọi công cụ trong một trang"
+        }
+      }
+    },
+    "announcements": {
+      "label": "Thông báo",
+      "dismiss": "Bỏ qua"
+    },
+    "tour": {
+      "close": "Đóng hướng dẫn",
+      "back": "Quay lại",
+      "next": "Tiếp",
+      "done": "Xong",
+      "progress": "{current} trên {total}",
+      "steps": {
+        "welcome": {
+          "title": "Chào mừng đến với {app}",
+          "body": "Giới thiệu nhanh những nơi bạn dùng nhiều nhất. Chưa đến một phút."
+        },
+        "navbar": {
+          "title": "Menu của bạn",
+          "body": "Mọi việc hằng ngày chỉ cách một cú nhấp trên thanh trên cùng."
+        },
+        "metaads": {
+          "title": "Quảng cáo Meta",
+          "body": "Chạy quảng cáo nhấp để mở WhatsApp và xem kết quả mang lại."
+        },
+        "campaigns": {
+          "title": "Chiến dịch",
+          "body": "Lập kế hoạch, gửi và theo dõi chiến dịch WhatsApp."
+        },
+        "flows": {
+          "title": "Luồng",
+          "body": "Xây dựng tự động hóa trả lời thay bạn."
+        },
+        "templates": {
+          "title": "Mẫu",
+          "body": "Lưu các mẫu tin nhắn đã duyệt của bạn tại đây."
+        },
+        "devices": {
+          "title": "Kênh",
+          "body": "Kết nối các số và tài khoản bạn gửi tin từ đó."
+        },
+        "more": {
+          "title": "Thêm",
+          "body": "Mọi công cụ khác nằm ở đây, được nhóm và có thể tìm kiếm."
+        },
+        "kpi": {
+          "title": "Số của bạn",
+          "body": "Tin nhắn, phản hồi và tình trạng gửi trong nháy mắt."
+        },
+        "newCampaign": {
+          "title": "Bắt đầu chiến dịch",
+          "body": "Tạo chiến dịch đầu tiên của bạn từ đây."
+        },
+        "pipeline": {
+          "title": "Quy trình bán hàng",
+          "body": "Theo dõi giao dịch từ tin nhắn đầu tiên đến khi chốt."
+        }
+      }
+    },
+    "more": {
+      "titleLead": "Thêm",
+      "titleTail": "tính năng",
+      "subtitle": "Mọi công cụ ở một nơi.",
+      "navigation": "Điều hướng",
+      "allTools": "Tất cả công cụ",
+      "noTools": "Chưa có gì ở đây.",
+      "tabs": {
+        "all": "Tất cả",
+        "automation": "Tự động hóa",
+        "data": "Dữ liệu",
+        "help": "Trợ giúp"
+      },
+      "plan": "Gói của bạn",
+      "managePlan": "Quản lý gói",
+      "wallet": "Ví",
+      "topUp": "Nạp tiền",
+      "tips": {
+        "title": "Mẹo",
+        "pager": "Mẹo",
+        "templates": {
+          "title": "Dùng mẫu",
+          "body": "Mẫu đã duyệt tiếp cận được khách hàng ngoài khung 24 giờ."
+        },
+        "flows": {
+          "title": "Tự động trả lời",
+          "body": "Một luồng có thể trả lời cùng một câu hỏi thay bạn mỗi lần."
+        },
+        "palette": {
+          "title": "Chuyển đến bất cứ đâu",
+          "body": "Nhấn Ctrl K để tìm mọi trang."
+        },
+        "scheduled": {
+          "title": "Lên lịch trước",
+          "body": "Xếp hàng tin nhắn ngay bây giờ và để nó gửi đúng lúc."
+        },
+        "wallet": {
+          "title": "Theo dõi số dư",
+          "body": "Nạp tiền trước khi sắp hết để việc gửi không bao giờ bị gián đoạn."
+        }
+      },
+      "shortcuts": {
+        "title": "Lối tắt",
+        "customise": "Tùy chỉnh",
+        "empty": "Chưa chọn lối tắt nào. Dùng Tùy chỉnh để thêm.",
+        "editTitle": "Tùy chỉnh lối tắt",
+        "emptyEditor": "Chưa chọn lối tắt nào",
+        "up": "Chuyển {item} lên",
+        "down": "Chuyển {item} xuống",
+        "remove": "Gỡ {item}",
+        "customTitle": "Tiêu đề",
+        "customSubtitle": "Phụ đề",
+        "customUrl": "Liên kết",
+        "customProblem": "Lối tắt tùy chỉnh cần có tiêu đề và liên kết.",
+        "addCustom": "Thêm lối tắt tùy chỉnh",
+        "reset": "Đặt lại mặc định",
+        "cancel": "Hủy",
+        "save": "Lưu",
+        "presets": {
+          "new-auto-reply": {
+            "title": "Trả lời tự động mới",
+            "subtitle": "Tự động trả lời các câu hỏi thường gặp"
+          },
+          "schedule-send": {
+            "title": "Lên lịch gửi",
+            "subtitle": "Xếp hàng tin nhắn để gửi sau"
+          },
+          "test-webhook": {
+            "title": "Webhook",
+            "subtitle": "Gửi sự kiện đến các hệ thống khác"
+          },
+          "export-history": {
+            "title": "Lịch sử tin nhắn",
+            "subtitle": "Xem lại và xuất những gì đã gửi"
+          },
+          "contact-support": {
+            "title": "Liên hệ hỗ trợ",
+            "subtitle": "Nhờ nhóm hỗ trợ giúp đỡ"
+          },
+          "new-broadcast": {
+            "title": "Gửi hàng loạt mới",
+            "subtitle": "Nhắn nhiều liên hệ cùng lúc"
+          },
+          "open-contacts": {
+            "title": "Liên hệ",
+            "subtitle": "Đối tượng của bạn"
+          },
+          "pair-device": {
+            "title": "Kết nối một số",
+            "subtitle": "Ghép nối một số WhatsApp"
+          },
+          "team-inbox": {
+            "title": "Hộp thư",
+            "subtitle": "Mọi cuộc trò chuyện"
+          },
+          "create-flow": {
+            "title": "Tạo luồng",
+            "subtitle": "Xây dựng một tự động hóa"
+          },
+          "new-template": {
+            "title": "Mẫu mới",
+            "subtitle": "Soạn một mẫu tin nhắn"
+          }
+        }
+      }
+    },
+    "inboxBell": {
+      "label": "{count, plural, other {# cuộc trò chuyện chưa đọc}}",
+      "pill": "{count, plural, other {tin nhắn mới}}",
+      "dismiss": "Bỏ qua cho đến khi có tin mới hơn",
+      "title": "Tin nhắn mới",
+      "viewInbox": "Mở hộp thư"
+    },
+    "connectDevice": {
+      "title": "Kết nối một số",
+      "close": "Đóng",
+      "connected": "Số đã kết nối"
+    },
+    "search": {
+      "label": "Tìm trong bảng điều khiển",
+      "trigger": "Tìm trong quản trị…",
+      "placeholder": "Tìm trang và cài đặt…",
+      "noResults": "Không có kết quả cho “{query}”",
+      "count": "{count, plural, other {# kết quả}}",
+      "hintMove": "di chuyển",
+      "hintOpen": "mở",
+      "hintToggle": "bật/tắt"
+    }
+  }
+}

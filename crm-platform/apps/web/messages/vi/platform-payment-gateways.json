@@ -1,0 +1,686 @@
+{
+  "platform-payment-gateways": {
+    "nav": {
+      "gateways": "Cổng thanh toán",
+      "group": "Thanh toán",
+      "orders": "Lịch sử đơn hàng",
+      "billingHistory": "Lịch sử thanh toán",
+      "invoices": "Hóa đơn",
+      "billingSettings": "Cài đặt thanh toán"
+    },
+    "admin": {
+      "title": "Cổng thanh toán",
+      "description": "{count} cổng thanh toán. Thông tin xác thực được mã hóa khi lưu trữ và sẽ không hiển thị lại sau khi lưu.",
+      "kpi": {
+        "total": "Cổng thanh toán",
+        "active": "Đang hoạt động",
+        "india": "Ấn Độ",
+        "crypto": "Tiền mã hóa"
+      },
+      "tabsLabel": "Lọc theo khu vực",
+      "all": "Tất cả",
+      "search": "Lọc theo tên hoặc slug",
+      "emptyTitle": "Không có cổng thanh toán nào",
+      "emptyMessage": "Không có kết quả khớp với khu vực và từ khóa này. Thử tab khác hoặc xóa từ khóa tìm kiếm.",
+      "regions": {
+        "popular": "Phổ biến",
+        "india": "Ấn Độ",
+        "asia": "Châu Á",
+        "mena": "MENA",
+        "europe": "Châu Âu",
+        "us": "Hoa Kỳ và Canada",
+        "africa": "Châu Phi",
+        "latam": "Mỹ Latinh",
+        "crypto": "Tiền mã hóa",
+        "offline": "Ngoại tuyến"
+      },
+      "card": {
+        "active": "Đang hoạt động",
+        "disabled": "Đã tắt",
+        "mode": {
+          "sandbox": "Sandbox",
+          "live": "Chính thức"
+        },
+        "keysSaved": "Đã lưu khóa",
+        "noDriverBadge": "Chưa có trình điều khiển",
+        "activate": "Kích hoạt",
+        "disable": "Tắt",
+        "savedPlaceholder": "Đã lưu. Để trống để giữ nguyên.",
+        "clear": "Xóa giá trị đã lưu",
+        "undoClear": "Giữ giá trị đã lưu",
+        "modeLabel": "Chế độ",
+        "sortOrder": "Thứ tự sắp xếp",
+        "currencies": "Tiền tệ được hỗ trợ",
+        "currenciesAll": "Chưa chọn: chấp nhận mọi loại tiền tệ",
+        "currenciesSelected": "{count, plural, other {Đã chọn #}}",
+        "currenciesHint": "Người mua chỉ thấy cổng thanh toán này với các loại tiền tệ bạn chọn. Để trống tất cả để chấp nhận mọi loại tiền tệ.",
+        "webhookUrl": "URL webhook",
+        "webhookHint": "Dán URL này vào bảng điều khiển của nhà cung cấp để họ thông báo cho chúng tôi về các khoản thanh toán.",
+        "saving": "Đang lưu",
+        "save": "Lưu",
+        "readOnly": "Chỉ quản trị viên cấp cao mới có thể thay đổi cổng thanh toán.",
+        "saved": "Đã lưu cài đặt {name}.",
+        "activated": "Đã kích hoạt {name}.",
+        "deactivated": "Đã tắt {name}."
+      },
+      "errors": {
+        "conflict": "Có người khác vừa thay đổi cổng thanh toán này. Trang đã được tải lại; hãy xem lại và lưu lần nữa.",
+        "notConfigured": "Cấu hình các trường bắt buộc trước: {fields}",
+        "noDriver": "Cổng thanh toán này chưa có trình điều khiển trong bản phát hành này, nên có thể cấu hình nhưng chưa thể kích hoạt.",
+        "forbidden": "Chỉ quản trị viên cấp cao mới có thể thay đổi cổng thanh toán.",
+        "generic": "Đã xảy ra lỗi. Vui lòng thử lại."
+      }
+    },
+    "checkout": {
+      "title": "Hoàn tất đơn hàng",
+      "walletTitle": "Nạp tiền vào ví của bạn",
+      "subtitle": "Xem lại giá, cho chúng tôi biết ai là người thanh toán và chọn cách thanh toán.",
+      "loading": "Đang tải trang thanh toán",
+      "account": "Tài khoản",
+      "name": "Họ và tên",
+      "email": "Email",
+      "billingAddress": "Địa chỉ thanh toán",
+      "company": "Công ty",
+      "taxId": "Mã số thuế",
+      "taxIdHint": "GSTIN, VAT hoặc EIN, nếu có.",
+      "address": "Địa chỉ",
+      "city": "Thành phố",
+      "postal": "Mã bưu chính",
+      "country": "Quốc gia",
+      "currency": "Tiền tệ",
+      "period": "Kỳ thanh toán",
+      "periods": {
+        "monthly": "Hàng tháng",
+        "yearly": "Hàng năm"
+      },
+      "paymentMethod": "Phương thức thanh toán",
+      "noGateway": "Chưa cấu hình cổng thanh toán nào cho {currency}. Hãy nhờ quản trị viên kích hoạt một cổng.",
+      "noGatewayButton": "Chưa cấu hình cổng thanh toán",
+      "sandbox": "sandbox",
+      "pay": "Thanh toán {amount}",
+      "processing": "Đang bắt đầu thanh toán",
+      "summary": "Tóm tắt đơn hàng",
+      "billed": {
+        "monthly": "Thanh toán cho một kỳ",
+        "yearly": "Thanh toán cho 12 tháng"
+      },
+      "subtotal": "Tạm tính",
+      "tax": "{label} ({rate}%)",
+      "total": "Tổng hôm nay",
+      "updating": "Đang cập nhật giá",
+      "errors": {
+        "gatewayUnavailable": "Cổng thanh toán này hiện không khả dụng.",
+        "currencyUnsupported": "Cổng thanh toán này không chấp nhận loại tiền tệ này. Chọn cổng hoặc tiền tệ khác.",
+        "providerError": "Lỗi từ nhà cung cấp thanh toán. Thử lại hoặc chọn cổng khác.",
+        "notPurchasable": "Gói này không thể mua trực tuyến.",
+        "downgrade": "Không thể hạ cấp trực tuyến. Liên hệ hỗ trợ để chuyển sang gói thấp hơn.",
+        "amountTooLow": "Nhập số tiền lớn hơn để nạp vào ví của bạn.",
+        "couponUnavailable": "Chưa hỗ trợ mã giảm giá.",
+        "forbidden": "Bạn không có quyền mua.",
+        "notFound": "Không tìm thấy gói này.",
+        "widgetBlocked": "Không thể mở cửa sổ thanh toán. Kiểm tra trình duyệt có cho phép không rồi thử lại.",
+        "generic": "Đã xảy ra lỗi. Vui lòng thử lại.",
+        "couponRejected": "Không thể sử dụng mã giảm giá này."
+      },
+      "coupon": "Mã giảm giá",
+      "couponApply": "Áp dụng",
+      "couponApplied": "Đã áp dụng mã {code}: giảm {amount}.",
+      "couponRemove": "Xóa",
+      "couponDiscount": "Giảm giá ({code})",
+      "refundGuarantee": "Đảm bảo hoàn tiền trong {days} ngày",
+      "countryPlaceholder": "Chọn quốc gia",
+      "autoRenew": "Tự động gia hạn mỗi kỳ. Bạn có thể hủy bất cứ lúc nào.",
+      "addonRenews": "Tiện ích này tự động gia hạn mỗi kỳ. Bạn có thể hủy bất cứ lúc nào và vẫn giữ đến hết kỳ trả phí.",
+      "cardTitle": "Thanh toán bằng thẻ",
+      "payNow": "Thanh toán ngay"
+    },
+    "orders": {
+      "title": "Lịch sử đơn hàng",
+      "lifetime": "Tổng chi tiêu: {total}",
+      "loading": "Đang tải đơn hàng",
+      "loadFailed": "Không thể tải đơn hàng. Tải lại trang để thử lại.",
+      "emptyTitle": "Chưa có đơn hàng",
+      "emptyMessage": "Các giao dịch mua của bạn sẽ hiển thị ở đây.",
+      "browsePlans": "Xem các gói",
+      "loadMore": "Tải thêm",
+      "outcome": {
+        "success": "Đã nhận thanh toán. Cảm ơn bạn.",
+        "failed": "Thanh toán chưa hoàn tất. Thử lại hoặc chọn cổng khác.",
+        "cancelled": "Bạn đã hủy thanh toán.",
+        "pending": "Chúng tôi đang chờ nhà cung cấp thanh toán xác nhận. Trang sẽ cập nhật khi có xác nhận.",
+        "notfound": "Không tìm thấy đơn hàng này.",
+        "proof": "Đã gửi chứng từ thanh toán. Chúng tôi sẽ xác minh và kích hoạt gói của bạn sớm."
+      },
+      "col": {
+        "order": "Đơn hàng",
+        "item": "Mục",
+        "date": "Ngày",
+        "amount": "Số tiền",
+        "status": "Trạng thái",
+        "actions": "Thao tác"
+      },
+      "status": {
+        "pending": "Đang chờ",
+        "awaiting_approval": "Chờ phê duyệt",
+        "paid": "Đã thanh toán",
+        "failed": "Thất bại",
+        "cancelled": "Đã hủy",
+        "refunded": "Đã hoàn tiền"
+      },
+      "uploadProof": "Chứng từ thanh toán",
+      "invoice": "Hóa đơn"
+    },
+    "billing": {
+      "common": {
+        "admin": "Quản trị",
+        "breadcrumb": "Đường dẫn",
+        "billingHistory": "Lịch sử thanh toán",
+        "analytics": "Phân tích",
+        "exportCsv": "Xuất CSV",
+        "exportTruncated": "Xuất dừng ở {rows} dòng. Thu hẹp bộ lọc để xuất phần còn lại.",
+        "exportFailed": "Không thể tạo tệp xuất. Thử lại.",
+        "actionFailed": "Thao tác không thành công. Tải lại trang và thử lại.",
+        "cancel": "Hủy",
+        "back": "Giữ lại",
+        "close": "Đóng",
+        "openWorkspace": "Mở không gian làm việc",
+        "showing": "Hiển thị {from}–{to} trên tổng {total} {noun}",
+        "pager": "Trang",
+        "previous": "Trước",
+        "next": "Tiếp",
+        "chartEmpty": "Không có dữ liệu trong khoảng thời gian này.",
+        "periods": {
+          "monthly": "hàng tháng",
+          "yearly": "hàng năm"
+        },
+        "status": {
+          "pending": "đang chờ",
+          "awaiting_approval": "chờ phê duyệt",
+          "paid": "đã thanh toán",
+          "failed": "thất bại",
+          "cancelled": "đã hủy",
+          "refunded": "đã hoàn tiền"
+        },
+        "windows": {
+          "7d": "7 ngày gần đây",
+          "30d": "30 ngày gần đây",
+          "90d": "90 ngày gần đây",
+          "1y": "Năm trước",
+          "all": "Toàn thời gian"
+        }
+      },
+      "orders": {
+        "title": "Lịch sử đơn hàng",
+        "eyebrow": "Quản trị · Thanh toán & gói · Lịch sử đơn hàng",
+        "titleFirst": "Đơn hàng",
+        "titleSecond": "lịch sử",
+        "description": "Đơn đăng ký, nâng cấp và hạ cấp gói, mua tiện ích bổ sung và nạp tiền một lần: mọi quyết định thương mại mà không gian làm việc đã thực hiện.",
+        "window": "Khoảng thời gian",
+        "windows": {
+          "90d": "90 ngày gần đây",
+          "this_year": "Năm nay",
+          "all": "Toàn thời gian"
+        },
+        "kpi": {
+          "total": "Tổng đơn hàng",
+          "vsPrevious": "so với kỳ trước",
+          "upgrades": "Nâng cấp",
+          "mrrAdded": "+{amount} MRR tăng thêm",
+          "downgrades": "Hạ cấp",
+          "mrrLowered": "{amount} ở các gói thấp hơn",
+          "addons": "Gói tiện ích bổ sung",
+          "attached": "{amount} đã đính kèm",
+          "cancellations": "Hủy",
+          "mrrLost": "-{amount} MRR đã mất"
+        },
+        "typeFilter": "Lọc theo loại đơn hàng",
+        "types": {
+          "all": "Tất cả",
+          "new": "Đăng ký mới",
+          "upgrade": "Nâng cấp",
+          "downgrade": "Hạ cấp",
+          "addon": "Tiện ích bổ sung",
+          "cancel": "Hủy"
+        },
+        "rowTypes": {
+          "new": "Mới",
+          "renewal": "Gia hạn",
+          "upgrade": "Nâng cấp",
+          "downgrade": "Hạ cấp",
+          "addon": "Tiện ích bổ sung",
+          "wallet_topup": "Nạp ví",
+          "manual": "Thủ công"
+        },
+        "search": "Tìm theo số đơn hàng, không gian làm việc, gói…",
+        "noun": "đơn hàng",
+        "col": {
+          "order": "Số đơn hàng",
+          "date": "Ngày",
+          "workspace": "Không gian làm việc",
+          "type": "Loại",
+          "item": "Gói / mục",
+          "mrr": "Δ MRR",
+          "total": "Tổng",
+          "status": "Trạng thái"
+        },
+        "empty": "Không có đơn hàng trong khoảng thời gian này.",
+        "awaitingApproval": "chờ phê duyệt",
+        "actions": {
+          "markPaid": "Đánh dấu đã thanh toán",
+          "cancelOrder": "Hủy",
+          "approve": "Phê duyệt",
+          "reject": "Từ chối"
+        },
+        "confirm": {
+          "approveTitle": "Đánh dấu đơn hàng này là đã thanh toán?",
+          "approve": "Đánh dấu đơn hàng này là đã thanh toán và kích hoạt gói?",
+          "cancelTitle": "Hủy đơn hàng này?",
+          "cancel": "Hủy đơn hàng đang chờ này? Đơn sẽ được đánh dấu đã hủy và không còn nằm trong các khoản còn phải thu."
+        },
+        "reject": {
+          "title": "Từ chối {order}",
+          "reason": "Lý do (không bắt buộc)"
+        },
+        "awaiting": {
+          "title": "Chờ phê duyệt",
+          "ref": "Mã tham chiếu:",
+          "proofAttached": "Đã đính kèm chứng từ thanh toán"
+        }
+      },
+      "orderAnalytics": {
+        "title": "Phân tích đơn hàng",
+        "eyebrow": "Quản trị · Thanh toán & gói · Phân tích đơn hàng",
+        "titleFirst": "Đơn hàng",
+        "titleSecond": "phân tích",
+        "description": "Đăng ký, nâng cấp, hạ cấp, tiện ích bổ sung và hủy: yếu tố nào đang tác động đến biến động doanh thu ròng trên toàn nền tảng.",
+        "window": "Khoảng thời gian",
+        "viewLedger": "Xem sổ cái",
+        "kpi": {
+          "total": "Tổng đơn hàng",
+          "newMrr": "MRR mới ròng",
+          "paid": "{count} đã thanh toán",
+          "lostMrr": "MRR đã mất",
+          "cancels": "{count} lượt hủy",
+          "aov": "Giá trị đơn hàng trung bình",
+          "paidOrders": "đơn đã thanh toán",
+          "attach": "Tỷ lệ đính kèm tiện ích",
+          "attachLabel": "{addons} tiện ích / {total}",
+          "conversion": "Tỷ lệ chuyển đổi",
+          "conversionHint": "đơn đã thanh toán trên {signups} lượt đăng ký"
+        },
+        "motion": {
+          "kicker": "Biến động đơn hàng",
+          "title": "Đơn đã thanh toán và lượt hủy",
+          "paid": "Đã thanh toán",
+          "cancelled": "Đã hủy hoặc thất bại"
+        },
+        "typeMix": {
+          "kicker": "Cơ cấu loại đơn hàng",
+          "title": "Theo loại"
+        },
+        "addons": {
+          "kicker": "Tiện ích đã bán",
+          "title": "Hiệu quả cao nhất",
+          "empty": "Không có đơn tiện ích nào trong khoảng thời gian này."
+        },
+        "funnel": {
+          "kicker": "Phễu chuyển đổi",
+          "title": "Từ đăng ký đến trả phí",
+          "note": "Chỉ hiện các giai đoạn đã được tính."
+        },
+        "countries": {
+          "kicker": "Theo quốc gia",
+          "title": "Thị trường hàng đầu",
+          "empty": "Chưa nhập quốc gia thanh toán nào."
+        },
+        "cohorts": {
+          "kicker": "Tỷ lệ giữ chân theo nhóm",
+          "title": "% không gian làm việc vẫn hoạt động sau N tháng",
+          "last": "6 nhóm gần nhất",
+          "emptyTitle": "Chưa có không gian làm việc đăng ký",
+          "empty": "Nhóm sẽ hiện khi đã có không gian làm việc đăng ký."
+        }
+      },
+      "history": {
+        "title": "Lịch sử thanh toán",
+        "eyebrow": "Quản trị · Thanh toán & gói · Lịch sử thanh toán",
+        "titleFirst": "Thanh toán",
+        "titleSecond": "lịch sử",
+        "description": "Mọi sự kiện thanh toán mà nền tảng đã xử lý: thu phí, hoàn tiền và thử lại trên mọi không gian làm việc.",
+        "window": "Khoảng thời gian",
+        "kpi": {
+          "gross": "Doanh thu gộp",
+          "vsPrev": "so với kỳ trước",
+          "charges": "Thu phí thành công",
+          "successRate": "Tỷ lệ thành công {pct}%",
+          "failed": "Thất bại",
+          "dunning": "cần thử lại / nhắc thanh toán",
+          "refunds": "Hoàn tiền đã thực hiện",
+          "refundsTotal": "{amount} tổng cộng",
+          "chargebacks": "Khiếu nại thanh toán",
+          "disputed": "{amount} đang tranh chấp"
+        },
+        "trend": {
+          "kicker": "Xu hướng",
+          "title": "Thu phí và hoàn tiền theo ngày",
+          "charges": "Thu phí",
+          "refunds": "Hoàn tiền"
+        },
+        "statusFilter": "Lọc theo trạng thái thanh toán",
+        "statuses": {
+          "all": "Tất cả",
+          "paid": "Thành công",
+          "failed": "Thất bại",
+          "refunded": "Đã hoàn tiền",
+          "pending": "Đang chờ"
+        },
+        "gateway": "Cổng thanh toán",
+        "allGateways": "Tất cả cổng thanh toán",
+        "search": "Tìm theo số đơn hàng, không gian làm việc, khách hàng…",
+        "noun": "sự kiện",
+        "col": {
+          "date": "Ngày",
+          "order": "Số đơn hàng",
+          "workspace": "Không gian làm việc",
+          "gateway": "Cổng thanh toán",
+          "plan": "Gói",
+          "amount": "Số tiền",
+          "status": "Trạng thái",
+          "actions": "Thao tác"
+        },
+        "empty": "Không có sự kiện thanh toán nào khớp."
+      },
+      "billingAnalytics": {
+        "title": "Phân tích thanh toán",
+        "eyebrow": "Quản trị · Thanh toán & gói · Phân tích thanh toán",
+        "titleFirst": "Thanh toán",
+        "titleSecond": "phân tích",
+        "description": "Dòng tiền, tỷ lệ thanh toán thành công, phân bổ cổng thanh toán và xu hướng hoàn tiền trên toàn nền tảng.",
+        "window": "Khoảng thời gian",
+        "viewLedger": "Xem sổ cái",
+        "kpi": {
+          "gross": "Doanh thu gộp",
+          "net": "Doanh thu ròng",
+          "netPct": "{pct}% ròng",
+          "success": "Ủy quyền thành công",
+          "failed": "Thất bại",
+          "events": "{count, plural, other {# sự kiện}}",
+          "refunds": "Hoàn tiền",
+          "chargebacks": "Khiếu nại thanh toán",
+          "disputes": "{count, plural, other {# tranh chấp}}"
+        },
+        "cashFlow": {
+          "kicker": "Dòng tiền",
+          "title": "Thu phí, hoàn tiền và thất bại",
+          "charges": "Thu phí",
+          "refunds": "Hoàn tiền",
+          "failed": "Thất bại"
+        },
+        "gatewayShare": {
+          "title": "Tỷ trọng cổng thanh toán",
+          "hint": "Doanh thu trả phí chia theo nhà cung cấp"
+        },
+        "topPayers": {
+          "title": "Không gian làm việc chi trả nhiều nhất",
+          "hint": "Chi tiêu cao nhất trong khoảng thời gian",
+          "all": "Tất cả không gian làm việc",
+          "workspace": "Không gian làm việc",
+          "orders": "Đơn hàng",
+          "total": "Tổng",
+          "empty": "Chưa có đơn hàng trả phí trong khoảng thời gian này.",
+          "unknown": "Không gian làm việc đã xóa"
+        },
+        "statusMix": {
+          "title": "Cơ cấu trạng thái đơn hàng",
+          "hint": "Số lượng theo trạng thái vòng đời"
+        }
+      },
+      "invoices": {
+        "title": "Hóa đơn",
+        "eyebrow": "Quản trị · Thanh toán & gói · Hóa đơn",
+        "titleFirst": "Tất cả",
+        "titleSecond": "hóa đơn",
+        "description": "Mỗi đơn hàng là một chứng từ thanh toán. Lọc theo trạng thái, mở và in hóa đơn, đánh dấu đã thanh toán, hủy hoặc phát hành hóa đơn thủ công.",
+        "window": "Khoảng thời gian",
+        "windows": {
+          "all": "Toàn thời gian",
+          "this_month": "Tháng này",
+          "last_month": "Tháng trước",
+          "this_quarter": "Quý này",
+          "this_year": "Năm nay"
+        },
+        "kpi": {
+          "total": "Tổng hóa đơn",
+          "allTime": "toàn thời gian",
+          "paid": "Đã thanh toán",
+          "outstanding": "Còn phải thu",
+          "due": "{amount} cần thanh toán",
+          "overdue": "Quá hạn",
+          "overdueHint": "quá hạn hơn 15 ngày",
+          "thisMonth": "Tháng này",
+          "mom": "So với tháng trước (MoM)"
+        },
+        "statusFilter": "Lọc theo trạng thái hóa đơn",
+        "statuses": {
+          "all": "Tất cả",
+          "paid": "Đã thanh toán",
+          "outstanding": "Còn phải thu",
+          "overdue": "Quá hạn",
+          "refunded": "Đã hoàn tiền",
+          "void": "Đã hủy"
+        },
+        "badges": {
+          "paid": "đã thanh toán",
+          "outstanding": "còn phải thu",
+          "overdue": "quá hạn",
+          "refunded": "đã hoàn tiền",
+          "void": "đã hủy"
+        },
+        "search": "Tìm theo số hóa đơn, không gian làm việc, chủ sở hữu…",
+        "noun": "hóa đơn",
+        "col": {
+          "number": "Số hóa đơn",
+          "issued": "Ngày phát hành",
+          "due": "Ngày đến hạn",
+          "workspace": "Không gian làm việc",
+          "item": "Mục",
+          "amount": "Số tiền",
+          "status": "Trạng thái",
+          "view": "Xem",
+          "actions": "Thao tác"
+        },
+        "daysLate": "trễ {days} ngày",
+        "refunded": "đã hoàn tiền",
+        "viewInvoice": "Xem hóa đơn",
+        "rowMenu": "Thao tác cho {number}",
+        "empty": "Không có hóa đơn nào trong khoảng thời gian này.",
+        "actions": {
+          "view": "Xem",
+          "markPaid": "Đánh dấu đã thanh toán",
+          "void": "Hủy hóa đơn",
+          "delete": "Xóa"
+        },
+        "confirm": {
+          "markPaidTitle": "Đánh dấu hóa đơn này là đã thanh toán?",
+          "markPaid": "Đánh dấu hóa đơn này là đã thanh toán? Gói, tiện ích bổ sung hoặc số dư ví mà hóa đơn này mua cũng sẽ được áp dụng.",
+          "markPaidManual": "Đánh dấu hóa đơn thủ công này là đã thanh toán? Chỉ ghi nhận khoản thanh toán.",
+          "voidTitle": "Hủy hóa đơn này?",
+          "void": "Hủy hóa đơn này? Hóa đơn vẫn được lưu trong hồ sơ nhưng sẽ bị hủy.",
+          "deleteTitle": "Xóa hóa đơn này?",
+          "delete": "Xóa vĩnh viễn hóa đơn này? Không thể hoàn tác."
+        },
+        "manual": {
+          "tag": "thủ công",
+          "open": "Hóa đơn thủ công",
+          "eyebrow": "Hóa đơn",
+          "title": "Hóa đơn thủ công",
+          "workspace": "Không gian làm việc",
+          "chooseWorkspace": "Chọn không gian làm việc",
+          "customerName": "Tên khách hàng",
+          "customerNameHint": "Mặc định là tên không gian làm việc.",
+          "customerEmail": "Email khách hàng",
+          "description": "Mô tả",
+          "amount": "Số tiền",
+          "currency": "Tiền tệ",
+          "status": "Trạng thái",
+          "statuses": {
+            "pending": "Đang chờ",
+            "paid": "Đã thanh toán"
+          },
+          "issuedAt": "Ngày phát hành",
+          "issuedAtHint": "Để trống để dùng ngày hôm nay. Chọn ngày trong quá khứ sẽ lùi ngày hóa đơn.",
+          "submit": "Tạo hóa đơn",
+          "created": "Đã tạo hóa đơn thủ công {number}."
+        }
+      },
+      "invoice": {
+        "title": "Hóa đơn",
+        "print": "In",
+        "downloadPdf": "Tải PDF",
+        "banner": {
+          "invoice": "Hóa đơn #{number}",
+          "issued": "Phát hành {date}",
+          "settled": "đã thanh toán {date}",
+          "paidInFull": "đã thanh toán đủ"
+        },
+        "taxInvoice": "Hóa đơn thuế",
+        "invoiceWord": "HÓA ĐƠN",
+        "taxIdLabel": "GSTIN/VAT",
+        "number": "Số hóa đơn",
+        "issueDate": "Ngày phát hành",
+        "paidDate": "Ngày thanh toán",
+        "status": "Trạng thái",
+        "billTo": "Gửi đến",
+        "payment": "Thanh toán",
+        "method": "Phương thức",
+        "txn": "Mã giao dịch",
+        "captured": "Ghi nhận lúc",
+        "currency": "Tiền tệ",
+        "coupon": "Mã giảm giá",
+        "description": "Mô tả",
+        "qty": "SL",
+        "unit": "Đơn giá",
+        "total": "Tổng",
+        "discount": "Giảm giá",
+        "code": "mã",
+        "subtotal": "Tạm tính",
+        "amountPaid": "Số tiền đã thanh toán",
+        "balanceDue": "Số tiền còn lại",
+        "notes": "Ghi chú",
+        "notesText": "Cảm ơn bạn đã sử dụng dịch vụ. Hóa đơn này ứng với đơn hàng nêu trên. Vui lòng ghi số hóa đơn khi có thắc mắc về thanh toán.",
+        "help": "Cần trợ giúp?",
+        "helpFallback": "Liên hệ quản trị viên nền tảng.",
+        "refundNote": "Để được hỗ trợ hoặc hoàn tiền, hãy liên hệ chúng tôi trong vòng {days} ngày kể từ khi thanh toán.",
+        "regNo": "Số đăng ký",
+        "computerGenerated": "Đây là hóa đơn được tạo bởi máy tính, không cần chữ ký."
+      },
+      "settings": {
+        "title": "Cài đặt thanh toán",
+        "eyebrow": "Quản trị · Thanh toán & gói · Cài đặt",
+        "titleFirst": "Thanh toán",
+        "titleSecond": "cài đặt",
+        "description": "Mọi thông tin mà trang giá và trang thanh toán đọc: thuế, thời hạn hoàn tiền, giảm giá hàng năm, tự động gia hạn, thông tin hóa đơn và danh sách quốc gia. Thay đổi có hiệu lực khi tải lại trang.",
+        "previewPlans": "Xem trước trang gói",
+        "readOnly": "Chỉ quản trị viên cấp cao mới có thể thay đổi cài đặt thanh toán.",
+        "conflict": "Có người khác vừa thay đổi các cài đặt này. Trang đã được tải lại; hãy xem lại và lưu lần nữa.",
+        "saved": "Đã lưu cài đặt thanh toán.",
+        "save": "Lưu cài đặt",
+        "tax": {
+          "title": "Thuế",
+          "hint": "Áp dụng cho mọi tạm tính khi thanh toán. Tắt nếu giá hiển thị đã bao gồm thuế.",
+          "rate": "Thuế suất (%)",
+          "label": "Nhãn",
+          "labelPlaceholder": "GST / VAT / Thuế bán hàng"
+        },
+        "company": {
+          "title": "Thông tin công ty và thanh toán",
+          "hint": "Thông tin pháp lý của doanh nghiệp. Các thông tin này được in trên mọi hóa đơn: khối “gửi từ”, mã số thuế và chân trang.",
+          "name": "Tên pháp lý của công ty",
+          "taxId": "Mã số thuế (GSTIN / VAT)",
+          "address": "Địa chỉ đăng ký",
+          "regNo": "Số đăng ký / CIN",
+          "email": "Email thanh toán",
+          "phone": "Số điện thoại hỗ trợ"
+        },
+        "logo": {
+          "title": "Logo hóa đơn",
+          "hint": "Hiển thị ở đầu mọi hóa đơn và biên lai. PNG, JPG, SVG hoặc WebP, tối đa {kb} KB. Để trống để dùng logo của trang web.",
+          "none": "Không có logo",
+          "choose": "Chọn tệp logo",
+          "remove": "Xóa logo hiện tại (dùng logo của trang web)",
+          "fallback": "Hiện đang dùng logo thương hiệu của trang web làm logo thay thế.",
+          "tooBig": "Logo phải có dung lượng tối đa {kb} KB."
+        },
+        "refund": {
+          "title": "Đảm bảo hoàn tiền",
+          "hint": "Khi bật, trang thanh toán hiển thị thời hạn đảm bảo bên dưới phần tóm tắt đơn hàng. Tắt để ẩn ở mọi nơi.",
+          "days": "Thời hạn (ngày)"
+        },
+        "yearly": {
+          "title": "Công tắc thanh toán hàng năm",
+          "hint": "Hiện công tắc Hàng tháng / Hàng năm trên trang giá. Ẩn hoàn toàn nếu mọi gói chỉ thanh toán hàng tháng.",
+          "discount": "Giảm giá hàng năm (%)",
+          "formula": "Giá hàng năm = hàng tháng × 12 × (1 − giảm giá%)."
+        },
+        "recurring": {
+          "title": "Đăng ký tự động gia hạn",
+          "hint": "Khi bật, các gói trả phí có thời hạn (hàng tháng hoặc hàng năm) sẽ tự động gia hạn: cổng thanh toán tính tiền thẻ mỗi chu kỳ và thời hạn gói tự kéo dài. Gói miễn phí, trọn đời và báo giá tùy chỉnh không bao giờ định kỳ, và mọi cổng không hỗ trợ định kỳ sẽ vẫn là thu một lần. Tắt để thu tiền một lần cho mỗi giao dịch mua.",
+          "graceDays": "Thời gian ân hạn (ngày)",
+          "graceHint": "Khi khoản thu tự động gia hạn thất bại, gói hoặc tiện ích vẫn hoạt động thêm số ngày này sau khi kỳ kết thúc, trong lúc cổng thanh toán thử lại. 0 nghĩa là tắt thời gian ân hạn.",
+          "gateways": "Cổng thanh toán hỗ trợ tự động gia hạn",
+          "note": "Braintree chỉ tự động gia hạn khi bạn đặt Plan ID trong thông tin xác thực của cổng. Square thanh toán mỗi chu kỳ bằng cách gửi hóa đơn qua email cho khách hàng (không tự động trừ thẻ). Mọi lần gia hạn đều cần URL webhook của cổng được thiết lập trong bảng điều khiển của nhà cung cấp."
+        },
+        "countries": {
+          "title": "Danh sách quốc gia thanh toán",
+          "hint": "Các lựa chọn trong ô Quốc gia của biểu mẫu thanh toán, dùng cho địa chỉ trên hóa đơn. Mỗi quốc gia một dòng; thứ tự được giữ nguyên."
+        },
+        "links": {
+          "coupons": "Mã giảm giá",
+          "couponsTitle": "Quản lý mã giảm giá",
+          "couponsHint": "Thêm, sửa hoặc tắt mã giảm giá.",
+          "faqs": "Câu hỏi thường gặp",
+          "faqsTitle": "Sửa câu hỏi thường gặp trên trang giá",
+          "faqsHint": "Các mục thu gọn hiển thị bên dưới các gói.",
+          "configured": "Đã cấu hình {count}."
+        }
+      }
+    },
+    "offline": {
+      "eyebrow": {
+        "bank_transfer": "Thanh toán / Chuyển khoản ngân hàng",
+        "offline": "Thanh toán / Ngoại tuyến"
+      },
+      "title": {
+        "bank_transfer": "Chuyển khoản thanh toán",
+        "offline": "Liên hệ chúng tôi để hoàn tất đơn hàng này"
+      },
+      "intro": {
+        "bank_transfer": "Chuyển <strong>{amount}</strong> vào tài khoản bên dưới. Dùng <mono>{ref}</mono> làm nội dung chuyển khoản để chúng tôi đối chiếu với đơn hàng của bạn.",
+        "offline": "Đơn hàng <mono>{ref}</mono> · <strong>{amount}</strong> · thanh toán bằng {currency}"
+      },
+      "instructions": "Hướng dẫn",
+      "referenceNote": "<strong>Nội dung chuyển khoản:</strong> ghi <mono>{ref}</mono> khi chuyển khoản, sau đó gửi bằng chứng thanh toán bên dưới. Gói của bạn sẽ được kích hoạt khi đội ngũ chúng tôi xác nhận thanh toán.",
+      "proofTitle": "Gửi bằng chứng thanh toán",
+      "proofHelp": "Đã thanh toán? Tải lên biên lai và mã tham chiếu để chúng tôi xác minh và kích hoạt gói của bạn.",
+      "later": {
+        "bank_transfer": "Tôi đã gửi thanh toán — gửi bằng chứng sau",
+        "offline": "Đã hiểu — tôi sẽ gửi bằng chứng sau"
+      }
+    },
+    "proof": {
+      "file": "Ảnh chụp màn hình / biên lai thanh toán",
+      "fileHint": "JPG, PNG, WEBP hoặc PDF · tối đa 4 MB",
+      "reference": "Mã tham chiếu / số UTR",
+      "referencePlaceholder": "VD: số UTR / mã giao dịch",
+      "note": "Ghi chú (không bắt buộc)",
+      "notePlaceholder": "Thông tin khác chúng tôi cần biết về khoản thanh toán này",
+      "submit": "Gửi bằng chứng thanh toán",
+      "sending": "Đang tải lên",
+      "chooseFile": "Chọn biên lai để tải lên.",
+      "tooLarge": "Tệp này lớn hơn 4 MB.",
+      "rejected": "Loại tệp này không được phép. Hãy dùng JPG, PNG, WEBP hoặc PDF.",
+      "closed": "Không thể gửi bằng chứng thanh toán cho đơn hàng này nữa.",
+      "failed": "Không thể tải tệp lên. Vui lòng thử lại."
+    }
+  }
+}

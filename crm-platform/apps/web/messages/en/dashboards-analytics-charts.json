@@ -690,7 +690,8 @@
         },
         "titleLead": "Admin",
         "titleAccent": "analytics"
-      }
+      },
+      "kpiLabel": "KPI"
     },
     "quickAccess": {
       "title": "Quick access",

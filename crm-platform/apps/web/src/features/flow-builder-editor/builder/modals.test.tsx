@@ -1,6 +1,6 @@
-import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import { AIGenModal, SaveConfirmModal } from './modals';
+import { renderIntl as renderToStaticMarkup } from '../test-utils/intl';
 
 vi.mock('../api/flows', () => ({ flowsApi: { aiGenerate: vi.fn() } }));
 

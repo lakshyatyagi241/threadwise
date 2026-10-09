@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "Peran & izin",
+      "roles": "Peran",
+      "permissions": "Izin",
+      "staff": "Peran staf"
+    },
+    "common": {
+      "admin": "Admin",
+      "breadcrumb": "Breadcrumb",
+      "loading": "Memuat…",
+      "retry": "Coba lagi",
+      "requestId": "ID permintaan",
+      "cancel": "Batal",
+      "noAccess": {
+        "title": "Anda tidak memiliki akses ke layar ini",
+        "body": "Peran Anda tidak mencakup izin platform yang dibutuhkan layar ini. Minta Super Admin untuk memberikannya.",
+        "bodyWithKey": "Layar ini memerlukan izin platform {permission}. Minta Super Admin untuk menambahkannya ke salah satu peran Anda.",
+        "back": "Kembali ke konsol"
+      },
+      "errors": {
+        "unexpected": "Terjadi kesalahan di sisi kami. Coba lagi; jika terus terjadi, sertakan ID permintaan.",
+        "request": "Permintaan tidak dapat diselesaikan.",
+        "validation": "Periksa formulir dan coba lagi.",
+        "validationField": "{message}",
+        "conflict": "Orang lain mengubah peran ini saat Anda mengedit. Muat ulang untuk melihat versinya, lalu terapkan kembali perubahan Anda.",
+        "noAccess": "Anda memerlukan izin platform {permission} untuk ini.",
+        "nameTaken": "Nama ini sudah digunakan.",
+        "nameRequired": "Nama peran wajib diisi.",
+        "permissionNameRequired": "Nama izin wajib diisi.",
+        "permissionNameFormat": "Gunakan huruf kecil, angka, dan garis bawah, dengan titik di antara bagian.",
+        "locked": "Super Admin terkunci sistem: tidak dapat diganti nama, dicabut izinnya, atau dihapus.",
+        "lockedDelete": "Peran Super Admin terkunci sistem dan tidak dapat dihapus.",
+        "permissionSystem": "Izin ini diperiksa oleh platform dan tidak dapat dihapus.",
+        "permissionUnknown": "Izin berikut tidak ada di katalog: {names}.",
+        "reassignSame": "Pilih peran lain untuk memindahkan pengguna.",
+        "lastSuperAdmin": "Harus ada minimal satu Super Admin aktif.",
+        "privilegedRole": "Hanya Super Admin yang dapat memberi atau mencabut peran Super Admin.",
+        "notFound": "Item ini tidak ada lagi. Mungkin sudah dihapus."
+      }
+    },
+    "list": {
+      "crumb": "Peran",
+      "eyebrow": "Admin · Pengguna & akses · Peran",
+      "titleLead": "Peran &",
+      "titleAccent": "izin",
+      "description": "Tentukan apa yang dapat dilakukan setiap peran di seluruh platform. Setiap pengguna mendapat satu peran; izin dikelompokkan per peran.",
+      "managePermissions": "Kelola izin",
+      "addRole": "Tambahkan peran",
+      "kpi": {
+        "label": "Total peran",
+        "total": "Total peran",
+        "totalHint": "{system} sistem · {custom} kustom",
+        "permissions": "Total izin",
+        "permissionsHint": "di seluruh modul",
+        "users": "Pengguna dengan peran",
+        "usersHint": "di semua peran",
+        "noUsers": "Peran tanpa pengguna",
+        "noUsersHint": "pertimbangkan untuk mengarsipkan"
+      },
+      "filter": {
+        "label": "Filter peran berdasarkan jenis",
+        "all": "Semua",
+        "system": "Sistem",
+        "custom": "Kustom",
+        "search": "Cari peran…",
+        "searchLabel": "Cari peran"
+      },
+      "table": {
+        "caption": "Peran platform",
+        "index": "#",
+        "name": "Nama peran",
+        "type": "Jenis",
+        "users": "Pengguna",
+        "permissions": "Izin",
+        "lastEdited": "Terakhir diubah",
+        "actions": "Tindakan"
+      },
+      "systemRole": "Peran sistem",
+      "customRole": "Peran kustom",
+      "systemBadge": "Sistem",
+      "customBadge": "Kustom",
+      "row": {
+        "menu": "Tindakan untuk {name}",
+        "edit": "Edit peran",
+        "delete": "Hapus"
+      },
+      "footer": {
+        "showing": "Menampilkan {shown} dari {total} peran",
+        "add": "+ Tambahkan peran"
+      },
+      "empty": {
+        "none": "Belum ada peran. <link>Buat peran pertama</link>.",
+        "noMatch": "Tidak ada peran yang cocok dengan filter Anda.",
+        "clear": "Hapus filter"
+      },
+      "delete": {
+        "title": "Hapus peran",
+        "message": "Hapus peran {name}? Pengguna yang memiliki peran ini akan kehilangan semua izinnya. Tindakan ini tidak dapat dibatalkan.",
+        "confirm": "Ya, hapus",
+        "cancel": "Batal"
+      },
+      "toasts": {
+        "deleted": "Peran \"{name}\" dihapus."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Peran",
+      "crumbNew": "Baru",
+      "eyebrowNew": "Admin · Peran · Baru",
+      "eyebrowEdit": "Admin · Mengedit peran",
+      "titleLead": "Buat",
+      "titleAccent": "peran baru",
+      "description": "Pilih nama, lalu centang kotak untuk memberi peran ini akses ke modul tertentu. Anda dapat mengeditnya kapan saja.",
+      "summary": "{count} / {total} izin · terakhir diubah {date}.",
+      "userChip": "{count, plural, other {# pengguna}}",
+      "save": "Simpan perubahan",
+      "create": "Buat peran",
+      "saving": "Menyimpan…",
+      "reload": "Muat ulang peran",
+      "discard": "Ada perubahan yang belum disimpan. Tinggalkan tanpa menyimpan?",
+      "duplicatedBanner": "Peran diduplikasi sebagai \"{name}\". Edit salinan di bawah.",
+      "lockedNotice": "{name} terkunci sistem: tidak dapat diganti nama, dicabut izinnya, atau dihapus.",
+      "details": "Detail peran",
+      "name": "Nama peran",
+      "namePlaceholder": "mis. Kepala Penjualan",
+      "template": "Mulai dari templat",
+      "templateBlank": "Kosong · tanpa izin",
+      "templateOption": "{name} · {count, plural, other {# izin}}",
+      "templateBusy": "Memuat templat…",
+      "descriptionLabel": "Deskripsi",
+      "descriptionPlaceholder": "Apa fungsi peran ini? Terlihat oleh admin.",
+      "toasts": {
+        "created": "Peran \"{name}\" dibuat.",
+        "updated": "Peran \"{name}\" diperbarui."
+      }
+    },
+    "matrix": {
+      "title": "Tetapkan izin",
+      "counter": "{count, number} / {total, number} dipilih",
+      "selectAll": "Pilih semua izin",
+      "module": "Modul",
+      "selectAllColumn": "Pilih semua",
+      "available": "Izin yang tersedia",
+      "selectAllModule": "Pilih semua",
+      "selectAllOf": "Pilih semua izin {module}",
+      "empty": "Belum ada izin. <link>Buat satu</link>.",
+      "emptyPlain": "Belum ada izin."
+    },
+    "dangerZone": {
+      "title": "Zona berbahaya",
+      "irreversible": "tidak dapat dibatalkan",
+      "duplicate": {
+        "title": "Duplikasi peran",
+        "hint": "Buat salinan dengan izin yang sama",
+        "action": "Duplikasi",
+        "busy": "Menduplikasi…"
+      },
+      "reassign": {
+        "title": "Tetapkan ulang semua pengguna",
+        "hint": "Pindahkan {count, plural, other {# pengguna}} ke peran lain",
+        "targetLabel": "Pindahkan pengguna ke",
+        "placeholder": "Ke…",
+        "action": "Pindahkan",
+        "busy": "Memindahkan…"
+      },
+      "moved": "{count} pengguna dipindahkan dari \"{from}\" ke \"{to}\".",
+      "delete": {
+        "title": "Hapus peran",
+        "hint": "Menghapus peran dan melepaskan semua pengguna.",
+        "action": "Hapus",
+        "dialogTitle": "Hapus peran",
+        "dialogMessage": "Hapus peran {name}? Pengguna yang memiliki peran ini akan kehilangan semua izinnya. Tindakan ini tidak dapat dibatalkan.",
+        "confirm": "Ya, hapus",
+        "cancel": "Batal"
+      },
+      "deleted": "Peran \"{name}\" dihapus."
+    },
+    "permissions": {
+      "crumb": "Izin",
+      "eyebrow": "Admin · Pengguna & akses · Izin",
+      "titleLead": "Semua",
+      "titleAccent": "izin",
+      "description": "Setiap penanda izin yang dikenali platform, dikelompokkan per modul. Tambahkan penanda baru di sini, lalu lampirkan ke peran di editor peran.",
+      "backToRoles": "Kembali ke peran",
+      "add": "Tambahkan izin",
+      "kpi": {
+        "label": "Total izin",
+        "total": "Total izin",
+        "totalHint": "di seluruh {modules, plural, other {# modul}}",
+        "used": "Digunakan di peran",
+        "usedHint": "terlampir ke ≥ 1 peran",
+        "orphans": "Izin yatim",
+        "orphansHint": "terlampir ke 0 peran",
+        "last": "Terakhir ditambahkan"
+      },
+      "filter": {
+        "search": "Cari nama izin…",
+        "searchLabel": "Cari nama izin",
+        "moduleLabel": "Modul",
+        "allModules": "Semua modul",
+        "count": "{count, plural, other {# izin}} di {modules, plural, other {# modul}}"
+      },
+      "groupsLabel": "Izin per modul",
+      "groupCount": "{count, plural, other {# izin}}",
+      "orphan": "yatim",
+      "system": "sistem",
+      "systemHint": "Diperiksa oleh platform, sehingga tidak dapat dihapus.",
+      "inRoles": "di {count, plural, other {# peran}}",
+      "deleteName": "Hapus izin {name}",
+      "empty": {
+        "none": "Belum ada izin. <link>Buat yang pertama</link>.",
+        "noMatch": "Tidak ada izin yang cocok dengan pencarian Anda."
+      },
+      "delete": {
+        "action": "Hapus",
+        "title": "Hapus izin",
+        "message": "Hapus izin {name}? Peran yang menggunakannya langsung kehilangan kemampuan tersebut.",
+        "confirm": "Ya, hapus",
+        "cancel": "Batal"
+      },
+      "toasts": {
+        "deleted": "Izin \"{name}\" dihapus."
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "Izin",
+      "crumbNew": "Baru",
+      "eyebrow": "Admin · Izin · Baru",
+      "titleLead": "Buat",
+      "titleAccent": "izin baru",
+      "description": "Tambahkan penanda kemampuan terperinci. Setelah dibuat, lampirkan ke satu atau beberapa peran di editor peran.",
+      "create": "Buat izin",
+      "creating": "Membuat…",
+      "details": "Detail izin",
+      "module": "Modul",
+      "modulePlaceholder": "Pilih modul",
+      "moduleHint": "Izin dikelompokkan per modul di editor peran.",
+      "action": "Tindakan",
+      "actionHint": "Huruf kecil, tanpa spasi. Akan digabungkan menjadi",
+      "actionPlaceholder": "mis. export · refund · approve",
+      "name": "Nama izin",
+      "namePlaceholder": "module.action — terisi otomatis dari atas",
+      "nameHint": "Terisi otomatis dari modul + tindakan. Edit hanya jika Anda memerlukan string kustom.",
+      "tip": "<b>Konvensi penamaan:</b> gunakan <code>module.action</code> dengan huruf kecil. Contoh: <code>campaigns.send</code>, <code>billing.refund</code>, <code>audit.export</code>.",
+      "preview": {
+        "title": "Pratinjau izin",
+        "appearsUnder": "Akan muncul di bawah <b>{module}</b> di editor peran.",
+        "selectedModule": "modul yang dipilih"
+      },
+      "code": {
+        "title": "Referensi kode",
+        "hint": "Gunakan <code>@PlatformPermission()</code> pada rute platform untuk memerlukan izin ini."
+      },
+      "tipCard": "<b>Tips:</b> izin yang dinamai seperti <code>module.action</code> otomatis dikelompokkan di editor peran.",
+      "toasts": {
+        "created": "Izin \"{name}\" dibuat."
+      }
+    },
+    "staff": {
+      "crumbRoles": "Peran",
+      "crumb": "Peran staf",
+      "eyebrow": "Admin · Pengguna & akses · Peran staf",
+      "titleLead": "Staf",
+      "titleAccent": "peran",
+      "description": "Berikan setiap operator konsol ini peran platform yang menentukan apa yang boleh mereka lakukan. Menyimpan akan menggantikan peran operator dengan peran yang dicentang saja.",
+      "backToRoles": "Kembali ke peran",
+      "caption": "Operator dan peran platform mereka",
+      "table": {
+        "operator": "Operator",
+        "tier": "Akses konsol",
+        "status": "Status",
+        "roles": "Peran platform",
+        "actions": "Tindakan"
+      },
+      "tier": {
+        "super_admin": "Super admin",
+        "support": "Support",
+        "auditor": "Auditor"
+      },
+      "status": {
+        "active": "Aktif",
+        "suspended": "Ditangguhkan"
+      },
+      "noRoles": "Tanpa peran",
+      "rolesOf": "Peran {name}",
+      "assign": "Tetapkan peran",
+      "assignFor": "Tetapkan peran ke {name}",
+      "empty": "Belum ada operator.",
+      "dialog": {
+        "title": "Tetapkan peran ke {name}",
+        "close": "Tutup",
+        "cancel": "Batal",
+        "save": "Simpan peran",
+        "saving": "Menyimpan…",
+        "hint": "Centang setiap peran yang harus dimiliki operator ini.",
+        "superOnly": "Hanya Super Admin yang dapat memberi atau mencabut peran ini.",
+        "count": "{count, plural, =0 {Tidak ada peran dipilih} other {# peran dipilih}}"
+      },
+      "toasts": {
+        "saved": "Peran untuk \"{name}\" diperbarui."
+      }
+    }
+  }
+}

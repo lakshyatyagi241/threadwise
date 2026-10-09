@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "Trung tâm trợ giúp",
+    "searchLabel": "Tìm trợ giúp",
+    "searchPlaceholder": "Tìm hướng dẫn",
+    "resultsStatus": "{count, plural, =0 {Không tìm thấy hướng dẫn} other {# hướng dẫn}}",
+    "none": {
+      "title": "Chưa có hướng dẫn nào",
+      "message": "Hướng dẫn cho các tính năng trong gói của bạn sẽ hiện ở đây."
+    },
+    "noResults": {
+      "title": "Không có hướng dẫn nào khớp tìm kiếm",
+      "message": "Thử từ khác, hoặc xóa tìm kiếm để xem mọi hướng dẫn."
+    },
+    "areas": {
+      "overview": "Nền tảng",
+      "inbox": "Hộp thư & Trò chuyện",
+      "audience": "CRM",
+      "sales": "Bán hàng",
+      "campaigns": "Chiến dịch",
+      "automation": "Tự động hóa",
+      "store": "Cửa hàng",
+      "apps": "Marketplace",
+      "settings": "Cài đặt",
+      "account": "Tài khoản",
+      "getting-started": "Bắt đầu",
+      "troubleshooting": "Khắc phục sự cố"
+    },
+    "allHelp": "Quay lại trợ giúp",
+    "onThisPage": "Trên trang này",
+    "openScreen": "Mở màn hình này",
+    "shownInEnglish": "Hướng dẫn này chưa được dịch sang ngôn ngữ của bạn nên đang hiển thị bằng tiếng Anh.",
+    "tip": {
+      "label": "Trợ giúp: {title}",
+      "readMore": "Đọc hướng dẫn"
+    },
+    "guideCount": "{count, plural, =0 {Không có hướng dẫn} other {# hướng dẫn}}",
+    "crumb": "Thêm / Trợ giúp",
+    "heading": "Trợ giúp",
+    "headingRest": "& hướng dẫn",
+    "back": "Quay lại",
+    "askSupport": "Không tìm thấy? Hỏi bộ phận hỗ trợ",
+    "askSupportShort": "Hỗ trợ",
+    "categories": "Danh mục",
+    "allGuides": "Tất cả hướng dẫn",
+    "needHuman": "Cần hỗ trợ trực tiếp?",
+    "contactSupport": "Liên hệ hỗ trợ",
+    "popular": "Phổ biến",
+    "searchResults": "Kết quả tìm kiếm",
+    "read": "Đọc hướng dẫn",
+    "readMinutes": "{count, plural, other {# phút đọc}}",
+    "moreInArea": "Xem thêm trong {area}"
+  }
+}

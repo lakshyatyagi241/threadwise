@@ -5,8 +5,12 @@ import { AskForm, ButtonsForm, ListForm } from './options';
 
 // Messages are not loaded here: the key is the text; a key with params keeps them so the `{{choice}}` hint can be read.
 vi.mock('next-intl', () => ({
-  useTranslations: () => (key: string, values?: Record<string, string>) =>
-    values ? `${key} ${JSON.stringify(values)}` : key,
+  useTranslations: () => {
+    const t = (key: string, values?: Record<string, unknown>) =>
+      values ? `${key} ${JSON.stringify(values)}` : key;
+    t.rich = t;
+    return t;
+  },
 }));
 vi.mock('@/lib/use-unofficial-whatsapp', () => ({ useUnofficialWhatsapp: () => false }));
 vi.mock('@/features/contacts-attributes-tags', () => ({

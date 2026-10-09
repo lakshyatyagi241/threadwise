@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "Broadcast Instagram"
+    },
+    "common": {
+      "dismiss": "Chiudi"
+    },
+    "hub": {
+      "kicker": "Canale · Instagram",
+      "title": "Instagram",
+      "titleAccent": "account",
+      "intro": "Collega una volta il tuo account Instagram Business o Creator. Da quel momento i suoi messaggi arrivano nell’inbox del team e da qui puoi rispondere, avviare flow e inviare messaggi alle persone che ti hanno già scritto.",
+      "teamInbox": "Inbox del team",
+      "broadcasts": "Broadcast solo risposta",
+      "loadError": "Impossibile caricare gli account Instagram collegati. Riprova.",
+      "loadErrorDetail": "Impossibile caricare gli account Instagram collegati (errore {status}{code}). Riprova.",
+      "engineOff": "{engine} non è collegato. Un amministratore deve collegarlo in Admin → Add-on prima che si possa collegare un account Instagram.",
+      "connectedCount": "{count, plural, one {# account collegato} other {# account collegati}}",
+      "notConnected": "Non collegato",
+      "cardTitle": "Aggiungi un account Instagram",
+      "cardBody": "Collega un account Business/Creator. Instagram si collega una sola volta e compare qui: conversazioni, flow e risposte automatiche funzionano tutti da questo Workspace.",
+      "add": "Aggiungi un account Instagram",
+      "linkedAccounts": "Account collegati",
+      "linked": "Account Instagram collegato.",
+      "linkFailed": "Impossibile collegare questo account."
+    },
+    "dialog": {
+      "close": "Chiudi",
+      "kicker": "Instagram",
+      "title": "Aggiungi un account Instagram",
+      "note": "Instagram si collega una volta sola tramite {engine} (che gestisce l’accesso e il webhook). Questo Workspace si collega a lui e mostra qui inbox, flow e annunci: è sempre un solo account, non due.",
+      "connect": "Collega Instagram",
+      "checking": "Verifica in corso…",
+      "hint": "Si collega subito se l’hai già collegato su {engine}; altrimenti si apre una rapida finestra di accesso.",
+      "pick": "Scegli un account da collegare",
+      "link": "Collega",
+      "connectDifferent": "Collega un altro account",
+      "linkFailed": "Impossibile collegare questo account.",
+      "startFailed": "Impossibile avviare il collegamento a Instagram."
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "Collegato",
+      "needsReauth": "Richiede nuova autenticazione",
+      "live": "attivo",
+      "manage": "Gestisci su {engine}",
+      "refresh": "Aggiorna profilo da {engine}",
+      "unlink": "Scollega",
+      "unlinkConfirm": "Disconnettere questo account Instagram? Le sue conversazioni e i dati dell’inbox verranno rimossi e Instagram scomparirà da dashboard, inbox, flow, template e risposte automatiche finché non ne colleghi un altro. L’account resta su {engine}: potrai ricollegarlo in seguito.",
+      "cancel": "Annulla",
+      "updated": "Account Instagram {handle} aggiornato.",
+      "unlinked": "Account Instagram disconnesso: i suoi dati sono stati rimossi.",
+      "failed": "Operazione non riuscita. Riprova."
+    },
+    "broadcast": {
+      "kicker": "Instagram · Solo risposta",
+      "title": "Instagram",
+      "titleAccent": "broadcast",
+      "intro": "Instagram permette di scrivere solo a chi ti ha già scritto, quindi scegli tra le conversazioni esistenti. Instagram applica la sua finestra di 24 ore all’invio di ogni messaggio.",
+      "accounts": "Account Instagram",
+      "loadError": "Impossibile caricare le conversazioni. Riprova.",
+      "failed": "Operazione non riuscita. Riprova.",
+      "noAccounts": "Nessun account Instagram è ancora collegato.",
+      "name": "Nome del broadcast",
+      "namePlaceholder": "Offerta autunnale",
+      "account": "Account Instagram",
+      "template": "Template",
+      "templateHint": "Facoltativo. Compila il messaggio quando è vuoto.",
+      "templateNone": "Nessun template",
+      "message": "Messaggio",
+      "messageHint": "Usa {token} per il nome della persona. Massimo {max} caratteri.",
+      "messagePlaceholder": "Ciao {token}, …",
+      "send": "{count, plural, =0 {Invia} one {Invia a # conversazione} other {Invia a # conversazioni}}",
+      "sending": "Invio in corso…",
+      "recipients": "Destinatari",
+      "windowOpenCount": "{open} di {total} nella finestra di 24 ore",
+      "search": "Cerca conversazioni",
+      "selectAll": "Seleziona tutti",
+      "clear": "Cancella",
+      "capNote": "Un invio raggiunge al massimo {max} conversazioni; seleziona tutti sceglie le prime {max}.",
+      "empty": "Nessuna conversazione ancora. Le persone compaiono qui dopo aver scritto al tuo account.",
+      "inWindow": "Nella finestra",
+      "outsideWindow": "Oltre 24 ore",
+      "selected": "{count, plural, one {# selezionata} other {# selezionate}}",
+      "sent": "Broadcast Instagram inviato: {sent} consegnati{failed, plural, =0 {} other {, # non riusciti}}.",
+      "sentNone": "Impossibile inviare a nessun destinatario. Controlla la connessione a Instagram."
+    }
+  }
+}

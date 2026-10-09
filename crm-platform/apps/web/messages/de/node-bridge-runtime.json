@@ -1,0 +1,164 @@
+{
+  "node-bridge-runtime": {
+    "nav": {
+      "group": "Kanäle",
+      "item": "Node-Bridge"
+    },
+    "page": {
+      "title": "Node-Bridge-URL und Token",
+      "eyebrow": "global · Node-Bridge",
+      "description": "Die gemeinsame Node-Bridge, über die alle Engines kommunizieren – die inoffizielle API sendet darüber, und die Sendetaktung wird hier angewendet. Einmal festlegen; sie gilt plattformweit.",
+      "superOnly": "Nur ein Super-Admin kann die Node-Bridge ändern. Die gespeicherten Werte sind sichtbar."
+    },
+    "bridge": {
+      "tokenSet": "Token gesetzt",
+      "noToken": "Kein Token",
+      "serverUrl": "Server-URL",
+      "serverUrlPlaceholder": "http://localhost:8888",
+      "urlInvalid": "Geben Sie zuerst eine gültige Server-URL (http:// oder https://) ein.",
+      "serverUrlHint": "Unter welcher Adresse Ihre Node-Bridge erreichbar ist. Eingehende Webhooks und Status-Webhooks werden automatisch verarbeitet – die Bridge übernimmt unsere URL aus ihrer Umgebungsvariable APP_DOMAIN_NAME.",
+      "token": "Node-Webhook-Token (X-Node-Token)",
+      "tokenPlaceholder": "gemeinsames X-Node-Token-Geheimnis",
+      "tokenSavedPlaceholder": "••• gespeichert, leer lassen zum Beibehalten",
+      "tokenHint": "Gemeinsames Geheimnis, das die Node-Bridge als X-Node-Token sendet. Muss mit dem Token in Ihrer Node-Bridge-Konfiguration übereinstimmen. Nach dem Speichern verborgen; nur zum Rotieren erneut einfügen.",
+      "save": "Speichern",
+      "saving": "Wird gespeichert…",
+      "test": "Verbindung testen",
+      "testing": "Wird getestet…",
+      "saved": "Node-Bridge gespeichert."
+    },
+    "pacing": {
+      "eyebrow": "Taktung",
+      "title": "Sendetaktung und Stapelung",
+      "msgGap": "Abstand zwischen Nachrichten (Sek.)",
+      "msgGapHint": "Sekunden zwischen aufeinanderfolgenden Sendungen.",
+      "batchesGap": "Stapelgröße",
+      "batchesGapHint": "Empfänger pro Stapel.",
+      "bwMsgGap": "Abstand zwischen Stapeln (Min.)",
+      "bwMsgGapHint": "Minuten zwischen den Stapeln.",
+      "enableBatches": "Stapelung aktivieren",
+      "update": "Taktung aktualisieren",
+      "updating": "Wird gespeichert…",
+      "saved": "Sendetaktung aktualisiert.",
+      "tipTitle": "Hinweis zur Taktung",
+      "tip": "Verringern Sie den Abstand zwischen Nachrichten erst nach 24 Stunden Testlauf – Meta drosselt aggressive Absender. 3 Sekunden sind der sichere Standardwert."
+    },
+    "errors": {
+      "forbidden": "Sie haben keine Berechtigung dafür.",
+      "conflict": "Jemand anderes hat diese Einstellungen geändert. Die Seite wurde aktualisiert; versuchen Sie es erneut.",
+      "validation": "Prüfen Sie die Werte und versuchen Sie es erneut.",
+      "request": "Diese Anfrage konnte nicht abgeschlossen werden.",
+      "unexpected": "Auf unserer Seite ist ein Fehler aufgetreten. Versuchen Sie es gleich noch einmal.",
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung."
+    },
+    "loading": "Wird geladen",
+    "retry": "Erneut versuchen",
+    "unofficial": {
+      "eyebrow": "Plattform-Schalter",
+      "title": "Inoffizielles WhatsApp (persönliche Nummern per QR-Code)",
+      "status": {
+        "disabled": "Deaktiviert / nicht unterstützt",
+        "enabled": "Aktiviert (nicht unterstützt)"
+      },
+      "explanation": "Wir unterstützen ausschließlich die offizielle WhatsApp Business API. Dies ist der plattformweite Schalter für persönliche Nummern: Er wird nicht unterstützt und kann zur Sperrung von Nummern führen. Auch wenn er eingeschaltet ist, können nur die unten zugelassenen Workspaces ihn nutzen.",
+      "state": {
+        "disabled": "Aus. Kein Workspace kann persönliche Nummern sehen oder verbinden, unabhängig von der Liste unten: Der QR-Verbindungsablauf, der Warmer und die Sender für persönliche Nummern sind ausgeblendet, und Sendungen darüber werden abgelehnt.",
+        "enabled": "Ein, nur für die zugelassenen Workspaces. Ein Workspace, der nicht auf der Liste unten steht, sieht davon nichts. Dies wird nicht unterstützt; solche Nummern können von WhatsApp gesperrt werden."
+      },
+      "enable": "Inoffizielles WhatsApp aktivieren",
+      "disable": "Inoffizielles WhatsApp deaktivieren",
+      "cancel": "Abbrechen",
+      "enableDialog": {
+        "title": "Inoffizielles WhatsApp aktivieren?",
+        "body": "Dies wird nicht unterstützt. Auf diese Weise verbundene Nummern können von WhatsApp gesperrt werden, und darüber gesendete Nachrichten sind durch keine Zustellgarantie abgedeckt. Den Schalter einzuschalten gewährt allein niemandem Zugriff: Nur die Workspaces auf der Zulassungsliste können ihn nutzen.",
+        "typeLabel": "Geben Sie zur Bestätigung {word} ein",
+        "confirm": "Aktivieren"
+      },
+      "disableDialog": {
+        "title": "Inoffizielles WhatsApp deaktivieren?",
+        "body": "Jeder Workspace sieht keine persönlichen Nummern, den Warmer und den QR-Verbindungsablauf mehr, und Sendungen über persönliche Nummern werden abgelehnt. Gespeicherte Daten und die Zulassungsliste bleiben erhalten.",
+        "confirm": "Deaktivieren"
+      },
+      "enabledToast": "Inoffizielles WhatsApp ist jetzt aktiviert.",
+      "disabledToast": "Inoffizielles WhatsApp ist jetzt deaktiviert.",
+      "dimNote": "Die folgenden Einstellungen gelten nur für persönliche Nummern und werden nicht verwendet, solange inoffizielles WhatsApp deaktiviert ist.",
+      "errors": {
+        "forbidden": "Nur ein Super-Admin kann diesen Schalter ändern.",
+        "conflict": "Jemand anderes hat diese Einstellungen geändert. Die Seite wurde aktualisiert; versuchen Sie es erneut.",
+        "validation": "Prüfen Sie die Werte und versuchen Sie es erneut.",
+        "request": "Diese Anfrage konnte nicht abgeschlossen werden.",
+        "unexpected": "Auf unserer Seite ist ein Fehler aufgetreten. Versuchen Sie es gleich noch einmal.",
+        "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung."
+      },
+      "allowedCount": "{count, plural, =0 {Keine Workspaces zugelassen} one {# Workspace zugelassen} other {# Workspaces zugelassen}}"
+    },
+    "workspaces": {
+      "eyebrow": "Zulassungsliste",
+      "title": "Workspaces mit inoffiziellem WhatsApp",
+      "description": "Standardmäßig für alle deaktiviert. Nur die hier aufgeführten Workspaces können WhatsApp mit persönlicher Nummer nutzen, und nur solange die Engine oben eingeschaltet ist.",
+      "count": "{count, plural, =0 {Keine Workspaces zugelassen} one {# Workspace zugelassen} other {# Workspaces zugelassen}}",
+      "engineOff": "Die Engine ist ausgeschaltet, daher können diese Workspaces sie noch nicht nutzen.",
+      "engineOffAction": "Zum Schalter",
+      "readOnly": "Nur ein Super-Admin kann Workspaces hinzufügen oder entfernen. Sie können die Liste sehen.",
+      "search": {
+        "label": "Workspace hinzufügen",
+        "placeholder": "Suche nach Workspace-Name, Slug oder E-Mail des Inhabers",
+        "hint": "Geben Sie mindestens 2 Zeichen ein.",
+        "searching": "Suche läuft",
+        "none": "Kein Workspace passt zu „{q}“.",
+        "add": "Hinzufügen",
+        "alreadyAdded": "Bereits zugelassen",
+        "owner": "Inhaber: {email}",
+        "noPlan": "Kein Tarif",
+        "results": "Suchergebnisse"
+      },
+      "table": {
+        "caption": "Workspaces, die inoffizielles WhatsApp nutzen dürfen",
+        "workspace": "Workspace",
+        "plan": "Tarif",
+        "devices": "Geräte",
+        "since": "Aktiviert seit",
+        "by": "Aktiviert von",
+        "note": "Notiz",
+        "actions": "Aktionen",
+        "devicesValue": "{active} aktiv von {total}",
+        "noPlan": "Kein Tarif",
+        "system": "Unbekannt",
+        "noNote": "Keine",
+        "remove": "Entfernen"
+      },
+      "empty": {
+        "title": "Noch keine Workspaces zugelassen",
+        "message": "Niemand kann WhatsApp mit persönlicher Nummer nutzen, auch nicht bei eingeschalteter Engine. Suchen Sie oben, um den ersten Workspace hinzuzufügen."
+      },
+      "loadMore": "Mehr laden",
+      "loadingMore": "Wird geladen",
+      "addDialog": {
+        "title": "{name} zulassen?",
+        "body": "{name} ({slug}) kann persönliche WhatsApp-Nummern per QR-Code verbinden, solange die Engine eingeschaltet ist. Dies wird nicht unterstützt, und Nummern können von WhatsApp gesperrt werden.",
+        "noteLabel": "Notiz (optional)",
+        "notePlaceholder": "Warum dieser Workspace, wer hat angefragt",
+        "noteCount": "{count} / {max}",
+        "noteTooLong": "Die Notiz darf höchstens {max} Zeichen lang sein.",
+        "confirm": "Workspace zulassen"
+      },
+      "removeDialog": {
+        "title": "{name} entfernen?",
+        "body": "{name} kann WhatsApp mit persönlicher Nummer nicht mehr nutzen. Seine Verbindungen enden innerhalb von 20 Sekunden. Gespeicherte Sitzungen bleiben erhalten, daher stellt eine erneute Zulassung des Workspace sie wieder her.",
+        "confirm": "Entfernen"
+      },
+      "cancel": "Abbrechen",
+      "addedToast": "{name} kann jetzt inoffizielles WhatsApp nutzen.",
+      "removedToast": "{name} wurde aus der Liste entfernt.",
+      "errors": {
+        "forbidden": "Nur ein Super-Admin kann diese Liste ändern.",
+        "conflict": "Die Liste hat sich in der Zwischenzeit geändert. Sie wurde aktualisiert; versuchen Sie es erneut.",
+        "validation": "Prüfen Sie die Werte und versuchen Sie es erneut.",
+        "request": "Diese Anfrage konnte nicht abgeschlossen werden.",
+        "unexpected": "Auf unserer Seite ist ein Fehler aufgetreten. Versuchen Sie es gleich noch einmal.",
+        "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung."
+      },
+      "retry": "Erneut versuchen"
+    }
+  }
+}

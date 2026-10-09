@@ -1,0 +1,1066 @@
+{
+  "appointments": {
+    "nav": {
+      "appointments": "Janji Temu"
+    },
+    "common": {
+      "dismiss": "Tutup",
+      "loading": "Memuat",
+      "cancel": "Batal",
+      "save": "Simpan",
+      "close": "Tutup",
+      "back": "Kembali",
+      "minutes": "{count, plural, other {# menit}}",
+      "minShort": "{count} mnt",
+      "hoursMinutes": "{hours} j {minutes} mnt",
+      "hours": "{hours} j"
+    },
+    "status": {
+      "pending": "Menunggu",
+      "confirmed": "Dikonfirmasi",
+      "cancelled": "Dibatalkan",
+      "completed": "Selesai",
+      "no_show": "Tidak hadir",
+      "declined": "Ditolak"
+    },
+    "errors": {
+      "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukannya.",
+      "signedOut": "Sesi Anda telah berakhir. Masuk lagi untuk melanjutkan.",
+      "conflict": "Ini diubah oleh orang lain. Muat ulang untuk melihat versi terbaru.",
+      "validation": "Sebagian informasi tidak valid. Periksa kolom yang disorot.",
+      "unavailable": "Janji temu belum tersedia di server ini.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "notFound": "Tidak ditemukan. Mungkin telah dihapus.",
+      "planDisabled": "Janji temu tidak termasuk dalam paket Anda.",
+      "slotTaken": "Waktu itu baru saja diambil. Silakan pilih yang lain.",
+      "gone": "Pemesanan ini tidak dapat diubah lagi.",
+      "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi.",
+      "requestId": "ID permintaan",
+      "retry": "Coba lagi",
+      "invalidTransition": "Pemesanan itu tidak dalam status yang memungkinkan hal ini. Muat ulang untuk melihat statusnya.",
+      "notStarted": "Ini hanya dapat dilakukan setelah pemesanan dimulai.",
+      "alreadyStarted": "Pemesanan ini sudah dimulai, sehingga tidak dapat diubah lagi.",
+      "bookingOff": "Pemesanan tidak tersedia untuk layanan ini saat ini.",
+      "notDeletable": "Ini tidak dapat dihapus selama masih ada pemesanan mendatang."
+    },
+    "picker": {
+      "timeZone": "Zona waktu",
+      "previousMonth": "Bulan sebelumnya",
+      "nextMonth": "Bulan berikutnya",
+      "pickDay": "Pilih hari",
+      "times": "Waktu tersedia",
+      "timesAvailable": "{count, plural, other {# waktu tersedia}}",
+      "seatsLeft": "{count} tersisa",
+      "noTimes": "Tidak ada waktu kosong dalam beberapa hari ke depan.",
+      "noTimesDay": "Tidak ada waktu pada hari ini. Pilih hari lain.",
+      "loading": "Memuat waktu",
+      "loadFailed": "Waktu tidak dapat dimuat.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "retry": "Coba lagi",
+      "typeZone": "Layanan ini berjalan di {zone}."
+    },
+    "hours": {
+      "openDay": "Buka pada hari {day}",
+      "daySummary": "{hours} j {minutes} mnt",
+      "closed": "Tutup",
+      "from": "{day}, interval {n}, waktu mulai",
+      "to": "{day}, interval {n}, waktu selesai",
+      "removeInterval": "Hapus interval {n} pada {day}",
+      "addInterval": "Tambah interval",
+      "copyTo": "Salin jam {day} ke hari lain",
+      "copyDay": "Salin ke",
+      "copyWeekdays": "Senin sampai Jumat",
+      "copyAll": "Semua hari",
+      "problems": {
+        "incomplete": "Isi kedua waktu.",
+        "order": "Waktu selesai harus setelah waktu mulai.",
+        "overlap": "Ini tumpang tindih dengan interval lain."
+      }
+    },
+    "hub": {
+      "breadcrumb": "Breadcrumb",
+      "integrations": "Integrasi",
+      "appointments": "Janji Temu",
+      "title": "Pemesanan Anda",
+      "subtitle": "Biarkan pelanggan memesan janji temu langsung di chat. Buat jenis pemesanan dengan layanan, jam, dan pengingat Anda, lalu pelanggan memilih slot dan dikonfirmasi otomatis.",
+      "newType": "Jenis pemesanan baru",
+      "types": "Jenis pemesanan",
+      "settings": "Pengaturan",
+      "weekTitle": "Minggu",
+      "monthTitle": "Bulan",
+      "inRange": "{count, plural, =0 {Tidak ada pemesanan} other {# pemesanan}} dalam tampilan",
+      "tableLabel": "Pemesanan",
+      "loading": "Memuat pemesanan",
+      "useSampleData": "Gunakan data contoh (pengembangan)",
+      "empty": {
+        "upcoming": {
+          "title": "Tidak ada pemesanan mendatang",
+          "message": "Buat jenis pemesanan dengan layanan dan jam Anda, lalu letakkan node \"Pesan janji temu\" di flow mana pun. Pemesanan yang dikonfirmasi muncul di sini."
+        },
+        "past": {
+          "title": "Tidak ada pemesanan lampau",
+          "message": "Pemesanan yang sudah berlangsung muncul di sini, beserta hasilnya."
+        },
+        "filtered": {
+          "title": "Tidak ada pemesanan yang cocok",
+          "message": "Tidak ada yang cocok dengan pencarian dan filter. Hapus untuk melihat semua pemesanan."
+        }
+      },
+      "resetFilters": "Hapus filter",
+      "truncated": "Menampilkan {count} pemesanan pertama dari rentang ini. Persempit filter untuk melihat sisanya.",
+      "showing": "{count, plural, other {Menampilkan # pemesanan}}",
+      "loadMore": "Muat lebih banyak",
+      "endOfList": "Akhir daftar",
+      "cancelTitle": "Batalkan janji temu ini?",
+      "cancelMessage": "Pemesanan dibatalkan dan waktunya kembali kosong. Pelanggan diberi tahu, dan pengingat dihapus.",
+      "cancelConfirm": "Batalkan janji temu",
+      "keep": "Pertahankan",
+      "declineTitle": "Tolak permintaan ini?",
+      "declineMessage": "Pelanggan diberi tahu bahwa permintaan ditolak dan waktunya kembali kosong.",
+      "declineConfirm": "Tolak permintaan"
+    },
+    "tabs": {
+      "label": "Daftar pemesanan",
+      "upcoming": "Mendatang",
+      "past": "Lampau",
+      "count": "{count, plural, other {# pemesanan}}"
+    },
+    "toolbar": {
+      "label": "Filter dan tampilan",
+      "search": "Cari pelanggan, telepon, email, atau layanan",
+      "status": "Status",
+      "allStatuses": "Semua status",
+      "type": "Jenis pemesanan",
+      "allTypes": "Semua jenis pemesanan",
+      "clear": "Hapus",
+      "navigate": "Navigasi kalender",
+      "previous": "Sebelumnya",
+      "next": "Berikutnya",
+      "today": "Hari ini",
+      "refresh": "Segarkan",
+      "view": "Tampilan",
+      "views": {
+        "list": "Daftar",
+        "week": "Minggu",
+        "month": "Bulan"
+      }
+    },
+    "table": {
+      "when": "Kapan",
+      "customer": "Pelanggan",
+      "service": "Layanan",
+      "status": "Status",
+      "actions": "Aksi",
+      "today": "Hari ini",
+      "tomorrow": "Besok",
+      "yesterday": "Kemarin",
+      "rowLabel": "Buka pemesanan: {title}",
+      "noName": "Tanpa nama",
+      "needsReview": "Perlu ditinjau"
+    },
+    "row": {
+      "moreFor": "Aksi lainnya untuk {title}",
+      "open": "Buka",
+      "confirm": "Konfirmasi",
+      "complete": "Tandai selesai",
+      "noShow": "Tandai tidak hadir",
+      "reschedule": "Jadwalkan ulang",
+      "copyLink": "Salin tautan kelola",
+      "cancel": "Batal",
+      "decline": "Tolak"
+    },
+    "calendar": {
+      "emptyWeek": "Tidak ada pemesanan minggu ini.",
+      "monthGrid": "Kalender bulanan",
+      "more": "+{count} lagi",
+      "dayAgenda": "Pemesanan pada hari yang dipilih",
+      "emptyDay": "Tidak ada pemesanan hari ini."
+    },
+    "drawer": {
+      "loading": "Memuat pemesanan",
+      "close": "Tutup",
+      "noType": "Jenis pemesanan yang dihapus",
+      "pendingHint": "Menunggu konfirmasi",
+      "minutes": "{count} mnt",
+      "customerTime": "Untuk pelanggan: {time} ({zone})",
+      "confirm": "Konfirmasi",
+      "complete": "Tandai selesai",
+      "noShow": "Tidak hadir",
+      "reschedule": "Jadwalkan ulang",
+      "cancel": "Batal",
+      "customer": "Pelanggan",
+      "openContact": "Buka kontak",
+      "linkedContact": "Kontak tertaut",
+      "noName": "Tanpa nama",
+      "where": "Lokasi",
+      "joinCall": "Gabung panggilan video",
+      "answers": "Jawaban atas pertanyaan pemesanan",
+      "noAnswers": "Layanan ini tidak mengajukan pertanyaan, atau pelanggan tidak menjawab apa pun.",
+      "payment": "Pembayaran",
+      "depositPaid": "{amount} dibayar",
+      "notes": "Catatan",
+      "notesPlaceholder": "Catatan pribadi tentang pemesanan ini",
+      "saveNotes": "Simpan catatan",
+      "reminders": "Pengingat",
+      "noReminders": "Tidak ada pengingat yang diatur untuk layanan ini.",
+      "before": "{count, plural, other {# menit sebelumnya}}",
+      "reminder": {
+        "scheduled": "Terjadwal",
+        "skipped": "Tidak terkirim",
+        "due": "Waktu tercapai"
+      },
+      "manageLink": "Tautan kelola",
+      "manageHint": "Bagikan tautan ini kepada pelanggan agar mereka dapat menjadwalkan ulang atau membatalkan sendiri.",
+      "copy": "Salin",
+      "openLink": "Buka halaman kelola",
+      "noManageLink": "Pemesanan ini tidak memiliki tautan kelola.",
+      "source": "Dipesan dari",
+      "bookedOn": "Dipesan pada",
+      "cancelTitle": "Batalkan janji temu ini?",
+      "cancelMessage": "Pemesanan dibatalkan dan waktunya kembali kosong. Pelanggan diberi tahu, dan pengingat dihapus.",
+      "cancelConfirm": "Batalkan janji temu",
+      "keep": "Pertahankan",
+      "decline": "Tolak",
+      "host": "Host",
+      "needsReview": "Berakhir, belum ditandai",
+      "needsReviewHint": "Pemesanan ini berakhir dan tidak ada yang menandainya selesai atau tidak hadir.",
+      "cancelledBy": "{who} membatalkan pemesanan ini",
+      "cancelledByStaff": "Staf",
+      "cancelledByInvitee": "Pelanggan",
+      "cancelledBySystem": "Sistem",
+      "cancelReason": "Alasan",
+      "declineTitle": "Tolak permintaan ini?",
+      "declineMessage": "Pelanggan diberi tahu bahwa permintaan ditolak dan waktunya kembali kosong.",
+      "declineConfirm": "Tolak permintaan",
+      "remindersNote": "Pengingat mengikuti jenis pemesanan. Pengiriman tidak dilacak per pengingat."
+    },
+    "source": {
+      "chat": "Flow chat",
+      "manual": "Staf",
+      "api": "API",
+      "link": "Halaman pemesanan"
+    },
+    "payment": {
+      "none": "Tanpa pembayaran",
+      "pending": "Pembayaran tertunda",
+      "paid": "Dibayar",
+      "refunded": "Dikembalikan",
+      "partial": "Dibayar sebagian"
+    },
+    "reschedule": {
+      "eyebrow": "Jadwalkan ulang",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "confirm": "Konfirmasi waktu baru",
+      "current": "Saat ini: {day}, {time} {zone}",
+      "noType": "Jenis pemesanan dari pemesanan ini telah dihapus, sehingga tidak ada waktu kosong untuk pindah.",
+      "taken": "Waktu itu baru saja diambil. Pilih yang lain.",
+      "newTime": "Waktu baru: {day}, {time}",
+      "notify": "Beri tahu pelanggan tentang waktu baru"
+    },
+    "toast": {
+      "conflict": "Pemesanan ini diubah oleh orang lain. Telah dimuat ulang.",
+      "failed": "Tidak berhasil.",
+      "confirmed": "Pemesanan dikonfirmasi.",
+      "cancelled": "Janji temu dibatalkan.",
+      "completed": "Ditandai selesai.",
+      "noShow": "Ditandai tidak hadir.",
+      "notesSaved": "Catatan disimpan.",
+      "rescheduled": "Pemesanan dipindahkan ke waktu baru.",
+      "linkCopied": "Tautan kelola disalin.",
+      "copyFailed": "Tautan tidak dapat disalin.",
+      "declined": "Permintaan ditolak."
+    },
+    "typesList": {
+      "breadcrumb": "Breadcrumb",
+      "appointments": "Janji Temu",
+      "services": "Layanan",
+      "title": "Jenis pemesanan",
+      "subtitle": "Setiap layanan memiliki durasi, ketersediaan, harga, kuesioner, dan pengingatnya sendiri. Pelanggan memesannya dari chat atau dari halaman pemesanannya sendiri.",
+      "newType": "Jenis pemesanan baru",
+      "allBookings": "Semua pemesanan",
+      "settings": "Pengaturan",
+      "toolbar": "Filter",
+      "search": "Cari jenis pemesanan",
+      "statusFilter": "Status",
+      "allStatuses": "Semua status",
+      "active": "Aktif",
+      "pausedLabel": "Dijeda",
+      "clear": "Hapus",
+      "tableLabel": "Jenis pemesanan",
+      "loading": "Memuat jenis pemesanan",
+      "useSampleData": "Gunakan data contoh (pengembangan)",
+      "emptyFilteredTitle": "Tidak ada jenis pemesanan yang cocok",
+      "emptyFiltered": "Tidak ada yang cocok dengan pencarian dan filter.",
+      "emptyTitle": "Belum ada jenis pemesanan",
+      "emptyMessage": "Buat layanan pertama Anda. Atur durasi, jam, dan harganya, lalu pelanggan dapat memesannya dari chat.",
+      "name": "Nama",
+      "details": "Detail",
+      "price": "Harga",
+      "booked": "Dipesan",
+      "status": "Status",
+      "actions": "Aksi",
+      "minutes": "{count} mnt",
+      "location": {
+        "address": "Tatap muka",
+        "virtual": "Virtual",
+        "phone": "Panggilan telepon",
+        "whatsapp": "WhatsApp"
+      },
+      "capacity": "{count, plural, other {# kursi}} per slot",
+      "approval": "Perlu persetujuan",
+      "free": "Gratis",
+      "toggle": "Aktif: {name}",
+      "moreFor": "Aksi lainnya untuk {name}",
+      "edit": "Edit",
+      "copyLink": "Salin tautan publik",
+      "openPage": "Buka halaman pemesanan",
+      "duplicate": "Duplikat",
+      "delete": "Hapus",
+      "showing": "{count, plural, other {# jenis pemesanan}}",
+      "deleteTitle": "Hapus \"{name}\"?",
+      "deleteMessage": "Hapus jenis pemesanan ini? Pemesanan yang ada tetap dipertahankan.",
+      "deleteConfirm": "Hapus jenis pemesanan",
+      "keep": "Pertahankan",
+      "activated": "\"{name}\" aktif.",
+      "paused": "\"{name}\" dijeda.",
+      "duplicated": "\"{name}\" dibuat (dijeda).",
+      "deleted": "\"{name}\" dihapus.",
+      "failed": "Tidak berhasil.",
+      "linkCopied": "Tautan publik disalin.",
+      "copyFailed": "Tautan tidak dapat disalin.",
+      "copyLinkFor": "Salin tautan publik {name}",
+      "copyLinkPaused": "Aktifkan jenis pemesanan ini untuk mendapatkan tautan publik"
+    },
+    "editor": {
+      "forbidden": "Anda tidak memiliki izin untuk membuat atau mengedit jenis pemesanan.",
+      "notFoundTitle": "Jenis pemesanan tidak ditemukan",
+      "notFound": "Jenis pemesanan itu tidak ditemukan. Mungkin telah dihapus.",
+      "loading": "Memuat jenis pemesanan",
+      "header": {
+        "back": "Kembali ke jenis pemesanan",
+        "kickerNew": "Janji Temu / Baru",
+        "kickerEdit": "Janji Temu / Edit",
+        "titleNew": "Buat jenis pemesanan",
+        "titleEdit": "Edit jenis pemesanan",
+        "draft": "Draf / belum disimpan",
+        "unsaved": "Perubahan belum disimpan"
+      },
+      "steps": {
+        "label": "Langkah",
+        "service": "Layanan",
+        "timing": "Waktu",
+        "availability": "Ketersediaan",
+        "pricing": "Harga",
+        "messaging": "Pesan",
+        "hasProblem": "perlu perhatian",
+        "stepOf": "Langkah {n} dari {total}: {name}"
+      },
+      "nav": {
+        "back": "Kembali",
+        "cancel": "Batal",
+        "next": "Berikutnya",
+        "create": "Buat jenis pemesanan",
+        "save": "Simpan perubahan",
+        "saving": "Menyimpan"
+      },
+      "toast": {
+        "created": "Jenis pemesanan \"{name}\" dibuat.",
+        "updated": "Jenis pemesanan \"{name}\" diperbarui."
+      },
+      "saveError": {
+        "conflict": "Jenis pemesanan ini diubah oleh orang lain saat Anda mengeditnya. Muat ulang untuk melihat versi mereka. Perubahan Anda yang belum disimpan di sini akan hilang.",
+        "reload": "Muat versi terbaru"
+      },
+      "leave": {
+        "title": "Buang perubahan Anda?",
+        "message": "Anda memiliki perubahan yang belum disimpan. Jika keluar sekarang, perubahan akan hilang.",
+        "discard": "Buang perubahan",
+        "keep": "Lanjut mengedit"
+      },
+      "problems": {
+        "nameRequired": "Masukkan nama untuk jenis pemesanan ini.",
+        "nameTooLong": "Nama maksimal {nameMax} karakter.",
+        "slugInvalid": "Gunakan huruf kecil, angka, dan tanda hubung tunggal, hingga {slugMax} karakter.",
+        "durationInvalid": "Durasi harus bilangan bulat dari {durationMin} hingga {durationMax} menit.",
+        "incrementInvalid": "Langkah mulai harus bilangan bulat dari {incrementMin} hingga {incrementMax} menit.",
+        "bufferInvalid": "Masukkan bilangan bulat menit dari 0 hingga {bufferMax}.",
+        "minNoticeInvalid": "Masukkan bilangan bulat menit dari 0 hingga {minNoticeMax}.",
+        "maxAdvanceInvalid": "Masukkan bilangan bulat hari dari {maxAdvanceMin} hingga {maxAdvanceMax}.",
+        "maxPerDayInvalid": "Kosongkan untuk tanpa batas, atau masukkan angka dari 1 hingga {maxPerDayMax}.",
+        "capacityInvalid": "Kapasitas harus bilangan bulat dari 1 hingga {capacityMax}.",
+        "timezoneInvalid": "Pilih zona waktu yang valid.",
+        "colorInvalid": "Gunakan warna hex seperti #075E54.",
+        "feeInvalid": "Masukkan jumlah seperti 150.00.",
+        "taxInvalid": "Masukkan persentase dari 0 hingga 100 dengan maksimal dua desimal.",
+        "depositInvalid": "Masukkan jumlah deposit lebih dari 0.",
+        "depositTooHigh": "Deposit tidak boleh lebih dari total (biaya ditambah pajak).",
+        "cancelFeeInvalid": "Masukkan jumlah seperti 25.00.",
+        "cancelWindowInvalid": "Masukkan bilangan bulat menit dari 0 hingga {cancelWindowMax}.",
+        "reminderInvalid": "Masukkan bilangan bulat menit sebelum mulai, dari 1 hingga {reminderMax}.",
+        "remindersDuplicate": "Setiap pengingat memerlukan waktu yang berbeda.",
+        "remindersTooMany": "Satu jenis pemesanan dapat memiliki maksimal {reminders} pengingat.",
+        "questionLabelRequired": "Beri label pada pertanyaan (hingga {questionLabelMax} karakter).",
+        "questionsTooMany": "Satu jenis pemesanan dapat memiliki maksimal {questions} pertanyaan.",
+        "questionOptionsRequired": "Tambahkan minimal satu pilihan, satu per baris.",
+        "hoursInvalid": "Perbaiki jam mingguan yang ditandai di bawah.",
+        "overridesInvalid": "Perbaiki tanggal yang ditandai dalam daftar pengecualian tanggal.",
+        "descriptionTooLong": "Deskripsi maksimal {descriptionMax} karakter.",
+        "locationTooLong": "Lokasi maksimal {locationMax} karakter.",
+        "server": "Server tidak menerima nilai ini. Periksa lalu coba lagi."
+      },
+      "service": {
+        "title": "Detail layanan",
+        "hint": "Beri nama layanan dan tempat berlangsungnya.",
+        "name": "Nama",
+        "namePlaceholder": "Demo 30 menit",
+        "description": "Deskripsi",
+        "descriptionPlaceholder": "Apa yang dipesan orang, ditampilkan di halaman pemesanan.",
+        "locationType": "Jenis lokasi",
+        "locationTypes": {
+          "address": "Tatap muka (alamat)",
+          "virtual": "Virtual (video)",
+          "phone": "Panggilan telepon",
+          "whatsapp": "WhatsApp"
+        },
+        "locationValue": "Lokasi / alamat",
+        "locationPlaceholders": {
+          "address": "Alamat jalan",
+          "virtual": "Tautan video (opsional)",
+          "phone": "Nomor telepon untuk dihubungi (opsional)",
+          "whatsapp": "Nomor WhatsApp (opsional)"
+        },
+        "appearanceTitle": "Warna",
+        "appearanceHint": "Menandai layanan ini di kalender dan di halaman pemesanan.",
+        "color": "Warna",
+        "colorSwatches": "Pilih warna",
+        "linkTitle": "Tautan publik",
+        "linkHint": "Pengunjung memesan di alamat ini. Berfungsi setelah jenis pemesanan disimpan dan aktif.",
+        "slug": "Nama tautan",
+        "slugHint": "Dibuat dari nama sampai Anda mengubahnya. Huruf kecil, angka, dan tanda hubung.",
+        "slugPlaceholder": "discovery-call",
+        "publicUrl": "Halaman publik",
+        "copy": "Salin tautan",
+        "copied": "Tautan disalin.",
+        "copyFailed": "Tautan tidak dapat disalin. Pilih lalu salin secara manual.",
+        "rulesTitle": "Aturan pemesanan",
+        "requiresApproval": "Wajib persetujuan",
+        "requiresApprovalHint": "Pemesanan baru menunggu sebagai Tertunda sampai seseorang di tim Anda mengonfirmasinya.",
+        "isActive": "Aktif",
+        "isActiveHint": "Matikan untuk menjeda layanan: halaman publiknya berhenti menerima pemesanan."
+      },
+      "timing": {
+        "title": "Waktu",
+        "hint": "Berapa lama setiap pemesanan berlangsung dan seberapa jauh ke depan orang dapat memesan.",
+        "duration": "Durasi (mnt)",
+        "durationHint": "Lama satu pemesanan. 60 = 1 jam.",
+        "increment": "Langkah mulai (mnt)",
+        "incrementHint": "Jeda antar waktu mulai yang ditawarkan. 30 menawarkan 9:00, 9:30, 10:00.",
+        "capacity": "Kapasitas (per slot)",
+        "capacityHint": "Jumlah orang yang dapat berbagi satu waktu. 1 untuk satu lawan satu.",
+        "bufferBefore": "Jeda sebelum (mnt)",
+        "bufferAfter": "Jeda sesudah (mnt)",
+        "bufferHint": "Waktu kosong yang disisakan di sekitar setiap pemesanan.",
+        "minNotice": "Pemberitahuan min. (mnt)",
+        "minNoticeHint": "Seberapa cepat sebelum mulai orang dapat memesan. 240 = 4 jam.",
+        "maxAdvance": "Pesan hingga (hari)",
+        "maxAdvanceHint": "Seberapa jauh ke depan orang dapat memesan. 30 = sebulan.",
+        "maxPerDay": "Maks. per hari",
+        "maxPerDayHint": "Pemesanan terbanyak dalam satu hari. Kosongkan untuk tanpa batas.",
+        "noLimit": "Tanpa batas",
+        "zoneTitle": "Zona waktu",
+        "zoneHint": "Jam mingguan dan tanggal dibaca dalam zona ini. Pengunjung melihat waktu di zona mereka sendiri.",
+        "zone": "Zona waktu layanan ini",
+        "zoneSearch": "Cari zona",
+        "zonePick": "Pilih zona waktu",
+        "zoneNone": "Tidak ada zona yang cocok dengan pencarian itu."
+      },
+      "availability": {
+        "title": "Jam mingguan",
+        "hint": "Tambahkan waktu Anda menerima pemesanan setiap hari. Panel kanan menampilkan pratinjau slot yang benar-benar dapat dipesan.",
+        "empty": "Belum ada jam yang diatur, sehingga belum ada yang dapat dipesan.",
+        "total": "{hours} j {minutes} mnt waktu yang dapat dipesan dalam seminggu."
+      },
+      "overrides": {
+        "title": "Pengecualian tanggal dan hari libur",
+        "hint": "Tutup satu hari untuk hari libur, atau beri satu tanggal jamnya sendiri. Selebihnya mengikuti jam mingguan.",
+        "previousMonth": "Bulan sebelumnya",
+        "nextMonth": "Bulan berikutnya",
+        "legend": "Legenda",
+        "status": {
+          "closed": "Tutup",
+          "custom": "Jam kustom",
+          "open": "Buka (jam mingguan)",
+          "off": "Tutup (jam mingguan)"
+        },
+        "clickHint": "Klik hari untuk menutupnya. Klik hari yang ditandai lagi untuk mengembalikan jam mingguannya.",
+        "rangeTitle": "Tutup satu rentang",
+        "rangeHint": "Tutup beberapa hari sekaligus, seperti minggu libur. Hari yang sudah memiliki pengecualian tetap mempertahankannya.",
+        "rangeFrom": "Dari",
+        "rangeTo": "Sampai (opsional)",
+        "reason": "Alasan",
+        "reasonPlaceholder": "Alasan (opsional)",
+        "rangeProblems": {
+          "invalid": "Pilih tanggal mulai, dan tanggal akhir yang tidak sebelum tanggal mulai.",
+          "tooLong": "Satu rentang paling banyak mencakup satu tahun.",
+          "full": "Batas pengecualian tanggal tercapai."
+        },
+        "closeRange": "Tutup hari-hari ini",
+        "listTitle": "Pengecualian",
+        "count": "{count, plural, =0 {Tidak ada tanggal} other {# tanggal}}",
+        "limit": "Anda mencapai batas {max} tanggal. Hapus beberapa untuk menambah lagi.",
+        "empty": "Belum ada tanggal. Klik hari di kalender untuk menutupnya.",
+        "remove": "Hapus pengecualian pada {date}",
+        "mode": "{date}: tutup atau jam kustom",
+        "modeClosed": "Tutup sepanjang hari",
+        "modeCustom": "Jam kustom",
+        "from": "{date}, waktu mulai",
+        "to": "{date}, waktu selesai",
+        "reasonOf": "{date}, alasan",
+        "problems": {
+          "incomplete": "Isi kedua waktu.",
+          "order": "Waktu selesai harus setelah waktu mulai.",
+          "dayClosedHours": "Hari yang tutup tidak memiliki jam."
+        }
+      },
+      "pricing": {
+        "title": "Harga (opsional)",
+        "hint": "Biarkan biaya di 0 untuk pemesanan gratis.",
+        "currency": "Mata uang",
+        "currencyHint": "Default ke mata uang workspace Anda.",
+        "fee": "Biaya ({currency})",
+        "feeHint": "Tulis jumlahnya, mis. {example}.",
+        "tax": "Pajak %",
+        "taxHint": "Ditambahkan di atas biaya.",
+        "deposit": "Deposit",
+        "depositModes": {
+          "none": "Tanpa pembayaran di muka",
+          "partial": "Deposit sebagian",
+          "full": "Jumlah penuh"
+        },
+        "depositAmount": "Jumlah deposit ({currency})",
+        "paymentNote": "Penagihan pembayaran online belum terhubung. Deposit dicatat pada setiap pemesanan tetapi tidak ada yang ditagih.",
+        "cancelFee": "Biaya pembatalan ({currency})",
+        "noShowFee": "Biaya tidak hadir ({currency})",
+        "cancelWindow": "Jendela pembatalan (mnt)",
+        "cancelWindowHint": "Berapa lama sebelum mulai pemesanan dapat dibatalkan tanpa biaya. 1440 = 24 jam.",
+        "recordedOnly": "Biaya pembatalan, biaya tidak hadir, dan jendela pembatalan hanya dicatat.",
+        "totalsLabel": "Biaya sebuah pemesanan",
+        "totalFee": "Biaya",
+        "totalTax": "Pajak",
+        "totalSum": "Total",
+        "totalDue": "Jatuh tempo sekarang"
+      },
+      "calendar": {
+        "title": "Google Calendar (opsional)",
+        "hint": "Pemesanan berfungsi tanpa ini. Hubungkan Google Calendar di Janji Temu, Pengaturan untuk menyinkronkan waktu sibuk/kosong dan menambahkan tautan Meet.",
+        "unavailable": "Google Calendar belum disiapkan untuk platform ini. Pengaturan ini disimpan bersama jenis pemesanan untuk saat sudah siap.",
+        "calendarId": "Kalender",
+        "calendarPlaceholder": "utama",
+        "spreadsheetId": "Tambah ke sheet (opsional)",
+        "spreadsheetPlaceholder": "ID spreadsheet",
+        "createMeet": "Buat tautan Google Meet untuk setiap pemesanan",
+        "calendarDefault": "Kalender workspace"
+      },
+      "messages": {
+        "title": "Pesan siklus pemesanan",
+        "hint": "Yang dikirim kepada pelanggan saat pemesanan dikonfirmasi, diingatkan, dibatalkan, atau dipindahkan. Kosongkan kotak untuk memakai default workspace.",
+        "placeholdersTitle": "Placeholder yang dapat digunakan",
+        "placeholdersHint": "Klik salah satu untuk menyisipkannya di posisi kursor pada pesan yang sedang Anda edit ({event}).",
+        "placeholderMeaning": {
+          "type": "nama jenis pemesanan",
+          "slot": "tanggal dan waktu pemesanan",
+          "name": "nama pelanggan",
+          "manage_link": "tautan untuk mengelola pemesanan"
+        },
+        "events": {
+          "confirmation": "Konfirmasi",
+          "reminder": "Pengingat",
+          "cancellation": "Pembatalan",
+          "reschedule": "Jadwal ulang"
+        },
+        "placeholders": {
+          "confirmation": "Halo {name}, {type} Anda telah dipesan untuk {slot}. Kelola di sini: {manage_link}",
+          "reminder": "Halo {name}, pengingat: {type} Anda pada {slot}.",
+          "cancellation": "Halo {name}, {type} Anda pada {slot} dibatalkan.",
+          "reschedule": "Halo {name}, {type} Anda dipindahkan ke {slot}. Detail: {manage_link}"
+        },
+        "templatesNote": "Template WhatsApp yang disetujui belum dapat dipilih. Pesan dikirim sebagai teks biasa di atas."
+      },
+      "reminders": {
+        "title": "Pengingat",
+        "hint": "Waktu harus berbeda (1440 = 24 jam sebelumnya, 180 = 3 jam sebelumnya). Hingga {max}.",
+        "add": "Tambah pengingat",
+        "quickAdd": "Tambah cepat",
+        "quick": {
+          "h24": "24 j",
+          "h3": "3 j",
+          "h1": "1 j",
+          "m15": "15 mnt"
+        },
+        "empty": "Tidak ada pengingat. Pelanggan hanya menerima konfirmasi.",
+        "offsetOf": "Pengingat {n}, menit sebelum mulai",
+        "minBefore": "mnt sebelumnya",
+        "labelPlaceholder": "24j",
+        "labelOf": "Pengingat {n}, label",
+        "remove": "Hapus pengingat {n}",
+        "count": "{count} dari {max} pengingat"
+      },
+      "questions": {
+        "title": "Kuesioner",
+        "hint": "Pertanyaan yang diajukan saat seseorang memesan. Hingga {max}.",
+        "add": "Tambah pertanyaan",
+        "intro": "Pesan pengantar",
+        "introHint": "Ditampilkan di atas pertanyaan.",
+        "empty": "Tidak ada pertanyaan. Orang hanya memberikan nama, email, dan telepon.",
+        "labelPlaceholder": "Label pertanyaan",
+        "labelOf": "Pertanyaan {n}, label",
+        "typeOf": "Pertanyaan {n}, jenis jawaban",
+        "types": {
+          "text": "Teks",
+          "textarea": "Teks panjang",
+          "select": "Pilihan",
+          "number": "Angka",
+          "email": "Email",
+          "phone": "Telepon",
+          "date": "Tanggal"
+        },
+        "optionsOf": "Pertanyaan {n}, pilihan",
+        "optionsPlaceholder": "Satu pilihan per baris",
+        "optionsHint": "Hingga {max} pilihan.",
+        "map": "Simpan jawaban ke",
+        "mapOf": "Pertanyaan {n}, kolom kontak",
+        "mapNone": "Tidak ada",
+        "mapFields": {
+          "email": "Email",
+          "name": "Nama",
+          "mobile": "Ponsel"
+        },
+        "required": "Wajib",
+        "moveUp": "Pindahkan pertanyaan {n} ke atas",
+        "moveDown": "Pindahkan pertanyaan {n} ke bawah",
+        "remove": "Hapus pertanyaan {n}",
+        "count": "{count} dari {max} pertanyaan"
+      },
+      "rail": {
+        "title": "Ringkasan langsung",
+        "viewPublic": "Lihat halaman publik",
+        "cardLabel": "Pratinjau kartu pemesanan",
+        "newService": "Layanan baru",
+        "needsApproval": "Pemesanan menunggu persetujuan Anda.",
+        "fee": "Biaya",
+        "free": "Gratis",
+        "tax": "Pajak",
+        "total": "Total",
+        "dueNow": "Jatuh tempo sekarang",
+        "slotsTitle": "Pratinjau slot",
+        "refresh": "Segarkan",
+        "loading": "Memuat",
+        "slotsIdle": "Atur jam mingguan, durasi, dan zona waktu untuk melihat pratinjau waktu yang benar-benar dapat dipesan.",
+        "slotsFailed": "Pratinjau gagal.",
+        "slotsNone": "Tidak ada waktu yang dapat dipesan untuk konfigurasi ini dalam {days} hari ke depan.",
+        "slotsSummary": "{count, plural, other {# slot}} · waktu dalam {zone}"
+      }
+    },
+    "public": {
+      "brandFallback": "Pemesanan online",
+      "brandName": "CRM",
+      "poweredBy": "Didukung oleh {brand}",
+      "language": "Bahasa",
+      "loading": "Memuat",
+      "problem": {
+        "retry": "Coba lagi",
+        "back": "Lihat semua layanan",
+        "notFoundOrg": {
+          "title": "Kami tidak dapat menemukan halaman pemesanan ini",
+          "message": "Alamat mungkin salah ketik, atau bisnis ini tidak menerima pemesanan online. Minta tautannya kepada mereka."
+        },
+        "notFoundService": {
+          "title": "Layanan ini tidak tersedia",
+          "message": "Mungkin dijeda, atau tidak lagi ditawarkan. Anda dapat melihat layanan lain milik bisnis ini."
+        },
+        "notFoundLink": {
+          "title": "Tautan ini tidak valid",
+          "message": "Pemesanan mungkin telah dihapus, atau tautannya tidak lengkap. Gunakan tautan dari konfirmasi Anda, atau minta tautan baru kepada bisnis."
+        },
+        "paused": {
+          "title": "Layanan ini dijeda",
+          "message": "Saat ini tidak menerima pemesanan. Coba lagi nanti, atau lihat layanan lain milik bisnis ini."
+        },
+        "closed": {
+          "title": "Pemesanan ini tidak dapat diubah lagi",
+          "message": "Sudah dibatalkan atau selesai. Hubungi bisnis jika Anda memerlukan hal lain."
+        },
+        "rateLimited": {
+          "title": "Terlalu banyak permintaan",
+          "message": "Harap tunggu sebentar lalu coba lagi."
+        },
+        "unavailable": {
+          "title": "Pemesanan online tidak tersedia saat ini",
+          "message": "Layanan pemesanan tidak dapat dijangkau. Coba lagi dalam beberapa menit."
+        },
+        "network": {
+          "title": "Kami tidak dapat memuat halaman ini",
+          "message": "Periksa koneksi Anda lalu coba lagi. Jika terus terjadi, hubungi bisnis."
+        }
+      },
+      "directory": {
+        "title": "Pesan janji temu",
+        "subtitle": "Pilih layanan untuk melihat waktu kosong di {name}.",
+        "services": "Layanan",
+        "choose": "Pilih waktu",
+        "empty": {
+          "title": "Belum ada yang dapat dipesan saat ini",
+          "message": "Bisnis ini tidak memiliki layanan yang terbuka untuk pemesanan online saat ini. Silakan cek lagi nanti."
+        }
+      },
+      "location": {
+        "address": "Tatap muka",
+        "virtual": "Panggilan video",
+        "phone": "Panggilan telepon",
+        "whatsapp": "WhatsApp"
+      },
+      "service": {
+        "allServices": "Semua layanan",
+        "approvalNote": "Bisnis mengonfirmasi setiap pemesanan. Anda akan menerima permintaan terlebih dahulu, lalu konfirmasi."
+      },
+      "step": {
+        "time": "Pilih hari dan waktu",
+        "pickHint": "Pilih hari, lalu waktu, untuk melanjutkan.",
+        "continue": "Lanjutkan",
+        "changeTime": "Ubah waktu",
+        "details": "Data Anda"
+      },
+      "when": {
+        "atService": "Lokasi layanan berada: {day}, {range} ({zone})"
+      },
+      "where": {
+        "join": "Gabung panggilan video",
+        "videoLater": "Panggilan video",
+        "phone": "Panggilan telepon pada"
+      },
+      "form": {
+        "name": "Nama Anda",
+        "email": "Email",
+        "phone": "Telepon",
+        "optional": "(opsional)",
+        "choose": "Pilih opsi",
+        "required": "Kolom ini wajib diisi.",
+        "tooLong": "Ini terlalu panjang.",
+        "serverInvalid": "Ini tidak dapat diterima. Periksa lalu coba lagi.",
+        "invalid": {
+          "text": "Periksa nilai ini.",
+          "textarea": "Periksa nilai ini.",
+          "email": "Masukkan alamat email yang valid.",
+          "phone": "Masukkan nomor telepon yang valid, dengan kode negara jika bukan nomor lokal.",
+          "number": "Masukkan angka.",
+          "date": "Pilih tanggal yang valid.",
+          "select": "Pilih salah satu opsi."
+        }
+      },
+      "price": {
+        "title": "Harga",
+        "inclTax": "termasuk pajak {pct}%",
+        "fee": "Biaya",
+        "tax": "Pajak ({pct}%)",
+        "total": "Total",
+        "dueNow": "Jatuh tempo saat pemesanan",
+        "notCollected": "Tidak ada yang ditagih di halaman ini. Pembayaran online belum tersedia."
+      },
+      "book": {
+        "confirm": "Konfirmasi pemesanan",
+        "request": "Minta pemesanan",
+        "sending": "Mengirim pemesanan Anda",
+        "slotTaken": "Waktu itu baru saja diambil. Silakan pilih yang lain.",
+        "slotTakenHint": "Data Anda tetap tersimpan. Waktu di bawah sudah diperbarui.",
+        "notice": {
+          "validation": {
+            "title": "Sebagian informasi tidak dapat diterima",
+            "message": "Periksa kolom yang disorot lalu coba lagi."
+          },
+          "rateLimited": {
+            "title": "Terlalu banyak permintaan",
+            "message": "Harap tunggu sebentar lalu tekan tombol lagi."
+          },
+          "network": {
+            "title": "Pemesanan tidak dapat dikirim",
+            "message": "Periksa koneksi Anda lalu tekan tombol lagi. Anda tidak akan dipesan dua kali."
+          },
+          "unavailable": {
+            "title": "Layanan ini tidak lagi tersedia",
+            "message": "Mungkin telah dijeda. Kembali ke daftar layanan dan coba yang lain."
+          }
+        }
+      },
+      "booked": {
+        "confirmedTitle": "Pemesanan Anda dikonfirmasi",
+        "confirmedMessage": "{name} telah menerima pemesanan Anda. Simpan tautan di bawah untuk mengubah atau membatalkannya.",
+        "pendingTitle": "Permintaan diterima, menunggu konfirmasi",
+        "pendingMessage": "{name} akan mengonfirmasi pemesanan Anda. Simpan tautan di bawah untuk memeriksa, mengubah, atau membatalkannya.",
+        "pendingNote": "Sampai dikonfirmasi, waktu ditahan untuk Anda tetapi masih dapat berubah.",
+        "manage": "Kelola pemesanan",
+        "bookAnother": "Pesan layanan lain"
+      },
+      "calendar": {
+        "title": "Tambahkan ke kalender",
+        "download": "Unduh file .ics",
+        "google": "Google Calendar",
+        "opensNewTab": "(terbuka di tab baru)"
+      },
+      "manageLink": {
+        "title": "Tautan pemesanan Anda",
+        "hint": "Simpan tautan ini. Ini satu-satunya cara untuk mengubah atau membatalkan pemesanan Anda, dan siapa pun yang memilikinya dapat melakukannya.",
+        "copy": "Salin",
+        "copied": "Disalin"
+      },
+      "manage": {
+        "title": "Pemesanan Anda",
+        "reschedule": "Jadwalkan ulang",
+        "cancel": "Batal",
+        "flash": {
+          "rescheduled": "Pemesanan Anda telah dijadwalkan ulang.",
+          "cancelled": "Pemesanan Anda telah dibatalkan."
+        },
+        "failure": {
+          "closed": "Pemesanan ini tidak dapat diubah lagi.",
+          "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+          "network": "Pemesanan tidak dapat diubah. Periksa koneksi Anda lalu coba lagi."
+        },
+        "confirmCancel": {
+          "title": "Batalkan pemesanan ini?",
+          "message": "Pemesanan Anda untuk {what} akan dibatalkan dan waktunya dilepas. Tindakan ini tidak dapat dibatalkan.",
+          "confirm": "Ya, batalkan pemesanan",
+          "keep": "Pertahankan pemesanan"
+        },
+        "state": {
+          "pending": {
+            "title": "Menunggu konfirmasi",
+            "message": "Bisnis belum mengonfirmasi pemesanan ini."
+          },
+          "cancelled": {
+            "title": "Pemesanan ini dibatalkan",
+            "message": "Tidak dapat diubah lagi."
+          },
+          "no_show": {
+            "title": "Pemesanan ini ditandai terlewat",
+            "message": "Tidak dapat diubah lagi. Hubungi bisnis jika ini keliru."
+          },
+          "completed": {
+            "title": "Janji temu ini sudah selesai",
+            "message": "Tidak dapat diubah lagi."
+          },
+          "passed": {
+            "title": "Janji temu ini sudah dimulai",
+            "message": "Tidak dapat diubah lagi secara online. Hubungi bisnis jika perlu."
+          }
+        }
+      },
+      "reschedule": {
+        "title": "Jadwalkan ulang",
+        "back": "Kembali ke pemesanan Anda",
+        "backToBooking": "Kembali ke pemesanan Anda",
+        "current": "Waktu saat ini",
+        "saving": "Menyimpan waktu baru",
+        "confirm": "Konfirmasi waktu baru · {when}",
+        "failure": {
+          "slotTaken": "Waktu itu baru saja diambil — silakan pilih yang lain.",
+          "closed": "Pemesanan ini tidak dapat diubah lagi.",
+          "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+          "validation": "Waktu itu tidak dapat diterima. Pilih yang lain.",
+          "network": "Waktu baru tidak dapat disimpan. Periksa koneksi Anda lalu coba lagi."
+        },
+        "closed": {
+          "closed": {
+            "title": "Pemesanan ini tidak dapat diubah lagi",
+            "message": "Sudah dibatalkan atau selesai, jadi tidak ada waktu untuk dipindahkan."
+          },
+          "passed": {
+            "title": "Janji temu ini sudah dimulai",
+            "message": "Pemesanan tidak dapat dipindahkan setelah dimulai. Hubungi bisnis jika perlu."
+          }
+        }
+      },
+      "meta": {
+        "book": "Pesan janji temu",
+        "manage": "Pemesanan Anda",
+        "reschedule": "Jadwalkan ulang pemesanan"
+      }
+    },
+    "settings": {
+      "title": "Pengaturan pemesanan",
+      "subtitle": "Default, jam kerja, dan pesan untuk pemesanan di workspace ini.",
+      "breadcrumb": {
+        "label": "Breadcrumb",
+        "integrations": "Integrasi",
+        "appointments": "Janji Temu",
+        "settings": "Pengaturan"
+      },
+      "back": "Kembali ke pemesanan",
+      "save": "Simpan pengaturan",
+      "saving": "Menyimpan...",
+      "saved": "Pengaturan pemesanan disimpan.",
+      "discard": "Buang perubahan",
+      "unsaved": "Anda memiliki perubahan yang belum disimpan.",
+      "allSaved": "Semua perubahan disimpan.",
+      "loading": "Memuat pengaturan",
+      "forbidden": "Anda tidak memiliki izin untuk melihat pengaturan pemesanan.",
+      "readOnly": "Anda dapat melihat pengaturan ini tetapi tidak dapat mengubahnya.",
+      "fixFirst": "Perbaiki kolom yang disorot terlebih dahulu.",
+      "issues": "{count, plural, other {# kolom perlu diperbaiki sebelum dapat disimpan.}}",
+      "conflict": {
+        "message": "Pengaturan ini diubah di tempat lain sejak Anda membukanya. Muat ulang untuk melihat versi terbaru; perubahan Anda di sini akan digantikan.",
+        "reload": "Muat versi terbaru"
+      },
+      "leave": {
+        "title": "Keluar tanpa menyimpan?",
+        "message": "Perubahan Anda pada pengaturan pemesanan belum disimpan.",
+        "leave": "Keluar",
+        "stay": "Lanjut mengedit"
+      },
+      "calendar": {
+        "title": "Integrasi kalender",
+        "description": "Hubungkan kalender agar pemesanan dan waktu sibuk Anda tetap selaras.",
+        "provider": "Google Calendar",
+        "providerSub": "Pemesanan janji temu",
+        "status": {
+          "unavailable": "Tidak tersedia",
+          "disconnected": "Tidak terhubung",
+          "connected": "Terhubung",
+          "needs_reconnect": "Perlu dihubungkan ulang"
+        },
+        "loading": "Memeriksa koneksi",
+        "unavailableTitle": "Google Calendar belum disiapkan untuk platform ini",
+        "unavailableBody": "Administrator platform Anda harus menambahkan klien OAuth Google (Admin, Pengaturan, Google Calendar) sebelum workspace dapat terhubung. Pemesanan Anda tidak terpengaruh.",
+        "disconnectedBody": "Tidak terhubung. Menghubungkan akan membuka Google, tempat Anda memilih akun dan menyetujui berbagi akses kalender.",
+        "disconnectedReadOnly": "Tidak terhubung. Minta admin workspace untuk menghubungkannya.",
+        "reconnectTitle": "Google berhenti menerima koneksi",
+        "reconnectBody": "Akses dicabut atau telah kedaluwarsa, sehingga pemesanan tidak ditulis ke kalender Anda dan waktu sibuknya tidak dibaca. Hubungkan lagi untuk melanjutkan.",
+        "reconnectBodyAccount": "Akses untuk {account} dicabut atau telah kedaluwarsa, sehingga pemesanan tidak ditulis ke kalender Anda dan waktu sibuknya tidak dibaca. Hubungkan lagi untuk melanjutkan.",
+        "account": "Akun Google",
+        "calendar": "Kalender",
+        "primaryCalendar": "Kalender utama Anda",
+        "connectedAgo": "Terhubung {when}",
+        "errors": {
+          "notConfigured": "Google Calendar belum disiapkan untuk platform ini. Minta administrator platform Anda menambahkan klien OAuth Google.",
+          "notConnected": "Tidak ada Google Calendar yang terhubung. Muat ulang halaman lalu hubungkan lagi.",
+          "providerFailed": "Google tidak merespons. Coba lagi sebentar lagi."
+        },
+        "loadingCalendars": "Memuat kalender Anda",
+        "chooseLabel": "Tulis pemesanan ke",
+        "chooseHint": "Hanya kalender yang dapat diedit akun ini yang ditampilkan. Acara yang sudah ditulis tetap di tempatnya.",
+        "choosePlaceholder": "Pilih kalender",
+        "chooseOptionPrimary": "{name} (kalender utama)",
+        "chooseSave": "Gunakan kalender ini",
+        "chooseCancel": "Batal",
+        "saving": "Menyimpan",
+        "connect": "Hubungkan Google Calendar",
+        "reconnect": "Hubungkan ulang Google",
+        "redirecting": "Membuka Google",
+        "choose": "Pilih kalender",
+        "disconnect": "Putuskan",
+        "disconnected": "Google Calendar diputuskan.",
+        "calendarSaved": "Kalender disimpan.",
+        "confirmOff": {
+          "title": "Putuskan Google Calendar?",
+          "message": "Pemesanan baru berhenti masuk ke kalender Anda dan waktu sibuknya tidak dibaca lagi. Acara yang sudah ada di kalender Anda tetap di sana, dan Google diminta mencabut akses ini.",
+          "confirm": "Putuskan",
+          "cancel": "Pertahankan"
+        },
+        "outcome": {
+          "connected": "Google Calendar terhubung. Pemesanan yang dikonfirmasi kini masuk ke kalender Anda.",
+          "denied": "Akses tidak diberikan di Google, sehingga tidak ada yang terhubung.",
+          "failed": "Proses menghubungkan tidak selesai. Coba lagi; jika terus gagal, minta administrator platform Anda memeriksa pengaturan Google.",
+          "expired": "Percobaan itu terlalu lama. Tekan Hubungkan untuk memulai lagi.",
+          "not_configured": "Google Calendar belum disiapkan untuk platform ini. Minta administrator platform Anda menambahkan klien OAuth Google.",
+          "missing_scope": "Google tidak memberikan semua izin kalender yang diperlukan. Hubungkan lagi dan biarkan semua kotak tetap tercentang."
+        },
+        "whatTitle": "Fungsinya",
+        "what": {
+          "freeBusy": "Membaca waktu sibuk dan kosong dari kalender Anda.",
+          "nextSlots": "Menawarkan slot kosong berikutnya kepada pelanggan.",
+          "writeBack": "Menulis pemesanan yang dikonfirmasi ke kalender Anda sebagai acara, dengan tautan Meet jika layanan memintanya."
+        },
+        "hint": "Pemesanan berfungsi tanpa ini. Waktu kosong berasal dari jam kerja dan aturan pemesanan Anda di bawah."
+      },
+      "timezone": {
+        "title": "Zona waktu",
+        "description": "Zona tempat jam kerja dan waktu pemesanan Anda dibaca.",
+        "label": "Zona waktu workspace",
+        "hint": "Pelanggan melihat waktu di zona mereka sendiri; milik Anda ditampilkan di zona ini."
+      },
+      "hours": {
+        "title": "Jam kerja",
+        "description": "Kapan pelanggan dapat memesan. Matikan satu hari untuk menutupnya, atau tambahkan interval untuk istirahat.",
+        "noHours": "Tidak ada hari yang buka, sehingga tidak ada yang dapat memesan."
+      },
+      "defaults": {
+        "title": "Aturan pemesanan",
+        "description": "Default untuk pemesanan di workspace ini.",
+        "fields": {
+          "slotDurationMinutes": "Durasi slot (menit)",
+          "maxPerDay": "Maks. pemesanan per hari",
+          "bufferBeforeMinutes": "Jeda sebelum (menit)",
+          "bufferAfterMinutes": "Jeda sesudah (menit)",
+          "advanceDays": "Jendela pemesanan di muka (hari)",
+          "reminderMinutesBefore": "Pengingat (menit sebelumnya)",
+          "defaultLocation": "Lokasi default (opsional)"
+        },
+        "hints": {
+          "slotDurationMinutes": "{min} hingga {max} menit.",
+          "maxPerDay": "{min} hingga {max} pemesanan.",
+          "bufferBeforeMinutes": "{min} hingga {max} menit.",
+          "bufferAfterMinutes": "{min} hingga {max} menit.",
+          "advanceDays": "{min} hingga {max} hari ke depan.",
+          "reminderMinutesBefore": "{min} hingga {max} menit. 0 mematikan pengingat."
+        },
+        "locationHint": "Hingga 191 karakter.",
+        "locationPlaceholder": "mis. Jl. Jenderal Sudirman No. 12, Jakarta"
+      },
+      "templates": {
+        "title": "Template pesan",
+        "description": "Pesan teks biasa yang diterima pelanggan. Placeholder diisi untuk setiap pemesanan.",
+        "placeholders": "Placeholder",
+        "placeholder": {
+          "type": "Nama jenis pemesanan",
+          "slot": "Tanggal dan waktu",
+          "name": "Nama pelanggan",
+          "manage_link": "Tautan untuk mengelola pemesanan"
+        },
+        "events": {
+          "confirmation": "Konfirmasi",
+          "reminder": "Pengingat",
+          "cancellation": "Pembatalan",
+          "reschedule": "Jadwal ulang"
+        },
+        "reset": "Reset ke default",
+        "unknown": "Bukan placeholder yang dikenal, akan dikirim apa adanya: {names}",
+        "counter": "{count} / {max}"
+      },
+      "v": {
+        "required": "Ini wajib diisi.",
+        "notInteger": "Masukkan bilangan bulat.",
+        "tooSmall": "Minimal {min}.",
+        "tooLarge": "Maksimal {max}.",
+        "tooLong": "Maksimal {max} karakter.",
+        "badZone": "Pilih zona waktu dari daftar.",
+        "badHours": "Perbaiki waktu yang disorot pada jam kerja."
+      },
+      "notAvailable": "Pengaturan pemesanan seluruh workspace tidak tersedia di server ini. Setiap jenis pemesanan membawa jam, zona waktu, pengingat, dan pesannya sendiri.",
+      "openTypes": "Buka jenis pemesanan"
+    },
+    "linked": {
+      "title": "Janji Temu",
+      "openBookings": "Buka pemesanan",
+      "showPast": "Tampilkan yang lampau",
+      "hidePast": "Sembunyikan yang lampau",
+      "empty": "Tidak ada janji temu mendatang.",
+      "emptyBoth": "Belum ada janji temu.",
+      "loading": "Memuat janji temu",
+      "unavailable": "Janji temu belum tersedia di server ini.",
+      "loadMore": "Muat lebih banyak",
+      "loadMorePast": "Muat lebih banyak yang lampau",
+      "noType": "Janji temu"
+    }
+  }
+}

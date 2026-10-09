@@ -1,0 +1,307 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "附加组件和模块",
+      "packs": "附加包（计费）",
+      "extensions": "附加组件（代码）",
+      "workspace": "附加组件"
+    },
+    "common": {
+      "loading": "加载中",
+      "retry": "重试",
+      "cancel": "取消",
+      "save": "保存",
+      "saving": "保存中",
+      "close": "关闭",
+      "dismiss": "忽略",
+      "admin": "管理员",
+      "settings": "设置",
+      "optional": "可选",
+      "required": "必填",
+      "readOnly": "你可以查看此页面，但只有超级管理员可以修改。",
+      "requestId": "请求 ID",
+      "errors": {
+        "forbidden": "你无权访问此页面。",
+        "request": "无法完成请求。",
+        "unexpected": "出了点问题，请稍后重试。",
+        "conflict": "刚刚有其他人修改了此内容。请刷新后重试。"
+      }
+    },
+    "packs": {
+      "crumbHere": "附加包",
+      "eyebrow": "管理员 · 计费和套餐 · 附加包",
+      "titleLead": "附加",
+      "titleAccent": "包",
+      "title": "附加包",
+      "description": "客户在套餐之外按需购买的功能包，例如“营销活动附加包”或“+1 个 WhatsApp 号码”。每个附加包会授予你设置的功能开关和限额，并合并到客户的套餐中。客户开通有效套餐后，它们会显示在其账户页面上。",
+      "new": "新建附加包",
+      "empty": {
+        "title": "暂无附加包。",
+        "action": "创建第一个附加包"
+      },
+      "table": {
+        "label": "附加包",
+        "name": "名称",
+        "price": "价格",
+        "period": "周期",
+        "grants": "包含内容",
+        "status": "状态",
+        "actions": "操作"
+      },
+      "price": {
+        "free": "免费",
+        "lifetime": "一次性"
+      },
+      "period": {
+        "days": "{count} 天",
+        "weeks": "{count} 周",
+        "months": "{count} 个月",
+        "years": "{count} 年"
+      },
+      "grants": {
+        "none": "未设置",
+        "unlimited": "不限 {name}",
+        "add": "+{amount} {name}",
+        "more": "+{count}"
+      },
+      "status": {
+        "active": "已启用",
+        "off": "关闭"
+      },
+      "actions": {
+        "edit": "编辑",
+        "enable": "启用",
+        "disable": "停用",
+        "delete": "删除"
+      },
+      "toasts": {
+        "created": "附加包已创建。",
+        "updated": "附加包已更新。",
+        "activated": "{name} 已启用",
+        "deactivated": "{name} 已停用",
+        "deleted": "{name} 已删除"
+      },
+      "delete": {
+        "title": "删除 {name}？",
+        "body": "删除此附加包？已购买的工作区在到期前仍可继续使用。",
+        "confirm": "删除",
+        "inUse": "{count, plural, other {# 个工作区拥有此附加包，因此无法删除。请改为停用；拥有者在有效期结束前仍可使用。}}"
+      },
+      "errors": {
+        "generic": "无法保存附加包。",
+        "forbidden": "只有超级管理员可以修改附加包。",
+        "notFound": "此附加包已不存在。"
+      },
+      "editor": {
+        "crumbHere": "附加包",
+        "crumbNew": "新建",
+        "crumbEdit": "编辑",
+        "eyebrowNew": "管理员 · 附加包 · 新建",
+        "eyebrowEdit": "管理员 · 附加包 · 编辑",
+        "titleNewLead": "创建",
+        "titleEditLead": "编辑",
+        "titleAccent": "附加包",
+        "intro": "附加包只会授予你开启的内容，不会有其他权益。留空的限额不会被改动，因此不会意外出现“无限”。",
+        "fixTitle": "请修正以下问题：",
+        "cancel": "取消",
+        "create": "创建附加包",
+        "saveChanges": "保存更改",
+        "basics": "附加包基本信息",
+        "features": "此附加包解锁的功能",
+        "featuresHint": "只勾选此附加包授予的内容。未勾选的仍由客户的套餐决定。",
+        "coreFeature": "所有套餐均含",
+        "limits": "限额提升",
+        "limitsHint": "留空 = 此附加包不改动该限额。输入数字可在套餐基础上增加（例如 +2 台设备）。输入 -1 表示不限。",
+        "fields": {
+          "name": "名称",
+          "namePlaceholder": "营销活动附加包",
+          "subtitle": "副标题",
+          "subtitlePlaceholder": "解锁营销活动",
+          "amount": "价格",
+          "offerAmount": "优惠价（可选）",
+          "currency": "货币",
+          "billingDuration": "时长",
+          "billingUnit": "单位",
+          "billingMode": "计费",
+          "sortOrder": "排序",
+          "isActive": "启用",
+          "isLifetime": "永久（一次性）"
+        },
+        "modes": {
+          "one_time": "一次性（到期后可再次购买）",
+          "recurring": "定期（自动扣款续订）"
+        },
+        "units": {
+          "days": "天",
+          "weeks": "周",
+          "months": "月",
+          "years": "年"
+        },
+        "problems": {
+          "name": "请输入名称。",
+          "amount": "请输入金额，例如 19 或 19.99。",
+          "offerAmount": "优惠价必须低于原价。",
+          "currency": "请使用三位字母的货币代码。",
+          "billingDuration": "请输入 1 或更大的整数。",
+          "sortOrder": "请输入整数。",
+          "limits": "限额须为整数，或 -1 表示不限。",
+          "form": "请检查高亮的字段。"
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "附加组件",
+      "eyebrow": "管理员 · 附加组件",
+      "titleLead": "安装",
+      "titleAccent": "附加组件",
+      "title": "附加组件",
+      "description": "附加组件会将额外功能合并到此安装中，Instagram 是第一个。验证购买码，上传安装包，即可原地安装。你的数据和设置不会受到影响。",
+      "coreVersion": "核心",
+      "packsLead": "想找客户在套餐之外购买的付费功能包？",
+      "packsLink": "那些是套餐附加包（计费）",
+      "packsTail": "。此页面用于安装代码。",
+      "installed": {
+        "title": "已安装的附加组件",
+        "empty": "尚未安装附加组件。请先在上方验证购买码，然后上传安装包。",
+        "version": "v{version}",
+        "files": "{count, plural, other {# 个文件}}",
+        "inPlace": "原地模块",
+        "filesKept": "文件保留在磁盘上",
+        "active": "已启用",
+        "disabled": "已停用",
+        "inactive": "未激活",
+        "enable": "启用",
+        "disable": "停用",
+        "remove": "移除",
+        "reactivate": "重新激活",
+        "footnote": "移除附加组件只会删除它安装的文件（从添加时起逐一记录），因此不会触及核心文件。数据仍保留在数据库中。"
+      },
+      "verify": {
+        "title": "验证你的购买码",
+        "body": "与解锁更新的 {brand} 许可证相同。附加组件与其绑定。",
+        "placeholder": "例如 8f2c1a44-...",
+        "label": "购买码",
+        "action": "验证",
+        "checking": "验证中…",
+        "empty": "请先输入购买码。",
+        "failed": "验证失败。"
+      },
+      "upload": {
+        "title": "上传附加组件安装包",
+        "body": "写入任何内容之前会先检查 ZIP。格式错误或不兼容的安装包会被拒绝，你的安装不受影响。",
+        "choose": "选择附加组件 .zip",
+        "max": "最大 100 MB",
+        "action": "安装",
+        "installing": "安装中…",
+        "progress": "正在上传并合并。请勿关闭此标签页。"
+      },
+      "confirm": {
+        "removeTitle": "移除 {name}？",
+        "removeBody": "这会删除它安装的文件。其数据仍保留在数据库中。",
+        "remove": "移除",
+        "moduleOffTitle": "移除 {name}？",
+        "moduleOffBody": "这会停用该附加组件，其页面和自动化将停止运行。文件会保留，因此你可以随时重新激活。不会删除任何内容，其数据仍保留在数据库中。",
+        "moduleOnTitle": "重新激活 {name}？",
+        "moduleOnBody": "这会重新启用该附加组件。其文件仍在磁盘上，因此会立即恢复工作。",
+        "reactivate": "重新激活"
+      },
+      "engines": {
+        "connected": "已连接",
+        "notConnected": "未连接",
+        "connect": "连接",
+        "manage": "管理",
+        "disconnect": "断开连接",
+        "disconnectYes": "是，断开连接",
+        "save": "保存并连接",
+        "testing": "连接中…",
+        "displayName": "显示名称",
+        "secret": "共享密钥令牌",
+        "secretSaved": "•••••••• 已保存，留空则保持不变",
+        "secretNew": "粘贴共享密钥",
+        "lastChecked": "上次检查",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "作为独立的 {brand} 部署运行。通过 URL + 密钥连接，无需上传。",
+          "blocked": "已阻止：原生附加组件已启用",
+          "blockedNote": "已安装原生 Instagram 附加组件。请先在下方移除它，才能连接远程 {brand}。",
+          "modalTitle": "连接 Instagram",
+          "modalBody": "粘贴你的 {brand} 部署 URL 和共享密钥令牌。{app} 将通过 API 验证连接。不会上传任何内容。",
+          "url": "{brand} URL",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "显示在应用中所有“从……同步”“在……上管理”和“……URL”标签里。",
+          "disconnectTitle": "断开 Instagram？",
+          "disconnectBody": "这将断开 Instagram 与 {app} 的连接。Instagram 会立即从所有工作区的仪表板、分析、收件箱、流程、模板和自动回复中消失，重新连接前都无法使用。继续吗？"
+        },
+        "email": {
+          "title": "邮件",
+          "body": "连接后会关联 {brand} 邮件平台，邮件将进入团队收件箱。通过 URL + 密钥连接，无需上传。",
+          "modalTitle": "连接邮件",
+          "modalBody": "粘贴你的 {brand} 部署 URL 和共享密钥令牌。{app} 将通过 API 验证连接。不会上传任何内容。",
+          "url": "{brand} URL",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "显示在应用中所有邮件标签里。",
+          "disconnectTitle": "断开邮件？",
+          "disconnectBody": "这将断开邮件平台与 {app} 的连接。重新连接前，所有工作区的邮件都不会再进入团队收件箱。继续吗？"
+        }
+      },
+      "errors": {
+        "generic": "操作未成功。",
+        "forbidden": "只有超级管理员可以修改模块。",
+        "invalidPackage": "安装包无效。",
+        "tooLarge": "安装包过大。",
+        "coreTooOld": "此安装包需要更新的核心版本。",
+        "engineConflict": "Instagram 一次只能运行一个引擎。请先断开另一个。"
+      }
+    },
+    "workspace": {
+      "title": "附加包",
+      "description": "在订阅之外购买的额外功能包。",
+      "needPlanTitle": "附加包需要有效套餐",
+      "needPlanBody": "附加包是在订阅之外购买的额外功能包。请先选择套餐，再回到这里添加功能。",
+      "viewPlans": "查看套餐",
+      "noneTitle": "暂无可用附加包",
+      "noneBody": "目前没有提供附加包，请稍后再来。",
+      "ownedTitle": "你的附加包",
+      "ownedBody": "已合并到当前套餐的有效功能包。",
+      "ends": "{date} 结束",
+      "lifetime": "永久",
+      "autoRenews": "自动续订",
+      "renewal": {
+        "cancel": "取消续订",
+        "confirmTitle": "取消续订？",
+        "confirmBody": "此附加包在你已付费的期限结束前保持有效，之后不会续订。",
+        "confirm": "取消续订",
+        "keep": "继续续订",
+        "forbidden": "你无权更改套餐。",
+        "none": "没有可取消的有效订阅。",
+        "failed": "无法取消续订，请重试。"
+      },
+      "active": "已启用",
+      "cardEyebrow": "附加包",
+      "catalogTitle": "附加包",
+      "catalogBody": "在当前套餐基础上解锁额外功能，无需更换套餐。",
+      "count": "{count, plural, other {# 个附加包}}",
+      "free": "免费",
+      "lifetimePrice": "一次性",
+      "per": "/ {unit}",
+      "units": {
+        "days": "天",
+        "weeks": "周",
+        "months": "个月",
+        "years": "年"
+      },
+      "buy": "添加到套餐",
+      "buyAgain": "再次购买",
+      "owned": "已拥有 ×{count} · 再次购买可叠加",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "不限 {name}",
+        "add": "+{amount} {name}"
+      },
+      "error": "无法加载附加包。"
+    }
+  }
+}

@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "Ausblenden"
+    },
+    "connect": {
+      "title": "Telegram-Bot verbinden",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "submit": "Bot verbinden",
+      "intro": "Geben Sie Ihren HTTP-API-Token des Bots ein, um den Webhook einzurichten und Telegram-Chats zu bearbeiten.",
+      "tokenLabel": "Bot-Token *",
+      "tokenPlaceholder": "z. B. 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "Das sieht nicht nach einem BotFather-Token aus.",
+      "connected": "Telegram-Bot verbunden.",
+      "savedNeedsAttention": "Der Bot ist gespeichert, aber Telegram hat den Webhook nicht akzeptiert.",
+      "failed": "Der Bot konnte nicht verbunden werden. Versuchen Sie es erneut.",
+      "howTitle": "Wie erhalte ich ein Bot-Token?",
+      "how1a": "Öffnen Sie Telegram und suchen Sie nach dem verifizierten",
+      "how1b": "Konto.",
+      "how2a": "Senden Sie",
+      "how2b": "und wählen Sie einen Anzeigenamen und einen Benutzernamen.",
+      "how3": "Kopieren Sie den erzeugten HTTP-API-Token und fügen Sie ihn oben ein."
+    },
+    "bot": {
+      "failed": "Das hat nicht funktioniert. Versuchen Sie es erneut.",
+      "webhookFixed": "Eingehende Nachrichten sind wieder aktiv.",
+      "live": "Aktiv",
+      "paused": "Pausiert",
+      "needsAttention": "Benötigt Aufmerksamkeit",
+      "lastMessage": "Letzte Nachricht {when}",
+      "payments": "Zahlungen",
+      "on": "an",
+      "paymentsSaved": "Zahlungseinstellungen gespeichert.",
+      "paymentsHint": "Fügen Sie ein Zahlungsanbieter-Token von @BotFather ein (/mybots → Payments), um den Knoten Zahlungsablauf zu aktivieren – native Rechnungen im Chat.",
+      "paymentsSavedPlaceholder": "•••••••• (gespeichert – zum Beibehalten leer lassen)",
+      "paymentsToken": "Token des Zahlungsanbieters",
+      "removeToken": "Token entfernen",
+      "save": "Speichern",
+      "webhook": "Webhook",
+      "fixInbound": "Eingehende Nachrichten reparieren (Webhook neu registrieren)",
+      "pause": "Pausieren",
+      "resume": "Fortsetzen",
+      "pausedDone": "Bot pausiert.",
+      "resumedDone": "Bot fortgesetzt.",
+      "disconnect": "Trennen",
+      "disconnectConfirm": "Diesen Telegram-Bot trennen? Seine Posteingangs-Threads bleiben erhalten, aber er sendet und empfängt nicht mehr.",
+      "cancel": "Abbrechen",
+      "disconnected": "Bot getrennt."
+    },
+    "hub": {
+      "kicker": "Kanal · Telegram",
+      "title": "Telegram",
+      "titleAccent": "Verbinden",
+      "intro": "Stellen Sie einen Telegram-Bot bereit, um Nachrichtenabläufe zu automatisieren, Kundensupport zu übernehmen und Updates an alle Abonnenten weltweit zu senden.",
+      "teamInbox": "Team-Posteingang",
+      "flows": "Flows",
+      "broadcasts": "Broadcasts",
+      "telegramBroadcasts": "Telegram-Broadcasts",
+      "loadError": "Ihre Telegram-Bots konnten nicht geladen werden.",
+      "connectedCount": "{count} verbunden",
+      "notConnected": "Nicht verbunden",
+      "botCardTitle": "Verbindung des Telegram-Bots",
+      "botCardBody": "Fügen Sie einen Bot-Token von @BotFather ein, um Nachrichten zu automatisieren, Support zu übernehmen und an Abonnenten zu senden.",
+      "connectAnother": "Weiteren Bot verbinden",
+      "connectBot": "Bot verbinden",
+      "accountCardTitle": "Verbindung des Telegram-Kontos",
+      "accountCardBody": "Verknüpfen Sie Ihr Telegram-Konto, um Bots direkt hier zu erstellen – scannen Sie einen QR-Code oder nutzen Sie Ihre Telefonnummer, wie bei WhatsApp.",
+      "connectAccount": "Konto verbinden",
+      "accountUnavailable": "Noch nicht verfügbar: Dafür wird der Telegram-Kontodienst benötigt, der in diesem Workspace nicht eingerichtet ist.",
+      "connectedBots": "Verbundene Bots",
+      "guideTitle": "Einrichtungsanleitung für den Telegram-Bot",
+      "guideBody": "Führen Sie diese Schritte aus, um Ihren Telegram-Kanal zu verknüpfen und automatisierte Abläufe zu aktivieren.",
+      "prerequisites": "Voraussetzungen",
+      "pre": {
+        "account": "Ein aktives Telegram-Konto",
+        "name": "Ein eindeutiger Name für Ihren Bot",
+        "app": "Zugriff auf Telegram Web oder die App"
+      },
+      "stepsTitle": "Verbindungsschritte",
+      "step": "Schritt {n}",
+      "steps": {
+        "locate": {
+          "title": "BotFather finden",
+          "body": "Öffnen Sie Telegram und suchen Sie nach dem offiziellen Konto @BotFather (achten Sie auf das verifizierte Abzeichen)."
+        },
+        "create": {
+          "title": "Einen neuen Bot erstellen",
+          "body": "Senden Sie /newbot an @BotFather und folgen Sie den Anweisungen, um Ihren Bot zu benennen und einen Benutzernamen festzulegen."
+        },
+        "token": {
+          "title": "API-Token abrufen",
+          "body": "BotFather erzeugt einen HTTP-API-Token (z. B. 123456789:ABC…). Kopieren Sie ihn sicher."
+        },
+        "connect": {
+          "title": "Bot hier verbinden",
+          "body": "Klicken Sie auf „Bot verbinden“, fügen Sie Ihren Token in das Feld ein und senden Sie ihn ab, um die Verbindung abzuschließen."
+        }
+      },
+      "unlockedTitle": "Was wird freigeschaltet?",
+      "unlocked": {
+        "support": {
+          "title": "Support automatisieren",
+          "body": "Lassen Sie KI-Bots häufige Fragen beantworten und Unterhaltungen rund um die Uhr weiterleiten."
+        },
+        "broadcast": {
+          "title": "Broadcast-Kampagnen",
+          "body": "Senden Sie Aktionen, Hinweise und Newsletter gleichzeitig an alle Abonnenten."
+        },
+        "media": {
+          "title": "Interaktive Medien",
+          "body": "Binden Sie Nutzer mit Schaltflächen, Menüs, Rechnungen und Bildern ein."
+        }
+      },
+      "tipTitle": "Konfigurationstipp",
+      "tipBody": "Teilen Sie Ihr Bot-API-Token niemals öffentlich. Falls es kompromittiert wird, schreiben Sie @BotFather und führen Sie /revoke aus, um sofort ein neues zu erzeugen. Auf localhost ändert sich die Adresse eines Tunnels bei jedem Neustart – klicken Sie auf „Eingehende Nachrichten reparieren“, um neu zu registrieren."
+    },
+    "broadcasts": {
+      "kicker": "Telegram · Broadcasts",
+      "title": "Telegram",
+      "titleAccent": "Broadcasts",
+      "intro": "Schreiben Sie allen, die mit Ihrem Bot gechattet haben, und verfolgen Sie gesendet, fehlgeschlagen und blockiert pro Broadcast.",
+      "bots": "Bots",
+      "newBroadcast": "Neuer Broadcast",
+      "connectFirst": "Verbinden Sie zuerst einen Telegram-Bot.",
+      "connectBot": "Einen Bot verbinden",
+      "tile": {
+        "sent": "Gesendet",
+        "audience": "Empfängerkreis",
+        "failed": "Fehlgeschlagen",
+        "blocked": "Blockiert",
+        "sending": "Wird gesendet",
+        "broadcasts": "{count} Broadcasts",
+        "audienceHint": "Empfänger insgesamt",
+        "failedHint": "Zustellfehler",
+        "blockedHint": "Bot vom Nutzer blockiert",
+        "sendingHint": "in Bearbeitung"
+      },
+      "listKicker": "Broadcast-Liste",
+      "listTitle": "Letzte Broadcasts",
+      "col": {
+        "broadcast": "Broadcast",
+        "bot": "Bot",
+        "recipients": "Empfänger",
+        "progress": "Fortschritt",
+        "status": "Status",
+        "actions": "Aktionen"
+      },
+      "counts": "{sent} gesendet · {failed} fehlgeschlagen · {blocked} blockiert",
+      "status": {
+        "draft": "Entwurf",
+        "sending": "Wird gesendet",
+        "done": "Fertig",
+        "failed": "Fehlgeschlagen"
+      },
+      "start": "Starten",
+      "pause": "Pausieren",
+      "retry": "Erneut versuchen",
+      "delete": "Löschen",
+      "deleteConfirm": "Diesen Broadcast löschen?",
+      "cancel": "Abbrechen",
+      "empty": "Noch keine Broadcasts.",
+      "createFirst": "Erstellen Sie Ihren ersten",
+      "failed": "Das hat nicht funktioniert. Versuchen Sie es erneut.",
+      "started": "Versand gestartet.",
+      "paused": "Pausiert. Nicht gesendete Chats bleiben ausstehend.",
+      "retried": "{count} fehlgeschlagene Chats können erneut gesendet werden. Drücken Sie Starten.",
+      "deleted": "Broadcast gelöscht."
+    },
+    "compose": {
+      "kicker": "Telegram · Neuer Broadcast",
+      "title": "Erstellen Sie einen",
+      "titleAccent": "Broadcast",
+      "back": "Zurück",
+      "loadError": "Die Bots und Vorlagen konnten nicht geladen werden.",
+      "noPermission": "Sie können diese Seite ansehen, aber Sie dürfen keine Broadcasts erstellen.",
+      "setup": "Broadcast einrichten",
+      "name": "Name des Broadcasts",
+      "namePlaceholder": "z. B. Wochenendangebot",
+      "bot": "Bot",
+      "template": "Vorlage (optional)",
+      "templateHint": "Füllt die Nachricht vor und sendet die Schaltflächen der Vorlage.",
+      "templateNone": "— keine (eigene Nachricht schreiben) —",
+      "buttonCount": "{count} Schaltfläche(n)",
+      "message": "Nachricht",
+      "messageHint": "Verwenden Sie '{name}' für die Personalisierung.",
+      "messagePlaceholder": "Hallo '{name}'! …",
+      "attachment": "Anhang (optional)",
+      "attachmentHint": "Eine öffentliche Adresse zu einem Bild, Video, einer Audiodatei oder einem Dokument. Das Hochladen einer Datei benötigt den Speicherdienst.",
+      "attachmentInvalid": "Geben Sie eine vollständige Adresse ein, die mit http:// oder https:// beginnt.",
+      "recipients": "Empfänger",
+      "selectAll": "Alle auswählen",
+      "clearAll": "Alle entfernen",
+      "noChats": "Bisher hat niemand mit diesem Bot gechattet.",
+      "type": {
+        "private": "privat",
+        "group": "Gruppe",
+        "channel": "Kanal"
+      },
+      "selected": "{count} ausgewählt",
+      "submit": "Broadcast erstellen",
+      "preview": "Live-Vorschau",
+      "previewEmpty": "Vorschau Ihrer Nachricht…",
+      "previewNote": "So wird Ihr Broadcast im Chat jedes Empfängers aussehen.",
+      "created": "Broadcast mit {count} Empfängern erstellt. Drücken Sie Versand starten, wenn Sie bereit sind.",
+      "failed": "Der Broadcast konnte nicht erstellt werden. Versuchen Sie es erneut."
+    }
+  }
+}

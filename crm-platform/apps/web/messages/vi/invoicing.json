@@ -1,0 +1,662 @@
+{
+  "invoicing": {
+    "nav": {
+      "invoices": "Hóa đơn",
+      "payments": "Thanh toán",
+      "taxRates": "Thuế suất",
+      "recurring": "Hóa đơn định kỳ",
+      "salesOrders": "Đơn bán hàng"
+    },
+    "common": {
+      "unnamedContact": "Liên hệ chưa có tên",
+      "dismiss": "Bỏ qua"
+    },
+    "status": {
+      "draft": "Nháp",
+      "issued": "Đã phát hành",
+      "partially_paid": "Thanh toán một phần",
+      "overdue": "Quá hạn",
+      "paid": "Đã thanh toán",
+      "void": "Đã hủy"
+    },
+    "method": {
+      "bank_transfer": "Chuyển khoản ngân hàng",
+      "cash": "Tiền mặt",
+      "card": "Thẻ",
+      "upi": "UPI",
+      "cheque": "Séc",
+      "gateway": "Trực tuyến",
+      "other": "Khác"
+    },
+    "errors": {
+      "network": "Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "signedOut": "Phiên đăng nhập đã kết thúc. Hãy đăng nhập lại.",
+      "conflict": "Có người khác vừa thay đổi nội dung này. Hãy tải lại để xem phiên bản mới nhất.",
+      "validation": "Một số thông tin không hợp lệ. Hãy kiểm tra các trường được tô sáng.",
+      "unavailable": "Chức năng hóa đơn chưa khả dụng trên máy chủ này.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "notFound": "Hóa đơn này không còn tồn tại.",
+      "planDisabled": "Gói của bạn không bao gồm chức năng hóa đơn.",
+      "invalidState": "Không thể thực hiện thao tác này ở trạng thái hiện tại của hóa đơn. Hãy tải lại và kiểm tra trạng thái.",
+      "unexpected": "Đã xảy ra lỗi phía chúng tôi. Hãy thử lại.",
+      "requestId": "Mã yêu cầu",
+      "retry": "Thử lại"
+    },
+    "picker": {
+      "unlink": "Xóa liên hệ",
+      "searchContact": "Tìm liên hệ theo tên",
+      "results": "Liên hệ khớp",
+      "searching": "Đang tìm...",
+      "unavailable": "Không tải được danh sách liên hệ.",
+      "none": "Không tìm thấy liên hệ nào."
+    },
+    "actions": {
+      "failed": "Thao tác không thành công.",
+      "issued": "Đã phát hành hóa đơn {number}.",
+      "sent": "Đã đánh dấu là đã gửi.",
+      "voided": "Đã hủy hóa đơn {number}.",
+      "duplicated": "Đã tạo bản sao dưới dạng nháp.",
+      "deleted": "Đã xóa nháp.",
+      "linkCopied": "Đã sao chép liên kết.",
+      "linkCopyFailed": "Trình duyệt đã chặn sao chép. Hãy chọn liên kết và sao chép thủ công."
+    },
+    "payDialog": {
+      "title": "Ghi nhận thanh toán",
+      "forInvoice": "Hóa đơn {number}",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "record": "Ghi nhận thanh toán",
+      "markPaid": "Ghi nhận và đánh dấu đã thanh toán",
+      "recordAnyway": "Vẫn ghi nhận",
+      "balance": "Số dư còn lại",
+      "amount": "Số tiền ({currency})",
+      "method": "Phương thức",
+      "paidOn": "Ngày thanh toán",
+      "reference": "Tham chiếu",
+      "referenceHint": "Mã giao dịch hoặc số séc",
+      "note": "Ghi chú",
+      "recorded": "Đã ghi nhận thanh toán {amount}.",
+      "partialNote": "Đây là thanh toán một phần. Vẫn còn {left} chưa thanh toán.",
+      "overpayNote": "Số này vượt số dư {extra}. Hãy kiểm tra số tiền trước khi ghi nhận.",
+      "problems": {
+        "amountInvalid": "Nhập số tiền, ví dụ 125.50.",
+        "amountZero": "Số tiền phải lớn hơn 0.",
+        "dateInvalid": "Nhập ngày hợp lệ.",
+        "dateFuture": "Ngày thanh toán không thể ở tương lai.",
+        "tooMuch": "Vượt quá số tiền có thể hoàn lại.",
+        "referenceTooLong": "Tham chiếu quá dài (tối đa 191 ký tự).",
+        "noteTooLong": "Ghi chú quá dài (tối đa 2000 ký tự)."
+      }
+    },
+    "refundDialog": {
+      "title": "Hoàn tiền thanh toán",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "refund": "Hoàn tiền",
+      "available": "Tối đa {amount} có thể hoàn lại.",
+      "amount": "Số tiền ({currency})",
+      "date": "Ngày hoàn tiền",
+      "reason": "Lý do",
+      "effect": "Hóa đơn sẽ lại nợ số tiền đã hoàn.",
+      "refunded": "Đã hoàn {amount}.",
+      "problems": {
+        "amountInvalid": "Nhập số tiền, ví dụ 125.50.",
+        "amountZero": "Số tiền phải lớn hơn 0.",
+        "tooMuch": "Vượt quá số tiền có thể hoàn lại."
+      }
+    },
+    "voidDialog": {
+      "title": "Hủy hóa đơn",
+      "close": "Đóng",
+      "keep": "Giữ hóa đơn",
+      "void": "Hủy hóa đơn",
+      "warning": "Hóa đơn đã hủy vẫn giữ số của nó nhưng không thể thanh toán, chỉnh sửa hay mở lại. Liên kết của khách hàng sẽ hiển thị hóa đơn là đã hủy.",
+      "reason": "Lý do",
+      "reasonHint": "Không bắt buộc. Được lưu trong hoạt động của hóa đơn."
+    },
+    "sendDialog": {
+      "title": "Chia sẻ hóa đơn",
+      "issueTitle": "Phát hành hóa đơn",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "issue": "Phát hành hóa đơn",
+      "done": "Xong",
+      "issueIntro": "Phát hành sẽ chính thức hóa hóa đơn này:",
+      "issueNumber": "Hóa đơn sẽ nhận số hóa đơn tiếp theo.",
+      "issueFrozen": "Các dòng, giá và thuế của hóa đơn sẽ không còn chỉnh sửa được.",
+      "issueLink": "Liên kết dành cho khách hàng sẽ khả dụng.",
+      "link": "Liên kết dành cho khách hàng",
+      "linkHint": "Bất kỳ ai có liên kết này đều có thể xem hóa đơn và cách thanh toán.",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "copyFailed": "Trình duyệt đã chặn sao chép. Hãy chọn liên kết và sao chép thủ công.",
+      "open": "Mở trang của khách hàng",
+      "email": "Gửi email tới",
+      "emailHint": "Không bắt buộc. Để trống nếu bạn tự chia sẻ liên kết và chỉ đánh dấu hóa đơn là đã gửi.",
+      "alreadySent": "Hóa đơn này đã được đánh dấu là đã gửi."
+    },
+    "deleteDialog": {
+      "title": "Xóa nháp?",
+      "message": "{name} sẽ bị xóa vĩnh viễn. Chỉ có thể xóa nháp.",
+      "delete": "Xóa nháp",
+      "keep": "Giữ lại"
+    },
+    "row": {
+      "moreFor": "Thao tác cho {name}",
+      "draft": "nháp",
+      "open": "Mở",
+      "edit": "Sửa",
+      "issue": "Phát hành và gửi",
+      "send": "Chia sẻ liên kết / đánh dấu đã gửi",
+      "copyLink": "Sao chép liên kết",
+      "recordPayment": "Ghi nhận thanh toán",
+      "markPaid": "Đánh dấu đã thanh toán",
+      "duplicate": "Nhân bản",
+      "print": "Tải xuống / In",
+      "void": "Hủy",
+      "delete": "Xóa nháp"
+    },
+    "table": {
+      "columns": {
+        "number": "Hóa đơn",
+        "contact": "Khách hàng",
+        "issued": "Đã phát hành",
+        "due": "Đến hạn",
+        "total": "Tổng",
+        "paid": "Đã trả",
+        "balance": "Số dư",
+        "status": "Trạng thái"
+      },
+      "draft": "Nháp",
+      "daysLate": "{count, plural, other {# ngày trễ}}",
+      "selectAll": "Chọn tất cả hóa đơn đã tải",
+      "selectRow": "Chọn {name}",
+      "scrollArea": "Bảng hóa đơn"
+    },
+    "tabs": {
+      "label": "Trạng thái hóa đơn",
+      "all": "Tất cả",
+      "draft": "Nháp",
+      "issued": "Đã phát hành",
+      "partially_paid": "Thanh toán một phần",
+      "overdue": "Quá hạn",
+      "paid": "Đã thanh toán",
+      "void": "Đã hủy",
+      "count": "{count, plural, other {# hóa đơn}}"
+    },
+    "toolbar": {
+      "search": "Tìm theo số hoặc khách hàng",
+      "contactLoading": "Khách hàng",
+      "from": "Từ",
+      "to": "Đến",
+      "issuedFrom": "Phát hành từ",
+      "issuedTo": "Phát hành đến",
+      "sort": "Sắp xếp hóa đơn",
+      "sorts": {
+        "newest": "Mới nhất trước",
+        "oldest": "Cũ nhất trước",
+        "due": "Ngày đến hạn",
+        "amount": "Số tiền cao nhất"
+      },
+      "reset": "Xóa bộ lọc",
+      "refresh": "Làm mới"
+    },
+    "bulk": {
+      "label": "Thao tác hàng loạt",
+      "selected": "{count, plural, other {# hóa đơn đã chọn}}",
+      "working": "Đang xử lý...",
+      "issue": "Phát hành các nháp",
+      "void": "Hủy",
+      "delete": "Xóa các nháp",
+      "clear": "Bỏ chọn tất cả",
+      "failed": "Thao tác không thành công.",
+      "keep": "Giữ lại",
+      "someFailed": "{count, plural, other {# hóa đơn không thể thay đổi.}}",
+      "done": {
+        "issue": "{count, plural, other {# nháp đã được phát hành.}}",
+        "void": "{count, plural, other {# hóa đơn đã được hủy.}}",
+        "delete": "{count, plural, other {# nháp đã được xóa.}}"
+      },
+      "confirm": {
+        "void": {
+          "title": "Hủy các hóa đơn đã chọn?",
+          "message": "{count, plural, other {# hóa đơn đã chọn sẽ bị hủy. Hóa đơn đã có thanh toán sẽ được bỏ qua.}}",
+          "confirm": "Hủy hóa đơn"
+        },
+        "delete": {
+          "title": "Xóa các nháp đã chọn?",
+          "message": "{count, plural, other {# hóa đơn đã chọn sẽ được xem xét. Chỉ nháp mới bị xóa vĩnh viễn.}}",
+          "confirm": "Xóa nháp"
+        }
+      }
+    },
+    "list": {
+      "title": "Hóa đơn",
+      "subtitle": "Lập hóa đơn cho khách hàng, theo dõi những gì đã thanh toán và những gì trễ hạn.",
+      "payments": "Thanh toán",
+      "newInvoice": "Hóa đơn mới",
+      "tableLabel": "Danh sách hóa đơn",
+      "empty": {
+        "all": {
+          "title": "Chưa có hóa đơn nào",
+          "message": "Tạo hóa đơn đầu tiên, hoặc bắt đầu từ một đề xuất hoặc báo giá đã được chấp nhận."
+        },
+        "draft": {
+          "title": "Chưa có nháp nào",
+          "message": "Các hóa đơn bạn vẫn đang soạn sẽ hiện ở đây."
+        },
+        "issued": {
+          "title": "Không có gì đang chờ thanh toán",
+          "message": "Hóa đơn đã phát hành nhưng chưa thanh toán sẽ hiện ở đây."
+        },
+        "partially_paid": {
+          "title": "Không có hóa đơn thanh toán một phần",
+          "message": "Hóa đơn đã có thanh toán nhưng còn số dư sẽ hiện ở đây."
+        },
+        "overdue": {
+          "title": "Không có hóa đơn quá hạn",
+          "message": "Hóa đơn quá ngày đến hạn và còn số dư sẽ hiện ở đây."
+        },
+        "paid": {
+          "title": "Chưa có hóa đơn đã thanh toán",
+          "message": "Hóa đơn đã thanh toán đủ sẽ hiện ở đây."
+        },
+        "void": {
+          "title": "Không có hóa đơn đã hủy",
+          "message": "Hóa đơn đã hủy sẽ hiện ở đây và giữ nguyên số."
+        }
+      },
+      "emptyFilteredTitle": "Không có hóa đơn nào khớp",
+      "emptyFiltered": "Thử tìm kiếm khác hoặc xóa bộ lọc.",
+      "resetFilters": "Xóa bộ lọc",
+      "loading": "Đang tải hóa đơn",
+      "showing": "{count, plural, other {# hóa đơn đã tải}}",
+      "loadMore": "Tải thêm",
+      "allLoaded": "Đã hiển thị tất cả"
+    },
+    "lines": {
+      "lineN": "Dòng {n}",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Bạn đang lập hóa đơn cho khoản nào?",
+      "removeLine": "Xóa dòng {n}",
+      "qty": "SL",
+      "price": "Đơn giá ({currency})",
+      "discount": "Giảm giá %",
+      "tax": "Thuế",
+      "noTax": "Không thuế",
+      "inclusive": "đã gồm",
+      "removedRate": "Đã xóa mức thuế",
+      "inactive": "không hoạt động",
+      "amount": "Thành tiền",
+      "addLine": "Thêm dòng",
+      "problems": {
+        "descriptionRequired": "Mô tả dòng này.",
+        "qtyInvalid": "Nhập số lượng lớn hơn 0.",
+        "priceInvalid": "Nhập giá, ví dụ 49.90.",
+        "lineDiscountInvalid": "Nhập tỷ lệ phần trăm từ 0 đến 100.",
+        "noLines": "Thêm ít nhất một dòng trước khi phát hành.",
+        "amountZero": "Tổng hóa đơn phải lớn hơn 0."
+      }
+    },
+    "totals": {
+      "label": "Tổng hóa đơn",
+      "title": "Tổng cộng",
+      "subtotal": "Tạm tính",
+      "discount": "Giảm giá",
+      "total": "Tổng"
+    },
+    "builder": {
+      "creatingFromDocument": "Đang tạo hóa đơn từ tài liệu...",
+      "loading": "Đang tải",
+      "notEditable": "Hóa đơn này đã được phát hành nên không thể chỉnh sửa. Hãy nhân bản để tạo hóa đơn đã sửa.",
+      "openInvoice": "Mở hóa đơn",
+      "newTitle": "Hóa đơn mới",
+      "editTitle": "Sửa nháp",
+      "back": "Quay lại",
+      "unsaved": "Có thay đổi chưa lưu",
+      "cancel": "Hủy",
+      "saveDraft": "Lưu nháp",
+      "saveAndIssue": "Lưu và phát hành",
+      "conflict": "Có người khác vừa thay đổi nháp này khi bạn đang chỉnh sửa. Hãy tải lại để xem phiên bản của họ; các thay đổi của bạn ở đây sẽ bị mất.",
+      "reload": "Tải lại",
+      "viewLabel": "Chế độ trình tạo",
+      "views": {
+        "edit": "Sửa",
+        "preview": "Xem trước"
+      },
+      "billTo": "Lập hóa đơn cho",
+      "contact": "Liên hệ",
+      "contactHint": "Chọn một liên hệ để liên kết hóa đơn với họ, hoặc nhập tên người mua bên dưới.",
+      "buyerName": "Tên trên hóa đơn",
+      "buyerEmail": "Email",
+      "buyerPhone": "Điện thoại",
+      "buyerAddress": "Địa chỉ thanh toán",
+      "details": "Ngày và tiền tệ",
+      "currency": "Tiền tệ",
+      "currencyHint": "Ba chữ cái, như USD hoặc KWD. Số thập phân theo tiền tệ.",
+      "issueDate": "Ngày phát hành",
+      "terms": "Điều khoản thanh toán",
+      "noDueDate": "Không có ngày đến hạn",
+      "dueDate": "Ngày đến hạn",
+      "lineItems": "Các dòng hàng hóa",
+      "orderLinkedNote": "Các dòng của hóa đơn được tạo từ đơn bán hàng là cố định. Hãy hủy hoặc xóa hóa đơn này và lập lại hóa đơn cho đơn để thay đổi chúng.",
+      "adjustments": "Giảm giá",
+      "discountKind": "Giảm giá toàn bộ hóa đơn",
+      "discountNone": "Không giảm giá",
+      "discountPercent": "Phần trăm",
+      "discountAmount": "Số tiền cố định ({currency})",
+      "discountValue": "Giá trị giảm giá",
+      "notesAndTerms": "Ghi chú và điều khoản",
+      "notes": "Ghi chú cho khách hàng",
+      "notesHint": "Hiển thị trên hóa đơn.",
+      "termsText": "Điều khoản và điều kiện",
+      "termsHint": "Hiển thị ở cuối hóa đơn.",
+      "preview": "Xem trước",
+      "saved": "Đã lưu nháp.",
+      "fixProblems": "Hãy sửa các trường được tô sáng trước.",
+      "serverRejected": "Máy chủ không chấp nhận một số giá trị. Hãy kiểm tra các trường và thử lại.",
+      "problems": {
+        "contactRequired": "Chọn một liên hệ hoặc nhập tên người mua.",
+        "currencyInvalid": "Nhập mã tiền tệ gồm ba chữ cái.",
+        "issueDateInvalid": "Nhập ngày phát hành hợp lệ.",
+        "dueBeforeIssue": "Ngày đến hạn không thể trước ngày phát hành.",
+        "dueInvalid": "Nhập ngày đến hạn hợp lệ.",
+        "noLines": "Thêm ít nhất một dòng trước khi phát hành.",
+        "discountInvalid": "Nhập mức giảm giá hợp lệ.",
+        "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+        "amountZero": "Tổng hóa đơn phải lớn hơn 0.",
+        "descriptionRequired": "Mô tả dòng này.",
+        "priceInvalid": "Nhập giá hợp lệ.",
+        "qtyInvalid": "Nhập số lượng lớn hơn 0.",
+        "lineDiscountInvalid": "Nhập tỷ lệ phần trăm từ 0 đến 100."
+      }
+    },
+    "terms": {
+      "onReceipt": "Đến hạn khi nhận",
+      "net": "Net {days}",
+      "custom": "Ngày tùy chỉnh"
+    },
+    "paper": {
+      "label": "Hóa đơn {number}",
+      "labelDraft": "Xem trước nháp hóa đơn",
+      "sellerFallback": "Tên doanh nghiệp của bạn",
+      "title": "Hóa đơn",
+      "draftNumber": "Nháp",
+      "billedTo": "Lập hóa đơn cho",
+      "buyerFallback": "Khách hàng",
+      "issued": "Đã phát hành",
+      "due": "Đến hạn",
+      "onReceipt": "Khi nhận",
+      "item": "Mặt hàng",
+      "qty": "SL",
+      "price": "Giá",
+      "tax": "Thuế",
+      "amount": "Thành tiền",
+      "noLines": "Chưa có dòng nào",
+      "noDescription": "Không có mô tả",
+      "lineDiscount": "Giảm giá {percent}%",
+      "subtotal": "Tạm tính",
+      "discount": "Giảm giá",
+      "discountPercent": "Giảm giá ({percent}%)",
+      "total": "Tổng",
+      "includesTax": "Thuế đã gồm trong giá",
+      "paid": "Đã thanh toán",
+      "balanceDue": "Số dư còn lại",
+      "notes": "Ghi chú",
+      "terms": "Điều khoản"
+    },
+    "detail": {
+      "loading": "Đang tải hóa đơn",
+      "backToList": "Quay lại danh sách hóa đơn",
+      "draftTitle": "Nháp hóa đơn",
+      "edit": "Sửa",
+      "issueAndSend": "Phát hành và gửi",
+      "shareAgain": "Chia sẻ lại",
+      "send": "Chia sẻ và gửi",
+      "recordPayment": "Ghi nhận thanh toán",
+      "markPaid": "Đánh dấu đã thanh toán",
+      "copyLink": "Sao chép liên kết",
+      "print": "Tải xuống / In",
+      "duplicate": "Nhân bản",
+      "void": "Hủy",
+      "delete": "Xóa nháp",
+      "voidedBanner": "Hóa đơn này đã bị hủy vào {date}. Hóa đơn vẫn giữ số của nó nhưng không thể thanh toán nữa.",
+      "voidNeedsRefund": "Để hủy hóa đơn này, hãy hoàn tiền các khoản thanh toán trước.",
+      "overpaid": "Số tiền đã thanh toán vượt quá số tiền hóa đơn yêu cầu.",
+      "amountsLabel": "Số tiền",
+      "total": "Tổng",
+      "paid": "Đã trả",
+      "balance": "Số dư còn lại",
+      "issued": "Đã phát hành",
+      "due": "Đến hạn",
+      "noDue": "Không có ngày đến hạn",
+      "daysLate": "{count, plural, other {# ngày trễ}}",
+      "sentAt": "Đã gửi",
+      "paidAt": "Đã thanh toán đủ",
+      "source": "Tạo từ",
+      "sourceKind": {
+        "proposal": "Đề xuất",
+        "estimate": "Báo giá"
+      },
+      "deal": "Thương vụ",
+      "dealFallback": "Mở thương vụ"
+    },
+    "paymentsSection": {
+      "title": "Thanh toán",
+      "loading": "Đang tải thanh toán",
+      "none": "Chưa có thanh toán nào được ghi nhận.",
+      "refund": "Hoàn tiền"
+    },
+    "activity": {
+      "title": "Hoạt động",
+      "loading": "Đang tải hoạt động",
+      "events": {
+        "created": "Đã tạo bản nháp",
+        "edited": "Đã chỉnh sửa bản nháp",
+        "issued": "Đã phát hành hóa đơn",
+        "sent": "Đã đánh dấu là đã gửi",
+        "viewed": "Khách hàng đã mở",
+        "payment_recorded": "Đã ghi nhận thanh toán",
+        "payment_refunded": "Đã hoàn tiền",
+        "paid": "Đã thanh toán đủ",
+        "reminder_sent": "Đã gửi nhắc nhở",
+        "voided": "Đã hủy hóa đơn"
+      }
+    },
+    "pickInvoice": {
+      "title": "Hóa đơn nào đã được thanh toán?",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "search": "Tìm theo số hoặc khách hàng",
+      "loading": "Đang tải hóa đơn",
+      "noMatch": "Không có hóa đơn còn nợ nào khớp.",
+      "nothingOwed": "Hiện không có khoản nào cần thu.",
+      "balance": "Số dư",
+      "more": "Xem thêm"
+    },
+    "aging": {
+      "loading": "Đang tải báo cáo tuổi nợ",
+      "emptyTitle": "Không có khoản nợ nào",
+      "emptyMessage": "Mọi hóa đơn đã phát hành đều đã được thanh toán. Hóa đơn chưa thanh toán sẽ hiển thị ở đây, nhóm theo số ngày quá hạn.",
+      "asOf": "Tính đến {date}. Số ngày quá hạn được tính từ ngày đến hạn.",
+      "currencyLabel": "Còn nợ bằng {currency}",
+      "outstanding": "Còn nợ",
+      "invoices": "{count, plural, other {# hóa đơn}}",
+      "barLabel": "Tỷ lệ số tiền còn nợ trong từng nhóm tuổi nợ",
+      "buckets": {
+        "current": "Chưa đến hạn",
+        "d1_30": "Quá hạn 1-30 ngày",
+        "d31_60": "Quá hạn 31-60 ngày",
+        "d61_90": "Quá hạn 61-90 ngày",
+        "d90_plus": "Quá hạn trên 90 ngày"
+      },
+      "total": "Tổng cộng",
+      "unnamed": "Liên hệ chưa có tên",
+      "noContact": "Không có liên hệ"
+    },
+    "payments": {
+      "title": "Thanh toán",
+      "subtitle": "Số tiền đã nhận cho hóa đơn của bạn và số tiền còn nợ.",
+      "invoices": "Hóa đơn",
+      "record": "Ghi nhận thanh toán",
+      "viewLabel": "Chế độ xem thanh toán",
+      "views": {
+        "ledger": "Sổ cái",
+        "aging": "Tuổi nợ"
+      },
+      "tableLabel": "Sổ thanh toán",
+      "loading": "Đang tải thanh toán",
+      "emptyFilteredTitle": "Không có thanh toán nào khớp",
+      "emptyFiltered": "Thử tìm kiếm khác hoặc xóa bộ lọc.",
+      "emptyTitle": "Chưa có thanh toán nào",
+      "emptyMessage": "Khi khách hàng thanh toán hóa đơn, hãy ghi nhận tại đây hoặc từ hóa đơn.",
+      "resetFilters": "Xóa bộ lọc",
+      "showing": "{count, plural, other {# thanh toán đã tải}}",
+      "loadMore": "Tải thêm",
+      "allLoaded": "Đã hiển thị tất cả",
+      "strip": {
+        "loading": "Đang tải tổng số",
+        "label": "Tổng thanh toán",
+        "window": "Từ {from} đến {to}",
+        "none": "Không có thanh toán trong giai đoạn này.",
+        "collected": "Đã thu ({currency})",
+        "count": "Thanh toán",
+        "refunded": "Đã hoàn tiền"
+      },
+      "toolbar": {
+        "search": "Tìm theo mã tham chiếu, hóa đơn hoặc khách hàng",
+        "method": "Phương thức",
+        "allMethods": "Tất cả phương thức",
+        "from": "Từ",
+        "to": "Đến",
+        "paidFrom": "Thanh toán từ",
+        "paidTo": "Thanh toán đến",
+        "reset": "Xóa bộ lọc",
+        "refresh": "Làm mới"
+      },
+      "table": {
+        "scrollArea": "Bảng thanh toán",
+        "columns": {
+          "date": "Ngày",
+          "invoice": "Hóa đơn",
+          "contact": "Khách hàng",
+          "method": "Phương thức",
+          "reference": "Mã tham chiếu",
+          "amount": "Số tiền",
+          "refunded": "Đã hoàn tiền",
+          "recordedBy": "Ghi nhận bởi",
+          "actions": "Thao tác"
+        },
+        "moreFor": "Thao tác cho thanh toán ngày {date}",
+        "openInvoice": "Mở hóa đơn",
+        "refund": "Hoàn tiền"
+      }
+    },
+    "taxRates": {
+      "title": "Thuế suất",
+      "subtitle": "Các loại thuế bạn thêm vào dòng hóa đơn. Một loại là mặc định cho dòng mới.",
+      "new": "Thuế suất mới",
+      "tableLabel": "Thuế suất",
+      "loading": "Đang tải thuế suất",
+      "emptyTitle": "Chưa có thuế suất nào",
+      "emptyMessage": "Thêm các loại thuế bạn áp dụng, như VAT hoặc GST, để chọn trên dòng hóa đơn.",
+      "scrollArea": "Bảng thuế suất",
+      "columns": {
+        "name": "Tên",
+        "rate": "Thuế suất",
+        "type": "Loại",
+        "status": "Trạng thái",
+        "effective": "Có hiệu lực từ",
+        "used": "Dòng",
+        "actions": "Thao tác"
+      },
+      "default": "Mặc định",
+      "inclusive": "Đã bao gồm",
+      "exclusive": "Chưa bao gồm",
+      "active": "Đang dùng",
+      "inactive": "Ngừng dùng",
+      "always": "Luôn luôn",
+      "moreFor": "Thao tác cho {name}",
+      "edit": "Chỉnh sửa",
+      "makeDefault": "Đặt làm mặc định",
+      "madeDefault": "{name} hiện là mặc định.",
+      "deactivate": "Ngừng dùng",
+      "activate": "Kích hoạt",
+      "deactivated": "Đã ngừng dùng {name}.",
+      "activated": "Đã kích hoạt {name}.",
+      "delete": "Xóa",
+      "deleteTitle": "Xóa thuế suất này?",
+      "keep": "Giữ lại",
+      "deleted": "Đã xóa {name}.",
+      "count": "{count, plural, other {# thuế suất}}",
+      "hint": "Thay đổi thuế suất không bao giờ làm thay đổi hóa đơn đã phát hành: mỗi hóa đơn giữ thuế suất đã áp dụng khi lập.",
+      "errors": {
+        "isDefault": "Đây là thuế suất mặc định. Hãy đặt thuế suất khác làm mặc định trước."
+      },
+      "form": {
+        "eyebrow": "Thuế suất",
+        "editTitle": "Chỉnh sửa thuế suất",
+        "newTitle": "Thuế suất mới",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "save": "Lưu",
+        "name": "Tên",
+        "namePlaceholder": "VAT, GST, Thuế bán hàng",
+        "rate": "Thuế suất",
+        "type": "Cách áp dụng",
+        "exclusive": "Chưa bao gồm: cộng thêm vào giá",
+        "inclusive": "Đã bao gồm: đã có trong giá",
+        "typeHint": {
+          "exclusive": "Khách hàng trả giá cộng thuế.",
+          "inclusive": "Giá đã bao gồm thuế; hóa đơn hiển thị số tiền thuế trong đó."
+        },
+        "effectiveFrom": "Có hiệu lực từ",
+        "effectiveHint": "Không bắt buộc. Dùng cho thuế suất thay đổi theo ngày.",
+        "description": "Mô tả",
+        "makeDefault": "Mặc định cho dòng mới",
+        "defaultHint": "Dòng hóa đơn mới sẽ dùng thuế suất này.",
+        "active": "Đang dùng",
+        "activeHint": "Thuế suất ngừng dùng không thể chọn cho dòng mới.",
+        "saved": "Đã lưu {name}.",
+        "created": "Đã thêm {name}.",
+        "problems": {
+          "nameRequired": "Nhập tên.",
+          "nameTaken": "Đã có thuế suất với tên này.",
+          "rateInvalid": "Nhập tỷ lệ phần trăm từ 0 đến 100.",
+          "dateInvalid": "Nhập ngày hợp lệ.",
+          "conflict": "Người khác đã thay đổi thuế suất này. Hãy đóng và mở lại."
+        }
+      }
+    },
+    "public": {
+      "loading": "Đang tải hóa đơn",
+      "errorTitle": "Không thể tải hóa đơn này",
+      "errorMessage": "Kiểm tra kết nối và thử lại.",
+      "retry": "Thử lại",
+      "title": "Hóa đơn từ {seller}",
+      "dueOn": "đến hạn {date}",
+      "print": "In",
+      "download": "Tải PDF",
+      "paidBanner": "Hóa đơn này đã được thanh toán đủ. Xin cảm ơn.",
+      "voidBanner": "Hóa đơn này đã bị hủy và không cần thanh toán.",
+      "payNow": "Cách thanh toán",
+      "amountDue": "Số tiền cần thanh toán:",
+      "bankIntro": "Thanh toán qua chuyển khoản ngân hàng và dùng {number} làm nội dung thanh toán.",
+      "copied": "Đã sao chép",
+      "payButton": "Thanh toán {amount}",
+      "gatewayNote": "Bạn sẽ được chuyển đến trang thanh toán của nhà cung cấp thanh toán của người bán.",
+      "questions": "Có thắc mắc về hóa đơn này?",
+      "metaTitle": "Hóa đơn"
+    },
+    "linked": {
+      "title": "Hóa đơn",
+      "new": "Hóa đơn mới",
+      "viewAll": "Xem tất cả",
+      "loading": "Đang tải hóa đơn",
+      "none": "Chưa có hóa đơn nào.",
+      "draft": "Bản nháp",
+      "owes": "nợ"
+    }
+  }
+}

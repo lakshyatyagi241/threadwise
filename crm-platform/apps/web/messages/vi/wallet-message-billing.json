@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "tile": {
+      "label": "Chi phí, ví và sao kê",
+      "description": "Theo dõi chi tiêu: số dư tin nhắn, nạp tiền, mọi khoản phí và sao kê đầy đủ.",
+      "keywords": "ví số dư nạp tiền thêm tiền tín dụng sao kê thanh toán chi phí chi tiêu mức chi tiêu phí sử dụng giao dịch lịch sử sổ cái"
+    },
+    "common": {
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "requestId": "Mã yêu cầu",
+      "cancel": "Hủy",
+      "back": "Quay lại",
+      "close": "Đóng",
+      "dismiss": "Bỏ qua",
+      "on": "Bật",
+      "off": "Tắt",
+      "previous": "Trước",
+      "next": "Tiếp",
+      "pagination": "Phân trang",
+      "pageN": "Trang {page}",
+      "deniedTitle": "Bạn không có quyền truy cập mục này",
+      "deniedBody": "Hãy nhờ quản trị viên không gian làm việc cấp quyền “{permission}”."
+    },
+    "errors": {
+      "noteRequired": "Cần nhập lý do có ít nhất 5 ký tự.",
+      "amountInvalid": "Số tiền này không được chấp nhận. Nhập số dương, tối đa 2 chữ số thập phân.",
+      "insufficient": "Số dư không đủ cho thao tác này.",
+      "notFound": "Không gian làm việc này chưa có ví.",
+      "rateInvalid": "Không thể lưu mức giá. Kiểm tra quốc gia, danh mục và số tiền.",
+      "importFailed": "Không đọc được bảng giá hoặc bảng không có dòng hợp lệ.",
+      "syncFailed": "Không đọc được bảng giá của Meta và không có bảng giá đi kèm.",
+      "conflict": "Có người khác vừa thay đổi mục này. Tải lại và thử lại.",
+      "forbidden": "Chỉ quản trị viên cấp cao mới làm được việc này.",
+      "validation": "Kiểm tra các trường được đánh dấu.",
+      "network": "Không thể kết nối đến máy chủ. Kiểm tra kết nối và thử lại.",
+      "generic": "Đã xảy ra lỗi. Thử lại.",
+      "currencyUnsupported": "Chưa thể dùng đơn vị tiền tệ đó: hãy nhập bảng giá Meta cho đơn vị này trước (Giá tin nhắn, Bảng giá Meta)."
+    },
+    "types": {
+      "topup": "Nạp tiền",
+      "earn": "Thu nhập",
+      "refund": "Hoàn tiền",
+      "spend": "Phí tin nhắn",
+      "admin_adjust": "Điều chỉnh"
+    },
+    "categories": {
+      "marketing": "Tiếp thị",
+      "utility": "Tiện ích",
+      "authentication": "Xác thực",
+      "service": "Dịch vụ"
+    },
+    "modes": {
+      "wallet": "Trả theo tin nhắn",
+      "plan": "Gói"
+    },
+    "chip": {
+      "balance": "Số dư",
+      "low": "Số dư của bạn thấp"
+    },
+    "wallet": {
+      "title": "Ví",
+      "subtitle": "Số dư tin nhắn, số tiền bạn đã chi và đã nhận trong 30 ngày qua, và cách nạp tiền.",
+      "fullStatement": "Sao kê đầy đủ",
+      "lowBalanceTitle": "Số dư của bạn sắp hết",
+      "lowBalanceBody": "Số dư đang ở mức {threshold} hoặc thấp hơn. Nạp tiền để chiến dịch và phản hồi tiếp tục được gửi.",
+      "kpi": {
+        "balance": "Số dư",
+        "available": "Khả dụng ngay",
+        "approx": "khoảng {count, plural, other {# tin nhắn}}",
+        "spent": "Đã chi",
+        "earned": "Đã nhận",
+        "last30": "30 ngày qua"
+      },
+      "add": {
+        "title": "Nạp tiền",
+        "amount": "Số tiền",
+        "hint": "Chỉ nhập số nguyên, tối thiểu 1.",
+        "invalid": "Nhập số nguyên từ 1 trở lên.",
+        "submit": "Nạp tiền",
+        "quick": "Số tiền nhanh"
+      },
+      "how": {
+        "title": "Cách tính phí",
+        "wallet": {
+          "body": "Mỗi tin nhắn được gửi thành công sẽ bị trừ từ ví theo giá của quốc gia và danh mục tương ứng. Tin nhắn thất bại không bị tính phí.",
+          "funded": "Khi số dư bằng 0, việc gửi hàng loạt sẽ tạm dừng cho đến khi bạn nạp tiền."
+        },
+        "plan": {
+          "allowance": "Gói của bạn bao gồm {limit} tin nhắn mỗi tháng.",
+          "used": "Đã dùng {used} trong tháng này.",
+          "ends": "Gói của bạn kết thúc vào {date}.",
+          "extra": "Tin nhắn vượt hạn mức hằng tháng sẽ bị trừ từ ví.",
+          "ended": "Gói của bạn đã kết thúc nên việc gửi tin đang tạm dừng cho đến khi gia hạn."
+        },
+        "generic": "Tin nhắn của bạn được gói bao trả. Ví sẽ thanh toán những phần mà gói không bao gồm."
+      },
+      "activity": {
+        "title": "Hoạt động gần đây",
+        "fullStatement": "Mở sao kê đầy đủ",
+        "emptyTitle": "Chưa có hoạt động",
+        "emptyBody": "Nạp tiền, phí tin nhắn và hoàn tiền sẽ hiển thị tại đây."
+      }
+    },
+    "activity": {
+      "description": "Mô tả",
+      "type": "Loại",
+      "date": "Ngày",
+      "amount": "Số tiền",
+      "balance": "Số dư",
+      "noDescription": "Biến động ví",
+      "reason": "Lý do"
+    },
+    "pricingPanel": {
+      "title": "Giá tin nhắn",
+      "badge": "Mỗi tin nhắn",
+      "free": "Miễn phí",
+      "noCharge": "Không tính phí",
+      "perMessage": "mỗi tin nhắn",
+      "footer": "Được tính phí khi tin nhắn được gửi thành công. Giá phụ thuộc vào quốc gia của người nhận và danh mục tin nhắn."
+    },
+    "statement": {
+      "title": "Sao kê ví",
+      "subtitle": "Mọi biến động trên ví của bạn. Tổng số bao gồm tất cả giao dịch khớp với bộ lọc, không chỉ trang này.",
+      "back": "Quay lại ví",
+      "breadcrumbLabel": "Đường dẫn",
+      "breadcrumbWallet": "Ví",
+      "breadcrumbStatement": "Sao kê",
+      "export": "Xuất CSV",
+      "exporting": "Đang xuất",
+      "exported": "Đã lưu {fileName}",
+      "emptyTitle": "Chưa có giao dịch",
+      "emptyFiltered": "Không có kết quả nào khớp bộ lọc. Hãy thay đổi hoặc đặt lại bộ lọc.",
+      "emptyNone": "Các biến động trên ví sẽ được liệt kê tại đây.",
+      "filters": {
+        "type": "Loại",
+        "from": "Từ",
+        "to": "Đến",
+        "rangeInverted": "Ngày kết thúc trước ngày bắt đầu.",
+        "search": "Tìm kiếm",
+        "searchPlaceholder": "Mô tả hoặc lý do",
+        "apply": "Áp dụng",
+        "reset": "Đặt lại"
+      },
+      "typeFilter": {
+        "all": "Tất cả",
+        "topup": "Nạp tiền",
+        "earn": "Thu nhập",
+        "spend": "Phí tin nhắn",
+        "refund": "Hoàn tiền",
+        "admin_adjust": "Điều chỉnh"
+      },
+      "summary": {
+        "balance": "Số dư hiện tại",
+        "in": "Tiền vào",
+        "out": "Tiền ra",
+        "net": "Biến động ròng",
+        "count": "{count, plural, other {# giao dịch}}"
+      },
+      "columns": {
+        "label": "Sao kê ví",
+        "date": "Ngày",
+        "description": "Mô tả",
+        "type": "Loại",
+        "in": "Tiền vào",
+        "out": "Tiền ra",
+        "balance": "Số dư",
+        "none": "Không có"
+      },
+      "context": {
+        "reason": "Lý do",
+        "to": "Đến",
+        "template": "Mẫu"
+      },
+      "channels": {
+        "campaign": "Chiến dịch",
+        "broadcast": "Gửi hàng loạt",
+        "flow": "Luồng",
+        "scheduled": "Đã lên lịch",
+        "auto_reply": "Trả lời tự động",
+        "chat": "Trò chuyện",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      }
+    },
+    "admin": {
+      "admin": "Quản trị",
+      "wallet": "Ví",
+      "workspacesLabel": "Không gian làm việc",
+      "breadcrumb": "Đường dẫn",
+      "readOnly": "Bạn đang đăng nhập với vai trò {role}. Chỉ quản trị viên cấp cao mới có thể thay đổi cài đặt ví, giá hoặc số dư.",
+      "nav": {
+        "overview": "Ví",
+        "pricing": "Giá tin nhắn",
+        "workspaces": "Ví của không gian làm việc",
+        "logs": "Nhật ký ví",
+        "margins": "Biên lợi nhuận",
+        "packages": "Gói nạp tiền"
+      },
+      "overview": {
+        "title": "Tổng quan ví",
+        "subtitle": "Số tiền đang giữ trong ví của các không gian làm việc và biến động trong 30 ngày gần đây.",
+        "linkWorkspaces": "Ví của không gian làm việc",
+        "linkPricing": "Giá tin nhắn",
+        "linkLogs": "Nhật ký ví",
+        "float": "Tổng số dư ví",
+        "floatHint": "Đang giữ trên tất cả không gian làm việc",
+        "holding": "Không gian làm việc có số dư",
+        "low": "Số dư thấp",
+        "last30": "30 ngày qua",
+        "toppedUp": "Đã nạp",
+        "charged": "Đã trừ phí",
+        "refunded": "Đã hoàn",
+        "adjustedIn": "Cộng thủ công",
+        "adjustedOut": "Trừ thủ công",
+        "chargedMessages": "Tin nhắn đã tính phí",
+        "freeMessages": "Tin nhắn miễn phí",
+        "reconcile": {
+          "title": "Đối chiếu số dư với sổ cái",
+          "body": "Tính lại từng ví theo sổ cái và liệt kê mọi số dư không khớp.",
+          "button": "Đối chiếu số dư với sổ cái",
+          "running": "Đang kiểm tra",
+          "ok": "Tất cả {count, plural, other {# ví}} đều khớp với sổ cái.",
+          "mismatches": "{count} trên {checked} ví không khớp với sổ cái.",
+          "workspace": "Không gian làm việc",
+          "balance": "Số dư",
+          "ledger": "Sổ cái",
+          "difference": "Chênh lệch"
+        },
+        "otherCurrencies": "Ví bằng tiền tệ khác",
+        "otherCurrenciesNote": "Không gian làm việc thanh toán bằng tiền tệ khác sẽ giữ tiền bằng đơn vị đó. Các số liệu ở trên chỉ tính {currency}; mỗi tiền tệ khác được tính riêng trên một dòng.",
+        "other": {
+          "currency": "Tiền tệ",
+          "float": "Tiền đang giữ",
+          "holding": "Không gian làm việc có số dư",
+          "toppedUp": "Đã nạp, 30 ngày",
+          "charged": "Đã trừ phí, 30 ngày"
+        }
+      },
+      "pricing": {
+        "title": "Giá tin nhắn",
+        "crumb": "Giá tin nhắn",
+        "subtitle": "Chi phí mỗi tin nhắn đối với khách hàng của bạn, cách bảo vệ ví mới và bảng giá theo quốc gia.",
+        "kpi": {
+          "signup": "Thưởng giới thiệu",
+          "cost": "Chi phí mỗi tin nhắn",
+          "costHint": "Giá cố định khi tắt giá theo quốc gia",
+          "spending": "Chi tiêu thực tế",
+          "spendingHint": "Số tin nhắn {amount} mua được ở giá cố định",
+          "lowBalance": "Cảnh báo số dư thấp"
+        },
+        "economics": {
+          "title": "Kinh tế",
+          "liveKeys": "Có hiệu lực ngay",
+          "flatPrice": "Giá cố định mỗi tin nhắn",
+          "flatPriceHint": "Tối thiểu 0,01. Dùng bảng giá để đặt tin nhắn miễn phí.",
+          "referralSignup": "Thưởng giới thiệu",
+          "referralSignupHint": "Trả cho người giới thiệu khi người được giới thiệu thanh toán đơn hàng đầu tiên.",
+          "lowBalance": "Cảnh báo số dư thấp khi",
+          "lowBalanceHint": "Không gian làm việc có số dư bằng hoặc thấp hơn mức này sẽ nhận cảnh báo.",
+          "coverage": "Mức bao phủ khi ra mắt",
+          "coverageHint": "Chiến dịch gửi hàng loạt sẽ bị từ chối trừ khi ví đủ bao phủ tỷ lệ này trong chi phí ước tính. 0 chỉ từ chối khi ví trống.",
+          "rewardSentence": "Mức thưởng {reward} trả được {count, plural, other {# tin nhắn}} theo giá cố định.",
+          "save": "Lưu kinh tế",
+          "saving": "Đang lưu",
+          "saved": "Đã lưu cài đặt kinh tế.",
+          "problems": {
+            "invalid": "Nhập số tiền có tối đa 2 chữ số thập phân.",
+            "flatZero": "Giá cố định không được bằng 0.",
+            "percent": "Nhập số nguyên từ 0 đến 100."
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "Giá theo quốc gia",
+            "on": "Bật: mỗi tin nhắn được tính theo quốc gia và danh mục của người nhận từ bảng giá.",
+            "off": "Tắt: mọi tin nhắn đều tính theo giá cố định.",
+            "save": "Lưu",
+            "confirmTitle": "Đổi cách tính giá theo quốc gia?",
+            "confirmOn": "Từ lần gửi tiếp theo, tin nhắn sẽ được tính theo quốc gia và danh mục.",
+            "confirmOff": "Từ lần gửi tiếp theo, tin nhắn sẽ được tính theo giá cố định.",
+            "confirm": "Có, đổi",
+            "savedOn": "Giá theo quốc gia đang bật.",
+            "savedOff": "Giá theo quốc gia đang tắt."
+          },
+          "payPerMessage": {
+            "label": "Tính phí theo tin nhắn",
+            "on": "Bật: các không gian làm việc không có hạn mức theo gói sẽ trả cho mỗi tin nhắn đã gửi thành công từ ví của họ.",
+            "off": "Tắt: tin nhắn không bị trừ tiền khỏi ví.",
+            "save": "Lưu",
+            "confirmTitle": "Đổi cách tính phí theo tin nhắn?",
+            "confirmOn": "Từ bây giờ, tin nhắn đã gửi thành công sẽ bị trừ từ ví.",
+            "confirmOff": "Ví sẽ không còn bị trừ tiền cho tin nhắn. Thay đổi này áp dụng cho mọi không gian làm việc.",
+            "confirm": "Có, đổi",
+            "savedOn": "Tính phí theo tin nhắn đang bật.",
+            "savedOff": "Tính phí theo tin nhắn đang tắt."
+          }
+        },
+        "grid": {
+          "title": "Bảng giá",
+          "modeOn": "Giá theo quốc gia đang bật: các mức giá này được áp dụng.",
+          "modeOff": "Giá theo quốc gia đang tắt: các mức giá này được lưu nhưng hệ thống vẫn tính theo giá cố định.",
+          "empty": "Chưa có mức giá nào. Thêm một dòng, nhập bảng giá hoặc khôi phục bảng giá mẫu.",
+          "country": "Quốc gia",
+          "category": "Danh mục",
+          "charge": "Bạn tính",
+          "metaCost": "Meta tính bạn",
+          "margin": "Biên lợi nhuận",
+          "marginUnknown": "Không rõ",
+          "actions": "Thao tác",
+          "anyCountry": "Mọi quốc gia",
+          "anyCategory": "Mọi danh mục",
+          "serviceFree": "Dịch vụ (miễn phí)",
+          "addRow": "Thêm dòng",
+          "remove": "Xóa",
+          "cancel": "Hủy",
+          "removeTitle": "Xóa mức giá này?",
+          "removeBody": "Mức giá của {country} sẽ bị xóa. Tin nhắn sẽ dùng mức giá khớp tiếp theo.",
+          "removed": "Đã xóa mức giá.",
+          "save": "Lưu bảng giá",
+          "saving": "Đang lưu",
+          "saved": "{count, plural, other {Đã lưu # mức giá.}}",
+          "savedSome": "Đã lưu {saved}, bỏ qua {skipped}. Xem lý do trên từng dòng bị bỏ qua.",
+          "unsaved": "{count, plural, other {# dòng chưa lưu}}",
+          "tooMany": "Quá nhiều dòng thay đổi cho một lần lưu. Hãy lưu theo từng đợt nhỏ hơn.",
+          "problems": {
+            "price": "Nhập giá có tối đa 2 chữ số thập phân.",
+            "metaCost": "Nhập chi phí có tối đa 6 chữ số thập phân.",
+            "country": "Dùng mã quốc gia gồm 2 chữ cái, hoặc để trống để áp dụng cho mọi quốc gia.",
+            "empty": "Nhập giá hoặc chi phí của Meta.",
+            "duplicate": "Quốc gia và danh mục này đã có một dòng."
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "Đồng bộ chi phí Meta",
+            "title": "Đồng bộ chi phí Meta",
+            "loading": "Đang đọc bảng giá của Meta",
+            "source": "Nguồn",
+            "version": "Phiên bản",
+            "noVersion": "Không có",
+            "currency": "Tiền tệ",
+            "added": "Dòng sẽ thêm",
+            "updated": "Dòng sẽ cập nhật",
+            "untouched": "Giá của bạn không thay đổi. Chỉ chi phí Meta tính bạn được cập nhật.",
+            "bundledNote": "Chưa kết nối bảng giá trực tiếp của Meta, nên hệ thống dùng bảng giá đi kèm.",
+            "apply": "Áp dụng",
+            "applying": "Đang áp dụng",
+            "done": "Đã đồng bộ chi phí Meta: thêm {added}, cập nhật {updated}."
+          },
+          "import": {
+            "button": "Nhập bảng giá",
+            "title": "Nhập bảng giá",
+            "intro": "Tải lên bảng giá dạng CSV. Bạn sẽ thấy những gì sẽ thay đổi trước khi lưu.",
+            "file": "Tệp CSV",
+            "limit": "Tối đa 4 MB.",
+            "reading": "Đang đọc tệp",
+            "shape": "Bố cục",
+            "shapes": {
+              "wide": "Một cột cho mỗi danh mục",
+              "long": "Một dòng cho mỗi danh mục"
+            },
+            "added": "Sẽ thêm",
+            "updated": "Sẽ cập nhật",
+            "skipped": "Bỏ qua",
+            "currencyNote": "Giá được đọc theo {currency}.",
+            "problems": "Các dòng sẽ bị bỏ qua",
+            "line": "Dòng {line}:",
+            "fileProblems": {
+              "notCsv": "Hãy chọn tệp .csv.",
+              "tooBig": "Tệp lớn hơn 4 MB.",
+              "unreadable": "Không thể đọc tệp."
+            },
+            "apply": "Áp dụng nhập",
+            "applying": "Đang nhập",
+            "done": "Đã nhập bảng giá: thêm {added}, cập nhật {updated}, bỏ qua {skipped}."
+          },
+          "seed": {
+            "button": "Khôi phục bảng giá mẫu",
+            "title": "Khôi phục bảng giá mẫu?",
+            "warning": "Thao tác này ghi đè giá mẫu đi kèm lên các dòng hiện có cùng quốc gia và danh mục. Giá bạn đã đặt thủ công cho các dòng đó sẽ bị thay thế.",
+            "confirm": "Khôi phục",
+            "done": "Đã ghi {count, plural, other {# mức giá}} từ bảng giá mẫu."
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "Gửi xuyên biên giới",
+            "body": "Giá được tính theo quốc gia của người nhận, không phải quốc gia của không gian làm việc. Hãy thêm một dòng cho mỗi quốc gia bạn gửi tới."
+          },
+          "how": {
+            "title": "Cách tìm giá",
+            "body": "Ví tra cứu quốc gia của người nhận và danh mục tin nhắn trong bảng giá này. Danh mục hoặc quốc gia để trống sẽ khớp với mọi giá trị."
+          },
+          "order": {
+            "title": "Dòng nào được ưu tiên",
+            "body": "Trước tiên dùng dòng khớp chính xác cả quốc gia và danh mục, sau đó đến quốc gia với mọi danh mục, rồi mọi quốc gia, cuối cùng là giá cố định."
+          }
+        },
+        "mode": {
+          "title": "Cách tính giá cho khách hàng",
+          "current": "Hiện tại: {mode}",
+          "intro": "Chọn chi phí mỗi tin nhắn đối với khách hàng. Áp dụng cho mọi không gian làm việc và được lưu riêng.",
+          "fixed": {
+            "label": "Giá cố định",
+            "body": "Bạn nhập giá cho từng quốc gia và danh mục trong bảng giá bên dưới. Biên lợi nhuận được lưu nhưng không dùng."
+          },
+          "margin": {
+            "label": "Chi phí Meta + biên lợi nhuận",
+            "body": "Khách hàng trả chi phí của Meta cộng với biên lợi nhuận của bạn, đặt theo quốc gia và danh mục. Nếu không biết chi phí của Meta, hệ thống tính giá cố định đã nhập."
+          },
+          "save": "Lưu chế độ giá",
+          "manage": "Đặt biên lợi nhuận",
+          "confirmTitle": "Đổi cách tính giá cho khách hàng?",
+          "confirmFixed": "Mọi không gian làm việc sẽ được tính theo giá cố định trong bảng giá từ tin nhắn tiếp theo. Biên lợi nhuận vẫn được lưu nhưng không còn áp dụng.",
+          "confirmMargin": "Mọi không gian làm việc sẽ được tính theo chi phí Meta cộng với biên lợi nhuận áp dụng cho họ (ghi đè của không gian làm việc, rồi đến gói, cuối cùng là mặc định của nền tảng) từ tin nhắn tiếp theo. Nếu không biết chi phí của Meta, hệ thống vẫn tính giá cố định.",
+          "confirm": "Có, đổi",
+          "savedFixed": "Khách hàng hiện được tính theo giá cố định.",
+          "savedMargin": "Khách hàng hiện được tính theo chi phí Meta cộng biên lợi nhuận."
+        },
+        "metaCards": {
+          "title": "Bảng giá Meta",
+          "intro": "Meta công bố một bảng giá cho mỗi loại tiền tệ và chỉ thay đổi vào ngày 1 tháng 1, 1 tháng 4, 1 tháng 7 và 1 tháng 10. Không gian làm việc thanh toán bằng INR được tính giá theo bảng INR của Meta và trừ vào ví INR, không bao giờ quy đổi từ bảng USD. Hãy nhập từng tệp đúng như Meta công bố. Giá nhập tay và giá cố định được giữ bằng tiền tệ của nền tảng, và được quy đổi theo tỷ giá đã lưu cho những không gian làm việc thanh toán bằng tiền tệ khác.",
+          "none": "Chưa có bảng giá Meta nào được lưu. Hãy nhập tệp Meta công bố cho tiền tệ của bạn.",
+          "view": "Xem",
+          "hide": "Ẩn",
+          "usedPricing": "Giá, biên lợi nhuận và báo cáo lãi lỗ của đại lý, cùng các không gian làm việc thanh toán bằng tiền tệ của nền tảng",
+          "usedWorkspaces": "Giá cho không gian làm việc thanh toán bằng {currency}",
+          "columns": {
+            "currency": "Tiền tệ",
+            "effective": "Hiệu lực",
+            "checked": "Nhập lần cuối",
+            "markets": "Thị trường",
+            "usedFor": "Dùng cho",
+            "status": "Trạng thái",
+            "actions": "Thao tác"
+          },
+          "freshness": {
+            "current": "Đã cập nhật",
+            "upcoming": "Sắp kiểm tra",
+            "due": "Kiểm tra ngay"
+          },
+          "reminder": {
+            "link": "Mở trang giá của Meta",
+            "current": "Đã cập nhật. Meta có thể đổi giá tiếp theo vào {date}.",
+            "dueTitle": "Một quý mới đã bắt đầu vào {date}: Meta có thể đã đổi giá.",
+            "dueBody": "Tải về các tệp bảng giá mới (mỗi tiền tệ đang dùng một tệp) và nhập tại đây. Cho đến lúc đó, chi phí và biên lợi nhuận vẫn dùng bảng cũ.",
+            "upcomingTitle": "Meta có thể đổi giá vào {date} (còn {days, plural, other {# ngày}}).",
+            "upcomingBody": "Hãy chuẩn bị sẵn các tệp mới để nhập vào ngày đó.",
+            "missingTitle": "Chưa có bảng giá Meta cho {currencies}.",
+            "missingBody": "Các không gian làm việc đặt theo tiền tệ đó chưa có bảng giá Meta để hiển thị. Hãy nhập tệp Meta công bố cho tiền tệ này."
+          },
+          "table": {
+            "heading": "Bảng {currency} của Meta",
+            "note": "Giá niêm yết mỗi tin nhắn đã gửi thành công, theo Meta công bố. Các quốc gia Meta không nêu tên được tính là Khác.",
+            "market": "Thị trường",
+            "everyOther": "Mọi quốc gia không được nêu tên",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Tiện ích",
+              "authentication": "Xác thực",
+              "authentication_international": "Xác thực quốc tế",
+              "service": "Dịch vụ"
+            }
+          },
+          "import": {
+            "button": "Nhập bảng giá Meta",
+            "title": "Nhập bảng giá Meta",
+            "intro": "Chọn tệp Meta công bố cho một tiền tệ (tệp Excel, kể cả khi liên kết ghi CSV). Tiền tệ và ngày hiệu lực được đọc từ tệp. Bạn sẽ thấy những gì sẽ thay đổi trước khi lưu.",
+            "file": "Tệp bảng giá Meta (.xlsx hoặc .csv)",
+            "hint": "Một tiền tệ cho mỗi tệp. Tệp mới sẽ thay thế toàn bộ bảng của tiền tệ đó. Tối đa 2 MB.",
+            "reading": "Đang đọc tệp…",
+            "applying": "Đang nhập",
+            "apply": "Nhập bảng",
+            "done": "Đã nhập bảng {currency}.",
+            "fileProblems": {
+              "wrongType": "Hãy chọn tệp .xlsx mà Meta công bố, hoặc tệp CSV được lưu từ tệp đó.",
+              "tooBig": "Tệp lớn hơn 2 MB, không phải bảng giá Meta.",
+              "unreadable": "Không thể đọc tệp."
+            },
+            "summary": {
+              "currency": "Tiền tệ",
+              "effective": "Hiệu lực",
+              "added": "Dòng mới",
+              "changed": "Đã thay đổi",
+              "unchanged": "Không đổi",
+              "removed": "Bị loại bỏ"
+            },
+            "replaces": "Thay thế bảng có hiệu lực từ {date}.",
+            "appliesToPricing": "Đây là bảng {currency}, tiền tệ của nền tảng. Nhập bảng này cũng làm mới chi phí Meta dùng cho giá, biên lợi nhuận và báo cáo lãi lỗ của đại lý ({added} mới, {updated} cập nhật). Giá của khách hàng không thay đổi.",
+            "storedOnly": "Đây không phải tiền tệ của nền tảng. Bảng được lưu và hiển thị, và dùng để tính giá cho mọi không gian làm việc thanh toán bằng {currency}. Chi phí Meta trong bảng giá bên dưới vẫn bằng tiền tệ của nền tảng.",
+            "biggest": "Thay đổi lớn nhất",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Tiện ích",
+              "authentication": "Xác thực",
+              "authentication_international": "Xác thực quốc tế",
+              "service": "Dịch vụ"
+            },
+            "problems": "Các dòng đã bị bỏ qua"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "Ví của không gian làm việc",
+        "crumb": "Ví của không gian làm việc",
+        "subtitle": "Mọi không gian làm việc cùng số dư. Mở một ví để xem các mục hoặc điều chỉnh số dư.",
+        "search": "Tìm kiếm",
+        "searchPlaceholder": "Tên hoặc slug của không gian làm việc",
+        "lowOnly": "Chỉ số dư thấp",
+        "apply": "Áp dụng",
+        "totalWorkspaces": "Không gian làm việc",
+        "totalFloat": "Tổng số đang giữ",
+        "totalLow": "Số dư thấp",
+        "emptyTitle": "Không tìm thấy không gian làm việc nào",
+        "emptyBody": "Thay đổi từ khóa tìm kiếm hoặc bỏ bộ lọc số dư thấp.",
+        "loadMore": "Tải thêm",
+        "loadingMore": "Đang tải thêm",
+        "columns": {
+          "label": "Ví của không gian làm việc",
+          "workspace": "Không gian làm việc",
+          "mode": "Thanh toán",
+          "balance": "Số dư",
+          "low": "Thấp",
+          "activity": "Hoạt động gần nhất",
+          "never": "Chưa có"
+        },
+        "totalFloatIn": "Tiền đang giữ ({currency})"
+      },
+      "detail": {
+        "crumb": "Không gian làm việc",
+        "adjust": "Điều chỉnh số dư",
+        "balance": "Số dư",
+        "lowBalance": "Số dư thấp",
+        "threshold": "Cảnh báo khi {amount}",
+        "recent": "Mục gần đây",
+        "emptyTitle": "Chưa có mục nào",
+        "emptyBody": "Các biến động của ví này sẽ được liệt kê tại đây.",
+        "columns": {
+          "label": "Mục ví gần đây",
+          "date": "Ngày",
+          "type": "Loại",
+          "amount": "Số tiền",
+          "balanceAfter": "Số dư sau",
+          "who": "Thực hiện bởi",
+          "reason": "Lý do",
+          "customer": "Khách hàng",
+          "operator": "Người vận hành",
+          "system": "Hệ thống"
+        },
+        "result": {
+          "appliedAdd": "Đã thêm {applied}. Số dư hiện là {balance}.",
+          "appliedDeduct": "Đã trừ {applied}. Số dư hiện là {balance}.",
+          "partial": "Chỉ áp dụng được {applied} trên {requested} vì số dư không thể xuống dưới 0. Số dư hiện là {balance}.",
+          "replayed": "(Yêu cầu này đã được áp dụng trước đó.)"
+        },
+        "pricing": {
+          "title": "Giá cho không gian làm việc này",
+          "subtitle": "Ghi đè biên lợi nhuận được ưu tiên hơn gói của không gian làm việc và mặc định của nền tảng, chỉ áp dụng cho không gian làm việc này.",
+          "plan": "Gói",
+          "planLoading": "Đang tải gói",
+          "planUnknown": "Không thể đọc",
+          "noPlan": "Không có gói",
+          "overrides": "Ghi đè biên lợi nhuận",
+          "overridesHint": "Chỉ các dòng được liệt kê ở đây bị ghi đè. Mọi thứ khác theo gói và mặc định của nền tảng.",
+          "empty": "Không có ghi đè. Không gian làm việc này theo gói và mặc định của nền tảng.",
+          "reason": {
+            "label": "Lý do (được lưu trong nhật ký kiểm tra)",
+            "hint": "Bắt buộc khi thay đổi hoặc xóa, từ 5 đến 500 ký tự.",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "Hãy nêu lý do với ít nhất 5 ký tự.",
+              "long": "Giữ lý do dưới 500 ký tự."
+            }
+          },
+          "save": "Lưu ghi đè",
+          "saving": "Đang lưu",
+          "saveHint": "Hãy sửa các dòng được tô sáng và nhập lý do để lưu.",
+          "saved": "Đã lưu {saved}, đã xóa {removed}.",
+          "savedSome": "Đã lưu {saved}, bỏ qua {skipped}. Xem lý do trên từng dòng bị bỏ qua.",
+          "preview": {
+            "title": "Xem trước giá",
+            "hint": "Xem một tin nhắn gửi tới không gian làm việc này sẽ được tính giá thế nào và lớp nào đã đặt giá.",
+            "country": "Quốc gia",
+            "category": "Danh mục",
+            "run": "Xem trước giá",
+            "running": "Đang tính giá",
+            "result": {
+              "label": "Kết quả xem trước giá",
+              "metaCost": "Chi phí Meta",
+              "unknownCost": "Chưa rõ",
+              "margin": "Biên lợi nhuận",
+              "noMargin": "Không có",
+              "layer": "Đặt bởi",
+              "noLayer": "Không khớp biên lợi nhuận nào",
+              "layers": {
+                "workspace": "Ghi đè của không gian làm việc",
+                "plan": "Biên lợi nhuận của gói",
+                "platform": "Mặc định của nền tảng"
+              },
+              "price": "Giá cho khách hàng",
+              "basis": "Cơ sở",
+              "bases": {
+                "margin": "Chi phí Meta + biên lợi nhuận",
+                "fixed": "Giá cố định"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "Tiền tệ thanh toán",
+          "intro": "Tin nhắn được tính giá theo bảng giá Meta của tiền tệ này và trừ vào ví của không gian làm việc bằng tiền tệ đó. Nạp tiền cũng được nhập và ghi có bằng tiền tệ này.",
+          "billedIn": "Thanh toán bằng",
+          "change": "Đổi tiền tệ",
+          "otherWallets": "Các ví khác mà không gian làm việc này đang giữ",
+          "notUsed": "Không dùng để thanh toán; số tiền vẫn nằm ở đây.",
+          "dialog": {
+            "title": "Đổi tiền tệ thanh toán",
+            "currency": "Thanh toán bằng",
+            "effect": "Từ bây giờ tin nhắn được tính giá theo bảng {to} của Meta và trừ vào ví {to}. Không quy đổi gì: ví {from} giữ nguyên số dư.",
+            "left": "{amount} vẫn nằm trong ví {from} và không được dùng cho đến khi không gian làm việc được chuyển lại.",
+            "reason": "Lý do",
+            "reasonHint": "Hiển thị trong nhật ký kiểm tra và nhật ký ví của không gian làm việc. Tối thiểu 5 ký tự.",
+            "confirm": "Thanh toán bằng {currency}",
+            "saving": "Đang lưu",
+            "done": "Hiện thanh toán bằng {to} (trước đây là {from})."
+          }
+        }
+      },
+      "adjust": {
+        "title": "Điều chỉnh số dư",
+        "current": "Số dư hiện tại",
+        "direction": "Thao tác",
+        "add": "Cộng tiền",
+        "deduct": "Trừ tiền",
+        "amount": "Số tiền",
+        "amountHint": "Tối đa 2 chữ số thập phân.",
+        "reason": "Lý do",
+        "reasonHint": "Bắt buộc, từ 5 đến 500 ký tự. Không gian làm việc sẽ thấy lý do này trong sao kê của họ.",
+        "counter": "{count} / {max}",
+        "cappedWarning": "Số tiền này lớn hơn số dư {balance}. Chỉ trừ phần có sẵn; số dư dừng ở 0.",
+        "review": "Xem lại",
+        "confirmAdd": "Cộng tiền",
+        "confirmDeduct": "Trừ tiền",
+        "posting": "Đang ghi",
+        "summaryAdd": "Cộng {amount} cho {workspace}.",
+        "summaryDeduct": "Trừ {amount} khỏi {workspace}.",
+        "newBalance": "Số dư mới: {balance}",
+        "summaryReason": "Lý do: {reason}",
+        "visibleNote": "Lý do sẽ hiển thị cho không gian làm việc và được lưu trong nhật ký kiểm tra.",
+        "problems": {
+          "amount": {
+            "required": "Nhập số tiền.",
+            "invalid": "Nhập số tiền dương, có tối đa 2 chữ số thập phân.",
+            "zero": "Số tiền phải lớn hơn 0.",
+            "tooLarge": "Số tiền này vượt giới hạn cho một lần điều chỉnh."
+          },
+          "note": {
+            "short": "Hãy nêu lý do với ít nhất {min} ký tự.",
+            "long": "Giữ lý do dưới {max} ký tự."
+          }
+        }
+      },
+      "logs": {
+        "title": "Nhật ký ví",
+        "crumb": "Nhật ký ví",
+        "subtitle": "Những gì đã xảy ra với ví và những gì người vận hành đã thay đổi.",
+        "scope": "Phạm vi",
+        "scopes": {
+          "all": "Tất cả",
+          "workspace": "Sự kiện của không gian làm việc",
+          "platform": "Thay đổi của nền tảng"
+        },
+        "event": "Sự kiện",
+        "anyEvent": "Mọi sự kiện",
+        "severity": "Mức độ",
+        "anySeverity": "Mọi mức độ",
+        "severities": {
+          "info": "Thông tin",
+          "warning": "Cảnh báo",
+          "error": "Lỗi"
+        },
+        "workspaceId": "Mã không gian làm việc",
+        "workspaceIdInvalid": "Nhập mã không gian làm việc (UUID).",
+        "search": "Tìm kiếm",
+        "from": "Từ",
+        "to": "Đến",
+        "apply": "Áp dụng",
+        "reset": "Đặt lại",
+        "emptyTitle": "Không có mục nhật ký nào",
+        "emptyBody": "Không có gì khớp với bộ lọc này.",
+        "loadMore": "Tải thêm",
+        "loadingMore": "Đang tải thêm",
+        "platform": "Nền tảng",
+        "showDetails": "Xem chi tiết",
+        "hideDetails": "Ẩn chi tiết",
+        "requestId": "Mã yêu cầu",
+        "columns": {
+          "time": "Thời gian",
+          "severity": "Mức độ",
+          "event": "Sự kiện",
+          "workspace": "Không gian làm việc",
+          "actor": "Người thực hiện",
+          "message": "Nội dung"
+        },
+        "actors": {
+          "operator": "Người vận hành",
+          "customer": "Khách hàng",
+          "system": "Hệ thống"
+        }
+      },
+      "margins": {
+        "title": "Biên lợi nhuận",
+        "crumb": "Biên lợi nhuận",
+        "subtitle": "Khách hàng trả thêm bao nhiêu so với chi phí của Meta, theo từng quốc gia và danh mục tin nhắn.",
+        "retry": "Thử lại",
+        "ratesFailed": "Không tải được chi phí của Meta, nên không thể hiển thị giá cho các dòng mới.",
+        "mode": {
+          "current": "Khách hàng được tính giá theo",
+          "inactive": "Chế độ giá đang là Giá cố định, nên các biên lợi nhuận này chưa có hiệu lực. Chúng được lưu và sẽ áp dụng khi bạn chuyển sang Chi phí Meta + biên lợi nhuận.",
+          "switchLink": "Chuyển đến công tắc chế độ giá"
+        },
+        "scope": {
+          "label": "Biên lợi nhuận cho",
+          "hint": "Mặc định của nền tảng áp dụng cho mọi gói. Biên lợi nhuận riêng của gói được ưu tiên hơn.",
+          "platform": "Mặc định của nền tảng (áp dụng cho mọi gói)"
+        },
+        "grid": {
+          "country": "Quốc gia",
+          "searchCountry": "Tìm quốc gia",
+          "category": "Danh mục",
+          "margin": "Biên lợi nhuận %",
+          "metaCost": "Chi phí Meta",
+          "price": "Giá cho khách hàng",
+          "note": "Lý do",
+          "setBy": "Đặt bởi",
+          "actions": "Thao tác",
+          "anyCountry": "Mọi quốc gia",
+          "anyCategory": "Mọi danh mục",
+          "unknownCost": "Chưa biết chi phí của Meta ở đây, nên áp dụng giá cố định đã nhập.",
+          "priceInvalid": "Nhập biên lợi nhuận từ -100 đến 1000, có tối đa 2 chữ số thập phân.",
+          "removedPending": "Sẽ bị xóa khi bạn lưu.",
+          "addRow": "Thêm dòng",
+          "remove": "Xóa",
+          "undo": "Hoàn tác",
+          "cancel": "Hủy",
+          "empty": "Chưa có biên lợi nhuận nào. Thêm một dòng để đặt.",
+          "removeTitle": "Xóa biên lợi nhuận này?",
+          "removeBody": "Biên lợi nhuận của {country} sẽ bị xóa. Giá sẽ dùng biên lợi nhuận khớp tiếp theo.",
+          "removed": "Đã xóa biên lợi nhuận.",
+          "save": "Lưu biên lợi nhuận",
+          "saving": "Đang lưu",
+          "saved": "{count, plural, other {Đã lưu # biên lợi nhuận.}}",
+          "savedSome": "Đã lưu {saved}, bỏ qua {skipped}. Xem lý do trên từng dòng bị bỏ qua.",
+          "unsaved": "{count, plural, other {# dòng chưa lưu}}",
+          "tooMany": "Quá nhiều dòng thay đổi cho một lần lưu. Hãy lưu theo từng đợt nhỏ hơn.",
+          "problems": {
+            "margin": "Nhập tỷ lệ từ -100 đến 1000, có tối đa 2 chữ số thập phân. -100 nghĩa là miễn phí.",
+            "duplicate": "Quốc gia và danh mục này đã có một dòng."
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "Biên lợi nhuận nào được áp dụng",
+            "body": "Ghi đè của không gian làm việc được ưu tiên hơn biên lợi nhuận của gói, và biên lợi nhuận của gói được ưu tiên hơn mặc định của nền tảng. Mỗi lớp được đọc đầy đủ trước khi chuyển sang lớp tiếp theo."
+          },
+          "specific": {
+            "title": "Cụ thể nhất trước",
+            "body": "Trong mỗi lớp, quốc gia và danh mục được dùng trước, sau đó đến quốc gia với mọi danh mục, rồi danh mục ở mọi quốc gia, cuối cùng là dòng mặc định."
+          },
+          "unknown": {
+            "title": "Khi chưa biết chi phí của Meta",
+            "body": "Giá là chi phí của Meta cộng biên lợi nhuận, làm tròn đến 0,01 và tối thiểu 0,01, trừ khi biên lợi nhuận là -100% (miễn phí). Nếu chưa biết chi phí của Meta, hệ thống áp dụng giá cố định đã nhập."
+          }
+        }
+      },
+      "packages": {
+        "title": "Gói nạp tiền",
+        "crumb": "Gói nạp tiền",
+        "subtitle": "Ưu đãi tùy chọn: trả số tiền này, nhận số tiền này vào ví. Phần tín dụng cao hơn giá là tiền thưởng nạp.",
+        "new": "Gói mới",
+        "edit": "Sửa",
+        "enable": "Bật",
+        "disable": "Tắt",
+        "delete": "Xóa",
+        "cancel": "Hủy",
+        "enabled": "Đã bật {name}.",
+        "disabled": "Đã tắt {name}.",
+        "deleted": "Đã xóa gói.",
+        "deleteTitle": "Xóa gói?",
+        "deleteBody": "Xóa gói này? Các giao dịch mua hiện có vẫn giữ các dòng sổ cái.",
+        "bonus": "+{percent}% tiền thưởng",
+        "status": {
+          "active": "Đang hoạt động",
+          "inactive": "Không hoạt động",
+          "featured": "Nổi bật"
+        },
+        "empty": {
+          "title": "Chưa có gói nạp tiền nào",
+          "body": "Chưa tạo gói nào.",
+          "bodyWrite": "Tạo gói đầu tiên để cung cấp gói nạp ví kèm tiền thưởng."
+        },
+        "columns": {
+          "label": "Gói nạp tiền",
+          "name": "Tên",
+          "slug": "Slug",
+          "price": "Giá",
+          "credit": "Tín dụng ví",
+          "badge": "Nhãn",
+          "status": "Trạng thái",
+          "actions": "Thao tác"
+        },
+        "form": {
+          "newTitle": "Gói nạp tiền mới",
+          "editTitle": "Sửa gói nạp tiền",
+          "newCrumb": "Gói mới",
+          "editCrumb": "Sửa gói",
+          "notFound": "Gói này không còn tồn tại.",
+          "back": "Quay lại gói nạp tiền",
+          "sections": {
+            "identity": "Thông tin",
+            "pricing": "Giá",
+            "display": "Hiển thị"
+          },
+          "name": "Tên",
+          "slug": "Slug (tùy chọn)",
+          "slugHint": "Chữ cái, số, dấu gạch ngang và gạch dưới. Để trống để tạo từ tên.",
+          "description": "Mô tả",
+          "price": "Giá",
+          "priceHint": "Số tiền khách hàng trả.",
+          "currency": "Tiền tệ",
+          "walletCredit": "Tín dụng ví",
+          "walletCreditHint": "Số tiền sẽ vào ví.",
+          "bonusLine": "Tiền thưởng {percent}%: khách hàng trả {price} và nhận {credit}.",
+          "badge": "Nhãn",
+          "badgeHint": "Nhãn ngắn, ví dụ Giá tốt nhất.",
+          "sortOrder": "Thứ tự sắp xếp",
+          "sortOrderHint": "Thấp nhất xếp trước.",
+          "active": "Đang hoạt động",
+          "featured": "Nổi bật",
+          "create": "Tạo gói",
+          "save": "Lưu thay đổi",
+          "saving": "Đang lưu",
+          "created": "Đã tạo {name}.",
+          "saved": "Đã lưu {name}.",
+          "stale": {
+            "title": "Gói này vừa được người khác thay đổi",
+            "body": "Thay đổi của bạn chưa được lưu, nên không có gì bị ghi đè. Hãy tải lại phiên bản mới nhất, rồi thực hiện lại thay đổi.",
+            "reload": "Tải lại phiên bản mới nhất"
+          },
+          "problems": {
+            "name": "Nhập tên tối đa 96 ký tự.",
+            "slug": "Chỉ dùng chữ cái, số, dấu gạch ngang và gạch dưới.",
+            "description": "Giữ mô tả dưới 500 ký tự.",
+            "price": "Nhập số tiền có tối đa 2 chữ số thập phân.",
+            "currency": "Chọn một trong các tiền tệ được liệt kê.",
+            "walletCredit": "Nhập số tiền lớn hơn 0, có tối đa 2 chữ số thập phân.",
+            "badge": "Giữ nhãn dưới 32 ký tự.",
+            "sortOrder": "Nhập số nguyên từ 0 đến 9999."
+          }
+        }
+      }
+    }
+  }
+}

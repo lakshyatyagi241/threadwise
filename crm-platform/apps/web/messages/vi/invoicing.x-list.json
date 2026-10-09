@@ -1,0 +1,268 @@
+{
+  "invoicing": {
+    "method": {
+      "bank": "Chuyển khoản ngân hàng",
+      "manual": "Thủ công",
+      "wa_pay": "WhatsApp Pay",
+      "storefront": "Cửa hàng trực tuyến"
+    },
+    "toolbar": {
+      "currency": "Tiền tệ",
+      "currencyPlaceholder": "USD",
+      "issued": "Đã phát hành",
+      "issuedWindow": "Khoảng ngày phát hành",
+      "due": "Đến hạn",
+      "dueWindow": "Khoảng ngày đến hạn",
+      "dueFrom": "Đến hạn từ",
+      "dueTo": "Đến hạn đến",
+      "docType": "Loại chứng từ",
+      "anyDocType": "Tất cả loại",
+      "mine": "Hóa đơn của tôi",
+      "docTypes": {
+        "tax_invoice": "Hóa đơn thuế",
+        "proforma": "Tạm tính",
+        "receipt": "Biên lai"
+      }
+    },
+    "strip": {
+      "label": "Số tiền còn phải thu",
+      "outstanding": "Còn nợ ({currency})",
+      "overdue": "Trong đó quá hạn"
+    },
+    "row": {
+      "creditNote": "Tạo ghi chú tín dụng",
+      "downloadPdf": "Tải PDF"
+    },
+    "bulk": {
+      "sendLink": "Đánh dấu liên kết là đã gửi",
+      "someSkipped": "{count, plural, other {# hóa đơn đã chọn bị bỏ qua vì không chấp nhận thao tác này.}}",
+      "done": {
+        "send": "{count, plural, other {# hóa đơn đã được đánh dấu là đã gửi.}}"
+      },
+      "confirm": {
+        "delete": {
+          "message": "{count, plural, other {# bản nháp sẽ bị xóa vĩnh viễn. Hóa đơn không phải bản nháp sẽ được giữ nguyên.}}"
+        }
+      },
+      "voidDialog": {
+        "title": "Hủy các hóa đơn đã chọn",
+        "close": "Đóng",
+        "keep": "Giữ hóa đơn",
+        "confirm": "{count, plural, other {Hủy # hóa đơn}}",
+        "warning": "{count, plural, other {# hóa đơn sẽ bị hủy. Hóa đơn giữ nguyên số nhưng không thể thanh toán hoặc chỉnh sửa nữa.}}",
+        "skipped": "{count, plural, other {# hóa đơn đã chọn bị bỏ qua: chỉ hóa đơn đã phát hành, chưa có thanh toán và chưa có ghi chú tín dụng mới được hủy.}}",
+        "reason": "Lý do (được lưu trên mọi hóa đơn)",
+        "reasonRequired": "Nêu lý do hủy các hóa đơn này."
+      }
+    },
+    "actions": {
+      "sentVia": {
+        "link": "Được ghi nhận là đã gửi cùng liên kết.",
+        "email": "Hóa đơn đã gửi qua email.",
+        "whatsapp": "Hóa đơn đã gửi qua WhatsApp."
+      },
+      "markedPaid": "Đã đánh dấu là đã thanh toán.",
+      "linkRegenerated": "Đã tạo liên kết mới. Liên kết cũ không còn hoạt động.",
+      "linkRevoked": "Đã tắt liên kết.",
+      "linkUnavailable": "Hóa đơn này không có liên kết đang hoạt động. Mở hóa đơn để tạo liên kết mới."
+    },
+    "voidDialog": {
+      "reasonHint": "Bắt buộc. Được lưu trong dòng thời gian của hóa đơn.",
+      "reasonRequired": "Nêu lý do hủy hóa đơn này.",
+      "refundFirst": "Hóa đơn này đã nhận thanh toán. Hãy hoàn tiền trước (từ danh sách Thanh toán trên hóa đơn), rồi mới hủy.",
+      "creditsFirst": "Hóa đơn này có ghi chú tín dụng. Hãy hủy các ghi chú tín dụng trước, rồi mới hủy hóa đơn."
+    },
+    "sendDialog": {
+      "loading": "Đang tải hóa đơn",
+      "channel": "Bạn gửi bằng cách nào?",
+      "channels": {
+        "link": "Tự chia sẻ liên kết",
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "action": {
+        "link": "Đánh dấu là đã gửi",
+        "email": "Gửi email",
+        "whatsapp": "Gửi qua WhatsApp"
+      },
+      "linkOff": "Hóa đơn này không có liên kết đang hoạt động. Hãy tạo liên kết mới từ thẻ liên kết trên hóa đơn, rồi chia sẻ.",
+      "linkRecords": "Tự chia sẻ liên kết chỉ ghi nhận rằng liên kết đã được gửi.",
+      "noEmail": "Hóa đơn này không có địa chỉ email",
+      "noPhone": "Hóa đơn này không có số điện thoại",
+      "noEmailHelp": "Hóa đơn này không có email người mua. Đóng cửa sổ này, dùng Chỉnh sửa chi tiết để thêm email rồi thử lại.",
+      "noPhoneHelp": "Hóa đơn này không có số điện thoại người mua. Đóng cửa sổ này, dùng Chỉnh sửa chi tiết để thêm số rồi thử lại.",
+      "message": "Tin nhắn",
+      "messageHint": "Không bắt buộc. Được thêm vào tin nhắn gửi kèm hóa đơn.",
+      "deliveryNote": "Hóa đơn đang chờ gửi đến người mua. Dòng thời gian sẽ hiển thị thời điểm đã gửi."
+    },
+    "editDialog": {
+      "title": "Chỉnh sửa chi tiết",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "save": "Lưu thay đổi",
+      "saved": "Đã lưu chi tiết hóa đơn.",
+      "reload": "Tải lại hóa đơn",
+      "conflict": "Trong lúc bạn chỉnh sửa, người khác đã thay đổi hóa đơn này. Hãy tải lại để xem phiên bản mới nhất, rồi thực hiện lại thay đổi.",
+      "intro": "Hóa đơn đã phát hành giữ nguyên các dòng, số tiền và cách đánh số. Các chi tiết này vẫn có thể thay đổi.",
+      "email": "Email người mua",
+      "phone": "Điện thoại người mua",
+      "phoneHint": "Kèm mã quốc gia, ví dụ +14155550123",
+      "contact": "Liên hệ",
+      "owner": "Chủ sở hữu",
+      "dueDate": "Ngày đến hạn",
+      "dueHint": "Kéo dài hoặc rút ngắn điều khoản thanh toán.",
+      "reference": "Mã tham chiếu",
+      "notes": "Ghi chú",
+      "terms": "Điều khoản"
+    },
+    "payDialog": {
+      "overpayNote": "Số này vượt số dư {extra}. Bạn sẽ được yêu cầu xác nhận trước khi ghi nhận thành khoản ghi có.",
+      "overpayConfirm": "Phần vượt số dư {extra} sẽ được ghi nhận và hiển thị là khoản ghi có trên hóa đơn. Nhấn lại nút để xác nhận.",
+      "problems": {
+        "tooMuch": "Số tiền này vượt quá số hóa đơn còn nợ."
+      }
+    },
+    "markPaidDialog": {
+      "title": "Đánh dấu là đã thanh toán",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "confirm": "Ghi nhận thanh toán",
+      "message": "Ghi nhận đã nhận đủ số dư {amount} hôm nay?",
+      "method": "Người nhận"
+    },
+    "refundDialog": {
+      "problems": {
+        "dateFuture": "Ngày hoàn tiền không thể ở tương lai."
+      }
+    },
+    "paymentsSection": {
+      "refundChip": "Hoàn tiền",
+      "receipt": "Biên lai",
+      "refundOf": "hoàn lại {receipt}",
+      "refundedSoFar": "Đã hoàn {amount} đến nay"
+    },
+    "activity": {
+      "none": "Chưa có gì xảy ra.",
+      "actors": {
+        "buyer": "Người mua",
+        "gateway": "Cổng thanh toán",
+        "system": "Hệ thống"
+      },
+      "events": {
+        "sent": "Đã gửi đến người mua",
+        "overdue": "Đã quá hạn",
+        "partially_paid": "Đã thanh toán một phần",
+        "link_regenerated": "Liên kết công khai đã được thay thế",
+        "link_revoked": "Liên kết công khai đã được tắt",
+        "pay_attempt": "Đã thử thanh toán trực tuyến",
+        "credit_note_issued": "Ghi chú tín dụng"
+      }
+    },
+    "linked": {
+      "invoiced": "Đã lập hóa đơn",
+      "paid": "Đã thanh toán",
+      "outstanding": "Còn nợ",
+      "overdue": "Quá hạn",
+      "latest": "{count, plural, other {Đang hiển thị hóa đơn mới nhất.}}"
+    },
+    "detail": {
+      "editDetails": "Chỉnh sửa chi tiết",
+      "downloadPdf": "PDF",
+      "createCreditNote": "Tạo ghi chú tín dụng",
+      "linkOffBanner": "Liên kết của người mua đã bị tắt nên người mua không thể mở hóa đơn này. Hãy tạo liên kết mới trong thẻ liên kết.",
+      "refunded": "Đã hoàn tiền",
+      "credited": "Đã ghi có",
+      "credit": "Ghi có",
+      "detailsLabel": "Chi tiết hóa đơn",
+      "contact": "Liên hệ",
+      "company": "Công ty",
+      "quote": "Báo giá",
+      "salesOrder": "Đơn hàng bán",
+      "recurring": "Lịch định kỳ",
+      "makeRecurring": "Đặt định kỳ",
+      "reference": "Mã tham chiếu",
+      "owner": "Chủ sở hữu",
+      "createdBy": "Tạo bởi",
+      "overpaid": "Số tiền nhận hoặc ghi có đã vượt quá số hóa đơn yêu cầu. Phần dư được hiển thị như khoản ghi có.",
+      "voidNeedsRefund": "Để hủy hóa đơn này, hãy hoàn tiền các khoản thanh toán trước. Hóa đơn cũng không được có ghi chú tín dụng.",
+      "sources": {
+        "manual": "Tạo thủ công",
+        "quote": "Từ báo giá",
+        "order": "Từ đơn hàng",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Cửa hàng trực tuyến",
+        "api": "API",
+        "ai": "Trợ lý AI",
+        "recurring": "Hóa đơn định kỳ",
+        "sales_order": "Đơn hàng bán"
+      },
+      "creditNotes": {
+        "title": "Ghi chú tín dụng",
+        "create": "Tạo ghi chú tín dụng",
+        "loading": "Đang tải ghi chú tín dụng",
+        "none": "Không có ghi chú tín dụng nào cho hóa đơn này.",
+        "draft": "Bản nháp",
+        "status": {
+          "draft": "Bản nháp",
+          "issued": "Đã phát hành",
+          "void": "Hủy hóa đơn"
+        }
+      }
+    },
+    "linkCard": {
+      "title": "Liên kết công khai",
+      "address": "Địa chỉ liên kết",
+      "state": {
+        "active": "Đang hoạt động",
+        "revoked": "Đã tắt",
+        "expired": "Đã hết hạn"
+      },
+      "off": {
+        "revoked": "Liên kết đã bị tắt. Người mua sẽ thấy trang thông báo hóa đơn không còn khả dụng.",
+        "expired": "Liên kết đã hết hạn. Người mua sẽ thấy trang thông báo hóa đơn không còn khả dụng."
+      },
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "expires": "Hết hạn",
+      "revokedAt": "Đã tắt",
+      "views": "Số lần mở",
+      "firstViewed": "Lần mở đầu tiên",
+      "lastViewed": "Lần mở gần nhất",
+      "open": "Mở trang của người mua",
+      "regenerate": "Liên kết mới",
+      "revoke": "Tắt",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "regenerateTitle": "Tạo liên kết mới",
+      "regenerateWarning": "Liên kết hiện tại sẽ ngừng hoạt động ngay. Ai có liên kết này sẽ thấy hóa đơn không còn khả dụng.",
+      "regenerateConfirm": "Tạo liên kết mới",
+      "expiry": "Liên kết mới có hiệu lực trong",
+      "expiryNever": "Không hết hạn",
+      "expiryDays": "{count, plural, other {# ngày}}",
+      "revokeTitle": "Tắt liên kết này?",
+      "revokeMessage": "Người mua sẽ không thể mở hoặc thanh toán hóa đơn này qua liên kết nữa. Bạn có thể tạo liên kết mới sau.",
+      "revokeConfirm": "Tắt liên kết"
+    },
+    "errors": {
+      "codes": {
+        "INV_NOT_DRAFT": "Hóa đơn này đã được phát hành nên các dòng và số tiền không còn thay đổi được.",
+        "INV_NOT_ISSUED": "Chỉ hóa đơn đã phát hành mới thực hiện được việc này. Hãy phát hành bản nháp trước.",
+        "INV_ALREADY_VOID": "Hóa đơn này đã bị hủy.",
+        "INV_HAS_PAYMENTS": "Hóa đơn này vẫn còn khoản thanh toán. Hãy hoàn tiền trước, sau đó hủy hóa đơn.",
+        "INV_HAS_CREDITS": "Hóa đơn này có chứng từ điều chỉnh giảm. Hãy hủy các chứng từ đó trước, sau đó hủy hóa đơn.",
+        "INV_NOT_DELETABLE": "Chỉ có thể xóa bản nháp. Hãy hủy hóa đơn này thay thế.",
+        "INV_NO_RECIPIENT": "Hóa đơn không có địa chỉ email hoặc số điện thoại cho kênh này. Hãy thêm qua Chỉnh sửa chi tiết rồi thử lại.",
+        "INV_LINK_UNAVAILABLE": "Hóa đơn này không có liên kết đang hoạt động. Hãy tạo liên kết mới từ thẻ liên kết.",
+        "INV_OWNER_INVALID": "Người này không phải thành viên đang hoạt động của không gian làm việc. Hãy chọn người phụ trách khác.",
+        "PAY_OVERPAYMENT": "Số tiền này lớn hơn số còn phải thu của hóa đơn. Hãy giảm số tiền hoặc xác nhận bạn đang ghi nhận khoản bù trừ.",
+        "PAY_FUTURE_DATE": "Ngày thanh toán không được ở tương lai.",
+        "PAY_CURRENCY_MISMATCH": "Khoản thanh toán phải dùng cùng loại tiền tệ với hóa đơn.",
+        "PAY_REFUND_EXCEEDS": "Số tiền này vượt quá số còn có thể hoàn lại cho khoản thanh toán này.",
+        "PAY_NOT_REFUNDABLE": "Mục này không thể hoàn tiền. Chỉ khoản thanh toán còn số dư mới được hoàn.",
+        "PAY_NOTHING_TO_PAY": "Hóa đơn này không còn số tiền phải thanh toán.",
+        "ROW_VERSION_CONFLICT": "Vừa có người khác thay đổi hóa đơn này. Hãy tải lại để xem phiên bản mới nhất, rồi thử lại."
+      }
+    }
+  }
+}

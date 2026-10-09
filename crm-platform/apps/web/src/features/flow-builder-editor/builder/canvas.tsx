@@ -10,6 +10,7 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
+import { useTranslations } from 'next-intl';
 import type { FlbBuilderContext, FlbPortContext } from '@crm/contracts';
 import {
   NODE_W,
@@ -82,6 +83,7 @@ export function Canvas({
   wrapperRef,
   children,
 }: Props) {
+  const t = useTranslations('flb.builder.shell.canvas');
   const { nodes, edges } = state;
   const [hoveredPort, setHoveredPort] = useState<string | null>(null);
   const [hoveredEdge, setHoveredEdge] = useState<string | null>(null);
@@ -517,7 +519,7 @@ export function Canvas({
             }}
           >
             <Icon d="M3 4h10M6 4V2.5h4V4M5 4l1 9h4l1-9" />
-            <span>Delete</span>
+            <span>{t('deleteEdge')}</span>
           </div>
         ) : null}
       </div>

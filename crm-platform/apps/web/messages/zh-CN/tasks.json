@@ -1,0 +1,330 @@
+{
+  "tasks": {
+    "nav": {
+      "tasks": "任务"
+    },
+    "common": {
+      "dismiss": "关闭"
+    },
+    "hub": {
+      "title": "任务",
+      "subtitle": "跟进事项和待办事项。可分配任务、设置优先级和截止日期，并标记完成。",
+      "newTask": "新建任务",
+      "tableLabel": "任务",
+      "loading": "正在加载任务",
+      "useSampleData": "使用示例数据（开发环境）",
+      "emptyFilteredTitle": "没有符合条件的任务",
+      "emptyFiltered": "请尝试其他搜索词或清除筛选条件。",
+      "resetFilters": "清除筛选",
+      "empty": {
+        "mine": {
+          "title": "没有分配给您的任务",
+          "message": "分配给您的任务将显示在此处。您可以在上方添加任务，或查看全部任务。"
+        },
+        "all": {
+          "title": "暂无任务",
+          "message": "使用上方的输入框添加跟进事项或待办事项，它将显示在此处。"
+        },
+        "overdue": {
+          "title": "没有逾期任务",
+          "message": "所有未完成任务均未逾期。"
+        },
+        "today": {
+          "title": "今天没有到期任务",
+          "message": "今天剩余时间内没有到期的未完成任务。"
+        },
+        "upcoming": {
+          "title": "近期没有待办任务",
+          "message": "之后到期的未完成任务将显示在此处。"
+        },
+        "completed": {
+          "title": "暂无已完成任务",
+          "message": "您标记为完成的任务将显示在此处，最新的排在前面。"
+        }
+      },
+      "showing": "{count, plural, other {已加载 # 项任务}}",
+      "loadMore": "加载更多",
+      "allLoaded": "已加载全部任务",
+      "deleteTitle": "删除此任务？",
+      "deleteMessage": "“{title}”将对所有人删除。此操作无法撤销。",
+      "delete": "删除",
+      "keep": "保留"
+    },
+    "tabs": {
+      "label": "任务列表",
+      "mine": "我的任务",
+      "all": "全部任务",
+      "overdue": "已逾期",
+      "today": "今天",
+      "upcoming": "即将到期",
+      "completed": "已完成",
+      "count": "{count, plural, other {# 项任务}}"
+    },
+    "toolbar": {
+      "label": "任务筛选",
+      "search": "搜索任务",
+      "status": "状态",
+      "statusOpen": "未完成",
+      "statusDone": "已完成",
+      "statusAll": "未完成和已完成",
+      "priority": "优先级",
+      "allPriorities": "所有优先级",
+      "priorities": {
+        "high": "高",
+        "medium": "中",
+        "low": "低"
+      },
+      "assignee": "负责人",
+      "allAssignees": "所有负责人",
+      "unassigned": "未分配",
+      "linked": "关联到",
+      "anyLink": "任意记录",
+      "linkContact": "联系人",
+      "linkDeal": "交易",
+      "clear": "清除",
+      "modifyColumns": "修改列",
+      "resetColumns": "重置列",
+      "columns": {
+        "title": "任务",
+        "priority": "优先级",
+        "due": "截止",
+        "assignee": "负责人",
+        "contact": "联系人",
+        "deal": "交易",
+        "created": "创建时间",
+        "completed": "完成于"
+      },
+      "refresh": "刷新",
+      "shortcuts": "键盘快捷键",
+      "view": "布局",
+      "views": {
+        "list": "列表",
+        "board": "按截止日期看板"
+      }
+    },
+    "table": {
+      "scrollArea": "任务表格",
+      "selectAll": "选择所有已加载任务",
+      "selectRow": "选择 {title}",
+      "columns": {
+        "title": "任务",
+        "priority": "优先级",
+        "due": "截止",
+        "assignee": "负责人",
+        "contact": "联系人",
+        "deal": "交易",
+        "created": "创建时间",
+        "completed": "完成于"
+      }
+    },
+    "row": {
+      "complete": "标记为完成",
+      "reopen": "重新打开",
+      "completeNamed": "将“{title}”标记为完成",
+      "reopenNamed": "重新打开“{title}”",
+      "moreFor": "{title} 的更多操作",
+      "open": "打开",
+      "edit": "编辑",
+      "delete": "删除",
+      "unassigned": "未分配"
+    },
+    "bulk": {
+      "label": "所选任务的操作",
+      "selected": "{count, plural, other {已选择 # 项任务}}",
+      "working": "处理中",
+      "complete": "完成",
+      "assign": "分配",
+      "assignTo": "分配给",
+      "me": "{name}（我）",
+      "unassign": "取消分配",
+      "delete": "删除",
+      "clear": "清除选择",
+      "failed": "操作未成功。",
+      "someFailed": "{count, plural, other {# 项任务无法更改。}}",
+      "completed": "{count, plural, other {已完成 # 项任务。}}",
+      "assigned": "{count, plural, other {已将 # 项任务分配给 {name}。}}",
+      "unassigned": "{count, plural, other {已取消 # 项任务的分配。}}",
+      "deleted": "{count, plural, other {已删除 # 项任务。}}",
+      "deleteTitle": "删除所选任务？",
+      "deleteMessage": "{count, plural, other {将对所有人删除 # 项任务。此操作无法撤销。}}",
+      "keep": "保留"
+    },
+    "quick": {
+      "label": "添加任务",
+      "placeholder": "输入任务后按 Enter 添加",
+      "priority": "优先级",
+      "priorities": {
+        "high": "高",
+        "medium": "中",
+        "low": "低"
+      },
+      "due": "截止日期和时间",
+      "add": "添加",
+      "dueRequired": "请选择截止日期和时间。",
+      "titleRequired": "请输入需要完成的事项。",
+      "options": "更多选项（优先级和截止日期）"
+    },
+    "form": {
+      "eyebrow": "任务",
+      "newTitle": "新建任务",
+      "editTitle": "编辑任务",
+      "close": "关闭",
+      "cancel": "取消",
+      "create": "创建任务",
+      "save": "保存更改",
+      "title": "任务",
+      "titlePlaceholder": "例如：致电 Acme 洽谈续约",
+      "priority": "优先级",
+      "priorities": {
+        "high": "高",
+        "medium": "中",
+        "low": "低"
+      },
+      "assignee": "分配给",
+      "unassigned": "无",
+      "me": "{name}（我）",
+      "due": "截止",
+      "presets": {
+        "today": "今天",
+        "tomorrow": "明天",
+        "nextWeek": "下周"
+      },
+      "clearDue": "清除日期",
+      "contact": "联系人",
+      "deal": "交易",
+      "notes": "备注",
+      "reminderHint": "任务到期时，负责人将收到提醒。",
+      "assigneePick": "请选择此任务的负责人。",
+      "problems": {
+        "dueRequired": "请选择截止日期和时间。",
+        "priorityRequired": "请选择优先级。",
+        "assigneeRequired": "请选择此任务的负责人。",
+        "titleRequired": "请输入需要完成的事项。",
+        "titleTooLong": "任务内容过长（最多 255 个字符）。",
+        "notesTooLong": "备注过长（最多 5000 个字符）。",
+        "dueInvalid": "该日期无效。",
+        "assigneeInvalid": "该成员不是此工作区的有效成员。"
+      }
+    },
+    "drawer": {
+      "loading": "正在加载任务",
+      "close": "关闭",
+      "eyebrow": "任务",
+      "name": "任务名称",
+      "titleRequired": "任务需要一个名称。",
+      "statusOpen": "未完成",
+      "statusDone": "已完成",
+      "complete": "标记为完成",
+      "reopen": "重新打开",
+      "edit": "编辑",
+      "delete": "删除",
+      "details": "详情",
+      "notes": "备注",
+      "notesPlaceholder": "为接手此任务的人补充背景信息",
+      "linked": "关联记录",
+      "company": "公司",
+      "noLinks": "未关联联系人或交易。",
+      "activity": "动态",
+      "events": {
+        "created": "任务已创建",
+        "createdBy": "由 {name} 创建",
+        "reminded": "已发送到期提醒",
+        "completed": "已标记为完成"
+      },
+      "deleteTitle": "删除此任务？",
+      "deleteMessage": "“{title}”将为所有人删除，且无法恢复。",
+      "cancel": "保留"
+    },
+    "board": {
+      "buckets": {
+        "overdue": "已逾期",
+        "today": "今天",
+        "upcoming": "即将到期",
+        "no_date": "无日期"
+      },
+      "empty": "这里没有内容。"
+    },
+    "due": {
+      "none": "无日期",
+      "overdue": "已逾期",
+      "today": "今天 {time}",
+      "tomorrow": "明天 {time}",
+      "yesterday": "昨天 {time}",
+      "date": "{date} {time}"
+    },
+    "priority": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    },
+    "link": {
+      "unnamedContact": "未命名联系人",
+      "unnamedDeal": "交易"
+    },
+    "picker": {
+      "searchContact": "搜索联系人",
+      "searchDeal": "搜索交易",
+      "results": "搜索结果",
+      "searching": "搜索中",
+      "unavailable": "目前无法搜索。",
+      "none": "没有匹配项。",
+      "unlink": "移除链接"
+    },
+    "errors": {
+      "network": "无法连接服务器。请检查网络连接后重试。",
+      "forbidden": "您没有执行此操作的权限。",
+      "signedOut": "会话已结束。请重新登录后继续。",
+      "conflict": "此任务已被他人修改。请刷新后重试。",
+      "validation": "部分信息无效。",
+      "unavailable": "此服务器尚未提供任务服务。",
+      "rateLimited": "请求过于频繁。请稍候再试。",
+      "notFound": "找不到该任务，可能已被删除。",
+      "planDisabled": "您的套餐不包含任务功能。升级后即可使用。",
+      "assigneeInvalid": "该用户不是此工作区的活跃成员。",
+      "unexpected": "出错了，请稍后重试。",
+      "requestId": "请求 ID",
+      "retry": "重试"
+    },
+    "toast": {
+      "completed": "任务已完成。",
+      "reopened": "任务已重新打开。",
+      "created": "任务已创建。",
+      "saved": "任务已保存。",
+      "deleted": "任务已删除。",
+      "conflict": "此任务已被他人修改。列表已刷新，请重试。",
+      "failed": "无法更新任务。",
+      "saveFailed": "无法保存任务。",
+      "deleteFailed": "无法删除任务。",
+      "createFailed": "无法创建任务。"
+    },
+    "shortcuts": {
+      "title": "键盘快捷键",
+      "close": "关闭",
+      "intro": "无需鼠标即可浏览列表。在输入框中输入时快捷键会暂停。",
+      "actions": {
+        "next": "下一个任务",
+        "prev": "上一个任务",
+        "open": "打开任务",
+        "toggleComplete": "完成或重新打开",
+        "toggleSelect": "选择或取消选择",
+        "newTask": "新建任务",
+        "focusSearch": "搜索",
+        "clearSelection": "清除选择",
+        "help": "显示此列表"
+      }
+    },
+    "linked": {
+      "title": "任务",
+      "addPlaceholder": "输入任务标题，然后点击“添加”填写详细信息",
+      "viewAll": "查看全部",
+      "loading": "正在加载任务",
+      "unavailableTitle": "任务功能暂不可用",
+      "unavailable": "此服务器尚未提供任务服务。",
+      "empty": "没有未完成的任务。",
+      "loadMore": "加载更多",
+      "loadMoreDone": "加载更多已完成任务",
+      "showDone": "显示已完成",
+      "hideDone": "隐藏已完成"
+    }
+  }
+}

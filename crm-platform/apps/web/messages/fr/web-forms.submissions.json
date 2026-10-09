@@ -1,0 +1,170 @@
+{
+  "web-forms": {
+    "submissions": {
+      "title": "Réponses",
+      "backToForm": "Retour à {name}",
+      "formFallback": "Formulaire",
+      "count": "{count, plural, =0 {Aucune réponse} one {1 réponse} other {# réponses}} chargées",
+      "moreAvailable": "D’autres sont disponibles",
+      "tabsLabel": "Groupes de réponses",
+      "tabs": {
+        "all": "Toutes",
+        "needs_attention": "À traiter",
+        "spam": "Spam"
+      },
+      "filters": {
+        "search": "Rechercher",
+        "searchPlaceholder": "Nom, e-mail ou téléphone",
+        "status": "Statut",
+        "allStatuses": "Tous les statuts",
+        "from": "Du",
+        "to": "Au",
+        "clear": "Effacer les filtres"
+      },
+      "status": {
+        "received": "Reçue",
+        "created": "Contact créé",
+        "updated": "Contact mis à jour",
+        "needs_review": "À examiner",
+        "awaiting_payment": "En attente de paiement",
+        "paid": "Payée",
+        "failed": "Échec",
+        "spam": "Spam"
+      },
+      "reason": {
+        "label": "Motif",
+        "todo": "Que faire",
+        "no_contact_point": {
+          "what": "Le visiteur n’a fourni ni e-mail ni téléphone exploitable : aucun contact n’a pu être créé.",
+          "todo": "Ouvrez la réponse, ajoutez manuellement l’information manquante au contact, ou corrigez l’association du formulaire puis relancez."
+        },
+        "invalid_phone": {
+          "what": "Le numéro de téléphone n’a pas pu être lu comme un numéro valide.",
+          "todo": "Ouvrez la réponse, vérifiez le numéro, puis relancez une fois que le formulaire l’accepte, ou ajoutez le contact manuellement."
+        },
+        "plan_limit_reached": {
+          "what": "La limite de contacts de votre forfait a été atteinte : aucun nouveau contact n’a été créé.",
+          "todo": "Libérez des contacts ou mettez à niveau votre forfait, puis relancez."
+        },
+        "submissions_cap": {
+          "what": "La limite mensuelle de réponses de votre forfait a été atteinte : celle-ci a été enregistrée pour examen.",
+          "todo": "Mettez à niveau votre forfait ou attendez le mois suivant, puis relancez."
+        },
+        "spam_score": {
+          "what": "La réponse ressemble à du spam et a été mise de côté.",
+          "todo": "S’il s’agit d’une vraie personne, ouvrez la réponse et ajoutez-la manuellement comme contact."
+        },
+        "too_fast": {
+          "what": "Elle a été envoyée plus vite qu’une personne ne peut remplir le formulaire : elle a été mise de côté comme spam.",
+          "todo": "S’il s’agit d’une vraie personne, ouvrez la réponse et ajoutez-la manuellement comme contact."
+        },
+        "internal_error": {
+          "what": "Une erreur est survenue de notre côté pendant le traitement. Les réponses sont conservées.",
+          "todo": "Relancez le traitement. Si l’échec se reproduit, contactez le support en indiquant l’heure de l’envoi."
+        },
+        "unknown": {
+          "what": "Cette réponse est mise de côté pour un motif que cette version de l’application ne reconnaît pas.",
+          "todo": "Ouvrez-la pour voir les détails, puis relancez ou traitez-la manuellement."
+        }
+      },
+      "table": {
+        "received": "Reçue",
+        "visitor": "Visiteur",
+        "status": "Statut",
+        "contact": "Contact",
+        "company": "Entreprise",
+        "version": "Version",
+        "open": "Ouvrir la réponse de {who}"
+      },
+      "anonymous": "Aucun nom indiqué",
+      "answersRemovedShort": "Réponses supprimées",
+      "versionShort": "v{n}",
+      "noLink": "Aucune",
+      "unnamedContact": "Ouvrir le contact",
+      "unnamedCompany": "Ouvrir l’entreprise",
+      "drawer": {
+        "title": "Réponse de {who}",
+        "close": "Fermer",
+        "loading": "Ouverture de la réponse",
+        "errorTitle": "Cette réponse n’a pas pu être ouverte.",
+        "errorBody": "Vérifiez votre connexion et réessayez.",
+        "retryLoad": "Réessayer",
+        "auditNote": "L’ouverture des réponses d’un envoi est consignée dans le journal d’audit.",
+        "answers": "Réponses",
+        "noAnswers": "Cet envoi ne contient aucune réponse.",
+        "emptyAnswer": "Pas de réponse",
+        "yes": "Oui",
+        "no": "Non",
+        "removedTitle": "Les réponses ont été supprimées",
+        "removedBody": "Les réponses ont été effacées ou purgées. Seul cet enregistrement subsiste, et le contact a été conservé.",
+        "summary": "Résumé",
+        "receivedAt": "Reçue",
+        "formVersion": "Version du formulaire",
+        "spamScore": "Score de spam",
+        "error": "Erreur",
+        "attribution": "Origine",
+        "noAttribution": "Aucun détail d’origine n’a été capturé.",
+        "utm": "Étiquettes de campagne",
+        "referrer": "Référent",
+        "pageUrl": "Page",
+        "userAgent": "Navigateur",
+        "consent": "Consentement",
+        "consentGiven": "Consentement donné",
+        "consentText": "Texte vu par le visiteur",
+        "consentVersion": "Version du texte",
+        "consentAt": "Donné le",
+        "noConsent": "Ce formulaire ne demandait pas de consentement.",
+        "links": "Enregistrements",
+        "actions": "Actions"
+      },
+      "actions": {
+        "retry": "Relancer",
+        "retrying": "Relance en cours",
+        "delete": "Supprimer les réponses",
+        "deleting": "Suppression en cours",
+        "export": "Exporter en CSV",
+        "exporting": "Export en cours",
+        "exportHintAttention": "Choisissez un seul statut à exporter pour ce groupe, ou utilisez Toutes.",
+        "exportHintSearch": "L’export ne tient pas compte du texte de recherche.",
+        "notSpam": "Pas du spam : traiter"
+      },
+      "confirmDelete": {
+        "title": "Supprimer ces réponses ?",
+        "message": "Cette action efface définitivement les réponses de cet envoi. Une ligne reste dans la liste pour attester que l’envoi a eu lieu, et le contact n’est jamais supprimé.",
+        "confirm": "Supprimer les réponses",
+        "cancel": "Annuler"
+      },
+      "toast": {
+        "retried": "Relancé. L’envoi a désormais le statut : {status}.",
+        "notRetryable": "Seuls les envois à examiner ou en échec peuvent être relancés.",
+        "purged": "Les réponses ont déjà été supprimées : il n’y a rien à relancer.",
+        "retryFailed": "La relance n’a pas abouti. Veuillez réessayer.",
+        "deleted": "Les réponses ont été supprimées. Le contact a été conservé.",
+        "deleteFailed": "Les réponses n’ont pas pu être supprimées. Veuillez réessayer.",
+        "exported": "Le CSV a été téléchargé.",
+        "exportTruncated": "L’export a été limité aux {max} lignes les plus récentes. Affinez les dates pour obtenir le reste.",
+        "exportFailed": "L’export n’a pas pu être généré. Veuillez réessayer."
+      },
+      "state": {
+        "loading": "Chargement des réponses",
+        "errorTitle": "Les réponses n’ont pas pu être chargées.",
+        "errorBody": "Vérifiez votre connexion et réessayez.",
+        "retry": "Réessayer",
+        "lockedTitle": "Les formulaires ne font pas partie de votre forfait",
+        "lockedBody": "Ajoutez l’application Formulaires à votre espace de travail pour recueillir et examiner les réponses.",
+        "upgrade": "Voir les forfaits",
+        "emptyTitle": "Aucune réponse pour l’instant",
+        "emptyBody": "Partagez le lien du formulaire ou intégrez-le à votre site. Chaque réponse apparaît ici dès qu’elle est envoyée.",
+        "emptyShare": "Partager ce formulaire",
+        "emptyFilteredTitle": "Aucune réponse ne correspond",
+        "emptyFilteredBody": "Aucun résultat ne correspond à ces filtres. Effacez-les pour tout afficher.",
+        "loadMore": "Charger davantage",
+        "loadingMore": "Chargement en cours"
+      },
+      "cap": {
+        "notice": "Certaines réponses ont été enregistrées pour examen, la limite mensuelle de réponses de votre forfait ayant été atteinte.",
+        "upgrade": "Mettre à niveau votre forfait"
+      }
+    }
+  }
+}

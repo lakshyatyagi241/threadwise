@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "Số tiền, số lượng hoặc thuế suất trên hóa đơn không hợp lệ. Hãy kiểm tra các trường được đánh dấu.",
+        "INV_TAX_RATE_INVALID": "Một trong các thuế suất hiện không dùng được: đang ngừng dùng hoặc ngoài thời hạn. Hãy chọn thuế suất khác.",
+        "INV_NOT_DRAFT": "Hóa đơn này đã phát hành nên không thể chỉnh sửa nữa. Hãy sao chép để tạo hóa đơn đã sửa.",
+        "INV_ORDER_LINKED": "Hóa đơn này thuộc một đơn hàng bán, nên cần chỉnh sửa đơn hàng đó.",
+        "SALESDOC_INVALID_TRANSITION": "Báo giá hoặc dự toán chưa được chấp nhận nên chưa thể chuyển thành hóa đơn.",
+        "SALESDOC_ALREADY_CONVERTED": "Chứng từ này đã được chuyển thành hóa đơn.",
+        "SALESDOC_INVOICING_UNAVAILABLE": "Chức năng hóa đơn chưa khả dụng trên máy chủ này.",
+        "INV_LINK_UNAVAILABLE": "Liên kết hóa đơn này không còn khả dụng."
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "Đang tạo bản nháp từ chứng từ đã chấp nhận...",
+      "duplicating": "Đang sao chép hóa đơn thành bản nháp mới...",
+      "openExisting": "Mở hóa đơn đã được tạo",
+      "backToInvoices": "Quay lại danh sách hóa đơn",
+      "backToInvoice": "Quay lại hóa đơn",
+      "issued": "Đã phát hành hóa đơn.",
+      "savedNotIssued": "Đã lưu bản nháp nhưng không thể phát hành: {reason}",
+      "buyerCountry": "Quốc gia",
+      "buyerCountryHint": "Hai chữ cái, như IN hoặc GB. Quyết định định dạng mã số thuế và, ở chế độ tự động, cả thuế.",
+      "buyerTaxId": "Mã số thuế",
+      "buyerTaxIdNamed": "Mã số thuế ({label})",
+      "taxIdHint": "GSTIN, số VAT, EIN... Được kiểm tra khi bạn nhập.",
+      "taxIdExpected": "Cần có: {label}, ví dụ {example}.",
+      "taxIdUnchecked": "Chưa có định dạng cho quốc gia này nên số được lưu đúng như bạn nhập.",
+      "taxIdValid": "{label} có vẻ đúng ({level, select, checksum {đã kiểm tra định dạng và chữ số kiểm tra} other {chỉ đã kiểm tra định dạng}}). Điều này không chứng minh mã đã được đăng ký.",
+      "taxIdInvalid": "{label} này có vẻ sai ({level, select, checksum {đã kiểm tra định dạng và chữ số kiểm tra} other {chỉ đã kiểm tra định dạng}}).",
+      "taxIdStillSave": "Bạn vẫn có thể lưu.",
+      "docType": "Chứng từ",
+      "docTypes": {
+        "tax_invoice": "Hóa đơn thuế",
+        "proforma": "Hóa đơn tạm tính"
+      },
+      "noDueDate": "Điều khoản thanh toán mặc định",
+      "reference": "Mã tham chiếu",
+      "referenceHint": "Số đơn đặt hàng của người mua hoặc bất kỳ tham chiếu nào cần in.",
+      "tax": "Thuế",
+      "taxMode": "Cách tính thuế",
+      "taxModes": {
+        "rates": "Thuế suất",
+        "auto": "Tự động"
+      },
+      "taxModeHint": {
+        "rates": "Chọn thuế suất cho từng dòng. Dòng để mặc định sẽ dùng thuế suất mặc định của không gian làm việc.",
+        "auto": "Công cụ tính thuế quyết định thuế của từng dòng dựa trên quốc gia của bạn, quốc gia và mã số thuế của người mua, loại hàng hóa và nơi cung ứng. Kết quả từ máy chủ là giá trị được lưu."
+      },
+      "sellerCountry": "Quốc gia của bạn (từ hồ sơ hóa đơn)",
+      "sellerCountryMissing": "Thuế tự động cần quốc gia của bạn trong hồ sơ hóa đơn (quốc gia có cấu hình thuế sẵn). Hãy đặt tại đó trước.",
+      "supplyType": "Loại cung ứng",
+      "supplyTypes": {
+        "goods": "Hàng hóa",
+        "services": "Dịch vụ",
+        "digital": "Dịch vụ số"
+      },
+      "placeOfSupply": "Nơi cung ứng",
+      "placeOfSupplyHint": "Một bang hoặc tỉnh của {country}; giữ lựa chọn đầu tiên nếu áp dụng cho cả quốc gia.",
+      "placeSameCountry": "Toàn quốc",
+      "placeRegionPlaceholder": "Mã vùng, không bắt buộc",
+      "reverseCharge": "Đảo ngược nghĩa vụ thuế",
+      "reverseChargeHint": "Người mua kê khai thuế nên hóa đơn này không tính thuế.",
+      "shipping": "Phí vận chuyển ({currency})",
+      "shippingHint": "Không bao giờ được giảm giá hoặc tính thuế.",
+      "legalNotes": "Ghi chú pháp lý",
+      "legalNotesHint": "Nội dung bắt buộc trên chứng từ, như tuyên bố đảo ngược nghĩa vụ thuế. Chế độ tự động sẽ điền khi pháp luật yêu cầu.",
+      "problems": {
+        "contactRequired": "Chọn liên hệ hoặc nhập tên người mua.",
+        "currencyInvalid": "Nhập mã tiền tệ gồm ba chữ cái.",
+        "issueDateInvalid": "Nhập ngày phát hành hợp lệ.",
+        "dueBeforeIssue": "Ngày đến hạn không thể trước ngày phát hành.",
+        "dueInvalid": "Nhập ngày đến hạn hợp lệ.",
+        "noLines": "Thêm ít nhất một dòng trước khi phát hành.",
+        "discountInvalid": "Nhập mức chiết khấu hợp lệ (tỷ lệ phần trăm từ 0 đến 100, hoặc số tiền).",
+        "shippingInvalid": "Nhập phí vận chuyển hợp lệ.",
+        "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+        "amountZero": "Tổng hóa đơn phải lớn hơn không.",
+        "amountInvalid": "Số tiền quá lớn hoặc có quá nhiều chữ số thập phân cho loại tiền tệ này.",
+        "countryInvalid": "Dùng mã quốc gia gồm hai chữ cái.",
+        "regionInvalid": "Dùng mã vùng ngắn, tối đa ba chữ cái hoặc chữ số.",
+        "autoNeedsSellerCountry": "Đặt quốc gia trong hồ sơ hóa đơn để dùng thuế tự động.",
+        "descriptionRequired": "Mô tả dòng này.",
+        "qtyInvalid": "Nhập số lượng lớn hơn không, tối đa 4 chữ số thập phân.",
+        "priceInvalid": "Nhập giá hợp lệ với số thập phân mà loại tiền tệ này cho phép.",
+        "lineDiscountInvalid": "Nhập chiết khấu dòng hợp lệ.",
+        "hsnRequired": "Nhập mã HSN/SAC. Quốc gia của bạn yêu cầu mã này trên từng dòng.",
+        "hsnInvalid": "Mã HSN/SAC gồm 2 đến 12 chữ cái hoặc chữ số.",
+        "taxRateRemoved": "Thuế suất của dòng này đã bị xóa. Hãy chọn thuế suất hiện hành."
+      }
+    },
+    "lines": {
+      "discount": "Chiết khấu",
+      "discountKind": "Loại chiết khấu",
+      "taxAuto": "Tự động",
+      "taxDefault": "Mặc định ({rate})",
+      "taxDefaultNone": "Mặc định (không thuế)",
+      "removedRateOption": "{rate}, đã xóa",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "Mã"
+    },
+    "totals": {
+      "shipping": "Vận chuyển",
+      "taxIncluded": "{name}, đã bao gồm",
+      "taxOn": "trên {base}",
+      "reverseCharge": "Đảo ngược nghĩa vụ thuế: không tính thuế.",
+      "includesTotal": "Giá đã bao gồm thuế"
+    },
+    "taxWhy": {
+      "title": "Vì sao có thuế này?",
+      "preview": "Xem trước",
+      "previewNote": "Được tính trên trình duyệt khi bạn chỉnh sửa. Kết quả máy chủ quyết định khi bạn lưu mới là kết quả chính thức.",
+      "taxFree": "Không tính thuế cho loại cung ứng này",
+      "warnings": "Kiểm tra lại",
+      "placeOfSupply": "Nơi cung ứng",
+      "reverseCharge": "Đảo ngược nghĩa vụ thuế",
+      "reverseChargeNote": "Người mua kê khai thuế nên không tính thuế.",
+      "documentNotes": "In trên chứng từ",
+      "disclaimer": "Thuế suất và quy tắc là mặc định cần xác minh với kế toán hoặc cơ quan thuế. Đây không phải tư vấn pháp lý hay thuế."
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "Hóa đơn thuế",
+        "proforma": "Hóa đơn tạm tính",
+        "receipt": "Biên lai"
+      },
+      "sellerTaxId": "Mã số thuế",
+      "registrationNo": "Số đăng ký",
+      "buyerTaxId": "Mã số thuế",
+      "reference": "Mã tham chiếu",
+      "placeOfSupply": "Nơi cung ứng",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "Chiết khấu {amount}",
+      "shipping": "Vận chuyển",
+      "credited": "Đã ghi có",
+      "taxSummary": "Tóm tắt thuế",
+      "taxName": "Thuế",
+      "taxBase": "Số tiền chịu thuế",
+      "taxAmount": "Thuế",
+      "taxInclusive": "đã bao gồm",
+      "reverseCharge": "Đảo ngược nghĩa vụ thuế: người mua kê khai thuế.",
+      "paymentsReceived": "Thanh toán đã nhận",
+      "refund": "hoàn tiền",
+      "bankDetails": "Thông tin ngân hàng",
+      "voidReason": "Đã hủy: {reason}"
+    },
+    "public": {
+      "notFoundTitle": "Không tìm thấy liên kết",
+      "notFoundMessage": "Liên kết hóa đơn này không tồn tại. Hãy kiểm tra xem bạn đã sao chép đủ chưa, hoặc yêu cầu người gửi gửi lại liên kết.",
+      "unavailableTitle": "Liên kết này không khả dụng",
+      "unavailableMessage": "Liên kết hóa đơn đã bị thu hồi hoặc hết hạn. Hãy yêu cầu người gửi cấp liên kết mới.",
+      "voidReason": "Lý do: {reason}",
+      "printable": "Mở trang in",
+      "amountDueFooter": "Số tiền cần thanh toán: {amount}",
+      "noPayOptions": "Người bán chưa thiết lập cách thanh toán trực tuyến. Vui lòng liên hệ để sắp xếp thanh toán.",
+      "payAmount": "Số tiền thanh toán ({currency})",
+      "payAmountHint": "Đã điền đủ số dư. Nhập số tiền nhỏ hơn để thanh toán một phần.",
+      "amountErrors": {
+        "invalid": "Nhập số tiền lớn hơn không.",
+        "tooMuch": "Số tiền không được vượt quá số tiền cần thanh toán."
+      },
+      "linkUnavailable": "Liên kết hóa đơn này không còn khả dụng nên không thể thanh toán tại đây.",
+      "payFailed": "Không thể bắt đầu thanh toán. Vui lòng thử lại sau.",
+      "payUnavailable": "Hiện chưa thể thanh toán trực tuyến cho hóa đơn này.",
+      "redirecting": "Đang chuyển bạn đến trang thanh toán...",
+      "payInstructions": "Hãy thanh toán theo hướng dẫn bên dưới.",
+      "bankTransfer": "Chuyển khoản ngân hàng",
+      "copyInstructions": "Sao chép hướng dẫn",
+      "copyValue": "Sao chép {label}"
+    }
+  }
+}

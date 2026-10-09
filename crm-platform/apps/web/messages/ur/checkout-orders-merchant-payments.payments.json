@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "اسٹور / ادائیگیاں",
+      "title": "ادائیگیاں",
+      "subtitle": "آپ کے اسٹور آرڈرز کا مالی پہلو: کیا ادا ہو چکا، کیا زیر انتظار ہے اور کیا ڈیلیوری پر نقد ہے۔",
+      "listTitle": "ادائیگیوں کی فہرست",
+      "loading": "ادائیگیاں لوڈ ہو رہی ہیں",
+      "emptyFilteredTitle": "کوئی ادائیگی میل نہیں کھاتی",
+      "emptyFilteredMessage": "ہر ادائیگی دیکھنے کے لیے فلٹرز بدلیں یا ری سیٹ کریں۔",
+      "resetFilters": "فلٹرز ری سیٹ کریں",
+      "emptyTitle": "ابھی کوئی ادائیگی نہیں",
+      "emptyMessage": "اسٹور آرڈر دیتے ہی ادائیگی یہاں نظر آ جاتی ہے۔ اپنے آرڈرز دیکھنے یا دستی آرڈر شامل کرنے کے لیے آرڈرز کھولیں۔",
+      "goToOrders": "آرڈرز پر جائیں",
+      "summary": {
+        "loading": "ادائیگیوں کے کل لوڈ ہو رہے ہیں",
+        "orders": "آرڈرز",
+        "collected": "وصول شدہ",
+        "collectedNone": "ابھی کچھ وصول نہیں ہوا۔"
+      },
+      "filters": {
+        "search": "تلاش",
+        "searchPlaceholder": "آرڈر نمبر، کسٹمر یا حوالہ",
+        "status": "حالت",
+        "allStatuses": "تمام حالتیں",
+        "method": "طریقہ",
+        "allMethods": "تمام طریقے",
+        "prepaid": "پیشگی ادا شدہ",
+        "cod": "ڈیلیوری پر نقد",
+        "gatewayOption": "کوئی گیٹ وے...",
+        "gatewayCode": "گیٹ وے کوڈ",
+        "gatewayCodePlaceholder": "مثلاً razorpay",
+        "from": "از",
+        "to": "تا",
+        "rangeInverted": "آغاز کی تاریخ اختتام کی تاریخ کے بعد ہے، اس لیے تاریخ کی حد نظر انداز کر دی گئی۔",
+        "reset": "فلٹرز ری سیٹ کریں"
+      },
+      "table": {
+        "caption": "اسٹور آرڈرز کی ادائیگیاں، تازہ ترین پہلے",
+        "order": "آرڈر",
+        "customer": "کسٹمر",
+        "status": "حالت",
+        "method": "طریقہ",
+        "paidVia": "ذریعہ ادائیگی",
+        "reference": "حوالہ",
+        "amount": "رقم",
+        "shop": "دکان",
+        "date": "تاریخ",
+        "methodPrepaid": "پیشگی ادا شدہ",
+        "methodCod": "ڈیلیوری پر نقد",
+        "via": {
+          "razorpay_link": "Razorpay لنک",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "چیٹ میں WhatsApp Pay",
+        "intro": "خریداروں کو WhatsApp چھوڑے بغیر آرڈر کی ادائیگی کرنے دیں (UPI، کارڈز، نیٹ بینکنگ، والیٹس) اور رقم اپنے Razorpay، PayU، BillDesk یا Zaakpay اکاؤنٹ میں وصول کریں۔",
+        "indiaOnly": "فی الحال صرف بھارت معاون مارکیٹ ہے: ملک اور کرنسی بھارت اور INR پر مقرر ہیں۔",
+        "viewOnly": "آپ WhatsApp Pay کی کنفیگریشنز دیکھ سکتے ہیں مگر بدل نہیں سکتے۔ ادائیگیوں کا انتظام کرنے کی اجازت کے لیے ورک اسپیس ایڈمن سے کہیں۔",
+        "howTitle": "اسے کیسے سیٹ اپ کریں",
+        "how1": "WhatsApp Manager میں بھارت کی Payments کے تحت Direct Pay Method بنائیں اور اپنا گیٹ وے اکاؤنٹ منسلک کریں۔",
+        "how2": "اسے نام دیں اور وہی نام یہاں کاپی کریں۔ یہ اس ایپ سے نہیں بن سکتا، یہ Meta کی طرف کا مرحلہ ہے۔",
+        "how3": "کنفیگریشن محفوظ کریں، پھر آرڈرز کھولیں اور کسی بھی آرڈر پر WhatsApp پر ادائیگی مانگیں۔",
+        "how4": "خریدار Review and Pay پر ٹیپ کرتا ہے، چیٹ میں ادائیگی کرتا ہے اور Meta کی تصدیق کے بعد آرڈر ادا شدہ نشان زد ہو جاتا ہے۔",
+        "listTitle": "آپ کی کنفیگریشنز",
+        "loading": "کنفیگریشنز لوڈ ہو رہی ہیں",
+        "emptyTitle": "ابھی کوئی ادائیگی کنفیگریشن نہیں",
+        "emptyMessage": "چیٹ میں ادائیگیاں لینا شروع کرنے کے لیے اس صفحے پر ایک شامل کریں۔",
+        "emptyMessageReadOnly": "ابھی کسی نے شامل نہیں کی۔",
+        "market": "بھارت · INR",
+        "autoChargeOn": "خودکار چارج آن",
+        "active": "فعال",
+        "off": "بند",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "کنفیگریشن محفوظ ہو گئی",
+          "removed": "کنفیگریشن ہٹا دی گئی"
+        },
+        "addTitle": "ادائیگی کنفیگریشن شامل کریں",
+        "editTitle": "{name} میں ترمیم کریں",
+        "name": "کنفیگریشن کا نام",
+        "nameLocked": "نام کنفیگریشن کی شناخت ہے۔ نام بدلنے کے لیے اسے ہٹا کر دوبارہ شامل کریں۔",
+        "updatesExisting": "اس نام کی کنفیگریشن موجود ہے: محفوظ کرنے سے وہ اپ ڈیٹ ہو جائے گی۔",
+        "nameHint": "WhatsApp Manager (Payments، India) میں Direct Pay Method کے نام سے بالکل ایک جیسا ہونا چاہیے۔",
+        "nameInvalid": "1 سے {max} حروف کا نام درج کریں۔",
+        "namePlaceholder": "مثلاً my-razorpay-pay",
+        "gateway": "گیٹ وے",
+        "activeLabel": "فعال",
+        "autoCharge": "نئے آرڈرز خود چارج کریں",
+        "autoChargeHint": "آرڈر دیتے ہی چیٹ میں ادائیگی کی درخواست خود بخود بھیجیں۔",
+        "save": "کنفیگریشن محفوظ کریں",
+        "cancelEdit": "ترمیم منسوخ کریں",
+        "removeTitle": "{name} ہٹائیں؟",
+        "removeMessage": "اس کنفیگریشن سے آرڈرز اب چیٹ میں چارج نہیں ہو سکیں گے۔ WhatsApp Manager میں Direct Pay Method کو چھوا نہیں جاتا۔",
+        "removeConfirm": "کنفیگریشن ہٹائیں"
+      }
+    }
+  }
+}

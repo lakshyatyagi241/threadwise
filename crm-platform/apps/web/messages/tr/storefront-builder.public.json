@@ -1,0 +1,336 @@
+{
+  "shopPublic": {
+    "common": {
+      "close": "Kapat",
+      "ok": "Tamam",
+      "done": "Bitti",
+      "skip": "İçeriğe atla"
+    },
+    "strip": "WhatsApp'tan sipariş verin · Kapıda ödeme mevcut · Ücretsiz sohbet, hızlı yanıt",
+    "header": {
+      "navLabel": "Mağaza bölümleri",
+      "shop": "Mağaza",
+      "categories": "Kategoriler",
+      "about": "Hakkında",
+      "searchPlaceholder": "Ürün ara…",
+      "searchLabel": "Ürün ara",
+      "wishlist": "İstek listesi",
+      "compare": "Karşılaştır",
+      "cart": "Sepet",
+      "withCount": "{label}, {count, plural, other {# ürün}}"
+    },
+    "hero": {
+      "welcome": "{shop} mağazasına hoş geldiniz.",
+      "sub": "Özenle seçilmiş ürünler. Her ürünü doğrudan WhatsApp'tan sipariş edin — ödeme formu yok, uygulama kurulumu yok.",
+      "trust": {
+        "cod": "Kapıda ödeme",
+        "chat": "Ücretsiz sohbet desteği",
+        "returns": "Kolay iade"
+      }
+    },
+    "catalog": {
+      "label": "Ürünler",
+      "emptyTitle": "Henüz ürün yok",
+      "emptyBody": "Mağaza sahibi hâlâ kurulum yapıyor — lütfen kısa süre sonra tekrar kontrol edin.",
+      "count": "{count, plural, other {# ürün}}",
+      "sort": {
+        "label": "Ürünleri sırala",
+        "featured": "Sırala · Öne çıkanlar",
+        "priceAsc": "Fiyat · Düşükten yükseğe",
+        "priceDesc": "Fiyat · Yüksekten düşüğe",
+        "nameAsc": "Ad · A → Z",
+        "nameDesc": "Ad · Z → A"
+      },
+      "view": {
+        "label": "Düzen",
+        "grid": "Izgara görünümü",
+        "list": "Liste görünümü"
+      },
+      "filters": {
+        "title": "Filtrele",
+        "category": "Kategori",
+        "price": "Fiyat",
+        "min": "En az",
+        "max": "En çok",
+        "range": "Aralık: {min} — {max}",
+        "availability": "Stok durumu",
+        "inStock": "Yalnızca stokta olanlar",
+        "onSale": "İndirimde",
+        "reset": "Filtreleri sıfırla",
+        "clear": "Filtreleri temizle"
+      },
+      "noMatch": "Bu filtrelerle eşleşen bir şey yok",
+      "showMore": "Daha fazla ürün göster",
+      "loading": "Yükleniyor…",
+      "retry": "Yeniden dene",
+      "showing": "{total} üründen {shown} tanesi gösteriliyor"
+    },
+    "card": {
+      "new": "Yeni",
+      "soldOut": "Tükendi",
+      "soldOutNamed": "{name}: tükendi",
+      "addToCart": "Sepete ekle",
+      "addToCartNamed": "{name} ürününü sepete ekle",
+      "addWish": "{name} ürününü istek listesine ekle",
+      "removeWish": "{name} ürününü istek listesinden çıkar",
+      "quickView": "{name} için hızlı görünüm",
+      "quickViewTitle": "Hızlı görünüm",
+      "was": "Önceki"
+    },
+    "quick": {
+      "details": "Tüm ayrıntılar →"
+    },
+    "product": {
+      "gallery": "Ürün görselleri",
+      "showImage": "{n}. görseli göster",
+      "breadcrumb": "Buradasınız",
+      "save": "%{percent} tasarruf",
+      "onlyLeft": "Yalnızca {count} kaldı",
+      "inStock": "Stokta · kargoya hazır",
+      "quantity": "Adet",
+      "addCompare": "Karşılaştırmaya ekle",
+      "removeCompare": "Karşılaştırmadan çıkar",
+      "share": "Bu ürünü paylaş",
+      "shareTitle": "Bu ürünü paylaş",
+      "ask": "WhatsApp'tan soru sorun",
+      "sku": "SKU",
+      "category": "Kategori",
+      "weight": "Ağırlık",
+      "grams": "{count} g",
+      "delivery": "Teslimat",
+      "deliveryTime": "2–5 iş günü",
+      "tags": "Etiketler",
+      "tabs": {
+        "label": "Ürün bilgileri",
+        "desc": "Açıklama",
+        "ship": "Kargo ve iade",
+        "reviews": "Yorumlar"
+      },
+      "noDescription": "Henüz açıklama yok — daha fazla bilgi için satıcıya WhatsApp'tan yazın.",
+      "shippingHeading": "Kargo.",
+      "shippingBody": "Siparişler 1–2 iş günü içinde gönderilir. Teslimat süresi konumunuza göre değişir — genellikle 2–5 iş günü.",
+      "freeAbove": "{amount} üzeri siparişlerde kargo ücretsizdir.",
+      "returnsHeading": "İade.",
+      "returnsBody": "Kullanılmamış ürünler teslimattan itibaren 7 gün içinde iade edilebilir. İade başlatmak için WhatsApp'tan yazın — kargo alımını biz ayarlarız.",
+      "reviewCount": "{count, plural, other {# yorum}}",
+      "anonymous": "Anonim",
+      "ratingOf": "5 üzerinden {rating}",
+      "noReviews": "Henüz yorum yok — bu ürünü ilk değerlendiren siz olun.",
+      "related": "Bunlar da hoşunuza gidebilir"
+    },
+    "review": {
+      "write": "Yorum yaz",
+      "name": "Adınız",
+      "rating": "Puan",
+      "ratings": {
+        "1": "Kötü",
+        "2": "Zayıf",
+        "3": "Idare eder",
+        "4": "İyi",
+        "5": "Mükemmel"
+      },
+      "bodyLabel": "Yorumunuz",
+      "body": "Deneyiminizi paylaşın (isteğe bağlı)",
+      "submit": "Yorumu gönder",
+      "nameRequired": "Lütfen adınızı ekleyin.",
+      "thanks": "Yorumunuz için teşekkürler!",
+      "network": "Ağ hatası. Lütfen yeniden deneyin.",
+      "failed": "Yorumunuz gönderilemedi."
+    },
+    "cart": {
+      "title": "Sepetiniz",
+      "subtotal": "Ara toplam",
+      "shipping": "Kargo",
+      "free": "ÜCRETSİZ ✓",
+      "total": "Toplam",
+      "addForFree": "Ücretsiz kargo için {amount} daha ekleyin",
+      "order": "WhatsApp'tan sipariş ver →",
+      "payVia": "{method} ile öde · Kapıda ödeme",
+      "methods": {
+        "upi": "UPI",
+        "razorpay": "Razorpay",
+        "card": "Kart",
+        "paypal": "PayPal",
+        "bank": "Banka havalesi"
+      },
+      "codOnly": "Kapıda ödeme · Sohbetten onaylayın",
+      "emptyTitle": "Sepetiniz boş",
+      "emptyBody": "Kataloğa göz atın ve birkaç favori ekleyin.",
+      "keepBrowsing": "Gezinmeye devam et",
+      "quantityOf": "{name} adedi",
+      "decrease": "Adedi azalt",
+      "increase": "Adedi artır",
+      "remove": "{name} ürününü sepetten çıkar",
+      "fullTitle": "Sepetiniz dolu",
+      "fullBody": "Bir sepet en fazla 100 farklı ürün tutabilir. Önce bunları sipariş edin, ardından yeni bir sepet başlatın."
+    },
+    "wish": {
+      "title": "İstek listesi",
+      "emptyTitle": "Henüz favori yok",
+      "emptyBody": "Daha sonra kaydetmek için herhangi bir üründe kalbe dokunun.",
+      "remove": "{name} ürününü istek listesinden çıkar"
+    },
+    "compare": {
+      "title": "Ürünleri karşılaştır",
+      "emptyTitle": "Karşılaştırılacak bir şey yok",
+      "emptyBody": "Yan yana görmek için herhangi iki üründe “Karşılaştır” seçeneğine dokunun.",
+      "attribute": "Özellik",
+      "rows": {
+        "image": "Görsel",
+        "name": "Ad",
+        "price": "Fiyat",
+        "sku": "SKU",
+        "category": "Kategori",
+        "description": "Açıklama"
+      },
+      "remove": "{name} ürününü karşılaştırmadan çıkar",
+      "bar": "Karşılaştırılacak ürünler",
+      "open": "Karşılaştır →",
+      "fullTitle": "Karşılaştırma dolu",
+      "fullBody": "Aynı anda en fazla {count} ürün karşılaştırabilirsiniz. Yeni bir ürün eklemek için karşılaştırma çubuğundan birini çıkarın."
+    },
+    "stock": {
+      "title": "Stokta yalnızca {count} tane var",
+      "soldOut": "Bu ürün tükendi. Yakında yeniden stoklanacak — haberdar olmak için WhatsApp'tan yazın.",
+      "limit": "{count, plural, other {Yalnızca # birim mevcut ve bunların hepsi zaten sepetinizde.}}",
+      "maxTitle": "Sınıra ulaşıldı",
+      "maxBody": "Bir seferde bir üründen en fazla {count} adet sipariş verebilirsiniz."
+    },
+    "toast": {
+      "added": "{name} · sepete eklendi",
+      "wishAdded": "İstek listesine eklendi ♡",
+      "wishRemoved": "İstek listesinden çıkarıldı",
+      "compareAdded": "Karşılaştırmaya eklendi",
+      "compareRemoved": "Karşılaştırmadan çıkarıldı"
+    },
+    "checkout": {
+      "title": "Ödeme",
+      "summary": "{count, plural, other {# ürün}} · {total}",
+      "name": "Adınız",
+      "phone": "WhatsApp numarası",
+      "phonePlaceholder": "+1 555 123 4567",
+      "address": "Teslimat adresi",
+      "note": "Not (isteğe bağlı)",
+      "coupon": "İndirim kodu",
+      "apply": "Uygula",
+      "payment": "Ödeme",
+      "prepaid": "Çevrimiçi ödeme / kapıda ödeme ayrıntıları",
+      "cod": "Kapıda ödeme",
+      "place": "Siparişi ver",
+      "placing": "Sipariş veriliyor…",
+      "opening": "Sipariş verildi! WhatsApp açılıyor…",
+      "nameRequired": "Lütfen adınızı girin.",
+      "phoneInvalid": "Lütfen geçerli bir WhatsApp numarası girin.",
+      "cartEmpty": "Sepetiniz boş.",
+      "emptyTitle": "Sepetiniz boş",
+      "emptyBody": "Ödemeye geçmeden önce kataloğa göz atın ve bir ürün ekleyin.",
+      "failed": "Sipariş verilemedi. Lütfen yeniden deneyin.",
+      "network": "Ağ hatası. Lütfen yeniden deneyin.",
+      "couponSave": "{discount} tasarruf ediyorsunuz · Yeni toplam {total}",
+      "couponFree": "Ücretsiz kargo uygulandı · Yeni toplam {total}",
+      "couponInvalid": "Bu kod bu sepet için geçerli değil.",
+      "couponNetwork": "Bu kod kontrol edilemedi.",
+      "couponFallback": "Geçersiz kod."
+    },
+    "errors": {
+      "itemsUnavailable": "Bu ürünler artık mevcut değil. Lütfen sayfayı yenileyip tekrar deneyin.",
+      "notAvailable": "Bu mağaza kullanılamıyor.",
+      "rateLimited": "Çok fazla istek. Lütfen biraz bekleyip yeniden deneyin."
+    },
+    "placed": {
+      "title": "Sipariş verildi",
+      "track": "#{orderNo} siparişini takip et →"
+    },
+    "share": {
+      "title": "Paylaş",
+      "url": "Paylaşılacak bağlantı",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı ✓",
+      "copyFailed": "Bağlantı kopyalanamadı",
+      "linkCopied": "Bağlantı kopyalandı",
+      "whatsapp": "WhatsApp",
+      "whatsappHint": "Bir sohbete gönder",
+      "email": "E-posta",
+      "emailHint": "Posta uygulamasını aç",
+      "telegram": "Telegram",
+      "telegramHint": "Sohbette paylaş",
+      "more": "Daha fazla…",
+      "moreHint": "Telefon paylaşım menüsü",
+      "showQr": "QR kodunu göster →",
+      "qrTitle": "Bağlantının QR kodu",
+      "scan": "Mağazayı açmak için tarayın"
+    },
+    "info": {
+      "freeAbove": "{amount} üzeri ücretsiz kargo.",
+      "shipping": {
+        "title": "Kargo ve teslimat",
+        "body": "Siparişler WhatsApp üzerinden onaylanır. Teslimat süresi konumunuza göre değişir — genellikle 2–5 iş günü."
+      },
+      "returns": {
+        "title": "İadeler",
+        "body": "Kullanılmamış ürünler 7 gün içinde iade edilebilir. İade başlatmak için WhatsApp'tan yazın."
+      },
+      "howToOrder": {
+        "title": "Nasıl sipariş verilir",
+        "body": "Kataloğa göz atın, sepete ekleyin, ardından “WhatsApp'tan sipariş ver” seçeneğine dokunun. Siparişinizi sohbetten onaylar ve teslimatı ayarlarız."
+      },
+      "privacy": {
+        "title": "Gizlilik",
+        "body": "Siparişinizi yerine getirmek için yalnızca sohbette paylaştığınız bilgileri topluyoruz. Verilerinizi asla satmayız."
+      }
+    },
+    "footer": {
+      "blurb": "Özenle seçilmiş ürünler, WhatsApp'tan telefon görüşmesi gibi sipariş edilir. Uygulama gerekmez — satın almak için bize yazmanız yeterli.",
+      "paymentsLabel": "Ödeme yolları",
+      "pay": {
+        "whatsapp": "WhatsApp",
+        "upi": "UPI",
+        "cod": "Kapıda ödeme",
+        "bank": "Banka havalesi"
+      },
+      "shopHeading": "Mağaza",
+      "allProducts": "Tüm ürünler",
+      "helpHeading": "Yardım",
+      "help": {
+        "shipping": "Kargo",
+        "returns": "İadeler",
+        "howToOrder": "Nasıl sipariş verilir",
+        "privacy": "Gizlilik"
+      },
+      "contactHeading": "İletişim",
+      "whatsappLink": "WhatsApp · {number}",
+      "hours": "Pzt–Paz · 09:00–21:00",
+      "hoursToast": "Saatler: 09:00–21:00",
+      "copyright": "© {year} {shop}"
+    },
+    "order": {
+      "title": "Sipariş #{orderNo}",
+      "progress": "Sipariş durumu",
+      "cancelled": "Bu sipariş iptal edildi. Beklenmedik bir durumsa bize ulaşın.",
+      "steps": {
+        "placed": "Verildi",
+        "confirmed": "Onaylandı",
+        "paid": "Ödendi",
+        "shipped": "Kargoya verildi"
+      },
+      "stepDone": "tamamlandı",
+      "stepTodo": "henüz değil",
+      "items": "Ürünler",
+      "qty": "Adet {qty} · {price}",
+      "free": "Ücretsiz",
+      "deliveryTo": "Teslimat adresi",
+      "payNow": "Şimdi öde",
+      "message": "Bu sipariş hakkında bize yazın"
+    },
+    "notFound": {
+      "kicker": "Çalışma alanında kayboldunuz",
+      "title": "Bu sayfa yanlış bir yere çıktı.",
+      "body": "Aradığınızı bulamadık. Bağlantı bozulmuş, sayfa taşınmış veya hiç var olmamış olabilir.",
+      "back": "Geri dön",
+      "signIn": "Oturum aç",
+      "help": "Yardıma mı ihtiyacınız var?",
+      "support": "Destekle görüşün",
+      "metaTitle": "Sayfa bulunamadı"
+    }
+  }
+}

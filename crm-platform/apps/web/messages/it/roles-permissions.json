@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "Ruoli e permessi",
+      "roles": "Ruoli",
+      "permissions": "Permessi",
+      "staff": "Ruoli dello staff"
+    },
+    "common": {
+      "admin": "Admin",
+      "breadcrumb": "Percorso di navigazione",
+      "loading": "Caricamento…",
+      "retry": "Riprova",
+      "requestId": "ID richiesta",
+      "cancel": "Annulla",
+      "noAccess": {
+        "title": "Non hai accesso a questa schermata",
+        "body": "I tuoi ruoli non includono il permesso di piattaforma necessario per questa schermata. Chiedi a un Super Admin di concederlo.",
+        "bodyWithKey": "Questa schermata richiede il permesso di piattaforma {permission}. Chiedi a un Super Admin di aggiungerlo a uno dei tuoi ruoli.",
+        "back": "Torna alla console"
+      },
+      "errors": {
+        "unexpected": "Si è verificato un errore lato nostro. Riprova; se succede ancora, indica l’ID richiesta.",
+        "request": "Impossibile completare la richiesta.",
+        "validation": "Controlla il modulo e riprova.",
+        "validationField": "{message}",
+        "conflict": "Qualcun altro ha modificato questo ruolo mentre lavoravi. Ricarica per vedere la sua versione, poi riapplica le tue modifiche.",
+        "noAccess": "Per questa operazione ti serve il permesso di piattaforma {permission}.",
+        "nameTaken": "Questo nome è già in uso.",
+        "nameRequired": "Il nome del ruolo è obbligatorio.",
+        "permissionNameRequired": "Il nome del permesso è obbligatorio.",
+        "permissionNameFormat": "Usa lettere minuscole, cifre e trattini bassi, con punti tra le parti.",
+        "locked": "Super Admin è bloccato a livello di sistema: non può essere rinominato, privato dei permessi né eliminato.",
+        "lockedDelete": "Il ruolo Super Admin è bloccato a livello di sistema e non può essere eliminato.",
+        "permissionSystem": "Questo permesso è verificato dalla piattaforma e non può essere eliminato.",
+        "permissionUnknown": "Questi permessi non sono nel catalogo: {names}.",
+        "reassignSame": "Scegli un altro ruolo in cui spostare gli utenti.",
+        "lastSuperAdmin": "Deve esserci almeno un Super Admin attivo.",
+        "privilegedRole": "Solo un Super Admin può concedere o revocare il ruolo Super Admin.",
+        "notFound": "Questo elemento non esiste più. Potrebbe essere stato eliminato."
+      }
+    },
+    "list": {
+      "crumb": "Ruoli",
+      "eyebrow": "Amministrazione · Utenti e accessi · Ruoli",
+      "titleLead": "Ruoli e",
+      "titleAccent": "permessi",
+      "description": "Definisci cosa può fare ciascun ruolo sulla piattaforma. A ogni utente viene assegnato un ruolo; i permessi sono raggruppati per ruolo.",
+      "managePermissions": "Gestisci permessi",
+      "addRole": "Aggiungi ruolo",
+      "kpi": {
+        "label": "Totali dei ruoli",
+        "total": "Ruoli totali",
+        "totalHint": "{system} di sistema · {custom} personalizzati",
+        "permissions": "Permessi totali",
+        "permissionsHint": "nei moduli",
+        "users": "Utenti con ruolo",
+        "usersHint": "in tutti i ruoli",
+        "noUsers": "Ruoli senza utenti",
+        "noUsersHint": "valuta l’archiviazione"
+      },
+      "filter": {
+        "label": "Filtra i ruoli per tipo",
+        "all": "Tutti",
+        "system": "Di sistema",
+        "custom": "Personalizzati",
+        "search": "Cerca ruoli…",
+        "searchLabel": "Cerca ruoli"
+      },
+      "table": {
+        "caption": "Ruoli della piattaforma",
+        "index": "#",
+        "name": "Nome del ruolo",
+        "type": "Tipo",
+        "users": "Utenti",
+        "permissions": "Permessi",
+        "lastEdited": "Ultima modifica",
+        "actions": "Azioni"
+      },
+      "systemRole": "Ruolo di sistema",
+      "customRole": "Ruolo personalizzato",
+      "systemBadge": "Di sistema",
+      "customBadge": "Personalizzato",
+      "row": {
+        "menu": "Azioni per {name}",
+        "edit": "Modifica ruolo",
+        "delete": "Elimina"
+      },
+      "footer": {
+        "showing": "Mostrati {shown} di {total} ruoli",
+        "add": "+ Aggiungi ruolo"
+      },
+      "empty": {
+        "none": "Nessun ruolo ancora definito. <link>Crea il primo ruolo</link>.",
+        "noMatch": "Nessun ruolo corrisponde ai filtri.",
+        "clear": "Azzera filtri"
+      },
+      "delete": {
+        "title": "Elimina ruolo",
+        "message": "Eliminare il ruolo {name}? Gli utenti assegnati a questo ruolo perderanno tutti i suoi permessi. L’operazione non può essere annullata.",
+        "confirm": "Sì, elimina",
+        "cancel": "Annulla"
+      },
+      "toasts": {
+        "deleted": "Ruolo «{name}» eliminato."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Ruoli",
+      "crumbNew": "Nuovo",
+      "eyebrowNew": "Amministrazione · Ruoli · Nuovo",
+      "eyebrowEdit": "Amministrazione · Modifica ruolo",
+      "titleLead": "Crea un nuovo",
+      "titleAccent": "ruolo",
+      "description": "Scegli un nome, poi seleziona le caselle per dare a questo ruolo accesso a moduli specifici. Puoi modificarlo in qualsiasi momento.",
+      "summary": "{count} / {total} permessi · ultima modifica {date}.",
+      "userChip": "{count, plural, one {# utente} other {# utenti}}",
+      "save": "Salva modifiche",
+      "create": "Crea ruolo",
+      "saving": "Salvataggio…",
+      "reload": "Ricarica il ruolo",
+      "discard": "Ci sono modifiche non salvate. Uscire senza salvare?",
+      "duplicatedBanner": "Ruolo duplicato come «{name}». Modifica la copia qui sotto.",
+      "lockedNotice": "{name} è bloccato a livello di sistema: non può essere rinominato, privato dei permessi né eliminato.",
+      "details": "Dettagli del ruolo",
+      "name": "Nome del ruolo",
+      "namePlaceholder": "es. Responsabile vendite",
+      "template": "Parti da un modello",
+      "templateBlank": "Vuoto · nessun permesso",
+      "templateOption": "{name} · {count, plural, one {# permesso} other {# permessi}}",
+      "templateBusy": "Caricamento del modello…",
+      "descriptionLabel": "Descrizione",
+      "descriptionPlaceholder": "Cosa fa questo ruolo? Visibile agli amministratori.",
+      "toasts": {
+        "created": "Ruolo «{name}» creato.",
+        "updated": "Ruolo «{name}» aggiornato."
+      }
+    },
+    "matrix": {
+      "title": "Assegna permessi",
+      "counter": "{count, number} / {total, number} selezionati",
+      "selectAll": "Seleziona tutti i permessi",
+      "module": "Modulo",
+      "selectAllColumn": "Seleziona tutto",
+      "available": "Permessi disponibili",
+      "selectAllModule": "Seleziona tutto",
+      "selectAllOf": "Seleziona tutti i permessi di {module}",
+      "empty": "Nessun permesso ancora definito. <link>Creane uno</link>.",
+      "emptyPlain": "Nessun permesso ancora definito."
+    },
+    "dangerZone": {
+      "title": "Zona pericolosa",
+      "irreversible": "irreversibile",
+      "duplicate": {
+        "title": "Duplica ruolo",
+        "hint": "Crea una copia con gli stessi permessi",
+        "action": "Duplica",
+        "busy": "Duplicazione…"
+      },
+      "reassign": {
+        "title": "Riassegna tutti gli utenti",
+        "hint": "Sposta {count, plural, one {# utente} other {# utenti}} in un altro ruolo",
+        "targetLabel": "Sposta utenti in",
+        "placeholder": "A…",
+        "action": "Sposta",
+        "busy": "Spostamento…"
+      },
+      "moved": "{count} utente/i spostato/i da «{from}» a «{to}».",
+      "delete": {
+        "title": "Elimina ruolo",
+        "hint": "Rimuove il ruolo e scollega tutti gli utenti.",
+        "action": "Elimina",
+        "dialogTitle": "Elimina ruolo",
+        "dialogMessage": "Eliminare il ruolo {name}? Gli utenti assegnati a questo ruolo perderanno tutti i suoi permessi. L’operazione non può essere annullata.",
+        "confirm": "Sì, elimina",
+        "cancel": "Annulla"
+      },
+      "deleted": "Ruolo «{name}» eliminato."
+    },
+    "permissions": {
+      "crumb": "Permessi",
+      "eyebrow": "Amministrazione · Utenti e accessi · Permessi",
+      "titleLead": "Tutti",
+      "titleAccent": "permessi",
+      "description": "Ogni flag di permesso riconosciuto dalla piattaforma, raggruppato per modulo. Aggiungi qui un nuovo flag, poi assegnalo ai ruoli nell’editor dei ruoli.",
+      "backToRoles": "Torna ai ruoli",
+      "add": "Aggiungi permesso",
+      "kpi": {
+        "label": "Totali dei permessi",
+        "total": "Permessi totali",
+        "totalHint": "in {modules, plural, one {# modulo} other {# moduli}}",
+        "used": "Usati nei ruoli",
+        "usedHint": "assegnati ad almeno 1 ruolo",
+        "orphans": "Permessi orfani",
+        "orphansHint": "assegnati a 0 ruoli",
+        "last": "Ultimo aggiunto"
+      },
+      "filter": {
+        "search": "Cerca nome del permesso…",
+        "searchLabel": "Cerca nome del permesso",
+        "moduleLabel": "Modulo",
+        "allModules": "Tutti i moduli",
+        "count": "{count, plural, one {# permesso} other {# permessi}} in {modules, plural, one {# modulo} other {# moduli}}"
+      },
+      "groupsLabel": "Permessi per modulo",
+      "groupCount": "{count, plural, one {# permesso} other {# permessi}}",
+      "orphan": "orfano",
+      "system": "sistema",
+      "systemHint": "Verificato dalla piattaforma, quindi non può essere eliminato.",
+      "inRoles": "in {count, plural, one {# ruolo} other {# ruoli}}",
+      "deleteName": "Elimina permesso {name}",
+      "empty": {
+        "none": "Nessun permesso ancora definito. <link>Crea il primo</link>.",
+        "noMatch": "Nessun permesso corrisponde alla ricerca."
+      },
+      "delete": {
+        "action": "Elimina",
+        "title": "Elimina permesso",
+        "message": "Eliminare il permesso {name}? Qualsiasi ruolo che lo usa perde immediatamente quella capacità.",
+        "confirm": "Sì, elimina",
+        "cancel": "Annulla"
+      },
+      "toasts": {
+        "deleted": "Permesso «{name}» eliminato."
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "Permessi",
+      "crumbNew": "Nuovo",
+      "eyebrow": "Amministrazione · Permessi · Nuovo",
+      "titleLead": "Crea un nuovo",
+      "titleAccent": "permesso",
+      "description": "Aggiungi un flag di capacità granulare. Una volta creato, assegnalo a uno o più ruoli nell’editor dei ruoli.",
+      "create": "Crea permesso",
+      "creating": "Creazione…",
+      "details": "Dettagli del permesso",
+      "module": "Modulo",
+      "modulePlaceholder": "Scegli un modulo",
+      "moduleHint": "I permessi sono raggruppati per modulo nell’editor dei ruoli.",
+      "action": "Azione",
+      "actionHint": "Minuscole, senza spazi. Verranno combinate come",
+      "actionPlaceholder": "es. export · rimborso · approva",
+      "name": "Nome del permesso",
+      "namePlaceholder": "modulo.azione — compilato automaticamente dai campi sopra",
+      "nameHint": "Compilato automaticamente da modulo + azione. Modificalo solo se ti serve una stringa personalizzata.",
+      "tip": "<b>Convenzione di denominazione:</b> usa <code>modulo.azione</code> in minuscolo. Esempi: <code>campaigns.send</code>, <code>billing.refund</code>, <code>audit.export</code>.",
+      "preview": {
+        "title": "Anteprima del permesso",
+        "appearsUnder": "Comparirà sotto <b>{module}</b> nell’editor dei ruoli.",
+        "selectedModule": "modulo selezionato"
+      },
+      "code": {
+        "title": "Riferimento nel codice",
+        "hint": "Usa <code>@PlatformPermission()</code> su una route della piattaforma per richiedere questo permesso."
+      },
+      "tipCard": "<b>Suggerimento:</b> i permessi denominati <code>modulo.azione</code> si raggruppano automaticamente nell’editor dei ruoli.",
+      "toasts": {
+        "created": "Permesso «{name}» creato."
+      }
+    },
+    "staff": {
+      "crumbRoles": "Ruoli",
+      "crumb": "Ruoli dello staff",
+      "eyebrow": "Amministrazione · Utenti e accessi · Ruoli dello staff",
+      "titleLead": "Staff",
+      "titleAccent": "ruoli",
+      "description": "Assegna a ciascun operatore di questa console i ruoli di piattaforma che decidono cosa può fare. Il salvataggio sostituisce i ruoli dell’operatore con esattamente quelli selezionati.",
+      "backToRoles": "Torna ai ruoli",
+      "caption": "Operatori e relativi ruoli di piattaforma",
+      "table": {
+        "operator": "Operatore",
+        "tier": "Accesso alla console",
+        "status": "Stato",
+        "roles": "Ruoli di piattaforma",
+        "actions": "Azioni"
+      },
+      "tier": {
+        "super_admin": "Super admin",
+        "support": "Assistenza",
+        "auditor": "Auditor"
+      },
+      "status": {
+        "active": "Attivo",
+        "suspended": "Sospeso"
+      },
+      "noRoles": "Nessun ruolo",
+      "rolesOf": "Ruoli di {name}",
+      "assign": "Assegna ruoli",
+      "assignFor": "Assegna ruoli a {name}",
+      "empty": "Nessun operatore ancora.",
+      "dialog": {
+        "title": "Assegna ruoli a {name}",
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "save": "Salva ruoli",
+        "saving": "Salvataggio…",
+        "hint": "Seleziona ogni ruolo che questo operatore deve avere.",
+        "superOnly": "Solo un Super Admin può concedere o revocare questo ruolo.",
+        "count": "{count, plural, =0 {Nessun ruolo selezionato} one {# ruolo selezionato} other {# ruoli selezionati}}"
+      },
+      "toasts": {
+        "saved": "Ruoli aggiornati per «{name}»."
+      }
+    }
+  }
+}

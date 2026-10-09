@@ -1,0 +1,531 @@
+{
+  "scheduled-queue-warmer": {
+    "nav": {
+      "scheduled": "Dijadwalkan",
+      "warmer": "Pemanasan"
+    },
+    "common": {
+      "dismiss": "Abaikan"
+    },
+    "status": {
+      "scheduled": "Antre",
+      "running": "Berjalan",
+      "paused": "Dijeda",
+      "completed": "Selesai",
+      "failed": "Gagal",
+      "cancelled": "Dibatalkan"
+    },
+    "type": {
+      "plain": "Teks biasa",
+      "template": "Templat",
+      "media": "Media",
+      "location": "Lokasi"
+    },
+    "errors": {
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "FORBIDDEN": "Anda tidak memiliki izin untuk melakukan ini.",
+      "VALIDATION_FAILED": "Beberapa kolom perlu diperhatikan.",
+      "ROW_VERSION_CONFLICT": "Jadwal ini telah berubah. Muat ulang dan coba lagi.",
+      "PLAN_FEATURE_LOCKED": "Paket Anda tidak mencakup fitur ini.",
+      "PLAN_LIMIT_REACHED": "Anda telah mencapai batas paket Anda.",
+      "WA_UNOFFICIAL_DISABLED": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi.",
+      "AUTH_SEND_HALTED": "Pengiriman dihentikan untuk workspace ini.",
+      "upgrade": "Lihat paket dan tingkatkan",
+      "requestId": "Permintaan {id}"
+    },
+    "actions": {
+      "done": {
+        "pause": "Jadwal dijeda.",
+        "resume": "Jadwal dilanjutkan.",
+        "cancel": "Jadwal dibatalkan.",
+        "run-now": "Jadwal sedang berjalan sekarang.",
+        "destroy": "Jadwal dihapus.",
+        "retry": "Jadwal diantrekan dengan waktu baru."
+      }
+    },
+    "confirm": {
+      "yes": "Ya, lanjutkan",
+      "keep": "Biarkan",
+      "cancel": {
+        "title": "Batalkan jadwal ini?",
+        "body": "“{name}” tidak akan terkirim. Tindakan ini tidak dapat dibatalkan."
+      },
+      "run-now": {
+        "title": "Jalankan jadwal ini sekarang?",
+        "body": "“{name}” akan langsung mulai dikirim, bukan pada waktu yang ditetapkan."
+      },
+      "destroy": {
+        "title": "Hapus jadwal ini?",
+        "body": "“{name}” dan daftar penerimanya akan dihapus."
+      }
+    },
+    "retry": {
+      "title": "Coba lagi dengan waktu baru",
+      "body": "Pilih waktu kirim baru untuk “{name}”. Jadwal kembali ke Antre.",
+      "date": "Tanggal kirim",
+      "time": "Waktu",
+      "timezone": "Zona waktu",
+      "keep": "Biarkan gagal",
+      "confirm": "Coba sekarang"
+    },
+    "list": {
+      "crumb": "Kampanye / Pesan terjadwal",
+      "title": "Pesan terjadwal",
+      "queued": "{n} antre",
+      "create": "Jadwalkan pesan",
+      "stats": {
+        "total": "Total terjadwal",
+        "totalHint": "di semua status",
+        "active": "Antrean aktif",
+        "activeHint": "menunggu untuk dijalankan",
+        "sent": "Total terkirim",
+        "sentHint": "pesan keluar (halaman ini)",
+        "delivery": "Tingkat pengiriman",
+        "deliveryHint": "dari yang selesai (halaman ini)"
+      },
+      "upNext": {
+        "eyebrow": "Berikutnya",
+        "title": "Dijalankan berikutnya",
+        "pending": "{n} tertunda",
+        "empty": "Belum ada yang dijadwalkan.",
+        "createOne": "Buat satu →",
+        "recurring": "berulang",
+        "queued": "antre"
+      },
+      "tip": {
+        "eyebrow": "Tips",
+        "title": "Kirim saat mereka membaca",
+        "body": "Tingkat buka tertinggi antara pukul 09.00–11.00 dan 18.00–20.00 waktu lokal kontak Anda. Pilih waktu kirim yang sesuai dengan kelompok penerima; jadwal berulang memungkinkan Anda mengaturnya sekali saja.",
+        "cta": "Jadwalkan satu"
+      },
+      "tabs": {
+        "all": "Semua",
+        "upcoming": "Mendatang",
+        "running": "Berjalan",
+        "paused": "Dijeda",
+        "completed": "Selesai",
+        "failed": "Gagal"
+      },
+      "search": "Cari berdasarkan nama…",
+      "cols": {
+        "schedule": "Jadwal",
+        "type": "Jenis",
+        "recipients": "Penerima",
+        "sendTime": "Waktu kirim",
+        "repeat": "Ulangi",
+        "status": "Status",
+        "actions": "Tindakan"
+      },
+      "recipients": {
+        "group": "Grup",
+        "tag": "Tag",
+        "queue": "Antrean",
+        "number": "Nomor"
+      },
+      "when": {
+        "overdue": "terlambat",
+        "now": "sekarang",
+        "minutes": "dalam {n} mnt",
+        "hours": "dalam {n} jam",
+        "tomorrow": "besok",
+        "date": "nanti"
+      },
+      "completedAt": "selesai {when}",
+      "once": "sekali",
+      "actions": {
+        "open": "Buka",
+        "pause": "Jeda",
+        "resume": "Lanjutkan",
+        "runNow": "Jalankan sekarang",
+        "cancel": "Batal",
+        "retry": "Coba lagi dengan waktu baru",
+        "delete": "Hapus",
+        "deleteHistory": "Hapus dari riwayat"
+      },
+      "empty": {
+        "title": "Tidak ada jadwal",
+        "none": "Jadwalkan pesan pertama Anda.",
+        "filtered": "Tidak ada jadwal yang cocok dengan filter saat ini. Coba hapus filter atau jadwalkan pesan pertama Anda.",
+        "reset": "Atur ulang filter"
+      },
+      "page": "Halaman {page} dari {pages}",
+      "prev": "Sebelumnya",
+      "next": "Berikutnya"
+    },
+    "composer": {
+      "crumb": "Terjadwal / Baru",
+      "title": "Jadwalkan pesan",
+      "back": "Kembali",
+      "forbidden": "Anda tidak memiliki izin untuk menjadwalkan pesan.",
+      "steps": "Langkah",
+      "stepNames": {
+        "basics": "Dasar",
+        "audience": "Penerima",
+        "message": "Pesan",
+        "when": "Waktu",
+        "review": "Tinjau"
+      },
+      "required": "wajib",
+      "previous": "Sebelumnya",
+      "next": "Berikutnya",
+      "submit": "Jadwalkan pesan",
+      "stepOf": "Langkah {n} dari {total}",
+      "engine": {
+        "baileys": "API tidak resmi",
+        "waba": "WhatsApp Cloud API",
+        "twilio": "Twilio"
+      },
+      "types": {
+        "plain": {
+          "title": "Teks biasa",
+          "hint": "Hanya kata dan emoji.",
+          "pill": "teks biasa"
+        },
+        "template": {
+          "title": "Templat",
+          "hint": "Templat WhatsApp yang disetujui.",
+          "pill": "templat"
+        },
+        "media": {
+          "title": "Dengan media",
+          "hint": "Gambar, video, dokumen, audio.",
+          "pill": "media"
+        },
+        "location": {
+          "title": "Lokasi",
+          "hint": "Pin latitude/longitude.",
+          "pill": "lokasi"
+        }
+      },
+      "basics": {
+        "title": "Dasar jadwal",
+        "name": "Nama jadwal",
+        "nameHint": "Label internal saja — penerima tidak melihat ini.",
+        "namePlaceholder": "contoh: Promo musim semi / segmen VIP",
+        "sender": "Pengirim",
+        "senders": "Pengirim",
+        "tickAll": "Centang semua yang berlaku",
+        "noSenders": "Tidak ada pengirim terhubung. Hubungkan nomor terlebih dahulu.",
+        "warming": "Pemanasan",
+        "splitHint": "Setiap pengirim yang dicentang menjalankan jadwalnya sendiri dengan bagian audiens yang adil.",
+        "messageType": "Jenis pesan"
+      },
+      "audience": {
+        "title": "Penerima",
+        "source": "Sumber penerima",
+        "sources": {
+          "group": {
+            "title": "Grup",
+            "hint": "Pilih satu atau lebih grup kontak yang disimpan."
+          },
+          "tag": {
+            "title": "Tag",
+            "hint": "Semua yang memiliki tag"
+          },
+          "queue": {
+            "title": "Antrean audiens",
+            "hint": "Tetapkan ulang penerima dari broadcast sebelumnya."
+          },
+          "number": {
+            "title": "Nomor",
+            "hint": "Tempel daftar secara manual."
+          }
+        },
+        "chooseGroups": "Pilih grup",
+        "chooseTags": "Pilih satu atau lebih tag",
+        "chooseQueues": "Pilih satu atau lebih broadcast sebelumnya",
+        "tickAny": "(centang berapa pun)",
+        "noGroups": "Belum ada grup",
+        "noTags": "Belum ada tag",
+        "noQueues": "Belum ada broadcast yang selesai",
+        "contacts": "Buka Kontak",
+        "broadcast": "Buka Broadcast",
+        "tagsHint": "Penerima dihitung ulang saat jadwal dijalankan, sehingga kontak yang baru diberi tag ikut disertakan.",
+        "queuesHint": "Centang broadcast sebanyak yang diinginkan. Penerima otomatis dihapus duplikatnya sebelum dikirim.",
+        "paste": "Tempel nomor",
+        "pasteHint": "Kode negara terlebih dahulu, tanpa + di depan. Baris baru atau koma memisahkan entri.",
+        "pastePlaceholder": "Satu nomor per baris — sertakan kode negara, tanpa tanda plus",
+        "total": "Total penerima:",
+        "optedOut": "{n} dikeluarkan: berhenti berlangganan atau diarsipkan"
+      },
+      "message": {
+        "title": "Susun pesan",
+        "content": "Isi pesan",
+        "caption": "Keterangan",
+        "placeholder": "Halo '{name}', pembaruan terjadwal Anda sudah tiba…",
+        "personalise": "Gunakan '{name}', '{phone}', '{email}' untuk personalisasi.",
+        "template": "Templat yang disetujui",
+        "chooseTemplate": "Pilih templat yang disetujui",
+        "browse": "Klik untuk menelusuri templat Anda",
+        "approved": "DISETUJUI",
+        "change": "Ubah",
+        "mediaLink": "Tautan media",
+        "mediaHint": "Tautan ke file (https://…). Gambar, video, audio, atau dokumen.",
+        "pin": "Pin lokasi",
+        "latitude": "Lintang",
+        "longitude": "Bujur",
+        "estimate": "Perkiraan waktu kirim",
+        "minutes": "sekitar {n} mnt",
+        "estimateHint": "dengan 60 pesan/mnt",
+        "estimateEmpty": "pilih penerima terlebih dahulu.",
+        "variables": "Variabel dalam pesan",
+        "variablesHint": "placeholder terdeteksi.",
+        "pickerEyebrow": "templat",
+        "pickerTitle": "Pilih templat",
+        "pickerHint": "Hanya templat yang disetujui dan aktif yang ditampilkan.",
+        "pickerSearch": "Cari berdasarkan nama atau bahasa…",
+        "pickerEmpty": "Tidak ada templat yang cocok.",
+        "manageTemplates": "Kelola templat →",
+        "cancel": "Batal"
+      },
+      "when": {
+        "title": "Kapan dikirim",
+        "modes": {
+          "once": {
+            "title": "Kirim sekali",
+            "hint": "Satu kali pengiriman pada tanggal & waktu yang dipilih."
+          },
+          "recurring": {
+            "title": "Berulang",
+            "hint": "Ulangi setiap hari, minggu, atau bulan dengan interval tetap."
+          }
+        },
+        "date": "Tanggal kirim",
+        "time": "Waktu",
+        "timezone": "Zona waktu",
+        "recurrence": "Pengulangan",
+        "every": "Ulangi setiap",
+        "interval": "Interval",
+        "intervals": {
+          "daily": "hari",
+          "weekly": "minggu",
+          "monthly": "bulan"
+        },
+        "end": "Berakhir",
+        "endNever": "Tidak pernah",
+        "endDate": "Pada tanggal tertentu",
+        "endOn": "Hari terakhir",
+        "days": "Hari dalam seminggu",
+        "daysHint": "Klik hari mana pun untuk mengganti. Jadwal mingguan memerlukan minimal satu.",
+        "lead": "Jadwal harus minimal {n} menit ke depan."
+      },
+      "review": {
+        "title": "Tinjau & jadwalkan",
+        "final": "final",
+        "schedule": "Jadwal",
+        "name": "Nama",
+        "sender": "Pengirim",
+        "type": "Jenis",
+        "mode": "Mode",
+        "at": "Pengiriman pertama",
+        "once": "Kirim sekali",
+        "recurring": "Setiap {n} {interval}",
+        "delivery": "Pengiriman",
+        "source": "Sumber penerima",
+        "recipients": "Penerima",
+        "estimated": "Perkiraan waktu",
+        "testTitle": "Kirim uji coba dulu",
+        "testHint": "Terima satu pesan pratinjau di nomor yang Anda masukkan sebelum pengiriman penuh.",
+        "testNumber": "Kirim uji coba ke nomor ini",
+        "testNumberHint": "Kode negara terlebih dahulu, tanpa + di depan."
+      },
+      "preview": {
+        "title": "Pratinjau langsung",
+        "channel": "WhatsApp",
+        "empty": "Pesan Anda akan muncul di sini…",
+        "media": "[ media dilampirkan ]",
+        "pin": "Pin lokasi",
+        "noTemplate": "Belum ada templat dipilih"
+      },
+      "errors": {
+        "nameRequired": "Beri nama jadwal.",
+        "senderRequired": "Pilih minimal satu pengirim.",
+        "wabaTemplate": "Nomor WhatsApp Cloud API tidak dapat mengirim jadwal templat. Hapus centangnya atau pilih jenis pesan lain.",
+        "audienceRequired": "Pilih minimal satu.",
+        "numbersRequired": "Tempel minimal satu nomor.",
+        "messageRequired": "Tulis pesannya.",
+        "messageTooLong": "Pesan lebih dari 1024 karakter.",
+        "templateRequired": "Pilih templat.",
+        "mediaLink": "Masukkan tautan yang diawali dengan http:// atau https://.",
+        "latitude": "Masukkan lintang antara -90 dan 90.",
+        "longitude": "Masukkan bujur antara -180 dan 180.",
+        "dateRequired": "Pilih tanggal.",
+        "timeRequired": "Masukkan waktu seperti 14:30.",
+        "timezoneRequired": "Pilih zona waktu.",
+        "tooSoon": "Pilih waktu minimal beberapa menit dari sekarang.",
+        "repeatEvery": "Masukkan bilangan bulat dari 1 sampai 365.",
+        "daysRequired": "Pilih hari dalam seminggu.",
+        "endDateRequired": "Pilih hari terakhir.",
+        "endBeforeStart": "Tanggal berakhir sebelum pengiriman pertama.",
+        "testNumber": "Masukkan nomor dengan kode negaranya."
+      }
+    },
+    "detail": {
+      "crumb": "Terjadwal / Analitik",
+      "title": "Analitik jadwal",
+      "back": "Kembali ke pesan terjadwal",
+      "eyebrow": "Pesan terjadwal",
+      "untitled": "Tanpa judul",
+      "recurs": "Berulang · {interval} × {n}",
+      "fires": "Dijalankan {when}",
+      "actions": {
+        "pause": "Jeda",
+        "resume": "Lanjutkan",
+        "runNow": "Jalankan sekarang",
+        "cancel": "Batal",
+        "retry": "Coba lagi dengan waktu baru",
+        "delete": "Hapus"
+      },
+      "kpi": {
+        "recipients": "Penerima",
+        "delivered": "Terkirim",
+        "read": "Dibaca",
+        "sent": "Dikirim",
+        "status": "Status",
+        "ofSent": "dari yang dikirim",
+        "failedCount": "{n} gagal",
+        "pendingCount": "{n} tertunda",
+        "fires": "dijalankan {when}",
+        "paused": "dijeda",
+        "done": "selesai {when}"
+      },
+      "funnel": {
+        "eyebrow": "Corong pengiriman",
+        "title": "Dari pengiriman hingga tindakan",
+        "recipients": "Penerima",
+        "sent": "Dikirim",
+        "delivered": "Terkirim",
+        "read": "Dibaca",
+        "failed": "Gagal"
+      },
+      "mix": {
+        "eyebrow": "Komposisi status",
+        "title": "Status pengiriman",
+        "empty": "Belum ada aktivitas pengiriman.",
+        "delivered": "Terkirim",
+        "sentOnly": "Dikirim · belum terkirim",
+        "failed": "Gagal",
+        "pending": "Tertunda"
+      },
+      "recipients": {
+        "eyebrow": "Penerima",
+        "title": "Siapa yang menerima apa",
+        "none": "Tidak ada penerima tercatat untuk jadwal ini.",
+        "emptyTab": "Belum ada penerima di tab ini.",
+        "truncated": "Menampilkan {n} penerima pertama dari {total}.",
+        "tabs": {
+          "all": "Semua",
+          "sent": "Dikirim",
+          "delivered": "Terkirim",
+          "read": "Dibaca",
+          "failed": "Gagal",
+          "pending": "Tertunda"
+        },
+        "cols": {
+          "recipient": "Penerima",
+          "phone": "Telepon",
+          "status": "Status",
+          "when": "Waktu",
+          "note": "Catatan"
+        },
+        "status": {
+          "pending": "Tertunda",
+          "processing": "Tertunda",
+          "sent": "Dikirim",
+          "delivered": "Terkirim",
+          "read": "Dibaca",
+          "failed": "Gagal"
+        }
+      },
+      "config": {
+        "eyebrow": "Detail jadwal",
+        "title": "Konfigurasi",
+        "scheduleType": "Jenis jadwal",
+        "messageType": "Jenis pesan",
+        "scheduledAt": "Dijadwalkan pada",
+        "nextRun": "Dijalankan berikutnya",
+        "lastRun": "Terakhir dijalankan",
+        "repeats": "Diulang setiap",
+        "until": "hingga {date}",
+        "sender": "Dari pengirim",
+        "provider": "Mesin",
+        "attempts": "Percobaan pengiriman"
+      },
+      "preview": {
+        "eyebrow": "Pratinjau pesan",
+        "title": "Yang dilihat penerima",
+        "empty": "(isi kosong)"
+      },
+      "another": "Jadwalkan lainnya"
+    },
+    "warmer": {
+      "warming": "{n} pemanasan",
+      "name": "WhatsApp Warmer",
+      "tagline": "Pemanasan nomor",
+      "how": {
+        "title": "Cara kerjanya",
+        "one": "Aktifkan pemanasan untuk sebuah nomor.",
+        "two": "Setiap hari nomor dapat mengirim sedikit lebih banyak dari hari sebelumnya.",
+        "three": "Pesan dikirim perlahan, hanya pada jam yang Anda pilih.",
+        "four": "Kampanye, broadcast, dan pengiriman terjadwal semuanya mematuhi batas ini."
+      },
+      "good": {
+        "title": "Perlu diketahui",
+        "body": "Pemanasan menurunkan risiko pemblokiran pada nomor API tidak resmi — ini bukan jaminan. Untuk volume tinggi, gunakan nomor WhatsApp Business (Cloud API) resmi, yang tidak memerlukan pemanasan."
+      },
+      "crumb": "Kampanye / Pemanasan",
+      "heading": "Panaskan nomor Anda",
+      "lead": "Naikkan batas kirim harian setiap nomor API tidak resmi dengan jeda mirip manusia dan jam aktif untuk mengurangi risiko pemblokiran. Setiap nomor dipanaskan sesuai jadwalnya sendiri.",
+      "tiles": {
+        "warming": "Nomor sedang dipanaskan",
+        "warmingHint": "dari {n} terhubung",
+        "budget": "Anggaran hari ini",
+        "budgetHint": "pesan diizinkan hari ini",
+        "sent": "Terkirim hari ini",
+        "sentHint": "dihitung untuk pemanasan",
+        "health": "Rata-rata kesehatan",
+        "healthHint": "di semua nomor"
+      },
+      "empty": "Belum ada nomor terhubung.",
+      "connect": "Hubungkan nomor",
+      "number": "Nomor",
+      "engines": {
+        "baileys": "API tidak resmi",
+        "waba": "WABA",
+        "twilio": "Twilio"
+      },
+      "health": "Kesehatan {n}",
+      "healthTitle": "Skor kesehatan (makin tinggi makin aman untuk dinaikkan)",
+      "switch": "Pemanasan",
+      "budgetToday": "Anggaran hari ini",
+      "remaining": "Sisa hari ini",
+      "sentToday": "Terkirim hari ini",
+      "fields": {
+        "dailyBase": "Anggaran awal/hari",
+        "stepPct": "Kenaikan +% / langkah",
+        "stepDays": "Naik setiap (hari)",
+        "maxDaily": "Anggaran maks/hari",
+        "gapMin": "Jeda min (detik)",
+        "gapMax": "Jeda maks (detik)",
+        "activeStart": "Aktif dari (jam)",
+        "activeEnd": "Aktif hingga (jam)"
+      },
+      "hints": {
+        "dailyBase": "Berapa banyak pesan yang boleh dikirim nomor ini pada hari pertama.",
+        "stepPct": "Tingkatkan batas harian ini dengan persentase ini setiap langkah.",
+        "stepDays": "Seberapa sering batas bertambah (setiap N hari).",
+        "maxDaily": "Batas tertinggi yang pernah dicapai batas harian.",
+        "gapMin": "Jeda terpendek antara dua pesan.",
+        "gapMax": "Jeda terpanjang antara dua pesan.",
+        "activeStart": "Mulai mengirim hanya setelah jam ini (format 24 jam).",
+        "activeEnd": "Berhenti mengirim setelah jam ini."
+      },
+      "spintax": {
+        "title": "Variasi spintax",
+        "hint": "Kirim kata-kata yang sedikit berbeda ke setiap orang agar pesan tidak terlihat sama. Tulis pilihan seperti '{Hi|Hello|Hey}' di sana."
+      },
+      "save": "Simpan pemanasan",
+      "saved": "Pemanasan disimpan."
+    }
+  }
+}

@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "tile": {
+      "label": "Uitgaven, portemonnee en overzicht",
+      "description": "Houd bij wat je uitgeeft: je berichtensaldo, opwaarderingen, elke afschrijving en het volledige overzicht.",
+      "keywords": "portemonnee saldo opwaarderen geld toevoegen tegoed overzicht facturatie uitgaven uitgave besteden kosten afschrijvingen gebruik transacties geschiedenis grootboek"
+    },
+    "common": {
+      "loading": "Laden",
+      "retry": "Opnieuw proberen",
+      "requestId": "Verzoek-id",
+      "cancel": "Annuleren",
+      "back": "Terug",
+      "close": "Sluiten",
+      "dismiss": "Sluiten",
+      "on": "Aan",
+      "off": "Uit",
+      "previous": "Vorige",
+      "next": "Volgende",
+      "pagination": "Paginering",
+      "pageN": "Pagina {page}",
+      "deniedTitle": "Je hebt geen toegang tot dit",
+      "deniedBody": "Vraag een workspacebeheerder om de rechten \"{permission}\"."
+    },
+    "errors": {
+      "noteRequired": "Een reden van minstens 5 tekens is vereist.",
+      "amountInvalid": "Dit bedrag wordt niet geaccepteerd. Gebruik een positief bedrag met maximaal 2 decimalen.",
+      "insufficient": "Het saldo is hiervoor te laag.",
+      "notFound": "Deze workspace heeft geen portemonnee.",
+      "rateInvalid": "Een tarief kon niet worden opgeslagen. Controleer het land, de categorie en de bedragen.",
+      "importFailed": "De tariefkaart kon niet worden gelezen of heeft geen bruikbare rij.",
+      "syncFailed": "De prijslijst van Meta kon niet worden gelezen en er is geen ingebouwde kaart beschikbaar.",
+      "conflict": "Iemand anders heeft dit gewijzigd. Laad opnieuw en probeer het opnieuw.",
+      "forbidden": "Alleen superbeheerders kunnen dit doen.",
+      "validation": "Controleer de gemarkeerde velden.",
+      "network": "De server kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
+      "generic": "Er ging iets mis. Probeer het opnieuw.",
+      "currencyUnsupported": "Die valuta kan nog niet worden gebruikt: importeer eerst de tariefkaart van Meta ervoor (Berichtprijzen, Tariefkaarten van Meta)."
+    },
+    "types": {
+      "topup": "Opwaardering",
+      "earn": "Verdiend",
+      "refund": "Terugbetaling",
+      "spend": "Berichtkosten",
+      "admin_adjust": "Correctie"
+    },
+    "categories": {
+      "marketing": "Marketing",
+      "utility": "Utility",
+      "authentication": "Authenticatie",
+      "service": "Service"
+    },
+    "modes": {
+      "wallet": "Betalen per bericht",
+      "plan": "Abonnement"
+    },
+    "chip": {
+      "balance": "Saldo",
+      "low": "Je saldo is laag"
+    },
+    "wallet": {
+      "title": "Portemonnee",
+      "subtitle": "Je berichtensaldo, wat je de afgelopen 30 dagen hebt uitgegeven en verdiend, en hoe je geld toevoegt.",
+      "fullStatement": "Volledig overzicht",
+      "lowBalanceTitle": "Je saldo raakt op",
+      "lowBalanceBody": "Het is op of onder {threshold}. Voeg geld toe om je campagnes en antwoorden te blijven verzenden.",
+      "kpi": {
+        "balance": "Saldo",
+        "available": "Nu beschikbaar",
+        "approx": "ongeveer {count, plural, one {# bericht} other {# berichten}}",
+        "spent": "Uitgegeven",
+        "earned": "Verdiend",
+        "last30": "Afgelopen 30 dagen"
+      },
+      "add": {
+        "title": "Geld toevoegen",
+        "amount": "Bedrag",
+        "hint": "Alleen hele bedragen, minimaal 1.",
+        "invalid": "Voer een heel bedrag van 1 of meer in.",
+        "submit": "Geld toevoegen",
+        "quick": "Snelle bedragen"
+      },
+      "how": {
+        "title": "Hoe facturatie werkt",
+        "wallet": {
+          "body": "Elk afgeleverd bericht wordt van je portemonnee afgeschreven tegen de prijs voor het land en de categorie. Mislukte berichten worden niet in rekening gebracht.",
+          "funded": "Wanneer het saldo op is, worden bulkverzendingen gepauzeerd tot je geld toevoegt."
+        },
+        "plan": {
+          "allowance": "Je abonnement bevat {limit} berichten per maand.",
+          "used": "{used} gebruikt deze maand.",
+          "ends": "Je abonnement eindigt op {date}.",
+          "extra": "Berichten boven het maandelijkse tegoed worden van je portemonnee afgeschreven.",
+          "ended": "Je abonnement is beëindigd, dus verzenden is gepauzeerd tot het is verlengd."
+        },
+        "generic": "Je berichten vallen onder je abonnement. Je portemonnee betaalt voor alles wat het abonnement niet bevat."
+      },
+      "activity": {
+        "title": "Recente activiteit",
+        "fullStatement": "Het volledige overzicht openen",
+        "emptyTitle": "Nog geen activiteit",
+        "emptyBody": "Opwaarderingen, berichtkosten en terugbetalingen verschijnen hier."
+      }
+    },
+    "activity": {
+      "description": "Omschrijving",
+      "type": "Type",
+      "date": "Datum",
+      "amount": "Bedrag",
+      "balance": "Saldo",
+      "noDescription": "Portemonneemutatie",
+      "reason": "Reden"
+    },
+    "pricingPanel": {
+      "title": "Berichtprijzen",
+      "badge": "Per bericht",
+      "free": "Gratis",
+      "noCharge": "Geen kosten",
+      "perMessage": "per bericht",
+      "footer": "Wordt in rekening gebracht wanneer een bericht is bezorgd. De prijs hangt af van het land van de ontvanger en de berichtcategorie."
+    },
+    "statement": {
+      "title": "Portemonneeoverzicht",
+      "subtitle": "Elke beweging op je portemonnee. De totalen tellen alles mee wat aan de filters voldoet, niet alleen deze pagina.",
+      "back": "Terug naar portemonnee",
+      "breadcrumbLabel": "Kruimelpad",
+      "breadcrumbWallet": "Portemonnee",
+      "breadcrumbStatement": "Overzicht",
+      "export": "CSV exporteren",
+      "exporting": "Exporteren",
+      "exported": "{fileName} opgeslagen",
+      "emptyTitle": "Geen transacties",
+      "emptyFiltered": "Niets voldoet aan deze filters. Pas ze aan of zet ze terug.",
+      "emptyNone": "Mutaties op je portemonnee worden hier getoond.",
+      "filters": {
+        "type": "Type",
+        "from": "Van",
+        "to": "Tot",
+        "rangeInverted": "De einddatum ligt voor de begindatum.",
+        "search": "Zoeken",
+        "searchPlaceholder": "Omschrijving of reden",
+        "apply": "Toepassen",
+        "reset": "Resetten"
+      },
+      "typeFilter": {
+        "all": "Alle",
+        "topup": "Opwaarderingen",
+        "earn": "Verdiensten",
+        "spend": "Berichtkosten",
+        "refund": "Terugbetalingen",
+        "admin_adjust": "Correcties"
+      },
+      "summary": {
+        "balance": "Huidig saldo",
+        "in": "Binnenkomend",
+        "out": "Uitgaand",
+        "net": "Netto mutatie",
+        "count": "{count, plural, one {# transactie} other {# transacties}}"
+      },
+      "columns": {
+        "label": "Portemonneeoverzicht",
+        "date": "Datum",
+        "description": "Omschrijving",
+        "type": "Type",
+        "in": "Binnenkomend",
+        "out": "Uitgaand",
+        "balance": "Saldo",
+        "none": "Geen"
+      },
+      "context": {
+        "reason": "Reden",
+        "to": "Aan",
+        "template": "Sjabloon"
+      },
+      "channels": {
+        "campaign": "Campagne",
+        "broadcast": "Broadcast",
+        "flow": "Flow",
+        "scheduled": "Gepland",
+        "auto_reply": "Automatisch antwoord",
+        "chat": "Chat",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      }
+    },
+    "admin": {
+      "admin": "Beheerder",
+      "wallet": "Portemonnee",
+      "workspacesLabel": "Workspaces",
+      "breadcrumb": "Kruimelpad",
+      "readOnly": "Je bent ingelogd als {role}. Alleen superbeheerders kunnen portemonneeinstellingen, prijzen of saldi wijzigen.",
+      "nav": {
+        "overview": "Portemonnee",
+        "pricing": "Berichtprijzen",
+        "workspaces": "Portemonnees van workspaces",
+        "logs": "Portemonneelogs",
+        "margins": "Marges",
+        "packages": "Tegoedpakketten"
+      },
+      "overview": {
+        "title": "Portemonnee-overzicht",
+        "subtitle": "Het geld op portemonnees van workspaces en de mutaties van de afgelopen 30 dagen.",
+        "linkWorkspaces": "Portemonnees van workspaces",
+        "linkPricing": "Berichtprijzen",
+        "linkLogs": "Portemonneelogs",
+        "float": "Portemonneevlot",
+        "floatHint": "Vastgehouden over alle workspaces",
+        "holding": "Workspaces met saldo",
+        "low": "Laag saldo",
+        "last30": "Afgelopen 30 dagen",
+        "toppedUp": "Opgewaardeerd",
+        "charged": "Afgeschreven",
+        "refunded": "Terugbetaald",
+        "adjustedIn": "Handmatig toegevoegd",
+        "adjustedOut": "Handmatig afgetrokken",
+        "chargedMessages": "Betaalde berichten",
+        "freeMessages": "Gratis berichten",
+        "reconcile": {
+          "title": "Saldi controleren tegen journaals",
+          "body": "Herberekent elke portemonnee vanuit het journaal en toont elk saldo dat niet klopt.",
+          "button": "Saldi controleren tegen journaals",
+          "running": "Controleren",
+          "ok": "Alle {count, plural, one {# portemonnee komt} other {# portemonnees komen}} overeen met het journaal.",
+          "mismatches": "{count} van {checked} portemonnees komt niet overeen met het journaal.",
+          "workspace": "Workspace",
+          "balance": "Saldo",
+          "ledger": "Journaal",
+          "difference": "Verschil"
+        },
+        "otherCurrencies": "Portemonnees in andere valuta's",
+        "otherCurrenciesNote": "Workspaces die in een andere valuta worden gefactureerd, houden geld in die valuta. De cijfers hierboven gelden alleen voor {currency}; elke andere valuta telt op een eigen regel.",
+        "other": {
+          "currency": "Valuta",
+          "float": "Vastgehouden geld",
+          "holding": "Workspaces met saldo",
+          "toppedUp": "Opgewaardeerd, 30 dagen",
+          "charged": "Afgeschreven, 30 dagen"
+        }
+      },
+      "pricing": {
+        "title": "Berichtprijzen",
+        "crumb": "Berichtprijzen",
+        "subtitle": "Wat een bericht je klanten kost, hoe nieuwe portemonnees worden beschermd en de tariefkaart per land.",
+        "kpi": {
+          "signup": "Verwijzingsbeloning",
+          "cost": "Kosten per bericht",
+          "costHint": "Vaste prijs wanneer prijzen per land uit staan",
+          "spending": "Werkelijke uitgaven",
+          "spendingHint": "Berichten die {amount} koopt tegen de vaste prijs",
+          "lowBalance": "Waarschuwing bij laag saldo"
+        },
+        "economics": {
+          "title": "Economie",
+          "liveKeys": "Gaat meteen in",
+          "flatPrice": "Vaste prijs per bericht",
+          "flatPriceHint": "Minimaal 0,01. Gebruik het tariefrooster voor gratis berichten.",
+          "referralSignup": "Verwijzingsbeloning",
+          "referralSignupHint": "Uitbetaald aan een verwijzer bij de eerste betaalde bestelling van de verwezen klant.",
+          "lowBalance": "Waarschuwing bij laag saldo bij",
+          "lowBalanceHint": "Workspaces op of onder dit saldo krijgen een waarschuwing.",
+          "coverage": "Dekking bij lancering",
+          "coverageHint": "Een bulkverzending wordt geweigerd tenzij de portemonnee dit deel van de geschatte kosten dekt. 0 weigert alleen een lege portemonnee.",
+          "rewardSentence": "Een beloning van {reward} betaalt {count, plural, one {# bericht} other {# berichten}} tegen de vaste prijs.",
+          "save": "Economie opslaan",
+          "saving": "Opslaan",
+          "saved": "Economie opgeslagen.",
+          "problems": {
+            "invalid": "Voer een bedrag in met maximaal 2 decimalen.",
+            "flatZero": "De vaste prijs kan niet 0 zijn.",
+            "percent": "Voer een geheel getal van 0 tot 100 in."
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "Prijzen per land",
+            "on": "Aan: elk bericht wordt afgeschreven op basis van het land en de categorie van de ontvanger uit de tariefkaart.",
+            "off": "Uit: elk bericht wordt tegen de vaste prijs afgeschreven.",
+            "save": "Opslaan",
+            "confirmTitle": "Prijzen per land wijzigen?",
+            "confirmOn": "Berichten worden vanaf de volgende verzending per land en categorie afgeschreven.",
+            "confirmOff": "Berichten worden vanaf de volgende verzending tegen de vaste prijs afgeschreven.",
+            "confirm": "Ja, wijzigen",
+            "savedOn": "Prijzen per land staan aan.",
+            "savedOff": "Prijzen per land staan uit."
+          },
+          "payPerMessage": {
+            "label": "Afrekening per bericht",
+            "on": "Aan: workspaces zonder abonnementstegoed betalen voor elk afgeleverd bericht uit hun portemonnee.",
+            "off": "Uit: berichten worden niet van portemonnees afgeschreven.",
+            "save": "Opslaan",
+            "confirmTitle": "Afrekening per bericht wijzigen?",
+            "confirmOn": "Afgeleverde berichten worden vanaf nu van portemonnees afgeschreven.",
+            "confirmOff": "Portemonnees worden niet langer voor berichten afgeschreven. Dit geldt voor elke workspace.",
+            "confirm": "Ja, wijzigen",
+            "savedOn": "Afrekening per bericht staat aan.",
+            "savedOff": "Afrekening per bericht staat uit."
+          }
+        },
+        "grid": {
+          "title": "Tariefkaart",
+          "modeOn": "Prijzen per land staan aan: deze prijzen worden gebruikt.",
+          "modeOff": "Prijzen per land staan uit: deze prijzen worden opgeslagen, maar de vaste prijs wordt berekend.",
+          "empty": "Nog geen tarieven. Voeg een rij toe, importeer een tariefkaart of laad de startkaart opnieuw.",
+          "country": "Land",
+          "category": "Categorie",
+          "charge": "Jouw prijs",
+          "metaCost": "Meta rekent je",
+          "margin": "Marge",
+          "marginUnknown": "Onbekend",
+          "actions": "Acties",
+          "anyCountry": "Elk land",
+          "anyCategory": "Elke categorie",
+          "serviceFree": "Service (gratis)",
+          "addRow": "Rij toevoegen",
+          "remove": "Verwijderen",
+          "cancel": "Annuleren",
+          "removeTitle": "Dit tarief verwijderen?",
+          "removeBody": "Het tarief voor {country} wordt verwijderd. Berichten vallen terug op het volgende passende tarief.",
+          "removed": "Tarief verwijderd.",
+          "save": "Tarieven opslaan",
+          "saving": "Opslaan",
+          "saved": "{count, plural, one {# tarief opgeslagen.} other {# tarieven opgeslagen.}}",
+          "savedSome": "{saved} opgeslagen, {skipped} overgeslagen. Zie de reden bij elke overgeslagen rij.",
+          "unsaved": "{count, plural, one {# niet-opgeslagen rij} other {# niet-opgeslagen rijen}}",
+          "tooMany": "Te veel gewijzigde rijen voor één keer opslaan. Sla op in kleinere batches.",
+          "problems": {
+            "price": "Voer een prijs in met maximaal 2 decimalen.",
+            "metaCost": "Voer een kostprijs in met maximaal 6 decimalen.",
+            "country": "Gebruik een landcode van 2 letters, of laat het leeg voor elk land.",
+            "empty": "Voer een prijs of een Meta-kostprijs in.",
+            "duplicate": "Voor dit land en deze categorie bestaat al een rij."
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "Meta-kosten synchroniseren",
+            "title": "Meta-kosten synchroniseren",
+            "loading": "Prijslijst van Meta lezen",
+            "source": "Bron",
+            "version": "Versie",
+            "noVersion": "Geen",
+            "currency": "Valuta",
+            "added": "Toe te voegen rijen",
+            "updated": "Bij te werken rijen",
+            "untouched": "Je prijzen worden niet gewijzigd. Alleen de kosten die Meta jou rekent worden bijgewerkt.",
+            "bundledNote": "Er is geen live prijslijst van Meta verbonden, dus de ingebouwde tariefkaart wordt gebruikt.",
+            "apply": "Toepassen",
+            "applying": "Toepassen",
+            "done": "Meta-kosten gesynchroniseerd: {added} toegevoegd, {updated} bijgewerkt."
+          },
+          "import": {
+            "button": "Tariefkaart importeren",
+            "title": "Tariefkaart importeren",
+            "intro": "Upload een CSV-tariefkaart. Je ziet wat er zou veranderen voordat er iets wordt opgeslagen.",
+            "file": "CSV-bestand",
+            "limit": "Maximaal 4 MB.",
+            "reading": "Bestand lezen",
+            "shape": "Indeling",
+            "shapes": {
+              "wide": "Eén kolom per categorie",
+              "long": "Eén rij per categorie"
+            },
+            "added": "Toe te voegen",
+            "updated": "Bij te werken",
+            "skipped": "Overgeslagen",
+            "currencyNote": "Prijzen worden gelezen in {currency}.",
+            "problems": "Rijen die worden overgeslagen",
+            "line": "Regel {line}:",
+            "fileProblems": {
+              "notCsv": "Kies een .csv-bestand.",
+              "tooBig": "Het bestand is groter dan 4 MB.",
+              "unreadable": "Het bestand kon niet worden gelezen."
+            },
+            "apply": "Import toepassen",
+            "applying": "Importeren",
+            "done": "Tariefkaart geïmporteerd: {added} toegevoegd, {updated} bijgewerkt, {skipped} overgeslagen."
+          },
+          "seed": {
+            "button": "Startkaart opnieuw laden",
+            "title": "De startkaart opnieuw laden?",
+            "warning": "Dit schrijft de ingebouwde startprijzen over bestaande rijen voor hetzelfde land en dezelfde categorie. Prijzen die je voor die rijen handmatig hebt ingesteld, worden vervangen.",
+            "confirm": "Opnieuw laden",
+            "done": "{count, plural, one {# tarief} other {# tarieven}} geschreven vanuit de startkaart."
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "Grensoverschrijdende verzendingen",
+            "body": "De prijs volgt het land van de ontvanger, niet dat van de workspace. Voeg een rij toe voor elk land waarnaar je verstuurt."
+          },
+          "how": {
+            "title": "Hoe een prijs wordt gevonden",
+            "body": "De portemonnee zoekt het land van de ontvanger en de berichtcategorie op in deze kaart. Een lege categorie of een leeg land komt overeen met alles."
+          },
+          "order": {
+            "title": "Welke rij wint",
+            "body": "Eerst wordt een exacte overeenkomst van land en categorie gebruikt, dan het land met elke categorie, dan elk land, en daarna de vaste prijs."
+          }
+        },
+        "mode": {
+          "title": "Hoe klanten worden geprijsd",
+          "current": "Huidig: {mode}",
+          "intro": "Kies wat een bericht je klanten kost. Dit geldt voor elke workspace en wordt apart opgeslagen.",
+          "fixed": {
+            "label": "Vaste prijzen",
+            "body": "Je typt een prijs per land en categorie in de tariefkaart hieronder. Marges worden opgeslagen maar niet gebruikt."
+          },
+          "margin": {
+            "label": "Meta-kosten + marge",
+            "body": "De klant betaalt de kosten van Meta plus jouw marge, per land en categorie ingesteld. Waar de kosten van Meta niet bekend zijn, wordt de ingevoerde vaste prijs berekend."
+          },
+          "save": "Prijsmodus opslaan",
+          "manage": "Marges instellen",
+          "confirmTitle": "Manier van prijzen voor klanten wijzigen?",
+          "confirmFixed": "Elke workspace wordt vanaf het volgende bericht de vaste prijzen uit de tariefkaart berekend. Marges blijven opgeslagen maar werken niet meer.",
+          "confirmMargin": "Elke workspace wordt vanaf het volgende bericht de kosten van Meta plus de marge die voor haar geldt berekend (workspace-uitzondering, dan het abonnement, dan de platformstandaard). Waar de kosten van Meta onbekend zijn, wordt nog steeds de vaste prijs berekend.",
+          "confirm": "Ja, wijzigen",
+          "savedFixed": "Klanten worden nu geprijsd met vaste prijzen.",
+          "savedMargin": "Klanten worden nu geprijsd met Meta-kosten plus marge."
+        },
+        "metaCards": {
+          "title": "Tariefkaarten van Meta",
+          "intro": "Meta publiceert één prijslijst per valuta en wijzigt die alleen op 1 januari, 1 april, 1 juli en 1 oktober. Een workspace die in INR wordt gefactureerd, wordt geprijsd op basis van de INR-lijst van Meta en afgeschreven van haar INR-portemonnee, nooit van de omgerekende USD-lijst. Importeer elk bestand zoals Meta het publiceert. Ingevoerde prijzen en de vaste prijs worden bewaard in de platformvaluta en omgerekend tegen de koers in het systeem voor een workspace die in een andere valuta wordt gefactureerd.",
+          "none": "Er is nog geen tariefkaart van Meta opgeslagen. Importeer het bestand dat Meta voor jouw valuta publiceert.",
+          "view": "Bekijken",
+          "hide": "Verbergen",
+          "usedPricing": "Prijzen, marges en de resellerwinst- en verliesrekening, en workspaces die in de platformvaluta worden gefactureerd",
+          "usedWorkspaces": "Prijzen voor workspaces gefactureerd in {currency}",
+          "columns": {
+            "currency": "Valuta",
+            "effective": "Geldig vanaf",
+            "checked": "Laatst geïmporteerd",
+            "markets": "Markten",
+            "usedFor": "Gebruikt voor",
+            "status": "Status",
+            "actions": "Acties"
+          },
+          "freshness": {
+            "current": "Up-to-date",
+            "upcoming": "Binnenkort controleren",
+            "due": "Nu controleren"
+          },
+          "reminder": {
+            "link": "Prijspagina van Meta openen",
+            "current": "Up-to-date. Meta kan de prijzen de volgende keer wijzigen op {date}.",
+            "dueTitle": "Op {date} is een nieuw kwartaal begonnen: Meta heeft de prijzen mogelijk gewijzigd.",
+            "dueBody": "Download de nieuwe tariefbestanden (één per gebruikte valuta) en importeer ze hier. Tot die tijd gebruiken kosten en marges de oudere kaart.",
+            "upcomingTitle": "Meta kan de prijzen wijzigen op {date} (over {days, plural, one {# dag} other {# dagen}}).",
+            "upcomingBody": "Zorg dat de nieuwe bestanden die dag klaarstaan om te importeren.",
+            "missingTitle": "Geen tariefkaart van Meta voor {currencies}.",
+            "missingBody": "Workspaces met die valuta hebben geen prijslijst van Meta om te tonen. Importeer het bestand dat Meta daarvoor publiceert."
+          },
+          "table": {
+            "heading": "Kaart van Meta in {currency}",
+            "note": "Lijstprijs per afgeleverd bericht, zoals Meta die publiceert. Landen die Meta niet noemt, worden geprijsd als Overig.",
+            "market": "Markt",
+            "everyOther": "Elk niet genoemd land",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utility",
+              "authentication": "Authenticatie",
+              "authentication_international": "Auth. internationaal",
+              "service": "Service"
+            }
+          },
+          "import": {
+            "button": "Tariefkaart van Meta importeren",
+            "title": "Tariefkaart van Meta importeren",
+            "intro": "Kies het bestand dat Meta voor één valuta publiceert (een Excel-werkmap, ook als de link CSV zegt). De valuta en ingangsdatum worden uit het bestand gelezen. Je ziet wat er zou veranderen voordat er iets wordt opgeslagen.",
+            "file": "Tariefbestand van Meta (.xlsx of .csv)",
+            "hint": "Eén valuta per bestand. Een nieuw bestand vervangt de kaart van die valuta als geheel. Maximaal 2 MB.",
+            "reading": "Bestand lezen…",
+            "applying": "Importeren",
+            "apply": "Kaart importeren",
+            "done": "De kaart in {currency} is geïmporteerd.",
+            "fileProblems": {
+              "wrongType": "Kies het .xlsx-bestand dat Meta publiceert, of een CSV die daaruit is opgeslagen.",
+              "tooBig": "Het bestand is groter dan 2 MB, wat geen tariefkaart van Meta is.",
+              "unreadable": "Het bestand kon niet worden gelezen."
+            },
+            "summary": {
+              "currency": "Valuta",
+              "effective": "Geldig vanaf",
+              "added": "Nieuwe rijen",
+              "changed": "Gewijzigd",
+              "unchanged": "Ongewijzigd",
+              "removed": "Vervallen"
+            },
+            "replaces": "Vervangt de kaart die geldig is vanaf {date}.",
+            "appliesToPricing": "Dit is de {currency}-kaart, je platformvaluta. Importeren vernieuwt ook de Meta-kosten achter prijzen, marges en de resellerwinst- en verliesrekening ({added} nieuw, {updated} bijgewerkt). Klantprijzen worden niet gewijzigd.",
+            "storedOnly": "Dit is niet de platformvaluta. Ze wordt opgeslagen en getoond, en ze bepaalt de prijs voor elke workspace die in {currency} wordt gefactureerd. De Meta-kosten in het tariefrooster hieronder blijven in de platformvaluta.",
+            "biggest": "Grootste wijzigingen",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utility",
+              "authentication": "Authenticatie",
+              "authentication_international": "Auth. internationaal",
+              "service": "Service"
+            },
+            "problems": "Overgeslagen rijen"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "Portemonnees van workspaces",
+        "crumb": "Portemonnees van workspaces",
+        "subtitle": "Elke workspace met zijn saldo. Open er een om de boekingen te zien of het saldo aan te passen.",
+        "search": "Zoeken",
+        "searchPlaceholder": "Naam of slug van workspace",
+        "lowOnly": "Alleen laag saldo",
+        "apply": "Toepassen",
+        "totalWorkspaces": "Workspaces",
+        "totalFloat": "Totaal vastgehouden",
+        "totalLow": "Laag saldo",
+        "emptyTitle": "Geen workspaces gevonden",
+        "emptyBody": "Pas de zoekopdracht aan of wis het filter voor laag saldo.",
+        "loadMore": "Meer laden",
+        "loadingMore": "Meer laden",
+        "columns": {
+          "label": "Portemonnees van workspaces",
+          "workspace": "Workspace",
+          "mode": "Facturatie",
+          "balance": "Saldo",
+          "low": "Laag",
+          "activity": "Laatste activiteit",
+          "never": "Nooit"
+        },
+        "totalFloatIn": "Vastgehouden geld ({currency})"
+      },
+      "detail": {
+        "crumb": "Workspace",
+        "adjust": "Saldo aanpassen",
+        "balance": "Saldo",
+        "lowBalance": "Laag saldo",
+        "threshold": "Waarschuwing bij {amount}",
+        "recent": "Recente boekingen",
+        "emptyTitle": "Nog geen boekingen",
+        "emptyBody": "Mutaties op deze portemonnee worden hier getoond.",
+        "columns": {
+          "label": "Recente portemonneeboekingen",
+          "date": "Datum",
+          "type": "Type",
+          "amount": "Bedrag",
+          "balanceAfter": "Saldo na boeking",
+          "who": "Uitgevoerd door",
+          "reason": "Reden",
+          "customer": "Klant",
+          "operator": "Operator",
+          "system": "Systeem"
+        },
+        "result": {
+          "appliedAdd": "{applied} toegevoegd. Het saldo is nu {balance}.",
+          "appliedDeduct": "{applied} afgetrokken. Het saldo is nu {balance}.",
+          "partial": "Slechts {applied} van {requested} is toegepast, omdat het saldo niet onder 0 kan komen. Het saldo is nu {balance}.",
+          "replayed": "(Dit verzoek was al toegepast.)"
+        },
+        "pricing": {
+          "title": "Prijzen voor deze workspace",
+          "subtitle": "Margeuitzonderingen gaan voor op het abonnement van de workspace en de platformstandaard, alleen voor deze workspace.",
+          "plan": "Abonnement",
+          "planLoading": "Abonnement laden",
+          "planUnknown": "Kon niet worden gelezen",
+          "noPlan": "Geen abonnement",
+          "overrides": "Margeuitzonderingen",
+          "overridesHint": "Alleen de hier vermelde rijen worden overschreven. Al het andere volgt het abonnement en de platformstandaard.",
+          "empty": "Geen uitzonderingen. Deze workspace volgt zijn abonnement en de platformstandaard.",
+          "reason": {
+            "label": "Reden (wordt bewaard in het auditlogboek)",
+            "hint": "Verplicht bij elke wijziging of verwijdering, 5 tot 500 tekens.",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "Geef in minimaal 5 tekens aan waarom.",
+              "long": "Houd de reden op 500 tekens of minder."
+            }
+          },
+          "save": "Uitzonderingen opslaan",
+          "saving": "Opslaan",
+          "saveHint": "Corrigeer de gemarkeerde rijen en geef een reden om op te slaan.",
+          "saved": "{saved} opgeslagen, {removed} verwijderd.",
+          "savedSome": "{saved} opgeslagen, {skipped} overgeslagen. Zie de reden bij elke overgeslagen rij.",
+          "preview": {
+            "title": "Prijsvoorbeeld",
+            "hint": "Zie hoe één bericht naar deze workspace geprijsd zou worden en welke laag dat bepaalde.",
+            "country": "Land",
+            "category": "Categorie",
+            "run": "Voorbeeldprijs",
+            "running": "Prijs berekenen",
+            "result": {
+              "label": "Resultaat prijsvoorbeeld",
+              "metaCost": "Meta-kosten",
+              "unknownCost": "Onbekend",
+              "margin": "Marge",
+              "noMargin": "Geen",
+              "layer": "Ingesteld door",
+              "noLayer": "Geen marge gevonden",
+              "layers": {
+                "workspace": "Uitzondering voor workspace",
+                "plan": "Marge van abonnement",
+                "platform": "Platformstandaard"
+              },
+              "price": "Klantprijs",
+              "basis": "Grondslag",
+              "bases": {
+                "margin": "Meta-kosten + marge",
+                "fixed": "Vaste prijs"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "Facturatievaluta",
+          "intro": "Berichten worden geprijsd op basis van de tariefkaart van Meta voor deze valuta en afgeschreven van de portemonnee van de workspace in die valuta. Opwaarderingen worden ook in die valuta ingevoerd en bijgeschreven.",
+          "billedIn": "Gefactureerd in",
+          "change": "Valuta wijzigen",
+          "otherWallets": "Andere portemonnees die deze workspace heeft",
+          "notUsed": "Niet gebruikt voor facturatie; het geld blijft hier staan.",
+          "dialog": {
+            "title": "Facturatievaluta wijzigen",
+            "currency": "Factureren in",
+            "effect": "Vanaf nu worden berichten geprijsd op basis van de kaart van Meta in {to} en afgeschreven van de portemonnee in {to}. Er wordt niets omgerekend: de portemonnee in {from} houdt zijn saldo.",
+            "left": "{amount} blijft in de portemonnee in {from} staan en wordt niet gebruikt totdat de workspace terug wordt gezet.",
+            "reason": "Reden",
+            "reasonHint": "Zichtbaar in het auditspoor en het portemonneelogboek van de workspace. Minimaal 5 tekens.",
+            "confirm": "Factureren in {currency}",
+            "saving": "Opslaan",
+            "done": "Wordt nu gefactureerd in {to} (was {from})."
+          }
+        }
+      },
+      "adjust": {
+        "title": "Saldo aanpassen",
+        "current": "Huidig saldo",
+        "direction": "Actie",
+        "add": "Geld toevoegen",
+        "deduct": "Aftrekken",
+        "amount": "Bedrag",
+        "amountHint": "Tot 2 decimalen.",
+        "reason": "Reden",
+        "reasonHint": "Verplicht, 5 tot 500 tekens. De workspace ziet deze reden op zijn overzicht.",
+        "counter": "{count} / {max}",
+        "cappedWarning": "Dit is meer dan het saldo van {balance}. Alleen wat er staat wordt afgetrokken; het saldo blijft op 0 steken.",
+        "review": "Controleren",
+        "confirmAdd": "Geld toevoegen",
+        "confirmDeduct": "Aftrekken",
+        "posting": "Boeken",
+        "summaryAdd": "{amount} toevoegen aan {workspace}.",
+        "summaryDeduct": "{amount} aftrekken van {workspace}.",
+        "newBalance": "Nieuw saldo: {balance}",
+        "summaryReason": "Reden: {reason}",
+        "visibleNote": "De reden wordt aan de workspace getoond en in het auditlogboek bewaard.",
+        "problems": {
+          "amount": {
+            "required": "Voer een bedrag in.",
+            "invalid": "Voer een positief bedrag in met maximaal 2 decimalen.",
+            "zero": "Het bedrag moet groter zijn dan 0.",
+            "tooLarge": "Dat is boven de limiet voor één aanpassing."
+          },
+          "note": {
+            "short": "Geef in minimaal {min} tekens aan waarom.",
+            "long": "Houd de reden onder {max} tekens."
+          }
+        }
+      },
+      "logs": {
+        "title": "Portemonneelogs",
+        "crumb": "Portemonneelogs",
+        "subtitle": "Wat er met portemonnees is gebeurd en wat operators hebben gewijzigd.",
+        "scope": "Bereik",
+        "scopes": {
+          "all": "Alle",
+          "workspace": "Gebeurtenissen in workspaces",
+          "platform": "Platformwijzigingen"
+        },
+        "event": "Gebeurtenis",
+        "anyEvent": "Elke gebeurtenis",
+        "severity": "Ernst",
+        "anySeverity": "Elke ernst",
+        "severities": {
+          "info": "Info",
+          "warning": "Waarschuwing",
+          "error": "Fout"
+        },
+        "workspaceId": "Workspace-id",
+        "workspaceIdInvalid": "Voer een workspace-id in (een UUID).",
+        "search": "Zoeken",
+        "from": "Van",
+        "to": "Tot",
+        "apply": "Toepassen",
+        "reset": "Resetten",
+        "emptyTitle": "Geen logregels",
+        "emptyBody": "Niets voldoet aan deze filters.",
+        "loadMore": "Meer laden",
+        "loadingMore": "Meer laden",
+        "platform": "Platform",
+        "showDetails": "Details tonen",
+        "hideDetails": "Details verbergen",
+        "requestId": "Verzoek-id",
+        "columns": {
+          "time": "Tijd",
+          "severity": "Ernst",
+          "event": "Gebeurtenis",
+          "workspace": "Workspace",
+          "actor": "Uitgevoerd door",
+          "message": "Bericht"
+        },
+        "actors": {
+          "operator": "Operator",
+          "customer": "Klant",
+          "system": "Systeem"
+        }
+      },
+      "margins": {
+        "title": "Marges",
+        "crumb": "Marges",
+        "subtitle": "Wat klanten bovenop de kosten van Meta betalen, per land en berichtcategorie.",
+        "retry": "Opnieuw proberen",
+        "ratesFailed": "De kosten van Meta konden niet worden geladen, dus prijzen voor nieuwe rijen kunnen niet worden getoond.",
+        "mode": {
+          "current": "Klanten worden geprijsd op basis van",
+          "inactive": "De prijsmodus is Vaste prijzen, dus deze marges zijn nog niet van kracht. Ze worden opgeslagen en gelden zodra je overschakelt naar Meta-kosten + marge.",
+          "switchLink": "Naar de schakelaar voor prijsmodus"
+        },
+        "scope": {
+          "label": "Marges voor",
+          "hint": "De platformstandaard geldt voor elk abonnement. De eigen marge van een abonnement gaat ervoor.",
+          "platform": "Platformstandaard (geldt voor elk abonnement)"
+        },
+        "grid": {
+          "country": "Land",
+          "searchCountry": "Landen zoeken",
+          "category": "Categorie",
+          "margin": "Marge %",
+          "metaCost": "Meta-kosten",
+          "price": "Klantprijs",
+          "note": "Reden",
+          "setBy": "Ingesteld door",
+          "actions": "Acties",
+          "anyCountry": "Elk land",
+          "anyCategory": "Elke categorie",
+          "unknownCost": "De kosten van Meta zijn hier niet bekend, dus geldt de ingevoerde vaste prijs.",
+          "priceInvalid": "Voer een marge in van -100 tot 1000 met maximaal 2 decimalen.",
+          "removedPending": "Wordt verwijderd wanneer je opslaat.",
+          "addRow": "Rij toevoegen",
+          "remove": "Verwijderen",
+          "undo": "Ongedaan maken",
+          "cancel": "Annuleren",
+          "empty": "Nog geen marges. Voeg een rij toe om er een in te stellen.",
+          "removeTitle": "Deze marge verwijderen?",
+          "removeBody": "De marge voor {country} wordt verwijderd. Prijzen vallen terug op de volgende passende marge.",
+          "removed": "Marge verwijderd.",
+          "save": "Marges opslaan",
+          "saving": "Opslaan",
+          "saved": "{count, plural, one {# marge opgeslagen.} other {# marges opgeslagen.}}",
+          "savedSome": "{saved} opgeslagen, {skipped} overgeslagen. Zie de reden bij elke overgeslagen rij.",
+          "unsaved": "{count, plural, one {# niet-opgeslagen rij} other {# niet-opgeslagen rijen}}",
+          "tooMany": "Te veel gewijzigde rijen voor één keer opslaan. Sla op in kleinere batches.",
+          "problems": {
+            "margin": "Voer een percentage in van -100 tot 1000 met maximaal 2 decimalen. -100 betekent gratis.",
+            "duplicate": "Voor dit land en deze categorie bestaat al een rij."
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "Welke marge wint",
+            "body": "Een uitzondering voor de workspace gaat voor de marge van het abonnement, die voor de platformstandaard gaat. Een laag wordt volledig gelezen voordat de volgende wordt gelezen."
+          },
+          "specific": {
+            "title": "Meest specifiek eerst",
+            "body": "Binnen een laag wordt eerst land en categorie gebruikt, dan het land met elke categorie, dan de categorie in elk land, en daarna de standaardrij."
+          },
+          "unknown": {
+            "title": "Wanneer de kosten van Meta onbekend zijn",
+            "body": "De prijs is de kosten van Meta plus de marge, afgerond op de dichtstbijzijnde 0,01 en minimaal 0,01, tenzij de marge -100% is (gratis). Waar de kosten van Meta onbekend zijn, geldt in plaats daarvan de ingevoerde vaste prijs."
+          }
+        }
+      },
+      "packages": {
+        "title": "Tegoedpakketten",
+        "crumb": "Tegoedpakketten",
+        "subtitle": "Optionele aanbiedingen: betaal dit bedrag, krijg dit tegoed op de portemonnee. Een tegoed boven de prijs is een bonus bij opwaardering.",
+        "new": "Nieuw pakket",
+        "edit": "Bewerken",
+        "enable": "Inschakelen",
+        "disable": "Uitschakelen",
+        "delete": "Verwijderen",
+        "cancel": "Annuleren",
+        "enabled": "{name} is ingeschakeld.",
+        "disabled": "{name} is uitgeschakeld.",
+        "deleted": "Pakket verwijderd.",
+        "deleteTitle": "Pakket verwijderen?",
+        "deleteBody": "Dit pakket verwijderen? Bestaande aankopen behouden hun journaalregels.",
+        "bonus": "+{percent}% bonus",
+        "status": {
+          "active": "Actief",
+          "inactive": "Inactief",
+          "featured": "Uitgelicht"
+        },
+        "empty": {
+          "title": "Nog geen tegoedpakketten",
+          "body": "Er zijn nog geen pakketten aangemaakt.",
+          "bodyWrite": "Maak het eerste pakket aan om een opwaardering op de portemonnee met bonus aan te bieden."
+        },
+        "columns": {
+          "label": "Tegoedpakketten",
+          "name": "Naam",
+          "slug": "Slug",
+          "price": "Prijs",
+          "credit": "Tegoed op portemonnee",
+          "badge": "Label",
+          "status": "Status",
+          "actions": "Acties"
+        },
+        "form": {
+          "newTitle": "Nieuw tegoedpakket",
+          "editTitle": "Tegoedpakket bewerken",
+          "newCrumb": "Nieuw pakket",
+          "editCrumb": "Pakket bewerken",
+          "notFound": "Dit pakket bestaat niet meer.",
+          "back": "Terug naar tegoedpakketten",
+          "sections": {
+            "identity": "Identiteit",
+            "pricing": "Prijzen",
+            "display": "Weergave"
+          },
+          "name": "Naam",
+          "slug": "Slug (optioneel)",
+          "slugHint": "Letters, cijfers, streepjes en underscores. Laat leeg om het uit de naam te maken.",
+          "description": "Beschrijving",
+          "price": "Prijs",
+          "priceHint": "Wat de klant betaalt.",
+          "currency": "Valuta",
+          "walletCredit": "Tegoed op portemonnee",
+          "walletCreditHint": "Wat op de portemonnee wordt bijgeschreven.",
+          "bonusLine": "Een bonus van {percent}%: de klant betaalt {price} en krijgt {credit}.",
+          "badge": "Label",
+          "badgeHint": "Een korte aanduiding, zoals Beste waarde.",
+          "sortOrder": "Volgorde",
+          "sortOrderHint": "Laagste eerst.",
+          "active": "Actief",
+          "featured": "Uitgelicht",
+          "create": "Pakket aanmaken",
+          "save": "Wijzigingen opslaan",
+          "saving": "Opslaan",
+          "created": "{name} aangemaakt.",
+          "saved": "{name} opgeslagen.",
+          "stale": {
+            "title": "Dit pakket is door iemand anders gewijzigd",
+            "body": "Je wijzigingen zijn niet opgeslagen, dus er is niets overschreven. Laad de nieuwste versie en maak je wijziging opnieuw.",
+            "reload": "Nieuwste versie laden"
+          },
+          "problems": {
+            "name": "Voer een naam in van maximaal 96 tekens.",
+            "slug": "Gebruik alleen letters, cijfers, streepjes en underscores.",
+            "description": "Houd de beschrijving op 500 tekens of minder.",
+            "price": "Voer een bedrag in met maximaal 2 decimalen.",
+            "currency": "Kies een van de vermelde valuta.",
+            "walletCredit": "Voer een bedrag groter dan 0 in met maximaal 2 decimalen.",
+            "badge": "Houd het label op 32 tekens of minder.",
+            "sortOrder": "Voer een geheel getal van 0 tot 9999 in."
+          }
+        }
+      }
+    }
+  }
+}

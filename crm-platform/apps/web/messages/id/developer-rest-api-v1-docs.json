@@ -1,0 +1,107 @@
+{
+  "developer-rest-api-v1-docs": {
+    "metaTitle": "Referensi API {brand}",
+    "metaDescription": "Referensi REST API {brand}: autentikasi, batas laju, dan setiap endpoint dengan contoh permintaan dan respons.",
+    "common": {
+      "copy": "Salin",
+      "copied": "Disalin",
+      "copyFailed": "Tidak dapat disalin. Pilih teks lalu salin secara manual."
+    },
+    "topbar": {
+      "home": "Beranda {brand}",
+      "apiWord": "API",
+      "version": "v1",
+      "spec": "Spesifikasi OpenAPI",
+      "getKey": "Dapatkan kunci API"
+    },
+    "sidebar": {
+      "label": "Navigasi referensi",
+      "filterLabel": "Filter endpoint",
+      "filterPlaceholder": "Filter endpoint…",
+      "startHere": "Mulai di sini",
+      "intro": "Pengantar",
+      "auth": "Autentikasi",
+      "webhooks": "Webhook"
+    },
+    "hero": {
+      "eyebrow": "Referensi developer",
+      "title": "<em>REST API</em> {brand}",
+      "lead": "Satu REST API untuk mengirim pesan WhatsApp, menjalankan broadcast dan kampanye, mengelola kontak dan template, memicu flow otomasi, dan membaca akun Anda, semua yang dibutuhkan CRM, platform otomasi, atau aplikasi Anda.",
+      "baseUrl": "URL dasar",
+      "copyBaseUrl": "Salin URL dasar"
+    },
+    "capabilities": {
+      "title": "Yang dapat Anda lakukan",
+      "send": {
+        "title": "Kirim pesan",
+        "body": "Pengiriman tunggal, broadcast, kampanye, dan pengiriman terjadwal"
+      },
+      "receive": {
+        "title": "Terima pesan",
+        "body": "Baca percakapan masuk dan pesannya"
+      },
+      "contacts": {
+        "title": "Kontak dan prospek",
+        "body": "Buat, baca, ubah, dan hapus lengkap, grup, dan atribut kustom"
+      },
+      "templates": {
+        "title": "Template",
+        "body": "Buat, perbarui, dan daftar template WhatsApp"
+      },
+      "flows": {
+        "title": "Flow otomasi",
+        "body": "Daftarkan kontak ke flow melalui API"
+      },
+      "status": {
+        "title": "Status pengiriman",
+        "body": "Terkirim, sampai, dibaca, dan gagal per pesan"
+      },
+      "devices": {
+        "title": "Perangkat",
+        "body": "Daftar nomor terhubung dan statusnya"
+      },
+      "account": {
+        "title": "Akun dan penggunaan",
+        "body": "Paket, batas, dan kredit pesan"
+      }
+    },
+    "auth": {
+      "title": "Autentikasi",
+      "intro": "Setiap permintaan diautentikasi dengan <strong>kunci API</strong> workspace. Buat di dasbor pada <strong>Pengaturan, REST API</strong>. Kirim sebagai token Bearer:",
+      "copyHeader": "Salin header",
+      "alt": "Atau kirim lewat header <code>X-Api-Key</code>. Kunci dimiliki satu workspace dan hanya hash-nya yang disimpan, jadi salin kunci saat dibuat: kunci tidak dapat ditampilkan lagi. Kunci dapat dicabut kapan saja dan langsung berhenti berfungsi."
+    },
+    "webhooks": {
+      "title": "Webhook dan peristiwa real-time",
+      "comingTitle": "Pengiriman webhook segera hadir",
+      "comingBody": "Mendaftarkan webhook dan menerima peristiwa di URL Anda sendiri belum tersedia. Saat ini tidak ada peristiwa yang dikirim ke server Anda, jadi belum ada yang bisa dilanggani. Kartu ini akan mencantumkan peristiwa dan header tanda tangan saat pengiriman aktif.",
+      "rateLabel": "Batas laju",
+      "rate": "Setiap kunci dibatasi sesuai batas per menit paket workspace; jika paket tidak menetapkannya, berlaku default platform sebesar {limit} permintaan per menit. Setiap jawaban memuat <code>X-RateLimit-Limit</code> dan <code>X-RateLimit-Remaining</code>, dan permintaan yang melebihi batas dijawab dengan HTTP 429 dan header <code>Retry-After</code>. Pengiriman keluar juga memakai kredit pesan paket Anda."
+    },
+    "reference": {
+      "title": "Endpoint",
+      "count": "{count, plural, other {# endpoint}}",
+      "noMatch": "Tidak ada endpoint yang cocok dengan “{query}”.",
+      "clearFilter": "Hapus filter",
+      "empty": "Belum ada endpoint yang dipublikasikan. Periksa lagi nanti.",
+      "unavailableTitle": "Referensi endpoint tidak dapat dimuat",
+      "unavailableBody": "Spesifikasi API tidak dapat dijangkau saat ini. Pengantar di atas tetap berlaku. Coba lagi sebentar lagi.",
+      "retry": "Coba lagi",
+      "general": "Umum",
+      "toggle": "Tampilkan atau sembunyikan detail {method} {path}",
+      "parameters": "Parameter",
+      "bodyParameters": "Parameter body",
+      "name": "Nama",
+      "field": "Kolom",
+      "description": "Deskripsi",
+      "required": "wajib",
+      "exampleRequest": "Contoh permintaan",
+      "requestBody": "Body permintaan",
+      "responses": "Respons",
+      "copyCurl": "Salin permintaan",
+      "copyJson": "Salin JSON",
+      "noExample": "Spesifikasi tidak memberikan contoh untuk respons ini."
+    },
+    "footer": "REST API {brand} · v1 · dibuat dari spesifikasi OpenAPI langsung"
+  }
+}

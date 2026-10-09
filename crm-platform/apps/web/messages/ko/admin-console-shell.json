@@ -1,0 +1,709 @@
+{
+  "admin-console-shell": {
+    "nav": {
+      "overview": "홈",
+      "menuOrder": "메뉴 순서",
+      "groups": {
+        "shell": "인터페이스"
+      },
+      "sections": {
+        "reports": "리포트",
+        "plans": "워크스페이스 및 요금제",
+        "billing": "결제",
+        "messaging": "메시지 결제",
+        "support": "지원",
+        "website": "웹사이트",
+        "whatsapp": "WhatsApp",
+        "apps": "앱",
+        "team": "팀 및 보안",
+        "settings": "설정",
+        "system": "시스템"
+      },
+      "badges": {
+        "notSupported": "지원되지 않음",
+        "noWorkspaces": "워크스페이스 없음"
+      },
+      "labels": {
+        "addonPacks": "애드온 팩",
+        "extensions": "확장 기능",
+        "trackingCode": "추적 코드",
+        "planPricingSettings": "요금제 가격 설정",
+        "checkoutSettings": "결제 진행 설정",
+        "walletOverview": "지갑 개요",
+        "flowTemplates": "플로우 템플릿"
+      },
+      "hubNotes": {
+        "reports": "매출, 요금제, AI 및 시스템 리포트.",
+        "plans": "워크스페이스, 요금제, 애드온 팩, 쿠폰 및 요금 안내 페이지.",
+        "billing": "주문, 인보이스, 결제 및 결제 진행 설정.",
+        "messaging": "메시지 가격, 마진, 크레딧 패키지 및 Meta 리셀러 수익.",
+        "support": "티켓, 팀 및 플랫폼 인박스, 상담원, SLA, 플레이북, 문의 메시지.",
+        "website": "사이트 편집기, 블로그, 법적 고지 페이지, 공지 및 가이드북.",
+        "whatsapp": "프로바이더, 번호 전환, Node 브리지, 웹훅, WABA 및 카탈로그 설정.",
+        "apps": "마켓플레이스, 확장 기능 및 플로우 템플릿.",
+        "team": "역할, 권한, 보안 및 로그인 규칙.",
+        "settings": "브랜딩, 메일, 연동, 개인정보, 스토리지 등.",
+        "system": "업데이트, 언어, 통화 및 번역."
+      },
+      "captions": {
+        "branding": "브랜딩 및 인터페이스",
+        "integrations": "연동",
+        "privacy": "개인정보 및 추적",
+        "infrastructure": "인프라",
+        "roles": "역할",
+        "security": "보안",
+        "signin": "로그인 및 가입"
+      }
+    },
+    "shell": {
+      "collapse": "사이드바 접기",
+      "expand": "사이드바 펼치기",
+      "backToApp": "앱으로 돌아가기",
+      "allAreas": "모든 영역",
+      "switchArea": "영역 전환, 현재 {area}"
+    },
+    "overview": {
+      "title": "플랫폼 콘솔",
+      "note": "영역을 선택하세요. 각 영역은 왼쪽 메뉴에 해당 페이지가 열리며, Ctrl+K로 이름으로 모든 페이지를 찾을 수 있습니다.",
+      "open": "열기",
+      "attentionTitle": "확인 필요",
+      "attentionAll": "{count, plural, other {읽지 않은 알림 #개}}",
+      "attentionEmpty": "지금 확인할 항목이 없습니다.",
+      "pages": "{count, plural, other {페이지 #개}}"
+    },
+    "menuOrder": {
+      "title": "메뉴 순서",
+      "note": "모든 고객에게 표시되는 상단 바에 나타낼 항목과 순서를 선택하세요. 나머지는 더보기 아래에 표시됩니다. 사용자는 다음 페이지 로드 시 변경 사항을 볼 수 있습니다.",
+      "barZone": "상단 바",
+      "moreZone": "더보기",
+      "locked": "항상 마지막",
+      "save": "레이아웃 저장",
+      "reset": "기본값으로 재설정",
+      "saved": "메뉴 레이아웃을 저장했습니다. 사용자는 다음 페이지 로드 시 확인할 수 있습니다.",
+      "saveFailed": "레이아웃을 저장할 수 없습니다.",
+      "loadFailed": "레이아웃을 불러올 수 없습니다.",
+      "moveUp": "{item} 위로 이동",
+      "moveDown": "{item} 아래로 이동",
+      "remove": "{item}을(를) 더보기로 이동",
+      "add": "{item}을(를) 상단 바에 추가",
+      "removeShort": "제거",
+      "addShort": "추가",
+      "items": {
+        "dashboard": "대시보드",
+        "team-inbox": "팀 인박스",
+        "wa-campaigns": "캠페인",
+        "flows": "플로우",
+        "templates": "템플릿",
+        "devices": "기기",
+        "metaads": "Meta 광고",
+        "broadcasts": "브로드캐스트",
+        "contacts": "연락처",
+        "deals": "딜",
+        "chat": "라이브 채팅",
+        "analytics": "분석",
+        "auto-reply": "자동 응답",
+        "scheduled": "예약됨",
+        "message-history": "기록",
+        "ai-assistants": "AI 어시스턴트",
+        "ai-training": "AI 학습",
+        "wa-links": "WA 링크",
+        "chatbot-widgets": "채팅 위젯",
+        "webhooks": "웹훅",
+        "integrations": "연동",
+        "warmer": "워머",
+        "call-logs": "통화 기록",
+        "support": "지원",
+        "more": "더보기"
+      }
+    },
+    "header": {
+      "health": {
+        "title": "플랫폼 상태",
+        "ok": "모든 시스템 정상",
+        "stuck": "{count, plural, other {멈춘 작업 #개}}",
+        "down": "데이터베이스에 연결할 수 없음"
+      },
+      "bell": {
+        "title": "알림",
+        "labelUnread": "알림, 읽지 않음 {count}개",
+        "inbox": "인박스",
+        "markAllRead": "모두 읽음으로 표시",
+        "clearAll": "모두 지우기",
+        "viewAll": "모두 보기",
+        "loading": "로딩 중...",
+        "empty": "아직 알림이 없습니다."
+      },
+      "account": {
+        "menu": "계정 메뉴",
+        "open": "{name}의 계정 메뉴",
+        "myAccount": "내 계정",
+        "settings": "설정",
+        "overview": "관리자 개요",
+        "signOut": "로그아웃"
+      },
+      "feed": {
+        "signup": "신규 가입",
+        "paymentReceived": "결제 수신",
+        "newOrder": "새 주문",
+        "newTicket": "새 지원 티켓",
+        "newContactMessage": "새 문의 메시지",
+        "newWorkspace": "새 워크스페이스"
+      }
+    },
+    "notificationsPage": {
+      "eyebrow": "관리자 - 플랫폼 활동 - 알림",
+      "title": "관리자 알림",
+      "note": "신규 가입, 결제, 지원 티켓, 문의 메시지, 새 워크스페이스 등 플랫폼 전체에서 일어나는 모든 일입니다. 워크스페이스 멤버의 개인 알림과는 별개입니다.",
+      "tiles": {
+        "all": "모든 이벤트",
+        "signup": "가입",
+        "payment": "결제",
+        "ticket": "지원",
+        "contact": "메시지",
+        "workspace": "워크스페이스"
+      },
+      "pills": {
+        "all": "전체",
+        "signup": "가입",
+        "payment": "결제",
+        "ticket": "지원",
+        "contact": "메시지",
+        "workspace": "워크스페이스"
+      },
+      "kinds": {
+        "signup": "가입",
+        "payment": "결제",
+        "ticket": "지원",
+        "contact": "메시지",
+        "workspace": "워크스페이스"
+      },
+      "last30": "최근 30일",
+      "search": "이벤트 검색...",
+      "empty": "이 보기에는 플랫폼 활동이 없습니다.",
+      "loadFailed": "피드를 불러올 수 없습니다.",
+      "cols": {
+        "type": "유형",
+        "event": "이벤트",
+        "detail": "상세",
+        "when": "시간",
+        "open": "열기"
+      },
+      "showing": "{count, plural, other {최근 이벤트 #개}} 표시 중",
+      "live": "실시간 피드, 최신순"
+    },
+    "settings": {
+      "workspace": {
+        "label": "워크스페이스 설정",
+        "description": "이름, 시간대, 통화, 알림, 데이터 내보내기 및 워크스페이스 삭제.",
+        "keywords": "워크스페이스, 이름, 시간대, 통화, 알림, 내보내기, 삭제, slack"
+      }
+    },
+    "workspaceSettings": {
+      "titleLead": "워크스페이스",
+      "titleTail": "설정",
+      "subtitle": "워크스페이스, 팀, 연동을 설정하세요.",
+      "tabs": {
+        "general": "일반",
+        "branding": "브랜딩",
+        "team": "팀 및 역할",
+        "notifications": "알림",
+        "aikeys": "AI 키",
+        "security": "보안",
+        "api": "API 및 웹훅",
+        "data": "데이터 및 내보내기",
+        "appearance": "화면 모양"
+      },
+      "general": {
+        "workspace": "워크스페이스",
+        "ownerOnly": "워크스페이스 소유자만 시간대, 통화 또는 워크스페이스 이름을 변경할 수 있습니다.",
+        "name": "워크스페이스 이름",
+        "url": "워크스페이스 URL",
+        "urlHint": "URL 슬러그는 여기에서 수정할 수 없습니다. 변경하려면 지원팀에 문의하세요.",
+        "timezone": "기본 시간대",
+        "timezoneHint": "예약 발송, 영업시간 확인, SLA 타이머가 모두 이 시간대로 실행됩니다.",
+        "currency": "통화",
+        "currencyHint": "요금제 결제, 인보이스, 지갑 표시에 사용됩니다.",
+        "save": "저장",
+        "saved": "설정을 저장했습니다.",
+        "saveFailed": "설정을 저장할 수 없습니다.",
+        "loadFailed": "설정을 불러올 수 없습니다.",
+        "hours": {
+          "title": "근무 시간",
+          "note": "참고용으로 표시됩니다. 근무 시간은 아직 적용되지 않으므로 이 컨트롤은 읽기 전용입니다.",
+          "weekdays": "월 - 금",
+          "saturday": "토요일",
+          "sunday": "일요일",
+          "from": "시작",
+          "to": "종료"
+        },
+        "preferences": {
+          "title": "AI 자동 요약",
+          "note": "모든 메시지 본문 입력란에서 AI가 실시간으로 검토합니다. 잘된 점은 녹색, 고칠 점은 빨간색으로 표시하고 한 번의 탭으로 붙여넣을 수 있는 \"최적 버전\"도 제공합니다. 끄면 툴바의 반짝이 아이콘에서 필요할 때 같은 검토를 실행할 수 있습니다.",
+          "save": "저장",
+          "saved": "환경설정을 저장했습니다.",
+          "saveFailed": "환경설정을 저장할 수 없습니다."
+        }
+      },
+      "notifications": {
+        "title": "워크스페이스 알림",
+        "note": "채널별로 전달 여부를 전환하세요. 여기서 끈 항목은 앱 내 알림, 이메일, Slack 메시지가 생성되지 않습니다.",
+        "readOnly": "읽기 전용입니다. 워크스페이스 소유자가 수정할 수 있습니다.",
+        "save": "환경설정 저장",
+        "saved": "알림 환경설정을 저장했습니다.",
+        "saveFailed": "환경설정을 저장할 수 없습니다.",
+        "loadFailed": "환경설정을 불러올 수 없습니다.",
+        "specificEvents": "개별 이벤트",
+        "byCategory": "카테고리별",
+        "event": "이벤트",
+        "category": "카테고리",
+        "channels": {
+          "inapp": "앱 내",
+          "email": "이메일",
+          "slack": "Slack"
+        },
+        "events": {
+          "device_connected": "기기 연결됨",
+          "device_disconnected": "기기 연결 해제됨",
+          "campaign_completed": "캠페인 완료",
+          "campaign_failed": "캠페인 실패",
+          "broadcast_completed": "브로드캐스트 완료",
+          "new_customer_reply": "새 고객 답장",
+          "mention_in_inbox": "나를 @멘션함",
+          "conversation_assigned": "나에게 대화 배정됨",
+          "sla_breached": "SLA 위반",
+          "wallet_low_balance": "지갑 잔액 부족",
+          "plan_changed": "요금제 업그레이드 / 다운그레이드",
+          "payment_failed": "결제 실패",
+          "webhook_delivery_failed": "웹훅 전달 실패",
+          "flow_started": "플로우 시작됨",
+          "flow_failed": "플로우 실패",
+          "integration_disconnected": "연동 연결 해제됨",
+          "appointment_booked": "예약 완료",
+          "weekly_summary": "주간 요약"
+        },
+        "categories": {
+          "device": "기기",
+          "contact": "연락처",
+          "campaign": "캠페인",
+          "broadcast": "브로드캐스트",
+          "template": "템플릿",
+          "chat": "채팅",
+          "webhook": "웹훅",
+          "billing": "결제",
+          "system": "시스템"
+        },
+        "slackLabel": "Slack 수신 웹훅 URL",
+        "slackHint": "Slack의 앱, 수신 웹훅에서 만드세요. Slack 토글이 켜진 이벤트가 여기에 게시됩니다.",
+        "channelStatus": "채널 상태",
+        "statusInapp": "앱 내 알림: 활성, 상단 헤더의 배지에 반영됩니다.",
+        "statusEmailLive": "이메일: 활성, 플랫폼 메일 설정을 통해 발송됩니다.",
+        "statusEmailOff": "이메일: 플랫폼 관리자가 SMTP를 설정하면 발송됩니다.",
+        "statusSlackOn": "Slack: 웹훅이 저장되었습니다.",
+        "statusSlackOff": "Slack: 켜려면 웹훅 URL을 추가하세요."
+      },
+      "data": {
+        "loadFailed": "내보내기 건수를 불러올 수 없습니다.",
+        "exportTitle": "데이터 내보내기",
+        "exportNote": "워크스페이스 데이터를 CSV로 다운로드하세요. 각 링크는 새 내보내기를 스트리밍합니다.",
+        "exportOwnerOnly": "워크스페이스 소유자만 내보내기를 다운로드할 수 있습니다.",
+        "types": {
+          "contacts": "연락처",
+          "conversations": "대화",
+          "messages": "메시지"
+        },
+        "count": {
+          "contacts": "{count, plural, other {레코드 #개}} · CSV",
+          "conversations": "{count, plural, other {스레드 #개}} · CSV",
+          "messages": "{count, plural, other {메시지 #개}} · CSV"
+        },
+        "delete": {
+          "title": "워크스페이스 삭제",
+          "note": "이 워크스페이스와 모든 대화, 자동화, 결제 내역을 영구 삭제합니다.",
+          "irreversible": "되돌릴 수 없습니다.",
+          "ownerOnly": "워크스페이스 소유자만 워크스페이스를 삭제할 수 있습니다.",
+          "typeName": "워크스페이스 이름을 입력하세요:",
+          "password": "비밀번호로 확인",
+          "submit": "워크스페이스 영구 삭제",
+          "cancel": "취소",
+          "confirmTitle": "이 워크스페이스를 삭제할까요?",
+          "confirmMessage": "\"{name}\"과(와) 그 안의 모든 항목이 삭제되며 모든 사용자가 로그아웃됩니다. 되돌릴 수 없습니다.",
+          "failed": "워크스페이스를 삭제할 수 없습니다."
+        }
+      },
+      "groups": {
+        "workspace": "워크스페이스",
+        "system": "시스템"
+      },
+      "railLabel": "설정 섹션",
+      "personal": {
+        "title": "내 계정",
+        "body": "프로필, 비밀번호, 개인 환경설정."
+      },
+      "api": {
+        "restTitle": "일반 REST API",
+        "rest1": "API 키를 만들어 자체 시스템에서 연락처, 대화, 메시지를 읽고 쓰세요.",
+        "rest2": "모든 키는 이 워크스페이스로 범위가 제한되며 언제든 폐기할 수 있습니다.",
+        "rest3": "요청은 요금제에 따라 분당 횟수가 제한됩니다.",
+        "webhooksTitle": "웹훅",
+        "webhooksBody": "자체 엔드포인트로 이벤트를 보내고 다른 도구의 이벤트를 받으세요.",
+        "manage": "연동 관리"
+      },
+      "appearance": {
+        "title": "화면 모양",
+        "note": "앱이 표시되는 모양을 선택하세요. 헤더의 해와 달 버튼과 같은 설정입니다.",
+        "choices": {
+          "light": {
+            "label": "라이트",
+            "body": "부드러운 종이 톤의 밝은 화면."
+          },
+          "dark": {
+            "label": "다크",
+            "body": "밤에 눈이 편안한 어두운 화면."
+          }
+        },
+        "save": "저장",
+        "saved": "화면 모양을 업데이트했습니다."
+      }
+    },
+    "topNav": {
+      "more": "더보기",
+      "search": "검색",
+      "premium": "프리미엄 기능: 요금제를 업그레이드하여 잠금 해제"
+    },
+    "palette": {
+      "title": "페이지 검색",
+      "placeholder": "페이지, 설정, 도구 검색...",
+      "empty": "\"{query}\"에 대한 결과 없음",
+      "hintNavigate": "위/아래 키로 이동",
+      "hintOpen": "Enter로 열기",
+      "hintToggle": "Ctrl K로 전환",
+      "tags": {
+        "page": "페이지",
+        "account": "계정",
+        "plan": "요금제",
+        "help": "도움말",
+        "system": "시스템"
+      },
+      "entries": {
+        "profile": "프로필",
+        "profileHint": "이름, 사진, 연락처 정보",
+        "password": "비밀번호 및 보안",
+        "passwordHint": "비밀번호, 2단계 로그인, 활성 세션"
+      }
+    },
+    "strip": {
+      "jump": "검색 또는 이동...",
+      "account": {
+        "group": "계정",
+        "account": "계정",
+        "wallet": "지갑",
+        "notifications": "알림"
+      },
+      "greeting": {
+        "midnightOil": "늦은 시간까지 수고 많으세요",
+        "morning": "좋은 아침입니다",
+        "afternoon": "좋은 오후입니다",
+        "evening": "좋은 저녁입니다",
+        "night": "편안한 밤 되세요"
+      }
+    },
+    "profileMenu": {
+      "chip": "{plan} 요금제 - {role}",
+      "wallet": "지갑",
+      "orders": "주문 내역",
+      "plans": "요금 및 요금제",
+      "tour": "둘러보기 시작"
+    },
+    "quickAccess": {
+      "title": "빠른 실행",
+      "open": "빠른 실행 열기",
+      "close": "닫기",
+      "edit": "바로가기 수정",
+      "editTitle": "빠른 실행 수정",
+      "editNote": "페이지나 자신의 링크를 최대 10개까지 고정할 수 있습니다. 대시보드와 사이드 드로어에 표시됩니다.",
+      "dashboard": "대시보드",
+      "allApps": "모든 앱",
+      "limit": "바로가기는 최대 {max}개까지 고정할 수 있습니다.",
+      "saveFailed": "바로가기를 저장할 수 없습니다.",
+      "customLinks": "사용자 지정 링크",
+      "linkLabel": "라벨",
+      "linkUrl": "링크",
+      "addLink": "링크 추가",
+      "removeLink": "이 링크 제거",
+      "counter": "{count} / {max}개 고정됨",
+      "cancel": "취소",
+      "save": "바로가기 저장",
+      "problem": {
+        "incomplete": "링크에는 라벨과 주소가 필요합니다.",
+        "unsafe": "이 앱 내부 주소(슬래시 하나로 시작) 또는 http, https 주소를 사용하세요."
+      },
+      "catalog": {
+        "inbox": {
+          "label": "통합 인박스",
+          "desc": "모든 대화를 한곳에서"
+        },
+        "contacts": {
+          "label": "연락처",
+          "desc": "오디언스와 상세 정보"
+        },
+        "campaigns": {
+          "label": "캠페인",
+          "desc": "캠페인 계획 및 발송"
+        },
+        "broadcasts": {
+          "label": "브로드캐스트",
+          "desc": "여러 연락처에 한 번에 메시지 발송"
+        },
+        "templates": {
+          "label": "템플릿",
+          "desc": "승인된 메시지 템플릿"
+        },
+        "flows": {
+          "label": "플로우",
+          "desc": "대화 자동화"
+        },
+        "scheduled": {
+          "label": "예약됨",
+          "desc": "발송 대기 중인 메시지"
+        },
+        "catalog": {
+          "label": "카탈로그",
+          "desc": "WhatsApp에서 판매하는 상품"
+        },
+        "store": {
+          "label": "스토어",
+          "desc": "스토어프론트 및 주문"
+        },
+        "deals": {
+          "label": "영업 파이프라인",
+          "desc": "단계별 딜"
+        },
+        "analytics": {
+          "label": "분석",
+          "desc": "전달 및 응답 수치"
+        },
+        "auto-reply": {
+          "label": "자동 응답",
+          "desc": "키워드 및 영업시간 외 응답"
+        },
+        "devices": {
+          "label": "기기",
+          "desc": "연결된 WhatsApp 번호"
+        },
+        "chatbots": {
+          "label": "채팅 위젯",
+          "desc": "웹사이트용 채팅 위젯"
+        },
+        "ai": {
+          "label": "AI 어시스턴트",
+          "desc": "대신 응답하는 어시스턴트"
+        },
+        "appointments": {
+          "label": "예약",
+          "desc": "예약 및 가용 시간"
+        },
+        "webhooks": {
+          "label": "웹훅",
+          "desc": "다른 시스템으로 이벤트 전송"
+        },
+        "history": {
+          "label": "메시지 로그",
+          "desc": "주고받은 모든 메시지"
+        },
+        "account": {
+          "label": "계정",
+          "desc": "프로필, 요금제, 지갑"
+        },
+        "more": {
+          "label": "더 많은 앱",
+          "desc": "모든 도구를 한 페이지에"
+        }
+      }
+    },
+    "announcements": {
+      "label": "공지사항",
+      "dismiss": "닫기"
+    },
+    "tour": {
+      "close": "둘러보기 닫기",
+      "back": "뒤로",
+      "next": "다음",
+      "done": "완료",
+      "progress": "{current} / {total}",
+      "steps": {
+        "welcome": {
+          "title": "{app}에 오신 것을 환영합니다",
+          "body": "가장 자주 사용하는 곳을 빠르게 둘러봅니다. 1분도 걸리지 않습니다."
+        },
+        "navbar": {
+          "title": "내 메뉴",
+          "body": "일상적인 작업은 모두 상단 바에서 한 번의 클릭으로 할 수 있습니다."
+        },
+        "metaads": {
+          "title": "Meta 광고",
+          "body": "WhatsApp 연결 광고를 운영하고 성과를 확인하세요."
+        },
+        "campaigns": {
+          "title": "캠페인",
+          "body": "WhatsApp 캠페인을 계획, 발송, 추적하세요."
+        },
+        "flows": {
+          "title": "플로우",
+          "body": "대신 응답하는 자동화를 만드세요."
+        },
+        "templates": {
+          "title": "템플릿",
+          "body": "승인된 메시지 템플릿을 여기에 보관하세요."
+        },
+        "devices": {
+          "title": "채널",
+          "body": "발송에 사용할 번호와 계정을 연결하세요."
+        },
+        "more": {
+          "title": "더보기",
+          "body": "그 외 모든 도구가 그룹별로 정리되어 검색할 수 있습니다."
+        },
+        "kpi": {
+          "title": "내 번호",
+          "body": "메시지, 답장, 전달 현황을 한눈에."
+        },
+        "newCampaign": {
+          "title": "캠페인 시작",
+          "body": "여기에서 첫 캠페인을 만드세요."
+        },
+        "pipeline": {
+          "title": "영업 파이프라인",
+          "body": "첫 메시지부터 성사까지 딜을 추적하세요."
+        }
+      }
+    },
+    "more": {
+      "titleLead": "더보기",
+      "titleTail": "기능",
+      "subtitle": "모든 도구를 한곳에.",
+      "navigation": "탐색",
+      "allTools": "모든 도구",
+      "noTools": "아직 아무것도 없습니다.",
+      "tabs": {
+        "all": "전체",
+        "automation": "자동화",
+        "data": "데이터",
+        "help": "도움말"
+      },
+      "plan": "내 요금제",
+      "managePlan": "요금제 관리",
+      "wallet": "지갑",
+      "topUp": "충전",
+      "tips": {
+        "title": "팁",
+        "pager": "팁",
+        "templates": {
+          "title": "템플릿 사용",
+          "body": "승인된 템플릿은 24시간 창 밖의 고객에게도 전달됩니다."
+        },
+        "flows": {
+          "title": "응답 자동화",
+          "body": "플로우가 같은 질문에 항상 대신 답할 수 있습니다."
+        },
+        "palette": {
+          "title": "어디든 이동",
+          "body": "Ctrl K를 눌러 모든 페이지를 검색하세요."
+        },
+        "scheduled": {
+          "title": "미리 예약",
+          "body": "지금 메시지를 대기열에 넣으면 적절한 시간에 발송됩니다."
+        },
+        "wallet": {
+          "title": "잔액 확인",
+          "body": "잔액이 부족해지기 전에 충전하여 발송이 중단되지 않게 하세요."
+        }
+      },
+      "shortcuts": {
+        "title": "바로가기",
+        "customise": "사용자 지정",
+        "empty": "선택된 바로가기가 없습니다. 사용자 지정에서 추가하세요.",
+        "editTitle": "바로가기 사용자 지정",
+        "emptyEditor": "선택된 바로가기 없음",
+        "up": "{item} 위로 이동",
+        "down": "{item} 아래로 이동",
+        "remove": "{item} 제거",
+        "customTitle": "제목",
+        "customSubtitle": "부제목",
+        "customUrl": "링크",
+        "customProblem": "사용자 지정 바로가기에는 제목과 링크가 필요합니다.",
+        "addCustom": "사용자 지정 바로가기 추가",
+        "reset": "기본값 복원",
+        "cancel": "취소",
+        "save": "저장",
+        "presets": {
+          "new-auto-reply": {
+            "title": "새 자동 응답",
+            "subtitle": "자주 묻는 질문에 자동으로 응답"
+          },
+          "schedule-send": {
+            "title": "예약 발송",
+            "subtitle": "나중에 보낼 메시지를 대기열에 추가"
+          },
+          "test-webhook": {
+            "title": "웹훅",
+            "subtitle": "다른 시스템으로 이벤트 전송"
+          },
+          "export-history": {
+            "title": "메시지 기록",
+            "subtitle": "발송 내역 검토 및 내보내기"
+          },
+          "contact-support": {
+            "title": "지원팀 문의",
+            "subtitle": "팀에 도움 요청"
+          },
+          "new-broadcast": {
+            "title": "새 브로드캐스트",
+            "subtitle": "여러 연락처에 한 번에 메시지 발송"
+          },
+          "open-contacts": {
+            "title": "연락처",
+            "subtitle": "내 오디언스"
+          },
+          "pair-device": {
+            "title": "번호 연결",
+            "subtitle": "WhatsApp 번호 페어링"
+          },
+          "team-inbox": {
+            "title": "인박스",
+            "subtitle": "모든 대화"
+          },
+          "create-flow": {
+            "title": "플로우 만들기",
+            "subtitle": "자동화 만들기"
+          },
+          "new-template": {
+            "title": "새 템플릿",
+            "subtitle": "메시지 템플릿 작성"
+          }
+        }
+      }
+    },
+    "inboxBell": {
+      "label": "{count, plural, other {읽지 않은 대화 #개}}",
+      "pill": "{count, plural, other {새 메시지}}",
+      "dismiss": "더 새로운 항목이 올 때까지 숨기기",
+      "title": "새 메시지",
+      "viewInbox": "인박스 열기"
+    },
+    "connectDevice": {
+      "title": "번호 연결",
+      "close": "닫기",
+      "connected": "번호 연결됨"
+    },
+    "search": {
+      "label": "콘솔 검색",
+      "trigger": "관리자 검색…",
+      "placeholder": "페이지 및 설정 검색…",
+      "noResults": "“{query}”에 대한 결과 없음",
+      "count": "{count, plural, other {결과 #개}}",
+      "hintMove": "이동",
+      "hintOpen": "열기",
+      "hintToggle": "전환"
+    }
+  }
+}

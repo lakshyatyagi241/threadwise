@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "Storefront / Zahlungen",
+      "title": "Zahlungen",
+      "subtitle": "Die Geldseite Ihrer Shop-Bestellungen: was bezahlt ist, was aussteht und was per Nachnahme läuft.",
+      "listTitle": "Zahlungsliste",
+      "loading": "Zahlungen werden geladen",
+      "emptyFilteredTitle": "Keine passenden Zahlungen",
+      "emptyFilteredMessage": "Ändern Sie die Filter oder setzen Sie sie zurück, um alle Zahlungen zu sehen.",
+      "resetFilters": "Filter zurücksetzen",
+      "emptyTitle": "Noch keine Zahlungen",
+      "emptyMessage": "Eine Zahlung erscheint hier, sobald eine Shop-Bestellung aufgegeben wird. Öffnen Sie Bestellungen, um Ihre Bestellungen zu sehen oder eine manuell hinzuzufügen.",
+      "goToOrders": "Zu den Bestellungen",
+      "summary": {
+        "loading": "Zahlungssummen werden geladen",
+        "orders": "Bestellungen",
+        "collected": "Eingezogen",
+        "collectedNone": "Noch nichts eingezogen."
+      },
+      "filters": {
+        "search": "Suchen",
+        "searchPlaceholder": "Bestellnummer, Kunde oder Referenz",
+        "status": "Status",
+        "allStatuses": "Alle Status",
+        "method": "Methode",
+        "allMethods": "Alle Methoden",
+        "prepaid": "Vorauszahlung",
+        "cod": "Nachnahme",
+        "gatewayOption": "Ein Gateway...",
+        "gatewayCode": "Gateway-Code",
+        "gatewayCodePlaceholder": "z. B. razorpay",
+        "from": "Von",
+        "to": "Bis",
+        "rangeInverted": "Das Startdatum liegt nach dem Enddatum, daher wird der Zeitraum ignoriert.",
+        "reset": "Filter zurücksetzen"
+      },
+      "table": {
+        "caption": "Zahlungen von Shop-Bestellungen, neueste zuerst",
+        "order": "Bestellung",
+        "customer": "Kunde",
+        "status": "Status",
+        "method": "Methode",
+        "paidVia": "Bezahlt über",
+        "reference": "Referenz",
+        "amount": "Betrag",
+        "shop": "Shop",
+        "date": "Datum",
+        "methodPrepaid": "Vorauszahlung",
+        "methodCod": "Nachnahme",
+        "via": {
+          "razorpay_link": "Razorpay-Link",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "WhatsApp Pay im Chat",
+        "intro": "Lassen Sie Käufer eine Bestellung bezahlen, ohne WhatsApp zu verlassen (UPI, Karten, Netbanking, Wallets), und ziehen Sie das Geld auf Ihr eigenes Razorpay-, PayU-, BillDesk- oder Zaakpay-Konto ein.",
+        "indiaOnly": "Derzeit wird nur Indien als Markt unterstützt: Land und Währung sind fest auf Indien und INR gesetzt.",
+        "viewOnly": "Sie können die WhatsApp-Pay-Konfigurationen sehen, aber nicht ändern. Bitten Sie einen Workspace-Admin um die Berechtigung zur Verwaltung von Zahlungen.",
+        "howTitle": "So richten Sie es ein",
+        "how1": "Erstellen Sie im WhatsApp Manager unter Zahlungen für Indien eine Direct Pay Method und verknüpfen Sie Ihr Gateway-Konto.",
+        "how2": "Geben Sie ihr einen Namen und kopieren Sie diesen Namen hierher. Sie kann nicht aus dieser App heraus erstellt werden, es ist ein Schritt bei Meta.",
+        "how3": "Speichern Sie die Konfiguration, öffnen Sie dann Bestellungen und fordern Sie bei einer beliebigen Bestellung die Zahlung über WhatsApp an.",
+        "how4": "Der Käufer tippt auf Prüfen und bezahlen, bezahlt im Chat, und die Bestellung wird als bezahlt markiert, sobald Meta dies bestätigt.",
+        "listTitle": "Ihre Konfigurationen",
+        "loading": "Konfigurationen werden geladen",
+        "emptyTitle": "Noch keine Zahlungskonfigurationen",
+        "emptyMessage": "Fügen Sie auf dieser Seite eine hinzu, um Zahlungen im Chat einzuziehen.",
+        "emptyMessageReadOnly": "Bisher hat niemand eine hinzugefügt.",
+        "market": "Indien · INR",
+        "autoChargeOn": "Automatische Abbuchung an",
+        "active": "Aktiv",
+        "off": "Aus",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "Konfiguration gespeichert",
+          "removed": "Konfiguration entfernt"
+        },
+        "addTitle": "Zahlungskonfiguration hinzufügen",
+        "editTitle": "{name} bearbeiten",
+        "name": "Name der Konfiguration",
+        "nameLocked": "Der Name identifiziert die Konfiguration. Um sie umzubenennen, entfernen Sie sie und fügen Sie sie erneut hinzu.",
+        "updatesExisting": "Eine Konfiguration mit diesem Namen existiert: Beim Speichern wird sie aktualisiert.",
+        "nameHint": "Muss genau dem Namen der Direct Pay Method im WhatsApp Manager entsprechen (Zahlungen, Indien).",
+        "nameInvalid": "Geben Sie einen Namen mit 1 bis {max} Zeichen ein.",
+        "namePlaceholder": "z. B. my-razorpay-pay",
+        "gateway": "Gateway",
+        "activeLabel": "Aktiv",
+        "autoCharge": "Neue Bestellungen automatisch abbuchen",
+        "autoChargeHint": "Sendet die Zahlungsanfrage im Chat automatisch, sobald eine Bestellung aufgegeben wird.",
+        "save": "Konfiguration speichern",
+        "cancelEdit": "Bearbeitung abbrechen",
+        "removeTitle": "{name} entfernen?",
+        "removeMessage": "Bestellungen können mit dieser Konfiguration nicht mehr im Chat abgebucht werden. Die Direct Pay Method im WhatsApp Manager bleibt unberührt.",
+        "removeConfirm": "Konfiguration entfernen"
+      }
+    }
+  }
+}

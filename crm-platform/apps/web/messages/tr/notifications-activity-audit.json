@@ -1,0 +1,371 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "Bildirimler",
+      "labelUnread": "Bildirimler, {count} okunmadı",
+      "title": "Bildirimler",
+      "markAll": "Tümünü okundu olarak işaretle",
+      "empty": "Henüz bildirim yok.",
+      "loading": "Bildirimler yükleniyor",
+      "failed": "Bildirimler yüklenemedi.",
+      "retry": "Tekrar dene",
+      "unread": "Okunmadı",
+      "settings": "Uyarı ayarları",
+      "sound": "Yeni sohbet ve mesajlar için ses çal",
+      "soundOn": "Ses: açık",
+      "soundOff": "Ses: kapalı",
+      "desktopEnable": "Masaüstü uyarılarını etkinleştir",
+      "desktopOn": "Masaüstü uyarıları: açık",
+      "desktopOff": "Masaüstü uyarıları: kapalı",
+      "desktopBlocked": "Masaüstü uyarıları tarayıcı ayarlarınızda engellenmiş.",
+      "desktopHint": "Kişi adını yalnızca bu sekme arka plandayken gösterir.",
+      "preferences": "Bildirim ayarları"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Size bir görev atandı",
+        "body": "{actor} size bir görev atadı: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "Görev süresi doluyor",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "Görev tamamlandı",
+        "body": "{actor} tamamladı: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "Yeni potansiyel müşteri",
+        "titleReturning": "Potansiyel müşteri yeniden geldi",
+        "body": "{name}, {platform} üzerinden geldi",
+        "bodyReturning": "{name}, {platform} üzerinden başka bir potansiyel müşteri gönderdi",
+        "bodyNoActor": "{name} geldi"
+      },
+      "new_chat": {
+        "title": "{name} kişisinden yeni sohbet",
+        "titleNoName": "Yeni sohbet",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, other {{name} kişisinden # yeni mesaj}}",
+        "titleNoName": "{count, plural, other {# yeni mesaj}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "chat_waiting": {
+        "title": "{name} henüz yanıtlanmadı",
+        "titleNoName": "Bir sohbet hâlâ yanıt bekliyor",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "{name} size atandı",
+        "titleNoName": "Size bir sohbet atandı",
+        "titleTeam": "{name} ekibinize atandı",
+        "titleTeamNoName": "Ekibinize bir sohbet atandı",
+        "body": "{actor} tarafından atandı",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "{actor} sizi andı",
+        "titleNoName": "Bir notta adınız anıldı",
+        "body": "{name}: {preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "device_connected": {
+        "title": "{name} bağlandı",
+        "titleNoName": "WhatsApp numaranız bağlandı"
+      },
+      "device_disconnected": {
+        "title": "{name} bağlantısı kesildi",
+        "titleNoName": "Bir WhatsApp numarasının bağlantısı kesildi",
+        "body": "Yeniden bağlamak için cihazı açın."
+      },
+      "device_logged_out": {
+        "title": "{name} oturumu kapatıldı",
+        "titleNoName": "Bir WhatsApp numarasının oturumu kapatıldı",
+        "body": "Yeniden bağlanmak için QR kodunu tekrar tarayın."
+      },
+      "broadcast_completed": {
+        "title": "“{name}” toplu gönderimi tamamlandı",
+        "titleNoName": "Bir toplu gönderim tamamlandı",
+        "bodySent": "{sent, plural, other {# mesaj gönderildi}}",
+        "bodySentFailed": "{sent, plural, other {# mesaj gönderildi}}, {failed, plural, other {# başarısız}}"
+      },
+      "broadcast_failed": {
+        "title": "“{name}” toplu gönderimi başarısız oldu",
+        "titleNoName": "Bir toplu gönderim başarısız oldu",
+        "body": "{reason}",
+        "bodyNoReason": "Neyin yanlış gittiğini görmek için açın."
+      },
+      "campaign_completed": {
+        "title": "“{name}” kampanyası tamamlandı",
+        "titleNoName": "Bir kampanya tamamlandı",
+        "bodySent": "{sent, plural, other {# mesaj gönderildi}}",
+        "bodySentFailed": "{sent, plural, other {# mesaj gönderildi}}, {failed, plural, other {# başarısız}}"
+      },
+      "campaign_failed": {
+        "title": "“{name}” kampanyası başarısız oldu",
+        "titleNoName": "Bir kampanya başarısız oldu",
+        "body": "{reason}",
+        "bodyNoReason": "Neyin yanlış gittiğini görmek için açın."
+      },
+      "scheduled_completed": {
+        "title": "“{name}” zamanlanmış gönderimi gönderildi",
+        "titleNoName": "Zamanlanmış bir gönderim gönderildi",
+        "bodySent": "{sent, plural, other {# mesaj gönderildi}}",
+        "bodySentFailed": "{sent, plural, other {# mesaj gönderildi}}, {failed, plural, other {# başarısız}}"
+      },
+      "scheduled_failed": {
+        "title": "“{name}” zamanlanmış gönderimi başarısız oldu",
+        "titleNoName": "Zamanlanmış bir gönderim başarısız oldu",
+        "body": "{reason}",
+        "bodyNoReason": "Neyin yanlış gittiğini görmek için açın."
+      },
+      "teamchat_mention": {
+        "title": "{author} sizi {channel} kanalında andı",
+        "titleNoChannel": "{author} sizi Ekip sohbetinde andı",
+        "titleNoName": "Ekip sohbetinde adınız anıldı"
+      },
+      "teamchat_message": {
+        "title": "{count, plural, other {{author} kişisinden # yeni mesaj}}",
+        "titleNoName": "{count, plural, other {# yeni doğrudan mesaj}}"
+      }
+    },
+    "live": {
+      "open": "Aç",
+      "dismiss": "Kapat",
+      "toastRegion": "Bildirimler",
+      "summary": "{count} yeni bildirim",
+      "announceMany": "{count} yeni bildirim",
+      "desktop": {
+        "new_chat": "Yeni sohbet",
+        "new_message": "Yeni mesaj",
+        "chat_waiting": "Yanıt bekleniyor",
+        "conversation_assigned": "Size atandı",
+        "mention": "Sizi andı",
+        "fallbackTitle": "Yeni bildirim",
+        "device_connected": "WhatsApp numarası bağlandı",
+        "device_disconnected": "WhatsApp numarasının bağlantısı kesildi",
+        "device_logged_out": "WhatsApp numarasının oturumu kapatıldı",
+        "broadcast_completed": "Toplu gönderim tamamlandı",
+        "broadcast_failed": "Toplu gönderim başarısız",
+        "campaign_completed": "Kampanya tamamlandı",
+        "campaign_failed": "Kampanya başarısız",
+        "scheduled_completed": "Zamanlanmış gönderim gönderildi",
+        "scheduled_failed": "Zamanlanmış gönderim başarısız",
+        "teamchat_mention": "Ekip sohbetinde sizi andı",
+        "teamchat_message": "Yeni doğrudan mesaj"
+      }
+    },
+    "prefs": {
+      "title": "Bildirim tercihleri",
+      "description": "Her etkinliğin size nasıl ulaşacağını seçin. Bu tercihler yalnızca sizindir; çalışma alanınız hangi etkinliklerin başlangıçta açık olacağını belirler.",
+      "columns": {
+        "event": "Etkinlik",
+        "bell": "Zil",
+        "toast": "Açılır pencere",
+        "sound": "Ses",
+        "push": "Anlık bildirim"
+      },
+      "groups": {
+        "conversations": "Sohbetler",
+        "tasks": "Görevler",
+        "leads": "Potansiyel müşteriler ve formlar",
+        "documents": "Satış belgeleri",
+        "wallet": "Cüzdan",
+        "devices": "WhatsApp numaraları",
+        "broadcasts": "Toplu gönderimler ve kampanyalar",
+        "team_chat": "Ekip sohbeti"
+      },
+      "types": {
+        "new_chat": {
+          "label": "Yeni sohbet",
+          "hint": "Henüz sahibi olmayan bir konuşmaya ilk mesaj gelir."
+        },
+        "new_message": {
+          "label": "Sohbetimde yeni mesaj",
+          "hint": "Bir müşteri size atanmış bir sohbete yazar."
+        },
+        "chat_waiting": {
+          "label": "Sohbet hâlâ yanıt bekliyor",
+          "hint": "Kimseye atanmamış bir sohbette müşteri mesajı birkaç dakikadır yanıtsız kaldı. Bu bildirimi yalnızca bir kez alırsınız."
+        },
+        "conversation_assigned": {
+          "label": "Bana atanan sohbet",
+          "hint": "Bir sohbet size veya ekibinize atandı."
+        },
+        "mention": {
+          "label": "Bir notta anıldı",
+          "hint": "Bir iş arkadaşı sizi bir konuşma notunda anar."
+        },
+        "teamchat_mention": {
+          "label": "Ekip sohbetinde anıldı",
+          "hint": "Bir iş arkadaşı sizi bir ekip sohbeti kanalında anar."
+        },
+        "teamchat_message": {
+          "label": "Doğrudan mesaj",
+          "hint": "Bir iş arkadaşı Ekip sohbetinde size yazar."
+        },
+        "device_connected": {
+          "label": "Numara bağlandı",
+          "hint": "Kişisel bir WhatsApp numarasının bağlanması tamamlandı."
+        },
+        "device_disconnected": {
+          "label": "Numara bağlantısı kesildi",
+          "hint": "Kişisel bir WhatsApp numarasının bağlantısı koptu."
+        },
+        "device_logged_out": {
+          "label": "Numara oturumu kapatıldı",
+          "hint": "Kişisel bir WhatsApp numarasının oturumu telefondan kapatıldı."
+        },
+        "broadcast_completed": {
+          "label": "Toplu gönderim tamamlandı",
+          "hint": "Başlattığınız bir toplu gönderim gönderildi."
+        },
+        "broadcast_failed": {
+          "label": "Toplu gönderim başarısız",
+          "hint": "Başlattığınız bir toplu gönderim başarısız oldu."
+        },
+        "campaign_completed": {
+          "label": "Kampanya tamamlandı",
+          "hint": "Başlattığınız bir kampanya gönderildi."
+        },
+        "campaign_failed": {
+          "label": "Kampanya başarısız",
+          "hint": "Başlattığınız bir kampanya başarısız oldu."
+        },
+        "scheduled_completed": {
+          "label": "Zamanlanmış gönderim gönderildi",
+          "hint": "Ayarladığınız zamanlanmış bir gönderim gönderildi."
+        },
+        "scheduled_failed": {
+          "label": "Zamanlanmış gönderim başarısız",
+          "hint": "Ayarladığınız zamanlanmış bir gönderim başarısız oldu."
+        },
+        "task_assigned": {
+          "label": "Bana bir görev atandı",
+          "hint": "Size bir görev atandı."
+        },
+        "task_due": {
+          "label": "Görev süresi doluyor",
+          "hint": "Görevinizin süresi doluyor."
+        },
+        "task_completed": {
+          "label": "Görev tamamlandı",
+          "hint": "Oluşturduğunuz bir görev tamamlandı."
+        },
+        "new_lead": {
+          "label": "Yeni potansiyel müşteri",
+          "hint": "Bir potansiyel müşteri kaynağından potansiyel müşteri geldi."
+        },
+        "form_submission": {
+          "label": "Form gönderildi",
+          "hint": "Biri formlarınızdan birini gönderdi."
+        },
+        "form_needs_review": {
+          "label": "Form incelenmeli",
+          "hint": "Bir gönderim incelenmeli."
+        },
+        "wallet_low_balance": {
+          "label": "Cüzdan bakiyesi düşük",
+          "hint": "Çalışma alanı cüzdanının bakiyesi azalıyor."
+        },
+        "sales_doc_decided": {
+          "label": "Satış belgesi karara bağlandı",
+          "hint": "Bir teklif veya fatura kabul edildi ya da reddedildi."
+        },
+        "wallet_credited": {
+          "label": "Cüzdana bakiye yüklendi",
+          "hint": "Çalışma alanı cüzdanına bakiye yüklendi."
+        }
+      },
+      "loading": "Tercihleriniz yükleniyor",
+      "failed": "Tercihleriniz yüklenemedi.",
+      "retry": "Tekrar dene",
+      "saveFailed": "Bu değişiklik kaydedilemedi. Geri alındı.",
+      "saved": "Kaydedildi",
+      "dismiss": "Kapat",
+      "resetRow": "Varsayılana sıfırla",
+      "resetRowFor": "{event} etkinliğini varsayılana sıfırla",
+      "resetAll": "Her şeyi varsayılana sıfırla",
+      "resetAllDone": "Tüm tercihler varsayılana döndü.",
+      "customised": "Değiştirildi",
+      "usingDefault": "Varsayılan",
+      "toggleLabel": "{event}: {channel}",
+      "workspaceOff": "Çalışma alanınız tarafından kapatıldı",
+      "workspaceOffHelp": "Çalışma alanınızda bu kapalı; yine de kendi seçiminiz sizin için geçerlidir.",
+      "bellOffHelp": "Açılır pencere, ses veya anlık bildirim seçmek için zili açın.",
+      "notAvailable": "Kullanılamıyor",
+      "defaultSummary": "Varsayılan: {bell}, {toast}, {sound}",
+      "on": "açık",
+      "off": "kapalı",
+      "channelNames": {
+        "bell": "zil",
+        "toast": "açılır pencere",
+        "sound": "ses",
+        "push": "anlık bildirim"
+      },
+      "browser": {
+        "title": "Bu tarayıcı",
+        "description": "Ses ve masaüstü uyarıları hesap başına değil, tarayıcı başına ayarlanır."
+      },
+      "empty": "Henüz ayarlanacak bildirim türü yok.",
+      "defaultSummaryPush": "Varsayılan: {bell}, {toast}, {sound}, {push}",
+      "push": {
+        "title": "Tarayıcı bildirimleri",
+        "description": "CRM kapalıyken bile zilinize ulaşan etkinlikler için tarayıcınızdan bildirim alın. Aşağıdaki Anlık bildirim sütununda hangi etkinliklerin geleceğini siz seçersiniz.",
+        "state": {
+          "on": "Bu cihazda açık",
+          "off": "Kapalı",
+          "blocked": "Engellendi",
+          "unavailable": "Kullanılamıyor"
+        },
+        "checking": "Bu tarayıcı kontrol ediliyor",
+        "unsupported": "Bu tarayıcı, CRM kapalıyken bildirim gösteremez. Güncel bir Chrome, Edge, Firefox veya Safari'yi güvenli (https) bir sayfada deneyin.",
+        "needsInstall": "iPhone ve iPad'de tarayıcı bildirimleri yalnızca Ana Ekrana eklenen bir uygulama için çalışır.",
+        "needsInstallSteps": "Bu sayfayı Safari'de açın, Paylaş'a dokunun, Ana Ekrana Ekle'yi seçin, ardından CRM'i yeni simgeden açıp buraya geri dönün. iOS veya iPadOS 16.4 veya sonrası gerekir.",
+        "blocked": "Bu site için bildirimler tarayıcınızda engellenmiş.",
+        "blockedHelp": "Bunu yalnızca tarayıcınız geri alabilir: site ayarlarını açın (adres yanındaki simge), Bildirimler'i İzin ver olarak ayarlayın, ardından bu sayfaya dönün.",
+        "offHelp": "Bu cihazda etkin değil. Etkinleştir'e bastığınızda tarayıcınız izin isteyecek.",
+        "enable": "Bu cihazda etkinleştir",
+        "enabling": "Etkinleştiriliyor...",
+        "onHelp": "Aşağıda açtığınız etkinlikler için, CRM'e bakmadığınızda bu cihaz bir tarayıcı bildirimi alır.",
+        "howItWorks": "CRM açık ve önünüzdeyken bildirim alınmaz (bunu zil ve açılır pencereler karşılar). Bildirim, kimin ve hangi tür etkinliğin olduğunu gösterir; asla mesaj metnini göstermez.",
+        "test": "Test bildirimi gönder",
+        "testing": "Gönderiliyor...",
+        "disable": "Bu cihazda kapat",
+        "disabling": "Kapatılıyor...",
+        "testResult": {
+          "sent": "Gönderildi. CRM kapalı olsa bile birkaç saniye içinde cihazlarınızda görünmelidir.",
+          "none_reachable": "Tarayıcınıza veya anlık bildirim hizmetine şu anda ulaşılamadı. Biraz sonra tekrar deneyin; artık olmayan bir cihaz otomatik olarak kaldırılır.",
+          "no_device": "Gönderilecek bir cihaz yok. Önce bu cihazda bildirimleri etkinleştirin.",
+          "wait": "Az önce bir test gönderildi. Bir tane daha göndermeden önce birkaç saniye bekleyin."
+        },
+        "problem": {
+          "enable_failed": "Bu cihazda bildirimler etkinleştirilemedi. Tekrar deneyin.",
+          "disable_failed": "Bu cihazda bildirimler kapatılamadı. Tekrar deneyin.",
+          "remove_failed": "Bu cihaz kaldırılamadı. Tekrar deneyin.",
+          "test_failed": "Test gönderilemedi. Tekrar deneyin."
+        },
+        "devicesFailed": "Cihazlarınız yüklenemedi.",
+        "devices": {
+          "title": "Cihazlarınız",
+          "thisDevice": "Bu cihaz",
+          "added": "{date} tarihinde eklendi",
+          "lastUsed": "son bildirim {date}",
+          "neverUsed": "henüz bildirim yok",
+          "remove": "Kaldır",
+          "removeFor": "{device} cihazını kaldır"
+        }
+      }
+    },
+    "nav": {
+      "preferences": "Bildirimler"
+    }
+  }
+}

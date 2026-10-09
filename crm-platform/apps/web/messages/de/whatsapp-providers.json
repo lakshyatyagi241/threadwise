@@ -1,0 +1,663 @@
+{
+  "whatsapp-providers": {
+    "nav": {
+      "group": "WhatsApp-Provider",
+      "providers": "Provider",
+      "assignments": "Workspace-Zuweisungen",
+      "switch": "Provider wechseln"
+    },
+    "common": {
+      "loading": "Wird geladen...",
+      "retry": "Erneut versuchen",
+      "requestId": "Anfrage-ID"
+    },
+    "errors": {
+      "conflict": "Jemand anderes hat diesen Provider geändert, während Sie ihn bearbeitet haben. Die neueste Version wurde geladen. Prüfen Sie sie und wenden Sie Ihre Änderung erneut an.",
+      "noAccess": "Ihnen fehlt die Plattformberechtigung, die dafür nötig ist ({permission}). Bitten Sie einen Super-Admin, sie unter Rollen zu erteilen.",
+      "keyTaken": "Ein Provider mit diesem Schlüssel existiert bereits. Wählen Sie einen anderen Schlüssel.",
+      "baseUrlRefused": "Diese Adresse wird abgelehnt: {detail}.",
+      "baseUrlRefusedPlain": "Diese Adresse wird abgelehnt. Verwenden Sie eine https-Adresse mit einem öffentlichen Hostnamen.",
+      "inUse": "Nummern oder Workspaces verwenden diesen Provider noch. Wechseln Sie sie zuerst zu einem anderen Provider (der Anmeldemodus kann nicht geändert werden, solange Nummern über ihn verbunden sind).",
+      "disabled": "Der Provider muss dafür aktiv sein. Aktivieren Sie ihn zuerst.",
+      "credentialsMissing": "Der Provider hat noch kein gespeichertes Token. Fügen Sie sein Provider-Token hinzu, speichern Sie und aktivieren Sie ihn dann.",
+      "isDefault": "Dies ist der Standard-Provider. Machen Sie zuerst einen anderen Provider zum Standard oder entfernen Sie den Standard.",
+      "builtin": "Dies ist ein integrierter Provider. Seine Adresse, Version und Geheimnisse werden unter Plattform-Einstellungen, WhatsApp bearbeitet.",
+      "nothingToDo": "Nichts zu wechseln: Jede verbundene Nummer dieses Workspace nutzt bereits diesen Provider.",
+      "partnerNotConfigured": "Diesem Provider fehlt etwas, das sein Partnerprogramm benötigt: der Partnerschlüssel (Provider-Token), die Lösungs-ID oder die Konfiguration des eingebetteten Signups. Prüfen Sie den Provider und speichern Sie.",
+      "partnerRefused": "Der Partner hat diese Anfrage abgelehnt: {message}",
+      "partnerRefusedPlain": "Der Partner hat diese Anfrage abgelehnt. Versuchen Sie es erneut oder prüfen Sie die Provider-Einstellungen.",
+      "unavailable": "Dieser Provider ist nicht verfügbar. Er ist möglicherweise archiviert oder es fehlt ein Zugangsdatensatz.",
+      "notFound": "Dieser Provider oder Workspace existiert nicht mehr. Gehen Sie zurück und laden Sie die Liste neu.",
+      "tooManyNumbers": "Mehr als 50 Nummern würden gleichzeitig verschoben. Wählen Sie einen Quell-Provider, um die Auswahl einzugrenzen, und führen Sie den Wechsel dann für den Rest erneut aus.",
+      "validationField": "{message}",
+      "validation": "Einige Werte wurden nicht akzeptiert. Prüfen Sie das Formular und versuchen Sie es erneut.",
+      "request": "Die Anfrage wurde abgelehnt. Prüfen Sie die Werte und versuchen Sie es erneut.",
+      "unexpected": "Auf unserer Seite ist ein Fehler aufgetreten. Versuchen Sie es in einem Moment erneut."
+    },
+    "status": {
+      "active": "Aktiv",
+      "disabled": "Deaktiviert",
+      "archived": "Archiviert",
+      "default": "Standard",
+      "builtin": "Integriert"
+    },
+    "secret": {
+      "show": "Den eingegebenen Wert anzeigen",
+      "hide": "Den eingegebenen Wert ausblenden",
+      "placeholderKeep": "Leer lassen, um den gespeicherten Wert beizubehalten",
+      "placeholderNew": "Wert einfügen",
+      "undoClear": "Behalten",
+      "clear": "Gespeicherten Wert entfernen",
+      "setWithHint": "Gesetzt, endet auf {last4}",
+      "set": "Gesetzt",
+      "notSet": "Nicht gesetzt",
+      "willClear": "Wird beim Speichern entfernt",
+      "willReplace": "Ersetzt den gespeicherten Wert beim Speichern"
+    },
+    "enums": {
+      "authScheme": {
+        "bearer": {
+          "label": "Bearer-Token",
+          "help": "Sendet Authorization: Bearer mit dem Token des Anmeldemodus."
+        },
+        "custom_headers": {
+          "label": "Benutzerdefinierte Header",
+          "help": "Sendet die von Ihnen definierten Header mit Token, WABA-ID und Telefonnummern-ID, die pro Aufruf eingesetzt werden."
+        }
+      },
+      "credentialMode": {
+        "platform_token": {
+          "label": "Plattform-Token",
+          "help": "Ein Token der Plattform beim Provider (ein Partner-Token). Kunden besitzen keines."
+        },
+        "channel_token": {
+          "label": "Nummern-Token",
+          "help": "Jede verbundene Nummer besitzt ein eigenes Zugriffstoken."
+        }
+      },
+      "webhookMode": {
+        "meta_app_level": {
+          "label": "Callback auf App-Ebene",
+          "help": "Die Plattform abonniert nur die WABA. Der Callback wird einmalig in der Meta-App festgelegt."
+        },
+        "number_level_override": {
+          "label": "Callback pro Nummer",
+          "help": "Nach dem Abonnieren legt die Plattform den Callback für jede Nummer über den Provider fest."
+        }
+      },
+      "signatureScheme": {
+        "meta_app_secret_sha256": {
+          "label": "Meta-Signatur (App-Geheimnis)",
+          "help": "Zustellungen enthalten X-Hub-Signature-256, geprüft mit dem App-Geheimnis des Providers."
+        },
+        "shared_secret_header": {
+          "label": "Gemeinsames Geheimnis in einem Header",
+          "help": "Ein Header, den Sie benennen, enthält das Webhook-Geheimnis des Providers selbst."
+        },
+        "none": {
+          "label": "Keine Signatur",
+          "help": "Der Provider signiert nichts. Nur das Geheimnis in der Callback-URL authentifiziert Zustellungen."
+        }
+      },
+      "billingMode": {
+        "provider_credit_line": {
+          "label": "Kreditlinie des Providers",
+          "help": "Der Provider stellt der Plattform die Kosten über eine eigene Kreditlinie in Rechnung."
+        },
+        "customer_direct": {
+          "label": "Kunde zahlt Meta direkt",
+          "help": "Die Zahlungsmethode des Kunden liegt bei Meta (Reseller-Engine-Modus meta_direct)."
+        },
+        "meta_reseller": {
+          "label": "Kreditlinie des Meta-Resellers",
+          "help": "Die Meta-Kreditlinie der Plattform wird auf die WABA des Kunden übertragen (Reseller-Engine-Modus reseller)."
+        }
+      },
+      "onboarding": {
+        "manual": {
+          "label": "Manuell",
+          "help": "Workspaces fügen ihre WABA- und Telefonnummern-IDs ein."
+        },
+        "embedded_signup": {
+          "label": "Eingebetteter Signup",
+          "help": "Workspaces verbinden sich über den eingebetteten Meta-Signup der Meta-App der Plattform."
+        }
+      },
+      "partnerProgram": {
+        "none": {
+          "label": "Keine"
+        },
+        "pinnacle": {
+          "label": "Pinnacle"
+        }
+      }
+    },
+    "gaps": {
+      "providerToken": "Das Provider-Token wird nicht gespeichert. Die Aktivierung dieses Providers benötigt es.",
+      "appSecret": "Das App-Geheimnis wird nicht gespeichert. Jede Webhook-Zustellung dieses Providers wird abgelehnt, bis es gespeichert ist.",
+      "webhookSecret": "Das Webhook-Geheimnis wird nicht gespeichert. Jede Webhook-Zustellung dieses Providers wird abgelehnt, bis es gespeichert ist."
+    },
+    "headers": {
+      "intro": "Header, die bei jedem Aufruf an diesen Provider gesendet werden. Ein Header, dessen Wert bei einem Aufruf nicht bekannt ist, wird weggelassen und niemals als wörtlicher Platzhalter gesendet.",
+      "listLabel": "Header-Vorlagen",
+      "name": "Header-Name",
+      "value": "Wert",
+      "insertFor": "Platzhalter in Header {n} einfügen",
+      "insert": "Platzhalter einfügen",
+      "removeFor": "Header {n} entfernen",
+      "remove": "Entfernen",
+      "add": "Header hinzufügen",
+      "placeholdersTitle": "Platzhalter und Regeln",
+      "leftOut": "Ein Header, der einen Platzhalter ohne Wert bei diesem Aufruf verwendet, wird weggelassen. Hop-by-Hop- und Rahmen-Header (host, content-length, transfer-encoding und ähnliche) können nicht gesetzt werden.",
+      "channelTokenNeverKnown": "Dieser Provider verwendet das Plattform-Token, daher besitzen Kunden kein Nummern-Token: Ein Header, der den Nummern-Token-Platzhalter verwendet, wird immer weggelassen.",
+      "problems": {
+        "tooMany": "Es sind höchstens {max} Header erlaubt.",
+        "nameInvalid": "Header-Namen verwenden nur Buchstaben, Ziffern und Bindestriche.",
+        "nameDenied": "Der Header {name} wird von der Verbindung verwaltet und kann nicht gesetzt werden.",
+        "nameDuplicate": "Der Header {name} kommt zweimal vor.",
+        "valueEmpty": "Der Header {name} benötigt einen Wert.",
+        "valueTooLong": "Der Wert von {name} ist länger als {max} Zeichen.",
+        "valueCharacters": "Der Wert von {name} enthält ein Steuerzeichen oder ein Nicht-ASCII-Zeichen.",
+        "placeholderUnknown": "Der Header {name} verwendet einen unbekannten Platzhalter: {names}.",
+        "strayBrace": "Der Header {name} enthält eine überzählige geschweifte Klammer. Platzhalter werden mit doppelten geschweiften Klammern um den Namen geschrieben.",
+        "credentialNotCarried": "Ein Header muss den Platzhalter {placeholder} enthalten, über den das Zugangsdatum den Provider erreicht."
+      },
+      "placeholders": {
+        "providerToken": "Das Token der Plattform beim Provider.",
+        "channelToken": "Das Zugriffstoken der Nummer, für die der Aufruf erfolgt.",
+        "wabaId": "Die WhatsApp-Business-Account-ID der Nummer.",
+        "phoneNumberId": "Die Telefonnummern-ID der Nummer."
+      },
+      "preview": {
+        "title": "Vorschau eines Aufrufs",
+        "urlPending": "(gültige Adresse eingeben)",
+        "note": "Es werden Platzhalterwerte angezeigt. Echte Token und IDs werden pro Aufruf eingesetzt und hier nie angezeigt."
+      }
+    },
+    "form": {
+      "wizardLabel": "WhatsApp-Provider hinzufügen",
+      "editLabel": "WhatsApp-Provider ändern",
+      "stepsLabel": "Schritte",
+      "steps": {
+        "basics": "Grundlagen",
+        "connection": "Verbindung",
+        "credentials": "Zugangsdaten",
+        "webhooks": "Webhooks",
+        "billing": "Abrechnung und Onboarding",
+        "review": "Prüfen"
+      },
+      "stepHelp": {
+        "basics": "Ein stabiler Schlüssel, ein Name, den Operatoren wiedererkennen, und optionale Notizen.",
+        "connection": "Wo der Provider antwortet und wie sich die Plattform bei ihm authentifiziert.",
+        "credentials": "Wessen Zugangsdaten die Arbeit erledigen, und das Provider-Token.",
+        "webhooks": "Wie der Provider eingehende Nachrichten zustellt und ihre Echtheit nachweist.",
+        "billing": "Wer Meta bezahlt, ob Dateien hochgeladen werden können und wie Workspaces eingebunden werden.",
+        "review": "Prüfen Sie alles. Nichts wird gesendet, bevor Sie den Provider erstellen."
+      },
+      "fields": {
+        "key": "Schlüssel",
+        "label": "Name",
+        "notes": "Notizen",
+        "baseUrl": "Basis-URL",
+        "apiVersion": "API-Version",
+        "authScheme": "Authentifizierung",
+        "credentialMode": "Anmeldemodus",
+        "providerToken": "Provider-Token",
+        "webhookMode": "Webhook-Modus",
+        "signatureScheme": "Webhook-Signatur",
+        "appSecret": "App-Geheimnis",
+        "webhookSecret": "Webhook-Geheimnis",
+        "verifyToken": "Verifizierungs-Token",
+        "signatureHeaderName": "Name des Signatur-Headers",
+        "billingMode": "Abrechnungsmodus",
+        "mediaUpload": "Medien-Upload unterstützt",
+        "onboarding": "Onboarding",
+        "onboardingAppId": "Meta-App-ID",
+        "onboardingConfigId": "ID der Konfiguration für den eingebetteten Signup",
+        "partnerProgram": "Partnerprogramm",
+        "partnerSolutionId": "Lösungs-ID"
+      },
+      "hints": {
+        "key": "Kleinbuchstaben, Ziffern, Unterstrich und Bindestrich, 2 bis 40 Zeichen, beginnend mit einem Buchstaben. Später kann er nicht geändert werden.",
+        "keyFixed": "Der Schlüssel kann nicht geändert werden.",
+        "notes": "Nur Operatoren sehen diese.",
+        "baseUrl": "https://host oder https://host/Präfix. Die Plattform ruft nur öffentliche https-Hosts auf.",
+        "credentialModeLocked": "{count, plural, one {# Nummer ist} other {# Nummern sind}} über diesen Provider verbunden, daher kann der Anmeldemodus nicht geändert werden. Wechseln Sie diese zuerst weg.",
+        "providerTokenNeeded": "Hier erforderlich, bevor dieser Provider aktiviert werden kann.",
+        "providerTokenOptional": "Hier optional: Jede Nummer bringt ihr eigenes Token mit.",
+        "appSecret": "Prüft den X-Hub-Signature-256 jeder Zustellung. Ohne sie wird jede Zustellung dieses Providers abgelehnt.",
+        "webhookSecret": "Der Wert, den der Provider in den Signatur-Header schreibt. Ohne ihn wird jede Zustellung abgelehnt.",
+        "signatureHeaderName": "Buchstaben, Ziffern und Bindestriche, zum Beispiel x-bsp-secret.",
+        "verifyToken": "Beantwortet die Abonnement-Prüfung des Providers. Optional.",
+        "billingMode": "Eine Bezeichnung, die auf die Abrechnungs-Engine des Resellers verweist. Sie ändert das Abrechnungsverhalten nicht.",
+        "mediaUpload": "Ist es ausgeschaltet, werden Dateien über einen öffentlichen Link statt per Upload gesendet.",
+        "onboardingIds": "Nur Ziffern. Dies sind öffentliche IDs der Meta-App der Plattform.",
+        "partnerPinnacle": "Pinnacle vergibt jeder Nummer einen eigenen Schlüssel. Speichern Sie den Partnerschlüssel als Provider-Token und das App-Geheimnis der Meta-App als App-Geheimnis (eingehende Webhooks werden damit geprüft).",
+        "partnerSolutionId": "Nur Ziffern, 5 bis 32. Die Partner-Lösungs-ID aus dem Pinnacle-Dashboard."
+      },
+      "devLoopback": "Einfaches http an einer Loopback-Adresse ist nur in der Entwicklungsumgebung hinter einem Serverflag erlaubt. In der Produktion wird diese Adresse abgelehnt.",
+      "ssrfNote": "Die Adresse wird vom Server erneut geprüft: nur https, ein öffentlicher Hostname, der Standardport, und jede Adresse, in die er aufgelöst wird, muss öffentlich sein.",
+      "secretsNote": "Geheimnisse sind nur schreibbar. Nach dem Speichern werden sie nur als gesetzt mit den letzten vier Zeichen angezeigt.",
+      "signatureNoneNote": "Ohne Signatur authentifiziert nur das Geheimnis in der Callback-URL Zustellungen. Verwenden Sie dies nur, wenn der Provider nicht signieren kann.",
+      "builtinNotice": "Dies ist ein integrierter Provider. Seine Adresse, Version und Geheimnisse befinden sich unter Plattform-Einstellungen, WhatsApp. Hier können nur Name, Notizen und Abrechnungsmodus geändert werden.",
+      "openConsoleSettings": "Plattform-Einstellungen, WhatsApp öffnen",
+      "conflictHint": "Ihre Änderungen wurden nicht gespeichert. Das Formular zeigt die neuesten Werte.",
+      "fixProblems": "{count, plural, one {# Wert benötigt} other {# Werte benötigen}} Aufmerksamkeit. Korrigieren Sie die markierten Felder.",
+      "save": "Änderungen speichern",
+      "nothingToSave": "Noch keine Änderungen",
+      "back": "Zurück",
+      "next": "Weiter",
+      "cancel": "Abbrechen",
+      "create": "Provider erstellen",
+      "saved": "{name} gespeichert.",
+      "created": "{name} erstellt. Er startet deaktiviert: Testen Sie ihn und aktivieren Sie ihn dann.",
+      "review": {
+        "headers": "Header",
+        "yes": "Ja",
+        "no": "Nein",
+        "secrets": "Zu speichernde Geheimnisse",
+        "noSecrets": "Keine",
+        "gapsTitle": "Fehlt noch, bevor dieser Provider funktioniert",
+        "startsDisabled": "Ein neuer Provider startet deaktiviert. Führen Sie nach dem Erstellen Verbindungstest aus und aktivieren Sie ihn."
+      },
+      "problems": {
+        "labelRequired": "Geben Sie einen Namen ein.",
+        "labelLength": "Der Name darf höchstens {max} Zeichen lang sein.",
+        "notesLength": "Notizen dürfen höchstens {max} Zeichen lang sein.",
+        "keyRequired": "Geben Sie einen Schlüssel ein.",
+        "keyBuiltin": "meta und interakt sind integrierte Provider. Wählen Sie einen anderen Schlüssel.",
+        "keyFormat": "Beginnen Sie mit einem Buchstaben, danach Buchstaben, Ziffern, Unterstrich oder Bindestrich, insgesamt 2 bis 40 Zeichen.",
+        "baseUrl": {
+          "empty": "Geben Sie die Basis-URL des Providers ein.",
+          "length": "Die Adresse muss zwischen 1 und 200 Zeichen lang sein.",
+          "characters": "Die Adresse darf keine Leerzeichen oder Steuerzeichen enthalten.",
+          "invalid": "Dies ist keine gültige URL.",
+          "credentials": "Die Adresse darf keinen Benutzernamen und kein Passwort enthalten.",
+          "queryOrFragment": "Die Adresse darf keine Abfrage und kein Fragment enthalten.",
+          "notHttps": "Die Adresse muss mit https:// beginnen.",
+          "port": "Nur der Standard-https-Port ist erlaubt.",
+          "host": "Verwenden Sie einen öffentlichen Hostnamen, keine IP-Adresse und keinen Namen mit nur einem Label.",
+          "internal": "Verwenden Sie einen öffentlichen Hostnamen, keinen internen."
+        },
+        "apiVersion": "Verwenden Sie eine Version wie v25.0.",
+        "headers": "{count, plural, one {# Header-Problem.} other {# Header-Probleme.}} Siehe die Liste oben.",
+        "signatureHeaderRequired": "Nennen Sie den Header, der das Geheimnis enthält.",
+        "signatureHeaderFormat": "Nur Buchstaben, Ziffern und Bindestriche.",
+        "digits": "Nur Ziffern, 5 bis 32.",
+        "partnerSolutionIdRequired": "Geben Sie die Lösungs-ID ein.",
+        "partnerCredentialMode": "Ein Partnerprogramm vergibt jeder Nummer ein eigenes Token: Verwenden Sie dafür den Kanal-Token-Modus.",
+        "secretCharacters": "Keine Leerzeichen oder Steuerzeichen.",
+        "secretLength": "Zwischen {min} und {max} Zeichen."
+      }
+    },
+    "actions": {
+      "activate": "Aktivieren",
+      "makeDefault": "Als Standard festlegen",
+      "clearDefault": "Standard entfernen",
+      "disable": "Deaktivieren",
+      "archive": "Archivieren",
+      "cancel": "Abbrechen",
+      "menu": "Aktionen",
+      "menuLabel": "Aktionen für {name}",
+      "manage": "Verwalten",
+      "open": "Öffnen",
+      "switchTo": "Nummern hier wechseln",
+      "blocked": {
+        "default": "ist der Standard",
+        "builtin": "integriert",
+        "inUse": "in Verwendung"
+      },
+      "done": {
+        "activate": "{name} ist aktiv.",
+        "disable": "{name} ist deaktiviert. Nummern, die bereits darüber laufen, senden weiter.",
+        "archive": "{name} ist archiviert.",
+        "default": "{name} ist jetzt der Standard für neue Nummern.",
+        "clearDefault": "Der Standard wurde entfernt. Neue Nummern folgen wieder der WhatsApp-Einstellung der Konsole."
+      },
+      "confirm": {
+        "disable": {
+          "title": "{name} deaktivieren?",
+          "body": "Er wird für neue Nummern oder Zuweisungen nicht mehr angeboten. Nummern, die bereits darüber laufen, senden weiter, daher ist dies kein Ausfall.",
+          "inUse": "{count, plural, one {# Nummer ist} other {# Nummern sind}} noch über diesen Provider verbunden. Wechseln Sie diese, wenn Sie bereit sind.",
+          "action": "Deaktivieren"
+        },
+        "archive": {
+          "title": "{name} archivieren?",
+          "body": "Ein archivierter Provider wird außer Betrieb genommen. Dies wird abgelehnt, solange eine Nummer oder ein Workspace-Überschreiben ihn verwendet. Sie können ihn später wieder aktivieren.",
+          "action": "Archivieren"
+        },
+        "default": {
+          "title": "{name} als Standard festlegen?",
+          "body": "Workspaces ohne Überschreibung verbinden NEUE Nummern über diesen Provider. Bereits verbundene Nummern werden nicht verschoben.",
+          "action": "Als Standard festlegen"
+        },
+        "clearDefault": {
+          "title": "Standard entfernen?",
+          "body": "Neue Nummern folgen wieder der WhatsApp-Einstellung der Konsole. Bereits verbundene Nummern werden nicht verschoben.",
+          "action": "Standard entfernen"
+        }
+      }
+    },
+    "test": {
+      "title": "Verbindungstest",
+      "description": "Führt einen authentifizierten Lesezugriff auf den Provider mit dem gespeicherten Zugangsdatum aus. Beim Provider wird nichts geändert.",
+      "path": "Zu lesender Pfad",
+      "pathHint": "Beginnt mit einem Schrägstrich. Standard ist /me.",
+      "willCall": "Ruft {url} auf",
+      "pathInvalid": "Beginnen Sie mit / und verwenden Sie nur Buchstaben, Ziffern sowie . _ / -.",
+      "wabaId": "WABA-ID (optional)",
+      "idsHint": "Füllt nur Header-Platzhalter für diesen Aufruf. Sie wird nicht gespeichert.",
+      "idInvalid": "Nur Buchstaben, Ziffern sowie . _ : -.",
+      "phoneNumberId": "Telefonnummern-ID (optional)",
+      "channelToken": "Test-Nummern-Token (optional)",
+      "channelTokenHint": "Für Provider, bei denen jede Nummer ein eigenes Token hat. Wird nur für diesen Aufruf verwendet und dann aus diesem Formular gelöscht.",
+      "tokenInvalid": "Mindestens 8 druckbare Zeichen, keine Leerzeichen.",
+      "show": "Den eingegebenen Wert anzeigen",
+      "hide": "Den eingegebenen Wert ausblenden",
+      "run": "Test ausführen",
+      "running": "Wird getestet...",
+      "forgotten": "Hier eingegebene IDs und Token werden für einen Aufruf verwendet und danach vergessen.",
+      "needManage": "Sie sehen das letzte Ergebnis. Für einen Test benötigen Sie die Berechtigung zum Verwalten.",
+      "ok": "Verbunden",
+      "failed": "Fehlgeschlagen",
+      "justNow": "Gerade eben",
+      "lastTest": "Letzter Test",
+      "httpStatus": "HTTP-Status",
+      "noResponse": "Keine Antwort",
+      "latency": "Latenz",
+      "ms": "{ms} ms",
+      "errorCode": "Fehlercode",
+      "message": "Was der Provider geantwortet hat",
+      "redactedNote": "Der Server ersetzt jedes Geheimnis durch [redacted], bevor er antwortet.",
+      "never": "Dieser Provider wurde noch nicht getestet.",
+      "hints": {
+        "ok": "Der Provider hat einen authentifizierten Lesezugriff beantwortet. Er kann sicher aktiviert werden.",
+        "addressRefused": "Die Adresse wurde abgelehnt (nicht https, kein öffentlicher Name oder Auflösung auf eine private Adresse). Korrigieren Sie die Basis-URL.",
+        "credentialsMissing": "Der Provider hat kein gespeichertes Token. Fügen Sie sein Provider-Token hinzu und speichern Sie.",
+        "unauthorized": "Der Provider hat das Zugangsdatum abgelehnt. Prüfen Sie das Token sowie die Header-Namen und -Werte.",
+        "notFound": "Der Pfad wurde nicht gefunden. Versuchen Sie einen vom Provider unterstützten Lesezugriff oder prüfen Sie die Basis-URL und die API-Version.",
+        "rateLimited": "Der Provider begrenzt die Anfragerate. Warten Sie einen Moment und testen Sie erneut.",
+        "providerError": "Der Provider hat mit einem Serverfehler geantwortet. Versuchen Sie es später erneut.",
+        "unreachable": "Keine Antwort: Der Host hat nicht reagiert oder die Verbindung ist fehlgeschlagen. Prüfen Sie die Adresse.",
+        "other": "Der Provider hat mit einem unerwarteten Status geantwortet. Siehe oben, was er gesagt hat."
+      }
+    },
+    "list": {
+      "title": "WhatsApp-Provider",
+      "description": "Wählen Sie, über welchen WhatsApp Business Solution Provider die Plattform sendet, fügen Sie Provider hinzu und verschieben Sie Workspaces zwischen ihnen.",
+      "consoleSettings": "Meta-App- und Interakt-Zugangsdaten",
+      "switchWorkspace": "Einen Workspace wechseln",
+      "add": "Provider hinzufügen",
+      "kpi": {
+        "providers": "Provider",
+        "active": "Aktiv",
+        "numbers": "Verbundene Nummern",
+        "overrides": "Workspace-Überschreibungen"
+      },
+      "defaultIs": "Neue Nummern verbinden sich über {name}, sofern ein Workspace keine eigene Überschreibung hat.",
+      "noDefault": "Es ist kein Registry-Standard festgelegt. Neue Nummern folgen der WhatsApp-Einstellung der Konsole.",
+      "defaultHelp": "Das Ändern des Standards oder einer Überschreibung verschiebt nie eine bereits verbundene Nummer. Verwenden Sie dafür Wechseln.",
+      "filterLabel": "Nach Status filtern",
+      "filters": {
+        "all": "Alle",
+        "active": "Aktiv",
+        "disabled": "Deaktiviert",
+        "archived": "Archiviert"
+      },
+      "search": "Nach Name oder Schlüssel filtern",
+      "emptyTitle": "Noch keine Provider",
+      "emptyMessage": "Fügen Sie einen Provider hinzu, um WhatsApp über einen anderen BSP zu leiten. Die integrierten Routen Meta und Interakt funktionieren immer.",
+      "noMatchTitle": "Keine Provider gefunden",
+      "noMatchMessage": "Nichts passt zu diesem Status und dieser Suche. Versuchen Sie einen anderen Filter oder löschen Sie die Suche.",
+      "tableCaption": "WhatsApp-Provider",
+      "cols": {
+        "provider": "Provider",
+        "status": "Status",
+        "billing": "Abrechnungsmodus",
+        "credentials": "Anmeldemodus",
+        "usage": "In Verwendung",
+        "lastTest": "Letzter Test",
+        "actions": "Aktionen"
+      },
+      "usage": {
+        "numbers": "{count, plural, one {# Nummer} other {# Nummern}}",
+        "workspaces": "{count, plural, one {# Workspace} other {# Workspaces}}"
+      },
+      "test": {
+        "ok": "Verbunden",
+        "failed": "Fehlgeschlagen",
+        "never": "Nicht getestet"
+      },
+      "officialLabel": "Offizielles WhatsApp (unterstützt)"
+    },
+    "detail": {
+      "title": "WhatsApp-Provider",
+      "back": "Zurück zu den Providern",
+      "gapsTitle": "Fehlt noch, bevor dieser Provider funktioniert",
+      "lifecycle": {
+        "title": "Status und Standard",
+        "description": "Das Aktivieren macht den Provider für neue Nummern und Zuweisungen wählbar. Das Deaktivieren stoppt nie Nummern, die bereits darüber laufen."
+      },
+      "edit": {
+        "title": "Bearbeiten",
+        "readOnly": "Sie können diesen Provider ansehen. Zum Ändern benötigen Sie die Berechtigung zum Verwalten."
+      },
+      "overview": {
+        "title": "Übersicht",
+        "headers": "Header-Namen",
+        "none": "keine",
+        "engineMode": "Reseller-Engine-Modus: {mode}",
+        "yes": "Ja",
+        "no": "Nein",
+        "usage": "In Verwendung",
+        "numbers": "{count, plural, one {# Nummer} other {# Nummern}}",
+        "workspaces": "{count, plural, one {# Workspace-Überschreibung} other {# Workspace-Überschreibungen}}",
+        "updated": "Zuletzt geändert",
+        "builtinNote": "Dies ist ein integrierter Provider. Seine Adresse, Version und Geheimnisse werden live aus den Plattform-Einstellungen, WhatsApp, gelesen.",
+        "openConsoleSettings": "Plattform-Einstellungen, WhatsApp öffnen",
+        "credentialsTitle": "Gespeicherte Geheimnisse",
+        "credentialsNote": "Geheimnisse sind nur schreibbar. Nach dem Speichern werden sie nie wieder angezeigt, nur ob jedes gesetzt ist und seine letzten vier Zeichen.",
+        "webhookTitle": "Webhook",
+        "webhookNote": "Registrieren Sie Ihre öffentliche API-Adresse plus diesen Pfad beim Provider. Eine URL bedient jeden Provider und jeden Workspace."
+      }
+    },
+    "new": {
+      "title": "WhatsApp-Provider hinzufügen",
+      "back": "Zurück zu den Providern",
+      "description": "Registrieren Sie einen Graph-kompatiblen BSP. Er startet deaktiviert; testen Sie ihn und aktivieren Sie ihn dann."
+    },
+    "assignments": {
+      "title": "Workspace-Zuweisungen",
+      "description": "Der Provider, über den jeder Workspace NEUE Nummern verbindet. Ein Workspace ohne Überschreibung folgt dem Standard.",
+      "defaultIs": "Registry-Standard: {name}.",
+      "noDefault": "Kein Registry-Standard. Workspaces ohne Überschreibung folgen der WhatsApp-Einstellung der Konsole.",
+      "existingNote": "Bestehende Nummern wechseln nicht, wenn Sie eine Überschreibung ändern. Verwenden Sie Wechseln, um sie zu verschieben.",
+      "search": "Workspaces suchen",
+      "overrideOnly": "Nur Workspaces mit einer Überschreibung",
+      "noMatchTitle": "Keine Workspaces gefunden",
+      "noMatchMessage": "Versuchen Sie eine andere Suche oder löschen Sie den Filter.",
+      "emptyTitle": "Noch keine Workspaces",
+      "emptyMessage": "Workspaces erscheinen hier, sobald sie vorhanden sind.",
+      "loadMore": "Mehr laden",
+      "tableCaption": "Provider-Zuweisungen der Workspaces",
+      "cols": {
+        "workspace": "Workspace",
+        "override": "Überschreibung",
+        "effective": "Neue Nummern laufen über",
+        "numbers": "Nummern",
+        "actions": "Aktionen"
+      },
+      "followsDefault": "Folgt dem Standard",
+      "source": {
+        "override": "Workspace-Überschreibung",
+        "default": "Registry-Standard",
+        "platform_setting": "WhatsApp-Einstellung der Konsole"
+      },
+      "numberCount": "{count, plural, one {# Nummer} other {# Nummern}}",
+      "onOther": "{count} bei einem anderen Provider",
+      "change": "Ändern",
+      "setOverride": "Überschreibung setzen",
+      "clear": "Überschreibung entfernen",
+      "switch": "Nummern wechseln",
+      "common": {
+        "close": "Schließen",
+        "cancel": "Abbrechen"
+      },
+      "set": {
+        "title": "Überschreibung für {name}",
+        "help": "Neue Nummern dieses Workspace verbinden sich über den gewählten Provider. Bereits verbundene Nummern bleiben, wo sie sind.",
+        "noActive": "Kein Provider ist aktiv. Aktivieren Sie zuerst einen.",
+        "provider": "Provider",
+        "note": "Notiz (optional)",
+        "noteHint": "Warum dieser Workspace einen eigenen Provider hat. Bis zu 500 Zeichen.",
+        "save": "Überschreibung speichern",
+        "done": "{workspace} verbindet neue Nummern jetzt über {provider}."
+      },
+      "clearDialog": {
+        "title": "Überschreibung für {name} entfernen?",
+        "body": "{name} folgt wieder dem Standard. Nummern, die bereits über {provider} verbunden sind, werden nicht verschoben.",
+        "action": "Überschreibung entfernen",
+        "done": "{workspace} folgt wieder dem Standard."
+      }
+    },
+    "switch": {
+      "title": "Provider wechseln",
+      "description": "Verschieben Sie die verbundenen WhatsApp-Nummern eines Workspace zu einem anderen Provider. Führen Sie zuerst einen Probelauf durch: Er ändert und ruft nichts auf.",
+      "choose": {
+        "title": "Workspace und Ziel",
+        "description": "Wählen Sie den Workspace und den Provider, zu dem seine Nummern verschoben werden sollen.",
+        "target": "Verschieben nach",
+        "targetHint": "Als Ziel sind nur aktive Provider möglich.",
+        "pick": "Provider auswählen",
+        "from": "Nur Nummern bei",
+        "fromHint": "Optional. Lassen Sie es bei einem beliebigen Provider, um alle Nummern zu verschieben, die nicht bereits beim Ziel sind.",
+        "anyProvider": "Beliebiger Provider",
+        "setOverride": "Auch als Überschreibung dieses Workspace festlegen",
+        "setOverrideHint": "Nummern, die der Workspace später verbindet, folgen dem. Wird nur beim Anwenden des Wechsels übernommen, nicht beim Probelauf.",
+        "reason": "Grund (optional)",
+        "reasonHint": "Wird im Prüfprotokoll gespeichert. Bis zu 500 Zeichen.",
+        "targetNotActive": "Dieser Provider ist nicht aktiv. Der Wechsel wird abgelehnt, bis er aktiviert ist.",
+        "dryRun": "Prüfen, was sich ändern würde",
+        "dryRunNote": "Probelauf: Nichts wird geändert und kein Provider wird aufgerufen."
+      },
+      "workspace": {
+        "selected": "Workspace",
+        "unnamed": "Ausgewählter Workspace",
+        "change": "Workspace ändern",
+        "label": "Workspace",
+        "search": "Workspaces suchen",
+        "none": "Keine Workspaces gefunden.",
+        "numbers": "{count, plural, one {# Nummer} other {# Nummern}}",
+        "onOther": "{count} bei einem anderen Provider",
+        "narrow": "Es gibt weitere Workspaces. Grenzen Sie die Suche ein."
+      },
+      "plan": {
+        "stale": "Sie haben die Auswahl nach dem Probelauf geändert. Führen Sie die Prüfung vor dem Anwenden erneut aus.",
+        "title": "Was sich ändern würde",
+        "description": "Markieren Sie die Nummern, die verschoben werden sollen. Eine blockierte Nummer wird nicht angefasst.",
+        "nothingReady": "Noch keine Nummer kann verschoben werden. Lösen Sie die aufgelisteten Punkte und führen Sie die Prüfung dann erneut aus.",
+        "headline": "{total, plural, one {# Nummer} other {# Nummern}} geprüft, {ready} können zu {provider} verschoben werden.",
+        "ready": "{count} bereit",
+        "blocked": "{count} blockiert",
+        "failed": "{count} konnten nicht geprüft werden",
+        "reconnect": "{count} getrennt"
+      },
+      "requirements": {
+        "title": "Was eine Person erfordert",
+        "blocks": "Blockiert die Verschiebung",
+        "advice": "Benötigt eine Nachverfolgung",
+        "numberToken": {
+          "label": "Zugriffstoken der Nummer erforderlich",
+          "help": "Das Ziel verwendet das eigene Token jeder Nummer, und diese Nummer hat keines. Lassen Sie den Workspace eines auf der Seite Nummernstatus einfügen oder die Nummer neu verbinden und führen Sie die Prüfung dann erneut aus."
+        },
+        "providerToken": {
+          "label": "Provider-Token erforderlich",
+          "help": "Für den Zielprovider ist kein Partner-Token gespeichert. Fügen Sie es zuerst auf der Providerseite hinzu."
+        },
+        "idsMissing": {
+          "label": "WABA- oder Telefonnummern-ID fehlt",
+          "help": "Für die Verbindung ist keine WABA-ID oder Telefonnummern-ID hinterlegt. Verbinden Sie sie neu."
+        },
+        "reconnect": {
+          "label": "Nummer ist getrennt",
+          "help": "Sie wird nur neu zugeordnet, nicht wiederbelebt. Der Workspace muss sie erneut verbinden, bevor sie senden kann."
+        }
+      },
+      "numbers": {
+        "captionPlan": "Durch den Probelauf geprüfte Nummern",
+        "captionResult": "Ergebnis des Wechsels pro Nummer",
+        "cols": {
+          "move": "Verschieben",
+          "number": "Nummer",
+          "from": "Jetzt bei",
+          "state": "Status",
+          "details": "Details"
+        },
+        "moveNumber": "{name} verschieben",
+        "unknownProvider": "Unbekannt",
+        "state": {
+          "ready": "Bereit",
+          "blocked": "Blockiert",
+          "switched": "Gewechselt",
+          "repointed": "Neu zugeordnet",
+          "failed": "Fehlgeschlagen"
+        },
+        "willResubscribe": "Der Webhook wird zuerst über den neuen Provider neu abonniert.",
+        "willRepoint": "Wird nur neu zugeordnet.",
+        "inboundNotWired": "Der Provider hat keinen Callback pro Nummer akzeptiert. Setzen Sie den Callback beim Provider oder in der Meta-App auf den Plattform-Webhook.",
+        "inboundWired": "Eingehender Callback gesetzt."
+      },
+      "apply": {
+        "title": "Wechsel anwenden",
+        "summary": "{count, plural, one {# Nummer wird} other {# Nummern werden}} zu {provider} verschoben.",
+        "understood": "Ich verstehe, dass dies die aktiven Nummern des Workspace neu zuordnet und ihre Webhooks neu abonniert.",
+        "action": "Wechsel anwenden",
+        "tickOne": "Wählen Sie mindestens eine Nummer aus."
+      },
+      "confirm": {
+        "title": "Nummern verschieben?",
+        "body": "{count, plural, one {# Nummer von} other {# Nummern von}} {workspace} werden zu {provider} verschoben. Jede Nummer wird zuerst neu abonniert und nur dann neu zugeordnet, wenn dies gelingt.",
+        "rollback": "Zum Zurücksetzen wechseln Sie sie wieder zurück. Nachrichtenverlauf, Nachrichten-IDs und Lesebestätigungen bleiben unberührt.",
+        "action": "Nummern verschieben",
+        "cancel": "Abbrechen"
+      },
+      "errorHints": {
+        "nothingToDo": "Wählen Sie ein anderes Ziel oder einen anderen Quell-Provider.",
+        "tooMany": "Wählen Sie einen Quell-Provider, um die Auswahl einzugrenzen.",
+        "disabled": "Aktivieren Sie den Zielprovider auf seiner Seite und versuchen Sie es dann erneut."
+      },
+      "result": {
+        "title": "Ergebnis",
+        "allMoved": "Alle {count, plural, one {# Nummer ist} other {# Nummern sind}} jetzt bei {provider}.",
+        "noneMoved": "Es wurde keine Nummer verschoben. Details siehe unten.",
+        "partial": "{moved} von {total} Nummern verschoben. Details siehe unten.",
+        "switched": "{count} gewechselt",
+        "repointed": "{count} neu zugeordnet",
+        "failed": "{count} fehlgeschlagen",
+        "blocked": "{count} blockiert",
+        "overrideSet": "{provider} ist jetzt die Überschreibung dieses Workspace.",
+        "repointedNote": "Getrennte Nummern wurden nur neu zugeordnet. Der Workspace muss sie erneut verbinden, bevor sie senden können.",
+        "inboundNote": "{count, plural, one {# Nummer wurde verschoben, aber ihr} other {# Nummern wurden verschoben, aber ihre}} Callback pro Nummer wurde nicht akzeptiert. Setzen Sie den Callback beim Provider oder in der Meta-App auf den Plattform-Webhook.",
+        "rollback": {
+          "title": "Zurücksetzen",
+          "description": "Zurücksetzen bedeutet zurückwechseln. Die Nummern behalten alle Zugangsdaten, die sie hatten, daher benötigt eine Route mit Nummern-Token nichts Neues; eine Route mit Plattform-Token benötigt ein gespeichertes Token.",
+          "action": "Wechsel zurück zu {provider} vorbereiten",
+          "unknown": "Der vorherige Provider dieser Nummern ist nicht bekannt, daher kann ein Zurücksetzen von hier aus nicht vorbereitet werden."
+        },
+        "another": "Einen anderen Workspace wechseln",
+        "toAssignments": "Zurück zu den Zuweisungen"
+      }
+    },
+    "workspaceNote": {
+      "title": "Ihr WhatsApp-Provider",
+      "newNumbers": "Neue Nummern verbinden sich über {provider}.",
+      "ownToken": "Jede Nummer verwendet ihr eigenes Zugriffstoken.",
+      "platformToken": "Die Plattform verwaltet das Zugangsdatum; Sie verbinden sich nur mit IDs.",
+      "mediaYes": "Dateiupload wird unterstützt.",
+      "mediaNo": "Dateiupload wird nicht unterstützt: Dateien werden per öffentlichem Link gesendet.",
+      "none": "Derzeit ist kein Provider zum Verbinden einer neuen Nummer verfügbar. Wenden Sie sich an Ihren Plattform-Administrator.",
+      "numberOn": "{name} läuft über {provider}.",
+      "numberNoMedia": "Dateiupload wird nicht unterstützt."
+    }
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "bsp-billing-engine": {
+    "nav": {
+      "income": "Revenus des messages",
+      "reseller": "Facturation revendeur (Meta)",
+      "billing": "Facturation des messages",
+      "groups": {
+        "billing": "Facturation"
+      }
+    },
+    "common": {
+      "loading": "Chargement",
+      "retry": "Réessayer",
+      "requestId": "ID de requête",
+      "loadFailed": "Impossible de charger ce contenu.",
+      "forbidden": "Vous n’y avez pas accès.",
+      "cancel": "Annuler",
+      "dismiss": "Fermer"
+    },
+    "errors": {
+      "notConfigured": "Connectez d’abord votre ligne de crédit Meta (étape 1).",
+      "currencyUnsupported": "Meta n’accepte que AUD, EUR, GBP, IDR, INR et USD pour une ligne de crédit.",
+      "wabaNotFound": "Ce numéro n’est pas un numéro WhatsApp Business connecté de cet espace de travail.",
+      "metaRejected": "Refusé par Meta : {detail}",
+      "notAttached": "Seule une ligne de crédit associée peut être révoquée.",
+      "resellerUnavailable": "La facturation revendeur n’est pas encore disponible : la ligne de crédit Meta de la plateforme n’est pas configurée.",
+      "conflict": "Quelqu’un d’autre a modifié ceci. Rechargez et réessayez.",
+      "forbidden": "Seuls les super administrateurs peuvent effectuer cette action.",
+      "validation": "Vérifiez les champs en surbrillance.",
+      "generic": "Une erreur s’est produite. Réessayez."
+    },
+    "console": {
+      "title": "Crédit et clés Meta",
+      "subtitle": "Connectez votre entreprise Meta, puis partagez votre ligne de crédit avec vos clients pour que Meta vous facture et que vous les facturiez.",
+      "linkIncome": "Revenus des messages",
+      "linkPricing": "Tarifs des messages",
+      "optionalTitle": "Facultatif, uniquement pour une vraie revente",
+      "optionalBody": "Vous avez besoin du statut Solution Partner et d’une ligne de crédit approuvée par Meta. Tout le reste (portefeuilles, prix, forfaits) fonctionne sans cela.",
+      "readOnly": "Vous pouvez consulter cette page, mais seuls les super administrateurs peuvent la modifier.",
+      "step1": {
+        "title": "1. Connecter votre entreprise Meta",
+        "connected": "Connecté",
+        "notConnected": "Non connecté",
+        "businessId": "ID de l’entreprise Meta",
+        "businessIdPlaceholder": "ID numérique",
+        "token": "Jeton d’utilisateur système",
+        "tokenStored": "Enregistré. Laissez vide pour le conserver.",
+        "tokenPlaceholder": "Collez le jeton",
+        "tokenHint": "Nécessite business_management, whatsapp_business_management et whatsapp_business_messaging. Il est stocké chiffré et n’est plus jamais affiché.",
+        "clearToken": "Supprimer le jeton enregistré",
+        "creditLine": "ID de la ligne de crédit étendue",
+        "creditLineHint": "Facultatif. Si vide, la première ligne de crédit de votre entreprise est trouvée puis mémorisée.",
+        "graphVersion": "Version de l’API Graph",
+        "graphVersionHint": "Au format v26.0. Si vide, v26.0 est utilisée.",
+        "ratesEndpoint": "Point de terminaison des tarifs Meta",
+        "ratesEndpointHint": "Adresse https facultative qui renvoie la liste de prix de Meta. Si vide, la grille tarifaire intégrée ou un fichier téléversé est utilisé.",
+        "baseCurrency": "Devise de base",
+        "baseCurrencyHint": "La devise des chiffres de revenus. Trois lettres, par exemple USD.",
+        "autoAttach": "Associer automatiquement",
+        "autoAttachHint": "Un espace de travail revendeur qui connecte un numéro obtient votre ligne de crédit sans que personne n’ait à cliquer.",
+        "autoCurrency": "Facturer en",
+        "auto": "Auto (devise de base)",
+        "save": "Enregistrer la connexion",
+        "saved": "Connexion enregistrée.",
+        "invalid": {
+          "graphVersion": "Utilisez le format v26.0.",
+          "ratesEndpoint": "Saisissez une adresse https.",
+          "autoAttachCurrency": "Meta n’accepte pas cette devise.",
+          "baseCurrency": "Utilisez un code de devise à trois lettres.",
+          "businessId": "Saisissez 64 caractères au maximum."
+        }
+      },
+      "step2": {
+        "title": "2. Associer un client manuellement",
+        "hintAuto": "L’association automatique est activée : les nouveaux numéros des espaces de travail revendeurs sont associés pour vous.",
+        "hintManual": "Choisissez un numéro connecté et la devise dans laquelle il est facturé.",
+        "attachAll": "Associer tous les numéros connectés maintenant",
+        "attachAllTitle": "Associer tous les numéros connectés ?",
+        "attachAllBody": "Votre ligne de crédit est partagée avec chaque numéro connecté d’un espace de travail revendeur qui n’est pas encore associé. Chacun correspond à un appel à Meta.",
+        "attachAllConfirm": "Tout associer",
+        "attachAllDone": "{attached} associés, {failed} échoués, {skipped} déjà configurés.",
+        "attachAllMore": "{remaining} autres sont en attente. Relancez l’opération.",
+        "empty": "Aucun client n’a encore connecté de numéro WhatsApp Business (Cloud API). Il apparaîtra ici dès qu’il le fera.",
+        "number": "Numéro WhatsApp du client",
+        "pick": "Choisir un numéro connecté",
+        "currency": "Facturer ce numéro en",
+        "locked": "Verrouillée une fois associée : Meta ne permet pas de changer la devise ultérieurement.",
+        "attach": "Associer la ligne de crédit",
+        "attached": "Ligne de crédit associée au WABA {waba}.",
+        "failed": "Échec de l’association : {error}",
+        "finishStep1": "Terminez d’abord l’étape 1.",
+        "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
+        "noPhone": "aucun numéro"
+      },
+      "register": {
+        "title": "Lignes de crédit utilisées",
+        "empty": "Aucun compte associé pour le moment. Terminez les étapes 1 et 2 ci-dessus.",
+        "columns": {
+          "workspace": "Espace de travail",
+          "waba": "WABA",
+          "allocation": "ID d’allocation",
+          "currency": "Devise",
+          "status": "Statut",
+          "action": "Action"
+        },
+        "status": {
+          "attached": "Associée",
+          "revoked": "Révoquée",
+          "failed": "Échouée"
+        },
+        "reseller": "Facturation revendeur",
+        "direct": "Paie Meta directement",
+        "revoke": "Révoquer",
+        "revokeTitle": "Révoquer cette ligne de crédit ?",
+        "revokeBody": "Meta cesse de vous facturer ce numéro et le client paie de nouveau Meta directement.",
+        "revokeStillReseller": "Cet espace de travail est toujours en facturation revendeur : son portefeuille continue d’être débité par message pendant que Meta facture directement le client.",
+        "revokeConfirm": "Révoquer",
+        "revoked": "Allocation de crédit révoquée.",
+        "revokeFailed": "Échec de la révocation : {error}",
+        "loadMore": "Charger plus",
+        "loadingMore": "Chargement",
+        "label": "Allocations de crédit"
+      },
+      "guide": {
+        "title": "Guide de configuration",
+        "step1Title": "ID de l’entreprise",
+        "step1Body": "Retrouvez-le dans les paramètres Meta Business, sous Informations sur l’entreprise.",
+        "step2Title": "Jeton d’utilisateur système",
+        "step2Body": "Créez un utilisateur système dans votre entreprise et générez un jeton avec ces autorisations. Il n’est affiché qu’une seule fois.",
+        "step3Title": "Ligne de crédit",
+        "step3Body": "Vous avez besoin d’une ligne de crédit étendue approuvée. Si l’ID est laissé vide, il est lu automatiquement depuis Meta.",
+        "goodTitle": "Bon à savoir",
+        "good1": "La devise d’une ligne de crédit est verrouillée une fois associée.",
+        "good2": "L’association signifie que Meta vous facture, mais vous fixez toujours les prix de vos clients.",
+        "good3": "Vous pouvez révoquer à tout moment et le client paie de nouveau Meta directement.",
+        "link": "Présentation de Meta Solution Partner"
+      }
+    },
+    "dashboard": {
+      "title": "Pertes et profits revendeur",
+      "eyebrow": "Ce mois-ci",
+      "intro": "Le chiffre d’affaires correspond à ce qui a été facturé aux clients pour les messages distribués, le coût Meta à ce que ces mêmes messages vous ont coûté, la marge à la différence. Les messages remboursés et gratuits ne sont pas comptés.",
+      "linkRates": "Tarifs et marge",
+      "linkConnect": "Connecter Meta",
+      "revenue": "Chiffre d’affaires (facturé)",
+      "metaCost": "Coût Meta",
+      "margin": "Marge (profit)",
+      "walletFloat": "Fonds détenus en portefeuilles",
+      "walletFloatHint": "Argent présent dans les portefeuilles clients, tous espaces de travail confondus",
+      "billed": "Messages facturés",
+      "free": "Messages gratuits",
+      "unpriced": "Aucun coût Meta défini",
+      "unpricedBanner": "{count, plural, one {# message facturé n’a} other {# messages facturés n’ont}} aucun coût Meta pour leur pays et leur catégorie ; la marge les compte donc comme du pur chiffre d’affaires.",
+      "perWorkspace": "Par espace de travail (ce mois-ci)",
+      "columns": {
+        "workspace": "Espace de travail",
+        "messages": "Msgs",
+        "revenue": "Chiffre d’affaires",
+        "metaCost": "Coût Meta",
+        "margin": "Marge",
+        "wallet": "Solde du portefeuille"
+      },
+      "empty": "Aucun message facturé ce mois-ci pour le moment.",
+      "more": "Seuls les principaux espaces de travail par chiffre d’affaires sont listés.",
+      "loadFailed": "Impossible de charger les pertes et profits.",
+      "currency": "Devise du rapport"
+    }
+  }
+}

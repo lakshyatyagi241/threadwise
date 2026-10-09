@@ -1,0 +1,709 @@
+{
+  "admin-console-shell": {
+    "nav": {
+      "overview": "Accueil",
+      "menuOrder": "Ordre du menu",
+      "groups": {
+        "shell": "Interface"
+      },
+      "sections": {
+        "reports": "Rapports",
+        "plans": "Espaces de travail et forfaits",
+        "billing": "Facturation",
+        "messaging": "Facturation des messages",
+        "support": "Support",
+        "website": "Site web",
+        "whatsapp": "WhatsApp",
+        "apps": "Applications",
+        "team": "Équipe et sécurité",
+        "settings": "Paramètres",
+        "system": "Système"
+      },
+      "badges": {
+        "notSupported": "Non pris en charge",
+        "noWorkspaces": "Aucun espace de travail"
+      },
+      "labels": {
+        "addonPacks": "Packs de modules complémentaires",
+        "extensions": "Extensions",
+        "trackingCode": "Code de suivi",
+        "planPricingSettings": "Paramètres de tarification des forfaits",
+        "checkoutSettings": "Paramètres de paiement",
+        "walletOverview": "Aperçu du portefeuille",
+        "flowTemplates": "Modèles de flux"
+      },
+      "hubNotes": {
+        "reports": "Rapports sur les revenus, les forfaits, l’IA et le système.",
+        "plans": "Espaces de travail, forfaits, packs de modules complémentaires, coupons et page de tarifs.",
+        "billing": "Commandes, factures, paiements et paramètres de paiement.",
+        "messaging": "Tarification des messages, marges, packs de crédits et revenus de revendeur Meta.",
+        "support": "Tickets, boîtes de réception de l’équipe et de la plateforme, agents, SLA, playbooks et messages de contact.",
+        "website": "L’éditeur de site, le blog, les pages légales, les annonces et le guide.",
+        "whatsapp": "Fournisseurs, bascule de numéro, pont Node, webhooks, WABA et paramètres du catalogue.",
+        "apps": "La place de marché, les extensions et les modèles de flux.",
+        "team": "Rôles, autorisations, sécurité et règles de connexion.",
+        "settings": "Image de marque, e-mail, intégrations, confidentialité, stockage et plus encore.",
+        "system": "Mises à jour, langues, devises et traduction."
+      },
+      "captions": {
+        "branding": "Image de marque et interface",
+        "integrations": "Intégrations",
+        "privacy": "Confidentialité et suivi",
+        "infrastructure": "Infrastructure",
+        "roles": "Rôles",
+        "security": "Sécurité",
+        "signin": "Connexion et inscription"
+      }
+    },
+    "shell": {
+      "collapse": "Réduire la barre latérale",
+      "expand": "Développer la barre latérale",
+      "backToApp": "Retour à l’application",
+      "allAreas": "Toutes les zones",
+      "switchArea": "Changer de zone, actuellement dans {area}"
+    },
+    "overview": {
+      "title": "Console de la plateforme",
+      "note": "Choisissez une zone. Chacune s’ouvre avec ses pages dans un menu à gauche, et Ctrl+K trouve n’importe quelle page par son nom.",
+      "open": "Ouvrir",
+      "attentionTitle": "À traiter",
+      "attentionAll": "{count, plural, one {# notification non lue} other {# notifications non lues}}",
+      "attentionEmpty": "Rien ne nécessite votre attention pour le moment.",
+      "pages": "{count, plural, one {# page} other {# pages}}"
+    },
+    "menuOrder": {
+      "title": "Ordre du menu",
+      "note": "Choisissez les entrées qui apparaissent dans la barre supérieure vue par tous les clients, et leur ordre. Tout le reste se trouve sous Plus. Les utilisateurs voient le changement au prochain chargement de page.",
+      "barZone": "Barre supérieure",
+      "moreZone": "Plus",
+      "locked": "Toujours en dernier",
+      "save": "Enregistrer la disposition",
+      "reset": "Rétablir par défaut",
+      "saved": "Disposition du menu enregistrée. Les utilisateurs la verront au prochain chargement de page.",
+      "saveFailed": "La disposition n’a pas pu être enregistrée.",
+      "loadFailed": "La disposition n’a pas pu être chargée.",
+      "moveUp": "Monter {item}",
+      "moveDown": "Descendre {item}",
+      "remove": "Déplacer {item} vers Plus",
+      "add": "Ajouter {item} à la barre supérieure",
+      "removeShort": "Retirer",
+      "addShort": "Ajouter",
+      "items": {
+        "dashboard": "Tableau de bord",
+        "team-inbox": "Boîte de réception d’équipe",
+        "wa-campaigns": "Campagnes",
+        "flows": "Flux",
+        "templates": "Modèles",
+        "devices": "Appareils",
+        "metaads": "Meta Ads",
+        "broadcasts": "Diffusions",
+        "contacts": "Contacts",
+        "deals": "Opportunités",
+        "chat": "Chat en direct",
+        "analytics": "Analyses",
+        "auto-reply": "Réponse automatique",
+        "scheduled": "Planifié",
+        "message-history": "Historique",
+        "ai-assistants": "Assistants IA",
+        "ai-training": "Entraînement IA",
+        "wa-links": "Liens WA",
+        "chatbot-widgets": "Widget de chat",
+        "webhooks": "Webhooks",
+        "integrations": "Intégrations",
+        "warmer": "Warmer",
+        "call-logs": "Journaux d’appels",
+        "support": "Support",
+        "more": "Plus"
+      }
+    },
+    "header": {
+      "health": {
+        "title": "État de la plateforme",
+        "ok": "Tous les systèmes fonctionnent normalement",
+        "stuck": "{count, plural, one {# tâche bloquée} other {# tâches bloquées}}",
+        "down": "Base de données inaccessible"
+      },
+      "bell": {
+        "title": "Notifications",
+        "labelUnread": "Notifications, {count} non lue(s)",
+        "inbox": "Boîte de réception",
+        "markAllRead": "Tout marquer comme lu",
+        "clearAll": "Tout effacer",
+        "viewAll": "Tout voir",
+        "loading": "Chargement...",
+        "empty": "Aucune notification pour le moment."
+      },
+      "account": {
+        "menu": "Menu du compte",
+        "open": "Menu du compte de {name}",
+        "myAccount": "Mon compte",
+        "settings": "Paramètres",
+        "overview": "Vue d’ensemble admin",
+        "signOut": "Se déconnecter"
+      },
+      "feed": {
+        "signup": "Nouvelle inscription",
+        "paymentReceived": "Paiement reçu",
+        "newOrder": "Nouvelle commande",
+        "newTicket": "Nouveau ticket de support",
+        "newContactMessage": "Nouveau message de contact",
+        "newWorkspace": "Nouvel espace de travail"
+      }
+    },
+    "notificationsPage": {
+      "eyebrow": "Admin - Activité de la plateforme - Notifications",
+      "title": "Notifications admin",
+      "note": "Tout ce qui se passe sur la plateforme : nouvelles inscriptions, paiements, tickets de support, messages de contact et nouveaux espaces de travail. Distinct des notifications personnelles d’un membre de l’espace de travail.",
+      "tiles": {
+        "all": "Tous les événements",
+        "signup": "Inscriptions",
+        "payment": "Paiements",
+        "ticket": "Support",
+        "contact": "Messages",
+        "workspace": "Espaces de travail"
+      },
+      "pills": {
+        "all": "Tous",
+        "signup": "Inscriptions",
+        "payment": "Paiements",
+        "ticket": "Support",
+        "contact": "Messages",
+        "workspace": "Espaces de travail"
+      },
+      "kinds": {
+        "signup": "Inscription",
+        "payment": "Paiement",
+        "ticket": "Support",
+        "contact": "Message",
+        "workspace": "Espace de travail"
+      },
+      "last30": "30 derniers jours",
+      "search": "Rechercher des événements...",
+      "empty": "Aucune activité de la plateforme dans cette vue.",
+      "loadFailed": "Le flux n’a pas pu être chargé.",
+      "cols": {
+        "type": "Type",
+        "event": "Événement",
+        "detail": "Détail",
+        "when": "Quand",
+        "open": "Ouvrir"
+      },
+      "showing": "Affichage de {count, plural, one {# événement récent} other {# événements récents}}",
+      "live": "Flux en direct, du plus récent au plus ancien"
+    },
+    "settings": {
+      "workspace": {
+        "label": "Paramètres de l’espace de travail",
+        "description": "Nom, fuseau horaire, devise, notifications, export des données et suppression de l’espace de travail.",
+        "keywords": "espace de travail, nom, fuseau horaire, devise, notifications, export, suppression, slack"
+      }
+    },
+    "workspaceSettings": {
+      "titleLead": "Paramètres de",
+      "titleTail": "l’espace de travail",
+      "subtitle": "Configurez votre espace de travail, votre équipe et vos intégrations.",
+      "tabs": {
+        "general": "Général",
+        "branding": "Image de marque",
+        "team": "Équipe et rôles",
+        "notifications": "Notifications",
+        "aikeys": "Clés IA",
+        "security": "Sécurité",
+        "api": "API et webhooks",
+        "data": "Données et export",
+        "appearance": "Apparence"
+      },
+      "general": {
+        "workspace": "Espace de travail",
+        "ownerOnly": "Seul le propriétaire de l’espace de travail peut modifier le fuseau horaire, la devise ou le nom de l’espace de travail.",
+        "name": "Nom de l’espace de travail",
+        "url": "URL de l’espace de travail",
+        "urlHint": "Le slug d’URL n’est pas modifiable ici. Contactez le support pour le changer.",
+        "timezone": "Fuseau horaire par défaut",
+        "timezoneHint": "Tous les envois planifiés, vérifications des heures d’ouverture et minuteurs SLA s’exécutent dans ce fuseau.",
+        "currency": "Devise",
+        "currencyHint": "Utilisée pour le paiement des forfaits, les factures et l’affichage du portefeuille.",
+        "save": "Enregistrer",
+        "saved": "Paramètres enregistrés.",
+        "saveFailed": "Les paramètres n’ont pas pu être enregistrés.",
+        "loadFailed": "Les paramètres n’ont pas pu être chargés.",
+        "hours": {
+          "title": "Heures de travail",
+          "note": "Affichées à titre indicatif. Les heures de travail ne sont pas encore appliquées, ces commandes sont donc en lecture seule.",
+          "weekdays": "Lun - Ven",
+          "saturday": "Samedi",
+          "sunday": "Dimanche",
+          "from": "De",
+          "to": "À"
+        },
+        "preferences": {
+          "title": "Résumé IA automatique",
+          "note": "Obtenez une analyse IA en direct sur chaque zone de texte de message : ce qui fonctionne en vert, ce qu’il faut corriger en rouge, plus une « meilleure version » en un clic à recoller. Si désactivé, la même analyse s’exécute à la demande depuis l’icône étincelle de la barre d’outils.",
+          "save": "Enregistrer",
+          "saved": "Préférence enregistrée.",
+          "saveFailed": "La préférence n’a pas pu être enregistrée."
+        }
+      },
+      "notifications": {
+        "title": "Notifications de l’espace de travail",
+        "note": "Activez ou désactivez l’envoi par canal. Tout ce qui est désactivé ici ne produira jamais d’entrée dans la cloche de l’application, d’e-mail ni de message Slack.",
+        "readOnly": "Lecture seule. Le propriétaire de l’espace de travail peut les modifier.",
+        "save": "Enregistrer les préférences",
+        "saved": "Préférences de notification enregistrées.",
+        "saveFailed": "Les préférences n’ont pas pu être enregistrées.",
+        "loadFailed": "Les préférences n’ont pas pu être chargées.",
+        "specificEvents": "Événements spécifiques",
+        "byCategory": "Par catégorie",
+        "event": "Événement",
+        "category": "Catégorie",
+        "channels": {
+          "inapp": "Dans l’application",
+          "email": "E-mail",
+          "slack": "Slack"
+        },
+        "events": {
+          "device_connected": "Appareil connecté",
+          "device_disconnected": "Appareil déconnecté",
+          "campaign_completed": "Campagne terminée",
+          "campaign_failed": "Échec de la campagne",
+          "broadcast_completed": "Diffusion terminée",
+          "new_customer_reply": "Nouvelle réponse d’un client",
+          "mention_in_inbox": "Vous avez été @mentionné",
+          "conversation_assigned": "Conversation qui vous est assignée",
+          "sla_breached": "SLA dépassé",
+          "wallet_low_balance": "Solde du portefeuille faible",
+          "plan_changed": "Forfait amélioré / rétrogradé",
+          "payment_failed": "Échec du paiement",
+          "webhook_delivery_failed": "Échec de la livraison du webhook",
+          "flow_started": "Flux démarré",
+          "flow_failed": "Échec du flux",
+          "integration_disconnected": "Intégration déconnectée",
+          "appointment_booked": "Rendez-vous pris",
+          "weekly_summary": "Résumé hebdomadaire"
+        },
+        "categories": {
+          "device": "Appareils",
+          "contact": "Contacts",
+          "campaign": "Campagnes",
+          "broadcast": "Diffusions",
+          "template": "Modèles",
+          "chat": "Chat",
+          "webhook": "Webhooks",
+          "billing": "Facturation",
+          "system": "Système"
+        },
+        "slackLabel": "URL du webhook entrant Slack",
+        "slackHint": "Créez-en un dans Slack sous Applications, Webhooks entrants. Les événements dont l’option Slack est activée sont publiés ici.",
+        "channelStatus": "État des canaux",
+        "statusInapp": "Cloche de l’application : active, alimente le badge de l’en-tête.",
+        "statusEmailLive": "E-mail : actif, envoyé via les paramètres e-mail de la plateforme.",
+        "statusEmailOff": "E-mail : envoyé une fois le SMTP configuré par l’administrateur de la plateforme.",
+        "statusSlackOn": "Slack : webhook enregistré.",
+        "statusSlackOff": "Slack : ajoutez une URL de webhook pour l’activer."
+      },
+      "data": {
+        "loadFailed": "Les compteurs d’export n’ont pas pu être chargés.",
+        "exportTitle": "Export des données",
+        "exportNote": "Téléchargez les données de votre espace de travail en CSV. Chaque lien génère un nouvel export en flux.",
+        "exportOwnerOnly": "Seul le propriétaire de l’espace de travail peut télécharger les exports.",
+        "types": {
+          "contacts": "Contacts",
+          "conversations": "Conversations",
+          "messages": "Messages"
+        },
+        "count": {
+          "contacts": "{count, plural, one {# enregistrement} other {# enregistrements}} · CSV",
+          "conversations": "{count, plural, one {# fil} other {# fils}} · CSV",
+          "messages": "{count, plural, one {# message} other {# messages}} · CSV"
+        },
+        "delete": {
+          "title": "Supprimer l’espace de travail",
+          "note": "Supprimez définitivement cet espace de travail, toutes les conversations, automatisations et l’historique de facturation.",
+          "irreversible": "Action irréversible.",
+          "ownerOnly": "Seul le propriétaire de l’espace de travail peut supprimer l’espace de travail.",
+          "typeName": "Saisissez le nom de l’espace de travail :",
+          "password": "Confirmer avec le mot de passe",
+          "submit": "Supprimer définitivement l’espace de travail",
+          "cancel": "Annuler",
+          "confirmTitle": "Supprimer cet espace de travail ?",
+          "confirmMessage": "« {name} » et tout son contenu seront supprimés et tout le monde sera déconnecté. Cette action est irréversible.",
+          "failed": "L’espace de travail n’a pas pu être supprimé."
+        }
+      },
+      "groups": {
+        "workspace": "Espace de travail",
+        "system": "Système"
+      },
+      "railLabel": "Sections des paramètres",
+      "personal": {
+        "title": "Votre compte",
+        "body": "Profil, mot de passe et préférences personnelles."
+      },
+      "api": {
+        "restTitle": "API REST générale",
+        "rest1": "Créez une clé API pour lire et écrire des contacts, conversations et messages depuis vos propres systèmes.",
+        "rest2": "Chaque clé est limitée à cet espace de travail et peut être révoquée à tout moment.",
+        "rest3": "Les requêtes sont limitées par minute selon votre forfait.",
+        "webhooksTitle": "Webhooks",
+        "webhooksBody": "Envoyez des événements vers vos propres points de terminaison et recevez ceux d’autres outils.",
+        "manage": "Gérer les intégrations"
+      },
+      "appearance": {
+        "title": "Apparence",
+        "note": "Choisissez l’apparence de l’application pour vous. C’est le même choix que le bouton soleil et lune dans l’en-tête.",
+        "choices": {
+          "light": {
+            "label": "Clair",
+            "body": "Pages lumineuses aux tons papier doux."
+          },
+          "dark": {
+            "label": "Sombre",
+            "body": "Pages tamisées plus reposantes la nuit."
+          }
+        },
+        "save": "Enregistrer",
+        "saved": "Apparence mise à jour."
+      }
+    },
+    "topNav": {
+      "more": "Plus",
+      "search": "Rechercher",
+      "premium": "Fonctionnalité premium : passez à un forfait supérieur pour la débloquer"
+    },
+    "palette": {
+      "title": "Rechercher des pages",
+      "placeholder": "Rechercher des pages, paramètres, outils...",
+      "empty": "Aucun résultat pour « {query} »",
+      "hintNavigate": "Haut et bas pour naviguer",
+      "hintOpen": "Entrée pour ouvrir",
+      "hintToggle": "Ctrl K pour basculer",
+      "tags": {
+        "page": "page",
+        "account": "compte",
+        "plan": "forfait",
+        "help": "aide",
+        "system": "système"
+      },
+      "entries": {
+        "profile": "Profil",
+        "profileHint": "Votre nom, photo et coordonnées",
+        "password": "Mot de passe et sécurité",
+        "passwordHint": "Mot de passe, connexion en deux étapes et sessions actives"
+      }
+    },
+    "strip": {
+      "jump": "Rechercher ou aller à...",
+      "account": {
+        "group": "Compte",
+        "account": "Compte",
+        "wallet": "Portefeuille",
+        "notifications": "Notifications"
+      },
+      "greeting": {
+        "midnightOil": "Veillée tardive",
+        "morning": "Bonjour",
+        "afternoon": "Bon après-midi",
+        "evening": "Bonsoir",
+        "night": "Bonne nuit"
+      }
+    },
+    "profileMenu": {
+      "chip": "Forfait {plan} - {role}",
+      "wallet": "Portefeuille",
+      "orders": "Historique des commandes",
+      "plans": "Tarifs et forfaits",
+      "tour": "Faire la visite guidée"
+    },
+    "quickAccess": {
+      "title": "Accès rapide",
+      "open": "Ouvrir l’accès rapide",
+      "close": "Fermer",
+      "edit": "Modifier les raccourcis",
+      "editTitle": "Modifier l’accès rapide",
+      "editNote": "Épinglez jusqu’à dix pages ou vos propres liens. Ils s’affichent sur le tableau de bord et dans le panneau latéral.",
+      "dashboard": "Tableau de bord",
+      "allApps": "Toutes les applications",
+      "limit": "Vous pouvez épingler jusqu’à {max} raccourcis.",
+      "saveFailed": "Les raccourcis n’ont pas pu être enregistrés.",
+      "customLinks": "Liens personnalisés",
+      "linkLabel": "Libellé",
+      "linkUrl": "Lien",
+      "addLink": "Ajouter un lien",
+      "removeLink": "Supprimer ce lien",
+      "counter": "{count} / {max} épinglés",
+      "cancel": "Annuler",
+      "save": "Enregistrer les raccourcis",
+      "problem": {
+        "incomplete": "Un lien nécessite un libellé et une adresse.",
+        "unsafe": "Utilisez une adresse interne à cette application (commençant par une barre oblique) ou une adresse http ou https."
+      },
+      "catalog": {
+        "inbox": {
+          "label": "Boîte de réception unifiée",
+          "desc": "Toutes les conversations au même endroit"
+        },
+        "contacts": {
+          "label": "Contacts",
+          "desc": "Votre audience et ses informations"
+        },
+        "campaigns": {
+          "label": "Campagnes",
+          "desc": "Planifier et envoyer des campagnes"
+        },
+        "broadcasts": {
+          "label": "Diffusions",
+          "desc": "Envoyer un message à de nombreux contacts"
+        },
+        "templates": {
+          "label": "Modèles",
+          "desc": "Modèles de messages approuvés"
+        },
+        "flows": {
+          "label": "Flux",
+          "desc": "Automatiser les conversations"
+        },
+        "scheduled": {
+          "label": "Planifié",
+          "desc": "Messages en attente d’envoi"
+        },
+        "catalog": {
+          "label": "Catalogue",
+          "desc": "Produits que vous vendez sur WhatsApp"
+        },
+        "store": {
+          "label": "Boutique",
+          "desc": "Votre vitrine et vos commandes"
+        },
+        "deals": {
+          "label": "Pipeline de vente",
+          "desc": "Opportunités par étape"
+        },
+        "analytics": {
+          "label": "Analyses",
+          "desc": "Chiffres de livraison et de réponse"
+        },
+        "auto-reply": {
+          "label": "Réponse automatique",
+          "desc": "Réponses par mot-clé et hors horaires"
+        },
+        "devices": {
+          "label": "Appareils",
+          "desc": "Numéros WhatsApp connectés"
+        },
+        "chatbots": {
+          "label": "Widgets de chat",
+          "desc": "Widget de chat pour votre site web"
+        },
+        "ai": {
+          "label": "Assistants IA",
+          "desc": "Assistants qui répondent à votre place"
+        },
+        "appointments": {
+          "label": "Rendez-vous",
+          "desc": "Réservations et disponibilités"
+        },
+        "webhooks": {
+          "label": "Webhooks",
+          "desc": "Envoyer des événements à d’autres systèmes"
+        },
+        "history": {
+          "label": "Journal des messages",
+          "desc": "Tous les messages envoyés et reçus"
+        },
+        "account": {
+          "label": "Compte",
+          "desc": "Profil, forfait et portefeuille"
+        },
+        "more": {
+          "label": "Plus d’applications",
+          "desc": "Tous les outils sur une page"
+        }
+      }
+    },
+    "announcements": {
+      "label": "Annonces",
+      "dismiss": "Ignorer"
+    },
+    "tour": {
+      "close": "Fermer la visite",
+      "back": "Retour",
+      "next": "Suivant",
+      "done": "Terminé",
+      "progress": "{current} sur {total}",
+      "steps": {
+        "welcome": {
+          "title": "Bienvenue sur {app}",
+          "body": "Une visite rapide des endroits que vous utiliserez le plus. Elle dure moins d’une minute."
+        },
+        "navbar": {
+          "title": "Votre menu",
+          "body": "Tout ce que vous faites au quotidien est à un clic dans la barre supérieure."
+        },
+        "metaads": {
+          "title": "Meta Ads",
+          "body": "Lancez des publicités click-to-WhatsApp et voyez ce qu’elles rapportent."
+        },
+        "campaigns": {
+          "title": "Campagnes",
+          "body": "Planifiez, envoyez et suivez vos campagnes WhatsApp."
+        },
+        "flows": {
+          "title": "Flux",
+          "body": "Créez des automatisations qui répondent à votre place."
+        },
+        "templates": {
+          "title": "Modèles",
+          "body": "Conservez ici vos modèles de messages approuvés."
+        },
+        "devices": {
+          "title": "Canaux",
+          "body": "Connectez les numéros et comptes depuis lesquels vous envoyez."
+        },
+        "more": {
+          "title": "Plus",
+          "body": "Tous les autres outils sont ici, regroupés et consultables."
+        },
+        "kpi": {
+          "title": "Vos numéros",
+          "body": "Messages, réponses et livraison en un coup d’œil."
+        },
+        "newCampaign": {
+          "title": "Lancer une campagne",
+          "body": "Créez votre première campagne à partir d’ici."
+        },
+        "pipeline": {
+          "title": "Pipeline de vente",
+          "body": "Suivez les opportunités du premier message à la vente conclue."
+        }
+      }
+    },
+    "more": {
+      "titleLead": "Plus de",
+      "titleTail": "fonctionnalités",
+      "subtitle": "Tous les outils au même endroit.",
+      "navigation": "Navigation",
+      "allTools": "Tous les outils",
+      "noTools": "Rien ici pour le moment.",
+      "tabs": {
+        "all": "Tout",
+        "automation": "Automatisation",
+        "data": "Données",
+        "help": "Aide"
+      },
+      "plan": "Votre forfait",
+      "managePlan": "Gérer le forfait",
+      "wallet": "Portefeuille",
+      "topUp": "Recharger",
+      "tips": {
+        "title": "Astuce",
+        "pager": "Astuces",
+        "templates": {
+          "title": "Utilisez des modèles",
+          "body": "Les modèles approuvés atteignent les clients en dehors de la fenêtre de 24 heures."
+        },
+        "flows": {
+          "title": "Automatisez les réponses",
+          "body": "Un flux peut répondre à la même question à votre place à chaque fois."
+        },
+        "palette": {
+          "title": "Accédez à tout",
+          "body": "Appuyez sur Ctrl K pour rechercher dans toutes les pages."
+        },
+        "scheduled": {
+          "title": "Planifiez à l’avance",
+          "body": "Mettez un message en file d’attente maintenant et laissez-le partir au bon moment."
+        },
+        "wallet": {
+          "title": "Surveillez votre solde",
+          "body": "Rechargez avant qu’il ne soit trop bas pour que les envois ne s’arrêtent jamais."
+        }
+      },
+      "shortcuts": {
+        "title": "Raccourcis",
+        "customise": "Personnaliser",
+        "empty": "Aucun raccourci sélectionné. Utilisez Personnaliser pour en ajouter.",
+        "editTitle": "Personnaliser les raccourcis",
+        "emptyEditor": "Aucun raccourci sélectionné",
+        "up": "Monter {item}",
+        "down": "Descendre {item}",
+        "remove": "Retirer {item}",
+        "customTitle": "Titre",
+        "customSubtitle": "Sous-titre",
+        "customUrl": "Lien",
+        "customProblem": "Un raccourci personnalisé nécessite un titre et un lien.",
+        "addCustom": "Ajouter un raccourci personnalisé",
+        "reset": "Rétablir les valeurs par défaut",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "presets": {
+          "new-auto-reply": {
+            "title": "Nouvelle réponse automatique",
+            "subtitle": "Répondre automatiquement aux questions courantes"
+          },
+          "schedule-send": {
+            "title": "Planifier un envoi",
+            "subtitle": "Mettre un message en file pour plus tard"
+          },
+          "test-webhook": {
+            "title": "Webhooks",
+            "subtitle": "Envoyer des événements à d’autres systèmes"
+          },
+          "export-history": {
+            "title": "Historique des messages",
+            "subtitle": "Consulter et exporter ce qui a été envoyé"
+          },
+          "contact-support": {
+            "title": "Contacter le support",
+            "subtitle": "Demander de l’aide à l’équipe"
+          },
+          "new-broadcast": {
+            "title": "Nouvelle diffusion",
+            "subtitle": "Envoyer un message à plusieurs contacts à la fois"
+          },
+          "open-contacts": {
+            "title": "Contacts",
+            "subtitle": "Votre audience"
+          },
+          "pair-device": {
+            "title": "Connecter un numéro",
+            "subtitle": "Associer un numéro WhatsApp"
+          },
+          "team-inbox": {
+            "title": "Boîte de réception",
+            "subtitle": "Toutes les conversations"
+          },
+          "create-flow": {
+            "title": "Créer un flux",
+            "subtitle": "Créer une automatisation"
+          },
+          "new-template": {
+            "title": "Nouveau modèle",
+            "subtitle": "Rédiger un modèle de message"
+          }
+        }
+      }
+    },
+    "inboxBell": {
+      "label": "{count, plural, one {1 conversation non lue} other {# conversations non lues}}",
+      "pill": "{count, plural, one {nouveau message} other {nouveaux messages}}",
+      "dismiss": "Ignorer jusqu’à l’arrivée d’un élément plus récent",
+      "title": "Nouveaux messages",
+      "viewInbox": "Ouvrir la boîte de réception"
+    },
+    "connectDevice": {
+      "title": "Connecter un numéro",
+      "close": "Fermer",
+      "connected": "Numéro connecté"
+    },
+    "search": {
+      "label": "Rechercher dans la console",
+      "trigger": "Rechercher dans l’admin…",
+      "placeholder": "Rechercher des pages et des paramètres…",
+      "noResults": "Aucun résultat pour « {query} »",
+      "count": "{count, plural, one {# résultat} other {# résultats}}",
+      "hintMove": "naviguer",
+      "hintOpen": "ouvrir",
+      "hintToggle": "basculer"
+    }
+  }
+}

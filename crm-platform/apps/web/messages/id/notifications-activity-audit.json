@@ -1,0 +1,371 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "Notifikasi",
+      "labelUnread": "Notifikasi, {count} belum dibaca",
+      "title": "Notifikasi",
+      "markAll": "Tandai semua dibaca",
+      "empty": "Belum ada notifikasi.",
+      "loading": "Memuat notifikasi",
+      "failed": "Notifikasi tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "unread": "Belum dibaca",
+      "settings": "Pengaturan peringatan",
+      "sound": "Putar suara untuk chat dan pesan baru",
+      "soundOn": "Suara: aktif",
+      "soundOff": "Suara: nonaktif",
+      "desktopEnable": "Aktifkan peringatan desktop",
+      "desktopOn": "Peringatan desktop: aktif",
+      "desktopOff": "Peringatan desktop: nonaktif",
+      "desktopBlocked": "Peringatan desktop diblokir di pengaturan browser Anda.",
+      "desktopHint": "Hanya menampilkan nama kontak saat tab ini ada di latar belakang.",
+      "preferences": "Pengaturan notifikasi"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Tugas ditugaskan kepada Anda",
+        "body": "{actor} menugaskan Anda: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "Tugas jatuh tempo",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "Tugas selesai",
+        "body": "{actor} menyelesaikan: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "Prospek baru",
+        "titleReturning": "Prospek masuk lagi",
+        "body": "{name} masuk dari {platform}",
+        "bodyReturning": "{name} mengirim prospek lain dari {platform}",
+        "bodyNoActor": "{name} masuk"
+      },
+      "new_chat": {
+        "title": "Chat baru dari {name}",
+        "titleNoName": "Chat baru",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, other {# pesan baru dari {name}}}",
+        "titleNoName": "{count, plural, other {# pesan baru}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "chat_waiting": {
+        "title": "Belum ada yang membalas {name}",
+        "titleNoName": "Sebuah chat masih menunggu balasan",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "{name} ditugaskan kepada Anda",
+        "titleNoName": "Sebuah chat ditugaskan kepada Anda",
+        "titleTeam": "{name} ditugaskan kepada tim Anda",
+        "titleTeamNoName": "Sebuah chat ditugaskan kepada tim Anda",
+        "body": "Ditugaskan oleh {actor}",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "{actor} menyebut Anda",
+        "titleNoName": "Anda disebut dalam catatan",
+        "body": "{name}: {preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "device_connected": {
+        "title": "{name} terhubung",
+        "titleNoName": "Nomor WhatsApp Anda terhubung"
+      },
+      "device_disconnected": {
+        "title": "{name} terputus",
+        "titleNoName": "Sebuah nomor WhatsApp terputus",
+        "body": "Buka perangkat untuk menghubungkan ulang."
+      },
+      "device_logged_out": {
+        "title": "{name} keluar",
+        "titleNoName": "Sebuah nomor WhatsApp keluar",
+        "body": "Pindai kode QR lagi untuk menghubungkan ulang."
+      },
+      "broadcast_completed": {
+        "title": "Broadcast “{name}” selesai",
+        "titleNoName": "Sebuah broadcast selesai",
+        "bodySent": "{sent, plural, other {# pesan terkirim}}",
+        "bodySentFailed": "{sent, plural, other {# pesan terkirim}}, {failed, plural, other {# gagal}}"
+      },
+      "broadcast_failed": {
+        "title": "Broadcast “{name}” gagal",
+        "titleNoName": "Sebuah broadcast gagal",
+        "body": "{reason}",
+        "bodyNoReason": "Buka untuk melihat apa yang salah."
+      },
+      "campaign_completed": {
+        "title": "Kampanye “{name}” selesai",
+        "titleNoName": "Sebuah kampanye selesai",
+        "bodySent": "{sent, plural, other {# pesan terkirim}}",
+        "bodySentFailed": "{sent, plural, other {# pesan terkirim}}, {failed, plural, other {# gagal}}"
+      },
+      "campaign_failed": {
+        "title": "Kampanye “{name}” gagal",
+        "titleNoName": "Sebuah kampanye gagal",
+        "body": "{reason}",
+        "bodyNoReason": "Buka untuk melihat apa yang salah."
+      },
+      "scheduled_completed": {
+        "title": "Pengiriman terjadwal “{name}” terkirim",
+        "titleNoName": "Sebuah pengiriman terjadwal terkirim",
+        "bodySent": "{sent, plural, other {# pesan terkirim}}",
+        "bodySentFailed": "{sent, plural, other {# pesan terkirim}}, {failed, plural, other {# gagal}}"
+      },
+      "scheduled_failed": {
+        "title": "Pengiriman terjadwal “{name}” gagal",
+        "titleNoName": "Sebuah pengiriman terjadwal gagal",
+        "body": "{reason}",
+        "bodyNoReason": "Buka untuk melihat apa yang salah."
+      },
+      "teamchat_mention": {
+        "title": "{author} menyebut Anda di {channel}",
+        "titleNoChannel": "{author} menyebut Anda di Team chat",
+        "titleNoName": "Anda disebut di Team chat"
+      },
+      "teamchat_message": {
+        "title": "{count, plural, other {# pesan baru dari {author}}}",
+        "titleNoName": "{count, plural, other {# pesan langsung baru}}"
+      }
+    },
+    "live": {
+      "open": "Buka",
+      "dismiss": "Tutup",
+      "toastRegion": "Notifikasi",
+      "summary": "{count} notifikasi baru",
+      "announceMany": "{count} notifikasi baru",
+      "desktop": {
+        "new_chat": "Chat baru",
+        "new_message": "Pesan baru",
+        "chat_waiting": "Menunggu balasan",
+        "conversation_assigned": "Ditugaskan kepada Anda",
+        "mention": "Menyebut Anda",
+        "fallbackTitle": "Notifikasi baru",
+        "device_connected": "Nomor WhatsApp terhubung",
+        "device_disconnected": "Nomor WhatsApp terputus",
+        "device_logged_out": "Nomor WhatsApp keluar",
+        "broadcast_completed": "Broadcast selesai",
+        "broadcast_failed": "Broadcast gagal",
+        "campaign_completed": "Kampanye selesai",
+        "campaign_failed": "Kampanye gagal",
+        "scheduled_completed": "Pengiriman terjadwal terkirim",
+        "scheduled_failed": "Pengiriman terjadwal gagal",
+        "teamchat_mention": "Menyebut Anda di Team chat",
+        "teamchat_message": "Pesan langsung baru"
+      }
+    },
+    "prefs": {
+      "title": "Preferensi notifikasi",
+      "description": "Pilih cara setiap peristiwa sampai kepada Anda. Pilihan ini hanya milik Anda; workspace Anda menentukan peristiwa mana yang aktif sejak awal.",
+      "columns": {
+        "event": "Peristiwa",
+        "bell": "Lonceng",
+        "toast": "Pop-up",
+        "sound": "Suara",
+        "push": "Push"
+      },
+      "groups": {
+        "conversations": "Chat",
+        "tasks": "Tugas",
+        "leads": "Prospek dan formulir",
+        "documents": "Dokumen penjualan",
+        "wallet": "Dompet",
+        "devices": "Nomor WhatsApp",
+        "broadcasts": "Broadcast dan kampanye",
+        "team_chat": "Team chat"
+      },
+      "types": {
+        "new_chat": {
+          "label": "Chat baru",
+          "hint": "Percakapan yang belum dimiliki siapa pun mendapat pesan pertama."
+        },
+        "new_message": {
+          "label": "Pesan baru di chat saya",
+          "hint": "Pelanggan menulis di chat yang ditugaskan kepada Anda."
+        },
+        "chat_waiting": {
+          "label": "Chat masih menunggu balasan",
+          "hint": "Sebuah chat yang belum dimiliki siapa pun belum dibalas pesan pelanggannya selama beberapa menit. Anda diberi tahu sekali."
+        },
+        "conversation_assigned": {
+          "label": "Chat ditugaskan kepada saya",
+          "hint": "Sebuah chat ditugaskan kepada Anda atau tim Anda."
+        },
+        "mention": {
+          "label": "Disebut dalam catatan",
+          "hint": "Rekan kerja menyebut Anda dalam catatan percakapan."
+        },
+        "teamchat_mention": {
+          "label": "Disebut di Team chat",
+          "hint": "Rekan kerja menyebut Anda di kanal team chat."
+        },
+        "teamchat_message": {
+          "label": "Pesan langsung",
+          "hint": "Rekan kerja menulis kepada Anda di Team chat."
+        },
+        "device_connected": {
+          "label": "Nomor terhubung",
+          "hint": "Sebuah nomor WhatsApp pribadi selesai terhubung."
+        },
+        "device_disconnected": {
+          "label": "Nomor terputus",
+          "hint": "Sebuah nomor WhatsApp pribadi kehilangan koneksinya."
+        },
+        "device_logged_out": {
+          "label": "Nomor keluar",
+          "hint": "Sebuah nomor WhatsApp pribadi keluar dari ponsel."
+        },
+        "broadcast_completed": {
+          "label": "Broadcast selesai",
+          "hint": "Sebuah broadcast yang Anda mulai telah terkirim."
+        },
+        "broadcast_failed": {
+          "label": "Broadcast gagal",
+          "hint": "Sebuah broadcast yang Anda mulai gagal."
+        },
+        "campaign_completed": {
+          "label": "Kampanye selesai",
+          "hint": "Sebuah kampanye yang Anda mulai telah terkirim."
+        },
+        "campaign_failed": {
+          "label": "Kampanye gagal",
+          "hint": "Sebuah kampanye yang Anda mulai gagal."
+        },
+        "scheduled_completed": {
+          "label": "Pengiriman terjadwal terkirim",
+          "hint": "Sebuah pengiriman terjadwal yang Anda atur telah terkirim."
+        },
+        "scheduled_failed": {
+          "label": "Pengiriman terjadwal gagal",
+          "hint": "Sebuah pengiriman terjadwal yang Anda atur gagal."
+        },
+        "task_assigned": {
+          "label": "Tugas ditugaskan kepada saya",
+          "hint": "Sebuah tugas ditugaskan kepada Anda."
+        },
+        "task_due": {
+          "label": "Tugas jatuh tempo",
+          "hint": "Sebuah tugas Anda jatuh tempo."
+        },
+        "task_completed": {
+          "label": "Tugas selesai",
+          "hint": "Sebuah tugas yang Anda buat telah selesai."
+        },
+        "new_lead": {
+          "label": "Prospek baru",
+          "hint": "Sebuah prospek masuk dari sumber prospek."
+        },
+        "form_submission": {
+          "label": "Formulir dikirim",
+          "hint": "Seseorang mengirim salah satu formulir Anda."
+        },
+        "form_needs_review": {
+          "label": "Formulir perlu ditinjau",
+          "hint": "Sebuah pengiriman perlu diperiksa."
+        },
+        "wallet_low_balance": {
+          "label": "Saldo dompet rendah",
+          "hint": "Saldo dompet workspace hampir habis."
+        },
+        "sales_doc_decided": {
+          "label": "Dokumen penjualan diputuskan",
+          "hint": "Sebuah penawaran atau faktur diterima atau ditolak."
+        },
+        "wallet_credited": {
+          "label": "Dompet diisi ulang",
+          "hint": "Dompet workspace telah dikreditkan."
+        }
+      },
+      "loading": "Memuat preferensi Anda",
+      "failed": "Preferensi Anda tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "saveFailed": "Perubahan itu tidak dapat disimpan. Perubahan dibatalkan.",
+      "saved": "Tersimpan",
+      "dismiss": "Tutup",
+      "resetRow": "Kembalikan ke default",
+      "resetRowFor": "Kembalikan {event} ke default",
+      "resetAll": "Kembalikan semuanya ke default",
+      "resetAllDone": "Semua preferensi kembali ke default.",
+      "customised": "Diubah",
+      "usingDefault": "Default",
+      "toggleLabel": "{event}: {channel}",
+      "workspaceOff": "Dimatikan oleh workspace Anda",
+      "workspaceOffHelp": "Workspace Anda mematikan ini; pilihan Anda tetap berlaku untuk Anda.",
+      "bellOffHelp": "Nyalakan lonceng untuk memilih pop-up, suara, atau push.",
+      "notAvailable": "Tidak tersedia",
+      "defaultSummary": "Default: {bell}, {toast}, {sound}",
+      "on": "aktif",
+      "off": "nonaktif",
+      "channelNames": {
+        "bell": "lonceng",
+        "toast": "pop-up",
+        "sound": "suara",
+        "push": "push"
+      },
+      "browser": {
+        "title": "Browser ini",
+        "description": "Suara dan peringatan desktop diatur per browser, bukan per akun."
+      },
+      "empty": "Belum ada jenis notifikasi untuk diatur.",
+      "defaultSummaryPush": "Default: {bell}, {toast}, {sound}, {push}",
+      "push": {
+        "title": "Notifikasi browser",
+        "description": "Dapatkan notifikasi dari browser Anda untuk peristiwa yang masuk ke lonceng, bahkan saat CRM tertutup. Anda memilih peristiwa di kolom Push di bawah.",
+        "state": {
+          "on": "Aktif untuk perangkat ini",
+          "off": "Nonaktif",
+          "blocked": "Diblokir",
+          "unavailable": "Tidak tersedia"
+        },
+        "checking": "Memeriksa browser ini",
+        "unsupported": "Browser ini tidak dapat menampilkan notifikasi saat CRM tertutup. Coba Chrome, Edge, Firefox, atau Safari yang terbaru, di halaman aman (https).",
+        "needsInstall": "Di iPhone dan iPad, notifikasi browser hanya berfungsi untuk aplikasi yang ditambahkan ke Layar Utama Anda.",
+        "needsInstallSteps": "Buka halaman ini di Safari, ketuk Bagikan, pilih Tambah ke Layar Utama, lalu buka CRM dari ikon baru dan kembali ke sini. Memerlukan iOS atau iPadOS 16.4 atau lebih baru.",
+        "blocked": "Notifikasi diblokir untuk situs ini di browser Anda.",
+        "blockedHelp": "Hanya browser Anda yang dapat membatalkan ini: buka pengaturan situs (ikon di sebelah alamat), atur Notifikasi ke Izinkan, lalu kembali ke halaman ini.",
+        "offHelp": "Belum diaktifkan di perangkat ini. Browser Anda akan meminta izin saat Anda menekan Aktifkan.",
+        "enable": "Aktifkan di perangkat ini",
+        "enabling": "Mengaktifkan...",
+        "onHelp": "Perangkat ini mendapat notifikasi browser untuk peristiwa yang Anda aktifkan di bawah, saat Anda tidak sedang melihat CRM.",
+        "howItWorks": "Anda tidak diberi tahu saat CRM terbuka dan berada di depan Anda (lonceng dan pop-up sudah menangani itu). Notifikasi menampilkan siapa dan jenis peristiwanya, tidak pernah isi pesan.",
+        "test": "Kirim notifikasi uji",
+        "testing": "Mengirim...",
+        "disable": "Nonaktifkan di perangkat ini",
+        "disabling": "Menonaktifkan...",
+        "testResult": {
+          "sent": "Terkirim. Notifikasi akan muncul di perangkat Anda sebentar lagi, meski CRM tertutup.",
+          "none_reachable": "Browser atau layanan push-nya tidak dapat dihubungi saat ini. Coba lagi sebentar lagi; perangkat yang sudah tidak ada dihapus otomatis.",
+          "no_device": "Tidak ada perangkat tujuan. Aktifkan notifikasi di perangkat ini terlebih dahulu.",
+          "wait": "Uji baru saja dikirim. Tunggu beberapa detik sebelum mengirim lagi."
+        },
+        "problem": {
+          "enable_failed": "Notifikasi tidak dapat diaktifkan di perangkat ini. Coba lagi.",
+          "disable_failed": "Notifikasi tidak dapat dinonaktifkan di perangkat ini. Coba lagi.",
+          "remove_failed": "Perangkat itu tidak dapat dihapus. Coba lagi.",
+          "test_failed": "Uji tidak dapat dikirim. Coba lagi."
+        },
+        "devicesFailed": "Perangkat Anda tidak dapat dimuat.",
+        "devices": {
+          "title": "Perangkat Anda",
+          "thisDevice": "Perangkat ini",
+          "added": "Ditambahkan {date}",
+          "lastUsed": "terakhir diberi tahu {date}",
+          "neverUsed": "belum pernah diberi tahu",
+          "remove": "Hapus",
+          "removeFor": "Hapus {device}"
+        }
+      }
+    },
+    "nav": {
+      "preferences": "Notifikasi"
+    }
+  }
+}

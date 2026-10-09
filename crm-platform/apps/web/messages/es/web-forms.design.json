@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "Tema",
+        "custom": "Personalizado: has cambiado un color, una esquina o una fuente del tema del que partiste.",
+        "classic": "Clásico",
+        "ocean": "Océano",
+        "forest": "Bosque",
+        "sunset": "Atardecer",
+        "berry": "Frutos rojos",
+        "slate": "Pizarra",
+        "noir": "Noir",
+        "paper": "Papel"
+      },
+      "colours": {
+        "title": "Colores",
+        "hint": "Usa colores hexadecimales de seis dígitos, como #2563eb. Un valor incompleto no se aplica.",
+        "swatch": "{name} (selector de color)",
+        "primary": "Principal (botones y acentos)",
+        "background": "Fondo de la página",
+        "surface": "Fondo del formulario",
+        "text": "Texto",
+        "mutedText": "Texto secundario",
+        "border": "Bordes",
+        "error": "Error"
+      },
+      "contrast": {
+        "title": "Algunos colores son difíciles de leer. Procura un contraste de al menos 4,5:1.",
+        "item": "{pair}: {ratio}:1",
+        "ok": "Todas las combinaciones de colores revisadas son fáciles de leer.",
+        "text": "Texto sobre el fondo del formulario",
+        "muted": "Texto secundario sobre el fondo del formulario",
+        "button": "Texto del botón sobre el botón"
+      },
+      "shape": {
+        "title": "Forma y espaciado",
+        "radius": "Esquinas",
+        "none": "Ninguna",
+        "sm": "Pequeñas",
+        "md": "Medianas",
+        "lg": "Grandes",
+        "pill": "Redondeadas",
+        "density": "Espaciado",
+        "compact": "Compacto",
+        "comfortable": "Cómodo",
+        "spacious": "Amplio",
+        "shadow": "Sombra",
+        "shadowNone": "Ninguna"
+      },
+      "type": {
+        "title": "Tipografía",
+        "font": "Fuente",
+        "fontHint": "Las fuentes web se cargan solo cuando eliges una.",
+        "sample": "El veloz murciélago hindú comía feliz cardillo y kiwi",
+        "scale": "Tamaño del texto"
+      },
+      "fonts": {
+        "system": "Predeterminado del sistema",
+        "serif": "Serif",
+        "mono": "Monoespaciada"
+      },
+      "layout": {
+        "title": "Diseño y botones",
+        "preset": "Diseño",
+        "classic": "Tarjeta clásica",
+        "fullWidth": "Ancho completo",
+        "split": "Dividido con imagen de portada",
+        "minimal": "Minimalista",
+        "labelPosition": "Posición de la etiqueta",
+        "labelTop": "Encima del campo",
+        "labelLeft": "Junto al campo",
+        "buttonStyle": "Estilo del botón",
+        "filled": "Relleno",
+        "outline": "Contorno",
+        "buttonWidth": "Ancho del botón",
+        "widthAuto": "Ajustar a la etiqueta",
+        "widthFull": "Ancho completo",
+        "maxWidth": "Ancho máximo",
+        "maxWidthHint": "Entre 320 y 960 píxeles.",
+        "maxWidthInvalid": "Introduce un número entero de 320 a 960.",
+        "maxWidthSlider": "Control deslizante de ancho máximo",
+        "mode": "Modo de color",
+        "light": "Claro",
+        "dark": "Oscuro",
+        "auto": "Seguir el dispositivo del visitante"
+      },
+      "images": {
+        "title": "Imágenes",
+        "logo": "Logotipo",
+        "logoHint": "Una dirección https. Déjalo vacío si no hay logotipo.",
+        "cover": "Imagen de portada",
+        "coverHint": "Se muestra junto al formulario en el diseño dividido.",
+        "background": "Imagen de fondo",
+        "backgroundHint": "Una dirección https. Déjalo vacío para un fondo liso.",
+        "invalid": "Introduce una dirección https o déjalo vacío."
+      },
+      "reset": "Restablecer valores predeterminados",
+      "readOnly": "Puedes ver el diseño, pero no cambiarlo.",
+      "preview": {
+        "title": "Vista previa",
+        "device": "Tamaño de vista previa",
+        "desktop": "Escritorio",
+        "mobile": "Móvil",
+        "scheme": "Modo de color de la vista previa",
+        "light": "Claro",
+        "dark": "Oscuro",
+        "schemeHint": "El modo de color está en Claro, así que no hay versión oscura que mostrar.",
+        "frameTitle": "Vista previa en directo del formulario"
+      }
+    }
+  }
+}

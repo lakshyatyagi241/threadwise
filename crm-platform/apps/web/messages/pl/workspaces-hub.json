@@ -1,0 +1,258 @@
+{
+  "workspaces-hub": {
+    "nav": {
+      "group": "Przestrzenie robocze",
+      "workspaces": "Przestrzenie robocze"
+    },
+    "crumb": {
+      "admin": "Admin",
+      "workspaces": "Przestrzenie robocze",
+      "label": "Ścieżka nawigacji"
+    },
+    "common": {
+      "loading": "Wczytywanie",
+      "retry": "Spróbuj ponownie",
+      "cancel": "Anuluj",
+      "close": "Zamknij",
+      "none": "Brak",
+      "never": "Nigdy",
+      "unlimited": "Bez limitu",
+      "noAccess": "Twoja rola nie pozwala na to."
+    },
+    "list": {
+      "title": "Przestrzenie robocze",
+      "subtitle": "Wszystkie przestrzenie robocze klientów w jednym miejscu: plan, dostawca, portfel, właściciel i aktywność, wraz z działaniami, których potrzebujesz przy każdej.",
+      "kpi": {
+        "total": "Przestrzenie robocze",
+        "active": "Aktywne",
+        "suspended": "Zawieszone",
+        "trial": "Na okresie próbnym",
+        "newThisMonth": "Nowe w tym miesiącu",
+        "lowBalance": "Niskie saldo",
+        "mrr": "MRR"
+      },
+      "search": "Szukaj",
+      "searchPlaceholder": "Nazwa, slug, imię lub e-mail właściciela",
+      "status": {
+        "label": "Status",
+        "all": "Wszystkie",
+        "active": "Aktywne",
+        "suspended": "Zawieszone"
+      },
+      "plan": "Plan",
+      "allPlans": "Wszystkie plany",
+      "state": "Stan",
+      "allStates": "Wszystkie stany",
+      "provider": "Dostawca",
+      "allProviders": "Wszyscy dostawcy",
+      "lowOnly": "Tylko niskie saldo",
+      "sort": {
+        "label": "Sortuj według",
+        "created": "Najnowsze",
+        "last_active": "Ostatnio aktywne",
+        "name": "Nazwa"
+      },
+      "clear": "Wyczyść filtry",
+      "refresh": "Odśwież",
+      "columns": {
+        "menu": "Kolumny",
+        "reset": "Przywróć kolumny",
+        "workspace": "Przestrzeń robocza",
+        "provider": "Dostawca",
+        "numbers": "Numery",
+        "plan": "Plan",
+        "state": "Stan",
+        "ends": "Koniec",
+        "limits": "Limity",
+        "wallet": "Portfel",
+        "owner": "Właściciel",
+        "mrr": "MRR",
+        "messages7d": "Wiad. 7 dni",
+        "lastActive": "Ostatnio aktywne",
+        "actions": "Działania"
+      },
+      "tableLabel": "Przestrzenie robocze",
+      "emptyTitle": "Brak przestrzeni roboczych",
+      "emptyMessage": "Przestrzenie robocze pojawią się tutaj, gdy tylko klienci się zarejestrują.",
+      "noMatchTitle": "Żadna przestrzeń robocza nie pasuje",
+      "noMatchMessage": "Zmień wyszukiwanie lub filtry, aby zobaczyć więcej.",
+      "loadMore": "Wczytaj więcej",
+      "loadingMore": "Wczytywanie kolejnych",
+      "loaded": "Wyświetlono: {count, plural, one {# przestrzeń robocza} few {# przestrzenie robocze} many {# przestrzeni roboczych} other {# przestrzeni roboczej}}"
+    },
+    "cell": {
+      "suspended": "Zawieszone",
+      "suspendedBy": {
+        "frozen": "Zamrożone",
+        "tos_violation": "Naruszenie regulaminu",
+        "fraud": "Oszustwo"
+      },
+      "providerSource": {
+        "override": "Nadpisanie",
+        "default": "Domyślny",
+        "platform_setting": "Ustawienie platformy"
+      },
+      "numbersCount": "{count, plural, one {# numer} few {# numery} many {# numerów} other {# numeru}}",
+      "platformOwned": "Platforma",
+      "unknownPlan": "Nieznany plan",
+      "health": {
+        "suspended": "Zawieszone",
+        "good": "Dobry",
+        "active": "Aktywne",
+        "low": "Niskie użycie",
+        "new": "Nowe",
+        "idle": "Bezczynne"
+      },
+      "daysLeft": "Pozostało: {count, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}",
+      "expired": "Wygasło",
+      "limits": {
+        "summary": "{messages} wiad./mies. · {users} użytkowników · {contacts} kontaktów · {devices} urządzeń",
+        "override": "Nadpisanie",
+        "messages": "Wiadomości miesięcznie",
+        "users": "Użytkownicy",
+        "contacts": "Kontakty",
+        "devices": "Urządzenia"
+      },
+      "lowBalance": "Niskie",
+      "noOwner": "Brak właściciela",
+      "ago": {
+        "now": "Przed chwilą",
+        "minutes": "{count, plural, one {# minutę temu} few {# minuty temu} many {# minut temu} other {# minuty temu}}",
+        "hours": "{count, plural, one {# godzinę temu} few {# godziny temu} many {# godzin temu} other {# godziny temu}}",
+        "days": "{count, plural, one {# dzień temu} few {# dni temu} many {# dni temu} other {# dnia temu}}"
+      }
+    },
+    "actions": {
+      "menu": "Działania dla {name}",
+      "dashboard": "Panel przestrzeni roboczej",
+      "editPlan": "Edytuj i zmień plan",
+      "planLimits": "Plan i limity",
+      "provider": "Zmień i ustaw dostawcę",
+      "impersonate": "Zaloguj jako właściciel",
+      "suspend": "Zawieś",
+      "unsuspend": "Aktywuj ponownie",
+      "denied": "Niedozwolone"
+    },
+    "plan": {
+      "loading": "Wczytywanie planu",
+      "loadFailed": "Nie udało się wczytać planu.",
+      "saved": "Zapisano plan dla {name}."
+    },
+    "provider": {
+      "title": "Dostawca dla {name}",
+      "help": "Nowe numery tej przestrzeni roboczej będą łączone przez wybranego dostawcę. Już połączone numery pozostają tam, gdzie są, dopóki ich nie przeniesiesz.",
+      "current": "Używa teraz {name} ({source})",
+      "field": "Dostawca",
+      "note": "Notatka (opcjonalna)",
+      "noteHint": "Zapisywana z nadpisaniem, aby następny operator wiedział dlaczego.",
+      "noActive": "Żaden dostawca nie jest aktywny. Najpierw włącz jednego w rejestrze dostawców.",
+      "save": "Ustaw nadpisanie",
+      "clear": "Użyj domyślnego",
+      "switchLink": "Przenieś połączone numery do innego dostawcy",
+      "assignmentsLink": "Rejestr dostawców",
+      "saved": "Ustawiono dostawcę dla {name}.",
+      "cleared": "{name} znów korzysta z domyślnego dostawcy."
+    },
+    "impersonate": {
+      "title": "Zaloguj jako właściciel {name}",
+      "help": "Otworzysz przestrzeń roboczą jako jej właściciel w nowej karcie. Sesja trwa maksymalnie {minutes} min i jest zapisywana wraz z podanym powodem.",
+      "reason": "Powód",
+      "reasonHint": "Co najmniej {min} znaków. Jest zapisywany w dzienniku audytu.",
+      "readOnly": "Sesja tylko do odczytu",
+      "readOnlyHint": "Możesz się rozglądać, ale każda zmiana zostanie odrzucona.",
+      "submit": "Otwórz przestrzeń roboczą",
+      "opened": "Otwieranie {name} w nowej karcie.",
+      "popupBlocked": "Przeglądarka zablokowała nową kartę. Zezwól na wyskakujące okna dla tej strony i spróbuj ponownie.",
+      "reasonShort": "Wpisz co najmniej {min} znaków."
+    },
+    "suspend": {
+      "title": "Zawiesić {name}?",
+      "message": "Jej użytkownicy zostaną wylogowani z przestrzeni roboczej, a wysyłanie wiadomości zostanie wstrzymane, dopóki jej nie aktywujesz ponownie.",
+      "reason": "Powód (opcjonalny)",
+      "confirm": "Zawieś przestrzeń roboczą",
+      "done": "{name} jest zawieszona."
+    },
+    "unsuspend": {
+      "title": "Aktywować ponownie {name}?",
+      "message": "Jej użytkownicy znów mogą korzystać z przestrzeni roboczej.",
+      "reason": "Notatka (opcjonalna)",
+      "confirm": "Aktywuj ponownie przestrzeń roboczą",
+      "done": "{name} jest znów aktywna."
+    },
+    "errors": {
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
+      "forbidden": "Twoja rola nie pozwala na to.",
+      "conflict": "Ktoś inny zmienił tę przestrzeń roboczą. Wczytaj ponownie i spróbuj jeszcze raz.",
+      "notFound": "Ta przestrzeń robocza już nie istnieje.",
+      "reasonRequired": "Wymagany jest powód liczący co najmniej 8 znaków.",
+      "orgSuspended": "Przestrzeń robocza jest zawieszona, więc nie można do niej wejść.",
+      "validation": "Sprawdź wartości i spróbuj ponownie.",
+      "requestId": "Identyfikator żądania"
+    },
+    "detail": {
+      "crumb": "Przestrzeń robocza",
+      "back": "Wszystkie przestrzenie robocze",
+      "loadFailed": "Nie udało się wczytać tej przestrzeni roboczej.",
+      "slug": "Slug",
+      "created": "Utworzono {date}",
+      "kpi": {
+        "members": "Członkowie",
+        "contacts": "Kontakty",
+        "openTickets": "Otwarte zgłoszenia",
+        "delivered": "Dostarczone",
+        "wallet": "Portfel",
+        "mrr": "MRR",
+        "messages7d": "Wiadomości, 7 dni"
+      },
+      "chart": {
+        "title": "Ostatnie 30 dni",
+        "label": "Wysłane i dostarczone wiadomości dziennie, ostatnie 30 dni",
+        "sent": "Wysłane",
+        "delivered": "Dostarczone",
+        "empty": "Brak wiadomości w ostatnich 30 dniach."
+      },
+      "tabs": {
+        "label": "Sekcje przestrzeni roboczej",
+        "overview": "Przegląd",
+        "plan": "Plan i limity",
+        "wallet": "Portfel",
+        "provider": "Dostawca",
+        "support": "Wsparcie"
+      },
+      "overview": {
+        "owner": "Właściciel",
+        "adminNote": "Notatka administratora",
+        "noNote": "Brak notatki.",
+        "health": "Stan zdrowia",
+        "lastActive": "Ostatnio aktywne",
+        "suspendedBy": "Przypisane do"
+      },
+      "planTab": {
+        "plan": "Plan",
+        "state": "Stan",
+        "ends": "Koniec",
+        "limits": "Obowiązujące limity",
+        "edit": "Edytuj i zmień plan",
+        "overrideNote": "Ta przestrzeń robocza ma własne limity, które zastępują limity planu."
+      },
+      "walletTab": {
+        "open": "Otwórz pełny portfel",
+        "balance": "Saldo",
+        "adjust": "Dostosuj saldo",
+        "adjusted": "Saldo zostało dostosowane."
+      },
+      "providerTab": {
+        "provider": "Obowiązujący dostawca",
+        "source": "Wybrany przez",
+        "numbers": "Połączone numery",
+        "change": "Zmień i ustaw dostawcę",
+        "switch": "Przenieś numery do innego dostawcy"
+      },
+      "supportTab": {
+        "text": "Zgłoszenia, rozmowy i historia wsparcia tej przestrzeni roboczej.",
+        "open": "Otwórz kartę wsparcia",
+        "openTickets": "{count, plural, one {# otwarte zgłoszenie} few {# otwarte zgłoszenia} many {# otwartych zgłoszeń} other {# otwartego zgłoszenia}}"
+      }
+    }
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "web-forms": {
+    "submissions": {
+      "title": "Envios",
+      "backToForm": "Voltar para {name}",
+      "formFallback": "Formulário",
+      "count": "{count, plural, =0 {Nenhum envio} one {1 envio} other {# envios}} carregados",
+      "moreAvailable": "Há mais disponíveis",
+      "tabsLabel": "Grupos de envios",
+      "tabs": {
+        "all": "Todos",
+        "needs_attention": "Precisa de atenção",
+        "spam": "Spam"
+      },
+      "filters": {
+        "search": "Pesquisar",
+        "searchPlaceholder": "Nome, e-mail ou telefone",
+        "status": "Status",
+        "allStatuses": "Qualquer status",
+        "from": "De",
+        "to": "Até",
+        "clear": "Limpar filtros"
+      },
+      "status": {
+        "received": "Recebido",
+        "created": "Contato criado",
+        "updated": "Contato atualizado",
+        "needs_review": "Precisa de revisão",
+        "awaiting_payment": "Aguardando pagamento",
+        "paid": "Pago",
+        "failed": "Falhou",
+        "spam": "Spam"
+      },
+      "reason": {
+        "label": "Motivo",
+        "todo": "O que fazer",
+        "no_contact_point": {
+          "what": "O visitante não informou um e-mail ou telefone utilizável, então não foi possível criar um contato.",
+          "todo": "Abra as respostas, adicione o dado que falta ao contato manualmente ou corrija o mapeamento do formulário e tente novamente."
+        },
+        "invalid_phone": {
+          "what": "Não foi possível ler o número de telefone como um número válido.",
+          "todo": "Abra as respostas, confira o número e tente novamente quando o formulário aceitar o valor, ou adicione o contato manualmente."
+        },
+        "plan_limit_reached": {
+          "what": "O limite de contatos do seu plano foi atingido, então um novo contato não foi criado.",
+          "todo": "Libere contatos ou faça upgrade do seu plano e tente novamente."
+        },
+        "submissions_cap": {
+          "what": "O limite mensal de envios do seu plano foi atingido, então este envio foi salvo para revisão.",
+          "todo": "Faça upgrade do seu plano ou aguarde o próximo mês e tente novamente."
+        },
+        "spam_score": {
+          "what": "O envio parecia spam e foi separado.",
+          "todo": "Se for uma pessoa real, abra o envio e adicione-a como contato manualmente."
+        },
+        "too_fast": {
+          "what": "Foi enviado mais rápido do que uma pessoa conseguiria preencher o formulário, então foi separado como spam.",
+          "todo": "Se for uma pessoa real, abra o envio e adicione-a como contato manualmente."
+        },
+        "internal_error": {
+          "what": "Algo deu errado do nosso lado ao processar o envio. As respostas foram mantidas.",
+          "todo": "Tente novamente. Se falhar outra vez, entre em contato com o suporte informando a data e a hora do envio."
+        },
+        "unknown": {
+          "what": "Este envio foi separado por um motivo que esta versão do aplicativo não reconhece.",
+          "todo": "Abra-o para ver os detalhes e depois tente novamente ou trate-o manualmente."
+        }
+      },
+      "table": {
+        "received": "Recebido",
+        "visitor": "Visitante",
+        "status": "Status",
+        "contact": "Contato",
+        "company": "Empresa",
+        "version": "Versão",
+        "open": "Abrir envio de {who}"
+      },
+      "anonymous": "Nenhum nome informado",
+      "answersRemovedShort": "Respostas removidas",
+      "versionShort": "v{n}",
+      "noLink": "Nenhum",
+      "unnamedContact": "Abrir contato",
+      "unnamedCompany": "Abrir empresa",
+      "drawer": {
+        "title": "Envio de {who}",
+        "close": "Fechar",
+        "loading": "Abrindo envio",
+        "errorTitle": "Não foi possível abrir este envio.",
+        "errorBody": "Verifique sua conexão e tente novamente.",
+        "retryLoad": "Tentar novamente",
+        "auditNote": "A abertura das respostas de um envio é registrada no log de auditoria.",
+        "answers": "Respostas",
+        "noAnswers": "Este envio não tem respostas.",
+        "emptyAnswer": "Sem resposta",
+        "yes": "Sim",
+        "no": "Não",
+        "removedTitle": "As respostas foram removidas",
+        "removedBody": "As respostas foram apagadas ou expurgadas. Apenas este registro permanece, e o contato foi mantido.",
+        "summary": "Resumo",
+        "receivedAt": "Recebido",
+        "formVersion": "Versão do formulário",
+        "spamScore": "Pontuação de spam",
+        "error": "Erro",
+        "attribution": "De onde veio",
+        "noAttribution": "Nenhum detalhe de origem foi capturado.",
+        "utm": "Tags de campanha",
+        "referrer": "Referenciador",
+        "pageUrl": "Página",
+        "userAgent": "Navegador",
+        "consent": "Consentimento",
+        "consentGiven": "Consentimento dado",
+        "consentText": "Texto que o visitante viu",
+        "consentVersion": "Versão do texto",
+        "consentAt": "Dado em",
+        "noConsent": "Este formulário não pediu consentimento.",
+        "links": "Registros",
+        "actions": "Ações"
+      },
+      "actions": {
+        "retry": "Tentar novamente",
+        "retrying": "Tentando novamente",
+        "delete": "Excluir respostas",
+        "deleting": "Excluindo",
+        "export": "Exportar CSV",
+        "exporting": "Exportando",
+        "exportHintAttention": "Escolha um único status para exportar deste grupo, ou use Todos.",
+        "exportHintSearch": "A exportação ignora o texto da pesquisa.",
+        "notSpam": "Não é spam: processar"
+      },
+      "confirmDelete": {
+        "title": "Excluir estas respostas?",
+        "message": "Isto apaga definitivamente as respostas deste envio. Uma linha permanece na lista como registro de que o envio aconteceu, e o contato nunca é excluído.",
+        "confirm": "Excluir respostas",
+        "cancel": "Cancelar"
+      },
+      "toast": {
+        "retried": "Reenviado. O envio agora está: {status}.",
+        "notRetryable": "Somente envios que precisam de revisão ou que falharam podem ser reenviados.",
+        "purged": "As respostas já foram removidas, então não há nada para reenviar.",
+        "retryFailed": "O reenvio não foi concluído. Tente novamente.",
+        "deleted": "As respostas foram excluídas. O contato foi mantido.",
+        "deleteFailed": "Não foi possível excluir as respostas. Tente novamente.",
+        "exported": "O CSV foi baixado.",
+        "exportTruncated": "A exportação foi limitada às {max} linhas mais recentes. Restrinja as datas para obter o restante.",
+        "exportFailed": "Não foi possível gerar a exportação. Tente novamente."
+      },
+      "state": {
+        "loading": "Carregando envios",
+        "errorTitle": "Não foi possível carregar os envios.",
+        "errorBody": "Verifique sua conexão e tente novamente.",
+        "retry": "Tentar novamente",
+        "lockedTitle": "Formulários não fazem parte do seu plano",
+        "lockedBody": "Adicione o app Formulários ao seu espaço de trabalho para coletar e revisar envios.",
+        "upgrade": "Ver planos",
+        "emptyTitle": "Nenhum envio ainda",
+        "emptyBody": "Compartilhe o link do formulário ou incorpore-o no seu site. Cada envio aparece aqui assim que alguém o enviar.",
+        "emptyShare": "Compartilhar este formulário",
+        "emptyFilteredTitle": "Nenhum envio corresponde",
+        "emptyFilteredBody": "Nada se encaixa nestes filtros. Limpe-os para ver tudo.",
+        "loadMore": "Carregar mais",
+        "loadingMore": "Carregando mais"
+      },
+      "cap": {
+        "notice": "Alguns envios foram salvos para revisão porque o limite mensal de envios do seu plano foi atingido.",
+        "upgrade": "Faça upgrade do seu plano"
+      }
+    }
+  }
+}

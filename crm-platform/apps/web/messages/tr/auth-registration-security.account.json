@@ -1,0 +1,571 @@
+{
+  "auth-registration-security": {
+    "account": {
+      "nav": {
+        "title": "Hesap"
+      },
+      "common": {
+        "cancel": "İptal",
+        "loading": "Yükleniyor",
+        "reset": "Sıfırla",
+        "retry": "Tekrar dene",
+        "save": "Değişiklikleri kaydet",
+        "saving": "Kaydediliyor",
+        "showPassword": "Parolayı göster",
+        "hidePassword": "Parolayı gizle",
+        "signOut": "Oturumu kapat"
+      },
+      "errors": {
+        "unexpected": "Bizim tarafımızda bir şeyler ters gitti. Lütfen tekrar deneyin.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+        "forbidden": "Bunu yapma izniniz yok.",
+        "signedOut": "Oturumunuz sona erdi. Lütfen tekrar oturum açın.",
+        "rateLimited": "Çok fazla deneme. Lütfen biraz bekleyip tekrar deneyin.",
+        "rateLimitedWait": "Çok fazla deneme. {seconds, plural, one {# saniye} other {# saniye}} sonra tekrar deneyin.",
+        "requestId": "İstek kimliği",
+        "locked": "Çok fazla başarısız deneme. Tekrar denemeden önce bir süre bekleyin.",
+        "lockedWait": "Çok fazla başarısız deneme. {minutes, plural, one {# dakika} other {# dakika}} sonra tekrar deneyin."
+      },
+      "hub": {
+        "railLabel": "Hesap",
+        "menuLabel": "Hesap bölümleri",
+        "groups": {
+          "account": "Hesap",
+          "security": "Güvenlik"
+        },
+        "tabs": {
+          "profile": "Profil",
+          "security": "Parola ve güvenlik",
+          "delete": "Hesabı sil",
+          "plan": "Planlar"
+        },
+        "pages": {
+          "profile": {
+            "title": "Profil",
+            "description": "Fotoğrafınızı, adınızı ve iletişim bilgilerinizi güncelleyin."
+          },
+          "security": {
+            "title": "Parola ve güvenlik",
+            "description": "Parolanızı değiştirin, iki adımlı doğrulamayı açın ve oturum açtığınız yerleri gözden geçirin."
+          },
+          "delete": {
+            "title": "Hesabı sil",
+            "description": "Hesabınızı bu çalışma alanından kalıcı olarak kaldırın."
+          }
+        },
+        "breadcrumbLabel": "Gezinti yolu",
+        "breadcrumbRoot": "Hesap",
+        "planBadge": "{plan} planı",
+        "planFree": "Ücretsiz",
+        "upgrade": {
+          "title": "Daha fazla alana mı ihtiyacınız var?",
+          "body": "Daha yüksek bir planla daha fazla kampanya, cihaz ve yapay zeka desteğinin kilidini açın.",
+          "cta": "Planları gör"
+        },
+        "lockedHint": "Önce bu hesapta güvenlik adımını tamamlayın."
+      },
+      "avatar": {
+        "alt": "{name} fotoğrafı",
+        "change": "Fotoğrafı değiştir",
+        "remove": "Fotoğrafı kaldır",
+        "uploading": "Fotoğraf yükleniyor",
+        "removing": "Fotoğraf kaldırılıyor",
+        "updated": "Fotoğraf güncellendi.",
+        "removed": "Fotoğraf kaldırıldı.",
+        "errors": {
+          "type": "JPG, PNG, WebP veya GIF görseli seçin.",
+          "too-large": "Görsel küçültüldükten sonra bile {size} sınırını aşıyor. Daha küçük bir resim deneyin.",
+          "decode": "Bu görsel okunamadı. Başka bir dosya deneyin.",
+          "encode": "Bu görsel hazırlanamadı. Başka bir dosya deneyin.",
+          "rejected": "Bu dosya kabul edilmedi. JPG, PNG, WebP veya GIF görseli kullanın.",
+          "source-too-large": "Bu görsel açılamayacak kadar büyük. 20 MB altında bir görsel seçin.",
+          "forbidden": "Bu hesabın fotoğrafını değiştirme yetkiniz yok.",
+          "expired": "Oturumunuz sona erdi. Sayfayı yenileyin, yeniden oturum açın ve tekrar deneyin."
+        },
+        "hint": "JPG, PNG, WebP veya GIF. {size} sınırına sığacak şekilde küçültürüz."
+      },
+      "timezone": {
+        "label": "Saat dilimi",
+        "placeholder": "Saat dilimi arayın, örneğin Kolkata veya UTC+05:30",
+        "empty": "Aramanızla eşleşen saat dilimi yok."
+      },
+      "phone": {
+        "country": "Ülke",
+        "countryPlaceholder": "Ülke ara",
+        "countryEmpty": "Aramanızla eşleşen ülke yok.",
+        "number": "Telefon numarası",
+        "numberPlaceholder": "Telefon numarası"
+      },
+      "profile": {
+        "personalInfo": "Kişisel bilgiler",
+        "fullName": "Ad soyad",
+        "displayName": "Görünen ad",
+        "displayNameHint": "Adınızın ekip arkadaşlarınıza nasıl görüneceği. İlk adınızla başlarız.",
+        "email": "E-posta",
+        "changeEmail": "E-postayı değiştir",
+        "verified": "Doğrulandı",
+        "unverified": "Doğrulanmadı",
+        "pendingEmail": "{email} adresine bir onay bağlantısı gönderdik. Bağlantıyı açtıktan sonra oturum açma e-postanız değişir.",
+        "phone": "Telefon",
+        "phoneHint": "İsteğe bağlı. Bir ülke seçin, ardından numarayı girin.",
+        "language": "Dil",
+        "languageHint": "Uygulamanın sizin için kullanacağı dil.",
+        "languageDefault": "Varsayılanı kullan",
+        "theme": "Tema",
+        "themes": {
+          "paper": "Kağıt",
+          "bright": "Parlak",
+          "dark": "Koyu"
+        },
+        "workspaceTimezone": "Saat dilimi",
+        "workspaceTimezoneHint": "{workspace} için geçerlidir. Yalnızca sahipler ve yöneticiler değiştirebilir.",
+        "saved": "Profil kaydedildi.",
+        "errors": {
+          "fullNameRequired": "Ad soyadınızı girin.",
+          "phoneInvalid": "Seçilen ülke için geçerli bir telefon numarası girin.",
+          "invalid": "Bu değer geçerli değil.",
+          "timezoneInvalid": "Listeden bir saat dilimi seçin.",
+          "timezoneForbidden": "Çalışma alanı saat dilimini yalnızca sahipler ve yöneticiler değiştirebilir."
+        },
+        "workspaceTag": "(çalışma alanı)"
+      },
+      "emailChange": {
+        "title": "E-postanızı değiştirin",
+        "intro": "Yeni adresi ve mevcut parolanızı girin. Yeni adrese bir onay bağlantısı göndereceğiz; oturum açma e-postanız yalnızca bağlantıyı açtıktan sonra değişir.",
+        "newEmail": "Yeni e-posta adresi",
+        "password": "Mevcut parola",
+        "passwordHint": "Yeni adres oturum açma kimliğiniz olacağı için parolanızı istiyoruz.",
+        "showPassword": "Parolayı göster",
+        "hidePassword": "Parolayı gizle",
+        "cancel": "İptal",
+        "submit": "Onay bağlantısı gönder",
+        "sending": "Gönderiliyor",
+        "errors": {
+          "invalidEmail": "Geçerli bir e-posta adresi girin.",
+          "same": "Bu zaten sizin e-posta adresiniz.",
+          "taken": "Bu e-posta adresi bu çalışma alanında zaten kullanılıyor.",
+          "passwordRequired": "Mevcut parolanızı girin.",
+          "passwordWrong": "Bu parola doğru değil."
+        }
+      },
+      "messageFooterPage": {
+        "title": "Mesaj alt bilgisi",
+        "titleLead": "Mesaj",
+        "titleAccent": "alt bilgi",
+        "description": "Çalışma alanınızın otomasyonlardan, zamanlanmış gönderimlerden ve ekip gelen kutusu yanıtlarından gönderdiği mesajları bitiren satır."
+      },
+      "branding": {
+        "title": "Mesaj alt bilgisi",
+        "description": "Otomasyonlardan, zamanlanmış gönderimlerden ve ekip gelen kutusu yanıtlarından gönderilen düz metin ve etkileşimli mesajların altına eklenen satır. Onaylı şablonlar kendi metnini taşır ve bunu atlar.",
+        "label": "Özel alt bilgi (en fazla {max} karakter)",
+        "hint": "Mesajları hiç alt bilgi olmadan göndermek için boş bırakın.",
+        "preview": "Önizleme",
+        "sampleMessage": "Merhaba! İstediğiniz bilgiler burada.",
+        "noFooter": "(alt bilgi yok)",
+        "save": "Alt bilgiyi kaydet",
+        "saving": "Kaydediliyor",
+        "saved": "Alt bilgi güncellendi. Göndereceğiniz sonraki mesajdan itibaren geçerlidir.",
+        "tooLong": "Alt bilgi en fazla {max} karakter olabilir.",
+        "forbidden": "Alt bilgiyi değiştirme yetkiniz yok.",
+        "current": "Geçerli alt bilgi",
+        "currentDefault": "Geçerli alt bilgi (platform varsayılanı)",
+        "planLocked": "Planınız giden mesajlarda platformun varsayılan alt bilgisini kullanır. Daha yüksek planlar özel alt bilginin veya alt bilgisiz göndermenin kilidini açar.",
+        "permissionLocked": "Alt bilgiyi yalnızca çalışma alanı yöneticileri değiştirebilir. Burada görebilirsiniz ancak düzenleyemezsiniz.",
+        "upgrade": "Planları gör",
+        "upgradeTitle": "Platform alt bilgisini kaldırmak için yükseltin.",
+        "placeholder": "{name} ile gönderildi",
+        "remove": "Alt bilgimi kaldır",
+        "removed": "Alt bilgi kaldırıldı. Mesajlarınız bir sonraki gönderimden itibaren alt bilgisiz gider."
+      },
+      "password": {
+        "title": "Parolayı değiştir",
+        "subtitle": "Başka hiçbir yerde kullanmadığınız güçlü bir parola seçin.",
+        "current": "Mevcut parola",
+        "new": "Yeni parola",
+        "newHint": "En az {count} karakter.",
+        "confirm": "Yeni parolayı onayla",
+        "submit": "Parolayı güncelle",
+        "updating": "Güncelleniyor",
+        "forcedBanner": "Devam etmeden önce yeni bir parola belirlemeniz gerekiyor. Aşağıdan bir parola seçin.",
+        "forcedDone": "Parola güncellendi. Tekrar hoş geldiniz.",
+        "success": "Parola güncellendi. {count, plural, =0 {Bu cihazda oturumunuz açık kalır.} one {Diğer 1 cihazın oturumu kapatıldı.} other {Diğer # cihazın oturumu kapatıldı.}}",
+        "errors": {
+          "currentRequired": "Mevcut parolanızı girin.",
+          "currentWrong": "Bu parola doğru değil.",
+          "tooShort": "En az {count} karakter kullanın.",
+          "tooLong": "En fazla 256 karakter kullanın.",
+          "sameAsCurrent": "Mevcut parolanızdan farklı bir parola seçin.",
+          "mismatch": "İki parola eşleşmiyor.",
+          "policy": "Bu parola çalışma alanınızın kurallarını karşılamıyor:"
+        },
+        "rules": {
+          "min_length": "En az {count} karakter kullanın.",
+          "upper_lower": "Büyük ve küçük harfleri karıştırın.",
+          "number": "En az bir rakam ekleyin.",
+          "symbol": "En az bir sembol ekleyin.",
+          "common": "Bu parola tahmin edilmesi çok kolay."
+        },
+        "currentPlaceholder": "Mevcut parolanızı girin",
+        "newPlaceholder": "En az {count} karakter",
+        "confirmPlaceholder": "Tekrar yazın",
+        "tips": {
+          "title": "Parola ipuçları",
+          "mix": "Büyük ve küçük harfleri, rakamları ve sembolleri karıştırın.",
+          "reuse": "Diğer sitelerdeki parolaları yeniden kullanmayın.",
+          "manager": "Bir parola yöneticisi kullanmayı düşünün."
+        },
+        "newHintRequires": "{rules} içermelidir.",
+        "requirement": {
+          "mixedCase": "büyük ve küçük harfler",
+          "number": "bir rakam",
+          "symbol": "bir sembol"
+        },
+        "resetLink": {
+          "title": "Yazacak mevcut parolanız yok mu?",
+          "body": "Google veya Facebook ile oturum açtıysanız ya da parolanızı hatırlamıyorsanız, parolasız yeni bir parola seçebilmeniz için {email} adresine bir bağlantı gönderebiliriz.",
+          "send": "Bana sıfırlama bağlantısı gönder",
+          "sending": "Gönderiliyor",
+          "sent": "{email} adresi posta alabiliyorsa bir sıfırlama bağlantısı yolda. Yeni parola seçmek için bağlantıyı açın. Her yerde oturumunuz kapatılır ve yeni parolayla tekrar oturum açabilirsiniz.",
+          "captchaFailed": "Captcha doğrulamasını tamamlayıp tekrar deneyin."
+        }
+      },
+      "passwordConfirm": {
+        "password": "Mevcut parola",
+        "required": "Mevcut parolanızı girin.",
+        "wrong": "Bu parola doğru değil.",
+        "show": "Parolayı göster",
+        "hide": "Parolayı gizle",
+        "cancel": "İptal",
+        "working": "İşleniyor"
+      },
+      "mfa": {
+        "title": "İki adımlı doğrulama",
+        "subtitle": "Her oturum açışınızda bir kimlik doğrulama uygulamasından kod isteyin.",
+        "forcedBanner": "Kuruluşunuz iki adımlı doğrulamayı zorunlu kılıyor. Uygulamayı kullanmaya devam etmek için kurun.",
+        "forcedDone": "İki adımlı doğrulama açık. Tekrar hoş geldiniz.",
+        "offDescription": "İki adımlı doğrulama kapalı. Parolanız sızsa bile hesabınızı korumak için açın.",
+        "starting": "Kurulum hazırlanıyor",
+        "step1": "Telefonunuzda bir kimlik doğrulama uygulaması açın (Google Authenticator, Microsoft Authenticator, 1Password ve benzerleri).",
+        "step2": "QR kodunu tarayın veya kurulum anahtarını elle yazın.",
+        "step3": "Bitirmek için uygulamanın gösterdiği altı haneli kodu girin.",
+        "qrLabel": "Kimlik doğrulama uygulamanız için QR kodu",
+        "manualKey": "Kurulum anahtarı",
+        "manualKeyHint": "Kodu tarayamıyorsanız bunu kullanın. Gizli tutun.",
+        "copy": "Kopyala",
+        "copied": "Kopyalandı",
+        "codeLabel": "Altı haneli kod",
+        "codeHint": "Kod 30 saniyede bir değişir.",
+        "codeInvalid": "Uygulamanızdaki altı haneyi girin.",
+        "codeWrong": "Kod yanlış veya süresi dolmuş. Yeni bir kod bekleyip tekrar deneyin.",
+        "enable": "Aç",
+        "enabling": "Açılıyor",
+        "expired": "Bu kurulumun süresi doldu. Yeni bir kod almak için baştan başlayın.",
+        "restart": "Baştan başla",
+        "on": "Açık",
+        "since": "{date} tarihinden beri",
+        "onDescription": "Her oturum açışınızda kimlik doğrulama uygulamanızdan bir kod istenecek.",
+        "remaining": "{count, plural, =0 {Hiç kurtarma kodunuz kalmadı.} one {1 kurtarma kodu kaldı.} other {# kurtarma kodu kaldı.}}",
+        "remainingLow": "Yakında yenilerini oluşturun.",
+        "regenerate": "Kurtarma kodlarını değiştir",
+        "regenerateTitle": "Kurtarma kodlarını değiştir",
+        "regenerateDescription": "Bu işlem on yeni kod oluşturur ve eskilerinin çalışmasını durdurur. Devam etmek için parolanızı girin.",
+        "regenerateConfirm": "Kodları değiştir",
+        "disable": "Kapat",
+        "disableTitle": "İki adımlı doğrulamayı kapat",
+        "disableDescription": "Hesabınız yalnızca parolanızla korunacak. Onaylamak için parolanızı girin.",
+        "disableConfirm": "Kapat",
+        "disabledDone": "İki adımlı doğrulama kapalı.",
+        "codesTitleEnabled": "İki adımlı doğrulama açık. Kurtarma kodlarınızı kaydedin.",
+        "codesTitleRegenerated": "Yeni kurtarma kodlarınız",
+        "scanTitle": "Bu QR kodunu tarayın"
+      },
+      "recovery": {
+        "intro": "Telefonunuzu kaybederseniz bu kodların her biri bir kez oturum açmanızı sağlar.",
+        "onlyOnce": "Bu kodlar yalnızca bir kez gösterilir. Parola yöneticisi gibi güvenli bir yerde saklayın.",
+        "listLabel": "Kurtarma kodları",
+        "copy": "Kodları kopyala",
+        "copied": "Kopyalandı",
+        "copyFailed": "Tarayıcınız kopyalamaya izin vermedi. Kodları seçip elle kopyalayın veya indirin.",
+        "download": "İndir",
+        "fileHeader": "Kurtarma kodları. Her biri bir kez çalışır.",
+        "confirmSaved": "Bu kodları güvenli bir yere kaydettim.",
+        "done": "Kaydettim"
+      },
+      "sessions": {
+        "title": "Oturum açtığınız yerler",
+        "subtitle": "Hesabınızda oturum açmış cihazlar. Tanımadıklarınızı iptal edin.",
+        "thisDevice": "Bu cihaz",
+        "remembered": "Oturum açık kalır",
+        "ipUnknown": "Adres bilinmiyor",
+        "signOutOthers": "Diğerlerinin hepsinden çıkış yap",
+        "signingOut": "Çıkış yapılıyor",
+        "empty": "Etkin oturum yok.",
+        "confirmOneTitle": "Bu cihazdan çıkış yapılsın mı?",
+        "confirmOneBody": "{device} cihazının oturumu kapatılacak ve tekrar oturum açmak için parolanız gerekecek.",
+        "confirmOthersTitle": "Diğer tüm cihazlardan çıkış yapılsın mı?",
+        "confirmOthersBody": "{count, plural, one {Diğer 1 cihazın} other {Diğer # cihazın}} oturumu kapatılacak. Bu cihazda oturumunuz açık kalır.",
+        "revoked": "{device} cihazının oturumu kapatıldı.",
+        "revokedOthers": "{count, plural, =0 {Oturum açık başka cihaz yoktu.} one {1 cihazın oturumu kapatıldı.} other {# cihazın oturumu kapatıldı.}}",
+        "columns": {
+          "device": "Cihaz",
+          "ip": "IP adresi",
+          "lastActive": "Son etkinlik",
+          "actions": "İşlemler"
+        },
+        "revoke": "İptal et",
+        "showing": "{total} içinden {from}–{to} arası gösteriliyor",
+        "prev": "Önceki",
+        "next": "Sonraki",
+        "lifetimes": "Bir oturum {session} sonra veya Beni oturumda tut seçildiyse {remembered} sonra kendiliğinden sona erer.",
+        "idle": "Bu seçim yapılmadıysa {idle} etkinlik olmadığında da sona erer."
+      },
+      "delete": {
+        "title": "Hesabınızı silin",
+        "warning": "Bu işlem hesabınızı kalıcı olarak siler: oturum açma bilgilerinizi, profilinizi, fotoğrafınızı ve cihazlarınızı.",
+        "irreversible": "Bu işlem geri alınamaz.",
+        "consequencesTitle": "Neler olur",
+        "consequence1": "Her yerde oturumunuz kapatılır ve bu hesapla bir daha oturum açamazsınız.",
+        "consequence2": "Çalışma alanı ve diğer üyeler kalır. Yaptığınız işler çalışma alanında kalır.",
+        "consequence3": "Hesabın silindiğine dair bir kayıt denetim için saklanır.",
+        "blocked": {
+          "sole_member": {
+            "title": "Bu çalışma alanının tek üyesisiniz.",
+            "body": "Hesap tek başına silinemez. Platform ekibinden çalışma alanını kapatmasını isteyin."
+          },
+          "sole_admin": {
+            "title": "Tek yönetici sizsiniz.",
+            "body": "Önce başka bir üyeyi yönetici yapın, sonra hesabınızı silmek için geri dönün."
+          }
+        },
+        "phraseLabel": "Onaylamak için {phrase} yazın",
+        "phraseHint": "Büyük harfler dahil, gösterildiği gibi yazın.",
+        "password": "Mevcut parola",
+        "showPassword": "Parolayı göster",
+        "hidePassword": "Parolayı gizle",
+        "cancel": "İptal",
+        "submit": "Hesabı kalıcı olarak sil",
+        "deleting": "Siliniyor",
+        "errors": {
+          "phrase": "İfadeyi gösterildiği gibi yazın.",
+          "passwordRequired": "Mevcut parolanızı girin.",
+          "passwordWrong": "Bu parola doğru değil."
+        },
+        "considerTitle": "Silmeden önce şunları düşünün",
+        "considerPlanLink": "Silmek yerine ücretsiz plana geçmek",
+        "considerPlanRest": "seçeneğini.",
+        "considerSupportLink": "Destek ile iletişime geçmek",
+        "considerSupportRest": "bir sorun ayrılmanıza neden oluyorsa. Çözebiliriz.",
+        "reasonLabel": "Neden ayrılıyorsunuz? (isteğe bağlı)",
+        "reasonHint": "Bu yalnızca bu formda kalır. Hiçbir yere gönderilmez.",
+        "reasonPlaceholder": "Neyi daha iyi yapabileceğimizi söyleyin"
+      },
+      "switcher": {
+        "heading": "Çalışma alanları",
+        "label": "Çalışma alanı: {name}. Çalışma alanını değiştir",
+        "switching": "Çalışma alanı değiştiriliyor",
+        "switched": "{name} çalışma alanına geçildi",
+        "failed": "Çalışma alanı değiştirilemedi. Lütfen tekrar deneyin.",
+        "notAvailable": "Bu çalışma alanına geçemezsiniz.",
+        "rateLimited": "Çok fazla deneme. Lütfen biraz bekleyip tekrar deneyin.",
+        "rateLimitedWait": "Çok fazla deneme. {seconds, plural, one {# saniye} other {# saniye}} sonra tekrar deneyin."
+      },
+      "mfaChallenge": {
+        "title": "Siz olduğunuzu doğrulayın",
+        "intro": "{name} iki adımlı doğrulama kullanıyor. Geçmek için kimlik doğrulama uygulamanızdaki kodu girin.",
+        "codeLabel": "Altı haneli kod",
+        "codeHint": "Kod 30 saniyede bir değişir.",
+        "codeInvalid": "Uygulamanızdaki altı haneyi girin.",
+        "codeWrong": "Kod yanlış veya süresi dolmuş. Bir sonrakini deneyin.",
+        "recoveryLabel": "Kurtarma kodu",
+        "recoveryHint": "Her kurtarma kodu bir kez çalışır.",
+        "recoveryInvalid": "Bir kurtarma kodu girin.",
+        "recoveryWrong": "Bu kurtarma kodu geçerli değil.",
+        "expired": "Bu oturum açma adımının süresi doldu. Bu pencereyi kapatıp çalışma alanını yeniden seçin.",
+        "useRecovery": "Bunun yerine kurtarma kodu kullan",
+        "useCode": "Bunun yerine kimlik doğrulama kodu kullan",
+        "cancel": "İptal",
+        "confirm": "Onayla",
+        "verifying": "Doğrulanıyor"
+      },
+      "banners": {
+        "dismiss": "Kapat",
+        "verifyMessage": "Lütfen e-posta adresinizi ({email}) doğrulayın. Kaydolurken size bir bağlantı gönderdik.",
+        "resend": "E-postayı yeniden gönder",
+        "resendIn": "{seconds} sn içinde yeniden gönder",
+        "resendWait": "Kısa süre sonra başka bir e-posta isteyebilirsiniz.",
+        "sending": "Gönderiliyor",
+        "sent": "E-posta gönderildi.",
+        "notSent": "E-posta şu anda gönderilemedi.",
+        "throttled": "Tekrar istemeden önce lütfen bekleyin.",
+        "alreadyVerified": "E-postanız zaten doğrulanmış."
+      },
+      "suspended": {
+        "title": "Hesabınız askıya alındı",
+        "greeting": "Merhaba {name}, bir yönetici bu hesabı askıya aldı. Oturum açabilirsiniz ancak hesap yeniden etkinleştirilene kadar uygulamanın geri kalanı kilitlidir.",
+        "support": "Bunun bir hata olduğunu düşünüyorsanız çalışma alanı sahibinden veya yöneticisinden hesabınızı yeniden etkinleştirmesini isteyin.",
+        "signOut": "Çıkış yap",
+        "checking": "Kontrol ediliyor"
+      },
+      "verifyRequired": {
+        "title": "Lütfen e-postanızı doğrulayın",
+        "body": "Aşağıdaki adrese bir doğrulama bağlantısı gönderdik. Çalışma alanınızın kilidini açmak için bağlantıyı açın.",
+        "resend": "Doğrulama e-postasını yeniden gönder",
+        "resendIn": "{seconds} sn içinde yeniden gönder",
+        "sending": "Gönderiliyor",
+        "sent": "{email} adresine yeni bir bağlantı gönderdik.",
+        "notSent": "E-posta şu anda gönderilemedi.",
+        "throttled": "Az önce bir bağlantı gönderildi. Tekrar istemeden önce lütfen bekleyin.",
+        "alreadyVerified": "E-postanız zaten doğrulanmış. İçeri alınıyorsunuz.",
+        "signOut": "Çıkış yap",
+        "help": "Ulaşmadı mı? Spam klasörünüzü kontrol edin. Bağlantıyı başka bir cihazda açtıysanız bu sekmeye dönün, biz fark ederiz."
+      },
+      "onboarding": {
+        "metaTitle": "Çalışma alanınızı kurun",
+        "notAllowed": {
+          "title": "Kurulum tamamlanmadı",
+          "body": "Çalışma alanınızın kurulumu hâlâ sürüyor. Devam edebilmeniz için bir yöneticinin kurulumu tamamlaması gerekiyor."
+        },
+        "stepper": {
+          "label": "Adım {current} / {total} · {name}",
+          "progress": "Kurulum ilerlemesi",
+          "account": "Hesap",
+          "workspace": "Çalışma alanı",
+          "plan": "Plan"
+        },
+        "workspace": {
+          "title": "Çalışma alanınızı kurun",
+          "subtitle": "Uygulamanın ekibinize uyması için birkaç ayrıntı.",
+          "name": "Çalışma alanı adı",
+          "nameHint": "Ekibinizin uygulamanın üstünde gördüğü kolay bir ad.",
+          "namePlaceholder": "Örneğin Bloomly Pazarlama",
+          "industry": "Sektör",
+          "industryPlaceholder": "Bir sektör seçin",
+          "industries": {
+            "ecommerce": "E-ticaret",
+            "saas": "SaaS",
+            "agency": "Ajans",
+            "education": "Eğitim",
+            "healthcare": "Sağlık",
+            "finance": "Finans",
+            "travel": "Seyahat",
+            "hospitality": "Konaklama",
+            "other": "Diğer"
+          },
+          "size": "Ekip büyüklüğü",
+          "sizePlaceholder": "Bir ekip büyüklüğü seçin",
+          "timezone": "Saat dilimi",
+          "timezoneHint": "Herhangi bir saat dilimini aramak için yazın. Zamanlamalar ve raporlar bunu kullanır.",
+          "currency": "Para birimi",
+          "currencyHint": "Mesaj cüzdanınızın faturalandığı para birimi. Hindistan için varsayılan INR, diğer tüm ülkeler için USD. Cüzdan kullanıldıktan sonra değiştirilemez.",
+          "currencyNone": "Ayarlanmadı",
+          "currencyPlaceholder": "Para birimi ara",
+          "currencyEmpty": "Aramanızla eşleşen para birimi yok.",
+          "phone": "Cep telefonu numarası",
+          "phoneHint": "Hesabınız ve önemli güncellemeler hakkında size ulaşmak için kullanırız.",
+          "continue": "Devam",
+          "saving": "Kaydediliyor",
+          "errors": {
+            "nameInvalid": "2 ile 120 karakter arasında bir çalışma alanı adı girin.",
+            "timezoneRequired": "Bir saat dilimi seçin.",
+            "timezoneInvalid": "Listeden bir saat dilimi seçin.",
+            "phoneRequired": "Cep telefonu numaranızı girin.",
+            "phoneInvalid": "Seçilen ülke için geçerli bir telefon numarası girin.",
+            "invalid": "Bu değer geçerli değil.",
+            "forbidden": "Çalışma alanını yalnızca bir çalışma alanı yöneticisi kurabilir.",
+            "countryRequired": "Bir ülke seçin.",
+            "countryInvalid": "Listeden bir ülke seçin.",
+            "currencyInvalid": "Bu para birimi kullanılamıyor veya faturalandırma para birimi zaten kullanımda. Değiştirmek için destekle iletişime geçin."
+          },
+          "country": "Ülke",
+          "countryHint": "İşletmenizin bulunduğu yer.",
+          "countryPlaceholder": "Ülke ara",
+          "countryEmpty": "Aramanızla eşleşen ülke yok."
+        },
+        "plan": {
+          "title": "Bir plan seçin",
+          "intro": "Her plan aylık bir mesaj hakkı içerir. Ücretsiz başlayın veya daha fazlasının kilidini açmak için bir plan seçin. Bunu daha sonra değiştirebilirsiniz.",
+          "empty": "Henüz hiçbir plan oluşturulmadı. Şimdi ücretsiz başlayıp planı daha sonra seçebilirsiniz.",
+          "listLabel": "Kullanılabilir planlar",
+          "free": "Ücretsiz",
+          "back": "Geri",
+          "startFree": "Ücretsiz başla / şimdilik atla",
+          "finishing": "Tamamlanıyor",
+          "welcome": "Hazırsınız. Hoş geldiniz!"
+        }
+      },
+      "plans": {
+        "title": "Planlar",
+        "description": "Çalışma alanınızın neler yapabileceğini seçin.",
+        "currentPlan": "Planınız",
+        "noPlan": "Plan yok",
+        "trialEnds": "Ücretsiz deneme {date} tarihinde bitiyor",
+        "comingSoon": "Plan seçme ve ödeme, bu sürümde henüz yer almayan faturalandırma ile gelecek. O zamana kadar destekle iletişime geçin, çalışma alanınızı ihtiyaç duyduğunuz plana taşıyalım.",
+        "contactSupport": "Destekle iletişime geç",
+        "back": "Hesaba dön",
+        "card": {
+          "popular": "En popüler",
+          "current": "Mevcut plan",
+          "free": "Ücretsiz",
+          "custom": "Özel",
+          "lifetime": "tek seferlik",
+          "messagesUnlimited": "Sınırsız mesaj",
+          "messagesLimited": "Ayda {count, number} mesaj",
+          "chipsLabel": "Dahil olan özellikler",
+          "period": {
+            "days": "{count, plural, one {/ gün} other {/ # gün}}",
+            "weeks": "{count, plural, one {/ hafta} other {/ # hafta}}",
+            "months": "{count, plural, one {/ ay} other {/ # ay}}",
+            "years": "{count, plural, one {/ yıl} other {/ # yıl}}"
+          },
+          "chips": {
+            "analytics": "Analizler",
+            "automation": "Otomasyon",
+            "ai_assistants": "Yapay zeka asistanları",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "calling": "WhatsApp aramaları",
+            "remove_branding": "Beyaz etiket",
+            "sales_pipeline": "Satış hunisi",
+            "appointment_booking": "Randevular",
+            "chatbot_widgets": "Sohbet botu widget'ları",
+            "wa_storefront": "WhatsApp kataloğu",
+            "inbox_sla": "Gelen kutusu SLA",
+            "inbox_routing": "Gelen kutusu yönlendirme",
+            "waba_calling": "WhatsApp aramaları",
+            "inbox_kanban": "Gelen kutusu Kanban",
+            "team_performance": "Ekip performansı",
+            "scheduled_messages": "Zamanlanmış mesajlar",
+            "whatsapp_warmer": "WhatsApp ısındırıcı",
+            "marketplace": "Pazar yeri",
+            "lead_sources": "Potansiyel müşteri kaynakları",
+            "team_chat": "Ekip sohbeti",
+            "public_api": "Genel API",
+            "outbound_webhooks": "Giden webhook'lar",
+            "storefront_builder": "Mağaza vitrini oluşturucu",
+            "invoicing": "Faturalama",
+            "forms_and_links": "Formlar ve bağlantılar",
+            "extra_channels": "Telegram, Facebook ve Instagram",
+            "form_builder": "Formlar",
+            "waba_groups": "WhatsApp grupları"
+          },
+          "cta": {
+            "continueFree": "Ücretsiz devam et",
+            "talkToSales": "Satışla görüşün",
+            "upgrade": "{name} planına yükselt",
+            "downgradeUnavailable": "Düşürme kullanılamıyor",
+            "downgradeHint": "Plan düşürme çevrimiçi yapılamaz. Daha düşük bir plana geçmek için destekle iletişime geçin.",
+            "working": "İşleniyor"
+          }
+        }
+      },
+      "mailFailure": {
+        "not_configured": "Bu platformda e-posta gönderimi henüz kurulmadı. Yöneticinize danışın.",
+        "auth_failed": "Posta sunucusu oturum açmamızı reddetti. Yöneticinizden posta ayarlarını kontrol etmesini isteyin.",
+        "connection_refused": "Posta sunucusu bağlantıyı kabul etmedi. Daha sonra tekrar deneyin veya yöneticinize danışın.",
+        "timeout": "Posta sunucusu yanıt vermekte çok gecikti. Hemen tekrar deneyebilirsiniz.",
+        "transport_error": "E-posta posta sunucusuna iletilemedi. Hemen tekrar deneyebilirsiniz.",
+        "unknown": "E-posta, belirleyemediğimiz bir nedenle gönderilemedi. Hemen tekrar deneyebilirsiniz."
+      }
+    }
+  }
+}

@@ -4,6 +4,7 @@ import type { FlowEdge, FlowNode, FlbTemplateButtonRef } from '@crm/contracts';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState, type ReactElement } from 'react';
 import { flowsApi } from '../../api/flows';
+import { useFlb } from '../../lib/msg';
 import { createSimulator, type LogEntry, type SimFile, type Simulator } from './simulator';
 
 /** Files the operator can "send" to an Ask for file / image node: nothing is uploaded, the runtime only reads the name and type. */
@@ -42,6 +43,7 @@ function Choices({
   live: boolean;
   onPick: (label: string) => void;
 }): ReactElement {
+  const tr = useTranslations('flb.builder.testRunner');
   const [open, setOpen] = useState(false);
   const pill =
     'flex w-full items-center justify-center gap-1.5 rounded-md border border-[#0b8a73]/40 bg-white px-2 py-1.5 text-[12.5px] font-medium text-[#0b8a73] transition disabled:cursor-default disabled:opacity-50 enabled:hover:bg-[#0b8a73]/10';
@@ -64,7 +66,7 @@ function Choices({
           >
             <path d="M3 4h10M3 8h10M3 12h10" strokeLinecap="round" />
           </svg>
-          {choices.button || 'Choose'}
+          {choices.button || tr('choose')}
         </button>
         {open && live && (
           <ul className="max-h-44 overflow-y-auto rounded-md border border-black/10 bg-white">
@@ -185,6 +187,8 @@ export function TestPanel({
   /** What the run waits for from the operator: the node type of a media / location question, else plain text. */
   const [waitType, setWaitType] = useState<string | null>(null);
   const t = useTranslations('flb.builder.askMedia.test');
+  const tr = useTranslations('flb.builder.testRunner');
+  const tf = useFlb();
   const fileInput = useRef<HTMLInputElement>(null);
   const [val, setVal] = useState('');
   const simRef = useRef<Simulator | null>(null);
@@ -199,6 +203,7 @@ export function TestPanel({
     simRef.current?.stop();
     const g = latest.current;
     const sim = createSimulator({
+      t: tf,
       nodes: g.nodes,
       edges: g.edges,
       templateButtons: g.templateButtons,
@@ -214,7 +219,7 @@ export function TestPanel({
     simRef.current = sim;
     setVal('');
     sim.start();
-  }, []);
+  }, [tf]);
 
   useEffect(() => {
     // `runNonce` 0 is a panel opened by `?test=1`: it waits, empty, for Restart (WaDesk quirk).
@@ -241,7 +246,7 @@ export function TestPanel({
   return (
     <div
       role="dialog"
-      aria-label="Test runner"
+      aria-label={tr('dialogLabel')}
       className="fixed bottom-6 right-6 z-40 flex max-h-[65vh] w-[380px] flex-col rounded-2xl border border-border bg-background shadow-lg"
     >
       <div className="flex items-center justify-between border-b border-border px-4 py-3">
@@ -253,9 +258,9 @@ export function TestPanel({
           </span>
           <div>
             <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              Test runner
+              {tr('title')}
             </div>
-            <div className="font-serif text-[15px] leading-tight">Simulate a chat</div>
+            <div className="font-serif text-[15px] leading-tight">{tr('subtitle')}</div>
           </div>
         </div>
         <div className="flex items-center gap-1">
@@ -264,12 +269,12 @@ export function TestPanel({
             onClick={restart}
             className="px-1.5 text-[11px] font-semibold text-brand hover:underline"
           >
-            Restart
+            {tr('restart')}
           </button>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={tr('close')}
             className="grid h-8 w-8 place-items-center rounded-full hover:bg-muted"
           >
             <svg
@@ -349,7 +354,13 @@ export function TestPanel({
           <button
             type="button"
             data-sample-location="pin"
-            onClick={() => simRef.current?.sendLocation(SAMPLE_LOCATION)}
+            onClick={() =>
+              simRef.current?.sendLocation({
+                ...SAMPLE_LOCATION,
+                name: tr('location.sampleName'),
+                address: tr('location.sampleAddress'),
+              })
+            }
             className="rounded-full border border-border bg-background px-2.5 py-1 hover:border-brand hover:text-brand"
           >
             {t('location.pin')}
@@ -376,7 +387,7 @@ export function TestPanel({
           onKeyDown={(e) => {
             if (e.key === 'Enter') send();
           }}
-          placeholder={awaiting ? 'Type a reply…' : 'Waiting for bot…'}
+          placeholder={awaiting ? tr('typeReply') : tr('waitingForBot')}
           disabled={!awaiting}
           className="flex-1 rounded-full border border-border bg-background px-3 py-2 text-[12.5px] focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/10 disabled:cursor-not-allowed disabled:bg-muted"
         />
@@ -386,7 +397,7 @@ export function TestPanel({
           disabled={!awaiting}
           className="rounded-full bg-brand px-3.5 py-2 text-[12px] font-semibold text-white disabled:opacity-50"
         >
-          Send
+          {tr('send')}
         </button>
       </div>
     </div>

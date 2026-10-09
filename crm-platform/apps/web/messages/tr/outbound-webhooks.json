@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "events": {
+      "contact_created": "Kişi oluşturuldu",
+      "contact_updated": "Kişi güncellendi",
+      "contact_deleted": "Kişi silindi",
+      "contact_tag_added": "Bir kişiye etiket eklendi",
+      "contact_opted_in": "Kişi onay verdi",
+      "deal_stage_changed": "Fırsat başka bir aşamaya taşındı",
+      "task_created": "Görev oluşturuldu",
+      "task_assigned": "Görev atandı",
+      "template_status_changed": "Şablon durumu değişti",
+      "device_status_changed": "Cihaz durumu değişti",
+      "conversation_reopened": "Konuşma yeniden açıldı"
+    },
+    "page": {
+      "title": "Webhook'lar",
+      "subtitle": "Bu çalışma alanındaki etkinlikleri gerçekleştikçe kendi sistemlerinize gönderin. Her teslimat imzalı bir JSON POST'tur; sunucunuz yanıt vermezse yeniden denenir.",
+      "back": "Entegrasyonlar ve geliştirici",
+      "add": "Webhook ekle",
+      "list": "Webhook'lar",
+      "emptyTitle": "Henüz webhook yok",
+      "empty": "Yeni bir kişi veya aşama değiştiren bir fırsat gibi etkinlikleri almak için bir uç nokta ekleyin.",
+      "noAccess": "Webhook'lara erişiminiz yok.",
+      "loadFailed": "Webhook'lar yüklenemedi.",
+      "retry": "Tekrar dene",
+      "allEvents": "Tüm etkinlikler",
+      "signed": "İmzalı",
+      "health": {
+        "off": "Kapalı",
+        "failing": "Hata veriyor",
+        "healthy": "Sağlıklı",
+        "idle": "Henüz teslimat yok"
+      },
+      "activeFor": "Etkin: {name}",
+      "lastDelivery": "Son teslimat {when}, yanıt {status}",
+      "noDeliveries": "Henüz teslimat yapılmadı",
+      "noAnswer": "yanıt yok",
+      "counts": "{ok} teslim edildi, {failed} başarısız",
+      "lastError": "Son hata: {error}",
+      "deliveries": "Teslimatlar",
+      "test": "Test gönder",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "cancel": "İptal",
+      "deleteTitle": "Bu webhook silinsin mi?",
+      "deleteMessage": "{name} etkinlik almayı bırakır ve teslimat günlüğü kaldırılır. Bu geri alınamaz.",
+      "created": "Webhook eklendi.",
+      "saved": "Webhook kaydedildi.",
+      "deleted": "Webhook silindi.",
+      "deleteFailed": "Webhook silinemedi. Tekrar deneyin.",
+      "toggleFailed": "Değişiklik kaydedilemedi. Tekrar deneyin.",
+      "testOk": "Test teslim edildi (yanıt {status}).",
+      "testFailed": "Test başarısız oldu: {reason}",
+      "testError": "Test gönderilemedi. Tekrar deneyin."
+    },
+    "dialog": {
+      "addTitle": "Bir webhook ekle",
+      "editTitle": "Webhook'u düzenle",
+      "close": "Kapat",
+      "name": "Ad",
+      "nameHint": "İsteğe bağlı: sizin için bir etiket, örneğin bunu alan sistem.",
+      "url": "Uç nokta URL'si",
+      "urlHint": "İnternetten erişilebilen bir https adresi. Özel ve dahili adresler kabul edilmez.",
+      "urlProblem": {
+        "empty": "Uç nokta URL'sini girin.",
+        "tooLong": "URL çok uzun.",
+        "notHttps": "URL, https:// ile başlamalıdır.",
+        "invalid": "Bu geçerli bir URL değil."
+      },
+      "secret": "İmza sırrı",
+      "secretHint": "İsteğe bağlı. Ayarlandığında her teslimat, sunucunuzun doğrulayabileceği bir imza taşır. Bir daha gösterilmez.",
+      "secretSetHint": "Bir sır ayarlı. Korumak için boş bırakın ya da değiştirmek için yeni bir tane yazın.",
+      "secretKeep": "Değişmedi",
+      "removeSecret": "İmza sırrını kaldır (teslimatlar imzalanmayacak)",
+      "events": "Etkinlikler",
+      "allEvents": "Tüm etkinlikler",
+      "pickEvents": "En az bir etkinlik seçin veya tüm etkinlikleri seçin.",
+      "active": "Etkin",
+      "cancel": "İptal",
+      "create": "Webhook ekle",
+      "save": "Değişiklikleri kaydet",
+      "failed": "Webhook kaydedilemedi. Lütfen yeniden deneyin."
+    },
+    "deliveries": {
+      "title": "Teslimatlar: {name}",
+      "close": "Kapat",
+      "empty": "Henüz teslimat yok. Bir tane oluşturmak için Test gönder seçeneğini kullanın.",
+      "failed": "Teslimatlar yüklenemedi.",
+      "when": "Ne zaman",
+      "event": "Etkinlik",
+      "result": "Yanıt",
+      "time": "Zaman",
+      "attempt": "Dene",
+      "test": "Test",
+      "noAnswer": "Yanıt yok"
+    }
+  }
+}

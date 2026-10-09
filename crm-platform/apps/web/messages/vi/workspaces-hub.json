@@ -1,0 +1,258 @@
+{
+  "workspaces-hub": {
+    "nav": {
+      "group": "Không gian làm việc",
+      "workspaces": "Không gian làm việc"
+    },
+    "crumb": {
+      "admin": "Quản trị",
+      "workspaces": "Không gian làm việc",
+      "label": "Đường dẫn"
+    },
+    "common": {
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "cancel": "Hủy",
+      "close": "Đóng",
+      "none": "Không có",
+      "never": "Chưa bao giờ",
+      "unlimited": "Không giới hạn",
+      "noAccess": "Vai trò của bạn không thể thực hiện việc này."
+    },
+    "list": {
+      "title": "Không gian làm việc",
+      "subtitle": "Mọi không gian làm việc của khách hàng ở một nơi: gói, nhà cung cấp, ví, chủ sở hữu và hoạt động, cùng các thao tác bạn cần cho từng mục.",
+      "kpi": {
+        "total": "Không gian làm việc",
+        "active": "Đang hoạt động",
+        "suspended": "Đã tạm khóa",
+        "trial": "Đang dùng thử",
+        "newThisMonth": "Mới trong tháng",
+        "lowBalance": "Số dư thấp",
+        "mrr": "MRR"
+      },
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Tên, slug, tên hoặc email chủ sở hữu",
+      "status": {
+        "label": "Trạng thái",
+        "all": "Tất cả",
+        "active": "Đang hoạt động",
+        "suspended": "Đã tạm khóa"
+      },
+      "plan": "Gói",
+      "allPlans": "Tất cả gói",
+      "state": "Tình trạng",
+      "allStates": "Tất cả tình trạng",
+      "provider": "Nhà cung cấp",
+      "allProviders": "Tất cả nhà cung cấp",
+      "lowOnly": "Chỉ số dư thấp",
+      "sort": {
+        "label": "Sắp xếp theo",
+        "created": "Mới nhất",
+        "last_active": "Hoạt động gần nhất",
+        "name": "Tên"
+      },
+      "clear": "Xóa bộ lọc",
+      "refresh": "Làm mới",
+      "columns": {
+        "menu": "Cột",
+        "reset": "Đặt lại cột",
+        "workspace": "Không gian làm việc",
+        "provider": "Nhà cung cấp",
+        "numbers": "Số",
+        "plan": "Gói",
+        "state": "Tình trạng",
+        "ends": "Kết thúc",
+        "limits": "Giới hạn",
+        "wallet": "Ví",
+        "owner": "Chủ sở hữu",
+        "mrr": "MRR",
+        "messages7d": "Tin 7 ngày",
+        "lastActive": "Hoạt động gần nhất",
+        "actions": "Thao tác"
+      },
+      "tableLabel": "Không gian làm việc",
+      "emptyTitle": "Chưa có không gian làm việc nào",
+      "emptyMessage": "Không gian làm việc sẽ xuất hiện ở đây ngay khi khách hàng đăng ký.",
+      "noMatchTitle": "Không có không gian làm việc phù hợp",
+      "noMatchMessage": "Thay đổi tìm kiếm hoặc bộ lọc để xem thêm.",
+      "loadMore": "Tải thêm",
+      "loadingMore": "Đang tải thêm",
+      "loaded": "Hiển thị {count, plural, other {# không gian làm việc}}"
+    },
+    "cell": {
+      "suspended": "Đã tạm khóa",
+      "suspendedBy": {
+        "frozen": "Đã đóng băng",
+        "tos_violation": "Vi phạm điều khoản",
+        "fraud": "Gian lận"
+      },
+      "providerSource": {
+        "override": "Ghi đè",
+        "default": "Mặc định",
+        "platform_setting": "Cài đặt nền tảng"
+      },
+      "numbersCount": "{count, plural, other {# số}}",
+      "platformOwned": "Nền tảng",
+      "unknownPlan": "Gói không rõ",
+      "health": {
+        "suspended": "Đã tạm khóa",
+        "good": "Tốt",
+        "active": "Đang hoạt động",
+        "low": "Sử dụng thấp",
+        "new": "Mới",
+        "idle": "Không hoạt động"
+      },
+      "daysLeft": "Còn {count, plural, other {# ngày}}",
+      "expired": "Đã hết hạn",
+      "limits": {
+        "summary": "{messages} tin/tháng · {users} người dùng · {contacts} liên hệ · {devices} thiết bị",
+        "override": "Ghi đè",
+        "messages": "Tin nhắn mỗi tháng",
+        "users": "Người dùng",
+        "contacts": "Liên hệ",
+        "devices": "Thiết bị"
+      },
+      "lowBalance": "Thấp",
+      "noOwner": "Không có chủ sở hữu",
+      "ago": {
+        "now": "Vừa xong",
+        "minutes": "{count, plural, other {# phút trước}}",
+        "hours": "{count, plural, other {# giờ trước}}",
+        "days": "{count, plural, other {# ngày trước}}"
+      }
+    },
+    "actions": {
+      "menu": "Thao tác cho {name}",
+      "dashboard": "Bảng điều khiển không gian làm việc",
+      "editPlan": "Chỉnh sửa và đổi gói",
+      "planLimits": "Gói và giới hạn",
+      "provider": "Đổi và đặt nhà cung cấp",
+      "impersonate": "Đăng nhập thay chủ sở hữu",
+      "suspend": "Tạm khóa",
+      "unsuspend": "Kích hoạt lại",
+      "denied": "Không được phép"
+    },
+    "plan": {
+      "loading": "Đang tải gói",
+      "loadFailed": "Không thể tải gói.",
+      "saved": "Đã lưu gói cho {name}."
+    },
+    "provider": {
+      "title": "Nhà cung cấp cho {name}",
+      "help": "Số mới của không gian làm việc này kết nối qua nhà cung cấp bạn chọn. Số đã kết nối vẫn giữ nguyên cho đến khi bạn chuyển chúng.",
+      "current": "Hiện đang dùng {name} ({source})",
+      "field": "Nhà cung cấp",
+      "note": "Ghi chú (không bắt buộc)",
+      "noteHint": "Được lưu cùng ghi đè để người vận hành sau biết lý do.",
+      "noActive": "Chưa có nhà cung cấp nào hoạt động. Hãy bật một nhà cung cấp trong danh mục nhà cung cấp trước.",
+      "save": "Đặt ghi đè",
+      "clear": "Dùng mặc định",
+      "switchLink": "Chuyển các số đã kết nối sang nhà cung cấp khác",
+      "assignmentsLink": "Danh mục nhà cung cấp",
+      "saved": "Đã đặt nhà cung cấp cho {name}.",
+      "cleared": "{name} lại theo nhà cung cấp mặc định."
+    },
+    "impersonate": {
+      "title": "Đăng nhập thay chủ sở hữu của {name}",
+      "help": "Bạn sẽ mở không gian làm việc với tư cách chủ sở hữu trong một tab mới. Phiên kéo dài tối đa {minutes} phút và được ghi lại cùng lý do của bạn.",
+      "reason": "Lý do",
+      "reasonHint": "Tối thiểu {min} ký tự. Được lưu trong nhật ký kiểm tra.",
+      "readOnly": "Phiên chỉ đọc",
+      "readOnlyHint": "Bạn có thể xem, nhưng mọi thay đổi đều bị từ chối.",
+      "submit": "Mở không gian làm việc",
+      "opened": "Đang mở {name} trong tab mới.",
+      "popupBlocked": "Trình duyệt đã chặn tab mới. Hãy cho phép cửa sổ bật lên với trang này rồi thử lại.",
+      "reasonShort": "Nhập ít nhất {min} ký tự."
+    },
+    "suspend": {
+      "title": "Tạm khóa {name}?",
+      "message": "Người dùng sẽ bị đăng xuất khỏi không gian làm việc và việc nhắn tin dừng lại cho đến khi bạn kích hoạt lại.",
+      "reason": "Lý do (không bắt buộc)",
+      "confirm": "Tạm khóa không gian làm việc",
+      "done": "{name} đã bị tạm khóa."
+    },
+    "unsuspend": {
+      "title": "Kích hoạt lại {name}?",
+      "message": "Người dùng có thể dùng lại không gian làm việc.",
+      "reason": "Ghi chú (không bắt buộc)",
+      "confirm": "Kích hoạt lại không gian làm việc",
+      "done": "{name} đã hoạt động trở lại."
+    },
+    "errors": {
+      "unexpected": "Đã xảy ra lỗi. Thử lại.",
+      "forbidden": "Vai trò của bạn không thể thực hiện việc này.",
+      "conflict": "Có người khác đã thay đổi không gian làm việc này. Tải lại và thử lại.",
+      "notFound": "Không gian làm việc này không còn tồn tại.",
+      "reasonRequired": "Cần lý do tối thiểu 8 ký tự.",
+      "orgSuspended": "Không gian làm việc đã bị tạm khóa nên không thể truy cập.",
+      "validation": "Kiểm tra các giá trị và thử lại.",
+      "requestId": "Mã yêu cầu"
+    },
+    "detail": {
+      "crumb": "Không gian làm việc",
+      "back": "Tất cả không gian làm việc",
+      "loadFailed": "Không thể tải không gian làm việc này.",
+      "slug": "Slug",
+      "created": "Đã tạo {date}",
+      "kpi": {
+        "members": "Thành viên",
+        "contacts": "Liên hệ",
+        "openTickets": "Ticket đang mở",
+        "delivered": "Đã gửi tới",
+        "wallet": "Ví",
+        "mrr": "MRR",
+        "messages7d": "Tin nhắn, 7 ngày"
+      },
+      "chart": {
+        "title": "30 ngày qua",
+        "label": "Tin nhắn đã gửi và đã nhận mỗi ngày, 30 ngày qua",
+        "sent": "Đã gửi",
+        "delivered": "Đã nhận",
+        "empty": "Không có tin nhắn trong 30 ngày qua."
+      },
+      "tabs": {
+        "label": "Các mục của không gian làm việc",
+        "overview": "Tổng quan",
+        "plan": "Gói và giới hạn",
+        "wallet": "Ví",
+        "provider": "Nhà cung cấp",
+        "support": "Hỗ trợ"
+      },
+      "overview": {
+        "owner": "Chủ sở hữu",
+        "adminNote": "Ghi chú quản trị",
+        "noNote": "Không có ghi chú.",
+        "health": "Tình trạng",
+        "lastActive": "Hoạt động gần nhất",
+        "suspendedBy": "Được giữ bởi"
+      },
+      "planTab": {
+        "plan": "Gói",
+        "state": "Tình trạng",
+        "ends": "Kết thúc",
+        "limits": "Giới hạn hiệu lực",
+        "edit": "Chỉnh sửa và đổi gói",
+        "overrideNote": "Không gian làm việc này có giới hạn riêng thay thế giới hạn của gói."
+      },
+      "walletTab": {
+        "open": "Mở toàn bộ ví",
+        "balance": "Số dư",
+        "adjust": "Điều chỉnh số dư",
+        "adjusted": "Đã điều chỉnh số dư."
+      },
+      "providerTab": {
+        "provider": "Nhà cung cấp hiệu lực",
+        "source": "Được chọn bởi",
+        "numbers": "Số đã kết nối",
+        "change": "Đổi và đặt nhà cung cấp",
+        "switch": "Chuyển số sang nhà cung cấp khác"
+      },
+      "supportTab": {
+        "text": "Ticket, cuộc trò chuyện và lịch sử hỗ trợ của không gian làm việc này.",
+        "open": "Mở hồ sơ hỗ trợ",
+        "openTickets": "{count, plural, other {# ticket đang mở}}"
+      }
+    }
+  }
+}

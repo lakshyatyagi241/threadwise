@@ -240,7 +240,7 @@ export function FlowsScreen() {
       flash(tt('cloned', { name: tpl.name }));
       router.push(`/flows/builder/${created.id}`);
     } catch (e) {
-      setImportError(e instanceof ApiError ? e.message : 'Could not clone the template.');
+      setImportError(e instanceof ApiError ? e.message : tt('cloneFailed'));
     }
   };
 

@@ -1,0 +1,139 @@
+{
+  "settings": {
+    "tiles": {
+      "google-sheets-addon": {
+        "label": "Componente aggiuntivo Google Sheets",
+        "description": "Crea la tua chiave, scarica i file del componente aggiuntivo e sincronizza contatti e prodotti da un foglio di calcolo.",
+        "keywords": "google sheets, foglio di calcolo, componente aggiuntivo, apps script, importa contatti, sincronizza prodotti, chiave"
+      }
+    }
+  },
+  "chrome-extension-sheets-addon": {
+    "common": {
+      "dismiss": "Chiudi",
+      "copy": "Copia",
+      "copied": "Copiato",
+      "copyFailed": "Impossibile copiare. Seleziona la chiave e copiala manualmente.",
+      "reference": "Riferimento per l'assistenza: {id}",
+      "back": "Torna alle integrazioni"
+    },
+    "page": {
+      "title": "Componente aggiuntivo Google Sheets",
+      "subtitle": "Importa ed esporta contatti e sincronizza i prodotti tra un foglio di calcolo e il tuo Workspace.",
+      "loading": "Caricamento della configurazione del componente aggiuntivo",
+      "retry": "Riprova",
+      "status": {
+        "connected": "Chiave attiva",
+        "noKey": "Ancora nessuna chiave",
+        "notInstalled": "Non installato"
+      },
+      "forbidden": {
+        "title": "Non puoi usare il componente aggiuntivo Google Sheets",
+        "body": "Il tuo ruolo non include il componente aggiuntivo Google Sheets. Chiedi a un amministratore di dare accesso al tuo ruolo."
+      },
+      "loadFailed": {
+        "title": "Impossibile caricare la configurazione del componente aggiuntivo.",
+        "notInstalled": "Il componente aggiuntivo non è installato in questo Workspace.",
+        "forbidden": "Il tuo ruolo non può vedere questa pagina.",
+        "planLocked": "Il tuo piano non include il Marketplace.",
+        "suspended": "Questo account o Workspace è sospeso.",
+        "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+        "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+        "unexpected": "Qualcosa è andato storto da parte nostra. Riprova."
+      }
+    },
+    "install": {
+      "title": "Installa prima il componente aggiuntivo",
+      "body": "Il componente aggiuntivo Google Sheets non è installato in questo Workspace, quindi le chiavi e il componente non funzionano ancora. Un amministratore lo installa una volta dal Marketplace.",
+      "marketplace": "Installalo dal Marketplace",
+      "google": "Apri la scheda su Google Workspace Marketplace",
+      "keyKept": "Hai ancora una chiave. Puoi disattivarla qui sotto."
+    },
+    "key": {
+      "title": "La tua chiave",
+      "intro": "Il componente aggiuntivo usa la tua chiave personale per agire a tuo nome. Vede solo ciò che il tuo ruolo consente.",
+      "none": "Non hai ancora una chiave.",
+      "generate": "Genera chiave",
+      "rotate": "Genera una nuova chiave",
+      "revoke": "Revoca chiave",
+      "working": "Operazione in corso...",
+      "active": "Chiave",
+      "created": "Creata {when}",
+      "lastUsed": "Ultimo utilizzo {when}",
+      "neverUsed": "Mai usata",
+      "newTitle": "La tua nuova chiave",
+      "newWarning": "Copiala adesso. Viene mostrata una sola volta e non potrà essere mostrata di nuovo. Chiunque abbia questa chiave può agire a tuo nome nel componente aggiuntivo.",
+      "rotatedNote": "La tua chiave precedente ha smesso di funzionare.",
+      "keyLabel": "Nuova chiave",
+      "confirmRotate": {
+        "title": "Sostituire la tua chiave?",
+        "message": "La chiave che usi ora smette subito di funzionare. Incolla la nuova chiave nel componente aggiuntivo per continuare a usarlo.",
+        "confirm": "Sostituisci chiave"
+      },
+      "confirmRevoke": {
+        "title": "Revocare la tua chiave?",
+        "message": "Il componente aggiuntivo smette di funzionare finché non crei e incolli una nuova chiave.",
+        "confirm": "Revoca chiave"
+      },
+      "cancel": "Annulla",
+      "revoked": "La tua chiave è stata revocata.",
+      "generated": "La tua chiave è stata creata. Copiala adesso.",
+      "errors": {
+        "notInstalled": "Il componente aggiuntivo non è installato in questo Workspace. Chiedi a un amministratore di installarlo.",
+        "forbidden": "Il tuo ruolo non può eseguire questa azione.",
+        "planLocked": "Il tuo piano non include il Marketplace.",
+        "suspended": "Questo account o Workspace è sospeso.",
+        "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+        "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+        "unexpected": "Qualcosa è andato storto da parte nostra. Riprova."
+      }
+    },
+    "can": {
+      "title": "Cosa può fare la tua chiave",
+      "intro": "È l'intersezione tra il tuo ruolo e ciò che l'installazione consente.",
+      "allowed": "Consentito",
+      "notAllowed": "Non consentito",
+      "readContacts": "Importa contatti in un foglio",
+      "writeContacts": "Esporta contatti da un foglio",
+      "readCatalog": "Vedere negozi e prodotti",
+      "writeCatalog": "Sincronizzare i prodotti con un negozio"
+    },
+    "files": {
+      "title": "File del componente aggiuntivo",
+      "intro": "Sei file compongono il progetto Apps Script. Code.gs punta già a questo Workspace.",
+      "download": "Scarica",
+      "downloadFile": "Scarica {name}",
+      "downloaded": "{name} scaricato.",
+      "notAvailable": "Non ancora disponibile su questo server",
+      "failed": "Impossibile scaricare {name}. Riprova."
+    },
+    "steps": {
+      "title": "Configuralo in un foglio di calcolo",
+      "one": "Apri un foglio di calcolo, poi Estensioni, poi Apps Script.",
+      "two": "Scarica i sei file qui sopra. In Impostazioni progetto mostra il file appsscript.json, e incolla appsscript.json e Code.gs al posto di quelli presenti nell'editor.",
+      "three": "Aggiungi tre file HTML chiamati Dialog, Settings e Help e incolla in essi i file scaricati.",
+      "four": "Salva e ricarica il foglio di calcolo. Compare un menu CRM. Consenti i tre permessi richiesti da Google.",
+      "five": "Scegli CRM, poi Impostazioni, incolla la tua chiave e seleziona Salva e controlla.",
+      "six": "La riga 1 del foglio contiene i nomi delle colonne. Poi usa Importa contatti, Esporta contatti o Sincronizza prodotti dal menu CRM."
+    },
+    "columns": {
+      "title": "Colonne lette dal componente aggiuntivo",
+      "contacts": "Contatti",
+      "products": "Prodotti",
+      "contactsHint": "email o telefono è obbligatorio. Una colonna chiamata attr:city compila la proprietà personalizzata city. Una cella vuota non cancella mai un valore salvato.",
+      "productsHint": "name e price sono obbligatori. I prodotti vengono abbinati per SKU, poi per nome. Una scorta vuota significa illimitata."
+    },
+    "shops": {
+      "title": "Negozi",
+      "empty": "Ancora nessun negozio. La tua prima sincronizzazione dei prodotti ne crea uno.",
+      "disabled": "Disattivato",
+      "open": "Apri {name}",
+      "updated": "Aggiornato {when}"
+    },
+    "products": {
+      "title": "Prodotti recenti",
+      "empty": "Ancora nessun prodotto. Sincronizza un foglio per aggiungerne.",
+      "count": "{count, plural, one {# prodotto nel tuo Workspace} other {# prodotti nel tuo Workspace}}"
+    }
+  }
+}

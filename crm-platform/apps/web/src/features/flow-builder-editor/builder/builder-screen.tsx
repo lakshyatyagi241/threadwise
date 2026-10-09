@@ -2,11 +2,11 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   flbFlowTypeOf,
   flbIsFlowType,
-  flbValidateGraph,
   type FlbAiGenerateResponse,
   type FlowDetail,
   type FlowGetaSync,
@@ -15,6 +15,8 @@ import {
 } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import { flowsApi } from '../api/flows';
+import { useMsg, type Msg } from '../lib/msg';
+import { validateGraph } from '../lib/validation-text';
 import { getaApi } from '../geta-publish/api';
 import { POLL_EVERY_MS, POLL_MAX_TRIES, viewOf } from '../geta-publish/status-model';
 import { GetaPublishStatus } from '../geta-publish/sync-status';
@@ -87,8 +89,8 @@ function ShellHidden() {
   return null;
 }
 
-const errMessage = (e: unknown): string =>
-  e instanceof ApiError ? e.message : ((e as Error)?.message ?? 'unknown');
+const errMessage = (e: unknown, fallback: string): string =>
+  e instanceof ApiError ? e.message : ((e as Error)?.message ?? fallback);
 
 /**
  * The builder (WD-FLB-014..019, 022): the whole screen, full viewport like WaDesk's (palette, canvas, inspector, toolbar,
@@ -107,6 +109,7 @@ export function BuilderScreen({ flowId: initialFlowId }: { flowId?: string }) {
     retry: false,
   });
   const { ctx, loading: ctxLoading, refresh } = useBuilderContext();
+  const tb = useTranslations('flb.builder.shell.screen');
 
   // An unknown or out-of-workspace id gives a blank new-flow canvas (WaDesk: no 404), so a failed load is not an error screen.
   const ready = !ctxLoading && (!initialFlowId || !flowQuery.isPending);
@@ -114,7 +117,7 @@ export function BuilderScreen({ flowId: initialFlowId }: { flowId?: string }) {
     return (
       <div className="flb-root fixed inset-0 z-40 grid place-items-center bg-background text-[13px] text-muted-foreground">
         <BuilderFonts />
-        Loading flow builder...
+        {tb('loading')}
       </div>
     );
   }
@@ -151,6 +154,7 @@ function BuilderInner({
   aiPrompt,
   testOpenInitially,
 }: InnerProps) {
+  const tb = useTranslations('flb.builder.shell.screen');
   const seed = useMemo<CanvasState>(
     () => ({
       nodes: initial?.graph.flowNodes ?? [],
@@ -163,7 +167,7 @@ function BuilderInner({
   );
   const [state, setState] = useState<CanvasState>(seed);
   const [hist, setHist] = useState<History>(() => createHistory(seed));
-  const [name, setName] = useState(initial?.name ?? 'New flow');
+  const [name, setName] = useState(initial?.name ?? tb('newFlow'));
   const [flowId, setFlowId] = useState<string | null>(initial?.id ?? null);
   const [rowVersion, setRowVersion] = useState(initial?.rowVersion ?? 1);
   const [status, setStatus] = useState(initial?.isPublished ? 'Published' : 'Draft');
@@ -207,11 +211,15 @@ function BuilderInner({
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [viewport, setViewport] = useState({ width: 1000, height: 600 });
 
-  const toast = useCallback((m: string) => {
-    setToastMsg(m);
-    if (toastTimer.current) clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToastMsg(null), 1800);
-  }, []);
+  const m = useMsg();
+  const toast = useCallback(
+    (text: string | Msg) => {
+      setToastMsg(typeof text === 'string' ? text : m(text));
+      if (toastTimer.current) clearTimeout(toastTimer.current);
+      toastTimer.current = setTimeout(() => setToastMsg(null), 1800);
+    },
+    [m],
+  );
   useEffect(() => () => void (toastTimer.current && clearTimeout(toastTimer.current)), []);
 
   useEffect(() => {
@@ -345,12 +353,12 @@ function BuilderInner({
   }, [mode, ctx.senders]);
 
   const runValidation = (): boolean => {
-    const r = flbValidateGraph(state.nodes, state.edges, { mode, senderAvailable });
+    const r = validateGraph(state.nodes, state.edges, { mode, senderAvailable });
     if (r.ok) {
       setVres(null);
       return true;
     }
-    setVres({ edges: state.edges, ids: new Set(r.badNodeIds), items: r.items, popup: true });
+    setVres({ edges: state.edges, ids: new Set(r.badNodeIds), items: r.items.map(m), popup: true });
     if (r.badNodeIds[0]) setSelectedId(r.badNodeIds[0]);
     return false;
   };
@@ -395,11 +403,11 @@ function BuilderInner({
       // QUIRK kept from WaDesk: the pill keeps "Published" only when the click happened with nothing edited; saving edits
       // to a live flow reads "Draft" although the flow stays live on the server (the next Save republishes silently).
       setStatus(statusAtClick === 'Published' ? 'Published' : 'Draft');
-      toast(`Flow saved · "${saved.name}"`);
+      toast(tb('flowSaved', { name: saved.name }));
       setSaveOpen(false);
     } catch (e) {
       setStatus('Draft · unsaved');
-      toast(`Save failed: ${errMessage(e)}`);
+      toast(tb('saveFailed', { message: errMessage(e, tb('unknownError')) }));
     } finally {
       setBusy(false);
     }
@@ -443,7 +451,7 @@ function BuilderInner({
     try {
       setGeta(await getaApi.retry(flowId));
     } catch (e) {
-      toast(`Retry failed: ${errMessage(e)}`);
+      toast(tb('retryFailed', { message: errMessage(e, tb('unknownError')) }));
     } finally {
       setRetrying(false);
     }
@@ -456,7 +464,7 @@ function BuilderInner({
       let id = flowId;
       if (!id) {
         // A never-saved graph is saved once and THAT row is published (WaDesk saved twice and published a second copy).
-        const saved = await persist(name.trim() || 'New flow');
+        const saved = await persist(name.trim() || tb('newFlow'));
         id = saved.id;
       }
       const pub = await flowsApi.publish(id);
@@ -465,9 +473,9 @@ function BuilderInner({
       setPublished(true);
       setJustPublished(true);
       setGeta(pub.getaSync ?? null);
-      toast('Published');
+      toast(tb('published'));
     } catch (e) {
-      toast(`Publish failed: ${errMessage(e)}`);
+      toast(tb('publishFailed', { message: errMessage(e, tb('unknownError')) }));
     } finally {
       setBusy(false);
     }
@@ -485,7 +493,7 @@ function BuilderInner({
     setHist((h) => pushHistory(h, next));
     setSelectedId(null);
     setStatus('Draft · unsaved (AI-generated)');
-    toast(`Flow generated with ${modelLabel}`);
+    toast(tb('generated', { model: modelLabel }));
   };
 
   const env: FormEnv = useMemo(
@@ -608,8 +616,8 @@ function BuilderInner({
             type="button"
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="absolute top-1/2 left-0 z-20 grid h-12 w-5 -translate-y-1/2 place-items-center rounded-r-md border border-l-0 border-border bg-background hover:bg-muted"
-            title={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
-            aria-label={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
+            title={sidebarOpen ? tb('hideSidebar') : tb('showSidebar')}
+            aria-label={sidebarOpen ? tb('hideSidebar') : tb('showSidebar')}
           >
             <Icon
               d={sidebarOpen ? 'M9 4l-3 4 3 4' : 'M7 4l3 4-3 4'}
@@ -622,10 +630,10 @@ function BuilderInner({
               type="button"
               onClick={() => setSidebarOpen(true)}
               className="absolute bottom-4 left-4 z-30 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-[13px] font-semibold text-brand-foreground shadow-lg md:hidden"
-              title="Add a node"
+              title={tb('addNodeTitle')}
             >
               <Icon d="M8 3v10M3 8h10" />
-              Add node
+              {tb('addNode')}
             </button>
           ) : null}
 
@@ -638,8 +646,8 @@ function BuilderInner({
                 onClick={doUndo}
                 disabled={!canUndo(hist)}
                 className="grid h-9 w-9 place-items-center hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
-                title="Undo (Ctrl+Z)"
-                aria-label="Undo"
+                title={tb('undoTitle')}
+                aria-label={tb('undo')}
               >
                 <Icon d="M4 8h6a3 3 0 0 1 0 6M4 8l3-3M4 8l3 3" className="h-3.5 w-3.5" />
               </button>
@@ -649,8 +657,8 @@ function BuilderInner({
                 onClick={doRedo}
                 disabled={!canRedo(hist)}
                 className="grid h-9 w-9 place-items-center hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
-                title="Redo (Ctrl+Shift+Z)"
-                aria-label="Redo"
+                title={tb('redoTitle')}
+                aria-label={tb('redo')}
               >
                 <Icon d="M12 8H6a3 3 0 0 0 0 6M12 8L9 5M12 8l-3 3" className="h-3.5 w-3.5" />
               </button>
@@ -660,8 +668,8 @@ function BuilderInner({
                 type="button"
                 onClick={() => setZoom(Math.min(1.8, zoom + 0.1))}
                 className="grid h-9 w-9 place-items-center hover:bg-muted"
-                title="Zoom in"
-                aria-label="Zoom in"
+                title={tb('zoomIn')}
+                aria-label={tb('zoomIn')}
               >
                 <Icon d="M8 4v8M4 8h8" className="h-3.5 w-3.5" />
               </button>
@@ -675,8 +683,8 @@ function BuilderInner({
                 type="button"
                 onClick={() => setZoom(Math.max(0.4, zoom - 0.1))}
                 className="grid h-9 w-9 place-items-center hover:bg-muted"
-                title="Zoom out"
-                aria-label="Zoom out"
+                title={tb('zoomOut')}
+                aria-label={tb('zoomOut')}
               >
                 <Icon d="M4 8h8" className="h-3.5 w-3.5" />
               </button>
@@ -687,8 +695,8 @@ function BuilderInner({
                   setPan({ x: 40, y: 40 });
                 }}
                 className="grid h-9 w-9 place-items-center border-l border-border hover:bg-muted"
-                title="Reset"
-                aria-label="Reset view"
+                title={tb('reset')}
+                aria-label={tb('resetView')}
               >
                 <Icon d="M3 8a5 5 0 1 0 1.5-3.5L3 6M3 3v3h3" className="h-3.5 w-3.5" />
               </button>

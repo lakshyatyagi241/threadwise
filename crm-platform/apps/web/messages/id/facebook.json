@@ -1,0 +1,491 @@
+{
+  "facebook": {
+    "nav": {
+      "hub": "Facebook",
+      "posts": "Postingan Facebook",
+      "setup": "Pengaturan Messenger",
+      "broadcasts": "Broadcast Messenger"
+    },
+    "common": {
+      "dismiss": "Tutup",
+      "cancel": "Batal"
+    },
+    "hub": {
+      "kicker": "Saluran · Facebook",
+      "title": "Facebook",
+      "titleAccent": "Halaman",
+      "intro": "Masuk dengan Facebook sekali saja dan setiap Halaman yang dikelola akun Anda akan ditambahkan. Lalu terbitkan postingan, balas komentar, dan jalankan Messenger dari kotak masuk Anda.",
+      "teamInbox": "Kotak masuk tim",
+      "posts": "Postingan",
+      "setup": "Pengaturan Messenger",
+      "broadcasts": "Broadcast Messenger",
+      "loadError": "Halaman yang terhubung tidak dapat dimuat. Coba lagi.",
+      "notConfigured": "Facebook belum dikonfigurasi di instalasi ini — administrator harus menambahkan aplikasi Meta sebelum Halaman dapat dihubungkan.",
+      "connectedCount": "{count, plural, other {# Halaman terhubung}}",
+      "notConnected": "Tidak terhubung",
+      "cardTitle": "Hubungkan akun Facebook Anda",
+      "cardBody": "Masuk dengan Facebook sekali saja — setiap Halaman yang dikelola akun Anda ditambahkan otomatis, masing-masing dengan aksesnya sendiri. Atau tambahkan satu Halaman dengan token aksesnya.",
+      "connect": "Hubungkan Halaman",
+      "connectAnother": "Hubungkan akun lain",
+      "connectedPages": "Halaman terhubung",
+      "webhookTitle": "Alamat webhook",
+      "webhookBody": "Tempel alamat ini di pengaturan webhook aplikasi Meta Anda (URL callback) agar pesan dan komentar Messenger masuk ke kotak masuk Anda. Menggunakan token verifikasi yang sama dengan WhatsApp kecuali token Facebook diatur."
+    },
+    "connect": {
+      "close": "Tutup",
+      "kicker": "Facebook",
+      "title": "Hubungkan akun Facebook Anda",
+      "intro": "Masuk dengan Facebook sekali saja — setiap Halaman yang dikelola akun Anda ditambahkan otomatis. Anda kemudian dapat menerbitkan postingan, membalas komentar, dan menjalankan Messenger dari kotak masuk Anda.",
+      "continue": "Lanjutkan dengan Facebook",
+      "or": "atau",
+      "manualToggle": "Tambahkan Halaman secara manual dengan token akses",
+      "tokenLabel": "Token akses Halaman",
+      "tokenHint": "Dari Meta → Pengaturan bisnis → Pengguna sistem, atau Graph API Explorer. Kami menentukan Halaman dari token tersebut.",
+      "connectPage": "Hubungkan Halaman",
+      "tokenShape": "Ini tampaknya bukan token akses Halaman.",
+      "failed": "Tidak dapat terhubung. Coba lagi.",
+      "footerLeft": "Langsung masuk ke kotak masuk Anda",
+      "footerRight": "terenkripsi"
+    },
+    "page": {
+      "facebookPage": "Halaman Facebook",
+      "failed": "Tidak berhasil. Coba lagi.",
+      "live": "Aktif",
+      "reconnect": "Hubungkan ulang",
+      "followers": "{count} pengikut",
+      "liveNoCount": "aktif",
+      "dataAccess": "Akses data Meta berakhir {when}",
+      "refresh": "Segarkan profil",
+      "refreshed": "Halaman Facebook disegarkan.",
+      "inboundFixed": "Webhook Facebook didaftarkan ulang untuk Halaman ini.",
+      "fixInbound": "Perbaiki pesan masuk",
+      "remove": "Putuskan",
+      "removeConfirm": "Putuskan Halaman Facebook ini? Utasnya tetap ada di kotak masuk, tetapi pengiriman berhenti sampai Anda menghubungkannya kembali.",
+      "cancel": "Batal",
+      "removed": "Halaman Facebook diputuskan."
+    },
+    "broadcasts": {
+      "kicker": "Facebook · Broadcast",
+      "title": "Messenger",
+      "titleAccent": "broadcast",
+      "intro": "Kirim pesan kepada orang yang baru-baru ini chatting dengan Halaman Anda. Meta hanya mengizinkan Halaman mengirim pesan kepada seseorang dalam 24 jam setelah pesan terakhir mereka — daftar di bawah adalah audiens yang dapat dijangkau saat ini.",
+      "inbox": "Kotak masuk",
+      "loadError": "Broadcast tidak dapat dimuat. Coba lagi.",
+      "connectFirst": "Hubungkan Halaman Facebook terlebih dahulu.",
+      "connectPage": "Hubungkan Halaman",
+      "none": "Belum ada broadcast. Buat di sebelah kanan.",
+      "recipients": "{count, plural, other {# penerima}}",
+      "status": {
+        "sending": "Mengirim",
+        "done": "Selesai",
+        "failed": "Gagal",
+        "draft": "Draf"
+      },
+      "counts": "{sent} terkirim · {failed} gagal · {blocked} diblokir",
+      "start": "Mulai kirim",
+      "started": "Pengiriman dimulai. Pengiriman akan terus berjalan meskipun Anda meninggalkan halaman ini.",
+      "pause": "Jeda",
+      "paused": "Dijeda. Penerima yang tersisa tetap dalam antrean.",
+      "retry": "Coba ulang yang gagal",
+      "retried": "{count, plural, other {# penerima}} diantrekan ulang. Tekan Mulai kirim.",
+      "delete": "Hapus",
+      "deleted": "Broadcast dihapus.",
+      "deleteConfirm": "Hapus broadcast ini?",
+      "cancel": "Batal",
+      "newBroadcast": "Broadcast baru",
+      "name": "Nama",
+      "namePlaceholder": "mis. Penjualan akhir pekan",
+      "page": "Halaman",
+      "template": "Templat (opsional)",
+      "templateHint": "Mengisi pesan terlebih dahulu dan mengirim tombol templat.",
+      "templateNone": "— tidak ada (tulis sendiri) —",
+      "buttons": "{count, plural, other {# tombol}}",
+      "message": "Pesan",
+      "messageHint": "Gunakan '{name}' untuk mempersonalisasi.",
+      "messagePlaceholder": "Halo '{name}'! …",
+      "recipientsLabel": "Penerima",
+      "within24": "(dalam 24 jam)",
+      "selectAll": "Pilih semua",
+      "noAudience": "Tidak ada yang berada dalam jendela 24 jam saat ini — seseorang harus mengirim pesan ke Halaman ini terlebih dahulu.",
+      "messengerUser": "Pengguna Messenger",
+      "selected": "{count} dipilih",
+      "create": "Buat broadcast",
+      "created": "Broadcast dibuat dengan {count, plural, other {# penerima}}. Tekan Mulai kirim saat siap.",
+      "failed": "Tidak berhasil. Coba lagi."
+    },
+    "setup": {
+      "kicker": "Facebook · Messenger",
+      "title": "Messenger",
+      "titleAccent": "pengaturan",
+      "intro": "Atur bagaimana chat Messenger menyambut dan memandu pelanggan — tombol Get Started, sapaan selamat datang, menu yang selalu tersedia, dan FAQ yang bisa diketuk. Pilih fitur, baca penjelasannya, lalu isi. Perubahan langsung disimpan ke Facebook.",
+      "pagePicker": "Halaman",
+      "composer": "Penyusun",
+      "loadError": "Profil Messenger tidak dapat dimuat. Coba lagi.",
+      "noPage": "Belum ada Halaman Facebook yang terhubung.",
+      "connect": "Hubungkan akun Facebook",
+      "profile": "Profil Messenger",
+      "tabs": {
+        "getstarted": "Tombol Get Started",
+        "greeting": "Sapaan",
+        "menu": "Menu persisten",
+        "icebreakers": "Ice breaker"
+      },
+      "isSet": "Atur",
+      "notSet": "Belum diatur",
+      "failed": "Tidak berhasil. Coba lagi.",
+      "footnote": "Pengaturan ini ditulis ke profil Messenger Facebook melalui Graph API dan berlaku untuk percakapan baru. Meta mungkin memerlukan waktu sebentar untuk menerapkan perubahan.",
+      "frame": {
+        "preview": "Pratinjau",
+        "yourPage": "Halaman Anda",
+        "activeNow": "Aktif sekarang"
+      },
+      "explainer": {
+        "what": "Apa itu",
+        "customer": "Bagaimana pelanggan Anda menggunakannya",
+        "how": "Cara mengaturnya"
+      },
+      "getstarted": {
+        "title": "Tombol Get Started",
+        "subtitle": "Tombol yang diketuk pelanggan baru untuk memulai chat.",
+        "what": "Ini adalah hal pertama yang dilihat seseorang saat membuka Messenger Anda — satu tombol \"Get Started\" di layar sambutan.",
+        "customer": "Mereka mengetuknya sekali, dan percakapan dimulai. Tombol ini hanya muncul sebelum pesan pertama.",
+        "how": "Beri payload (kata kunci seperti GET_STARTED). Lalu di Alur, tambahkan Pemicu yang mendengarkan payload tersebut agar alur Sambutan berjalan saat mereka mengetuk.",
+        "payload": "Payload",
+        "payloadHint": "Kata ini dikirim ke Anda saat tombol diketuk. Cocokkan di pemicu Alur untuk memulai otomatisasi.",
+        "remove": "Hapus",
+        "removeConfirm": "Hapus tombol Get Started?",
+        "save": "Simpan",
+        "yourPage": "Halaman Anda",
+        "typically": "Biasanya membalas seketika",
+        "button": "Get Started"
+      },
+      "greeting": {
+        "title": "Sapaan",
+        "subtitle": "Kalimat sambutan ramah yang ditampilkan sebelum ada yang mengetik.",
+        "what": "Pesan singkat selamat datang di layar pertama chat, tepat di bawah nama Halaman Anda.",
+        "customer": "Mereka membacanya begitu membuka Messenger — ini menentukan nada dan memberi tahu apa yang bisa Anda bantu.",
+        "how": "Cukup satu baris hangat (maks. 160 karakter). Tips: tambahkan tag nama depan dan Messenger akan menyapa setiap pelanggan dengan nama.",
+        "welcomeText": "Teks sambutan",
+        "placeholder": "Halo! Ada yang bisa kami bantu hari ini?",
+        "remove": "Hapus",
+        "removeConfirm": "Hapus sapaan?",
+        "save": "Simpan",
+        "yourPage": "Halaman Anda",
+        "sample": "Halo! Ada yang bisa kami bantu hari ini?"
+      },
+      "menu": {
+        "title": "Menu persisten",
+        "subtitle": "Menu pintasan yang selalu tersedia di bar pesan.",
+        "what": "Menu (ikon ☰ di sebelah kotak teks) yang tetap tersedia sepanjang chat — hingga 3 pintasan.",
+        "customer": "Mereka mengetuk ☰ kapan saja untuk langsung ke kebutuhan mereka — \"Hubungi kami\", \"Lacak pesanan saya\", \"Kunjungi toko\".",
+        "how": "Tambahkan hingga 3 item. Setiap item menjalankan Alur (mengirim payload) atau membuka tautan (URL). Opsional: sembunyikan kotak teks agar orang hanya menggunakan menu.",
+        "sample1": "Hubungi kami",
+        "sample2": "Lacak pesanan saya",
+        "sample3": "Kunjungi toko",
+        "menuLabel": "Menu",
+        "menuItem": "Item menu",
+        "titleLabel": "Judul",
+        "titlePlaceholder": "Hubungi kami",
+        "action": "Aksi",
+        "actionFlow": "Jalankan alur (kirim payload)",
+        "actionLink": "Buka tautan (URL)",
+        "url": "URL",
+        "payload": "Payload",
+        "removeItem": "Hapus item",
+        "add": "Tambah item menu",
+        "hideComposer": "Sembunyikan kotak teks (hanya menu)",
+        "remove": "Hapus menu",
+        "removeConfirm": "Hapus menu persisten?",
+        "save": "Simpan menu"
+      },
+      "ice": {
+        "title": "Ice breaker",
+        "subtitle": "Pertanyaan yang disarankan, ditampilkan sebelum pesan pertama.",
+        "what": "Hingga 4 pertanyaan yang bisa diketuk di layar sambutan — pertanyaan umum yang sudah siap diketuk alih-alih diketik.",
+        "customer": "Alih-alih memikirkan apa yang harus ditulis, mereka mengetuk pertanyaan seperti \"Jam berapa Anda buka?\" dan langsung mendapat jawaban.",
+        "how": "Tambahkan FAQ teratas Anda. Setiap ketukan mengirim payload-nya — cocokkan payload itu di pemicu Alur untuk menjawab otomatis.",
+        "sample1": "Jam berapa Anda buka?",
+        "sample2": "Di mana Anda mengirim?",
+        "sample3": "Bicara dengan manusia",
+        "yourPage": "Halaman Anda",
+        "question": "Pertanyaan",
+        "questionLabel": "Pertanyaan",
+        "questionPlaceholder": "Jam berapa Anda buka?",
+        "payload": "Payload",
+        "removeItem": "Hapus ice breaker",
+        "add": "Tambah ice breaker",
+        "remove": "Hapus semua",
+        "removeConfirm": "Hapus semua ice breaker?",
+        "save": "Simpan ice breaker"
+      }
+    },
+    "posts": {
+      "kicker": "Facebook · Postingan",
+      "title": "Facebook",
+      "titleAccent": "postingan",
+      "intro": "Semua yang Anda buat, jadwalkan, atau terbitkan dari sini — lacak status, coba ulang yang gagal, dan kelola antrean Anda.",
+      "allPages": "Semua Halaman",
+      "pagePicker": "Halaman",
+      "myPosts": "Postingan saya",
+      "insights": "Insight",
+      "create": "Buat postingan",
+      "loadError": "Postingan tidak dapat dimuat. Coba lagi.",
+      "noPage": "Belum ada Halaman Facebook yang terhubung",
+      "noPageHint": "Hubungkan akun Facebook untuk menerbitkan dan menjadwalkan postingan Halaman.",
+      "connect": "Hubungkan akun Facebook",
+      "kpi": {
+        "total": "Total postingan",
+        "scheduled": "Dijadwalkan",
+        "published": "Diterbitkan",
+        "failed": "Gagal"
+      },
+      "tabs": {
+        "all": "Semua",
+        "scheduled": "Dijadwalkan",
+        "published": "Diterbitkan",
+        "failed": "Gagal"
+      },
+      "ranges": {
+        "all": "Sepanjang waktu",
+        "7d": "7h",
+        "30d": "30h",
+        "90d": "90h"
+      },
+      "search": "Cari postingan…",
+      "cols": {
+        "post": "Postingan",
+        "page": "Halaman",
+        "type": "Jenis",
+        "status": "Status",
+        "when": "Waktu",
+        "actions": "Aksi"
+      },
+      "status": {
+        "scheduled": "Dijadwalkan",
+        "published": "Diterbitkan",
+        "failed": "Gagal",
+        "draft": "Draf"
+      },
+      "publishNow": "Terbitkan sekarang",
+      "delete": "Hapus",
+      "noMatch": "Tidak ada postingan yang cocok dengan filter ini",
+      "none": "Belum ada postingan",
+      "noneHint": "Buat postingan pertama Anda — terbitkan sekarang atau jadwalkan.",
+      "pageOf": "Halaman {page} dari {last}",
+      "prev": "Sebelumnya",
+      "next": "Berikutnya",
+      "deleteTitle": "Hapus postingan",
+      "deleteLive": "Ini juga menghapus postingan dari Facebook — tidak dapat dibatalkan.",
+      "deleteLocal": "Hapus postingan ini?",
+      "deleteYes": "Ya, hapus",
+      "cancel": "Batal",
+      "rejected": "Facebook menolak postingan: {error}",
+      "published": "Postingan diterbitkan ke Facebook.",
+      "removed": "Postingan dihapus.",
+      "failed": "Tidak berhasil. Coba lagi."
+    },
+    "compose": {
+      "kicker": "Facebook · Buat",
+      "title": "Buat",
+      "titleAccent": "postingan",
+      "intro": "Susun foto, album, tautan, video, dan reel — terbitkan sekarang atau jadwalkan langsung ke Halaman yang terhubung. Lihat hasilnya di pratinjau langsung.",
+      "posts": "Postingan",
+      "myPosts": "Postingan saya",
+      "insights": "Insight",
+      "loadError": "Halaman tidak dapat dimuat. Coba lagi.",
+      "noPage": "Belum ada Halaman Facebook yang terhubung",
+      "noPageHint": "Hubungkan akun Facebook untuk menerbitkan dan menjadwalkan postingan Halaman.",
+      "noAccess": "Anda tidak dapat membuat postingan",
+      "noAccessHint": "Minta administrator memberi izin untuk menyusun postingan Facebook.",
+      "connect": "Hubungkan akun Facebook",
+      "required": "wajib",
+      "steps": {
+        "page": "Halaman",
+        "type": "Jenis postingan",
+        "media": "Media",
+        "message": "Pesan",
+        "when": "Kapan memposting"
+      },
+      "types": {
+        "photo": {
+          "label": "Foto",
+          "hint": "Postingan foto tunggal."
+        },
+        "multi_photo": {
+          "label": "Album",
+          "hint": "2–10 foto dalam satu postingan."
+        },
+        "link": {
+          "label": "Tautan",
+          "hint": "Bagikan tautan dengan pratinjau."
+        },
+        "video": {
+          "label": "Video",
+          "hint": "Video feed (MP4 / MOV)."
+        },
+        "reel": {
+          "label": "Reel",
+          "hint": "Video pendek vertikal berbentuk reel."
+        }
+      },
+      "photoUrls": "Tempel URL gambar publik",
+      "photoHint": "Satu per baris, hingga 10. Mengunggah file memerlukan layanan penyimpanan, yang belum terhubung, jadi gunakan alamat gambar publik.",
+      "linkUrl": "URL tautan",
+      "linkHint": "Facebook membuat kartu pratinjau dari tautan. Postingan dapat berisi tautan atau foto, tidak keduanya.",
+      "videoUrl": "Tempel URL video HTTPS publik",
+      "reelNote": "Reel adalah video pendek vertikal. Pesan di bawah digunakan sebagai deskripsi reel.",
+      "videoNote": "Meta mengambil file melalui HTTPS publik. Pesan di bawah digunakan sebagai deskripsi video.",
+      "messagePlaceholder": "Tulis postingan Anda…",
+      "ai": {
+        "title": "Alat penyusun AI",
+        "caption": "Keterangan",
+        "repurpose": "Gunakan ulang",
+        "review": "Tinjau",
+        "bestTime": "Waktu terbaik",
+        "image": "Gambar",
+        "unavailable": "Alat AI belum tersedia: menunggu pengaturan penyedia AI."
+      },
+      "when": {
+        "now": "Terbitkan sekarang",
+        "later": "Jadwalkan nanti",
+        "label": "Tanggal & waktu kirim",
+        "hint": "Antara 10 menit dan 75 hari dari sekarang, dalam zona waktu Anda ({tz}). Facebook akan mengantrekannya dan menerbitkannya saat tiba waktunya."
+      },
+      "submit": {
+        "publish": "Terbitkan",
+        "schedule": "Jadwalkan"
+      },
+      "preview": {
+        "live": "Pratinjau langsung",
+        "facebook": "Facebook",
+        "yourPage": "Halaman Anda",
+        "justNow": "Baru saja",
+        "empty": "Teks postingan Anda akan tampil di sini…",
+        "reel": "Reel",
+        "video": "Video",
+        "like": "Suka",
+        "comment": "Komentar",
+        "share": "Bagikan",
+        "note": "Pratinjau langsung — postingan sebenarnya di Facebook mungkin tampak sedikit berbeda."
+      },
+      "help": {
+        "label": "Bantuan - {n}",
+        "help1": {
+          "title": "Apa yang bisa saya posting?",
+          "body": "Foto, album, tautan, video feed, dan reel diterbitkan langsung ke Halaman Facebook Anda yang terhubung melalui Graph API."
+        },
+        "help2": {
+          "title": "Bagaimana cara kerja penjadwalan?",
+          "body": "Pilih waktu antara 10 menit dan 75 hari ke depan, dan Facebook akan mengantrekannya — diterbitkan otomatis saat tiba waktunya. Atau terbitkan sekarang."
+        },
+        "help3": {
+          "title": "Postingan gagal — kenapa?",
+          "body": "Biasanya URL media bukan HTTPS publik, atau Halaman telah dihubungkan ulang. Baca galatnya di baris tersebut, lalu coba lagi dengan Terbitkan sekarang."
+        }
+      },
+      "problem": {
+        "noPage": "Pilih Halaman Facebook yang terhubung.",
+        "scheduleMissing": "Pilih tanggal dan waktu untuk menjadwalkan postingan.",
+        "scheduleInvalid": "Tanggal dan waktu tersebut tidak dapat dibaca."
+      },
+      "rejected": "Facebook menolak postingan: {error}",
+      "scheduled": "Postingan dijadwalkan.",
+      "published": "Postingan diterbitkan ke Facebook.",
+      "failed": "Tidak berhasil. Coba lagi."
+    },
+    "grid": {
+      "kicker": "Facebook · Postingan saya",
+      "title": "Kisi",
+      "titleAccent": "Anda",
+      "intro": "Postingan Halaman yang baru diterbitkan — langsung dari Facebook. Ketuk postingan mana pun untuk melihat pratinjau.",
+      "posts": "Postingan",
+      "newPost": "Postingan baru",
+      "pagePicker": "Halaman",
+      "loadError": "Postingan tidak dapat dimuat. Coba lagi.",
+      "noPage": "Tidak ada Halaman Facebook yang terhubung",
+      "noPageHint": "Hubungkan satu untuk melihat kisi Anda di sini.",
+      "goHub": "Buka Facebook",
+      "empty": "Belum ada apa-apa di sini",
+      "emptyHint": "Postingan yang Anda terbitkan akan muncul di sini.",
+      "firstPost": "Buat postingan pertama Anda",
+      "noCaption": "(tanpa keterangan)",
+      "view": "Lihat postingan",
+      "close": "Tutup",
+      "postTitle": "Postingan",
+      "noImage": "Tanpa gambar",
+      "viewOnFacebook": "Lihat di Facebook"
+    },
+    "insights": {
+      "kicker": "Facebook · Analitik",
+      "title": "Halaman",
+      "titleAccent": "insight",
+      "intro": "Jangkauan dan keterlibatan (28 hari, langsung dari Facebook) digabung dengan aktivitas Messenger Anda dan postingan yang diterbitkan dari sini.",
+      "create": "Buat postingan",
+      "myPosts": "Postingan saya",
+      "loadError": "Insight tidak dapat dimuat. Coba lagi.",
+      "noPage": "Belum ada Halaman Facebook yang terhubung.",
+      "connect": "Hubungkan akun Facebook",
+      "connected": "Terhubung",
+      "viewing": "Akun yang dilihat",
+      "cards": {
+        "followers": "Pengikut",
+        "followersSub": "total audiens",
+        "reach": "Jangkauan · 28 hari",
+        "reachSub": "orang dijangkau",
+        "impressions": "Impresi · 28 hari",
+        "impressionsSub": "kali ditampilkan",
+        "engagements": "Keterlibatan · 28 hari",
+        "engagementsSub": "interaksi",
+        "convos": "Percakapan",
+        "convosSub": "{n} terbuka",
+        "messagesIn": "Pesan masuk · 28 hari",
+        "messagesInSub": "{n} dibalas",
+        "published": "Postingan diterbitkan",
+        "publishedSub": "{n} dijadwalkan",
+        "rate": "Tingkat keterlibatan",
+        "rateSub": "keterlibatan ÷ jangkauan"
+      },
+      "liveFromFacebook": "Langsung dari Facebook",
+      "fromHere": "Dari ruang kerja ini",
+      "activity": "Aktivitas Messenger · 14 hari terakhir",
+      "received": "Diterima",
+      "sent": "Terkirim",
+      "mix": {
+        "title": "Komposisi konten",
+        "posts": "{n} postingan",
+        "none": "Belum ada postingan yang diterbitkan dari sini.",
+        "first": "Buat postingan pertama Anda"
+      },
+      "types": {
+        "photo": "Foto",
+        "multi_photo": "Album",
+        "link": "Tautan",
+        "video": "Video",
+        "reel": "Reel"
+      },
+      "convos": {
+        "title": "Percakapan",
+        "total": "{n} total",
+        "open": "Buka Kotak Masuk Tim",
+        "none": "Belum ada percakapan Facebook. Percakapan akan muncul di sini setelah orang mengirim pesan ke Halaman Anda."
+      },
+      "status": {
+        "open": "Terbuka",
+        "pending": "Menunggu",
+        "resolved": "Selesai",
+        "closed": "Ditutup",
+        "snoozed": "Ditunda"
+      },
+      "recent": {
+        "title": "Postingan terbaru",
+        "none": "Belum ada postingan, atau insight masih dikumpulkan.",
+        "noCaption": "(tanpa keterangan)",
+        "impressions": "impresi",
+        "engaged": "terlibat",
+        "view": "Lihat"
+      },
+      "legendLive": "Langsung dari Facebook — metrik yang sudah tidak didukung mungkin tampil sebagai —.",
+      "legendHere": "Dari ruang kerja ini — Messenger dan postingan yang diterbitkan."
+    }
+  }
+}

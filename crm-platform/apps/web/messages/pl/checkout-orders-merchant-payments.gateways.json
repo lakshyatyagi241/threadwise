@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "Sklep / Bramki płatności",
+      "title": "Bramki płatności",
+      "subtitle": "Dodaj własne klucze bramki, aby płatności trafiały na Twoje konto. Wklej klucze, które bramka podaje w swoim panelu.",
+      "banner": "Jedna konfiguracja bramki jest używana przez kasę sklepu i faktury w Sprzedaży.",
+      "viewOnly": "Możesz zobaczyć konfigurację bramki, ale nie możesz jej zmienić. Poproś administratora przestrzeni roboczej o uprawnienie do zarządzania bramkami.",
+      "scope": {
+        "label": "Gdzie obowiązują te ustawienia",
+        "workspace": "Przestrzeń robocza (wszystkie sklepy)",
+        "workspaceHint": "Używane przez każdy sklep i faktury w Sprzedaży, chyba że sklep ma własne zastąpienie.",
+        "store": "Tylko ten sklep (zastąpienie)",
+        "storeHint": "Używane tylko przez kasę sklepu {shop}. Ma pierwszeństwo przed konfiguracją przestrzeni roboczej.",
+        "storeNamed": "Sklep: {shop}",
+        "noShop": "Najpierw utwórz sklep, aby ustawić zastąpienie.",
+        "shop": "Sklep"
+      },
+      "resolved": {
+        "used": "Obecnie używana: {name} (źródło: {source})",
+        "none": "Nie skonfigurowano jeszcze bramki",
+        "noneHint": "Skonfiguruj bramkę poniżej i ją włącz. Do tego czasu kupujący nie mogą płacić online, a faktury nie mają przycisku płatności.",
+        "source": {
+          "store_override": "zastąpienie sklepu",
+          "workspace_default": "domyślna przestrzeni roboczej",
+          "legacy_storefront": "klucze sklepu"
+        }
+      },
+      "mode": {
+        "live": "Produkcyjny",
+        "test": "Testowy"
+      },
+      "catalogue": {
+        "title": "Bramki",
+        "count": "{count, plural, one {# bramka} few {# bramki} many {# bramek} other {# bramki}}",
+        "search": "Szukaj bramek",
+        "searchPlaceholder": "Szukaj po nazwie, kraju lub walucie",
+        "loading": "Wczytywanie bramek",
+        "noDriversTitle": "Brak dostępnych bramek",
+        "noDriversMessage": "Ten serwer nie ma jeszcze bramek płatności do skonfigurowania.",
+        "noMatchTitle": "Brak pasujących bramek",
+        "noMatchMessage": "Spróbuj innej nazwy, kraju lub kodu waluty.",
+        "clearSearch": "Wyczyść wyszukiwanie"
+      },
+      "card": {
+        "available": "Dostępne",
+        "unavailable": "Jeszcze niedostępne",
+        "paymentLinks": "Linki płatności",
+        "unavailableNote": "Ta bramka jest wymieniona, ale w tej wersji nie może jeszcze przyjmować płatności.",
+        "active": "Aktywna",
+        "off": "Wyłączona",
+        "incomplete": "Niekompletne klucze",
+        "default": "Domyślna",
+        "migrated": "Przeniesione z kluczy Twojej witryny sklepowej. Zapisz raz tutaj, aby zachować je w nowej konfiguracji.",
+        "webhookMissing": "Brak sekretu webhooka: powiadomienia o płatnościach z tej bramki są odrzucane, dopóki go nie dodasz.",
+        "notSetUp": "Jeszcze nie skonfigurowano dla tego zakresu.",
+        "configure": "Skonfiguruj",
+        "edit": "Edytuj",
+        "test": "Przetestuj połączenie",
+        "testing": "Testowanie",
+        "setDefault": "Ustaw jako domyślną",
+        "activeSwitch": "{name} jest włączona",
+        "remove": "Usuń",
+        "removeTitle": "Usunąć {name}?",
+        "removeMessage": "Jej zapisane klucze zostaną usunięte dla tego zakresu ({scope}). Kupujący nie będą mogli już przez nią płacić, a płatności w toku mogą nie zostać potwierdzone.",
+        "removeConfirm": "Usuń bramkę"
+      },
+      "toast": {
+        "saved": "Bramka zapisana",
+        "switchedOn": "{name} włączona",
+        "switchedOff": "{name} wyłączona",
+        "defaultSet": "{name} jest teraz domyślna",
+        "removed": "{name} usunięta"
+      },
+      "test": {
+        "verified": "Dostawca zaakceptował klucze.",
+        "fieldsTitle": "Wymagane pola są wypełnione",
+        "fieldsOnly": "Sprawdzono tylko wymagane pola: ta bramka nie ma taniego wywołania kontrolnego, więc prawdziwym testem jest płatność.",
+        "missingTitle": "Klucze są niekompletne",
+        "missing": "Te wymagane pola są puste: {fields}.",
+        "rejected": "Dostawca nie zaakceptował kluczy.",
+        "providerSaid": "Dostawca odpowiedział: {message}"
+      },
+      "drawer": {
+        "eyebrow": "Konfiguracja bramki",
+        "save": "Zapisz bramkę",
+        "appliesTo": "Dotyczy: {scope}",
+        "credentials": "Dane uwierzytelniające",
+        "noFields": "Ta bramka nie wymaga kluczy.",
+        "secretsNote": "Zapisane klucze nigdy nie są pokazywane ponownie. Jako przypomnienie wyświetlany jest tylko koniec każdego z nich.",
+        "requiredField": "Pole {field} jest wymagane.",
+        "invalidOption": "Wybierz jedną z dostępnych opcji dla pola {field}.",
+        "mode": "Tryb",
+        "modeHint": "Użyj trybu Testowy, gdy wypróbowujesz bramkę z kluczami testowymi, a Produkcyjny, aby przyjmować prawdziwe płatności.",
+        "active": "Aktywna",
+        "activeHint": "Wyłączona bramka nigdy nie jest używana przez kasę ani faktury.",
+        "webhookTitle": "Adres webhooka",
+        "webhookHint": "Wklej to w panelu {name}, aby płatności potwierdzały się automatycznie.",
+        "webhookAfterSave": "Adres webhooka pojawi się tutaj po pierwszym zapisie.",
+        "willClear": "Zapisana wartość zostanie usunięta po zapisaniu.",
+        "keepBlank": "Pozostaw puste, aby zachować zapisaną wartość.",
+        "requiredMark": "(wymagane)",
+        "stored": "Zapisano: {mask}",
+        "keepOption": "Zachowaj zapisaną wartość",
+        "chooseOption": "Wybierz opcję",
+        "clear": "Wyczyść zapisaną wartość",
+        "show": "Pokaż wartość",
+        "hide": "Ukryj wartość"
+      }
+    }
+  }
+}

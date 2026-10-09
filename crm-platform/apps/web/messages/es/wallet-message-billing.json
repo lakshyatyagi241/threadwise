@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "statement": {
+      "subtitle": "Cada movimiento de tu monedero. Los totales incluyen todo lo que coincide con los filtros, no solo esta página.",
+      "back": "Volver al monedero",
+      "breadcrumbLabel": "Ruta de navegación",
+      "breadcrumbWallet": "Monedero",
+      "breadcrumbStatement": "Extracto",
+      "export": "Exportar CSV",
+      "exporting": "Exportando",
+      "exported": "Guardado {fileName}",
+      "emptyTitle": "Sin transacciones",
+      "emptyFiltered": "Ningún resultado coincide con estos filtros. Cámbialos o restablécelos.",
+      "emptyNone": "Aquí aparecerán los movimientos de tu monedero.",
+      "filters": {
+        "type": "Tipo",
+        "from": "Desde",
+        "to": "Hasta",
+        "rangeInverted": "La fecha de fin es anterior a la de inicio.",
+        "search": "Buscar",
+        "searchPlaceholder": "Descripción o motivo",
+        "apply": "Aplicar",
+        "reset": "Restablecer"
+      },
+      "typeFilter": {
+        "all": "Todos",
+        "topup": "Recargas",
+        "earn": "Ganancias",
+        "spend": "Cargos por mensajes",
+        "refund": "Reembolsos",
+        "admin_adjust": "Ajustes"
+      },
+      "summary": {
+        "balance": "Saldo actual",
+        "in": "Entradas",
+        "out": "Salidas",
+        "net": "Movimiento neto",
+        "count": "{count, plural, one {# transacción} other {# transacciones}}"
+      },
+      "columns": {
+        "label": "Extracto del monedero",
+        "date": "Fecha",
+        "description": "Descripción",
+        "type": "Tipo",
+        "in": "Entradas",
+        "out": "Salidas",
+        "balance": "Saldo",
+        "none": "Ninguno"
+      },
+      "context": {
+        "reason": "Motivo",
+        "to": "Destinatario",
+        "template": "Plantilla"
+      },
+      "channels": {
+        "campaign": "Campaña",
+        "broadcast": "Difusión",
+        "flow": "Flujo",
+        "scheduled": "Programado",
+        "auto_reply": "Respuesta automática",
+        "chat": "Chat",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      },
+      "title": "Extracto del monedero"
+    },
+    "admin": {
+      "admin": "Admin",
+      "wallet": "Monedero",
+      "workspacesLabel": "Espacios de trabajo",
+      "breadcrumb": "Ruta de navegación",
+      "readOnly": "Has iniciado sesión como {role}. Solo los superadministradores pueden cambiar la configuración, los precios o los saldos del monedero.",
+      "nav": {
+        "overview": "Monedero",
+        "pricing": "Precios de mensajes",
+        "workspaces": "Monederos de espacios de trabajo",
+        "logs": "Registros del monedero",
+        "margins": "Márgenes",
+        "packages": "Paquetes de créditos"
+      },
+      "overview": {
+        "title": "Resumen del monedero",
+        "subtitle": "El dinero retenido en los monederos de los espacios de trabajo y los movimientos de los últimos 30 días.",
+        "linkWorkspaces": "Monederos de espacios de trabajo",
+        "linkPricing": "Precios de mensajes",
+        "linkLogs": "Registros del monedero",
+        "float": "Saldo en circulación",
+        "floatHint": "Retenido en todos los espacios de trabajo",
+        "holding": "Espacios de trabajo con saldo",
+        "low": "Saldo bajo",
+        "last30": "Últimos 30 días",
+        "toppedUp": "Recargado",
+        "charged": "Cobrado",
+        "refunded": "Reembolsado",
+        "adjustedIn": "Añadido manualmente",
+        "adjustedOut": "Descontado manualmente",
+        "chargedMessages": "Mensajes cobrados",
+        "freeMessages": "Mensajes gratuitos",
+        "reconcile": {
+          "title": "Comparar saldos con los registros",
+          "body": "Recalcula cada monedero a partir de su registro y enumera los saldos que no coinciden.",
+          "button": "Comparar saldos con los registros",
+          "running": "Comprobando",
+          "ok": "Todos los {count, plural, one {# monedero coincide} other {# monederos coinciden}} con su registro.",
+          "mismatches": "{count} de {checked} monederos no coinciden con su registro.",
+          "workspace": "Espacio de trabajo",
+          "balance": "Saldo",
+          "ledger": "Registro",
+          "difference": "Diferencia"
+        },
+        "otherCurrencies": "Monederos en otras divisas",
+        "otherCurrenciesNote": "Los espacios de trabajo facturados en otra divisa guardan el dinero en esa divisa. Las cifras anteriores son solo en {currency}; cada otra divisa se cuenta en su propia línea.",
+        "other": {
+          "currency": "Divisa",
+          "float": "Dinero retenido",
+          "holding": "Espacios de trabajo con saldo",
+          "toppedUp": "Recargado, 30 días",
+          "charged": "Cobrado, 30 días"
+        }
+      },
+      "pricing": {
+        "title": "Precios de mensajes",
+        "crumb": "Precios de mensajes",
+        "subtitle": "Cuánto cuesta un mensaje a tus clientes, cómo se protegen los monederos nuevos y la tarifa por país.",
+        "kpi": {
+          "signup": "Recompensa por referido",
+          "cost": "Coste por mensaje",
+          "costHint": "Precio fijo cuando el precio por país está desactivado",
+          "spending": "Gasto real",
+          "spendingHint": "Mensajes que {amount} compra al precio fijo",
+          "lowBalance": "Alerta de saldo bajo"
+        },
+        "economics": {
+          "title": "Economía",
+          "liveKeys": "Se aplica de inmediato",
+          "flatPrice": "Precio fijo por mensaje",
+          "flatPriceHint": "Mínimo 0,01. Usa la tabla de tarifas para los mensajes gratuitos.",
+          "referralSignup": "Recompensa por referido",
+          "referralSignupHint": "Se paga al referente en el primer pedido de pago del referido.",
+          "lowBalance": "Alerta de saldo bajo en",
+          "lowBalanceHint": "Los espacios de trabajo con este saldo o menos recibirán un aviso.",
+          "coverage": "Cobertura de lanzamiento",
+          "coverageHint": "Un envío masivo se rechaza salvo que el monedero cubra esta proporción de su coste estimado. 0 rechaza solo un monedero vacío.",
+          "rewardSentence": "Una recompensa de {reward} paga {count, plural, one {# mensaje} other {# mensajes}} al precio fijo.",
+          "save": "Guardar economía",
+          "saving": "Ahorro",
+          "saved": "Economía guardada.",
+          "problems": {
+            "invalid": "Introduce un importe con como máximo 2 decimales.",
+            "flatZero": "El precio fijo no puede ser 0.",
+            "percent": "Introduce un número entero de 0 a 100."
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "Precio por país",
+            "on": "Activado: cada mensaje se cobra según el país y la categoría del destinatario, según la tabla de tarifas.",
+            "off": "Desactivado: cada mensaje se cobra al precio fijo.",
+            "save": "Guardar",
+            "confirmTitle": "¿Cambiar el precio por país?",
+            "confirmOn": "Los mensajes se cobrarán por país y categoría desde el siguiente envío.",
+            "confirmOff": "Los mensajes se cobrarán al precio fijo desde el siguiente envío.",
+            "confirm": "Sí, cambiar",
+            "savedOn": "El precio por país está activado.",
+            "savedOff": "El precio por país está desactivado."
+          },
+          "payPerMessage": {
+            "label": "Cobrar por mensaje",
+            "on": "Activado: los espacios de trabajo sin cupo de plan pagan cada mensaje entregado desde su monedero.",
+            "off": "Desactivado: los mensajes no se cobran a los monederos.",
+            "save": "Guardar",
+            "confirmTitle": "¿Cambiar el cobro por mensaje?",
+            "confirmOn": "A partir de ahora, los mensajes entregados se cobrarán a los monederos.",
+            "confirmOff": "Los monederos dejarán de cobrar por mensajes. Esto afecta a todos los espacios de trabajo.",
+            "confirm": "Sí, cambiar",
+            "savedOn": "El cobro por mensaje está activado.",
+            "savedOff": "El cobro por mensaje está desactivado."
+          }
+        },
+        "grid": {
+          "title": "Tabla de tarifas",
+          "modeOn": "El precio por país está activado: se usan estos precios.",
+          "modeOff": "El precio por país está desactivado: estos precios se guardan, pero se cobra el precio fijo.",
+          "empty": "Aún no hay tarifas. Añade una fila, importa una tabla de tarifas o vuelve a cargar la tabla inicial.",
+          "country": "País",
+          "category": "Categoría",
+          "charge": "Tú cobras",
+          "metaCost": "Meta te cobra",
+          "margin": "Margen",
+          "marginUnknown": "Desconocido",
+          "actions": "Acciones",
+          "anyCountry": "Cualquier país",
+          "anyCategory": "Cualquier categoría",
+          "serviceFree": "Servicio (gratuito)",
+          "addRow": "Añadir fila",
+          "remove": "Quitar",
+          "cancel": "Cancelar",
+          "removeTitle": "¿Quitar esta tarifa?",
+          "removeBody": "Se elimina la tarifa de {country}. Los mensajes usarán la siguiente tarifa coincidente.",
+          "removed": "Tarifa eliminada.",
+          "save": "Guardar tarifas",
+          "saving": "Guardando",
+          "saved": "{count, plural, one {# tarifa guardada.} other {# tarifas guardadas.}}",
+          "savedSome": "{saved} guardadas, {skipped} omitidas. Consulta el motivo en cada fila omitida.",
+          "unsaved": "{count, plural, one {# fila sin guardar} other {# filas sin guardar}}",
+          "tooMany": "Demasiadas filas cambiadas para un solo guardado. Guarda en lotes más pequeños.",
+          "problems": {
+            "price": "Introduce un precio con como máximo 2 decimales.",
+            "metaCost": "Introduce un coste con como máximo 6 decimales.",
+            "country": "Usa un código de país de 2 letras, o déjalo en blanco para cualquier país.",
+            "empty": "Introduce un precio o un coste de Meta.",
+            "duplicate": "Esta combinación de país y categoría ya tiene una fila."
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "Sincronizar costes de Meta",
+            "title": "Sincronizar costes de Meta",
+            "loading": "Leyendo la lista de precios de Meta",
+            "source": "Origen",
+            "version": "Versión",
+            "noVersion": "Ninguna",
+            "currency": "Divisa",
+            "added": "Filas que añadir",
+            "updated": "Filas que actualizar",
+            "untouched": "Tus precios no cambian. Solo se actualiza el coste que Meta te cobra.",
+            "bundledNote": "No hay ninguna lista de precios de Meta conectada, así que se usa la tabla de tarifas incluida.",
+            "apply": "Aplicar",
+            "applying": "Aplicando",
+            "done": "Costes de Meta sincronizados: {added} añadidos, {updated} actualizados."
+          },
+          "import": {
+            "button": "Importar tabla de tarifas",
+            "title": "Importar tabla de tarifas",
+            "intro": "Sube una tabla de tarifas en CSV. Verás qué cambiaría antes de guardar nada.",
+            "file": "Archivo CSV",
+            "limit": "Hasta 4 MB.",
+            "reading": "Leyendo el archivo",
+            "shape": "Formato",
+            "shapes": {
+              "wide": "Una columna por categoría",
+              "long": "Una fila por categoría"
+            },
+            "added": "Para añadir",
+            "updated": "Para actualizar",
+            "skipped": "Omitidas",
+            "currencyNote": "Los precios se leen en {currency}.",
+            "problems": "Filas que se omitirán",
+            "line": "Línea {line}:",
+            "fileProblems": {
+              "notCsv": "Elige un archivo .csv.",
+              "tooBig": "El archivo supera los 4 MB.",
+              "unreadable": "No se pudo leer el archivo."
+            },
+            "apply": "Aplicar importación",
+            "applying": "Importando",
+            "done": "Tabla de tarifas importada: {added} añadidas, {updated} actualizadas, {skipped} omitidas."
+          },
+          "seed": {
+            "button": "Recargar la tabla de tarifas inicial",
+            "title": "¿Recargar la tabla de tarifas inicial?",
+            "warning": "Esto sobrescribe las filas existentes del mismo país y categoría con los precios incluidos. Los precios que hayas definido a mano para esas filas se reemplazarán.",
+            "confirm": "Recargar",
+            "done": "{count, plural, one {# tarifa escrita} other {# tarifas escritas}} desde la tabla inicial."
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "Envíos transfronterizos",
+            "body": "El precio sigue al país del destinatario, no al del espacio de trabajo. Añade una fila para cada país al que envíes."
+          },
+          "how": {
+            "title": "Cómo se encuentra un precio",
+            "body": "El monedero busca el país del destinatario y la categoría del mensaje en esta tabla. Una categoría o un país en blanco coinciden con cualquiera."
+          },
+          "order": {
+            "title": "Qué fila gana",
+            "body": "Primero se usa una coincidencia exacta de país y categoría; luego el país con cualquier categoría; luego cualquier país; por último, el precio fijo."
+          }
+        },
+        "mode": {
+          "title": "Cómo se fijan los precios a los clientes",
+          "current": "Actual: {mode}",
+          "intro": "Elige cuánto cuesta un mensaje a tus clientes. Se aplica a todos los espacios de trabajo y se guarda por separado.",
+          "fixed": {
+            "label": "Precios fijos",
+            "body": "Escribes un precio para cada país y categoría de la tabla de abajo. Los márgenes se guardan, pero no se usan."
+          },
+          "margin": {
+            "label": "Coste de Meta + margen",
+            "body": "El cliente paga el coste de Meta más tu margen, definido por país y categoría. Cuando no se conoce el coste de Meta, se cobra el precio fijo escrito."
+          },
+          "save": "Guardar modo de precio",
+          "manage": "Definir márgenes",
+          "confirmTitle": "¿Cambiar la forma de fijar los precios a los clientes?",
+          "confirmFixed": "Todos los espacios de trabajo pagarán los precios fijos de la tabla desde el siguiente mensaje. Los márgenes se guardan, pero dejan de aplicarse.",
+          "confirmMargin": "Todos los espacios de trabajo pagarán el coste de Meta más el margen que les corresponda (ajuste del espacio de trabajo, luego su plan, luego el valor predeterminado de la plataforma) desde el siguiente mensaje. Cuando el coste de Meta es desconocido, se sigue cobrando el precio fijo.",
+          "confirm": "Sí, cambiar",
+          "savedFixed": "Los clientes ahora tienen precios fijos.",
+          "savedMargin": "Los clientes ahora tienen precio de coste de Meta más margen."
+        },
+        "metaCards": {
+          "title": "Tablas de tarifas de Meta",
+          "intro": "Meta publica una lista de precios por cada divisa y solo la cambia el 1 de enero, el 1 de abril, el 1 de julio y el 1 de octubre. Un espacio de trabajo facturado en INR se cobra con la lista INR de Meta y con su monedero INR, nunca con la lista en USD convertida. Importa cada archivo tal como lo publica Meta. Los precios escritos y el precio fijo se guardan en la divisa de la plataforma y se convierten con el tipo de cambio registrado para los espacios de trabajo facturados en otra divisa.",
+          "none": "Todavía no hay ninguna tabla de tarifas de Meta guardada. Importa el archivo que Meta publica para tu divisa.",
+          "view": "Ver",
+          "hide": "Ocultar",
+          "usedPricing": "Precios, márgenes y P&L de revendedor, y espacios de trabajo facturados en la divisa de la plataforma",
+          "usedWorkspaces": "Precios de los espacios de trabajo facturados en {currency}",
+          "columns": {
+            "currency": "Divisa",
+            "effective": "Vigente",
+            "checked": "Última importación",
+            "markets": "Mercados",
+            "usedFor": "Se usa para",
+            "status": "Estado",
+            "actions": "Acciones"
+          },
+          "freshness": {
+            "current": "Al día",
+            "upcoming": "Revisar pronto",
+            "due": "Revisar ahora"
+          },
+          "reminder": {
+            "link": "Abrir la página de precios de Meta",
+            "current": "Al día. Meta podría cambiar sus precios el {date}.",
+            "dueTitle": "El {date} empezó un nuevo trimestre: Meta podría haber cambiado sus precios.",
+            "dueBody": "Descarga los nuevos archivos de tarifas (uno por divisa en uso) e impórtalos aquí. Hasta entonces, los costes y márgenes usan la tabla anterior.",
+            "upcomingTitle": "Meta podría cambiar sus precios el {date} (faltan {days, plural, one {# día} other {# días}}).",
+            "upcomingBody": "Ten los nuevos archivos listos para importar ese día.",
+            "missingTitle": "No hay tabla de tarifas de Meta para {currencies}.",
+            "missingBody": "Los espacios de trabajo con esa divisa no tienen lista de precios de Meta que mostrar. Importa el archivo que Meta publica para ella."
+          },
+          "table": {
+            "heading": "Tabla {currency} de Meta",
+            "note": "Precio de lista por mensaje entregado, tal como lo publica Meta. Los países que Meta no nombra se tarifican como Otros.",
+            "market": "Mercado",
+            "everyOther": "Todos los países no nombrados",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utilidad",
+              "authentication": "Autenticación",
+              "authentication_international": "Autenticación internacional",
+              "service": "Servicio"
+            }
+          },
+          "import": {
+            "button": "Importar tabla de tarifas de Meta",
+            "title": "Importar tabla de tarifas de Meta",
+            "intro": "Elige el archivo que Meta publica para una divisa (un libro de Excel, aunque el enlace diga CSV). La divisa y la fecha de vigencia se leen del archivo. Verás qué cambiaría antes de guardar nada.",
+            "file": "Archivo de tarifas de Meta (.xlsx o .csv)",
+            "hint": "Una divisa por archivo. Un archivo nuevo reemplaza por completo la tabla de esa divisa. Máximo 2 MB.",
+            "reading": "Leyendo el archivo…",
+            "applying": "Importando",
+            "apply": "Importar tabla",
+            "done": "Se importó la tabla en {currency}.",
+            "fileProblems": {
+              "wrongType": "Elige el archivo .xlsx que publica Meta, o un CSV guardado a partir de él.",
+              "tooBig": "El archivo supera los 2 MB, así que no es una tabla de tarifas de Meta.",
+              "unreadable": "No se pudo leer el archivo."
+            },
+            "summary": {
+              "currency": "Divisa",
+              "effective": "Vigente",
+              "added": "Filas nuevas",
+              "changed": "Cambiadas",
+              "unchanged": "Sin cambios",
+              "removed": "Eliminadas"
+            },
+            "replaces": "Reemplaza la tabla vigente desde {date}.",
+            "appliesToPricing": "Esta es la tabla en {currency}, la divisa de tu plataforma. Al importarla también se actualiza el coste de Meta que sirve de base para precios, márgenes y el P&L de revendedor ({added} nuevas, {updated} actualizadas). Los precios de los clientes no cambian.",
+            "storedOnly": "Esta no es la divisa de la plataforma. Se guarda y se muestra, y fija el precio de todos los espacios de trabajo facturados en {currency}. El coste de Meta de la tabla de tarifas de abajo sigue en la divisa de la plataforma.",
+            "biggest": "Mayores cambios",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Utilidad",
+              "authentication": "Autenticación",
+              "authentication_international": "Autenticación internacional",
+              "service": "Servicio"
+            },
+            "problems": "Filas omitidas"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "Monederos de espacios de trabajo",
+        "crumb": "Monederos de espacios de trabajo",
+        "subtitle": "Cada espacio de trabajo con su saldo. Ábrelo para ver sus movimientos o ajustarlo.",
+        "search": "Buscar",
+        "searchPlaceholder": "Nombre o slug del espacio de trabajo",
+        "lowOnly": "Solo saldo bajo",
+        "apply": "Aplicar",
+        "totalWorkspaces": "Espacios de trabajo",
+        "totalFloat": "Total retenido",
+        "totalLow": "Saldo bajo",
+        "emptyTitle": "No se encontraron espacios de trabajo",
+        "emptyBody": "Cambia la búsqueda o quita el filtro de saldo bajo.",
+        "loadMore": "Cargar más",
+        "loadingMore": "Cargando más",
+        "columns": {
+          "label": "Monederos de espacios de trabajo",
+          "workspace": "Espacio de trabajo",
+          "mode": "Facturación",
+          "balance": "Saldo",
+          "low": "Bajo",
+          "activity": "Última actividad",
+          "never": "Nunca"
+        },
+        "totalFloatIn": "Dinero retenido ({currency})"
+      },
+      "detail": {
+        "crumb": "Espacio de trabajo",
+        "adjust": "Ajustar saldo",
+        "balance": "Saldo",
+        "lowBalance": "Saldo bajo",
+        "threshold": "Aviso en {amount}",
+        "recent": "Movimientos recientes",
+        "emptyTitle": "Aún no hay movimientos",
+        "emptyBody": "Aquí aparecerán los movimientos de este monedero.",
+        "columns": {
+          "label": "Movimientos recientes del monedero",
+          "date": "Fecha",
+          "type": "Tipo",
+          "amount": "Importe",
+          "balanceAfter": "Saldo después",
+          "who": "Realizado por",
+          "reason": "Motivo",
+          "customer": "Cliente",
+          "operator": "Operador",
+          "system": "Sistema"
+        },
+        "result": {
+          "appliedAdd": "Se añadieron {applied}. El saldo es ahora {balance}.",
+          "appliedDeduct": "Se descontaron {applied}. El saldo es ahora {balance}.",
+          "partial": "Solo se aplicaron {applied} de {requested} porque el saldo no puede quedar por debajo de 0. El saldo es ahora {balance}.",
+          "replayed": "(Esta solicitud ya se había aplicado.)"
+        },
+        "pricing": {
+          "title": "Precios de este espacio de trabajo",
+          "subtitle": "Los márgenes personalizados prevalecen sobre el plan del espacio de trabajo y el valor predeterminado de la plataforma, solo para este espacio de trabajo.",
+          "plan": "Plan",
+          "planLoading": "Cargando plan",
+          "planUnknown": "No se pudo leer",
+          "noPlan": "Sin plan",
+          "overrides": "Márgenes personalizados",
+          "overridesHint": "Solo se sustituyen las filas que aparecen aquí. Todo lo demás sigue al plan y al valor predeterminado de la plataforma.",
+          "empty": "Sin personalizaciones. Este espacio de trabajo sigue su plan y el valor predeterminado de la plataforma.",
+          "reason": {
+            "label": "Motivo (se guarda en el registro de auditoría)",
+            "hint": "Obligatorio para cualquier cambio o eliminación, de 5 a 500 caracteres.",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "Indica el motivo con al menos 5 caracteres.",
+              "long": "Mantén el motivo en 500 caracteres o menos."
+            }
+          },
+          "save": "Guardar personalizaciones",
+          "saving": "Guardando",
+          "saveHint": "Corrige las filas marcadas e indica un motivo para guardar.",
+          "saved": "{saved} guardadas, {removed} eliminadas.",
+          "savedSome": "{saved} guardadas, {skipped} omitidas. Consulta el motivo en cada fila omitida.",
+          "preview": {
+            "title": "Vista previa de precio",
+            "hint": "Consulta cómo se tarifaría un mensaje a este espacio de trabajo y qué nivel lo definió.",
+            "country": "País",
+            "category": "Categoría",
+            "run": "Previsualizar precio",
+            "running": "Calculando el precio",
+            "result": {
+              "label": "Resultado de la vista previa de precio",
+              "metaCost": "Coste de Meta",
+              "unknownCost": "No conocido",
+              "margin": "Margen",
+              "noMargin": "Ninguno",
+              "layer": "Definido por",
+              "noLayer": "Ningún margen coincide",
+              "layers": {
+                "workspace": "Personalización del espacio de trabajo",
+                "plan": "Margen del plan",
+                "platform": "Valor predeterminado de la plataforma"
+              },
+              "price": "Precio para el cliente",
+              "basis": "Base",
+              "bases": {
+                "margin": "Coste de Meta + margen",
+                "fixed": "Precio fijo"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "Divisa de facturación",
+          "intro": "Los mensajes se tarifan según la tabla de Meta para esta divisa y se cobran al monedero del espacio de trabajo en esa divisa. Las recargas también se introducen y acreditan en ella.",
+          "billedIn": "Facturado en",
+          "change": "Cambiar divisa",
+          "otherWallets": "Otros monederos de este espacio de trabajo",
+          "notUsed": "No se usan para facturar; el dinero permanece aquí.",
+          "dialog": {
+            "title": "Cambiar divisa de facturación",
+            "currency": "Facturar en",
+            "effect": "A partir de ahora, los mensajes se tarifan con la tabla {to} de Meta y se cobran al monedero {to}. No se convierte nada: el monedero {from} conserva su saldo.",
+            "left": "{amount} permanece en el monedero {from} y no se usa hasta que el espacio de trabajo vuelva a cambiarse.",
+            "reason": "Motivo",
+            "reasonHint": "Aparece en el registro de auditoría y en el registro del monedero del espacio de trabajo. Al menos 5 caracteres.",
+            "confirm": "Facturar en {currency}",
+            "saving": "Guardando",
+            "done": "Ahora se factura en {to} (antes {from})."
+          }
+        }
+      },
+      "adjust": {
+        "title": "Ajustar saldo",
+        "current": "Saldo actual",
+        "direction": "Acción",
+        "add": "Añadir dinero",
+        "deduct": "Descontar",
+        "amount": "Importe",
+        "amountHint": "Hasta 2 decimales.",
+        "reason": "Motivo",
+        "reasonHint": "Obligatorio, de 5 a 500 caracteres. El espacio de trabajo verá este motivo en su extracto.",
+        "counter": "{count} / {max}",
+        "cappedWarning": "Supera el saldo de {balance}. Solo se descuenta lo disponible; el saldo se queda en 0.",
+        "review": "Revisar",
+        "confirmAdd": "Añadir dinero",
+        "confirmDeduct": "Descontar",
+        "posting": "Registrando",
+        "summaryAdd": "Añadir {amount} a {workspace}.",
+        "summaryDeduct": "Descontar {amount} de {workspace}.",
+        "newBalance": "Nuevo saldo: {balance}",
+        "summaryReason": "Motivo: {reason}",
+        "visibleNote": "El motivo se muestra al espacio de trabajo y se guarda en el registro de auditoría.",
+        "problems": {
+          "amount": {
+            "required": "Introduce un importe.",
+            "invalid": "Introduce un importe positivo con como máximo 2 decimales.",
+            "zero": "El importe debe ser mayor que 0.",
+            "tooLarge": "Eso supera el límite de un solo ajuste."
+          },
+          "note": {
+            "short": "Indica el motivo con al menos {min} caracteres.",
+            "long": "Mantén el motivo por debajo de {max} caracteres."
+          }
+        }
+      },
+      "logs": {
+        "title": "Registros del monedero",
+        "crumb": "Registros del monedero",
+        "subtitle": "Qué ha pasado con los monederos y qué han cambiado los operadores.",
+        "scope": "Ámbito",
+        "scopes": {
+          "all": "Todos",
+          "workspace": "Eventos de espacios de trabajo",
+          "platform": "Cambios de la plataforma"
+        },
+        "event": "Evento",
+        "anyEvent": "Cualquier evento",
+        "severity": "Gravedad",
+        "anySeverity": "Cualquier gravedad",
+        "severities": {
+          "info": "Info",
+          "warning": "Aviso",
+          "error": "Error"
+        },
+        "workspaceId": "ID del espacio de trabajo",
+        "workspaceIdInvalid": "Introduce un ID de espacio de trabajo (un UUID).",
+        "search": "Buscar",
+        "from": "Desde",
+        "to": "Hasta",
+        "apply": "Aplicar",
+        "reset": "Restablecer",
+        "emptyTitle": "No hay entradas en el registro",
+        "emptyBody": "Nada coincide con estos filtros.",
+        "loadMore": "Cargar más",
+        "loadingMore": "Cargando más",
+        "platform": "Plataforma",
+        "showDetails": "Mostrar detalles",
+        "hideDetails": "Ocultar detalles",
+        "requestId": "ID de solicitud",
+        "columns": {
+          "time": "Hora",
+          "severity": "Gravedad",
+          "event": "Evento",
+          "workspace": "Espacio de trabajo",
+          "actor": "Autor",
+          "message": "Mensaje"
+        },
+        "actors": {
+          "operator": "Operador",
+          "customer": "Cliente",
+          "system": "Sistema"
+        }
+      },
+      "margins": {
+        "title": "Márgenes",
+        "crumb": "Márgenes",
+        "subtitle": "Lo que pagan los clientes sobre el coste de Meta, por país y categoría de mensaje.",
+        "retry": "Reintentar",
+        "ratesFailed": "No se pudieron cargar los costes de Meta, así que no se pueden mostrar los precios de las filas nuevas.",
+        "mode": {
+          "current": "Los clientes se tarifan por",
+          "inactive": "El modo de precio es Precios fijos, así que estos márgenes aún no se aplican. Se guardan y se aplicarán cuando cambies a Coste de Meta + margen.",
+          "switchLink": "Ir al selector del modo de precio"
+        },
+        "scope": {
+          "label": "Márgenes para",
+          "hint": "El valor predeterminado de la plataforma se aplica a todos los planes. El margen propio de un plan prevalece sobre él.",
+          "platform": "Valor predeterminado de la plataforma (se aplica a todos los planes)"
+        },
+        "grid": {
+          "country": "País",
+          "searchCountry": "Buscar países",
+          "category": "Categoría",
+          "margin": "Margen %",
+          "metaCost": "Coste de Meta",
+          "price": "Precio para el cliente",
+          "note": "Motivo",
+          "setBy": "Definido por",
+          "actions": "Acciones",
+          "anyCountry": "Cualquier país",
+          "anyCategory": "Cualquier categoría",
+          "unknownCost": "Aquí no se conoce el coste de Meta, así que se aplica el precio fijo escrito.",
+          "priceInvalid": "Introduce un margen de -100 a 1000 con como máximo 2 decimales.",
+          "removedPending": "Se eliminará al guardar.",
+          "addRow": "Añadir fila",
+          "remove": "Quitar",
+          "undo": "Deshacer",
+          "cancel": "Cancelar",
+          "empty": "Aún no hay márgenes. Añade una fila para definir uno.",
+          "removeTitle": "¿Quitar este margen?",
+          "removeBody": "Se elimina el margen de {country}. Los precios usarán el siguiente margen coincidente.",
+          "removed": "Margen eliminado.",
+          "save": "Guardar márgenes",
+          "saving": "Guardando",
+          "saved": "{count, plural, one {# margen guardado.} other {# márgenes guardados.}}",
+          "savedSome": "{saved} guardados, {skipped} omitidos. Consulta el motivo en cada fila omitida.",
+          "unsaved": "{count, plural, one {# fila sin guardar} other {# filas sin guardar}}",
+          "tooMany": "Demasiadas filas cambiadas para un solo guardado. Guarda en lotes más pequeños.",
+          "problems": {
+            "margin": "Introduce un porcentaje de -100 a 1000 con como máximo 2 decimales. -100 significa gratis.",
+            "duplicate": "Esta combinación de país y categoría ya tiene una fila."
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "Qué margen gana",
+            "body": "La personalización de un espacio de trabajo prevalece sobre el margen de su plan, que a su vez prevalece sobre el valor predeterminado de la plataforma. Cada nivel se lee completo antes del siguiente."
+          },
+          "specific": {
+            "title": "Primero lo más específico",
+            "body": "Dentro de un nivel se usa primero país y categoría, luego el país con cualquier categoría, luego la categoría en cualquier país y por último la fila predeterminada."
+          },
+          "unknown": {
+            "title": "Cuando el coste de Meta es desconocido",
+            "body": "El precio es el coste de Meta más el margen, redondeado al 0,01 más cercano y con un mínimo de 0,01, salvo que el margen sea -100 % (gratis). Cuando el coste de Meta es desconocido, se aplica el precio fijo escrito."
+          }
+        }
+      },
+      "packages": {
+        "title": "Paquetes de créditos",
+        "crumb": "Paquetes de créditos",
+        "subtitle": "Ofertas opcionales: paga esta cantidad y recibe este crédito en el monedero. Un crédito superior al precio es un bono por recarga.",
+        "new": "Nuevo paquete",
+        "edit": "Editar",
+        "enable": "Activar",
+        "disable": "Desactivar",
+        "delete": "Eliminar",
+        "cancel": "Cancelar",
+        "enabled": "{name} está activado.",
+        "disabled": "{name} está desactivado.",
+        "deleted": "Paquete eliminado.",
+        "deleteTitle": "¿Eliminar el paquete?",
+        "deleteBody": "¿Eliminar este paquete? Las compras existentes conservan sus filas de registro.",
+        "bonus": "Bonificación del +{percent} %",
+        "status": {
+          "active": "Activo",
+          "inactive": "Inactivo",
+          "featured": "Destacado"
+        },
+        "empty": {
+          "title": "Todavía no hay paquetes de créditos",
+          "body": "No se ha creado ningún paquete.",
+          "bodyWrite": "Crea el primer paquete para ofrecer una recarga de monedero con bonificación."
+        },
+        "columns": {
+          "label": "Paquetes de créditos",
+          "name": "Nombre",
+          "slug": "Slug",
+          "price": "Precio",
+          "credit": "Crédito del monedero",
+          "badge": "Distintivo",
+          "status": "Estado",
+          "actions": "Acciones"
+        },
+        "form": {
+          "newTitle": "Nuevo paquete de créditos",
+          "editTitle": "Editar paquete de créditos",
+          "newCrumb": "Nuevo paquete",
+          "editCrumb": "Editar paquete",
+          "notFound": "Este paquete ya no existe.",
+          "back": "Volver a paquetes de créditos",
+          "sections": {
+            "identity": "Identidad",
+            "pricing": "Precio",
+            "display": "Visualización"
+          },
+          "name": "Nombre",
+          "slug": "Slug (opcional)",
+          "slugHint": "Letras, números, guiones y guiones bajos. Déjalo en blanco para generarlo a partir del nombre.",
+          "description": "Descripción",
+          "price": "Precio",
+          "priceHint": "Lo que paga el cliente.",
+          "currency": "Divisa",
+          "walletCredit": "Crédito del monedero",
+          "walletCreditHint": "Lo que entra en el monedero.",
+          "bonusLine": "Una bonificación del {percent} %: el cliente paga {price} y recibe {credit}.",
+          "badge": "Distintivo",
+          "badgeHint": "Una etiqueta corta, como Mejor valor.",
+          "sortOrder": "Orden",
+          "sortOrderHint": "De menor a mayor.",
+          "active": "Activo",
+          "featured": "Destacado",
+          "create": "Crear paquete",
+          "save": "Guardar cambios",
+          "saving": "Guardando",
+          "created": "{name} creado.",
+          "saved": "{name} guardado.",
+          "stale": {
+            "title": "Otra persona cambió este paquete",
+            "body": "Tus cambios no se guardaron, así que no se sobrescribió nada. Recarga la versión más reciente y vuelve a hacer el cambio.",
+            "reload": "Recargar la versión más reciente"
+          },
+          "problems": {
+            "name": "Introduce un nombre de hasta 96 caracteres.",
+            "slug": "Usa solo letras, números, guiones y guiones bajos.",
+            "description": "Mantén la descripción en 500 caracteres o menos.",
+            "price": "Introduce un importe con como máximo 2 decimales.",
+            "currency": "Elige una de las divisas de la lista.",
+            "walletCredit": "Introduce un importe mayor que 0 con como máximo 2 decimales.",
+            "badge": "Mantén el distintivo en 32 caracteres o menos.",
+            "sortOrder": "Introduce un número entero de 0 a 9999."
+          }
+        }
+      }
+    },
+    "tile": {
+      "label": "Gastos, monedero y extracto",
+      "description": "Controla lo que gastas: tu saldo de mensajes, las recargas, cada cargo y el extracto completo.",
+      "keywords": "monedero saldo recarga añadir dinero créditos extracto facturación gastos gastar gasto cargos costes uso transacciones historial libro mayor"
+    },
+    "common": {
+      "loading": "Cargando",
+      "retry": "Reintentar",
+      "requestId": "ID de la solicitud",
+      "cancel": "Cancelar",
+      "back": "Volver",
+      "close": "Cerrar",
+      "dismiss": "Descartar",
+      "on": "Activado",
+      "off": "Desactivado",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "pagination": "Paginación",
+      "pageN": "Página {page}",
+      "deniedTitle": "No tienes acceso a esto",
+      "deniedBody": "Pide a un administrador del espacio de trabajo el permiso \"{permission}\"."
+    },
+    "errors": {
+      "noteRequired": "Se requiere un motivo de al menos 5 caracteres.",
+      "amountInvalid": "Ese importe no se acepta. Usa un importe positivo con como máximo 2 decimales.",
+      "insufficient": "El saldo es demasiado bajo para esto.",
+      "notFound": "Este espacio de trabajo no tiene monedero.",
+      "rateInvalid": "No se pudo guardar una tarifa. Revisa el país, la categoría y los importes.",
+      "importFailed": "No se pudo leer la tabla de tarifas o no tiene ninguna fila utilizable.",
+      "syncFailed": "No se pudo leer la lista de precios de Meta y no hay ninguna tabla incluida disponible.",
+      "conflict": "Otra persona ha cambiado esto. Recarga la página e inténtalo de nuevo.",
+      "forbidden": "Solo los superadministradores pueden hacer esto.",
+      "validation": "Revisa los campos marcados.",
+      "network": "No se pudo contactar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "generic": "Algo salió mal. Inténtalo de nuevo.",
+      "currencyUnsupported": "Esa moneda aún no se puede usar: importa primero la tarifa de Meta para ella (Precios de mensajes, Tarifas de Meta)."
+    },
+    "types": {
+      "topup": "Recarga",
+      "earn": "Ingreso",
+      "refund": "Reembolso",
+      "spend": "Cargo por mensaje",
+      "admin_adjust": "Ajuste"
+    },
+    "categories": {
+      "marketing": "Marketing",
+      "utility": "Utilidad",
+      "authentication": "Autenticación",
+      "service": "Servicio"
+    },
+    "modes": {
+      "wallet": "Pago por mensaje",
+      "plan": "Plan"
+    },
+    "chip": {
+      "balance": "Saldo",
+      "low": "Tu saldo es bajo"
+    },
+    "wallet": {
+      "title": "Monedero",
+      "subtitle": "Tu saldo de mensajes, lo que gastaste y ganaste en los últimos 30 días, y cómo añadir dinero.",
+      "fullStatement": "Extracto completo",
+      "lowBalanceTitle": "Tu saldo se está agotando",
+      "lowBalanceBody": "Está en {threshold} o por debajo. Añade dinero para que tus campañas y respuestas sigan enviándose.",
+      "kpi": {
+        "balance": "Saldo",
+        "available": "Disponible ahora",
+        "approx": "unos {count, plural, one {# mensaje} other {# mensajes}}",
+        "spent": "Gastado",
+        "earned": "Ganado",
+        "last30": "Últimos 30 días"
+      },
+      "add": {
+        "title": "Añadir dinero",
+        "amount": "Importe",
+        "hint": "Solo importes enteros, de al menos 1.",
+        "invalid": "Introduce un importe entero de 1 o más.",
+        "submit": "Añadir dinero",
+        "quick": "Importes rápidos"
+      },
+      "how": {
+        "title": "Cómo funciona la facturación",
+        "wallet": {
+          "body": "Cada mensaje entregado se cobra a tu monedero según el precio de su país y categoría. Los mensajes fallidos no se cobran.",
+          "funded": "Cuando el saldo se agota, los envíos masivos se pausan hasta que añadas dinero."
+        },
+        "plan": {
+          "allowance": "Tu plan incluye {limit} mensajes al mes.",
+          "used": "{used} usados este mes.",
+          "ends": "Tu plan termina el {date}.",
+          "extra": "Los mensajes que superen el límite mensual se cargan a tu monedero.",
+          "ended": "Tu plan ha terminado, así que el envío está en pausa hasta que se renueve."
+        },
+        "generic": "Tu plan cubre tus mensajes. Tu monedero paga todo lo que el plan no incluye."
+      },
+      "activity": {
+        "title": "Actividad reciente",
+        "fullStatement": "Abrir el extracto completo",
+        "emptyTitle": "Aún no hay actividad",
+        "emptyBody": "Aquí aparecen las recargas, los cargos por mensaje y los reembolsos."
+      }
+    },
+    "activity": {
+      "description": "Descripción",
+      "type": "Tipo",
+      "date": "Fecha",
+      "amount": "Importe",
+      "balance": "Saldo",
+      "noDescription": "Movimiento del monedero",
+      "reason": "Motivo"
+    },
+    "pricingPanel": {
+      "title": "Precios de mensajes",
+      "badge": "Por mensaje",
+      "free": "Gratis",
+      "noCharge": "Sin cargo",
+      "perMessage": "por mensaje",
+      "footer": "Se cobra cuando se entrega un mensaje. El precio depende del país del destinatario y de la categoría del mensaje."
+    }
+  }
+}

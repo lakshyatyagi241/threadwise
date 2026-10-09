@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "Jumlah, kuantitas, atau tarif pada faktur tidak dapat digunakan. Periksa kolom yang disorot.",
+        "INV_TAX_RATE_INVALID": "Salah satu tarif pajak tidak dapat digunakan hari ini: nonaktif atau di luar tanggal berlakunya. Pilih tarif lain.",
+        "INV_NOT_DRAFT": "Faktur ini sudah diterbitkan, sehingga tidak bisa diedit lagi. Duplikasi untuk membuat faktur revisi.",
+        "INV_ORDER_LINKED": "Faktur ini berasal dari pesanan penjualan, sehingga pesanan tersebut yang harus diubah.",
+        "SALESDOC_INVALID_TRANSITION": "Penawaran atau estimasi belum diterima, sehingga tidak bisa menjadi faktur.",
+        "SALESDOC_ALREADY_CONVERTED": "Dokumen ini sudah dijadikan faktur.",
+        "SALESDOC_INVOICING_UNAVAILABLE": "Penagihan belum tersedia di server ini.",
+        "INV_LINK_UNAVAILABLE": "Tautan faktur ini sudah tidak tersedia."
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "Membuat draf dari dokumen yang diterima...",
+      "duplicating": "Menyalin faktur ke draf baru...",
+      "openExisting": "Buka faktur yang sudah dibuat",
+      "backToInvoices": "Kembali ke faktur",
+      "backToInvoice": "Kembali ke faktur",
+      "issued": "Faktur diterbitkan.",
+      "savedNotIssued": "Draf disimpan, tetapi tidak dapat diterbitkan: {reason}",
+      "buyerCountry": "Negara",
+      "buyerCountryHint": "Dua huruf, misalnya ID atau GB. Menentukan format nomor pajak dan, dalam mode otomatis, pajaknya.",
+      "buyerTaxId": "Nomor pajak",
+      "buyerTaxIdNamed": "Nomor pajak ({label})",
+      "taxIdHint": "GSTIN, nomor PPN, EIN... Diperiksa saat Anda mengetik.",
+      "taxIdExpected": "Yang diharapkan: {label}, misalnya {example}.",
+      "taxIdUnchecked": "Format untuk negara ini belum diketahui, sehingga nomor disimpan sesuai ketikan.",
+      "taxIdValid": "{label} tampak benar ({level, select, checksum {format dan digit pemeriksa diperiksa} other {hanya format yang diperiksa}}). Ini tidak membuktikan bahwa nomor tersebut terdaftar.",
+      "taxIdInvalid": "{label} ini tampaknya salah ({level, select, checksum {format dan digit pemeriksa diperiksa} other {hanya format yang diperiksa}}).",
+      "taxIdStillSave": "Anda tetap bisa menyimpannya.",
+      "docType": "Dokumen",
+      "docTypes": {
+        "tax_invoice": "Faktur pajak",
+        "proforma": "Faktur proforma"
+      },
+      "noDueDate": "Ketentuan pembayaran default",
+      "reference": "Referensi",
+      "referenceHint": "Nomor pesanan pembelian pembeli atau referensi lain yang akan dicetak.",
+      "tax": "Pajak",
+      "taxMode": "Cara menghitung pajak",
+      "taxModes": {
+        "rates": "Tarif pajak",
+        "auto": "Otomatis"
+      },
+      "taxModeHint": {
+        "rates": "Pilih tarif pajak untuk setiap baris. Baris yang dibiarkan default memakai tarif default ruang kerja Anda.",
+        "auto": "Mesin pajak menentukan pajak setiap baris dari negara Anda, negara dan nomor pajak pembeli, jenis pasokan, serta tempat pasokan. Jawaban server yang disimpan."
+      },
+      "sellerCountry": "Negara Anda (dari profil penagihan)",
+      "sellerCountryMissing": "Pajak otomatis memerlukan negara Anda di profil penagihan (negara dengan preset pajak). Atur di sana terlebih dahulu.",
+      "supplyType": "Pasokan",
+      "supplyTypes": {
+        "goods": "Barang",
+        "services": "Jasa",
+        "digital": "Jasa digital"
+      },
+      "placeOfSupply": "Tempat pasokan",
+      "placeOfSupplyHint": "Provinsi atau negara bagian di {country}; biarkan pada pilihan pertama untuk seluruh negara.",
+      "placeSameCountry": "Seluruh negara",
+      "placeRegionPlaceholder": "Kode wilayah, opsional",
+      "reverseCharge": "Reverse charge",
+      "reverseChargeHint": "Pembeli yang menanggung pajak, sehingga tidak ada pajak yang dikenakan pada faktur ini.",
+      "shipping": "Ongkos kirim ({currency})",
+      "shippingHint": "Tidak pernah didiskon atau dikenai pajak.",
+      "legalNotes": "Catatan hukum",
+      "legalNotesHint": "Teks yang wajib ada di dokumen, misalnya pernyataan reverse charge. Mode otomatis mengisinya jika diwajibkan hukum.",
+      "problems": {
+        "contactRequired": "Pilih kontak atau ketik nama pembeli.",
+        "currencyInvalid": "Masukkan kode mata uang tiga huruf.",
+        "issueDateInvalid": "Masukkan tanggal terbit yang valid.",
+        "dueBeforeIssue": "Tanggal jatuh tempo tidak boleh sebelum tanggal terbit.",
+        "dueInvalid": "Masukkan tanggal jatuh tempo yang valid.",
+        "noLines": "Tambahkan minimal satu baris sebelum menerbitkan.",
+        "discountInvalid": "Masukkan diskon yang valid (persentase dari 0 sampai 100, atau nominal).",
+        "shippingInvalid": "Masukkan nominal ongkos kirim yang valid.",
+        "emailInvalid": "Masukkan alamat email yang valid.",
+        "amountZero": "Total faktur harus lebih dari nol.",
+        "amountInvalid": "Nominal terlalu besar atau memiliki terlalu banyak desimal untuk mata uang ini.",
+        "countryInvalid": "Gunakan kode negara dua huruf.",
+        "regionInvalid": "Gunakan kode wilayah singkat, hingga tiga huruf atau angka.",
+        "autoNeedsSellerCountry": "Atur negara Anda di profil penagihan untuk menggunakan pajak otomatis.",
+        "descriptionRequired": "Jelaskan baris ini.",
+        "qtyInvalid": "Masukkan kuantitas di atas nol, dengan maksimal 4 desimal.",
+        "priceInvalid": "Masukkan harga yang valid dengan desimal yang diizinkan mata uang ini.",
+        "lineDiscountInvalid": "Masukkan diskon baris yang valid.",
+        "hsnRequired": "Masukkan kode HSN/SAC. Negara Anda mewajibkannya pada setiap baris.",
+        "hsnInvalid": "Kode HSN/SAC terdiri dari 2 sampai 12 huruf atau angka.",
+        "taxRateRemoved": "Tarif pajak baris ini telah dihapus. Pilih tarif yang berlaku."
+      }
+    },
+    "lines": {
+      "discount": "Diskon",
+      "discountKind": "Jenis diskon",
+      "taxAuto": "Otomatis",
+      "taxDefault": "Default ({rate})",
+      "taxDefaultNone": "Default (tanpa pajak)",
+      "removedRateOption": "{rate}, dihapus",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "Kode"
+    },
+    "totals": {
+      "shipping": "Ongkos kirim",
+      "taxIncluded": "{name}, termasuk",
+      "taxOn": "atas {base}",
+      "reverseCharge": "Reverse charge: tidak ada pajak yang dikenakan.",
+      "includesTotal": "Pajak termasuk dalam harga"
+    },
+    "taxWhy": {
+      "title": "Mengapa pajak ini?",
+      "preview": "Pratinjau",
+      "previewNote": "Dihitung di browser Anda saat Anda mengedit. Yang berlaku adalah keputusan server saat Anda menyimpan.",
+      "taxFree": "Tidak ada pajak yang dikenakan atas pasokan ini",
+      "warnings": "Periksa ulang",
+      "placeOfSupply": "Tempat pasokan",
+      "reverseCharge": "Reverse charge",
+      "reverseChargeNote": "Pembeli yang menanggung pajak, sehingga tidak ada yang dikenakan.",
+      "documentNotes": "Dicetak pada dokumen",
+      "disclaimer": "Tarif dan aturan adalah default yang perlu diverifikasi dengan akuntan atau otoritas pajak Anda. Ini bukan nasihat hukum atau pajak."
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "Faktur pajak",
+        "proforma": "Faktur proforma",
+        "receipt": "Kwitansi"
+      },
+      "sellerTaxId": "Nomor pajak",
+      "registrationNo": "No. reg.",
+      "buyerTaxId": "Nomor pajak",
+      "reference": "Referensi",
+      "placeOfSupply": "Tempat pasokan",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "Diskon {amount}",
+      "shipping": "Ongkos kirim",
+      "credited": "Dikreditkan",
+      "taxSummary": "Ringkasan pajak",
+      "taxName": "Pajak",
+      "taxBase": "Jumlah kena pajak",
+      "taxAmount": "Pajak",
+      "taxInclusive": "termasuk",
+      "reverseCharge": "Reverse charge: pembeli yang menanggung pajak.",
+      "paymentsReceived": "Pembayaran diterima",
+      "refund": "pengembalian dana",
+      "bankDetails": "Detail bank",
+      "voidReason": "Dibatalkan: {reason}"
+    },
+    "public": {
+      "notFoundTitle": "Tautan tidak ditemukan",
+      "notFoundMessage": "Tautan faktur ini tidak ada. Periksa apakah Anda sudah menyalin seluruhnya, atau minta tautan baru kepada pengirim.",
+      "unavailableTitle": "Tautan ini tidak tersedia",
+      "unavailableMessage": "Tautan faktur telah dicabut atau kedaluwarsa. Minta tautan baru kepada pengirim.",
+      "voidReason": "Alasan: {reason}",
+      "printable": "Buka halaman cetak",
+      "amountDueFooter": "Jumlah yang harus dibayar: {amount}",
+      "noPayOptions": "Penjual belum menyiapkan cara pembayaran online. Silakan hubungi mereka untuk mengatur pembayaran.",
+      "payAmount": "Jumlah yang akan dibayar ({currency})",
+      "payAmountHint": "Seluruh saldo sudah terisi. Masukkan nominal lebih kecil untuk membayar sebagian.",
+      "amountErrors": {
+        "invalid": "Masukkan nominal di atas nol.",
+        "tooMuch": "Nominal tidak boleh melebihi jumlah yang harus dibayar."
+      },
+      "linkUnavailable": "Tautan faktur ini sudah tidak tersedia, sehingga tidak bisa dibayar dari sini.",
+      "payFailed": "Pembayaran tidak dapat dimulai. Coba lagi sebentar lagi.",
+      "payUnavailable": "Pembayaran online untuk faktur ini belum tersedia saat ini.",
+      "redirecting": "Mengalihkan ke halaman pembayaran...",
+      "payInstructions": "Bayar sesuai petunjuk di bawah.",
+      "bankTransfer": "Transfer bank",
+      "copyInstructions": "Salin petunjuk",
+      "copyValue": "Salin {label}"
+    }
+  }
+}

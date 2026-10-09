@@ -26,6 +26,7 @@ const limit = (v: string, n: number) => (v.length <= n ? v : `${v.slice(0, n).tr
 export function AdminTemplatesScreen() {
   const t = useTranslations('flb.admin.list');
   const tc = useTranslations('flb.common');
+  const ts = useTranslations('flb.builder.shell.admin');
   const qc = useQueryClient();
   const canWrite = useOperator().operator.role === 'super_admin';
   const [cursors, setCursors] = useState<string[]>([]);
@@ -87,7 +88,7 @@ export function AdminTemplatesScreen() {
   const rows = q.data?.data ?? [];
   return (
     <div className="flb-root space-y-5" data-testid="admin-flow-templates">
-      <nav className="font-mono text-[12px] text-muted-foreground" aria-label="Breadcrumb">
+      <nav className="font-mono text-[12px] text-muted-foreground" aria-label={ts('breadcrumb')}>
         <span className="tracking-[0.16em] uppercase">{t('crumbAdmin')}</span> ›{' '}
         <span className="text-foreground">{t('crumbTemplates')}</span>
       </nav>
@@ -325,14 +326,14 @@ export function AdminTemplatesScreen() {
       )}
 
       {rows.length > 0 && (cursors.length > 0 || q.data?.page.hasMore) ? (
-        <nav className="flex items-center justify-end gap-2 text-sm" aria-label="Pagination">
+        <nav className="flex items-center justify-end gap-2 text-sm" aria-label={ts('pagination')}>
           <button
             type="button"
             disabled={cursors.length === 0}
             onClick={() => setCursors((c) => c.slice(0, -1))}
             className="rounded-full border border-border px-3 py-1.5 hover:bg-muted disabled:opacity-40"
           >
-            Prev
+            {ts('prev')}
           </button>
           <span className="text-muted-foreground">{cursors.length + 1}</span>
           <button
@@ -343,7 +344,7 @@ export function AdminTemplatesScreen() {
             }
             className="rounded-full border border-border px-3 py-1.5 hover:bg-muted disabled:opacity-40"
           >
-            Next
+            {ts('next')}
           </button>
         </nav>
       ) : null}

@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "Tema",
+        "custom": "Personalizzato: hai modificato un colore, un angolo o un carattere del tema di partenza.",
+        "classic": "Classico",
+        "ocean": "Oceano",
+        "forest": "Foresta",
+        "sunset": "Tramonto",
+        "berry": "Frutti di bosco",
+        "slate": "Ardesia",
+        "noir": "Noir",
+        "paper": "Carta"
+      },
+      "colours": {
+        "title": "Colori",
+        "hint": "Usa colori esadecimali a sei cifre come #2563eb. Un valore incompleto non viene applicato.",
+        "swatch": "{name} (selettore colore)",
+        "primary": "Primario (pulsanti e accenti)",
+        "background": "Sfondo della pagina",
+        "surface": "Sfondo del modulo",
+        "text": "Testo",
+        "mutedText": "Testo secondario",
+        "border": "Bordi",
+        "error": "Errore"
+      },
+      "contrast": {
+        "title": "Alcuni colori sono difficili da leggere. Punta a un contrasto di almeno 4.5:1.",
+        "item": "{pair}: {ratio}:1",
+        "ok": "Tutte le coppie di colori verificate sono facili da leggere.",
+        "text": "Testo sullo sfondo del modulo",
+        "muted": "Testo secondario sullo sfondo del modulo",
+        "button": "Testo del pulsante sul pulsante"
+      },
+      "shape": {
+        "title": "Forma e spaziatura",
+        "radius": "Angoli",
+        "none": "Nessuno",
+        "sm": "Piccoli",
+        "md": "Medi",
+        "lg": "Grandi",
+        "pill": "Arrotondati",
+        "density": "Spaziatura",
+        "compact": "Compatta",
+        "comfortable": "Confortevole",
+        "spacious": "Ampia",
+        "shadow": "Ombra",
+        "shadowNone": "Nessuna"
+      },
+      "type": {
+        "title": "Tipografia",
+        "font": "Carattere",
+        "fontHint": "I caratteri web vengono caricati solo quando ne scegli uno.",
+        "sample": "Ogni giorno la volpe veloce salta sopra il cane pigro",
+        "scale": "Dimensione testo"
+      },
+      "fonts": {
+        "system": "Predefinito di sistema",
+        "serif": "Serif",
+        "mono": "Monospazio"
+      },
+      "layout": {
+        "title": "Layout e pulsanti",
+        "preset": "Layout",
+        "classic": "Scheda classica",
+        "fullWidth": "Larghezza intera",
+        "split": "Diviso con immagine di copertina",
+        "minimal": "Minimale",
+        "labelPosition": "Posizione etichetta",
+        "labelTop": "Sopra il campo",
+        "labelLeft": "Accanto al campo",
+        "buttonStyle": "Stile pulsante",
+        "filled": "Pieno",
+        "outline": "Contorno",
+        "buttonWidth": "Larghezza pulsante",
+        "widthAuto": "Adatta all’etichetta",
+        "widthFull": "Larghezza intera",
+        "maxWidth": "Larghezza massima",
+        "maxWidthHint": "Tra 320 e 960 pixel.",
+        "maxWidthInvalid": "Inserisci un numero intero da 320 a 960.",
+        "maxWidthSlider": "Cursore larghezza massima",
+        "mode": "Modalità colore",
+        "light": "Chiaro",
+        "dark": "Scuro",
+        "auto": "Segui il dispositivo del visitatore"
+      },
+      "images": {
+        "title": "Immagini",
+        "logo": "Logo",
+        "logoHint": "Un indirizzo https. Lascia vuoto per nessun logo.",
+        "cover": "Immagine di copertina",
+        "coverHint": "Mostrata accanto al modulo nel layout diviso.",
+        "background": "Immagine di sfondo",
+        "backgroundHint": "Un indirizzo https. Lascia vuoto per uno sfondo semplice.",
+        "invalid": "Inserisci un indirizzo https, oppure lascia vuoto."
+      },
+      "reset": "Ripristina i valori predefiniti",
+      "readOnly": "Puoi vedere il design ma non modificarlo.",
+      "preview": {
+        "title": "Anteprima",
+        "device": "Dimensione anteprima",
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "scheme": "Modalità colore anteprima",
+        "light": "Chiaro",
+        "dark": "Scuro",
+        "schemeHint": "La modalità colore è impostata su Chiaro, quindi non c’è una versione scura da mostrare in anteprima.",
+        "frameTitle": "Anteprima live del modulo"
+      }
+    }
+  }
+}

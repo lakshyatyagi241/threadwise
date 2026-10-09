@@ -1,0 +1,350 @@
+{
+  "chatbotWidget": {
+    "nav": {
+      "title": "Chatwidget"
+    },
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "paywall": {
+      "kicker": "Abonnement",
+      "title": "Chatbotwidgets zitten niet in je abonnement",
+      "body": "Je abonnement bevat geen chatbotwidgets. Upgrade om deze functie te ontgrendelen.",
+      "upgrade": "Abonnementen bekijken"
+    },
+    "list": {
+      "tip": "Tip",
+      "tipBody": "Plaats een snippet van één regel op elke site om een zwevende chatbubbel te starten. Elke widget kan worden aangestuurd door een slimme agent, doorverwijzen naar WhatsApp, of beide — gesprekken van bezoekers komen in de inbox van je team.",
+      "statusViews": "Widgetstatus",
+      "view": {
+        "all": "Alle widgets",
+        "active": "Actief",
+        "paused": "Gepauzeerd"
+      },
+      "status": {
+        "all": "Alle",
+        "active": "Actief",
+        "paused": "Gepauzeerd"
+      },
+      "trainFirst": "Eerst trainen",
+      "trainBody": "Bouw een slimme agent en voeg kennis toe in <link>AI-training</link>, en koppel die hier zodat je widget in jouw stijl antwoordt.",
+      "workspace": "Workspace",
+      "title": "Chatbot",
+      "titleAccent": "widgets",
+      "intro": "Plaats een zwevende chatbubbel op elke pagina. De slimme agent antwoordt in de browser en draagt indien nodig over aan de Unified Inbox.",
+      "activePill": "{count} actief",
+      "newWidget": "Nieuwe widget",
+      "card": {
+        "total": "Totaal aantal widgets",
+        "visitors": "Bezoekers",
+        "avg": "Gem. / widget",
+        "health": "Status",
+        "activeHint": "{count} actief",
+        "allTime": "totaal",
+        "visitorsUnit": "bezoekers"
+      },
+      "health": {
+        "healthy": "gezond",
+        "empty": "leeg",
+        "attention": "aandacht nodig"
+      },
+      "search": "Zoek op naam of slug…",
+      "col": {
+        "widget": "Widget",
+        "engine": "Engine",
+        "agent": "Slimme agent",
+        "visitors": "Bezoekers",
+        "updated": "Bijgewerkt",
+        "actions": "Acties"
+      },
+      "loading": "Widgets laden",
+      "loadError": "De widgets konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "emptyTitle": "Nog geen widgets",
+      "emptyBody": "Bouw je eerste chatwidget — die verschijnt als zwevende bubbel op de pagina waar je hem insluit.",
+      "createWidget": "Widget maken",
+      "noMatch": "Geen enkele widget op deze pagina komt overeen met je zoekopdracht.",
+      "showing": "Toont",
+      "of": "van",
+      "widgetsCount": "{count} widgets",
+      "loadMore": "Meer laden",
+      "pill": {
+        "active": "Actief",
+        "paused": "Gepauzeerd"
+      },
+      "action": {
+        "preview": "Losse voorvertoning openen",
+        "copy": "Embed-snippet kopiëren",
+        "edit": "Widget bewerken",
+        "rotate": "Embed-token vernieuwen",
+        "duplicate": "Widget dupliceren",
+        "delete": "Widget verwijderen"
+      },
+      "copied": "Snippet gekopieerd — plak hem vóór {tag} op je site.",
+      "duplicateFailed": "De widget kon niet worden gedupliceerd.",
+      "rotated": "Token vernieuwd — kopieer de nieuwe snippet.",
+      "rotateFailed": "Vernieuwen mislukt — {reason}",
+      "networkError": "netwerkfout",
+      "deleted": "Widget verwijderd.",
+      "deleteFailed": "Verwijderen mislukt — {reason}",
+      "rotateTitle": "Het embed-token van deze widget vernieuwen?",
+      "rotateBody": "De huidige snippet op je site werkt meteen niet meer. Je moet de nieuwe snippet kopiëren en plakken.",
+      "rotate": "Vernieuwen",
+      "cancel": "Annuleren",
+      "deleteTitle": "\"{name}\" verwijderen?",
+      "deleteBody": "De embed-snippet op je site werkt meteen niet meer. Eerdere gesprekken blijven in de inbox van je team.",
+      "delete": "Widget verwijderen",
+      "keep": "Behouden",
+      "copyManuallyTitle": "Kopieer dit handmatig",
+      "gotIt": "Begrepen",
+      "close": "Sluiten"
+    },
+    "builder": {
+      "loading": "Widget laden",
+      "notFoundTitle": "Widget niet gevonden",
+      "notFoundBody": "Deze widget bestaat niet in je workspace.",
+      "loadError": "De widget kon niet worden geladen.",
+      "backToWidgets": "Terug naar widgets",
+      "back": "Terug naar widgets",
+      "crumb": "Chatbotwidgets",
+      "crumbEdit": "Bewerken",
+      "crumbNew": "Nieuw",
+      "titleNew": "Een chatbot bouwen",
+      "titleEdit": "Chatbot bewerken",
+      "titleAccent": "widget",
+      "stateSaved": "Opgeslagen",
+      "stateDraft": "Concept / niet opgeslagen",
+      "saveDraft": "Concept opslaan",
+      "stepper": "Builderstappen",
+      "steps": {
+        "setup": "Instellen",
+        "look": "Uiterlijk",
+        "voice": "Stem",
+        "launch": "Lanceren"
+      },
+      "previous": "Vorige",
+      "next": "Volgende",
+      "stepOf": "Stap {n} van {total}",
+      "launchWidget": "Widget lanceren",
+      "draftSaved": "Concept opgeslagen.",
+      "savedEmbed": "Opgeslagen — embed klaar om te kopiëren.",
+      "saveFailed": "Opslaan mislukt — controleer de gemarkeerde stap.",
+      "snippetCopied": "Snippet gekopieerd.",
+      "clipboardBlocked": "Klembord geblokkeerd — selecteer de snippet handmatig.",
+      "problem": {
+        "name": "Geef je widget een naam.",
+        "assistant": "Koppel een slimme agent — of zet de engine op WhatsApp-deeplink.",
+        "whatsapp": "Voeg een volledig WhatsApp-nummer toe — landcode en cijfers.",
+        "launcherColour": "De launcherkleur moet een hexkleur zijn (bijv. #075E54).",
+        "headerTitle": "Geef het chatvenster een titel.",
+        "welcome": "Schrijf een openingszin.",
+        "bgImage": "Voeg een achtergrondafbeeldings-URL toe of kies een effen kleur."
+      },
+      "setup": {
+        "title": "Widget-instellingen",
+        "required": "verplicht",
+        "name": "Interne naam",
+        "namePlaceholder": "bijv. Widget voor prijspagina",
+        "nameHint": "Voor je team. Bezoekers zien dit label niet.",
+        "position": "Plaatsing van de launcher",
+        "bottomRight": "Rechtsonder",
+        "bottomLeft": "Linksonder",
+        "positionHint": "Waar de ronde chatbubbel op je site zweeft.",
+        "engine": "Gesprekengine",
+        "mode": {
+          "ai": {
+            "title": "Slimme agent",
+            "body": "Getrainde AI antwoordt direct in de browser."
+          },
+          "whatsapp": {
+            "title": "WhatsApp-deeplink",
+            "body": "Stuur de bezoeker naar de WhatsApp-app om te chatten."
+          },
+          "both": {
+            "title": "Slim + WhatsApp",
+            "body": "De bezoeker kiest — hier chatten of WhatsApp openen."
+          }
+        },
+        "agent": "Slimme agent (het brein)",
+        "agentPlaceholder": "— Kies een opgeslagen slimme agent —",
+        "agentHintBefore": "Zie je er geen?",
+        "agentBuild": "Bouw een slimme agent",
+        "agentHintAfter": "eerst.",
+        "whatsapp": "WhatsApp-nummer",
+        "country": "Land",
+        "phonePlaceholder": "Je nummer zonder landcode",
+        "whatsappHint": "Kies de landvlag — de kengetal wordt automatisch toegevoegd.",
+        "prefilled": "Vooraf getypt bericht (komt in WhatsApp terecht)",
+        "prefilledPlaceholder": "Hallo, ik wil graag meer weten over de prijzen.",
+        "prefilledHint": "De bezoeker komt in WhatsApp terecht met dit bericht al ingetypt."
+      },
+      "look": {
+        "title": "Stijl van launcher en venster",
+        "tag": "merk",
+        "launcherFill": "Launcherkleur",
+        "launcherFillHint": "Achtergrond van de ronde bubbel.",
+        "headerTint": "Kleur van de vensterkop",
+        "headerTintHint": "Bovenste balk van het chatvenster.",
+        "headerInk": "Kopkleur van tekst",
+        "headerInkHint": "Tekst-/pictogramkleur voor de kop.",
+        "windowTitle": "Venstertitel (getoond in de kop)",
+        "windowTitlePlaceholder": "Chat met ons team",
+        "windowTitleHint": "Houd het onder ~30 tekens.",
+        "icon": "URL van eigen launcherpictogram",
+        "optional": "optioneel",
+        "iconHint": "PNG / SVG · 80×80 px aanbevolen · transparante achtergrond."
+      },
+      "voice": {
+        "title": "Openingsbericht en chatoppervlak",
+        "tag": "inhoud",
+        "opening": "Openingszin",
+        "openingPlaceholder": "Hallo! Waarmee kunnen we je vandaag helpen?",
+        "openingHint": "Eerste bubbel die verschijnt als de chat opent.",
+        "bubbleFill": "Vulkleur van inkomende bubbel",
+        "bubbleFillHint": "Kleur van bubbels van jouw kant.",
+        "bubbleInk": "Tekstkleur van inkomende bubbel",
+        "bubbleInkHint": "Tekstkleur in de bubbels.",
+        "canvas": "Vensterachtergrond",
+        "canvasKind": {
+          "color": "Effen kleur",
+          "image": "Tegelafbeelding"
+        },
+        "canvasColour": "Kleur van de vensterachtergrond",
+        "canvasImage": "URL van de vensterachtergrondafbeelding",
+        "canvasImageHint": "Een naadloos herhaalbare PNG werkt het best.",
+        "autoOpen": "Automatisch openen",
+        "autoOpenHint": "Opent de chat ongeveer 1,2 s nadat de pagina is geladen.",
+        "intake": "Gegevens van bezoeker",
+        "intakeHint": "Velden vóór de chat die worden getoond voordat het gesprek begint. Sla alles over voor anoniem chatten.",
+        "intakeField": {
+          "name": "Weergavenaam",
+          "email": "E-mailadres",
+          "phone": "Telefoonnummer"
+        }
+      },
+      "launch": {
+        "title": "Verzendknop en embed-snippet",
+        "tag": "lanceren",
+        "label": "Label van verzendknop",
+        "labelPlaceholder": "Bericht verzenden",
+        "labelHint": "Vermijd \"Verzenden\" alleen. Probeer \"Bericht verzenden\" of \"Vraag het team\".",
+        "fill": "Vulkleur van verzendknop",
+        "ink": "Tekstkleur van verzendknop",
+        "ready": "Klaar. Plak dit vlak vóór <code>{tag}</code> op de pagina waar je de widget wilt hebben.",
+        "copy": "Naar klembord kopiëren",
+        "preview": "Losse voorvertoning openen"
+      },
+      "preview": {
+        "title": "Live voorvertoning",
+        "chat": "Chat",
+        "hi": "Hallo!",
+        "send": "Verzenden",
+        "engine": {
+          "ai": "Slimme agent",
+          "whatsapp": "WhatsApp",
+          "both": "AI + WhatsApp"
+        },
+        "metaEngine": "Engine",
+        "metaPlacement": "Plaatsing",
+        "metaAutoOpen": "Automatisch openen",
+        "metaIntake": "Gegevens",
+        "left": "Links",
+        "right": "Rechts",
+        "on": "Aan",
+        "off": "Uit",
+        "none": "Geen"
+      },
+      "colorSwatch": "{label} (kleurstaal)"
+    },
+    "whatsappBuilder": {
+      "crumb": "WhatsApp-widget",
+      "title": "WhatsApp-widget",
+      "titleAccent": "Installeren en aanpassen",
+      "type": "Widgettype",
+      "nameHint": "Alleen jij ziet deze naam. Het is ook de bedrijfsnaam die in de messenger wordt getoond.",
+      "save": "Wijzigingen opslaan",
+      "saved": "Wijzigingen opgeslagen. Je widget is live.",
+      "card": {
+        "1": {
+          "title": "Stijl je WhatsApp-chatknop",
+          "subtitle": "Kies een mooi chatknopontwerp dat het best bij je website past",
+          "buttonType": "Knoptype",
+          "type": {
+            "pill": "Knop \"Chat met ons\"",
+            "icon": "Ronde knop met alleen pictogram"
+          },
+          "iconOnly": "Alleen pictogram",
+          "buttonColor": "Knopkleur",
+          "pickCustom": "Kies een eigen kleur",
+          "custom": "Eigen {hex}"
+        },
+        "2": {
+          "title": "Ontwerp je messenger",
+          "subtitle": "Kies een mooie afbeelding voor je messenger",
+          "image": "Messenger-afbeelding",
+          "names": {
+            "support": "Support",
+            "store": "Winkel",
+            "chat": "Chat",
+            "person": "Persoon"
+          },
+          "url": "Of gebruik je eigen afbeeldingsadres",
+          "urlHint": "Plak het adres van een vierkante afbeelding (https://...). Een bestand uploaden is nog niet beschikbaar."
+        },
+        "3": {
+          "title": "Stel je welkomstbericht in",
+          "subtitle": "Verwelkom je klanten",
+          "greeting": "Begroeting",
+          "greetingHint": "Zeg hallo tegen je klanten wanneer ze de messenger openen",
+          "intro": "Introductiebericht",
+          "introHint": "Stel je bedrijf voor en vertel klanten hoe je kunt helpen"
+        },
+        "4": {
+          "title": "Stel de positie van je chatknop in",
+          "subtitle": "Pas de positie van je knop aan op computers en mobiel",
+          "preview": "Voorvertoning chatknop",
+          "desktopPreview": "Voorvertoning desktop",
+          "mobilePreview": "Voorvertoning mobiel",
+          "desktopPosition": "Launcherpositie op desktop",
+          "mobilePosition": "Launcherpositie op mobiel",
+          "left": "Links",
+          "right": "Rechts",
+          "desktopSideSpacing": "Zijmarge op desktop",
+          "desktopBottomSpacing": "Ondermarge op desktop",
+          "mobileSideSpacing": "Zijmarge op mobiel",
+          "mobileBottomSpacing": "Ondermarge op mobiel",
+          "px": "px"
+        },
+        "5": {
+          "title": "Configureer je WhatsApp-nummer",
+          "subtitle": "Koppel het WhatsApp-nummer aan de messenger",
+          "number": "WhatsApp-nummer",
+          "numberHint": "De messenger stuurt je klanten naar dit WhatsApp-nummer",
+          "prefilled": "Vooraf ingevuld bericht",
+          "prefilledHint": "Dit wordt de eerste standaardberichttekst"
+        }
+      },
+      "install": {
+        "title": "Installeren op je website",
+        "body": "Plak deze tag vlak vóór de afsluitende body-tag van elke pagina die de widget moet tonen.",
+        "copy": "Code kopiëren"
+      },
+      "problem": {
+        "name": "Geef je widget een naam.",
+        "avatar": "Gebruik een ingebouwde afbeelding of een http(s)-afbeeldingsadres.",
+        "greeting": "Voeg een begroeting toe.",
+        "intro": "Voeg een introductiebericht toe.",
+        "spacing": "De marge moet een geheel aantal pixels van 0 tot 500 zijn.",
+        "whatsapp": "Voeg een volledig WhatsApp-nummer toe: landcode en cijfers."
+      },
+      "preview": {
+        "title": "Live voorvertoning",
+        "desktop": "Desktop",
+        "mobile": "Mobiel",
+        "frameTitle": "Live voorvertoning van je WhatsApp-widget",
+        "hint": "Klap het paneel in met de ronde knop, open het opnieuw vanaf de launcher en probeer Gesprek starten.",
+        "businessName": "Jouw bedrijf"
+      }
+    }
+  }
+}

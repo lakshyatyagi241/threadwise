@@ -1,0 +1,719 @@
+{
+  "dashboards-analytics-charts": {
+    "nav": {
+      "title": "ダッシュボード",
+      "analytics": "分析"
+    },
+    "home": {
+      "title": "ダッシュボード",
+      "welcome": "ワークスペースへようこそ。"
+    },
+    "chart": {
+      "empty": "この期間のデータはまだありません。",
+      "bucket": "期間",
+      "cell": "{day} {hour}:00 · {count, plural, other {#件のメッセージ}}"
+    },
+    "range": {
+      "label": "日付範囲",
+      "short": {
+        "24h": "24時間",
+        "7d": "7日",
+        "30d": "30日",
+        "90d": "90日",
+        "qtd": "四半期累計",
+        "custom": "カスタム"
+      },
+      "long": {
+        "24h": "過去24時間",
+        "7d": "過去7日間",
+        "30d": "過去30日間",
+        "qtd": "四半期累計",
+        "custom": "カスタム範囲"
+      },
+      "from": "開始日",
+      "to": "終了日",
+      "apply": "適用"
+    },
+    "funnel": {
+      "listLabel": "連絡先ファネル",
+      "stageLabel": "{stage}：{n}件の連絡先、メッセージ送信済み連絡先の{pct}%",
+      "stage": {
+        "messaged": "メッセージ送信済みの連絡先",
+        "delivered": "配信済み",
+        "replied": "返信あり",
+        "goalCompleted": "ゴール達成"
+      },
+      "goalCompletedHint": "フローが完了した連絡先",
+      "activity": {
+        "title": "会話アクティビティ",
+        "summary": "{inbound, plural, other {受信メッセージ#件}} · {contacts, plural, other {返信した連絡先#件}} · 返信した連絡先あたり{perContact}件の返信"
+      },
+      "comparison": {
+        "title": "前期間との比較",
+        "replyRate": "返信率"
+      }
+    },
+    "error": {
+      "locked": "ご利用のプランには分析機能が含まれていません。",
+      "upgrade": "プランを見る",
+      "forbidden": "このページへのアクセス権がありません。",
+      "generic": "数値を読み込めませんでした。しばらくしてからもう一度お試しください。"
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "おはようございます、{name}さん。",
+        "afternoon": "こんにちは、{name}さん。",
+        "evening": "こんばんは、{name}さん。"
+      },
+      "subline": "{date} - {range}：送信{sent}件、到達率{rate}%、{devices, plural, other {接続済みデバイス#台}}の合計。",
+      "kpis": "主要指標",
+      "kpi": {
+        "sent": "送信メッセージ · {range}",
+        "sentLegend": "配信済み{delivered}件 · 失敗{failed}件",
+        "readRate": "開封率",
+        "deliverability": "到達率",
+        "deliveredOf": "{sent}件中{delivered}件のメッセージ",
+        "replies": "返信",
+        "replyRate": "返信率{rate}%",
+        "readMini": {
+          "sent": "送信済み",
+          "delivered": "配信済み",
+          "read": "既読"
+        }
+      },
+      "throughput": {
+        "title": "メッセージスループット",
+        "subtitle": {
+          "24h": "送信、配信済み、失敗（1時間ごと、過去24時間）",
+          "7d": "送信、配信済み、失敗（日別、過去7日間）",
+          "30d": "送信、配信済み、失敗（日別、過去30日間）",
+          "qtd": "送信、配信済み、失敗（日別、四半期累計）",
+          "custom": "送信、配信済み、失敗（日別、カスタム範囲）"
+        },
+        "peak": "ピーク時間帯 {when} · {n}件のメッセージ",
+        "sent": "送信済み",
+        "delivered": "配信済み",
+        "failed": "失敗",
+        "avgHour": "1時間あたりの平均",
+        "replies": "返信",
+        "replyRate": "返信率"
+      },
+      "sparkline": {
+        "title": "過去20時間",
+        "subtitle": "1時間あたりの送信メッセージ数（古い順）",
+        "inCard": "過去20時間"
+      },
+      "funnel": {
+        "title": "エンゲージメントファネル",
+        "viewAll": "分析を表示"
+      },
+      "kicker": "オペレーターダッシュボード",
+      "calm": "ワークスペースは落ち着いています。",
+      "running": "{n, plural, other {#件の一斉配信を実行中です。}}",
+      "export": "エクスポート",
+      "newCampaign": "新しいキャンペーン",
+      "contacts": {
+        "title": "アクティブな連絡先",
+        "subscribed": "購読中",
+        "optedIn": "オプトイン済み",
+        "blocked": "ブロック済み"
+      },
+      "wallet": {
+        "title": "ウォレット残高",
+        "payPerMessage": "メッセージごとの従量課金",
+        "topUp": "チャージ",
+        "earn": "アフィリエイトで稼ぐ"
+      },
+      "autopilot": {
+        "kicker": "もっと効率化",
+        "title": "返信を自動化",
+        "body": "フローを作成するかキャンペーンを開始して、より多くの顧客に自動でリーチしましょう。",
+        "flow": "フローを作成",
+        "campaign": "新しいキャンペーン"
+      },
+      "pipeline": {
+        "kicker": "営業パイプライン",
+        "open": "パイプラインを開く",
+        "deals": "進行中の案件",
+        "won": "今月の成約",
+        "winRate": "成約率",
+        "board": "ボードを開く"
+      },
+      "inbox": {
+        "title": "ライブ受信トレイ",
+        "unread": "未読{n}件",
+        "oldest": "最古は{when}",
+        "open": "受信トレイを開く",
+        "recent": "最近の会話",
+        "empty": "会話はまだありません。"
+      },
+      "campaigns": {
+        "title": "アクティブなキャンペーン",
+        "summary": "実行中{running}件 - 予約済み{scheduled}件 - 一時停止{paused}件",
+        "viewAll": "{n}件すべて表示",
+        "untitled": "無題の一斉配信",
+        "delivered": "{total}件中{done}件配信済み",
+        "emptyTitle": "アクティブな一斉配信はありません",
+        "emptyBody": "作成して、連絡先グループへの送信を始めましょう。",
+        "new": "新しい一斉配信",
+        "status": {
+          "processing": "送信中",
+          "sending": "送信中",
+          "running": "送信中",
+          "active": "送信中",
+          "scheduled": "予約済み",
+          "pending": "予約済み",
+          "queued": "予約済み",
+          "paused": "一時停止中",
+          "cancelled": "一時停止中",
+          "failed": "失敗",
+          "completed": "完了",
+          "completed_with_errors": "完了",
+          "done": "完了",
+          "sent": "完了"
+        }
+      },
+      "devices": {
+        "title": "接続済みデバイス",
+        "summary": "{cap}スロット中{total}使用中 - オンライン{online}",
+        "connect": "接続",
+        "emptyTitle": "接続されたデバイスはありません",
+        "emptyBody": "WhatsApp番号をペアリングして送信を始めましょう。",
+        "connectDevice": "デバイスを接続",
+        "unzoned": "ゾーン未設定",
+        "per24h": "{n}/24時間",
+        "deliv": "配信",
+        "free": "{n, plural, other {空きデバイススロット#件}}"
+      },
+      "templates": {
+        "title": "パフォーマンス上位のテンプレート",
+        "subtitle": "送信数順 - 選択した期間",
+        "count": "{n, plural, other {#件のテンプレート}}",
+        "new": "新しいテンプレート",
+        "empty": "テンプレートはまだありません。",
+        "create": "最初のテンプレートを作成",
+        "col": {
+          "template": "テンプレート",
+          "type": "タイプ",
+          "sent": "送信済み",
+          "delivered": "配信済み",
+          "read": "既読",
+          "readRate": "開封率",
+          "performance": "配信率",
+          "status": "ステータス"
+        },
+        "status": {
+          "approved": "承認済み",
+          "public": "承認済み",
+          "active": "承認済み",
+          "pending": "審査中",
+          "submitted": "審査中",
+          "in_review": "審査中",
+          "rejected": "却下",
+          "disabled": "却下"
+        }
+      },
+      "activity": {
+        "title": "アクティビティログ",
+        "subtitle": "ワークスペースのイベント",
+        "empty": "このワークスペースの最近のアクティビティは記録されていません。",
+        "by": "{actor} - {module} {action}"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "accounts": "{count, plural, other {#件のアカウント}}",
+        "connected": "接続済み",
+        "openInbox": "受信トレイを開く →",
+        "tile": {
+          "needReply": "返信待ち",
+          "openChats": "オープンなチャット",
+          "dmsIn": "受信DM · 7日",
+          "dmsOut": "送信DM · 7日",
+          "followers": "フォロワー",
+          "replyRate": "返信率"
+        }
+      },
+      "copilot": {
+        "title": "{brand} Copilot",
+        "tag": "AI搭載",
+        "headline": "一文からフローを作成。",
+        "body": "カスタマージャーニーを説明すると、Copilotがノード、分岐、テンプレート案の下書きを作成します。",
+        "try": "例：",
+        "generate": "フローを生成 ✦",
+        "examples": "例",
+        "stat": {
+          "flows": "フロー",
+          "active": "有効",
+          "subscribers": "購読者"
+        }
+      },
+      "flows": {
+        "title": "自動化フロー",
+        "summary": "有効{active}件 · 購読者{subscribers}人",
+        "open": "開く",
+        "empty": "フローはまだありません。",
+        "build": "最初のフローを作成",
+        "meta": "{trigger}トリガー · {steps}ステップ · 購読者{subs}人",
+        "statusActive": "有効",
+        "statusPaused": "一時停止中",
+        "subs": "購読者"
+      },
+      "quickActions": {
+        "title": "クイックアクション",
+        "soon": "近日公開",
+        "broadcast": {
+          "label": "新しい一斉配信",
+          "hint": "連絡先グループ宛て"
+        },
+        "flow": {
+          "label": "フローを作成",
+          "hint": "ドラッグ＆ドロップ"
+        },
+        "template": {
+          "label": "新しいテンプレート",
+          "hint": "Metaに申請"
+        },
+        "autoReply": {
+          "label": "自動返信",
+          "hint": "キーワードルール"
+        }
+      },
+      "integrations": {
+        "title": "連携",
+        "name": {
+          "woocommerce": "WooCommerce",
+          "shopify": "Shopify",
+          "google_sheets": "Google Sheets",
+          "meta_catalog": "Meta Catalog"
+        },
+        "events": "{n}イベント / 7日",
+        "connected": {
+          "woocommerce": "接続済み",
+          "shopify": "接続済み",
+          "google_sheets": "APIキー発行済み",
+          "meta_catalog": "カタログ連携済み"
+        },
+        "notConnected": "未接続",
+        "connect": "接続",
+        "connectedLabel": "接続済み"
+      },
+      "sublineOfficial": "{date} - {range}：送信{sent}件、到達率{rate}%。"
+    },
+    "analytics": {
+      "title": "分析",
+      "headline": "{from}から{to}までに、メッセージの{rate}%が受信者に届きました。",
+      "subline": "{sent, plural, other {#件のメッセージ}}を送信、返信率{replyRate}%。",
+      "noSends": "この期間に送信メッセージはまだありません。",
+      "export": "CSVをエクスポート",
+      "from": "開始",
+      "to": "終了",
+      "apply": "適用",
+      "kpis": "主要指標",
+      "kpi": {
+        "sent": "送信済み",
+        "delivered": "配信済み",
+        "queued": "キュー待ち",
+        "failed": "失敗",
+        "replyRate": "返信率"
+      },
+      "series": {
+        "sent": "送信済み",
+        "delivered": "配信済み",
+        "failed": "失敗",
+        "queued": "キュー待ち"
+      },
+      "empty": "この期間に表示するものはありません。",
+      "volume": {
+        "title": "メッセージ数の推移",
+        "subtitle": "日別の送信済み、配信済み、失敗"
+      },
+      "rates": {
+        "title": "配信率",
+        "subtitle": "配信済み、キュー待ち、失敗の割合"
+      },
+      "totals": {
+        "title": "日別合計",
+        "subtitle": "日別の配信済み、キュー待ち、失敗（積み上げ）"
+      },
+      "funnel": {
+        "title": "エンゲージメントファネル"
+      },
+      "types": {
+        "title": "メッセージタイプ",
+        "subtitle": "送信の内訳",
+        "byType": "メッセージタイプ別の送信済みと配信済み",
+        "kind": "タイプ",
+        "sent": "送信済み",
+        "delivered": "配信済み",
+        "text": "テキスト",
+        "template": "テンプレート",
+        "media": "メディア",
+        "interactive": "インタラクティブ",
+        "location": "位置情報"
+      },
+      "heatmap": {
+        "title": "ベストな時間帯",
+        "subtitle": "曜日と時間帯別のメッセージ数（{zone}）。色が濃いほど多いことを示します。",
+        "empty": "この期間にメッセージはありません。",
+        "footer": "{total}件のメッセージから算出、タイムゾーン {tz}"
+      },
+      "panels": {
+        "devices": {
+          "title": "デバイス別",
+          "subtitle": "過去24時間の送信数",
+          "online": "オンライン {online}/{total}",
+          "empty": "接続されたデバイスはまだありません。",
+          "msg": "{n}件"
+        },
+        "templates": {
+          "title": "テンプレート",
+          "subtitle": "送信数の上位",
+          "empty": "この期間にテンプレートの送信はありません。"
+        },
+        "contacts": {
+          "title": "上位の連絡先",
+          "subtitle": "最もエンゲージメントの高い会話",
+          "empty": "この期間に会話はありません。",
+          "msgs": "{n}件"
+        },
+        "team": {
+          "title": "チームのパフォーマンス",
+          "subtitle": "この期間のエージェント",
+          "count": "{n, plural, other {#人のエージェント}}",
+          "col": {
+            "agent": "エージェント",
+            "convos": "会話数",
+            "resolved": "解決",
+            "first": "平均初回応答",
+            "resolution": "平均解決時間",
+            "csat": "CSAT"
+          }
+        },
+        "geo": {
+          "title": "国別",
+          "subtitle": "リーチ",
+          "markets": "{n, plural, other {#市場}}",
+          "unspecified": "未指定",
+          "empty": "この期間に国が判明している会話はありません。"
+        },
+        "events": {
+          "title": "イベントストリーム",
+          "subtitle": "この期間の最新メッセージ",
+          "sent": "送信 → {peer}",
+          "received": "{peer}から受信",
+          "empty": "この期間に最近のアクティビティはありません。"
+        }
+      }
+    },
+    "health": {
+      "nav": "システムの状態",
+      "group": "システム",
+      "title": "システムの状態",
+      "kicker": "プラットフォーム",
+      "description": "プラットフォームが稼働するサービスのライブチェック。",
+      "banner": {
+        "up": "全システム - 正常稼働",
+        "warn": "全システム - 低下",
+        "down": "全システム - ダウン",
+        "checked": "最終確認 {time} · 20秒ごとに自動更新",
+        "refresh": "今すぐ更新",
+        "refreshing": "確認中..."
+      },
+      "core": "コアサービス",
+      "activity": {
+        "messages": "メッセージ · 24時間",
+        "aiCalls": "AI呼び出し · 24時間",
+        "conversations": "会話 · 24時間",
+        "webhooks": "Webhook · 24時間"
+      },
+      "throughput": {
+        "title": "メッセージスループット · 14日間",
+        "peak": "ピーク {n}/日",
+        "empty": "過去14日間にメッセージのアクティビティはありません。",
+        "aria": "1日あたりのメッセージ数（過去14日間）"
+      },
+      "state": {
+        "up": "正常稼働",
+        "warn": "低下",
+        "down": "ダウン",
+        "idle": "アイドル"
+      },
+      "check": {
+        "database": "データベース",
+        "cache": "キャッシュ",
+        "queue": "キュー",
+        "bridge": "Nodeブリッジ",
+        "storage": "メディアストレージ"
+      },
+      "latency": {
+        "title": "応答時間",
+        "empty": "タイミングデータがありません。",
+        "ms": "{ms} ミリ秒"
+      },
+      "queues": {
+        "title": "キュー",
+        "name": "キュー",
+        "pending": "保留中",
+        "failed": "失敗"
+      },
+      "clear": {
+        "button": "保留中のジョブをクリア",
+        "busy": "クリア中...",
+        "confirmTitle": "保留中と失敗したジョブをクリアしますか？",
+        "confirmBody": "すべてのキューで、待機中と遅延中のジョブが削除され、失敗したジョブも削除されます。実行中のジョブには影響しません。",
+        "confirm": "ジョブをクリア",
+        "cancel": "キャンセル",
+        "done": "保留中{pending}件、失敗{failed}件のジョブをクリアしました。",
+        "failed": "失敗：{message}",
+        "superOnly": "ジョブをクリアできるのはスーパー管理者のみです。"
+      },
+      "vitals": {
+        "title": "ホストの状態",
+        "node": "Node",
+        "app": "アプリのバージョン",
+        "environment": "環境",
+        "uptime": "稼働時間",
+        "memory": "メモリ（RSS）",
+        "heap": "使用中のヒープ",
+        "diskFree": "ディスクの空き容量",
+        "diskFreeValue": "{gb} GB",
+        "diskUsed": "ディスク使用率 {pct}%",
+        "noDisk": "利用不可"
+      },
+      "error": "ヘルスチェックを読み込めませんでした。しばらくしてからもう一度お試しください。",
+      "engines": {
+        "title": "WhatsAppエンジンと接続済み番号",
+        "empty": "エンジンはまだ設定されていません。",
+        "caption": "全番号のうち接続済み"
+      }
+    },
+    "admin": {
+      "nav": {
+        "analytics": "分析"
+      },
+      "window": {
+        "label": "期間",
+        "24h": "過去24時間",
+        "7d": "過去7日間",
+        "30d": "過去30日間",
+        "90d": "過去90日間",
+        "1y": "過去1年間"
+      },
+      "error": "プラットフォームの数値を読み込めませんでした。",
+      "retry": "再試行",
+      "vsPrevious": "前期間比",
+      "overview": {
+        "title": "管理ダッシュボード。",
+        "kicker": "管理 / 概要",
+        "subtitle": "プラットフォームの状態、収益、利用状況、ワークスペースのアクティビティをまとめて確認できます。",
+        "addWorkspace": "ワークスペースを追加",
+        "kpi": {
+          "income": "総収入",
+          "profit": "利益",
+          "profitHint": "利益率32％での概算であり、会計上の数値ではありません",
+          "views": "総閲覧数",
+          "viewsHint": "全ワークスペースが送信したメッセージ",
+          "conversion": "コンバージョン率"
+        },
+        "revenue": {
+          "title": "収益の推移",
+          "total": "総収益",
+          "target": "総目標",
+          "targetHint": "目標は前期間比10％増の成長ベンチマークであり、保存された目標ではありません。",
+          "revenue": "収益",
+          "aria": "期間ごとの収益と目標の比較"
+        },
+        "countries": {
+          "title": "国別セッション",
+          "subtitle": "地域別の上位セッション",
+          "empty": "国のデータはまだありません - ユーザーが地域を共有していません。"
+        },
+        "regions": {
+          "title": "地域別の売上",
+          "subtitle": "プラットフォーム収益の構成比",
+          "aria": "地域別の新規ユーザー"
+        },
+        "platform": {
+          "title": "プラットフォーム別の売上",
+          "subtitle": "Eコマース連携",
+          "empty": "この期間に支払い済みの注文はありません。",
+          "aria": "決済ゲートウェイ別の支払い済み収益"
+        },
+        "users": {
+          "title": "登録ユーザー",
+          "subtitle": "ユーザーシートの概要",
+          "total": "総ユーザー数",
+          "premium": "プレミアムプラン",
+          "basic": "ベーシックプラン",
+          "aria": "ユーザーの{pct}%が有料プランです"
+        },
+        "workspaces": {
+          "title": "ワークスペースのアクティビティ",
+          "subtitle": "最近の重要な管理者イベント",
+          "viewAll": "すべて表示",
+          "empty": "ワークスペースはまだありません。",
+          "col": {
+            "workspace": "ワークスペース",
+            "owner": "オーナー",
+            "plan": "プラン",
+            "messages": "メッセージ",
+            "health": "状態",
+            "mrr": "MRR"
+          },
+          "health": {
+            "good": "良好",
+            "active": "アクティブ",
+            "low": "低",
+            "idle": "アイドル"
+          }
+        },
+        "alerts": {
+          "title": "管理者アラート",
+          "subtitle": "優先キュー",
+          "open": "未対応{n}件",
+          "empty": "全システム正常 - アラートはありません。"
+        },
+        "titleLead": "管理",
+        "titleAccent": "ダッシュボード"
+      },
+      "analytics": {
+        "title": "管理分析。",
+        "kicker": "管理 - プラットフォーム",
+        "subtitle": "収益、ワークスペースの成長、WhatsAppの利用状況、キャンペーンの配信、デバイスの状態、サポートの負荷を一望できるコントロールルーム。",
+        "days": {
+          "7": "過去7日間",
+          "30": "過去30日間",
+          "90": "過去90日間",
+          "365": "今年",
+          "custom": "過去{n}日間"
+        },
+        "daysLabel": "日数",
+        "export": "エクスポート",
+        "tabs": {
+          "overview": "概要",
+          "revenue": "収益",
+          "usage": "利用状況",
+          "workspaces": "ワークスペース",
+          "campaigns": "キャンペーン",
+          "support": "サポート"
+        },
+        "kpi": {
+          "revenue": "収益",
+          "revenueSub": "{n, plural, other {新規ワークスペース#件}}",
+          "workspaces": "ワークスペース",
+          "workspacesSub": "{n, plural, other {総ユーザー#人}}",
+          "messages": "メッセージ",
+          "messagesSub": "1日平均 {n}件",
+          "devices": "オンラインのデバイス",
+          "newUsers": "新規ユーザー",
+          "newUsersSub": "合計{n}人",
+          "tickets": "未解決のチケット",
+          "watch": "要注意",
+          "clear": "問題なし"
+        },
+        "pulse": {
+          "title": "プラットフォームの状況",
+          "subtitle": "コントロールルームのリアルタイムの負荷",
+          "workspaces": "ワークスペース",
+          "devices": "接続済みデバイス",
+          "tickets": "未解決のチケット",
+          "signups": "新規登録",
+          "normal": "通常"
+        },
+        "growth": {
+          "title": "成長コマンドセンター",
+          "subtitle": "ユーザー登録数（過去{days}日間）",
+          "aria": "日別の登録数",
+          "series": "登録数"
+        },
+        "plans": {
+          "title": "プラン分布",
+          "subtitle": "プラン別のワークスペース",
+          "empty": "データはまだありません - 少なくとも1つのワークスペースにプランが割り当てられると、プラン分布が表示されます。",
+          "aria": "プラン別のワークスペース"
+        },
+        "acquisition": {
+          "title": "獲得",
+          "subtitle": "ユーザーからワークスペースへ",
+          "users": "総ユーザー数",
+          "newUsers": "新規ユーザー",
+          "workspaces": "作成されたワークスペース",
+          "newWorkspaces": "新規ワークスペース",
+          "devices": "接続済みデバイス"
+        },
+        "devices": {
+          "title": "上位デバイス - 24時間",
+          "subtitle": "送信量",
+          "empty": "送信はまだありません",
+          "devices": "デバイス",
+          "online": "オンライン",
+          "sends": "24時間の送信数",
+          "aria": "デバイスごとの過去24時間の送信数"
+        },
+        "leaderboard": {
+          "title": "支払い済み収益の上位ワークスペース",
+          "subtitle": "過去{days}日間",
+          "workspace": "ワークスペース",
+          "orders": "注文",
+          "revenue": "支払い済み収益",
+          "open": "開く",
+          "empty": "この期間に支払い済みの注文はありません。"
+        },
+        "cohort": {
+          "title": "登録コホート",
+          "subtitle": "直近{days}日間",
+          "aria": "日別の登録数"
+        },
+        "composition": {
+          "title": "収益の構成",
+          "subtitle": "主な貢献者",
+          "empty": "支払い済みの収益はまだありません。"
+        },
+        "support": {
+          "title": "サポートの負荷",
+          "subtitle": "チケットの状況",
+          "empty": "チケットはまだありません。",
+          "open": "未解決",
+          "resolved": "解決済み",
+          "inbox": "受信トレイを開く"
+        },
+        "queue": {
+          "title": "管理者の対応が必要",
+          "subtitle": "アクションキュー",
+          "tickets": "{n, plural, other {未解決のチケット#件}}",
+          "ticketsHint": "SLA違反の前にサポートで優先度を判断してください",
+          "offline": "{n, plural, other {オフラインのデバイス#台}}",
+          "offlineHint": "オンラインのデバイスが半数未満です",
+          "users": "{n, plural, other {新規ユーザー#人}}",
+          "usersHint": "最新の登録を確認してください",
+          "clear": "問題なし"
+        },
+        "titleLead": "管理",
+        "titleAccent": "分析"
+      },
+      "kpiLabel": "KPI"
+    },
+    "quickAccess": {
+      "title": "クイックアクセス",
+      "kicker": "ショートカット",
+      "edit": "ショートカットを編集",
+      "empty": "クイックアクセスのショートカットを追加",
+      "open": "{label}を開く",
+      "modalTitle": "クイックアクセス",
+      "modalEyebrow": "ショートカットを最大10件までピン留め",
+      "pages": "アプリのページ（最大10件）",
+      "custom": "カスタムリンク",
+      "labelPlaceholder": "ラベル",
+      "urlPlaceholder": "https://... または /path",
+      "addCustom": "+ カスタムリンクを追加",
+      "removeCustom": "このリンクを削除",
+      "counter": "{n} / 10 件をピン留め中",
+      "cancel": "キャンセル",
+      "save": "ショートカットを保存",
+      "saving": "保存中...",
+      "limit": "ショートカットは最大10件までピン留めできます。",
+      "saved": "クイックアクセスを更新しました。",
+      "failed": "ショートカットを保存できませんでした。"
+    }
+  }
+}

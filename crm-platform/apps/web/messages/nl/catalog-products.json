@@ -1,0 +1,730 @@
+{
+  "catalogProducts": {
+    "nav": {
+      "catalog": "Catalogus",
+      "products": "Producten",
+      "reviews": "Beoordelingen"
+    },
+    "common": {
+      "dismiss": "Sluiten",
+      "retry": "Opnieuw proberen",
+      "requestId": "Verzoek-id"
+    },
+    "errors": {
+      "network": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt geen toestemming om dat te doen.",
+      "signedOut": "Je sessie is beëindigd. Log opnieuw in om door te gaan.",
+      "conflict": "Iemand anders heeft dit gewijzigd terwijl je bezig was. Laad opnieuw om de nieuwste versie te zien.",
+      "validation": "Sommige velden zijn ongeldig. Controleer de gemarkeerde velden en probeer het opnieuw.",
+      "unavailable": "Dit deel van de catalogus is nog niet beschikbaar op deze server.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "notFound": "Dat item is niet gevonden. Mogelijk is het verwijderd.",
+      "planLocked": "Je abonnement bevat de WhatsApp-catalogus niet. Upgrade om hem te ontgrendelen.",
+      "planLimit": "De berichtlimiet van je abonnement is bereikt.",
+      "wallet": "Je wallet-saldo is te laag om te verzenden. Voeg tegoed toe en probeer het opnieuw.",
+      "sendBlocked": "Verzenden is nu geblokkeerd: {detail}",
+      "notConnected": "Er is geen catalogus verbonden. Verbind er eerst een op het tabblad Instellingen.",
+      "metaRejected": "Meta heeft het verzoek afgewezen: {detail}",
+      "noWaba": "Geen verbonden WhatsApp Business (WABA)-nummer gevonden. Verbind eerst een WABA-nummer of koppel handmatig een catalogus.",
+      "wabaToken": "Je WABA-nummer is verbonden, maar het token kon niet worden gelezen. Verbind het nummer opnieuw of koppel handmatig een catalogus.",
+      "noCatalogLinked": "Er is nog geen productcatalogus gekoppeld aan je WhatsApp-account. Maak er een in Meta Commerce Manager en probeer het opnieuw, of koppel handmatig.",
+      "noRecipients": "Kies minstens één contact of groep, of plak een nummer.",
+      "tooManyRecipients": "Maximaal 500 ontvangers per verzending. Splits ze op in kleinere batches.",
+      "noProducts": "Kies eerst minstens één product.",
+      "noSender": "Geen verbonden apparaat. Koppel er eerst een onder Kanalen.",
+      "sendFailed": "Het bericht kon niet worden verzonden: {detail}",
+      "collectionProducts": "Geen van de geselecteerde producten hoort bij deze workspace.",
+      "providerFailed": "WhatsApp of Meta kon het verzoek niet voltooien: {detail}",
+      "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw."
+    },
+    "paywall": {
+      "kicker": "Premiumfunctie",
+      "title": "WhatsApp-etalage zit niet in je abonnement",
+      "message": "Kies een abonnement waar het in zit. Upgrade en ontgrendel deze functie direct.",
+      "back": "Terug",
+      "compare": "Alle abonnementen vergelijken"
+    },
+    "status": {
+      "unsynced": "niet gesynchroniseerd",
+      "pending": "in behandeling",
+      "synced": "gesynchroniseerd",
+      "failed": "mislukt"
+    },
+    "pager": {
+      "showing": "Resultaten {from} tot {to} van {total}",
+      "label": "Pagina's",
+      "prev": "Vorige pagina",
+      "next": "Volgende pagina",
+      "goTo": "Ga naar pagina {page}"
+    },
+    "shell": {
+      "back": "Terug naar integraties",
+      "breadcrumb": "Integraties / WhatsApp-catalogus",
+      "titleLead": "Producten pushen naar",
+      "titleAccent": "WhatsApp-chats",
+      "connected": "{provider} · verbonden",
+      "notConnected": "Niet verbonden",
+      "tabs": "Catalogusonderdelen",
+      "tab": {
+        "setup": "Instellingen",
+        "send": "Verzenden",
+        "collections": "Collecties",
+        "activity": "Activiteit"
+      }
+    },
+    "connect": {
+      "provider": "Provider",
+      "providers": {
+        "meta_cloud": "Meta Cloud API (direct)",
+        "dialog_360": "360dialog (BSP)"
+      },
+      "catalogId": "Catalogus-id",
+      "catalogName": "Catalogusnaam",
+      "label": "(label)",
+      "catalogNamePlaceholder": "bijv. Hoofdcatalogus",
+      "wabaId": "WABA-id",
+      "phoneNumberId": "Telefoonnummer-id",
+      "accessToken": "Toegangstoken / API-sleutel",
+      "accessTokenHint": "Versleuteld opgeslagen. Bij het opslaan geverifieerd bij Meta.",
+      "accessTokenPlaceholder": "EAAxx... of D360-API-KEY...",
+      "showToken": "Token tonen",
+      "hideToken": "Token verbergen",
+      "submit": "Verbinden en verifiëren",
+      "connected": "Catalogus verbonden.",
+      "problem": {
+        "required": "Dit veld is verplicht.",
+        "tooShort": "Het toegangstoken moet minstens 20 tekens bevatten.",
+        "tooLong": "Deze waarde is te lang."
+      }
+    },
+    "setup": {
+      "loading": "Catalogus laden",
+      "loadError": "De catalogus kon niet worden geladen",
+      "cancel": "Annuleren",
+      "manage": "Beheren →",
+      "view": "Bekijken →",
+      "advanced": {
+        "kicker": "Optioneel · geavanceerd",
+        "titleManual": "Of koppel handmatig een catalogus",
+        "titleAlso": "Koppel ook een Meta Commerce-catalogus",
+        "intro": "Ontgrendelt de officiële catalogusknop op je WhatsApp Business-profiel, de winkelwagen en de webhook \"bestelling geplaatst\". Alleen nodig als je een geverifieerde WABA hebt. De onofficiële API werkt prima zonder."
+      },
+      "noSender": {
+        "title": "Verbind eerst een apparaat",
+        "message": "Voor het verzenden van catalogi is minstens één WhatsApp-apparaat op dit account nodig: een QR-koppeling van de onofficiële API (gratis) of een door Meta geverifieerd WABA-nummer. Het duurt maar 30 seconden.",
+        "connect": "Een apparaat verbinden"
+      },
+      "ready": {
+        "kicker": "✓ Klaar om te verzenden",
+        "officialTitle": "Officiële WhatsApp-catalogusmodus",
+        "unofficialTitle": "Carrouselmodus van de onofficiële API",
+        "officialBody": "Je hebt {count, plural, one {# nummer} other {# nummers}} verbonden. Catalogi worden verzonden via je verbonden {engine}-nummer. Koppel hieronder een Meta Commerce-catalogus voor interactieve productberichten.",
+        "unofficialBody": "Je hebt {count, plural, one {# apparaat} other {# apparaten}} verbonden. Catalogi verzenden werkt nu via native WhatsApp-carrousels met de onofficiële API, zonder Meta-configuratie en zonder te wachten op goedkeuring.",
+        "head": "Ga naar het <b>tabblad Verzenden</b> om producten naar het nummer van een klant te pushen.",
+        "openSend": "Tabblad Verzenden openen"
+      },
+      "senders": {
+        "title": "Verbonden apparaten",
+        "noNumber": "Geen nummer",
+        "connected": "verbonden"
+      },
+      "tiles": {
+        "products": "Producten",
+        "shops": "Winkels",
+        "recentSends": "Recente verzendingen",
+        "total": "Totaal",
+        "synced": "Gesynchroniseerd",
+        "pending": "In behandeling",
+        "failed": "Mislukt"
+      },
+      "autodetect": {
+        "title": "Koppel je Meta Commerce-catalogus",
+        "intro": "Je WhatsApp-nummer is al verbonden, dus we kunnen de catalogus rechtstreeks bij Meta ophalen, zonder catalogus-id, WABA-id of toegangstoken om te plakken. Ontgrendelt de officiële catalogusknop, de winkelwagen en de webhook \"bestelling geplaatst\".",
+        "button": "Ophalen uit mijn WhatsApp-account",
+        "linked": "Catalogus gekoppeld vanuit je WhatsApp-account."
+      },
+      "header": {
+        "connected": "Verbonden · {provider}",
+        "defaultName": "Meta Commerce-catalogus",
+        "sendProducts": "Producten verzenden →",
+        "disconnect": "Verbinding verbreken"
+      },
+      "disconnectTitle": "De catalogus loskoppelen?",
+      "disconnectConfirm": "Producten blijven op Meta; we stoppen alleen met synchroniseren.",
+      "disconnected": "Catalogus losgekoppeld.",
+      "table": {
+        "title": "Producten",
+        "hint": "Recentst bijgewerkt · klik op <b>Status vernieuwen</b> om Meta te bevragen.",
+        "manage": "Producten beheren →",
+        "product": "Product",
+        "sku": "SKU",
+        "price": "Prijs",
+        "availability": "Beschikbaarheid",
+        "metaStatus": "Meta-status",
+        "actions": "Acties",
+        "empty": "Nog geen producten.",
+        "addOne": "Voeg er een toe →",
+        "sync": {
+          "idle": "Synchroniseren",
+          "busy": "…",
+          "queued": "In wachtrij ✓",
+          "skipped": "Niet in wachtrij",
+          "failed": "Mislukt"
+        }
+      }
+    },
+    "sync": {
+      "title": "Producten synchroniseren met Meta",
+      "intro": "Pusht tot 1000 per verzoek en herhaalt tot alles klaar is. {count} wachtend.",
+      "syncButton": "Synchroniseren met Meta",
+      "syncing": "Synchroniseren…",
+      "pollButton": "Status vernieuwen",
+      "polling": "Bevragen…",
+      "importButton": "Importeren uit Meta",
+      "importing": "Importeren…",
+      "importHint": "Haal producten die rechtstreeks in Meta Commerce Manager zijn gemaakt naar de catalogus.",
+      "progress": "Synchronisatievoortgang",
+      "starting": "Starten…",
+      "pushed": "Gepusht {pushed} · in behandeling {pending} · gesynchroniseerd {synced} · mislukt {failed}",
+      "stalled": "Er kon in deze run niets meer worden gepusht. Controleer de producten die als mislukt zijn gemarkeerd.",
+      "done": "klaar · {count} in wachtrij",
+      "polled": "Bevraagd · gesynchroniseerd+{synced} · mislukt+{failed}",
+      "importStarting": "Importeren uit Meta · starten…",
+      "imported": "Geïmporteerd {imported} · bijgewerkt {updated} · overgeslagen {skipped} van {total}"
+    },
+    "commerce": {
+      "title": "Commerce-instellingen",
+      "visible": "Catalogus tonen in bedrijfsprofiel",
+      "visibleHint": "Voegt de knop \"Catalogus\" toe aan je WhatsApp Business-profiel.",
+      "cart": "Winkelwagen inschakelen",
+      "cartHint": "Kopers kunnen meerdere producten toevoegen voordat ze de bestelling versturen.",
+      "save": "Opslaan",
+      "saved": "Commerce-instellingen bijgewerkt."
+    },
+    "automation": {
+      "title": "Automatisering",
+      "ack": "Automatisch antwoorden wanneer een klant een winkelwagen verstuurt",
+      "ackHint": "De koper krijgt direct een bericht dat de bestelling is ontvangen (items + totaal) in plaats van stilte, de nummer 1 oplossing voor catalogusconversie.",
+      "payUrl": "Basis van betaallink (optioneel)",
+      "payUrlHint": "We voegen de bestel-id toe; laat leeg om alleen de ontvangst te bevestigen.",
+      "concierge": "Catalogusconcierge: productvragen automatisch beantwoorden",
+      "conciergeHint": "Wanneer een klant bijvoorbeeld \"rode schoenen onder 2000\" typt, antwoord dan automatisch met een passend Multi-Product Message. Standaard uit.",
+      "header": "Koptekst van het antwoord",
+      "headerPlaceholder": "Dit heb ik gevonden",
+      "max": "Max. producten",
+      "replyOnEmpty": "Ook antwoorden als niets overeenkomt",
+      "replyOnEmptyHint": "Anders blijft de concierge stil bij geen match (aanbevolen).",
+      "emptyText": "Antwoord bij geen match",
+      "emptyTextPlaceholder": "Sorry, ik kon geen match vinden. Probeer een ander trefwoord of budget.",
+      "save": "Automatisering opslaan",
+      "saved": "Automatiseringsinstellingen opgeslagen.",
+      "problem": {
+        "badUrl": "Voer een volledige link in die begint met https://",
+        "tooLong": "Deze tekst is te lang.",
+        "range": "Voer een geheel getal van 1 tot 30 in."
+      }
+    },
+    "health": {
+      "title": "Catalogusgezondheid",
+      "needAttention": "{count, plural, one {# product heeft aandacht nodig voordat het kan verkopen.} other {# producten hebben aandacht nodig voordat ze kunnen verkopen.}}",
+      "allGood": "Elk product is klaar voor de catalogus. Mooi.",
+      "noImage": "geen afbeelding",
+      "noPrice": "geen prijs",
+      "syncError": "synchronisatiefout",
+      "showFix": "Te herstellen producten tonen",
+      "fix": "Herstellen →"
+    },
+    "send": {
+      "loading": "Het verzendformulier laden",
+      "loadError": "Het verzendformulier kon niet worden geladen",
+      "maxProducts": "Maximaal {max} producten per carrousel.",
+      "noSender": {
+        "title": "Verbind eerst een apparaat",
+        "message": "Je hebt een verbonden WhatsApp-apparaat nodig om catalogusberichten te verzenden.",
+        "connect": "Een apparaat verbinden"
+      },
+      "feedback": {
+        "failed": "Er is niets verzonden.",
+        "sent": "{count, plural, one {Verzonden naar # ontvanger} other {Verzonden naar # ontvangers}}",
+        "someFailed": "{count} mislukt"
+      },
+      "recipients": {
+        "title": "Ontvangers",
+        "count": "{count, plural, one {# ontvanger} other {# ontvangers}}",
+        "source": "Waar ontvangers vandaan komen",
+        "modes": {
+          "groups": {
+            "title": "Contactgroepen",
+            "hint": "Gebruik opgeslagen segmenten."
+          },
+          "contacts": {
+            "title": "Individuele contacten",
+            "hint": "Kies specifieke mensen."
+          },
+          "manual": {
+            "title": "Handmatige nummers",
+            "hint": "Plakken, één per regel."
+          }
+        },
+        "noGroups": "Nog geen contactgroepen. Maak er eerst een op de pagina <link>Contacten</link>.",
+        "groupContacts": "{count, plural, one {# contact} other {# contacten}}",
+        "noContacts": "Nog geen contacten. Voeg ze toe op de pagina <link>Contacten</link>.",
+        "searchContacts": "Contacten zoeken…",
+        "noMatch": "Geen contact komt overeen.",
+        "paste": "Telefoonnummers plakken",
+        "pastePlaceholder": "Eén nummer per regel, inclusief landcode",
+        "pasteHint": "Eén per regel, komma of puntkomma. Landcode vereist (met of zonder +).",
+        "overCap": "Maximaal {max} ontvangers per verzending. Splits ze op in kleinere batches."
+      },
+      "format": {
+        "title": "Indeling en afzender",
+        "spm": {
+          "title": "Eén product",
+          "hint": "Eén productkaart"
+        },
+        "mpm": {
+          "title": "Productlijst (carrousel)",
+          "hint": "Tot 30 producten"
+        },
+        "link": {
+          "title": "Cataloguslink",
+          "hint": "Platte tekst · werkt altijd"
+        },
+        "sendFrom": "Verzenden vanaf",
+        "fromShop": "Vanuit winkel",
+        "brandingContext": "(merkcontext)",
+        "shopFallback": "Winkel {slug}"
+      },
+      "products": {
+        "title": "Producten",
+        "selected": "({count} geselecteerd)",
+        "selectedOf": "({count} geselecteerd / {max})",
+        "search": "Producten zoeken…",
+        "showingFrom": "Producten van <b>{shop}</b> worden getoond. Wijzig de keuze <b>Vanuit winkel</b> hierboven om de catalogus van een andere winkel te zien.",
+        "loading": "Producten laden…",
+        "loadError": "Producten konden niet worden geladen",
+        "other": "Overig",
+        "noMatch": "Geen product komt overeen met je zoekopdracht.",
+        "emptyShop": "Geen actieve producten in deze winkel.",
+        "empty": "Nog geen actieve producten.",
+        "addOne": "Voeg er een toe →"
+      },
+      "message": {
+        "title": "Bericht en verzenden",
+        "text": "Berichttekst",
+        "optional": "(optioneel)",
+        "placeholder": "bijv. Hier zijn enkele producten die je misschien leuk vindt, tik op een product voor meer info.",
+        "header": "Header",
+        "headerPlaceholder": "bijv. Bekijk deze eens",
+        "footer": "Voettekst",
+        "footerPlaceholder": "bijv. Antwoord STOP om je af te melden",
+        "counter": "{used} / {max}",
+        "viewRecent": "Recente verzendingen bekijken →",
+        "sendProduct": "Product verzenden →",
+        "sendCarousel": "Carrousel verzenden →",
+        "sendLink": "Cataloguslink verzenden →",
+        "sending": "Verzenden…",
+        "noPermission": "Je kunt dit formulier bekijken, maar geen catalogusberichten verzenden."
+      },
+      "rail": {
+        "label": "Verzendsamenvatting",
+        "summary": "Samenvatting",
+        "recipients": "Ontvangers",
+        "products": "Producten",
+        "format": "Indeling",
+        "formats": {
+          "spm": "Eén product",
+          "mpm": "Lijst met meerdere producten",
+          "link": "Cataloguslink"
+        },
+        "catalog": "Catalogus",
+        "metaCommerce": "Meta Commerce",
+        "productCount": "{count, plural, one {# product} other {# producten}}",
+        "unofficial": "Onofficiële API (carrousel)",
+        "linkMeta": "Meta koppelen →",
+        "recent": "Recente verzendingen",
+        "windowTitle": "Venster van 24 uur",
+        "windowBody": "SPM- en lijstmodus vereisen dat de koper je de afgelopen 24 uur een bericht heeft gestuurd. De modus <b>Cataloguslink</b> werkt altijd."
+      }
+    },
+    "collections": {
+      "loading": "Collecties laden",
+      "loadError": "Collecties konden niet worden geladen",
+      "title": "Collecties",
+      "intro": "Sla een groep producten één keer op en verstuur hem daarna met één klik als Multi-Product Message, zonder elke keer opnieuw te kiezen.",
+      "new": "Nieuwe collectie",
+      "create": "Collectie maken",
+      "created": "Collectie gemaakt.",
+      "updated": "Collectie bijgewerkt.",
+      "deleted": "Collectie verwijderd.",
+      "empty": "Nog geen collecties. Maak hierboven je eerste.",
+      "productCount": "{count, plural, =0 {geen producten} one {# product} other {# producten}}",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "cancel": "Annuleren",
+      "saveChanges": "Wijzigingen opslaan",
+      "deleteTitle": "Deze collectie verwijderen?",
+      "deleteBody": "\"{name}\" wordt verwijderd. Producten blijven ongewijzigd.",
+      "send": {
+        "button": "Verzenden",
+        "noLive": "Deze collectie heeft geen actieve producten om te verzenden.",
+        "needNumber": "Voer eerst een ontvangersnummer in.",
+        "sending": "Verzenden…",
+        "sent": "{count, plural, one {Verzonden naar # ontvanger} other {Verzonden naar # ontvangers}}",
+        "someFailed": "{count} mislukt",
+        "failed": "Er is niets verzonden.",
+        "number": "Ontvangersnummer",
+        "numberPlaceholder": "Nummer met landcode",
+        "header": "Header (optioneel)",
+        "headerPlaceholder": "Bekijk deze eens",
+        "from": "Verzenden vanaf",
+        "auto": "Automatisch (actief)",
+        "go": "Verzenden als MPM"
+      },
+      "picker": {
+        "filter": "Producten filteren…",
+        "empty": "Nog geen actieve producten.",
+        "addOne": "Voeg er een toe →",
+        "noMatch": "Geen product komt overeen.",
+        "max": "Een collectie bevat maximaal {max} producten."
+      },
+      "form": {
+        "name": "Naam",
+        "namePlaceholder": "bijv. Zomeruitverkoop",
+        "description": "Beschrijving (optioneel)",
+        "products": "Producten",
+        "upTo": "tot {max}",
+        "reload": "Opnieuw laden",
+        "problem": {
+          "nameRequired": "Voer een naam in.",
+          "nameTooLong": "De naam is te lang.",
+          "descriptionTooLong": "De beschrijving is te lang.",
+          "noProducts": "Kies minstens één product."
+        }
+      }
+    },
+    "activity": {
+      "loading": "Activiteit laden",
+      "loadError": "Activiteit kon niet worden geladen",
+      "title": "Activiteit van catalogusverzendingen",
+      "subtitle": "Elk catalogusbericht dat je workspace heeft verzonden (SPM · MPM · link).",
+      "sendAnother": "Nog een verzenden →",
+      "emptyTitle": "Nog geen verzendingen",
+      "emptyBody": "Verstuur je eerste catalogus via het <link>tabblad Verzenden</link>.",
+      "failed": "Mislukt",
+      "col": {
+        "when": "Wanneer",
+        "to": "Aan",
+        "mode": "Modus",
+        "body": "Inhoud"
+      }
+    },
+    "products": {
+      "kicker": "Winkel / Producten",
+      "title": "Catalogus",
+      "add": "Product toevoegen",
+      "search": "Zoek op naam of SKU...",
+      "loading": "Producten laden",
+      "loadError": "Producten konden niet worden geladen",
+      "col": {
+        "image": "Afbeelding",
+        "name": "Naam",
+        "sku": "SKU",
+        "price": "Prijs",
+        "stock": "Voorraad",
+        "actions": "Acties"
+      },
+      "noMatchTitle": "Geen producten komen overeen",
+      "noMatchBody": "Niets komt overeen met \"{q}\" op naam of SKU.",
+      "clearSearch": "Zoekopdracht wissen",
+      "emptyTitle": "Nog geen producten",
+      "emptyBody": "Klik op \"Product toevoegen\" om je eerste te maken.",
+      "inStock": "Op voorraad",
+      "out": "Uitverkocht",
+      "share": "Delen",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "cancel": "Annuleren",
+      "deleted": "Product verwijderd.",
+      "deleteTitle": "Dit product verwijderen?",
+      "deleteBody": "\"{name}\" wordt verwijderd. Het blijft op Meta staan tot je het daar verwijdert."
+    },
+    "share": {
+      "eyebrow": "Product delen",
+      "product": "Product",
+      "close": "Sluiten",
+      "loading": "Links laden",
+      "storefrontLink": "Etalagelink",
+      "noStorefront": "(stel eerst de slug van je etalage in)",
+      "waLink": "WhatsApp-deeplink",
+      "noPhone": "(verbind eerst een telefoonnummer)",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd!",
+      "sendToCustomer": "Naar een klant sturen",
+      "phonePlaceholder": "WhatsApp-nummer, bijv. +1 555…",
+      "send": "Verzenden",
+      "sending": "Verzenden…",
+      "sent": "Verzonden.",
+      "invalidPhone": "Voer een geldig WhatsApp-nummer met landcode in."
+    },
+    "form": {
+      "breadcrumb": "Kruimelpad",
+      "products": "Producten",
+      "crumbNew": "Nieuw",
+      "crumbEdit": "Bewerken",
+      "addTitle": "Een product toevoegen",
+      "editFallback": "Product bewerken",
+      "loading": "Product laden",
+      "loadError": "Het product kon niet worden geladen",
+      "noPermissionTitle": "Je kunt dit niet doen",
+      "noPermission": "Je rol staat het maken of bewerken van producten niet toe.",
+      "reload": "Opnieuw laden",
+      "fixFields": "Sommige velden zijn ongeldig. Controleer de gemarkeerde velden.",
+      "basics": "Basis",
+      "name": "Naam",
+      "namePlaceholder": "bijv. Katoenen lente-T-shirt",
+      "sku": "SKU",
+      "optional": "(optioneel)",
+      "shortDescription": "Korte beschrijving",
+      "shortDescriptionPlaceholder": "Getoond in cataloguskaarten en WhatsApp-deellinks.",
+      "fullDescription": "Volledige beschrijving",
+      "fullDescriptionNote": "(hoofdtekst van de productpagina)",
+      "fullDescriptionPlaceholder": "Maten, stof, verzorgingsinstructies: alles wat de koper helpt beslissen. HTML toegestaan.",
+      "media": "Media",
+      "primaryImage": "Hoofdafbeelding · plak een URL",
+      "imageUrl": "Afbeeldings-URL",
+      "imageUrlHint": "Plak een directe afbeeldings-URL.",
+      "photoTipsTitle": "Tips voor geweldige productfoto's",
+      "photoTips": "Gebruik vierkante (1:1) afbeeldingen van 1024×1024 px of groter. Effen achtergronden converteren beter dan drukke.",
+      "gallery": "Galerij",
+      "galleryHint": "Voeg meer afbeeldingen toe aan de productdetailpagina. Kopers zien deze als miniaturen.",
+      "addGalleryUrl": "Afbeeldings-URL toevoegen",
+      "galleryRow": "URL van galerijafbeelding {n}",
+      "removeGallery": "Galerijafbeelding {n} verwijderen",
+      "galleryEmpty": "Nog geen galerijafbeeldingen. Klik hierboven op \"Afbeeldings-URL toevoegen\" om er een toe te voegen.",
+      "pricing": "Prijzen",
+      "price": "Prijs",
+      "comparePrice": "Vergelijkingsprijs",
+      "was": "(was)",
+      "comparePriceHint": "Oorspronkelijke prijs · wordt doorgehaald getoond.",
+      "currency": "Valuta",
+      "profit": "Winstindicator",
+      "profitHint": "Automatisch · prijs versus vergelijkingsprijs.",
+      "profitOff": "-{percent}% korting",
+      "profitLower": "Vergelijking < prijs",
+      "profitSame": "0% · gelijk",
+      "inventory": "Voorraad en verzending",
+      "stockQty": "Voorraadaantal",
+      "stockPlaceholder": "Leeg = onbeperkt",
+      "weight": "Gewicht",
+      "weightHint": "Gebruikt voor het berekenen van verzendkosten.",
+      "weightPlaceholder": "bijv. 250",
+      "available": "Beschikbaar voor verkoop",
+      "availableHint": "Uitvinken om als uitverkocht te markeren terwijl het product zichtbaar blijft.",
+      "sortOrder": "Sorteervolgorde",
+      "sortOrderHint": "Lagere nummers verschijnen eerst.",
+      "visibility": "Zichtbaarheid",
+      "status": {
+        "active": "Actief: live in de etalage",
+        "draft": "Concept: verborgen, bewerkbaar",
+        "archived": "Gearchiveerd: verborgen, bewaard in de gegevens"
+      },
+      "organization": "Organisatie",
+      "category": "Categorie",
+      "categoryPlaceholder": "bijv. Kleding, Snacks",
+      "tags": "Tags",
+      "tagsNote": "(gescheiden door komma's)",
+      "tagsPlaceholder": "katoen, zomer, bestseller",
+      "preview": "Etalagevoorbeeld",
+      "noImage": "Nog geen afbeelding",
+      "productName": "Productnaam",
+      "cancel": "Annuleren",
+      "saveChanges": "Wijzigingen opslaan",
+      "createProduct": "Product maken",
+      "created": "Product gemaakt.",
+      "updated": "Product bijgewerkt.",
+      "problem": {
+        "required": "Dit veld is verplicht.",
+        "tooLong": "Deze tekst is te lang.",
+        "notNumber": "Voer een getal in, zoals 499 of 499,50.",
+        "tooBig": "Het bedrag is te groot.",
+        "notWhole": "Voer een geheel getal in.",
+        "badUrl": "Voer een volledige link in die begint met https://",
+        "outOfRange": "Dit getal valt buiten het bereik.",
+        "tooMany": "Te veel afbeeldingen."
+      }
+    },
+    "reviews": {
+      "rating": "{rating, plural, one {# ster van 5} other {# sterren van 5}}",
+      "kicker": "Winkel / Beoordelingen",
+      "title": "Productbeoordelingen",
+      "subtitle": "Keur klantbeoordelingen goed om ze op de productpagina van de etalage te tonen.",
+      "tabs": "Beoordelingsstatus",
+      "tab": {
+        "pending": "In behandeling",
+        "approved": "Goedgekeurd",
+        "rejected": "Afgewezen"
+      },
+      "loading": "Beoordelingen laden",
+      "loadError": "Beoordelingen konden niet worden geladen",
+      "empty": {
+        "pending": "Geen beoordelingen in behandeling.",
+        "approved": "Geen goedgekeurde beoordelingen.",
+        "rejected": "Geen afgewezen beoordelingen."
+      },
+      "anonymous": "Anoniem",
+      "on": "over",
+      "unknownProduct": "een verwijderd product",
+      "approve": "Goedkeuren",
+      "reject": "Afwijzen",
+      "delete": "Verwijderen",
+      "cancel": "Annuleren",
+      "approved": "Beoordeling goedgekeurd.",
+      "rejected": "Review afgewezen.",
+      "deleted": "Review verwijderd.",
+      "deleteTitle": "Deze review verwijderen?",
+      "deleteBody": "De review wordt definitief verwijderd."
+    },
+    "senderPicker": {
+      "none": "Geen gekoppelde afzenders.",
+      "connectOne": "Koppel er een →",
+      "select": "— Kies een afzender —",
+      "connectNew": "Nieuw apparaat koppelen",
+      "engine": {
+        "waba": "Meta",
+        "twilio": "Twilio",
+        "baileys": "Onofficiële API"
+      }
+    },
+    "admin": {
+      "nav": "Catalogus",
+      "pageTitle": "Catalogusinstellingen",
+      "loading": "Catalogusinstellingen laden",
+      "retry": "Opnieuw proberen",
+      "eyebrow": "Beheer · Projectinstellingen",
+      "titleLead": "WhatsApp",
+      "titleAccent": "Catalogus",
+      "intro": "Instellingen op platformniveau voor de WABA-catalogusfunctie. Elke verkoper koppelt zijn eigen Meta Commerce Account-catalogus via de <link>/catalog</link>-pagina in de workspace. Dit scherm bepaalt de standaardwaarden die elke workspace overneemt.",
+      "allSettings": "Alle instellingen",
+      "openCatalog": "Gebruikerscatalogus openen",
+      "reset": "Concept herstellen",
+      "save": "Wijzigingen opslaan",
+      "saved": "Catalogusinstellingen opgeslagen.",
+      "superOnly": "Alleen een superbeheerder kan deze instellingen wijzigen. Je ziet de opgeslagen waarden.",
+      "fix": "Corrigeer de gemarkeerde velden:",
+      "problems": {
+        "graphVersion": "Gebruik een Graph API-versie zoals v23.0.",
+        "currency": "Gebruik een valutacode van 3 letters."
+      },
+      "errors": {
+        "conflict": "Iemand anders heeft deze instellingen eerder opgeslagen. De nieuwste waarden worden getoond; voer je wijziging opnieuw door.",
+        "forbidden": "Je hebt geen toestemming om deze instellingen te wijzigen.",
+        "validation": "Sommige velden zijn ongeldig. Controleer de gemarkeerde velden en probeer het opnieuw.",
+        "network": "Kan de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+        "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw."
+      },
+      "usage": {
+        "connected": "Gekoppelde workspaces",
+        "connectedHint": "met een opgeslagen Meta-catalogus-ID",
+        "products": "Gesynchroniseerde producten",
+        "productsHint": "in alle workspacecatalogi",
+        "sends": "Verzonden catalogusberichten",
+        "sendsHint": "SPM + MPM + catalogus-CTA"
+      },
+      "gate": {
+        "kicker": "Functieschakelaar",
+        "title": "Beschikbaarheid van catalogus",
+        "enabled": "Ingeschakeld",
+        "body": "Indien ingeschakeld kunnen workspace-eigenaren hun Meta Commerce-catalogus koppelen via <link>/catalog</link> en Single Product-, Multi-Product- en Catalog-CTA-berichten sturen vanuit de chat en de flowbuilder. Schakel uit om het menu-item in alle workspaces te verbergen (bestaande koppelingen blijven behouden maar worden alleen-lezen).",
+        "commerce": "Commerce-checkout toestaan",
+        "commerceHint": "Laat verkopers betalingen in WhatsApp accepteren via een gekoppeld Commerce Account. Vereist een door Meta goedgekeurd Commerce Account en een ondersteunde regio."
+      },
+      "api": {
+        "kicker": "Cloud API",
+        "title": "Graph API-versie",
+        "intro": "Elke cataloguswerking (verzenden, synchroniseren, pushen) loopt via deze Graph API-versie. Meta brengt ongeveer elke 3 maanden een nieuwe versie uit en ondersteunt de vorige ongeveer 2 jaar.",
+        "version": "Graph API-versie",
+        "versionHint": "Indeling: v'{'major'}'.'{'minor'}', bijvoorbeeld v23.0. Laat leeg om de standaardwaarde te gebruiken.",
+        "currency": "Standaardvaluta",
+        "currencyHint": "ISO-4217-code (3 letters). Wordt gebruikt als standaard voor nieuwe catalogi; elke Meta Commerce-catalogus blijft aan één valuta gebonden."
+      },
+      "app": {
+        "kicker": "Optioneel · Meta-app",
+        "title": "Meta-app voor het hele platform",
+        "intro": "Alleen nodig als je een OAuth-ervaring met \"Installeren met Meta\" wilt aanbieden. In de standaardflow plakt elke verkoper zijn eigen systeemgebruikerstoken op de cataloguspagina, dus app-gegevens zijn niet nodig.",
+        "id": "Meta-app-ID",
+        "idHint": "Te vinden op developers.facebook.com → jouw app → Instellingen → Basis.",
+        "secret": "Meta-appgeheim",
+        "secretPlaceholder": "App-geheim",
+        "secretSaved": "•••••••••••• (opgeslagen, leeg laten om te behouden)",
+        "secretHint": "Versleuteld opgeslagen. Wordt gebruikt om handtekeningen van webhook-payloads te verifiëren (X-Hub-Signature-256)."
+      },
+      "walk": {
+        "kicker": "Stappenplan voor verkopers",
+        "title": "Hoe een workspace zijn catalogus koppelt",
+        "intro": "Wordt aan verkopers getoond op de cataloguspagina. Hier herhaald zodat je de flow kunt controleren.",
+        "waba": {
+          "title": "Heb een actieve WABA + telefoonnummer-ID",
+          "body": "De verkoper heeft een geverifieerd WhatsApp Business Account in Meta Business Suite nodig met minstens één goedgekeurd telefoonnummer. Zonder dit kan geen enkel catalogusbericht worden verzonden."
+        },
+        "catalog": {
+          "title": "Maak een catalogus in Meta Commerce Manager",
+          "body": "Ga naar business.facebook.com/commerce → Catalogus maken → kies e-commerce. Voeg producten handmatig toe, via CSV, of haal ze op uit Shopify/Woo. De catalogus moet openbaar zijn en aan één valuta gebonden."
+        },
+        "link": {
+          "title": "Koppel de catalogus aan de WABA",
+          "body": "Ga in Business Suite naar WhatsApp Manager → tabblad Catalogus → \"Kies een catalogus\" → kies de catalogus uit stap 2. Hiermee worden productberichten via de Cloud API mogelijk."
+        },
+        "token": {
+          "title": "Genereer een systeemgebruikerstoken",
+          "body": "Bedrijfsinstellingen → Systeemgebruikers → Toevoegen → Beheerder. Genereer een token met whatsapp_business_messaging, whatsapp_business_management, catalog_management, business_management. Kies \"Nooit\" als vervaldatum om elk kwartaal opnieuw inloggen te voorkomen."
+        },
+        "paste": {
+          "title": "Plak de gegevens op de cataloguspagina",
+          "body": "WABA-ID, catalogus-ID, telefoonnummer-ID en het systeemgebruikerstoken komen op de cataloguspagina in de workspace. Daarna wordt een test GET /{CATALOG_ID}?fields=name,product_count uitgevoerd om te controleren of het token catalog_management heeft op die catalogus."
+        }
+      },
+      "side": {
+        "archKicker": "Architectuur",
+        "archTitle": "Per verkoper versus platform",
+        "here": "Hier (beheer, eenmalig)",
+        "hereBody": "Functieschakelaar, Graph API-versie, standaardvaluta, optionele Meta-appgegevens.",
+        "merchant": "Op de cataloguspagina (per verkoper)",
+        "merchantBody": "WABA-ID, catalogus-ID, telefoonnummer-ID, systeemgebruikerstoken. Meta eist dat de catalogus eigendom is van het Commerce Account van de verkoper, dus er is geen gedeelde catalogus.",
+        "payloadsKicker": "Cloud API-payloads",
+        "payloadsTitle": "Drie berichttypen die we versturen",
+        "payload": {
+          "spm": {
+            "title": "SPM · Single Product",
+            "code": "interactive.type = \"product\""
+          },
+          "mpm": {
+            "title": "MPM · Multi-Product",
+            "code": "interactive.type = \"product_list\" · max. 10 secties, 30 items"
+          },
+          "cta": {
+            "title": "Catalogus-CTA",
+            "code": "interactive.type = \"catalog_message\""
+          }
+        },
+        "docsKicker": "Officiële documentatie",
+        "docsTitle": "Referentie",
+        "docs": {
+          "sell": "Producten en diensten verkopen →",
+          "messages": "Cloud API-berichtenreferentie →",
+          "batch": "Catalog Batch API (producten pushen) →",
+          "changelog": "Graph API-wijzigingslog →",
+          "policies": "Commerce-beleid →"
+        },
+        "constraintsTitle": "Beperkingen",
+        "constraints": {
+          "public": "Catalogus moet openbaar zijn",
+          "currency": "Eén valuta per catalogus",
+          "images": "Afbeeldingen ≥ 500×500 px (JPG / PNG)",
+          "goods": "Geen alcohol / volwassenen- / gereguleerde goederen",
+          "verification": "Bedrijfsverificatie vereist voor productie"
+        }
+      }
+    }
+  }
+}

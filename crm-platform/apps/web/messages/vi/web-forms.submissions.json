@@ -1,0 +1,170 @@
+{
+  "web-forms": {
+    "submissions": {
+      "title": "Bài gửi",
+      "backToForm": "Quay lại {name}",
+      "formFallback": "Biểu mẫu",
+      "count": "Đã tải {count, plural, =0 {không có bài gửi nào} other {# bài gửi}}",
+      "moreAvailable": "Còn nhiều hơn để tải",
+      "tabsLabel": "Nhóm bài gửi",
+      "tabs": {
+        "all": "Tất cả",
+        "needs_attention": "Cần xử lý",
+        "spam": "Thư rác"
+      },
+      "filters": {
+        "search": "Tìm kiếm",
+        "searchPlaceholder": "Tên, email hoặc số điện thoại",
+        "status": "Trạng thái",
+        "allStatuses": "Mọi trạng thái",
+        "from": "Từ",
+        "to": "Đến",
+        "clear": "Xóa bộ lọc"
+      },
+      "status": {
+        "received": "Đã nhận",
+        "created": "Đã tạo liên hệ",
+        "updated": "Đã cập nhật liên hệ",
+        "needs_review": "Cần xem xét",
+        "awaiting_payment": "Chờ thanh toán",
+        "paid": "Đã thanh toán",
+        "failed": "Thất bại",
+        "spam": "Thư rác"
+      },
+      "reason": {
+        "label": "Lý do",
+        "todo": "Cần làm gì",
+        "no_contact_point": {
+          "what": "Người truy cập không cung cấp email hoặc số điện thoại dùng được, nên không thể tạo liên hệ.",
+          "todo": "Mở câu trả lời, thêm thông tin còn thiếu vào liên hệ bằng tay, hoặc sửa ánh xạ của biểu mẫu rồi thử lại."
+        },
+        "invalid_phone": {
+          "what": "Không đọc được số điện thoại thành số hợp lệ.",
+          "todo": "Mở câu trả lời, kiểm tra số, rồi thử lại khi biểu mẫu chấp nhận, hoặc thêm liên hệ bằng tay."
+        },
+        "plan_limit_reached": {
+          "what": "Đã đạt giới hạn liên hệ của gói, nên chưa tạo liên hệ mới.",
+          "todo": "Giải phóng bớt liên hệ hoặc nâng cấp gói, rồi thử lại."
+        },
+        "submissions_cap": {
+          "what": "Đã đạt giới hạn bài gửi hằng tháng của gói, nên bài này được lưu để xem xét.",
+          "todo": "Nâng cấp gói hoặc đợi tháng sau, rồi thử lại."
+        },
+        "spam_score": {
+          "what": "Bài gửi giống thư rác nên đã được gạt sang một bên.",
+          "todo": "Nếu đây là người thật, hãy mở và thêm họ làm liên hệ bằng tay."
+        },
+        "too_fast": {
+          "what": "Bài được gửi nhanh hơn mức người thật có thể điền biểu mẫu, nên đã bị gạt sang một bên như thư rác.",
+          "todo": "Nếu đây là người thật, hãy mở và thêm họ làm liên hệ bằng tay."
+        },
+        "internal_error": {
+          "what": "Có lỗi xảy ra phía chúng tôi khi xử lý. Câu trả lời vẫn được giữ lại.",
+          "todo": "Hãy thử lại. Nếu vẫn lỗi, liên hệ hỗ trợ kèm thời gian gửi."
+        },
+        "unknown": {
+          "what": "Bài gửi này bị gạt sang một bên vì lý do mà phiên bản ứng dụng này không nhận diện được.",
+          "todo": "Mở để xem chi tiết, rồi thử lại hoặc xử lý bằng tay."
+        }
+      },
+      "table": {
+        "received": "Đã nhận",
+        "visitor": "Người truy cập",
+        "status": "Trạng thái",
+        "contact": "Liên hệ",
+        "company": "Công ty",
+        "version": "Phiên bản",
+        "open": "Mở bài gửi từ {who}"
+      },
+      "anonymous": "Không có tên",
+      "answersRemovedShort": "Đã xóa câu trả lời",
+      "versionShort": "v{n}",
+      "noLink": "Không có",
+      "unnamedContact": "Mở liên hệ",
+      "unnamedCompany": "Mở công ty",
+      "drawer": {
+        "title": "Bài gửi từ {who}",
+        "close": "Đóng",
+        "loading": "Đang mở bài gửi",
+        "errorTitle": "Không thể mở bài gửi này.",
+        "errorBody": "Kiểm tra kết nối và thử lại.",
+        "retryLoad": "Thử lại",
+        "auditNote": "Việc mở câu trả lời của bài gửi được ghi lại trong nhật ký kiểm toán.",
+        "answers": "Câu trả lời",
+        "noAnswers": "Bài gửi này không có câu trả lời.",
+        "emptyAnswer": "Không có câu trả lời",
+        "yes": "Có",
+        "no": "Không",
+        "removedTitle": "Câu trả lời đã bị xóa",
+        "removedBody": "Câu trả lời đã bị xóa hoặc làm sạch. Chỉ còn bản ghi này, và liên hệ vẫn được giữ lại.",
+        "summary": "Tóm tắt",
+        "receivedAt": "Đã nhận",
+        "formVersion": "Phiên bản biểu mẫu",
+        "spamScore": "Điểm thư rác",
+        "error": "Lỗi",
+        "attribution": "Nguồn gốc",
+        "noAttribution": "Không ghi nhận được chi tiết nguồn.",
+        "utm": "Thẻ chiến dịch",
+        "referrer": "Trang giới thiệu",
+        "pageUrl": "Trang",
+        "userAgent": "Trình duyệt",
+        "consent": "Đồng ý",
+        "consentGiven": "Đã đồng ý",
+        "consentText": "Nội dung người truy cập đã thấy",
+        "consentVersion": "Phiên bản nội dung",
+        "consentAt": "Đồng ý lúc",
+        "noConsent": "Biểu mẫu này không yêu cầu đồng ý.",
+        "links": "Bản ghi",
+        "actions": "Hành động"
+      },
+      "actions": {
+        "retry": "Thử lại",
+        "retrying": "Đang thử lại",
+        "delete": "Xóa câu trả lời",
+        "deleting": "Đang xóa",
+        "export": "Xuất CSV",
+        "exporting": "Đang xuất",
+        "exportHintAttention": "Chọn một trạng thái để xuất từ nhóm này, hoặc chọn Tất cả.",
+        "exportHintSearch": "Khi xuất, nội dung ô tìm kiếm sẽ bị bỏ qua.",
+        "notSpam": "Không phải thư rác: xử lý"
+      },
+      "confirmDelete": {
+        "title": "Xóa các câu trả lời này?",
+        "message": "Thao tác này xóa vĩnh viễn câu trả lời của bài gửi này. Một dòng vẫn còn trong danh sách để ghi nhận rằng bài gửi đã xảy ra, và liên hệ không bao giờ bị xóa.",
+        "confirm": "Xóa câu trả lời",
+        "cancel": "Hủy"
+      },
+      "toast": {
+        "retried": "Đã thử lại. Bài gửi hiện là: {status}.",
+        "notRetryable": "Chỉ bài gửi cần xem xét hoặc bị lỗi mới có thể thử lại.",
+        "purged": "Câu trả lời đã được xóa trước đó nên không có gì để thử lại.",
+        "retryFailed": "Lần thử lại chưa thành công. Vui lòng thử lại.",
+        "deleted": "Đã xóa câu trả lời. Liên hệ được giữ lại.",
+        "deleteFailed": "Không thể xóa câu trả lời. Vui lòng thử lại.",
+        "exported": "Đã tải xuống tệp CSV.",
+        "exportTruncated": "Việc xuất đã bị cắt ở {max} dòng mới nhất. Hãy thu hẹp khoảng ngày để lấy phần còn lại.",
+        "exportFailed": "Không thể xuất dữ liệu. Vui lòng thử lại."
+      },
+      "state": {
+        "loading": "Đang tải bài gửi",
+        "errorTitle": "Không tải được bài gửi.",
+        "errorBody": "Kiểm tra kết nối và thử lại.",
+        "retry": "Thử lại",
+        "lockedTitle": "Biểu mẫu không nằm trong gói của bạn",
+        "lockedBody": "Thêm ứng dụng Biểu mẫu vào không gian làm việc để thu thập và xem xét bài gửi.",
+        "upgrade": "Xem các gói",
+        "emptyTitle": "Chưa có bài gửi nào",
+        "emptyBody": "Chia sẻ liên kết của biểu mẫu hoặc nhúng lên trang web của bạn. Mỗi bài gửi sẽ hiện ở đây ngay khi có người gửi.",
+        "emptyShare": "Chia sẻ biểu mẫu này",
+        "emptyFilteredTitle": "Không có bài gửi nào khớp",
+        "emptyFilteredBody": "Không có gì khớp với bộ lọc này. Xóa bộ lọc để xem tất cả.",
+        "loadMore": "Tải thêm",
+        "loadingMore": "Đang tải thêm"
+      },
+      "cap": {
+        "notice": "Một số bài gửi đã được lưu để xem xét vì đã đạt giới hạn bài gửi hằng tháng của gói.",
+        "upgrade": "Nâng cấp gói"
+      }
+    }
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "whatsapp-cloud-api-waba": {
+    "nav": {
+      "groups": "Meta-Gruppen"
+    },
+    "errors": {
+      "WABA_GROUPS_NOT_ELIGIBLE": "Diese Nummer ist für Gruppen nicht berechtigt. WhatsApp öffnet Gruppen nur für offizielle Business-Konten.",
+      "WABA_GROUPS_PROVIDER_UNSUPPORTED": "Gruppen sind nur für direkt mit Meta verbundene Nummern verfügbar. Diese Nummer wird über einen anderen Anbieter erreicht.",
+      "WABA_GROUP_NOT_FOUND": "Gruppe nicht gefunden.",
+      "WABA_GROUP_SUSPENDED": "WhatsApp hat diese Gruppe wegen eines Richtlinienverstoßes gesperrt.",
+      "WABA_GROUP_LIMIT_REACHED": "Ein WhatsApp-Limit für Gruppen wurde erreicht. Entfernen Sie eine Gruppe oder fragen Sie WhatsApp nach mehr.",
+      "WABA_GROUP_RATE_LIMITED": "Zu viele Gruppenvorgänge von dieser Nummer. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "PLAN_FEATURE_LOCKED": "Ihr Tarif umfasst keine WhatsApp-Gruppen. Aktualisieren Sie ihn, um sie freizuschalten.",
+      "VALIDATION_FAILED": "Prüfen Sie die Felder und versuchen Sie es erneut."
+    },
+    "groups": {
+      "pageTitle": "WhatsApp-Gruppen",
+      "eyebrow": "WhatsApp / Gruppen",
+      "headingA": "Gruppe",
+      "headingB": "Nachrichten",
+      "intro": "Erstellen Sie WhatsApp-Gruppen über Ihre Geschäftsnummer, teilen Sie den Einladungslink und verwalten Sie Beitrittsanfragen. Unterhaltungen erscheinen wie jeder andere Chat in Ihrem Posteingang.",
+      "loading": "Gruppen werden geladen…",
+      "loadFailed": "Die Gruppen konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "numbersDenied": "Sie können Gruppen sehen, aber nicht die Liste der WhatsApp-Nummern, zu denen sie gehören. Bitten Sie einen Admin um Zugriff auf WhatsApp-Nummern.",
+      "rail": {
+        "title": "Gruppen",
+        "noNumber": "Keine WhatsApp-Business-Nummer",
+        "eligible": "Berechtigt",
+        "notEligible": "Nicht berechtigt",
+        "numberLabel": "Nummer",
+        "howTitle": "So funktionieren Gruppen",
+        "howInvite": "Gruppen sind nur auf Einladung zugänglich. Sie erstellen die Gruppe, WhatsApp stellt einen Einladungslink bereit, und Sie teilen diesen Link. Personen entscheiden selbst, ob sie beitreten. Eine direkte Hinzufügung ist nicht möglich.",
+        "howCost": "Jede Nachricht, die Sie senden, wird pro empfangender Person berechnet. Eine Nachricht an 100 Mitglieder kostet 100 Sendungen."
+      },
+      "state": {
+        "noNumber": {
+          "title": "Keine WhatsApp-Business-Nummer verbunden",
+          "message": "Für Gruppen ist eine WhatsApp-Nummer nötig, die über die offizielle WhatsApp Business Platform verbunden ist.",
+          "hint": "Verbinden Sie eine unter Einstellungen, Kanäle, WhatsApp.",
+          "connect": "WhatsApp-Nummern öffnen"
+        },
+        "notEligible": {
+          "title": "Diese Nummer kann noch keine Gruppen nutzen",
+          "message": "WhatsApp öffnet die Gruppenfunktion nur für offizielle Business-Konten, also die verifizierte Stufe mit dem grünen Abzeichen. Ihre Nummer ist verbunden und funktioniert für normale Chats; sie hat lediglich noch keinen Gruppenzugang erhalten.",
+          "hint": "Beantragen Sie den Status eines offiziellen Business-Kontos im WhatsApp Manager und laden Sie dann diese Seite neu.",
+          "reload": "Erneut prüfen",
+          "checking": "Wird geprüft…"
+        },
+        "providerUnsupported": {
+          "title": "Gruppen sind über diesen Weg nicht verfügbar",
+          "message": "Diese Nummer wird über einen anderen Anbieter erreicht, nicht direkt über Meta. Gruppen wurden nur für direkt mit Meta verbundene Nummern eingerichtet.",
+          "hint": "Verbinden Sie die Nummer direkt mit Meta oder fragen Sie den Anbieter, ob Gruppen unterstützt werden."
+        },
+        "missingCredentials": {
+          "title": "Diese Nummer muss neu verbunden werden",
+          "message": "Für diese Nummer ist kein Zugriffstoken gespeichert, daher kann WhatsApp nicht nach Gruppen gefragt werden.",
+          "hint": "Ersetzen Sie das Token auf der Zustandsseite der Nummer."
+        },
+        "checkFailed": "WhatsApp konnte gerade nicht abgefragt werden, ob diese Nummer Gruppen nutzen kann. Alles unten funktioniert, wenn sie es kann; schlägt eine Aktion fehl, versuchen Sie es in einem Moment erneut."
+      },
+      "kpi": {
+        "groups": "Gruppen",
+        "groupsSub": "auf dieser Nummer",
+        "members": "Mitglieder",
+        "membersSub": "in allen Gruppen",
+        "joinRequests": "Beitrittsanfragen",
+        "joinRequestsSub": "warten auf Sie",
+        "suspended": "Gesperrt",
+        "suspendedSub": "von WhatsApp blockiert"
+      },
+      "create": {
+        "title": "Gruppe erstellen",
+        "name": "Gruppenname",
+        "nameHint": "Was Mitglieder oben im Chat sehen. Bis zu 128 Zeichen.",
+        "who": "Wer beitreten kann",
+        "whoAuto": "Wer den Link hat, tritt sofort bei",
+        "whoApproval": "Sie genehmigen jede Person zuerst",
+        "whoHint": "Mit Genehmigung erhalten Sie eine Warteschlange zur Prüfung, bevor jemand eingelassen wird.",
+        "description": "Beschreibung",
+        "descriptionHint": "Optional. Wird auf dem Gruppeninfo-Bildschirm angezeigt.",
+        "submit": "Gruppe erstellen",
+        "submitting": "Wird erstellt…"
+      },
+      "list": {
+        "title": "Ihre Gruppen",
+        "empty": "Noch keine Gruppen. Erstellen Sie oben eine, um loszulegen.",
+        "untitled": "Gruppe ohne Namen",
+        "members": "{count, plural, =0 {Keine Mitglieder} one {1 Mitglied} other {# Mitglieder}}",
+        "approvalRequired": "Genehmigung erforderlich",
+        "suspended": "WhatsApp hat diese Gruppe gesperrt. Sie können ihr erst schreiben, wenn WhatsApp sie wiederherstellt.",
+        "creationFailed": "WhatsApp konnte diese Gruppe nicht erstellen: {message}",
+        "refresh": "Aktualisieren",
+        "refreshing": "Wird aktualisiert…",
+        "delete": "Löschen",
+        "edit": "Bearbeiten",
+        "membersButton": "Mitglieder",
+        "loadMore": "Weitere Gruppen anzeigen",
+        "loadingMore": "Wird geladen…"
+      },
+      "link": {
+        "awaiting": "Der Einladungslink wird gerade von WhatsApp erstellt…",
+        "label": "Einladungslink",
+        "copy": "Kopieren",
+        "copied": "Kopiert",
+        "newLink": "Neuer Link"
+      },
+      "joinRequests": {
+        "title": "Wartet auf Beitritt",
+        "approve": "Genehmigen",
+        "reject": "Ablehnen",
+        "working": "…",
+        "hidden": "{count, plural, one {1 Person wartet auf den Beitritt.} other {# Personen warten auf den Beitritt.}} Sie benötigen die Berechtigung, Gruppen zu verwalten, um zu sehen, wer das ist."
+      },
+      "confirm": {
+        "deleteTitle": "Diese Gruppe löschen?",
+        "deleteMessage": "Diese Gruppe löschen und alle Mitglieder entfernen? Eine gelöschte Gruppe kann nicht wiederhergestellt werden. Ihr Chatverlauf bleibt in Ihrem Posteingang erhalten.",
+        "deleteConfirm": "Gruppe löschen",
+        "linkTitle": "Neuen Link erstellen?",
+        "linkMessage": "Neuen Link erstellen? Alle, denen Sie den alten Link bereits geschickt haben, können ihn nicht mehr verwenden.",
+        "linkConfirm": "Neuen Link erstellen",
+        "cancel": "Abbrechen"
+      },
+      "edit": {
+        "title": "Gruppe bearbeiten",
+        "subject": "Gruppenname",
+        "description": "Beschreibung",
+        "hint": "An WhatsApp gesendet. Die Gruppe wird hier aktualisiert, sobald Meta es bestätigt.",
+        "save": "An WhatsApp senden",
+        "saving": "Wird gesendet…"
+      },
+      "members": {
+        "title": "Mitglieder von {name}",
+        "hint": "Wird beim Öffnen dieses Fensters von WhatsApp gelesen; hier wird nichts gespeichert. Sie können bis zu {max} Personen gleichzeitig entfernen.",
+        "loading": "Mitglieder werden von WhatsApp gelesen…",
+        "empty": "Noch keine Mitglieder.",
+        "selected": "{count} ausgewählt",
+        "remove": "Ausgewählte entfernen",
+        "removing": "Wird entfernt…",
+        "limit": "Sie können höchstens {max} Personen gleichzeitig entfernen.",
+        "removeConfirm": "{count, plural, one {Diese Person} other {diese # Personen}} aus der Gruppe entfernen? Sie können mit dem alten Link nicht wieder beitreten."
+      },
+      "notice": {
+        "created": "Gruppe erstellt. Der Einladungslink erscheint hier, sobald Meta ihn ausstellt.",
+        "refreshed": "Gruppe aktualisiert.",
+        "linkReset": "Neuer Einladungslink erstellt. Alle bisher geteilten Links funktionieren nicht mehr.",
+        "updateSent": "Aktualisierung an WhatsApp gesendet. Die Gruppe wird hier aktualisiert, sobald Meta es bestätigt.",
+        "deleted": "Gruppe gelöscht und alle Teilnehmer entfernt.",
+        "removed": "{count, plural, one {1 Person aus der Gruppe entfernt.} other {# Personen aus der Gruppe entfernt.}}",
+        "approved": "{count, plural, one {1 Person genehmigt.} other {# Personen genehmigt.}}",
+        "rejected": "{count, plural, one {1 Anfrage abgelehnt.} other {# Anfragen abgelehnt.}}",
+        "copyFailed": "Der Link konnte nicht kopiert werden. Markieren Sie ihn und kopieren Sie ihn manuell."
+      },
+      "removeNumberWarning": "Für diese Nummer gibt es hier {count, plural, one {1 Gruppendatensatz} other {# Gruppendatensätze}}. Wenn Sie die Nummer entfernen, werden diese aus diesem Arbeitsbereich gelöscht. Die Gruppen selbst bleiben bei WhatsApp und ihre Chats bleiben in Ihrem Posteingang."
+    }
+  }
+}

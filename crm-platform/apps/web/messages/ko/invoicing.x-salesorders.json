@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "초안 주문만 변경할 수 있습니다. 확정된 주문은 고정되어 있으므로, 항목이나 가격을 바꾸려면 취소한 후 새 주문을 만드세요.",
+        "SO_NOT_CONFIRMED": "먼저 주문을 확정하세요. 확정된 주문만 인보이스를 만들거나 배송을 기록할 수 있습니다.",
+        "SO_CANCELLED": "이 주문은 취소되어 더 이상 작업할 수 없습니다.",
+        "SO_QUOTE_NOT_ACCEPTED": "수락된 제안서 또는 견적서만 판매 주문이 될 수 있습니다. 먼저 수락으로 표시하세요.",
+        "SO_QUOTE_TAKEN": "이 제안서 또는 견적서에는 이미 판매 주문이 있습니다.",
+        "SO_QUANTITY_EXCEEDS": "수량이 해당 항목에 남은 양보다 많습니다. 수량을 낮춘 후 다시 시도하세요.",
+        "SO_NOTHING_TO_INVOICE": "남은 작업이 없습니다. 모든 항목이 이미 인보이스 발행 또는 배송 완료되었습니다.",
+        "SO_HAS_INVOICES": "이 주문에서 만든 인보이스가 아직 유효합니다. 먼저 인보이스를 무효 처리하거나 삭제한 후 주문을 취소하세요."
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "판매 주문",
+        "subtitle": "수락된 제안을 주문으로 전환하여 한 번에 또는 나누어 인보이스를 발행하고 배송합니다.",
+        "newOrder": "새 판매 주문",
+        "search": "번호, 구매자 또는 참조로 검색",
+        "reset": "초기화",
+        "refresh": "새로고침",
+        "tableLabel": "판매 주문",
+        "noAccessTitle": "접근 권한 없음",
+        "noAccess": "판매 주문을 볼 권한이 없습니다.",
+        "emptyFilteredTitle": "일치하는 주문 없음",
+        "emptyFiltered": "이 필터와 일치하는 항목이 없습니다. 필터를 변경하거나 초기화하세요.",
+        "resetFilters": "필터 초기화",
+        "loading": "판매 주문을 불러오는 중",
+        "showing": "{count}개 표시",
+        "loadMore": "더 보기",
+        "allLoaded": "모두 불러옴",
+        "contactLoading": "불러오는 중...",
+        "empty": {
+          "all": {
+            "title": "아직 판매 주문이 없습니다",
+            "message": "수락된 제안서 또는 견적서를 주문으로 전환하거나 처음부터 새로 만드세요."
+          },
+          "draft": {
+            "title": "초안 주문 없음",
+            "message": "작성 중인 주문이 여기에 표시됩니다."
+          },
+          "confirmed": {
+            "title": "확정된 주문 없음",
+            "message": "인보이스 발행 또는 배송을 기다리는 확정 주문이 여기에 표시됩니다."
+          },
+          "cancelled": {
+            "title": "취소된 주문 없음",
+            "message": "취소한 주문이 사유와 함께 여기에 표시됩니다."
+          },
+          "closed": {
+            "title": "마감된 주문 없음",
+            "message": "모든 항목에 인보이스 발행과 배송이 끝나면 주문이 마감됩니다."
+          }
+        }
+      },
+      "strip": {
+        "label": "진행 중인 주문 금액",
+        "openValue": "진행 중인 주문 ({currency})"
+      },
+      "tabs": {
+        "label": "주문 상태",
+        "all": "전체",
+        "draft": "초안",
+        "confirmed": "확정됨",
+        "cancelled": "취소됨",
+        "closed": "마감됨",
+        "count": "주문 {count}건"
+      },
+      "quick": {
+        "label": "빠른 필터",
+        "toInvoice": "인보이스 발행 대기",
+        "toFulfil": "이행 대기"
+      },
+      "table": {
+        "scrollArea": "판매 주문 표",
+        "columns": {
+          "number": "주문",
+          "buyer": "구매자",
+          "quote": "견적",
+          "deal": "거래",
+          "expected": "예정일",
+          "status": "상태",
+          "invoicing": "인보이스 발행",
+          "fulfilment": "배송",
+          "total": "합계",
+          "invoices": "인보이스"
+        }
+      },
+      "row": {
+        "moreFor": "{name} 작업",
+        "open": "열기",
+        "edit": "편집",
+        "confirm": "주문 확정",
+        "invoiceAll": "남은 항목 모두 인보이스 발행",
+        "fulfilAll": "모두 배송 완료로 표시",
+        "cancel": "주문 취소",
+        "delete": "초안 삭제"
+      },
+      "status": {
+        "draft": "초안",
+        "confirmed": "확정됨",
+        "cancelled": "취소됨",
+        "closed": "마감됨"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "미발행",
+        "partially_invoiced": "일부 발행",
+        "invoiced": "발행 완료"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "미배송",
+        "partially_fulfilled": "일부 배송",
+        "fulfilled": "배송 완료"
+      },
+      "actions": {
+        "failed": "작업이 실패했습니다.",
+        "confirmed": "주문 {number}이(가) 확정되었습니다.",
+        "invoicedDraft": "주문에서 초안 인보이스가 만들어졌습니다.",
+        "invoicedIssued": "인보이스 {number}이(가) 발행되었습니다.",
+        "fulfilled": "배송이 기록되었습니다.",
+        "cancelled": "주문 {number}이(가) 취소되었습니다.",
+        "deleted": "초안 주문이 삭제되었습니다."
+      },
+      "dialog": {
+        "close": "닫기",
+        "cancel": "취소",
+        "how": "수량 선택",
+        "mode": {
+          "all": "남은 전체 수량",
+          "lines": "수량 선택"
+        },
+        "left": "{qty} 남음",
+        "qtyExceeds": "이 항목에는 최대 {max}이(가) 남아 있습니다.",
+        "qtyInvalid": "소수점 4자리 이하의 수량을 입력하거나, 이 항목을 건너뛰려면 0을 입력하세요.",
+        "nothingHint": "이 주문의 모든 항목이 이미 인보이스 발행되었습니다."
+      },
+      "confirmDialog": {
+        "title": "이 주문을 확정할까요?",
+        "message": "확정하면 항목과 가격이 고정됩니다. 이후에는 주문을 한 번에 또는 나누어 인보이스 발행하고 배송을 기록할 수 있습니다. 유효한 인보이스가 없는 동안에는 여전히 취소할 수 있습니다.",
+        "confirm": "주문 확정"
+      },
+      "cancelDialog": {
+        "title": "이 주문을 취소할까요?",
+        "warning": "취소된 주문은 더 이상 인보이스를 발행하거나 배송할 수 없으며, 다시 열 수 없습니다.",
+        "reason": "사유",
+        "reasonHint": "팀 내부용으로 주문에 기록됩니다.",
+        "reasonRequired": "주문을 취소하는 이유를 입력하세요.",
+        "reasonTooLong": "사유는 {max}자 미만으로 입력하세요.",
+        "cancelOrder": "주문 취소",
+        "hasInvoices": "이 주문에 아직 인보이스가 있습니다. 먼저 인보이스를 무효 처리하거나 삭제하세요(무효 처리된 인보이스의 수량은 주문으로 돌아갑니다). 그런 다음 주문을 취소하세요.",
+        "seeInvoices": "인보이스 보기"
+      },
+      "deleteDialog": {
+        "title": "이 초안을 삭제할까요?",
+        "message": "초안 주문은 영구적으로 삭제됩니다. 확정된 주문은 삭제할 수 없으며 취소만 가능합니다.",
+        "delete": "초안 삭제"
+      },
+      "invoiceDialog": {
+        "title": "이 주문 인보이스 발행",
+        "intro": "고정된 가격으로 주문을 청구합니다. 나누어 인보이스를 발행할 수 있으며, 지금 청구되지 않은 항목은 주문에 남습니다.",
+        "invoiceAndIssue": "인보이스 만들기 및 발행",
+        "createDraft": "초안 인보이스 만들기",
+        "issueDate": "발행일",
+        "issueDateHint": "비워 두면 오늘({today})로 설정됩니다.",
+        "dueDate": "기한일",
+        "terms": "결제 조건",
+        "termsDefault": "워크스페이스 기본값",
+        "termsOnIssue": "발행 즉시 결제",
+        "termsDays": "{count}일",
+        "issueNow": "인보이스 지금 발행",
+        "issueNowHint": "인보이스에 번호가 부여되며 바로 발송할 수 있습니다.",
+        "draftHint": "발행 전에 확인할 수 있도록 초안으로 두세요.",
+        "includeShipping": "이 인보이스에 배송비 청구",
+        "problems": {
+          "nothing": "하나 이상의 항목에서 0보다 큰 수량을 선택하세요.",
+          "issueDateInvalid": "올바른 발행일을 입력하세요.",
+          "dueDateInvalid": "올바른 기한일을 입력하세요.",
+          "dueBeforeIssue": "기한일은 발행일보다 빠를 수 없습니다."
+        }
+      },
+      "fulfilDialog": {
+        "title": "배송 기록",
+        "intro": "구매자에게 배송된 내용을 기록하세요. 배송은 인보이스 발행과 별도로 추적되므로 어느 쪽이 먼저여도 됩니다.",
+        "record": "배송 기록",
+        "note": "메모",
+        "noteHint": "선택 사항입니다. 예: 배송 명세서 번호.",
+        "problems": {
+          "nothing": "하나 이상의 항목에서 0보다 큰 수량을 선택하세요.",
+          "noteTooLong": "메모는 {max}자 미만으로 입력하세요."
+        }
+      },
+      "detail": {
+        "noAccessTitle": "접근 권한 없음",
+        "noAccess": "판매 주문을 볼 권한이 없습니다.",
+        "loading": "주문을 불러오는 중",
+        "back": "판매 주문으로 돌아가기",
+        "noBuyer": "구매자 없음",
+        "edit": "편집",
+        "confirm": "주문 확정",
+        "recordDelivery": "배송 기록",
+        "invoice": "인보이스 발행...",
+        "more": "추가 작업",
+        "cancel": "주문 취소",
+        "delete": "초안 삭제",
+        "cancelledOn": "{date}에 취소됨",
+        "draftHint": "이 주문은 초안입니다. 확정하면 가격이 고정되고 인보이스 발행과 배송을 시작할 수 있습니다.",
+        "notes": "메모",
+        "terms": "약관",
+        "progress": "진행률",
+        "invoiced": "인보이스 발행됨",
+        "fulfilled": "배송됨"
+      },
+      "lines": {
+        "title": "항목",
+        "scrollArea": "주문 항목",
+        "item": "품목",
+        "ordered": "주문 수량",
+        "invoiced": "인보이스 발행됨",
+        "fulfilled": "배송됨",
+        "toInvoice": "발행 대기",
+        "unitPrice": "단가",
+        "amount": "금액",
+        "taxLine": "{name} {rate}%",
+        "taxRate": "세금 {rate}%",
+        "invoicedBar": "{name}의 인보이스 발행 비율",
+        "fulfilledBar": "{name}의 배송 비율"
+      },
+      "totals": {
+        "title": "합계",
+        "subtotal": "소계",
+        "discount": "할인",
+        "shipping": "배송비",
+        "shippingBilled": "청구됨",
+        "shippingPending": "첫 인보이스에 청구됨",
+        "tax": "세금",
+        "total": "합계"
+      },
+      "info": {
+        "title": "상세 정보",
+        "buyer": "구매자",
+        "email": "이메일",
+        "phone": "전화번호",
+        "quote": "견적",
+        "deal": "거래",
+        "owner": "담당자",
+        "reference": "참조",
+        "expected": "예정일",
+        "created": "생성일",
+        "confirmed": "확정일"
+      },
+      "invoices": {
+        "title": "이 주문의 인보이스",
+        "none": "이 주문으로 만든 인보이스가 아직 없습니다.",
+        "noneDraft": "주문이 확정되면 인보이스를 만들 수 있습니다.",
+        "draft": "초안",
+        "voidNote": "무효 처리된 인보이스의 수량은 주문으로 돌아갑니다."
+      },
+      "builder": {
+        "noAccessTitle": "접근 권한 없음",
+        "noAccess": "판매 주문을 변경할 권한이 없습니다.",
+        "loading": "불러오는 중",
+        "frozen": "이 주문은 확정되어 항목과 가격이 고정되어 있습니다. 변경하려면 취소한 후 새 주문을 시작하세요.",
+        "openOrder": "주문 열기",
+        "back": "뒤로",
+        "editTitle": "{number} 편집",
+        "newTitle": "새 판매 주문",
+        "unsaved": "저장되지 않은 변경 사항",
+        "cancel": "취소",
+        "saveChanges": "변경 사항 저장",
+        "createDraft": "초안 만들기",
+        "conflict": "편집하는 동안 다른 사용자가 이 초안을 변경했습니다. 새로고침하여 해당 버전을 확인하세요. 여기서 편집한 내용은 사라집니다.",
+        "reload": "새로고침",
+        "saved": "초안이 저장되었습니다.",
+        "created": "주문 {number}이(가) 초안으로 만들어졌습니다.",
+        "fixProblems": "강조 표시된 필드를 먼저 수정하세요.",
+        "serverRejected": "서버에서 일부 값을 허용하지 않았습니다. 필드를 확인한 후 다시 시도하세요.",
+        "startFrom": "시작 방식",
+        "source": {
+          "scratch": "빈 주문",
+          "quote": "수락된 제안서 또는 견적서"
+        },
+        "loadingQuote": "제안을 불러오는 중...",
+        "buyer": "구매자",
+        "contact": "연락처",
+        "contactHint": "연락처를 선택해 주문을 연결하거나 아래에 구매자를 직접 입력하세요.",
+        "buyerName": "구매자 이름",
+        "fromQuoteHint": "비워 두면 제안의 구매자가 사용됩니다.",
+        "buyerEmail": "이메일",
+        "buyerPhone": "전화번호",
+        "details": "주문 상세",
+        "currency": "통화",
+        "currencyHint": "USD 또는 KWD처럼 세 글자로 입력하세요.",
+        "currencyLocked": "주문이 만들어지면 고정됩니다.",
+        "expectedDate": "예정일",
+        "expectedHint": "구매자가 배송받기를 원하는 날짜입니다.",
+        "reference": "참조",
+        "referenceHint": "예: 구매자의 구매 주문 번호.",
+        "linesFromQuote": "항목",
+        "linesFromQuoteHint": "주문은 수락된 제안의 항목, 가격, 세금을 가져오며 문서 할인은 항목에 반영됩니다. 초안을 만든 후에도 항목을 편집할 수 있습니다.",
+        "lineItems": "항목",
+        "shippingNotes": "배송비, 메모 및 약관",
+        "shipping": "배송비 ({currency})",
+        "shippingHint": "첫 인보이스에 청구됩니다.",
+        "notes": "메모",
+        "notesHint": "주문에 표시됩니다.",
+        "terms": "약관",
+        "termsHint": "이 주문으로 만든 인보이스에 옮겨집니다.",
+        "draftNote": "확정하기 전까지 주문은 초안으로 유지됩니다. 확정하면 가격이 고정됩니다.",
+        "quoteTotals": "제안 합계",
+        "quoteTotalsNote": "수락된 제안과 동일합니다. 주문이 만들어지면 주문 자체의 금액이 표시됩니다.",
+        "subtotal": "소계",
+        "discount": "할인",
+        "tax": "세금",
+        "total": "합계",
+        "openExisting": "주문 {number} 열기",
+        "viewOrders": "모든 주문 보기",
+        "pickAnother": "다른 제안 선택",
+        "problems": {
+          "buyerRequired": "연락처를 선택하거나 구매자 이름을 입력하세요.",
+          "emailInvalid": "올바른 이메일 주소를 입력하세요.",
+          "currencyInvalid": "3자리 통화 코드를 입력하세요.",
+          "expectedDateInvalid": "올바른 날짜를 입력하세요.",
+          "shippingInvalid": "올바른 금액을 입력하세요.",
+          "noLines": "항목을 하나 이상 추가하세요.",
+          "referenceTooLong": "참조는 191자 미만으로 입력하세요."
+        },
+        "lineProblems": {
+          "descriptionRequired": "이 항목을 설명하세요.",
+          "qtyInvalid": "0보다 큰 수량을 입력하세요.",
+          "priceInvalid": "올바른 가격을 입력하세요.",
+          "lineDiscountInvalid": "올바른 할인 값을 입력하세요.",
+          "hsnRequired": "HSN/SAC 코드를 입력하세요.",
+          "hsnInvalid": "올바른 HSN/SAC 코드를 입력하세요.",
+          "taxRateRemoved": "이 항목의 세율이 더 이상 존재하지 않습니다. 현재 세율을 선택하세요."
+        }
+      },
+      "quotePicker": {
+        "search": "수락된 제안 검색",
+        "results": "수락된 제안서 및 견적서",
+        "loading": "제안을 불러오는 중",
+        "noMatch": "일치하는 수락된 제안이 없습니다.",
+        "none": "아직 수락된 제안서 또는 견적서가 없습니다.",
+        "kind": {
+          "proposal": "제안서",
+          "estimate": "견적서"
+        },
+        "untitled": "제목 없음",
+        "accepted": "{date} 수락됨"
+      }
+    }
+  }
+}

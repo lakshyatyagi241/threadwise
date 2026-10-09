@@ -1,0 +1,107 @@
+{
+  "developer-rest-api-v1-docs": {
+    "metaTitle": "{brand} API Başvurusu",
+    "metaDescription": "{brand} REST API başvurusu: kimlik doğrulama, hız sınırları ve istek ile yanıt örnekleriyle her uç nokta.",
+    "common": {
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "copyFailed": "Kopyalanamadı. Metni seçip elle kopyalayın."
+    },
+    "topbar": {
+      "home": "{brand} ana sayfa",
+      "apiWord": "API",
+      "version": "v1",
+      "spec": "OpenAPI belirtimi",
+      "getKey": "API anahtarı al"
+    },
+    "sidebar": {
+      "label": "Başvuru gezintisi",
+      "filterLabel": "Uç noktaları filtrele",
+      "filterPlaceholder": "Uç noktaları filtrele…",
+      "startHere": "Buradan başlayın",
+      "intro": "Giriş",
+      "auth": "Kimlik doğrulama",
+      "webhooks": "Webhook'lar"
+    },
+    "hero": {
+      "eyebrow": "Geliştirici başvurusu",
+      "title": "{brand} <em>REST API</em>",
+      "lead": "WhatsApp mesajları göndermek, toplu gönderimler ve kampanyalar yürütmek, kişileri ve şablonları yönetmek, otomasyon akışlarını tetiklemek ve hesabınızı okumak için tek bir REST API; CRM'inizin, otomasyon platformunuzun veya uygulamanızın ihtiyaç duyduğu her şey.",
+      "baseUrl": "Temel URL",
+      "copyBaseUrl": "Temel URL'yi kopyala"
+    },
+    "capabilities": {
+      "title": "Neler yapabilirsiniz",
+      "send": {
+        "title": "Mesaj gönderin",
+        "body": "Tekli gönderimler, toplu gönderimler, kampanyalar ve zamanlanmış gönderimler"
+      },
+      "receive": {
+        "title": "Mesaj alın",
+        "body": "Gelen konuşmaları ve mesajlarını okuyun"
+      },
+      "contacts": {
+        "title": "Kişiler ve potansiyel müşteriler",
+        "body": "Tam oluşturma, okuma, güncelleme ve silme; gruplar ve özel öznitelikler"
+      },
+      "templates": {
+        "title": "Şablonlar",
+        "body": "WhatsApp şablonlarını oluşturun, güncelleyin ve listeleyin"
+      },
+      "flows": {
+        "title": "Otomasyon akışları",
+        "body": "API üzerinden bir kişiyi akışa kaydedin"
+      },
+      "status": {
+        "title": "İletim durumu",
+        "body": "Mesaj başına gönderildi, iletildi, okundu ve başarısız"
+      },
+      "devices": {
+        "title": "Cihazlar",
+        "body": "Bağlı numaraları ve durumlarını listeleyin"
+      },
+      "account": {
+        "title": "Hesap ve kullanım",
+        "body": "Plan, sınırlar ve mesaj kredileri"
+      }
+    },
+    "auth": {
+      "title": "Kimlik doğrulama",
+      "intro": "Her istek bir çalışma alanı <strong>API anahtarı</strong> ile doğrulanır. Panoda <strong>Ayarlar, REST API</strong> altında bir tane oluşturun. Bearer belirteci olarak gönderin:",
+      "copyHeader": "Başlığı kopyala",
+      "alt": "Alternatif olarak <code>X-Api-Key</code> başlığında iletin. Anahtarlar tek bir çalışma alanına aittir ve yalnızca özetleri saklanır, bu yüzden anahtarı oluşturulduğunda kopyalayın: yeniden gösterilemez. Anahtarlar istediğiniz zaman iptal edilebilir ve hemen çalışmayı durdurur."
+    },
+    "webhooks": {
+      "title": "Webhook'lar ve gerçek zamanlı olaylar",
+      "comingTitle": "Webhook iletimi yakında geliyor",
+      "comingBody": "Bir webhook kaydetmek ve olayları kendi URL'nizde almak henüz mümkün değil. Bugün sunucunuza olay gönderilmiyor, bu yüzden abone olunacak bir şey yok. İletim devreye girdiğinde bu kart olayları ve imza başlığını listeleyecek.",
+      "rateLabel": "Hız sınırları",
+      "rate": "Her anahtar, çalışma alanı planının dakika başına sınırıyla sınırlıdır; plan sınır belirlemiyorsa dakikada {limit} isteklik platform varsayılanı geçerlidir. Her yanıt <code>X-RateLimit-Limit</code> ve <code>X-RateLimit-Remaining</code> başlıklarını taşır; sınırı aşan istek HTTP 429 ve <code>Retry-After</code> başlığıyla yanıtlanır. Giden gönderimler ayrıca planınızın mesaj kredilerinden düşer."
+    },
+    "reference": {
+      "title": "Uç noktalar",
+      "count": "{count, plural, one {# uç nokta} other {# uç nokta}}",
+      "noMatch": "“{query}” ile eşleşen uç nokta yok.",
+      "clearFilter": "Filtreyi temizle",
+      "empty": "Henüz yayımlanmış uç nokta yok. Yakında tekrar kontrol edin.",
+      "unavailableTitle": "Uç nokta başvurusu yüklenemedi",
+      "unavailableBody": "API belirtimine şu anda ulaşılamıyor. Yukarıdaki giriş yine de geçerlidir. Birazdan tekrar deneyin.",
+      "retry": "Tekrar dene",
+      "general": "Genel",
+      "toggle": "{method} {path} ayrıntılarını göster veya gizle",
+      "parameters": "Parametreler",
+      "bodyParameters": "Gövde parametreleri",
+      "name": "Ad",
+      "field": "Alan",
+      "description": "Açıklama",
+      "required": "zorunlu",
+      "exampleRequest": "Örnek istek",
+      "requestBody": "İstek gövdesi",
+      "responses": "Yanıtlar",
+      "copyCurl": "İsteği kopyala",
+      "copyJson": "JSON'u kopyala",
+      "noExample": "Belirtim bu yanıt için örnek vermiyor."
+    },
+    "footer": "{brand} REST API · v1 · canlı OpenAPI belirtiminden oluşturuldu"
+  }
+}

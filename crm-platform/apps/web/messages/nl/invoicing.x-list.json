@@ -1,0 +1,268 @@
+{
+  "invoicing": {
+    "method": {
+      "bank": "Bankoverschrijving",
+      "manual": "Handmatig",
+      "wa_pay": "WhatsApp Pay",
+      "storefront": "Webwinkel"
+    },
+    "toolbar": {
+      "currency": "Valuta",
+      "currencyPlaceholder": "USD",
+      "issued": "Uitgegeven",
+      "issuedWindow": "Uitgiftedatumbereik",
+      "due": "Vervalt",
+      "dueWindow": "Vervaldatumbereik",
+      "dueFrom": "Vervalt vanaf",
+      "dueTo": "Vervalt tot",
+      "docType": "Documenttype",
+      "anyDocType": "Alle typen",
+      "mine": "Mijn facturen",
+      "docTypes": {
+        "tax_invoice": "Btw-factuur",
+        "proforma": "Proforma",
+        "receipt": "Ontvangstbewijs"
+      }
+    },
+    "strip": {
+      "label": "Nog openstaand",
+      "outstanding": "Openstaand ({currency})",
+      "overdue": "Waarvan achterstallig"
+    },
+    "row": {
+      "creditNote": "Creditnota maken",
+      "downloadPdf": "PDF downloaden"
+    },
+    "bulk": {
+      "sendLink": "Link als verstuurd markeren",
+      "someSkipped": "{count, plural, one {# geselecteerde factuur is overgeslagen omdat die deze actie niet accepteert.} other {# geselecteerde facturen zijn overgeslagen omdat ze deze actie niet accepteren.}}",
+      "done": {
+        "send": "{count, plural, one {# factuur als verstuurd gemarkeerd.} other {# facturen als verstuurd gemarkeerd.}}"
+      },
+      "confirm": {
+        "delete": {
+          "message": "{count, plural, one {# concept wordt definitief verwijderd. Facturen die geen concept zijn, blijven ongemoeid.} other {# concepten worden definitief verwijderd. Facturen die geen concept zijn, blijven ongemoeid.}}"
+        }
+      },
+      "voidDialog": {
+        "title": "Geselecteerde facturen ongeldig maken",
+        "close": "Sluiten",
+        "keep": "Facturen behouden",
+        "confirm": "{count, plural, one {# factuur ongeldig maken} other {# facturen ongeldig maken}}",
+        "warning": "{count, plural, one {# factuur wordt ongeldig gemaakt. Hij behoudt zijn nummer maar kan niet meer worden betaald of bewerkt.} other {# facturen worden ongeldig gemaakt. Ze behouden hun nummers maar kunnen niet meer worden betaald of bewerkt.}}",
+        "skipped": "{count, plural, one {# geselecteerde factuur wordt overgeslagen: alleen uitgegeven facturen zonder betaling en zonder creditnota kunnen ongeldig worden gemaakt.} other {# geselecteerde facturen worden overgeslagen: alleen uitgegeven facturen zonder betaling en zonder creditnota kunnen ongeldig worden gemaakt.}}",
+        "reason": "Reden (bij elke factuur bewaard)",
+        "reasonRequired": "Zeg waarom deze facturen ongeldig worden gemaakt."
+      }
+    },
+    "actions": {
+      "sentVia": {
+        "link": "Vastgelegd als verstuurd met de link.",
+        "email": "Factuur per e-mail verstuurd.",
+        "whatsapp": "Factuur via WhatsApp verstuurd."
+      },
+      "markedPaid": "Als betaald gemarkeerd.",
+      "linkRegenerated": "Nieuwe link aangemaakt. De oude werkt niet meer.",
+      "linkRevoked": "Link uitgeschakeld.",
+      "linkUnavailable": "Deze factuur heeft geen actieve link. Open de factuur om een nieuwe aan te maken."
+    },
+    "voidDialog": {
+      "reasonHint": "Verplicht. Wordt bewaard in de tijdlijn van de factuur.",
+      "reasonRequired": "Zeg waarom de factuur ongeldig wordt gemaakt.",
+      "refundFirst": "Op deze factuur zijn betalingen ontvangen. Betaal ze eerst terug (via de betalingenlijst op de factuur), maak daarna pas de factuur ongeldig.",
+      "creditsFirst": "Op deze factuur staan creditnota's. Maak eerst de creditnota's ongeldig, daarna pas de factuur."
+    },
+    "sendDialog": {
+      "loading": "Factuur laden",
+      "channel": "Hoe verstuur je hem?",
+      "channels": {
+        "link": "Ik deel de link zelf",
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "action": {
+        "link": "Als verstuurd markeren",
+        "email": "E-mail versturen",
+        "whatsapp": "Via WhatsApp versturen"
+      },
+      "linkOff": "Deze factuur heeft geen actieve link. Maak een nieuwe aan via de linkkaart op de factuur en deel die.",
+      "linkRecords": "De link zelf delen registreert alleen dat hij is verstuurd.",
+      "noEmail": "Geen e-mailadres op deze factuur",
+      "noPhone": "Geen telefoonnummer op deze factuur",
+      "noEmailHelp": "Deze factuur heeft geen e-mailadres van de koper. Sluit dit venster, gebruik Gegevens bewerken om er een toe te voegen en probeer het opnieuw.",
+      "noPhoneHelp": "Deze factuur heeft geen telefoonnummer van de koper. Sluit dit venster, gebruik Gegevens bewerken om er een toe te voegen en probeer het opnieuw.",
+      "message": "Bericht",
+      "messageHint": "Optioneel. Wordt toegevoegd aan het bericht bij de factuur.",
+      "deliveryNote": "De factuur staat klaar om naar de koper te worden verstuurd. De tijdlijn toont wanneer hij is verzonden."
+    },
+    "editDialog": {
+      "title": "Gegevens bewerken",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "save": "Wijzigingen opslaan",
+      "saved": "Factuurgegevens opgeslagen.",
+      "reload": "Factuur opnieuw laden",
+      "conflict": "Iemand anders heeft deze factuur gewijzigd terwijl je hem bewerkte. Laad hem opnieuw om de nieuwste versie te zien en doe je wijziging daarna opnieuw.",
+      "intro": "Een uitgegeven factuur behoudt zijn regels, bedragen en nummering. Deze gegevens kunnen nog wel wijzigen.",
+      "email": "E-mail koper",
+      "phone": "Telefoon koper",
+      "phoneHint": "Met landcode, bijvoorbeeld +31612345678",
+      "contact": "Contact",
+      "owner": "Eigenaar",
+      "dueDate": "Vervaldatum",
+      "dueHint": "Verleng of verkort de betaaltermijn.",
+      "reference": "Referentie",
+      "notes": "Notities",
+      "terms": "Voorwaarden"
+    },
+    "payDialog": {
+      "overpayNote": "Dit is {extra} meer dan het saldo. Je wordt gevraagd dit te bevestigen voordat het als credit wordt vastgelegd.",
+      "overpayConfirm": "{extra} meer dan het saldo wordt vastgelegd en als credit op de factuur getoond. Druk nogmaals op de knop om te bevestigen.",
+      "problems": {
+        "tooMuch": "Dat is meer dan de factuur nog verschuldigd is."
+      }
+    },
+    "markPaidDialog": {
+      "title": "Als betaald markeren",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "confirm": "Betaling registreren",
+      "message": "Het volledige saldo van {amount} als vandaag ontvangen registreren?",
+      "method": "Ontvangen door"
+    },
+    "refundDialog": {
+      "problems": {
+        "dateFuture": "De terugbetalingsdatum kan niet in de toekomst liggen."
+      }
+    },
+    "paymentsSection": {
+      "refundChip": "Terugbetalen",
+      "receipt": "Bon",
+      "refundOf": "zet {receipt} terug",
+      "refundedSoFar": "{amount} tot nu toe terugbetaald"
+    },
+    "activity": {
+      "none": "Er is nog niets gebeurd.",
+      "actors": {
+        "buyer": "De koper",
+        "gateway": "Betaalprovider",
+        "system": "Systeem"
+      },
+      "events": {
+        "sent": "Naar de koper verstuurd",
+        "overdue": "Achterstallig geworden",
+        "partially_paid": "Deels betaald",
+        "link_regenerated": "Openbare link vervangen",
+        "link_revoked": "Openbare link uitgeschakeld",
+        "pay_attempt": "Online betaling geprobeerd",
+        "credit_note_issued": "Creditnota"
+      }
+    },
+    "linked": {
+      "invoiced": "Gefactureerd",
+      "paid": "Betaald",
+      "outstanding": "Verschuldigd",
+      "overdue": "Achterstallig",
+      "latest": "{count, plural, one {Laatste factuur wordt getoond.} other {Laatste # facturen worden getoond.}}"
+    },
+    "detail": {
+      "editDetails": "Gegevens bewerken",
+      "downloadPdf": "PDF",
+      "createCreditNote": "Creditnota maken",
+      "linkOffBanner": "De link van de koper staat uit, dus de koper kan deze factuur niet openen. Maak een nieuwe link aan op de linkkaart.",
+      "refunded": "Terugbetaald",
+      "credited": "Gecrediteerd",
+      "credit": "Credit",
+      "detailsLabel": "Factuurgegevens",
+      "contact": "Contact",
+      "company": "Bedrijf",
+      "quote": "Offerte",
+      "salesOrder": "Verkooporder",
+      "recurring": "Terugkerend schema",
+      "makeRecurring": "Terugkerend maken",
+      "reference": "Referentie",
+      "owner": "Eigenaar",
+      "createdBy": "Aangemaakt door",
+      "overpaid": "Er is meer ontvangen of gecrediteerd dan deze factuur vraagt. Het surplus wordt als credit getoond.",
+      "voidNeedsRefund": "Om deze factuur ongeldig te maken, moet je eerst de betalingen terugbetalen. Er mogen ook geen creditnota's zijn.",
+      "sources": {
+        "manual": "Handmatig aangemaakt",
+        "quote": "Vanuit een offerte",
+        "order": "Vanuit een order",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Webwinkel",
+        "api": "API",
+        "ai": "AI-assistent",
+        "recurring": "Terugkerende factuur",
+        "sales_order": "Verkooporder"
+      },
+      "creditNotes": {
+        "title": "Creditnota's",
+        "create": "Creditnota maken",
+        "loading": "Creditnota's laden",
+        "none": "Geen creditnota's voor deze factuur.",
+        "draft": "Concept",
+        "status": {
+          "draft": "Concept",
+          "issued": "Uitgegeven",
+          "void": "Ongeldig"
+        }
+      }
+    },
+    "linkCard": {
+      "title": "Openbare link",
+      "address": "Linkadres",
+      "state": {
+        "active": "Actief",
+        "revoked": "Uitgeschakeld",
+        "expired": "Verlopen"
+      },
+      "off": {
+        "revoked": "De link is uitgeschakeld. De koper ziet een pagina waarop staat dat de factuur niet beschikbaar is.",
+        "expired": "De link is verlopen. De koper ziet een pagina waarop staat dat de factuur niet beschikbaar is."
+      },
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "expires": "Verloopt",
+      "revokedAt": "Uitgeschakeld",
+      "views": "Aantal keer geopend",
+      "firstViewed": "Eerst geopend",
+      "lastViewed": "Laatst geopend",
+      "open": "Open de pagina van de koper",
+      "regenerate": "Nieuwe link",
+      "revoke": "Uitschakelen",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "regenerateTitle": "Maak een nieuwe link",
+      "regenerateWarning": "De huidige link werkt meteen niet meer. Iedereen die hem heeft, ziet dat de factuur niet beschikbaar is.",
+      "regenerateConfirm": "Nieuwe link maken",
+      "expiry": "De nieuwe link werkt voor",
+      "expiryNever": "Geen vervaldatum",
+      "expiryDays": "{count, plural, one {# dag} other {# dagen}}",
+      "revokeTitle": "Link uitschakelen?",
+      "revokeMessage": "De koper kan deze factuur via de link niet meer openen of betalen. Je kunt later een nieuwe link maken.",
+      "revokeConfirm": "Link uitschakelen"
+    },
+    "errors": {
+      "codes": {
+        "INV_NOT_DRAFT": "Deze factuur is al uitgegeven, dus de regels en bedragen kunnen niet meer wijzigen.",
+        "INV_NOT_ISSUED": "Alleen een uitgegeven factuur kan dat. Geef de conceptfactuur eerst uit.",
+        "INV_ALREADY_VOID": "Deze factuur is al ongeldig.",
+        "INV_HAS_PAYMENTS": "Deze factuur heeft nog betalingen. Betaal die eerst terug en maak de factuur daarna ongeldig.",
+        "INV_HAS_CREDITS": "Voor deze factuur bestaan creditnota's. Maak die eerst ongeldig en daarna de factuur.",
+        "INV_NOT_DELETABLE": "Alleen een concept kan worden verwijderd. Maak deze factuur in plaats daarvan ongeldig.",
+        "INV_NO_RECIPIENT": "De factuur heeft geen e-mailadres of telefoonnummer voor dat kanaal. Voeg er een toe via Gegevens bewerken en probeer het opnieuw.",
+        "INV_LINK_UNAVAILABLE": "Deze factuur heeft geen actieve link. Maak een nieuwe aan via de linkkaart.",
+        "INV_OWNER_INVALID": "Die persoon is geen actief lid van deze workspace. Kies een andere eigenaar.",
+        "PAY_OVERPAYMENT": "Dat is meer dan de factuur nog open heeft staan. Verlaag het bedrag, of bevestig dat je een tegoed registreert.",
+        "PAY_FUTURE_DATE": "De betaaldatum kan niet in de toekomst liggen.",
+        "PAY_CURRENCY_MISMATCH": "De betaling moet in dezelfde valuta zijn als de factuur.",
+        "PAY_REFUND_EXCEEDS": "Dat is meer dan er nog op deze betaling terugbetaald kan worden.",
+        "PAY_NOT_REFUNDABLE": "Deze regel kan niet worden terugbetaald. Alleen een betaling met nog een restbedrag kan dat.",
+        "PAY_NOTHING_TO_PAY": "Op deze factuur staat niets meer open.",
+        "ROW_VERSION_CONFLICT": "Iemand anders heeft deze factuur net gewijzigd. Laad de pagina opnieuw om de nieuwste versie te zien en probeer het daarna nog eens."
+      }
+    }
+  }
+}

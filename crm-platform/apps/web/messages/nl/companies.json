@@ -1,0 +1,218 @@
+{
+  "companies": {
+    "nav": {
+      "companies": "Bedrijven"
+    },
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "errors": {
+      "network": "Kan de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt geen toestemming om dat te doen.",
+      "signedOut": "Je sessie is beëindigd. Log opnieuw in om verder te gaan.",
+      "conflict": "Iemand anders heeft dit bedrijf gewijzigd terwijl je het bewerkte. Hun wijzigingen zijn geladen; jouw bewerkingen blijven behouden, dus bekijk ze en sla opnieuw op.",
+      "validation": "Een deel van wat is ingevuld is ongeldig. Controleer de velden en probeer het opnieuw.",
+      "unavailable": "Bedrijven zijn op deze server nog niet beschikbaar.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "notFound": "Dat bedrijf bestaat niet meer.",
+      "planDisabled": "Je abonnement bevat geen bedrijven. Upgrade om ze te ontgrendelen.",
+      "ownerInvalid": "De eigenaar moet een actief lid van deze workspace zijn.",
+      "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw.",
+      "requestId": "Verzoek-ID",
+      "retry": "Opnieuw proberen"
+    },
+    "list": {
+      "eyebrow": "CRM · Organisaties",
+      "title": "Bedrijven",
+      "subtitle": "Groepeer contacten en deals onder een organisatie — zie alle contacten, open deals en gewonnen omzet op één plek.",
+      "newCompany": "Nieuw bedrijf",
+      "tiles": {
+        "companies": "Bedrijven",
+        "withDeals": "Met open deals",
+        "wonRevenue": "Gewonnen omzet"
+      },
+      "bulk": {
+        "label": "Bulkacties",
+        "selected": "{count, plural, one {# bedrijf geselecteerd} other {# bedrijven geselecteerd}}",
+        "delete": "Verwijderen",
+        "clear": "Selectie wissen"
+      },
+      "loading": "Bedrijven laden",
+      "unavailableTitle": "Bedrijven zijn niet beschikbaar",
+      "unavailable": "De bedrijvenservice is op deze server nog niet uitgerold.",
+      "emptyFilteredTitle": "Geen bedrijven gevonden",
+      "emptyFiltered": "Probeer een andere zoekopdracht of wis de filters.",
+      "clearFilters": "Filters wissen",
+      "emptyTitle": "Nog geen bedrijven",
+      "empty": "Nog geen bedrijven. Maak je eerste aan.",
+      "showing": "{count, plural, one {# bedrijf geladen} other {# bedrijven geladen}}",
+      "loadMore": "Meer laden",
+      "allLoaded": "Alle bedrijven geladen",
+      "deleteTitle": "Bedrijf verwijderen",
+      "deleteMessage": "Dit bedrijf verwijderen? De contacten en deals blijven bewaard en worden alleen losgekoppeld.",
+      "deleteManyTitle": "Bedrijven verwijderen",
+      "deleteManyMessage": "{count, plural, one {Dit bedrijf verwijderen? De contacten en deals blijven bewaard en worden alleen losgekoppeld.} other {Deze # bedrijven verwijderen? Hun contacten en deals blijven bewaard en worden alleen losgekoppeld.}}",
+      "delete": "Verwijderen",
+      "keep": "Behouden"
+    },
+    "toolbar": {
+      "label": "Bedrijven filteren",
+      "search": "Bedrijven zoeken…",
+      "industry": "Branche",
+      "allIndustries": "Alle branches",
+      "owner": "Eigenaar",
+      "allOwners": "Alle eigenaren",
+      "noOwner": "Geen eigenaar",
+      "withOpenDeals": "Met open deals",
+      "sort": "Volgorde",
+      "sorts": {
+        "created": "Nieuwste eerst",
+        "name": "Naam A tot Z"
+      },
+      "clear": "Wissen",
+      "refresh": "Vernieuwen"
+    },
+    "table": {
+      "label": "Bedrijven",
+      "selectAll": "Alle geladen bedrijven selecteren",
+      "select": "{name} selecteren",
+      "company": "Bedrijf",
+      "industry": "Branche",
+      "contacts": "Contacten",
+      "openDeals": "Open deals",
+      "wonValue": "Gewonnen waarde",
+      "actions": "Acties",
+      "delete": "Bedrijf verwijderen",
+      "deleteNamed": "Bedrijf {name} verwijderen"
+    },
+    "form": {
+      "eyebrow": "Bedrijf",
+      "newTitle": "Nieuw bedrijf",
+      "editTitle": "Bedrijf bewerken",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "create": "Maken",
+      "save": "Wijzigingen opslaan",
+      "name": "Bedrijfsnaam *",
+      "namePlaceholder": "Acme BV",
+      "industry": "Branche",
+      "website": "Website",
+      "email": "E-mail",
+      "phone": "Telefoon",
+      "notes": "Notities",
+      "moreDetails": "Meer details",
+      "sizeRange": "Grootte",
+      "sizeHint": "Bijvoorbeeld 1-10 of 11-50.",
+      "owner": "Eigenaar",
+      "noOwner": "Geen eigenaar",
+      "me": "{name} (jij)",
+      "address": "Adres",
+      "problems": {
+        "required": "Een bedrijfsnaam is verplicht.",
+        "tooLong": "Te lang: maximaal {limit} tekens.",
+        "email": "Voer een geldig e-mailadres in.",
+        "invalid": "Een deel van wat is ingevuld is ongeldig.",
+        "ownerInvalid": "De eigenaar moet een actief lid van deze workspace zijn."
+      }
+    },
+    "toast": {
+      "created": "Bedrijf gemaakt.",
+      "updated": "Bedrijf bijgewerkt.",
+      "deleted": "{count, plural, one {Bedrijf verwijderd.} other {# bedrijven verwijderd.}}",
+      "deletedSome": "{count, plural, one {# bedrijf verwijderd} other {# bedrijven verwijderd}}, {failed, plural, one {# kon niet worden verwijderd.} other {# konden niet worden verwijderd.}}",
+      "deleteFailed": "Verwijderen mislukt. Probeer het opnieuw.",
+      "contactUnlinked": "Contact verwijderd uit het bedrijf.",
+      "contactAlreadyOut": "Dat contact hoort niet meer bij dit bedrijf.",
+      "contactUnlinkFailed": "Kan het contact niet verwijderen. Probeer het opnieuw.",
+      "contactsLinked": "{count, plural, one {# contact toegevoegd aan het bedrijf.} other {# contacten toegevoegd aan het bedrijf.}}",
+      "contactsLinkedSome": "{count, plural, one {# contact toegevoegd} other {# contacten toegevoegd}}, {failed, plural, one {# kon niet worden toegevoegd.} other {# konden niet worden toegevoegd.}}",
+      "contactsLinkFailed": "Kan de contacten niet toevoegen. Probeer het opnieuw."
+    },
+    "detail": {
+      "back": "Alle bedrijven",
+      "loading": "Bedrijf laden",
+      "notFoundTitle": "Bedrijf niet gevonden",
+      "notFound": "Dit bedrijf bestaat niet of is verwijderd.",
+      "edit": "Bewerken",
+      "delete": "Verwijderen",
+      "keep": "Behouden",
+      "tiles": {
+        "contacts": "Contacten",
+        "openDeals": "Open deals",
+        "wonRevenue": "Gewonnen omzet"
+      },
+      "notes": "Notities",
+      "deleteTitle": "Bedrijf verwijderen",
+      "deleteMessage": "Dit bedrijf verwijderen? De contacten en deals blijven bewaard en worden alleen losgekoppeld.",
+      "details": "Details",
+      "owner": "Eigenaar",
+      "sizeRange": "Grootte",
+      "address": "Adres",
+      "createdBy": "Gemaakt door",
+      "created": "Gemaakt",
+      "updated": "Laatst gewijzigd"
+    },
+    "contacts": {
+      "title": "Contacten",
+      "add": "Contacten toevoegen",
+      "loading": "Contacten laden",
+      "empty": "Geen contacten gekoppeld aan dit bedrijf.",
+      "unnamed": "(geen naam)",
+      "unlink": "Uit bedrijf verwijderen",
+      "unlinkNamed": "{name} uit het bedrijf verwijderen",
+      "loadMore": "Meer laden",
+      "addModal": {
+        "title": "Contacten aan het bedrijf toevoegen",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "add": "{count, plural, one {# contact toevoegen} other {# contacten toevoegen}}",
+        "search": "Contacten zoeken op naam, e-mail of nummer",
+        "loading": "Contacten zoeken",
+        "noneTitle": "Geen contacten gevonden",
+        "none": "Geen contact komt overeen. Probeer een andere naam, e-mail of ander nummer.",
+        "unnamed": "(geen naam)",
+        "already": "Al aanwezig",
+        "willMove": "In een ander bedrijf",
+        "hint": "Een contact kan bij één bedrijf horen. Als je een contact toevoegt dat bij een ander bedrijf hoort, wordt het hierheen verplaatst."
+      }
+    },
+    "deals": {
+      "title": "Deals",
+      "loading": "Deals laden",
+      "empty": "Geen deals voor dit bedrijf.",
+      "loadMore": "Meer laden",
+      "status": {
+        "open": "Open",
+        "won": "Gewonnen",
+        "lost": "Verloren"
+      }
+    },
+    "activity": {
+      "title": "Activiteit",
+      "loading": "Activiteit laden",
+      "none": "Er is nog niets gebeurd met dit bedrijf.",
+      "loadMore": "Meer laden",
+      "empty": "leeg",
+      "system": "Het systeem",
+      "actions": {
+        "insert": "heeft het bedrijf gemaakt",
+        "update": "heeft het bedrijf gewijzigd",
+        "delete": "heeft het bedrijf verwijderd"
+      },
+      "contactLinked": "Contact toegevoegd",
+      "contactUnlinked": "Contact verwijderd",
+      "deletedContact": "een verwijderd contact",
+      "fields": {
+        "name": "Naam",
+        "website": "Website",
+        "email": "E-mail",
+        "phone": "Telefoon",
+        "industry": "Branche",
+        "sizeRange": "Grootte",
+        "address": "Adres",
+        "notes": "Notities",
+        "owner": "Eigenaar"
+      }
+    }
+  }
+}

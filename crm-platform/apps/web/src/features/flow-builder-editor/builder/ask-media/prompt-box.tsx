@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
+import { useFlb } from '../../lib/msg';
 import { attrEntries, filterAttrs } from '../inspector/attr-picker';
 import { TextArea } from '../inspector/kit';
 
@@ -91,12 +92,13 @@ export function PromptBox({
   rows?: number;
 }) {
   const t = useTranslations('flb.builder.askMedia.toolbar');
+  const tf = useFlb();
   const box = useRef<HTMLDivElement>(null);
   const [tool, setTool] = useState<Tool>(null);
   const [query, setQuery] = useState('');
   const text = value === null || value === undefined ? '' : String(value);
   const feed = usePickerFeed();
-  const entries = useMemo(() => attrEntries(feed.data), [feed.data]);
+  const entries = useMemo(() => attrEntries(feed.data, tf), [feed.data, tf]);
   const matches = useMemo(() => filterAttrs(entries, query).slice(0, 40), [entries, query]);
 
   const area = () => box.current?.querySelector('textarea') ?? null;

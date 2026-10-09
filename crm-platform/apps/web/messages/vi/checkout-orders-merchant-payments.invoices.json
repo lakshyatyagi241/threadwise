@@ -1,0 +1,48 @@
+{
+  "checkout-orders-merchant-payments": {
+    "invoices": {
+      "eyebrow": "Cửa hàng / Hóa đơn",
+      "title": "Hóa đơn",
+      "subtitle": "Hóa đơn được tạo từ đơn hàng của cửa hàng. Quản lý trong Bán hàng.",
+      "allInvoices": "Tất cả hóa đơn",
+      "loading": "Đang tải hóa đơn",
+      "searching": "Đang tìm thêm hóa đơn cửa hàng...",
+      "search": {
+        "label": "Tìm hóa đơn",
+        "placeholder": "Tìm theo số, người mua hoặc mã tham chiếu..."
+      },
+      "status": {
+        "label": "Trạng thái",
+        "all": "Tất cả trạng thái"
+      },
+      "columns": {
+        "number": "Hóa đơn",
+        "buyer": "Người mua",
+        "status": "Trạng thái",
+        "total": "Tổng",
+        "issued": "Ngày phát hành",
+        "due": "Đến hạn",
+        "actions": "Thao tác"
+      },
+      "row": {
+        "draft": "Nháp",
+        "openInSales": "Mở trong Bán hàng",
+        "openAria": "Mở hóa đơn {number} trong Bán hàng"
+      },
+      "empty": {
+        "title": "Chưa có hóa đơn nào từ đơn hàng cửa hàng",
+        "message": "Hãy mở một đơn hàng và chọn Tạo hóa đơn.",
+        "action": "Đến đơn hàng"
+      },
+      "noMatch": {
+        "title": "Không có hóa đơn cửa hàng phù hợp",
+        "message": "Hãy thay đổi tìm kiếm hoặc trạng thái để xem thêm."
+      },
+      "capped": {
+        "title": "Không tìm thấy trong các hóa đơn mới nhất",
+        "message": "Các hóa đơn gần đây nhất trong Bán hàng đã được kiểm tra và không có hóa đơn nào đến từ đơn hàng cửa hàng. Hãy tải thêm để tìm xa hơn.",
+        "note": "Chỉ các hóa đơn gần đây nhất đã được kiểm tra. Hãy tải thêm để tìm xa hơn."
+      }
+    }
+  }
+}
