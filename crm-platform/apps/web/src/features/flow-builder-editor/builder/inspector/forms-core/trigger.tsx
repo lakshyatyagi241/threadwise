@@ -1,11 +1,7 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import {
-  FLB_SCHEDULE_AUDIENCES,
-  FLB_SCHEDULE_FREQUENCIES,
-  FLB_STORE_EVENTS,
-} from '@crm/contracts';
+import { FLB_SCHEDULE_AUDIENCES, FLB_SCHEDULE_FREQUENCIES, FLB_STORE_EVENTS } from '@crm/contracts';
 import { offerSenders } from '@/lib/unofficial-whatsapp';
 import type { ReactNode } from 'react';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
@@ -162,20 +158,14 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
       ) : null}
 
       {kind === 'group_leave' ? (
-        <Field
-          label={t('ext.groupLeaveLabel')}
-          hint={t('ext.groupLeaveHint')}
-        >
+        <Field label={t('ext.groupLeaveLabel')} hint={t('ext.groupLeaveHint')}>
           <SelectInput value={d.groupId} options={groupOpts} onChange={(v) => set('groupId', v)} />
         </Field>
       ) : null}
 
       {kind === 'segment_join' ? (
         <>
-          <Field
-            label={t('ext.segmentLabel')}
-            hint={t('ext.segmentHint')}
-          >
+          <Field label={t('ext.segmentLabel')} hint={t('ext.segmentHint')}>
             <SelectInput
               value={d.segmentId}
               options={segmentOpts}
@@ -186,10 +176,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
       ) : null}
 
       {kind === 'field_match' || kind === 'date_field_match' ? (
-        <Field
-          label={t('ext.fieldLabel')}
-          hint={t('ext.fieldHint')}
-        >
+        <Field label={t('ext.fieldLabel')} hint={t('ext.fieldHint')}>
           <TextInput
             value={d.field}
             placeholder={kind === 'date_field_match' ? 'birthday' : 'city'}
@@ -208,10 +195,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
             />
           </Field>
           {d.operator !== 'is_set' && d.operator !== 'is_not_set' ? (
-            <Field
-              label={t('ext.value')}
-              hint={t('ext.valueHint')}
-            >
+            <Field label={t('ext.value')} hint={t('ext.valueHint')}>
               <TextInput value={d.value} placeholder="Pune" onChange={(v) => set('value', v)} />
             </Field>
           ) : null}
@@ -307,20 +291,14 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
               onChange={(v) => set('time', v)}
             />
           </Field>
-          <Field
-            label={t('ext.tz')}
-            hint={t('ext.tzHint')}
-          >
+          <Field label={t('ext.tz')} hint={t('ext.tzHint')}>
             <TextInput
               value={d.timezone}
               placeholder="Asia/Kolkata"
               onChange={(v) => set('timezone', v)}
             />
           </Field>
-          <Field
-            label={t('ext.who')}
-            hint={t('ext.whoHint')}
-          >
+          <Field label={t('ext.who')} hint={t('ext.whoHint')}>
             <SelectInput
               value={d.audienceKind || 'all'}
               options={FLB_SCHEDULE_AUDIENCES.map((a) => ({ v: a, l: t(`ext.audience.${a}`) }))}
@@ -370,9 +348,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
         </>
       ) : null}
 
-      {kind === 'contact_updated' ? (
-        <Notice>{t('ext.updatedNote')}</Notice>
-      ) : null}
+      {kind === 'contact_updated' ? <Notice>{t('ext.updatedNote')}</Notice> : null}
 
       {kind === 'comment_to_dm' ? (
         <Field label={t('rulesLabel')} hint={t('rulesHint')}>

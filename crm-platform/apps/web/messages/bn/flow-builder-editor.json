@@ -2096,6 +2096,10 @@
         "wa_session": {
           "label": "WhatsApp সেশন সক্রিয়",
           "description": "হ্যাঁ / না: গ্রাহক গত ২৪ ঘণ্টায় লিখেছেন"
+        },
+        "api_library": {
+          "label": "API (লাইব্রেরি থেকে)",
+          "description": "API লাইব্রেরি থেকে একটি সংরক্ষিত API কল করুন"
         }
       },
       "groups": {

@@ -2096,6 +2096,10 @@
         "wa_session": {
           "label": "Sesi WhatsApp aktif",
           "description": "Ya / tidak: pelanggan menulis dalam 24 jam terakhir"
+        },
+        "api_library": {
+          "label": "API (dari pustaka)",
+          "description": "Panggil API tersimpan dari Pustaka API"
         }
       },
       "groups": {

@@ -1959,6 +1959,10 @@
         "wa_session": {
           "label": "WhatsApp-sessie actief",
           "description": "Ja / nee: de klant heeft in de laatste 24 uur geschreven"
+        },
+        "api_library": {
+          "label": "API (uit bibliotheek)",
+          "description": "Roep een opgeslagen API aan vanuit de API-bibliotheek"
         }
       },
       "groups": {
