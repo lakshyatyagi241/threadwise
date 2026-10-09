@@ -579,6 +579,22 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
         </div>
       );
     }
+    case 'api_library': {
+      const api = str(d.apiName);
+      const overrides = asArr(d.inputs).length;
+      return (
+        <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
+          <Count>
+            {api ? api : '(pick an API)'}
+            {overrides > 0 ? ` · ${overrides} input${overrides === 1 ? '' : 's'}` : ''}
+          </Count>
+          <div className="truncate text-[12px] text-foreground">
+            <Muted>save →</Muted>{' '}
+            <Mono cls="text-[11px]">{`{{${str(d.save) || 'api_response'}}}`}</Mono>
+          </div>
+        </div>
+      );
+    }
     case 'google_sheets':
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">

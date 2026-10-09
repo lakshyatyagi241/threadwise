@@ -72,6 +72,7 @@ import { CouponsCreditsReferralCurrencyModule } from './modules/coupons-credits-
 import { TeamChatModule } from './modules/team-chat';
 import { WebhookFanoutModule } from './modules/webhook-fanout';
 import { OutboundWebhooksModule } from './modules/outbound-webhooks';
+import { ApiLibraryModule } from './modules/api-library';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
 import { WhatsappDevicesBaileysModule } from './modules/whatsapp-devices-baileys';
@@ -217,6 +218,7 @@ import { HealthModule } from './health/health.module';
     TeamChatModule,
     WebhookFanoutModule,
     OutboundWebhooksModule,
+    ApiLibraryModule,
     WabaModule,
     WhatsAppProviderAdminModule,
     MessageTemplatesModule,

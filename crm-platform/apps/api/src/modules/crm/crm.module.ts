@@ -335,6 +335,8 @@ import { TagsService } from './tags/tags.service';
     ContactBulkService,
     ContactImportEngine,
     MergeTagService,
+    // The API Library lists the contact properties a response can be saved into (modules/api-library).
+    AttributesService,
     FieldSectionsService,
     FieldsService,
     StatusOptionsService,

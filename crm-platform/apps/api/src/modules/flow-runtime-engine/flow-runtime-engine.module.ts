@@ -31,6 +31,7 @@ import { CommerceNodes } from './runtime/nodes/commerce/commerce-nodes';
 import { CommerceNodesModule } from './runtime/nodes/commerce/commerce-nodes.module';
 import { GoogleFormWebhookController } from './runtime/nodes/integrations/google-form-webhook.controller';
 import { GoogleFormWebhookService } from './runtime/nodes/integrations/google-form-webhook.service';
+import { ApiLibraryNodes } from './runtime/nodes/integrations/api-library-node';
 import { IntegrationNodes } from './runtime/nodes/integrations/integrations-nodes';
 import { IntegrationNodesModule } from './runtime/nodes/integrations/integrations-nodes.module';
 
@@ -89,6 +90,7 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
         AiNodes,
         CommerceNodes,
         IntegrationNodes,
+        ApiLibraryNodes,
       ],
     },
   ],

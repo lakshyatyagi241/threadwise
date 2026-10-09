@@ -139,6 +139,8 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('ai_call', 'AI voice call', 'Engage', 'Call the customer with an AI voice agent'),
   def('google_meet', 'Google Meet', 'Engage', 'Create + send a Meet link'),
   def('wa_form', 'WhatsApp form', 'Engage', 'Send a published Meta form'),
+  // Not a WaDesk node: the owner asked for the old console's API Library to come over (docs/api/api-library.md). WhatsApp only.
+  def('api_library', 'API (from library)', 'Integrations', 'Call a saved API from the API Library'),
   def('google_sheets', 'Google Sheets', 'Integrations', 'Write or read a row'),
   def('google_docs', 'Google Docs', 'Integrations', 'Generate from a template'),
   def('google_form', 'Google Form', 'Integrations', 'Send link, capture answers'),
@@ -593,6 +595,8 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
         ctaLabel: 'Open form',
         flowVariable: 'form_submission',
       };
+    case 'api_library':
+      return { apiId: '', apiName: '', inputs: [], save: 'api_response' };
     case 'google_sheets':
       return {
         mode: 'write',
@@ -916,6 +920,8 @@ export function flbPortsFor(
       return out('link sent');
     case 'wa_form':
       return out('submitted');
+    case 'api_library':
+      return yesNo(['success', 'success'], ['error', 'error']);
     case 'google_sheets':
       return out(d.mode === 'read' ? 'row loaded' : 'row written');
     case 'google_docs':
@@ -945,6 +951,7 @@ const HANDLE_PORT: Record<string, Record<string, number>> = {
   shopify: { purchased: 1, abandoned: 2 },
   google_form: { submitted: 1, timeout: 2 },
   deal: { created: 1, error: 2 },
+  api_library: { success: 1, error: 2 },
   in_list: { yes: 1, no: 2 },
   in_segment: { yes: 1, no: 2 },
   wa_session: { yes: 1, no: 2 },
