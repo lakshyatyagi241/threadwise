@@ -62,6 +62,13 @@ After the owner pulls the team's work (the post-merge hook prints `N features ha
 a session-start note repeats it), draft the pending guides without being asked and tell the owner what you wrote.
 Design: [docs/specs/help-center.md](docs/specs/help-center.md).
 
+## Every text is translated into all 21 locales (mandatory)
+
+Any key you add or change in `apps/web/messages/en/` is translated into the other 20 locales in the same change, and no
+user-visible text stays as a literal in a component. After you build or change any screen, tile, error text or notification copy,
+invoke the `i18n-translate-sync` skill before saying it is done. The pre-pr gate runs its `check.sh` and fails when a message file
+you touched has a missing or still-English key in any locale. English-only is never "done".
+
 ## Before calling anything done
 
 ```bash
