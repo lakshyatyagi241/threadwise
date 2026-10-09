@@ -1,0 +1,870 @@
+{
+  "marketplace": {
+    "nav": {
+      "marketplace": "Pazar yeri"
+    },
+    "meta": {
+      "apps": "Mini uygulamalar · Pazar yeri",
+      "integrations": "Entegrasyonlar · Pazar yeri",
+      "app": "Uygulama · Pazar yeri",
+      "install": "Yükle · Pazar yeri",
+      "installed": "Yüklü · Pazar yeri",
+      "manage": "Uygulamayı yönet · Pazar yeri",
+      "requests": "İstekler · Pazar yeri"
+    },
+    "common": {
+      "dismiss": "Kapat",
+      "loading": "Yükleniyor",
+      "errorTitle": "Bu yüklenemedi",
+      "requestId": "İstek kimliği",
+      "retry": "Tekrar dene",
+      "upgrade": "Planları gör ve yükselt",
+      "opensNewTab": "(yeni sekmede açılır)",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "copyFailed": "Kopyalanamadı. Metni seçip elle kopyalayın.",
+      "needsPermission": "Bunu yapmak için {permission} iznine ihtiyacınız var. Bir çalışma alanı yöneticisine sorun."
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapmak için izniniz yok.",
+      "signedOut": "Oturumunuz sona erdi. Yeniden giriş yapın.",
+      "conflict": "Bunu önce başka biri değiştirdi. En son sürümü görmek için yenileyin.",
+      "validation": "Bazı değerler geçersiz. Alanları kontrol edip tekrar deneyin.",
+      "rateLimited": "Çok fazla istek. Bir süre bekleyip tekrar deneyin.",
+      "rateLimitedWait": "Çok fazla istek. {seconds, plural, other {# saniye}} sonra tekrar deneyin.",
+      "unavailable": "Pazar yeri bu sunucuda henüz kullanılamıyor.",
+      "notFound": "Bu öğe artık mevcut değil.",
+      "appNotFound": "Bu uygulama yok veya çalışma alanınız için kullanılamıyor.",
+      "notInstalled": "Bu uygulama çalışma alanınıza yüklü değil.",
+      "alreadyInstalled": "Bu uygulama çalışma alanınıza zaten yüklü.",
+      "appUnavailable": "Bu uygulama şu anda sunulmuyor.",
+      "appLockedPlan": "Planınız bu uygulamayı içermiyor. Kullanmak için yükseltin.",
+      "appLockedModule": "Bu uygulama bu ürün kurulumunda kullanılamıyor.",
+      "planLocked": "Pazar yeri planınıza dahil değil. Kullanmak için yükseltin.",
+      "planLimitInstalled": "Planınızın yüklü uygulama sınırına ulaştınız, bu yüzden hiçbir şey yüklenmedi. Birini kaldırın veya planınızı yükseltin.",
+      "planLimitInstalledCounts": "Planınızın izin verdiği {cap} uygulamadan {used} tanesini yüklediniz, bu yüzden hiçbir şey yüklenmedi. Birini kaldırın veya planınızı yükseltin.",
+      "planLimitLeadSources": "Planınızın potansiyel müşteri kaynağı sınırına ulaştınız, bu yüzden hiçbir şey yüklenmedi. Bir potansiyel müşteri kaynağını kaldırın veya planınızı yükseltin.",
+      "planLimitLeadSourcesCounts": "Planınızın izin verdiği {cap} potansiyel müşteri kaynağından {used} tanesine sahipsiniz, bu yüzden hiçbir şey yüklenmedi. Birini kaldırın veya planınızı yükseltin.",
+      "planLimit": "Planınızın bir sınırına ulaştınız, bu yüzden hiçbir şey yüklenmedi. Devam etmek için planınızı yükseltin.",
+      "planLimitCounts": "Planınızın izin verdiği {cap} sınırından {used} tanesini kullandınız, bu yüzden hiçbir şey yüklenmedi. Devam etmek için planınızı yükseltin.",
+      "consentRequired": "İzinler değişti. Yüklemeden önce tekrar gözden geçirin.",
+      "reconsentRequired": "Yeni sürüm daha fazla izin istiyor. Önce bunları inceleyip kabul edin.",
+      "scopeExceeds": "Kendinizde olmayan izinleri veremezsiniz. Eksik: {permissions}.",
+      "installationKilled": "Platform bu uygulamayı durdurdu. Yalnızca kaldırılabilir.",
+      "installationDisabled": "Bu uygulama duraklatıldı. Önce devam ettirin.",
+      "credentialMissing": "Gerekli alanları doldurun.",
+      "noConnection": "Bu kurulumda bunu yapabilecek bir bağlantı yok.",
+      "leadPipeline": "Potansiyel müşteri hizmeti şu anda kullanılamıyor. Hiçbir şey kaydedilmedi. Birazdan tekrar deneyin.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "subscriptionRequired": "Bu ücretli bir uygulama. Yüklemek için abone olun.",
+      "notForSale": "Bu uygulama şu anda yeni abonelere satılmıyor.",
+      "trialUnavailable": "Bu uygulama için ücretsiz deneme çalışma alanınızda kullanılamıyor.",
+      "subscriptionNotFound": "Çalışma alanınızın bu uygulamaya aboneliği yok.",
+      "subscriptionState": "Bu, aboneliğin mevcut durumuyla uyuşmuyor. En son durumu görmek için yenileyin."
+    },
+    "chips": {
+      "installed": "Yüklü",
+      "paused": "Duraklatıldı",
+      "killed": "Platform tarafından durduruldu",
+      "healthy": "Sağlıklı",
+      "degraded": "Sorunlu",
+      "error": "Hata",
+      "needs_reauth": "Yeniden oturum açmanız gerekiyor",
+      "unknown": "Henüz kontrol edilmedi",
+      "needsConsent": "İncelenecek yeni izinler",
+      "subscribed": "Abone",
+      "trialing": "Ücretsiz deneme",
+      "comped": "Ücretsiz erişim",
+      "canceling": "Yenilenmeyecek",
+      "subscriptionEnded": "Abonelik sona erdi"
+    },
+    "lock": {
+      "planFeature": {
+        "chip": "Planınızda yok",
+        "message": "Planınız bu uygulamayı içermiyor. Hakkında buradan bilgi edinebilirsiniz, ancak kurulum için planınızı yükseltmeniz gerekiyor."
+      },
+      "moduleDisabled": {
+        "chip": "Kullanılamıyor",
+        "message": "Bu uygulama, ürünün bu kurulumunda kapalı olan bir modüle bağlı."
+      },
+      "limitReached": {
+        "chip": "Plan limitine ulaşıldı",
+        "message": "Planınızın izin verdiği kadar uygulama kurdunuz. Birini kaldırın veya planınızı yükseltin."
+      }
+    },
+    "scopes": {
+      "risk": {
+        "low": "Düşük risk",
+        "medium": "Orta risk",
+        "high": "Yüksek risk"
+      },
+      "none": "Bu uygulama hiçbir izin istemiyor.",
+      "new": "Yeni",
+      "overall": {
+        "low": {
+          "title": "Genel olarak düşük risk",
+          "message": "Bu uygulama yalnızca bilgi okumak için izin istiyor."
+        },
+        "medium": {
+          "title": "Genel olarak orta risk",
+          "message": "Bu uygulama çalışma alanınızdaki verileri okuyabilir ve değiştirebilir."
+        },
+        "high": {
+          "title": "Genel olarak yüksek risk",
+          "message": "Bu uygulama adınıza hareket edebilir, örneğin mesaj gönderebilir veya entegrasyonları yönetebilir. Yalnızca geliştiriciye güveniyorsanız kurun."
+        }
+      },
+      "counts": "{high} yüksek, {medium} orta, {low} düşük"
+    },
+    "header": {
+      "title": "Pazar yeri",
+      "subtitle": "Çalışma alanınıza mini uygulamalar ekleyin ve dış hizmetleri bağlayın.",
+      "tabsLabel": "Pazar yeri bölümleri",
+      "moreLabel": "Kurulu ve istekler",
+      "tabs": {
+        "mini_app": "Mini uygulamalar",
+        "integration": "Entegrasyonlar"
+      },
+      "installed": "Kurulu",
+      "installedLimit": "Kurulu ({installed} / {limit})",
+      "installedUnlimited": "Kurulu ({installed})",
+      "request": "Entegrasyon isteyin"
+    },
+    "card": {
+      "firstParty": "Bizim tarafımızdan geliştirildi",
+      "pricing": {
+        "free": "Ücretsiz",
+        "included": "Planınıza dahil",
+        "monthly": "{price} / ay",
+        "subscribed": "Abone",
+        "notForSale": "Satılık değil",
+        "paid": "Ücretli uygulama",
+        "addOn": "Ek paket",
+        "trial": "{days} günlük ücretsiz deneme"
+      },
+      "installs": "{count, plural, other {# kurulum}}",
+      "version": "Sürüm {version}",
+      "cta": {
+        "install": "Kur",
+        "manage": "Yönet",
+        "review": "İzinleri incele",
+        "killed": "Yönet",
+        "locked": "Ayrıntıları gör",
+        "view": "Ayrıntıları gör",
+        "subscribe": "Abone ol"
+      }
+    },
+    "browse": {
+      "categoriesLabel": "Kategoriler",
+      "all": "Tümü",
+      "shelves": {
+        "featured": "Öne çıkanlar",
+        "popular": "Popüler",
+        "new": "Yeni"
+      },
+      "searchLabel": "Pazar yerinde ara",
+      "searchPlaceholder": {
+        "mini_app": "Mini uygulamalarda ara",
+        "integration": "Entegrasyonlarda ara"
+      },
+      "availability": {
+        "label": "Göster",
+        "all": "Tümü",
+        "addons": "Kullanılabilir ek paketler",
+        "installed": "Kurulu"
+      },
+      "sortLabel": "Sırala",
+      "sort": {
+        "featured": "Öne çıkanlar",
+        "popular": "En çok kurulan",
+        "new": "En yeni",
+        "name": "Ad"
+      },
+      "unknownCategory": "Bu kategori bu sekmede yok.",
+      "showAll": "Her şeyi göster",
+      "resultsAll": "Tüm uygulamalar",
+      "resultsFiltered": "Sonuçlar",
+      "loadedCount": "{count, plural, other {# uygulama gösteriliyor}}",
+      "loadMore": "Daha fazla yükle",
+      "clearFilters": "Filtreleri temizle",
+      "empty": {
+        "search": {
+          "title": "Aramanızla eşleşen bir şey yok",
+          "message": "Daha kısa bir ad deneyin veya filtreleri temizleyin. Listede yoksa aşağıdan talep edebilirsiniz."
+        },
+        "addons": {
+          "title": "Burada satın alınacak ek paket yok",
+          "message": "Planınızda listelenen ancak satın almadığınız ek paketler burada görünür. Hepsini görmek için Tümü'nü seçin."
+        },
+        "installed": {
+          "title": "Burada henüz kurulu bir şey yok",
+          "message": "Kurduğunuz uygulamalar burada görünür. Hepsine göz atmak için Tümü'nü seçin."
+        },
+        "category": {
+          "title": "Bu kategoride henüz bir şey yok",
+          "message": "Başka bir kategori seçin veya aşağıdan ihtiyacınız olanı talep edin."
+        },
+        "none": {
+          "title": "Burada henüz listelenen bir şey yok",
+          "message": "Yeni uygulamalar yayımlandığında burada görünür. Aşağıdan bir uygulama talep edebilirsiniz."
+        }
+      }
+    },
+    "requestBox": {
+      "title": {
+        "mini_app": "Bir mini uygulama mı eksik?",
+        "integration": "Bir entegrasyon mu eksik?"
+      },
+      "message": "Neye ihtiyacınız olduğunu bize bildirin. Talepler sayılır ve en çok istenenler önce geliştirilir.",
+      "action": {
+        "mini_app": "Mini uygulama talep edin",
+        "integration": "Entegrasyon talep edin"
+      }
+    },
+    "detail": {
+      "backToMarketplace": "Pazar yerine dön",
+      "backToApps": "Mini uygulamalara dön",
+      "backToIntegrations": "Entegrasyonlara dön",
+      "notFound": {
+        "title": "Uygulama bulunamadı",
+        "message": "Bu uygulama mevcut değil veya çalışma alanınız için kullanılamıyor.",
+        "integrations": "Entegrasyonlara göz atın",
+        "apps": "Mini uygulamalara göz atın"
+      },
+      "kind": {
+        "mini_app": "Mini uygulama",
+        "integration": "Entegrasyon"
+      },
+      "firstParty": "Bizim tarafımızdan geliştirildi",
+      "install": "Kur",
+      "manage": "Yönet",
+      "killed": "Platform bu uygulamayı durdurdu. Yalnızca kaldırılabilir.",
+      "about": "Bu uygulama hakkında",
+      "screenshots": "Ekran görüntüleri",
+      "screenshotAlt": "Ekran görüntüsü {n} / {name}",
+      "permissions": {
+        "title": "Neye erişebilir",
+        "intro": "Bir şey kurulmadan önce bunları tekrar görürsünüz ve onaylarsınız."
+      },
+      "setup": {
+        "title": "Kurmak için hazırlamanız gerekenler",
+        "intro": {
+          "oauth": "Hizmete bağlanmak için hizmette oturum açarsınız.",
+          "push": "Hizmet, buraya girdiğiniz bir anahtar kullanarak çalışma alanınıza veri gönderir.",
+          "pull": "Hizmetten, buraya girdiğiniz bir anahtar kullanarak veri çekeriz.",
+          "email_parse": "Hizmetin gönderdiği uyarı e-postalarını okuruz.",
+          "webhook_relay": "Veri gönderen araca yapıştıracağınız bir web adresi ve gizli anahtar alırsınız.",
+          "client": "Çalıştığınız yerde kurarsınız ve kendi hesabınızla oturum açarsınız."
+        },
+        "required": "Zorunlu",
+        "optional": "İsteğe bağlı",
+        "kind": {
+          "secret": "gizli tutulur",
+          "text": "metin",
+          "select": "seçim"
+        },
+        "noFields": "Doldurulacak bir şey yok. Kurulumdan sonra bağlantı bilgilerini alırsınız.",
+        "hasSample": "Kurulumdan sonra bağlantıyı denemek için örnek bir potansiyel müşteri gönderebilirsiniz."
+      },
+      "data": {
+        "title": "Verileriniz",
+        "intro": "Bu uygulamanın neyi, nerede sakladığı ve nasıl silindiği.",
+        "summary": "Sakladığı veriler",
+        "regions": "Konum",
+        "deletion": "Nasıl silinir"
+      },
+      "changelog": {
+        "title": "Neler değişti",
+        "version": "Sürüm {version}"
+      },
+      "facts": {
+        "title": "Ayrıntılar",
+        "version": "Sürüm",
+        "connector": "Nasıl bağlanır",
+        "connectors": {
+          "oauth": "Oturum aç",
+          "push": "Size veri gönderir",
+          "pull": "Verilerini biz çekeriz",
+          "email_parse": "Uyarı e-postaları",
+          "webhook_relay": "Web adresi ve gizli anahtar",
+          "client": "Her üye tarafından kurulur"
+        },
+        "installs": "Kurulumlar",
+        "developer": "Geliştirici"
+      },
+      "support": {
+        "title": "Destek ve hukuki bilgiler",
+        "website": "Web sitesi",
+        "docs": "Dokümantasyon",
+        "privacy": "Gizlilik politikası",
+        "terms": "Koşullar",
+        "status": "Durum sayfası",
+        "email": "E-posta desteği"
+      }
+    },
+    "install": {
+      "backToMarketplace": "Pazar yerine dön",
+      "backToApp": "{name} sayfasına dön",
+      "notFound": {
+        "title": "Uygulama bulunamadı",
+        "message": "Bu uygulama mevcut değil veya çalışma alanınız için kullanılamıyor."
+      },
+      "alreadyTitle": "Zaten kurulu",
+      "alreadyMessage": "{name} çalışma alanınızda zaten kurulu.",
+      "openManage": "Aç",
+      "lockedTitle": "{name} kilitli",
+      "noPermissionTitle": "Uygulama kuramazsınız",
+      "noPermissionMessage": "Uygulama kurmak, rolünüzün sahip olmadığı bir izin gerektiriyor.",
+      "title": "{name} uygulamasını kur",
+      "stepsLabel": "Kurulum adımları",
+      "steps": {
+        "permissions": "İzinler",
+        "setup": "Ayarla",
+        "done": "Tamam"
+      },
+      "permissions": {
+        "title": "İzinleri incele",
+        "intro": "{name} aşağıdaki izinleri istiyor. Kaldırana kadar kurulum bu izinlerin tamamını verir.",
+        "diffSummary": "{missing, plural, other {# izin}} dahil edilmedi ve {unexpected, plural, other {# izin}} gösterilmiyor.",
+        "consent": "Anlıyorum ve bu uygulamanın çalışma alanımda bu izinleri kullanmasına izin veriyorum.",
+        "consentNone": "{name} uygulamasının hiçbir izin istemediğini anlıyorum ve kurmak istiyorum.",
+        "continue": "Devam et"
+      },
+      "cancel": "Vazgeç",
+      "install": "Kur",
+      "back": "Geri",
+      "setup": {
+        "title": "Ayarla",
+        "intro": "Bu uygulamanın bağlanması için gereken bilgileri doldurun. Anahtarlar şifreli saklanır ve tekrar okunamaz."
+      },
+      "installing": "Kuruluyor",
+      "missingPermissions": "Şu izinler eksik:",
+      "seeInstalled": "Kurulu olanları gör",
+      "changed": {
+        "title": "Bakarken izinler değişti",
+        "message": "Aşağıdaki listeyi yeniden inceleyin. Hiçbir şey kurulmadı.",
+        "added": "Artık şunları da istiyor:",
+        "removed": "Artık şunları istemiyor:",
+        "edited": "Bazı izinlerin açıklaması veya risk düzeyi değişti."
+      },
+      "gaps": {
+        "title": "Bunların hepsini veremeyebilirsiniz",
+        "message": "Kurulum hiçbir zaman kuranın sahip olduğundan fazla erişim vermez. Şunlardan yoksunsunuz gibi görünüyor:"
+      },
+      "done": {
+        "title": "{name} kuruldu",
+        "message": "Sürüm {version} artık çalışma alanınızda etkin.",
+        "saved": "Kaydettim, devam et",
+        "manage": "Ayarları aç",
+        "browse": "Pazar yerine dön"
+      },
+      "subscribeTitle": "{name} ücretli bir uygulama",
+      "subscribeIntro": "Kurmak için abone olun. İlk ay için ödeme sayfasına gidersiniz; deneme sunuluyorsa önce ücretsiz deneyebilirsiniz. Hiçbir şey kurulmadan önce izinlerini inceleyip onaylarsınız.",
+      "notForSaleTitle": "{name} satılık değil",
+      "goToCheckout": "Ödeme sayfasına git"
+    },
+    "setup": {
+      "optionalLabel": "{label} (isteğe bağlı)",
+      "stored": {
+        "notSet": "Ayarlanmadı",
+        "endsIn": "Kaydedildi, son hanesi {last}",
+        "value": "Bir değer kaydedildi",
+        "set": "Kaydedildi"
+      },
+      "keepBlank": "Kayıtlı değeri korumak için boş bırakın. Değiştirmek için yazın.",
+      "show": "Değeri göster",
+      "hide": "Değeri gizle",
+      "choose": "Seç",
+      "clear": "{label} alanını temizle",
+      "problems": {
+        "required": "{label} zorunlu.",
+        "pattern": "{label} doğru görünmüyor.",
+        "option": "{label} için seçeneklerden birini seçin.",
+        "server": "{label} kabul edilmedi. Değeri kontrol edin."
+      }
+    },
+    "reveal": {
+      "title": "Bağlantı gizli anahtarınızı kaydedin",
+      "warning": "Bu gizli anahtarı bir daha göremeyeceksiniz. Şimdi kopyalayın ve güvenli bir yerde saklayın. Kaybederseniz yeni bir tane almak için gizli anahtarı yenileyin.",
+      "address": "Gönderilecek web adresi",
+      "secret": "Gizli anahtar",
+      "copyAddress": "Web adresini kopyala",
+      "copySecret": "Gizli anahtarı kopyala",
+      "saved": "Gizli anahtarı ve adresi kaydettim.",
+      "doneHint": "Devam etmek için kutuyu işaretleyin.",
+      "send": {
+        "title": "Nasıl gönderilir",
+        "post": "Adrese, JSON gövdesiyle bir POST isteği gönderin.",
+        "token": "Gizli anahtarı {header} başlığına koyun.",
+        "signature": "Ya da gövdeyi gizli anahtarla HMAC-SHA256 ile imzalayın ve {header} başlığında sha256= ardından onaltılık özeti gönderin."
+      },
+      "leaveConfirm": "Gizli anahtarı kaydettiğinizi onaylamadınız. Şimdi ayrılırsanız bir daha göremeyeceksiniz. Yine de çıkmak istiyor musunuz?"
+    },
+    "portals": {
+      "maturity": {
+        "beta": "Beta",
+        "needsPortalSetup": "Portal kurulumu gerekiyor",
+        "betaHint": "Portalın kısmi dokümantasyonundan oluşturuldu. Çalışıyor, ancak ilk gerçek potansiyel müşteriden sonra bir ayarlama gerekebilir.",
+        "needsPortalSetupHint": "Portalın kendi ekibi sizin için açana kadar hiçbir şey gelmez."
+      },
+      "reveal": {
+        "title": "Özel adresinizi kaydedin",
+        "warning": "Bu adresi bir daha göremeyeceksiniz. Aynı zamanda bağlantının parolasıdır: adresi bilen herkes çalışma alanınıza potansiyel müşteri gönderebilir. Şimdi kopyalayın ve güvenli bir yerde saklayın. Kaybederseniz yeni bir adres oluşturun; eski adres o zaman çalışmaz.",
+        "address": "Özel adresiniz",
+        "copyAddress": "Özel adresi kopyala",
+        "saved": "Adresi kaydettim.",
+        "sendTitle": "Göndericinin ihtiyacı olanlar",
+        "method": "Yöntem: {methods}",
+        "formats": "Kabul edilen biçimler: {formats}",
+        "noHeader": "Başka bir şey gerekmez: başlık veya imza yok. Adresin son kısmı paroladır.",
+        "managerTitle": "Portalın hesap yöneticisine gönderin",
+        "managerIntro": "{portal} ekibi bunu sizin değil, kendi ekibi açar. Hazır bir mesaj kopyalayıp orada hesap yöneticinize gönderin.",
+        "copyMessage": "Portalınızın hesap yöneticisi için bir mesaj kopyalayın",
+        "messageCopied": "Mesaj kopyalandı",
+        "portalFallback": "portal"
+      },
+      "formats": {
+        "json": "JSON",
+        "form": "form alanları",
+        "xml": "XML",
+        "query": "sorgu dizesi parametreleri"
+      },
+      "message": {
+        "subjectLine": "Konu: {portal} hesabımız için potansiyel müşteri teslim adresi",
+        "body": "Merhaba,\n\nLütfen {portal} hesabımızın potansiyel müşterilerini bu özel adrese göndermeye başlayın:\n\n{address}\n\nLütfen her potansiyel müşteriyi {methods} yöntemiyle gönderin. Bilgileri {formats} olarak kabul ediyoruz. Adres hesabımızı zaten tanımladığı için başlık, parola veya imza gerekmez. Lütfen gizli tutun.\n\nEtkinleştirilir etkinleştirilmez bize bir test potansiyel müşterisi gönderin, böylece ulaştığını doğrulayabilelim.\n\nTeşekkürler."
+      },
+      "connection": {
+        "nextPoll": "Sonraki kontrol",
+        "notScheduled": "Planlanmadı",
+        "syncedThrough": "Potansiyel müşteriler şu zamana kadar çekildi",
+        "syncedNever": "Henüz bir şey çekilmedi",
+        "errorHint": "Anahtarı Kimlik bilgileri bölümünde yeniden girin veya Şimdi eşitle'ye basın.",
+        "errorHintNoSync": "Anahtarı Kimlik bilgileri bölümünde yeniden girin.",
+        "rotatePath": "Yeni adres oluştur",
+        "rotatePathConfirm": {
+          "title": "Yeni bir adres oluşturulsun mu?",
+          "message": "Yeni bir özel adres oluşturulur ve eski adres hemen çalışmaz hale gelir. Portal ekibine yeni adres verilene kadar eski adrese gönderilenler reddedilir. Yeni adresi bir kez göreceksiniz.",
+          "confirm": "Yeni adres oluştur"
+        },
+        "waiting": {
+          "title": "{portal} tarafından ilk potansiyel müşteri bekleniyor",
+          "message": "Bunu {portal} ekibinin açması gerekiyor. Bağlantınızın adresine göndermeye başlayana kadar hiçbir şey gelmez. Orada hesap yöneticinizin adresi bildiğinden emin olun ve bir test potansiyel müşterisi isteyin."
+        },
+        "path": {
+          "address": "Özel adres",
+          "maskedNote": "Adresin son kısmı parolasıdır. Uygulamayı kurduğunuzda veya yeni bir adres oluşturduğunuzda bir kez gösterilir; bu yüzden burada yalnızca sonu gösteriliyor.",
+          "method": "Yöntem: {methods}",
+          "formats": "Kabul edilen biçimler: {formats}",
+          "noHeader": "Başlık veya imza gerekmez. Adres parolanızdır: gizli tutun.",
+          "newAddressHint": "Adresi mi kaybettiniz veya birinin kullanmasını mı engellemek istiyorsunuz? Aşağıdan yeni bir adres oluşturun. Eski adres hemen çalışmaz hale gelir ve portal ekibine yenisi verilmelidir."
+        }
+      },
+      "sync": {
+        "button": "Şimdi eşitle",
+        "needsActive": "Hemen eşitlemek için uygulamayı sürdürün.",
+        "scheduledNow": "Eşitleme planlandı. Hemen başlar.",
+        "scheduled": "Eşitleme {time} için planlandı.",
+        "waits": "Portal her {interval} bir istek kabul eder, bu nedenle bu eşitleme o zamana kadar beklemek zorunda.",
+        "duration": {
+          "seconds": "{count, plural, other {# saniye}}",
+          "minutes": "{count, plural, other {# dakika}}",
+          "hours": "{count, plural, other {# saat}}"
+        }
+      }
+    },
+    "installed": {
+      "title": "Kurulu",
+      "filters": {
+        "kind": "Tür",
+        "status": "Durum",
+        "all": "Tümü"
+      },
+      "kind": {
+        "mini_app": "Mini uygulama",
+        "integration": "Entegrasyon"
+      },
+      "status": {
+        "active": "Kurulu",
+        "disabled": "Duraklatıldı",
+        "killed": "Platform tarafından durduruldu"
+      },
+      "listLabel": "Kurulu uygulamalar",
+      "emptyFiltered": {
+        "title": "Bu filtrelerle eşleşen bir şey yok",
+        "message": "Diğer kurulu uygulamalarınızı görmek için filtreleri değiştirin."
+      },
+      "empty": {
+        "title": "Henüz kurulu bir şey yok",
+        "message": "Bir mini uygulama eklemek veya bir hizmet bağlamak için Pazar yerine göz atın.",
+        "integrations": "Entegrasyonlara göz atın",
+        "apps": "Mini uygulamalara göz atın"
+      },
+      "usage": {
+        "unlimited": "{installed} kurulu. Planınızda limit yok.",
+        "of": "{installed} / {limit} kurulu",
+        "remaining": "{count, plural, other {# yer kaldı}}",
+        "atCap": "Plan limitinize ulaştınız. Başka bir uygulama kurmak için bir uygulamayı kaldırın veya planınızı yükseltin.",
+        "upgrade": "Planları gör ve yükselt",
+        "nearCap": "Plan limitinize yaklaşıyorsunuz."
+      },
+      "version": "Sürüm {version}",
+      "killReason": "Neden: {reason}",
+      "lastError": "Son hata: {error}",
+      "pending": "Sürüm {version} yeni izinlerinizi kabul etmenizi bekliyor.",
+      "installedOn": "Kurulum tarihi {date}",
+      "review": "İncele",
+      "manage": "Yönet",
+      "subscriptions": {
+        "title": "Abonelikler",
+        "intro": "Ücretli uygulamalarınız ve denemeleriniz; ücretli dönemi hâlâ devam eden kaldırılmış uygulamalar dahil.",
+        "listLabel": "Abonelikler",
+        "manage": "Yönet",
+        "viewApp": "Uygulamayı görüntüle"
+      }
+    },
+    "manage": {
+      "backToInstalled": "Kurululara dön",
+      "notFound": {
+        "title": "Kurulum bulunamadı",
+        "message": "Bu uygulama çalışma alanınızda kurulu değil veya kaldırıldı."
+      },
+      "version": "Sürüm {version}",
+      "checkedAt": "Son kontrol {date}",
+      "notChecked": "Henüz kontrol edilmedi. Kontrol etmek için Bağlantıyı test et'i kullanın.",
+      "lastError": "Son hata: {error}",
+      "viewListing": "Listeleme sayfasını görüntüle",
+      "resume": "Devam et",
+      "pause": "Duraklat",
+      "toast": {
+        "resumed": "Uygulama devam ettirildi.",
+        "paused": "Uygulama duraklatıldı.",
+        "consented": "Yeni izinler kabul edildi. Artık sürüm {version} üzerinde.",
+        "uninstalled": "{name} kaldırıldı."
+      },
+      "killed": {
+        "title": "Platform tarafından durduruldu",
+        "message": "Bu uygulama herkes için kapatıldı. Yalnızca kaldırabilirsiniz.",
+        "reason": "Neden: {reason}"
+      },
+      "paused": {
+        "title": "Duraklatıldı",
+        "message": "Duraklatılmış bir uygulama hiçbir şey yapmaz ve siz devam ettirene kadar web adresi teslimatları reddeder."
+      },
+      "permissions": {
+        "title": "Verilen izinler",
+        "intro": "Bu uygulamanın çalışma alanınızda şu anda neler yapabileceği."
+      },
+      "reconsent": {
+        "title": "Sürüm {version} yeni izinler istiyor",
+        "message": "Bu uygulama, sürüm {version} izinlerini kabul edene kadar {current} sürümünde çalışmaya devam eder.",
+        "newScopes": "Yeni izinler",
+        "fullList": "Yeni sürüm için tam liste",
+        "accept": "Yeni izinleri kabul et"
+      },
+      "problem": {
+        "conflictTitle": "Bu sırada değişti",
+        "conflictMessage": "Bu uygulamayı başka biri değiştirdi. En güncel durumu görmek için yenileyin, ardından değişikliğinizi tekrar yapın.",
+        "reload": "Yenile",
+        "consentTitle": "İzinler değişti",
+        "consentMessage": "Bu sayfayı açtığınızdan beri izin listesi değişti. Güncel listeyi görmek için yenileyin."
+      },
+      "credentials": {
+        "title": "Kimlik bilgileri ve ayarlar",
+        "intro": "Yazmak kayıtlı değerin yerini alır. Kayıtlı değeri korumak için bir alanı boş bırakın. Kaydedilmiş anahtarlar bir daha gösterilmez.",
+        "readOnly": "Bu uygulama için kaydedilenler. Anahtarlar hiçbir zaman gösterilmez.",
+        "saved": "Ayarlar kaydedildi.",
+        "nothingToSave": "Henüz kaydedilecek bir şey yok.",
+        "save": "Değişiklikleri kaydet",
+        "missing": "Zorunlu alanları doldurun.",
+        "invalid": "Bazı değerler kabul edilmedi."
+      },
+      "connection": {
+        "title": "Bağlantı",
+        "intro": "Bu uygulamanın çalışma alanınızla nasıl iletişim kurduğu ve durumu.",
+        "type": "Tür",
+        "types": {
+          "oauth": "Oturum aç",
+          "push": "Size veri gönderir",
+          "pull": "Verilerini biz çekeriz",
+          "email_parse": "Uyarı e-postaları",
+          "webhook_relay": "Web adresi ve gizli anahtar",
+          "client": "Her üye tarafından kurulur"
+        },
+        "status": "Bağlantı durumu",
+        "statuses": {
+          "active": "Etkin",
+          "paused": "Duraklatıldı",
+          "error": "Hata",
+          "disabled": "Kapalı"
+        },
+        "pollEvery": "Şu aralıkla kontrol eder",
+        "seconds": "{count, plural, other {# saniye}}",
+        "lastEvent": "Son teslimat",
+        "lastSuccess": "Son başarı",
+        "lastError": "Son hata",
+        "never": "Hiçbir zaman",
+        "counters": {
+          "received": "Alındı",
+          "accepted": "Kabul edildi",
+          "duplicates": "Yinelenenler",
+          "failed": "Başarısız"
+        },
+        "inbound": {
+          "address": "Gönderilecek web adresi",
+          "copyAddress": "Web adresini kopyala",
+          "method": "JSON gövdesiyle bir POST isteği gönderin.",
+          "token": "Gizli anahtarı {header} başlığına koyun.",
+          "signature": "Ya da gövdeyi HMAC-SHA256 ile imzalayın ve {header} başlığında sha256= ardından onaltılık özeti gönderin.",
+          "secretEndsIn": "Gizli anahtarın son hanesi {last}. Bir daha gösterilemez.",
+          "secretSet": "Bir gizli anahtar ayarlanmış. Bir daha gösterilemez."
+        },
+        "actions": {
+          "test": "Bağlantıyı test et",
+          "sample": "Örnek potansiyel müşteri gönder",
+          "rotate": "Gizli anahtarı yenile",
+          "sampleNeedsActive": "Örnek potansiyel müşteri göndermek için uygulamayı devam ettirin.",
+          "testOk": "Bağlantı çalışıyor.",
+          "testFailed": "Bağlantı testi başarısız oldu.",
+          "latency": "{ms} ms",
+          "sampleAccepted": "Örnek potansiyel müşteri kabul edildi. Artık gerçek bir potansiyel müşteri olarak var.",
+          "sampleDuplicate": "Bu örnek potansiyel müşteri zaten alınmıştı.",
+          "rotatedDone": "Kaydettim, devam et",
+          "rotateNotApplicable": "Bu bağlantının gizli anahtarı diğer hizmetin bir anahtarı. Bunun yerine Kimlik bilgileri ve ayarlar bölümünden değiştirin.",
+          "rotateConfirm": {
+            "title": "Bağlantının gizli anahtarı yenilensin mi?",
+            "message": "Yeni bir gizli anahtar oluşturulur ve eski anahtar hemen çalışmaz hale gelir. Eski anahtarla göndermeye devam eden her şey, yeni anahtarı verene kadar reddedilir. Yeni gizli anahtarı bir kez göreceksiniz.",
+            "confirm": "Gizli anahtarı yenile",
+            "cancel": "Vazgeç"
+          }
+        }
+      },
+      "events": {
+        "title": "Son teslimatlar",
+        "intro": "Bu bağlantının aldığı en son şeyler, en yeniden eskiye.",
+        "refresh": "Yenile",
+        "empty": {
+          "title": "Henüz teslimat yok",
+          "message": "Diğer hizmet bir şey gönderdiğinde veya siz örnek potansiyel müşteri gönderdiğinizde burada görünür."
+        },
+        "columns": {
+          "received": "Alındı",
+          "status": "Sonuç",
+          "externalId": "Teslimat kimliği",
+          "error": "Neden"
+        },
+        "status": {
+          "accepted": "Kabul edildi",
+          "duplicate": "Yinelenen",
+          "rejected": "Reddedildi",
+          "failed": "Başarısız"
+        },
+        "loadMore": "Daha fazla yükle"
+      },
+      "pauseConfirm": {
+        "title": "{name} duraklatılsın mı?",
+        "message": "Devam ettirene kadar çalışmaz. Bu süre boyunca web adresi teslimatları reddeder.",
+        "confirm": "Duraklat",
+        "cancel": "Vazgeç"
+      },
+      "uninstall": {
+        "section": "Kaldır",
+        "sectionIntro": "Bu uygulamayı çalışma alanınızdan kaldırın.",
+        "open": "Kaldır",
+        "title": "{name} kaldırılsın mı?",
+        "confirm": "Kaldır",
+        "cancel": "Vazgeç",
+        "effect": "Erişimi hemen sona erer.",
+        "effectConnection": "Erişimi hemen sona erer ve web adresi yanıt vermeyi bırakır.",
+        "dataLegend": "Oluşturduğu verilere ne olmalı?",
+        "choices": {
+          "keep": {
+            "label": "Oluşturduğu verileri sakla",
+            "help": "Eklediği kişiler ve kayıtlar çalışma alanınızda kalır."
+          },
+          "delete": {
+            "label": "Oluşturduğu verileri sil",
+            "help": "İsteğinizi kaydederiz ve bu verinin sahibi olan ürün bölümlerine bildiririz."
+          }
+        },
+        "honestNote": "Bugün, bu uygulamanın zaten oluşturduğu kişiler hangisini seçerseniz seçin çalışma alanınızda kalır. Seçiminiz, veri silecek alanlar için kaydedilir.",
+        "irreversible": "Bu geri alınamaz. Uygulamayı yeniden kullanmak için tekrar kurun.",
+        "renewal": {
+          "title": "Bu uygulamanın ücretli bir aboneliği var",
+          "message": "Kaldırmak, aboneliğin yenilenmesini durdurur; böylece başka ücret alınmaz. Zaten ödediğiniz dönem size ait kalır, bu yüzden sona ermeden ücretsiz olarak yeniden kurabilirsiniz.",
+          "messageUntil": "Kaldırmak, aboneliğin yenilenmesini durdurur; böylece başka ücret alınmaz. Zaten ödediğiniz dönem {date} tarihine kadar size ait kalır, bu yüzden o tarihten önce ücretsiz olarak yeniden kurabilirsiniz."
+        }
+      },
+      "subscription": {
+        "title": "Abonelik",
+        "subscribeTitle": "{name} uygulamasını kullanmaya devam etmek için abone olun",
+        "subscribeIntro": "Bu ücretli bir uygulama ve çalışma alanınızın bu uygulama için henüz aboneliği yok.",
+        "included": "Planınız bu uygulamayı içeriyor, bu yüzden ödeyecek bir şey yok."
+      },
+      "subscriptionEnded": {
+        "title": "Abonelik sona erdi",
+        "message": {
+          "resubscribe": "{name}, aboneliği sona erdiği için duraklatıldı. Verileriniz ve ayarlarınız korunur. Yeniden açmak için tekrar abone olun.",
+          "notForSale": "{name}, aboneliği sona erdiği için duraklatıldı ve artık satılmadığı için yeniden açılamaz. Verileriniz ve ayarlarınız korunur.",
+          "resumable": "{name}, aboneliği sona erdiği için duraklatıldı, ancak çalışma alanınız artık ona yeniden erişebiliyor. Yeniden açmak için devam ettirin."
+        },
+        "resubscribe": "Yeniden abone ol",
+        "resume": "Devam ettir",
+        "noCheckout": "Ödeme şu anda kullanılamıyor. Biraz sonra tekrar deneyin."
+      }
+    },
+    "requests": {
+      "title": "Talepler",
+      "form": {
+        "title": "Bir şey talep edin",
+        "intro": "Listede yok mu? Neye ihtiyacınız olduğunu bize bildirin. Biri zaten talep ettiyse, talebiniz bir oy olarak sayılır.",
+        "name": "Ad",
+        "namePlaceholder": "Örneğin bir hizmetin adı",
+        "kind": "Tür",
+        "kinds": {
+          "mini_app": "Mini uygulama",
+          "integration": "Entegrasyon"
+        },
+        "category": "Kategori",
+        "categoryHint": "İsteğe bağlı.",
+        "anyCategory": "Emin değilim",
+        "website": "Web sitesi",
+        "websiteHint": "İsteğe bağlı. Tam bir https:// adresi.",
+        "note": "Neden ihtiyacınız var?",
+        "noteHint": "Yalnızca platform ekibi görebilir",
+        "problems": {
+          "nameShort": "En az 2 karakter girin.",
+          "nameLong": "En fazla 80 karakter kullanın.",
+          "websiteInvalid": "Tam bir https:// adresi girin.",
+          "noteLong": "En fazla 500 karakter kullanın.",
+          "server": "Bu kabul edilmedi. Değeri kontrol edin."
+        },
+        "result": {
+          "created": {
+            "title": "Talep eklendi: {name}",
+            "message": "Teşekkürler. Diğer çalışma alanları artık bunun için oy verebilir."
+          },
+          "counted": {
+            "title": "{name} zaten talep edildi",
+            "message": "Talebiniz bunun için bir oy olarak sayıldı."
+          }
+        },
+        "submit": "Talebi gönder"
+      },
+      "list": {
+        "title": "Diğerlerinin talep ettikleri",
+        "intro": "İstediğiniz şeye oy verin. En çok istenenler önce geliştirilir.",
+        "searchLabel": "Talepleri ara",
+        "searchPlaceholder": "Talepleri ara",
+        "kind": "Tür",
+        "allKinds": "Tüm türler",
+        "kinds": {
+          "mini_app": "Mini uygulama",
+          "integration": "Entegrasyon"
+        },
+        "status": "Durum",
+        "allStatuses": "Tüm durumlar",
+        "statuses": {
+          "open": "Açık",
+          "planned": "Planlandı",
+          "building": "Geliştiriliyor",
+          "shipped": "Yayımlandı",
+          "declined": "Reddedildi"
+        },
+        "sort": "Sırala",
+        "sorts": {
+          "votes": "En çok oy",
+          "new": "En yeni"
+        },
+        "emptyFiltered": {
+          "title": "Hiçbir talep eşleşmiyor",
+          "message": "Filtreleri değiştirin veya kendiniz talep edin."
+        },
+        "empty": {
+          "title": "Henüz talep yok",
+          "message": "Bir şey talep eden ilk kişi siz olun."
+        },
+        "loadMore": "Daha fazla yükle",
+        "votes": "{count, plural, other {# oy}}",
+        "voted": "Oy verildi",
+        "vote": "Oy ver"
+      }
+    },
+    "pricing": {
+      "title": "Fiyatlandırma",
+      "freeNote": "Kurmak ve kullanmak ücretsiz.",
+      "included": {
+        "planFeature": "Planınız bu uygulamayı içeriyor, bu yüzden ödeyecek bir şey yok.",
+        "minPlan": "Planınız veya daha üst bir plan bu uygulamayı içeriyor, bu yüzden ödeyecek bir şey yok.",
+        "plan": "Planınız bu uygulamayı içeriyor, bu yüzden ödeyecek bir şey yok."
+      },
+      "needsPurchase": "Planınızın kataloğunda yer alıyor; kullanmak için satın alın.",
+      "subscribedNote": "Çalışma alanınızın bu uygulama için bir aboneliği var.",
+      "trialOffer": "{days} gün ücretsiz deneyin. Abone olmayı seçene kadar hiçbir ücret alınmaz.",
+      "prepaidNote": "Çalışma alanınızın faturalandırmasıyla aylık faturalandırılır. Her ödeme bir ayı kapsar ve otomatik olarak çekilmez: uygulamanın çalışmaya devam etmesi için gösterilen tarihten önce tekrar ödeyin.",
+      "notForSale": {
+        "title": "Satılık değil",
+        "message": "Bu uygulama şu anda yeni abonelere satılmıyor."
+      }
+    },
+    "subscribe": {
+      "subscribe": "Abone ol",
+      "startTrial": "{days} günlük ücretsiz denemeyi başlat",
+      "hintPrice": "Ayda {price}, ödeme sayfasında ödenir. Her ödeme bir ayı kapsar.",
+      "hint": "Ödeme sayfasında her seferinde bir ay için ödersiniz.",
+      "working": "Çalışıyor",
+      "noCheckout": "Bu uygulama için ödeme şu anda kullanılamıyor. Biraz sonra tekrar deneyin.",
+      "toast": {
+        "trial_started": "{name} için ücretsiz deneme başladı.",
+        "included": "{name} planınıza dahil.",
+        "already_entitled": "Çalışma alanınızın zaten {name} erişimi var.",
+        "free": "{name} ücretsiz."
+      }
+    },
+    "subscription": {
+      "title": "Abonelik",
+      "status": {
+        "active": "Etkin",
+        "trialing": "Ücretsiz deneme",
+        "comped": "Ücretsiz erişim",
+        "canceling": "Yenilenmeyecek",
+        "ended": "Sona erdi"
+      },
+      "date": {
+        "paidUntil": "{date} tarihine kadar ödendi",
+        "trialEnds": "Ücretsiz deneme {date} tarihinde bitiyor",
+        "compUntil": "{date} tarihine kadar ücretsiz erişim",
+        "compOpen": "Süresiz ücretsiz erişim",
+        "cancelingUntil": "Yenilenmeyecek. {date} tarihine kadar etkin",
+        "endedOn": "Abonelik {date} tarihinde sona erdi",
+        "endedNoDate": "Abonelik sona erdi"
+      },
+      "lastPayment": "Son ödeme: ayda {price}",
+      "nextPayment": "Bu uygulamanın fiyatı değişti. Bir sonraki ödemeniz ayda {price} olacak.",
+      "compNote": "Platform ekibi size bu erişimi verdi. Burada iptal edilemez.",
+      "renewHint": "Ödenen bir ay otomatik olarak yenilenmez. Uygulamanın duraksamadan çalışmaya devam etmesi için gösterilen tarihten önce yenileyin.",
+      "actions": {
+        "renew": "Şimdi yenile",
+        "resubscribe": "Yeniden abone ol",
+        "subscribe": "Şimdi abone ol",
+        "resume": "Aboneliği devam ettir",
+        "cancel": "Aboneliği iptal et"
+      },
+      "cancelConfirm": {
+        "title": "{name} aboneliği iptal edilsin mi?",
+        "message": "{name}, {date} tarihine kadar etkin kalır, ardından duraklatılır. Verileriniz ve ayarlarınız korunur.",
+        "messageNoDate": "{name}, ödediğiniz dönemin sonuna kadar etkin kalır, ardından duraklatılır. Verileriniz ve ayarlarınız korunur.",
+        "afterwards": "Başka ücret alınmaz ve istediğiniz zaman yeniden abone olabilirsiniz.",
+        "confirm": "Aboneliği iptal et",
+        "keep": "Aboneliği koru"
+      },
+      "toast": {
+        "canceled": "Abonelik iptal edildi. {date} tarihine kadar etkin kalır.",
+        "canceledNoDate": "Abonelik iptal edildi. Ödenen dönem sonuna kadar etkin kalır.",
+        "resumed": "Abonelik devam ettirildi."
+      },
+      "working": "Çalışıyor",
+      "noCheckout": "Bu uygulama için ödeme şu anda kullanılamıyor. Biraz sonra tekrar deneyin."
+    }
+  }
+}

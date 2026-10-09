@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "סגור"
+    },
+    "events": {
+      "contact_created": "איש קשר נוצר",
+      "contact_updated": "איש קשר עודכן",
+      "contact_deleted": "איש קשר נמחק",
+      "contact_tag_added": "תג נוסף לאיש קשר",
+      "contact_opted_in": "איש קשר אישר הסכמה",
+      "deal_stage_changed": "עסקה הועברה לשלב אחר",
+      "task_created": "משימה נוצרה",
+      "task_assigned": "משימה הוקצתה",
+      "template_status_changed": "סטטוס תבנית השתנה",
+      "device_status_changed": "סטטוס מכשיר השתנה",
+      "conversation_reopened": "השיחה נפתחה מחדש"
+    },
+    "page": {
+      "title": "Webhooks",
+      "subtitle": "שלח אירועים מסביבת העבודה הזו למערכות שלך כשהם קורים. כל מסירה היא POST של JSON חתום, ומנוסה מחדש כשהשרת שלך לא עונה.",
+      "back": "אינטגרציות ומפתחים",
+      "add": "הוספת Webhook",
+      "list": "Webhooks",
+      "emptyTitle": "אין עדיין Webhooks",
+      "empty": "הוסף נקודת קצה כדי לקבל אירועים כגון איש קשר חדש או עסקה שמתקדמת בשלב.",
+      "noAccess": "אין לך גישה ל־Webhooks.",
+      "loadFailed": "לא ניתן לטעון את ה־Webhooks.",
+      "retry": "נסה שוב",
+      "allEvents": "כל האירועים",
+      "signed": "חתום",
+      "health": {
+        "off": "כבוי",
+        "failing": "נכשל",
+        "healthy": "תקין",
+        "idle": "אין עדיין מסירות"
+      },
+      "activeFor": "פעיל: {name}",
+      "lastDelivery": "מסירה אחרונה {when}, תשובה {status}",
+      "noDeliveries": "עדיין לא נמסר דבר",
+      "noAnswer": "אין תשובה",
+      "counts": "{ok} נמסרו, {failed} נכשלו",
+      "lastError": "שגיאה אחרונה: {error}",
+      "deliveries": "מסירות",
+      "test": "שליחת בדיקה",
+      "edit": "עריכה",
+      "delete": "מחיקה",
+      "cancel": "ביטול",
+      "deleteTitle": "למחוק את ה־Webhook הזה?",
+      "deleteMessage": "{name} מפסיק לקבל אירועים ויומן המסירות שלו יוסר. לא ניתן לבטל זאת.",
+      "created": "ה־Webhook נוסף.",
+      "saved": "ה־Webhook נשמר.",
+      "deleted": "ה־Webhook נמחק.",
+      "deleteFailed": "לא ניתן למחוק את ה־Webhook. נסה שוב.",
+      "toggleFailed": "לא ניתן לשמור את השינוי. נסה שוב.",
+      "testOk": "הבדיקה נמסרה (תשובה {status}).",
+      "testFailed": "הבדיקה נכשלה: {reason}",
+      "testError": "לא ניתן לשלוח את הבדיקה. נסה שוב."
+    },
+    "dialog": {
+      "addTitle": "הוסף Webhook",
+      "editTitle": "עריכת Webhook",
+      "close": "סגור",
+      "name": "שם",
+      "nameHint": "אופציונלי: תווית עבורך, כגון המערכת שמקבלת אותו.",
+      "url": "כתובת נקודת הקצה",
+      "urlHint": "כתובת https שנגישה מהאינטרנט. כתובות פרטיות ופנימיות נדחות.",
+      "urlProblem": {
+        "empty": "הזן את כתובת נקודת הקצה.",
+        "tooLong": "הכתובת ארוכה מדי.",
+        "notHttps": "הכתובת חייבת להתחיל ב־https://.",
+        "invalid": "זו אינה כתובת תקינה."
+      },
+      "secret": "סוד חתימה",
+      "secretHint": "אופציונלי. כשהוגדר, לכל מסירה יש חתימה שהשרת שלך יכול לאמת. הוא לעולם לא יוצג שוב.",
+      "secretSetHint": "סוד הוגדר. השאר ריק כדי לשמור אותו, או הקלד חדש כדי להחליף.",
+      "secretKeep": "ללא שינוי",
+      "removeSecret": "הסר את סוד החתימה (מסירות לא ייחתמו)",
+      "events": "אירועים",
+      "allEvents": "כל האירועים",
+      "pickEvents": "בחר לפחות אירוע אחד, או בחר את כל האירועים.",
+      "active": "פעיל",
+      "cancel": "ביטול",
+      "create": "הוספת Webhook",
+      "save": "שמירת שינויים",
+      "failed": "לא ניתן היה לשמור את ה־Webhook. נסה שוב."
+    },
+    "deliveries": {
+      "title": "משלוחים: {name}",
+      "close": "סגירה",
+      "empty": "אין עדיין משלוחים. השתמש ב“שליחת בדיקה” כדי ליצור אחד.",
+      "failed": "לא ניתן היה לטעון את המשלוחים.",
+      "when": "מתי",
+      "event": "אירוע",
+      "result": "תשובה",
+      "time": "שעה",
+      "attempt": "ניסיון",
+      "test": "בדיקה",
+      "noAnswer": "אין תשובה"
+    }
+  }
+}

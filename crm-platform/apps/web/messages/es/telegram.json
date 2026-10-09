@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "Descartar"
+    },
+    "connect": {
+      "title": "Conectar bot de Telegram",
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "submit": "Conectar bot",
+      "intro": "Introduce el token de API HTTP de tu bot para configurar el webhook y empezar a atender chats de Telegram.",
+      "tokenLabel": "Token del bot *",
+      "tokenPlaceholder": "p. ej., 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "Eso no parece un token de BotFather.",
+      "connected": "Bot de Telegram conectado.",
+      "savedNeedsAttention": "El bot se ha guardado, pero Telegram no aceptó el webhook.",
+      "failed": "No se pudo conectar el bot. Inténtalo de nuevo.",
+      "howTitle": "¿Cómo obtener un token de bot?",
+      "how1a": "Abre Telegram y busca la",
+      "how1b": "cuenta verificada.",
+      "how2a": "Envía",
+      "how2b": "y elige un nombre visible y un nombre de usuario.",
+      "how3": "Copia el token de API HTTP generado y pégalo arriba."
+    },
+    "bot": {
+      "failed": "No funcionó. Inténtalo de nuevo.",
+      "webhookFixed": "La recepción de mensajes vuelve a estar activa.",
+      "live": "Activo",
+      "paused": "Pausado",
+      "needsAttention": "Requiere atención",
+      "lastMessage": "Último mensaje: {when}",
+      "payments": "Pagos",
+      "on": "Activado",
+      "paymentsSaved": "Ajustes de pagos guardados.",
+      "paymentsHint": "Pega un token de proveedor de pagos desde @BotFather (/mybots → Payments) para activar el nodo de flujo de pago: facturas nativas dentro del chat.",
+      "paymentsSavedPlaceholder": "•••••••• (guardado; déjalo en blanco para conservarlo)",
+      "paymentsToken": "Token del proveedor de pagos",
+      "removeToken": "Quitar token",
+      "save": "Guardar",
+      "webhook": "Webhook",
+      "fixInbound": "Corregir recepción (volver a registrar el webhook)",
+      "pause": "Pausar",
+      "resume": "Reanudar",
+      "pausedDone": "Bot pausado.",
+      "resumedDone": "Bot reanudado.",
+      "disconnect": "Desconectar",
+      "disconnectConfirm": "¿Desconectar este bot de Telegram? Sus conversaciones de la bandeja se conservan, pero deja de enviar y recibir mensajes.",
+      "cancel": "Cancelar",
+      "disconnected": "Bot desconectado."
+    },
+    "hub": {
+      "kicker": "Canal · Telegram",
+      "title": "Telegram",
+      "titleAccent": "Conectar",
+      "intro": "Despliega un bot de Telegram para automatizar flujos de mensajes, atender a tus clientes y enviar novedades a tus suscriptores de todo el mundo.",
+      "teamInbox": "Bandeja de equipo",
+      "flows": "Flujos",
+      "broadcasts": "Difusiones",
+      "telegramBroadcasts": "Difusiones de Telegram",
+      "loadError": "No se pudieron cargar tus bots de Telegram.",
+      "connectedCount": "{count} conectados",
+      "notConnected": "No conectado",
+      "botCardTitle": "Conexión de bot de Telegram",
+      "botCardBody": "Pega un token de bot de @BotFather para automatizar mensajes, atender soporte y enviar difusiones a tus suscriptores.",
+      "connectAnother": "Conectar otro bot",
+      "connectBot": "Conectar bot",
+      "accountCardTitle": "Conexión de cuenta de Telegram",
+      "accountCardBody": "Vincula tu cuenta de Telegram para crear bots desde aquí: escanea un QR o usa tu número de teléfono, igual que en WhatsApp.",
+      "connectAccount": "Conectar cuenta",
+      "accountUnavailable": "Aún no disponible: necesita el servicio de cuentas de Telegram, que no está configurado en este espacio de trabajo.",
+      "connectedBots": "Bots conectados",
+      "guideTitle": "Guía de configuración del bot de Telegram",
+      "guideBody": "Completa estos pasos para vincular tu canal de Telegram y activar los flujos automatizados.",
+      "prerequisites": "Requisitos previos",
+      "pre": {
+        "account": "Una cuenta de Telegram activa",
+        "name": "Un nombre único para tu bot",
+        "app": "Acceso a Telegram Web o a la app"
+      },
+      "stepsTitle": "Pasos de conexión",
+      "step": "Paso {n}",
+      "steps": {
+        "locate": {
+          "title": "Busca a BotFather",
+          "body": "Abre Telegram y busca la cuenta oficial @BotFather (busca la insignia de verificación)."
+        },
+        "create": {
+          "title": "Crea un bot nuevo",
+          "body": "Envía /newbot a @BotFather y sigue los pasos para dar nombre a tu bot y elegir un nombre de usuario."
+        },
+        "token": {
+          "title": "Obtén el token de API",
+          "body": "BotFather genera un token de API HTTP (p. ej., 123456789:ABC…). Cópialo con cuidado."
+        },
+        "connect": {
+          "title": "Conecta el bot aquí",
+          "body": "Haz clic en “Conectar bot”, pega el token en el cuadro y envía para terminar la vinculación."
+        }
+      },
+      "unlockedTitle": "¿Qué se desbloquea?",
+      "unlocked": {
+        "support": {
+          "title": "Automatiza la atención",
+          "body": "Deja que los bots con IA respondan preguntas frecuentes y deriven conversaciones las 24 horas."
+        },
+        "broadcast": {
+          "title": "Campañas de difusión",
+          "body": "Envía promociones, alertas y boletines a todos los suscriptores a la vez."
+        },
+        "media": {
+          "title": "Contenido multimedia interactivo",
+          "body": "Involucra a los usuarios con botones, menús, facturas e imágenes."
+        }
+      },
+      "tipTitle": "Consejo de configuración",
+      "tipBody": "Nunca compartas el token de API de tu bot en público. Si se ve comprometido, escribe a @BotFather y ejecuta /revoke para generar uno nuevo de inmediato. En localhost, la dirección de un túnel cambia en cada reinicio: pulsa “Corregir recepción” para volver a registrarlo."
+    },
+    "broadcasts": {
+      "kicker": "Telegram · Difusiones",
+      "title": "Telegram",
+      "titleAccent": "difusiones",
+      "intro": "Escribe a todas las personas que han chateado con tu bot y consulta por difusión los envíos, los fallos y los bloqueos.",
+      "bots": "Bots",
+      "newBroadcast": "Nueva difusión",
+      "connectFirst": "Primero conecta un bot de Telegram.",
+      "connectBot": "Conectar un bot",
+      "tile": {
+        "sent": "Enviados",
+        "audience": "Audiencia",
+        "failed": "Fallidos",
+        "blocked": "Bloqueados",
+        "sending": "Enviando",
+        "broadcasts": "{count} difusiones",
+        "audienceHint": "destinatarios en total",
+        "failedHint": "errores de entrega",
+        "blockedHint": "bot bloqueado por el usuario",
+        "sendingHint": "en curso"
+      },
+      "listKicker": "Lista de difusiones",
+      "listTitle": "Difusiones recientes",
+      "col": {
+        "broadcast": "Difusión",
+        "bot": "Bot",
+        "recipients": "Destinatarios",
+        "progress": "Progreso",
+        "status": "Estado",
+        "actions": "Acciones"
+      },
+      "counts": "{sent} enviados · {failed} fallidos · {blocked} bloqueados",
+      "status": {
+        "draft": "Borrador",
+        "sending": "Enviando",
+        "done": "Completada",
+        "failed": "Fallida"
+      },
+      "start": "Iniciar",
+      "pause": "Pausar",
+      "retry": "Reintentar",
+      "delete": "Eliminar",
+      "deleteConfirm": "¿Eliminar esta difusión?",
+      "cancel": "Cancelar",
+      "empty": "Aún no hay difusiones.",
+      "createFirst": "Crea la primera",
+      "failed": "No funcionó. Inténtalo de nuevo.",
+      "started": "El envío ha empezado.",
+      "paused": "En pausa. Los chats no enviados quedan pendientes.",
+      "retried": "{count} chats fallidos están listos para reenviarse. Pulsa Iniciar.",
+      "deleted": "Difusión eliminada."
+    },
+    "compose": {
+      "kicker": "Telegram · Nueva difusión",
+      "title": "Redacta una",
+      "titleAccent": "difusión",
+      "back": "Atrás",
+      "loadError": "No se pudieron cargar los bots y las plantillas.",
+      "noPermission": "Puedes ver esta página, pero no tienes permiso para crear difusiones.",
+      "setup": "Configuración de la difusión",
+      "name": "Nombre de la difusión",
+      "namePlaceholder": "p. ej., Oferta de fin de semana",
+      "bot": "Bot",
+      "template": "Plantilla (opcional)",
+      "templateHint": "Rellena el mensaje y envía los botones de la plantilla.",
+      "templateNone": "— ninguna (escribe la tuya) —",
+      "buttonCount": "{count} botón(es)",
+      "message": "Mensaje",
+      "messageHint": "Usa '{name}' para personalizar.",
+      "messagePlaceholder": "¡Hola '{name}'! …",
+      "attachment": "Adjunto (opcional)",
+      "attachmentHint": "Una dirección pública de una imagen, un vídeo, un audio o un documento. Subir un archivo necesita el servicio de almacenamiento.",
+      "attachmentInvalid": "Introduce una dirección completa que empiece por http:// o https://.",
+      "recipients": "Destinatarios",
+      "selectAll": "Seleccionar todos",
+      "clearAll": "Quitar todos",
+      "noChats": "Aún nadie ha chateado con este bot.",
+      "type": {
+        "private": "privado",
+        "group": "grupo",
+        "channel": "canal"
+      },
+      "selected": "{count} seleccionados",
+      "submit": "Crear difusión",
+      "preview": "Vista previa en directo",
+      "previewEmpty": "Vista previa de tu mensaje…",
+      "previewNote": "Así se verá tu difusión en el chat de cada destinatario.",
+      "created": "Difusión creada con {count} destinatarios. Pulsa Iniciar envío cuando estés listo.",
+      "failed": "No se pudo crear la difusión. Inténtalo de nuevo."
+    }
+  }
+}

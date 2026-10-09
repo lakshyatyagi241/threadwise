@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "Dispensar"
+    },
+    "connect": {
+      "title": "Conectar bot do Telegram",
+      "close": "Fechar",
+      "cancel": "Cancelar",
+      "submit": "Conectar bot",
+      "intro": "Insira o token do bot da API HTTP para configurar o webhook e começar a atender chats do Telegram.",
+      "tokenLabel": "Token do bot *",
+      "tokenPlaceholder": "ex.: 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "Este não parece ser um token do BotFather.",
+      "connected": "Bot do Telegram conectado.",
+      "savedNeedsAttention": "O bot foi salvo, mas o Telegram não aceitou o webhook.",
+      "failed": "Não foi possível conectar o bot. Tente novamente.",
+      "howTitle": "Como obter um token de bot?",
+      "how1a": "Abra o Telegram e pesquise a conta verificada",
+      "how1b": "do BotFather.",
+      "how2a": "Envie",
+      "how2b": "e escolha um nome de exibição e um nome de usuário.",
+      "how3": "Copie o token da API HTTP gerado e cole-o acima."
+    },
+    "bot": {
+      "failed": "Não funcionou. Tente novamente.",
+      "webhookFixed": "O recebimento voltou a funcionar.",
+      "live": "Ativo",
+      "paused": "Pausado",
+      "needsAttention": "Precisa de atenção",
+      "lastMessage": "Última mensagem {when}",
+      "payments": "Pagamentos",
+      "on": "ativado",
+      "paymentsSaved": "Configurações de pagamento salvas.",
+      "paymentsHint": "Cole um token de provedor de pagamento do @BotFather (/mybots → Payments) para habilitar o nó de fluxo de pagamento — faturas nativas no chat.",
+      "paymentsSavedPlaceholder": "•••••••• (salvo — deixe em branco para manter)",
+      "paymentsToken": "Token do provedor de pagamento",
+      "removeToken": "Remover token",
+      "save": "Salvar",
+      "webhook": "Webhook",
+      "fixInbound": "Corrigir recebimento (registrar webhook novamente)",
+      "pause": "Pausar",
+      "resume": "Retomar",
+      "pausedDone": "Bot pausado.",
+      "resumedDone": "Bot retomado.",
+      "disconnect": "Desconectar",
+      "disconnectConfirm": "Desconectar este bot do Telegram? As conversas dele na caixa de entrada permanecem, mas ele deixa de enviar e receber mensagens.",
+      "cancel": "Cancelar",
+      "disconnected": "Bot desconectado."
+    },
+    "hub": {
+      "kicker": "Canal · Telegram",
+      "title": "Telegram",
+      "titleAccent": "Conectar",
+      "intro": "Implante um bot do Telegram para automatizar fluxos de mensagens, atender clientes e enviar atualizações a todos os seus assinantes no mundo todo.",
+      "teamInbox": "Caixa de entrada da equipe",
+      "flows": "Fluxos",
+      "broadcasts": "Transmissões",
+      "telegramBroadcasts": "Transmissões do Telegram",
+      "loadError": "Não foi possível carregar seus bots do Telegram.",
+      "connectedCount": "{count} conectado(s)",
+      "notConnected": "Não conectado",
+      "botCardTitle": "Conexão de bot do Telegram",
+      "botCardBody": "Cole um token de bot do @BotFather para automatizar mensagens, atender clientes e enviar transmissões aos seus assinantes.",
+      "connectAnother": "Conectar outro bot",
+      "connectBot": "Conectar bot",
+      "accountCardTitle": "Conexão de conta do Telegram",
+      "accountCardBody": "Vincule sua conta do Telegram para criar bots aqui mesmo — escaneie um QR ou use seu número de telefone, como no WhatsApp.",
+      "connectAccount": "Conectar conta",
+      "accountUnavailable": "Ainda não disponível: é necessário o serviço de conta do Telegram, que não está configurado neste espaço de trabalho.",
+      "connectedBots": "Bots conectados",
+      "guideTitle": "Guia de configuração do bot do Telegram",
+      "guideBody": "Siga estas etapas para vincular seu canal do Telegram e ativar os fluxos automatizados.",
+      "prerequisites": "Pré-requisitos",
+      "pre": {
+        "account": "Uma conta ativa no Telegram",
+        "name": "Um nome exclusivo para o seu bot",
+        "app": "Acesso ao Telegram Web/App"
+      },
+      "stepsTitle": "Etapas de conexão",
+      "step": "Etapa {n}",
+      "steps": {
+        "locate": {
+          "title": "Localizar o BotFather",
+          "body": "Abra o Telegram e pesquise a conta oficial @BotFather (procure o selo de verificado)."
+        },
+        "create": {
+          "title": "Criar um novo bot",
+          "body": "Envie /newbot ao @BotFather e siga as instruções para dar um nome ao bot e escolher um nome de usuário."
+        },
+        "token": {
+          "title": "Obter token da API",
+          "body": "O BotFather gera um token da API HTTP (ex.: 123456789:ABC…). Copie-o com segurança."
+        },
+        "connect": {
+          "title": "Conecte o bot aqui",
+          "body": "Clique em “Conectar bot”, cole seu token na caixa e envie para concluir a conexão."
+        }
+      },
+      "unlockedTitle": "O que é desbloqueado?",
+      "unlocked": {
+        "support": {
+          "title": "Automatize o atendimento",
+          "body": "Deixe bots de IA responderem às perguntas frequentes e direcionarem conversas 24 horas por dia."
+        },
+        "broadcast": {
+          "title": "Campanhas de transmissão",
+          "body": "Envie promoções, alertas e newsletters para todos os assinantes de uma só vez."
+        },
+        "media": {
+          "title": "Mídia interativa avançada",
+          "body": "Engaje usuários com botões, menus, faturas e imagens."
+        }
+      },
+      "tipTitle": "Dica de configuração",
+      "tipBody": "Nunca compartilhe o token da API do seu bot publicamente. Se ele for comprometido, envie mensagem ao @BotFather e execute /revoke para gerar um novo imediatamente. Em localhost, o endereço de um túnel muda a cada reinicialização — clique em “Corrigir recebimento” para registrar novamente."
+    },
+    "broadcasts": {
+      "kicker": "Telegram · Transmissões",
+      "title": "Telegram",
+      "titleAccent": "transmissões",
+      "intro": "Envie mensagens para todos que conversaram com seu bot e acompanhe as enviadas, com falha e bloqueadas em cada transmissão.",
+      "bots": "Bots",
+      "newBroadcast": "Nova transmissão",
+      "connectFirst": "Conecte primeiro um bot do Telegram.",
+      "connectBot": "Conectar um bot",
+      "tile": {
+        "sent": "Enviadas",
+        "audience": "Público",
+        "failed": "Com falha",
+        "blocked": "Bloqueadas",
+        "sending": "Enviando",
+        "broadcasts": "{count} transmissões",
+        "audienceHint": "destinatários no total",
+        "failedHint": "erros de entrega",
+        "blockedHint": "bot bloqueado pelo usuário",
+        "sendingHint": "em andamento"
+      },
+      "listKicker": "Lista de transmissões",
+      "listTitle": "Transmissões recentes",
+      "col": {
+        "broadcast": "Transmissão",
+        "bot": "Bot",
+        "recipients": "Destinatários",
+        "progress": "Progresso",
+        "status": "Status",
+        "actions": "Ações"
+      },
+      "counts": "{sent} enviadas · {failed} com falha · {blocked} bloqueadas",
+      "status": {
+        "draft": "Rascunho",
+        "sending": "Enviando",
+        "done": "Concluída",
+        "failed": "Com falha"
+      },
+      "start": "Iniciar",
+      "pause": "Pausar",
+      "retry": "Tentar novamente",
+      "delete": "Excluir",
+      "deleteConfirm": "Excluir esta transmissão?",
+      "cancel": "Cancelar",
+      "empty": "Nenhuma transmissão ainda.",
+      "createFirst": "Crie a primeira",
+      "failed": "Não funcionou. Tente novamente.",
+      "started": "Envio iniciado.",
+      "paused": "Pausado. Os chats não enviados continuam pendentes.",
+      "retried": "{count} chats com falha estão prontos para reenvio. Clique em Iniciar.",
+      "deleted": "Transmissão excluída."
+    },
+    "compose": {
+      "kicker": "Telegram · Nova transmissão",
+      "title": "Crie uma nova",
+      "titleAccent": "transmissão",
+      "back": "Voltar",
+      "loadError": "Não foi possível carregar os bots e modelos.",
+      "noPermission": "Você pode ver esta página, mas não tem permissão para criar transmissões.",
+      "setup": "Configuração da transmissão",
+      "name": "Nome da transmissão",
+      "namePlaceholder": "ex.: Promoção de fim de semana",
+      "bot": "Bot",
+      "template": "Modelo (opcional)",
+      "templateHint": "Preenche a mensagem e envia os botões do modelo.",
+      "templateNone": "— nenhum (escreva o seu) —",
+      "buttonCount": "{count} botão(ões)",
+      "message": "Mensagem",
+      "messageHint": "Use '{name}' para personalizar.",
+      "messagePlaceholder": "Olá, '{name}'! …",
+      "attachment": "Anexo (opcional)",
+      "attachmentHint": "Um endereço público para uma imagem, vídeo, áudio ou documento. Enviar um arquivo exige o serviço de armazenamento.",
+      "attachmentInvalid": "Digite um endereço completo começando com http:// ou https://.",
+      "recipients": "Destinatários",
+      "selectAll": "Selecionar tudo",
+      "clearAll": "Limpar tudo",
+      "noChats": "Ninguém conversou com este bot ainda.",
+      "type": {
+        "private": "privado",
+        "group": "grupo",
+        "channel": "canal"
+      },
+      "selected": "{count} selecionado(s)",
+      "submit": "Criar transmissão",
+      "preview": "Pré-visualização",
+      "previewEmpty": "Prévia da sua mensagem…",
+      "previewNote": "Veja como sua transmissão aparecerá no chat de cada destinatário.",
+      "created": "Transmissão criada com {count} destinatários. Clique em Iniciar envio quando estiver pronto.",
+      "failed": "Não foi possível criar a transmissão. Tente novamente."
+    }
+  }
+}

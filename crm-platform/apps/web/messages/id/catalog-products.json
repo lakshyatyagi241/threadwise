@@ -1,0 +1,730 @@
+{
+  "catalogProducts": {
+    "nav": {
+      "catalog": "Katalog",
+      "products": "Produk",
+      "reviews": "Ulasan"
+    },
+    "common": {
+      "dismiss": "Tutup",
+      "retry": "Coba lagi",
+      "requestId": "ID permintaan"
+    },
+    "errors": {
+      "network": "Tidak dapat menjangkau server. Periksa koneksi Anda dan coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukannya.",
+      "signedOut": "Sesi Anda telah berakhir. Masuk lagi untuk melanjutkan.",
+      "conflict": "Orang lain mengubah ini saat Anda mengedit. Muat ulang untuk melihat versi terbaru.",
+      "validation": "Beberapa kolom tidak valid. Periksa kolom yang ditandai dan coba lagi.",
+      "unavailable": "Bagian katalog ini belum tersedia di server ini.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar dan coba lagi.",
+      "notFound": "Item itu tidak ditemukan. Mungkin sudah dihapus.",
+      "planLocked": "Paket Anda tidak mencakup katalog WhatsApp. Upgrade untuk membukanya.",
+      "planLimit": "Batas pesan pada paket Anda telah tercapai.",
+      "wallet": "Saldo dompet Anda terlalu rendah untuk mengirim. Tambah dana dan coba lagi.",
+      "sendBlocked": "Pengiriman sedang diblokir: {detail}",
+      "notConnected": "Tidak ada katalog yang terhubung. Hubungkan satu di tab Penyiapan terlebih dahulu.",
+      "metaRejected": "Meta menolak permintaan: {detail}",
+      "noWaba": "Tidak ditemukan nomor WhatsApp Business (WABA) yang terhubung. Hubungkan nomor WABA terlebih dahulu, atau tautkan katalog secara manual.",
+      "wabaToken": "Nomor WABA Anda terhubung tetapi token-nya tidak dapat dibaca. Hubungkan ulang nomor tersebut, atau tautkan katalog secara manual.",
+      "noCatalogLinked": "Belum ada katalog produk yang ditautkan ke akun WhatsApp Anda. Buat satu di Meta Commerce Manager, lalu coba lagi, atau tautkan secara manual.",
+      "noRecipients": "Pilih setidaknya satu kontak, grup, atau tempel nomor.",
+      "tooManyRecipients": "Maksimal 500 penerima per pengiriman. Bagi menjadi batch yang lebih kecil.",
+      "noProducts": "Pilih setidaknya satu produk terlebih dahulu.",
+      "noSender": "Tidak ada perangkat terhubung. Pasangkan satu di Saluran terlebih dahulu.",
+      "sendFailed": "Pesan tidak dapat dikirim: {detail}",
+      "collectionProducts": "Tidak ada produk terpilih yang termasuk dalam workspace ini.",
+      "providerFailed": "WhatsApp atau Meta tidak dapat menyelesaikan permintaan: {detail}",
+      "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi."
+    },
+    "paywall": {
+      "kicker": "Fitur premium",
+      "title": "Etalase WhatsApp tidak termasuk dalam paket Anda",
+      "message": "Pilih paket yang menyertakannya. Upgrade dan buka fitur ini seketika.",
+      "back": "Kembali",
+      "compare": "Bandingkan semua paket"
+    },
+    "status": {
+      "unsynced": "belum disinkronkan",
+      "pending": "tertunda",
+      "synced": "tersinkronisasi",
+      "failed": "gagal"
+    },
+    "pager": {
+      "showing": "Menampilkan {from} sampai {to} dari {total} hasil",
+      "label": "Halaman",
+      "prev": "Halaman sebelumnya",
+      "next": "Halaman berikutnya",
+      "goTo": "Ke halaman {page}"
+    },
+    "shell": {
+      "back": "Kembali ke integrasi",
+      "breadcrumb": "Integrasi / Katalog WhatsApp",
+      "titleLead": "Kirim produk ke",
+      "titleAccent": "obrolan WhatsApp",
+      "connected": "{provider} · terhubung",
+      "notConnected": "Tidak terhubung",
+      "tabs": "Bagian katalog",
+      "tab": {
+        "setup": "Penyiapan",
+        "send": "Kirim",
+        "collections": "Koleksi",
+        "activity": "Aktivitas"
+      }
+    },
+    "connect": {
+      "provider": "Penyedia",
+      "providers": {
+        "meta_cloud": "Meta Cloud API (langsung)",
+        "dialog_360": "360dialog (BSP)"
+      },
+      "catalogId": "ID katalog",
+      "catalogName": "Nama katalog",
+      "label": "(label)",
+      "catalogNamePlaceholder": "mis. Katalog Utama",
+      "wabaId": "ID WABA",
+      "phoneNumberId": "ID nomor telepon",
+      "accessToken": "Token akses / kunci API",
+      "accessTokenHint": "Disimpan terenkripsi. Diverifikasi ke Meta saat disimpan.",
+      "accessTokenPlaceholder": "EAAxx... atau D360-API-KEY...",
+      "showToken": "Tampilkan token",
+      "hideToken": "Sembunyikan token",
+      "submit": "Hubungkan & verifikasi",
+      "connected": "Katalog terhubung.",
+      "problem": {
+        "required": "Kolom ini wajib diisi.",
+        "tooShort": "Token akses minimal 20 karakter.",
+        "tooLong": "Nilai ini terlalu panjang."
+      }
+    },
+    "setup": {
+      "loading": "Memuat katalog",
+      "loadError": "Katalog tidak dapat dimuat",
+      "cancel": "Batal",
+      "manage": "Kelola →",
+      "view": "Lihat →",
+      "advanced": {
+        "kicker": "Opsional · lanjutan",
+        "titleManual": "Atau tautkan katalog secara manual",
+        "titleAlso": "Tautkan juga Katalog Meta Commerce",
+        "intro": "Membuka tombol katalog resmi di profil WhatsApp Business Anda, keranjang, dan webhook \"order placed\". Hanya diperlukan jika Anda memakai WABA terverifikasi. API Tidak Resmi berfungsi baik tanpanya."
+      },
+      "noSender": {
+        "title": "Hubungkan perangkat terlebih dahulu",
+        "message": "Pengiriman katalog memerlukan setidaknya satu perangkat WhatsApp di akun ini: pasangan QR API Tidak Resmi (gratis) atau nomor WABA terverifikasi Meta. Hanya butuh 30 detik.",
+        "connect": "Hubungkan perangkat"
+      },
+      "ready": {
+        "kicker": "✓ Siap dikirim",
+        "officialTitle": "Mode katalog WhatsApp resmi",
+        "unofficialTitle": "Mode carousel API Tidak Resmi",
+        "officialBody": "Anda memiliki {count, plural, other {# nomor}} yang terhubung. Pengiriman katalog dilakukan melalui nomor {engine} yang terhubung. Untuk pesan produk interaktif, tautkan Katalog Meta Commerce di bawah.",
+        "unofficialBody": "Anda memiliki {count, plural, other {# perangkat}} yang terhubung. Pengiriman katalog berfungsi sekarang melalui carousel WhatsApp native lewat API Tidak Resmi, tanpa penyiapan Meta dan tanpa menunggu persetujuan.",
+        "head": "Buka <b>tab Kirim</b> untuk mengirim produk ke nomor pelanggan mana pun.",
+        "openSend": "Buka tab Kirim"
+      },
+      "senders": {
+        "title": "Perangkat terhubung",
+        "noNumber": "Tidak ada nomor",
+        "connected": "terhubung"
+      },
+      "tiles": {
+        "products": "Produk",
+        "shops": "Toko",
+        "recentSends": "Pengiriman terbaru",
+        "total": "Total",
+        "synced": "Tersinkronisasi",
+        "pending": "Tertunda",
+        "failed": "Gagal"
+      },
+      "autodetect": {
+        "title": "Tautkan Katalog Meta Commerce Anda",
+        "intro": "Nomor WhatsApp Anda sudah terhubung, jadi kami dapat mengambil katalog langsung dari Meta, tanpa perlu menempel ID Katalog, ID WABA, atau token akses. Membuka tombol katalog resmi, keranjang, dan webhook \"order placed\".",
+        "button": "Ambil dari akun WhatsApp saya",
+        "linked": "Katalog ditautkan dari akun WhatsApp Anda."
+      },
+      "header": {
+        "connected": "Terhubung · {provider}",
+        "defaultName": "Katalog Meta Commerce",
+        "sendProducts": "Kirim produk →",
+        "disconnect": "Putuskan"
+      },
+      "disconnectTitle": "Putuskan katalog?",
+      "disconnectConfirm": "Produk tetap ada di Meta; kami hanya berhenti menyinkronkan.",
+      "disconnected": "Katalog diputuskan.",
+      "table": {
+        "title": "Produk",
+        "hint": "Terakhir diperbarui · klik <b>Segarkan status</b> untuk memeriksa Meta.",
+        "manage": "Kelola produk →",
+        "product": "Produk",
+        "sku": "SKU",
+        "price": "Harga",
+        "availability": "Ketersediaan",
+        "metaStatus": "Status Meta",
+        "actions": "Aksi",
+        "empty": "Belum ada produk.",
+        "addOne": "Tambahkan →",
+        "sync": {
+          "idle": "Sinkronkan",
+          "busy": "…",
+          "queued": "Diantrekan ✓",
+          "skipped": "Tidak diantrekan",
+          "failed": "Gagal"
+        }
+      }
+    },
+    "sync": {
+      "title": "Sinkronkan produk ke Meta",
+      "intro": "Mengirim hingga 1000 per permintaan, berulang sampai selesai. {count} menunggu.",
+      "syncButton": "Sinkronkan ke Meta",
+      "syncing": "Menyinkronkan…",
+      "pollButton": "Segarkan status",
+      "polling": "Memeriksa…",
+      "importButton": "Impor dari Meta",
+      "importing": "Mengimpor…",
+      "importHint": "Tarik produk yang dibuat langsung di Meta Commerce Manager ke dalam katalog.",
+      "progress": "Progres sinkronisasi",
+      "starting": "Memulai…",
+      "pushed": "Terkirim {pushed} · tertunda {pending} · tersinkron {synced} · gagal {failed}",
+      "stalled": "Tidak ada lagi yang dapat dikirim pada putaran ini. Periksa produk yang ditandai gagal.",
+      "done": "selesai · {count} diantrekan",
+      "polled": "Diperiksa · tersinkron+{synced} · gagal+{failed}",
+      "importStarting": "Impor dari Meta · memulai…",
+      "imported": "Diimpor {imported} · diperbarui {updated} · dilewati {skipped} dari {total}"
+    },
+    "commerce": {
+      "title": "Pengaturan commerce",
+      "visible": "Tampilkan katalog di profil bisnis",
+      "visibleHint": "Menambahkan tombol \"Katalog\" ke profil WhatsApp Business Anda.",
+      "cart": "Aktifkan keranjang",
+      "cartHint": "Pembeli dapat menambahkan beberapa produk sebelum mengirim pesanan.",
+      "save": "Simpan",
+      "saved": "Pengaturan commerce diperbarui."
+    },
+    "automation": {
+      "title": "Otomatisasi",
+      "ack": "Balas otomatis saat pelanggan mengirim keranjang",
+      "ackHint": "Pembeli langsung mendapat pesan pesanan diterima (item + total) alih-alih hening, perbaikan konversi katalog nomor 1.",
+      "payUrl": "Dasar tautan pembayaran (opsional)",
+      "payUrlHint": "Kami menambahkan ID pesanan; kosongkan untuk sekadar mengonfirmasi penerimaan.",
+      "concierge": "Concierge katalog: jawab otomatis pertanyaan produk",
+      "conciergeHint": "Saat pelanggan mengetik mis. \"sepatu merah di bawah 2000\", balas otomatis dengan Multi-Product Message yang cocok. Nonaktif secara default.",
+      "header": "Header balasan",
+      "headerPlaceholder": "Ini yang saya temukan",
+      "max": "Produk maksimal",
+      "replyOnEmpty": "Balas meskipun tidak ada yang cocok",
+      "replyOnEmptyHint": "Jika tidak, concierge tetap diam saat tidak ada yang cocok (disarankan).",
+      "emptyText": "Balasan tidak cocok",
+      "emptyTextPlaceholder": "Maaf, saya tidak menemukan yang cocok. Coba kata kunci atau anggaran lain.",
+      "save": "Simpan otomatisasi",
+      "saved": "Pengaturan otomatisasi disimpan.",
+      "problem": {
+        "badUrl": "Masukkan tautan lengkap yang diawali https://",
+        "tooLong": "Teks ini terlalu panjang.",
+        "range": "Masukkan bilangan bulat dari 1 sampai 30."
+      }
+    },
+    "health": {
+      "title": "Kesehatan katalog",
+      "needAttention": "{count, plural, other {# produk perlu diperhatikan sebelum dapat dijual.}}",
+      "allGood": "Setiap produk siap untuk katalog. Bagus.",
+      "noImage": "tanpa gambar",
+      "noPrice": "tanpa harga",
+      "syncError": "error sinkronisasi",
+      "showFix": "Tampilkan produk yang perlu diperbaiki",
+      "fix": "Perbaiki →"
+    },
+    "send": {
+      "loading": "Memuat formulir kirim",
+      "loadError": "Formulir kirim tidak dapat dimuat",
+      "maxProducts": "Maksimal {max} produk per carousel.",
+      "noSender": {
+        "title": "Hubungkan perangkat terlebih dahulu",
+        "message": "Anda memerlukan perangkat WhatsApp yang terhubung untuk mengirim pesan katalog.",
+        "connect": "Hubungkan perangkat"
+      },
+      "feedback": {
+        "failed": "Tidak ada yang dikirim.",
+        "sent": "{count, plural, other {Terkirim ke # penerima}}",
+        "someFailed": "{count} gagal"
+      },
+      "recipients": {
+        "title": "Penerima",
+        "count": "{count, plural, other {# penerima}}",
+        "source": "Asal penerima",
+        "modes": {
+          "groups": {
+            "title": "Grup kontak",
+            "hint": "Gunakan segmen tersimpan."
+          },
+          "contacts": {
+            "title": "Kontak individu",
+            "hint": "Pilih orang tertentu."
+          },
+          "manual": {
+            "title": "Nomor manual",
+            "hint": "Tempel, satu per baris."
+          }
+        },
+        "noGroups": "Belum ada grup kontak. Buat satu dari halaman <link>Kontak</link> terlebih dahulu.",
+        "groupContacts": "{count, plural, other {# kontak}}",
+        "noContacts": "Belum ada kontak. Tambahkan di halaman <link>Kontak</link>.",
+        "searchContacts": "Cari kontak…",
+        "noMatch": "Tidak ada kontak yang cocok.",
+        "paste": "Tempel nomor telepon",
+        "pastePlaceholder": "Satu nomor per baris, sertakan kode negara",
+        "pasteHint": "Satu per baris, koma, atau titik koma. Kode negara wajib (dengan atau tanpa +).",
+        "overCap": "Maksimal {max} penerima per pengiriman. Bagi menjadi batch yang lebih kecil."
+      },
+      "format": {
+        "title": "Format & pengirim",
+        "spm": {
+          "title": "Produk tunggal",
+          "hint": "Satu kartu produk"
+        },
+        "mpm": {
+          "title": "Daftar produk (carousel)",
+          "hint": "Hingga 30 produk"
+        },
+        "link": {
+          "title": "Tautan katalog",
+          "hint": "Teks biasa · berfungsi kapan saja"
+        },
+        "sendFrom": "Kirim dari",
+        "fromShop": "Dari toko",
+        "brandingContext": "(konteks branding)",
+        "shopFallback": "Toko {slug}"
+      },
+      "products": {
+        "title": "Produk",
+        "selected": "({count} dipilih)",
+        "selectedOf": "({count} dipilih / {max})",
+        "search": "Cari produk…",
+        "showingFrom": "Menampilkan produk dari <b>{shop}</b>. Ubah pemilih <b>Dari toko</b> di atas untuk melihat katalog toko lain.",
+        "loading": "Memuat produk…",
+        "loadError": "Produk tidak dapat dimuat",
+        "other": "Lainnya",
+        "noMatch": "Tidak ada produk yang cocok dengan pencarian Anda.",
+        "emptyShop": "Tidak ada produk aktif di toko ini.",
+        "empty": "Belum ada produk aktif.",
+        "addOne": "Tambahkan →"
+      },
+      "message": {
+        "title": "Pesan & kirim",
+        "text": "Teks pesan",
+        "optional": "(opsional)",
+        "placeholder": "mis. Ini beberapa produk yang mungkin Anda suka, ketuk salah satunya untuk info lebih lanjut.",
+        "header": "Header",
+        "headerPlaceholder": "mis. Lihat ini",
+        "footer": "Footer",
+        "footerPlaceholder": "mis. Balas STOP untuk berhenti berlangganan",
+        "counter": "{used} / {max}",
+        "viewRecent": "Lihat pengiriman terbaru →",
+        "sendProduct": "Kirim produk →",
+        "sendCarousel": "Kirim carousel →",
+        "sendLink": "Kirim tautan katalog →",
+        "sending": "Mengirim…",
+        "noPermission": "Anda dapat melihat formulir ini tetapi tidak dapat mengirim pesan katalog."
+      },
+      "rail": {
+        "label": "Ringkasan pengiriman",
+        "summary": "Ringkasan",
+        "recipients": "Penerima",
+        "products": "Produk",
+        "format": "Format",
+        "formats": {
+          "spm": "Produk tunggal",
+          "mpm": "Daftar multi-produk",
+          "link": "Tautan katalog"
+        },
+        "catalog": "Katalog",
+        "metaCommerce": "Meta Commerce",
+        "productCount": "{count, plural, other {# produk}}",
+        "unofficial": "API Tidak Resmi (carousel)",
+        "linkMeta": "Tautkan Meta →",
+        "recent": "Pengiriman terbaru",
+        "windowTitle": "Jendela 24 jam",
+        "windowBody": "Mode SPM & daftar mengharuskan pembeli mengirim pesan kepada Anda dalam 24 jam terakhir. Mode <b>Tautan katalog</b> berfungsi kapan saja."
+      }
+    },
+    "collections": {
+      "loading": "Memuat koleksi",
+      "loadError": "Koleksi tidak dapat dimuat",
+      "title": "Koleksi",
+      "intro": "Simpan sekelompok produk sekali, lalu kirim sebagai Multi-Product Message dengan satu klik, tanpa memilih ulang setiap kali.",
+      "new": "Koleksi baru",
+      "create": "Buat koleksi",
+      "created": "Koleksi dibuat.",
+      "updated": "Koleksi diperbarui.",
+      "deleted": "Koleksi dihapus.",
+      "empty": "Belum ada koleksi. Buat yang pertama di atas.",
+      "productCount": "{count, plural, =0 {tidak ada produk} other {# produk}}",
+      "edit": "Edit",
+      "delete": "Hapus",
+      "cancel": "Batal",
+      "saveChanges": "Simpan perubahan",
+      "deleteTitle": "Hapus koleksi ini?",
+      "deleteBody": "\"{name}\" akan dihapus. Produk tidak terpengaruh.",
+      "send": {
+        "button": "Kirim",
+        "noLive": "Koleksi ini tidak memiliki produk aktif untuk dikirim.",
+        "needNumber": "Masukkan nomor penerima terlebih dahulu.",
+        "sending": "Mengirim…",
+        "sent": "{count, plural, other {Terkirim ke # penerima}}",
+        "someFailed": "{count} gagal",
+        "failed": "Tidak ada yang dikirim.",
+        "number": "Nomor penerima",
+        "numberPlaceholder": "Nomor dengan kode negara",
+        "header": "Header (opsional)",
+        "headerPlaceholder": "Lihat ini",
+        "from": "Kirim dari",
+        "auto": "Otomatis (aktif)",
+        "go": "Kirim sebagai MPM"
+      },
+      "picker": {
+        "filter": "Filter produk…",
+        "empty": "Belum ada produk aktif.",
+        "addOne": "Tambahkan →",
+        "noMatch": "Tidak ada produk yang cocok.",
+        "max": "Satu koleksi berisi maksimal {max} produk."
+      },
+      "form": {
+        "name": "Nama",
+        "namePlaceholder": "mis. Obral Musim Panas",
+        "description": "Deskripsi (opsional)",
+        "products": "Produk",
+        "upTo": "hingga {max}",
+        "reload": "Muat ulang",
+        "problem": {
+          "nameRequired": "Masukkan nama.",
+          "nameTooLong": "Nama terlalu panjang.",
+          "descriptionTooLong": "Deskripsi terlalu panjang.",
+          "noProducts": "Pilih setidaknya satu produk."
+        }
+      }
+    },
+    "activity": {
+      "loading": "Memuat aktivitas",
+      "loadError": "Aktivitas tidak dapat dimuat",
+      "title": "Aktivitas pengiriman katalog",
+      "subtitle": "Setiap pesan katalog yang telah dikirim workspace Anda (SPM · MPM · tautan).",
+      "sendAnother": "Kirim lagi →",
+      "emptyTitle": "Belum ada pengiriman",
+      "emptyBody": "Kirim katalog pertama Anda dari <link>tab Kirim</link>.",
+      "failed": "Gagal",
+      "col": {
+        "when": "Kapan",
+        "to": "Kepada",
+        "mode": "Mode",
+        "body": "Isi"
+      }
+    },
+    "products": {
+      "kicker": "Toko / Produk",
+      "title": "Katalog",
+      "add": "Tambah produk",
+      "search": "Cari berdasarkan nama atau SKU...",
+      "loading": "Memuat produk",
+      "loadError": "Produk tidak dapat dimuat",
+      "col": {
+        "image": "Gambar",
+        "name": "Nama",
+        "sku": "SKU",
+        "price": "Harga",
+        "stock": "Stok",
+        "actions": "Aksi"
+      },
+      "noMatchTitle": "Tidak ada produk yang cocok",
+      "noMatchBody": "Tidak ada yang cocok dengan \"{q}\" berdasarkan nama atau SKU.",
+      "clearSearch": "Hapus pencarian",
+      "emptyTitle": "Belum ada produk",
+      "emptyBody": "Klik \"Tambah produk\" untuk membuat yang pertama.",
+      "inStock": "Tersedia",
+      "out": "Habis",
+      "share": "Bagikan",
+      "edit": "Edit",
+      "delete": "Hapus",
+      "cancel": "Batal",
+      "deleted": "Produk dihapus.",
+      "deleteTitle": "Hapus produk ini?",
+      "deleteBody": "\"{name}\" akan dihapus. Produk tetap ada di Meta sampai Anda menghapusnya di sana."
+    },
+    "share": {
+      "eyebrow": "Bagikan produk",
+      "product": "Produk",
+      "close": "Tutup",
+      "loading": "Memuat tautan",
+      "storefrontLink": "Tautan etalase",
+      "noStorefront": "(siapkan slug etalase Anda terlebih dahulu)",
+      "waLink": "Deep link WhatsApp",
+      "noPhone": "(hubungkan nomor telepon terlebih dahulu)",
+      "copy": "Salin",
+      "copied": "Tersalin!",
+      "sendToCustomer": "Kirim ke pelanggan",
+      "phonePlaceholder": "Nomor WhatsApp, mis. +1 555…",
+      "send": "Kirim",
+      "sending": "Mengirim…",
+      "sent": "Terkirim.",
+      "invalidPhone": "Masukkan nomor WhatsApp yang valid dengan kode negara."
+    },
+    "form": {
+      "breadcrumb": "Breadcrumb",
+      "products": "Produk",
+      "crumbNew": "Baru",
+      "crumbEdit": "Edit",
+      "addTitle": "Tambah produk",
+      "editFallback": "Edit produk",
+      "loading": "Memuat produk",
+      "loadError": "Produk tidak dapat dimuat",
+      "noPermissionTitle": "Anda tidak dapat melakukan ini",
+      "noPermission": "Peran Anda tidak mengizinkan pembuatan atau pengeditan produk.",
+      "reload": "Muat ulang",
+      "fixFields": "Beberapa kolom tidak valid. Periksa kolom yang ditandai.",
+      "basics": "Dasar",
+      "name": "Nama",
+      "namePlaceholder": "mis. Kaos Katun Musim Semi",
+      "sku": "SKU",
+      "optional": "(opsional)",
+      "shortDescription": "Deskripsi singkat",
+      "shortDescriptionPlaceholder": "Ditampilkan di kartu katalog + tautan bagikan WhatsApp.",
+      "fullDescription": "Deskripsi lengkap",
+      "fullDescriptionNote": "(isi halaman produk)",
+      "fullDescriptionPlaceholder": "Ukuran, bahan, petunjuk perawatan: apa pun yang membantu pembeli memutuskan. HTML diizinkan.",
+      "media": "Media",
+      "primaryImage": "Gambar utama · tempel URL",
+      "imageUrl": "URL gambar",
+      "imageUrlHint": "Tempel URL gambar langsung apa pun.",
+      "photoTipsTitle": "Tips foto produk yang bagus",
+      "photoTips": "Gunakan gambar persegi (1:1) berukuran 1024×1024 px atau lebih besar. Latar polos lebih berkonversi daripada latar ramai.",
+      "gallery": "Galeri",
+      "galleryHint": "Tambahkan lebih banyak gambar ke halaman detail produk. Pembeli melihatnya sebagai thumbnail.",
+      "addGalleryUrl": "Tambah URL gambar",
+      "galleryRow": "URL gambar galeri {n}",
+      "removeGallery": "Hapus gambar galeri {n}",
+      "galleryEmpty": "Belum ada gambar galeri. Klik \"Tambah URL gambar\" di atas untuk menambahkan.",
+      "pricing": "Harga",
+      "price": "Harga",
+      "comparePrice": "Harga pembanding",
+      "was": "(sebelumnya)",
+      "comparePriceHint": "Harga asli · tampil dicoret.",
+      "currency": "Mata uang",
+      "profit": "Indikator keuntungan",
+      "profitHint": "Otomatis · harga vs harga pembanding.",
+      "profitOff": "-{percent}% diskon",
+      "profitLower": "Pembanding < harga",
+      "profitSame": "0% · sama",
+      "inventory": "Inventaris & pengiriman",
+      "stockQty": "Jumlah stok",
+      "stockPlaceholder": "Kosong = tak terbatas",
+      "weight": "Berat",
+      "weightHint": "Digunakan untuk perhitungan biaya pengiriman.",
+      "weightPlaceholder": "mis. 250",
+      "available": "Tersedia untuk dijual",
+      "availableHint": "Hapus centang untuk menandai habis terjual sambil tetap menampilkan produk.",
+      "sortOrder": "Urutan",
+      "sortOrderHint": "Angka lebih kecil tampil lebih dulu.",
+      "visibility": "Visibilitas",
+      "status": {
+        "active": "Aktif: tayang di etalase",
+        "draft": "Draf: tersembunyi, dapat diedit",
+        "archived": "Diarsipkan: tersembunyi, disimpan dalam catatan"
+      },
+      "organization": "Organisasi",
+      "category": "Kategori",
+      "categoryPlaceholder": "mis. Pakaian, Camilan",
+      "tags": "Tag",
+      "tagsNote": "(dipisahkan koma)",
+      "tagsPlaceholder": "katun, musim panas, terlaris",
+      "preview": "Pratinjau etalase",
+      "noImage": "Belum ada gambar",
+      "productName": "Nama produk",
+      "cancel": "Batal",
+      "saveChanges": "Simpan perubahan",
+      "createProduct": "Buat produk",
+      "created": "Produk dibuat.",
+      "updated": "Produk diperbarui.",
+      "problem": {
+        "required": "Kolom ini wajib diisi.",
+        "tooLong": "Teks ini terlalu panjang.",
+        "notNumber": "Masukkan angka, seperti 499 atau 499.50.",
+        "tooBig": "Jumlahnya terlalu besar.",
+        "notWhole": "Masukkan bilangan bulat.",
+        "badUrl": "Masukkan tautan lengkap yang diawali https://",
+        "outOfRange": "Angka ini di luar rentang.",
+        "tooMany": "Terlalu banyak gambar."
+      }
+    },
+    "reviews": {
+      "rating": "{rating, plural, other {# bintang dari 5}}",
+      "kicker": "Toko / Ulasan",
+      "title": "Ulasan produk",
+      "subtitle": "Setujui ulasan pelanggan untuk menampilkannya di halaman produk etalase.",
+      "tabs": "Status ulasan",
+      "tab": {
+        "pending": "Menunggu",
+        "approved": "Disetujui",
+        "rejected": "Ditolak"
+      },
+      "loading": "Memuat ulasan",
+      "loadError": "Ulasan tidak dapat dimuat",
+      "empty": {
+        "pending": "Tidak ada ulasan yang menunggu.",
+        "approved": "Tidak ada ulasan yang disetujui.",
+        "rejected": "Tidak ada ulasan yang ditolak."
+      },
+      "anonymous": "Anonim",
+      "on": "pada",
+      "unknownProduct": "produk yang dihapus",
+      "approve": "Setujui",
+      "reject": "Tolak",
+      "delete": "Hapus",
+      "cancel": "Batal",
+      "approved": "Ulasan disetujui.",
+      "rejected": "Ulasan ditolak.",
+      "deleted": "Ulasan dihapus.",
+      "deleteTitle": "Hapus ulasan ini?",
+      "deleteBody": "Ulasan akan dihapus secara permanen."
+    },
+    "senderPicker": {
+      "none": "Tidak ada pengirim yang terhubung.",
+      "connectOne": "Hubungkan →",
+      "select": "— Pilih pengirim —",
+      "connectNew": "Hubungkan perangkat baru",
+      "engine": {
+        "waba": "Meta",
+        "twilio": "Twilio",
+        "baileys": "API tidak resmi"
+      }
+    },
+    "admin": {
+      "nav": "Katalog",
+      "pageTitle": "Pengaturan katalog",
+      "loading": "Memuat pengaturan katalog",
+      "retry": "Coba lagi",
+      "eyebrow": "Admin · Pengaturan proyek",
+      "titleLead": "WhatsApp",
+      "titleAccent": "Katalog",
+      "intro": "Kontrol tingkat platform untuk fitur Katalog WABA. Setiap merchant menghubungkan katalog Akun Commerce Meta miliknya sendiri dari halaman <link>/catalog</link> di sisi workspace. Layar ini mengatur nilai default yang diwarisi setiap workspace.",
+      "allSettings": "Semua pengaturan",
+      "openCatalog": "Buka katalog pengguna",
+      "reset": "Reset draf",
+      "save": "Simpan perubahan",
+      "saved": "Pengaturan katalog disimpan.",
+      "superOnly": "Hanya super admin yang dapat mengubah pengaturan ini. Anda dapat melihat nilai yang tersimpan.",
+      "fix": "Perbaiki kolom yang ditandai:",
+      "problems": {
+        "graphVersion": "Gunakan versi Graph API seperti v23.0.",
+        "currency": "Gunakan kode mata uang 3 huruf."
+      },
+      "errors": {
+        "conflict": "Orang lain menyimpan pengaturan ini lebih dulu. Nilai terbaru ditampilkan; lakukan perubahan Anda lagi.",
+        "forbidden": "Anda tidak memiliki izin untuk mengubah pengaturan ini.",
+        "validation": "Beberapa kolom tidak valid. Periksa kolom yang ditandai lalu coba lagi.",
+        "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
+        "unexpected": "Terjadi kesalahan. Coba lagi sesaat lagi."
+      },
+      "usage": {
+        "connected": "Workspace terhubung",
+        "connectedHint": "dengan Catalog ID Meta tersimpan",
+        "products": "Produk disinkronkan",
+        "productsHint": "di semua katalog workspace",
+        "sends": "Pesan katalog terkirim",
+        "sendsHint": "SPM + MPM + CTA katalog"
+      },
+      "gate": {
+        "kicker": "Gerbang fitur",
+        "title": "Ketersediaan katalog",
+        "enabled": "Aktif",
+        "body": "Jika diaktifkan, pemilik workspace dapat menghubungkan katalog Meta Commerce mereka di <link>/catalog</link> dan mengirim pesan Single Product, Multi-Product, dan Catalog-CTA dari obrolan dan flow builder. Nonaktifkan untuk menyembunyikan entri menu di semua workspace (koneksi yang ada tetap utuh tetapi menjadi hanya-baca).",
+        "commerce": "Izinkan checkout Commerce",
+        "commerceHint": "Memungkinkan merchant menerima pembayaran di dalam WhatsApp melalui Akun Commerce yang terhubung. Memerlukan Akun Commerce yang disetujui Meta + wilayah yang didukung."
+      },
+      "api": {
+        "kicker": "Cloud API",
+        "title": "Versi Graph API",
+        "intro": "Setiap operasi katalog (kirim, sinkron, push) menggunakan versi Graph API ini. Meta merilis versi baru setiap ~3 bulan dan mendukung versi sebelumnya selama ~2 tahun.",
+        "version": "Versi Graph API",
+        "versionHint": "Format: v'{'major'}'.'{'minor'}', misalnya v23.0. Kosongkan untuk memakai default.",
+        "currency": "Mata uang default",
+        "currencyHint": "Kode ISO-4217 (3 huruf). Digunakan sebagai default untuk katalog baru; setiap katalog Meta Commerce tetap terkunci pada satu mata uang."
+      },
+      "app": {
+        "kicker": "Opsional · Aplikasi Meta",
+        "title": "Aplikasi Meta tingkat platform",
+        "intro": "Hanya diperlukan jika Anda berencana menghadirkan pengalaman OAuth \"Install with Meta\". Alur default meminta setiap merchant menempel token system-user miliknya di halaman katalog, sehingga kredensial aplikasi tidak diperlukan.",
+        "id": "Meta App ID",
+        "idHint": "Dari developers.facebook.com → aplikasi Anda → Settings → Basic.",
+        "secret": "Meta App Secret",
+        "secretPlaceholder": "App secret",
+        "secretSaved": "•••••••••••• (tersimpan, kosongkan untuk mempertahankan)",
+        "secretHint": "Dienkripsi saat disimpan. Digunakan untuk memverifikasi tanda tangan payload webhook (X-Hub-Signature-256)."
+      },
+      "walk": {
+        "kicker": "Panduan merchant",
+        "title": "Cara workspace menghubungkan katalognya",
+        "intro": "Ditampilkan kepada merchant di halaman katalog. Ditampilkan ulang di sini agar Anda dapat memeriksa alurnya.",
+        "waba": {
+          "title": "Miliki WABA aktif + Phone Number ID",
+          "body": "Merchant memerlukan WhatsApp Business Account terverifikasi di Meta Business Suite dengan setidaknya satu nomor yang disetujui. Tanpa ini, pesan katalog tidak dapat dikirim."
+        },
+        "catalog": {
+          "title": "Buat katalog di Meta Commerce Manager",
+          "body": "Di business.facebook.com/commerce → Create catalog → pilih e-commerce. Tambahkan produk secara manual, lewat CSV, atau tarik dari Shopify/Woo. Katalog harus Public dan terkunci pada satu mata uang."
+        },
+        "link": {
+          "title": "Hubungkan katalog ke WABA",
+          "body": "Di Business Suite → WhatsApp Manager → tab Catalog → \"Choose a catalog\" → pilih katalog yang dibuat di Langkah 2. Inilah yang mengaktifkan pesan produk Cloud API."
+        },
+        "token": {
+          "title": "Buat token System User",
+          "body": "Business Settings → System Users → Add → Admin. Buat token dengan whatsapp_business_messaging, whatsapp_business_management, catalog_management, business_management. Pilih \"Never\" untuk masa berlaku agar tidak perlu autentikasi ulang tiap kuartal."
+        },
+        "paste": {
+          "title": "Tempel kredensial di halaman katalog",
+          "body": "WABA ID, Catalog ID, Phone Number ID, dan token System User dimasukkan di halaman katalog sisi workspace. Lalu sistem menjalankan tes GET /{CATALOG_ID}?fields=name,product_count untuk memastikan token memiliki catalog_management pada katalog tersebut."
+        }
+      },
+      "side": {
+        "archKicker": "Arsitektur",
+        "archTitle": "Per merchant vs platform",
+        "here": "Di sini (admin, sekali saja)",
+        "hereBody": "Sakelar fitur, versi Graph API, mata uang default, kredensial Meta App opsional.",
+        "merchant": "Di halaman katalog (per merchant)",
+        "merchantBody": "WABA ID, Catalog ID, Phone Number ID, token System User. Meta mewajibkan katalog dimiliki oleh Akun Commerce merchant, sehingga tidak ada katalog bersama.",
+        "payloadsKicker": "Payload Cloud API",
+        "payloadsTitle": "Tiga jenis pesan yang kami kirim",
+        "payload": {
+          "spm": {
+            "title": "SPM · Single Product",
+            "code": "interactive.type = \"product\""
+          },
+          "mpm": {
+            "title": "MPM · Multi-Product",
+            "code": "interactive.type = \"product_list\" · maks 10 bagian, 30 item"
+          },
+          "cta": {
+            "title": "Catalog CTA",
+            "code": "interactive.type = \"catalog_message\""
+          }
+        },
+        "docsKicker": "Dokumentasi resmi",
+        "docsTitle": "Referensi",
+        "docs": {
+          "sell": "Jual produk dan layanan →",
+          "messages": "Referensi pesan Cloud API →",
+          "batch": "Catalog Batch API (push produk) →",
+          "changelog": "Changelog Graph API →",
+          "policies": "Kebijakan Commerce →"
+        },
+        "constraintsTitle": "Batasan",
+        "constraints": {
+          "public": "Katalog harus Public",
+          "currency": "Satu mata uang per katalog",
+          "images": "Gambar ≥ 500×500 px (JPG / PNG)",
+          "goods": "Tanpa alkohol / dewasa / barang yang diatur",
+          "verification": "Business Verification diperlukan untuk produksi"
+        }
+      }
+    }
+  }
+}

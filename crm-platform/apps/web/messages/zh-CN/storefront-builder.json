@@ -1,0 +1,439 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "店铺"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "关闭"
+      },
+      "errors": {
+        "requestId": "请求 ID",
+        "retry": "重试",
+        "network": {
+          "title": "无法连接服务器",
+          "message": "请检查网络连接后重试。"
+        },
+        "forbidden": {
+          "title": "无访问权限",
+          "message": "您的角色无权执行此操作。"
+        },
+        "signedOut": {
+          "title": "您已退出登录",
+          "message": "请重新登录以继续。"
+        },
+        "conflict": {
+          "title": "已在别处更改",
+          "message": "您编辑时其他人已更改此内容。请刷新以查看最新版本。"
+        },
+        "validation": {
+          "title": "请检查表单",
+          "message": "部分字段需要检查。"
+        },
+        "unavailable": {
+          "title": "暂不可用",
+          "message": "此服务器上的店铺服务不可用。"
+        },
+        "rateLimited": {
+          "title": "请求过于频繁",
+          "message": "请稍候片刻后重试。"
+        },
+        "notFound": {
+          "title": "未找到",
+          "message": "此工作区中不存在该店铺。"
+        },
+        "noShop": {
+          "title": "暂无店铺",
+          "message": "请先设置您的店铺。"
+        },
+        "slugTaken": {
+          "title": "地址已被占用",
+          "message": "该店铺地址已被使用。"
+        },
+        "deviceInvalid": {
+          "title": "选择已连接的设备",
+          "message": "请选择一台已连接的设备。"
+        },
+        "noSender": {
+          "title": "请先连接 WhatsApp",
+          "message": "店铺需要已连接的 WhatsApp 号码。请先连接一个号码，然后重试。"
+        },
+        "resetNotConfirmed": {
+          "title": "未确认",
+          "message": "未确认重置。"
+        },
+        "domainNotSet": {
+          "title": "无自定义域名",
+          "message": "未设置自定义域名。"
+        },
+        "unexpected": {
+          "title": "出了点问题",
+          "message": "出了点问题，请稍后重试。"
+        }
+      },
+      "sidebar": {
+        "label": "店铺",
+        "navLabel": "店铺板块",
+        "section": "店铺",
+        "settings": "设置",
+        "items": {
+          "overview": "概览",
+          "orders": "订单",
+          "products": "商品",
+          "groups": "分组",
+          "storefront": "店面",
+          "coupons": "优惠券",
+          "reviews": "评价",
+          "payments": "付款",
+          "gateways": "结账支付网关",
+          "customers": "客户",
+          "invoices": "发票",
+          "connection": "连接"
+        },
+        "comingSoon": "即将推出",
+        "comingSoonHint": "即将推出",
+        "noShopTitle": "暂无店铺",
+        "noShopMessage": "创建您的第一家店铺，以使用店铺工具。",
+        "noShopAction": "设置您的店铺",
+        "live": "已上线",
+        "setup": "设置中",
+        "yourStore": "您的店铺",
+        "notConnected": "未连接",
+        "unofficialApi": "非官方 API",
+        "deviceConnected": "设备已连接 · /channels",
+        "switchShop": "切换店铺",
+        "shopFallback": "店铺",
+        "manageShops": "管理所有店铺 →",
+        "publicUrl": "公开网址",
+        "open": "打开",
+        "copy": "复制",
+        "copied": "已复制！",
+        "providerLive": "服务商已上线",
+        "sendingFrom": "发送方",
+        "noDevice": "未连接设备。",
+        "connectOne": "连接设备",
+        "thenBind": "然后在以下位置将其绑定到此店铺：",
+        "connectWizard": "连接向导"
+      },
+      "dashboard": {
+        "eyebrow": "店铺 / 概览",
+        "title": "销售概览",
+        "subtitle": "最近 30 天。订单汇总自所有渠道 — WABA、店面、Twilio。",
+        "addProduct": "添加商品",
+        "loading": "正在加载店铺概览",
+        "kpi": {
+          "revenue": "收入（30 天）",
+          "orders": "订单（30 天）",
+          "aov": "平均订单额",
+          "products": "商品",
+          "visits": "访问量（30 天）"
+        },
+        "trend": {
+          "eyebrow": "销售趋势",
+          "title": "收入随时间变化"
+        },
+        "legendRevenue": "收入（{symbol}）",
+        "legendOrders": "订单",
+        "dayReadout": "{day}：{revenue}，{orders, plural, other {# 笔订单}}",
+        "chartLabel": "最近 30 天每日收入与订单",
+        "tableDay": "日期",
+        "tableRevenue": "收入（{symbol}）",
+        "tableOrders": "订单",
+        "top": {
+          "eyebrow": "热销商品（30 天）",
+          "title": "畅销品",
+          "empty": "暂无销售——请分享您的店铺链接。"
+        },
+        "recent": {
+          "title": "最近订单",
+          "viewAll": "查看全部",
+          "open": "打开",
+          "columns": {
+            "when": "时间",
+            "customer": "客户",
+            "source": "来源",
+            "items": "商品数",
+            "total": "总计",
+            "status": "状态",
+            "open": "打开"
+          },
+          "itemsCount": "{count, plural, other {# 件商品}}",
+          "emptyTitle": "暂无订单",
+          "emptyMessage": "客户通过您的店面或 WhatsApp 下单后，订单将显示在此处。"
+        }
+      },
+      "settings": {
+        "eyebrow": "店铺 / 店面",
+        "title": "店面设计",
+        "viewLive": "查看线上页面",
+        "noAccess": "您的角色无权访问店面设置。",
+        "loading": "正在加载店面设置",
+        "saved": "店面已更新。",
+        "conflict": "您编辑时此店面已在别处更改。请刷新以获取最新设置，然后重新进行修改。",
+        "reload": "刷新",
+        "fixErrors": "请修正高亮字段后再次保存。",
+        "optional": "（可选）",
+        "save": "保存",
+        "readOnly": "您可以查看这些设置，但无法更改。",
+        "live": "店面上线（取消勾选将使其下线）",
+        "theme": {
+          "title": "主题"
+        },
+        "slug": {
+          "label": "店面标识",
+          "hint": "您的店铺地址为"
+        },
+        "domain": {
+          "label": "自定义域名",
+          "placeholder": "shop.yourbiz.com",
+          "verifiedLive": "已验证——您的域名已生效",
+          "addCname": "请在您的 DNS 服务商处添加此 CNAME 记录：",
+          "cname": "CNAME",
+          "verify": "立即验证",
+          "verified": "域名已验证 ✓",
+          "notPointing": "CNAME 未指向 {expected}",
+          "notSet": "未设置自定义域名。",
+          "verifyFailed": "无法检查域名，请重试。"
+        },
+        "brand": {
+          "logoUrl": "徽标网址",
+          "color": "品牌色（十六进制）",
+          "colorPicker": "选择品牌色",
+          "heroText": "主视觉文字",
+          "heroPlaceholder": "欢迎光临我们的店铺",
+          "footerText": "页脚文字",
+          "footerPlaceholder": "© 2026 您的店铺"
+        },
+        "currency": {
+          "title": "货币",
+          "label": "货币",
+          "hint": "新商品的默认货币，以及购物车抽屉中显示的符号。"
+        },
+        "shipping": {
+          "title": "运费",
+          "flat": "固定运费",
+          "flatHint": "添加到每笔订单。留空或填 0 表示免运费。",
+          "freeAbove": "满额免运费门槛",
+          "freeAboveHint": "购物车金额超过此值即免运费。",
+          "note": "运费说明",
+          "noteHint": "显示在购物车和商品页面中。",
+          "notePlaceholder": "2–5 个工作日 · 可追踪"
+        },
+        "payment": {
+          "title": "付款链接",
+          "intro": "选择付款服务商后，我们会将付款链接附加到每条 WhatsApp 订单消息中。买家通过链接付款，您在聊天中确认。店面不包含内置结账流程。",
+          "provider": "服务商",
+          "providers": {
+            "none": "无 · 货到付款",
+            "upi": "UPI（印度）— VPA + 姓名",
+            "razorpay_link": "Razorpay 付款链接（粘贴静态链接）",
+            "razorpay_api": "Razorpay（自动生成链接 + 自动确认）",
+            "stripe_link": "Stripe 付款链接",
+            "paypal_me": "PayPal.me 账号",
+            "bank_transfer": "银行转账说明"
+          },
+          "handle": "付款详情",
+          "handleHint": "UPI VPA、付款链接网址、PayPal.me 账号或银行账户。",
+          "handlePlaceholder": "例如 shop@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "Razorpay API（自动链接）",
+            "keyId": "Key ID",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "密钥",
+            "webhookSecret": "Webhook 密钥",
+            "stored": "已保存——留空则保留原值",
+            "show": "显示密钥",
+            "hide": "隐藏密钥",
+            "webhookHelp": "在 Razorpay 控制台中，将 webhook 网址设置为",
+            "webhookEvent": "用于 payment_link.paid 事件。"
+          }
+        },
+        "recovery": {
+          "title": "废弃购物车挽回",
+          "enable": "向开始结账但未完成付款的客户发送 WhatsApp 提醒",
+          "enableHint": "结账时获取手机号；如客户已下单，提醒将自动取消。需要已连接的设备。",
+          "delay": "延迟（分钟）",
+          "message": "消息",
+          "messageHint": "（留空则使用默认值；'{name}' '{shop}' '{url}' '{total}'）",
+          "messagePlaceholder": "嗨 '{name}'！您在 '{shop}' 的购物车中还有未结算的商品。请在此完成：'{url}'"
+        },
+        "problems": {
+          "required": "此字段为必填项。",
+          "tooLong": "最多 {max} 个字符。",
+          "slugPattern": "仅可使用小写字母、数字和短横线。",
+          "domainInvalid": "该域名格式不正确（例如 shop.yourbiz.com）。",
+          "urlInvalid": "请输入以 http:// 或 https:// 开头的完整地址。",
+          "colorInvalid": "请使用十六进制颜色，例如 #075E54。",
+          "amountInvalid": "请输入不小于 0 的数字。",
+          "amountTooBig": "最大值为 {max}。",
+          "delayRange": "请输入 {min} 到 {max} 之间的整数。",
+          "themeInvalid": "请选择一个主题。",
+          "currencyInvalid": "请从列表中选择一种货币。",
+          "providerInvalid": "请从列表中选择一个服务商。",
+          "slugTaken": "该标识已被占用，请另选一个。"
+        }
+      },
+      "share": {
+        "message": "快来看看我的店铺：{name}",
+        "subject": "快来看看我的店铺 · {name}",
+        "eyebrow": "分享您的店铺",
+        "fallbackName": "我的店铺",
+        "close": "关闭",
+        "link": "店铺链接",
+        "copy": "复制",
+        "copied": "已复制 ✓",
+        "copiedShort": "已复制",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "发送到聊天",
+        "email": "电子邮件",
+        "emailHint": "打开邮件应用",
+        "telegram": "Telegram",
+        "telegramHint": "分享到频道",
+        "more": "更多…",
+        "moreHint": "手机分享菜单",
+        "nativeUnsupported": "此浏览器不支持",
+        "showQr": "显示二维码",
+        "qrAlt": "二维码",
+        "qrCaption": "扫描以打开店铺"
+      },
+      "wizard": {
+        "loading": "正在加载您的店铺",
+        "back": "返回",
+        "breadcrumb": "连接 / WhatsApp 店铺",
+        "manageConnections": "管理所有连接 →",
+        "titles": {
+          "list": "您的店铺",
+          "add": "设置您的店铺",
+          "edit": "编辑 {name}",
+          "shopFallback": "店铺"
+        },
+        "gate": {
+          "step": "第 1 步，共 3 步",
+          "title": "请先连接 WhatsApp",
+          "message": "您的店铺需要已连接的 WhatsApp 号码，才能发送订单确认并与客户聊天。请前往渠道页面配对一个号码，只需 30 秒。",
+          "action": "前往设备"
+        },
+        "list": {
+          "headline": "{workspace} 中共 {count, plural, other {# 家店铺}}",
+          "intro": "每家店铺都有各自的公开网址、主题和发送设备。可按需添加——适用于不同品牌、语言或地区。",
+          "add": "添加店铺",
+          "addAnother": "添加其他店铺",
+          "addAnotherHint": "运营独立的店面，拥有各自的网址、主题和 WhatsApp 号码。"
+        },
+        "share": {
+          "fallbackName": "我的店铺"
+        },
+        "noAccess": {
+          "title": "您无法更改店铺",
+          "message": "您的角色只能查看店铺，无法创建或编辑。",
+          "action": "返回店铺列表"
+        },
+        "delete": {
+          "title": "删除 {name}？",
+          "message": "将永久删除该店面及其订单。工作区中的商品不受影响。此操作无法撤销。",
+          "confirm": "是，删除",
+          "cancel": "取消",
+          "done": "店铺已删除。",
+          "thisShop": "此店铺"
+        },
+        "reset": {
+          "open": "清除所有店铺数据",
+          "title": "清除所有店铺数据？",
+          "message": "将永久删除此工作区的所有店铺、订单和商品。此操作无法撤销。",
+          "confirm": "是，全部清除",
+          "done": "已清除此工作区的所有店铺数据。",
+          "notConfirmed": "未确认重置。"
+        },
+        "card": {
+          "live": "已上线",
+          "disabled": "已停用",
+          "theme": "{theme} 主题",
+          "untitled": "未命名店铺",
+          "sendingFrom": "发送方",
+          "noDevice": "无设备",
+          "domain": "域名",
+          "pending": "待定",
+          "builtIn": "内置网址",
+          "manage": "管理",
+          "manageTitle": "打开管理仪表板",
+          "preview": "预览",
+          "previewTitle": "在新标签页中打开公开店面",
+          "edit": "编辑",
+          "editTitle": "编辑店铺设置",
+          "share": "分享",
+          "shareAria": "分享 {name}",
+          "delete": "删除店铺",
+          "deleteAria": "删除 {name}"
+        },
+        "form": {
+          "backToShops": "返回店铺列表",
+          "creatingShop": "正在创建第 {n} 家店铺",
+          "progress": "步骤",
+          "steps": {
+            "details": "店铺详情",
+            "url": "公开网址",
+            "device": "发送设备"
+          },
+          "optional": "（可选）",
+          "details": {
+            "title": "店铺详情",
+            "hint": "面向客户的名称，以及商品所在的网址标识。",
+            "name": "店铺名称",
+            "nameHint": "显示在店面页眉和订单确认中。",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "例如 {workspace} · 孟买",
+            "slug": "店面标识",
+            "auto": "（自动）",
+            "slugLocked": "店铺上线后将锁定，以确保已分享的链接持续可用。",
+            "slugAuto": "根据店铺名称生成——保存后即确定。"
+          },
+          "url": {
+            "title": "公开网址",
+            "hint": "选择买家访问店铺的方式——内置网址免费，自定义域名更专业。",
+            "builtIn": "内置网址 · 免费",
+            "pathMode": "保存后即可使用。由于未配置公开店面主机，使用基于路径的网址。",
+            "subdomainMode": "保存后即可使用。托管于平台的店面域名。",
+            "domain": "自定义域名",
+            "domainHint": "保存后，您需要在 DNS 服务商处添加 CNAME 记录，并在店面设置页面中进行验证。留空则使用内置网址。",
+            "domainPlaceholder": "shop.yourbiz.com",
+            "verified": "{domain} 已验证。",
+            "pending": "{domain} 等待 DNS 验证。"
+          },
+          "device": {
+            "title": "发送设备",
+            "hint": "由哪个 WhatsApp 号码发送订单确认并回复买家。",
+            "none": "此账户未连接任何设备。",
+            "pair": "在您的渠道中配对一台设备 →",
+            "official": "官方 API · Meta (WABA)",
+            "officialDetail": "工作区 WhatsApp Business 号码",
+            "fallback": "设备",
+            "noNumber": "无号码",
+            "connected": "已连接"
+          },
+          "cancel": "取消",
+          "deleteThis": "删除此店铺",
+          "saveChanges": "保存更改",
+          "create": "创建店铺 →",
+          "created": "店铺“{name}”已创建。",
+          "updated": "店铺“{name}”已更新。",
+          "problems": {
+            "nameRequired": "请输入店铺名称。",
+            "nameTooLong": "最多 191 个字符。",
+            "domainInvalid": "该域名格式不正确（例如 shop.yourbiz.com）。",
+            "domainTooLong": "最多 191 个字符。",
+            "deviceInvalid": "请选择一台已连接的设备。",
+            "slugTaken": "该店铺名称生成的地址已被占用，请稍作修改。"
+          },
+          "live": {
+            "eyebrow": "此店铺已上线",
+            "fallbackName": "您的店铺",
+            "hint": "添加商品、选择主题、查看订单并分享您的链接。",
+            "view": "查看店铺",
+            "share": "分享店铺",
+            "dashboard": "打开仪表板"
+          }
+        }
+      }
+    }
+  }
+}

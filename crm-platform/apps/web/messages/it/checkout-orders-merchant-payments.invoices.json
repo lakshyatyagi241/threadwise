@@ -1,0 +1,48 @@
+{
+  "checkout-orders-merchant-payments": {
+    "invoices": {
+      "eyebrow": "Negozio / Fatture",
+      "title": "Fatture",
+      "subtitle": "Fatture create dagli ordini del negozio. Gestiscile in Vendite.",
+      "allInvoices": "Tutte le fatture",
+      "loading": "Caricamento delle fatture",
+      "searching": "Ricerca di altre fatture del negozio...",
+      "search": {
+        "label": "Cerca fatture",
+        "placeholder": "Cerca per numero, acquirente o riferimento..."
+      },
+      "status": {
+        "label": "Stato",
+        "all": "Tutti gli stati"
+      },
+      "columns": {
+        "number": "Fattura",
+        "buyer": "Acquirente",
+        "status": "Stato",
+        "total": "Totale",
+        "issued": "Emessa",
+        "due": "Scadenza",
+        "actions": "Azioni"
+      },
+      "row": {
+        "draft": "Bozza",
+        "openInSales": "Apri in Vendite",
+        "openAria": "Apri la fattura {number} in Vendite"
+      },
+      "empty": {
+        "title": "Ancora nessuna fattura dagli ordini del negozio",
+        "message": "Apri un ordine e seleziona Crea fattura.",
+        "action": "Vai agli ordini"
+      },
+      "noMatch": {
+        "title": "Nessuna fattura del negozio corrisponde",
+        "message": "Cambia la ricerca o lo stato per vedere di più."
+      },
+      "capped": {
+        "title": "Nessuna trovata nelle fatture più recenti",
+        "message": "Sono state controllate le fatture più recenti in Vendite e nessuna proviene da un ordine del negozio. Carica altro per cercare più indietro.",
+        "note": "Sono state controllate solo le fatture più recenti. Carica altro per cercare più indietro."
+      }
+    }
+  }
+}

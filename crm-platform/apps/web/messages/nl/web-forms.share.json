@@ -1,0 +1,278 @@
+{
+  "web-forms": {
+    "share": {
+      "readOnly": "Je kunt deze instellingen bekijken maar niet wijzigen.",
+      "clipboardBlocked": "Je browser heeft kopiëren geblokkeerd. Selecteer de tekst en kopieer hem handmatig.",
+      "copied": "Gekopieerd",
+      "status": {
+        "archived": {
+          "title": "Dit formulier is gearchiveerd",
+          "body": "De publieke link en alle insluitingen zijn gesloten. Herstel het formulier om ze weer te gebruiken."
+        },
+        "draft": {
+          "title": "Publiceer het formulier om deze link te laten werken",
+          "body": "Niemand kan de link of de insluiting openen totdat het formulier minstens één keer is gepubliceerd."
+        },
+        "paused": {
+          "title": "Dit formulier is gesloten",
+          "body": "De link en insluitingen tonen een melding dat het gesloten is en nemen geen antwoorden meer aan. Hervat het formulier om het weer te openen."
+        },
+        "live": {
+          "title": "Dit formulier is live",
+          "body": "Bezoekers zien versie {version}. Wijzigingen die je in de builder maakt, bereiken hen pas wanneer je publiceert."
+        }
+      },
+      "hosted": {
+        "title": "Publieke link",
+        "description": "Deel dit adres waar je wilt: in een bericht, een e-mail of een social bio. Het opent het formulier op een eigen pagina.",
+        "label": "Formulieradres",
+        "copy": "Link kopiëren",
+        "copiedToast": "Link gekopieerd.",
+        "open": "Openen",
+        "newTab": "(opent in een nieuw tabblad)"
+      },
+      "qr": {
+        "title": "QR-code",
+        "description": "Voor print, posters en verpakkingen. Door hem te scannen opent de publieke link.",
+        "alt": "QR-code die het formulier opent",
+        "tracking": "De code voegt utm_source=qr toe aan het adres, zodat inzendingen die hiervandaan komen als QR worden getoond in de toewijzing.",
+        "downloadPng": "PNG downloaden",
+        "downloadSvg": "SVG downloaden",
+        "downloadFailed": "De QR-code kon niet worden gedownload. Probeer het opnieuw."
+      },
+      "embed": {
+        "title": "Zet het formulier op je website",
+        "description": "Plak een van deze op de plek waar het formulier moet verschijnen. Insluiten werkt alleen op de sites die hieronder bij Toegestane websites staan.",
+        "copy": "Code kopiëren",
+        "copiedToast": "{name} gekopieerd.",
+        "script": {
+          "title": "Script-insluiting",
+          "description": "Aanbevolen. Het formulier past zijn formaat aan de pagina aan en kan na verzending doorverwijzen."
+        },
+        "iframe": {
+          "title": "Iframe-insluiting",
+          "description": "Een eenvoudig kader voor builders die scripts niet toestaan. Je stelt de hoogte zelf in."
+        }
+      },
+      "domains": {
+        "title": "Toegestane websites",
+        "description": "Alleen de websites die hier staan mogen dit formulier insluiten en antwoorden vanuit een browser versturen.",
+        "none": "Er is nog geen website toegestaan, dus het formulier werkt alleen via de publieke link en kan niet worden ingesloten.",
+        "label": "Een website toevoegen",
+        "hint": "Gebruik het exacte adres, zoals https://www.example.com. Eén jokerteken-niveau is toegestaan, zoals https://*.example.com. Gewoon http werkt alleen voor localhost.",
+        "count": "{count} van {max}",
+        "add": "Toevoegen",
+        "remove": "{value} verwijderen",
+        "empty": "Geen websites toegevoegd.",
+        "issues": {
+          "empty": "Voer eerst een websiteadres in.",
+          "invalid": "Dat is geen geldig adres. Gebruik de vorm https://example.com of https://*.example.com, zonder pad.",
+          "duplicate": "Deze website staat al in de lijst.",
+          "max": "Je kunt maximaal {max} websites toestaan."
+        }
+      },
+      "rotate": {
+        "title": "De publieke sleutel vernieuwen",
+        "description": "Maakt een nieuwe sleutel voor dit formulier. Gebruik dit als de link of insluitcode is gelekt of je hem wilt intrekken.",
+        "button": "Sleutel vernieuwen",
+        "readOnly": "Je kunt dit formulier niet wijzigen",
+        "confirmTitle": "De publieke sleutel vernieuwen?",
+        "confirmMessage": "De oude link, QR-codes en insluitcode stoppen meteen met werken. Je moet de nieuwe link delen en de code vervangen op elke site die het formulier insluit.",
+        "confirmButton": "Sleutel vernieuwen",
+        "cancel": "Annuleren",
+        "success": "De sleutel is vernieuwd. Kopieer de nieuwe link en code.",
+        "failed": "De sleutel kon niet worden vernieuwd. Er is niets gewijzigd. Probeer het opnieuw.",
+        "conflict": "Iemand anders heeft dit formulier gewijzigd. Laad de pagina opnieuw om de nieuwste versie te zien en probeer het dan opnieuw."
+      }
+    },
+    "settings": {
+      "readOnly": "Je kunt deze instellingen bekijken maar niet wijzigen.",
+      "usersFailed": "De lijst met teamleden kon niet worden geladen, dus eigenaren kunnen nu niet worden gekozen.",
+      "form": {
+        "title": "Formulier",
+        "description": "De naam die je in de lijst ziet en de basis die bezoekers op het formulier zien.",
+        "name": "Formuliernaam",
+        "nameHint": "Alleen je team ziet deze naam.",
+        "issues": {
+          "nameRequired": "Geef het formulier een naam.",
+          "submit_empty": "De knop heeft een label nodig.",
+          "submit_too_long": "Houd het knoplabel op {max} tekens of minder."
+        },
+        "language": "Formuliertaal",
+        "languageHint": "Bepaalt de taal van de ingebouwde teksten en de leesrichting (Arabisch wordt van rechts naar links gelezen).",
+        "languages": {
+          "en": "Engels",
+          "ar": "Arabisch"
+        },
+        "submitLabel": "Label van verzendknop",
+        "submitLabelHint": "1 tot {max} tekens."
+      },
+      "after": {
+        "title": "Na verzending",
+        "description": "Wat de bezoeker ziet nadat zijn antwoorden zijn verzonden.",
+        "mode": "Wat er gebeurt",
+        "modes": {
+          "message": "Een bericht tonen",
+          "redirect": "Naar een andere pagina gaan"
+        },
+        "modeHints": {
+          "message": "Het formulier wordt vervangen door je bedankbericht.",
+          "redirect": "De bezoeker wordt naar een pagina van jou gestuurd, zoals een bedankpagina of boekingspagina."
+        },
+        "message": "Bedankbericht",
+        "messageHint": "Gewone tekst. Deze eenvoudige tags zijn toegestaan: b, i, u, br, ul, ol, li en a. Tot {max} tekens.",
+        "messageTooLong": "Het bericht is langer dan {max} tekens.",
+        "redirect": "Doeladres",
+        "redirectHint": "Moet beginnen met https://. Een pagina die geen https gebruikt wordt nooit geopend.",
+        "redirectIssues": {
+          "required": "Voer het adres in waarnaar bezoekers moeten worden gestuurd.",
+          "https": "Gebruik een adres dat begint met https://."
+        },
+        "redirectKeepsMessage": "Het bedankbericht blijft in het formulier bewaard en wordt niet getoond zolang een doorverwijzing is ingesteld."
+      },
+      "consent": {
+        "title": "Toestemming",
+        "description": "Een selectievakje dat vastlegt waarmee de bezoeker heeft ingestemd, met de exacte tekst, de versie en het tijdstip.",
+        "enabled": "Toestemming vragen",
+        "enabledHint": "Toont de toestemmingstekst boven de verzendknop.",
+        "text": "Toestemmingstekst",
+        "textHint": "Tot {max} tekens. Bezoekers zien precies deze tekst.",
+        "textRequired": "Schrijf de toestemmingstekst of schakel toestemming uit.",
+        "textTooLong": "De tekst is langer dan {max} tekens.",
+        "version": "Tekstversie {version}",
+        "versionHintPublished": "Zodra het formulier is gepubliceerd, start een wijziging van de tekst automatisch een nieuwe versie. Eerdere inzendingen behouden de versie waarmee is ingestemd.",
+        "versionHintDraft": "De versie blijft 1 totdat het formulier is gepubliceerd. Daarna start een wijziging van de tekst een nieuwe versie.",
+        "privacyUrl": "Link naar privacybeleid",
+        "privacyUrlHint": "Optioneel. Wordt naast de toestemmingstekst getoond. Moet beginnen met https://.",
+        "privacyUrlHttps": "Gebruik een adres dat begint met https://.",
+        "required": "Moet worden aangevinkt om te verzenden",
+        "requiredHint": "Zet dit uit als toestemming optioneel is.",
+        "marketing": "Opt-in voor marketing",
+        "marketingHint": "Het aanvinken registreert marketingtoestemming bij het contact. Een niet-aangevinkt vakje schrijft nooit iemand in."
+      },
+      "crm": {
+        "title": "In het CRM",
+        "description": "Wat elke inzending doet met het contact dat wordt aangemaakt of bijgewerkt.",
+        "company": "Bedrijf koppelen",
+        "companyOptions": {
+          "none": "Niet koppelen",
+          "email_domain": "Op e-maildomein",
+          "name_or_domain": "Op naam of domein"
+        },
+        "companyHints": {
+          "none": "Antwoorden over het bedrijf worden niet gebruikt om een bedrijf te koppelen.",
+          "email_domain": "Koppelt het contact aan het bedrijf dat het domein van hun e-mailadres bezit.",
+          "name_or_domain": "Koppelt het bedrijf op naam of websitedomein, en maakt het aan als er geen overeenkomst is."
+        },
+        "lifecycle": "Levensfase",
+        "lifecycleHint": "Wordt bij het verzenden van het formulier op het contact ingesteld.",
+        "lifecycleNone": "Niet instellen",
+        "stages": {
+          "new": "Nieuw",
+          "contacted": "Benaderd",
+          "qualified": "Gekwalificeerd",
+          "application_started": "Aanvraag gestart",
+          "application_submitted": "Aanvraag verzonden",
+          "interview_scheduled": "Gesprek gepland",
+          "offer_received": "Aanbod ontvangen",
+          "admission_confirmed": "Toelating bevestigd",
+          "enrolled": "Ingeschreven",
+          "lost": "Verloren"
+        },
+        "tags": "Toe te voegen tags",
+        "tagsHint": "Wordt toegevoegd aan elk contact dat dit formulier verzendt. Tot {max} tags van 1 tot 60 tekens.",
+        "tagsPlaceholder": "Bijvoorbeeld: webinar",
+        "tagsCount": "{count} van {max}",
+        "tagAdd": "Tag toevoegen",
+        "tagRemove": "Tag {value} verwijderen",
+        "tagsNone": "Geen tags.",
+        "tagIssues": {
+          "empty": "Voer eerst een tag in.",
+          "too_long": "Een tag mag maximaal 60 tekens bevatten.",
+          "duplicate": "Deze tag staat al in de lijst.",
+          "max": "Je kunt maximaal {max} tags toevoegen."
+        },
+        "owner": "Eigenaar van nieuwe contacten",
+        "ownerHint": "Wie het contact beheert dat dit formulier aanmaakt.",
+        "ownerMode": "Eigenaarregel",
+        "ownerModes": {
+          "unassigned": "Geen eigenaar",
+          "fixed": "Eén persoon",
+          "round_robin": "Om de beurt"
+        },
+        "ownerModeHints": {
+          "unassigned": "Het contact heeft geen eigenaar totdat iemand het claimt.",
+          "fixed": "Elk contact gaat naar dezelfde persoon.",
+          "round_robin": "Contacten gaan om de beurt naar de gekozen personen. Personen die niet meer actief zijn, worden overgeslagen."
+        },
+        "ownerFixed": "Eigenaar",
+        "ownerRoundRobin": "Personen die om de beurt gaan",
+        "ownerRoundRobinHint": "Kies minstens twee personen.",
+        "chooseUser": "Kies een persoon",
+        "unknownUser": "Een persoon die niet meer beschikbaar is",
+        "pickUsers": "Personen kiezen",
+        "noUsers": "Geen overeenkomende personen",
+        "removeUser": "{name} verwijderen",
+        "ownerIssues": {
+          "fixed_one": "Kies precies één persoon.",
+          "round_robin_two": "Om de beurt vereist minstens twee personen.",
+          "unassigned_none": "Een regel zonder toewijzing kan geen personen hebben. Kies een andere regel of wis de lijst.",
+          "too_many": "Je kunt maximaal 50 personen kiezen."
+        }
+      },
+      "notify": {
+        "title": "Meldingen",
+        "description": "Wie wordt op de hoogte gebracht wanneer een inzending binnenkomt.",
+        "owner": "De eigenaar van het contact informeren",
+        "ownerHint": "De eigenaar krijgt een melding bij elke inzending.",
+        "users": "Ook deze personen informeren",
+        "usersHint": "Tot {max} teamleden krijgen de melding ook.",
+        "emails": "Ook deze adressen per e-mail informeren",
+        "emailsHint": "Tot {max} adressen krijgen bij elke inzending een e-mail. Ze mogen bij mensen buiten je team horen.",
+        "emailPlaceholder": "naam@voorbeeld.nl",
+        "emailsCount": "{count} van {max}",
+        "emailAdd": "E-mail toevoegen",
+        "emailRemove": "{value} verwijderen",
+        "emailsNone": "Geen extra adressen.",
+        "emailIssues": {
+          "empty": "Voer eerst een e-mailadres in.",
+          "invalid": "Dat is geen geldig e-mailadres.",
+          "duplicate": "Dit adres staat al in de lijst.",
+          "max": "Je kunt maximaal {max} adressen toevoegen."
+        }
+      },
+      "protection": {
+        "title": "Bescherming",
+        "description": "Houdt spam tegen en bepaalt hoe lang antwoorden worden bewaard.",
+        "honeypot": "Verborgen valvelde",
+        "honeypotHint": "Voegt een veld toe dat mensen nooit zien. Bots vullen het in en hun inzendingen worden als spam gemarkeerd.",
+        "captcha": "CAPTCHA",
+        "captchaOptions": {
+          "inherit": "Volg de platforminstelling",
+          "on": "Altijd aan",
+          "off": "Uit"
+        },
+        "captchaHints": {
+          "inherit": "Gebruikt wat je workspace voor publieke formulieren heeft ingesteld.",
+          "on": "Bezoekers moeten de controle doorstaan voordat ze kunnen verzenden.",
+          "off": "Geen controle. Vertrouw op het verborgen valvelde en de snelheidslimieten."
+        },
+        "retention": "Antwoorden bewaren (dagen)",
+        "retentionHint": "Na zoveel dagen worden de antwoorden verwijderd. Dit helpt bij regels voor gegevensbescherming zoals de AVG. Tussen 30 en 3650.",
+        "range": "Voer een geheel getal van {min} tot {max} in.",
+        "keepForever": "Bewaren tot ik ze verwijder",
+        "keepForeverHint": "Antwoorden blijven bewaard totdat iemand ze verwijdert. Kies dit alleen als je een wettelijke reden hebt om ze te bewaren.",
+        "advanced": "Geavanceerd: snelheidslimieten",
+        "advancedHint": "Limieten die golven van inzendingen afremmen. De standaardwaarden passen bij de meeste formulieren.",
+        "rate": {
+          "perIpPerMinute": "Per adres, per minuut",
+          "perIpPerMinuteHint": "Inzendingen vanaf één internetadres.",
+          "perFormPerMinute": "Per formulier, per minuut",
+          "perFormPerMinuteHint": "Inzendingen naar dit formulier, van overal.",
+          "perContactPerHour": "Per contact, per uur",
+          "perContactPerHourHint": "Inzendingen met hetzelfde e-mailadres of telefoonnummer."
+        }
+      }
+    }
+  }
+}

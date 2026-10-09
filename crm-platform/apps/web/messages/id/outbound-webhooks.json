@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "events": {
+      "contact_created": "Kontak dibuat",
+      "contact_updated": "Kontak diperbarui",
+      "contact_deleted": "Kontak dihapus",
+      "contact_tag_added": "Tag ditambahkan ke kontak",
+      "contact_opted_in": "Kontak menyetujui",
+      "deal_stage_changed": "Deal dipindahkan ke tahap lain",
+      "task_created": "Tugas dibuat",
+      "task_assigned": "Tugas ditugaskan",
+      "template_status_changed": "Status templat berubah",
+      "device_status_changed": "Status perangkat berubah",
+      "conversation_reopened": "Percakapan dibuka kembali"
+    },
+    "page": {
+      "title": "Webhook",
+      "subtitle": "Kirim peristiwa dari workspace ini ke sistem Anda sendiri saat terjadi. Setiap pengiriman adalah POST JSON yang ditandatangani, dicoba ulang saat server Anda tidak merespons.",
+      "back": "Integrasi dan developer",
+      "add": "Tambah webhook",
+      "list": "Webhook",
+      "emptyTitle": "Belum ada webhook",
+      "empty": "Tambahkan endpoint untuk menerima peristiwa seperti kontak baru atau deal yang berpindah tahap.",
+      "noAccess": "Anda tidak memiliki akses ke webhook.",
+      "loadFailed": "Webhook tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "allEvents": "Semua peristiwa",
+      "signed": "Ditandatangani",
+      "health": {
+        "off": "Nonaktif",
+        "failing": "Gagal",
+        "healthy": "Sehat",
+        "idle": "Belum ada pengiriman"
+      },
+      "activeFor": "Aktif: {name}",
+      "lastDelivery": "Pengiriman terakhir {when}, jawaban {status}",
+      "noDeliveries": "Belum ada yang terkirim",
+      "noAnswer": "tanpa jawaban",
+      "counts": "{ok} terkirim, {failed} gagal",
+      "lastError": "Kesalahan terakhir: {error}",
+      "deliveries": "Pengiriman",
+      "test": "Kirim uji",
+      "edit": "Edit",
+      "delete": "Hapus",
+      "cancel": "Batal",
+      "deleteTitle": "Hapus webhook ini?",
+      "deleteMessage": "{name} berhenti menerima peristiwa dan log pengirimannya dihapus. Tindakan ini tidak dapat dibatalkan.",
+      "created": "Webhook ditambahkan.",
+      "saved": "Webhook disimpan.",
+      "deleted": "Webhook dihapus.",
+      "deleteFailed": "Webhook tidak dapat dihapus. Coba lagi.",
+      "toggleFailed": "Perubahan tidak dapat disimpan. Coba lagi.",
+      "testOk": "Uji terkirim (jawaban {status}).",
+      "testFailed": "Uji gagal: {reason}",
+      "testError": "Uji tidak dapat dikirim. Coba lagi."
+    },
+    "dialog": {
+      "addTitle": "Tambah webhook",
+      "editTitle": "Edit webhook",
+      "close": "Tutup",
+      "name": "Nama",
+      "nameHint": "Opsional: label untuk Anda, misalnya sistem yang menerimanya.",
+      "url": "URL endpoint",
+      "urlHint": "Alamat https yang dapat dijangkau dari internet. Alamat privat dan internal ditolak.",
+      "urlProblem": {
+        "empty": "Masukkan URL endpoint.",
+        "tooLong": "URL terlalu panjang.",
+        "notHttps": "URL harus diawali https://.",
+        "invalid": "URL ini tidak valid."
+      },
+      "secret": "Rahasia penandatanganan",
+      "secretHint": "Opsional. Jika diisi, setiap pengiriman membawa tanda tangan yang dapat diverifikasi server Anda. Tidak pernah ditampilkan lagi.",
+      "secretSetHint": "Rahasia sudah diatur. Kosongkan untuk mempertahankannya, atau ketik yang baru untuk menggantinya.",
+      "secretKeep": "Tidak diubah",
+      "removeSecret": "Hapus rahasia penandatanganan (pengiriman tidak akan ditandatangani)",
+      "events": "Peristiwa",
+      "allEvents": "Semua peristiwa",
+      "pickEvents": "Pilih minimal satu peristiwa, atau pilih semua peristiwa.",
+      "active": "Aktif",
+      "cancel": "Batal",
+      "create": "Tambah webhook",
+      "save": "Simpan perubahan",
+      "failed": "Webhook tidak dapat disimpan. Coba lagi."
+    },
+    "deliveries": {
+      "title": "Pengiriman: {name}",
+      "close": "Tutup",
+      "empty": "Belum ada pengiriman. Gunakan Kirim uji untuk membuatnya.",
+      "failed": "Pengiriman tidak dapat dimuat.",
+      "when": "Kapan",
+      "event": "Peristiwa",
+      "result": "Jawaban",
+      "time": "Waktu",
+      "attempt": "Coba",
+      "test": "Uji",
+      "noAnswer": "Tanpa jawaban"
+    }
+  }
+}

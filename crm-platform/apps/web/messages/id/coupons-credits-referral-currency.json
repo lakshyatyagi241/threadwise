@@ -1,0 +1,412 @@
+{
+  "coupons-credits-referral-currency": {
+    "nav": {
+      "group": "Penagihan & paket",
+      "coupons": "Kupon",
+      "currencies": "Mata uang",
+      "currenciesGroup": "Lokalisasi",
+      "affiliate": "Afiliasi"
+    },
+    "common": {
+      "loading": "Memuat",
+      "retry": "Coba lagi",
+      "cancel": "Batal",
+      "dismiss": "Tutup",
+      "admin": "Admin",
+      "readOnly": "Anda dapat melihat halaman ini tetapi hanya super admin yang dapat mengubahnya.",
+      "requestId": "ID permintaan",
+      "errors": {
+        "forbidden": "Anda tidak memiliki akses ke halaman ini.",
+        "request": "Permintaan tidak dapat diselesaikan.",
+        "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi."
+      },
+      "pager": {
+        "label": "Paginasi",
+        "previous": "Sebelumnya",
+        "next": "Berikutnya",
+        "page": "Halaman {n}"
+      }
+    },
+    "errors": {
+      "generic": "Terjadi kesalahan. Coba lagi sebentar lagi.",
+      "forbidden": "Hanya super admin yang dapat mengubah ini.",
+      "notFound": "Item ini sudah tidak ada. Mungkin telah dihapus.",
+      "conflict": "Orang lain baru saja mengubah ini. Muat ulang halaman dan coba lagi.",
+      "validation": "Beberapa nilai tidak valid. Periksa formulir dan coba lagi.",
+      "codeTaken": "Kupon lain sudah memakai kode ini.",
+      "planUnknown": "Satu atau lebih paket yang dipilih sudah tidak ada.",
+      "currencyUnknown": "Pilih salah satu mata uang aktif.",
+      "currencyTaken": "Mata uang dengan kode ini sudah ada.",
+      "defaultProtected": "Ini adalah mata uang default sistem. Pilih default lain terlebih dahulu.",
+      "inUse": "Mata uang ini masih dipakai oleh {used}. Nonaktifkan saja.",
+      "ratesFailed": "Penyedia kurs tidak dapat dijangkau atau tidak mengembalikan kurs. Tidak ada kurs yang diubah."
+    },
+    "coupons": {
+      "title": "Kupon diskon",
+      "titleLead": "Diskon",
+      "titleAccent": "kupon",
+      "crumbHere": "Kupon",
+      "eyebrow": "Admin · Penagihan · Kode kupon",
+      "description": "Kode promo yang dimasukkan pembeli saat checkout. Pilih persentase atau jumlah tetap, atur masa berlaku, batasi ke paket tertentu, dan batasi total penukaran.",
+      "new": "Kupon baru",
+      "kpi": {
+        "total": "Total kupon",
+        "totalHint": "di katalog",
+        "active": "Aktif",
+        "activeHint": "menerima penukaran",
+        "expired": "Kedaluwarsa",
+        "expiredHint": "melewati tanggal kedaluwarsa",
+        "redeemed": "Total penukaran",
+        "redeemedHint": "penggunaan sepanjang waktu"
+      },
+      "filters": {
+        "label": "Filter kupon",
+        "all": "Semua",
+        "active": "Aktif",
+        "disabled": "Dinonaktifkan",
+        "expired": "Kedaluwarsa",
+        "search": "Cari menurut kode atau deskripsi…",
+        "searchLabel": "Cari kupon"
+      },
+      "table": {
+        "label": "Kupon",
+        "code": "Kode",
+        "discount": "Diskon",
+        "uses": "Penggunaan",
+        "validity": "Masa berlaku",
+        "status": "Status",
+        "actions": "Aksi"
+      },
+      "validity": {
+        "forever": "selamanya",
+        "now": "sekarang",
+        "range": "{from} → {to}"
+      },
+      "empty": {
+        "title": "Tidak ada kupon yang cocok.",
+        "hint": "Sesuaikan atau reset filter, atau",
+        "create": "buat yang pertama"
+      },
+      "footer": "Menampilkan {from}–{to} dari {total} kupon",
+      "pager": {
+        "label": "Paginasi",
+        "previous": "Sebelumnya",
+        "next": "Berikutnya",
+        "page": "Halaman {n}"
+      },
+      "actions": {
+        "edit": "Ubah",
+        "delete": "Hapus",
+        "menu": "Aksi",
+        "toggle": "Aktifkan atau matikan {code}"
+      },
+      "toasts": {
+        "created": "Kupon dibuat.",
+        "updated": "Kupon diperbarui.",
+        "activated": "Diaktifkan.",
+        "deactivated": "Dinonaktifkan.",
+        "deleted": "Kupon dihapus."
+      },
+      "delete": {
+        "title": "Hapus kupon",
+        "body": "Hapus kupon {code}? Workspace yang sudah menukarkannya tetap mendapat diskon.",
+        "confirm": "Ya, hapus"
+      },
+      "editor": {
+        "notFoundTitle": "Kupon tidak ditemukan",
+        "notFoundBody": "Tidak ada kupon dengan alamat ini. Mungkin telah dihapus, atau tautannya salah.",
+        "backToList": "Kembali ke kupon",
+        "crumbNew": "Baru",
+        "eyebrowNew": "Admin · Penagihan · Kode kupon · Buat",
+        "eyebrowEdit": "Admin · Penagihan · Kode kupon · Ubah",
+        "titleLead": "Baru",
+        "titleAccent": "kupon",
+        "descriptionNew": "Kode promo yang ditukarkan saat /checkout. Pilih persentase atau jumlah tetap, kaitkan dengan satu paket atau semua paket, dan opsional beri masa berlaku.",
+        "redeemed": "Ditukarkan {used}{max} kali",
+        "redeemedMax": " / {max}",
+        "expires": "kedaluwarsa {when}",
+        "active": "Aktif",
+        "disabled": "Dinonaktifkan",
+        "create": "Buat kupon",
+        "saveChanges": "Simpan perubahan",
+        "saving": "Menyimpan",
+        "cancel": "Batal",
+        "problemsTitle": "Beberapa kolom perlu diperhatikan:",
+        "problems": {
+          "code": "Kode: masukkan kode hingga 64 karakter.",
+          "description": "Deskripsi: maksimal 255 karakter.",
+          "adminNote": "Catatan admin: maksimal 1000 karakter.",
+          "type": "Tipe: pilih persen atau jumlah tetap.",
+          "amount": "Jumlah: masukkan angka seperti 10 atau 12.5.",
+          "maxDiscountAmount": "Batas maksimum diskon: masukkan angka atau kosongkan.",
+          "currencyCode": "Kunci mata uang: maksimal 8 karakter.",
+          "minOrderAmount": "Jumlah pesanan minimum: masukkan angka atau kosongkan.",
+          "applicablePlans": "Paket yang berlaku: pilih paket dari daftar.",
+          "startsAt": "Mulai pada: masukkan tanggal dan waktu yang valid.",
+          "expiresAt": "Kedaluwarsa pada: masukkan tanggal dan waktu yang valid dan tidak sebelum waktu mulai.",
+          "maxUses": "Maks. total penukaran: bilangan bulat 1 atau lebih, atau kosong.",
+          "perUserLimit": "Batas per pengguna: bilangan bulat 1 atau lebih, atau kosong."
+        },
+        "sections": {
+          "identity": "Identitas",
+          "discount": "Diskon",
+          "eligibility": "Kelayakan",
+          "limits": "Batas & perilaku"
+        },
+        "fields": {
+          "code": "Kode",
+          "codeHint": "Disimpan dalam huruf kapital. Pelanggan memasukkan kode persis ini saat membayar.",
+          "codePlaceholder": "WELCOME10",
+          "description": "Deskripsi",
+          "descriptionNote": "(ditampilkan ke pelanggan)",
+          "descriptionPlaceholder": "Penawaran selamat datang: diskon 10% bulan pertama",
+          "adminNote": "Catatan admin",
+          "adminNoteNote": "(internal, tidak ditampilkan)",
+          "adminNotePlaceholder": "Batch obral liburan · Slack #marketing · berakhir bersama kampanye",
+          "activeTitle": "Aktif",
+          "activeHint": "Pembeli dapat menerapkannya saat checkout",
+          "type": "Tipe",
+          "typePercent": "Persen (%)",
+          "typeFixed": "Jumlah tetap",
+          "amount": "Jumlah",
+          "amountHint": "Untuk kupon persen, 10 berarti 10%. Untuk kupon tetap, 10 berarti 10 unit mata uang.",
+          "maxDiscount": "Batas maksimum diskon",
+          "maxDiscountNote": "(hanya tipe %)",
+          "maxDiscountPlaceholder": "kosong = tanpa batas",
+          "maxDiscountHint": "Misalnya, diskon 20% dengan batas atas $50.",
+          "currency": "Kunci mata uang",
+          "currencyAny": "Mata uang apa saja",
+          "currencyHint": "Batasi penukaran ke satu mata uang (berlaku untuk kupon jumlah tetap).",
+          "minOrder": "Jumlah pesanan minimum",
+          "minOrderPlaceholder": "0 = tanpa minimum",
+          "plans": "Paket yang berlaku",
+          "plansNote": "(kosong = paket apa saja)",
+          "plansPlaceholder": "Pilih satu paket atau lebih (kosong = paket apa saja)...",
+          "plansHint": "Mulai mengetik untuk mempersempit daftar, pilih untuk menambahkan, dan gunakan × pada chip untuk menghapus.",
+          "plansEmpty": "Tidak ada paket lagi untuk dipilih.",
+          "plansRemove": "Hapus {name}",
+          "plansClear": "Hapus semua paket",
+          "startsAt": "Mulai pada",
+          "startsAtHint": "Kosong = tersedia sekarang.",
+          "expiresAt": "Kedaluwarsa pada",
+          "expiresAtHint": "Kosong = tidak pernah kedaluwarsa.",
+          "maxUses": "Maks. total penukaran",
+          "unlimitedPlaceholder": "kosong = tanpa batas",
+          "maxUsesHint": "Untuk semua pelanggan.",
+          "perUser": "Batas per pengguna",
+          "perUserHint": "Jumlah penukaran yang diizinkan untuk setiap pelanggan.",
+          "firstPurchaseTitle": "Hanya pembelian pertama",
+          "firstPurchaseHint": "Hanya workspace yang belum pernah melakukan pesanan berbayar",
+          "stackableTitle": "Dapat digabung dengan kupon lain",
+          "stackableHint": "Memungkinkan pembeli memakainya bersama kode aktif lain saat checkout"
+        }
+      }
+    },
+    "currencies": {
+      "title": "Mata uang platform",
+      "titleLead": "Platform",
+      "titleAccent": "mata uang",
+      "crumbGroup": "Sistem",
+      "crumbGroup2": "Lokalisasi",
+      "crumbHere": "Mata uang",
+      "eyebrow": "Admin · Platform · Lokalisasi",
+      "description": "Kelola mata uang yang dapat dipilih workspace. Kurs disimpan relatif terhadap USD. Mengubah default berlaku ke setiap dasbor pengguna, faktur, dan tampilan dompet.",
+      "fetchRates": "Ambil kurs terkini",
+      "fetching": "Mengambil",
+      "add": "Tambah mata uang",
+      "kpi": {
+        "total": "Total",
+        "totalHint": "mata uang dikonfigurasi",
+        "active": "Aktif",
+        "activeHint": "terlihat oleh workspace",
+        "default": "Default sistem",
+        "defaultHint": "dipakai untuk workspace yang baru dibuat",
+        "inactive": "Nonaktif",
+        "inactiveHint": "tidak ditawarkan di pengaturan workspace"
+      },
+      "defaultCard": {
+        "eyebrow": "Default sistem",
+        "title": "Mata uang cadangan untuk seluruh platform",
+        "body": "Workspace yang belum memilih mata uang memakai yang ini. Menyimpan langsung menghapus cache, sehingga perubahan muncul pada pemuatan halaman berikutnya di seluruh aplikasi.",
+        "select": "Mata uang default",
+        "set": "Atur default",
+        "setting": "Menyimpan"
+      },
+      "search": "Kode, nama, atau simbol…",
+      "searchLabel": "Cari mata uang",
+      "searchButton": "Cari",
+      "table": {
+        "label": "Mata uang",
+        "code": "Kode",
+        "name": "Nama",
+        "symbol": "Simbol",
+        "rate": "Kurs (1 USD →)",
+        "decimals": "Desimal",
+        "active": "Aktif",
+        "actions": "Aksi"
+      },
+      "defaultBadge": "Default",
+      "rate": "1 USD → {rate}",
+      "on": "Hidup",
+      "off": "Mati",
+      "empty": {
+        "none": "Belum ada mata uang.",
+        "noMatch": "Tidak ada hasil untuk \"{q}\"."
+      },
+      "footer": "Menampilkan {from}–{to} dari {total} mata uang",
+      "actions": {
+        "edit": "Ubah",
+        "delete": "Hapus",
+        "toggle": "Aktifkan atau matikan {code}"
+      },
+      "toasts": {
+        "added": "Mata uang ditambahkan.",
+        "updated": "Mata uang diperbarui.",
+        "activated": "Diaktifkan.",
+        "deactivated": "Dinonaktifkan.",
+        "deleted": "Mata uang dihapus.",
+        "defaultSet": "Mata uang default diatur ke {code}.",
+        "ratesUpdated": "{count} mata uang diperbarui dari {provider}."
+      },
+      "delete": {
+        "title": "Hapus mata uang",
+        "body": "Hapus {code}? Harga apa pun yang disimpan dalam mata uang ini akan menjadi yatim.",
+        "confirm": "Ya, hapus"
+      },
+      "form": {
+        "addTitle": "Tambah mata uang",
+        "editTitle": "Ubah {code}",
+        "name": "Nama *",
+        "namePlaceholder": "Franc Swiss",
+        "code": "Kode ISO *",
+        "codePlaceholder": "CHF",
+        "codeLocked": "Kode tidak pernah berubah setelah mata uang ada.",
+        "symbol": "Simbol",
+        "symbolPlaceholder": "Fr",
+        "precision": "Desimal *",
+        "rate": "Kurs konversi (1 USD = ?) *",
+        "active": "Langsung aktif",
+        "save": "Tambah mata uang",
+        "saveChanges": "Simpan perubahan",
+        "cancel": "Batal",
+        "problemsTitle": "Beberapa kolom perlu diperhatikan:",
+        "problems": {
+          "name": "Nama: masukkan nama hingga 120 karakter.",
+          "code": "Kode ISO: tiga huruf, seperti CHF.",
+          "symbol": "Simbol: maksimal 20 karakter.",
+          "precision": "Desimal: bilangan bulat dari 0 sampai 6.",
+          "exchangeRate": "Kurs: angka minimal 0.000001."
+        },
+        "eyebrow": "Entri baru",
+        "rateHint": "Gunakan \"Ambil kurs terkini\" di atas untuk mengisi nilai dari open.er-api.com.",
+        "editEyebrow": "Ubah entri"
+      },
+      "catalog": {
+        "eyebrow": "Katalog",
+        "title": "Semua mata uang"
+      }
+    },
+    "affiliate": {
+      "title": "Afiliasi",
+      "subtitle": "Bagikan tautan Anda dan pantau workspace yang Anda ajak.",
+      "common": {
+        "dismiss": "Tutup"
+      },
+      "states": {
+        "loading": "Memuat data afiliasi Anda"
+      },
+      "header": {
+        "codeLabel": "Kode referral Anda",
+        "noCode": "Belum ada kode",
+        "linkLabel": "Tautan referral Anda",
+        "copyLink": "Salin tautan",
+        "copied": "Tautan disalin.",
+        "copyFailed": "Tautan tidak dapat disalin. Pilih lalu salin secara manual.",
+        "reward": "Setiap workspace yang direferensikan dan melakukan pembayaran pertama memberi Anda {amount}.",
+        "rewardMessages": "Itu mencakup {count, plural, other {# pesan}}.",
+        "rewardNone": "Program saat ini tidak membayar apa pun untuk referral baru. Kode dan riwayat Anda tetap di sini."
+      },
+      "filters": {
+        "label": "Rentang dan ekspor",
+        "range": "Rentang",
+        "ranges": {
+          "7d": "7 hari terakhir",
+          "30d": "30 hari terakhir",
+          "90d": "90 hari terakhir",
+          "all": "Sepanjang waktu"
+        },
+        "search": "Cari referral",
+        "searchPlaceholder": "Nama, email, atau kode",
+        "reset": "Reset",
+        "export": "Ekspor CSV",
+        "exporting": "Menyiapkan file",
+        "exported": "{fileName} diunduh."
+      },
+      "kpi": {
+        "inRange": "Referral dalam rentang",
+        "vsPrevious": "{delta} dibanding periode sebelumnya",
+        "earned": "Diperoleh, seumur hidup",
+        "last30": "Referral, 30 hari terakhir",
+        "last30Earned": "{amount} diperoleh dalam 30 hari terakhir",
+        "average": "Rata-rata per referral"
+      },
+      "chart": {
+        "title": "Referral dari waktu ke waktu",
+        "label": "Referral sebagai batang dan kredit yang diperoleh sebagai garis, per periode",
+        "buckets": {
+          "daily": "Harian",
+          "weekly": "Mingguan",
+          "monthly": "Bulanan"
+        },
+        "signups": "Referral",
+        "credits": "Kredit diperoleh",
+        "bucket": "Periode",
+        "empty": "Belum ada referral dalam rentang ini."
+      },
+      "topCodes": {
+        "title": "Kode teratas",
+        "referrals": "{count, plural, other {# referral}}",
+        "empty": "Tidak ada kode yang dipakai dalam rentang ini."
+      },
+      "payouts": {
+        "title": "Pembayaran terbaru",
+        "balanceAfter": "Saldo setelah {amount}",
+        "empty": "Belum ada pembayaran. Hadiah masuk ke dompet Anda saat workspace yang direferensikan melakukan pembayaran pertama."
+      },
+      "table": {
+        "title": "Referral",
+        "label": "Referral dalam rentang yang dipilih",
+        "when": "Waktu",
+        "referee": "Yang direferensikan",
+        "code": "Kode dipakai",
+        "credits": "Kredit diperoleh",
+        "status": "Status",
+        "transaction": "Transaksi dompet",
+        "noName": "Pengguna tanpa nama",
+        "paid": "Dibayar",
+        "pending": "Tertunda",
+        "noTransaction": "Tidak ada transaksi dompet",
+        "pagination": "Halaman referral",
+        "previous": "Sebelumnya",
+        "next": "Berikutnya",
+        "showing": "Menampilkan {from}-{to} dari {total}"
+      },
+      "empty": {
+        "noneTitle": "Belum ada referral",
+        "noneBody": "Bagikan tautan Anda. Orang yang mendaftar dengannya muncul di sini.",
+        "filteredTitle": "Tidak ada referral yang cocok",
+        "filteredBody": "Coba rentang lain atau hapus pencarian."
+      },
+      "errors": {
+        "unauthenticated": "Sesi Anda telah berakhir. Masuk lagi untuk melihat data afiliasi Anda.",
+        "forbidden": "Anda tidak memiliki akses ke halaman ini.",
+        "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+        "validation": "Filter tersebut tidak dapat diterapkan. Reset lalu coba lagi.",
+        "network": "Server tidak dapat dijangkau. Periksa koneksi Anda lalu coba lagi.",
+        "generic": "Terjadi kesalahan. Coba lagi sebentar lagi.",
+        "requestId": "ID permintaan",
+        "retry": "Coba lagi"
+      }
+    }
+  }
+}

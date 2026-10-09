@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "common": {
+      "dismiss": "Ignora"
+    },
+    "nav": {
+      "forms": "Moduli"
+    },
+    "kinds": {
+      "short_text": "Testo breve",
+      "long_text": "Testo lungo",
+      "email": "Email",
+      "phone": "Numero di telefono",
+      "number": "Numero",
+      "currency": "Importo",
+      "date": "Data",
+      "dropdown": "Menu a discesa",
+      "radio": "Scelta singola",
+      "checkbox_group": "Scelta multipla",
+      "checkbox": "Casella di controllo",
+      "rating": "Valutazione",
+      "hidden": "Campo nascosto"
+    },
+    "errors": {
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "forbidden": "Non hai i permessi per eseguire questa operazione.",
+      "signedOut": "La sessione è terminata. Accedi di nuovo per continuare.",
+      "conflict": "Qualcun altro ha modificato questo modulo. Ricarica la pagina per vedere l’ultima versione.",
+      "nameTaken": "Un altro modulo ha già questo nome. Scegli un nome diverso.",
+      "stateInvalid": "Non è possibile nello stato attuale del modulo.",
+      "definitionInvalid": "Il modulo non è ancora valido. Controlla i campi e riprova.",
+      "publishInvalid": "Il modulo non può ancora essere pubblicato. Correggi i problemi elencati e riprova.",
+      "planLimit": "Il limite del tuo piano è stato raggiunto.",
+      "planLimitForms": "Hai raggiunto il numero di moduli consentito dal tuo piano. Archivia un modulo non più usato, oppure passa a un piano superiore.",
+      "planLocked": "I moduli non fanno parte del tuo workspace.",
+      "notFound": "Questo modulo non è stato trovato. Potrebbe essere stato eliminato.",
+      "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+      "unexpected": "Qualcosa è andato storto. Riprova tra poco.",
+      "upgrade": "Vedi i piani"
+    }
+  }
+}

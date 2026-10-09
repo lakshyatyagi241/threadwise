@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "Hanya pesanan draf yang dapat diubah. Pesanan yang sudah dikonfirmasi dibekukan: batalkan dan mulai pesanan baru untuk mengubah baris atau harganya.",
+        "SO_NOT_CONFIRMED": "Konfirmasi pesanan terlebih dahulu. Hanya pesanan yang sudah dikonfirmasi yang dapat difakturkan atau dicatat pengirimannya.",
+        "SO_CANCELLED": "Pesanan ini dibatalkan, jadi tidak ada lagi yang dapat dilakukan dengannya.",
+        "SO_QUOTE_NOT_ACCEPTED": "Hanya proposal atau estimasi yang diterima yang dapat menjadi pesanan penjualan. Tandai sebagai diterima terlebih dahulu.",
+        "SO_QUOTE_TAKEN": "Proposal atau estimasi ini sudah memiliki pesanan penjualan.",
+        "SO_QUANTITY_EXCEEDS": "Jumlah melebihi sisa pada baris itu. Kurangi, lalu coba lagi.",
+        "SO_NOTHING_TO_INVOICE": "Tidak ada yang perlu dilakukan di sini: semuanya sudah difakturkan atau dikirim.",
+        "SO_HAS_INVOICES": "Faktur yang dibuat dari pesanan ini masih aktif. Batalkan atau hapus faktur terlebih dahulu, lalu batalkan pesanan."
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "Pesanan penjualan",
+        "subtitle": "Penawaran yang diterima menjadi pesanan, difakturkan sekaligus atau bertahap, dan dikirim.",
+        "newOrder": "Pesanan penjualan baru",
+        "search": "Cari berdasarkan nomor, pembeli, atau referensi",
+        "reset": "Atur ulang",
+        "refresh": "Segarkan",
+        "tableLabel": "Pesanan penjualan",
+        "noAccessTitle": "Tidak ada akses",
+        "noAccess": "Anda tidak memiliki izin untuk melihat pesanan penjualan.",
+        "emptyFilteredTitle": "Tidak ada pesanan yang cocok",
+        "emptyFiltered": "Tidak ada yang cocok dengan filter ini. Ubah atau atur ulang filternya.",
+        "resetFilters": "Atur ulang filter",
+        "loading": "Memuat pesanan penjualan",
+        "showing": "Menampilkan {count}",
+        "loadMore": "Muat lebih banyak",
+        "allLoaded": "Semua sudah dimuat",
+        "contactLoading": "Memuat...",
+        "empty": {
+          "all": {
+            "title": "Belum ada pesanan penjualan",
+            "message": "Ubah proposal atau estimasi yang diterima menjadi pesanan, atau mulai dari awal."
+          },
+          "draft": {
+            "title": "Tidak ada pesanan draf",
+            "message": "Pesanan yang masih Anda siapkan akan muncul di sini."
+          },
+          "confirmed": {
+            "title": "Tidak ada pesanan yang dikonfirmasi",
+            "message": "Pesanan yang sudah dikonfirmasi dan menunggu difakturkan atau dikirim akan muncul di sini."
+          },
+          "cancelled": {
+            "title": "Tidak ada pesanan yang dibatalkan",
+            "message": "Pesanan yang Anda batalkan akan muncul di sini beserta alasannya."
+          },
+          "closed": {
+            "title": "Tidak ada pesanan yang ditutup",
+            "message": "Pesanan ditutup saat semua isinya sudah difakturkan dan dikirim."
+          }
+        }
+      },
+      "strip": {
+        "label": "Nilai pesanan terbuka",
+        "openValue": "Pesanan terbuka ({currency})"
+      },
+      "tabs": {
+        "label": "Status pesanan",
+        "all": "Semua",
+        "draft": "Draf",
+        "confirmed": "Dikonfirmasi",
+        "cancelled": "Dibatalkan",
+        "closed": "Ditutup",
+        "count": "{count} pesanan"
+      },
+      "quick": {
+        "label": "Filter cepat",
+        "toInvoice": "Perlu difakturkan",
+        "toFulfil": "Perlu dipenuhi"
+      },
+      "table": {
+        "scrollArea": "Tabel pesanan penjualan",
+        "columns": {
+          "number": "Pesanan",
+          "buyer": "Pembeli",
+          "quote": "Penawaran",
+          "deal": "Deal",
+          "expected": "Diharapkan",
+          "status": "Status",
+          "invoicing": "Penagihan",
+          "fulfilment": "Pengiriman",
+          "total": "Total",
+          "invoices": "Faktur"
+        }
+      },
+      "row": {
+        "moreFor": "Tindakan untuk {name}",
+        "open": "Buka",
+        "edit": "Edit",
+        "confirm": "Konfirmasi pesanan",
+        "invoiceAll": "Fakturkan semua sisanya",
+        "fulfilAll": "Tandai semua sebagai dikirim",
+        "cancel": "Batalkan pesanan",
+        "delete": "Hapus draf"
+      },
+      "status": {
+        "draft": "Draf",
+        "confirmed": "Dikonfirmasi",
+        "cancelled": "Dibatalkan",
+        "closed": "Ditutup"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "Belum difakturkan",
+        "partially_invoiced": "Sebagian difakturkan",
+        "invoiced": "Sudah difakturkan"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "Belum dikirim",
+        "partially_fulfilled": "Sebagian dikirim",
+        "fulfilled": "Sudah dikirim"
+      },
+      "actions": {
+        "failed": "Itu tidak berhasil.",
+        "confirmed": "Pesanan {number} dikonfirmasi.",
+        "invoicedDraft": "Draf faktur dibuat dari pesanan.",
+        "invoicedIssued": "Faktur {number} diterbitkan.",
+        "fulfilled": "Pengiriman dicatat.",
+        "cancelled": "Pesanan {number} dibatalkan.",
+        "deleted": "Pesanan draf dihapus."
+      },
+      "dialog": {
+        "close": "Tutup",
+        "cancel": "Batal",
+        "how": "Jumlah yang mana",
+        "mode": {
+          "all": "Semua yang tersisa",
+          "lines": "Pilih jumlah"
+        },
+        "left": "Sisa {qty}",
+        "qtyExceeds": "Paling banyak {max} tersisa pada baris ini.",
+        "qtyInvalid": "Masukkan jumlah dengan paling banyak 4 desimal, atau 0 untuk melewati baris ini.",
+        "nothingHint": "Semua isi pesanan ini sudah difakturkan."
+      },
+      "confirmDialog": {
+        "title": "Konfirmasi pesanan ini?",
+        "message": "Konfirmasi akan membekukan baris dan harga. Setelah itu Anda dapat memfakturkan pesanan, sekaligus atau bertahap, dan mencatat pengiriman. Pesanan masih dapat dibatalkan selama belum ada faktur.",
+        "confirm": "Konfirmasi pesanan"
+      },
+      "cancelDialog": {
+        "title": "Batalkan pesanan ini?",
+        "warning": "Pesanan yang dibatalkan tidak dapat lagi difakturkan atau dikirim, dan tidak dapat dibuka kembali.",
+        "reason": "Alasan",
+        "reasonHint": "Disimpan pada pesanan untuk tim Anda.",
+        "reasonRequired": "Tulis alasan pesanan dibatalkan.",
+        "reasonTooLong": "Jaga alasan di bawah {max} karakter.",
+        "cancelOrder": "Batalkan pesanan",
+        "hasInvoices": "Pesanan ini masih memiliki faktur. Batalkan atau hapus faktur terlebih dahulu (faktur yang dibatalkan mengembalikan jumlahnya), lalu batalkan pesanan.",
+        "seeInvoices": "Lihat fakturnya"
+      },
+      "deleteDialog": {
+        "title": "Hapus draf ini?",
+        "message": "Pesanan draf akan dihapus permanen. Pesanan yang sudah dikonfirmasi tidak dapat dihapus, hanya dapat dibatalkan.",
+        "delete": "Hapus draf"
+      },
+      "invoiceDialog": {
+        "title": "Fakturkan pesanan ini",
+        "intro": "Tagihkan pesanan dengan harga yang sudah dibekukan. Anda dapat memfakturkannya secara bertahap: bagian yang belum ditagihkan sekarang tetap ada di pesanan.",
+        "invoiceAndIssue": "Buat dan terbitkan faktur",
+        "createDraft": "Buat draf faktur",
+        "issueDate": "Tanggal penerbitan",
+        "issueDateHint": "Kosongkan untuk hari ini ({today}).",
+        "dueDate": "Tanggal jatuh tempo",
+        "terms": "Tenggat pembayaran",
+        "termsDefault": "Default workspace",
+        "termsOnIssue": "Jatuh tempo saat diterbitkan",
+        "termsDays": "{count} hari",
+        "issueNow": "Terbitkan faktur sekarang",
+        "issueNowHint": "Faktur mendapat nomornya dan dapat langsung dikirim.",
+        "draftHint": "Simpan sebagai draf untuk diperiksa sebelum diterbitkan.",
+        "includeShipping": "Tagihkan pengiriman bersama faktur ini",
+        "problems": {
+          "nothing": "Pilih jumlah di atas nol pada minimal satu baris.",
+          "issueDateInvalid": "Masukkan tanggal penerbitan yang valid.",
+          "dueDateInvalid": "Masukkan tanggal jatuh tempo yang valid.",
+          "dueBeforeIssue": "Tanggal jatuh tempo tidak boleh sebelum tanggal penerbitan."
+        }
+      },
+      "fulfilDialog": {
+        "title": "Catat pengiriman",
+        "intro": "Catat apa yang sudah dikirim ke pembeli. Pengiriman dilacak terpisah dari penagihan: salah satunya bisa terjadi lebih dulu.",
+        "record": "Catat pengiriman",
+        "note": "Catatan",
+        "noteHint": "Opsional, misalnya nomor surat jalan.",
+        "problems": {
+          "nothing": "Pilih jumlah di atas nol pada minimal satu baris.",
+          "noteTooLong": "Jaga catatan di bawah {max} karakter."
+        }
+      },
+      "detail": {
+        "noAccessTitle": "Tidak ada akses",
+        "noAccess": "Anda tidak memiliki izin untuk melihat pesanan penjualan.",
+        "loading": "Memuat pesanan",
+        "back": "Kembali ke pesanan penjualan",
+        "noBuyer": "Tanpa pembeli",
+        "edit": "Edit",
+        "confirm": "Konfirmasi pesanan",
+        "recordDelivery": "Catat pengiriman",
+        "invoice": "Faktur...",
+        "more": "Tindakan lainnya",
+        "cancel": "Batalkan pesanan",
+        "delete": "Hapus draf",
+        "cancelledOn": "Dibatalkan pada {date}",
+        "draftHint": "Pesanan ini masih draf. Konfirmasi untuk membekukan harganya dan mulai penagihan serta pengiriman.",
+        "notes": "Catatan",
+        "terms": "Syarat",
+        "progress": "Progres",
+        "invoiced": "Sudah difakturkan",
+        "fulfilled": "Sudah dikirim"
+      },
+      "lines": {
+        "title": "Baris",
+        "scrollArea": "Baris pesanan",
+        "item": "Item",
+        "ordered": "Dipesan",
+        "invoiced": "Difakturkan",
+        "fulfilled": "Dikirim",
+        "toInvoice": "Perlu difakturkan",
+        "unitPrice": "Harga satuan",
+        "amount": "Jumlah",
+        "taxLine": "{name} {rate}%",
+        "taxRate": "Pajak {rate}%",
+        "invoicedBar": "Bagian {name} yang sudah difakturkan",
+        "fulfilledBar": "Bagian {name} yang sudah dikirim"
+      },
+      "totals": {
+        "title": "Total",
+        "subtotal": "Subtotal",
+        "discount": "Diskon",
+        "shipping": "Pengiriman",
+        "shippingBilled": "Ditagihkan",
+        "shippingPending": "Ditagihkan bersama faktur pertama",
+        "tax": "Pajak",
+        "total": "Total"
+      },
+      "info": {
+        "title": "Detail",
+        "buyer": "Pembeli",
+        "email": "Email",
+        "phone": "Telepon",
+        "quote": "Penawaran",
+        "deal": "Deal",
+        "owner": "Pemilik",
+        "reference": "Referensi",
+        "expected": "Diharapkan",
+        "created": "Dibuat",
+        "confirmed": "Dikonfirmasi"
+      },
+      "invoices": {
+        "title": "Faktur dari pesanan ini",
+        "none": "Belum ada faktur yang dibuat dari pesanan ini.",
+        "noneDraft": "Faktur dapat dibuat setelah pesanan dikonfirmasi.",
+        "draft": "Draf",
+        "voidNote": "Faktur yang dibatalkan mengembalikan jumlahnya ke pesanan."
+      },
+      "builder": {
+        "noAccessTitle": "Tidak ada akses",
+        "noAccess": "Anda tidak memiliki izin untuk mengubah pesanan penjualan.",
+        "loading": "Memuat",
+        "frozen": "Pesanan ini sudah dikonfirmasi, jadi baris dan harganya dibekukan. Batalkan dan mulai pesanan baru untuk mengubahnya.",
+        "openOrder": "Buka pesanan",
+        "back": "Kembali",
+        "editTitle": "Edit {number}",
+        "newTitle": "Pesanan penjualan baru",
+        "unsaved": "Perubahan belum disimpan",
+        "cancel": "Batal",
+        "saveChanges": "Simpan perubahan",
+        "createDraft": "Buat draf",
+        "conflict": "Orang lain mengubah draf ini saat Anda sedang mengeditnya. Muat ulang untuk melihat versinya; perubahan Anda di sini akan hilang.",
+        "reload": "Muat ulang",
+        "saved": "Draf disimpan.",
+        "created": "Pesanan {number} dibuat sebagai draf.",
+        "fixProblems": "Perbaiki kolom yang disorot terlebih dahulu.",
+        "serverRejected": "Server tidak menerima beberapa nilai. Periksa kolom dan coba lagi.",
+        "startFrom": "Mulai dari",
+        "source": {
+          "scratch": "Pesanan kosong",
+          "quote": "Proposal atau estimasi yang diterima"
+        },
+        "loadingQuote": "Memuat penawaran...",
+        "buyer": "Pembeli",
+        "contact": "Kontak",
+        "contactHint": "Pilih kontak untuk menautkan pesanan kepadanya, atau ketik pembeli di bawah.",
+        "buyerName": "Nama pembeli",
+        "fromQuoteHint": "Jika dikosongkan, pembeli dari penawaran akan digunakan.",
+        "buyerEmail": "Email",
+        "buyerPhone": "Telepon",
+        "details": "Detail pesanan",
+        "currency": "Mata uang",
+        "currencyHint": "Tiga huruf, seperti USD atau KWD.",
+        "currencyLocked": "Dikunci setelah pesanan dibuat.",
+        "expectedDate": "Tanggal yang diharapkan",
+        "expectedHint": "Kapan pembeli mengharapkan pengiriman.",
+        "reference": "Referensi",
+        "referenceHint": "Misalnya, nomor purchase order pembeli.",
+        "linesFromQuote": "Baris",
+        "linesFromQuoteHint": "Pesanan mengambil baris, harga, dan pajak dari penawaran yang diterima, dengan diskon dokumen digabungkan ke dalam baris. Anda tetap dapat mengedit baris draf setelah dibuat.",
+        "lineItems": "Item baris",
+        "shippingNotes": "Pengiriman, catatan, dan syarat",
+        "shipping": "Pengiriman ({currency})",
+        "shippingHint": "Ditagihkan bersama faktur pertama.",
+        "notes": "Catatan",
+        "notesHint": "Ditampilkan pada pesanan.",
+        "terms": "Syarat",
+        "termsHint": "Dibawa ke faktur yang dibuat dari pesanan ini.",
+        "draftNote": "Pesanan tetap berupa draf sampai Anda mengonfirmasinya. Konfirmasi akan membekukan harganya.",
+        "quoteTotals": "Total penawaran",
+        "quoteTotalsNote": "Sesuai penawaran yang diterima. Angka pesanan sendiri ditampilkan setelah pesanan dibuat.",
+        "subtotal": "Subtotal",
+        "discount": "Diskon",
+        "tax": "Pajak",
+        "total": "Total",
+        "openExisting": "Buka pesanan {number}",
+        "viewOrders": "Lihat semua pesanan",
+        "pickAnother": "Pilih penawaran lain",
+        "problems": {
+          "buyerRequired": "Pilih kontak atau ketik nama pembeli.",
+          "emailInvalid": "Masukkan alamat email yang valid.",
+          "currencyInvalid": "Masukkan kode mata uang tiga huruf.",
+          "expectedDateInvalid": "Masukkan tanggal yang valid.",
+          "shippingInvalid": "Masukkan jumlah yang valid.",
+          "noLines": "Tambahkan minimal satu baris.",
+          "referenceTooLong": "Jaga referensi di bawah 191 karakter."
+        },
+        "lineProblems": {
+          "descriptionRequired": "Jelaskan baris ini.",
+          "qtyInvalid": "Masukkan jumlah di atas nol.",
+          "priceInvalid": "Masukkan harga yang valid.",
+          "lineDiscountInvalid": "Masukkan diskon yang valid.",
+          "hsnRequired": "Masukkan kode HSN/SAC.",
+          "hsnInvalid": "Masukkan kode HSN/SAC yang valid.",
+          "taxRateRemoved": "Tarif pajak pada baris ini sudah tidak ada. Pilih yang berlaku."
+        }
+      },
+      "quotePicker": {
+        "search": "Cari penawaran yang diterima",
+        "results": "Proposal dan estimasi yang diterima",
+        "loading": "Memuat penawaran",
+        "noMatch": "Tidak ada penawaran yang diterima yang cocok.",
+        "none": "Belum ada proposal atau estimasi yang diterima.",
+        "kind": {
+          "proposal": "Proposal",
+          "estimate": "Estimasi"
+        },
+        "untitled": "Tanpa judul",
+        "accepted": "Diterima {date}"
+      }
+    }
+  }
+}

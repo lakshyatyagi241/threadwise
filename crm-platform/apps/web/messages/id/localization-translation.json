@@ -1,0 +1,201 @@
+{
+  "localization-translation": {
+    "nav": {
+      "languages": "Bahasa",
+      "providers": "Penyedia terjemahan",
+      "usage": "Penggunaan terjemahan",
+      "group": "Lokalisasi"
+    },
+    "errors": {
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "conflict": "Orang lain telah mengubah ini. Daftar dimuat ulang, jadi periksa dan coba lagi.",
+      "languageIsDefault": "Bahasa default tidak dapat dinonaktifkan atau dihapus. Atur bahasa lain sebagai default terlebih dahulu.",
+      "languageInactive": "Aktifkan bahasa terlebih dahulu sebelum menjadikannya default.",
+      "credentialsMissing": "Isi kredensial yang diperlukan terlebih dahulu.",
+      "providerInactive": "Hanya penyedia yang aktif yang dapat menjadi default.",
+      "lockdownNoOfficial": "Aktifkan dan konfigurasikan minimal satu penyedia resmi berbayar (DeepL atau Google Cloud) sebelum mengaktifkan lockdown.",
+      "planGate": "Paket Anda tidak mencakup terjemahan."
+    },
+    "switcher": {
+      "label": "Ubah bahasa",
+      "menu": "Bahasa",
+      "failed": "Bahasa tidak dapat diubah. Coba lagi."
+    },
+    "languages": {
+      "kicker": "Admin · Sistem · Bahasa",
+      "titleLead": "Platform",
+      "titleEm": "bahasa",
+      "description": "Kelola bahasa yang dapat dipilih pengguna dan workspace baru. Bahasa \"default\" menjadi cadangan untuk setiap akun yang baru dibuat.",
+      "loading": "Memuat bahasa",
+      "stats": {
+        "total": "Total",
+        "totalHint": "dikonfigurasi",
+        "active": "Aktif",
+        "activeHint": "terlihat oleh pengguna",
+        "default": "Default",
+        "defaultHint": "cadangan untuk akun baru"
+      },
+      "catalog": "Katalog",
+      "allLanguages": "Semua bahasa",
+      "columns": {
+        "name": "Nama",
+        "code": "Kode",
+        "dir": "Arah",
+        "active": "Aktif",
+        "default": "Default",
+        "actions": "Tindakan"
+      },
+      "on": "Aktif",
+      "off": "Nonaktif",
+      "defaultBadge": "Default",
+      "set": "Atur",
+      "toggleLabel": "Aktifkan atau nonaktifkan {name}",
+      "delete": "Hapus",
+      "cancel": "Batal",
+      "empty": "Belum ada bahasa.",
+      "flash": {
+        "activated": "{name} diaktifkan.",
+        "disabled": "{name} dinonaktifkan.",
+        "nowDefault": "{name} sekarang menjadi bahasa default.",
+        "removed": "Bahasa dihapus."
+      },
+      "confirmDelete": {
+        "title": "Hapus bahasa",
+        "message": "Hapus {name}?"
+      },
+      "pack": {
+        "kicker": "Paket bahasa",
+        "title": "Tetap di {count} bahasa",
+        "body": "Setiap bahasa aktif didukung oleh file JSON terjemahan yang disertakan dengan platform. Slot bahasa baru akan muncul di sini saat paket terjemahan diperluas.",
+        "note": "Anda tetap dapat mengubah status aktif, mengedit nama asli + arah, dan memilih default platform dari tabel di sebelah kiri."
+      },
+      "usedFor": {
+        "title": "Cara penggunaannya",
+        "body": "Bahasa aktif muncul di pengalih bahasa profil pengguna dan di pemilih templat / balasan otomatis. Default berlaku untuk akun baru yang belum memilih bahasa."
+      }
+    },
+    "providers": {
+      "kicker": "Admin · Sistem",
+      "title": "Penyedia terjemahan",
+      "description": "Balasan otomatis multibahasa memakai salah satu penyedia ini untuk menerjemahkan pesan masuk dan menyusun balasan dalam bahasa pelanggan. MyMemory aktif sejak awal (gratis, tanpa kunci) — hubungkan DeepL / Google Cloud / LibreTranslate untuk kualitas lebih tinggi atau privasi self-hosted.",
+      "loading": "Memuat penyedia",
+      "on": "Aktif",
+      "off": "Nonaktif",
+      "cancel": "Batal",
+      "lockdown": {
+        "title": "Lockdown kepatuhan",
+        "description": "Saat aktif, rantai fallback melewati <mono>{slugs}</mono> dan hanya merutekan terjemahan balasan otomatis melalui API berbayar resmi (DeepL, Google Cloud). Diperlukan oleh beberapa kebijakan keamanan perusahaan yang melarang endpoint pihak ketiga tidak resmi.",
+        "enable": "Aktifkan lockdown",
+        "disable": "Nonaktifkan lockdown",
+        "confirmOn": "Aktifkan lockdown? Driver gratis akan dilewati — hanya API berbayar yang menerjemahkan.",
+        "confirmOff": "Nonaktifkan lockdown? Driver gratis akan kembali ke rantai fallback."
+      },
+      "flash": {
+        "activated": "{name} diaktifkan.",
+        "disabled": "{name} dinonaktifkan.",
+        "nowDefault": "{name} sekarang menjadi penyedia default.",
+        "saved": "{name} disimpan.",
+        "lockdownOn": "Lockdown kepatuhan aktif.",
+        "lockdownOff": "Lockdown kepatuhan nonaktif."
+      },
+      "empty": {
+        "title": "Belum ada penyedia terjemahan yang dikonfigurasi",
+        "body": "Jalankan seed penyedia terjemahan untuk mengisi daftar ini."
+      },
+      "active": "Aktif",
+      "disabled": "Nonaktif",
+      "defaultBadge": "Default",
+      "skipped": "Lockdown · dilewati",
+      "skippedTitle": "Dilewati karena lockdown kepatuhan aktif.",
+      "slug": "slug: {slug}",
+      "makeDefault": "Jadikan default",
+      "activate": "Aktifkan",
+      "disable": "Nonaktifkan",
+      "keepSecret": "••••••• (kosongkan untuk mempertahankan)",
+      "noCredentials": "Tidak memerlukan kredensial — penyedia ini langsung berfungsi.",
+      "sortOrder": "Urutan",
+      "sortOrderHint": "Angka lebih kecil = prioritas lebih tinggi dalam rantai fallback.",
+      "save": "Simpan {name}"
+    },
+    "usage": {
+      "kicker": "Admin · Sistem",
+      "title": "Penggunaan terjemahan",
+      "description": "Volume + estimasi biaya setiap terjemahan balasan otomatis. Hit kamus bawaan dan cache 24 jam tidak ditagih dan tidak muncul di sini — ini adalah panggilan ke layanan eksternal.",
+      "from": "Dari",
+      "to": "Sampai",
+      "apply": "Terapkan",
+      "badRange": "Tanggal mulai tidak boleh setelah tanggal akhir.",
+      "loading": "Memuat penggunaan",
+      "failed": "Tidak dapat memuat penggunaan.",
+      "totals": {
+        "calls": "Panggilan ke layanan",
+        "chars": "Karakter diterjemahkan",
+        "charsOut": "keluar: {count}",
+        "cost": "Estimasi biaya",
+        "costHint": "berdasarkan tarif per karakter yang dipublikasikan",
+        "fallbackHits": "Hit fallback",
+        "fallbackHint": "penyedia utama gagal, rantai menangkapnya"
+      },
+      "byProvider": "Per penyedia",
+      "emptyProvider": "Tidak ada panggilan terjemahan dalam rentang ini. Kirim pesan masuk non-Inggris ke perangkat yang memiliki balasan otomatis, lalu segarkan.",
+      "free": "gratis",
+      "last30": "30 hari terakhir",
+      "timelineHint": "arahkan kursor ke setiap batang untuk tanggal / karakter / biaya",
+      "topWorkspaces": "Workspace dengan pengeluaran terbesar",
+      "emptyWorkspaces": "Tidak ada terjemahan paket berbayar dalam rentang ini.",
+      "cols": {
+        "provider": "Penyedia",
+        "workspace": "Workspace",
+        "calls": "Panggilan",
+        "charsIn": "Karakter masuk",
+        "chars": "Karakter",
+        "cost": "Biaya",
+        "rate": "Tarif / 1 juta karakter"
+      }
+    },
+    "settings": {
+      "title": "Terjemahan real-time",
+      "description": "Chat dengan pelanggan dalam bahasa apa pun. Setiap pihak membaca dalam bahasanya sendiri — secara otomatis.",
+      "loading": "Memuat pengaturan terjemahan",
+      "failed": "Tidak dapat memuat pengaturan terjemahan.",
+      "saved": "Pengaturan terjemahan disimpan.",
+      "steps": {
+        "1": {
+          "title": "Pesan pelanggan (bahasa apa pun)",
+          "body": "Pesan mereka diterjemahkan otomatis KE bahasa tim Anda dan ditampilkan kepada agen, dengan pesan asli cukup satu klik."
+        },
+        "2": {
+          "title": "Balasan agen (bahasa Anda)",
+          "body": "Balasan Anda diterjemahkan KE bahasa pelanggan tepat sebelum dikirim melalui WhatsApp."
+        },
+        "3": {
+          "title": "AI + widget juga",
+          "body": "Agen AI dan widget chat situs web membalas langsung dalam bahasa pelanggan."
+        }
+      },
+      "engine": {
+        "kicker": "Mesin terjemahan",
+        "free": "MyMemory (gratis)",
+        "body": "Anda TIDAK perlu memasukkan kunci API di sini — terjemahan dikonfigurasi sekali untuk seluruh platform dan berfungsi otomatis. Mesin gratis aktif secara default; platform dapat diatur untuk menggunakan DeepL / Google Translate demi kualitas lebih tinggi."
+      },
+      "usage": {
+        "kicker": "Bulan ini",
+        "line": "karakter diterjemahkan · {count} pesan"
+      },
+      "enabled": {
+        "title": "Terjemahkan percakapan otomatis",
+        "hint": "Aktifkan atau nonaktifkan seluruhnya untuk workspace ini."
+      },
+      "teamLanguage": {
+        "label": "Bahasa tim Anda",
+        "hint": "Bahasa yang DIPAKAI agen Anda untuk membaca + menulis. Pesan pelanggan diterjemahkan ke bahasa ini; balasan Anda diterjemahkan dari bahasa ini."
+      },
+      "save": "Simpan pengaturan terjemahan",
+      "upgrade": {
+        "title": "Tingkatkan paket untuk membuka terjemahan real-time.",
+        "body": "Terjemahkan otomatis percakapan WhatsApp antara bahasa tim Anda dan bahasa pelanggan Anda.",
+        "link": "Lihat paket →"
+      }
+    }
+  }
+}

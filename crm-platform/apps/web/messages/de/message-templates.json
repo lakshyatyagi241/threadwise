@@ -1,0 +1,361 @@
+{
+  "message-templates": {
+    "nav": {
+      "title": "Vorlagen"
+    },
+    "common": {
+      "dismiss": "Schließen",
+      "requestId": "Anfrage-ID"
+    },
+    "status": {
+      "draft": "Entwurf",
+      "pending": "In Prüfung",
+      "approved": "Genehmigt",
+      "rejected": "Abgelehnt",
+      "paused": "Pausiert",
+      "disabled": "Deaktiviert",
+      "deleted": "Bei Meta fehlend"
+    },
+    "category": {
+      "MARKETING": "Marketing",
+      "UTILITY": "Utility",
+      "AUTHENTICATION": "Authentifizierung"
+    },
+    "quality": {
+      "GREEN": "Hohe Qualität",
+      "YELLOW": "Mittlere Qualität",
+      "RED": "Niedrige Qualität",
+      "UNKNOWN": "Qualität ausstehend"
+    },
+    "errors": {
+      "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut, und geben Sie die Anfrage-ID an, falls das Problem weiterhin auftritt.",
+      "TPL_NOT_FOUND": "Diese Vorlage existiert nicht mehr.",
+      "TPL_NAME_TAKEN": "Für diese Nummer existiert bereits eine Vorlage mit diesem Namen und dieser Sprache. Wählen Sie einen anderen Namen oder eine andere Sprache.",
+      "TPL_LINT_FAILED": "Die Prüfungen haben Probleme gefunden, die Meta ablehnen würde. Es wurde nichts gesendet. Beheben Sie die rechts aufgeführten Fehler.",
+      "TPL_META_REJECTED": "Meta hat die Vorlage abgelehnt. Der Grund steht unten; die Vorlage wird als Entwurf gespeichert, damit Sie sie korrigieren und erneut senden können.",
+      "TPL_NO_CONNECTION": "Dieser Vorlage ist keine verbundene WhatsApp-Nummer zum Einreichen zugeordnet. Verbinden Sie zuerst eine Nummer.",
+      "TPL_IN_USE": "Diese Vorlage kann nicht gelöscht werden, weil sie in einem laufenden oder geplanten Broadcast verwendet wird.",
+      "TPL_NOT_EDITABLE": "Nur eine Vorlage, die Meta noch nicht genehmigt hat, oder eine abgelehnte Vorlage kann bearbeitet werden.",
+      "ROW_VERSION_CONFLICT": "Jemand hat diese Vorlage geändert, während Sie sie bearbeitet haben. Laden Sie neu, um die neueste Version zu sehen, und wenden Sie Ihre Änderung dann erneut an.",
+      "VALIDATION_FAILED": "Einige Felder sind ungültig. Prüfen Sie die Felder unten.",
+      "INTERNAL": "Der Server konnte diese Anfrage nicht verarbeiten. Versuchen Sie es in Kürze erneut."
+    },
+    "preview": {
+      "title": "Vorschau",
+      "headerImageAlt": "Beispiel für Kopfbild",
+      "header": {
+        "image": "Bild",
+        "video": "Video",
+        "document": "Dokument",
+        "location": "Standort"
+      },
+      "authBody": "ist Ihr Bestätigungscode.",
+      "authExpiry": "{count, plural, one {Dieser Code läuft in # Minute ab.} other {Dieser Code läuft in # Minuten ab.}}",
+      "bodyEmpty": "Ihr Nachrichtentext erscheint hier.",
+      "time": "10:30",
+      "copyCode": "Code kopieren",
+      "buttonUnnamed": "Schaltfläche",
+      "moreButtons": "{count, plural, one {+# weitere Schaltfläche} other {+# weitere Schaltflächen}}"
+    },
+    "card": {
+      "rejected": "Abgelehnt: {reason}",
+      "view": "Ansehen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen"
+    },
+    "library": {
+      "title": "Vorlagenbibliothek",
+      "intro": "WhatsApp-Nachrichtenvorlagen: Erstellen Sie sie, senden Sie sie zur Prüfung an Meta und verfolgen Sie hier ihren Status.",
+      "sync": "Von Meta synchronisieren",
+      "syncing": "Synchronisierung läuft...",
+      "syncHint": "Ihre Vorlagen von Meta abrufen",
+      "syncDone": "Von Meta synchronisiert: {created} neu, {updated} aktualisiert, {missing} nicht mehr bei Meta.",
+      "syncNone": "Auf diesem WhatsApp-Business-Konto wurden noch keine Vorlagen gefunden.",
+      "syncFailed": "Synchronisierung von Meta fehlgeschlagen. Prüfen Sie die Verbindung der Nummer und versuchen Sie es erneut.",
+      "syncPartial": "{count, plural, one {# Nummer konnte nicht synchronisiert werden.} other {# Nummern konnten nicht synchronisiert werden.}}",
+      "new": "Neue Vorlage",
+      "filters": "Vorlagen filtern",
+      "search": "Suchen",
+      "searchPlaceholder": "Vorlagenname",
+      "status": "Status",
+      "allStatuses": "Alle Status",
+      "category": "Kategorie",
+      "allCategories": "Alle Kategorien",
+      "connection": "WhatsApp-Nummer",
+      "allConnections": "Alle Nummern",
+      "loading": "Vorlagen werden geladen",
+      "retry": "Erneut versuchen",
+      "emptyTitle": "Noch keine Vorlagen",
+      "emptyBody": "Erstellen Sie eine Vorlage und reichen Sie sie bei Meta ein, oder synchronisieren Sie bereits vorhandene Vorlagen aus dem Meta Business Manager.",
+      "emptyFilteredTitle": "Keine Vorlage passt",
+      "emptyFilteredBody": "Ändern Sie die Filter oder setzen Sie sie zurück, um weitere Vorlagen zu sehen.",
+      "clearFilters": "Filter zurücksetzen",
+      "loadMore": "Mehr laden"
+    },
+    "delete": {
+      "title": "Vorlage löschen",
+      "message": "„{name}“ löschen? Sie wird hier und bei Meta entfernt und kann nicht mehr gesendet werden.",
+      "confirm": "Vorlage löschen",
+      "cancel": "Abbrechen",
+      "done": "„{name}“ gelöscht.",
+      "inUseHelp": "Öffnen Sie den Broadcast, der diese Vorlage verwendet, und brechen Sie ihn ab oder wählen Sie eine andere Vorlage. Löschen Sie danach diese Vorlage."
+    },
+    "lint": {
+      "title": "Prüfungen vor dem Einreichen",
+      "checking": "Wird geprüft",
+      "unavailable": "Die Prüfungen konnten gerade nicht ausgeführt werden. Die Prüfung durch Meta gilt weiterhin, und der Server prüft beim Einreichen erneut.",
+      "clean": "Keine Probleme gefunden.",
+      "summary": "{errors, plural, one {# Fehler} other {# Fehler}}, {warnings, plural, one {# Warnung} other {# Warnungen}}",
+      "severity": {
+        "error": "Fehler",
+        "warning": "Warnung"
+      },
+      "field": {
+        "name": "Name",
+        "language": "Sprache",
+        "header": "Kopfzeile",
+        "body": "Text",
+        "footer": "Fußzeile",
+        "buttons": "Schaltflächen",
+        "template": "Vorlage"
+      }
+    },
+    "form": {
+      "loading": "Wird geladen",
+      "retry": "Erneut versuchen",
+      "backToLibrary": "Zurück zur Bibliothek",
+      "noPermission": "Sie haben keine Berechtigung, Vorlagen zu erstellen oder zu bearbeiten.",
+      "notEditableTitle": "Diese Vorlage kann nicht mehr bearbeitet werden",
+      "notEditableBody": "Nur eine Vorlage, die Meta noch nicht genehmigt hat, oder eine abgelehnte Vorlage kann bearbeitet werden. Erstellen Sie eine neue Vorlage, um eine genehmigte zu ändern.",
+      "viewTemplate": "Vorlage ansehen",
+      "breadcrumb": "Navigationspfad",
+      "breadcrumbLibrary": "Vorlagen",
+      "breadcrumbNew": "Neu",
+      "breadcrumbEdit": "Bearbeiten",
+      "titleNew": "Neue Vorlage",
+      "titleEdit": "{name} bearbeiten",
+      "saveDraft": "Entwurf speichern",
+      "submit": "An Meta senden",
+      "reload": "Vorlage neu laden",
+      "aside": "Vorschau und Prüfungen",
+      "why": {
+        "connection": "Wählen Sie eine WhatsApp-Nummer zum Einreichen.",
+        "name": "Geben Sie einen Vorlagennamen ein.",
+        "fields": "Einige Felder sind ungültig.",
+        "errors": "Beheben Sie die Fehler, bevor Sie einreichen.",
+        "checking": "Vorlage wird geprüft."
+      },
+      "toast": {
+        "submitted": "Vorlage zur Prüfung an Meta gesendet.",
+        "saved": "Vorlage als Entwurf gespeichert."
+      },
+      "errors": {
+        "name": "Geben Sie einen Vorlagennamen ein.",
+        "header": "Die Kopfzeile darf höchstens 60 Zeichen lang sein.",
+        "body": "Der Text darf höchstens {max} Zeichen lang sein.",
+        "footer": "Die Fußzeile darf höchstens 60 Zeichen lang sein."
+      },
+      "identity": {
+        "title": "Identität",
+        "connection": "WhatsApp-Nummer",
+        "connectionHint": "Medien und Einreichung müssen dieselbe Nummer verwenden, sonst lehnt Meta die Vorlage ab.",
+        "connectionUnknown": "Nummer nicht mehr verfügbar",
+        "noConnection": "Keine verbundene WhatsApp-Nummer zum Einreichen vorhanden.",
+        "connectNumber": "Nummer verbinden",
+        "category": "Kategorie",
+        "categoryHint": "Meta prüft und bepreist die Vorlage anhand ihrer Kategorie.",
+        "categories": {
+          "MARKETING": "Marketing",
+          "UTILITY": "Utility",
+          "AUTHENTICATION": "Authentifizierung"
+        },
+        "name": "Vorlagenname",
+        "nameHint": "Nur a–z, 0–9 und _, bis zu 60 Zeichen.",
+        "nameTaken": "Dieser Name ist für diese Sprache bei dieser Nummer bereits vergeben.",
+        "language": "Sprache"
+      },
+      "auth": {
+        "title": "Einmal-Code",
+        "hint": "Meta schreibt die Nachricht und die Schaltfläche Code kopieren einer Authentifizierungsvorlage.",
+        "expiry": "Code läuft ab nach (Minuten)",
+        "expiryHint": "Optional. Von {min} bis {max} Minuten.",
+        "expiryInvalid": "Geben Sie eine ganze Zahl von {min} bis {max} ein.",
+        "fixedBody": "Die Nachricht lautet: ein Code, gefolgt von „ist Ihr Bestätigungscode“ und einem Sicherheitshinweis. Sie können sie nicht ändern."
+      },
+      "header": {
+        "title": "Kopfzeile",
+        "hint": "Optional. Text oder ein Bild, Video, Dokument oder Standort.",
+        "type": "Art der Kopfzeile",
+        "kind": {
+          "none": "Keine",
+          "text": "Text",
+          "image": "Bild",
+          "video": "Video",
+          "document": "Dokument",
+          "location": "Standort"
+        },
+        "text": "Kopfzeilentext",
+        "textHint": "{used}/{max}. Höchstens eine Variable.",
+        "sample": "Beispieldatei",
+        "uploading": "Wird hochgeladen",
+        "keptSample": "Das gespeicherte Beispiel bleibt erhalten. Wählen Sie eine Datei, um es zu ersetzen.",
+        "noFile": "Keine Datei ausgewählt",
+        "limits": "Bild bis 5 MB, Video bis 16 MB, PDF bis 100 MB.",
+        "replace": "Datei ersetzen",
+        "choose": "Beispieldatei auswählen",
+        "tooBig": "Dieses {kind} ist {size} MB groß. WhatsApp akzeptiert bis zu {max} MB. Wählen Sie eine kleinere Datei.",
+        "wrongType": "Dieser Dateityp wird für diese Kopfzeile nicht akzeptiert.",
+        "emptyFile": "Diese Datei ist leer.",
+        "locationHelp": "Der Standort wird beim Senden der Nachricht eingetragen. Meta muss nur wissen, dass die Kopfzeile ein Standort ist."
+      },
+      "body": {
+        "title": "Text",
+        "hint": "Der Nachrichtentext. Verwenden Sie Variablen im Stil '{{name}}'; sie werden beim Speichern für Meta nummeriert.",
+        "toolbar": "Textformatierung",
+        "format": {
+          "bold": "Fett",
+          "italic": "Kursiv",
+          "strike": "Durchgestrichen",
+          "code": "Code"
+        },
+        "variable": "Variable hinzufügen",
+        "label": "Haupttext",
+        "counter": "{used}/{max}",
+        "wrapSample": "Text"
+      },
+      "variables": {
+        "title": "Variablenzuordnung",
+        "empty": "Noch keine Variablen. Geben Sie im Text einen Platzhalter wie '{{name}}' ein oder verwenden Sie Variable hinzufügen.",
+        "help": "Nennen Sie für jede Variable das Kontaktattribut, das sie beim Senden füllt, und geben Sie einen Beispielwert für die Prüfung durch Meta an.",
+        "attribute": "Kontaktattribut",
+        "sample": "Beispielwert",
+        "header": "Kopfzeile",
+        "body": "Text"
+      },
+      "footer": {
+        "title": "Fußzeile",
+        "label": "Fußzeilentext",
+        "hint": "Optional. {used}/{max}. Keine Variablen."
+      },
+      "buttons": {
+        "title": "Schaltflächen",
+        "hint": "Optional. Schnellantworten müssen zusammen am Anfang oder am Ende stehen.",
+        "add": {
+          "quick_reply": "Schnellantwort",
+          "url": "Website besuchen",
+          "phone": "Telefonnummer anrufen",
+          "copy_code": "Code kopieren"
+        },
+        "kind": {
+          "quick_reply": "Schnellantwort",
+          "url": "Website besuchen",
+          "phone": "Anrufen",
+          "copy_code": "Code kopieren",
+          "other": "Sonstige"
+        },
+        "count": "{used}/{max} Schaltflächen",
+        "limitReached": "Höchstens {max} dieser Art.",
+        "empty": "Keine Schaltflächen. Fügen Sie oben eine hinzu.",
+        "moveUp": "Schaltfläche {n} nach oben verschieben",
+        "moveDown": "Schaltfläche {n} nach unten verschieben",
+        "remove": "Schaltfläche {n} entfernen",
+        "keptAsIs": "„{text}“ bleibt unverändert. Dieser Editor ändert sie nicht.",
+        "text": "Schaltflächentext",
+        "textHint": "{used}/25",
+        "url": "Website-URL",
+        "urlHint": "Fügen Sie am Ende '{{1}}' für einen dynamischen Teil hinzu.",
+        "urlExample": "Beispiel für die Variable",
+        "phone": "Telefonnummer",
+        "phoneHint": "Mit Ländervorwahl.",
+        "code": "Beispielcode",
+        "codeHint": "Zum Beispiel PROMO50.",
+        "limits": "Meta erlaubt bis zu {quick} Schnellantworten, {url} Website-Schaltflächen, {phone} Telefon-Schaltfläche und {copy} Code-kopieren-Schaltfläche.",
+        "allUsed": "Jede Schaltflächenart hat ihr Limit erreicht.",
+        "issue": {
+          "textRequired": "Geben Sie den Schaltflächentext ein.",
+          "textTooLong": "Höchstens {max} Zeichen.",
+          "urlRequired": "Geben Sie die URL ein.",
+          "urlInvalid": "Die URL muss mit http:// oder https:// beginnen.",
+          "phoneRequired": "Geben Sie die Telefonnummer ein.",
+          "codeRequired": "Geben Sie einen Beispielcode ein.",
+          "quickReplyVariable": "Eine Schnellantwort darf keine Variable enthalten.",
+          "urlExampleRequired": "Geben Sie einen Beispielwert für die URL-Variable an.",
+          "quickReplyPosition": "Schnellantworten müssen zusammen am Anfang oder am Ende der Schaltflächen stehen."
+        }
+      },
+      "result": {
+        "metaRefused": "Gespeichert, aber Meta hat die Vorlage abgelehnt.",
+        "metaRefusedHelp": "Die Vorlage wird als Entwurf gespeichert. Beheben Sie, was Meta nennt, und senden Sie sie erneut. Ihr Formular bleibt unverändert.",
+        "submitted": "An Meta zur Prüfung gesendet.",
+        "saved": "Als Entwurf gespeichert.",
+        "warnings": "Vor der Prüfung durch Meta lohnt ein Blick darauf:",
+        "open": "Vorlage öffnen"
+      }
+    },
+    "detail": {
+      "loading": "Vorlage wird geladen",
+      "retry": "Erneut versuchen",
+      "back": "Zurück zur Bibliothek",
+      "breadcrumb": "Navigationspfad",
+      "refresh": "Status aktualisieren",
+      "retrySubmit": "An Meta senden",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "refreshed": "Status von Meta aktualisiert.",
+      "submittedToast": "Vorlage zur Prüfung an Meta gesendet.",
+      "never": "Nie",
+      "none": "Keine",
+      "banner": {
+        "metaFailed": "Meta hat die Vorlage abgelehnt",
+        "draft": "Diese Vorlage wurde noch nicht an Meta gesendet. Senden Sie sie, um die Prüfung zu starten.",
+        "pending": "Zur Prüfung durch Meta gesendet. Diese Seite prüft alle 15 Sekunden auf eine Antwort.",
+        "pendingMeta": "Gesendet {submitted}. Zuletzt geprüft {checked}.",
+        "polling": "Sie können diese Seite geöffnet lassen oder später zurückkehren.",
+        "rejected": "Von Meta abgelehnt",
+        "rejectedHelp": "Bearbeiten Sie die Vorlage, um den Grund zu beheben, und senden Sie sie erneut.",
+        "paused": "Von Meta pausiert. Sie kann erst gesendet werden, wenn Meta die Pause aufhebt.",
+        "pausedUntil": "Von Meta pausiert bis {when}.",
+        "disabled": "Von Meta deaktiviert. Sie kann nicht gesendet werden.",
+        "deleted": "Meta führt diese Vorlage nicht mehr auf. Sie bleibt hier erhalten; synchronisieren Sie erneut oder löschen Sie sie."
+      },
+      "facts": {
+        "title": "Meta-Synchronisierung",
+        "status": "Meta-Status",
+        "quality": "Qualität",
+        "category": "Meta-Kategorie",
+        "metaId": "Vorlagen-ID",
+        "number": "WhatsApp-Nummer",
+        "numberUnknown": "Nummer nicht mehr verfügbar",
+        "submitted": "Gesendet",
+        "approved": "Genehmigt",
+        "synced": "Zuletzt synchronisiert"
+      },
+      "components": {
+        "title": "Komponenten",
+        "header": "Kopfzeile",
+        "media": "Kopfzeilen-Medien",
+        "body": "Text",
+        "footer": "Fußzeile",
+        "buttons": "Schaltflächen",
+        "expiry": "Code-Ablauf",
+        "expiryValue": "{count, plural, one {# Minute} other {# Minuten}}"
+      },
+      "attachment": {
+        "none": "Keine",
+        "image": "Bild",
+        "video": "Video",
+        "document": "Dokument",
+        "location": "Standort"
+      },
+      "lint": {
+        "title": "Prüfungen",
+        "clean": "Keine Probleme gefunden."
+      },
+      "payload": {
+        "title": "Meta-Daten",
+        "hint": "Was zur Prüfung an Meta gesendet wird, genau so wie es aufgebaut ist.",
+        "empty": "Noch nichts erstellt."
+      }
+    }
+  }
+}

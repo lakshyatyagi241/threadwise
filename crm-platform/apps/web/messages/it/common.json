@@ -1,0 +1,18 @@
+{
+  "common": {
+    "appName": "CRM",
+    "loadMore": "Carica altri",
+    "loading": "Caricamento",
+    "empty": "Ancora niente qui",
+    "retry": "Riprova",
+    "requestId": "ID richiesta",
+    "search": "Cerca",
+    "unexpected": "Qualcosa è andato storto",
+    "fatal": {
+      "title": "Qualcosa è andato storto",
+      "body": "Impossibile caricare la pagina. Il problema è stato segnalato. Riprova e, se continua a succedere, contatta l'assistenza.",
+      "bodyWithDigest": "Impossibile caricare la pagina. Il problema è stato segnalato. Riprova e, se continua a succedere, contatta l'assistenza citando {digest}.",
+      "home": "Torna all'inizio"
+    }
+  }
+}

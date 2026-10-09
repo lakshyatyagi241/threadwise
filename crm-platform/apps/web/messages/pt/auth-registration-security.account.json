@@ -1,0 +1,571 @@
+{
+  "auth-registration-security": {
+    "account": {
+      "nav": {
+        "title": "Conta"
+      },
+      "common": {
+        "cancel": "Cancelar",
+        "loading": "Carregando",
+        "reset": "Redefinir",
+        "retry": "Tentar novamente",
+        "save": "Salvar alterações",
+        "saving": "Salvando",
+        "showPassword": "Mostrar senha",
+        "hidePassword": "Ocultar senha",
+        "signOut": "Sair"
+      },
+      "errors": {
+        "unexpected": "Algo deu errado do nosso lado. Tente novamente.",
+        "network": "Não foi possível alcançar o servidor. Verifique sua conexão e tente novamente.",
+        "forbidden": "Você não tem permissão para fazer isso.",
+        "signedOut": "Sua sessão terminou. Faça login novamente.",
+        "rateLimited": "Muitas tentativas. Aguarde um momento e tente novamente.",
+        "rateLimitedWait": "Muitas tentativas. Tente novamente em {seconds, plural, one {# segundo} other {# segundos}}.",
+        "requestId": "ID da solicitação",
+        "locked": "Muitas tentativas malsucedidas. Aguarde um pouco antes de tentar novamente.",
+        "lockedWait": "Muitas tentativas malsucedidas. Tente novamente em {minutes, plural, one {# minuto} other {# minutos}}."
+      },
+      "hub": {
+        "railLabel": "Conta",
+        "menuLabel": "Seções da conta",
+        "groups": {
+          "account": "Conta",
+          "security": "Segurança"
+        },
+        "tabs": {
+          "profile": "Perfil",
+          "security": "Senha e segurança",
+          "delete": "Excluir conta",
+          "plan": "Planos"
+        },
+        "pages": {
+          "profile": {
+            "title": "Perfil",
+            "description": "Atualize sua foto, nome e dados de contato."
+          },
+          "security": {
+            "title": "Senha e segurança",
+            "description": "Altere sua senha, ative a autenticação em duas etapas e veja onde você está conectado."
+          },
+          "delete": {
+            "title": "Excluir conta",
+            "description": "Remova permanentemente sua conta deste espaço de trabalho."
+          }
+        },
+        "breadcrumbLabel": "Trilha de navegação",
+        "breadcrumbRoot": "Conta",
+        "planBadge": "Plano {plan}",
+        "planFree": "Grátis",
+        "upgrade": {
+          "title": "Precisa de mais espaço?",
+          "body": "Desbloqueie mais campanhas, dispositivos e ajuda de IA com um plano superior.",
+          "cta": "Ver planos"
+        },
+        "lockedHint": "Conclua primeiro a etapa de segurança desta conta."
+      },
+      "avatar": {
+        "alt": "Foto de {name}",
+        "change": "Alterar foto",
+        "remove": "Remover foto",
+        "uploading": "Enviando foto",
+        "removing": "Removendo foto",
+        "updated": "Foto atualizada.",
+        "removed": "Foto removida.",
+        "errors": {
+          "type": "Escolha uma imagem JPG, PNG, WebP ou GIF.",
+          "too-large": "Essa imagem ainda ultrapassa o limite de {size} após a redução. Tente uma imagem menor.",
+          "decode": "Não foi possível ler essa imagem. Tente outro arquivo.",
+          "encode": "Não foi possível preparar essa imagem. Tente outro arquivo.",
+          "rejected": "Esse arquivo não foi aceito. Use uma imagem JPG, PNG, WebP ou GIF.",
+          "source-too-large": "Essa imagem é grande demais para abrir. Escolha uma com menos de 20 MB.",
+          "forbidden": "Você não tem permissão para alterar a foto desta conta.",
+          "expired": "Sua sessão foi encerrada. Recarregue a página, entre novamente e tente de novo."
+        },
+        "hint": "JPG, PNG, WebP ou GIF. Reduzimos a imagem para caber em {size}."
+      },
+      "timezone": {
+        "label": "Fuso horário",
+        "placeholder": "Pesquise fusos horários, por exemplo Kolkata ou UTC+05:30",
+        "empty": "Nenhum fuso horário corresponde à sua pesquisa."
+      },
+      "phone": {
+        "country": "País",
+        "countryPlaceholder": "Pesquisar países",
+        "countryEmpty": "Nenhum país corresponde à sua pesquisa.",
+        "number": "Número de telefone",
+        "numberPlaceholder": "Número de telefone"
+      },
+      "profile": {
+        "personalInfo": "Informações pessoais",
+        "fullName": "Nome completo",
+        "displayName": "Nome de exibição",
+        "displayNameHint": "Como seu nome aparece para os colegas. Começamos com seu primeiro nome.",
+        "email": "E-mail",
+        "changeEmail": "Alterar e-mail",
+        "verified": "Verificado",
+        "unverified": "Não verificado",
+        "pendingEmail": "Enviamos um link de confirmação para {email}. Seu e-mail de login muda depois que você abrir o link.",
+        "phone": "Telefone",
+        "phoneHint": "Opcional. Escolha um país e depois digite o número.",
+        "language": "Idioma",
+        "languageHint": "O idioma do app para você.",
+        "languageDefault": "Usar o padrão",
+        "theme": "Tema",
+        "themes": {
+          "paper": "Papel",
+          "bright": "Claro",
+          "dark": "Escuro"
+        },
+        "workspaceTimezone": "Fuso horário",
+        "workspaceTimezoneHint": "Vale para {workspace}. Somente proprietários e administradores podem alterá-lo.",
+        "saved": "Perfil salvo.",
+        "errors": {
+          "fullNameRequired": "Digite seu nome completo.",
+          "phoneInvalid": "Digite um número de telefone válido para o país escolhido.",
+          "invalid": "Este valor não é válido.",
+          "timezoneInvalid": "Escolha um fuso horário da lista.",
+          "timezoneForbidden": "Somente proprietários e administradores podem alterar o fuso horário do espaço de trabalho."
+        },
+        "workspaceTag": "(espaço de trabalho)"
+      },
+      "emailChange": {
+        "title": "Alterar seu e-mail",
+        "intro": "Digite o novo endereço e sua senha atual. Enviaremos um link de confirmação para o novo endereço; seu e-mail de login só muda depois que você abrir o link.",
+        "newEmail": "Novo endereço de e-mail",
+        "password": "Senha atual",
+        "passwordHint": "O novo endereço passa a ser seu identificador de login, por isso pedimos sua senha.",
+        "showPassword": "Mostrar senha",
+        "hidePassword": "Ocultar senha",
+        "cancel": "Cancelar",
+        "submit": "Enviar link de confirmação",
+        "sending": "Enviando",
+        "errors": {
+          "invalidEmail": "Digite um endereço de e-mail válido.",
+          "same": "Esse já é o seu endereço de e-mail.",
+          "taken": "Esse endereço de e-mail já é usado neste espaço de trabalho.",
+          "passwordRequired": "Digite sua senha atual.",
+          "passwordWrong": "Essa senha está incorreta."
+        }
+      },
+      "messageFooterPage": {
+        "title": "Rodapé da mensagem",
+        "titleLead": "Rodapé",
+        "titleAccent": "da mensagem",
+        "description": "A linha que encerra as mensagens enviadas pelo seu espaço de trabalho a partir de automações, envios agendados e respostas da caixa de entrada da equipe."
+      },
+      "branding": {
+        "title": "Rodapé da mensagem",
+        "description": "A linha adicionada ao final das mensagens de texto simples e interativas enviadas por automações, envios agendados e respostas da caixa de entrada da equipe. Modelos aprovados têm seu próprio texto e não usam o rodapé.",
+        "label": "Rodapé personalizado (no máximo {max} caracteres)",
+        "hint": "Deixe em branco para enviar mensagens sem nenhum rodapé.",
+        "preview": "Pré-visualização",
+        "sampleMessage": "Olá! Aqui estão as informações que você pediu.",
+        "noFooter": "(sem rodapé)",
+        "save": "Salvar rodapé",
+        "saving": "Salvando",
+        "saved": "Rodapé atualizado. Vale a partir da próxima mensagem que você enviar.",
+        "tooLong": "O rodapé pode ter no máximo {max} caracteres.",
+        "forbidden": "Você não tem permissão para alterar o rodapé.",
+        "current": "Rodapé atual",
+        "currentDefault": "Rodapé atual (padrão da plataforma)",
+        "planLocked": "Seu plano usa o rodapé padrão da plataforma nas mensagens enviadas. Planos superiores liberam um rodapé personalizado ou nenhum rodapé.",
+        "permissionLocked": "Somente administradores do espaço de trabalho podem alterar o rodapé. Você pode vê-lo aqui, mas não editá-lo.",
+        "upgrade": "Ver planos",
+        "upgradeTitle": "Faça upgrade para remover o rodapé da plataforma.",
+        "placeholder": "Enviado via {name}",
+        "remove": "Remover meu rodapé",
+        "removed": "Rodapé removido. Suas mensagens sairão sem rodapé a partir do próximo envio."
+      },
+      "password": {
+        "title": "Alterar senha",
+        "subtitle": "Escolha uma senha forte que você não use em nenhum outro lugar.",
+        "current": "Senha atual",
+        "new": "Nova senha",
+        "newHint": "Pelo menos {count} caracteres.",
+        "confirm": "Confirmar nova senha",
+        "submit": "Atualizar senha",
+        "updating": "Atualizando",
+        "forcedBanner": "Você precisa definir uma nova senha antes de continuar. Escolha uma abaixo.",
+        "forcedDone": "Senha atualizada. Bem-vindo de volta.",
+        "success": "Senha atualizada. {count, plural, =0 {Você continua conectado neste dispositivo.} one {1 outro dispositivo foi desconectado.} other {# outros dispositivos foram desconectados.}}",
+        "errors": {
+          "currentRequired": "Digite sua senha atual.",
+          "currentWrong": "Essa senha está incorreta.",
+          "tooShort": "Use pelo menos {count} caracteres.",
+          "tooLong": "Use no máximo 256 caracteres.",
+          "sameAsCurrent": "Escolha uma senha diferente da atual.",
+          "mismatch": "As duas senhas não coincidem.",
+          "policy": "Essa senha não atende às regras do seu espaço de trabalho:"
+        },
+        "rules": {
+          "min_length": "Use pelo menos {count} caracteres.",
+          "upper_lower": "Misture letras maiúsculas e minúsculas.",
+          "number": "Inclua pelo menos um número.",
+          "symbol": "Inclua pelo menos um símbolo.",
+          "common": "Essa senha é fácil demais de adivinhar."
+        },
+        "currentPlaceholder": "Digite sua senha atual",
+        "newPlaceholder": "Pelo menos {count} caracteres",
+        "confirmPlaceholder": "Digite novamente",
+        "tips": {
+          "title": "Dicas de senha",
+          "mix": "Misture letras maiúsculas e minúsculas, números e símbolos.",
+          "reuse": "Não reutilize senhas de outros sites.",
+          "manager": "Considere usar um gerenciador de senhas."
+        },
+        "newHintRequires": "Deve incluir {rules}.",
+        "requirement": {
+          "mixedCase": "letras maiúsculas e minúsculas",
+          "number": "um número",
+          "symbol": "um símbolo"
+        },
+        "resetLink": {
+          "title": "Não tem a senha atual?",
+          "body": "Se você entrou com o Google ou o Facebook, ou não lembra sua senha, podemos enviar um link para {email} para você escolher uma nova sem ela.",
+          "send": "Enviar link de redefinição por e-mail",
+          "sending": "Enviando",
+          "sent": "Se {email} puder receber e-mails, um link de redefinição está a caminho. Abra-o para escolher uma nova senha. Você será desconectado de todos os lugares e poderá entrar novamente com a nova senha.",
+          "captchaFailed": "Conclua a verificação captcha e tente novamente."
+        }
+      },
+      "passwordConfirm": {
+        "password": "Senha atual",
+        "required": "Digite sua senha atual.",
+        "wrong": "Essa senha está incorreta.",
+        "show": "Mostrar senha",
+        "hide": "Ocultar senha",
+        "cancel": "Cancelar",
+        "working": "Processando"
+      },
+      "mfa": {
+        "title": "Autenticação em duas etapas",
+        "subtitle": "Peça um código de um app autenticador a cada login.",
+        "forcedBanner": "Sua organização exige autenticação em duas etapas. Configure-a para continuar usando o app.",
+        "forcedDone": "A autenticação em duas etapas está ativada. Bem-vindo de volta.",
+        "offDescription": "A autenticação em duas etapas está desativada. Ative-a para proteger sua conta mesmo que sua senha vaze.",
+        "starting": "Preparando a configuração",
+        "step1": "Abra um app autenticador no celular (Google Authenticator, Microsoft Authenticator, 1Password e similares).",
+        "step2": "Escaneie o QR code ou digite a chave de configuração manualmente.",
+        "step3": "Digite o código de seis dígitos exibido no app para concluir.",
+        "qrLabel": "QR code para seu app autenticador",
+        "manualKey": "Chave de configuração",
+        "manualKeyHint": "Use-a se não conseguir escanear o código. Mantenha-a em sigilo.",
+        "copy": "Copiar",
+        "copied": "Copiado",
+        "codeLabel": "Código de seis dígitos",
+        "codeHint": "O código muda a cada 30 segundos.",
+        "codeInvalid": "Digite os seis dígitos do seu app.",
+        "codeWrong": "Esse código está incorreto ou expirou. Aguarde um novo e tente novamente.",
+        "enable": "Ativar",
+        "enabling": "Ativando",
+        "expired": "Esta configuração expirou. Comece de novo para obter um novo código.",
+        "restart": "Começar de novo",
+        "on": "Ativada",
+        "since": "Desde {date}",
+        "onDescription": "Pediremos um código do seu app autenticador a cada login.",
+        "remaining": "{count, plural, =0 {Você não tem mais códigos de recuperação.} one {1 código de recuperação restante.} other {# códigos de recuperação restantes.}}",
+        "remainingLow": "Gere novos em breve.",
+        "regenerate": "Substituir códigos de recuperação",
+        "regenerateTitle": "Substituir códigos de recuperação",
+        "regenerateDescription": "Isso cria dez novos códigos e invalida os antigos. Digite sua senha para continuar.",
+        "regenerateConfirm": "Substituir códigos",
+        "disable": "Desativar",
+        "disableTitle": "Desativar autenticação em duas etapas",
+        "disableDescription": "Sua conta ficará protegida apenas pela senha. Digite sua senha para confirmar.",
+        "disableConfirm": "Desativar",
+        "disabledDone": "A autenticação em duas etapas está desativada.",
+        "codesTitleEnabled": "A autenticação em duas etapas está ativada. Salve seus códigos de recuperação.",
+        "codesTitleRegenerated": "Seus novos códigos de recuperação",
+        "scanTitle": "Escaneie este QR code"
+      },
+      "recovery": {
+        "intro": "Se você perder o celular, cada um destes códigos permite entrar uma vez.",
+        "onlyOnce": "Estes códigos são exibidos apenas uma vez. Guarde-os em um lugar seguro, como um gerenciador de senhas.",
+        "listLabel": "Códigos de recuperação",
+        "copy": "Copiar códigos",
+        "copied": "Copiado",
+        "copyFailed": "Seu navegador não permitiu a cópia. Selecione os códigos e copie-os manualmente, ou baixe-os.",
+        "download": "Baixar",
+        "fileHeader": "Códigos de recuperação. Cada um funciona uma vez.",
+        "confirmSaved": "Guardei estes códigos em um lugar seguro.",
+        "done": "Já salvei"
+      },
+      "sessions": {
+        "title": "Onde você está conectado",
+        "subtitle": "Dispositivos conectados à sua conta. Revogue os que você não reconhecer.",
+        "thisDevice": "Este dispositivo",
+        "remembered": "Continua conectado",
+        "ipUnknown": "Endereço desconhecido",
+        "signOutOthers": "Sair de todos os outros",
+        "signingOut": "Saindo",
+        "empty": "Nenhuma sessão ativa.",
+        "confirmOneTitle": "Desconectar este dispositivo?",
+        "confirmOneBody": "{device} será desconectado e precisará da sua senha para entrar novamente.",
+        "confirmOthersTitle": "Desconectar todos os outros dispositivos?",
+        "confirmOthersBody": "{count, plural, one {1 outro dispositivo será desconectado} other {# outros dispositivos serão desconectados}}. Este dispositivo continua conectado.",
+        "revoked": "{device} foi desconectado.",
+        "revokedOthers": "{count, plural, =0 {Nenhum outro dispositivo estava conectado.} one {1 dispositivo foi desconectado.} other {# dispositivos foram desconectados.}}",
+        "columns": {
+          "device": "Dispositivo",
+          "ip": "Endereço IP",
+          "lastActive": "Última atividade",
+          "actions": "Ações"
+        },
+        "revoke": "Revogar",
+        "showing": "Mostrando {from}–{to} de {total}",
+        "prev": "Anterior",
+        "next": "Próxima",
+        "lifetimes": "Um login termina sozinho após {session}, ou após {remembered} quando a opção de manter conectado foi escolhida.",
+        "idle": "Sem essa opção, ele também termina após {idle} de inatividade."
+      },
+      "delete": {
+        "title": "Excluir sua conta",
+        "warning": "Isso exclui permanentemente sua conta: seu login, perfil, foto e dispositivos.",
+        "irreversible": "Isso não pode ser desfeito.",
+        "consequencesTitle": "O que acontece",
+        "consequence1": "Você é desconectado de todos os lugares e não poderá mais entrar com esta conta.",
+        "consequence2": "O espaço de trabalho e os outros membros permanecem. O trabalho que você fez continua com o espaço de trabalho.",
+        "consequence3": "Um registro da exclusão da conta é mantido para auditoria.",
+        "blocked": {
+          "sole_member": {
+            "title": "Você é o único membro deste espaço de trabalho.",
+            "body": "A conta não pode ser excluída isoladamente. Peça à equipe da plataforma para encerrar o espaço de trabalho."
+          },
+          "sole_admin": {
+            "title": "Você é o único administrador.",
+            "body": "Torne outro membro administrador primeiro e depois volte para excluir sua conta."
+          }
+        },
+        "phraseLabel": "Digite {phrase} para confirmar",
+        "phraseHint": "Exatamente como mostrado, incluindo maiúsculas.",
+        "password": "Senha atual",
+        "showPassword": "Mostrar senha",
+        "hidePassword": "Ocultar senha",
+        "cancel": "Cancelar",
+        "submit": "Excluir conta permanentemente",
+        "deleting": "Excluindo",
+        "errors": {
+          "phrase": "Digite a frase exatamente como mostrado.",
+          "passwordRequired": "Digite sua senha atual.",
+          "passwordWrong": "Essa senha está incorreta."
+        },
+        "considerTitle": "Antes de excluir, considere",
+        "considerPlanLink": "Mudar para o plano gratuito",
+        "considerPlanRest": "em vez de excluir.",
+        "considerSupportLink": "Falar com o suporte",
+        "considerSupportRest": "se um problema está levando você a sair. Talvez possamos resolvê-lo.",
+        "reasonLabel": "Por que você está saindo? (opcional)",
+        "reasonHint": "Isso fica neste formulário. Não é enviado a lugar nenhum.",
+        "reasonPlaceholder": "Conte-nos o que podemos melhorar"
+      },
+      "switcher": {
+        "heading": "Espaços de trabalho",
+        "label": "Espaço de trabalho: {name}. Trocar de espaço de trabalho",
+        "switching": "Trocando de espaço de trabalho",
+        "switched": "Mudou para {name}",
+        "failed": "Não foi possível trocar de espaço de trabalho. Tente novamente.",
+        "notAvailable": "Você não pode mudar para esse espaço de trabalho.",
+        "rateLimited": "Muitas tentativas. Aguarde um momento e tente novamente.",
+        "rateLimitedWait": "Muitas tentativas. Tente novamente em {seconds, plural, one {# segundo} other {# segundos}}."
+      },
+      "mfaChallenge": {
+        "title": "Confirme que é você",
+        "intro": "{name} usa autenticação em duas etapas. Digite o código do seu app autenticador para trocar.",
+        "codeLabel": "Código de seis dígitos",
+        "codeHint": "O código muda a cada 30 segundos.",
+        "codeInvalid": "Digite os seis dígitos do seu app.",
+        "codeWrong": "Esse código está incorreto ou expirou. Tente o próximo.",
+        "recoveryLabel": "Código de recuperação",
+        "recoveryHint": "Cada código de recuperação funciona uma vez.",
+        "recoveryInvalid": "Digite um código de recuperação.",
+        "recoveryWrong": "Esse código de recuperação não é válido.",
+        "expired": "Esta etapa de login expirou. Feche esta janela e escolha o espaço de trabalho novamente.",
+        "useRecovery": "Usar um código de recuperação",
+        "useCode": "Usar um código do autenticador",
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "verifying": "Verificando"
+      },
+      "banners": {
+        "dismiss": "Dispensar",
+        "verifyMessage": "Verifique seu endereço de e-mail ({email}). Enviamos um link quando você se cadastrou.",
+        "resend": "Reenviar e-mail",
+        "resendIn": "Reenviar em {seconds}s",
+        "resendWait": "Você poderá pedir outro e-mail em breve.",
+        "sending": "Enviando",
+        "sent": "E-mail enviado.",
+        "notSent": "Não foi possível enviar o e-mail agora.",
+        "throttled": "Aguarde antes de pedir novamente.",
+        "alreadyVerified": "Seu e-mail já está verificado."
+      },
+      "suspended": {
+        "title": "Sua conta está suspensa",
+        "greeting": "Olá, {name}. Um administrador suspendeu esta conta. Você ainda pode entrar, mas o restante do app fica bloqueado até a reativação.",
+        "support": "Se acha que é um engano, peça ao proprietário ou a um administrador do seu espaço de trabalho para reativar sua conta.",
+        "signOut": "Sair",
+        "checking": "Verificando"
+      },
+      "verifyRequired": {
+        "title": "Verifique seu e-mail",
+        "body": "Enviamos um link de verificação para o endereço abaixo. Abra-o para liberar seu espaço de trabalho.",
+        "resend": "Reenviar e-mail de verificação",
+        "resendIn": "Reenviar em {seconds}s",
+        "sending": "Enviando",
+        "sent": "Enviamos um novo link para {email}.",
+        "notSent": "Não foi possível enviar o e-mail agora.",
+        "throttled": "Um link foi enviado há pouco. Aguarde antes de pedir novamente.",
+        "alreadyVerified": "Seu e-mail já está verificado. Estamos levando você para dentro.",
+        "signOut": "Sair",
+        "help": "Não recebeu? Verifique a caixa de spam. Se abriu o link em outro dispositivo, volte a esta aba e continuaremos daqui."
+      },
+      "onboarding": {
+        "metaTitle": "Configure seu espaço de trabalho",
+        "notAllowed": {
+          "title": "A configuração não foi concluída",
+          "body": "Seu espaço de trabalho ainda está sendo configurado. Um administrador precisa concluir isso antes de você continuar."
+        },
+        "stepper": {
+          "label": "Etapa {current} de {total} / {name}",
+          "progress": "Progresso da configuração",
+          "account": "Conta",
+          "workspace": "Espaço de trabalho",
+          "plan": "Plano"
+        },
+        "workspace": {
+          "title": "Configure seu espaço de trabalho",
+          "subtitle": "Alguns detalhes para o app se adaptar à sua equipe.",
+          "name": "Nome do espaço de trabalho",
+          "nameHint": "Um nome amigável que sua equipe vê no topo do app.",
+          "namePlaceholder": "Por exemplo, Bloomly Marketing",
+          "industry": "Setor",
+          "industryPlaceholder": "Selecione um setor",
+          "industries": {
+            "ecommerce": "E-commerce",
+            "saas": "SaaS",
+            "agency": "Agência",
+            "education": "Educação",
+            "healthcare": "Saúde",
+            "finance": "Finanças",
+            "travel": "Viagens",
+            "hospitality": "Hotelaria",
+            "other": "Outro"
+          },
+          "size": "Tamanho da equipe",
+          "sizePlaceholder": "Selecione o tamanho da equipe",
+          "timezone": "Fuso horário",
+          "timezoneHint": "Digite para pesquisar qualquer fuso horário. Agendamentos e relatórios o usam.",
+          "currency": "Moeda",
+          "currencyHint": "A moeda em que sua carteira de mensagens é cobrada. A Índia usa INR por padrão e os demais países, USD. Não pode ser alterada depois que a carteira for usada.",
+          "currencyNone": "Não definido",
+          "currencyPlaceholder": "Pesquisar moedas",
+          "currencyEmpty": "Nenhuma moeda corresponde à sua pesquisa.",
+          "phone": "Número de celular",
+          "phoneHint": "Usamos para falar com você sobre sua conta e atualizações importantes.",
+          "continue": "Continuar",
+          "saving": "Salvando",
+          "errors": {
+            "nameInvalid": "Digite um nome de espaço de trabalho com 2 a 120 caracteres.",
+            "timezoneRequired": "Escolha um fuso horário.",
+            "timezoneInvalid": "Escolha um fuso horário da lista.",
+            "phoneRequired": "Digite seu número de celular.",
+            "phoneInvalid": "Digite um número de telefone válido para o país escolhido.",
+            "invalid": "Este valor não é válido.",
+            "forbidden": "Somente um administrador do espaço de trabalho pode configurá-lo.",
+            "countryRequired": "Escolha um país.",
+            "countryInvalid": "Escolha um país da lista.",
+            "currencyInvalid": "Esta moeda não está disponível, ou a moeda de cobrança já está em uso. Entre em contato com o suporte para alterá-la."
+          },
+          "country": "País",
+          "countryHint": "Onde sua empresa está sediada.",
+          "countryPlaceholder": "Pesquisar países",
+          "countryEmpty": "Nenhum país corresponde à sua pesquisa."
+        },
+        "plan": {
+          "title": "Escolha um plano",
+          "intro": "Cada plano inclui uma franquia mensal de mensagens. Comece grátis ou escolha um plano para desbloquear mais. Você pode mudar depois.",
+          "empty": "Nenhum plano foi configurado ainda. Você pode começar grátis agora e escolher um plano depois.",
+          "listLabel": "Planos disponíveis",
+          "free": "Grátis",
+          "back": "Voltar",
+          "startFree": "Começar grátis / pular por agora",
+          "finishing": "Finalizando",
+          "welcome": "Tudo pronto. Boas-vindas!"
+        }
+      },
+      "plans": {
+        "title": "Planos",
+        "description": "Escolha o quanto seu espaço de trabalho pode fazer.",
+        "currentPlan": "Seu plano",
+        "noPlan": "Sem plano",
+        "trialEnds": "O teste grátis termina em {date}",
+        "comingSoon": "A escolha e o pagamento de um plano chegam com o faturamento, que ainda não faz parte desta versão. Até lá, fale com o suporte e moveremos seu espaço de trabalho para o plano de que você precisa.",
+        "contactSupport": "Falar com o suporte",
+        "back": "Voltar à conta",
+        "card": {
+          "popular": "Mais popular",
+          "current": "Plano atual",
+          "free": "Grátis",
+          "custom": "Personalizado",
+          "lifetime": "pagamento único",
+          "messagesUnlimited": "Mensagens ilimitadas",
+          "messagesLimited": "{count, number} mensagens / mês",
+          "chipsLabel": "Recursos incluídos",
+          "period": {
+            "days": "{count, plural, one {/ dia} other {/ # dias}}",
+            "weeks": "{count, plural, one {/ semana} other {/ # semanas}}",
+            "months": "{count, plural, one {/ mês} other {/ # meses}}",
+            "years": "{count, plural, one {/ ano} other {/ # anos}}"
+          },
+          "chips": {
+            "analytics": "Análises",
+            "automation": "Automação",
+            "ai_assistants": "Assistentes de IA",
+            "woocommerce": "WooCommerce",
+            "shopify": "Shopify",
+            "calling": "Chamadas no WhatsApp",
+            "remove_branding": "Marca própria",
+            "sales_pipeline": "Funil de vendas",
+            "appointment_booking": "Agendamentos",
+            "chatbot_widgets": "Widgets de chatbot",
+            "wa_storefront": "Catálogo do WhatsApp",
+            "inbox_sla": "SLA da caixa de entrada",
+            "inbox_routing": "Roteamento da caixa de entrada",
+            "waba_calling": "Chamadas no WhatsApp",
+            "inbox_kanban": "Kanban da caixa de entrada",
+            "team_performance": "Desempenho da equipe",
+            "scheduled_messages": "Mensagens agendadas",
+            "whatsapp_warmer": "Aquecedor de WhatsApp",
+            "marketplace": "Marketplace",
+            "lead_sources": "Origens de leads",
+            "team_chat": "Chat da equipe",
+            "public_api": "API pública",
+            "outbound_webhooks": "Webhooks de saída",
+            "storefront_builder": "Construtor de loja virtual",
+            "invoicing": "Faturas",
+            "forms_and_links": "Formulários e links",
+            "extra_channels": "Telegram, Facebook e Instagram",
+            "form_builder": "Formulários",
+            "waba_groups": "Grupos do WhatsApp"
+          },
+          "cta": {
+            "continueFree": "Continuar grátis",
+            "talkToSales": "Falar com vendas",
+            "upgrade": "Fazer upgrade para {name}",
+            "downgradeUnavailable": "Downgrade indisponível",
+            "downgradeHint": "Downgrades não estão disponíveis online. Fale com o suporte para mudar para um plano inferior.",
+            "working": "Processando"
+          }
+        }
+      },
+      "mailFailure": {
+        "not_configured": "O envio de e-mails ainda não foi configurado nesta plataforma. Fale com seu administrador.",
+        "auth_failed": "O servidor de e-mail recusou nosso login. Peça ao administrador para verificar as configurações de e-mail.",
+        "connection_refused": "O servidor de e-mail não aceitou a conexão. Tente novamente mais tarde ou fale com seu administrador.",
+        "timeout": "O servidor de e-mail demorou demais para responder. Você pode tentar novamente agora.",
+        "transport_error": "Não foi possível entregar o e-mail ao servidor de e-mail. Você pode tentar novamente agora.",
+        "unknown": "Não foi possível enviar o e-mail por um motivo desconhecido. Você pode tentar novamente agora."
+      }
+    }
+  }
+}

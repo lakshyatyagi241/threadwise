@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "Pusat bantuan",
+    "searchLabel": "Cari bantuan",
+    "searchPlaceholder": "Cari panduan",
+    "resultsStatus": "{count, plural, =0 {Panduan tidak ditemukan} other {# panduan}}",
+    "none": {
+      "title": "Belum ada panduan",
+      "message": "Panduan untuk fitur di paket Anda akan muncul di sini."
+    },
+    "noResults": {
+      "title": "Tidak ada panduan yang cocok dengan pencarian Anda",
+      "message": "Coba kata lain, atau hapus pencarian untuk melihat semua panduan."
+    },
+    "areas": {
+      "overview": "Platform",
+      "inbox": "Kotak Masuk & Chat",
+      "audience": "CRM",
+      "sales": "Penjualan",
+      "campaigns": "Kampanye",
+      "automation": "Otomasi",
+      "store": "Toko",
+      "apps": "Marketplace",
+      "settings": "Pengaturan",
+      "account": "Akun",
+      "getting-started": "Mulai",
+      "troubleshooting": "Pemecahan masalah"
+    },
+    "allHelp": "Kembali ke bantuan",
+    "onThisPage": "Di halaman ini",
+    "openScreen": "Buka layar ini",
+    "shownInEnglish": "Panduan ini belum tersedia dalam bahasa Anda, sehingga ditampilkan dalam bahasa Inggris.",
+    "tip": {
+      "label": "Bantuan: {title}",
+      "readMore": "Baca panduan"
+    },
+    "guideCount": "{count, plural, =0 {Tidak ada panduan} other {# panduan}}",
+    "crumb": "Lainnya / Bantuan",
+    "heading": "Bantuan",
+    "headingRest": "& panduan",
+    "back": "Kembali",
+    "askSupport": "Tidak menemukannya? Hubungi dukungan",
+    "askSupportShort": "Dukungan",
+    "categories": "Kategori",
+    "allGuides": "Semua panduan",
+    "needHuman": "Butuh bantuan langsung?",
+    "contactSupport": "Hubungi dukungan",
+    "popular": "Populer",
+    "searchResults": "Hasil pencarian",
+    "read": "Baca panduan",
+    "readMinutes": "{count, plural, other {# menit baca}}",
+    "moreInArea": "Lainnya di {area}"
+  }
+}

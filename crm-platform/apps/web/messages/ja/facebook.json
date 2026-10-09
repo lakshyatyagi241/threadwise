@@ -1,0 +1,491 @@
+{
+  "facebook": {
+    "compose": {
+      "title": "作成",
+      "kicker": "Facebook・作成",
+      "titleAccent": "投稿",
+      "intro": "写真、アルバム、リンク、動画、リールを作成し、今すぐ公開するか、接続済みのページに予約できます。ライブプレビューで仕上がりを確認できます。",
+      "posts": "投稿",
+      "myPosts": "自分の投稿",
+      "insights": "インサイト",
+      "loadError": "ページを読み込めませんでした。もう一度お試しください。",
+      "noPage": "Facebookページがまだ接続されていません",
+      "noPageHint": "Facebookアカウントを接続して、ページの投稿を公開・予約します。",
+      "noAccess": "投稿を作成できません",
+      "noAccessHint": "Facebook投稿を作成する権限を管理者に依頼してください。",
+      "connect": "Facebookアカウントを接続",
+      "required": "必須",
+      "steps": {
+        "page": "ページ",
+        "type": "投稿の種類",
+        "media": "メディア",
+        "message": "メッセージ",
+        "when": "投稿のタイミング"
+      },
+      "types": {
+        "photo": {
+          "label": "写真",
+          "hint": "写真1枚の投稿です。"
+        },
+        "multi_photo": {
+          "label": "アルバム",
+          "hint": "1つの投稿に2〜10枚の写真を含めます。"
+        },
+        "link": {
+          "label": "リンク",
+          "hint": "プレビュー付きでリンクを共有します。"
+        },
+        "video": {
+          "label": "動画",
+          "hint": "フィード動画(MP4/MOV)です。"
+        },
+        "reel": {
+          "label": "リール",
+          "hint": "縦型のショート動画リールです。"
+        }
+      },
+      "photoUrls": "公開されている画像URLを貼り付け",
+      "photoHint": "1行に1つ、最大10個です。ファイルのアップロードにはストレージサービスが必要ですが、まだ接続されていないため、公開されている画像アドレスを使用してください。",
+      "linkUrl": "リンクURL",
+      "linkHint": "Facebookはリンクからプレビューカードを作成します。1つの投稿にはリンクか写真のどちらかのみ含められます。",
+      "videoUrl": "公開されているHTTPSの動画URLを貼り付け",
+      "reelNote": "リールは縦型のショート動画です。下のメッセージがリールの説明文として使われます。",
+      "videoNote": "Metaは公開HTTPS経由でファイルを取得します。下のメッセージが動画の説明文として使われます。",
+      "messagePlaceholder": "投稿を書く…",
+      "ai": {
+        "title": "AI作成ツール",
+        "caption": "キャプション",
+        "repurpose": "リパーパス",
+        "review": "レビュー",
+        "bestTime": "最適な時間",
+        "image": "画像",
+        "unavailable": "AIツールはまだ利用できません。AIプロバイダーの設定待ちです。"
+      },
+      "when": {
+        "now": "今すぐ公開",
+        "later": "後で予約",
+        "label": "送信日時",
+        "hint": "現在から10分後〜75日後の間で、お使いのタイムゾーン({tz})で指定します。Facebookがキューに入れ、期日に公開します。"
+      },
+      "submit": {
+        "publish": "公開",
+        "schedule": "予約"
+      },
+      "preview": {
+        "live": "ライブプレビュー",
+        "facebook": "Facebook",
+        "yourPage": "あなたのページ",
+        "justNow": "たった今",
+        "empty": "ここに投稿テキストが表示されます…",
+        "reel": "リール",
+        "video": "動画",
+        "like": "いいね!",
+        "comment": "コメント",
+        "share": "シェア",
+        "note": "ライブプレビューです。実際の投稿はFacebook上で少し異なって見える場合があります。"
+      },
+      "help": {
+        "label": "ヘルプ - {n}",
+        "help1": {
+          "title": "何を投稿できますか?",
+          "body": "写真、アルバム、リンク、フィード動画、リールをGraph API経由で接続済みのページに直接公開できます。"
+        },
+        "help2": {
+          "title": "予約はどのように動作しますか?",
+          "body": "10分後〜75日後の間で時間を選ぶと、Facebookがキューに入れ、期日に自動で公開します。今すぐ公開することもできます。"
+        },
+        "help3": {
+          "title": "投稿が失敗しました。なぜですか?",
+          "body": "多くの場合、メディアURLが公開HTTPSではないか、ページが再接続されたことが原因です。行に表示されたエラーを確認し、「今すぐ公開」で再試行してください。"
+        }
+      },
+      "problem": {
+        "noPage": "接続済みのFacebookページを選択してください。",
+        "scheduleMissing": "投稿を予約する日時を選択してください。",
+        "scheduleInvalid": "その日時を読み取れませんでした。"
+      },
+      "rejected": "Facebookが投稿を拒否しました: {error}",
+      "scheduled": "投稿を予約しました。",
+      "published": "Facebookに投稿を公開しました。",
+      "failed": "うまくいきませんでした。もう一度お試しください。"
+    },
+    "nav": {
+      "hub": "Facebook",
+      "posts": "Facebook投稿",
+      "setup": "Messengerの設定",
+      "broadcasts": "Messenger一斉配信"
+    },
+    "common": {
+      "dismiss": "閉じる",
+      "cancel": "キャンセル"
+    },
+    "hub": {
+      "kicker": "チャネル・Facebook",
+      "title": "Facebook",
+      "titleAccent": "ページ",
+      "intro": "Facebookで一度ログインすると、アカウントで管理しているすべてのページが追加されます。その後は受信トレイから投稿の公開、コメントへの返信、Messengerの運用ができます。",
+      "teamInbox": "チーム受信トレイ",
+      "posts": "投稿",
+      "setup": "Messengerの設定",
+      "broadcasts": "Messenger一斉配信",
+      "loadError": "接続済みのページを読み込めませんでした。もう一度お試しください。",
+      "notConfigured": "このインストールではFacebookがまだ設定されていません。ページを接続する前に、管理者がMetaアプリを追加する必要があります。",
+      "connectedCount": "{count, plural, other {#ページ接続済み}}",
+      "notConnected": "未接続",
+      "cardTitle": "Facebookアカウントを接続",
+      "cardBody": "Facebookで一度ログインすると、アカウントで管理しているすべてのページがそれぞれのアクセス権付きで自動的に追加されます。アクセストークンで単一のページを追加することもできます。",
+      "connect": "ページを接続",
+      "connectAnother": "別のアカウントを接続",
+      "connectedPages": "接続済みのページ",
+      "webhookTitle": "Webhookアドレス",
+      "webhookBody": "このアドレスをMetaアプリのWebhook設定(コールバックURL)に貼り付けると、Messengerのメッセージとコメントが受信トレイに届きます。Facebook用の認証トークンを設定しない限り、WhatsAppと同じ認証トークンを使用します。"
+    },
+    "connect": {
+      "close": "閉じる",
+      "kicker": "Facebook",
+      "title": "Facebookアカウントを接続",
+      "intro": "Facebookで一度ログインすると、アカウントで管理しているすべてのページが自動的に追加されます。その後は受信トレイから投稿の公開、コメントへの返信、Messengerの運用ができます。",
+      "continue": "Facebookで続行",
+      "or": "または",
+      "manualToggle": "アクセストークンでページを手動追加",
+      "tokenLabel": "ページアクセストークン",
+      "tokenHint": "Meta → ビジネス設定 → システムユーザー、またはGraph APIエクスプローラーから取得できます。ページはトークンから特定します。",
+      "connectPage": "ページを接続",
+      "tokenShape": "ページアクセストークンではないようです。",
+      "failed": "接続できませんでした。もう一度お試しください。",
+      "footerLeft": "受信トレイに即座に振り分けられます",
+      "footerRight": "暗号化済み"
+    },
+    "page": {
+      "facebookPage": "Facebookページ",
+      "failed": "うまくいきませんでした。もう一度お試しください。",
+      "live": "ライブ",
+      "reconnect": "再接続",
+      "followers": "フォロワー{count}人",
+      "liveNoCount": "ライブ",
+      "dataAccess": "Metaのデータアクセスは{when}に終了します",
+      "refresh": "プロフィールを更新",
+      "refreshed": "Facebookページを更新しました。",
+      "inboundFixed": "このページのFacebook Webhookを再購読しました。",
+      "fixInbound": "受信を修復",
+      "remove": "接続解除",
+      "removeConfirm": "このFacebookページの接続を解除しますか?受信トレイのスレッドは残りますが、再接続するまで送信できなくなります。",
+      "cancel": "キャンセル",
+      "removed": "Facebookページの接続を解除しました。"
+    },
+    "broadcasts": {
+      "kicker": "Facebook・一斉配信",
+      "title": "Messenger",
+      "titleAccent": "一斉配信",
+      "intro": "最近ページとチャットした人にメッセージを送ります。Metaでは、最後のメッセージから24時間以内の相手にしかページからメッセージを送れません。下のリストが現在リーチ可能なオーディエンスです。",
+      "inbox": "受信トレイ",
+      "loadError": "一斉配信を読み込めませんでした。もう一度お試しください。",
+      "connectFirst": "先にFacebookページを接続してください。",
+      "connectPage": "ページを接続",
+      "none": "一斉配信はまだありません。右側で作成してください。",
+      "recipients": "{count, plural, other {受信者#人}}",
+      "status": {
+        "sending": "送信中",
+        "done": "完了",
+        "failed": "失敗",
+        "draft": "下書き"
+      },
+      "counts": "送信{sent}件・失敗{failed}件・ブロック{blocked}件",
+      "start": "送信を開始",
+      "started": "送信を開始しました。このページを離れても続行されます。",
+      "pause": "一時停止",
+      "paused": "一時停止しました。残りの受信者はキューに残っています。",
+      "retry": "失敗分を再試行",
+      "retried": "{count, plural, other {受信者#人}}を再キューに追加しました。「送信を開始」を押してください。",
+      "delete": "削除",
+      "deleted": "一斉配信を削除しました。",
+      "deleteConfirm": "この一斉配信を削除しますか?",
+      "cancel": "キャンセル",
+      "newBroadcast": "新規一斉配信",
+      "name": "名前",
+      "namePlaceholder": "例: 週末セール",
+      "page": "ページ",
+      "template": "テンプレート(任意)",
+      "templateHint": "メッセージを入力済みにし、テンプレートのボタンも送信します。",
+      "templateNone": "— なし(自分で作成)—",
+      "buttons": "{count, plural, other {ボタン#個}}",
+      "message": "メッセージ",
+      "messageHint": "パーソナライズには '{name}' を使用します。",
+      "messagePlaceholder": "こんにちは、'{name}'さん!…",
+      "recipientsLabel": "受信者",
+      "within24": "(24時間以内)",
+      "selectAll": "すべて選択",
+      "noAudience": "現在24時間のウィンドウ内にいる人はいません。まず相手がこのページにメッセージを送る必要があります。",
+      "messengerUser": "Messengerユーザー",
+      "selected": "{count}件選択中",
+      "create": "一斉配信を作成",
+      "created": "{count, plural, other {受信者#人}}で一斉配信を作成しました。準備ができたら「送信を開始」を押してください。",
+      "failed": "うまくいきませんでした。もう一度お試しください。"
+    },
+    "setup": {
+      "kicker": "Facebook・Messenger",
+      "title": "Messenger",
+      "titleAccent": "設定",
+      "intro": "Messengerチャットでの顧客への挨拶と案内を設定します。「始める」ボタン、ウェルカムメッセージ、常時表示メニュー、タップできるよくある質問です。機能を選び、説明を読んでから入力してください。変更はそのままFacebookに保存されます。",
+      "pagePicker": "ページ",
+      "composer": "入力欄",
+      "loadError": "Messengerプロフィールを読み込めませんでした。もう一度お試しください。",
+      "noPage": "Facebookページがまだ接続されていません。",
+      "connect": "Facebookアカウントを接続",
+      "profile": "Messengerプロフィール",
+      "tabs": {
+        "getstarted": "「始める」ボタン",
+        "greeting": "挨拶文",
+        "menu": "固定メニュー",
+        "icebreakers": "アイスブレーカー"
+      },
+      "isSet": "設定済み",
+      "notSet": "未設定",
+      "failed": "うまくいきませんでした。もう一度お試しください。",
+      "footnote": "これらの設定はGraph API経由でFacebook Messengerプロフィールに書き込まれ、新しい会話に適用されます。変更の反映に少し時間がかかることがあります。",
+      "frame": {
+        "preview": "プレビュー",
+        "yourPage": "あなたのページ",
+        "activeNow": "オンライン"
+      },
+      "explainer": {
+        "what": "概要",
+        "customer": "顧客の使い方",
+        "how": "設定方法"
+      },
+      "getstarted": {
+        "title": "「始める」ボタン",
+        "subtitle": "初めての顧客がチャットを始めるためにタップするボタンです。",
+        "what": "Messengerを開いたときに最初に目に入るもので、ウェルカム画面に表示される1つの「始める」ボタンです。",
+        "customer": "一度タップすると会話が始まります。最初のメッセージの前にだけ表示されます。",
+        "how": "ペイロード(GET_STARTEDなどのキーワード)を設定します。次にフローで、そのペイロードを待ち受けるトリガーを追加すると、タップした瞬間にウェルカムフローが実行されます。",
+        "payload": "ペイロード",
+        "payloadHint": "ボタンがタップされるとこの語が送信されます。フローのトリガーで一致させると自動化が開始します。",
+        "remove": "削除",
+        "removeConfirm": "「始める」ボタンを削除しますか?",
+        "save": "保存",
+        "yourPage": "あなたのページ",
+        "typically": "通常は即座に返信します",
+        "button": "始める"
+      },
+      "greeting": {
+        "title": "挨拶文",
+        "subtitle": "誰かが入力する前に表示される親しみのあるウェルカム文です。",
+        "what": "チャットの最初の画面、ページ名のすぐ下に表示される短いウェルカムメッセージです。",
+        "customer": "Messengerを開いた瞬間に読まれ、雰囲気を伝え、対応できる内容を知らせます。",
+        "how": "温かい一文(最大160文字)にまとめましょう。ヒント: 名前のタグを追加すると、Messengerが顧客を名前で呼びます。",
+        "welcomeText": "ウェルカムテキスト",
+        "placeholder": "こんにちは!今日はどのようなご用件でしょうか?",
+        "remove": "削除",
+        "removeConfirm": "挨拶文を削除しますか?",
+        "save": "保存",
+        "yourPage": "あなたのページ",
+        "sample": "こんにちは!今日はどのようなご用件でしょうか?"
+      },
+      "menu": {
+        "title": "固定メニュー",
+        "subtitle": "メッセージバー内に常に表示されるショートカットメニューです。",
+        "what": "チャット中ずっと利用できるメニュー(入力欄の横の☰アイコン)で、ショートカットは最大3つです。",
+        "customer": "いつでも☰をタップして、「担当者と話す」「注文を追跡」「ショップを見る」など必要な項目に移動できます。",
+        "how": "最大3項目を追加します。各項目はフローを実行する(ペイロードを送信)か、リンクを開きます(URL)。入力欄を非表示にして、メニューだけを使わせることもできます。",
+        "sample1": "お問い合わせ",
+        "sample2": "注文を追跡",
+        "sample3": "ショップを見る",
+        "menuLabel": "メニュー",
+        "menuItem": "メニュー項目",
+        "titleLabel": "タイトル",
+        "titlePlaceholder": "お問い合わせ",
+        "action": "アクション",
+        "actionFlow": "フローを実行(ペイロードを送信)",
+        "actionLink": "リンクを開く(URL)",
+        "url": "URL",
+        "payload": "ペイロード",
+        "removeItem": "項目を削除",
+        "add": "メニュー項目を追加",
+        "hideComposer": "入力欄を非表示(メニューのみ)",
+        "remove": "メニューを削除",
+        "removeConfirm": "固定メニューを削除しますか?",
+        "save": "メニューを保存"
+      },
+      "ice": {
+        "title": "アイスブレーカー",
+        "subtitle": "最初のメッセージの前に表示されるおすすめの質問です。",
+        "what": "ウェルカム画面に表示される、タップできる最大4つの質問です。よくある質問を入力せずにタップで送れます。",
+        "customer": "何を書くか考えなくても、「営業時間は?」のような質問をタップするだけで、すぐに回答が届きます。",
+        "how": "よくある質問を追加します。タップするとそれぞれのペイロードが送信されるので、フローのトリガーで一致させると自動で回答できます。",
+        "sample1": "営業時間は?",
+        "sample2": "どこに配送しますか?",
+        "sample3": "担当者と話す",
+        "yourPage": "あなたのページ",
+        "question": "質問",
+        "questionLabel": "質問",
+        "questionPlaceholder": "営業時間は?",
+        "payload": "ペイロード",
+        "removeItem": "アイスブレーカーを削除",
+        "add": "アイスブレーカーを追加",
+        "remove": "すべて削除",
+        "removeConfirm": "すべてのアイスブレーカーを削除しますか?",
+        "save": "アイスブレーカーを保存"
+      }
+    },
+    "posts": {
+      "kicker": "Facebook・投稿",
+      "title": "Facebook",
+      "titleAccent": "投稿",
+      "intro": "ここから作成、予約、公開したすべての投稿です。ステータスの確認、失敗した投稿の再試行、キューの管理ができます。",
+      "allPages": "すべてのページ",
+      "pagePicker": "ページ",
+      "myPosts": "自分の投稿",
+      "insights": "インサイト",
+      "create": "投稿を作成",
+      "loadError": "投稿を読み込めませんでした。もう一度お試しください。",
+      "noPage": "Facebookページがまだ接続されていません",
+      "noPageHint": "Facebookアカウントを接続して、ページの投稿を公開・予約します。",
+      "connect": "Facebookアカウントを接続",
+      "kpi": {
+        "total": "投稿数",
+        "scheduled": "予約済み",
+        "published": "公開済み",
+        "failed": "失敗"
+      },
+      "tabs": {
+        "all": "すべて",
+        "scheduled": "予約済み",
+        "published": "公開済み",
+        "failed": "失敗"
+      },
+      "ranges": {
+        "all": "全期間",
+        "7d": "7日",
+        "30d": "30日",
+        "90d": "90日"
+      },
+      "search": "投稿を検索…",
+      "cols": {
+        "post": "投稿",
+        "page": "ページ",
+        "type": "種類",
+        "status": "ステータス",
+        "when": "日時",
+        "actions": "操作"
+      },
+      "status": {
+        "scheduled": "予約済み",
+        "published": "公開済み",
+        "failed": "失敗",
+        "draft": "下書き"
+      },
+      "publishNow": "今すぐ公開",
+      "delete": "削除",
+      "noMatch": "条件に一致する投稿がありません",
+      "none": "投稿はまだありません",
+      "noneHint": "最初の投稿を作成しましょう。今すぐ公開することも、予約することもできます。",
+      "pageOf": "{page}/{last}ページ",
+      "prev": "前へ",
+      "next": "次へ",
+      "deleteTitle": "投稿を削除",
+      "deleteLive": "Facebookからも投稿が削除されます。この操作は元に戻せません。",
+      "deleteLocal": "この投稿を削除しますか?",
+      "deleteYes": "削除する",
+      "cancel": "キャンセル",
+      "rejected": "Facebookが投稿を拒否しました: {error}",
+      "published": "Facebookに投稿を公開しました。",
+      "removed": "投稿を削除しました。",
+      "failed": "うまくいきませんでした。もう一度お試しください。"
+    },
+    "grid": {
+      "kicker": "Facebook・自分の投稿",
+      "title": "あなたの",
+      "titleAccent": "グリッド",
+      "intro": "最近公開したページの投稿をFacebookからリアルタイムで表示します。投稿をタップするとプレビューできます。",
+      "posts": "投稿",
+      "newPost": "新規投稿",
+      "pagePicker": "ページ",
+      "loadError": "投稿を読み込めませんでした。もう一度お試しください。",
+      "noPage": "Facebookページが接続されていません",
+      "noPageHint": "接続すると、ここにグリッドが表示されます。",
+      "goHub": "Facebookに移動",
+      "empty": "まだ何もありません",
+      "emptyHint": "公開した投稿がここに表示されます。",
+      "firstPost": "最初の投稿を作成",
+      "noCaption": "(キャプションなし)",
+      "view": "投稿を表示",
+      "close": "閉じる",
+      "postTitle": "投稿",
+      "noImage": "画像なし",
+      "viewOnFacebook": "Facebookで表示"
+    },
+    "insights": {
+      "kicker": "Facebook・分析",
+      "title": "ページ",
+      "titleAccent": "インサイト",
+      "intro": "リーチとエンゲージメント(直近28日間、Facebookからのライブデータ)に、Messengerの活動とここから公開した投稿を組み合わせています。",
+      "create": "投稿を作成",
+      "myPosts": "自分の投稿",
+      "loadError": "インサイトを読み込めませんでした。もう一度お試しください。",
+      "noPage": "Facebookページがまだ接続されていません。",
+      "connect": "Facebookアカウントを接続",
+      "connected": "接続済み",
+      "viewing": "表示中のアカウント",
+      "cards": {
+        "followers": "フォロワー",
+        "followersSub": "総オーディエンス",
+        "reach": "リーチ・28日間",
+        "reachSub": "リーチした人数",
+        "impressions": "インプレッション・28日間",
+        "impressionsSub": "表示回数",
+        "engagements": "エンゲージメント・28日間",
+        "engagementsSub": "インタラクション",
+        "convos": "会話",
+        "convosSub": "進行中{n}件",
+        "messagesIn": "受信メッセージ・28日間",
+        "messagesInSub": "返信{n}件",
+        "published": "公開した投稿",
+        "publishedSub": "予約{n}件",
+        "rate": "エンゲージメント率",
+        "rateSub": "エンゲージメント ÷ リーチ"
+      },
+      "liveFromFacebook": "Facebookからのライブデータ",
+      "fromHere": "このワークスペースから",
+      "activity": "Messengerの活動・直近14日間",
+      "received": "受信",
+      "sent": "送信",
+      "mix": {
+        "title": "コンテンツの内訳",
+        "posts": "投稿{n}件",
+        "none": "ここから公開した投稿はまだありません。",
+        "first": "最初の投稿を作成"
+      },
+      "types": {
+        "photo": "写真",
+        "multi_photo": "アルバム",
+        "link": "リンク",
+        "video": "動画",
+        "reel": "リール"
+      },
+      "convos": {
+        "title": "会話",
+        "total": "合計{n}件",
+        "open": "チーム受信トレイを開く",
+        "none": "Facebookの会話はまだありません。ページにメッセージが届くとここに表示されます。"
+      },
+      "status": {
+        "open": "未対応",
+        "pending": "保留中",
+        "resolved": "解決済み",
+        "closed": "クローズ",
+        "snoozed": "スヌーズ中"
+      },
+      "recent": {
+        "title": "最近の投稿",
+        "none": "投稿がまだないか、インサイトの準備中です。",
+        "noCaption": "(キャプションなし)",
+        "impressions": "インプレッション",
+        "engaged": "エンゲージメント",
+        "view": "表示"
+      },
+      "legendLive": "Facebookからのライブデータです。廃止された指標は—と表示される場合があります。",
+      "legendHere": "このワークスペースから。Messengerと公開した投稿です。"
+    }
+  }
+}

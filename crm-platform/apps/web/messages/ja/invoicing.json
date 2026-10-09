@@ -1,0 +1,662 @@
+{
+  "invoicing": {
+    "nav": {
+      "invoices": "請求書",
+      "payments": "支払い",
+      "taxRates": "税率",
+      "recurring": "定期請求書",
+      "salesOrders": "注文"
+    },
+    "common": {
+      "unnamedContact": "名称未設定の連絡先",
+      "dismiss": "閉じる"
+    },
+    "status": {
+      "draft": "下書き",
+      "issued": "発行済み",
+      "partially_paid": "一部入金済み",
+      "overdue": "期限超過",
+      "paid": "入金済み",
+      "void": "無効"
+    },
+    "method": {
+      "bank_transfer": "銀行振込",
+      "cash": "現金",
+      "card": "カード",
+      "upi": "UPI",
+      "cheque": "小切手",
+      "gateway": "オンライン",
+      "other": "その他"
+    },
+    "errors": {
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "forbidden": "その操作を行う権限がありません。",
+      "signedOut": "セッションが終了しました。再度サインインしてください。",
+      "conflict": "ほかのユーザーがたった今これを変更しました。最新版を表示するには再読み込みしてください。",
+      "validation": "一部の入力内容が正しくありません。強調表示された項目を確認してください。",
+      "unavailable": "このサーバーではまだ請求書機能をご利用いただけません。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
+      "notFound": "この請求書は存在しません。",
+      "planDisabled": "ご利用のプランには請求書機能が含まれていません。",
+      "invalidState": "請求書の現在の状態では、この操作はできません。再読み込みして、ステータスを確認してください。",
+      "unexpected": "当方で問題が発生しました。もう一度お試しください。",
+      "requestId": "リクエスト ID",
+      "retry": "再試行"
+    },
+    "picker": {
+      "unlink": "連絡先を削除",
+      "searchContact": "名前で連絡先を検索",
+      "results": "一致する連絡先",
+      "searching": "検索中...",
+      "unavailable": "連絡先を読み込めませんでした。",
+      "none": "連絡先が見つかりません。"
+    },
+    "actions": {
+      "failed": "うまくいきませんでした。",
+      "issued": "請求書 {number} を発行しました。",
+      "sent": "送付済みとしてマークしました。",
+      "voided": "請求書 {number} を無効にしました。",
+      "duplicated": "コピーを下書きとして作成しました。",
+      "deleted": "下書きを削除しました。",
+      "linkCopied": "リンクをコピーしました。",
+      "linkCopyFailed": "ブラウザでコピーがブロックされました。リンクを選択して手動でコピーしてください。"
+    },
+    "payDialog": {
+      "title": "入金を記録",
+      "forInvoice": "請求書 {number}",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "record": "入金を記録",
+      "markPaid": "記録して入金済みにする",
+      "recordAnyway": "それでも記録",
+      "balance": "未払い残高",
+      "amount": "金額 ({currency})",
+      "method": "方法",
+      "paidOn": "入金日",
+      "reference": "参照",
+      "referenceHint": "取引 ID または小切手番号",
+      "note": "メモ",
+      "recorded": "{amount} の入金を記録しました。",
+      "partialNote": "一部入金です。残り {left} が未払いのままになります。",
+      "overpayNote": "未払い残高より {extra} 多くなっています。記録する前に金額を確認してください。",
+      "problems": {
+        "amountInvalid": "金額を入力してください (例: 125.50)。",
+        "amountZero": "金額は 0 より大きくしてください。",
+        "dateInvalid": "有効な日付を入力してください。",
+        "dateFuture": "入金日を未来の日付にすることはできません。",
+        "tooMuch": "返金可能な金額を超えています。",
+        "referenceTooLong": "参照が長すぎます (最大 191 文字)。",
+        "noteTooLong": "メモが長すぎます (最大 2000 文字)。"
+      }
+    },
+    "refundDialog": {
+      "title": "返金",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "refund": "返金",
+      "available": "{amount} まで返金できます。",
+      "amount": "金額 ({currency})",
+      "date": "返金日",
+      "reason": "理由",
+      "effect": "返金された金額が、再び請求書の未払い額になります。",
+      "refunded": "{amount} を返金しました。",
+      "problems": {
+        "amountInvalid": "金額を入力してください (例: 125.50)。",
+        "amountZero": "金額は 0 より大きくしてください。",
+        "tooMuch": "返金可能な金額を超えています。"
+      }
+    },
+    "voidDialog": {
+      "title": "請求書を無効にする",
+      "close": "閉じる",
+      "keep": "請求書を残す",
+      "void": "請求書を無効にする",
+      "warning": "無効にした請求書は番号を保持しますが、今後は入金、編集、再開ができなくなります。購入者のリンクには取り消し済みと表示されます。",
+      "reason": "理由",
+      "reasonHint": "任意。請求書のアクティビティに保存されます。"
+    },
+    "sendDialog": {
+      "title": "請求書を共有",
+      "issueTitle": "請求書を発行",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "issue": "請求書を発行",
+      "done": "完了",
+      "issueIntro": "発行すると、この請求書が正式なものになります:",
+      "issueNumber": "次の請求書番号が割り当てられます。",
+      "issueFrozen": "明細、価格、税金は編集できなくなります。",
+      "issueLink": "お客様向けのリンクが利用可能になります。",
+      "link": "お客様向けのリンク",
+      "linkHint": "このリンクを知っている人は、請求書の内容と支払い方法を確認できます。",
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "copyFailed": "ブラウザでコピーがブロックされました。リンクを選択して手動でコピーしてください。",
+      "open": "お客様のページを開く",
+      "email": "メールで送信先",
+      "emailHint": "任意。空欄のままにすると、リンクはご自身で共有し、請求書を送付済みとしてマークするだけになります。",
+      "alreadySent": "この請求書は既に送付済みとしてマークされています。"
+    },
+    "deleteDialog": {
+      "title": "下書きを削除しますか?",
+      "message": "{name} は完全に削除されます。削除できるのは下書きのみです。",
+      "delete": "下書きを削除",
+      "keep": "残す"
+    },
+    "row": {
+      "moreFor": "{name} の操作",
+      "draft": "下書き",
+      "open": "開く",
+      "edit": "編集",
+      "issue": "発行して送信",
+      "send": "リンクを共有 / 送付済みにする",
+      "copyLink": "リンクをコピー",
+      "recordPayment": "入金を記録",
+      "markPaid": "入金済みにする",
+      "duplicate": "複製",
+      "print": "ダウンロード / 印刷",
+      "void": "無効にする",
+      "delete": "下書きを削除"
+    },
+    "table": {
+      "columns": {
+        "number": "請求書",
+        "contact": "顧客",
+        "issued": "発行日",
+        "due": "支払期日",
+        "total": "合計",
+        "paid": "入金額",
+        "balance": "残高",
+        "status": "ステータス"
+      },
+      "draft": "下書き",
+      "daysLate": "{count, plural, other {# 日遅延}}",
+      "selectAll": "読み込み済みの請求書をすべて選択",
+      "selectRow": "{name} を選択",
+      "scrollArea": "請求書の表"
+    },
+    "tabs": {
+      "label": "請求書のステータス",
+      "all": "すべて",
+      "draft": "下書き",
+      "issued": "発行済み",
+      "partially_paid": "一部入金済み",
+      "overdue": "期限超過",
+      "paid": "入金済み",
+      "void": "無効",
+      "count": "{count, plural, other {# 件の請求書}}"
+    },
+    "toolbar": {
+      "search": "番号または顧客で検索",
+      "contactLoading": "顧客",
+      "from": "開始日",
+      "to": "終了日",
+      "issuedFrom": "発行日 (開始)",
+      "issuedTo": "発行日 (終了)",
+      "sort": "請求書を並べ替え",
+      "sorts": {
+        "newest": "新しい順",
+        "oldest": "古い順",
+        "due": "支払期日",
+        "amount": "金額の高い順"
+      },
+      "reset": "フィルターをクリア",
+      "refresh": "更新"
+    },
+    "bulk": {
+      "label": "一括操作",
+      "selected": "{count, plural, other {# 件の請求書を選択中}}",
+      "working": "処理中...",
+      "issue": "下書きを発行",
+      "void": "無効にする",
+      "delete": "下書きを削除",
+      "clear": "選択を解除",
+      "failed": "うまくいきませんでした。",
+      "keep": "残す",
+      "someFailed": "{count, plural, other {# 件の請求書を変更できませんでした。}}",
+      "done": {
+        "issue": "{count, plural, other {# 件の下書きを発行しました。}}",
+        "void": "{count, plural, other {# 件の請求書を無効にしました。}}",
+        "delete": "{count, plural, other {# 件の下書きを削除しました。}}"
+      },
+      "confirm": {
+        "void": {
+          "title": "選択した請求書を無効にしますか?",
+          "message": "{count, plural, other {選択した # 件の請求書を無効にします。入金のある請求書はスキップされます。}}",
+          "confirm": "請求書を無効にする"
+        },
+        "delete": {
+          "title": "選択した下書きを削除しますか?",
+          "message": "{count, plural, other {選択した # 件の請求書が対象になります。下書きのみ完全に削除されます。}}",
+          "confirm": "下書きを削除"
+        }
+      }
+    },
+    "list": {
+      "title": "請求書",
+      "subtitle": "お客様に請求し、入金状況と遅延を把握できます。",
+      "payments": "支払い",
+      "newInvoice": "新規請求書",
+      "tableLabel": "請求書一覧",
+      "empty": {
+        "all": {
+          "title": "請求書はまだありません",
+          "message": "最初の請求書を作成するか、承認済みの提案または見積もりから開始してください。"
+        },
+        "draft": {
+          "title": "下書きはありません",
+          "message": "作成中の請求書がここに表示されます。"
+        },
+        "issued": {
+          "title": "入金待ちの請求書はありません",
+          "message": "まだ入金のない発行済みの請求書がここに表示されます。"
+        },
+        "partially_paid": {
+          "title": "一部入金済みの請求書はありません",
+          "message": "入金はあるものの残高がある請求書がここに表示されます。"
+        },
+        "overdue": {
+          "title": "期限超過の請求書はありません",
+          "message": "支払期日を過ぎ、残高がある請求書がここに表示されます。"
+        },
+        "paid": {
+          "title": "入金済みの請求書はまだありません",
+          "message": "全額入金済みの請求書がここに表示されます。"
+        },
+        "void": {
+          "title": "無効にされた請求書はありません",
+          "message": "取り消された請求書は番号を保持したままここに表示されます。"
+        }
+      },
+      "emptyFilteredTitle": "一致する請求書はありません",
+      "emptyFiltered": "別の検索語を試すか、フィルターをクリアしてください。",
+      "resetFilters": "フィルターをクリア",
+      "loading": "請求書を読み込み中",
+      "showing": "{count, plural, other {# 件の請求書を読み込みました}}",
+      "loadMore": "さらに読み込む",
+      "allLoaded": "以上がすべてです"
+    },
+    "lines": {
+      "lineN": "明細 {n}",
+      "description": "説明",
+      "descriptionPlaceholder": "何に対する請求ですか?",
+      "removeLine": "明細 {n} を削除",
+      "qty": "数量",
+      "price": "単価 ({currency})",
+      "discount": "割引 %",
+      "tax": "税",
+      "noTax": "税なし",
+      "inclusive": "税込",
+      "removedRate": "税率を削除しました",
+      "inactive": "無効",
+      "amount": "金額",
+      "addLine": "明細を追加",
+      "problems": {
+        "descriptionRequired": "この明細の内容を入力してください。",
+        "qtyInvalid": "0 より大きい数量を入力してください。",
+        "priceInvalid": "価格を入力してください (例: 49.90)。",
+        "lineDiscountInvalid": "0 から 100 までの割合を入力してください。",
+        "noLines": "発行する前に明細を 1 件以上追加してください。",
+        "amountZero": "請求書の合計は 0 より大きくしてください。"
+      }
+    },
+    "totals": {
+      "label": "請求書の合計",
+      "title": "合計",
+      "subtotal": "小計",
+      "discount": "割引",
+      "total": "合計"
+    },
+    "builder": {
+      "creatingFromDocument": "ドキュメントから請求書を作成しています...",
+      "loading": "読み込み中",
+      "notEditable": "この請求書は発行済みのため、編集できなくなりました。修正版を作成するには複製してください。",
+      "openInvoice": "請求書を開く",
+      "newTitle": "新規請求書",
+      "editTitle": "下書きを編集",
+      "back": "戻る",
+      "unsaved": "未保存の変更",
+      "cancel": "キャンセル",
+      "saveDraft": "下書きを保存",
+      "saveAndIssue": "保存して発行",
+      "conflict": "編集中に、ほかのユーザーがこの下書きを変更しました。相手の版を表示するには再読み込みしてください。ここでの編集内容は失われます。",
+      "reload": "再読み込み",
+      "viewLabel": "ビルダー表示",
+      "views": {
+        "edit": "編集",
+        "preview": "プレビュー"
+      },
+      "billTo": "請求先",
+      "contact": "連絡先",
+      "contactHint": "請求書を紐付ける連絡先を選択するか、下に購入者名を入力してください。",
+      "buyerName": "請求書上の名前",
+      "buyerEmail": "メールアドレス",
+      "buyerPhone": "電話番号",
+      "buyerAddress": "請求先住所",
+      "details": "日付と通貨",
+      "currency": "通貨",
+      "currencyHint": "USD や KWD のような 3 文字のコードです。小数点の桁数は通貨に従います。",
+      "issueDate": "発行日",
+      "terms": "支払条件",
+      "noDueDate": "支払期日なし",
+      "dueDate": "支払期日",
+      "lineItems": "明細",
+      "orderLinkedNote": "注文から作成された請求書の明細は固定されています。変更するには、この請求書を無効にするか削除してから、注文を再度請求してください。",
+      "adjustments": "割引",
+      "discountKind": "請求書全体への割引",
+      "discountNone": "割引なし",
+      "discountPercent": "割合",
+      "discountAmount": "固定額 ({currency})",
+      "discountValue": "割引額",
+      "notesAndTerms": "メモと条件",
+      "notes": "お客様へのメモ",
+      "notesHint": "請求書に表示されます。",
+      "termsText": "利用条件",
+      "termsHint": "請求書の下部に表示されます。",
+      "preview": "プレビュー",
+      "saved": "下書きを保存しました。",
+      "fixProblems": "先に強調表示された項目を修正してください。",
+      "serverRejected": "サーバーが一部の値を受け付けませんでした。項目を確認して、もう一度お試しください。",
+      "problems": {
+        "contactRequired": "連絡先を選択するか、購入者名を入力してください。",
+        "currencyInvalid": "3 文字の通貨コードを入力してください。",
+        "issueDateInvalid": "有効な発行日を入力してください。",
+        "dueBeforeIssue": "支払期日を発行日より前にすることはできません。",
+        "dueInvalid": "有効な支払期日を入力してください。",
+        "noLines": "発行する前に明細を 1 件以上追加してください。",
+        "discountInvalid": "有効な割引を入力してください。",
+        "emailInvalid": "有効なメールアドレスを入力してください。",
+        "amountZero": "請求書の合計は 0 より大きくしてください。",
+        "descriptionRequired": "この明細の内容を入力してください。",
+        "priceInvalid": "有効な価格を入力してください。",
+        "qtyInvalid": "0 より大きい数量を入力してください。",
+        "lineDiscountInvalid": "0 から 100 までの割合を入力してください。"
+      }
+    },
+    "terms": {
+      "onReceipt": "受領時に支払い",
+      "net": "{days} 日以内",
+      "custom": "日付を指定"
+    },
+    "paper": {
+      "label": "請求書 {number}",
+      "labelDraft": "請求書下書きのプレビュー",
+      "sellerFallback": "事業者名",
+      "title": "請求書",
+      "draftNumber": "下書き",
+      "billedTo": "請求先",
+      "buyerFallback": "顧客",
+      "issued": "発行日",
+      "due": "支払期日",
+      "onReceipt": "受領時",
+      "item": "品目",
+      "qty": "数量",
+      "price": "価格",
+      "tax": "税",
+      "amount": "金額",
+      "noLines": "明細はまだありません",
+      "noDescription": "説明なし",
+      "lineDiscount": "{percent}% 割引",
+      "subtotal": "小計",
+      "discount": "割引",
+      "discountPercent": "割引 ({percent}%)",
+      "total": "合計",
+      "includesTax": "価格に税が含まれています",
+      "paid": "入金済み",
+      "balanceDue": "未払い残高",
+      "notes": "メモ",
+      "terms": "条件"
+    },
+    "detail": {
+      "loading": "請求書を読み込み中",
+      "backToList": "請求書一覧に戻る",
+      "draftTitle": "請求書下書き",
+      "edit": "編集",
+      "issueAndSend": "発行して送信",
+      "shareAgain": "再共有",
+      "send": "共有して送信",
+      "recordPayment": "入金を記録",
+      "markPaid": "入金済みにする",
+      "copyLink": "リンクをコピー",
+      "print": "ダウンロード / 印刷",
+      "duplicate": "複製",
+      "void": "無効にする",
+      "delete": "下書きを削除",
+      "voidedBanner": "この請求書は {date} に無効になりました。番号は保持されますが、今後は入金できません。",
+      "voidNeedsRefund": "この請求書を無効にするには、先に入金分を返金してください。",
+      "overpaid": "この請求書の請求額を超える入金があります。",
+      "amountsLabel": "金額",
+      "total": "合計",
+      "paid": "入金済み",
+      "balance": "未払い残高",
+      "issued": "発行日",
+      "due": "支払期日",
+      "noDue": "支払期日なし",
+      "daysLate": "{count, plural, other {# 日遅延}}",
+      "sentAt": "送付済み",
+      "paidAt": "全額入金済み",
+      "source": "作成元",
+      "sourceKind": {
+        "proposal": "提案",
+        "estimate": "見積もり"
+      },
+      "deal": "案件",
+      "dealFallback": "進行中"
+    },
+    "paymentsSection": {
+      "title": "支払い",
+      "loading": "支払いを読み込み中",
+      "none": "支払いはまだ記録されていません。",
+      "refund": "返金"
+    },
+    "activity": {
+      "title": "操作履歴",
+      "loading": "操作履歴を読み込み中",
+      "events": {
+        "created": "下書きを作成しました",
+        "edited": "下書きを編集しました",
+        "issued": "請求書を発行しました",
+        "sent": "送信済みにしました",
+        "viewed": "顧客が開封しました",
+        "payment_recorded": "入金を記録しました",
+        "payment_refunded": "入金を返金しました",
+        "paid": "全額入金済み",
+        "reminder_sent": "リマインダーを送信しました",
+        "voided": "請求書を無効化しました"
+      }
+    },
+    "pickInvoice": {
+      "title": "どの請求書が支払われましたか？",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "search": "番号または顧客で検索",
+      "loading": "請求書を読み込み中",
+      "noMatch": "該当する未払いの請求書はありません。",
+      "nothingOwed": "現在、未払いはありません。",
+      "balance": "残高",
+      "more": "さらに表示"
+    },
+    "aging": {
+      "loading": "経過日数レポートを読み込み中",
+      "emptyTitle": "未払いはありません",
+      "emptyMessage": "発行済みの請求書はすべて入金済みです。未払いの請求書は、支払期限からの経過日数ごとにここに表示されます。",
+      "asOf": "{date}時点。遅延日数は支払期限から数えます。",
+      "currencyLabel": "{currency}建ての未収金",
+      "outstanding": "未収金",
+      "invoices": "{count, plural, other {#件の請求書}}",
+      "barLabel": "経過日数ごとの未収金の内訳",
+      "buckets": {
+        "current": "支払期限前",
+        "d1_30": "遅延1～30日",
+        "d31_60": "遅延31～60日",
+        "d61_90": "遅延61～90日",
+        "d90_plus": "遅延90日超"
+      },
+      "total": "合計",
+      "unnamed": "名称未設定の連絡先",
+      "noContact": "連絡先なし"
+    },
+    "payments": {
+      "title": "入金",
+      "subtitle": "請求書に対して受け取った入金と、未収の残高。",
+      "invoices": "請求書",
+      "record": "入金を記録",
+      "viewLabel": "入金一覧",
+      "views": {
+        "ledger": "台帳",
+        "aging": "経過日数"
+      },
+      "tableLabel": "入金台帳",
+      "loading": "入金を読み込み中",
+      "emptyFilteredTitle": "該当する入金はありません",
+      "emptyFiltered": "別の検索語を試すか、フィルターを解除してください。",
+      "emptyTitle": "まだ入金はありません",
+      "emptyMessage": "顧客が請求書に支払ったら、ここから、または請求書から記録してください。",
+      "resetFilters": "フィルターを解除",
+      "showing": "{count, plural, other {#件の入金を読み込みました}}",
+      "loadMore": "さらに読み込む",
+      "allLoaded": "以上です",
+      "strip": {
+        "loading": "合計を読み込み中",
+        "label": "入金合計",
+        "window": "{from}～{to}",
+        "none": "この期間の入金はありません。",
+        "collected": "受領額（{currency}）",
+        "count": "入金",
+        "refunded": "返金済み"
+      },
+      "toolbar": {
+        "search": "参照番号、請求書、顧客で検索",
+        "method": "方法",
+        "allMethods": "すべての方法",
+        "from": "開始日",
+        "to": "終了日",
+        "paidFrom": "支払元",
+        "paidTo": "支払先",
+        "reset": "フィルターを解除",
+        "refresh": "更新"
+      },
+      "table": {
+        "scrollArea": "入金の表",
+        "columns": {
+          "date": "日付",
+          "invoice": "請求書",
+          "contact": "顧客",
+          "method": "方法",
+          "reference": "参照番号",
+          "amount": "金額",
+          "refunded": "返金額",
+          "recordedBy": "記録者",
+          "actions": "操作"
+        },
+        "moreFor": "{date}の入金の操作",
+        "openInvoice": "請求書を開く",
+        "refund": "返金"
+      }
+    },
+    "taxRates": {
+      "title": "税率",
+      "subtitle": "請求書の明細に追加する税。1つを新規明細の既定値に設定できます。",
+      "new": "税率を追加",
+      "tableLabel": "税率",
+      "loading": "税率を読み込み中",
+      "emptyTitle": "まだ税率がありません",
+      "emptyMessage": "VATやGSTなど、請求する税を追加すると、請求書の明細で選択できます。",
+      "scrollArea": "税率の表",
+      "columns": {
+        "name": "名称",
+        "rate": "税率",
+        "type": "種類",
+        "status": "ステータス",
+        "effective": "適用開始日",
+        "used": "明細",
+        "actions": "操作"
+      },
+      "default": "既定",
+      "inclusive": "税込",
+      "exclusive": "税別",
+      "active": "有効",
+      "inactive": "無効",
+      "always": "常時",
+      "moreFor": "{name}の操作",
+      "edit": "編集",
+      "makeDefault": "既定にする",
+      "madeDefault": "{name}を既定に設定しました。",
+      "deactivate": "無効にする",
+      "activate": "有効にする",
+      "deactivated": "{name}を無効にしました。",
+      "activated": "{name}を有効にしました。",
+      "delete": "削除",
+      "deleteTitle": "この税率を削除しますか？",
+      "keep": "残す",
+      "deleted": "{name}を削除しました。",
+      "count": "{count, plural, other {#件の税率}}",
+      "hint": "税率を変更しても、発行済みの請求書は変わりません。各請求書は作成時の税率のままです。",
+      "errors": {
+        "isDefault": "これは既定の税率です。先に別の税率を既定に設定してください。"
+      },
+      "form": {
+        "eyebrow": "税率",
+        "editTitle": "税率を編集",
+        "newTitle": "税率を追加",
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "save": "保存",
+        "name": "名称",
+        "namePlaceholder": "例: VAT、GST、売上税",
+        "rate": "税率",
+        "type": "適用方法",
+        "exclusive": "税別: 価格に加算",
+        "inclusive": "税込: 価格に含まれる",
+        "typeHint": {
+          "exclusive": "顧客は価格に税を加えた金額を支払います。",
+          "inclusive": "価格にはすでに税が含まれます。請求書には、そのうち税額がいくらかを表示します。"
+        },
+        "effectiveFrom": "適用開始日",
+        "effectiveHint": "任意。日付で変わる税率に使用します。",
+        "description": "説明",
+        "makeDefault": "新規明細の既定",
+        "defaultHint": "新しい請求書の明細はこの税率で始まります。",
+        "active": "有効",
+        "activeHint": "無効な税率は新規明細で選択できません。",
+        "saved": "{name}を保存しました。",
+        "created": "{name}を追加しました。",
+        "problems": {
+          "nameRequired": "名称を入力してください。",
+          "nameTaken": "この名称の税率はすでにあります。",
+          "rateInvalid": "0～100の割合を入力してください。",
+          "dateInvalid": "有効な日付を入力してください。",
+          "conflict": "他のユーザーがこの税率を変更しました。閉じてから開き直してください。"
+        }
+      }
+    },
+    "public": {
+      "loading": "請求書を読み込み中",
+      "errorTitle": "この請求書を読み込めませんでした",
+      "errorMessage": "接続を確認して、もう一度お試しください。",
+      "retry": "再試行",
+      "title": "{seller}の請求書",
+      "dueOn": "支払期限 {date}",
+      "print": "印刷",
+      "download": "PDFをダウンロード",
+      "paidBanner": "この請求書は全額入金済みです。ありがとうございます。",
+      "voidBanner": "この請求書はキャンセルされたため、お支払いは不要です。",
+      "payNow": "お支払い方法",
+      "amountDue": "お支払い金額:",
+      "bankIntro": "銀行振込でお支払いいただき、振込人名（参照番号）に{number}をご入力ください。",
+      "copied": "コピーしました",
+      "payButton": "{amount}を支払う",
+      "gatewayNote": "販売者の決済サービスの支払いページに移動します。",
+      "questions": "この請求書についてのお問い合わせ",
+      "metaTitle": "請求書"
+    },
+    "linked": {
+      "title": "請求書",
+      "new": "請求書を作成",
+      "viewAll": "すべて表示",
+      "loading": "請求書を読み込み中",
+      "none": "まだ請求書はありません。",
+      "draft": "下書き",
+      "owes": "未払い"
+    }
+  }
+}

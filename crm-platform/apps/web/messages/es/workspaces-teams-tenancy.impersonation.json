@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "Suplantando",
+      "viewing": "Viendo {workspace} como {owner}",
+      "reason": "Motivo: {reason}",
+      "readOnly": "Solo lectura",
+      "timeLeft": "{minutes, plural, one {Queda # minuto} other {Quedan # minutos}}",
+      "endsSoon": "Queda menos de un minuto",
+      "stop": "Dejar de suplantar",
+      "stopping": "Deteniendo",
+      "stopFailed": "No se pudo detener la sesión. Inténtalo de nuevo.",
+      "readOnlyRefused": "Esta sesión es de solo lectura, así que no se permiten cambios.",
+      "forbiddenRefused": "Esto no está disponible mientras ves el espacio de trabajo como su propietario.",
+      "ended": {
+        "title": "Esta sesión de suplantación ha terminado",
+        "expired": "El enlace ya se usó o caducó. Vuelve a empezar desde la consola.",
+        "body": "Desde aquí no se puede hacer nada más en el espacio de trabajo. Vuelve a la consola para iniciar una nueva sesión.",
+        "back": "Volver a la consola"
+      }
+    }
+  }
+}

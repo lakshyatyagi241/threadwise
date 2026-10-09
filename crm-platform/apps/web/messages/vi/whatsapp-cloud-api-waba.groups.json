@@ -1,0 +1,157 @@
+{
+  "whatsapp-cloud-api-waba": {
+    "nav": {
+      "groups": "Nhóm Meta"
+    },
+    "errors": {
+      "WABA_GROUPS_NOT_ELIGIBLE": "Số này không đủ điều kiện cho Nhóm. WhatsApp chỉ mở Nhóm cho Tài khoản doanh nghiệp chính thức.",
+      "WABA_GROUPS_PROVIDER_UNSUPPORTED": "Nhóm chỉ khả dụng với các số kết nối trực tiếp với Meta. Số này được kết nối qua nhà cung cấp khác.",
+      "WABA_GROUP_NOT_FOUND": "Không tìm thấy nhóm.",
+      "WABA_GROUP_SUSPENDED": "WhatsApp đã tạm ngưng nhóm này do vi phạm chính sách.",
+      "WABA_GROUP_LIMIT_REACHED": "Đã đạt giới hạn của WhatsApp đối với nhóm. Hãy xóa một nhóm hoặc yêu cầu WhatsApp tăng giới hạn.",
+      "WABA_GROUP_RATE_LIMITED": "Quá nhiều thao tác nhóm từ số này. Hãy đợi một lát rồi thử lại.",
+      "PLAN_FEATURE_LOCKED": "Gói của bạn không bao gồm nhóm WhatsApp. Nâng cấp để mở khóa.",
+      "VALIDATION_FAILED": "Kiểm tra các trường và thử lại."
+    },
+    "groups": {
+      "pageTitle": "Nhóm WhatsApp",
+      "eyebrow": "WhatsApp / Nhóm",
+      "headingA": "Nhóm",
+      "headingB": "nhắn tin",
+      "intro": "Tạo nhóm WhatsApp từ số doanh nghiệp của bạn, chia sẻ liên kết mời và xử lý yêu cầu tham gia. Cuộc trò chuyện xuất hiện trong hộp thư đến như mọi cuộc trò chuyện khác.",
+      "loading": "Đang tải nhóm…",
+      "loadFailed": "Không tải được nhóm.",
+      "retry": "Thử lại",
+      "numbersDenied": "Bạn có thể xem nhóm nhưng không xem được danh sách số WhatsApp mà chúng thuộc về. Hãy hỏi quản trị viên để được cấp quyền truy cập số WhatsApp.",
+      "rail": {
+        "title": "Nhóm",
+        "noNumber": "Chưa có số WhatsApp Business",
+        "eligible": "Đủ điều kiện",
+        "notEligible": "Không đủ điều kiện",
+        "numberLabel": "Số",
+        "howTitle": "Nhóm hoạt động như thế nào",
+        "howInvite": "Nhóm chỉ vào bằng lời mời. Bạn tạo nhóm, WhatsApp cấp liên kết mời, và bạn chia sẻ liên kết đó để người khác tự chọn tham gia. Không có cách nào thêm người vào trực tiếp.",
+        "howCost": "Mỗi tin nhắn bạn gửi được tính phí một lần cho mỗi người nhận. Tin nhắn gửi đến 100 thành viên tính là 100 lượt gửi."
+      },
+      "state": {
+        "noNumber": {
+          "title": "Chưa kết nối số WhatsApp Business",
+          "message": "Nhóm cần một số WhatsApp được kết nối qua Nền tảng WhatsApp Business chính thức.",
+          "hint": "Kết nối một số trong Cài đặt, Kênh, WhatsApp.",
+          "connect": "Mở số WhatsApp"
+        },
+        "notEligible": {
+          "title": "Số này chưa thể dùng nhóm",
+          "message": "WhatsApp chỉ mở tính năng Nhóm cho Tài khoản doanh nghiệp chính thức, cấp xác minh có huy hiệu xanh lá. Số của bạn đã kết nối và hoạt động bình thường cho trò chuyện thông thường; chỉ là chưa được cấp quyền dùng nhóm.",
+          "hint": "Đăng ký trạng thái Tài khoản doanh nghiệp chính thức trong WhatsApp Manager, rồi tải lại trang này.",
+          "reload": "Kiểm tra lại",
+          "checking": "Đang kiểm tra…"
+        },
+        "providerUnsupported": {
+          "title": "Nhóm không khả dụng trên tuyến này",
+          "message": "Số này được kết nối qua nhà cung cấp khác, không trực tiếp qua Meta. Nhóm chỉ được thiết lập cho các số kết nối trực tiếp với Meta.",
+          "hint": "Kết nối số trực tiếp với Meta, hoặc hỏi nhà cung cấp xem họ có hỗ trợ Nhóm không."
+        },
+        "missingCredentials": {
+          "title": "Số này cần kết nối lại",
+          "message": "Không lưu mã truy cập nào cho số này nên không thể hỏi WhatsApp về nhóm.",
+          "hint": "Thay mã truy cập trên trang sức khỏe của số."
+        },
+        "checkFailed": "Hiện không thể hỏi WhatsApp xem số này có dùng được nhóm hay không. Mọi thao tác bên dưới vẫn hoạt động nếu được phép; nếu thao tác lỗi, hãy thử lại sau ít phút."
+      },
+      "kpi": {
+        "groups": "Nhóm",
+        "groupsSub": "trên số này",
+        "members": "Thành viên",
+        "membersSub": "trên tất cả nhóm",
+        "joinRequests": "Yêu cầu tham gia",
+        "joinRequestsSub": "đang chờ bạn",
+        "suspended": "Đã tạm ngưng",
+        "suspendedSub": "bị WhatsApp chặn"
+      },
+      "create": {
+        "title": "Tạo nhóm",
+        "name": "Tên nhóm",
+        "nameHint": "Điều thành viên thấy ở đầu cuộc trò chuyện. Tối đa 128 ký tự.",
+        "who": "Ai có thể tham gia",
+        "whoAuto": "Ai có liên kết sẽ tham gia ngay",
+        "whoApproval": "Bạn duyệt từng người trước",
+        "whoHint": "Duyệt cho bạn hàng đợi để xem xét trước khi cho ai vào.",
+        "description": "Mô tả",
+        "descriptionHint": "Không bắt buộc. Hiển thị trên màn hình thông tin nhóm.",
+        "submit": "Tạo nhóm",
+        "submitting": "Đang tạo…"
+      },
+      "list": {
+        "title": "Nhóm của bạn",
+        "empty": "Chưa có nhóm nào. Tạo một nhóm ở trên để bắt đầu.",
+        "untitled": "Nhóm chưa đặt tên",
+        "members": "{count, plural, =0 {Chưa có thành viên} other {# thành viên}}",
+        "approvalRequired": "cần duyệt",
+        "suspended": "WhatsApp đã tạm ngưng nhóm này. Bạn không thể nhắn tin cho nhóm cho đến khi họ khôi phục.",
+        "creationFailed": "WhatsApp không thể tạo nhóm này: {message}",
+        "refresh": "Làm mới",
+        "refreshing": "Đang làm mới…",
+        "delete": "Xóa",
+        "edit": "Sửa",
+        "membersButton": "Thành viên",
+        "loadMore": "Hiện thêm nhóm",
+        "loadingMore": "Đang tải…"
+      },
+      "link": {
+        "awaiting": "WhatsApp đang tạo liên kết mời…",
+        "label": "Liên kết mời",
+        "copy": "Sao chép",
+        "copied": "Đã sao chép",
+        "newLink": "Liên kết mới"
+      },
+      "joinRequests": {
+        "title": "Đang chờ tham gia",
+        "approve": "Duyệt",
+        "reject": "Từ chối",
+        "working": "…",
+        "hidden": "{count, plural, other {# người đang chờ tham gia.}} Bạn cần quyền quản lý nhóm để xem họ là ai."
+      },
+      "confirm": {
+        "deleteTitle": "Xóa nhóm này?",
+        "deleteMessage": "Xóa nhóm này và đưa mọi người ra khỏi nhóm? Nhóm đã xóa không thể khôi phục. Lịch sử trò chuyện vẫn nằm trong hộp thư đến của bạn.",
+        "deleteConfirm": "Xóa nhóm",
+        "linkTitle": "Tạo liên kết mới?",
+        "linkMessage": "Tạo liên kết mới? Những người bạn đã gửi liên kết cũ sẽ không thể dùng nó nữa.",
+        "linkConfirm": "Tạo liên kết mới",
+        "cancel": "Hủy"
+      },
+      "edit": {
+        "title": "Sửa nhóm",
+        "subject": "Tên nhóm",
+        "description": "Mô tả",
+        "hint": "Đã gửi đến WhatsApp. Nhóm sẽ làm mới tại đây khi Meta xác nhận.",
+        "save": "Gửi đến WhatsApp",
+        "saving": "Đang gửi…"
+      },
+      "members": {
+        "title": "Thành viên của {name}",
+        "hint": "Đọc từ WhatsApp khi bạn mở cửa sổ này; không lưu gì ở đây. Bạn có thể xóa tối đa {max} người mỗi lần.",
+        "loading": "Đang đọc thành viên từ WhatsApp…",
+        "empty": "Chưa có thành viên.",
+        "selected": "Đã chọn {count}",
+        "remove": "Xóa đã chọn",
+        "removing": "Đang xóa…",
+        "limit": "Bạn chỉ có thể xóa tối đa {max} người mỗi lần.",
+        "removeConfirm": "Xóa {count, plural, other {# người này}} khỏi nhóm? Họ không thể tham gia lại bằng liên kết cũ."
+      },
+      "notice": {
+        "created": "Đã tạo nhóm. Liên kết mời sẽ hiện ở đây ngay khi Meta cấp.",
+        "refreshed": "Đã làm mới nhóm.",
+        "linkReset": "Đã tạo liên kết mời mới. Mọi liên kết đã chia sẻ trước đó đã ngừng hoạt động.",
+        "updateSent": "Đã gửi cập nhật đến WhatsApp. Nhóm sẽ làm mới tại đây khi Meta xác nhận.",
+        "deleted": "Đã xóa nhóm và đưa mọi thành viên ra ngoài.",
+        "removed": "{count, plural, other {# người đã bị xóa khỏi nhóm.}}",
+        "approved": "{count, plural, other {# người đã được duyệt.}}",
+        "rejected": "{count, plural, other {# yêu cầu đã bị từ chối.}}",
+        "copyFailed": "Không thể sao chép liên kết. Hãy chọn và sao chép bằng tay."
+      },
+      "removeNumberWarning": "Số này có {count, plural, other {# bản ghi nhóm}} ở đây. Xóa số sẽ xóa các bản ghi này khỏi không gian làm việc. Bản thân các nhóm vẫn nằm trên WhatsApp và cuộc trò chuyện vẫn nằm trong hộp thư đến của bạn."
+    }
+  }
+}

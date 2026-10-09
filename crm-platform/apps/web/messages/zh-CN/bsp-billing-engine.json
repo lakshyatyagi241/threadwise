@@ -1,0 +1,169 @@
+{
+  "bsp-billing-engine": {
+    "nav": {
+      "income": "消息收入",
+      "reseller": "分销商计费（Meta）",
+      "billing": "消息计费",
+      "groups": {
+        "billing": "计费"
+      }
+    },
+    "common": {
+      "loading": "加载中",
+      "retry": "重试",
+      "requestId": "请求 ID",
+      "loadFailed": "无法加载此内容。",
+      "forbidden": "您没有访问此内容的权限。",
+      "cancel": "取消",
+      "dismiss": "关闭"
+    },
+    "errors": {
+      "notConfigured": "请先连接您的 Meta 信用额度（步骤 1）。",
+      "currencyUnsupported": "Meta 的信用额度仅接受 AUD、EUR、GBP、IDR、INR 和 USD。",
+      "wabaNotFound": "该号码不是此工作区已连接的 WhatsApp Business 号码。",
+      "metaRejected": "Meta 拒绝：{detail}",
+      "notAttached": "只有已关联的信用额度才能撤销。",
+      "resellerUnavailable": "分销商计费暂不可用：平台的 Meta 信用额度尚未设置。",
+      "conflict": "其他人已修改此内容。请重新加载后再试。",
+      "forbidden": "只有超级管理员可以执行此操作。",
+      "validation": "请检查高亮显示的字段。",
+      "generic": "出了点问题，请重试。"
+    },
+    "console": {
+      "title": "Meta 信用额度与密钥",
+      "subtitle": "连接您的 Meta 商务账户，然后与客户共享您的信用额度，由 Meta 向您收费，您再向客户收费。",
+      "linkIncome": "消息收入",
+      "linkPricing": "消息定价",
+      "optionalTitle": "可选，仅适用于真实转售",
+      "optionalBody": "您需要具备解决方案合作伙伴资格，并获得 Meta 批准的信用额度。其他所有功能（钱包、价格、套餐）无需此项也可使用。",
+      "readOnly": "您可以查看此页面，但只有超级管理员可以修改。",
+      "step1": {
+        "title": "1. 连接您的 Meta 商务账户",
+        "connected": "已连接",
+        "notConnected": "未连接",
+        "businessId": "Meta 商务 ID",
+        "businessIdPlaceholder": "数字 ID",
+        "token": "系统用户令牌",
+        "tokenStored": "已保存。留空则保持不变。",
+        "tokenPlaceholder": "粘贴令牌",
+        "tokenHint": "需要 business_management、whatsapp_business_management 和 whatsapp_business_messaging 权限。令牌将加密存储，之后不再显示。",
+        "clearToken": "移除已保存的令牌",
+        "creditLine": "扩展信用额度 ID",
+        "creditLineHint": "可选。留空则自动查找并记住您商务账户的第一个信用额度。",
+        "graphVersion": "Graph API 版本",
+        "graphVersionHint": "格式如 v26.0。留空则使用 v26.0。",
+        "ratesEndpoint": "Meta 费率接口",
+        "ratesEndpointHint": "可选的 https 地址，用于返回 Meta 的价格表。留空则使用内置费率表或已上传的文件。",
+        "baseCurrency": "基础货币",
+        "baseCurrencyHint": "收入数据所用的货币。三个字母，例如 USD。",
+        "autoAttach": "自动关联",
+        "autoAttachHint": "分销商工作区连接号码后，无需任何人操作即可获得您的信用额度。",
+        "autoCurrency": "计费货币",
+        "auto": "自动（基础货币）",
+        "save": "保存连接",
+        "saved": "连接已保存。",
+        "invalid": {
+          "graphVersion": "请使用 v26.0 这种格式。",
+          "ratesEndpoint": "请输入 https 地址。",
+          "autoAttachCurrency": "Meta 不接受此货币。",
+          "baseCurrency": "请使用三位字母的货币代码。",
+          "businessId": "最多输入 64 个字符。"
+        }
+      },
+      "step2": {
+        "title": "2. 手动关联单个客户",
+        "hintAuto": "自动关联已开启：分销商工作区的新号码会自动为您关联。",
+        "hintManual": "选择一个已连接的号码及其计费货币。",
+        "attachAll": "立即关联所有已连接号码",
+        "attachAllTitle": "关联所有已连接的号码？",
+        "attachAllBody": "您的信用额度将共享给分销商工作区中所有尚未关联的已连接号码。每个号码都会调用一次 Meta。",
+        "attachAllConfirm": "全部关联",
+        "attachAllDone": "已关联 {attached} 个，失败 {failed} 个，已设置 {skipped} 个。",
+        "attachAllMore": "还有 {remaining} 个待处理。请再运行一次。",
+        "empty": "尚无客户连接 WhatsApp Business（Cloud API）号码。连接后会显示在这里。",
+        "number": "客户的 WhatsApp 号码",
+        "pick": "选择已连接的号码",
+        "currency": "此号码的计费货币",
+        "locked": "关联后即锁定：Meta 不允许之后更改货币。",
+        "attach": "关联信用额度",
+        "attached": "信用额度已关联到 WABA {waba}。",
+        "failed": "关联失败：{error}",
+        "finishStep1": "请先完成步骤 1。",
+        "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
+        "noPhone": "无号码"
+      },
+      "register": {
+        "title": "使用中的信用额度",
+        "empty": "尚未关联任何账户。请先完成上方的步骤 1 和 2。",
+        "columns": {
+          "workspace": "工作区",
+          "waba": "WABA",
+          "allocation": "分配 ID",
+          "currency": "货币",
+          "status": "状态",
+          "action": "操作"
+        },
+        "status": {
+          "attached": "已关联",
+          "revoked": "已撤销",
+          "failed": "失败"
+        },
+        "reseller": "分销商计费",
+        "direct": "直接向 Meta 付款",
+        "revoke": "撤销",
+        "revokeTitle": "撤销此信用额度？",
+        "revokeBody": "Meta 将不再就此号码向您收费，客户将重新直接向 Meta 付款。",
+        "revokeStillReseller": "此工作区仍采用分销商计费：在 Meta 直接向客户收费的同时，其钱包仍会按每条消息扣费。",
+        "revokeConfirm": "撤销",
+        "revoked": "信用额度分配已撤销。",
+        "revokeFailed": "撤销失败：{error}",
+        "loadMore": "加载更多",
+        "loadingMore": "加载中",
+        "label": "信用额度分配"
+      },
+      "guide": {
+        "title": "设置指南",
+        "step1Title": "商务 ID",
+        "step1Body": "可在 Meta 商务设置的“商务信息”下找到。",
+        "step2Title": "系统用户令牌",
+        "step2Body": "在您的商务账户中创建系统用户，并生成具有这些权限的令牌。令牌只显示一次。",
+        "step3Title": "信用额度",
+        "step3Body": "您需要一个已批准的扩展信用额度。ID 留空时将自动从 Meta 读取。",
+        "goodTitle": "须知",
+        "good1": "信用额度的货币一旦关联即被锁定。",
+        "good2": "关联意味着由 Meta 向您收费，但您仍需自行设置客户的价格。",
+        "good3": "您可以随时撤销，客户将重新直接向 Meta 付款。",
+        "link": "Meta 解决方案合作伙伴概览"
+      }
+    },
+    "dashboard": {
+      "title": "分销商损益",
+      "eyebrow": "本月",
+      "intro": "收入是已送达消息向客户收取的费用，Meta 成本是相同消息给您带来的成本，利润为两者之差。已退款和免费的消息不计入。",
+      "linkRates": "费率与利润",
+      "linkConnect": "连接 Meta",
+      "revenue": "收入（已收费）",
+      "metaCost": "Meta 成本",
+      "margin": "利润",
+      "walletFloat": "持有的钱包余额",
+      "walletFloatHint": "所有工作区客户钱包中的资金",
+      "billed": "计费消息",
+      "free": "免费消息",
+      "unpriced": "未设置 Meta 成本",
+      "unpricedBanner": "{count, plural, other {# 条计费消息}}的国家和类别没有 Meta 成本，因此利润将其全部计为收入。",
+      "perWorkspace": "各工作区（本月）",
+      "columns": {
+        "workspace": "工作区",
+        "messages": "消息数",
+        "revenue": "收入",
+        "metaCost": "Meta 成本",
+        "margin": "利润",
+        "wallet": "钱包余额"
+      },
+      "empty": "本月暂无计费消息。",
+      "more": "仅列出收入最高的工作区。",
+      "loadFailed": "无法加载损益数据。",
+      "currency": "报告货币"
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "Ein Betrag, eine Menge oder ein Satz auf der Rechnung kann nicht verwendet werden. Prüfen Sie die markierten Felder.",
+        "INV_TAX_RATE_INVALID": "Einer der Steuersätze kann heute nicht verwendet werden: Er ist inaktiv oder liegt außerhalb seines Gültigkeitszeitraums. Wählen Sie einen anderen Satz.",
+        "INV_NOT_DRAFT": "Diese Rechnung wurde ausgestellt und kann nicht mehr bearbeitet werden. Duplizieren Sie sie, um eine korrigierte Rechnung zu erstellen.",
+        "INV_ORDER_LINKED": "Diese Rechnung gehört zu einem Auftrag. Ändern Sie stattdessen diesen Auftrag.",
+        "SALESDOC_INVALID_TRANSITION": "Das Angebot oder der Kostenvoranschlag wurde noch nicht angenommen und kann daher nicht in eine Rechnung umgewandelt werden.",
+        "SALESDOC_ALREADY_CONVERTED": "Dieses Dokument wurde bereits in eine Rechnung umgewandelt.",
+        "SALESDOC_INVOICING_UNAVAILABLE": "Rechnungsstellung ist auf diesem Server noch nicht verfügbar.",
+        "INV_LINK_UNAVAILABLE": "Dieser Rechnungslink ist nicht mehr verfügbar."
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "Entwurf aus dem angenommenen Dokument wird erstellt ...",
+      "duplicating": "Rechnung wird in einen neuen Entwurf kopiert ...",
+      "openExisting": "Bereits erstellte Rechnung öffnen",
+      "backToInvoices": "Zurück zu den Rechnungen",
+      "backToInvoice": "Zurück zur Rechnung",
+      "issued": "Rechnung ausgestellt.",
+      "savedNotIssued": "Der Entwurf wurde gespeichert, konnte aber nicht ausgestellt werden: {reason}",
+      "buyerCountry": "Land",
+      "buyerCountryHint": "Zwei Buchstaben, z. B. DE oder AT. Bestimmt das Format der Steuernummer und im Automatikmodus die Steuer.",
+      "buyerTaxId": "Steuernummer",
+      "buyerTaxIdNamed": "Steuernummer ({label})",
+      "taxIdHint": "GSTIN, USt-IdNr., EIN ... Wird während der Eingabe geprüft.",
+      "taxIdExpected": "Erwartet: {label}, z. B. {example}.",
+      "taxIdUnchecked": "Für dieses Land ist kein Format bekannt, daher wird die Nummer so gespeichert, wie sie eingegeben wurde.",
+      "taxIdValid": "{label} sieht korrekt aus ({level, select, checksum {Format und Prüfziffern geprüft} other {nur das Format geprüft}}). Das belegt nicht, dass sie registriert ist.",
+      "taxIdInvalid": "{label} sieht falsch aus ({level, select, checksum {Format und Prüfziffern geprüft} other {nur das Format geprüft}}).",
+      "taxIdStillSave": "Sie können trotzdem speichern.",
+      "docType": "Dokument",
+      "docTypes": {
+        "tax_invoice": "Steuerrechnung",
+        "proforma": "Proformarechnung"
+      },
+      "noDueDate": "Standard-Zahlungsbedingungen",
+      "reference": "Referenz",
+      "referenceHint": "Bestellnummer des Käufers oder eine andere Referenz zum Drucken.",
+      "tax": "Steuer",
+      "taxMode": "So wird die Steuer berechnet",
+      "taxModes": {
+        "rates": "Steuersätze",
+        "auto": "Automatisch"
+      },
+      "taxModeHint": {
+        "rates": "Wählen Sie für jede Position einen Steuersatz. Eine Position, die auf dem Standard belassen wird, verwendet den Standardsatz des Mandanten.",
+        "auto": "Die Steuerberechnung legt die Steuer jeder Position anhand Ihres Landes, des Landes und der Steuernummer des Käufers, der Lieferung und des Lieferorts fest. Maßgeblich ist die Antwort des Servers, die gespeichert wird."
+      },
+      "sellerCountry": "Ihr Land (aus dem Rechnungsprofil)",
+      "sellerCountryMissing": "Die automatische Steuer benötigt Ihr Land im Rechnungsprofil (ein Land mit Steuervorgabe). Legen Sie es zuerst dort fest.",
+      "supplyType": "Lieferung",
+      "supplyTypes": {
+        "goods": "Waren",
+        "services": "Dienstleistungen",
+        "digital": "Digitale Dienstleistungen"
+      },
+      "placeOfSupply": "Ort der Lieferung",
+      "placeOfSupplyHint": "Ein Bundesland oder eine Provinz von {country}; bei der ersten Auswahl bleiben für das gesamte Land.",
+      "placeSameCountry": "Gesamtes Land",
+      "placeRegionPlaceholder": "Regionscode, optional",
+      "reverseCharge": "Reverse Charge",
+      "reverseChargeHint": "Der Käufer schuldet die Steuer, daher wird auf dieser Rechnung keine Steuer berechnet.",
+      "shipping": "Versand ({currency})",
+      "shippingHint": "Wird nie rabattiert oder besteuert.",
+      "legalNotes": "Rechtliche Hinweise",
+      "legalNotesHint": "Auf dem Dokument erforderlicher Wortlaut, z. B. ein Hinweis zum Reverse Charge. Im Automatikmodus wird er ausgefüllt, wenn das Gesetz ihn verlangt.",
+      "problems": {
+        "contactRequired": "Wählen Sie einen Kontakt oder geben Sie den Namen des Käufers ein.",
+        "currencyInvalid": "Geben Sie einen dreistelligen Währungscode ein.",
+        "issueDateInvalid": "Geben Sie ein gültiges Ausstellungsdatum ein.",
+        "dueBeforeIssue": "Das Fälligkeitsdatum darf nicht vor dem Ausstellungsdatum liegen.",
+        "dueInvalid": "Geben Sie ein gültiges Fälligkeitsdatum ein.",
+        "noLines": "Fügen Sie vor dem Ausstellen mindestens eine Position hinzu.",
+        "discountInvalid": "Geben Sie einen gültigen Rabatt ein (ein Prozentsatz von 0 bis 100 oder ein Betrag).",
+        "shippingInvalid": "Geben Sie einen gültigen Versandbetrag ein.",
+        "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+        "amountZero": "Der Rechnungsbetrag muss größer als null sein.",
+        "amountInvalid": "Ein Betrag ist zu groß oder hat für diese Währung zu viele Nachkommastellen.",
+        "countryInvalid": "Verwenden Sie einen zweistelligen Ländercode.",
+        "regionInvalid": "Verwenden Sie einen kurzen Regionscode mit höchstens drei Buchstaben oder Ziffern.",
+        "autoNeedsSellerCountry": "Legen Sie Ihr Land im Rechnungsprofil fest, um die automatische Steuer zu verwenden.",
+        "descriptionRequired": "Beschreiben Sie diese Position.",
+        "qtyInvalid": "Geben Sie eine Menge größer als null mit höchstens 4 Nachkommastellen ein.",
+        "priceInvalid": "Geben Sie einen gültigen Preis mit den für diese Währung zulässigen Nachkommastellen ein.",
+        "lineDiscountInvalid": "Geben Sie einen gültigen Positionsrabatt ein.",
+        "hsnRequired": "Geben Sie den HSN/SAC-Code ein. Ihr Land verlangt ihn für jede Position.",
+        "hsnInvalid": "Ein HSN/SAC-Code besteht aus 2 bis 12 Buchstaben oder Ziffern.",
+        "taxRateRemoved": "Der Steuersatz dieser Position wurde entfernt. Wählen Sie einen aktuellen Satz."
+      }
+    },
+    "lines": {
+      "discount": "Rabatt",
+      "discountKind": "Rabattart",
+      "taxAuto": "Automatisch",
+      "taxDefault": "Standard ({rate})",
+      "taxDefaultNone": "Standard (keine Steuer)",
+      "removedRateOption": "{rate}, entfernt",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "Code"
+    },
+    "totals": {
+      "shipping": "Versand",
+      "taxIncluded": "{name}, inklusive",
+      "taxOn": "auf {base}",
+      "reverseCharge": "Reverse Charge: Es wird keine Steuer berechnet.",
+      "includesTotal": "Steuer in Preisen enthalten"
+    },
+    "taxWhy": {
+      "title": "Warum diese Steuer?",
+      "preview": "Vorschau",
+      "previewNote": "Wird während der Bearbeitung in Ihrem Browser berechnet. Maßgeblich ist, was der Server beim Speichern festlegt.",
+      "taxFree": "Für diese Lieferung wird keine Steuer berechnet",
+      "warnings": "Bitte prüfen",
+      "placeOfSupply": "Ort der Lieferung",
+      "reverseCharge": "Reverse Charge",
+      "reverseChargeNote": "Der Käufer schuldet die Steuer, daher wird keine berechnet.",
+      "documentNotes": "Auf dem Dokument gedruckt",
+      "disclaimer": "Sätze und Regeln sind Vorgaben, die Sie mit Ihrer Steuerberatung oder dem Finanzamt prüfen sollten. Dies ist keine Rechts- oder Steuerberatung."
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "Steuerrechnung",
+        "proforma": "Proformarechnung",
+        "receipt": "Quittung"
+      },
+      "sellerTaxId": "Steuernummer",
+      "registrationNo": "Reg.-Nr.",
+      "buyerTaxId": "Steuernummer",
+      "reference": "Referenz",
+      "placeOfSupply": "Ort der Lieferung",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "{amount} Rabatt",
+      "shipping": "Versand",
+      "credited": "Gutgeschrieben",
+      "taxSummary": "Steuerübersicht",
+      "taxName": "Steuer",
+      "taxBase": "Steuerbemessungsgrundlage",
+      "taxAmount": "Steuer",
+      "taxInclusive": "inklusive",
+      "reverseCharge": "Reverse Charge: Der Käufer schuldet die Steuer.",
+      "paymentsReceived": "Erhaltene Zahlungen",
+      "refund": "Erstattung",
+      "bankDetails": "Bankverbindung",
+      "voidReason": "Storniert: {reason}"
+    },
+    "public": {
+      "notFoundTitle": "Link nicht gefunden",
+      "notFoundMessage": "Dieser Rechnungslink existiert nicht. Prüfen Sie, ob Sie ihn vollständig kopiert haben, oder fordern Sie den Link erneut beim Absender an.",
+      "unavailableTitle": "Dieser Link ist nicht verfügbar",
+      "unavailableMessage": "Der Rechnungslink wurde zurückgezogen oder ist abgelaufen. Fordern Sie beim Absender einen neuen Link an.",
+      "voidReason": "Grund: {reason}",
+      "printable": "Druckbare Seite öffnen",
+      "amountDueFooter": "Fälliger Betrag: {amount}",
+      "noPayOptions": "Der Verkäufer hat keine Online-Zahlungsmöglichkeit eingerichtet. Bitte kontaktieren Sie ihn, um die Zahlung zu vereinbaren.",
+      "payAmount": "Zu zahlender Betrag ({currency})",
+      "payAmountHint": "Der volle Saldo ist eingetragen. Geben Sie einen kleineren Betrag ein, um einen Teilbetrag zu zahlen.",
+      "amountErrors": {
+        "invalid": "Geben Sie einen Betrag größer als null ein.",
+        "tooMuch": "Der Betrag darf nicht höher sein als der fällige Betrag."
+      },
+      "linkUnavailable": "Dieser Rechnungslink ist nicht mehr verfügbar, daher kann von hier aus nicht bezahlt werden.",
+      "payFailed": "Die Zahlung konnte nicht gestartet werden. Versuchen Sie es in Kürze erneut.",
+      "payUnavailable": "Online-Zahlung ist für diese Rechnung derzeit nicht verfügbar.",
+      "redirecting": "Sie werden zur Zahlungsseite weitergeleitet ...",
+      "payInstructions": "Bezahlen Sie wie unten beschrieben.",
+      "bankTransfer": "Banküberweisung",
+      "copyInstructions": "Anleitung kopieren",
+      "copyValue": "{label} kopieren"
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "developer-rest-api-v1": {
+    "common": {
+      "dismiss": "Descartar",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "copyFailed": "No se pudo copiar. Selecciona el texto y cópialo manualmente."
+    },
+    "rail": {
+      "name": "API para desarrolladores",
+      "tagline": "REST · /api/v1",
+      "keyActive": "Clave activa",
+      "noKey": "Aún no hay clave",
+      "baseUrl": "URL base",
+      "authHeader": "Encabezado de autenticación",
+      "help": {
+        "title": "¿Necesitas ayuda?",
+        "body": "Referencia completa de solicitudes y respuestas, con ejemplos copiables de cada endpoint.",
+        "link": "Leer la documentación"
+      }
+    },
+    "page": {
+      "crumbLabel": "Ruta de navegación",
+      "crumbSettings": "Ajustes",
+      "crumbHere": "Desarrolladores",
+      "title": "Desarrollador",
+      "titleAccent": "Claves de API",
+      "lead": "Genera una clave para llamar a la API REST desde tus propias apps, CRM o automatizaciones: enviar mensajes, administrar contactos, plantillas, difusiones y más. Una clave por espacio de trabajo.",
+      "back": "Atrás",
+      "openDocs": "Abrir documentación",
+      "loading": "Cargando tu clave de API",
+      "forbidden": {
+        "title": "No puedes ver las claves de API",
+        "body": "Tu rol no incluye acceso a las claves de API. Pide a un administrador del espacio de trabajo que te dé el permiso de claves de API."
+      }
+    },
+    "banner": {
+      "title": "Tu nueva clave de API",
+      "warning": "Cópiala ahora y guárdala en un lugar seguro. Por tu seguridad solo conservamos un hash, así que no se volverá a mostrar."
+    },
+    "key": {
+      "title": "Tu clave de API",
+      "active": "Activa",
+      "untitled": "Clave sin nombre",
+      "created": "Creada el {date}",
+      "lastUsed": "Último uso {when}",
+      "never": "nunca",
+      "revoke": "Revocar",
+      "noRevoke": "Tu rol no puede revocar claves de API.",
+      "revoked": "Clave de API revocada. Cualquier app que la use dejará de funcionar de inmediato.",
+      "footer": "Solo se permite una clave por espacio de trabajo. Revoca esta para emitir una nueva.",
+      "confirm": {
+        "title": "¿Revocar esta clave?",
+        "message": "Cualquier app o integración que use esta clave dejará de funcionar de inmediato. Esta acción no se puede deshacer. Después podrás crear una clave nueva.",
+        "accept": "Revocar",
+        "cancel": "Cancelar"
+      }
+    },
+    "create": {
+      "title": "Crea tu clave",
+      "help": "Ponle un nombre a la clave para recordar dónde se usa. La clave se muestra una sola vez al crearla.",
+      "name": "Nombre de la clave",
+      "placeholder": "p. ej. Backend de producción",
+      "submit": "Crear clave",
+      "submitting": "Creando clave…",
+      "created": "Clave de API creada. Cópiala ahora: no se volverá a mostrar.",
+      "noCreate": "Tu rol no puede crear claves de API. Consulta a un administrador del espacio de trabajo.",
+      "planLocked": "Tu plan no incluye la API REST.",
+      "errors": {
+        "required": "Introduce un nombre para la clave.",
+        "tooLong": "El nombre puede tener 120 caracteres como máximo."
+      }
+    },
+    "quickstart": {
+      "title": "Inicio rápido",
+      "reference": "Referencia completa",
+      "intro": "Envía tu primer mensaje. Sustituye la clave y el destinatario:"
+    },
+    "errors": {
+      "planLimit": "Ya tienes una clave de API activa. Revócala antes de crear una nueva: solo se permite una clave por espacio de trabajo.",
+      "planLocked": "Tu plan no incluye la API REST. Mejora tu plan para crear claves de API.",
+      "forbidden": "No tienes permiso para hacer eso.",
+      "validation": "El nombre de la clave no es válido. Revísalo e inténtalo de nuevo.",
+      "notFound": "Esa clave ya no existe. La lista se actualizó.",
+      "network": "No se pudo contactar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "unexpected": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento.",
+      "loadFailed": "No se pudo cargar tu clave de API.",
+      "retry": "Reintentar",
+      "upgrade": "Ver planes",
+      "requestId": "ID de solicitud: {id}"
+    }
+  }
+}

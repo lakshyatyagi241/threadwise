@@ -1,0 +1,312 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "devices": "個人用 WhatsApp"
+    },
+    "area": {
+      "title": "非公式 WhatsApp API",
+      "numbers": "番号",
+      "warmer": "注意"
+    },
+    "common": {
+      "dismiss": "閉じる",
+      "requestId": "リクエスト {id}",
+      "unofficial": "非公式",
+      "reminder": "非公式の接続です。WhatsApp によってこの番号が制限される可能性があります。",
+      "readGuide": "ガイドを読む",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "back": "戻る"
+    },
+    "list": {
+      "title": "個人用 WhatsApp 番号",
+      "subtitle": "QR コードまたはペアリングコードで WhatsApp 番号をリンクします。その番号のチャットは共有受信トレイに表示されます。",
+      "connect": "番号を接続",
+      "capCount": "{used} / {limit} 件の番号",
+      "capUnlimited": "{used, plural, other {# 件の番号}}",
+      "capFull": "このエンジンでは、ワークスペースに {limit, plural, other {# 件の番号}} まで設定できます。別の番号を接続するには、1 件削除してください。",
+      "capLabel": "使用中の番号",
+      "loading": "番号を読み込んでいます…",
+      "retry": "再試行",
+      "searchLabel": "名前または番号で検索",
+      "searchPlaceholder": "名前または番号",
+      "tabs": {
+        "all": "すべて",
+        "connected": "接続済み",
+        "disconnected": "未接続"
+      },
+      "noMatch": "一致する番号がありません。検索をクリアするか、別のタブを選択してください。",
+      "empty": {
+        "title": "個人用の番号はまだリンクされていません",
+        "message": "すでに使用している WhatsApp 番号をリンクします。WhatsApp Web と同様の仕組みのため、WhatsApp を自動化する正式な方法ではなく、WhatsApp によって番号が制限される可能性があります。重要な用途や長期的な利用には、公式の WhatsApp Business ルートの方がリスクが低くなります。",
+        "action": "番号を接続",
+        "noPermission": "ワークスペースの管理者に番号の接続を依頼してください。"
+      },
+      "columns": {
+        "name": "名前",
+        "lastSeen": "最終確認"
+      },
+      "lastSeenNever": "なし",
+      "assignedTo": "担当: {name}",
+      "noticeChanged": {
+        "title": "お知らせが変更されました",
+        "body": "個人用番号のリスクに関するお知らせが更新されました。接続済みの番号は引き続き使用できます。次回接続するときに、再度お読みいただく必要があります。",
+        "action": "お知らせを読む"
+      },
+      "action": {
+        "link": "接続",
+        "reconnect": "再接続",
+        "relink": "再リンク",
+        "retry": "再試行",
+        "details": "詳細",
+        "disconnect": "接続解除",
+        "rename": "名前を変更",
+        "delete": "削除"
+      },
+      "sendingToggle": "{name} を送信に使用",
+      "sendingOn": "送信に使用中",
+      "sendingOff": "送信に未使用",
+      "done": {
+        "disconnected": "{name} の接続を解除しました。",
+        "disconnectedNotUnlinked": "{name} の接続をここで解除しました。WhatsApp の「リンク済みの端末」からこの端末も削除してください。",
+        "deleted": "{name} を削除しました。チャットは受信トレイに残ります。",
+        "renamed": "{name} に名前を変更しました。",
+        "sendingSaved": "保存しました。"
+      },
+      "workerDown": "接続サービスが動作していません。サービスが復旧するまで、番号を接続できません。"
+    },
+    "state": {
+      "created": "まだリンクされていません",
+      "awaiting_qr": "スキャン待ち",
+      "awaiting_pairing_code": "コード待ち",
+      "connecting": "接続中",
+      "connected": "接続済み",
+      "disconnected": "未接続",
+      "logged_out": "WhatsApp によりリンクが終了されました",
+      "error": "接続できませんでした",
+      "unknown": "不明"
+    },
+    "reason": {
+      "unlinked_on_phone": "この番号へのリンクは WhatsApp により終了されました。WhatsApp の「リンク済みの端末」で端末が削除された場合や、WhatsApp が番号を制限した場合に発生します。ここのチャットは保持されています。再度リンクできます。",
+      "forbidden": "WhatsApp が接続を拒否しました。番号が制限されている可能性があります。ここのチャットは保持されています。",
+      "qr_timeout": "コードが時間内にスキャンされませんでした。",
+      "pair_failed": "WhatsApp がこの番号のリンクを完了できませんでした。",
+      "code_failed": "ペアリングコードが受け付けられませんでした。",
+      "mismatch": "スキャンした端末は、入力された番号の端末ではありません。番号を確認して、もう一度お試しください。",
+      "proxy_unreachable": "プロキシが応答しませんでした。動作するまで番号はオフラインのままです。",
+      "session_conflict": "同じ番号が別の場所にもリンクされており、両方が互いに接続を置き換えています。もう一方のリンクを削除してから、再度接続してください。",
+      "device_limit_reached": "WhatsApp では、リンクできる端末は 4 台までです。WhatsApp の「リンク済みの端末」から 1 台削除して、もう一度お試しください。",
+      "worker_unavailable": "接続サービスを利用できません。数分後にもう一度お試しください。",
+      "worker_silent": "この番号について接続サービスが応答しなくなりました。サービスが復旧すると自動的に再接続されます。",
+      "user": "このワークスペースから接続解除されました。",
+      "session_incomplete": "保存されたセッションが完了しませんでした。番号を再度リンクしてください。"
+    },
+    "notice": {
+      "title": "接続する前に",
+      "intro": "以下をお読みください。短く、事実のみを記載しています。",
+      "listLabel": "各項目を確認してください",
+      "notesTitle": "知っておくと良いこと",
+      "version": "お知らせのバージョン {version}",
+      "accept": "同意して続行",
+      "accepting": "保存中...",
+      "mustTick": "続行するには 3 つのチェックボックスすべてにチェックを入れてください。",
+      "pageTitle": "個人用番号のリスクに関するお知らせ",
+      "pageIntro": "個人用の WhatsApp 番号を接続する前に同意していただくお知らせです。",
+      "acceptedOn": "バージョン {version} に {date} に同意しました。",
+      "notAccepted": "現在のバージョンにはまだ同意していません。番号を接続するときに確認されます。",
+      "backToList": "番号一覧に戻る",
+      "texts": {
+        "v2026_10_07_1": {
+          "items": {
+            "not_approved_ban_risk": "これは WhatsApp Web と同じように WhatsApp を接続する仕組みであることを理解しています。WhatsApp を自動化する正式な方法ではなく、WhatsApp の利用規約に違反します。通常の利用であっても、WhatsApp はいつでもこの番号を制限または永久停止する可能性があります。当方がそれを防いだり、番号を取り戻したりすることはできません。",
+            "own_number_expected_contacts": "所有している番号、または所有者から接続の許可を得ている番号のみを接続し、失うことになっても問題ないことを理解しています。連絡を期待している相手にのみメッセージを送信します。",
+            "shared_inbox_disclosure": "リンクされた瞬間から、この番号のすべての個人チャット（ビジネスチャットだけでなく）が、受信トレイを閲覧できるこのワークスペースのメンバーの共有受信トレイに表示されることを理解しています。また、私が携帯電話で入力したメッセージも同様にコピーされます。"
+          },
+          "notes": {
+            "official_route_lower_risk": "重要な用途や長期的な利用には、公式の WhatsApp Business ルートの方がリスクが低くなります。",
+            "warm_up": "番号をゆっくりと段階的に慣らし、送信量を少なく保ってください。",
+            "no_ban_support": "制限または停止された番号は、サポート対象外です。調査、復元、返金は行いません。",
+            "shared_addresses": "このパイロット版では、番号は当方のサーバーの共有アドレスから接続されます（プロキシは使用しません）。そのため、1 つの番号に対する制限が他の番号にも及ぶ可能性があります。",
+            "disconnect_keeps_chats": "ここで接続解除すると、リンクと保存されたセッションは削除されますが、受信トレイのチャットは削除されません。"
+          }
+        }
+      }
+    },
+    "wizard": {
+      "title": "番号を接続",
+      "relinkTitle": "{name} をリンク",
+      "stepOf": "ステップ {step} / {total}",
+      "continue": "続行",
+      "creating": "保存中...",
+      "number": {
+        "title": "どの番号ですか？",
+        "name": "名前",
+        "namePlaceholder": "例: 営業用回線",
+        "nameHelp": "この名前はチームのみに表示されます。",
+        "phone": "WhatsApp 番号",
+        "phoneHelp": "リンクする番号を、国番号を含めて入力してください。スキャンまたはコードを入力する端末の番号である必要があります。",
+        "activate": "リンク後に送信に使用",
+        "activateHelp": "リンク後、キャンペーン、予約メッセージ、フローでこの番号を使用できます。",
+        "nameError": {
+          "required": "名前を入力してください。",
+          "short": "名前は 2 文字以上必要です。",
+          "long": "名前が長すぎます（最大 191 文字）。"
+        },
+        "phoneError": {
+          "empty": "番号を入力してください。",
+          "invalid": "選択した国では、この番号は有効ではありません。"
+        },
+        "openExisting": "既存の番号を開く"
+      },
+      "link": {
+        "title": "端末をリンク",
+        "choose": "どの方法でリンクしますか？",
+        "methodLabel": "リンク方法",
+        "qr": "QR コードをスキャン",
+        "qrHelp": "この番号を持つ端末でスキャンしてください。",
+        "code": "ペアリングコードを使用",
+        "codeHelp": "端末に 8 文字のコードを入力します。スキャンできないときに便利です。",
+        "numberLine": "番号: {phone}",
+        "startQr": "QR コードを表示",
+        "startCode": "ペアリングコードを取得",
+        "starting": "開始中...",
+        "needCountryCode": "ペアリングコードを使用するには、国番号を追加してください。",
+        "someoneElse": "このコードは、接続する番号の端末にのみ入力してください。他人と共有しないでください。他人の端末でペアリングコードを入力すると、その人の WhatsApp アカウント全体がこのワークスペースにリンクされてしまいます。",
+        "qrSteps": {
+          "one": "端末で WhatsApp を開いてください。",
+          "two": "「リンク済みの端末」を開き、「端末をリンク」を選択してください。",
+          "three": "このコードにカメラを向けてください。"
+        },
+        "codeSteps": {
+          "one": "端末で WhatsApp を開いてください。",
+          "two": "「リンク済みの端末」→「端末をリンク」→「代わりに電話番号でリンク」を選択してください。",
+          "three": "このコードを入力してください。"
+        },
+        "qrAlt": "番号をリンクするための QR コード",
+        "qrRefresh": "{seconds} 秒後に新しいコード",
+        "qrExpires": "{time} で期限切れ",
+        "codeValid": "このコードの有効期間は約 3 分です。",
+        "codeExpires": "有効期間: {time}",
+        "codeLabel": "ペアリングコード",
+        "copy": "コードをコピー",
+        "copied": "コピーしました",
+        "copyFailed": "コピーできませんでした。コードを選択してコピーしてください。",
+        "strip": {
+          "shown": "コードを表示しました",
+          "scanned": "スキャン済み",
+          "ready": "準備完了"
+        },
+        "stripLabel": "進行状況",
+        "linking": "リンク中。WhatsApp が同期しています。しばらくかかる場合があります。",
+        "cancelAttempt": "停止して別の方法を選択",
+        "reading": "最初のコードを待っています...",
+        "relinkAction": "保存済みのセッションを破棄して、もう一度連携する"
+      },
+      "result": {
+        "connectedTitle": "接続済み",
+        "connectedBody": "{phone} を連携しました。この番号のチャットが共有の受信トレイに表示されるようになります。",
+        "warmer": "ウォームアップを設定",
+        "inbox": "受信トレイを開く",
+        "list": "番号一覧に戻る",
+        "timedOutTitle": "コードが時間内にスキャンされませんでした",
+        "timedOutBody": "連携は行われませんでした。電話がオフラインだったりロックされていたりした場合は、オンラインにしてから再度お試しください。",
+        "phoneOfflineTitle": "電話に接続できませんでした",
+        "phoneOfflineBody": "電話がオンラインか確認してから、もう一度お試しください。",
+        "loggedOutTitle": "WhatsAppで連携が終了しました",
+        "loggedOutBody": "これは、WhatsAppの「連携済みの端末」からデバイスが削除された場合や、WhatsAppが番号を制限した場合に起こります。ここでのチャットは保持されます。再度連携できます。",
+        "replacedTitle": "別のセッションによってこのセッションが置き換えられました",
+        "replacedBody": "同じ番号が別の場所で連携されています。もう一方の連携を削除してから、再度接続してください。",
+        "mismatchTitle": "スキャンした電話の番号が入力された番号と一致しません",
+        "mismatchBody": "スキャンした電話の番号が、入力された番号と一致しません。番号を確認して、もう一度お試しください。",
+        "limitTitle": "電話の連携済み端末が多すぎます",
+        "limitBody": "WhatsAppでは連携できる端末は4台までです。WhatsAppの「連携済みの端末」から1台削除してから、もう一度お試しください。",
+        "proxyTitle": "プロキシが応答しませんでした",
+        "proxyBody": "プロキシが動作するまで、この番号はオフラインのままです。",
+        "serviceTitle": "接続サービスを利用できません",
+        "serviceBody": "数分後にもう一度お試しください。",
+        "failedTitle": "番号を連携できませんでした",
+        "failedBody": "WhatsAppでの連携が完了しませんでした。何も連携されていません。もう一度お試しください。",
+        "tryAgain": "再試行"
+      },
+      "discard": {
+        "title": "接続を中止しますか?",
+        "message": "入力が完了していません。今離れると、入力内容が失われ、進行中の連携も中断されます。",
+        "stay": "続ける",
+        "leave": "離れる"
+      }
+    },
+    "detail": {
+      "back": "すべての番号",
+      "loading": "番号を読み込んでいます...",
+      "notFound": "この番号は存在しないか、削除されています。",
+      "status": "ステータス",
+      "lastSeen": "最終確認",
+      "linkedSince": "この状態になった日時",
+      "number": "番号",
+      "numberLocked": "連携がある間は番号を変更できません。先に連携を解除してください。",
+      "assignedTo": "担当者",
+      "createdBy": "追加者",
+      "sending": "送信に使用",
+      "editTitle": "編集",
+      "name": "名前",
+      "save": "保存",
+      "saving": "保存しています...",
+      "saved": "保存しました。",
+      "dangerTitle": "連携解除または削除",
+      "disconnectHelp": "番号の連携を解除し、保存されたセッションを削除します。後で再度連携できます。",
+      "deleteHelp": "この番号をワークスペースから削除します。チャットは受信トレイに残ります。",
+      "warmerLink": "この番号のウォームアップを設定"
+    },
+    "dialog": {
+      "disconnect": {
+        "title": "{name} の連携を解除しますか?",
+        "message": "番号の連携を解除し、保存されたセッションを削除します。会話は引き続き閲覧できますが、この番号から再度連携するまで返信できなくなります。",
+        "confirm": "連携解除"
+      },
+      "delete": {
+        "title": "{name} を削除しますか?",
+        "message": "番号の連携を解除し、保存されたセッションを削除します。会話は受信トレイで引き続き閲覧できますが、この番号からは返信できなくなります。この操作は元に戻せません。",
+        "confirm": "番号を削除"
+      },
+      "rename": {
+        "title": "番号の名前を変更",
+        "label": "名前",
+        "confirm": "保存"
+      },
+      "cancel": "キャンセル"
+    },
+    "errors": {
+      "generic": "問題が発生しました。もう一度お試しください。",
+      "FORBIDDEN": "この操作を行う権限がありません。",
+      "UNAUTHENTICATED": "セッションが終了しました。再度サインインしてください。",
+      "NOT_FOUND": "この番号は存在しないか、削除されています。",
+      "VALIDATION_FAILED": "一部の項目を確認してください。",
+      "ROW_VERSION_CONFLICT": "この番号は別の場所で変更されました。再読み込みしてから、もう一度お試しください。",
+      "WA_UNOFFICIAL_DISABLED": "この機能はワークスペースで有効になっていません。",
+      "PLAN_FEATURE_LOCKED": "お使いのプランにはこの機能が含まれていません。",
+      "PLAN_LIMIT_REACHED": "お使いのプランでは、ここで {limit, plural, other {# 件のWhatsApp番号}} まで利用できます。1件削除するか、プランをアップグレードしてください。",
+      "PLAN_LIMIT_REACHED_GENERIC": "お使いのプランでは、ここではこれ以上番号を追加できません。1件削除するか、プランをアップグレードしてください。",
+      "DEVICE_ALREADY_EXISTS": "この電話番号のデバイスは、このワークスペースに既に存在します。",
+      "DEVICE_PHONE_INVALID": "ペアリングコードを使うには、国番号を入力してください。",
+      "PERSONAL_WA_NOTICE_REQUIRED": "先に通知を読んで同意してください。",
+      "DEVICE_PAIRING_RATE_LIMITED": "この番号への試行回数が多すぎます。しばらくしてからもう一度お試しください。",
+      "DEVICE_PAIRING_RATE_LIMITED_WAIT": "この番号への試行回数が多すぎます。{minutes, plural, other {# 分}}後にもう一度お試しください。",
+      "DEVICE_PAIRING_IN_PROGRESS": "少し前に別の接続が開始されました。完了するか終了するまでお待ちください。",
+      "DEVICE_NOT_PAIRABLE": "この番号は現在連携できません。先に連携を解除してください。",
+      "WA_WORKER_UNAVAILABLE": "接続サービスを利用できません。数分後にもう一度お試しください。",
+      "RATE_LIMITED": "リクエストが多すぎます。少し待ってください。",
+      "upgrade": "プランを確認してアップグレード",
+      "requestId": "リクエスト {id}",
+      "DEVICE_PILOT_CAP_REACHED": "ワークスペースは、試用期間中に追加できる個人用WhatsApp番号の上限に達しました。別の番号を接続するには、1件削除してください。",
+      "DEVICE_CREATE_RATE_LIMITED": "過去1時間に追加された番号が多すぎます。しばらくしてからもう一度お試しください。",
+      "DEVICE_CREATE_RATE_LIMITED_WAIT": "過去1時間に追加された番号が多すぎます。{minutes, plural, other {# 分}}後にもう一度お試しください。",
+      "DEVICE_PAIRING_IN_PROGRESS_BY": "{name} は少し前に接続を開始しました。完了するまでお待ちください。",
+      "DEVICE_NO_PAIRING": "この接続の試行は終了しました。もう一度開始してください。",
+      "DEVICE_NUMBER_LOCKED": "連携がある間は番号を変更できません。先に連携を解除してください。",
+      "DEVICE_PAIRING_TIMEOUT": "WhatsAppから時間内に応答がありませんでした。もう一度お試しください。",
+      "DEVICE_NOT_PAIRABLE_CONNECTED": "この番号は既に連携されています。先に連携を解除してから、再度接続してください。",
+      "DEVICE_NOT_PAIRABLE_SESSION": "この番号には保存済みのWhatsAppセッションがあります。保存されたセッションを破棄して最初からやり直すには、ゼロから再度連携してください。",
+      "DEVICE_NOT_PAIRABLE_LIVE": "この番号では既に接続処理が進行中です。最初からやり直すには、ゼロから再度連携してください。"
+    }
+  }
+}

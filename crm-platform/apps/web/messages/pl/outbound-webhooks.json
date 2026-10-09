@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "Odrzuć"
+    },
+    "events": {
+      "contact_created": "Utworzono kontakt",
+      "contact_updated": "Zaktualizowano kontakt",
+      "contact_deleted": "Usunięto kontakt",
+      "contact_tag_added": "Dodano tag do kontaktu",
+      "contact_opted_in": "Kontakt wyraził zgodę",
+      "deal_stage_changed": "Szansa sprzedaży przeniesiona do innego etapu",
+      "task_created": "Utworzono zadanie",
+      "task_assigned": "Przypisano zadanie",
+      "template_status_changed": "Zmieniono status szablonu",
+      "device_status_changed": "Zmieniono status urządzenia",
+      "conversation_reopened": "Ponownie otwarto rozmowę"
+    },
+    "page": {
+      "title": "Webhooki",
+      "subtitle": "Wysyłaj zdarzenia z tej przestrzeni roboczej do własnych systemów w chwili ich wystąpienia. Każde dostarczenie to podpisane żądanie POST w formacie JSON, ponawiane, gdy Twój serwer nie odpowie.",
+      "back": "Integracje i dla deweloperów",
+      "add": "Dodaj webhook",
+      "list": "Webhooki",
+      "emptyTitle": "Brak webhooków",
+      "empty": "Dodaj punkt końcowy, aby odbierać zdarzenia, np. nowy kontakt albo przesunięcie szansy sprzedaży na inny etap.",
+      "noAccess": "Nie masz dostępu do webhooków.",
+      "loadFailed": "Nie udało się wczytać webhooków.",
+      "retry": "Spróbuj ponownie",
+      "allEvents": "Wszystkie zdarzenia",
+      "signed": "Podpisany",
+      "health": {
+        "off": "Wyłączony",
+        "failing": "Z błędami",
+        "healthy": "Sprawny",
+        "idle": "Brak dostarczeń"
+      },
+      "activeFor": "Aktywny: {name}",
+      "lastDelivery": "Ostatnie dostarczenie {when}, odpowiedź {status}",
+      "noDeliveries": "Nic jeszcze nie dostarczono",
+      "noAnswer": "brak odpowiedzi",
+      "counts": "Dostarczono: {ok}, nieudane: {failed}",
+      "lastError": "Ostatni błąd: {error}",
+      "deliveries": "Dostarczenia",
+      "test": "Wyślij test",
+      "edit": "Edytuj",
+      "delete": "Usuń",
+      "cancel": "Anuluj",
+      "deleteTitle": "Usunąć ten webhook?",
+      "deleteMessage": "{name} przestanie odbierać zdarzenia, a jego dziennik dostarczeń zostanie usunięty. Nie można tego cofnąć.",
+      "created": "Dodano webhook.",
+      "saved": "Zapisano webhook.",
+      "deleted": "Usunięto webhook.",
+      "deleteFailed": "Nie udało się usunąć webhooka. Spróbuj ponownie.",
+      "toggleFailed": "Nie udało się zapisać zmiany. Spróbuj ponownie.",
+      "testOk": "Test został dostarczony (odpowiedź {status}).",
+      "testFailed": "Test nie powiódł się: {reason}",
+      "testError": "Nie udało się wysłać testu. Spróbuj ponownie."
+    },
+    "dialog": {
+      "addTitle": "Dodaj webhook",
+      "editTitle": "Edytuj webhook",
+      "close": "Zamknij",
+      "name": "Nazwa",
+      "nameHint": "Opcjonalnie: etykieta dla Ciebie, np. system, który go odbiera.",
+      "url": "Adres URL punktu końcowego",
+      "urlHint": "Adres https dostępny z internetu. Adresy prywatne i wewnętrzne są odrzucane.",
+      "urlProblem": {
+        "empty": "Podaj adres URL punktu końcowego.",
+        "tooLong": "Adres URL jest za długi.",
+        "notHttps": "Adres URL musi zaczynać się od https://.",
+        "invalid": "To nie jest prawidłowy adres URL."
+      },
+      "secret": "Sekret podpisu",
+      "secretHint": "Opcjonalnie. Gdy ustawiony, każde dostarczenie zawiera podpis, który Twój serwer może zweryfikować. Nie jest ponownie pokazywany.",
+      "secretSetHint": "Sekret jest ustawiony. Zostaw to pole puste, aby go zachować, albo wpisz nowy, aby go zastąpić.",
+      "secretKeep": "Bez zmian",
+      "removeSecret": "Usuń sekret podpisu (dostarczenia nie będą podpisywane)",
+      "events": "Zdarzenia",
+      "allEvents": "Wszystkie zdarzenia",
+      "pickEvents": "Wybierz co najmniej jedno zdarzenie lub zaznacz wszystkie.",
+      "active": "Aktywny",
+      "cancel": "Anuluj",
+      "create": "Dodaj webhook",
+      "save": "Zapisz zmiany",
+      "failed": "Nie udało się zapisać webhooka. Spróbuj ponownie."
+    },
+    "deliveries": {
+      "title": "Dostarczenia: {name}",
+      "close": "Zamknij",
+      "empty": "Brak dostarczeń. Użyj opcji Wyślij test, aby wysłać pierwsze.",
+      "failed": "Nie udało się wczytać dostarczeń.",
+      "when": "Kiedy",
+      "event": "Zdarzenie",
+      "result": "Odpowiedź",
+      "time": "Czas",
+      "attempt": "Próba",
+      "test": "Test",
+      "noAnswer": "Brak odpowiedzi"
+    }
+  }
+}

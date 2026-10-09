@@ -1,0 +1,307 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "Add-ons und Module",
+      "packs": "Add-ons (Abrechnung)",
+      "extensions": "Add-ons (Code)",
+      "workspace": "Add-ons"
+    },
+    "common": {
+      "loading": "Wird geladen",
+      "retry": "Erneut versuchen",
+      "cancel": "Abbrechen",
+      "save": "Speichern",
+      "saving": "Wird gespeichert",
+      "close": "Schließen",
+      "dismiss": "Ausblenden",
+      "admin": "Admin",
+      "settings": "Einstellungen",
+      "optional": "optional",
+      "required": "erforderlich",
+      "readOnly": "Sie können diese Seite ansehen, aber nur ein Super-Admin kann sie ändern.",
+      "requestId": "Anfrage-ID",
+      "errors": {
+        "forbidden": "Sie haben keinen Zugriff auf diese Seite.",
+        "request": "Die Anfrage konnte nicht abgeschlossen werden.",
+        "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+        "conflict": "Jemand anderes hat dies gerade geändert. Laden Sie die Seite neu und versuchen Sie es erneut."
+      }
+    },
+    "packs": {
+      "crumbHere": "Add-ons",
+      "eyebrow": "Admin · Abrechnung & Tarife · Add-ons",
+      "titleLead": "Add",
+      "titleAccent": "-ons",
+      "title": "Add-ons",
+      "description": "À-la-carte-Funktionspakete, die Kunden zusätzlich zu ihrem Tarif kaufen, etwa „Kampagnen-Add-on“ oder „+1 WhatsApp-Nummer“. Jedes Add-on gewährt die von Ihnen festgelegten Funktionsschalter und Limits, die mit dem Tarif des Kunden zusammengeführt werden. Sie erscheinen auf der Kontoseite des Kunden, sobald er einen aktiven Tarif hat.",
+      "new": "Neues Add-on",
+      "empty": {
+        "title": "Noch keine Add-ons.",
+        "action": "Erstes Add-on erstellen"
+      },
+      "table": {
+        "label": "Add-ons",
+        "name": "Name",
+        "price": "Preis",
+        "period": "Zeitraum",
+        "grants": "Gewährt",
+        "status": "Status",
+        "actions": "Aktionen"
+      },
+      "price": {
+        "free": "Kostenlos",
+        "lifetime": "einmalig"
+      },
+      "period": {
+        "days": "{count} Tage",
+        "weeks": "{count} Wochen",
+        "months": "{count} Monate",
+        "years": "{count} Jahre"
+      },
+      "grants": {
+        "none": "nichts festgelegt",
+        "unlimited": "Unbegrenzt {name}",
+        "add": "+{amount} {name}",
+        "more": "+{count}"
+      },
+      "status": {
+        "active": "Aktiv",
+        "off": "Aus"
+      },
+      "actions": {
+        "edit": "Bearbeiten",
+        "enable": "Aktivieren",
+        "disable": "Deaktivieren",
+        "delete": "Löschen"
+      },
+      "toasts": {
+        "created": "Add-on erstellt.",
+        "updated": "Add-on aktualisiert.",
+        "activated": "{name} aktiviert",
+        "deactivated": "{name} deaktiviert",
+        "deleted": "{name} gelöscht"
+      },
+      "delete": {
+        "title": "{name} löschen?",
+        "body": "Dieses Add-on löschen? Workspaces, die es gekauft haben, behalten es bis zum Ablauf.",
+        "confirm": "Löschen",
+        "inUse": "{count, plural, one {# Workspace besitzt dieses Add-on, daher kann es nicht gelöscht werden. Deaktivieren Sie es stattdessen; Besitzer behalten es bis zum Ende.} other {# Workspaces besitzen dieses Add-on, daher kann es nicht gelöscht werden. Deaktivieren Sie es stattdessen; Besitzer behalten es bis zum Ende.}}"
+      },
+      "errors": {
+        "generic": "Das Add-on konnte nicht gespeichert werden.",
+        "forbidden": "Nur ein Super-Admin kann Add-ons ändern.",
+        "notFound": "Dieses Add-on existiert nicht mehr."
+      },
+      "editor": {
+        "crumbHere": "Add-ons",
+        "crumbNew": "Neu",
+        "crumbEdit": "Bearbeiten",
+        "eyebrowNew": "Admin · Add-ons · Neu",
+        "eyebrowEdit": "Admin · Add-ons · Bearbeiten",
+        "titleNewLead": "Neues",
+        "titleEditLead": "Bearbeiten:",
+        "titleAccent": "Add-on",
+        "intro": "Ein Add-on gewährt NUR das, was Sie aktivieren, und sonst nichts. Ein leeres Limit wird nicht verändert, es gibt also kein versehentliches „Unbegrenzt“.",
+        "fixTitle": "Bitte korrigieren Sie Folgendes:",
+        "cancel": "Abbrechen",
+        "create": "Add-on erstellen",
+        "saveChanges": "Änderungen speichern",
+        "basics": "Add-on-Grundlagen",
+        "features": "Funktionen, die dieses Add-on freischaltet",
+        "featuresHint": "Haken Sie nur an, was dieses Add-on gewährt. Alles Nicht-Angehakte richtet sich weiterhin nach dem Tarif des Kunden.",
+        "coreFeature": "in jedem Tarif",
+        "limits": "Limit-Erhöhungen",
+        "limitsHint": "Leer = das Add-on ändert dieses Limit nicht. Geben Sie eine Zahl ein, die zum Tarif ADDIERT wird (z. B. +2 Geräte). Verwenden Sie -1 für unbegrenzt.",
+        "fields": {
+          "name": "Name",
+          "namePlaceholder": "Kampagnen-Add-on",
+          "subtitle": "Untertitel",
+          "subtitlePlaceholder": "Kampagnen freischalten",
+          "amount": "Preis",
+          "offerAmount": "Angebotspreis (optional)",
+          "currency": "Währung",
+          "billingDuration": "Laufzeit",
+          "billingUnit": "Einheit",
+          "billingMode": "Abrechnung",
+          "sortOrder": "Sortierreihenfolge",
+          "isActive": "Aktiv",
+          "isLifetime": "Lebenslang (einmalig)"
+        },
+        "modes": {
+          "one_time": "Einmalig (nach Ablauf erneut kaufen)",
+          "recurring": "Wiederkehrend (verlängert sich per Autopay)"
+        },
+        "units": {
+          "days": "Tage",
+          "weeks": "Wochen",
+          "months": "Monate",
+          "years": "Jahre"
+        },
+        "problems": {
+          "name": "Geben Sie einen Namen ein.",
+          "amount": "Geben Sie einen Betrag wie 19 oder 19.99 ein.",
+          "offerAmount": "Der Angebotspreis muss niedriger als der Preis sein.",
+          "currency": "Verwenden Sie einen dreistelligen Währungscode.",
+          "billingDuration": "Geben Sie eine ganze Zahl ab 1 ein.",
+          "sortOrder": "Geben Sie eine ganze Zahl ein.",
+          "limits": "Limits sind ganze Zahlen oder -1 für unbegrenzt.",
+          "form": "Prüfen Sie die markierten Felder."
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "Add-ons",
+      "eyebrow": "Admin · Add-ons",
+      "titleLead": "Ein neues",
+      "titleAccent": "Add-on installieren",
+      "title": "Add-ons",
+      "description": "Add-ons fügen dieser Installation zusätzliche Funktionen hinzu. Instagram ist das erste. Bestätigen Sie Ihren Kaufcode, laden Sie das Paket hoch, und es wird direkt installiert. Ihre Daten und Einstellungen bleiben unberührt.",
+      "coreVersion": "Kern",
+      "packsLead": "Suchen Sie die kostenpflichtigen Funktionspakete, die Kunden zusätzlich zu einem Tarif kaufen?",
+      "packsLink": "Das sind Tarif-Add-ons (Abrechnung)",
+      "packsTail": ". Diese Seite installiert Code.",
+      "installed": {
+        "title": "Installierte Add-ons",
+        "empty": "Noch keine Add-ons installiert. Bestätigen Sie oben Ihren Kaufcode und laden Sie dann ein Paket hoch.",
+        "version": "v{version}",
+        "files": "{count, plural, one {# Datei} other {# Dateien}}",
+        "inPlace": "Direkt installiertes Modul",
+        "filesKept": "Dateien bleiben auf dem Datenträger",
+        "active": "Aktiv",
+        "disabled": "Deaktiviert",
+        "inactive": "Inaktiv",
+        "enable": "Aktivieren",
+        "disable": "Deaktivieren",
+        "remove": "Entfernen",
+        "reactivate": "Reaktivieren",
+        "footnote": "Beim Entfernen eines Add-ons werden nur die Dateien gelöscht, die es installiert hat, und zwar ab dem Zeitpunkt seines Hinzufügens, sodass Kerndateien nie angetastet werden. Die Daten bleiben in der Datenbank."
+      },
+      "verify": {
+        "title": "Kaufcode bestätigen",
+        "body": "Dieselbe {brand}-Lizenz, die Updates freischaltet. Add-ons sind daran gebunden.",
+        "placeholder": "z. B. 8f2c1a44-...",
+        "label": "Kaufcode",
+        "action": "Bestätigen",
+        "checking": "Wird bestätigt…",
+        "empty": "Geben Sie zuerst Ihren Kaufcode ein.",
+        "failed": "Bestätigung fehlgeschlagen."
+      },
+      "upload": {
+        "title": "Add-on-Paket hochladen",
+        "body": "Die ZIP-Datei wird geprüft, bevor etwas geschrieben wird. Ein fehlerhaftes oder inkompatibles Paket wird abgelehnt, und Ihre Installation bleibt unverändert.",
+        "choose": "Add-on-.zip auswählen",
+        "max": "Max. 100 MB",
+        "action": "Installieren",
+        "installing": "Wird installiert…",
+        "progress": "Wird hochgeladen und zusammengeführt. Schließen Sie diesen Tab nicht."
+      },
+      "confirm": {
+        "removeTitle": "{name} entfernen?",
+        "removeBody": "Dadurch werden die installierten Dateien gelöscht. Die Daten bleiben in der Datenbank.",
+        "remove": "Entfernen",
+        "moduleOffTitle": "{name} entfernen?",
+        "moduleOffBody": "Dadurch wird das Add-on deaktiviert, sodass seine Seiten und Automatisierungen nicht mehr laufen. Die Dateien bleiben erhalten, Sie können es jederzeit reaktivieren. Es wird nichts gelöscht, und die Daten bleiben in der Datenbank.",
+        "moduleOnTitle": "{name} reaktivieren?",
+        "moduleOnBody": "Dadurch wird das Add-on wieder eingeschaltet. Seine Dateien sind noch auf dem Datenträger, es funktioniert also sofort wieder.",
+        "reactivate": "Reaktivieren"
+      },
+      "engines": {
+        "connected": "Verbunden",
+        "notConnected": "Nicht verbunden",
+        "connect": "Verbinden",
+        "manage": "Verwalten",
+        "disconnect": "Trennen",
+        "disconnectYes": "Ja, trennen",
+        "save": "Speichern & verbinden",
+        "testing": "Verbindung wird hergestellt…",
+        "displayName": "Anzeigename",
+        "secret": "Gemeinsames Geheimtoken",
+        "secretSaved": "•••••••• gespeichert, leer lassen zum Beibehalten",
+        "secretNew": "Gemeinsames Geheimnis einfügen",
+        "lastChecked": "Zuletzt geprüft",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "Läuft als separate {brand}-Bereitstellung. Verbindung per URL + Geheimnis, kein Upload.",
+          "blocked": "Blockiert: natives Add-on aktiv",
+          "blockedNote": "Das native Instagram-Add-on ist installiert. Entfernen Sie es unten, um ein entferntes {brand} zu verbinden.",
+          "modalTitle": "Instagram verbinden",
+          "modalBody": "Fügen Sie die URL Ihrer {brand}-Bereitstellung und das gemeinsame Geheimtoken ein. {app} prüft die Verbindung per API. Es wird nichts hochgeladen.",
+          "url": "{brand}-URL",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "Wird in der gesamten App bei jeder Beschriftung wie „Synchronisieren von …“, „Verwalten auf …“ und „… URL“ angezeigt.",
+          "disconnectTitle": "Instagram trennen?",
+          "disconnectBody": "Dadurch wird Instagram von {app} getrennt. Instagram verschwindet sofort aus Dashboard, Analysen, Posteingang, Flows, Vorlagen und Autoantworten aller Workspaces und kann erst nach erneuter Verbindung wieder genutzt werden. Fortfahren?"
+        },
+        "email": {
+          "title": "E-Mail",
+          "body": "Beim Verbinden wird die {brand}-E-Mail-Plattform angebunden, damit E-Mails im Team-Posteingang landen, per URL + Geheimnis, kein Upload.",
+          "modalTitle": "E-Mail verbinden",
+          "modalBody": "Fügen Sie die URL Ihrer {brand}-Bereitstellung und das gemeinsame Geheimtoken ein. {app} prüft die Verbindung per API. Es wird nichts hochgeladen.",
+          "url": "{brand}-URL",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "Wird in der gesamten App bei jeder E-Mail-Beschriftung angezeigt.",
+          "disconnectTitle": "E-Mail trennen?",
+          "disconnectBody": "Dadurch wird die E-Mail-Plattform von {app} getrennt. E-Mails landen für alle Workspaces nicht mehr im Team-Posteingang, bis Sie sie erneut verbinden. Fortfahren?"
+        }
+      },
+      "errors": {
+        "generic": "Das hat nicht funktioniert.",
+        "forbidden": "Nur ein Super-Admin kann Module ändern.",
+        "invalidPackage": "Das Paket ist ungültig.",
+        "tooLarge": "Das Paket ist zu groß.",
+        "coreTooOld": "Dieses Paket benötigt eine neuere Kernversion.",
+        "engineConflict": "Instagram läuft jeweils nur mit einer Engine. Trennen Sie zuerst die andere."
+      }
+    },
+    "workspace": {
+      "title": "Add-ons",
+      "description": "Zusätzliche Funktionspakete, die Sie zu Ihrem Abonnement dazukaufen.",
+      "needPlanTitle": "Add-ons erfordern einen aktiven Tarif",
+      "needPlanBody": "Add-ons sind zusätzliche Funktionspakete, die Sie zu Ihrem Abonnement dazukaufen. Wählen Sie zuerst einen Tarif und kehren Sie dann hierher zurück, um Funktionen hinzuzufügen.",
+      "viewPlans": "Tarife ansehen",
+      "noneTitle": "Keine Add-ons verfügbar",
+      "noneBody": "Derzeit werden keine Add-ons angeboten. Schauen Sie später noch einmal vorbei.",
+      "ownedTitle": "Ihre Add-ons",
+      "ownedBody": "Aktive Pakete, die mit Ihrem aktuellen Tarif zusammengeführt sind.",
+      "ends": "Endet am {date}",
+      "lifetime": "Lebenslang",
+      "autoRenews": "Verlängert sich automatisch",
+      "renewal": {
+        "cancel": "Verlängerung kündigen",
+        "confirmTitle": "Verlängerung kündigen?",
+        "confirmBody": "Dieses Add-on bleibt bis zum Ende der bereits bezahlten Laufzeit aktiv und wird danach nicht verlängert.",
+        "confirm": "Verlängerung kündigen",
+        "keep": "Weiter verlängern",
+        "forbidden": "Sie haben keine Berechtigung, den Tarif zu ändern.",
+        "none": "Es gibt kein aktives Abonnement, das gekündigt werden könnte.",
+        "failed": "Die Verlängerung konnte nicht gekündigt werden. Bitte versuchen Sie es erneut."
+      },
+      "active": "Aktiv",
+      "cardEyebrow": "Add-on",
+      "catalogTitle": "Add-ons",
+      "catalogBody": "Schalten Sie zusätzliche Funktionen zu Ihrem aktuellen Tarif frei. Ein Tarifwechsel ist nicht nötig.",
+      "count": "{count, plural, one {# Add-on} other {# Add-ons}}",
+      "free": "Kostenlos",
+      "lifetimePrice": "einmalig",
+      "per": "/ {unit}",
+      "units": {
+        "days": "Tage",
+        "weeks": "Wochen",
+        "months": "Monate",
+        "years": "Jahre"
+      },
+      "buy": "Zum Tarif hinzufügen",
+      "buyAgain": "Erneut kaufen",
+      "owned": "Im Besitz ×{count} · erneuter Kauf fügt mehr hinzu",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "Unbegrenzt {name}",
+        "add": "+{amount} {name}"
+      },
+      "error": "Die Add-ons konnten nicht geladen werden."
+    }
+  }
+}

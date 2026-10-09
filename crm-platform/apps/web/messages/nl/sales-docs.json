@@ -1,0 +1,647 @@
+{
+  "sales-docs": {
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "nav": {
+      "proposals": "Offertes",
+      "estimates": "Schattingen"
+    },
+    "kind": {
+      "proposal": {
+        "singular": "Offerte",
+        "plural": "offertes"
+      },
+      "estimate": {
+        "singular": "Schatting",
+        "plural": "schattingen"
+      }
+    },
+    "status": {
+      "draft": "Concept",
+      "sent": "Verzonden",
+      "viewed": "Bekeken",
+      "accepted": "Geaccepteerd",
+      "declined": "Afgewezen",
+      "expired": "Verlopen",
+      "converted": "Omgezet"
+    },
+    "tabs": {
+      "label": "Status",
+      "all": "Alle",
+      "draft": "Concept",
+      "sent": "Verzonden",
+      "viewed": "Bekeken",
+      "accepted": "Geaccepteerd",
+      "declined": "Afgewezen",
+      "expired": "Verlopen",
+      "converted": "Omgezet",
+      "count": "{count, plural, one {# document} other {# documenten}}"
+    },
+    "list": {
+      "proposal": {
+        "title": "Offertes",
+        "subtitle": "Presenteer scope en prijs, volg wat de koper doet en zet de winnaar om in een factuur.",
+        "new": "Nieuwe offerte",
+        "emptyTitle": "Nog geen offertes",
+        "emptyMessage": "Maak je eerste offerte, stuur de link naar je koper en volg hoe die van verzonden naar geaccepteerd gaat."
+      },
+      "estimate": {
+        "title": "Schattingen",
+        "subtitle": "Geef een prijsopgave voordat je factureert. Verstuur hem, laat hem accepteren en zet hem met één klik om.",
+        "new": "Nieuwe schatting",
+        "emptyTitle": "Nog geen schattingen",
+        "emptyMessage": "Maak je eerste schatting, stuur de link naar je koper en zet die na acceptatie om in een factuur."
+      },
+      "openValue": "Openstaande waarde",
+      "tableLabel": "Documenten",
+      "loading": "Laden",
+      "showing": "{count, plural, one {# document wordt getoond} other {# documenten worden getoond}}",
+      "loadMore": "Meer laden",
+      "allLoaded": "Alles geladen",
+      "useSampleData": "Voorbeeldgegevens gebruiken",
+      "emptyFilteredTitle": "Geen resultaten",
+      "emptyFiltered": "Geen document komt overeen met de zoekopdracht en filters. Probeer minder filters of een ander woord.",
+      "resetFilters": "Filters wissen",
+      "emptyTabTitle": "Geen {status}-documenten",
+      "emptyTab": "Wanneer een van je {kind} deze status krijgt, verschijnt die hier.",
+      "statusWord": {
+        "all": "alle",
+        "draft": "concept",
+        "sent": "verzonden",
+        "viewed": "bekeken",
+        "accepted": "geaccepteerd",
+        "declined": "afgewezen",
+        "expired": "verlopen",
+        "converted": "omgezet"
+      }
+    },
+    "toolbar": {
+      "label": "Filters",
+      "search": "Zoek op nummer, titel of koper",
+      "owner": "Eigenaar",
+      "allOwners": "Alle eigenaren",
+      "validity": "Geldig tot",
+      "anyValidity": "Elke datum",
+      "validWeek": "Verloopt binnen 7 dagen",
+      "validLapsed": "Datum is verstreken",
+      "clear": "Wissen",
+      "refresh": "Vernieuwen",
+      "shortcuts": "Sneltoetsen",
+      "contactFilter": "Contact",
+      "dealFilter": "Deal",
+      "removeFilter": "Dit filter verwijderen",
+      "mine": "Mijn"
+    },
+    "table": {
+      "scrollArea": "Tabel met documenten",
+      "selectAll": "Alle geladen documenten selecteren",
+      "selectRow": "{number} selecteren",
+      "columns": {
+        "number": "Nummer",
+        "title": "Titel / Koper",
+        "contact": "Contact",
+        "amount": "Bedrag",
+        "status": "Status",
+        "validUntil": "Geldig tot",
+        "owner": "Eigenaar",
+        "created": "Aangemaakt"
+      }
+    },
+    "row": {
+      "moreFor": "Acties voor {number}",
+      "untitled": "Zonder titel",
+      "noBuyer": "Nog geen koper",
+      "unowned": "Geen eigenaar"
+    },
+    "bulk": {
+      "label": "Acties voor selectie",
+      "selected": "{count, plural, one {# geselecteerd} other {# geselecteerd}}",
+      "working": "Bezig",
+      "delete": "Verwijderen",
+      "clear": "Selectie wissen",
+      "deleteTitle": "De geselecteerde documenten verwijderen?",
+      "deleteMessage": "{count, plural, one {# document wordt definitief verwijderd. De openbare link werkt dan niet meer.} other {# documenten worden definitief verwijderd. Hun openbare links werken dan niet meer.}} Omgezette documenten blijven bewaard.",
+      "deleteConfirm": "Verwijderen",
+      "keep": "Behouden",
+      "deleted": "{count, plural, one {# document verwijderd} other {# documenten verwijderd}}",
+      "someFailed": "{count, plural, one {# document kon niet worden verwijderd} other {# documenten konden niet worden verwijderd}}",
+      "failed": "Verwijderen mislukt."
+    },
+    "shortcuts": {
+      "title": "Sneltoetsen",
+      "close": "Sluiten",
+      "list": "In de lijst",
+      "builder": "In de editor",
+      "actions": {
+        "next": "Volgende rij",
+        "prev": "Vorige rij",
+        "open": "Rij openen",
+        "toggleSelect": "Rij selecteren of deselecteren",
+        "newDoc": "Nieuw document",
+        "focusSearch": "Zoeken",
+        "clearSelection": "Selectie wissen",
+        "help": "Deze lijst tonen",
+        "save": "Concept opslaan",
+        "send": "Verzenden",
+        "addRow": "Regel toevoegen"
+      }
+    },
+    "actions": {
+      "open": "Openen",
+      "edit": "Bewerken",
+      "send": "Verzenden",
+      "copyLink": "Openbare link kopiëren",
+      "markSent": "Markeren als verzonden",
+      "convertInvoice": "Omzetten naar factuur",
+      "createSalesOrder": "Verkooporder aanmaken",
+      "convertDeal": "Deal aanmaken",
+      "duplicate": "Dupliceren",
+      "print": "Afdrukken / PDF",
+      "activity": "Activiteit",
+      "delete": "Verwijderen",
+      "accept": "Vastleggen als geaccepteerd",
+      "decline": "Vastleggen als afgewezen",
+      "revise": "Herzien (terug naar concept)",
+      "extend": "Geldigheid verlengen"
+    },
+    "confirm": {
+      "cancel": "Annuleren",
+      "linkCopied": "Link gekopieerd",
+      "copyFailed": "Kon de link niet kopiëren. Selecteer hem en kopieer handmatig.",
+      "markSent": {
+        "title": "{number} markeren als verzonden?",
+        "message": "Dit legt vast dat de {kind} handmatig met de koper is gedeeld (de link is gekopieerd). Er wordt niets verzonden; gebruik daarvoor Verzenden.",
+        "confirm": "Markeren als verzonden"
+      },
+      "convertInvoice": {
+        "title": "{number} omzetten naar een factuur?",
+        "message": "Er wordt een factuurconcept aangemaakt met dezelfde regels en totalen, en deze {kind} wordt vergrendeld als omgezet. Dit kan niet ongedaan worden gemaakt.",
+        "confirm": "Omzetten naar factuur"
+      },
+      "convertDeal": {
+        "title": "Een deal aanmaken op basis van {number}?",
+        "message": "Er wordt een deal aangemaakt met het totaal en contact van deze {kind}, en gekoppeld eraan.",
+        "confirm": "Deal aanmaken"
+      },
+      "delete": {
+        "title": "{number} verwijderen?",
+        "message": "De {kind} wordt definitief verwijderd en de openbare link werkt niet meer. Het nummer wordt nooit opnieuw gebruikt.",
+        "confirm": "Verwijderen"
+      },
+      "close": "Sluiten",
+      "theBuyer": "de koper",
+      "linkCopiedInactive": "Link gekopieerd. De koper kan hem pas openen nadat het document is verzonden.",
+      "accept": {
+        "title": "{number} vastleggen als geaccepteerd?",
+        "message": "Gebruik dit wanneer {name} buiten de link om heeft ingestemd, telefonisch of met een ondertekend exemplaar. Het wordt in de activiteit vastgelegd als door jou ingevoerd, niet als handtekening van de koper zelf.",
+        "confirm": "Vastleggen als geaccepteerd"
+      },
+      "decline": {
+        "title": "{number} vastleggen als afgewezen?",
+        "message": "Gebruik dit wanneer {name} buiten de link om nee heeft gezegd. De {kind} wordt afgesloten als afgewezen; je kunt hem later herzien naar een nieuw concept.",
+        "confirm": "Vastleggen als afgewezen"
+      },
+      "extend": {
+        "title": "{number} verlengen",
+        "message": "Geef deze {kind} een nieuwe einddatum. Een verlopen {kind} wordt weer open voor {name}.",
+        "confirm": "Verlengen",
+        "date": "Nieuwe einddatum",
+        "past": "De datum kan niet in het verleden liggen."
+      },
+      "revise": {
+        "title": "{number} herzien?",
+        "message": "De {kind} gaat terug naar concept zodat je hem kunt wijzigen (het revisienummer gaat omhoog en de oude inhoud blijft bewaard). De koper kan de oude versie niet meer accepteren zodra je hem wijzigt.",
+        "confirm": "Herzien"
+      },
+      "note": "Notitie (optioneel)",
+      "noteHint": "Wordt bij deze beslissing in de activiteit bewaard."
+    },
+    "toast": {
+      "created": "{number} aangemaakt",
+      "saved": "{number} opgeslagen",
+      "duplicated": "Concept {number} aangemaakt",
+      "convertedInvoice": "{number} omgezet naar een factuur",
+      "convertedDeal": "Deal {deal} aangemaakt op basis van {number}",
+      "deleted": "{number} verwijderd",
+      "accepted": "{number} vastgelegd als geaccepteerd",
+      "declined": "{number} vastgelegd als afgewezen",
+      "revised": "{number} is weer een concept (revisie {revision})",
+      "extended": "{number} verlengd",
+      "delivery": {
+        "sent": "{number} per e-mail naar de koper gestuurd",
+        "queued": "{number} klaargezet voor verzending via WhatsApp",
+        "shared": "{number} gemarkeerd als verzonden"
+      }
+    },
+    "errors": {
+      "network": "Kon de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt daar geen toestemming voor.",
+      "signedOut": "Je sessie is beëindigd. Meld je opnieuw aan.",
+      "conflict": "Iemand anders heeft dit document gewijzigd. Het is opnieuw geladen; controleer het en probeer het opnieuw.",
+      "validation": "Sommige waarden zijn niet geaccepteerd. Controleer de gemarkeerde velden.",
+      "unavailable": "Offertes en schattingen zijn nog niet beschikbaar op deze server.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "notFound": "Dit document is niet gevonden. Het is mogelijk verwijderd.",
+      "planDisabled": "Je abonnement bevat geen offertes en schattingen.",
+      "invalidTransition": "Die wijziging is niet toegestaan vanuit de huidige status van het document. Het is opnieuw geladen.",
+      "notEditable": "Alleen een concept kan worden bewerkt. Herzie het document om het terug naar concept te zetten.",
+      "notDeletable": "Geaccepteerde en omgezette documenten worden als administratie bewaard en kunnen niet worden verwijderd.",
+      "alreadyDecided": "Over dit document is al besloten. Het is opnieuw geladen.",
+      "alreadyConverted": "Dit document is al omgezet naar een factuur.",
+      "alreadyLinkedDeal": "Dit document heeft al een gekoppelde deal.",
+      "linkUnavailable": "De openbare link is ingetrokken of verlopen. Maak eerst een nieuwe link.",
+      "noRecipient": "Voeg eerst het e-mailadres of telefoonnummer van de koper toe en verstuur daarna.",
+      "sendFailed": "Het bericht kon niet worden afgeleverd, dus het document is niet als verzonden gemarkeerd. Probeer het opnieuw.",
+      "expired": "De geldigheidsdatum van dit document is verstreken. Verleng het eerst.",
+      "ownerInvalid": "De eigenaar moet een actief lid van de workspace zijn.",
+      "invoicingUnavailable": "Facturatie is nog niet beschikbaar, dus dit document kan niet worden omgezet.",
+      "unexpected": "Er ging iets mis. Probeer het opnieuw.",
+      "requestId": "Verzoek-ID",
+      "retry": "Opnieuw proberen"
+    },
+    "link": {
+      "unnamedContact": "Naamloos contact"
+    },
+    "picker": {
+      "unnamed": "Naamloos",
+      "unlinkContact": "Contact ontkoppelen",
+      "unlinkDeal": "Deal ontkoppelen",
+      "searchContact": "Zoek contacten op naam, e-mail of telefoon",
+      "searchDeal": "Deals zoeken",
+      "results": "Resultaten",
+      "searching": "Zoeken",
+      "unavailable": "Kon de lijst niet laden.",
+      "none": "Geen resultaat.",
+      "create": "Een contact aanmaken",
+      "createNamed": "Contact “{name}” aanmaken",
+      "createTitle": "Een contact aanmaken",
+      "createEyebrow": "Nieuw contact",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "createConfirm": "Aanmaken en koppelen",
+      "nameLabel": "Naam",
+      "emailLabel": "E-mail",
+      "phoneLabel": "Telefoon",
+      "phoneHint": "Met landcode, bijvoorbeeld +971 50 123 4567.",
+      "nameInvalid": "Voer een naam in.",
+      "emailInvalid": "Voer een geldig e-mailadres in.",
+      "phoneInvalid": "Voer een geldig telefoonnummer in.",
+      "forbidden": "Je hebt geen toestemming om contacten aan te maken.",
+      "createFailed": "Het contact kon niet worden aangemaakt. Probeer het opnieuw.",
+      "contactCreated": "Contact {name} aangemaakt"
+    },
+    "send": {
+      "eyebrow": "Naar de koper verzenden",
+      "title": "{number} verzenden",
+      "close": "Sluiten",
+      "done": "Klaar",
+      "channels": "Hoe verzenden",
+      "tabs": {
+        "link": "Link",
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "linkLabel": "Openbare link",
+      "linkHint": "Iedereen met deze link kan het document bekijken en accepteren of afwijzen. Deel hem alleen met de koper.",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "copiedToast": "Link gekopieerd",
+      "copyFailed": "Kon de link niet kopiëren. Selecteer hem en kopieer handmatig.",
+      "to": "Aan",
+      "emailInvalid": "Voer een geldig e-mailadres in.",
+      "noEmail": "Dit document heeft geen e-mailadres van de koper. Vul hier een adres in.",
+      "message": "Bericht",
+      "messageDefault": "Hallo {name}, hierbij ons document. Het toont de scope en de prijs, en je kunt het online accepteren.",
+      "messageHint": "De link naar het document wordt onder je bericht toegevoegd.",
+      "sendEmail": "E-mail verzenden",
+      "waTo": "Verzenden naar",
+      "noPhone": "Dit document heeft geen telefoonnummer van de koper. Voeg eerst een nummer toe in de gegevens van de koper.",
+      "waPreview": "Bericht",
+      "waTotal": "Totaal",
+      "waView": "Bekijken en accepteren",
+      "sendWhatsapp": "Versturen via WhatsApp",
+      "openWhatsapp": "Openen in WhatsApp",
+      "markSent": "Ik heb het gedeeld: markeren als verzonden",
+      "linkLoading": "Link laden",
+      "linkUnavailable": "De link is nog niet beschikbaar op deze server.",
+      "stateDraft": "De link wordt geopend zodra het document is verzonden. Tot die tijd ziet de koper niets.",
+      "stateRevoked": "Deze link is ingetrokken: de koper kan hem niet openen. Maak een nieuwe aan om opnieuw te delen.",
+      "stateActive": "{views, plural, =0 {Nog niet geopend.} one {Eén keer geopend.} other {# keer geopend.}}",
+      "stateInactive": "Deze link is verlopen en de koper kan hem niet openen. Maak een nieuwe.",
+      "regenerate": "Nieuwe link maken",
+      "revoke": "Link intrekken",
+      "regenerateWarning": "De oude link werkt meteen niet meer. Wie hem heeft, ziet dat hij niet meer beschikbaar is.",
+      "keepLink": "Huidige link behouden",
+      "regenerateConfirm": "Nieuwe link maken",
+      "regenerated": "Nieuwe link aangemaakt",
+      "revoked": "Link ingetrokken",
+      "waHint": "Verzenden zet het bericht klaar op je verbonden WhatsApp en markeert het document als verzonden. Openen in WhatsApp laat je het zelf verzenden; gebruik daarna het tabblad Link om het als verzonden te markeren."
+    },
+    "activity": {
+      "title": "Activiteit van {number}",
+      "subtitle": "Alles wat met dit document is gebeurd, het nieuwste eerst.",
+      "close": "Sluiten",
+      "loading": "Laden",
+      "unavailable": "De activiteitengeschiedenis is nog niet beschikbaar op deze server.",
+      "empty": "Er is nog niets met dit document gebeurd.",
+      "buyer": "de koper",
+      "system": "het systeem",
+      "someone": "Iemand",
+      "via": "Verzonden via {channel}",
+      "signedBy": "Ondertekend door {name}",
+      "reason": "Reden: {reason}",
+      "channels": {
+        "link": "link",
+        "email": "e-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "events": {
+        "created": "Aangemaakt door {who}",
+        "edited": "Bewerkt door {who}",
+        "sent": "Verzonden door {who}",
+        "viewed": "Bekeken door {who}",
+        "accepted": "Geaccepteerd door {who}",
+        "declined": "Afgewezen door {who}",
+        "expired": "Verlopen",
+        "duplicated": "Gedupliceerd door {who}",
+        "revised": "Herzien door {who}",
+        "extended": "Geldigheid verlengd door {who}",
+        "converted_invoice": "Omgezet naar een factuur door {who}",
+        "converted_deal": "Deal aangemaakt door {who}",
+        "link_regenerated": "Nieuwe link aangemaakt door {who}",
+        "link_revoked": "Link ingetrokken door {who}"
+      },
+      "withSignature": "Er is een getekende handtekening vastgelegd",
+      "recordedByStaff": "Vastgelegd door een teamlid namens de koper",
+      "note": "Opmerking: {note}",
+      "revision": "Revisie {revision}",
+      "fromAddress": "Van netwerkadres {ip}"
+    },
+    "paper": {
+      "label": "{kind} {number}",
+      "sellerFallback": "Je bedrijf",
+      "numberPending": "Nummer wordt bij opslaan toegekend",
+      "untitled": "Naamloos {kind}",
+      "preparedFor": "Opgesteld voor",
+      "noBuyer": "Nog geen koper",
+      "issued": "Uitgegeven",
+      "validUntil": "Geldig tot",
+      "description": "Omschrijving",
+      "qty": "Aantal",
+      "unit": "Stukprijs",
+      "discount": "Korting",
+      "tax": "BTW",
+      "amount": "Bedrag",
+      "noItems": "Geen regels.",
+      "subtotal": "Subtotaal",
+      "discountPercent": "Korting ({percent}%)",
+      "discountRow": "Korting",
+      "taxRow": "BTW ({percent}%)",
+      "total": "Totaal",
+      "notes": "Opmerkingen",
+      "terms": "Voorwaarden"
+    },
+    "builder": {
+      "loading": "Laden",
+      "notFoundTitle": "Document niet gevonden",
+      "notFound": "Dit document bestaat niet of is verwijderd.",
+      "back": {
+        "proposal": "Alle voorstellen",
+        "estimate": "Alle schattingen"
+      },
+      "formLabel": "Documentdetails",
+      "newTitle": {
+        "proposal": "Nieuw voorstel",
+        "estimate": "Nieuwe schatting"
+      },
+      "newSubtitle": "Vul de koper en de regels in. Het nummer wordt toegekend wanneer je deze {kind} opslaat.",
+      "untitledSub": "Naamloos",
+      "unsaved": "Niet-opgeslagen wijzigingen",
+      "leaveTitle": "Weggaan zonder op te slaan?",
+      "leaveMessage": "Deze pagina bevat wijzigingen die niet zijn opgeslagen. Als je nu weggaat, gaan ze verloren.",
+      "leave": "Weggaan zonder opslaan",
+      "keepEditing": "Blijven bewerken",
+      "save": "Concept opslaan",
+      "send": "Verzenden",
+      "more": "Meer acties",
+      "fixErrors": "Sommige velden hebben aandacht nodig voordat dit kan worden opgeslagen.",
+      "panes": "Formulier of voorbeeld",
+      "pane": {
+        "edit": "Bewerken",
+        "preview": "Voorbeeld"
+      },
+      "locked": {
+        "sent": "Dit document is bij de koper, dus het kan niet worden bewerkt. Herzie het om terug te gaan naar concept, of dupliceer het voor een nieuwe.",
+        "accepted": "Dit document is geaccepteerd en wordt bewaard als administratie. Zet het om in een factuur of dupliceer het voor een nieuwe.",
+        "converted": "Dit document is omgezet in een factuur en vergrendeld.",
+        "openInvoice": "Open de factuur",
+        "revise": "Herzien",
+        "duplicate": "Dupliceren als concept"
+      },
+      "buyer": {
+        "title": "Koper",
+        "hint": "Kies een contact of typ de gegevens van de koper. Hun e-mail en telefoon worden gebruikt om te verzenden.",
+        "contact": "Contact",
+        "name": "Naam koper",
+        "email": "E-mail koper",
+        "phone": "Telefoon koper",
+        "phoneHint": "Met landcode. Nodig om via WhatsApp te verzenden."
+      },
+      "details": {
+        "title": "Details",
+        "docTitle": "Titel",
+        "titlePlaceholder": {
+          "proposal": "bijv. Websitevernieuwing, fase 1",
+          "estimate": "bijv. Snelle offerte keukenverbouwing"
+        },
+        "deal": "Deal",
+        "currency": "Valuta",
+        "validUntil": "Geldig tot",
+        "plusDays": "+{days} dagen",
+        "noExpiry": "Geen vervaldatum"
+      },
+      "items": {
+        "title": "Regels",
+        "hint": "Aantallen mogen decimalen bevatten. Korting is een percentage of een bedrag (tik op het teken in het vak om te wisselen). Een lege btw gebruikt het btw-tarief van het document.",
+        "description": "Omschrijving",
+        "qty": "Aantal",
+        "unit": "Stukprijs",
+        "discount": "Korting %",
+        "tax": "BTW %",
+        "amount": "Bedrag",
+        "drag": "Sleep om te herordenen",
+        "row": "Regel {n}",
+        "descriptionPlaceholder": "Waarvoor je factureert",
+        "descriptionFor": "Omschrijving van regel {n}",
+        "qtyFor": "Aantal van regel {n}",
+        "unitFor": "Stukprijs van regel {n}",
+        "discountFor": "Kortingspercentage van regel {n}",
+        "taxFor": "BTW-percentage van regel {n}",
+        "amountFor": "Bedrag van regel {n}",
+        "moveUp": "Regel {n} omhoog verplaatsen",
+        "moveDown": "Regel {n} omlaag verplaatsen",
+        "duplicate": "Regel {n} dupliceren",
+        "remove": "Regel {n} verwijderen",
+        "add": "Regel toevoegen",
+        "discountToAmount": "Regel {n}: korting is een percentage; wissel naar een bedrag",
+        "discountToPercent": "Regel {n}: korting is een bedrag; wissel naar een percentage"
+      },
+      "problems": {
+        "noItems": "Voeg minstens één regel toe met een omschrijving en een prijs.",
+        "descriptionRequired": "Voer een omschrijving in.",
+        "descriptionTooLong": "De omschrijving is te lang (maximaal 500 tekens).",
+        "qtyInvalid": "Aantal moet een getal zijn, 0 of meer, met maximaal 4 decimalen.",
+        "priceInvalid": "Voer de stukprijs in als getal, 0 of meer.",
+        "discountInvalid": "Korting moet een percentage zijn van 0 tot 100.",
+        "taxInvalid": "BTW moet een percentage zijn van 0 tot 100.",
+        "docDiscountInvalid": "Voer de korting in als getal, 0 of meer.",
+        "docTaxInvalid": "BTW moet een percentage zijn van 0 tot 100.",
+        "emailInvalid": "Voer een geldig e-mailadres in.",
+        "phoneInvalid": "Voer het telefoonnummer in met landcode, bijvoorbeeld +971 50 123 4567.",
+        "titleTooLong": "De titel is te lang (maximaal 255 tekens).",
+        "notesTooLong": "De opmerkingen zijn te lang (maximaal 5.000 tekens).",
+        "termsTooLong": "De voorwaarden zijn te lang (maximaal 10.000 tekens).",
+        "dateInvalid": "Voer een geldige datum in.",
+        "tooLarge": "Een bedrag is te groot. Verlaag een aantal of een prijs."
+      },
+      "totals": {
+        "defaultTax": "BTW-tarief",
+        "defaultTaxHint": "Geldt voor elke regel die geen eigen btw heeft.",
+        "discount": "Korting op het hele document",
+        "discountKind": "Kortingstype",
+        "subtotal": "Subtotaal",
+        "discountRow": "Korting",
+        "taxRow": "BTW ({percent}%)",
+        "total": "Totaal"
+      },
+      "notes": {
+        "title": "Opmerkingen en voorwaarden",
+        "notes": "Opmerkingen voor de koper",
+        "terms": "Voorwaarden",
+        "insertTemplate": "Gebruik een sjabloon",
+        "count": "{count} / {max}"
+      },
+      "preview": {
+        "title": "Voorbeeld",
+        "print": "Afdrukken / PDF",
+        "hint": "Dit ziet de koper en dit wordt afgedrukt. Totalen gebruiken dezelfde afronding als het opgeslagen document."
+      }
+    },
+    "templates": {
+      "notes": {
+        "thanks": {
+          "label": "Bedankt",
+          "text": "Bedankt voor de kans om met je samen te werken. We kijken ernaar uit om te beginnen."
+        },
+        "scope": {
+          "label": "Herinnering scope",
+          "text": "Dit document dekt alleen de hierboven genoemde punten. Alles daarbuiten wordt apart geoffreerd."
+        },
+        "followUp": {
+          "label": "Volgende stappen",
+          "text": "Om door te gaan, accepteer je dit document online. We bevestigen de startdatum binnen één werkdag."
+        }
+      },
+      "terms": {
+        "net14": {
+          "label": "Betaling binnen 14 dagen",
+          "text": "Betaling is verschuldigd binnen 14 dagen na de factuurdatum."
+        },
+        "net30": {
+          "label": "Betaling binnen 30 dagen",
+          "text": "Betaling is verschuldigd binnen 30 dagen na de factuurdatum."
+        },
+        "deposit50": {
+          "label": "50% aanbetaling",
+          "text": "Een aanbetaling van 50% is verschuldigd bij acceptatie. Het restant is verschuldigd bij oplevering."
+        },
+        "warranty": {
+          "label": "Garantie",
+          "text": "Het werk heeft 90 dagen garantie vanaf levering op gebreken in het vakmanschap."
+        }
+      }
+    },
+    "linked": {
+      "title": "Voorstellen en schattingen",
+      "newProposal": "Voorstel",
+      "newEstimate": "Schatting",
+      "loading": "Laden",
+      "unavailableTitle": "Nog niet beschikbaar",
+      "unavailable": "Voorstellen en schattingen zijn nog niet beschikbaar op deze server.",
+      "empty": "Nog geen voorstellen of schattingen.",
+      "kind": {
+        "proposal": "Voorstel",
+        "estimate": "Schatting"
+      },
+      "viewProposals": "Alle voorstellen",
+      "viewEstimates": "Alle schattingen"
+    },
+    "signature": {
+      "area": "Handtekeningvak: zet je handtekening met je vinger, pen of muis",
+      "placeholder": "Teken hier",
+      "clear": "Handtekening wissen"
+    },
+    "public": {
+      "loading": "Document wordt geladen",
+      "brandFallback": "Je leverancier",
+      "language": "Taal",
+      "print": "Afdrukken / PDF",
+      "invalid": {
+        "title": "Deze link is niet geldig",
+        "message": "Het document is mogelijk verwijderd of de link is onvolledig. Vraag de afzender om een nieuwe link."
+      },
+      "error": {
+        "title": "We konden het document niet laden",
+        "message": "Controleer je verbinding en probeer het opnieuw. Blijft dit gebeuren, neem dan contact op met de afzender.",
+        "retry": "Opnieuw proberen"
+      },
+      "banner": {
+        "accepted": "Je hebt deze {kind} geaccepteerd. {seller} is op de hoogte gebracht en neemt contact met je op.",
+        "signedBy": "Ondertekend door {name}",
+        "declined": "Deze {kind} is afgewezen.",
+        "declinedHint": "Als dit een vergissing was, neem dan contact op met {seller}.",
+        "converted": "Geaccepteerd. Er is een factuur uitgegeven voor deze {kind}.",
+        "expired": "Deze {kind} is verlopen op {date}.",
+        "expiredHint": "Hij kan niet meer worden geaccepteerd. Neem contact op met {seller} om een nieuwe aan te vragen."
+      },
+      "footer": "Deze {kind} is opgesteld door {seller}.",
+      "decision": {
+        "title": "Jouw beslissing",
+        "intro": "Deze {kind} accepteren voor {total} bevestigt de hierboven genoemde scope en prijs bij {seller}.",
+        "name": "Je volledige naam",
+        "nameHint": "Getypt als je naam in de administratie (minstens 2 tekens).",
+        "nameRequired": "Voer je volledige naam in.",
+        "signature": "Handtekening",
+        "typedPlaceholder": "Je naam verschijnt hier",
+        "useTyped": "Ondertekenen met mijn getypte naam in plaats van tekenen",
+        "signatureRequired": "Teken je handtekening, of kies om met je getypte naam te ondertekenen.",
+        "agree": "Ik heb deze {kind} gelezen en accepteer de scope, prijs en voorwaarden.",
+        "agreeRequired": "Vink het vakje aan om te bevestigen.",
+        "accept": "Deze {kind} accepteren",
+        "decline": "Afwijzen",
+        "note": "Je naam, handtekening, het tijdstip en je netwerkadres worden vastgelegd bij je beslissing.",
+        "declineTitle": "Deze {kind} afwijzen?",
+        "declineMessage": "{seller} wordt op de hoogte gebracht dat je hebt afgewezen. Dit kun je daarna niet meer wijzigen.",
+        "reason": "Reden (optioneel)",
+        "reasonHint": "Een korte toelichting helpt {seller} begrijpen wat er moet worden aangepast.",
+        "keep": "Terug",
+        "declineConfirm": "Afwijzen",
+        "close": "Sluiten",
+        "problem": {
+          "expired": "Dit document is verlopen en kan niet meer worden geaccepteerd.",
+          "closed": "Over dit document is al beslist. De pagina is ververst.",
+          "rateLimited": "Te veel pogingen. Wacht een minuut en probeer het opnieuw.",
+          "validation": "Een deel van je gegevens is niet geaccepteerd. Controleer je naam en probeer het opnieuw.",
+          "generic": "We konden je beslissing niet vastleggen. Controleer je verbinding en probeer het opnieuw.",
+          "gone": "Deze link is niet meer actief."
+        }
+      },
+      "gone": {
+        "title": "Deze link is niet meer actief",
+        "message": "De afzender heeft deze link uitgeschakeld of hij is verlopen. Vraag om een nieuwe link."
+      },
+      "metaTitle": "Offerte"
+    }
+  }
+}

@@ -1,0 +1,316 @@
+{
+  "aiTraining": {
+    "nav": {
+      "title": "Pelatihan AI"
+    },
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "paywall": {
+      "kicker": "Paket",
+      "title": "Pelatihan AI tidak termasuk dalam paket Anda",
+      "body": "Paket Anda tidak menyertakan asisten AI. Upgrade untuk membuka fitur ini.",
+      "upgrade": "Lihat paket"
+    },
+    "responder": {
+      "title": "Siapa yang menjawab WhatsApp Anda?",
+      "body": "Jika Anda mengaktifkan Business Agent milik Meta, AI kami dan balasan otomatis kata kunci akan berhenti untuk workspace ini, sehingga pelanggan tidak pernah mendapat dua jawaban untuk pesan yang sama.",
+      "metaCheck": "Saya menggunakan Meta Business Agent",
+      "mode": {
+        "threadwise_only": {
+          "label": "AI kami yang menjawab",
+          "desc": "AI kami dan balasan otomatis kata kunci menangani chat (default)."
+        },
+        "meta_agent_only": {
+          "label": "Agen Meta yang menjawab",
+          "desc": "Business Agent Meta yang membalas. Kami hanya mencatat utas, AI kami tetap diam."
+        },
+        "meta_agent_then_handoff": {
+          "label": "Agen Meta, lalu serah terima",
+          "desc": "Meta menangani pertanyaan pertama. Saat dieskalasi, chat masuk ke Kotak Masuk Tim Anda untuk ditangani orang. AI otomatis kami tetap diam."
+        }
+      },
+      "save": "Simpan",
+      "hint": "Agen Meta memerlukan nomor WhatsApp Business (Cloud API). Nomor pada mesin tidak resmi selalu menggunakan AI kami.",
+      "readOnly": "Anda dapat melihat pengaturan ini tetapi tidak dapat mengubahnya.",
+      "saved": "Mode responder AI disimpan.",
+      "saveFailed": "Mode responder tidak dapat disimpan.",
+      "loadError": "Mode responder tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat mode responder"
+    },
+    "list": {
+      "tip": "Tips",
+      "tipBody": "Agen pintar menggerakkan <link>widget chatbot</link> dan langkah AI pada flow Anda. Pembuat lima langkah memandu Anda melalui identitas, persona, otak, keamanan, dan pengetahuan.",
+      "statusViews": "Status agen",
+      "view": {
+        "all": "Semua agen",
+        "active": "Aktif",
+        "paused": "Dijeda"
+      },
+      "status": {
+        "all": "Semua",
+        "active": "Aktif",
+        "paused": "Dijeda"
+      },
+      "knowledgeTip": "Tips pengetahuan",
+      "knowledgeTipBody": "Satu pasang pertanyaan dan jawaban FAQ sering kali sudah cukup. Beberapa URL halaman bantuan mencakup sebagian besar pertanyaan dukungan, jadi tidak perlu memuat seluruh situs Anda.",
+      "workspace": "Workspace",
+      "title": "AI",
+      "titleAccent": "Pelatihan",
+      "intro": "Bangun agen pintar yang berbicara dengan gaya merek Anda. Latih dengan URL, teks, pasangan T&J, dan file.",
+      "activePill": "{count} aktif",
+      "newAgent": "Agen pintar baru",
+      "card": {
+        "total": "Total agen",
+        "knowledge": "Entri pengetahuan",
+        "avg": "Rata-rata / agen",
+        "health": "Kesehatan",
+        "activeHint": "{count} aktif",
+        "indexedHint": "{count} terindeks",
+        "entriesUnit": "entri"
+      },
+      "health": {
+        "healthy": "sehat",
+        "empty": "kosong",
+        "attention": "perlu perhatian"
+      },
+      "col": {
+        "agent": "Agen",
+        "provider": "Penyedia",
+        "knowledge": "Pengetahuan",
+        "tone": "Nada",
+        "updated": "Diperbarui",
+        "actions": "Aksi"
+      },
+      "search": "Cari berdasarkan nama atau slug…",
+      "loading": "Memuat agen",
+      "loadError": "Agen tidak dapat dimuat",
+      "retry": "Coba lagi",
+      "emptyTitle": "Belum ada agen pintar",
+      "emptyBody": "Bangun agen pertama Anda. Pembuat lima langkah memandu Anda melalui identitas, persona, otak, keamanan, dan pengetahuan yang harus dimilikinya.",
+      "buildAgent": "Bangun agen pintar",
+      "noMatch": "Tidak ada agen yang cocok dengan pencarian atau tampilan status Anda.",
+      "entries": "{count, plural, other {# entri}}",
+      "edit": "Edit agen",
+      "editNamed": "Edit {name}",
+      "duplicate": "Duplikat agen",
+      "duplicateNamed": "Duplikat {name}",
+      "deleteAgent": "Hapus agen",
+      "deleteNamed": "Hapus {name}",
+      "deleteTitle": "Hapus \"{name}\"?",
+      "deleteBody": "Agen dan entri pengetahuannya akan dihapus. Widget dan flow yang menggunakannya akan berhenti membalas dengan agen ini sampai Anda memilih agen lain.",
+      "delete": "Hapus agen",
+      "keep": "Pertahankan",
+      "deleted": "Agen dihapus.",
+      "deleteFailed": "Gagal menghapus: {reason}",
+      "duplicateFailed": "Agen tidak dapat diduplikat.",
+      "networkError": "kesalahan jaringan",
+      "showing": "Menampilkan",
+      "of": "dari",
+      "agentsCount": "{count, plural, other {# agen}}",
+      "loadMore": "Muat lebih banyak"
+    },
+    "builder": {
+      "back": "Kembali ke Pelatihan AI",
+      "crumb": "Pelatihan AI",
+      "crumbNew": "Baru",
+      "crumbEdit": "Edit",
+      "titleNew": "Bangun",
+      "titleEdit": "Edit",
+      "titleAccent": "agen pintar",
+      "stateSaved": "Tersimpan",
+      "stateDraft": "Draf / belum disimpan",
+      "saveDraft": "Simpan draf",
+      "stepper": "Langkah pembuat",
+      "steps": {
+        "identity": "Identitas",
+        "persona": "Persona",
+        "brain": "Otak",
+        "safety": "Keamanan",
+        "knowledge": "Pengetahuan"
+      },
+      "stepOf": "Langkah {n} dari {total}",
+      "previous": "Sebelumnya",
+      "next": "Berikutnya",
+      "finish": "Selesai & tutup",
+      "loading": "Memuat agen",
+      "loadError": "Agen tidak dapat dimuat",
+      "notFoundTitle": "Agen tidak ditemukan",
+      "notFoundBody": "Agen ini tidak ada di workspace Anda, atau telah dihapus.",
+      "backToList": "Kembali ke Pelatihan AI",
+      "saved": "Agen disimpan.",
+      "saveFailed": "Gagal menyimpan. Periksa kolom lalu coba lagi.",
+      "conflict": "Agen ini diubah di tempat lain. Muat ulang halaman untuk mendapatkan versi terbaru, lalu simpan lagi.",
+      "problem": {
+        "name": "Beri nama asisten Anda.",
+        "greeting": "Tulis kalimat pembuka.",
+        "model": "Pilih model.",
+        "tokens": "Panjang balasan harus 50–4000 token.",
+        "temperature": "Kreativitas harus antara 0 dan 2."
+      },
+      "identity": {
+        "title": "Identitas agen",
+        "required": "wajib",
+        "name": "Nama tampilan agen",
+        "namePlaceholder": "mis. Concierge harga",
+        "nameHint": "Untuk catatan Anda. Pengunjung tidak melihat label ini.",
+        "status": "Status peluncuran",
+        "statusActive": "Live: pilih agen ini di widget dan flow",
+        "statusPaused": "Dijeda: sembunyikan dari pilihan",
+        "statusHint": "Agen yang dijeda tetap ada di daftar tetapi tidak dapat dipasang ke widget baru.",
+        "language": "Bahasa pilihan",
+        "languageHint": "Kode ISO 639-1. Menyesuaikan bahasa pengunjung jika berbeda.",
+        "tone": "Nada percakapan",
+        "toneHint": "Mengatur gaya penulisan, terlepas dari ringkasan persona.",
+        "tones": {
+          "helpful": "Membantu · tenang dan tepat sasaran",
+          "friendly": "Ramah · hangat dan santai",
+          "formal": "Formal · netral dan tepat",
+          "playful": "Playful · ringan dan jenaka"
+        }
+      },
+      "persona": {
+        "title": "Persona & kalimat pembuka",
+        "tag": "konten",
+        "greeting": "Kalimat pembuka",
+        "greetingPlaceholder": "Halo! Saya di sini untuk membantu. Tanyakan apa saja tentang harga atau paket.",
+        "greetingHint": "Terlihat oleh pengunjung. Ditampilkan sebagai gelembung pertama saat chat dibuka.",
+        "brief": "Ringkasan karakter (instruksi sistem)",
+        "briefPlaceholder": "Anda adalah agen dukungan yang ramah untuk Acme Inc. Selalu jawab dengan kalimat pendek dan serahkan kepada orang untuk apa pun terkait pengembalian dana.",
+        "briefHint": "Internal, tidak pernah ditampilkan kepada pengunjung. Sertakan yang boleh, yang tidak boleh, dan aturan eskalasi."
+      },
+      "brain": {
+        "title": "Model & kontrol balasan",
+        "tag": "otak",
+        "provider": "Penyedia model",
+        "providerHint": "Admin Anda mengatur kunci penyedia. Penyedia yang kunci miliknya Anda tambahkan juga ditampilkan, pada paket yang mengizinkannya.",
+        "notEnabled": "{name} (tidak aktif)",
+        "model": "Nama model",
+        "modelHint": "Pilih salah satu model yang diaktifkan untuk Anda, atau ketik ID model lain.",
+        "noModels": "Belum ada model AI yang diaktifkan untuk workspace Anda. Minta admin Anda mengaktifkannya, atau tambahkan kunci Anda sendiri di Pengaturan, Kunci AI.",
+        "tokens": "Anggaran panjang balasan (token)",
+        "tokensHint": "Kira-kira 1 token sama dengan 4 karakter. 400 cukup untuk satu paragraf.",
+        "temperature": "Kreativitas (0 = ketat, 2 = liar)",
+        "temperatureHint": "Lebih rendah berarti konsisten dan faktual. Lebih tinggi menghasilkan frasa yang bervariasi."
+      },
+      "safety": {
+        "title": "Balasan cadangan & serah terima ke manusia",
+        "tag": "keamanan",
+        "fallback": "Balasan cadangan (digunakan saat model error)",
+        "fallbackPlaceholder": "Rekan tim akan segera menindaklanjuti. Terima kasih atas kesabaran Anda.",
+        "fallbackHint": "Dikirim apa adanya jika model tidak mengembalikan apa pun atau panggilan gagal.",
+        "handoff": "Aktifkan serah terima ke manusia",
+        "handoffHint": "Pengunjung mengetik frasa pemicu, agen berhenti membalas, dan kotak masuk tim Anda menyala.",
+        "keyword": "Frasa pemicu",
+        "keywordPlaceholder": "bicara dengan manusia",
+        "keywordHint": "Saat pengunjung mengetik ini di mana pun dalam pesan, serah terima aktif.",
+        "ack": "Pesan konfirmasi serah terima",
+        "ackPlaceholder": "Tentu, saya hubungkan dengan rekan tim sekarang. Mohon tunggu.",
+        "ackHint": "Pesan terakhir sebelum agen diam."
+      }
+    },
+    "knowledge": {
+      "title": "Latih agen",
+      "tag": "pengetahuan",
+      "saveFirst": "Simpan agen terlebih dahulu. Entri pengetahuan dilampirkan ke agen yang tersimpan.",
+      "addLabel": "Tambah pengetahuan",
+      "add": {
+        "url": {
+          "title": "URL langsung",
+          "body": "Ambil halaman publik dan simpan teksnya."
+        },
+        "text": {
+          "title": "Teks bebas",
+          "body": "Tempel cuplikan bantuan atau kebijakan."
+        },
+        "qa": {
+          "title": "Pasangan T&J",
+          "body": "Satu pertanyaan dengan jawaban bakunya."
+        },
+        "file": {
+          "title": "PDF, DOCX, TXT & lainnya",
+          "body": "Unggah file. Teksnya diekstrak untuk Anda."
+        }
+      },
+      "panel": {
+        "url": "Ambil URL publik",
+        "text": "Tempel teks biasa",
+        "qa": "T&J tunggal",
+        "file": "Unggah file pengetahuan"
+      },
+      "label": "Label",
+      "url": "URL",
+      "content": "Teks",
+      "question": "Pertanyaan",
+      "answer": "Jawaban",
+      "file": "File",
+      "placeholder": {
+        "label": {
+          "url": "Label (mis. Halaman harga)",
+          "text": "Label (mis. Ringkasan kebijakan pengembalian dana)",
+          "qa": "Label (mis. Waktu pengembalian dana)",
+          "file": "Label (mis. Buku panduan produk)"
+        },
+        "content": "Tempel teks apa pun yang harus diketahui agen…",
+        "question": "Pertanyaan, mis. Berapa lama pengembalian dana diproses?",
+        "answer": "Jawaban, mis. Pengembalian dana diselesaikan dalam 3 sampai 5 hari kerja."
+      },
+      "urlHint": "Hanya halaman http dan https publik yang dibaca. Halaman diambil di latar belakang, sehingga entri menampilkan Memproses sesaat.",
+      "fileHint": "PDF, DOCX, TXT, Markdown, CSV, atau HTML, hingga 10 MB. Teks diekstrak secara otomatis.",
+      "uploading": "Progres unggah",
+      "submit": {
+        "url": "Ambil & latih",
+        "text": "Simpan teks",
+        "qa": "Simpan pasangan",
+        "file": "Unggah"
+      },
+      "cancel": "Batal",
+      "added": "Pengetahuan ditambahkan.",
+      "addFailed": "Entri tidak dapat ditambahkan.",
+      "problem": {
+        "label": "Tambahkan label agar Anda dapat menemukan entri ini nanti.",
+        "url": "Tambahkan alamat halaman.",
+        "content": "Tempel teks terlebih dahulu.",
+        "question": "Tambahkan pertanyaan.",
+        "answer": "Tambahkan jawaban.",
+        "file": "Pilih file (PDF, DOCX, TXT, Markdown, CSV, atau HTML).",
+        "file_type": "Jenis file yang diterima: TXT, Markdown, CSV, HTML, PDF, DOCX. Untuk yang lain, tempel teksnya ke entri Teks.",
+        "file_legacyDoc": "File .doc lama tidak didukung. Simpan ulang sebagai .docx (atau ekspor ke .pdf) lalu unggah lagi.",
+        "file_size": "File itu melebihi 10 MB.",
+        "file_empty": "File itu kosong.",
+        "tooLarge": "Teks terlalu banyak untuk satu kali tempel. Unggah sebagai file saja."
+      },
+      "col": {
+        "kind": "Jenis",
+        "label": "Label",
+        "state": "Status",
+        "actions": "Aksi"
+      },
+      "kind": {
+        "url": "url",
+        "text": "teks",
+        "qa": "t&j",
+        "file": "file"
+      },
+      "state": {
+        "ready": "siap",
+        "processing": "memproses",
+        "failed": "gagal"
+      },
+      "tokens": "sekitar {count} token",
+      "workspaceWide": "seluruh workspace",
+      "loading": "Memuat entri",
+      "loadError": "Entri tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "empty": "Belum ada pengetahuan. Pilih jenis di atas untuk menambahkan entri pertama.",
+      "remove": "Hapus",
+      "removeNamed": "Hapus {label}",
+      "removeTitle": "Hapus entri pengetahuan ini?",
+      "removeBody": "Agen akan berhenti menggunakannya untuk balasan baru. Percakapan lama tidak berubah.",
+      "keep": "Pertahankan",
+      "removed": "Dihapus.",
+      "removeFailed": "Gagal menghapus."
+    }
+  }
+}

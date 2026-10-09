@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "לא ניתן להשתמש בסכום, בכמות או בשיעור בחשבונית. בדוק את השדות המסומנים.",
+        "INV_TAX_RATE_INVALID": "אחד משיעורי המס לא ניתן לשימוש היום: הוא לא פעיל או מחוץ לתאריכי התוקף שלו. בחר שיעור אחר.",
+        "INV_NOT_DRAFT": "החשבונית הונפקה ולכן אי אפשר לערוך אותה עוד. שכפל אותה כדי להתחיל חשבונית מתוקנת.",
+        "INV_ORDER_LINKED": "החשבונית שייכת להזמנת מכירה, ולכן יש לשנות את ההזמנה במקום.",
+        "SALESDOC_INVALID_TRANSITION": "ההצעה או ההערכה עדיין לא אושרו, ולכן אי אפשר להפוך אותן לחשבונית.",
+        "SALESDOC_ALREADY_CONVERTED": "המסמך הזה כבר הפך לחשבונית.",
+        "SALESDOC_INVOICING_UNAVAILABLE": "הפקת חשבוניות עדיין לא זמינה בשרת הזה.",
+        "INV_LINK_UNAVAILABLE": "קישור החשבונית הזה כבר אינו זמין."
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "יוצר טיוטה מהמסמך שאושר...",
+      "duplicating": "מעתיק את החשבונית לטיוטה חדשה...",
+      "openExisting": "פתח את החשבונית שכבר נוצרה",
+      "backToInvoices": "חזרה לחשבוניות",
+      "backToInvoice": "חזרה לחשבונית",
+      "issued": "החשבונית הונפקה.",
+      "savedNotIssued": "הטיוטה נשמרה, אך לא ניתן היה להנפיק אותה: {reason}",
+      "buyerCountry": "מדינה",
+      "buyerCountryHint": "שתי אותיות, כמו IN או GB. קובע את פורמט מזהה המס ובמצב אוטומטי גם את המס.",
+      "buyerTaxId": "מזהה מס",
+      "buyerTaxIdNamed": "מזהה מס ({label})",
+      "taxIdHint": "GSTIN, מספר VAT, EIN... נבדק בזמן ההקלדה.",
+      "taxIdExpected": "הפורמט הצפוי: {label}, למשל {example}.",
+      "taxIdUnchecked": "אין פורמט ידוע למדינה זו, ולכן המספר נשמר כפי שהוקלד.",
+      "taxIdValid": "{label} נראה תקין ({level, select, checksum {נבדקו הפורמט וספרות הביקורת} other {נבדק הפורמט בלבד}}). זה לא מוכיח שהמספר רשום.",
+      "taxIdInvalid": "{label} נראה שגוי ({level, select, checksum {נבדקו הפורמט וספרות הביקורת} other {נבדק הפורמט בלבד}}).",
+      "taxIdStillSave": "אפשר בכל זאת לשמור.",
+      "docType": "מסמך",
+      "docTypes": {
+        "tax_invoice": "חשבונית מס",
+        "proforma": "חשבונית פרופורמה"
+      },
+      "noDueDate": "תנאי תשלום ברירת מחדל",
+      "reference": "אסמכתא",
+      "referenceHint": "מספר הזמנת הרכש של הקונה או כל אסמכתא אחרת להדפסה.",
+      "tax": "מס",
+      "taxMode": "אופן חישוב המס",
+      "taxModes": {
+        "rates": "שיעורי מס",
+        "auto": "אוטומטי"
+      },
+      "taxModeHint": {
+        "rates": "בחר שיעור מס לכל שורה. שורה שנשארה על ברירת המחדל משתמשת בשיעור ברירת המחדל של סביבת העבודה שלך.",
+        "auto": "מנוע המס קובע את המס של כל שורה לפי המדינה שלך, מדינת הקונה ומזהה המס שלו, סוג האספקה ומקום האספקה. התשובה של השרת היא מה שנשמר."
+      },
+      "sellerCountry": "המדינה שלך (מפרופיל ההפקה)",
+      "sellerCountryMissing": "מס אוטומטי דורש שהמדינה שלך תוגדר בפרופיל ההפקה (מדינה עם הגדרת מס מוכנה). הגדר אותה שם קודם.",
+      "supplyType": "סוג אספקה",
+      "supplyTypes": {
+        "goods": "טובין",
+        "services": "שירותים",
+        "digital": "שירותים דיגיטליים"
+      },
+      "placeOfSupply": "מקום האספקה",
+      "placeOfSupplyHint": "מדינה או מחוז ב־{country}; השאר על הבחירה הראשונה לכל המדינה.",
+      "placeSameCountry": "כל המדינה",
+      "placeRegionPlaceholder": "קוד אזור, לא חובה",
+      "reverseCharge": "מס הפוך",
+      "reverseChargeHint": "הקונה מדווח על המס, ולכן לא נגבה מס בחשבונית הזו.",
+      "shipping": "משלוח ({currency})",
+      "shippingHint": "לעולם לא מוזל ולא מחויב במס.",
+      "legalNotes": "הערות משפטיות",
+      "legalNotesHint": "נוסח שנדרש במסמך, כמו הצהרת מס הפוך. במצב אוטומטי הוא מתמלא כשהחוק דורש זאת.",
+      "problems": {
+        "contactRequired": "בחר איש קשר או הקלד את שם הקונה.",
+        "currencyInvalid": "הזן קוד מטבע בן שלוש אותיות.",
+        "issueDateInvalid": "הזן תאריך הנפקה תקין.",
+        "dueBeforeIssue": "תאריך הפירעון לא יכול להיות לפני תאריך ההנפקה.",
+        "dueInvalid": "הזן תאריך פירעון תקין.",
+        "noLines": "הוסף לפחות שורה אחת לפני ההנפקה.",
+        "discountInvalid": "הזן הנחה תקינה (אחוז בין 0 ל־100, או סכום).",
+        "shippingInvalid": "הזן סכום משלוח תקין.",
+        "emailInvalid": "הזן כתובת אימייל תקינה.",
+        "amountZero": "סך החשבונית חייב להיות גדול מאפס.",
+        "amountInvalid": "הסכום גדול מדי או מכיל יותר מדי ספרות עשרוניות עבור מטבע זה.",
+        "countryInvalid": "השתמש בקוד מדינה בן שתי אותיות.",
+        "regionInvalid": "השתמש בקוד אזור קצר, עד שלוש אותיות או ספרות.",
+        "autoNeedsSellerCountry": "הגדר את המדינה שלך בפרופיל ההפקה כדי להשתמש במס אוטומטי.",
+        "descriptionRequired": "תאר את השורה הזו.",
+        "qtyInvalid": "הזן כמות גדולה מאפס, עם עד 4 ספרות עשרוניות.",
+        "priceInvalid": "הזן מחיר תקין עם מספר הספרות העשרוניות שהמטבע מאפשר.",
+        "lineDiscountInvalid": "הזן הנחה תקינה לשורה.",
+        "hsnRequired": "הזן את קוד HSN/SAC. המדינה שלך דורשת אותו בכל שורה.",
+        "hsnInvalid": "קוד HSN/SAC הוא בין 2 ל־12 אותיות או ספרות.",
+        "taxRateRemoved": "שיעור המס של שורה זו הוסר. בחר שיעור עדכני."
+      }
+    },
+    "lines": {
+      "discount": "הנחה",
+      "discountKind": "סוג הנחה",
+      "taxAuto": "אוטומטי",
+      "taxDefault": "ברירת מחדל ({rate})",
+      "taxDefaultNone": "ברירת מחדל (ללא מס)",
+      "removedRateOption": "{rate}, הוסר",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "קוד"
+    },
+    "totals": {
+      "shipping": "משלוח",
+      "taxIncluded": "{name}, כלול",
+      "taxOn": "על {base}",
+      "reverseCharge": "מס הפוך: לא נגבה מס.",
+      "includesTotal": "המס כלול במחירים"
+    },
+    "taxWhy": {
+      "title": "למה המס הזה?",
+      "preview": "תצוגה מקדימה",
+      "previewNote": "מחושב בדפדפן שלך בזמן העריכה. מה שהשרת קובע בעת השמירה הוא הקובע.",
+      "taxFree": "לא נגבה מס על אספקה זו",
+      "warnings": "בדוק שוב",
+      "placeOfSupply": "מקום האספקה",
+      "reverseCharge": "מס הפוך",
+      "reverseChargeNote": "הקונה מדווח על המס, ולכן לא נגבה מס.",
+      "documentNotes": "מודפס על המסמך",
+      "disclaimer": "השיעורים והכללים הם ברירות מחדל שיש לאמת מול רואה החשבון שלך או מול רשות המס. זו אינה ייעוץ משפטי או מס."
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "חשבונית מס",
+        "proforma": "חשבונית פרופורמה",
+        "receipt": "קבלה"
+      },
+      "sellerTaxId": "מזהה מס",
+      "registrationNo": "מס׳ רישום",
+      "buyerTaxId": "מזהה מס",
+      "reference": "אסמכתא",
+      "placeOfSupply": "מקום האספקה",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "הנחה של {amount}",
+      "shipping": "משלוח",
+      "credited": "זוכה",
+      "taxSummary": "סיכום מס",
+      "taxName": "מס",
+      "taxBase": "סכום חייב במס",
+      "taxAmount": "מס",
+      "taxInclusive": "כלול",
+      "reverseCharge": "מס הפוך: הקונה מדווח על המס.",
+      "paymentsReceived": "תשלומים שהתקבלו",
+      "refund": "החזר",
+      "bankDetails": "פרטי בנק",
+      "voidReason": "בוטלה: {reason}"
+    },
+    "public": {
+      "notFoundTitle": "הקישור לא נמצא",
+      "notFoundMessage": "קישור החשבונית הזה לא קיים. ודא שהעתקת אותו במלואו, או בקש מהשולח קישור מחדש.",
+      "unavailableTitle": "הקישור אינו זמין",
+      "unavailableMessage": "קישור החשבונית בוטל או פג תוקפו. בקש מהשולח קישור חדש.",
+      "voidReason": "סיבה: {reason}",
+      "printable": "פתח את דף ההדפסה",
+      "amountDueFooter": "סכום לתשלום: {amount}",
+      "noPayOptions": "המוכר לא הגדיר דרך תשלום מקוונת. אנא פנה אליו כדי לסדר את התשלום.",
+      "payAmount": "סכום לתשלום ({currency})",
+      "payAmountHint": "היתרה המלאה מולאה. הזן סכום קטן יותר כדי לשלם חלק ממנה.",
+      "amountErrors": {
+        "invalid": "הזן סכום גדול מאפס.",
+        "tooMuch": "הסכום לא יכול לעלות על הסכום לתשלום."
+      },
+      "linkUnavailable": "קישור החשבונית הזה כבר אינו זמין, ולכן אי אפשר לשלם מכאן.",
+      "payFailed": "לא ניתן היה להתחיל את התשלום. נסה שוב בעוד רגע.",
+      "payUnavailable": "תשלום מקוון אינו זמין כרגע לחשבונית הזו.",
+      "redirecting": "מעביר אותך לדף התשלום...",
+      "payInstructions": "שלם לפי ההוראות שלהלן.",
+      "bankTransfer": "העברה בנקאית",
+      "copyInstructions": "העתק את ההוראות",
+      "copyValue": "העתק את {label}"
+    }
+  }
+}

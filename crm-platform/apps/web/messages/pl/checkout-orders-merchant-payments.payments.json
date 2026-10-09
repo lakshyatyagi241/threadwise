@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "Sklep / Płatności",
+      "title": "Płatności",
+      "subtitle": "Finansowa strona zamówień sklepu: co jest opłacone, co oczekuje i co jest płatne przy odbiorze.",
+      "listTitle": "Lista płatności",
+      "loading": "Wczytywanie płatności",
+      "emptyFilteredTitle": "Brak pasujących płatności",
+      "emptyFilteredMessage": "Zmień filtry lub zresetuj je, aby zobaczyć wszystkie płatności.",
+      "resetFilters": "Resetuj filtry",
+      "emptyTitle": "Brak płatności",
+      "emptyMessage": "Płatność pojawi się tutaj, gdy tylko zostanie złożone zamówienie w sklepie. Otwórz Zamówienia, aby zobaczyć zamówienia lub dodać je ręcznie.",
+      "goToOrders": "Przejdź do zamówień",
+      "summary": {
+        "loading": "Wczytywanie sum płatności",
+        "orders": "zamówienia",
+        "collected": "Pobrano",
+        "collectedNone": "Jeszcze nic nie pobrano."
+      },
+      "filters": {
+        "search": "Szukaj",
+        "searchPlaceholder": "Numer zamówienia, klient lub numer referencyjny",
+        "status": "Status",
+        "allStatuses": "Wszystkie statusy",
+        "method": "Metoda",
+        "allMethods": "Wszystkie metody",
+        "prepaid": "Przedpłata",
+        "cod": "Płatność przy odbiorze",
+        "gatewayOption": "Bramka...",
+        "gatewayCode": "Kod bramki",
+        "gatewayCodePlaceholder": "np. razorpay",
+        "from": "Od",
+        "to": "Do",
+        "rangeInverted": "Data początkowa jest po końcowej, więc zakres dat jest ignorowany.",
+        "reset": "Resetuj filtry"
+      },
+      "table": {
+        "caption": "Płatności za zamówienia sklepu, od najnowszych",
+        "order": "Zamówienie",
+        "customer": "Klient",
+        "status": "Status",
+        "method": "Metoda",
+        "paidVia": "Zapłacono przez",
+        "reference": "Numer referencyjny",
+        "amount": "Kwota",
+        "shop": "Sklep",
+        "date": "Data",
+        "methodPrepaid": "Przedpłata",
+        "methodCod": "Płatność przy odbiorze",
+        "via": {
+          "razorpay_link": "Link Razorpay",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "WhatsApp Pay w czacie",
+        "intro": "Pozwól kupującym płacić za zamówienie bez opuszczania WhatsApp (UPI, karty, bankowość internetowa, portfele) i odbieraj pieniądze na własne konto Razorpay, PayU, BillDesk lub Zaakpay.",
+        "indiaOnly": "Na razie obsługiwany jest tylko rynek indyjski: kraj i waluta są ustalone na Indie i INR.",
+        "viewOnly": "Możesz zobaczyć konfiguracje WhatsApp Pay, ale nie możesz ich zmieniać. Poproś administratora przestrzeni roboczej o uprawnienie do zarządzania płatnościami.",
+        "howTitle": "Jak to skonfigurować",
+        "how1": "W WhatsApp Manager, w sekcji Płatności dla Indii, utwórz Direct Pay Method i połącz konto bramki.",
+        "how2": "Nadaj mu nazwę i skopiuj ją tutaj. Nie można jej utworzyć w tej aplikacji, to krok po stronie Meta.",
+        "how3": "Zapisz konfigurację, a następnie otwórz Zamówienia i poproś o płatność w WhatsApp dla dowolnego zamówienia.",
+        "how4": "Kupujący dotyka Przejrzyj i zapłać, płaci w czacie, a zamówienie zostaje oznaczone jako opłacone, gdy Meta to potwierdzi.",
+        "listTitle": "Twoje konfiguracje",
+        "loading": "Wczytywanie konfiguracji",
+        "emptyTitle": "Brak konfiguracji płatności",
+        "emptyMessage": "Dodaj jedną na tej stronie, aby zacząć przyjmować płatności w czacie.",
+        "emptyMessageReadOnly": "Nikt jeszcze jej nie dodał.",
+        "market": "Indie · INR",
+        "autoChargeOn": "Automatyczne pobieranie włączone",
+        "active": "Aktywna",
+        "off": "Wyłączona",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "Konfiguracja zapisana",
+          "removed": "Konfiguracja usunięta"
+        },
+        "addTitle": "Dodaj konfigurację płatności",
+        "editTitle": "Edytuj {name}",
+        "name": "Nazwa konfiguracji",
+        "nameLocked": "Nazwa identyfikuje konfigurację. Aby ją zmienić, usuń konfigurację i dodaj ją ponownie.",
+        "updatesExisting": "Konfiguracja o tej nazwie istnieje: zapisanie ją zaktualizuje.",
+        "nameHint": "Musi dokładnie odpowiadać nazwie Direct Pay Method w WhatsApp Manager (Płatności, Indie).",
+        "nameInvalid": "Wpisz nazwę o długości od 1 do {max} znaków.",
+        "namePlaceholder": "np. my-razorpay-pay",
+        "gateway": "Bramka",
+        "activeLabel": "Aktywna",
+        "autoCharge": "Automatycznie pobieraj płatność za nowe zamówienia",
+        "autoChargeHint": "Wysyłaj prośbę o płatność w czacie automatycznie w chwili złożenia zamówienia.",
+        "save": "Zapisz konfigurację",
+        "cancelEdit": "Anuluj edycję",
+        "removeTitle": "Usunąć {name}?",
+        "removeMessage": "Zamówień nie będzie można już pobierać w czacie z tą konfiguracją. Direct Pay Method w WhatsApp Manager pozostaje nietknięty.",
+        "removeConfirm": "Usuń konfigurację"
+      }
+    }
+  }
+}

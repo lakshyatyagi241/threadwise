@@ -1,0 +1,93 @@
+{
+  "developer-rest-api-v1": {
+    "common": {
+      "dismiss": "Sluiten",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "copyFailed": "Kopiëren mislukt. Selecteer de tekst en kopieer hem handmatig."
+    },
+    "rail": {
+      "name": "Ontwikkelaars-API",
+      "tagline": "REST · /api/v1",
+      "keyActive": "Sleutel actief",
+      "noKey": "Nog geen sleutel",
+      "baseUrl": "Basis-URL",
+      "authHeader": "Auth-header",
+      "help": {
+        "title": "Hulp nodig?",
+        "body": "Volledige referentie van verzoeken en antwoorden, met kopieerbare voorbeelden voor elk endpoint.",
+        "link": "Documentatie lezen"
+      }
+    },
+    "page": {
+      "crumbLabel": "Kruimelpad",
+      "crumbSettings": "Instellingen",
+      "crumbHere": "Ontwikkelaars",
+      "title": "Ontwikkelaar",
+      "titleAccent": "API-sleutels",
+      "lead": "Genereer een sleutel om de REST API aan te roepen vanuit je eigen apps, CRM of automatisering: berichten sturen, contacten, sjablonen, broadcasts en meer beheren. Eén sleutel per workspace.",
+      "back": "Terug",
+      "openDocs": "Documentatie openen",
+      "loading": "Je API-sleutel laden",
+      "forbidden": {
+        "title": "Je kunt API-sleutels niet bekijken",
+        "body": "Je rol heeft geen toegang tot API-sleutels. Vraag een workspace-beheerder om je de machtiging voor API-sleutels te geven."
+      }
+    },
+    "banner": {
+      "title": "Je nieuwe API-sleutel",
+      "warning": "Kopieer dit nu en bewaar het veilig. Voor je veiligheid bewaren we alleen een hash, dus de sleutel wordt nooit meer getoond."
+    },
+    "key": {
+      "title": "Je API-sleutel",
+      "active": "Actief",
+      "untitled": "Sleutel zonder naam",
+      "created": "Aangemaakt op {date}",
+      "lastUsed": "Laatst gebruikt {when}",
+      "never": "nooit",
+      "revoke": "Intrekken",
+      "noRevoke": "Je rol kan API-sleutels niet intrekken.",
+      "revoked": "API-sleutel ingetrokken. Elke app die hem gebruikt, werkt direct niet meer.",
+      "footer": "Er is maar één sleutel per workspace toegestaan. Trek deze in om een nieuwe sleutel uit te geven.",
+      "confirm": {
+        "title": "Deze sleutel intrekken?",
+        "message": "Elke app of integratie die deze sleutel gebruikt, werkt direct niet meer. Dit kan niet ongedaan worden gemaakt. Je kunt daarna een nieuwe sleutel aanmaken.",
+        "accept": "Intrekken",
+        "cancel": "Annuleren"
+      }
+    },
+    "create": {
+      "title": "Je sleutel aanmaken",
+      "help": "Geef de sleutel een naam zodat je weet waar hij wordt gebruikt. De sleutel wordt eenmalig getoond bij het aanmaken.",
+      "name": "Sleutelnaam",
+      "placeholder": "bijv. Productie-backend",
+      "submit": "Sleutel aanmaken",
+      "submitting": "Sleutel aanmaken…",
+      "created": "API-sleutel aangemaakt. Kopieer hem nu - hij wordt niet opnieuw getoond.",
+      "noCreate": "Je rol kan geen API-sleutels aanmaken. Vraag het aan een workspace-beheerder.",
+      "planLocked": "Je abonnement bevat de REST API niet.",
+      "errors": {
+        "required": "Voer een naam voor de sleutel in.",
+        "tooLong": "De naam mag maximaal 120 tekens bevatten."
+      }
+    },
+    "quickstart": {
+      "title": "Snelstart",
+      "reference": "Volledige referentie",
+      "intro": "Stuur je eerste bericht. Vervang de sleutel en de ontvanger:"
+    },
+    "errors": {
+      "planLimit": "Je hebt al een actieve API-sleutel. Trek hem in voordat je een nieuwe aanmaakt - er is maar één sleutel per workspace toegestaan.",
+      "planLocked": "Je abonnement bevat de REST API niet. Upgrade om API-sleutels aan te maken.",
+      "forbidden": "Je hebt hiervoor geen toestemming.",
+      "validation": "De sleutelnaam is ongeldig. Controleer hem en probeer het opnieuw.",
+      "notFound": "Die sleutel bestaat niet meer. De lijst is vernieuwd.",
+      "network": "De server was niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+      "unexpected": "Er ging iets mis aan onze kant. Probeer het zo meteen opnieuw.",
+      "loadFailed": "Je API-sleutel kon niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "upgrade": "Abonnementen bekijken",
+      "requestId": "Verzoek-ID: {id}"
+    }
+  }
+}

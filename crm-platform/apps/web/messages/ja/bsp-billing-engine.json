@@ -1,0 +1,169 @@
+{
+  "bsp-billing-engine": {
+    "nav": {
+      "income": "メッセージ収益",
+      "reseller": "リセラー課金(Meta)",
+      "billing": "メッセージ課金",
+      "groups": {
+        "billing": "請求"
+      }
+    },
+    "common": {
+      "loading": "読み込み中",
+      "retry": "再試行",
+      "requestId": "リクエストID",
+      "loadFailed": "読み込めませんでした。",
+      "forbidden": "これにアクセスする権限がありません。",
+      "cancel": "キャンセル",
+      "dismiss": "閉じる"
+    },
+    "errors": {
+      "notConfigured": "先にMetaのクレジットラインを接続してください(ステップ1)。",
+      "currencyUnsupported": "クレジットラインに使用できるのは、AUD、EUR、GBP、IDR、INR、USDのみです。",
+      "wabaNotFound": "その番号は、このワークスペースに接続されているWhatsApp Business番号ではありません。",
+      "metaRejected": "Metaが拒否しました: {detail}",
+      "notAttached": "取り消せるのは、添付済みのクレジットラインのみです。",
+      "resellerUnavailable": "リセラー課金はまだ利用できません。プラットフォームのMetaクレジットラインが設定されていません。",
+      "conflict": "他のユーザーがこれを変更しました。再読み込みしてもう一度お試しください。",
+      "forbidden": "この操作ができるのはスーパー管理者のみです。",
+      "validation": "強調表示された項目を確認してください。",
+      "generic": "問題が発生しました。もう一度お試しください。"
+    },
+    "console": {
+      "title": "Metaクレジットとキー",
+      "subtitle": "Metaビジネスを接続し、クレジットラインを顧客と共有すると、Metaからあなたに請求され、あなたから顧客に請求できます。",
+      "linkIncome": "メッセージ収益",
+      "linkPricing": "メッセージ料金",
+      "optionalTitle": "任意、実際に再販する場合のみ",
+      "optionalBody": "ソリューションパートナーのステータスと、Metaの承認済みクレジットラインが必要です。それ以外(ウォレット、料金、プラン)はこれがなくても機能します。",
+      "readOnly": "このページは閲覧できますが、変更できるのはスーパー管理者のみです。",
+      "step1": {
+        "title": "1. Metaビジネスを接続",
+        "connected": "接続済み",
+        "notConnected": "未接続",
+        "businessId": "MetaビジネスID",
+        "businessIdPlaceholder": "数値ID",
+        "token": "システムユーザートークン",
+        "tokenStored": "保存済み。そのままにするには空欄のままにしてください。",
+        "tokenPlaceholder": "トークンを貼り付け",
+        "tokenHint": "business_management、whatsapp_business_management、whatsapp_business_messagingが必要です。暗号化して保存され、再表示されることはありません。",
+        "clearToken": "保存済みのトークンを削除",
+        "creditLine": "拡張クレジットラインID",
+        "creditLineHint": "任意。空欄の場合、ビジネスの最初のクレジットラインが検出され、記憶されます。",
+        "graphVersion": "Graph APIバージョン",
+        "graphVersionHint": "v26.0のような形式です。空欄の場合はv26.0を使用します。",
+        "ratesEndpoint": "Metaレートのエンドポイント",
+        "ratesEndpointHint": "任意。Metaの料金表を返すhttpsアドレスです。空欄の場合は、同梱のレートカードまたはアップロードしたファイルを使用します。",
+        "baseCurrency": "基準通貨",
+        "baseCurrencyHint": "収益金額の通貨です。USDなど3文字で入力します。",
+        "autoAttach": "自動で添付",
+        "autoAttachHint": "番号を接続したリセラーのワークスペースには、誰もボタンを押さなくてもあなたのクレジットラインが付与されます。",
+        "autoCurrency": "請求通貨",
+        "auto": "自動(基準通貨)",
+        "save": "接続を保存",
+        "saved": "接続を保存しました。",
+        "invalid": {
+          "graphVersion": "v26.0の形式を使用してください。",
+          "ratesEndpoint": "httpsアドレスを入力してください。",
+          "autoAttachCurrency": "Metaはこの通貨に対応していません。",
+          "baseCurrency": "3文字の通貨コードを使用してください。",
+          "businessId": "64文字以内で入力してください。"
+        }
+      },
+      "step2": {
+        "title": "2. 顧客を手動で1件添付",
+        "hintAuto": "自動添付がオンです。リセラーのワークスペースの新しい番号は自動で添付されます。",
+        "hintManual": "接続済みの番号と、請求に使う通貨を選択します。",
+        "attachAll": "接続済みをすべて今すぐ添付",
+        "attachAllTitle": "接続済みのすべての番号を添付しますか?",
+        "attachAllBody": "クレジットラインは、まだ添付されていないリセラーのワークスペースの接続済みの全番号と共有されます。それぞれがMetaへの呼び出しになります。",
+        "attachAllConfirm": "すべて添付",
+        "attachAllDone": "{attached}件添付、{failed}件失敗、{skipped}件は設定済み。",
+        "attachAllMore": "さらに{remaining}件が待機中です。もう一度実行してください。",
+        "empty": "WhatsApp Business(Cloud API)番号を接続した顧客はまだいません。接続されるとここに表示されます。",
+        "number": "顧客のWhatsApp番号",
+        "pick": "接続済みの番号を選択",
+        "currency": "この番号の請求通貨",
+        "locked": "添付後はロックされます。Metaでは後から通貨を変更できません。",
+        "attach": "クレジットラインを添付",
+        "attached": "クレジットラインをWABA {waba}に添付しました。",
+        "failed": "添付に失敗しました: {error}",
+        "finishStep1": "先にステップ1を完了してください。",
+        "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
+        "noPhone": "番号なし"
+      },
+      "register": {
+        "title": "使用中のクレジットライン",
+        "empty": "添付済みのアカウントはまだありません。上のステップ1と2を完了してください。",
+        "columns": {
+          "workspace": "ワークスペース",
+          "waba": "WABA",
+          "allocation": "割り当てID",
+          "currency": "通貨",
+          "status": "ステータス",
+          "action": "操作"
+        },
+        "status": {
+          "attached": "添付済み",
+          "revoked": "取り消し済み",
+          "failed": "失敗"
+        },
+        "reseller": "リセラー課金",
+        "direct": "Metaに直接支払い",
+        "revoke": "取り消す",
+        "revokeTitle": "このクレジットラインを取り消しますか?",
+        "revokeBody": "この番号についてMetaからの請求が停止し、顧客が再びMetaに直接支払うようになります。",
+        "revokeStillReseller": "このワークスペースはまだリセラー課金です。顧客にはMetaから直接請求されますが、ウォレットからもメッセージごとに引き続き課金されます。",
+        "revokeConfirm": "取り消す",
+        "revoked": "クレジット割り当てを取り消しました。",
+        "revokeFailed": "取り消しに失敗しました: {error}",
+        "loadMore": "さらに読み込む",
+        "loadingMore": "読み込み中",
+        "label": "クレジット割り当て"
+      },
+      "guide": {
+        "title": "セットアップガイド",
+        "step1Title": "ビジネスID",
+        "step1Body": "Meta Business Settingsの「ビジネス情報」で確認できます。",
+        "step2Title": "システムユーザートークン",
+        "step2Body": "ビジネスにシステムユーザーを作成し、これらの権限を持つトークンを生成します。表示されるのは一度だけです。",
+        "step3Title": "クレジットライン",
+        "step3Body": "承認済みの拡張クレジットラインが必要です。IDを空欄にすると、Metaから自動的に読み取られます。",
+        "goodTitle": "ご注意",
+        "good1": "クレジットラインの通貨は、添付後にロックされます。",
+        "good2": "添付するとMetaからあなたに請求されますが、顧客への料金は引き続きあなたが設定します。",
+        "good3": "いつでも取り消すことができ、顧客は再びMetaに直接支払うようになります。",
+        "link": "Metaソリューションパートナーの概要"
+      }
+    },
+    "dashboard": {
+      "title": "リセラー損益",
+      "eyebrow": "今月",
+      "intro": "収益は配信済みメッセージに対して顧客に請求した額、Metaコストは同じメッセージにかかった費用、マージンはその差額です。返金されたメッセージと無料メッセージは含まれません。",
+      "linkRates": "レートとマージン",
+      "linkConnect": "Metaを接続",
+      "revenue": "収益(請求額)",
+      "metaCost": "Metaコスト",
+      "margin": "マージン(利益)",
+      "walletFloat": "保有中のウォレット残高",
+      "walletFloatHint": "すべてのワークスペースの顧客ウォレットにある資金",
+      "billed": "課金されたメッセージ",
+      "free": "無料メッセージ",
+      "unpriced": "Metaコスト未設定",
+      "unpricedBanner": "{count, plural, other {課金されたメッセージ#件}}は、国とカテゴリーのMetaコストが未設定のため、マージンでは全額が収益として計上されます。",
+      "perWorkspace": "ワークスペース別(今月)",
+      "columns": {
+        "workspace": "ワークスペース",
+        "messages": "メッセージ数",
+        "revenue": "収益",
+        "metaCost": "Metaコスト",
+        "margin": "マージン",
+        "wallet": "ウォレット残高"
+      },
+      "empty": "今月はまだ課金されたメッセージがありません。",
+      "more": "収益上位のワークスペースのみ表示されます。",
+      "loadFailed": "損益を読み込めませんでした。",
+      "currency": "レポート通貨"
+    }
+  }
+}

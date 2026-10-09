@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "Rôles et autorisations",
+      "roles": "Rôles",
+      "permissions": "Autorisations",
+      "staff": "Rôles du personnel"
+    },
+    "common": {
+      "admin": "Admin",
+      "breadcrumb": "Fil d’Ariane",
+      "loading": "Chargement…",
+      "retry": "Réessayer",
+      "requestId": "ID de la requête",
+      "cancel": "Annuler",
+      "noAccess": {
+        "title": "Vous n’avez pas accès à cet écran",
+        "body": "Vos rôles n’incluent pas l’autorisation de plateforme requise par cet écran. Demandez à un super administrateur de vous l’accorder.",
+        "bodyWithKey": "Cet écran nécessite l’autorisation de plateforme {permission}. Demandez à un super administrateur de l’ajouter à l’un de vos rôles.",
+        "back": "Retour à la console"
+      },
+      "errors": {
+        "unexpected": "Une erreur est survenue de notre côté. Réessayez ; si le problème persiste, indiquez l’ID de la requête.",
+        "request": "La demande n’a pas pu aboutir.",
+        "validation": "Vérifiez le formulaire et réessayez.",
+        "validationField": "{message}",
+        "conflict": "Quelqu’un d’autre a modifié ce rôle pendant votre édition. Rechargez la page pour voir sa version, puis réappliquez vos modifications.",
+        "noAccess": "Vous avez besoin de l’autorisation de plateforme {permission} pour cela.",
+        "nameTaken": "Ce nom est déjà utilisé.",
+        "nameRequired": "Le nom du rôle est obligatoire.",
+        "permissionNameRequired": "Le nom de l’autorisation est obligatoire.",
+        "permissionNameFormat": "Utilisez des lettres minuscules, des chiffres et des tirets bas, avec des points entre les parties.",
+        "locked": "Le rôle Super administrateur est verrouillé par le système : il ne peut être ni renommé, ni privé d’autorisations, ni supprimé.",
+        "lockedDelete": "Le rôle Super administrateur est verrouillé par le système et ne peut pas être supprimé.",
+        "permissionSystem": "Cette autorisation est vérifiée par la plateforme et ne peut pas être supprimée.",
+        "permissionUnknown": "Ces autorisations ne figurent pas dans le catalogue : {names}.",
+        "reassignSame": "Choisissez un autre rôle vers lequel transférer les utilisateurs.",
+        "lastSuperAdmin": "Il doit y avoir au moins un super administrateur actif.",
+        "privilegedRole": "Seul un super administrateur peut accorder ou retirer le rôle Super administrateur.",
+        "notFound": "Cet élément n’existe plus. Il a peut-être été supprimé."
+      }
+    },
+    "list": {
+      "crumb": "Rôles",
+      "eyebrow": "Admin · Utilisateurs et accès · Rôles",
+      "titleLead": "Rôles et",
+      "titleAccent": "autorisations",
+      "description": "Définissez ce que chaque rôle peut faire sur la plateforme. Chaque utilisateur se voit attribuer un rôle ; les autorisations sont regroupées par rôle.",
+      "managePermissions": "Gérer les autorisations",
+      "addRole": "Ajouter un rôle",
+      "kpi": {
+        "label": "Totaux des rôles",
+        "total": "Total des rôles",
+        "totalHint": "{system} système · {custom} personnalisés",
+        "permissions": "Total des autorisations",
+        "permissionsHint": "dans les modules",
+        "users": "Utilisateurs avec un rôle",
+        "usersHint": "tous rôles confondus",
+        "noUsers": "Rôles sans utilisateur",
+        "noUsersHint": "envisagez de les archiver"
+      },
+      "filter": {
+        "label": "Filtrer les rôles par type",
+        "all": "Tous",
+        "system": "Système",
+        "custom": "Personnalisé",
+        "search": "Rechercher des rôles…",
+        "searchLabel": "Rechercher des rôles"
+      },
+      "table": {
+        "caption": "Rôles de la plateforme",
+        "index": "n°",
+        "name": "Nom du rôle",
+        "type": "Type",
+        "users": "Utilisateurs",
+        "permissions": "Autorisations",
+        "lastEdited": "Dernière modification",
+        "actions": "Actions"
+      },
+      "systemRole": "Rôle système",
+      "customRole": "Rôle personnalisé",
+      "systemBadge": "Système",
+      "customBadge": "Personnalisé",
+      "row": {
+        "menu": "Actions pour {name}",
+        "edit": "Modifier le rôle",
+        "delete": "Supprimer"
+      },
+      "footer": {
+        "showing": "{shown} rôles sur {total} affichés",
+        "add": "+ Ajouter un rôle"
+      },
+      "empty": {
+        "none": "Aucun rôle défini pour l’instant. <link>Créez le premier rôle</link>.",
+        "noMatch": "Aucun rôle ne correspond à vos filtres.",
+        "clear": "Effacer les filtres"
+      },
+      "delete": {
+        "title": "Supprimer le rôle",
+        "message": "Supprimer le rôle {name} ? Les utilisateurs qui ont ce rôle perdront toutes ses autorisations. Cette action est irréversible.",
+        "confirm": "Oui, supprimer",
+        "cancel": "Annuler"
+      },
+      "toasts": {
+        "deleted": "Rôle « {name} » supprimé."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Rôles",
+      "crumbNew": "Nouveau",
+      "eyebrowNew": "Admin · Rôles · Nouveau",
+      "eyebrowEdit": "Admin · Modification du rôle",
+      "titleLead": "Créer un nouveau",
+      "titleAccent": "rôle",
+      "description": "Choisissez un nom, puis cochez les cases pour accorder à ce rôle l’accès à des modules précis. Vous pourrez le modifier à tout moment.",
+      "summary": "{count} / {total} autorisations · dernière modification le {date}.",
+      "userChip": "{count, plural, one {# utilisateur} other {# utilisateurs}}",
+      "save": "Enregistrer les modifications",
+      "create": "Créer le rôle",
+      "saving": "Enregistrement…",
+      "reload": "Recharger le rôle",
+      "discard": "Vous avez des modifications non enregistrées. Quitter sans enregistrer ?",
+      "duplicatedBanner": "Rôle dupliqué sous le nom « {name} ». Modifiez la copie ci-dessous.",
+      "lockedNotice": "{name} est verrouillé par le système : il ne peut être ni renommé, ni privé d’autorisations, ni supprimé.",
+      "details": "Détails du rôle",
+      "name": "Nom du rôle",
+      "namePlaceholder": "ex. : Responsable commercial",
+      "template": "Partir d’un modèle",
+      "templateBlank": "Vide · aucune autorisation",
+      "templateOption": "{name} · {count, plural, one {# autorisation} other {# autorisations}}",
+      "templateBusy": "Chargement du modèle…",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "À quoi sert ce rôle ? Visible par les administrateurs.",
+      "toasts": {
+        "created": "Rôle « {name} » créé.",
+        "updated": "Rôle « {name} » mis à jour."
+      }
+    },
+    "matrix": {
+      "title": "Attribuer des autorisations",
+      "counter": "{count, number} / {total, number} sélectionnées",
+      "selectAll": "Sélectionner toutes les autorisations",
+      "module": "Module",
+      "selectAllColumn": "Tout sélectionner",
+      "available": "Autorisations disponibles",
+      "selectAllModule": "Tout sélectionner",
+      "selectAllOf": "Sélectionner toutes les autorisations de {module}",
+      "empty": "Aucune autorisation définie pour l’instant. <link>Créez-en une</link>.",
+      "emptyPlain": "Aucune autorisation définie pour l’instant."
+    },
+    "dangerZone": {
+      "title": "Zone dangereuse",
+      "irreversible": "irréversible",
+      "duplicate": {
+        "title": "Dupliquer le rôle",
+        "hint": "Créer une copie avec les mêmes autorisations",
+        "action": "Dupliquer",
+        "busy": "Duplication…"
+      },
+      "reassign": {
+        "title": "Réattribuer tous les utilisateurs",
+        "hint": "Déplacer {count, plural, one {# utilisateur} other {# utilisateurs}} vers un autre rôle",
+        "targetLabel": "Déplacer les utilisateurs vers",
+        "placeholder": "Vers…",
+        "action": "Déplacer",
+        "busy": "Déplacement…"
+      },
+      "moved": "{count} utilisateur(s) déplacé(s) de « {from} » vers « {to} ».",
+      "delete": {
+        "title": "Supprimer le rôle",
+        "hint": "Supprime le rôle et détache tous les utilisateurs.",
+        "action": "Supprimer",
+        "dialogTitle": "Supprimer le rôle",
+        "dialogMessage": "Supprimer le rôle {name} ? Les utilisateurs qui ont ce rôle perdront toutes ses autorisations. Cette action est irréversible.",
+        "confirm": "Oui, supprimer",
+        "cancel": "Annuler"
+      },
+      "deleted": "Rôle « {name} » supprimé."
+    },
+    "permissions": {
+      "crumb": "Autorisations",
+      "eyebrow": "Admin · Utilisateurs et accès · Autorisations",
+      "titleLead": "Toutes",
+      "titleAccent": "autorisations",
+      "description": "Tous les indicateurs d’autorisation reconnus par la plateforme, regroupés par module. Ajoutez-en un nouveau ici, puis attachez-le aux rôles dans l’éditeur de rôles.",
+      "backToRoles": "Retour aux rôles",
+      "add": "Ajouter une autorisation",
+      "kpi": {
+        "label": "Totaux des autorisations",
+        "total": "Total des autorisations",
+        "totalHint": "dans {modules, plural, one {# module} other {# modules}}",
+        "used": "Utilisées dans les rôles",
+        "usedHint": "rattachées à au moins 1 rôle",
+        "orphans": "Autorisations orphelines",
+        "orphansHint": "rattachées à aucun rôle",
+        "last": "Dernière ajoutée"
+      },
+      "filter": {
+        "search": "Rechercher le nom d’une autorisation…",
+        "searchLabel": "Rechercher le nom d’une autorisation",
+        "moduleLabel": "Module",
+        "allModules": "Tous les modules",
+        "count": "{count, plural, one {# autorisation} other {# autorisations}} dans {modules, plural, one {# module} other {# modules}}"
+      },
+      "groupsLabel": "Autorisations par module",
+      "groupCount": "{count, plural, one {# autorisation} other {# autorisations}}",
+      "orphan": "orpheline",
+      "system": "système",
+      "systemHint": "Vérifiée par la plateforme : elle ne peut pas être supprimée.",
+      "inRoles": "dans {count, plural, one {# rôle} other {# rôles}}",
+      "deleteName": "Supprimer l’autorisation {name}",
+      "empty": {
+        "none": "Aucune autorisation définie pour l’instant. <link>Créez la première</link>.",
+        "noMatch": "Aucune autorisation ne correspond à votre recherche."
+      },
+      "delete": {
+        "action": "Supprimer",
+        "title": "Supprimer l’autorisation",
+        "message": "Supprimer l’autorisation {name} ? Tout rôle qui l’utilise perd immédiatement cette capacité.",
+        "confirm": "Oui, supprimer",
+        "cancel": "Annuler"
+      },
+      "toasts": {
+        "deleted": "Autorisation « {name} » supprimée."
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "Autorisations",
+      "crumbNew": "Nouvelle",
+      "eyebrow": "Admin · Autorisations · Nouvelle",
+      "titleLead": "Créer une nouvelle",
+      "titleAccent": "autorisation",
+      "description": "Ajoutez un indicateur de capacité précis. Une fois créé, attachez-le à un ou plusieurs rôles dans l’éditeur de rôles.",
+      "create": "Créer l’autorisation",
+      "creating": "Création…",
+      "details": "Détails de l’autorisation",
+      "module": "Module",
+      "modulePlaceholder": "Choisissez un module",
+      "moduleHint": "Dans l’éditeur de rôles, les autorisations sont regroupées par module.",
+      "action": "Action",
+      "actionHint": "Minuscules, sans espaces. Sera combiné sous la forme",
+      "actionPlaceholder": "ex. : export · refund · approve",
+      "name": "Nom de l’autorisation",
+      "namePlaceholder": "module.action — rempli automatiquement ci-dessus",
+      "nameHint": "Rempli automatiquement à partir du module et de l’action. Ne modifiez que si vous avez besoin d’une chaîne personnalisée.",
+      "tip": "<b>Convention de nommage :</b> utilisez <code>module.action</code> en minuscules. Exemples : <code>campaigns.send</code>, <code>billing.refund</code>, <code>audit.export</code>.",
+      "preview": {
+        "title": "Aperçu de l’autorisation",
+        "appearsUnder": "Apparaîtra sous <b>{module}</b> dans l’éditeur de rôles.",
+        "selectedModule": "module sélectionné"
+      },
+      "code": {
+        "title": "Référence dans le code",
+        "hint": "Utilisez <code>@PlatformPermission()</code> sur une route de la plateforme pour exiger cette autorisation."
+      },
+      "tipCard": "<b>Astuce :</b> les autorisations nommées <code>module.action</code> se regroupent automatiquement dans l’éditeur de rôles.",
+      "toasts": {
+        "created": "Autorisation « {name} » créée."
+      }
+    },
+    "staff": {
+      "crumbRoles": "Rôles",
+      "crumb": "Rôles du personnel",
+      "eyebrow": "Admin · Utilisateurs et accès · Rôles du personnel",
+      "titleLead": "Personnel",
+      "titleAccent": "rôles",
+      "description": "Attribuez à chaque opérateur de cette console les rôles de plateforme qui déterminent ce qu’il peut faire. L’enregistrement remplace les rôles de l’opérateur par exactement ceux cochés.",
+      "backToRoles": "Retour aux rôles",
+      "caption": "Opérateurs et leurs rôles de plateforme",
+      "table": {
+        "operator": "Opérateur",
+        "tier": "Accès à la console",
+        "status": "Statut",
+        "roles": "Rôles de la plateforme",
+        "actions": "Actions"
+      },
+      "tier": {
+        "super_admin": "Super administrateur",
+        "support": "Support",
+        "auditor": "Auditeur"
+      },
+      "status": {
+        "active": "Actif",
+        "suspended": "Suspendu"
+      },
+      "noRoles": "Aucun rôle",
+      "rolesOf": "Rôles de {name}",
+      "assign": "Attribuer des rôles",
+      "assignFor": "Attribuer des rôles à {name}",
+      "empty": "Aucun opérateur pour l’instant.",
+      "dialog": {
+        "title": "Attribuer des rôles à {name}",
+        "close": "Fermer",
+        "cancel": "Annuler",
+        "save": "Enregistrer les rôles",
+        "saving": "Enregistrement…",
+        "hint": "Cochez tous les rôles que cet opérateur doit détenir.",
+        "superOnly": "Seul un super administrateur peut accorder ou retirer ce rôle.",
+        "count": "{count, plural, =0 {Aucun rôle sélectionné} one {# rôle sélectionné} other {# rôles sélectionnés}}"
+      },
+      "toasts": {
+        "saved": "Rôles de « {name} » mis à jour."
+      }
+    }
+  }
+}

@@ -1,0 +1,412 @@
+{
+  "coupons-credits-referral-currency": {
+    "nav": {
+      "group": "Facturering en abonnementen",
+      "coupons": "Coupons",
+      "currencies": "Valuta",
+      "currenciesGroup": "Lokalisatie",
+      "affiliate": "Affiliate"
+    },
+    "common": {
+      "loading": "Laden",
+      "retry": "Opnieuw proberen",
+      "cancel": "Annuleren",
+      "dismiss": "Sluiten",
+      "admin": "Beheerder",
+      "readOnly": "Je kunt deze pagina bekijken, maar alleen een superbeheerder kan hem wijzigen.",
+      "requestId": "Verzoek-ID",
+      "errors": {
+        "forbidden": "Je hebt geen toegang tot deze pagina.",
+        "request": "Het verzoek kon niet worden voltooid.",
+        "unexpected": "Er ging iets mis. Probeer het zo meteen opnieuw."
+      },
+      "pager": {
+        "label": "Paginering",
+        "previous": "Vorige",
+        "next": "Volgende",
+        "page": "Pagina {n}"
+      }
+    },
+    "errors": {
+      "generic": "Er ging iets mis. Probeer het zo meteen opnieuw.",
+      "forbidden": "Alleen een superbeheerder kan dit wijzigen.",
+      "notFound": "Dit item bestaat niet meer. Het is mogelijk verwijderd.",
+      "conflict": "Iemand anders heeft dit zojuist gewijzigd. Laad de pagina opnieuw en probeer het nog eens.",
+      "validation": "Sommige waarden zijn ongeldig. Controleer het formulier en probeer het opnieuw.",
+      "codeTaken": "Een andere coupon gebruikt deze code al.",
+      "planUnknown": "Een of meer van de geselecteerde abonnementen bestaan niet meer.",
+      "currencyUnknown": "Kies een van de actieve valuta.",
+      "currencyTaken": "Er bestaat al een valuta met deze code.",
+      "defaultProtected": "Dit is de standaardvaluta van het systeem. Kies eerst een andere standaard.",
+      "inUse": "Deze valuta wordt nog gebruikt door {used}. Deactiveer hem in plaats daarvan.",
+      "ratesFailed": "De koersprovider was niet bereikbaar of gaf geen koersen terug. Er is geen koers gewijzigd."
+    },
+    "coupons": {
+      "title": "Kortingscoupons",
+      "titleLead": "Korting",
+      "titleAccent": "coupons",
+      "crumbHere": "Coupons",
+      "eyebrow": "Beheer · Facturering · Couponcodes",
+      "description": "Promocodes die klanten bij het afrekenen invoeren. Kies een percentage of vast bedrag, stel een geldigheidsperiode in, beperk ze tot bepaalde abonnementen en stel een maximum aantal inwisselingen in.",
+      "new": "Nieuwe coupon",
+      "kpi": {
+        "total": "Totaal aantal coupons",
+        "totalHint": "in catalogus",
+        "active": "Actief",
+        "activeHint": "kan worden ingewisseld",
+        "expired": "Verlopen",
+        "expiredHint": "einddatum verstreken",
+        "redeemed": "Totaal aantal inwisselingen",
+        "redeemedHint": "gebruik sinds het begin"
+      },
+      "filters": {
+        "label": "Coupons filteren",
+        "all": "Alle",
+        "active": "Actief",
+        "disabled": "Uitgeschakeld",
+        "expired": "Verlopen",
+        "search": "Zoek op code of beschrijving…",
+        "searchLabel": "Coupons zoeken"
+      },
+      "table": {
+        "label": "Coupons",
+        "code": "Code",
+        "discount": "Korting",
+        "uses": "Gebruik",
+        "validity": "Geldigheid",
+        "status": "Status",
+        "actions": "Acties"
+      },
+      "validity": {
+        "forever": "voor altijd",
+        "now": "nu",
+        "range": "{from} → {to}"
+      },
+      "empty": {
+        "title": "Geen coupons gevonden.",
+        "hint": "Pas de filters aan of reset ze, of",
+        "create": "maak de eerste aan"
+      },
+      "footer": "{from}–{to} van {total} coupons",
+      "pager": {
+        "label": "Paginering",
+        "previous": "Vorige",
+        "next": "Volgende",
+        "page": "Pagina {n}"
+      },
+      "actions": {
+        "edit": "Bewerken",
+        "delete": "Verwijderen",
+        "menu": "Acties",
+        "toggle": "{code} aan- of uitzetten"
+      },
+      "toasts": {
+        "created": "Coupon aangemaakt.",
+        "updated": "Coupon bijgewerkt.",
+        "activated": "Geactiveerd.",
+        "deactivated": "Gedeactiveerd.",
+        "deleted": "Coupon verwijderd."
+      },
+      "delete": {
+        "title": "Coupon verwijderen",
+        "body": "Coupon {code} verwijderen? Workspaces die hem al hebben ingewisseld, behouden hun korting.",
+        "confirm": "Ja, verwijderen"
+      },
+      "editor": {
+        "notFoundTitle": "Coupon niet gevonden",
+        "notFoundBody": "Er bestaat geen coupon met dit adres. Hij is mogelijk verwijderd, of de link klopt niet.",
+        "backToList": "Terug naar coupons",
+        "crumbNew": "Nieuw",
+        "eyebrowNew": "Beheer · Facturering · Couponcodes · Aanmaken",
+        "eyebrowEdit": "Beheer · Facturering · Couponcodes · Wijzigen",
+        "titleLead": "Nieuwe",
+        "titleAccent": "coupon",
+        "descriptionNew": "Promocodes die tijdens /checkout worden ingewisseld. Kies een percentage of vast bedrag, koppel ze aan één abonnement of alle abonnementen en geef ze eventueel een geldigheidsperiode.",
+        "redeemed": "{used}{max} keer ingewisseld",
+        "redeemedMax": " / {max}",
+        "expires": "verloopt {when}",
+        "active": "Actief",
+        "disabled": "Uitgeschakeld",
+        "create": "Coupon aanmaken",
+        "saveChanges": "Wijzigingen opslaan",
+        "saving": "Opslaan",
+        "cancel": "Annuleren",
+        "problemsTitle": "Sommige velden vragen aandacht:",
+        "problems": {
+          "code": "Code: voer een code van maximaal 64 tekens in.",
+          "description": "Beschrijving: maximaal 255 tekens.",
+          "adminNote": "Beheerdersnotitie: maximaal 1000 tekens.",
+          "type": "Type: kies percentage of vast bedrag.",
+          "amount": "Bedrag: voer een getal in zoals 10 of 12.5.",
+          "maxDiscountAmount": "Maximale kortingslimiet: voer een getal in of laat leeg.",
+          "currencyCode": "Valutavergrendeling: maximaal 8 tekens.",
+          "minOrderAmount": "Minimaal bestelbedrag: voer een getal in of laat leeg.",
+          "applicablePlans": "Van toepassing op abonnementen: kies abonnementen uit de lijst.",
+          "startsAt": "Begint op: voer een geldige datum en tijd in.",
+          "expiresAt": "Verloopt op: voer een geldige datum en tijd in die niet voor de start ligt.",
+          "maxUses": "Maximaal totaal aantal inwisselingen: een geheel getal van 1 of meer, of leeg.",
+          "perUserLimit": "Limiet per gebruiker: een geheel getal van 1 of meer, of leeg."
+        },
+        "sections": {
+          "identity": "Identiteit",
+          "discount": "Korting",
+          "eligibility": "Geschiktheid",
+          "limits": "Limieten en gedrag"
+        },
+        "fields": {
+          "code": "Code",
+          "codeHint": "Wordt in hoofdletters opgeslagen. Klanten voeren exact deze code in bij het betalen.",
+          "codePlaceholder": "WELCOME10",
+          "description": "Beschrijving",
+          "descriptionNote": "(zichtbaar voor klant)",
+          "descriptionPlaceholder": "Welkomstaanbieding: 10% korting op de eerste maand",
+          "adminNote": "Beheerdersnotitie",
+          "adminNoteNote": "(intern, niet zichtbaar)",
+          "adminNotePlaceholder": "Feestdagenactie · Slack #marketing · eindigt met campagne",
+          "activeTitle": "Actief",
+          "activeHint": "Klanten kunnen hem toepassen bij het afrekenen",
+          "type": "Type",
+          "typePercent": "Percentage (%)",
+          "typeFixed": "Vast bedrag",
+          "amount": "Bedrag",
+          "amountHint": "Bij percentagecoupons betekent 10 dan 10%. Bij coupons met vast bedrag betekent 10 dan 10 valuta-eenheden.",
+          "maxDiscount": "Maximale kortingslimiet",
+          "maxDiscountNote": "(alleen type %)",
+          "maxDiscountPlaceholder": "leeg = geen limiet",
+          "maxDiscountHint": "Bijvoorbeeld 20% korting met een maximum van $50.",
+          "currency": "Valutavergrendeling",
+          "currencyAny": "Elke valuta",
+          "currencyHint": "Beperk het inwisselen tot één valuta (geldt voor coupons met vast bedrag).",
+          "minOrder": "Minimaal bestelbedrag",
+          "minOrderPlaceholder": "0 = geen minimum",
+          "plans": "Van toepassing op abonnementen",
+          "plansNote": "(leeg = elk abonnement)",
+          "plansPlaceholder": "Kies een of meer abonnementen (leeg = elk abonnement)...",
+          "plansHint": "Begin met typen om de lijst te filteren, selecteer om toe te voegen en gebruik de × van het label om er een te verwijderen.",
+          "plansEmpty": "Geen abonnementen meer om te kiezen.",
+          "plansRemove": "{name} verwijderen",
+          "plansClear": "Alle abonnementen verwijderen",
+          "startsAt": "Begint op",
+          "startsAtHint": "Leeg = nu beschikbaar.",
+          "expiresAt": "Verloopt op",
+          "expiresAtHint": "Leeg = verloopt nooit.",
+          "maxUses": "Maximaal totaal aantal inwisselingen",
+          "unlimitedPlaceholder": "leeg = onbeperkt",
+          "maxUsesHint": "Over alle klanten heen.",
+          "perUser": "Limiet per gebruiker",
+          "perUserHint": "Aantal toegestane inwisselingen per klant.",
+          "firstPurchaseTitle": "Alleen eerste aankoop",
+          "firstPurchaseHint": "Alleen workspaces die nog geen betaalde bestelling hebben geplaatst",
+          "stackableTitle": "Te combineren met andere coupons",
+          "stackableHint": "Laat klanten hem naast een andere actieve code gebruiken bij het afrekenen"
+        }
+      }
+    },
+    "currencies": {
+      "title": "Platformvaluta",
+      "titleLead": "Platform",
+      "titleAccent": "valuta",
+      "crumbGroup": "Systeem",
+      "crumbGroup2": "Lokalisatie",
+      "crumbHere": "Valuta",
+      "eyebrow": "Beheer · Platform · Lokalisatie",
+      "description": "Beheer de valuta die workspaces kunnen kiezen. Wisselkoersen worden opgeslagen ten opzichte van USD. Een andere standaard werkt door in elk gebruikersdashboard, elke factuur en elke walletweergave.",
+      "fetchRates": "Actuele koersen ophalen",
+      "fetching": "Ophalen",
+      "add": "Valuta toevoegen",
+      "kpi": {
+        "total": "Totaal",
+        "totalHint": "valuta geconfigureerd",
+        "active": "Actief",
+        "activeHint": "zichtbaar voor workspaces",
+        "default": "Systeemstandaard",
+        "defaultHint": "gebruikt voor nieuw aangemaakte workspaces",
+        "inactive": "Inactief",
+        "inactiveHint": "niet aangeboden in workspace-instellingen"
+      },
+      "defaultCard": {
+        "eyebrow": "Systeemstandaard",
+        "title": "Terugvalvaluta voor het hele platform",
+        "body": "Elke workspace die geen valuta heeft gekozen, gebruikt deze. Bij opslaan wordt de cache direct gewist, dus de wijziging is bij het eerstvolgende laden van een pagina overal in de app zichtbaar.",
+        "select": "Standaardvaluta",
+        "set": "Standaard instellen",
+        "setting": "Opslaan"
+      },
+      "search": "Code, naam of symbool…",
+      "searchLabel": "Valuta zoeken",
+      "searchButton": "Zoeken",
+      "table": {
+        "label": "Valuta",
+        "code": "Code",
+        "name": "Naam",
+        "symbol": "Symbool",
+        "rate": "Koers (1 USD →)",
+        "decimals": "Decimalen",
+        "active": "Actief",
+        "actions": "Acties"
+      },
+      "defaultBadge": "Standaard",
+      "rate": "1 USD → {rate}",
+      "on": "Aan",
+      "off": "Uit",
+      "empty": {
+        "none": "Nog geen valuta.",
+        "noMatch": "Geen resultaten voor \"{q}\"."
+      },
+      "footer": "{from}–{to} van {total} valuta",
+      "actions": {
+        "edit": "Bewerken",
+        "delete": "Verwijderen",
+        "toggle": "{code} aan- of uitzetten"
+      },
+      "toasts": {
+        "added": "Valuta toegevoegd.",
+        "updated": "Valuta bijgewerkt.",
+        "activated": "Geactiveerd.",
+        "deactivated": "Gedeactiveerd.",
+        "deleted": "Valuta verwijderd.",
+        "defaultSet": "Standaardvaluta ingesteld op {code}.",
+        "ratesUpdated": "{count} valuta bijgewerkt via {provider}."
+      },
+      "delete": {
+        "title": "Valuta verwijderen",
+        "body": "{code} verwijderen? Prijzen die in deze valuta zijn opgeslagen, raken verweesd.",
+        "confirm": "Ja, verwijderen"
+      },
+      "form": {
+        "addTitle": "Een valuta toevoegen",
+        "editTitle": "{code} bewerken",
+        "name": "Naam *",
+        "namePlaceholder": "Zwitserse frank",
+        "code": "ISO-code *",
+        "codePlaceholder": "CHF",
+        "codeLocked": "De code verandert niet meer zodra een valuta bestaat.",
+        "symbol": "Symbool",
+        "symbolPlaceholder": "Fr",
+        "precision": "Decimalen *",
+        "rate": "Omrekenkoers (1 USD = ?) *",
+        "active": "Direct actief",
+        "save": "Valuta toevoegen",
+        "saveChanges": "Wijzigingen opslaan",
+        "cancel": "Annuleren",
+        "problemsTitle": "Sommige velden vragen aandacht:",
+        "problems": {
+          "name": "Naam: voer een naam van maximaal 120 tekens in.",
+          "code": "ISO-code: drie letters, zoals CHF.",
+          "symbol": "Symbool: maximaal 20 tekens.",
+          "precision": "Decimalen: een geheel getal van 0 tot 6.",
+          "exchangeRate": "Wisselkoers: een getal van minimaal 0.000001."
+        },
+        "eyebrow": "Nieuw item",
+        "rateHint": "Gebruik \"Actuele koersen ophalen\" hierboven om waarden vooraf in te vullen vanuit open.er-api.com.",
+        "editEyebrow": "Item bewerken"
+      },
+      "catalog": {
+        "eyebrow": "Catalogus",
+        "title": "Alle valuta"
+      }
+    },
+    "affiliate": {
+      "title": "Affiliate",
+      "subtitle": "Deel je link en volg de workspaces die je binnenhaalt.",
+      "common": {
+        "dismiss": "Sluiten"
+      },
+      "states": {
+        "loading": "Je affiliategegevens laden"
+      },
+      "header": {
+        "codeLabel": "Je verwijscode",
+        "noCode": "Nog geen code",
+        "linkLabel": "Je verwijslink",
+        "copyLink": "Link kopiëren",
+        "copied": "Link gekopieerd.",
+        "copyFailed": "De link kon niet worden gekopieerd. Selecteer hem en kopieer hem handmatig.",
+        "reward": "Elke doorverwezen workspace die een eerste betaling doet, levert je {amount} op.",
+        "rewardMessages": "Dat dekt {count, plural, one {# bericht} other {# berichten}}.",
+        "rewardNone": "Het programma betaalt momenteel niets uit voor nieuwe verwijzingen. Je code en geschiedenis blijven hier staan."
+      },
+      "filters": {
+        "label": "Periode en export",
+        "range": "Periode",
+        "ranges": {
+          "7d": "Laatste 7 dagen",
+          "30d": "Laatste 30 dagen",
+          "90d": "Laatste 90 dagen",
+          "all": "Altijd"
+        },
+        "search": "Verwijzingen zoeken",
+        "searchPlaceholder": "Naam, e-mail of code",
+        "reset": "Resetten",
+        "export": "CSV exporteren",
+        "exporting": "Bestand voorbereiden",
+        "exported": "{fileName} gedownload."
+      },
+      "kpi": {
+        "inRange": "Verwijzingen in periode",
+        "vsPrevious": "{delta} t.o.v. vorige periode",
+        "earned": "Verdiend, totaal",
+        "last30": "Verwijzingen, laatste 30 dagen",
+        "last30Earned": "{amount} verdiend in de laatste 30 dagen",
+        "average": "Gemiddeld per verwijzing"
+      },
+      "chart": {
+        "title": "Verwijzingen in de tijd",
+        "label": "Verwijzingen als staven en verdiende tegoeden als lijn, per periode",
+        "buckets": {
+          "daily": "Dagelijks",
+          "weekly": "Wekelijks",
+          "monthly": "Maandelijks"
+        },
+        "signups": "Verwijzingen",
+        "credits": "Verdiende tegoeden",
+        "bucket": "Periode",
+        "empty": "Nog geen verwijzingen in deze periode."
+      },
+      "topCodes": {
+        "title": "Topcodes",
+        "referrals": "{count, plural, one {# verwijzing} other {# verwijzingen}}",
+        "empty": "In deze periode is geen code gebruikt."
+      },
+      "payouts": {
+        "title": "Recente uitbetalingen",
+        "balanceAfter": "Saldo na {amount}",
+        "empty": "Nog geen uitbetalingen. Een beloning komt in je wallet terecht zodra een doorverwezen workspace de eerste betaling doet."
+      },
+      "table": {
+        "title": "Verwijzingen",
+        "label": "Verwijzingen in de geselecteerde periode",
+        "when": "Wanneer",
+        "referee": "Doorverwezene",
+        "code": "Gebruikte code",
+        "credits": "Verdiende tegoeden",
+        "status": "Status",
+        "transaction": "Wallettransactie",
+        "noName": "Naamloze gebruiker",
+        "paid": "Betaald",
+        "pending": "In behandeling",
+        "noTransaction": "Geen wallettransactie",
+        "pagination": "Verwijzingspagina's",
+        "previous": "Vorige",
+        "next": "Volgende",
+        "showing": "{from}-{to} van {total}"
+      },
+      "empty": {
+        "noneTitle": "Nog geen verwijzingen",
+        "noneBody": "Deel je link. Mensen die zich ermee aanmelden verschijnen hier.",
+        "filteredTitle": "Geen verwijzingen gevonden",
+        "filteredBody": "Probeer een andere periode of wis de zoekopdracht."
+      },
+      "errors": {
+        "unauthenticated": "Je sessie is beëindigd. Meld je opnieuw aan om je affiliategegevens te zien.",
+        "forbidden": "Je hebt geen toegang tot deze pagina.",
+        "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+        "validation": "Die filters konden niet worden toegepast. Reset ze en probeer het opnieuw.",
+        "network": "De server was niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+        "generic": "Er ging iets mis. Probeer het zo meteen opnieuw.",
+        "requestId": "Verzoek-ID",
+        "retry": "Opnieuw proberen"
+      }
+    }
+  }
+}

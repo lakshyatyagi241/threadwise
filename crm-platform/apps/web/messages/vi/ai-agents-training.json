@@ -1,0 +1,316 @@
+{
+  "aiTraining": {
+    "nav": {
+      "title": "Huấn luyện AI"
+    },
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "paywall": {
+      "kicker": "Gói",
+      "title": "Huấn luyện AI không có trong gói của bạn",
+      "body": "Gói của bạn không bao gồm trợ lý AI. Hãy nâng cấp để mở khóa tính năng này.",
+      "upgrade": "Xem các gói"
+    },
+    "responder": {
+      "title": "Ai trả lời WhatsApp của bạn?",
+      "body": "Nếu bạn bật Business Agent của Meta, AI của chúng tôi và trả lời tự động theo từ khóa sẽ tạm dừng cho không gian làm việc này, nên khách hàng không bao giờ nhận hai câu trả lời cho cùng một tin nhắn.",
+      "metaCheck": "Tôi dùng Meta Business Agent",
+      "mode": {
+        "threadwise_only": {
+          "label": "AI của chúng tôi trả lời",
+          "desc": "AI của chúng tôi và trả lời tự động theo từ khóa xử lý các cuộc trò chuyện (mặc định)."
+        },
+        "meta_agent_only": {
+          "label": "Meta agent trả lời",
+          "desc": "Business Agent của Meta trả lời. Chúng tôi chỉ ghi lại cuộc trò chuyện, AI của chúng tôi giữ im lặng."
+        },
+        "meta_agent_then_handoff": {
+          "label": "Meta agent, rồi chuyển giao",
+          "desc": "Meta xử lý các câu hỏi đầu tiên. Khi chuyển lên, cuộc trò chuyện vào Hộp thư nhóm của bạn để người thật xử lý. AI tự động của chúng tôi giữ im lặng."
+        }
+      },
+      "save": "Lưu",
+      "hint": "Meta agent cần một số WhatsApp Business (Cloud API). Các số dùng engine không chính thức luôn dùng AI của chúng tôi.",
+      "readOnly": "Bạn có thể xem cài đặt này nhưng không thể thay đổi.",
+      "saved": "Đã lưu chế độ trả lời AI.",
+      "saveFailed": "Không thể lưu chế độ trả lời.",
+      "loadError": "Không thể tải chế độ trả lời.",
+      "retry": "Thử lại",
+      "loading": "Đang tải chế độ trả lời"
+    },
+    "list": {
+      "tip": "Mẹo",
+      "tipBody": "Các agent thông minh vận hành <link>widget chatbot</link> và bước AI trong luồng của bạn. Trình xây dựng năm bước hướng dẫn bạn qua danh tính, tính cách, bộ não, an toàn và kiến thức.",
+      "statusViews": "Trạng thái agent",
+      "view": {
+        "all": "Tất cả agent",
+        "active": "Hoạt động",
+        "paused": "Đã tạm dừng"
+      },
+      "status": {
+        "all": "Tất cả",
+        "active": "Hoạt động",
+        "paused": "Đã tạm dừng"
+      },
+      "knowledgeTip": "Mẹo kiến thức",
+      "knowledgeTipBody": "Một câu hỏi và trả lời FAQ thường là đủ. Vài URL trang trợ giúp đã bao quát hầu hết câu hỏi hỗ trợ, nên không cần nạp cả website.",
+      "workspace": "Không gian làm việc",
+      "title": "Huấn luyện",
+      "titleAccent": "AI",
+      "intro": "Xây dựng agent thông minh nói bằng giọng điệu thương hiệu của bạn. Huấn luyện bằng URL, văn bản, cặp Hỏi & Đáp và tệp.",
+      "activePill": "{count} đang hoạt động",
+      "newAgent": "Agent thông minh mới",
+      "card": {
+        "total": "Tổng số agent",
+        "knowledge": "Mục kiến thức",
+        "avg": "TB / agent",
+        "health": "Tình trạng",
+        "activeHint": "{count} đang hoạt động",
+        "indexedHint": "{count} đã lập chỉ mục",
+        "entriesUnit": "mục"
+      },
+      "health": {
+        "healthy": "tốt",
+        "empty": "trống",
+        "attention": "cần chú ý"
+      },
+      "col": {
+        "agent": "Agent",
+        "provider": "Nhà cung cấp",
+        "knowledge": "Kiến thức",
+        "tone": "Giọng điệu",
+        "updated": "Cập nhật",
+        "actions": "Thao tác"
+      },
+      "search": "Tìm theo tên hoặc slug…",
+      "loading": "Đang tải agent",
+      "loadError": "Không thể tải agent",
+      "retry": "Thử lại",
+      "emptyTitle": "Chưa có agent thông minh nào",
+      "emptyBody": "Hãy xây dựng agent đầu tiên của bạn. Trình xây dựng năm bước hướng dẫn bạn qua danh tính, tính cách, bộ não, an toàn và kiến thức nó cần có.",
+      "buildAgent": "Xây dựng agent thông minh",
+      "noMatch": "Không có agent nào khớp với tìm kiếm hoặc chế độ xem trạng thái.",
+      "entries": "{count, plural, other {# mục}}",
+      "edit": "Sửa agent",
+      "editNamed": "Sửa {name}",
+      "duplicate": "Nhân bản agent",
+      "duplicateNamed": "Nhân bản {name}",
+      "deleteAgent": "Xóa agent",
+      "deleteNamed": "Xóa {name}",
+      "deleteTitle": "Xóa \"{name}\"?",
+      "deleteBody": "Agent và các mục kiến thức của nó sẽ bị xóa. Các widget và luồng đang dùng nó sẽ ngừng trả lời bằng agent này cho đến khi bạn chọn agent khác.",
+      "delete": "Xóa agent",
+      "keep": "Giữ lại",
+      "deleted": "Đã xóa agent.",
+      "deleteFailed": "Xóa thất bại: {reason}",
+      "duplicateFailed": "Không thể nhân bản agent.",
+      "networkError": "lỗi mạng",
+      "showing": "Hiển thị",
+      "of": "trên",
+      "agentsCount": "{count, plural, other {# agent}}",
+      "loadMore": "Tải thêm"
+    },
+    "builder": {
+      "back": "Quay lại Huấn luyện AI",
+      "crumb": "Huấn luyện AI",
+      "crumbNew": "Mới",
+      "crumbEdit": "Sửa",
+      "titleNew": "Xây dựng",
+      "titleEdit": "Sửa",
+      "titleAccent": "agent thông minh",
+      "stateSaved": "Đã lưu",
+      "stateDraft": "Bản nháp / chưa lưu",
+      "saveDraft": "Lưu bản nháp",
+      "stepper": "Các bước xây dựng",
+      "steps": {
+        "identity": "Danh tính",
+        "persona": "Tính cách",
+        "brain": "Bộ não",
+        "safety": "An toàn",
+        "knowledge": "Kiến thức"
+      },
+      "stepOf": "Bước {n} trên {total}",
+      "previous": "Trước",
+      "next": "Tiếp",
+      "finish": "Hoàn tất & đóng",
+      "loading": "Đang tải agent",
+      "loadError": "Không thể tải agent",
+      "notFoundTitle": "Không tìm thấy agent",
+      "notFoundBody": "Agent này không tồn tại trong không gian làm việc của bạn hoặc đã bị xóa.",
+      "backToList": "Quay lại Huấn luyện AI",
+      "saved": "Đã lưu agent.",
+      "saveFailed": "Lưu thất bại. Hãy kiểm tra các trường và thử lại.",
+      "conflict": "Agent này đã được thay đổi ở nơi khác. Hãy tải lại trang để lấy phiên bản mới nhất, rồi lưu lại.",
+      "problem": {
+        "name": "Đặt tên cho trợ lý của bạn.",
+        "greeting": "Viết câu mở đầu.",
+        "model": "Chọn một mô hình.",
+        "tokens": "Độ dài phản hồi phải từ 50–4000 token.",
+        "temperature": "Độ sáng tạo phải từ 0 đến 2."
+      },
+      "identity": {
+        "title": "Danh tính agent",
+        "required": "bắt buộc",
+        "name": "Tên hiển thị của agent",
+        "namePlaceholder": "ví dụ: Tư vấn viên giá",
+        "nameHint": "Dành cho bạn lưu trữ. Khách truy cập không thấy nhãn này.",
+        "status": "Trạng thái triển khai",
+        "statusActive": "Hoạt động: chọn agent này trong widget và luồng",
+        "statusPaused": "Tạm dừng: ẩn khỏi danh sách chọn",
+        "statusHint": "Agent tạm dừng vẫn nằm trong danh sách nhưng không thể gắn vào widget mới.",
+        "language": "Ngôn ngữ ưu tiên",
+        "languageHint": "Mã ISO 639-1. Khớp với ngôn ngữ của khách truy cập khi khác nhau.",
+        "tone": "Giọng điệu hội thoại",
+        "toneHint": "Đặt phong cách viết, độc lập với mô tả tính cách.",
+        "tones": {
+          "helpful": "Hữu ích · bình tĩnh và đúng trọng tâm",
+          "friendly": "Thân thiện · ấm áp và gần gũi",
+          "formal": "Trang trọng · trung lập và chính xác",
+          "playful": "Vui tươi · nhẹ nhàng và dí dỏm"
+        }
+      },
+      "persona": {
+        "title": "Tính cách & câu mở đầu",
+        "tag": "nội dung",
+        "greeting": "Câu mở đầu",
+        "greetingPlaceholder": "Xin chào! Tôi ở đây để giúp bạn. Hãy hỏi tôi bất cứ điều gì về giá hoặc các gói.",
+        "greetingHint": "Hiển thị cho khách truy cập. Là bong bóng chat đầu tiên khi cửa sổ chat mở.",
+        "brief": "Mô tả nhân vật (chỉ dẫn hệ thống)",
+        "briefPlaceholder": "Bạn là nhân viên hỗ trợ thân thiện của Acme Inc. Luôn trả lời bằng câu ngắn và chuyển cho người thật với mọi vấn đề về hoàn tiền.",
+        "briefHint": "Nội bộ, không bao giờ hiển thị cho khách truy cập. Bao gồm những việc nên làm, không nên làm và quy tắc chuyển cấp."
+      },
+      "brain": {
+        "title": "Mô hình & điều khiển phản hồi",
+        "tag": "bộ não",
+        "provider": "Nhà cung cấp mô hình",
+        "providerHint": "Quản trị viên của bạn thiết lập khóa nhà cung cấp. Các nhà cung cấp bạn đã thêm khóa riêng cũng hiển thị, ở những gói cho phép.",
+        "notEnabled": "{name} (chưa bật)",
+        "model": "Tên mô hình",
+        "modelHint": "Chọn một trong các mô hình được bật cho bạn, hoặc nhập ID mô hình khác.",
+        "noModels": "Chưa có mô hình AI nào được bật cho không gian làm việc của bạn. Hãy nhờ quản trị viên bật, hoặc thêm khóa riêng tại Cài đặt, Khóa AI.",
+        "tokens": "Ngân sách độ dài phản hồi (token)",
+        "tokensHint": "Khoảng 1 token bằng 4 ký tự. 400 vừa một đoạn văn.",
+        "temperature": "Độ sáng tạo (0 = chặt chẽ, 2 = phóng khoáng)",
+        "temperatureHint": "Thấp thì nhất quán và đúng sự thật. Cao thì diễn đạt đa dạng hơn."
+      },
+      "safety": {
+        "title": "Trả lời dự phòng & chuyển cho người thật",
+        "tag": "an toàn",
+        "fallback": "Trả lời dự phòng (dùng khi mô hình gặp lỗi)",
+        "fallbackPlaceholder": "Một đồng nghiệp sẽ liên hệ lại với bạn sớm. Cảm ơn bạn đã kiên nhẫn.",
+        "fallbackHint": "Được gửi nguyên văn nếu mô hình không trả về gì hoặc lệnh gọi thất bại.",
+        "handoff": "Bật chuyển cho người thật",
+        "handoffHint": "Khách truy cập nhập cụm từ kích hoạt, agent ngừng trả lời và hộp thư nhóm của bạn sáng lên.",
+        "keyword": "Cụm từ kích hoạt",
+        "keywordPlaceholder": "nói chuyện với người thật",
+        "keywordHint": "Khi khách truy cập nhập cụm này ở bất kỳ đâu trong tin nhắn, việc chuyển giao sẽ kích hoạt.",
+        "ack": "Xác nhận chuyển giao",
+        "ackPlaceholder": "Vâng, tôi đang gọi một đồng nghiệp vào ngay. Xin giữ máy.",
+        "ackHint": "Tin nhắn cuối cùng trước khi agent im lặng."
+      }
+    },
+    "knowledge": {
+      "title": "Huấn luyện agent",
+      "tag": "kiến thức",
+      "saveFirst": "Hãy lưu agent trước. Các mục kiến thức gắn với agent đã lưu.",
+      "addLabel": "Thêm kiến thức",
+      "add": {
+        "url": {
+          "title": "URL trực tiếp",
+          "body": "Lấy một trang công khai và giữ lại văn bản."
+        },
+        "text": {
+          "title": "Văn bản tự do",
+          "body": "Dán một đoạn trợ giúp hoặc chính sách."
+        },
+        "qa": {
+          "title": "Cặp Hỏi & Đáp",
+          "body": "Một câu hỏi với câu trả lời chuẩn."
+        },
+        "file": {
+          "title": "PDF, DOCX, TXT & khác",
+          "body": "Tải tệp lên. Văn bản được trích xuất cho bạn."
+        }
+      },
+      "panel": {
+        "url": "Lấy một URL công khai",
+        "text": "Dán văn bản thuần",
+        "qa": "Một cặp Hỏi & Đáp",
+        "file": "Tải lên tệp kiến thức"
+      },
+      "label": "Nhãn",
+      "url": "URL",
+      "content": "Văn bản",
+      "question": "Câu hỏi",
+      "answer": "Câu trả lời",
+      "file": "Tệp",
+      "placeholder": {
+        "label": {
+          "url": "Nhãn (ví dụ: Trang bảng giá)",
+          "text": "Nhãn (ví dụ: Tóm tắt chính sách hoàn tiền)",
+          "qa": "Nhãn (ví dụ: Thời gian hoàn tiền)",
+          "file": "Nhãn (ví dụ: Sổ tay sản phẩm)"
+        },
+        "content": "Dán bất kỳ văn bản nào agent cần biết…",
+        "question": "Câu hỏi, ví dụ: Hoàn tiền mất bao lâu?",
+        "answer": "Câu trả lời, ví dụ: Tiền được hoàn trong 3 đến 5 ngày làm việc."
+      },
+      "urlHint": "Chỉ đọc các trang http và https công khai. Trang được lấy ở chế độ nền nên mục sẽ hiển thị Đang xử lý trong giây lát.",
+      "fileHint": "PDF, DOCX, TXT, Markdown, CSV hoặc HTML, tối đa 10 MB. Văn bản được trích xuất tự động.",
+      "uploading": "Tiến trình tải lên",
+      "submit": {
+        "url": "Lấy & huấn luyện",
+        "text": "Lưu văn bản",
+        "qa": "Lưu cặp",
+        "file": "Tải lên"
+      },
+      "cancel": "Hủy",
+      "added": "Đã thêm kiến thức.",
+      "addFailed": "Không thể thêm mục.",
+      "problem": {
+        "label": "Thêm nhãn để bạn tìm lại mục này sau.",
+        "url": "Thêm địa chỉ trang.",
+        "content": "Hãy dán văn bản trước.",
+        "question": "Thêm câu hỏi.",
+        "answer": "Thêm câu trả lời.",
+        "file": "Chọn một tệp (PDF, DOCX, TXT, Markdown, CSV hoặc HTML).",
+        "file_type": "Loại tệp được chấp nhận: TXT, Markdown, CSV, HTML, PDF, DOCX. Với loại khác, hãy dán văn bản vào mục Văn bản.",
+        "file_legacyDoc": "Không hỗ trợ tệp .doc cũ. Hãy lưu lại dưới dạng .docx (hoặc xuất ra .pdf) và tải lên lại.",
+        "file_size": "Tệp đó vượt quá 10 MB.",
+        "file_empty": "Tệp đó trống.",
+        "tooLarge": "Văn bản quá nhiều cho một lần dán. Hãy tải lên dưới dạng tệp."
+      },
+      "col": {
+        "kind": "Loại",
+        "label": "Nhãn",
+        "state": "Trạng thái",
+        "actions": "Thao tác"
+      },
+      "kind": {
+        "url": "url",
+        "text": "văn bản",
+        "qa": "hỏi đáp",
+        "file": "tệp"
+      },
+      "state": {
+        "ready": "sẵn sàng",
+        "processing": "đang xử lý",
+        "failed": "thất bại"
+      },
+      "tokens": "khoảng {count} token",
+      "workspaceWide": "toàn không gian làm việc",
+      "loading": "Đang tải các mục",
+      "loadError": "Không thể tải các mục.",
+      "retry": "Thử lại",
+      "empty": "Chưa có kiến thức. Chọn một loại ở trên để thêm mục đầu tiên.",
+      "remove": "Gỡ bỏ",
+      "removeNamed": "Gỡ {label}",
+      "removeTitle": "Gỡ mục kiến thức này?",
+      "removeBody": "Agent sẽ ngừng dùng nó cho các phản hồi mới. Các cuộc trò chuyện cũ không thay đổi.",
+      "keep": "Giữ lại",
+      "removed": "Đã gỡ bỏ.",
+      "removeFailed": "Gỡ bỏ thất bại."
+    }
+  }
+}

@@ -1,0 +1,365 @@
+{
+  "install-update-licensing": {
+    "setup": {
+      "title": "セットアップウィザード",
+      "brand": "CRM",
+      "railEyebrow": "セットアップウィザード",
+      "railTitle": "<i>WhatsApp スイート</i>の準備が数分で整います。",
+      "railFooter": "プラットフォームインストーラー · v{version}",
+      "stepsLabel": "セットアップの手順",
+      "stepOf": "手順 {n} / {total}",
+      "mobileStep": "手順 {n}/{total} · {name}",
+      "steps": {
+        "welcome": "ようこそ",
+        "requirements": "動作要件",
+        "database": "データベース",
+        "application": "アプリケーション",
+        "admin": "管理者アカウント",
+        "node": "Node ブリッジ",
+        "install": "インストール"
+      },
+      "screens": {
+        "licence": "ライセンス"
+      },
+      "disabled": "サーバーにセットアップトークンが設定されていないため、セットアップは無効になっています。SETUP_TOKEN を設定するか、コマンドラインから最初のオペレーターを作成してください。",
+      "unavailable": "セットアップの状態を読み取れませんでした。API が起動しているか確認してから、このページを再読み込みしてください。",
+      "welcome": {
+        "eyebrow": "ようこそ",
+        "title": "<i>{app}</i> を使えるようにしましょう。",
+        "intro": "全部で 7 つの簡単な手順、所要時間は約 3 分です。サーバーを確認し、データベースをチェックし、管理コンソールに必要な既定値をすべて確認して、Node ブリッジを連携し、最初のスーパー管理者ログインを作成します。",
+        "tiles": {
+          "database": "データベース",
+          "security": "セキュリティ",
+          "translations": "翻訳",
+          "admin": "管理"
+        },
+        "beforeTitle": "開始する前に",
+        "before": {
+          "database": "このデプロイ環境からアクセスでき、マイグレーションが適用済みの PostgreSQL 16 データベース。",
+          "runtime": "API と同じ環境で稼働している Node.js 22 以降と Redis。",
+          "token": "デプロイ設定にあるセットアップトークン (SETUP_TOKEN)。"
+        },
+        "tokenLabel": "セットアップトークン",
+        "tokenHint": "このデプロイ環境の管理権限を証明するものです。各手順で再確認されます。",
+        "begin": "インストールを開始"
+      },
+      "licence": {
+        "eyebrow": "ライセンス",
+        "title": "<i>購入</i>を確認します。",
+        "intro": "CodeCanyon の購入コードを入力してください。インストール前に Envato で検証します。有効なコードがないとインストールを続行できません。",
+        "label": "購入コード",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "help": "CodeCanyon アカウントの → <b>ダウンロード</b> → <b>ライセンス証明書と購入コード</b> から確認できます。",
+        "verified": "購入は既に確認済みです。続行できます。",
+        "submit": "確認して続行"
+      },
+      "requirements": {
+        "eyebrow": "手順 {n} / {total}",
+        "title": "サーバーの<i>動作要件</i>。",
+        "intro": "インストール前に、ホストが最低要件を満たしているか確認しています。",
+        "runtimeOk": "Node.js {version}",
+        "runtimeOkDetail": "— {required} 以上の要件を満たしています",
+        "runtimeBad": "Node.js {version}",
+        "runtimeBadDetail": "— {app} には Node.js {required} 以上が必要です。",
+        "modules": "ランタイムモジュール",
+        "services": "サービス",
+        "directories": "ディレクトリ",
+        "database": "データベース",
+        "noDatabase": "データベースが検出されません。",
+        "databaseRequired": "PostgreSQL が必要です。",
+        "extensionMissing": "データベース拡張機能がありません: {name}。",
+        "tiles": {
+          "database": "データベース",
+          "redis": "redis",
+          "migrations": "マイグレーション",
+          "permissions": "権限",
+          "temp": "一時ファイル",
+          "migrationsDir": "マイグレーション"
+        },
+        "fixNotice": "続行する前に、赤でマークされた項目を修正してください。すべてのチェックに合格するまで「続行」ボタンは無効のままです。",
+        "recheck": "再チェック",
+        "checking": "確認中…",
+        "loadFailed": "動作要件のチェックを実行できませんでした。"
+      },
+      "database": {
+        "eyebrow": "手順 {n} / {total}",
+        "title": "データベースの<i>接続</i>。",
+        "intro": "このプラットフォームが動作する PostgreSQL データベースを確認します。次に進む前に接続を検証します。",
+        "driver": "データベースドライバー",
+        "driverName": "PostgreSQL",
+        "host": "ホスト",
+        "port": "ポート",
+        "name": "データベース名",
+        "namePlaceholder": "crm",
+        "user": "ユーザー名",
+        "userPlaceholder": "postgres",
+        "password": "パスワード",
+        "passwordHint": "空欄のままにすると、このデプロイ環境のパスワードを使用します。接続自体はサーバーの環境変数で設定されており、この手順では接続をテストするだけです。",
+        "test": "接続をテスト",
+        "testing": "テスト中…",
+        "ok": "接続に成功しました。",
+        "unreachable": "どの経路でも PostgreSQL に接続できませんでした。ホスティングパネルに表示されている正確なホストを使用し、ポートを確認して、データベースとユーザーが存在すること、およびサーバーがこのマシンからの接続を受け付けていることを確認してから、再試行してください。",
+        "networkError": "ネットワークエラー: {detail}"
+      },
+      "application": {
+        "eyebrow": "手順 {n} / {total}",
+        "title": "アプリケーションの<i>基本設定</i>。",
+        "intro": "インストールの名前を付け、公開 URL を設定し、タイムゾーンと既定の言語を選択します。",
+        "name": "アプリケーション名",
+        "url": "アプリケーション URL",
+        "urlPlaceholder": "https://app.example.com",
+        "timezone": "タイムゾーン",
+        "timezonePlaceholder": "タイムゾーンを検索…",
+        "timezoneEmpty": "一致するタイムゾーンはありません。",
+        "locale": "既定の言語"
+      },
+      "admin": {
+        "eyebrow": "手順 {n} / {total}",
+        "title": "管理者の<i>アカウント</i>。",
+        "intro": "最初のスーパー管理者ログインと専用ワークスペースです。チームメンバーは後からコンソールで追加できます。",
+        "fullName": "氏名",
+        "fullNamePlaceholder": "Vetrick R.",
+        "email": "メールアドレス",
+        "emailPlaceholder": "you@yourdomain.com",
+        "password": "パスワード",
+        "confirm": "パスワードの確認",
+        "workspace": "ワークスペース名",
+        "workspacePlaceholder": "マイチーム",
+        "note": "12 文字以上で、大文字、小文字、数字、記号を含めてください · argon2id でハッシュ化されます。このプラットフォームはマルチテナント型です。専用ワークスペースが 1 つ事前設定されており、後から「ワークスペース」で名前を変更できます。パスワードは平文で保存されることはなく、初回ログイン時には二要素認証と組み合わせる必要があります。"
+      },
+      "node": {
+        "eyebrow": "手順 {n} / {total}",
+        "title": "Node の<i>ブリッジ</i>。",
+        "intro": "WhatsApp は小さな Node サービス経由で送信されます。プラットフォームをそのサービスに向け、共有トークンを設定してください。インストーラーが両側に保存します。",
+        "url": "Node サーバー URL",
+        "urlHint": "Node ブリッジが待ち受けるアドレスです。API はこのアドレスを使ってメッセージを送信します。",
+        "port": "Node ポート",
+        "portHint": "Node ブリッジがバインドするポートです。",
+        "token": "Node 共有トークン",
+        "tokenHint": "自動入力されます。API と Node ブリッジで一致している必要があります。インストーラーが暗号化して一度だけ保存します。",
+        "generate": "生成",
+        "info": "これらはプラットフォーム設定に保存され、.env ファイルには保存されません。トークンは NODE_WEBHOOK_TOKEN として Node ブリッジと共有されます。",
+        "submit": "続行してインストール"
+      },
+      "install": {
+        "eyebrow": "手順 {n} / {total}",
+        "title": "<i>{app}</i> をインストール中です。",
+        "intro": "そのままお待ちください。すべての設定を行っています。通常は数秒で完了します。",
+        "preparing": "準備中…",
+        "complete": "完了",
+        "failed": "失敗しました。下記をご確認ください",
+        "paused": "インストールを一時停止しました",
+        "retry": "失敗した手順から再試行",
+        "success": "インストールが完了しました。移動しています…",
+        "rows": {
+          "configuration": {
+            "done": "設定を保存しました",
+            "active": "アプリケーションと Node ブリッジの設定を保存しています…"
+          },
+          "migrations": {
+            "done": "データベースのマイグレーションを確認しました",
+            "active": "データベースのマイグレーションを確認しています…"
+          },
+          "defaults": {
+            "done": "必須データを確認しました",
+            "active": "ロール、権限、既定値を確認しています…"
+          },
+          "account": {
+            "done": "管理者とワークスペースの準備が完了",
+            "active": "管理者アカウントと専用ワークスペースを作成しています…"
+          },
+          "storage": {
+            "done": "ストレージの準備が完了",
+            "active": "ストレージと一時ディレクトリを確認しています…"
+          },
+          "finalize": {
+            "done": "インストールを完了しました",
+            "active": "セットアップをロックし、インストールを記録しています…"
+          }
+        }
+      },
+      "completed": {
+        "body": "このデプロイ環境では、セットアップは既に完了しています。",
+        "login": "サインインへ移動"
+      },
+      "back": "戻る",
+      "continue": "続行",
+      "show": "表示",
+      "hide": "非表示",
+      "working": "処理中",
+      "problems": {
+        "token": "そのセットアップトークンは正しくありません。",
+        "disabled": "このサーバーではセットアップが無効になっています。",
+        "outOfOrder": "手順が正しい順序で実行されませんでした。ページを再読み込みして最初からやり直してください。",
+        "step": "インストールの手順が失敗しました。入力内容とサーバーログを確認してから、もう一度お試しください。",
+        "unknown": "問題が発生しました。もう一度お試しください。",
+        "requestId": "リクエスト ID {id}",
+        "prerequisites": "サーバーがセットアップの準備できていません: {items}。",
+        "licence": {
+          "empty": "CodeCanyon の購入コードを入力してください。",
+          "not_configured": "ライセンスチェックが設定されていません (Envato トークンがありません)。",
+          "unreachable": "コードを検証するために Envato に接続できませんでした。サーバーのインターネット接続を確認してください。",
+          "not_found": "購入コードが無効です。Envato にこの購入の記録がありません。",
+          "http_error": "Envato での検証に失敗しました。",
+          "other_product": "この購入コードは別の製品のものです。",
+          "unknown": "購入コードを検証できませんでした。"
+        },
+        "keys": {
+          "runtime": "Node.js バージョン",
+          "database": "データベース",
+          "redis": "Redis",
+          "migrations": "データベースのマイグレーション",
+          "permissions": "権限の定義",
+          "temp": "一時ディレクトリ",
+          "storage": "ストレージ",
+          "default": "{key}"
+        }
+      },
+      "errors": {
+        "tokenLength": "セットアップトークンは {min} 文字以上にしてください。",
+        "dbHost": "データベースのホストを入力してください。",
+        "dbPort": "1 から 65535 の間のポート番号を入力してください。",
+        "dbName": "データベース名を入力してください。",
+        "dbUser": "データベースのユーザー名を入力してください。",
+        "appNameRequired": "アプリケーション名を入力してください。",
+        "appNameLong": "アプリケーション名は {max} 文字以内にしてください。",
+        "appUrl": "http:// または https:// で始まる完全な URL を入力してください。",
+        "timezone": "一覧からタイムゾーンを選択してください。",
+        "locale": "一覧から言語を選択してください。",
+        "fullNameRequired": "氏名を入力してください。",
+        "fullNameLong": "氏名は {max} 文字以内にしてください。",
+        "email": "有効なメールアドレスを入力してください。",
+        "passwordMismatch": "パスワードの確認が一致しません。",
+        "workspaceRequired": "2 文字以上のワークスペース名を入力してください。",
+        "workspaceLong": "ワークスペース名は {max} 文字以内にしてください。",
+        "nodeUrl": "http:// または https:// で始まる Node サーバー URL を入力してください。",
+        "nodePort": "1 から 65535 の間のポート番号を入力してください。",
+        "nodeToken": "共有トークンは {min} 文字以上にしてください。",
+        "password": {
+          "length": "パスワードは 12 文字以上にしてください。",
+          "upper": "パスワードには大文字を含めてください。",
+          "lower": "パスワードには小文字を含めてください。",
+          "number": "パスワードには数字を含めてください。",
+          "symbol": "パスワードには記号を含めてください。",
+          "personal": "パスワードに氏名やメールアドレスを含めることはできません。"
+        }
+      }
+    },
+    "system": {
+      "nav": {
+        "group": "システム",
+        "item": "アップデーター"
+      },
+      "title": "アプリケーションのアップデーター",
+      "titleRich": "アプリケーションの<i>アップデーター</i>。",
+      "titleAccent": "アップデーター",
+      "kicker": "管理 · メンテナンス",
+      "description": "購入を確認し、このデプロイ環境で何が実行されているかを確認できます。アップデートは新しいイメージとして提供され、起動前にマイグレーションが実行されます。このページからデータベース、ストレージ、アップロードファイルが変更されることはありません。",
+      "crumbAdmin": "管理",
+      "crumbSettings": "設定",
+      "crumbUpdater": "アップデーター",
+      "version": "v{version} · ビルド {build}",
+      "buildNone": "該当なし",
+      "allSettings": "すべての設定",
+      "refresh": "更新",
+      "loading": "読み込み中",
+      "errorForbidden": "このページを表示する権限がありません。",
+      "errorUnexpected": "アップデーターを読み込めませんでした。",
+      "requestId": "リクエスト ID",
+      "retry": "再試行",
+      "licence": {
+        "kicker": "手順 1 · ライセンス",
+        "title": "購入を確認",
+        "intro": "CodeCanyon の購入コードを入力してください。アップデートを実行する前に Envato で検証されます。",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "mask": "••••••••-••••-••••-••••-••••••••••••",
+        "verify": "確認",
+        "verifying": "確認中…",
+        "verified": "購入を確認しました。次に進めます。",
+        "verifiedAt": "{date} に確認済み。",
+        "notVerified": "まだ確認されていません。",
+        "notEnabled": "このデプロイ環境では購入コードの確認が必要ないため、ここで確認する項目はありません。",
+        "superAdminOnly": "購入コードを確認できるのはスーパー管理者のみです。",
+        "reasons": {
+          "empty": "CodeCanyon の購入コードを入力してください。",
+          "not_configured": "ライセンスチェックが設定されていません (Envato トークンがありません)。",
+          "unreachable": "コードを検証するために Envato に接続できませんでした。サーバーのインターネット接続を確認してください。",
+          "not_found": "購入コードが無効です。Envato にこの購入の記録がありません。",
+          "http_error": "Envato での検証に失敗しました。",
+          "other_product": "この購入コードは別の製品のものです。",
+          "unknown": "購入コードを検証できませんでした。"
+        }
+      },
+      "process": {
+        "kicker": "アップデートの手順",
+        "title": "アップデートはイメージとして提供されます",
+        "step2": {
+          "title": "データベースをバックアップ",
+          "body": "デプロイ前にデータベースのバックアップ (pg_dump またはポイントインタイムリカバリ) を取得してください。ここではボタンではなく、インフラ側の作業です。"
+        },
+        "step3": {
+          "title": "新しいイメージをデプロイ",
+          "body": "新しいコンテナイメージを展開します。現在実行中のバージョンとビルドは下に表示されます。"
+        },
+        "step4": {
+          "title": "マイグレーションを実行",
+          "body": "pnpm db:migrate は新しいテーブルと列を適用しますが、データを削除することはありません。下の一覧に、すべてのマイグレーションとその状態が表示されます。"
+        },
+        "step5": {
+          "title": "ヘルスチェック",
+          "body": "依存関係は下でリアルタイムにチェックされます。デプロイ後にこのページを更新して、すべてが稼働していることを確認してください。"
+        }
+      },
+      "release": {
+        "kicker": "このデプロイ環境",
+        "title": "リリース",
+        "version": "バージョン",
+        "gitSha": "ビルドのコミット",
+        "buildNumber": "ビルド番号",
+        "builtAt": "ビルド日時",
+        "environment": "環境",
+        "uptime": "稼働時間",
+        "none": "記録されていません",
+        "demo": "デモモードが有効です。許可リストに登録されていない限り、書き込みは拒否されます。"
+      },
+      "setup": {
+        "title": "初回セットアップ",
+        "open": "未完了",
+        "completed": "完了",
+        "completedAt": "{date} にバージョン {version} で完了"
+      },
+      "checks": {
+        "kicker": "ヘルス",
+        "title": "ヘルスチェック",
+        "database": "データベース",
+        "redis": "Redis",
+        "migrations": "マイグレーション",
+        "up": "稼働中",
+        "down": "停止",
+        "degraded": "一部低下",
+        "latency": "{ms} ms"
+      },
+      "migrations": {
+        "kicker": "台帳",
+        "title": "マイグレーション",
+        "summary": "{count} 件適用済み",
+        "status": {
+          "current": "最新です",
+          "pending": "保留中のマイグレーション",
+          "drift": "適用後にマイグレーションファイルが変更されました",
+          "unknown": "このビルドにはマイグレーションファイルが含まれていません"
+        },
+        "state": {
+          "applied": "適用済み",
+          "pending": "保留中",
+          "modified": "変更あり",
+          "missing-file": "ファイルがありません"
+        },
+        "id": "マイグレーション",
+        "stateLabel": "状態",
+        "appliedAt": "適用日時"
+      },
+      "breadcrumb": "パンくず"
+    }
+  }
+}

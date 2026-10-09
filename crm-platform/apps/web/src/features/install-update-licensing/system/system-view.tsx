@@ -193,7 +193,7 @@ export function SystemView() {
   return (
     <div className="space-y-5">
       <nav
-        aria-label="breadcrumb"
+        aria-label={t('breadcrumb')}
         className="flex items-center gap-2 font-mono text-[12px] text-muted-foreground"
       >
         <Link href="/admin" className="uppercase tracking-[0.16em] hover:text-foreground">

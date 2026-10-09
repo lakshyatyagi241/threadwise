@@ -1,0 +1,371 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "Benachrichtigungen",
+      "labelUnread": "Benachrichtigungen, {count} ungelesen",
+      "title": "Benachrichtigungen",
+      "markAll": "Alle als gelesen markieren",
+      "empty": "Noch keine Benachrichtigungen.",
+      "loading": "Benachrichtigungen werden geladen",
+      "failed": "Benachrichtigungen konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "unread": "Ungelesen",
+      "settings": "Warneinstellungen",
+      "sound": "Bei neuen Chats und Nachrichten einen Ton abspielen",
+      "soundOn": "Ton: an",
+      "soundOff": "Ton: aus",
+      "desktopEnable": "Desktop-Benachrichtigungen aktivieren",
+      "desktopOn": "Desktop-Benachrichtigungen: an",
+      "desktopOff": "Desktop-Benachrichtigungen: aus",
+      "desktopBlocked": "Desktop-Benachrichtigungen sind in Ihren Browser-Einstellungen blockiert.",
+      "desktopHint": "Zeigt den Kontaktnamen nur an, wenn dieser Tab im Hintergrund ist.",
+      "preferences": "Benachrichtigungseinstellungen"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Aufgabe Ihnen zugewiesen",
+        "body": "{actor} hat Ihnen zugewiesen: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "Aufgabe fällig",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "Aufgabe erledigt",
+        "body": "{actor} hat erledigt: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "Neuer Lead",
+        "titleReturning": "Lead ist erneut eingegangen",
+        "body": "{name} ist über {platform} eingegangen",
+        "bodyReturning": "{name} hat über {platform} einen weiteren Lead gesendet",
+        "bodyNoActor": "{name} ist eingegangen"
+      },
+      "new_chat": {
+        "title": "Neuer Chat von {name}",
+        "titleNoName": "Neuer Chat",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, one {Neue Nachricht von {name}} other {# neue Nachrichten von {name}}}",
+        "titleNoName": "{count, plural, one {Neue Nachricht} other {# neue Nachrichten}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "chat_waiting": {
+        "title": "{name} wurde noch niemand geantwortet",
+        "titleNoName": "Ein Chat wartet noch auf eine Antwort",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "{name} wurde Ihnen zugewiesen",
+        "titleNoName": "Ein Chat wurde Ihnen zugewiesen",
+        "titleTeam": "{name} wurde Ihrem Team zugewiesen",
+        "titleTeamNoName": "Ein Chat wurde Ihrem Team zugewiesen",
+        "body": "Zugewiesen von {actor}",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "{actor} hat Sie erwähnt",
+        "titleNoName": "Sie wurden in einer Notiz erwähnt",
+        "body": "{name}: {preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "device_connected": {
+        "title": "{name} ist verbunden",
+        "titleNoName": "Ihre WhatsApp-Nummer ist verbunden"
+      },
+      "device_disconnected": {
+        "title": "{name} getrennt",
+        "titleNoName": "Eine WhatsApp-Nummer wurde getrennt",
+        "body": "Öffnen Sie das Gerät, um die Verbindung wiederherzustellen."
+      },
+      "device_logged_out": {
+        "title": "{name} wurde abgemeldet",
+        "titleNoName": "Eine WhatsApp-Nummer wurde abgemeldet",
+        "body": "Scannen Sie den QR-Code erneut, um die Verbindung wiederherzustellen."
+      },
+      "broadcast_completed": {
+        "title": "Broadcast „{name}“ abgeschlossen",
+        "titleNoName": "Ein Broadcast wurde abgeschlossen",
+        "bodySent": "{sent, plural, one {# Nachricht gesendet} other {# Nachrichten gesendet}}",
+        "bodySentFailed": "{sent, plural, one {# Nachricht gesendet} other {# Nachrichten gesendet}}, {failed, plural, one {# fehlgeschlagen} other {# fehlgeschlagen}}"
+      },
+      "broadcast_failed": {
+        "title": "Broadcast „{name}“ fehlgeschlagen",
+        "titleNoName": "Ein Broadcast ist fehlgeschlagen",
+        "body": "{reason}",
+        "bodyNoReason": "Öffnen Sie ihn, um zu sehen, was schiefgelaufen ist."
+      },
+      "campaign_completed": {
+        "title": "Kampagne „{name}“ abgeschlossen",
+        "titleNoName": "Eine Kampagne wurde abgeschlossen",
+        "bodySent": "{sent, plural, one {# Nachricht gesendet} other {# Nachrichten gesendet}}",
+        "bodySentFailed": "{sent, plural, one {# Nachricht gesendet} other {# Nachrichten gesendet}}, {failed, plural, one {# fehlgeschlagen} other {# fehlgeschlagen}}"
+      },
+      "campaign_failed": {
+        "title": "Kampagne „{name}“ fehlgeschlagen",
+        "titleNoName": "Eine Kampagne ist fehlgeschlagen",
+        "body": "{reason}",
+        "bodyNoReason": "Öffnen Sie sie, um zu sehen, was schiefgelaufen ist."
+      },
+      "scheduled_completed": {
+        "title": "Geplanter Versand „{name}“ wurde gesendet",
+        "titleNoName": "Ein geplanter Versand wurde gesendet",
+        "bodySent": "{sent, plural, one {# Nachricht gesendet} other {# Nachrichten gesendet}}",
+        "bodySentFailed": "{sent, plural, one {# Nachricht gesendet} other {# Nachrichten gesendet}}, {failed, plural, one {# fehlgeschlagen} other {# fehlgeschlagen}}"
+      },
+      "scheduled_failed": {
+        "title": "Geplanter Versand „{name}“ fehlgeschlagen",
+        "titleNoName": "Ein geplanter Versand ist fehlgeschlagen",
+        "body": "{reason}",
+        "bodyNoReason": "Öffnen Sie ihn, um zu sehen, was schiefgelaufen ist."
+      },
+      "teamchat_mention": {
+        "title": "{author} hat Sie in {channel} erwähnt",
+        "titleNoChannel": "{author} hat Sie im Team-Chat erwähnt",
+        "titleNoName": "Sie wurden im Team-Chat erwähnt"
+      },
+      "teamchat_message": {
+        "title": "{count, plural, one {Neue Nachricht von {author}} other {# neue Nachrichten von {author}}}",
+        "titleNoName": "{count, plural, one {Neue Direktnachricht} other {# neue Direktnachrichten}}"
+      }
+    },
+    "live": {
+      "open": "Öffnen",
+      "dismiss": "Schließen",
+      "toastRegion": "Benachrichtigungen",
+      "summary": "{count} neue Benachrichtigungen",
+      "announceMany": "{count} neue Benachrichtigungen",
+      "desktop": {
+        "new_chat": "Neuer Chat",
+        "new_message": "Neue Nachricht",
+        "chat_waiting": "Wartet auf Antwort",
+        "conversation_assigned": "Ihnen zugewiesen",
+        "mention": "Hat Sie erwähnt",
+        "fallbackTitle": "Neue Benachrichtigung",
+        "device_connected": "WhatsApp-Nummer verbunden",
+        "device_disconnected": "WhatsApp-Nummer getrennt",
+        "device_logged_out": "WhatsApp-Nummer abgemeldet",
+        "broadcast_completed": "Broadcast abgeschlossen",
+        "broadcast_failed": "Broadcast fehlgeschlagen",
+        "campaign_completed": "Kampagne abgeschlossen",
+        "campaign_failed": "Kampagne fehlgeschlagen",
+        "scheduled_completed": "Geplanter Versand gesendet",
+        "scheduled_failed": "Geplanter Versand fehlgeschlagen",
+        "teamchat_mention": "Hat Sie im Team-Chat erwähnt",
+        "teamchat_message": "Neue Direktnachricht"
+      }
+    },
+    "prefs": {
+      "title": "Benachrichtigungseinstellungen",
+      "description": "Legen Sie fest, wie jedes Ereignis Sie erreicht. Diese Auswahl gilt nur für Sie; Ihr Workspace legt fest, welche Ereignisse standardmäßig aktiv sind.",
+      "columns": {
+        "event": "Ereignis",
+        "bell": "Glocke",
+        "toast": "Pop-up",
+        "sound": "Ton",
+        "push": "Push"
+      },
+      "groups": {
+        "conversations": "Chats",
+        "tasks": "Aufgaben",
+        "leads": "Leads und Formulare",
+        "documents": "Verkaufsdokumente",
+        "wallet": "Wallet",
+        "devices": "WhatsApp-Nummern",
+        "broadcasts": "Broadcasts und Kampagnen",
+        "team_chat": "Team-Chat"
+      },
+      "types": {
+        "new_chat": {
+          "label": "Neuer Chat",
+          "hint": "Eine Unterhaltung, die noch niemandem gehört, erhält ihre erste Nachricht."
+        },
+        "new_message": {
+          "label": "Neue Nachricht in meinem Chat",
+          "hint": "Ein Kunde schreibt in einem Chat, der Ihnen zugewiesen ist."
+        },
+        "chat_waiting": {
+          "label": "Chat wartet noch auf Antwort",
+          "hint": "Auf eine Kundennachricht in einem Chat ohne Zuständigen blieb einige Minuten lang keine Antwort. Sie werden einmal darüber informiert."
+        },
+        "conversation_assigned": {
+          "label": "Mir zugewiesener Chat",
+          "hint": "Ein Chat ist Ihnen oder Ihrem Team zugewiesen."
+        },
+        "mention": {
+          "label": "In einer Notiz erwähnt",
+          "hint": "Ein Kollege erwähnt Sie in einer Unterhaltungsnotiz."
+        },
+        "teamchat_mention": {
+          "label": "Im Team-Chat erwähnt",
+          "hint": "Ein Kollege erwähnt Sie in einem Team-Chat-Kanal."
+        },
+        "teamchat_message": {
+          "label": "Direktnachricht",
+          "hint": "Ein Kollege schreibt Ihnen im Team-Chat."
+        },
+        "device_connected": {
+          "label": "Nummer verbunden",
+          "hint": "Eine persönliche WhatsApp-Nummer wurde erfolgreich verbunden."
+        },
+        "device_disconnected": {
+          "label": "Nummer getrennt",
+          "hint": "Eine persönliche WhatsApp-Nummer hat ihre Verbindung verloren."
+        },
+        "device_logged_out": {
+          "label": "Nummer abgemeldet",
+          "hint": "Eine persönliche WhatsApp-Nummer wurde auf dem Telefon abgemeldet."
+        },
+        "broadcast_completed": {
+          "label": "Broadcast abgeschlossen",
+          "hint": "Ein von Ihnen gestarteter Broadcast wurde gesendet."
+        },
+        "broadcast_failed": {
+          "label": "Broadcast fehlgeschlagen",
+          "hint": "Ein von Ihnen gestarteter Broadcast ist fehlgeschlagen."
+        },
+        "campaign_completed": {
+          "label": "Kampagne abgeschlossen",
+          "hint": "Eine von Ihnen gestartete Kampagne wurde gesendet."
+        },
+        "campaign_failed": {
+          "label": "Kampagne fehlgeschlagen",
+          "hint": "Eine von Ihnen gestartete Kampagne ist fehlgeschlagen."
+        },
+        "scheduled_completed": {
+          "label": "Geplanter Versand gesendet",
+          "hint": "Ein von Ihnen eingerichteter geplanter Versand wurde gesendet."
+        },
+        "scheduled_failed": {
+          "label": "Geplanter Versand fehlgeschlagen",
+          "hint": "Ein von Ihnen eingerichteter geplanter Versand ist fehlgeschlagen."
+        },
+        "task_assigned": {
+          "label": "Mir zugewiesene Aufgabe",
+          "hint": "Eine Aufgabe ist Ihnen zugewiesen."
+        },
+        "task_due": {
+          "label": "Aufgabe fällig",
+          "hint": "Eine Ihrer Aufgaben ist fällig."
+        },
+        "task_completed": {
+          "label": "Aufgabe erledigt",
+          "hint": "Eine von Ihnen erstellte Aufgabe wurde erledigt."
+        },
+        "new_lead": {
+          "label": "Neuer Lead",
+          "hint": "Ein Lead ist aus einer Lead-Quelle eingegangen."
+        },
+        "form_submission": {
+          "label": "Formular abgeschickt",
+          "hint": "Jemand hat eines Ihrer Formulare abgeschickt."
+        },
+        "form_needs_review": {
+          "label": "Formular muss geprüft werden",
+          "hint": "Eine Einsendung muss geprüft werden."
+        },
+        "wallet_low_balance": {
+          "label": "Wallet-Guthaben niedrig",
+          "hint": "Das Wallet-Guthaben des Workspace wird knapp."
+        },
+        "sales_doc_decided": {
+          "label": "Verkaufsdokument entschieden",
+          "hint": "Ein Angebot oder eine Rechnung wurde angenommen oder abgelehnt."
+        },
+        "wallet_credited": {
+          "label": "Wallet aufgeladen",
+          "hint": "Das Wallet des Workspace wurde gutgeschrieben."
+        }
+      },
+      "loading": "Ihre Einstellungen werden geladen",
+      "failed": "Ihre Einstellungen konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "saveFailed": "Diese Änderung konnte nicht gespeichert werden. Sie wurde rückgängig gemacht.",
+      "saved": "Gespeichert",
+      "dismiss": "Schließen",
+      "resetRow": "Auf Standard zurücksetzen",
+      "resetRowFor": "{event} auf Standard zurücksetzen",
+      "resetAll": "Alles auf Standard zurücksetzen",
+      "resetAllDone": "Alle Einstellungen sind auf die Standardwerte zurückgesetzt.",
+      "customised": "Geändert",
+      "usingDefault": "Standard",
+      "toggleLabel": "{event}: {channel}",
+      "workspaceOff": "Von Ihrem Workspace ausgeschaltet",
+      "workspaceOffHelp": "Ihr Workspace hat dies ausgeschaltet; Ihre Auswahl gilt dennoch für Sie.",
+      "bellOffHelp": "Schalten Sie die Glocke ein, um Pop-up, Ton oder Push auszuwählen.",
+      "notAvailable": "Nicht verfügbar",
+      "defaultSummary": "Standard: {bell}, {toast}, {sound}",
+      "on": "an",
+      "off": "aus",
+      "channelNames": {
+        "bell": "Glocke",
+        "toast": "Pop-up",
+        "sound": "Ton",
+        "push": "Push"
+      },
+      "browser": {
+        "title": "Dieser Browser",
+        "description": "Ton und Desktop-Benachrichtigungen werden pro Browser festgelegt, nicht pro Konto."
+      },
+      "empty": "Es gibt noch keine Benachrichtigungstypen zum Einrichten.",
+      "defaultSummaryPush": "Standard: {bell}, {toast}, {sound}, {push}",
+      "push": {
+        "title": "Browser-Benachrichtigungen",
+        "description": "Erhalten Sie eine Browser-Benachrichtigung für die Ereignisse, die Ihre Glocke erreichen, auch wenn das CRM geschlossen ist. Welche Ereignisse das sind, wählen Sie in der Spalte Push unten.",
+        "state": {
+          "on": "Für dieses Gerät aktiviert",
+          "off": "Aus",
+          "blocked": "Blockiert",
+          "unavailable": "Nicht verfügbar"
+        },
+        "checking": "Dieser Browser wird geprüft",
+        "unsupported": "Dieser Browser kann bei geschlossenem CRM keine Benachrichtigungen anzeigen. Verwenden Sie einen aktuellen Chrome, Edge, Firefox oder Safari auf einer sicheren (https-)Seite.",
+        "needsInstall": "Auf iPhone und iPad funktionieren Browser-Benachrichtigungen nur für eine App, die Sie auf dem Home-Bildschirm hinzugefügt haben.",
+        "needsInstallSteps": "Öffnen Sie diese Seite in Safari, tippen Sie auf Teilen, wählen Sie Zum Home-Bildschirm, öffnen Sie das CRM über das neue Symbol und kehren Sie dann hierher zurück. Erforderlich ist iOS oder iPadOS 16.4 oder neuer.",
+        "blocked": "Benachrichtigungen sind für diese Seite in Ihrem Browser blockiert.",
+        "blockedHelp": "Nur Ihr Browser kann dies rückgängig machen: Öffnen Sie die Seiteneinstellungen (das Symbol neben der Adresse), stellen Sie Benachrichtigungen auf Zulassen und kehren Sie dann auf diese Seite zurück.",
+        "offHelp": "Auf diesem Gerät nicht aktiviert. Ihr Browser fragt nach der Berechtigung, wenn Sie auf Aktivieren klicken.",
+        "enable": "Auf diesem Gerät aktivieren",
+        "enabling": "Wird aktiviert...",
+        "onHelp": "Dieses Gerät erhält eine Browser-Benachrichtigung für die unten aktivierten Ereignisse, wenn Sie das CRM nicht ansehen.",
+        "howItWorks": "Bei geöffnetem und sichtbarem CRM werden Sie nicht benachrichtigt; dafür sorgen Glocke und Pop-ups. Die Benachrichtigung zeigt, wer und welche Art von Ereignis, niemals den Nachrichtentext.",
+        "test": "Test-Benachrichtigung senden",
+        "testing": "Wird gesendet...",
+        "disable": "Auf diesem Gerät ausschalten",
+        "disabling": "Wird ausgeschaltet...",
+        "testResult": {
+          "sent": "Gesendet. Sie sollte gleich auf Ihren Geräten erscheinen, auch wenn das CRM geschlossen ist.",
+          "none_reachable": "Ihr Browser oder dessen Push-Dienst war gerade nicht erreichbar. Versuchen Sie es gleich noch einmal; ein nicht mehr vorhandenes Gerät wird automatisch entfernt.",
+          "no_device": "Es gibt kein Gerät, an das gesendet werden könnte. Aktivieren Sie zuerst Benachrichtigungen auf diesem Gerät.",
+          "wait": "Gerade wurde ein Test gesendet. Warten Sie einige Sekunden, bevor Sie einen weiteren senden."
+        },
+        "problem": {
+          "enable_failed": "Benachrichtigungen konnten auf diesem Gerät nicht aktiviert werden. Versuchen Sie es erneut.",
+          "disable_failed": "Benachrichtigungen konnten auf diesem Gerät nicht ausgeschaltet werden. Versuchen Sie es erneut.",
+          "remove_failed": "Dieses Gerät konnte nicht entfernt werden. Versuchen Sie es erneut.",
+          "test_failed": "Der Test konnte nicht gesendet werden. Versuchen Sie es erneut."
+        },
+        "devicesFailed": "Ihre Geräte konnten nicht geladen werden.",
+        "devices": {
+          "title": "Ihre Geräte",
+          "thisDevice": "Dieses Gerät",
+          "added": "Hinzugefügt am {date}",
+          "lastUsed": "zuletzt benachrichtigt am {date}",
+          "neverUsed": "noch nicht benachrichtigt",
+          "remove": "Entfernen",
+          "removeFor": "{device} entfernen"
+        }
+      }
+    },
+    "nav": {
+      "preferences": "Benachrichtigungen"
+    }
+  }
+}

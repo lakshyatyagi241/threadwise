@@ -1,0 +1,307 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "Add-on dan modul",
+      "packs": "Add-on (penagihan)",
+      "extensions": "Add-on (kode)",
+      "workspace": "Add-on"
+    },
+    "common": {
+      "loading": "Memuat",
+      "retry": "Coba lagi",
+      "cancel": "Batal",
+      "save": "Simpan",
+      "saving": "Menyimpan",
+      "close": "Tutup",
+      "dismiss": "Tutup",
+      "admin": "Admin",
+      "settings": "Pengaturan",
+      "optional": "opsional",
+      "required": "wajib",
+      "readOnly": "Anda dapat melihat halaman ini, tetapi hanya super admin yang dapat mengubahnya.",
+      "requestId": "ID permintaan",
+      "errors": {
+        "forbidden": "Anda tidak memiliki akses ke halaman ini.",
+        "request": "Permintaan tidak dapat diselesaikan.",
+        "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi.",
+        "conflict": "Orang lain baru saja mengubah ini. Muat ulang lalu coba lagi."
+      }
+    },
+    "packs": {
+      "crumbHere": "Add-on",
+      "eyebrow": "Admin · Penagihan & paket · Add-on",
+      "titleLead": "Add",
+      "titleAccent": "-on",
+      "title": "Add-on",
+      "description": "Paket fitur à la carte yang dibeli pelanggan di luar paketnya, seperti \"Add-on Kampanye\" atau \"+1 nomor WhatsApp\". Setiap add-on memberikan fitur dan batas yang Anda atur, lalu digabungkan ke paket pelanggan. Add-on muncul di halaman Akun pelanggan setelah mereka memiliki paket aktif.",
+      "new": "Add-on baru",
+      "empty": {
+        "title": "Belum ada add-on.",
+        "action": "Buat add-on pertama Anda"
+      },
+      "table": {
+        "label": "Add-on",
+        "name": "Nama",
+        "price": "Harga",
+        "period": "Periode",
+        "grants": "Memberikan",
+        "status": "Status",
+        "actions": "Aksi"
+      },
+      "price": {
+        "free": "Gratis",
+        "lifetime": "sekali bayar"
+      },
+      "period": {
+        "days": "{count} hari",
+        "weeks": "{count} minggu",
+        "months": "{count} bulan",
+        "years": "{count} tahun"
+      },
+      "grants": {
+        "none": "belum diatur",
+        "unlimited": "{name} tanpa batas",
+        "add": "+{amount} {name}",
+        "more": "+{count}"
+      },
+      "status": {
+        "active": "Aktif",
+        "off": "Nonaktif"
+      },
+      "actions": {
+        "edit": "Edit",
+        "enable": "Aktifkan",
+        "disable": "Nonaktifkan",
+        "delete": "Hapus"
+      },
+      "toasts": {
+        "created": "Add-on dibuat.",
+        "updated": "Add-on diperbarui.",
+        "activated": "{name} diaktifkan",
+        "deactivated": "{name} dinonaktifkan",
+        "deleted": "{name} dihapus"
+      },
+      "delete": {
+        "title": "Hapus {name}?",
+        "body": "Hapus add-on ini? Workspace yang telah membelinya tetap memilikinya sampai masa berlakunya berakhir.",
+        "confirm": "Hapus",
+        "inUse": "{count, plural, other {# workspace memiliki add-on ini, sehingga tidak dapat dihapus. Nonaktifkan saja; pemilik tetap memilikinya sampai berakhir.}}"
+      },
+      "errors": {
+        "generic": "Add-on tidak dapat disimpan.",
+        "forbidden": "Hanya super admin yang dapat mengubah add-on.",
+        "notFound": "Add-on ini sudah tidak ada."
+      },
+      "editor": {
+        "crumbHere": "Add-on",
+        "crumbNew": "Baru",
+        "crumbEdit": "Edit",
+        "eyebrowNew": "Admin · Add-on · Baru",
+        "eyebrowEdit": "Admin · Add-on · Edit",
+        "titleNewLead": "Buat",
+        "titleEditLead": "Edit",
+        "titleAccent": "add-on",
+        "intro": "Add-on HANYA memberikan apa yang Anda aktifkan, tidak lebih. Batas yang dikosongkan tidak diubah, sehingga tidak ada \"tanpa batas\" yang tidak disengaja.",
+        "fixTitle": "Harap perbaiki hal berikut:",
+        "cancel": "Batal",
+        "create": "Buat add-on",
+        "saveChanges": "Simpan perubahan",
+        "basics": "Dasar add-on",
+        "features": "Fitur yang dibuka add-on ini",
+        "featuresHint": "Centang hanya yang diberikan add-on ini. Semua yang tidak dicentang tetap diatur oleh paket pelanggan.",
+        "coreFeature": "di setiap paket",
+        "limits": "Penambahan batas",
+        "limitsHint": "Kosong = add-on tidak mengubah batas ini. Masukkan angka untuk MENAMBAH di atas paket (misalnya +2 perangkat). Gunakan -1 untuk tanpa batas.",
+        "fields": {
+          "name": "Nama",
+          "namePlaceholder": "Add-on Kampanye",
+          "subtitle": "Subjudul",
+          "subtitlePlaceholder": "Buka Kampanye",
+          "amount": "Harga",
+          "offerAmount": "Harga penawaran (opsional)",
+          "currency": "Mata uang",
+          "billingDuration": "Durasi",
+          "billingUnit": "Satuan",
+          "billingMode": "Penagihan",
+          "sortOrder": "Urutan",
+          "isActive": "Aktif",
+          "isLifetime": "Seumur hidup (sekali bayar)"
+        },
+        "modes": {
+          "one_time": "Sekali bayar (beli lagi setelah berakhir)",
+          "recurring": "Berulang (diperpanjang otomatis)"
+        },
+        "units": {
+          "days": "Hari",
+          "weeks": "Minggu",
+          "months": "Bulan",
+          "years": "Tahun"
+        },
+        "problems": {
+          "name": "Masukkan nama.",
+          "amount": "Masukkan jumlah seperti 19 atau 19.99.",
+          "offerAmount": "Harga penawaran harus lebih rendah dari harga.",
+          "currency": "Gunakan kode mata uang tiga huruf.",
+          "billingDuration": "Masukkan bilangan bulat 1 atau lebih.",
+          "sortOrder": "Masukkan bilangan bulat.",
+          "limits": "Batas berupa bilangan bulat, atau -1 untuk tanpa batas.",
+          "form": "Periksa kolom yang disorot."
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "Add-on",
+      "eyebrow": "Admin · Add-on",
+      "titleLead": "Pasang",
+      "titleAccent": "add-on",
+      "title": "Add-on",
+      "description": "Add-on menggabungkan fitur tambahan ke instalasi ini. Instagram adalah yang pertama. Verifikasi kode pembelian, unggah paket, dan add-on terpasang langsung di tempat. Data dan pengaturan Anda tidak berubah.",
+      "coreVersion": "Inti",
+      "packsLead": "Mencari paket fitur berbayar yang dibeli pelanggan di luar paket?",
+      "packsLink": "Itu adalah add-on paket (penagihan)",
+      "packsTail": ". Halaman ini memasang kode.",
+      "installed": {
+        "title": "Add-on terpasang",
+        "empty": "Belum ada add-on terpasang. Verifikasi kode pembelian Anda di atas, lalu unggah paket.",
+        "version": "v{version}",
+        "files": "{count, plural, other {# file}}",
+        "inPlace": "Modul langsung",
+        "filesKept": "file disimpan di disk",
+        "active": "Aktif",
+        "disabled": "Dinonaktifkan",
+        "inactive": "Tidak aktif",
+        "enable": "Aktifkan",
+        "disable": "Nonaktifkan",
+        "remove": "Hapus",
+        "reactivate": "Aktifkan kembali",
+        "footnote": "Menghapus add-on hanya menghapus file yang dipasangnya, dilacak sejak ditambahkan, sehingga file inti tidak pernah disentuh. Data tetap ada di database."
+      },
+      "verify": {
+        "title": "Verifikasi kode pembelian Anda",
+        "body": "Lisensi {brand} yang sama yang membuka pembaruan. Add-on terikat padanya.",
+        "placeholder": "mis. 8f2c1a44-...",
+        "label": "Kode pembelian",
+        "action": "Verifikasi",
+        "checking": "Memverifikasi…",
+        "empty": "Masukkan kode pembelian Anda terlebih dahulu.",
+        "failed": "Verifikasi gagal."
+      },
+      "upload": {
+        "title": "Unggah paket add-on",
+        "body": "ZIP diperiksa sebelum ada yang ditulis. Paket yang rusak atau tidak kompatibel ditolak tanpa mengubah instalasi Anda.",
+        "choose": "Pilih .zip add-on",
+        "max": "Maks. 100 MB",
+        "action": "Pasang",
+        "installing": "Memasang…",
+        "progress": "Mengunggah dan menggabungkan. Jangan tutup tab ini."
+      },
+      "confirm": {
+        "removeTitle": "Hapus {name}?",
+        "removeBody": "Ini menghapus file yang dipasangnya. Datanya tetap ada di database.",
+        "remove": "Hapus",
+        "moduleOffTitle": "Hapus {name}?",
+        "moduleOffBody": "Ini menonaktifkan add-on, sehingga halaman dan otomatisasinya berhenti berjalan. File tetap disimpan, sehingga Anda dapat mengaktifkannya kembali kapan saja. Tidak ada yang dihapus, dan datanya tetap ada di database.",
+        "moduleOnTitle": "Aktifkan kembali {name}?",
+        "moduleOnBody": "Ini mengaktifkan kembali add-on. File-nya masih ada di disk, sehingga langsung berfungsi lagi.",
+        "reactivate": "Aktifkan kembali"
+      },
+      "engines": {
+        "connected": "Terhubung",
+        "notConnected": "Tidak terhubung",
+        "connect": "Hubungkan",
+        "manage": "Kelola",
+        "disconnect": "Putuskan",
+        "disconnectYes": "Ya, putuskan",
+        "save": "Simpan & hubungkan",
+        "testing": "Menghubungkan…",
+        "displayName": "Nama tampilan",
+        "secret": "Token rahasia bersama",
+        "secretSaved": "•••••••• tersimpan, kosongkan untuk mempertahankan",
+        "secretNew": "tempel rahasia bersama",
+        "lastChecked": "Terakhir diperiksa",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "Berjalan sebagai deployment {brand} terpisah. Hubungkan dengan URL + rahasia, tanpa unggahan.",
+          "blocked": "Diblokir: add-on bawaan aktif",
+          "blockedNote": "Add-on Instagram bawaan terpasang. Hapus di bawah untuk menghubungkan {brand} jarak jauh.",
+          "modalTitle": "Hubungkan Instagram",
+          "modalBody": "Tempel URL deployment {brand} dan token rahasia bersama Anda. {app} memverifikasi koneksi melalui API. Tidak ada yang diunggah.",
+          "url": "URL {brand}",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "Ditampilkan di setiap label \"Sinkronkan dari …\", \"Kelola di …\", dan \"URL …\" di seluruh aplikasi.",
+          "disconnectTitle": "Putuskan Instagram?",
+          "disconnectBody": "Ini memutuskan Instagram dari {app}. Instagram akan langsung hilang dari dasbor, analitik, kotak masuk, flow, template, dan balasan otomatis untuk setiap workspace, dan tidak ada yang dapat digunakan sampai Anda menghubungkannya kembali. Lanjutkan?"
+        },
+        "email": {
+          "title": "Email",
+          "body": "Menghubungkan akan menautkan platform email {brand} agar email masuk ke kotak masuk tim, dengan URL + rahasia, tanpa unggahan.",
+          "modalTitle": "Hubungkan email",
+          "modalBody": "Tempel URL deployment {brand} dan token rahasia bersama Anda. {app} memverifikasi koneksi melalui API. Tidak ada yang diunggah.",
+          "url": "URL {brand}",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "Ditampilkan di setiap label email di seluruh aplikasi.",
+          "disconnectTitle": "Putuskan email?",
+          "disconnectBody": "Ini memutuskan platform email dari {app}. Email berhenti masuk ke kotak masuk tim untuk setiap workspace sampai Anda menghubungkannya kembali. Lanjutkan?"
+        }
+      },
+      "errors": {
+        "generic": "Tidak berhasil.",
+        "forbidden": "Hanya super admin yang dapat mengubah modul.",
+        "invalidPackage": "Paket tidak valid.",
+        "tooLarge": "Paket terlalu besar.",
+        "coreTooOld": "Paket ini membutuhkan versi inti yang lebih baru.",
+        "engineConflict": "Instagram hanya menjalankan satu mesin dalam satu waktu. Putuskan yang lain terlebih dahulu."
+      }
+    },
+    "workspace": {
+      "title": "Add-on",
+      "description": "Paket fitur tambahan yang Anda beli di luar langganan.",
+      "needPlanTitle": "Add-on membutuhkan paket aktif",
+      "needPlanBody": "Add-on adalah paket fitur tambahan yang Anda beli di luar langganan. Pilih paket terlebih dahulu, lalu kembali ke sini untuk menambah fitur.",
+      "viewPlans": "Lihat paket",
+      "noneTitle": "Tidak ada add-on tersedia",
+      "noneBody": "Saat ini tidak ada add-on yang ditawarkan. Periksa lagi nanti.",
+      "ownedTitle": "Add-on Anda",
+      "ownedBody": "Paket aktif yang digabungkan ke paket Anda saat ini.",
+      "ends": "Berakhir {date}",
+      "lifetime": "Seumur hidup",
+      "autoRenews": "Perpanjang otomatis",
+      "renewal": {
+        "cancel": "Batalkan perpanjangan",
+        "confirmTitle": "Batalkan perpanjangan?",
+        "confirmBody": "Add-on ini tetap aktif sampai akhir masa yang sudah Anda bayar, lalu tidak akan diperpanjang.",
+        "confirm": "Batalkan perpanjangan",
+        "keep": "Tetap perpanjang",
+        "forbidden": "Anda tidak memiliki izin untuk mengubah paket.",
+        "none": "Tidak ada langganan aktif yang dapat dibatalkan.",
+        "failed": "Kami tidak dapat membatalkan perpanjangan. Silakan coba lagi."
+      },
+      "active": "Aktif",
+      "cardEyebrow": "Add-on",
+      "catalogTitle": "Add-on",
+      "catalogBody": "Buka fitur tambahan di atas paket Anda saat ini. Tidak perlu mengganti paket.",
+      "count": "{count, plural, other {# add-on}}",
+      "free": "Gratis",
+      "lifetimePrice": "sekali bayar",
+      "per": "/ {unit}",
+      "units": {
+        "days": "hari",
+        "weeks": "minggu",
+        "months": "bulan",
+        "years": "tahun"
+      },
+      "buy": "Tambah ke paket",
+      "buyAgain": "Beli lagi",
+      "owned": "Dimiliki ×{count} · membeli lagi menambah jumlahnya",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "{name} tanpa batas",
+        "add": "+{amount} {name}"
+      },
+      "error": "Add-on tidak dapat dimuat."
+    }
+  }
+}

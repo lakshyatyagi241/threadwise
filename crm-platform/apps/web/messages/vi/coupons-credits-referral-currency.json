@@ -1,0 +1,412 @@
+{
+  "coupons-credits-referral-currency": {
+    "nav": {
+      "group": "Thanh toán và gói",
+      "coupons": "Phiếu giảm giá",
+      "currencies": "Tiền tệ",
+      "currenciesGroup": "Bản địa hóa",
+      "affiliate": "Tiếp thị liên kết"
+    },
+    "common": {
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "cancel": "Hủy",
+      "dismiss": "Bỏ qua",
+      "admin": "Quản trị",
+      "readOnly": "Bạn có thể xem trang này nhưng chỉ quản trị viên cấp cao mới có thể thay đổi.",
+      "requestId": "Mã yêu cầu",
+      "errors": {
+        "forbidden": "Bạn không có quyền truy cập trang này.",
+        "request": "Không thể hoàn tất yêu cầu.",
+        "unexpected": "Đã xảy ra lỗi. Hãy thử lại sau giây lát."
+      },
+      "pager": {
+        "label": "Phân trang",
+        "previous": "Trước",
+        "next": "Tiếp",
+        "page": "Trang {n}"
+      }
+    },
+    "errors": {
+      "generic": "Đã xảy ra lỗi. Hãy thử lại sau giây lát.",
+      "forbidden": "Chỉ quản trị viên cấp cao mới có thể thay đổi mục này.",
+      "notFound": "Mục này không còn tồn tại. Có thể nó đã bị xóa.",
+      "conflict": "Người khác vừa thay đổi mục này. Hãy tải lại trang và thử lại.",
+      "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra biểu mẫu và thử lại.",
+      "codeTaken": "Một phiếu giảm giá khác đã dùng mã này.",
+      "planUnknown": "Một hoặc nhiều gói đã chọn không còn tồn tại.",
+      "currencyUnknown": "Hãy chọn một trong các loại tiền tệ đang hoạt động.",
+      "currencyTaken": "Đã có một loại tiền tệ với mã này.",
+      "defaultProtected": "Đây là loại tiền tệ mặc định của hệ thống. Hãy chọn mặc định khác trước.",
+      "inUse": "Loại tiền tệ này vẫn đang được {used} sử dụng. Hãy hủy kích hoạt thay vì xóa.",
+      "ratesFailed": "Không thể kết nối với nhà cung cấp tỷ giá hoặc không nhận được tỷ giá nào. Không có tỷ giá nào bị thay đổi."
+    },
+    "coupons": {
+      "title": "Phiếu giảm giá",
+      "titleLead": "Giảm giá",
+      "titleAccent": "phiếu",
+      "crumbHere": "Phiếu giảm giá",
+      "eyebrow": "Quản trị · Thanh toán · Mã phiếu giảm giá",
+      "description": "Mã khuyến mãi người mua nhập khi thanh toán. Chọn phần trăm hoặc số tiền cố định, đặt thời hạn hiệu lực, giới hạn cho một số gói và đặt trần tổng số lần sử dụng.",
+      "new": "Phiếu giảm giá mới",
+      "kpi": {
+        "total": "Tổng số phiếu",
+        "totalHint": "trong danh mục",
+        "active": "Đang hoạt động",
+        "activeHint": "đang nhận lượt sử dụng",
+        "expired": "Hết hạn",
+        "expiredHint": "đã quá ngày hết hạn",
+        "redeemed": "Tổng lượt sử dụng",
+        "redeemedHint": "tổng lượt từ trước đến nay"
+      },
+      "filters": {
+        "label": "Lọc phiếu giảm giá",
+        "all": "Tất cả",
+        "active": "Đang hoạt động",
+        "disabled": "Đã tắt",
+        "expired": "Hết hạn",
+        "search": "Tìm theo mã hoặc mô tả…",
+        "searchLabel": "Tìm phiếu giảm giá"
+      },
+      "table": {
+        "label": "Phiếu giảm giá",
+        "code": "Mã",
+        "discount": "Giảm giá",
+        "uses": "Lượt dùng",
+        "validity": "Hiệu lực",
+        "status": "Trạng thái",
+        "actions": "Thao tác"
+      },
+      "validity": {
+        "forever": "vĩnh viễn",
+        "now": "bây giờ",
+        "range": "{from} → {to}"
+      },
+      "empty": {
+        "title": "Không có phiếu giảm giá nào khớp.",
+        "hint": "Hãy điều chỉnh hoặc đặt lại bộ lọc, hoặc",
+        "create": "tạo phiếu đầu tiên"
+      },
+      "footer": "Đang hiển thị {from}–{to} trong {total} phiếu giảm giá",
+      "pager": {
+        "label": "Phân trang",
+        "previous": "Trước",
+        "next": "Tiếp",
+        "page": "Trang {n}"
+      },
+      "actions": {
+        "edit": "Sửa",
+        "delete": "Xóa",
+        "menu": "Thao tác",
+        "toggle": "Bật hoặc tắt {code}"
+      },
+      "toasts": {
+        "created": "Đã tạo phiếu giảm giá.",
+        "updated": "Đã cập nhật phiếu giảm giá.",
+        "activated": "Đã kích hoạt.",
+        "deactivated": "Đã hủy kích hoạt.",
+        "deleted": "Đã xóa phiếu giảm giá."
+      },
+      "delete": {
+        "title": "Xóa phiếu giảm giá",
+        "body": "Xóa phiếu giảm giá {code}? Các không gian làm việc đã sử dụng nó vẫn giữ mức giảm của họ.",
+        "confirm": "Có, xóa"
+      },
+      "editor": {
+        "notFoundTitle": "Không tìm thấy phiếu giảm giá",
+        "notFoundBody": "Không có phiếu giảm giá nào ở địa chỉ này. Có thể nó đã bị xóa hoặc liên kết sai.",
+        "backToList": "Quay lại phiếu giảm giá",
+        "crumbNew": "Mới",
+        "eyebrowNew": "Quản trị · Thanh toán · Mã phiếu giảm giá · Tạo",
+        "eyebrowEdit": "Quản trị · Thanh toán · Mã phiếu giảm giá · Chỉnh sửa",
+        "titleLead": "Phiếu",
+        "titleAccent": "giảm giá mới",
+        "descriptionNew": "Mã khuyến mãi được sử dụng tại /checkout. Chọn phần trăm hoặc số tiền cố định, gắn với một gói hoặc tất cả gói, và có thể đặt thời hạn hiệu lực.",
+        "redeemed": "Đã dùng {used}{max} lần",
+        "redeemedMax": " / {max}",
+        "expires": "hết hạn {when}",
+        "active": "Đang hoạt động",
+        "disabled": "Đã tắt",
+        "create": "Tạo phiếu giảm giá",
+        "saveChanges": "Lưu thay đổi",
+        "saving": "Đang lưu",
+        "cancel": "Hủy",
+        "problemsTitle": "Một số trường cần chú ý:",
+        "problems": {
+          "code": "Mã: nhập mã tối đa 64 ký tự.",
+          "description": "Mô tả: tối đa 255 ký tự.",
+          "adminNote": "Ghi chú quản trị: tối đa 1000 ký tự.",
+          "type": "Loại: chọn phần trăm hoặc số tiền cố định.",
+          "amount": "Số tiền: nhập một số như 10 hoặc 12.5.",
+          "maxDiscountAmount": "Mức giảm tối đa: nhập một số hoặc để trống.",
+          "currencyCode": "Khóa tiền tệ: tối đa 8 ký tự.",
+          "minOrderAmount": "Giá trị đơn hàng tối thiểu: nhập một số hoặc để trống.",
+          "applicablePlans": "Gói áp dụng: chọn gói từ danh sách.",
+          "startsAt": "Bắt đầu lúc: nhập ngày giờ hợp lệ.",
+          "expiresAt": "Hết hạn lúc: nhập ngày giờ hợp lệ và không trước thời điểm bắt đầu.",
+          "maxUses": "Tổng số lần sử dụng tối đa: số nguyên từ 1 trở lên, hoặc để trống.",
+          "perUserLimit": "Giới hạn mỗi người dùng: số nguyên từ 1 trở lên, hoặc để trống."
+        },
+        "sections": {
+          "identity": "Nhận dạng",
+          "discount": "Giảm giá",
+          "eligibility": "Điều kiện áp dụng",
+          "limits": "Giới hạn và hành vi"
+        },
+        "fields": {
+          "code": "Mã",
+          "codeHint": "Được lưu bằng chữ in hoa. Khách hàng nhập đúng mã này khi thanh toán.",
+          "codePlaceholder": "WELCOME10",
+          "description": "Mô tả",
+          "descriptionNote": "(hiển thị cho khách hàng)",
+          "descriptionPlaceholder": "Ưu đãi chào mừng: giảm 10% tháng đầu",
+          "adminNote": "Ghi chú quản trị",
+          "adminNoteNote": "(nội bộ, không hiển thị)",
+          "adminNotePlaceholder": "Đợt khuyến mãi lễ · Slack #marketing · kết thúc cùng chiến dịch",
+          "activeTitle": "Đang hoạt động",
+          "activeHint": "Người mua có thể áp dụng khi thanh toán",
+          "type": "Loại",
+          "typePercent": "Phần trăm (%)",
+          "typeFixed": "Số tiền cố định",
+          "amount": "Số tiền",
+          "amountHint": "Với phiếu phần trăm, 10 nghĩa là 10%. Với phiếu cố định, 10 nghĩa là 10 đơn vị tiền tệ.",
+          "maxDiscount": "Mức giảm tối đa",
+          "maxDiscountNote": "(chỉ loại %)",
+          "maxDiscountPlaceholder": "để trống = không giới hạn",
+          "maxDiscountHint": "Ví dụ: giảm 20% với mức trần $50.",
+          "currency": "Khóa tiền tệ",
+          "currencyAny": "Mọi loại tiền tệ",
+          "currencyHint": "Giới hạn việc sử dụng ở một loại tiền tệ duy nhất (áp dụng cho phiếu số tiền cố định).",
+          "minOrder": "Giá trị đơn hàng tối thiểu",
+          "minOrderPlaceholder": "0 = không có mức tối thiểu",
+          "plans": "Gói áp dụng",
+          "plansNote": "(trống = mọi gói)",
+          "plansPlaceholder": "Chọn một hoặc nhiều gói (trống = mọi gói)...",
+          "plansHint": "Gõ để thu hẹp danh sách, chọn để thêm và dùng dấu × trên nhãn để bỏ một gói.",
+          "plansEmpty": "Không còn gói nào để chọn.",
+          "plansRemove": "Xóa {name}",
+          "plansClear": "Xóa tất cả gói",
+          "startsAt": "Bắt đầu lúc",
+          "startsAtHint": "Để trống = có hiệu lực ngay.",
+          "expiresAt": "Hết hạn lúc",
+          "expiresAtHint": "Để trống = không bao giờ hết hạn.",
+          "maxUses": "Tổng số lần sử dụng tối đa",
+          "unlimitedPlaceholder": "để trống = không giới hạn",
+          "maxUsesHint": "Trên tất cả khách hàng.",
+          "perUser": "Giới hạn mỗi người dùng",
+          "perUserHint": "Số lần sử dụng cho phép với mỗi khách hàng.",
+          "firstPurchaseTitle": "Chỉ lần mua đầu tiên",
+          "firstPurchaseHint": "Chỉ các không gian làm việc chưa có đơn hàng đã thanh toán",
+          "stackableTitle": "Có thể kết hợp với phiếu khác",
+          "stackableHint": "Cho phép người mua dùng cùng một mã đang hoạt động khác khi thanh toán"
+        }
+      }
+    },
+    "currencies": {
+      "title": "Tiền tệ nền tảng",
+      "titleLead": "Tiền tệ",
+      "titleAccent": "nền tảng",
+      "crumbGroup": "Hệ thống",
+      "crumbGroup2": "Bản địa hóa",
+      "crumbHere": "Tiền tệ",
+      "eyebrow": "Quản trị · Nền tảng · Bản địa hóa",
+      "description": "Quản lý các loại tiền tệ mà không gian làm việc có thể chọn. Tỷ giá được lưu so với USD. Thay đổi mặc định sẽ áp dụng cho mọi bảng điều khiển người dùng, hóa đơn và hiển thị ví.",
+      "fetchRates": "Lấy tỷ giá trực tiếp",
+      "fetching": "Đang lấy",
+      "add": "Thêm tiền tệ",
+      "kpi": {
+        "total": "Tổng",
+        "totalHint": "loại tiền tệ đã cấu hình",
+        "active": "Đang hoạt động",
+        "activeHint": "hiển thị cho không gian làm việc",
+        "default": "Mặc định của hệ thống",
+        "defaultHint": "dùng cho không gian làm việc mới tạo",
+        "inactive": "Không hoạt động",
+        "inactiveHint": "không được đưa ra trong cài đặt không gian làm việc"
+      },
+      "defaultCard": {
+        "eyebrow": "Mặc định của hệ thống",
+        "title": "Tiền tệ dự phòng cho toàn nền tảng",
+        "body": "Không gian làm việc nào chưa chọn tiền tệ sẽ dùng loại này. Việc lưu sẽ xóa bộ nhớ đệm ngay, nên thay đổi hiện ra ở lần tải trang tiếp theo trên toàn ứng dụng.",
+        "select": "Tiền tệ mặc định",
+        "set": "Đặt làm mặc định",
+        "setting": "Đang lưu"
+      },
+      "search": "Mã, tên hoặc ký hiệu…",
+      "searchLabel": "Tìm tiền tệ",
+      "searchButton": "Tìm kiếm",
+      "table": {
+        "label": "Tiền tệ",
+        "code": "Mã",
+        "name": "Tên",
+        "symbol": "Ký hiệu",
+        "rate": "Tỷ giá (1 USD →)",
+        "decimals": "Số thập phân",
+        "active": "Đang hoạt động",
+        "actions": "Thao tác"
+      },
+      "defaultBadge": "Mặc định",
+      "rate": "1 USD → {rate}",
+      "on": "Bật",
+      "off": "Tắt",
+      "empty": {
+        "none": "Chưa có loại tiền tệ nào.",
+        "noMatch": "Không có kết quả nào cho \"{q}\"."
+      },
+      "footer": "Đang hiển thị {from}–{to} trong {total} loại tiền tệ",
+      "actions": {
+        "edit": "Sửa",
+        "delete": "Xóa",
+        "toggle": "Bật hoặc tắt {code}"
+      },
+      "toasts": {
+        "added": "Đã thêm tiền tệ.",
+        "updated": "Đã cập nhật tiền tệ.",
+        "activated": "Đã kích hoạt.",
+        "deactivated": "Đã hủy kích hoạt.",
+        "deleted": "Đã xóa tiền tệ.",
+        "defaultSet": "Đã đặt tiền tệ mặc định là {code}.",
+        "ratesUpdated": "Đã cập nhật {count} loại tiền tệ từ {provider}."
+      },
+      "delete": {
+        "title": "Xóa tiền tệ",
+        "body": "Xóa {code}? Mọi giá đã lưu bằng loại tiền tệ này sẽ trở thành mồ côi.",
+        "confirm": "Có, xóa"
+      },
+      "form": {
+        "addTitle": "Thêm tiền tệ",
+        "editTitle": "Sửa {code}",
+        "name": "Tên *",
+        "namePlaceholder": "Franc Thụy Sĩ",
+        "code": "Mã ISO *",
+        "codePlaceholder": "CHF",
+        "codeLocked": "Mã không bao giờ thay đổi sau khi tiền tệ được tạo.",
+        "symbol": "Ký hiệu",
+        "symbolPlaceholder": "Fr",
+        "precision": "Số thập phân *",
+        "rate": "Tỷ giá quy đổi (1 USD = ?) *",
+        "active": "Kích hoạt ngay",
+        "save": "Thêm tiền tệ",
+        "saveChanges": "Lưu thay đổi",
+        "cancel": "Hủy",
+        "problemsTitle": "Một số trường cần chú ý:",
+        "problems": {
+          "name": "Tên: nhập tên tối đa 120 ký tự.",
+          "code": "Mã ISO: ba chữ cái, như CHF.",
+          "symbol": "Ký hiệu: tối đa 20 ký tự.",
+          "precision": "Số thập phân: số nguyên từ 0 đến 6.",
+          "exchangeRate": "Tỷ giá: một số tối thiểu 0.000001."
+        },
+        "eyebrow": "Mục mới",
+        "rateHint": "Dùng \"Lấy tỷ giá trực tiếp\" ở trên để điền sẵn giá trị từ open.er-api.com.",
+        "editEyebrow": "Sửa mục"
+      },
+      "catalog": {
+        "eyebrow": "Danh mục",
+        "title": "Tất cả tiền tệ"
+      }
+    },
+    "affiliate": {
+      "title": "Tiếp thị liên kết",
+      "subtitle": "Chia sẻ liên kết của bạn và theo dõi các không gian làm việc bạn giới thiệu.",
+      "common": {
+        "dismiss": "Bỏ qua"
+      },
+      "states": {
+        "loading": "Đang tải dữ liệu tiếp thị liên kết của bạn"
+      },
+      "header": {
+        "codeLabel": "Mã giới thiệu của bạn",
+        "noCode": "Chưa có mã",
+        "linkLabel": "Liên kết giới thiệu của bạn",
+        "copyLink": "Sao chép liên kết",
+        "copied": "Đã sao chép liên kết.",
+        "copyFailed": "Không thể sao chép liên kết. Hãy chọn và sao chép thủ công.",
+        "reward": "Mỗi không gian làm việc được giới thiệu thanh toán lần đầu sẽ mang lại cho bạn {amount}.",
+        "rewardMessages": "Số tiền đó tương đương {count, plural, other {# tin nhắn}}.",
+        "rewardNone": "Chương trình hiện không trả thưởng cho lượt giới thiệu mới. Mã và lịch sử của bạn vẫn được giữ ở đây."
+      },
+      "filters": {
+        "label": "Khoảng thời gian và xuất",
+        "range": "Khoảng thời gian",
+        "ranges": {
+          "7d": "7 ngày qua",
+          "30d": "30 ngày qua",
+          "90d": "90 ngày qua",
+          "all": "Mọi thời gian"
+        },
+        "search": "Tìm lượt giới thiệu",
+        "searchPlaceholder": "Tên, email hoặc mã",
+        "reset": "Đặt lại",
+        "export": "Xuất CSV",
+        "exporting": "Đang chuẩn bị tệp",
+        "exported": "Đã tải xuống {fileName}."
+      },
+      "kpi": {
+        "inRange": "Lượt giới thiệu trong khoảng này",
+        "vsPrevious": "{delta} so với kỳ trước",
+        "earned": "Đã nhận, từ trước đến nay",
+        "last30": "Lượt giới thiệu, 30 ngày qua",
+        "last30Earned": "Đã nhận {amount} trong 30 ngày qua",
+        "average": "Trung bình mỗi lượt giới thiệu"
+      },
+      "chart": {
+        "title": "Lượt giới thiệu theo thời gian",
+        "label": "Lượt giới thiệu dạng cột và tín dụng đã nhận dạng đường, theo kỳ",
+        "buckets": {
+          "daily": "Hàng ngày",
+          "weekly": "Hàng tuần",
+          "monthly": "Hàng tháng"
+        },
+        "signups": "Lượt giới thiệu",
+        "credits": "Tín dụng đã nhận",
+        "bucket": "Kỳ",
+        "empty": "Chưa có lượt giới thiệu nào trong khoảng này."
+      },
+      "topCodes": {
+        "title": "Mã hàng đầu",
+        "referrals": "{count, plural, other {# lượt giới thiệu}}",
+        "empty": "Không có mã nào được dùng trong khoảng này."
+      },
+      "payouts": {
+        "title": "Các khoản thưởng gần đây",
+        "balanceAfter": "Số dư sau {amount}",
+        "empty": "Chưa có khoản thưởng nào. Phần thưởng sẽ vào ví của bạn khi một không gian làm việc được giới thiệu thanh toán lần đầu."
+      },
+      "table": {
+        "title": "Lượt giới thiệu",
+        "label": "Lượt giới thiệu trong khoảng đã chọn",
+        "when": "Thời điểm",
+        "referee": "Người được giới thiệu",
+        "code": "Mã đã dùng",
+        "credits": "Tín dụng đã nhận",
+        "status": "Trạng thái",
+        "transaction": "Giao dịch ví",
+        "noName": "Người dùng chưa đặt tên",
+        "paid": "Đã thanh toán",
+        "pending": "Đang chờ",
+        "noTransaction": "Không có giao dịch ví",
+        "pagination": "Các trang giới thiệu",
+        "previous": "Trước",
+        "next": "Tiếp",
+        "showing": "Đang hiển thị {from}-{to} trong {total}"
+      },
+      "empty": {
+        "noneTitle": "Chưa có lượt giới thiệu nào",
+        "noneBody": "Hãy chia sẻ liên kết của bạn. Những người đăng ký bằng liên kết đó sẽ xuất hiện ở đây.",
+        "filteredTitle": "Không có lượt giới thiệu nào khớp",
+        "filteredBody": "Hãy thử khoảng thời gian khác hoặc xóa tìm kiếm."
+      },
+      "errors": {
+        "unauthenticated": "Phiên của bạn đã kết thúc. Hãy đăng nhập lại để xem dữ liệu tiếp thị liên kết.",
+        "forbidden": "Bạn không có quyền truy cập trang này.",
+        "rateLimited": "Quá nhiều yêu cầu. Hãy chờ giây lát rồi thử lại.",
+        "validation": "Không thể áp dụng các bộ lọc đó. Hãy đặt lại và thử lại.",
+        "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối và thử lại.",
+        "generic": "Đã xảy ra lỗi. Hãy thử lại sau giây lát.",
+        "requestId": "Mã yêu cầu",
+        "retry": "Thử lại"
+      }
+    }
+  }
+}

@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "Solo se puede modificar un pedido en borrador. Un pedido confirmado queda fijo: cancélalo y crea uno nuevo para cambiar sus líneas o precios.",
+        "SO_NOT_CONFIRMED": "Confirma primero el pedido. Solo un pedido confirmado puede facturarse o registrar su entrega.",
+        "SO_CANCELLED": "Este pedido está cancelado, así que no se puede hacer nada más con él.",
+        "SO_QUOTE_NOT_ACCEPTED": "Solo una propuesta o presupuesto aceptado puede convertirse en pedido de venta. Márcalo primero como aceptado.",
+        "SO_QUOTE_TAKEN": "Esta propuesta o presupuesto ya tiene un pedido de venta.",
+        "SO_QUANTITY_EXCEEDS": "Una cantidad supera lo que queda en esa línea. Redúcela e inténtalo de nuevo.",
+        "SO_NOTHING_TO_INVOICE": "No queda nada por hacer aquí: todo ya está facturado o entregado.",
+        "SO_HAS_INVOICES": "Una factura creada desde este pedido sigue activa. Anula o elimina la factura primero y luego cancela el pedido."
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "Pedidos de venta",
+        "subtitle": "Ofertas aceptadas convertidas en pedidos, facturadas de una vez o por partes, y entregadas.",
+        "newOrder": "Nuevo pedido de venta",
+        "search": "Buscar por número, comprador o referencia",
+        "reset": "Restablecer",
+        "refresh": "Actualizar",
+        "tableLabel": "Pedidos de venta",
+        "noAccessTitle": "Sin acceso",
+        "noAccess": "No tienes permiso para ver los pedidos de venta.",
+        "emptyFilteredTitle": "Ningún pedido coincide",
+        "emptyFiltered": "Nada coincide con estos filtros. Cámbialos o restablécelos.",
+        "resetFilters": "Restablecer filtros",
+        "loading": "Cargando pedidos de venta",
+        "showing": "Mostrando {count}",
+        "loadMore": "Cargar más",
+        "allLoaded": "Todo cargado",
+        "contactLoading": "Cargando...",
+        "empty": {
+          "all": {
+            "title": "Todavía no hay pedidos de venta",
+            "message": "Convierte una propuesta o presupuesto aceptado en pedido, o crea uno desde cero."
+          },
+          "draft": {
+            "title": "No hay pedidos en borrador",
+            "message": "Aquí aparecen los pedidos que todavía estás preparando."
+          },
+          "confirmed": {
+            "title": "No hay pedidos confirmados",
+            "message": "Aquí aparecen los pedidos confirmados pendientes de facturar o entregar."
+          },
+          "cancelled": {
+            "title": "No hay pedidos cancelados",
+            "message": "Aquí aparecen los pedidos que cancelas, con su motivo."
+          },
+          "closed": {
+            "title": "No hay pedidos cerrados",
+            "message": "Un pedido se cierra cuando todo lo que incluye está facturado y entregado."
+          }
+        }
+      },
+      "strip": {
+        "label": "Valor de los pedidos abiertos",
+        "openValue": "Pedidos abiertos ({currency})"
+      },
+      "tabs": {
+        "label": "Estado del pedido",
+        "all": "Todos",
+        "draft": "Borrador",
+        "confirmed": "Confirmado",
+        "cancelled": "Cancelado",
+        "closed": "Cerrado",
+        "count": "{count} pedidos"
+      },
+      "quick": {
+        "label": "Filtros rápidos",
+        "toInvoice": "Por facturar",
+        "toFulfil": "Por cumplir"
+      },
+      "table": {
+        "scrollArea": "Tabla de pedidos de venta",
+        "columns": {
+          "number": "Pedido",
+          "buyer": "Comprador",
+          "quote": "Presupuesto",
+          "deal": "Negocio",
+          "expected": "Previsto",
+          "status": "Estado",
+          "invoicing": "Facturación",
+          "fulfilment": "Entrega",
+          "total": "Total",
+          "invoices": "Facturas"
+        }
+      },
+      "row": {
+        "moreFor": "Acciones para {name}",
+        "open": "Abrir",
+        "edit": "Editar",
+        "confirm": "Confirmar pedido",
+        "invoiceAll": "Facturar todo lo pendiente",
+        "fulfilAll": "Marcar todo como entregado",
+        "cancel": "Cancelar pedido",
+        "delete": "Eliminar borrador"
+      },
+      "status": {
+        "draft": "Borrador",
+        "confirmed": "Confirmado",
+        "cancelled": "Cancelado",
+        "closed": "Cerrado"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "Sin facturar",
+        "partially_invoiced": "Facturado en parte",
+        "invoiced": "Facturado"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "Sin entregar",
+        "partially_fulfilled": "Entregado en parte",
+        "fulfilled": "Entregado"
+      },
+      "actions": {
+        "failed": "Algo no funcionó.",
+        "confirmed": "Pedido {number} confirmado.",
+        "invoicedDraft": "Factura en borrador creada a partir del pedido.",
+        "invoicedIssued": "Factura {number} emitida.",
+        "fulfilled": "Entrega registrada.",
+        "cancelled": "Pedido {number} cancelado.",
+        "deleted": "Borrador de pedido eliminado."
+      },
+      "dialog": {
+        "close": "Cerrar",
+        "cancel": "Cancelar",
+        "how": "Qué cantidades",
+        "mode": {
+          "all": "Todo lo que queda",
+          "lines": "Elegir cantidades"
+        },
+        "left": "Quedan {qty}",
+        "qtyExceeds": "Como máximo queda {max} en esta línea.",
+        "qtyInvalid": "Introduce una cantidad con como máximo 4 decimales, o 0 para omitir esta línea.",
+        "nothingHint": "Todo este pedido ya está facturado."
+      },
+      "confirmDialog": {
+        "title": "¿Confirmar este pedido?",
+        "message": "Al confirmar, las líneas y los precios quedan fijos. Después puedes facturar el pedido, de una vez o por partes, y registrar entregas. Mientras no exista ninguna factura, aún puedes cancelarlo.",
+        "confirm": "Confirmar pedido"
+      },
+      "cancelDialog": {
+        "title": "¿Cancelar este pedido?",
+        "warning": "Un pedido cancelado ya no se puede facturar ni entregar, y no se puede reabrir.",
+        "reason": "Motivo",
+        "reasonHint": "Se guarda en el pedido para tu equipo.",
+        "reasonRequired": "Indica por qué se cancela el pedido.",
+        "reasonTooLong": "Mantén el motivo por debajo de {max} caracteres.",
+        "cancelOrder": "Cancelar pedido",
+        "hasInvoices": "Este pedido todavía tiene una factura. Anula o elimina la factura primero (al anularla se devuelven sus cantidades) y luego cancela el pedido.",
+        "seeInvoices": "Ver las facturas"
+      },
+      "deleteDialog": {
+        "title": "¿Eliminar este borrador?",
+        "message": "El borrador del pedido se elimina definitivamente. Un pedido confirmado no se puede eliminar, solo cancelar.",
+        "delete": "Eliminar borrador"
+      },
+      "invoiceDialog": {
+        "title": "Facturar este pedido",
+        "intro": "Factura el pedido a sus precios fijos. Puedes facturarlo por partes: lo que no se facture ahora queda pendiente en el pedido.",
+        "invoiceAndIssue": "Crear y emitir factura",
+        "createDraft": "Crear factura en borrador",
+        "issueDate": "Fecha de emisión",
+        "issueDateHint": "Déjalo vacío para hoy ({today}).",
+        "dueDate": "Fecha de vencimiento",
+        "terms": "Condiciones de pago",
+        "termsDefault": "Predeterminado del espacio de trabajo",
+        "termsOnIssue": "Vence al emitir",
+        "termsDays": "{count} días",
+        "issueNow": "Emitir la factura ahora",
+        "issueNowHint": "La factura recibe su número y puede enviarse de inmediato.",
+        "draftHint": "Déjala como borrador para revisarla antes de emitirla.",
+        "includeShipping": "Facturar el envío con esta factura",
+        "problems": {
+          "nothing": "Elige una cantidad mayor que cero en al menos una línea.",
+          "issueDateInvalid": "Introduce una fecha de emisión válida.",
+          "dueDateInvalid": "Introduce una fecha de vencimiento válida.",
+          "dueBeforeIssue": "La fecha de vencimiento no puede ser anterior a la fecha de emisión."
+        }
+      },
+      "fulfilDialog": {
+        "title": "Registrar entrega",
+        "intro": "Registra lo que se entregó al comprador. La entrega se controla aparte de la facturación: puede ir primero cualquiera de las dos.",
+        "record": "Registrar entrega",
+        "note": "Nota",
+        "noteHint": "Opcional, por ejemplo un número de albarán.",
+        "problems": {
+          "nothing": "Elige una cantidad mayor que cero en al menos una línea.",
+          "noteTooLong": "Mantén la nota por debajo de {max} caracteres."
+        }
+      },
+      "detail": {
+        "noAccessTitle": "Sin acceso",
+        "noAccess": "No tienes permiso para ver los pedidos de venta.",
+        "loading": "Cargando el pedido",
+        "back": "Volver a pedidos de venta",
+        "noBuyer": "Sin comprador",
+        "edit": "Editar",
+        "confirm": "Confirmar pedido",
+        "recordDelivery": "Registrar entrega",
+        "invoice": "Facturar...",
+        "more": "Más acciones",
+        "cancel": "Cancelar pedido",
+        "delete": "Eliminar borrador",
+        "cancelledOn": "Cancelado el {date}",
+        "draftHint": "Este pedido es un borrador. Confírmalo para fijar sus precios y empezar la facturación y la entrega.",
+        "notes": "Notas",
+        "terms": "Condiciones",
+        "progress": "Progreso",
+        "invoiced": "Facturado",
+        "fulfilled": "Entregado"
+      },
+      "lines": {
+        "title": "Líneas",
+        "scrollArea": "Líneas del pedido",
+        "item": "Artículo",
+        "ordered": "Pedido",
+        "invoiced": "Facturado",
+        "fulfilled": "Entregado",
+        "toInvoice": "Por facturar",
+        "unitPrice": "Precio unitario",
+        "amount": "Importe",
+        "taxLine": "{name} {rate}%",
+        "taxRate": "Impuesto {rate}%",
+        "invoicedBar": "Parte facturada de {name}",
+        "fulfilledBar": "Parte entregada de {name}"
+      },
+      "totals": {
+        "title": "Totales",
+        "subtotal": "Subtotal",
+        "discount": "Descuento",
+        "shipping": "Envío",
+        "shippingBilled": "Facturado",
+        "shippingPending": "Facturado con la primera factura",
+        "tax": "Impuesto",
+        "total": "Total"
+      },
+      "info": {
+        "title": "Detalles",
+        "buyer": "Comprador",
+        "email": "Correo",
+        "phone": "Teléfono",
+        "quote": "Presupuesto",
+        "deal": "Negocio",
+        "owner": "Responsable",
+        "reference": "Referencia",
+        "expected": "Previsto",
+        "created": "Creado",
+        "confirmed": "Confirmado"
+      },
+      "invoices": {
+        "title": "Facturas de este pedido",
+        "none": "Todavía no se ha creado ninguna factura a partir de este pedido.",
+        "noneDraft": "Las facturas se pueden crear una vez confirmado el pedido.",
+        "draft": "Borrador",
+        "voidNote": "Al anular una factura, sus cantidades vuelven al pedido."
+      },
+      "builder": {
+        "noAccessTitle": "Sin acceso",
+        "noAccess": "No tienes permiso para modificar los pedidos de venta.",
+        "loading": "Cargando",
+        "frozen": "Este pedido está confirmado, así que sus líneas y precios están fijos. Cancélalo y crea uno nuevo para cambiarlos.",
+        "openOrder": "Abrir el pedido",
+        "back": "Atrás",
+        "editTitle": "Editar {number}",
+        "newTitle": "Nuevo pedido de venta",
+        "unsaved": "Cambios sin guardar",
+        "cancel": "Cancelar",
+        "saveChanges": "Guardar cambios",
+        "createDraft": "Crear borrador",
+        "conflict": "Otra persona cambió este borrador mientras editabas. Recarga para ver su versión; tus cambios aquí se perderán.",
+        "reload": "Recargar",
+        "saved": "Borrador guardado.",
+        "created": "Pedido {number} creado como borrador.",
+        "fixProblems": "Corrige primero los campos marcados.",
+        "serverRejected": "El servidor no aceptó algunos valores. Revisa los campos e inténtalo de nuevo.",
+        "startFrom": "Partir de",
+        "source": {
+          "scratch": "Un pedido en blanco",
+          "quote": "Una propuesta o presupuesto aceptado"
+        },
+        "loadingQuote": "Cargando la oferta...",
+        "buyer": "Comprador",
+        "contact": "Contacto",
+        "contactHint": "Elige un contacto para vincular el pedido a él, o escribe el comprador abajo.",
+        "buyerName": "Nombre del comprador",
+        "fromQuoteHint": "Si se deja vacío, se usa el comprador de la oferta.",
+        "buyerEmail": "Correo",
+        "buyerPhone": "Teléfono",
+        "details": "Datos del pedido",
+        "currency": "Moneda",
+        "currencyHint": "Tres letras, como USD o KWD.",
+        "currencyLocked": "Se fija una vez creado el pedido.",
+        "expectedDate": "Fecha prevista",
+        "expectedHint": "Cuándo espera el comprador la entrega.",
+        "reference": "Referencia",
+        "referenceHint": "Por ejemplo, el número de orden de compra del comprador.",
+        "linesFromQuote": "Líneas",
+        "linesFromQuoteHint": "El pedido toma las líneas, precios e impuestos de la oferta aceptada, con su descuento general incorporado en las líneas. Puedes seguir editando las líneas del borrador después de crearlo.",
+        "lineItems": "Líneas de artículo",
+        "shippingNotes": "Envío, notas y condiciones",
+        "shipping": "Envío ({currency})",
+        "shippingHint": "Se factura con la primera factura.",
+        "notes": "Notas",
+        "notesHint": "Se muestra en el pedido.",
+        "terms": "Condiciones",
+        "termsHint": "Se trasladan a las facturas creadas a partir de este pedido.",
+        "draftNote": "El pedido sigue en borrador hasta que lo confirmes. Al confirmarlo se fijan sus precios.",
+        "quoteTotals": "Totales de la oferta",
+        "quoteTotalsNote": "Igual que en la oferta aceptada. Las cifras propias del pedido aparecen cuando se crea.",
+        "subtotal": "Subtotal",
+        "discount": "Descuento",
+        "tax": "Impuesto",
+        "total": "Total",
+        "openExisting": "Abrir pedido {number}",
+        "viewOrders": "Ver todos los pedidos",
+        "pickAnother": "Elegir otra oferta",
+        "problems": {
+          "buyerRequired": "Elige un contacto o escribe el nombre del comprador.",
+          "emailInvalid": "Introduce una dirección de correo válida.",
+          "currencyInvalid": "Introduce un código de moneda de tres letras.",
+          "expectedDateInvalid": "Introduce una fecha válida.",
+          "shippingInvalid": "Introduce un importe válido.",
+          "noLines": "Añade al menos una línea.",
+          "referenceTooLong": "Mantén la referencia por debajo de 191 caracteres."
+        },
+        "lineProblems": {
+          "descriptionRequired": "Describe esta línea.",
+          "qtyInvalid": "Introduce una cantidad mayor que cero.",
+          "priceInvalid": "Introduce un precio válido.",
+          "lineDiscountInvalid": "Introduce un descuento válido.",
+          "hsnRequired": "Introduce el código HSN/SAC.",
+          "hsnInvalid": "Introduce un código HSN/SAC válido.",
+          "taxRateRemoved": "El tipo de impuesto de esta línea ya no existe. Elige uno vigente."
+        }
+      },
+      "quotePicker": {
+        "search": "Buscar ofertas aceptadas",
+        "results": "Propuestas y presupuestos aceptados",
+        "loading": "Cargando ofertas",
+        "noMatch": "Ninguna oferta aceptada coincide.",
+        "none": "Todavía no hay ninguna propuesta ni presupuesto aceptado.",
+        "kind": {
+          "proposal": "Propuesta",
+          "estimate": "Presupuesto"
+        },
+        "untitled": "Sin título",
+        "accepted": "Aceptado el {date}"
+      }
+    }
+  }
+}

@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "Vai trò & quyền",
+      "roles": "Vai trò",
+      "permissions": "Quyền",
+      "staff": "Vai trò nhân viên"
+    },
+    "common": {
+      "admin": "Quản trị",
+      "breadcrumb": "Đường dẫn",
+      "loading": "Đang tải…",
+      "retry": "Thử lại",
+      "requestId": "Mã yêu cầu",
+      "cancel": "Hủy",
+      "noAccess": {
+        "title": "Bạn không có quyền truy cập màn hình này",
+        "body": "Vai trò của bạn không có quyền nền tảng màn hình này cần. Hãy nhờ Quản trị viên cấp cao cấp quyền.",
+        "bodyWithKey": "Màn hình này cần quyền nền tảng {permission}. Hãy nhờ Quản trị viên cấp cao thêm quyền này vào một trong các vai trò của bạn.",
+        "back": "Quay lại bảng điều khiển"
+      },
+      "errors": {
+        "unexpected": "Đã xảy ra lỗi phía chúng tôi. Vui lòng thử lại; nếu vẫn tiếp diễn, hãy cung cấp mã yêu cầu.",
+        "request": "Không thể hoàn tất yêu cầu.",
+        "validation": "Kiểm tra biểu mẫu và thử lại.",
+        "validationField": "{message}",
+        "conflict": "Có người khác đã thay đổi vai trò này khi bạn đang chỉnh sửa. Tải lại để xem phiên bản của họ, rồi áp dụng lại thay đổi của bạn.",
+        "noAccess": "Bạn cần quyền nền tảng {permission} để thực hiện việc này.",
+        "nameTaken": "Tên này đã được sử dụng.",
+        "nameRequired": "Tên vai trò là bắt buộc.",
+        "permissionNameRequired": "Tên quyền là bắt buộc.",
+        "permissionNameFormat": "Dùng chữ thường, chữ số và dấu gạch dưới, các phần cách nhau bằng dấu chấm.",
+        "locked": "Quản trị viên cấp cao bị khóa hệ thống: không thể đổi tên, gỡ quyền hoặc xóa.",
+        "lockedDelete": "Vai trò Quản trị viên cấp cao bị khóa hệ thống và không thể xóa.",
+        "permissionSystem": "Quyền này do nền tảng kiểm tra và không thể xóa.",
+        "permissionUnknown": "Các quyền này không có trong danh mục: {names}.",
+        "reassignSame": "Chọn một vai trò khác để chuyển người dùng sang.",
+        "lastSuperAdmin": "Phải có ít nhất một Quản trị viên cấp cao đang hoạt động.",
+        "privilegedRole": "Chỉ Quản trị viên cấp cao mới có thể cấp hoặc thu hồi vai trò Quản trị viên cấp cao.",
+        "notFound": "Mục này không còn tồn tại. Có thể đã bị xóa."
+      }
+    },
+    "list": {
+      "crumb": "Vai trò",
+      "eyebrow": "Quản trị · Người dùng & quyền truy cập · Vai trò",
+      "titleLead": "Vai trò &",
+      "titleAccent": "quyền",
+      "description": "Xác định mỗi vai trò được làm gì trên toàn nền tảng. Mỗi người dùng được gán một vai trò; quyền được gom theo từng vai trò.",
+      "managePermissions": "Quản lý quyền",
+      "addRole": "Thêm vai trò",
+      "kpi": {
+        "label": "Tổng hợp vai trò",
+        "total": "Tổng vai trò",
+        "totalHint": "{system} hệ thống · {custom} tùy chỉnh",
+        "permissions": "Tổng quyền",
+        "permissionsHint": "trên các mô-đun",
+        "users": "Người dùng có vai trò",
+        "usersHint": "trên tất cả vai trò",
+        "noUsers": "Vai trò không có người dùng",
+        "noUsersHint": "cân nhắc lưu trữ"
+      },
+      "filter": {
+        "label": "Lọc vai trò theo loại",
+        "all": "Tất cả",
+        "system": "Hệ thống",
+        "custom": "Tùy chỉnh",
+        "search": "Tìm vai trò…",
+        "searchLabel": "Tìm vai trò"
+      },
+      "table": {
+        "caption": "Vai trò nền tảng",
+        "index": "#",
+        "name": "Tên vai trò",
+        "type": "Loại",
+        "users": "Người dùng",
+        "permissions": "Quyền",
+        "lastEdited": "Chỉnh sửa lần cuối",
+        "actions": "Thao tác"
+      },
+      "systemRole": "Vai trò hệ thống",
+      "customRole": "Vai trò tùy chỉnh",
+      "systemBadge": "Hệ thống",
+      "customBadge": "Tùy chỉnh",
+      "row": {
+        "menu": "Thao tác cho {name}",
+        "edit": "Sửa vai trò",
+        "delete": "Xóa"
+      },
+      "footer": {
+        "showing": "Hiển thị {shown} / {total} vai trò",
+        "add": "+ Thêm vai trò"
+      },
+      "empty": {
+        "none": "Chưa có vai trò nào. <link>Tạo vai trò đầu tiên</link>.",
+        "noMatch": "Không có vai trò nào khớp bộ lọc.",
+        "clear": "Xóa bộ lọc"
+      },
+      "delete": {
+        "title": "Xóa vai trò",
+        "message": "Xóa vai trò {name}? Người dùng được gán vai trò này sẽ mất toàn bộ quyền. Không thể hoàn tác.",
+        "confirm": "Có, xóa",
+        "cancel": "Hủy"
+      },
+      "toasts": {
+        "deleted": "Đã xóa vai trò “{name}”."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Vai trò",
+      "crumbNew": "Mới",
+      "eyebrowNew": "Quản trị · Vai trò · Mới",
+      "eyebrowEdit": "Quản trị · Đang sửa vai trò",
+      "titleLead": "Tạo",
+      "titleAccent": "vai trò mới",
+      "description": "Chọn tên, rồi đánh dấu các ô để cấp cho vai trò này quyền truy cập các mô-đun cụ thể. Bạn có thể chỉnh sửa bất cứ lúc nào.",
+      "summary": "{count} / {total} quyền · chỉnh sửa lần cuối {date}.",
+      "userChip": "{count, plural, other {# người dùng}}",
+      "save": "Lưu thay đổi",
+      "create": "Tạo vai trò",
+      "saving": "Đang lưu…",
+      "reload": "Tải lại vai trò",
+      "discard": "Bạn có thay đổi chưa lưu. Rời đi mà không lưu?",
+      "duplicatedBanner": "Đã nhân bản vai trò thành “{name}”. Chỉnh sửa bản sao bên dưới.",
+      "lockedNotice": "{name} bị khóa hệ thống: không thể đổi tên, gỡ quyền hoặc xóa.",
+      "details": "Chi tiết vai trò",
+      "name": "Tên vai trò",
+      "namePlaceholder": "Ví dụ: Trưởng nhóm bán hàng",
+      "template": "Bắt đầu từ mẫu",
+      "templateBlank": "Trống · không có quyền",
+      "templateOption": "{name} · {count, plural, other {# quyền}}",
+      "templateBusy": "Đang tải mẫu…",
+      "descriptionLabel": "Mô tả",
+      "descriptionPlaceholder": "Vai trò này làm gì? Hiển thị cho quản trị viên.",
+      "toasts": {
+        "created": "Đã tạo vai trò “{name}”.",
+        "updated": "Đã cập nhật vai trò “{name}”."
+      }
+    },
+    "matrix": {
+      "title": "Gán quyền",
+      "counter": "Đã chọn {count, number} / {total, number}",
+      "selectAll": "Chọn tất cả quyền",
+      "module": "Mô-đun",
+      "selectAllColumn": "Chọn tất cả",
+      "available": "Quyền khả dụng",
+      "selectAllModule": "Chọn tất cả",
+      "selectAllOf": "Chọn tất cả quyền {module}",
+      "empty": "Chưa có quyền nào được định nghĩa. <link>Tạo một quyền</link>.",
+      "emptyPlain": "Chưa có quyền nào được định nghĩa."
+    },
+    "dangerZone": {
+      "title": "Vùng nguy hiểm",
+      "irreversible": "không thể đảo ngược",
+      "duplicate": {
+        "title": "Nhân bản vai trò",
+        "hint": "Tạo bản sao với cùng quyền",
+        "action": "Nhân bản",
+        "busy": "Đang nhân bản…"
+      },
+      "reassign": {
+        "title": "Gán lại tất cả người dùng",
+        "hint": "Chuyển {count, plural, other {# người dùng}} sang vai trò khác",
+        "targetLabel": "Chuyển người dùng sang",
+        "placeholder": "Đến…",
+        "action": "Chuyển",
+        "busy": "Đang chuyển…"
+      },
+      "moved": "Đã chuyển {count} người dùng từ “{from}” sang “{to}”.",
+      "delete": {
+        "title": "Xóa vai trò",
+        "hint": "Xóa vai trò và gỡ liên kết tất cả người dùng.",
+        "action": "Xóa",
+        "dialogTitle": "Xóa vai trò",
+        "dialogMessage": "Xóa vai trò {name}? Người dùng được gán vai trò này sẽ mất toàn bộ quyền. Không thể hoàn tác.",
+        "confirm": "Có, xóa",
+        "cancel": "Hủy"
+      },
+      "deleted": "Đã xóa vai trò “{name}”."
+    },
+    "permissions": {
+      "crumb": "Quyền",
+      "eyebrow": "Quản trị · Người dùng & quyền truy cập · Quyền",
+      "titleLead": "Tất cả",
+      "titleAccent": "quyền",
+      "description": "Tất cả cờ quyền mà nền tảng nhận diện, được nhóm theo mô-đun. Thêm cờ mới tại đây, rồi gắn vào vai trò trong trình chỉnh sửa vai trò.",
+      "backToRoles": "Quay lại danh sách vai trò",
+      "add": "Thêm quyền",
+      "kpi": {
+        "label": "Tổng hợp quyền",
+        "total": "Tổng quyền",
+        "totalHint": "trên {modules, plural, other {# mô-đun}}",
+        "used": "Được dùng trong vai trò",
+        "usedHint": "gắn với ≥ 1 vai trò",
+        "orphans": "Quyền mồ côi",
+        "orphansHint": "không gắn với vai trò nào",
+        "last": "Thêm gần nhất"
+      },
+      "filter": {
+        "search": "Tìm tên quyền…",
+        "searchLabel": "Tìm tên quyền",
+        "moduleLabel": "Mô-đun",
+        "allModules": "Tất cả mô-đun",
+        "count": "{count, plural, other {# quyền}} trong {modules, plural, other {# mô-đun}}"
+      },
+      "groupsLabel": "Quyền theo mô-đun",
+      "groupCount": "{count, plural, other {# quyền}}",
+      "orphan": "mồ côi",
+      "system": "hệ thống",
+      "systemHint": "Do nền tảng kiểm tra nên không thể xóa.",
+      "inRoles": "trong {count, plural, other {# vai trò}}",
+      "deleteName": "Xóa quyền {name}",
+      "empty": {
+        "none": "Chưa có quyền nào được định nghĩa. <link>Tạo quyền đầu tiên</link>.",
+        "noMatch": "Không có quyền nào khớp tìm kiếm."
+      },
+      "delete": {
+        "action": "Xóa",
+        "title": "Xóa quyền",
+        "message": "Xóa quyền {name}? Mọi vai trò đang dùng quyền này sẽ mất khả năng tương ứng ngay lập tức.",
+        "confirm": "Có, xóa",
+        "cancel": "Hủy"
+      },
+      "toasts": {
+        "deleted": "Đã xóa quyền “{name}”."
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "Quyền",
+      "crumbNew": "Mới",
+      "eyebrow": "Quản trị · Quyền · Mới",
+      "titleLead": "Tạo",
+      "titleAccent": "quyền mới",
+      "description": "Thêm một cờ năng lực chi tiết. Sau khi tạo, gắn cờ vào một hoặc nhiều vai trò trong trình chỉnh sửa vai trò.",
+      "create": "Tạo quyền",
+      "creating": "Đang tạo…",
+      "details": "Chi tiết quyền",
+      "module": "Mô-đun",
+      "modulePlaceholder": "Chọn mô-đun",
+      "moduleHint": "Quyền được nhóm theo mô-đun trong trình chỉnh sửa vai trò.",
+      "action": "Hành động",
+      "actionHint": "Chữ thường, không có khoảng trắng. Sẽ được ghép thành",
+      "actionPlaceholder": "Ví dụ: export · refund · approve",
+      "name": "Tên quyền",
+      "namePlaceholder": "module.action — tự động điền từ trên",
+      "nameHint": "Tự động điền từ mô-đun + hành động. Chỉ sửa nếu bạn cần chuỗi tùy chỉnh.",
+      "tip": "<b>Quy ước đặt tên:</b> dùng <code>module.action</code> viết thường. Ví dụ: <code>campaigns.send</code>, <code>billing.refund</code>, <code>audit.export</code>.",
+      "preview": {
+        "title": "Xem trước quyền",
+        "appearsUnder": "Sẽ hiển thị dưới <b>{module}</b> trong trình chỉnh sửa vai trò.",
+        "selectedModule": "mô-đun đã chọn"
+      },
+      "code": {
+        "title": "Tham chiếu mã",
+        "hint": "Dùng <code>@PlatformPermission()</code> trên một route của nền tảng để yêu cầu quyền này."
+      },
+      "tipCard": "<b>Mẹo:</b> các quyền đặt tên theo dạng <code>module.action</code> sẽ tự động nhóm lại trong trình chỉnh sửa vai trò.",
+      "toasts": {
+        "created": "Đã tạo quyền “{name}”."
+      }
+    },
+    "staff": {
+      "crumbRoles": "Vai trò",
+      "crumb": "Vai trò nhân viên",
+      "eyebrow": "Quản trị · Người dùng & quyền truy cập · Vai trò nhân viên",
+      "titleLead": "Nhân viên",
+      "titleAccent": "vai trò",
+      "description": "Gán cho mỗi người vận hành của bảng điều khiển này các vai trò nền tảng quyết định họ được làm gì. Khi lưu, vai trò của người vận hành sẽ được thay bằng đúng những vai trò đã chọn.",
+      "backToRoles": "Quay lại danh sách vai trò",
+      "caption": "Người vận hành và vai trò nền tảng",
+      "table": {
+        "operator": "Người vận hành",
+        "tier": "Quyền truy cập bảng điều khiển",
+        "status": "Trạng thái",
+        "roles": "Vai trò nền tảng",
+        "actions": "Thao tác"
+      },
+      "tier": {
+        "super_admin": "Quản trị viên cấp cao",
+        "support": "Hỗ trợ",
+        "auditor": "Kiểm toán viên"
+      },
+      "status": {
+        "active": "Hoạt động",
+        "suspended": "Đã tạm ngưng"
+      },
+      "noRoles": "Chưa có vai trò",
+      "rolesOf": "Vai trò của {name}",
+      "assign": "Gán vai trò",
+      "assignFor": "Gán vai trò cho {name}",
+      "empty": "Chưa có người vận hành nào.",
+      "dialog": {
+        "title": "Gán vai trò cho {name}",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "save": "Lưu vai trò",
+        "saving": "Đang lưu…",
+        "hint": "Đánh dấu mọi vai trò mà người vận hành này nên có.",
+        "superOnly": "Chỉ Quản trị viên cấp cao mới có thể cấp hoặc thu hồi vai trò này.",
+        "count": "{count, plural, =0 {Chưa chọn vai trò nào} other {Đã chọn # vai trò}}"
+      },
+      "toasts": {
+        "saved": "Đã cập nhật vai trò cho “{name}”."
+      }
+    }
+  }
+}

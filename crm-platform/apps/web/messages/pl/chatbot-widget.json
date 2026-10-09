@@ -1,0 +1,350 @@
+{
+  "chatbotWidget": {
+    "nav": {
+      "title": "Widżet czatu"
+    },
+    "common": {
+      "dismiss": "Odrzuć"
+    },
+    "paywall": {
+      "kicker": "Plan",
+      "title": "Widżety chatbota nie są w Twoim planie",
+      "body": "Twój plan nie obejmuje widżetów chatbota. Zmień plan na wyższy, aby odblokować tę funkcję.",
+      "upgrade": "Zobacz plany"
+    },
+    "list": {
+      "tip": "Wskazówka",
+      "tipBody": "Wstaw jednowierszowy fragment kodu na dowolną stronę, aby uruchomić pływającą bańkę czatu. Każdy widżet może być obsługiwany przez inteligentnego agenta, kierować do WhatsApp lub jedno i drugie — rozmowy z odwiedzającymi trafiają do skrzynki odbiorczej zespołu.",
+      "statusViews": "Status widżetu",
+      "view": {
+        "all": "Wszystkie widżety",
+        "active": "Aktywne",
+        "paused": "Wstrzymane"
+      },
+      "status": {
+        "all": "Wszystkie",
+        "active": "Aktywne",
+        "paused": "Wstrzymane"
+      },
+      "trainFirst": "Najpierw wytrenuj",
+      "trainBody": "Zbuduj inteligentnego agenta i dodaj wiedzę w <link>Szkoleniu AI</link>, a następnie przypisz go tutaj, aby widżet odpowiadał Twoim głosem.",
+      "workspace": "Przestrzeń robocza",
+      "title": "Chatbot",
+      "titleAccent": "widżety",
+      "intro": "Osadź pływającą bańkę czatu na dowolnej stronie. Inteligentny agent odpowiada w przeglądarce i w razie potrzeby przekazuje rozmowę do Zunifikowanej skrzynki odbiorczej.",
+      "activePill": "{count} aktywnych",
+      "newWidget": "Nowy widżet",
+      "card": {
+        "total": "Wszystkie widżety",
+        "visitors": "Odwiedzający",
+        "avg": "Śr. / widżet",
+        "health": "Kondycja",
+        "activeHint": "{count} aktywnych",
+        "allTime": "łącznie",
+        "visitorsUnit": "odwiedzających"
+      },
+      "health": {
+        "healthy": "sprawne",
+        "empty": "puste",
+        "attention": "wymaga uwagi"
+      },
+      "search": "Szukaj po nazwie lub slugu…",
+      "col": {
+        "widget": "Widżet",
+        "engine": "Silnik",
+        "agent": "Inteligentny agent",
+        "visitors": "Odwiedzający",
+        "updated": "Zaktualizowano",
+        "actions": "Działania"
+      },
+      "loading": "Wczytywanie widżetów",
+      "loadError": "Nie udało się wczytać widżetów.",
+      "retry": "Spróbuj ponownie",
+      "emptyTitle": "Brak widżetów",
+      "emptyBody": "Zbuduj swój pierwszy widżet czatu — będzie działał jako pływająca bańka na stronie, na której go osadzisz.",
+      "createWidget": "Utwórz widżet",
+      "noMatch": "Żaden widżet na tej stronie nie pasuje do wyszukiwania.",
+      "showing": "Wyświetlono",
+      "of": "z",
+      "widgetsCount": "{count} widżetów",
+      "loadMore": "Wczytaj więcej",
+      "pill": {
+        "active": "Aktywny",
+        "paused": "Wstrzymany"
+      },
+      "action": {
+        "preview": "Otwórz samodzielny podgląd",
+        "copy": "Kopiuj fragment kodu do osadzenia",
+        "edit": "Edytuj widżet",
+        "rotate": "Zmień token osadzania",
+        "duplicate": "Duplikuj widżet",
+        "delete": "Usuń widżet"
+      },
+      "copied": "Skopiowano fragment kodu — wklej go przed {tag} na swojej stronie.",
+      "duplicateFailed": "Nie udało się zduplikować widżetu.",
+      "rotated": "Token zmieniony — skopiuj nowy fragment kodu.",
+      "rotateFailed": "Zmiana nie powiodła się — {reason}",
+      "networkError": "błąd sieci",
+      "deleted": "Widżet usunięty.",
+      "deleteFailed": "Usuwanie nie powiodło się — {reason}",
+      "rotateTitle": "Zmienić token osadzania tego widżetu?",
+      "rotateBody": "Obecny fragment kodu na Twojej stronie natychmiast przestanie działać. Trzeba będzie skopiować i wkleić nowy fragment.",
+      "rotate": "Zmień",
+      "cancel": "Anuluj",
+      "deleteTitle": "Usunąć „{name}”?",
+      "deleteBody": "Fragment kodu do osadzenia na Twojej stronie natychmiast przestanie działać. Dotychczasowe rozmowy pozostaną w skrzynce odbiorczej zespołu.",
+      "delete": "Usuń widżet",
+      "keep": "Zachowaj",
+      "copyManuallyTitle": "Skopiuj to ręcznie",
+      "gotIt": "Rozumiem",
+      "close": "Zamknij"
+    },
+    "builder": {
+      "loading": "Wczytywanie widżetu",
+      "notFoundTitle": "Nie znaleziono widżetu",
+      "notFoundBody": "Ten widżet nie istnieje w Twojej przestrzeni roboczej.",
+      "loadError": "Nie udało się wczytać widżetu.",
+      "backToWidgets": "Wróć do widżetów",
+      "back": "Wróć do widżetów",
+      "crumb": "Widżety chatbota",
+      "crumbEdit": "Edytuj",
+      "crumbNew": "Nowy",
+      "titleNew": "Zbuduj chatbota",
+      "titleEdit": "Edytuj chatbota",
+      "titleAccent": "widżet",
+      "stateSaved": "Zapisano",
+      "stateDraft": "Wersja robocza / niezapisane",
+      "saveDraft": "Zapisz wersję roboczą",
+      "stepper": "Kroki kreatora",
+      "steps": {
+        "setup": "Konfiguracja",
+        "look": "Wygląd",
+        "voice": "Głos",
+        "launch": "Uruchomienie"
+      },
+      "previous": "Wstecz",
+      "next": "Dalej",
+      "stepOf": "Krok {n} z {total}",
+      "launchWidget": "Uruchom widżet",
+      "draftSaved": "Wersja robocza zapisana.",
+      "savedEmbed": "Zapisano — kod do osadzenia gotowy do skopiowania.",
+      "saveFailed": "Zapis nie powiódł się — sprawdź zaznaczony krok.",
+      "snippetCopied": "Skopiowano fragment kodu.",
+      "clipboardBlocked": "Schowek zablokowany — zaznacz fragment kodu ręcznie.",
+      "problem": {
+        "name": "Nazwij swój widżet.",
+        "assistant": "Połącz inteligentnego agenta — albo przełącz silnik na łącze do WhatsApp.",
+        "whatsapp": "Dodaj pełny numer WhatsApp — kierunkowy i cyfry.",
+        "launcherColour": "Kolor przycisku musi być w formacie szesnastkowym (np. #075E54).",
+        "headerTitle": "Nadaj oknu czatu tytuł.",
+        "welcome": "Napisz zdanie otwierające.",
+        "bgImage": "Dodaj adres URL obrazu tła lub przełącz na jednolity kolor."
+      },
+      "setup": {
+        "title": "Konfiguracja widżetu",
+        "required": "wymagane",
+        "name": "Nazwa wewnętrzna",
+        "namePlaceholder": "np. Widżet strony cennika",
+        "nameHint": "Dla Twojego zespołu. Odwiedzający nie widzą tej etykiety.",
+        "position": "Położenie przycisku",
+        "bottomRight": "Prawy dolny róg",
+        "bottomLeft": "Lewy dolny róg",
+        "positionHint": "Gdzie na Twojej stronie unosi się okrągła bańka czatu.",
+        "engine": "Silnik rozmowy",
+        "mode": {
+          "ai": {
+            "title": "Inteligentny agent",
+            "body": "Wytrenowana AI odpowiada bezpośrednio w przeglądarce."
+          },
+          "whatsapp": {
+            "title": "Link do WhatsApp",
+            "body": "Przekieruj odwiedzającego do aplikacji WhatsApp, aby porozmawiać."
+          },
+          "both": {
+            "title": "Inteligentny agent + WhatsApp",
+            "body": "Odwiedzający wybiera — czat tutaj albo otwarcie WhatsApp."
+          }
+        },
+        "agent": "Inteligentny agent (mózg)",
+        "agentPlaceholder": "— Wybierz zapisanego inteligentnego agenta —",
+        "agentHintBefore": "Nie widzisz żadnego?",
+        "agentBuild": "Zbuduj inteligentnego agenta",
+        "agentHintAfter": "najpierw.",
+        "whatsapp": "Numer WhatsApp",
+        "country": "Kraj",
+        "phonePlaceholder": "Twój numer bez numeru kierunkowego kraju",
+        "whatsappHint": "Wybierz flagę kraju — numer kierunkowy zostanie dodany automatycznie.",
+        "prefilled": "Wstępnie wpisana wiadomość (trafia do WhatsApp)",
+        "prefilledPlaceholder": "Cześć, chciałbym dowiedzieć się więcej o cenach.",
+        "prefilledHint": "Odwiedzający trafia do WhatsApp z już wpisaną tą wiadomością."
+      },
+      "look": {
+        "title": "Stylizacja przycisku i okna",
+        "tag": "marka",
+        "launcherFill": "Kolor przycisku",
+        "launcherFillHint": "Tło okrągłej bańki.",
+        "headerTint": "Odcień nagłówka okna",
+        "headerTintHint": "Górny pasek okna czatu.",
+        "headerInk": "Kolor tekstu nagłówka",
+        "headerInkHint": "Kolor tekstu i ikon nagłówka.",
+        "windowTitle": "Tytuł okna (wyświetlany w nagłówku)",
+        "windowTitlePlaceholder": "Porozmawiaj z naszym zespołem",
+        "windowTitleHint": "Zachowaj poniżej ok. 30 znaków.",
+        "icon": "Adres URL własnej ikony przycisku",
+        "optional": "opcjonalnie",
+        "iconHint": "PNG / SVG · zalecane 80×80 px · przezroczyste tło."
+      },
+      "voice": {
+        "title": "Wiadomość powitalna i powierzchnia czatu",
+        "tag": "treść",
+        "opening": "Zdanie otwierające",
+        "openingPlaceholder": "Cześć! W czym możemy dziś pomóc?",
+        "openingHint": "Pierwsza bańka widoczna po otwarciu czatu.",
+        "bubbleFill": "Kolor bańki wiadomości przychodzących",
+        "bubbleFillHint": "Kolor baniek z Twojej strony.",
+        "bubbleInk": "Kolor tekstu wiadomości przychodzących",
+        "bubbleInkHint": "Kolor tekstu wewnątrz baniek.",
+        "canvas": "Tło okna",
+        "canvasKind": {
+          "color": "Jednolity kolor",
+          "image": "Obraz kafelkowy"
+        },
+        "canvasColour": "Kolor tła okna",
+        "canvasImage": "Adres URL obrazu tła okna",
+        "canvasImageHint": "Najlepiej sprawdza się kafelkowalny PNG.",
+        "autoOpen": "Otwieraj automatycznie",
+        "autoOpenHint": "Otwiera czat ok. 1,2 s po załadowaniu strony.",
+        "intake": "Dane odwiedzającego",
+        "intakeHint": "Pola wyświetlane przed rozpoczęciem czatu. Pomiń wszystkie, aby czat był anonimowy.",
+        "intakeField": {
+          "name": "Nazwa wyświetlana",
+          "email": "Adres e-mail",
+          "phone": "Numer telefonu"
+        }
+      },
+      "launch": {
+        "title": "Przycisk wysyłania i fragment kodu do osadzenia",
+        "tag": "uruchomienie",
+        "label": "Etykieta przycisku wysyłania",
+        "labelPlaceholder": "Wyślij wiadomość",
+        "labelHint": "Unikaj „Zatwierdź”. Spróbuj „Wyślij wiadomość” lub „Zapytaj zespół”.",
+        "fill": "Kolor przycisku wysyłania",
+        "ink": "Kolor tekstu przycisku wysyłania",
+        "ready": "Gotowe. Wklej to tuż przed <code>{tag}</code> na stronie, na której ma być widżet.",
+        "copy": "Kopiuj do schowka",
+        "preview": "Otwórz samodzielny podgląd"
+      },
+      "preview": {
+        "title": "Podgląd na żywo",
+        "chat": "Czat",
+        "hi": "Cześć!",
+        "send": "Wyślij",
+        "engine": {
+          "ai": "Inteligentny agent",
+          "whatsapp": "WhatsApp",
+          "both": "AI + WhatsApp"
+        },
+        "metaEngine": "Silnik",
+        "metaPlacement": "Położenie",
+        "metaAutoOpen": "Automatyczne otwieranie",
+        "metaIntake": "Dane",
+        "left": "Lewo",
+        "right": "Prawo",
+        "on": "Wł.",
+        "off": "Wył.",
+        "none": "Brak"
+      },
+      "colorSwatch": "{label} (próbka)"
+    },
+    "whatsappBuilder": {
+      "crumb": "Widżet WhatsApp",
+      "title": "Widżet WhatsApp",
+      "titleAccent": "Instalacja i personalizacja",
+      "type": "Typ widżetu",
+      "nameHint": "Tylko Ty widzisz tę nazwę. Jest to także nazwa firmy wyświetlana w komunikatorze.",
+      "save": "Zapisz zmiany",
+      "saved": "Zmiany zapisane. Twój widżet działa.",
+      "card": {
+        "1": {
+          "title": "Stylizuj przycisk czatu WhatsApp",
+          "subtitle": "Wybierz ładny projekt przycisku czatu, który najlepiej pasuje do Twojej witryny",
+          "buttonType": "Typ przycisku",
+          "type": {
+            "pill": "Przycisk „Porozmawiaj z nami”",
+            "icon": "Okrągły przycisk tylko z ikoną"
+          },
+          "iconOnly": "Tylko ikona",
+          "buttonColor": "Kolor przycisku",
+          "pickCustom": "Wybierz własny kolor",
+          "custom": "Własny {hex}"
+        },
+        "2": {
+          "title": "Zaprojektuj swój komunikator",
+          "subtitle": "Wybierz ładny obraz dla swojego komunikatora",
+          "image": "Obraz komunikatora",
+          "names": {
+            "support": "Wsparcie",
+            "store": "Sklep",
+            "chat": "Czat",
+            "person": "Osoba"
+          },
+          "url": "Lub użyj adresu własnego obrazu",
+          "urlHint": "Wklej adres kwadratowego obrazu (https://...). Przesyłanie pliku nie jest jeszcze dostępne."
+        },
+        "3": {
+          "title": "Ustaw wiadomość powitalną",
+          "subtitle": "Przywitaj swoich klientów",
+          "greeting": "Powitanie",
+          "greetingHint": "Przywitaj się z klientami, gdy otworzą komunikator",
+          "intro": "Wiadomość wprowadzająca",
+          "introHint": "Przedstaw swoją firmę i powiedz klientom, w czym możesz pomóc"
+        },
+        "4": {
+          "title": "Ustaw położenie przycisku czatu",
+          "subtitle": "Dostosuj położenie przycisku na komputerach i urządzeniach mobilnych",
+          "preview": "Podgląd przycisku czatu",
+          "desktopPreview": "Podgląd na komputerze",
+          "mobilePreview": "Podgląd na urządzeniu mobilnym",
+          "desktopPosition": "Położenie przycisku na komputerze",
+          "mobilePosition": "Położenie przycisku na urządzeniu mobilnym",
+          "left": "Lewo",
+          "right": "Prawo",
+          "desktopSideSpacing": "Odstęp boczny na komputerze",
+          "desktopBottomSpacing": "Odstęp dolny na komputerze",
+          "mobileSideSpacing": "Odstęp boczny na urządzeniu mobilnym",
+          "mobileBottomSpacing": "Odstęp dolny na urządzeniu mobilnym",
+          "px": "px"
+        },
+        "5": {
+          "title": "Skonfiguruj swój numer WhatsApp",
+          "subtitle": "Połącz numer WhatsApp z komunikatorem",
+          "number": "Numer WhatsApp",
+          "numberHint": "Komunikator będzie kierować Twoich klientów na ten numer WhatsApp",
+          "prefilled": "Wstępnie wypełniona wiadomość",
+          "prefilledHint": "To będzie pierwszy domyślny tekst wiadomości"
+        }
+      },
+      "install": {
+        "title": "Zainstaluj na swojej stronie",
+        "body": "Wklej ten znacznik tuż przed zamykającym znacznikiem body na każdej stronie, która ma wyświetlać widżet.",
+        "copy": "Kopiuj kod"
+      },
+      "problem": {
+        "name": "Nazwij swój widżet.",
+        "avatar": "Użyj wbudowanego obrazu lub adresu obrazu http(s).",
+        "greeting": "Dodaj powitanie.",
+        "intro": "Dodaj wiadomość wprowadzającą.",
+        "spacing": "Odstęp musi być liczbą całkowitą pikseli od 0 do 500.",
+        "whatsapp": "Dodaj pełny numer WhatsApp: numer kierunkowy i cyfry."
+      },
+      "preview": {
+        "title": "Podgląd na żywo",
+        "desktop": "Komputer",
+        "mobile": "Urządzenie mobilne",
+        "frameTitle": "Podgląd na żywo Twojego widżetu WhatsApp",
+        "hint": "Zwiń panel okrągłym przyciskiem, otwórz go ponownie z przycisku i wypróbuj Rozpocznij rozmowę.",
+        "businessName": "Twoja firma"
+      }
+    }
+  }
+}

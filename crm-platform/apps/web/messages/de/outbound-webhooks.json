@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "Schließen"
+    },
+    "events": {
+      "contact_created": "Kontakt erstellt",
+      "contact_updated": "Kontakt aktualisiert",
+      "contact_deleted": "Kontakt gelöscht",
+      "contact_tag_added": "Tag zu einem Kontakt hinzugefügt",
+      "contact_opted_in": "Kontakt angemeldet",
+      "deal_stage_changed": "Deal in eine andere Phase verschoben",
+      "task_created": "Aufgabe erstellt",
+      "task_assigned": "Aufgabe zugewiesen",
+      "template_status_changed": "Vorlagenstatus geändert",
+      "device_status_changed": "Gerätestatus geändert",
+      "conversation_reopened": "Unterhaltung wieder geöffnet"
+    },
+    "page": {
+      "title": "Webhooks",
+      "subtitle": "Senden Sie Ereignisse dieses Workspace bei ihrem Eintreten an Ihre eigenen Systeme. Jede Zustellung ist ein signierter JSON-POST, der erneut versucht wird, wenn Ihr Server nicht antwortet.",
+      "back": "Integrationen und Entwickler",
+      "add": "Webhook hinzufügen",
+      "list": "Webhooks",
+      "emptyTitle": "Noch keine Webhooks",
+      "empty": "Fügen Sie einen Endpunkt hinzu, um Ereignisse wie einen neuen Kontakt oder einen Deal-Phasenwechsel zu empfangen.",
+      "noAccess": "Sie haben keinen Zugriff auf Webhooks.",
+      "loadFailed": "Die Webhooks konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "allEvents": "Alle Ereignisse",
+      "signed": "Signiert",
+      "health": {
+        "off": "Aus",
+        "failing": "Fehlerhaft",
+        "healthy": "Fehlerfrei",
+        "idle": "Noch keine Zustellungen"
+      },
+      "activeFor": "Aktiv: {name}",
+      "lastDelivery": "Letzte Zustellung {when}, Antwort {status}",
+      "noDeliveries": "Noch nichts zugestellt",
+      "noAnswer": "keine Antwort",
+      "counts": "{ok} zugestellt, {failed} fehlgeschlagen",
+      "lastError": "Letzter Fehler: {error}",
+      "deliveries": "Zustellungen",
+      "test": "Test senden",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "cancel": "Abbrechen",
+      "deleteTitle": "Diesen Webhook löschen?",
+      "deleteMessage": "{name} empfängt keine Ereignisse mehr, und sein Zustellungsprotokoll wird entfernt. Dies kann nicht rückgängig gemacht werden.",
+      "created": "Webhook hinzugefügt.",
+      "saved": "Webhook gespeichert.",
+      "deleted": "Webhook gelöscht.",
+      "deleteFailed": "Der Webhook konnte nicht gelöscht werden. Versuchen Sie es erneut.",
+      "toggleFailed": "Die Änderung konnte nicht gespeichert werden. Versuchen Sie es erneut.",
+      "testOk": "Der Test wurde zugestellt (Antwort {status}).",
+      "testFailed": "Der Test ist fehlgeschlagen: {reason}",
+      "testError": "Der Test konnte nicht gesendet werden. Versuchen Sie es erneut."
+    },
+    "dialog": {
+      "addTitle": "Webhook hinzufügen",
+      "editTitle": "Webhook bearbeiten",
+      "close": "Schließen",
+      "name": "Name",
+      "nameHint": "Optional: eine Bezeichnung für Sie, zum Beispiel das System, das ihn empfängt.",
+      "url": "Endpunkt-URL",
+      "urlHint": "Eine https-Adresse, die aus dem Internet erreichbar ist. Private und interne Adressen werden abgelehnt.",
+      "urlProblem": {
+        "empty": "Geben Sie die Endpunkt-URL ein.",
+        "tooLong": "Die URL ist zu lang.",
+        "notHttps": "Die URL muss mit https:// beginnen.",
+        "invalid": "Dies ist keine gültige URL."
+      },
+      "secret": "Signiergeheimnis",
+      "secretHint": "Optional. Ist es gesetzt, trägt jede Zustellung eine Signatur, die Ihr Server prüfen kann. Es wird nie erneut angezeigt.",
+      "secretSetHint": "Ein Geheimnis ist gesetzt. Lassen Sie das Feld leer, um es beizubehalten, oder geben Sie ein neues ein, um es zu ersetzen.",
+      "secretKeep": "Unverändert",
+      "removeSecret": "Signiergeheimnis entfernen (Zustellungen werden nicht signiert)",
+      "events": "Ereignisse",
+      "allEvents": "Alle Ereignisse",
+      "pickEvents": "Wählen Sie mindestens ein Ereignis aus oder wählen Sie alle Ereignisse.",
+      "active": "Aktiv",
+      "cancel": "Abbrechen",
+      "create": "Webhook hinzufügen",
+      "save": "Änderungen speichern",
+      "failed": "Der Webhook konnte nicht gespeichert werden. Versuchen Sie es erneut."
+    },
+    "deliveries": {
+      "title": "Zustellungen: {name}",
+      "close": "Schließen",
+      "empty": "Noch keine Zustellungen. Verwenden Sie Test senden, um eine auszulösen.",
+      "failed": "Die Zustellungen konnten nicht geladen werden.",
+      "when": "Zeitpunkt",
+      "event": "Ereignis",
+      "result": "Antwort",
+      "time": "Zeit",
+      "attempt": "Versuch",
+      "test": "Test",
+      "noAnswer": "Keine Antwort"
+    }
+  }
+}

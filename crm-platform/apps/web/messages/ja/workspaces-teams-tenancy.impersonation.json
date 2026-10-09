@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "なりすまし中",
+      "viewing": "{owner} としての {workspace} を表示中",
+      "reason": "理由: {reason}",
+      "readOnly": "読み取り専用",
+      "timeLeft": "{minutes, plural, other {残り # 分}}",
+      "endsSoon": "残り1分未満",
+      "stop": "なりすましを停止",
+      "stopping": "停止中",
+      "stopFailed": "セッションを停止できませんでした。もう一度お試しください。",
+      "readOnlyRefused": "このセッションは読み取り専用のため、変更は許可されていません。",
+      "forbiddenRefused": "オーナーとしてワークスペースを表示している間は、これは利用できません。",
+      "ended": {
+        "title": "このなりすましセッションは終了しました",
+        "expired": "このリンクは既に使用されたか、期限切れです。コンソールから再度開始してください。",
+        "body": "ここからワークスペースで行える操作はありません。新しいセッションを開始するには、コンソールに戻ってください。",
+        "back": "コンソールに戻る"
+      }
+    }
+  }
+}

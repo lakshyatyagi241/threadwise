@@ -1,0 +1,326 @@
+{
+  "invoicing": {
+    "nav": {
+      "creditNotes": "Note di credito"
+    },
+    "errors": {
+      "codes": {
+        "CN_EXCEEDS_INVOICE": "Le note di credito non possono superare la fattura. Riduci gli importi o accredita ciò che resta.",
+        "CN_NOT_DRAFT": "Solo una nota di credito in bozza può essere modificata o eliminata. Ricarica per vedere lo stato attuale.",
+        "CN_ALREADY_VOID": "Questa nota di credito è già annullata.",
+        "CN_HAS_REFUND": "Per questa nota di credito è stato restituito denaro, quindi non può essere annullata. Il rimborso resta nel registro dei pagamenti.",
+        "CN_NOTHING_TO_CREDIT": "Non c’è più nulla da accreditare. Scegli una riga con un residuo o aggiungi un importo.",
+        "CN_LINE_INVALID": "Una riga accreditata non è valida: la quantità supera il residuo oppure un importo è errato. Controlla le righe evidenziate.",
+        "INV_NOT_ISSUED": "Una nota di credito può riferirsi solo a una fattura emessa."
+      }
+    },
+    "creditNotes": {
+      "status": {
+        "draft": "Bozza",
+        "issued": "Emessa",
+        "void": "Annullata"
+      },
+      "reasons": {
+        "return": "Merce restituita",
+        "price_adjustment": "Rettifica di prezzo",
+        "billing_error": "Errore di fatturazione",
+        "cancellation": "Annullamento",
+        "goodwill": "Gesto commerciale",
+        "other": "Altro"
+      },
+      "settlements": {
+        "balance": "Applicata al saldo",
+        "refund": "Rimborso in denaro"
+      },
+      "tabs": {
+        "label": "Stato della nota di credito",
+        "all": "Tutte",
+        "draft": "Bozze",
+        "issued": "Emesse",
+        "void": "Annullate"
+      },
+      "list": {
+        "title": "Note di credito",
+        "subtitle": "Documenti che riducono quanto un cliente deve su una fattura emessa.",
+        "invoices": "Fatture",
+        "newCreditNote": "Nuova nota di credito",
+        "search": "Cerca per numero o cliente",
+        "reset": "Rimuovi filtri",
+        "refresh": "Aggiorna",
+        "tableLabel": "Note di credito",
+        "noAccessTitle": "Accesso negato",
+        "noAccess": "Non hai i permessi per vedere le note di credito.",
+        "emptyFilteredTitle": "Nessuna nota di credito corrisponde",
+        "emptyFiltered": "Prova una ricerca diversa o rimuovi i filtri.",
+        "resetFilters": "Rimuovi filtri",
+        "empty": {
+          "all": {
+            "title": "Nessuna nota di credito ancora",
+            "message": "Emetti una nota di credito su una fattura quando la merce torna indietro, un prezzo era errato o vuoi restituire qualcosa."
+          },
+          "draft": {
+            "title": "Nessuna bozza",
+            "message": "Qui compaiono le note di credito che stai ancora preparando."
+          },
+          "issued": {
+            "title": "Nessuna emessa",
+            "message": "Le note di credito emesse hanno un numero e hanno già modificato la loro fattura."
+          },
+          "void": {
+            "title": "Nessuna annullata",
+            "message": "Qui vengono conservate le note di credito annullate."
+          }
+        },
+        "showing": "{count, plural, one {# nota di credito caricata} other {# note di credito caricate}}",
+        "loadMore": "Carica altre",
+        "allLoaded": "Tutte caricate",
+        "loading": "Caricamento note di credito",
+        "contactLoading": "...",
+        "invoiceChip": "Fattura {number}",
+        "clearInvoice": "Mostra le note di credito di ogni fattura"
+      },
+      "table": {
+        "draft": "Bozza",
+        "scrollArea": "Tabella delle note di credito, scorrevole in orizzontale",
+        "columns": {
+          "number": "Nota di credito",
+          "invoice": "Fattura",
+          "buyer": "Cliente",
+          "reason": "Motivo",
+          "settlement": "Regolamento",
+          "total": "Totale",
+          "applied": "Applicata al saldo",
+          "refunded": "Rimborsata in contanti",
+          "issued": "Data di emissione",
+          "status": "Stato"
+        }
+      },
+      "row": {
+        "moreFor": "Altre azioni per {name}",
+        "draft": "bozza",
+        "open": "Apri",
+        "edit": "Modifica bozza",
+        "issue": "Emetti",
+        "pdf": "Scarica PDF",
+        "print": "Stampa",
+        "void": "Annulla nota",
+        "delete": "Elimina bozza"
+      },
+      "dialogs": {
+        "draftName": "questa bozza",
+        "close": "Chiudi",
+        "keep": "Mantienila",
+        "done": {
+          "issue": "Nota di credito {name} emessa.",
+          "void": "Nota di credito {name} annullata.",
+          "delete": "Bozza eliminata."
+        },
+        "issue": {
+          "title": "Emettere questa nota di credito?",
+          "message": "Riceve il suo numero e riduce quanto il cliente deve sulla fattura. Con rimborso in contanti, il denaro viene restituito tramite il registro dei pagamenti. Dopodiché non potrà più essere modificata.",
+          "confirm": "Emetti nota di credito"
+        },
+        "void": {
+          "title": "Annullare questa nota di credito?",
+          "warning": "Il credito smette di contare: la fattura torna com’era prima di questa nota di credito.",
+          "reason": "Perché viene annullata?",
+          "reasonHint": "Obbligatorio. Viene conservato sulla nota di credito.",
+          "confirm": "Annulla nota di credito"
+        },
+        "delete": {
+          "title": "Eliminare questa bozza?",
+          "message": "La bozza viene eliminata definitivamente. Non è stato emesso nulla, quindi la fattura non cambia.",
+          "confirm": "Elimina bozza"
+        }
+      },
+      "picker": {
+        "total": "Totale fattura",
+        "paid": "Pagato",
+        "credited": "Accreditato finora",
+        "balance": "Saldo dovuto",
+        "loading": "Caricamento fattura",
+        "change": "Cambia fattura",
+        "search": "Cerca fatture emesse per numero o cliente",
+        "results": "Fatture accreditabili",
+        "searching": "Ricerca in corso...",
+        "none": "Nessuna fattura emessa trovata.",
+        "more": "Mostra altro",
+        "totalShort": "Totale",
+        "notCreditable": "Una nota di credito può riferirsi solo a una fattura emessa (emessa, parzialmente pagata, scaduta o pagata). Scegline un’altra."
+      },
+      "lines": {
+        "invoiceLines": "Righe della fattura",
+        "creditLine": "Accredita {name}",
+        "lineFacts": "Fatturate {qty} per {amount} al netto dell’imposta",
+        "tax": "Imposta",
+        "taxIncluded": "{name} {rate}% inclusa nel prezzo",
+        "taxAdded": "{name} {rate}% aggiunta",
+        "alreadyCredited": "{qty} già accreditate, {left} rimaste",
+        "fullyCredited": "Già accreditata per intero",
+        "qtyToCredit": "Quantità da accreditare",
+        "freeTitle": "Righe libere",
+        "freeHint": "Un importo di cortesia o una rettifica non legata a una riga. L’importo è al netto dell’imposta.",
+        "description": "Descrizione",
+        "amount": "Importo al netto dell’imposta",
+        "taxRate": "Aliquota fiscale",
+        "noTax": "Nessuna imposta",
+        "inclusive": "inclusa",
+        "removeFree": "Rimuovi questa riga",
+        "addFree": "Aggiungi una riga libera"
+      },
+      "problems": {
+        "noInvoice": "Scegli la fattura da accreditare.",
+        "nothing": "Scegli cosa accreditare: una riga o un importo libero.",
+        "qtyInvalid": "Inserisci una quantità maggiore di 0, con al massimo 4 decimali.",
+        "qtyExceeds": "Su questa riga si possono ancora accreditare al massimo {max}.",
+        "descriptionRequired": "Descrivi cosa viene accreditato.",
+        "amountInvalid": "Inserisci un importo maggiore di 0.",
+        "noteTooLong": "La nota supera i 2000 caratteri."
+      },
+      "estimate": {
+        "title": "Accredito stimato",
+        "disclaimer": "Una stima calcolata qui con i prezzi e le imposte della fattura. Valgono i dati salvati dal server.",
+        "empty": "Nulla da accreditare. Scegli l’intera fattura o seleziona le righe.",
+        "lineQty": "Quantità {qty}",
+        "taxSummary": "Riepilogo imposte",
+        "included": "inclusa",
+        "taxOn": "{tax} su {base}",
+        "subtotal": "Netto imposta",
+        "tax": "Imposta",
+        "total": "Totale accredito",
+        "exceeds": "Supera quanto la fattura consente ancora di accreditare ({max}). Il server lo rifiuterà.",
+        "money": "Cosa succede al denaro",
+        "balanceBefore": "Saldo dovuto ora",
+        "balanceAfter": "Saldo dovuto dopo",
+        "applied": "Applicato alla fattura",
+        "refunded": "Restituito in contanti",
+        "refundNote": "Rimborso in contanti: il denaro versato dal cliente oltre quanto ancora dovuto viene restituito tramite il registro dei pagamenti all’emissione.",
+        "balanceNote": "Applicata al saldo: non viene pagato denaro. Il credito riduce soltanto quanto dovuto dal cliente."
+      },
+      "builder": {
+        "noAccess": "Non hai i permessi per creare note di credito.",
+        "backToList": "Torna alle note di credito",
+        "loading": "Caricamento nota di credito",
+        "notDraft": "Solo una nota di credito in bozza può essere modificata.",
+        "openIt": "Apri la nota di credito",
+        "back": "Indietro",
+        "newTitle": "Nuova nota di credito",
+        "editTitle": "Modifica nota di credito in bozza",
+        "conflict": "Qualcun altro ha modificato questa nota di credito mentre la stavi modificando. Ricarica per vedere la versione più recente: le tue modifiche andranno perse.",
+        "reload": "Ricarica",
+        "invoice": {
+          "title": "Fattura da accreditare",
+          "hint": "Una nota di credito appartiene a una sola fattura emessa."
+        },
+        "details": {
+          "title": "Dettagli",
+          "reason": "Motivo",
+          "issueDate": "Data di emissione",
+          "issueDateHint": "Lascia vuoto per usare il giorno di emissione (oggi è {today}).",
+          "note": "Nota",
+          "noteHint": "Stampata sulla nota di credito. Facoltativa."
+        },
+        "settlement": {
+          "title": "Cosa succede al denaro",
+          "hint": "Scelto ora, applicato all’emissione della nota di credito.",
+          "balance": {
+            "title": "Applica al saldo della fattura",
+            "body": "La fattura deve meno. Nessun denaro si muove. Usalo quando il cliente non ha ancora pagato o terrà il credito."
+          },
+          "refund": {
+            "title": "Rimborso in contanti",
+            "body": "Quanto il cliente ha già pagato oltre al dovuto attuale viene restituito come rimborso tramite il registro dei pagamenti."
+          }
+        },
+        "what": {
+          "title": "Cosa accreditare",
+          "pickFirst": "Scegli prima la fattura.",
+          "loadingCredits": "Verifica delle note di credito precedenti di questa fattura",
+          "full": {
+            "title": "L’intera fattura residua",
+            "body": "Accredita ogni riga e la spedizione con la prima nota di credito. Ancora accreditabile:"
+          },
+          "lines": {
+            "title": "Alcune righe o importi",
+            "body": "Seleziona righe e quantità da accreditare, oppure aggiungi un importo libero."
+          }
+        },
+        "saveDraft": "Salva bozza",
+        "saveAndIssue": "Salva ed emetti",
+        "cancel": "Annulla",
+        "estimateWaiting": "Scegli una fattura per vedere l’accredito stimato.",
+        "savedToast": "Nota di credito salvata come bozza.",
+        "issuedToast": "Nota di credito {number} emessa.",
+        "savedNotIssued": "Salvata come bozza, ma non è stato possibile emetterla: {reason}"
+      },
+      "detail": {
+        "noAccess": "Non hai i permessi per vedere le note di credito.",
+        "loading": "Caricamento nota di credito",
+        "back": "Torna alle note di credito",
+        "backToList": "Torna alle note di credito",
+        "draft": "Bozza",
+        "againstInvoice": "Su fattura",
+        "edit": "Modifica",
+        "issue": "Emetti",
+        "pdf": "PDF",
+        "print": "Stampa",
+        "void": "Annulla nota",
+        "delete": "Elimina",
+        "cannotVoidRefunded": "Per questa nota di credito è stato restituito denaro, quindi non può essere annullata. Il rimborso resta nel registro dei pagamenti.",
+        "voidedOn": "Annullata il {date}",
+        "voided": "Questa nota di credito è stata annullata.",
+        "voidReason": "Motivo"
+      },
+      "money": {
+        "title": "Cosa è successo al denaro",
+        "titleDraft": "Cosa succederà al denaro",
+        "total": "Totale accredito",
+        "applied": "Applicato alla fattura",
+        "refunded": "Restituito in contanti",
+        "voidNote": "Questa nota di credito è stata annullata, quindi non riduce più la fattura.",
+        "draftNote": "Se la emetti così com’è ora:",
+        "estimate": "Una stima finché non viene emessa.",
+        "balanceBody": "Regolamento: applicato al saldo. Non viene pagato denaro.",
+        "refundBody": "Regolamento: rimborso in contanti. Il denaro versato oltre quanto dovuto torna al cliente tramite il registro dei pagamenti."
+      },
+      "after": {
+        "title": "La fattura dopo questa nota di credito",
+        "titleNow": "La fattura ora",
+        "total": "Totale fattura",
+        "paid": "Pagato",
+        "credited": "Accreditato",
+        "balance": "Saldo dovuto",
+        "credit": "Credito a favore del cliente"
+      },
+      "paper": {
+        "label": "Nota di credito {number}",
+        "labelDraft": "Nota di credito in bozza",
+        "void": "Annullata",
+        "sellerFallback": "La tua attività",
+        "title": "Nota di credito",
+        "draftNumber": "Bozza",
+        "creditedTo": "Accreditato a",
+        "buyerFallback": "Cliente",
+        "issued": "Emessa",
+        "invoice": "Fattura",
+        "item": "Articolo",
+        "qty": "Q.tà",
+        "unit": "Prezzo unitario",
+        "tax": "Imposta",
+        "net": "Netto",
+        "taxAmount": "Importo imposta",
+        "total": "Totale",
+        "taxFallback": "Imposta",
+        "taxSummary": "Riepilogo imposte",
+        "taxRate": "Aliquota",
+        "taxBase": "Imponibile",
+        "included": "inclusa",
+        "subtotal": "Netto imposta",
+        "taxTotal": "Imposta",
+        "totalCredit": "Totale accredito",
+        "reason": "Motivo",
+        "note": "Nota"
+      }
+    }
+  }
+}

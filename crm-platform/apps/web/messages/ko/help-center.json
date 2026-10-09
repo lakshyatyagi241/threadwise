@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "도움말 센터",
+    "searchLabel": "도움말 검색",
+    "searchPlaceholder": "가이드 검색",
+    "resultsStatus": "{count, plural, =0 {가이드를 찾을 수 없음} other {가이드 #개}}",
+    "none": {
+      "title": "아직 가이드가 없습니다",
+      "message": "요금제에 포함된 기능의 가이드가 여기에 표시됩니다."
+    },
+    "noResults": {
+      "title": "검색과 일치하는 가이드가 없습니다",
+      "message": "다른 단어를 입력하거나 검색어를 지워 모든 가이드를 확인하세요."
+    },
+    "areas": {
+      "overview": "플랫폼",
+      "inbox": "수신함 및 채팅",
+      "audience": "CRM",
+      "sales": "영업",
+      "campaigns": "캠페인",
+      "automation": "자동화",
+      "store": "스토어",
+      "apps": "마켓플레이스",
+      "settings": "설정",
+      "account": "계정",
+      "getting-started": "시작하기",
+      "troubleshooting": "문제 해결"
+    },
+    "allHelp": "도움말로 돌아가기",
+    "onThisPage": "이 페이지 내용",
+    "openScreen": "이 화면 열기",
+    "shownInEnglish": "이 가이드는 아직 한국어로 번역되지 않아 영어로 표시됩니다.",
+    "tip": {
+      "label": "도움말: {title}",
+      "readMore": "가이드 읽기"
+    },
+    "guideCount": "{count, plural, =0 {가이드 없음} other {가이드 #개}}",
+    "crumb": "더보기 / 도움말",
+    "heading": "도움말",
+    "headingRest": "및 가이드",
+    "back": "뒤로",
+    "askSupport": "찾을 수 없나요? 지원팀에 문의하세요",
+    "askSupportShort": "지원",
+    "categories": "카테고리",
+    "allGuides": "모든 가이드",
+    "needHuman": "담당자와 상담이 필요하신가요?",
+    "contactSupport": "지원팀 문의",
+    "popular": "인기",
+    "searchResults": "검색 결과",
+    "read": "가이드 읽기",
+    "readMinutes": "{count, plural, other {읽는 데 #분}}",
+    "moreInArea": "{area}의 더 많은 항목"
+  }
+}

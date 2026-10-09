@@ -2,6 +2,7 @@
 
 import intlTelInput from 'intl-tel-input/intlTelInputWithUtils';
 import 'intl-tel-input/styles';
+import { useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 import { cn } from '@crm/ui';
 import { nationalDigits, openingCountry } from '../lib/phone';
@@ -32,6 +33,7 @@ export function PhoneField({
   onNumber: (digits: string) => void;
   invalid?: boolean;
 }) {
+  const t = useTranslations('chatbotWidget.builder.setup');
   const input = useRef<HTMLInputElement>(null);
   const iti = useRef<Iti | null>(null);
   // The picker is mounted once; later prop changes must not rebuild it, so its callbacks read the latest ones.
@@ -107,7 +109,7 @@ export function PhoneField({
         type="tel"
         autoComplete="off"
         aria-invalid={invalid || undefined}
-        placeholder="Your number without country code"
+        placeholder={t('phonePlaceholder')}
         className={cn(
           'h-10 w-full rounded-xl border bg-background px-3 text-[13px] outline-none',
           'focus-visible:border-brand focus-visible:ring-4 focus-visible:ring-brand/10',

@@ -1,0 +1,164 @@
+{
+  "node-bridge-runtime": {
+    "nav": {
+      "group": "채널",
+      "item": "Node 브리지"
+    },
+    "page": {
+      "title": "Node 브리지 URL 및 토큰",
+      "eyebrow": "전역 · Node 브리지",
+      "description": "모든 엔진이 통신하는 공유 Node 브리지입니다. 비공식 API는 이를 통해 전송되며 발신 속도 조절도 여기에서 적용됩니다. 한 번만 설정하면 플랫폼 전체에 적용됩니다.",
+      "superOnly": "Node 브리지는 슈퍼 관리자만 변경할 수 있습니다. 저장된 값은 확인할 수 있습니다."
+    },
+    "bridge": {
+      "tokenSet": "토큰 설정됨",
+      "noToken": "토큰 없음",
+      "serverUrl": "서버 URL",
+      "serverUrlPlaceholder": "http://localhost:8888",
+      "urlInvalid": "먼저 올바른 서버 URL(http:// 또는 https://)을 입력하세요.",
+      "serverUrlHint": "Node 브리지에 접근할 수 있는 주소입니다. 수신 및 상태 웹훅은 자동으로 처리됩니다. 브리지는 APP_DOMAIN_NAME 환경 변수에서 이 URL을 가져옵니다.",
+      "token": "Node 웹훅 토큰 (X-Node-Token)",
+      "tokenPlaceholder": "공유 X-Node-Token 비밀값",
+      "tokenSavedPlaceholder": "••• 저장됨, 유지하려면 비워 두세요",
+      "tokenHint": "Node 브리지가 X-Node-Token으로 보내는 공유 비밀값입니다. Node 브리지 설정의 토큰과 일치해야 합니다. 저장 후에는 숨겨집니다. 교체할 때만 다시 붙여넣으세요.",
+      "save": "저장",
+      "saving": "저장 중…",
+      "test": "연결 테스트",
+      "testing": "테스트 중…",
+      "saved": "Node 브리지를 저장했습니다."
+    },
+    "pacing": {
+      "eyebrow": "속도 조절",
+      "title": "발신 속도 및 일괄 처리",
+      "msgGap": "메시지 간격 (초)",
+      "msgGapHint": "연속 발송 사이의 초 단위 간격입니다.",
+      "batchesGap": "배치 크기",
+      "batchesGapHint": "배치당 수신자 수입니다.",
+      "bwMsgGap": "배치 간격 (분)",
+      "bwMsgGapHint": "배치 사이의 분 단위 간격입니다.",
+      "enableBatches": "배치 사용",
+      "update": "타이밍 업데이트",
+      "updating": "저장 중…",
+      "saved": "발송 타이밍을 업데이트했습니다.",
+      "tipTitle": "속도 조절 팁",
+      "tip": "24시간 동안 안정성을 확인한 뒤에만 메시지 간격을 줄이세요. Meta는 공격적인 발신을 제한합니다. 3초가 안전한 기본값입니다."
+    },
+    "errors": {
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "conflict": "다른 사용자가 이 설정을 변경했습니다. 페이지를 새로고침했으니 다시 시도하세요.",
+      "validation": "값을 확인하고 다시 시도하세요.",
+      "request": "요청을 완료할 수 없습니다.",
+      "unexpected": "서버에서 문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+      "network": "서버에 연결할 수 없습니다. 네트워크 연결을 확인하세요."
+    },
+    "loading": "불러오는 중",
+    "retry": "다시 시도",
+    "unofficial": {
+      "eyebrow": "플랫폼 스위치",
+      "title": "비공식 WhatsApp (QR을 통한 개인 번호)",
+      "status": {
+        "disabled": "사용 안 함 / 지원되지 않음",
+        "enabled": "사용 (지원되지 않음)"
+      },
+      "explanation": "당사는 공식 WhatsApp Business API만 지원합니다. 이 스위치는 개인 번호에 대한 플랫폼 전체 설정이며 지원되지 않고 번호가 차단될 수 있습니다. 켜져 있더라도 아래에서 허용된 워크스페이스만 사용할 수 있습니다.",
+      "state": {
+        "disabled": "꺼짐. 아래 목록과 관계없이 어떤 워크스페이스도 개인 번호를 보거나 연결할 수 없습니다. QR 연결 흐름, Warmer 및 개인 번호 발신 기능이 숨겨지며 이를 통한 발송은 거부됩니다.",
+        "enabled": "켜짐, 허용된 워크스페이스에만 적용됩니다. 아래 목록에 없는 워크스페이스는 이 기능을 전혀 볼 수 없습니다. 지원되지 않는 기능이며 해당 번호는 WhatsApp에서 차단될 수 있습니다."
+      },
+      "enable": "비공식 WhatsApp 사용",
+      "disable": "비공식 WhatsApp 사용 안 함",
+      "cancel": "취소",
+      "enableDialog": {
+        "title": "비공식 WhatsApp을 사용하시겠습니까?",
+        "body": "지원되지 않는 기능입니다. 이 방식으로 연결된 번호는 WhatsApp에서 차단될 수 있으며, 이를 통해 보낸 메시지는 어떠한 전송 보장도 적용되지 않습니다. 스위치를 켠다고 해서 자동으로 누군가에게 기능이 제공되지는 않습니다. 허용 목록에 있는 워크스페이스만 사용할 수 있습니다.",
+        "typeLabel": "확인하려면 {word}을(를) 입력하세요",
+        "confirm": "사용"
+      },
+      "disableDialog": {
+        "title": "비공식 WhatsApp을 사용 안 함으로 설정하시겠습니까?",
+        "body": "모든 워크스페이스에서 개인 번호, Warmer 및 QR 연결 흐름이 더 이상 표시되지 않으며, 개인 번호를 통한 발송은 거부됩니다. 저장된 데이터와 허용 목록은 유지됩니다.",
+        "confirm": "사용 안 함"
+      },
+      "enabledToast": "비공식 WhatsApp을 사용하도록 설정했습니다.",
+      "disabledToast": "비공식 WhatsApp을 사용 안 함으로 설정했습니다.",
+      "dimNote": "아래 설정은 개인 번호에만 적용되며, 비공식 WhatsApp이 사용 안 함 상태일 때는 사용되지 않습니다.",
+      "errors": {
+        "forbidden": "이 스위치는 슈퍼 관리자만 변경할 수 있습니다.",
+        "conflict": "다른 사용자가 이 설정을 변경했습니다. 페이지를 새로고침했으니 다시 시도하세요.",
+        "validation": "값을 확인하고 다시 시도하세요.",
+        "request": "요청을 완료할 수 없습니다.",
+        "unexpected": "서버에서 문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+        "network": "서버에 연결할 수 없습니다. 네트워크 연결을 확인하세요."
+      },
+      "allowedCount": "{count, plural, =0 {허용된 워크스페이스 없음} other {허용된 워크스페이스 #곳}}"
+    },
+    "workspaces": {
+      "eyebrow": "허용 목록",
+      "title": "비공식 WhatsApp을 사용하는 워크스페이스",
+      "description": "기본적으로 모든 사용자에게 꺼져 있습니다. 여기에 나열된 워크스페이스만 개인 번호 WhatsApp을 사용할 수 있으며, 위의 엔진이 켜져 있을 때만 가능합니다.",
+      "count": "{count, plural, =0 {허용된 워크스페이스 없음} other {허용된 워크스페이스 #곳}}",
+      "engineOff": "엔진이 꺼져 있어 이 워크스페이스들은 아직 사용할 수 없습니다.",
+      "engineOffAction": "스위치로 이동",
+      "readOnly": "워크스페이스를 추가하거나 제거할 수 있는 것은 슈퍼 관리자뿐입니다. 목록은 볼 수 있습니다.",
+      "search": {
+        "label": "워크스페이스 추가",
+        "placeholder": "워크스페이스 이름, 슬러그 또는 소유자 이메일로 검색",
+        "hint": "2자 이상 입력하세요.",
+        "searching": "검색 중",
+        "none": "\"{q}\"과(와) 일치하는 워크스페이스가 없습니다.",
+        "add": "추가",
+        "alreadyAdded": "이미 허용됨",
+        "owner": "소유자: {email}",
+        "noPlan": "요금제 없음",
+        "results": "검색 결과"
+      },
+      "table": {
+        "caption": "비공식 WhatsApp 사용이 허용된 워크스페이스",
+        "workspace": "워크스페이스",
+        "plan": "요금제",
+        "devices": "기기",
+        "since": "사용 시작일",
+        "by": "사용 설정자",
+        "note": "메모",
+        "actions": "작업",
+        "devicesValue": "활성 {active} / 전체 {total}",
+        "noPlan": "요금제 없음",
+        "system": "알 수 없음",
+        "noNote": "없음",
+        "remove": "제거"
+      },
+      "empty": {
+        "title": "아직 허용된 워크스페이스가 없습니다",
+        "message": "엔진이 켜져 있어도 개인 번호 WhatsApp을 사용할 수 있는 사람이 없습니다. 위에서 검색해 첫 워크스페이스를 추가하세요."
+      },
+      "loadMore": "더 보기",
+      "loadingMore": "불러오는 중",
+      "addDialog": {
+        "title": "{name}을(를) 허용하시겠습니까?",
+        "body": "엔진이 켜져 있는 동안 {name}({slug})은(는) QR 코드로 개인 WhatsApp 번호를 연결할 수 있게 됩니다. 지원되지 않는 기능이며 WhatsApp에서 번호가 차단될 수 있습니다.",
+        "noteLabel": "메모 (선택)",
+        "notePlaceholder": "이 워크스페이스를 허용하는 이유와 요청자",
+        "noteCount": "{count} / {max}",
+        "noteTooLong": "메모는 최대 {max}자까지 입력할 수 있습니다.",
+        "confirm": "워크스페이스 허용"
+      },
+      "removeDialog": {
+        "title": "{name}을(를) 제거하시겠습니까?",
+        "body": "{name}은(는) 더 이상 개인 번호 WhatsApp을 사용할 수 없습니다. 연결은 20초 이내에 중지됩니다. 저장된 세션은 유지되므로 워크스페이스를 다시 허용하면 복원됩니다.",
+        "confirm": "제거"
+      },
+      "cancel": "취소",
+      "addedToast": "{name}은(는) 이제 비공식 WhatsApp을 사용할 수 있습니다.",
+      "removedToast": "{name}을(를) 목록에서 제거했습니다.",
+      "errors": {
+        "forbidden": "이 목록은 슈퍼 관리자만 변경할 수 있습니다.",
+        "conflict": "그사이 목록이 변경되었습니다. 새로고침했으니 다시 시도하세요.",
+        "validation": "값을 확인하고 다시 시도하세요.",
+        "request": "요청을 완료할 수 없습니다.",
+        "unexpected": "서버에서 문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+        "network": "서버에 연결할 수 없습니다. 네트워크 연결을 확인하세요."
+      },
+      "retry": "다시 시도"
+    }
+  }
+}

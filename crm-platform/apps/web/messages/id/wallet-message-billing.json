@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "tile": {
+      "label": "Pengeluaran, dompet, dan laporan",
+      "description": "Pantau pengeluaran Anda: saldo pesan, isi ulang, setiap biaya, dan laporan lengkap.",
+      "keywords": "dompet saldo isi ulang tambah saldo kredit laporan tagihan pengeluaran belanja biaya penggunaan transaksi riwayat buku besar"
+    },
+    "common": {
+      "loading": "Memuat",
+      "retry": "Coba lagi",
+      "requestId": "ID permintaan",
+      "cancel": "Batal",
+      "back": "Kembali",
+      "close": "Tutup",
+      "dismiss": "Tutup",
+      "on": "Aktif",
+      "off": "Nonaktif",
+      "previous": "Sebelumnya",
+      "next": "Berikutnya",
+      "pagination": "Pengelompokan halaman",
+      "pageN": "Halaman {page}",
+      "deniedTitle": "Anda tidak memiliki akses ke ini",
+      "deniedBody": "Minta admin workspace untuk izin “{permission}”."
+    },
+    "errors": {
+      "noteRequired": "Alasan minimal 5 karakter wajib diisi.",
+      "amountInvalid": "Jumlah tersebut tidak diterima. Gunakan jumlah positif dengan paling banyak 2 desimal.",
+      "insufficient": "Saldo tidak cukup untuk ini.",
+      "notFound": "Workspace ini tidak memiliki dompet.",
+      "rateInvalid": "Tarif tidak dapat disimpan. Periksa negara, kategori, dan jumlahnya.",
+      "importFailed": "Kartu tarif tidak dapat dibaca atau tidak memiliki baris yang dapat digunakan.",
+      "syncFailed": "Daftar harga Meta tidak dapat dibaca dan tidak ada kartu bawaan yang tersedia.",
+      "conflict": "Orang lain telah mengubah ini. Muat ulang lalu coba lagi.",
+      "forbidden": "Hanya super admin yang dapat melakukan ini.",
+      "validation": "Periksa kolom yang disorot.",
+      "network": "Server tidak dapat dihubungi. Periksa koneksi Anda lalu coba lagi.",
+      "generic": "Terjadi kesalahan. Coba lagi.",
+      "currencyUnsupported": "Mata uang itu belum dapat digunakan: impor kartu tarif Meta untuknya terlebih dahulu (Harga pesan, Kartu tarif Meta)."
+    },
+    "types": {
+      "topup": "Isi ulang",
+      "earn": "Pendapatan",
+      "refund": "Pengembalian dana",
+      "spend": "Biaya pesan",
+      "admin_adjust": "Penyesuaian"
+    },
+    "categories": {
+      "marketing": "Pemasaran",
+      "utility": "Utilitas",
+      "authentication": "Autentikasi",
+      "service": "Layanan"
+    },
+    "modes": {
+      "wallet": "Bayar per pesan",
+      "plan": "Paket"
+    },
+    "chip": {
+      "balance": "Saldo",
+      "low": "Saldo Anda rendah"
+    },
+    "wallet": {
+      "title": "Dompet",
+      "subtitle": "Saldo pesan Anda, apa yang Anda belanjakan dan peroleh dalam 30 hari terakhir, dan cara menambah saldo.",
+      "fullStatement": "Laporan lengkap",
+      "lowBalanceTitle": "Saldo Anda hampir habis",
+      "lowBalanceBody": "Saldo berada di atau di bawah {threshold}. Tambahkan saldo agar kampanye dan balasan Anda tetap terkirim.",
+      "kpi": {
+        "balance": "Saldo",
+        "available": "Tersedia sekarang",
+        "approx": "sekitar {count, plural, other {# pesan}}",
+        "spent": "Terpakai",
+        "earned": "Diperoleh",
+        "last30": "30 hari terakhir"
+      },
+      "add": {
+        "title": "Tambah saldo",
+        "amount": "Jumlah",
+        "hint": "Hanya jumlah bulat, minimal 1.",
+        "invalid": "Masukkan jumlah bulat 1 atau lebih.",
+        "submit": "Tambah saldo",
+        "quick": "Jumlah cepat"
+      },
+      "how": {
+        "title": "Cara kerja penagihan",
+        "wallet": {
+          "body": "Setiap pesan yang terkirim dikenai biaya dari dompet Anda sesuai harga untuk negara dan kategorinya. Pesan yang gagal tidak dikenai biaya.",
+          "funded": "Saat saldo habis, pengiriman massal dijeda sampai Anda menambah saldo."
+        },
+        "plan": {
+          "allowance": "Paket Anda mencakup {limit} pesan setiap bulan.",
+          "used": "{used} terpakai bulan ini.",
+          "ends": "Paket Anda berakhir pada {date}.",
+          "extra": "Pesan di luar kuota bulanan dikenakan biaya ke dompet Anda.",
+          "ended": "Paket Anda telah berakhir, sehingga pengiriman dijeda hingga diperpanjang."
+        },
+        "generic": "Pesan Anda ditanggung paket Anda. Dompet membayar apa pun yang tidak tercakup paket."
+      },
+      "activity": {
+        "title": "Aktivitas terbaru",
+        "fullStatement": "Buka laporan lengkap",
+        "emptyTitle": "Belum ada aktivitas",
+        "emptyBody": "Isi ulang, biaya pesan, dan pengembalian dana akan muncul di sini."
+      }
+    },
+    "activity": {
+      "description": "Deskripsi",
+      "type": "Jenis",
+      "date": "Tanggal",
+      "amount": "Jumlah",
+      "balance": "Saldo",
+      "noDescription": "Mutasi dompet",
+      "reason": "Alasan"
+    },
+    "pricingPanel": {
+      "title": "Harga pesan",
+      "badge": "Per pesan",
+      "free": "Gratis",
+      "noCharge": "Tanpa biaya",
+      "perMessage": "per pesan",
+      "footer": "Dikenakan biaya saat pesan terkirim. Harganya bergantung pada negara penerima dan kategori pesan."
+    },
+    "statement": {
+      "title": "Laporan dompet",
+      "subtitle": "Setiap mutasi di dompet Anda. Total mencakup semua yang sesuai dengan filter, bukan hanya halaman ini.",
+      "back": "Kembali ke dompet",
+      "breadcrumbLabel": "Breadcrumb",
+      "breadcrumbWallet": "Dompet",
+      "breadcrumbStatement": "Laporan mutasi",
+      "export": "Ekspor CSV",
+      "exporting": "Mengekspor",
+      "exported": "{fileName} disimpan",
+      "emptyTitle": "Tidak ada transaksi",
+      "emptyFiltered": "Tidak ada yang sesuai dengan filter ini. Ubah atau atur ulang filter.",
+      "emptyNone": "Mutasi dompet Anda akan ditampilkan di sini.",
+      "filters": {
+        "type": "Jenis",
+        "from": "Dari",
+        "to": "Sampai",
+        "rangeInverted": "Tanggal akhir lebih awal dari tanggal mulai.",
+        "search": "Cari",
+        "searchPlaceholder": "Deskripsi atau alasan",
+        "apply": "Terapkan",
+        "reset": "Atur ulang"
+      },
+      "typeFilter": {
+        "all": "Semua",
+        "topup": "Isi ulang saldo",
+        "earn": "Pendapatan",
+        "spend": "Biaya pesan",
+        "refund": "Pengembalian dana",
+        "admin_adjust": "Penyesuaian"
+      },
+      "summary": {
+        "balance": "Saldo saat ini",
+        "in": "Uang masuk",
+        "out": "Uang keluar",
+        "net": "Mutasi bersih",
+        "count": "{count, plural, other {# transaksi}}"
+      },
+      "columns": {
+        "label": "Laporan mutasi dompet",
+        "date": "Tanggal",
+        "description": "Deskripsi",
+        "type": "Jenis",
+        "in": "Uang masuk",
+        "out": "Uang keluar",
+        "balance": "Saldo",
+        "none": "Tidak ada"
+      },
+      "context": {
+        "reason": "Alasan",
+        "to": "Kepada",
+        "template": "Templat"
+      },
+      "channels": {
+        "campaign": "Kampanye",
+        "broadcast": "Broadcast",
+        "flow": "Alur",
+        "scheduled": "Terjadwal",
+        "auto_reply": "Balasan otomatis",
+        "chat": "Chat",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      }
+    },
+    "admin": {
+      "admin": "Admin",
+      "wallet": "Dompet",
+      "workspacesLabel": "Workspace",
+      "breadcrumb": "Breadcrumb",
+      "readOnly": "Anda masuk sebagai {role}. Hanya super admin yang dapat mengubah pengaturan, harga, atau saldo dompet.",
+      "nav": {
+        "overview": "Dompet",
+        "pricing": "Harga pesan",
+        "workspaces": "Dompet workspace",
+        "logs": "Log dompet",
+        "margins": "Margin",
+        "packages": "Paket kredit"
+      },
+      "overview": {
+        "title": "Ikhtisar dompet",
+        "subtitle": "Dana yang ditahan di dompet workspace dan mutasi 30 hari terakhir.",
+        "linkWorkspaces": "Dompet workspace",
+        "linkPricing": "Harga pesan",
+        "linkLogs": "Log dompet",
+        "float": "Dana dompet",
+        "floatHint": "Ditahan di semua workspace",
+        "holding": "Workspace dengan saldo",
+        "low": "Saldo rendah",
+        "last30": "30 hari terakhir",
+        "toppedUp": "Diisi ulang",
+        "charged": "Dipotong",
+        "refunded": "Dikembalikan",
+        "adjustedIn": "Ditambahkan manual",
+        "adjustedOut": "Dikurangi manual",
+        "chargedMessages": "Pesan yang dipotong",
+        "freeMessages": "Pesan gratis",
+        "reconcile": {
+          "title": "Periksa saldo terhadap buku besar",
+          "body": "Menghitung ulang setiap dompet dari buku besarnya dan mencantumkan saldo yang tidak cocok.",
+          "button": "Periksa saldo terhadap buku besar",
+          "running": "Memeriksa",
+          "ok": "Semua {count, plural, other {# dompet sesuai}} dengan buku besarnya.",
+          "mismatches": "{count} dari {checked} dompet tidak sesuai dengan buku besarnya.",
+          "workspace": "Workspace",
+          "balance": "Saldo",
+          "ledger": "Buku besar",
+          "difference": "Selisih"
+        },
+        "otherCurrencies": "Dompet dalam mata uang lain",
+        "otherCurrenciesNote": "Workspace yang ditagih dalam mata uang lain menyimpan dana dalam mata uang tersebut. Angka di atas hanya {currency}; setiap mata uang lain dihitung pada baris tersendiri.",
+        "other": {
+          "currency": "Mata uang",
+          "float": "Dana yang ditahan",
+          "holding": "Workspace dengan saldo",
+          "toppedUp": "Diisi ulang, 30 hari",
+          "charged": "Dipotong, 30 hari"
+        }
+      },
+      "pricing": {
+        "title": "Harga pesan",
+        "crumb": "Harga pesan",
+        "subtitle": "Biaya setiap pesan untuk pelanggan Anda, cara dompet baru dilindungi, dan daftar tarif per negara.",
+        "kpi": {
+          "signup": "Hadiah referral",
+          "cost": "Biaya per pesan",
+          "costHint": "Harga tetap saat harga per negara nonaktif",
+          "spending": "Pengeluaran sebenarnya",
+          "spendingHint": "Pesan yang dibeli {amount} dengan harga tetap",
+          "lowBalance": "Peringatan saldo rendah"
+        },
+        "economics": {
+          "title": "Ekonomi",
+          "liveKeys": "Berlaku segera",
+          "flatPrice": "Harga tetap per pesan",
+          "flatPriceHint": "Minimal 0.01. Gunakan kisi tarif untuk pesan gratis.",
+          "referralSignup": "Hadiah referral",
+          "referralSignupHint": "Dibayarkan kepada perujuk pada pesanan berbayar pertama pihak yang dirujuk.",
+          "lowBalance": "Peringatan saldo rendah pada",
+          "lowBalanceHint": "Workspace dengan saldo sama dengan atau di bawah ini akan diberi peringatan.",
+          "coverage": "Cakupan peluncuran",
+          "coverageHint": "Pengiriman massal ditolak kecuali dompet menutup persentase estimasi biaya ini. 0 hanya menolak dompet kosong.",
+          "rewardSentence": "Hadiah {reward} membayar {count, plural, other {# pesan}} dengan harga tetap.",
+          "save": "Simpan ekonomi",
+          "saving": "Menyimpan",
+          "saved": "Ekonomi disimpan.",
+          "problems": {
+            "invalid": "Masukkan jumlah dengan paling banyak 2 desimal.",
+            "flatZero": "Harga tetap tidak boleh 0.",
+            "percent": "Masukkan bilangan bulat dari 0 sampai 100."
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "Harga per negara",
+            "on": "Aktif: setiap pesan dikenai biaya berdasarkan negara dan kategori penerima dari daftar tarif.",
+            "off": "Nonaktif: setiap pesan dikenai harga tetap.",
+            "save": "Simpan",
+            "confirmTitle": "Ubah harga per negara?",
+            "confirmOn": "Pesan akan dikenai biaya berdasarkan negara dan kategori mulai dari pengiriman berikutnya.",
+            "confirmOff": "Pesan akan dikenai harga tetap mulai dari pengiriman berikutnya.",
+            "confirm": "Ya, ubah",
+            "savedOn": "Harga per negara aktif.",
+            "savedOff": "Harga per negara nonaktif."
+          },
+          "payPerMessage": {
+            "label": "Biaya per pesan",
+            "on": "Aktif: workspace tanpa kuota paket membayar setiap pesan terkirim dari dompet mereka.",
+            "off": "Nonaktif: pesan tidak dikenai biaya ke dompet.",
+            "save": "Simpan",
+            "confirmTitle": "Ubah pengenaan biaya per pesan?",
+            "confirmOn": "Pesan terkirim akan dikenai biaya ke dompet mulai sekarang.",
+            "confirmOff": "Dompet tidak lagi dikenai biaya untuk pesan. Ini berlaku untuk setiap workspace.",
+            "confirm": "Ya, ubah",
+            "savedOn": "Biaya per pesan aktif.",
+            "savedOff": "Biaya per pesan nonaktif."
+          }
+        },
+        "grid": {
+          "title": "Daftar tarif",
+          "modeOn": "Harga per negara aktif: harga ini yang digunakan.",
+          "modeOff": "Harga per negara nonaktif: harga ini disimpan tetapi harga tetap yang dikenakan.",
+          "empty": "Belum ada tarif. Tambahkan baris, impor daftar tarif, atau isi ulang daftar tarif awal.",
+          "country": "Negara",
+          "category": "Kategori",
+          "charge": "Tagihan Anda",
+          "metaCost": "Biaya dari Meta",
+          "margin": "Margin",
+          "marginUnknown": "Tidak diketahui",
+          "actions": "Tindakan",
+          "anyCountry": "Negara mana pun",
+          "anyCategory": "Kategori mana pun",
+          "serviceFree": "Layanan (gratis)",
+          "addRow": "Tambah baris",
+          "remove": "Hapus",
+          "cancel": "Batal",
+          "removeTitle": "Hapus tarif ini?",
+          "removeBody": "Tarif untuk {country} dihapus. Pesan akan memakai tarif yang cocok berikutnya.",
+          "removed": "Tarif dihapus.",
+          "save": "Simpan tarif",
+          "saving": "Menyimpan",
+          "saved": "{count, plural, other {# tarif disimpan.}}",
+          "savedSome": "{saved} disimpan, {skipped} dilewati. Lihat alasan pada setiap baris yang dilewati.",
+          "unsaved": "{count, plural, other {# baris belum disimpan}}",
+          "tooMany": "Terlalu banyak baris yang berubah untuk satu kali simpan. Simpan dalam kelompok yang lebih kecil.",
+          "problems": {
+            "price": "Masukkan harga dengan paling banyak 2 desimal.",
+            "metaCost": "Masukkan biaya dengan paling banyak 6 desimal.",
+            "country": "Gunakan kode negara 2 huruf, atau kosongkan untuk negara mana pun.",
+            "empty": "Masukkan harga atau biaya Meta.",
+            "duplicate": "Negara dan kategori ini sudah memiliki baris."
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "Sinkronkan biaya Meta",
+            "title": "Sinkronkan biaya Meta",
+            "loading": "Membaca daftar harga Meta",
+            "source": "Sumber",
+            "version": "Versi",
+            "noVersion": "Tidak ada",
+            "currency": "Mata uang",
+            "added": "Baris yang akan ditambahkan",
+            "updated": "Baris yang akan diperbarui",
+            "untouched": "Harga Anda tidak berubah. Hanya biaya yang dikenakan Meta kepada Anda yang diperbarui.",
+            "bundledNote": "Tidak ada daftar harga Meta langsung yang terhubung, jadi daftar tarif bawaan yang digunakan.",
+            "apply": "Terapkan",
+            "applying": "Menerapkan",
+            "done": "Biaya Meta disinkronkan: {added} ditambahkan, {updated} diperbarui."
+          },
+          "import": {
+            "button": "Impor daftar tarif",
+            "title": "Impor daftar tarif",
+            "intro": "Unggah daftar tarif CSV. Anda melihat apa yang akan berubah sebelum ada yang disimpan.",
+            "file": "File CSV",
+            "limit": "Hingga 4 MB.",
+            "reading": "Membaca file",
+            "shape": "Tata letak",
+            "shapes": {
+              "wide": "Satu kolom per kategori",
+              "long": "Satu baris per kategori"
+            },
+            "added": "Akan ditambahkan",
+            "updated": "Akan diperbarui",
+            "skipped": "Dilewati",
+            "currencyNote": "Harga dibaca dalam {currency}.",
+            "problems": "Baris yang akan dilewati",
+            "line": "Baris {line}:",
+            "fileProblems": {
+              "notCsv": "Pilih file .csv.",
+              "tooBig": "Ukuran file lebih dari 4 MB.",
+              "unreadable": "File tidak dapat dibaca."
+            },
+            "apply": "Terapkan impor",
+            "applying": "Mengimpor",
+            "done": "Daftar tarif diimpor: {added} ditambahkan, {updated} diperbarui, {skipped} dilewati."
+          },
+          "seed": {
+            "button": "Isi ulang daftar tarif awal",
+            "title": "Isi ulang daftar tarif awal?",
+            "warning": "Ini menulis harga awal bawaan di atas baris yang ada untuk negara dan kategori yang sama. Harga yang Anda atur manual untuk baris tersebut akan diganti.",
+            "confirm": "Isi ulang",
+            "done": "{count, plural, other {# tarif}} ditulis dari daftar awal."
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "Pengiriman lintas negara",
+            "body": "Harga mengikuti negara penerima, bukan negara workspace. Tambahkan baris untuk setiap negara tujuan pengiriman Anda."
+          },
+          "how": {
+            "title": "Cara harga ditemukan",
+            "body": "Dompet mencari negara penerima dan kategori pesan di daftar ini. Kategori atau negara yang kosong cocok dengan apa pun."
+          },
+          "order": {
+            "title": "Baris mana yang menang",
+            "body": "Kecocokan negara dan kategori yang tepat dipakai lebih dulu, lalu negara dengan kategori apa pun, lalu negara mana pun, lalu harga tetap."
+          }
+        },
+        "mode": {
+          "title": "Cara pelanggan dikenai harga",
+          "current": "Saat ini: {mode}",
+          "intro": "Pilih berapa biaya setiap pesan untuk pelanggan Anda. Ini berlaku untuk setiap workspace dan disimpan tersendiri.",
+          "fixed": {
+            "label": "Harga tetap",
+            "body": "Anda mengetik harga untuk setiap negara dan kategori di daftar tarif di bawah. Margin disimpan tetapi tidak dipakai."
+          },
+          "margin": {
+            "label": "Biaya Meta + margin",
+            "body": "Pelanggan membayar biaya Meta ditambah margin Anda, diatur per negara dan kategori. Jika biaya Meta tidak diketahui, harga tetap yang diketik akan dikenakan."
+          },
+          "save": "Simpan mode harga",
+          "manage": "Atur margin",
+          "confirmTitle": "Ubah cara pelanggan dikenai harga?",
+          "confirmFixed": "Setiap workspace akan dikenai harga tetap dari daftar tarif mulai dari pesan berikutnya. Margin tetap disimpan tetapi tidak lagi berlaku.",
+          "confirmMargin": "Setiap workspace akan dikenai biaya Meta ditambah margin yang berlaku baginya (penggantian workspace, lalu paketnya, lalu bawaan platform) mulai dari pesan berikutnya. Jika biaya Meta tidak diketahui, harga tetap tetap dikenakan.",
+          "confirm": "Ya, ubah",
+          "savedFixed": "Pelanggan sekarang dikenai harga tetap.",
+          "savedMargin": "Pelanggan sekarang dikenai biaya Meta ditambah margin."
+        },
+        "metaCards": {
+          "title": "Daftar tarif Meta",
+          "intro": "Meta menerbitkan satu daftar harga untuk setiap mata uang, dan hanya mengubahnya pada 1 Januari, 1 April, 1 Juli, dan 1 Oktober. Workspace yang ditagih dalam INR dihargai dari daftar INR Meta dan dibebankan ke dompet INR-nya, bukan dari daftar USD yang dikonversi. Impor setiap file sebagaimana Meta menerbitkannya. Harga yang diketik dan harga tetap disimpan dalam mata uang platform dan dikonversi menggunakan kurs yang tersimpan untuk workspace yang ditagih dalam mata uang lain.",
+          "none": "Belum ada daftar tarif Meta yang tersimpan. Impor file yang diterbitkan Meta untuk mata uang Anda.",
+          "view": "Lihat",
+          "hide": "Sembunyikan",
+          "usedPricing": "Harga, margin, dan L/R reseller, serta workspace yang ditagih dalam mata uang platform",
+          "usedWorkspaces": "Harga workspace yang ditagih dalam {currency}",
+          "columns": {
+            "currency": "Mata uang",
+            "effective": "Berlaku",
+            "checked": "Terakhir diimpor",
+            "markets": "Pasar",
+            "usedFor": "Digunakan untuk",
+            "status": "Status",
+            "actions": "Tindakan"
+          },
+          "freshness": {
+            "current": "Terbaru",
+            "upcoming": "Segera periksa",
+            "due": "Periksa sekarang"
+          },
+          "reminder": {
+            "link": "Buka halaman harga Meta",
+            "current": "Terbaru. Meta mungkin mengubah harganya berikutnya pada {date}.",
+            "dueTitle": "Kuartal baru dimulai pada {date}: Meta mungkin telah mengubah harganya.",
+            "dueBody": "Unduh file tarif baru (satu per mata uang yang digunakan) dan impor di sini. Sampai saat itu, biaya dan margin memakai daftar lama.",
+            "upcomingTitle": "Meta mungkin mengubah harganya pada {date} ({days, plural, other {# hari}} lagi).",
+            "upcomingBody": "Siapkan file baru untuk diimpor pada hari itu.",
+            "missingTitle": "Tidak ada daftar tarif Meta untuk {currencies}.",
+            "missingBody": "Workspace yang diatur ke mata uang itu tidak memiliki daftar harga Meta untuk ditampilkan. Impor file yang diterbitkan Meta untuknya."
+          },
+          "table": {
+            "heading": "Daftar {currency} Meta",
+            "note": "Harga daftar per pesan terkirim, sebagaimana diterbitkan Meta. Negara yang tidak disebut Meta dihargai sebagai Lainnya.",
+            "market": "Pasar",
+            "everyOther": "Setiap negara yang tidak disebutkan",
+            "categories": {
+              "marketing": "Pemasaran",
+              "utility": "Utilitas",
+              "authentication": "Autentikasi",
+              "authentication_international": "Autentikasi internasional",
+              "service": "Layanan"
+            }
+          },
+          "import": {
+            "button": "Impor daftar tarif Meta",
+            "title": "Impor daftar tarif Meta",
+            "intro": "Pilih file yang diterbitkan Meta untuk satu mata uang (berupa buku kerja Excel, meskipun tautannya bertuliskan CSV). Mata uang dan tanggal berlaku dibaca dari file. Anda melihat apa yang akan berubah sebelum ada yang disimpan.",
+            "file": "File tarif Meta (.xlsx atau .csv)",
+            "hint": "Satu mata uang per file. File baru menggantikan daftar mata uang tersebut secara utuh. Maksimal 2 MB.",
+            "reading": "Membaca file…",
+            "applying": "Mengimpor",
+            "apply": "Impor daftar",
+            "done": "Daftar {currency} diimpor.",
+            "fileProblems": {
+              "wrongType": "Pilih file .xlsx yang diterbitkan Meta, atau CSV yang disimpan darinya.",
+              "tooBig": "Ukuran file lebih dari 2 MB, yang bukan daftar tarif Meta.",
+              "unreadable": "File tidak dapat dibaca."
+            },
+            "summary": {
+              "currency": "Mata uang",
+              "effective": "Berlaku",
+              "added": "Baris baru",
+              "changed": "Berubah",
+              "unchanged": "Tidak berubah",
+              "removed": "Dihapus"
+            },
+            "replaces": "Menggantikan daftar yang berlaku {date}.",
+            "appliesToPricing": "Ini adalah daftar {currency}, mata uang platform Anda. Mengimpornya juga menyegarkan biaya Meta di balik harga, margin, dan L/R reseller ({added} baru, {updated} diperbarui). Harga pelanggan tidak berubah.",
+            "storedOnly": "Ini bukan mata uang platform. Data ini disimpan dan ditampilkan, dan menentukan harga setiap workspace yang ditagih dalam {currency}. Biaya Meta di kisi tarif di bawah tetap dalam mata uang platform.",
+            "biggest": "Perubahan terbesar",
+            "categories": {
+              "marketing": "Pemasaran",
+              "utility": "Utilitas",
+              "authentication": "Autentikasi",
+              "authentication_international": "Autentikasi internasional",
+              "service": "Layanan"
+            },
+            "problems": "Baris yang dilewati"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "Dompet workspace",
+        "crumb": "Dompet workspace",
+        "subtitle": "Setiap workspace beserta saldonya. Buka salah satu untuk melihat entrinya atau menyesuaikan saldo.",
+        "search": "Cari",
+        "searchPlaceholder": "Nama atau slug workspace",
+        "lowOnly": "Hanya saldo rendah",
+        "apply": "Terapkan",
+        "totalWorkspaces": "Workspace",
+        "totalFloat": "Total ditahan",
+        "totalLow": "Saldo rendah",
+        "emptyTitle": "Tidak ada workspace yang ditemukan",
+        "emptyBody": "Ubah pencarian atau hapus filter saldo rendah.",
+        "loadMore": "Muat lebih banyak",
+        "loadingMore": "Memuat lebih banyak",
+        "columns": {
+          "label": "Dompet workspace",
+          "workspace": "Workspace",
+          "mode": "Penagihan",
+          "balance": "Saldo",
+          "low": "Rendah",
+          "activity": "Aktivitas terakhir",
+          "never": "Belum pernah"
+        },
+        "totalFloatIn": "Dana ditahan ({currency})"
+      },
+      "detail": {
+        "crumb": "Workspace",
+        "adjust": "Sesuaikan saldo",
+        "balance": "Saldo",
+        "lowBalance": "Saldo rendah",
+        "threshold": "Peringatan pada {amount}",
+        "recent": "Entri terbaru",
+        "emptyTitle": "Belum ada entri",
+        "emptyBody": "Mutasi pada dompet ini akan ditampilkan di sini.",
+        "columns": {
+          "label": "Entri dompet terbaru",
+          "date": "Tanggal",
+          "type": "Jenis",
+          "amount": "Jumlah",
+          "balanceAfter": "Saldo setelahnya",
+          "who": "Dibuat oleh",
+          "reason": "Alasan",
+          "customer": "Pelanggan",
+          "operator": "Operator",
+          "system": "Sistem"
+        },
+        "result": {
+          "appliedAdd": "{applied} ditambahkan. Saldo sekarang {balance}.",
+          "appliedDeduct": "{applied} dikurangkan. Saldo sekarang {balance}.",
+          "partial": "Hanya {applied} dari {requested} yang diterapkan karena saldo tidak boleh di bawah 0. Saldo sekarang {balance}.",
+          "replayed": "(Permintaan ini sudah diterapkan.)"
+        },
+        "pricing": {
+          "title": "Harga untuk workspace ini",
+          "subtitle": "Penggantian margin mengesampingkan paket workspace dan bawaan platform, khusus untuk workspace ini saja.",
+          "plan": "Paket",
+          "planLoading": "Memuat paket",
+          "planUnknown": "Tidak dapat dibaca",
+          "noPlan": "Tanpa paket",
+          "overrides": "Penggantian margin",
+          "overridesHint": "Hanya baris yang tercantum di sini yang digantikan. Lainnya mengikuti paket dan bawaan platform.",
+          "empty": "Tidak ada penggantian. Workspace ini mengikuti paketnya dan bawaan platform.",
+          "reason": {
+            "label": "Alasan (disimpan di log audit)",
+            "hint": "Wajib untuk setiap perubahan atau penghapusan, 5 sampai 500 karakter.",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "Jelaskan alasannya dengan minimal 5 karakter.",
+              "long": "Batasi alasan hingga 500 karakter atau kurang."
+            }
+          },
+          "save": "Simpan penggantian",
+          "saving": "Menyimpan",
+          "saveHint": "Perbaiki baris yang disorot dan isi alasan untuk menyimpan.",
+          "saved": "{saved} disimpan, {removed} dihapus.",
+          "savedSome": "{saved} disimpan, {skipped} dilewati. Lihat alasan pada setiap baris yang dilewati.",
+          "preview": {
+            "title": "Pratinjau harga",
+            "hint": "Lihat bagaimana satu pesan ke workspace ini akan dihargai dan lapisan mana yang menetapkannya.",
+            "country": "Negara",
+            "category": "Kategori",
+            "run": "Pratinjau harga",
+            "running": "Menghitung harga",
+            "result": {
+              "label": "Hasil pratinjau harga",
+              "metaCost": "Biaya Meta",
+              "unknownCost": "Tidak diketahui",
+              "margin": "Margin",
+              "noMargin": "Tidak ada",
+              "layer": "Ditetapkan oleh",
+              "noLayer": "Tidak ada margin yang cocok",
+              "layers": {
+                "workspace": "Penggantian workspace",
+                "plan": "Margin paket",
+                "platform": "Bawaan platform"
+              },
+              "price": "Harga pelanggan",
+              "basis": "Dasar",
+              "bases": {
+                "margin": "Biaya Meta + margin",
+                "fixed": "Harga tetap"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "Mata uang penagihan",
+          "intro": "Pesan dihargai dari daftar tarif Meta untuk mata uang ini dan dibebankan ke dompet workspace dalam mata uang tersebut. Isi ulang juga dimasukkan dan dikreditkan dalam mata uang itu.",
+          "billedIn": "Ditagih dalam",
+          "change": "Ubah mata uang",
+          "otherWallets": "Dompet lain yang dimiliki workspace ini",
+          "notUsed": "Tidak digunakan untuk penagihan; dananya tetap di sini.",
+          "dialog": {
+            "title": "Ubah mata uang penagihan",
+            "currency": "Tagih dalam",
+            "effect": "Mulai sekarang pesan dihargai dari daftar Meta {to} dan dibebankan ke dompet {to}. Tidak ada konversi: dompet {from} mempertahankan saldonya.",
+            "left": "{amount} tetap berada di dompet {from} dan tidak digunakan sampai workspace dialihkan kembali.",
+            "reason": "Alasan",
+            "reasonHint": "Ditampilkan di jejak audit dan log dompet workspace. Minimal 5 karakter.",
+            "confirm": "Tagih dalam {currency}",
+            "saving": "Menyimpan",
+            "done": "Sekarang ditagih dalam {to} (sebelumnya {from})."
+          }
+        }
+      },
+      "adjust": {
+        "title": "Sesuaikan saldo",
+        "current": "Saldo saat ini",
+        "direction": "Tindakan",
+        "add": "Tambah dana",
+        "deduct": "Kurangi",
+        "amount": "Jumlah",
+        "amountHint": "Hingga 2 desimal.",
+        "reason": "Alasan",
+        "reasonHint": "Wajib, 5 sampai 500 karakter. Workspace melihat alasan ini di laporan mutasinya.",
+        "counter": "{count} / {max}",
+        "cappedWarning": "Ini lebih besar dari saldo {balance}. Hanya yang tersedia yang dikurangkan; saldo berhenti di 0.",
+        "review": "Tinjau",
+        "confirmAdd": "Tambah dana",
+        "confirmDeduct": "Kurangi",
+        "posting": "Memposting",
+        "summaryAdd": "Tambahkan {amount} ke {workspace}.",
+        "summaryDeduct": "Kurangi {amount} dari {workspace}.",
+        "newBalance": "Saldo baru: {balance}",
+        "summaryReason": "Alasan: {reason}",
+        "visibleNote": "Alasan ditampilkan kepada workspace dan disimpan di log audit.",
+        "problems": {
+          "amount": {
+            "required": "Masukkan jumlah.",
+            "invalid": "Masukkan jumlah positif dengan paling banyak 2 desimal.",
+            "zero": "Jumlah harus lebih dari 0.",
+            "tooLarge": "Jumlah itu melebihi batas untuk satu penyesuaian."
+          },
+          "note": {
+            "short": "Jelaskan alasannya dengan minimal {min} karakter.",
+            "long": "Jaga alasan di bawah {max} karakter."
+          }
+        }
+      },
+      "logs": {
+        "title": "Log dompet",
+        "crumb": "Log dompet",
+        "subtitle": "Apa yang terjadi pada dompet dan apa yang diubah operator.",
+        "scope": "Cakupan",
+        "scopes": {
+          "all": "Semua",
+          "workspace": "Peristiwa workspace",
+          "platform": "Perubahan platform"
+        },
+        "event": "Peristiwa",
+        "anyEvent": "Peristiwa apa pun",
+        "severity": "Tingkat keparahan",
+        "anySeverity": "Tingkat keparahan apa pun",
+        "severities": {
+          "info": "Info",
+          "warning": "Peringatan",
+          "error": "Error"
+        },
+        "workspaceId": "ID workspace",
+        "workspaceIdInvalid": "Masukkan ID workspace (UUID).",
+        "search": "Cari",
+        "from": "Dari",
+        "to": "Sampai",
+        "apply": "Terapkan",
+        "reset": "Atur ulang",
+        "emptyTitle": "Tidak ada entri log",
+        "emptyBody": "Tidak ada yang sesuai dengan filter ini.",
+        "loadMore": "Muat lebih banyak",
+        "loadingMore": "Memuat lebih banyak",
+        "platform": "Platform",
+        "showDetails": "Tampilkan detail",
+        "hideDetails": "Sembunyikan detail",
+        "requestId": "ID permintaan",
+        "columns": {
+          "time": "Waktu",
+          "severity": "Tingkat keparahan",
+          "event": "Peristiwa",
+          "workspace": "Workspace",
+          "actor": "Pelaku",
+          "message": "Pesan"
+        },
+        "actors": {
+          "operator": "Operator",
+          "customer": "Pelanggan",
+          "system": "Sistem"
+        }
+      },
+      "margins": {
+        "title": "Margin",
+        "crumb": "Margin",
+        "subtitle": "Yang dibayar pelanggan di atas biaya Meta, per negara dan kategori pesan.",
+        "retry": "Coba lagi",
+        "ratesFailed": "Biaya Meta tidak dapat dimuat, sehingga harga untuk baris baru tidak dapat ditampilkan.",
+        "mode": {
+          "current": "Pelanggan dihargai dengan",
+          "inactive": "Mode harga adalah Harga tetap, sehingga margin ini belum berlaku. Margin disimpan dan akan berlaku saat Anda beralih ke Biaya Meta + margin.",
+          "switchLink": "Buka sakelar mode harga"
+        },
+        "scope": {
+          "label": "Margin untuk",
+          "hint": "Bawaan platform berlaku untuk setiap paket. Margin milik paket akan menggantikannya.",
+          "platform": "Bawaan platform (berlaku untuk setiap paket)"
+        },
+        "grid": {
+          "country": "Negara",
+          "searchCountry": "Cari negara",
+          "category": "Kategori",
+          "margin": "Margin %",
+          "metaCost": "Biaya Meta",
+          "price": "Harga pelanggan",
+          "note": "Alasan",
+          "setBy": "Ditetapkan oleh",
+          "actions": "Tindakan",
+          "anyCountry": "Negara mana pun",
+          "anyCategory": "Kategori mana pun",
+          "unknownCost": "Biaya Meta tidak diketahui di sini, jadi harga tetap yang diketik berlaku.",
+          "priceInvalid": "Masukkan margin dari -100 sampai 1000 dengan paling banyak 2 desimal.",
+          "removedPending": "Akan dihapus saat Anda menyimpan.",
+          "addRow": "Tambah baris",
+          "remove": "Hapus",
+          "undo": "Urungkan",
+          "cancel": "Batal",
+          "empty": "Belum ada margin. Tambahkan baris untuk menetapkannya.",
+          "removeTitle": "Hapus margin ini?",
+          "removeBody": "Margin untuk {country} dihapus. Harga akan memakai margin yang cocok berikutnya.",
+          "removed": "Margin dihapus.",
+          "save": "Simpan margin",
+          "saving": "Menyimpan",
+          "saved": "{count, plural, other {# margin disimpan.}}",
+          "savedSome": "{saved} disimpan, {skipped} dilewati. Lihat alasan pada setiap baris yang dilewati.",
+          "unsaved": "{count, plural, other {# baris belum disimpan}}",
+          "tooMany": "Terlalu banyak baris yang berubah untuk satu kali simpan. Simpan dalam kelompok yang lebih kecil.",
+          "problems": {
+            "margin": "Masukkan persentase dari -100 sampai 1000 dengan paling banyak 2 desimal. -100 berarti gratis.",
+            "duplicate": "Negara dan kategori ini sudah memiliki baris."
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "Margin mana yang menang",
+            "body": "Penggantian workspace mengalahkan margin paketnya, yang mengalahkan bawaan platform. Setiap lapisan dibaca penuh sebelum lapisan berikutnya."
+          },
+          "specific": {
+            "title": "Paling spesifik lebih dulu",
+            "body": "Di dalam satu lapisan, negara dan kategori dipakai lebih dulu, lalu negara dengan kategori apa pun, lalu kategori di negara mana pun, lalu baris bawaan."
+          },
+          "unknown": {
+            "title": "Saat biaya Meta tidak diketahui",
+            "body": "Harganya adalah biaya Meta ditambah margin, dibulatkan ke 0.01 terdekat dan minimal 0.01 kecuali margin -100% (gratis). Jika biaya Meta tidak diketahui, harga tetap yang diketik berlaku sebagai gantinya."
+          }
+        }
+      },
+      "packages": {
+        "title": "Paket kredit",
+        "crumb": "Paket kredit",
+        "subtitle": "Penawaran opsional: bayar sejumlah ini, dapatkan kredit dompet sejumlah ini. Kredit di atas harga adalah bonus isi ulang.",
+        "new": "Paket baru",
+        "edit": "Ubah",
+        "enable": "Aktifkan",
+        "disable": "Nonaktifkan",
+        "delete": "Hapus",
+        "cancel": "Batal",
+        "enabled": "{name} diaktifkan.",
+        "disabled": "{name} dinonaktifkan.",
+        "deleted": "Paket dihapus.",
+        "deleteTitle": "Hapus paket?",
+        "deleteBody": "Hapus paket ini? Pembelian yang ada tetap menyimpan baris bukunya.",
+        "bonus": "Bonus +{percent}%",
+        "status": {
+          "active": "Aktif",
+          "inactive": "Nonaktif",
+          "featured": "Unggulan"
+        },
+        "empty": {
+          "title": "Belum ada paket kredit",
+          "body": "Belum ada paket yang dibuat.",
+          "bodyWrite": "Buat paket pertama untuk menawarkan isi ulang dompet dengan bonus."
+        },
+        "columns": {
+          "label": "Paket kredit",
+          "name": "Nama",
+          "slug": "Slug",
+          "price": "Harga",
+          "credit": "Kredit dompet",
+          "badge": "Lencana",
+          "status": "Status",
+          "actions": "Tindakan"
+        },
+        "form": {
+          "newTitle": "Paket kredit baru",
+          "editTitle": "Ubah paket kredit",
+          "newCrumb": "Paket baru",
+          "editCrumb": "Ubah paket",
+          "notFound": "Paket ini tidak ada lagi.",
+          "back": "Kembali ke paket kredit",
+          "sections": {
+            "identity": "Identitas",
+            "pricing": "Harga",
+            "display": "Tampilan"
+          },
+          "name": "Nama",
+          "slug": "Slug (opsional)",
+          "slugHint": "Huruf, angka, tanda hubung, dan garis bawah. Kosongkan untuk membuatnya dari nama.",
+          "description": "Deskripsi",
+          "price": "Harga",
+          "priceHint": "Yang dibayar pelanggan.",
+          "currency": "Mata uang",
+          "walletCredit": "Kredit dompet",
+          "walletCreditHint": "Yang masuk ke dompet.",
+          "bonusLine": "Bonus {percent}%: pelanggan membayar {price} dan mendapat {credit}.",
+          "badge": "Lencana",
+          "badgeHint": "Label singkat seperti Nilai terbaik.",
+          "sortOrder": "Urutan",
+          "sortOrderHint": "Terkecil dulu.",
+          "active": "Aktif",
+          "featured": "Unggulan",
+          "create": "Buat paket",
+          "save": "Simpan perubahan",
+          "saving": "Menyimpan",
+          "created": "{name} dibuat.",
+          "saved": "{name} disimpan.",
+          "stale": {
+            "title": "Paket ini diubah oleh orang lain",
+            "body": "Perubahan Anda belum disimpan, jadi tidak ada yang tertimpa. Muat ulang versi terbaru, lalu buat perubahan Anda lagi.",
+            "reload": "Muat ulang versi terbaru"
+          },
+          "problems": {
+            "name": "Masukkan nama hingga 96 karakter.",
+            "slug": "Gunakan huruf, angka, tanda hubung, dan garis bawah saja.",
+            "description": "Batasi deskripsi hingga 500 karakter atau kurang.",
+            "price": "Masukkan jumlah dengan paling banyak 2 desimal.",
+            "currency": "Pilih salah satu mata uang yang tercantum.",
+            "walletCredit": "Masukkan jumlah lebih dari 0 dengan paling banyak 2 desimal.",
+            "badge": "Batasi lencana hingga 32 karakter atau kurang.",
+            "sortOrder": "Masukkan bilangan bulat dari 0 sampai 9999."
+          }
+        }
+      }
+    }
+  }
+}

@@ -646,7 +646,8 @@
       "copied": "Copied",
       "payButton": "Pay {amount}",
       "gatewayNote": "You will go to the payment page of the seller's payment provider.",
-      "questions": "Questions about this invoice?"
+      "questions": "Questions about this invoice?",
+      "metaTitle": "Invoice"
     },
     "linked": {
       "title": "Invoices",

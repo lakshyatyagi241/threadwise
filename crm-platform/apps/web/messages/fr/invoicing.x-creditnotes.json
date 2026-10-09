@@ -1,0 +1,326 @@
+{
+  "invoicing": {
+    "nav": {
+      "creditNotes": "Avoirs"
+    },
+    "errors": {
+      "codes": {
+        "CN_EXCEEDS_INVOICE": "Le total des avoirs ne peut pas dépasser la facture. Réduisez les montants ou créditez uniquement ce qui reste.",
+        "CN_NOT_DRAFT": "Seul un avoir en brouillon peut être modifié ou supprimé. Rechargez la page pour voir son état actuel.",
+        "CN_ALREADY_VOID": "Cet avoir est déjà invalidé.",
+        "CN_HAS_REFUND": "Un remboursement en espèces a été effectué pour cet avoir : il ne peut pas être invalidé. Le remboursement reste dans le journal des paiements.",
+        "CN_NOTHING_TO_CREDIT": "Il ne reste rien à créditer ici. Choisissez une ligne avec un solde restant, ou ajoutez un montant.",
+        "CN_LINE_INVALID": "Une ligne créditée n’est pas valide : la quantité dépasse le reste à créditer, ou un montant est incorrect. Vérifiez les lignes en surbrillance.",
+        "INV_NOT_ISSUED": "Un avoir ne peut être établi que sur une facture émise."
+      }
+    },
+    "creditNotes": {
+      "status": {
+        "draft": "Brouillon",
+        "issued": "Émis",
+        "void": "Invalidé"
+      },
+      "reasons": {
+        "return": "Retour de marchandises",
+        "price_adjustment": "Correction de prix",
+        "billing_error": "Erreur de facturation",
+        "cancellation": "Annulation",
+        "goodwill": "Geste commercial",
+        "other": "Autre"
+      },
+      "settlements": {
+        "balance": "Imputé sur le solde",
+        "refund": "Remboursement en espèces"
+      },
+      "tabs": {
+        "label": "Statut de l’avoir",
+        "all": "Tous",
+        "draft": "Brouillon",
+        "issued": "Émis",
+        "void": "Invalidé"
+      },
+      "list": {
+        "title": "Avoirs",
+        "subtitle": "Documents qui réduisent le montant dû par un acheteur sur une facture émise.",
+        "invoices": "Factures",
+        "newCreditNote": "Nouvel avoir",
+        "search": "Rechercher par numéro ou acheteur",
+        "reset": "Effacer les filtres",
+        "refresh": "Actualiser",
+        "tableLabel": "Avoirs",
+        "noAccessTitle": "Accès refusé",
+        "noAccess": "Vous n’avez pas l’autorisation de voir les avoirs.",
+        "emptyFilteredTitle": "Aucun avoir ne correspond",
+        "emptyFiltered": "Essayez une autre recherche ou effacez les filtres.",
+        "resetFilters": "Effacer les filtres",
+        "empty": {
+          "all": {
+            "title": "Aucun avoir pour le moment",
+            "message": "Établissez un avoir sur une facture émise en cas de retour de marchandises, d’erreur de prix ou de geste commercial."
+          },
+          "draft": {
+            "title": "Aucun brouillon",
+            "message": "Les avoirs en cours de préparation apparaîtront ici."
+          },
+          "issued": {
+            "title": "Aucune émission",
+            "message": "Les avoirs émis ont un numéro et ont déjà modifié leur facture."
+          },
+          "void": {
+            "title": "Aucune invalidation",
+            "message": "Les avoirs invalidés sont conservés ici."
+          }
+        },
+        "showing": "{count, plural, one {# avoir chargé} other {# avoirs chargés}}",
+        "loadMore": "Charger plus",
+        "allLoaded": "Tout est chargé",
+        "loading": "Chargement des avoirs",
+        "contactLoading": "...",
+        "invoiceChip": "Facture {number}",
+        "clearInvoice": "Afficher les avoirs de toutes les factures"
+      },
+      "table": {
+        "draft": "Brouillon",
+        "scrollArea": "Tableau des avoirs, défilement horizontal",
+        "columns": {
+          "number": "Avoir",
+          "invoice": "Facture",
+          "buyer": "Acheteur",
+          "reason": "Motif",
+          "settlement": "Mode de règlement",
+          "total": "Total",
+          "applied": "Imputé sur le solde",
+          "refunded": "Remboursé en espèces",
+          "issued": "Date d’émission",
+          "status": "Statut"
+        }
+      },
+      "row": {
+        "moreFor": "Autres actions pour {name}",
+        "draft": "brouillon",
+        "open": "Ouvrir",
+        "edit": "Modifier le brouillon",
+        "issue": "Émettre",
+        "pdf": "Télécharger le PDF",
+        "print": "Imprimer",
+        "void": "Invalider",
+        "delete": "Supprimer le brouillon"
+      },
+      "dialogs": {
+        "draftName": "ce brouillon",
+        "close": "Fermer",
+        "keep": "Le conserver",
+        "done": {
+          "issue": "Avoir {name} émis.",
+          "void": "Avoir {name} invalidé.",
+          "delete": "Brouillon supprimé."
+        },
+        "issue": {
+          "title": "Émettre cet avoir ?",
+          "message": "Il reçoit son numéro et réduit le montant dû par l’acheteur sur la facture. En cas de remboursement en espèces, la somme est restituée via le journal des paiements. Ensuite, il ne peut plus être modifié.",
+          "confirm": "Émettre l’avoir"
+        },
+        "void": {
+          "title": "Invalider cet avoir ?",
+          "warning": "L’avoir n’est plus pris en compte : la facture revient à son montant d’avant cet avoir.",
+          "reason": "Pourquoi l’invalider ?",
+          "reasonHint": "Obligatoire. Il est conservé sur l’avoir.",
+          "confirm": "Invalider l’avoir"
+        },
+        "delete": {
+          "title": "Supprimer ce brouillon ?",
+          "message": "Le brouillon est supprimé définitivement. Rien n’a été émis, la facture ne change donc pas.",
+          "confirm": "Supprimer le brouillon"
+        }
+      },
+      "picker": {
+        "total": "Total de la facture",
+        "paid": "Payé",
+        "credited": "Déjà crédité",
+        "balance": "Solde dû",
+        "loading": "Chargement de la facture",
+        "change": "Changer de facture",
+        "search": "Rechercher une facture émise par numéro ou acheteur",
+        "results": "Factures pouvant faire l’objet d’un avoir",
+        "searching": "Recherche...",
+        "none": "Aucune facture émise trouvée.",
+        "more": "Afficher plus",
+        "totalShort": "Total",
+        "notCreditable": "Un avoir ne peut être établi que sur une facture émise (émise, partiellement payée, en retard ou payée). Choisissez une autre facture."
+      },
+      "lines": {
+        "invoiceLines": "Lignes de la facture",
+        "creditLine": "Créditer {name}",
+        "lineFacts": "Facturé {qty} pour {amount} HT",
+        "tax": "Taxe",
+        "taxIncluded": "{name} {rate} % incluse dans le prix",
+        "taxAdded": "{name} {rate} % en sus",
+        "alreadyCredited": "{qty} déjà crédité(s), {left} restant(s)",
+        "fullyCredited": "Déjà entièrement crédité",
+        "qtyToCredit": "Quantité à créditer",
+        "freeTitle": "Lignes libres",
+        "freeHint": "Un geste commercial ou une correction non rattachée à une ligne. Le montant est hors taxes.",
+        "description": "Description",
+        "amount": "Montant HT",
+        "taxRate": "Taux de taxe",
+        "noTax": "Sans taxe",
+        "inclusive": "incluse",
+        "removeFree": "Supprimer cette ligne",
+        "addFree": "Ajouter une ligne libre"
+      },
+      "problems": {
+        "noInvoice": "Choisissez la facture à créditer.",
+        "nothing": "Choisissez un élément à créditer : une ligne ou un montant libre.",
+        "qtyInvalid": "Saisissez une quantité supérieure à 0, avec 4 décimales au maximum.",
+        "qtyExceeds": "{max} au maximum peut encore être crédité sur cette ligne.",
+        "descriptionRequired": "Décrivez ce qui est crédité.",
+        "amountInvalid": "Saisissez un montant supérieur à 0.",
+        "noteTooLong": "La note dépasse 2 000 caractères."
+      },
+      "estimate": {
+        "title": "Avoir estimé",
+        "disclaimer": "Estimation calculée ici à partir des prix et taxes de la facture. Les montants enregistrés par le serveur sont les montants définitifs.",
+        "empty": "Rien à créditer pour le moment. Choisissez la facture entière ou cochez des lignes.",
+        "lineQty": "Quantité {qty}",
+        "taxSummary": "Récapitulatif des taxes",
+        "included": "incluse",
+        "taxOn": "{tax} sur {base}",
+        "subtotal": "HT",
+        "tax": "Taxe",
+        "total": "Total de l’avoir",
+        "exceeds": "Ce montant dépasse ce que la facture permet encore de créditer ({max}). Le serveur le refusera.",
+        "money": "Traitement du montant",
+        "balanceBefore": "Solde dû actuellement",
+        "balanceAfter": "Solde dû après",
+        "applied": "Imputé sur la facture",
+        "refunded": "Restitué en espèces",
+        "refundNote": "Remboursement en espèces : le trop-perçu de l’acheteur est restitué via le journal des paiements à l’émission.",
+        "balanceNote": "Imputé sur le solde : aucune somme n’est versée. L’avoir réduit seulement ce que doit l’acheteur."
+      },
+      "builder": {
+        "noAccess": "Vous n’avez pas l’autorisation de créer des avoirs.",
+        "backToList": "Retour aux avoirs",
+        "loading": "Chargement de l’avoir",
+        "notDraft": "Seul un avoir en brouillon peut être modifié.",
+        "openIt": "Ouvrir l’avoir",
+        "back": "Retour",
+        "newTitle": "Nouvel avoir",
+        "editTitle": "Modifier l’avoir en brouillon",
+        "conflict": "Un autre utilisateur a modifié cet avoir pendant votre saisie. Rechargez pour voir la dernière version ; vos modifications seront perdues.",
+        "reload": "Recharger",
+        "invoice": {
+          "title": "Facture à créditer",
+          "hint": "Un avoir se rattache à une seule facture émise."
+        },
+        "details": {
+          "title": "Détails",
+          "reason": "Motif",
+          "issueDate": "Date d’émission",
+          "issueDateHint": "Laissez vide pour utiliser la date d’émission (aujourd’hui : {today}).",
+          "note": "Note",
+          "noteHint": "Imprimée sur l’avoir. Facultatif."
+        },
+        "settlement": {
+          "title": "Traitement du montant",
+          "hint": "Choisi maintenant, appliqué à l’émission de l’avoir.",
+          "balance": {
+            "title": "Imputer sur le solde de la facture",
+            "body": "La facture doit moins. Aucun mouvement d’argent. À utiliser lorsque l’acheteur n’a pas encore payé, ou conserve l’avoir."
+          },
+          "refund": {
+            "title": "Rembourser en espèces",
+            "body": "Le montant déjà versé par l’acheteur au-delà du solde dû est restitué via le journal des paiements."
+          }
+        },
+        "what": {
+          "title": "Quoi créditer",
+          "pickFirst": "Choisissez d’abord la facture.",
+          "loadingCredits": "Vérification des avoirs antérieurs de cette facture",
+          "full": {
+            "title": "La facture restante en totalité",
+            "body": "Crédite toutes les lignes, et les frais de port avec le premier avoir. Encore créditable :"
+          },
+          "lines": {
+            "title": "Certaines lignes ou certains montants",
+            "body": "Cochez les lignes et quantités à créditer, ou ajoutez un montant libre."
+          }
+        },
+        "saveDraft": "Enregistrer le brouillon",
+        "saveAndIssue": "Enregistrer et émettre",
+        "cancel": "Annuler",
+        "estimateWaiting": "Choisissez une facture pour voir l’avoir estimé.",
+        "savedToast": "Avoir enregistré en brouillon.",
+        "issuedToast": "Avoir {number} émis.",
+        "savedNotIssued": "Enregistré en brouillon, mais l’avoir n’a pas pu être émis : {reason}"
+      },
+      "detail": {
+        "noAccess": "Vous n’avez pas l’autorisation de voir les avoirs.",
+        "loading": "Chargement de l’avoir",
+        "back": "Retour aux avoirs",
+        "backToList": "Retour aux avoirs",
+        "draft": "Brouillon",
+        "againstInvoice": "Sur la facture",
+        "edit": "Modifier",
+        "issue": "Émettre",
+        "pdf": "PDF",
+        "print": "Imprimer",
+        "void": "Invalider",
+        "delete": "Supprimer",
+        "cannotVoidRefunded": "Un remboursement en espèces a été effectué pour cet avoir : il ne peut pas être invalidé. Le remboursement reste dans le journal des paiements.",
+        "voidedOn": "Invalidé le {date}",
+        "voided": "Cet avoir a été invalidé.",
+        "voidReason": "Motif"
+      },
+      "money": {
+        "title": "Traitement du montant",
+        "titleDraft": "Traitement du montant prévu",
+        "total": "Total de l’avoir",
+        "applied": "Imputé sur la facture",
+        "refunded": "Restitué en espèces",
+        "voidNote": "Cet avoir a été invalidé : il ne réduit donc plus la facture.",
+        "draftNote": "Si vous l’émettez en l’état :",
+        "estimate": "Estimation jusqu’à son émission.",
+        "balanceBody": "Règlement : imputé sur le solde. Aucune somme n’est versée.",
+        "refundBody": "Règlement : remboursement en espèces. Le trop-perçu est restitué à l’acheteur via le journal des paiements."
+      },
+      "after": {
+        "title": "La facture après cet avoir",
+        "titleNow": "La facture actuellement",
+        "total": "Total de la facture",
+        "paid": "Payé",
+        "credited": "Crédité",
+        "balance": "Solde dû",
+        "credit": "Avoir en faveur de l’acheteur"
+      },
+      "paper": {
+        "label": "Avoir {number}",
+        "labelDraft": "Avoir en brouillon",
+        "void": "Invalidé",
+        "sellerFallback": "Votre entreprise",
+        "title": "Avoir",
+        "draftNumber": "Brouillon",
+        "creditedTo": "Crédité à",
+        "buyerFallback": "Acheteur",
+        "issued": "Émis",
+        "invoice": "Facture",
+        "item": "Article",
+        "qty": "Qté",
+        "unit": "Prix unitaire",
+        "tax": "Taxe",
+        "net": "Net",
+        "taxAmount": "Montant de taxe",
+        "total": "Total",
+        "taxFallback": "Taxe",
+        "taxSummary": "Récapitulatif des taxes",
+        "taxRate": "Taux",
+        "taxBase": "Base imposable",
+        "included": "incluse",
+        "subtotal": "HT",
+        "taxTotal": "Taxe",
+        "totalCredit": "Total de l’avoir",
+        "reason": "Motif",
+        "note": "Note"
+      }
+    }
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "Penggunaan AI",
+      "keys": "Kunci penyedia AI"
+    },
+    "admin": {
+      "nav": {
+        "group": "AI",
+        "keys": "Kunci penyedia AI",
+        "dashboard": "Penggunaan AI"
+      }
+    },
+    "common": {
+      "loading": "Memuat",
+      "retry": "Coba lagi",
+      "requestId": "ID permintaan",
+      "dismiss": "Tutup",
+      "tokens": "{count, number} token",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Anda tidak memiliki izin untuk melihat ini.",
+        "request": "Permintaan itu tidak dapat diselesaikan.",
+        "unexpected": "Terjadi masalah di sisi kami. Coba lagi sebentar lagi.",
+        "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
+        "conflict": "Orang lain mengubah ini. Halaman telah dimuat ulang: terapkan perubahan Anda lagi.",
+        "keyRequired": "Tambahkan kunci API sebelum mengaktifkan penyedia ini.",
+        "validation": "Beberapa nilai tidak valid. Periksa kolom yang disorot.",
+        "notFound": "Item itu sudah tidak ada."
+      }
+    },
+    "windows": {
+      "label": "Rentang waktu",
+      "7d": "7 hari",
+      "30d": "30 hari",
+      "90d": "90 hari",
+      "1y": "1 tahun",
+      "custom": "Kustom",
+      "from": "Dari",
+      "to": "Sampai",
+      "pick": "Pilih tanggal mulai dan akhir.",
+      "invalid": "Tanggal akhir sebelum tanggal mulai.",
+      "tooLong": "Pilih rentang {days} hari atau kurang."
+    },
+    "keys": {
+      "eyebrow": "Admin · Sistem · Penyedia AI",
+      "title": "Kunci API AI",
+      "description": "Kunci global untuk setiap penyedia AI yang didukung. Workspace pada paket tanpa \"Bawa kunci sendiri\" menggunakan ini sebagai cadangan. Dienkripsi saat disimpan.",
+      "superOnly": "Hanya super admin yang dapat mengelola kunci AI platform.",
+      "summary": {
+        "providers": "Penyedia",
+        "providersHint": "bawaan",
+        "active": "Aktif",
+        "activeHint": "diaktifkan sebagai cadangan",
+        "ready": "Siap",
+        "readyHint": "aktif + memiliki kunci",
+        "noKey": "Kunci belum diatur",
+        "noKeyHint": "tempel kunci agar siap"
+      },
+      "groups": {
+        "llm": "Model bahasa",
+        "voice": "Suara"
+      },
+      "card": {
+        "active": "Aktif",
+        "off": "Dinonaktifkan",
+        "keySaved": "Kunci tersimpan",
+        "keySavedLast4": "Kunci tersimpan, berakhiran {last4}",
+        "noKey": "Tanpa kunci",
+        "unreadable": "Kunci tersimpan tidak dapat dibaca, tempel lagi",
+        "slug": "ID penyedia",
+        "apiKey": "Kunci API",
+        "apiKeyHint": "Kosongkan untuk mempertahankan kunci tersimpan.",
+        "apiKeyPlaceholder": "Tempel kunci di sini",
+        "apiKeySavedPlaceholder": "•••••••••• (tersimpan — kosongkan untuk mempertahankan)",
+        "defaultModel": "Model default",
+        "pickModel": "— Pilih model default —",
+        "customModel": "{model} (kustom)",
+        "sortOrder": "Urutan",
+        "maxTokens": "Maks. token per permintaan",
+        "maxTokensHint": "Batas atas opsional untuk panjang balasan di setiap workspace. Kosong berarti tanpa batas.",
+        "extraModels": "Model tambahan",
+        "extraModelsHint": "Opsional. ID model yang ditawarkan di samping default, dipisahkan koma.",
+        "save": "Simpan {name}",
+        "saving": "Menyimpan",
+        "turnOn": "Aktifkan",
+        "turnOff": "Nonaktifkan",
+        "removeKey": "Hapus kunci",
+        "removeTitle": "Hapus kunci {name}?",
+        "removeBody": "Workspace akan berhenti menggunakan {name} sampai Anda menambahkan kunci lagi. Penyedia dimatikan.",
+        "removeConfirm": "Hapus kunci",
+        "cancel": "Batal"
+      },
+      "toasts": {
+        "saved": "{name} disimpan.",
+        "savedOn": "{name} disimpan dan diaktifkan.",
+        "on": "{name} diaktifkan.",
+        "off": "{name} dinonaktifkan.",
+        "removed": "Kunci {name} dihapus."
+      },
+      "help": {
+        "title": "Cara kunci ini digunakan",
+        "body": "Kunci milik workspace hanya diutamakan jika paketnya mengizinkan. Jika tidak, penyedia aktif yang sesuai di sini yang digunakan. Mematikan penyedia berarti workspace tanpa kunci sendiri tidak dapat menggunakannya."
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Admin / Dasbor AI",
+      "title": "Penggunaan AI & pembakaran token",
+      "description": "Setiap panggilan AI di seluruh platform — penyedia mana, model mana, workspace mana, kunci platform vs kunci sendiri (BYOK), dengan estimasi biaya.",
+      "kpis": {
+        "tokens": "Token terpakai",
+        "tokensHint": "pada rentang ini",
+        "cost": "Estimasi biaya",
+        "costHint": "estimasi gabungan",
+        "calls": "Panggilan AI",
+        "callsHint": "permintaan tercatat",
+        "workspaces": "Workspace yang memakai AI",
+        "workspacesHint": "aktif"
+      },
+      "daily": "Pemakaian token harian",
+      "byProvider": "Token menurut penyedia",
+      "split": "Siapa yang membayar — platform vs BYOK",
+      "splitPlatform": "Kunci platform",
+      "splitOwn": "Kunci sendiri (BYOK)",
+      "topWorkspaces": "Workspace dengan pemakaian token terbanyak",
+      "topModels": "Model teratas",
+      "keyHealth": "Kesehatan kunci AI",
+      "live": "Aktif",
+      "notLive": "Mati",
+      "peak": "puncak {value}/hari",
+      "dailyEmpty": "Belum ada panggilan AI tercatat pada rentang ini.",
+      "providerCalls": "{count, number} panggilan",
+      "providerEmpty": "Belum ada penggunaan.",
+      "splitNote": "Hanya token kunci platform yang dihitung terhadap batas AI bulanan paket. Workspace BYOK menggunakan akun penyedianya sendiri.",
+      "workspaceEmpty": "Belum ada penggunaan AI workspace.",
+      "workspaceMeta": "{count, number} panggilan",
+      "workspaceByok": "{tokens} BYOK",
+      "modelEmpty": "Belum ada penggunaan model.",
+      "modelMeta": "{provider} · {count, number} panggilan",
+      "manageKeys": "Kelola kunci",
+      "noDefaultModel": "tanpa model default",
+      "noPlatformKeys": "Belum ada kunci AI platform yang dikonfigurasi.",
+      "byokKeys": "Kunci BYOK aktif",
+      "byokWorkspaces": "Workspace dengan BYOK"
+    },
+    "usage": {
+      "title": "Penggunaan AI",
+      "description": "Setiap panggilan AI yang dilakukan workspace Anda — token terpakai, menurut model dan penyedia, kunci paket vs kunci Anda sendiri, dan estimasi biaya.",
+      "kpis": {
+        "tokens": "Token terpakai",
+        "calls": "{count, plural, other {# panggilan AI}}",
+        "platform": "Kunci paket",
+        "ownKeys": "Kunci Anda (BYOK)",
+        "cost": "Estimasi biaya",
+        "costHint": "tarif gabungan penyedia",
+        "providers": "Penyedia",
+        "models": "Model"
+      },
+      "cap": {
+        "title": "Bulan ini · batas AI paket",
+        "used": "{used, number} dari {limit, number} token terpakai bulan ini",
+        "unlimited": "{used, number} token terpakai bulan ini: tanpa batas pada paket Anda",
+        "reached": "Hampir mencapai batas bulanan Anda. Upgrade paket atau tambahkan kunci sendiri (BYOK) untuk terus menggunakan AI.",
+        "note": "Token BYOK berjalan di akun penyedia Anda sendiri dan tidak pernah dihitung terhadap batas paket Anda."
+      },
+      "daily": "Pemakaian token harian",
+      "byProvider": "Menurut penyedia",
+      "split": "Kunci paket vs kunci Anda",
+      "splitPlatform": "Kunci paket",
+      "splitOwn": "Kunci Anda (BYOK)",
+      "models": "Menurut model",
+      "columns": {
+        "model": "Model",
+        "provider": "Penyedia",
+        "tokens": "Token",
+        "calls": "Panggilan",
+        "prompt": "Prompt",
+        "completion": "Completion"
+      },
+      "empty": "Belum ada penggunaan AI pada rentang ini.",
+      "costNote": "Biaya adalah estimasi berdasarkan tarif token gabungan per penyedia yang dipublikasikan dan dapat berbeda dari faktur penyedia Anda. Jumlah token akurat."
+    },
+    "own": {
+      "title": "Kunci penyedia AI Anda",
+      "description": "Tambahkan kunci Anda sendiri untuk sebuah vendor agar fitur AI Anda memakai akun Anda, bukan akun bersama. Kunci dienkripsi dan tidak pernah ditampilkan lagi.",
+      "allowed": "Paket Anda memungkinkan kunci Anda sendiri diutamakan.",
+      "notAllowed": "Paket Anda belum menyertakan kunci sendiri. Anda dapat menyimpannya sekarang, tetapi panggilan tetap memakai kunci bersama sampai Anda upgrade.",
+      "add": "Tambah kunci",
+      "provider": "Penyedia",
+      "apiKey": "Kunci API",
+      "apiKeyHint": "Minimal 8 karakter.",
+      "save": "Simpan kunci",
+      "replace": "Ganti kunci",
+      "saving": "Menyimpan",
+      "on": "Aktif",
+      "off": "Nonaktif",
+      "ends": "Berakhiran {last4}",
+      "using": "Panggilan menggunakan",
+      "usingOwn": "kunci Anda",
+      "usingShared": "kunci bersama",
+      "usingNone": "tanpa kunci (tidak ada yang tersedia)",
+      "turnOn": "Aktifkan",
+      "turnOff": "Matikan",
+      "remove": "Hapus",
+      "removeTitle": "Hapus kunci {name} Anda?",
+      "removeBody": "Panggilan beralih ke kunci bersama jika tersedia.",
+      "removeConfirm": "Hapus kunci",
+      "cancel": "Batal",
+      "empty": "Anda belum menambahkan kunci apa pun.",
+      "toasts": {
+        "saved": "Kunci {name} disimpan.",
+        "on": "Kunci {name} diaktifkan.",
+        "off": "Kunci {name} dimatikan.",
+        "removed": "Kunci {name} dihapus."
+      },
+      "errors": {
+        "tooShort": "Kunci minimal 8 karakter."
+      }
+    }
+  }
+}

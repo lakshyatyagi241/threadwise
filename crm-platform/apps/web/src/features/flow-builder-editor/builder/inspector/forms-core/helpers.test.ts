@@ -14,10 +14,15 @@ import {
   senderLabel,
   senderNoneCopy,
   senderOptions,
+  senderPickKey,
   subflowLabel,
   toggleId,
   withCurrent,
+  type HelperT,
 } from './helpers';
+
+/** A translator that echoes the key and its values, so the tests assert which message is picked, not its wording. */
+const t: HelperT = (key, values) => (values ? `${key}:${JSON.stringify(values)}` : key);
 
 describe('moveItem', () => {
   it('swaps neighbours and ignores out-of-range moves', () => {
@@ -47,30 +52,40 @@ describe('trigger sender', () => {
   });
 
   it('labels the sender field by channel and trigger kind', () => {
-    expect(senderLabel('instagram', 'keyword')).toBe('Listen on Instagram account');
-    expect(senderLabel('chat', 'tag_added')).toBe('Send from number');
-    expect(senderLabel('email', 'keyword')).toBe('Listen on mailbox');
+    expect(senderLabel(t, 'instagram', 'keyword')).toBe('senderLabel.listen.instagram');
+    expect(senderLabel(t, 'chat', 'tag_added')).toBe('senderLabel.send.chat');
+    expect(senderLabel(t, 'email', 'keyword')).toBe('senderLabel.listen.email');
+  });
+
+  it('picks the "pick a sender" note by channel', () => {
+    expect(senderPickKey('instagram')).toBe('senderPickNotice.instagram');
+    expect(senderPickKey('telegram')).toBe('senderPickNotice.telegram');
+    expect(senderPickKey('line')).toBe('senderPickNotice.number');
   });
 
   it('shows the "none connected" placeholder only when empty', () => {
-    expect(senderOptions('chat', [])[0]?.l).toBe('No connected number');
-    const opts = senderOptions('chat', [{ key: 'waba:1', label: '+1 555', engineLabel: 'WABA' }]);
-    expect(opts[0]?.l).toBe('— pick number —');
-    expect(opts[1]).toEqual({ v: 'waba:1', l: '+1 555 · WABA' });
+    expect(senderOptions(t, 'chat', [])[0]?.l).toBe('senderEmpty.chat');
+    const opts = senderOptions(t, 'chat', [
+      { key: 'waba:1', label: '+1 555', engineLabel: 'WABA' },
+    ]);
+    expect(opts[0]?.l).toBe('senderPick.chat');
+    expect(opts[1]).toEqual({
+      v: 'waba:1',
+      l: 'senderEngine:{"label":"+1 555","engine":"WABA"}',
+    });
   });
 });
 
 describe('sender copy while the platform has unofficial WhatsApp off', () => {
   it('names only the official engines and links to the official WhatsApp connect flow', () => {
     const off = senderHint('chat');
-    expect(off.before).toContain('WhatsApp Business API / Twilio');
-    expect(off.before).not.toContain('Unofficial');
+    expect(off.key).toBe('senderHint.chatOfficial');
     expect(off.href).toBe('/channels/whatsapp');
     expect(senderNoneCopy('chat').href).toBe('/channels/whatsapp');
   });
 
   it('keeps the three-engine wording and the device page only while the switch is on', () => {
-    expect(senderHint('chat', true).before).toContain('Unofficial / WABA / Twilio');
+    expect(senderHint('chat', true).key).toBe('senderHint.chatUnofficial');
     expect(senderHint('chat', true).href).toBe('/devices');
     expect(senderNoneCopy('chat', true).href).toBe('/devices');
   });
@@ -142,12 +157,12 @@ describe('cta', () => {
   });
 
   it('keeps a custom label on type change and resets the value', () => {
-    expect(changeCtaType({ type: 'url', label: 'Visit website', value: 'x' }, 'phone')).toEqual({
+    expect(changeCtaType(t, { type: 'url', label: 'ctaLabel.url', value: 'x' }, 'phone')).toEqual({
       type: 'phone',
-      label: 'Call us',
+      label: 'ctaLabel.phone',
       value: '',
     });
-    expect(changeCtaType({ type: 'url', label: 'Shop now', value: 'x' }, 'copy').label).toBe(
+    expect(changeCtaType(t, { type: 'url', label: 'Shop now', value: 'x' }, 'copy').label).toBe(
       'Shop now',
     );
   });
@@ -163,20 +178,22 @@ describe('acceptFor', () => {
 
 describe('subflowLabel', () => {
   it("marks a flow live or draft like Reference's Sub-flow picker", () => {
-    expect(subflowLabel('Welcome', true)).toBe('Welcome · live');
-    expect(subflowLabel('Welcome', false)).toBe('Welcome · draft');
-    expect(subflowLabel('', false)).toBe('Flow · draft');
+    expect(subflowLabel(t, 'Welcome', true)).toBe('subflowLive:{"name":"Welcome"}');
+    expect(subflowLabel(t, 'Welcome', false)).toBe('subflowDraft:{"name":"Welcome"}');
+    expect(subflowLabel(t, '', false)).toBe('subflowDraft:{"name":"flowFallback"}');
   });
 });
 
 describe('agentLabel', () => {
   it('appends provider/model only when both are known', () => {
-    expect(agentLabel({ name: 'Sales bot', provider: 'openai', model: 'gpt-4o-mini' })).toBe(
-      'Sales bot · openai/gpt-4o-mini',
+    expect(agentLabel(t, { name: 'Sales bot', provider: 'openai', model: 'gpt-4o-mini' })).toBe(
+      'agentWithModel:{"name":"Sales bot","model":"openai/gpt-4o-mini"}',
     );
-    expect(agentLabel({ name: 'Sales bot', provider: null, model: 'gpt-4o-mini' })).toBe(
+    expect(agentLabel(t, { name: 'Sales bot', provider: null, model: 'gpt-4o-mini' })).toBe(
       'Sales bot',
     );
-    expect(agentLabel({ name: '', provider: 'openai', model: 'x' })).toBe('Agent · openai/x');
+    expect(agentLabel(t, { name: '', provider: 'openai', model: 'x' })).toBe(
+      'agentWithModel:{"name":"agentFallback","model":"openai/x"}',
+    );
   });
 });

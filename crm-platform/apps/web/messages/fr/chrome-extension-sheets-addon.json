@@ -1,0 +1,139 @@
+{
+  "settings": {
+    "tiles": {
+      "google-sheets-addon": {
+        "label": "Module complémentaire Google Sheets",
+        "description": "Créez votre clé, téléchargez les fichiers du module complémentaire et synchronisez contacts et produits depuis une feuille de calcul.",
+        "keywords": "google sheets, feuille de calcul, module complémentaire, apps script, importer des contacts, synchroniser des produits, clé"
+      }
+    }
+  },
+  "chrome-extension-sheets-addon": {
+    "common": {
+      "dismiss": "Ignorer",
+      "copy": "Copier",
+      "copied": "Copié",
+      "copyFailed": "Impossible de copier. Sélectionnez la clé et copiez-la à la main.",
+      "reference": "Référence pour l’assistance : {id}",
+      "back": "Retour aux intégrations"
+    },
+    "page": {
+      "title": "Module complémentaire Google Sheets",
+      "subtitle": "Importez et exportez des contacts, et synchronisez des produits entre une feuille de calcul et votre espace de travail.",
+      "loading": "Chargement de la configuration du module complémentaire",
+      "retry": "Réessayer",
+      "status": {
+        "connected": "Clé active",
+        "noKey": "Pas encore de clé",
+        "notInstalled": "Non installé"
+      },
+      "forbidden": {
+        "title": "Vous ne pouvez pas utiliser le module complémentaire Google Sheets",
+        "body": "Votre rôle n’inclut pas le module complémentaire Google Sheets. Demandez à un administrateur d’accorder l’accès à votre rôle."
+      },
+      "loadFailed": {
+        "title": "Impossible de charger la configuration du module complémentaire.",
+        "notInstalled": "Le module complémentaire n’est pas installé dans cet espace de travail.",
+        "forbidden": "Votre rôle n’est pas autorisé à voir cette page.",
+        "planLocked": "Votre forfait n’inclut pas la Marketplace.",
+        "suspended": "Ce compte ou cet espace de travail est suspendu.",
+        "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+        "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+        "unexpected": "Un problème est survenu de notre côté. Réessayez."
+      }
+    },
+    "install": {
+      "title": "Installez d’abord le module complémentaire",
+      "body": "Le module complémentaire Google Sheets n’est pas installé dans cet espace de travail ; les clés et le module ne fonctionnent donc pas encore. Un administrateur l’installe une seule fois depuis la Marketplace.",
+      "marketplace": "L’installer depuis la Marketplace",
+      "google": "Ouvrir la fiche du Google Workspace Marketplace",
+      "keyKept": "Vous avez toujours une clé. Vous pouvez la désactiver ci-dessous."
+    },
+    "key": {
+      "title": "Votre clé",
+      "intro": "Le module complémentaire utilise votre clé personnelle pour agir en votre nom. Il ne voit que ce que votre rôle autorise.",
+      "none": "Vous n’avez pas encore de clé.",
+      "generate": "Générer une clé",
+      "rotate": "Générer une nouvelle clé",
+      "revoke": "Révoquer la clé",
+      "working": "En cours...",
+      "active": "Clé",
+      "created": "Créée {when}",
+      "lastUsed": "Dernière utilisation {when}",
+      "neverUsed": "Jamais utilisée",
+      "newTitle": "Votre nouvelle clé",
+      "newWarning": "Copiez-la maintenant. Elle n’est affichée qu’une seule fois et ne pourra plus l’être. Toute personne disposant de cette clé peut agir en votre nom dans le module complémentaire.",
+      "rotatedNote": "Votre clé précédente a cessé de fonctionner.",
+      "keyLabel": "Nouvelle clé",
+      "confirmRotate": {
+        "title": "Remplacer votre clé ?",
+        "message": "La clé que vous utilisez actuellement cesse de fonctionner immédiatement. Collez la nouvelle clé dans le module complémentaire pour continuer à l’utiliser.",
+        "confirm": "Remplacer la clé"
+      },
+      "confirmRevoke": {
+        "title": "Révoquer votre clé ?",
+        "message": "Le module complémentaire cesse de fonctionner jusqu’à ce que vous créiez et colliez une nouvelle clé.",
+        "confirm": "Révoquer la clé"
+      },
+      "cancel": "Annuler",
+      "revoked": "Votre clé a été révoquée.",
+      "generated": "Votre clé a été créée. Copiez-la maintenant.",
+      "errors": {
+        "notInstalled": "Le module complémentaire n’est pas installé dans cet espace de travail. Demandez à un administrateur de l’installer.",
+        "forbidden": "Votre rôle n’est pas autorisé à faire cela.",
+        "planLocked": "Votre forfait n’inclut pas la Marketplace.",
+        "suspended": "Ce compte ou cet espace de travail est suspendu.",
+        "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+        "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+        "unexpected": "Un problème est survenu de notre côté. Réessayez."
+      }
+    },
+    "can": {
+      "title": "Ce que votre clé peut faire",
+      "intro": "Il s’agit de l’intersection entre votre rôle et ce que l’installation autorise.",
+      "allowed": "Autorisé",
+      "notAllowed": "Non autorisé",
+      "readContacts": "Importer des contacts dans une feuille",
+      "writeContacts": "Exporter des contacts depuis une feuille",
+      "readCatalog": "Voir les boutiques et les produits",
+      "writeCatalog": "Synchroniser des produits vers une boutique"
+    },
+    "files": {
+      "title": "Fichiers du module complémentaire",
+      "intro": "Six fichiers composent le projet Apps Script. Code.gs pointe déjà vers cet espace de travail.",
+      "download": "Télécharger",
+      "downloadFile": "Télécharger {name}",
+      "downloaded": "{name} téléchargé.",
+      "notAvailable": "Pas encore disponible sur ce serveur",
+      "failed": "Impossible de télécharger {name}. Réessayez."
+    },
+    "steps": {
+      "title": "Le configurer dans une feuille de calcul",
+      "one": "Ouvrez une feuille de calcul, puis Extensions, puis Apps Script.",
+      "two": "Téléchargez les six fichiers ci-dessus. Dans Paramètres du projet, affichez le fichier appsscript.json, puis collez appsscript.json et Code.gs à la place de ceux de l’éditeur.",
+      "three": "Ajoutez trois fichiers HTML nommés Dialog, Settings et Help et collez-y les fichiers téléchargés.",
+      "four": "Enregistrez et rechargez la feuille de calcul. Un menu CRM apparaît. Accordez les trois autorisations que Google demande.",
+      "five": "Choisissez CRM, puis Paramètres, collez votre clé et sélectionnez Enregistrer et vérifier.",
+      "six": "La ligne 1 de votre feuille contient les noms des colonnes. Utilisez ensuite Importer des contacts, Exporter des contacts ou Synchroniser les produits dans le menu CRM."
+    },
+    "columns": {
+      "title": "Colonnes lues par le module complémentaire",
+      "contacts": "Contacts",
+      "products": "Produits",
+      "contactsHint": "email ou phone est obligatoire. Une colonne nommée attr:city renseigne la propriété personnalisée city. Une cellule vide n’efface jamais une valeur enregistrée.",
+      "productsHint": "name et price sont obligatoires. Les produits sont rapprochés par SKU, puis par nom. Un stock vide signifie illimité."
+    },
+    "shops": {
+      "title": "Boutiques",
+      "empty": "Aucune boutique pour l’instant. Votre première synchronisation de produits en crée une.",
+      "disabled": "Désactivée",
+      "open": "Ouvrir {name}",
+      "updated": "Mis à jour {when}"
+    },
+    "products": {
+      "title": "Produits récents",
+      "empty": "Aucun produit pour l’instant. Synchronisez une feuille pour en ajouter.",
+      "count": "{count, plural, one {# produit dans votre espace de travail} other {# produits dans votre espace de travail}}"
+    }
+  }
+}

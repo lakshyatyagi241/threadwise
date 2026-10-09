@@ -1,0 +1,870 @@
+{
+  "marketplace": {
+    "nav": {
+      "marketplace": "Marketplace"
+    },
+    "meta": {
+      "apps": "Ứng dụng nhỏ · Marketplace",
+      "integrations": "Tích hợp · Marketplace",
+      "app": "Ứng dụng · Marketplace",
+      "install": "Cài đặt · Marketplace",
+      "installed": "Đã cài đặt · Marketplace",
+      "manage": "Quản lý ứng dụng · Marketplace",
+      "requests": "Yêu cầu · Marketplace"
+    },
+    "common": {
+      "dismiss": "Bỏ qua",
+      "loading": "Đang tải",
+      "errorTitle": "Không tải được mục này",
+      "requestId": "Mã yêu cầu",
+      "retry": "Thử lại",
+      "upgrade": "Xem các gói và nâng cấp",
+      "opensNewTab": "(mở trong tab mới)",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "copyFailed": "Không sao chép được. Hãy chọn văn bản và sao chép thủ công.",
+      "needsPermission": "Bạn cần quyền {permission} để làm việc này. Hãy hỏi quản trị viên không gian làm việc."
+    },
+    "errors": {
+      "network": "Không kết nối được máy chủ. Kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền làm việc này.",
+      "signedOut": "Phiên làm việc đã kết thúc. Hãy đăng nhập lại.",
+      "conflict": "Người khác đã thay đổi mục này trước. Tải lại để xem phiên bản mới nhất.",
+      "validation": "Một số giá trị không hợp lệ. Kiểm tra các trường và thử lại.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "rateLimitedWait": "Quá nhiều yêu cầu. Thử lại sau {seconds, plural, other {# giây}}.",
+      "unavailable": "Marketplace chưa khả dụng trên máy chủ này.",
+      "notFound": "Mục này không còn tồn tại.",
+      "appNotFound": "Ứng dụng này không tồn tại hoặc không khả dụng cho không gian làm việc của bạn.",
+      "notInstalled": "Ứng dụng này chưa được cài đặt trong không gian làm việc của bạn.",
+      "alreadyInstalled": "Ứng dụng này đã được cài đặt trong không gian làm việc của bạn.",
+      "appUnavailable": "Ứng dụng này hiện không được cung cấp.",
+      "appLockedPlan": "Gói của bạn không bao gồm ứng dụng này. Hãy nâng cấp để mở khóa.",
+      "appLockedModule": "Ứng dụng này không khả dụng trên bản cài đặt sản phẩm này.",
+      "planLocked": "Marketplace không nằm trong gói của bạn. Hãy nâng cấp để sử dụng.",
+      "planLimitInstalled": "Bạn đã đạt giới hạn số ứng dụng đã cài trong gói, nên chưa cài đặt gì. Hãy gỡ bớt một ứng dụng hoặc nâng cấp gói.",
+      "planLimitInstalledCounts": "Bạn đã cài {used} trên {cap} ứng dụng mà gói của bạn cho phép, nên chưa cài đặt gì. Hãy gỡ bớt một ứng dụng hoặc nâng cấp gói.",
+      "planLimitLeadSources": "Bạn đã đạt giới hạn nguồn khách hàng tiềm năng trong gói, nên chưa cài đặt gì. Hãy xóa một nguồn khách hàng tiềm năng hoặc nâng cấp gói.",
+      "planLimitLeadSourcesCounts": "Bạn có {used} trên {cap} nguồn khách hàng tiềm năng mà gói của bạn cho phép, nên chưa cài đặt gì. Hãy xóa một nguồn hoặc nâng cấp gói.",
+      "planLimit": "Bạn đã đạt một giới hạn của gói, nên chưa cài đặt gì. Hãy nâng cấp gói để tiếp tục.",
+      "planLimitCounts": "Bạn đã dùng {used} trên {cap} mà gói cho phép, nên chưa cài đặt gì. Hãy nâng cấp gói để tiếp tục.",
+      "consentRequired": "Quyền đã thay đổi. Hãy xem lại trước khi cài đặt.",
+      "reconsentRequired": "Phiên bản mới yêu cầu thêm quyền. Hãy xem xét và chấp nhận trước.",
+      "scopeExceeds": "Bạn không thể cấp quyền mà chính bạn không có. Thiếu: {permissions}.",
+      "installationKilled": "Nền tảng đã dừng ứng dụng này. Chỉ có thể gỡ cài đặt.",
+      "installationDisabled": "Ứng dụng này đang tạm dừng. Hãy tiếp tục trước.",
+      "credentialMissing": "Hãy điền các trường bắt buộc.",
+      "noConnection": "Bản cài đặt này không có kết nối nào có thể làm việc đó.",
+      "leadPipeline": "Dịch vụ khách hàng tiềm năng hiện không khả dụng. Chưa có gì được lưu. Hãy thử lại sau ít phút.",
+      "unexpected": "Đã có lỗi xảy ra. Hãy thử lại.",
+      "subscriptionRequired": "Đây là ứng dụng trả phí. Đăng ký để cài đặt.",
+      "notForSale": "Ứng dụng này hiện không được bán cho người đăng ký mới.",
+      "trialUnavailable": "Bản dùng thử miễn phí không khả dụng cho ứng dụng này trong không gian làm việc của bạn.",
+      "subscriptionNotFound": "Không gian làm việc của bạn không có đăng ký cho ứng dụng này.",
+      "subscriptionState": "Điều đó không khớp với trạng thái hiện tại của đăng ký. Tải lại để xem trạng thái mới nhất."
+    },
+    "chips": {
+      "installed": "Đã cài đặt",
+      "paused": "Đã tạm dừng",
+      "killed": "Bị nền tảng dừng",
+      "healthy": "Khỏe mạnh",
+      "degraded": "Suy giảm",
+      "error": "Lỗi",
+      "needs_reauth": "Cần đăng nhập lại",
+      "unknown": "Chưa kiểm tra",
+      "needsConsent": "Có quyền mới cần xem xét",
+      "subscribed": "Đã đăng ký",
+      "trialing": "Dùng thử miễn phí",
+      "comped": "Được tặng",
+      "canceling": "Không gia hạn",
+      "subscriptionEnded": "Gói đăng ký đã kết thúc"
+    },
+    "lock": {
+      "planFeature": {
+        "chip": "Không có trong gói của bạn",
+        "message": "Gói của bạn không bao gồm ứng dụng này. Bạn có thể đọc thông tin tại đây, nhưng để cài đặt cần nâng cấp gói."
+      },
+      "moduleDisabled": {
+        "chip": "Không khả dụng",
+        "message": "Ứng dụng này phụ thuộc vào một mô-đun đang bị tắt trong bản cài đặt sản phẩm này."
+      },
+      "limitReached": {
+        "chip": "Đã đạt giới hạn gói",
+        "message": "Bạn đã cài số ứng dụng tối đa mà gói cho phép. Hãy gỡ cài đặt một ứng dụng hoặc nâng cấp gói."
+      }
+    },
+    "scopes": {
+      "risk": {
+        "low": "Rủi ro thấp",
+        "medium": "Rủi ro trung bình",
+        "high": "Rủi ro cao"
+      },
+      "none": "Ứng dụng này không yêu cầu quyền nào.",
+      "new": "Mới",
+      "overall": {
+        "low": {
+          "title": "Rủi ro thấp nhìn chung",
+          "message": "Ứng dụng này chỉ yêu cầu quyền đọc."
+        },
+        "medium": {
+          "title": "Rủi ro trung bình nhìn chung",
+          "message": "Ứng dụng này có thể đọc và thay đổi dữ liệu trong không gian làm việc của bạn."
+        },
+        "high": {
+          "title": "Rủi ro cao nhìn chung",
+          "message": "Ứng dụng này có thể thực hiện thay mặt bạn, chẳng hạn gửi tin nhắn hoặc quản lý tích hợp. Chỉ cài đặt nếu bạn tin tưởng nhà phát triển."
+        }
+      },
+      "counts": "{high} rủi ro cao, {medium} trung bình, {low} thấp"
+    },
+    "header": {
+      "title": "Chợ ứng dụng",
+      "subtitle": "Thêm ứng dụng mini và kết nối dịch vụ bên ngoài vào không gian làm việc của bạn.",
+      "tabsLabel": "Các mục của chợ ứng dụng",
+      "moreLabel": "Đã cài đặt và yêu cầu",
+      "tabs": {
+        "mini_app": "Ứng dụng mini",
+        "integration": "Tích hợp"
+      },
+      "installed": "Đã cài đặt",
+      "installedLimit": "Đã cài đặt ({installed} trên {limit})",
+      "installedUnlimited": "Đã cài đặt ({installed})",
+      "request": "Yêu cầu một tích hợp"
+    },
+    "card": {
+      "firstParty": "Do chúng tôi phát triển",
+      "pricing": {
+        "free": "Miễn phí",
+        "included": "Đã có trong gói của bạn",
+        "monthly": "{price} / tháng",
+        "subscribed": "Đã đăng ký",
+        "notForSale": "Không bán",
+        "paid": "Ứng dụng trả phí",
+        "addOn": "Tiện ích bổ sung",
+        "trial": "Dùng thử miễn phí {days} ngày"
+      },
+      "installs": "{count, plural, other {# lượt cài đặt}}",
+      "version": "Phiên bản {version}",
+      "cta": {
+        "install": "Cài đặt",
+        "manage": "Quản lý",
+        "review": "Xem lại quyền",
+        "killed": "Quản lý",
+        "locked": "Xem chi tiết",
+        "view": "Xem chi tiết",
+        "subscribe": "Đăng ký"
+      }
+    },
+    "browse": {
+      "categoriesLabel": "Danh mục",
+      "all": "Tất cả",
+      "shelves": {
+        "featured": "Nổi bật",
+        "popular": "Phổ biến",
+        "new": "Mới"
+      },
+      "searchLabel": "Tìm trong Chợ ứng dụng",
+      "searchPlaceholder": {
+        "mini_app": "Tìm ứng dụng mini",
+        "integration": "Tìm tích hợp"
+      },
+      "availability": {
+        "label": "Hiển thị",
+        "all": "Tất cả",
+        "addons": "Tiện ích bổ sung có sẵn",
+        "installed": "Đã cài đặt"
+      },
+      "sortLabel": "Sắp xếp theo",
+      "sort": {
+        "featured": "Nổi bật",
+        "popular": "Được cài nhiều nhất",
+        "new": "Mới nhất",
+        "name": "Tên"
+      },
+      "unknownCategory": "Danh mục đó không tồn tại trong thẻ này.",
+      "showAll": "Hiển thị tất cả",
+      "resultsAll": "Tất cả ứng dụng",
+      "resultsFiltered": "Kết quả",
+      "loadedCount": "{count, plural, other {# ứng dụng được hiển thị}}",
+      "loadMore": "Tải thêm",
+      "clearFilters": "Xóa bộ lọc",
+      "empty": {
+        "search": {
+          "title": "Không có kết quả nào khớp với tìm kiếm",
+          "message": "Thử tên ngắn hơn hoặc xóa bộ lọc. Nếu không thấy ứng dụng, bạn có thể yêu cầu bên dưới."
+        },
+        "addons": {
+          "title": "Không có tiện ích bổ sung để mua ở đây",
+          "message": "Các tiện ích bổ sung mà gói của bạn liệt kê nhưng bạn chưa mua sẽ hiển thị ở đây. Chọn Tất cả để xem mọi thứ."
+        },
+        "installed": {
+          "title": "Chưa cài đặt gì ở đây",
+          "message": "Ứng dụng bạn cài đặt sẽ hiển thị ở đây. Chọn Tất cả để duyệt toàn bộ."
+        },
+        "category": {
+          "title": "Chưa có gì trong danh mục này",
+          "message": "Chọn danh mục khác, hoặc yêu cầu thứ bạn cần bên dưới."
+        },
+        "none": {
+          "title": "Chưa có gì được liệt kê ở đây",
+          "message": "Ứng dụng mới sẽ xuất hiện ở đây khi được xuất bản. Bạn có thể yêu cầu một ứng dụng bên dưới."
+        }
+      }
+    },
+    "requestBox": {
+      "title": {
+        "mini_app": "Thiếu ứng dụng mini?",
+        "integration": "Thiếu tích hợp?"
+      },
+      "message": "Hãy cho chúng tôi biết bạn cần gì. Các yêu cầu được đếm, và những yêu cầu được hỏi nhiều nhất sẽ được xây dựng trước.",
+      "action": {
+        "mini_app": "Yêu cầu một ứng dụng mini",
+        "integration": "Yêu cầu một tích hợp"
+      }
+    },
+    "detail": {
+      "backToMarketplace": "Quay lại Chợ ứng dụng",
+      "backToApps": "Quay lại Ứng dụng mini",
+      "backToIntegrations": "Quay lại Tích hợp",
+      "notFound": {
+        "title": "Không tìm thấy ứng dụng",
+        "message": "Ứng dụng này không tồn tại, hoặc không khả dụng với không gian làm việc của bạn.",
+        "integrations": "Duyệt tích hợp",
+        "apps": "Duyệt ứng dụng mini"
+      },
+      "kind": {
+        "mini_app": "Ứng dụng mini",
+        "integration": "Tích hợp"
+      },
+      "firstParty": "Do chúng tôi phát triển",
+      "install": "Cài đặt",
+      "manage": "Quản lý",
+      "killed": "Nền tảng đã dừng ứng dụng này. Chỉ có thể gỡ cài đặt.",
+      "about": "Giới thiệu về ứng dụng này",
+      "screenshots": "Ảnh chụp màn hình",
+      "screenshotAlt": "Ảnh chụp màn hình {n} trên {name}",
+      "permissions": {
+        "title": "Ứng dụng có thể truy cập những gì",
+        "intro": "Bạn sẽ thấy lại các mục này và xác nhận trước khi bất kỳ thứ gì được cài đặt."
+      },
+      "setup": {
+        "title": "Những gì bạn cần thiết lập",
+        "intro": {
+          "oauth": "Bạn đăng nhập vào dịch vụ để kết nối.",
+          "push": "Dịch vụ gửi dữ liệu đến không gian làm việc của bạn bằng khóa mà bạn nhập ở đây.",
+          "pull": "Chúng tôi lấy dữ liệu từ dịch vụ bằng khóa mà bạn nhập ở đây.",
+          "email_parse": "Chúng tôi đọc email cảnh báo do dịch vụ gửi.",
+          "webhook_relay": "Bạn nhận một địa chỉ web và một bí mật để dán vào công cụ gửi dữ liệu.",
+          "client": "Bạn cài đặt nơi bạn làm việc và đăng nhập bằng tài khoản của chính bạn."
+        },
+        "required": "Bắt buộc",
+        "optional": "Không bắt buộc",
+        "kind": {
+          "secret": "giữ bí mật",
+          "text": "văn bản",
+          "select": "lựa chọn"
+        },
+        "noFields": "Không có gì để điền. Bạn sẽ nhận thông tin kết nối sau khi cài đặt.",
+        "hasSample": "Sau khi cài đặt, bạn có thể gửi một liên hệ mẫu để kiểm tra kết nối."
+      },
+      "data": {
+        "title": "Dữ liệu của bạn",
+        "intro": "Ứng dụng này lưu gì, ở đâu, và cách xóa ra sao.",
+        "summary": "Dữ liệu được lưu",
+        "regions": "Nơi lưu",
+        "deletion": "Cách xóa"
+      },
+      "changelog": {
+        "title": "Có gì thay đổi",
+        "version": "Phiên bản {version}"
+      },
+      "facts": {
+        "title": "Chi tiết",
+        "version": "Phiên bản",
+        "connector": "Cách kết nối",
+        "connectors": {
+          "oauth": "Đăng nhập",
+          "push": "Gửi dữ liệu đến bạn",
+          "pull": "Chúng tôi lấy dữ liệu của dịch vụ",
+          "email_parse": "Email cảnh báo",
+          "webhook_relay": "Địa chỉ web và bí mật",
+          "client": "Mỗi thành viên tự cài đặt"
+        },
+        "installs": "Lượt cài đặt",
+        "developer": "Nhà phát triển"
+      },
+      "support": {
+        "title": "Hỗ trợ và pháp lý",
+        "website": "Trang web",
+        "docs": "Tài liệu",
+        "privacy": "Chính sách quyền riêng tư",
+        "terms": "Điều khoản",
+        "status": "Trang trạng thái",
+        "email": "Hỗ trợ qua email"
+      }
+    },
+    "install": {
+      "backToMarketplace": "Quay lại Chợ ứng dụng",
+      "backToApp": "Quay lại {name}",
+      "notFound": {
+        "title": "Không tìm thấy ứng dụng",
+        "message": "Ứng dụng này không tồn tại, hoặc không khả dụng với không gian làm việc của bạn."
+      },
+      "alreadyTitle": "Đã cài đặt rồi",
+      "alreadyMessage": "{name} đã được cài đặt trong không gian làm việc của bạn.",
+      "openManage": "Mở ra",
+      "lockedTitle": "{name} đã bị khóa",
+      "noPermissionTitle": "Bạn không thể cài đặt ứng dụng",
+      "noPermissionMessage": "Cài đặt ứng dụng cần một quyền mà vai trò của bạn không có.",
+      "title": "Cài đặt {name}",
+      "stepsLabel": "Các bước cài đặt",
+      "steps": {
+        "permissions": "Quyền",
+        "setup": "Thiết lập",
+        "done": "Xong"
+      },
+      "permissions": {
+        "title": "Xem lại quyền",
+        "intro": "{name} yêu cầu các quyền bên dưới. Cài đặt sẽ cấp đúng những quyền này, cho đến khi bạn gỡ cài đặt.",
+        "diffSummary": "Thiếu {missing, plural, other {# quyền}} và {unexpected, plural, other {# quyền}} không được hiển thị.",
+        "consent": "Tôi hiểu và cho phép ứng dụng này sử dụng các quyền này trong không gian làm việc của tôi.",
+        "consentNone": "Tôi hiểu rằng {name} không yêu cầu quyền nào và muốn cài đặt.",
+        "continue": "Tiếp tục"
+      },
+      "cancel": "Hủy",
+      "install": "Cài đặt",
+      "back": "Quay lại",
+      "setup": {
+        "title": "Thiết lập",
+        "intro": "Điền những gì ứng dụng này cần để kết nối. Khóa được lưu ở dạng mã hóa và không thể đọc lại."
+      },
+      "installing": "Đang cài đặt",
+      "missingPermissions": "Bạn đang thiếu các quyền sau:",
+      "seeInstalled": "Xem những gì đã cài đặt",
+      "changed": {
+        "title": "Quyền đã thay đổi trong lúc bạn xem",
+        "message": "Hãy xem lại danh sách bên dưới. Chưa có gì được cài đặt.",
+        "added": "Giờ còn yêu cầu:",
+        "removed": "Không còn yêu cầu:",
+        "edited": "Cách diễn đạt hoặc mức rủi ro của một số quyền đã thay đổi."
+      },
+      "gaps": {
+        "title": "Bạn có thể không cấp được tất cả các quyền này",
+        "message": "Việc cài đặt không bao giờ cấp cho ai quyền truy cập nhiều hơn người cài đặt có. Bạn dường như thiếu:"
+      },
+      "done": {
+        "title": "{name} đã được cài đặt",
+        "message": "Phiên bản {version} hiện đang hoạt động trong không gian làm việc của bạn.",
+        "saved": "Tôi đã lưu, tiếp tục",
+        "manage": "Mở cài đặt",
+        "browse": "Quay lại Chợ ứng dụng"
+      },
+      "subscribeTitle": "{name} là ứng dụng trả phí",
+      "subscribeIntro": "Đăng ký để cài đặt. Bạn sẽ đến trang thanh toán để trả cho tháng đầu tiên, hoặc có thể dùng thử miễn phí trước khi có ưu đãi. Bạn xem lại và xác nhận quyền của ứng dụng trước khi bất kỳ thứ gì được cài đặt.",
+      "notForSaleTitle": "{name} không bán",
+      "goToCheckout": "Đến thanh toán"
+    },
+    "setup": {
+      "optionalLabel": "{label} (không bắt buộc)",
+      "stored": {
+        "notSet": "Chưa đặt",
+        "endsIn": "Đã lưu, kết thúc bằng {last}",
+        "value": "Đã lưu một giá trị",
+        "set": "Đã lưu"
+      },
+      "keepBlank": "Để trống để giữ giá trị đã lưu. Nhập để thay thế.",
+      "show": "Hiện giá trị",
+      "hide": "Ẩn giá trị",
+      "choose": "Chọn",
+      "clear": "Xóa {label}",
+      "problems": {
+        "required": "{label} là bắt buộc.",
+        "pattern": "{label} có vẻ không đúng.",
+        "option": "Chọn một trong các tùy chọn cho {label}.",
+        "server": "{label} không được chấp nhận. Kiểm tra lại giá trị."
+      }
+    },
+    "reveal": {
+      "title": "Lưu bí mật kết nối của bạn",
+      "warning": "Bạn sẽ không thấy bí mật này nữa. Sao chép ngay và giữ ở nơi an toàn. Nếu mất, hãy đổi bí mật để nhận một bí mật mới.",
+      "address": "Địa chỉ web để gửi đến",
+      "secret": "Bí mật",
+      "copyAddress": "Sao chép địa chỉ web",
+      "copySecret": "Sao chép bí mật",
+      "saved": "Tôi đã lưu bí mật và địa chỉ.",
+      "doneHint": "Đánh dấu ô để tiếp tục.",
+      "send": {
+        "title": "Cách gửi",
+        "post": "Gửi yêu cầu POST với nội dung JSON đến địa chỉ.",
+        "token": "Đặt bí mật vào tiêu đề {header}.",
+        "signature": "Hoặc ký nội dung bằng HMAC-SHA256 dùng bí mật, rồi gửi sha256= theo sau là chuỗi hex digest trong tiêu đề {header}."
+      },
+      "leaveConfirm": "Bạn chưa xác nhận đã lưu bí mật. Nếu rời đi bây giờ, bạn sẽ không thấy nó nữa. Vẫn rời đi?"
+    },
+    "portals": {
+      "maturity": {
+        "beta": "Beta",
+        "needsPortalSetup": "Cần thiết lập trên cổng",
+        "betaHint": "Được xây dựng từ tài liệu một phần của cổng. Ứng dụng hoạt động, nhưng có thể cần điều chỉnh sau liên hệ thực đầu tiên.",
+        "needsPortalSetupHint": "Chưa có gì đến cho đến khi đội ngũ của cổng bật tính năng cho bạn."
+      },
+      "reveal": {
+        "title": "Lưu địa chỉ riêng của bạn",
+        "warning": "Bạn sẽ không thấy địa chỉ này nữa. Đây cũng là mật khẩu của kết nối: ai có nó đều có thể gửi liên hệ vào không gian làm việc của bạn. Sao chép ngay và giữ ở nơi an toàn. Nếu mất, hãy tạo địa chỉ mới; địa chỉ cũ sẽ ngừng hoạt động.",
+        "address": "Địa chỉ riêng của bạn",
+        "copyAddress": "Sao chép địa chỉ riêng",
+        "saved": "Tôi đã lưu địa chỉ.",
+        "sendTitle": "Người gửi cần gì",
+        "method": "Phương thức: {methods}",
+        "formats": "Định dạng được chấp nhận: {formats}",
+        "noHeader": "Không cần thêm gì: không có tiêu đề và không có chữ ký. Phần cuối của địa chỉ là mật khẩu.",
+        "managerTitle": "Gửi cho quản lý tài khoản của cổng",
+        "managerIntro": "{portal} do đội ngũ của họ bật, không phải bạn. Sao chép tin nhắn có sẵn và gửi cho quản lý tài khoản của bạn bên đó.",
+        "copyMessage": "Sao chép tin nhắn cho quản lý tài khoản cổng của bạn",
+        "messageCopied": "Đã sao chép tin nhắn",
+        "portalFallback": "cổng"
+      },
+      "formats": {
+        "json": "JSON",
+        "form": "các trường biểu mẫu",
+        "xml": "XML",
+        "query": "tham số chuỗi truy vấn"
+      },
+      "message": {
+        "subjectLine": "Tiêu đề: Địa chỉ nhận liên hệ cho tài khoản {portal} của chúng tôi",
+        "body": "Xin chào,\n\nVui lòng bắt đầu gửi liên hệ của tài khoản {portal} của chúng tôi đến địa chỉ riêng này:\n\n{address}\n\nVui lòng gửi mỗi liên hệ bằng {methods}. Chúng tôi chấp nhận thông tin dưới dạng {formats}. Địa chỉ đã xác định tài khoản của chúng tôi, nên không cần tiêu đề, mật khẩu hay chữ ký. Vui lòng giữ bí mật.\n\nVui lòng gửi cho chúng tôi một liên hệ thử ngay khi được bật, để chúng tôi xác nhận rằng nó đến nơi.\n\nCảm ơn bạn."
+      },
+      "connection": {
+        "nextPoll": "Lần kiểm tra tiếp theo",
+        "notScheduled": "Chưa lên lịch",
+        "syncedThrough": "Đã lấy liên hệ đến",
+        "syncedNever": "Chưa lấy dữ liệu nào",
+        "errorHint": "Nhập lại khóa trong Thông tin xác thực hoặc nhấn Đồng bộ ngay.",
+        "errorHintNoSync": "Nhập lại khóa trong Thông tin xác thực.",
+        "rotatePath": "Tạo địa chỉ mới",
+        "rotatePathConfirm": {
+          "title": "Tạo địa chỉ mới?",
+          "message": "Một địa chỉ riêng mới sẽ được tạo và địa chỉ cũ ngừng hoạt động ngay lập tức. Mọi thứ vẫn gửi đến địa chỉ cũ sẽ bị từ chối cho đến khi đội ngũ cổng được cấp địa chỉ mới. Bạn sẽ thấy địa chỉ mới một lần.",
+          "confirm": "Tạo địa chỉ mới"
+        },
+        "waiting": {
+          "title": "Đang chờ liên hệ đầu tiên từ {portal}",
+          "message": "Đội ngũ của {portal} phải bật tính năng này. Chưa có gì đến cho đến khi họ bắt đầu gửi đến địa chỉ kết nối của bạn. Hãy chắc quản lý tài khoản bên đó đã có địa chỉ, và yêu cầu một liên hệ thử."
+        },
+        "path": {
+          "address": "Địa chỉ riêng",
+          "maskedNote": "Phần cuối của địa chỉ là mật khẩu của nó. Nó chỉ hiển thị một lần, khi bạn cài đặt hoặc tạo địa chỉ mới, nên ở đây chỉ hiện phần cuối.",
+          "method": "Phương thức: {methods}",
+          "formats": "Định dạng được chấp nhận: {formats}",
+          "noHeader": "Không cần tiêu đề hay chữ ký. Địa chỉ chính là mật khẩu: hãy giữ bí mật.",
+          "newAddressHint": "Mất địa chỉ, hoặc muốn ngừng ai đó sử dụng nó? Tạo địa chỉ mới bên dưới. Địa chỉ cũ ngừng hoạt động ngay và đội ngũ cổng phải được cấp địa chỉ mới."
+        }
+      },
+      "sync": {
+        "button": "Đồng bộ ngay",
+        "needsActive": "Tiếp tục ứng dụng để đồng bộ ngay.",
+        "scheduledNow": "Đã lên lịch đồng bộ. Bắt đầu ngay.",
+        "scheduled": "Đã lên lịch đồng bộ vào {time}.",
+        "waits": "Cổng chỉ cho phép một yêu cầu mỗi {interval}, nên lần đồng bộ này phải chờ đến lúc đó.",
+        "duration": {
+          "seconds": "{count, plural, other {# giây}}",
+          "minutes": "{count, plural, other {# phút}}",
+          "hours": "{count, plural, other {# giờ}}"
+        }
+      }
+    },
+    "installed": {
+      "title": "Đã cài đặt",
+      "filters": {
+        "kind": "Loại",
+        "status": "Trạng thái",
+        "all": "Tất cả"
+      },
+      "kind": {
+        "mini_app": "Ứng dụng mini",
+        "integration": "Tích hợp"
+      },
+      "status": {
+        "active": "Đã cài đặt",
+        "disabled": "Tạm dừng",
+        "killed": "Nền tảng đã dừng"
+      },
+      "listLabel": "Ứng dụng đã cài đặt",
+      "emptyFiltered": {
+        "title": "Không có gì khớp với bộ lọc này",
+        "message": "Thay đổi bộ lọc để xem các ứng dụng đã cài đặt khác của bạn."
+      },
+      "empty": {
+        "title": "Chưa cài đặt gì",
+        "message": "Duyệt Chợ ứng dụng để thêm ứng dụng mini hoặc kết nối dịch vụ.",
+        "integrations": "Duyệt tích hợp",
+        "apps": "Duyệt ứng dụng mini"
+      },
+      "usage": {
+        "unlimited": "Đã cài {installed}. Gói của bạn không giới hạn.",
+        "of": "Đã cài {installed} trên {limit}",
+        "remaining": "{count, plural, other {còn # chỗ}}",
+        "atCap": "Bạn đã đạt giới hạn của gói. Gỡ cài đặt một ứng dụng hoặc nâng cấp gói để cài thêm.",
+        "upgrade": "Xem gói và nâng cấp",
+        "nearCap": "Bạn sắp đạt giới hạn của gói."
+      },
+      "version": "Phiên bản {version}",
+      "killReason": "Lý do: {reason}",
+      "lastError": "Lỗi gần nhất: {error}",
+      "pending": "Phiên bản {version} đang chờ bạn chấp nhận quyền mới.",
+      "installedOn": "Đã cài đặt {date}",
+      "review": "Xem lại",
+      "manage": "Quản lý",
+      "subscriptions": {
+        "title": "Đăng ký",
+        "intro": "Các ứng dụng trả phí và bản dùng thử của bạn, kể cả ứng dụng đã gỡ nhưng kỳ trả phí vẫn đang chạy.",
+        "listLabel": "Đăng ký",
+        "manage": "Quản lý",
+        "viewApp": "Xem ứng dụng"
+      }
+    },
+    "manage": {
+      "backToInstalled": "Quay lại Đã cài đặt",
+      "notFound": {
+        "title": "Không tìm thấy bản cài đặt",
+        "message": "Ứng dụng này chưa được cài trong không gian làm việc của bạn, hoặc đã bị gỡ cài đặt."
+      },
+      "version": "Phiên bản {version}",
+      "checkedAt": "Kiểm tra lần cuối {date}",
+      "notChecked": "Chưa kiểm tra. Dùng Kiểm tra kết nối để kiểm tra.",
+      "lastError": "Lỗi gần nhất: {error}",
+      "viewListing": "Xem trang giới thiệu",
+      "resume": "Tiếp tục",
+      "pause": "Tạm dừng",
+      "toast": {
+        "resumed": "Đã tiếp tục ứng dụng.",
+        "paused": "Đã tạm dừng ứng dụng.",
+        "consented": "Đã chấp nhận quyền mới. Hiện dùng phiên bản {version}.",
+        "uninstalled": "Đã gỡ cài đặt {name}."
+      },
+      "killed": {
+        "title": "Nền tảng đã dừng",
+        "message": "Ứng dụng này đã bị tắt với tất cả mọi người. Bạn chỉ có thể gỡ cài đặt.",
+        "reason": "Lý do: {reason}"
+      },
+      "paused": {
+        "title": "Đã tạm dừng",
+        "message": "Ứng dụng đang tạm dừng sẽ không làm gì, và địa chỉ web của nó từ chối nhận dữ liệu cho đến khi bạn tiếp tục."
+      },
+      "permissions": {
+        "title": "Quyền đã cấp",
+        "intro": "Ứng dụng này hiện có thể làm gì trong không gian làm việc của bạn."
+      },
+      "reconsent": {
+        "title": "Phiên bản {version} yêu cầu quyền mới",
+        "message": "Ứng dụng tiếp tục chạy trên phiên bản {current} cho đến khi bạn chấp nhận quyền của phiên bản {version}.",
+        "newScopes": "Quyền mới",
+        "fullList": "Danh sách đầy đủ cho phiên bản mới",
+        "accept": "Chấp nhận quyền mới"
+      },
+      "problem": {
+        "conflictTitle": "Đã thay đổi trong lúc chờ",
+        "conflictMessage": "Ai đó đã thay đổi ứng dụng này. Tải lại để xem trạng thái mới nhất, rồi thực hiện thay đổi lại.",
+        "reload": "Tải lại",
+        "consentTitle": "Quyền đã thay đổi",
+        "consentMessage": "Danh sách quyền đã thay đổi kể từ khi bạn mở trang này. Tải lại để xem danh sách hiện tại."
+      },
+      "credentials": {
+        "title": "Thông tin xác thực và cài đặt",
+        "intro": "Nhập sẽ thay thế giá trị đã lưu. Để trống ô để giữ giá trị đã lưu. Khóa đã lưu sẽ không bao giờ hiện lại.",
+        "readOnly": "Những gì được lưu cho ứng dụng này. Khóa không bao giờ được hiển thị.",
+        "saved": "Đã lưu cài đặt.",
+        "nothingToSave": "Chưa có gì để lưu.",
+        "save": "Lưu thay đổi",
+        "missing": "Điền các trường bắt buộc.",
+        "invalid": "Một số giá trị không được chấp nhận."
+      },
+      "connection": {
+        "title": "Kết nối",
+        "intro": "Cách ứng dụng này giao tiếp với không gian làm việc của bạn, và tình trạng hiện tại.",
+        "type": "Loại",
+        "types": {
+          "oauth": "Đăng nhập",
+          "push": "Gửi dữ liệu đến bạn",
+          "pull": "Chúng tôi lấy dữ liệu của nó",
+          "email_parse": "Email cảnh báo",
+          "webhook_relay": "Địa chỉ web và bí mật",
+          "client": "Mỗi thành viên tự cài đặt"
+        },
+        "status": "Trạng thái kết nối",
+        "statuses": {
+          "active": "Đang hoạt động",
+          "paused": "Tạm dừng",
+          "error": "Lỗi",
+          "disabled": "Đã tắt"
+        },
+        "pollEvery": "Kiểm tra mỗi",
+        "seconds": "{count, plural, other {# giây}}",
+        "lastEvent": "Lần gửi gần nhất",
+        "lastSuccess": "Thành công gần nhất",
+        "lastError": "Lỗi gần nhất",
+        "never": "Chưa bao giờ",
+        "counters": {
+          "received": "Đã nhận",
+          "accepted": "Đã chấp nhận",
+          "duplicates": "Trùng lặp",
+          "failed": "Thất bại"
+        },
+        "inbound": {
+          "address": "Địa chỉ web để gửi đến",
+          "copyAddress": "Sao chép địa chỉ web",
+          "method": "Gửi yêu cầu POST với nội dung JSON.",
+          "token": "Đặt bí mật vào tiêu đề {header}.",
+          "signature": "Hoặc ký nội dung bằng HMAC-SHA256 và gửi sha256= theo sau là chuỗi hex digest trong tiêu đề {header}.",
+          "secretEndsIn": "Bí mật kết thúc bằng {last}. Không thể hiển thị lại.",
+          "secretSet": "Đã đặt bí mật. Không thể hiển thị lại."
+        },
+        "actions": {
+          "test": "Kiểm tra kết nối",
+          "sample": "Gửi liên hệ mẫu",
+          "rotate": "Đổi bí mật",
+          "sampleNeedsActive": "Tiếp tục ứng dụng để gửi liên hệ mẫu.",
+          "testOk": "Kết nối hoạt động.",
+          "testFailed": "Kiểm tra kết nối thất bại.",
+          "latency": "{ms} ms",
+          "sampleAccepted": "Liên hệ mẫu đã được chấp nhận. Giờ nó tồn tại như một liên hệ thật.",
+          "sampleDuplicate": "Liên hệ mẫu đó đã được nhận trước đó.",
+          "rotatedDone": "Tôi đã lưu, tiếp tục",
+          "rotateNotApplicable": "Bí mật của kết nối này là khóa từ dịch vụ khác. Hãy đổi trong Thông tin xác thực và cài đặt.",
+          "rotateConfirm": {
+            "title": "Đổi bí mật của kết nối?",
+            "message": "Một bí mật mới sẽ được tạo và bí mật cũ ngừng hoạt động ngay. Mọi thứ vẫn gửi bằng bí mật cũ sẽ bị từ chối cho đến khi bạn cung cấp bí mật mới. Bạn sẽ thấy bí mật mới một lần.",
+            "confirm": "Đổi bí mật",
+            "cancel": "Hủy"
+          }
+        }
+      },
+      "events": {
+        "title": "Dữ liệu nhận gần đây",
+        "intro": "Những thứ mới nhất kết nối này đã nhận, mới nhất trước.",
+        "refresh": "Làm mới",
+        "empty": {
+          "title": "Chưa có dữ liệu nhận",
+          "message": "Khi dịch vụ khác gửi gì đó, hoặc bạn gửi liên hệ mẫu, nó sẽ hiện ở đây."
+        },
+        "columns": {
+          "received": "Đã nhận",
+          "status": "Kết quả",
+          "externalId": "Mã giao nhận",
+          "error": "Lý do"
+        },
+        "status": {
+          "accepted": "Đã chấp nhận",
+          "duplicate": "Trùng lặp",
+          "rejected": "Bị từ chối",
+          "failed": "Thất bại"
+        },
+        "loadMore": "Tải thêm"
+      },
+      "pauseConfirm": {
+        "title": "Tạm dừng {name}?",
+        "message": "Ứng dụng ngừng hoạt động cho đến khi bạn tiếp tục. Trong lúc này địa chỉ web của nó từ chối nhận dữ liệu.",
+        "confirm": "Tạm dừng",
+        "cancel": "Hủy"
+      },
+      "uninstall": {
+        "section": "Gỡ cài đặt",
+        "sectionIntro": "Gỡ ứng dụng này khỏi không gian làm việc của bạn.",
+        "open": "Gỡ cài đặt",
+        "title": "Gỡ cài đặt {name}?",
+        "confirm": "Gỡ cài đặt",
+        "cancel": "Hủy",
+        "effect": "Quyền truy cập của nó kết thúc ngay lập tức.",
+        "effectConnection": "Quyền truy cập của nó kết thúc ngay lập tức, và địa chỉ web của nó ngừng phản hồi.",
+        "dataLegend": "Dữ liệu do nó tạo ra nên xử lý thế nào?",
+        "choices": {
+          "keep": {
+            "label": "Giữ dữ liệu do nó tạo",
+            "help": "Liên hệ và bản ghi nó đã thêm vẫn nằm trong không gian làm việc của bạn."
+          },
+          "delete": {
+            "label": "Xóa dữ liệu do nó tạo",
+            "help": "Chúng tôi ghi nhận yêu cầu của bạn và báo cho các phần của sản phẩm sở hữu dữ liệu đó."
+          }
+        },
+        "honestNote": "Hiện tại, các liên hệ mà ứng dụng này đã tạo sẽ vẫn nằm trong không gian làm việc của bạn dù bạn chọn gì. Lựa chọn của bạn được ghi nhận cho các khu vực sẽ xóa dữ liệu.",
+        "irreversible": "Không thể hoàn tác. Để dùng lại ứng dụng, hãy cài đặt lại.",
+        "renewal": {
+          "title": "Ứng dụng này có gói đăng ký trả phí",
+          "message": "Gỡ cài đặt sẽ ngừng gia hạn nên sẽ không bị thu thêm phí. Kỳ bạn đã trả vẫn thuộc về bạn, nên bạn có thể cài lại trước khi hết hạn mà không mất phí.",
+          "messageUntil": "Gỡ cài đặt sẽ ngừng gia hạn nên sẽ không bị thu thêm phí. Kỳ bạn đã trả vẫn thuộc về bạn đến {date}, nên bạn có thể cài lại trước thời điểm đó mà không mất phí."
+        }
+      },
+      "subscription": {
+        "title": "Đăng ký",
+        "subscribeTitle": "Đăng ký để tiếp tục dùng {name}",
+        "subscribeIntro": "Đây là ứng dụng trả phí và không gian làm việc của bạn chưa có đăng ký cho nó.",
+        "included": "Gói của bạn bao gồm ứng dụng này, nên không cần trả gì."
+      },
+      "subscriptionEnded": {
+        "title": "Gói đăng ký đã kết thúc",
+        "message": {
+          "resubscribe": "{name} đang tạm dừng vì gói đăng ký đã kết thúc. Dữ liệu và cài đặt của bạn vẫn được giữ. Đăng ký lại để bật lại.",
+          "notForSale": "{name} đang tạm dừng vì gói đăng ký đã kết thúc, và không còn được bán nên không thể bật lại. Dữ liệu và cài đặt của bạn vẫn được giữ.",
+          "resumable": "{name} đang tạm dừng vì gói đăng ký đã kết thúc, nhưng không gian làm việc của bạn đã có quyền truy cập trở lại. Tiếp tục để bật lại."
+        },
+        "resubscribe": "Đăng ký lại",
+        "resume": "Tiếp tục",
+        "noCheckout": "Hiện không thể thanh toán. Thử lại sau ít phút."
+      }
+    },
+    "requests": {
+      "title": "Yêu cầu",
+      "form": {
+        "title": "Yêu cầu điều gì đó",
+        "intro": "Chưa có trong danh sách? Hãy cho chúng tôi biết bạn cần gì. Nếu ai đó đã yêu cầu rồi, yêu cầu của bạn được tính là một phiếu bình chọn.",
+        "name": "Tên",
+        "namePlaceholder": "Ví dụ, tên một dịch vụ",
+        "kind": "Loại",
+        "kinds": {
+          "mini_app": "Ứng dụng mini",
+          "integration": "Tích hợp"
+        },
+        "category": "Danh mục",
+        "categoryHint": "Không bắt buộc.",
+        "anyCategory": "Chưa chắc",
+        "website": "Trang web",
+        "websiteHint": "Không bắt buộc. Địa chỉ https:// đầy đủ.",
+        "note": "Bạn cần nó để làm gì?",
+        "noteHint": "Chỉ đội ngũ nền tảng nhìn thấy",
+        "problems": {
+          "nameShort": "Nhập ít nhất 2 ký tự.",
+          "nameLong": "Dùng tối đa 80 ký tự.",
+          "websiteInvalid": "Nhập địa chỉ https:// đầy đủ.",
+          "noteLong": "Dùng tối đa 500 ký tự.",
+          "server": "Không được chấp nhận. Kiểm tra giá trị."
+        },
+        "result": {
+          "created": {
+            "title": "Đã thêm yêu cầu: {name}",
+            "message": "Cảm ơn bạn. Các không gian làm việc khác giờ có thể bình chọn cho nó."
+          },
+          "counted": {
+            "title": "Ai đó đã yêu cầu {name}",
+            "message": "Yêu cầu của bạn được tính là một phiếu bình chọn cho nó."
+          }
+        },
+        "submit": "Gửi yêu cầu"
+      },
+      "list": {
+        "title": "Những gì người khác yêu cầu",
+        "intro": "Bình chọn cho thứ bạn muốn. Những thứ được yêu cầu nhiều nhất sẽ được xây dựng trước.",
+        "searchLabel": "Tìm yêu cầu",
+        "searchPlaceholder": "Tìm yêu cầu",
+        "kind": "Loại",
+        "allKinds": "Mọi loại",
+        "kinds": {
+          "mini_app": "Ứng dụng mini",
+          "integration": "Tích hợp"
+        },
+        "status": "Trạng thái",
+        "allStatuses": "Mọi trạng thái",
+        "statuses": {
+          "open": "Mở",
+          "planned": "Đã lên kế hoạch",
+          "building": "Đang xây dựng",
+          "shipped": "Đã phát hành",
+          "declined": "Từ chối"
+        },
+        "sort": "Sắp xếp theo",
+        "sorts": {
+          "votes": "Nhiều phiếu nhất",
+          "new": "Mới nhất"
+        },
+        "emptyFiltered": {
+          "title": "Không có yêu cầu nào khớp",
+          "message": "Thay đổi bộ lọc, hoặc tự yêu cầu."
+        },
+        "empty": {
+          "title": "Chưa có yêu cầu nào",
+          "message": "Hãy là người đầu tiên yêu cầu điều gì đó."
+        },
+        "loadMore": "Tải thêm",
+        "votes": "{count, plural, other {# phiếu bình chọn}}",
+        "voted": "Đã bình chọn",
+        "vote": "Bình chọn"
+      }
+    },
+    "pricing": {
+      "title": "Giá",
+      "freeNote": "Không mất phí khi cài đặt hoặc sử dụng.",
+      "included": {
+        "planFeature": "Gói của bạn bao gồm ứng dụng này, nên không cần trả gì.",
+        "minPlan": "Gói của bạn, hoặc gói cao hơn, bao gồm ứng dụng này, nên không cần trả gì.",
+        "plan": "Gói của bạn bao gồm ứng dụng này, nên không cần trả gì."
+      },
+      "needsPurchase": "Có trong danh mục gói của bạn, mua để sử dụng.",
+      "subscribedNote": "Không gian làm việc của bạn đã đăng ký ứng dụng này.",
+      "trialOffer": "Dùng thử miễn phí {days, plural, other {# ngày}}. Không thu phí cho đến khi bạn chọn đăng ký.",
+      "prepaidNote": "Thanh toán hàng tháng qua hệ thống thanh toán của không gian làm việc. Mỗi lần thanh toán bao gồm một tháng và không tự động trừ tiền: hãy thanh toán lại trước ngày hiển thị để ứng dụng tiếp tục hoạt động.",
+      "notForSale": {
+        "title": "Không bán",
+        "message": "Ứng dụng này hiện không được bán cho người đăng ký mới."
+      }
+    },
+    "subscribe": {
+      "subscribe": "Đăng ký",
+      "startTrial": "Bắt đầu dùng thử miễn phí {days} ngày",
+      "hintPrice": "{price} mỗi tháng, thanh toán khi đến trang thanh toán. Mỗi lần thanh toán bao gồm một tháng.",
+      "hint": "Bạn thanh toán từng tháng một tại trang thanh toán.",
+      "working": "Đang xử lý",
+      "noCheckout": "Hiện không thể thanh toán cho ứng dụng này. Thử lại sau ít phút.",
+      "toast": {
+        "trial_started": "Đã bắt đầu dùng thử miễn phí {name}.",
+        "included": "{name} được bao gồm trong gói của bạn.",
+        "already_entitled": "Không gian làm việc của bạn đã có quyền truy cập {name}.",
+        "free": "{name} miễn phí."
+      }
+    },
+    "subscription": {
+      "title": "Đăng ký",
+      "status": {
+        "active": "Đang hoạt động",
+        "trialing": "Dùng thử miễn phí",
+        "comped": "Được tặng",
+        "canceling": "Không gia hạn",
+        "ended": "Đã kết thúc"
+      },
+      "date": {
+        "paidUntil": "Đã trả đến {date}",
+        "trialEnds": "Dùng thử miễn phí kết thúc {date}",
+        "compUntil": "Quyền truy cập miễn phí đến {date}",
+        "compOpen": "Quyền truy cập miễn phí, không có ngày kết thúc",
+        "cancelingUntil": "Không gia hạn. Hoạt động đến {date}",
+        "endedOn": "Gói đăng ký đã kết thúc {date}",
+        "endedNoDate": "Gói đăng ký đã kết thúc"
+      },
+      "lastPayment": "Thanh toán gần nhất: {price} mỗi tháng",
+      "nextPayment": "Giá của ứng dụng này đã thay đổi. Lần thanh toán tiếp theo của bạn sẽ là {price} mỗi tháng.",
+      "compNote": "Đội ngũ nền tảng đã cấp quyền truy cập này cho bạn. Không thể hủy ở đây.",
+      "renewHint": "Một tháng đã trả không tự động gia hạn. Hãy gia hạn trước ngày hiển thị để ứng dụng tiếp tục hoạt động không bị gián đoạn.",
+      "actions": {
+        "renew": "Gia hạn ngay",
+        "resubscribe": "Đăng ký lại",
+        "subscribe": "Đăng ký ngay",
+        "resume": "Tiếp tục đăng ký",
+        "cancel": "Hủy đăng ký"
+      },
+      "cancelConfirm": {
+        "title": "Hủy đăng ký {name}?",
+        "message": "{name} hoạt động đến {date}, sau đó sẽ bị tạm dừng. Dữ liệu và cài đặt của bạn vẫn được giữ.",
+        "messageNoDate": "{name} hoạt động đến khi kỳ bạn đã trả kết thúc, sau đó sẽ bị tạm dừng. Dữ liệu và cài đặt của bạn vẫn được giữ.",
+        "afterwards": "Sẽ không thu thêm phí nào, và bạn có thể đăng ký lại bất cứ lúc nào.",
+        "confirm": "Hủy đăng ký",
+        "keep": "Giữ đăng ký"
+      },
+      "toast": {
+        "canceled": "Đã hủy đăng ký. Vẫn hoạt động đến {date}.",
+        "canceledNoDate": "Đã hủy đăng ký. Vẫn hoạt động đến khi kỳ đã trả kết thúc.",
+        "resumed": "Đã tiếp tục đăng ký."
+      },
+      "working": "Đang xử lý",
+      "noCheckout": "Hiện không thể thanh toán cho ứng dụng này. Thử lại sau ít phút."
+    }
+  }
+}

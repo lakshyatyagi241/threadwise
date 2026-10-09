@@ -1,0 +1,870 @@
+{
+  "marketplace": {
+    "nav": {
+      "marketplace": "应用市场"
+    },
+    "meta": {
+      "apps": "小程序 · 应用市场",
+      "integrations": "集成 · 应用市场",
+      "app": "应用 · 应用市场",
+      "install": "安装 · 应用市场",
+      "installed": "已安装 · 应用市场",
+      "manage": "管理应用 · 应用市场",
+      "requests": "请求 · 应用市场"
+    },
+    "common": {
+      "dismiss": "关闭",
+      "loading": "正在加载",
+      "errorTitle": "无法加载此内容",
+      "requestId": "请求 ID",
+      "retry": "重试",
+      "upgrade": "查看套餐并升级",
+      "opensNewTab": "（在新标签页中打开）",
+      "copy": "复制",
+      "copied": "已复制",
+      "copyFailed": "无法复制。请选中文本后手动复制。",
+      "needsPermission": "您需要权限 {permission} 才能执行此操作。请联系工作区管理员。"
+    },
+    "errors": {
+      "network": "无法连接服务器。请检查网络连接后重试。",
+      "forbidden": "您没有执行此操作的权限。",
+      "signedOut": "您的会话已结束。请重新登录。",
+      "conflict": "其他人已先修改此内容。请重新加载以查看最新版本。",
+      "validation": "部分值无效。请检查字段后重试。",
+      "rateLimited": "请求过于频繁。请稍候再试。",
+      "rateLimitedWait": "请求过于频繁。请在 {seconds, plural, other {# 秒}} 后重试。",
+      "unavailable": "应用市场在此服务器上暂不可用。",
+      "notFound": "该项目已不存在。",
+      "appNotFound": "此应用不存在，或您的工作区无法使用。",
+      "notInstalled": "此应用未安装在您的工作区中。",
+      "alreadyInstalled": "此应用已安装在您的工作区中。",
+      "appUnavailable": "此应用目前不提供。",
+      "appLockedPlan": "您的套餐不包含此应用。请升级以解锁。",
+      "appLockedModule": "此应用在当前版本的产品中不可用。",
+      "planLocked": "应用市场不在您的套餐范围内。请升级后使用。",
+      "planLimitInstalled": "您已达到套餐的已安装应用数量上限，因此未安装任何应用。请卸载一个应用或升级套餐。",
+      "planLimitInstalledCounts": "您已安装 {used} 个应用，套餐上限为 {cap} 个，因此未安装任何应用。请卸载一个应用或升级套餐。",
+      "planLimitLeadSources": "您已达到套餐的线索来源数量上限，因此未安装任何内容。请删除一个线索来源或升级套餐。",
+      "planLimitLeadSourcesCounts": "您已使用 {used} 个线索来源，套餐上限为 {cap} 个，因此未安装任何内容。请删除一个或升级套餐。",
+      "planLimit": "您已达到套餐的某项上限，因此未安装任何内容。请升级套餐以继续。",
+      "planLimitCounts": "您已使用 {used}，套餐上限为 {cap}，因此未安装任何内容。请升级套餐以继续。",
+      "consentRequired": "权限已更改。安装前请重新审核。",
+      "reconsentRequired": "新版本需要更多权限。请先审核并接受。",
+      "scopeExceeds": "您不能授予自己不具备的权限。缺少：{permissions}。",
+      "installationKilled": "平台已停止此应用。只能卸载。",
+      "installationDisabled": "此应用已暂停。请先恢复。",
+      "credentialMissing": "请填写必填字段。",
+      "noConnection": "此安装中没有可执行该操作的连接。",
+      "leadPipeline": "线索服务目前不可用。未保存任何内容。请稍后重试。",
+      "unexpected": "出了点问题，请重试。",
+      "subscriptionRequired": "这是付费应用。请订阅后安装。",
+      "notForSale": "目前不向新订阅者出售此应用。",
+      "trialUnavailable": "此应用在您的工作区中不提供免费试用。",
+      "subscriptionNotFound": "您的工作区没有订阅此应用。",
+      "subscriptionState": "这与订阅的当前状态不符。请重新加载以查看最新状态。"
+    },
+    "chips": {
+      "installed": "已安装",
+      "paused": "已暂停",
+      "killed": "平台已停止",
+      "healthy": "正常",
+      "degraded": "降级",
+      "error": "错误",
+      "needs_reauth": "需要重新登录",
+      "unknown": "尚未检查",
+      "needsConsent": "有新权限待审核",
+      "subscribed": "已订阅",
+      "trialing": "免费试用",
+      "comped": "赠予",
+      "canceling": "不续订",
+      "subscriptionEnded": "订阅已结束"
+    },
+    "lock": {
+      "planFeature": {
+        "chip": "不在您的套餐内",
+        "message": "您的套餐不包含此应用。您可以在此了解详情，但安装需要升级套餐。"
+      },
+      "moduleDisabled": {
+        "chip": "不可用",
+        "message": "此应用依赖的模块在本产品的当前安装中已关闭。"
+      },
+      "limitReached": {
+        "chip": "已达套餐上限",
+        "message": "您安装的应用数量已达套餐上限。请卸载一个应用或升级套餐。"
+      }
+    },
+    "scopes": {
+      "risk": {
+        "low": "低风险",
+        "medium": "中风险",
+        "high": "高风险"
+      },
+      "none": "此应用不请求任何权限。",
+      "new": "新",
+      "overall": {
+        "low": {
+          "title": "整体低风险",
+          "message": "此应用仅请求读取权限。"
+        },
+        "medium": {
+          "title": "整体中风险",
+          "message": "此应用可以读取和更改您工作区中的数据。"
+        },
+        "high": {
+          "title": "整体高风险",
+          "message": "此应用可代表您执行操作，例如发送消息或管理集成。仅当您信任开发者时才安装。"
+        }
+      },
+      "counts": "{high} 个高风险、{medium} 个中风险、{low} 个低风险"
+    },
+    "header": {
+      "title": "应用市场",
+      "subtitle": "为您的工作区添加迷你应用，并连接外部服务。",
+      "tabsLabel": "应用市场分区",
+      "moreLabel": "已安装与请求",
+      "tabs": {
+        "mini_app": "迷你应用",
+        "integration": "集成"
+      },
+      "installed": "已安装",
+      "installedLimit": "已安装（{installed}/{limit}）",
+      "installedUnlimited": "已安装（{installed}）",
+      "request": "申请集成"
+    },
+    "card": {
+      "firstParty": "我们自主开发",
+      "pricing": {
+        "free": "免费",
+        "included": "已包含在您的套餐中",
+        "monthly": "{price} / 月",
+        "subscribed": "已订阅",
+        "notForSale": "不出售",
+        "paid": "付费应用",
+        "addOn": "附加包",
+        "trial": "{days} 天免费试用"
+      },
+      "installs": "{count, plural, other {# 次安装}}",
+      "version": "版本 {version}",
+      "cta": {
+        "install": "安装",
+        "manage": "管理",
+        "review": "审核权限",
+        "killed": "管理",
+        "locked": "查看详情",
+        "view": "查看详情",
+        "subscribe": "订阅"
+      }
+    },
+    "browse": {
+      "categoriesLabel": "分类",
+      "all": "全部",
+      "shelves": {
+        "featured": "精选",
+        "popular": "热门",
+        "new": "新"
+      },
+      "searchLabel": "搜索应用市场",
+      "searchPlaceholder": {
+        "mini_app": "搜索迷你应用",
+        "integration": "搜索集成"
+      },
+      "availability": {
+        "label": "显示",
+        "all": "全部",
+        "addons": "可用附加包",
+        "installed": "已安装"
+      },
+      "sortLabel": "排序方式",
+      "sort": {
+        "featured": "精选",
+        "popular": "安装最多",
+        "new": "最新",
+        "name": "名称"
+      },
+      "unknownCategory": "此选项卡中不存在该分类。",
+      "showAll": "显示全部",
+      "resultsAll": "全部应用",
+      "resultsFiltered": "结果",
+      "loadedCount": "{count, plural, other {显示 # 个应用}}",
+      "loadMore": "加载更多",
+      "clearFilters": "清除筛选条件",
+      "empty": {
+        "search": {
+          "title": "没有符合搜索条件的结果",
+          "message": "请尝试较短的名称，或清除筛选条件。如果未列出，您可以在下方提出申请。"
+        },
+        "addons": {
+          "title": "此处没有可购买的附加包",
+          "message": "您的套餐列出但您尚未购买的附加包会显示在此处。选择“全部”可查看所有内容。"
+        },
+        "installed": {
+          "title": "此处尚未安装任何内容",
+          "message": "您安装的应用会显示在此处。选择“全部”可浏览所有应用。"
+        },
+        "category": {
+          "title": "此分类下暂无内容",
+          "message": "请选择其他分类，或在下方提出您需要的内容。"
+        },
+        "none": {
+          "title": "此处暂未列出任何内容",
+          "message": "新应用发布后会显示在此处。您可以在下方申请。"
+        }
+      }
+    },
+    "requestBox": {
+      "title": {
+        "mini_app": "缺少迷你应用？",
+        "integration": "缺少集成？"
+      },
+      "message": "请告诉我们您的需求。申请会被计数，被要求最多的将优先开发。",
+      "action": {
+        "mini_app": "申请迷你应用",
+        "integration": "申请集成"
+      }
+    },
+    "detail": {
+      "backToMarketplace": "返回应用市场",
+      "backToApps": "返回迷你应用",
+      "backToIntegrations": "返回集成",
+      "notFound": {
+        "title": "未找到应用",
+        "message": "此应用不存在，或您的工作区无法使用。",
+        "integrations": "浏览集成",
+        "apps": "浏览迷你应用"
+      },
+      "kind": {
+        "mini_app": "迷你应用",
+        "integration": "集成"
+      },
+      "firstParty": "我们自主开发",
+      "install": "安装",
+      "manage": "管理",
+      "killed": "平台已停用此应用。只能卸载。",
+      "about": "关于此应用",
+      "screenshots": "截图",
+      "screenshotAlt": "{name} 截图 {n}",
+      "permissions": {
+        "title": "可访问的内容",
+        "intro": "在安装任何内容之前，您将再次看到这些权限并需确认。"
+      },
+      "setup": {
+        "title": "您需要进行的设置",
+        "intro": {
+          "oauth": "您需要登录该服务以连接它。",
+          "push": "该服务使用您在此输入的密钥向您的工作区发送数据。",
+          "pull": "我们使用您在此输入的密钥从该服务获取数据。",
+          "email_parse": "我们读取该服务发送的提醒邮件。",
+          "webhook_relay": "您将获得一个网址和一个密钥，粘贴到发送数据的工具中。",
+          "client": "您在工作场所安装它，并使用您自己的账户登录。"
+        },
+        "required": "必填",
+        "optional": "可选",
+        "kind": {
+          "secret": "保密",
+          "text": "文本",
+          "select": "选项"
+        },
+        "noFields": "无需填写任何内容。安装后您将获得连接详情。",
+        "hasSample": "安装后，您可以发送一条示例线索以检查连接。"
+      },
+      "data": {
+        "title": "您的数据",
+        "intro": "此应用存储什么、存储在哪里以及如何删除。",
+        "summary": "存储内容",
+        "regions": "存储位置",
+        "deletion": "删除方式"
+      },
+      "changelog": {
+        "title": "变更内容",
+        "version": "版本 {version}"
+      },
+      "facts": {
+        "title": "详情",
+        "version": "版本",
+        "connector": "连接方式",
+        "connectors": {
+          "oauth": "登录",
+          "push": "向您发送数据",
+          "pull": "我们获取其数据",
+          "email_parse": "提醒邮件",
+          "webhook_relay": "网址和密钥",
+          "client": "由每位成员安装"
+        },
+        "installs": "安装次数",
+        "developer": "开发者"
+      },
+      "support": {
+        "title": "支持与法律",
+        "website": "网站",
+        "docs": "文档",
+        "privacy": "隐私政策",
+        "terms": "条款",
+        "status": "状态页",
+        "email": "邮件支持"
+      }
+    },
+    "install": {
+      "backToMarketplace": "返回应用市场",
+      "backToApp": "返回 {name}",
+      "notFound": {
+        "title": "未找到应用",
+        "message": "此应用不存在，或您的工作区无法使用。"
+      },
+      "alreadyTitle": "已安装",
+      "alreadyMessage": "{name} 已安装在您的工作区中。",
+      "openManage": "打开",
+      "lockedTitle": "{name} 已锁定",
+      "noPermissionTitle": "您无法安装应用",
+      "noPermissionMessage": "安装应用需要您的角色不具备的权限。",
+      "title": "安装 {name}",
+      "stepsLabel": "安装步骤",
+      "steps": {
+        "permissions": "权限",
+        "setup": "设置",
+        "done": "完成"
+      },
+      "permissions": {
+        "title": "审核权限",
+        "intro": "{name} 请求以下权限。安装后它将仅获得这些权限，直至您将其卸载。",
+        "diffSummary": "遗漏了 {missing, plural, other {# 项权限}}，且 {unexpected, plural, other {# 项权限}}未显示。",
+        "consent": "我已了解，并允许此应用在我的工作区中使用这些权限。",
+        "consentNone": "我已了解 {name} 不请求任何权限，并希望安装它。",
+        "continue": "继续"
+      },
+      "cancel": "取消",
+      "install": "安装",
+      "back": "返回",
+      "setup": {
+        "title": "设置",
+        "intro": "请填写此应用连接所需的内容。密钥将加密存储，无法读取。"
+      },
+      "installing": "正在安装",
+      "missingPermissions": "您缺少以下权限：",
+      "seeInstalled": "查看已安装内容",
+      "changed": {
+        "title": "您查看期间权限已变更",
+        "message": "请重新查看下方列表。尚未安装任何内容。",
+        "added": "现在还请求：",
+        "removed": "不再请求：",
+        "edited": "部分权限的描述或风险已更改。"
+      },
+      "gaps": {
+        "title": "您可能无法授予以上全部权限",
+        "message": "安装不会授予安装人员超出其自身拥有的访问权限。您似乎缺少："
+      },
+      "done": {
+        "title": "{name} 已安装",
+        "message": "版本 {version} 现已在您的工作区中生效。",
+        "saved": "我已保存，继续",
+        "manage": "打开设置",
+        "browse": "返回应用市场"
+      },
+      "subscribeTitle": "{name} 是付费应用",
+      "subscribeIntro": "订阅后即可安装。结账时支付首月费用；若提供试用，您可先免费试用。在安装前，您可查看并确认其权限。",
+      "notForSaleTitle": "{name} 不出售",
+      "goToCheckout": "前往结账"
+    },
+    "setup": {
+      "optionalLabel": "{label}（可选）",
+      "stored": {
+        "notSet": "未设置",
+        "endsIn": "已保存，末四位为 {last}",
+        "value": "已保存值",
+        "set": "已保存"
+      },
+      "keepBlank": "留空则保留已保存的值。输入内容即可替换。",
+      "show": "显示值",
+      "hide": "隐藏值",
+      "choose": "选择",
+      "clear": "清除 {label}",
+      "problems": {
+        "required": "{label} 为必填项。",
+        "pattern": "{label} 格式似乎不正确。",
+        "option": "请为 {label} 选择一个选项。",
+        "server": "{label} 未被接受。请检查该值。"
+      }
+    },
+    "reveal": {
+      "title": "保存您的连接密钥",
+      "warning": "您之后将无法再次看到此密钥。请立即复制并妥善保存。若丢失，请轮换密钥以获取新密钥。",
+      "address": "要发送至的网址",
+      "secret": "密钥",
+      "copyAddress": "复制网址",
+      "copySecret": "复制密钥",
+      "saved": "我已保存密钥和地址。",
+      "doneHint": "请勾选方框以继续。",
+      "send": {
+        "title": "发送方式",
+        "post": "向该地址发送带 JSON 正文的 POST 请求。",
+        "token": "将密钥放在请求头 {header} 中。",
+        "signature": "或使用密钥对正文进行 HMAC-SHA256 签名，并在请求头 {header} 中发送 sha256= 加上十六进制摘要。"
+      },
+      "leaveConfirm": "您尚未确认已保存密钥。若现在离开，将无法再次看到它。仍要离开吗？"
+    },
+    "portals": {
+      "maturity": {
+        "beta": "测试版",
+        "needsPortalSetup": "需要在门户中设置",
+        "betaHint": "基于门户的部分文档构建。目前可用，但在首条真实线索到达后可能需要调整。",
+        "needsPortalSetupHint": "在门户自身的团队为您开启之前，不会有任何内容到达。"
+      },
+      "reveal": {
+        "title": "保存您的专属地址",
+        "warning": "您之后将无法再次看到此地址。它同时也是此连接的密码：拥有它的人都可以向您的工作区发送线索。请立即复制并妥善保存。若丢失，请创建新地址；旧地址将随即失效。",
+        "address": "您的专属地址",
+        "copyAddress": "复制专属地址",
+        "saved": "我已保存此地址。",
+        "sendTitle": "发送方需要的内容",
+        "method": "方法：{methods}",
+        "formats": "支持的格式：{formats}",
+        "noHeader": "无需其他内容：不需要请求头，也不需要签名。地址的最后一部分即为密码。",
+        "managerTitle": "发送给门户的客户经理",
+        "managerIntro": "此功能由 {portal} 自身的团队开启，而非您。请复制现成的消息，并将其发送给该门户的客户经理。",
+        "copyMessage": "复制发给门户客户经理的消息",
+        "messageCopied": "消息已复制",
+        "portalFallback": "该门户"
+      },
+      "formats": {
+        "json": "JSON",
+        "form": "表单字段",
+        "xml": "XML",
+        "query": "查询字符串参数"
+      },
+      "message": {
+        "subjectLine": "主题：我们 {portal} 账户的线索投递地址",
+        "body": "您好，\n\n请开始将我们 {portal} 账户的线索发送至以下专属地址：\n\n{address}\n\n请使用{methods}发送每条线索。我们接受的数据格式为{formats}。该地址已标识我们的账户，因此无需请求头、密码或签名。请妥善保密。\n\n功能开启后，请尽快发送一条测试线索，以便我们确认能够收到。\n\n谢谢。"
+      },
+      "connection": {
+        "nextPoll": "下次检查",
+        "notScheduled": "未安排",
+        "syncedThrough": "线索已获取至",
+        "syncedNever": "尚未获取任何内容",
+        "errorHint": "请在“凭据”中重新输入密钥，或点击“立即同步”。",
+        "errorHintNoSync": "请在“凭据”中重新输入密钥。",
+        "rotatePath": "创建新地址",
+        "rotatePathConfirm": {
+          "title": "创建新地址？",
+          "message": "将创建新的专属地址，旧地址会立即失效。在门户团队获得新地址之前，仍发往旧地址的内容都会被拒绝。新地址只会显示一次。",
+          "confirm": "创建新地址"
+        },
+        "waiting": {
+          "title": "等待来自 {portal} 的首条线索",
+          "message": "{portal} 的团队需要开启此功能。在其开始向您的连接地址发送内容之前，不会有任何内容到达。请确保对方的客户经理已获得该地址，并请其发送一条测试线索。"
+        },
+        "path": {
+          "address": "专属地址",
+          "maskedNote": "地址的最后一部分是其密码。它仅在您安装或创建新地址时显示一次，因此此处仅显示末尾部分。",
+          "method": "方法：{methods}",
+          "formats": "支持的格式：{formats}",
+          "noHeader": "无需请求头或签名。地址即为密码：请妥善保密。",
+          "newAddressHint": "丢失了地址，或想阻止他人使用？请在下方创建新地址。旧地址将立即失效，并且必须将新地址提供给门户团队。"
+        }
+      },
+      "sync": {
+        "button": "立即同步",
+        "needsActive": "恢复应用后即可立即同步。",
+        "scheduledNow": "已安排同步，将立即开始。",
+        "scheduled": "已安排于 {time} 同步。",
+        "waits": "该门户允许每 {interval} 发送一次请求，因此本次同步需等待至该时间。",
+        "duration": {
+          "seconds": "{count, plural, other {# 秒}}",
+          "minutes": "{count, plural, other {# 分钟}}",
+          "hours": "{count, plural, other {# 小时}}"
+        }
+      }
+    },
+    "installed": {
+      "title": "已安装",
+      "filters": {
+        "kind": "类型",
+        "status": "状态",
+        "all": "全部"
+      },
+      "kind": {
+        "mini_app": "迷你应用",
+        "integration": "集成"
+      },
+      "status": {
+        "active": "已安装",
+        "disabled": "已暂停",
+        "killed": "平台已停用"
+      },
+      "listLabel": "已安装的应用",
+      "emptyFiltered": {
+        "title": "没有符合这些筛选条件的内容",
+        "message": "请更改筛选条件，以查看您的其他已安装应用。"
+      },
+      "empty": {
+        "title": "尚未安装任何应用",
+        "message": "浏览应用市场，添加迷你应用或连接服务。",
+        "integrations": "浏览集成",
+        "apps": "浏览迷你应用"
+      },
+      "usage": {
+        "unlimited": "已安装 {installed} 个。您的套餐不限数量。",
+        "of": "已安装 {installed}/{limit}",
+        "remaining": "剩余 {count, plural, other {# 个名额}}",
+        "atCap": "您已达到套餐上限。请卸载一个应用或升级套餐以安装其他应用。",
+        "upgrade": "查看套餐并升级",
+        "nearCap": "您即将达到套餐上限。"
+      },
+      "version": "版本 {version}",
+      "killReason": "原因：{reason}",
+      "lastError": "最近错误：{error}",
+      "pending": "版本 {version} 正在等待您接受其新权限。",
+      "installedOn": "安装于 {date}",
+      "review": "审核",
+      "manage": "管理",
+      "subscriptions": {
+        "title": "订阅",
+        "intro": "您的付费应用和试用，包括已卸载但付费期限尚未结束的应用。",
+        "listLabel": "订阅",
+        "manage": "管理",
+        "viewApp": "查看应用"
+      }
+    },
+    "manage": {
+      "backToInstalled": "返回已安装",
+      "notFound": {
+        "title": "未找到安装记录",
+        "message": "此应用未安装在您的工作区中，或已被卸载。"
+      },
+      "version": "版本 {version}",
+      "checkedAt": "上次检查：{date}",
+      "notChecked": "尚未检查。请使用“测试连接”进行检查。",
+      "lastError": "最近错误：{error}",
+      "viewListing": "查看应用页面",
+      "resume": "恢复",
+      "pause": "暂停",
+      "toast": {
+        "resumed": "应用已恢复。",
+        "paused": "应用已暂停。",
+        "consented": "已接受新权限。当前版本为 {version}。",
+        "uninstalled": "{name} 已卸载。"
+      },
+      "killed": {
+        "title": "平台已停用",
+        "message": "此应用已对所有人关闭。您只能将其卸载。",
+        "reason": "原因：{reason}"
+      },
+      "paused": {
+        "title": "已暂停",
+        "message": "已暂停的应用不做任何处理，在您恢复之前，其网址将拒绝投递。"
+      },
+      "permissions": {
+        "title": "已授予的权限",
+        "intro": "此应用目前在您的工作区中可执行的操作。"
+      },
+      "reconsent": {
+        "title": "版本 {version} 请求新权限",
+        "message": "在您接受版本 {version} 的权限之前，此应用将继续以版本 {current} 运行。",
+        "newScopes": "新权限",
+        "fullList": "新版本的完整列表",
+        "accept": "接受新权限"
+      },
+      "problem": {
+        "conflictTitle": "期间已有变更",
+        "conflictMessage": "其他人更改了此应用。请重新加载以查看最新状态，然后再次进行您的更改。",
+        "reload": "重新加载",
+        "consentTitle": "权限已变更",
+        "consentMessage": "自您打开此页面以来，权限列表已变更。请重新加载以查看当前列表。"
+      },
+      "credentials": {
+        "title": "凭据和设置",
+        "intro": "输入内容会替换已保存的值。留空则保留已保存的内容。已保存的密钥将不再显示。",
+        "readOnly": "此应用的已保存内容。密钥永不显示。",
+        "saved": "设置已保存。",
+        "nothingToSave": "尚无可保存的内容。",
+        "save": "保存更改",
+        "missing": "请填写必填字段。",
+        "invalid": "部分值未被接受。"
+      },
+      "connection": {
+        "title": "连接",
+        "intro": "此应用如何与您的工作区通信，以及其运行状况。",
+        "type": "类型",
+        "types": {
+          "oauth": "登录",
+          "push": "向您发送数据",
+          "pull": "我们获取其数据",
+          "email_parse": "提醒邮件",
+          "webhook_relay": "网址和密钥",
+          "client": "由每位成员安装"
+        },
+        "status": "连接状态",
+        "statuses": {
+          "active": "活动",
+          "paused": "已暂停",
+          "error": "错误",
+          "disabled": "已关闭"
+        },
+        "pollEvery": "检查频率",
+        "seconds": "{count, plural, other {# 秒}}",
+        "lastEvent": "最近投递",
+        "lastSuccess": "最近成功",
+        "lastError": "最近错误",
+        "never": "从未",
+        "counters": {
+          "received": "已接收",
+          "accepted": "已接受",
+          "duplicates": "重复",
+          "failed": "失败"
+        },
+        "inbound": {
+          "address": "要发送至的网址",
+          "copyAddress": "复制网址",
+          "method": "发送带 JSON 正文的 POST 请求。",
+          "token": "将密钥放在请求头 {header} 中。",
+          "signature": "或使用密钥对正文进行 HMAC-SHA256 签名，并在请求头 {header} 中发送 sha256= 加上十六进制摘要。",
+          "secretEndsIn": "密钥末四位为 {last}。无法再次显示。",
+          "secretSet": "已设置密钥。无法再次显示。"
+        },
+        "actions": {
+          "test": "测试连接",
+          "sample": "发送示例线索",
+          "rotate": "轮换密钥",
+          "sampleNeedsActive": "恢复应用后即可发送示例线索。",
+          "testOk": "连接正常。",
+          "testFailed": "连接测试失败。",
+          "latency": "{ms} 毫秒",
+          "sampleAccepted": "示例线索已接受，现已成为真实线索。",
+          "sampleDuplicate": "该示例线索此前已接收。",
+          "rotatedDone": "我已保存，继续",
+          "rotateNotApplicable": "此连接的密钥是来自另一服务的密钥。请改在“凭据和设置”中更改。",
+          "rotateConfirm": {
+            "title": "轮换连接密钥？",
+            "message": "将创建新密钥，旧密钥会立即失效。在您提供新密钥之前，仍使用旧密钥发送的内容都会被拒绝。新密钥只会显示一次。",
+            "confirm": "轮换密钥",
+            "cancel": "取消"
+          }
+        }
+      },
+      "events": {
+        "title": "最近投递",
+        "intro": "此连接最近接收到的内容，最新的在前。",
+        "refresh": "刷新",
+        "empty": {
+          "title": "暂无投递记录",
+          "message": "当另一服务发送内容，或您发送示例线索时，将显示在此处。"
+        },
+        "columns": {
+          "received": "已接收",
+          "status": "结果",
+          "externalId": "投递 ID",
+          "error": "原因"
+        },
+        "status": {
+          "accepted": "已接受",
+          "duplicate": "重复",
+          "rejected": "已拒绝",
+          "failed": "失败"
+        },
+        "loadMore": "加载更多"
+      },
+      "pauseConfirm": {
+        "title": "暂停 {name}？",
+        "message": "在您恢复之前，它将停止工作。在此期间，其网址将拒绝投递。",
+        "confirm": "暂停",
+        "cancel": "取消"
+      },
+      "uninstall": {
+        "section": "卸载",
+        "sectionIntro": "从您的工作区中移除此应用。",
+        "open": "卸载",
+        "title": "卸载 {name}？",
+        "confirm": "卸载",
+        "cancel": "取消",
+        "effect": "其访问权限将立即终止。",
+        "effectConnection": "其访问权限将立即终止，其网址也将停止响应。",
+        "dataLegend": "其创建的数据应如何处理？",
+        "choices": {
+          "keep": {
+            "label": "保留其创建的数据",
+            "help": "它添加的联系人和记录将保留在您的工作区中。"
+          },
+          "delete": {
+            "label": "删除其创建的数据",
+            "help": "我们将记录您的请求，并通知负责该数据的产品部分。"
+          }
+        },
+        "honestNote": "目前无论您选择哪一项，此应用已创建的联系人都会保留在您的工作区中。您的选择将记录下来，供将来执行删除的部分使用。",
+        "irreversible": "此操作无法撤销。若要再次使用此应用，请重新安装。",
+        "renewal": {
+          "title": "此应用有付费订阅",
+          "message": "卸载后将停止续订，因此不会再收费。您已支付的期限仍归您所有，因此您可以在到期前免费重新安装。",
+          "messageUntil": "卸载后将停止续订，因此不会再收费。您已支付的期限将保留至 {date}，因此您可在此之前免费重新安装。"
+        }
+      },
+      "subscription": {
+        "title": "订阅",
+        "subscribeTitle": "订阅以继续使用 {name}",
+        "subscribeIntro": "这是一款付费应用，您的工作区尚未订阅。",
+        "included": "您的套餐包含此应用，因此无需付费。"
+      },
+      "subscriptionEnded": {
+        "title": "订阅已结束",
+        "message": {
+          "resubscribe": "{name} 因订阅已结束而暂停。您的数据和设置将被保留。重新订阅即可将其恢复运行。",
+          "notForSale": "{name} 因订阅已结束而暂停，且已不再出售，因此无法重新开启。您的数据和设置将被保留。",
+          "resumable": "{name} 因订阅已结束而暂停，但您的工作区已重新获得其访问权限。请恢复它以重新开启。"
+        },
+        "resubscribe": "重新订阅",
+        "resume": "恢复",
+        "noCheckout": "结账功能暂时不可用。请稍后再试。"
+      }
+    },
+    "requests": {
+      "title": "申请",
+      "form": {
+        "title": "提出需求",
+        "intro": "没有列出？请告诉我们您的需求。如果已有人提出，您的申请将计为一票。",
+        "name": "名称",
+        "namePlaceholder": "例如，某项服务的名称",
+        "kind": "类型",
+        "kinds": {
+          "mini_app": "迷你应用",
+          "integration": "集成"
+        },
+        "category": "分类",
+        "categoryHint": "可选。",
+        "anyCategory": "不确定",
+        "website": "网站",
+        "websiteHint": "可选。完整的 https:// 地址。",
+        "note": "您需要它用于什么？",
+        "noteHint": "仅平台团队可见",
+        "problems": {
+          "nameShort": "请至少输入 2 个字符。",
+          "nameLong": "最多使用 80 个字符。",
+          "websiteInvalid": "请输入完整的 https:// 地址。",
+          "noteLong": "最多使用 500 个字符。",
+          "server": "未被接受。请检查该值。"
+        },
+        "result": {
+          "created": {
+            "title": "已添加申请：{name}",
+            "message": "谢谢。其他工作区现在可以为其投票。"
+          },
+          "counted": {
+            "title": "已有人申请 {name}",
+            "message": "您的申请已计为对其的一票。"
+          }
+        },
+        "submit": "发送申请"
+      },
+      "list": {
+        "title": "其他人的申请",
+        "intro": "为您想要的内容投票。被要求最多的将优先开发。",
+        "searchLabel": "搜索申请",
+        "searchPlaceholder": "搜索申请",
+        "kind": "类型",
+        "allKinds": "所有类型",
+        "kinds": {
+          "mini_app": "迷你应用",
+          "integration": "集成"
+        },
+        "status": "状态",
+        "allStatuses": "所有状态",
+        "statuses": {
+          "open": "待处理",
+          "planned": "已计划",
+          "building": "开发中",
+          "shipped": "已发布",
+          "declined": "已拒绝"
+        },
+        "sort": "排序方式",
+        "sorts": {
+          "votes": "票数最多",
+          "new": "最新"
+        },
+        "emptyFiltered": {
+          "title": "没有符合的申请",
+          "message": "请更改筛选条件，或自行提出申请。"
+        },
+        "empty": {
+          "title": "暂无申请",
+          "message": "成为第一个提出需求的人吧。"
+        },
+        "loadMore": "加载更多",
+        "votes": "{count, plural, other {# 票}}",
+        "voted": "已投票",
+        "vote": "投票"
+      }
+    },
+    "pricing": {
+      "title": "定价",
+      "freeNote": "安装和使用均免费。",
+      "included": {
+        "planFeature": "您的套餐包含此应用，因此无需付费。",
+        "minPlan": "您的套餐或更高套餐包含此应用，因此无需付费。",
+        "plan": "您的套餐包含此应用，因此无需付费。"
+      },
+      "needsPurchase": "已包含在套餐目录中，购买后即可使用。",
+      "subscribedNote": "您的工作区已订阅此应用。",
+      "trialOffer": "免费试用 {days, plural, other {# 天}}。在您选择订阅之前不会收费。",
+      "prepaidNote": "通过工作区账单按月计费。每次付款涵盖一个月，不会自动扣款：请在所示日期前再次付款，以保持应用运行。",
+      "notForSale": {
+        "title": "不出售",
+        "message": "此应用目前不向新订阅者出售。"
+      }
+    },
+    "subscribe": {
+      "subscribe": "订阅",
+      "startTrial": "开始 {days} 天免费试用",
+      "hintPrice": "每月 {price}，在结账时支付。每次付款涵盖一个月。",
+      "hint": "结账时按月付费。",
+      "working": "处理中",
+      "noCheckout": "此应用目前无法结账。请稍后再试。",
+      "toast": {
+        "trial_started": "{name} 的免费试用已开始。",
+        "included": "{name} 已包含在您的套餐中。",
+        "already_entitled": "您的工作区已可访问 {name}。",
+        "free": "{name} 免费。"
+      }
+    },
+    "subscription": {
+      "title": "订阅",
+      "status": {
+        "active": "活动",
+        "trialing": "免费试用",
+        "comped": "赠予",
+        "canceling": "不续订",
+        "ended": "已结束"
+      },
+      "date": {
+        "paidUntil": "付费至 {date}",
+        "trialEnds": "免费试用于 {date} 结束",
+        "compUntil": "赠予访问权限至 {date}",
+        "compOpen": "赠予访问权限，无结束日期",
+        "cancelingUntil": "不续订。有效期至 {date}",
+        "endedOn": "订阅已于 {date} 结束",
+        "endedNoDate": "订阅已结束"
+      },
+      "lastPayment": "上次付款：每月 {price}",
+      "nextPayment": "此应用的价格已变更。您的下次付款将为每月 {price}。",
+      "compNote": "此访问权限由平台团队授予，无法在此处取消。",
+      "renewHint": "按月付费的期限不会自动续订。请在所示日期前续订，以保持应用持续运行、不中断。",
+      "actions": {
+        "renew": "立即续订",
+        "resubscribe": "重新订阅",
+        "subscribe": "立即订阅",
+        "resume": "恢复订阅",
+        "cancel": "取消订阅"
+      },
+      "cancelConfirm": {
+        "title": "取消对 {name} 的订阅？",
+        "message": "{name} 将保持有效至 {date}，之后将暂停。您的数据和设置将被保留。",
+        "messageNoDate": "{name} 将保持有效直至您已付费的期限结束，之后将暂停。您的数据和设置将被保留。",
+        "afterwards": "之后将不再收费，您可随时重新订阅。",
+        "confirm": "取消订阅",
+        "keep": "保留订阅"
+      },
+      "toast": {
+        "canceled": "订阅已取消。将保持有效至 {date}。",
+        "canceledNoDate": "订阅已取消。将保持有效直至已付费期限结束。",
+        "resumed": "订阅已恢复。"
+      },
+      "working": "处理中",
+      "noCheckout": "此应用目前无法结账。请稍后再试。"
+    }
+  }
+}

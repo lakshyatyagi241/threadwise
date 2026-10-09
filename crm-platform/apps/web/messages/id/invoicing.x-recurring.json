@@ -1,0 +1,370 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "REC_ENDED": "Jadwal ini sudah berakhir, jadi tidak ada yang dapat diubah atau dijalankan.",
+        "REC_NOT_ACTIVE": "Jadwal ini tidak aktif. Lanjutkan terlebih dahulu.",
+        "REC_START_TOO_OLD": "Tanggal mulai terlalu jauh di masa lalu. Paling banyak 12 periode lalu yang dibuat, jadi mulailah dari tanggal yang lebih baru.",
+        "INV_RECURRING_INVALID": "Templat tidak dapat digunakan untuk membuat faktur. Periksa pembeli, baris, dan pajak, lalu simpan lagi."
+      }
+    },
+    "recurring": {
+      "title": "Faktur berulang",
+      "subtitle": "Jadwal yang membuat faktur secara otomatis, pada tanggal yang Anda atur.",
+      "new": "Jadwal baru",
+      "invoices": "Faktur",
+      "tabsLabel": "Status jadwal",
+      "tabs": {
+        "all": "Semua",
+        "active": "Aktif",
+        "paused": "Dijeda",
+        "ended": "Berakhir"
+      },
+      "search": "Cari jadwal yang sudah dimuat",
+      "refresh": "Segarkan",
+      "tableLabel": "Jadwal faktur berulang",
+      "scrollArea": "Tabel jadwal, dapat digeser ke samping",
+      "loading": "Memuat jadwal",
+      "empty": {
+        "all": {
+          "title": "Belum ada faktur berulang",
+          "message": "Atur jadwal sekali, dan faktur akan dibuat untuk Anda setiap minggu, bulan, atau tahun."
+        },
+        "active": {
+          "title": "Tidak ada yang berjalan",
+          "message": "Jadwal aktif, yaitu yang akan membuat faktur berikutnya tepat waktu, muncul di sini."
+        },
+        "paused": {
+          "title": "Tidak ada jadwal yang dijeda",
+          "message": "Jadwal yang Anda jeda tidak akan membuat faktur sampai Anda melanjutkannya."
+        },
+        "ended": {
+          "title": "Tidak ada jadwal yang berakhir",
+          "message": "Jadwal berakhir setelah proses terakhirnya atau tanggal berakhirnya."
+        }
+      },
+      "emptySearchTitle": "Tidak ada jadwal yang cocok",
+      "emptySearch": "Tidak ada baris yang dimuat yang cocok. Hapus pencarian atau muat lebih banyak.",
+      "clearSearch": "Hapus pencarian",
+      "showing": "{count, plural, other {Menampilkan # jadwal}}",
+      "showingMatches": "{count} dari {loaded} jadwal yang dimuat cocok",
+      "loadMore": "Muat lebih banyak",
+      "allLoaded": "Semua jadwal sudah dimuat",
+      "searchLoadedOnly": "Pencarian hanya memeriksa jadwal yang sudah dimuat. Muat lebih banyak untuk mencari lebih jauh.",
+      "columns": {
+        "name": "Jadwal",
+        "buyer": "Pembeli",
+        "every": "Berulang",
+        "next": "Proses berikutnya",
+        "last": "Proses terakhir",
+        "runs": "Proses",
+        "failures": "Kegagalan",
+        "amount": "Per faktur",
+        "mode": "Setiap faktur",
+        "status": "Status",
+        "actions": "Tindakan"
+      },
+      "lineCount": "{count, plural, other {# baris}}",
+      "onHold": "Ditahan",
+      "runsOf": "{done} dari {max}",
+      "failuresTitle": "{count, plural, other {# periode gagal. Buka riwayat.}}",
+      "channel": {
+        "link": "Tautan",
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "moreFor": "Tindakan lainnya untuk {name}",
+      "open": "Buka",
+      "edit": "Edit",
+      "pause": "Jeda",
+      "resume": "Lanjutkan",
+      "cancel": "Batal",
+      "runNow": {
+        "action": "Jalankan sekarang",
+        "title": "Jalankan {name} sekarang?",
+        "confirm": "Jalankan sekarang",
+        "message": {
+          "draft": "Ini akan membuat faktur untuk {date} sekarang, sebagai draf yang bisa Anda tinjau, dan jadwal lanjut ke periode berikutnya.",
+          "issue": "Ini akan membuat dan menerbitkan faktur untuk {date} sekarang (langsung mendapat nomornya). Jadwal lanjut ke periode berikutnya.",
+          "issue_send": "Ini akan membuat, menerbitkan, dan mengirim faktur untuk {date} ke pembeli sekarang. Jadwal lanjut ke periode berikutnya."
+        }
+      },
+      "delete": {
+        "action": "Hapus",
+        "title": "Hapus {name}?",
+        "message": "{name} berhenti membuat faktur. Faktur yang sudah dibuat tetap ada di daftar Anda.",
+        "confirm": "Hapus jadwal",
+        "keep": "Simpan"
+      },
+      "toast": {
+        "paused": "{name} dijeda.",
+        "resumed": "{name} berjalan lagi. Faktur berikutnya: {date}.",
+        "resumedEnded": "{name} tidak punya periode tersisa, jadi sudah berakhir.",
+        "ran": "Sebuah faktur dibuat dari {name}.",
+        "runFailed": "Proses untuk {name} gagal dan telah dicatat. Buka riwayat untuk melihat penyebabnya.",
+        "deleted": "{name} telah dihapus."
+      },
+      "every": {
+        "day": "{interval, plural, other {Setiap # hari}}",
+        "week": "{interval, plural, other {Setiap # minggu}}",
+        "month": "{interval, plural, other {Setiap # bulan}}",
+        "year": "{interval, plural, other {Setiap # tahun}}"
+      },
+      "status": {
+        "active": "Aktif",
+        "paused": "Dijeda",
+        "ended": "Berakhir"
+      },
+      "runStatus": {
+        "created": "Dibuat",
+        "failed": "Gagal"
+      },
+      "modeShort": {
+        "draft": "Draf",
+        "issue": "Diterbitkan",
+        "issue_send": "Diterbitkan dan dikirim"
+      },
+      "modeSent": {
+        "email": "Diterbitkan dan dikirim via email",
+        "link": "Diterbitkan, dibagikan lewat tautan",
+        "whatsapp": "Diterbitkan dan dikirim lewat WhatsApp"
+      },
+      "frequency": {
+        "day": "Hari",
+        "week": "Minggu",
+        "month": "Bulan",
+        "year": "Tahun"
+      },
+      "modeCards": {
+        "draft": {
+          "title": "Simpan sebagai draf",
+          "hint": "Setiap faktur menunggu tinjauan Anda sebelum diterbitkan."
+        },
+        "issue": {
+          "title": "Terbitkan",
+          "hint": "Setiap faktur diberi nomor dan siap pada hari jatuh temponya."
+        },
+        "issue_send": {
+          "title": "Terbitkan dan kirim",
+          "hint": "Setiap faktur diterbitkan dan dikirim ke pembeli secara otomatis."
+        }
+      },
+      "warnings": {
+        "noBuyerEmail": "Templat tidak memiliki email pembeli, jadi pengiriman email akan gagal. Tambahkan email atau kirim lewat tautan."
+      },
+      "preview": {
+        "title": "Proses berikutnya",
+        "incomplete": "Isi jadwal untuk melihat kapan faktur akan dibuat.",
+        "sentence": "{every} mulai {start}{limit}. {outcome}",
+        "sentenceLimit": "{kind, select, runs {, {count, plural, other {# faktur}}} end {, sampai {end}} both {, {count, plural, other {# faktur}}, sampai {end}} other {}}",
+        "outcome": {
+          "draft": "Setiap faktur disimpan sebagai draf untuk Anda tinjau.",
+          "issue": "Setiap faktur diterbitkan secara otomatis.",
+          "issue_email": "Setiap faktur diterbitkan dan dikirim via email ke pembeli.",
+          "issue_link": "Setiap faktur diterbitkan dan dicatat sebagai dibagikan lewat tautan.",
+          "issue_whatsapp": "Setiap faktur diterbitkan dan dikirim lewat WhatsApp."
+        },
+        "eachInvoice": "Setiap faktur bernilai sekitar",
+        "lastDay": "Hari terakhir bulan",
+        "noRuns": "Tidak ada proses dalam jadwal ini.",
+        "endsMaxRuns": "{count, plural, other {Berhenti setelah # faktur.}}",
+        "endsEndDate": "{count, plural, other {Tidak ada proses setelah {date}: total # faktur.}}",
+        "moreBounded": "{count, plural, other {Total # faktur, sisanya mengikuti ritme yang sama.}}",
+        "moreForever": "Akan terus berjalan sampai Anda menjedanya atau menghapusnya.",
+        "clampNote": "Jadwal ini dimulai pada tanggal {day}. Bulan yang tidak memiliki tanggal {day} akan berjalan pada hari terakhirnya, dan bulan berikutnya kembali ke tanggal {day}.",
+        "catchUp": "{count, plural, other {# periode sudah lewat: fakturnya langsung dibuat, masing-masing satu.}}",
+        "catchUpTooOld": "{count} periode sudah lewat, dan paling banyak {max} yang dibuat. Mulailah dari tanggal yang lebih baru."
+      },
+      "builder": {
+        "loading": "Memuat",
+        "endedNoEdit": "Jadwal ini sudah berakhir, jadi tidak dapat diedit lagi.",
+        "openSchedule": "Buka jadwal",
+        "back": "Kembali",
+        "newTitle": "Faktur berulang baru",
+        "editTitle": "Edit {name}",
+        "newSubtitle": "Atur ritme dan faktur yang dibuat. Proses berikutnya ditampilkan di samping.",
+        "editSubtitle": "Ubah ritme atau faktur untuk periode yang akan datang.",
+        "cancel": "Batal",
+        "save": "Simpan perubahan",
+        "create": "Buat jadwal",
+        "conflict": "Orang lain mengubah jadwal ini saat Anda sedang mengeditnya. Muat ulang untuk melihat versinya. Perubahan Anda di sini akan hilang.",
+        "reload": "Muat ulang",
+        "fixProblems": "Perbaiki kolom yang disorot terlebih dahulu.",
+        "nothingToSave": "Tidak ada yang diubah.",
+        "saved": "Jadwal disimpan.",
+        "created": "{name} sekarang akan membuat faktur sesuai jadwal.",
+        "schedule": "Jadwal",
+        "name": "Nama",
+        "nameHint": "Hanya Anda yang melihatnya, misalnya Retainer bulanan.",
+        "every": "Ulangi setiap",
+        "frequency": "Satuan",
+        "startDate": "Faktur pertama pada",
+        "startFixed": "Tanggal mulai tidak dapat diubah. Buat jadwal baru untuk mulai dari tanggal lain.",
+        "startHint": "Tanggal di masa lalu membuat periode yang sudah jatuh tempo langsung dibuat, hingga 12.",
+        "endDate": "Berhenti setelah (opsional)",
+        "endHint": "Tidak ada faktur yang dibuat setelah tanggal ini.",
+        "maxRuns": "Jumlah faktur (opsional)",
+        "maxRunsHint": "Jadwal berakhir setelah sejumlah faktur ini.",
+        "noLimit": "Tanpa batas",
+        "scheduleEditNote": "Ritme yang diubah berlanjut mulai hari ini dan tidak pernah mengulang periode yang sudah berjalan.",
+        "mode": "Apa yang terjadi pada setiap faktur",
+        "sendChannel": "Kirim lewat",
+        "sendChannelHint": "Tautan mencatat bahwa Anda membagikan tautannya sendiri. Email dan WhatsApp mengirimkannya untuk Anda.",
+        "templateTitle": "Templat faktur",
+        "templateFuture": "Templat baru berlaku untuk faktur yang akan datang. Faktur yang sudah dibuat tidak akan berubah.",
+        "replaceTemplate": "Ganti templat",
+        "keepTemplate": "Pertahankan templat saat ini"
+      },
+      "template": {
+        "title": "Templat faktur",
+        "hint": "Setiap periode mendapat faktur baru yang dibuat dari templat ini, dengan tanggal periode tersebut.",
+        "hintEdit": "Buat templat baru di sini. Templat ini menggantikan templat saat ini untuk faktur mendatang.",
+        "sourceLabel": "Asal templat",
+        "source": {
+          "invoice": {
+            "title": "Salin faktur",
+            "hint": "Gunakan pembeli dan baris dari faktur yang sudah Anda buat."
+          },
+          "build": {
+            "title": "Buat templat",
+            "hint": "Isi pembeli dan baris di sini."
+          }
+        },
+        "draftInvoice": "Draf faktur",
+        "copyOf": "Salinan faktur ini, dengan total",
+        "change": "Ubah",
+        "choose": "Pilih faktur",
+        "copyNote": "Pembeli, baris, pajak, dan catatan disalin saat Anda menyimpan. Perubahan berikutnya pada aslinya tidak akan memengaruhi jadwal.",
+        "startFromInvoice": "Mulai dari faktur",
+        "startFromInvoiceHint": "Memuat pembeli dan baris di sini agar Anda dapat menyesuaikannya.",
+        "billTo": "Tagihan kepada",
+        "contact": "Kontak",
+        "contactHint": "Pilih kontak untuk menautkan setiap faktur kepadanya, atau ketik pembeli di bawah.",
+        "buyerName": "Nama di faktur",
+        "buyerEmail": "Email",
+        "buyerPhone": "Telepon",
+        "buyerCountry": "Negara",
+        "buyerCountryHint": "Dua huruf, seperti IN atau DE.",
+        "buyerTaxId": "ID pajak",
+        "buyerAddress": "Alamat penagihan",
+        "details": "Mata uang dan pajak",
+        "currency": "Mata uang",
+        "docType": "Dokumen",
+        "docTypes": {
+          "tax_invoice": "Faktur pajak",
+          "proforma": "Faktur proforma"
+        },
+        "taxMode": "Pajak",
+        "taxModes": {
+          "rates": "Menurut tarif pajak",
+          "auto": "Otomatis"
+        },
+        "taxModeAutoHint": "Mesin pajak menentukan pajak berdasarkan negara penjual dan pembeli.",
+        "supplyType": "Penyerahan",
+        "supply": {
+          "goods": "Barang",
+          "services": "Jasa",
+          "digital": "Jasa digital"
+        },
+        "paymentTerms": "Tenggat pembayaran",
+        "paymentTermsHint": "Dihitung sejak hari setiap faktur diterbitkan.",
+        "termsDefault": "Default workspace",
+        "termsOnReceipt": "Jatuh tempo saat diterima",
+        "termsNet": "Net {days}",
+        "lines": "Item baris",
+        "adjustments": "Diskon dan pengiriman",
+        "discountKind": "Diskon untuk seluruh faktur",
+        "discountNone": "Tanpa diskon",
+        "discountPercent": "Persentase",
+        "discountAmount": "Jumlah tetap ({currency})",
+        "discountValue": "Nilai diskon",
+        "shipping": "Pengiriman ({currency})",
+        "notes": "Catatan untuk pelanggan",
+        "notesHint": "Dicetak di setiap faktur.",
+        "termsText": "Syarat dan ketentuan",
+        "termsTextHint": "Dicetak di bagian bawah setiap faktur.",
+        "kept": "{count, plural, other {Templat memiliki # baris, ditagihkan kepada}}"
+      },
+      "problems": {
+        "generic": "Periksa kolom ini.",
+        "nameRequired": "Beri nama jadwal ini.",
+        "nameTooLong": "Gunakan paling banyak 120 karakter.",
+        "intervalInvalid": "Masukkan bilangan bulat dari 1 sampai 365.",
+        "startInvalid": "Masukkan tanggal mulai yang valid.",
+        "startTooOld": "Tanggal mulai itu {count} periode ke belakang, dan paling banyak {max} periode lalu yang dibuat. Pilih tanggal yang lebih baru.",
+        "endInvalid": "Masukkan tanggal berakhir yang valid.",
+        "endBeforeStart": "Tanggal berakhir lebih awal dari tanggal mulai.",
+        "maxRunsInvalid": "Masukkan bilangan bulat dari 1 sampai 1000, atau kosongkan.",
+        "invoiceRequired": "Pilih faktur yang akan disalin.",
+        "termsInvalid": "Masukkan 0 sampai 365 hari.",
+        "descriptionRequired": "Jelaskan baris ini.",
+        "qtyInvalid": "Masukkan jumlah di atas nol.",
+        "priceInvalid": "Masukkan harga yang valid.",
+        "lineDiscountInvalid": "Masukkan persentase dari 0 sampai 100.",
+        "hsnRequired": "Masukkan kode HSN atau SAC.",
+        "hsnInvalid": "Kode HSN atau SAC terdiri dari 2 sampai 12 huruf atau angka.",
+        "taxRateRemoved": "Tarif pajak ini tidak ada lagi. Pilih yang lain.",
+        "currencyInvalid": "Masukkan kode mata uang tiga huruf.",
+        "noLines": "Tambahkan minimal satu baris.",
+        "discountInvalid": "Masukkan diskon yang valid.",
+        "shippingInvalid": "Masukkan jumlah yang valid.",
+        "emailInvalid": "Masukkan alamat email yang valid.",
+        "amountZero": "Total faktur harus lebih dari nol.",
+        "amountInvalid": "Jumlah ini tidak valid.",
+        "contactRequired": "Pilih kontak atau ketik nama pembeli. Faktur yang diterbitkan secara otomatis memerlukan pembeli.",
+        "countryInvalid": "Gunakan kode negara dua huruf.",
+        "regionInvalid": "Masukkan kode provinsi atau wilayah yang valid.",
+        "autoNeedsSellerCountry": "Pajak otomatis memerlukan negara Anda di pengaturan faktur."
+      },
+      "detail": {
+        "loading": "Memuat jadwal",
+        "backToList": "Kembali ke faktur berulang",
+        "back": "Kembali ke faktur berulang",
+        "failures": "{count, plural, other {# periode gagal membuat faktur.}}",
+        "seeHistory": "Lihat penyebabnya",
+        "pausedNote": "Jadwal ini dijeda. Periode yang jatuh selama jeda akan dilewati: saat Anda melanjutkan, faktur berikutnya untuk hari ini atau setelahnya.",
+        "endedNote": "Jadwal ini sudah berakhir. Tidak ada lagi yang akan dibuat, dan jadwal tidak dapat diedit lagi.",
+        "nextRun": "Proses berikutnya",
+        "lastRun": "Proses terakhir",
+        "runs": "Faktur dibuat",
+        "failedCount": "{count, plural, other {# kegagalan}}",
+        "amount": "Per faktur",
+        "amountNote": "Nilai templat hari ini",
+        "upcoming": "Tanggal mendatang",
+        "noUpcoming": "Tidak ada proses lagi yang dijadwalkan.",
+        "template": "Templat",
+        "buyer": "Pembeli",
+        "lines": "Baris",
+        "currency": "Mata uang",
+        "mode": "Setiap faktur",
+        "starts": "Dimulai",
+        "ends": "Berakhir",
+        "never": "Tanpa tanggal berakhir",
+        "limit": "Batas",
+        "noLimit": "Tanpa batas",
+        "invoicesCount": "{count, plural, other {# faktur}}",
+        "templateNote": "Mengedit templat hanya mengubah faktur yang akan datang, tidak pernah yang sudah dibuat."
+      },
+      "runs": {
+        "title": "Riwayat proses",
+        "subtitle": "Satu baris untuk setiap periode, yang terbaru di atas.",
+        "loading": "Memuat riwayat",
+        "scrollArea": "Tabel riwayat proses, dapat digeser ke samping",
+        "emptyTitle": "Belum ada proses",
+        "emptyMessage": "Faktur pertama dibuat pada tanggal proses berikutnya.",
+        "period": "Periode {n}",
+        "draftInvoice": "Draf",
+        "showing": "{count, plural, other {Menampilkan # proses}}",
+        "loadMore": "Muat lebih banyak",
+        "allLoaded": "Seluruh riwayat ditampilkan",
+        "columns": {
+          "period": "Tanggal periode",
+          "status": "Hasil",
+          "invoice": "Faktur",
+          "error": "Penyebab kegagalan",
+          "at": "Dibuat pada"
+        }
+      }
+    }
+  }
+}

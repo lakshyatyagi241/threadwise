@@ -1,0 +1,258 @@
+{
+  "workspaces-hub": {
+    "nav": {
+      "group": "Çalışma alanları",
+      "workspaces": "Çalışma alanları"
+    },
+    "crumb": {
+      "admin": "Yönetici",
+      "workspaces": "Çalışma alanları",
+      "label": "Gezinti yolu"
+    },
+    "common": {
+      "loading": "Yükleniyor",
+      "retry": "Yeniden dene",
+      "cancel": "İptal",
+      "close": "Kapat",
+      "none": "Yok",
+      "never": "Hiçbir zaman",
+      "unlimited": "Sınırsız",
+      "noAccess": "Rolünüz bunu yapamaz."
+    },
+    "list": {
+      "title": "Çalışma alanları",
+      "subtitle": "Tüm müşteri çalışma alanları tek yerde: plan, sağlayıcı, cüzdan, sahip ve etkinlik; her biri için gereken işlemlerle birlikte.",
+      "kpi": {
+        "total": "Çalışma alanları",
+        "active": "Etkin",
+        "suspended": "Askıya alındı",
+        "trial": "Deneme sürümünde",
+        "newThisMonth": "Bu ay yeni",
+        "lowBalance": "Düşük bakiye",
+        "mrr": "MRR"
+      },
+      "search": "Ara",
+      "searchPlaceholder": "Ad, slug, sahip adı veya e-posta",
+      "status": {
+        "label": "Durum",
+        "all": "Tümü",
+        "active": "Etkin",
+        "suspended": "Askıya alındı"
+      },
+      "plan": "Plan",
+      "allPlans": "Tüm planlar",
+      "state": "Durum",
+      "allStates": "Tüm durumlar",
+      "provider": "Sağlayıcı",
+      "allProviders": "Tüm sağlayıcılar",
+      "lowOnly": "Yalnızca düşük bakiye",
+      "sort": {
+        "label": "Sırala",
+        "created": "En yeni",
+        "last_active": "Son etkinlik",
+        "name": "Ad"
+      },
+      "clear": "Filtreleri temizle",
+      "refresh": "Yenile",
+      "columns": {
+        "menu": "Sütunlar",
+        "reset": "Sütunları sıfırla",
+        "workspace": "Çalışma alanı",
+        "provider": "Sağlayıcı",
+        "numbers": "Numaralar",
+        "plan": "Plan",
+        "state": "Durum",
+        "ends": "Bitiş",
+        "limits": "Limitler",
+        "wallet": "Cüzdan",
+        "owner": "Sahip",
+        "mrr": "MRR",
+        "messages7d": "7 g mesaj",
+        "lastActive": "Son etkinlik",
+        "actions": "İşlemler"
+      },
+      "tableLabel": "Çalışma alanları",
+      "emptyTitle": "Henüz çalışma alanı yok",
+      "emptyMessage": "Müşteriler kaydolduğunda çalışma alanları burada görünür.",
+      "noMatchTitle": "Eşleşen çalışma alanı yok",
+      "noMatchMessage": "Daha fazlasını görmek için aramayı veya filtreleri değiştirin.",
+      "loadMore": "Daha fazla yükle",
+      "loadingMore": "Daha fazla yükleniyor",
+      "loaded": "{count, plural, other {# çalışma alanı}} gösteriliyor"
+    },
+    "cell": {
+      "suspended": "Askıya alındı",
+      "suspendedBy": {
+        "frozen": "Donduruldu",
+        "tos_violation": "Kullanım koşulu ihlali",
+        "fraud": "Dolandırıcılık"
+      },
+      "providerSource": {
+        "override": "Geçersiz kılma",
+        "default": "Varsayılan",
+        "platform_setting": "Platform ayarı"
+      },
+      "numbersCount": "{count, plural, other {# numara}}",
+      "platformOwned": "Platform",
+      "unknownPlan": "Bilinmeyen plan",
+      "health": {
+        "suspended": "Askıya alındı",
+        "good": "İyi",
+        "active": "Etkin",
+        "low": "Düşük kullanım",
+        "new": "Yeni",
+        "idle": "Boşta"
+      },
+      "daysLeft": "{count, plural, other {# gün kaldı}}",
+      "expired": "Süresi doldu",
+      "limits": {
+        "summary": "{messages} mesaj/ay · {users} kullanıcı · {contacts} kişi · {devices} cihaz",
+        "override": "Geçersiz kılma",
+        "messages": "Aylık mesaj",
+        "users": "Kullanıcılar",
+        "contacts": "Kişiler",
+        "devices": "Cihazlar"
+      },
+      "lowBalance": "Düşük",
+      "noOwner": "Sahip yok",
+      "ago": {
+        "now": "Az önce",
+        "minutes": "{count, plural, other {# dakika önce}}",
+        "hours": "{count, plural, other {# saat önce}}",
+        "days": "{count, plural, other {# gün önce}}"
+      }
+    },
+    "actions": {
+      "menu": "{name} için işlemler",
+      "dashboard": "Çalışma alanı paneli",
+      "editPlan": "Düzenle ve planı değiştir",
+      "planLimits": "Plan ve limitler",
+      "provider": "Sağlayıcıyı değiştir ve ayarla",
+      "impersonate": "Sahip olarak giriş yap",
+      "suspend": "Askıya al",
+      "unsuspend": "Yeniden etkinleştir",
+      "denied": "İzin verilmiyor"
+    },
+    "plan": {
+      "loading": "Plan yükleniyor",
+      "loadFailed": "Plan yüklenemedi.",
+      "saved": "{name} için plan kaydedildi."
+    },
+    "provider": {
+      "title": "{name} için sağlayıcı",
+      "help": "Bu çalışma alanının yeni numaraları seçtiğiniz sağlayıcı üzerinden bağlanır. Zaten bağlı numaralar, siz taşıyana kadar olduğu yerde kalır.",
+      "current": "Şu an {name} kullanılıyor ({source})",
+      "field": "Sağlayıcı",
+      "note": "Not (isteğe bağlı)",
+      "noteHint": "Bir sonraki operatörün nedenini bilmesi için geçersiz kılmayla birlikte saklanır.",
+      "noActive": "Etkin sağlayıcı yok. Önce sağlayıcı kayıt defterinden birini etkinleştirin.",
+      "save": "Geçersiz kılma ayarla",
+      "clear": "Varsayılanı kullan",
+      "switchLink": "Bağlı numaraları başka bir sağlayıcıya taşı",
+      "assignmentsLink": "Sağlayıcı kaydı",
+      "saved": "{name} için sağlayıcı ayarlandı.",
+      "cleared": "{name} yeniden varsayılan sağlayıcıyı izliyor."
+    },
+    "impersonate": {
+      "title": "{name} sahibi olarak giriş yap",
+      "help": "Çalışma alanını yeni bir sekmede sahibi olarak açacaksınız. Oturum en fazla {minutes} dakika sürer ve nedeninizle birlikte kaydedilir.",
+      "reason": "Neden",
+      "reasonHint": "En az {min} karakter. Denetim kaydında tutulur.",
+      "readOnly": "Salt okunur oturum",
+      "readOnlyHint": "Gezebilirsiniz, ancak her değişiklik reddedilir.",
+      "submit": "Çalışma alanını aç",
+      "opened": "{name} yeni sekmede açılıyor.",
+      "popupBlocked": "Tarayıcınız yeni sekmeyi engelledi. Bu sayfa için açılır pencerelere izin verip yeniden deneyin.",
+      "reasonShort": "En az {min} karakter yazın."
+    },
+    "suspend": {
+      "title": "{name} askıya alınsın mı?",
+      "message": "Kullanıcıları çalışma alanından çıkış yapar ve siz yeniden etkinleştirene kadar mesajlaşma durur.",
+      "reason": "Neden (isteğe bağlı)",
+      "confirm": "Çalışma alanını askıya al",
+      "done": "{name} askıya alındı."
+    },
+    "unsuspend": {
+      "title": "{name} yeniden etkinleştirilsin mi?",
+      "message": "Kullanıcıları çalışma alanını yeniden kullanabilir.",
+      "reason": "Not (isteğe bağlı)",
+      "confirm": "Çalışma alanını yeniden etkinleştir",
+      "done": "{name} yeniden etkin."
+    },
+    "errors": {
+      "unexpected": "Bir sorun oluştu. Yeniden deneyin.",
+      "forbidden": "Rolünüz bunu yapamaz.",
+      "conflict": "Bu çalışma alanını başka biri değiştirdi. Yenileyip yeniden deneyin.",
+      "notFound": "Bu çalışma alanı artık yok.",
+      "reasonRequired": "En az 8 karakterlik bir neden gerekli.",
+      "orgSuspended": "Çalışma alanı askıya alındığı için girilemiyor.",
+      "validation": "Değerleri kontrol edip yeniden deneyin.",
+      "requestId": "İstek kimliği"
+    },
+    "detail": {
+      "crumb": "Çalışma alanı",
+      "back": "Tüm çalışma alanları",
+      "loadFailed": "Bu çalışma alanı yüklenemedi.",
+      "slug": "Slug",
+      "created": "{date} tarihinde oluşturuldu",
+      "kpi": {
+        "members": "Üyeler",
+        "contacts": "Kişiler",
+        "openTickets": "Açık talepler",
+        "delivered": "Teslim edildi",
+        "wallet": "Cüzdan",
+        "mrr": "MRR",
+        "messages7d": "Mesajlar, 7 gün"
+      },
+      "chart": {
+        "title": "Son 30 gün",
+        "label": "Son 30 günde günlük gönderilen ve teslim edilen mesajlar",
+        "sent": "Gönderildi",
+        "delivered": "Teslim edildi",
+        "empty": "Son 30 günde mesaj yok."
+      },
+      "tabs": {
+        "label": "Çalışma alanı bölümleri",
+        "overview": "Genel bakış",
+        "plan": "Plan ve limitler",
+        "wallet": "Cüzdan",
+        "provider": "Sağlayıcı",
+        "support": "Destek"
+      },
+      "overview": {
+        "owner": "Sahip",
+        "adminNote": "Yönetici notu",
+        "noNote": "Not yok.",
+        "health": "Sağlık",
+        "lastActive": "Son etkinlik",
+        "suspendedBy": "Tutan"
+      },
+      "planTab": {
+        "plan": "Plan",
+        "state": "Durum",
+        "ends": "Bitiş",
+        "limits": "Geçerli limitler",
+        "edit": "Düzenle ve planı değiştir",
+        "overrideNote": "Bu çalışma alanının, planın yerine geçen kendi limitleri var."
+      },
+      "walletTab": {
+        "open": "Tam cüzdanı aç",
+        "balance": "Bakiye",
+        "adjust": "Bakiyeyi düzelt",
+        "adjusted": "Bakiye düzeltildi."
+      },
+      "providerTab": {
+        "provider": "Geçerli sağlayıcı",
+        "source": "Seçen",
+        "numbers": "Bağlı numaralar",
+        "change": "Sağlayıcıyı değiştir ve ayarla",
+        "switch": "Numaraları başka bir sağlayıcıya taşı"
+      },
+      "supportTab": {
+        "text": "Bu çalışma alanının talepleri, görüşmeleri ve destek geçmişi.",
+        "open": "Destek kaydını aç",
+        "openTickets": "{count, plural, other {# açık talep}}"
+      }
+    }
+  }
+}

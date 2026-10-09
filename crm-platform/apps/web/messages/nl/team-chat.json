@@ -1,0 +1,191 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "Teamchat"
+    },
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "screen": {
+      "title": "Teamchat",
+      "back": "Terug naar kanalen",
+      "search": "Dit kanaal doorzoeken",
+      "pinned": "Vastgezette berichten",
+      "members": "Kanaalleden",
+      "deleteChannel": "Dit kanaal verwijderen",
+      "type": {
+        "public": "Kanaal",
+        "private": "Privé",
+        "dm": "Direct bericht"
+      },
+      "olderMessage": "Dat bericht staat verderop. Laad oudere berichten om het te zien.",
+      "loading": "Teamchat laden",
+      "loadFailed": "Teamchat kon niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "deleteTitle": "Dit kanaal verwijderen?",
+      "deleteMessage": "#{name} en alle berichten erin worden voor iedereen verwijderd. Dit kan niet ongedaan worden gemaakt.",
+      "deleteConfirm": "Kanaal verwijderen",
+      "cancel": "Annuleren"
+    },
+    "sidebar": {
+      "label": "Kanalen en personen",
+      "channels": "Kanalen",
+      "createChannel": "Een kanaal maken",
+      "loading": "Kanalen laden",
+      "loadFailed": "Kanalen konden niet worden geladen.",
+      "noChannels": "Nog geen kanalen",
+      "direct": "Directe berichten",
+      "people": "Personen",
+      "invite": "Nodig een teamgenoot uit",
+      "pending": "Openstaande verzoeken",
+      "pendingCount": "{count, plural, one {# openstaand verzoek} other {# openstaande verzoeken}}",
+      "unread": "{count, plural, one {# ongelezen bericht} other {# ongelezen berichten}}"
+    },
+    "members": {
+      "label": "Leden",
+      "title": "Teamchat",
+      "count": "{count, plural, one {# lid} other {# leden}}",
+      "countUnknown": "Leden",
+      "search": "Leden zoeken",
+      "loading": "Leden laden",
+      "none": "Geen leden gevonden",
+      "online": "Online",
+      "offline": "Offline",
+      "you": "(jij)",
+      "message": "Bericht aan {name}"
+    },
+    "panel": {
+      "searchTitle": "Berichten zoeken",
+      "pinnedTitle": "Vastgezette berichten",
+      "searchPlaceholder": "Dit kanaal doorzoeken",
+      "searchHint": "Typ minstens twee tekens.",
+      "close": "Sluiten",
+      "failed": "Dat kon niet worden geladen.",
+      "noResults": "Geen berichten gevonden.",
+      "noPinned": "Er is niets vastgezet in dit kanaal."
+    },
+    "stream": {
+      "loading": "Berichten laden",
+      "loadFailed": "Berichten konden niet worden geladen.",
+      "loadOlder": "Oudere berichten laden",
+      "emptyTitle": "Nog geen berichten in #{name}",
+      "emptyMessage": "Zeg hallo en start het gesprek."
+    },
+    "message": {
+      "edited": "(bewerkt)",
+      "pinned": "Vastgezet",
+      "editLabel": "Bewerk je bericht",
+      "cancel": "Annuleren",
+      "save": "Opslaan",
+      "editConflict": "Dit bericht is gewijzigd terwijl je het bewerkte. Laad opnieuw en probeer het opnieuw.",
+      "reactions": "Reacties",
+      "reactionChip": "{emoji}, {count, plural, one {# persoon} other {# personen}}",
+      "reactionTray": "Kies een reactie",
+      "reply": "Beantwoorden",
+      "react": "Reageren",
+      "edit": "Bewerken",
+      "pin": "Vastzetten",
+      "unpin": "Losmaken",
+      "delete": "Verwijderen",
+      "deleteTitle": "Dit bericht verwijderen?",
+      "deleteMessage": "Het wordt voor iedereen in het kanaal verwijderd.",
+      "uploading": "Uploaden",
+      "retry": "Opnieuw proberen",
+      "discard": "Weggooien"
+    },
+    "composer": {
+      "placeholder": "Bericht in #{name}",
+      "attach": "Een bestand bijvoegen",
+      "send": "Verzenden",
+      "hint": "Enter om te verzenden, Shift+Enter voor een nieuwe regel, @ om een teamgenoot te noemen.",
+      "replyingTo": "Antwoord aan {name}",
+      "cancelReply": "Antwoord annuleren",
+      "removeFile": "Bijlage verwijderen",
+      "fileTooLarge": "Dat bestand is groter dan 20 MB.",
+      "mentionList": "Teamgenoten om te noemen",
+      "typingOne": "{name} is aan het typen",
+      "typingMany": "{count} personen zijn aan het typen"
+    },
+    "createChannel": {
+      "title": "Een kanaal maken",
+      "close": "Sluiten",
+      "name": "Naam",
+      "nameHint": "Kleine letters, cijfers, streepjes en underscores, geen spaties.",
+      "description": "Beschrijving (optioneel)",
+      "privacy": "Privacy",
+      "public": {
+        "label": "Openbaar",
+        "hint": "Iedereen in de workspace kan lezen en schrijven."
+      },
+      "private": {
+        "label": "Privé",
+        "hint": "Alleen op uitnodiging. Alleen de leden zien het."
+      },
+      "cancel": "Annuleren",
+      "create": "Kanaal maken"
+    },
+    "invite": {
+      "title": "Nodig een teamgenoot uit",
+      "close": "Sluiten",
+      "email": "E-mail",
+      "name": "Naam (optioneel)",
+      "note": "Notitie voor de beheerder (optioneel)",
+      "noteHint": "Waarom deze persoon zich zou moeten aansluiten.",
+      "addToChannel": "Voeg ook toe aan #{name}",
+      "approved": "Klaar. Het verzoek is goedgekeurd.",
+      "pending": "Uitnodiging verzonden, wacht op goedkeuring door een beheerder.",
+      "cancel": "Annuleren",
+      "submit": "Uitnodiging versturen"
+    },
+    "invitations": {
+      "title": "Openstaande uitnodigingen",
+      "close": "Sluiten",
+      "loading": "Laden",
+      "loadFailed": "Uitnodigingen konden niet worden geladen.",
+      "empty": "Nog geen uitnodigingen",
+      "status": {
+        "pending": "In behandeling",
+        "approved": "Goedgekeurd",
+        "declined": "Afgewezen",
+        "expired": "Verlopen"
+      },
+      "requestedBy": "Aangevraagd door {name} · {time}",
+      "decidedBy": "{status} door {name} · {time}",
+      "needsAccount": "Deze persoon heeft nog geen account in de workspace, dus niemand is toegevoegd.",
+      "approve": "Goedkeuren",
+      "decline": "Afwijzen"
+    },
+    "channelMembers": {
+      "title": "Leden van #{name}",
+      "close": "Sluiten",
+      "admin": "Beheerder",
+      "leave": "Verlaten",
+      "remove": "Verwijderen",
+      "addLabel": "Een teamgenoot toevoegen",
+      "choose": "Kies een teamgenoot",
+      "add": "Toevoegen"
+    },
+    "errors": {
+      "network": "Netwerkfout. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt geen toestemming om dit te doen.",
+      "signedOut": "Je bent uitgelogd. Log opnieuw in.",
+      "notFound": "Dat bestaat niet meer.",
+      "validation": "Controleer wat je hebt ingevoerd en probeer het opnieuw.",
+      "conflict": "Dit is inmiddels gewijzigd. Laad opnieuw en probeer het opnieuw.",
+      "tooLarge": "Dat bestand is groter dan 20 MB.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "emptyMessage": "Schrijf een bericht of voeg een bestand toe.",
+      "replyOtherChannel": "Je kunt alleen antwoorden op een bericht in hetzelfde kanaal.",
+      "attachmentRejected": "Dit bestand kon niet worden bijgevoegd. Alleen afbeeldingen, pdf's, Word-, Excel-, tekst- en csv-bestanden tot 20 MB zijn toegestaan.",
+      "editExpired": "Berichten kunnen alleen binnen 15 minuten worden bewerkt.",
+      "nameTaken": "Er bestaat al een kanaal met deze naam.",
+      "channelProtected": "#general kan niet worden verwijderd.",
+      "alreadyMember": "Is al lid van de workspace.",
+      "alreadyDecided": "Al beslist.",
+      "notMember": "Je bent geen lid van dit kanaal.",
+      "notAuthor": "Je kunt alleen je eigen berichten wijzigen.",
+      "kindInvalid": "Dat is niet van toepassing op dit type kanaal.",
+      "unexpected": "Er ging iets mis. Probeer het opnieuw."
+    }
+  }
+}

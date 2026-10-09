@@ -1,0 +1,316 @@
+{
+  "aiTraining": {
+    "nav": {
+      "title": "AI 训练"
+    },
+    "common": {
+      "dismiss": "忽略"
+    },
+    "paywall": {
+      "kicker": "套餐",
+      "title": "你的套餐不包含 AI 训练",
+      "body": "你的套餐不包含 AI 助手。升级即可解锁此功能。",
+      "upgrade": "查看套餐"
+    },
+    "responder": {
+      "title": "谁来回复你的 WhatsApp？",
+      "body": "如果你开启 Meta 自己的 Business Agent，我们的 AI 和关键词自动回复将在此工作区暂停，这样客户就不会对同一条消息收到两个回答。",
+      "metaCheck": "我使用 Meta Business Agent",
+      "mode": {
+        "threadwise_only": {
+          "label": "由我们的 AI 回答",
+          "desc": "由我们的 AI 和关键词自动回复处理聊天（默认）。"
+        },
+        "meta_agent_only": {
+          "label": "由 Meta 智能体回答",
+          "desc": "由 Meta 的 Business Agent 回复。我们只记录会话，我们的 AI 保持静默。"
+        },
+        "meta_agent_then_handoff": {
+          "label": "Meta 智能体，然后转人工",
+          "desc": "由 Meta 先处理最初的问题。升级后，聊天会进入你的团队收件箱交给真人处理。我们的自动 AI 保持静默。"
+        }
+      },
+      "save": "保存",
+      "hint": "Meta 智能体需要 WhatsApp Business（Cloud API）号码。使用非官方引擎的号码始终使用我们的 AI。",
+      "readOnly": "你可以查看此设置，但无法更改。",
+      "saved": "AI 回复模式已保存。",
+      "saveFailed": "无法保存回复模式。",
+      "loadError": "无法加载回复模式。",
+      "retry": "重试",
+      "loading": "正在加载回复模式"
+    },
+    "list": {
+      "tip": "提示",
+      "tipBody": "智能体为你的<link>聊天小组件</link>和流程中的 AI 步骤提供支持。五步构建器会引导你完成身份、角色、大脑、安全和知识设置。",
+      "statusViews": "智能体状态",
+      "view": {
+        "all": "所有智能体",
+        "active": "已启用",
+        "paused": "已暂停"
+      },
+      "status": {
+        "all": "全部",
+        "active": "已启用",
+        "paused": "已暂停"
+      },
+      "knowledgeTip": "知识提示",
+      "knowledgeTipBody": "通常一个常见问题及其答案就足够了。几个帮助页面的 URL 就能覆盖大多数支持问题，无需导入整个网站。",
+      "workspace": "工作区",
+      "title": "AI",
+      "titleAccent": "训练",
+      "intro": "构建以你品牌口吻说话的智能体。使用 URL、文本、问答对和文件来训练它们。",
+      "activePill": "{count} 个已启用",
+      "newAgent": "新建智能体",
+      "card": {
+        "total": "智能体总数",
+        "knowledge": "知识条目",
+        "avg": "平均 / 智能体",
+        "health": "健康状况",
+        "activeHint": "{count} 个已启用",
+        "indexedHint": "{count} 个已索引",
+        "entriesUnit": "条目"
+      },
+      "health": {
+        "healthy": "正常",
+        "empty": "空",
+        "attention": "需关注"
+      },
+      "col": {
+        "agent": "智能体",
+        "provider": "服务商",
+        "knowledge": "知识",
+        "tone": "语气",
+        "updated": "更新时间",
+        "actions": "操作"
+      },
+      "search": "按名称或标识搜索…",
+      "loading": "正在加载智能体",
+      "loadError": "无法加载智能体",
+      "retry": "重试",
+      "emptyTitle": "还没有智能体",
+      "emptyBody": "构建你的第一个智能体。五步构建器会引导你完成身份、角色、大脑、安全以及它应具备的知识。",
+      "buildAgent": "构建智能体",
+      "noMatch": "没有符合搜索或状态视图的智能体。",
+      "entries": "{count, plural, other {# 个条目}}",
+      "edit": "编辑智能体",
+      "editNamed": "编辑 {name}",
+      "duplicate": "复制智能体",
+      "duplicateNamed": "复制 {name}",
+      "deleteAgent": "删除智能体",
+      "deleteNamed": "删除 {name}",
+      "deleteTitle": "删除“{name}”？",
+      "deleteBody": "该智能体及其知识条目将被移除。使用它的小组件和流程将不再由此智能体回复，直到你选择其他智能体。",
+      "delete": "删除智能体",
+      "keep": "保留",
+      "deleted": "智能体已删除。",
+      "deleteFailed": "删除失败：{reason}",
+      "duplicateFailed": "无法复制智能体。",
+      "networkError": "网络错误",
+      "showing": "显示",
+      "of": "/ 共",
+      "agentsCount": "{count, plural, other {# 个智能体}}",
+      "loadMore": "加载更多"
+    },
+    "builder": {
+      "back": "返回 AI 训练",
+      "crumb": "AI 训练",
+      "crumbNew": "新建",
+      "crumbEdit": "编辑",
+      "titleNew": "构建",
+      "titleEdit": "编辑",
+      "titleAccent": "智能体",
+      "stateSaved": "已保存",
+      "stateDraft": "草稿 / 未保存",
+      "saveDraft": "保存草稿",
+      "stepper": "构建步骤",
+      "steps": {
+        "identity": "身份",
+        "persona": "角色",
+        "brain": "大脑",
+        "safety": "安全",
+        "knowledge": "知识"
+      },
+      "stepOf": "第 {n} 步，共 {total} 步",
+      "previous": "上一步",
+      "next": "下一步",
+      "finish": "完成并关闭",
+      "loading": "正在加载智能体",
+      "loadError": "无法加载智能体",
+      "notFoundTitle": "未找到智能体",
+      "notFoundBody": "此智能体在你的工作区中不存在，或已被删除。",
+      "backToList": "返回 AI 训练",
+      "saved": "智能体已保存。",
+      "saveFailed": "保存失败。请检查字段后重试。",
+      "conflict": "此智能体已在别处被修改。请刷新页面获取最新版本，然后再次保存。",
+      "problem": {
+        "name": "为你的助手命名。",
+        "greeting": "写一句开场白。",
+        "model": "选择模型。",
+        "tokens": "回复长度必须为 50–4000 个 token。",
+        "temperature": "创造性必须在 0 到 2 之间。"
+      },
+      "identity": {
+        "title": "智能体身份",
+        "required": "必填",
+        "name": "智能体显示名称",
+        "namePlaceholder": "例如 价格咨询员",
+        "nameHint": "仅供你记录。访客看不到此标签。",
+        "status": "上线状态",
+        "statusActive": "已上线：可在小组件和流程中选择此智能体",
+        "statusPaused": "已暂停：从选择器中隐藏",
+        "statusHint": "已暂停的智能体仍在列表中，但无法关联到新的小组件。",
+        "language": "首选语言",
+        "languageHint": "ISO 639-1 代码。当访客语言不同时，会匹配访客的语言。",
+        "tone": "对话语气",
+        "toneHint": "设置写作风格，与角色简介无关。",
+        "tones": {
+          "helpful": "乐于助人 · 冷静切题",
+          "friendly": "友好 · 亲切随和",
+          "formal": "正式 · 中立精确",
+          "playful": "俏皮 · 轻松机智"
+        }
+      },
+      "persona": {
+        "title": "角色和开场白",
+        "tag": "内容",
+        "greeting": "开场白",
+        "greetingPlaceholder": "你好！我可以帮你解答。关于价格或套餐，随时问我。",
+        "greetingHint": "面向访客。聊天打开时显示为第一个气泡。",
+        "brief": "角色简介（系统指令）",
+        "briefPlaceholder": "你是 Acme Inc. 友好的支持智能体。始终用简短的句子回答，凡涉及退款的问题都转交给真人。",
+        "briefHint": "仅内部可见，不会显示给访客。包括该做的、不该做的以及升级规则。"
+      },
+      "brain": {
+        "title": "模型和回复控制",
+        "tag": "大脑",
+        "provider": "模型服务商",
+        "providerHint": "服务商密钥由你的管理员设置。在允许的套餐上，你自己添加密钥的服务商也会显示。",
+        "notEnabled": "{name}（未启用）",
+        "model": "模型名称",
+        "modelHint": "选择已为你启用的模型之一，或输入其他模型 ID。",
+        "noModels": "你的工作区尚未启用任何 AI 模型。请让管理员开启一个，或在“设置 > AI 密钥”下添加你自己的密钥。",
+        "tokens": "回复长度预算（token）",
+        "tokensHint": "约 1 个 token 相当于 4 个字符。400 可容纳一个段落。",
+        "temperature": "创造性（0 = 严谨，2 = 奔放）",
+        "temperatureHint": "较低则稳定且基于事实，较高则措辞更多样。"
+      },
+      "safety": {
+        "title": "后备回复和转人工",
+        "tag": "安全",
+        "fallback": "后备回复（模型出错时使用）",
+        "fallbackPlaceholder": "同事会尽快跟进。感谢你的耐心等待。",
+        "fallbackHint": "如果模型没有返回内容或调用失败，将原样发送。",
+        "handoff": "启用转人工",
+        "handoffHint": "访客输入触发短语后，智能体停止回复，你的团队收件箱会亮起提醒。",
+        "keyword": "触发短语",
+        "keywordPlaceholder": "转人工",
+        "keywordHint": "访客在消息中任意位置输入此短语时，就会触发转人工。",
+        "ack": "转人工确认语",
+        "ackPlaceholder": "好的，马上为你转接同事，请稍候。",
+        "ackHint": "智能体沉默前的最后一条消息。"
+      }
+    },
+    "knowledge": {
+      "title": "训练智能体",
+      "tag": "知识",
+      "saveFirst": "请先保存智能体。知识条目需关联到已保存的智能体。",
+      "addLabel": "添加知识",
+      "add": {
+        "url": {
+          "title": "在线 URL",
+          "body": "抓取公开页面并保留其文本。"
+        },
+        "text": {
+          "title": "自由文本",
+          "body": "粘贴帮助片段或政策。"
+        },
+        "qa": {
+          "title": "问答对",
+          "body": "一个问题及其标准答案。"
+        },
+        "file": {
+          "title": "PDF、DOCX、TXT 等",
+          "body": "上传文件，文本将自动提取。"
+        }
+      },
+      "panel": {
+        "url": "抓取公开 URL",
+        "text": "粘贴纯文本",
+        "qa": "单个问答",
+        "file": "上传知识文件"
+      },
+      "label": "标签",
+      "url": "URL",
+      "content": "文本",
+      "question": "问题",
+      "answer": "答案",
+      "file": "文件",
+      "placeholder": {
+        "label": {
+          "url": "标签（例如 价格页面）",
+          "text": "标签（例如 退款政策摘要）",
+          "qa": "标签（例如 退款时效）",
+          "file": "标签（例如 产品手册）"
+        },
+        "content": "粘贴智能体应该了解的任何文本…",
+        "question": "问题，例如 退款需要多久？",
+        "answer": "答案，例如 退款将在 3 到 5 个工作日内到账。"
+      },
+      "urlHint": "仅读取公开的 http 和 https 页面。页面在后台抓取，因此条目会短暂显示为处理中。",
+      "fileHint": "PDF、DOCX、TXT、Markdown、CSV 或 HTML，最大 10 MB。文本会自动提取。",
+      "uploading": "上传进度",
+      "submit": {
+        "url": "抓取并训练",
+        "text": "保存文本",
+        "qa": "保存问答对",
+        "file": "上传"
+      },
+      "cancel": "取消",
+      "added": "知识已添加。",
+      "addFailed": "无法添加条目。",
+      "problem": {
+        "label": "请添加标签，以便日后找到此条目。",
+        "url": "请添加页面地址。",
+        "content": "请先粘贴一些文本。",
+        "question": "请添加问题。",
+        "answer": "请添加答案。",
+        "file": "请选择文件（PDF、DOCX、TXT、Markdown、CSV 或 HTML）。",
+        "file_type": "支持的文件类型：TXT、Markdown、CSV、HTML、PDF、DOCX。其他类型请将文本粘贴到文本条目中。",
+        "file_legacyDoc": "不支持旧版 .doc 文件。请另存为 .docx（或导出为 .pdf）后重新上传。",
+        "file_size": "该文件超过 10 MB。",
+        "file_empty": "该文件是空的。",
+        "tooLarge": "一次粘贴的文本太多。请改为作为文件上传。"
+      },
+      "col": {
+        "kind": "类型",
+        "label": "标签",
+        "state": "状态",
+        "actions": "操作"
+      },
+      "kind": {
+        "url": "url",
+        "text": "文本",
+        "qa": "问答",
+        "file": "文件"
+      },
+      "state": {
+        "ready": "就绪",
+        "processing": "处理中",
+        "failed": "失败"
+      },
+      "tokens": "约 {count} 个 token",
+      "workspaceWide": "工作区范围",
+      "loading": "正在加载条目",
+      "loadError": "无法加载条目。",
+      "retry": "重试",
+      "empty": "还没有知识。请在上方选择一种类型来添加第一个条目。",
+      "remove": "移除",
+      "removeNamed": "移除 {label}",
+      "removeTitle": "移除此知识条目？",
+      "removeBody": "智能体将不再用它生成新的回复。较早的会话保持不变。",
+      "keep": "保留",
+      "removed": "已移除。",
+      "removeFailed": "移除失败。"
+    }
+  }
+}

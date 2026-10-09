@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "Loja / Pedidos",
+      "title": "Todos os pedidos",
+      "subtitle": "Todos os pedidos de todos os canais: WhatsApp, vitrine, Twilio e manual.",
+      "loading": "Carregando pedidos",
+      "statusTabs": "Status do pedido",
+      "searchLabel": "Buscar pedidos",
+      "searchPlaceholder": "Buscar por telefone, nome ou número do pedido",
+      "sourceLabel": "Origem",
+      "allSources": "Todas as origens",
+      "paymentLabel": "Pagamento",
+      "allPayments": "Todos os pagamentos",
+      "fromLabel": "De",
+      "toLabel": "Até",
+      "shopLabel": "Loja",
+      "invertedRange": "A data inicial é posterior à data final, então nenhum pedido pode corresponder.",
+      "clearFilters": "Limpar filtros",
+      "cols": {
+        "order": "Pedido",
+        "customer": "Cliente",
+        "items": "Itens",
+        "total": "Total",
+        "payment": "Pagamento",
+        "status": "Status",
+        "source": "Origem",
+        "created": "Criado",
+        "actions": "Ações"
+      },
+      "itemsCount": "{count, plural, one {# item} other {# itens}}",
+      "anonymous": "Anônimo",
+      "openOrder": "Abrir pedido #{no}",
+      "changeStatus": "Alterar o status do pedido #{no}",
+      "deleteOrder": "Excluir pedido #{no}",
+      "deleteTitle": "Excluir o pedido #{no}?",
+      "deleteMessage": "O pedido e seus itens são removidos definitivamente. Isso não pode ser desfeito.",
+      "deleteConfirm": "Excluir pedido",
+      "deleted": "O pedido #{no} foi excluído.",
+      "statusChanged": "O pedido #{no} agora está como {status}.",
+      "buyerNotified": "O comprador foi avisado por mensagem.",
+      "confirmStatusTitle": "Marcar o pedido #{no} como {status}?",
+      "confirmStatusMessage": "O comprador é informado sobre o novo status. Você ainda pode mover o pedido para outro status depois.",
+      "confirmStatusConfirm": "Atualizar status",
+      "emptyTitle": "Nenhum pedido ainda",
+      "emptyMessage": "Quando os clientes fizerem pedidos na sua vitrine ou pelo WhatsApp, eles aparecerão aqui. Compartilhe o link da sua loja para receber o primeiro.",
+      "emptyAction": "Abrir a visão geral da loja",
+      "noMatchTitle": "Nenhum pedido corresponde a estes filtros",
+      "noMatchMessage": "Tente outra busca, status ou período, ou limpe os filtros para ver todos os pedidos."
+    },
+    "orderDetail": {
+      "back": "Voltar para pedidos",
+      "title": "Pedido #{no}",
+      "placed": "Feito {when}",
+      "loading": "Carregando pedido",
+      "readOnly": "Você pode ver este pedido, mas não alterá-lo.",
+      "items": {
+        "title": "Itens",
+        "empty": "Este pedido não tem itens.",
+        "qty": "Qtd. {qty}",
+        "retailerId": "ID {id}",
+        "unit": "{price} cada"
+      },
+      "totals": {
+        "title": "Totais",
+        "subtotal": "Subtotal",
+        "shipping": "Frete",
+        "tax": "Imposto",
+        "taxInclusive": "Incluído nos preços",
+        "discount": "Desconto",
+        "discountCoupon": "Desconto ({code})",
+        "total": "Total"
+      },
+      "customer": {
+        "title": "Cliente",
+        "anonymous": "Anônimo",
+        "phone": "Telefone",
+        "email": "E-mail",
+        "address": "Endereço de entrega",
+        "noAddress": "Nenhum endereço registrado para este pedido.",
+        "notes": "Observações"
+      },
+      "meta": {
+        "title": "Detalhes do pedido",
+        "orderId": "ID do pedido",
+        "source": "Origem",
+        "shop": "Loja",
+        "paymentMethod": "Forma de pagamento",
+        "updated": "Última atualização"
+      },
+      "rto": {
+        "title": "Risco de devolução à origem",
+        "summary": "{band} ({score})",
+        "low": "Baixo",
+        "medium": "Médio",
+        "high": "Alto"
+      },
+      "timeline": {
+        "title": "Linha do tempo",
+        "empty": "Ainda não aconteceu nada neste pedido.",
+        "kind": {
+          "created": "Pedido feito",
+          "status_changed": "Status alterado",
+          "payment_link": "Link de pagamento",
+          "paid": "Pagamento recebido",
+          "invoice": "Fatura",
+          "note": "Nota",
+          "updated": "Pedido atualizado"
+        },
+        "actor": {
+          "user": "Por um membro da equipe",
+          "system": "Automático",
+          "customer": "Pelo cliente"
+        }
+      },
+      "payments": {
+        "title": "Pagamentos",
+        "empty": "Nenhum pagamento foi registrado para este pedido.",
+        "kind": {
+          "gateway": "Pagamento online",
+          "payment_link": "Link de pagamento",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "Pagamento na entrega",
+          "manual": "Registrado manualmente"
+        },
+        "reference": "Referência {ref}",
+        "openLink": "Abrir link"
+      },
+      "form": {
+        "title": "Atualizar status",
+        "status": "Status",
+        "suggestion": "Próximo passo habitual: {status}",
+        "notes": "Observações",
+        "paymentLink": "Link de pagamento",
+        "optional": "opcional",
+        "paymentLinkHint": "Um novo link é enviado ao comprador junto com a atualização.",
+        "invalidLink": "Informe um link da web que comece com http:// ou https://.",
+        "save": "Salvar alterações",
+        "saving": "Salvando",
+        "saved": "Pedido #{no} atualizado.",
+        "notified": "O comprador foi avisado por mensagem.",
+        "notNotified": "O comprador não foi avisado por mensagem.",
+        "reload": "Recarregar pedido"
+      },
+      "pay": {
+        "title": "Link de pagamento",
+        "current": "Link de pagamento atual",
+        "sendTitle": "Enviar um link que você já tem",
+        "sendLabel": "URL do link de pagamento",
+        "sendButton": "Enviar link de pagamento",
+        "sent": "O link de pagamento foi enviado ao comprador.",
+        "savedNotSent": "O link foi salvo, mas não foi possível enviá-lo ao comprador.",
+        "generateTitle": "Gerar um link de checkout",
+        "generateHint": "Cria um link de pagamento hospedado no seu gateway de pagamento e o envia ao comprador pelo WhatsApp.",
+        "gatewayLabel": "Gateway",
+        "generateButton": "Gerar link e enviar",
+        "noGatewayTitle": "Nenhum gateway de pagamento configurado",
+        "noGatewayMessage": "É preciso configurar um gateway de pagamento antes de gerar um link de checkout.",
+        "noGatewayAction": "Configurar um gateway",
+        "resultTitle": "Link de pagamento pronto",
+        "copyLink": "Copiar link",
+        "resultSent": "Enviado ao comprador pelo WhatsApp.",
+        "resultNotSent": "Salvo no pedido, mas não foi possível enviá-lo ao comprador. Compartilhe você mesmo."
+      },
+      "invoice": {
+        "title": "Fatura",
+        "description": "Transforme este pedido em uma fatura e em um pedido de venda em Vendas.",
+        "create": "Criar fatura",
+        "creating": "Criando",
+        "created": "Fatura {number} criada.",
+        "createdNoNumber": "Fatura criada.",
+        "existing": "Este pedido já foi faturado.",
+        "viewInvoice": "Fatura",
+        "viewSalesOrder": "Pedido de venda"
+      },
+      "delete": {
+        "title": "Excluir o pedido #{no}?",
+        "message": "O pedido e seus itens são removidos definitivamente. Isso não pode ser desfeito.",
+        "confirm": "Excluir pedido",
+        "deleted": "O pedido #{no} foi excluído."
+      }
+    }
+  }
+}

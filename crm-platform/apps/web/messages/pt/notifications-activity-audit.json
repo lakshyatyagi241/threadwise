@@ -1,0 +1,371 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "Notificações",
+      "labelUnread": "Notificações, {count} não lidas",
+      "title": "Notificações",
+      "markAll": "Marcar todas como lidas",
+      "empty": "Ainda não há notificações.",
+      "loading": "Carregando notificações",
+      "failed": "Não foi possível carregar as notificações.",
+      "retry": "Tentar novamente",
+      "unread": "Não lidas",
+      "settings": "Configurações de alerta",
+      "sound": "Tocar um som para novos chats e mensagens",
+      "soundOn": "Som: ligado",
+      "soundOff": "Som: desligado",
+      "desktopEnable": "Ativar alertas na área de trabalho",
+      "desktopOn": "Alertas na área de trabalho: ligados",
+      "desktopOff": "Alertas na área de trabalho: desligados",
+      "desktopBlocked": "Os alertas na área de trabalho estão bloqueados nas configurações do seu navegador.",
+      "desktopHint": "Mostra o nome do contato somente quando esta aba está em segundo plano.",
+      "preferences": "Configurações de notificação"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Tarefa atribuída a você",
+        "body": "{actor} atribuiu a você: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "Tarefa vencendo",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "Tarefa concluída",
+        "body": "{actor} concluiu: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "Novo lead",
+        "titleReturning": "Lead chegou de novo",
+        "body": "{name} chegou por {platform}",
+        "bodyReturning": "{name} enviou outro lead por {platform}",
+        "bodyNoActor": "{name} chegou"
+      },
+      "new_chat": {
+        "title": "Novo chat de {name}",
+        "titleNoName": "Novo chat",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, one {Nova mensagem de {name}} other {# novas mensagens de {name}}}",
+        "titleNoName": "{count, plural, one {Nova mensagem} other {# novas mensagens}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "chat_waiting": {
+        "title": "Ninguém respondeu a {name} ainda",
+        "titleNoName": "Um chat ainda aguarda resposta",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "{name} foi atribuído a você",
+        "titleNoName": "Um chat foi atribuído a você",
+        "titleTeam": "{name} foi atribuído à sua equipe",
+        "titleTeamNoName": "Um chat foi atribuído à sua equipe",
+        "body": "Atribuído por {actor}",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "{actor} mencionou você",
+        "titleNoName": "Você foi mencionado em uma nota",
+        "body": "{name}: {preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "device_connected": {
+        "title": "{name} está conectado",
+        "titleNoName": "Seu número do WhatsApp está conectado"
+      },
+      "device_disconnected": {
+        "title": "{name} desconectado",
+        "titleNoName": "Um número do WhatsApp foi desconectado",
+        "body": "Abra o dispositivo para reconectar."
+      },
+      "device_logged_out": {
+        "title": "{name} foi desconectado da sessão",
+        "titleNoName": "Um número do WhatsApp foi desconectado da sessão",
+        "body": "Leia o QR code novamente para reconectar."
+      },
+      "broadcast_completed": {
+        "title": "Transmissão “{name}” concluída",
+        "titleNoName": "Uma transmissão foi concluída",
+        "bodySent": "{sent, plural, one {# mensagem enviada} other {# mensagens enviadas}}",
+        "bodySentFailed": "{sent, plural, one {# mensagem enviada} other {# mensagens enviadas}}, {failed, plural, one {# com falha} other {# com falha}}"
+      },
+      "broadcast_failed": {
+        "title": "Transmissão “{name}” falhou",
+        "titleNoName": "Uma transmissão falhou",
+        "body": "{reason}",
+        "bodyNoReason": "Abra para ver o que deu errado."
+      },
+      "campaign_completed": {
+        "title": "Campanha “{name}” concluída",
+        "titleNoName": "Uma campanha foi concluída",
+        "bodySent": "{sent, plural, one {# mensagem enviada} other {# mensagens enviadas}}",
+        "bodySentFailed": "{sent, plural, one {# mensagem enviada} other {# mensagens enviadas}}, {failed, plural, one {# com falha} other {# com falha}}"
+      },
+      "campaign_failed": {
+        "title": "Campanha “{name}” falhou",
+        "titleNoName": "Uma campanha falhou",
+        "body": "{reason}",
+        "bodyNoReason": "Abra para ver o que deu errado."
+      },
+      "scheduled_completed": {
+        "title": "Envio agendado “{name}” foi enviado",
+        "titleNoName": "Um envio agendado foi enviado",
+        "bodySent": "{sent, plural, one {# mensagem enviada} other {# mensagens enviadas}}",
+        "bodySentFailed": "{sent, plural, one {# mensagem enviada} other {# mensagens enviadas}}, {failed, plural, one {# com falha} other {# com falha}}"
+      },
+      "scheduled_failed": {
+        "title": "Envio agendado “{name}” falhou",
+        "titleNoName": "Um envio agendado falhou",
+        "body": "{reason}",
+        "bodyNoReason": "Abra para ver o que deu errado."
+      },
+      "teamchat_mention": {
+        "title": "{author} mencionou você em {channel}",
+        "titleNoChannel": "{author} mencionou você no Chat da equipe",
+        "titleNoName": "Você foi mencionado no Chat da equipe"
+      },
+      "teamchat_message": {
+        "title": "{count, plural, one {Nova mensagem de {author}} other {# novas mensagens de {author}}}",
+        "titleNoName": "{count, plural, one {Nova mensagem direta} other {# novas mensagens diretas}}"
+      }
+    },
+    "live": {
+      "open": "Abrir",
+      "dismiss": "Dispensar",
+      "toastRegion": "Notificações",
+      "summary": "{count} novas notificações",
+      "announceMany": "{count} novas notificações",
+      "desktop": {
+        "new_chat": "Novo chat",
+        "new_message": "Nova mensagem",
+        "chat_waiting": "Aguardando resposta",
+        "conversation_assigned": "Atribuído a você",
+        "mention": "Mencionou você",
+        "fallbackTitle": "Nova notificação",
+        "device_connected": "Número do WhatsApp conectado",
+        "device_disconnected": "Número do WhatsApp desconectado",
+        "device_logged_out": "Número do WhatsApp desconectado da sessão",
+        "broadcast_completed": "Transmissão concluída",
+        "broadcast_failed": "Transmissão falhou",
+        "campaign_completed": "Campanha concluída",
+        "campaign_failed": "Campanha falhou",
+        "scheduled_completed": "Envio agendado enviado",
+        "scheduled_failed": "Envio agendado falhou",
+        "teamchat_mention": "Mencionou você no Chat da equipe",
+        "teamchat_message": "Nova mensagem direta"
+      }
+    },
+    "prefs": {
+      "title": "Preferências de notificação",
+      "description": "Escolha como cada evento chega até você. Essas escolhas são somente suas; o seu espaço de trabalho define quais eventos começam ativados.",
+      "columns": {
+        "event": "Evento",
+        "bell": "Sino",
+        "toast": "Pop-up",
+        "sound": "Som",
+        "push": "Push"
+      },
+      "groups": {
+        "conversations": "Chats",
+        "tasks": "Tarefas",
+        "leads": "Leads e formulários",
+        "documents": "Documentos de venda",
+        "wallet": "Carteira",
+        "devices": "Números do WhatsApp",
+        "broadcasts": "Transmissões e campanhas",
+        "team_chat": "Chat da equipe"
+      },
+      "types": {
+        "new_chat": {
+          "label": "Novo chat",
+          "hint": "Uma conversa que ainda não tem responsável recebe a primeira mensagem."
+        },
+        "new_message": {
+          "label": "Nova mensagem no meu chat",
+          "hint": "Um cliente escreve em um chat atribuído a você."
+        },
+        "chat_waiting": {
+          "label": "Chat ainda aguardando resposta",
+          "hint": "Um chat sem responsável está com uma mensagem do cliente sem resposta há alguns minutos. Você é avisado uma vez."
+        },
+        "conversation_assigned": {
+          "label": "Chat atribuído a mim",
+          "hint": "Um chat é atribuído a você ou à sua equipe."
+        },
+        "mention": {
+          "label": "Mencionado em uma nota",
+          "hint": "Um colega menciona você em uma nota de conversa."
+        },
+        "teamchat_mention": {
+          "label": "Mencionado no Chat da equipe",
+          "hint": "Um colega menciona você em um canal do chat da equipe."
+        },
+        "teamchat_message": {
+          "label": "Mensagem direta",
+          "hint": "Um colega escreve para você no Chat da equipe."
+        },
+        "device_connected": {
+          "label": "Número conectado",
+          "hint": "Um número pessoal do WhatsApp terminou de conectar."
+        },
+        "device_disconnected": {
+          "label": "Número desconectado",
+          "hint": "Um número pessoal do WhatsApp perdeu a conexão."
+        },
+        "device_logged_out": {
+          "label": "Número desconectado da sessão",
+          "hint": "Um número pessoal do WhatsApp foi desconectado pelo celular."
+        },
+        "broadcast_completed": {
+          "label": "Transmissão concluída",
+          "hint": "Uma transmissão que você iniciou foi enviada."
+        },
+        "broadcast_failed": {
+          "label": "Transmissão falhou",
+          "hint": "Uma transmissão que você iniciou falhou."
+        },
+        "campaign_completed": {
+          "label": "Campanha concluída",
+          "hint": "Uma campanha que você iniciou foi enviada."
+        },
+        "campaign_failed": {
+          "label": "Campanha falhou",
+          "hint": "Uma campanha que você iniciou falhou."
+        },
+        "scheduled_completed": {
+          "label": "Envio agendado enviado",
+          "hint": "Um envio agendado por você foi enviado."
+        },
+        "scheduled_failed": {
+          "label": "Envio agendado falhou",
+          "hint": "Um envio agendado por você falhou."
+        },
+        "task_assigned": {
+          "label": "Tarefa atribuída a mim",
+          "hint": "Uma tarefa foi atribuída a você."
+        },
+        "task_due": {
+          "label": "Tarefa vencendo",
+          "hint": "Uma tarefa sua está vencendo."
+        },
+        "task_completed": {
+          "label": "Tarefa concluída",
+          "hint": "Uma tarefa criada por você foi concluída."
+        },
+        "new_lead": {
+          "label": "Novo lead",
+          "hint": "Um lead chegou de uma fonte de leads."
+        },
+        "form_submission": {
+          "label": "Formulário enviado",
+          "hint": "Alguém enviou um dos seus formulários."
+        },
+        "form_needs_review": {
+          "label": "Formulário precisa de revisão",
+          "hint": "Um envio precisa de atenção."
+        },
+        "wallet_low_balance": {
+          "label": "Saldo da carteira baixo",
+          "hint": "O saldo da carteira do espaço de trabalho está acabando."
+        },
+        "sales_doc_decided": {
+          "label": "Documento de venda decidido",
+          "hint": "Um orçamento ou fatura foi aceito ou recusado."
+        },
+        "wallet_credited": {
+          "label": "Carteira recarregada",
+          "hint": "A carteira do espaço de trabalho recebeu um crédito."
+        }
+      },
+      "loading": "Carregando suas preferências",
+      "failed": "Não foi possível carregar suas preferências.",
+      "retry": "Tentar novamente",
+      "saveFailed": "Não foi possível salvar essa alteração. Ela foi desfeita.",
+      "saved": "Salvo",
+      "dismiss": "Dispensar",
+      "resetRow": "Redefinir para o padrão",
+      "resetRowFor": "Redefinir {event} para o padrão",
+      "resetAll": "Redefinir tudo para o padrão",
+      "resetAllDone": "Todas as preferências voltaram ao padrão.",
+      "customised": "Alterado",
+      "usingDefault": "Padrão",
+      "toggleLabel": "{event}: {channel}",
+      "workspaceOff": "Desligado pelo seu espaço de trabalho",
+      "workspaceOffHelp": "Seu espaço de trabalho desligou isto; sua escolha continua valendo para você.",
+      "bellOffHelp": "Ligue o sino para escolher pop-up, som ou push.",
+      "notAvailable": "Indisponível",
+      "defaultSummary": "Padrão: {bell}, {toast}, {sound}",
+      "on": "ligado",
+      "off": "desligado",
+      "channelNames": {
+        "bell": "sino",
+        "toast": "pop-up",
+        "sound": "som",
+        "push": "push"
+      },
+      "browser": {
+        "title": "Este navegador",
+        "description": "Som e alertas na área de trabalho são definidos por navegador, não por conta."
+      },
+      "empty": "Ainda não há tipos de notificação para configurar.",
+      "defaultSummaryPush": "Padrão: {bell}, {toast}, {sound}, {push}",
+      "push": {
+        "title": "Notificações do navegador",
+        "description": "Receba uma notificação do seu navegador para os eventos que chegam ao sino, mesmo com o CRM fechado. Você escolhe quais eventos na coluna Push abaixo.",
+        "state": {
+          "on": "Ativado neste dispositivo",
+          "off": "Desligado",
+          "blocked": "Bloqueado",
+          "unavailable": "Indisponível"
+        },
+        "checking": "Verificando este navegador",
+        "unsupported": "Este navegador não consegue mostrar notificações com o CRM fechado. Tente um Chrome, Edge, Firefox ou Safari atualizado, em uma página segura (https).",
+        "needsInstall": "No iPhone e no iPad, as notificações do navegador só funcionam para um app adicionado à tela inicial.",
+        "needsInstallSteps": "Abra esta página no Safari, toque em Compartilhar, escolha Adicionar à Tela de Início, depois abra o CRM pelo novo ícone e volte aqui. Requer iOS ou iPadOS 16.4 ou superior.",
+        "blocked": "As notificações estão bloqueadas para este site nas configurações do seu navegador.",
+        "blockedHelp": "Só o seu navegador pode desfazer isso: abra as configurações do site (o ícone ao lado do endereço), defina Notificações como Permitir e volte a esta página.",
+        "offHelp": "Não ativado neste dispositivo. Seu navegador pedirá permissão quando você clicar em Ativar.",
+        "enable": "Ativar neste dispositivo",
+        "enabling": "Ativando...",
+        "onHelp": "Este dispositivo recebe uma notificação do navegador para os eventos que você ativou abaixo, quando você não está olhando o CRM.",
+        "howItWorks": "Você não é notificado enquanto o CRM estiver aberto e na sua frente (o sino e os pop-ups cobrem isso). A notificação mostra quem e que tipo de evento, nunca o texto da mensagem.",
+        "test": "Enviar uma notificação de teste",
+        "testing": "Enviando...",
+        "disable": "Desativar neste dispositivo",
+        "disabling": "Desativando...",
+        "testResult": {
+          "sent": "Enviado. Deve aparecer nos seus dispositivos em instantes, mesmo com o CRM fechado.",
+          "none_reachable": "Não foi possível acessar o seu navegador ou o serviço de push agora. Tente novamente em instantes; um dispositivo que não existe mais é removido automaticamente.",
+          "no_device": "Não há dispositivo para enviar. Ative as notificações neste dispositivo primeiro.",
+          "wait": "Um teste acabou de ser enviado. Aguarde alguns segundos antes de enviar outro."
+        },
+        "problem": {
+          "enable_failed": "Não foi possível ativar as notificações neste dispositivo. Tente novamente.",
+          "disable_failed": "Não foi possível desativar as notificações neste dispositivo. Tente novamente.",
+          "remove_failed": "Não foi possível remover esse dispositivo. Tente novamente.",
+          "test_failed": "Não foi possível enviar o teste. Tente novamente."
+        },
+        "devicesFailed": "Não foi possível carregar seus dispositivos.",
+        "devices": {
+          "title": "Seus dispositivos",
+          "thisDevice": "Este dispositivo",
+          "added": "Adicionado em {date}",
+          "lastUsed": "última notificação em {date}",
+          "neverUsed": "ainda sem notificação",
+          "remove": "Remover",
+          "removeFor": "Remover {device}"
+        }
+      }
+    },
+    "nav": {
+      "preferences": "Notificações"
+    }
+  }
+}

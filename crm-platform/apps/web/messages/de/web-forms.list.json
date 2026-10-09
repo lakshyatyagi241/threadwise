@@ -1,0 +1,132 @@
+{
+  "web-forms": {
+    "list": {
+      "title": "Formulare",
+      "subtitle": "Erstellen Sie Formulare, binden Sie sie auf Ihrer Website ein oder teilen Sie einen Link, und jede Antwort landet als Kontakt in Ihrem CRM.",
+      "templates": "Vorlagen",
+      "newForm": "Neues Formular",
+      "statsLabel": "Summen für die angezeigten Formulare",
+      "stats": {
+        "forms": "Formulare",
+        "published": "Veröffentlicht",
+        "submissions": "Einsendungen",
+        "needsReview": "Braucht Aufmerksamkeit"
+      },
+      "views": {
+        "label": "Anzeigen",
+        "all": "Alle",
+        "published": "Veröffentlicht",
+        "draft": "Entwürfe",
+        "paused": "Pausiert",
+        "archived": "Archiviert"
+      },
+      "search": "Formulare suchen",
+      "loading": "Formulare werden geladen",
+      "loadFailed": "Die Formulare konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "empty": {
+        "title": "Noch keine Formulare",
+        "message": "Starten Sie mit einer Vorlage oder einem leeren Formular, veröffentlichen Sie es und teilen Sie den Link oder fügen Sie den Einbettungscode auf Ihrer Website ein.",
+        "fromTemplate": "Mit einer Vorlage starten",
+        "blank": "Leeres Formular"
+      },
+      "noMatch": {
+        "title": "Keine Formulare gefunden",
+        "message": "Versuchen Sie eine andere Suche oder Ansicht.",
+        "clear": "Filter zurücksetzen"
+      },
+      "col": {
+        "name": "Formular",
+        "status": "Status",
+        "submissions": "Einsendungen",
+        "views": "Aufrufe",
+        "conversion": "Konversion",
+        "last": "Letzte Einsendung"
+      },
+      "unpublished": "Nicht veröffentlichte Änderungen",
+      "version": "Version {n}",
+      "needsReview": "{count, plural, one {# braucht Aufmerksamkeit} other {# brauchen Aufmerksamkeit}}",
+      "status": {
+        "draft": "Entwurf",
+        "published": "Veröffentlicht",
+        "paused": "Pausiert",
+        "archived": "Archiviert"
+      },
+      "noRate": "-",
+      "never": "Nie",
+      "actionsFor": "Aktionen für {name}",
+      "action": {
+        "edit": "Bearbeiten",
+        "submissions": "Einsendungen",
+        "copyLink": "Link kopieren",
+        "embed": "Auf einer Website einbetten",
+        "duplicate": "Duplizieren",
+        "pause": "Pausieren",
+        "resume": "Fortsetzen",
+        "archive": "Archivieren",
+        "delete": "Löschen",
+        "restore": "Wiederherstellen"
+      },
+      "loadMore": "Mehr laden",
+      "copied": "Link kopiert",
+      "copyBlocked": "Das Kopieren ist in diesem Browser blockiert. Der Link lautet {url}",
+      "paused": "Formular pausiert. Besucher sehen, dass es geschlossen ist.",
+      "resumed": "Formular fortgesetzt",
+      "archived": "Formular archiviert",
+      "deleted": "Formular gelöscht",
+      "cancel": "Abbrechen",
+      "archive": {
+        "title": "Dieses Formular archivieren?",
+        "message": "Der öffentliche Link und alle Einbettungen von „{name}“ funktionieren nicht mehr. Die Einsendungen bleiben erhalten und Sie können sie weiterhin lesen.",
+        "confirm": "Archivieren"
+      },
+      "delete": {
+        "title": "Dieses Formular löschen?",
+        "message": "„{name}“ wird endgültig gelöscht. Von ihm erstellte Kontakte bleiben in Ihrem CRM.",
+        "confirm": "Löschen"
+      },
+      "restored": "Formular wiederhergestellt"
+    },
+    "newForm": {
+      "eyebrow": "Formulare",
+      "title": "Neues Formular",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "create": "Formular anlegen",
+      "startFrom": "Starten mit",
+      "mode": {
+        "template": "Einer Vorlage",
+        "blank": "Leer"
+      },
+      "loadingTemplates": "Vorlagen werden geladen",
+      "templatesFailed": "Die Vorlagen konnten nicht geladen werden. Sie können trotzdem mit einem leeren Formular starten.",
+      "templates": "Vorlagen",
+      "fieldCount": "{count, plural, one {# Feld} other {# Felder}}",
+      "pickTemplate": "Wählen Sie eine Vorlage aus, um fortzufahren.",
+      "name": "Formularname",
+      "nameHint": "Nur Ihr Team sieht diesen Namen.",
+      "nameRequired": "Geben Sie einen Namen für das Formular ein."
+    },
+    "templates": {
+      "breadcrumb": "Navigationspfad",
+      "back": "Zurück zu den Formularen",
+      "title": "Formularvorlagen",
+      "subtitle": "Starten Sie mit einem fertigen Formular und ändern Sie es nach Belieben.",
+      "blank": "Leeres Formular",
+      "loading": "Vorlagen werden geladen",
+      "loadFailed": "Die Vorlagen konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "empty": "Keine Vorlagen verfügbar.",
+      "category": {
+        "lead": "Lead-Erfassung",
+        "contact": "Kontakt",
+        "event": "Veranstaltung",
+        "order": "Bestellung",
+        "survey": "Umfrage"
+      },
+      "fields": "Felder in dieser Vorlage",
+      "more": "+{count} weitere",
+      "use": "Diese Vorlage verwenden"
+    }
+  }
+}

@@ -1,0 +1,647 @@
+{
+  "sales-docs": {
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "nav": {
+      "proposals": "Đề xuất",
+      "estimates": "Báo giá"
+    },
+    "kind": {
+      "proposal": {
+        "singular": "Đề xuất",
+        "plural": "đề xuất"
+      },
+      "estimate": {
+        "singular": "Báo giá",
+        "plural": "báo giá"
+      }
+    },
+    "status": {
+      "draft": "Bản nháp",
+      "sent": "Đã gửi",
+      "viewed": "Đã xem",
+      "accepted": "Đã chấp nhận",
+      "declined": "Đã từ chối",
+      "expired": "Hết hạn",
+      "converted": "Đã chuyển đổi"
+    },
+    "tabs": {
+      "label": "Trạng thái",
+      "all": "Tất cả",
+      "draft": "Bản nháp",
+      "sent": "Đã gửi",
+      "viewed": "Đã xem",
+      "accepted": "Đã chấp nhận",
+      "declined": "Đã từ chối",
+      "expired": "Hết hạn",
+      "converted": "Đã chuyển đổi",
+      "count": "{count, plural, other {# tài liệu}}"
+    },
+    "list": {
+      "proposal": {
+        "title": "Đề xuất",
+        "subtitle": "Trình bày phạm vi và giá, theo dõi hành động của người mua, và chuyển đề xuất được chọn thành hóa đơn.",
+        "new": "Đề xuất mới",
+        "emptyTitle": "Chưa có đề xuất nào",
+        "emptyMessage": "Tạo đề xuất đầu tiên, gửi liên kết cho người mua và theo dõi trạng thái từ đã gửi sang đã chấp nhận."
+      },
+      "estimate": {
+        "title": "Báo giá",
+        "subtitle": "Báo giá trước khi xuất hóa đơn. Gửi báo giá, được chấp nhận, rồi chuyển đổi chỉ với một nhấn.",
+        "new": "Báo giá mới",
+        "emptyTitle": "Chưa có báo giá nào",
+        "emptyMessage": "Tạo báo giá đầu tiên, gửi liên kết cho người mua và chuyển thành hóa đơn khi được chấp nhận."
+      },
+      "openValue": "Giá trị đang mở",
+      "tableLabel": "Tài liệu",
+      "loading": "Đang tải",
+      "showing": "{count, plural, other {Đang hiển thị # tài liệu}}",
+      "loadMore": "Tải thêm",
+      "allLoaded": "Đã tải hết",
+      "useSampleData": "Dùng dữ liệu mẫu",
+      "emptyFilteredTitle": "Không có kết quả khớp",
+      "emptyFiltered": "Không có tài liệu nào khớp tìm kiếm và bộ lọc. Hãy thử ít bộ lọc hơn hoặc từ khóa khác.",
+      "resetFilters": "Xóa bộ lọc",
+      "emptyTabTitle": "Không có tài liệu {status}",
+      "emptyTab": "Khi một trong các {kind} của bạn đạt trạng thái này, nó sẽ hiển thị tại đây.",
+      "statusWord": {
+        "all": "tất cả",
+        "draft": "bản nháp",
+        "sent": "đã gửi",
+        "viewed": "đã xem",
+        "accepted": "đã chấp nhận",
+        "declined": "đã từ chối",
+        "expired": "hết hạn",
+        "converted": "đã chuyển đổi"
+      }
+    },
+    "toolbar": {
+      "label": "Bộ lọc",
+      "search": "Tìm theo số, tiêu đề hoặc người mua",
+      "owner": "Người phụ trách",
+      "allOwners": "Tất cả người phụ trách",
+      "validity": "Hiệu lực đến",
+      "anyValidity": "Mọi ngày",
+      "validWeek": "Hết hạn trong 7 ngày",
+      "validLapsed": "Đã quá ngày",
+      "clear": "Xóa",
+      "refresh": "Làm mới",
+      "shortcuts": "Phím tắt",
+      "contactFilter": "Liên hệ",
+      "dealFilter": "Thương vụ",
+      "removeFilter": "Xóa bộ lọc này",
+      "mine": "Của tôi"
+    },
+    "table": {
+      "scrollArea": "Bảng tài liệu",
+      "selectAll": "Chọn tất cả tài liệu đã tải",
+      "selectRow": "Chọn {number}",
+      "columns": {
+        "number": "Số",
+        "title": "Tiêu đề / Người mua",
+        "contact": "Liên hệ",
+        "amount": "Số tiền",
+        "status": "Trạng thái",
+        "validUntil": "Hiệu lực đến",
+        "owner": "Người phụ trách",
+        "created": "Ngày tạo"
+      }
+    },
+    "row": {
+      "moreFor": "Thao tác cho {number}",
+      "untitled": "Không có tiêu đề",
+      "noBuyer": "Chưa có người mua",
+      "unowned": "Chưa có người phụ trách"
+    },
+    "bulk": {
+      "label": "Thao tác hàng loạt",
+      "selected": "{count, plural, other {Đã chọn #}}",
+      "working": "Đang xử lý",
+      "delete": "Xóa",
+      "clear": "Bỏ chọn",
+      "deleteTitle": "Xóa các tài liệu đã chọn?",
+      "deleteMessage": "{count, plural, other {# tài liệu sẽ bị xóa vĩnh viễn. Liên kết công khai của chúng sẽ ngừng hoạt động.}} Tài liệu đã chuyển đổi sẽ được giữ lại.",
+      "deleteConfirm": "Xóa",
+      "keep": "Giữ lại",
+      "deleted": "{count, plural, other {Đã xóa # tài liệu}}",
+      "someFailed": "{count, plural, other {Không thể xóa # tài liệu}}",
+      "failed": "Xóa thất bại."
+    },
+    "shortcuts": {
+      "title": "Phím tắt",
+      "close": "Đóng",
+      "list": "Trong danh sách",
+      "builder": "Trong trình tạo",
+      "actions": {
+        "next": "Dòng tiếp theo",
+        "prev": "Dòng trước",
+        "open": "Mở dòng",
+        "toggleSelect": "Chọn hoặc bỏ chọn dòng",
+        "newDoc": "Tài liệu mới",
+        "focusSearch": "Tìm kiếm",
+        "clearSelection": "Bỏ chọn",
+        "help": "Hiện danh sách này",
+        "save": "Lưu bản nháp",
+        "send": "Gửi",
+        "addRow": "Thêm dòng mục"
+      }
+    },
+    "actions": {
+      "open": "Mở",
+      "edit": "Sửa",
+      "send": "Gửi",
+      "copyLink": "Sao chép liên kết công khai",
+      "markSent": "Đánh dấu đã gửi",
+      "convertInvoice": "Chuyển thành hóa đơn",
+      "createSalesOrder": "Tạo đơn bán hàng",
+      "convertDeal": "Tạo thương vụ",
+      "duplicate": "Nhân bản",
+      "print": "In / PDF",
+      "activity": "Hoạt động",
+      "delete": "Xóa",
+      "accept": "Ghi nhận là đã chấp nhận",
+      "decline": "Ghi nhận là đã từ chối",
+      "revise": "Chỉnh sửa (về bản nháp)",
+      "extend": "Gia hạn hiệu lực"
+    },
+    "confirm": {
+      "cancel": "Hủy",
+      "linkCopied": "Đã sao chép liên kết",
+      "copyFailed": "Không thể sao chép liên kết. Hãy chọn và sao chép thủ công.",
+      "markSent": {
+        "title": "Đánh dấu {number} là đã gửi?",
+        "message": "Thao tác này ghi nhận rằng {kind} đã được chia sẻ cho người mua thủ công (liên kết đã được sao chép). Thao tác không gửi gì cả; để gửi, hãy dùng Gửi.",
+        "confirm": "Đánh dấu đã gửi"
+      },
+      "convertInvoice": {
+        "title": "Chuyển {number} thành hóa đơn?",
+        "message": "Một bản nháp hóa đơn sẽ được tạo với cùng các dòng và tổng tiền, và {kind} này sẽ bị khóa ở trạng thái đã chuyển đổi. Không thể hoàn tác.",
+        "confirm": "Chuyển thành hóa đơn"
+      },
+      "convertDeal": {
+        "title": "Tạo thương vụ từ {number}?",
+        "message": "Một thương vụ sẽ được tạo với tổng tiền và liên hệ của {kind} này, và được liên kết ngược lại.",
+        "confirm": "Tạo thương vụ"
+      },
+      "delete": {
+        "title": "Xóa {number}?",
+        "message": "{kind} sẽ bị xóa vĩnh viễn và liên kết công khai ngừng hoạt động. Số của nó sẽ không bao giờ được dùng lại.",
+        "confirm": "Xóa"
+      },
+      "close": "Đóng",
+      "theBuyer": "người mua",
+      "linkCopiedInactive": "Đã sao chép liên kết. Người mua không thể mở cho đến khi tài liệu được gửi.",
+      "accept": {
+        "title": "Ghi nhận {number} là đã chấp nhận?",
+        "message": "Dùng khi {name} đồng ý ngoài liên kết, qua điện thoại hoặc bằng bản có chữ ký. Hoạt động sẽ ghi nhận do bạn nhập, không phải chữ ký của người mua.",
+        "confirm": "Ghi nhận là đã chấp nhận"
+      },
+      "decline": {
+        "title": "Ghi nhận {number} là đã từ chối?",
+        "message": "Dùng khi {name} từ chối ngoài liên kết. {kind} sẽ đóng ở trạng thái đã từ chối; sau này bạn có thể chỉnh sửa thành bản nháp mới.",
+        "confirm": "Ghi nhận là đã từ chối"
+      },
+      "extend": {
+        "title": "Gia hạn {number}",
+        "message": "Đặt ngày hiệu lực mới cho {kind} này. Nếu đã hết hạn, nó sẽ mở lại cho {name}.",
+        "confirm": "Gia hạn",
+        "date": "Ngày hiệu lực mới",
+        "past": "Ngày không được ở quá khứ."
+      },
+      "revise": {
+        "title": "Chỉnh sửa {number}?",
+        "message": "{kind} sẽ trở về bản nháp để bạn chỉnh sửa (số phiên bản tăng lên và nội dung cũ được giữ lại). Sau khi bạn thay đổi, người mua không thể chấp nhận phiên bản cũ.",
+        "confirm": "Chỉnh sửa"
+      },
+      "note": "Ghi chú (không bắt buộc)",
+      "noteHint": "Được lưu trong hoạt động cùng quyết định này."
+    },
+    "toast": {
+      "created": "Đã tạo {number}",
+      "saved": "Đã lưu {number}",
+      "duplicated": "Đã tạo bản nháp {number}",
+      "convertedInvoice": "Đã chuyển {number} thành hóa đơn",
+      "convertedDeal": "Đã tạo thương vụ {deal} từ {number}",
+      "deleted": "Đã xóa {number}",
+      "accepted": "Đã ghi nhận {number} là đã chấp nhận",
+      "declined": "Đã ghi nhận {number} là đã từ chối",
+      "revised": "{number} đã trở lại bản nháp (phiên bản {revision})",
+      "extended": "Đã gia hạn {number}",
+      "delivery": {
+        "sent": "Đã gửi email {number} cho người mua",
+        "queued": "{number} đã được xếp hàng chờ gửi qua WhatsApp",
+        "shared": "Đã đánh dấu {number} là đã gửi"
+      }
+    },
+    "errors": {
+      "network": "Không thể kết nối máy chủ. Kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện việc này.",
+      "signedOut": "Phiên làm việc đã kết thúc. Vui lòng đăng nhập lại.",
+      "conflict": "Có người khác đã thay đổi tài liệu này. Tài liệu đã được tải lại; hãy xem lại và thử lại.",
+      "validation": "Một số giá trị không được chấp nhận. Kiểm tra các trường được tô sáng.",
+      "unavailable": "Đề xuất và báo giá chưa khả dụng trên máy chủ này.",
+      "rateLimited": "Quá nhiều yêu cầu. Vui lòng đợi một lát rồi thử lại.",
+      "notFound": "Không tìm thấy tài liệu này. Có thể đã bị xóa.",
+      "planDisabled": "Gói của bạn không bao gồm đề xuất và báo giá.",
+      "invalidTransition": "Không thể thực hiện thay đổi này ở trạng thái hiện tại của tài liệu. Tài liệu đã được tải lại.",
+      "notEditable": "Chỉ có thể sửa bản nháp. Hãy chỉnh sửa tài liệu để chuyển về bản nháp.",
+      "notDeletable": "Tài liệu đã chấp nhận và đã chuyển đổi được giữ lại như bản ghi và không thể xóa.",
+      "alreadyDecided": "Tài liệu này đã có quyết định. Tài liệu đã được tải lại.",
+      "alreadyConverted": "Tài liệu này đã được chuyển thành hóa đơn.",
+      "alreadyLinkedDeal": "Tài liệu này đã được liên kết với một thương vụ.",
+      "linkUnavailable": "Liên kết công khai đã bị thu hồi hoặc đã hết hạn. Hãy tạo liên kết mới trước.",
+      "noRecipient": "Hãy thêm email hoặc số điện thoại của người mua trước, rồi mới gửi.",
+      "sendFailed": "Không thể gửi tin nhắn, nên tài liệu chưa được đánh dấu là đã gửi. Vui lòng thử lại.",
+      "expired": "Tài liệu này đã quá ngày hiệu lực. Hãy gia hạn trước.",
+      "ownerInvalid": "Người phụ trách phải là thành viên đang hoạt động của không gian làm việc.",
+      "invoicingUnavailable": "Tính năng xuất hóa đơn chưa khả dụng, nên tài liệu này không thể chuyển đổi.",
+      "unexpected": "Đã xảy ra lỗi. Vui lòng thử lại.",
+      "requestId": "Mã yêu cầu",
+      "retry": "Thử lại"
+    },
+    "link": {
+      "unnamedContact": "Liên hệ chưa đặt tên"
+    },
+    "picker": {
+      "unnamed": "Chưa đặt tên",
+      "unlinkContact": "Hủy liên kết liên hệ",
+      "unlinkDeal": "Hủy liên kết thương vụ",
+      "searchContact": "Tìm liên hệ theo tên, email hoặc số điện thoại",
+      "searchDeal": "Tìm thương vụ",
+      "results": "Kết quả",
+      "searching": "Đang tìm",
+      "unavailable": "Không thể tải danh sách.",
+      "none": "Không có kết quả khớp.",
+      "create": "Tạo liên hệ",
+      "createNamed": "Tạo liên hệ “{name}”",
+      "createTitle": "Tạo liên hệ",
+      "createEyebrow": "Liên hệ mới",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "createConfirm": "Tạo và liên kết",
+      "nameLabel": "Tên",
+      "emailLabel": "Email",
+      "phoneLabel": "Số điện thoại",
+      "phoneHint": "Kèm mã quốc gia, ví dụ +971 50 123 4567.",
+      "nameInvalid": "Nhập tên.",
+      "emailInvalid": "Nhập email hợp lệ.",
+      "phoneInvalid": "Nhập số điện thoại hợp lệ.",
+      "forbidden": "Bạn không có quyền tạo liên hệ.",
+      "createFailed": "Không thể tạo liên hệ. Vui lòng thử lại.",
+      "contactCreated": "Đã tạo liên hệ {name}"
+    },
+    "send": {
+      "eyebrow": "Gửi cho người mua",
+      "title": "Gửi {number}",
+      "close": "Đóng",
+      "done": "Xong",
+      "channels": "Cách gửi",
+      "tabs": {
+        "link": "Liên kết",
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "linkLabel": "Liên kết công khai",
+      "linkHint": "Bất kỳ ai có liên kết này đều có thể xem tài liệu và chấp nhận hoặc từ chối. Chỉ chia sẻ cho người mua.",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "copiedToast": "Đã sao chép liên kết",
+      "copyFailed": "Không thể sao chép liên kết. Hãy chọn và sao chép thủ công.",
+      "to": "Đến",
+      "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+      "noEmail": "Tài liệu này chưa có email người mua. Nhập email tại đây.",
+      "message": "Nội dung",
+      "messageDefault": "Xin chào {name}, đây là tài liệu của chúng tôi. Tài liệu thể hiện phạm vi và giá, và bạn có thể chấp nhận trực tuyến.",
+      "messageHint": "Liên kết đến tài liệu sẽ được thêm bên dưới nội dung của bạn.",
+      "sendEmail": "Gửi email",
+      "waTo": "Gửi đến",
+      "noPhone": "Tài liệu này chưa có số điện thoại người mua. Hãy thêm số trong thông tin người mua trước.",
+      "waPreview": "Nội dung",
+      "waTotal": "Tổng cộng",
+      "waView": "Xem và chấp nhận",
+      "sendWhatsapp": "Gửi qua WhatsApp",
+      "openWhatsapp": "Mở trong WhatsApp",
+      "markSent": "Tôi đã chia sẻ: đánh dấu đã gửi",
+      "linkLoading": "Đang tải liên kết",
+      "linkUnavailable": "Liên kết chưa khả dụng trên máy chủ này.",
+      "stateDraft": "Liên kết sẽ mở khi tài liệu được gửi. Trước đó người mua không thấy gì.",
+      "stateRevoked": "Liên kết này đã bị thu hồi: người mua không thể mở. Hãy tạo liên kết mới để chia sẻ lại.",
+      "stateActive": "{views, plural, =0 {Chưa mở.} other {Đã mở # lần.}}",
+      "stateInactive": "Liên kết này đã hết hạn và người mua không thể mở. Hãy tạo liên kết mới.",
+      "regenerate": "Tạo liên kết mới",
+      "revoke": "Thu hồi liên kết",
+      "regenerateWarning": "Liên kết cũ sẽ ngừng hoạt động ngay. Bất kỳ ai có liên kết sẽ thấy liên kết không còn khả dụng.",
+      "keepLink": "Giữ liên kết hiện tại",
+      "regenerateConfirm": "Tạo liên kết mới",
+      "regenerated": "Đã tạo liên kết mới",
+      "revoked": "Đã thu hồi liên kết",
+      "waHint": "Gửi sẽ xếp tin nhắn vào WhatsApp đã kết nối của bạn và đánh dấu tài liệu là đã gửi. Mở trong WhatsApp cho phép bạn tự gửi; sau đó dùng tab Liên kết để đánh dấu đã gửi."
+    },
+    "activity": {
+      "title": "Hoạt động của {number}",
+      "subtitle": "Mọi thao tác với tài liệu này, mới nhất trước.",
+      "close": "Đóng",
+      "loading": "Đang tải",
+      "unavailable": "Lịch sử hoạt động chưa khả dụng trên máy chủ này.",
+      "empty": "Chưa có hoạt động nào với tài liệu này.",
+      "buyer": "người mua",
+      "system": "hệ thống",
+      "someone": "Ai đó",
+      "via": "Gửi qua {channel}",
+      "signedBy": "Ký bởi {name}",
+      "reason": "Lý do: {reason}",
+      "channels": {
+        "link": "liên kết",
+        "email": "email",
+        "whatsapp": "WhatsApp"
+      },
+      "events": {
+        "created": "Tạo bởi {who}",
+        "edited": "Chỉnh sửa bởi {who}",
+        "sent": "Gửi bởi {who}",
+        "viewed": "Xem bởi {who}",
+        "accepted": "Chấp nhận bởi {who}",
+        "declined": "Từ chối bởi {who}",
+        "expired": "Hết hạn",
+        "duplicated": "Nhân bản bởi {who}",
+        "revised": "Chỉnh sửa bởi {who}",
+        "extended": "Hiệu lực được gia hạn bởi {who}",
+        "converted_invoice": "Chuyển thành hóa đơn bởi {who}",
+        "converted_deal": "Thương vụ được tạo bởi {who}",
+        "link_regenerated": "Liên kết mới được tạo bởi {who}",
+        "link_revoked": "Liên kết đã bị {who} thu hồi"
+      },
+      "withSignature": "Đã ghi nhận chữ ký vẽ tay",
+      "recordedByStaff": "Do thành viên trong nhóm ghi nhận thay mặt người mua",
+      "note": "Ghi chú: {note}",
+      "revision": "Bản sửa đổi {revision}",
+      "fromAddress": "Từ địa chỉ mạng {ip}"
+    },
+    "paper": {
+      "label": "{kind} {number}",
+      "sellerFallback": "Công ty của bạn",
+      "numberPending": "Số được gán khi lưu",
+      "untitled": "{kind} chưa có tiêu đề",
+      "preparedFor": "Lập cho",
+      "noBuyer": "Chưa có người mua",
+      "issued": "Ngày phát hành",
+      "validUntil": "Có hiệu lực đến",
+      "description": "Mô tả",
+      "qty": "SL",
+      "unit": "Đơn giá",
+      "discount": "Giảm",
+      "tax": "Thuế",
+      "amount": "Thành tiền",
+      "noItems": "Chưa có mục nào.",
+      "subtotal": "Tạm tính",
+      "discountPercent": "Giảm giá ({percent}%)",
+      "discountRow": "Giảm giá",
+      "taxRow": "Thuế ({percent}%)",
+      "total": "Tổng cộng",
+      "notes": "Ghi chú",
+      "terms": "Điều khoản"
+    },
+    "builder": {
+      "loading": "Đang tải",
+      "notFoundTitle": "Không tìm thấy tài liệu",
+      "notFound": "Tài liệu này không tồn tại hoặc đã bị xóa.",
+      "back": {
+        "proposal": "Tất cả đề xuất",
+        "estimate": "Tất cả báo giá"
+      },
+      "formLabel": "Chi tiết tài liệu",
+      "newTitle": {
+        "proposal": "Đề xuất mới",
+        "estimate": "Báo giá mới"
+      },
+      "newSubtitle": "Nhập người mua và các mục hàng. Số sẽ được gán khi bạn lưu {kind} này.",
+      "untitledSub": "Chưa có tiêu đề",
+      "unsaved": "Có thay đổi chưa lưu",
+      "leaveTitle": "Rời đi mà không lưu?",
+      "leaveMessage": "Trang này có thay đổi chưa được lưu. Nếu bạn rời đi bây giờ, các thay đổi sẽ bị mất.",
+      "leave": "Rời đi không lưu",
+      "keepEditing": "Tiếp tục chỉnh sửa",
+      "save": "Lưu nháp",
+      "send": "Gửi",
+      "more": "Thao tác khác",
+      "fixErrors": "Một số trường cần được xem lại trước khi có thể lưu.",
+      "panes": "Biểu mẫu hoặc bản xem trước",
+      "pane": {
+        "edit": "Chỉnh sửa",
+        "preview": "Xem trước"
+      },
+      "locked": {
+        "sent": "Tài liệu này đã được gửi cho người mua nên không thể chỉnh sửa. Hãy sửa lại để chuyển về bản nháp, hoặc nhân bản để tạo bản mới.",
+        "accepted": "Tài liệu này đã được chấp nhận và được lưu làm hồ sơ. Hãy chuyển thành hóa đơn, hoặc nhân bản để tạo bản mới.",
+        "converted": "Tài liệu này đã được chuyển thành hóa đơn và bị khóa.",
+        "openInvoice": "Mở hóa đơn",
+        "revise": "Sửa lại",
+        "duplicate": "Nhân bản thành bản nháp"
+      },
+      "buyer": {
+        "title": "Người mua",
+        "hint": "Chọn một liên hệ hoặc nhập thông tin người mua. Email và số điện thoại sẽ được dùng để gửi.",
+        "contact": "Liên hệ",
+        "name": "Tên người mua",
+        "email": "Email người mua",
+        "phone": "Số điện thoại người mua",
+        "phoneHint": "Kèm mã quốc gia. Cần để gửi qua WhatsApp."
+      },
+      "details": {
+        "title": "Chi tiết",
+        "docTitle": "Tiêu đề",
+        "titlePlaceholder": {
+          "proposal": "VD: Thiết kế lại website, giai đoạn 1",
+          "estimate": "VD: Báo giá nhanh lắp đặt bếp"
+        },
+        "deal": "Thương vụ",
+        "currency": "Tiền tệ",
+        "validUntil": "Có hiệu lực đến",
+        "plusDays": "+{days} ngày",
+        "noExpiry": "Không hết hạn"
+      },
+      "items": {
+        "title": "Các mục hàng",
+        "hint": "Số lượng có thể là số thập phân. Giảm giá là phần trăm hoặc số tiền (chạm vào dấu trong ô để đổi); để trống thuế sẽ dùng thuế suất của tài liệu.",
+        "description": "Mô tả",
+        "qty": "SL",
+        "unit": "Đơn giá",
+        "discount": "Giảm %",
+        "tax": "Thuế %",
+        "amount": "Thành tiền",
+        "drag": "Kéo để sắp xếp lại",
+        "row": "Dòng {n}",
+        "descriptionPlaceholder": "Nội dung bạn đang tính phí",
+        "descriptionFor": "Mô tả dòng {n}",
+        "qtyFor": "Số lượng dòng {n}",
+        "unitFor": "Đơn giá dòng {n}",
+        "discountFor": "Phần trăm giảm giá dòng {n}",
+        "taxFor": "Phần trăm thuế dòng {n}",
+        "amountFor": "Thành tiền dòng {n}",
+        "moveUp": "Di chuyển dòng {n} lên",
+        "moveDown": "Di chuyển dòng {n} xuống",
+        "duplicate": "Nhân bản dòng {n}",
+        "remove": "Xóa dòng {n}",
+        "add": "Thêm dòng",
+        "discountToAmount": "Dòng {n}: giảm giá là phần trăm; chuyển sang số tiền",
+        "discountToPercent": "Dòng {n}: giảm giá là số tiền; chuyển sang phần trăm"
+      },
+      "problems": {
+        "noItems": "Thêm ít nhất một mục hàng có mô tả và đơn giá.",
+        "descriptionRequired": "Nhập mô tả.",
+        "descriptionTooLong": "Mô tả quá dài (tối đa 500 ký tự).",
+        "qtyInvalid": "Số lượng phải là số từ 0 trở lên, tối đa 4 chữ số thập phân.",
+        "priceInvalid": "Nhập đơn giá là số từ 0 trở lên.",
+        "discountInvalid": "Giảm giá phải là phần trăm từ 0 đến 100.",
+        "taxInvalid": "Thuế phải là phần trăm từ 0 đến 100.",
+        "docDiscountInvalid": "Nhập số tiền giảm giá từ 0 trở lên.",
+        "docTaxInvalid": "Thuế phải là phần trăm từ 0 đến 100.",
+        "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+        "phoneInvalid": "Nhập số điện thoại kèm mã quốc gia, ví dụ +971 50 123 4567.",
+        "titleTooLong": "Tiêu đề quá dài (tối đa 255 ký tự).",
+        "notesTooLong": "Ghi chú quá dài (tối đa 5.000 ký tự).",
+        "termsTooLong": "Điều khoản quá dài (tối đa 10.000 ký tự).",
+        "dateInvalid": "Nhập ngày hợp lệ.",
+        "tooLarge": "Số tiền quá lớn. Hãy giảm số lượng hoặc đơn giá."
+      },
+      "totals": {
+        "defaultTax": "Thuế suất",
+        "defaultTaxHint": "Áp dụng cho mọi dòng không có thuế riêng.",
+        "discount": "Giảm giá toàn tài liệu",
+        "discountKind": "Loại giảm giá",
+        "subtotal": "Tạm tính",
+        "discountRow": "Giảm giá",
+        "taxRow": "Thuế ({percent}%)",
+        "total": "Tổng cộng"
+      },
+      "notes": {
+        "title": "Ghi chú và điều khoản",
+        "notes": "Ghi chú gửi người mua",
+        "terms": "Điều khoản",
+        "insertTemplate": "Dùng mẫu",
+        "count": "{count} / {max}"
+      },
+      "preview": {
+        "title": "Xem trước",
+        "print": "In / PDF",
+        "hint": "Đây là nội dung người mua sẽ thấy và bản in. Tổng tiền dùng cùng cách làm tròn như tài liệu đã lưu."
+      }
+    },
+    "templates": {
+      "notes": {
+        "thanks": {
+          "label": "Cảm ơn",
+          "text": "Cảm ơn bạn đã tin tưởng hợp tác. Chúng tôi mong được bắt đầu."
+        },
+        "scope": {
+          "label": "Lưu ý về phạm vi",
+          "text": "Tài liệu này chỉ bao gồm các mục nêu trên. Mọi việc ngoài phạm vi sẽ được báo giá riêng."
+        },
+        "followUp": {
+          "label": "Các bước tiếp theo",
+          "text": "Để tiếp tục, hãy chấp nhận tài liệu này trực tuyến. Chúng tôi sẽ xác nhận ngày bắt đầu trong vòng một ngày làm việc."
+        }
+      },
+      "terms": {
+        "net14": {
+          "label": "Thanh toán trong 14 ngày",
+          "text": "Thanh toán trong vòng 14 ngày kể từ ngày hóa đơn."
+        },
+        "net30": {
+          "label": "Thanh toán trong 30 ngày",
+          "text": "Thanh toán trong vòng 30 ngày kể từ ngày hóa đơn."
+        },
+        "deposit50": {
+          "label": "Đặt cọc 50%",
+          "text": "Cần đặt cọc 50% khi chấp nhận. Số dư thanh toán khi hoàn thành."
+        },
+        "warranty": {
+          "label": "Bảo hành",
+          "text": "Công việc được bảo hành 90 ngày kể từ ngày bàn giao đối với lỗi tay nghề."
+        }
+      }
+    },
+    "linked": {
+      "title": "Đề xuất và báo giá",
+      "newProposal": "Đề xuất",
+      "newEstimate": "Báo giá",
+      "loading": "Đang tải",
+      "unavailableTitle": "Chưa khả dụng",
+      "unavailable": "Đề xuất và báo giá chưa khả dụng trên máy chủ này.",
+      "empty": "Chưa có đề xuất hoặc báo giá nào.",
+      "kind": {
+        "proposal": "Đề xuất",
+        "estimate": "Báo giá"
+      },
+      "viewProposals": "Tất cả đề xuất",
+      "viewEstimates": "Tất cả báo giá"
+    },
+    "signature": {
+      "area": "Ô chữ ký: vẽ chữ ký bằng ngón tay, bút hoặc chuột",
+      "placeholder": "Ký tại đây",
+      "clear": "Xóa chữ ký"
+    },
+    "public": {
+      "loading": "Đang tải tài liệu",
+      "brandFallback": "Nhà cung cấp của bạn",
+      "language": "Ngôn ngữ",
+      "print": "In / PDF",
+      "invalid": {
+        "title": "Liên kết này không hợp lệ",
+        "message": "Tài liệu có thể đã bị gỡ hoặc liên kết chưa đầy đủ. Hãy yêu cầu người gửi cung cấp liên kết mới."
+      },
+      "error": {
+        "title": "Không thể tải tài liệu",
+        "message": "Kiểm tra kết nối và thử lại. Nếu vẫn lỗi, hãy liên hệ người gửi.",
+        "retry": "Thử lại"
+      },
+      "banner": {
+        "accepted": "Bạn đã chấp nhận {kind} này. {seller} đã được thông báo và sẽ liên hệ với bạn.",
+        "signedBy": "Ký bởi {name}",
+        "declined": "{kind} này đã bị từ chối.",
+        "declinedHint": "Nếu đây là nhầm lẫn, vui lòng liên hệ {seller}.",
+        "converted": "Đã chấp nhận. Hóa đơn đã được phát hành cho {kind} này.",
+        "expired": "{kind} này đã hết hạn vào {date}.",
+        "expiredHint": "Không còn có thể chấp nhận. Hãy liên hệ {seller} để yêu cầu bản mới."
+      },
+      "footer": "{kind} này do {seller} tạo.",
+      "decision": {
+        "title": "Quyết định của bạn",
+        "intro": "Chấp nhận {kind} này với tổng {total} nghĩa là xác nhận phạm vi và giá ở trên với {seller}.",
+        "name": "Họ và tên đầy đủ",
+        "nameHint": "Nhập đúng như tên trong hồ sơ (ít nhất 2 ký tự).",
+        "nameRequired": "Nhập họ và tên đầy đủ.",
+        "signature": "Chữ ký",
+        "typedPlaceholder": "Tên của bạn sẽ hiển thị ở đây",
+        "useTyped": "Ký bằng tên đã nhập thay vì vẽ",
+        "signatureRequired": "Vẽ chữ ký, hoặc chọn ký bằng tên đã nhập.",
+        "agree": "Tôi đã đọc {kind} này và chấp nhận phạm vi, giá và điều khoản của nó.",
+        "agreeRequired": "Đánh dấu ô để xác nhận.",
+        "accept": "Chấp nhận {kind} này",
+        "decline": "Từ chối",
+        "note": "Tên, chữ ký, thời gian và địa chỉ mạng của bạn sẽ được ghi nhận cùng với quyết định.",
+        "declineTitle": "Từ chối {kind} này?",
+        "declineMessage": "{seller} sẽ được thông báo rằng bạn đã từ chối. Sau đó bạn sẽ không thể thay đổi.",
+        "reason": "Lý do (không bắt buộc)",
+        "reasonHint": "Ghi chú ngắn giúp {seller} hiểu cần điều chỉnh gì.",
+        "keep": "Quay lại",
+        "declineConfirm": "Từ chối",
+        "close": "Đóng",
+        "problem": {
+          "expired": "Tài liệu này đã hết hạn và không còn có thể chấp nhận.",
+          "closed": "Tài liệu này đã được quyết định trước đó. Trang đã được làm mới.",
+          "rateLimited": "Quá nhiều lần thử. Vui lòng đợi một phút rồi thử lại.",
+          "validation": "Một số thông tin không được chấp nhận. Kiểm tra tên và thử lại.",
+          "generic": "Không thể ghi nhận quyết định của bạn. Kiểm tra kết nối và thử lại.",
+          "gone": "Liên kết này không còn hoạt động."
+        }
+      },
+      "gone": {
+        "title": "Liên kết này không còn hoạt động",
+        "message": "Người gửi đã tắt liên kết này hoặc liên kết đã hết hạn. Hãy yêu cầu liên kết mới."
+      },
+      "metaTitle": "Báo giá"
+    }
+  }
+}

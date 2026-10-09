@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "Đơn hàng",
+      "coupons": "Phiếu giảm giá"
+    },
+    "settingsTile": {
+      "label": "Cổng thanh toán",
+      "description": "Cổng thanh toán duy nhất mà thanh toán cửa hàng và hóa đơn Bán hàng của bạn dùng để nhận thanh toán trực tuyến.",
+      "keywords": "cổng thanh toán, razorpay, stripe, thanh toán, liên kết thanh toán, thanh toán trực tuyến, thẻ, upi"
+    },
+    "common": {
+      "noAccessTitle": "Bạn không có quyền truy cập trang này",
+      "noAccessMessage": "Hãy nhờ quản trị viên không gian làm việc cấp quyền cho vai trò của bạn.",
+      "loading": "Đang tải",
+      "loadMore": "Tải thêm",
+      "cancel": "Hủy",
+      "close": "Đóng",
+      "save": "Lưu",
+      "saving": "Đang lưu",
+      "edit": "Sửa",
+      "delete": "Xóa",
+      "remove": "Xóa",
+      "open": "Mở",
+      "view": "Xem",
+      "search": "Tìm kiếm",
+      "clear": "Xóa",
+      "all": "Tất cả",
+      "no": "Không",
+      "none": "Không có",
+      "actions": "Thao tác",
+      "retry": "Thử lại",
+      "dismiss": "Bỏ qua",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "viewContact": "Xem liên hệ",
+      "allShops": "Tất cả cửa hàng",
+      "shop": "Cửa hàng"
+    },
+    "status": {
+      "new": "Mới",
+      "pending": "Đang chờ",
+      "confirmed": "Đã xác nhận",
+      "paid": "Đã thanh toán",
+      "processing": "Đang xử lý",
+      "completed": "Hoàn tất",
+      "shipped": "Đã giao vận",
+      "cancelled": "Đã hủy"
+    },
+    "paymentStatus": {
+      "paid": "Đã thanh toán",
+      "awaiting": "Chờ thanh toán",
+      "cod": "Thanh toán khi nhận hàng",
+      "unpaid": "Chưa thanh toán"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "Cửa hàng trực tuyến",
+      "twilio": "Twilio",
+      "manual": "Thủ công",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "WhatsApp AI"
+    },
+    "errors": {
+      "requestId": "Mã yêu cầu",
+      "retry": "Thử lại",
+      "network": {
+        "title": "Không thể kết nối đến máy chủ",
+        "message": "Hãy kiểm tra kết nối và thử lại."
+      },
+      "forbidden": {
+        "title": "Không được phép",
+        "message": "Vai trò của bạn không cho phép thao tác này."
+      },
+      "signedOut": {
+        "title": "Bạn đã đăng xuất",
+        "message": "Hãy đăng nhập lại để tiếp tục."
+      },
+      "conflict": {
+        "title": "Đã bị người khác thay đổi",
+        "message": "Bản ghi này đã thay đổi khi bạn đang mở. Hãy tải lại và thử lại."
+      },
+      "validation": {
+        "title": "Vui lòng kiểm tra biểu mẫu",
+        "message": "Một số giá trị không hợp lệ. Hãy kiểm tra các trường được đánh dấu."
+      },
+      "unavailable": {
+        "title": "Chưa khả dụng",
+        "message": "Phần này của cửa hàng chưa khả dụng trên máy chủ này."
+      },
+      "rateLimited": {
+        "title": "Quá nhiều yêu cầu",
+        "message": "Hãy đợi một lát rồi thử lại."
+      },
+      "notFound": {
+        "title": "Không tìm thấy",
+        "message": "Mục này đã bị xóa hoặc chưa từng tồn tại."
+      },
+      "planLocked": {
+        "title": "Không có trong gói của bạn",
+        "message": "Gói của bạn không bao gồm cửa hàng. Hãy nâng cấp để sử dụng."
+      },
+      "couponCodeTaken": {
+        "title": "Mã đã được dùng",
+        "message": "Một phiếu giảm giá khác đã dùng mã này. Hãy chọn mã khác."
+      },
+      "groupCodeTaken": {
+        "title": "Mã đã được dùng",
+        "message": "Một nhóm khác đã dùng mã đặt hàng này."
+      },
+      "orderNoPhone": {
+        "title": "Không có số điện thoại",
+        "message": "Đơn hàng này không có số điện thoại người mua nên không thể gửi gì."
+      },
+      "gatewayNotConfigured": {
+        "title": "Chưa thiết lập cổng thanh toán",
+        "message": "Hãy thiết lập cổng thanh toán trước. Khóa của nó đang thiếu hoặc cổng đang tắt."
+      },
+      "gatewayUnavailable": {
+        "title": "Cổng thanh toán không khả dụng",
+        "message": "Cổng thanh toán này không thể tạo liên kết thanh toán để người mua mở."
+      },
+      "paymentLinkFailed": {
+        "title": "Cổng thanh toán từ chối liên kết",
+        "message": "Hãy kiểm tra các khóa và đảm bảo số tiền lớn hơn mức tối thiểu của cổng."
+      },
+      "unexpected": {
+        "title": "Đã xảy ra lỗi",
+        "message": "Hãy thử lại. Nếu lỗi vẫn tiếp diễn, hãy gửi mã yêu cầu cho bộ phận hỗ trợ."
+      }
+    }
+  }
+}

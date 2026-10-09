@@ -1,0 +1,102 @@
+{
+  "outbound-webhooks": {
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "events": {
+      "contact_created": "Đã tạo liên hệ",
+      "contact_updated": "Đã cập nhật liên hệ",
+      "contact_deleted": "Đã xóa liên hệ",
+      "contact_tag_added": "Đã thêm thẻ vào liên hệ",
+      "contact_opted_in": "Liên hệ đã đồng ý nhận tin",
+      "deal_stage_changed": "Thương vụ đã chuyển sang giai đoạn khác",
+      "task_created": "Đã tạo công việc",
+      "task_assigned": "Đã giao công việc",
+      "template_status_changed": "Trạng thái mẫu đã thay đổi",
+      "device_status_changed": "Trạng thái thiết bị đã thay đổi",
+      "conversation_reopened": "Hội thoại đã được mở lại"
+    },
+    "page": {
+      "title": "Webhook",
+      "subtitle": "Gửi sự kiện từ không gian làm việc này đến hệ thống của bạn ngay khi chúng xảy ra. Mỗi lần gửi là một yêu cầu POST JSON có chữ ký, được thử lại khi máy chủ của bạn không phản hồi.",
+      "back": "Tích hợp và nhà phát triển",
+      "add": "Thêm webhook",
+      "list": "Webhook",
+      "emptyTitle": "Chưa có webhook nào",
+      "empty": "Thêm một điểm cuối để nhận các sự kiện như liên hệ mới hoặc thương vụ chuyển giai đoạn.",
+      "noAccess": "Bạn không có quyền truy cập webhook.",
+      "loadFailed": "Không tải được webhook.",
+      "retry": "Thử lại",
+      "allEvents": "Mọi sự kiện",
+      "signed": "Đã ký",
+      "health": {
+        "off": "Tắt",
+        "failing": "Đang lỗi",
+        "healthy": "Bình thường",
+        "idle": "Chưa có lần gửi nào"
+      },
+      "activeFor": "Đang hoạt động: {name}",
+      "lastDelivery": "Lần gửi gần nhất {when}, phản hồi {status}",
+      "noDeliveries": "Chưa gửi thành công lần nào",
+      "noAnswer": "không phản hồi",
+      "counts": "{ok} đã gửi, {failed} thất bại",
+      "lastError": "Lỗi gần nhất: {error}",
+      "deliveries": "Lần gửi",
+      "test": "Gửi thử",
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa",
+      "cancel": "Hủy",
+      "deleteTitle": "Xóa webhook này?",
+      "deleteMessage": "{name} sẽ ngừng nhận sự kiện và nhật ký gửi sẽ bị xóa. Không thể hoàn tác.",
+      "created": "Đã thêm webhook.",
+      "saved": "Đã lưu webhook.",
+      "deleted": "Đã xóa webhook.",
+      "deleteFailed": "Không xóa được webhook. Hãy thử lại.",
+      "toggleFailed": "Không lưu được thay đổi. Hãy thử lại.",
+      "testOk": "Đã gửi thử thành công (phản hồi {status}).",
+      "testFailed": "Gửi thử thất bại: {reason}",
+      "testError": "Không gửi được bản thử. Hãy thử lại."
+    },
+    "dialog": {
+      "addTitle": "Thêm webhook",
+      "editTitle": "Chỉnh sửa webhook",
+      "close": "Đóng",
+      "name": "Tên",
+      "nameHint": "Không bắt buộc: nhãn để bạn nhận biết, ví dụ hệ thống nhận sự kiện.",
+      "url": "URL điểm cuối",
+      "urlHint": "Địa chỉ https có thể truy cập từ internet. Địa chỉ riêng tư và nội bộ sẽ bị từ chối.",
+      "urlProblem": {
+        "empty": "Nhập URL điểm cuối.",
+        "tooLong": "URL quá dài.",
+        "notHttps": "URL phải bắt đầu bằng https://.",
+        "invalid": "URL không hợp lệ."
+      },
+      "secret": "Khóa bí mật ký",
+      "secretHint": "Không bắt buộc. Khi đặt, mỗi lần gửi kèm chữ ký để máy chủ của bạn xác minh. Khóa sẽ không hiển thị lại.",
+      "secretSetHint": "Đã đặt khóa bí mật. Để trống để giữ nguyên, hoặc nhập khóa mới để thay thế.",
+      "secretKeep": "Không đổi",
+      "removeSecret": "Xóa khóa bí mật ký (các lần gửi sẽ không được ký)",
+      "events": "Sự kiện",
+      "allEvents": "Tất cả sự kiện",
+      "pickEvents": "Chọn ít nhất một sự kiện, hoặc chọn tất cả sự kiện.",
+      "active": "Đang hoạt động",
+      "cancel": "Hủy",
+      "create": "Thêm webhook",
+      "save": "Lưu thay đổi",
+      "failed": "Không thể lưu webhook. Vui lòng thử lại."
+    },
+    "deliveries": {
+      "title": "Lượt gửi: {name}",
+      "close": "Đóng",
+      "empty": "Chưa có lượt gửi nào. Dùng Gửi thử để tạo một lượt.",
+      "failed": "Không thể tải các lượt gửi.",
+      "when": "Thời điểm",
+      "event": "Sự kiện",
+      "result": "Phản hồi",
+      "time": "Thời gian",
+      "attempt": "Thử",
+      "test": "Thử nghiệm",
+      "noAnswer": "Không có phản hồi"
+    }
+  }
+}

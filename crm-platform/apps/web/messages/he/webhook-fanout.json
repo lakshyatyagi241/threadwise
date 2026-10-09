@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "Webhooks",
+      "forwarding": "העברת Webhook"
+    },
+    "common": {
+      "loading": "טוען",
+      "retry": "נסו שוב",
+      "requestId": "מזהה בקשה",
+      "dash": "-",
+      "errors": {
+        "forbidden": "אין לכם הרשאה לבצע פעולה זו.",
+        "request": "לא ניתן היה להשלים את הבקשה.",
+        "unexpected": "משהו השתבש בצד שלנו. נסו שוב בעוד רגע.",
+        "network": "לא ניתן היה להגיע לשרת. בדקו את החיבור ונסו שוב.",
+        "conflict": "מישהו אחר שינה יעד זה. הרשימה נטענה מחדש: החילו את השינוי שלכם שוב.",
+        "validation": "חלק מהערכים אינם תקינים. בדקו את השדות המסומנים.",
+        "notFound": "הפריט הזה כבר אינו קיים.",
+        "urlRejected": "כתובת URL זו אינה מותרת. השתמשו בכתובת https שניתנת להגעה מהאינטרנט."
+      }
+    },
+    "page": {
+      "eyebrow": "ניהול / מערכת / Webhooks",
+      "title": "העברת Webhook",
+      "description": "רשימת השירותים של מפעיל הפלטפורמה שמקבלים עותק של כל Webhook של Meta.",
+      "banner": "Meta מאפשרת כתובת callback אחת. אנחנו מקבלים אותה פעם אחת, מאמתים אותה, ומעבירים את הגוף הגולמי ללא שינוי (עם החתימה המקורית) לכל יעד פעיל.",
+      "superOnly": "רק מנהל־על יכול לנהל העברת Webhook.",
+      "add": "הוספת יעד",
+      "tabs": {
+        "targets": "יעדים",
+        "failures": "מסירות שנכשלו"
+      }
+    },
+    "targets": {
+      "empty": "אין עדיין יעדי העברה",
+      "emptyBody": "הוסיפו יעד כדי להתחיל להעביר Webhook של Meta לשירות אחר.",
+      "columns": {
+        "target": "יעד",
+        "active": "פעיל",
+        "fields": "שדות",
+        "deliveries": "מסירות",
+        "last": "מסירה אחרונה",
+        "actions": "פעולות"
+      },
+      "allFields": "כל השדות",
+      "success": "{count, number} תקינות",
+      "failure": "{count, number} נכשלו",
+      "pending": "{count, number} ממתינות",
+      "pendingLabel": "{count, number} מסירות שנכשלו ממתינות להשמעה חוזרת",
+      "neverDelivered": "עדיין לא נמסר דבר",
+      "lastStatus": "סטטוס {status}",
+      "lastError": "שגיאה: {error}",
+      "lastAt": "ב-{time}",
+      "activeSwitch": "העברה אל {name}",
+      "on": "יעד מופעל",
+      "off": "יעד כבוי",
+      "edit": "עריכה",
+      "test": "בדיקה",
+      "testing": "בודק",
+      "testOk": "הבדיקה עברה: סטטוס {status} תוך {ms, number} ms",
+      "testFailed": "הבדיקה נכשלה: {reason} ({ms, number} ms)",
+      "testNoStatus": "אין תשובה",
+      "testStatus": "סטטוס {status}",
+      "delete": "מחיקה",
+      "deleteTitle": "למחוק את {name}?",
+      "deleteBody": "היעד יפסיק לקבל Webhooks, והמסירות שנכשלו ושנשמרו שלו יימחקו. לא ניתן לבטל פעולה זו.",
+      "deleteConfirm": "מחיקת יעד",
+      "cancel": "ביטול",
+      "toasts": {
+        "created": "{name} נוסף",
+        "saved": "{name} נשמר",
+        "on": "{name} מופעל",
+        "off": "{name} כבוי",
+        "deleted": "{name} נמחק"
+      }
+    },
+    "dialog": {
+      "createTitle": "הוספת יעד העברה",
+      "editTitle": "עריכת {name}",
+      "close": "סגירה",
+      "name": "שם",
+      "namePlaceholder": "שירות אנליטיקה",
+      "url": "URL",
+      "urlHint": "רק https. כתובות ברשתות פרטיות נדחות.",
+      "headerName": "שם כותרת (אופציונלי)",
+      "headerNameHint": "נשלח עם כל מסירה, למשל Authorization.",
+      "headerValue": "ערך כותרת",
+      "headerValueSaved": "נשמר, מסתיים ב-••••{last4}. השאירו ריק כדי לשמור אותו.",
+      "headerValueSavedNoLast4": "נשמר. השאירו ריק כדי לשמור אותו.",
+      "headerValueHint": "לכתיבה בלבד: לא יוצג שוב לאחר השמירה.",
+      "removeHeader": "הסרת הכותרת השמורה",
+      "fieldFilter": "מסנן שדות",
+      "fieldFilterHint": "השאירו ריק כדי להעביר כל שדה. הקלידו שדה ולחצו Enter, למשל messages או message_template_status_update.",
+      "fieldFilterPlaceholder": "הוספת שדה",
+      "fieldRemove": "הסרת {field}",
+      "timeout": "זמן המתנה (שניות)",
+      "timeoutHint": "1 עד 30",
+      "maxAttempts": "מספר ניסיונות מקסימלי",
+      "maxAttemptsHint": "1 עד 10",
+      "active": "העברה ליעד זה",
+      "save": "שמירה",
+      "saving": "שומר",
+      "cancel": "ביטול",
+      "errors": {
+        "nameRequired": "הזינו שם.",
+        "urlRequired": "הזינו את ה-URL.",
+        "urlHttps": "ה-URL חייב להתחיל ב-https://.",
+        "headerNameInvalid": "השתמשו באותיות, ספרות ומקפים בלבד.",
+        "headerValueRequired": "כותרת צריכה גם שם וגם ערך.",
+        "headerNameRequired": "הזינו גם את שם הכותרת.",
+        "timeout": "הזינו מספר שלם בין 1 ל-30.",
+        "maxAttempts": "הזינו מספר שלם בין 1 ל-10."
+      }
+    },
+    "failures": {
+      "empty": "אין מסירות שנכשלו",
+      "emptyBody": "מסירות שנגמרו להן הניסיונות נשמרות כאן 14 ימים כדי שתוכלו לשלוח אותן שוב.",
+      "filterAll": "כל היעדים",
+      "filterLabel": "יעד",
+      "columns": {
+        "target": "יעד",
+        "when": "נכשל ב-",
+        "attempts": "ניסיונות",
+        "reason": "סיבה",
+        "size": "גודל",
+        "actions": "פעולה"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} בייטים",
+      "replay": "השמעה חוזרת",
+      "replaying": "משמיע מחדש",
+      "replayed": "הושמע מחדש ב-{time}",
+      "replayOk": "נמסר: סטטוס {status} תוך {ms, number} ms",
+      "replayFailed": "לא נמסר: {reason} ({ms, number} ms)",
+      "reasonStatus": "סטטוס {status}",
+      "reasonNone": "אין תשובה"
+    }
+  }
+}

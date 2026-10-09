@@ -1,0 +1,140 @@
+{
+  "webhook-fanout": {
+    "nav": {
+      "group": "ویب ہکس",
+      "forwarding": "ویب ہک فارورڈنگ"
+    },
+    "common": {
+      "loading": "لوڈ ہو رہا ہے",
+      "retry": "دوبارہ کوشش کریں",
+      "requestId": "ریکوئسٹ آئی ڈی",
+      "dash": "-",
+      "errors": {
+        "forbidden": "آپ کو یہ کرنے کی اجازت نہیں ہے۔",
+        "request": "یہ درخواست مکمل نہیں ہو سکی۔",
+        "unexpected": "ہماری طرف سے کچھ غلط ہو گیا۔ ابھی تھوڑی دیر بعد دوبارہ کوشش کریں۔",
+        "network": "سرور تک رسائی نہیں ہو سکی۔ اپنا کنکشن جانچیں اور دوبارہ کوشش کریں۔",
+        "conflict": "اس ہدف میں کسی اور نے تبدیلی کی ہے۔ فہرست دوبارہ لوڈ کر دی گئی ہے: اپنی تبدیلی دوبارہ لاگو کریں۔",
+        "validation": "کچھ قدریں درست نہیں ہیں۔ نشان زد فیلڈز چیک کریں۔",
+        "notFound": "یہ آئٹم اب موجود نہیں ہے۔",
+        "urlRejected": "یہ URL اجازت یافتہ نہیں ہے۔ انٹرنیٹ سے قابلِ رسائی https پتہ استعمال کریں۔"
+      }
+    },
+    "page": {
+      "eyebrow": "ایڈمن / سسٹم / ویب ہکس",
+      "title": "ویب ہک فارورڈنگ",
+      "description": "پلیٹ فارم آپریٹر کی فہرست ان سروسز کی جو ہر Meta ویب ہک کی ایک کاپی وصول کرتی ہیں۔",
+      "banner": "Meta ایک کال بیک URL کی اجازت دیتا ہے۔ ہم اسے ایک بار وصول کرتے ہیں، اس کی تصدیق کرتے ہیں، اور خام باڈی کو اصل دستخط کے ساتھ، بغیر تبدیلی کے، ہر فعال ہدف کو فارورڈ کرتے ہیں۔",
+      "superOnly": "صرف سپر ایڈمن ویب ہک فارورڈنگ کا انتظام کر سکتا ہے۔",
+      "add": "ہدف شامل کریں",
+      "tabs": {
+        "targets": "اہداف",
+        "failures": "ناکام ڈیلیوریز"
+      }
+    },
+    "targets": {
+      "empty": "ابھی تک کوئی فارورڈ ہدف نہیں",
+      "emptyBody": "Meta ویب ہکس کسی دوسری سروس کو فارورڈ کرنا شروع کرنے کے لیے ایک ہدف شامل کریں۔",
+      "columns": {
+        "target": "ہدف",
+        "active": "فعال",
+        "fields": "فیلڈز",
+        "deliveries": "ڈیلیوریز",
+        "last": "آخری ڈیلیوری",
+        "actions": "اعمال"
+      },
+      "allFields": "تمام فیلڈز",
+      "success": "{count, number} کامیاب",
+      "failure": "{count, number} ناکام",
+      "pending": "{count, number} زیرِ التوا",
+      "pendingLabel": "{count, number} ناکام ڈیلیوریز دوبارہ بھیجے جانے کے انتظار میں",
+      "neverDelivered": "ابھی تک کچھ ڈیلیور نہیں ہوا",
+      "lastStatus": "حیثیت {status}",
+      "lastError": "خرابی: {error}",
+      "lastAt": "{time} پر",
+      "activeSwitch": "{name} کو فارورڈ کریں",
+      "on": "ہدف آن",
+      "off": "ہدف آف",
+      "edit": "ترمیم کریں",
+      "test": "جانچ",
+      "testing": "جانچ ہو رہی ہے",
+      "testOk": "جانچ کامیاب: حیثیت {status}، {ms, number} ms میں",
+      "testFailed": "جانچ ناکام: {reason} ({ms, number} ms)",
+      "testNoStatus": "کوئی جواب نہیں",
+      "testStatus": "حیثیت {status}",
+      "delete": "حذف کریں",
+      "deleteTitle": "{name} حذف کریں؟",
+      "deleteBody": "ہدف ویب ہکس وصول کرنا بند کر دے گا اور اس کی رکھی گئی ناکام ڈیلیوریز حذف ہو جائیں گی۔ یہ واپس نہیں ہو سکتا۔",
+      "deleteConfirm": "ہدف حذف کریں",
+      "cancel": "منسوخ کریں",
+      "toasts": {
+        "created": "{name} شامل ہو گیا",
+        "saved": "{name} محفوظ ہو گیا",
+        "on": "{name} آن ہے",
+        "off": "{name} آف ہے",
+        "deleted": "{name} حذف ہو گیا"
+      }
+    },
+    "dialog": {
+      "createTitle": "فارورڈ ہدف شامل کریں",
+      "editTitle": "{name} میں ترمیم کریں",
+      "close": "بند کریں",
+      "name": "نام",
+      "namePlaceholder": "تجزیات کی سروس",
+      "url": "URL",
+      "urlHint": "صرف https۔ نجی نیٹ ورکس کے پتے مسترد کیے جاتے ہیں۔",
+      "headerName": "ہیڈر کا نام (اختیاری)",
+      "headerNameHint": "ہر ڈیلیوری کے ساتھ بھیجا جاتا ہے، جیسے Authorization۔",
+      "headerValue": "ہیڈر کی قدر",
+      "headerValueSaved": "محفوظ شدہ، ••••{last4} پر ختم ہوتا ہے۔ برقرار رکھنے کے لیے خالی چھوڑیں۔",
+      "headerValueSavedNoLast4": "محفوظ ہو گیا۔ برقرار رکھنے کے لیے خالی چھوڑیں۔",
+      "headerValueHint": "صرف لکھنے کے لیے: محفوظ کرنے کے بعد اسے دوبارہ نہیں دکھایا جاتا۔",
+      "removeHeader": "محفوظ شدہ ہیڈر ہٹائیں",
+      "fieldFilter": "فیلڈ فلٹر",
+      "fieldFilterHint": "ہر فیلڈ فارورڈ کرنے کے لیے خالی چھوڑیں۔ ایک فیلڈ لکھیں اور Enter دبائیں، جیسے messages یا message_template_status_update۔",
+      "fieldFilterPlaceholder": "فیلڈ شامل کریں",
+      "fieldRemove": "{field} ہٹائیں",
+      "timeout": "ٹائم آؤٹ (سیکنڈ)",
+      "timeoutHint": "1 تا 30",
+      "maxAttempts": "زیادہ سے زیادہ کوششیں",
+      "maxAttemptsHint": "1 تا 10",
+      "active": "اس ہدف کو فارورڈ کریں",
+      "save": "محفوظ کریں",
+      "saving": "محفوظ ہو رہا ہے",
+      "cancel": "منسوخ کریں",
+      "errors": {
+        "nameRequired": "نام درج کریں۔",
+        "urlRequired": "URL درج کریں۔",
+        "urlHttps": "URL کا آغاز https:// سے ہونا چاہیے۔",
+        "headerNameInvalid": "صرف حروف، ہندسے اور ڈیش استعمال کریں۔",
+        "headerValueRequired": "ہیڈر کے لیے نام اور قدر دونوں درکار ہیں۔",
+        "headerNameRequired": "ہیڈر کا نام بھی درج کریں۔",
+        "timeout": "1 سے 30 کے درمیان پورا عدد درج کریں۔",
+        "maxAttempts": "1 سے 10 کے درمیان پورا عدد درج کریں۔"
+      }
+    },
+    "failures": {
+      "empty": "کوئی ناکام ڈیلیوری نہیں",
+      "emptyBody": "وہ ڈیلیوریز جن کی کوششیں ختم ہو جاتی ہیں، 14 دن تک یہاں رکھی جاتی ہیں تاکہ آپ انہیں دوبارہ بھیج سکیں۔",
+      "filterAll": "تمام اہداف",
+      "filterLabel": "ہدف",
+      "columns": {
+        "target": "ہدف",
+        "when": "ناکامی کا وقت",
+        "attempts": "کوششیں",
+        "reason": "وجہ",
+        "size": "سائز",
+        "actions": "عمل"
+      },
+      "attempts": "{count, number}",
+      "bytes": "{count, number} بائٹس",
+      "replay": "دوبارہ چلائیں",
+      "replaying": "دوبارہ چلایا جا رہا ہے",
+      "replayed": "{time} پر دوبارہ چلایا گیا",
+      "replayOk": "ڈیلیور ہو گیا: حیثیت {status}، {ms, number} ms میں",
+      "replayFailed": "ڈیلیور نہیں ہوا: {reason} ({ms, number} ms)",
+      "reasonStatus": "حیثیت {status}",
+      "reasonNone": "کوئی جواب نہیں"
+    }
+  }
+}

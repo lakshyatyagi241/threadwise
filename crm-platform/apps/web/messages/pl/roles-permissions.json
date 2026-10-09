@@ -1,0 +1,306 @@
+{
+  "roles-permissions": {
+    "nav": {
+      "group": "Role i uprawnienia",
+      "roles": "Role",
+      "permissions": "Uprawnienia",
+      "staff": "Role personelu"
+    },
+    "common": {
+      "admin": "Administrator",
+      "breadcrumb": "Ścieżka nawigacji",
+      "loading": "Ładowanie…",
+      "retry": "Spróbuj ponownie",
+      "requestId": "Identyfikator żądania",
+      "cancel": "Anuluj",
+      "noAccess": {
+        "title": "Nie masz dostępu do tego ekranu",
+        "body": "Twoje role nie obejmują uprawnienia platformy potrzebnego do tego ekranu. Poproś super administratora o jego nadanie.",
+        "bodyWithKey": "Ten ekran wymaga uprawnienia platformy {permission}. Poproś super administratora o dodanie go do jednej z Twoich ról.",
+        "back": "Wróć do konsoli"
+      },
+      "errors": {
+        "unexpected": "Po naszej stronie wystąpił błąd. Spróbuj ponownie; jeśli problem się powtarza, podaj identyfikator żądania.",
+        "request": "Nie udało się zrealizować żądania.",
+        "validation": "Sprawdź formularz i spróbuj ponownie.",
+        "validationField": "{message}",
+        "conflict": "Ktoś inny zmienił tę rolę podczas edycji. Odśwież stronę, aby zobaczyć jego wersję, a następnie ponownie zastosuj swoje zmiany.",
+        "noAccess": "Do tej czynności potrzebujesz uprawnienia platformy {permission}.",
+        "nameTaken": "Ta nazwa jest już zajęta.",
+        "nameRequired": "Nazwa roli jest wymagana.",
+        "permissionNameRequired": "Nazwa uprawnienia jest wymagana.",
+        "permissionNameFormat": "Używaj małych liter, cyfr i podkreśleń, a części oddzielaj kropkami.",
+        "locked": "Super administrator jest zablokowany systemowo: nie można go zmienić, odebrać mu uprawnień ani usunąć.",
+        "lockedDelete": "Rola super administratora jest zablokowana systemowo i nie można jej usunąć.",
+        "permissionSystem": "To uprawnienie jest sprawdzane przez platformę i nie można go usunąć.",
+        "permissionUnknown": "Tych uprawnień nie ma w katalogu: {names}.",
+        "reassignSame": "Wybierz inną rolę, do której przeniesiesz użytkowników.",
+        "lastSuperAdmin": "Musi istnieć co najmniej jeden aktywny super administrator.",
+        "privilegedRole": "Tylko super administrator może nadawać lub odbierać rolę super administratora.",
+        "notFound": "Ten element już nie istnieje. Mógł zostać usunięty."
+      }
+    },
+    "list": {
+      "crumb": "Role",
+      "eyebrow": "Administrator · Użytkownicy i dostęp · Role",
+      "titleLead": "Role i",
+      "titleAccent": "uprawnienia",
+      "description": "Określ, co może robić każda rola na platformie. Każdy użytkownik ma jedną rolę; uprawnienia są przypisywane do ról.",
+      "managePermissions": "Zarządzaj uprawnieniami",
+      "addRole": "Dodaj rolę",
+      "kpi": {
+        "label": "Podsumowanie ról",
+        "total": "Łącznie ról",
+        "totalHint": "{system} systemowych · {custom} własnych",
+        "permissions": "Łącznie uprawnień",
+        "permissionsHint": "w modułach",
+        "users": "Użytkownicy z rolą",
+        "usersHint": "we wszystkich rolach",
+        "noUsers": "Role bez użytkowników",
+        "noUsersHint": "rozważ archiwizację"
+      },
+      "filter": {
+        "label": "Filtruj role według typu",
+        "all": "Wszystkie",
+        "system": "Systemowe",
+        "custom": "Własne",
+        "search": "Szukaj ról…",
+        "searchLabel": "Szukaj ról"
+      },
+      "table": {
+        "caption": "Role platformy",
+        "index": "#",
+        "name": "Nazwa roli",
+        "type": "Typ",
+        "users": "Użytkownicy",
+        "permissions": "Uprawnienia",
+        "lastEdited": "Ostatnia zmiana",
+        "actions": "Działania"
+      },
+      "systemRole": "Rola systemowa",
+      "customRole": "Rola własna",
+      "systemBadge": "Systemowa",
+      "customBadge": "Własna",
+      "row": {
+        "menu": "Działania dla: {name}",
+        "edit": "Edytuj rolę",
+        "delete": "Usuń"
+      },
+      "footer": {
+        "showing": "Pokazano {shown} z {total} ról",
+        "add": "+ Dodaj rolę"
+      },
+      "empty": {
+        "none": "Nie zdefiniowano jeszcze ról. <link>Utwórz pierwszą rolę</link>.",
+        "noMatch": "Żadna rola nie pasuje do filtrów.",
+        "clear": "Wyczyść filtry"
+      },
+      "delete": {
+        "title": "Usuń rolę",
+        "message": "Usunąć rolę {name}? Użytkownicy z tą rolą stracą wszystkie jej uprawnienia. Tej operacji nie można cofnąć.",
+        "confirm": "Tak, usuń",
+        "cancel": "Anuluj"
+      },
+      "toasts": {
+        "deleted": "Usunięto rolę „{name}”."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Role",
+      "crumbNew": "Nowa",
+      "eyebrowNew": "Administrator · Role · Nowa",
+      "eyebrowEdit": "Administrator · Edycja roli",
+      "titleLead": "Utwórz nową",
+      "titleAccent": "rolę",
+      "description": "Wybierz nazwę, a następnie zaznacz pola, aby przyznać tej roli dostęp do wybranych modułów. Możesz to zmienić w dowolnym momencie.",
+      "summary": "{count} z {total} uprawnień · ostatnia zmiana: {date}.",
+      "userChip": "{count, plural, one {# użytkownik} few {# użytkownicy} many {# użytkowników} other {# użytkownika}}",
+      "save": "Zapisz zmiany",
+      "create": "Utwórz rolę",
+      "saving": "Zapisywanie…",
+      "reload": "Przeładuj rolę",
+      "discard": "Masz niezapisane zmiany. Wyjść bez zapisywania?",
+      "duplicatedBanner": "Zduplikowano rolę jako „{name}”. Edytuj kopię poniżej.",
+      "lockedNotice": "{name} jest zablokowana systemowo: nie można jej zmienić, odebrać uprawnień ani usunąć.",
+      "details": "Szczegóły roli",
+      "name": "Nazwa roli",
+      "namePlaceholder": "np. Kierownik sprzedaży",
+      "template": "Zacznij od szablonu",
+      "templateBlank": "Pusta · bez uprawnień",
+      "templateOption": "{name} · {count, plural, one {# uprawnienie} few {# uprawnienia} many {# uprawnień} other {# uprawnienia}}",
+      "templateBusy": "Ładowanie szablonu…",
+      "descriptionLabel": "Opis",
+      "descriptionPlaceholder": "Do czego służy ta rola? Widoczne dla administratorów.",
+      "toasts": {
+        "created": "Utworzono rolę „{name}”.",
+        "updated": "Zaktualizowano rolę „{name}”."
+      }
+    },
+    "matrix": {
+      "title": "Przypisz uprawnienia",
+      "counter": "zaznaczono: {count, number} z {total, number}",
+      "selectAll": "Zaznacz wszystkie uprawnienia",
+      "module": "Moduł",
+      "selectAllColumn": "Zaznacz wszystko",
+      "available": "Dostępne uprawnienia",
+      "selectAllModule": "Zaznacz wszystko",
+      "selectAllOf": "Zaznacz wszystkie uprawnienia: {module}",
+      "empty": "Nie zdefiniowano jeszcze uprawnień. <link>Utwórz pierwsze</link>.",
+      "emptyPlain": "Nie zdefiniowano jeszcze uprawnień."
+    },
+    "dangerZone": {
+      "title": "Strefa niebezpieczna",
+      "irreversible": "nieodwracalne",
+      "duplicate": {
+        "title": "Duplikuj rolę",
+        "hint": "Utwórz kopię z tymi samymi uprawnieniami",
+        "action": "Duplikuj",
+        "busy": "Duplikowanie…"
+      },
+      "reassign": {
+        "title": "Przypisz wszystkich użytkowników ponownie",
+        "hint": "Przenieś {count, plural, one {# użytkownika} few {# użytkowników} many {# użytkowników} other {# użytkownika}} do innej roli",
+        "targetLabel": "Przenieś użytkowników do",
+        "placeholder": "Do…",
+        "action": "Przenieś",
+        "busy": "Przenoszenie…"
+      },
+      "moved": "Przeniesiono użytkowników ({count}) z „{from}” do „{to}”.",
+      "delete": {
+        "title": "Usuń rolę",
+        "hint": "Usuwa rolę i odłącza od niej wszystkich użytkowników.",
+        "action": "Usuń",
+        "dialogTitle": "Usuń rolę",
+        "dialogMessage": "Usunąć rolę {name}? Użytkownicy z tą rolą stracą wszystkie jej uprawnienia. Tej operacji nie można cofnąć.",
+        "confirm": "Tak, usuń",
+        "cancel": "Anuluj"
+      },
+      "deleted": "Usunięto rolę „{name}”."
+    },
+    "permissions": {
+      "crumb": "Uprawnienia",
+      "eyebrow": "Administrator · Użytkownicy i dostęp · Uprawnienia",
+      "titleLead": "Wszystkie",
+      "titleAccent": "uprawnienia",
+      "description": "Wszystkie flagi uprawnień rozpoznawane przez platformę, pogrupowane według modułów. Dodaj nową flagę tutaj, a następnie przypisz ją do ról w edytorze ról.",
+      "backToRoles": "Wróć do ról",
+      "add": "Dodaj uprawnienie",
+      "kpi": {
+        "label": "Podsumowanie uprawnień",
+        "total": "Łącznie uprawnień",
+        "totalHint": "w {modules, plural, one {# module} few {# modułach} many {# modułach} other {# module}}",
+        "used": "Używane w rolach",
+        "usedHint": "przypisane do co najmniej 1 roli",
+        "orphans": "Uprawnienia osierocone",
+        "orphansHint": "nieprzypisane do żadnej roli",
+        "last": "Ostatnio dodane"
+      },
+      "filter": {
+        "search": "Szukaj nazwy uprawnienia…",
+        "searchLabel": "Szukaj nazwy uprawnienia",
+        "moduleLabel": "Moduł",
+        "allModules": "Wszystkie moduły",
+        "count": "{count, plural, one {# uprawnienie} few {# uprawnienia} many {# uprawnień} other {# uprawnienia}} w {modules, plural, one {# module} few {# modułach} many {# modułach} other {# module}}"
+      },
+      "groupsLabel": "Uprawnienia według modułów",
+      "groupCount": "{count, plural, one {# uprawnienie} few {# uprawnienia} many {# uprawnień} other {# uprawnienia}}",
+      "orphan": "osierocone",
+      "system": "systemowe",
+      "systemHint": "Sprawdzane przez platformę, dlatego nie można go usunąć.",
+      "inRoles": "w {count, plural, one {# roli} few {# rolach} many {# rolach} other {# roli}}",
+      "deleteName": "Usuń uprawnienie {name}",
+      "empty": {
+        "none": "Nie zdefiniowano jeszcze uprawnień. <link>Utwórz pierwsze</link>.",
+        "noMatch": "Żadne uprawnienie nie pasuje do wyszukiwania."
+      },
+      "delete": {
+        "action": "Usuń",
+        "title": "Usuń uprawnienie",
+        "message": "Usunąć uprawnienie {name}? Każda rola, która z niego korzysta, natychmiast traci tę możliwość.",
+        "confirm": "Tak, usuń",
+        "cancel": "Anuluj"
+      },
+      "toasts": {
+        "deleted": "Usunięto uprawnienie „{name}”."
+      }
+    },
+    "permissionNew": {
+      "crumbPermissions": "Uprawnienia",
+      "crumbNew": "Nowe",
+      "eyebrow": "Administrator · Uprawnienia · Nowe",
+      "titleLead": "Utwórz nowe",
+      "titleAccent": "uprawnienie",
+      "description": "Dodaj szczegółową flagę uprawnienia. Po utworzeniu przypisz ją do jednej lub większej liczby ról w edytorze ról.",
+      "create": "Utwórz uprawnienie",
+      "creating": "Tworzenie…",
+      "details": "Szczegóły uprawnienia",
+      "module": "Moduł",
+      "modulePlaceholder": "Wybierz moduł",
+      "moduleHint": "Uprawnienia są grupowane według modułu w edytorze ról.",
+      "action": "Akcja",
+      "actionHint": "Małe litery, bez spacji. Zostanie złączone jako",
+      "actionPlaceholder": "np. eksport · zwrot · zatwierdzenie",
+      "name": "Nazwa uprawnienia",
+      "namePlaceholder": "module.action — uzupełniane automatycznie z powyższych pól",
+      "nameHint": "Uzupełniane z modułu i akcji. Edytuj tylko, jeśli potrzebujesz własnego ciągu znaków.",
+      "tip": "<b>Konwencja nazewnictwa:</b> używaj formatu <code>module.action</code> małymi literami. Przykłady: <code>campaigns.send</code>, <code>billing.refund</code>, <code>audit.export</code>.",
+      "preview": {
+        "title": "Podgląd uprawnienia",
+        "appearsUnder": "Pojawi się w edytorze ról w grupie <b>{module}</b>.",
+        "selectedModule": "wybrany moduł"
+      },
+      "code": {
+        "title": "Odwołanie w kodzie",
+        "hint": "Użyj <code>@PlatformPermission()</code> na trasie platformy, aby wymagać tego uprawnienia."
+      },
+      "tipCard": "<b>Wskazówka:</b> uprawnienia nazwane jak <code>module.action</code> automatycznie grupują się w edytorze ról.",
+      "toasts": {
+        "created": "Utworzono uprawnienie „{name}”."
+      }
+    },
+    "staff": {
+      "crumbRoles": "Role",
+      "crumb": "Role personelu",
+      "eyebrow": "Administrator · Użytkownicy i dostęp · Role personelu",
+      "titleLead": "Personel",
+      "titleAccent": "ról",
+      "description": "Przydziel każdemu operatorowi konsoli role platformy, które określają, co może robić. Zapisanie zastąpi role operatora dokładnie zaznaczonymi.",
+      "backToRoles": "Wróć do ról",
+      "caption": "Operatorzy i ich role platformy",
+      "table": {
+        "operator": "Operator",
+        "tier": "Dostęp do konsoli",
+        "status": "Status",
+        "roles": "Role platformy",
+        "actions": "Działania"
+      },
+      "tier": {
+        "super_admin": "Super administrator",
+        "support": "Wsparcie",
+        "auditor": "Audytor"
+      },
+      "status": {
+        "active": "Aktywny",
+        "suspended": "Zawieszony"
+      },
+      "noRoles": "Brak ról",
+      "rolesOf": "Role: {name}",
+      "assign": "Przypisz role",
+      "assignFor": "Przypisz role: {name}",
+      "empty": "Brak operatorów.",
+      "dialog": {
+        "title": "Przypisz role: {name}",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "save": "Zapisz role",
+        "saving": "Zapisywanie…",
+        "hint": "Zaznacz wszystkie role, które ma mieć ten operator.",
+        "superOnly": "Tylko super administrator może nadawać lub odbierać tę rolę.",
+        "count": "{count, plural, =0 {Nie wybrano ról} one {Wybrano # rolę} few {Wybrano # role} many {Wybrano # ról} other {Wybrano # roli}}"
+      },
+      "toasts": {
+        "saved": "Zaktualizowano role dla „{name}”."
+      }
+    }
+  }
+}

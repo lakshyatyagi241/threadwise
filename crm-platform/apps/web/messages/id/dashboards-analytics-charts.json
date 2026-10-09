@@ -1,0 +1,719 @@
+{
+  "dashboards-analytics-charts": {
+    "nav": {
+      "title": "Dasbor",
+      "analytics": "Analitik"
+    },
+    "home": {
+      "title": "Dasbor",
+      "welcome": "Selamat datang di workspace Anda."
+    },
+    "chart": {
+      "empty": "Belum ada data pada rentang ini.",
+      "bucket": "Periode",
+      "cell": "{day} {hour}:00 · {count, plural, other {# pesan}}"
+    },
+    "range": {
+      "label": "Rentang tanggal",
+      "short": {
+        "24h": "24j",
+        "7d": "7h",
+        "30d": "30h",
+        "90d": "90h",
+        "qtd": "QTD",
+        "custom": "Kustom"
+      },
+      "long": {
+        "24h": "24 jam terakhir",
+        "7d": "7 hari terakhir",
+        "30d": "30 hari terakhir",
+        "qtd": "Kuartal berjalan",
+        "custom": "Rentang kustom"
+      },
+      "from": "Dari tanggal",
+      "to": "Sampai tanggal",
+      "apply": "Terapkan"
+    },
+    "funnel": {
+      "listLabel": "Corong kontak",
+      "stageLabel": "{stage}: {n} kontak, {pct}% dari kontak yang dikirimi pesan",
+      "stage": {
+        "messaged": "Kontak yang dikirimi pesan",
+        "delivered": "Terkirim",
+        "replied": "Dibalas",
+        "goalCompleted": "Tujuan tercapai"
+      },
+      "goalCompletedHint": "Kontak yang flow-nya selesai",
+      "activity": {
+        "title": "Aktivitas percakapan",
+        "summary": "{inbound, plural, other {# pesan masuk}} · {contacts, plural, other {# kontak yang membalas}} · {perContact} balasan/kontak yang membalas"
+      },
+      "comparison": {
+        "title": "Dibandingkan periode sebelumnya",
+        "replyRate": "Tingkat balasan"
+      }
+    },
+    "error": {
+      "locked": "Paket Anda tidak menyertakan analitik.",
+      "upgrade": "Lihat paket",
+      "forbidden": "Anda tidak memiliki akses ke halaman ini.",
+      "generic": "Angka tidak dapat dimuat. Coba lagi sebentar lagi."
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "Selamat pagi, {name}.",
+        "afternoon": "Selamat siang, {name}.",
+        "evening": "Selamat malam, {name}."
+      },
+      "subline": "{date} - {range} menampilkan {sent} keluar, deliverabilitas {rate}% di {devices, plural, other {# perangkat terhubung}}.",
+      "kpis": "Angka utama",
+      "kpi": {
+        "sent": "Pesan terkirim · {range}",
+        "sentLegend": "{delivered} terkirim · {failed} gagal",
+        "readRate": "Tingkat dibaca",
+        "deliverability": "Deliverabilitas",
+        "deliveredOf": "{delivered} dari {sent} pesan",
+        "replies": "Balasan",
+        "replyRate": "Tingkat balasan {rate}%",
+        "readMini": {
+          "sent": "Dikirim",
+          "delivered": "Terkirim",
+          "read": "Dibaca"
+        }
+      },
+      "throughput": {
+        "title": "Throughput pesan",
+        "subtitle": {
+          "24h": "Keluar, terkirim, dan gagal, per jam, 24 jam terakhir",
+          "7d": "Keluar, terkirim, dan gagal, per hari, 7 hari terakhir",
+          "30d": "Keluar, terkirim, dan gagal, per hari, 30 hari terakhir",
+          "qtd": "Keluar, terkirim, dan gagal, per hari, kuartal berjalan",
+          "custom": "Keluar, terkirim, dan gagal, per hari, rentang kustom"
+        },
+        "peak": "Jam puncak {when} · {n} pesan",
+        "sent": "Dikirim",
+        "delivered": "Terkirim",
+        "failed": "Gagal",
+        "avgHour": "Rata-rata per jam",
+        "replies": "Balasan",
+        "replyRate": "Tingkat balasan"
+      },
+      "sparkline": {
+        "title": "20 jam terakhir",
+        "subtitle": "Pesan terkirim per jam, terlama dulu",
+        "inCard": "20 jam terakhir"
+      },
+      "funnel": {
+        "title": "Corong keterlibatan",
+        "viewAll": "Lihat analitik"
+      },
+      "kicker": "Dasbor operator",
+      "calm": "Workspace tenang.",
+      "running": "{n, plural, other {# broadcast sedang berjalan.}}",
+      "export": "Ekspor",
+      "newCampaign": "Kampanye baru",
+      "contacts": {
+        "title": "Kontak aktif",
+        "subscribed": "Berlangganan",
+        "optedIn": "Opt-in",
+        "blocked": "Diblokir"
+      },
+      "wallet": {
+        "title": "Saldo dompet",
+        "payPerMessage": "bayar per pesan",
+        "topUp": "Isi saldo",
+        "earn": "Hasilkan lewat afiliasi"
+      },
+      "autopilot": {
+        "kicker": "Selesaikan lebih banyak",
+        "title": "Otomatiskan balasan",
+        "body": "Buat flow atau luncurkan kampanye untuk menjangkau lebih banyak pelanggan secara otomatis.",
+        "flow": "Buat flow",
+        "campaign": "Kampanye baru"
+      },
+      "pipeline": {
+        "kicker": "Pipeline penjualan",
+        "open": "Pipeline terbuka",
+        "deals": "Deal terbuka",
+        "won": "Menang bulan ini",
+        "winRate": "Tingkat kemenangan",
+        "board": "Buka papan"
+      },
+      "inbox": {
+        "title": "Kotak masuk langsung",
+        "unread": "{n} belum dibaca",
+        "oldest": "terlama {when}",
+        "open": "Buka kotak masuk",
+        "recent": "Percakapan terbaru",
+        "empty": "Belum ada percakapan."
+      },
+      "campaigns": {
+        "title": "Kampanye aktif",
+        "summary": "{running} berjalan - {scheduled} terjadwal - {paused} dijeda",
+        "viewAll": "Lihat semua {n}",
+        "untitled": "Broadcast tanpa judul",
+        "delivered": "{done} / {total} terkirim",
+        "emptyTitle": "Tidak ada broadcast aktif",
+        "emptyBody": "Buat satu untuk mulai mengirim ke grup kontak.",
+        "new": "Broadcast baru",
+        "status": {
+          "processing": "Mengirim",
+          "sending": "Mengirim",
+          "running": "Mengirim",
+          "active": "Mengirim",
+          "scheduled": "Terjadwal",
+          "pending": "Terjadwal",
+          "queued": "Terjadwal",
+          "paused": "Dijeda",
+          "cancelled": "Dijeda",
+          "failed": "Gagal",
+          "completed": "Selesai",
+          "completed_with_errors": "Selesai",
+          "done": "Selesai",
+          "sent": "Selesai"
+        }
+      },
+      "devices": {
+        "title": "Perangkat terhubung",
+        "summary": "{total} dari {cap} slot terpakai - {online} online",
+        "connect": "Hubungkan",
+        "emptyTitle": "Tidak ada perangkat terhubung",
+        "emptyBody": "Pasangkan nomor WhatsApp untuk mulai mengirim.",
+        "connectDevice": "Hubungkan perangkat",
+        "unzoned": "tanpa zona",
+        "per24h": "{n}/24j",
+        "deliv": "terkirim",
+        "free": "{n, plural, other {# slot perangkat tersedia}}"
+      },
+      "templates": {
+        "title": "Template berkinerja terbaik",
+        "subtitle": "Menurut volume kirim - rentang yang dipilih",
+        "count": "{n, plural, other {# template}}",
+        "new": "Template baru",
+        "empty": "Belum ada template.",
+        "create": "Buat yang pertama",
+        "col": {
+          "template": "Template",
+          "type": "Tipe",
+          "sent": "Dikirim",
+          "delivered": "Terkirim",
+          "read": "Dibaca",
+          "readRate": "Tingkat dibaca",
+          "performance": "Tingkat pengiriman",
+          "status": "Status"
+        },
+        "status": {
+          "approved": "Disetujui",
+          "public": "Disetujui",
+          "active": "Disetujui",
+          "pending": "Dalam peninjauan",
+          "submitted": "Dalam peninjauan",
+          "in_review": "Dalam peninjauan",
+          "rejected": "Ditolak",
+          "disabled": "Ditolak"
+        }
+      },
+      "activity": {
+        "title": "Log aktivitas",
+        "subtitle": "Peristiwa workspace",
+        "empty": "Tidak ada aktivitas terbaru yang dicatat untuk workspace ini.",
+        "by": "{actor} - {module} {action}"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "accounts": "{count, plural, other {# akun}}",
+        "connected": "Terhubung",
+        "openInbox": "Buka kotak masuk →",
+        "tile": {
+          "needReply": "Perlu dibalas",
+          "openChats": "Buka chat",
+          "dmsIn": "DM masuk · 7h",
+          "dmsOut": "DM terkirim · 7h",
+          "followers": "Pengikut",
+          "replyRate": "Tingkat balasan"
+        }
+      },
+      "copilot": {
+        "title": "{brand} Copilot",
+        "tag": "Didukung AI",
+        "headline": "Buat flow dari satu kalimat.",
+        "body": "Jelaskan perjalanan pelanggan dan Copilot menyusun node, cabang, dan saran template.",
+        "try": "coba:",
+        "generate": "Buat flow ✦",
+        "examples": "Contoh",
+        "stat": {
+          "flows": "flow",
+          "active": "aktif",
+          "subscribers": "pelanggan"
+        }
+      },
+      "flows": {
+        "title": "Flow otomasi",
+        "summary": "{active} aktif · {subscribers} pelanggan",
+        "open": "Buka",
+        "empty": "Belum ada flow.",
+        "build": "Buat flow pertama Anda",
+        "meta": "Pemicu {trigger} · {steps} langkah · {subs} pelanggan",
+        "statusActive": "Aktif",
+        "statusPaused": "Dijeda",
+        "subs": "pelanggan"
+      },
+      "quickActions": {
+        "title": "Aksi cepat",
+        "soon": "Segera",
+        "broadcast": {
+          "label": "Broadcast baru",
+          "hint": "ke grup kontak"
+        },
+        "flow": {
+          "label": "Buat flow",
+          "hint": "seret & lepas"
+        },
+        "template": {
+          "label": "Template baru",
+          "hint": "kirim ke Meta"
+        },
+        "autoReply": {
+          "label": "Balasan otomatis",
+          "hint": "aturan kata kunci"
+        }
+      },
+      "integrations": {
+        "title": "Integrasi",
+        "name": {
+          "woocommerce": "WooCommerce",
+          "shopify": "Shopify",
+          "google_sheets": "Google Sheets",
+          "meta_catalog": "Meta Catalog"
+        },
+        "events": "{n} peristiwa / 7h",
+        "connected": {
+          "woocommerce": "Terhubung",
+          "shopify": "Terhubung",
+          "google_sheets": "Kunci API diterbitkan",
+          "meta_catalog": "Katalog ditautkan"
+        },
+        "notConnected": "belum terhubung",
+        "connect": "Hubungkan",
+        "connectedLabel": "Terhubung"
+      },
+      "sublineOfficial": "{date} - {range} menampilkan {sent} keluar, deliverabilitas {rate}%."
+    },
+    "analytics": {
+      "title": "Analitik",
+      "headline": "{rate}% pesan sampai ke pembacanya antara {from} dan {to}.",
+      "subline": "{sent, plural, other {# pesan}} terkirim, tingkat balasan {replyRate}%.",
+      "noSends": "Belum ada pesan keluar pada rentang ini.",
+      "export": "Ekspor CSV",
+      "from": "Dari",
+      "to": "Sampai",
+      "apply": "Terapkan",
+      "kpis": "Angka utama",
+      "kpi": {
+        "sent": "Dikirim",
+        "delivered": "Terkirim",
+        "queued": "Dalam antrean",
+        "failed": "Gagal",
+        "replyRate": "Tingkat balasan"
+      },
+      "series": {
+        "sent": "Dikirim",
+        "delivered": "Terkirim",
+        "failed": "Gagal",
+        "queued": "Dalam antrean"
+      },
+      "empty": "Tidak ada yang ditampilkan pada rentang ini.",
+      "volume": {
+        "title": "Pesan dari waktu ke waktu",
+        "subtitle": "Dikirim, terkirim, dan gagal per hari"
+      },
+      "rates": {
+        "title": "Tingkat pengiriman",
+        "subtitle": "Porsi terkirim, dalam antrean, dan gagal"
+      },
+      "totals": {
+        "title": "Total harian",
+        "subtitle": "Terkirim, dalam antrean, dan gagal per hari, bertumpuk"
+      },
+      "funnel": {
+        "title": "Corong keterlibatan"
+      },
+      "types": {
+        "title": "Tipe pesan",
+        "subtitle": "Distribusi keluar",
+        "byType": "Dikirim dan terkirim menurut tipe pesan",
+        "kind": "Tipe",
+        "sent": "Dikirim",
+        "delivered": "Terkirim",
+        "text": "Teks",
+        "template": "Template",
+        "media": "Media",
+        "interactive": "Interaktif",
+        "location": "Lokasi"
+      },
+      "heatmap": {
+        "title": "Jam terbaik",
+        "subtitle": "Volume pesan menurut hari dan jam, {zone}. Lebih gelap berarti lebih ramai.",
+        "empty": "Tidak ada volume pesan pada rentang ini.",
+        "footer": "Dihitung dari {total} pesan, zona waktu {tz}"
+      },
+      "panels": {
+        "devices": {
+          "title": "Menurut perangkat",
+          "subtitle": "Pengiriman dalam 24 jam terakhir",
+          "online": "{online}/{total} online",
+          "empty": "Belum ada perangkat terhubung.",
+          "msg": "{n} pesan"
+        },
+        "templates": {
+          "title": "Template",
+          "subtitle": "Berkinerja terbaik menurut pengiriman",
+          "empty": "Tidak ada pengiriman template pada rentang ini."
+        },
+        "contacts": {
+          "title": "Kontak teratas",
+          "subtitle": "Percakapan paling aktif",
+          "empty": "Tidak ada percakapan pada rentang ini.",
+          "msgs": "{n} pesan"
+        },
+        "team": {
+          "title": "Kinerja tim",
+          "subtitle": "Agen pada rentang ini",
+          "count": "{n, plural, other {# agen}}",
+          "col": {
+            "agent": "Agen",
+            "convos": "Percakapan",
+            "resolved": "Selesai",
+            "first": "Rata-rata respons pertama",
+            "resolution": "Rata-rata penyelesaian",
+            "csat": "CSAT"
+          }
+        },
+        "geo": {
+          "title": "Menurut negara",
+          "subtitle": "Jangkauan",
+          "markets": "{n, plural, other {# pasar}}",
+          "unspecified": "Tidak ditentukan",
+          "empty": "Tidak ada percakapan dengan negara yang diketahui pada rentang ini."
+        },
+        "events": {
+          "title": "Aliran peristiwa",
+          "subtitle": "Pesan terbaru pada rentang ini",
+          "sent": "Dikirim → {peer}",
+          "received": "Diterima dari {peer}",
+          "empty": "Tidak ada aktivitas terbaru pada rentang ini."
+        }
+      }
+    },
+    "health": {
+      "nav": "Kesehatan sistem",
+      "group": "Sistem",
+      "title": "Kesehatan sistem",
+      "kicker": "Platform",
+      "description": "Pemeriksaan langsung layanan yang dijalankan platform.",
+      "banner": {
+        "up": "Semua sistem - Beroperasi",
+        "warn": "Semua sistem - Menurun",
+        "down": "Semua sistem - Mati",
+        "checked": "Terakhir diperiksa {time} · diperbarui otomatis setiap 20 dtk",
+        "refresh": "Segarkan sekarang",
+        "refreshing": "Memeriksa..."
+      },
+      "core": "Layanan inti",
+      "activity": {
+        "messages": "Pesan · 24j",
+        "aiCalls": "Panggilan AI · 24j",
+        "conversations": "Percakapan · 24j",
+        "webhooks": "Webhook · 24j"
+      },
+      "throughput": {
+        "title": "Throughput pesan · 14 hari",
+        "peak": "puncak {n}/hari",
+        "empty": "Tidak ada aktivitas pesan dalam 14 hari terakhir.",
+        "aria": "Pesan per hari, 14 hari terakhir"
+      },
+      "state": {
+        "up": "Beroperasi",
+        "warn": "Menurun",
+        "down": "Mati",
+        "idle": "Menganggur"
+      },
+      "check": {
+        "database": "Database",
+        "cache": "Cache",
+        "queue": "Antrean",
+        "bridge": "Node bridge",
+        "storage": "Penyimpanan media"
+      },
+      "latency": {
+        "title": "Waktu respons",
+        "empty": "Tidak ada data waktu.",
+        "ms": "{ms} md"
+      },
+      "queues": {
+        "title": "Antrean",
+        "name": "Antrean",
+        "pending": "Tertunda",
+        "failed": "Gagal"
+      },
+      "clear": {
+        "button": "Hapus job tertunda",
+        "busy": "Menghapus...",
+        "confirmTitle": "Hapus job tertunda dan gagal?",
+        "confirmBody": "Job yang menunggu dan tertunda dihapus, dan job yang gagal dihapus dari setiap antrean. Job yang sedang berjalan tidak disentuh.",
+        "confirm": "Hapus job",
+        "cancel": "Batal",
+        "done": "{pending} job tertunda dan {failed} job gagal dihapus.",
+        "failed": "Gagal: {message}",
+        "superOnly": "Hanya super admin yang dapat menghapus job."
+      },
+      "vitals": {
+        "title": "Vital host",
+        "node": "Node",
+        "app": "Versi aplikasi",
+        "environment": "Lingkungan",
+        "uptime": "Waktu aktif",
+        "memory": "Memori (RSS)",
+        "heap": "Heap terpakai",
+        "diskFree": "Disk kosong",
+        "diskFreeValue": "{gb} GB",
+        "diskUsed": "Disk terpakai {pct}%",
+        "noDisk": "Tidak tersedia"
+      },
+      "error": "Pemeriksaan kesehatan tidak dapat dimuat. Coba lagi sebentar lagi.",
+      "engines": {
+        "title": "Mesin WhatsApp & nomor terhubung",
+        "empty": "Belum ada mesin yang dikonfigurasi.",
+        "caption": "nomor terhubung dari total"
+      }
+    },
+    "admin": {
+      "nav": {
+        "analytics": "Analitik"
+      },
+      "window": {
+        "label": "Rentang waktu",
+        "24h": "24 jam terakhir",
+        "7d": "7 hari terakhir",
+        "30d": "30 hari terakhir",
+        "90d": "90 hari terakhir",
+        "1y": "Tahun lalu"
+      },
+      "error": "Angka platform tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "vsPrevious": "dibanding periode sebelumnya",
+      "overview": {
+        "title": "Dasbor admin.",
+        "kicker": "Admin / Ringkasan",
+        "subtitle": "Kesehatan platform, pendapatan, penggunaan, dan aktivitas workspace di satu tempat.",
+        "addWorkspace": "Tambah workspace",
+        "kpi": {
+          "income": "Total pendapatan",
+          "profit": "Laba",
+          "profitHint": "Perkiraan dengan margin 32%, bukan angka akuntansi",
+          "views": "Total tayangan",
+          "viewsHint": "Pesan yang dikirim oleh setiap workspace",
+          "conversion": "Tingkat konversi"
+        },
+        "revenue": {
+          "title": "Pendapatan dari waktu ke waktu",
+          "total": "Total pendapatan",
+          "target": "Total target",
+          "targetHint": "Target adalah tolok ukur pertumbuhan 10% di atas periode sebelumnya, bukan sasaran yang tersimpan.",
+          "revenue": "Pendapatan",
+          "aria": "Pendapatan per periode terhadap target"
+        },
+        "countries": {
+          "title": "Sesi menurut negara",
+          "subtitle": "Sesi teratas menurut wilayah",
+          "empty": "Belum ada data negara - pengguna belum membagikan wilayahnya."
+        },
+        "regions": {
+          "title": "Penjualan menurut wilayah",
+          "subtitle": "Porsi pendapatan platform",
+          "aria": "Pengguna baru per wilayah"
+        },
+        "platform": {
+          "title": "Penjualan menurut platform",
+          "subtitle": "Integrasi e-commerce",
+          "empty": "Tidak ada pesanan berbayar pada rentang ini.",
+          "aria": "Pendapatan berbayar menurut gateway pembayaran"
+        },
+        "users": {
+          "title": "Pengguna terdaftar",
+          "subtitle": "Ringkasan kursi pengguna",
+          "total": "Total pengguna",
+          "premium": "Paket premium",
+          "basic": "Paket dasar",
+          "aria": "{pct}% pengguna memakai paket berbayar"
+        },
+        "workspaces": {
+          "title": "Aktivitas workspace",
+          "subtitle": "Peristiwa admin bernilai tinggi terbaru",
+          "viewAll": "Lihat semua",
+          "empty": "Belum ada workspace.",
+          "col": {
+            "workspace": "Workspace",
+            "owner": "Pemilik",
+            "plan": "Paket",
+            "messages": "Pesan",
+            "health": "Kesehatan",
+            "mrr": "MRR"
+          },
+          "health": {
+            "good": "Baik",
+            "active": "Aktif",
+            "low": "Rendah",
+            "idle": "Menganggur"
+          }
+        },
+        "alerts": {
+          "title": "Peringatan admin",
+          "subtitle": "Antrean prioritas",
+          "open": "{n} terbuka",
+          "empty": "Semua sistem sehat - tidak ada peringatan."
+        },
+        "titleLead": "Dasbor",
+        "titleAccent": "admin"
+      },
+      "analytics": {
+        "title": "Analitik admin.",
+        "kicker": "Admin - Platform",
+        "subtitle": "Tampilan ruang kendali lengkap untuk pendapatan, pertumbuhan workspace, penggunaan WhatsApp, pengiriman kampanye, kesehatan perangkat, dan tekanan dukungan.",
+        "days": {
+          "7": "7 hari terakhir",
+          "30": "30 hari terakhir",
+          "90": "90 hari terakhir",
+          "365": "Tahun ini",
+          "custom": "{n} hari terakhir"
+        },
+        "daysLabel": "Hari",
+        "export": "Ekspor",
+        "tabs": {
+          "overview": "Ringkasan",
+          "revenue": "Pendapatan",
+          "usage": "Penggunaan",
+          "workspaces": "Workspace",
+          "campaigns": "Kampanye",
+          "support": "Dukungan"
+        },
+        "kpi": {
+          "revenue": "Pendapatan",
+          "revenueSub": "{n, plural, other {# workspace baru}}",
+          "workspaces": "Workspace",
+          "workspacesSub": "{n, plural, other {# total pengguna}}",
+          "messages": "Pesan",
+          "messagesSub": "rata-rata {n} / hari",
+          "devices": "Perangkat online",
+          "newUsers": "Pengguna baru",
+          "newUsersSub": "{n} total",
+          "tickets": "Tiket terbuka",
+          "watch": "pantau",
+          "clear": "aman"
+        },
+        "pulse": {
+          "title": "Denyut platform",
+          "subtitle": "Kejenuhan ruang kendali secara langsung",
+          "workspaces": "Workspace",
+          "devices": "Perangkat terhubung",
+          "tickets": "Tiket terbuka",
+          "signups": "Pendaftaran baru",
+          "normal": "normal"
+        },
+        "growth": {
+          "title": "Pusat komando pertumbuhan",
+          "subtitle": "Pendaftaran pengguna, {days} hari terakhir",
+          "aria": "Pendaftaran per hari",
+          "series": "Pendaftaran"
+        },
+        "plans": {
+          "title": "Distribusi paket",
+          "subtitle": "Workspace menurut paket",
+          "empty": "Belum ada data - distribusi paket muncul setelah setidaknya satu workspace diberi paket.",
+          "aria": "Workspace menurut paket"
+        },
+        "acquisition": {
+          "title": "Akuisisi",
+          "subtitle": "Pengguna ke workspace",
+          "users": "Total pengguna",
+          "newUsers": "Pengguna baru",
+          "workspaces": "Workspace dibuat",
+          "newWorkspaces": "Workspace baru",
+          "devices": "Perangkat terhubung"
+        },
+        "devices": {
+          "title": "Perangkat teratas - 24j",
+          "subtitle": "Volume kirim",
+          "empty": "Belum ada pengiriman",
+          "devices": "Perangkat",
+          "online": "Online",
+          "sends": "Kirim 24j",
+          "aria": "Pengiriman dalam 24 jam terakhir per perangkat"
+        },
+        "leaderboard": {
+          "title": "Workspace teratas menurut pendapatan berbayar",
+          "subtitle": "{days} hari terakhir",
+          "workspace": "Workspace",
+          "orders": "Pesanan",
+          "revenue": "Pendapatan berbayar",
+          "open": "Buka",
+          "empty": "Tidak ada pesanan berbayar pada rentang ini."
+        },
+        "cohort": {
+          "title": "Kohort pendaftaran",
+          "subtitle": "{days} hari terakhir",
+          "aria": "Pendaftaran harian"
+        },
+        "composition": {
+          "title": "Komposisi pendapatan",
+          "subtitle": "Kontributor teratas",
+          "empty": "Belum ada pendapatan berbayar."
+        },
+        "support": {
+          "title": "Beban dukungan",
+          "subtitle": "Status tiket",
+          "empty": "Belum ada tiket.",
+          "open": "Terbuka",
+          "resolved": "Terselesaikan",
+          "inbox": "Buka kotak masuk"
+        },
+        "queue": {
+          "title": "Perhatian admin",
+          "subtitle": "Antrean tindakan",
+          "tickets": "{n, plural, other {# tiket terbuka}}",
+          "ticketsHint": "Tangani di dukungan sebelum SLA terlampaui",
+          "offline": "{n, plural, other {# perangkat offline}}",
+          "offlineHint": "Kurang dari setengah perangkat yang online",
+          "users": "{n, plural, other {# pengguna baru}}",
+          "usersHint": "Tinjau pendaftaran terbaru",
+          "clear": "Semua aman"
+        },
+        "titleLead": "Analitik",
+        "titleAccent": "admin"
+      },
+      "kpiLabel": "KPI"
+    },
+    "quickAccess": {
+      "title": "Akses cepat",
+      "kicker": "Pintasan",
+      "edit": "Ubah pintasan",
+      "empty": "Tambah pintasan akses cepat",
+      "open": "Buka {label}",
+      "modalTitle": "Akses cepat",
+      "modalEyebrow": "Sematkan hingga 10 pintasan",
+      "pages": "Halaman aplikasi (maks. 10)",
+      "custom": "Tautan kustom",
+      "labelPlaceholder": "Label",
+      "urlPlaceholder": "https://... atau /path",
+      "addCustom": "+ Tambah tautan kustom",
+      "removeCustom": "Hapus tautan ini",
+      "counter": "{n} / 10 disematkan",
+      "cancel": "Batal",
+      "save": "Simpan pintasan",
+      "saving": "Menyimpan...",
+      "limit": "Anda dapat menyematkan hingga 10 pintasan.",
+      "saved": "Akses cepat diperbarui.",
+      "failed": "Pintasan Anda tidak dapat disimpan."
+    }
+  }
+}

@@ -1,0 +1,662 @@
+{
+  "invoicing": {
+    "nav": {
+      "invoices": "Facturen",
+      "payments": "Betalingen",
+      "taxRates": "Btw-tarieven",
+      "recurring": "Terugkerende facturen",
+      "salesOrders": "Verkooporders"
+    },
+    "common": {
+      "unnamedContact": "Naamloos contact",
+      "dismiss": "Sluiten"
+    },
+    "status": {
+      "draft": "Concept",
+      "issued": "Verstuurd",
+      "partially_paid": "Deels betaald",
+      "overdue": "Te laat",
+      "paid": "Betaald",
+      "void": "Ongeldig"
+    },
+    "method": {
+      "bank_transfer": "Bankoverschrijving",
+      "cash": "Contant",
+      "card": "Pinpas",
+      "upi": "UPI",
+      "cheque": "Cheque",
+      "gateway": "Online",
+      "other": "Overig"
+    },
+    "errors": {
+      "network": "We konden de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt geen rechten om dat te doen.",
+      "signedOut": "Je sessie is beëindigd. Log opnieuw in.",
+      "conflict": "Iemand anders heeft dit zojuist gewijzigd. Laad de pagina opnieuw om de nieuwste versie te zien.",
+      "validation": "Sommige gegevens zijn niet geldig. Controleer de gemarkeerde velden.",
+      "unavailable": "Facturatie is op deze server nog niet beschikbaar.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "notFound": "Deze factuur bestaat niet meer.",
+      "planDisabled": "Je abonnement omvat geen facturatie.",
+      "invalidState": "Dat kan niet in de huidige status van de factuur. Laad de pagina opnieuw en controleer de status.",
+      "unexpected": "Er ging iets mis aan onze kant. Probeer het opnieuw.",
+      "requestId": "Verzoek-ID",
+      "retry": "Opnieuw proberen"
+    },
+    "picker": {
+      "unlink": "Contact verwijderen",
+      "searchContact": "Contacten zoeken op naam",
+      "results": "Overeenkomende contacten",
+      "searching": "Zoeken...",
+      "unavailable": "Contacten konden niet worden geladen.",
+      "none": "Geen contacten gevonden."
+    },
+    "actions": {
+      "failed": "Dat is niet gelukt.",
+      "issued": "Factuur {number} uitgegeven.",
+      "sent": "Gemarkeerd als verzonden.",
+      "voided": "Factuur {number} ongeldig gemaakt.",
+      "duplicated": "Kopie aangemaakt als concept.",
+      "deleted": "Concept verwijderd.",
+      "linkCopied": "Link gekopieerd.",
+      "linkCopyFailed": "Je browser blokkeerde kopiëren. Selecteer de link en kopieer hem handmatig."
+    },
+    "payDialog": {
+      "title": "Betaling registreren",
+      "forInvoice": "Factuur {number}",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "record": "Betaling registreren",
+      "markPaid": "Registreren en als betaald markeren",
+      "recordAnyway": "Toch registreren",
+      "balance": "Openstaand saldo",
+      "amount": "Bedrag ({currency})",
+      "method": "Methode",
+      "paidOn": "Betaald op",
+      "reference": "Referentie",
+      "referenceHint": "Transactie-ID of chequenummer",
+      "note": "Notitie",
+      "recorded": "Betaling van {amount} geregistreerd.",
+      "partialNote": "Dit is een gedeeltelijke betaling. Er is nog {left} openstaand.",
+      "overpayNote": "Dit is {extra} meer dan het saldo. Controleer het bedrag voordat je het registreert.",
+      "problems": {
+        "amountInvalid": "Vul een bedrag in, bijvoorbeeld 125,50.",
+        "amountZero": "Het bedrag moet groter zijn dan nul.",
+        "dateInvalid": "Vul een geldige datum in.",
+        "dateFuture": "De betaaldatum kan niet in de toekomst liggen.",
+        "tooMuch": "Dat is meer dan er terugbetaald kan worden.",
+        "referenceTooLong": "De referentie is te lang (maximaal 191 tekens).",
+        "noteTooLong": "De notitie is te lang (maximaal 2000 tekens)."
+      }
+    },
+    "refundDialog": {
+      "title": "Betaling terugbetalen",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "refund": "Terugbetalen",
+      "available": "Er kan maximaal {amount} worden terugbetaald.",
+      "amount": "Bedrag ({currency})",
+      "date": "Terugbetaald op",
+      "reason": "Reden",
+      "effect": "De factuur staat dan weer open voor het terugbetaalde bedrag.",
+      "refunded": "{amount} terugbetaald.",
+      "problems": {
+        "amountInvalid": "Vul een bedrag in, bijvoorbeeld 125,50.",
+        "amountZero": "Het bedrag moet groter zijn dan nul.",
+        "tooMuch": "Dat is meer dan er terugbetaald kan worden."
+      }
+    },
+    "voidDialog": {
+      "title": "Factuur ongeldig maken",
+      "close": "Sluiten",
+      "keep": "Factuur behouden",
+      "void": "Factuur ongeldig maken",
+      "warning": "Een ongeldige factuur behoudt haar nummer, maar kan niet meer betaald, bewerkt of heropend worden. De link van de klant toont haar als geannuleerd.",
+      "reason": "Reden",
+      "reasonHint": "Optioneel. Wordt bewaard in de activiteit van de factuur."
+    },
+    "sendDialog": {
+      "title": "Factuur delen",
+      "issueTitle": "Factuur uitgeven",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "issue": "Factuur uitgeven",
+      "done": "Klaar",
+      "issueIntro": "Uitgeven maakt deze factuur officieel:",
+      "issueNumber": "Ze krijgt het volgende factuurnummer.",
+      "issueFrozen": "Regels, prijzen en belastingen kunnen daarna niet meer worden bewerkt.",
+      "issueLink": "Er komt een link voor je klant beschikbaar.",
+      "link": "Link voor je klant",
+      "linkHint": "Iedereen met deze link kan de factuur zien en zien hoe die betaald kan worden.",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "copyFailed": "Je browser blokkeerde kopiëren. Selecteer de link en kopieer hem handmatig.",
+      "open": "Open de pagina van de klant",
+      "email": "E-mailen naar",
+      "emailHint": "Optioneel. Laat leeg om de link zelf te delen en de factuur alleen als verzonden te markeren.",
+      "alreadySent": "Deze factuur was al als verzonden gemarkeerd."
+    },
+    "deleteDialog": {
+      "title": "Concept verwijderen?",
+      "message": "{name} wordt definitief verwijderd. Alleen concepten kunnen worden verwijderd.",
+      "delete": "Concept verwijderen",
+      "keep": "Behouden"
+    },
+    "row": {
+      "moreFor": "Acties voor {name}",
+      "draft": "concept",
+      "open": "Openen",
+      "edit": "Bewerken",
+      "issue": "Uitgeven en verzenden",
+      "send": "Link delen / als verzonden markeren",
+      "copyLink": "Link kopiëren",
+      "recordPayment": "Betaling registreren",
+      "markPaid": "Als betaald markeren",
+      "duplicate": "Dupliceren",
+      "print": "Downloaden / afdrukken",
+      "void": "Ongeldig maken",
+      "delete": "Concept verwijderen"
+    },
+    "table": {
+      "columns": {
+        "number": "Factuur",
+        "contact": "Klant",
+        "issued": "Uitgegeven",
+        "due": "Vervalt",
+        "total": "Totaal",
+        "paid": "Betaald",
+        "balance": "Saldo",
+        "status": "Status"
+      },
+      "draft": "Concept",
+      "daysLate": "{count, plural, one {# dag te laat} other {# dagen te laat}}",
+      "selectAll": "Alle geladen facturen selecteren",
+      "selectRow": "{name} selecteren",
+      "scrollArea": "Tabel met facturen"
+    },
+    "tabs": {
+      "label": "Factuurstatus",
+      "all": "Alle",
+      "draft": "Concept",
+      "issued": "Uitgegeven",
+      "partially_paid": "Deels betaald",
+      "overdue": "Te laat",
+      "paid": "Betaald",
+      "void": "Ongeldig",
+      "count": "{count, plural, one {# factuur} other {# facturen}}"
+    },
+    "toolbar": {
+      "search": "Zoeken op nummer of klant",
+      "contactLoading": "Klant",
+      "from": "Van",
+      "to": "Tot",
+      "issuedFrom": "Uitgegeven vanaf",
+      "issuedTo": "Uitgegeven tot",
+      "sort": "Facturen sorteren",
+      "sorts": {
+        "newest": "Nieuwste eerst",
+        "oldest": "Oudste eerst",
+        "due": "Vervaldatum",
+        "amount": "Hoogste bedrag"
+      },
+      "reset": "Filters wissen",
+      "refresh": "Vernieuwen"
+    },
+    "bulk": {
+      "label": "Bulkacties",
+      "selected": "{count, plural, one {# factuur geselecteerd} other {# facturen geselecteerd}}",
+      "working": "Bezig...",
+      "issue": "Concepten uitgeven",
+      "void": "Ongeldig maken",
+      "delete": "Concepten verwijderen",
+      "clear": "Selectie wissen",
+      "failed": "Dat is niet gelukt.",
+      "keep": "Behouden",
+      "someFailed": "{count, plural, one {# factuur kon niet worden gewijzigd.} other {# facturen konden niet worden gewijzigd.}}",
+      "done": {
+        "issue": "{count, plural, one {# concept uitgegeven.} other {# concepten uitgegeven.}}",
+        "void": "{count, plural, one {# factuur ongeldig gemaakt.} other {# facturen ongeldig gemaakt.}}",
+        "delete": "{count, plural, one {# concept verwijderd.} other {# concepten verwijderd.}}"
+      },
+      "confirm": {
+        "void": {
+          "title": "Geselecteerde facturen ongeldig maken?",
+          "message": "{count, plural, one {# geselecteerde factuur wordt ongeldig gemaakt. Facturen met betalingen worden overgeslagen.} other {# geselecteerde facturen worden ongeldig gemaakt. Facturen met betalingen worden overgeslagen.}}",
+          "confirm": "Facturen ongeldig maken"
+        },
+        "delete": {
+          "title": "Geselecteerde concepten verwijderen?",
+          "message": "{count, plural, one {# geselecteerde factuur wordt bekeken. Alleen concepten worden definitief verwijderd.} other {# geselecteerde facturen worden bekeken. Alleen concepten worden definitief verwijderd.}}",
+          "confirm": "Concepten verwijderen"
+        }
+      }
+    },
+    "list": {
+      "title": "Facturen",
+      "subtitle": "Factureer je klanten en houd bij wat betaald is en wat te laat is.",
+      "payments": "Betalingen",
+      "newInvoice": "Nieuwe factuur",
+      "tableLabel": "Factuurlijst",
+      "empty": {
+        "all": {
+          "title": "Nog geen facturen",
+          "message": "Maak je eerste factuur, of start er een vanuit een geaccepteerd voorstel of een offerte."
+        },
+        "draft": {
+          "title": "Geen concepten",
+          "message": "Facturen waar je nog aan werkt, verschijnen hier."
+        },
+        "issued": {
+          "title": "Niets wacht op betaling",
+          "message": "Uitgegeven facturen zonder betaling verschijnen hier."
+        },
+        "partially_paid": {
+          "title": "Geen deels betaalde facturen",
+          "message": "Facturen met een betaling maar nog een saldo verschijnen hier."
+        },
+        "overdue": {
+          "title": "Niets is te laat",
+          "message": "Facturen die over de vervaldatum zijn met nog een saldo verschijnen hier."
+        },
+        "paid": {
+          "title": "Nog geen betaalde facturen",
+          "message": "Facturen die volledig betaald zijn, verschijnen hier."
+        },
+        "void": {
+          "title": "Geen ongeldige facturen",
+          "message": "Geannuleerde facturen verschijnen hier en behouden hun nummers."
+        }
+      },
+      "emptyFilteredTitle": "Geen facturen gevonden",
+      "emptyFiltered": "Probeer een andere zoekopdracht of wis de filters.",
+      "resetFilters": "Filters wissen",
+      "loading": "Facturen laden",
+      "showing": "{count, plural, one {# factuur geladen} other {# facturen geladen}}",
+      "loadMore": "Meer laden",
+      "allLoaded": "Dat zijn ze allemaal"
+    },
+    "lines": {
+      "lineN": "Regel {n}",
+      "description": "Omschrijving",
+      "descriptionPlaceholder": "Waarvoor factureer je?",
+      "removeLine": "Regel {n} verwijderen",
+      "qty": "Aantal",
+      "price": "Stukprijs ({currency})",
+      "discount": "Korting %",
+      "tax": "Btw",
+      "noTax": "Geen btw",
+      "inclusive": "incl.",
+      "removedRate": "Btw-tarief verwijderd",
+      "inactive": "inactief",
+      "amount": "Bedrag",
+      "addLine": "Regel toevoegen",
+      "problems": {
+        "descriptionRequired": "Omschrijf deze regel.",
+        "qtyInvalid": "Vul een aantal in boven nul.",
+        "priceInvalid": "Vul een prijs in, bijvoorbeeld 49,90.",
+        "lineDiscountInvalid": "Vul een percentage in van 0 tot 100.",
+        "noLines": "Voeg minstens één regel toe voordat je uitgeeft.",
+        "amountZero": "Het factuurtotaal moet groter zijn dan nul."
+      }
+    },
+    "totals": {
+      "label": "Factuurtotalen",
+      "title": "Totalen",
+      "subtotal": "Subtotaal",
+      "discount": "Korting",
+      "total": "Totaal"
+    },
+    "builder": {
+      "creatingFromDocument": "De factuur wordt aangemaakt uit het document...",
+      "loading": "Laden",
+      "notEditable": "Deze factuur is uitgegeven en kan daarom niet meer worden bewerkt. Dupliceer hem om een gecorrigeerde te maken.",
+      "openInvoice": "Open de factuur",
+      "newTitle": "Nieuwe factuur",
+      "editTitle": "Concept bewerken",
+      "back": "Terug",
+      "unsaved": "Niet-opgeslagen wijzigingen",
+      "cancel": "Annuleren",
+      "saveDraft": "Concept opslaan",
+      "saveAndIssue": "Opslaan en uitgeven",
+      "conflict": "Iemand anders heeft dit concept gewijzigd terwijl je bewerkte. Laad de pagina opnieuw om hun versie te zien; je wijzigingen hier gaan verloren.",
+      "reload": "Opnieuw laden",
+      "viewLabel": "Builderweergave",
+      "views": {
+        "edit": "Bewerken",
+        "preview": "Voorbeeld"
+      },
+      "billTo": "Factureren aan",
+      "contact": "Contact",
+      "contactHint": "Kies een contact om de factuur daaraan te koppelen, of typ hieronder de koper.",
+      "buyerName": "Naam op de factuur",
+      "buyerEmail": "E-mail",
+      "buyerPhone": "Telefoon",
+      "buyerAddress": "Factuuradres",
+      "details": "Datums en valuta",
+      "currency": "Valuta",
+      "currencyHint": "Drie letters, zoals EUR of USD. Decimalen volgen de valuta.",
+      "issueDate": "Uitgiftedatum",
+      "terms": "Betalingstermijn",
+      "noDueDate": "Geen vervaldatum",
+      "dueDate": "Vervaldatum",
+      "lineItems": "Factuurregels",
+      "orderLinkedNote": "De regels van een factuur die uit een verkooporder is gemaakt, liggen vast. Ongeldig maken of verwijderen van deze factuur en de order opnieuw factureren om ze te wijzigen.",
+      "adjustments": "Korting",
+      "discountKind": "Korting op de hele factuur",
+      "discountNone": "Geen korting",
+      "discountPercent": "Percentage",
+      "discountAmount": "Vast bedrag ({currency})",
+      "discountValue": "Kortingswaarde",
+      "notesAndTerms": "Notities en voorwaarden",
+      "notes": "Notitie voor de klant",
+      "notesHint": "Staat op de factuur.",
+      "termsText": "Algemene voorwaarden",
+      "termsHint": "Staat onderaan de factuur.",
+      "preview": "Voorbeeld",
+      "saved": "Concept opgeslagen.",
+      "fixProblems": "Corrigeer eerst de gemarkeerde velden.",
+      "serverRejected": "De server heeft sommige waarden niet geaccepteerd. Controleer de velden en probeer het opnieuw.",
+      "problems": {
+        "contactRequired": "Kies een contact of typ de naam van de koper.",
+        "currencyInvalid": "Vul een valutacode van drie letters in.",
+        "issueDateInvalid": "Vul een geldige uitgiftedatum in.",
+        "dueBeforeIssue": "De vervaldatum kan niet vóór de uitgiftedatum liggen.",
+        "dueInvalid": "Vul een geldige vervaldatum in.",
+        "noLines": "Voeg minstens één regel toe voordat je uitgeeft.",
+        "discountInvalid": "Vul een geldige korting in.",
+        "emailInvalid": "Vul een geldig e-mailadres in.",
+        "amountZero": "Het factuurtotaal moet groter zijn dan nul.",
+        "descriptionRequired": "Omschrijf deze regel.",
+        "priceInvalid": "Vul een geldige prijs in.",
+        "qtyInvalid": "Vul een aantal in boven nul.",
+        "lineDiscountInvalid": "Vul een percentage in van 0 tot 100."
+      }
+    },
+    "terms": {
+      "onReceipt": "Betaalbaar bij ontvangst",
+      "net": "Netto {days}",
+      "custom": "Aangepaste datum"
+    },
+    "paper": {
+      "label": "Factuur {number}",
+      "labelDraft": "Voorbeeld van conceptfactuur",
+      "sellerFallback": "Naam van je bedrijf",
+      "title": "Factuur",
+      "draftNumber": "Concept",
+      "billedTo": "Gefactureerd aan",
+      "buyerFallback": "Klant",
+      "issued": "Uitgegeven",
+      "due": "Vervalt",
+      "onReceipt": "Bij ontvangst",
+      "item": "Artikel",
+      "qty": "Aantal",
+      "price": "Prijs",
+      "tax": "Btw",
+      "amount": "Bedrag",
+      "noLines": "Nog geen regels",
+      "noDescription": "Geen omschrijving",
+      "lineDiscount": "{percent}% korting",
+      "subtotal": "Subtotaal",
+      "discount": "Korting",
+      "discountPercent": "Korting ({percent}%)",
+      "total": "Totaal",
+      "includesTax": "Btw inbegrepen in prijzen",
+      "paid": "Betaald",
+      "balanceDue": "Openstaand saldo",
+      "notes": "Notities",
+      "terms": "Voorwaarden"
+    },
+    "detail": {
+      "loading": "Factuur laden",
+      "backToList": "Terug naar facturen",
+      "draftTitle": "Conceptfactuur",
+      "edit": "Bewerken",
+      "issueAndSend": "Uitgeven en verzenden",
+      "shareAgain": "Opnieuw delen",
+      "send": "Delen en verzenden",
+      "recordPayment": "Betaling registreren",
+      "markPaid": "Als betaald markeren",
+      "copyLink": "Link kopiëren",
+      "print": "Downloaden / afdrukken",
+      "duplicate": "Dupliceren",
+      "void": "Ongeldig maken",
+      "delete": "Concept verwijderen",
+      "voidedBanner": "Deze factuur is op {date} ongeldig gemaakt. Ze behoudt haar nummer maar kan niet meer betaald worden.",
+      "voidNeedsRefund": "Om deze factuur ongeldig te maken, moet je eerst de betalingen terugbetalen.",
+      "overpaid": "Er is meer betaald dan de factuur vraagt.",
+      "amountsLabel": "Bedragen",
+      "total": "Totaal",
+      "paid": "Betaald",
+      "balance": "Openstaand saldo",
+      "issued": "Uitgegeven",
+      "due": "Vervalt",
+      "noDue": "Geen vervaldatum",
+      "daysLate": "{count, plural, one {# dag te laat} other {# dagen te laat}}",
+      "sentAt": "Verzonden",
+      "paidAt": "Volledig betaald",
+      "source": "Gemaakt vanuit",
+      "sourceKind": {
+        "proposal": "Voorstel",
+        "estimate": "Offerte"
+      },
+      "deal": "Deal",
+      "dealFallback": "Open deal"
+    },
+    "paymentsSection": {
+      "title": "Betalingen",
+      "loading": "Betalingen laden",
+      "none": "Nog geen betalingen geregistreerd.",
+      "refund": "Terugbetalen"
+    },
+    "activity": {
+      "title": "Activiteit",
+      "loading": "Activiteit laden",
+      "events": {
+        "created": "Concept aangemaakt",
+        "edited": "Concept bewerkt",
+        "issued": "Factuur uitgegeven",
+        "sent": "Als verstuurd gemarkeerd",
+        "viewed": "Door de klant geopend",
+        "payment_recorded": "Betaling geregistreerd",
+        "payment_refunded": "Betaling terugbetaald",
+        "paid": "Volledig betaald",
+        "reminder_sent": "Herinnering verstuurd",
+        "voided": "Factuur ongeldig gemaakt"
+      }
+    },
+    "pickInvoice": {
+      "title": "Welke factuur is betaald?",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "search": "Zoeken op nummer of klant",
+      "loading": "Facturen laden",
+      "noMatch": "Geen openstaande factuur gevonden.",
+      "nothingOwed": "Er staat nu niets open.",
+      "balance": "Saldo",
+      "more": "Meer tonen"
+    },
+    "aging": {
+      "loading": "Ouderdomsrapport laden",
+      "emptyTitle": "Niets openstaand",
+      "emptyMessage": "Alle uitgegeven facturen zijn betaald. Onbetaalde facturen verschijnen hier, gegroepeerd naar hoe laat ze zijn.",
+      "asOf": "Stand per {date}. Achterstand telt vanaf de vervaldatum.",
+      "currencyLabel": "Openstaand in {currency}",
+      "outstanding": "Openstaand",
+      "invoices": "{count, plural, one {# factuur} other {# facturen}}",
+      "barLabel": "Aandeel van het openstaande bedrag per leeftijdsgroep",
+      "buckets": {
+        "current": "Nog niet vervallen",
+        "d1_30": "1-30 dagen te laat",
+        "d31_60": "31-60 dagen te laat",
+        "d61_90": "61-90 dagen te laat",
+        "d90_plus": "Meer dan 90 dagen te laat"
+      },
+      "total": "Totaal",
+      "unnamed": "Contact zonder naam",
+      "noContact": "Geen contact"
+    },
+    "payments": {
+      "title": "Betalingen",
+      "subtitle": "Ontvangen geld voor je facturen, en wat nog openstaat.",
+      "invoices": "Facturen",
+      "record": "Betaling registreren",
+      "viewLabel": "Betalingenoverzicht",
+      "views": {
+        "ledger": "Journaal",
+        "aging": "Ouderdom"
+      },
+      "tableLabel": "Betalingsjournaal",
+      "loading": "Betalingen laden",
+      "emptyFilteredTitle": "Geen betalingen gevonden",
+      "emptyFiltered": "Probeer een andere zoekopdracht of wis de filters.",
+      "emptyTitle": "Nog geen betalingen",
+      "emptyMessage": "Wanneer een klant een factuur betaalt, registreer je dat hier of vanaf de factuur.",
+      "resetFilters": "Filters wissen",
+      "showing": "{count, plural, one {# betaling geladen} other {# betalingen geladen}}",
+      "loadMore": "Meer laden",
+      "allLoaded": "Dat is alles",
+      "strip": {
+        "loading": "Totalen laden",
+        "label": "Betalingstotalen",
+        "window": "{from} t/m {to}",
+        "none": "Geen betalingen in deze periode.",
+        "collected": "Ontvangen ({currency})",
+        "count": "Betalingen",
+        "refunded": "Terugbetaald"
+      },
+      "toolbar": {
+        "search": "Zoeken op referentie, factuur of klant",
+        "method": "Methode",
+        "allMethods": "Alle methoden",
+        "from": "Van",
+        "to": "Tot",
+        "paidFrom": "Betaald vanaf",
+        "paidTo": "Betaald tot",
+        "reset": "Filters wissen",
+        "refresh": "Vernieuwen"
+      },
+      "table": {
+        "scrollArea": "Tabel met betalingen",
+        "columns": {
+          "date": "Datum",
+          "invoice": "Factuur",
+          "contact": "Klant",
+          "method": "Methode",
+          "reference": "Referentie",
+          "amount": "Bedrag",
+          "refunded": "Terugbetaald",
+          "recordedBy": "Geregistreerd door",
+          "actions": "Acties"
+        },
+        "moreFor": "Acties voor de betaling van {date}",
+        "openInvoice": "Factuur openen",
+        "refund": "Terugbetalen"
+      }
+    },
+    "taxRates": {
+      "title": "Belastingtarieven",
+      "subtitle": "De belastingen die je aan factuurregels toevoegt. Eén is de standaard voor nieuwe regels.",
+      "new": "Nieuw belastingtarief",
+      "tableLabel": "Belastingtarieven",
+      "loading": "Belastingtarieven laden",
+      "emptyTitle": "Nog geen belastingtarieven",
+      "emptyMessage": "Voeg de belastingen toe die je rekent, zoals BTW of GST, om ze op factuurregels te kiezen.",
+      "scrollArea": "Tabel met belastingtarieven",
+      "columns": {
+        "name": "Naam",
+        "rate": "Tarief",
+        "type": "Type",
+        "status": "Status",
+        "effective": "Geldig vanaf",
+        "used": "Regels",
+        "actions": "Acties"
+      },
+      "default": "Standaard",
+      "inclusive": "Inclusief",
+      "exclusive": "Exclusief",
+      "active": "Actief",
+      "inactive": "Inactief",
+      "always": "Altijd",
+      "moreFor": "Acties voor {name}",
+      "edit": "Bewerken",
+      "makeDefault": "Als standaard instellen",
+      "madeDefault": "{name} is nu de standaard.",
+      "deactivate": "Deactiveren",
+      "activate": "Activeren",
+      "deactivated": "{name} gedeactiveerd.",
+      "activated": "{name} geactiveerd.",
+      "delete": "Verwijderen",
+      "deleteTitle": "Dit belastingtarief verwijderen?",
+      "keep": "Behouden",
+      "deleted": "{name} verwijderd.",
+      "count": "{count, plural, one {# belastingtarief} other {# belastingtarieven}}",
+      "hint": "Een tarief wijzigen verandert nooit al uitgegeven facturen: elke factuur houdt het tarief aan waarmee hij is gemaakt.",
+      "errors": {
+        "isDefault": "Dit is het standaardtarief. Maak eerst een ander tarief de standaard."
+      },
+      "form": {
+        "eyebrow": "Belastingtarief",
+        "editTitle": "Belastingtarief bewerken",
+        "newTitle": "Nieuw belastingtarief",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "name": "Naam",
+        "namePlaceholder": "BTW, GST, verkoopbelasting",
+        "rate": "Tarief",
+        "type": "Hoe het wordt toegepast",
+        "exclusive": "Exclusief: bovenop opgeteld",
+        "inclusive": "Inclusief: zit al in de prijs",
+        "typeHint": {
+          "exclusive": "De klant betaalt de prijs plus de belasting.",
+          "inclusive": "De prijs bevat de belasting al; de factuur toont hoeveel daarvan belasting is."
+        },
+        "effectiveFrom": "Geldig vanaf",
+        "effectiveHint": "Optioneel. Gebruik dit voor een tarief dat op een datum verandert.",
+        "description": "Omschrijving",
+        "makeDefault": "Standaard voor nieuwe regels",
+        "defaultHint": "Nieuwe factuurregels beginnen met dit tarief.",
+        "active": "Actief",
+        "activeHint": "Inactieve tarieven kunnen niet op nieuwe regels worden gekozen.",
+        "saved": "{name} opgeslagen.",
+        "created": "{name} toegevoegd.",
+        "problems": {
+          "nameRequired": "Vul een naam in.",
+          "nameTaken": "Er bestaat al een belastingtarief met deze naam.",
+          "rateInvalid": "Vul een percentage in van 0 tot 100.",
+          "dateInvalid": "Vul een geldige datum in.",
+          "conflict": "Iemand anders heeft dit tarief gewijzigd. Sluit het en open het opnieuw."
+        }
+      }
+    },
+    "public": {
+      "loading": "Factuur laden",
+      "errorTitle": "We konden deze factuur niet laden",
+      "errorMessage": "Controleer je verbinding en probeer het opnieuw.",
+      "retry": "Opnieuw proberen",
+      "title": "Factuur van {seller}",
+      "dueOn": "vervalt op {date}",
+      "print": "Afdrukken",
+      "download": "PDF downloaden",
+      "paidBanner": "Deze factuur is volledig betaald. Dank je wel.",
+      "voidBanner": "Deze factuur is geannuleerd en hoeft niet betaald te worden.",
+      "payNow": "Hoe betaal je",
+      "amountDue": "Te betalen bedrag:",
+      "bankIntro": "Betaal per bankoverschrijving en gebruik {number} als betalingskenmerk.",
+      "copied": "Gekopieerd",
+      "payButton": "{amount} betalen",
+      "gatewayNote": "Je gaat naar de betaalpagina van de betaalprovider van de verkoper.",
+      "questions": "Vragen over deze factuur?",
+      "metaTitle": "Factuur"
+    },
+    "linked": {
+      "title": "Facturen",
+      "new": "Nieuwe factuur",
+      "viewAll": "Alles bekijken",
+      "loading": "Facturen laden",
+      "none": "Nog geen facturen.",
+      "draft": "Concept",
+      "owes": "openstaand"
+    }
+  }
+}

@@ -1,0 +1,709 @@
+{
+  "admin-console-shell": {
+    "nav": {
+      "overview": "Home",
+      "menuOrder": "Menuvolgorde",
+      "groups": {
+        "shell": "Interface"
+      },
+      "sections": {
+        "reports": "Rapporten",
+        "plans": "Workspaces en abonnementen",
+        "billing": "Facturatie",
+        "messaging": "Berichtfacturatie",
+        "support": "Support",
+        "website": "Website",
+        "whatsapp": "WhatsApp",
+        "apps": "Apps",
+        "team": "Team en beveiliging",
+        "settings": "Instellingen",
+        "system": "Systeem"
+      },
+      "badges": {
+        "notSupported": "Niet ondersteund",
+        "noWorkspaces": "Geen workspaces"
+      },
+      "labels": {
+        "addonPacks": "Add-onpakketten",
+        "extensions": "Extensies",
+        "trackingCode": "Trackingcode",
+        "planPricingSettings": "Instellingen voor abonnementsprijzen",
+        "checkoutSettings": "Afrekeninstellingen",
+        "walletOverview": "Walletoverzicht",
+        "flowTemplates": "Flowsjablonen"
+      },
+      "hubNotes": {
+        "reports": "Omzet-, abonnements-, AI- en systeemrapporten.",
+        "plans": "Workspaces, abonnementen, add-onpakketten, coupons en de prijspagina.",
+        "billing": "Bestellingen, facturen, betalingen en afrekeninstellingen.",
+        "messaging": "Berichtprijzen, marges, tegoedpakketten en Meta-reselleropbrengsten.",
+        "support": "Tickets, de team- en platforminboxen, agenten, SLA, playbooks en contactberichten.",
+        "website": "De site-editor, blog, juridische pagina's, aankondigingen en de handleiding.",
+        "whatsapp": "Providers, de nummerwissel, Node-bridge, webhooks, WABA- en catalogusinstellingen.",
+        "apps": "De marktplaats, extensies en flowsjablonen.",
+        "team": "Rollen, rechten, beveiliging en aanmeldregels.",
+        "settings": "Branding, e-mail, integraties, privacy, opslag en meer.",
+        "system": "Updates, talen, valuta's en vertaling."
+      },
+      "captions": {
+        "branding": "Branding en interface",
+        "integrations": "Integraties",
+        "privacy": "Privacy en tracking",
+        "infrastructure": "Infrastructuur",
+        "roles": "Rollen",
+        "security": "Beveiliging",
+        "signin": "Aanmelden en registreren"
+      }
+    },
+    "shell": {
+      "collapse": "Zijbalk invouwen",
+      "expand": "Zijbalk uitvouwen",
+      "backToApp": "Terug naar app",
+      "allAreas": "Alle gebieden",
+      "switchArea": "Gebied wisselen, nu in {area}"
+    },
+    "overview": {
+      "title": "Platformconsole",
+      "note": "Kies een gebied. Elk gebied opent met zijn pagina's in een menu aan de linkerkant, en met Ctrl+K vind je elke pagina op naam.",
+      "open": "Openen",
+      "attentionTitle": "Vereist aandacht",
+      "attentionAll": "{count, plural, one {# ongelezen melding} other {# ongelezen meldingen}}",
+      "attentionEmpty": "Op dit moment is er niets dat aandacht nodig heeft.",
+      "pages": "{count, plural, one {# pagina} other {# pagina's}}"
+    },
+    "menuOrder": {
+      "title": "Menuvolgorde",
+      "note": "Kies welke items in de bovenbalk verschijnen die elke klant ziet, en in welke volgorde. Al het andere staat onder Meer. Gebruikers zien de wijziging bij het volgende laden van de pagina.",
+      "barZone": "Bovenbalk",
+      "moreZone": "Meer",
+      "locked": "Altijd als laatste",
+      "save": "Indeling opslaan",
+      "reset": "Standaard herstellen",
+      "saved": "Menu-indeling opgeslagen. Gebruikers zien haar bij het volgende laden van de pagina.",
+      "saveFailed": "De indeling kon niet worden opgeslagen.",
+      "loadFailed": "De indeling kon niet worden geladen.",
+      "moveUp": "{item} omhoog verplaatsen",
+      "moveDown": "{item} omlaag verplaatsen",
+      "remove": "{item} naar Meer verplaatsen",
+      "add": "{item} toevoegen aan de bovenbalk",
+      "removeShort": "Verwijderen",
+      "addShort": "Toevoegen",
+      "items": {
+        "dashboard": "Dashboard",
+        "team-inbox": "Teaminbox",
+        "wa-campaigns": "Campagnes",
+        "flows": "Flows",
+        "templates": "Sjablonen",
+        "devices": "Apparaten",
+        "metaads": "Meta Ads",
+        "broadcasts": "Broadcasts",
+        "contacts": "Contacten",
+        "deals": "Deals",
+        "chat": "Livechat",
+        "analytics": "Analyses",
+        "auto-reply": "Automatisch antwoord",
+        "scheduled": "Gepland",
+        "message-history": "Geschiedenis",
+        "ai-assistants": "AI-assistenten",
+        "ai-training": "AI-training",
+        "wa-links": "WA-links",
+        "chatbot-widgets": "Chatwidget",
+        "webhooks": "Webhooks",
+        "integrations": "Integraties",
+        "warmer": "Warmer",
+        "call-logs": "Gespreksgeschiedenis",
+        "support": "Support",
+        "more": "Meer"
+      }
+    },
+    "header": {
+      "health": {
+        "title": "Platformstatus",
+        "ok": "Alle systemen normaal",
+        "stuck": "{count, plural, one {# vastgelopen taak} other {# vastgelopen taken}}",
+        "down": "Database onbereikbaar"
+      },
+      "bell": {
+        "title": "Meldingen",
+        "labelUnread": "Meldingen, {count} ongelezen",
+        "inbox": "Inbox",
+        "markAllRead": "Alles als gelezen markeren",
+        "clearAll": "Alles wissen",
+        "viewAll": "Alles bekijken",
+        "loading": "Laden...",
+        "empty": "Nog geen meldingen."
+      },
+      "account": {
+        "menu": "Accountmenu",
+        "open": "Accountmenu voor {name}",
+        "myAccount": "Mijn account",
+        "settings": "Instellingen",
+        "overview": "Beheeroverzicht",
+        "signOut": "Afmelden"
+      },
+      "feed": {
+        "signup": "Nieuwe aanmelding",
+        "paymentReceived": "Betaling ontvangen",
+        "newOrder": "Nieuwe bestelling",
+        "newTicket": "Nieuw supportticket",
+        "newContactMessage": "Nieuw contactbericht",
+        "newWorkspace": "Nieuwe workspace"
+      }
+    },
+    "notificationsPage": {
+      "eyebrow": "Beheer - Platformactiviteit - Meldingen",
+      "title": "Beheermeldingen",
+      "note": "Alles wat er op het platform gebeurt: nieuwe aanmeldingen, betalingen, supporttickets, contactberichten en nieuwe workspaces. Los van de persoonlijke meldingen van een workspacelid.",
+      "tiles": {
+        "all": "Alle gebeurtenissen",
+        "signup": "Aanmeldingen",
+        "payment": "Betalingen",
+        "ticket": "Support",
+        "contact": "Berichten",
+        "workspace": "Workspaces"
+      },
+      "pills": {
+        "all": "Alle",
+        "signup": "Aanmeldingen",
+        "payment": "Betalingen",
+        "ticket": "Support",
+        "contact": "Berichten",
+        "workspace": "Workspaces"
+      },
+      "kinds": {
+        "signup": "Aanmelding",
+        "payment": "Betaling",
+        "ticket": "Support",
+        "contact": "Bericht",
+        "workspace": "Workspace"
+      },
+      "last30": "laatste 30 dagen",
+      "search": "Gebeurtenissen zoeken...",
+      "empty": "Geen platformactiviteit in deze weergave.",
+      "loadFailed": "De feed kon niet worden geladen.",
+      "cols": {
+        "type": "Type",
+        "event": "Gebeurtenis",
+        "detail": "Details",
+        "when": "Wanneer",
+        "open": "Openen"
+      },
+      "showing": "{count, plural, one {# recente gebeurtenis} other {# recente gebeurtenissen}} weergegeven",
+      "live": "Live feed, nieuwste eerst"
+    },
+    "settings": {
+      "workspace": {
+        "label": "Workspace-instellingen",
+        "description": "Naam, tijdzone, valuta, meldingen, gegevensexport en het verwijderen van de workspace.",
+        "keywords": "workspace, naam, tijdzone, valuta, meldingen, export, verwijderen, slack"
+      }
+    },
+    "workspaceSettings": {
+      "titleLead": "Workspace",
+      "titleTail": "instellingen",
+      "subtitle": "Configureer je workspace, team en integraties.",
+      "tabs": {
+        "general": "Algemeen",
+        "branding": "Branding",
+        "team": "Team en rollen",
+        "notifications": "Meldingen",
+        "aikeys": "AI-sleutels",
+        "security": "Beveiliging",
+        "api": "API en webhooks",
+        "data": "Gegevens en export",
+        "appearance": "Weergave"
+      },
+      "general": {
+        "workspace": "Workspace",
+        "ownerOnly": "Alleen de workspace-eigenaar kan de tijdzone, valuta of workspacenaam wijzigen.",
+        "name": "Workspacenaam",
+        "url": "Workspace-URL",
+        "urlHint": "De URL-slug kan hier niet worden bewerkt. Neem contact op met support om hem te wijzigen.",
+        "timezone": "Standaardtijdzone",
+        "timezoneHint": "Alle geplande verzendingen, controles van kantooruren en SLA-timers draaien in deze zone.",
+        "currency": "Valuta",
+        "currencyHint": "Wordt gebruikt bij het afrekenen van abonnementen, op facturen en in de walletweergave.",
+        "save": "Opslaan",
+        "saved": "Instellingen opgeslagen.",
+        "saveFailed": "De instellingen konden niet worden opgeslagen.",
+        "loadFailed": "De instellingen konden niet worden geladen.",
+        "hours": {
+          "title": "Werktijden",
+          "note": "Alleen ter referentie weergegeven. Werktijden worden nog niet afgedwongen, dus deze besturingselementen zijn alleen-lezen.",
+          "weekdays": "Ma - Vr",
+          "saturday": "Zaterdag",
+          "sunday": "Zondag",
+          "from": "Van",
+          "to": "Tot"
+        },
+        "preferences": {
+          "title": "Automatisch AI-samenvatten",
+          "note": "Krijg een live AI-beoordeling bij elk berichttekstveld: wat goed werkt in groen, wat beter kan in rood, plus een „beste versie” met één tik die je terug kunt plakken. Als dit uit staat, wordt dezelfde beoordeling op verzoek uitgevoerd via het vonkjespictogram in de werkbalk.",
+          "save": "Opslaan",
+          "saved": "Voorkeur opgeslagen.",
+          "saveFailed": "De voorkeur kon niet worden opgeslagen."
+        }
+      },
+      "notifications": {
+        "title": "Workspacemeldingen",
+        "note": "Schakel de bezorging per kanaal in of uit. Wat hier is uitgeschakeld, levert nooit een melding in de app, e-mail of Slack-bericht op.",
+        "readOnly": "Alleen-lezen. De workspace-eigenaar kan deze bewerken.",
+        "save": "Voorkeuren opslaan",
+        "saved": "Meldingsvoorkeuren opgeslagen.",
+        "saveFailed": "De voorkeuren konden niet worden opgeslagen.",
+        "loadFailed": "De voorkeuren konden niet worden geladen.",
+        "specificEvents": "Specifieke gebeurtenissen",
+        "byCategory": "Per categorie",
+        "event": "Gebeurtenis",
+        "category": "Categorie",
+        "channels": {
+          "inapp": "In-app",
+          "email": "E-mail",
+          "slack": "Slack"
+        },
+        "events": {
+          "device_connected": "Apparaat verbonden",
+          "device_disconnected": "Apparaat losgekoppeld",
+          "campaign_completed": "Campagne voltooid",
+          "campaign_failed": "Campagne mislukt",
+          "broadcast_completed": "Broadcast voltooid",
+          "new_customer_reply": "Nieuw antwoord van klant",
+          "mention_in_inbox": "Je bent @genoemd",
+          "conversation_assigned": "Gesprek aan jou toegewezen",
+          "sla_breached": "SLA overschreden",
+          "wallet_low_balance": "Laag walletsaldo",
+          "plan_changed": "Abonnement geüpgraded / gedowngraded",
+          "payment_failed": "Betaling mislukt",
+          "webhook_delivery_failed": "Webhook-bezorging mislukt",
+          "flow_started": "Flow gestart",
+          "flow_failed": "Flow mislukt",
+          "integration_disconnected": "Integratie losgekoppeld",
+          "appointment_booked": "Afspraak geboekt",
+          "weekly_summary": "Wekelijkse samenvatting"
+        },
+        "categories": {
+          "device": "Apparaten",
+          "contact": "Contacten",
+          "campaign": "Campagnes",
+          "broadcast": "Broadcasts",
+          "template": "Sjablonen",
+          "chat": "Chat",
+          "webhook": "Webhooks",
+          "billing": "Facturatie",
+          "system": "Systeem"
+        },
+        "slackLabel": "Slack-webhook-URL voor inkomende berichten",
+        "slackHint": "Maak er een aan in Slack onder Apps, Incoming Webhooks. Gebeurtenissen met de Slack-schakelaar aan worden hier geplaatst.",
+        "channelStatus": "Kanaalstatus",
+        "statusInapp": "In-appbel: live, stuurt de badge in de bovenste koptekst aan.",
+        "statusEmailLive": "E-mail: live, verzonden via de e-mailinstellingen van het platform.",
+        "statusEmailOff": "E-mail: wordt verzonden zodra de platformbeheerder SMTP heeft geconfigureerd.",
+        "statusSlackOn": "Slack: webhook opgeslagen.",
+        "statusSlackOff": "Slack: voeg een webhook-URL toe om het in te schakelen."
+      },
+      "data": {
+        "loadFailed": "De exporttellingen konden niet worden geladen.",
+        "exportTitle": "Gegevensexport",
+        "exportNote": "Download je workspacegegevens als CSV. Elke link streamt een nieuwe export.",
+        "exportOwnerOnly": "Alleen de workspace-eigenaar kan exports downloaden.",
+        "types": {
+          "contacts": "Contacten",
+          "conversations": "Gesprekken",
+          "messages": "Berichten"
+        },
+        "count": {
+          "contacts": "{count, plural, one {# record} other {# records}} · CSV",
+          "conversations": "{count, plural, one {# thread} other {# threads}} · CSV",
+          "messages": "{count, plural, one {# bericht} other {# berichten}} · CSV"
+        },
+        "delete": {
+          "title": "Workspace verwijderen",
+          "note": "Verwijder deze workspace permanent, inclusief alle gesprekken, automatiseringen en facturatiegeschiedenis.",
+          "irreversible": "Kan niet ongedaan worden gemaakt.",
+          "ownerOnly": "Alleen de workspace-eigenaar kan de workspace verwijderen.",
+          "typeName": "Typ de workspacenaam:",
+          "password": "Bevestigen met wachtwoord",
+          "submit": "Workspace permanent verwijderen",
+          "cancel": "Annuleren",
+          "confirmTitle": "Deze workspace verwijderen?",
+          "confirmMessage": "„{name}” en alles erin wordt verwijderd en iedereen wordt afgemeld. Dit kan niet ongedaan worden gemaakt.",
+          "failed": "De workspace kon niet worden verwijderd."
+        }
+      },
+      "groups": {
+        "workspace": "Workspace",
+        "system": "Systeem"
+      },
+      "railLabel": "Instellingensecties",
+      "personal": {
+        "title": "Je account",
+        "body": "Profiel, wachtwoord en persoonlijke voorkeuren."
+      },
+      "api": {
+        "restTitle": "Algemene REST API",
+        "rest1": "Maak een API-sleutel aan om contacten, gesprekken en berichten te lezen en te schrijven vanuit je eigen systemen.",
+        "rest2": "Elke sleutel is beperkt tot deze workspace en kan op elk moment worden ingetrokken.",
+        "rest3": "Verzoeken worden per minuut beperkt volgens je abonnement.",
+        "webhooksTitle": "Webhooks",
+        "webhooksBody": "Stuur gebeurtenissen naar je eigen endpoints en ontvang gebeurtenissen van andere tools.",
+        "manage": "Integraties beheren"
+      },
+      "appearance": {
+        "title": "Weergave",
+        "note": "Kies hoe de app er voor jou uitziet. Dit is dezelfde keuze als de zon- en maanknop in de koptekst.",
+        "choices": {
+          "light": {
+            "label": "Licht",
+            "body": "Heldere pagina's met zachte papiertinten."
+          },
+          "dark": {
+            "label": "Donker",
+            "body": "Gedimde pagina's die 's nachts prettiger zijn voor de ogen."
+          }
+        },
+        "save": "Opslaan",
+        "saved": "Weergave bijgewerkt."
+      }
+    },
+    "topNav": {
+      "more": "Meer",
+      "search": "Zoeken",
+      "premium": "Premiumfunctie: upgrade je abonnement om te ontgrendelen"
+    },
+    "palette": {
+      "title": "Pagina's zoeken",
+      "placeholder": "Zoek pagina's, instellingen, tools...",
+      "empty": "Geen resultaten voor „{query}”",
+      "hintNavigate": "Omhoog en omlaag om te navigeren",
+      "hintOpen": "Enter om te openen",
+      "hintToggle": "Ctrl K om te wisselen",
+      "tags": {
+        "page": "pagina",
+        "account": "account",
+        "plan": "abonnement",
+        "help": "help",
+        "system": "systeem"
+      },
+      "entries": {
+        "profile": "Profiel",
+        "profileHint": "Je naam, foto en contactgegevens",
+        "password": "Wachtwoord en beveiliging",
+        "passwordHint": "Wachtwoord, tweestapsaanmelding en actieve sessies"
+      }
+    },
+    "strip": {
+      "jump": "Zoeken of springen naar...",
+      "account": {
+        "group": "Account",
+        "account": "Account",
+        "wallet": "Wallet",
+        "notifications": "Meldingen"
+      },
+      "greeting": {
+        "midnightOil": "Nachtwerk",
+        "morning": "Goedemorgen",
+        "afternoon": "Goedemiddag",
+        "evening": "Goedenavond",
+        "night": "Goedenacht"
+      }
+    },
+    "profileMenu": {
+      "chip": "{plan}-abonnement - {role}",
+      "wallet": "Wallet",
+      "orders": "Bestelgeschiedenis",
+      "plans": "Prijzen en abonnementen",
+      "tour": "Rondleiding starten"
+    },
+    "quickAccess": {
+      "title": "Snelle toegang",
+      "open": "Snelle toegang openen",
+      "close": "Sluiten",
+      "edit": "Snelkoppelingen bewerken",
+      "editTitle": "Snelle toegang bewerken",
+      "editNote": "Maak tot tien pagina's of je eigen links vast. Ze worden getoond op het dashboard en in de zijlade.",
+      "dashboard": "Dashboard",
+      "allApps": "Alle apps",
+      "limit": "Je kunt maximaal {max} snelkoppelingen vastmaken.",
+      "saveFailed": "De snelkoppelingen konden niet worden opgeslagen.",
+      "customLinks": "Eigen links",
+      "linkLabel": "Label",
+      "linkUrl": "Link",
+      "addLink": "Link toevoegen",
+      "removeLink": "Deze link verwijderen",
+      "counter": "{count} / {max} vastgemaakt",
+      "cancel": "Annuleren",
+      "save": "Snelkoppelingen opslaan",
+      "problem": {
+        "incomplete": "Een link heeft een label en een adres nodig.",
+        "unsafe": "Gebruik een adres binnen deze app (beginnend met één schuine streep) of een http- of https-adres."
+      },
+      "catalog": {
+        "inbox": {
+          "label": "Gecombineerde inbox",
+          "desc": "Elk gesprek op één plek"
+        },
+        "contacts": {
+          "label": "Contacten",
+          "desc": "Je doelgroep en hun gegevens"
+        },
+        "campaigns": {
+          "label": "Campagnes",
+          "desc": "Campagnes plannen en verzenden"
+        },
+        "broadcasts": {
+          "label": "Broadcasts",
+          "desc": "Stuur één bericht naar veel contacten"
+        },
+        "templates": {
+          "label": "Sjablonen",
+          "desc": "Goedgekeurde berichtsjablonen"
+        },
+        "flows": {
+          "label": "Flows",
+          "desc": "Gesprekken automatiseren"
+        },
+        "scheduled": {
+          "label": "Gepland",
+          "desc": "Berichten die nog verzonden worden"
+        },
+        "catalog": {
+          "label": "Catalogus",
+          "desc": "Producten die je op WhatsApp verkoopt"
+        },
+        "store": {
+          "label": "Winkel",
+          "desc": "Je etalage en bestellingen"
+        },
+        "deals": {
+          "label": "Verkooppijplijn",
+          "desc": "Deals per fase"
+        },
+        "analytics": {
+          "label": "Analyses",
+          "desc": "Bezorg- en reactiecijfers"
+        },
+        "auto-reply": {
+          "label": "Automatisch antwoord",
+          "desc": "Antwoorden op trefwoorden en buiten kantooruren"
+        },
+        "devices": {
+          "label": "Apparaten",
+          "desc": "Verbonden WhatsApp-nummers"
+        },
+        "chatbots": {
+          "label": "Chatwidgets",
+          "desc": "Chatwidget voor je website"
+        },
+        "ai": {
+          "label": "AI-assistenten",
+          "desc": "Assistenten die voor je antwoorden"
+        },
+        "appointments": {
+          "label": "Afspraken",
+          "desc": "Boekingen en beschikbaarheid"
+        },
+        "webhooks": {
+          "label": "Webhooks",
+          "desc": "Stuur gebeurtenissen naar andere systemen"
+        },
+        "history": {
+          "label": "Berichtenlogboek",
+          "desc": "Elk verzonden en ontvangen bericht"
+        },
+        "account": {
+          "label": "Account",
+          "desc": "Profiel, abonnement en wallet"
+        },
+        "more": {
+          "label": "Meer apps",
+          "desc": "Alle tools op één pagina"
+        }
+      }
+    },
+    "announcements": {
+      "label": "Aankondigingen",
+      "dismiss": "Negeren"
+    },
+    "tour": {
+      "close": "Rondleiding sluiten",
+      "back": "Terug",
+      "next": "Volgende",
+      "done": "Klaar",
+      "progress": "{current} van {total}",
+      "steps": {
+        "welcome": {
+          "title": "Welkom bij {app}",
+          "body": "Een korte rondleiding langs de plekken die je het vaakst gebruikt. Het duurt minder dan een minuut."
+        },
+        "navbar": {
+          "title": "Je menu",
+          "body": "Alles wat je dagelijks doet, staat één klik weg in de bovenbalk."
+        },
+        "metaads": {
+          "title": "Meta Ads",
+          "body": "Voer click-to-WhatsApp-advertenties uit en zie wat ze opleveren."
+        },
+        "campaigns": {
+          "title": "Campagnes",
+          "body": "Plan, verzend en volg WhatsApp-campagnes."
+        },
+        "flows": {
+          "title": "Flows",
+          "body": "Bouw automatiseringen die voor je antwoorden."
+        },
+        "templates": {
+          "title": "Sjablonen",
+          "body": "Bewaar hier je goedgekeurde berichtsjablonen."
+        },
+        "devices": {
+          "title": "Kanalen",
+          "body": "Verbind de nummers en accounts waarmee je verzendt."
+        },
+        "more": {
+          "title": "Meer",
+          "body": "Alle andere tools staan hier, gegroepeerd en doorzoekbaar."
+        },
+        "kpi": {
+          "title": "Je nummers",
+          "body": "Berichten, antwoorden en bezorging in één oogopslag."
+        },
+        "newCampaign": {
+          "title": "Een campagne starten",
+          "body": "Maak hier je eerste campagne aan."
+        },
+        "pipeline": {
+          "title": "Verkooppijplijn",
+          "body": "Volg deals van het eerste bericht tot gewonnen."
+        }
+      }
+    },
+    "more": {
+      "titleLead": "Meer",
+      "titleTail": "functies",
+      "subtitle": "Alle tools op één plek.",
+      "navigation": "Navigatie",
+      "allTools": "Alle tools",
+      "noTools": "Hier is nog niets.",
+      "tabs": {
+        "all": "Alle",
+        "automation": "Automatisering",
+        "data": "Gegevens",
+        "help": "Help"
+      },
+      "plan": "Je abonnement",
+      "managePlan": "Abonnement beheren",
+      "wallet": "Wallet",
+      "topUp": "Opwaarderen",
+      "tips": {
+        "title": "Tip",
+        "pager": "Tips",
+        "templates": {
+          "title": "Gebruik sjablonen",
+          "body": "Goedgekeurde sjablonen bereiken klanten buiten het venster van 24 uur."
+        },
+        "flows": {
+          "title": "Automatiseer antwoorden",
+          "body": "Een flow kan elke keer dezelfde vraag voor je beantwoorden."
+        },
+        "palette": {
+          "title": "Spring overal naartoe",
+          "body": "Druk op Ctrl K om alle pagina's te doorzoeken."
+        },
+        "scheduled": {
+          "title": "Plan vooruit",
+          "body": "Zet nu een bericht in de wachtrij en laat het op het juiste moment verzenden."
+        },
+        "wallet": {
+          "title": "Houd je saldo in de gaten",
+          "body": "Waardeer op voordat het laag wordt, zodat verzenden nooit stopt."
+        }
+      },
+      "shortcuts": {
+        "title": "Snelkoppelingen",
+        "customise": "Aanpassen",
+        "empty": "Geen snelkoppelingen geselecteerd. Gebruik Aanpassen om er toe te voegen.",
+        "editTitle": "Snelkoppelingen aanpassen",
+        "emptyEditor": "Geen snelkoppelingen geselecteerd",
+        "up": "{item} omhoog verplaatsen",
+        "down": "{item} omlaag verplaatsen",
+        "remove": "{item} verwijderen",
+        "customTitle": "Titel",
+        "customSubtitle": "Ondertitel",
+        "customUrl": "Link",
+        "customProblem": "Een eigen snelkoppeling heeft een titel en een link nodig.",
+        "addCustom": "Eigen snelkoppeling toevoegen",
+        "reset": "Standaardwaarden herstellen",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "presets": {
+          "new-auto-reply": {
+            "title": "Nieuw automatisch antwoord",
+            "subtitle": "Beantwoord veelgestelde vragen automatisch"
+          },
+          "schedule-send": {
+            "title": "Verzending plannen",
+            "subtitle": "Zet een bericht in de wachtrij voor later"
+          },
+          "test-webhook": {
+            "title": "Webhooks",
+            "subtitle": "Stuur gebeurtenissen naar andere systemen"
+          },
+          "export-history": {
+            "title": "Berichtgeschiedenis",
+            "subtitle": "Bekijk en exporteer wat is verzonden"
+          },
+          "contact-support": {
+            "title": "Contact opnemen met support",
+            "subtitle": "Vraag het team om hulp"
+          },
+          "new-broadcast": {
+            "title": "Nieuwe broadcast",
+            "subtitle": "Bericht naar veel contacten tegelijk"
+          },
+          "open-contacts": {
+            "title": "Contacten",
+            "subtitle": "Je doelgroep"
+          },
+          "pair-device": {
+            "title": "Een nummer verbinden",
+            "subtitle": "Een WhatsApp-nummer koppelen"
+          },
+          "team-inbox": {
+            "title": "Inbox",
+            "subtitle": "Elk gesprek"
+          },
+          "create-flow": {
+            "title": "Flow maken",
+            "subtitle": "Een automatisering bouwen"
+          },
+          "new-template": {
+            "title": "Nieuw sjabloon",
+            "subtitle": "Schrijf een berichtsjabloon"
+          }
+        }
+      }
+    },
+    "inboxBell": {
+      "label": "{count, plural, one {1 ongelezen gesprek} other {# ongelezen gesprekken}}",
+      "pill": "{count, plural, one {nieuw bericht} other {nieuwe berichten}}",
+      "dismiss": "Verbergen tot er iets nieuwers binnenkomt",
+      "title": "Nieuwe berichten",
+      "viewInbox": "De inbox openen"
+    },
+    "connectDevice": {
+      "title": "Een nummer verbinden",
+      "close": "Sluiten",
+      "connected": "Nummer verbonden"
+    },
+    "search": {
+      "label": "De console doorzoeken",
+      "trigger": "Beheer doorzoeken…",
+      "placeholder": "Zoek pagina's en instellingen…",
+      "noResults": "Geen resultaten voor “{query}”",
+      "count": "{count, plural, one {# resultaat} other {# resultaten}}",
+      "hintMove": "navigeren",
+      "hintOpen": "openen",
+      "hintToggle": "wisselen"
+    }
+  }
+}

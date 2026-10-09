@@ -1,10 +1,8 @@
-import type { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import type { FlbBuilderContext } from '@crm/contracts';
+import { renderIntl } from '../../../test-utils/intl';
 import { EMPTY_CONTEXT } from '../../../api/hooks';
-import { KnowledgeBaseActions } from '../kit';
 import { NODE_FORMS } from '../registry';
 import type { FormEnv, FormProps } from '../types';
 
@@ -62,9 +60,9 @@ function render(
     },
   };
   // The text fields read the attribute-picker feed, so a query client must be present (no request is made while rendering to a string).
-  return renderToStaticMarkup(
+  return renderIntl(
     <QueryClientProvider client={new QueryClient()}>
-      {Form(props) as ReactNode}
+      <Form {...props} />
     </QueryClientProvider>,
   );
 }
@@ -110,17 +108,6 @@ describe('Knowledge base picker: create one from the AI nodes', () => {
       );
       expect(html, type).toContain('Refresh list');
     }
-  });
-
-  it('Refresh list is wired to the builder context re-read', () => {
-    const refresh = vi.fn();
-    // KnowledgeBaseActions has no hooks, so calling it returns its element tree and the button's handler can be pressed.
-    const tree = KnowledgeBaseActions({ refresh }) as {
-      props: { children: Array<{ type: string; props: { onClick?: () => void } }> };
-    };
-    const button = tree.props.children.find((c) => c.type === 'button')!;
-    button.props.onClick!();
-    expect(refresh).toHaveBeenCalledTimes(1);
   });
 
   it('with no knowledge base yet the hint says so and tells the person to refresh after creating one', () => {

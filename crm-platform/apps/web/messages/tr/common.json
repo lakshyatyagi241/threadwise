@@ -1,0 +1,18 @@
+{
+  "common": {
+    "appName": "CRM",
+    "loadMore": "Daha fazla yükle",
+    "loading": "Yükleniyor",
+    "empty": "Henüz burada bir şey yok",
+    "retry": "Tekrar dene",
+    "requestId": "İstek kimliği",
+    "search": "Ara",
+    "unexpected": "Bir şeyler ters gitti",
+    "fatal": {
+      "title": "Bir şeyler ters gitti",
+      "body": "Sayfa yüklenemedi. Bildirildi. Tekrar deneyin, devam ederse destekle iletişime geçin.",
+      "bodyWithDigest": "Sayfa yüklenemedi. Bildirildi. Tekrar deneyin, devam ederse destekle iletişime geçin ve {digest} değerini belirtin.",
+      "home": "Başa dön"
+    }
+  }
+}

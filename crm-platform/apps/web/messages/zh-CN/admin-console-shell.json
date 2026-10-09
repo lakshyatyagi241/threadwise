@@ -1,0 +1,709 @@
+{
+  "admin-console-shell": {
+    "nav": {
+      "overview": "首页",
+      "menuOrder": "菜单顺序",
+      "groups": {
+        "shell": "界面"
+      },
+      "sections": {
+        "reports": "报表",
+        "plans": "工作区和套餐",
+        "billing": "计费",
+        "messaging": "消息计费",
+        "support": "支持",
+        "website": "网站",
+        "whatsapp": "WhatsApp",
+        "apps": "应用",
+        "team": "团队和安全",
+        "settings": "设置",
+        "system": "系统"
+      },
+      "badges": {
+        "notSupported": "不支持",
+        "noWorkspaces": "没有工作区"
+      },
+      "labels": {
+        "addonPacks": "附加包",
+        "extensions": "扩展",
+        "trackingCode": "跟踪代码",
+        "planPricingSettings": "套餐定价设置",
+        "checkoutSettings": "结账设置",
+        "walletOverview": "钱包概览",
+        "flowTemplates": "流程模板"
+      },
+      "hubNotes": {
+        "reports": "收入、套餐、AI 和系统报表。",
+        "plans": "工作区、套餐、附加包、优惠券和定价页面。",
+        "billing": "订单、发票、付款和结账设置。",
+        "messaging": "消息定价、利润率、充值包和 Meta 分销收入。",
+        "support": "工单、团队和平台收件箱、客服、SLA、操作手册和联系消息。",
+        "website": "站点编辑器、博客、法律页面、公告和指南。",
+        "whatsapp": "服务商、号码切换、Node 桥接、Webhook、WABA 和商品目录设置。",
+        "apps": "市场、扩展和流程模板。",
+        "team": "角色、权限、安全和登录规则。",
+        "settings": "品牌、邮件、集成、隐私、存储等。",
+        "system": "更新、语言、货币和翻译。"
+      },
+      "captions": {
+        "branding": "品牌和界面",
+        "integrations": "集成",
+        "privacy": "隐私和跟踪",
+        "infrastructure": "基础设施",
+        "roles": "角色",
+        "security": "安全",
+        "signin": "登录和注册"
+      }
+    },
+    "shell": {
+      "collapse": "收起侧边栏",
+      "expand": "展开侧边栏",
+      "backToApp": "返回应用",
+      "allAreas": "所有区域",
+      "switchArea": "切换区域，当前在{area}"
+    },
+    "overview": {
+      "title": "平台控制台",
+      "note": "选择一个区域。每个区域都会在左侧菜单中列出其页面，按 Ctrl+K 可按名称查找任意页面。",
+      "open": "打开",
+      "attentionTitle": "需要处理",
+      "attentionAll": "{count, plural, other {# 条未读通知}}",
+      "attentionEmpty": "目前没有需要处理的事项。",
+      "pages": "{count, plural, other {# 个页面}}"
+    },
+    "menuOrder": {
+      "title": "菜单顺序",
+      "note": "选择哪些入口显示在每位客户都能看到的顶部栏中，以及它们的顺序。其余入口都放在“更多”下。用户在下次加载页面时看到更改。",
+      "barZone": "顶部栏",
+      "moreZone": "更多",
+      "locked": "始终在最后",
+      "save": "保存布局",
+      "reset": "恢复默认",
+      "saved": "菜单布局已保存。用户在下次加载页面时看到。",
+      "saveFailed": "无法保存布局。",
+      "loadFailed": "无法加载布局。",
+      "moveUp": "上移 {item}",
+      "moveDown": "下移 {item}",
+      "remove": "将 {item} 移到“更多”",
+      "add": "将 {item} 添加到顶部栏",
+      "removeShort": "移除",
+      "addShort": "添加",
+      "items": {
+        "dashboard": "仪表板",
+        "team-inbox": "团队收件箱",
+        "wa-campaigns": "营销活动",
+        "flows": "流程",
+        "templates": "模板",
+        "devices": "设备",
+        "metaads": "Meta 广告",
+        "broadcasts": "群发",
+        "contacts": "联系人",
+        "deals": "交易",
+        "chat": "在线聊天",
+        "analytics": "分析",
+        "auto-reply": "自动回复",
+        "scheduled": "已计划",
+        "message-history": "历史记录",
+        "ai-assistants": "AI 助手",
+        "ai-training": "AI 训练",
+        "wa-links": "WA 链接",
+        "chatbot-widgets": "聊天小组件",
+        "webhooks": "Webhook",
+        "integrations": "集成",
+        "warmer": "预热",
+        "call-logs": "通话记录",
+        "support": "支持",
+        "more": "更多"
+      }
+    },
+    "header": {
+      "health": {
+        "title": "平台健康状况",
+        "ok": "所有系统正常",
+        "stuck": "{count, plural, other {# 个卡住的任务}}",
+        "down": "无法连接数据库"
+      },
+      "bell": {
+        "title": "通知",
+        "labelUnread": "通知，{count} 条未读",
+        "inbox": "收件箱",
+        "markAllRead": "全部标为已读",
+        "clearAll": "全部清除",
+        "viewAll": "查看全部",
+        "loading": "加载中...",
+        "empty": "暂无通知。"
+      },
+      "account": {
+        "menu": "账户菜单",
+        "open": "{name} 的账户菜单",
+        "myAccount": "我的账户",
+        "settings": "设置",
+        "overview": "管理员概览",
+        "signOut": "退出登录"
+      },
+      "feed": {
+        "signup": "新用户注册",
+        "paymentReceived": "已收到付款",
+        "newOrder": "新订单",
+        "newTicket": "新支持工单",
+        "newContactMessage": "新联系消息",
+        "newWorkspace": "新工作区"
+      }
+    },
+    "notificationsPage": {
+      "eyebrow": "管理员 - 平台动态 - 通知",
+      "title": "管理员通知",
+      "note": "平台上发生的一切：新注册、付款、支持工单、联系消息和新工作区。与工作区成员的个人通知相互独立。",
+      "tiles": {
+        "all": "所有事件",
+        "signup": "注册",
+        "payment": "付款",
+        "ticket": "支持",
+        "contact": "消息",
+        "workspace": "工作区"
+      },
+      "pills": {
+        "all": "全部",
+        "signup": "注册",
+        "payment": "付款",
+        "ticket": "支持",
+        "contact": "消息",
+        "workspace": "工作区"
+      },
+      "kinds": {
+        "signup": "注册",
+        "payment": "付款",
+        "ticket": "支持",
+        "contact": "消息",
+        "workspace": "工作区"
+      },
+      "last30": "最近 30 天",
+      "search": "搜索事件...",
+      "empty": "此视图中没有平台动态。",
+      "loadFailed": "无法加载动态。",
+      "cols": {
+        "type": "类型",
+        "event": "事件",
+        "detail": "详情",
+        "when": "时间",
+        "open": "打开"
+      },
+      "showing": "显示 {count, plural, other {# 个最近事件}}",
+      "live": "实时动态，最新在前"
+    },
+    "settings": {
+      "workspace": {
+        "label": "工作区设置",
+        "description": "名称、时区、货币、通知、数据导出和删除工作区。",
+        "keywords": "工作区, 名称, 时区, 货币, 通知, 导出, 删除, slack"
+      }
+    },
+    "workspaceSettings": {
+      "titleLead": "工作区",
+      "titleTail": "设置",
+      "subtitle": "配置你的工作区、团队和集成。",
+      "tabs": {
+        "general": "常规",
+        "branding": "品牌",
+        "team": "团队和角色",
+        "notifications": "通知",
+        "aikeys": "AI 密钥",
+        "security": "安全",
+        "api": "API 和 Webhook",
+        "data": "数据和导出",
+        "appearance": "外观"
+      },
+      "general": {
+        "workspace": "工作区",
+        "ownerOnly": "只有工作区所有者可以更改时区、货币或工作区名称。",
+        "name": "工作区名称",
+        "url": "工作区 URL",
+        "urlHint": "URL 标识无法在此处编辑。如需更改请联系支持。",
+        "timezone": "默认时区",
+        "timezoneHint": "所有定时发送、营业时间检查和 SLA 计时都按此时区运行。",
+        "currency": "货币",
+        "currencyHint": "用于套餐结账、发票和钱包显示。",
+        "save": "保存",
+        "saved": "设置已保存。",
+        "saveFailed": "无法保存设置。",
+        "loadFailed": "无法加载设置。",
+        "hours": {
+          "title": "工作时间",
+          "note": "仅供参考。工作时间尚未生效，因此这些控件为只读。",
+          "weekdays": "周一至周五",
+          "saturday": "周六",
+          "sunday": "周日",
+          "from": "从",
+          "to": "至"
+        },
+        "preferences": {
+          "title": "自动 AI 摘要",
+          "note": "对每个消息正文文本框进行实时 AI 点评：做得好的用绿色标出，需要修改的用红色标出，并提供可一键粘贴回去的“最佳版本”。关闭后，仍可通过工具栏中的闪光图标按需运行同样的点评。",
+          "save": "保存",
+          "saved": "偏好已保存。",
+          "saveFailed": "无法保存偏好。"
+        }
+      },
+      "notifications": {
+        "title": "工作区通知",
+        "note": "按渠道开关送达方式。在此关闭的内容将不会产生应用内提醒、邮件或 Slack 消息。",
+        "readOnly": "只读。工作区所有者可以编辑这些设置。",
+        "save": "保存偏好",
+        "saved": "通知偏好已保存。",
+        "saveFailed": "无法保存偏好。",
+        "loadFailed": "无法加载偏好。",
+        "specificEvents": "特定事件",
+        "byCategory": "按类别",
+        "event": "事件",
+        "category": "类别",
+        "channels": {
+          "inapp": "应用内",
+          "email": "邮件",
+          "slack": "Slack"
+        },
+        "events": {
+          "device_connected": "设备已连接",
+          "device_disconnected": "设备已断开",
+          "campaign_completed": "营销活动已完成",
+          "campaign_failed": "营销活动失败",
+          "broadcast_completed": "群发已完成",
+          "new_customer_reply": "客户新回复",
+          "mention_in_inbox": "你被 @提及",
+          "conversation_assigned": "会话已分配给你",
+          "sla_breached": "SLA 超时",
+          "wallet_low_balance": "钱包余额不足",
+          "plan_changed": "套餐升级 / 降级",
+          "payment_failed": "付款失败",
+          "webhook_delivery_failed": "Webhook 投递失败",
+          "flow_started": "流程已启动",
+          "flow_failed": "流程失败",
+          "integration_disconnected": "集成已断开",
+          "appointment_booked": "预约已创建",
+          "weekly_summary": "每周摘要"
+        },
+        "categories": {
+          "device": "设备",
+          "contact": "联系人",
+          "campaign": "营销活动",
+          "broadcast": "群发",
+          "template": "模板",
+          "chat": "聊天",
+          "webhook": "Webhook",
+          "billing": "计费",
+          "system": "系统"
+        },
+        "slackLabel": "Slack 传入 Webhook URL",
+        "slackHint": "在 Slack 的“应用”“传入 Webhook”下创建。开启 Slack 开关的事件会发送到这里。",
+        "channelStatus": "渠道状态",
+        "statusInapp": "应用内提醒：已生效，驱动顶部标题栏的角标。",
+        "statusEmailLive": "邮件：已生效，通过平台邮件设置发送。",
+        "statusEmailOff": "邮件：平台管理员配置 SMTP 后发送。",
+        "statusSlackOn": "Slack：Webhook 已保存。",
+        "statusSlackOff": "Slack：添加 Webhook URL 以启用。"
+      },
+      "data": {
+        "loadFailed": "无法加载导出数量。",
+        "exportTitle": "数据导出",
+        "exportNote": "将工作区数据下载为 CSV。每个链接都会生成新的导出。",
+        "exportOwnerOnly": "只有工作区所有者可以下载导出。",
+        "types": {
+          "contacts": "联系人",
+          "conversations": "会话",
+          "messages": "消息"
+        },
+        "count": {
+          "contacts": "{count, plural, other {# 条记录}} · CSV",
+          "conversations": "{count, plural, other {# 个会话线程}} · CSV",
+          "messages": "{count, plural, other {# 条消息}} · CSV"
+        },
+        "delete": {
+          "title": "删除工作区",
+          "note": "永久删除此工作区、所有会话、自动化和计费历史。",
+          "irreversible": "无法撤销。",
+          "ownerOnly": "只有工作区所有者可以删除工作区。",
+          "typeName": "输入工作区名称：",
+          "password": "使用密码确认",
+          "submit": "永久删除工作区",
+          "cancel": "取消",
+          "confirmTitle": "删除此工作区？",
+          "confirmMessage": "“{name}”及其中的所有内容都将被删除，所有人都将退出登录。此操作不可逆。",
+          "failed": "无法删除工作区。"
+        }
+      },
+      "groups": {
+        "workspace": "工作区",
+        "system": "系统"
+      },
+      "railLabel": "设置分区",
+      "personal": {
+        "title": "你的账户",
+        "body": "个人资料、密码和个人偏好。"
+      },
+      "api": {
+        "restTitle": "通用 REST API",
+        "rest1": "创建 API 密钥，从你自己的系统读写联系人、会话和消息。",
+        "rest2": "每个密钥都限定在此工作区内，可随时撤销。",
+        "rest3": "请求按套餐限制每分钟次数。",
+        "webhooksTitle": "Webhook",
+        "webhooksBody": "向你自己的端点发送事件，并接收来自其他工具的事件。",
+        "manage": "管理集成"
+      },
+      "appearance": {
+        "title": "外观",
+        "note": "选择应用对你的显示方式。这与页眉中的太阳和月亮按钮是同一个选项。",
+        "choices": {
+          "light": {
+            "label": "浅色",
+            "body": "明亮的页面，带柔和的纸张色调。"
+          },
+          "dark": {
+            "label": "深色",
+            "body": "昏暗的页面，夜间更护眼。"
+          }
+        },
+        "save": "保存",
+        "saved": "外观已更新。"
+      }
+    },
+    "topNav": {
+      "more": "更多",
+      "search": "搜索",
+      "premium": "高级功能：升级套餐即可解锁"
+    },
+    "palette": {
+      "title": "搜索页面",
+      "placeholder": "搜索页面、设置、工具...",
+      "empty": "未找到“{query}”的结果",
+      "hintNavigate": "上下键导航",
+      "hintOpen": "按 Enter 打开",
+      "hintToggle": "Ctrl K 切换",
+      "tags": {
+        "page": "页面",
+        "account": "账户",
+        "plan": "套餐",
+        "help": "帮助",
+        "system": "系统"
+      },
+      "entries": {
+        "profile": "个人资料",
+        "profileHint": "你的姓名、头像和联系方式",
+        "password": "密码和安全",
+        "passwordHint": "密码、双重验证登录和活动会话"
+      }
+    },
+    "strip": {
+      "jump": "搜索或跳转到...",
+      "account": {
+        "group": "账户",
+        "account": "账户",
+        "wallet": "钱包",
+        "notifications": "通知"
+      },
+      "greeting": {
+        "midnightOil": "挑灯夜战",
+        "morning": "早上好",
+        "afternoon": "下午好",
+        "evening": "晚上好",
+        "night": "晚安"
+      }
+    },
+    "profileMenu": {
+      "chip": "{plan}套餐 - {role}",
+      "wallet": "钱包",
+      "orders": "订单历史",
+      "plans": "定价和套餐",
+      "tour": "开始导览"
+    },
+    "quickAccess": {
+      "title": "快捷入口",
+      "open": "打开快捷入口",
+      "close": "关闭",
+      "edit": "编辑快捷方式",
+      "editTitle": "编辑快捷入口",
+      "editNote": "最多固定十个页面或你自己的链接。它们会显示在仪表板和侧边抽屉中。",
+      "dashboard": "仪表板",
+      "allApps": "所有应用",
+      "limit": "最多可固定 {max} 个快捷方式。",
+      "saveFailed": "无法保存快捷方式。",
+      "customLinks": "自定义链接",
+      "linkLabel": "标签",
+      "linkUrl": "链接",
+      "addLink": "添加链接",
+      "removeLink": "移除此链接",
+      "counter": "已固定 {count} / {max}",
+      "cancel": "取消",
+      "save": "保存快捷方式",
+      "problem": {
+        "incomplete": "链接需要标签和地址。",
+        "unsafe": "请使用本应用内的地址（以一个斜杠开头）或 http、https 地址。"
+      },
+      "catalog": {
+        "inbox": {
+          "label": "统一收件箱",
+          "desc": "所有会话集中在一处"
+        },
+        "contacts": {
+          "label": "联系人",
+          "desc": "你的受众及其详情"
+        },
+        "campaigns": {
+          "label": "营销活动",
+          "desc": "策划并发送营销活动"
+        },
+        "broadcasts": {
+          "label": "群发",
+          "desc": "向多位联系人发送同一条消息"
+        },
+        "templates": {
+          "label": "模板",
+          "desc": "已审核的消息模板"
+        },
+        "flows": {
+          "label": "流程",
+          "desc": "自动化会话"
+        },
+        "scheduled": {
+          "label": "已计划",
+          "desc": "等待发送的消息"
+        },
+        "catalog": {
+          "label": "商品目录",
+          "desc": "你在 WhatsApp 上销售的商品"
+        },
+        "store": {
+          "label": "商店",
+          "desc": "你的店面和订单"
+        },
+        "deals": {
+          "label": "销售管道",
+          "desc": "按阶段划分的交易"
+        },
+        "analytics": {
+          "label": "分析",
+          "desc": "送达和回复数据"
+        },
+        "auto-reply": {
+          "label": "自动回复",
+          "desc": "关键词和非营业时间回复"
+        },
+        "devices": {
+          "label": "设备",
+          "desc": "已连接的 WhatsApp 号码"
+        },
+        "chatbots": {
+          "label": "聊天小组件",
+          "desc": "用于你网站的聊天小组件"
+        },
+        "ai": {
+          "label": "AI 助手",
+          "desc": "替你回答的助手"
+        },
+        "appointments": {
+          "label": "预约",
+          "desc": "预订和可用时间"
+        },
+        "webhooks": {
+          "label": "Webhook",
+          "desc": "向其他系统发送事件"
+        },
+        "history": {
+          "label": "消息日志",
+          "desc": "所有已发送和已接收的消息"
+        },
+        "account": {
+          "label": "账户",
+          "desc": "个人资料、套餐和钱包"
+        },
+        "more": {
+          "label": "更多应用",
+          "desc": "所有工具集中在一页"
+        }
+      }
+    },
+    "announcements": {
+      "label": "公告",
+      "dismiss": "忽略"
+    },
+    "tour": {
+      "close": "关闭导览",
+      "back": "上一步",
+      "next": "下一步",
+      "done": "完成",
+      "progress": "{current} / {total}",
+      "steps": {
+        "welcome": {
+          "title": "欢迎使用 {app}",
+          "body": "快速浏览你最常用的地方，用时不到一分钟。"
+        },
+        "navbar": {
+          "title": "你的菜单",
+          "body": "日常所做的一切，在顶部栏一键即达。"
+        },
+        "metaads": {
+          "title": "Meta 广告",
+          "body": "投放点击跳转 WhatsApp 的广告，并查看带来的效果。"
+        },
+        "campaigns": {
+          "title": "营销活动",
+          "body": "策划、发送并跟踪 WhatsApp 营销活动。"
+        },
+        "flows": {
+          "title": "流程",
+          "body": "构建替你回复的自动化。"
+        },
+        "templates": {
+          "title": "模板",
+          "body": "在这里保存你已审核的消息模板。"
+        },
+        "devices": {
+          "title": "渠道",
+          "body": "连接你用来发送消息的号码和账户。"
+        },
+        "more": {
+          "title": "更多",
+          "body": "其他所有工具都在这里，已分组且可搜索。"
+        },
+        "kpi": {
+          "title": "你的号码",
+          "body": "消息、回复和送达情况一目了然。"
+        },
+        "newCampaign": {
+          "title": "开始营销活动",
+          "body": "从这里创建你的第一个营销活动。"
+        },
+        "pipeline": {
+          "title": "销售管道",
+          "body": "从第一条消息到成交，全程跟进交易。"
+        }
+      }
+    },
+    "more": {
+      "titleLead": "更多",
+      "titleTail": "功能",
+      "subtitle": "所有工具集中在一处。",
+      "navigation": "导航",
+      "allTools": "所有工具",
+      "noTools": "这里还没有内容。",
+      "tabs": {
+        "all": "全部",
+        "automation": "自动化",
+        "data": "数据",
+        "help": "帮助"
+      },
+      "plan": "你的套餐",
+      "managePlan": "管理套餐",
+      "wallet": "钱包",
+      "topUp": "充值",
+      "tips": {
+        "title": "提示",
+        "pager": "小贴士",
+        "templates": {
+          "title": "使用模板",
+          "body": "已审核的模板可在 24 小时窗口之外触达客户。"
+        },
+        "flows": {
+          "title": "自动回复",
+          "body": "流程可以每次替你回答同样的问题。"
+        },
+        "palette": {
+          "title": "随处跳转",
+          "body": "按 Ctrl K 搜索所有页面。"
+        },
+        "scheduled": {
+          "title": "提前安排",
+          "body": "现在排队一条消息，让它在合适的时间发出。"
+        },
+        "wallet": {
+          "title": "留意余额",
+          "body": "在余额不足前充值，发送就不会中断。"
+        }
+      },
+      "shortcuts": {
+        "title": "快捷方式",
+        "customise": "自定义",
+        "empty": "未选择快捷方式。使用“自定义”添加。",
+        "editTitle": "自定义快捷方式",
+        "emptyEditor": "未选择快捷方式",
+        "up": "上移 {item}",
+        "down": "下移 {item}",
+        "remove": "移除 {item}",
+        "customTitle": "标题",
+        "customSubtitle": "副标题",
+        "customUrl": "链接",
+        "customProblem": "自定义快捷方式需要标题和链接。",
+        "addCustom": "添加自定义快捷方式",
+        "reset": "恢复默认",
+        "cancel": "取消",
+        "save": "保存",
+        "presets": {
+          "new-auto-reply": {
+            "title": "新建自动回复",
+            "subtitle": "自动回答常见问题"
+          },
+          "schedule-send": {
+            "title": "定时发送",
+            "subtitle": "排队稍后发送消息"
+          },
+          "test-webhook": {
+            "title": "Webhook",
+            "subtitle": "向其他系统发送事件"
+          },
+          "export-history": {
+            "title": "消息历史",
+            "subtitle": "查看并导出已发送的内容"
+          },
+          "contact-support": {
+            "title": "联系支持",
+            "subtitle": "向团队寻求帮助"
+          },
+          "new-broadcast": {
+            "title": "新建群发",
+            "subtitle": "一次向多位联系人发送消息"
+          },
+          "open-contacts": {
+            "title": "联系人",
+            "subtitle": "你的受众"
+          },
+          "pair-device": {
+            "title": "连接号码",
+            "subtitle": "配对 WhatsApp 号码"
+          },
+          "team-inbox": {
+            "title": "收件箱",
+            "subtitle": "所有会话"
+          },
+          "create-flow": {
+            "title": "创建流程",
+            "subtitle": "构建自动化"
+          },
+          "new-template": {
+            "title": "新建模板",
+            "subtitle": "编写消息模板"
+          }
+        }
+      }
+    },
+    "inboxBell": {
+      "label": "{count, plural, other {# 个未读会话}}",
+      "pill": "{count, plural, other {新消息}}",
+      "dismiss": "忽略，直到有更新的消息",
+      "title": "新消息",
+      "viewInbox": "打开收件箱"
+    },
+    "connectDevice": {
+      "title": "连接号码",
+      "close": "关闭",
+      "connected": "号码已连接"
+    },
+    "search": {
+      "label": "搜索控制台",
+      "trigger": "搜索管理后台…",
+      "placeholder": "搜索页面和设置…",
+      "noResults": "未找到“{query}”的结果",
+      "count": "{count, plural, other {# 个结果}}",
+      "hintMove": "导航",
+      "hintOpen": "打开",
+      "hintToggle": "切换"
+    }
+  }
+}

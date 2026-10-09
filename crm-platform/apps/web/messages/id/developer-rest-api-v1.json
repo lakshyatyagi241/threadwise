@@ -1,0 +1,93 @@
+{
+  "developer-rest-api-v1": {
+    "common": {
+      "dismiss": "Tutup",
+      "copy": "Salin",
+      "copied": "Disalin",
+      "copyFailed": "Tidak dapat disalin. Pilih teks lalu salin secara manual."
+    },
+    "rail": {
+      "name": "API developer",
+      "tagline": "REST · /api/v1",
+      "keyActive": "Kunci aktif",
+      "noKey": "Belum ada kunci",
+      "baseUrl": "URL dasar",
+      "authHeader": "Header autentikasi",
+      "help": {
+        "title": "Butuh bantuan?",
+        "body": "Referensi permintaan dan respons lengkap, dengan contoh yang dapat disalin untuk setiap endpoint.",
+        "link": "Baca dokumentasi"
+      }
+    },
+    "page": {
+      "crumbLabel": "Breadcrumb",
+      "crumbSettings": "Pengaturan",
+      "crumbHere": "Developer",
+      "title": "Developer",
+      "titleAccent": "Kunci API",
+      "lead": "Buat kunci untuk memanggil REST API dari aplikasi, CRM, atau otomasi Anda sendiri: kirim pesan, kelola kontak, template, broadcast, dan lainnya. Satu kunci per workspace.",
+      "back": "Kembali",
+      "openDocs": "Buka dokumentasi",
+      "loading": "Memuat kunci API Anda",
+      "forbidden": {
+        "title": "Anda tidak dapat melihat kunci API",
+        "body": "Peran Anda tidak mencakup akses ke kunci API. Minta admin workspace memberi Anda izin kunci API."
+      }
+    },
+    "banner": {
+      "title": "Kunci API baru Anda",
+      "warning": "Salin sekarang dan simpan dengan aman. Demi keamanan kami hanya menyimpan hash, sehingga kunci tidak akan ditampilkan lagi."
+    },
+    "key": {
+      "title": "Kunci API Anda",
+      "active": "Aktif",
+      "untitled": "Kunci tanpa judul",
+      "created": "Dibuat {date}",
+      "lastUsed": "Terakhir dipakai {when}",
+      "never": "belum pernah",
+      "revoke": "Cabut",
+      "noRevoke": "Peran Anda tidak dapat mencabut kunci API.",
+      "revoked": "Kunci API dicabut. Aplikasi apa pun yang memakainya akan langsung berhenti berfungsi.",
+      "footer": "Hanya satu kunci yang diizinkan per workspace. Cabut yang ini untuk menerbitkan kunci baru.",
+      "confirm": {
+        "title": "Cabut kunci ini?",
+        "message": "Aplikasi atau integrasi apa pun yang memakai kunci ini akan langsung berhenti berfungsi. Tindakan ini tidak dapat dibatalkan. Anda dapat membuat kunci baru setelahnya.",
+        "accept": "Cabut",
+        "cancel": "Batal"
+      }
+    },
+    "create": {
+      "title": "Buat kunci Anda",
+      "help": "Beri nama kunci agar Anda ingat tempat pemakaiannya. Kunci ditampilkan sekali saat dibuat.",
+      "name": "Nama kunci",
+      "placeholder": "mis. Backend produksi",
+      "submit": "Buat kunci",
+      "submitting": "Membuat kunci…",
+      "created": "Kunci API dibuat. Salin sekarang - tidak akan ditampilkan lagi.",
+      "noCreate": "Peran Anda tidak dapat membuat kunci API. Hubungi admin workspace.",
+      "planLocked": "Paket Anda tidak menyertakan REST API.",
+      "errors": {
+        "required": "Masukkan nama untuk kunci.",
+        "tooLong": "Nama maksimal 120 karakter."
+      }
+    },
+    "quickstart": {
+      "title": "Mulai cepat",
+      "reference": "Referensi lengkap",
+      "intro": "Kirim pesan pertama Anda. Ganti kunci dan penerima:"
+    },
+    "errors": {
+      "planLimit": "Anda sudah memiliki kunci API aktif. Cabut sebelum membuat yang baru - hanya satu kunci per workspace yang diizinkan.",
+      "planLocked": "Paket Anda tidak menyertakan REST API. Upgrade untuk membuat kunci API.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukannya.",
+      "validation": "Nama kunci tidak valid. Periksa lalu coba lagi.",
+      "notFound": "Kunci tersebut sudah tidak ada. Daftar telah dimuat ulang.",
+      "network": "Server tidak dapat dijangkau. Periksa koneksi Anda lalu coba lagi.",
+      "unexpected": "Terjadi kesalahan di pihak kami. Coba lagi sebentar lagi.",
+      "loadFailed": "Kunci API Anda tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "upgrade": "Lihat paket",
+      "requestId": "ID permintaan: {id}"
+    }
+  }
+}

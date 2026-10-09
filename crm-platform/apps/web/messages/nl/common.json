@@ -1,0 +1,18 @@
+{
+  "common": {
+    "appName": "CRM",
+    "loadMore": "Meer laden",
+    "loading": "Laden",
+    "empty": "Hier is nog niets",
+    "retry": "Opnieuw proberen",
+    "requestId": "Verzoek-ID",
+    "search": "Zoeken",
+    "unexpected": "Er is iets misgegaan",
+    "fatal": {
+      "title": "Er is iets misgegaan",
+      "body": "De pagina kon niet worden geladen. Het is gemeld. Probeer het opnieuw en neem contact op met support als het blijft gebeuren.",
+      "bodyWithDigest": "De pagina kon niet worden geladen. Het is gemeld. Probeer het opnieuw en neem contact op met support als het blijft gebeuren, onder vermelding van {digest}.",
+      "home": "Terug naar het begin"
+    }
+  }
+}

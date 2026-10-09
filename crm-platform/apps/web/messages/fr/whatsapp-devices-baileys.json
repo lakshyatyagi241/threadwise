@@ -1,0 +1,312 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "devices": "WhatsApp personnel"
+    },
+    "area": {
+      "title": "API WhatsApp non officielle",
+      "numbers": "Numéros",
+      "warmer": "Préchauffage"
+    },
+    "common": {
+      "dismiss": "Ignorer",
+      "requestId": "Demande {id}",
+      "unofficial": "Non officiel",
+      "reminder": "Connexion non officielle. WhatsApp peut restreindre ce numéro.",
+      "readGuide": "Lire le guide",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "back": "Retour"
+    },
+    "list": {
+      "title": "Numéros WhatsApp personnels",
+      "subtitle": "Reliez un numéro WhatsApp par code QR ou code d’appairage. Les discussions de ce numéro apparaissent dans la boîte de réception partagée.",
+      "connect": "Connecter un numéro",
+      "capCount": "{used} sur {limit} numéros",
+      "capUnlimited": "{used, plural, one {# numéro} other {# numéros}}",
+      "capFull": "Votre espace de travail peut avoir {limit, plural, one {# numéro} other {# numéros}} sur ce moteur. Supprimez-en un pour en connecter un autre.",
+      "capLabel": "Numéros utilisés",
+      "loading": "Chargement de vos numéros…",
+      "retry": "Réessayer",
+      "searchLabel": "Rechercher par nom ou numéro",
+      "searchPlaceholder": "Rechercher nom ou numéro",
+      "tabs": {
+        "all": "Tous",
+        "connected": "Connectés",
+        "disconnected": "Déconnectés"
+      },
+      "noMatch": "Aucun numéro ne correspond. Effacez la recherche ou choisissez un autre onglet.",
+      "empty": {
+        "title": "Aucun numéro personnel n’est encore relié",
+        "message": "Reliez le numéro WhatsApp que vous utilisez déjà. Il fonctionne comme WhatsApp Web : ce n’est pas une méthode approuvée pour automatiser WhatsApp, et WhatsApp peut restreindre le numéro. Pour un usage sérieux ou durable, la voie officielle WhatsApp Business présente un risque moindre.",
+        "action": "Connecter un numéro",
+        "noPermission": "Demandez à un administrateur de l’espace de travail de connecter un numéro."
+      },
+      "columns": {
+        "name": "Nom",
+        "lastSeen": "Vu pour la dernière fois"
+      },
+      "lastSeenNever": "Jamais",
+      "assignedTo": "Géré par {name}",
+      "noticeChanged": {
+        "title": "Notre avis a changé",
+        "body": "L’avis sur les risques des numéros personnels a été mis à jour. Vos numéros connectés continuent de fonctionner. Il vous sera demandé de le relire la prochaine fois que vous en connecterez un.",
+        "action": "Lire l’avis"
+      },
+      "action": {
+        "link": "Connecter",
+        "reconnect": "Reconnecter",
+        "relink": "Relier à nouveau",
+        "retry": "Réessayer",
+        "details": "Détails",
+        "disconnect": "Déconnecter",
+        "rename": "Renommer",
+        "delete": "Supprimer"
+      },
+      "sendingToggle": "Utiliser {name} pour l’envoi",
+      "sendingOn": "Utilisé pour l’envoi",
+      "sendingOff": "Non utilisé pour l’envoi",
+      "done": {
+        "disconnected": "{name} a été déconnecté.",
+        "disconnectedNotUnlinked": "{name} a été déconnecté ici. Supprimez aussi cet appareil dans WhatsApp, sous Appareils associés.",
+        "deleted": "{name} a été supprimé. Ses discussions restent dans la boîte de réception.",
+        "renamed": "Renommé en {name}.",
+        "sendingSaved": "Enregistré."
+      },
+      "workerDown": "Le service de connexion ne fonctionne pas. Les numéros ne peuvent pas se connecter tant qu’il n’est pas rétabli."
+    },
+    "state": {
+      "created": "Pas encore relié",
+      "awaiting_qr": "En attente du scan",
+      "awaiting_pairing_code": "En attente du code",
+      "connecting": "Connexion en cours",
+      "connected": "Connecté",
+      "disconnected": "Déconnecté",
+      "logged_out": "Liaison interrompue par WhatsApp",
+      "error": "Connexion impossible",
+      "unknown": "Inconnu"
+    },
+    "reason": {
+      "unlinked_on_phone": "WhatsApp a interrompu la liaison de ce numéro. Cela arrive lorsque l’appareil est supprimé dans WhatsApp, sous Appareils associés, et aussi lorsque WhatsApp restreint un numéro. Vos discussions ici sont conservées. Vous pouvez le relier à nouveau.",
+      "forbidden": "WhatsApp a refusé la connexion. Cela peut signifier que le numéro a été restreint. Vos discussions ici sont conservées.",
+      "qr_timeout": "Le code n’a pas été scanné à temps.",
+      "pair_failed": "WhatsApp n’a pas pu terminer la liaison de ce numéro.",
+      "code_failed": "Le code d’appairage n’a pas été accepté.",
+      "mismatch": "Le téléphone qui a scanné n’est pas le numéro que vous avez saisi. Vérifiez le numéro et réessayez.",
+      "proxy_unreachable": "Le proxy n’a pas répondu. Le numéro reste hors ligne tant que le problème persiste.",
+      "session_conflict": "Le même numéro est relié ailleurs et les deux liaisons se remplacent en permanence. Supprimez l’autre liaison, puis connectez-vous à nouveau.",
+      "device_limit_reached": "WhatsApp autorise 4 appareils associés. Supprimez-en un dans WhatsApp, sous Appareils associés, puis réessayez.",
+      "worker_unavailable": "Le service de connexion est indisponible. Réessayez dans quelques minutes.",
+      "worker_silent": "Le service de connexion ne répond plus pour ce numéro. Il se reconnecte automatiquement dès que le service est rétabli.",
+      "user": "Déconnecté de cet espace de travail.",
+      "session_incomplete": "La session enregistrée n’a pas abouti. Reliez de nouveau le numéro."
+    },
+    "notice": {
+      "title": "Avant de vous connecter",
+      "intro": "Lisez ceci. C’est court et c’est vrai.",
+      "listLabel": "Veuillez confirmer chaque point",
+      "notesTitle": "Bon à savoir",
+      "version": "Version de l’avis {version}",
+      "accept": "J’accepte et je continue",
+      "accepting": "Enregistrement…",
+      "mustTick": "Cochez les trois cases pour continuer.",
+      "pageTitle": "Avis sur les risques des numéros personnels",
+      "pageIntro": "C’est l’avis que vous acceptez avant de connecter un numéro WhatsApp personnel.",
+      "acceptedOn": "Vous avez accepté la version {version} le {date}.",
+      "notAccepted": "Vous n’avez pas encore accepté la version actuelle. Il vous sera demandé lorsque vous connecterez un numéro.",
+      "backToList": "Retour aux numéros",
+      "texts": {
+        "v2026_10_07_1": {
+          "items": {
+            "not_approved_ban_risk": "Je comprends que cela connecte mon WhatsApp comme le fait WhatsApp Web. Ce n’est pas une méthode approuvée pour automatiser WhatsApp, et elle est contraire aux conditions de WhatsApp. WhatsApp peut restreindre ou bannir définitivement ce numéro à tout moment, y compris pour un usage normal, et nous ne pouvons ni l’empêcher ni récupérer le numéro.",
+            "own_number_expected_contacts": "Je ne connecterai qu’un numéro qui m’appartient ou dont le propriétaire m’a donné l’autorisation, et je peux me permettre de le perdre. Je n’écrirai qu’aux personnes qui s’attendent à me lire.",
+            "shared_inbox_disclosure": "Je comprends qu’à partir du moment où il est relié, toute discussion privée sur ce numéro (et pas seulement les discussions professionnelles) apparaît dans la boîte de réception partagée de cet espace de travail, pour les membres autorisés à la lire, et que les messages que je tape sur mon téléphone y sont aussi copiés."
+          },
+          "notes": {
+            "official_route_lower_risk": "La voie officielle WhatsApp Business présente un risque moindre pour un usage sérieux ou durable.",
+            "warm_up": "Faites monter progressivement le numéro en charge et gardez des volumes faibles.",
+            "no_ban_support": "Un numéro restreint ou banni n’est pas couvert par le support : nous ne l’examinons pas, ne le rétablissons pas et ne le remboursons pas.",
+            "shared_addresses": "Dans cette version pilote, les numéros se connectent depuis les adresses partagées de nos serveurs (sans proxy) ; une restriction sur un numéro peut donc être liée à d’autres.",
+            "disconnect_keeps_chats": "Se déconnecter ici supprime la liaison et la session enregistrée, mais ne supprime pas les discussions de la boîte de réception."
+          }
+        }
+      }
+    },
+    "wizard": {
+      "title": "Connecter un numéro",
+      "relinkTitle": "Relier {name}",
+      "stepOf": "Étape {step} sur {total}",
+      "continue": "Continuer",
+      "creating": "Enregistrement…",
+      "number": {
+        "title": "Quel numéro ?",
+        "name": "Nom",
+        "namePlaceholder": "Par exemple Ligne commerciale",
+        "nameHelp": "Seule votre équipe voit ce nom.",
+        "phone": "Numéro WhatsApp",
+        "phoneHelp": "Saisissez le numéro que vous allez relier, avec son indicatif pays. Il doit s’agir du numéro du téléphone qui scannera ou saisira le code.",
+        "activate": "Utiliser pour l’envoi après la liaison",
+        "activateHelp": "Les campagnes, messages programmés et flux pourront utiliser ce numéro une fois relié.",
+        "nameError": {
+          "required": "Saisissez un nom.",
+          "short": "Le nom doit comporter au moins 2 caractères.",
+          "long": "Le nom est trop long (191 caractères maximum)."
+        },
+        "phoneError": {
+          "empty": "Saisissez le numéro.",
+          "invalid": "Ce numéro n’est pas valide pour le pays choisi."
+        },
+        "openExisting": "Ouvrir le numéro existant"
+      },
+      "link": {
+        "title": "Relier le téléphone",
+        "choose": "Comment voulez-vous le relier ?",
+        "methodLabel": "Méthode de liaison",
+        "qr": "Scanner un code QR",
+        "qrHelp": "Scannez avec le téléphone qui a ce numéro.",
+        "code": "Utiliser un code d’appairage",
+        "codeHelp": "Saisissez sur le téléphone un code de 8 caractères. Pratique si vous ne pouvez pas scanner.",
+        "numberLine": "Numéro : {phone}",
+        "startQr": "Afficher le code QR",
+        "startCode": "Obtenir un code d’appairage",
+        "starting": "Démarrage…",
+        "needCountryCode": "Ajoutez l’indicatif pays pour utiliser un code d’appairage.",
+        "someoneElse": "Ne saisissez ce code que sur le téléphone du numéro que vous connectez. Ne le partagez jamais. Un code saisi sur le téléphone de quelqu’un d’autre relie tout le compte WhatsApp de cette personne à cet espace de travail.",
+        "qrSteps": {
+          "one": "Ouvrez WhatsApp sur le téléphone.",
+          "two": "Allez dans Appareils associés, puis Associer un appareil.",
+          "three": "Placez ce code devant la caméra."
+        },
+        "codeSteps": {
+          "one": "Ouvrez WhatsApp sur le téléphone.",
+          "two": "Allez dans Appareils associés, puis Associer un appareil, puis Associer avec un numéro de téléphone.",
+          "three": "Saisissez ce code."
+        },
+        "qrAlt": "Code QR pour relier le numéro",
+        "qrRefresh": "Nouveau code dans {seconds} s",
+        "qrExpires": "Expire dans {time}",
+        "codeValid": "Le code est valide environ 3 minutes.",
+        "codeExpires": "Valide encore {time}",
+        "codeLabel": "Code d’appairage",
+        "copy": "Copier le code",
+        "copied": "Copié",
+        "copyFailed": "Copie impossible. Sélectionnez le code et copiez-le.",
+        "strip": {
+          "shown": "Code affiché",
+          "scanned": "Scanné",
+          "ready": "Prêt"
+        },
+        "stripLabel": "Progression",
+        "linking": "Liaison en cours. WhatsApp synchronise, cela peut prendre un moment.",
+        "cancelAttempt": "Changer de méthode et choisir une autre voie",
+        "reading": "En attente du premier code...",
+        "relinkAction": "Oublier la session enregistrée et relier à nouveau"
+      },
+      "result": {
+        "connectedTitle": "Connecté",
+        "connectedBody": "{phone} est relié. Les conversations de ce numéro apparaissent désormais dans la boîte de réception partagée.",
+        "warmer": "Configurer le préchauffage",
+        "inbox": "Ouvrir la boîte de réception",
+        "list": "Retour aux numéros",
+        "timedOutTitle": "Le code n’a pas été scanné à temps",
+        "timedOutBody": "Aucun lien n’a été créé. Si le téléphone était hors ligne ou verrouillé, remettez-le en ligne et recommencez.",
+        "phoneOfflineTitle": "Le téléphone est injoignable",
+        "phoneOfflineBody": "Vérifiez que le téléphone est en ligne, puis recommencez.",
+        "loggedOutTitle": "WhatsApp a mis fin au lien",
+        "loggedOutBody": "Cela se produit lorsque l’appareil est supprimé dans WhatsApp, sous Appareils associés, ou lorsque WhatsApp restreint un numéro. Vos conversations sont conservées. Vous pouvez le relier à nouveau.",
+        "replacedTitle": "Une autre session a remplacé celle-ci",
+        "replacedBody": "Le même numéro est relié ailleurs. Supprimez l’autre lien, puis reconnectez-vous.",
+        "mismatchTitle": "Ce n’est pas le numéro que vous avez saisi",
+        "mismatchBody": "Le téléphone qui a scanné n’est pas le numéro saisi. Vérifiez le numéro et réessayez.",
+        "limitTitle": "Le téléphone a trop d’appareils associés",
+        "limitBody": "WhatsApp autorise 4 appareils associés. Supprimez-en un dans WhatsApp, sous Appareils associés, puis réessayez.",
+        "proxyTitle": "Le proxy n’a pas répondu",
+        "proxyBody": "Le numéro reste hors ligne tant que le proxy ne fonctionne pas.",
+        "serviceTitle": "Le service de connexion n’est pas disponible",
+        "serviceBody": "Réessayez dans quelques minutes.",
+        "failedTitle": "Le numéro n’a pas pu être relié",
+        "failedBody": "WhatsApp n’a pas terminé la liaison. Aucun lien n’a été créé. Réessayez.",
+        "tryAgain": "Réessayer"
+      },
+      "discard": {
+        "title": "Arrêter la connexion ?",
+        "message": "Vous n’avez pas terminé. Si vous quittez maintenant, ce que vous avez saisi sera perdu et le lien en cours sera abandonné.",
+        "stay": "Continuer",
+        "leave": "Quitter"
+      }
+    },
+    "detail": {
+      "back": "Tous les numéros",
+      "loading": "Chargement du numéro...",
+      "notFound": "Ce numéro n’existe pas ou a été supprimé.",
+      "status": "Statut",
+      "lastSeen": "Dernière activité",
+      "linkedSince": "Dans cet état depuis",
+      "number": "Numéro",
+      "numberLocked": "Le numéro ne peut pas changer tant qu’un lien existe. Déconnectez-le d’abord.",
+      "assignedTo": "Géré par",
+      "createdBy": "Ajouté par",
+      "sending": "Utiliser pour l’envoi",
+      "editTitle": "Modifier",
+      "name": "Nom",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "saved": "Enregistré.",
+      "dangerTitle": "Déconnecter ou supprimer",
+      "disconnectHelp": "Dissocie le numéro et supprime sa session enregistrée. Vous pourrez le relier à nouveau plus tard.",
+      "deleteHelp": "Retire le numéro de cet espace de travail. Les conversations restent dans la boîte de réception.",
+      "warmerLink": "Configurer le préchauffage pour ce numéro"
+    },
+    "dialog": {
+      "disconnect": {
+        "title": "Déconnecter {name} ?",
+        "message": "Cette action dissocie le numéro et supprime sa session enregistrée. Les conversations restent lisibles, mais ne peuvent plus recevoir de réponse depuis ce numéro tant que vous ne l’avez pas relié à nouveau.",
+        "confirm": "Déconnecter"
+      },
+      "delete": {
+        "title": "Supprimer {name} ?",
+        "message": "Cette action dissocie le numéro et supprime sa session enregistrée. Les conversations restent lisibles dans la boîte de réception, mais ne peuvent plus recevoir de réponse depuis ce numéro. Cette action est irréversible.",
+        "confirm": "Supprimer le numéro"
+      },
+      "rename": {
+        "title": "Renommer le numéro",
+        "label": "Nom",
+        "confirm": "Enregistrer"
+      },
+      "cancel": "Annuler"
+    },
+    "errors": {
+      "generic": "Une erreur s’est produite. Réessayez.",
+      "FORBIDDEN": "Vous n’avez pas l’autorisation d’effectuer cette action.",
+      "UNAUTHENTICATED": "Votre session a pris fin. Reconnectez-vous.",
+      "NOT_FOUND": "Ce numéro n’existe pas ou a été supprimé.",
+      "VALIDATION_FAILED": "Certains champs nécessitent votre attention.",
+      "ROW_VERSION_CONFLICT": "Quelqu’un a modifié ce numéro. Rechargez la page et réessayez.",
+      "WA_UNOFFICIAL_DISABLED": "Cette fonctionnalité n’est plus activée pour votre espace de travail.",
+      "PLAN_FEATURE_LOCKED": "Votre forfait n’inclut pas cette fonctionnalité.",
+      "PLAN_LIMIT_REACHED": "Votre forfait autorise {limit, plural, one {# numéro WhatsApp} other {# numéros WhatsApp}} ici. Supprimez-en un ou passez à un forfait supérieur pour en ajouter un autre.",
+      "PLAN_LIMIT_REACHED_GENERIC": "Votre forfait n’autorise plus de numéros ici. Supprimez-en un ou passez à un forfait supérieur pour en ajouter un autre.",
+      "DEVICE_ALREADY_EXISTS": "Un appareil avec ce numéro de téléphone existe déjà dans cet espace de travail.",
+      "DEVICE_PHONE_INVALID": "Ajoutez l’indicatif pays pour utiliser un code d’appairage.",
+      "PERSONAL_WA_NOTICE_REQUIRED": "Lisez et acceptez d’abord l’avis.",
+      "DEVICE_PAIRING_RATE_LIMITED": "Trop de tentatives pour ce numéro. Réessayez plus tard.",
+      "DEVICE_PAIRING_RATE_LIMITED_WAIT": "Trop de tentatives pour ce numéro. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+      "DEVICE_PAIRING_IN_PROGRESS": "Une connexion a été lancée il y a un instant. Attendez qu’elle se termine ou arrête-la.",
+      "DEVICE_NOT_PAIRABLE": "Ce numéro ne peut pas être relié pour le moment. Déconnectez-le d’abord.",
+      "WA_WORKER_UNAVAILABLE": "Le service de connexion n’est pas disponible. Réessayez dans quelques minutes.",
+      "RATE_LIMITED": "Trop de requêtes. Patientez un instant.",
+      "upgrade": "Voir les forfaits et passer à un forfait supérieur",
+      "requestId": "Requête {id}",
+      "DEVICE_PILOT_CAP_REACHED": "Votre espace de travail a atteint le nombre de numéros WhatsApp personnels autorisés pendant le pilote. Supprimez-en un pour en connecter un autre.",
+      "DEVICE_CREATE_RATE_LIMITED": "Trop de numéros ont été ajoutés au cours de la dernière heure. Réessayez plus tard.",
+      "DEVICE_CREATE_RATE_LIMITED_WAIT": "Trop de numéros ont été ajoutés au cours de la dernière heure. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+      "DEVICE_PAIRING_IN_PROGRESS_BY": "Une connexion a été lancée il y a un instant pour {name}. Attendez qu’elle se termine.",
+      "DEVICE_NO_PAIRING": "Cette tentative de connexion a pris fin. Recommencez.",
+      "DEVICE_NUMBER_LOCKED": "Le numéro ne peut pas changer tant qu’un lien existe. Déconnectez-le d’abord.",
+      "DEVICE_PAIRING_TIMEOUT": "WhatsApp n’a pas répondu à temps. Réessayez.",
+      "DEVICE_NOT_PAIRABLE_CONNECTED": "Ce numéro est déjà relié. Déconnectez-le d’abord, puis reconnectez-le.",
+      "DEVICE_NOT_PAIRABLE_SESSION": "Ce numéro possède encore une session WhatsApp enregistrée. Reliez-le à nouveau depuis le début pour oublier la session enregistrée et recommencer.",
+      "DEVICE_NOT_PAIRABLE_LIVE": "Une connexion est déjà en cours pour ce numéro. Reliez-le à nouveau depuis le début pour recommencer."
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "인보이스의 금액, 수량 또는 세율을 사용할 수 없습니다. 강조 표시된 필드를 확인하세요.",
+        "INV_TAX_RATE_INVALID": "사용할 수 없는 세율이 있습니다. 사용 중지되었거나 적용 기간이 아닙니다. 다른 세율을 선택하세요.",
+        "INV_NOT_DRAFT": "이 인보이스는 발행되어 더 이상 편집할 수 없습니다. 수정본을 만들려면 복제하세요.",
+        "INV_ORDER_LINKED": "이 인보이스는 판매 주문에 속해 있으므로 해당 주문을 대신 변경해야 합니다.",
+        "SALESDOC_INVALID_TRANSITION": "제안서 또는 견적서가 아직 승인되지 않아 인보이스로 전환할 수 없습니다.",
+        "SALESDOC_ALREADY_CONVERTED": "이 문서는 이미 인보이스로 전환되었습니다.",
+        "SALESDOC_INVOICING_UNAVAILABLE": "이 서버에서는 아직 인보이스 기능을 사용할 수 없습니다.",
+        "INV_LINK_UNAVAILABLE": "이 인보이스 링크는 더 이상 사용할 수 없습니다."
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "승인된 문서로 초안을 만드는 중...",
+      "duplicating": "인보이스를 새 초안으로 복사하는 중...",
+      "openExisting": "이미 만들어진 인보이스 열기",
+      "backToInvoices": "인보이스 목록으로",
+      "backToInvoice": "인보이스로 돌아가기",
+      "issued": "인보이스를 발행했습니다.",
+      "savedNotIssued": "초안은 저장되었지만 발행할 수 없습니다: {reason}",
+      "buyerCountry": "국가",
+      "buyerCountryHint": "IN 또는 GB처럼 두 글자로 입력하세요. 사업자등록번호 형식과, 자동 모드에서는 세금을 결정합니다.",
+      "buyerTaxId": "사업자등록번호",
+      "buyerTaxIdNamed": "사업자등록번호 ({label})",
+      "taxIdHint": "GSTIN, VAT 번호, EIN 등. 입력하면서 확인합니다.",
+      "taxIdExpected": "기대 형식: {label}, 예: {example}.",
+      "taxIdUnchecked": "이 국가의 형식 정보가 없어 입력한 그대로 저장됩니다.",
+      "taxIdValid": "{label} 형식이 올바른 것으로 보입니다({level, select, checksum {형식과 검증 숫자 확인됨} other {형식만 확인됨}}). 등록된 번호임을 보장하지는 않습니다.",
+      "taxIdInvalid": "이 {label} 형식이 올바르지 않은 것으로 보입니다({level, select, checksum {형식과 검증 숫자 확인됨} other {형식만 확인됨}}).",
+      "taxIdStillSave": "그래도 저장할 수 있습니다.",
+      "docType": "문서",
+      "docTypes": {
+        "tax_invoice": "세금계산서",
+        "proforma": "견적 인보이스"
+      },
+      "noDueDate": "기본 결제 조건",
+      "reference": "참조번호",
+      "referenceHint": "구매자의 발주번호 또는 인쇄할 참조 정보입니다.",
+      "tax": "세금",
+      "taxMode": "세금 계산 방식",
+      "taxModes": {
+        "rates": "세율",
+        "auto": "자동"
+      },
+      "taxModeHint": {
+        "rates": "항목마다 세율을 선택하세요. 기본값으로 둔 항목은 워크스페이스의 기본 세율을 사용합니다.",
+        "auto": "세금 엔진이 판매자 국가, 구매자 국가와 사업자등록번호, 공급 유형, 공급지를 바탕으로 각 항목의 세금을 결정합니다. 서버 결과가 저장됩니다."
+      },
+      "sellerCountry": "판매자 국가 (인보이스 프로필 기준)",
+      "sellerCountryMissing": "자동 세금 계산에는 인보이스 프로필에 국가(세금 프리셋이 있는 국가)가 필요합니다. 먼저 프로필에서 설정하세요.",
+      "supplyType": "공급 유형",
+      "supplyTypes": {
+        "goods": "재화",
+        "services": "용역",
+        "digital": "디지털 용역"
+      },
+      "placeOfSupply": "공급지",
+      "placeOfSupplyHint": "{country}의 주 또는 도; 국가 전체라면 첫 번째 선택지를 그대로 두세요.",
+      "placeSameCountry": "국가 전체",
+      "placeRegionPlaceholder": "지역 코드 (선택)",
+      "reverseCharge": "역과세(리버스 차지)",
+      "reverseChargeHint": "구매자가 세금을 신고하므로 이 인보이스에는 세금이 부과되지 않습니다.",
+      "shipping": "배송비 ({currency})",
+      "shippingHint": "할인이나 과세 대상이 되지 않습니다.",
+      "legalNotes": "법적 고지",
+      "legalNotesHint": "역과세 문구 등 문서에 필요한 법적 문구입니다. 자동 모드에서는 법규상 필요할 때 자동으로 입력됩니다.",
+      "problems": {
+        "contactRequired": "연락처를 선택하거나 구매자 이름을 입력하세요.",
+        "currencyInvalid": "3자리 통화 코드를 입력하세요.",
+        "issueDateInvalid": "올바른 발행일을 입력하세요.",
+        "dueBeforeIssue": "지급 기한은 발행일보다 빠를 수 없습니다.",
+        "dueInvalid": "올바른 지급 기한을 입력하세요.",
+        "noLines": "발행 전에 항목을 하나 이상 추가하세요.",
+        "discountInvalid": "올바른 할인을 입력하세요 (0~100 사이의 백분율 또는 금액).",
+        "shippingInvalid": "올바른 배송비를 입력하세요.",
+        "emailInvalid": "올바른 이메일 주소를 입력하세요.",
+        "amountZero": "인보이스 합계는 0보다 커야 합니다.",
+        "amountInvalid": "금액이 너무 크거나 이 통화에 허용되지 않는 소수점 자릿수가 있습니다.",
+        "countryInvalid": "두 글자 국가 코드를 사용하세요.",
+        "regionInvalid": "최대 3자리의 문자 또는 숫자로 된 짧은 지역 코드를 사용하세요.",
+        "autoNeedsSellerCountry": "자동 세금을 사용하려면 인보이스 프로필에서 국가를 설정하세요.",
+        "descriptionRequired": "이 항목을 설명하세요.",
+        "qtyInvalid": "0보다 큰 수량을 입력하세요 (소수점 4자리 이하).",
+        "priceInvalid": "이 통화에서 허용하는 소수점 자릿수에 맞게 올바른 가격을 입력하세요.",
+        "lineDiscountInvalid": "올바른 항목 할인을 입력하세요.",
+        "hsnRequired": "HSN/SAC 코드를 입력하세요. 이 국가에서는 항목마다 필요합니다.",
+        "hsnInvalid": "HSN/SAC 코드는 2~12자리의 문자 또는 숫자입니다.",
+        "taxRateRemoved": "이 항목의 세율이 삭제되었습니다. 현재 세율을 선택하세요."
+      }
+    },
+    "lines": {
+      "discount": "할인",
+      "discountKind": "할인 유형",
+      "taxAuto": "자동",
+      "taxDefault": "기본 ({rate})",
+      "taxDefaultNone": "기본 (세금 없음)",
+      "removedRateOption": "{rate}, 삭제됨",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "코드"
+    },
+    "totals": {
+      "shipping": "배송비",
+      "taxIncluded": "{name}, 포함",
+      "taxOn": "기준 {base}",
+      "reverseCharge": "역과세: 세금이 부과되지 않습니다.",
+      "includesTotal": "가격에 세금 포함"
+    },
+    "taxWhy": {
+      "title": "이 세금은 왜 적용되나요?",
+      "preview": "미리보기",
+      "previewNote": "편집하는 동안 브라우저에서 계산됩니다. 저장할 때 서버가 결정한 값이 최종 기준입니다.",
+      "taxFree": "이 공급에는 세금이 부과되지 않습니다",
+      "warnings": "다시 확인",
+      "placeOfSupply": "공급지",
+      "reverseCharge": "역과세(리버스 차지)",
+      "reverseChargeNote": "구매자가 세금을 신고하므로 부과되지 않습니다.",
+      "documentNotes": "문서에 인쇄됨",
+      "disclaimer": "세율과 규칙은 기본값이며 회계사 또는 세무 당국에 확인하세요. 법률 또는 세무 자문이 아닙니다."
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "세금계산서",
+        "proforma": "견적 인보이스",
+        "receipt": "영수증"
+      },
+      "sellerTaxId": "사업자등록번호",
+      "registrationNo": "등록번호",
+      "buyerTaxId": "사업자등록번호",
+      "reference": "참조번호",
+      "placeOfSupply": "공급지",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "{amount} 할인",
+      "shipping": "배송비",
+      "credited": "크레딧 적용됨",
+      "taxSummary": "세금 요약",
+      "taxName": "세금",
+      "taxBase": "과세 금액",
+      "taxAmount": "세금",
+      "taxInclusive": "포함",
+      "reverseCharge": "역과세: 구매자가 세금을 신고합니다.",
+      "paymentsReceived": "받은 결제",
+      "refund": "환불",
+      "bankDetails": "계좌 정보",
+      "voidReason": "취소됨: {reason}"
+    },
+    "public": {
+      "notFoundTitle": "링크를 찾을 수 없음",
+      "notFoundMessage": "이 인보이스 링크는 존재하지 않습니다. 링크를 전부 복사했는지 확인하거나 보낸 사람에게 링크를 다시 요청하세요.",
+      "unavailableTitle": "이 링크는 사용할 수 없습니다",
+      "unavailableMessage": "인보이스 링크가 철회되었거나 만료되었습니다. 보낸 사람에게 새 링크를 요청하세요.",
+      "voidReason": "사유: {reason}",
+      "printable": "인쇄용 페이지 열기",
+      "amountDueFooter": "결제 금액: {amount}",
+      "noPayOptions": "판매자가 온라인 결제 수단을 설정하지 않았습니다. 판매자에게 연락해 결제 방법을 협의하세요.",
+      "payAmount": "결제 금액 ({currency})",
+      "payAmountHint": "전체 잔액이 입력되어 있습니다. 일부만 결제하려면 더 작은 금액을 입력하세요.",
+      "amountErrors": {
+        "invalid": "0보다 큰 금액을 입력하세요.",
+        "tooMuch": "결제 금액은 미수금을 초과할 수 없습니다."
+      },
+      "linkUnavailable": "이 인보이스 링크는 더 이상 사용할 수 없어 여기서 결제할 수 없습니다.",
+      "payFailed": "결제를 시작할 수 없습니다. 잠시 후 다시 시도하세요.",
+      "payUnavailable": "이 인보이스는 현재 온라인 결제를 사용할 수 없습니다.",
+      "redirecting": "결제 페이지로 이동하는 중...",
+      "payInstructions": "아래 안내에 따라 결제하세요.",
+      "bankTransfer": "계좌이체",
+      "copyInstructions": "안내 복사",
+      "copyValue": "{label} 복사"
+    }
+  }
+}

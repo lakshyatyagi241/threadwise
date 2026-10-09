@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "Mise en ligne…",
+        "live": "En ligne",
+        "liveTitle": "En ligne sur Geta",
+        "push": "Mettre en ligne",
+        "pushHint": "Publié ici ; envoyez-le maintenant en ligne sur Geta",
+        "failed": "Échec",
+        "failedConfiguration": "Échec lors de la mise à jour de la configuration",
+        "failedPublish": "Échec lors de la publication",
+        "retry": "Réessayer",
+        "retrying": "Nouvelle tentative…",
+        "reasonLabel": "Motif",
+        "failedNote": "Le flux reste publié ici. Réessayer reprend à l’étape qui a échoué.",
+        "notConfigured": "Publié ici ; configurez la publication Geta dans les réglages pour le mettre en ligne.",
+        "openSettings": "Ouvrir les réglages",
+        "dismiss": "Ignorer"
+      },
+      "settings": {
+        "title": "Publication Geta",
+        "intro": "Quand vous cliquez sur Publier dans le générateur de flux, votre bot est aussi mis en ligne sur la console Geta. Saisissez une seule fois les informations de connexion pour cet espace de travail. Les secrets sont stockés chiffrés et ne sont plus jamais affichés.",
+        "viewOnly": "Vous pouvez voir l’état de ces réglages, mais pas les modifier.",
+        "loading": "Chargement…",
+        "loadFailed": "Impossible de charger les réglages.",
+        "retry": "Réessayer",
+        "fixtureNotice": "Ce serveur est en mode fixture : la publication est simulée et rien n’est envoyé à Geta.",
+        "ready": "Prêt",
+        "incomplete": "Incomplet",
+        "readyNote": "La publication d’un flux mettra aussi votre bot en ligne sur Geta.",
+        "incompleteNote": "Remplissez tous les champs ci-dessous pour mettre en ligne les flux publiés sur Geta.",
+        "baseUrl": {
+          "label": "URL de base",
+          "hint": "L’adresse de l’API Geta, par exemple https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "Origine de la console (facultatif)",
+          "hint": "Envoyée comme origin et referer de chaque requête. Laissez vide pour n’envoyer ni l’un ni l’autre."
+        },
+        "authorization": {
+          "label": "Jeton d’autorisation",
+          "hint": "Envoyé exactement tel que vous le saisissez, sans « Bearer » ajouté."
+        },
+        "getaHost": {
+          "label": "Jeton geta-host",
+          "hint": "Envoyé dans l’en-tête geta-host."
+        },
+        "secretKept": "Enregistré. Laissez le champ vide pour le conserver, ou saisissez une nouvelle valeur pour le remplacer.",
+        "secretPlaceholder": "Enregistré (masqué)",
+        "show": "Afficher",
+        "hide": "Masquer",
+        "remove": "Supprimer",
+        "record": {
+          "label": "Enregistrement du chatbot Geta",
+          "paste": "Collez l’enregistrement du chatbot (JSON)",
+          "replace": "Remplacez l’enregistrement du chatbot (JSON)",
+          "hint": "L’objet chatbot exactement tel qu’il doit être envoyé à Geta, ou le corps complet de la requête avec une clé chatbot. Il faut au minimum id et bot_id. Seul modified_time est actualisé à l’envoi.",
+          "keepPlaceholder": "Laissez vide pour conserver l’enregistrement sauvegardé",
+          "id": "ID du chatbot",
+          "name": "Nom",
+          "botId": "ID du bot",
+          "remove": "Supprimer l’enregistrement sauvegardé"
+        },
+        "saved": "Enregistré",
+        "notSet": "Non défini",
+        "save": "Enregistrer",
+        "saving": "Enregistrement…",
+        "saveFailed": "Enregistrement impossible.",
+        "removed": "Supprimé.",
+        "clear": "Tout effacer",
+        "cleared": "Réglages de publication Geta effacés.",
+        "clearConfirm": {
+          "title": "Effacer la publication Geta ?",
+          "message": "Cela supprime l’URL de base, les deux jetons et l’enregistrement du chatbot. Les flux publiés restent publiés ici mais ne seront plus envoyés à Geta.",
+          "confirm": "Tout effacer",
+          "cancel": "Annuler"
+        }
+      }
+    }
+  }
+}

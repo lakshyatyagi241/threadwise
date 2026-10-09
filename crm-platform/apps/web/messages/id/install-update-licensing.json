@@ -1,0 +1,365 @@
+{
+  "install-update-licensing": {
+    "setup": {
+      "title": "Wizard pengaturan",
+      "brand": "CRM",
+      "railEyebrow": "Wizard pengaturan",
+      "railTitle": "<i>Suite WhatsApp</i> Anda, siap dalam hitungan menit.",
+      "railFooter": "Installer platform · v{version}",
+      "stepsLabel": "Langkah pengaturan",
+      "stepOf": "Langkah {n} dari {total}",
+      "mobileStep": "Langkah {n}/{total} · {name}",
+      "steps": {
+        "welcome": "Selamat datang",
+        "requirements": "Persyaratan",
+        "database": "Database",
+        "application": "Aplikasi",
+        "admin": "Akun admin",
+        "node": "Node bridge",
+        "install": "Pasang"
+      },
+      "screens": {
+        "licence": "Lisensi"
+      },
+      "disabled": "Pengaturan dinonaktifkan karena tidak ada token pengaturan yang dikonfigurasi di server. Atur SETUP_TOKEN, atau buat operator pertama dari command line.",
+      "unavailable": "Status pengaturan tidak dapat dibaca. Pastikan API berjalan, lalu muat ulang halaman ini.",
+      "welcome": {
+        "eyebrow": "Selamat datang",
+        "title": "Mari jalankan <i>{app}</i>.",
+        "intro": "Tujuh langkah sederhana, sekitar tiga menit. Kami akan memverifikasi server Anda, memeriksa database, memastikan setiap default yang dibutuhkan konsol admin, menautkan Node bridge, dan membuat login super-admin pertama Anda.",
+        "tiles": {
+          "database": "Database",
+          "security": "Keamanan",
+          "translations": "Terjemahan",
+          "admin": "Admin"
+        },
+        "beforeTitle": "Sebelum memulai",
+        "before": {
+          "database": "Database PostgreSQL 16 yang dapat dijangkau deployment ini, dengan migrasinya sudah diterapkan.",
+          "runtime": "Node.js 22 atau lebih baru dan Redis yang berjalan di samping API.",
+          "token": "Token pengaturan dari konfigurasi deployment Anda (SETUP_TOKEN)."
+        },
+        "tokenLabel": "Token pengaturan",
+        "tokenHint": "Membuktikan Anda mengontrol deployment ini. Diperiksa ulang oleh setiap langkah.",
+        "begin": "Mulai instalasi"
+      },
+      "licence": {
+        "eyebrow": "Lisensi",
+        "title": "Verifikasi <i>pembelian</i> Anda.",
+        "intro": "Masukkan kode pembelian CodeCanyon Anda. Kami memvalidasinya dengan Envato sebelum memasang — instalasi tidak dapat dilanjutkan tanpa kode yang valid.",
+        "label": "Kode pembelian",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "help": "Temukan di akun CodeCanyon Anda → <b>Downloads</b> → <b>License certificate & purchase code</b>.",
+        "verified": "Pembelian sudah diverifikasi — Anda dapat melanjutkan.",
+        "submit": "Verifikasi & lanjutkan"
+      },
+      "requirements": {
+        "eyebrow": "Langkah {n} dari {total}",
+        "title": "<i>Persyaratan</i> server.",
+        "intro": "Kami memeriksa apakah host memenuhi persyaratan minimum sebelum memasang.",
+        "runtimeOk": "Node.js {version}",
+        "runtimeOkDetail": "— memenuhi persyaratan {required}+",
+        "runtimeBad": "Node.js {version}",
+        "runtimeBadDetail": "— {app} membutuhkan Node.js {required} atau lebih baru.",
+        "modules": "Modul runtime",
+        "services": "Layanan",
+        "directories": "Direktori",
+        "database": "Database",
+        "noDatabase": "Database tidak terdeteksi.",
+        "databaseRequired": "PostgreSQL diperlukan.",
+        "extensionMissing": "Ekstensi database tidak ada: {name}.",
+        "tiles": {
+          "database": "database",
+          "redis": "redis",
+          "migrations": "migrasi",
+          "permissions": "izin",
+          "temp": "file sementara",
+          "migrationsDir": "migrasi"
+        },
+        "fixNotice": "Perbaiki item yang ditandai merah sebelum melanjutkan. Tombol Lanjutkan tetap nonaktif hingga semua lolos.",
+        "recheck": "Periksa lagi",
+        "checking": "Memeriksa…",
+        "loadFailed": "Pemeriksaan persyaratan tidak dapat dijalankan."
+      },
+      "database": {
+        "eyebrow": "Langkah {n} dari {total}",
+        "title": "<i>Koneksi</i> database.",
+        "intro": "Periksa database PostgreSQL tempat platform ini berjalan. Kami memverifikasi koneksi sebelum lanjut.",
+        "driver": "Driver database",
+        "driverName": "PostgreSQL",
+        "host": "Host",
+        "port": "Port",
+        "name": "Nama database",
+        "namePlaceholder": "crm",
+        "user": "Nama pengguna",
+        "userPlaceholder": "postgres",
+        "password": "Kata sandi",
+        "passwordHint": "Kosongkan untuk menggunakan kata sandi deployment ini. Koneksi itu sendiri diatur di environment server; langkah ini hanya mengujinya.",
+        "test": "Uji koneksi",
+        "testing": "Menguji…",
+        "ok": "Koneksi berhasil.",
+        "unreachable": "PostgreSQL tidak dapat dijangkau melalui rute apa pun. Gunakan host persis seperti yang ditampilkan panel hosting Anda, periksa port, pastikan database dan pengguna ada serta server menerima koneksi dari mesin ini, lalu coba lagi.",
+        "networkError": "Error jaringan: {detail}"
+      },
+      "application": {
+        "eyebrow": "Langkah {n} dari {total}",
+        "title": "<i>Dasar</i> aplikasi.",
+        "intro": "Beri nama instalasi Anda, atur URL publik, dan pilih zona waktu + bahasa default.",
+        "name": "Nama aplikasi",
+        "url": "URL aplikasi",
+        "urlPlaceholder": "https://app.example.com",
+        "timezone": "Zona waktu",
+        "timezonePlaceholder": "Cari zona waktu…",
+        "timezoneEmpty": "Tidak ada zona waktu yang cocok.",
+        "locale": "Bahasa default"
+      },
+      "admin": {
+        "eyebrow": "Langkah {n} dari {total}",
+        "title": "<i>Akun</i> admin.",
+        "intro": "Login super-admin pertama dan workspace pribadi Anda. Tambahkan anggota tim nanti dari konsol.",
+        "fullName": "Nama lengkap",
+        "fullNamePlaceholder": "Vetrick R.",
+        "email": "Email",
+        "emailPlaceholder": "you@yourdomain.com",
+        "password": "Kata sandi",
+        "confirm": "Konfirmasi kata sandi",
+        "workspace": "Nama workspace",
+        "workspacePlaceholder": "Tim saya",
+        "note": "Minimal 12 karakter dengan huruf besar, huruf kecil, angka, dan simbol · di-hash dengan argon2id. Platform ini multi-tenant — satu workspace pribadi sudah dikonfigurasi; ganti namanya nanti di Workspaces. Kata sandi Anda tidak pernah disimpan dalam teks biasa, dan harus dipasangkan dengan masuk dua faktor saat login pertama."
+      },
+      "node": {
+        "eyebrow": "Langkah {n} dari {total}",
+        "title": "<i>Bridge</i> Node.",
+        "intro": "WhatsApp dikirim melalui layanan Node kecil. Arahkan platform ke layanan tersebut dan atur token bersama — installer menyimpannya untuk kedua sisi.",
+        "url": "URL server Node",
+        "urlHint": "Tempat Node bridge Anda mendengarkan. API memanggil alamat ini untuk mengirim pesan.",
+        "port": "Port Node",
+        "portHint": "Port tempat Node bridge terikat.",
+        "token": "Token bersama Node",
+        "tokenHint": "Terisi otomatis. Harus sama di API dan Node bridge — installer menyimpannya sekali, terkunci.",
+        "generate": "Buat",
+        "info": "Ini disimpan di pengaturan platform, bukan di file .env. Token dibagikan sebagai NODE_WEBHOOK_TOKEN ke Node bridge.",
+        "submit": "Lanjutkan & pasang"
+      },
+      "install": {
+        "eyebrow": "Langkah {n} dari {total}",
+        "title": "Memasang <i>{app}</i>.",
+        "intro": "Harap tunggu — kami sedang mengonfigurasi semuanya. Biasanya hanya butuh beberapa detik.",
+        "preparing": "Menyiapkan…",
+        "complete": "Selesai",
+        "failed": "Gagal — lihat di bawah",
+        "paused": "Instalasi dijeda",
+        "retry": "Coba lagi dari langkah yang gagal",
+        "success": "Instalasi selesai — mengalihkan…",
+        "rows": {
+          "configuration": {
+            "done": "Konfigurasi disimpan",
+            "active": "Menyimpan konfigurasi aplikasi dan Node bridge…"
+          },
+          "migrations": {
+            "done": "Migrasi database terverifikasi",
+            "active": "Memeriksa migrasi database…"
+          },
+          "defaults": {
+            "done": "Data penting terverifikasi",
+            "active": "Memeriksa peran, izin, dan default…"
+          },
+          "account": {
+            "done": "Admin + workspace siap",
+            "active": "Membuat akun admin dan workspace pribadi…"
+          },
+          "storage": {
+            "done": "Penyimpanan siap",
+            "active": "Memeriksa penyimpanan dan direktori sementara…"
+          },
+          "finalize": {
+            "done": "Instalasi diselesaikan",
+            "active": "Mengunci pengaturan dan mencatat instalasi…"
+          }
+        }
+      },
+      "completed": {
+        "body": "Pengaturan sudah selesai di deployment ini.",
+        "login": "Ke halaman masuk"
+      },
+      "back": "Kembali",
+      "continue": "Lanjutkan",
+      "show": "Tampilkan",
+      "hide": "Sembunyikan",
+      "working": "Memproses",
+      "problems": {
+        "token": "Token pengaturan itu tidak benar.",
+        "disabled": "Pengaturan dinonaktifkan di server ini.",
+        "outOfOrder": "Langkah berjalan tidak berurutan. Muat ulang halaman dan mulai lagi.",
+        "step": "Langkah instalasi gagal. Periksa detail dan log server, lalu coba lagi.",
+        "unknown": "Terjadi kesalahan. Coba lagi.",
+        "requestId": "ID permintaan {id}",
+        "prerequisites": "Server belum siap untuk pengaturan: {items}.",
+        "licence": {
+          "empty": "Masukkan kode pembelian CodeCanyon Anda.",
+          "not_configured": "Pemeriksaan lisensi belum dikonfigurasi (token Envato tidak ada).",
+          "unreachable": "Envato tidak dapat dihubungi untuk memverifikasi kode. Periksa koneksi internet server.",
+          "not_found": "Kode pembelian tidak valid — Envato tidak memiliki penjualan untuk kode ini.",
+          "http_error": "Verifikasi Envato gagal.",
+          "other_product": "Kode pembelian ini untuk produk lain.",
+          "unknown": "Kode pembelian tidak dapat diverifikasi."
+        },
+        "keys": {
+          "runtime": "Versi Node.js",
+          "database": "database",
+          "redis": "Redis",
+          "migrations": "migrasi database",
+          "permissions": "definisi izin",
+          "temp": "direktori sementara",
+          "storage": "penyimpanan",
+          "default": "{key}"
+        }
+      },
+      "errors": {
+        "tokenLength": "Token pengaturan minimal {min} karakter.",
+        "dbHost": "Masukkan host database.",
+        "dbPort": "Masukkan port antara 1 dan 65535.",
+        "dbName": "Masukkan nama database.",
+        "dbUser": "Masukkan nama pengguna database.",
+        "appNameRequired": "Masukkan nama aplikasi.",
+        "appNameLong": "Nama aplikasi maksimal {max} karakter.",
+        "appUrl": "Masukkan URL lengkap yang diawali dengan http:// atau https://.",
+        "timezone": "Pilih zona waktu dari daftar.",
+        "locale": "Pilih bahasa dari daftar.",
+        "fullNameRequired": "Masukkan nama lengkap Anda.",
+        "fullNameLong": "Nama lengkap maksimal {max} karakter.",
+        "email": "Masukkan alamat email yang valid.",
+        "passwordMismatch": "Konfirmasi kata sandi tidak cocok.",
+        "workspaceRequired": "Masukkan nama workspace minimal 2 karakter.",
+        "workspaceLong": "Nama workspace maksimal {max} karakter.",
+        "nodeUrl": "Masukkan URL server Node, diawali dengan http:// atau https://.",
+        "nodePort": "Masukkan port antara 1 dan 65535.",
+        "nodeToken": "Token bersama minimal {min} karakter.",
+        "password": {
+          "length": "Kata sandi harus minimal 12 karakter.",
+          "upper": "Kata sandi harus memuat huruf besar.",
+          "lower": "Kata sandi harus memuat huruf kecil.",
+          "number": "Kata sandi harus memuat angka.",
+          "symbol": "Kata sandi harus memuat simbol.",
+          "personal": "Kata sandi tidak boleh memuat nama atau email Anda."
+        }
+      }
+    },
+    "system": {
+      "nav": {
+        "group": "Sistem",
+        "item": "Pembaruan"
+      },
+      "title": "Pembaru aplikasi",
+      "titleRich": "<i>Pembaru</i> aplikasi.",
+      "titleAccent": "pembaru",
+      "kicker": "Admin · Pemeliharaan",
+      "description": "Verifikasi pembelian Anda dan lihat dengan tepat apa yang dijalankan deployment ini. Pembaruan dikirim sebagai image baru dan migrasi berjalan sebelum dimulai — database, penyimpanan, dan unggahan Anda tidak pernah disentuh dari halaman ini.",
+      "crumbAdmin": "Admin",
+      "crumbSettings": "Pengaturan",
+      "crumbUpdater": "Pembaruan",
+      "version": "v{version} · build {build}",
+      "buildNone": "n/a",
+      "allSettings": "Semua pengaturan",
+      "refresh": "Segarkan",
+      "loading": "Memuat",
+      "errorForbidden": "Anda tidak dapat melihat halaman ini.",
+      "errorUnexpected": "Pembaru tidak dapat dimuat.",
+      "requestId": "ID permintaan",
+      "retry": "Coba lagi",
+      "licence": {
+        "kicker": "langkah 1 · lisensi",
+        "title": "Verifikasi pembelian Anda",
+        "intro": "Masukkan kode pembelian CodeCanyon Anda. Kode divalidasi dengan Envato sebelum pembaruan apa pun dapat dijalankan.",
+        "placeholder": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "mask": "••••••••-••••-••••-••••-••••••••••••",
+        "verify": "Verifikasi",
+        "verifying": "Memverifikasi…",
+        "verified": "Pembelian terverifikasi — Anda dapat melanjutkan.",
+        "verifiedAt": "Terverifikasi {date}.",
+        "notVerified": "Belum diverifikasi.",
+        "notEnabled": "Deployment ini tidak memberlakukan kode pembelian, sehingga tidak ada yang perlu diverifikasi di sini.",
+        "superAdminOnly": "Hanya super admin yang dapat memverifikasi kode pembelian.",
+        "reasons": {
+          "empty": "Masukkan kode pembelian CodeCanyon Anda.",
+          "not_configured": "Pemeriksaan lisensi belum dikonfigurasi (token Envato tidak ada).",
+          "unreachable": "Envato tidak dapat dihubungi untuk memverifikasi kode. Periksa koneksi internet server.",
+          "not_found": "Kode pembelian tidak valid — Envato tidak memiliki penjualan untuk kode ini.",
+          "http_error": "Verifikasi Envato gagal.",
+          "other_product": "Kode pembelian ini untuk produk lain.",
+          "unknown": "Kode pembelian tidak dapat diverifikasi."
+        }
+      },
+      "process": {
+        "kicker": "proses pembaruan",
+        "title": "Pembaruan dikirim sebagai image",
+        "step2": {
+          "title": "Cadangkan database",
+          "body": "Buat cadangan database (pg_dump atau point-in-time recovery) sebelum deploy. Cadangan di sini adalah tugas infrastruktur, bukan tombol."
+        },
+        "step3": {
+          "title": "Deploy image baru",
+          "body": "Terapkan image container baru. Versi dan build yang sedang berjalan ditampilkan di bawah."
+        },
+        "step4": {
+          "title": "Jalankan migrasi",
+          "body": "pnpm db:migrate menerapkan tabel dan kolom baru dan tidak pernah menghapus data. Buku besar di bawah mencantumkan setiap migrasi dan statusnya."
+        },
+        "step5": {
+          "title": "Pemeriksaan kesehatan",
+          "body": "Dependensi diperiksa secara langsung di bawah. Segarkan halaman ini setelah deploy untuk memastikan semuanya berjalan."
+        }
+      },
+      "release": {
+        "kicker": "deployment ini",
+        "title": "Rilis",
+        "version": "Versi",
+        "gitSha": "Commit build",
+        "buildNumber": "Nomor build",
+        "builtAt": "Dibangun pada",
+        "environment": "Lingkungan",
+        "uptime": "Waktu aktif",
+        "none": "Tidak tercatat",
+        "demo": "Mode demo aktif: penulisan ditolak kecuali yang diizinkan."
+      },
+      "setup": {
+        "title": "Pengaturan awal",
+        "open": "Buka",
+        "completed": "Selesai",
+        "completedAt": "Selesai {date} pada versi {version}"
+      },
+      "checks": {
+        "kicker": "kesehatan",
+        "title": "Pemeriksaan kesehatan",
+        "database": "Database",
+        "redis": "Redis",
+        "migrations": "Migrasi",
+        "up": "Aktif",
+        "down": "Mati",
+        "degraded": "Menurun",
+        "latency": "{ms} ms"
+      },
+      "migrations": {
+        "kicker": "buku besar",
+        "title": "Migrasi",
+        "summary": "{count} diterapkan",
+        "status": {
+          "current": "Sudah terbaru",
+          "pending": "Migrasi tertunda",
+          "drift": "File migrasi berubah setelah diterapkan",
+          "unknown": "File migrasi tidak disertakan dengan build ini"
+        },
+        "state": {
+          "applied": "Diterapkan",
+          "pending": "Tertunda",
+          "modified": "Diubah",
+          "missing-file": "File tidak ada"
+        },
+        "id": "Migrasi",
+        "stateLabel": "Status",
+        "appliedAt": "Diterapkan pada"
+      },
+      "breadcrumb": "Breadcrumb"
+    }
+  }
+}

@@ -1,0 +1,212 @@
+{
+  "telegram": {
+    "nav": {
+      "title": "Telegram"
+    },
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "connect": {
+      "title": "Hubungkan Bot Telegram",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "submit": "Hubungkan Bot",
+      "intro": "Masukkan token bot HTTP API Anda untuk mengatur webhook dan mulai menangani chat Telegram.",
+      "tokenLabel": "Token bot *",
+      "tokenPlaceholder": "mis. 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ",
+      "tokenShape": "Ini tidak terlihat seperti token BotFather.",
+      "connected": "Bot Telegram terhubung.",
+      "savedNeedsAttention": "Bot disimpan, tetapi Telegram tidak menerima webhook.",
+      "failed": "Bot tidak dapat dihubungkan. Coba lagi.",
+      "howTitle": "Bagaimana cara mendapatkan token bot?",
+      "how1a": "Buka Telegram dan cari akun",
+      "how1b": "terverifikasi.",
+      "how2a": "Kirim",
+      "how2b": "lalu pilih nama tampilan dan nama pengguna.",
+      "how3": "Salin token HTTP API yang dihasilkan dan tempel di atas."
+    },
+    "bot": {
+      "failed": "Itu tidak berhasil. Coba lagi.",
+      "webhookFixed": "Pesan masuk aktif kembali.",
+      "live": "Aktif",
+      "paused": "Dijeda",
+      "needsAttention": "Perlu perhatian",
+      "lastMessage": "Pesan terakhir {when}",
+      "payments": "Pembayaran",
+      "on": "aktif",
+      "paymentsSaved": "Pengaturan pembayaran disimpan.",
+      "paymentsHint": "Tempel token penyedia pembayaran dari @BotFather (/mybots → Payments) untuk mengaktifkan node alur Pembayaran — faktur native di dalam chat.",
+      "paymentsSavedPlaceholder": "•••••••• (tersimpan — kosongkan untuk mempertahankan)",
+      "paymentsToken": "Token penyedia pembayaran",
+      "removeToken": "Hapus token",
+      "save": "Simpan",
+      "webhook": "Webhook",
+      "fixInbound": "Perbaiki pesan masuk (daftarkan ulang webhook)",
+      "pause": "Jeda",
+      "resume": "Lanjutkan",
+      "pausedDone": "Bot dijeda.",
+      "resumedDone": "Bot dilanjutkan.",
+      "disconnect": "Putuskan",
+      "disconnectConfirm": "Putuskan bot Telegram ini? Percakapan di inbox-nya tetap ada, tetapi bot berhenti mengirim/menerima.",
+      "cancel": "Batal",
+      "disconnected": "Bot terputus."
+    },
+    "hub": {
+      "kicker": "Channel · Telegram",
+      "title": "Telegram",
+      "titleAccent": "Hubungkan",
+      "intro": "Terapkan bot Telegram untuk mengotomatiskan alur pesan, menangani dukungan pelanggan, dan menyiarkan pembaruan ke pelanggan Anda di seluruh dunia.",
+      "teamInbox": "Inbox tim",
+      "flows": "Alur",
+      "broadcasts": "Broadcast",
+      "telegramBroadcasts": "Broadcast Telegram",
+      "loadError": "Bot Telegram Anda tidak dapat dimuat.",
+      "connectedCount": "{count} terhubung",
+      "notConnected": "Tidak terhubung",
+      "botCardTitle": "Koneksi Bot Telegram",
+      "botCardBody": "Tempel token bot dari @BotFather untuk mengotomatiskan pesan, menangani dukungan, dan menyiarkan ke pelanggan Anda.",
+      "connectAnother": "Hubungkan bot lain",
+      "connectBot": "Hubungkan Bot",
+      "accountCardTitle": "Koneksi Akun Telegram",
+      "accountCardBody": "Tautkan akun Telegram Anda untuk membuat bot langsung di sini — pindai QR atau gunakan nomor ponsel Anda, seperti WhatsApp.",
+      "connectAccount": "Hubungkan Akun",
+      "accountUnavailable": "Belum tersedia: memerlukan layanan akun Telegram, yang belum disiapkan di workspace ini.",
+      "connectedBots": "Bot terhubung",
+      "guideTitle": "Panduan Pengaturan Bot Telegram",
+      "guideBody": "Selesaikan langkah-langkah ini untuk menautkan channel Telegram Anda dan mengaktifkan alur otomatis.",
+      "prerequisites": "Prasyarat",
+      "pre": {
+        "account": "Akun Telegram yang aktif",
+        "name": "Nama unik untuk bot Anda",
+        "app": "Akses ke Telegram Web/App"
+      },
+      "stepsTitle": "Langkah koneksi",
+      "step": "Langkah {n}",
+      "steps": {
+        "locate": {
+          "title": "Temukan BotFather",
+          "body": "Buka Telegram dan cari akun resmi @BotFather (cari lencana terverifikasi)."
+        },
+        "create": {
+          "title": "Buat bot baru",
+          "body": "Kirim /newbot ke @BotFather dan ikuti petunjuk untuk memberi nama bot dan memilih nama pengguna."
+        },
+        "token": {
+          "title": "Ambil token API",
+          "body": "BotFather membuat token HTTP API (mis. 123456789:ABC…). Salin dengan aman."
+        },
+        "connect": {
+          "title": "Hubungkan bot di sini",
+          "body": "Klik “Hubungkan Bot”, tempel token Anda di kotak, lalu kirim untuk menyelesaikan penautan."
+        }
+      },
+      "unlockedTitle": "Apa yang terbuka?",
+      "unlocked": {
+        "support": {
+          "title": "Otomatiskan dukungan",
+          "body": "Biarkan bot AI menangani FAQ dan mengarahkan percakapan 24/7."
+        },
+        "broadcast": {
+          "title": "Kampanye broadcast",
+          "body": "Kirim promosi, peringatan, dan buletin ke semua pelanggan sekaligus."
+        },
+        "media": {
+          "title": "Media interaktif yang kaya",
+          "body": "Libatkan pengguna dengan tombol, menu, faktur, dan gambar."
+        }
+      },
+      "tipTitle": "Tips konfigurasi",
+      "tipBody": "Jangan pernah membagikan token API bot Anda secara publik. Jika bocor, kirim pesan ke @BotFather dan jalankan /revoke untuk membuat token baru segera. Di localhost, alamat tunnel berubah setiap kali dimulai ulang — tekan “Perbaiki pesan masuk” untuk mendaftarkan ulang."
+    },
+    "broadcasts": {
+      "kicker": "Telegram · Broadcast",
+      "title": "Telegram",
+      "titleAccent": "broadcast",
+      "intro": "Kirim pesan ke semua orang yang pernah chat dengan bot Anda, lalu pantau terkirim, gagal, dan diblokir per broadcast.",
+      "bots": "Bot",
+      "newBroadcast": "Broadcast baru",
+      "connectFirst": "Hubungkan bot Telegram terlebih dahulu.",
+      "connectBot": "Hubungkan bot",
+      "tile": {
+        "sent": "Terkirim",
+        "audience": "Audiens",
+        "failed": "Gagal",
+        "blocked": "Diblokir",
+        "sending": "Mengirim",
+        "broadcasts": "{count} broadcast",
+        "audienceHint": "total penerima",
+        "failedHint": "kesalahan pengiriman",
+        "blockedHint": "bot diblokir oleh pengguna",
+        "sendingHint": "sedang berjalan"
+      },
+      "listKicker": "Daftar broadcast",
+      "listTitle": "Broadcast terbaru",
+      "col": {
+        "broadcast": "Broadcast",
+        "bot": "Bot",
+        "recipients": "Penerima",
+        "progress": "Kemajuan",
+        "status": "Status",
+        "actions": "Tindakan"
+      },
+      "counts": "{sent} terkirim · {failed} gagal · {blocked} diblokir",
+      "status": {
+        "draft": "Draf",
+        "sending": "Mengirim",
+        "done": "Selesai",
+        "failed": "Gagal"
+      },
+      "start": "Mulai",
+      "pause": "Jeda",
+      "retry": "Coba lagi",
+      "delete": "Hapus",
+      "deleteConfirm": "Hapus broadcast ini?",
+      "cancel": "Batal",
+      "empty": "Belum ada broadcast.",
+      "createFirst": "Buat yang pertama",
+      "failed": "Itu tidak berhasil. Coba lagi.",
+      "started": "Pengiriman dimulai.",
+      "paused": "Dijeda. Chat yang belum terkirim tetap menunggu.",
+      "retried": "{count} chat yang gagal siap dikirim ulang. Tekan Mulai.",
+      "deleted": "Broadcast dihapus."
+    },
+    "compose": {
+      "kicker": "Telegram · Broadcast baru",
+      "title": "Susun",
+      "titleAccent": "broadcast",
+      "back": "Kembali",
+      "loadError": "Bot dan templat tidak dapat dimuat.",
+      "noPermission": "Anda dapat melihat halaman ini, tetapi tidak diizinkan membuat broadcast.",
+      "setup": "Pengaturan broadcast",
+      "name": "Nama broadcast",
+      "namePlaceholder": "mis. Penjualan akhir pekan",
+      "bot": "Bot",
+      "template": "Templat (opsional)",
+      "templateHint": "Mengisi pesan terlebih dahulu dan mengirim tombol dari templat.",
+      "templateNone": "— tidak ada (tulis sendiri) —",
+      "buttonCount": "{count} tombol",
+      "message": "Pesan",
+      "messageHint": "Gunakan '{name}' untuk personalisasi.",
+      "messagePlaceholder": "Hai '{name}'! …",
+      "attachment": "Lampiran (opsional)",
+      "attachmentHint": "Alamat publik ke gambar, video, file audio, atau dokumen. Mengunggah file memerlukan layanan penyimpanan.",
+      "attachmentInvalid": "Masukkan alamat lengkap yang diawali dengan http:// atau https://.",
+      "recipients": "Penerima",
+      "selectAll": "Pilih semua",
+      "clearAll": "Hapus semua",
+      "noChats": "Belum ada yang chat dengan bot ini.",
+      "type": {
+        "private": "privat",
+        "group": "grup",
+        "channel": "channel"
+      },
+      "selected": "{count} dipilih",
+      "submit": "Buat broadcast",
+      "preview": "Pratinjau langsung",
+      "previewEmpty": "Pratinjau pesan Anda…",
+      "previewNote": "Begini tampilan broadcast Anda di chat setiap penerima.",
+      "created": "Broadcast dibuat untuk {count} penerima. Tekan Mulai kirim saat siap.",
+      "failed": "Broadcast tidak dapat dibuat. Coba lagi."
+    }
+  }
+}

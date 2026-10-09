@@ -1,0 +1,113 @@
+{
+  "calling-voice": {
+    "nav": {
+      "title": "Arama",
+      "description": "Her numara için WhatsApp aramasını açın veya kapatın.",
+      "keywords": "arama, aramalar, sesli, telefon, whatsapp araması, arama düğmesi"
+    },
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "button": {
+      "label": "Ara",
+      "tooltip": "WhatsApp araması başlat",
+      "working": "Çalışıyor..."
+    },
+    "confirm": {
+      "title": "Onaylanmış arama izni yok",
+      "body": "Bu kişi için kayıtlı onaylanmış bir arama izni yok.",
+      "callAnyway": "Yine de ara",
+      "callAnywayHint": "Kişi WhatsApp içinde zaten \"İzin ver\" düğmesine dokunduysa çalışır.",
+      "askPermission": "İzin iste",
+      "askPermissionHint": "Bunun yerine kişiye bir izin isteği gönderir. Arama yapılmaz.",
+      "close": "Kapat"
+    },
+    "toast": {
+      "noPhone": "Bu kişide telefon numarası yok.",
+      "noNumber": "Hiçbir WABA numarasında arama etkin değil.",
+      "alreadyPermitted": "Bu kişi aramalara zaten izin veriyor - arama başlatılıyor...",
+      "permissionSent": "İzin isteği gönderildi. WhatsApp içinde Kabul/Reddet seçeneklerini görecek - yanıt verdikten sonra yeniden Ara'yı deneyin.",
+      "permissionFailed": "İzin isteği gönderilemedi: {message}",
+      "startFailed": "Arama başlatılamadı: {message}",
+      "acceptInvalid": "Arama kabul edilemedi: WhatsApp'tan geçersiz arama verisi geldi. Tekrar deneyin.",
+      "acceptFailed": "Arama kabul edilemedi: {message}",
+      "alreadyAccepted": "Arama zaten başka bir ekip arkadaşı tarafından kabul edildi.",
+      "recordingStarted": "Kayıt başladı - kapatıldığında Arama kayıtları bölümüne kaydedilecek.",
+      "recordingSaved": "Arama kaydı Arama kayıtları bölümüne kaydedildi.",
+      "recordUnsupported": "Kayıt bu tarayıcıda desteklenmiyor.",
+      "noActiveCall": "Kaydedilecek etkin arama yok."
+    },
+    "incoming": {
+      "title": "Gelen WhatsApp araması",
+      "caller": "Arayan +{digits}",
+      "accept": "Kabul et",
+      "decline": "Reddet",
+      "aiHandling": "Yapay zeka bu aramayı yönetiyor..."
+    },
+    "panel": {
+      "label": "Arama sürüyor",
+      "title": "Aramada",
+      "ringing": "çalıyor...",
+      "connected": "bağlandı",
+      "timer": "Arama süresi",
+      "mute": "Sesi kapat",
+      "muted": "Ses kapalı",
+      "end": "Bitir",
+      "record": "Kaydet",
+      "recording": "Kaydediliyor",
+      "recordTooltip": "Bu aramayı kaydet",
+      "recordingTooltip": "Bu arama kaydediliyor",
+      "recordingNotice": "Bu arama kaydediliyor"
+    },
+    "failures": {
+      "REJECTED": "Müşteri aramayı reddetti.",
+      "BUSY": "Müşteri başka bir görüşmede.",
+      "NO_ANSWER": "Yanıt yok - müşteri açmadı.",
+      "MISSED": "Müşteri aramayı cevapsız bıraktı.",
+      "CANCELLED": "Arama iptal edildi.",
+      "MIC_BLOCKED": "Mikrofon erişimi engellendi - arayan sizi duyamaz. Tarayıcınızda mikrofon izni verip yeniden deneyin.",
+      "BUSY_SLOT": "Bu sekmede zaten başka bir arama etkin.",
+      "INVALID_SDP": "Geçersiz SDP teklifi - v=0 veya medya satırı eksik",
+      "LOCAL_SDP_EMPTY": "Yerel SDP boş - ICE toplama başarısız oldu",
+      "ENDED_EARLY": "Arama bağlanmadan sona erdi.",
+      "ANSWER_FAILED": "WhatsApp yanıtı uygulanamadı"
+    },
+    "errors": {
+      "CALL_NUMBER_NOT_FOUND": "Bu numara artık çalışma alanınızda değil. Sayfayı yenileyip tekrar deneyin.",
+      "CALL_NOT_FOUND": "Bu arama bulunamadı. Zaten sona ermiş olabilir.",
+      "CALL_NOT_WABA": "Arama yalnızca WhatsApp Cloud API numaralarında çalışır. Bu numara başka bir yolla bağlı.",
+      "CALL_NUMBER_NOT_CONNECTED": "Bu numara şu anda WhatsApp Cloud API'ye bağlı değil. Kanallar bölümünden yeniden bağlayıp tekrar deneyin.",
+      "CALL_COEXISTENCE_UNSUPPORTED": "WhatsApp Business uygulamasında da kullanılan bir numara arama alamaz.",
+      "CALL_NOT_ENABLED": "Bu numara için arama kapalı. Önce Arama bölümünden açın.",
+      "CALL_META_REFUSED": "WhatsApp isteği reddetti. Biraz sonra tekrar deneyin.",
+      "CALL_PERMISSION_REQUESTED": "İzin isteği gönderildi. WhatsApp içinde Kabul/Reddet seçeneklerini görecek - yanıt verdikten sonra yeniden Ara'yı deneyin.",
+      "CALL_STATE_CONFLICT": "Arama zaten başka bir ekip arkadaşı tarafından kabul edildi.",
+      "CALL_RECORDING_FAILED": "Kayıt kaydedilemedi.",
+      "FORBIDDEN": "Aramayı kullanma izniniz yok.",
+      "PLAN_FEATURE_LOCKED": "Planınız WhatsApp aramasını içermiyor.",
+      "NETWORK": "Ağ hatası - lütfen tekrar deneyin.",
+      "UNEXPECTED": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+    },
+    "settings": {
+      "title": "Arama",
+      "intro": "Gelen kutusundaki sohbetlerde yeşil Ara düğmesinin görünmesi için bir numarada WhatsApp aramasını açın.",
+      "cardTitle": "WhatsApp araması",
+      "numberFallback": "WhatsApp numarası",
+      "connection": "Bağlantı: {status}",
+      "enabledStatus": "Etkin - yeşil Ara düğmesi artık gelen kutusunda bu numaranın sohbetlerinde görünüyor.",
+      "enabledSince": "Etkinleştirildi: {date}",
+      "offStatus": "Kapalı - Ara düğmesinin bu numarayla yapılan sohbetlerde görünmesi için açın.",
+      "enable": "Aramayı etkinleştir",
+      "disable": "Aramayı kapat",
+      "asking": "WhatsApp'a soruluyor...",
+      "enabledDone": "Bu numara için arama artık açık.",
+      "disabledDone": "Bu numara için arama artık kapalı.",
+      "loading": "Numaralar yükleniyor",
+      "loadFailed": "Numaralarınız yüklenemedi.",
+      "retry": "Tekrar dene",
+      "emptyTitle": "Henüz WhatsApp numarası yok",
+      "emptyMessage": "Kanallar bölümünden bir WhatsApp Cloud API numarası bağlayın, ardından aramayı açmak için geri gelin.",
+      "viewOnly": "Her numaranın arama durumunu görebilirsiniz. Açıp kapatmak için arama yönetimi izni gerekir."
+    }
+  }
+}

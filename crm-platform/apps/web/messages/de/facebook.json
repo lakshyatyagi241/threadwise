@@ -1,0 +1,491 @@
+{
+  "facebook": {
+    "nav": {
+      "hub": "Facebook",
+      "posts": "Facebook-Beiträge",
+      "setup": "Messenger-Einrichtung",
+      "broadcasts": "Messenger-Broadcasts"
+    },
+    "common": {
+      "dismiss": "Ausblenden",
+      "cancel": "Abbrechen"
+    },
+    "hub": {
+      "kicker": "Kanal · Facebook",
+      "title": "Facebook",
+      "titleAccent": "Seiten",
+      "intro": "Melden Sie sich einmal mit Facebook an, dann werden alle Seiten hinzugefügt, die Ihr Konto verwaltet. Anschließend können Sie Beiträge veröffentlichen, auf Kommentare antworten und Messenger aus Ihrem Posteingang heraus nutzen.",
+      "teamInbox": "Team-Posteingang",
+      "posts": "Beiträge",
+      "setup": "Messenger-Einrichtung",
+      "broadcasts": "Messenger-Broadcasts",
+      "loadError": "Die verbundenen Seiten konnten nicht geladen werden. Versuchen Sie es erneut.",
+      "notConfigured": "Facebook ist auf dieser Installation noch nicht konfiguriert – ein Administrator muss zuerst die Meta-App hinzufügen, bevor eine Seite verbunden werden kann.",
+      "connectedCount": "{count, plural, one {# Seite verbunden} other {# Seiten verbunden}}",
+      "notConnected": "Nicht verbunden",
+      "cardTitle": "Verbinden Sie Ihr Facebook-Konto",
+      "cardBody": "Melden Sie sich einmal mit Facebook an – jede Seite, die Ihr Konto verwaltet, wird automatisch mit eigenem Zugriff hinzugefügt. Oder fügen Sie eine einzelne Seite mit ihrem Zugriffstoken hinzu.",
+      "connect": "Seite verbinden",
+      "connectAnother": "Weiteres Konto verbinden",
+      "connectedPages": "Verbundene Seiten",
+      "webhookTitle": "Webhook-Adresse",
+      "webhookBody": "Fügen Sie diese Adresse in die Webhook-Einstellungen Ihrer Meta-App (Callback-URL) ein, damit Messenger-Nachrichten und Kommentare in Ihren Posteingang gelangen. Es wird derselbe Verify-Token wie bei WhatsApp verwendet, sofern kein eigener Facebook-Token gesetzt ist."
+    },
+    "connect": {
+      "close": "Schließen",
+      "kicker": "Facebook",
+      "title": "Verbinden Sie Ihr Facebook-Konto",
+      "intro": "Melden Sie sich einmal mit Facebook an – jede Seite, die Ihr Konto verwaltet, wird automatisch hinzugefügt. Anschließend können Sie Beiträge veröffentlichen, auf Kommentare antworten und Messenger aus Ihrem Posteingang heraus nutzen.",
+      "continue": "Mit Facebook fortfahren",
+      "or": "oder",
+      "manualToggle": "Seite manuell mit einem Zugriffstoken hinzufügen",
+      "tokenLabel": "Seiten-Zugriffstoken",
+      "tokenHint": "Aus Meta → Geschäftseinstellungen → Systembenutzer oder dem Graph API Explorer. Wir ermitteln die Seite anhand des Tokens.",
+      "connectPage": "Seite verbinden",
+      "tokenShape": "Das sieht nicht nach einem Seiten-Zugriffstoken aus.",
+      "failed": "Verbindung fehlgeschlagen. Versuchen Sie es erneut.",
+      "footerLeft": "Wird sofort in Ihren Posteingang geleitet",
+      "footerRight": "verschlüsselt"
+    },
+    "page": {
+      "facebookPage": "Facebook-Seite",
+      "failed": "Das hat nicht funktioniert. Versuchen Sie es erneut.",
+      "live": "Live",
+      "reconnect": "Erneut verbinden",
+      "followers": "{count} Follower",
+      "liveNoCount": "live",
+      "dataAccess": "Der Datenzugriff von Meta endet {when}",
+      "refresh": "Profil aktualisieren",
+      "refreshed": "Facebook-Seite aktualisiert.",
+      "inboundFixed": "Facebook-Webhooks für diese Seite neu abonniert.",
+      "fixInbound": "Eingehende Nachrichten reparieren",
+      "remove": "Trennen",
+      "removeConfirm": "Diese Facebook-Seite trennen? Die Posteingangs-Threads bleiben erhalten, der Versand stoppt jedoch, bis Sie neu verbinden.",
+      "cancel": "Abbrechen",
+      "removed": "Facebook-Seite getrennt."
+    },
+    "broadcasts": {
+      "kicker": "Facebook · Broadcasts",
+      "title": "Messenger",
+      "titleAccent": "Broadcasts",
+      "intro": "Schreiben Sie Personen an, die kürzlich mit Ihrer Seite gechattet haben. Meta erlaubt einer Seite nur, innerhalb von 24 Stunden nach der letzten Nachricht einer Person zu schreiben – die Liste unten ist Ihre aktuell erreichbare Zielgruppe.",
+      "inbox": "Posteingang",
+      "loadError": "Die Broadcasts konnten nicht geladen werden. Versuchen Sie es erneut.",
+      "connectFirst": "Verbinden Sie zuerst eine Facebook-Seite.",
+      "connectPage": "Seite verbinden",
+      "none": "Noch keine Broadcasts. Erstellen Sie rechts einen.",
+      "recipients": "{count, plural, one {# Empfänger} other {# Empfänger}}",
+      "status": {
+        "sending": "Wird gesendet",
+        "done": "Fertig",
+        "failed": "Fehlgeschlagen",
+        "draft": "Entwurf"
+      },
+      "counts": "{sent} gesendet · {failed} fehlgeschlagen · {blocked} blockiert",
+      "start": "Senden starten",
+      "started": "Der Versand wurde gestartet. Er läuft weiter, auch wenn Sie diese Seite verlassen.",
+      "pause": "Pausieren",
+      "paused": "Pausiert. Die übrigen Empfänger bleiben in der Warteschlange.",
+      "retry": "Fehlgeschlagene wiederholen",
+      "retried": "{count, plural, one {# Empfänger} other {# Empfänger}} erneut eingereiht. Klicken Sie auf Senden starten.",
+      "delete": "Löschen",
+      "deleted": "Broadcast gelöscht.",
+      "deleteConfirm": "Diesen Broadcast löschen?",
+      "cancel": "Abbrechen",
+      "newBroadcast": "Neuer Broadcast",
+      "name": "Name",
+      "namePlaceholder": "z. B. Wochenendangebot",
+      "page": "Seite",
+      "template": "Vorlage (optional)",
+      "templateHint": "Füllt die Nachricht vor und sendet die Schaltflächen der Vorlage.",
+      "templateNone": "— keine (eigenen Text schreiben) —",
+      "buttons": "{count, plural, one {# Schaltfläche} other {# Schaltflächen}}",
+      "message": "Nachricht",
+      "messageHint": "Verwenden Sie '{name}' zur Personalisierung.",
+      "messagePlaceholder": "Hallo '{name}'! …",
+      "recipientsLabel": "Empfänger",
+      "within24": "(innerhalb von 24 Std.)",
+      "selectAll": "Alle auswählen",
+      "noAudience": "Derzeit befindet sich niemand im 24-Stunden-Fenster – zuerst muss jemand diese Seite anschreiben.",
+      "messengerUser": "Messenger-Nutzer",
+      "selected": "{count} ausgewählt",
+      "create": "Broadcast erstellen",
+      "created": "Broadcast mit {count, plural, one {# Empfänger} other {# Empfängern}} erstellt. Klicken Sie auf Senden starten, sobald Sie bereit sind.",
+      "failed": "Das hat nicht funktioniert. Versuchen Sie es erneut."
+    },
+    "setup": {
+      "kicker": "Facebook · Messenger",
+      "title": "Messenger",
+      "titleAccent": "Einrichtung",
+      "intro": "Legen Sie fest, wie Ihr Messenger-Chat Kunden begrüßt und führt – die Schaltfläche Get Started, eine Willkommensbegrüßung, ein ständig verfügbares Menü und antippbare FAQs. Wählen Sie eine Funktion, lesen Sie, was sie bewirkt, und füllen Sie sie aus. Änderungen werden direkt an Facebook gespeichert.",
+      "pagePicker": "Seite",
+      "composer": "Editor",
+      "loadError": "Das Messenger-Profil konnte nicht geladen werden. Versuchen Sie es erneut.",
+      "noPage": "Noch keine Facebook-Seite verbunden.",
+      "connect": "Facebook-Konto verbinden",
+      "profile": "Messenger-Profil",
+      "tabs": {
+        "getstarted": "Schaltfläche Get Started",
+        "greeting": "Begrüßung",
+        "menu": "Dauermenü",
+        "icebreakers": "Eisbrecher"
+      },
+      "isSet": "Einrichten",
+      "notSet": "Nicht eingerichtet",
+      "failed": "Das hat nicht funktioniert. Versuchen Sie es erneut.",
+      "footnote": "Diese Einstellungen schreiben über die Graph API in das Facebook-Messenger-Profil und gelten für neue Unterhaltungen. Meta benötigt unter Umständen einen Moment, bis Änderungen übernommen werden.",
+      "frame": {
+        "preview": "Vorschau",
+        "yourPage": "Ihre Seite",
+        "activeNow": "Jetzt aktiv"
+      },
+      "explainer": {
+        "what": "Was es ist",
+        "customer": "Wie Ihre Kunden es nutzen",
+        "how": "So richten Sie es ein"
+      },
+      "getstarted": {
+        "title": "Schaltfläche Get Started",
+        "subtitle": "Die Schaltfläche, mit der ein neuer Kunde den Chat startet.",
+        "what": "Sie ist das Allererste, was jemand sieht, wenn er Ihren Messenger öffnet – eine einzelne Schaltfläche „Get Started“ auf dem Willkommensbildschirm.",
+        "customer": "Einmal angetippt, beginnt die Unterhaltung. Sie wird nur vor der ersten Nachricht angezeigt.",
+        "how": "Vergeben Sie eine Payload (ein Schlüsselwort wie GET_STARTED). Fügen Sie dann unter Flows einen Trigger hinzu, der auf diese Payload reagiert, damit ein Willkommens-Flow beim Antippen startet.",
+        "payload": "Payload",
+        "payloadHint": "Dieses Wort wird Ihnen beim Antippen der Schaltfläche übermittelt. Gleichen Sie es in einem Flow-Trigger ab, um die Automatisierung zu starten.",
+        "remove": "Entfernen",
+        "removeConfirm": "Schaltfläche Get Started entfernen?",
+        "save": "Speichern",
+        "yourPage": "Ihre Seite",
+        "typically": "Antwortet in der Regel sofort",
+        "button": "Get Started"
+      },
+      "greeting": {
+        "title": "Begrüßung",
+        "subtitle": "Die freundliche Begrüßung, die angezeigt wird, bevor jemand schreibt.",
+        "what": "Eine kurze Willkommensnachricht auf dem ersten Bildschirm Ihres Chats, direkt unter dem Namen Ihrer Seite.",
+        "customer": "Sie lesen sie, sobald sie Ihren Messenger öffnen – sie gibt den Ton vor und zeigt, wobei Sie helfen können.",
+        "how": "Halten Sie es bei einer herzlichen Zeile (max. 160 Zeichen). Tipp: Mit einem Vornamen-Tag begrüßt Messenger jeden Kunden mit Namen.",
+        "welcomeText": "Begrüßungstext",
+        "placeholder": "Hallo! Wie können wir Ihnen heute helfen?",
+        "remove": "Entfernen",
+        "removeConfirm": "Begrüßung entfernen?",
+        "save": "Speichern",
+        "yourPage": "Ihre Seite",
+        "sample": "Hallo! Wie können wir Ihnen heute helfen?"
+      },
+      "menu": {
+        "title": "Dauermenü",
+        "subtitle": "Das ständig verfügbare Kurzmenü in der Nachrichtenleiste.",
+        "what": "Ein Menü (das ☰-Symbol neben dem Textfeld), das während des gesamten Chats verfügbar bleibt – bis zu 3 Kurzbefehle.",
+        "customer": "Sie tippen jederzeit auf ☰, um direkt zu dem zu gelangen, was sie brauchen – „Mit einem Menschen sprechen“, „Meine Bestellung verfolgen“, „Shop besuchen“.",
+        "how": "Fügen Sie bis zu 3 Einträge hinzu. Jeder startet einen Flow (sendet eine Payload) oder öffnet einen Link (URL). Optional können Sie das Textfeld ausblenden, damit Personen nur das Menü nutzen.",
+        "sample1": "Kontaktieren Sie uns",
+        "sample2": "Meine Bestellung verfolgen",
+        "sample3": "Shop besuchen",
+        "menuLabel": "Menü",
+        "menuItem": "Menüpunkt",
+        "titleLabel": "Titel",
+        "titlePlaceholder": "Kontaktieren Sie uns",
+        "action": "Aktion",
+        "actionFlow": "Flow starten (Payload senden)",
+        "actionLink": "Link öffnen (URL)",
+        "url": "URL",
+        "payload": "Payload",
+        "removeItem": "Eintrag entfernen",
+        "add": "Menüpunkt hinzufügen",
+        "hideComposer": "Textfeld ausblenden (nur Menü)",
+        "remove": "Menü entfernen",
+        "removeConfirm": "Dauermenü entfernen?",
+        "save": "Menü speichern"
+      },
+      "ice": {
+        "title": "Eisbrecher",
+        "subtitle": "Vorgeschlagene Fragen, die vor der ersten Nachricht angezeigt werden.",
+        "what": "Bis zu 4 antippbare Fragen auf dem Willkommensbildschirm – die häufigsten Anliegen, zum Antippen statt Tippen.",
+        "customer": "Statt sich zu überlegen, was sie schreiben sollen, tippen Kunden auf eine Frage wie „Wann haben Sie geöffnet?“ und erhalten sofort eine Antwort.",
+        "how": "Fügen Sie Ihre wichtigsten FAQs hinzu. Jedes Antippen sendet seine Payload – gleichen Sie sie in einem Flow-Trigger ab, um automatisch zu antworten.",
+        "sample1": "Wann haben Sie geöffnet?",
+        "sample2": "Wohin liefern Sie?",
+        "sample3": "Mit einem Menschen sprechen",
+        "yourPage": "Ihre Seite",
+        "question": "Frage",
+        "questionLabel": "Frage",
+        "questionPlaceholder": "Wann haben Sie geöffnet?",
+        "payload": "Payload",
+        "removeItem": "Eisbrecher entfernen",
+        "add": "Eisbrecher hinzufügen",
+        "remove": "Alle entfernen",
+        "removeConfirm": "Alle Eisbrecher entfernen?",
+        "save": "Eisbrecher speichern"
+      }
+    },
+    "posts": {
+      "kicker": "Facebook · Beiträge",
+      "title": "Facebook",
+      "titleAccent": "Beiträge",
+      "intro": "Alles, was Sie von hier aus erstellt, geplant oder veröffentlicht haben – verfolgen Sie den Status, wiederholen Sie Fehlschläge und verwalten Sie Ihre Warteschlange.",
+      "allPages": "Alle Seiten",
+      "pagePicker": "Seite",
+      "myPosts": "Meine Beiträge",
+      "insights": "Insights",
+      "create": "Beitrag erstellen",
+      "loadError": "Die Beiträge konnten nicht geladen werden. Versuchen Sie es erneut.",
+      "noPage": "Noch keine Facebook-Seite verbunden",
+      "noPageHint": "Verbinden Sie ein Facebook-Konto, um Seitenbeiträge zu veröffentlichen und zu planen.",
+      "connect": "Facebook-Konto verbinden",
+      "kpi": {
+        "total": "Beiträge gesamt",
+        "scheduled": "Geplant",
+        "published": "Veröffentlicht",
+        "failed": "Fehlgeschlagen"
+      },
+      "tabs": {
+        "all": "Alle",
+        "scheduled": "Geplant",
+        "published": "Veröffentlicht",
+        "failed": "Fehlgeschlagen"
+      },
+      "ranges": {
+        "all": "Gesamtzeitraum",
+        "7d": "7 T.",
+        "30d": "30 T.",
+        "90d": "90 T."
+      },
+      "search": "Beiträge suchen…",
+      "cols": {
+        "post": "Beitrag",
+        "page": "Seite",
+        "type": "Typ",
+        "status": "Status",
+        "when": "Wann",
+        "actions": "Aktionen"
+      },
+      "status": {
+        "scheduled": "Geplant",
+        "published": "Veröffentlicht",
+        "failed": "Fehlgeschlagen",
+        "draft": "Entwurf"
+      },
+      "publishNow": "Jetzt veröffentlichen",
+      "delete": "Löschen",
+      "noMatch": "Keine Beiträge entsprechen diesen Filtern",
+      "none": "Noch keine Beiträge",
+      "noneHint": "Verfassen Sie Ihren ersten Beitrag – veröffentlichen oder planen Sie ihn sofort.",
+      "pageOf": "Seite {page} von {last}",
+      "prev": "Zurück",
+      "next": "Weiter",
+      "deleteTitle": "Beitrag löschen",
+      "deleteLive": "Dadurch wird der Beitrag auch auf Facebook gelöscht – dies kann nicht rückgängig gemacht werden.",
+      "deleteLocal": "Diesen Beitrag entfernen?",
+      "deleteYes": "Ja, löschen",
+      "cancel": "Abbrechen",
+      "rejected": "Facebook hat den Beitrag abgelehnt: {error}",
+      "published": "Beitrag auf Facebook veröffentlicht.",
+      "removed": "Beitrag entfernt.",
+      "failed": "Das hat nicht funktioniert. Versuchen Sie es erneut."
+    },
+    "compose": {
+      "kicker": "Facebook · Erstellen",
+      "title": "Erstellen Sie einen",
+      "titleAccent": "Beitrag",
+      "intro": "Verfassen Sie Fotos, Alben, Links, Videos und Reels – veröffentlichen oder planen Sie sie sofort auf Ihren verbundenen Seiten. Sehen Sie in der Live-Vorschau zu, wie er entsteht.",
+      "posts": "Beiträge",
+      "myPosts": "Meine Beiträge",
+      "insights": "Insights",
+      "loadError": "Die Seiten konnten nicht geladen werden. Versuchen Sie es erneut.",
+      "noPage": "Noch keine Facebook-Seite verbunden",
+      "noPageHint": "Verbinden Sie ein Facebook-Konto, um Seitenbeiträge zu veröffentlichen und zu planen.",
+      "noAccess": "Sie können keine Beiträge erstellen",
+      "noAccessHint": "Bitten Sie einen Administrator um die Berechtigung, Facebook-Beiträge zu verfassen.",
+      "connect": "Facebook-Konto verbinden",
+      "required": "erforderlich",
+      "steps": {
+        "page": "Seite",
+        "type": "Beitragstyp",
+        "media": "Medien",
+        "message": "Nachricht",
+        "when": "Wann posten"
+      },
+      "types": {
+        "photo": {
+          "label": "Foto",
+          "hint": "Ein einzelner Fotobeitrag."
+        },
+        "multi_photo": {
+          "label": "Album",
+          "hint": "2–10 Fotos in einem Beitrag."
+        },
+        "link": {
+          "label": "Link",
+          "hint": "Einen Link mit Vorschau teilen."
+        },
+        "video": {
+          "label": "Video",
+          "hint": "Ein Feed-Video (MP4 / MOV)."
+        },
+        "reel": {
+          "label": "Reel",
+          "hint": "Ein vertikales Kurzvideo als Reel."
+        }
+      },
+      "photoUrls": "Öffentliche Bild-URLs einfügen",
+      "photoHint": "Eine pro Zeile, bis zu 10. Das Hochladen einer Datei erfordert den Speicherdienst, der noch nicht verbunden ist – verwenden Sie daher öffentliche Bildadressen.",
+      "linkUrl": "Link-URL",
+      "linkHint": "Facebook erstellt aus dem Link eine Vorschaukarte. Ein Beitrag kann einen Link oder Fotos enthalten, nicht beides.",
+      "videoUrl": "Öffentliche HTTPS-Video-URL einfügen",
+      "reelNote": "Reels sind vertikale Kurzvideos. Die Nachricht unten dient als Reel-Beschreibung.",
+      "videoNote": "Meta ruft die Datei über öffentliches HTTPS ab. Die Nachricht unten dient als Videobeschreibung.",
+      "messagePlaceholder": "Schreiben Sie Ihren Beitrag…",
+      "ai": {
+        "title": "KI-Werkzeuge für den Editor",
+        "caption": "Bildunterschrift",
+        "repurpose": "Umwidmen",
+        "review": "Überprüfen",
+        "bestTime": "Beste Zeit",
+        "image": "Bild",
+        "unavailable": "KI-Werkzeuge sind noch nicht verfügbar: Sie warten auf die Einstellungen des KI-Anbieters."
+      },
+      "when": {
+        "now": "Jetzt veröffentlichen",
+        "later": "Für später planen",
+        "label": "Sendedatum & -uhrzeit",
+        "hint": "Zwischen 10 Minuten und 75 Tagen ab jetzt, in Ihrer Zeitzone ({tz}). Facebook reiht den Beitrag ein und veröffentlicht ihn zur festgelegten Zeit."
+      },
+      "submit": {
+        "publish": "Veröffentlichen",
+        "schedule": "Planen"
+      },
+      "preview": {
+        "live": "Live-Vorschau",
+        "facebook": "Facebook",
+        "yourPage": "Ihre Seite",
+        "justNow": "Gerade eben",
+        "empty": "Ihr Beitragstext erscheint hier…",
+        "reel": "Reel",
+        "video": "Video",
+        "like": "Gefällt mir",
+        "comment": "Kommentieren",
+        "share": "Teilen",
+        "note": "Live-Vorschau – der echte Beitrag kann auf Facebook etwas anders aussehen."
+      },
+      "help": {
+        "label": "Hilfe – {n}",
+        "help1": {
+          "title": "Was kann ich posten?",
+          "body": "Fotos, Alben, Links, Feed-Videos und Reels werden über die Graph API direkt auf Ihrer verbundenen Seite veröffentlicht."
+        },
+        "help2": {
+          "title": "Wie funktioniert die Planung?",
+          "body": "Wählen Sie eine Zeit zwischen 10 Minuten und 75 Tagen ab jetzt – Facebook reiht den Beitrag ein und veröffentlicht ihn automatisch zur festgelegten Zeit. Oder veröffentlichen Sie sofort."
+        },
+        "help3": {
+          "title": "Ein Beitrag ist fehlgeschlagen – warum?",
+          "body": "Meist war die Medien-URL nicht öffentlich über HTTPS erreichbar oder die Seite wurde neu verbunden. Lesen Sie die Fehlermeldung in der Zeile und wiederholen Sie den Vorgang mit Jetzt veröffentlichen."
+        }
+      },
+      "problem": {
+        "noPage": "Wählen Sie eine verbundene Facebook-Seite aus.",
+        "scheduleMissing": "Wählen Sie Datum und Uhrzeit, um den Beitrag zu planen.",
+        "scheduleInvalid": "Datum und Uhrzeit konnten nicht gelesen werden."
+      },
+      "rejected": "Facebook hat den Beitrag abgelehnt: {error}",
+      "scheduled": "Beitrag geplant.",
+      "published": "Beitrag auf Facebook veröffentlicht.",
+      "failed": "Das hat nicht funktioniert. Versuchen Sie es erneut."
+    },
+    "grid": {
+      "kicker": "Facebook · Meine Beiträge",
+      "title": "Ihr",
+      "titleAccent": "Raster",
+      "intro": "Ihre zuletzt veröffentlichten Seitenbeiträge – direkt von Facebook. Tippen Sie auf einen Beitrag, um eine Vorschau anzuzeigen.",
+      "posts": "Beiträge",
+      "newPost": "Neuer Beitrag",
+      "pagePicker": "Seite",
+      "loadError": "Die Beiträge konnten nicht geladen werden. Versuchen Sie es erneut.",
+      "noPage": "Keine Facebook-Seite verbunden",
+      "noPageHint": "Verbinden Sie eine Seite, um hier Ihr Raster zu sehen.",
+      "goHub": "Zu Facebook",
+      "empty": "Noch nichts hier",
+      "emptyHint": "Beiträge, die Sie veröffentlichen, werden hier angezeigt.",
+      "firstPost": "Ersten Beitrag erstellen",
+      "noCaption": "(keine Bildunterschrift)",
+      "view": "Beitrag ansehen",
+      "close": "Schließen",
+      "postTitle": "Beitrag",
+      "noImage": "Kein Bild",
+      "viewOnFacebook": "Auf Facebook ansehen"
+    },
+    "insights": {
+      "kicker": "Facebook · Analysen",
+      "title": "Seite",
+      "titleAccent": "Insights",
+      "intro": "Reichweite und Interaktion (28 Tage, live von Facebook) kombiniert mit Ihrer Messenger-Aktivität und den von hier veröffentlichten Beiträgen.",
+      "create": "Beitrag erstellen",
+      "myPosts": "Meine Beiträge",
+      "loadError": "Die Insights konnten nicht geladen werden. Versuchen Sie es erneut.",
+      "noPage": "Noch keine Facebook-Seite verbunden.",
+      "connect": "Facebook-Konto verbinden",
+      "connected": "Verbunden",
+      "viewing": "Angezeigtes Konto",
+      "cards": {
+        "followers": "Follower",
+        "followersSub": "Gesamtpublikum",
+        "reach": "Reichweite · 28 Tage",
+        "reachSub": "erreichte Personen",
+        "impressions": "Impressionen · 28 Tage",
+        "impressionsSub": "Anzeigen",
+        "engagements": "Interaktionen · 28 Tage",
+        "engagementsSub": "Interaktionen",
+        "convos": "Unterhaltungen",
+        "convosSub": "{n} offen",
+        "messagesIn": "Eingehende Nachrichten · 28 Tage",
+        "messagesInSub": "{n} zurückgesendet",
+        "published": "Veröffentlichte Beiträge",
+        "publishedSub": "{n} geplant",
+        "rate": "Interaktionsrate",
+        "rateSub": "Interaktionen ÷ Reichweite"
+      },
+      "liveFromFacebook": "Live von Facebook",
+      "fromHere": "Aus diesem Arbeitsbereich",
+      "activity": "Messenger-Aktivität · letzte 14 Tage",
+      "received": "Empfangen",
+      "sent": "Gesendet",
+      "mix": {
+        "title": "Inhaltsmix",
+        "posts": "{n} Beiträge",
+        "none": "Von hier aus wurden noch keine Beiträge veröffentlicht.",
+        "first": "Ersten Beitrag erstellen"
+      },
+      "types": {
+        "photo": "Foto",
+        "multi_photo": "Album",
+        "link": "Link",
+        "video": "Video",
+        "reel": "Reel"
+      },
+      "convos": {
+        "title": "Unterhaltungen",
+        "total": "{n} insgesamt",
+        "open": "Team-Posteingang öffnen",
+        "none": "Noch keine Facebook-Unterhaltungen. Sie erscheinen hier, sobald Personen Ihrer Seite schreiben."
+      },
+      "status": {
+        "open": "Offen",
+        "pending": "Ausstehend",
+        "resolved": "Gelöst",
+        "closed": "Geschlossen",
+        "snoozed": "Zurückgestellt"
+      },
+      "recent": {
+        "title": "Letzte Beiträge",
+        "none": "Noch keine Beiträge, oder die Insights werden noch aufgebaut.",
+        "noCaption": "(keine Bildunterschrift)",
+        "impressions": "Impressionen",
+        "engaged": "interagiert",
+        "view": "Ansehen"
+      },
+      "legendLive": "Live von Facebook – veraltete Kennzahlen werden unter Umständen als — angezeigt.",
+      "legendHere": "Aus diesem Arbeitsbereich – Messenger und veröffentlichte Beiträge."
+    }
+  }
+}

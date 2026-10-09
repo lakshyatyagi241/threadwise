@@ -1,0 +1,1742 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "平台设置",
+      "hub": "设置中心",
+      "general": "常规",
+      "appearance": "外观与颜色",
+      "siteInfo": "网站信息",
+      "footer": "页脚",
+      "mail": "邮件",
+      "seo": "SEO",
+      "privacy": "隐私、GDPR 与 ADA",
+      "analytics": "分析",
+      "custom": "自定义代码",
+      "pwa": "PWA",
+      "storage": "云存储",
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "营销活动",
+      "googleCalendar": "Google 日历",
+      "flowBuilder": "流程构建器"
+    },
+    "hub": {
+      "kicker": "管理员 - 项目设置",
+      "title": "项目设置",
+      "description": "配置应用标识、消息服务商、邮件、电商集成、店面元数据、页脚内容、PWA、SEO 和自定义代码。",
+      "export": "导出配置",
+      "exporting": "导出中",
+      "exportHint": "下载所有已保存的设置。密钥和账户标识将被替换。",
+      "tiles": {
+        "saved": "已保存的设置",
+        "savedHint": "共 {total} 组",
+        "healthy": "正常",
+        "healthyHint": "有非空值",
+        "needsTest": "待测试",
+        "needsTestNone": "已全部验证",
+        "secrets": "密钥字段",
+        "secretsHint": "已加密 / 已遮蔽",
+        "lastUpdated": "最后更新",
+        "lastUpdatedNone": "尚未编辑",
+        "lastUpdatedHint": "最近一次保存"
+      },
+      "card": {
+        "saved": "已保存",
+        "defaults": "默认值",
+        "needsTest": "待测试",
+        "updated": "更新于 {when}",
+        "open": "打开"
+      },
+      "others": "货币、商品目录、Shopify、WooCommerce、HubSpot、Google、Slack、移动推送和 Trello 设置会在对应模块安装后显示在此处。",
+      "actions": {
+        "addons": "附加组件",
+        "updater": "更新程序",
+        "legal": "法律页面",
+        "general": "打开常规"
+      }
+    },
+    "common": {
+      "save": "保存更改",
+      "saving": "保存中",
+      "saved": "{count, plural, other {已保存 # 项更改。}}",
+      "rejected": "{count, plural, other {# 个字段需要注意}}",
+      "conflict": "您打开这些设置后，其他人已保存了它们。请重新加载以查看他们的更改，然后再次应用您的更改。",
+      "reload": "重新加载设置",
+      "unexpected": "出错了，未保存任何内容。",
+      "requestId": "请求 ID",
+      "readOnly": "您可以查看这些设置，但只有超级管理员可以更改。",
+      "secretSet": "已保存。留空则保留原值。",
+      "secretUnset": "未设置。",
+      "secretClear": "移除已保存的值",
+      "secretShow": "显示",
+      "secretHide": "隐藏",
+      "numberRequired": "请输入整数。",
+      "numberInteger": "请使用整数。",
+      "updated": "上次保存于 {when}",
+      "neverSaved": "从未保存：正在显示默认值。",
+      "back": "所有设置",
+      "invalidGroup": "该设置页面不存在。",
+      "eyebrow": "管理员 - 项目设置",
+      "guide": "快速指南",
+      "resetDraft": "重置草稿",
+      "cancel": "取消",
+      "applyAfterSave": "更改仅在保存后生效。",
+      "saveAndTest": "保存并测试连接",
+      "custom": "自定义",
+      "manageLanguages": "管理语言"
+    },
+    "test": {
+      "title": "发送测试邮件",
+      "saveFirst": "请先保存更改：检查使用的是已保存的设置。",
+      "mailTo": "将测试邮件发送至",
+      "mailRun": "发送测试邮件",
+      "run": "测试连接",
+      "running": "测试中",
+      "ok": "通过",
+      "failed": "失败",
+      "lastOk": "上次成功检查于 {when}",
+      "neverTested": "尚未检查。"
+    },
+    "groups": {
+      "general": {
+        "title": "常规设置",
+        "description": "应用标识、平台默认值和维护模式开关。",
+        "sections": {
+          "identity": {
+            "title": "应用标识"
+          },
+          "defaults": {
+            "title": "平台默认值"
+          },
+          "platform": {
+            "title": "平台开关"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "应用名称",
+            "hint": "显示在页面标题、邮件和浏览器标签页中。"
+          },
+          "appUrl": {
+            "label": "应用 URL"
+          },
+          "supportEmail": {
+            "label": "支持邮箱",
+            "placeholder": "support@…"
+          },
+          "fromEmail": {
+            "label": "发件邮箱",
+            "placeholder": "hello@…"
+          },
+          "contactNumber": {
+            "label": "联系电话",
+            "placeholder": "+91 …"
+          },
+          "address": {
+            "label": "地址"
+          },
+          "mapIframeUrl": {
+            "label": "地图 iframe URL",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
+          },
+          "platformFooter": {
+            "label": "平台页脚",
+            "hint": "将添加到平台发出的消息中。留空则不添加。"
+          },
+          "defaultTimezone": {
+            "label": "默认时区",
+            "hint": "在工作区或用户未选择时使用。"
+          },
+          "defaultLanguage": {
+            "label": "默认语言"
+          },
+          "defaultCurrency": {
+            "label": "默认货币"
+          },
+          "defaultCountryCode": {
+            "label": "默认国家代码",
+            "hint": "带加号的拨号代码，例如 +91。"
+          },
+          "defaultCountryIso": {
+            "label": "默认国家（电话选择器）",
+            "hint": "适用于平台上的所有电话输入选择器。"
+          },
+          "fontFamily": {
+            "label": "字体系列"
+          },
+          "maintenanceMode": {
+            "label": "维护模式",
+            "hint": "使客户应用以 503 状态离线。管理员、登录和机器回调仍可正常使用。"
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "主题默认值"
+          }
+        }
+      },
+      "branding": {
+        "title": "品牌与外观",
+        "description": "网站图标、各主题的徽标、颜色标记和界面大小。",
+        "sections": {
+          "assets": {
+            "title": "品牌资源"
+          },
+          "colors": {
+            "title": "颜色标记"
+          },
+          "interface": {
+            "title": "界面"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "网站图标 URL"
+          },
+          "logos": {
+            "paper": {
+              "label": "纸质"
+            },
+            "bright": {
+              "label": "明亮"
+            },
+            "dark": {
+              "label": "深色"
+            },
+            "doodle": {
+              "label": "涂鸦"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "主色",
+              "hint": "设置主色时，除非您也单独设置，否则青色、绿色、薄荷色和气泡色也会随之变化。"
+            },
+            "wa-teal": {
+              "label": "主色（悬停）"
+            },
+            "wa-green": {
+              "label": "强调色 / 成功色"
+            },
+            "wa-mint": {
+              "label": "柔和强调填充"
+            },
+            "wa-bubble": {
+              "label": "聊天气泡"
+            },
+            "paper-0": {
+              "label": "页面背景"
+            },
+            "paper-50": {
+              "label": "卡片 / 弱化背景"
+            },
+            "paper-100": {
+              "label": "悬停背景"
+            },
+            "paper-200": {
+              "label": "边框"
+            },
+            "ink-500": {
+              "label": "弱化文字"
+            },
+            "ink-700": {
+              "label": "正文文字"
+            },
+            "ink-900": {
+              "label": "标题"
+            },
+            "accent-coral": {
+              "label": "强调色 - 珊瑚色"
+            },
+            "accent-amber": {
+              "label": "强调色 - 琥珀色"
+            },
+            "accent-plum": {
+              "label": "强调色 - 梅紫色"
+            },
+            "accent-sky": {
+              "label": "强调色 - 天蓝色"
+            }
+          },
+          "fontScale": {
+            "label": "字体大小",
+            "hint": "整个界面的文字大小，百分比，范围 80 至 130。"
+          },
+          "uiOpacity": {
+            "label": "不透明度",
+            "hint": "整个界面的不透明度，百分比，范围 55 至 100。"
+          },
+          "dashboardLayout": {
+            "label": "导航布局"
+          },
+          "sidebarColor": {
+            "label": "背景"
+          },
+          "sidebarTextColor": {
+            "label": "文字颜色"
+          },
+          "sidebarAccentColor": {
+            "label": "强调颜色"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "顶部栏",
+            "sidebar": "侧边栏"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "当前：顶部菜单，溢出项放在“更多”页面。",
+            "sidebar": "管理后台式左侧导航栏，所有功能分组显示，无顶部菜单。"
+          }
+        }
+      },
+      "site": {
+        "title": "网站信息",
+        "description": "公司信息、联系地址、社交资料和公开页脚。",
+        "sections": {
+          "company": {
+            "title": "公司"
+          },
+          "contact": {
+            "title": "联系地址"
+          },
+          "social": {
+            "title": "社交资料"
+          },
+          "footer": {
+            "title": "公开页脚"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "公司名称"
+          },
+          "tagline": {
+            "label": "标语"
+          },
+          "foundedYear": {
+            "label": "成立年份"
+          },
+          "address": {
+            "label": "地址"
+          },
+          "cityCountry": {
+            "label": "城市 国家"
+          },
+          "emailGeneral": {
+            "label": "通用邮箱"
+          },
+          "emailSupport": {
+            "label": "支持邮箱"
+          },
+          "emailSales": {
+            "label": "销售邮箱"
+          },
+          "emailSecurity": {
+            "label": "安全邮箱"
+          },
+          "emailCareers": {
+            "label": "招聘邮箱"
+          },
+          "phone": {
+            "label": "电话"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "X 账号"
+          },
+          "socialLinkedin": {
+            "label": "LinkedIn 账号"
+          },
+          "socialInstagram": {
+            "label": "Instagram 账号"
+          },
+          "socialYoutube": {
+            "label": "YouTube 账号"
+          },
+          "socialFacebook": {
+            "label": "Facebook 账号"
+          },
+          "socialGithub": {
+            "label": "GitHub 账号"
+          },
+          "footerTitle": {
+            "label": "页脚标题"
+          },
+          "footerDescription": {
+            "label": "页脚描述"
+          },
+          "footerCopyright": {
+            "label": "页脚版权"
+          }
+        }
+      },
+      "mail": {
+        "title": "邮件设置",
+        "description": "外发邮件。保存的值会在每次发送时覆盖服务器默认值。",
+        "sections": {
+          "sender": {
+            "title": "发件人"
+          },
+          "smtp": {
+            "title": "邮件服务器"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "发件人名称",
+            "placeholder": "Acme Inc.",
+            "hint": "收件人在“发件人”字段中看到的名称。"
+          },
+          "fromAddress": {
+            "label": "发件地址",
+            "placeholder": "hello@yourdomain.com",
+            "hint": "域名必须配置有效的 SPF + DKIM，否则邮件可能进入垃圾箱。"
+          },
+          "mailer": {
+            "label": "邮件发送器",
+            "hint": "目前支持 SMTP 和日志发送器；基于 API 的发送器尚未接入。"
+          },
+          "host": {
+            "label": "主机",
+            "placeholder": "smtp.mailgun.org",
+            "hint": "留空则保留服务器默认值。"
+          },
+          "port": {
+            "label": "端口",
+            "hint": "TLS 用 587，SSL 用 465，25（不建议）。"
+          },
+          "encryption": {
+            "label": "加密方式",
+            "hint": "ssl 表示隐式 TLS（通常为端口 465）；tls 和 starttls 在端口 587 上升级。"
+          },
+          "username": {
+            "label": "用户名",
+            "placeholder": "postmaster@mg.example.com"
+          },
+          "password": {
+            "label": "密码",
+            "placeholder": "输入 SMTP 密码",
+            "hint": "加密存储，不会再次显示。"
+          }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls（端口 587）",
+            "ssl": "ssl（端口 465）",
+            "starttls": "starttls",
+            "none": "无"
+          }
+        }
+      },
+      "seo": {
+        "title": "SEO 设置",
+        "description": "公开站点的搜索和社交分享标签。",
+        "sections": {
+          "search": {
+            "title": "搜索结果"
+          },
+          "social": {
+            "title": "社交分享"
+          },
+          "verification": {
+            "title": "站点验证"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "Meta 标题",
+            "hint": "以品牌名开头。"
+          },
+          "metaDescription": {
+            "label": "Meta 描述",
+            "hint": "显示在 Google 标题下方。",
+            "placeholder": "1–2 句简介，显示在 Google 标题下方。"
+          },
+          "metaKeywords": {
+            "label": "Meta 关键词",
+            "placeholder": "WhatsApp 营销, WhatsApp CRM, 营销活动, 自动化, 收件箱"
+          },
+          "robots": {
+            "label": "Robots 指令",
+            "hint": "告诉搜索引擎爬虫是否索引页面并跟踪链接。"
+          },
+          "canonical": {
+            "label": "规范链接",
+            "placeholder": "https://app.example.com"
+          },
+          "author": {
+            "label": "作者"
+          },
+          "ogTitle": {
+            "label": "Open Graph 标题",
+            "placeholder": "默认为 Meta 标题"
+          },
+          "ogDescription": {
+            "label": "Open Graph 描述",
+            "placeholder": "默认为 Meta 描述"
+          },
+          "ogType": {
+            "label": "Open Graph 类型"
+          },
+          "ogUrl": {
+            "label": "Open Graph URL",
+            "placeholder": "https://app.example.com"
+          },
+          "ogImage": {
+            "label": "Open Graph 图片",
+            "hint": "建议 1200x630。用于 Slack、X、WhatsApp、Discord。",
+            "placeholder": "https://app.example.com/og.png"
+          },
+          "twitterCard": {
+            "label": "Twitter 卡片"
+          },
+          "twitterSite": {
+            "label": "Twitter 站点账号",
+            "placeholder": "@yourbrand"
+          },
+          "twitterCreator": {
+            "label": "Twitter 创作者",
+            "placeholder": "@author"
+          },
+          "googleVerification": {
+            "label": "Google 验证",
+            "placeholder": "google-site-verification=…"
+          },
+          "bingVerification": {
+            "label": "Bing 验证",
+            "placeholder": "msvalidate.01=…"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "索引、跟踪 — 公开站点",
+            "index, nofollow": "索引、不跟踪",
+            "noindex, follow": "不索引、跟踪",
+            "noindex, nofollow": "不索引、不跟踪 — 在搜索中隐藏"
+          }
+        }
+      },
+      "privacy": {
+        "title": "隐私与 Cookie",
+        "description": "Cookie 同意横幅、法律链接和合规标记。",
+        "sections": {
+          "banner": {
+            "title": "Cookie 横幅"
+          },
+          "links": {
+            "title": "法律链接"
+          },
+          "compliance": {
+            "title": "合规标记"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "启用横幅"
+          },
+          "cookieBannerStyle": {
+            "label": "横幅样式"
+          },
+          "cookieMessage": {
+            "label": "同意提示信息"
+          },
+          "respectDoNotTrack": {
+            "label": "遵守“请勿跟踪”",
+            "hint": "浏览器发送 DNT=1 → 全部拒绝"
+          },
+          "policyUrl": {
+            "label": "隐私政策 URL",
+            "placeholder": "https://example.com/privacy"
+          },
+          "termsUrl": {
+            "label": "服务条款 URL",
+            "placeholder": "https://example.com/terms"
+          },
+          "cookiesPolicyUrl": {
+            "label": "Cookie 政策 URL（了解更多）",
+            "placeholder": "https://example.com/cookies"
+          },
+          "gdprCompliance": {
+            "label": "GDPR 合规（欧盟）",
+            "hint": "仅作记录保存，暂不改变行为。"
+          },
+          "ccpaCompliance": {
+            "label": "CCPA 合规（加利福尼亚州）",
+            "hint": "仅作记录保存，暂不改变行为。"
+          },
+          "adaSkipLink": {
+            "label": "跳转到内容的链接",
+            "hint": "仅作记录保存，暂不改变行为。"
+          },
+          "adaHighContrast": {
+            "label": "提供高对比度模式",
+            "hint": "仅作记录保存，暂不改变行为。"
+          },
+          "adaLargeText": {
+            "label": "提供大字体模式",
+            "hint": "仅作记录保存，暂不改变行为。"
+          },
+          "adaReducedMotion": {
+            "label": "遵循 prefers-reduced-motion",
+            "hint": "仅作记录保存，暂不改变行为。"
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "底部固定栏 — 推荐",
+            "top-bar": "顶部固定栏",
+            "modal": "居中弹窗"
+          }
+        }
+      },
+      "analytics": {
+        "title": "分析",
+        "description": "追踪器 ID。追踪器仅在访客同意后加载。",
+        "sections": {
+          "trackers": {
+            "title": "追踪器 ID"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "Meta 像素"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft Clarity"
+          },
+          "tiktokPixel": {
+            "label": "TikTok 像素"
+          },
+          "linkedinPartner": {
+            "label": "LinkedIn 合作伙伴"
+          },
+          "twitterPixel": {
+            "label": "Twitter 像素"
+          },
+          "plausibleDomain": {
+            "label": "Plausible 域名"
+          },
+          "posthogKey": {
+            "label": "PostHog 密钥"
+          },
+          "mixpanelToken": {
+            "label": "Mixpanel 令牌"
+          },
+          "hotjarSiteId": {
+            "label": "Hotjar 站点 ID"
+          },
+          "posthogHost": {
+            "label": "PostHog 主机"
+          }
+        }
+      },
+      "customCode": {
+        "title": "自定义代码",
+        "description": "注入公开站点的 CSS 和 JavaScript。",
+        "sections": {
+          "code": {
+            "title": "自定义代码"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "在生产环境中注入",
+            "hint": "开启此项前，下方内容均不会在公开站点运行。"
+          },
+          "css": {
+            "label": "自定义 CSS"
+          },
+          "js": {
+            "label": "自定义 JS",
+            "hint": "对每位访客生效。请仅粘贴您信任的代码。"
+          }
+        }
+      },
+      "pwa": {
+        "title": "可安装应用",
+        "description": "Web 应用清单和安装行为。",
+        "sections": {
+          "app": {
+            "title": "可安装应用"
+          },
+          "look": {
+            "title": "外观与行为"
+          },
+          "install": {
+            "title": "安装与离线"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "已启用"
+          },
+          "appName": {
+            "label": "应用名称"
+          },
+          "shortName": {
+            "label": "短名称"
+          },
+          "description": {
+            "label": "描述"
+          },
+          "startUrl": {
+            "label": "起始 URL"
+          },
+          "scope": {
+            "label": "范围"
+          },
+          "display": {
+            "label": "显示方式"
+          },
+          "orientation": {
+            "label": "方向"
+          },
+          "themeColor": {
+            "label": "主题颜色"
+          },
+          "backgroundColor": {
+            "label": "背景颜色"
+          },
+          "icon192": {
+            "label": "图标 192"
+          },
+          "icon512": {
+            "label": "图标 512"
+          },
+          "installPrompt": {
+            "label": "安装提示"
+          },
+          "offlineEnabled": {
+            "label": "已启用离线"
+          }
+        }
+      },
+      "storage": {
+        "title": "云存储",
+        "description": "用于媒体的 S3 兼容存储桶。开启前请先测试连接。",
+        "sections": {
+          "provider": {
+            "title": "服务商"
+          },
+          "credentials": {
+            "title": "存储桶凭据"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "已启用"
+          },
+          "provider": {
+            "label": "服务商"
+          },
+          "visibility": {
+            "label": "文件可见性",
+            "hint": "私有对象需要签名链接；对于人们直接打开的媒体，请使用公开或 CDN URL。"
+          },
+          "basePath": {
+            "label": "基础文件夹路径（可选）",
+            "hint": "探测对象的前缀。文件模块上线后，上传将使用该前缀。"
+          },
+          "accessKeyId": {
+            "label": "访问密钥 ID *"
+          },
+          "secret": {
+            "label": "访问密钥 *",
+            "hint": "加密存储，不会再次显示。",
+            "placeholder": "粘贴密钥"
+          },
+          "region": {
+            "label": "区域",
+            "placeholder": "us-east-1"
+          },
+          "bucket": {
+            "label": "存储桶 *"
+          },
+          "endpoint": {
+            "label": "端点",
+            "hint": "Spaces、R2 和 MinIO 必需。末尾的 /bucket 会被移除。",
+            "placeholder": "https://…（Spaces / R2 / MinIO 必需；Wasabi 和 Bunny 自动设置）"
+          },
+          "cdnUrl": {
+            "label": "公开 / CDN URL（可选）",
+            "placeholder": "https://cdn.example.com"
+          },
+          "pathStyle": {
+            "label": "使用路径风格端点（MinIO / 部分 S3 兼容存储）"
+          },
+          "storageZone": {
+            "label": "存储区",
+            "hint": "仅 Bunny。"
+          },
+          "storagePassword": {
+            "label": "存储密码（访问密钥）",
+            "hint": "仅 Bunny：存储区密码。加密存储。",
+            "placeholder": "粘贴密码"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Bunny.net 存储",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO / S3 兼容"
+          },
+          "visibility": {
+            "private": "私有（签名 URL）",
+            "public": "公开"
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "WhatsApp 设置",
+        "description": "用于注册 WhatsApp 号码的 Meta 应用和 Interakt 合作伙伴。",
+        "sections": {
+          "metaApp": {
+            "title": "商业 API (WABA)"
+          },
+          "interakt": {
+            "title": "Interakt 通道"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "Meta 应用 ID",
+            "hint": "留空则使用服务器环境变量。"
+          },
+          "appSecret": {
+            "label": "应用密钥",
+            "hint": "加密存储，不会再次显示。留空则保留已存储的密钥。"
+          },
+          "configId": {
+            "label": "嵌入式注册配置 ID",
+            "hint": "留空表示工作区需手动粘贴令牌。"
+          },
+          "graphVersion": {
+            "label": "Graph API 版本",
+            "hint": "格式如 v25.0。留空则保留服务器默认值。"
+          },
+          "coexistence": {
+            "label": "共存",
+            "hint": "在嵌入式注册中提供“连接我现有的商业应用号码”选项。"
+          },
+          "defaultProvider": {
+            "label": "默认通道",
+            "hint": "新连接号码使用的 API。"
+          },
+          "solutionId": {
+            "label": "Interakt 解决方案 ID",
+            "hint": "以 extras.setup.solutionID 发送给 Meta，并在注册时发送给 Interakt。"
+          },
+          "partnerAuthKey": {
+            "label": "Interakt 合作伙伴密钥",
+            "hint": "共享的技术合作伙伴密钥。加密存储。"
+          },
+          "systemUserId": {
+            "label": "系统用户 ID",
+            "hint": "以 MANAGE 权限分配给每个已连接的 WABA。"
+          },
+          "systemUserToken": {
+            "label": "系统用户令牌",
+            "hint": "用于检查令牌和分配系统用户。加密存储。"
+          },
+          "businessId": {
+            "label": "商业 ID",
+            "hint": "当令牌未列出 WABA 时，用于查找 WABA 的备用值。"
+          },
+          "verifyToken": {
+            "label": "Webhook 验证令牌",
+            "hint": "任意随机字符串。留空则使用上方生成的令牌。"
+          },
+          "requireSignature": {
+            "label": "每个 webhook 都要求签名",
+            "hint": "拒绝不带有效 Meta 签名的 Interakt 转发事件。仅当 Interakt 对其签名时开启。"
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt（Meta 代理）",
+            "meta": "Meta（直连）"
+          }
+        }
+      },
+      "campaigns": {
+        "title": "营销活动",
+        "description": "营销活动如何重试失败的消息，以及何时结束未完成的活动。",
+        "sections": {
+          "retry": {
+            "title": "重试"
+          },
+          "expiry": {
+            "title": "自动结束"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "重试次数",
+            "hint": "每位收件人在标记为失败前的尝试次数（0 至 10）。"
+          },
+          "retryBackoffSec": {
+            "label": "重试等待（秒）",
+            "hint": "下一次尝试前的暂停时间；每次重试都会递增。"
+          },
+          "autoExpiryEnabled": {
+            "label": "结束未完成的营销活动",
+            "hint": "结束仍在运行、超过下方时长的营销活动。"
+          },
+          "defaultExpiryHours": {
+            "label": "结束时长（小时）"
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google 日历",
+        "description": "每个工作区连接日历时使用的 Google OAuth 客户端。",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth 客户端"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "允许工作区连接 Google 日历",
+            "hint": "关闭时：任何工作区都无法连接，也不会写入或读取日历。"
+          },
+          "clientId": {
+            "label": "客户端 ID",
+            "hint": "来自 Google Cloud，凭据，OAuth 2.0 客户端 ID（Web 应用）。留空则使用 GOOGLE_CALENDAR_CLIENT_ID。"
+          },
+          "clientSecret": {
+            "label": "客户端密钥",
+            "hint": "加密存储，不会再次显示。留空则保留已保存的密钥；GOOGLE_CALENDAR_CLIENT_SECRET 为备用。"
+          },
+          "redirectUri": {
+            "label": "重定向 URI 覆盖",
+            "hint": "留空则使用上方地址。必须与客户端上的已授权重定向 URI 完全一致。"
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "流程构建器",
+        "description": "向工作区提供哪些流程构建器。",
+        "sections": {
+          "mode": {
+            "title": "构建器"
+          }
+        },
+        "fields": {
+          "mode": {
+            "label": "工作区默认构建器",
+            "hint": "简单模式为逐步列表构建器，高级模式为画布构建器。工作区可在其“流程”页面中覆盖此设置。"
+          }
+        },
+        "options": {
+          "mode": {
+            "simple": "仅简单模式",
+            "advanced": "仅高级模式"
+          }
+        }
+      }
+    },
+    "cards": {
+      "appearance": {
+        "title": "外观与颜色",
+        "description": "重新设置用户和管理后台每个页面的颜色：品牌、表面、文字和强调色。即时生效。",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "常规设置",
+        "description": "应用名称、联系方式、徽标、URL、地址以及全局服务开关。",
+        "tags": "APP_NAME / APP_URL / 徽标"
+      },
+      "paymentGateways": {
+        "title": "支付网关",
+        "description": "Stripe、Razorpay、PayPal、Paystack、Flutterwave 等：密钥、货币和正式环境开关。",
+        "tags": "正式 / 沙盒 - 按网关设置密钥"
+      },
+      "aiKeys": {
+        "title": "AI / API 密钥",
+        "description": "OpenAI、Anthropic、Google 等服务商的凭据。驱动平台中的所有 AI 功能。",
+        "tags": "BYOK / 默认模型"
+      },
+      "mail": {
+        "title": "邮件设置",
+        "description": "SMTP 驱动、主机、端口、发件人名称、加密方式和测试发送。",
+        "tags": "SMTP / 验证 / 欢迎邮件"
+      },
+      "auditLog": {
+        "title": "审计日志",
+        "description": "管理员所有操作的可搜索记录：工作区编辑、用户变更、账单事件、安全事件、设置更新。",
+        "tags": "筛选 / 详情 / CSV 导出"
+      },
+      "privacy": {
+        "title": "隐私、GDPR 与 ADA",
+        "description": "Cookie 同意横幅、GDPR / CCPA 合规、ADA / WCAG 无障碍开关以及政策 URL。",
+        "tags": "同意 / 政策 / 无障碍"
+      },
+      "menuOrder": {
+        "title": "菜单顺序",
+        "description": "设置每个用户工作区中顶部导航项的显示顺序。",
+        "tags": "重新排序"
+      },
+      "authPages": {
+        "title": "认证页面",
+        "description": "编辑登录、注册和忘记密码页面：标题、副文本、强调色以及侧边图片或视频。实时预览。",
+        "tags": "登录 / 注册 / 忘记密码"
+      },
+      "analytics": {
+        "title": "分析集成",
+        "description": "Google Analytics、GTM、Meta Pixel、Clarity、Plausible、PostHog、Hotjar、TikTok、LinkedIn、X：粘贴 ID，我们会生成脚本。",
+        "tags": "GA4 / 像素 / Clarity / GTM"
+      },
+      "seo": {
+        "title": "SEO 设置",
+        "description": "Meta 标题、描述、OpenGraph、Twitter 卡片、Robots、规范链接，以及 Google 和 Bing 站点验证。",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "语言",
+        "description": "可用语言区域、默认语言、RTL 标志以及每种语言的启用开关。驱动语言选择器。",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "PWA 设置",
+        "description": "应用名称、安装图标、主题颜色、背景颜色、显示模式以及 PWA 启用开关。",
+        "tags": "图标 / 颜色 / 安装"
+      },
+      "footer": {
+        "title": "页脚设置",
+        "description": "页脚标题、社交链接、版权文字以及公开页脚描述。",
+        "tags": "徽标 / 社交 / 版权"
+      },
+      "siteInfo": {
+        "title": "网站信息",
+        "description": "在公开页脚、联系页和关于页中共享的联系邮箱、电话、WhatsApp、地址和社交链接。",
+        "tags": "邮箱 / 电话 / 社交"
+      },
+      "socialLogin": {
+        "title": "社交登录与验证码",
+        "description": "在登录和注册页面开启或关闭 Google 和 Facebook 登录，粘贴 OAuth 密钥，并启用 reCAPTCHA。",
+        "tags": "未配置"
+      },
+      "registration": {
+        "title": "注册",
+        "description": "公开注册、邮箱验证、新工作区的默认套餐和试用时长。",
+        "tags": "注册 / 试用 / 套餐"
+      },
+      "custom": {
+        "title": "自定义代码",
+        "description": "开关开启时，将生产环境的 CSS 和 JavaScript 注入公开页面。",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "云存储",
+        "description": "将客户媒体发送到您自己的存储桶：Amazon S3、Wasabi、Bunny.net、DigitalOcean Spaces、Cloudflare R2 或 MinIO。",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "每个工作区连接其 WhatsApp 号码所用的 Meta 应用：应用 ID 和密钥、嵌入式注册、webhook 和 Interakt 通道。",
+        "tags": "Meta / 嵌入式注册 / Interakt"
+      },
+      "campaigns": {
+        "title": "营销活动",
+        "description": "重试以及未完成营销活动的自动结束。",
+        "tags": "重试 / 过期"
+      },
+      "googleCalendar": {
+        "title": "Google 日历",
+        "description": "工作区用于连接日历以进行预约和忙碌时段查询的 Google OAuth 客户端。",
+        "tags": "Google / OAuth / 日历"
+      },
+      "flowBuilder": {
+        "title": "流程构建器",
+        "description": "每个工作区的默认流程构建器：简单逐步模式或高级画布模式。工作区可覆盖此设置。",
+        "tags": "简单 / 高级 / 自动化"
+      }
+    },
+    "signup": {
+      "body": "公开注册、自动验证邮箱、新注册用户的默认套餐以及免费试用时长，请在“注册”页面中编辑。",
+      "link": "打开注册设置"
+    },
+    "brandAssets": {
+      "intro": "网站图标在所有主题间共享。徽标按主题设置：深色模式请上传反色或浅色版本，涂鸦主题请上传适合涂鸦风格的版本。",
+      "favicon": {
+        "title": "网站图标",
+        "note": "显示在浏览器标签页和书签中。建议 35x35 px。支持 PNG、ICO、JPG、SVG 或 WebP，最大 512 KB。上传后将替换原图标。"
+      },
+      "logos": {
+        "title": "各主题徽标",
+        "note": "每个主题使用自己的徽标。若未上传该主题的徽标，则回退到纸质主题。"
+      },
+      "themes": {
+        "paper": {
+          "label": "纸质（默认）",
+          "note": "浅色，略带灰白。默认外观。"
+        },
+        "bright": {
+          "label": "明亮白色",
+          "note": "对比度更高的白色背景。"
+        },
+        "dark": {
+          "label": "深色（测试版）",
+          "note": "使用徽标的浅色或反色版本。"
+        },
+        "doodle": {
+          "label": "涂鸦（花式）",
+          "note": "淡薄荷色背景。"
+        }
+      },
+      "noFile": "无文件",
+      "upload": "上传",
+      "uploading": "上传中",
+      "remove": "移除",
+      "loading": "加载中",
+      "loadFailed": "无法加载品牌文件。",
+      "failed": "上传失败。",
+      "tooLarge": "此文件超过 {kb} KB。",
+      "wrongType": "此处不允许该文件类型。"
+    },
+    "teamInbox": {
+      "intro": "一个独立的可安装应用，范围限定于团队收件箱。坐席打开链接并将其添加到主屏幕后，即使应用已关闭，也能在收到新消息时接收推送通知。",
+      "enabled": {
+        "label": "启用团队收件箱应用",
+        "hint": "开启后，将在 /team-inbox 上启用独立的清单、安装提示和通知。"
+      },
+      "name": {
+        "label": "应用名称"
+      },
+      "shortName": {
+        "label": "短名称",
+        "hint": "最多 12 个字符。"
+      },
+      "icon192": {
+        "label": "应用图标（192x192 PNG）",
+        "note": "留空则使用应用图标。收件箱应用在主屏幕上的图标。"
+      },
+      "icon512": {
+        "label": "大图标 / 启动页（512x512 PNG）",
+        "note": "留空则使用应用图标。用于安装启动页和高 DPI 屏幕。"
+      },
+      "push": {
+        "ready": {
+          "title": "推送通知：已就绪",
+          "body": "密钥已生成。坐席可在收件箱中开启通知。"
+        },
+        "todo": {
+          "title": "推送通知：还差一步",
+          "body": "点击“生成密钥”即可设置推送，无需访问服务器。"
+        },
+        "generate": "生成密钥",
+        "generating": "生成中",
+        "generated": "推送密钥已生成。"
+      },
+      "manifestLink": "团队收件箱清单",
+      "save": "保存团队收件箱应用",
+      "saving": "保存中",
+      "saved": "团队收件箱应用已保存。",
+      "conflict": "您打开此页面后，其他人已保存了内容。请重新加载页面后再试。",
+      "failed": "出错了，未保存任何内容。",
+      "loading": "加载中",
+      "loadFailed": "无法加载团队收件箱应用设置。"
+    },
+    "seoPreview": {
+      "google": "Google 搜索结果",
+      "noDescription": "尚未设置 Meta 描述。",
+      "noImage": "无 OG 图片",
+      "sitemapKicker": "站点地图与 robots",
+      "sitemapTitle": "爬虫文件",
+      "sitemapFile": "由公开页面和已发布的博客文章自动生成。请在 Google Search Console 中提交 /sitemap.xml。",
+      "download": "下载 sitemap.xml"
+    },
+    "pages": {
+      "general": {
+        "title": "常规设置",
+        "description": "核心应用标识、联系信息、默认语言区域和货币，以及平台级服务开关。",
+        "sections": {
+          "identity": {
+            "title": "应用标识"
+          },
+          "brandAssets": {
+            "title": "品牌资源"
+          },
+          "platform": {
+            "title": "平台开关"
+          },
+          "signup": {
+            "title": "注册与免费试用"
+          }
+        },
+        "guide": {
+          "title": "内容去向",
+          "items": {
+            "appName": {
+              "title": "应用名称",
+              "body": "用于页面标题、邮件和应用内品牌。请保持简短，最好一两个词。"
+            },
+            "appUrl": {
+              "title": "应用 URL",
+              "body": "标准地址。所有回调、邮件和 OAuth 重定向均由此派生。"
+            },
+            "language": {
+              "title": "默认语言",
+              "body": "应用于新账户。现有用户保留其已选择的语言。"
+            },
+            "currency": {
+              "title": "默认货币",
+              "body": "用于没有单独设置的发票和钱包。"
+            },
+            "maintenance": {
+              "title": "维护模式",
+              "body": "开启后，所有非管理员路由都将显示占位页。管理员仍可访问控制台。"
+            }
+          }
+        },
+        "tip": {
+          "title": "生产环境规则",
+          "body": "仅在测试受影响的用户流程后保存。标识更改将同步到发票和外发邮件。"
+        }
+      },
+      "appearance": {
+        "title": "仪表盘颜色",
+        "description": "通过更改这些主题颜色，重新设置整个应用、用户仪表盘每个页面和管理面板的颜色。保存后会立即对所有人生效；保持颜色为默认值即可保留出厂外观。",
+        "sections": {
+          "layout": {
+            "title": "导航布局",
+            "description": "选择用户仪表盘的布局。侧边栏会将所有菜单移到左侧导航栏（无顶部栏，也没有“更多”页面）。"
+          },
+          "sidebar": {
+            "title": "侧边栏颜色",
+            "description": "深色左侧导航栏背景（仅侧边栏布局）。保持默认值即为出厂的近黑色。"
+          },
+          "interface": {
+            "title": "界面"
+          },
+          "brand": {
+            "title": "品牌"
+          },
+          "surfaces": {
+            "title": "表面"
+          },
+          "text": {
+            "title": "文字"
+          },
+          "accents": {
+            "title": "强调"
+          }
+        },
+        "guide": {
+          "title": "颜色如何生效",
+          "items": {
+            "how": {
+              "title": "立即生效",
+              "body": "保存后会为所有人重写实时主题标记。"
+            },
+            "tokens": {
+              "title": "一个标记，一个用途",
+              "body": "每个色块对应用户仪表盘和管理面板中使用的单个 CSS 变量。"
+            },
+            "primary": {
+              "title": "更改主色，其余随之变化",
+              "body": "除非您单独设置，否则主色（悬停）、强调色、柔和填充和聊天气泡均由主色派生。"
+            },
+            "defaults": {
+              "title": "保持默认值不变",
+              "body": "保持出厂值的颜色将保留原始外观；仅覆盖已更改的标记。"
+            }
+          }
+        },
+        "tip": {
+          "title": "提示",
+          "body": "进行较大改动后请检查对比度。文字和背景颜色均来自这些标记。"
+        },
+        "eyebrow": "管理员 - 外观"
+      },
+      "siteInfo": {
+        "title": "网站信息",
+        "description": "在页脚、联系页和关于页中共享的联系信息与社交链接。只需编辑一次，即可在所有位置更新。",
+        "sections": {
+          "company": {
+            "title": "公司"
+          },
+          "contact": {
+            "title": "联系邮箱"
+          },
+          "phone": {
+            "title": "电话与 WhatsApp"
+          },
+          "social": {
+            "title": "社交链接"
+          }
+        },
+        "guide": {
+          "title": "内容去向",
+          "items": {
+            "shared": {
+              "title": "全局共享",
+              "body": "这些值会用于公开页脚、联系页和法律页面。"
+            },
+            "frontend": {
+              "title": "页面文字与颜色",
+              "body": "请在前端编辑器中编辑，而非此处。"
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "页脚设置",
+        "description": "页脚标题、社交链接、版权文字和公开页脚描述。",
+        "sections": {
+          "footer": {
+            "title": "公开页脚"
+          }
+        },
+        "guide": {
+          "title": "内容去向",
+          "items": {
+            "what": {
+              "title": "页脚标题与版权",
+              "body": "标题留空则使用平台名称。版权文字留空则根据年份和品牌自动生成。"
+            },
+            "social": {
+              "title": "社交 URL",
+              "body": "字段留空则隐藏图标。这些与网站信息中的社交链接共享：在此处编辑会同步更新各处。"
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "邮件设置",
+        "description": "SMTP 主机、端口、加密方式和凭据。保存的值会在每次发送时应用，因此欢迎邮件、验证邮件、收据和支持邮件无需重启即可使用。",
+        "sections": {
+          "smtp": {
+            "title": "SMTP 凭据"
+          }
+        },
+        "guide": {
+          "title": "常见服务商主机",
+          "items": {
+            "hosts": {
+              "title": "典型设置",
+              "body": "Mailgun smtp.mailgun.org 587 / tls。SendGrid smtp.sendgrid.net 587 / tls。Amazon SES email-smtp.REGION.amazonaws.com 587 / tls。Postmark smtp.postmarkapp.com 587 / tls。Resend smtp.resend.com 587 / tls。Gmail smtp.gmail.com 587 / tls，需使用应用专用密码。"
+            },
+            "used": {
+              "title": "系统中的邮件模板",
+              "body": "欢迎邮件和验证邮件、密码重置、发票和收据、支持回复、安全提醒以及工作区邀请。"
+            }
+          }
+        },
+        "tip": {
+          "title": "提示",
+          "body": "编辑后请务必发送测试邮件。主机或端口中的一个错误就会悄无声息地破坏平台中的所有事务性邮件。"
+        }
+      },
+      "seo": {
+        "title": "SEO 设置",
+        "description": "全站默认 meta 标签：标题、描述、OpenGraph、Twitter 卡片、Robots、规范链接以及搜索引擎验证。",
+        "sections": {
+          "search": {
+            "title": "Meta 标签"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "Twitter 卡片"
+          },
+          "verification": {
+            "title": "站点验证"
+          },
+          "preview": {
+            "title": "实时预览"
+          }
+        },
+        "guide": {
+          "title": "SEO 基础",
+          "items": {
+            "basics": {
+              "title": "标题与描述",
+              "body": "Meta 标题：以品牌名和一个有力的描述开头，50–60 个字符。Meta 描述：1–2 句简介，140–160 个字符。"
+            },
+            "where": {
+              "title": "显示位置",
+              "body": "管理页面、登录后页面、公开页面和链接预览（WhatsApp、Slack、Discord、X）。Robots：暂存或私有部署请使用 noindex。"
+            },
+            "sitemap": {
+              "title": "验证",
+              "body": "opengraph.xyz、Google 富媒体结果测试和 Twitter 卡片验证工具。"
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "隐私、GDPR 与 ADA",
+        "eyebrow": "管理员 - 合规",
+        "description": "Cookie 同意横幅、政策 URL、GDPR/CCPA 合规以及 WCAG 无障碍开关。同一设置同时驱动同意界面，并控制每个分析集成的启用。",
+        "sections": {
+          "banner": {
+            "title": "横幅与政策"
+          },
+          "compliance": {
+            "title": "GDPR 与 CCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG",
+            "description": "美国《残疾人法案》与 WCAG 2.1 AA 级别的无障碍功能，访客可自行切换。"
+          }
+        },
+        "guide": {
+          "title": "同意的运作方式",
+          "items": {
+            "order": {
+              "title": "操作顺序",
+              "body": "1. 访客进入页面，Cookie 横幅弹出（若遵守“请勿跟踪”则跳过）。2. 选择会保存在 crm_cookie_consent Cookie 中，有效期一年。3. 仅加载已允许的追踪器。4. 访客可从带有 data-cookie-prefs-open 的任意元素重新打开偏好设置。"
+            },
+            "linked": {
+              "title": "关联设置",
+              "body": "分析集成（GA4、GTM、像素、Clarity 等）以及 PWA 设置。"
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "分析集成",
+        "eyebrow": "管理员 - 追踪",
+        "description": "每个提供商的 ID 只需粘贴一次。官方厂商代码片段会渲染在每个公开页面上，但仅在访客同意相应 Cookie 类别后才会加载。",
+        "sections": {
+          "site": {
+            "title": "站点分析"
+          },
+          "marketing": {
+            "title": "广告像素"
+          }
+        },
+        "guide": {
+          "title": "追踪器 -> 类别",
+          "items": {
+            "categories": {
+              "title": "各自何时触发",
+              "body": "分析：GA4、GTM、Clarity、Plausible、PostHog、Hotjar、Mixpanel。营销：Meta 像素、TikTok、LinkedIn、X 像素。GTM 容器脚本可能包含其他追踪器；可在 GTM 中使用类别触发器暂停它们。"
+            },
+            "where": {
+              "title": "加载位置",
+              "body": "公开页面和登录页面。管理员页面有意关闭。"
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "自定义代码",
+        "description": "用于高级品牌和行为的生产环境自定义样式与脚本。启用后注入公开页面。",
+        "sections": {
+          "code": {
+            "title": "自定义代码"
+          }
+        },
+        "guide": {
+          "title": "经验法则",
+          "items": {
+            "scope": {
+              "title": "限定 CSS 作用域",
+              "body": "用品牌类名包裹规则。避免修改 body、*或框架工具类。"
+            },
+            "block": {
+              "title": "不要阻塞",
+              "body": "将 JS 包裹在 DOMContentLoaded 中。避免同步网络请求。"
+            },
+            "dark": {
+              "title": "测试深色模式",
+              "body": "切换主题，并在保存前检查 html[data-theme=\"dark\"] 选择器。"
+            },
+            "sensitive": {
+              "title": "对生产敏感",
+              "body": "错误的保存会立即影响每个公开页面。大改动请让同事审核。"
+            }
+          }
+        },
+        "tip": {
+          "title": "谨慎",
+          "body": "自定义代码在每个公开页面上运行，且无法沙箱隔离。只有超级管理员可以更改。"
+        }
+      },
+      "pwa": {
+        "title": "PWA 设置",
+        "description": "可安装应用清单：名称、图标、颜色和显示模式。驱动清单和安装提示。",
+        "sections": {
+          "app": {
+            "title": "PWA 清单"
+          },
+          "teamInbox": {
+            "title": "团队收件箱 PWA"
+          }
+        },
+        "guide": {
+          "title": "可安装应用",
+          "items": {
+            "manifest": {
+              "title": "实时清单",
+              "body": "清单位于 /api/v2/public/manifest.webmanifest，且仅在开关开启时存在。"
+            },
+            "install": {
+              "title": "图标",
+              "body": "在外观页面上传方形 PNG 图标，或粘贴已托管的 URL。192 px 用于主屏幕，512 px 用于启动页。"
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "云存储",
+        "eyebrow": "管理员 - 媒体存储",
+        "description": "将所有客户媒体附件发送到您自己的存储桶——Amazon S3、Wasabi、Bunny.net、DigitalOcean Spaces、Cloudflare R2 或任何 S3 兼容存储——而非应用服务器。关闭时，媒体保留在本地磁盘，因此在开启之前不会出现任何故障。",
+        "status": {
+          "active": "已启用：{provider}。新上传的文件将进入您的存储桶。",
+          "configured": "已配置但已关闭。媒体仍保存在本地磁盘。请先测试，然后再启用。",
+          "local": "本地磁盘（尚未设置云服务商）。",
+          "enabled": "已启用",
+          "disabled": "已禁用"
+        },
+        "sections": {
+          "provider": {
+            "title": "云媒体路由"
+          },
+          "credentials": {
+            "title": "存储桶连接"
+          }
+        },
+        "guide": {
+          "title": "设置",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "访问密钥 + 密钥 + 区域 + 存储桶。Wasabi 端点由区域推导。"
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "使用 Bunny 字段：存储区和密码。区域为存储区所在区域（de、ny、la 等）。"
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "填写 S3 字段并粘贴端点 URL。MinIO 请勾选路径风格。"
+            },
+            "test": {
+              "title": "务必先测试",
+              "body": "“保存并测试连接”会在您开启“已启用”之前写入并删除一个探测文件。"
+            }
+          }
+        },
+        "tip": {
+          "title": "默认安全",
+          "body": "现有文件保持原位。只有新上传的文件会进入存储桶；不会迁移或删除任何内容。"
+        }
+      },
+      "whatsapp": {
+        "title": "WhatsApp 设置",
+        "eyebrow": "管理员 - 设置 - 渠道 - WhatsApp",
+        "description": "所有工作区的 WhatsApp 号码都通过这一个 Meta 应用（及 Interakt 合作伙伴）注册。若没有应用 ID 和密钥，嵌入式注册和令牌续期将无法工作；若没有配置 ID，工作区需手动粘贴令牌。保存的值会在几秒内覆盖服务器默认值，并在每个进程中生效。",
+        "sections": {
+          "metaApp": {
+            "title": "商业 API (WABA)",
+            "description": "Meta 官方 Cloud API。高流量、模板消息和已验证的商家资料所必需。同时支持手动粘贴令牌和嵌入式注册（WhatsApp 登录）。"
+          },
+          "interakt": {
+            "title": "Interakt 通道",
+            "description": "通过嵌入式注册连接的号码默认通过 Interakt 的 Meta 代理收发消息。切换为 Meta（直连）可跳过 Interakt。已有号码保留其连接时所用的通道。"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "商业 API (WABA)",
+          "items": {
+            "api": {
+              "title": "Meta Cloud API",
+              "body": "Meta 官方 Cloud API。高流量、模板消息和已验证的商家资料所必需。同时支持手动粘贴令牌和嵌入式注册（WhatsApp 登录）。"
+            },
+            "app": {
+              "title": "Facebook 应用 ID + 密钥",
+              "body": "developers.facebook.com/apps，基本设置。更改应用会使旧应用签发的令牌失效，因此工作区必须重新连接。"
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "应用控制台，WhatsApp，配置：粘贴本页面中的回调 URL 和验证令牌，然后订阅 messages 和 message_template_status_update。"
+            },
+            "perWorkspace": {
+              "title": "按工作区",
+              "body": "每个工作区都在“渠道 > WhatsApp 号码”中连接自己的号码。电话号码 ID 和永久令牌在该处填写。"
+            },
+            "login": {
+              "title": "WABA 登录（可选）",
+              "body": "填写嵌入式注册配置 ID 可启用一键“使用 Meta 登录”。需要应用具有 Tech Provider 角色。留空则仅使用手动粘贴。"
+            }
+          }
+        },
+        "tip": {
+          "title": "提示",
+          "body": "在流量进行中切换默认通道或应用，只影响之后连接的号码。更改 Meta 应用前请先暂停营销活动。"
+        }
+      },
+      "campaigns": {
+        "title": "营销活动投递",
+        "eyebrow": "管理员 - 营销活动",
+        "description": "适用于所有工作区营销活动的平台级规则：失败消息的重试频率，以及未完成营销活动何时结束。",
+        "sections": {
+          "retry": {
+            "title": "重试"
+          },
+          "expiry": {
+            "title": "自动结束"
+          }
+        },
+        "guide": {
+          "title": "运作方式",
+          "items": {
+            "retry": {
+              "title": "重试",
+              "body": "发送失败的收件人会在等待后重试，最多按此处设置的次数进行。"
+            },
+            "expiry": {
+              "title": "自动结束",
+              "body": "运行时间超过此处设置小时数的营销活动将被结束，以免永久占用发送通道。"
+            }
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google 日历",
+        "eyebrow": "管理员 - 预约",
+        "description": "整个平台使用一个 Google Cloud OAuth 客户端。每个工作区随后可在“预约 > 设置”中连接自己的 Google 账户；工作区永远看不到客户端 ID 或密钥。",
+        "sections": {
+          "oauth": {
+            "title": "Google OAuth 客户端",
+            "description": "没有客户端 ID 和密钥时，工作区会看到 Google 日历不可用，预约仍可继续，只是没有日历。"
+          }
+        },
+        "guide": {
+          "title": "在 Google Cloud 中设置",
+          "items": {
+            "project": {
+              "title": "1. 项目与 API",
+              "body": "在 Google Cloud Console 中创建项目并启用 Google Calendar API。"
+            },
+            "redirect": {
+              "title": "2. OAuth 客户端",
+              "body": "创建类型为 Web 应用的 OAuth 2.0 客户端 ID，并将本页面显示的重定向 URI 添加到“已授权的重定向 URI”下。"
+            },
+            "consent": {
+              "title": "3. 同意屏幕",
+              "body": "添加 calendar.events、calendar.freebusy 和 calendar.calendarlist.readonly 权限范围，然后发布应用：处于测试状态时，Google 会在 7 天后使所有授权失效，工作区需要重新连接。"
+            },
+            "workspaces": {
+              "title": "4. 工作区连接",
+              "body": "在此粘贴客户端 ID 和密钥并保存。管理员随后可在“预约 > 设置 > Google 日历”中连接。"
+            }
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "流程构建器",
+        "eyebrow": "管理员 - 自动化",
+        "description": "为每个工作区选择默认流程构建器：简单逐步构建器或高级画布构建器。工作区可在其“流程”页面中覆盖此设置。",
+        "sections": {
+          "mode": {
+            "title": "构建器"
+          }
+        },
+        "guide": {
+          "title": "运作方式",
+          "items": {
+            "modes": {
+              "title": "两种构建器",
+              "body": "简单模式将流程按步骤逐条列出，步骤之间有加号。高级模式是带节点和连线的画布。两者保存的是同一个流程，运行方式相同。"
+            },
+            "existing": {
+              "title": "已存在的流程",
+              "body": "更改此设置绝不会更改或删除流程。流程仍会正常运行，只是会在当前启用的构建器中打开。自行选择构建器的工作区会保留该选择，直到其重新选择平台默认值。"
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "我们使用 Cookie",
+      "learnMore": "了解更多",
+      "decline": "拒绝",
+      "customize": "自定义",
+      "acceptAll": "全部接受",
+      "rejectAll": "全部拒绝",
+      "save": "保存偏好",
+      "preferences": "Cookie 偏好",
+      "categories": {
+        "necessary": {
+          "title": "严格必要",
+          "body": "网站正常运行所需：登录、安全以及您的选择。始终开启。"
+        },
+        "analytics": {
+          "title": "分析 Cookie",
+          "body": "帮助我们了解网站的使用情况，以便改进。"
+        },
+        "marketing": {
+          "title": "营销 Cookie",
+          "body": "用于衡量广告效果，并在其他地方向您展示相关营销活动。"
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "实时预览",
+      "previewTitle": "保存前",
+      "previewNote": "拖动时颜色、大小和不透明度会实时更新。在您保存之前，不会对任何人生效。",
+      "resetTitle": "恢复默认值",
+      "resetBody": "清除所有覆盖并恢复原始调色板。",
+      "reset": "重置所有颜色",
+      "tokens": "{count} 个标记",
+      "controls": "{count} 个控件",
+      "primary": "主色",
+      "cancel": "取消",
+      "active": "已启用"
+    },
+    "wabaCallback": {
+      "loading": "正在加载 Webhook 详情…",
+      "unavailable": "Webhook 详情仅对超级管理员显示。",
+      "webhookUrl": "Webhook URL",
+      "noUrl": "请设置 APP_URL 或 WABA_WEBHOOK_PUBLIC_URL",
+      "webhookHint": "粘贴到 Meta 应用中（WhatsApp，配置，回调 URL）。订阅：{fields}。",
+      "verifyToken": "验证令牌",
+      "verifyHint": "粘贴到与验证令牌相同的屏幕中。",
+      "copy": "复制",
+      "copied": "已复制",
+      "connected": "已连接的 WABA（所有工作区）",
+      "fieldsTitle": "Webhook 字段（共存与群组）",
+      "fieldsHint": "共存需要 Meta 应用订阅 messages、smb_message_echoes、smb_app_state_sync 和 history。WhatsApp 群组需要 group_lifecycle_update、group_participants_update、group_settings_update 和 group_status_update。",
+      "fieldsCheck": "检查 Webhook 字段",
+      "fieldsChecking": "正在询问 Meta…",
+      "fieldsOk": "所有字段均已订阅：在手机上输入的回复将同步，WhatsApp 群组事件也将到达。",
+      "fieldsMissing": "部分字段尚未订阅。",
+      "fieldsSubscribed": "已订阅。在手机上输入的回复现在将同步，WhatsApp 群组事件也将到达。",
+      "fieldsMissingTag": "缺失",
+      "fieldsGroupTag": "群组",
+      "fieldsSubscribe": "订阅缺失字段",
+      "fieldsSubscribing": "正在订阅…"
+    },
+    "googleCallback": {
+      "redirectTitle": "重定向 URI",
+      "redirectHint": "请将此确切地址注册为 OAuth 客户端上的已授权重定向 URI。工作区管理员同意后，Google 会将浏览器跳转至此地址。",
+      "copy": "复制",
+      "copied": "已复制"
+    }
+  }
+}

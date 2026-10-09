@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "代登录中",
+      "viewing": "正以 {owner} 的身份查看 {workspace}",
+      "reason": "原因：{reason}",
+      "readOnly": "只读",
+      "timeLeft": "剩余 {minutes, plural, other {# 分钟}}",
+      "endsSoon": "剩余不到一分钟",
+      "stop": "停止代登录",
+      "stopping": "正在停止",
+      "stopFailed": "无法停止会话，请重试。",
+      "readOnlyRefused": "此会话为只读，因此不允许更改。",
+      "forbiddenRefused": "以所有者身份查看工作区时，此操作不可用。",
+      "ended": {
+        "title": "此代登录会话已结束",
+        "expired": "该链接已被使用或已过期。请从控制台重新开始。",
+        "body": "从此处无法再对工作区进行任何操作。请返回控制台以开始新的会话。",
+        "back": "返回控制台"
+      }
+    }
+  }
+}

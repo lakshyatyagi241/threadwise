@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "Berikutnya",
+      "back": "Kembali",
+      "sending": "Mengirim...",
+      "optional": "opsional",
+      "selectPlaceholder": "Pilih opsi",
+      "stepOf": "Langkah {n} dari {total}",
+      "summaryTitle": "{count, plural, other {Mohon perbaiki # kolom}}",
+      "successTitle": "Terima kasih",
+      "continue": "Lanjutkan",
+      "previewNotice": "Pratinjau: tidak ada yang dikirim dari sini.",
+      "honeypot": "Kosongkan kolom ini",
+      "privacyPolicy": "Kebijakan privasi",
+      "poweredBy": "Didukung oleh {brand}",
+      "brandName": "Formulir",
+      "captchaNeeded": "Mohon selesaikan pemeriksaan di bawah sebelum mengirim.",
+      "rateLimited": "Terlalu banyak percobaan. Mohon tunggu sebentar lalu coba lagi.",
+      "closed": "Formulir ini tidak menerima jawaban saat ini.",
+      "genericError": "Terjadi kesalahan dan jawaban Anda tidak terkirim. Mohon coba lagi.",
+      "notAvailableTitle": "Formulir ini tidak tersedia",
+      "notAvailableBody": "Tautannya mungkin salah, atau formulir sudah ditutup.",
+      "errors": {
+        "required": "Kolom ini wajib diisi.",
+        "consent_required": "Centang kotak ini untuk melanjutkan.",
+        "invalid_email": "Masukkan alamat email yang valid.",
+        "invalid_phone": "Masukkan nomor telepon yang valid, dengan kode negara jika memungkinkan.",
+        "invalid_number": "Masukkan nomor yang valid.",
+        "invalid_date": "Masukkan tanggal yang valid.",
+        "too_small": "Masukkan nilai minimal {min}.",
+        "too_large": "Masukkan nilai maksimal {max}.",
+        "too_short": "Masukkan minimal {min} karakter.",
+        "too_long": "Masukkan maksimal {max} karakter.",
+        "pattern": "Format ini tidak sesuai dengan yang diharapkan.",
+        "invalid_option": "Pilih salah satu opsi yang tersedia."
+      },
+      "closedTitle": "Formulir ini ditutup"
+    }
+  }
+}

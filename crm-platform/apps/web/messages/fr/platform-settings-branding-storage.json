@@ -1,0 +1,1742 @@
+{
+  "platform-settings-branding-storage": {
+    "nav": {
+      "groupHeading": "Paramètres de la plateforme",
+      "hub": "Centre des paramètres",
+      "general": "Général",
+      "appearance": "Apparence et couleurs",
+      "siteInfo": "Informations sur le site",
+      "footer": "Pied de page",
+      "mail": "E-mail",
+      "seo": "SEO",
+      "privacy": "Confidentialité, RGPD et ADA",
+      "analytics": "Analytics",
+      "custom": "Code personnalisé",
+      "pwa": "PWA",
+      "storage": "Stockage cloud",
+      "whatsapp": "WhatsApp (WABA)",
+      "campaigns": "Campagnes",
+      "googleCalendar": "Google Agenda",
+      "flowBuilder": "Éditeur de flux"
+    },
+    "hub": {
+      "kicker": "Admin - Paramètres du projet",
+      "title": "Paramètres du projet",
+      "description": "Configurez l’identité de l’application, les fournisseurs de messagerie, l’e-mail, les intégrations e-commerce, les métadonnées de la vitrine, le contenu du pied de page, la PWA, le SEO et le code personnalisé.",
+      "export": "Exporter la configuration",
+      "exporting": "Export en cours",
+      "exportHint": "Télécharge chaque paramètre enregistré. Les secrets et identifiants de compte sont remplacés.",
+      "tiles": {
+        "saved": "Paramètres enregistrés",
+        "savedHint": "groupes sur {total} enregistrés",
+        "healthy": "Opérationnel",
+        "healthyHint": "avec une valeur non vide",
+        "needsTest": "À tester",
+        "needsTestNone": "tous vérifiés",
+        "secrets": "Champs secrets",
+        "secretsHint": "chiffrés / masqués",
+        "lastUpdated": "Dernière mise à jour",
+        "lastUpdatedNone": "aucune modification pour l’instant",
+        "lastUpdatedHint": "dernier enregistrement"
+      },
+      "card": {
+        "saved": "Enregistré",
+        "defaults": "Valeurs par défaut",
+        "needsTest": "À tester",
+        "updated": "Mis à jour {when}",
+        "open": "Ouvrir"
+      },
+      "others": "Les paramètres des devises, du catalogue, de Shopify, WooCommerce, HubSpot, Google, Slack, des notifications push mobiles et de Trello apparaissent ici lorsque leurs modules sont installés.",
+      "actions": {
+        "addons": "Modules complémentaires",
+        "updater": "Mise à jour",
+        "legal": "Pages légales",
+        "general": "Ouvrir général"
+      }
+    },
+    "common": {
+      "save": "Enregistrer les modifications",
+      "saving": "Enregistrement",
+      "saved": "{count, plural, one {1 modification enregistrée.} other {# modifications enregistrées.}}",
+      "rejected": "{count, plural, one {1 champ nécessite une attention} other {# champs nécessitent une attention}}",
+      "conflict": "Quelqu’un d’autre a enregistré ces paramètres après que vous les avez ouverts. Rechargez pour voir ses modifications, puis réappliquez les vôtres.",
+      "reload": "Recharger les paramètres",
+      "unexpected": "Une erreur est survenue, rien n’a été enregistré.",
+      "requestId": "ID de la requête",
+      "readOnly": "Vous pouvez consulter ces paramètres, mais seul un super administrateur peut les modifier.",
+      "secretSet": "Enregistré. Laissez vide pour le conserver.",
+      "secretUnset": "Non défini.",
+      "secretClear": "Supprimer la valeur enregistrée",
+      "secretShow": "Afficher",
+      "secretHide": "Masquer",
+      "numberRequired": "Saisissez un nombre entier.",
+      "numberInteger": "Utilisez un nombre entier.",
+      "updated": "Dernier enregistrement {when}",
+      "neverSaved": "Jamais enregistré : valeurs par défaut affichées.",
+      "back": "Tous les paramètres",
+      "invalidGroup": "Cette page de paramètres n’existe pas.",
+      "eyebrow": "Admin - Paramètres du projet",
+      "guide": "Guide rapide",
+      "resetDraft": "Réinitialiser le brouillon",
+      "cancel": "Annuler",
+      "applyAfterSave": "Les modifications ne s’appliquent qu’après enregistrement.",
+      "saveAndTest": "Enregistrer et tester la connexion",
+      "custom": "personnalisé",
+      "manageLanguages": "Gérer les langues"
+    },
+    "test": {
+      "title": "Envoyer un e-mail de test",
+      "saveFirst": "Enregistrez d’abord vos modifications : la vérification utilise les paramètres enregistrés.",
+      "mailTo": "Envoyer l’e-mail de test à",
+      "mailRun": "Envoyer l’e-mail de test",
+      "run": "Tester la connexion",
+      "running": "Test en cours",
+      "ok": "Réussi",
+      "failed": "Échec",
+      "lastOk": "Dernière vérification réussie {when}",
+      "neverTested": "Pas encore vérifié."
+    },
+    "groups": {
+      "general": {
+        "title": "Paramètres généraux",
+        "description": "Identité de l’application, valeurs par défaut de la plateforme et interrupteur de maintenance.",
+        "sections": {
+          "identity": {
+            "title": "Identité de l’application"
+          },
+          "defaults": {
+            "title": "Valeurs par défaut de la plateforme"
+          },
+          "platform": {
+            "title": "Interrupteurs de la plateforme"
+          }
+        },
+        "fields": {
+          "appName": {
+            "label": "Nom de l’application",
+            "hint": "Affiché dans les titres de page, les e-mails et l’onglet du navigateur."
+          },
+          "appUrl": {
+            "label": "URL de l’application"
+          },
+          "supportEmail": {
+            "label": "E-mail d’assistance",
+            "placeholder": "support@…"
+          },
+          "fromEmail": {
+            "label": "E-mail d’envoi",
+            "placeholder": "hello@…"
+          },
+          "contactNumber": {
+            "label": "Numéro de contact",
+            "placeholder": "+91 …"
+          },
+          "address": {
+            "label": "Adresse"
+          },
+          "mapIframeUrl": {
+            "label": "URL de l’iframe de la carte",
+            "placeholder": "https://www.google.com/maps/embed?pb=..."
+          },
+          "platformFooter": {
+            "label": "Pied de page de la plateforme",
+            "hint": "Ajouté aux messages sortants de la plateforme. Laissez vide si aucun."
+          },
+          "defaultTimezone": {
+            "label": "Fuseau horaire par défaut",
+            "hint": "Utilisé lorsqu’un espace de travail ou une personne n’en a pas choisi."
+          },
+          "defaultLanguage": {
+            "label": "Langue par défaut"
+          },
+          "defaultCurrency": {
+            "label": "Devise par défaut"
+          },
+          "defaultCountryCode": {
+            "label": "Indicatif pays par défaut",
+            "hint": "Indicatif avec le signe plus, par exemple +91."
+          },
+          "defaultCountryIso": {
+            "label": "Pays par défaut (sélecteurs de téléphone)",
+            "hint": "S’applique à tous les sélecteurs de numéro de téléphone de la plateforme."
+          },
+          "fontFamily": {
+            "label": "Famille de police"
+          },
+          "maintenanceMode": {
+            "label": "Mode maintenance",
+            "hint": "Met l’application client hors ligne avec une erreur 503. Les opérateurs, la connexion et les rappels machine restent fonctionnels."
+          }
+        },
+        "options": {
+          "fontFamily": {
+            "none": "Thème par défaut"
+          }
+        }
+      },
+      "branding": {
+        "title": "Image de marque et apparence",
+        "description": "Favicône, logos par thème, jetons de couleur et taille de l’interface.",
+        "sections": {
+          "assets": {
+            "title": "Éléments graphiques de la marque"
+          },
+          "colors": {
+            "title": "Jetons de couleur"
+          },
+          "interface": {
+            "title": "Interface"
+          }
+        },
+        "fields": {
+          "faviconUrl": {
+            "label": "URL du favicon"
+          },
+          "logos": {
+            "paper": {
+              "label": "Papier"
+            },
+            "bright": {
+              "label": "Clair"
+            },
+            "dark": {
+              "label": "Sombre"
+            },
+            "doodle": {
+              "label": "Doodle"
+            }
+          },
+          "colors": {
+            "wa-deep": {
+              "label": "Principale",
+              "hint": "Définir la couleur principale recolore aussi les nuances sarcelle, verte, menthe et des bulles, sauf si vous les définissez aussi."
+            },
+            "wa-teal": {
+              "label": "Principale (survol)"
+            },
+            "wa-green": {
+              "label": "Accent / succès"
+            },
+            "wa-mint": {
+              "label": "Fond d’accent doux"
+            },
+            "wa-bubble": {
+              "label": "Bulle de chat"
+            },
+            "paper-0": {
+              "label": "Fond de page"
+            },
+            "paper-50": {
+              "label": "Fond carte / atténué"
+            },
+            "paper-100": {
+              "label": "Fond au survol"
+            },
+            "paper-200": {
+              "label": "Bordures"
+            },
+            "ink-500": {
+              "label": "Texte atténué"
+            },
+            "ink-700": {
+              "label": "Texte courant"
+            },
+            "ink-900": {
+              "label": "Titres"
+            },
+            "accent-coral": {
+              "label": "Accent - corail"
+            },
+            "accent-amber": {
+              "label": "Accent - ambre"
+            },
+            "accent-plum": {
+              "label": "Accent - prune"
+            },
+            "accent-sky": {
+              "label": "Accent - bleu ciel"
+            }
+          },
+          "fontScale": {
+            "label": "Taille de police",
+            "hint": "Taille du texte de toute l’interface, en pourcentage, de 80 à 130."
+          },
+          "uiOpacity": {
+            "label": "Opacité",
+            "hint": "Opacité de toute l’interface, en pourcentage, de 55 à 100."
+          },
+          "dashboardLayout": {
+            "label": "Disposition de la navigation"
+          },
+          "sidebarColor": {
+            "label": "Fond"
+          },
+          "sidebarTextColor": {
+            "label": "Couleur du texte"
+          },
+          "sidebarAccentColor": {
+            "label": "Couleur d’accent"
+          }
+        },
+        "options": {
+          "dashboardLayout": {
+            "topbar": "Barre supérieure",
+            "sidebar": "Barre latérale"
+          }
+        },
+        "optionNotes": {
+          "dashboardLayout": {
+            "topbar": "Actuel : menu en haut de page avec une page Plus pour le débordement.",
+            "sidebar": "Colonne de gauche de type administration, avec toutes les fonctions regroupées. Pas de menu supérieur."
+          }
+        }
+      },
+      "site": {
+        "title": "Informations sur le site",
+        "description": "Coordonnées de l’entreprise, adresses de contact, profils sociaux et pied de page public.",
+        "sections": {
+          "company": {
+            "title": "Entreprise"
+          },
+          "contact": {
+            "title": "Adresses de contact"
+          },
+          "social": {
+            "title": "Profils sociaux"
+          },
+          "footer": {
+            "title": "Pied de page public"
+          }
+        },
+        "fields": {
+          "companyName": {
+            "label": "Nom de l’entreprise"
+          },
+          "tagline": {
+            "label": "Slogan"
+          },
+          "foundedYear": {
+            "label": "Année de fondation"
+          },
+          "address": {
+            "label": "Adresse"
+          },
+          "cityCountry": {
+            "label": "Ville, pays"
+          },
+          "emailGeneral": {
+            "label": "E-mail général"
+          },
+          "emailSupport": {
+            "label": "E-mail d’assistance"
+          },
+          "emailSales": {
+            "label": "E-mail commercial"
+          },
+          "emailSecurity": {
+            "label": "E-mail de sécurité"
+          },
+          "emailCareers": {
+            "label": "E-mail recrutement"
+          },
+          "phone": {
+            "label": "Téléphone"
+          },
+          "whatsapp": {
+            "label": "WhatsApp"
+          },
+          "socialX": {
+            "label": "X"
+          },
+          "socialLinkedin": {
+            "label": "LinkedIn"
+          },
+          "socialInstagram": {
+            "label": "Instagram"
+          },
+          "socialYoutube": {
+            "label": "YouTube"
+          },
+          "socialFacebook": {
+            "label": "Facebook"
+          },
+          "socialGithub": {
+            "label": "GitHub"
+          },
+          "footerTitle": {
+            "label": "Titre du pied de page"
+          },
+          "footerDescription": {
+            "label": "Description du pied de page"
+          },
+          "footerCopyright": {
+            "label": "Mention de copyright du pied de page"
+          }
+        }
+      },
+      "mail": {
+        "title": "Paramètres d’e-mail",
+        "description": "E-mail sortant. Les valeurs enregistrées remplacent les valeurs par défaut du serveur à chaque envoi.",
+        "sections": {
+          "sender": {
+            "title": "Expéditeur"
+          },
+          "smtp": {
+            "title": "Serveur de messagerie"
+          }
+        },
+        "fields": {
+          "fromName": {
+            "label": "Nom d’expéditeur",
+            "placeholder": "Acme Inc.",
+            "hint": "Affiché aux destinataires comme nom de l’expéditeur « De »."
+          },
+          "fromAddress": {
+            "label": "Adresse d’expéditeur",
+            "placeholder": "hello@votredomaine.com",
+            "hint": "Le domaine doit disposer d’un SPF et d’un DKIM valides, sinon les messages finissent dans les spams."
+          },
+          "mailer": {
+            "label": "Mailer",
+            "hint": "SMTP et le mailer de journalisation fonctionnent actuellement ; les mailers basés sur une API ne sont pas encore connectés."
+          },
+          "host": {
+            "label": "Hôte",
+            "placeholder": "smtp.mailgun.org",
+            "hint": "Laissez vide pour conserver la valeur par défaut du serveur."
+          },
+          "port": {
+            "label": "Port",
+            "hint": "587 pour TLS, 465 pour SSL, 25 (à éviter)."
+          },
+          "encryption": {
+            "label": "Chiffrement",
+            "hint": "ssl correspond à un TLS implicite (généralement port 465) ; tls et starttls passent en TLS sur le port 587."
+          },
+          "username": {
+            "label": "Nom d’utilisateur",
+            "placeholder": "postmaster@mg.example.com"
+          },
+          "password": {
+            "label": "Mot de passe",
+            "placeholder": "Saisissez le mot de passe SMTP",
+            "hint": "Stocké chiffré et jamais réaffiché."
+          }
+        },
+        "options": {
+          "encryption": {
+            "tls": "tls (port 587)",
+            "ssl": "ssl (port 465)",
+            "starttls": "starttls",
+            "none": "aucun"
+          }
+        }
+      },
+      "seo": {
+        "title": "Paramètres SEO",
+        "description": "Balises de recherche et de partage social pour le site public.",
+        "sections": {
+          "search": {
+            "title": "Résultats de recherche"
+          },
+          "social": {
+            "title": "Partage social"
+          },
+          "verification": {
+            "title": "Vérification du site"
+          }
+        },
+        "fields": {
+          "metaTitle": {
+            "label": "Balise title",
+            "hint": "Commencez par la marque."
+          },
+          "metaDescription": {
+            "label": "Balise meta description",
+            "hint": "Affichée sous le titre dans Google.",
+            "placeholder": "Un argumentaire de 1 à 2 phrases, affiché sous le titre dans Google."
+          },
+          "metaKeywords": {
+            "label": "Mots-clés meta",
+            "placeholder": "marketing whatsapp, crm whatsapp, campagnes, automatisation, boîte de réception"
+          },
+          "robots": {
+            "label": "Directive robots",
+            "hint": "Indique aux robots d’indexation s’ils doivent suivre les liens et les répertorier."
+          },
+          "canonical": {
+            "label": "Canonique",
+            "placeholder": "https://app.example.com"
+          },
+          "author": {
+            "label": "Auteur"
+          },
+          "ogTitle": {
+            "label": "Titre Open Graph",
+            "placeholder": "Par défaut : balise title"
+          },
+          "ogDescription": {
+            "label": "Description Open Graph",
+            "placeholder": "Par défaut : balise meta description"
+          },
+          "ogType": {
+            "label": "Type Open Graph"
+          },
+          "ogUrl": {
+            "label": "URL Open Graph",
+            "placeholder": "https://app.example.com"
+          },
+          "ogImage": {
+            "label": "Image Open Graph",
+            "hint": "Recommandé : 1200x630. Utilisée par Slack, X, WhatsApp, Discord.",
+            "placeholder": "https://app.example.com/og.png"
+          },
+          "twitterCard": {
+            "label": "Carte Twitter"
+          },
+          "twitterSite": {
+            "label": "Compte Twitter du site",
+            "placeholder": "@votremarque"
+          },
+          "twitterCreator": {
+            "label": "Créateur Twitter",
+            "placeholder": "@auteur"
+          },
+          "googleVerification": {
+            "label": "Vérification Google",
+            "placeholder": "google-site-verification=…"
+          },
+          "bingVerification": {
+            "label": "Vérification Bing",
+            "placeholder": "msvalidate.01=…"
+          }
+        },
+        "options": {
+          "robots": {
+            "index, follow": "Indexer, suivre : site public",
+            "index, nofollow": "Indexer, ne pas suivre",
+            "noindex, follow": "Ne pas indexer, suivre",
+            "noindex, nofollow": "Ne pas indexer, ne pas suivre : masquer de la recherche"
+          }
+        }
+      },
+      "privacy": {
+        "title": "Confidentialité et cookies",
+        "description": "La bannière de consentement aux cookies, les liens juridiques et les indicateurs de conformité.",
+        "sections": {
+          "banner": {
+            "title": "Bannière cookies"
+          },
+          "links": {
+            "title": "Liens juridiques"
+          },
+          "compliance": {
+            "title": "Indicateurs de conformité"
+          }
+        },
+        "fields": {
+          "cookieBannerEnabled": {
+            "label": "Bannière activée"
+          },
+          "cookieBannerStyle": {
+            "label": "Style de la bannière"
+          },
+          "cookieMessage": {
+            "label": "Message de consentement"
+          },
+          "respectDoNotTrack": {
+            "label": "Respecter Ne pas suivre",
+            "hint": "Le navigateur envoie DNT=1 → tout refuser"
+          },
+          "policyUrl": {
+            "label": "URL de la politique de confidentialité",
+            "placeholder": "https://example.com/privacy"
+          },
+          "termsUrl": {
+            "label": "URL des conditions d’utilisation",
+            "placeholder": "https://example.com/terms"
+          },
+          "cookiesPolicyUrl": {
+            "label": "URL de la politique cookies (En savoir plus)",
+            "placeholder": "https://example.com/cookies"
+          },
+          "gdprCompliance": {
+            "label": "Conformité RGPD (UE)",
+            "hint": "Conservé à titre de référence. Ne modifie pas encore le comportement."
+          },
+          "ccpaCompliance": {
+            "label": "Conformité CCPA (Californie)",
+            "hint": "Conservé à titre de référence. Ne modifie pas encore le comportement."
+          },
+          "adaSkipLink": {
+            "label": "Lien « Aller au contenu »",
+            "hint": "Conservé à titre de référence. Ne modifie pas encore le comportement."
+          },
+          "adaHighContrast": {
+            "label": "Proposer le mode contraste élevé",
+            "hint": "Conservé à titre de référence. Ne modifie pas encore le comportement."
+          },
+          "adaLargeText": {
+            "label": "Proposer le mode texte agrandi",
+            "hint": "Conservé à titre de référence. Ne modifie pas encore le comportement."
+          },
+          "adaReducedMotion": {
+            "label": "Respecter prefers-reduced-motion",
+            "hint": "Conservé à titre de référence. Ne modifie pas encore le comportement."
+          }
+        },
+        "options": {
+          "cookieBannerStyle": {
+            "bottom-bar": "Barre collante en bas : recommandée",
+            "top-bar": "Barre collante en haut",
+            "modal": "Fenêtre modale centrée"
+          }
+        }
+      },
+      "analytics": {
+        "title": "Analytics",
+        "description": "Identifiants des traceurs. Les traceurs ne se chargent qu’après le consentement du visiteur.",
+        "sections": {
+          "trackers": {
+            "title": "Identifiants des traceurs"
+          }
+        },
+        "fields": {
+          "googleGa4": {
+            "label": "Google GA4"
+          },
+          "googleGtm": {
+            "label": "Google GTM"
+          },
+          "metaPixel": {
+            "label": "Pixel Meta"
+          },
+          "microsoftClarity": {
+            "label": "Microsoft Clarity"
+          },
+          "tiktokPixel": {
+            "label": "Pixel TikTok"
+          },
+          "linkedinPartner": {
+            "label": "Partenaire LinkedIn"
+          },
+          "twitterPixel": {
+            "label": "Pixel Twitter"
+          },
+          "plausibleDomain": {
+            "label": "Domaine Plausible"
+          },
+          "posthogKey": {
+            "label": "Clé PostHog"
+          },
+          "mixpanelToken": {
+            "label": "Jeton Mixpanel"
+          },
+          "hotjarSiteId": {
+            "label": "ID de site Hotjar"
+          },
+          "posthogHost": {
+            "label": "Hôte PostHog"
+          }
+        }
+      },
+      "customCode": {
+        "title": "Code personnalisé",
+        "description": "CSS et JavaScript injectés dans le site public.",
+        "sections": {
+          "code": {
+            "title": "Code personnalisé"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Injecter en production",
+            "hint": "Rien ci-dessous ne s’exécute sur le site public tant que ceci n’est pas activé."
+          },
+          "css": {
+            "label": "CSS personnalisé"
+          },
+          "js": {
+            "label": "JS personnalisé",
+            "hint": "S’exécute pour chaque visiteur. Ne collez que du code de confiance."
+          }
+        }
+      },
+      "pwa": {
+        "title": "Application installable",
+        "description": "Manifeste de l’application web et comportement d’installation.",
+        "sections": {
+          "app": {
+            "title": "Application installable"
+          },
+          "look": {
+            "title": "Apparence et comportement"
+          },
+          "install": {
+            "title": "Installation et hors ligne"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Activé"
+          },
+          "appName": {
+            "label": "Nom de l’application"
+          },
+          "shortName": {
+            "label": "Nom court"
+          },
+          "description": {
+            "label": "Description"
+          },
+          "startUrl": {
+            "label": "URL de départ"
+          },
+          "scope": {
+            "label": "Portée"
+          },
+          "display": {
+            "label": "Affichage"
+          },
+          "orientation": {
+            "label": "Orientation"
+          },
+          "themeColor": {
+            "label": "Couleur du thème"
+          },
+          "backgroundColor": {
+            "label": "Couleur de fond"
+          },
+          "icon192": {
+            "label": "Icône 192"
+          },
+          "icon512": {
+            "label": "Icône 512"
+          },
+          "installPrompt": {
+            "label": "Invite d’installation"
+          },
+          "offlineEnabled": {
+            "label": "Mode hors ligne activé"
+          }
+        }
+      },
+      "storage": {
+        "title": "Stockage cloud",
+        "description": "Compartiment compatible S3 pour les médias. Testez la connexion avant de l’activer.",
+        "sections": {
+          "provider": {
+            "title": "Fournisseur"
+          },
+          "credentials": {
+            "title": "Identifiants du compartiment"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Activé"
+          },
+          "provider": {
+            "label": "Fournisseur"
+          },
+          "visibility": {
+            "label": "Visibilité des fichiers",
+            "hint": "Les objets privés nécessitent des liens signés ; utilisez public ou une URL CDN pour les médias ouverts directement."
+          },
+          "basePath": {
+            "label": "Chemin du dossier de base (facultatif)",
+            "hint": "Préfixe de l’objet de test. Les téléversements l’utiliseront une fois le module fichiers disponible."
+          },
+          "accessKeyId": {
+            "label": "ID de clé d’accès *"
+          },
+          "secret": {
+            "label": "Clé d’accès secrète *",
+            "hint": "Stockée chiffrée et jamais réaffichée.",
+            "placeholder": "collez le secret"
+          },
+          "region": {
+            "label": "Région",
+            "placeholder": "us-east-1"
+          },
+          "bucket": {
+            "label": "Compartiment *"
+          },
+          "endpoint": {
+            "label": "Point de terminaison",
+            "hint": "Requis pour Spaces, R2 et MinIO. Un /bucket final est supprimé.",
+            "placeholder": "https://… (requis pour Spaces / R2 / MinIO ; automatique pour Wasabi et Bunny)"
+          },
+          "cdnUrl": {
+            "label": "URL publique / CDN (facultatif)",
+            "placeholder": "https://cdn.example.com"
+          },
+          "pathStyle": {
+            "label": "Utiliser un point de terminaison en chemin (MinIO / certains stockages compatibles S3)"
+          },
+          "storageZone": {
+            "label": "Zone de stockage",
+            "hint": "Bunny uniquement."
+          },
+          "storagePassword": {
+            "label": "Mot de passe de stockage (clé d’accès)",
+            "hint": "Bunny uniquement : le mot de passe de la zone de stockage. Stocké chiffré.",
+            "placeholder": "collez le mot de passe"
+          }
+        },
+        "options": {
+          "provider": {
+            "s3": "Amazon S3",
+            "wasabi": "Wasabi",
+            "bunny": "Stockage Bunny.net",
+            "spaces": "DigitalOcean Spaces",
+            "r2": "Cloudflare R2",
+            "minio": "MinIO / compatible S3"
+          },
+          "visibility": {
+            "private": "Privé (URL signées)",
+            "public": "Public"
+          }
+        }
+      },
+      "whatsapp": {
+        "title": "Paramètres WhatsApp",
+        "description": "L’application Meta et le partenaire Interakt utilisés pour intégrer les numéros WhatsApp.",
+        "sections": {
+          "metaApp": {
+            "title": "API Business (WABA)"
+          },
+          "interakt": {
+            "title": "Route Interakt"
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "fields": {
+          "appId": {
+            "label": "ID de l’application Meta",
+            "hint": "Si vide, la valeur de l’environnement serveur est utilisée."
+          },
+          "appSecret": {
+            "label": "Secret de l’application",
+            "hint": "Stocké chiffré, jamais réaffiché. Laissez vide pour conserver le secret enregistré."
+          },
+          "configId": {
+            "label": "ID de configuration Embedded Signup",
+            "hint": "Si vide, les espaces de travail saisissent un jeton manuellement."
+          },
+          "graphVersion": {
+            "label": "Version de l’API Graph",
+            "hint": "Format v25.0. Si vide, la valeur par défaut du serveur est conservée."
+          },
+          "coexistence": {
+            "label": "Coexistence",
+            "hint": "Afficher « Connecter mon numéro d’application Business existant » dans Embedded Signup."
+          },
+          "defaultProvider": {
+            "label": "Route par défaut",
+            "hint": "API utilisée par les numéros nouvellement connectés."
+          },
+          "solutionId": {
+            "label": "ID de solution Interakt",
+            "hint": "Envoyé à Meta comme extras.setup.solutionID et à Interakt lors de l’enregistrement."
+          },
+          "partnerAuthKey": {
+            "label": "Clé du partenaire Interakt",
+            "hint": "La clé partagée du partenaire technique. Stockée chiffrée."
+          },
+          "systemUserId": {
+            "label": "ID de l’utilisateur système",
+            "hint": "Attribué à chaque WABA connecté avec la tâche MANAGE."
+          },
+          "systemUserToken": {
+            "label": "Jeton de l’utilisateur système",
+            "hint": "Sert à inspecter les jetons et à attribuer l’utilisateur système. Stocké chiffré."
+          },
+          "businessId": {
+            "label": "ID de l’entreprise",
+            "hint": "Solution de repli pour trouver un WABA lorsque le jeton n’en liste aucun."
+          },
+          "verifyToken": {
+            "label": "Jeton de vérification du webhook",
+            "hint": "Chaîne aléatoire quelconque. Laissez vide pour utiliser celle générée affichée ci-dessus."
+          },
+          "requireSignature": {
+            "label": "Exiger une signature sur chaque webhook",
+            "hint": "Rejette les événements transmis par Interakt qui ne portent pas de signature Meta valide. N’activez que si Interakt les signe."
+          }
+        },
+        "options": {
+          "defaultProvider": {
+            "interakt": "Interakt (proxy Meta)",
+            "meta": "Meta (direct)"
+          }
+        }
+      },
+      "campaigns": {
+        "title": "Campagnes",
+        "description": "Comment une campagne réessaie un message en échec et quand une campagne inachevée se termine.",
+        "sections": {
+          "retry": {
+            "title": "Nouvelles tentatives"
+          },
+          "expiry": {
+            "title": "Fin automatique"
+          }
+        },
+        "fields": {
+          "retryAttempts": {
+            "label": "Nombre de tentatives",
+            "hint": "Nombre d’essais par destinataire avant échec (0 à 10)."
+          },
+          "retryBackoffSec": {
+            "label": "Délai entre les essais (secondes)",
+            "hint": "La pause avant l’essai suivant ; elle augmente à chaque essai."
+          },
+          "autoExpiryEnabled": {
+            "label": "Terminer les campagnes inachevées",
+            "hint": "Termine une campagne encore en cours après les heures indiquées ci-dessous."
+          },
+          "defaultExpiryHours": {
+            "label": "Terminer après (heures)"
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Agenda",
+        "description": "Le client OAuth Google par lequel chaque espace de travail connecte son agenda.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth Google"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Autoriser les espaces de travail à connecter Google Agenda",
+            "hint": "Désactivé : aucun espace de travail ne peut se connecter, et rien n’est écrit ni lu dans un agenda."
+          },
+          "clientId": {
+            "label": "ID client",
+            "hint": "Depuis Google Cloud, Identifiants, ID client OAuth 2.0 (application Web). Si vide, GOOGLE_CALENDAR_CLIENT_ID est utilisé."
+          },
+          "clientSecret": {
+            "label": "Secret client",
+            "hint": "Stocké chiffré et jamais réaffiché. Si vide, le secret enregistré est conservé ; GOOGLE_CALENDAR_CLIENT_SECRET sert de solution de repli."
+          },
+          "redirectUri": {
+            "label": "Remplacement de l’URI de redirection",
+            "hint": "Laissez vide pour utiliser l’adresse ci-dessus. Elle doit correspondre exactement à un URI de redirection autorisé du client."
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Éditeur de flux",
+        "description": "Quels éditeurs de flux sont proposés aux espaces de travail.",
+        "sections": {
+          "mode": {
+            "title": "Éditeur"
+          }
+        },
+        "fields": {
+          "mode": {
+            "label": "Éditeur par défaut pour les espaces de travail",
+            "hint": "Simple est l’éditeur de liste étape par étape, Avancé est l’éditeur en canevas. Un espace de travail peut remplacer ce réglage sur sa page Flux."
+          }
+        },
+        "options": {
+          "mode": {
+            "simple": "Simple uniquement",
+            "advanced": "Avancé uniquement"
+          }
+        }
+      }
+    },
+    "cards": {
+      "appearance": {
+        "title": "Apparence et couleurs",
+        "description": "Recolorez chaque page des tableaux de bord utilisateur et administrateur : marque, surfaces, textes et accents. S’applique immédiatement.",
+        "tags": "theme.color.*"
+      },
+      "general": {
+        "title": "Paramètres généraux",
+        "description": "Nom de l’application, coordonnées, logos, URL, adresse et interrupteurs globaux des services.",
+        "tags": "APP_NAME / APP_URL / logos"
+      },
+      "paymentGateways": {
+        "title": "Passerelles de paiement",
+        "description": "Stripe, Razorpay, PayPal, Paystack, Flutterwave et autres : clés, devises et bascules en production.",
+        "tags": "Production / bac à sable : clés par passerelle"
+      },
+      "aiKeys": {
+        "title": "Clés IA / API",
+        "description": "Identifiants des fournisseurs OpenAI, Anthropic, Google et autres. Alimente toutes les fonctions IA de la plateforme.",
+        "tags": "BYOK / modèles par défaut"
+      },
+      "mail": {
+        "title": "Paramètres d’e-mail",
+        "description": "Pilote SMTP, hôte, port, nom de l’expéditeur, chiffrement et envoi de test.",
+        "tags": "SMTP / vérification / bienvenue"
+      },
+      "auditLog": {
+        "title": "Journal d’audit",
+        "description": "Historique consultable de chaque action administrateur : modifications d’espaces de travail, changements d’utilisateurs, événements de facturation, incidents de sécurité, mises à jour des paramètres.",
+        "tags": "Filtre / détail / export CSV"
+      },
+      "privacy": {
+        "title": "Confidentialité, RGPD et ADA",
+        "description": "Bannière de consentement aux cookies, conformité RGPD / CCPA, bascules d’accessibilité ADA / WCAG et URL des politiques.",
+        "tags": "Consentement / politiques / accessibilité"
+      },
+      "menuOrder": {
+        "title": "Ordre du menu",
+        "description": "Définit l’ordre des éléments de la navigation supérieure affichés dans chaque espace utilisateur.",
+        "tags": "Réordonner"
+      },
+      "authPages": {
+        "title": "Pages d’authentification",
+        "description": "Modifiez les pages de connexion, d’inscription et de mot de passe oublié : titre, sous-titre, couleur d’accent et image ou vidéo latérale. Aperçu en direct.",
+        "tags": "Connexion / inscription / mot de passe oublié"
+      },
+      "analytics": {
+        "title": "Intégrations d’analyse",
+        "description": "Google Analytics, GTM, Meta Pixel, Clarity, Plausible, PostHog, Hotjar, TikTok, LinkedIn, X : collez l’ID, nous générons le script.",
+        "tags": "GA4 / Pixel / Clarity / GTM"
+      },
+      "seo": {
+        "title": "Paramètres SEO",
+        "description": "Meta title, description, OpenGraph, cartes Twitter, robots, canonique et vérification du site Google et Bing.",
+        "tags": "Meta / OG / Twitter"
+      },
+      "languages": {
+        "title": "Langues",
+        "description": "Locales disponibles, langue par défaut, indicateur RTL et interrupteur d’activation par langue. Alimente le sélecteur de langue.",
+        "tags": "en / es / fr / ar / RTL"
+      },
+      "pwa": {
+        "title": "Paramètres PWA",
+        "description": "Nom de l’application, icônes d’installation, couleur du thème, couleur de fond, mode d’affichage et interrupteur PWA.",
+        "tags": "Icônes / couleurs / installation"
+      },
+      "footer": {
+        "title": "Paramètres du pied de page",
+        "description": "Titre du pied de page, liens sociaux, texte de copyright et description publique du pied de page.",
+        "tags": "Logo / réseaux / copyright"
+      },
+      "siteInfo": {
+        "title": "Informations sur le site",
+        "description": "E-mails de contact, téléphone, WhatsApp, adresse et liens sociaux partagés entre le pied de page public, la page contact et la page à propos.",
+        "tags": "e-mails / téléphone / réseaux"
+      },
+      "socialLogin": {
+        "title": "Connexion sociale et captcha",
+        "description": "Activez la connexion Google et Facebook sur les pages de connexion et d’inscription, saisissez les clés OAuth et activez reCAPTCHA.",
+        "tags": "non configuré"
+      },
+      "registration": {
+        "title": "Inscription",
+        "description": "Inscription publique, vérification automatique de l’e-mail, forfait par défaut et durée d’essai pour les nouveaux espaces de travail.",
+        "tags": "Inscription / essai / forfait"
+      },
+      "custom": {
+        "title": "Code personnalisé",
+        "description": "CSS et JavaScript de production injectés dans les pages publiques lorsque l’interrupteur est activé.",
+        "tags": "CSS / JS"
+      },
+      "storage": {
+        "title": "Stockage cloud",
+        "description": "Envoyez les médias des clients vers votre propre compartiment : Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 ou MinIO.",
+        "tags": "S3 / Wasabi / Bunny / R2"
+      },
+      "whatsapp": {
+        "title": "WhatsApp (WABA)",
+        "description": "L’application Meta par laquelle chaque espace de travail connecte ses numéros WhatsApp : ID et secret de l’application, Embedded Signup, webhook et route Interakt.",
+        "tags": "Meta / Embedded Signup / Interakt"
+      },
+      "campaigns": {
+        "title": "Campagnes",
+        "description": "Nouvelles tentatives et fin automatique d’une campagne jamais terminée.",
+        "tags": "Nouvelle tentative / expiration"
+      },
+      "googleCalendar": {
+        "title": "Google Agenda",
+        "description": "Le client OAuth Google qu’utilisent les espaces de travail pour connecter leur agenda aux réservations et aux créneaux occupés.",
+        "tags": "Google / OAuth / Agenda"
+      },
+      "flowBuilder": {
+        "title": "Éditeur de flux",
+        "description": "L’éditeur de flux par défaut de chaque espace de travail : Simple étape par étape ou Avancé en canevas. Un espace de travail peut le remplacer.",
+        "tags": "Simple / Avancé / Automatisation"
+      }
+    },
+    "signup": {
+      "body": "L’inscription publique, la vérification automatique de l’e-mail, le forfait par défaut des nouveaux inscrits et la durée de l’essai gratuit se modifient sur la page Inscription.",
+      "link": "Ouvrir les paramètres d’inscription"
+    },
+    "brandAssets": {
+      "intro": "Le favicon est commun à tous les thèmes. Le logo dépend du thème : téléversez une variante inversée ou claire pour le mode sombre, et une variante adaptée au thème doodle.",
+      "favicon": {
+        "title": "Favicon",
+        "note": "Affiché dans les onglets du navigateur et les favoris. Recommandé : 35x35 px. PNG, ICO, JPG, SVG ou WebP, jusqu’à 512 Ko. Le téléversement remplace l’ancien."
+      },
+      "logos": {
+        "title": "Logo par thème",
+        "note": "Chaque thème utilise son propre logo. Si aucun logo spécifique n’est téléversé, c’est le thème Papier qui sert de repli."
+      },
+      "themes": {
+        "paper": {
+          "label": "Papier (par défaut)",
+          "note": "Clair, blanc cassé. L’aspect par défaut."
+        },
+        "bright": {
+          "label": "Blanc vif",
+          "note": "Fond blanc à contraste plus élevé."
+        },
+        "dark": {
+          "label": "Sombre (bêta)",
+          "note": "Utilisez une version claire ou inversée de votre logo."
+        },
+        "doodle": {
+          "label": "Doodle (fantaisie)",
+          "note": "Fond vert menthe pastel."
+        }
+      },
+      "noFile": "Aucun fichier",
+      "upload": "Téléverser",
+      "uploading": "Téléversement en cours",
+      "remove": "Supprimer",
+      "loading": "Chargement",
+      "loadFailed": "Impossible de charger les fichiers de la marque.",
+      "failed": "Le téléversement a échoué.",
+      "tooLarge": "Ce fichier dépasse {kb} Ko.",
+      "wrongType": "Ce type de fichier n’est pas autorisé ici."
+    },
+    "teamInbox": {
+      "intro": "Une application installable distincte, réservée à la boîte de réception d’équipe. Les agents ouvrent le lien, l’ajoutent à leur écran d’accueil et reçoivent des notifications push pour les nouveaux messages, même lorsque l’application est fermée.",
+      "enabled": {
+        "label": "Activer l’application Boîte de réception d’équipe",
+        "hint": "Active le manifeste distinct, l’invite d’installation et les notifications sur /team-inbox."
+      },
+      "name": {
+        "label": "Nom de l’application"
+      },
+      "shortName": {
+        "label": "Nom court",
+        "hint": "12 caractères maximum."
+      },
+      "icon192": {
+        "label": "Icône de l’application (PNG 192x192)",
+        "note": "Utilise l’icône de l’application si vide. Icône sur l’écran d’accueil de la boîte de réception."
+      },
+      "icon512": {
+        "label": "Grande icône / écran de démarrage (PNG 512x512)",
+        "note": "Utilise l’icône de l’application si vide. Écran de démarrage à l’installation et écrans haute résolution."
+      },
+      "push": {
+        "ready": {
+          "title": "Notifications push : prêtes",
+          "body": "Les clés sont générées. Les agents peuvent activer les notifications depuis la boîte de réception."
+        },
+        "todo": {
+          "title": "Notifications push : une étape restante",
+          "body": "Cliquez sur Générer les clés pour configurer les notifications push. Aucun accès serveur nécessaire."
+        },
+        "generate": "Générer les clés",
+        "generating": "Génération en cours",
+        "generated": "Clés push générées."
+      },
+      "manifestLink": "Manifeste de la boîte de réception d’équipe",
+      "save": "Enregistrer l’application Boîte de réception d’équipe",
+      "saving": "Enregistrement",
+      "saved": "Application Boîte de réception d’équipe enregistrée.",
+      "conflict": "Quelqu’un d’autre a enregistré ceci après que vous l’avez ouvert. Rechargez la page et réessayez.",
+      "failed": "Une erreur est survenue, rien n’a été enregistré.",
+      "loading": "Chargement",
+      "loadFailed": "Impossible de charger les paramètres de l’application Boîte de réception d’équipe."
+    },
+    "seoPreview": {
+      "google": "Résultat Google",
+      "noDescription": "Aucune meta description pour l’instant.",
+      "noImage": "Aucune image OG",
+      "sitemapKicker": "Plan du site et robots",
+      "sitemapTitle": "Fichiers pour les robots d’indexation",
+      "sitemapFile": "Généré automatiquement à partir des pages publiques et des articles de blog publiés. Soumettez /sitemap.xml à Google Search Console.",
+      "download": "Télécharger sitemap.xml"
+    },
+    "pages": {
+      "general": {
+        "title": "Paramètres généraux",
+        "description": "Identité de l’application, coordonnées, langue et devise par défaut, et interrupteurs de service de la plateforme.",
+        "sections": {
+          "identity": {
+            "title": "Identité de l’application"
+          },
+          "brandAssets": {
+            "title": "Éléments graphiques de la marque"
+          },
+          "platform": {
+            "title": "Interrupteurs de la plateforme"
+          },
+          "signup": {
+            "title": "Inscriptions et essai gratuit"
+          }
+        },
+        "guide": {
+          "title": "Où vont les éléments",
+          "items": {
+            "appName": {
+              "title": "Nom de l’application",
+              "body": "Utilisé dans les titres de page, les e-mails et la marque dans l’application. Restez court : un ou deux mots idéalement."
+            },
+            "appUrl": {
+              "title": "URL de l’application",
+              "body": "L’adresse canonique. Tous les rappels, e-mails et redirections OAuth en dérivent."
+            },
+            "language": {
+              "title": "Langue par défaut",
+              "body": "Appliquée aux nouveaux comptes. Les utilisateurs existants conservent leur choix."
+            },
+            "currency": {
+              "title": "Devise par défaut",
+              "body": "Utilisée pour les factures et les portefeuilles sans remplacement explicite."
+            },
+            "maintenance": {
+              "title": "Mode maintenance",
+              "body": "Lorsqu’il est ACTIVÉ, chaque route non administrateur affiche un espace réservé. L’administration reste accessible."
+            }
+          }
+        },
+        "tip": {
+          "title": "Règle de production",
+          "body": "N’enregistrez qu’après avoir testé le parcours utilisateur concerné. Les changements d’identité se répercutent sur les factures et les e-mails sortants."
+        }
+      },
+      "appearance": {
+        "title": "Couleurs du tableau de bord",
+        "description": "Recolorez toute l’application, chaque page du tableau de bord utilisateur et le panneau d’administration en modifiant ces couleurs de thème. L’enregistrement s’applique immédiatement à tous ; laissez une couleur sur sa valeur par défaut pour conserver l’aspect livré.",
+        "sections": {
+          "layout": {
+            "title": "Disposition de la navigation",
+            "description": "Choisissez la disposition du tableau de bord utilisateur. Barre latérale place chaque menu dans une colonne de gauche (sans en-tête supérieur ni page Plus)."
+          },
+          "sidebar": {
+            "title": "Couleur de la barre latérale",
+            "description": "Fond de la colonne de gauche sombre (disposition barre latérale uniquement). Laissez la valeur par défaut pour le noir presque pur livré."
+          },
+          "interface": {
+            "title": "Interface"
+          },
+          "brand": {
+            "title": "Marque"
+          },
+          "surfaces": {
+            "title": "Surfaces"
+          },
+          "text": {
+            "title": "Texte"
+          },
+          "accents": {
+            "title": "Accents"
+          }
+        },
+        "guide": {
+          "title": "Fonctionnement des couleurs",
+          "items": {
+            "how": {
+              "title": "Appliqué immédiatement",
+              "body": "L’enregistrement réécrit les jetons de thème en production pour tout le monde."
+            },
+            "tokens": {
+              "title": "Un jeton, un rôle",
+              "body": "Chaque pastille correspond à une seule variable CSS utilisée dans le tableau de bord utilisateur et le panneau d’administration."
+            },
+            "primary": {
+              "title": "Changez la couleur principale, le reste suit",
+              "body": "La couleur principale au survol, l’accent, le fond doux et la bulle de chat dérivent de la couleur principale, sauf si vous les définissez vous-même."
+            },
+            "defaults": {
+              "title": "Laissez les valeurs par défaut",
+              "body": "Toute couleur laissée à sa valeur livrée conserve l’aspect d’origine ; seuls les jetons modifiés sont remplacés."
+            }
+          }
+        },
+        "tip": {
+          "title": "Astuce",
+          "body": "Vérifiez le contraste après les grandes modifications. Le texte et le fond proviennent de ces mêmes jetons."
+        },
+        "eyebrow": "Admin - Apparence"
+      },
+      "siteInfo": {
+        "title": "Informations sur le site",
+        "description": "Coordonnées et liens sociaux partagés entre le pied de page, la page contact et la page à propos. Modifiez une fois, mise à jour partout.",
+        "sections": {
+          "company": {
+            "title": "Entreprise"
+          },
+          "contact": {
+            "title": "E-mails de contact"
+          },
+          "phone": {
+            "title": "Téléphone et WhatsApp"
+          },
+          "social": {
+            "title": "Liens sociaux"
+          }
+        },
+        "guide": {
+          "title": "Ce qui va où",
+          "items": {
+            "shared": {
+              "title": "Partagé partout",
+              "body": "Ces valeurs alimentent le pied de page public, la page contact et les pages légales."
+            },
+            "frontend": {
+              "title": "Textes et couleurs des pages",
+              "body": "Modifiés dans l’éditeur Frontend, pas ici."
+            }
+          }
+        }
+      },
+      "footer": {
+        "title": "Paramètres du pied de page",
+        "description": "Titre du pied de page, liens sociaux, texte de copyright et description publique du pied de page.",
+        "sections": {
+          "footer": {
+            "title": "Pied de page public"
+          }
+        },
+        "guide": {
+          "title": "Ce qui va où",
+          "items": {
+            "what": {
+              "title": "Titre du pied de page et copyright",
+              "body": "Un titre vide utilise le nom de la plateforme. Un copyright vide est généré à partir de l’année et de la marque."
+            },
+            "social": {
+              "title": "URL des réseaux sociaux",
+              "body": "Un champ vide masque l’icône. Ces champs partagent les liens sociaux des informations du site : une modification ici s’applique partout."
+            }
+          }
+        }
+      },
+      "mail": {
+        "title": "Paramètres d’e-mail",
+        "description": "Hôte SMTP, port, chiffrement et identifiants. Les valeurs enregistrées s’appliquent à chaque envoi : les e-mails de bienvenue, de vérification, de reçu et d’assistance les utilisent sans redémarrage.",
+        "sections": {
+          "smtp": {
+            "title": "Identifiants SMTP"
+          }
+        },
+        "guide": {
+          "title": "Hôtes des fournisseurs courants",
+          "items": {
+            "hosts": {
+              "title": "Paramètres types",
+              "body": "Mailgun smtp.mailgun.org 587 / tls. SendGrid smtp.sendgrid.net 587 / tls. Amazon SES email-smtp.REGION.amazonaws.com 587 / tls. Postmark smtp.postmarkapp.com 587 / tls. Resend smtp.resend.com 587 / tls. Gmail smtp.gmail.com 587 / tls avec un mot de passe d’application."
+            },
+            "used": {
+              "title": "E-mails transactionnels du système",
+              "body": "E-mails de bienvenue et de vérification, réinitialisation du mot de passe, factures et reçus, réponses du support, alertes de sécurité et invitations d’espace de travail."
+            }
+          }
+        },
+        "tip": {
+          "title": "Astuce",
+          "body": "Envoyez toujours un test après une modification. Une seule faute de frappe dans l’hôte ou le port désactive silencieusement tous les e-mails transactionnels de la plateforme."
+        }
+      },
+      "seo": {
+        "title": "Paramètres SEO",
+        "description": "Balises meta par défaut pour tout le site : titre, description, OpenGraph, cartes Twitter, robots, canonique et vérification auprès des moteurs de recherche.",
+        "sections": {
+          "search": {
+            "title": "Balises meta"
+          },
+          "social": {
+            "title": "OpenGraph"
+          },
+          "twitter": {
+            "title": "Cartes Twitter"
+          },
+          "verification": {
+            "title": "Vérification du site"
+          },
+          "preview": {
+            "title": "Aperçu en direct"
+          }
+        },
+        "guide": {
+          "title": "Bases du SEO",
+          "items": {
+            "basics": {
+              "title": "Titres et descriptions",
+              "body": "Balise title : commencez par la marque et un descripteur fort, 50 à 60 caractères. Meta description : un argumentaire de 1 à 2 phrases, 140 à 160 caractères."
+            },
+            "where": {
+              "title": "Où cela s’affiche",
+              "body": "Pages d’administration, pages connectées, pages publiques et aperçus de liens (WhatsApp, Slack, Discord, X). Robots : utilisez noindex pour la préproduction ou les déploiements privés."
+            },
+            "sitemap": {
+              "title": "Valider",
+              "body": "opengraph.xyz, le test de résultats enrichis Google et le validateur de cartes Twitter."
+            }
+          }
+        }
+      },
+      "privacy": {
+        "title": "Confidentialité, RGPD et ADA",
+        "eyebrow": "Admin - Conformité",
+        "description": "Bannière de consentement aux cookies, URL des politiques, conformité RGPD/CCPA et bascules d’accessibilité WCAG. Le même paramètre alimente l’interface de consentement et contrôle chaque intégration d’analyse.",
+        "sections": {
+          "banner": {
+            "title": "Bannière et politiques"
+          },
+          "compliance": {
+            "title": "RGPD et CCPA"
+          },
+          "accessibility": {
+            "title": "ADA / WCAG",
+            "description": "Équivalents américains de l’Americans with Disabilities Act et de WCAG 2.1 niveau AA que les visiteurs peuvent activer."
+          }
+        },
+        "guide": {
+          "title": "Fonctionnement du consentement",
+          "items": {
+            "order": {
+              "title": "Ordre des opérations",
+              "body": "1. Le visiteur arrive et la bannière cookies s’ouvre (ignorée si Ne pas suivre est respecté). 2. Le choix est enregistré dans le cookie crm_cookie_consent pendant un an. 3. Seuls les traceurs autorisés sont chargés. 4. Le visiteur peut rouvrir le sélecteur depuis tout élément portant data-cookie-prefs-open."
+            },
+            "linked": {
+              "title": "Paramètres liés",
+              "body": "Intégrations d’analyse (GA4, GTM, Pixel, Clarity et autres) et paramètres PWA."
+            }
+          }
+        }
+      },
+      "analytics": {
+        "title": "Intégrations d’analyse",
+        "eyebrow": "Admin - Suivi",
+        "description": "Saisissez une fois l’identifiant de chaque fournisseur. L’extrait officiel du fournisseur est affiché sur chaque page publique, mais seulement après le consentement du visiteur à la catégorie de cookies correspondante.",
+        "sections": {
+          "site": {
+            "title": "Analyse du site"
+          },
+          "marketing": {
+            "title": "Pixels publicitaires"
+          }
+        },
+        "guide": {
+          "title": "Traceur -> catégorie",
+          "items": {
+            "categories": {
+              "title": "Moment du déclenchement",
+              "body": "Analyse : GA4, GTM, Clarity, Plausible, PostHog, Hotjar, Mixpanel. Marketing : Pixel Meta, TikTok, LinkedIn, Pixel X. Les scripts de conteneur GTM peuvent inclure d’autres traceurs ; mettez-les en pause avec des déclencheurs par catégorie dans GTM."
+            },
+            "where": {
+              "title": "Lieux de chargement",
+              "body": "Pages publiques et de connexion. Les pages d’administration sont volontairement exclues."
+            }
+          }
+        }
+      },
+      "custom": {
+        "title": "Code personnalisé",
+        "description": "Styles et scripts personnalisés de production pour une image de marque et un comportement avancés. Injectés dans les pages publiques lorsque c’est activé.",
+        "sections": {
+          "code": {
+            "title": "Code personnalisé"
+          }
+        },
+        "guide": {
+          "title": "Bonnes pratiques",
+          "items": {
+            "scope": {
+              "title": "Limitez la portée de votre CSS",
+              "body": "Encadrez vos règles d’une classe de marque. Évitez body, *, ou les classes utilitaires du framework."
+            },
+            "block": {
+              "title": "Ne bloquez pas",
+              "body": "Encapsulez le JS dans DOMContentLoaded. Aucun appel réseau synchrone."
+            },
+            "dark": {
+              "title": "Testez le mode sombre",
+              "body": "Changez de thème et vérifiez les sélecteurs html[data-theme=\"dark\"] avant d’enregistrer."
+            },
+            "sensitive": {
+              "title": "Sensible pour la production",
+              "body": "Un mauvais enregistrement atteint instantanément chaque page publique. Faites relire les gros changements par un collègue."
+            }
+          }
+        },
+        "tip": {
+          "title": "Prudence",
+          "body": "Le code personnalisé s’exécute sur chaque page publique et ne peut pas être isolé. Seul un super administrateur peut le modifier."
+        }
+      },
+      "pwa": {
+        "title": "Paramètres PWA",
+        "description": "Manifeste de l’application installable : nom, icônes, couleurs et mode d’affichage. Alimente le manifeste et l’invite d’installation.",
+        "sections": {
+          "app": {
+            "title": "Manifeste PWA"
+          },
+          "teamInbox": {
+            "title": "PWA Boîte de réception d’équipe"
+          }
+        },
+        "guide": {
+          "title": "Application installable",
+          "items": {
+            "manifest": {
+              "title": "Manifeste en direct",
+              "body": "Le manifeste est servi sur /api/v2/public/manifest.webmanifest et n’existe que lorsque l’interrupteur est activé."
+            },
+            "install": {
+              "title": "Icônes",
+              "body": "Téléversez des icônes PNG carrées sur la page Apparence ou collez des URL hébergées. 192 px pour l’écran d’accueil, 512 px pour l’écran de démarrage."
+            }
+          }
+        }
+      },
+      "storage": {
+        "title": "Stockage cloud",
+        "eyebrow": "Admin - Stockage des médias",
+        "description": "Envoyez toutes les pièces jointes multimédias des clients vers votre propre compartiment (Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 ou tout stockage compatible S3) au lieu du serveur de l’application. Désactivé, les médias restent sur le disque local : rien ne casse tant que vous ne l’activez pas.",
+        "status": {
+          "active": "Actif : {provider}. Les nouveaux téléversements vont dans votre compartiment.",
+          "configured": "Configuré mais désactivé. Les médias restent sur le disque local. Testez, puis activez.",
+          "local": "Disque local (aucun fournisseur cloud configuré pour l’instant).",
+          "enabled": "Activé",
+          "disabled": "Désactivé"
+        },
+        "sections": {
+          "provider": {
+            "title": "Routage des médias cloud"
+          },
+          "credentials": {
+            "title": "Connexion au compartiment"
+          }
+        },
+        "guide": {
+          "title": "Configurer",
+          "items": {
+            "s3": {
+              "title": "S3 / Wasabi",
+              "body": "Clé d’accès + secret + région + compartiment. Le point de terminaison Wasabi est déduit de la région."
+            },
+            "bunny": {
+              "title": "Bunny.net",
+              "body": "Utilisez les champs Bunny : zone de stockage et mot de passe. La région correspond à celle de la zone (de, ny, la…)."
+            },
+            "spaces": {
+              "title": "Spaces / R2 / MinIO",
+              "body": "Remplissez les champs S3 et collez l’URL du point de terminaison. Cochez le chemin de style pour MinIO."
+            },
+            "test": {
+              "title": "Toujours tester d’abord",
+              "body": "« Enregistrer et tester la connexion » écrit puis supprime un fichier de test avant que vous activiez l’interrupteur."
+            }
+          }
+        },
+        "tip": {
+          "title": "Sûr par défaut",
+          "body": "Les fichiers existants restent à leur emplacement. Seuls les nouveaux téléversements vont dans le compartiment ; rien n’est migré ni supprimé."
+        }
+      },
+      "whatsapp": {
+        "title": "Paramètres WhatsApp",
+        "eyebrow": "Admin - Paramètres - Canaux - WhatsApp",
+        "description": "L’unique application Meta (et partenaire Interakt) par laquelle sont intégrés les numéros WhatsApp de chaque espace de travail. Sans ID et secret d’application, Embedded Signup et le renouvellement des jetons ne fonctionnent pas ; sans ID de configuration, les espaces de travail collent un jeton manuellement. Les valeurs enregistrées remplacent les valeurs par défaut du serveur en quelques secondes, dans tous les processus.",
+        "sections": {
+          "metaApp": {
+            "title": "API Business (WABA)",
+            "description": "API Cloud officielle de Meta. Requise pour un trafic élevé, les modèles de messages et un profil d’entreprise vérifié. Prend en charge la saisie manuelle du jeton et Embedded Signup (connexion WhatsApp)."
+          },
+          "interakt": {
+            "title": "Route Interakt",
+            "description": "Les numéros connectés via Embedded Signup transitent par défaut par le proxy Meta d’Interakt. Passez à Meta (direct) pour ignorer Interakt. Les numéros existants conservent la route avec laquelle ils ont été connectés."
+          },
+          "inbound": {
+            "title": "Webhook"
+          }
+        },
+        "guide": {
+          "title": "API Business (WABA)",
+          "items": {
+            "api": {
+              "title": "API Cloud Meta",
+              "body": "API Cloud officielle de Meta. Requise pour un trafic élevé, les modèles de messages et un profil d’entreprise vérifié. Prend en charge la saisie manuelle du jeton et Embedded Signup (connexion WhatsApp)."
+            },
+            "app": {
+              "title": "ID + secret de l’application Facebook",
+              "body": "developers.facebook.com/apps, Paramètres de base. Modifier l’application invalide les jetons émis par l’ancienne : les espaces de travail doivent se reconnecter."
+            },
+            "webhook": {
+              "title": "Webhook",
+              "body": "Tableau de bord de l’application, WhatsApp, Configuration : collez l’URL de rappel et le jeton de vérification de cette page, puis abonnez-vous à messages et message_template_status_update."
+            },
+            "perWorkspace": {
+              "title": "Par espace de travail",
+              "body": "Chaque espace de travail connecte son propre numéro depuis Canaux, numéros WhatsApp. L’ID du numéro de téléphone et un jeton permanent y sont demandés."
+            },
+            "login": {
+              "title": "Connexion WABA (facultatif)",
+              "body": "Renseignez l’ID de configuration Embedded Signup pour activer la connexion en un clic avec Meta. Nécessite le rôle Tech Provider sur l’application. Laissez vide pour la saisie manuelle uniquement."
+            }
+          }
+        },
+        "tip": {
+          "title": "Astuce",
+          "body": "Changer la route par défaut ou l’application pendant un trafic en cours n’affecte que les numéros connectés ensuite. Mettez les campagnes en pause avant de modifier l’application Meta."
+        }
+      },
+      "campaigns": {
+        "title": "Diffusion des campagnes",
+        "eyebrow": "Admin - Campagnes",
+        "description": "Règles globales pour les campagnes de chaque espace de travail : à quelle fréquence un message en échec est réessayé et quand une campagne inachevée est terminée.",
+        "sections": {
+          "retry": {
+            "title": "Nouvelles tentatives"
+          },
+          "expiry": {
+            "title": "Fin automatique"
+          }
+        },
+        "guide": {
+          "title": "Fonctionnement",
+          "items": {
+            "retry": {
+              "title": "Nouvelles tentatives",
+              "body": "Un destinataire dont l’envoi échoue est réessayé après le délai, dans la limite des tentatives définies ici."
+            },
+            "expiry": {
+              "title": "Fin automatique",
+              "body": "Une campagne encore en cours après le nombre d’heures défini ici est terminée afin de ne pas monopoliser un expéditeur indéfiniment."
+            }
+          }
+        }
+      },
+      "googleCalendar": {
+        "title": "Google Agenda",
+        "eyebrow": "Admin - Rendez-vous",
+        "description": "Un seul client OAuth Google Cloud pour toute la plateforme. Chaque espace de travail connecte ensuite son propre compte Google depuis Rendez-vous, Paramètres ; un espace de travail ne voit jamais l’ID ni le secret du client.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth Google",
+            "description": "Sans ID et secret de client, les espaces de travail voient Google Agenda comme indisponible, et les réservations continuent sans agenda."
+          }
+        },
+        "guide": {
+          "title": "Configurer dans Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Projet et API",
+              "body": "Dans Google Cloud Console, créez un projet et activez l’API Google Agenda."
+            },
+            "redirect": {
+              "title": "2. Client OAuth",
+              "body": "Créez un ID client OAuth 2.0 de type application Web et ajoutez l’URI de redirection affiché sur cette page dans les URI de redirection autorisés."
+            },
+            "consent": {
+              "title": "3. Écran de consentement",
+              "body": "Ajoutez les portées calendar.events, calendar.freebusy et calendar.calendarlist.readonly, puis publiez l’application : en mode test, Google met fin à chaque autorisation au bout de 7 jours et les espaces de travail devront se reconnecter."
+            },
+            "workspaces": {
+              "title": "4. Connexion des espaces de travail",
+              "body": "Collez l’ID et le secret du client ici, puis enregistrez. Les administrateurs se connectent ensuite depuis Rendez-vous, Paramètres, Google Agenda."
+            }
+          }
+        }
+      },
+      "flowBuilder": {
+        "title": "Éditeur de flux",
+        "eyebrow": "Admin - Automatisation",
+        "description": "Choisissez l’éditeur de flux par défaut de chaque espace de travail : l’éditeur Simple étape par étape ou l’éditeur Avancé en canevas. Un espace de travail peut le remplacer sur sa page Flux.",
+        "sections": {
+          "mode": {
+            "title": "Éditeur"
+          }
+        },
+        "guide": {
+          "title": "Fonctionnement",
+          "items": {
+            "modes": {
+              "title": "Les deux éditeurs",
+              "body": "Simple affiche un flux sous forme d’étapes les unes sous les autres, avec un signe plus entre elles. Avancé est le canevas avec nœuds et connexions. Les deux enregistrent le même flux, qui s’exécute donc de la même façon."
+            },
+            "existing": {
+              "title": "Flux existants",
+              "body": "Modifier ce réglage ne change ni ne supprime jamais un flux. Un flux continue de fonctionner ; il est simplement ouvert dans l’éditeur actif. Un espace de travail qui a choisi son propre éditeur le conserve jusqu’à ce qu’il revienne au choix par défaut de la plateforme."
+            }
+          }
+        }
+      }
+    },
+    "cookie": {
+      "title": "Nous utilisons des cookies",
+      "learnMore": "En savoir plus",
+      "decline": "Refuser",
+      "customize": "Personnaliser",
+      "acceptAll": "Tout accepter",
+      "rejectAll": "Tout refuser",
+      "save": "Enregistrer les préférences",
+      "preferences": "Préférences cookies",
+      "categories": {
+        "necessary": {
+          "title": "Strictement nécessaires",
+          "body": "Nécessaires au fonctionnement du site : connexion, sécurité et vos choix. Toujours actifs."
+        },
+        "analytics": {
+          "title": "Cookies d’analyse",
+          "body": "Nous aident à comprendre l’utilisation du site pour l’améliorer."
+        },
+        "marketing": {
+          "title": "Cookies marketing",
+          "body": "Servent à mesurer les publicités et à vous montrer des campagnes pertinentes ailleurs."
+        }
+      }
+    },
+    "appearance": {
+      "previewKicker": "Aperçu en direct",
+      "previewTitle": "Avant d’enregistrer",
+      "previewNote": "Les couleurs, la taille et l’opacité se mettent à jour pendant que vous les faites glisser. Rien n’est appliqué à qui que ce soit tant que vous n’avez pas enregistré.",
+      "resetTitle": "Réinitialiser les valeurs par défaut",
+      "resetBody": "Efface toutes les surcharges et restaure la palette d’origine.",
+      "reset": "Réinitialiser toutes les couleurs",
+      "tokens": "{count} jetons",
+      "controls": "{count} commandes",
+      "primary": "Principale",
+      "cancel": "Annuler",
+      "active": "Actif"
+    },
+    "wabaCallback": {
+      "loading": "Chargement des détails du webhook…",
+      "unavailable": "Les détails du webhook ne sont affichés qu’aux super administrateurs.",
+      "webhookUrl": "URL du webhook",
+      "noUrl": "Définissez APP_URL ou WABA_WEBHOOK_PUBLIC_URL",
+      "webhookHint": "Collez dans l’application Meta (WhatsApp, Configuration, URL de rappel). Abonnez-vous à : {fields}.",
+      "verifyToken": "Jeton de vérification",
+      "verifyHint": "Collez-le au même endroit que le jeton de vérification.",
+      "copy": "Copier",
+      "copied": "Copié",
+      "connected": "WABA connectés (tous les espaces de travail)",
+      "fieldsTitle": "Champs du webhook (coexistence et groupes)",
+      "fieldsHint": "La coexistence nécessite que l’application Meta soit abonnée à messages, smb_message_echoes, smb_app_state_sync et history. Les groupes WhatsApp nécessitent group_lifecycle_update, group_participants_update, group_settings_update et group_status_update.",
+      "fieldsCheck": "Vérifier les champs du webhook",
+      "fieldsChecking": "Interrogation de Meta…",
+      "fieldsOk": "Tous les champs sont abonnés : les réponses saisies sur le téléphone seront synchronisées et les événements des groupes WhatsApp arriveront.",
+      "fieldsMissing": "Certains champs ne sont pas encore abonnés.",
+      "fieldsSubscribed": "Abonné. Les réponses saisies sur le téléphone seront désormais synchronisées et les événements des groupes WhatsApp arriveront.",
+      "fieldsMissingTag": "MANQUANT",
+      "fieldsGroupTag": "Groupes",
+      "fieldsSubscribe": "Abonner les champs manquants",
+      "fieldsSubscribing": "Abonnement…"
+    },
+    "googleCallback": {
+      "redirectTitle": "URI de redirection",
+      "redirectHint": "Enregistrez cette adresse exacte comme URI de redirection autorisé sur le client OAuth. C’est là que Google renvoie le navigateur après l’accord d’un administrateur d’espace de travail.",
+      "copy": "Copier",
+      "copied": "Copié"
+    }
+  }
+}

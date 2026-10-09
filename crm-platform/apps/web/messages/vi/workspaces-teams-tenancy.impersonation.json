@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "Đang đăng nhập thay",
+      "viewing": "Đang xem {workspace} với tư cách {owner}",
+      "reason": "Lý do: {reason}",
+      "readOnly": "Chỉ đọc",
+      "timeLeft": "Còn {minutes, plural, other {# phút}}",
+      "endsSoon": "Còn chưa đến một phút",
+      "stop": "Dừng đăng nhập thay",
+      "stopping": "Đang dừng",
+      "stopFailed": "Không thể dừng phiên. Thử lại.",
+      "readOnlyRefused": "Phiên này chỉ đọc nên không được thay đổi.",
+      "forbiddenRefused": "Không khả dụng khi bạn đang xem không gian làm việc với tư cách chủ sở hữu.",
+      "ended": {
+        "title": "Phiên đăng nhập thay này đã kết thúc",
+        "expired": "Liên kết đã được dùng hoặc đã hết hạn. Hãy bắt đầu lại từ bảng điều khiển.",
+        "body": "Không thể làm gì thêm trong không gian làm việc từ đây. Quay lại bảng điều khiển để bắt đầu phiên mới.",
+        "back": "Quay lại bảng điều khiển"
+      }
+    }
+  }
+}

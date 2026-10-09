@@ -1,0 +1,113 @@
+{
+  "web-forms": {
+    "design": {
+      "presets": {
+        "title": "Tema",
+        "custom": "Özel: başladığınız temanın bir rengini, köşesini veya yazı tipini değiştirdiniz.",
+        "classic": "Klasik",
+        "ocean": "Okyanus",
+        "forest": "Orman",
+        "sunset": "Gün batımı",
+        "berry": "Böğürtlen",
+        "slate": "Arduvaz",
+        "noir": "Siyah",
+        "paper": "Kağıt"
+      },
+      "colours": {
+        "title": "Renkler",
+        "hint": "#2563eb gibi altı haneli onaltılık renk kodları kullanın. Eksik bir değer uygulanmaz.",
+        "swatch": "{name} (renk seçici)",
+        "primary": "Birincil (düğmeler ve vurgular)",
+        "background": "Sayfa arka planı",
+        "surface": "Form arka planı",
+        "text": "Metin",
+        "mutedText": "İkincil metin",
+        "border": "Kenarlıklar",
+        "error": "Hata"
+      },
+      "contrast": {
+        "title": "Bazı renkler okunması zor. En az 4,5:1 kontrast hedefleyin.",
+        "item": "{pair}: {ratio}:1",
+        "ok": "Kontrol edilen tüm renk çiftleri kolay okunuyor.",
+        "text": "Form arka planı üzerindeki metin",
+        "muted": "Form arka planı üzerindeki ikincil metin",
+        "button": "Düğme üzerindeki düğme etiketi"
+      },
+      "shape": {
+        "title": "Şekil ve boşluk",
+        "radius": "Köşeler",
+        "none": "Yok",
+        "sm": "Küçük",
+        "md": "Orta",
+        "lg": "Büyük",
+        "pill": "Yuvarlak",
+        "density": "Boşluk",
+        "compact": "Sıkı",
+        "comfortable": "Rahat",
+        "spacious": "Geniş",
+        "shadow": "Gölge",
+        "shadowNone": "Yok"
+      },
+      "type": {
+        "title": "Tipografi",
+        "font": "Yazı tipi",
+        "fontHint": "Web yazı tipleri yalnızca birini seçtiğinizde yüklenir.",
+        "sample": "Pijamalı hasta, yağız şoföre çabucak güvendi.",
+        "scale": "Yazı boyutu"
+      },
+      "fonts": {
+        "system": "Sistem varsayılanı",
+        "serif": "Serif",
+        "mono": "Eşit aralıklı"
+      },
+      "layout": {
+        "title": "Düzen ve düğmeler",
+        "preset": "Düzen",
+        "classic": "Klasik kart",
+        "fullWidth": "Tam genişlik",
+        "split": "Kapak görseli ile bölünmüş",
+        "minimal": "Minimal",
+        "labelPosition": "Etiket konumu",
+        "labelTop": "Alanın üstünde",
+        "labelLeft": "Alanın yanında",
+        "buttonStyle": "Düğme stili",
+        "filled": "Dolu",
+        "outline": "Çerçeveli",
+        "buttonWidth": "Düğme genişliği",
+        "widthAuto": "Etikete göre",
+        "widthFull": "Tam genişlik",
+        "maxWidth": "En fazla genişlik",
+        "maxWidthHint": "320 ile 960 piksel arası.",
+        "maxWidthInvalid": "320 ile 960 arasında bir tam sayı girin.",
+        "maxWidthSlider": "En fazla genişlik kaydırıcısı",
+        "mode": "Renk modu",
+        "light": "Açık",
+        "dark": "Koyu",
+        "auto": "Ziyaretçinin cihazını izle"
+      },
+      "images": {
+        "title": "Görseller",
+        "logo": "Logo",
+        "logoHint": "Bir https adresi. Logo istemiyorsanız boş bırakın.",
+        "cover": "Kapak görseli",
+        "coverHint": "Bölünmüş düzende formun yanında gösterilir.",
+        "background": "Arka plan görseli",
+        "backgroundHint": "Bir https adresi. Düz arka plan için boş bırakın.",
+        "invalid": "Bir https adresi girin veya boş bırakın."
+      },
+      "reset": "Varsayılanlara sıfırla",
+      "readOnly": "Tasarıma bakabilirsiniz ancak değiştiremezsiniz.",
+      "preview": {
+        "title": "Önizleme",
+        "device": "Önizleme boyutu",
+        "desktop": "Masaüstü",
+        "mobile": "Mobil",
+        "scheme": "Önizleme renk modu",
+        "light": "Açık",
+        "dark": "Koyu",
+        "schemeHint": "Renk modu Açık olarak ayarlı, bu yüzden önizlenecek koyu bir sürüm yok.",
+        "frameTitle": "Formun canlı önizlemesi"
+      }
+    }
+  }
+}

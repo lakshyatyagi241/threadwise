@@ -1,0 +1,709 @@
+{
+  "admin-console-shell": {
+    "nav": {
+      "overview": "Beranda",
+      "menuOrder": "Urutan menu",
+      "groups": {
+        "shell": "Antarmuka"
+      },
+      "sections": {
+        "reports": "Laporan",
+        "plans": "Workspace & paket",
+        "billing": "Penagihan",
+        "messaging": "Penagihan pesan",
+        "support": "Dukungan",
+        "website": "Situs web",
+        "whatsapp": "WhatsApp",
+        "apps": "Aplikasi",
+        "team": "Tim & keamanan",
+        "settings": "Pengaturan",
+        "system": "Sistem"
+      },
+      "badges": {
+        "notSupported": "Tidak didukung",
+        "noWorkspaces": "Tidak ada workspace"
+      },
+      "labels": {
+        "addonPacks": "Paket add-on",
+        "extensions": "Ekstensi",
+        "trackingCode": "Kode pelacakan",
+        "planPricingSettings": "Pengaturan harga paket",
+        "checkoutSettings": "Pengaturan checkout",
+        "walletOverview": "Ringkasan wallet",
+        "flowTemplates": "Template flow"
+      },
+      "hubNotes": {
+        "reports": "Laporan pendapatan, paket, AI, dan sistem.",
+        "plans": "Workspace, paket, paket add-on, kupon, dan halaman harga.",
+        "billing": "Pesanan, faktur, pembayaran, dan pengaturan checkout.",
+        "messaging": "Harga pesan, margin, paket kredit, dan pendapatan reseller Meta.",
+        "support": "Tiket, kotak masuk tim dan platform, agen, SLA, playbook, dan pesan kontak.",
+        "website": "Editor situs, blog, halaman legal, pengumuman, dan panduan.",
+        "whatsapp": "Penyedia, pengalih nomor, Node bridge, webhook, WABA, dan pengaturan katalog.",
+        "apps": "Marketplace, ekstensi, dan template flow.",
+        "team": "Peran, izin, keamanan, dan aturan masuk.",
+        "settings": "Branding, email, integrasi, privasi, penyimpanan, dan lainnya.",
+        "system": "Pembaruan, bahasa, mata uang, dan terjemahan."
+      },
+      "captions": {
+        "branding": "Branding dan antarmuka",
+        "integrations": "Integrasi",
+        "privacy": "Privasi dan pelacakan",
+        "infrastructure": "Infrastruktur",
+        "roles": "Peran",
+        "security": "Keamanan",
+        "signin": "Masuk dan daftar"
+      }
+    },
+    "shell": {
+      "collapse": "Ciutkan sidebar",
+      "expand": "Perluas sidebar",
+      "backToApp": "Kembali ke aplikasi",
+      "allAreas": "Semua area",
+      "switchArea": "Ganti area, saat ini di {area}"
+    },
+    "overview": {
+      "title": "Konsol platform",
+      "note": "Pilih area. Setiap area terbuka dengan halamannya di menu sebelah kiri, dan Ctrl+K menemukan halaman mana pun berdasarkan nama.",
+      "open": "Buka",
+      "attentionTitle": "Perlu perhatian",
+      "attentionAll": "{count, plural, other {# notifikasi belum dibaca}}",
+      "attentionEmpty": "Tidak ada yang perlu diperhatikan saat ini.",
+      "pages": "{count, plural, other {# halaman}}"
+    },
+    "menuOrder": {
+      "title": "Urutan menu",
+      "note": "Pilih entri yang muncul di bilah atas yang dilihat setiap pelanggan, beserta urutannya. Sisanya ada di bawah Lainnya. Pengguna melihat perubahan pada pemuatan halaman berikutnya.",
+      "barZone": "Bilah atas",
+      "moreZone": "Lainnya",
+      "locked": "Selalu terakhir",
+      "save": "Simpan tata letak",
+      "reset": "Reset ke default",
+      "saved": "Tata letak menu disimpan. Pengguna melihatnya pada pemuatan halaman berikutnya.",
+      "saveFailed": "Tata letak tidak dapat disimpan.",
+      "loadFailed": "Tata letak tidak dapat dimuat.",
+      "moveUp": "Pindahkan {item} ke atas",
+      "moveDown": "Pindahkan {item} ke bawah",
+      "remove": "Pindahkan {item} ke Lainnya",
+      "add": "Tambahkan {item} ke bilah atas",
+      "removeShort": "Hapus",
+      "addShort": "Tambah",
+      "items": {
+        "dashboard": "Dasbor",
+        "team-inbox": "Kotak Masuk Tim",
+        "wa-campaigns": "Kampanye",
+        "flows": "Flow",
+        "templates": "Template",
+        "devices": "Perangkat",
+        "metaads": "Iklan Meta",
+        "broadcasts": "Broadcast",
+        "contacts": "Kontak",
+        "deals": "Deal",
+        "chat": "Live Chat",
+        "analytics": "Analitik",
+        "auto-reply": "Balasan otomatis",
+        "scheduled": "Terjadwal",
+        "message-history": "Riwayat",
+        "ai-assistants": "Asisten AI",
+        "ai-training": "Pelatihan AI",
+        "wa-links": "Tautan WA",
+        "chatbot-widgets": "Widget Chat",
+        "webhooks": "Webhook",
+        "integrations": "Integrasi",
+        "warmer": "Warmer",
+        "call-logs": "Log Panggilan",
+        "support": "Dukungan",
+        "more": "Lainnya"
+      }
+    },
+    "header": {
+      "health": {
+        "title": "Kesehatan platform",
+        "ok": "Semua sistem normal",
+        "stuck": "{count, plural, other {# job tersangkut}}",
+        "down": "Database tidak dapat dijangkau"
+      },
+      "bell": {
+        "title": "Notifikasi",
+        "labelUnread": "Notifikasi, {count} belum dibaca",
+        "inbox": "Kotak masuk",
+        "markAllRead": "Tandai semua dibaca",
+        "clearAll": "Hapus semua",
+        "viewAll": "Lihat semua",
+        "loading": "Memuat...",
+        "empty": "Belum ada notifikasi."
+      },
+      "account": {
+        "menu": "Menu akun",
+        "open": "Menu akun untuk {name}",
+        "myAccount": "Akun saya",
+        "settings": "Pengaturan",
+        "overview": "Ringkasan admin",
+        "signOut": "Keluar"
+      },
+      "feed": {
+        "signup": "Pendaftaran baru",
+        "paymentReceived": "Pembayaran diterima",
+        "newOrder": "Pesanan baru",
+        "newTicket": "Tiket dukungan baru",
+        "newContactMessage": "Pesan kontak baru",
+        "newWorkspace": "Workspace baru"
+      }
+    },
+    "notificationsPage": {
+      "eyebrow": "Admin - Aktivitas platform - Notifikasi",
+      "title": "Notifikasi admin",
+      "note": "Semua yang terjadi di seluruh platform: pendaftaran baru, pembayaran, tiket dukungan, pesan kontak, dan workspace baru. Terpisah dari notifikasi pribadi anggota workspace.",
+      "tiles": {
+        "all": "Semua peristiwa",
+        "signup": "Pendaftaran",
+        "payment": "Pembayaran",
+        "ticket": "Dukungan",
+        "contact": "Pesan",
+        "workspace": "Workspace"
+      },
+      "pills": {
+        "all": "Semua",
+        "signup": "Pendaftaran",
+        "payment": "Pembayaran",
+        "ticket": "Dukungan",
+        "contact": "Pesan",
+        "workspace": "Workspace"
+      },
+      "kinds": {
+        "signup": "Pendaftaran",
+        "payment": "Pembayaran",
+        "ticket": "Dukungan",
+        "contact": "Pesan",
+        "workspace": "Workspace"
+      },
+      "last30": "30 hari terakhir",
+      "search": "Cari peristiwa...",
+      "empty": "Tidak ada aktivitas platform pada tampilan ini.",
+      "loadFailed": "Feed tidak dapat dimuat.",
+      "cols": {
+        "type": "Jenis",
+        "event": "Peristiwa",
+        "detail": "Detail",
+        "when": "Waktu",
+        "open": "Buka"
+      },
+      "showing": "Menampilkan {count, plural, other {# peristiwa terbaru}}",
+      "live": "Feed langsung, terbaru dulu"
+    },
+    "settings": {
+      "workspace": {
+        "label": "Pengaturan workspace",
+        "description": "Nama, zona waktu, mata uang, notifikasi, ekspor data, dan penghapusan workspace.",
+        "keywords": "workspace, nama, zona waktu, mata uang, notifikasi, ekspor, hapus, slack"
+      }
+    },
+    "workspaceSettings": {
+      "titleLead": "Pengaturan",
+      "titleTail": "workspace",
+      "subtitle": "Konfigurasikan workspace, tim, dan integrasi Anda.",
+      "tabs": {
+        "general": "Umum",
+        "branding": "Branding",
+        "team": "Tim & peran",
+        "notifications": "Notifikasi",
+        "aikeys": "Kunci AI",
+        "security": "Keamanan",
+        "api": "API & webhook",
+        "data": "Data & ekspor",
+        "appearance": "Tampilan"
+      },
+      "general": {
+        "workspace": "Workspace",
+        "ownerOnly": "Hanya pemilik workspace yang dapat mengubah zona waktu, mata uang, atau nama workspace.",
+        "name": "Nama workspace",
+        "url": "URL workspace",
+        "urlHint": "Slug URL tidak dapat diedit di sini. Hubungi dukungan untuk mengubahnya.",
+        "timezone": "Zona waktu default",
+        "timezoneHint": "Semua pengiriman terjadwal, pemeriksaan jam kerja, dan timer SLA berjalan di zona ini.",
+        "currency": "Mata uang",
+        "currencyHint": "Digunakan pada checkout paket, faktur, dan tampilan wallet.",
+        "save": "Simpan",
+        "saved": "Pengaturan disimpan.",
+        "saveFailed": "Pengaturan tidak dapat disimpan.",
+        "loadFailed": "Pengaturan tidak dapat dimuat.",
+        "hours": {
+          "title": "Jam kerja",
+          "note": "Ditampilkan sebagai referensi. Jam kerja belum diberlakukan, sehingga kontrol ini hanya-baca.",
+          "weekdays": "Sen - Jum",
+          "saturday": "Sabtu",
+          "sunday": "Minggu",
+          "from": "Dari",
+          "to": "Sampai"
+        },
+        "preferences": {
+          "title": "Ringkasan AI otomatis",
+          "note": "Dapatkan ulasan AI langsung pada setiap kolom isi pesan: yang sudah baik berwarna hijau, yang perlu diperbaiki berwarna merah, plus \"versi terbaik\" yang dapat ditempel kembali dengan satu ketukan. Jika nonaktif, ulasan yang sama berjalan sesuai permintaan dari ikon kilau di toolbar.",
+          "save": "Simpan",
+          "saved": "Preferensi disimpan.",
+          "saveFailed": "Preferensi tidak dapat disimpan."
+        }
+      },
+      "notifications": {
+        "title": "Notifikasi workspace",
+        "note": "Aktifkan atau nonaktifkan pengiriman per kanal. Apa pun yang dimatikan di sini tidak akan pernah menghasilkan notifikasi lonceng dalam aplikasi, email, atau pesan Slack.",
+        "readOnly": "Hanya-baca. Pemilik workspace dapat mengeditnya.",
+        "save": "Simpan preferensi",
+        "saved": "Preferensi notifikasi disimpan.",
+        "saveFailed": "Preferensi tidak dapat disimpan.",
+        "loadFailed": "Preferensi tidak dapat dimuat.",
+        "specificEvents": "Peristiwa tertentu",
+        "byCategory": "Menurut kategori",
+        "event": "Peristiwa",
+        "category": "Kategori",
+        "channels": {
+          "inapp": "Dalam aplikasi",
+          "email": "Email",
+          "slack": "Slack"
+        },
+        "events": {
+          "device_connected": "Perangkat terhubung",
+          "device_disconnected": "Perangkat terputus",
+          "campaign_completed": "Kampanye selesai",
+          "campaign_failed": "Kampanye gagal",
+          "broadcast_completed": "Broadcast selesai",
+          "new_customer_reply": "Balasan pelanggan baru",
+          "mention_in_inbox": "Anda di-@mention",
+          "conversation_assigned": "Percakapan ditugaskan kepada Anda",
+          "sla_breached": "SLA terlampaui",
+          "wallet_low_balance": "Saldo wallet rendah",
+          "plan_changed": "Paket di-upgrade / di-downgrade",
+          "payment_failed": "Pembayaran gagal",
+          "webhook_delivery_failed": "Pengiriman webhook gagal",
+          "flow_started": "Flow dimulai",
+          "flow_failed": "Flow gagal",
+          "integration_disconnected": "Integrasi terputus",
+          "appointment_booked": "Janji temu dipesan",
+          "weekly_summary": "Ringkasan mingguan"
+        },
+        "categories": {
+          "device": "Perangkat",
+          "contact": "Kontak",
+          "campaign": "Kampanye",
+          "broadcast": "Broadcast",
+          "template": "Template",
+          "chat": "Chat",
+          "webhook": "Webhook",
+          "billing": "Penagihan",
+          "system": "Sistem"
+        },
+        "slackLabel": "URL webhook masuk Slack",
+        "slackHint": "Buat di Slack melalui Apps, Incoming Webhooks. Peristiwa dengan sakelar Slack aktif akan diposting di sini.",
+        "channelStatus": "Status kanal",
+        "statusInapp": "Lonceng dalam aplikasi: aktif, menggerakkan lencana di header atas.",
+        "statusEmailLive": "Email: aktif, dikirim melalui pengaturan email platform.",
+        "statusEmailOff": "Email: dikirim setelah SMTP dikonfigurasi oleh administrator platform.",
+        "statusSlackOn": "Slack: webhook tersimpan.",
+        "statusSlackOff": "Slack: tambahkan URL webhook untuk mengaktifkannya."
+      },
+      "data": {
+        "loadFailed": "Jumlah ekspor tidak dapat dimuat.",
+        "exportTitle": "Ekspor data",
+        "exportNote": "Unduh data workspace Anda sebagai CSV. Setiap tautan menghasilkan ekspor baru.",
+        "exportOwnerOnly": "Hanya pemilik workspace yang dapat mengunduh ekspor.",
+        "types": {
+          "contacts": "Kontak",
+          "conversations": "Percakapan",
+          "messages": "Pesan"
+        },
+        "count": {
+          "contacts": "{count, plural, other {# data}} · CSV",
+          "conversations": "{count, plural, other {# utas}} · CSV",
+          "messages": "{count, plural, other {# pesan}} · CSV"
+        },
+        "delete": {
+          "title": "Hapus workspace",
+          "note": "Hapus workspace ini secara permanen, beserta semua percakapan, otomatisasi, dan riwayat penagihan.",
+          "irreversible": "Tidak dapat dibatalkan.",
+          "ownerOnly": "Hanya pemilik workspace yang dapat menghapus workspace.",
+          "typeName": "Ketik nama workspace:",
+          "password": "Konfirmasi dengan kata sandi",
+          "submit": "Hapus workspace secara permanen",
+          "cancel": "Batal",
+          "confirmTitle": "Hapus workspace ini?",
+          "confirmMessage": "\"{name}\" dan semua isinya akan dihapus dan semua orang akan dikeluarkan. Tindakan ini tidak dapat dibatalkan.",
+          "failed": "Workspace tidak dapat dihapus."
+        }
+      },
+      "groups": {
+        "workspace": "Workspace",
+        "system": "Sistem"
+      },
+      "railLabel": "Bagian pengaturan",
+      "personal": {
+        "title": "Akun Anda",
+        "body": "Profil, kata sandi, dan preferensi pribadi."
+      },
+      "api": {
+        "restTitle": "REST API umum",
+        "rest1": "Buat kunci API untuk membaca dan menulis kontak, percakapan, dan pesan dari sistem Anda sendiri.",
+        "rest2": "Setiap kunci dibatasi pada workspace ini dan dapat dicabut kapan saja.",
+        "rest3": "Permintaan dibatasi per menit sesuai paket Anda.",
+        "webhooksTitle": "Webhook",
+        "webhooksBody": "Kirim peristiwa ke endpoint Anda sendiri dan terima peristiwa dari alat lain.",
+        "manage": "Kelola integrasi"
+      },
+      "appearance": {
+        "title": "Tampilan",
+        "note": "Pilih tampilan aplikasi untuk Anda. Ini pilihan yang sama dengan tombol matahari dan bulan di header.",
+        "choices": {
+          "light": {
+            "label": "Terang",
+            "body": "Halaman cerah dengan nuansa kertas yang lembut."
+          },
+          "dark": {
+            "label": "Gelap",
+            "body": "Halaman redup yang lebih nyaman di mata pada malam hari."
+          }
+        },
+        "save": "Simpan",
+        "saved": "Tampilan diperbarui."
+      }
+    },
+    "topNav": {
+      "more": "Lainnya",
+      "search": "Cari",
+      "premium": "Fitur premium: upgrade paket Anda untuk membukanya"
+    },
+    "palette": {
+      "title": "Cari halaman",
+      "placeholder": "Cari halaman, pengaturan, alat...",
+      "empty": "Tidak ada hasil untuk \"{query}\"",
+      "hintNavigate": "Atas dan bawah untuk bernavigasi",
+      "hintOpen": "Enter untuk membuka",
+      "hintToggle": "Ctrl K untuk beralih",
+      "tags": {
+        "page": "halaman",
+        "account": "akun",
+        "plan": "paket",
+        "help": "bantuan",
+        "system": "sistem"
+      },
+      "entries": {
+        "profile": "Profil",
+        "profileHint": "Nama, foto, dan detail kontak Anda",
+        "password": "Kata sandi dan keamanan",
+        "passwordHint": "Kata sandi, masuk dua faktor, dan sesi aktif"
+      }
+    },
+    "strip": {
+      "jump": "Cari atau lompat ke...",
+      "account": {
+        "group": "Akun",
+        "account": "Akun",
+        "wallet": "Wallet",
+        "notifications": "Notifikasi"
+      },
+      "greeting": {
+        "midnightOil": "Begadang",
+        "morning": "Selamat pagi",
+        "afternoon": "Selamat siang",
+        "evening": "Selamat malam",
+        "night": "Selamat malam"
+      }
+    },
+    "profileMenu": {
+      "chip": "Paket {plan} - {role}",
+      "wallet": "Wallet",
+      "orders": "Riwayat pesanan",
+      "plans": "Harga dan paket",
+      "tour": "Ikuti tur"
+    },
+    "quickAccess": {
+      "title": "Akses cepat",
+      "open": "Buka akses cepat",
+      "close": "Tutup",
+      "edit": "Edit pintasan",
+      "editTitle": "Edit akses cepat",
+      "editNote": "Sematkan hingga sepuluh halaman atau tautan Anda sendiri. Muncul di dasbor dan di laci samping.",
+      "dashboard": "Dasbor",
+      "allApps": "Semua aplikasi",
+      "limit": "Anda dapat menyematkan hingga {max} pintasan.",
+      "saveFailed": "Pintasan tidak dapat disimpan.",
+      "customLinks": "Tautan kustom",
+      "linkLabel": "Label",
+      "linkUrl": "Tautan",
+      "addLink": "Tambah tautan",
+      "removeLink": "Hapus tautan ini",
+      "counter": "{count} / {max} disematkan",
+      "cancel": "Batal",
+      "save": "Simpan pintasan",
+      "problem": {
+        "incomplete": "Tautan memerlukan label dan alamat.",
+        "unsafe": "Gunakan alamat di dalam aplikasi ini (diawali satu garis miring) atau alamat http atau https."
+      },
+      "catalog": {
+        "inbox": {
+          "label": "Kotak Masuk Terpadu",
+          "desc": "Semua percakapan di satu tempat"
+        },
+        "contacts": {
+          "label": "Kontak",
+          "desc": "Audiens Anda dan detailnya"
+        },
+        "campaigns": {
+          "label": "Kampanye",
+          "desc": "Rencanakan dan kirim kampanye"
+        },
+        "broadcasts": {
+          "label": "Broadcast",
+          "desc": "Kirim satu pesan ke banyak kontak"
+        },
+        "templates": {
+          "label": "Template",
+          "desc": "Template pesan yang disetujui"
+        },
+        "flows": {
+          "label": "Flow",
+          "desc": "Otomatiskan percakapan"
+        },
+        "scheduled": {
+          "label": "Terjadwal",
+          "desc": "Pesan yang menunggu dikirim"
+        },
+        "catalog": {
+          "label": "Katalog",
+          "desc": "Produk yang Anda jual di WhatsApp"
+        },
+        "store": {
+          "label": "Toko",
+          "desc": "Etalase dan pesanan Anda"
+        },
+        "deals": {
+          "label": "Pipeline Penjualan",
+          "desc": "Deal menurut tahap"
+        },
+        "analytics": {
+          "label": "Analitik",
+          "desc": "Angka pengiriman dan respons"
+        },
+        "auto-reply": {
+          "label": "Balasan Otomatis",
+          "desc": "Balasan kata kunci dan di luar jam kerja"
+        },
+        "devices": {
+          "label": "Perangkat",
+          "desc": "Nomor WhatsApp yang terhubung"
+        },
+        "chatbots": {
+          "label": "Widget Chat",
+          "desc": "Widget chat untuk situs web Anda"
+        },
+        "ai": {
+          "label": "Asisten AI",
+          "desc": "Asisten yang menjawab untuk Anda"
+        },
+        "appointments": {
+          "label": "Janji Temu",
+          "desc": "Pemesanan dan ketersediaan"
+        },
+        "webhooks": {
+          "label": "Webhook",
+          "desc": "Kirim peristiwa ke sistem lain"
+        },
+        "history": {
+          "label": "Log Pesan",
+          "desc": "Setiap pesan terkirim dan diterima"
+        },
+        "account": {
+          "label": "Akun",
+          "desc": "Profil, paket, dan wallet"
+        },
+        "more": {
+          "label": "Aplikasi lainnya",
+          "desc": "Semua alat dalam satu halaman"
+        }
+      }
+    },
+    "announcements": {
+      "label": "Pengumuman",
+      "dismiss": "Tutup"
+    },
+    "tour": {
+      "close": "Tutup tur",
+      "back": "Kembali",
+      "next": "Berikutnya",
+      "done": "Selesai",
+      "progress": "{current} dari {total}",
+      "steps": {
+        "welcome": {
+          "title": "Selamat datang di {app}",
+          "body": "Tur singkat tempat-tempat yang paling sering Anda gunakan. Kurang dari satu menit."
+        },
+        "navbar": {
+          "title": "Menu Anda",
+          "body": "Semua yang Anda lakukan sehari-hari hanya satu klik dari bilah atas."
+        },
+        "metaads": {
+          "title": "Iklan Meta",
+          "body": "Jalankan iklan click-to-WhatsApp dan lihat hasilnya."
+        },
+        "campaigns": {
+          "title": "Kampanye",
+          "body": "Rencanakan, kirim, dan lacak kampanye WhatsApp."
+        },
+        "flows": {
+          "title": "Flow",
+          "body": "Buat otomatisasi yang membalas untuk Anda."
+        },
+        "templates": {
+          "title": "Template",
+          "body": "Simpan template pesan yang disetujui di sini."
+        },
+        "devices": {
+          "title": "Kanal",
+          "body": "Hubungkan nomor dan akun yang Anda gunakan untuk mengirim."
+        },
+        "more": {
+          "title": "Lainnya",
+          "body": "Semua alat lain ada di sini, dikelompokkan dan dapat dicari."
+        },
+        "kpi": {
+          "title": "Nomor Anda",
+          "body": "Pesan, balasan, dan pengiriman sekilas."
+        },
+        "newCampaign": {
+          "title": "Mulai kampanye",
+          "body": "Buat kampanye pertama Anda dari sini."
+        },
+        "pipeline": {
+          "title": "Pipeline penjualan",
+          "body": "Ikuti deal dari pesan pertama hingga berhasil."
+        }
+      }
+    },
+    "more": {
+      "titleLead": "Lainnya",
+      "titleTail": "fitur",
+      "subtitle": "Semua alat di satu tempat.",
+      "navigation": "Navigasi",
+      "allTools": "Semua alat",
+      "noTools": "Belum ada apa-apa di sini.",
+      "tabs": {
+        "all": "Semua",
+        "automation": "Otomatisasi",
+        "data": "Data",
+        "help": "Bantuan"
+      },
+      "plan": "Paket Anda",
+      "managePlan": "Kelola paket",
+      "wallet": "Wallet",
+      "topUp": "Isi saldo",
+      "tips": {
+        "title": "Tips",
+        "pager": "Tips",
+        "templates": {
+          "title": "Gunakan template",
+          "body": "Template yang disetujui menjangkau pelanggan di luar jendela 24 jam."
+        },
+        "flows": {
+          "title": "Otomatiskan balasan",
+          "body": "Sebuah flow dapat menjawab pertanyaan yang sama untuk Anda setiap saat."
+        },
+        "palette": {
+          "title": "Lompat ke mana saja",
+          "body": "Tekan Ctrl K untuk mencari semua halaman."
+        },
+        "scheduled": {
+          "title": "Jadwalkan lebih awal",
+          "body": "Antrekan pesan sekarang dan biarkan terkirim pada waktu yang tepat."
+        },
+        "wallet": {
+          "title": "Pantau saldo Anda",
+          "body": "Isi saldo sebelum habis agar pengiriman tidak pernah berhenti."
+        }
+      },
+      "shortcuts": {
+        "title": "Pintasan",
+        "customise": "Sesuaikan",
+        "empty": "Belum ada pintasan dipilih. Gunakan Sesuaikan untuk menambahkan.",
+        "editTitle": "Sesuaikan pintasan",
+        "emptyEditor": "Belum ada pintasan dipilih",
+        "up": "Pindahkan {item} ke atas",
+        "down": "Pindahkan {item} ke bawah",
+        "remove": "Hapus {item}",
+        "customTitle": "Judul",
+        "customSubtitle": "Subjudul",
+        "customUrl": "Tautan",
+        "customProblem": "Pintasan kustom memerlukan judul dan tautan.",
+        "addCustom": "Tambah pintasan kustom",
+        "reset": "Reset ke default",
+        "cancel": "Batal",
+        "save": "Simpan",
+        "presets": {
+          "new-auto-reply": {
+            "title": "Balasan otomatis baru",
+            "subtitle": "Jawab pertanyaan umum secara otomatis"
+          },
+          "schedule-send": {
+            "title": "Jadwalkan pengiriman",
+            "subtitle": "Antrekan pesan untuk nanti"
+          },
+          "test-webhook": {
+            "title": "Webhook",
+            "subtitle": "Kirim peristiwa ke sistem lain"
+          },
+          "export-history": {
+            "title": "Riwayat pesan",
+            "subtitle": "Tinjau dan ekspor yang telah dikirim"
+          },
+          "contact-support": {
+            "title": "Hubungi dukungan",
+            "subtitle": "Minta bantuan tim"
+          },
+          "new-broadcast": {
+            "title": "Broadcast baru",
+            "subtitle": "Kirim pesan ke banyak kontak sekaligus"
+          },
+          "open-contacts": {
+            "title": "Kontak",
+            "subtitle": "Audiens Anda"
+          },
+          "pair-device": {
+            "title": "Hubungkan nomor",
+            "subtitle": "Pasangkan nomor WhatsApp"
+          },
+          "team-inbox": {
+            "title": "Kotak masuk",
+            "subtitle": "Semua percakapan"
+          },
+          "create-flow": {
+            "title": "Buat flow",
+            "subtitle": "Bangun otomatisasi"
+          },
+          "new-template": {
+            "title": "Template baru",
+            "subtitle": "Tulis template pesan"
+          }
+        }
+      }
+    },
+    "inboxBell": {
+      "label": "{count, plural, other {# percakapan belum dibaca}}",
+      "pill": "{count, plural, other {pesan baru}}",
+      "dismiss": "Tutup sampai ada yang lebih baru",
+      "title": "Pesan baru",
+      "viewInbox": "Buka kotak masuk"
+    },
+    "connectDevice": {
+      "title": "Hubungkan nomor",
+      "close": "Tutup",
+      "connected": "Nomor terhubung"
+    },
+    "search": {
+      "label": "Cari di konsol",
+      "trigger": "Cari admin…",
+      "placeholder": "Cari halaman dan pengaturan…",
+      "noResults": "Tidak ada hasil untuk “{query}”",
+      "count": "{count, plural, other {# hasil}}",
+      "hintMove": "navigasi",
+      "hintOpen": "buka",
+      "hintToggle": "alihkan"
+    }
+  }
+}

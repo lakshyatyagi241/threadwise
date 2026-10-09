@@ -1,0 +1,18 @@
+{
+  "common": {
+    "appName": "CRM",
+    "loadMore": "Tải thêm",
+    "loading": "Đang tải",
+    "empty": "Chưa có gì ở đây",
+    "retry": "Thử lại",
+    "requestId": "Mã yêu cầu",
+    "search": "Tìm kiếm",
+    "unexpected": "Đã xảy ra lỗi",
+    "fatal": {
+      "title": "Đã xảy ra lỗi",
+      "body": "Không tải được trang. Lỗi đã được báo cáo. Hãy thử lại, và nếu vẫn tiếp diễn hãy liên hệ bộ phận hỗ trợ.",
+      "bodyWithDigest": "Không tải được trang. Lỗi đã được báo cáo. Hãy thử lại, và nếu vẫn tiếp diễn hãy liên hệ bộ phận hỗ trợ và cung cấp {digest}.",
+      "home": "Về trang đầu"
+    }
+  }
+}

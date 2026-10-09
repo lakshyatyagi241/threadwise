@@ -1,0 +1,719 @@
+{
+  "dashboards-analytics-charts": {
+    "nav": {
+      "title": "Dashboard",
+      "analytics": "Analyses"
+    },
+    "home": {
+      "title": "Dashboard",
+      "welcome": "Welkom in je workspace."
+    },
+    "chart": {
+      "empty": "Nog geen gegevens in dit tijdvak.",
+      "bucket": "Periode",
+      "cell": "{day} {hour}:00 · {count, plural, one {# bericht} other {# berichten}}"
+    },
+    "range": {
+      "label": "Datumbereik",
+      "short": {
+        "24h": "24u",
+        "7d": "7d",
+        "30d": "30d",
+        "90d": "90d",
+        "qtd": "QTD",
+        "custom": "Aangepast"
+      },
+      "long": {
+        "24h": "Laatste 24 uur",
+        "7d": "Laatste 7 dagen",
+        "30d": "Laatste 30 dagen",
+        "qtd": "Kwartaal tot nu toe",
+        "custom": "Aangepast bereik"
+      },
+      "from": "Vanaf datum",
+      "to": "Tot datum",
+      "apply": "Toepassen"
+    },
+    "funnel": {
+      "listLabel": "Contactfunnel",
+      "stageLabel": "{stage}: {n} contacten, {pct}% van de benaderde contacten",
+      "stage": {
+        "messaged": "Benaderde contacten",
+        "delivered": "Bezorgd",
+        "replied": "Beantwoord",
+        "goalCompleted": "Doel bereikt"
+      },
+      "goalCompletedHint": "Contacten met een afgeronde flow",
+      "activity": {
+        "title": "Gespreksactiviteit",
+        "summary": "{inbound, plural, one {# inkomend bericht} other {# inkomende berichten}} · {contacts, plural, one {# reagerend contact} other {# reagerende contacten}} · {perContact} antwoorden per reagerend contact"
+      },
+      "comparison": {
+        "title": "Vergeleken met de vorige periode",
+        "replyRate": "Antwoordpercentage"
+      }
+    },
+    "error": {
+      "locked": "Je abonnement bevat geen analyses.",
+      "upgrade": "Abonnementen bekijken",
+      "forbidden": "Je hebt geen toegang tot deze pagina.",
+      "generic": "De cijfers konden niet worden geladen. Probeer het zo meteen opnieuw."
+    },
+    "dashboard": {
+      "greeting": {
+        "morning": "Goedemorgen, {name}.",
+        "afternoon": "Goedemiddag, {name}.",
+        "evening": "Goedenavond, {name}."
+      },
+      "subline": "{date} - {range} toont {sent} uitgaand, {rate}% bezorgbaarheid over {devices, plural, one {# verbonden apparaat} other {# verbonden apparaten}}.",
+      "kpis": "Kerncijfers",
+      "kpi": {
+        "sent": "Verzonden berichten · {range}",
+        "sentLegend": "{delivered} bezorgd · {failed} mislukt",
+        "readRate": "Leespercentage",
+        "deliverability": "Bezorgbaarheid",
+        "deliveredOf": "{delivered} van {sent} berichten",
+        "replies": "Antwoorden",
+        "replyRate": "{rate}% antwoordpercentage",
+        "readMini": {
+          "sent": "Verzonden",
+          "delivered": "Bezorgd",
+          "read": "Gelezen"
+        }
+      },
+      "throughput": {
+        "title": "Berichtendoorvoer",
+        "subtitle": {
+          "24h": "Uitgaand, bezorgd en mislukt, per uur, laatste 24 uur",
+          "7d": "Uitgaand, bezorgd en mislukt, per dag, laatste 7 dagen",
+          "30d": "Uitgaand, bezorgd en mislukt, per dag, laatste 30 dagen",
+          "qtd": "Uitgaand, bezorgd en mislukt, per dag, kwartaal tot nu toe",
+          "custom": "Uitgaand, bezorgd en mislukt, per dag, aangepast bereik"
+        },
+        "peak": "Piekuur {when} · {n} berichten",
+        "sent": "Verzonden",
+        "delivered": "Bezorgd",
+        "failed": "Mislukt",
+        "avgHour": "Gemiddeld per uur",
+        "replies": "Antwoorden",
+        "replyRate": "Antwoordpercentage"
+      },
+      "sparkline": {
+        "title": "Laatste 20 uur",
+        "subtitle": "Verzonden berichten per uur, oudste eerst",
+        "inCard": "Laatste 20 uur"
+      },
+      "funnel": {
+        "title": "Betrokkenheidsfunnel",
+        "viewAll": "Analyses bekijken"
+      },
+      "kicker": "Operatordashboard",
+      "calm": "De workspace is rustig.",
+      "running": "{n, plural, one {# broadcast wordt verzonden.} other {# broadcasts worden verzonden.}}",
+      "export": "Exporteren",
+      "newCampaign": "Nieuwe campagne",
+      "contacts": {
+        "title": "Actieve contacten",
+        "subscribed": "Geabonneerd",
+        "optedIn": "Aangemeld",
+        "blocked": "Geblokkeerd"
+      },
+      "wallet": {
+        "title": "Walletsaldo",
+        "payPerMessage": "betalen per bericht",
+        "topUp": "Opwaarderen",
+        "earn": "Verdienen via affiliate"
+      },
+      "autopilot": {
+        "kicker": "Haal meer uit je tijd",
+        "title": "Zet antwoorden op de automatische piloot",
+        "body": "Bouw een flow of start een campagne om automatisch meer klanten te bereiken.",
+        "flow": "Een flow bouwen",
+        "campaign": "Nieuwe campagne"
+      },
+      "pipeline": {
+        "kicker": "Verkooppipeline",
+        "open": "Open pipeline",
+        "deals": "Open deals",
+        "won": "Gewonnen deze maand",
+        "winRate": "Winstpercentage",
+        "board": "Bord openen"
+      },
+      "inbox": {
+        "title": "Live inbox",
+        "unread": "{n} ongelezen",
+        "oldest": "oudste {when}",
+        "open": "Inbox openen",
+        "recent": "Recente gesprekken",
+        "empty": "Nog geen gesprekken."
+      },
+      "campaigns": {
+        "title": "Actieve campagnes",
+        "summary": "{running} actief - {scheduled} gepland - {paused} gepauzeerd",
+        "viewAll": "Alle {n} bekijken",
+        "untitled": "Naamloze broadcast",
+        "delivered": "{done} / {total} bezorgd",
+        "emptyTitle": "Geen actieve broadcasts",
+        "emptyBody": "Maak er een aan om te beginnen met verzenden naar een contactgroep.",
+        "new": "Nieuwe broadcast",
+        "status": {
+          "processing": "Verzenden",
+          "sending": "Verzenden",
+          "running": "Verzenden",
+          "active": "Verzenden",
+          "scheduled": "Gepland",
+          "pending": "Gepland",
+          "queued": "Gepland",
+          "paused": "Gepauzeerd",
+          "cancelled": "Gepauzeerd",
+          "failed": "Mislukt",
+          "completed": "Voltooid",
+          "completed_with_errors": "Voltooid",
+          "done": "Voltooid",
+          "sent": "Voltooid"
+        }
+      },
+      "devices": {
+        "title": "Verbonden apparaten",
+        "summary": "{total} van {cap} slots in gebruik - {online} online",
+        "connect": "Verbinden",
+        "emptyTitle": "Geen apparaten verbonden",
+        "emptyBody": "Koppel een WhatsApp-nummer om te beginnen met verzenden.",
+        "connectDevice": "Een apparaat verbinden",
+        "unzoned": "zonder zone",
+        "per24h": "{n}/24u",
+        "deliv": "bezorgd",
+        "free": "{n, plural, one {# apparaatslot beschikbaar} other {# apparaatslots beschikbaar}}"
+      },
+      "templates": {
+        "title": "Best presterende sjablonen",
+        "subtitle": "Op verzendvolume - geselecteerde periode",
+        "count": "{n, plural, one {# sjabloon} other {# sjablonen}}",
+        "new": "Nieuw sjabloon",
+        "empty": "Nog geen sjablonen.",
+        "create": "Maak je eerste aan",
+        "col": {
+          "template": "Sjabloon",
+          "type": "Type",
+          "sent": "Verzonden",
+          "delivered": "Bezorgd",
+          "read": "Gelezen",
+          "readRate": "Leespercentage",
+          "performance": "Bezorgpercentage",
+          "status": "Status"
+        },
+        "status": {
+          "approved": "Goedgekeurd",
+          "public": "Goedgekeurd",
+          "active": "Goedgekeurd",
+          "pending": "In beoordeling",
+          "submitted": "In beoordeling",
+          "in_review": "In beoordeling",
+          "rejected": "Afgewezen",
+          "disabled": "Afgewezen"
+        }
+      },
+      "activity": {
+        "title": "Activiteitenlogboek",
+        "subtitle": "Workspace-gebeurtenissen",
+        "empty": "Geen recente activiteit gelogd voor deze workspace.",
+        "by": "{actor} - {module} {action}"
+      },
+      "instagram": {
+        "title": "Instagram",
+        "accounts": "{count, plural, one {# account} other {# accounts}}",
+        "connected": "Verbonden",
+        "openInbox": "Inbox openen →",
+        "tile": {
+          "needReply": "Antwoord nodig",
+          "openChats": "Open chats",
+          "dmsIn": "DM's binnen · 7d",
+          "dmsOut": "DM's verzonden · 7d",
+          "followers": "Volgers",
+          "replyRate": "Antwoordpercentage"
+        }
+      },
+      "copilot": {
+        "title": "{brand} Copilot",
+        "tag": "AI-gestuurd",
+        "headline": "Bouw een flow vanuit één zin.",
+        "body": "Beschrijf een klantreis en Copilot maakt een concept van de nodes, vertakkingen en sjabloonsuggesties.",
+        "try": "probeer:",
+        "generate": "Flow genereren ✦",
+        "examples": "Voorbeelden",
+        "stat": {
+          "flows": "flows",
+          "active": "actief",
+          "subscribers": "abonnees"
+        }
+      },
+      "flows": {
+        "title": "Automatiseringsflows",
+        "summary": "{active} actief · {subscribers} abonnees",
+        "open": "Openen",
+        "empty": "Nog geen flows.",
+        "build": "Bouw je eerste flow",
+        "meta": "{trigger} trigger · {steps} stappen · {subs} abonnees",
+        "statusActive": "Actief",
+        "statusPaused": "Gepauzeerd",
+        "subs": "abonnees"
+      },
+      "quickActions": {
+        "title": "Snelle acties",
+        "soon": "Binnenkort",
+        "broadcast": {
+          "label": "Nieuwe broadcast",
+          "hint": "naar een contactgroep"
+        },
+        "flow": {
+          "label": "Flow bouwen",
+          "hint": "slepen en neerzetten"
+        },
+        "template": {
+          "label": "Nieuw sjabloon",
+          "hint": "indienen bij Meta"
+        },
+        "autoReply": {
+          "label": "Automatisch antwoord",
+          "hint": "trefwoordregel"
+        }
+      },
+      "integrations": {
+        "title": "Integraties",
+        "name": {
+          "woocommerce": "WooCommerce",
+          "shopify": "Shopify",
+          "google_sheets": "Google Sheets",
+          "meta_catalog": "Meta Catalog"
+        },
+        "events": "{n} gebeurtenissen / 7d",
+        "connected": {
+          "woocommerce": "Verbonden",
+          "shopify": "Verbonden",
+          "google_sheets": "API-sleutel uitgegeven",
+          "meta_catalog": "Catalogus gekoppeld"
+        },
+        "notConnected": "niet verbonden",
+        "connect": "Verbinden",
+        "connectedLabel": "Verbonden"
+      },
+      "sublineOfficial": "{date} - {range} toont {sent} uitgaand, {rate}% bezorgbaarheid."
+    },
+    "analytics": {
+      "title": "Analyses",
+      "headline": "{rate}% van de berichten bereikte de lezer tussen {from} en {to}.",
+      "subline": "{sent, plural, one {# bericht} other {# berichten}} verzonden, {replyRate}% antwoordpercentage.",
+      "noSends": "Nog geen uitgaande berichten in dit tijdvak.",
+      "export": "CSV exporteren",
+      "from": "Van",
+      "to": "Tot",
+      "apply": "Toepassen",
+      "kpis": "Kerncijfers",
+      "kpi": {
+        "sent": "Verzonden",
+        "delivered": "Bezorgd",
+        "queued": "In wachtrij",
+        "failed": "Mislukt",
+        "replyRate": "Antwoordpercentage"
+      },
+      "series": {
+        "sent": "Verzonden",
+        "delivered": "Bezorgd",
+        "failed": "Mislukt",
+        "queued": "In wachtrij"
+      },
+      "empty": "Niets om te tonen in dit tijdvak.",
+      "volume": {
+        "title": "Berichten in de tijd",
+        "subtitle": "Verzonden, bezorgd en mislukt per dag"
+      },
+      "rates": {
+        "title": "Bezorgpercentages",
+        "subtitle": "Aandeel bezorgd, in wachtrij en mislukt"
+      },
+      "totals": {
+        "title": "Dagtotalen",
+        "subtitle": "Bezorgd, in wachtrij en mislukt per dag, gestapeld"
+      },
+      "funnel": {
+        "title": "Betrokkenheidsfunnel"
+      },
+      "types": {
+        "title": "Berichttypen",
+        "subtitle": "Uitgaande verdeling",
+        "byType": "Verzonden en bezorgd per berichttype",
+        "kind": "Type",
+        "sent": "Verzonden",
+        "delivered": "Bezorgd",
+        "text": "Tekst",
+        "template": "Sjabloon",
+        "media": "Media",
+        "interactive": "Interactief",
+        "location": "Locatie"
+      },
+      "heatmap": {
+        "title": "Beste uren",
+        "subtitle": "Berichtvolume per weekdag en uur, {zone}. Donkerder betekent drukker.",
+        "empty": "Geen berichtvolume in dit tijdvak.",
+        "footer": "Berekend op basis van {total} berichten, tijdzone {tz}"
+      },
+      "panels": {
+        "devices": {
+          "title": "Per apparaat",
+          "subtitle": "Verzendingen in de laatste 24 uur",
+          "online": "{online}/{total} online",
+          "empty": "Nog geen verbonden apparaten.",
+          "msg": "{n} ber."
+        },
+        "templates": {
+          "title": "Sjablonen",
+          "subtitle": "Beste presteerders op verzendingen",
+          "empty": "Geen sjabloonverzendingen in dit tijdvak."
+        },
+        "contacts": {
+          "title": "Topcontacten",
+          "subtitle": "Meest betrokken gesprekken",
+          "empty": "Geen gesprekken in dit tijdvak.",
+          "msgs": "{n} ber."
+        },
+        "team": {
+          "title": "Teamprestaties",
+          "subtitle": "Agents in dit tijdvak",
+          "count": "{n, plural, one {# agent} other {# agents}}",
+          "col": {
+            "agent": "Agent",
+            "convos": "Gesprekken",
+            "resolved": "Opgelost",
+            "first": "Gem. 1e reactie",
+            "resolution": "Gem. oplossing",
+            "csat": "CSAT"
+          }
+        },
+        "geo": {
+          "title": "Per land",
+          "subtitle": "Bereik",
+          "markets": "{n, plural, one {# markt} other {# markten}}",
+          "unspecified": "Niet opgegeven",
+          "empty": "Geen gesprekken met een bekend land in dit tijdvak."
+        },
+        "events": {
+          "title": "Gebeurtenisstroom",
+          "subtitle": "Nieuwste berichten in dit tijdvak",
+          "sent": "Verzonden → {peer}",
+          "received": "Ontvangen van {peer}",
+          "empty": "Geen recente activiteit in dit tijdvak."
+        }
+      }
+    },
+    "health": {
+      "nav": "Systeemstatus",
+      "group": "Systeem",
+      "title": "Systeemstatus",
+      "kicker": "Platform",
+      "description": "Live controles van de diensten waarop het platform draait.",
+      "banner": {
+        "up": "Alle systemen - Operationeel",
+        "warn": "Alle systemen - Verminderd",
+        "down": "Alle systemen - Storing",
+        "checked": "Laatst gecontroleerd {time} · ververst automatisch elke 20s",
+        "refresh": "Nu vernieuwen",
+        "refreshing": "Controleren..."
+      },
+      "core": "Kerndiensten",
+      "activity": {
+        "messages": "Berichten · 24u",
+        "aiCalls": "AI-aanroepen · 24u",
+        "conversations": "Gesprekken · 24u",
+        "webhooks": "Webhooks · 24u"
+      },
+      "throughput": {
+        "title": "Berichtendoorvoer · 14 dagen",
+        "peak": "piek {n}/dag",
+        "empty": "Geen berichtactiviteit in de laatste 14 dagen.",
+        "aria": "Berichten per dag, laatste 14 dagen"
+      },
+      "state": {
+        "up": "Operationeel",
+        "warn": "Verminderd",
+        "down": "Storing",
+        "idle": "Inactief"
+      },
+      "check": {
+        "database": "Database",
+        "cache": "Cache",
+        "queue": "Wachtrij",
+        "bridge": "Node-bridge",
+        "storage": "Mediaopslag"
+      },
+      "latency": {
+        "title": "Reactietijd",
+        "empty": "Geen timinggegevens.",
+        "ms": "{ms} ms"
+      },
+      "queues": {
+        "title": "Wachtrijen",
+        "name": "Wachtrij",
+        "pending": "In behandeling",
+        "failed": "Mislukt"
+      },
+      "clear": {
+        "button": "Openstaande taken wissen",
+        "busy": "Wissen...",
+        "confirmTitle": "Openstaande en mislukte taken wissen?",
+        "confirmBody": "Wachtende en uitgestelde taken worden verwijderd en mislukte taken worden uit elke wachtrij gewist. Taken die worden uitgevoerd, blijven ongemoeid.",
+        "confirm": "Taken wissen",
+        "cancel": "Annuleren",
+        "done": "{pending} openstaande en {failed} mislukte taak/taken gewist.",
+        "failed": "Mislukt: {message}",
+        "superOnly": "Alleen een superbeheerder kan taken wissen."
+      },
+      "vitals": {
+        "title": "Hostgegevens",
+        "node": "Node",
+        "app": "Appversie",
+        "environment": "Omgeving",
+        "uptime": "Uptime",
+        "memory": "Geheugen (RSS)",
+        "heap": "Heap in gebruik",
+        "diskFree": "Schijf vrij",
+        "diskFreeValue": "{gb} GB",
+        "diskUsed": "Schijf gebruikt {pct}%",
+        "noDisk": "Niet beschikbaar"
+      },
+      "error": "De statuscontroles konden niet worden geladen. Probeer het zo meteen opnieuw.",
+      "engines": {
+        "title": "WhatsApp-engines en verbonden nummers",
+        "empty": "Nog geen engines geconfigureerd.",
+        "caption": "verbonden van totaal aantal nummers"
+      }
+    },
+    "admin": {
+      "nav": {
+        "analytics": "Analyses"
+      },
+      "window": {
+        "label": "Tijdvenster",
+        "24h": "Laatste 24 uur",
+        "7d": "Laatste 7 dagen",
+        "30d": "Laatste 30 dagen",
+        "90d": "Laatste 90 dagen",
+        "1y": "Afgelopen jaar"
+      },
+      "error": "De platformcijfers konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "vsPrevious": "t.o.v. vorige periode",
+      "overview": {
+        "title": "Beheerdersdashboard.",
+        "kicker": "Beheer / Overzicht",
+        "subtitle": "Platformstatus, omzet, gebruik en workspace-activiteit op één plek.",
+        "addWorkspace": "Workspace toevoegen",
+        "kpi": {
+          "income": "Totale inkomsten",
+          "profit": "Winst",
+          "profitHint": "Schatting bij een marge van 32%, geen boekhoudkundig cijfer",
+          "views": "Totaal aantal weergaven",
+          "viewsHint": "Berichten verzonden door elke workspace",
+          "conversion": "Conversiepercentage"
+        },
+        "revenue": {
+          "title": "Omzet in de tijd",
+          "total": "Totale omzet",
+          "target": "Totaaldoel",
+          "targetHint": "Het doel is een groeibenchmark van 10% boven de vorige periode, geen opgeslagen doelstelling.",
+          "revenue": "Omzet",
+          "aria": "Omzet per periode ten opzichte van het doel"
+        },
+        "countries": {
+          "title": "Sessies per land",
+          "subtitle": "Topsessies per regio",
+          "empty": "Nog geen landgegevens - gebruikers hebben hun regio niet gedeeld."
+        },
+        "regions": {
+          "title": "Verkoop per regio",
+          "subtitle": "Omzetaandeel per platform",
+          "aria": "Nieuwe gebruikers per regio"
+        },
+        "platform": {
+          "title": "Verkoop per platform",
+          "subtitle": "E-commerce-integraties",
+          "empty": "Geen betaalde bestellingen in dit tijdvak.",
+          "aria": "Betaalde omzet per betaalprovider"
+        },
+        "users": {
+          "title": "Geregistreerde gebruikers",
+          "subtitle": "Overzicht van gebruikersplekken",
+          "total": "Totaal aantal gebruikers",
+          "premium": "Premiumabonnement",
+          "basic": "Basisabonnement",
+          "aria": "{pct}% van de gebruikers heeft een betaald abonnement"
+        },
+        "workspaces": {
+          "title": "Workspace-activiteit",
+          "subtitle": "Recente beheergebeurtenissen met hoge waarde",
+          "viewAll": "Alles bekijken",
+          "empty": "Nog geen workspaces.",
+          "col": {
+            "workspace": "Workspace",
+            "owner": "Eigenaar",
+            "plan": "Abonnement",
+            "messages": "Berichten",
+            "health": "Status",
+            "mrr": "MRR"
+          },
+          "health": {
+            "good": "Goed",
+            "active": "Actief",
+            "low": "Laag",
+            "idle": "Inactief"
+          }
+        },
+        "alerts": {
+          "title": "Beheerdersmeldingen",
+          "subtitle": "Prioriteitswachtrij",
+          "open": "{n} open",
+          "empty": "Alle systemen gezond - geen meldingen."
+        },
+        "titleLead": "Beheer",
+        "titleAccent": "dashboard"
+      },
+      "analytics": {
+        "title": "Beheerdersanalyses.",
+        "kicker": "Beheer - Platform",
+        "subtitle": "Een volledig controlekamer-overzicht van omzet, workspacegroei, WhatsApp-gebruik, campagnebezorging, apparaatstatus en supportdruk.",
+        "days": {
+          "7": "Laatste 7 dagen",
+          "30": "Laatste 30 dagen",
+          "90": "Laatste 90 dagen",
+          "365": "Dit jaar",
+          "custom": "Laatste {n} dagen"
+        },
+        "daysLabel": "Dagen",
+        "export": "Exporteren",
+        "tabs": {
+          "overview": "Overzicht",
+          "revenue": "Omzet",
+          "usage": "Gebruik",
+          "workspaces": "Workspaces",
+          "campaigns": "Campagnes",
+          "support": "Support"
+        },
+        "kpi": {
+          "revenue": "Omzet",
+          "revenueSub": "{n, plural, one {# nieuwe workspace} other {# nieuwe workspaces}}",
+          "workspaces": "Workspaces",
+          "workspacesSub": "{n, plural, one {# gebruiker in totaal} other {# gebruikers in totaal}}",
+          "messages": "Berichten",
+          "messagesSub": "gem. {n} / dag",
+          "devices": "Apparaten online",
+          "newUsers": "Nieuwe gebruikers",
+          "newUsersSub": "{n} in totaal",
+          "tickets": "Open tickets",
+          "watch": "let op",
+          "clear": "in orde"
+        },
+        "pulse": {
+          "title": "Platformpuls",
+          "subtitle": "Live belasting van de controlekamer",
+          "workspaces": "Workspaces",
+          "devices": "Apparaten verbonden",
+          "tickets": "Open tickets",
+          "signups": "Nieuwe aanmeldingen",
+          "normal": "normaal"
+        },
+        "growth": {
+          "title": "Groeicommandocentrum",
+          "subtitle": "Gebruikersaanmeldingen, laatste {days} dagen",
+          "aria": "Aanmeldingen per dag",
+          "series": "Aanmeldingen"
+        },
+        "plans": {
+          "title": "Abonnementsverdeling",
+          "subtitle": "Workspaces per abonnement",
+          "empty": "Nog geen gegevens - de abonnementsverdeling verschijnt zodra ten minste één workspace een abonnement heeft gekregen.",
+          "aria": "Workspaces per abonnement"
+        },
+        "acquisition": {
+          "title": "Acquisitie",
+          "subtitle": "Gebruikers naar workspace",
+          "users": "Totaal aantal gebruikers",
+          "newUsers": "Nieuwe gebruikers",
+          "workspaces": "Aangemaakte workspaces",
+          "newWorkspaces": "Nieuwe workspaces",
+          "devices": "Apparaten verbonden"
+        },
+        "devices": {
+          "title": "Topapparaten - 24u",
+          "subtitle": "Verzendvolume",
+          "empty": "Nog geen verzendingen",
+          "devices": "Apparaten",
+          "online": "Online",
+          "sends": "Verzendingen 24u",
+          "aria": "Verzendingen in de laatste 24 uur per apparaat"
+        },
+        "leaderboard": {
+          "title": "Topworkspaces op betaalde omzet",
+          "subtitle": "Laatste {days} dagen",
+          "workspace": "Workspace",
+          "orders": "Bestellingen",
+          "revenue": "Betaalde omzet",
+          "open": "Openen",
+          "empty": "Geen betaalde bestellingen in dit tijdvak."
+        },
+        "cohort": {
+          "title": "Aanmeldcohorten",
+          "subtitle": "Laatste {days} dagen",
+          "aria": "Dagelijkse aanmeldingen"
+        },
+        "composition": {
+          "title": "Omzetsamenstelling",
+          "subtitle": "Grootste bijdragers",
+          "empty": "Nog geen betaalde omzet."
+        },
+        "support": {
+          "title": "Supportbelasting",
+          "subtitle": "Ticketstatus",
+          "empty": "Nog geen tickets.",
+          "open": "Open",
+          "resolved": "Opgelost",
+          "inbox": "Inbox openen"
+        },
+        "queue": {
+          "title": "Aandacht van beheer",
+          "subtitle": "Actiewachtrij",
+          "tickets": "{n, plural, one {# open ticket} other {# open tickets}}",
+          "ticketsHint": "Behandel in support voordat de SLA wordt overschreden",
+          "offline": "{n, plural, one {# apparaat offline} other {# apparaten offline}}",
+          "offlineHint": "Minder dan de helft van de apparaten is online",
+          "users": "{n, plural, one {# nieuwe gebruiker} other {# nieuwe gebruikers}}",
+          "usersHint": "Bekijk de nieuwste aanmeldingen",
+          "clear": "Alles in orde"
+        },
+        "titleLead": "Beheer",
+        "titleAccent": "analyses"
+      },
+      "kpiLabel": "KPI"
+    },
+    "quickAccess": {
+      "title": "Snelle toegang",
+      "kicker": "Snelkoppelingen",
+      "edit": "Snelkoppelingen bewerken",
+      "empty": "Snelkoppelingen voor snelle toegang toevoegen",
+      "open": "{label} openen",
+      "modalTitle": "Snelle toegang",
+      "modalEyebrow": "Maximaal 10 snelkoppelingen vastzetten",
+      "pages": "App-pagina's (max. 10)",
+      "custom": "Eigen links",
+      "labelPlaceholder": "Label",
+      "urlPlaceholder": "https://... of /pad",
+      "addCustom": "+ Een eigen link toevoegen",
+      "removeCustom": "Deze link verwijderen",
+      "counter": "{n} / 10 vastgezet",
+      "cancel": "Annuleren",
+      "save": "Snelkoppelingen opslaan",
+      "saving": "Opslaan...",
+      "limit": "Je kunt maximaal 10 snelkoppelingen vastzetten.",
+      "saved": "Snelle toegang bijgewerkt.",
+      "failed": "Je snelkoppelingen konden niet worden opgeslagen."
+    }
+  }
+}

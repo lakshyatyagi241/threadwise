@@ -1,0 +1,105 @@
+{
+  "checkout-orders-merchant-payments": {
+    "payments": {
+      "eyebrow": "스토어 / 결제",
+      "title": "결제",
+      "subtitle": "스토어 주문의 금전 관련 현황입니다. 결제 완료, 대기 중, 착불 내역을 확인하세요.",
+      "listTitle": "결제 목록",
+      "loading": "결제를 불러오는 중",
+      "emptyFilteredTitle": "일치하는 결제가 없습니다",
+      "emptyFilteredMessage": "필터를 변경하거나 초기화하여 모든 결제를 확인하세요.",
+      "resetFilters": "필터 초기화",
+      "emptyTitle": "아직 결제가 없습니다",
+      "emptyMessage": "스토어 주문이 접수되면 바로 결제가 여기에 표시됩니다. 주문을 열어 확인하거나 직접 추가하세요.",
+      "goToOrders": "주문으로 이동",
+      "summary": {
+        "loading": "결제 합계를 불러오는 중",
+        "orders": "주문",
+        "collected": "수금됨",
+        "collectedNone": "아직 수금된 금액이 없습니다."
+      },
+      "filters": {
+        "search": "검색",
+        "searchPlaceholder": "주문 번호, 고객 또는 참조",
+        "status": "상태",
+        "allStatuses": "모든 상태",
+        "method": "방법",
+        "allMethods": "모든 방법",
+        "prepaid": "선결제",
+        "cod": "착불",
+        "gatewayOption": "게이트웨이...",
+        "gatewayCode": "게이트웨이 코드",
+        "gatewayCodePlaceholder": "예: razorpay",
+        "from": "시작",
+        "to": "종료",
+        "rangeInverted": "시작일이 종료일보다 늦어 날짜 범위는 무시됩니다.",
+        "reset": "필터 초기화"
+      },
+      "table": {
+        "caption": "스토어 주문 결제, 최신순",
+        "order": "주문",
+        "customer": "고객",
+        "status": "상태",
+        "method": "방법",
+        "paidVia": "결제 경로",
+        "reference": "참조",
+        "amount": "금액",
+        "shop": "쇼핑몰",
+        "date": "날짜",
+        "methodPrepaid": "선결제",
+        "methodCod": "착불",
+        "via": {
+          "razorpay_link": "Razorpay 링크",
+          "whatsapp_pay": "WhatsApp Pay"
+        }
+      },
+      "wa": {
+        "title": "채팅 내 WhatsApp Pay",
+        "intro": "구매자가 WhatsApp을 벗어나지 않고 주문 금액을 결제(UPI, 카드, 넷뱅킹, 지갑)하고, 그 대금을 본인의 Razorpay, PayU, BillDesk 또는 Zaakpay 계정으로 받을 수 있습니다.",
+        "indiaOnly": "현재는 인도만 지원됩니다. 국가와 통화는 인도와 INR로 고정됩니다.",
+        "viewOnly": "WhatsApp Pay 설정을 볼 수는 있지만 변경할 수는 없습니다. 워크스페이스 관리자에게 결제 관리 권한을 요청하세요.",
+        "howTitle": "설정 방법",
+        "how1": "WhatsApp Manager의 인도 결제에서 직접 결제 수단을 만들고 게이트웨이 계정을 연결하세요.",
+        "how2": "이름을 지정하고 그 이름을 여기에 복사하세요. 이 앱에서는 만들 수 없으며 Meta 쪽에서 진행하는 단계입니다.",
+        "how3": "설정을 저장한 다음 주문을 열고 아무 주문에서나 WhatsApp으로 결제 요청을 하세요.",
+        "how4": "구매자가 검토 및 결제를 누르고 채팅에서 결제하면, Meta가 확인한 후 주문이 결제 완료로 표시됩니다.",
+        "listTitle": "내 설정",
+        "loading": "설정을 불러오는 중",
+        "emptyTitle": "결제 설정이 아직 없습니다",
+        "emptyMessage": "이 페이지에서 추가하면 채팅 내 결제를 받을 수 있습니다.",
+        "emptyMessageReadOnly": "아직 추가한 사람이 없습니다.",
+        "market": "인도 · INR",
+        "autoChargeOn": "자동 청구 켜짐",
+        "active": "활성",
+        "off": "꺼짐",
+        "types": {
+          "razorpay": "Razorpay",
+          "payu": "PayU",
+          "billdesk": "BillDesk",
+          "zaakpay": "Zaakpay"
+        },
+        "toast": {
+          "saved": "설정이 저장되었습니다",
+          "removed": "설정이 삭제되었습니다"
+        },
+        "addTitle": "결제 설정 추가",
+        "editTitle": "{name} 수정",
+        "name": "설정 이름",
+        "nameLocked": "이름으로 설정을 식별합니다. 이름을 바꾸려면 삭제한 후 다시 추가하세요.",
+        "updatesExisting": "같은 이름의 설정이 있습니다. 저장하면 해당 설정이 업데이트됩니다.",
+        "nameHint": "WhatsApp Manager(결제, 인도)의 직접 결제 수단 이름과 정확히 일치해야 합니다.",
+        "nameInvalid": "1자에서 {max}자 사이의 이름을 입력하세요.",
+        "namePlaceholder": "예: my-razorpay-pay",
+        "gateway": "게이트웨이",
+        "activeLabel": "활성",
+        "autoCharge": "새 주문 자동 청구",
+        "autoChargeHint": "주문이 접수되는 즉시 채팅 내 결제 요청을 자동으로 보냅니다.",
+        "save": "설정 저장",
+        "cancelEdit": "수정 취소",
+        "removeTitle": "{name}을(를) 삭제할까요?",
+        "removeMessage": "이 설정으로는 더 이상 채팅에서 주문을 청구할 수 없습니다. WhatsApp Manager의 직접 결제 수단은 변경되지 않습니다.",
+        "removeConfirm": "설정 삭제"
+      }
+    }
+  }
+}

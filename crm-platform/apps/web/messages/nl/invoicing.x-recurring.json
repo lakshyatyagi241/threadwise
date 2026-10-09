@@ -1,0 +1,370 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "REC_ENDED": "Dit schema is afgelopen, dus er valt niets meer te wijzigen of uit te voeren.",
+        "REC_NOT_ACTIVE": "Dit schema is niet actief. Hervat het eerst.",
+        "REC_START_TOO_OLD": "De startdatum ligt te ver in het verleden. Er worden maximaal 12 perioden in het verleden aangemaakt, dus kies een latere startdatum.",
+        "INV_RECURRING_INVALID": "Het sjabloon kon niet worden gebruikt om een factuur te maken. Controleer de koper, de regels en de belasting en sla daarna opnieuw op."
+      }
+    },
+    "recurring": {
+      "title": "Terugkerende facturen",
+      "subtitle": "Schema's die zelf facturen maken, op de data die je instelt.",
+      "new": "Nieuw schema",
+      "invoices": "Facturen",
+      "tabsLabel": "Schemastatus",
+      "tabs": {
+        "all": "Alle",
+        "active": "Actief",
+        "paused": "Gepauzeerd",
+        "ended": "Afgelopen"
+      },
+      "search": "Zoek in de geladen schema's",
+      "refresh": "Vernieuwen",
+      "tableLabel": "Schema's voor terugkerende facturen",
+      "scrollArea": "Tabel met schema's, scrolt zijdelings",
+      "loading": "Schema's laden",
+      "empty": {
+        "all": {
+          "title": "Nog geen terugkerende facturen",
+          "message": "Stel een schema één keer in en de factuur wordt elke week, maand of elk jaar voor je gemaakt."
+        },
+        "active": {
+          "title": "Er draait niets",
+          "message": "Actieve schema's die hun volgende factuur op tijd maken, verschijnen hier."
+        },
+        "paused": {
+          "title": "Geen gepauzeerde schema's",
+          "message": "Een schema dat je pauzeert, maakt geen facturen meer tot je het hervat."
+        },
+        "ended": {
+          "title": "Geen afgelopen schema's",
+          "message": "Een schema eindigt na de laatste run of na de einddatum."
+        }
+      },
+      "emptySearchTitle": "Geen schema komt overeen",
+      "emptySearch": "Niets in de geladen rijen komt overeen. Wis de zoekopdracht of laad meer.",
+      "clearSearch": "Zoekopdracht wissen",
+      "showing": "{count, plural, one {1 schema wordt getoond} other {# schema's worden getoond}}",
+      "showingMatches": "{count} van de {loaded} geladen schema's komt overeen",
+      "loadMore": "Meer laden",
+      "allLoaded": "Alle schema's geladen",
+      "searchLoadedOnly": "Zoeken kijkt alleen naar de schema's die al geladen zijn. Laad meer om verder te zoeken.",
+      "columns": {
+        "name": "Schema",
+        "buyer": "Koper",
+        "every": "Herhaalt",
+        "next": "Volgende run",
+        "last": "Laatste run",
+        "runs": "Runs",
+        "failures": "Fouten",
+        "amount": "Per factuur",
+        "mode": "Elke factuur is",
+        "status": "Status",
+        "actions": "Acties"
+      },
+      "lineCount": "{count, plural, one {1 regel} other {# regels}}",
+      "onHold": "In de wacht",
+      "runsOf": "{done} van {max}",
+      "failuresTitle": "{count, plural, one {1 periode mislukt. Open de geschiedenis.} other {# perioden mislukt. Open de geschiedenis.}}",
+      "channel": {
+        "link": "Link",
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "moreFor": "Meer acties voor {name}",
+      "open": "Openen",
+      "edit": "Bewerken",
+      "pause": "Pauzeren",
+      "resume": "Hervatten",
+      "cancel": "Annuleren",
+      "runNow": {
+        "action": "Nu uitvoeren",
+        "title": "{name} nu uitvoeren?",
+        "confirm": "Nu uitvoeren",
+        "message": {
+          "draft": "Dit maakt nu de factuur voor {date} aan, als concept dat je kunt controleren, en het schema gaat door naar de volgende periode.",
+          "issue": "Dit maakt nu de factuur voor {date} aan en geeft die meteen uit (hij krijgt direct zijn nummer). Het schema gaat door naar de volgende periode.",
+          "issue_send": "Dit maakt nu de factuur voor {date} aan, geeft hem uit en stuurt hem naar de koper. Het schema gaat door naar de volgende periode."
+        }
+      },
+      "delete": {
+        "action": "Verwijderen",
+        "title": "{name} verwijderen?",
+        "message": "{name} maakt geen facturen meer. De facturen die het al heeft gemaakt, blijven in je lijst staan.",
+        "confirm": "Schema verwijderen",
+        "keep": "Behouden"
+      },
+      "toast": {
+        "paused": "{name} is gepauzeerd.",
+        "resumed": "{name} draait weer. Volgende factuur: {date}.",
+        "resumedEnded": "{name} had geen perioden meer over, dus het is afgelopen.",
+        "ran": "Er is een factuur gemaakt van {name}.",
+        "runFailed": "De run voor {name} is mislukt en vastgelegd. Open de geschiedenis om te zien waarom.",
+        "deleted": "{name} is verwijderd."
+      },
+      "every": {
+        "day": "{interval, plural, one {Elke dag} other {Elke # dagen}}",
+        "week": "{interval, plural, one {Elke week} other {Elke # weken}}",
+        "month": "{interval, plural, one {Elke maand} other {Elke # maanden}}",
+        "year": "{interval, plural, one {Elk jaar} other {Elke # jaar}}"
+      },
+      "status": {
+        "active": "Actief",
+        "paused": "Gepauzeerd",
+        "ended": "Afgelopen"
+      },
+      "runStatus": {
+        "created": "Aangemaakt",
+        "failed": "Mislukt"
+      },
+      "modeShort": {
+        "draft": "Een concept",
+        "issue": "Uitgegeven",
+        "issue_send": "Uitgegeven en verzonden"
+      },
+      "modeSent": {
+        "email": "Uitgegeven en per e-mail verstuurd",
+        "link": "Uitgegeven, gedeeld via link",
+        "whatsapp": "Uitgegeven en verzonden via WhatsApp"
+      },
+      "frequency": {
+        "day": "Dagen",
+        "week": "Weken",
+        "month": "Maanden",
+        "year": "Jaren"
+      },
+      "modeCards": {
+        "draft": {
+          "title": "Als concept laten",
+          "hint": "Elke factuur wacht op je controle voordat hij wordt uitgegeven."
+        },
+        "issue": {
+          "title": "Uitgeven",
+          "hint": "Elke factuur krijgt een nummer en is op de dag van de run klaar."
+        },
+        "issue_send": {
+          "title": "Uitgeven en verzenden",
+          "hint": "Elke factuur wordt zelf uitgegeven en naar de koper gestuurd."
+        }
+      },
+      "warnings": {
+        "noBuyerEmail": "Er staat geen e-mailadres van de koper in het sjabloon, dus verzenden per e-mail mislukt. Voeg een e-mailadres toe of verstuur via link."
+      },
+      "preview": {
+        "title": "Volgende runs",
+        "incomplete": "Vul het schema in om te zien wanneer de facturen worden gemaakt.",
+        "sentence": "{every} vanaf {start}{limit}. {outcome}",
+        "sentenceLimit": "{kind, select, runs {, {count, plural, one {1 factuur} other {# facturen}}} end {, tot {end}} both {, {count, plural, one {1 factuur} other {# facturen}}, tot {end}} other {}}",
+        "outcome": {
+          "draft": "Elke factuur blijft als concept staan zodat je hem kunt controleren.",
+          "issue": "Elke factuur wordt automatisch uitgegeven.",
+          "issue_email": "Elke factuur wordt uitgegeven en per e-mail naar de koper gestuurd.",
+          "issue_link": "Elke factuur wordt uitgegeven en geregistreerd als gedeeld via link.",
+          "issue_whatsapp": "Elke factuur wordt uitgegeven en via WhatsApp verstuurd."
+        },
+        "eachInvoice": "Elke factuur komt op ongeveer",
+        "lastDay": "Laatste dag van de maand",
+        "noRuns": "Er valt geen run binnen dit schema.",
+        "endsMaxRuns": "{count, plural, one {Het stopt na 1 factuur.} other {Het stopt na # facturen.}}",
+        "endsEndDate": "{count, plural, one {Er komt niets meer na {date}: 1 factuur in totaal.} other {Er komt niets meer na {date}: # facturen in totaal.}}",
+        "moreBounded": "{count, plural, one {1 factuur in totaal.} other {# facturen in totaal, de rest volgt hetzelfde ritme.}}",
+        "moreForever": "Het blijft doorgaan tot je het pauzeert of verwijdert.",
+        "clampNote": "Dit schema start op dag {day}. In een maand zonder dag {day} wordt op de laatste dag van die maand gemaakt, en de maand daarna gaat weer naar dag {day}.",
+        "catchUp": "{count, plural, one {1 periode is al voorbij: de factuur wordt meteen gemaakt.} other {# perioden zijn al voorbij: hun facturen worden meteen gemaakt, één per periode.}}",
+        "catchUpTooOld": "{count} perioden zijn al voorbij, en er worden er maximaal {max} gemaakt. Start vanaf een latere datum."
+      },
+      "builder": {
+        "loading": "Laden",
+        "endedNoEdit": "Dit schema is afgelopen en kan niet meer worden bewerkt.",
+        "openSchedule": "Schema openen",
+        "back": "Terug",
+        "newTitle": "Nieuwe terugkerende factuur",
+        "editTitle": "{name} bewerken",
+        "newSubtitle": "Stel het ritme in en de factuur die het maakt. De volgende runs staan aan de zijkant.",
+        "editSubtitle": "Wijzig het ritme of de factuur voor de periodes die nog komen.",
+        "cancel": "Annuleren",
+        "save": "Wijzigingen opslaan",
+        "create": "Schema maken",
+        "conflict": "Iemand anders heeft dit schema gewijzigd terwijl je aan het bewerken was. Laad de pagina opnieuw om hun versie te zien. Je wijzigingen hier gaan verloren.",
+        "reload": "Opnieuw laden",
+        "fixProblems": "Corrigeer eerst de gemarkeerde velden.",
+        "nothingToSave": "Er is niets gewijzigd.",
+        "saved": "Schema opgeslagen.",
+        "created": "{name} maakt nu facturen volgens schema.",
+        "schedule": "Schema",
+        "name": "Naam",
+        "nameHint": "Alleen jij ziet dit, bijvoorbeeld Maandelijkse retainer.",
+        "every": "Herhalen elke",
+        "frequency": "Eenheid",
+        "startDate": "Eerste factuur op",
+        "startFixed": "De startdatum kan niet worden gewijzigd. Maak een nieuw schema om vanaf een andere datum te starten.",
+        "startHint": "Een datum in het verleden maakt de perioden die al verschuldigd zijn meteen klaar, tot maximaal 12.",
+        "endDate": "Stoppen na (optioneel)",
+        "endHint": "Na deze datum wordt geen factuur meer gemaakt.",
+        "maxRuns": "Aantal facturen (optioneel)",
+        "maxRunsHint": "Het schema eindigt na dit aantal facturen.",
+        "noLimit": "Geen limiet",
+        "scheduleEditNote": "Een gewijzigd ritme loopt vanaf vandaag door en herhaalt nooit een periode die al gelopen is.",
+        "mode": "Wat er met elke factuur gebeurt",
+        "sendChannel": "Verzenden via",
+        "sendChannelHint": "Link registreert dat je de link zelf deelt. E-mail en WhatsApp verzenden hem voor je.",
+        "templateTitle": "Factuursjabloon",
+        "templateFuture": "Een nieuw sjabloon geldt voor de facturen die nog komen. Facturen die al gemaakt zijn, blijven ongewijzigd.",
+        "replaceTemplate": "Sjabloon vervangen",
+        "keepTemplate": "Huidig sjabloon behouden"
+      },
+      "template": {
+        "title": "Factuursjabloon",
+        "hint": "Elke periode krijgt een nieuwe factuur die hiervan gemaakt is, met de datum van die periode.",
+        "hintEdit": "Maak hier het nieuwe sjabloon. Het vervangt het huidige voor toekomstige facturen.",
+        "sourceLabel": "Waar het sjabloon vandaan komt",
+        "source": {
+          "invoice": {
+            "title": "Een factuur kopiëren",
+            "hint": "Gebruik de koper en regels van een factuur die je al hebt gemaakt."
+          },
+          "build": {
+            "title": "Een sjabloon maken",
+            "hint": "Vul hier de koper en de regels in."
+          }
+        },
+        "draftInvoice": "Conceptfactuur",
+        "copyOf": "Een kopie van deze factuur, totaal",
+        "change": "Wijzigen",
+        "choose": "Kies een factuur",
+        "copyNote": "De koper, regels, belasting en notities worden gekopieerd bij het opslaan. Latere wijzigingen aan het origineel komen niet in het schema terecht.",
+        "startFromInvoice": "Begin met een factuur",
+        "startFromInvoiceHint": "Laadt de koper en regels hier zodat je ze kunt aanpassen.",
+        "billTo": "Factureren aan",
+        "contact": "Contact",
+        "contactHint": "Kies een contact om elke factuur daaraan te koppelen, of typ de koper hieronder.",
+        "buyerName": "Naam op de factuur",
+        "buyerEmail": "E-mail",
+        "buyerPhone": "Telefoon",
+        "buyerCountry": "Land",
+        "buyerCountryHint": "Twee letters, zoals IN of DE.",
+        "buyerTaxId": "Belastingnummer",
+        "buyerAddress": "Factuuradres",
+        "details": "Valuta en belasting",
+        "currency": "Valuta",
+        "docType": "Document",
+        "docTypes": {
+          "tax_invoice": "Factuur",
+          "proforma": "Proforma-factuur"
+        },
+        "taxMode": "Belasting",
+        "taxModes": {
+          "rates": "Per belastingtarief",
+          "auto": "Automatisch"
+        },
+        "taxModeAutoHint": "De belastingengine bepaalt de belastingen op basis van het land van de verkoper en de koper.",
+        "supplyType": "Levering",
+        "supply": {
+          "goods": "Goederen",
+          "services": "Diensten",
+          "digital": "Digitale diensten"
+        },
+        "paymentTerms": "Betaaltermijn",
+        "paymentTermsHint": "Geteld vanaf de dag dat elke factuur wordt uitgegeven.",
+        "termsDefault": "Standaard van de workspace",
+        "termsOnReceipt": "Direct betaalbaar",
+        "termsNet": "Netto {days}",
+        "lines": "Regels",
+        "adjustments": "Korting en verzendkosten",
+        "discountKind": "Korting op de hele factuur",
+        "discountNone": "Geen korting",
+        "discountPercent": "Percentage",
+        "discountAmount": "Vast bedrag ({currency})",
+        "discountValue": "Kortingswaarde",
+        "shipping": "Verzendkosten ({currency})",
+        "notes": "Opmerking voor de klant",
+        "notesHint": "Wordt op elke factuur afgedrukt.",
+        "termsText": "Algemene voorwaarden",
+        "termsTextHint": "Wordt onderaan elke factuur afgedrukt.",
+        "kept": "{count, plural, one {Het sjabloon heeft 1 regel, gefactureerd aan} other {Het sjabloon heeft # regels, gefactureerd aan}}"
+      },
+      "problems": {
+        "generic": "Controleer dit veld.",
+        "nameRequired": "Geef het schema een naam.",
+        "nameTooLong": "Gebruik maximaal 120 tekens.",
+        "intervalInvalid": "Voer een geheel getal in van 1 tot 365.",
+        "startInvalid": "Voer een geldige startdatum in.",
+        "startTooOld": "Die startdatum ligt {count} perioden terug, en er worden maximaal {max} perioden in het verleden gemaakt. Kies een latere datum.",
+        "endInvalid": "Voer een geldige einddatum in.",
+        "endBeforeStart": "De einddatum ligt vóór de startdatum.",
+        "maxRunsInvalid": "Voer een geheel getal van 1 tot 1000 in, of laat het leeg.",
+        "invoiceRequired": "Kies de factuur om te kopiëren.",
+        "termsInvalid": "Voer 0 tot 365 dagen in.",
+        "descriptionRequired": "Beschrijf deze regel.",
+        "qtyInvalid": "Voer een hoeveelheid groter dan nul in.",
+        "priceInvalid": "Voer een geldige prijs in.",
+        "lineDiscountInvalid": "Voer een percentage van 0 tot 100 in.",
+        "hsnRequired": "Voer de HSN- of SAC-code in.",
+        "hsnInvalid": "Een HSN- of SAC-code bestaat uit 2 tot 12 letters of cijfers.",
+        "taxRateRemoved": "Dit belastingtarief bestaat niet meer. Kies een ander.",
+        "currencyInvalid": "Voer een valutacode van drie letters in.",
+        "noLines": "Voeg minstens één regel toe.",
+        "discountInvalid": "Voer een geldige korting in.",
+        "shippingInvalid": "Voer een geldig bedrag in.",
+        "emailInvalid": "Voer een geldig e-mailadres in.",
+        "amountZero": "Het totaal van de factuur moet meer dan nul zijn.",
+        "amountInvalid": "Dit bedrag is niet geldig.",
+        "contactRequired": "Kies een contact of typ de naam van de koper. Facturen die zelf worden uitgegeven, hebben een koper nodig.",
+        "countryInvalid": "Gebruik een landcode van twee letters.",
+        "regionInvalid": "Voer een geldige code voor staat of regio in.",
+        "autoNeedsSellerCountry": "Automatische belasting heeft je land nodig in de factuurinstellingen."
+      },
+      "detail": {
+        "loading": "Schema laden",
+        "backToList": "Terug naar terugkerende facturen",
+        "back": "Terug naar terugkerende facturen",
+        "failures": "{count, plural, one {1 periode kon zijn factuur niet maken.} other {# perioden konden hun factuur niet maken.}}",
+        "seeHistory": "Bekijk waarom",
+        "pausedNote": "Dit schema is gepauzeerd. Perioden die vallen terwijl het gepauzeerd is, worden overgeslagen: na hervatten is de volgende factuur voor vandaag of later.",
+        "endedNote": "Dit schema is afgelopen. Er wordt niets meer gemaakt en het kan niet meer worden bewerkt.",
+        "nextRun": "Volgende run",
+        "lastRun": "Laatste run",
+        "runs": "Gemaakte facturen",
+        "failedCount": "{count, plural, one {1 fout} other {# fouten}}",
+        "amount": "Per factuur",
+        "amountNote": "Wat het sjabloon vandaag oplevert",
+        "upcoming": "Komende data",
+        "noUpcoming": "Er staan geen runs meer gepland.",
+        "template": "Sjabloon",
+        "buyer": "Koper",
+        "lines": "Regels",
+        "currency": "Valuta",
+        "mode": "Elke factuur is",
+        "starts": "Gestart",
+        "ends": "Eindigt",
+        "never": "Geen einddatum",
+        "limit": "Limiet",
+        "noLimit": "Geen limiet",
+        "invoicesCount": "{count, plural, one {1 factuur} other {# facturen}}",
+        "templateNote": "Het sjabloon bewerken wijzigt de facturen die nog komen, nooit die al gemaakt zijn."
+      },
+      "runs": {
+        "title": "Runhistorie",
+        "subtitle": "Één rij per periode, nieuwste eerst.",
+        "loading": "Geschiedenis laden",
+        "scrollArea": "Tabel met runhistorie, scrolt zijdelings",
+        "emptyTitle": "Nog geen runs",
+        "emptyMessage": "De eerste factuur wordt op de volgende rundatum gemaakt.",
+        "period": "Periode {n}",
+        "draftInvoice": "Concept",
+        "showing": "{count, plural, one {1 run wordt getoond} other {# runs worden getoond}}",
+        "loadMore": "Meer laden",
+        "allLoaded": "Volledige geschiedenis getoond",
+        "columns": {
+          "period": "Datum periode",
+          "status": "Resultaat",
+          "invoice": "Factuur",
+          "error": "Waarom het mislukte",
+          "at": "Gemaakt op"
+        }
+      }
+    }
+  }
+}

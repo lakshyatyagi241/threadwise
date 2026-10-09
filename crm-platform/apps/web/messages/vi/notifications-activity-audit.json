@@ -1,0 +1,371 @@
+{
+  "notifications": {
+    "bell": {
+      "label": "Thông báo",
+      "labelUnread": "Thông báo, {count} chưa đọc",
+      "title": "Thông báo",
+      "markAll": "Đánh dấu tất cả đã đọc",
+      "empty": "Chưa có thông báo nào.",
+      "loading": "Đang tải thông báo",
+      "failed": "Không tải được thông báo.",
+      "retry": "Thử lại",
+      "unread": "Chưa đọc",
+      "settings": "Cài đặt cảnh báo",
+      "sound": "Phát âm thanh khi có chat và tin nhắn mới",
+      "soundOn": "Âm thanh: bật",
+      "soundOff": "Âm thanh: tắt",
+      "desktopEnable": "Bật cảnh báo trên màn hình",
+      "desktopOn": "Cảnh báo trên màn hình: bật",
+      "desktopOff": "Cảnh báo trên màn hình: tắt",
+      "desktopBlocked": "Cảnh báo trên màn hình đang bị chặn trong cài đặt trình duyệt của bạn.",
+      "desktopHint": "Chỉ hiện tên liên hệ khi tab này đang ở nền.",
+      "preferences": "Cài đặt thông báo"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Công việc được giao cho bạn",
+        "body": "{actor} đã giao cho bạn: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_due": {
+        "title": "Công việc đến hạn",
+        "body": "{task}",
+        "bodyNoActor": "{task}"
+      },
+      "task_completed": {
+        "title": "Công việc đã hoàn thành",
+        "body": "{actor} đã hoàn thành: {task}",
+        "bodyNoActor": "{task}"
+      },
+      "new_lead": {
+        "title": "Khách hàng tiềm năng mới",
+        "titleReturning": "Khách hàng tiềm năng quay lại",
+        "body": "{name} đến từ {platform}",
+        "bodyReturning": "{name} đã gửi thêm một khách hàng tiềm năng từ {platform}",
+        "bodyNoActor": "{name} vừa đến"
+      },
+      "new_chat": {
+        "title": "Chat mới từ {name}",
+        "titleNoName": "Chat mới",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "new_message": {
+        "title": "{count, plural, other {# tin nhắn mới từ {name}}}",
+        "titleNoName": "{count, plural, other {# tin nhắn mới}}",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "chat_waiting": {
+        "title": "Chưa ai trả lời {name}",
+        "titleNoName": "Có chat vẫn đang chờ trả lời",
+        "body": "{preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "conversation_assigned": {
+        "title": "{name} đã được giao cho bạn",
+        "titleNoName": "Một chat đã được giao cho bạn",
+        "titleTeam": "{name} đã được giao cho nhóm của bạn",
+        "titleTeamNoName": "Một chat đã được giao cho nhóm của bạn",
+        "body": "Được giao bởi {actor}",
+        "bodyNoActor": "{preview}"
+      },
+      "mention": {
+        "title": "{actor} đã nhắc đến bạn",
+        "titleNoName": "Bạn được nhắc đến trong một ghi chú",
+        "body": "{name}: {preview}",
+        "bodyNoActor": "{preview}"
+      },
+      "device_connected": {
+        "title": "{name} đã được kết nối",
+        "titleNoName": "Số WhatsApp của bạn đã được kết nối"
+      },
+      "device_disconnected": {
+        "title": "{name} đã ngắt kết nối",
+        "titleNoName": "Một số WhatsApp đã ngắt kết nối",
+        "body": "Mở thiết bị để kết nối lại."
+      },
+      "device_logged_out": {
+        "title": "{name} đã bị đăng xuất",
+        "titleNoName": "Một số WhatsApp đã bị đăng xuất",
+        "body": "Quét lại mã QR để kết nối lại."
+      },
+      "broadcast_completed": {
+        "title": "Gửi hàng loạt “{name}” đã hoàn tất",
+        "titleNoName": "Một chiến dịch Gửi hàng loạt đã hoàn tất",
+        "bodySent": "{sent, plural, other {Đã gửi # tin nhắn}}",
+        "bodySentFailed": "{sent, plural, other {Đã gửi # tin nhắn}}, {failed, plural, other {# thất bại}}"
+      },
+      "broadcast_failed": {
+        "title": "Gửi hàng loạt “{name}” thất bại",
+        "titleNoName": "Một chiến dịch Gửi hàng loạt thất bại",
+        "body": "{reason}",
+        "bodyNoReason": "Mở để xem lỗi ở đâu."
+      },
+      "campaign_completed": {
+        "title": "Chiến dịch “{name}” đã hoàn tất",
+        "titleNoName": "Một chiến dịch đã hoàn tất",
+        "bodySent": "{sent, plural, other {Đã gửi # tin nhắn}}",
+        "bodySentFailed": "{sent, plural, other {Đã gửi # tin nhắn}}, {failed, plural, other {# thất bại}}"
+      },
+      "campaign_failed": {
+        "title": "Chiến dịch “{name}” thất bại",
+        "titleNoName": "Một chiến dịch thất bại",
+        "body": "{reason}",
+        "bodyNoReason": "Mở để xem lỗi ở đâu."
+      },
+      "scheduled_completed": {
+        "title": "Lịch gửi “{name}” đã được gửi",
+        "titleNoName": "Một lịch gửi đã được gửi",
+        "bodySent": "{sent, plural, other {Đã gửi # tin nhắn}}",
+        "bodySentFailed": "{sent, plural, other {Đã gửi # tin nhắn}}, {failed, plural, other {# thất bại}}"
+      },
+      "scheduled_failed": {
+        "title": "Lịch gửi “{name}” thất bại",
+        "titleNoName": "Một lịch gửi thất bại",
+        "body": "{reason}",
+        "bodyNoReason": "Mở để xem lỗi ở đâu."
+      },
+      "teamchat_mention": {
+        "title": "{author} đã nhắc bạn trong {channel}",
+        "titleNoChannel": "{author} đã nhắc bạn trong Chat nhóm",
+        "titleNoName": "Bạn được nhắc đến trong Chat nhóm"
+      },
+      "teamchat_message": {
+        "title": "{count, plural, other {# tin nhắn mới từ {author}}}",
+        "titleNoName": "{count, plural, other {# tin nhắn trực tiếp mới}}"
+      }
+    },
+    "live": {
+      "open": "Mở",
+      "dismiss": "Bỏ qua",
+      "toastRegion": "Thông báo",
+      "summary": "{count} thông báo mới",
+      "announceMany": "{count} thông báo mới",
+      "desktop": {
+        "new_chat": "Chat mới",
+        "new_message": "Tin nhắn mới",
+        "chat_waiting": "Đang chờ trả lời",
+        "conversation_assigned": "Được giao cho bạn",
+        "mention": "Đã nhắc bạn",
+        "fallbackTitle": "Thông báo mới",
+        "device_connected": "Số WhatsApp đã kết nối",
+        "device_disconnected": "Số WhatsApp đã ngắt kết nối",
+        "device_logged_out": "Số WhatsApp đã đăng xuất",
+        "broadcast_completed": "Gửi hàng loạt đã hoàn tất",
+        "broadcast_failed": "Gửi hàng loạt thất bại",
+        "campaign_completed": "Chiến dịch đã hoàn tất",
+        "campaign_failed": "Chiến dịch thất bại",
+        "scheduled_completed": "Lịch gửi đã được gửi",
+        "scheduled_failed": "Lịch gửi thất bại",
+        "teamchat_mention": "Đã nhắc bạn trong Chat nhóm",
+        "teamchat_message": "Tin nhắn trực tiếp mới"
+      }
+    },
+    "prefs": {
+      "title": "Tùy chọn thông báo",
+      "description": "Chọn cách mỗi sự kiện đến với bạn. Các lựa chọn này chỉ của riêng bạn; không gian làm việc của bạn quyết định sự kiện nào được bật sẵn.",
+      "columns": {
+        "event": "Sự kiện",
+        "bell": "Chuông",
+        "toast": "Cửa sổ bật lên",
+        "sound": "Âm thanh",
+        "push": "Đẩy"
+      },
+      "groups": {
+        "conversations": "Chat",
+        "tasks": "Công việc",
+        "leads": "Khách hàng tiềm năng và biểu mẫu",
+        "documents": "Chứng từ bán hàng",
+        "wallet": "Ví",
+        "devices": "Số WhatsApp",
+        "broadcasts": "Gửi hàng loạt và chiến dịch",
+        "team_chat": "Chat nhóm"
+      },
+      "types": {
+        "new_chat": {
+          "label": "Chat mới",
+          "hint": "Cuộc hội thoại chưa có ai phụ trách sẽ nhận tin nhắn đầu tiên."
+        },
+        "new_message": {
+          "label": "Tin nhắn mới trong chat của tôi",
+          "hint": "Khách hàng nhắn trong chat được giao cho bạn."
+        },
+        "chat_waiting": {
+          "label": "Chat vẫn đang chờ trả lời",
+          "hint": "Chat chưa có ai phụ trách có tin nhắn của khách chưa được trả lời trong vài phút. Bạn chỉ được thông báo một lần."
+        },
+        "conversation_assigned": {
+          "label": "Chat được giao cho tôi",
+          "hint": "Chat được giao cho bạn hoặc nhóm của bạn."
+        },
+        "mention": {
+          "label": "Được nhắc đến trong ghi chú",
+          "hint": "Đồng nghiệp nhắc bạn trong ghi chú hội thoại."
+        },
+        "teamchat_mention": {
+          "label": "Được nhắc đến trong Chat nhóm",
+          "hint": "Đồng nghiệp nhắc bạn trong một kênh chat nhóm."
+        },
+        "teamchat_message": {
+          "label": "Tin nhắn trực tiếp",
+          "hint": "Đồng nghiệp nhắn cho bạn trong Chat nhóm."
+        },
+        "device_connected": {
+          "label": "Số đã kết nối",
+          "hint": "Một số WhatsApp cá nhân đã kết nối xong."
+        },
+        "device_disconnected": {
+          "label": "Số đã ngắt kết nối",
+          "hint": "Một số WhatsApp cá nhân đã mất kết nối."
+        },
+        "device_logged_out": {
+          "label": "Số đã đăng xuất",
+          "hint": "Một số WhatsApp cá nhân đã bị đăng xuất khỏi điện thoại."
+        },
+        "broadcast_completed": {
+          "label": "Gửi hàng loạt đã hoàn tất",
+          "hint": "Một chiến dịch Gửi hàng loạt bạn khởi tạo đã được gửi."
+        },
+        "broadcast_failed": {
+          "label": "Gửi hàng loạt thất bại",
+          "hint": "Một chiến dịch Gửi hàng loạt bạn khởi tạo đã thất bại."
+        },
+        "campaign_completed": {
+          "label": "Chiến dịch đã hoàn tất",
+          "hint": "Một chiến dịch bạn khởi tạo đã được gửi."
+        },
+        "campaign_failed": {
+          "label": "Chiến dịch thất bại",
+          "hint": "Một chiến dịch bạn khởi tạo đã thất bại."
+        },
+        "scheduled_completed": {
+          "label": "Lịch gửi đã được gửi",
+          "hint": "Một lịch gửi bạn thiết lập đã được gửi."
+        },
+        "scheduled_failed": {
+          "label": "Lịch gửi thất bại",
+          "hint": "Một lịch gửi bạn thiết lập đã thất bại."
+        },
+        "task_assigned": {
+          "label": "Công việc được giao cho tôi",
+          "hint": "Có một công việc được giao cho bạn."
+        },
+        "task_due": {
+          "label": "Công việc đến hạn",
+          "hint": "Có một công việc của bạn đến hạn."
+        },
+        "task_completed": {
+          "label": "Công việc đã hoàn thành",
+          "hint": "Một công việc bạn tạo đã hoàn thành."
+        },
+        "new_lead": {
+          "label": "Khách hàng tiềm năng mới",
+          "hint": "Có khách hàng tiềm năng mới từ một nguồn khách hàng."
+        },
+        "form_submission": {
+          "label": "Biểu mẫu đã gửi",
+          "hint": "Có người đã gửi một trong các biểu mẫu của bạn."
+        },
+        "form_needs_review": {
+          "label": "Biểu mẫu cần xem xét",
+          "hint": "Có một bài gửi cần xem xét."
+        },
+        "wallet_low_balance": {
+          "label": "Số dư ví thấp",
+          "hint": "Ví của không gian làm việc sắp hết tiền."
+        },
+        "sales_doc_decided": {
+          "label": "Chứng từ bán hàng đã có quyết định",
+          "hint": "Một báo giá hoặc hóa đơn đã được chấp nhận hoặc từ chối."
+        },
+        "wallet_credited": {
+          "label": "Ví đã nạp tiền",
+          "hint": "Ví của không gian làm việc đã được cộng tiền."
+        }
+      },
+      "loading": "Đang tải tùy chọn của bạn",
+      "failed": "Không tải được tùy chọn của bạn.",
+      "retry": "Thử lại",
+      "saveFailed": "Không lưu được thay đổi. Đã hoàn tác.",
+      "saved": "Đã lưu",
+      "dismiss": "Bỏ qua",
+      "resetRow": "Đặt lại mặc định",
+      "resetRowFor": "Đặt lại {event} về mặc định",
+      "resetAll": "Đặt lại tất cả về mặc định",
+      "resetAllDone": "Mọi tùy chọn đã được đặt lại mặc định.",
+      "customised": "Đã thay đổi",
+      "usingDefault": "Mặc định",
+      "toggleLabel": "{event}: {channel}",
+      "workspaceOff": "Đã bị không gian làm việc của bạn tắt",
+      "workspaceOffHelp": "Không gian làm việc của bạn đã tắt mục này; lựa chọn của bạn vẫn áp dụng cho bạn.",
+      "bellOffHelp": "Bật chuông để chọn cửa sổ bật lên, âm thanh hoặc thông báo đẩy.",
+      "notAvailable": "Không khả dụng",
+      "defaultSummary": "Mặc định: {bell}, {toast}, {sound}",
+      "on": "bật",
+      "off": "tắt",
+      "channelNames": {
+        "bell": "chuông",
+        "toast": "cửa sổ bật lên",
+        "sound": "âm thanh",
+        "push": "đẩy"
+      },
+      "browser": {
+        "title": "Trình duyệt này",
+        "description": "Âm thanh và cảnh báo trên màn hình được cài đặt theo từng trình duyệt, không theo tài khoản."
+      },
+      "empty": "Chưa có loại thông báo nào để thiết lập.",
+      "defaultSummaryPush": "Mặc định: {bell}, {toast}, {sound}, {push}",
+      "push": {
+        "title": "Thông báo trình duyệt",
+        "description": "Nhận thông báo từ trình duyệt cho các sự kiện hiển thị ở chuông, ngay cả khi CRM đã đóng. Bạn chọn sự kiện trong cột Đẩy bên dưới.",
+        "state": {
+          "on": "Đã bật trên thiết bị này",
+          "off": "Tắt",
+          "blocked": "Bị chặn",
+          "unavailable": "Không khả dụng"
+        },
+        "checking": "Đang kiểm tra trình duyệt này",
+        "unsupported": "Trình duyệt này không thể hiển thị thông báo khi CRM đã đóng. Hãy thử Chrome, Edge, Firefox hoặc Safari phiên bản mới nhất, trên trang bảo mật (https).",
+        "needsInstall": "Trên iPhone và iPad, thông báo trình duyệt chỉ hoạt động với ứng dụng đã được thêm vào Màn hình chính.",
+        "needsInstallSteps": "Mở trang này trong Safari, chạm Chia sẻ, chọn Thêm vào Màn hình chính, rồi mở CRM từ biểu tượng mới và quay lại đây. Cần iOS hoặc iPadOS 16.4 trở lên.",
+        "blocked": "Thông báo đang bị chặn cho trang này trong trình duyệt của bạn.",
+        "blockedHelp": "Chỉ trình duyệt của bạn mới hoàn tác được: mở cài đặt trang (biểu tượng cạnh địa chỉ), đặt Thông báo thành Cho phép, rồi quay lại trang này.",
+        "offHelp": "Chưa bật trên thiết bị này. Trình duyệt sẽ hỏi quyền khi bạn nhấn Bật.",
+        "enable": "Bật trên thiết bị này",
+        "enabling": "Đang bật...",
+        "onHelp": "Thiết bị này sẽ nhận thông báo trình duyệt cho các sự kiện bạn bật bên dưới khi bạn không xem CRM.",
+        "howItWorks": "Bạn sẽ không nhận thông báo khi CRM đang mở ở phía trước (chuông và cửa sổ bật lên đã đảm nhiệm việc đó). Thông báo chỉ hiện ai và loại sự kiện nào, không bao giờ hiện nội dung tin nhắn.",
+        "test": "Gửi thông báo thử",
+        "testing": "Đang gửi...",
+        "disable": "Tắt trên thiết bị này",
+        "disabling": "Đang tắt...",
+        "testResult": {
+          "sent": "Đã gửi. Thông báo sẽ hiện trên các thiết bị của bạn trong giây lát, ngay cả khi CRM đã đóng.",
+          "none_reachable": "Chưa thể kết nối tới trình duyệt hoặc dịch vụ đẩy của trình duyệt. Hãy thử lại sau ít phút; thiết bị không còn dùng sẽ tự động bị xóa.",
+          "no_device": "Không có thiết bị để gửi. Hãy bật thông báo trên thiết bị này trước.",
+          "wait": "Vừa gửi thông báo thử. Hãy đợi vài giây trước khi gửi lại."
+        },
+        "problem": {
+          "enable_failed": "Không bật được thông báo trên thiết bị này. Hãy thử lại.",
+          "disable_failed": "Không tắt được thông báo trên thiết bị này. Hãy thử lại.",
+          "remove_failed": "Không xóa được thiết bị đó. Hãy thử lại.",
+          "test_failed": "Không gửi được thông báo thử. Hãy thử lại."
+        },
+        "devicesFailed": "Không tải được danh sách thiết bị của bạn.",
+        "devices": {
+          "title": "Thiết bị của bạn",
+          "thisDevice": "Thiết bị này",
+          "added": "Đã thêm {date}",
+          "lastUsed": "thông báo gần nhất {date}",
+          "neverUsed": "chưa thông báo lần nào",
+          "remove": "Xóa",
+          "removeFor": "Xóa {device}"
+        }
+      }
+    },
+    "nav": {
+      "preferences": "Thông báo"
+    }
+  }
+}

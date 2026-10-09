@@ -1,0 +1,54 @@
+{
+  "checkout-orders-merchant-payments": {
+    "groups": {
+      "eyebrow": "店铺 / 群组",
+      "title": "WhatsApp 群组",
+      "subtitle": "您已连接的号码所在的群组。订单确认后，会发布到客户所在的群组并 @提及该客户。为群组设置下单代码，客户即可从该群组下单。",
+      "loading": "正在加载群组",
+      "summary": {
+        "groups": "已同步的群组",
+        "coded": "已设下单代码",
+        "bot": "机器人号码",
+        "noBot": "未连接 WhatsApp 号码。",
+        "connect": "前往渠道连接号码",
+        "copyNumber": "复制号码"
+      },
+      "search": {
+        "label": "搜索群组",
+        "placeholder": "搜索群组名称..."
+      },
+      "columns": {
+        "group": "群组",
+        "members": "成员",
+        "device": "机器人设备",
+        "synced": "已同步",
+        "code": "下单代码"
+      },
+      "row": {
+        "unnamed": "（未命名群组）",
+        "noCode": "无代码",
+        "placeholder": "例如 ACME",
+        "label": "{name} 的下单代码",
+        "copyLink": "复制下单链接",
+        "saved": "下单代码已保存。",
+        "cleared": "下单代码已清除。",
+        "tooLong": "最多使用 {max} 个字符。",
+        "badChars": "仅限字母、数字、点、短横线和下划线。",
+        "taken": "另一个群组已使用此代码。"
+      },
+      "empty": {
+        "title": "暂无群组",
+        "message": "群组列表是从您已连接的 WhatsApp 会话中复制的。该会话同步群组后，群组会显示在这里；暂不承诺具体时间。",
+        "action": "打开渠道"
+      },
+      "noMatch": {
+        "title": "没有与搜索匹配的群组",
+        "message": "请尝试群组名称的其他部分，或清除搜索。"
+      },
+      "how": {
+        "title": "下单代码的工作方式",
+        "body": "为群组设置一个简短代码（例如 ACME），然后分享其下单链接。客户点击链接并确认订单后，订单会直接发布到该特定群组并 @提及客户，即使他们同时属于多个群组。"
+      }
+    }
+  }
+}

@@ -1,0 +1,484 @@
+{
+  "auth-registration-security": {
+    "guest": {
+      "shell": {
+        "appNameFallback": "CRM",
+        "header": {
+          "login": {
+            "eyebrow": "Masuk",
+            "title": "Selamat",
+            "accent": "datang kembali",
+            "subtitle": "Masukkan detail Anda untuk kembali ke ruang kerja Anda."
+          },
+          "register": {
+            "eyebrow": "Langkah 1 dari 3 / Buat akun",
+            "title": "Buat",
+            "accent": "akun Anda",
+            "subtitle": "Beberapa detail dan ruang kerja Anda siap."
+          },
+          "forgot": {
+            "eyebrow": "Lupa kata sandi",
+            "title": "Atur ulang",
+            "accent": "kata sandi Anda",
+            "subtitle": "Beri tahu kami tempat Anda masuk dan kami akan mengirim tautan sekali pakai."
+          }
+        },
+        "defaults": {
+          "login": {
+            "hero_title": "Semuanya di satu tempat",
+            "hero_desc": "Obrolan, kampanye, dan kontak tetap bersama, jadi tak ada yang perlu mencari konteks.",
+            "stat1_num": "24/7",
+            "stat1_label": "kotak masuk tim bersama",
+            "stat2_num": "5 mnt",
+            "stat2_label": "penyiapan umum",
+            "stat3_num": "1 tempat",
+            "stat3_label": "untuk obrolan dan kontak",
+            "feat1_title": "Kotak masuk bersama",
+            "feat1_desc": "Tugaskan, balas, dan serahkan obrolan tanpa kehilangan alur percakapan.",
+            "feat2_title": "Siaran",
+            "feat2_desc": "Jangkau banyak kontak sekaligus dengan pengaturan laju dan pelacakan pengiriman.",
+            "feat3_title": "Otomatisasi",
+            "feat3_desc": "Arahkan, balas, dan tindak lanjuti dengan alur yang Anda rancang sendiri.",
+            "feat4_title": "Kontrol tim",
+            "feat4_desc": "Peran, izin, dan jejak audit menjaga setiap ruang kerja tetap terkendali.",
+            "inside_heading": "Di dalam ruang kerja Anda",
+            "chip1": "Kotak masuk",
+            "chip2": "Siaran",
+            "chip3": "Alur",
+            "chip4": "Kontak",
+            "chip5": "Laporan",
+            "chip6": "Templat"
+          },
+          "register": {
+            "hero_title": "Mulai gratis",
+            "hero_desc": "Siapkan ruang kerja Anda dulu dan pilih paket saat Anda siap.",
+            "stat1_num": "3 langkah",
+            "stat1_label": "menuju ruang kerja yang berfungsi",
+            "stat2_num": "5 mnt",
+            "stat2_label": "penyiapan umum",
+            "stat3_num": "Hari 1",
+            "stat3_label": "undang tim Anda",
+            "feat1_title": "Penyiapan cepat",
+            "feat1_desc": "Beri nama ruang kerja Anda, atur zona waktu, dan Anda sudah masuk.",
+            "feat2_title": "Ajak tim Anda",
+            "feat2_desc": "Undang rekan kerja dan beri masing-masing akses yang tepat sesuai kebutuhan.",
+            "feat3_title": "Hubungkan kanal",
+            "feat3_desc": "Tautkan nomor pesan Anda dan mulai berbicara dengan pelanggan.",
+            "feat4_title": "Tetap terkendali",
+            "feat4_desc": "Masuk dua faktor dan kontrol sesi melindungi setiap akun.",
+            "inside_heading": "Yang Anda dapatkan",
+            "chip1": "Kotak masuk bersama",
+            "chip2": "Siaran",
+            "chip3": "Alur",
+            "chip4": "Kontak",
+            "chip5": "Laporan",
+            "chip6": "Peran tim"
+          },
+          "forgot": {
+            "hero_title": "Tautan baru, sekali pakai",
+            "hero_desc": "Kami mengirim tautan aman yang hanya berfungsi sekali dan segera kedaluwarsa."
+          }
+        },
+        "contentDefaults": {
+          "login": {
+            "eyebrow": "Kotak masuk tim untuk WhatsApp",
+            "heading": "Setiap obrolan pelanggan,",
+            "headingAccent": "satu ruang kerja yang tenang",
+            "subheading": "Siaran, otomatisasi, dan kotak masuk bersama untuk tim yang menjawab cepat."
+          },
+          "register": {
+            "eyebrow": "Mulai dalam hitungan menit",
+            "heading": "Siapkan",
+            "headingAccent": "ruang kerja Anda",
+            "subheading": "Buat ruang kerja Anda, lalu ajak tim dan kanal pertama Anda."
+          },
+          "forgot": {
+            "eyebrow": "Pemulihan akun",
+            "heading": "Kembali dalam",
+            "headingAccent": "semenit",
+            "subheading": "Masukkan email Anda dan kami akan mengirim tautan aman untuk memilih kata sandi baru."
+          }
+        }
+      },
+      "toolbar": {
+        "language": "Bahasa",
+        "theme": "Ganti tema",
+        "themeToLight": "Terang",
+        "themeToDark": "Gelap"
+      },
+      "pages": {
+        "login": {
+          "title": "Masuk"
+        },
+        "signup": {
+          "title": "Buat akun Anda"
+        },
+        "verifyOtp": {
+          "title": "Verifikasi nomor Anda",
+          "eyebrow": "Verifikasi nomor Anda",
+          "heading": "Periksa",
+          "accent": "WhatsApp Anda",
+          "subtitle": "Masukkan kode sekali pakai yang kami kirim untuk menyelesaikan pembuatan ruang kerja Anda."
+        },
+        "forgot": {
+          "title": "Atur ulang kata sandi Anda"
+        },
+        "reset": {
+          "title": "Pilih kata sandi baru",
+          "eyebrow": "Atur ulang kata sandi",
+          "heading": "Pilih",
+          "accent": "kata sandi baru",
+          "subtitle": "Pilih yang kuat. Anda akan masuk dengannya segera setelah ini.",
+          "panel": {
+            "heroTitle": "Kata sandi baru",
+            "heroDesc": "Pilih yang mudah Anda ingat. Ruang kerja Anda mungkin meminta panjang minimum.",
+            "eyebrow": "Pemulihan akun",
+            "heading": "Awal",
+            "accent": "yang baru",
+            "subheading": "Setelah kata sandi baru Anda disimpan, Anda dapat langsung masuk dengannya."
+          }
+        },
+        "verifyEmail": {
+          "title": "Konfirmasi email Anda",
+          "eyebrow": "Konfirmasi email",
+          "heading": "Konfirmasi",
+          "accent": "email Anda",
+          "subtitle": "Halaman ini memeriksa tautan yang Anda buka dari kotak masuk.",
+          "panel": {
+            "heroTitle": "Konfirmasi alamat Anda",
+            "heroDesc": "Satu klik membuktikan kotak masuk ini milik Anda.",
+            "eyebrow": "Konfirmasi email",
+            "heading": "Memeriksa",
+            "accent": "tautan Anda",
+            "subheading": "Kami sedang mengonfirmasi alamat dari email yang Anda buka."
+          }
+        },
+        "findWorkspace": {
+          "title": "Temukan ruang kerja saya",
+          "eyebrow": "Temukan ruang kerja saya",
+          "heading": "Temukan",
+          "accent": "ruang kerja Anda",
+          "subtitle": "Masukkan email Anda dan kami akan mengirimkan alamat ruang kerja tempat Anda dapat masuk."
+        },
+        "confirmEmailChange": {
+          "title": "Konfirmasi email baru Anda",
+          "eyebrow": "Perubahan email",
+          "heading": "Konfirmasi",
+          "accent": "email baru Anda",
+          "subtitle": "Halaman ini memeriksa tautan yang Anda buka dari kotak masuk.",
+          "panel": {
+            "heroTitle": "Email masuk baru",
+            "heroDesc": "Alamat Anda berubah segera setelah Anda mengonfirmasinya.",
+            "eyebrow": "Perubahan email",
+            "heading": "Mengonfirmasi",
+            "accent": "email baru Anda",
+            "subheading": "Kami sedang memeriksa tautan dari pesan yang Anda buka."
+          }
+        },
+        "socialCallback": {
+          "title": "Memasukkan Anda",
+          "eyebrow": "Masuk dengan akun sosial",
+          "heading": "Memasukkan",
+          "accent": "Anda",
+          "subtitle": "Menyelesaikan proses masuk Anda."
+        }
+      },
+      "errors": {
+        "invalidCredentials": "Detail tersebut tidak cocok. Periksa ruang kerja, email, dan kata sandi.",
+        "locked": "Terlalu banyak percobaan gagal. Coba lagi dalam {minutes, plural, other {# menit}}.",
+        "rateLimited": "Terlalu banyak percobaan. Harap tunggu sebentar lalu coba lagi.",
+        "rateLimitedWait": "Terlalu banyak percobaan. Coba lagi dalam {seconds, plural, other {# detik}}.",
+        "suspended": "Akun ini ditangguhkan. Hubungi administrator ruang kerja Anda.",
+        "captcha": "Harap selesaikan captcha lalu coba lagi.",
+        "signupClosed": "Pendaftaran ditutup. Minta undangan kepada administrator.",
+        "slugTaken": "Alamat ruang kerja itu sudah dipakai.",
+        "emailTaken": "Email itu sudah digunakan di ruang kerja ini.",
+        "passwordPolicy": "Kata sandi itu tidak memenuhi kebijakan keamanan:",
+        "tokenInvalid": "Tautan ini tidak valid atau sudah kedaluwarsa.",
+        "emailUnverified": "Konfirmasi alamat email Anda terlebih dahulu.",
+        "mfaInvalid": "Kode itu tidak valid. Periksa kodenya lalu coba lagi.",
+        "mfaExpired": "Verifikasi Anda kedaluwarsa. Masuk lagi.",
+        "otpInvalid": "Kode itu salah. Coba lagi.",
+        "otpExpired": "Kode itu sudah kedaluwarsa. Minta kode baru.",
+        "otpTooMany": "Terlalu banyak percobaan. Minta kode baru.",
+        "otpCooldown": "Harap tunggu sebentar sebelum meminta kode lain.",
+        "otpSendFailed": "Kami tidak dapat mengirim kode verifikasi. Periksa nomornya lalu coba lagi.",
+        "socialUnavailable": "Metode masuk itu tidak tersedia.",
+        "socialExpired": "Sesi masuk kedaluwarsa. Silakan coba lagi.",
+        "socialFailed": "Kami tidak dapat menyelesaikan proses masuk {provider}. Silakan coba lagi.",
+        "socialNoEmail": "Akun itu tidak membagikan alamat email. Gunakan email dan kata sandi.",
+        "ipBlocked": "Masuk tidak diizinkan dari jaringan ini.",
+        "workspaceUnavailable": "Ruang kerja itu tidak tersedia.",
+        "workspaceRequired": "Email ini digunakan di lebih dari satu ruang kerja. Masukkan ruang kerja Anda untuk melanjutkan.",
+        "validation": "Silakan periksa kolom yang ditandai.",
+        "sessionExpired": "Sesi Anda kedaluwarsa demi keamanan. Silakan coba lagi.",
+        "network": "Kami tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
+        "unexpected": "Terjadi kesalahan di pihak kami. Silakan coba lagi.",
+        "requestId": "ID permintaan",
+        "signupExpired": "Silakan mulai pendaftaran lagi.",
+        "policyRules": {
+          "min_length": "Gunakan minimal {min, plural, other {# karakter}}.",
+          "upper_lower": "Campurkan huruf besar dan kecil.",
+          "number": "Sertakan minimal satu angka.",
+          "symbol": "Sertakan minimal satu simbol.",
+          "common": "Kata sandi itu terlalu mudah ditebak."
+        },
+        "socialNoAccount": "Tidak ada akun yang cocok dengan login {provider} itu. Masuk dengan email dan kata sandi Anda, atau buat akun.",
+        "forbidden": "Permintaan itu ditolak. Muat ulang halaman lalu coba lagi."
+      },
+      "validation": {
+        "orgSlug": "Masukkan alamat ruang kerja Anda (huruf, angka, tanda hubung, atau garis bawah).",
+        "orgSlugForSocial": "Masukkan alamat ruang kerja Anda terlebih dahulu agar kami tahu ke mana harus memasukkan Anda.",
+        "email": "Masukkan alamat email yang valid.",
+        "password": "Masukkan kata sandi yang memenuhi persyaratan yang ditampilkan.",
+        "passwordRequired": "Masukkan kata sandi Anda.",
+        "fullName": "Masukkan nama lengkap Anda.",
+        "orgName": "Beri nama ruang kerja Anda (minimal 2 karakter).",
+        "orgNameForSocial": "Beri nama ruang kerja Anda dulu, lalu lanjutkan dengan Google atau Facebook.",
+        "phoneRequired": "Masukkan nomor ponsel Anda.",
+        "phone": "Masukkan nomor ponsel yang valid untuk negara yang dipilih.",
+        "newPassword": "Gunakan minimal {min, plural, other {# karakter}}.",
+        "confirmPassword": "Kedua kata sandi tidak cocok.",
+        "acceptTerms": "Anda harus menerima ketentuan untuk melanjutkan.",
+        "referralCode": "Kode referral hanya terdiri dari huruf dan angka.",
+        "code": "Masukkan kode {length} digit."
+      },
+      "legal": {
+        "login": "Dengan masuk, Anda menyetujui <terms>Ketentuan</terms> dan <privacy>Kebijakan privasi</privacy> kami.",
+        "signup": "Saya menyetujui <terms>Ketentuan</terms> dan <privacy>Kebijakan privasi</privacy>.",
+        "cookies": "<cookies>Kebijakan cookie</cookies>"
+      },
+      "captcha": {
+        "protected": "Situs ini dilindungi oleh reCAPTCHA. <privacy>Kebijakan Privasi</privacy> dan <terms>Ketentuan Layanan</terms> Google berlaku."
+      },
+      "social": {
+        "divider": "atau dengan email",
+        "redirecting": "Membuka penyedia",
+        "login": {
+          "google": "Lanjutkan dengan Google",
+          "facebook": "Lanjutkan dengan Facebook"
+        },
+        "signup": {
+          "google": "Daftar dengan Google",
+          "facebook": "Daftar dengan Facebook"
+        },
+        "google": "Google",
+        "facebook": "Facebook"
+      },
+      "login": {
+        "workspace": "Ruang kerja",
+        "workspaceHint": "Alamat yang digunakan tim Anda, seperti acme.",
+        "chooseTitle": "Pilih ruang kerja",
+        "chooseSubtitle": "Email Anda ada di lebih dari satu ruang kerja. Pilih yang ingin Anda buka.",
+        "chooseMembers": "{count, plural, other {# anggota}}",
+        "chooseOpen": "Buka",
+        "chooseBack": "Gunakan akun lain",
+        "chooseExpired": "Terlalu lama. Masuk lagi.",
+        "workspacePlaceholder": "ruang-kerja-anda",
+        "email": "Email",
+        "emailPlaceholder": "anda@perusahaan.com",
+        "password": "Kata sandi",
+        "forgot": "Lupa kata sandi?",
+        "showPassword": "Tampilkan kata sandi",
+        "hidePassword": "Sembunyikan kata sandi",
+        "remember": "Biarkan saya tetap masuk selama 30 hari",
+        "submit": "Masuk",
+        "submitting": "Sedang masuk",
+        "newHere": "Baru di sini?",
+        "createAccount": "Buat akun",
+        "lostWorkspace": "Tidak yakin dengan alamat ruang kerja Anda?",
+        "findWorkspace": "Temukan ruang kerja saya",
+        "loggedOut": "Anda telah dikeluarkan.",
+        "flashReset": "Kata sandi telah diatur ulang. Masuk dengan kata sandi baru Anda.",
+        "flashExpired": "Sesi Anda kedaluwarsa. Silakan masuk lagi.",
+        "flashIdle": "Anda dikeluarkan setelah {minutes, plural, other {# menit}} tanpa aktivitas. Masuk lagi untuk melanjutkan.",
+        "mfaExpired": "Verifikasi Anda terlalu lama. Masuk lagi.",
+        "flashDeleted": "Akun Anda telah dihapus."
+      },
+      "mfa": {
+        "title": "Verifikasi dua langkah",
+        "descriptionCode": "Masukkan kode 6 digit dari aplikasi autentikator Anda.",
+        "descriptionRecovery": "Masukkan salah satu kode pemulihan sekali pakai Anda.",
+        "codeLabel": "Kode autentikator",
+        "recoveryLabel": "Kode pemulihan",
+        "recoveryHint": "Setiap kode pemulihan hanya berlaku sekali.",
+        "invalidCode": "Masukkan kode 6 digit.",
+        "invalidRecovery": "Masukkan kode pemulihan (8 sampai 32 karakter).",
+        "verify": "Verifikasi",
+        "verifying": "Memverifikasi",
+        "useRecovery": "Gunakan kode pemulihan",
+        "useApp": "Gunakan kode autentikator",
+        "back": "Kembali ke halaman masuk",
+        "expiresIn": "Verifikasi kedaluwarsa dalam {time}"
+      },
+      "signup": {
+        "steps": {
+          "label": "Progres pendaftaran",
+          "account": "Akun",
+          "workspace": "Ruang kerja",
+          "plan": "Paket"
+        },
+        "fullName": "Nama lengkap",
+        "fullNamePlaceholder": "Nama Anda",
+        "email": "Email kerja",
+        "orgName": "Nama ruang kerja",
+        "orgNamePlaceholder": "Acme Inc.",
+        "orgNameHint": "Tim Anda masuk dengan alamat {slug}.",
+        "orgNameHintEmpty": "Ini adalah nama yang dilihat tim Anda.",
+        "customiseSlug": "Pilih alamat ruang kerja kustom",
+        "orgSlug": "Alamat ruang kerja",
+        "orgSlugHint": "Huruf, angka, tanda hubung, atau garis bawah. Tim Anda memasukkan ini saat masuk.",
+        "orgSlugPlaceholder": "ruang-kerja-anda",
+        "phone": "Nomor ponsel",
+        "phoneHint": "Kami menggunakannya untuk memverifikasi akun Anda dan untuk pembaruan penting.",
+        "phonePlaceholder": "Nomor tanpa kode negara",
+        "country": "Negara",
+        "referral": "Kode referral",
+        "optional": "opsional",
+        "referralPlaceholder": "Punya kode dari teman?",
+        "password": "Kata sandi",
+        "confirmPassword": "Konfirmasi kata sandi",
+        "submit": "Lanjutkan",
+        "submitting": "Membuat akun Anda",
+        "haveAccount": "Sudah punya akun?",
+        "signIn": "Masuk",
+        "closedBody": "Pendaftaran ditutup. Minta undangan kepada administrator.",
+        "closedBack": "Kembali ke halaman masuk",
+        "restart": "Silakan mulai pendaftaran lagi.",
+        "countryButton": "Kode negara +{dial}",
+        "countrySearch": "Cari negara",
+        "countryEmpty": "Tidak ada negara yang cocok"
+      },
+      "otp": {
+        "sentTo": "Kami mengirim kode ke",
+        "code": "Kode verifikasi",
+        "expiresIn": "Kode kedaluwarsa dalam {time}.",
+        "expired": "Kode ini sudah kedaluwarsa. Minta kode baru.",
+        "verify": "Verifikasi dan lanjutkan",
+        "verifying": "Memverifikasi",
+        "resend": "Kirim ulang kode",
+        "resendIn": "Kirim ulang kode dalam {time}",
+        "resending": "Mengirim",
+        "resent": "Kode baru sedang dikirim ke WhatsApp Anda.",
+        "wrongNumber": "Nomor salah?",
+        "goBack": "Kembali",
+        "addressTakenHint": "Alamat ruang kerja itu dipakai orang lain saat Anda memverifikasi. Pilih alamat lain dan kami akan mengirim kode baru.",
+        "chooseAnotherAddress": "Pilih alamat lain"
+      },
+      "forgot": {
+        "submit": "Kirim tautan reset ke email",
+        "submitting": "Mengirim",
+        "remembered": "Sudah ingat?",
+        "back": "Kembali ke halaman masuk",
+        "doneTitle": "Periksa kotak masuk Anda",
+        "doneBody": "Jika email itu milik akun di ruang kerja tersebut, tautan reset sedang dikirim. Tautan hanya berlaku sekali dan segera kedaluwarsa.",
+        "doneHint": "Belum ada? Periksa folder spam, atau coba lagi dalam semenit.",
+        "tryAnother": "Gunakan email lain"
+      },
+      "reset": {
+        "password": "Kata sandi baru",
+        "confirmPassword": "Konfirmasi kata sandi baru",
+        "submit": "Simpan kata sandi baru",
+        "submitting": "Menyimpan",
+        "back": "Kembali ke halaman masuk",
+        "invalidTitle": "Tautan ini tidak berfungsi lagi",
+        "invalidBody": "Tautan reset hanya berlaku sekali dan kedaluwarsa setelah waktu singkat. Minta yang baru untuk melanjutkan.",
+        "requestNew": "Minta tautan baru"
+      },
+      "verifyEmail": {
+        "working": "Mengonfirmasi email Anda",
+        "doneTitle": "Email dikonfirmasi",
+        "doneBody": "Terima kasih, alamat Anda terverifikasi. Masuk untuk melanjutkan.",
+        "failedTitle": "Kami tidak dapat mengonfirmasi email Anda",
+        "failedHint": "Masuk dan minta email verifikasi baru dari banner di bagian atas aplikasi.",
+        "signIn": "Ke halaman masuk"
+      },
+      "confirmEmailChange": {
+        "working": "Mengonfirmasi email baru Anda",
+        "doneTitle": "Alamat email diperbarui",
+        "doneBody": "Gunakan alamat baru Anda saat masuk berikutnya.",
+        "failedTitle": "Kami tidak dapat mengonfirmasi perubahan itu",
+        "failedHint": "Masuk dan mulai perubahan email lagi dari halaman akun Anda.",
+        "signIn": "Ke halaman masuk"
+      },
+      "findWorkspace": {
+        "submit": "Kirim ruang kerja saya ke email",
+        "submitting": "Mengirim",
+        "back": "Kembali ke halaman masuk",
+        "doneTitle": "Periksa kotak masuk Anda",
+        "doneBody": "Jika alamat itu milik akun yang terverifikasi, kami telah mengirim email berisi alamat ruang kerja tempat Anda dapat masuk.",
+        "doneHint": "Belum ada? Periksa folder spam, atau coba email lain.",
+        "tryAnother": "Gunakan email lain"
+      },
+      "callback": {
+        "working": "Menyelesaikan proses masuk Anda",
+        "failedTitle": "Proses masuk tidak selesai",
+        "cancelled": "Proses masuk dibatalkan.",
+        "backToSignIn": "Kembali ke halaman masuk",
+        "createAccount": "Buat akun saja"
+      },
+      "layout": {
+        "noscript": "JavaScript dinonaktifkan di browser ini. Aktifkan untuk masuk atau membuat akun."
+      },
+      "consent": {
+        "label": "Pemberitahuan cookie",
+        "title": "Kami menggunakan cookie",
+        "message": "Kami menggunakan cookie agar Anda tetap masuk dan untuk memahami cara situs ini digunakan. Terima semua, tolak yang opsional, atau pilih yang Anda izinkan.",
+        "learnMore": "Pelajari lebih lanjut",
+        "decline": "Tolak",
+        "customize": "Sesuaikan",
+        "acceptAll": "Terima semua",
+        "prefsTitle": "Pilihan privasi Anda",
+        "necessary": "Sangat diperlukan",
+        "necessaryHint": "Diperlukan untuk masuk dan keamanan. Selalu aktif.",
+        "analytics": "Analitik",
+        "analyticsHint": "Membantu kami melihat halaman mana yang efektif dan mana yang tidak.",
+        "marketing": "Pemasaran",
+        "marketingHint": "Digunakan untuk menampilkan penawaran relevan di situs web lain.",
+        "rejectAll": "Tolak semua",
+        "save": "Simpan pilihan"
+      },
+      "policy": {
+        "minLength": "Minimal {min, plural, other {# karakter}}.",
+        "mixedCase": "Campurkan huruf besar dan kecil.",
+        "number": "Sertakan satu angka.",
+        "symbol": "Sertakan satu simbol.",
+        "placeholder": "Minimal {min, plural, other {# karakter}}"
+      }
+    },
+    "gate": {
+      "suspended": {
+        "titleLead": "Akun Anda",
+        "titleAccent": "ditangguhkan"
+      },
+      "verify": {
+        "titleLead": "Harap",
+        "titleAccent": "verifikasi email Anda"
+      },
+      "onboarding": {
+        "header": {
+          "step2": {
+            "eyebrow": "Langkah 2 dari 3 / Ruang kerja",
+            "title": "Buat",
+            "accent": "ruang kerja Anda"
+          },
+          "step3": {
+            "eyebrow": "Langkah 3 dari 3 / Paket",
+            "title": "Pilih",
+            "accent": "paket",
+            "subtitle": "Setiap paket dilengkapi kuota pesan bulanan. Mulai dengan paket gratis, atau pilih yang lebih lega."
+          }
+        },
+        "timezonePlaceholder": "Cari zona waktu...",
+        "timezoneEmpty": "Tidak ada zona waktu yang cocok dengan pencarian Anda.",
+        "timezoneLabel": "Zona waktu",
+        "phonePlaceholder": "Nomor tanpa kode negara",
+        "plan": {
+          "credits": "Paket Anda menyertakan jumlah pesan tertentu setiap bulan. Jika kuota habis saat paket masih aktif, pengiriman tambahan memakai kredit dompet sebesar <rate>{credits, plural, other {# kredit}} per pesan</rate>. Saat paket berakhir, pengiriman dijeda sampai Anda memperpanjang.",
+          "topUpPrompt": "Kuota hampir terlampaui?",
+          "topUp": "Tambah kredit pesan"
+        }
+      }
+    }
+  }
+}

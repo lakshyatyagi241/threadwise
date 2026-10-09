@@ -1,0 +1,132 @@
+{
+  "web-forms": {
+    "list": {
+      "title": "Biểu mẫu",
+      "subtitle": "Tạo biểu mẫu, đưa lên trang web hoặc chia sẻ liên kết, và mọi câu trả lời sẽ được đưa vào CRM dưới dạng liên hệ.",
+      "templates": "Mẫu",
+      "newForm": "Biểu mẫu mới",
+      "statsLabel": "Tổng cho các biểu mẫu đang hiển thị",
+      "stats": {
+        "forms": "Biểu mẫu",
+        "published": "Đã xuất bản",
+        "submissions": "Lượt gửi",
+        "needsReview": "Cần xem xét"
+      },
+      "views": {
+        "label": "Hiển thị",
+        "all": "Tất cả",
+        "published": "Đã xuất bản",
+        "draft": "Bản nháp",
+        "paused": "Tạm dừng",
+        "archived": "Đã lưu trữ"
+      },
+      "search": "Tìm biểu mẫu",
+      "loading": "Đang tải biểu mẫu",
+      "loadFailed": "Không tải được biểu mẫu.",
+      "retry": "Thử lại",
+      "empty": {
+        "title": "Chưa có biểu mẫu nào",
+        "message": "Bắt đầu từ một mẫu hoặc biểu mẫu trống, xuất bản, rồi chia sẻ liên kết hoặc dán mã nhúng lên trang web của bạn.",
+        "fromTemplate": "Bắt đầu từ mẫu",
+        "blank": "Biểu mẫu trống"
+      },
+      "noMatch": {
+        "title": "Không có biểu mẫu nào khớp",
+        "message": "Thử tìm kiếm khác hoặc chế độ xem khác.",
+        "clear": "Xóa bộ lọc"
+      },
+      "col": {
+        "name": "Biểu mẫu",
+        "status": "Trạng thái",
+        "submissions": "Lượt gửi",
+        "views": "Lượt xem",
+        "conversion": "Tỷ lệ chuyển đổi",
+        "last": "Lượt gửi gần nhất"
+      },
+      "unpublished": "Thay đổi chưa xuất bản",
+      "version": "Phiên bản {n}",
+      "needsReview": "{count, plural, other {# cần xử lý}}",
+      "status": {
+        "draft": "Bản nháp",
+        "published": "Đã xuất bản",
+        "paused": "Tạm dừng",
+        "archived": "Đã lưu trữ"
+      },
+      "noRate": "-",
+      "never": "Chưa có",
+      "actionsFor": "Thao tác cho {name}",
+      "action": {
+        "edit": "Sửa",
+        "submissions": "Lượt gửi",
+        "copyLink": "Sao chép liên kết",
+        "embed": "Nhúng lên trang web",
+        "duplicate": "Nhân bản",
+        "pause": "Tạm dừng",
+        "resume": "Tiếp tục",
+        "archive": "Lưu trữ",
+        "delete": "Xóa",
+        "restore": "Khôi phục"
+      },
+      "loadMore": "Tải thêm",
+      "copied": "Đã sao chép liên kết",
+      "copyBlocked": "Trình duyệt này chặn sao chép. Liên kết là {url}",
+      "paused": "Đã tạm dừng biểu mẫu. Khách truy cập sẽ thấy biểu mẫu đã đóng.",
+      "resumed": "Đã tiếp tục biểu mẫu",
+      "archived": "Đã lưu trữ biểu mẫu",
+      "deleted": "Đã xóa biểu mẫu",
+      "cancel": "Hủy",
+      "archive": {
+        "title": "Lưu trữ biểu mẫu này?",
+        "message": "Liên kết công khai và mọi bản nhúng của \"{name}\" sẽ ngừng hoạt động. Các lượt gửi vẫn được giữ lại và bạn vẫn có thể xem chúng.",
+        "confirm": "Lưu trữ"
+      },
+      "delete": {
+        "title": "Xóa biểu mẫu này?",
+        "message": "\"{name}\" sẽ bị xóa vĩnh viễn. Các liên hệ đã tạo từ biểu mẫu vẫn còn trong CRM.",
+        "confirm": "Xóa"
+      },
+      "restored": "Đã khôi phục biểu mẫu"
+    },
+    "newForm": {
+      "eyebrow": "Biểu mẫu",
+      "title": "Biểu mẫu mới",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "create": "Tạo biểu mẫu",
+      "startFrom": "Bắt đầu từ",
+      "mode": {
+        "template": "Một mẫu",
+        "blank": "Trống"
+      },
+      "loadingTemplates": "Đang tải mẫu",
+      "templatesFailed": "Không tải được mẫu. Bạn vẫn có thể bắt đầu từ biểu mẫu trống.",
+      "templates": "Mẫu",
+      "fieldCount": "{count, plural, other {# trường}}",
+      "pickTemplate": "Chọn một mẫu để tiếp tục.",
+      "name": "Tên biểu mẫu",
+      "nameHint": "Chỉ nhóm của bạn thấy tên này.",
+      "nameRequired": "Nhập tên cho biểu mẫu."
+    },
+    "templates": {
+      "breadcrumb": "Đường dẫn",
+      "back": "Quay lại biểu mẫu",
+      "title": "Mẫu biểu mẫu",
+      "subtitle": "Bắt đầu từ một biểu mẫu có sẵn và thay đổi tùy ý.",
+      "blank": "Biểu mẫu trống",
+      "loading": "Đang tải mẫu",
+      "loadFailed": "Không tải được mẫu.",
+      "retry": "Thử lại",
+      "empty": "Không có mẫu nào.",
+      "category": {
+        "lead": "Thu thập khách hàng tiềm năng",
+        "contact": "Liên hệ",
+        "event": "Sự kiện",
+        "order": "Đơn hàng",
+        "survey": "Khảo sát"
+      },
+      "fields": "Các trường trong mẫu này",
+      "more": "+{count} nữa",
+      "use": "Dùng mẫu này"
+    }
+  }
+}

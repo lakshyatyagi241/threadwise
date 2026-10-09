@@ -1,0 +1,278 @@
+{
+  "web-forms": {
+    "share": {
+      "readOnly": "Sie können diese Einstellungen einsehen, aber nicht ändern.",
+      "clipboardBlocked": "Ihr Browser hat das Kopieren blockiert. Markieren Sie den Text und kopieren Sie ihn manuell.",
+      "copied": "Kopiert",
+      "status": {
+        "archived": {
+          "title": "Dieses Formular ist archiviert",
+          "body": "Der öffentliche Link und alle Einbettungen sind geschlossen. Stellen Sie das Formular wieder her, um sie erneut zu verwenden."
+        },
+        "draft": {
+          "title": "Veröffentlichen Sie das Formular, damit dieser Link funktioniert",
+          "body": "Niemand kann den Link oder die Einbettung öffnen, bis das Formular mindestens einmal veröffentlicht wurde."
+        },
+        "paused": {
+          "title": "Dieses Formular ist geschlossen",
+          "body": "Der Link und die Einbettungen zeigen eine Meldung über das Schließen an und nehmen keine Antworten mehr an. Nehmen Sie das Formular wieder auf, um es erneut zu öffnen."
+        },
+        "live": {
+          "title": "Dieses Formular ist aktiv",
+          "body": "Besucher sehen Version {version}. Änderungen im Formularersteller erreichen sie erst, wenn Sie veröffentlichen."
+        }
+      },
+      "hosted": {
+        "title": "Öffentlicher Link",
+        "description": "Teilen Sie diese Adresse überall: in einer Nachricht, per E-Mail oder in einer Social-Media-Biografie. Sie öffnet das Formular auf einer eigenen Seite.",
+        "label": "Formularadresse",
+        "copy": "Link kopieren",
+        "copiedToast": "Link kopiert.",
+        "open": "Öffnen",
+        "newTab": "(öffnet sich in einem neuen Tab)"
+      },
+      "qr": {
+        "title": "QR-Code",
+        "description": "Für Druck, Plakate und Verpackungen. Beim Scannen wird der öffentliche Link geöffnet.",
+        "alt": "QR-Code, der das Formular öffnet",
+        "tracking": "Der Code fügt der Adresse utm_source=qr hinzu, damit Antworten, die darüber eingegangen sind, in der Zuordnung als QR erscheinen.",
+        "downloadPng": "PNG herunterladen",
+        "downloadSvg": "SVG herunterladen",
+        "downloadFailed": "Der QR-Code konnte nicht heruntergeladen werden. Versuchen Sie es erneut."
+      },
+      "embed": {
+        "title": "Formular auf Ihrer Website einbetten",
+        "description": "Fügen Sie einen dieser Codes dort ein, wo das Formular erscheinen soll. Das Einbetten funktioniert nur auf den unter Erlaubte Websites unten aufgeführten Seiten.",
+        "copy": "Code kopieren",
+        "copiedToast": "{name} kopiert.",
+        "script": {
+          "title": "Script-Einbettung",
+          "description": "Empfohlen. Das Formular passt seine Größe automatisch an die Seite an und kann nach dem Absenden weiterleiten."
+        },
+        "iframe": {
+          "title": "iFrame-Einbettung",
+          "description": "Ein einfacher Rahmen für Website-Baukästen, die keine Skripte erlauben. Die Höhe legen Sie selbst fest."
+        }
+      },
+      "domains": {
+        "title": "Erlaubte Websites",
+        "description": "Nur die hier aufgelisteten Websites dürfen dieses Formular einbetten und Antworten aus einem Browser senden.",
+        "none": "Es ist noch keine Website erlaubt. Das Formular funktioniert daher nur über den öffentlichen Link und kann nicht eingebettet werden.",
+        "label": "Website hinzufügen",
+        "hint": "Verwenden Sie die genaue Adresse, z. B. https://www.example.com. Eine Wildcard-Ebene ist erlaubt, z. B. https://*.example.com. Ein einfaches http funktioniert nur für localhost.",
+        "count": "{count} von {max}",
+        "add": "Hinzufügen",
+        "remove": "{value} entfernen",
+        "empty": "Keine Websites hinzugefügt.",
+        "issues": {
+          "empty": "Geben Sie zuerst eine Websiteadresse ein.",
+          "invalid": "Dies ist keine gültige Adresse. Verwenden Sie die Form https://example.com oder https://*.example.com, ohne Pfad.",
+          "duplicate": "Diese Website ist bereits in der Liste.",
+          "max": "Sie können höchstens {max} Websites erlauben."
+        }
+      },
+      "rotate": {
+        "title": "Öffentlichen Schlüssel erneuern",
+        "description": "Erstellt einen neuen Schlüssel für dieses Formular. Verwenden Sie ihn, wenn der Link oder Einbettungscode preisgegeben wurde oder Sie ihn außer Betrieb nehmen möchten.",
+        "button": "Schlüssel erneuern",
+        "readOnly": "Sie können dieses Formular nicht ändern",
+        "confirmTitle": "Öffentlichen Schlüssel erneuern?",
+        "confirmMessage": "Der alte Link, die QR-Codes und der Einbettungscode funktionieren sofort nicht mehr. Sie müssen den neuen Link teilen und den Code auf jeder Website ersetzen, die das Formular einbettet.",
+        "confirmButton": "Schlüssel erneuern",
+        "cancel": "Abbrechen",
+        "success": "Der Schlüssel wurde erneuert. Kopieren Sie den neuen Link und Code.",
+        "failed": "Der Schlüssel konnte nicht erneuert werden. Es wurde nichts geändert. Versuchen Sie es erneut.",
+        "conflict": "Jemand anderes hat dieses Formular geändert. Laden Sie die Seite neu, um die aktuelle Version zu sehen, und versuchen Sie es dann erneut."
+      }
+    },
+    "settings": {
+      "readOnly": "Sie können diese Einstellungen einsehen, aber nicht ändern.",
+      "usersFailed": "Die Liste der Teammitglieder konnte nicht geladen werden, daher können derzeit keine Verantwortlichen ausgewählt werden.",
+      "form": {
+        "title": "Formular",
+        "description": "Der Name, den Sie in der Liste sehen, und die Grundinformationen, die Besucher im Formular sehen.",
+        "name": "Formularname",
+        "nameHint": "Nur Ihr Team sieht diesen Namen.",
+        "issues": {
+          "nameRequired": "Geben Sie dem Formular einen Namen.",
+          "submit_empty": "Die Schaltfläche benötigt eine Beschriftung.",
+          "submit_too_long": "Halten Sie die Beschriftung der Schaltfläche auf höchstens {max} Zeichen."
+        },
+        "language": "Formularsprache",
+        "languageHint": "Legt die Sprache der integrierten Texte und die Leserichtung fest (Arabisch wird von rechts nach links gelesen).",
+        "languages": {
+          "en": "Englisch",
+          "ar": "Arabisch"
+        },
+        "submitLabel": "Beschriftung der Absendeschaltfläche",
+        "submitLabelHint": "1 bis {max} Zeichen."
+      },
+      "after": {
+        "title": "Nach dem Absenden",
+        "description": "Was der Besucher sieht, nachdem seine Antworten gesendet wurden.",
+        "mode": "Was passiert",
+        "modes": {
+          "message": "Eine Nachricht anzeigen",
+          "redirect": "Zu einer anderen Seite wechseln"
+        },
+        "modeHints": {
+          "message": "Das Formular wird durch Ihre Dankesnachricht ersetzt.",
+          "redirect": "Der Besucher wird zu einer Seite von Ihnen weitergeleitet, z. B. zu einer Dankes- oder Buchungsseite."
+        },
+        "message": "Dankesnachricht",
+        "messageHint": "Reiner Text. Diese einfachen Tags sind erlaubt: b, i, u, br, ul, ol, li und a. Bis zu {max} Zeichen.",
+        "messageTooLong": "Die Nachricht ist länger als {max} Zeichen.",
+        "redirect": "Weiterleitungsadresse",
+        "redirectHint": "Muss mit https:// beginnen. Eine Seite, die nicht https verwendet, wird nie geöffnet.",
+        "redirectIssues": {
+          "required": "Geben Sie die Adresse ein, zu der Besucher weitergeleitet werden sollen.",
+          "https": "Verwenden Sie eine Adresse, die mit https:// beginnt."
+        },
+        "redirectKeepsMessage": "Die Dankesnachricht bleibt im Formular gespeichert und wird nicht angezeigt, solange eine Weiterleitung eingestellt ist."
+      },
+      "consent": {
+        "title": "Einwilligung",
+        "description": "Ein Kontrollkästchen, das festhält, wem der Besucher zugestimmt hat, mit genauem Wortlaut, Version und Zeitpunkt.",
+        "enabled": "Einwilligung abfragen",
+        "enabledHint": "Zeigt den Einwilligungshinweis über der Absendeschaltfläche an.",
+        "text": "Einwilligungstext",
+        "textHint": "Bis zu {max} Zeichen. Besucher sehen genau diesen Wortlaut.",
+        "textRequired": "Schreiben Sie den Einwilligungstext oder deaktivieren Sie die Einwilligung.",
+        "textTooLong": "Der Text ist länger als {max} Zeichen.",
+        "version": "Wortlaut Version {version}",
+        "versionHintPublished": "Sobald das Formular veröffentlicht ist, startet eine Änderung des Wortlauts automatisch eine neue Version. Frühere Übermittlungen behalten die Version, der sie zugestimmt haben.",
+        "versionHintDraft": "Die Version bleibt auf 1, bis das Formular veröffentlicht wird. Danach startet jede Änderung des Wortlauts eine neue Version.",
+        "privacyUrl": "Link zur Datenschutzerklärung",
+        "privacyUrlHint": "Optional. Wird neben dem Einwilligungstext angezeigt. Muss mit https:// beginnen.",
+        "privacyUrlHttps": "Verwenden Sie eine Adresse, die mit https:// beginnt.",
+        "required": "Zum Absenden muss das Kästchen angehakt sein",
+        "requiredHint": "Deaktivieren Sie dies, wenn die Einwilligung optional ist.",
+        "marketing": "Marketing-Opt-in",
+        "marketingHint": "Wenn das Kästchen angehakt wird, wird die Marketing-Einwilligung im Kontakt gespeichert. Ein nicht angehaktes Kästchen meldet niemanden an."
+      },
+      "crm": {
+        "title": "Im CRM",
+        "description": "Was jede Übermittlung mit dem Kontakt macht, den sie anlegt oder aktualisiert.",
+        "company": "Unternehmen zuordnen",
+        "companyOptions": {
+          "none": "Nicht zuordnen",
+          "email_domain": "Nach E-Mail-Domain",
+          "name_or_domain": "Nach Name oder Domain"
+        },
+        "companyHints": {
+          "none": "Unternehmensangaben werden nicht zur Verknüpfung eines Unternehmens verwendet.",
+          "email_domain": "Verknüpft den Kontakt mit dem Unternehmen, dem die Domain seiner E-Mail-Adresse gehört.",
+          "name_or_domain": "Verknüpft das Unternehmen anhand von Name oder Website-Domain und legt es an, wenn keines passt."
+        },
+        "lifecycle": "Lifecycle-Phase",
+        "lifecycleHint": "Wird beim Absenden des Formulars im Kontakt gesetzt.",
+        "lifecycleNone": "Nicht setzen",
+        "stages": {
+          "new": "Neu",
+          "contacted": "Kontaktiert",
+          "qualified": "Qualifiziert",
+          "application_started": "Bewerbung begonnen",
+          "application_submitted": "Bewerbung eingereicht",
+          "interview_scheduled": "Gespräch geplant",
+          "offer_received": "Angebot erhalten",
+          "admission_confirmed": "Zulassung bestätigt",
+          "enrolled": "Eingeschrieben",
+          "lost": "Verloren"
+        },
+        "tags": "Hinzuzufügende Tags",
+        "tagsHint": "Wird jedem Kontakt hinzugefügt, der dieses Formular absendet. Bis zu {max} Tags mit 1 bis 60 Zeichen.",
+        "tagsPlaceholder": "Zum Beispiel: Webinar",
+        "tagsCount": "{count} von {max}",
+        "tagAdd": "Tag hinzufügen",
+        "tagRemove": "Tag {value} entfernen",
+        "tagsNone": "Keine Tags.",
+        "tagIssues": {
+          "empty": "Geben Sie zuerst ein Tag ein.",
+          "too_long": "Ein Tag darf höchstens 60 Zeichen haben.",
+          "duplicate": "Dieses Tag ist bereits in der Liste.",
+          "max": "Sie können höchstens {max} Tags hinzufügen."
+        },
+        "owner": "Verantwortlicher für neue Kontakte",
+        "ownerHint": "Wer sich um den Kontakt kümmert, den dieses Formular anlegt.",
+        "ownerMode": "Verantwortlichkeitsregel",
+        "ownerModes": {
+          "unassigned": "Kein Verantwortlicher",
+          "fixed": "Eine Person",
+          "round_robin": "Reihum"
+        },
+        "ownerModeHints": {
+          "unassigned": "Der Kontakt hat keinen Verantwortlichen, bis ihn jemand übernimmt.",
+          "fixed": "Jeder Kontakt geht an dieselbe Person.",
+          "round_robin": "Kontakte gehen der Reihe nach an die ausgewählten Personen. Personen, die nicht mehr aktiv sind, werden übersprungen."
+        },
+        "ownerFixed": "Verantwortlicher",
+        "ownerRoundRobin": "Personen für die Reihenfolge",
+        "ownerRoundRobinHint": "Wählen Sie mindestens zwei Personen aus.",
+        "chooseUser": "Eine Person auswählen",
+        "unknownUser": "Eine Person, die nicht mehr verfügbar ist",
+        "pickUsers": "Personen auswählen",
+        "noUsers": "Keine passenden Personen",
+        "removeUser": "{name} entfernen",
+        "ownerIssues": {
+          "fixed_one": "Wählen Sie genau eine Person aus.",
+          "round_robin_two": "Die Reihenfolge benötigt mindestens zwei Personen.",
+          "unassigned_none": "Eine Regel ohne Zuweisung kann keine Personen haben. Wählen Sie eine andere Regel oder leeren Sie die Liste.",
+          "too_many": "Sie können höchstens 50 Personen auswählen."
+        }
+      },
+      "notify": {
+        "title": "Benachrichtigungen",
+        "description": "Wer benachrichtigt wird, wenn eine Übermittlung eingeht.",
+        "owner": "Den Verantwortlichen des Kontakts benachrichtigen",
+        "ownerHint": "Der Verantwortliche erhält für jede Übermittlung eine Benachrichtigung.",
+        "users": "Diese Personen ebenfalls benachrichtigen",
+        "usersHint": "Bis zu {max} Teammitglieder erhalten ebenfalls die Benachrichtigung.",
+        "emails": "Diese Adressen zusätzlich per E-Mail benachrichtigen",
+        "emailsHint": "Bis zu {max} Adressen erhalten für jede Übermittlung eine E-Mail. Sie können auch zu Personen außerhalb Ihres Teams gehören.",
+        "emailPlaceholder": "name@example.com",
+        "emailsCount": "{count} von {max}",
+        "emailAdd": "E-Mail hinzufügen",
+        "emailRemove": "{value} entfernen",
+        "emailsNone": "Keine zusätzlichen Adressen.",
+        "emailIssues": {
+          "empty": "Geben Sie zuerst eine E-Mail-Adresse ein.",
+          "invalid": "Dies ist keine gültige E-Mail-Adresse.",
+          "duplicate": "Diese Adresse ist bereits in der Liste.",
+          "max": "Sie können höchstens {max} Adressen hinzufügen."
+        }
+      },
+      "protection": {
+        "title": "Schutz",
+        "description": "Hält Spam fern und legt fest, wie lange Antworten aufbewahrt werden.",
+        "honeypot": "Verstecktes Fallen-Feld",
+        "honeypotHint": "Fügt ein Feld hinzu, das Menschen nie sehen. Bots füllen es aus, und ihre Übermittlungen werden als Spam markiert.",
+        "captcha": "CAPTCHA",
+        "captchaOptions": {
+          "inherit": "Der Plattformeinstellung folgen",
+          "on": "Immer aktiv",
+          "off": "Aus"
+        },
+        "captchaHints": {
+          "inherit": "Verwendet die Einstellung Ihres Arbeitsbereichs für öffentliche Formulare.",
+          "on": "Besucher müssen die Prüfung bestehen, bevor sie absenden können.",
+          "off": "Keine Prüfung. Verlassen Sie sich auf das versteckte Fallen-Feld und die Ratenbegrenzungen."
+        },
+        "retention": "Antworten aufbewahren für (Tage)",
+        "retentionHint": "Nach so vielen Tagen werden die Antworten gelöscht. Das unterstützt Datenschutzvorgaben wie die DSGVO. Zwischen 30 und 3650.",
+        "range": "Geben Sie eine ganze Zahl von {min} bis {max} ein.",
+        "keepForever": "Bis ich sie lösche",
+        "keepForeverHint": "Antworten bleiben erhalten, bis eine Person sie löscht. Wählen Sie dies nur, wenn Sie einen rechtlichen Grund zur Aufbewahrung haben.",
+        "advanced": "Erweitert: Ratenbegrenzungen",
+        "advancedHint": "Begrenzungen, die Fluten von Übermittlungen ausbremsen. Die Standardwerte passen für die meisten Formulare.",
+        "rate": {
+          "perIpPerMinute": "Pro Adresse, pro Minute",
+          "perIpPerMinuteHint": "Übermittlungen von einer Internetadresse.",
+          "perFormPerMinute": "Pro Formular, pro Minute",
+          "perFormPerMinuteHint": "Übermittlungen an dieses Formular von überall.",
+          "perContactPerHour": "Pro Kontakt, pro Stunde",
+          "perContactPerHourHint": "Übermittlungen mit derselben E-Mail-Adresse oder Telefonnummer."
+        }
+      }
+    }
+  }
+}

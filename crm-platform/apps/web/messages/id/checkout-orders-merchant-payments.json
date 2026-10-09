@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "Pesanan",
+      "coupons": "Kupon"
+    },
+    "settingsTile": {
+      "label": "Gateway pembayaran",
+      "description": "Satu gateway yang digunakan checkout toko dan faktur Penjualan Anda untuk menerima pembayaran online.",
+      "keywords": "gateway pembayaran, razorpay, stripe, checkout, tautan bayar, pembayaran online, kartu, upi"
+    },
+    "common": {
+      "noAccessTitle": "Anda tidak memiliki akses ke halaman ini",
+      "noAccessMessage": "Minta admin workspace untuk memberikan izinnya kepada peran Anda.",
+      "loading": "Memuat",
+      "loadMore": "Muat lebih banyak",
+      "cancel": "Batal",
+      "close": "Tutup",
+      "save": "Simpan",
+      "saving": "Menyimpan",
+      "edit": "Edit",
+      "delete": "Hapus",
+      "remove": "Hapus",
+      "open": "Buka",
+      "view": "Lihat",
+      "search": "Cari",
+      "clear": "Hapus",
+      "all": "Semua",
+      "no": "Tidak",
+      "none": "Tidak ada",
+      "actions": "Tindakan",
+      "retry": "Coba lagi",
+      "dismiss": "Tutup",
+      "copy": "Salin",
+      "copied": "Tersalin",
+      "viewContact": "Lihat kontak",
+      "allShops": "Semua toko",
+      "shop": "Toko"
+    },
+    "status": {
+      "new": "Baru",
+      "pending": "Tertunda",
+      "confirmed": "Dikonfirmasi",
+      "paid": "Dibayar",
+      "processing": "Diproses",
+      "completed": "Selesai",
+      "shipped": "Dikirim",
+      "cancelled": "Dibatalkan"
+    },
+    "paymentStatus": {
+      "paid": "Dibayar",
+      "awaiting": "Menunggu pembayaran",
+      "cod": "Bayar di tempat",
+      "unpaid": "Belum dibayar"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "Storefront",
+      "twilio": "Twilio",
+      "manual": "Manual",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "WhatsApp AI"
+    },
+    "errors": {
+      "requestId": "ID permintaan",
+      "retry": "Coba lagi",
+      "network": {
+        "title": "Tidak dapat menjangkau server",
+        "message": "Periksa koneksi Anda lalu coba lagi."
+      },
+      "forbidden": {
+        "title": "Tidak diizinkan",
+        "message": "Peran Anda tidak mengizinkan ini."
+      },
+      "signedOut": {
+        "title": "Anda telah keluar",
+        "message": "Masuk lagi untuk melanjutkan."
+      },
+      "conflict": {
+        "title": "Diubah oleh orang lain",
+        "message": "Data ini berubah saat Anda membukanya. Muat ulang lalu coba lagi."
+      },
+      "validation": {
+        "title": "Periksa formulir",
+        "message": "Beberapa nilai tidak valid. Periksa kolom yang ditandai."
+      },
+      "unavailable": {
+        "title": "Belum tersedia",
+        "message": "Bagian toko ini belum tersedia di server ini."
+      },
+      "rateLimited": {
+        "title": "Terlalu banyak permintaan",
+        "message": "Tunggu sebentar lalu coba lagi."
+      },
+      "notFound": {
+        "title": "Tidak ditemukan",
+        "message": "Sudah dihapus atau tidak pernah ada."
+      },
+      "planLocked": {
+        "title": "Tidak ada di paket Anda",
+        "message": "Paket Anda tidak menyertakan toko. Upgrade untuk menggunakannya."
+      },
+      "couponCodeTaken": {
+        "title": "Kode sudah dipakai",
+        "message": "Kupon lain sudah memakai kode ini. Pilih kode yang berbeda."
+      },
+      "groupCodeTaken": {
+        "title": "Kode sudah dipakai",
+        "message": "Grup lain sudah memakai kode pemesanan ini."
+      },
+      "orderNoPhone": {
+        "title": "Tanpa nomor telepon",
+        "message": "Pesanan ini tidak memiliki nomor telepon pembeli, sehingga tidak ada yang dapat dikirim."
+      },
+      "gatewayNotConfigured": {
+        "title": "Belum ada gateway pembayaran",
+        "message": "Atur gateway pembayaran terlebih dahulu. Kuncinya hilang atau gateway dinonaktifkan."
+      },
+      "gatewayUnavailable": {
+        "title": "Gateway tidak tersedia",
+        "message": "Gateway ini tidak dapat membuat tautan pembayaran yang dapat dibuka pembeli."
+      },
+      "paymentLinkFailed": {
+        "title": "Gateway menolak tautan",
+        "message": "Periksa kunci dan pastikan jumlahnya di atas minimum gateway."
+      },
+      "unexpected": {
+        "title": "Terjadi kesalahan",
+        "message": "Coba lagi. Jika terus terjadi, bagikan ID permintaan kepada dukungan."
+      }
+    }
+  }
+}

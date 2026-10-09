@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "tile": {
+      "label": "지출, 지갑 및 명세서",
+      "description": "사용 금액을 확인하세요: 메시지 잔액, 충전 내역, 모든 요금 및 전체 명세서.",
+      "keywords": "지갑 잔액 충전 금액 추가 크레딧 명세서 청구 지출 비용 요금 사용 거래 내역 원장"
+    },
+    "common": {
+      "loading": "불러오는 중",
+      "retry": "다시 시도",
+      "requestId": "요청 ID",
+      "cancel": "취소",
+      "back": "뒤로",
+      "close": "닫기",
+      "dismiss": "닫기",
+      "on": "켜짐",
+      "off": "꺼짐",
+      "previous": "이전",
+      "next": "다음",
+      "pagination": "페이지 이동",
+      "pageN": "{page}페이지",
+      "deniedTitle": "이 기능에 접근할 권한이 없습니다",
+      "deniedBody": "워크스페이스 관리자에게 “{permission}” 권한을 요청하세요."
+    },
+    "errors": {
+      "noteRequired": "사유는 5자 이상이어야 합니다.",
+      "amountInvalid": "허용되지 않는 금액입니다. 소수점 2자리 이하의 양수 금액을 입력하세요.",
+      "insufficient": "잔액이 부족합니다.",
+      "notFound": "이 워크스페이스에는 지갑이 없습니다.",
+      "rateInvalid": "요금을 저장할 수 없습니다. 국가, 카테고리 및 금액을 확인하세요.",
+      "importFailed": "요금표를 읽을 수 없거나 사용 가능한 행이 없습니다.",
+      "syncFailed": "Meta 요금표를 읽을 수 없으며 기본 제공 요금표도 없습니다.",
+      "conflict": "다른 사용자가 변경했습니다. 새로고침한 후 다시 시도하세요.",
+      "forbidden": "최고 관리자만 이 작업을 할 수 있습니다.",
+      "validation": "강조 표시된 항목을 확인하세요.",
+      "network": "서버에 연결할 수 없습니다. 네트워크 연결을 확인한 후 다시 시도하세요.",
+      "generic": "문제가 발생했습니다. 다시 시도하세요.",
+      "currencyUnsupported": "이 통화는 아직 사용할 수 없습니다. 먼저 해당 통화의 Meta 요금표를 가져오세요(메시지 요금, Meta 요금표)."
+    },
+    "types": {
+      "topup": "충전",
+      "earn": "적립",
+      "refund": "환불",
+      "spend": "메시지 요금",
+      "admin_adjust": "조정"
+    },
+    "categories": {
+      "marketing": "마케팅",
+      "utility": "유틸리티",
+      "authentication": "인증",
+      "service": "서비스"
+    },
+    "modes": {
+      "wallet": "메시지당 과금",
+      "plan": "요금제"
+    },
+    "chip": {
+      "balance": "잔액",
+      "low": "잔액이 부족합니다"
+    },
+    "wallet": {
+      "title": "지갑",
+      "subtitle": "메시지 잔액, 최근 30일간 지출 및 적립 내역, 충전 방법을 확인하세요.",
+      "fullStatement": "전체 명세서",
+      "lowBalanceTitle": "잔액이 얼마 남지 않았습니다",
+      "lowBalanceBody": "잔액이 {threshold} 이하입니다. 캠페인과 답장이 계속 발송되도록 충전하세요.",
+      "kpi": {
+        "balance": "잔액",
+        "available": "현재 사용 가능",
+        "approx": "메시지 약 {count}건",
+        "spent": "사용",
+        "earned": "적립",
+        "last30": "최근 30일"
+      },
+      "add": {
+        "title": "충전",
+        "amount": "금액",
+        "hint": "1 이상의 정수 금액만 입력할 수 있습니다.",
+        "invalid": "1 이상의 정수 금액을 입력하세요.",
+        "submit": "충전",
+        "quick": "빠른 금액 선택"
+      },
+      "how": {
+        "title": "요금 작동 방식",
+        "wallet": {
+          "body": "전달된 모든 메시지는 수신자 국가와 카테고리에 따른 요금으로 지갑에서 차감됩니다. 실패한 메시지는 요금이 부과되지 않습니다.",
+          "funded": "잔액이 없으면 충전할 때까지 대량 발송이 일시 중지됩니다."
+        },
+        "plan": {
+          "allowance": "요금제에 매월 {limit}건의 메시지가 포함되어 있습니다.",
+          "used": "이번 달 {used}건 사용됨.",
+          "ends": "요금제는 {date}에 종료됩니다.",
+          "extra": "월간 허용량을 초과하는 메시지는 지갑에서 차감됩니다.",
+          "ended": "요금제가 종료되어 갱신 전까지 발송이 일시 중지됩니다."
+        },
+        "generic": "메시지는 요금제에 포함됩니다. 요금제에 포함되지 않은 항목은 지갑에서 차감됩니다."
+      },
+      "activity": {
+        "title": "최근 활동",
+        "fullStatement": "전체 명세서 열기",
+        "emptyTitle": "아직 활동이 없습니다",
+        "emptyBody": "충전, 메시지 요금 및 환불 내역이 여기에 표시됩니다."
+      }
+    },
+    "activity": {
+      "description": "설명",
+      "type": "유형",
+      "date": "날짜",
+      "amount": "금액",
+      "balance": "잔액",
+      "noDescription": "지갑 거래 내역",
+      "reason": "사유"
+    },
+    "pricingPanel": {
+      "title": "메시지 요금",
+      "badge": "메시지당",
+      "free": "무료",
+      "noCharge": "요금 없음",
+      "perMessage": "메시지당",
+      "footer": "메시지가 전달되면 요금이 부과됩니다. 요금은 수신자의 국가와 메시지 카테고리에 따라 다릅니다."
+    },
+    "statement": {
+      "title": "지갑 명세서",
+      "subtitle": "지갑의 모든 입출금 내역입니다. 합계는 이 페이지뿐 아니라 필터에 맞는 모든 항목을 포함합니다.",
+      "back": "지갑으로 돌아가기",
+      "breadcrumbLabel": "탐색 경로",
+      "breadcrumbWallet": "지갑",
+      "breadcrumbStatement": "거래 내역서",
+      "export": "CSV 내보내기",
+      "exporting": "내보내는 중",
+      "exported": "{fileName} 저장됨",
+      "emptyTitle": "거래 내역 없음",
+      "emptyFiltered": "필터와 일치하는 항목이 없습니다. 필터를 변경하거나 초기화하세요.",
+      "emptyNone": "지갑의 입출금 내역이 여기에 표시됩니다.",
+      "filters": {
+        "type": "유형",
+        "from": "시작",
+        "to": "종료",
+        "rangeInverted": "종료일이 시작일보다 앞섭니다.",
+        "search": "검색",
+        "searchPlaceholder": "설명 또는 사유",
+        "apply": "적용",
+        "reset": "초기화"
+      },
+      "typeFilter": {
+        "all": "전체",
+        "topup": "충전",
+        "earn": "수익",
+        "spend": "메시지 요금",
+        "refund": "환불",
+        "admin_adjust": "조정"
+      },
+      "summary": {
+        "balance": "현재 잔액",
+        "in": "입금",
+        "out": "출금",
+        "net": "순 변동",
+        "count": "{count, plural, other {거래 #건}}"
+      },
+      "columns": {
+        "label": "지갑 거래 내역서",
+        "date": "날짜",
+        "description": "설명",
+        "type": "유형",
+        "in": "입금",
+        "out": "출금",
+        "balance": "잔액",
+        "none": "없음"
+      },
+      "context": {
+        "reason": "사유",
+        "to": "받는 사람",
+        "template": "템플릿"
+      },
+      "channels": {
+        "campaign": "캠페인",
+        "broadcast": "브로드캐스트",
+        "flow": "플로우",
+        "scheduled": "예약됨",
+        "auto_reply": "자동 응답",
+        "chat": "채팅",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      }
+    },
+    "admin": {
+      "admin": "관리자",
+      "wallet": "지갑",
+      "workspacesLabel": "워크스페이스",
+      "breadcrumb": "탐색 경로",
+      "readOnly": "{role}(으)로 로그인되어 있습니다. 지갑 설정, 요금, 잔액은 최고 관리자만 변경할 수 있습니다.",
+      "nav": {
+        "overview": "지갑",
+        "pricing": "메시지 요금",
+        "workspaces": "워크스페이스 지갑",
+        "logs": "지갑 로그",
+        "margins": "마진",
+        "packages": "크레딧 패키지"
+      },
+      "overview": {
+        "title": "지갑 개요",
+        "subtitle": "워크스페이스 지갑에 보관된 금액과 최근 30일간의 입출금입니다.",
+        "linkWorkspaces": "워크스페이스 지갑",
+        "linkPricing": "메시지 요금",
+        "linkLogs": "지갑 로그",
+        "float": "지갑 보유액",
+        "floatHint": "전체 워크스페이스 보유액",
+        "holding": "잔액이 있는 워크스페이스",
+        "low": "잔액 부족",
+        "last30": "최근 30일",
+        "toppedUp": "충전됨",
+        "charged": "차감됨",
+        "refunded": "환불됨",
+        "adjustedIn": "수동 추가",
+        "adjustedOut": "수동 차감",
+        "chargedMessages": "요금 부과 메시지",
+        "freeMessages": "무료 메시지",
+        "reconcile": {
+          "title": "잔액을 원장과 대조",
+          "body": "모든 지갑을 원장에서 다시 계산하고 원장과 일치하지 않는 잔액을 나열합니다.",
+          "button": "잔액을 원장과 대조",
+          "running": "확인 중",
+          "ok": "{count, plural, other {#개 지갑이}} 원장과 모두 일치합니다.",
+          "mismatches": "{checked}개 지갑 중 {count}개가 원장과 일치하지 않습니다.",
+          "workspace": "워크스페이스",
+          "balance": "잔액",
+          "ledger": "원장",
+          "difference": "차이"
+        },
+        "otherCurrencies": "다른 통화의 지갑",
+        "otherCurrenciesNote": "다른 통화로 청구되는 워크스페이스는 해당 통화로 금액을 보관합니다. 위 수치는 {currency}만 반영하며, 다른 통화는 각각 별도 줄에 집계됩니다.",
+        "other": {
+          "currency": "통화",
+          "float": "보유액",
+          "holding": "잔액이 있는 워크스페이스",
+          "toppedUp": "충전됨, 30일",
+          "charged": "차감됨, 30일"
+        }
+      },
+      "pricing": {
+        "title": "메시지 요금",
+        "crumb": "메시지 요금",
+        "subtitle": "고객이 메시지당 지불하는 금액, 신규 지갑 보호 방식, 국가별 요금표를 설정합니다.",
+        "kpi": {
+          "signup": "추천 보상",
+          "cost": "메시지당 비용",
+          "costHint": "국가별 요금이 꺼져 있을 때 적용되는 고정 가격",
+          "spending": "실제 지출",
+          "spendingHint": "고정 가격 기준 {amount}으로 구매할 수 있는 메시지",
+          "lowBalance": "잔액 부족 알림"
+        },
+        "economics": {
+          "title": "경제성",
+          "liveKeys": "즉시 적용됩니다",
+          "flatPrice": "메시지당 고정 가격",
+          "flatPriceHint": "최소 0.01입니다. 무료 메시지는 요금표를 사용하세요.",
+          "referralSignup": "추천 보상",
+          "referralSignupHint": "추천인이 피추천인의 첫 유료 주문 시 지급됩니다.",
+          "lowBalance": "잔액 부족 알림 기준",
+          "lowBalanceHint": "이 잔액 이하의 워크스페이스에는 경고가 표시됩니다.",
+          "coverage": "발송 보장 비율",
+          "coverageHint": "대량 발송은 예상 비용 중 이 비율 이상을 지갑이 보유한 경우에만 허용됩니다. 0은 잔액이 전혀 없는 경우만 거부합니다.",
+          "rewardSentence": "{reward} 보상은 고정 가격 기준 {count, plural, other {메시지 #건}}에 해당합니다.",
+          "save": "경제성 저장",
+          "saving": "저장 중",
+          "saved": "경제성 설정이 저장되었습니다.",
+          "problems": {
+            "invalid": "소수점 2자리 이하의 금액을 입력하세요.",
+            "flatZero": "고정 가격은 0일 수 없습니다.",
+            "percent": "0에서 100 사이의 정수를 입력하세요."
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "국가별 요금",
+            "on": "켜짐: 요금표에 따라 수신자 국가와 카테고리별로 메시지 요금이 청구됩니다.",
+            "off": "꺼짐: 모든 메시지에 고정 가격이 청구됩니다.",
+            "save": "저장",
+            "confirmTitle": "국가별 요금 설정을 변경할까요?",
+            "confirmOn": "다음 발송부터 국가 및 카테고리에 따라 메시지 요금이 청구됩니다.",
+            "confirmOff": "다음 발송부터 모든 메시지에 고정 가격이 청구됩니다.",
+            "confirm": "예, 변경합니다",
+            "savedOn": "국가별 요금이 켜졌습니다.",
+            "savedOff": "국가별 요금이 꺼졌습니다."
+          },
+          "payPerMessage": {
+            "label": "메시지별 요금 청구",
+            "on": "켜짐: 요금제 포함 한도가 없는 워크스페이스는 전달된 메시지마다 지갑에서 요금이 차감됩니다.",
+            "off": "꺼짐: 메시지에 대해 지갑에서 요금이 차감되지 않습니다.",
+            "save": "저장",
+            "confirmTitle": "메시지별 요금 청구를 변경할까요?",
+            "confirmOn": "이제부터 전달된 메시지에 대해 지갑에서 요금이 차감됩니다.",
+            "confirmOff": "이제부터 지갑에서 메시지 요금을 차감하지 않습니다. 모든 워크스페이스에 영향을 줍니다.",
+            "confirm": "예, 변경합니다",
+            "savedOn": "메시지별 요금 청구가 켜졌습니다.",
+            "savedOff": "메시지별 요금 청구가 꺼졌습니다."
+          }
+        },
+        "grid": {
+          "title": "요금표",
+          "modeOn": "국가별 요금이 켜져 있으므로 이 가격이 적용됩니다.",
+          "modeOff": "국가별 요금이 꺼져 있으므로 이 가격은 저장만 되며 고정 가격이 청구됩니다.",
+          "empty": "아직 요금이 없습니다. 행을 추가하거나 요금표를 가져오거나 기본 요금표를 다시 적용하세요.",
+          "country": "국가",
+          "category": "카테고리",
+          "charge": "고객 요금",
+          "metaCost": "Meta 요금",
+          "margin": "마진",
+          "marginUnknown": "알 수 없음",
+          "actions": "작업",
+          "anyCountry": "모든 국가",
+          "anyCategory": "모든 카테고리",
+          "serviceFree": "서비스(무료)",
+          "addRow": "행 추가",
+          "remove": "삭제",
+          "cancel": "취소",
+          "removeTitle": "이 요금을 삭제할까요?",
+          "removeBody": "{country} 요금이 삭제됩니다. 메시지는 다음으로 일치하는 요금을 따릅니다.",
+          "removed": "요금이 삭제되었습니다.",
+          "save": "요금 저장",
+          "saving": "저장 중",
+          "saved": "{count, plural, other {요금 #건이}} 저장되었습니다.",
+          "savedSome": "{saved}건 저장, {skipped}건 건너뜀. 건너뛴 각 행의 사유를 확인하세요.",
+          "unsaved": "{count, plural, other {저장되지 않은 행 #개}}",
+          "tooMany": "한 번에 저장하기에는 변경된 행이 너무 많습니다. 더 작은 묶음으로 저장하세요.",
+          "problems": {
+            "price": "소수점 2자리 이하의 가격을 입력하세요.",
+            "metaCost": "소수점 6자리 이하의 비용을 입력하세요.",
+            "country": "2자리 국가 코드를 입력하거나, 모든 국가에 적용하려면 비워 두세요.",
+            "empty": "가격 또는 Meta 비용을 입력하세요.",
+            "duplicate": "이 국가와 카테고리의 행이 이미 있습니다."
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "Meta 비용 동기화",
+            "title": "Meta 비용 동기화",
+            "loading": "Meta 가격표를 읽는 중",
+            "source": "출처",
+            "version": "버전",
+            "noVersion": "없음",
+            "currency": "통화",
+            "added": "추가될 행",
+            "updated": "업데이트될 행",
+            "untouched": "고객 가격은 변경되지 않습니다. Meta가 청구하는 비용만 업데이트됩니다.",
+            "bundledNote": "연결된 Meta 가격표가 없어 번들된 요금표를 사용합니다.",
+            "apply": "적용",
+            "applying": "적용 중",
+            "done": "Meta 비용 동기화 완료: {added}건 추가, {updated}건 업데이트."
+          },
+          "import": {
+            "button": "요금표 가져오기",
+            "title": "요금표 가져오기",
+            "intro": "CSV 요금표를 업로드하세요. 저장 전에 변경될 내용을 확인할 수 있습니다.",
+            "file": "CSV 파일",
+            "limit": "최대 4MB.",
+            "reading": "파일을 읽는 중",
+            "shape": "레이아웃",
+            "shapes": {
+              "wide": "카테고리별 열 하나",
+              "long": "카테고리별 행 하나"
+            },
+            "added": "추가 예정",
+            "updated": "업데이트 예정",
+            "skipped": "건너뜀",
+            "currencyNote": "가격은 {currency} 기준으로 읽습니다.",
+            "problems": "건너뛸 행",
+            "line": "{line}행:",
+            "fileProblems": {
+              "notCsv": ".csv 파일을 선택하세요.",
+              "tooBig": "파일 크기가 4MB를 초과합니다.",
+              "unreadable": "파일을 읽을 수 없습니다."
+            },
+            "apply": "가져오기 적용",
+            "applying": "가져오는 중",
+            "done": "요금표를 가져왔습니다: {added}건 추가, {updated}건 업데이트, {skipped}건 건너뜀."
+          },
+          "seed": {
+            "button": "기본 요금표 다시 적용",
+            "title": "기본 요금표를 다시 적용할까요?",
+            "warning": "같은 국가와 카테고리의 기존 행을 번들된 기본 가격으로 덮어씁니다. 해당 행에 직접 설정한 가격은 대체됩니다.",
+            "confirm": "다시 적용",
+            "done": "기본 요금표에서 {count, plural, other {요금 #건이}} 작성되었습니다."
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "국경 간 발송",
+            "body": "가격은 워크스페이스가 아닌 수신자의 국가를 따릅니다. 발송하는 모든 국가에 대해 행을 추가하세요."
+          },
+          "how": {
+            "title": "가격이 정해지는 방식",
+            "body": "지갑은 수신자의 국가와 메시지 카테고리를 이 요금표에서 찾습니다. 카테고리나 국가를 비워 두면 모든 값에 일치합니다."
+          },
+          "order": {
+            "title": "우선 적용되는 행",
+            "body": "국가와 카테고리가 정확히 일치하는 행을 먼저 사용하고, 다음으로 카테고리 무관 국가 행, 그다음 모든 국가 행, 마지막으로 고정 가격을 사용합니다."
+          }
+        },
+        "mode": {
+          "title": "고객 요금 산정 방식",
+          "current": "현재: {mode}",
+          "intro": "고객에게 메시지당 요금을 정하는 방식을 선택하세요. 모든 워크스페이스에 적용되며 단독으로 저장됩니다.",
+          "fixed": {
+            "label": "고정 가격",
+            "body": "아래 요금표에서 국가와 카테고리별 가격을 직접 입력합니다. 마진은 저장되지만 사용되지 않습니다."
+          },
+          "margin": {
+            "label": "Meta 비용 + 마진",
+            "body": "고객은 Meta 비용에 국가 및 카테고리별로 설정한 마진을 더해 지불합니다. Meta 비용을 알 수 없는 경우에는 입력한 고정 가격이 청구됩니다."
+          },
+          "save": "요금 산정 방식 저장",
+          "manage": "마진 설정",
+          "confirmTitle": "고객 요금 산정 방식을 변경할까요?",
+          "confirmFixed": "다음 메시지부터 모든 워크스페이스에 요금표의 고정 가격이 청구됩니다. 마진은 저장되지만 적용되지 않습니다.",
+          "confirmMargin": "다음 메시지부터 모든 워크스페이스에 Meta 비용과 해당 워크스페이스에 적용되는 마진(워크스페이스 재정의, 요금제, 플랫폼 기본값 순)이 청구됩니다. Meta 비용을 알 수 없는 경우에는 고정 가격이 여전히 청구됩니다.",
+          "confirm": "예, 변경합니다",
+          "savedFixed": "이제 고객에게 고정 가격이 적용됩니다.",
+          "savedMargin": "이제 고객에게 Meta 비용 + 마진이 적용됩니다."
+        },
+        "metaCards": {
+          "title": "Meta 요금표",
+          "intro": "Meta는 통화별로 하나의 가격표를 발행하며, 1월 1일, 4월 1일, 7월 1일, 10월 1일에만 변경합니다. INR로 청구되는 워크스페이스는 USD 목록을 환산하지 않고 Meta의 INR 목록으로 가격이 정해지며 INR 지갑에서 차감됩니다. Meta가 발행한 파일을 그대로 각각 가져오세요. 입력한 가격과 고정 가격은 플랫폼 통화로 보관되며, 다른 통화로 청구되는 워크스페이스에는 보관된 환율로 환산됩니다.",
+          "none": "아직 저장된 Meta 요금표가 없습니다. 해당 통화에 대해 Meta가 발행한 파일을 가져오세요.",
+          "view": "보기",
+          "hide": "숨기기",
+          "usedPricing": "가격, 마진, 리셀러 손익, 플랫폼 통화로 청구되는 워크스페이스",
+          "usedWorkspaces": "{currency}로 청구되는 워크스페이스 가격",
+          "columns": {
+            "currency": "통화",
+            "effective": "적용 시작일",
+            "checked": "마지막 가져오기",
+            "markets": "시장",
+            "usedFor": "사용처",
+            "status": "상태",
+            "actions": "작업"
+          },
+          "freshness": {
+            "current": "최신 상태",
+            "upcoming": "곧 확인",
+            "due": "지금 확인"
+          },
+          "reminder": {
+            "link": "Meta 가격 페이지 열기",
+            "current": "최신 상태입니다. Meta는 다음에 {date}에 가격을 변경할 수 있습니다.",
+            "dueTitle": "{date}에 새 분기가 시작되었습니다. Meta가 가격을 변경했을 수 있습니다.",
+            "dueBody": "새 요금 파일(사용 중인 통화별로 하나)을 내려받아 여기에서 가져오세요. 그때까지 비용과 마진은 이전 요금표를 사용합니다.",
+            "upcomingTitle": "Meta는 {date}에 가격을 변경할 수 있습니다(남은 기간 {days, plural, other {#일}}).",
+            "upcomingBody": "그날 가져올 수 있도록 새 파일을 준비해 두세요.",
+            "missingTitle": "{currencies}에 대한 Meta 요금표가 없습니다.",
+            "missingBody": "해당 통화로 설정된 워크스페이스에 표시할 Meta 가격표가 없습니다. Meta가 발행한 파일을 가져오세요."
+          },
+          "table": {
+            "heading": "Meta {currency} 요금표",
+            "note": "Meta가 발행한 전달 메시지당 정가입니다. Meta가 이름을 지정하지 않은 국가는 기타로 가격이 정해집니다.",
+            "market": "시장",
+            "everyOther": "이름이 없는 모든 국가",
+            "categories": {
+              "marketing": "마케팅",
+              "utility": "유틸리티",
+              "authentication": "인증",
+              "authentication_international": "인증(국제)",
+              "service": "서비스"
+            }
+          },
+          "import": {
+            "button": "Meta 요금표 가져오기",
+            "title": "Meta 요금표 가져오기",
+            "intro": "한 통화에 대해 Meta가 발행한 파일을 선택하세요(링크가 CSV라고 되어 있어도 Excel 통합 문서입니다). 통화와 적용 시작일은 파일에서 읽습니다. 저장 전에 변경될 내용을 확인할 수 있습니다.",
+            "file": "Meta 요금 파일(.xlsx 또는 .csv)",
+            "hint": "파일당 통화 하나입니다. 새 파일은 해당 통화의 요금표 전체를 대체합니다. 최대 2MB.",
+            "reading": "파일을 읽는 중…",
+            "applying": "가져오는 중",
+            "apply": "요금표 가져오기",
+            "done": "{currency} 요금표를 가져왔습니다.",
+            "fileProblems": {
+              "wrongType": "Meta가 발행한 .xlsx 파일 또는 여기에서 저장한 CSV를 선택하세요.",
+              "tooBig": "파일 크기가 2MB를 초과합니다. Meta 요금표가 아닌 것으로 보입니다.",
+              "unreadable": "파일을 읽을 수 없습니다."
+            },
+            "summary": {
+              "currency": "통화",
+              "effective": "적용 시작일",
+              "added": "새 행",
+              "changed": "변경됨",
+              "unchanged": "변경 없음",
+              "removed": "제외됨"
+            },
+            "replaces": "{date} 적용 요금표를 대체합니다.",
+            "appliesToPricing": "플랫폼 통화인 {currency} 요금표입니다. 가져오면 가격, 마진, 리셀러 손익에 쓰이는 Meta 비용도 갱신됩니다({added}건 추가, {updated}건 업데이트). 고객 가격은 변경되지 않습니다.",
+            "storedOnly": "플랫폼 통화가 아닙니다. 저장되고 표시되며, {currency}로 청구되는 모든 워크스페이스의 가격을 결정합니다. 아래 요금표의 Meta 비용은 플랫폼 통화로 유지됩니다.",
+            "biggest": "가장 큰 변경",
+            "categories": {
+              "marketing": "마케팅",
+              "utility": "유틸리티",
+              "authentication": "인증",
+              "authentication_international": "인증(국제)",
+              "service": "서비스"
+            },
+            "problems": "건너뛴 행"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "워크스페이스 지갑",
+        "crumb": "워크스페이스 지갑",
+        "subtitle": "모든 워크스페이스와 잔액입니다. 항목을 보거나 잔액을 조정하려면 하나를 여세요.",
+        "search": "검색",
+        "searchPlaceholder": "워크스페이스 이름 또는 슬러그",
+        "lowOnly": "잔액 부족만 보기",
+        "apply": "적용",
+        "totalWorkspaces": "워크스페이스",
+        "totalFloat": "총 보유액",
+        "totalLow": "잔액 부족",
+        "emptyTitle": "워크스페이스를 찾을 수 없습니다",
+        "emptyBody": "검색어를 바꾸거나 잔액 부족 필터를 해제하세요.",
+        "loadMore": "더 보기",
+        "loadingMore": "더 불러오는 중",
+        "columns": {
+          "label": "워크스페이스 지갑",
+          "workspace": "워크스페이스",
+          "mode": "청구",
+          "balance": "잔액",
+          "low": "부족",
+          "activity": "마지막 활동",
+          "never": "없음"
+        },
+        "totalFloatIn": "보유액({currency})"
+      },
+      "detail": {
+        "crumb": "워크스페이스",
+        "adjust": "잔액 조정",
+        "balance": "잔액",
+        "lowBalance": "잔액 부족",
+        "threshold": "{amount}에서 알림",
+        "recent": "최근 항목",
+        "emptyTitle": "아직 항목이 없습니다",
+        "emptyBody": "이 지갑의 입출금 내역이 여기에 표시됩니다.",
+        "columns": {
+          "label": "최근 지갑 항목",
+          "date": "날짜",
+          "type": "유형",
+          "amount": "금액",
+          "balanceAfter": "처리 후 잔액",
+          "who": "처리자",
+          "reason": "사유",
+          "customer": "고객",
+          "operator": "운영자",
+          "system": "시스템"
+        },
+        "result": {
+          "appliedAdd": "{applied}이(가) 추가되었습니다. 현재 잔액은 {balance}입니다.",
+          "appliedDeduct": "{applied}이(가) 차감되었습니다. 현재 잔액은 {balance}입니다.",
+          "partial": "잔액은 0 아래로 내려갈 수 없으므로 요청한 {requested} 중 {applied}만 적용되었습니다. 현재 잔액은 {balance}입니다.",
+          "replayed": "(이 요청은 이미 적용되었습니다.)"
+        },
+        "pricing": {
+          "title": "이 워크스페이스의 가격",
+          "subtitle": "마진 재정의는 이 워크스페이스에만 적용되며, 워크스페이스의 요금제와 플랫폼 기본값보다 우선합니다.",
+          "plan": "요금제",
+          "planLoading": "요금제를 불러오는 중",
+          "planUnknown": "읽을 수 없음",
+          "noPlan": "요금제 없음",
+          "overrides": "마진 재정의",
+          "overridesHint": "여기 나열된 행만 재정의됩니다. 나머지는 요금제와 플랫폼 기본값을 따릅니다.",
+          "empty": "재정의 없음. 이 워크스페이스는 요금제와 플랫폼 기본값을 따릅니다.",
+          "reason": {
+            "label": "사유(감사 로그에 보관)",
+            "hint": "모든 변경 또는 삭제에 필요하며, 5~500자입니다.",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "최소 5자 이상으로 사유를 입력하세요.",
+              "long": "사유는 500자 이하로 입력하세요."
+            }
+          },
+          "save": "재정의 저장",
+          "saving": "저장 중",
+          "saveHint": "강조 표시된 행을 수정하고 사유를 입력해야 저장할 수 있습니다.",
+          "saved": "{saved}건 저장, {removed}건 삭제.",
+          "savedSome": "{saved}건 저장, {skipped}건 건너뜀. 건너뛴 각 행의 사유를 확인하세요.",
+          "preview": {
+            "title": "가격 미리보기",
+            "hint": "이 워크스페이스에 보내는 메시지 한 건의 가격과 그 가격을 정한 계층을 확인하세요.",
+            "country": "국가",
+            "category": "카테고리",
+            "run": "미리보기 가격",
+            "running": "가격을 계산하는 중",
+            "result": {
+              "label": "가격 미리보기 결과",
+              "metaCost": "Meta 비용",
+              "unknownCost": "알 수 없음",
+              "margin": "마진",
+              "noMargin": "없음",
+              "layer": "적용 기준",
+              "noLayer": "일치하는 마진 없음",
+              "layers": {
+                "workspace": "워크스페이스 재정의",
+                "plan": "요금제 마진",
+                "platform": "플랫폼 기본값"
+              },
+              "price": "고객 가격",
+              "basis": "기준",
+              "bases": {
+                "margin": "Meta 비용 + 마진",
+                "fixed": "고정 가격"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "청구 통화",
+          "intro": "메시지는 이 통화에 해당하는 Meta 요금표로 가격이 정해지며 워크스페이스의 해당 통화 지갑에서 차감됩니다. 충전도 같은 통화로 입력되고 적립됩니다.",
+          "billedIn": "청구 통화",
+          "change": "통화 변경",
+          "otherWallets": "이 워크스페이스가 보유한 다른 지갑",
+          "notUsed": "청구에 사용되지 않으며, 금액은 그대로 여기에 남습니다.",
+          "dialog": {
+            "title": "청구 통화 변경",
+            "currency": "청구 통화",
+            "effect": "이제부터 메시지는 Meta의 {to} 요금표로 가격이 정해지고 {to} 지갑에서 차감됩니다. 금액은 환전되지 않으며, {from} 지갑의 잔액은 그대로 유지됩니다.",
+            "left": "{amount}은(는) {from} 지갑에 남아 있으며, 워크스페이스를 다시 전환하기 전까지 사용되지 않습니다.",
+            "reason": "사유",
+            "reasonHint": "감사 기록과 워크스페이스의 지갑 로그에 표시됩니다. 최소 5자 이상입니다.",
+            "confirm": "{currency}로 청구",
+            "saving": "저장 중",
+            "done": "현재 {to}로 청구됩니다(이전: {from})."
+          }
+        }
+      },
+      "adjust": {
+        "title": "잔액 조정",
+        "current": "현재 잔액",
+        "direction": "작업",
+        "add": "금액 추가",
+        "deduct": "차감",
+        "amount": "금액",
+        "amountHint": "소수점 2자리까지 입력할 수 있습니다.",
+        "reason": "사유",
+        "reasonHint": "필수, 5~500자입니다. 워크스페이스는 명세서에서 이 사유를 확인합니다.",
+        "counter": "{count} / {max}",
+        "cappedWarning": "잔액 {balance}보다 큰 금액입니다. 잔액만큼만 차감되며 잔액은 0에서 멈춥니다.",
+        "review": "검토",
+        "confirmAdd": "금액 추가",
+        "confirmDeduct": "차감",
+        "posting": "반영 중",
+        "summaryAdd": "{workspace}에 {amount} 추가.",
+        "summaryDeduct": "{workspace}에서 {amount} 차감.",
+        "newBalance": "새 잔액: {balance}",
+        "summaryReason": "사유: {reason}",
+        "visibleNote": "사유는 워크스페이스에 표시되며 감사 로그에 보관됩니다.",
+        "problems": {
+          "amount": {
+            "required": "금액을 입력하세요.",
+            "invalid": "소수점 2자리 이하의 양수 금액을 입력하세요.",
+            "zero": "금액은 0보다 커야 합니다.",
+            "tooLarge": "단일 조정의 한도를 초과했습니다."
+          },
+          "note": {
+            "short": "최소 {min}자 이상으로 사유를 입력하세요.",
+            "long": "사유는 {max}자 미만으로 입력하세요."
+          }
+        }
+      },
+      "logs": {
+        "title": "지갑 로그",
+        "crumb": "지갑 로그",
+        "subtitle": "지갑에 무슨 일이 있었는지, 운영자가 무엇을 변경했는지 보여줍니다.",
+        "scope": "범위",
+        "scopes": {
+          "all": "전체",
+          "workspace": "워크스페이스 이벤트",
+          "platform": "플랫폼 변경"
+        },
+        "event": "이벤트",
+        "anyEvent": "모든 이벤트",
+        "severity": "심각도",
+        "anySeverity": "모든 심각도",
+        "severities": {
+          "info": "정보",
+          "warning": "경고",
+          "error": "오류"
+        },
+        "workspaceId": "워크스페이스 ID",
+        "workspaceIdInvalid": "워크스페이스 ID(UUID)를 입력하세요.",
+        "search": "검색",
+        "from": "시작",
+        "to": "종료",
+        "apply": "적용",
+        "reset": "초기화",
+        "emptyTitle": "로그 항목 없음",
+        "emptyBody": "필터와 일치하는 항목이 없습니다.",
+        "loadMore": "더 보기",
+        "loadingMore": "더 불러오는 중",
+        "platform": "플랫폼",
+        "showDetails": "상세 보기",
+        "hideDetails": "상세 숨기기",
+        "requestId": "요청 ID",
+        "columns": {
+          "time": "시간",
+          "severity": "심각도",
+          "event": "이벤트",
+          "workspace": "워크스페이스",
+          "actor": "행위자",
+          "message": "메시지"
+        },
+        "actors": {
+          "operator": "운영자",
+          "customer": "고객",
+          "system": "시스템"
+        }
+      },
+      "margins": {
+        "title": "마진",
+        "crumb": "마진",
+        "subtitle": "고객이 국가별, 메시지 카테고리별로 Meta 비용 위에 추가로 지불하는 금액입니다.",
+        "retry": "다시 시도",
+        "ratesFailed": "Meta 비용을 불러올 수 없어 새 행의 가격을 표시할 수 없습니다.",
+        "mode": {
+          "current": "고객 가격 기준",
+          "inactive": "가격 방식이 고정 가격이므로 이 마진은 아직 적용되지 않습니다. 저장되며 Meta 비용 + 마진으로 전환하면 적용됩니다.",
+          "switchLink": "가격 방식 전환으로 이동"
+        },
+        "scope": {
+          "label": "다음 대상의 마진",
+          "hint": "플랫폼 기본값은 모든 요금제에 적용됩니다. 요금제 자체 마진이 있으면 이것이 우선합니다.",
+          "platform": "플랫폼 기본값(모든 요금제에 적용)"
+        },
+        "grid": {
+          "country": "국가",
+          "searchCountry": "국가 검색",
+          "category": "카테고리",
+          "margin": "마진 %",
+          "metaCost": "Meta 비용",
+          "price": "고객 가격",
+          "note": "사유",
+          "setBy": "설정 주체",
+          "actions": "작업",
+          "anyCountry": "모든 국가",
+          "anyCategory": "모든 카테고리",
+          "unknownCost": "여기서는 Meta 비용을 알 수 없으므로 입력한 고정 가격이 적용됩니다.",
+          "priceInvalid": "-100에서 1000 사이이며 소수점 2자리 이하인 마진을 입력하세요.",
+          "removedPending": "저장하면 삭제됩니다.",
+          "addRow": "행 추가",
+          "remove": "삭제",
+          "undo": "실행 취소",
+          "cancel": "취소",
+          "empty": "아직 마진이 없습니다. 행을 추가하여 설정하세요.",
+          "removeTitle": "이 마진을 삭제할까요?",
+          "removeBody": "{country}의 마진이 삭제됩니다. 가격은 다음으로 일치하는 마진을 따릅니다.",
+          "removed": "마진이 삭제되었습니다.",
+          "save": "마진 저장",
+          "saving": "저장 중",
+          "saved": "{count, plural, other {마진 #건이}} 저장되었습니다.",
+          "savedSome": "{saved}건 저장, {skipped}건 건너뜀. 건너뛴 각 행의 사유를 확인하세요.",
+          "unsaved": "{count, plural, other {저장되지 않은 행 #개}}",
+          "tooMany": "한 번에 저장하기에는 변경된 행이 너무 많습니다. 더 작은 묶음으로 저장하세요.",
+          "problems": {
+            "margin": "-100에서 1000 사이이며 소수점 2자리 이하인 비율을 입력하세요. -100은 무료를 뜻합니다.",
+            "duplicate": "이 국가와 카테고리의 행이 이미 있습니다."
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "우선 적용되는 마진",
+            "body": "워크스페이스 재정의는 요금제 마진보다 우선하고, 요금제 마진은 플랫폼 기본값보다 우선합니다. 한 계층을 모두 확인한 뒤 다음 계층을 봅니다."
+          },
+          "specific": {
+            "title": "가장 구체적인 규칙 우선",
+            "body": "같은 계층 안에서는 국가와 카테고리가 일치하는 행을 먼저 쓰고, 그다음 카테고리 무관 국가 행, 그다음 모든 국가의 카테고리 행, 마지막으로 기본 행을 씁니다."
+          },
+          "unknown": {
+            "title": "Meta 비용을 알 수 없을 때",
+            "body": "가격은 Meta 비용에 마진을 더한 값을 0.01 단위로 반올림한 금액이며, 마진이 -100%(무료)인 경우가 아니면 최소 0.01입니다. Meta 비용을 알 수 없으면 대신 입력한 고정 가격이 적용됩니다."
+          }
+        }
+      },
+      "packages": {
+        "title": "크레딧 패키지",
+        "crumb": "크레딧 패키지",
+        "subtitle": "선택 사항인 상품입니다. 이 금액을 내면 이만큼의 지갑 크레딧을 받습니다. 가격보다 많은 크레딧은 충전 보너스입니다.",
+        "new": "새 패키지",
+        "edit": "편집",
+        "enable": "사용",
+        "disable": "사용 안 함",
+        "delete": "삭제",
+        "cancel": "취소",
+        "enabled": "{name}이(가) 사용으로 설정되었습니다.",
+        "disabled": "{name}이(가) 사용 안 함으로 설정되었습니다.",
+        "deleted": "패키지가 삭제되었습니다.",
+        "deleteTitle": "패키지를 삭제할까요?",
+        "deleteBody": "이 패키지를 삭제할까요? 기존 구매 내역의 원장 행은 유지됩니다.",
+        "bonus": "+{percent}% 보너스",
+        "status": {
+          "active": "활성",
+          "inactive": "비활성",
+          "featured": "추천"
+        },
+        "empty": {
+          "title": "크레딧 패키지가 아직 없습니다",
+          "body": "아직 생성된 패키지가 없습니다.",
+          "bodyWrite": "보너스가 포함된 지갑 충전 상품을 제공하려면 첫 패키지를 만드세요."
+        },
+        "columns": {
+          "label": "크레딧 패키지",
+          "name": "이름",
+          "slug": "슬러그",
+          "price": "가격",
+          "credit": "지갑 크레딧",
+          "badge": "배지",
+          "status": "상태",
+          "actions": "작업"
+        },
+        "form": {
+          "newTitle": "새 크레딧 패키지",
+          "editTitle": "크레딧 패키지 편집",
+          "newCrumb": "새 패키지",
+          "editCrumb": "패키지 편집",
+          "notFound": "이 패키지는 더 이상 존재하지 않습니다.",
+          "back": "크레딧 패키지로 돌아가기",
+          "sections": {
+            "identity": "식별 정보",
+            "pricing": "가격",
+            "display": "표시"
+          },
+          "name": "이름",
+          "slug": "슬러그(선택)",
+          "slugHint": "문자, 숫자, 하이픈, 밑줄만 사용할 수 있습니다. 비워 두면 이름에서 자동 생성됩니다.",
+          "description": "설명",
+          "price": "가격",
+          "priceHint": "고객이 지불하는 금액입니다.",
+          "currency": "통화",
+          "walletCredit": "지갑 크레딧",
+          "walletCreditHint": "지갑에 적립되는 금액입니다.",
+          "bonusLine": "{percent}% 보너스: 고객은 {price}을(를) 내고 {credit}을(를) 받습니다.",
+          "badge": "배지",
+          "badgeHint": "'최고의 가치' 같은 짧은 문구입니다.",
+          "sortOrder": "정렬 순서",
+          "sortOrderHint": "낮은 값이 먼저 표시됩니다.",
+          "active": "활성",
+          "featured": "추천",
+          "create": "패키지 생성",
+          "save": "변경 사항 저장",
+          "saving": "저장 중",
+          "created": "{name}이(가) 생성되었습니다.",
+          "saved": "{name}이(가) 저장되었습니다.",
+          "stale": {
+            "title": "다른 사용자가 이 패키지를 변경했습니다",
+            "body": "수정 내용은 저장되지 않았으며 아무것도 덮어쓰지 않았습니다. 최신 버전을 다시 불러온 후 변경을 다시 적용하세요.",
+            "reload": "최신 버전 다시 불러오기"
+          },
+          "problems": {
+            "name": "96자 이하의 이름을 입력하세요.",
+            "slug": "문자, 숫자, 하이픈, 밑줄만 사용하세요.",
+            "description": "설명은 500자 이하로 입력하세요.",
+            "price": "소수점 2자리 이하의 금액을 입력하세요.",
+            "currency": "표시된 통화 중 하나를 선택하세요.",
+            "walletCredit": "0보다 크고 소수점 2자리 이하인 금액을 입력하세요.",
+            "badge": "배지는 32자 이하로 입력하세요.",
+            "sortOrder": "0에서 9999 사이의 정수를 입력하세요."
+          }
+        }
+      }
+    }
+  }
+}

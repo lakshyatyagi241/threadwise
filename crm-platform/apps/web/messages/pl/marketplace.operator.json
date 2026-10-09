@@ -1,0 +1,924 @@
+{
+  "marketplace": {
+    "operator": {
+      "nav": {
+        "group": "Marketplace",
+        "catalogue": "Katalog",
+        "categories": "Kategorie",
+        "requests": "Prośby",
+        "usage": "Użycie"
+      },
+      "common": {
+        "loading": "Wczytywanie...",
+        "requestId": "ID żądania",
+        "retry": "Spróbuj ponownie",
+        "noPermissions": "Brak uprawnień"
+      },
+      "enums": {
+        "kind": {
+          "mini_app": "Miniaplikacja",
+          "integration": "Integracja"
+        },
+        "appStatus": {
+          "draft": "Szkic",
+          "in_review": "W przeglądzie",
+          "published": "Opublikowana",
+          "hidden": "Ukryta",
+          "killed": "Wyłączona"
+        },
+        "versionStatus": {
+          "draft": "Szkic",
+          "in_review": "W przeglądzie",
+          "approved": "Zatwierdzona",
+          "rejected": "Odrzucona",
+          "published": "Opublikowana",
+          "retired": "Wycofana"
+        },
+        "requestStatus": {
+          "open": "Otwarta",
+          "planned": "Zaplanowana",
+          "building": "W budowie",
+          "shipped": "Dostarczona",
+          "declined": "Odrzucona"
+        },
+        "connector": {
+          "oauth": "Logowanie OAuth",
+          "push": "Push (portal wysyła do nas)",
+          "pull": "Pull (my odpytujemy portal)",
+          "email_parse": "Parsowanie e-maili",
+          "webhook_relay": "Przekaźnik webhooków",
+          "client": "Klient (instalowany przez członków)"
+        },
+        "risk": {
+          "low": "Niskie ryzyko",
+          "medium": "Średnie ryzyko",
+          "high": "Wysokie ryzyko"
+        },
+        "subscriptionStatus": {
+          "active": "Płacąca",
+          "trialing": "Na okresie próbnym",
+          "comped": "Dostęp bezpłatny",
+          "canceling": "Kończąca się",
+          "ended": "Zakończona"
+        },
+        "subscriptionSource": {
+          "purchase": "Zakup",
+          "trial": "Próbny",
+          "comp": "Bezpłatny dostęp"
+        }
+      },
+      "errors": {
+        "conflict": "Ktoś inny zmienił to, gdy na to patrzyłeś. Odśwież, aby zobaczyć jego wersję, i wykonaj zmianę ponownie.",
+        "noAccess": "Do tego potrzebujesz uprawnienia platformy: {permission}.",
+        "manifestInvalid": "Manifest nie jest zgodny z manifestem v1. Każdy problem jest wypisany wraz ze ścieżką.",
+        "recipeInvalid": "Przepis nie jest zgodny z formatem przepisu albo nie pasuje do manifestu. Każdy problem jest wypisany wraz ze ścieżką.",
+        "urlRefused": "Adres w przepisie został odrzucony: {detail}.",
+        "urlRefusedPlain": "Adres w przepisie został odrzucony. Adresy muszą używać https, publicznej nazwy DNS, domyślnego portu i nie mogą zawierać danych logowania.",
+        "connectorNotAvailable": "Typ łącznika {type} nie jest jeszcze zaimplementowany, więc tej oferty nie można opublikować. Nic, co nie działa, nie trafi do przestrzeni roboczej.",
+        "slugTaken": "Inna oferta lub kategoria używa już tego ID. Wybierz inne.",
+        "categoryGone": "Ta kategoria już nie istnieje. Odśwież listę.",
+        "categoryUnknown": "Kategoria wskazana w manifeście nie istnieje dla tego typu aplikacji albo jest wyłączona. Wybierz jedną ze strony Kategorie.",
+        "categoryInUse": "W tej kategorii są aplikacje. Najpierw przenieś je do innej kategorii albo wyłącz kategorię, aby ukryć ją przed przestrzeniami roboczymi.",
+        "versionState": "Nie jest to dozwolone, gdy oferta lub wersja ma status {status}. Odśwież, aby zobaczyć jej aktualny stan.",
+        "versionStatePlain": "Nie jest to dozwolone w aktualnym stanie oferty lub wersji. Odśwież, aby zobaczyć jej aktualny stan.",
+        "versionExists": "Numer wersji musi być wyższy niż {newest}, czyli najwyższy dotychczas.",
+        "versionExistsPlain": "Taki numer wersji już istnieje. Użyj wyższego.",
+        "appUnavailable": "Oferty wyłączonej nie można opublikować. Najpierw ją przywróć, a potem opublikuj.",
+        "appNotFound": "Ta oferta nie istnieje. Mogła zostać usunięta.",
+        "notFound": "Nie znaleziono tej pozycji. Mogła zostać usunięta.",
+        "rateLimited": "Zbyt wiele żądań. Poczekaj {seconds} s i spróbuj ponownie.",
+        "rateLimitedPlain": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+        "validationFields": "Niektóre pola są nieprawidłowe. Każdy problem jest wypisany przy swoim polu.",
+        "validation": "Żądanie było nieprawidłowe.",
+        "request": "Nie udało się zrealizować żądania.",
+        "unexpected": "Coś poszło źle po naszej stronie. Spróbuj ponownie; jeśli to się powtarza, podaj ID żądania.",
+        "subscriptionState": "Nie jest to możliwe w obecnym stanie subskrypcji. Przestrzeni roboczej, która już płaci, nie można dać dostępu bezpłatnie (najpierw anuluj jej subskrypcję), darmowa aplikacja nie ma czego przyznać, a zakończonej subskrypcji nie można anulować ponownie.",
+        "subscriptionNotFound": "Nie znaleziono tej subskrypcji. Mogła zostać usunięta. Odśwież listę."
+      },
+      "list": {
+        "title": "Katalog Marketplace",
+        "description": "Każda oferta w dowolnym statusie: miniaplikacje i integracje, ich wersje i liczba przestrzeni roboczych, w których są zainstalowane.",
+        "new": "Nowa oferta",
+        "subscriptionsLink": "Subskrypcje i przychody",
+        "kpi": {
+          "label": "Oferty według statusu",
+          "loaded": "Wczytano",
+          "published": "Opublikowane",
+          "inReview": "W przeglądzie",
+          "hidden": "Ukryte",
+          "killed": "Wyłączone",
+          "note": "Liczby obejmują {count} ofert wczytanych dotąd, a nie cały katalog.",
+          "noteMore": "Dostępne są kolejne: użyj Wczytaj więcej."
+        },
+        "filters": {
+          "label": "Filtry",
+          "search": "Szukaj",
+          "searchPlaceholder": "Nazwa lub ID",
+          "kind": "Rodzaj",
+          "allKinds": "Wszystkie rodzaje",
+          "status": "Status",
+          "allStatuses": "Wszystkie statusy",
+          "category": "Kategoria",
+          "allCategories": "Wszystkie kategorie",
+          "categoryNote": "Filtruje oferty już wczytane: API nie ma filtra kategorii.",
+          "pricing": "Cennik",
+          "allPricing": "Wszystkie cenniki",
+          "free": "Bezpłatne",
+          "paid": "Płatne"
+        },
+        "cols": {
+          "app": "Aplikacja",
+          "kind": "Rodzaj",
+          "category": "Kategoria",
+          "status": "Status",
+          "versions": "Wersje",
+          "installs": "Instalacje",
+          "planFeature": "Funkcja planu",
+          "pricing": "Cennik",
+          "subscriptions": "Aktywne subskrypcje"
+        },
+        "badges": {
+          "firstParty": "Własna",
+          "featured": "Polecana"
+        },
+        "versionPublished": "Opublikowana",
+        "versionLatest": "Najnowsza",
+        "dash": "-",
+        "everyPlan": "Każdy plan",
+        "killedReason": "Wyłączona: {reason}",
+        "loadMore": "Wczytaj więcej",
+        "clearFilters": "Wyczyść filtry",
+        "emptyTitle": "Brak ofert",
+        "emptyMessage": "Utwórz pierwszą ofertę, aby rozpocząć katalog.",
+        "noMatchTitle": "Brak pasujących ofert",
+        "noMatchMessage": "Nic nie pasuje do tych filtrów. Spróbuj innych.",
+        "noMatchMoreMessage": "Żadna z dotąd wczytanych ofert nie pasuje. Dostępne są kolejne: wczytaj je albo zmień filtry.",
+        "tableCaption": "Oferty w Marketplace",
+        "viewSubscriptions": "Subskrypcje {name}"
+      },
+      "new": {
+        "title": "Nowa oferta",
+        "description": "Utwórz szkic oferty z pierwszą wersją. Nic nie trafi do przestrzeni roboczej, dopóki recenzent jej nie zatwierdzi i nie opublikuje.",
+        "back": "Wróć do katalogu",
+        "sections": {
+          "docs": "Manifest i przepis",
+          "docsHelp": "Manifest określa, czym jest aplikacja, co może robić i z którego łącznika korzysta. Integracja wymaga też przepisu. Oba są sprawdzane podczas pisania, według reguł stosowanych przez serwer.",
+          "changelog": "Notatki do pierwszej wersji",
+          "changelogHelp": "Pokazywane administratorom jako to, co zawiera pierwsza wersja."
+        },
+        "changelog": "Lista zmian",
+        "changelogHint": "Opcjonalne, do {max} znaków. Jeśli zostanie puste, pojawi się: Pierwsza wersja.",
+        "save": "Utwórz ofertę",
+        "saving": "Tworzenie...",
+        "cancel": "Anuluj",
+        "created": "Oferta {name} została utworzona jako szkic.",
+        "draftNote": "Oferta zaczyna się jako szkic. Wyślij jej wersję do przeglądu ze strony oferty."
+      },
+      "editor": {
+        "cancel": "Anuluj",
+        "format": "Format",
+        "problemCount": "{count, plural, one {# problem do naprawienia} few {# problemy do naprawienia} many {# problemów do naprawienia} other {# problemu do naprawienia}}",
+        "valid": {
+          "manifest": "Poprawny manifest v1.",
+          "recipe": "Poprawny przepis."
+        },
+        "manifest": {
+          "label": "Manifest (JSON)",
+          "hint": "Manifest v1: id, name, kind, category, version, description, scopes, pricing, support, connector."
+        },
+        "recipe": {
+          "label": "Przepis (JSON)",
+          "hint": "Przepis połączenia integracji: connector, authFields, mapping, rateLimits, errorMapping, setupInstructions, testPayloads.",
+          "insertStarter": "Wstaw przykładowy przepis"
+        },
+        "scopes": {
+          "title": "Uprawnienia, o które prosi ta wersja",
+          "help": "Co administrator ma zaakceptować, prostym językiem. Proś o jak najmniej uprawnień, które wystarczą."
+        },
+        "templates": {
+          "title": "Zacznij od szablonu",
+          "help": "Wypełnia oba edytory poprawnym punktem wyjścia, który potem edytujesz.",
+          "mini_app": "Miniaplikacja",
+          "webhook_relay": "Integracja: przekaźnik webhooków",
+          "push": "Integracja: push",
+          "replaceTitle": "Zastąpić to, co jest w edytorach?",
+          "replaceBody": "Wpisany przez Ciebie manifest i przepis zostaną zastąpione szablonem.",
+          "replaceAction": "Zastąp"
+        },
+        "problems": {
+          "listLabel": "Problemy",
+          "errorLabel": "Błąd:",
+          "warningLabel": "Ostrzeżenie:",
+          "syntax": "Nieprawidłowy JSON.",
+          "syntaxAt": "Nieprawidłowy JSON, w pobliżu wiersza {line}, kolumny {column}.",
+          "empty": "Ten dokument jest pusty.",
+          "recipeNotAllowed": "Miniaplikacja nie ma przepisu: wyczyść ten edytor.",
+          "recipeMissing": "Integracja potrzebuje przepisu, zanim zostanie wysłana do przeglądu.",
+          "recipeKeyMismatch": "Musi być równe ID z manifestu: {expected}.",
+          "recipeCategoryMismatch": "Musi być równe kategorii z manifestu: {expected}.",
+          "recipeConnectorMismatch": "Musi być równe typowi łącznika z manifestu: {expected}.",
+          "idChanged": "ID istniejącej oferty nie może się zmienić: musi pozostać {expected}.",
+          "kindChanged": "Rodzaj istniejącej oferty nie może się zmienić: musi pozostać {expected}.",
+          "versionNotHigher": "Wersja musi być wyższa niż {newest}, czyli najwyższa dotychczas.",
+          "versionTaken": "Inna wersja tej oferty już używa {version}.",
+          "categoryUnknown": "Brak aktywnej kategorii {kind} {category}. Sprawdź stronę Kategorie.",
+          "categoryRefused": "Serwer odrzucił tę kategorię: nie istnieje dla tego rodzaju albo jest wyłączona.",
+          "recipeRequired": "Integracja potrzebuje swojego przepisu.",
+          "slugTaken": "Inna oferta już używa tego ID."
+        }
+      },
+      "fields": {
+        "sections": {
+          "page": "Strona oferty",
+          "pageHelp": "Co administrator czyta na stronie aplikacji.",
+          "screenshots": "Zrzuty ekranu",
+          "screenshotsHelp": "Do {max} obrazów wyświetlanych na stronie aplikacji. Tylko linki https.",
+          "data": "Informacja o przetwarzaniu danych",
+          "dataHelp": "Co aplikacja przechowuje, gdzie i jak jest usuwana: oświadczenie pokazywane na stronie aplikacji.",
+          "placement": "Umiejscowienie i dostęp",
+          "placementHelp": "Jak jest szeregowana i który plan pozwala ją zainstalować."
+        },
+        "tagline": "Hasło przewodnie",
+        "taglineHint": "{count} z {max} znaków (co najmniej 5).",
+        "logo": "Adres logo",
+        "logoHint": "Link do obrazu https. Integracja bez niego używa logo z przepisu.",
+        "longDescription": "Długi opis",
+        "longDescriptionHint": "Zwykły tekst; puste wiersze oddzielają akapity. Do {max} znaków.",
+        "highlights": "Najważniejsze",
+        "highlightsHint": "Jedna pozycja w wierszu: do {max}, każda do {length} znaków.",
+        "screenshotUrl": "Adres zrzutu ekranu {n}",
+        "screenshotCaption": "Podpis zrzutu ekranu {n}",
+        "screenshotRemove": "Usuń zrzut ekranu {n}",
+        "screenshotAdd": "Dodaj zrzut ekranu",
+        "screenshotsNone": "Brak zrzutów ekranu.",
+        "dataSummary": "Co przechowuje",
+        "dataSummaryHint": "Do {max} znaków.",
+        "dataRegions": "Regiony",
+        "dataRegionsHint": "Oddzielone przecinkami, do {max}, na przykład India, EU.",
+        "dataDeletion": "Jak usuwane są dane",
+        "dataDeletionHint": "Do {max} znaków.",
+        "firstParty": "Własna",
+        "firstPartyHint": "Tworzona i prowadzona przez nas: oznaczona odznaką własną.",
+        "featured": "Polecana",
+        "featuredHint": "Pokazywana na polecanej półce.",
+        "planFeature": "Funkcja planu",
+        "planFeatureHint": "Przestrzeń robocza potrzebuje tej funkcji w planie lub przez dodatek, aby zainstalować aplikację. Etykiety pochodzą z katalogu planów.",
+        "planFeatureNone": "Każdy plan",
+        "sortOrder": "Kolejność sortowania",
+        "sortOrderHint": "Liczba całkowita od 0 do {max}; niższe pokazują się pierwsze.",
+        "problems": {
+          "required": "To pole jest wymagane.",
+          "tooShort": "Co najmniej {min} znaków.",
+          "tooLong": "Najwyżej {max} znaków.",
+          "https": "Użyj pełnego adresu https://.",
+          "tooMany": "Najwyżej {max} pozycji.",
+          "number": "Użyj liczby całkowitej od 0 do {max}.",
+          "unknownFeature": "Użyj małych liter, cyfr i podkreśleń, zaczynając od litery.",
+          "slug": "Użyj od 2 do 48 małych liter, cyfr lub myślników, zaczynając od litery.",
+          "icon": "Użyj od 1 do 32 małych liter, cyfr lub myślników."
+        }
+      },
+      "summary": {
+        "title": "Popraw to przed zapisem",
+        "sentTitle": "Serwer tego nie zapisał",
+        "manifest": "{count, plural, one {# problem w manifeście} few {# problemy w manifeście} many {# problemów w manifeście} other {# problemu w manifeście}}",
+        "recipe": "{count, plural, one {# problem w przepisie} few {# problemy w przepisie} many {# problemów w przepisie} other {# problemu w przepisie}}",
+        "fields": "{count, plural, one {# problem w polach oferty} few {# problemy w polach oferty} many {# problemów w polach oferty} other {# problemu w polach oferty}}"
+      },
+      "detail": {
+        "title": "Oferta",
+        "back": "Wróć do katalogu",
+        "firstParty": "Własna",
+        "featured": "Polecana",
+        "none": "Brak",
+        "everyPlan": "Każdy plan",
+        "kpi": {
+          "installs": "Instalacje",
+          "published": "Opublikowana wersja",
+          "latest": "Najnowsza wersja",
+          "versions": "Wersje"
+        },
+        "facts": {
+          "kind": "Rodzaj",
+          "category": "Kategoria",
+          "connector": "Łącznik",
+          "planFeature": "Funkcja planu"
+        },
+        "tabs": {
+          "overview": "Oferta",
+          "versions": "Wersje ({count})"
+        },
+        "operate": {
+          "title": "Obsługa",
+          "description": "Ukryj, wyłącz, przywróć lub usuń ofertę. Każde działanie wymaga potwierdzenia.",
+          "lacking": "Niektóre działania są ukryte, bo Twoje role nie obejmują {permission}."
+        },
+        "killed": {
+          "title": "Ta oferta jest wyłączona",
+          "reason": "Powód",
+          "effect": "Każda instalacja jest zatrzymana, a każdy adres dostawy odpowiada 410. Przestrzenie robocze mogą tylko odinstalować."
+        },
+        "notice": {
+          "killedTitle": "{name} została wyłączona",
+          "killedBody": "{count, plural, one {# instalacja została wyłączona.} few {# instalacje zostały wyłączone.} many {# instalacji zostało wyłączonych.} other {# instalacji zostało wyłączonych.}}",
+          "publishedTitle": "{name} {version} jest opublikowana",
+          "publishedUpgraded": "{count, plural, one {# instalacja przeszła na nią od razu.} few {# instalacje przeszły na nią od razu.} many {# instalacji przeszło na nią od razu.} other {# instalacji przeszło na nią od razu.}}",
+          "publishedWaiting": "{count, plural, one {# instalacja zachowuje obecną wersję, dopóki jej administrator nie zaakceptuje nowych uprawnień.} few {# instalacje zachowują obecną wersję, dopóki ich administratorzy nie zaakceptują nowych uprawnień.} many {# instalacji zachowuje obecną wersję, dopóki ich administratorzy nie zaakceptują nowych uprawnień.} other {# instalacji zachowuje obecną wersję, dopóki ich administratorzy nie zaakceptują nowych uprawnień.}}",
+          "dismiss": "Odrzuć"
+        }
+      },
+      "edit": {
+        "readOnly": "Tylko do odczytu. Edycja oferty wymaga uprawnienia platformy: {permission}.",
+        "conflict": "Ktoś inny zapisał tę ofertę, gdy ją edytowałeś. Odśwież, aby zobaczyć jego wersję, i wykonaj zmianę ponownie.",
+        "reload": "Odśwież",
+        "save": "Zapisz zmiany",
+        "saving": "Zapisywanie...",
+        "discard": "Odrzuć zmiany",
+        "nothingToSave": "Brak zmian.",
+        "saved": "Zapisano {name}."
+      },
+      "actions": {
+        "cancel": "Anuluj",
+        "hide": "Ukryj",
+        "unhide": "Pokaż ponownie",
+        "unkill": "Przywróć",
+        "delete": "Usuń",
+        "kill": "Wyłącznik awaryjny",
+        "confirm": {
+          "hide": {
+            "title": "Ukryć {name}?",
+            "body": "{name} znika z przeglądania i wyszukiwania, więc żadna nowa przestrzeń robocza jej nie znajdzie. Istniejące instalacje działają dalej.",
+            "action": "Ukryj"
+          },
+          "unhide": {
+            "title": "Pokazać ponownie {name}?",
+            "body": "{name} pojawia się ponownie w przeglądaniu i wyszukiwaniu z opublikowaną wersją.",
+            "action": "Pokaż ponownie"
+          },
+          "unkill": {
+            "title": "Przywrócić {name}?",
+            "body": "{name} zostaje ukryta, aby można ją było naprawić i ponownie opublikować. Wyłączone instalacje pozostają wyłączone: przestrzenie robocze muszą zainstalować ją ponownie.",
+            "action": "Przywróć"
+          },
+          "delete": {
+            "title": "Usunąć {name}?",
+            "body": "To trwale usuwa szkic oferty i jej wersje. Oferty opublikowanej lub zainstalowanej nie można usunąć: zamiast tego ją ukryj.",
+            "action": "Usuń ofertę"
+          }
+        },
+        "done": {
+          "hide": "{name} jest ukryta.",
+          "unhide": "{name} jest znów widoczna.",
+          "unkill": "{name} została przywrócona jako ukryta.",
+          "kill": "{name} została wyłączona.",
+          "delete": "{name} została usunięta."
+        }
+      },
+      "killDialog": {
+        "eyebrow": "Wyłącznik awaryjny",
+        "title": "Wyłączyć {name}?",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "confirm": "Wyłącz {name}",
+        "installs": "{name} jest zainstalowana w {count, plural, one {# przestrzeni roboczej} few {# przestrzeniach roboczych} many {# przestrzeniach roboczych} other {# przestrzeni roboczej}}.",
+        "effects": {
+          "stop": "Każda instalacja przestaje działać od razu.",
+          "connections": "Każde połączenie zostaje wyłączone.",
+          "address": "Adres dostawy odpowiada 410 Gone od następnego żądania.",
+          "uninstall": "Przestrzenie robocze mogą ją tylko odinstalować."
+        },
+        "undo": "Późniejsze przywrócenie oferty sprawi, że będzie ukryta. Wyłączone instalacje pozostaną wyłączone, a przestrzenie robocze muszą zainstalować ją ponownie.",
+        "reason": "Powód",
+        "reasonHint": "Od {min} do {max} znaków. Jest zapisywane w dzienniku audytu i pokazywane każdej przestrzeni roboczej.",
+        "count": "{count} z {max} znaków (co najmniej {min}).",
+        "typeSlug": "Wpisz {slug}, aby potwierdzić",
+        "typeSlugHint": "ID oferty, dokładnie tak jak pokazano."
+      },
+      "versions": {
+        "title": "Wersje",
+        "description": "Wszystkie wersje tej oferty. Wybierz jedną, aby zobaczyć jej manifest, przepis i działania.",
+        "newVersion": "Nowa wersja",
+        "newVersionHint": "Nowa wersja zaczyna się od wersji, którą oglądasz ({version}), z podniesionym numerem. Musi być wyższa niż każda wcześniejsza wersja.",
+        "tableCaption": "Wersje tej oferty",
+        "cols": {
+          "version": "Wersja",
+          "status": "Status",
+          "changelog": "Lista zmian",
+          "scopes": "Uprawnienia",
+          "reviewNote": "Notatka recenzenta",
+          "dates": "Daty"
+        },
+        "viewing": "Podgląd",
+        "none": "-",
+        "dates": {
+          "created": "Utworzono",
+          "submitted": "Wysłano",
+          "reviewed": "Sprawdzono",
+          "published": "Opublikowano"
+        },
+        "selectedTitle": "Wersja {version}",
+        "selectedHelp": "Jej uprawnienia, manifest i przepis w zapisanej postaci. Działania zależą od stanu wersji i Twoich uprawnień.",
+        "edit": "Edytuj",
+        "newFrom": "Nowa wersja z tej",
+        "submit": "Wyślij do przeglądu",
+        "approve": "Zatwierdź",
+        "reject": "Odrzuć",
+        "publish": "Opublikuj",
+        "rejectedNote": "Powód recenzenta (pokazywany twórcy)",
+        "recipeMissing": "Ta integracja nie ma jeszcze przepisu. Dodaj go przed wysłaniem do przeglądu.",
+        "permissions": "Uprawnienia",
+        "manifest": "Manifest",
+        "recipe": "Przepis",
+        "noRecipeIntegration": "Dla tej wersji nie zapisano przepisu.",
+        "noRecipeMiniApp": "Miniaplikacja nie ma przepisu.",
+        "done": {
+          "submit": "Wersja {version} wysłana do przeglądu.",
+          "approve": "Wersja {version} zatwierdzona.",
+          "reject": "Wersja {version} odrzucona.",
+          "publish": "Wersja {version} opublikowana.",
+          "created": "Wersja {version} zapisana jako szkic.",
+          "updated": "Wersja {version} zaktualizowana."
+        }
+      },
+      "versionEditor": {
+        "newTitle": "Nowa wersja",
+        "newHelp": "Zaczyna się od wersji, którą oglądasz, z podniesionym numerem. Zmień manifest i przepis, a potem opisz, co się zmieniło.",
+        "editTitle": "Edytuj wersję",
+        "editHelp": "Zastępuje manifest i przepis tej wersji. Odrzucona wersja wraca do szkicu po zapisaniu.",
+        "changelog": "Lista zmian",
+        "changelogHint": "Co zmieniło się w tej wersji. Administratorzy to czytają. Do {max} znaków.",
+        "saveNew": "Zapisz nową wersję",
+        "saveEdit": "Zapisz zmiany",
+        "saving": "Zapisywanie...",
+        "cancel": "Anuluj"
+      },
+      "versionDialogs": {
+        "approve": {
+          "title": "Zatwierdzić {name} {version}?",
+          "close": "Zamknij",
+          "cancel": "Anuluj",
+          "confirm": "Zatwierdź",
+          "body": "Zatwierdzoną wersję można potem opublikować. Zatwierdzenie nie zmienia tego, co widzą przestrzenie robocze.",
+          "note": "Notatka (opcjonalnie)",
+          "noteHint": "Zachowywana razem z wersją. Do {max} znaków."
+        },
+        "reject": {
+          "title": "Odrzucić {name} {version}?",
+          "close": "Zamknij",
+          "cancel": "Anuluj",
+          "confirm": "Odrzuć wersję",
+          "body": "Powód jest pokazywany twórcy. Edytuje wersję i wysyła ją ponownie.",
+          "note": "Powód",
+          "noteHint": "Co najmniej {min} i najwyżej {max} znaków.",
+          "count": "{count} z {max} znaków (co najmniej {min})."
+        },
+        "publish": {
+          "title": "Opublikować {name} {version}?",
+          "cancel": "Anuluj",
+          "confirm": "Opublikuj {version}",
+          "body": "{name} {version} staje się wersją, którą dostaje każda nowa instalacja.",
+          "effects": {
+            "retire": "Poprzednio opublikowana wersja zostaje wycofana.",
+            "moveSame": "Instalacje, których przyznane uprawnienia już obejmują tę wersję, przechodzą na nią od razu.",
+            "moveMore": "Instalacje, które wymagają więcej, działają dalej na obecnej wersji, dopóki ich administrator nie zaakceptuje nowej listy uprawnień.",
+            "killed": "Wyłączone instalacje nie są ruszane."
+          },
+          "installs": "{count, plural, one {# instalacja jest objęta zmianą.} few {# instalacje są objęte zmianą.} many {# instalacji jest objętych zmianą.} other {# instalacji jest objętych zmianą.}}",
+          "first": "To jest pierwsza opublikowana wersja.",
+          "addedScopes": "{count, plural, one {Wymaga # uprawnienia, którego nie ma opublikowana wersja:} few {Wymaga # uprawnienia, których nie ma opublikowana wersja:} many {Wymaga # uprawnień, których nie ma opublikowana wersja:} other {Wymaga # uprawnienia, którego nie ma opublikowana wersja:}}"
+        }
+      },
+      "categories": {
+        "title": "Kategorie",
+        "description": "Kategorie obu kart Marketplace. Wyłączona kategoria jest ukryta przed przestrzeniami roboczymi; kategorii z aplikacjami nie można usunąć.",
+        "new": "Nowa kategoria",
+        "emptyTitle": "Brak kategorii",
+        "emptyMessage": "Dodaj kategorię przed utworzeniem ofert: każda oferta do jakiejś należy.",
+        "groupCount": "{count, plural, one {# kategoria} few {# kategorie} many {# kategorii} other {# kategorii}}",
+        "groupEmpty": "Na razie brak kategorii dla tego rodzaju.",
+        "tableCaption": "Kategorie",
+        "cols": {
+          "name": "Nazwa",
+          "slug": "ID",
+          "icon": "Ikona",
+          "order": "Kolejność",
+          "apps": "Aplikacje",
+          "status": "Status",
+          "actions": "Działania"
+        },
+        "dash": "-",
+        "active": "Aktywna",
+        "inactive": "Ukryta przed przestrzeniami roboczymi",
+        "edit": "Edytuj",
+        "delete": "Usuń",
+        "inUse": "Ma aplikacje",
+        "form": {
+          "createTitle": "Nowa kategoria",
+          "editTitle": "Edytuj {name}",
+          "close": "Zamknij",
+          "cancel": "Anuluj",
+          "create": "Utwórz kategorię",
+          "save": "Zapisz zmiany",
+          "kind": "Rodzaj",
+          "kinds": {
+            "mini_app": "Miniaplikacja",
+            "integration": "Integracja"
+          },
+          "kindLocked": "Rodzaju nie można zmienić.",
+          "slug": "ID (slug)",
+          "slugHint": "Od 2 do 48 małych liter, cyfr lub myślników, zaczynając od litery. Później nie można tego zmienić.",
+          "slugLocked": "ID nie można zmienić po utworzeniu.",
+          "name": "Nazwa",
+          "nameHint": "Od {min} do {max} znaków.",
+          "descriptionField": "Opis",
+          "descriptionHint": "Opcjonalne, do {max} znaków.",
+          "icon": "Ikona",
+          "iconHint": "Opcjonalna nazwa ikony: małe litery, cyfry i myślniki.",
+          "sortOrder": "Kolejność sortowania",
+          "sortOrderHint": "Liczba całkowita od 0 do {max}; niższe pokazują się pierwsze.",
+          "active": "Aktywna",
+          "activeHint": "Wyłączona, kategoria jest ukryta przed przestrzeniami roboczymi. Jej aplikacje ją zachowują.",
+          "conflict": "Ktoś inny zmienił tę kategorię. Odśwież, aby zobaczyć jego wersję, i wykonaj zmianę ponownie.",
+          "reload": "Odśwież",
+          "created": "Kategoria {name} utworzona.",
+          "saved": "Kategoria {name} zapisana."
+        },
+        "deleteDialog": {
+          "title": "Usunąć {name}?",
+          "body": "{name} nie ma aplikacji. Usunięcie jest trwałe.",
+          "action": "Usuń kategorię",
+          "cancel": "Anuluj",
+          "done": "Kategoria {name} usunięta."
+        }
+      },
+      "requests": {
+        "title": "Prośby",
+        "description": "Czego chcą przestrzenie robocze, od najczęściej wskazywanych. Kolejność budowy wynika z tej listy.",
+        "readOnly": "Tylko do odczytu. Ocena wymaga uprawnienia platformy: {permission}.",
+        "filters": {
+          "label": "Filtry",
+          "search": "Szukaj",
+          "searchPlaceholder": "Nazwa",
+          "kind": "Rodzaj",
+          "allKinds": "Wszystkie rodzaje",
+          "status": "Status",
+          "allStatuses": "Wszystkie statusy"
+        },
+        "clearFilters": "Wyczyść filtry",
+        "emptyTitle": "Brak próśb",
+        "emptyMessage": "Gdy przestrzeń robocza poprosi o integrację, pojawi się tutaj wraz z głosami.",
+        "noMatchTitle": "Żadna prośba nie pasuje",
+        "noMatchMessage": "Nic nie pasuje do tych filtrów.",
+        "loadMore": "Wczytaj więcej",
+        "tableCaption": "Żądania według głosów",
+        "cols": {
+          "votes": "Głosy",
+          "request": "Żądanie",
+          "notes": "Notatki przestrzeni roboczej",
+          "firstWorkspace": "Pierwsze zgłoszenie od",
+          "status": "Status",
+          "actions": "Działania"
+        },
+        "votes": "{count, plural, one {# głos} few {# głosy} many {# głosów} other {# głosu}}",
+        "noNotes": "Brak notatek.",
+        "dash": "-",
+        "operatorNote": "Twoja notatka: {note}",
+        "triageAction": "Triaż",
+        "triage": {
+          "title": "Triaż: {name}",
+          "close": "Zamknij",
+          "cancel": "Anuluj",
+          "save": "Zapisz",
+          "saved": "Zapisano {name}.",
+          "votes": "{count, plural, one {# głos} few {# głosy} many {# głosów} other {# głosu}}",
+          "status": "Status",
+          "note": "Notatka operatora",
+          "noteHint": "Opcjonalnie, do {max} znaków. Widzą ją tylko operatorzy.",
+          "noteTooLong": "Najwyżej {max} znaków.",
+          "conflict": "Ktoś inny zaktualizował to żądanie. Wczytaj ponownie, aby zobaczyć jego wersję, a następnie wprowadź zmianę jeszcze raz.",
+          "reload": "Wczytaj ponownie"
+        }
+      },
+      "usage": {
+        "title": "Użycie i stan",
+        "description": "Dla każdej aplikacji: instalacje według statusu i stanu oraz dostarczenia zaakceptowane, powtórzone, odrzucone i nieudane w ostatnich 24 godzinach i 7 dniach.",
+        "kpi": {
+          "apps": "Aplikacje",
+          "installs": "Instalacje",
+          "activeHint": "Aktywne: {count}",
+          "needsLook": "Wymaga uwagi",
+          "failed7d": "Nieudane dostarczenia (7 dni)"
+        },
+        "sort": {
+          "label": "Sortuj według",
+          "failed": "Najwięcej nieudanych dostarczeń",
+          "installs": "Najwięcej instalacji",
+          "name": "Nazwa"
+        },
+        "emptyTitle": "Brak użycia",
+        "emptyMessage": "Aplikacje pojawią się tutaj po dodaniu do katalogu.",
+        "tableCaption": "Użycie według aplikacji",
+        "cols": {
+          "app": "Aplikacja",
+          "installs": "Instalacje",
+          "health": "Stan",
+          "events24h": "Dostarczenia, 24 godziny",
+          "events7d": "Dostarczenia, 7 dni",
+          "attention": "Uwaga"
+        },
+        "installs": {
+          "active": "Aktywne: {count}",
+          "disabled": "Wstrzymane: {count}",
+          "killed": "Zablokowane: {count}"
+        },
+        "health": {
+          "healthy": "Sprawne: {count}",
+          "degraded": "Z ograniczeniami: {count}",
+          "error": "Z błędem: {count}",
+          "needsReauth": "Wymagające ponownego logowania: {count}",
+          "unknown": "Nieznane: {count}"
+        },
+        "events": {
+          "accepted": "Zaakceptowane: {count}",
+          "duplicate": "Powtórzone: {count}",
+          "rejected": "Odrzucone: {count}",
+          "failed": "Nieudane: {count}"
+        },
+        "needsLook": "Wymaga uwagi",
+        "reasons": {
+          "installErrors": "Instalacje z błędem",
+          "needsReauth": "Instalacje wymagające ponownego logowania",
+          "failed24h": "Nieudane dostarczenia w ciągu ostatnich 24 godzin",
+          "failed7d": "Nieudane dostarczenia w ciągu ostatnich 7 dni"
+        },
+        "recipeHint": "Przepis może przestać działać: portal zmienił format albo wygasł klucz. Napraw go nową wersją przepisu.",
+        "fine": "Nie wykryto problemów",
+        "runbookNote": "Integracja z wieloma instalacjami z błędem lub wymagającymi ponownego logowania albo rosnącą liczbą nieudanych dostarczeń przestaje działać. Popraw jej przepis w nowej wersji (runbook, sekcja 8)."
+      },
+      "price": {
+        "free": "Bezpłatna",
+        "perMonth": "/ miesiąc",
+        "trial": "{count, plural, one {# dzień okresu próbnego} few {# dni okresu próbnego} many {# dni okresu próbnego} other {# dnia okresu próbnego}}",
+        "notOnSale": "Nie jest sprzedawana"
+      },
+      "pricing": {
+        "title": "Cennik",
+        "description": "Zdecyduj, czy ta aplikacja jest bezpłatna, czy płatna, i ile kosztuje. Obowiązuje Twój cennik; propozycja z manifestu dewelopera jest tylko sugestią.",
+        "billing": "Płatna aplikacja sprzedawana jest jako miesięczny okres prepaid: dodatek rozliczeniowy kupowany w zwykłym procesie płatności. Automatycznego odnawiania kartą nie ma jeszcze, więc przestrzeń robocza płaci ponownie, gdy jej miesiąc dobiega końca. Zmiana ceny dotyczy nowych subskrypcji i następnej płatności każdego subskrybenta; okres, za który już zapłacono, nigdy nie jest zmieniany.",
+        "readOnly": "Tylko do odczytu. Zmiana cennika wymaga uprawnienia platformy {permission}.",
+        "visibility": {
+          "label": "Status oferty",
+          "note": "Ukrywanie, ponowne pokazywanie lub wyłączanie oferty odbywa się w sekcji Zarządzanie powyżej. Ten panel jej nie zmienia."
+        },
+        "subscribers": {
+          "label": "Subskrypcje",
+          "count": "{count, plural, one {# aktywna subskrypcja} few {# aktywne subskrypcje} many {# aktywnych subskrypcji} other {# aktywnej subskrypcji}}",
+          "view": "Zobacz subskrypcje",
+          "hint": "Obowiązujące subskrypcje płatne, próbne i przyznane. Subskrypcje, które się kończą lub już się zakończyły, nie są liczone."
+        },
+        "changed": "Cena zmieniona ostatnio",
+        "conflict": "Ktoś inny zapisał tę ofertę, gdy edytowałeś cennik. Wczytaj ponownie, aby zobaczyć jego wersję, a następnie wprowadź zmianę jeszcze raz.",
+        "reload": "Wczytaj ponownie",
+        "model": {
+          "legend": "Cena",
+          "free": "Bezpłatna",
+          "freeHint": "Bez opłat. Każda przestrzeń robocza może ją zainstalować.",
+          "paid": "Płatna, miesięcznie",
+          "paidHint": "Przestrzenie robocze subskrybują przez proces płatności i płacą co miesiąc."
+        },
+        "fields": {
+          "amount": "Cena miesięczna",
+          "amountHint": "Za przestrzeń roboczą, za miesiąc: np. 9 lub 9.99.",
+          "currency": "Waluta",
+          "currencyHint": "Trzyliterowy kod, np. USD. Platforma odrzuca walutę, która nie jest włączona.",
+          "trialDays": "Bezpłatny okres próbny (dni)",
+          "trialDaysHint": "0, jeśli bez okresu próbnego; najwyżej {max}. Przestrzeń robocza otrzymuje jeden okres próbny na aplikację.",
+          "annualAmount": "Cena roczna (opcjonalnie)",
+          "annualAmountHint": "Zapisywana na później. Rozliczenia roczne nie są jeszcze dostępne, więc przestrzenie robocze nie mogą dziś płacić rocznie.",
+          "purchasable": "Sprzedaż",
+          "purchasableHint": "Po wyłączeniu nowe przestrzenie robocze nie mogą się subskrybować. Przestrzenie, które już subskrybują, nadal mogą odnawiać."
+        },
+        "included": {
+          "title": "Zawarte w planach",
+          "help": "Opcjonalnie. Przestrzeń robocza spełniająca którąkolwiek z reguł dostaje aplikację za darmo. Zostaw oba pola puste, aby pobierać opłatę od każdej przestrzeni roboczej.",
+          "feature": "Funkcja planu",
+          "featureHint": "Przestrzenie robocze, których plan (wraz z dodatkami) zawiera tę funkcję. Wybierz podpowiedź lub wpisz klucz funkcji.",
+          "plan": "Minimalny plan",
+          "planHint": "Przestrzenie robocze z tym planem lub wyższym. Plany są wymienione od najniższego.",
+          "planNone": "Brak reguły planu",
+          "planTyped": "Nie udało się wczytać listy planów. Wpisz identyfikator planu."
+        },
+        "grants": {
+          "title": "Przyznaje funkcje planu",
+          "help": "Opcjonalnie. Funkcje planu, które włącza subskrypcja tej aplikacji, dzięki czemu funkcję można sprzedawać jako aplikację, a jej obecne ograniczenia nadal działają. Można przyznać tylko funkcje domyślnie wyłączone.",
+          "thirdParty": "Tylko aplikacje pierwszej strony mogą przyznawać funkcje planu. Aby z tego skorzystać, oznacz ofertę jako pierwszej strony na karcie Oferta.",
+          "grandfather": "Zachowaj uprawnienia obecnych użytkowników",
+          "grandfatherHint": "Pozwala przyznać bezpłatnie przestrzeniom roboczym, które już mają przyznaną funkcję, aby nikt jej nie stracił. Zapisz, a następnie użyj opcji Przyznaj obecnym użytkownikom poniżej. Zrób to, zanim funkcja zostanie wyłączona w planach.",
+          "compExisting": "Przyznaj obecnym użytkownikom",
+          "compExistingHint": "Przestrzenie robocze, które mają już przyznaną funkcję przez plan i nie mają jeszcze subskrypcji, dostają tę aplikację bezpłatnie. Najpierw zobaczysz, kogo to dotyczy.",
+          "compExistingAction": "Przyznaj obecnym użytkownikom..."
+        },
+        "proposal": {
+          "title": "Propozycja dewelopera",
+          "intro": "Z manifestu wersji {version}. To tylko propozycja i nic nie zmienia: obowiązuje cennik powyżej, który widzą przestrzenie robocze.",
+          "note": "Uwaga: {note}",
+          "models": {
+            "free": "Bezpłatna",
+            "included": "Zawarte w planie",
+            "addon": "Płatny dodatek"
+          }
+        },
+        "save": "Zapisz cennik",
+        "saving": "Zapisywanie...",
+        "discard": "Odrzuć zmiany",
+        "nothingToSave": "Brak zmian.",
+        "saved": "Zapisano cennik: {name}.",
+        "problems": {
+          "priceRequired": "Ustaw cenę miesięczną.",
+          "priceFormat": "Podaj liczbę, np. 9 lub 9.99 (najwyżej dwa miejsca po przecinku).",
+          "pricePositive": "Cena musi być większa od zera.",
+          "currencyRequired": "Wybierz walutę.",
+          "currencyFormat": "Podaj trzyliterowy kod waluty.",
+          "yearlyFormat": "Podaj liczbę, np. 90 lub 89.99, albo pozostaw pole puste.",
+          "yearlyPositive": "Cena roczna musi być większa od zera albo pusta.",
+          "trialRange": "Podaj pełne dni od 0 do {max}.",
+          "featureFormat": "Użyj małych liter, cyfr i podkreśleń, zaczynając od litery.",
+          "planFormat": "Podaj identyfikator planu: małe litery, cyfry i podkreślenia.",
+          "grantsInvalid": "Wybierz każdą funkcję planu tylko raz, najwyżej 10 funkcji.",
+          "grandfatherNeedsGrants": "Najpierw wybierz co najmniej jedną funkcję planu, którą aplikacja przyznaje.",
+          "includedGranted": "Funkcja przyznawana przez aplikację nie może jednocześnie być tą, która ją zawiera."
+        },
+        "confirm": {
+          "cancel": "Kontynuuj edycję",
+          "priceChange": {
+            "title": "Zmienić cenę: {name}?",
+            "body": "{count, plural, one {# przestrzeń robocza subskrybuje} few {# przestrzenie robocze subskrybują} many {# przestrzeni roboczych subskrybuje} other {# przestrzeni roboczej subskrybuje}} obecnie. Cena miesięczna zmieni się z {from} na {to}.",
+            "next": "Nowa cena dotyczy nowych subskrypcji i następnej płatności każdego subskrybenta.",
+            "paid": "Okres, za który przestrzeń robocza już zapłaciła, nigdy nie jest zmieniany, zwracany ani przeliczany.",
+            "action": "Zmień cenę"
+          },
+          "toFree": {
+            "title": "Uczynić {name} bezpłatną?",
+            "body": "{count, plural, one {# przestrzeń robocza subskrybuje} few {# przestrzenie robocze subskrybują} many {# przestrzeni roboczych subskrybuje} other {# przestrzeni roboczej subskrybuje}} obecnie.",
+            "free": "Każda przestrzeń robocza będzie mogła korzystać z aplikacji bez płatności, a nikt nie zostanie już za nią obciążony.",
+            "paid": "Subskrybenci zachowują czas, za który już zapłacili. Nie jest on zwracany.",
+            "action": "Ustaw jako bezpłatną"
+          }
+        }
+      },
+      "grandfather": {
+        "eyebrow": "Obecni użytkownicy",
+        "title": "Przyznaj obecnym użytkownikom: {name}",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "change": "Zmień",
+        "run": "{count, plural, one {Przyznaj # przestrzeń roboczą} few {Przyznaj # przestrzenie robocze} many {Przyznaj # przestrzeni roboczych} other {Przyznaj # przestrzeni roboczej}}",
+        "preview": "Sprawdź, kto się kwalifikuje",
+        "intro": "Przyznaj bezpłatnie każdej przestrzeni roboczej, która ma już funkcję planu przyznawaną przez {name} (przez plan lub nadpisania) i nie ma jeszcze do niej subskrypcji. Najpierw zobaczysz, kogo to obejmie; nic się nie zmieni, dopóki nie potwierdzisz.",
+        "timing": "Wykonaj to, zanim funkcja zostanie wyłączona w planach lub zmieni się jej wartość domyślna: sprawdza ona, co każda przestrzeń robocza ma w tej chwili.",
+        "note": "Notatka",
+        "matched": "{count, plural, =0 {Żadna przestrzeń robocza nie kwalifikuje się} one {# przestrzeń robocza kwalifikuje się} few {# przestrzenie robocze kwalifikują się} many {# przestrzeni roboczych kwalifikuje się} other {# przestrzeni roboczej kwalifikuje się}}",
+        "nobody": "Nikt nie ma przyznanej funkcji bez subskrypcji, więc nie ma komu przyznać dostępu.",
+        "sample": "Niektóre z nich:",
+        "more": "i jeszcze: {count}",
+        "confirm": "Sprawdź listę, a następnie potwierdź, aby je objąć. Zdarzenie zostaje zapisane w dzienniku audytu i nie można go cofnąć jednym krokiem: aby zakończyć przyznanie, anuluj każdą subskrypcję.",
+        "refused": "Jest to możliwe tylko dla płatnej oferty, która przyznaje funkcje planu, i gdy zapisano opcję Zachowaj uprawnienia obecnych użytkowników. Sprawdź jej cennik.",
+        "done": "{count, plural, one {Przyznano # przestrzeń roboczą w: {name}.} few {Przyznano # przestrzenie robocze w: {name}.} many {Przyznano # przestrzeni roboczych w: {name}.} other {Przyznano # przestrzeni roboczej w: {name}.}}"
+      },
+      "compFields": {
+        "duration": "Na jak długo?",
+        "months": "Na określoną liczbę miesięcy",
+        "monthsLabel": "Miesiące",
+        "monthsHint": "Pełne miesiące, od 1 do {max}.",
+        "monthsInvalid": "Podaj pełne miesiące od 1 do {max}.",
+        "open": "Do czasu zakończenia",
+        "noteHint": "Od {min} do {max} znaków. Jest zapisywana w dzienniku audytu.",
+        "count": "{count} z {max} znaków (co najmniej {min})."
+      },
+      "cancelDialog": {
+        "eyebrow": "Subskrypcja",
+        "title": "Anulować subskrypcję przestrzeni roboczej {workspace}?",
+        "close": "Zamknij",
+        "back": "Zachowaj",
+        "summary": "Przestrzeń robocza {workspace} ma aplikację {app}.",
+        "when": "Kiedy ma się zakończyć?",
+        "periodEnd": {
+          "label": "Z końcem opłaconego okresu",
+          "detail": "Odnawianie zostaje zatrzymane. Przestrzeń robocza {workspace} zachowa {app} do {date}, a potem instalacja zostanie wstrzymana, a dane zachowane."
+        },
+        "now": {
+          "label": "Od razu",
+          "detail": "Dostęp kończy się od razu. Instalacja zostaje wstrzymana, a dane zachowane. Opłacony czas nie jest zwracany."
+        },
+        "noEnd": "Ta subskrypcja nie ma daty końcowej, więc można ją zakończyć tylko od razu.",
+        "ending": "Ustawiono już zakończenie na {date}. Nadal możesz zakończyć ją od razu.",
+        "reason": "Powód",
+        "confirmPeriod": "Zatrzymaj odnawianie",
+        "confirmNow": "Zakończ teraz",
+        "done": {
+          "periodEnd": "Zatrzymano odnawianie dla {workspace}. Dostęp trwa do końca opłaconego okresu.",
+          "now": "Przestrzeń robocza {workspace} nie ma już aplikacji {app}."
+        }
+      },
+      "compDialog": {
+        "eyebrow": "Przyznaj",
+        "title": "Przyznaj przestrzeń roboczą",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "submit": "Przyznaj przestrzeń roboczą",
+        "intro": "Przydziel przestrzeni roboczej płatną aplikację bezpłatnie. Zdarzenie zostaje zapisane w dzienniku audytu wraz z Twoją notatką. Jest odrzucane, gdy przestrzeń robocza płaci za tę aplikację: najpierw anuluj tę subskrypcję.",
+        "app": "Aplikacja",
+        "appPlaceholder": "Wybierz płatną aplikację",
+        "noPaidApps": "Nie ma jeszcze płatnej aplikacji do przyznania. Najpierw ustaw cenę w ofercie.",
+        "workspaceSearch": "Znajdź przestrzeń roboczą",
+        "workspaceSearchPlaceholder": "Nazwa przestrzeni roboczej",
+        "workspaceHint": "Pokazano do {count} wyników. Wpisz tekst, aby zawęzić listę.",
+        "workspaceChosen": "Wybrano: {name}",
+        "workspaceNone": "Brak pasujących przestrzeni roboczych.",
+        "workspaceResults": "Pasujące przestrzenie robocze",
+        "workspacePlan": "Plan: {plan}",
+        "workspaceLoading": "Wczytywanie przestrzeni roboczych...",
+        "note": "Notatka",
+        "effectMonths": "{count, plural, one {Przestrzeń robocza otrzyma aplikację bezpłatnie na # miesiąc.} few {Przestrzeń robocza otrzyma aplikację bezpłatnie na # miesiące.} many {Przestrzeń robocza otrzyma aplikację bezpłatnie na # miesięcy.} other {Przestrzeń robocza otrzyma aplikację bezpłatnie na # miesiąca.}}",
+        "effectOpen": "Przestrzeń robocza otrzyma aplikację bezpłatnie, dopóki nie zakończysz tego, anulując jej subskrypcję.",
+        "done": "Przestrzeń robocza {workspace} ma teraz aplikację {app} bezpłatnie."
+      },
+      "subscriptions": {
+        "title": "Subskrypcje",
+        "description": "Kto płaci za które płatne aplikacje, co ma każda przestrzeń robocza i jaki miesięczny przychód przynosi. Kwoty są cenami katalogowymi: bez podatku, kuponów i okresów próbnych.",
+        "readOnly": "Tylko do odczytu. Przyznawanie przestrzeni roboczej i anulowanie subskrypcji wymaga uprawnienia platformy {permission}.",
+        "comp": "Przyznaj przestrzeń roboczą",
+        "kpi": {
+          "label": "Subskrypcje według stanu",
+          "active": "Płacące",
+          "trialing": "Okres próbny",
+          "comped": "Przyznane",
+          "canceling": "Kończące się",
+          "ended": "Zakończone",
+          "mrr": "Przychód miesięczny",
+          "mrrNone": "Brak płacących subskrybentów",
+          "mrrCurrency": "Przychód miesięczny, {currency}"
+        },
+        "summary": {
+          "emptyTitle": "Brak płatnych aplikacji",
+          "emptyMessage": "Ustaw cenę w ofercie, aby zacząć ją sprzedawać. Pojawi się tutaj wraz z subskrybentami.",
+          "caption": "Subskrypcje według aplikacji i stanu",
+          "cols": {
+            "app": "Aplikacja",
+            "price": "Cena",
+            "active": "Płacące",
+            "trialing": "Okres próbny",
+            "comped": "Przyznane",
+            "canceling": "Kończące się",
+            "ended": "Zakończone",
+            "total": "Razem",
+            "mrr": "Przychód miesięczny"
+          },
+          "free": "Bezpłatna",
+          "totals": "Wszystkie aplikacje",
+          "note": "Przychód miesięczny to cena katalogowa każdej płacącej subskrypcji w jej walucie. Okresy próbne, przyznania i zakończone subskrypcje się nie liczą, a waluty nigdy nie są sumowane."
+        },
+        "filters": {
+          "label": "Filtry",
+          "app": "Aplikacja",
+          "allApps": "Wszystkie aplikacje",
+          "status": "Stan",
+          "allStatuses": "Wszystkie stany",
+          "source": "Źródło",
+          "allSources": "Wszystkie źródła",
+          "search": "Przestrzeń robocza",
+          "searchPlaceholder": "Nazwa przestrzeni roboczej"
+        },
+        "cols": {
+          "workspace": "Przestrzeń robocza",
+          "app": "Aplikacja",
+          "status": "Stan",
+          "source": "Źródło",
+          "started": "Rozpoczęto",
+          "period": "Okres",
+          "amount": "Kwota",
+          "actions": "Działania"
+        },
+        "period": {
+          "paidUntil": "Opłacone do {date}",
+          "trialEnds": "Okres próbny kończy się {date}",
+          "endsOn": "Kończy się {date}",
+          "compUntil": "Przyznane do {date}",
+          "compOpen": "Przyznane do zakończenia",
+          "endedOn": "Zakończono {date}",
+          "none": "Bez daty końcowej"
+        },
+        "noCharge": "Bez opłat",
+        "compBy": "Przyznane przez {operator}: {note}",
+        "cancel": "Anuluj...",
+        "tableCaption": "Subskrypcje",
+        "emptyTitle": "Brak subskrypcji",
+        "emptyMessage": "Przestrzeń robocza pojawi się tutaj, gdy zasubskrybuje, zacznie okres próbny lub zostanie objęta przyznaniem.",
+        "noMatchTitle": "Brak pasujących subskrypcji",
+        "noMatchMessage": "Żadna pozycja nie pasuje do tych filtrów. Spróbuj innych.",
+        "clearFilters": "Wyczyść filtry",
+        "loadMore": "Wczytaj więcej"
+      }
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "instagram": {
+    "nav": {
+      "hub": "Instagram",
+      "broadcast": "שידור Instagram"
+    },
+    "common": {
+      "dismiss": "סגירה"
+    },
+    "hub": {
+      "kicker": "ערוץ · Instagram",
+      "title": "Instagram",
+      "titleAccent": "חשבונות",
+      "intro": "קשרו פעם אחת את חשבון ה־Instagram העסקי או היוצרים שלכם. מאותו רגע ההודעות שלו מגיעות לתיבת הצוות, ואתם משיבים, מפעילים תהליכים ושולחים לאנשים שכבר כתבו לכם, הכול מכאן.",
+      "teamInbox": "תיבת הצוות",
+      "broadcasts": "שידור למענה בלבד",
+      "loadError": "לא ניתן לטעון את חשבונות Instagram המקושרים. נסו שוב.",
+      "loadErrorDetail": "לא ניתן לטעון את חשבונות Instagram המקושרים (שגיאה {status}{code}). נסו שוב.",
+      "engineOff": "{engine} אינו מחובר. מנהל צריך לחבר אותו ב־ניהול ← תוספים לפני שאפשר לקשר חשבון Instagram.",
+      "connectedCount": "{count, plural, one {חשבון אחד מקושר} two {# חשבונות מקושרים} other {# חשבונות מקושרים}}",
+      "notConnected": "לא מחובר",
+      "cardTitle": "הוספת חשבון Instagram",
+      "cardBody": "חברו חשבון עסקי או יוצרים. ה־Instagram שלכם מתחבר פעם אחת ומופיע כאן — שיחות, תהליכים ותשובות אוטומטיות פועלים כולם מסביבת העבודה הזו.",
+      "add": "הוספת חשבון Instagram",
+      "linkedAccounts": "חשבונות מקושרים",
+      "linked": "חשבון Instagram קושר.",
+      "linkFailed": "לא ניתן לקשר את החשבון הזה."
+    },
+    "dialog": {
+      "close": "סגירה",
+      "kicker": "Instagram",
+      "title": "הוספת חשבון Instagram",
+      "note": "ה־Instagram שלכם מתחבר פעם אחת דרך {engine} (שם נשמרים ההתחברות וה־webhook). סביבת עבודה זו מקושרת אליו ומציגה כאן את תיבת הדואר, התהליכים והמודעות שלו — תמיד מדובר בחשבון אחד, לא בשניים.",
+      "connect": "חיבור Instagram",
+      "checking": "בודקים…",
+      "hint": "מקושר מיד אם כבר חיברתם אותו ב־{engine}; אחרת ייפתח חלון כניסה קצר.",
+      "pick": "בחירת חשבון לקישור",
+      "link": "קישור",
+      "connectDifferent": "חיבור חשבון אחר",
+      "linkFailed": "לא ניתן לקשר את החשבון הזה.",
+      "startFailed": "לא ניתן להתחיל חיבור Instagram."
+    },
+    "row": {
+      "channel": "Instagram",
+      "connected": "מחובר",
+      "needsReauth": "נדרש אימות מחדש",
+      "live": "פעיל",
+      "manage": "ניהול ב־{engine}",
+      "refresh": "רענון הפרופיל מ־{engine}",
+      "unlink": "ביטול קישור",
+      "unlinkConfirm": "לנתק את חשבון Instagram הזה? השיחות ונתוני תיבת הדואר שלו יימחקו, וה־Instagram ייעלם מלוח הבקרה, מתיבת הדואר, מהתהליכים, מהתבניות ומהתשובות האוטומטיות עד שתחברו חשבון מחדש. החשבון עצמו נשאר ב־{engine} — אפשר לקשר אותו שוב מאוחר יותר.",
+      "cancel": "ביטול",
+      "updated": "חשבון Instagram {handle} עודכן.",
+      "unlinked": "חשבון Instagram נותק — הנתונים שלו הוסרו.",
+      "failed": "זה לא עבד. נסו שוב."
+    },
+    "broadcast": {
+      "kicker": "Instagram · למענה בלבד",
+      "title": "Instagram",
+      "titleAccent": "שידור",
+      "intro": "Instagram מאפשר לשלוח הודעות רק לאנשים שכבר כתבו לכם, לכן בחרו מתוך השיחות הקיימות. Instagram מפעיל את חלון ה־24 השעות בעת שליחת כל הודעה.",
+      "accounts": "חשבונות Instagram",
+      "loadError": "לא ניתן לטעון את השיחות. נסו שוב.",
+      "failed": "זה לא עבד. נסו שוב.",
+      "noAccounts": "עדיין אין חשבון Instagram מקושר ומחובר.",
+      "name": "שם השידור",
+      "namePlaceholder": "מבצע סתיו",
+      "account": "חשבון Instagram",
+      "template": "תבנית",
+      "templateHint": "אופציונלי. ממלא את ההודעה כשהיא ריקה.",
+      "templateNone": "ללא תבנית",
+      "message": "הודעה",
+      "messageHint": "השתמשו ב־{token} לשם האדם. עד {max} תווים.",
+      "messagePlaceholder": "שלום {token}, …",
+      "send": "{count, plural, =0 {שליחה} one {שליחה ל־# שיחה} two {שליחה ל־# שיחות} other {שליחה ל־# שיחות}}",
+      "sending": "שולחים…",
+      "recipients": "נמענים",
+      "windowOpenCount": "{open} מתוך {total} בחלון ה־24 שעות",
+      "search": "חיפוש שיחות",
+      "selectAll": "בחירת הכול",
+      "clear": "ניקוי",
+      "capNote": "שליחה אחת מגיעה לכל היותר ל־{max} שיחות; בחירת הכול בוחרת את {max} הראשונות.",
+      "empty": "עדיין אין שיחות. אנשים יופיעו כאן לאחר שכתבו לחשבון שלכם.",
+      "inWindow": "בתוך החלון",
+      "outsideWindow": "מחוץ ל־24 שעות",
+      "selected": "{count, plural, one {# נבחר} two {# נבחרו} other {# נבחרו}}",
+      "sent": "שידור Instagram נשלח — {sent} נמסרו{failed, plural, =0 {} other {, # נכשלו}}.",
+      "sentNone": "לא ניתן לשלוח לאף נמען. בדקו את החיבור ל־Instagram."
+    }
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "web-forms": {
+    "submissions": {
+      "title": "Gönderimler",
+      "backToForm": "{name} sayfasına dön",
+      "formFallback": "Form",
+      "count": "{count, plural, =0 {Gönderi yok} other {# gönderi}} yüklendi",
+      "moreAvailable": "Daha fazlası var",
+      "tabsLabel": "Gönderi grupları",
+      "tabs": {
+        "all": "Tümü",
+        "needs_attention": "Dikkat gerektiriyor",
+        "spam": "Spam"
+      },
+      "filters": {
+        "search": "Ara",
+        "searchPlaceholder": "Ad, e-posta veya telefon",
+        "status": "Durum",
+        "allStatuses": "Herhangi bir durum",
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "clear": "Filtreleri temizle"
+      },
+      "status": {
+        "received": "Alındı",
+        "created": "Kişi oluşturuldu",
+        "updated": "Kişi güncellendi",
+        "needs_review": "İnceleme gerekiyor",
+        "awaiting_payment": "Ödeme bekleniyor",
+        "paid": "Ödendi",
+        "failed": "Başarısız",
+        "spam": "Spam"
+      },
+      "reason": {
+        "label": "Neden",
+        "todo": "Ne yapmalı",
+        "no_contact_point": {
+          "what": "Ziyaretçi kullanılabilir bir e-posta veya telefon vermedi, bu yüzden kişi oluşturulamadı.",
+          "todo": "Yanıtları açın, eksik ayrıntıyı kişiye elle ekleyin veya formun eşlemesini düzeltip yeniden deneyin."
+        },
+        "invalid_phone": {
+          "what": "Telefon numarası geçerli bir numara olarak okunamadı.",
+          "todo": "Yanıtları açın, numarayı kontrol edin; ardından form kabul ettiğinde yeniden deneyin veya kişiyi elle ekleyin."
+        },
+        "plan_limit_reached": {
+          "what": "Planınızın kişi sınırına ulaşıldı, bu yüzden yeni kişi oluşturulmadı.",
+          "todo": "Kişi sayısını azaltın veya planınızı yükseltin, ardından yeniden deneyin."
+        },
+        "submissions_cap": {
+          "what": "Planınızın aylık gönderim sınırına ulaşıldı, bu yüzden bu gönderim inceleme için kaydedildi.",
+          "todo": "Planınızı yükseltin veya bir sonraki aya kadar bekleyin, ardından yeniden deneyin."
+        },
+        "spam_score": {
+          "what": "Gönderim spam'e benziyordu ve bir kenara ayrıldı.",
+          "todo": "Gerçek bir kişiyse açın ve elle kişi olarak ekleyin."
+        },
+        "too_fast": {
+          "what": "Form bir insanın doldurabileceğinden daha hızlı gönderildi, bu yüzden spam olarak bir kenara ayrıldı.",
+          "todo": "Gerçek bir kişiyse açın ve elle kişi olarak ekleyin."
+        },
+        "internal_error": {
+          "what": "İşlenirken tarafımızda bir sorun oluştu. Yanıtlar saklandı.",
+          "todo": "Yeniden deneyin. Yine başarısız olursa gönderim saatiyle birlikte destekle iletişime geçin."
+        },
+        "unknown": {
+          "what": "Bu gönderim, bu uygulama sürümünün tanımadığı bir nedenle bir kenara ayrıldı.",
+          "todo": "Ayrıntıları görmek için açın, ardından yeniden deneyin veya elle işleyin."
+        }
+      },
+      "table": {
+        "received": "Alındı",
+        "visitor": "Ziyaretçi",
+        "status": "Durum",
+        "contact": "Kişi",
+        "company": "Şirket",
+        "version": "Sürüm",
+        "open": "{who} kişisinden gelen gönderiyi aç"
+      },
+      "anonymous": "Ad verilmedi",
+      "answersRemovedShort": "Yanıtlar kaldırıldı",
+      "versionShort": "v{n}",
+      "noLink": "Yok",
+      "unnamedContact": "Kişiyi aç",
+      "unnamedCompany": "Şirketi aç",
+      "drawer": {
+        "title": "{who} kişisinden gönderi",
+        "close": "Kapat",
+        "loading": "Gönderi açılıyor",
+        "errorTitle": "Bu gönderi açılamadı.",
+        "errorBody": "Bağlantınızı kontrol edip yeniden deneyin.",
+        "retryLoad": "Yeniden dene",
+        "auditNote": "Bir gönderinin yanıtlarını açmak denetim günlüğüne kaydedilir.",
+        "answers": "Yanıtlar",
+        "noAnswers": "Bu gönderinin yanıtı yok.",
+        "emptyAnswer": "Yanıt yok",
+        "yes": "Evet",
+        "no": "Hayır",
+        "removedTitle": "Yanıtlar kaldırıldı",
+        "removedBody": "Yanıtlar silindi veya temizlendi. Yalnızca bu kayıt kaldı ve kişi korundu.",
+        "summary": "Özet",
+        "receivedAt": "Alındı",
+        "formVersion": "Form sürümü",
+        "spamScore": "Spam puanı",
+        "error": "Hata",
+        "attribution": "Nereden geldi",
+        "noAttribution": "Kaynak ayrıntısı kaydedilmedi.",
+        "utm": "Kampanya etiketleri",
+        "referrer": "Yönlendiren",
+        "pageUrl": "Sayfa",
+        "userAgent": "Tarayıcı",
+        "consent": "Onay",
+        "consentGiven": "Onay verildi",
+        "consentText": "Ziyaretçinin gördüğü metin",
+        "consentVersion": "Metin sürümü",
+        "consentAt": "Verildiği zaman",
+        "noConsent": "Bu form onay istemedi.",
+        "links": "Kayıtlar",
+        "actions": "İşlemler"
+      },
+      "actions": {
+        "retry": "Yeniden dene",
+        "retrying": "Yeniden deneniyor",
+        "delete": "Yanıtları sil",
+        "deleting": "Siliniyor",
+        "export": "CSV dışa aktar",
+        "exporting": "Dışa aktarılıyor",
+        "exportHintAttention": "Bu gruptan dışa aktarmak için tek bir durum seçin veya Tümü'nü kullanın.",
+        "exportHintSearch": "Dışa aktarma arama metnini dikkate almaz.",
+        "notSpam": "Spam değil: işle"
+      },
+      "confirmDelete": {
+        "title": "Bu yanıtlar silinsin mi?",
+        "message": "Bu, bu gönderinin yanıtlarını kalıcı olarak siler. Listede, bir olayın gerçekleştiğini gösteren bir kayıt kalır; kişi asla silinmez.",
+        "confirm": "Yanıtları sil",
+        "cancel": "Vazgeç"
+      },
+      "toast": {
+        "retried": "Yeniden denendi. Gönderinin durumu şimdi: {status}.",
+        "notRetryable": "Yalnızca inceleme gerektiren veya başarısız olan gönderiler yeniden denenebilir.",
+        "purged": "Yanıtlar zaten kaldırılmış, yeniden denenecek bir şey yok.",
+        "retryFailed": "Yeniden deneme tamamlanamadı. Lütfen tekrar deneyin.",
+        "deleted": "Yanıtlar silindi. Kişi korundu.",
+        "deleteFailed": "Yanıtlar silinemedi. Lütfen tekrar deneyin.",
+        "exported": "CSV indirildi.",
+        "exportTruncated": "Dışa aktarma en yeni {max} satırda kesildi. Kalanını almak için tarihleri daraltın.",
+        "exportFailed": "Dışa aktarma oluşturulamadı. Lütfen tekrar deneyin."
+      },
+      "state": {
+        "loading": "Gönderiler yükleniyor",
+        "errorTitle": "Gönderiler yüklenemedi.",
+        "errorBody": "Bağlantınızı kontrol edip yeniden deneyin.",
+        "retry": "Yeniden dene",
+        "lockedTitle": "Formlar planınıza dahil değil",
+        "lockedBody": "Gönderileri toplamak ve incelemek için çalışma alanınıza Formlar uygulamasını ekleyin.",
+        "upgrade": "Planları gör",
+        "emptyTitle": "Henüz gönderi yok",
+        "emptyBody": "Formun bağlantısını paylaşın veya sitenize gömün. Biri gönderdiğinde her gönderi burada görünür.",
+        "emptyShare": "Bu formu paylaş",
+        "emptyFilteredTitle": "Eşleşen gönderi yok",
+        "emptyFilteredBody": "Bu filtrelere uyan bir şey yok. Her şeyi görmek için filtreleri temizleyin.",
+        "loadMore": "Daha fazla yükle",
+        "loadingMore": "Daha fazlası yükleniyor"
+      },
+      "cap": {
+        "notice": "Planınızın aylık gönderim sınırına ulaşıldığı için bazı gönderiler inceleme için kaydedildi.",
+        "upgrade": "Planınızı yükseltin"
+      }
+    }
+  }
+}

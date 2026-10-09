@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "Commandes",
+      "coupons": "Coupons"
+    },
+    "settingsTile": {
+      "label": "Passerelles de paiement",
+      "description": "La passerelle unique que le paiement de votre boutique et les factures de vente utilisent pour encaisser en ligne.",
+      "keywords": "passerelle de paiement, razorpay, stripe, paiement, lien de paiement, paiement en ligne, carte, upi"
+    },
+    "common": {
+      "noAccessTitle": "Vous n’avez pas accès à cette page",
+      "noAccessMessage": "Demandez à un administrateur de l’espace de travail d’accorder cette autorisation à votre rôle.",
+      "loading": "Chargement",
+      "loadMore": "Charger plus",
+      "cancel": "Annuler",
+      "close": "Fermer",
+      "save": "Enregistrer",
+      "saving": "Enregistrement",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "remove": "Supprimer",
+      "open": "Ouvrir",
+      "view": "Voir",
+      "search": "Rechercher",
+      "clear": "Effacer",
+      "all": "Tous",
+      "no": "Non",
+      "none": "Aucun",
+      "actions": "Actions",
+      "retry": "Réessayer",
+      "dismiss": "Ignorer",
+      "copy": "Copier",
+      "copied": "Copié",
+      "viewContact": "Voir le contact",
+      "allShops": "Toutes les boutiques",
+      "shop": "Boutique"
+    },
+    "status": {
+      "new": "Nouvelle",
+      "pending": "En attente",
+      "confirmed": "Confirmée",
+      "paid": "Payée",
+      "processing": "En cours de traitement",
+      "completed": "Terminée",
+      "shipped": "Expédiée",
+      "cancelled": "Annulée"
+    },
+    "paymentStatus": {
+      "paid": "Payée",
+      "awaiting": "En attente de paiement",
+      "cod": "Paiement à la livraison",
+      "unpaid": "Non payée"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "Vitrine",
+      "twilio": "Twilio",
+      "manual": "Manuel",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "WhatsApp IA"
+    },
+    "errors": {
+      "requestId": "ID de requête",
+      "retry": "Réessayer",
+      "network": {
+        "title": "Impossible de joindre le serveur",
+        "message": "Vérifiez votre connexion et réessayez."
+      },
+      "forbidden": {
+        "title": "Non autorisé",
+        "message": "Votre rôle ne le permet pas."
+      },
+      "signedOut": {
+        "title": "Vous êtes déconnecté",
+        "message": "Reconnectez-vous pour continuer."
+      },
+      "conflict": {
+        "title": "Modifié par quelqu’un d’autre",
+        "message": "Cet enregistrement a changé pendant que vous l’aviez ouvert. Rechargez-le et réessayez."
+      },
+      "validation": {
+        "title": "Veuillez vérifier le formulaire",
+        "message": "Certaines valeurs ne sont pas valides. Vérifiez les champs en surbrillance."
+      },
+      "unavailable": {
+        "title": "Pas encore disponible",
+        "message": "Cette partie de la boutique n’est pas encore disponible sur ce serveur."
+      },
+      "rateLimited": {
+        "title": "Trop de requêtes",
+        "message": "Patientez un instant et réessayez."
+      },
+      "notFound": {
+        "title": "Introuvable",
+        "message": "Cet élément a été supprimé ou n’a jamais existé."
+      },
+      "planLocked": {
+        "title": "Non inclus dans votre forfait",
+        "message": "Votre forfait n’inclut pas la boutique. Passez à un forfait supérieur pour l’utiliser."
+      },
+      "couponCodeTaken": {
+        "title": "Code déjà utilisé",
+        "message": "Un autre coupon utilise déjà ce code. Choisissez-en un différent."
+      },
+      "groupCodeTaken": {
+        "title": "Code déjà utilisé",
+        "message": "Un autre groupe utilise déjà ce code de commande."
+      },
+      "orderNoPhone": {
+        "title": "Aucun numéro de téléphone",
+        "message": "Cette commande n’a pas de numéro de téléphone d’acheteur ; rien ne peut donc être envoyé."
+      },
+      "gatewayNotConfigured": {
+        "title": "Aucune passerelle de paiement configurée",
+        "message": "Configurez d’abord une passerelle de paiement. Ses clés sont manquantes ou elle est désactivée."
+      },
+      "gatewayUnavailable": {
+        "title": "Passerelle indisponible",
+        "message": "Cette passerelle ne peut pas créer de lien de paiement qu’un acheteur puisse ouvrir."
+      },
+      "paymentLinkFailed": {
+        "title": "La passerelle a refusé le lien",
+        "message": "Vérifiez les clés et que le montant dépasse le minimum de la passerelle."
+      },
+      "unexpected": {
+        "title": "Un problème est survenu",
+        "message": "Réessayez. Si le problème persiste, communiquez l’ID de requête à l’assistance."
+      }
+    }
+  }
+}

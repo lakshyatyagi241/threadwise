@@ -1,0 +1,439 @@
+{
+  "storefront-builder": {
+    "nav": {
+      "store": "חנות"
+    },
+    "admin": {
+      "common": {
+        "dismiss": "סגור"
+      },
+      "errors": {
+        "requestId": "מזהה בקשה",
+        "retry": "נסה שוב",
+        "network": {
+          "title": "לא ניתן להגיע לשרת",
+          "message": "בדוק את החיבור שלך ונסה שוב."
+        },
+        "forbidden": {
+          "title": "אין גישה",
+          "message": "התפקיד שלך לא מאפשר זאת."
+        },
+        "signedOut": {
+          "title": "יצאת מהחשבון",
+          "message": "התחבר שוב כדי להמשיך."
+        },
+        "conflict": {
+          "title": "שונה במקום אחר",
+          "message": "מישהו אחר שינה את זה בזמן שערכת. טען מחדש כדי לראות את העדכון האחרון."
+        },
+        "validation": {
+          "title": "בדוק את הטופס",
+          "message": "יש שדות שדורשים תשומת לב."
+        },
+        "unavailable": {
+          "title": "עדיין לא זמין",
+          "message": "שירות החנות אינו זמין בשרת הזה."
+        },
+        "rateLimited": {
+          "title": "יותר מדי בקשות",
+          "message": "המתן רגע ונסה שוב."
+        },
+        "notFound": {
+          "title": "לא נמצא",
+          "message": "החנות הזו אינה קיימת בסביבת העבודה הזו."
+        },
+        "noShop": {
+          "title": "עדיין אין חנות",
+          "message": "הגדר תחילה את החנות שלך."
+        },
+        "slugTaken": {
+          "title": "הכתובת תפוסה",
+          "message": "כתובת החנות הזו כבר בשימוש."
+        },
+        "deviceInvalid": {
+          "title": "בחר מכשיר מחובר",
+          "message": "בחר אחד מהמכשירים המחוברים שלך."
+        },
+        "noSender": {
+          "title": "חבר תחילה את WhatsApp",
+          "message": "לחנות נדרש מספר WhatsApp מחובר. חבר מספר ונסה שוב."
+        },
+        "resetNotConfirmed": {
+          "title": "לא אושר",
+          "message": "האיפוס לא אושר."
+        },
+        "domainNotSet": {
+          "title": "אין דומיין מותאם אישית",
+          "message": "לא הוגדר דומיין מותאם אישית."
+        },
+        "unexpected": {
+          "title": "משהו השתבש",
+          "message": "משהו השתבש. נסה שוב בעוד רגע."
+        }
+      },
+      "sidebar": {
+        "label": "חנות",
+        "navLabel": "קטעי חנות",
+        "section": "חנות",
+        "settings": "הגדרות",
+        "items": {
+          "overview": "סקירה כללית",
+          "orders": "הזמנות",
+          "products": "מוצרים",
+          "groups": "קבוצות",
+          "storefront": "חזית חנות",
+          "coupons": "קופונים",
+          "reviews": "ביקורות",
+          "payments": "תשלומים",
+          "gateways": "שערי תשלום בקופה",
+          "customers": "לקוחות",
+          "invoices": "חשבוניות",
+          "connection": "חיבור"
+        },
+        "comingSoon": "בקרוב",
+        "comingSoonHint": "בקרוב",
+        "noShopTitle": "עדיין אין חנות",
+        "noShopMessage": "צור את החנות הראשונה שלך כדי להשתמש בכלי החנות.",
+        "noShopAction": "הגדר את החנות שלך",
+        "live": "פעילה",
+        "setup": "הגדרה",
+        "yourStore": "החנות שלך",
+        "notConnected": "לא מחובר",
+        "unofficialApi": "API לא רשמי",
+        "deviceConnected": "מכשיר מחובר · /channels",
+        "switchShop": "החלף חנות",
+        "shopFallback": "חנות",
+        "manageShops": "נהל את כל החנויות ←",
+        "publicUrl": "כתובת ציבורית",
+        "open": "פתח",
+        "copy": "העתק",
+        "copied": "הועתק!",
+        "providerLive": "הספק פעיל",
+        "sendingFrom": "שליחה מ־",
+        "noDevice": "אין מכשיר מחובר.",
+        "connectOne": "חבר מכשיר",
+        "thenBind": "ואז קשר אותו לחנות הזו מתוך",
+        "connectWizard": "אשף החיבור"
+      },
+      "dashboard": {
+        "eyebrow": "חנות / סקירה כללית",
+        "title": "סקירת מכירות",
+        "subtitle": "30 הימים האחרונים. ההזמנות מאוחדות מכל הערוצים — WABA, חזית החנות, Twilio.",
+        "addProduct": "הוסף מוצר",
+        "loading": "טוען את סקירת החנות",
+        "kpi": {
+          "revenue": "הכנסות (30 ימים)",
+          "orders": "הזמנות (30 ימים)",
+          "aov": "ממוצע להזמנה",
+          "products": "מוצרים",
+          "visits": "ביקורים (30 ימים)"
+        },
+        "trend": {
+          "eyebrow": "מגמת מכירות",
+          "title": "הכנסות לאורך זמן"
+        },
+        "legendRevenue": "הכנסות ({symbol})",
+        "legendOrders": "הזמנות",
+        "dayReadout": "{day}: {revenue}, {orders, plural, one {הזמנה אחת} two {שתי הזמנות} other {# הזמנות}}",
+        "chartLabel": "הכנסות והזמנות ליום, 30 הימים האחרונים",
+        "tableDay": "יום",
+        "tableRevenue": "הכנסות ({symbol})",
+        "tableOrders": "הזמנות",
+        "top": {
+          "eyebrow": "המוצרים המובילים (30 ימים)",
+          "title": "רבי מכר",
+          "empty": "עדיין אין מכירות — שתף את קישור החנות שלך."
+        },
+        "recent": {
+          "title": "הזמנות אחרונות",
+          "viewAll": "הצג הכול",
+          "open": "פתח",
+          "columns": {
+            "when": "מתי",
+            "customer": "לקוח",
+            "source": "מקור",
+            "items": "פריטים",
+            "total": "סה״כ",
+            "status": "סטטוס",
+            "open": "פתוח"
+          },
+          "itemsCount": "{count, plural, one {פריט אחד} two {שני פריטים} other {# פריטים}}",
+          "emptyTitle": "עדיין אין הזמנות",
+          "emptyMessage": "ברגע שלקוחות יזמינו מחזית החנות או מ־WhatsApp, ההזמנות יופיעו כאן."
+        }
+      },
+      "settings": {
+        "eyebrow": "חנות / חזית חנות",
+        "title": "עיצוב חזית החנות",
+        "viewLive": "הצג באתר החי",
+        "noAccess": "לתפקיד שלך אין גישה להגדרות חזית החנות.",
+        "loading": "טוען את הגדרות חזית החנות",
+        "saved": "חזית החנות עודכנה.",
+        "conflict": "חזית החנות הזו שונתה במקום אחר בזמן שערכת. טען מחדש כדי לקבל את ההגדרות העדכניות, ואז בצע שוב את השינויים שלך.",
+        "reload": "טען מחדש",
+        "fixErrors": "תקן את השדות המסומנים ושמור שוב.",
+        "optional": "(אופציונלי)",
+        "save": "שמור",
+        "readOnly": "אפשר לצפות בהגדרות האלה אך לא לשנות אותן.",
+        "live": "חזית החנות פעילה (ביטול הסימון יוריד אותה מהאוויר)",
+        "theme": {
+          "title": "ערכת נושא"
+        },
+        "slug": {
+          "label": "Slug של חזית החנות",
+          "hint": "החנות שלך תהיה בכתובת"
+        },
+        "domain": {
+          "label": "דומיין מותאם אישית",
+          "placeholder": "shop.yourbiz.com",
+          "verifiedLive": "אומת — הדומיין שלך פעיל",
+          "addCname": "הוסף את רשומת CNAME הזו אצל ספק ה־DNS שלך:",
+          "cname": "CNAME",
+          "verify": "אמת עכשיו",
+          "verified": "הדומיין אומת ✓",
+          "notPointing": "רשומת CNAME אינה מצביעה ל־{expected}",
+          "notSet": "לא הוגדר דומיין מותאם אישית.",
+          "verifyFailed": "לא ניתן לבדוק את הדומיין. נסה שוב."
+        },
+        "brand": {
+          "logoUrl": "כתובת URL של הלוגו",
+          "color": "צבע המותג (hex)",
+          "colorPicker": "בחר את צבע המותג",
+          "heroText": "טקסט ראשי",
+          "heroPlaceholder": "ברוכים הבאים לחנות שלנו",
+          "footerText": "טקסט תחתון",
+          "footerPlaceholder": "© 2026 החנות שלך"
+        },
+        "currency": {
+          "title": "מטבע",
+          "label": "מטבע",
+          "hint": "ברירת מחדל למוצרים חדשים + הסמל שמוצג במגירת העגלה."
+        },
+        "shipping": {
+          "title": "משלוח",
+          "flat": "דמי משלוח קבועים",
+          "flatHint": "מתווסף לכל הזמנה. ריק או 0 = חינם.",
+          "freeAbove": "משלוח חינם מעל",
+          "freeAboveHint": "עגלות מעל הסכום הזה נשלחות בחינם.",
+          "note": "הערה על המשלוח",
+          "noteHint": "מוצג בעגלה ובדף המוצר.",
+          "notePlaceholder": "2–5 ימי עסקים · עם מעקב"
+        },
+        "payment": {
+          "title": "קישור תשלום",
+          "intro": "בחר ספק תשלומים ואנחנו נצרף את קישור התשלום לכל הודעת הזמנה ב־WhatsApp. הקונה משלם דרך הקישור, ואתה מאשר בצ׳אט. אין תהליך קופה מובנה בחזית החנות.",
+          "provider": "ספק",
+          "providers": {
+            "none": "ללא · תשלום במזומן בעת המסירה",
+            "upi": "UPI (הודו) — VPA + שם",
+            "razorpay_link": "קישור תשלום של Razorpay (הדבק קישור סטטי)",
+            "razorpay_api": "Razorpay (יצירת קישורים ואישור אוטומטי)",
+            "stripe_link": "קישור תשלום של Stripe",
+            "paypal_me": "שם משתמש ב־PayPal.me",
+            "bank_transfer": "הוראות העברה בנקאית"
+          },
+          "handle": "פרטי תשלום",
+          "handleHint": "UPI VPA, כתובת URL של קישור תשלום, שם משתמש ב־PayPal.me או חשבון בנק.",
+          "handlePlaceholder": "למשל shop@upi · https://rzp.io/l/xxx",
+          "razorpay": {
+            "title": "Razorpay API (קישורים אוטומטיים)",
+            "keyId": "מזהה מפתח",
+            "keyIdPlaceholder": "rzp_live_… / rzp_test_…",
+            "keySecret": "סוד המפתח",
+            "webhookSecret": "סוד Webhook",
+            "stored": "נשמר — השאר ריק כדי להשאיר",
+            "show": "הצג סוד",
+            "hide": "הסתר סוד",
+            "webhookHelp": "בלוח הבקרה של Razorpay, הגדר את כתובת ה־Webhook ל־",
+            "webhookEvent": "עבור האירוע payment_link.paid."
+          }
+        },
+        "recovery": {
+          "title": "שחזור עגלה נטושה",
+          "enable": "שלח תזכורת WhatsApp ללקוחות שהתחילו תהליך תשלום ולא סיימו",
+          "enableHint": "שומר את הטלפון בקופה; התזכורת מתבטלת אוטומטית אם הלקוח מזמין. נדרש מכשיר מחובר.",
+          "delay": "עיכוב (בדקות)",
+          "message": "הודעה",
+          "messageHint": "(ריק = ברירת מחדל; '{name}' '{shop}' '{url}' '{total}')",
+          "messagePlaceholder": "היי '{name}'! השארת פריטים בעגלה שלך ב־'{shop}'. סיים כאן: '{url}'"
+        },
+        "problems": {
+          "required": "שדה זה הוא חובה.",
+          "tooLong": "עד {max} תווים.",
+          "slugPattern": "השתמש רק באותיות קטנות, במספרים ובמקפים.",
+          "domainInvalid": "זה לא נראה כמו דומיין תקין (למשל shop.yourbiz.com).",
+          "urlInvalid": "הזן כתובת מלאה שמתחילה ב־http:// או ב־https://.",
+          "colorInvalid": "השתמש בצבע hex כמו #075E54.",
+          "amountInvalid": "הזן מספר, אפס או יותר.",
+          "amountTooBig": "עד {max}.",
+          "delayRange": "הזן מספר שלם מ־{min} עד {max}.",
+          "themeInvalid": "בחר אחת מערכות הנושא.",
+          "currencyInvalid": "בחר אחד מהמטבעות ברשימה.",
+          "providerInvalid": "בחר אחד מהספקים ברשימה.",
+          "slugTaken": "ה־slug הזה כבר תפוס. בחר אחר."
+        }
+      },
+      "share": {
+        "message": "בדוק את החנות שלי: {name}",
+        "subject": "בדוק את החנות שלי · {name}",
+        "eyebrow": "שתף את החנות שלך",
+        "fallbackName": "החנות שלי",
+        "close": "סגור",
+        "link": "קישור לחנות",
+        "copy": "העתק",
+        "copied": "הועתק ✓",
+        "copiedShort": "הועתק",
+        "whatsapp": "WhatsApp",
+        "whatsappHint": "שלח לצ׳אט",
+        "email": "אימייל",
+        "emailHint": "פתח אפליקציית דואר",
+        "telegram": "Telegram",
+        "telegramHint": "שתף לערוץ",
+        "more": "עוד…",
+        "moreHint": "תפריט שיתוף של הטלפון",
+        "nativeUnsupported": "לא נתמך בדפדפן הזה",
+        "showQr": "הצג קוד QR",
+        "qrAlt": "קוד QR",
+        "qrCaption": "סרוק כדי לפתוח את החנות"
+      },
+      "wizard": {
+        "loading": "טוען את החנויות שלך",
+        "back": "חזרה",
+        "breadcrumb": "חיבור / חנות WhatsApp",
+        "manageConnections": "נהל את כל החיבורים ←",
+        "titles": {
+          "list": "החנויות שלך",
+          "add": "הגדר את החנות שלך",
+          "edit": "ערוך את {name}",
+          "shopFallback": "חנות"
+        },
+        "gate": {
+          "step": "שלב 1 מתוך 3",
+          "title": "חבר תחילה את WhatsApp",
+          "message": "החנות שלך צריכה מספר WhatsApp מחובר כדי לשלוח אישורי הזמנה ולאפשר ללקוחות לשוחח. עבור לערוצים שלך כדי לצמד מספר — זה לוקח 30 שניות.",
+          "action": "עבור למכשירים"
+        },
+        "list": {
+          "headline": "{count, plural, one {חנות אחת} two {שתי חנויות} other {# חנויות}} ב־{workspace}",
+          "intro": "לכל חנות יש כתובת ציבורית, ערכת נושא ומכשיר שליחה משלה. הוסף כמה שצריך — מותגים, שפות או אזורים שונים.",
+          "add": "הוסף חנות",
+          "addAnother": "הוסף חנות נוספת",
+          "addAnotherHint": "הפעל חזית חנות נפרדת עם כתובת, ערכת נושא ומספר WhatsApp משלה."
+        },
+        "share": {
+          "fallbackName": "החנות שלי"
+        },
+        "noAccess": {
+          "title": "אי אפשר לשנות חנויות",
+          "message": "התפקיד שלך יכול לצפות בחנויות, אך לא ליצור או לערוך אותן.",
+          "action": "חזרה לחנויות"
+        },
+        "delete": {
+          "title": "למחוק את {name}?",
+          "message": "פעולה זו מוחקת לצמיתות את חזית החנות ואת ההזמנות שלה. מוצרים בסביבת העבודה שלך לא יושפעו. אי אפשר לבטל.",
+          "confirm": "כן, מחק",
+          "cancel": "ביטול",
+          "done": "החנות נמחקה.",
+          "thisShop": "החנות הזו"
+        },
+        "reset": {
+          "open": "נקה את כל נתוני החנות",
+          "title": "לנקות את כל נתוני החנות?",
+          "message": "פעולה זו מוחקת לצמיתות כל חנות, הזמנה ומוצר בסביבת העבודה הזו. אי אפשר לבטל.",
+          "confirm": "כן, נקה הכול",
+          "done": "כל נתוני החנות בסביבת העבודה הזו נוקו.",
+          "notConfirmed": "האיפוס לא אושר."
+        },
+        "card": {
+          "live": "פעילה",
+          "disabled": "מושבתת",
+          "theme": "ערכת נושא {theme}",
+          "untitled": "חנות ללא שם",
+          "sendingFrom": "שליחה מ־",
+          "noDevice": "אין מכשיר",
+          "domain": "דומיין",
+          "pending": "ממתין",
+          "builtIn": "כתובת מובנית",
+          "manage": "נהל",
+          "manageTitle": "פתח את לוח הניהול",
+          "preview": "תצוגה מקדימה",
+          "previewTitle": "פתח את חזית החנות הציבורית בכרטיסייה חדשה",
+          "edit": "ערוך",
+          "editTitle": "ערוך הגדרות חנות",
+          "share": "שתף",
+          "shareAria": "שתף את {name}",
+          "delete": "מחק חנות",
+          "deleteAria": "מחק את {name}"
+        },
+        "form": {
+          "backToShops": "חזרה לחנויות",
+          "creatingShop": "יוצר חנות מספר {n}",
+          "progress": "שלבים",
+          "steps": {
+            "details": "פרטי החנות",
+            "url": "כתובת ציבורית",
+            "device": "מכשיר שליחה"
+          },
+          "optional": "(אופציונלי)",
+          "details": {
+            "title": "פרטי החנות",
+            "hint": "השם שהלקוחות רואים + ה־slug של הכתובת שתחתיה יופיעו המוצרים.",
+            "name": "שם החנות",
+            "nameHint": "מוצג בכותרת חזית החנות ובאישורי ההזמנה.",
+            "namePlaceholder": "Media City Threads",
+            "namePlaceholderAnother": "למשל {workspace} · מומבאי",
+            "slug": "Slug של חזית החנות",
+            "auto": "(אוטומטי)",
+            "slugLocked": "נעול לאחר שהחנות עולה לאוויר, כדי שקישורים משותפים ימשיכו לעבוד.",
+            "slugAuto": "נוצר משם החנות שלך — נסגר כשתשמור."
+          },
+          "url": {
+            "title": "כתובת ציבורית",
+            "hint": "בחר איך הקונים מגיעים לחנות שלך — כתובת מובנית היא חינמית, דומיין מותאם אישית נראה מקצועי יותר.",
+            "builtIn": "כתובת מובנית · חינם",
+            "pathMode": "פועל מיד לאחר השמירה. כתובת מבוססת נתיב, מאחר שלא הוגדר שרת ציבורי לחזית החנות.",
+            "subdomainMode": "פועל מיד לאחר השמירה. מתארח בדומיין חזית החנות של הפלטפורמה.",
+            "domain": "דומיין מותאם אישית",
+            "domainHint": "תוסיף רשומת CNAME אצל ספק ה־DNS שלך ותאמת מדף הגדרות חזית החנות לאחר השמירה. השאר ריק כדי להשתמש בכתובת המובנית.",
+            "domainPlaceholder": "shop.yourbiz.com",
+            "verified": "{domain} אומת.",
+            "pending": "{domain} ממתין לאימות DNS."
+          },
+          "device": {
+            "title": "מכשיר שליחה",
+            "hint": "איזה מספר WhatsApp שולח אישורי הזמנה ותשובות לקונים.",
+            "none": "אין מכשירים מחוברים בחשבון הזה.",
+            "pair": "צמד מכשיר בערוצים שלך ←",
+            "official": "API רשמי · Meta (WABA)",
+            "officialDetail": "מספר WhatsApp Business של סביבת העבודה",
+            "fallback": "מכשיר",
+            "noNumber": "אין מספר",
+            "connected": "מחובר"
+          },
+          "cancel": "ביטול",
+          "deleteThis": "מחק את החנות הזו",
+          "saveChanges": "שמור שינויים",
+          "create": "צור חנות ←",
+          "created": "החנות “{name}” נוצרה.",
+          "updated": "החנות “{name}” עודכנה.",
+          "problems": {
+            "nameRequired": "הזן שם לחנות.",
+            "nameTooLong": "עד 191 תווים.",
+            "domainInvalid": "זה לא נראה כמו דומיין תקין (למשל shop.yourbiz.com).",
+            "domainTooLong": "עד 191 תווים.",
+            "deviceInvalid": "בחר אחד מהמכשירים המחוברים שלך.",
+            "slugTaken": "שם החנות הזה יוצר כתובת שכבר תפוסה. שנה מעט את השם."
+          },
+          "live": {
+            "eyebrow": "החנות הזו פעילה",
+            "fallbackName": "החנות שלך",
+            "hint": "הוסף מוצרים, בחר ערכת נושא, צפה בהזמנות ושתף את הקישור שלך.",
+            "view": "הצג חנות",
+            "share": "שתף חנות",
+            "dashboard": "פתח לוח בקרה"
+          }
+        }
+      }
+    }
+  }
+}

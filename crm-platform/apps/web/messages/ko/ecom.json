@@ -1,0 +1,574 @@
+{
+  "ecom": {
+    "nav": {
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce"
+    },
+    "common": {
+      "dismiss": "닫기",
+      "integrations": "연동",
+      "back": "뒤로",
+      "docs": "문서 보기",
+      "loadError": "이 페이지를 불러오지 못했습니다. 다시 시도하세요.",
+      "support": "지원팀 문의",
+      "integration": "연동",
+      "notConnected": "연결되지 않음",
+      "setupSteps": "설정 단계",
+      "needHelp": "도움이 필요하세요?",
+      "none": "없음",
+      "optional": "선택 사항",
+      "yes": "예"
+    },
+    "connect": {
+      "shopify": {
+        "title": "연결",
+        "accent": "Shopify",
+        "intro": "Shopify 스토어를 연결하면 주문, 배송, 환불, 장바구니 이벤트가 자동으로 WhatsApp 메시지를 트리거하며, 대시보드에 주문, 상품, 고객 수가 표시됩니다.",
+        "step1": "관리자가 Shopify 앱 활성화",
+        "step2": "스토어 도메인 입력",
+        "step3": "Shopify에서 권한 승인",
+        "step4": "이벤트를 WhatsApp 템플릿에 매핑",
+        "help": "연결 후 웹훅이 자동으로 설치되므로 수동 작업이 필요 없습니다. 자격 증명에 문제가 있나요?",
+        "disabledTitle": "Shopify가 아직 활성화되지 않았습니다",
+        "disabledBody": "워크스페이스에서 스토어를 연결하려면 먼저 관리자가 Shopify 앱 자격 증명을 추가해야 합니다. 추가되면 아래 양식이 활성화됩니다.",
+        "formStep": "2단계",
+        "formTitle": "스토어 도메인",
+        "urlLabel": "Shopify 스토어 URL",
+        "urlPlaceholder": "my-store",
+        "urlSuffix": ".myshopify.com",
+        "urlHint": "스토어 핸들만 입력하거나 전체 URL을 붙여넣으세요. 자동으로 정리됩니다.",
+        "webhookLabel": "웹훅 URL · 연결 후 자동 설정",
+        "cancel": "취소",
+        "continue": "Shopify로 계속",
+        "continuing": "이동 중…",
+        "guideKicker": "설정 가이드",
+        "guideTitle": "다음 진행 과정",
+        "guide1": "요청한 권한 범위를 승인하도록 Shopify로 이동합니다.",
+        "guide2": "Shopify가 HMAC으로 서명된 영구 액세스 토큰을 보내 줍니다.",
+        "guide3": "{count}개 이벤트에 대한 웹훅이 스토어에 자동 등록됩니다.",
+        "guide4": "이 화면으로 돌아와 각 이벤트를 WhatsApp 템플릿에 매핑합니다.",
+        "scopes": "요청한 권한 범위",
+        "failed": "Shopify 연결을 시작할 수 없습니다.",
+        "connected": "Shopify가 연결되었습니다.",
+        "returnedError": "Shopify에 연결하지 못했습니다."
+      },
+      "woocommerce": {
+        "title": "연결",
+        "accent": "WooCommerce",
+        "intro": "WooCommerce의 주문, 환불, 상품, 고객 이벤트를 채팅 스레드로 가져옵니다. CRM을 벗어나지 않고 WhatsApp에서 주문 확인, 배송 안내, 장바구니 복구를 진행하세요.",
+        "step1": "관리자가 WooCommerce 활성화",
+        "step2": "WC 관리자에서 API 키 생성",
+        "step3": "아래에 스토어 URL과 키 붙여넣기",
+        "step4": "이벤트 → WhatsApp 템플릿 매핑",
+        "help": "연결 후 웹훅이 자동 설치되므로 WC에서 별도 작업이 필요 없습니다. 키 때문에 막히셨나요?",
+        "disabledTitle": "WooCommerce가 아직 활성화되지 않았습니다",
+        "disabledBody": "워크스페이스에서 스토어를 연결하려면 먼저 관리자가 WooCommerce 연동을 활성화해야 합니다.",
+        "formStep": "2단계",
+        "formTitle": "스토어 자격 증명",
+        "urlLabel": "스토어 URL",
+        "urlHint": "기본 인증에는 HTTPS가 필요합니다. WP REST는 자동으로 감지합니다.",
+        "keyLabel": "Consumer Key",
+        "secretLabel": "Consumer Secret",
+        "secretHint": "저장 시 암호화됩니다. 스토어의 REST API를 호출할 때만 사용됩니다.",
+        "webhookLabel": "웹훅 URL · 연결 후 자동 설정",
+        "test": "연결 테스트",
+        "testing": "테스트 중…",
+        "connect": "스토어 연결",
+        "connecting": "연결 중…",
+        "guideKicker": "키 생성 방법",
+        "guideTitle": "WooCommerce 관리자에서",
+        "g1": "WooCommerce → 설정 → 고급 → REST API를 엽니다.",
+        "g2": "키 추가를 클릭하고 \"CRM\"과 같은 설명을 입력합니다.",
+        "g3": "사용자를 선택하고(관리자 가능) 권한을 읽기/쓰기로 설정합니다.",
+        "g4": "API 키 생성을 클릭합니다. 두 키를 모두 복사하세요. 시크릿은 한 번만 표시됩니다.",
+        "g5": "왼쪽 양식에 붙여넣고 연결 테스트를 클릭합니다.",
+        "httpsTitle": "HTTPS만 지원",
+        "httpsBody": "기본 인증에는 HTTPS가 필요합니다. 스토어가 HTTP만 지원한다면 먼저 SSL 인증서를 설치하세요(Let's Encrypt는 무료입니다).",
+        "connected": "WooCommerce가 연결되었습니다.",
+        "failed": "연결에 실패했습니다.",
+        "networkError": "네트워크 오류입니다."
+      }
+    },
+    "shell": {
+      "status": {
+        "active": "활성",
+        "error": "오류",
+        "other": "{status}"
+      },
+      "plan": "요금제:",
+      "store": "스토어",
+      "related": "관련 항목",
+      "allIntegrations": "모든 연동",
+      "disconnect": "연결 해제",
+      "disconnectTitle": "{name} 연결을 해제할까요?",
+      "disconnectShopify": "등록된 웹훅은 삭제되지만 설정은 유지됩니다.",
+      "disconnectWoo": "등록된 웹훅이 제거됩니다.",
+      "disconnectDone": "스토어 연결이 해제되었습니다.",
+      "healthy": "웹훅 정상",
+      "noRecent": "최근 이벤트 없음",
+      "lastEvent": "마지막 이벤트:",
+      "triggerShopify": "Shopify에서 작업을 실행하면 여기에 표시됩니다.",
+      "triggerWoo": "WooCommerce에서 주문을 생성하면 여기에 표시됩니다.",
+      "sync": "지금 동기화",
+      "syncing": "동기화 중…",
+      "syncQueued": "동기화를 시작했습니다. 새 데이터가 곧 표시됩니다.",
+      "syncFailed": "동기화에 실패했습니다.",
+      "tabs": {
+        "overview": "개요",
+        "orders": "주문",
+        "products": "상품",
+        "offers": "오퍼 보내기",
+        "customers": "고객",
+        "events": "자동화",
+        "analytics": "분석",
+        "invoices": "인보이스",
+        "logs": "활동",
+        "settings": "설정"
+      },
+      "offersWoo": "오퍼",
+      "desc": {
+        "shopify": {
+          "overview": "Shopify에서 동기화한 스토어 실시간 현황입니다.",
+          "orders": "Shopify에서 동기화된 주문입니다.",
+          "products": "동기화된 카탈로그를 둘러보고 상품이나 오퍼를 WhatsApp으로 보내세요.",
+          "offers": "상품과 쿠폰을 선택하고 고객 세그먼트를 지정해 WhatsApp으로 오퍼를 브로드캐스트하세요.",
+          "customers": "Shopify에서 연락처로 동기화된 고객입니다.",
+          "events": "마케팅 자동화입니다. 켜고 템플릿을 선택하면 해당 스토어 이벤트 발생 시 실행됩니다.",
+          "analytics": "이 스토어의 매출, 주문 추이, 메시지 성과입니다.",
+          "logs": "이 스토어의 웹훅 전송 로그입니다.",
+          "settings": "연결을 관리합니다. 다시 동기화하거나 권한 범위를 보거나 연결을 해제하세요.",
+          "invoices": "Shopify 주문에 발행된 인보이스입니다."
+        },
+        "woocommerce": {
+          "overview": "WooCommerce REST API에서 가져온 실시간 현황입니다.",
+          "orders": "스토어에서 가져온 최근 주문 10건입니다.",
+          "products": "카탈로그의 최신 상품입니다.",
+          "offers": "상품 오퍼를 브로드캐스트하거나 이탈 고객을 다시 유치하세요.",
+          "customers": "최근 활동순으로 정렬된 고객 계정입니다.",
+          "events": "주문, COD, 장바구니, 재고 자동화를 켜거나 끕니다.",
+          "analytics": "이 스토어의 매출, 메시지 수, COD 영향입니다.",
+          "logs": "이 스토어의 웹훅 전송 로그입니다.",
+          "settings": "연결 정보입니다. 다시 확인하거나 연결을 해제하세요.",
+          "invoices": "WooCommerce 주문에 발행된 인보이스입니다."
+        }
+      },
+      "loading": "스토어를 불러오는 중…",
+      "flash": {
+        "success": "완료되었습니다.",
+        "error": "문제가 발생했습니다."
+      },
+      "cancel": "취소"
+    },
+    "overview": {
+      "revenueRecent": "매출(최근)",
+      "revenueRecentHint": "최근 동기화된 주문 기준",
+      "ordersTotal": "전체 주문",
+      "ordersMirrorHint": "CRM으로 동기화됨",
+      "products": "상품",
+      "productsHint": "동기화된 카탈로그 규모",
+      "customers": "고객",
+      "activeAutomations": "활성 자동화 {count}개",
+      "revenue30": "매출 · 30일",
+      "revenue30Hint": "WC 판매 보고서 기준",
+      "orders30": "주문 · 30일",
+      "ordersAllTime": "전체 누적 {count}건",
+      "customersNew": "30일간 신규 {count}명",
+      "itemsSold": "판매 수량 · 30일",
+      "recentOrders": "최근 주문",
+      "viewAll": "전체 보기 →",
+      "noOrders": "아직 주문이 없습니다. 지금 동기화를 눌러 보세요.",
+      "recentActivity": "최근 웹훅 활동",
+      "noActivity": "수신된 웹훅 이벤트가 없습니다."
+    },
+    "orders": {
+      "order": "주문",
+      "customer": "고객",
+      "status": "상태",
+      "total": "합계",
+      "placed": "주문일",
+      "none": "주문이 없습니다."
+    },
+    "products": {
+      "search": "상품 검색…",
+      "offers": "특별 오퍼",
+      "catalog": "카탈로그 보내기 →",
+      "newArrivals": "신상품",
+      "all": "전체 상품",
+      "none": "아직 상품이 없습니다. 스토어를 연결하거나 지금 동기화를 누르세요.",
+      "noImage": "이미지 없음",
+      "save": "{pct}% 할인",
+      "send": "보내기",
+      "offer": "오퍼",
+      "noMatch": "일치하는 상품이 없습니다.",
+      "wooNone": "상품이 없습니다.",
+      "inStock": "재고 있음",
+      "outOfStock": "품절"
+    },
+    "offers": {
+      "choose": "상품 선택",
+      "selected": "{count}개 선택됨",
+      "noProducts": "동기화된 상품이 없습니다.",
+      "template": "메시지 템플릿",
+      "pickTemplate": "템플릿 선택",
+      "tokens": "사용 가능한 토큰:",
+      "segment": "세그먼트에 보내기",
+      "pickGroup": "연락처 그룹 선택",
+      "coupon": "쿠폰(선택)",
+      "noCoupon": "쿠폰 없음",
+      "couponPercent": "{amount}%",
+      "send": "오퍼 보내기",
+      "sending": "보내는 중…",
+      "pickTemplateFirst": "먼저 템플릿을 선택하세요.",
+      "pickSegmentFirst": "먼저 세그먼트를 선택하세요.",
+      "note": "세그먼트 내 수신 동의한 연락처에만 메시지가 전송됩니다. WABA 발송에는 승인된 템플릿이 필요하며, 비공식 API는 텍스트와 버튼으로 표시합니다.",
+      "queued": "연락처 {total}명에게 발송 대기 중입니다. 완료되면 활동 탭에 집계가 표시됩니다.",
+      "failed": "전송에 실패했습니다.",
+      "wooTitle": "상품 오퍼 브로드캐스트",
+      "wooIntro": "세그먼트 내 수신 동의한 모든 연락처에 승인된 템플릿을 보냅니다. 상품과 쿠폰을 삽입할 수 있습니다.",
+      "wooTemplate": "템플릿",
+      "choose2": "선택",
+      "wooSegment": "세그먼트(연락처 그룹)",
+      "wooProduct": "추천 상품",
+      "wooCoupon": "쿠폰 코드",
+      "wooCouponPlaceholder": "SAVE10",
+      "winTitle": "스마트 세그먼트 브로드캐스트",
+      "winIntro": "주문 내역으로 고객을 타겟팅합니다. 최근성(재유치), 주문 횟수, 총 지출액(VIP) 기준이며 수신 거부 연락처는 제외됩니다.",
+      "winLast": "마지막 주문",
+      "winAny": "언제든지",
+      "winDays": "{days}일 이상 전",
+      "winMonths": "6개월 이상",
+      "winYear": "1년 이상",
+      "winMinOrders": "최소 주문 수",
+      "winAnyOrders": "전체",
+      "winMinSpend": "최소 지출액({currency})",
+      "winTemplate": "템플릿",
+      "winPick": "선택",
+      "winCoupon": "쿠폰",
+      "winNone": "없음",
+      "winSend": "재유치 메시지 보내기",
+      "winConfirm": "이 브로드캐스트를 세그먼트의 모든 사람에게 보낼까요?",
+      "winQueued": "이탈 고객 {total}명에게 발송 대기 중입니다. 완료되면 활동 탭에 집계가 표시됩니다.",
+      "wooWinTitle": "스마트 세그먼트 브로드캐스트",
+      "wooWinIntro": "주문 내역으로 타겟팅하세요. 이탈한 구매자를 다시 유치하거나 우수 고객에게 보상하세요.",
+      "wooLapsed": "이탈 기준 일수",
+      "wooWinNote": "일수가 0이면 기간 제한 없이(세그먼트만) 대상이 됩니다. 지출액은 스토어 통화 기준입니다. 수신 거부 연락처는 항상 제외됩니다.",
+      "wooCouponPlaceholder2": "COMEBACK15",
+      "wooWinSend": "브로드캐스트 보내기",
+      "optional": "선택 사항",
+      "none": "없음",
+      "cancel": "취소"
+    },
+    "customers": {
+      "name": "이름",
+      "email": "이메일",
+      "phone": "전화번호",
+      "orders": "주문",
+      "spent": "지출액",
+      "none": "아직 가져온 고객이 없습니다.",
+      "noneWoo": "아직 고객이 없습니다."
+    },
+    "events": {
+      "noTemplates": "승인된 WhatsApp 템플릿이 아직 없습니다. 자동화를 켜려면 템플릿에서 먼저 만드세요.",
+      "templatesLink": "템플릿",
+      "sendFrom": "발신 번호",
+      "sendFromHint": "이 자동화를 발송할 연결된 번호입니다.",
+      "auto": "자동 — 연결된 아무 번호",
+      "fired": "{count}회 실행됨",
+      "logged": "{count}건 기록됨",
+      "template": "템플릿",
+      "pickTemplate": "템플릿 선택",
+      "noneOption": "없음",
+      "sendTo": "수신 대상",
+      "customer": "고객",
+      "admin": "관리자만",
+      "both": "둘 다",
+      "adminNumber": "관리자 번호",
+      "delay": "지연",
+      "on": "켜짐",
+      "immediate": "즉시",
+      "min": "{n}분",
+      "hour": "{n}시간",
+      "day": "{n, plural, other {#일}}",
+      "mapTitle": "템플릿 변수 → 주문 필드 매핑",
+      "param": "파라미터 {n}",
+      "blank": "— 비워 둠 —",
+      "field": {
+        "name": "고객 이름",
+        "first_name": "이름(名)",
+        "order_name": "주문 번호(예: #1001)",
+        "order_number": "주문 번호",
+        "total": "합계 + 통화",
+        "total_price": "합계(금액만)",
+        "currency": "통화",
+        "email": "고객 이메일",
+        "store_name": "스토어 이름",
+        "financial_status": "결제 상태",
+        "fulfillment_status": "처리 상태"
+      },
+      "advanced": "고급 · 변수 순서",
+      "advancedHint": "쉼표로 구분한 필드가 번호가 매겨진 템플릿 자리표시자에 순서대로 매핑됩니다. 비워 두면 기본값(이름, 주문, 합계)이 사용됩니다.",
+      "advancedPlaceholder": "name, first_name, order_number, order_name, total, currency, order_url, tracking_number, tracking_url",
+      "save": "자동화 저장",
+      "saving": "저장 중…",
+      "saved": "✓ 저장됨",
+      "saveFailed": "저장 실패",
+      "needTemplate": "켜는 모든 자동화에 템플릿을 선택하세요."
+    },
+    "autoGroups": {
+      "lifecycle": {
+        "name": "주문 라이프사이클",
+        "desc": "트랜잭션 알림입니다. 스토어 이벤트 발생 시 자동으로 실행됩니다."
+      },
+      "recovery": {
+        "name": "매출 회복",
+        "desc": "놓친 매출을 되찾으세요."
+      },
+      "marketing": {
+        "name": "라이프사이클 마케팅",
+        "desc": "고객을 늘리고 유지하세요."
+      }
+    },
+    "auto": {
+      "shopify": {
+        "orders_create": {
+          "name": "주문 확인",
+          "desc": "주문 즉시 고객에게 감사 인사를 보냅니다."
+        },
+        "orders_paid": {
+          "name": "결제 완료",
+          "desc": "결제가 완료되면 확인 메시지를 보냅니다."
+        },
+        "orders_fulfilled": {
+          "name": "배송 시작 / 배송 중",
+          "desc": "발송 안내를 보냅니다. 실시간 추적 링크에는 '{{'tracking_url'}}'을 사용하세요."
+        },
+        "order_delivered": {
+          "name": "배송 완료",
+          "desc": "배송 완료를 알립니다(템플릿에 포함하면 리뷰도 요청). 택배사가 배송 완료로 처리하면 실행됩니다."
+        },
+        "orders_cancelled": {
+          "name": "주문 취소",
+          "desc": "주문이 취소되었음을 고객에게 알립니다."
+        },
+        "refunds_create": {
+          "name": "환불 완료",
+          "desc": "환불이 처리되었음을 알립니다."
+        },
+        "orders_updated": {
+          "name": "주문 변경",
+          "desc": "기존 주문이 변경될 때마다 실행됩니다."
+        },
+        "checkouts_create": {
+          "name": "장바구니 이탈 · 1단계",
+          "desc": "결제 이탈 직후 실행됩니다. 고객을 다시 불러오려면 '{{'checkout_url'}}'을 포함하세요."
+        },
+        "cart_step2": {
+          "name": "장바구니 이탈 · 2단계",
+          "desc": "예약된 후속 메시지입니다(지연 설정, 예: 1시간). 구매하면 자동 취소됩니다."
+        },
+        "cart_step3": {
+          "name": "장바구니 이탈 · 3단계",
+          "desc": "마지막 안내입니다(예: 24시간 후). 템플릿에 쿠폰을 넣어 구매를 유도하세요."
+        },
+        "cod_confirm": {
+          "name": "COD 주문 확인",
+          "desc": "착불(COD) 고객에게 예/아니오 답장으로 확인을 요청해 허위 주문과 반품(RTO)을 줄입니다."
+        },
+        "cod_prepaid": {
+          "name": "COD → 선결제 오퍼",
+          "desc": "COD 고객에게 지금 온라인 결제를 유도합니다(템플릿에 '{{'order_url'}}'과 할인 포함). 반품은 줄고 현금은 빨리 들어옵니다."
+        },
+        "stock_back": {
+          "name": "재입고 알림",
+          "desc": "품절 상품에 대해 문의한 고객에게 재입고 시 자동으로 알립니다."
+        },
+        "customers_create": {
+          "name": "신규 고객 환영",
+          "desc": "첫 구매 고객을 따뜻하게 맞이합니다."
+        },
+        "customers_update": {
+          "name": "고객 정보 변경",
+          "desc": "고객 프로필이 변경될 때 실행됩니다."
+        },
+        "products_update": {
+          "name": "상품 변경",
+          "desc": "가격 또는 재고 변경 시 내부 트리거로 사용됩니다."
+        }
+      },
+      "woocommerce": {
+        "order_created": {
+          "name": "주문 접수",
+          "desc": "새 주문이 들어오는 즉시 전송됩니다."
+        },
+        "order_processing": {
+          "name": "주문 확정",
+          "desc": "결제가 확인되어 주문을 준비 중입니다."
+        },
+        "order_completed": {
+          "name": "주문 배송 완료",
+          "desc": "WooCommerce에서 주문이 완료 처리되었습니다."
+        },
+        "order_on_hold": {
+          "name": "주문 보류",
+          "desc": "결제 또는 재고를 기다리는 중입니다. 구매자에게 진행 상황을 알려 주세요."
+        },
+        "order_cancelled": {
+          "name": "주문 취소",
+          "desc": "주문이 취소되었습니다."
+        },
+        "order_refunded": {
+          "name": "주문 환불",
+          "desc": "환불이 발급되었습니다."
+        },
+        "cod_confirm": {
+          "name": "COD 이중 확인",
+          "desc": "배송 전에 착불 구매자에게 예/아니오 확인을 요청합니다. RTO를 줄이는 가장 효과적인 방법입니다."
+        },
+        "cod_prepaid": {
+          "name": "COD → 선결제 유도",
+          "desc": "COD 구매자에게 온라인 결제 링크를 제안합니다(템플릿에 '{{'order_url'}}'과 혜택을 넣을 수 있음)."
+        },
+        "checkout_created": {
+          "name": "장바구니 이탈 · 1단계",
+          "desc": "결제를 시작했지만 주문이 완료되지 않았을 때 보내는 첫 안내입니다. WooCommerce 전용 플러그인이 필요합니다."
+        },
+        "cart_step2": {
+          "name": "장바구니 이탈 · 2단계",
+          "desc": "아래 지연 시간 이후 예약된 후속 메시지입니다."
+        },
+        "cart_step3": {
+          "name": "장바구니 이탈 · 3단계",
+          "desc": "마지막 알림입니다. 템플릿에 할인을 추가하세요."
+        },
+        "stock_back": {
+          "name": "재입고",
+          "desc": "품절 상품이 재입고되면 대기 목록의 모든 사람에게 메시지를 보냅니다."
+        },
+        "subscription_payment_failed": {
+          "name": "구독 결제 재시도 안내",
+          "desc": "구독 갱신 결제가 실패하면 원탭 \"결제 수단 업데이트\" 링크를 보냅니다. WooCommerce 전용 플러그인이 필요합니다."
+        },
+        "customer_created": {
+          "name": "신규 고객 환영",
+          "desc": "고객이 스토어에 처음 가입했을 때 인사합니다."
+        },
+        "review_reward": {
+          "name": "리뷰 연동 쿠폰",
+          "desc": "최근 구매자가 긍정적인 평점(4~5점 / \"좋아요\")으로 답장하면 이 보상 템플릿을 자동 발송합니다. 쿠폰을 포함하세요. 평점을 요청하는 \"주문 배송 완료\" 템플릿과 함께 사용하세요."
+        }
+      }
+    },
+    "analytics": {
+      "revenue": "매출",
+      "orders": "주문",
+      "avgOrder": "평균 주문",
+      "messagesSent": "발송 메시지",
+      "offersSent": "발송 오퍼",
+      "codProtected": "보호된 COD 매출",
+      "codConfirmed": "COD 주문 {count}건 확인됨",
+      "rtoAvoided": "방지한 RTO",
+      "codCancelled": "허위/COD 주문 {count}건 차단",
+      "recovery": "회복 메시지",
+      "recoveryHint": "장바구니 / 오퍼 / 재유치 / 재고",
+      "avgValue": "평균 주문 금액",
+      "trend": "매출 · 최근 14일",
+      "perf": "자동화 성과",
+      "event": "이벤트",
+      "fired": "실행됨",
+      "noActivity": "아직 자동화 활동이 없습니다.",
+      "revenueMirrored": "매출 · 미러링됨",
+      "ordersSynced": "주문 {count}건 동기화됨",
+      "perOrder": "주문당",
+      "offerBroadcasts": "오퍼 브로드캐스트 {count}건",
+      "recoverySends": "회복 발송",
+      "recoverySendsHint": "COD / 장바구니 / 재고 / 오퍼",
+      "wouldBeRto": "조기에 취소된 예상 RTO",
+      "activeAutomations": "활성 자동화",
+      "firingOn": "스토어 이벤트에서 실행 중"
+    },
+    "logs": {
+      "processed": "처리됨",
+      "sent": "발송됨",
+      "skipped": "건너뜀",
+      "failed": "실패",
+      "event": "이벤트",
+      "recipient": "수신자",
+      "status": "상태",
+      "when": "시간",
+      "none": "이 스토어에 도착한 웹훅 이벤트가 아직 없습니다."
+    },
+    "settings": {
+      "storeUrl": "스토어 URL",
+      "connectedAt": "연결 시각",
+      "lastVerified": "마지막 확인",
+      "scopes": "부여된 권한 범위",
+      "wooVersion": "WooCommerce 버전",
+      "webhookUrl": "웹훅 URL",
+      "registered": "등록된 웹훅",
+      "registeredCount": "{count, plural, other {활성 구독 #개}}",
+      "copy": "복사",
+      "copied": "복사됨",
+      "plugin": {
+        "title": "WordPress 플러그인",
+        "body": "스토어에 이 작은 플러그인을 설치하면 주문이 생성되기 전의 장바구니 이탈을 복구하고, 실패한 구독 결제와 사용자 지정 주문 상태를 전달할 수 있습니다.",
+        "step1": "아래에서 플러그인을 다운로드하세요. 이 스토어 전용으로 만들어졌습니다.",
+        "step2": "WordPress에서 플러그인, 새로 추가, 플러그인 업로드를 차례로 열고 zip 파일을 선택한 뒤 활성화하세요.",
+        "step3": "사이트에서 WP-Cron이 실행되는지 확인하세요. 플러그인은 5분마다 방치된 장바구니를 확인합니다.",
+        "download": "플러그인 다운로드(.zip)",
+        "preparing": "플러그인 준비 중…",
+        "started": "플러그인을 다운로드했습니다.",
+        "secretNote": "이 파일에는 스토어의 비밀 키가 들어 있습니다. 외부에 공개하지 마세요.",
+        "forbidden": "플러그인을 다운로드할 권한이 없습니다.",
+        "failed": "플러그인을 다운로드할 수 없습니다. 다시 시도하세요."
+      }
+    },
+    "embedded": {
+      "title": "Shopify",
+      "connected": "연결됨",
+      "notConnected": "연결 안 됨",
+      "store": "스토어",
+      "plan": "Shopify 요금제",
+      "lastVerified": "마지막 확인",
+      "openApp": "앱 열기",
+      "openToConnect": "앱을 열어 연결",
+      "invalid": "Shopify 세션이 유효하지 않습니다. Shopify 관리자에서 앱을 다시 불러오세요.",
+      "off": "이 설치에서는 Shopify 연동이 활성화되어 있지 않습니다. 지원팀에 문의하세요.",
+      "error": "문제가 발생했습니다. Shopify 관리자에서 앱을 다시 불러오세요."
+    },
+    "invoices": {
+      "policyTitle": "자동 인보이스",
+      "autoInvoice": "이 스토어의 주문에 인보이스를 자동 발행",
+      "autoInvoiceHint": "각 인보이스는 WhatsApp으로 구매자에게 발송 대기열에 추가되며, 전화번호가 없으면 이메일로 보냅니다. 켜기 전에는 꺼져 있습니다.",
+      "trigger": "인보이스 발행 시점(주문 상태)",
+      "on_placed": "접수",
+      "on_paid": "결제 완료",
+      "on_fulfilled": "배송 처리 완료",
+      "saved": "인보이스 설정을 저장했습니다.",
+      "saveFailed": "인보이스 설정을 저장할 수 없습니다.",
+      "policyLoadFailed": "인보이스 설정을 불러올 수 없습니다.",
+      "listTitle": "이 스토어의 인보이스",
+      "number": "번호",
+      "buyer": "구매자",
+      "type": "유형",
+      "status": "상태",
+      "total": "합계",
+      "issued": "발행일",
+      "draft": "초안",
+      "tax_invoice": "세금계산서",
+      "receipt": "영수증",
+      "proforma": "견적 인보이스",
+      "status_draft": "초안",
+      "status_issued": "발행됨",
+      "status_partially_paid": "부분 결제",
+      "status_paid": "결제 완료",
+      "status_overdue": "연체",
+      "status_void": "무효",
+      "loading": "인보이스를 불러오는 중…",
+      "none": "이 스토어의 인보이스가 아직 없습니다. 위에서 자동 인보이스를 켜면 다음 결제 완료 주문부터 발행됩니다.",
+      "error": "인보이스를 불러올 수 없습니다.",
+      "retry": "다시 시도",
+      "forbidden": "인보이스에 접근할 권한이 없습니다.",
+      "viewAll": "전체 인보이스 열기"
+    }
+  }
+}

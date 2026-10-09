@@ -3,8 +3,11 @@ import { getSiteConfig } from '@/features/platform-settings-branding-storage/sit
 import '@/features/storefront-builder/public/styles/storefront.css';
 
 export async function generateMetadata() {
-  const site = await getSiteConfig();
-  return { title: { absolute: `Page not found — ${site?.brand.name || 'Reference'}` }, robots: null };
+  const [site, t] = await Promise.all([getSiteConfig(), getTranslations('shopPublic.notFound')]);
+  return {
+    title: { absolute: `${t('metaTitle')} — ${site?.brand.name || 'Reference'}` },
+    robots: null,
+  };
 }
 
 /**

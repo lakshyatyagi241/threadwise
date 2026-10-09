@@ -1,0 +1,41 @@
+{
+  "web-forms": {
+    "public": {
+      "next": "다음",
+      "back": "뒤로",
+      "sending": "보내는 중...",
+      "optional": "선택 사항",
+      "selectPlaceholder": "옵션 선택",
+      "stepOf": "{total}단계 중 {n}단계",
+      "summaryTitle": "{count, plural, other {필드 #개를 수정하세요}}",
+      "successTitle": "감사합니다",
+      "continue": "계속",
+      "previewNotice": "미리보기: 여기서는 아무것도 전송되지 않습니다.",
+      "honeypot": "이 필드는 비워 두세요",
+      "privacyPolicy": "개인정보 처리방침",
+      "poweredBy": "{brand} 제공",
+      "brandName": "양식",
+      "captchaNeeded": "보내기 전에 아래 확인을 완료하세요.",
+      "rateLimited": "시도 횟수가 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+      "closed": "이 양식은 현재 응답을 받지 않습니다.",
+      "genericError": "문제가 발생하여 응답이 전송되지 않았습니다. 다시 시도하세요.",
+      "notAvailableTitle": "이 양식은 사용할 수 없습니다",
+      "notAvailableBody": "링크가 잘못되었거나 양식이 마감되었을 수 있습니다.",
+      "errors": {
+        "required": "이 필드는 필수입니다.",
+        "consent_required": "계속하려면 이 상자를 체크하세요.",
+        "invalid_email": "올바른 이메일 주소를 입력하세요.",
+        "invalid_phone": "올바른 전화번호를 입력하세요. 가능하면 국가 번호를 포함하세요.",
+        "invalid_number": "올바른 번호를 입력하세요.",
+        "invalid_date": "올바른 날짜를 입력하세요.",
+        "too_small": "{min} 이상의 값을 입력하세요.",
+        "too_large": "{max} 이하의 값을 입력하세요.",
+        "too_short": "{min}자 이상 입력하세요.",
+        "too_long": "{max}자 이하로 입력하세요.",
+        "pattern": "예상된 형식과 일치하지 않습니다.",
+        "invalid_option": "나열된 옵션 중 하나를 선택하세요."
+      },
+      "closedTitle": "이 폼은 마감되었습니다"
+    }
+  }
+}

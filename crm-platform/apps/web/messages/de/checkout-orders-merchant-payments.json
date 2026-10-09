@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "Bestellungen",
+      "coupons": "Gutscheine"
+    },
+    "settingsTile": {
+      "label": "Zahlungs-Gateways",
+      "description": "Das eine Gateway, das Ihr Shop-Checkout und Ihre Sales-Rechnungen für Online-Zahlungen verwenden.",
+      "keywords": "Zahlungs-Gateway, razorpay, stripe, Checkout, Zahlungslink, Online-Zahlung, Karte, upi"
+    },
+    "common": {
+      "noAccessTitle": "Sie haben keinen Zugriff auf diese Seite",
+      "noAccessMessage": "Bitten Sie einen Workspace-Admin, Ihrer Rolle die entsprechende Berechtigung zu geben.",
+      "loading": "Wird geladen",
+      "loadMore": "Mehr laden",
+      "cancel": "Abbrechen",
+      "close": "Schließen",
+      "save": "Speichern",
+      "saving": "Wird gespeichert",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "remove": "Entfernen",
+      "open": "Öffnen",
+      "view": "Ansehen",
+      "search": "Suchen",
+      "clear": "Zurücksetzen",
+      "all": "Alle",
+      "no": "Nein",
+      "none": "Keine",
+      "actions": "Aktionen",
+      "retry": "Erneut versuchen",
+      "dismiss": "Ausblenden",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "viewContact": "Kontakt ansehen",
+      "allShops": "Alle Shops",
+      "shop": "Shop"
+    },
+    "status": {
+      "new": "Neu",
+      "pending": "Ausstehend",
+      "confirmed": "Bestätigt",
+      "paid": "Bezahlt",
+      "processing": "In Bearbeitung",
+      "completed": "Abgeschlossen",
+      "shipped": "Versendet",
+      "cancelled": "Storniert"
+    },
+    "paymentStatus": {
+      "paid": "Bezahlt",
+      "awaiting": "Zahlung ausstehend",
+      "cod": "Nachnahme",
+      "unpaid": "Unbezahlt"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "Storefront",
+      "twilio": "Twilio",
+      "manual": "Manuell",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "WhatsApp-KI"
+    },
+    "errors": {
+      "requestId": "Anfrage-ID",
+      "retry": "Erneut versuchen",
+      "network": {
+        "title": "Der Server ist nicht erreichbar",
+        "message": "Prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
+      },
+      "forbidden": {
+        "title": "Nicht erlaubt",
+        "message": "Ihre Rolle erlaubt dies nicht."
+      },
+      "signedOut": {
+        "title": "Sie sind abgemeldet",
+        "message": "Melden Sie sich erneut an, um fortzufahren."
+      },
+      "conflict": {
+        "title": "Von jemand anderem geändert",
+        "message": "Dieser Datensatz wurde geändert, während Sie ihn geöffnet hatten. Laden Sie ihn neu und versuchen Sie es erneut."
+      },
+      "validation": {
+        "title": "Bitte prüfen Sie das Formular",
+        "message": "Einige Werte sind ungültig. Prüfen Sie die markierten Felder."
+      },
+      "unavailable": {
+        "title": "Noch nicht verfügbar",
+        "message": "Dieser Teil des Shops ist auf diesem Server noch nicht verfügbar."
+      },
+      "rateLimited": {
+        "title": "Zu viele Anfragen",
+        "message": "Warten Sie einen Moment und versuchen Sie es erneut."
+      },
+      "notFound": {
+        "title": "Nicht gefunden",
+        "message": "Er wurde entfernt oder hat nie existiert."
+      },
+      "planLocked": {
+        "title": "Nicht in Ihrem Tarif",
+        "message": "Ihr Tarif enthält den Shop nicht. Wechseln Sie auf einen höheren Tarif, um ihn zu nutzen."
+      },
+      "couponCodeTaken": {
+        "title": "Code bereits vergeben",
+        "message": "Ein anderer Gutschein verwendet diesen Code bereits. Wählen Sie einen anderen."
+      },
+      "groupCodeTaken": {
+        "title": "Code bereits vergeben",
+        "message": "Eine andere Gruppe verwendet diesen Bestellcode bereits."
+      },
+      "orderNoPhone": {
+        "title": "Keine Telefonnummer",
+        "message": "Diese Bestellung hat keine Telefonnummer des Käufers, daher kann nichts gesendet werden."
+      },
+      "gatewayNotConfigured": {
+        "title": "Kein Zahlungs-Gateway eingerichtet",
+        "message": "Richten Sie zuerst ein Zahlungs-Gateway ein. Seine Schlüssel fehlen oder es ist ausgeschaltet."
+      },
+      "gatewayUnavailable": {
+        "title": "Gateway nicht verfügbar",
+        "message": "Dieses Gateway kann keinen Zahlungslink erstellen, den ein Käufer öffnen kann."
+      },
+      "paymentLinkFailed": {
+        "title": "Das Gateway hat den Link abgelehnt",
+        "message": "Prüfen Sie die Schlüssel und ob der Betrag über dem Mindestbetrag des Gateways liegt."
+      },
+      "unexpected": {
+        "title": "Etwas ist schiefgelaufen",
+        "message": "Versuchen Sie es erneut. Wenn das Problem bestehen bleibt, nennen Sie dem Support die Anfrage-ID."
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "workspaces-teams-tenancy": {
+    "impersonation": {
+      "label": "Usurpation d’identité en cours",
+      "viewing": "Consultation de {workspace} en tant que {owner}",
+      "reason": "Motif : {reason}",
+      "readOnly": "Lecture seule",
+      "timeLeft": "{minutes, plural, one {# minute restante} other {# minutes restantes}}",
+      "endsSoon": "Moins d’une minute restante",
+      "stop": "Arrêter l’usurpation",
+      "stopping": "Arrêt en cours",
+      "stopFailed": "La session n’a pas pu être arrêtée. Réessayez.",
+      "readOnlyRefused": "Cette session est en lecture seule : les modifications ne sont pas autorisées.",
+      "forbiddenRefused": "Cette action n’est pas disponible lorsque vous consultez l’espace de travail en tant que propriétaire.",
+      "ended": {
+        "title": "Cette session d’usurpation a pris fin",
+        "expired": "Le lien a déjà été utilisé ou a expiré. Recommencez depuis la console.",
+        "body": "Aucune autre action n’est possible dans l’espace de travail depuis ici. Retournez à la console pour démarrer une nouvelle session.",
+        "back": "Retour à la console"
+      }
+    }
+  }
+}

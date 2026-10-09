@@ -1,0 +1,560 @@
+{
+  "lead-sources": {
+    "common": {
+      "dismiss": "Kapat",
+      "loading": "Yükleniyor",
+      "retry": "Yeniden dene",
+      "copied": "Kopyalandı",
+      "copyFailed": "Kopyalanamadı: metni seçip elle kopyalayın",
+      "requestId": "Referans: {id}"
+    },
+    "states": {
+      "noAccessTitle": "Sosyal potansiyel müşterilere erişiminiz yok",
+      "noAccessBody": "Rolünüz, bu ekranın ihtiyaç duyduğu izni ({permission}) içermiyor. Çalışma alanı yöneticisinden rolünüze eklemesini isteyin.",
+      "lockedTitle": "Sosyal potansiyel müşteriler planınıza dahil değil",
+      "lockedBody": "Mevcut planınız potansiyel müşteri kaynaklarını içermiyor, bu nedenle bunları göremez veya oluşturamazsınız. Reklam ve açılış sayfası potansiyel müşterilerini kişilerinize eklemek için planınızı yükseltin.",
+      "upgrade": "Planı yükselt",
+      "manageNeeded": "Burada yalnızca görüntüleyebilirsiniz; kaynakları değiştirmek {permission} iznini gerektirir."
+    },
+    "errors": {
+      "conflict": "Siz düzenlerken bu kaynağı başka biri değiştirdi. Onların sürümünü görmek için yenileyin; kaydedilmemiş düzenlemeleriniz kaybolur.",
+      "noAccess": "Rolünüz bu işleme izin vermiyor.",
+      "signedOut": "Oturumunuz sona erdi. Devam etmek için yeniden oturum açın.",
+      "planLocked": "Planınız Sosyal potansiyel müşterileri içermiyor. Kullanmak için planınızı yükseltin.",
+      "planLimit": "Planınızın potansiyel müşteri kaynağı sınırına ulaşıldı. Planınızı yükseltin veya artık kullanmadığınız bir kaynağı silin.",
+      "nameTaken": "Bu ada sahip başka bir kaynak zaten var. Farklı bir ad seçin.",
+      "mappingInvalid": "Eşleştirme, bir potansiyel müşteriden doldurulamayan kişi alanlarını gösteriyor.",
+      "defaultsInvalid": "Kurallardaki bir şey bu çalışma alanının parçası değil (kullanıcı, satış hattı, aşama veya yaşam döngüsü aşaması).",
+      "notRetryable": "Yalnızca inceleme gerektiren veya başarısız olan potansiyel müşteriler yeniden denenebilir. Bu zaten tamamlanmış veya işleniyor.",
+      "payloadPurged": "Saklanan potansiyel müşteri, saklama süresinden sonra silindi; yeniden denenecek bir şey yok.",
+      "sourcePaused": "Bu kaynak duraklatıldı. Test potansiyel müşterisi göndermek veya bir potansiyel müşteriyi yeniden denemek için devam ettirin.",
+      "notFound": "Bulunamadı. Silinmiş olabilir.",
+      "rateLimited": "Çok fazla istek. Bir süre bekleyip tekrar deneyin.",
+      "rateLimitedWait": "Çok fazla istek. {seconds} saniye sonra tekrar deneyin.",
+      "validation": "Girdiklerinizin bir kısmı geçerli değil. Vurgulanan alanları kontrol edin.",
+      "validationField": "{message}",
+      "detailVerbatim": "{message}",
+      "badResponse": "Sunucu bu sayfanın anlayamadığı bir yanıt verdi. Sayfayı yenileyin; sorun devam ederse destekle iletişime geçin.",
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "unexpected": "Tarafımızda bir sorun oluştu. Biraz sonra tekrar deneyin.",
+      "request": "İstek kabul edilmedi. Girdiklerinizi kontrol edip tekrar deneyin.",
+      "details": {
+        "unknown_property": "Bu kişi özelliği yok veya kapalı.",
+        "not_mappable": "Bu özellik hesaplanır veya başka bir kaydı gösterir, bu nedenle bir potansiyel müşteri dolduramaz.",
+        "unknown_pipeline": "Bu satış hattı çalışma alanınızda yok.",
+        "unknown_stage": "Bu fırsat aşaması çalışma alanınızda yok.",
+        "stage_not_in_pipeline": "Bu aşama farklı bir satış hattına ait.",
+        "pipeline_required": "Bu aşamanın ait olduğu satış hattını seçin.",
+        "unknown_or_lost_stage": "Bu yaşam döngüsü aşaması yok veya kayıp aşaması.",
+        "unknown_or_inactive_user": "Seçilen kişilerden biri bu çalışma alanının aktif bir üyesi değil."
+      }
+    },
+    "problems": {
+      "nameRequired": "Kaynağa bir ad verin.",
+      "nameLength": "En fazla {max} karakter kullanın.",
+      "platformLength": "En fazla {max} karakter kullanın.",
+      "secretLength": "Paylaşılan bir gizli anahtar {min} ila {max} karakter olmalıdır.",
+      "pathLength": "Bir yol en fazla {max} karakter olabilir.",
+      "pathCharacters": "Bir yol kontrol karakterleri içeremez.",
+      "retentionRange": "1 ile {max} arasında tam bir gün sayısı girin.",
+      "countryCode": "1 ila 4 haneli bir ülke telefon kodu girin, örneğin 91 veya 44.",
+      "textLength": "En fazla {max} karakter kullanın.",
+      "ownerFixed": "Tam olarak bir kişi seçin.",
+      "ownerRoundRobin": "Sırayla ilgilenmek için en az iki kişi seçin.",
+      "ownerTooMany": "En fazla {max} kişi seçin.",
+      "notifyTooMany": "En fazla {max} kişi seçin.",
+      "dealTitleLength": "Fırsat başlığı en fazla {max} karakter olabilir.",
+      "propertyRequired": "Doldurulacak kişi alanını seçin.",
+      "propertyKey": "Bir özellik anahtarı harfle başlar ve küçük harf, rakam ve alt çizgi kullanır.",
+      "propertyDuplicate": "Bu özellik iki kez eşleştirilmiş.",
+      "pathRequired": "Değerin veri içinde nerede olduğunu belirtin.",
+      "customFieldsTooMany": "En fazla {max} özel özelliği eşleştirin.",
+      "contract": "{message}"
+    },
+    "kinds": {
+      "webhook": "Webhook",
+      "meta_lead_ads": "Meta potansiyel müşteri formları",
+      "tiktok": "TikTok",
+      "linkedin": "LinkedIn",
+      "google_ads": "Google Ads",
+      "connector": "Pazar yeri bağlantısı"
+    },
+    "sourceStatus": {
+      "active": "Aktif",
+      "paused": "Duraklatıldı"
+    },
+    "eventStatus": {
+      "received": "Alındı",
+      "created": "Kişi oluşturuldu",
+      "updated": "Kişi güncellendi",
+      "duplicate": "Yinelenen",
+      "needs_review": "İnceleme gerekiyor",
+      "failed": "Başarısız"
+    },
+    "reasons": {
+      "no_contact_point": "E-posta veya telefon yok",
+      "invalid_phone": "Telefon okunamadı",
+      "plan_limit_reached": "Kişi sınırına ulaşıldı",
+      "source_paused": "Kaynak duraklatıldı",
+      "internal_error": "İşleme hatası",
+      "identity_conflict": "E-posta veya telefon başka bir kişiye ait"
+    },
+    "guidance": {
+      "noContactPoint": "Potansiyel müşterinin kullanılabilir bir e-postası ya da telefon numarası yoktu. Eşleştirmeyi veya varsayılan ülke kodunu düzeltip yeniden deneyin.",
+      "invalidPhone": "Bir telefon numarası gönderildi ancak okunamadı ve e-posta yoktu. Telefon eşleştirmesini ve varsayılan ülke kodunu kontrol edip yeniden deneyin.",
+      "planLimit": "Planınızın kişi sınırına ulaşıldığı için bu potansiyel müşteri kişiye dönüştürülemedi. Planınızı yükseltin, sonra yeniden deneyin.",
+      "sourcePaused": "Kaynak duraklatıldı. Devam ettirin, sonra yeniden deneyin.",
+      "internalError": "Bu potansiyel müşteri işlenirken bir sorun oluştu. Yeniden deneyin; yine başarısız olursa hatadaki referansı destekle paylaşın.",
+      "identityConflict": "Potansiyel müşteri mevcut bir kişiye eklendi, ancak e-postası veya telefonu başka bir kişiye ait olduğu için bu bilgi taşınmadı.",
+      "generic": "Bu potansiyel müşterinin incelenmesi gerekiyor. Nedeni ve hatayı kontrol edin, gerekiyorsa eşleştirmeyi veya varsayılanları düzeltip yeniden deneyin.",
+      "upgrade": "Planı yükselt"
+    },
+    "eventFilters": {
+      "all": "Tüm potansiyel müşteriler",
+      "attention": "Dikkat gerektiriyor",
+      "needs_review": "İnceleme gerekiyor",
+      "failed": "Başarısız",
+      "created": "Kişi oluşturuldu",
+      "updated": "Kişi güncellendi",
+      "duplicate": "Yinelenen",
+      "received": "İşleniyor"
+    },
+    "testFilters": {
+      "all": "Gerçek ve test potansiyel müşterileri",
+      "only": "Yalnızca test potansiyel müşterileri",
+      "hide": "Test potansiyel müşterilerini gizle"
+    },
+    "page": {
+      "title": "Sosyal potansiyel müşteriler",
+      "description": "Reklamlarınızdan ve açılış sayfalarınızdan gelen potansiyel müşterileri, seçtiğiniz sahip, etiket ve fırsatla kişilerinize aktarın.",
+      "newSource": "Yeni kaynak",
+      "loading": "Potansiyel müşteri kaynakları yükleniyor",
+      "tabs": {
+        "ads": "Reklamlar",
+        "webhook": "Webhook",
+        "attention": "{count, plural, other {# potansiyel müşteri dikkat gerektiriyor}}"
+      }
+    },
+    "ads": {
+      "intro": "Potansiyel müşterilerinizin nereden geleceğini seçin. Her kaynak aynı yere ulaşır: kaynağı kayıtlı bir kişi, bir sahip, isteğe bağlı bir fırsat ve bir bildirim.",
+      "available": "Kullanılabilir",
+      "comingSoon": "Yakında",
+      "untilThen": "Bu zamana kadar bu potansiyel müşterileri Zapier veya Make ile Webhook üzerinden gönderin.",
+      "sourceCount": "{count, plural, =0 {Henüz kaynak yok} other {# kaynak}}",
+      "setUpWebhook": "Webhook kurun",
+      "openSources": "Kaynakları aç",
+      "providers": {
+        "webhook": {
+          "name": "Webhook",
+          "body": "Web isteği gönderebilen her araçtan potansiyel müşteri gönderin: Zapier, Make, açılış sayfası oluşturucusu veya kendi formunuz. LinkedIn, TikTok ve Google Ads potansiyel müşterilerini de taşır."
+        },
+        "meta": {
+          "name": "Meta potansiyel müşteri formları",
+          "body": "Facebook ve Instagram potansiyel müşteri reklamları, doğrudan Sayfanızdan."
+        },
+        "linkedin": {
+          "name": "LinkedIn",
+          "body": "LinkedIn potansiyel müşteri oluşturma formları."
+        },
+        "tiktok": {
+          "name": "TikTok",
+          "body": "TikTok potansiyel müşteri oluşturma formları."
+        },
+        "google": {
+          "name": "Google Ads",
+          "body": "Google Ads potansiyel müşteri formu uzantıları."
+        }
+      }
+    },
+    "sources": {
+      "emptyTitle": "Henüz kaynak yok",
+      "empty": "Zapier, Make veya form aracınıza yapıştırabileceğiniz bir URL almak için bir webhook kaynağı oluşturun. Bu adrese gönderilen potansiyel müşteriler kişi olur.",
+      "emptyNoManage": "Henüz bir potansiyel müşteri kaynağı oluşturulmadı. Potansiyel müşteri kaynaklarını yönetebilen birinden bir tane oluşturmasını isteyin.",
+      "create": "Yeni kaynak",
+      "caption": "Potansiyel müşteri kaynakları",
+      "col": {
+        "name": "Ad",
+        "kind": "Tür",
+        "status": "Durum",
+        "token": "URL",
+        "lastEvent": "Son potansiyel müşteri",
+        "attention": "Dikkat gerektiriyor"
+      },
+      "connector": "Pazar yeri üzerinden",
+      "endsIn": "{hint} sonra sona erer",
+      "noEvents": "Henüz potansiyel müşteri yok",
+      "needsAttention": "{count, plural, other {# potansiyel müşteri}}"
+    },
+    "wizard": {
+      "title": "Yeni potansiyel müşteri kaynağı",
+      "description": "Gelen potansiyel müşterileri kişilere dönüştüren bir webhook kurun.",
+      "back": "Sosyal potansiyel müşterilere dön",
+      "stepsLabel": "Potansiyel müşteri kaynağı oluşturma adımları",
+      "steps": {
+        "basics": "Temel bilgiler",
+        "rules": "Bir potansiyel müşteriye ne olur",
+        "connect": "Gönderen sisteminizi bağlayın",
+        "mapping": "Alanları eşleştirin"
+      },
+      "stepTitle": {
+        "basics": "Kaynağınıza ad verin",
+        "rules": "Bir potansiyel müşteriye ne olur",
+        "connect": "Gönderen sisteminizi bağlayın",
+        "mapping": "Alanları eşleştirin"
+      },
+      "stepHelp": {
+        "basics": "Bu kaynağın adını ve ham potansiyel müşteri verisinin ne kadar süre saklanacağını belirtin.",
+        "rules": "Gelen her potansiyel müşteri için sahibi, etiketi, fırsatı ve bildirimi seçin.",
+        "connect": "Kaynağınız oluşturuldu. URL'yi ve belirteci şimdi kopyalayın: yalnızca bir kez gösterilir.",
+        "mapping": "Her değerin, aracınızın gönderdiği veride nerede durduğunu belirtin. Önizleme, yazdıkça sonucu gösterir."
+      },
+      "previous": "Geri",
+      "next": "İleri",
+      "cancel": "Vazgeç",
+      "create": "Kaynak oluştur",
+      "created": "{name} kaynağı oluşturuldu",
+      "mappingSaved": "Eşleştirme kaydedildi",
+      "planLimit": "Lead kaynaklarında planınızın sınırına ulaşıldı; yeni bir kaynak oluşturulamaz.",
+      "planLocked": "Planınız Sosyal potansiyel müşteriler özelliğini içermiyor.",
+      "upgrade": "Planı yükselt",
+      "skipMapping": "Şimdilik atla",
+      "finish": "Kaydet ve bitir",
+      "revealGone": "URL ve belirteç artık gösterilmiyor. Bunları kaydetmediyseniz kaynağı açın ve belirteci yenileyerek yeni bir URL alın.",
+      "toMapping": "Eşlemeye devam et"
+    },
+    "form": {
+      "name": "Kaynak adı",
+      "nameHint": "Örneğin Zapier: Facebook lead reklamları. Adlar benzersizdir.",
+      "platform": "Platform etiketi",
+      "platformHint": "Kişilerinizin kaynak olarak göreceği ad, örneğin Facebook veya IndiaMART. En fazla {max} karakter.",
+      "platformPlaceholder": "Facebook",
+      "secret": {
+        "label": "Paylaşılan gizli anahtar",
+        "isSet": "Paylaşılan bir gizli anahtar ayarlı. Gönderenler bunu X-Webhook-Secret üstbilgisinde göndermelidir.",
+        "notSet": "Paylaşılan gizli anahtar yok. URL'yi bilen herkes potansiyel müşteri gönderebilir.",
+        "willRemove": "Kaydettiğinizde paylaşılan gizli anahtar kaldırılacak.",
+        "willReplace": "Kaydettiğinizde paylaşılan gizli anahtar değiştirilecek.",
+        "willSet": "Kaydettiğinizde bir paylaşılan gizli anahtar ayarlanacak.",
+        "newValue": "Yeni paylaşılan gizli anahtar",
+        "hint": "İsteğe bağlı. {min} ila {max} karakter. Kaydettikten sonra bir daha gösterilmez.",
+        "show": "Gizli anahtarı göster",
+        "hide": "Gizli anahtarı gizle",
+        "replace": "Değiştir",
+        "remove": "Kaldır",
+        "keep": "Mevcut gizli anahtarı koru"
+      },
+      "externalIdPath": "Potansiyel müşteri kimliği yolu",
+      "externalIdPathHint": "Göndericinin bir potansiyel müşteri için kullandığı kimliğin verideki konumu, örneğin lead.id. Aynı potansiyel müşterinin iki kez eklenmesini önler. İsteğe bağlı.",
+      "retention": "Ham potansiyel müşteri verisini şu kadar gün sakla",
+      "retentionHint": "Bu süre sonunda saklanan veri silinir; kişi kalır. 1 ila {max} gün.",
+      "sections": {
+        "contact": "Kişi",
+        "owner": "Sahip",
+        "deal": "Fırsat",
+        "notify": "Bildirimler"
+      },
+      "membersFailed": "Ekibiniz yüklenemedi, bu yüzden şu anda kişi seçilemiyor. Tekrar denemek için sayfayı yenileyin.",
+      "countryCode": "Varsayılan ülke kodu",
+      "countryCodeHint": "Başında ülke kodu olmadan gönderilen telefon numaralarına eklenir, örneğin 91. Bu yoksa numara kendi ülke koduyla birlikte gelmelidir.",
+      "lifecycleStage": "Başlangıç yaşam döngüsü aşaması",
+      "lifecycleStageHint": "Bu kaynaktan gelen yeni bir kişinin başlayacağı aşama.",
+      "lifecycleDefault": "Çalışma alanı varsayılanı",
+      "tag": "Etiket",
+      "tagHint": "Bu kaynağın getirdiği her kişiye eklenir. Etiket olmaması için boş bırakın.",
+      "ownerMode": "Kişinin sahibi",
+      "ownerModeHint": "Yalnızca henüz sahibi olmayan bir kişi için geçerlidir.",
+      "ownerModes": {
+        "unassigned": "Kimse (atanmamış)",
+        "fixed": "Bir kişi",
+        "round_robin": "Kişiler arasında sırayla"
+      },
+      "ownerFixed": "Sahip",
+      "ownerChoose": "Bir kişi seçin",
+      "unknownMember": "Artık müsait olmayan bir kişi",
+      "ownerRoundRobin": "Sırayla alan kişiler",
+      "ownerRoundRobinHint": "En az iki kişi seçin. Potansiyel müşteriler sırayla her birine gider; artık aktif olmayan kişiler atlanır.",
+      "pickMembers": "Kişileri seç",
+      "noMembers": "Seçilecek kimse kalmadı",
+      "removeMember": "{name} kaldır",
+      "dealEnabled": "Her yeni kişi için bir fırsat oluştur",
+      "dealEnabledHint": "Açana kadar kapalı. Zaten açık bir fırsatı olan kişiye yenisi eklenmez.",
+      "pipelinesFailed": "Satış hatlarınız yüklenemedi. Satış hattı ve aşama şu anda seçilemiyor.",
+      "pipeline": "Satış hattı",
+      "pipelineDefault": "Çalışma alanı varsayılan satış hattı",
+      "dealStage": "Aşama",
+      "dealStageNeedsPipeline": "Aşama seçmek için önce bir satış hattı seçin.",
+      "dealStageFirst": "Satış hattının ilk aşaması",
+      "dealTitle": "Fırsat başlığı",
+      "dealTitleHint": "Bunlar potansiyel müşteriden doldurulur: {tokens}.",
+      "notifyOwner": "Kişinin sahibine haber ver",
+      "notifyOwnerHint": "Yeni bir potansiyel müşteri geldiğinde uygulama içi bildirim. Test potansiyel müşterileri bildirim göndermez.",
+      "notifyUsers": "Ayrıca bilgilendir",
+      "notifyUsersHint": "Örneğin satış müdürünüz. En fazla 20 kişi."
+    },
+    "mapping": {
+      "contact": "Kişi alanları",
+      "contactHelp": "Bir anahtar (phone_number) veya bir yol (lead.contact.phone, answers[0].value) yazın. Bir kutuyu boş bırakırsanız yaygın adlar altına bakılır.",
+      "fields": {
+        "name": "Ad soyad",
+        "firstName": "Ad",
+        "lastName": "Soyad",
+        "email": "E-posta",
+        "phone": "Telefon"
+      },
+      "defaults": {
+        "name": "full_name, name, contact_name alanlarını arar",
+        "firstName": "first_name, firstname alanlarını arar",
+        "lastName": "last_name, lastname alanlarını arar",
+        "email": "email, email_address, mail alanlarını arar",
+        "phone": "phone, mobile, phone_number, whatsapp alanlarını arar"
+      },
+      "custom": "Özel özellikler",
+      "customHelp": "Aracınızın gönderdiği verilerden kendi kişi özelliklerinizi doldurun.",
+      "propertiesFailed": "Kişi özellikleriniz yüklenemedi, bu yüzden özellik anahtarını elle yazın.",
+      "property": "Kişi özelliği",
+      "propertyChoose": "Bir özellik seçin",
+      "path": "Yükteki yol",
+      "removeRow": "{number} numaralı özel özelliği kaldır",
+      "remove": "Kaldır",
+      "addRow": "Özel özellik ekle",
+      "attribution": "Atıf",
+      "attributionHelp": "Kampanya ayrıntılarının bulunduğu yer. Boş bırakılan her alan kendi adıyla aranır.",
+      "attributionFields": {
+        "platform": "Platform",
+        "campaign": "Kampanya",
+        "adset": "Reklam seti",
+        "ad": "Reklam",
+        "form": "Form"
+      },
+      "attributionDefaults": {
+        "platform": "platform, utm_source alanlarını arar",
+        "campaign": "campaign, utm_campaign alanlarını arar",
+        "adset": "adset, adgroup alanlarını arar",
+        "ad": "ad alanını arar",
+        "form": "form alanını arar"
+      }
+    },
+    "preview": {
+      "title": "Canlı önizleme",
+      "updating": "Güncelleniyor",
+      "help": "Yukarıdaki eşlemenin potansiyel müşteriyi nasıl işleyeceği. Önizleme hiçbir şeyi kaydetmez veya oluşturmaz.",
+      "paste": "Örnek bir potansiyel müşteri yapıştırın (JSON)",
+      "pasteHint": "Bir nesne, en fazla 64 KB.",
+      "pasteProblems": {
+        "empty": "Aracınızın gönderdiği JSON'u yapıştırın.",
+        "invalidJson": "Bu geçerli bir JSON değil. Eksik tırnak, virgül veya parantez olup olmadığını kontrol edin.",
+        "notObject": "Potansiyel müşteri bir JSON nesnesi olmalıdır: süslü parantezler arasında anahtar ve değer kümesi.",
+        "tooLarge": "Bu 64 KB'tan büyük."
+      },
+      "useLast": "Aldığımız son potansiyel müşteriyi kullan",
+      "pickStored": "Ya da kayıtlı bir potansiyel müşteri seçin",
+      "storedOption": "{id} ({status})",
+      "auditNote": "Kayıtlı bir potansiyel müşteriyi okumak denetim günlüğüne kaydedilir. Yapıştırılan örnek kaydedilmez.",
+      "fixDraft": "Önizleme görmek için vurgulanan eşleme alanlarını düzeltin.",
+      "choose": "Sonucu görmek için bir örnek yapıştırın ya da aldığımız son potansiyel müşteriyi kullanın.",
+      "loading": "Potansiyel müşteri okunuyor",
+      "none": "Henüz potansiyel müşteri alınmadı: bir örnek yapıştırın.",
+      "usable": "Bu potansiyel müşteri işlenir",
+      "notUsable": "Bu potansiyel müşterinin incelenmesi gerekir",
+      "basedOnEvent": "Kayıtlı bir potansiyel müşteriden",
+      "basedOnPayload": "Örneğinizden",
+      "externalId": "kimlik {id}",
+      "reasonsLabel": "Neden",
+      "reasons": {
+        "no_payload": "Henüz okunacak bir potansiyel müşteri yok.",
+        "no_contact_point": "E-posta ve telefon bulunamadı.",
+        "invalid_phone": "Bir telefon bulundu ama numara olarak okunamıyor ve e-posta da yok.",
+        "phone_unreadable": "Telefon numara olarak okunamıyor; e-posta kullanılacak.",
+        "email_invalid": "E-posta geçerli bir adres değil ve yok sayılır."
+      },
+      "contact": {
+        "name": "Ad",
+        "firstName": "Ad",
+        "lastName": "Soyad",
+        "email": "E-posta",
+        "phone": "Telefon"
+      },
+      "empty": "Bir şey bulunamadı",
+      "phoneUnreadable": "Numara olarak okunamadı",
+      "attribution": {
+        "platform": "Platform",
+        "campaign": "Kampanya",
+        "adset": "Reklam seti",
+        "ad": "Reklam",
+        "form": "Form"
+      },
+      "paths": "Bu potansiyel müşteride geçen alanlar",
+      "pathsPick": "Doldurmak için birine tıklayın: {field}",
+      "pathsFocusFirst": "Önce bir eşleme kutusuna, sonra doldurmak istediğiniz alana tıklayın.",
+      "pathsMore": "{count, plural, other {# alan daha}}"
+    },
+    "reveal": {
+      "titleCreated": "URL'nizi ve belirtecinizi şimdi kopyalayın",
+      "titleRotated": "Yeni URL'niz ve belirteciniz",
+      "bodyCreated": "Bunlar yalnızca bu sefer gösterilir. Yalnızca bir parmak izi tutuyoruz, bu yüzden bunları tekrar gösteremeyiz.",
+      "bodyRotated": "Eski URL hemen çalışmayı durdurdu. Bu yeni olan yalnızca bu sefer gösterilir.",
+      "url": "Webhook URL'si",
+      "copyUrl": "URL'yi kopyala",
+      "noOrigin": "Tam URL için API adresinizi bu yolun önüne ekleyin.",
+      "token": "Belirteç",
+      "copyToken": "Belirteci kopyala",
+      "secretHint": "Bu kaynak ayrıca bir paylaşılan gizli anahtar gerektirir: gönderen bunu {header} üstbilgisinde göndermelidir.",
+      "sample": "Bir terminalden deneyin",
+      "sampleHelp": "Zapier veya Make'te, URL'ye JSON gönderen bir Webhooks eylemi kullanın. Bu komut bir örnek potansiyel müşteri gönderir.",
+      "copied": "URL'yi ve belirteci güvenli bir yere kopyaladım",
+      "done": "Kopyaladım, devam et",
+      "doneHint": "Önce kutuyu işaretleyin. Bundan sonra belirteç bir daha gösterilemez."
+    },
+    "test": {
+      "title": "Test potansiyel müşterisi gönder",
+      "help": "Gerçek işlem hattından test olarak işaretlenmiş bir örnek potansiyel müşteri gönderir. Silebileceğiniz gerçek bir kişi oluşturur ve kimseye bildirim gitmez.",
+      "paused": "Bu kaynak duraklatıldı. Test potansiyel müşterisi göndermek için devam ettirin.",
+      "useSample": "Bunun yerine örnek potansiyel müşteriyi kullan",
+      "useOwn": "Kendi yükümü gönder",
+      "payload": "Yük (JSON)",
+      "payloadHint": "Bir nesne, en fazla 64 KB.",
+      "payloadProblems": {
+        "empty": "Gönderilecek JSON'u yapıştırın ya da örnek potansiyel müşteriyi kullanın.",
+        "invalidJson": "Bu geçerli bir JSON değil. Eksik tırnak, virgül veya parantez olup olmadığını kontrol edin.",
+        "notObject": "Potansiyel müşteri bir JSON nesnesi olmalıdır: süslü parantezler arasında anahtar ve değer kümesi.",
+        "tooLarge": "Bu 64 KB'tan büyük."
+      },
+      "send": "Test potansiyel müşterisi gönder",
+      "needsManage": "Test potansiyel müşterisi göndermek için leads.sources.manage izni gerekir.",
+      "result": "Sonuç",
+      "flag": "Test",
+      "openContact": "Kişiyi aç"
+    },
+    "watch": {
+      "waiting": "İlk potansiyel müşteri bekleniyor. URL'yi aracınıza yapıştırın ve bir tane gönderin.",
+      "received": "İlk potansiyel müşteri alındı:",
+      "error": "Şu anda potansiyel müşteriler kontrol edilemedi."
+    },
+    "detail": {
+      "loading": "Kaynak yükleniyor",
+      "backToList": "Kaynaklara dön",
+      "pageTitle": "Potansiyel müşteri kaynağı",
+      "needsAttention": "{count, plural, other {# potansiyel müşteri ilgi bekliyor}}",
+      "lastEvent": "Son potansiyel müşteri",
+      "noEvents": "henüz yok",
+      "pause": "Duraklat",
+      "resume": "Devam ettir",
+      "rotate": "Belirteci yenile",
+      "delete": "Sil",
+      "conflict": "Bu kaynağı başka biri değiştirdi. Onun sürümünü görmek için yenileyin; kaydedilmemiş düzenlemeleriniz kaybolur.",
+      "reload": "Yenile",
+      "connection": "Bağlantı",
+      "connector": "Pazar yeri üzerinden bağlı. Kendi URL'si veya belirteci yok; potansiyel müşteriler yüklü uygulama üzerinden gelir.",
+      "connectorLink": "Yüklü uygulamaları aç",
+      "endsIn": "URL belirteci {hint} ile biter",
+      "noHint": "Kayıtlı belirteç yok.",
+      "urlOnce": "Tam URL, kaynak oluşturulduğunda bir kez gösterildi. Yeni bir URL almak için belirteci yenileyin.",
+      "secretYes": "Paylaşılan bir gizli anahtar ayarlı: gönderenler bunu X-Webhook-Secret üstbilgisinde göndermelidir.",
+      "secretNo": "Paylaşılan bir gizli anahtar ayarlı değil.",
+      "pausedNote": "Bu kaynak duraklatıldı: URL'si 404 yanıtı verir, bu yüzden devam ettirene kadar gönderenler hata görür.",
+      "settings": "Ayarlar",
+      "settingsHelp": "Değişiklikler, kaydettikten sonra gelen potansiyel müşterilere uygulanır. Eski bir potansiyel müşteriyi yeniden denemek güncel ayarları kullanır.",
+      "basics": "Temel bilgiler",
+      "rules": "Bir potansiyel müşteriye ne olur",
+      "mapping": "Alan eşlemesi",
+      "unsaved": "Kaydedilmemiş değişiklikleriniz var",
+      "discard": "Değişiklikleri at",
+      "save": "Değişiklikleri kaydet",
+      "saved": "Değişiklikler kaydedildi",
+      "pausedToast": "Kaynak duraklatıldı",
+      "resumedToast": "Kaynak devam ettirildi",
+      "deletedToast": "{name} kaynağı silindi",
+      "confirm": {
+        "cancel": "İptal",
+        "pause": {
+          "title": "Bu kaynak duraklatılsın mı?",
+          "body": "Duraklatılmış olduğu sürece URL'si 404 yanıtı verir ve ona gönderilen potansiyel müşteriler alınmaz. İstediğiniz zaman devam ettirebilirsiniz.",
+          "action": "Kaynağı duraklat"
+        },
+        "rotate": {
+          "title": "Belirteç yenilensin mi?",
+          "body": "Mevcut URL hemen çalışmayı durdurur, bu yüzden aracınızı yeni URL ile güncelleyin. Yeni URL yalnızca bir kez gösterilir.",
+          "action": "Belirteci yenile"
+        },
+        "delete": {
+          "title": "{name} silinsin mi?",
+          "body": "URL'si çalışmayı durdurur ve onunla birlikte sakladığı potansiyel müşteriler silinir. Daha önce oluşturduğu kişiler kalır. Bu geri alınamaz.",
+          "action": "Kaynağı sil"
+        }
+      }
+    },
+    "events": {
+      "title": "Alınan potansiyel müşteriler",
+      "help": "Bu kaynağa ulaşan her potansiyel müşteri ve başına gelenler. En yeniler önce.",
+      "filterStatus": "Göster",
+      "filterTests": "Testler",
+      "attentionTitle": "{count, plural, other {# potansiyel müşteri ilgi bekliyor}}",
+      "attentionGroup": "{count, plural, other {# potansiyel müşteri:}}",
+      "showAttention": "Yalnızca bu potansiyel müşterileri göster",
+      "loading": "Potansiyel müşteriler yükleniyor",
+      "emptyTitle": "Henüz potansiyel müşteri yok",
+      "empty": "Bir test potansiyel müşterisi gönderin ya da URL'yi aracınıza yapıştırın.",
+      "emptyFilteredTitle": "Bu filtrelerle eşleşen potansiyel müşteri yok",
+      "emptyFiltered": "Bu filtrelere uyan potansiyel müşteri yok.",
+      "clearFilters": "Filtreleri temizle",
+      "col": {
+        "status": "Durum",
+        "lead": "Potansiyel müşteri",
+        "result": "Ne oldu",
+        "links": "Dönüştü",
+        "received": "Alındı",
+        "actions": "İşlemler"
+      },
+      "loadMore": "Daha fazla yükle",
+      "test": "Test",
+      "attempts": "{count, plural, other {# deneme}}",
+      "deliveredAgain": "{count, plural, other {# kez yeniden teslim edildi}}",
+      "contact": "Kişi",
+      "deal": "Fırsat",
+      "retry": "Yeniden dene",
+      "open": "Aç",
+      "retriedToast": "Yeniden denendi: şimdi {status}"
+    },
+    "event": {
+      "title": "Potansiyel müşteri ayrıntıları",
+      "close": "Kapat",
+      "retry": "Bu potansiyel müşteriyi yeniden dene",
+      "auditNote": "Yükü açmak denetim günlüğüne kaydedilir.",
+      "externalId": "Potansiyel müşteri kimliği",
+      "test": "Test",
+      "received": "Alındı",
+      "processed": "İşlendi",
+      "notProcessed": "henüz değil",
+      "attempts": "Denemeler",
+      "duplicates": "Tekrar teslimler",
+      "deliveredAgain": "{count, plural, other {# kez yeniden teslim edildi}}",
+      "reason": "Neden",
+      "contact": "Kişi",
+      "openContact": "Kişiyi aç",
+      "deal": "Fırsat",
+      "openDeal": "Fırsatı aç",
+      "error": "Hata",
+      "retried": "Yeniden denendi. Potansiyel müşteri artık",
+      "payload": "Saklanan yük",
+      "loadingPayload": "Ham yük açılıyor",
+      "purged": "Ham yük {days} gün sonra temizlendi. Potansiyel müşteri ve kişisi kalır."
+    },
+    "attribution": {
+      "title": "Potansiyel müşteri atfı",
+      "first": "İlk temas",
+      "latest": "Son temas",
+      "firstAndLatest": "İlk ve son temas",
+      "total": "Toplam {count} temas",
+      "platform": "Platform",
+      "source": "Kaynak",
+      "fields": {
+        "campaign": "Kampanya",
+        "adset": "Reklam seti",
+        "ad": "Reklam",
+        "form": "Form"
+      },
+      "capturedAt": "Yakalandı",
+      "openSource": "Potansiyel müşteri kaynağını aç"
+    }
+  }
+}

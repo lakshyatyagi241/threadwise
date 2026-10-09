@@ -1,0 +1,132 @@
+{
+  "web-forms": {
+    "list": {
+      "title": "Formulaires",
+      "subtitle": "Créez des formulaires, placez-les sur votre site ou partagez un lien : chaque réponse arrive dans votre CRM sous forme de contact.",
+      "templates": "Modèles",
+      "newForm": "Nouveau formulaire",
+      "statsLabel": "Totaux des formulaires affichés",
+      "stats": {
+        "forms": "Formulaires",
+        "published": "Publiés",
+        "submissions": "Réponses",
+        "needsReview": "Attention requise"
+      },
+      "views": {
+        "label": "Afficher",
+        "all": "Tous",
+        "published": "Publiés",
+        "draft": "Brouillons",
+        "paused": "Suspendus",
+        "archived": "Archivés"
+      },
+      "search": "Rechercher des formulaires",
+      "loading": "Chargement des formulaires",
+      "loadFailed": "Les formulaires n’ont pas pu être chargés.",
+      "retry": "Réessayer",
+      "empty": {
+        "title": "Aucun formulaire pour le moment",
+        "message": "Partez d’un modèle ou d’un formulaire vierge, publiez-le, puis partagez le lien ou collez le code d’intégration sur votre site.",
+        "fromTemplate": "Partir d’un modèle",
+        "blank": "Formulaire vierge"
+      },
+      "noMatch": {
+        "title": "Aucun formulaire ne correspond",
+        "message": "Essayez une autre recherche ou une autre vue.",
+        "clear": "Effacer les filtres"
+      },
+      "col": {
+        "name": "Formulaire",
+        "status": "Statut",
+        "submissions": "Réponses",
+        "views": "Vues",
+        "conversion": "Conversion",
+        "last": "Dernière réponse"
+      },
+      "unpublished": "Modifications non publiées",
+      "version": "Version {n}",
+      "needsReview": "{count, plural, one {# nécessite une attention} other {# nécessitent une attention}}",
+      "status": {
+        "draft": "Brouillon",
+        "published": "Publié",
+        "paused": "Suspendu",
+        "archived": "Archivé"
+      },
+      "noRate": "-",
+      "never": "Jamais",
+      "actionsFor": "Actions pour {name}",
+      "action": {
+        "edit": "Modifier",
+        "submissions": "Réponses",
+        "copyLink": "Copier le lien",
+        "embed": "Intégrer sur un site",
+        "duplicate": "Dupliquer",
+        "pause": "Suspendre",
+        "resume": "Reprendre",
+        "archive": "Archiver",
+        "delete": "Supprimer",
+        "restore": "Restaurer"
+      },
+      "loadMore": "Charger plus",
+      "copied": "Lien copié",
+      "copyBlocked": "La copie est bloquée dans ce navigateur. Le lien est {url}",
+      "paused": "Formulaire suspendu. Les visiteurs voient qu’il est fermé.",
+      "resumed": "Formulaire repris",
+      "archived": "Formulaire archivé",
+      "deleted": "Formulaire supprimé",
+      "cancel": "Annuler",
+      "archive": {
+        "title": "Archiver ce formulaire ?",
+        "message": "Le lien public et les intégrations de « {name} » cessent de fonctionner. Ses réponses sont conservées et vous pouvez toujours les consulter.",
+        "confirm": "Archiver"
+      },
+      "delete": {
+        "title": "Supprimer ce formulaire ?",
+        "message": "« {name} » sera supprimé définitivement. Les contacts qu’il a créés restent dans votre CRM.",
+        "confirm": "Supprimer"
+      },
+      "restored": "Formulaire restauré"
+    },
+    "newForm": {
+      "eyebrow": "Formulaires",
+      "title": "Nouveau formulaire",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "create": "Créer le formulaire",
+      "startFrom": "Partir de",
+      "mode": {
+        "template": "Un modèle",
+        "blank": "Vierge"
+      },
+      "loadingTemplates": "Chargement des modèles",
+      "templatesFailed": "Les modèles n’ont pas pu être chargés. Vous pouvez toujours partir d’un formulaire vierge.",
+      "templates": "Modèles",
+      "fieldCount": "{count, plural, one {# champ} other {# champs}}",
+      "pickTemplate": "Choisissez un modèle pour continuer.",
+      "name": "Nom du formulaire",
+      "nameHint": "Visible uniquement par votre équipe.",
+      "nameRequired": "Saisissez un nom pour le formulaire."
+    },
+    "templates": {
+      "breadcrumb": "Fil d’Ariane",
+      "back": "Retour aux formulaires",
+      "title": "Modèles de formulaires",
+      "subtitle": "Partez d’un formulaire prêt à l’emploi et modifiez ce que vous voulez.",
+      "blank": "Formulaire vierge",
+      "loading": "Chargement des modèles",
+      "loadFailed": "Les modèles n’ont pas pu être chargés.",
+      "retry": "Réessayer",
+      "empty": "Aucun modèle disponible.",
+      "category": {
+        "lead": "Capture de prospects",
+        "contact": "Contact",
+        "event": "Événement",
+        "order": "Commande",
+        "survey": "Enquête"
+      },
+      "fields": "Champs de ce modèle",
+      "more": "+{count} de plus",
+      "use": "Utiliser ce modèle"
+    }
+  }
+}

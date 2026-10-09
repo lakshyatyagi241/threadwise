@@ -1,0 +1,184 @@
+{
+  "checkout-orders-merchant-payments": {
+    "orders": {
+      "eyebrow": "ストア / 注文",
+      "title": "すべての注文",
+      "subtitle": "WhatsApp、ストアフロント、Twilio、手動など、すべてのチャネルからの注文です。",
+      "loading": "注文を読み込み中",
+      "statusTabs": "注文ステータス",
+      "searchLabel": "注文を検索",
+      "searchPlaceholder": "電話番号、名前、注文番号で検索",
+      "sourceLabel": "ソース",
+      "allSources": "すべてのソース",
+      "paymentLabel": "支払い",
+      "allPayments": "すべての支払い",
+      "fromLabel": "開始",
+      "toLabel": "終了",
+      "shopLabel": "ショップ",
+      "invertedRange": "開始日が終了日より後のため、一致する注文はありません。",
+      "clearFilters": "フィルターをクリア",
+      "cols": {
+        "order": "注文",
+        "customer": "顧客",
+        "items": "商品",
+        "total": "合計",
+        "payment": "支払い",
+        "status": "ステータス",
+        "source": "ソース",
+        "created": "作成日時",
+        "actions": "操作"
+      },
+      "itemsCount": "{count, plural, other {#点}}",
+      "anonymous": "匿名",
+      "openOrder": "注文 #{no}を開く",
+      "changeStatus": "注文 #{no}のステータスを変更",
+      "deleteOrder": "注文 #{no}を削除",
+      "deleteTitle": "注文 #{no}を削除しますか?",
+      "deleteMessage": "注文とその商品は完全に削除されます。この操作は元に戻せません。",
+      "deleteConfirm": "注文を削除",
+      "deleted": "注文 #{no}を削除しました。",
+      "statusChanged": "注文 #{no}は{status}になりました。",
+      "buyerNotified": "購入者にメッセージを送信しました。",
+      "confirmStatusTitle": "注文 #{no}を{status}にしますか?",
+      "confirmStatusMessage": "購入者に新しいステータスが通知されます。後で別のステータスに変更することもできます。",
+      "confirmStatusConfirm": "ステータスを更新",
+      "emptyTitle": "注文はまだありません",
+      "emptyMessage": "お客様がストアフロントまたはWhatsAppで注文すると、ここに表示されます。ショップのリンクを共有して、最初の注文を獲得しましょう。",
+      "emptyAction": "ストアの概要を開く",
+      "noMatchTitle": "これらのフィルターに一致する注文がありません",
+      "noMatchMessage": "別の検索条件、ステータス、期間を試すか、フィルターをクリアしてすべての注文を表示してください。"
+    },
+    "orderDetail": {
+      "back": "注文一覧に戻る",
+      "title": "注文 #{no}",
+      "placed": "注文日時: {when}",
+      "loading": "注文を読み込み中",
+      "readOnly": "この注文は表示できますが、変更はできません。",
+      "items": {
+        "title": "商品",
+        "empty": "この注文には商品がありません。",
+        "qty": "数量 {qty}",
+        "retailerId": "ID {id}",
+        "unit": "各{price}"
+      },
+      "totals": {
+        "title": "合計金額",
+        "subtotal": "小計",
+        "shipping": "送料",
+        "tax": "税",
+        "taxInclusive": "価格に含まれています",
+        "discount": "割引",
+        "discountCoupon": "割引({code})",
+        "total": "合計"
+      },
+      "customer": {
+        "title": "顧客",
+        "anonymous": "匿名",
+        "phone": "電話番号",
+        "email": "メール",
+        "address": "配送先住所",
+        "noAddress": "この注文には住所が登録されていません。",
+        "notes": "メモ"
+      },
+      "meta": {
+        "title": "注文の詳細",
+        "orderId": "注文ID",
+        "source": "ソース",
+        "shop": "ショップ",
+        "paymentMethod": "支払い方法",
+        "updated": "最終更新"
+      },
+      "rto": {
+        "title": "返送(RTO)リスク",
+        "summary": "{band}({score})",
+        "low": "低",
+        "medium": "中",
+        "high": "高"
+      },
+      "timeline": {
+        "title": "タイムライン",
+        "empty": "この注文にはまだ何も起きていません。",
+        "kind": {
+          "created": "注文が作成されました",
+          "status_changed": "ステータスが変更されました",
+          "payment_link": "支払いリンク",
+          "paid": "支払いを受領しました",
+          "invoice": "請求書",
+          "note": "メモ",
+          "updated": "注文が更新されました"
+        },
+        "actor": {
+          "user": "チームメンバーによる操作",
+          "system": "自動",
+          "customer": "顧客による操作"
+        }
+      },
+      "payments": {
+        "title": "支払い",
+        "empty": "この注文には支払いが記録されていません。",
+        "kind": {
+          "gateway": "オンライン決済",
+          "payment_link": "支払いリンク",
+          "whatsapp_pay": "WhatsApp Pay",
+          "cod": "代金引換",
+          "manual": "手動で記録"
+        },
+        "reference": "参照番号 {ref}",
+        "openLink": "リンクを開く"
+      },
+      "form": {
+        "title": "ステータスを更新",
+        "status": "ステータス",
+        "suggestion": "通常の次のステップ: {status}",
+        "notes": "メモ",
+        "paymentLink": "支払いリンク",
+        "optional": "任意",
+        "paymentLinkHint": "更新とともに、新しいリンクが購入者に送信されます。",
+        "invalidLink": "http:// または https:// で始まるウェブリンクを入力してください。",
+        "save": "変更を保存",
+        "saving": "保存中",
+        "saved": "注文 #{no}を更新しました。",
+        "notified": "購入者にメッセージを送信しました。",
+        "notNotified": "購入者にはメッセージを送信しませんでした。",
+        "reload": "注文を再読み込み"
+      },
+      "pay": {
+        "title": "支払いリンク",
+        "current": "現在の支払いリンク",
+        "sendTitle": "お持ちのリンクを送信",
+        "sendLabel": "支払いリンクのURL",
+        "sendButton": "支払いリンクを送信",
+        "sent": "支払いリンクを購入者に送信しました。",
+        "savedNotSent": "リンクは保存されましたが、購入者に送信できませんでした。",
+        "generateTitle": "チェックアウトリンクを生成",
+        "generateHint": "決済ゲートウェイ上にホスト型の支払いリンクを作成し、WhatsAppで購入者に送信します。",
+        "gatewayLabel": "ゲートウェイ",
+        "generateButton": "リンクを生成して送信",
+        "noGatewayTitle": "決済ゲートウェイが設定されていません",
+        "noGatewayMessage": "チェックアウトリンクを生成するには、先に決済ゲートウェイを設定する必要があります。",
+        "noGatewayAction": "ゲートウェイを設定",
+        "resultTitle": "支払いリンクの準備ができました",
+        "copyLink": "リンクをコピー",
+        "resultSent": "WhatsAppで購入者に送信しました。",
+        "resultNotSent": "注文には保存されましたが、購入者に送信できませんでした。ご自身で共有してください。"
+      },
+      "invoice": {
+        "title": "請求書",
+        "description": "この注文を、販売の請求書と販売注文に変換します。",
+        "create": "請求書を作成",
+        "creating": "作成中",
+        "created": "請求書{number}を作成しました。",
+        "createdNoNumber": "請求書を作成しました。",
+        "existing": "この注文はすでに請求書が作成されています。",
+        "viewInvoice": "請求書",
+        "viewSalesOrder": "販売注文"
+      },
+      "delete": {
+        "title": "注文 #{no}を削除しますか?",
+        "message": "注文とその商品は完全に削除されます。この操作は元に戻せません。",
+        "confirm": "注文を削除",
+        "deleted": "注文 #{no}を削除しました。"
+      }
+    }
+  }
+}

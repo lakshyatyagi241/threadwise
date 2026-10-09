@@ -1,0 +1,258 @@
+{
+  "workspaces-hub": {
+    "nav": {
+      "group": "Workspace",
+      "workspaces": "Workspace"
+    },
+    "crumb": {
+      "admin": "Admin",
+      "workspaces": "Workspace",
+      "label": "Breadcrumb"
+    },
+    "common": {
+      "loading": "Memuat",
+      "retry": "Coba lagi",
+      "cancel": "Batal",
+      "close": "Tutup",
+      "none": "Tidak ada",
+      "never": "Tidak pernah",
+      "unlimited": "Tidak terbatas",
+      "noAccess": "Peran Anda tidak dapat melakukan ini."
+    },
+    "list": {
+      "title": "Workspace",
+      "subtitle": "Semua workspace pelanggan dalam satu tempat: paket, provider, dompet, pemilik, dan aktivitas, dengan tindakan yang Anda butuhkan di setiap workspace.",
+      "kpi": {
+        "total": "Workspace",
+        "active": "Aktif",
+        "suspended": "Ditangguhkan",
+        "trial": "Masa uji coba",
+        "newThisMonth": "Baru bulan ini",
+        "lowBalance": "Saldo rendah",
+        "mrr": "MRR"
+      },
+      "search": "Cari",
+      "searchPlaceholder": "Nama, slug, nama atau email pemilik",
+      "status": {
+        "label": "Status",
+        "all": "Semua",
+        "active": "Aktif",
+        "suspended": "Ditangguhkan"
+      },
+      "plan": "Paket",
+      "allPlans": "Semua paket",
+      "state": "Status",
+      "allStates": "Semua status",
+      "provider": "Provider",
+      "allProviders": "Semua provider",
+      "lowOnly": "Hanya saldo rendah",
+      "sort": {
+        "label": "Urutkan berdasarkan",
+        "created": "Terbaru",
+        "last_active": "Terakhir aktif",
+        "name": "Nama"
+      },
+      "clear": "Hapus filter",
+      "refresh": "Muat ulang",
+      "columns": {
+        "menu": "Kolom",
+        "reset": "Atur ulang kolom",
+        "workspace": "Workspace",
+        "provider": "Provider",
+        "numbers": "Nomor",
+        "plan": "Paket",
+        "state": "Status",
+        "ends": "Berakhir",
+        "limits": "Batas",
+        "wallet": "Dompet",
+        "owner": "Pemilik",
+        "mrr": "MRR",
+        "messages7d": "Pesan 7 hari",
+        "lastActive": "Terakhir aktif",
+        "actions": "Tindakan"
+      },
+      "tableLabel": "Workspace",
+      "emptyTitle": "Belum ada workspace",
+      "emptyMessage": "Workspace akan muncul di sini begitu pelanggan mendaftar.",
+      "noMatchTitle": "Tidak ada workspace yang cocok",
+      "noMatchMessage": "Ubah pencarian atau filter untuk melihat lebih banyak.",
+      "loadMore": "Muat lainnya",
+      "loadingMore": "Memuat lebih banyak",
+      "loaded": "{count, plural, other {# workspace}} ditampilkan"
+    },
+    "cell": {
+      "suspended": "Ditangguhkan",
+      "suspendedBy": {
+        "frozen": "Dibekukan",
+        "tos_violation": "Pelanggaran ketentuan",
+        "fraud": "Penipuan"
+      },
+      "providerSource": {
+        "override": "Override",
+        "default": "Default",
+        "platform_setting": "Pengaturan platform"
+      },
+      "numbersCount": "{count, plural, other {# nomor}}",
+      "platformOwned": "Platform",
+      "unknownPlan": "Paket tidak dikenal",
+      "health": {
+        "suspended": "Ditangguhkan",
+        "good": "Baik",
+        "active": "Aktif",
+        "low": "Pemakaian rendah",
+        "new": "Baru",
+        "idle": "Tidak aktif"
+      },
+      "daysLeft": "{count, plural, other {# hari lagi}}",
+      "expired": "Kedaluwarsa",
+      "limits": {
+        "summary": "{messages} pesan/bln · {users} pengguna · {contacts} kontak · {devices} perangkat",
+        "override": "Override",
+        "messages": "Pesan per bulan",
+        "users": "Pengguna",
+        "contacts": "Kontak",
+        "devices": "Perangkat"
+      },
+      "lowBalance": "Rendah",
+      "noOwner": "Tanpa pemilik",
+      "ago": {
+        "now": "Baru saja",
+        "minutes": "{count, plural, other {# menit lalu}}",
+        "hours": "{count, plural, other {# jam lalu}}",
+        "days": "{count, plural, other {# hari lalu}}"
+      }
+    },
+    "actions": {
+      "menu": "Tindakan untuk {name}",
+      "dashboard": "Dasbor workspace",
+      "editPlan": "Edit & ubah paket",
+      "planLimits": "Paket dan batas",
+      "provider": "Ubah dan atur provider",
+      "impersonate": "Masuk sebagai Owner",
+      "suspend": "Tangguhkan",
+      "unsuspend": "Aktifkan kembali",
+      "denied": "Tidak diizinkan"
+    },
+    "plan": {
+      "loading": "Memuat paket",
+      "loadFailed": "Paket tidak dapat dimuat.",
+      "saved": "Paket disimpan untuk {name}."
+    },
+    "provider": {
+      "title": "Provider untuk {name}",
+      "help": "Nomor baru dari workspace ini terhubung melalui provider yang Anda pilih. Nomor yang sudah terhubung tetap di tempatnya sampai Anda memindahkannya.",
+      "current": "Sekarang menggunakan {name} ({source})",
+      "field": "Provider",
+      "note": "Catatan (opsional)",
+      "noteHint": "Disimpan bersama override agar operator berikutnya tahu alasannya.",
+      "noActive": "Tidak ada provider yang aktif. Aktifkan salah satu di registri provider terlebih dahulu.",
+      "save": "Atur override",
+      "clear": "Gunakan default",
+      "switchLink": "Pindahkan nomor yang terhubung ke provider lain",
+      "assignmentsLink": "Registri provider",
+      "saved": "Provider diatur untuk {name}.",
+      "cleared": "{name} kembali mengikuti provider default."
+    },
+    "impersonate": {
+      "title": "Masuk sebagai pemilik {name}",
+      "help": "Anda akan membuka workspace sebagai pemiliknya di tab baru. Sesi berlangsung paling lama {minutes} menit dan dicatat bersama alasan Anda.",
+      "reason": "Alasan",
+      "reasonHint": "Minimal {min} karakter. Disimpan di jejak audit.",
+      "readOnly": "Sesi hanya-baca",
+      "readOnlyHint": "Anda dapat melihat-lihat, tetapi setiap perubahan ditolak.",
+      "submit": "Buka workspace",
+      "opened": "Membuka {name} di tab baru.",
+      "popupBlocked": "Browser memblokir tab baru. Izinkan pop-up untuk halaman ini lalu coba lagi.",
+      "reasonShort": "Tulis minimal {min} karakter."
+    },
+    "suspend": {
+      "title": "Tangguhkan {name}?",
+      "message": "Penggunanya akan dikeluarkan dari workspace dan pesan dihentikan sampai Anda mengaktifkannya kembali.",
+      "reason": "Alasan (opsional)",
+      "confirm": "Tangguhkan workspace",
+      "done": "{name} ditangguhkan."
+    },
+    "unsuspend": {
+      "title": "Aktifkan kembali {name}?",
+      "message": "Penggunanya dapat menggunakan workspace lagi.",
+      "reason": "Catatan (opsional)",
+      "confirm": "Aktifkan kembali workspace",
+      "done": "{name} aktif kembali."
+    },
+    "errors": {
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "forbidden": "Peran Anda tidak dapat melakukan ini.",
+      "conflict": "Orang lain mengubah workspace ini. Muat ulang dan coba lagi.",
+      "notFound": "Workspace ini tidak lagi ada.",
+      "reasonRequired": "Alasan minimal 8 karakter diperlukan.",
+      "orgSuspended": "Workspace ditangguhkan, sehingga tidak dapat dimasuki.",
+      "validation": "Periksa nilainya dan coba lagi.",
+      "requestId": "ID permintaan"
+    },
+    "detail": {
+      "crumb": "Workspace",
+      "back": "Semua workspace",
+      "loadFailed": "Workspace ini tidak dapat dimuat.",
+      "slug": "Slug",
+      "created": "Dibuat {date}",
+      "kpi": {
+        "members": "Anggota",
+        "contacts": "Kontak",
+        "openTickets": "Tiket terbuka",
+        "delivered": "Terkirim",
+        "wallet": "Dompet",
+        "mrr": "MRR",
+        "messages7d": "Pesan, 7 hari"
+      },
+      "chart": {
+        "title": "30 hari terakhir",
+        "label": "Pesan yang dikirim dan diterima per hari, 30 hari terakhir",
+        "sent": "Terkirim",
+        "delivered": "Diterima",
+        "empty": "Tidak ada pesan dalam 30 hari terakhir."
+      },
+      "tabs": {
+        "label": "Bagian workspace",
+        "overview": "Ringkasan",
+        "plan": "Paket & batas",
+        "wallet": "Dompet",
+        "provider": "Provider",
+        "support": "Dukungan"
+      },
+      "overview": {
+        "owner": "Pemilik",
+        "adminNote": "Catatan admin",
+        "noNote": "Tidak ada catatan.",
+        "health": "Kesehatan",
+        "lastActive": "Terakhir aktif",
+        "suspendedBy": "Dipegang oleh"
+      },
+      "planTab": {
+        "plan": "Paket",
+        "state": "Status",
+        "ends": "Berakhir",
+        "limits": "Batas efektif",
+        "edit": "Edit & ubah paket",
+        "overrideNote": "Workspace ini memiliki batasnya sendiri yang menggantikan batas paket."
+      },
+      "walletTab": {
+        "open": "Buka dompet lengkap",
+        "balance": "Saldo",
+        "adjust": "Sesuaikan saldo",
+        "adjusted": "Saldo telah disesuaikan."
+      },
+      "providerTab": {
+        "provider": "Provider efektif",
+        "source": "Dipilih oleh",
+        "numbers": "Nomor terhubung",
+        "change": "Ubah dan atur provider",
+        "switch": "Pindahkan nomor ke provider lain"
+      },
+      "supportTab": {
+        "text": "Tiket, percakapan, dan riwayat dukungan dari workspace ini.",
+        "open": "Buka catatan dukungan",
+        "openTickets": "{count, plural, other {# tiket terbuka}}"
+      }
+    }
+  }
+}

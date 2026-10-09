@@ -1,0 +1,246 @@
+{
+  "roles-permissions-workspace": {
+    "nav": {
+      "team": "Członkowie zespołu",
+      "roles": "Role"
+    },
+    "common": {
+      "settings": "Ustawienia",
+      "breadcrumb": "Ścieżka nawigacji",
+      "loading": "Ładowanie…",
+      "retry": "Spróbuj ponownie",
+      "requestId": "Identyfikator żądania",
+      "cancel": "Anuluj",
+      "close": "Zamknij",
+      "dismiss": "Zamknij",
+      "required": "To pole jest wymagane.",
+      "showPassword": "Pokaż hasło",
+      "hidePassword": "Ukryj hasło",
+      "noAccess": {
+        "title": "Brak dostępu",
+        "body": "Twoje role nie obejmują uprawnienia potrzebnego do tego ekranu. Poproś właściciela lub administratora przestrzeni roboczej o jego nadanie.",
+        "bodyWithKey": "Ten ekran wymaga uprawnienia {permission}. Poproś właściciela lub administratora przestrzeni roboczej o dodanie go do jednej z Twoich ról.",
+        "back": "Wróć do przestrzeni roboczej"
+      }
+    },
+    "blurb": {
+      "owner": "Właściciel: wszystko, w tym rozliczenia.",
+      "admin": "Administrator: pełny dostęp do przestrzeni, bez rozliczeń.",
+      "manager": "Menedżer: widzi wszystko, może przypisywać i rozwiązywać.",
+      "agent": "Agent: obsługuje przypisane rozmowy.",
+      "viewer": "Obserwator: tylko podgląd."
+    },
+    "errors": {
+      "unexpected": "Po naszej stronie wystąpił błąd. Spróbuj ponownie; jeśli problem się powtarza, podaj identyfikator żądania.",
+      "request": "Nie udało się zrealizować żądania.",
+      "validation": "Sprawdź formularz i spróbuj ponownie.",
+      "passwordPolicy": "To hasło nie spełnia zasad haseł przestrzeni roboczej:",
+      "validationField": "Sprawdź to pole i spróbuj ponownie.",
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "conflict": "Ktoś inny zmienił to podczas edycji. Odśwież stronę, aby zobaczyć jego wersję, a następnie ponownie zastosuj swoje zmiany.",
+      "grantRole": "Nie możesz tego zrobić: ta rola (lub obecna rola członka) jest wyższa niż Twoja. Tylko właściciel może nadawać, zmieniać lub dezaktywować właścicieli i administratorów.",
+      "grantPermission": "Nie możesz nadać uprawnienia {permission}: sam go nie posiadasz.",
+      "selfRoleChange": "Nie możesz zmienić własnej roli.",
+      "lastOwner": "Przestrzeń robocza musi mieć co najmniej jednego właściciela. Najpierw nadaj tę rolę komuś innemu.",
+      "selfDeactivate": "Nie możesz dezaktywować własnego konta.",
+      "presetRole": "Właściciel, Administrator, Menedżer, Agent i Obserwator to role systemowe: nie można ich zmienić ani usunąć.",
+      "roleInUse": "Członkowie nadal mają tę rolę. Najpierw przenieś ich do innej roli, a potem ją usuń.",
+      "nameTaken": "Rola o tej nazwie już istnieje.",
+      "nameRequired": "Nazwa roli jest wymagana.",
+      "nameTooLong": "Nazwa roli może mieć najwyżej {max} znaków.",
+      "notFound": "Ten element już nie istnieje. Mógł zostać usunięty."
+    },
+    "team": {
+      "crumb": "Członkowie zespołu",
+      "eyebrow": "Ustawienia · Zespół",
+      "titleLead": "Zespół",
+      "titleAccent": "członków",
+      "description": "Dodawaj osoby do tej przestrzeni roboczej, wybieraj, co każda z nich może robić, i wyłączaj dostęp, gdy ktoś odchodzi.",
+      "addMember": "Dodaj członka",
+      "reload": "Odśwież",
+      "you": "Ty",
+      "noRole": "Brak roli",
+      "changeRoleAction": "Zmień rolę",
+      "reactivate": "Aktywuj ponownie",
+      "selfRoleHint": "Nie możesz zmienić własnej roli.",
+      "roleLockedHint": "Nie możesz zmienić roli tego członka: jest ona wyższa niż Twoja albo nie możesz przypisywać ról.",
+      "selfDeactivateHint": "Nie możesz dezaktywować własnego konta.",
+      "rolesUnavailable": "Nie udało się wczytać ról, więc dodawanie członków i zmiana ról są niedostępne. Etykiety ról są tworzone na podstawie wyświetlanych członków.",
+      "footer": "Pokazano {shown} z {total}",
+      "status": {
+        "active": "Aktywni",
+        "inactive": "Nieaktywni"
+      },
+      "filter": {
+        "label": "Filtruj członków według roli",
+        "all": "Wszyscy",
+        "preset": {
+          "owner": "Właściciele",
+          "admin": "Administratorzy",
+          "manager": "Menedżerowie",
+          "agent": "Agenci",
+          "viewer": "Obserwatorzy"
+        }
+      },
+      "search": {
+        "label": "Szukaj członków",
+        "placeholder": "Szukaj po nazwie lub e-mailu…"
+      },
+      "table": {
+        "caption": "Członkowie przestrzeni roboczej",
+        "member": "Członek",
+        "roles": "Role",
+        "status": "Status",
+        "actions": "Działania"
+      },
+      "empty": {
+        "none": "Nie ma jeszcze członków.",
+        "noMatch": "Żaden członek nie pasuje do filtra.",
+        "clear": "Wyczyść filtry"
+      },
+      "toasts": {
+        "added": "{name} został dodany do przestrzeni roboczej.",
+        "rolesUpdated": "Zaktualizowano role dla: {name}.",
+        "deactivated": "{name} został dezaktywowany.",
+        "reactivated": "{name} został ponownie aktywowany."
+      },
+      "deactivate": {
+        "action": "Dezaktywuj",
+        "title": "Dezaktywuj członka",
+        "message": "{name} nie będzie mógł się już zalogować. Możesz go w każdej chwili ponownie aktywować.",
+        "confirm": "Dezaktywuj",
+        "cancel": "Anuluj"
+      },
+      "add": {
+        "eyebrow": "Zespół",
+        "title": "Dodaj członka",
+        "fullName": "Imię i nazwisko",
+        "email": "E-mail",
+        "emailInvalid": "Podaj prawidłowy adres e-mail.",
+        "password": "Hasło",
+        "passwordHint": "Co najmniej 8 znaków. Przekaż je tej osobie; może je zmienić po zalogowaniu.",
+        "passwordGenerated": "Wygenerowane hasło: pokaż je przyciskiem z ikoną oka i skopiuj przed zapisem.",
+        "passwordShort": "Hasło musi mieć co najmniej 8 znaków.",
+        "generate": "Wygeneruj",
+        "role": "Rola",
+        "submit": "Dodaj członka"
+      },
+      "changeRole": {
+        "title": "Zmień role: {name}",
+        "legend": "Role",
+        "keptRole": "Rola {name} pozostaje: nie możesz jej nadawać ani odbierać.",
+        "atLeastOne": "Wybierz co najmniej jedną rolę.",
+        "save": "Zapisz role",
+        "reload": "Odśwież"
+      }
+    },
+    "list": {
+      "crumb": "Role",
+      "eyebrow": "Ustawienia · Zespół · Role",
+      "titleLead": "Role i",
+      "titleAccent": "uprawnienia",
+      "description": "Role określają, co mogą robić członkowie. Wybierz gotową rolę lub utwórz własną w macierzy uprawnień.",
+      "teamLink": "Członkowie zespołu",
+      "addRole": "Dodaj rolę",
+      "empty": "Nie ma jeszcze ról.",
+      "preset": "Systemowa",
+      "custom": "Własna",
+      "locked": "Zablokowana",
+      "footer": "{count, plural, one {# rola} few {# role} many {# ról} other {# roli}}",
+      "membersLink": "{count, plural, one {# członek ma rolę {name}} few {# członkowie mają rolę {name}} many {# członków ma rolę {name}} other {# członka ma rolę {name}}}",
+      "table": {
+        "caption": "Role przestrzeni roboczej",
+        "name": "Rola",
+        "type": "Typ",
+        "members": "Członkowie",
+        "permissions": "Uprawnienia",
+        "lastEdited": "Ostatnia zmiana",
+        "actions": "Działania"
+      },
+      "row": {
+        "menu": "Działania dla: {name}",
+        "edit": "Edytuj rolę",
+        "view": "Zobacz rolę",
+        "delete": "Usuń rolę"
+      },
+      "toasts": {
+        "deleted": "Usunięto rolę „{name}”."
+      }
+    },
+    "editor": {
+      "crumbRoles": "Role",
+      "crumbNew": "Nowa rola",
+      "eyebrowNew": "Ustawienia · Role · Nowa",
+      "eyebrowEdit": "Ustawienia · Role · Edycja",
+      "titleLead": "Utwórz",
+      "titleAccent": "rola",
+      "description": "Nazwij rolę i wybierz, co może robić.",
+      "summary": "{count, plural, =0 {Nikt nie ma tej roli.} one {1 członek ma tę rolę.} few {# członkowie mają tę rolę.} many {# członków ma tę rolę.} other {# członka ma tę rolę.}}",
+      "notFoundTitle": "Nie znaleziono roli",
+      "notFoundBody": "Ta rola już nie istnieje. Mogła zostać usunięta.",
+      "backToRoles": "Wróć do ról",
+      "back": "Wstecz",
+      "save": "Zapisz zmiany",
+      "create": "Utwórz rolę",
+      "saving": "Zapisywanie…",
+      "reload": "Odśwież",
+      "discard": "Masz niezapisane zmiany. Wyjść bez zapisywania?",
+      "lockedNotice": "Rola Właściciel ma wszystkie uprawnienia i nie można jej zmienić ani usunąć",
+      "adminNotice": "Tylko właściciel może zmieniać uprawnienia roli Administrator.",
+      "readOnlyNotice": "Nie możesz zmienić uprawnień tej roli.",
+      "details": "Szczegóły roli",
+      "name": "Nazwa roli",
+      "namePlaceholder": "np. Kierownik wsparcia",
+      "presetNameHint": "Role systemowe zachowują swoją nazwę.",
+      "template": "Zacznij od roli",
+      "templateHint": "Kopiuje uprawnienia innej roli do poniższej macierzy.",
+      "templateBlank": "Pusta (bez uprawnień)",
+      "templateOption": "{name} ({count, plural, one {# uprawnienie} few {# uprawnienia} many {# uprawnień} other {# uprawnienia}})",
+      "danger": {
+        "title": "Usuń tę rolę",
+        "hint": "Nikt nie ma tej roli, więc można ją usunąć.",
+        "inUse": "{count, plural, one {1 członek nadal ma tę rolę.} few {# członkowie nadal mają tę rolę.} many {# członków nadal ma tę rolę.} other {# członka nadal ma tę rolę.}} Najpierw przenieś ich do innej roli.",
+        "action": "Usuń rolę"
+      },
+      "toasts": {
+        "created": "Utworzono rolę „{name}”.",
+        "updated": "Zaktualizowano rolę „{name}”.",
+        "deleted": "Usunięto rolę „{name}”."
+      }
+    },
+    "matrix": {
+      "title": "Uprawnienia",
+      "counter": "zaznaczono: {count} z {total}",
+      "deniedCount": "{count} odmówionych",
+      "selectAll": "Zaznacz wszystko",
+      "selectAllCategory": "Zaznacz wszystko",
+      "selectAllOf": "Zaznacz wszystko w: {category}",
+      "search": "Szukaj uprawnień…",
+      "searchLabel": "Szukaj uprawnień",
+      "denyHint": "Odmowa ma pierwszeństwo przed zezwoleniem: odmówione uprawnienie jest blokowane, nawet gdy inna rola członka je przyznaje.",
+      "emptyCatalogue": "Brak dostępnych uprawnień.",
+      "noMatch": "Brak uprawnień pasujących do „{query}”.",
+      "allow": "Zezwól",
+      "deny": "Odmów",
+      "effectLabel": "Zezwól lub odmów: {label}",
+      "scopeLabel": "Zakres rekordów: {label}",
+      "needsPlan": "Wymaga planu: {feature}",
+      "needsApp": "Wymaga zainstalowanej aplikacji {app}",
+      "lockedHint": "To uprawnienie nie jest jeszcze dostępne w tej przestrzeni roboczej. Odblokuje się po włączeniu funkcji w planie lub instalacji aplikacji.",
+      "scope": {
+        "all": "Wszystkie rekordy",
+        "team": "Rekordy zespołu",
+        "own": "Własne rekordy"
+      }
+    },
+    "delete": {
+      "title": "Usuń rolę",
+      "message": "Usunąć rolę „{name}”? Tej operacji nie można cofnąć.",
+      "confirm": "Usuń rolę",
+      "cancel": "Anuluj",
+      "inUseTitle": "„{name}” jest nadal używana",
+      "inUse": "{count, plural, =0 {Nikt nadal nie ma tej roli.} one {1 członek nadal ma tę rolę.} few {# członkowie nadal mają tę rolę.} many {# członków nadal ma tę rolę.} other {# członka nadal ma tę rolę.}} Najpierw przenieś ich do innej roli, a potem ją usuń.",
+      "viewMembers": "Zobacz członków z tą rolą"
+    }
+  }
+}

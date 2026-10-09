@@ -1,0 +1,134 @@
+{
+  "checkout-orders-merchant-payments": {
+    "nav": {
+      "orders": "Pedidos",
+      "coupons": "Cupones"
+    },
+    "settingsTile": {
+      "label": "Pasarelas de pago",
+      "description": "La pasarela que usan el pago de tu tienda y las facturas de Ventas para cobrar en línea.",
+      "keywords": "pasarela de pago, razorpay, stripe, pago, enlace de pago, pago en línea, tarjeta, upi"
+    },
+    "common": {
+      "noAccessTitle": "No tienes acceso a esta página",
+      "noAccessMessage": "Pide a un administrador del espacio de trabajo que dé a tu rol el permiso correspondiente.",
+      "loading": "Cargando",
+      "loadMore": "Cargar más",
+      "cancel": "Cancelar",
+      "close": "Cerrar",
+      "save": "Guardar",
+      "saving": "Guardando",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "remove": "Quitar",
+      "open": "Abrir",
+      "view": "Ver",
+      "search": "Buscar",
+      "clear": "Borrar",
+      "all": "Todos",
+      "no": "No",
+      "none": "Ninguno",
+      "actions": "Acciones",
+      "retry": "Reintentar",
+      "dismiss": "Descartar",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "viewContact": "Ver contacto",
+      "allShops": "Todas las tiendas",
+      "shop": "Tienda"
+    },
+    "status": {
+      "new": "Nuevo",
+      "pending": "Pendiente",
+      "confirmed": "Confirmado",
+      "paid": "Pagado",
+      "processing": "En proceso",
+      "completed": "Completado",
+      "shipped": "Enviado",
+      "cancelled": "Cancelado"
+    },
+    "paymentStatus": {
+      "paid": "Pagado",
+      "awaiting": "Pendiente de pago",
+      "cod": "Contra reembolso",
+      "unpaid": "Sin pagar"
+    },
+    "source": {
+      "waba": "WhatsApp",
+      "storefront": "Tienda en línea",
+      "twilio": "Twilio",
+      "manual": "Manual",
+      "shopify": "Shopify",
+      "woocommerce": "WooCommerce",
+      "whatsapp_ai": "IA de WhatsApp"
+    },
+    "errors": {
+      "requestId": "ID de solicitud",
+      "retry": "Reintentar",
+      "network": {
+        "title": "No se puede conectar con el servidor",
+        "message": "Revisa tu conexión e inténtalo de nuevo."
+      },
+      "forbidden": {
+        "title": "No permitido",
+        "message": "Tu rol no permite esta acción."
+      },
+      "signedOut": {
+        "title": "Cerraste sesión",
+        "message": "Inicia sesión de nuevo para continuar."
+      },
+      "conflict": {
+        "title": "Cambiado por otra persona",
+        "message": "Este registro cambió mientras lo tenías abierto. Vuelve a cargarlo e inténtalo de nuevo."
+      },
+      "validation": {
+        "title": "Revisa el formulario",
+        "message": "Algunos valores no son válidos. Revisa los campos resaltados."
+      },
+      "unavailable": {
+        "title": "Aún no disponible",
+        "message": "Esta parte de la tienda aún no está disponible en este servidor."
+      },
+      "rateLimited": {
+        "title": "Demasiadas solicitudes",
+        "message": "Espera un momento e inténtalo de nuevo."
+      },
+      "notFound": {
+        "title": "No encontrado",
+        "message": "Se eliminó o nunca existió."
+      },
+      "planLocked": {
+        "title": "No incluido en tu plan",
+        "message": "Tu plan no incluye la tienda. Mejora tu plan para usarla."
+      },
+      "couponCodeTaken": {
+        "title": "Código ya utilizado",
+        "message": "Otro cupón ya usa este código. Elige uno diferente."
+      },
+      "groupCodeTaken": {
+        "title": "Código ya utilizado",
+        "message": "Otro grupo ya usa este código de pedido."
+      },
+      "orderNoPhone": {
+        "title": "Sin número de teléfono",
+        "message": "Este pedido no tiene número de teléfono del comprador, así que no se puede enviar nada."
+      },
+      "gatewayNotConfigured": {
+        "title": "No hay ninguna pasarela de pago configurada",
+        "message": "Configura primero una pasarela de pago. Faltan sus claves o está desactivada."
+      },
+      "gatewayUnavailable": {
+        "title": "Pasarela no disponible",
+        "message": "Esta pasarela no puede generar un enlace de pago que el comprador pueda abrir."
+      },
+      "paymentLinkFailed": {
+        "title": "La pasarela rechazó el enlace",
+        "message": "Revisa las claves y que el importe supere el mínimo de la pasarela."
+      },
+      "unexpected": {
+        "title": "Algo salió mal",
+        "message": "Inténtalo de nuevo. Si sigue ocurriendo, comparte el ID de solicitud con soporte."
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "help": {
+    "title": "सहायता केंद्र",
+    "searchLabel": "सहायता खोजें",
+    "searchPlaceholder": "गाइड खोजें",
+    "resultsStatus": "{count, plural, =0 {कोई गाइड नहीं मिली} one {# गाइड} other {# गाइड}}",
+    "none": {
+      "title": "अभी कोई गाइड नहीं",
+      "message": "आपके प्लान की सुविधाओं के लिए गाइड यहाँ दिखेंगी।"
+    },
+    "noResults": {
+      "title": "आपकी खोज से कोई गाइड मेल नहीं खाती",
+      "message": "अलग शब्द आज़माएँ, या सभी गाइड देखने के लिए खोज हटाएँ।"
+    },
+    "areas": {
+      "overview": "प्लेटफ़ॉर्म",
+      "inbox": "इनबॉक्स और चैट",
+      "audience": "CRM",
+      "sales": "सेल्स",
+      "campaigns": "कैंपेन",
+      "automation": "ऑटोमेशन",
+      "store": "स्टोर",
+      "apps": "मार्केटप्लेस",
+      "settings": "सेटिंग्स",
+      "account": "अकाउंट",
+      "getting-started": "शुरुआत करना",
+      "troubleshooting": "समस्या निवारण"
+    },
+    "allHelp": "सहायता पर वापस",
+    "onThisPage": "इस पेज पर",
+    "openScreen": "यह स्क्रीन खोलें",
+    "shownInEnglish": "यह गाइड अभी आपकी भाषा में अनुवादित नहीं है, इसलिए अंग्रेज़ी में दिखाई जा रही है।",
+    "tip": {
+      "label": "सहायता: {title}",
+      "readMore": "गाइड पढ़ें"
+    },
+    "guideCount": "{count, plural, =0 {कोई गाइड नहीं} one {# गाइड} other {# गाइड}}",
+    "crumb": "और / सहायता",
+    "heading": "सहायता",
+    "headingRest": "और गाइड",
+    "back": "वापस",
+    "askSupport": "नहीं मिला? सपोर्ट से पूछें",
+    "askSupportShort": "सपोर्ट",
+    "categories": "श्रेणियाँ",
+    "allGuides": "सभी गाइड",
+    "needHuman": "किसी से बात करनी है?",
+    "contactSupport": "सपोर्ट से संपर्क करें",
+    "popular": "लोकप्रिय",
+    "searchResults": "खोज परिणाम",
+    "read": "गाइड पढ़ें",
+    "readMinutes": "{count, plural, one {# मिनट पढ़ने का समय} other {# मिनट पढ़ने का समय}}",
+    "moreInArea": "{area} में और"
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "Chat da equipe"
+    },
+    "common": {
+      "dismiss": "Dispensar"
+    },
+    "screen": {
+      "title": "Chat da equipe",
+      "back": "Voltar para os canais",
+      "search": "Pesquisar neste canal",
+      "pinned": "Mensagens fixadas",
+      "members": "Membros do canal",
+      "deleteChannel": "Excluir este canal",
+      "type": {
+        "public": "Canal",
+        "private": "Privado",
+        "dm": "Mensagem direta"
+      },
+      "olderMessage": "Esta mensagem é mais antiga. Carregue mensagens anteriores para vê-la.",
+      "loading": "Carregando o chat da equipe",
+      "loadFailed": "Não foi possível carregar o chat da equipe.",
+      "retry": "Tentar novamente",
+      "deleteTitle": "Excluir este canal?",
+      "deleteMessage": "#{name} e todas as suas mensagens serão excluídos para todos. Esta ação não pode ser desfeita.",
+      "deleteConfirm": "Excluir canal",
+      "cancel": "Cancelar"
+    },
+    "sidebar": {
+      "label": "Canais e pessoas",
+      "channels": "Canais",
+      "createChannel": "Criar um canal",
+      "loading": "Carregando canais",
+      "loadFailed": "Não foi possível carregar os canais.",
+      "noChannels": "Nenhum canal ainda",
+      "direct": "Mensagens diretas",
+      "people": "Pessoas",
+      "invite": "Convidar um membro da equipe",
+      "pending": "Solicitações pendentes",
+      "pendingCount": "{count, plural, one {# solicitação pendente} other {# solicitações pendentes}}",
+      "unread": "{count, plural, one {# mensagem não lida} other {# mensagens não lidas}}"
+    },
+    "members": {
+      "label": "Membros",
+      "title": "Chat da equipe",
+      "count": "{count, plural, one {# membro} other {# membros}}",
+      "countUnknown": "Membros",
+      "search": "Pesquisar membros",
+      "loading": "Carregando membros",
+      "none": "Nenhum membro encontrado",
+      "online": "Online",
+      "offline": "Offline",
+      "you": "(você)",
+      "message": "Enviar mensagem para {name}"
+    },
+    "panel": {
+      "searchTitle": "Pesquisar mensagens",
+      "pinnedTitle": "Mensagens fixadas",
+      "searchPlaceholder": "Pesquisar neste canal",
+      "searchHint": "Digite pelo menos dois caracteres.",
+      "close": "Fechar",
+      "failed": "Não foi possível carregar isto.",
+      "noResults": "Nenhuma mensagem encontrada.",
+      "noPinned": "Nada está fixado neste canal."
+    },
+    "stream": {
+      "loading": "Carregando mensagens",
+      "loadFailed": "Não foi possível carregar as mensagens.",
+      "loadOlder": "Carregar mensagens anteriores",
+      "emptyTitle": "Ainda não há mensagens em #{name}",
+      "emptyMessage": "Diga olá e comece a conversa."
+    },
+    "message": {
+      "edited": "(editada)",
+      "pinned": "Fixada",
+      "editLabel": "Editar sua mensagem",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "editConflict": "Esta mensagem foi alterada enquanto você a editava. Recarregue e tente novamente.",
+      "reactions": "Reações",
+      "reactionChip": "{emoji}, {count, plural, one {# pessoa} other {# pessoas}}",
+      "reactionTray": "Escolher uma reação",
+      "reply": "Responder",
+      "react": "Reagir",
+      "edit": "Editar",
+      "pin": "Fixar",
+      "unpin": "Desafixar",
+      "delete": "Excluir",
+      "deleteTitle": "Excluir esta mensagem?",
+      "deleteMessage": "Ela será removida para todos no canal.",
+      "uploading": "Enviando",
+      "retry": "Tentar novamente",
+      "discard": "Descartar"
+    },
+    "composer": {
+      "placeholder": "Mensagem em #{name}",
+      "attach": "Anexar um arquivo",
+      "send": "Enviar",
+      "hint": "Enter para enviar, Shift+Enter para nova linha, @ para mencionar um membro da equipe.",
+      "replyingTo": "Respondendo a {name}",
+      "cancelReply": "Cancelar resposta",
+      "removeFile": "Remover o anexo",
+      "fileTooLarge": "Este arquivo tem mais de 20 MB.",
+      "mentionList": "Membros da equipe para mencionar",
+      "typingOne": "{name} está digitando",
+      "typingMany": "{count} pessoas estão digitando"
+    },
+    "createChannel": {
+      "title": "Criar um canal",
+      "close": "Fechar",
+      "name": "Nome",
+      "nameHint": "Letras minúsculas, números, traços e sublinhados, sem espaços.",
+      "description": "Descrição (opcional)",
+      "privacy": "Privacidade",
+      "public": {
+        "label": "Público",
+        "hint": "Todos no espaço de trabalho podem ler e escrever."
+      },
+      "private": {
+        "label": "Privado",
+        "hint": "Somente por convite. Apenas os membros podem vê-lo."
+      },
+      "cancel": "Cancelar",
+      "create": "Criar canal"
+    },
+    "invite": {
+      "title": "Convidar um membro da equipe",
+      "close": "Fechar",
+      "email": "E-mail",
+      "name": "Nome (opcional)",
+      "note": "Observação para o administrador (opcional)",
+      "noteHint": "Por que esta pessoa deve entrar.",
+      "addToChannel": "Adicionar também a #{name}",
+      "approved": "Concluído. A solicitação foi aprovada.",
+      "pending": "Convite enviado, aguardando aprovação do administrador.",
+      "cancel": "Cancelar",
+      "submit": "Enviar convite"
+    },
+    "invitations": {
+      "title": "Convites pendentes",
+      "close": "Fechar",
+      "loading": "Carregando",
+      "loadFailed": "Não foi possível carregar os convites.",
+      "empty": "Nenhum convite ainda",
+      "status": {
+        "pending": "Pendente",
+        "approved": "Aprovado",
+        "declined": "Recusado",
+        "expired": "Expirado"
+      },
+      "requestedBy": "Solicitado por {name} · {time}",
+      "decidedBy": "{status} por {name} · {time}",
+      "needsAccount": "Esta pessoa ainda não tem uma conta no espaço de trabalho, então ninguém foi adicionado.",
+      "approve": "Aprovar",
+      "decline": "Recusar"
+    },
+    "channelMembers": {
+      "title": "Membros de #{name}",
+      "close": "Fechar",
+      "admin": "Administrador",
+      "leave": "Sair",
+      "remove": "Remover",
+      "addLabel": "Adicionar um membro da equipe",
+      "choose": "Escolher um membro da equipe",
+      "add": "Adicionar"
+    },
+    "errors": {
+      "network": "Erro de rede. Verifique sua conexão e tente novamente.",
+      "forbidden": "Você não tem permissão para fazer isso.",
+      "signedOut": "Você foi desconectado. Entre novamente.",
+      "notFound": "Isso não existe mais.",
+      "validation": "Verifique o que você digitou e tente novamente.",
+      "conflict": "Isso foi alterado nesse meio-tempo. Recarregue e tente novamente.",
+      "tooLarge": "Este arquivo tem mais de 20 MB.",
+      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
+      "emptyMessage": "Escreva uma mensagem ou anexe um arquivo.",
+      "replyOtherChannel": "Você só pode responder a uma mensagem do mesmo canal.",
+      "attachmentRejected": "Não foi possível anexar este arquivo. Só são permitidos arquivos de imagem, PDF, Word, Excel, texto e CSV de até 20 MB.",
+      "editExpired": "As mensagens só podem ser editadas por 15 minutos.",
+      "nameTaken": "Já existe um canal com este nome.",
+      "channelProtected": "#general não pode ser excluído.",
+      "alreadyMember": "Já é membro do espaço de trabalho.",
+      "alreadyDecided": "Já foi decidido.",
+      "notMember": "Você não é membro deste canal.",
+      "notAuthor": "Você só pode alterar suas próprias mensagens.",
+      "kindInvalid": "Isso não se aplica a este tipo de canal.",
+      "unexpected": "Algo deu errado. Tente novamente."
+    }
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "Czat zespołu"
+    },
+    "common": {
+      "dismiss": "Odrzuć"
+    },
+    "screen": {
+      "title": "Czat zespołu",
+      "back": "Wróć do kanałów",
+      "search": "Szukaj w tym kanale",
+      "pinned": "Przypięte wiadomości",
+      "members": "Członkowie kanału",
+      "deleteChannel": "Usuń ten kanał",
+      "type": {
+        "public": "Kanał",
+        "private": "Prywatny",
+        "dm": "Wiadomość bezpośrednia"
+      },
+      "olderMessage": "Ta wiadomość jest starsza. Wczytaj starsze wiadomości, aby ją zobaczyć.",
+      "loading": "Wczytywanie czatu zespołu",
+      "loadFailed": "Nie udało się wczytać czatu zespołu.",
+      "retry": "Spróbuj ponownie",
+      "deleteTitle": "Usunąć ten kanał?",
+      "deleteMessage": "Kanał #{name} i wszystkie jego wiadomości zostaną usunięte dla wszystkich. Tej operacji nie można cofnąć.",
+      "deleteConfirm": "Usuń kanał",
+      "cancel": "Anuluj"
+    },
+    "sidebar": {
+      "label": "Kanały i osoby",
+      "channels": "Kanały",
+      "createChannel": "Utwórz kanał",
+      "loading": "Wczytywanie kanałów",
+      "loadFailed": "Nie udało się wczytać kanałów.",
+      "noChannels": "Brak kanałów",
+      "direct": "Wiadomości bezpośrednie",
+      "people": "Osoby",
+      "invite": "Zaproś członka zespołu",
+      "pending": "Oczekujące prośby",
+      "pendingCount": "{count, plural, one {# oczekująca prośba} few {# oczekujące prośby} many {# oczekujących próśb} other {# oczekującej prośby}}",
+      "unread": "{count, plural, one {# nieprzeczytana wiadomość} few {# nieprzeczytane wiadomości} many {# nieprzeczytanych wiadomości} other {# nieprzeczytanej wiadomości}}"
+    },
+    "members": {
+      "label": "Członkowie",
+      "title": "Czat zespołu",
+      "count": "{count, plural, one {# członek} few {# członkowie} many {# członków} other {# członka}}",
+      "countUnknown": "Członkowie",
+      "search": "Szukaj członków",
+      "loading": "Wczytywanie członków",
+      "none": "Brak pasujących członków",
+      "online": "Online",
+      "offline": "Offline",
+      "you": "(ty)",
+      "message": "Napisz do: {name}"
+    },
+    "panel": {
+      "searchTitle": "Szukaj wiadomości",
+      "pinnedTitle": "Przypięte wiadomości",
+      "searchPlaceholder": "Szukaj w tym kanale",
+      "searchHint": "Wpisz co najmniej dwa znaki.",
+      "close": "Zamknij",
+      "failed": "Nie udało się wczytać.",
+      "noResults": "Brak pasujących wiadomości.",
+      "noPinned": "W tym kanale nic nie jest przypięte."
+    },
+    "stream": {
+      "loading": "Wczytywanie wiadomości",
+      "loadFailed": "Nie udało się wczytać wiadomości.",
+      "loadOlder": "Wczytaj starsze wiadomości",
+      "emptyTitle": "Brak wiadomości w #{name}",
+      "emptyMessage": "Przywitaj się i zacznij rozmowę."
+    },
+    "message": {
+      "edited": "(edytowano)",
+      "pinned": "Przypięte",
+      "editLabel": "Edytuj wiadomość",
+      "cancel": "Anuluj",
+      "save": "Zapisz",
+      "editConflict": "Ta wiadomość zmieniła się podczas edycji. Odśwież stronę i spróbuj ponownie.",
+      "reactions": "Reakcje",
+      "reactionChip": "{emoji}, {count, plural, one {# osoba} few {# osoby} many {# osób} other {# osoby}}",
+      "reactionTray": "Wybierz reakcję",
+      "reply": "Odpowiedz",
+      "react": "Zareaguj",
+      "edit": "Edytuj",
+      "pin": "Przypnij",
+      "unpin": "Odepnij",
+      "delete": "Usuń",
+      "deleteTitle": "Usunąć tę wiadomość?",
+      "deleteMessage": "Zostanie usunięta dla wszystkich w kanale.",
+      "uploading": "Przesyłanie",
+      "retry": "Ponów",
+      "discard": "Odrzuć"
+    },
+    "composer": {
+      "placeholder": "Wiadomość do #{name}",
+      "attach": "Dołącz plik",
+      "send": "Wyślij",
+      "hint": "Enter wysyła, Shift+Enter dodaje nowy wiersz, @ oznacza członka zespołu.",
+      "replyingTo": "Odpowiedź dla: {name}",
+      "cancelReply": "Anuluj odpowiedź",
+      "removeFile": "Usuń załącznik",
+      "fileTooLarge": "Ten plik jest większy niż 20 MB.",
+      "mentionList": "Członkowie zespołu do oznaczenia",
+      "typingOne": "{name} pisze",
+      "typingMany": "Piszą osoby: {count}"
+    },
+    "createChannel": {
+      "title": "Utwórz kanał",
+      "close": "Zamknij",
+      "name": "Nazwa",
+      "nameHint": "Małe litery, cyfry, myślniki i podkreślenia, bez spacji.",
+      "description": "Opis (opcjonalnie)",
+      "privacy": "Prywatność",
+      "public": {
+        "label": "Publiczny",
+        "hint": "Wszyscy w przestrzeni roboczej mogą czytać i pisać."
+      },
+      "private": {
+        "label": "Prywatny",
+        "hint": "Tylko na zaproszenie. Widzą go wyłącznie jego członkowie."
+      },
+      "cancel": "Anuluj",
+      "create": "Utwórz kanał"
+    },
+    "invite": {
+      "title": "Zaproś członka zespołu",
+      "close": "Zamknij",
+      "email": "E-mail",
+      "name": "Imię i nazwisko (opcjonalnie)",
+      "note": "Notatka dla administratora (opcjonalnie)",
+      "noteHint": "Dlaczego ta osoba powinna dołączyć.",
+      "addToChannel": "Dodaj też do #{name}",
+      "approved": "Gotowe. Prośba została zatwierdzona.",
+      "pending": "Zaproszenie wysłane, czeka na zatwierdzenie przez administratora.",
+      "cancel": "Anuluj",
+      "submit": "Wyślij zaproszenie"
+    },
+    "invitations": {
+      "title": "Oczekujące zaproszenia",
+      "close": "Zamknij",
+      "loading": "Wczytywanie",
+      "loadFailed": "Nie udało się wczytać zaproszeń.",
+      "empty": "Brak zaproszeń",
+      "status": {
+        "pending": "Oczekuje",
+        "approved": "Zatwierdzone",
+        "declined": "Odrzucone",
+        "expired": "Wygasłe"
+      },
+      "requestedBy": "Zgłoszone przez {name} · {time}",
+      "decidedBy": "{status}, przez {name} · {time}",
+      "needsAccount": "Ta osoba nie ma jeszcze konta w przestrzeni roboczej, więc nikogo nie dodano.",
+      "approve": "Zatwierdź",
+      "decline": "Odrzuć"
+    },
+    "channelMembers": {
+      "title": "Członkowie #{name}",
+      "close": "Zamknij",
+      "admin": "Administrator",
+      "leave": "Opuść",
+      "remove": "Usuń",
+      "addLabel": "Dodaj członka zespołu",
+      "choose": "Wybierz członka zespołu",
+      "add": "Dodaj"
+    },
+    "errors": {
+      "network": "Błąd sieci. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "signedOut": "Zostałeś wylogowany. Zaloguj się ponownie.",
+      "notFound": "Tego już nie ma.",
+      "validation": "Sprawdź wprowadzone dane i spróbuj ponownie.",
+      "conflict": "To zmieniło się w międzyczasie. Odśwież stronę i spróbuj ponownie.",
+      "tooLarge": "Ten plik jest większy niż 20 MB.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "emptyMessage": "Napisz wiadomość lub dołącz plik.",
+      "replyOtherChannel": "Na wiadomość można odpowiedzieć tylko w tym samym kanale.",
+      "attachmentRejected": "Nie udało się dołączyć tego pliku. Dozwolone są tylko obrazy, pliki PDF, Word, Excel, tekstowe i CSV do 20 MB.",
+      "editExpired": "Wiadomości można edytować tylko przez 15 minut.",
+      "nameTaken": "Kanał o tej nazwie już istnieje.",
+      "channelProtected": "Nie można usunąć #general.",
+      "alreadyMember": "Ta osoba jest już członkiem przestrzeni roboczej.",
+      "alreadyDecided": "Decyzja już zapadła.",
+      "notMember": "Nie jesteś członkiem tego kanału.",
+      "notAuthor": "Możesz zmieniać tylko własne wiadomości.",
+      "kindInvalid": "To nie dotyczy tego typu kanału.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie."
+    }
+  }
+}

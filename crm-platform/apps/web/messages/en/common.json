@@ -7,6 +7,12 @@
     "retry": "Try again",
     "requestId": "Request id",
     "search": "Search",
-    "unexpected": "Something went wrong"
+    "unexpected": "Something went wrong",
+    "fatal": {
+      "title": "Something went wrong",
+      "body": "The page failed to load. It has been reported. Try again, and if it keeps happening contact support.",
+      "bodyWithDigest": "The page failed to load. It has been reported. Try again, and if it keeps happening contact support and quote {digest}.",
+      "home": "Back to the start"
+    }
   }
 }

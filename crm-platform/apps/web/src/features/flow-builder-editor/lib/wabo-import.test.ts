@@ -2,6 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { applyImport, importToSimple } from './simple-import';
 import { allSteps, emptyDoc, groupsOf, problems, toGraph, unreachable } from './simple-model';
 import { isWaboExport, waboToGraph } from './wabo-import';
+import { translator } from '../test-utils/intl';
+import { renderMsg, type Msg } from './msg';
+
+/** A message in English, as the user would read it. */
+const en = (m: Msg): string => renderMsg(translator('flb'), m);
 
 const MAIN = 'q-main';
 const EDU = 'q-edu';
@@ -171,7 +176,7 @@ describe('wabo export -> Simple', () => {
       response: [{ type: 'text', value: 'two' }],
     });
     const r = importToSimple([a, b]);
-    if (!r.ok) throw new Error(r.reasons.join('; '));
+    if (!r.ok) throw new Error(r.reasons.map(en).join('; '));
     expect(r.doc.journeys[0]!.steps.map((s) => s.data.text)).toEqual(['one', 'two']);
     expect(new Set(r.doc.journeys[0]!.steps.map((s) => s.id)).size).toBe(2);
   });
@@ -196,14 +201,14 @@ describe('wabo export -> Simple', () => {
       { title: 'Back to menu', description: '', section: 'GII Courses' },
     ]);
     expect(w.keywords).toBe('hi');
-    expect(w.notes.join('\n')).toMatch(/"live_agent" button/);
-    expect(w.notes.join('\n')).toMatch(/not in this file/);
-    expect(w.notes.join('\n')).toMatch(/Skipped a "carousel" step/);
+    expect(w.notes.map(en).join('\n')).toMatch(/"live_agent" button/);
+    expect(w.notes.map(en).join('\n')).toMatch(/not in this file/);
+    expect(w.notes.map(en).join('\n')).toMatch(/Skipped a "carousel" step/);
   });
 
   it('opens as Simple flows named from the Intent records, with no step left unreached', () => {
     const r = importToSimple(EXPORT);
-    if (!r.ok) throw new Error(r.reasons.join('; '));
+    if (!r.ok) throw new Error(r.reasons.map(en).join('; '));
     expect(r.source).toBe('wabo');
     // main: text, name, buttons. Education: the list ends its chain, then the photo and link button after it.
     expect(r.doc.journeys.map((j) => j.steps.length)).toEqual([3, 1, 2, 1]);
@@ -219,7 +224,7 @@ describe('wabo export -> Simple', () => {
     const g = toGraph(r.doc);
     expect(g.flowNodes).toHaveLength(allSteps(r.doc).length + 1);
     // the live-agent button leads to an Assign step; it only needs a team chosen
-    expect(problems(r.doc, { senderRequired: false }).map((p) => p.message)).toEqual([
+    expect(problems(r.doc, { senderRequired: false }).map((p) => en(p.message))).toEqual([
       'Step 1.4: choose the team the conversation goes to.',
     ]);
   });
@@ -266,7 +271,7 @@ describe("Simple import: this workspace's own file", () => {
     };
     const bad = importToSimple(withWebhook);
     expect(bad.ok).toBe(false);
-    expect(!bad.ok && bad.reasons[0]).toMatch(/Simple builder does not have/);
+    expect(!bad.ok && en(bad.reasons[0]!)).toMatch(/Simple builder does not have/);
     expect(importToSimple({ hello: 1 }).ok).toBe(false);
     expect(importToSimple({ flow_type: 'call', flow_data: { flowNodes: [] } }).ok).toBe(false);
   });
@@ -308,8 +313,8 @@ describe('wabo export quirks (from a real console export)', () => {
         response: [{ type: 'video', value: { text: 'Watch', url: 'https://x/v.mp4' } }],
       }),
     ]);
-    if (!r.ok) throw new Error(r.reasons.join('; '));
-    expect(r.notes.join('\n')).toMatch(/opt-in \/ opt-out/);
+    if (!r.ok) throw new Error(r.reasons.map(en).join('; '));
+    expect(r.notes.map(en).join('\n')).toMatch(/opt-in \/ opt-out/);
     expect(groupsOf(r.doc).map((g) => [g.name, g.steps])).toEqual([['Hello', 2]]);
     expect(allSteps(r.doc)[1]?.data).toMatchObject({
       kind: 'video',
@@ -364,7 +369,7 @@ describe('wabo export quirks (from a real console export)', () => {
     // the Simple import leaves both out and says so
     const simple = waboToGraph(raw);
     expect(simple.graph.flowNodes.some((n) => n.type === 'assign')).toBe(false);
-    expect(simple.notes.join('\n')).toMatch(/"live_agent" button/);
+    expect(simple.notes.map(en).join('\n')).toMatch(/"live_agent" button/);
   });
 
   it('reads a file question and a flow-list step', () => {
@@ -406,7 +411,7 @@ describe('wabo export quirks (from a real console export)', () => {
         ],
       }),
     ]);
-    if (!r.ok) throw new Error(r.reasons.join('; '));
+    if (!r.ok) throw new Error(r.reasons.map(en).join('; '));
     const steps = allSteps(r.doc);
     expect(steps.map((s) => s.type)).toEqual(['message', 'ask_file', 'list']);
     expect(steps[1]!.data).toMatchObject({
@@ -440,7 +445,7 @@ describe('wabo export quirks (from a real console export)', () => {
       text('cccccccc-3', 'q3', 0, 'Three', { stage: '1.1' }),
       text('dddddddd-4', 'q4', 0, 'Four', { stage: '1.1' }),
     ]);
-    if (!r.ok) throw new Error(r.reasons.join('; '));
+    if (!r.ok) throw new Error(r.reasons.map(en).join('; '));
     expect(r.doc.trigger.data.keywords).toBe('hi');
     const names = groupsOf(r.doc).map((g) => g.name);
     expect(new Set(names).size).toBe(names.length);

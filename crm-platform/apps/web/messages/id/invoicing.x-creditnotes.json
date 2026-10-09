@@ -1,0 +1,326 @@
+{
+  "invoicing": {
+    "nav": {
+      "creditNotes": "Nota kredit"
+    },
+    "errors": {
+      "codes": {
+        "CN_EXCEEDS_INVOICE": "Total nota kredit tidak boleh melebihi faktur. Kurangi nominalnya, atau kreditkan sisa yang tersedia.",
+        "CN_NOT_DRAFT": "Hanya nota kredit draf yang bisa diedit atau dihapus. Muat ulang untuk melihat status terkini.",
+        "CN_ALREADY_VOID": "Nota kredit ini sudah dibatalkan.",
+        "CN_HAS_REFUND": "Dana tunai sudah dikembalikan untuk nota kredit ini, sehingga tidak bisa dibatalkan. Pengembalian dana tetap tercatat di buku besar pembayaran.",
+        "CN_NOTHING_TO_CREDIT": "Tidak ada yang tersisa untuk dikreditkan. Pilih baris yang masih memiliki sisa, atau tambahkan nominal.",
+        "CN_LINE_INVALID": "Baris yang dikreditkan tidak valid: kuantitas melebihi sisa, atau nominal salah. Periksa baris yang disorot.",
+        "INV_NOT_ISSUED": "Nota kredit hanya bisa dibuat untuk faktur yang sudah diterbitkan."
+      }
+    },
+    "creditNotes": {
+      "status": {
+        "draft": "Draf",
+        "issued": "Diterbitkan",
+        "void": "Dibatalkan"
+      },
+      "reasons": {
+        "return": "Barang dikembalikan",
+        "price_adjustment": "Penyesuaian harga",
+        "billing_error": "Kesalahan penagihan",
+        "cancellation": "Pembatalan",
+        "goodwill": "Goodwill",
+        "other": "Lainnya"
+      },
+      "settlements": {
+        "balance": "Diterapkan ke saldo",
+        "refund": "Pengembalian dana tunai"
+      },
+      "tabs": {
+        "label": "Status nota kredit",
+        "all": "Semua",
+        "draft": "Draf",
+        "issued": "Diterbitkan",
+        "void": "Dibatalkan"
+      },
+      "list": {
+        "title": "Nota kredit",
+        "subtitle": "Dokumen yang mengurangi tagihan pembeli pada faktur yang sudah diterbitkan.",
+        "invoices": "Faktur",
+        "newCreditNote": "Nota kredit baru",
+        "search": "Cari berdasarkan nomor atau pembeli",
+        "reset": "Hapus filter",
+        "refresh": "Muat ulang",
+        "tableLabel": "Nota kredit",
+        "noAccessTitle": "Tidak ada akses",
+        "noAccess": "Anda tidak memiliki izin untuk melihat nota kredit.",
+        "emptyFilteredTitle": "Tidak ada nota kredit yang cocok",
+        "emptyFiltered": "Coba pencarian lain atau hapus filter.",
+        "resetFilters": "Hapus filter",
+        "empty": {
+          "all": {
+            "title": "Belum ada nota kredit",
+            "message": "Kreditkan faktur yang sudah diterbitkan saat barang dikembalikan, harga salah, atau Anda ingin memberikan pengembalian."
+          },
+          "draft": {
+            "title": "Tidak ada draf",
+            "message": "Nota kredit yang masih Anda siapkan akan muncul di sini."
+          },
+          "issued": {
+            "title": "Belum ada yang diterbitkan",
+            "message": "Nota kredit yang diterbitkan memiliki nomor dan sudah mengubah fakturnya."
+          },
+          "void": {
+            "title": "Belum ada yang dibatalkan",
+            "message": "Nota kredit yang dibatalkan disimpan di sini."
+          }
+        },
+        "showing": "{count, plural, other {# nota kredit dimuat}}",
+        "loadMore": "Muat lebih banyak",
+        "allLoaded": "Semua sudah dimuat",
+        "loading": "Memuat nota kredit",
+        "contactLoading": "...",
+        "invoiceChip": "Faktur {number}",
+        "clearInvoice": "Tampilkan nota kredit dari setiap faktur"
+      },
+      "table": {
+        "draft": "Draf",
+        "scrollArea": "Tabel nota kredit, dapat digeser ke samping",
+        "columns": {
+          "number": "Nota kredit",
+          "invoice": "Faktur",
+          "buyer": "Pembeli",
+          "reason": "Alasan",
+          "settlement": "Penyelesaian",
+          "total": "Total",
+          "applied": "Diterapkan ke saldo",
+          "refunded": "Dikembalikan tunai",
+          "issued": "Tanggal terbit",
+          "status": "Status"
+        }
+      },
+      "row": {
+        "moreFor": "Tindakan lainnya untuk {name}",
+        "draft": "draf",
+        "open": "Buka",
+        "edit": "Edit draf",
+        "issue": "Terbitkan",
+        "pdf": "Unduh PDF",
+        "print": "Cetak",
+        "void": "Batalkan",
+        "delete": "Hapus draf"
+      },
+      "dialogs": {
+        "draftName": "draf ini",
+        "close": "Tutup",
+        "keep": "Tetap simpan",
+        "done": {
+          "issue": "Nota kredit {name} diterbitkan.",
+          "void": "Nota kredit {name} dibatalkan.",
+          "delete": "Draf dihapus."
+        },
+        "issue": {
+          "title": "Terbitkan nota kredit ini?",
+          "message": "Nota kredit mendapat nomor dan mengurangi tagihan pembeli pada faktur. Dengan pengembalian dana tunai, uang dikembalikan melalui buku besar pembayaran. Setelah itu, nota kredit tidak bisa diedit lagi.",
+          "confirm": "Terbitkan nota kredit"
+        },
+        "void": {
+          "title": "Batalkan nota kredit ini?",
+          "warning": "Kredit tidak lagi dihitung: faktur kembali ke kondisi sebelum nota kredit ini.",
+          "reason": "Mengapa dibatalkan?",
+          "reasonHint": "Wajib diisi. Akan disimpan pada nota kredit.",
+          "confirm": "Batalkan nota kredit"
+        },
+        "delete": {
+          "title": "Hapus draf ini?",
+          "message": "Draf akan dihapus permanen. Belum ada yang diterbitkan, sehingga faktur tidak berubah.",
+          "confirm": "Hapus draf"
+        }
+      },
+      "picker": {
+        "total": "Total faktur",
+        "paid": "Dibayar",
+        "credited": "Sudah dikreditkan",
+        "balance": "Saldo terutang",
+        "loading": "Memuat faktur",
+        "change": "Ubah faktur",
+        "search": "Cari faktur yang sudah diterbitkan berdasarkan nomor atau pembeli",
+        "results": "Faktur yang bisa dikreditkan",
+        "searching": "Mencari...",
+        "none": "Tidak ada faktur yang diterbitkan ditemukan.",
+        "more": "Tampilkan lebih banyak",
+        "totalShort": "Total",
+        "notCreditable": "Nota kredit hanya bisa dibuat untuk faktur yang sudah diterbitkan (diterbitkan, dibayar sebagian, lewat jatuh tempo, atau lunas). Pilih faktur lain."
+      },
+      "lines": {
+        "invoiceLines": "Baris faktur",
+        "creditLine": "Kredit {name}",
+        "lineFacts": "Ditagihkan {qty} seharga {amount} sebelum pajak",
+        "tax": "Pajak",
+        "taxIncluded": "{name} {rate}% termasuk dalam harga",
+        "taxAdded": "{name} {rate}% ditambahkan di atas harga",
+        "alreadyCredited": "{qty} sudah dikreditkan, {left} tersisa",
+        "fullyCredited": "Sudah dikreditkan seluruhnya",
+        "qtyToCredit": "Kuantitas yang akan dikreditkan",
+        "freeTitle": "Baris bebas",
+        "freeHint": "Nominal goodwill atau penyesuaian yang tidak terikat pada baris. Nominal ini sebelum pajak.",
+        "description": "Deskripsi",
+        "amount": "Nominal sebelum pajak",
+        "taxRate": "Tarif pajak",
+        "noTax": "Tanpa pajak",
+        "inclusive": "termasuk",
+        "removeFree": "Hapus baris ini",
+        "addFree": "Tambahkan baris bebas"
+      },
+      "problems": {
+        "noInvoice": "Pilih faktur yang akan dikreditkan.",
+        "nothing": "Pilih sesuatu untuk dikreditkan: sebuah baris, atau nominal bebas.",
+        "qtyInvalid": "Masukkan kuantitas di atas 0, dengan maksimal 4 desimal.",
+        "qtyExceeds": "Paling banyak {max} yang masih bisa dikreditkan pada baris ini.",
+        "descriptionRequired": "Jelaskan apa yang dikreditkan.",
+        "amountInvalid": "Masukkan nominal di atas 0.",
+        "noteTooLong": "Catatan lebih dari 2000 karakter."
+      },
+      "estimate": {
+        "title": "Estimasi kredit",
+        "disclaimer": "Estimasi yang dihitung di sini dengan harga dan pajak faktur. Angka yang disimpan server adalah angka final.",
+        "empty": "Belum ada yang dikreditkan. Pilih seluruh faktur, atau centang baris.",
+        "lineQty": "Kuantitas {qty}",
+        "taxSummary": "Ringkasan pajak",
+        "included": "termasuk",
+        "taxOn": "{tax} atas {base}",
+        "subtotal": "Sebelum pajak",
+        "tax": "Pajak",
+        "total": "Total kredit",
+        "exceeds": "Jumlah ini melebihi sisa yang masih bisa dikreditkan pada faktur ({max}). Server akan menolaknya.",
+        "money": "Apa yang terjadi pada uang",
+        "balanceBefore": "Saldo terutang sekarang",
+        "balanceAfter": "Saldo terutang setelah",
+        "applied": "Diterapkan ke faktur",
+        "refunded": "Dikembalikan tunai",
+        "refundNote": "Pengembalian dana tunai: uang yang sudah dibayar pembeli melebihi jumlah yang masih terutang dikembalikan melalui buku besar pembayaran saat Anda menerbitkannya.",
+        "balanceNote": "Diterapkan ke saldo: tidak ada uang yang dikeluarkan. Kredit hanya mengurangi jumlah yang harus dibayar pembeli."
+      },
+      "builder": {
+        "noAccess": "Anda tidak memiliki izin untuk membuat nota kredit.",
+        "backToList": "Kembali ke nota kredit",
+        "loading": "Memuat nota kredit",
+        "notDraft": "Hanya nota kredit draf yang bisa diedit.",
+        "openIt": "Buka nota kredit",
+        "back": "Kembali",
+        "newTitle": "Nota kredit baru",
+        "editTitle": "Edit draf nota kredit",
+        "conflict": "Orang lain mengubah nota kredit ini saat Anda sedang mengeditnya. Muat ulang untuk melihat versi terbaru; perubahan Anda di sini akan hilang.",
+        "reload": "Muat ulang",
+        "invoice": {
+          "title": "Faktur yang dikreditkan",
+          "hint": "Sebuah nota kredit termasuk dalam satu faktur yang sudah diterbitkan."
+        },
+        "details": {
+          "title": "Detail",
+          "reason": "Alasan",
+          "issueDate": "Tanggal terbit",
+          "issueDateHint": "Kosongkan untuk memakai tanggal penerbitan (hari ini {today}).",
+          "note": "Catatan",
+          "noteHint": "Dicetak pada nota kredit. Opsional."
+        },
+        "settlement": {
+          "title": "Apa yang terjadi pada uang",
+          "hint": "Dipilih sekarang, diterapkan saat nota kredit diterbitkan.",
+          "balance": {
+            "title": "Terapkan ke saldo faktur",
+            "body": "Faktur jadi lebih sedikit terutang. Tidak ada uang yang berpindah. Gunakan saat pembeli belum membayar, atau akan menyimpan kreditnya."
+          },
+          "refund": {
+            "title": "Kembalikan tunai",
+            "body": "Kelebihan pembayaran pembeli di atas jumlah yang kini terutang akan dikembalikan melalui buku besar pembayaran sebagai pengembalian dana."
+          }
+        },
+        "what": {
+          "title": "Yang akan dikreditkan",
+          "pickFirst": "Pilih faktur terlebih dahulu.",
+          "loadingCredits": "Memeriksa nota kredit sebelumnya untuk faktur ini",
+          "full": {
+            "title": "Seluruh sisa faktur",
+            "body": "Mengkreditkan setiap baris, dan ongkos kirim pada nota kredit pertama. Masih bisa dikreditkan:"
+          },
+          "lines": {
+            "title": "Sebagian baris atau nominal",
+            "body": "Centang baris dan kuantitas yang akan dikreditkan, atau tambahkan nominal bebas."
+          }
+        },
+        "saveDraft": "Simpan draf",
+        "saveAndIssue": "Simpan dan terbitkan",
+        "cancel": "Batal",
+        "estimateWaiting": "Pilih faktur untuk melihat estimasi kredit.",
+        "savedToast": "Nota kredit disimpan sebagai draf.",
+        "issuedToast": "Nota kredit {number} diterbitkan.",
+        "savedNotIssued": "Disimpan sebagai draf, tetapi tidak dapat diterbitkan: {reason}"
+      },
+      "detail": {
+        "noAccess": "Anda tidak memiliki izin untuk melihat nota kredit.",
+        "loading": "Memuat nota kredit",
+        "back": "Kembali ke nota kredit",
+        "backToList": "Kembali ke nota kredit",
+        "draft": "Draf",
+        "againstInvoice": "Untuk faktur",
+        "edit": "Edit",
+        "issue": "Terbitkan",
+        "pdf": "PDF",
+        "print": "Cetak",
+        "void": "Batalkan",
+        "delete": "Hapus",
+        "cannotVoidRefunded": "Dana tunai sudah dikembalikan untuk nota kredit ini, sehingga tidak bisa dibatalkan. Pengembalian dana tetap tercatat di buku besar pembayaran.",
+        "voidedOn": "Dibatalkan pada {date}",
+        "voided": "Nota kredit ini telah dibatalkan.",
+        "voidReason": "Alasan"
+      },
+      "money": {
+        "title": "Apa yang terjadi pada uang",
+        "titleDraft": "Apa yang akan terjadi pada uang",
+        "total": "Total kredit",
+        "applied": "Diterapkan ke faktur",
+        "refunded": "Dikembalikan tunai",
+        "voidNote": "Nota kredit ini dibatalkan, sehingga tidak lagi mengurangi faktur.",
+        "draftNote": "Jika diterbitkan seperti sekarang:",
+        "estimate": "Estimasi sampai nota kredit diterbitkan.",
+        "balanceBody": "Penyelesaian: diterapkan ke saldo. Tidak ada uang yang dikeluarkan.",
+        "refundBody": "Penyelesaian: pengembalian dana tunai. Kelebihan pembayaran di atas jumlah yang masih terutang dikembalikan kepada pembeli melalui buku besar pembayaran."
+      },
+      "after": {
+        "title": "Faktur setelah nota kredit ini",
+        "titleNow": "Faktur sekarang",
+        "total": "Total faktur",
+        "paid": "Dibayar",
+        "credited": "Dikreditkan",
+        "balance": "Saldo terutang",
+        "credit": "Kredit untuk pembeli"
+      },
+      "paper": {
+        "label": "Nota kredit {number}",
+        "labelDraft": "Nota kredit draf",
+        "void": "Dibatalkan",
+        "sellerFallback": "Usaha Anda",
+        "title": "Nota kredit",
+        "draftNumber": "Draf",
+        "creditedTo": "Dikreditkan ke",
+        "buyerFallback": "Pembeli",
+        "issued": "Diterbitkan",
+        "invoice": "Faktur",
+        "item": "Item",
+        "qty": "Qty",
+        "unit": "Harga satuan",
+        "tax": "Pajak",
+        "net": "Netto",
+        "taxAmount": "Jumlah pajak",
+        "total": "Total",
+        "taxFallback": "Pajak",
+        "taxSummary": "Ringkasan pajak",
+        "taxRate": "Tarif",
+        "taxBase": "Jumlah kena pajak",
+        "included": "termasuk",
+        "subtotal": "Sebelum pajak",
+        "taxTotal": "Pajak",
+        "totalCredit": "Total kredit",
+        "reason": "Alasan",
+        "note": "Catatan"
+      }
+    }
+  }
+}

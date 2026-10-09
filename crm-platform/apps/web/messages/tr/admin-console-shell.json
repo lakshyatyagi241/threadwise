@@ -1,0 +1,709 @@
+{
+  "admin-console-shell": {
+    "nav": {
+      "overview": "Ana sayfa",
+      "menuOrder": "Menü sırası",
+      "groups": {
+        "shell": "Arayüz"
+      },
+      "sections": {
+        "reports": "Raporlar",
+        "plans": "Çalışma alanları ve planlar",
+        "billing": "Faturalama",
+        "messaging": "Mesaj faturalama",
+        "support": "Destek",
+        "website": "Web sitesi",
+        "whatsapp": "WhatsApp",
+        "apps": "Uygulamalar",
+        "team": "Ekip ve güvenlik",
+        "settings": "Ayarlar",
+        "system": "Sistem"
+      },
+      "badges": {
+        "notSupported": "Desteklenmiyor",
+        "noWorkspaces": "Çalışma alanı yok"
+      },
+      "labels": {
+        "addonPacks": "Eklenti paketleri",
+        "extensions": "Uzantılar",
+        "trackingCode": "İzleme kodu",
+        "planPricingSettings": "Plan fiyatlandırma ayarları",
+        "checkoutSettings": "Ödeme ayarları",
+        "walletOverview": "Cüzdan özeti",
+        "flowTemplates": "Akış şablonları"
+      },
+      "hubNotes": {
+        "reports": "Gelir, plan, yapay zekâ ve sistem raporları.",
+        "plans": "Çalışma alanları, planlar, eklenti paketleri, kuponlar ve fiyatlandırma sayfası.",
+        "billing": "Siparişler, faturalar, ödemeler ve ödeme ayarları.",
+        "messaging": "Mesaj fiyatlandırması, marjlar, kredi paketleri ve Meta bayilik geliri.",
+        "support": "Destek talepleri, ekip ve platform gelen kutuları, temsilciler, SLA, oyun kitapları ve iletişim mesajları.",
+        "website": "Site düzenleyici, blog, yasal sayfalar, duyurular ve kılavuz.",
+        "whatsapp": "Sağlayıcılar, numara geçişi, Node köprüsü, webhook'lar, WABA ve katalog ayarları.",
+        "apps": "Pazar yeri, uzantılar ve akış şablonları.",
+        "team": "Roller, izinler, güvenlik ve oturum açma kuralları.",
+        "settings": "Marka, posta, entegrasyonlar, gizlilik, depolama ve daha fazlası.",
+        "system": "Güncellemeler, diller, para birimleri ve çeviri."
+      },
+      "captions": {
+        "branding": "Marka ve arayüz",
+        "integrations": "Entegrasyonlar",
+        "privacy": "Gizlilik ve izleme",
+        "infrastructure": "Altyapı",
+        "roles": "Roller",
+        "security": "Güvenlik",
+        "signin": "Oturum açma ve kayıt"
+      }
+    },
+    "shell": {
+      "collapse": "Kenar çubuğunu daralt",
+      "expand": "Kenar çubuğunu genişlet",
+      "backToApp": "Uygulamaya dön",
+      "allAreas": "Tüm alanlar",
+      "switchArea": "Alanı değiştir, şu an: {area}"
+    },
+    "overview": {
+      "title": "Platform konsolu",
+      "note": "Bir alan seçin. Her biri, sayfalarını soldaki bir menüde açar ve Ctrl+K ile herhangi bir sayfayı adıyla bulabilirsiniz.",
+      "open": "Aç",
+      "attentionTitle": "Dikkat gerektiriyor",
+      "attentionAll": "{count, plural, one {# okunmamış bildirim} other {# okunmamış bildirim}}",
+      "attentionEmpty": "Şu anda dikkat gerektiren bir şey yok.",
+      "pages": "{count, plural, one {# sayfa} other {# sayfa}}"
+    },
+    "menuOrder": {
+      "title": "Menü sırası",
+      "note": "Her müşterinin gördüğü üst çubukta hangi öğelerin görüneceğini ve sıralarını seçin. Geri kalan her şey Daha fazla altında yer alır. Kullanıcılar değişikliği bir sonraki sayfa yüklemesinde görür.",
+      "barZone": "Üst çubuk",
+      "moreZone": "Daha fazla",
+      "locked": "Her zaman en sonda",
+      "save": "Düzeni kaydet",
+      "reset": "Varsayılana sıfırla",
+      "saved": "Menü düzeni kaydedildi. Kullanıcılar bunu bir sonraki sayfa yüklemesinde görür.",
+      "saveFailed": "Düzen kaydedilemedi.",
+      "loadFailed": "Düzen yüklenemedi.",
+      "moveUp": "{item} öğesini yukarı taşı",
+      "moveDown": "{item} öğesini aşağı taşı",
+      "remove": "{item} öğesini Daha fazla altına taşı",
+      "add": "{item} öğesini üst çubuğa ekle",
+      "removeShort": "Kaldır",
+      "addShort": "Ekle",
+      "items": {
+        "dashboard": "Kontrol paneli",
+        "team-inbox": "Ekip gelen kutusu",
+        "wa-campaigns": "Kampanyalar",
+        "flows": "Akışlar",
+        "templates": "Şablonlar",
+        "devices": "Cihazlar",
+        "metaads": "Meta Reklamları",
+        "broadcasts": "Toplu yayınlar",
+        "contacts": "Kişiler",
+        "deals": "Fırsatlar",
+        "chat": "Canlı sohbet",
+        "analytics": "Analizler",
+        "auto-reply": "Otomatik yanıt",
+        "scheduled": "Zamanlanmış",
+        "message-history": "Geçmiş",
+        "ai-assistants": "Yapay zekâ asistanları",
+        "ai-training": "Yapay zekâ eğitimi",
+        "wa-links": "WA bağlantıları",
+        "chatbot-widgets": "Sohbet widget'ı",
+        "webhooks": "Webhook'lar",
+        "integrations": "Entegrasyonlar",
+        "warmer": "Isıtıcı",
+        "call-logs": "Arama kayıtları",
+        "support": "Destek",
+        "more": "Daha fazla"
+      }
+    },
+    "header": {
+      "health": {
+        "title": "Platform sağlığı",
+        "ok": "Tüm sistemler normal",
+        "stuck": "{count, plural, one {# takılı iş} other {# takılı iş}}",
+        "down": "Veritabanına ulaşılamıyor"
+      },
+      "bell": {
+        "title": "Bildirimler",
+        "labelUnread": "Bildirimler, {count} okunmamış",
+        "inbox": "Gelen kutusu",
+        "markAllRead": "Tümünü okundu işaretle",
+        "clearAll": "Tümünü temizle",
+        "viewAll": "Tümünü gör",
+        "loading": "Yükleniyor...",
+        "empty": "Henüz bildirim yok."
+      },
+      "account": {
+        "menu": "Hesap menüsü",
+        "open": "{name} için hesap menüsü",
+        "myAccount": "Hesabım",
+        "settings": "Ayarlar",
+        "overview": "Yönetici özeti",
+        "signOut": "Oturumu kapat"
+      },
+      "feed": {
+        "signup": "Yeni kayıt",
+        "paymentReceived": "Ödeme alındı",
+        "newOrder": "Yeni sipariş",
+        "newTicket": "Yeni destek talebi",
+        "newContactMessage": "Yeni iletişim mesajı",
+        "newWorkspace": "Yeni çalışma alanı"
+      }
+    },
+    "notificationsPage": {
+      "eyebrow": "Yönetici - Platform etkinliği - Bildirimler",
+      "title": "Yönetici bildirimleri",
+      "note": "Platformda olan her şey: yeni kayıtlar, ödemeler, destek talepleri, iletişim mesajları ve yeni çalışma alanları. Çalışma alanı üyesinin kişisel bildirimlerinden ayrıdır.",
+      "tiles": {
+        "all": "Tüm olaylar",
+        "signup": "Kayıtlar",
+        "payment": "Ödemeler",
+        "ticket": "Destek",
+        "contact": "Mesajlar",
+        "workspace": "Çalışma alanları"
+      },
+      "pills": {
+        "all": "Tümü",
+        "signup": "Kayıtlar",
+        "payment": "Ödemeler",
+        "ticket": "Destek",
+        "contact": "Mesajlar",
+        "workspace": "Çalışma alanları"
+      },
+      "kinds": {
+        "signup": "Kayıt",
+        "payment": "Ödeme",
+        "ticket": "Destek",
+        "contact": "Mesaj",
+        "workspace": "Çalışma alanı"
+      },
+      "last30": "son 30 gün",
+      "search": "Olay ara...",
+      "empty": "Bu görünümde platform etkinliği yok.",
+      "loadFailed": "Akış yüklenemedi.",
+      "cols": {
+        "type": "Tür",
+        "event": "Olay",
+        "detail": "Ayrıntı",
+        "when": "Zaman",
+        "open": "Aç"
+      },
+      "showing": "{count, plural, one {Son # olay} other {Son # olay}} gösteriliyor",
+      "live": "Canlı akış, en yeni üstte"
+    },
+    "settings": {
+      "workspace": {
+        "label": "Çalışma alanı ayarları",
+        "description": "Ad, saat dilimi, para birimi, bildirimler, veri dışa aktarma ve çalışma alanını silme.",
+        "keywords": "çalışma alanı, ad, saat dilimi, para birimi, bildirimler, dışa aktarma, silme, slack"
+      }
+    },
+    "workspaceSettings": {
+      "titleLead": "Çalışma alanı",
+      "titleTail": "ayarları",
+      "subtitle": "Çalışma alanınızı, ekibinizi ve entegrasyonlarınızı yapılandırın.",
+      "tabs": {
+        "general": "Genel",
+        "branding": "Marka",
+        "team": "Ekip ve roller",
+        "notifications": "Bildirimler",
+        "aikeys": "Yapay zekâ anahtarları",
+        "security": "Güvenlik",
+        "api": "API ve webhook'lar",
+        "data": "Veri ve dışa aktarma",
+        "appearance": "Görünüm"
+      },
+      "general": {
+        "workspace": "Çalışma alanı",
+        "ownerOnly": "Saat dilimini, para birimini veya çalışma alanı adını yalnızca çalışma alanı sahibi değiştirebilir.",
+        "name": "Çalışma alanı adı",
+        "url": "Çalışma alanı URL'si",
+        "urlHint": "URL kısa adı buradan düzenlenemez. Değiştirmek için destekle iletişime geçin.",
+        "timezone": "Varsayılan saat dilimi",
+        "timezoneHint": "Zamanlanmış tüm gönderimler, çalışma saati kontrolleri ve SLA zamanlayıcıları bu dilimde çalışır.",
+        "currency": "Para birimi",
+        "currencyHint": "Plan ödemesinde, faturalarda ve cüzdan görünümünde kullanılır.",
+        "save": "Kaydet",
+        "saved": "Ayarlar kaydedildi.",
+        "saveFailed": "Ayarlar kaydedilemedi.",
+        "loadFailed": "Ayarlar yüklenemedi.",
+        "hours": {
+          "title": "Çalışma saatleri",
+          "note": "Yalnızca bilgi için gösterilir. Çalışma saatleri henüz uygulanmıyor, bu yüzden bu denetimler salt okunurdur.",
+          "weekdays": "Pzt - Cum",
+          "saturday": "Cumartesi",
+          "sunday": "Pazar",
+          "from": "Başlangıç",
+          "to": "Bitiş"
+        },
+        "preferences": {
+          "title": "Otomatik yapay zekâ özeti",
+          "note": "Her mesaj metni alanında canlı bir yapay zekâ incelemesi alın: neyin işe yaradığı yeşille, neyin düzeltilmesi gerektiği kırmızıyla gösterilir, ayrıca geri yapıştırabileceğiniz tek dokunuşluk bir \"en iyi sürüm\" sunulur. Kapalıyken aynı inceleme, araç çubuğundaki ışıltı simgesinden isteğe bağlı olarak çalışır.",
+          "save": "Kaydet",
+          "saved": "Tercih kaydedildi.",
+          "saveFailed": "Tercih kaydedilemedi."
+        }
+      },
+      "notifications": {
+        "title": "Çalışma alanı bildirimleri",
+        "note": "Teslimatı kanal bazında açıp kapatın. Burada kapatılan hiçbir şey uygulama içi zil bildirimi, e-posta veya Slack mesajı oluşturmaz.",
+        "readOnly": "Salt okunur. Bunları çalışma alanı sahibi düzenleyebilir.",
+        "save": "Tercihleri kaydet",
+        "saved": "Bildirim tercihleri kaydedildi.",
+        "saveFailed": "Tercihler kaydedilemedi.",
+        "loadFailed": "Tercihler yüklenemedi.",
+        "specificEvents": "Belirli olaylar",
+        "byCategory": "Kategoriye göre",
+        "event": "Olay",
+        "category": "Kategori",
+        "channels": {
+          "inapp": "Uygulama içi",
+          "email": "E-posta",
+          "slack": "Slack"
+        },
+        "events": {
+          "device_connected": "Cihaz bağlandı",
+          "device_disconnected": "Cihaz bağlantısı kesildi",
+          "campaign_completed": "Kampanya tamamlandı",
+          "campaign_failed": "Kampanya başarısız oldu",
+          "broadcast_completed": "Toplu yayın tamamlandı",
+          "new_customer_reply": "Yeni müşteri yanıtı",
+          "mention_in_inbox": "Sizden @bahsedildi",
+          "conversation_assigned": "Konuşma size atandı",
+          "sla_breached": "SLA aşıldı",
+          "wallet_low_balance": "Cüzdan bakiyesi düşük",
+          "plan_changed": "Plan yükseltildi / düşürüldü",
+          "payment_failed": "Ödeme başarısız oldu",
+          "webhook_delivery_failed": "Webhook teslimi başarısız oldu",
+          "flow_started": "Akış başladı",
+          "flow_failed": "Akış başarısız oldu",
+          "integration_disconnected": "Entegrasyon bağlantısı kesildi",
+          "appointment_booked": "Randevu alındı",
+          "weekly_summary": "Haftalık özet"
+        },
+        "categories": {
+          "device": "Cihazlar",
+          "contact": "Kişiler",
+          "campaign": "Kampanyalar",
+          "broadcast": "Toplu yayınlar",
+          "template": "Şablonlar",
+          "chat": "Sohbet",
+          "webhook": "Webhook'lar",
+          "billing": "Faturalama",
+          "system": "Sistem"
+        },
+        "slackLabel": "Slack gelen webhook URL'si",
+        "slackHint": "Slack'te Uygulamalar, Gelen Webhook'lar bölümünden bir tane oluşturun. Slack anahtarı açık olan olaylar buraya gönderilir.",
+        "channelStatus": "Kanal durumu",
+        "statusInapp": "Uygulama içi zil: canlı, üst başlıktaki rozeti yönetir.",
+        "statusEmailLive": "E-posta: canlı, platform posta ayarları üzerinden gönderilir.",
+        "statusEmailOff": "E-posta: SMTP platform yöneticisi tarafından yapılandırıldığında gönderilir.",
+        "statusSlackOn": "Slack: webhook kaydedildi.",
+        "statusSlackOff": "Slack: açmak için bir webhook URL'si ekleyin."
+      },
+      "data": {
+        "loadFailed": "Dışa aktarma sayıları yüklenemedi.",
+        "exportTitle": "Veri dışa aktarma",
+        "exportNote": "Çalışma alanı verilerinizi CSV olarak indirin. Her bağlantı yeni bir dışa aktarma oluşturur.",
+        "exportOwnerOnly": "Dışa aktarmaları yalnızca çalışma alanı sahibi indirebilir.",
+        "types": {
+          "contacts": "Kişiler",
+          "conversations": "Konuşmalar",
+          "messages": "Mesajlar"
+        },
+        "count": {
+          "contacts": "{count, plural, one {# kayıt} other {# kayıt}} · CSV",
+          "conversations": "{count, plural, one {# konu} other {# konu}} · CSV",
+          "messages": "{count, plural, one {# mesaj} other {# mesaj}} · CSV"
+        },
+        "delete": {
+          "title": "Çalışma alanını sil",
+          "note": "Bu çalışma alanını, tüm konuşmaları, otomasyonları ve faturalama geçmişini kalıcı olarak silin.",
+          "irreversible": "Geri alınamaz.",
+          "ownerOnly": "Çalışma alanını yalnızca çalışma alanı sahibi silebilir.",
+          "typeName": "Çalışma alanı adını yazın:",
+          "password": "Parolayla onaylayın",
+          "submit": "Çalışma alanını kalıcı olarak sil",
+          "cancel": "İptal",
+          "confirmTitle": "Bu çalışma alanı silinsin mi?",
+          "confirmMessage": "\"{name}\" ve içindeki her şey silinecek ve herkesin oturumu kapatılacak. Bu işlem geri alınamaz.",
+          "failed": "Çalışma alanı silinemedi."
+        }
+      },
+      "groups": {
+        "workspace": "Çalışma alanı",
+        "system": "Sistem"
+      },
+      "railLabel": "Ayar bölümleri",
+      "personal": {
+        "title": "Hesabınız",
+        "body": "Profil, parola ve kişisel tercihler."
+      },
+      "api": {
+        "restTitle": "Genel REST API",
+        "rest1": "Kendi sistemlerinizden kişileri, konuşmaları ve mesajları okumak ve yazmak için bir API anahtarı oluşturun.",
+        "rest2": "Her anahtar bu çalışma alanıyla sınırlıdır ve istediğiniz zaman iptal edilebilir.",
+        "rest3": "İstekler, planınıza göre dakika başına sınırlandırılır.",
+        "webhooksTitle": "Webhook'lar",
+        "webhooksBody": "Olayları kendi uç noktalarınıza gönderin ve diğer araçlardan olay alın.",
+        "manage": "Entegrasyonları yönet"
+      },
+      "appearance": {
+        "title": "Görünüm",
+        "note": "Uygulamanın size nasıl görüneceğini seçin. Bu, üst başlıktaki güneş ve ay düğmesiyle aynı seçimdir.",
+        "choices": {
+          "light": {
+            "label": "Açık",
+            "body": "Yumuşak kâğıt tonlarında parlak sayfalar."
+          },
+          "dark": {
+            "label": "Koyu",
+            "body": "Geceleri gözlere daha rahat gelen loş sayfalar."
+          }
+        },
+        "save": "Kaydet",
+        "saved": "Görünüm güncellendi."
+      }
+    },
+    "topNav": {
+      "more": "Daha fazla",
+      "search": "Ara",
+      "premium": "Premium özellik: kilidini açmak için planınızı yükseltin"
+    },
+    "palette": {
+      "title": "Sayfalarda ara",
+      "placeholder": "Sayfaları, ayarları, araçları ara...",
+      "empty": "\"{query}\" için sonuç yok",
+      "hintNavigate": "Gezinmek için yukarı ve aşağı",
+      "hintOpen": "Açmak için Enter",
+      "hintToggle": "Açıp kapatmak için Ctrl K",
+      "tags": {
+        "page": "sayfa",
+        "account": "hesap",
+        "plan": "plan",
+        "help": "yardım",
+        "system": "sistem"
+      },
+      "entries": {
+        "profile": "Profil",
+        "profileHint": "Adınız, fotoğrafınız ve iletişim bilgileriniz",
+        "password": "Parola ve güvenlik",
+        "passwordHint": "Parola, iki adımlı oturum açma ve etkin oturumlar"
+      }
+    },
+    "strip": {
+      "jump": "Ara veya git...",
+      "account": {
+        "group": "Hesap",
+        "account": "Hesap",
+        "wallet": "Cüzdan",
+        "notifications": "Bildirimler"
+      },
+      "greeting": {
+        "midnightOil": "Gece yarısı mesaisi",
+        "morning": "Günaydın",
+        "afternoon": "İyi günler",
+        "evening": "İyi akşamlar",
+        "night": "İyi geceler"
+      }
+    },
+    "profileMenu": {
+      "chip": "{plan} planı - {role}",
+      "wallet": "Cüzdan",
+      "orders": "Sipariş geçmişi",
+      "plans": "Fiyatlandırma ve planlar",
+      "tour": "Turu başlat"
+    },
+    "quickAccess": {
+      "title": "Hızlı erişim",
+      "open": "Hızlı erişimi aç",
+      "close": "Kapat",
+      "edit": "Kısayolları düzenle",
+      "editTitle": "Hızlı erişimi düzenle",
+      "editNote": "En fazla on sayfa veya kendi bağlantılarınızı sabitleyin. Kontrol panelinde ve yan çekmecede görünürler.",
+      "dashboard": "Kontrol paneli",
+      "allApps": "Tüm uygulamalar",
+      "limit": "En fazla {max} kısayol sabitleyebilirsiniz.",
+      "saveFailed": "Kısayollar kaydedilemedi.",
+      "customLinks": "Özel bağlantılar",
+      "linkLabel": "Etiket",
+      "linkUrl": "Bağlantı",
+      "addLink": "Bağlantı ekle",
+      "removeLink": "Bu bağlantıyı kaldır",
+      "counter": "{count} / {max} sabitlendi",
+      "cancel": "İptal",
+      "save": "Kısayolları kaydet",
+      "problem": {
+        "incomplete": "Bağlantı için bir etiket ve bir adres gerekir.",
+        "unsafe": "Bu uygulama içinde bir adres (tek eğik çizgiyle başlayan) veya bir http ya da https adresi kullanın."
+      },
+      "catalog": {
+        "inbox": {
+          "label": "Birleşik gelen kutusu",
+          "desc": "Tüm konuşmalar tek yerde"
+        },
+        "contacts": {
+          "label": "Kişiler",
+          "desc": "Kitleniz ve ayrıntıları"
+        },
+        "campaigns": {
+          "label": "Kampanyalar",
+          "desc": "Kampanyaları planlayın ve gönderin"
+        },
+        "broadcasts": {
+          "label": "Toplu yayınlar",
+          "desc": "Tek mesajı birçok kişiye gönderin"
+        },
+        "templates": {
+          "label": "Şablonlar",
+          "desc": "Onaylı mesaj şablonları"
+        },
+        "flows": {
+          "label": "Akışlar",
+          "desc": "Konuşmaları otomatikleştirin"
+        },
+        "scheduled": {
+          "label": "Zamanlanmış",
+          "desc": "Gönderilmeyi bekleyen mesajlar"
+        },
+        "catalog": {
+          "label": "Katalog",
+          "desc": "WhatsApp'ta sattığınız ürünler"
+        },
+        "store": {
+          "label": "Mağaza",
+          "desc": "Vitrininiz ve siparişleriniz"
+        },
+        "deals": {
+          "label": "Satış hattı",
+          "desc": "Aşamaya göre fırsatlar"
+        },
+        "analytics": {
+          "label": "Analizler",
+          "desc": "Teslimat ve yanıt rakamları"
+        },
+        "auto-reply": {
+          "label": "Otomatik yanıt",
+          "desc": "Anahtar kelime ve mesai dışı yanıtlar"
+        },
+        "devices": {
+          "label": "Cihazlar",
+          "desc": "Bağlı WhatsApp numaraları"
+        },
+        "chatbots": {
+          "label": "Sohbet widget'ları",
+          "desc": "Web siteniz için sohbet widget'ı"
+        },
+        "ai": {
+          "label": "Yapay zekâ asistanları",
+          "desc": "Sizin yerinize yanıt veren asistanlar"
+        },
+        "appointments": {
+          "label": "Randevular",
+          "desc": "Rezervasyonlar ve müsaitlik"
+        },
+        "webhooks": {
+          "label": "Webhook'lar",
+          "desc": "Olayları diğer sistemlere gönderin"
+        },
+        "history": {
+          "label": "Mesaj günlüğü",
+          "desc": "Gönderilen ve alınan her mesaj"
+        },
+        "account": {
+          "label": "Hesap",
+          "desc": "Profil, plan ve cüzdan"
+        },
+        "more": {
+          "label": "Diğer uygulamalar",
+          "desc": "Tüm araçlar tek sayfada"
+        }
+      }
+    },
+    "announcements": {
+      "label": "Duyurular",
+      "dismiss": "Gizle"
+    },
+    "tour": {
+      "close": "Turu kapat",
+      "back": "Geri",
+      "next": "İleri",
+      "done": "Bitti",
+      "progress": "{current} / {total}",
+      "steps": {
+        "welcome": {
+          "title": "{app} uygulamasına hoş geldiniz",
+          "body": "En çok kullanacağınız yerlere kısa bir tur. Bir dakikadan az sürer."
+        },
+        "navbar": {
+          "title": "Menünüz",
+          "body": "Gün içinde yaptığınız her şey üst çubukta bir tık uzağınızda."
+        },
+        "metaads": {
+          "title": "Meta Reklamları",
+          "body": "WhatsApp'a tıkla reklamları yayınlayın ve getirdiklerini görün."
+        },
+        "campaigns": {
+          "title": "Kampanyalar",
+          "body": "WhatsApp kampanyalarını planlayın, gönderin ve izleyin."
+        },
+        "flows": {
+          "title": "Akışlar",
+          "body": "Sizin yerinize yanıt veren otomasyonlar oluşturun."
+        },
+        "templates": {
+          "title": "Şablonlar",
+          "body": "Onaylı mesaj şablonlarınızı burada tutun."
+        },
+        "devices": {
+          "title": "Kanallar",
+          "body": "Gönderim yaptığınız numaraları ve hesapları bağlayın."
+        },
+        "more": {
+          "title": "Daha fazla",
+          "body": "Diğer tüm araçlar burada, gruplanmış ve aranabilir."
+        },
+        "kpi": {
+          "title": "Numaralarınız",
+          "body": "Mesajlar, yanıtlar ve teslimat tek bakışta."
+        },
+        "newCampaign": {
+          "title": "Kampanya başlat",
+          "body": "İlk kampanyanızı buradan oluşturun."
+        },
+        "pipeline": {
+          "title": "Satış hattı",
+          "body": "Fırsatları ilk mesajdan kazanılana kadar takip edin."
+        }
+      }
+    },
+    "more": {
+      "titleLead": "Daha fazla",
+      "titleTail": "özellik",
+      "subtitle": "Tüm araçlar tek yerde.",
+      "navigation": "Gezinme",
+      "allTools": "Tüm araçlar",
+      "noTools": "Burada henüz bir şey yok.",
+      "tabs": {
+        "all": "Tümü",
+        "automation": "Otomasyon",
+        "data": "Veri",
+        "help": "Yardım"
+      },
+      "plan": "Planınız",
+      "managePlan": "Planı yönet",
+      "wallet": "Cüzdan",
+      "topUp": "Bakiye yükle",
+      "tips": {
+        "title": "İpucu",
+        "pager": "İpuçları",
+        "templates": {
+          "title": "Şablon kullanın",
+          "body": "Onaylı şablonlar, 24 saatlik pencerenin dışında müşterilere ulaşır."
+        },
+        "flows": {
+          "title": "Yanıtları otomatikleştirin",
+          "body": "Bir akış, aynı soruyu her seferinde sizin yerinize yanıtlayabilir."
+        },
+        "palette": {
+          "title": "Her yere atlayın",
+          "body": "Tüm sayfalarda aramak için Ctrl K tuşlarına basın."
+        },
+        "scheduled": {
+          "title": "Önceden zamanlayın",
+          "body": "Bir mesajı şimdi sıraya alın, doğru zamanda gitsin."
+        },
+        "wallet": {
+          "title": "Bakiyenizi izleyin",
+          "body": "Gönderimler hiç durmasın diye bakiye azalmadan önce yükleyin."
+        }
+      },
+      "shortcuts": {
+        "title": "Kısayollar",
+        "customise": "Özelleştir",
+        "empty": "Seçili kısayol yok. Eklemek için Özelleştir'i kullanın.",
+        "editTitle": "Kısayolları özelleştir",
+        "emptyEditor": "Seçili kısayol yok",
+        "up": "{item} öğesini yukarı taşı",
+        "down": "{item} öğesini aşağı taşı",
+        "remove": "{item} öğesini kaldır",
+        "customTitle": "Başlık",
+        "customSubtitle": "Alt başlık",
+        "customUrl": "Bağlantı",
+        "customProblem": "Özel kısayol için bir başlık ve bir bağlantı gerekir.",
+        "addCustom": "Özel kısayol ekle",
+        "reset": "Varsayılanlara sıfırla",
+        "cancel": "İptal",
+        "save": "Kaydet",
+        "presets": {
+          "new-auto-reply": {
+            "title": "Yeni otomatik yanıt",
+            "subtitle": "Sık sorulan soruları otomatik yanıtlayın"
+          },
+          "schedule-send": {
+            "title": "Gönderimi zamanla",
+            "subtitle": "Bir mesajı daha sonrası için sıraya alın"
+          },
+          "test-webhook": {
+            "title": "Webhook'lar",
+            "subtitle": "Olayları diğer sistemlere gönderin"
+          },
+          "export-history": {
+            "title": "Mesaj geçmişi",
+            "subtitle": "Gönderilenleri inceleyin ve dışa aktarın"
+          },
+          "contact-support": {
+            "title": "Destekle iletişime geç",
+            "subtitle": "Ekipten yardım isteyin"
+          },
+          "new-broadcast": {
+            "title": "Yeni toplu yayın",
+            "subtitle": "Birçok kişiye aynı anda mesaj gönderin"
+          },
+          "open-contacts": {
+            "title": "Kişiler",
+            "subtitle": "Kitleniz"
+          },
+          "pair-device": {
+            "title": "Numara bağla",
+            "subtitle": "Bir WhatsApp numarası eşleyin"
+          },
+          "team-inbox": {
+            "title": "Gelen kutusu",
+            "subtitle": "Tüm konuşmalar"
+          },
+          "create-flow": {
+            "title": "Akış oluştur",
+            "subtitle": "Bir otomasyon oluşturun"
+          },
+          "new-template": {
+            "title": "Yeni şablon",
+            "subtitle": "Bir mesaj şablonu yazın"
+          }
+        }
+      }
+    },
+    "inboxBell": {
+      "label": "{count, plural, one {1 okunmamış konuşma} other {# okunmamış konuşma}}",
+      "pill": "{count, plural, one {yeni mesaj} other {yeni mesaj}}",
+      "dismiss": "Daha yeni bir şey gelene kadar gizle",
+      "title": "Yeni mesajlar",
+      "viewInbox": "Gelen kutusunu aç"
+    },
+    "connectDevice": {
+      "title": "Numara bağla",
+      "close": "Kapat",
+      "connected": "Numara bağlandı"
+    },
+    "search": {
+      "label": "Konsolda ara",
+      "trigger": "Yönetici alanında ara…",
+      "placeholder": "Sayfalarda ve ayarlarda ara…",
+      "noResults": "“{query}” için sonuç yok",
+      "count": "{count, plural, one {# sonuç} other {# sonuç}}",
+      "hintMove": "gezin",
+      "hintOpen": "aç",
+      "hintToggle": "aç/kapat"
+    }
+  }
+}

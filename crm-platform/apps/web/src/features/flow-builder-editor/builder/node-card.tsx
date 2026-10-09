@@ -10,6 +10,8 @@ import {
   type FlowNode,
   type FlbPortContext,
 } from '@crm/contracts';
+import { groupLabel, nodeLabel, portLabel } from '../lib/contract-text';
+import { useFlb } from '../lib/msg';
 import { lookOf } from '../lib/node-ui';
 import { NODE_W } from '../lib/graph-ops';
 import { AskFileCardBody, AskLocationCardBody } from './ask-media/cards';
@@ -77,11 +79,13 @@ export const NodeCard = memo(function NodeCard({
   onPatch,
 }: Props) {
   const tAsk = useTranslations('flb.builder.askMedia');
+  const tn = useTranslations('flb.builder.shell.nodeCard');
+  const tf = useFlb();
   const def = FLB_NODE_TYPES[node.type];
   const look = lookOf(node.type);
   const askTitle = ASK_CARD_TITLE_KEY[node.type];
-  const label = askTitle ? tAsk(askTitle) : (def?.label ?? node.type);
-  const group = def?.group ?? 'Node';
+  const label = askTitle ? tAsk(askTitle) : def ? nodeLabel(tf, node.type) : node.type;
+  const group = def ? groupLabel(tf, def.group) : tn('nodeFallback');
   const rows = flbPortsFor(node, portCtx);
   const isTrigger = node.type === 'trigger';
   const multi = flbIsMultiPort(node, portCtx);
@@ -117,7 +121,7 @@ export const NodeCard = memo(function NodeCard({
           onMouseEnter={() => onPortHover(`${node.id}:in`)}
           onMouseLeave={() => onPortHover(null)}
           onMouseDown={(e) => e.stopPropagation()}
-          title="input"
+          title={tn('input')}
         />
       ) : null}
 
@@ -129,7 +133,7 @@ export const NodeCard = memo(function NodeCard({
           <svg viewBox="0 0 16 16" className="h-2.5 w-2.5" fill="currentColor">
             <path d="M8 1.5l1.9 4 4.1.5-3 2.9.8 4-3.8-2-3.8 2 .8-4-3-2.9 4.1-.5z" />
           </svg>
-          START
+          {tn('start')}
         </div>
       ) : null}
 
@@ -160,7 +164,7 @@ export const NodeCard = memo(function NodeCard({
 
       {node.type === 'end' ? (
         <div className="px-3 py-4 text-center text-[11.5px] italic text-muted-foreground">
-          flow ends here
+          {tn('flowEnds')}
         </div>
       ) : null}
 
@@ -213,7 +217,7 @@ export const NodeCard = memo(function NodeCard({
                       : 'text-[var(--flb-ink-700)]'
                 }`}
               >
-                {r.label}
+                {portLabel(tf, node, r)}
               </div>
               <div
                 data-port={`out:${node.id}:${r.id}`}
@@ -224,7 +228,7 @@ export const NodeCard = memo(function NodeCard({
                 onMouseEnter={() => onPortHover(`${node.id}:${r.id}`)}
                 onMouseLeave={() => onPortHover(null)}
                 className={`port out ${r.kind === 'yes' ? 'is-yes ' : r.kind === 'no' ? 'is-no ' : ''}${hoveredPort === `${node.id}:${r.id}` ? 'active' : ''}`}
-                title={`out: ${r.label}`}
+                title={tn('outPort', { label: portLabel(tf, node, r) })}
               />
             </div>
           ))}
@@ -242,7 +246,7 @@ export const NodeCard = memo(function NodeCard({
           onMouseLeave={() => onPortHover(null)}
           className={`port out ${hoveredPort === `${node.id}:${rows[0]!.id}` ? 'active' : ''}`}
           style={{ top: '50%' }}
-          title="output"
+          title={tn('output')}
         />
       ) : null}
     </div>

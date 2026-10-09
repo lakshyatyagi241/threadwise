@@ -1,0 +1,83 @@
+{
+  "shell": {
+    "groups": {
+      "overview": "פלטפורמה",
+      "inbox": "תיבת דואר נכנס וצ׳אט",
+      "audience": "CRM",
+      "sales": "מכירות",
+      "campaigns": "קמפיינים",
+      "automation": "אוטומציה",
+      "store": "חנות",
+      "apps": "Marketplace",
+      "help": "תמיכה ועזרה",
+      "settings": "הגדרות"
+    },
+    "locked": "שדרוג",
+    "language": "שפה",
+    "theme": "ערכת נושא",
+    "themeLight": "בהיר",
+    "themeDark": "כהה",
+    "logout": "התנתק",
+    "openMenu": "פתח תפריט",
+    "admin": {
+      "title": "קונסולת פלטפורמה",
+      "note": "מסכי מנהל הפלטפורמה יופיעו כאן לאחר יצירת מנהל־על."
+    },
+    "soon": "בקרוב",
+    "new": "חדש",
+    "comingSoon": "בקרוב",
+    "appGate": {
+      "title": "{app} אינו חלק מסביבת העבודה שלך",
+      "body": "{app} הוא אפליקציה אופציונלית. הוסף אותה מ־Marketplace והיא תופיע בתפריט שלך.",
+      "bodyNoMarketplace": "{app} היא אפליקציה אופציונלית שאין לסביבת העבודה הזו. בקש ממנהל סביבת העבודה להוסיף אותה מ־Marketplace.",
+      "browse": "עיין ב־Marketplace",
+      "back": "חזרה ללוח הבקרה",
+      "unofficialTitle": "{app} אינה זמינה",
+      "unofficialBody": "{app} משמש רק עם מספרי WhatsApp אישיים המצומדים באמצעות קוד QR, שאינם מופעלים בסביבת העבודה שלך. WhatsApp מתחבר דרך WhatsApp Business API הרשמי."
+    },
+    "closeMenu": "סגור תפריט",
+    "mainMenu": "תפריט ראשי",
+    "userMenu": "תפריט חשבון",
+    "account": "חשבון",
+    "balance": "יתרה",
+    "pageSettings": {
+      "label": "הגדרות לדף זה",
+      "hint": "ההגדרות האלה מוצגות רק משום שהתפקיד שלך מאפשר לשנות אותן."
+    },
+    "notifications": "התראות",
+    "settings": "הגדרות",
+    "pinned": "עזרה והגדרות",
+    "nav": {
+      "analytics": "אנליטיקה",
+      "notifications": "התראות",
+      "inbox": "תיבת דואר נכנס",
+      "quickChat": "צ׳אט מהיר",
+      "callLogs": "יומני שיחות",
+      "teamChat": "צ׳אט צוות",
+      "leadFinder": "מאתר לידים",
+      "campaigns": "קמפיינים",
+      "broadcasts": "שידורים",
+      "scheduled": "מתוזמנות",
+      "templates": "תבניות",
+      "history": "היסטוריה",
+      "flows": "תהליכים",
+      "aiAssistants": "עוזרי AI",
+      "appointments": "פגישות",
+      "crmDashboard": "לוח בקרה CRM",
+      "store": "חנות",
+      "catalog": "קטלוג",
+      "support": "תמיכה",
+      "guidebook": "מדריך",
+      "pipelines": "צינורות",
+      "tasks": "משימות",
+      "companies": "חברות",
+      "emailTemplates": "תבניות אימייל",
+      "proposals": "הצעות",
+      "estimates": "הערכות מחיר",
+      "invoices": "חשבוניות",
+      "payments": "תשלומים"
+    },
+    "help": "עזרה",
+    "unreadCount": "{count, plural, one {# לא נקראה} two {# לא נקראו} other {# לא נקראו}}"
+  }
+}

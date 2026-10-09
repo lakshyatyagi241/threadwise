@@ -1,0 +1,268 @@
+{
+  "invoicing": {
+    "method": {
+      "bank": "Banka havalesi",
+      "manual": "Manuel",
+      "wa_pay": "WhatsApp Pay",
+      "storefront": "Çevrimiçi mağaza"
+    },
+    "toolbar": {
+      "currency": "Para birimi",
+      "currencyPlaceholder": "USD",
+      "issued": "Kesildi",
+      "issuedWindow": "Düzenleme tarih aralığı",
+      "due": "Vade",
+      "dueWindow": "Vade tarih aralığı",
+      "dueFrom": "Vade başlangıcı",
+      "dueTo": "Vade bitişi",
+      "docType": "Belge türü",
+      "anyDocType": "Tüm türler",
+      "mine": "Faturalarım",
+      "docTypes": {
+        "tax_invoice": "Vergi faturası",
+        "proforma": "Proforma",
+        "receipt": "Makbuz"
+      }
+    },
+    "strip": {
+      "label": "Ödenmesi gereken tutar",
+      "outstanding": "Ödenmemiş ({currency})",
+      "overdue": "Bunun vadesi geçmiş olanı"
+    },
+    "row": {
+      "creditNote": "Kredi notu oluştur",
+      "downloadPdf": "PDF indir"
+    },
+    "bulk": {
+      "sendLink": "Bağlantıyı gönderildi olarak işaretle",
+      "someSkipped": "{count, plural, other {Bu işlemi kabul etmediği için # seçili fatura atlandı.}}",
+      "done": {
+        "send": "{count, plural, other {# fatura gönderildi olarak işaretlendi.}}"
+      },
+      "confirm": {
+        "delete": {
+          "message": "{count, plural, other {# taslak kalıcı olarak silinecek. Taslak olmayan faturalara dokunulmayacak.}}"
+        }
+      },
+      "voidDialog": {
+        "title": "Seçili faturaları iptal et",
+        "close": "Kapat",
+        "keep": "Faturaları koru",
+        "confirm": "{count, plural, other {# faturayı iptal et}}",
+        "warning": "{count, plural, other {# fatura iptal edilecek. Numaraları korunur ancak artık ödenemez veya düzenlenemez.}}",
+        "skipped": "{count, plural, other {Yalnızca ödemesi ve kredi notu olmayan kesilmiş faturalar iptal edilebilir. Seçili # fatura atlanır.}}",
+        "reason": "Neden (her faturada saklanır)",
+        "reasonRequired": "Bu faturaların neden iptal edildiğini belirtin."
+      }
+    },
+    "actions": {
+      "sentVia": {
+        "link": "Bağlantıyla birlikte gönderildi olarak kaydedildi.",
+        "email": "Fatura e-posta ile gönderildi.",
+        "whatsapp": "Fatura WhatsApp üzerinden gönderildi."
+      },
+      "markedPaid": "Ödendi olarak işaretlendi.",
+      "linkRegenerated": "Yeni bağlantı oluşturuldu. Eskisi artık çalışmıyor.",
+      "linkRevoked": "Bağlantı kapatıldı.",
+      "linkUnavailable": "Bu faturanın etkin bağlantısı yok. Yeni bir tane oluşturmak için faturayı açın."
+    },
+    "voidDialog": {
+      "reasonHint": "Zorunlu. Faturanın zaman çizelgesinde saklanır.",
+      "reasonRequired": "Faturanın neden iptal edildiğini belirtin.",
+      "refundFirst": "Bu faturaya ödemeler alındı. Önce bunları iade edin (faturadaki Ödemeler listesinden), sonra iptal edin.",
+      "creditsFirst": "Bu faturaya karşı kredi notları var. Önce kredi notlarını iptal edin, sonra faturayı iptal edin."
+    },
+    "sendDialog": {
+      "loading": "Fatura yükleniyor",
+      "channel": "Nasıl göndermek istersiniz?",
+      "channels": {
+        "link": "Bağlantıyı kendim paylaşacağım",
+        "email": "E-posta",
+        "whatsapp": "WhatsApp"
+      },
+      "action": {
+        "link": "Gönderildi olarak işaretle",
+        "email": "E-posta gönder",
+        "whatsapp": "WhatsApp ile gönder"
+      },
+      "linkOff": "Bu faturanın etkin bağlantısı yok. Faturadaki bağlantı kartından yeni bir tane oluşturun, sonra paylaşın.",
+      "linkRecords": "Bağlantıyı kendiniz paylaşmak yalnızca gönderildiğini kaydeder.",
+      "noEmail": "Bu faturada e-posta adresi yok",
+      "noPhone": "Bu faturada telefon numarası yok",
+      "noEmailHelp": "Bu faturada alıcı e-postası yok. Bu pencereyi kapatın, Ayrıntıları düzenle ile bir tane ekleyin ve yeniden deneyin.",
+      "noPhoneHelp": "Bu faturada alıcı telefon numarası yok. Bu pencereyi kapatın, Ayrıntıları düzenle ile bir tane ekleyin ve yeniden deneyin.",
+      "message": "Mesaj",
+      "messageHint": "İsteğe bağlı. Faturaya eşlik eden mesaja eklenir.",
+      "deliveryNote": "Fatura alıcıya iletilmek üzere sıraya alındı. Zaman çizelgesinde ne zaman gönderildiği görünür."
+    },
+    "editDialog": {
+      "title": "Ayrıntıları düzenle",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "save": "Değişiklikleri kaydet",
+      "saved": "Fatura ayrıntıları kaydedildi.",
+      "reload": "Faturayı yeniden yükle",
+      "conflict": "Siz düzenlerken bu faturayı başka biri değiştirdi. En son sürümü görmek için yeniden yükleyin, sonra değişikliğinizi tekrar yapın.",
+      "intro": "Kesilmiş bir fatura kalemlerini, tutarlarını ve numaralandırmasını korur. Bu ayrıntılar yine de değişebilir.",
+      "email": "Alıcı e-postası",
+      "phone": "Alıcı telefonu",
+      "phoneHint": "Ülke koduyla birlikte, örneğin +14155550123",
+      "contact": "Kişi",
+      "owner": "Sahip",
+      "dueDate": "Vade tarihi",
+      "dueHint": "Ödeme koşullarını uzatın veya kısaltın.",
+      "reference": "Referans",
+      "notes": "Notlar",
+      "terms": "Koşullar"
+    },
+    "payDialog": {
+      "overpayNote": "Bu, bakiyeden {extra} fazla. Alacak olarak kaydedilmeden önce onay istenecek.",
+      "overpayConfirm": "Bakiyeden {extra} fazla tutar, faturada alacak olarak kaydedilip gösterilecek. Onaylamak için düğmeye yeniden basın.",
+      "problems": {
+        "tooMuch": "Bu, faturanın hâlâ borçlu olduğu tutardan fazla."
+      }
+    },
+    "markPaidDialog": {
+      "title": "Ödendi olarak işaretle",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "confirm": "Ödeme kaydet",
+      "message": "{amount} tutarındaki tüm bakiye bugün alındı olarak kaydedilsin mi?",
+      "method": "Alan kişi"
+    },
+    "refundDialog": {
+      "problems": {
+        "dateFuture": "İade tarihi gelecekte olamaz."
+      }
+    },
+    "paymentsSection": {
+      "refundChip": "İade",
+      "receipt": "Makbuz",
+      "refundOf": "{receipt} iade eder",
+      "refundedSoFar": "Şimdiye kadar {amount} iade edildi"
+    },
+    "activity": {
+      "none": "Henüz bir şey olmadı.",
+      "actors": {
+        "buyer": "Alıcı",
+        "gateway": "Ödeme geçidi",
+        "system": "Sistem"
+      },
+      "events": {
+        "sent": "Alıcıya gönderildi",
+        "overdue": "Vadesi geçti",
+        "partially_paid": "Kısmen ödendi",
+        "link_regenerated": "Genel bağlantı değiştirildi",
+        "link_revoked": "Genel bağlantı kapatıldı",
+        "pay_attempt": "Çevrimiçi ödeme denendi",
+        "credit_note_issued": "Kredi notu"
+      }
+    },
+    "linked": {
+      "invoiced": "Faturalandı",
+      "paid": "Ödendi",
+      "outstanding": "Borçlu",
+      "overdue": "Vadesi geçmiş",
+      "latest": "{count, plural, other {Son # fatura gösteriliyor.}}"
+    },
+    "detail": {
+      "editDetails": "Ayrıntıları düzenle",
+      "downloadPdf": "PDF",
+      "createCreditNote": "Kredi notu oluştur",
+      "linkOffBanner": "Alıcının bağlantısı kapalı, bu nedenle alıcı bu faturayı açamaz. Bağlantı kartında yeni bir bağlantı oluşturun.",
+      "refunded": "İade edildi",
+      "credited": "Alacaklandırıldı",
+      "credit": "Alacak",
+      "detailsLabel": "Fatura ayrıntıları",
+      "contact": "Kişi",
+      "company": "Şirket",
+      "quote": "Teklif",
+      "salesOrder": "Satış siparişi",
+      "recurring": "Tekrarlayan program",
+      "makeRecurring": "Tekrarlayan yap",
+      "reference": "Referans",
+      "owner": "Sahip",
+      "createdBy": "Oluşturan",
+      "overpaid": "Bu faturanın istediğinden fazla tutar alındı veya alacaklandırıldı. Fazlası alacak olarak gösterilir.",
+      "voidNeedsRefund": "Bu faturayı iptal etmek için önce ödemelerini iade edin. Ayrıca kredi notu olmamalıdır.",
+      "sources": {
+        "manual": "Elle oluşturuldu",
+        "quote": "Tekliften",
+        "order": "Siparişten",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Çevrimiçi mağaza",
+        "api": "API",
+        "ai": "AI Asistan",
+        "recurring": "Tekrarlayan fatura",
+        "sales_order": "Satış siparişi"
+      },
+      "creditNotes": {
+        "title": "Kredi notları",
+        "create": "Kredi notu oluştur",
+        "loading": "Kredi notları yükleniyor",
+        "none": "Bu faturaya karşı kredi notu yok.",
+        "draft": "Taslak",
+        "status": {
+          "draft": "Taslak",
+          "issued": "Kesildi",
+          "void": "İptal et"
+        }
+      }
+    },
+    "linkCard": {
+      "title": "Herkese açık bağlantı",
+      "address": "Bağlantı adresi",
+      "state": {
+        "active": "Aktif",
+        "revoked": "Kapalı",
+        "expired": "Süresi doldu"
+      },
+      "off": {
+        "revoked": "Bağlantı kapatıldı. Alıcı, faturanın kullanılamadığını belirten bir sayfa görür.",
+        "expired": "Bağlantının süresi doldu. Alıcı, faturanın kullanılamadığını belirten bir sayfa görür."
+      },
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "expires": "Son geçerlilik",
+      "revokedAt": "Kapatıldı",
+      "views": "Açılma sayısı",
+      "firstViewed": "İlk açılış",
+      "lastViewed": "Son açılış",
+      "open": "Alıcının sayfasını aç",
+      "regenerate": "Yeni bağlantı",
+      "revoke": "Kapat",
+      "close": "Kapat",
+      "cancel": "Vazgeç",
+      "regenerateTitle": "Yeni bağlantı oluştur",
+      "regenerateWarning": "Mevcut bağlantı hemen çalışmayı durdurur. Bağlantıya sahip olan herkes faturanın kullanılamadığını görür.",
+      "regenerateConfirm": "Yeni bağlantı oluştur",
+      "expiry": "Yeni bağlantı şu süre için geçerli:",
+      "expiryNever": "Süre sınırı yok",
+      "expiryDays": "{count, plural, other {# gün}}",
+      "revokeTitle": "Bağlantı kapatılsın mı?",
+      "revokeMessage": "Alıcı bu faturayı bağlantıdan artık açamaz veya ödeyemez. Daha sonra yeni bir bağlantı oluşturabilirsiniz.",
+      "revokeConfirm": "Bağlantıyı kapat"
+    },
+    "errors": {
+      "codes": {
+        "INV_NOT_DRAFT": "Bu fatura zaten düzenlendi; kalemleri ve tutarları artık değiştirilemez.",
+        "INV_NOT_ISSUED": "Bunu yalnızca düzenlenmiş bir fatura yapabilir. Önce taslağı düzenleyin.",
+        "INV_ALREADY_VOID": "Bu fatura zaten iptal edildi.",
+        "INV_HAS_PAYMENTS": "Bu faturanın hâlâ ödemeleri var. Önce bunları iade edin, sonra faturayı iptal edin.",
+        "INV_HAS_CREDITS": "Bu faturaya bağlı alacak dekontları var. Önce dekontları iptal edin, sonra faturayı iptal edin.",
+        "INV_NOT_DELETABLE": "Yalnızca taslak silinebilir. Bunun yerine bu faturayı iptal edin.",
+        "INV_NO_RECIPIENT": "Bu kanal için faturada e-posta adresi veya telefon numarası yok. Ayrıntıları düzenle bölümünden ekleyip yeniden deneyin.",
+        "INV_LINK_UNAVAILABLE": "Bu faturanın aktif bir bağlantısı yok. Bağlantı kartından yeni bir tane oluşturun.",
+        "INV_OWNER_INVALID": "Bu kişi çalışma alanının aktif bir üyesi değil. Başka bir sahip seçin.",
+        "PAY_OVERPAYMENT": "Bu tutar, faturanın kalan borcundan fazla. Tutarı düşürün veya bir alacak kaydettiğinizi onaylayın.",
+        "PAY_FUTURE_DATE": "Ödeme tarihi gelecekte olamaz.",
+        "PAY_CURRENCY_MISMATCH": "Ödeme, faturayla aynı para biriminde olmalıdır.",
+        "PAY_REFUND_EXCEEDS": "Bu tutar, bu ödemeden hâlâ iade edilebilecek tutarı aşıyor.",
+        "PAY_NOT_REFUNDABLE": "Bu kayıt iade edilemez. Yalnızca bakiyesi kalan bir ödeme iade edilebilir.",
+        "PAY_NOTHING_TO_PAY": "Bu faturada ödenecek bir tutar kalmadı.",
+        "ROW_VERSION_CONFLICT": "Bu faturayı az önce başka biri değiştirdi. En son sürümü görmek için sayfayı yenileyip tekrar deneyin."
+      }
+    }
+  }
+}

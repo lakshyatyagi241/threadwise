@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { cookies } from 'next/headers';
 import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages } from 'next-intl/server';
+import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { dirOf } from '@/i18n/locales';
 import { THEME_COOKIE } from '@/lib/auth/cookies';
@@ -18,7 +18,7 @@ import './globals.css';
 /** The site-wide tags come from the platform settings (TW-SET-026, 027, 036); without them the page still has a title. */
 export async function generateMetadata(): Promise<Metadata> {
   const cfg = await getSiteConfig();
-  return cfg ? siteMetadata(cfg) : { title: 'CRM' };
+  return cfg ? siteMetadata(cfg) : { title: (await getTranslations('common'))('appName') };
 }
 
 export async function generateViewport(): Promise<Viewport> {

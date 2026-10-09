@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "Si può modificare solo un ordine in bozza. Un ordine confermato è bloccato: annullalo e creane uno nuovo per cambiarne righe o prezzi.",
+        "SO_NOT_CONFIRMED": "Conferma prima l'ordine. Solo un ordine confermato può essere fatturato o avere una consegna registrata.",
+        "SO_CANCELLED": "Questo ordine è annullato, quindi non si può fare più nulla.",
+        "SO_QUOTE_NOT_ACCEPTED": "Solo una proposta o un preventivo accettato può diventare un ordine di vendita. Segnalo prima come accettato.",
+        "SO_QUOTE_TAKEN": "Questa proposta o questo preventivo ha già un ordine di vendita.",
+        "SO_QUANTITY_EXCEEDS": "Una quantità è superiore a quanto resta su quella riga. Abbassala e riprova.",
+        "SO_NOTHING_TO_INVOICE": "Non resta nulla da fare: tutto è già fatturato o consegnato.",
+        "SO_HAS_INVOICES": "Una fattura creata da questo ordine è ancora valida. Annulla o elimina prima la fattura, poi annulla l'ordine."
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "Ordini di vendita",
+        "subtitle": "Offerte accettate trasformate in ordini, fatturate in un'unica soluzione o a parti, e consegnate.",
+        "newOrder": "Nuovo ordine di vendita",
+        "search": "Cerca per numero, cliente o riferimento",
+        "reset": "Reimposta",
+        "refresh": "Aggiorna",
+        "tableLabel": "Ordini di vendita",
+        "noAccessTitle": "Accesso negato",
+        "noAccess": "Non hai il permesso di vedere gli ordini di vendita.",
+        "emptyFilteredTitle": "Nessun ordine corrisponde",
+        "emptyFiltered": "Nessun risultato per questi filtri. Modificali o reimpostali.",
+        "resetFilters": "Reimposta filtri",
+        "loading": "Caricamento ordini di vendita",
+        "showing": "Mostra {count}",
+        "loadMore": "Carica altri",
+        "allLoaded": "Tutti caricati",
+        "contactLoading": "Caricamento...",
+        "empty": {
+          "all": {
+            "title": "Nessun ordine di vendita",
+            "message": "Trasforma una proposta o un preventivo accettato in un ordine, oppure creane uno da zero."
+          },
+          "draft": {
+            "title": "Nessuna bozza d'ordine",
+            "message": "Qui compaiono gli ordini che stai ancora preparando."
+          },
+          "confirmed": {
+            "title": "Nessun ordine confermato",
+            "message": "Qui compaiono gli ordini confermati in attesa di essere fatturati o consegnati."
+          },
+          "cancelled": {
+            "title": "Nessun ordine annullato",
+            "message": "Qui compaiono gli ordini annullati, con il motivo."
+          },
+          "closed": {
+            "title": "Nessun ordine chiuso",
+            "message": "Un ordine si chiude quando tutto ciò che contiene è fatturato e consegnato."
+          }
+        }
+      },
+      "strip": {
+        "label": "Valore degli ordini aperti",
+        "openValue": "Ordini aperti ({currency})"
+      },
+      "tabs": {
+        "label": "Stato ordine",
+        "all": "Tutti",
+        "draft": "Bozza",
+        "confirmed": "Confermato",
+        "cancelled": "Annullato",
+        "closed": "Chiuso",
+        "count": "{count} ordini"
+      },
+      "quick": {
+        "label": "Filtri rapidi",
+        "toInvoice": "Da fatturare",
+        "toFulfil": "Da evadere"
+      },
+      "table": {
+        "scrollArea": "Tabella degli ordini di vendita",
+        "columns": {
+          "number": "Ordine",
+          "buyer": "Cliente",
+          "quote": "Preventivo",
+          "deal": "Trattativa",
+          "expected": "Prevista",
+          "status": "Stato",
+          "invoicing": "Fatturazione",
+          "fulfilment": "Consegna",
+          "total": "Totale",
+          "invoices": "Fatture"
+        }
+      },
+      "row": {
+        "moreFor": "Azioni per {name}",
+        "open": "Apri",
+        "edit": "Modifica",
+        "confirm": "Conferma ordine",
+        "invoiceAll": "Fattura tutto il residuo",
+        "fulfilAll": "Segna tutto come consegnato",
+        "cancel": "Annulla ordine",
+        "delete": "Elimina bozza"
+      },
+      "status": {
+        "draft": "Bozza",
+        "confirmed": "Confermato",
+        "cancelled": "Annullato",
+        "closed": "Chiuso"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "Non fatturato",
+        "partially_invoiced": "Parzialmente fatturato",
+        "invoiced": "Fatturato"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "Non consegnato",
+        "partially_fulfilled": "Parzialmente consegnato",
+        "fulfilled": "Consegnato"
+      },
+      "actions": {
+        "failed": "Operazione non riuscita.",
+        "confirmed": "Ordine {number} confermato.",
+        "invoicedDraft": "Bozza di fattura creata dall'ordine.",
+        "invoicedIssued": "Fattura {number} emessa.",
+        "fulfilled": "Consegna registrata.",
+        "cancelled": "Ordine {number} annullato.",
+        "deleted": "Bozza d'ordine eliminata."
+      },
+      "dialog": {
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "how": "Quali quantità",
+        "mode": {
+          "all": "Tutto il residuo",
+          "lines": "Scegli le quantità"
+        },
+        "left": "{qty} residui",
+        "qtyExceeds": "Su questa riga ne resta al massimo {max}.",
+        "qtyInvalid": "Inserisci una quantità con al massimo 4 decimali, oppure 0 per saltare questa riga.",
+        "nothingHint": "Tutto questo ordine è già fatturato."
+      },
+      "confirmDialog": {
+        "title": "Confermare questo ordine?",
+        "message": "Confermando, righe e prezzi vengono bloccati. Dopo puoi fatturare l'ordine, in un'unica soluzione o a parti, e registrare le consegne. Puoi ancora annullarlo finché non c'è una fattura valida.",
+        "confirm": "Conferma ordine"
+      },
+      "cancelDialog": {
+        "title": "Annullare questo ordine?",
+        "warning": "Un ordine annullato non può più essere fatturato o consegnato, e non può essere riaperto.",
+        "reason": "Motivo",
+        "reasonHint": "Conservato sull'ordine per il tuo team.",
+        "reasonRequired": "Spiega perché l'ordine viene annullato.",
+        "reasonTooLong": "Mantieni il motivo sotto i {max} caratteri.",
+        "cancelOrder": "Annulla ordine",
+        "hasInvoices": "Questo ordine ha ancora una fattura. Annulla o elimina prima la fattura (una fattura annullata restituisce le sue quantità), poi annulla l'ordine.",
+        "seeInvoices": "Vedi le fatture"
+      },
+      "deleteDialog": {
+        "title": "Eliminare questa bozza?",
+        "message": "La bozza d'ordine viene rimossa definitivamente. Un ordine confermato non può essere eliminato, solo annullato.",
+        "delete": "Elimina bozza"
+      },
+      "invoiceDialog": {
+        "title": "Fattura questo ordine",
+        "intro": "Fattura l'ordine ai prezzi bloccati. Puoi fatturarlo a parti: ciò che non viene fatturato ora resta sull'ordine.",
+        "invoiceAndIssue": "Crea ed emetti fattura",
+        "createDraft": "Crea bozza di fattura",
+        "issueDate": "Data di emissione",
+        "issueDateHint": "Lascia vuoto per oggi ({today}).",
+        "dueDate": "Data di scadenza",
+        "terms": "Termini di pagamento",
+        "termsDefault": "Predefinito dello spazio di lavoro",
+        "termsOnIssue": "Alla emissione",
+        "termsDays": "{count} giorni",
+        "issueNow": "Emetti subito la fattura",
+        "issueNowHint": "La fattura riceve il numero e può essere inviata subito.",
+        "draftHint": "Lasciala in bozza per controllarla prima dell'emissione.",
+        "includeShipping": "Fattura la spedizione con questa fattura",
+        "problems": {
+          "nothing": "Scegli una quantità maggiore di zero in almeno una riga.",
+          "issueDateInvalid": "Inserisci una data di emissione valida.",
+          "dueDateInvalid": "Inserisci una data di scadenza valida.",
+          "dueBeforeIssue": "La data di scadenza non può essere precedente alla data di emissione."
+        }
+      },
+      "fulfilDialog": {
+        "title": "Registra consegna",
+        "intro": "Registra ciò che è stato consegnato al cliente. La consegna è tracciata separatamente dalla fatturazione: può venire prima l'una o l'altra.",
+        "record": "Registra consegna",
+        "note": "Nota",
+        "noteHint": "Facoltativo, ad esempio un numero di documento di trasporto.",
+        "problems": {
+          "nothing": "Scegli una quantità maggiore di zero in almeno una riga.",
+          "noteTooLong": "Mantieni la nota sotto i {max} caratteri."
+        }
+      },
+      "detail": {
+        "noAccessTitle": "Accesso negato",
+        "noAccess": "Non hai il permesso di vedere gli ordini di vendita.",
+        "loading": "Caricamento dell'ordine",
+        "back": "Torna agli ordini di vendita",
+        "noBuyer": "Nessun cliente",
+        "edit": "Modifica",
+        "confirm": "Conferma ordine",
+        "recordDelivery": "Registra consegna",
+        "invoice": "Fattura...",
+        "more": "Altre azioni",
+        "cancel": "Annulla ordine",
+        "delete": "Elimina bozza",
+        "cancelledOn": "Annullato il {date}",
+        "draftHint": "Questo ordine è una bozza. Confermalo per bloccare i prezzi e avviare fatturazione e consegna.",
+        "notes": "Note",
+        "terms": "Condizioni",
+        "progress": "Avanzamento",
+        "invoiced": "Fatturato",
+        "fulfilled": "Consegnato"
+      },
+      "lines": {
+        "title": "Righe",
+        "scrollArea": "Righe dell'ordine",
+        "item": "Articolo",
+        "ordered": "Ordinato",
+        "invoiced": "Fatturato",
+        "fulfilled": "Consegnato",
+        "toInvoice": "Da fatturare",
+        "unitPrice": "Prezzo unitario",
+        "amount": "Importo",
+        "taxLine": "{name} {rate}%",
+        "taxRate": "Imposta {rate}%",
+        "invoicedBar": "Quota fatturata di {name}",
+        "fulfilledBar": "Quota consegnata di {name}"
+      },
+      "totals": {
+        "title": "Totali",
+        "subtotal": "Imponibile",
+        "discount": "Sconto",
+        "shipping": "Spedizione",
+        "shippingBilled": "Fatturato",
+        "shippingPending": "Fatturata con la prima fattura",
+        "tax": "Imposta",
+        "total": "Totale"
+      },
+      "info": {
+        "title": "Dettagli",
+        "buyer": "Cliente",
+        "email": "Email",
+        "phone": "Telefono",
+        "quote": "Preventivo",
+        "deal": "Trattativa",
+        "owner": "Responsabile",
+        "reference": "Riferimento",
+        "expected": "Prevista",
+        "created": "Creato il",
+        "confirmed": "Confermato il"
+      },
+      "invoices": {
+        "title": "Fatture di questo ordine",
+        "none": "Nessuna fattura è stata ancora creata da questo ordine.",
+        "noneDraft": "Le fatture possono essere create una volta confermato l'ordine.",
+        "draft": "Bozza",
+        "voidNote": "Una fattura annullata restituisce le sue quantità all'ordine."
+      },
+      "builder": {
+        "noAccessTitle": "Accesso negato",
+        "noAccess": "Non hai il permesso di modificare gli ordini di vendita.",
+        "loading": "Caricamento",
+        "frozen": "Questo ordine è confermato, quindi righe e prezzi sono bloccati. Annullalo e creane uno nuovo per modificarli.",
+        "openOrder": "Apri l'ordine",
+        "back": "Indietro",
+        "editTitle": "Modifica {number}",
+        "newTitle": "Nuovo ordine di vendita",
+        "unsaved": "Modifiche non salvate",
+        "cancel": "Annulla",
+        "saveChanges": "Salva modifiche",
+        "createDraft": "Crea bozza",
+        "conflict": "Qualcun altro ha modificato questa bozza mentre stavi modificando. Ricarica per vedere la sua versione; le tue modifiche andranno perse.",
+        "reload": "Ricarica",
+        "saved": "Bozza salvata.",
+        "created": "Ordine {number} creato come bozza.",
+        "fixProblems": "Correggi prima i campi evidenziati.",
+        "serverRejected": "Il server non ha accettato alcuni valori. Controlla i campi e riprova.",
+        "startFrom": "Parti da",
+        "source": {
+          "scratch": "Un ordine vuoto",
+          "quote": "Una proposta o un preventivo accettato"
+        },
+        "loadingQuote": "Caricamento dell'offerta...",
+        "buyer": "Cliente",
+        "contact": "Contatto",
+        "contactHint": "Scegli un contatto a cui collegare l'ordine, oppure digita il cliente qui sotto.",
+        "buyerName": "Nome del cliente",
+        "fromQuoteHint": "Se vuoto, si usa il cliente dell'offerta.",
+        "buyerEmail": "Email",
+        "buyerPhone": "Telefono",
+        "details": "Dettagli ordine",
+        "currency": "Valuta",
+        "currencyHint": "Tre lettere, come EUR o USD.",
+        "currencyLocked": "Fissata una volta creato l'ordine.",
+        "expectedDate": "Data prevista",
+        "expectedHint": "Quando il cliente prevede la consegna.",
+        "reference": "Riferimento",
+        "referenceHint": "Ad esempio il numero d'ordine del cliente.",
+        "linesFromQuote": "Righe",
+        "linesFromQuoteHint": "L'ordine riprende righe, prezzi e imposte dell'offerta accettata, con lo sconto del documento incorporato nelle righe. Puoi ancora modificare le righe della bozza dopo la creazione.",
+        "lineItems": "Righe",
+        "shippingNotes": "Spedizione, note e condizioni",
+        "shipping": "Spedizione ({currency})",
+        "shippingHint": "Fatturata con la prima fattura.",
+        "notes": "Note",
+        "notesHint": "Mostrate sull'ordine.",
+        "terms": "Condizioni",
+        "termsHint": "Riportate sulle fatture create da questo ordine.",
+        "draftNote": "L'ordine resta una bozza finché non lo confermi. Confermando, i prezzi vengono bloccati.",
+        "quoteTotals": "Totali dell'offerta",
+        "quoteTotalsNote": "Come nell'offerta accettata. I valori dell'ordine compaiono una volta creato.",
+        "subtotal": "Imponibile",
+        "discount": "Sconto",
+        "tax": "Imposta",
+        "total": "Totale",
+        "openExisting": "Apri ordine {number}",
+        "viewOrders": "Vedi tutti gli ordini",
+        "pickAnother": "Scegli un'altra offerta",
+        "problems": {
+          "buyerRequired": "Scegli un contatto o digita il nome del cliente.",
+          "emailInvalid": "Inserisci un indirizzo email valido.",
+          "currencyInvalid": "Inserisci un codice valuta di tre lettere.",
+          "expectedDateInvalid": "Inserisci una data valida.",
+          "shippingInvalid": "Inserisci un importo valido.",
+          "noLines": "Aggiungi almeno una riga.",
+          "referenceTooLong": "Mantieni il riferimento sotto i 191 caratteri."
+        },
+        "lineProblems": {
+          "descriptionRequired": "Descrivi questa riga.",
+          "qtyInvalid": "Inserisci una quantità maggiore di zero.",
+          "priceInvalid": "Inserisci un prezzo valido.",
+          "lineDiscountInvalid": "Inserisci uno sconto valido.",
+          "hsnRequired": "Inserisci il codice HSN/SAC.",
+          "hsnInvalid": "Inserisci un codice HSN/SAC valido.",
+          "taxRateRemoved": "L'aliquota di questa riga non esiste più. Sceglierne una attuale."
+        }
+      },
+      "quotePicker": {
+        "search": "Cerca offerte accettate",
+        "results": "Proposte e preventivi accettati",
+        "loading": "Caricamento offerte",
+        "noMatch": "Nessuna offerta accettata corrisponde.",
+        "none": "Non c'è ancora nessuna proposta o preventivo accettato.",
+        "kind": {
+          "proposal": "Proposta",
+          "estimate": "Preventivo"
+        },
+        "untitled": "Senza titolo",
+        "accepted": "Accettata il {date}"
+      }
+    }
+  }
+}

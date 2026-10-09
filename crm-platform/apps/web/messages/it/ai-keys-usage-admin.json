@@ -1,0 +1,221 @@
+{
+  "ai-keys-usage-admin": {
+    "nav": {
+      "usage": "Utilizzo AI",
+      "keys": "Chiavi dei provider AI"
+    },
+    "admin": {
+      "nav": {
+        "group": "AI",
+        "keys": "Chiavi dei provider AI",
+        "dashboard": "Utilizzo AI"
+      }
+    },
+    "common": {
+      "loading": "Caricamento",
+      "retry": "Riprova",
+      "requestId": "ID richiesta",
+      "dismiss": "Ignora",
+      "tokens": "{count, number} token",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Non hai l'autorizzazione per vedere questo contenuto.",
+        "request": "Impossibile completare la richiesta.",
+        "unexpected": "Qualcosa è andato storto da parte nostra. Riprova tra un attimo.",
+        "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+        "conflict": "Qualcun altro ha modificato questo elemento. La pagina è stata ricaricata: applica di nuovo la modifica.",
+        "keyRequired": "Aggiungi una chiave API prima di attivare questo provider.",
+        "validation": "Alcuni valori non sono validi. Controlla i campi evidenziati.",
+        "notFound": "Questo elemento non esiste più."
+      }
+    },
+    "windows": {
+      "label": "Intervallo di tempo",
+      "7d": "7 giorni",
+      "30d": "30 giorni",
+      "90d": "90 giorni",
+      "1y": "1 anno",
+      "custom": "Personalizzato",
+      "from": "Da",
+      "to": "A",
+      "pick": "Scegli una data di inizio e di fine.",
+      "invalid": "La data di fine è precedente alla data di inizio.",
+      "tooLong": "Scegli un intervallo di {days} giorni o meno."
+    },
+    "keys": {
+      "eyebrow": "Admin · Sistema · Provider AI",
+      "title": "Chiavi API AI",
+      "description": "Chiavi globali per ogni provider AI supportato. I workspace con piani senza «Usa la tua chiave» le usano come riserva. Crittografate a riposo.",
+      "superOnly": "Solo un super admin può gestire le chiavi AI della piattaforma.",
+      "summary": {
+        "providers": "Provider",
+        "providersHint": "predefinito",
+        "active": "Attivo",
+        "activeHint": "abilitato come riserva",
+        "ready": "Pronto",
+        "readyHint": "attivo + ha una chiave",
+        "noKey": "Nessuna chiave impostata",
+        "noKeyHint": "incolla una chiave per renderlo pronto"
+      },
+      "groups": {
+        "llm": "Modelli linguistici",
+        "voice": "Voce"
+      },
+      "card": {
+        "active": "Attivo",
+        "off": "Disabilitato",
+        "keySaved": "Chiave salvata",
+        "keySavedLast4": "Chiave salvata, termina con {last4}",
+        "noKey": "Nessuna chiave",
+        "unreadable": "Impossibile leggere la chiave salvata, incollala di nuovo",
+        "slug": "ID provider",
+        "apiKey": "Chiave API",
+        "apiKeyHint": "Lascia vuoto per mantenere la chiave salvata.",
+        "apiKeyPlaceholder": "Incolla qui la chiave",
+        "apiKeySavedPlaceholder": "•••••••••• (salvata — lascia vuoto per mantenerla)",
+        "defaultModel": "Modello predefinito",
+        "pickModel": "— Scegli un modello predefinito —",
+        "customModel": "{model} (personalizzato)",
+        "sortOrder": "Ordine",
+        "maxTokens": "Token massimi per richiesta",
+        "maxTokensHint": "Limite facoltativo alla lunghezza di una risposta per ogni workspace. Vuoto significa nessun limite.",
+        "extraModels": "Modelli aggiuntivi",
+        "extraModelsHint": "Facoltativo. ID dei modelli da offrire accanto a quello predefinito, separati da virgole.",
+        "save": "Salva {name}",
+        "saving": "Salvataggio",
+        "turnOn": "Attiva",
+        "turnOff": "Disabilita",
+        "removeKey": "Rimuovi chiave",
+        "removeTitle": "Rimuovere la chiave {name}?",
+        "removeBody": "I workspace smetteranno di usare {name} finché non aggiungerai di nuovo una chiave. Il provider viene disattivato.",
+        "removeConfirm": "Rimuovi chiave",
+        "cancel": "Annulla"
+      },
+      "toasts": {
+        "saved": "{name} salvato.",
+        "savedOn": "{name} salvato e attivato.",
+        "on": "{name} attivato.",
+        "off": "{name} disattivato.",
+        "removed": "Chiave {name} rimossa."
+      },
+      "help": {
+        "title": "Come vengono usate queste chiavi",
+        "body": "La chiave propria di un workspace ha la precedenza solo se il suo piano lo consente. Altrimenti viene usato il provider attivo corrispondente qui. Disattivare un provider significa che i workspace senza una chiave propria non possono usarlo."
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Admin / Dashboard AI",
+      "title": "Utilizzo AI e consumo di token",
+      "description": "Ogni chiamata AI sulla piattaforma: quale provider, quale modello, quale workspace, con chiavi della piattaforma o proprie (BYOK), con una spesa stimata.",
+      "kpis": {
+        "tokens": "Token consumati",
+        "tokensHint": "in questo intervallo",
+        "cost": "Costo stimato",
+        "costHint": "stima mista",
+        "calls": "Chiamate AI",
+        "callsHint": "richieste registrate",
+        "workspaces": "Workspace che usano l'AI",
+        "workspacesHint": "attivi"
+      },
+      "daily": "Consumo giornaliero di token",
+      "byProvider": "Token per provider",
+      "split": "Chi paga: piattaforma o BYOK",
+      "splitPlatform": "Chiavi della piattaforma",
+      "splitOwn": "Chiavi proprie (BYOK)",
+      "topWorkspaces": "Workspace con più consumo di token",
+      "topModels": "Modelli principali",
+      "keyHealth": "Stato delle chiavi AI",
+      "live": "Attivo",
+      "notLive": "Off",
+      "peak": "picco {value}/giorno",
+      "dailyEmpty": "Nessuna chiamata AI registrata in questo intervallo.",
+      "providerCalls": "{count, number} chiamate",
+      "providerEmpty": "Ancora nessun utilizzo.",
+      "splitNote": "Solo i token con chiavi della piattaforma contano per il limite AI mensile di un piano. I workspace BYOK spendono sul proprio account del provider.",
+      "workspaceEmpty": "Ancora nessun utilizzo AI dei workspace.",
+      "workspaceMeta": "{count, number} chiamate",
+      "workspaceByok": "{tokens} BYOK",
+      "modelEmpty": "Ancora nessun utilizzo dei modelli.",
+      "modelMeta": "{provider} · {count, number} chiamate",
+      "manageKeys": "Gestisci chiavi",
+      "noDefaultModel": "nessun modello predefinito",
+      "noPlatformKeys": "Nessuna chiave AI della piattaforma configurata.",
+      "byokKeys": "Chiavi BYOK attive",
+      "byokWorkspaces": "Workspace con BYOK"
+    },
+    "usage": {
+      "title": "Utilizzo AI",
+      "description": "Ogni chiamata AI effettuata dal tuo workspace: token consumati, per modello e provider, chiavi del piano o tue, e un costo stimato.",
+      "kpis": {
+        "tokens": "Token usati",
+        "calls": "{count, plural, one {# chiamata AI} other {# chiamate AI}}",
+        "platform": "Chiavi del piano",
+        "ownKeys": "Le tue chiavi (BYOK)",
+        "cost": "Costo stimato",
+        "costHint": "tariffa mista dei provider",
+        "providers": "Provider",
+        "models": "Modelli"
+      },
+      "cap": {
+        "title": "Questo mese · limite AI del piano",
+        "used": "{used, number} di {limit, number} token usati questo mese",
+        "unlimited": "{used, number} token usati questo mese: illimitati nel tuo piano",
+        "reached": "Sei quasi al limite mensile. Passa a un piano superiore o aggiungi le tue chiavi (BYOK) per continuare a usare l'AI.",
+        "note": "I token BYOK usano il tuo account del provider e non contano mai per il limite del tuo piano."
+      },
+      "daily": "Consumo giornaliero di token",
+      "byProvider": "Per provider",
+      "split": "Chiavi del piano e tue chiavi",
+      "splitPlatform": "Chiavi del piano",
+      "splitOwn": "Le tue chiavi (BYOK)",
+      "models": "Per modello",
+      "columns": {
+        "model": "Modello",
+        "provider": "Provider",
+        "tokens": "Token",
+        "calls": "Chiamate",
+        "prompt": "Prompt",
+        "completion": "Completamento"
+      },
+      "empty": "Ancora nessun utilizzo AI in questo intervallo.",
+      "costNote": "Il costo è una stima basata sulle tariffe miste per token pubblicate dai provider e può differire dalla fattura del tuo provider. Il conteggio dei token è esatto."
+    },
+    "own": {
+      "title": "Le tue chiavi dei provider AI",
+      "description": "Aggiungi la tua chiave per un fornitore così le funzioni AI usano il tuo account invece di quello condiviso. Le chiavi sono crittografate e non vengono più mostrate.",
+      "allowed": "Il tuo piano dà la precedenza alle tue chiavi.",
+      "notAllowed": "Il tuo piano non include ancora le chiavi proprie. Puoi salvarle ora, ma le chiamate continueranno a usare la chiave condivisa finché non passi a un piano superiore.",
+      "add": "Aggiungi una chiave",
+      "provider": "Provider",
+      "apiKey": "Chiave API",
+      "apiKeyHint": "Almeno 8 caratteri.",
+      "save": "Salva chiave",
+      "replace": "Sostituisci chiave",
+      "saving": "Salvataggio",
+      "on": "On",
+      "off": "Disabilitata",
+      "ends": "Termina con {last4}",
+      "using": "Le chiamate usano",
+      "usingOwn": "la tua chiave",
+      "usingShared": "la chiave condivisa",
+      "usingNone": "nessuna chiave (nulla di disponibile)",
+      "turnOn": "Attiva",
+      "turnOff": "Disattiva",
+      "remove": "Rimuovi",
+      "removeTitle": "Rimuovere la tua chiave {name}?",
+      "removeBody": "Le chiamate ripiegano sulla chiave condivisa, se disponibile.",
+      "removeConfirm": "Rimuovi chiave",
+      "cancel": "Annulla",
+      "empty": "Non hai aggiunto nessuna chiave.",
+      "toasts": {
+        "saved": "Chiave {name} salvata.",
+        "on": "Chiave {name} attivata.",
+        "off": "Chiave {name} disattivata.",
+        "removed": "Chiave {name} rimossa."
+      },
+      "errors": {
+        "tooShort": "Una chiave ha almeno 8 caratteri."
+      }
+    }
+  }
+}

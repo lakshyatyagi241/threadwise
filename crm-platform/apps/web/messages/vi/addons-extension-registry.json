@@ -1,0 +1,307 @@
+{
+  "addons-extension-registry": {
+    "nav": {
+      "group": "Tiện ích bổ sung và mô-đun",
+      "packs": "Tiện ích bổ sung (thanh toán)",
+      "extensions": "Tiện ích bổ sung (mã)",
+      "workspace": "Tiện ích bổ sung"
+    },
+    "common": {
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "cancel": "Hủy",
+      "save": "Lưu",
+      "saving": "Đang lưu",
+      "close": "Đóng",
+      "dismiss": "Bỏ qua",
+      "admin": "Quản trị",
+      "settings": "Cài đặt",
+      "optional": "tùy chọn",
+      "required": "bắt buộc",
+      "readOnly": "Bạn có thể xem trang này nhưng chỉ quản trị viên cấp cao mới có thể thay đổi.",
+      "requestId": "ID yêu cầu",
+      "errors": {
+        "forbidden": "Bạn không có quyền truy cập trang này.",
+        "request": "Không thể hoàn tất yêu cầu.",
+        "unexpected": "Đã xảy ra lỗi. Vui lòng thử lại sau giây lát.",
+        "conflict": "Có người khác vừa thay đổi nội dung này. Hãy tải lại và thử lại."
+      }
+    },
+    "packs": {
+      "crumbHere": "Tiện ích bổ sung",
+      "eyebrow": "Quản trị · Thanh toán & gói · Tiện ích bổ sung",
+      "titleLead": "Tiện ích",
+      "titleAccent": " bổ sung",
+      "title": "Tiện ích bổ sung",
+      "description": "Các gói tính năng mua lẻ mà khách hàng mua thêm ngoài gói của họ, như \"Tiện ích chiến dịch\" hoặc \"+1 số WhatsApp\". Mỗi tiện ích bổ sung cấp các tính năng và giới hạn bạn đặt, được gộp vào gói của khách hàng. Chúng hiển thị trên trang Tài khoản của khách hàng khi họ đang dùng một gói hoạt động.",
+      "new": "Tiện ích bổ sung mới",
+      "empty": {
+        "title": "Chưa có tiện ích bổ sung nào.",
+        "action": "Tạo tiện ích bổ sung đầu tiên"
+      },
+      "table": {
+        "label": "Tiện ích bổ sung",
+        "name": "Tên",
+        "price": "Giá",
+        "period": "Chu kỳ",
+        "grants": "Cấp quyền",
+        "status": "Trạng thái",
+        "actions": "Thao tác"
+      },
+      "price": {
+        "free": "Miễn phí",
+        "lifetime": "một lần"
+      },
+      "period": {
+        "days": "{count} ngày",
+        "weeks": "{count} tuần",
+        "months": "{count} tháng",
+        "years": "{count} năm"
+      },
+      "grants": {
+        "none": "chưa đặt",
+        "unlimited": "{name} không giới hạn",
+        "add": "+{amount} {name}",
+        "more": "+{count}"
+      },
+      "status": {
+        "active": "Hoạt động",
+        "off": "Tắt"
+      },
+      "actions": {
+        "edit": "Sửa",
+        "enable": "Bật",
+        "disable": "Tắt",
+        "delete": "Xóa"
+      },
+      "toasts": {
+        "created": "Đã tạo tiện ích bổ sung.",
+        "updated": "Đã cập nhật tiện ích bổ sung.",
+        "activated": "Đã bật {name}",
+        "deactivated": "Đã tắt {name}",
+        "deleted": "Đã xóa {name}"
+      },
+      "delete": {
+        "title": "Xóa {name}?",
+        "body": "Xóa tiện ích bổ sung này? Các không gian làm việc đã mua vẫn giữ nó cho đến khi hết hạn.",
+        "confirm": "Xóa",
+        "inUse": "{count, plural, other {# không gian làm việc đang sở hữu tiện ích bổ sung này nên không thể xóa. Hãy tắt nó; chủ sở hữu vẫn giữ cho đến khi hết hạn.}}"
+      },
+      "errors": {
+        "generic": "Không thể lưu tiện ích bổ sung.",
+        "forbidden": "Chỉ quản trị viên cấp cao mới có thể thay đổi tiện ích bổ sung.",
+        "notFound": "Tiện ích bổ sung này không còn tồn tại."
+      },
+      "editor": {
+        "crumbHere": "Tiện ích bổ sung",
+        "crumbNew": "Mới",
+        "crumbEdit": "Sửa",
+        "eyebrowNew": "Quản trị · Tiện ích bổ sung · Mới",
+        "eyebrowEdit": "Quản trị · Tiện ích bổ sung · Sửa",
+        "titleNewLead": "Tạo",
+        "titleEditLead": "Sửa",
+        "titleAccent": "tiện ích bổ sung",
+        "intro": "Tiện ích bổ sung CHỈ cấp những gì bạn bật, không gì khác. Giới hạn để trống sẽ không bị thay đổi, nên không có chuyện \"không giới hạn\" ngoài ý muốn.",
+        "fixTitle": "Vui lòng sửa các mục sau:",
+        "cancel": "Hủy",
+        "create": "Tạo tiện ích bổ sung",
+        "saveChanges": "Lưu thay đổi",
+        "basics": "Thông tin cơ bản",
+        "features": "Tính năng tiện ích này mở khóa",
+        "featuresHint": "Chỉ chọn những gì tiện ích này cấp. Mọi mục không chọn vẫn do gói của khách hàng quyết định.",
+        "coreFeature": "có trong mọi gói",
+        "limits": "Tăng giới hạn",
+        "limitsHint": "Để trống = tiện ích không thay đổi giới hạn này. Nhập số để CỘNG thêm vào gói (ví dụ +2 thiết bị). Dùng -1 cho không giới hạn.",
+        "fields": {
+          "name": "Tên",
+          "namePlaceholder": "Tiện ích chiến dịch",
+          "subtitle": "Phụ đề",
+          "subtitlePlaceholder": "Mở khóa chiến dịch",
+          "amount": "Giá",
+          "offerAmount": "Giá ưu đãi (tùy chọn)",
+          "currency": "Tiền tệ",
+          "billingDuration": "Thời hạn",
+          "billingUnit": "Đơn vị",
+          "billingMode": "Thanh toán",
+          "sortOrder": "Thứ tự sắp xếp",
+          "isActive": "Hoạt động",
+          "isLifetime": "Trọn đời (một lần)"
+        },
+        "modes": {
+          "one_time": "Một lần (mua lại sau khi hết hạn)",
+          "recurring": "Định kỳ (tự động gia hạn)"
+        },
+        "units": {
+          "days": "Ngày",
+          "weeks": "Tuần",
+          "months": "Tháng",
+          "years": "Năm"
+        },
+        "problems": {
+          "name": "Nhập tên.",
+          "amount": "Nhập số tiền như 19 hoặc 19.99.",
+          "offerAmount": "Giá ưu đãi phải thấp hơn giá gốc.",
+          "currency": "Dùng mã tiền tệ gồm ba chữ cái.",
+          "billingDuration": "Nhập số nguyên từ 1 trở lên.",
+          "sortOrder": "Nhập một số nguyên.",
+          "limits": "Giới hạn là số nguyên, hoặc -1 cho không giới hạn.",
+          "form": "Kiểm tra các trường được đánh dấu."
+        }
+      }
+    },
+    "extensions": {
+      "crumbHere": "Tiện ích bổ sung",
+      "eyebrow": "Quản trị · Tiện ích bổ sung",
+      "titleLead": "Cài đặt",
+      "titleAccent": "tiện ích bổ sung",
+      "title": "Tiện ích bổ sung",
+      "description": "Tiện ích bổ sung gộp thêm tính năng vào bản cài đặt này. Instagram là tiện ích đầu tiên. Xác minh mã mua hàng, tải gói lên và nó sẽ được cài trực tiếp. Dữ liệu và cài đặt của bạn không bị ảnh hưởng.",
+      "coreVersion": "Lõi",
+      "packsLead": "Bạn đang tìm các gói tính năng trả phí mà khách hàng mua thêm ngoài gói?",
+      "packsLink": "Đó là tiện ích bổ sung của gói (thanh toán)",
+      "packsTail": ". Trang này dùng để cài đặt mã.",
+      "installed": {
+        "title": "Tiện ích bổ sung đã cài",
+        "empty": "Chưa cài tiện ích bổ sung nào. Hãy xác minh mã mua hàng ở trên, sau đó tải gói lên.",
+        "version": "v{version}",
+        "files": "{count, plural, other {# tệp}}",
+        "inPlace": "Mô-đun cài trực tiếp",
+        "filesKept": "tệp được giữ trên đĩa",
+        "active": "Hoạt động",
+        "disabled": "Đã tắt",
+        "inactive": "Không hoạt động",
+        "enable": "Bật",
+        "disable": "Tắt",
+        "remove": "Gỡ bỏ",
+        "reactivate": "Kích hoạt lại",
+        "footnote": "Gỡ bỏ tiện ích bổ sung chỉ xóa các tệp nó đã cài, được theo dõi từ lúc thêm, nên các tệp lõi không bao giờ bị đụng đến. Dữ liệu vẫn nằm trong cơ sở dữ liệu."
+      },
+      "verify": {
+        "title": "Xác minh mã mua hàng của bạn",
+        "body": "Cùng giấy phép {brand} mở khóa các bản cập nhật. Tiện ích bổ sung gắn với giấy phép này.",
+        "placeholder": "ví dụ: 8f2c1a44-...",
+        "label": "Mã mua hàng",
+        "action": "Xác minh",
+        "checking": "Đang xác minh…",
+        "empty": "Hãy nhập mã mua hàng trước.",
+        "failed": "Xác minh thất bại."
+      },
+      "upload": {
+        "title": "Tải lên gói tiện ích bổ sung",
+        "body": "Tệp ZIP được kiểm tra trước khi ghi bất kỳ thứ gì. Gói sai định dạng hoặc không tương thích sẽ bị từ chối và bản cài đặt của bạn không bị thay đổi.",
+        "choose": "Chọn tệp .zip của tiện ích bổ sung",
+        "max": "Tối đa 100 MB",
+        "action": "Cài đặt",
+        "installing": "Đang cài đặt…",
+        "progress": "Đang tải lên và gộp. Đừng đóng tab này."
+      },
+      "confirm": {
+        "removeTitle": "Gỡ bỏ {name}?",
+        "removeBody": "Thao tác này xóa các tệp nó đã cài. Dữ liệu của nó vẫn nằm trong cơ sở dữ liệu.",
+        "remove": "Gỡ bỏ",
+        "moduleOffTitle": "Gỡ bỏ {name}?",
+        "moduleOffBody": "Thao tác này vô hiệu hóa tiện ích bổ sung, nên các trang và tự động hóa của nó sẽ ngừng chạy. Các tệp được giữ lại, bạn có thể kích hoạt lại bất cứ lúc nào. Không có gì bị xóa và dữ liệu của nó vẫn nằm trong cơ sở dữ liệu.",
+        "moduleOnTitle": "Kích hoạt lại {name}?",
+        "moduleOnBody": "Thao tác này bật lại tiện ích bổ sung. Các tệp của nó vẫn còn trên đĩa nên nó hoạt động trở lại ngay lập tức.",
+        "reactivate": "Kích hoạt lại"
+      },
+      "engines": {
+        "connected": "Đã kết nối",
+        "notConnected": "Chưa kết nối",
+        "connect": "Kết nối",
+        "manage": "Quản lý",
+        "disconnect": "Ngắt kết nối",
+        "disconnectYes": "Có, ngắt kết nối",
+        "save": "Lưu & kết nối",
+        "testing": "Đang kết nối…",
+        "displayName": "Tên hiển thị",
+        "secret": "Mã bí mật dùng chung",
+        "secretSaved": "•••••••• đã lưu, để trống để giữ nguyên",
+        "secretNew": "dán mã bí mật dùng chung",
+        "lastChecked": "Kiểm tra lần cuối",
+        "failed": "{reason}",
+        "instagram": {
+          "title": "Instagram",
+          "body": "Chạy như một bản triển khai {brand} riêng. Kết nối bằng URL + mã bí mật, không cần tải lên.",
+          "blocked": "Bị chặn: tiện ích gốc đang hoạt động",
+          "blockedNote": "Tiện ích Instagram gốc đã được cài. Hãy gỡ bỏ ở bên dưới để kết nối {brand} từ xa.",
+          "modalTitle": "Kết nối Instagram",
+          "modalBody": "Dán URL bản triển khai {brand} và mã bí mật dùng chung của bạn. {app} xác minh kết nối qua API. Không có gì được tải lên.",
+          "url": "URL {brand}",
+          "urlPlaceholder": "https://insta.yourdomain.com",
+          "brandPlaceholder": "IgDesk",
+          "brandHint": "Hiển thị trên mọi nhãn \"Đồng bộ từ …\", \"Quản lý trên …\" và \"URL …\" trong ứng dụng.",
+          "disconnectTitle": "Ngắt kết nối Instagram?",
+          "disconnectBody": "Thao tác này ngắt kết nối Instagram khỏi {app}. Instagram sẽ biến mất ngay khỏi bảng điều khiển, phân tích, hộp thư, luồng, mẫu và trả lời tự động của mọi không gian làm việc, và không thể dùng cho đến khi bạn kết nối lại. Tiếp tục?"
+        },
+        "email": {
+          "title": "Email",
+          "body": "Kết nối sẽ liên kết nền tảng email {brand} để thư đổ về hộp thư nhóm, bằng URL + mã bí mật, không cần tải lên.",
+          "modalTitle": "Kết nối email",
+          "modalBody": "Dán URL bản triển khai {brand} và mã bí mật dùng chung của bạn. {app} xác minh kết nối qua API. Không có gì được tải lên.",
+          "url": "URL {brand}",
+          "urlPlaceholder": "https://mail.yourdomain.com",
+          "brandPlaceholder": "MailTrixy",
+          "brandHint": "Hiển thị trên mọi nhãn email trong ứng dụng.",
+          "disconnectTitle": "Ngắt kết nối email?",
+          "disconnectBody": "Thao tác này ngắt kết nối nền tảng email khỏi {app}. Thư sẽ ngừng đổ về hộp thư nhóm của mọi không gian làm việc cho đến khi bạn kết nối lại. Tiếp tục?"
+        }
+      },
+      "errors": {
+        "generic": "Không thành công.",
+        "forbidden": "Chỉ quản trị viên cấp cao mới có thể thay đổi mô-đun.",
+        "invalidPackage": "Gói không hợp lệ.",
+        "tooLarge": "Gói quá lớn.",
+        "coreTooOld": "Gói này cần phiên bản lõi mới hơn.",
+        "engineConflict": "Instagram chỉ chạy một engine tại một thời điểm. Hãy ngắt kết nối engine kia trước."
+      }
+    },
+    "workspace": {
+      "title": "Tiện ích bổ sung",
+      "description": "Các gói tính năng bổ sung bạn mua thêm ngoài gói đăng ký.",
+      "needPlanTitle": "Tiện ích bổ sung cần một gói đang hoạt động",
+      "needPlanBody": "Tiện ích bổ sung là các gói tính năng bổ sung bạn mua thêm ngoài gói đăng ký. Hãy chọn gói trước, rồi quay lại đây để thêm tính năng.",
+      "viewPlans": "Xem các gói",
+      "noneTitle": "Không có tiện ích bổ sung",
+      "noneBody": "Hiện chưa có tiện ích bổ sung nào được cung cấp. Hãy quay lại sau.",
+      "ownedTitle": "Tiện ích bổ sung của bạn",
+      "ownedBody": "Các gói đang hoạt động được gộp vào gói hiện tại của bạn.",
+      "ends": "Kết thúc {date}",
+      "lifetime": "Trọn đời",
+      "autoRenews": "Tự động gia hạn",
+      "renewal": {
+        "cancel": "Hủy gia hạn",
+        "confirmTitle": "Hủy gia hạn?",
+        "confirmBody": "Tiện ích bổ sung này vẫn hoạt động đến hết kỳ bạn đã thanh toán, sau đó sẽ không gia hạn.",
+        "confirm": "Hủy gia hạn",
+        "keep": "Tiếp tục gia hạn",
+        "forbidden": "Bạn không có quyền thay đổi gói.",
+        "none": "Không có đăng ký đang hoạt động để hủy.",
+        "failed": "Chúng tôi không thể hủy gia hạn. Vui lòng thử lại."
+      },
+      "active": "Hoạt động",
+      "cardEyebrow": "Tiện ích bổ sung",
+      "catalogTitle": "Tiện ích bổ sung",
+      "catalogBody": "Mở khóa thêm tính năng ngoài gói hiện tại. Không cần đổi gói.",
+      "count": "{count, plural, other {# tiện ích bổ sung}}",
+      "free": "Miễn phí",
+      "lifetimePrice": "một lần",
+      "per": "/ {unit}",
+      "units": {
+        "days": "ngày",
+        "weeks": "tuần",
+        "months": "tháng",
+        "years": "năm"
+      },
+      "buy": "Thêm vào gói",
+      "buyAgain": "Mua lại",
+      "owned": "Đã sở hữu ×{count} · mua lại sẽ cộng thêm",
+      "bullets": {
+        "feature": "{name}",
+        "unlimited": "{name} không giới hạn",
+        "add": "+{amount} {name}"
+      },
+      "error": "Không thể tải tiện ích bổ sung."
+    }
+  }
+}

@@ -1,0 +1,370 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "REC_ENDED": "このスケジュールは終了しているため、変更や実行はできません。",
+        "REC_NOT_ACTIVE": "このスケジュールは有効ではありません。先に再開してください。",
+        "REC_START_TOO_OLD": "開始日が過去すぎます。作成される過去の期間は最大12回までのため、より新しい日付から開始してください。",
+        "INV_RECURRING_INVALID": "テンプレートから請求書を作成できませんでした。購入者、明細、税を確認してから、もう一度保存してください。"
+      }
+    },
+    "recurring": {
+      "title": "定期請求書",
+      "subtitle": "設定した日付に従って自動的に請求書を作成するスケジュールです。",
+      "new": "新しいスケジュール",
+      "invoices": "請求書",
+      "tabsLabel": "スケジュールの状態",
+      "tabs": {
+        "all": "すべて",
+        "active": "有効",
+        "paused": "一時停止",
+        "ended": "終了"
+      },
+      "search": "読み込み済みのスケジュールを検索",
+      "refresh": "更新",
+      "tableLabel": "定期請求書のスケジュール",
+      "scrollArea": "スケジュール一覧の表（横スクロール可能）",
+      "loading": "スケジュールを読み込んでいます",
+      "empty": {
+        "all": {
+          "title": "定期請求書はまだありません",
+          "message": "一度スケジュールを設定すると、毎週・毎月・毎年、請求書が自動で作成されます。"
+        },
+        "active": {
+          "title": "実行中のものはありません",
+          "message": "次の請求書を期日どおりに作成する有効なスケジュールがここに表示されます。"
+        },
+        "paused": {
+          "title": "一時停止中のスケジュールはありません",
+          "message": "一時停止したスケジュールは、再開するまで請求書を作成しません。"
+        },
+        "ended": {
+          "title": "終了したスケジュールはありません",
+          "message": "スケジュールは最後の実行後、または終了日に終了します。"
+        }
+      },
+      "emptySearchTitle": "一致するスケジュールはありません",
+      "emptySearch": "読み込み済みの行に一致するものはありません。検索をクリアするか、さらに読み込んでください。",
+      "clearSearch": "検索をクリア",
+      "showing": "{count, plural, other {# 件のスケジュールを表示中}}",
+      "showingMatches": "読み込み済み {loaded} 件のうち {count} 件が一致",
+      "loadMore": "さらに読み込む",
+      "allLoaded": "すべてのスケジュールを読み込みました",
+      "searchLoadedOnly": "検索は読み込み済みのスケジュールのみが対象です。さらに検索するには、さらに読み込んでください。",
+      "columns": {
+        "name": "スケジュール",
+        "buyer": "購入者",
+        "every": "繰り返し",
+        "next": "次回実行",
+        "last": "前回実行",
+        "runs": "実行回数",
+        "failures": "失敗",
+        "amount": "請求書1件あたり",
+        "mode": "各請求書の金額",
+        "status": "状態",
+        "actions": "操作"
+      },
+      "lineCount": "{count, plural, other {# 行}}",
+      "onHold": "保留中",
+      "runsOf": "{max} 件中 {done} 件",
+      "failuresTitle": "{count, plural, other {# 件の期間が失敗しました。履歴を開いてください。}}",
+      "channel": {
+        "link": "リンク",
+        "email": "メール",
+        "whatsapp": "WhatsApp"
+      },
+      "moreFor": "{name} のその他の操作",
+      "open": "開く",
+      "edit": "編集",
+      "pause": "一時停止",
+      "resume": "再開",
+      "cancel": "キャンセル",
+      "runNow": {
+        "action": "今すぐ実行",
+        "title": "{name} を今すぐ実行しますか?",
+        "confirm": "今すぐ実行",
+        "message": {
+          "draft": "{date} 分の請求書を今すぐ下書きとして作成し、スケジュールは次の期間に進みます。下書きは確認してから発行できます。",
+          "issue": "{date} 分の請求書を今すぐ作成して発行します（すぐに番号が付与されます）。スケジュールは次の期間に進みます。",
+          "issue_send": "{date} 分の請求書を今すぐ作成、発行し、購入者に送信します。スケジュールは次の期間に進みます。"
+        }
+      },
+      "delete": {
+        "action": "削除",
+        "title": "{name} を削除しますか?",
+        "message": "{name} は請求書の作成を停止します。これまでに作成された請求書は一覧に残ります。",
+        "confirm": "スケジュールを削除",
+        "keep": "残す"
+      },
+      "toast": {
+        "paused": "{name} を一時停止しました。",
+        "resumed": "{name} を再開しました。次回の請求書: {date}",
+        "resumedEnded": "{name} は残りの期間がなくなったため、終了しました。",
+        "ran": "{name} から請求書を作成しました。",
+        "runFailed": "{name} の実行は失敗し、記録されました。原因は履歴で確認できます。",
+        "deleted": "{name} を削除しました。"
+      },
+      "every": {
+        "day": "{interval, plural, other {# 日ごと}}",
+        "week": "{interval, plural, other {# 週間ごと}}",
+        "month": "{interval, plural, other {# か月ごと}}",
+        "year": "{interval, plural, other {# 年ごと}}"
+      },
+      "status": {
+        "active": "有効",
+        "paused": "一時停止",
+        "ended": "終了"
+      },
+      "runStatus": {
+        "created": "作成済み",
+        "failed": "失敗"
+      },
+      "modeShort": {
+        "draft": "下書き",
+        "issue": "発行済み",
+        "issue_send": "発行して送信済み"
+      },
+      "modeSent": {
+        "email": "発行してメール送信済み",
+        "link": "発行、リンクで共有済み",
+        "whatsapp": "発行して WhatsApp で送信済み"
+      },
+      "frequency": {
+        "day": "日",
+        "week": "週",
+        "month": "か月",
+        "year": "年"
+      },
+      "modeCards": {
+        "draft": {
+          "title": "下書きのままにする",
+          "hint": "各請求書は発行前に確認のため保留されます。"
+        },
+        "issue": {
+          "title": "発行する",
+          "hint": "各請求書には番号が付き、作成時に発行されます。"
+        },
+        "issue_send": {
+          "title": "発行して送信",
+          "hint": "各請求書は自動的に発行され、購入者に送信されます。"
+        }
+      },
+      "warnings": {
+        "noBuyerEmail": "テンプレートに購入者のメールアドレスがないため、メール送信は失敗します。メールアドレスを追加するか、リンクで送信してください。"
+      },
+      "preview": {
+        "title": "次回の実行予定",
+        "incomplete": "スケジュールを入力すると、請求書が作成される日時が表示されます。",
+        "sentence": "{every}、{start} から{limit}。{outcome}",
+        "sentenceLimit": "{kind, select, runs {、{count, plural, other {# 件の請求書}}} end {、{end} まで} both {、{count, plural, other {# 件の請求書}}、{end} まで} other {}}",
+        "outcome": {
+          "draft": "各請求書は確認用に下書きのまま残されます。",
+          "issue": "各請求書は自動的に発行されます。",
+          "issue_email": "各請求書は発行され、購入者にメールで送信されます。",
+          "issue_link": "各請求書は発行され、リンクで共有済みとして記録されます。",
+          "issue_whatsapp": "各請求書は発行され、WhatsApp で送信されます。"
+        },
+        "eachInvoice": "各請求書の金額はおよそ",
+        "lastDay": "月末日",
+        "noRuns": "このスケジュール内に実行日はありません。",
+        "endsMaxRuns": "{count, plural, other {# 件の請求書を作成すると停止します。}}",
+        "endsEndDate": "{count, plural, other {{date} 以降は実行されません。合計 # 件の請求書です。}}",
+        "moreBounded": "{count, plural, other {合計 # 件の請求書です。残りも同じ間隔で続きます。}}",
+        "moreForever": "一時停止または削除するまで続きます。",
+        "clampNote": "このスケジュールは毎月 {day} 日に開始します。{day} 日がない月は月末日に実行され、翌月は再び {day} 日に戻ります。",
+        "catchUp": "{count, plural, other {過去の期間が # 件あります。それぞれの請求書を直ちに作成します。}}",
+        "catchUpTooOld": "過去の期間が {count} 件あり、作成されるのは最大 {max} 件です。より新しい日付から開始してください。"
+      },
+      "builder": {
+        "loading": "読み込み中",
+        "endedNoEdit": "このスケジュールは終了しているため、もう編集できません。",
+        "openSchedule": "スケジュールを開く",
+        "back": "戻る",
+        "newTitle": "新しい定期請求書",
+        "editTitle": "{name} を編集",
+        "newSubtitle": "間隔と作成する請求書を設定します。次回の実行予定は横に表示されます。",
+        "editSubtitle": "これから作成される期間の間隔または請求書を変更します。",
+        "cancel": "キャンセル",
+        "save": "変更を保存",
+        "create": "スケジュールを作成",
+        "conflict": "編集中に他のユーザーがこのスケジュールを変更しました。再読み込みして最新版を確認してください。ここでの編集内容は失われます。",
+        "reload": "再読み込み",
+        "fixProblems": "先に強調表示された項目を修正してください。",
+        "nothingToSave": "変更はありませんでした。",
+        "saved": "スケジュールを保存しました。",
+        "created": "{name} は今後、スケジュールどおりに請求書を作成します。",
+        "schedule": "スケジュール",
+        "name": "名前",
+        "nameHint": "例: 月額顧問料。自分だけに表示されます。",
+        "every": "繰り返し間隔",
+        "frequency": "単位",
+        "startDate": "最初の請求書の日付",
+        "startFixed": "開始日は変更できません。別の日付から開始するには、新しいスケジュールを作成してください。",
+        "startHint": "過去の日付を指定すると、期限を過ぎた期間（最大 12 件）が直ちに作成されます。",
+        "endDate": "終了条件（任意）",
+        "endHint": "この日付以降の請求書は作成されません。",
+        "maxRuns": "請求書の件数（任意）",
+        "maxRunsHint": "この件数の請求書を作成すると、スケジュールは終了します。",
+        "noLimit": "無期限",
+        "scheduleEditNote": "変更した間隔は今日から適用され、すでに実行された期間が重複することはありません。",
+        "mode": "各請求書の送信方法",
+        "sendChannel": "送信方法",
+        "sendChannelHint": "「リンク」は、リンクを自分で共有したことを記録します。「メール」と「WhatsApp」は自動で送信します。",
+        "templateTitle": "請求書テンプレート",
+        "templateFuture": "新しいテンプレートは、これから作成される請求書に適用されます。作成済みの請求書は変更されません。",
+        "replaceTemplate": "テンプレートを置き換える",
+        "keepTemplate": "現在のテンプレートを維持"
+      },
+      "template": {
+        "title": "請求書テンプレート",
+        "hint": "各期間には、このテンプレートから作成された請求書が、その期間の日付で作成されます。",
+        "hintEdit": "ここで新しいテンプレートを作成します。今後の請求書では現在のテンプレートに代わって使用されます。",
+        "sourceLabel": "テンプレートの元",
+        "source": {
+          "invoice": {
+            "title": "請求書をコピー",
+            "hint": "作成済みの請求書の購入者と明細を使用します。"
+          },
+          "build": {
+            "title": "テンプレートを作成",
+            "hint": "ここで購入者と明細を入力します。"
+          }
+        },
+        "draftInvoice": "下書きの請求書",
+        "copyOf": "この請求書のコピー、合計",
+        "change": "変更",
+        "choose": "請求書を選択",
+        "copyNote": "保存時に、購入者、明細、税、メモがコピーされます。元の請求書を後から変更しても、スケジュールには反映されません。",
+        "startFromInvoice": "請求書から開始",
+        "startFromInvoiceHint": "購入者と明細をここに読み込み、調整できるようにします。",
+        "billTo": "請求先",
+        "contact": "連絡先",
+        "contactHint": "連絡先を選択すると各請求書がその連絡先に紐づきます。または下に購入者を入力してください。",
+        "buyerName": "請求書上の名前",
+        "buyerEmail": "メール",
+        "buyerPhone": "電話",
+        "buyerCountry": "国",
+        "buyerCountryHint": "IN や DE のような 2 文字のコード。",
+        "buyerTaxId": "税務 ID",
+        "buyerAddress": "請求先住所",
+        "details": "通貨と税",
+        "currency": "通貨",
+        "docType": "書類",
+        "docTypes": {
+          "tax_invoice": "税務請求書",
+          "proforma": "仮請求書"
+        },
+        "taxMode": "税",
+        "taxModes": {
+          "rates": "税率ごと",
+          "auto": "自動"
+        },
+        "taxModeAutoHint": "税計算エンジンが売主と購入者の国に基づいて税を決定します。",
+        "supplyType": "取引の種類",
+        "supply": {
+          "goods": "商品",
+          "services": "サービス",
+          "digital": "デジタルサービス"
+        },
+        "paymentTerms": "支払条件",
+        "paymentTermsHint": "各請求書の発行日から起算します。",
+        "termsDefault": "ワークスペースの既定値",
+        "termsOnReceipt": "受領時支払",
+        "termsNet": "支払期限 {days} 日",
+        "lines": "明細",
+        "adjustments": "割引と送料",
+        "discountKind": "請求書全体の割引",
+        "discountNone": "割引なし",
+        "discountPercent": "割合",
+        "discountAmount": "固定額（{currency}）",
+        "discountValue": "割引額",
+        "shipping": "送料（{currency}）",
+        "notes": "顧客へのメモ",
+        "notesHint": "すべての請求書に印刷されます。",
+        "termsText": "利用規約",
+        "termsTextHint": "すべての請求書の末尾に印刷されます。",
+        "kept": "{count, plural, other {テンプレートには # 行の明細があり、請求先は}}"
+      },
+      "problems": {
+        "generic": "この項目を確認してください。",
+        "nameRequired": "スケジュールに名前を付けてください。",
+        "nameTooLong": "120 文字以内で入力してください。",
+        "intervalInvalid": "1 から 365 までの整数を入力してください。",
+        "startInvalid": "有効な開始日を入力してください。",
+        "startTooOld": "その開始日は {count} 期間前にあたり、作成できる過去の期間は最大 {max} 件です。より新しい日付を選択してください。",
+        "endInvalid": "有効な終了日を入力してください。",
+        "endBeforeStart": "終了日が開始日より前になっています。",
+        "maxRunsInvalid": "1 から 1000 までの整数を入力するか、空欄のままにしてください。",
+        "invoiceRequired": "コピーする請求書を選択してください。",
+        "termsInvalid": "0 から 365 日の間で入力してください。",
+        "descriptionRequired": "この明細の内容を入力してください。",
+        "qtyInvalid": "0 より大きい数量を入力してください。",
+        "priceInvalid": "有効な単価を入力してください。",
+        "lineDiscountInvalid": "0 から 100 までの割合を入力してください。",
+        "hsnRequired": "HSN または SAC コードを入力してください。",
+        "hsnInvalid": "HSN または SAC コードは 2 〜 12 文字の英数字です。",
+        "taxRateRemoved": "この税率はすでに存在しません。別の税率を選択してください。",
+        "currencyInvalid": "3 文字の通貨コードを入力してください。",
+        "noLines": "明細を 1 行以上追加してください。",
+        "discountInvalid": "有効な割引額を入力してください。",
+        "shippingInvalid": "有効な金額を入力してください。",
+        "emailInvalid": "有効なメールアドレスを入力してください。",
+        "amountZero": "請求書の合計は 0 より大きくする必要があります。",
+        "amountInvalid": "この金額は有効ではありません。",
+        "contactRequired": "連絡先を選択するか購入者名を入力してください。自動で発行される請求書には購入者が必要です。",
+        "countryInvalid": "2 文字の国コードを入力してください。",
+        "regionInvalid": "有効な州または地域コードを入力してください。",
+        "autoNeedsSellerCountry": "自動税計算には、請求設定で国を指定する必要があります。"
+      },
+      "detail": {
+        "loading": "スケジュールを読み込んでいます",
+        "backToList": "定期請求書に戻る",
+        "back": "定期請求書に戻る",
+        "failures": "{count, plural, other {# 件の期間で請求書の作成に失敗しました。}}",
+        "seeHistory": "原因を確認",
+        "pausedNote": "このスケジュールは一時停止中です。一時停止中の期間はスキップされます。再開すると、次回の請求書は今日以降の日付になります。",
+        "endedNote": "このスケジュールは終了しました。これ以上作成されず、編集もできません。",
+        "nextRun": "次回実行",
+        "lastRun": "前回実行",
+        "runs": "作成された請求書",
+        "failedCount": "{count, plural, other {# 件の失敗}}",
+        "amount": "請求書1件あたり",
+        "amountNote": "本日時点のテンプレートの金額",
+        "upcoming": "今後の日付",
+        "noUpcoming": "今後の実行予定はありません。",
+        "template": "テンプレート",
+        "buyer": "購入者",
+        "lines": "明細",
+        "currency": "通貨",
+        "mode": "各請求書の金額",
+        "starts": "開始日",
+        "ends": "終了日",
+        "never": "終了日なし",
+        "limit": "上限",
+        "noLimit": "上限なし",
+        "invoicesCount": "{count, plural, other {# 件の請求書}}",
+        "templateNote": "テンプレートを編集すると、これから作成される請求書が変わります。作成済みの請求書が変わることはありません。"
+      },
+      "runs": {
+        "title": "実行履歴",
+        "subtitle": "期間ごとに 1 行ずつ、新しい順に表示します。",
+        "loading": "履歴を読み込んでいます",
+        "scrollArea": "実行履歴の表（横スクロール可能）",
+        "emptyTitle": "まだ実行されていません",
+        "emptyMessage": "最初の請求書は次回の実行日に作成されます。",
+        "period": "期間 {n}",
+        "draftInvoice": "下書き",
+        "showing": "{count, plural, other {# 件の実行を表示中}}",
+        "loadMore": "さらに読み込む",
+        "allLoaded": "すべての履歴を表示しています",
+        "columns": {
+          "period": "期間の日付",
+          "status": "結果",
+          "invoice": "請求書",
+          "error": "失敗の理由",
+          "at": "作成日時"
+        }
+      }
+    }
+  }
+}

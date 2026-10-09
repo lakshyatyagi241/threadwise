@@ -1,0 +1,353 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "SO_NOT_DRAFT": "Chỉ đơn hàng nháp mới có thể thay đổi. Đơn đã xác nhận bị khóa: hãy hủy và tạo đơn mới để thay đổi dòng hoặc giá.",
+        "SO_NOT_CONFIRMED": "Hãy xác nhận đơn hàng trước. Chỉ đơn đã xác nhận mới có thể lập hóa đơn hoặc ghi nhận giao hàng.",
+        "SO_CANCELLED": "Đơn hàng này đã bị hủy nên không thể thực hiện thêm thao tác nào.",
+        "SO_QUOTE_NOT_ACCEPTED": "Chỉ báo giá hoặc đề xuất đã được chấp nhận mới có thể thành đơn bán hàng. Hãy đánh dấu là đã chấp nhận trước.",
+        "SO_QUOTE_TAKEN": "Báo giá hoặc đề xuất này đã có đơn bán hàng.",
+        "SO_QUANTITY_EXCEEDS": "Một số lượng vượt quá số còn lại của dòng đó. Hãy giảm lại và thử lần nữa.",
+        "SO_NOTHING_TO_INVOICE": "Không còn việc gì cần làm: mọi thứ đã được lập hóa đơn hoặc giao hàng.",
+        "SO_HAS_INVOICES": "Hóa đơn tạo từ đơn này vẫn đang hiệu lực. Hãy hủy hoặc xóa hóa đơn trước, rồi hủy đơn hàng."
+      }
+    },
+    "salesOrders": {
+      "list": {
+        "title": "Đơn bán hàng",
+        "subtitle": "Các báo giá đã chấp nhận được chuyển thành đơn hàng, lập hóa đơn một lần hoặc nhiều phần, và giao hàng.",
+        "newOrder": "Đơn bán hàng mới",
+        "search": "Tìm theo số, người mua hoặc tham chiếu",
+        "reset": "Đặt lại",
+        "refresh": "Làm mới",
+        "tableLabel": "Đơn bán hàng",
+        "noAccessTitle": "Không có quyền truy cập",
+        "noAccess": "Bạn không có quyền xem đơn bán hàng.",
+        "emptyFilteredTitle": "Không có đơn hàng nào khớp",
+        "emptyFiltered": "Không có gì khớp với bộ lọc này. Hãy thay đổi hoặc đặt lại bộ lọc.",
+        "resetFilters": "Đặt lại bộ lọc",
+        "loading": "Đang tải đơn bán hàng",
+        "showing": "Đang hiển thị {count}",
+        "loadMore": "Tải thêm",
+        "allLoaded": "Đã tải toàn bộ",
+        "contactLoading": "Đang tải...",
+        "empty": {
+          "all": {
+            "title": "Chưa có đơn bán hàng nào",
+            "message": "Chuyển một báo giá hoặc đề xuất đã chấp nhận thành đơn hàng, hoặc tạo đơn mới từ đầu."
+          },
+          "draft": {
+            "title": "Không có đơn nháp",
+            "message": "Các đơn bạn đang chuẩn bị sẽ hiển thị ở đây."
+          },
+          "confirmed": {
+            "title": "Không có đơn đã xác nhận",
+            "message": "Các đơn đã xác nhận đang chờ lập hóa đơn hoặc giao hàng sẽ hiển thị ở đây."
+          },
+          "cancelled": {
+            "title": "Không có đơn đã hủy",
+            "message": "Các đơn bạn hủy sẽ hiển thị ở đây cùng lý do."
+          },
+          "closed": {
+            "title": "Không có đơn đã đóng",
+            "message": "Đơn hàng được đóng khi mọi mục trên đơn đã được lập hóa đơn và giao hàng."
+          }
+        }
+      },
+      "strip": {
+        "label": "Giá trị các đơn đang mở",
+        "openValue": "Đơn đang mở ({currency})"
+      },
+      "tabs": {
+        "label": "Trạng thái đơn",
+        "all": "Tất cả",
+        "draft": "Nháp",
+        "confirmed": "Đã xác nhận",
+        "cancelled": "Đã hủy",
+        "closed": "Đã đóng",
+        "count": "{count} đơn"
+      },
+      "quick": {
+        "label": "Bộ lọc nhanh",
+        "toInvoice": "Cần lập hóa đơn",
+        "toFulfil": "Cần giao hàng"
+      },
+      "table": {
+        "scrollArea": "Bảng đơn bán hàng",
+        "columns": {
+          "number": "Đơn hàng",
+          "buyer": "Người mua",
+          "quote": "Báo giá",
+          "deal": "Thương vụ",
+          "expected": "Dự kiến",
+          "status": "Trạng thái",
+          "invoicing": "Lập hóa đơn",
+          "fulfilment": "Giao hàng",
+          "total": "Tổng",
+          "invoices": "Hóa đơn"
+        }
+      },
+      "row": {
+        "moreFor": "Thao tác cho {name}",
+        "open": "Mở",
+        "edit": "Chỉnh sửa",
+        "confirm": "Xác nhận đơn hàng",
+        "invoiceAll": "Lập hóa đơn toàn bộ phần còn lại",
+        "fulfilAll": "Đánh dấu đã giao tất cả",
+        "cancel": "Hủy đơn hàng",
+        "delete": "Xóa bản nháp"
+      },
+      "status": {
+        "draft": "Nháp",
+        "confirmed": "Đã xác nhận",
+        "cancelled": "Đã hủy",
+        "closed": "Đã đóng"
+      },
+      "invoicingStatus": {
+        "not_invoiced": "Chưa lập hóa đơn",
+        "partially_invoiced": "Đã lập hóa đơn một phần",
+        "invoiced": "Đã lập hóa đơn"
+      },
+      "fulfilmentStatus": {
+        "unfulfilled": "Chưa giao hàng",
+        "partially_fulfilled": "Đã giao một phần",
+        "fulfilled": "Đã giao hàng"
+      },
+      "actions": {
+        "failed": "Thao tác không thành công.",
+        "confirmed": "Đã xác nhận đơn hàng {number}.",
+        "invoicedDraft": "Đã tạo bản nháp hóa đơn từ đơn hàng.",
+        "invoicedIssued": "Đã phát hành hóa đơn {number}.",
+        "fulfilled": "Đã ghi nhận giao hàng.",
+        "cancelled": "Đã hủy đơn hàng {number}.",
+        "deleted": "Đã xóa đơn hàng nháp."
+      },
+      "dialog": {
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "how": "Số lượng nào",
+        "mode": {
+          "all": "Toàn bộ phần còn lại",
+          "lines": "Chọn số lượng"
+        },
+        "left": "Còn {qty}",
+        "qtyExceeds": "Dòng này chỉ còn tối đa {max}.",
+        "qtyInvalid": "Nhập số lượng tối đa 4 chữ số thập phân, hoặc 0 để bỏ qua dòng này.",
+        "nothingHint": "Toàn bộ đơn hàng này đã được lập hóa đơn."
+      },
+      "confirmDialog": {
+        "title": "Xác nhận đơn hàng này?",
+        "message": "Khi xác nhận, các dòng và giá sẽ bị khóa. Sau đó bạn có thể lập hóa đơn cho đơn hàng một lần hoặc nhiều phần, và ghi nhận giao hàng. Bạn vẫn có thể hủy khi chưa có hóa đơn hiệu lực.",
+        "confirm": "Xác nhận đơn hàng"
+      },
+      "cancelDialog": {
+        "title": "Hủy đơn hàng này?",
+        "warning": "Đơn đã hủy sẽ không thể lập hóa đơn hay giao hàng nữa, và không thể mở lại.",
+        "reason": "Lý do",
+        "reasonHint": "Được lưu trên đơn hàng để nhóm của bạn xem.",
+        "reasonRequired": "Nêu lý do hủy đơn hàng.",
+        "reasonTooLong": "Giữ lý do dưới {max} ký tự.",
+        "cancelOrder": "Hủy đơn hàng",
+        "hasInvoices": "Đơn hàng này vẫn còn hóa đơn. Hãy hủy hoặc xóa hóa đơn trước (hóa đơn đã hủy sẽ hoàn lại số lượng), rồi hủy đơn hàng.",
+        "seeInvoices": "Xem các hóa đơn"
+      },
+      "deleteDialog": {
+        "title": "Xóa bản nháp này?",
+        "message": "Đơn hàng nháp sẽ bị xóa vĩnh viễn. Đơn đã xác nhận không thể xóa, chỉ có thể hủy.",
+        "delete": "Xóa bản nháp"
+      },
+      "invoiceDialog": {
+        "title": "Lập hóa đơn cho đơn hàng này",
+        "intro": "Lập hóa đơn theo giá đã khóa của đơn hàng. Bạn có thể lập theo từng phần: phần chưa lập lúc này sẽ vẫn nằm trên đơn hàng.",
+        "invoiceAndIssue": "Tạo và phát hành hóa đơn",
+        "createDraft": "Tạo bản nháp hóa đơn",
+        "issueDate": "Ngày phát hành",
+        "issueDateHint": "Để trống để dùng ngày hôm nay ({today}).",
+        "dueDate": "Ngày đến hạn",
+        "terms": "Điều khoản thanh toán",
+        "termsDefault": "Mặc định của không gian làm việc",
+        "termsOnIssue": "Đến hạn khi phát hành",
+        "termsDays": "{count} ngày",
+        "issueNow": "Phát hành hóa đơn ngay",
+        "issueNowHint": "Hóa đơn sẽ được cấp số và có thể gửi ngay.",
+        "draftHint": "Để ở dạng bản nháp để kiểm tra trước khi phát hành.",
+        "includeShipping": "Lập cả phí vận chuyển trên hóa đơn này",
+        "problems": {
+          "nothing": "Chọn số lượng lớn hơn 0 cho ít nhất một dòng.",
+          "issueDateInvalid": "Nhập ngày phát hành hợp lệ.",
+          "dueDateInvalid": "Nhập ngày đến hạn hợp lệ.",
+          "dueBeforeIssue": "Ngày đến hạn không được trước ngày phát hành."
+        }
+      },
+      "fulfilDialog": {
+        "title": "Ghi nhận giao hàng",
+        "intro": "Ghi nhận những gì đã giao cho người mua. Việc giao hàng được theo dõi riêng với việc lập hóa đơn: bên nào làm trước cũng được.",
+        "record": "Ghi nhận giao hàng",
+        "note": "Ghi chú",
+        "noteHint": "Không bắt buộc, ví dụ số phiếu giao hàng.",
+        "problems": {
+          "nothing": "Chọn số lượng lớn hơn 0 cho ít nhất một dòng.",
+          "noteTooLong": "Giữ ghi chú dưới {max} ký tự."
+        }
+      },
+      "detail": {
+        "noAccessTitle": "Không có quyền truy cập",
+        "noAccess": "Bạn không có quyền xem đơn bán hàng.",
+        "loading": "Đang tải đơn hàng",
+        "back": "Quay lại đơn bán hàng",
+        "noBuyer": "Chưa có người mua",
+        "edit": "Chỉnh sửa",
+        "confirm": "Xác nhận đơn hàng",
+        "recordDelivery": "Ghi nhận giao hàng",
+        "invoice": "Lập hóa đơn...",
+        "more": "Thao tác khác",
+        "cancel": "Hủy đơn hàng",
+        "delete": "Xóa bản nháp",
+        "cancelledOn": "Đã hủy ngày {date}",
+        "draftHint": "Đơn hàng này là bản nháp. Hãy xác nhận để khóa giá và bắt đầu lập hóa đơn cũng như giao hàng.",
+        "notes": "Ghi chú",
+        "terms": "Điều khoản",
+        "progress": "Tiến độ",
+        "invoiced": "Đã lập hóa đơn",
+        "fulfilled": "Đã giao hàng"
+      },
+      "lines": {
+        "title": "Dòng",
+        "scrollArea": "Các dòng đơn hàng",
+        "item": "Mặt hàng",
+        "ordered": "Đã đặt",
+        "invoiced": "Đã lập hóa đơn",
+        "fulfilled": "Đã giao",
+        "toInvoice": "Cần lập hóa đơn",
+        "unitPrice": "Đơn giá",
+        "amount": "Thành tiền",
+        "taxLine": "{name} {rate}%",
+        "taxRate": "Thuế {rate}%",
+        "invoicedBar": "Phần đã lập hóa đơn của {name}",
+        "fulfilledBar": "Phần đã giao của {name}"
+      },
+      "totals": {
+        "title": "Tổng cộng",
+        "subtotal": "Tạm tính",
+        "discount": "Chiết khấu",
+        "shipping": "Vận chuyển",
+        "shippingBilled": "Đã lập hóa đơn",
+        "shippingPending": "Lập cùng hóa đơn đầu tiên",
+        "tax": "Thuế",
+        "total": "Tổng"
+      },
+      "info": {
+        "title": "Chi tiết",
+        "buyer": "Người mua",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "quote": "Báo giá",
+        "deal": "Thương vụ",
+        "owner": "Người phụ trách",
+        "reference": "Tham chiếu",
+        "expected": "Dự kiến",
+        "created": "Ngày tạo",
+        "confirmed": "Ngày xác nhận"
+      },
+      "invoices": {
+        "title": "Hóa đơn từ đơn hàng này",
+        "none": "Chưa có hóa đơn nào được tạo từ đơn hàng này.",
+        "noneDraft": "Có thể lập hóa đơn sau khi đơn hàng được xác nhận.",
+        "draft": "Bản nháp",
+        "voidNote": "Hóa đơn đã hủy sẽ hoàn lại số lượng cho đơn hàng."
+      },
+      "builder": {
+        "noAccessTitle": "Không có quyền truy cập",
+        "noAccess": "Bạn không có quyền thay đổi đơn bán hàng.",
+        "loading": "Đang tải",
+        "frozen": "Đơn hàng đã xác nhận nên các dòng và giá bị khóa. Hãy hủy và tạo đơn mới để thay đổi.",
+        "openOrder": "Mở đơn hàng",
+        "back": "Quay lại",
+        "editTitle": "Chỉnh sửa {number}",
+        "newTitle": "Đơn bán hàng mới",
+        "unsaved": "Thay đổi chưa lưu",
+        "cancel": "Hủy",
+        "saveChanges": "Lưu thay đổi",
+        "createDraft": "Tạo bản nháp",
+        "conflict": "Có người khác đã thay đổi bản nháp này khi bạn đang chỉnh sửa. Hãy tải lại để xem phiên bản của họ; các chỉnh sửa của bạn sẽ bị mất.",
+        "reload": "Tải lại",
+        "saved": "Đã lưu bản nháp.",
+        "created": "Đã tạo đơn hàng {number} dưới dạng bản nháp.",
+        "fixProblems": "Hãy sửa các trường được đánh dấu trước.",
+        "serverRejected": "Máy chủ không chấp nhận một số giá trị. Hãy kiểm tra các trường và thử lại.",
+        "startFrom": "Bắt đầu từ",
+        "source": {
+          "scratch": "Đơn hàng trống",
+          "quote": "Một đề xuất hoặc báo giá đã chấp nhận"
+        },
+        "loadingQuote": "Đang tải báo giá...",
+        "buyer": "Người mua",
+        "contact": "Liên hệ",
+        "contactHint": "Chọn một liên hệ để gắn đơn hàng với người đó, hoặc nhập người mua bên dưới.",
+        "buyerName": "Tên người mua",
+        "fromQuoteHint": "Để trống thì dùng người mua của báo giá.",
+        "buyerEmail": "Email",
+        "buyerPhone": "Số điện thoại",
+        "details": "Chi tiết đơn hàng",
+        "currency": "Tiền tệ",
+        "currencyHint": "Ba ký tự, ví dụ USD hoặc KWD.",
+        "currencyLocked": "Cố định sau khi đơn hàng được tạo.",
+        "expectedDate": "Ngày dự kiến",
+        "expectedHint": "Ngày người mua mong đợi nhận hàng.",
+        "reference": "Tham chiếu",
+        "referenceHint": "Ví dụ số đơn đặt hàng của người mua.",
+        "linesFromQuote": "Dòng",
+        "linesFromQuoteHint": "Đơn hàng sẽ lấy các dòng, giá và thuế của báo giá đã chấp nhận, với chiết khấu toàn chứng từ được gộp vào các dòng. Bạn vẫn có thể chỉnh sửa các dòng của bản nháp sau khi tạo.",
+        "lineItems": "Các dòng hàng hóa",
+        "shippingNotes": "Vận chuyển, ghi chú và điều khoản",
+        "shipping": "Phí vận chuyển ({currency})",
+        "shippingHint": "Lập cùng hóa đơn đầu tiên.",
+        "notes": "Ghi chú",
+        "notesHint": "Hiển thị trên đơn hàng.",
+        "terms": "Điều khoản",
+        "termsHint": "Được chuyển sang các hóa đơn tạo từ đơn hàng này.",
+        "draftNote": "Đơn hàng vẫn là bản nháp cho đến khi bạn xác nhận. Khi xác nhận, giá sẽ bị khóa.",
+        "quoteTotals": "Tổng báo giá",
+        "quoteTotalsNote": "Theo báo giá đã chấp nhận. Số liệu riêng của đơn hàng sẽ hiển thị sau khi đơn được tạo.",
+        "subtotal": "Tạm tính",
+        "discount": "Chiết khấu",
+        "tax": "Thuế",
+        "total": "Tổng",
+        "openExisting": "Mở đơn hàng {number}",
+        "viewOrders": "Xem tất cả đơn hàng",
+        "pickAnother": "Chọn báo giá khác",
+        "problems": {
+          "buyerRequired": "Chọn một liên hệ hoặc nhập tên người mua.",
+          "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+          "currencyInvalid": "Nhập mã tiền tệ gồm 3 ký tự.",
+          "expectedDateInvalid": "Nhập ngày hợp lệ.",
+          "shippingInvalid": "Nhập số tiền hợp lệ.",
+          "noLines": "Thêm ít nhất một dòng.",
+          "referenceTooLong": "Giữ tham chiếu dưới 191 ký tự."
+        },
+        "lineProblems": {
+          "descriptionRequired": "Mô tả dòng này.",
+          "qtyInvalid": "Nhập số lượng lớn hơn 0.",
+          "priceInvalid": "Nhập giá hợp lệ.",
+          "lineDiscountInvalid": "Nhập chiết khấu hợp lệ.",
+          "hsnRequired": "Nhập mã HSN/SAC.",
+          "hsnInvalid": "Nhập mã HSN/SAC hợp lệ.",
+          "taxRateRemoved": "Thuế suất của dòng này không còn tồn tại. Hãy chọn thuế suất hiện hành."
+        }
+      },
+      "quotePicker": {
+        "search": "Tìm báo giá đã chấp nhận",
+        "results": "Đề xuất và báo giá đã chấp nhận",
+        "loading": "Đang tải báo giá",
+        "noMatch": "Không có báo giá đã chấp nhận nào khớp.",
+        "none": "Chưa có đề xuất hoặc báo giá nào được chấp nhận.",
+        "kind": {
+          "proposal": "Đề xuất",
+          "estimate": "Báo giá"
+        },
+        "untitled": "Không có tiêu đề",
+        "accepted": "Đã chấp nhận {date}"
+      }
+    }
+  }
+}

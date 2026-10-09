@@ -1,0 +1,191 @@
+{
+  "team-chat": {
+    "nav": {
+      "teamChat": "Trò chuyện nhóm"
+    },
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "screen": {
+      "title": "Trò chuyện nhóm",
+      "back": "Quay lại kênh",
+      "search": "Tìm trong kênh này",
+      "pinned": "Tin nhắn đã ghim",
+      "members": "Thành viên kênh",
+      "deleteChannel": "Xóa kênh này",
+      "type": {
+        "public": "Kênh",
+        "private": "Riêng tư",
+        "dm": "Tin nhắn trực tiếp"
+      },
+      "olderMessage": "Tin nhắn đó nằm xa hơn. Tải tin nhắn cũ hơn để xem.",
+      "loading": "Đang tải Trò chuyện nhóm",
+      "loadFailed": "Không thể tải Trò chuyện nhóm.",
+      "retry": "Thử lại",
+      "deleteTitle": "Xóa kênh này?",
+      "deleteMessage": "#{name} và toàn bộ tin nhắn trong đó sẽ bị xóa đối với mọi người. Không thể hoàn tác.",
+      "deleteConfirm": "Xóa kênh",
+      "cancel": "Hủy"
+    },
+    "sidebar": {
+      "label": "Kênh và người",
+      "channels": "Kênh",
+      "createChannel": "Tạo kênh",
+      "loading": "Đang tải kênh",
+      "loadFailed": "Không thể tải kênh.",
+      "noChannels": "Chưa có kênh nào",
+      "direct": "Tin nhắn trực tiếp",
+      "people": "Người",
+      "invite": "Mời đồng nghiệp",
+      "pending": "Yêu cầu đang chờ",
+      "pendingCount": "{count, plural, other {# yêu cầu đang chờ}}",
+      "unread": "{count, plural, other {# tin nhắn chưa đọc}}"
+    },
+    "members": {
+      "label": "Thành viên",
+      "title": "Trò chuyện nhóm",
+      "count": "{count, plural, other {# thành viên}}",
+      "countUnknown": "Thành viên",
+      "search": "Tìm thành viên",
+      "loading": "Đang tải thành viên",
+      "none": "Không có thành viên phù hợp",
+      "online": "Trực tuyến",
+      "offline": "Ngoại tuyến",
+      "you": "(bạn)",
+      "message": "Nhắn tin cho {name}"
+    },
+    "panel": {
+      "searchTitle": "Tìm tin nhắn",
+      "pinnedTitle": "Tin nhắn đã ghim",
+      "searchPlaceholder": "Tìm trong kênh này",
+      "searchHint": "Nhập ít nhất hai ký tự.",
+      "close": "Đóng",
+      "failed": "Không thể tải nội dung đó.",
+      "noResults": "Không có tin nhắn phù hợp.",
+      "noPinned": "Chưa có tin nhắn nào được ghim trong kênh này."
+    },
+    "stream": {
+      "loading": "Đang tải tin nhắn",
+      "loadFailed": "Không thể tải tin nhắn.",
+      "loadOlder": "Tải tin nhắn cũ hơn",
+      "emptyTitle": "Chưa có tin nhắn trong #{name}",
+      "emptyMessage": "Hãy chào hỏi và bắt đầu cuộc trò chuyện."
+    },
+    "message": {
+      "edited": "(đã chỉnh sửa)",
+      "pinned": "Đã ghim",
+      "editLabel": "Sửa tin nhắn của bạn",
+      "cancel": "Hủy",
+      "save": "Lưu",
+      "editConflict": "Tin nhắn này đã thay đổi trong lúc bạn chỉnh sửa. Tải lại và thử lại.",
+      "reactions": "Phản ứng",
+      "reactionChip": "{emoji}, {count, plural, other {# người}}",
+      "reactionTray": "Chọn phản ứng",
+      "reply": "Trả lời",
+      "react": "Phản ứng",
+      "edit": "Sửa",
+      "pin": "Ghim",
+      "unpin": "Bỏ ghim",
+      "delete": "Xóa",
+      "deleteTitle": "Xóa tin nhắn này?",
+      "deleteMessage": "Tin nhắn sẽ bị gỡ đối với mọi người trong kênh.",
+      "uploading": "Đang tải lên",
+      "retry": "Thử lại",
+      "discard": "Hủy bỏ"
+    },
+    "composer": {
+      "placeholder": "Tin nhắn #{name}",
+      "attach": "Đính kèm tệp",
+      "send": "Gửi",
+      "hint": "Nhấn Enter để gửi, Shift+Enter để xuống dòng, @ để nhắc đến đồng nghiệp.",
+      "replyingTo": "Đang trả lời {name}",
+      "cancelReply": "Hủy trả lời",
+      "removeFile": "Xóa tệp đính kèm",
+      "fileTooLarge": "Tệp đó lớn hơn 20 MB.",
+      "mentionList": "Đồng nghiệp để nhắc đến",
+      "typingOne": "{name} đang nhập",
+      "typingMany": "{count} người đang nhập"
+    },
+    "createChannel": {
+      "title": "Tạo kênh",
+      "close": "Đóng",
+      "name": "Tên",
+      "nameHint": "Chữ thường, chữ số, dấu gạch ngang và gạch dưới, không có khoảng trắng.",
+      "description": "Mô tả (không bắt buộc)",
+      "privacy": "Quyền riêng tư",
+      "public": {
+        "label": "Công khai",
+        "hint": "Mọi người trong không gian làm việc đều có thể đọc và ghi."
+      },
+      "private": {
+        "label": "Riêng tư",
+        "hint": "Chỉ theo lời mời. Chỉ thành viên mới thấy kênh."
+      },
+      "cancel": "Hủy",
+      "create": "Tạo kênh"
+    },
+    "invite": {
+      "title": "Mời đồng nghiệp",
+      "close": "Đóng",
+      "email": "Email",
+      "name": "Tên (không bắt buộc)",
+      "note": "Ghi chú cho quản trị viên (không bắt buộc)",
+      "noteHint": "Nêu lý do người này nên tham gia.",
+      "addToChannel": "Cũng thêm vào #{name}",
+      "approved": "Xong. Yêu cầu đã được chấp thuận.",
+      "pending": "Đã gửi lời mời, đang chờ quản trị viên duyệt.",
+      "cancel": "Hủy",
+      "submit": "Gửi lời mời"
+    },
+    "invitations": {
+      "title": "Lời mời đang chờ",
+      "close": "Đóng",
+      "loading": "Đang tải",
+      "loadFailed": "Không thể tải lời mời.",
+      "empty": "Chưa có lời mời nào",
+      "status": {
+        "pending": "Đang chờ",
+        "approved": "Đã chấp thuận",
+        "declined": "Đã từ chối",
+        "expired": "Đã hết hạn"
+      },
+      "requestedBy": "Yêu cầu bởi {name} · {time}",
+      "decidedBy": "{status} bởi {name} · {time}",
+      "needsAccount": "Người này chưa có tài khoản trong không gian làm việc, nên chưa ai được thêm.",
+      "approve": "Chấp thuận",
+      "decline": "Từ chối"
+    },
+    "channelMembers": {
+      "title": "Thành viên của #{name}",
+      "close": "Đóng",
+      "admin": "Quản trị viên",
+      "leave": "Rời khỏi",
+      "remove": "Xóa",
+      "addLabel": "Thêm đồng nghiệp",
+      "choose": "Chọn đồng nghiệp",
+      "add": "Thêm"
+    },
+    "errors": {
+      "network": "Lỗi mạng. Kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "signedOut": "Bạn đã đăng xuất. Vui lòng đăng nhập lại.",
+      "notFound": "Mục này không còn tồn tại.",
+      "validation": "Kiểm tra thông tin đã nhập và thử lại.",
+      "conflict": "Dữ liệu đã thay đổi trong lúc này. Tải lại và thử lại.",
+      "tooLarge": "Tệp đó lớn hơn 20 MB.",
+      "rateLimited": "Quá nhiều yêu cầu. Chờ một lát rồi thử lại.",
+      "emptyMessage": "Hãy nhập tin nhắn hoặc đính kèm tệp.",
+      "replyOtherChannel": "Bạn chỉ có thể trả lời tin nhắn trong cùng kênh.",
+      "attachmentRejected": "Không thể đính kèm tệp này. Chỉ cho phép hình ảnh, PDF, Word, Excel, văn bản và CSV tối đa 20 MB.",
+      "editExpired": "Chỉ có thể sửa tin nhắn trong 15 phút.",
+      "nameTaken": "Đã có kênh với tên này.",
+      "channelProtected": "Không thể xóa #general.",
+      "alreadyMember": "Đã là thành viên không gian làm việc.",
+      "alreadyDecided": "Đã có quyết định.",
+      "notMember": "Bạn không phải thành viên của kênh này.",
+      "notAuthor": "Bạn chỉ có thể thay đổi tin nhắn của chính mình.",
+      "kindInvalid": "Không áp dụng cho loại kênh này.",
+      "unexpected": "Đã xảy ra lỗi. Thử lại."
+    }
+  }
+}

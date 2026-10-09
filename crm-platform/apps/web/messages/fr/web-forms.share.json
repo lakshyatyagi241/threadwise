@@ -1,0 +1,278 @@
+{
+  "web-forms": {
+    "share": {
+      "readOnly": "Vous pouvez consulter ces paramètres sans les modifier.",
+      "clipboardBlocked": "Votre navigateur a bloqué la copie. Sélectionnez le texte et copiez-le manuellement.",
+      "copied": "Copié",
+      "status": {
+        "archived": {
+          "title": "Ce formulaire est archivé",
+          "body": "Le lien public et les intégrations sont fermés. Restaurez le formulaire pour les utiliser à nouveau."
+        },
+        "draft": {
+          "title": "Publiez le formulaire pour activer ce lien",
+          "body": "Personne ne peut ouvrir le lien ni l’intégration tant que le formulaire n’a pas été publié au moins une fois."
+        },
+        "paused": {
+          "title": "Ce formulaire est fermé",
+          "body": "Le lien et les intégrations affichent un message de fermeture et n’acceptent aucune réponse. Reprenez le formulaire pour le rouvrir."
+        },
+        "live": {
+          "title": "Ce formulaire est en ligne",
+          "body": "Les visiteurs voient la version {version}. Vos modifications dans le générateur ne leur parviennent qu’après publication."
+        }
+      },
+      "hosted": {
+        "title": "Lien public",
+        "description": "Partagez cette adresse où vous voulez : dans un message, un e-mail, une bio de réseau social. Elle ouvre le formulaire sur sa propre page.",
+        "label": "Adresse du formulaire",
+        "copy": "Copier le lien",
+        "copiedToast": "Lien copié.",
+        "open": "Ouvrir",
+        "newTab": "(s’ouvre dans un nouvel onglet)"
+      },
+      "qr": {
+        "title": "Code QR",
+        "description": "Pour l’impression, les affiches et les emballages. Le scan ouvre le lien public.",
+        "alt": "Code QR qui ouvre le formulaire",
+        "tracking": "Le code ajoute utm_source=qr à l’adresse, afin que les réponses venues de ce code apparaissent comme QR dans leur attribution.",
+        "downloadPng": "Télécharger le PNG",
+        "downloadSvg": "Télécharger le SVG",
+        "downloadFailed": "Le code QR n’a pas pu être téléchargé. Réessayez."
+      },
+      "embed": {
+        "title": "Intégrez le formulaire sur votre site",
+        "description": "Collez l’un de ces codes à l’endroit où le formulaire doit apparaître. L’intégration ne fonctionne que sur les sites listés sous Sites autorisés ci-dessous.",
+        "copy": "Copier le code",
+        "copiedToast": "{name} copié.",
+        "script": {
+          "title": "Intégration par script",
+          "description": "Recommandé. Le formulaire s’adapte seul à la page et peut rediriger après l’envoi."
+        },
+        "iframe": {
+          "title": "Intégration par iframe",
+          "description": "Un cadre simple pour les outils qui n’autorisent pas les scripts. Vous définissez vous-même la hauteur."
+        }
+      },
+      "domains": {
+        "title": "Sites autorisés",
+        "description": "Seuls les sites listés ici peuvent intégrer ce formulaire et envoyer des réponses depuis un navigateur.",
+        "none": "Aucun site n’est encore autorisé : le formulaire fonctionne uniquement via son lien public et ne peut pas être intégré.",
+        "label": "Ajouter un site",
+        "hint": "Saisissez l’adresse exacte, par exemple https://www.example.com. Un niveau de caractère générique est autorisé, par exemple https://*.example.com. Le protocole http n’est accepté que pour localhost.",
+        "count": "{count} sur {max}",
+        "add": "Ajouter",
+        "remove": "Retirer {value}",
+        "empty": "Aucun site ajouté.",
+        "issues": {
+          "empty": "Saisissez d’abord une adresse de site.",
+          "invalid": "Cette adresse n’est pas valide. Utilisez le format https://example.com ou https://*.example.com, sans chemin.",
+          "duplicate": "Ce site figure déjà dans la liste.",
+          "max": "Vous pouvez autoriser au plus {max} sites."
+        }
+      },
+      "rotate": {
+        "title": "Régénérer la clé publique",
+        "description": "Crée une nouvelle clé pour ce formulaire. Utilisez-la si le lien ou le code d’intégration a fuité, ou si vous voulez le retirer.",
+        "button": "Régénérer la clé",
+        "readOnly": "Vous ne pouvez pas modifier ce formulaire",
+        "confirmTitle": "Régénérer la clé publique ?",
+        "confirmMessage": "L’ancien lien, les codes QR et le code d’intégration cessent de fonctionner immédiatement. Vous devrez partager le nouveau lien et remplacer le code sur chaque site qui intègre le formulaire.",
+        "confirmButton": "Régénérer la clé",
+        "cancel": "Annuler",
+        "success": "La clé a été régénérée. Copiez le nouveau lien et le nouveau code.",
+        "failed": "La clé n’a pas pu être régénérée. Rien n’a changé. Réessayez.",
+        "conflict": "Quelqu’un d’autre a modifié ce formulaire. Rechargez la page pour voir la dernière version, puis réessayez."
+      }
+    },
+    "settings": {
+      "readOnly": "Vous pouvez consulter ces paramètres sans les modifier.",
+      "usersFailed": "La liste des membres de l’équipe n’a pas pu être chargée : impossible de choisir des responsables pour le moment.",
+      "form": {
+        "title": "Formulaire",
+        "description": "Le nom affiché dans la liste et les informations de base que voient les visiteurs.",
+        "name": "Nom du formulaire",
+        "nameHint": "Seule votre équipe voit ce nom.",
+        "issues": {
+          "nameRequired": "Donnez un nom au formulaire.",
+          "submit_empty": "Le bouton a besoin d’un libellé.",
+          "submit_too_long": "Limitez le libellé du bouton à {max} caractères maximum."
+        },
+        "language": "Langue du formulaire",
+        "languageHint": "Définit la langue des textes intégrés et le sens de lecture (l’arabe se lit de droite à gauche).",
+        "languages": {
+          "en": "Anglais",
+          "ar": "Arabe"
+        },
+        "submitLabel": "Libellé du bouton d’envoi",
+        "submitLabelHint": "De 1 à {max} caractères."
+      },
+      "after": {
+        "title": "Après l’envoi",
+        "description": "Ce que voit le visiteur une fois ses réponses envoyées.",
+        "mode": "Action",
+        "modes": {
+          "message": "Afficher un message",
+          "redirect": "Aller vers une autre page"
+        },
+        "modeHints": {
+          "message": "Le formulaire est remplacé par votre message de remerciement.",
+          "redirect": "Le visiteur est redirigé vers une de vos pages, par exemple une page de remerciement ou de réservation."
+        },
+        "message": "Message de remerciement",
+        "messageHint": "Texte brut. Ces balises simples sont autorisées : b, i, u, br, ul, ol, li et a. {max} caractères maximum.",
+        "messageTooLong": "Le message dépasse {max} caractères.",
+        "redirect": "Adresse de redirection",
+        "redirectHint": "Doit commencer par https://. Une page qui n’est pas en https n’est jamais ouverte.",
+        "redirectIssues": {
+          "required": "Saisissez l’adresse vers laquelle rediriger les visiteurs.",
+          "https": "Utilisez une adresse qui commence par https://."
+        },
+        "redirectKeepsMessage": "Le message de remerciement est conservé dans le formulaire mais n’est pas affiché tant qu’une redirection est définie."
+      },
+      "consent": {
+        "title": "Consentement",
+        "description": "Une case à cocher qui enregistre ce à quoi le visiteur a consenti, avec le texte exact, sa version et l’heure.",
+        "enabled": "Demander le consentement",
+        "enabledHint": "Affiche la mention de consentement au-dessus du bouton d’envoi.",
+        "text": "Texte de consentement",
+        "textHint": "{max} caractères maximum. Les visiteurs voient exactement ce texte.",
+        "textRequired": "Rédigez le texte de consentement, ou désactivez le consentement.",
+        "textTooLong": "Le texte dépasse {max} caractères.",
+        "version": "Version du texte {version}",
+        "versionHintPublished": "Une fois le formulaire publié, toute modification du texte crée automatiquement une nouvelle version. Les réponses antérieures conservent la version acceptée.",
+        "versionHintDraft": "La version reste à 1 tant que le formulaire n’est pas publié. Ensuite, toute modification du texte crée une nouvelle version.",
+        "privacyUrl": "Lien vers la politique de confidentialité",
+        "privacyUrlHint": "Facultatif. Affiché à côté du texte de consentement. Doit commencer par https://.",
+        "privacyUrlHttps": "Utilisez une adresse qui commence par https://.",
+        "required": "À cocher pour envoyer",
+        "requiredHint": "Désactivez cette option si le consentement est facultatif.",
+        "marketing": "Consentement marketing",
+        "marketingHint": "Cocher la case enregistre le consentement marketing sur le contact. Une case non cochée n’inscrit jamais personne."
+      },
+      "crm": {
+        "title": "Dans le CRM",
+        "description": "Ce que fait chaque réponse sur le contact qu’elle crée ou met à jour.",
+        "company": "Associer à une entreprise",
+        "companyOptions": {
+          "none": "Ne pas associer",
+          "email_domain": "Par domaine de l’e-mail",
+          "name_or_domain": "Par nom ou domaine"
+        },
+        "companyHints": {
+          "none": "Les réponses concernant l’entreprise ne servent pas à associer une entreprise.",
+          "email_domain": "Associe le contact à l’entreprise propriétaire du domaine de son adresse e-mail.",
+          "name_or_domain": "Associe l’entreprise par son nom ou le domaine de son site, et la crée si aucune ne correspond."
+        },
+        "lifecycle": "Étape du cycle de vie",
+        "lifecycleHint": "Définie sur le contact lors de l’envoi du formulaire.",
+        "lifecycleNone": "Ne pas définir",
+        "stages": {
+          "new": "Nouveau",
+          "contacted": "Contacté",
+          "qualified": "Qualifié",
+          "application_started": "Candidature commencée",
+          "application_submitted": "Candidature envoyée",
+          "interview_scheduled": "Entretien programmé",
+          "offer_received": "Offre reçue",
+          "admission_confirmed": "Admission confirmée",
+          "enrolled": "Inscrit",
+          "lost": "Perdu"
+        },
+        "tags": "Étiquettes à ajouter",
+        "tagsHint": "Ajoutées à chaque contact qui envoie ce formulaire. {max} étiquettes maximum, de 1 à 60 caractères chacune.",
+        "tagsPlaceholder": "Par exemple : webinaire",
+        "tagsCount": "{count} sur {max}",
+        "tagAdd": "Ajouter une étiquette",
+        "tagRemove": "Retirer l’étiquette {value}",
+        "tagsNone": "Aucune étiquette.",
+        "tagIssues": {
+          "empty": "Saisissez d’abord une étiquette.",
+          "too_long": "Une étiquette ne peut pas dépasser 60 caractères.",
+          "duplicate": "Cette étiquette figure déjà dans la liste.",
+          "max": "Vous pouvez ajouter au plus {max} étiquettes."
+        },
+        "owner": "Responsable des nouveaux contacts",
+        "ownerHint": "Qui s’occupe du contact créé par ce formulaire.",
+        "ownerMode": "Règle de responsable",
+        "ownerModes": {
+          "unassigned": "Aucun responsable",
+          "fixed": "Une personne",
+          "round_robin": "Attribution à tour de rôle"
+        },
+        "ownerModeHints": {
+          "unassigned": "Le contact n’a pas de responsable tant que quelqu’un ne le prend pas en charge.",
+          "fixed": "Tous les contacts vont à la même personne.",
+          "round_robin": "Les contacts sont attribués aux personnes choisies, à tour de rôle. Les personnes qui ne sont plus actives sont ignorées."
+        },
+        "ownerFixed": "Responsable",
+        "ownerRoundRobin": "Personnes qui se relaient",
+        "ownerRoundRobinHint": "Choisissez au moins deux personnes.",
+        "chooseUser": "Choisissez une personne",
+        "unknownUser": "Une personne qui n’est plus disponible",
+        "pickUsers": "Choisir des personnes",
+        "noUsers": "Aucune personne correspondante",
+        "removeUser": "Retirer {name}",
+        "ownerIssues": {
+          "fixed_one": "Choisissez exactement une personne.",
+          "round_robin_two": "L’attribution à tour de rôle nécessite au moins deux personnes.",
+          "unassigned_none": "Une règle sans attribution ne peut pas avoir de personnes. Choisissez une autre règle ou videz la liste.",
+          "too_many": "Vous pouvez choisir au plus 50 personnes."
+        }
+      },
+      "notify": {
+        "title": "Notifications",
+        "description": "Qui est prévenu à l’arrivée d’une réponse.",
+        "owner": "Prévenir le responsable du contact",
+        "ownerHint": "Le responsable reçoit une notification pour chaque réponse.",
+        "users": "Prévenir aussi ces personnes",
+        "usersHint": "{max} membres de l’équipe maximum reçoivent aussi la notification.",
+        "emails": "Envoyer aussi un e-mail à ces adresses",
+        "emailsHint": "{max} adresses maximum reçoivent un e-mail pour chaque réponse. Elles peuvent appartenir à des personnes extérieures à votre équipe.",
+        "emailPlaceholder": "nom@example.com",
+        "emailsCount": "{count} sur {max}",
+        "emailAdd": "Ajouter un e-mail",
+        "emailRemove": "Retirer {value}",
+        "emailsNone": "Aucune adresse supplémentaire.",
+        "emailIssues": {
+          "empty": "Saisissez d’abord une adresse e-mail.",
+          "invalid": "Cette adresse e-mail n’est pas valide.",
+          "duplicate": "Cette adresse figure déjà dans la liste.",
+          "max": "Vous pouvez ajouter au plus {max} adresses."
+        }
+      },
+      "protection": {
+        "title": "Protection",
+        "description": "Empêche le spam et détermine la durée de conservation des réponses.",
+        "honeypot": "Champ piège masqué",
+        "honeypotHint": "Ajoute un champ que les personnes ne voient jamais. Les robots le remplissent, et leurs envois sont marqués comme spam.",
+        "captcha": "CAPTCHA",
+        "captchaOptions": {
+          "inherit": "Suivre le paramètre de la plateforme",
+          "on": "Toujours activé",
+          "off": "Désactivé"
+        },
+        "captchaHints": {
+          "inherit": "Applique le réglage de votre espace de travail pour les formulaires publics.",
+          "on": "Les visiteurs doivent réussir la vérification avant de pouvoir envoyer.",
+          "off": "Aucune vérification. Repose sur le champ piège masqué et les limites de débit."
+        },
+        "retention": "Conserver les réponses (en jours)",
+        "retentionHint": "Au-delà de ce nombre de jours, les réponses sont supprimées. Cela aide à respecter les règles de protection des données comme le RGPD. Entre 30 et 3650.",
+        "range": "Saisissez un nombre entier de {min} à {max}.",
+        "keepForever": "Conserver jusqu’à leur suppression manuelle",
+        "keepForeverHint": "Les réponses restent jusqu’à ce qu’une personne les supprime. Ne choisissez cette option que si vous avez une obligation légale de les conserver.",
+        "advanced": "Avancé : limites de débit",
+        "advancedHint": "Limites qui ralentissent les envois massifs de réponses. Les valeurs par défaut conviennent à la plupart des formulaires.",
+        "rate": {
+          "perIpPerMinute": "Par adresse, par minute",
+          "perIpPerMinuteHint": "Envois depuis une même adresse internet.",
+          "perFormPerMinute": "Par formulaire, par minute",
+          "perFormPerMinuteHint": "Envois vers ce formulaire, quelle que soit leur origine.",
+          "perContactPerHour": "Par contact, par heure",
+          "perContactPerHourHint": "Envois avec le même e-mail ou le même numéro de téléphone."
+        }
+      }
+    }
+  }
+}

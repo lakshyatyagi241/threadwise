@@ -1,0 +1,662 @@
+{
+  "invoicing": {
+    "nav": {
+      "invoices": "Rechnungen",
+      "payments": "Zahlungen",
+      "taxRates": "Steuersätze",
+      "recurring": "Wiederkehrende Rechnungen",
+      "salesOrders": "Aufträge"
+    },
+    "common": {
+      "unnamedContact": "Unbenannter Kontakt",
+      "dismiss": "Schließen"
+    },
+    "status": {
+      "draft": "Entwurf",
+      "issued": "Ausgestellt",
+      "partially_paid": "Teilweise bezahlt",
+      "overdue": "Überfällig",
+      "paid": "Bezahlt",
+      "void": "Storniert"
+    },
+    "method": {
+      "bank_transfer": "Banküberweisung",
+      "cash": "Bar",
+      "card": "Karte",
+      "upi": "UPI",
+      "cheque": "Scheck",
+      "gateway": "Online",
+      "other": "Sonstige"
+    },
+    "errors": {
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Sie haben keine Berechtigung dafür.",
+      "signedOut": "Ihre Sitzung ist beendet. Melden Sie sich erneut an.",
+      "conflict": "Jemand hat dies gerade geändert. Laden Sie neu, um die aktuelle Version zu sehen.",
+      "validation": "Einige Angaben sind nicht gültig. Prüfen Sie die markierten Felder.",
+      "unavailable": "Rechnungsstellung ist auf diesem Server noch nicht verfügbar.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie kurz und versuchen Sie es erneut.",
+      "notFound": "Diese Rechnung existiert nicht mehr.",
+      "planDisabled": "Ihr Tarif enthält keine Rechnungsstellung.",
+      "invalidState": "Das ist im aktuellen Status der Rechnung nicht möglich. Laden Sie neu und prüfen Sie den Status.",
+      "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Versuchen Sie es erneut.",
+      "requestId": "Anfrage-ID",
+      "retry": "Erneut versuchen"
+    },
+    "picker": {
+      "unlink": "Kontakt entfernen",
+      "searchContact": "Kontakte nach Name suchen",
+      "results": "Passende Kontakte",
+      "searching": "Suche läuft…",
+      "unavailable": "Kontakte konnten nicht geladen werden.",
+      "none": "Keine Kontakte gefunden."
+    },
+    "actions": {
+      "failed": "Das hat nicht funktioniert.",
+      "issued": "Rechnung {number} ausgestellt.",
+      "sent": "Als versendet markiert.",
+      "voided": "Rechnung {number} storniert.",
+      "duplicated": "Kopie als Entwurf erstellt.",
+      "deleted": "Entwurf gelöscht.",
+      "linkCopied": "Link kopiert.",
+      "linkCopyFailed": "Ihr Browser hat das Kopieren blockiert. Markieren Sie den Link und kopieren Sie ihn manuell."
+    },
+    "payDialog": {
+      "title": "Zahlung erfassen",
+      "forInvoice": "Rechnung {number}",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "record": "Zahlung erfassen",
+      "markPaid": "Erfassen und als bezahlt markieren",
+      "recordAnyway": "Trotzdem erfassen",
+      "balance": "Offener Betrag",
+      "amount": "Betrag ({currency})",
+      "method": "Zahlungsart",
+      "paidOn": "Gezahlt am",
+      "reference": "Referenz",
+      "referenceHint": "Transaktions-ID oder Schecknummer",
+      "note": "Notiz",
+      "recorded": "Zahlung über {amount} erfasst.",
+      "partialNote": "Dies ist eine Teilzahlung. Es bleiben {left} offen.",
+      "overpayNote": "Dies ist {extra} mehr als der offene Betrag. Prüfen Sie den Betrag, bevor Sie ihn erfassen.",
+      "problems": {
+        "amountInvalid": "Geben Sie einen Betrag ein, zum Beispiel 125,50.",
+        "amountZero": "Der Betrag muss größer als null sein.",
+        "dateInvalid": "Geben Sie ein gültiges Datum ein.",
+        "dateFuture": "Das Zahlungsdatum darf nicht in der Zukunft liegen.",
+        "tooMuch": "Das ist mehr, als erstattet werden kann.",
+        "referenceTooLong": "Die Referenz ist zu lang (höchstens 191 Zeichen).",
+        "noteTooLong": "Die Notiz ist zu lang (höchstens 2000 Zeichen)."
+      }
+    },
+    "refundDialog": {
+      "title": "Zahlung erstatten",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "refund": "Erstatten",
+      "available": "Bis zu {amount} können erstattet werden.",
+      "amount": "Betrag ({currency})",
+      "date": "Erstattet am",
+      "reason": "Grund",
+      "effect": "Die Rechnung schuldet den erstatteten Betrag wieder.",
+      "refunded": "{amount} erstattet.",
+      "problems": {
+        "amountInvalid": "Geben Sie einen Betrag ein, zum Beispiel 125,50.",
+        "amountZero": "Der Betrag muss größer als null sein.",
+        "tooMuch": "Das ist mehr, als erstattet werden kann."
+      }
+    },
+    "voidDialog": {
+      "title": "Rechnung stornieren",
+      "close": "Schließen",
+      "keep": "Rechnung behalten",
+      "void": "Rechnung stornieren",
+      "warning": "Eine stornierte Rechnung behält ihre Nummer, kann aber nicht mehr bezahlt, bearbeitet oder wieder geöffnet werden. Der Link des Kunden zeigt sie als storniert an.",
+      "reason": "Grund",
+      "reasonHint": "Optional. Wird in der Aktivität der Rechnung gespeichert."
+    },
+    "sendDialog": {
+      "title": "Rechnung teilen",
+      "issueTitle": "Rechnung ausstellen",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "issue": "Rechnung ausstellen",
+      "done": "Fertig",
+      "issueIntro": "Mit dem Ausstellen wird diese Rechnung offiziell:",
+      "issueNumber": "Sie erhält die nächste Rechnungsnummer.",
+      "issueFrozen": "Ihre Positionen, Preise und Steuern können nicht mehr bearbeitet werden.",
+      "issueLink": "Ein Link für Ihren Kunden wird verfügbar.",
+      "link": "Link für Ihren Kunden",
+      "linkHint": "Wer diesen Link hat, kann die Rechnung und die Zahlungsmöglichkeiten sehen.",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "copyFailed": "Ihr Browser hat das Kopieren blockiert. Markieren Sie den Link und kopieren Sie ihn manuell.",
+      "open": "Kundenseite öffnen",
+      "email": "Per E-Mail senden an",
+      "emailHint": "Optional. Leer lassen, um den Link selbst zu teilen und die Rechnung nur als versendet zu markieren.",
+      "alreadySent": "Diese Rechnung wurde bereits als versendet markiert."
+    },
+    "deleteDialog": {
+      "title": "Entwurf löschen?",
+      "message": "{name} wird endgültig gelöscht. Nur Entwürfe können gelöscht werden.",
+      "delete": "Entwurf löschen",
+      "keep": "Behalten"
+    },
+    "row": {
+      "moreFor": "Aktionen für {name}",
+      "draft": "Entwurf",
+      "open": "Öffnen",
+      "edit": "Bearbeiten",
+      "issue": "Ausstellen und senden",
+      "send": "Link teilen / als versendet markieren",
+      "copyLink": "Link kopieren",
+      "recordPayment": "Zahlung erfassen",
+      "markPaid": "Als bezahlt markieren",
+      "duplicate": "Duplizieren",
+      "print": "Herunterladen / Drucken",
+      "void": "Stornieren",
+      "delete": "Entwurf löschen"
+    },
+    "table": {
+      "columns": {
+        "number": "Rechnung",
+        "contact": "Kunde",
+        "issued": "Ausgestellt",
+        "due": "Fällig",
+        "total": "Gesamt",
+        "paid": "Bezahlt",
+        "balance": "Offen",
+        "status": "Status"
+      },
+      "draft": "Entwurf",
+      "daysLate": "{count, plural, one {# Tag verspätet} other {# Tage verspätet}}",
+      "selectAll": "Alle geladenen Rechnungen auswählen",
+      "selectRow": "{name} auswählen",
+      "scrollArea": "Rechnungstabelle"
+    },
+    "tabs": {
+      "label": "Rechnungsstatus",
+      "all": "Alle",
+      "draft": "Entwurf",
+      "issued": "Ausgestellt",
+      "partially_paid": "Teilweise bezahlt",
+      "overdue": "Überfällig",
+      "paid": "Bezahlt",
+      "void": "Storniert",
+      "count": "{count, plural, one {# Rechnung} other {# Rechnungen}}"
+    },
+    "toolbar": {
+      "search": "Nach Nummer oder Kunde suchen",
+      "contactLoading": "Kunde",
+      "from": "Von",
+      "to": "Bis",
+      "issuedFrom": "Ausgestellt ab",
+      "issuedTo": "Ausgestellt bis",
+      "sort": "Rechnungen sortieren",
+      "sorts": {
+        "newest": "Neueste zuerst",
+        "oldest": "Älteste zuerst",
+        "due": "Fälligkeitsdatum",
+        "amount": "Höchster Betrag"
+      },
+      "reset": "Filter zurücksetzen",
+      "refresh": "Aktualisieren"
+    },
+    "bulk": {
+      "label": "Massenaktionen",
+      "selected": "{count, plural, one {# Rechnung ausgewählt} other {# Rechnungen ausgewählt}}",
+      "working": "Wird bearbeitet…",
+      "issue": "Entwürfe ausstellen",
+      "void": "Stornieren",
+      "delete": "Entwürfe löschen",
+      "clear": "Auswahl aufheben",
+      "failed": "Das hat nicht funktioniert.",
+      "keep": "Behalten",
+      "someFailed": "{count, plural, one {# Rechnung konnte nicht geändert werden.} other {# Rechnungen konnten nicht geändert werden.}}",
+      "done": {
+        "issue": "{count, plural, one {# Entwurf ausgestellt.} other {# Entwürfe ausgestellt.}}",
+        "void": "{count, plural, one {# Rechnung storniert.} other {# Rechnungen storniert.}}",
+        "delete": "{count, plural, one {# Entwurf gelöscht.} other {# Entwürfe gelöscht.}}"
+      },
+      "confirm": {
+        "void": {
+          "title": "Ausgewählte Rechnungen stornieren?",
+          "message": "{count, plural, one {# ausgewählte Rechnung wird storniert. Rechnungen mit Zahlungen werden übersprungen.} other {# ausgewählte Rechnungen werden storniert. Rechnungen mit Zahlungen werden übersprungen.}}",
+          "confirm": "Rechnungen stornieren"
+        },
+        "delete": {
+          "title": "Ausgewählte Entwürfe löschen?",
+          "message": "{count, plural, one {# ausgewählte Rechnung wird geprüft. Nur Entwürfe werden endgültig gelöscht.} other {# ausgewählte Rechnungen werden geprüft. Nur Entwürfe werden endgültig gelöscht.}}",
+          "confirm": "Entwürfe löschen"
+        }
+      }
+    },
+    "list": {
+      "title": "Rechnungen",
+      "subtitle": "Stellen Sie Ihren Kunden Rechnungen aus und behalten Sie im Blick, was bezahlt und was überfällig ist.",
+      "payments": "Zahlungen",
+      "newInvoice": "Neue Rechnung",
+      "tableLabel": "Rechnungsliste",
+      "empty": {
+        "all": {
+          "title": "Noch keine Rechnungen",
+          "message": "Erstellen Sie Ihre erste Rechnung oder starten Sie eine aus einem angenommenen Angebot oder Kostenvoranschlag."
+        },
+        "draft": {
+          "title": "Keine Entwürfe",
+          "message": "Rechnungen, an denen Sie noch arbeiten, erscheinen hier."
+        },
+        "issued": {
+          "title": "Nichts wartet auf Zahlung",
+          "message": "Ausgestellte Rechnungen ohne Zahlung erscheinen hier."
+        },
+        "partially_paid": {
+          "title": "Keine teilweise bezahlten Rechnungen",
+          "message": "Rechnungen mit einer Zahlung und einem Restbetrag erscheinen hier."
+        },
+        "overdue": {
+          "title": "Nichts ist überfällig",
+          "message": "Rechnungen nach dem Fälligkeitsdatum mit einem Restbetrag erscheinen hier."
+        },
+        "paid": {
+          "title": "Noch keine bezahlten Rechnungen",
+          "message": "Vollständig bezahlte Rechnungen erscheinen hier."
+        },
+        "void": {
+          "title": "Keine stornierten Rechnungen",
+          "message": "Stornierte Rechnungen erscheinen hier und behalten ihre Nummern."
+        }
+      },
+      "emptyFilteredTitle": "Keine Rechnungen gefunden",
+      "emptyFiltered": "Versuchen Sie eine andere Suche oder leeren Sie die Filter.",
+      "resetFilters": "Filter zurücksetzen",
+      "loading": "Rechnungen werden geladen",
+      "showing": "{count, plural, one {# Rechnung geladen} other {# Rechnungen geladen}}",
+      "loadMore": "Mehr laden",
+      "allLoaded": "Das waren alle"
+    },
+    "lines": {
+      "lineN": "Position {n}",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Wofür stellen Sie in Rechnung?",
+      "removeLine": "Position {n} entfernen",
+      "qty": "Menge",
+      "price": "Einzelpreis ({currency})",
+      "discount": "Rabatt %",
+      "tax": "Steuer",
+      "noTax": "Keine Steuer",
+      "inclusive": "inkl.",
+      "removedRate": "Steuersatz entfernt",
+      "inactive": "inaktiv",
+      "amount": "Betrag",
+      "addLine": "Position hinzufügen",
+      "problems": {
+        "descriptionRequired": "Beschreiben Sie diese Position.",
+        "qtyInvalid": "Geben Sie eine Menge größer als null ein.",
+        "priceInvalid": "Geben Sie einen Preis ein, zum Beispiel 49,90.",
+        "lineDiscountInvalid": "Geben Sie einen Prozentsatz von 0 bis 100 ein.",
+        "noLines": "Fügen Sie vor dem Ausstellen mindestens eine Position hinzu.",
+        "amountZero": "Die Rechnungssumme muss größer als null sein."
+      }
+    },
+    "totals": {
+      "label": "Rechnungssummen",
+      "title": "Summen",
+      "subtotal": "Zwischensumme",
+      "discount": "Rabatt",
+      "total": "Gesamt"
+    },
+    "builder": {
+      "creatingFromDocument": "Die Rechnung wird aus dem Dokument erstellt…",
+      "loading": "Wird geladen",
+      "notEditable": "Diese Rechnung wurde ausgestellt und kann daher nicht mehr bearbeitet werden. Duplizieren Sie sie, um eine korrigierte Version zu erstellen.",
+      "openInvoice": "Rechnung öffnen",
+      "newTitle": "Neue Rechnung",
+      "editTitle": "Entwurf bearbeiten",
+      "back": "Zurück",
+      "unsaved": "Ungespeicherte Änderungen",
+      "cancel": "Abbrechen",
+      "saveDraft": "Entwurf speichern",
+      "saveAndIssue": "Speichern und ausstellen",
+      "conflict": "Jemand hat diesen Entwurf geändert, während Sie bearbeitet haben. Laden Sie neu, um die aktuelle Version zu sehen. Ihre Änderungen hier gehen verloren.",
+      "reload": "Neu laden",
+      "viewLabel": "Editoransicht",
+      "views": {
+        "edit": "Bearbeiten",
+        "preview": "Vorschau"
+      },
+      "billTo": "Rechnungsempfänger",
+      "contact": "Kontakt",
+      "contactHint": "Wählen Sie einen Kontakt aus, um die Rechnung mit ihm zu verknüpfen, oder geben Sie den Empfänger unten ein.",
+      "buyerName": "Name auf der Rechnung",
+      "buyerEmail": "E-Mail",
+      "buyerPhone": "Telefon",
+      "buyerAddress": "Rechnungsadresse",
+      "details": "Daten und Währung",
+      "currency": "Währung",
+      "currencyHint": "Drei Buchstaben, z. B. USD oder KWD. Nachkommastellen richten sich nach der Währung.",
+      "issueDate": "Rechnungsdatum",
+      "terms": "Zahlungsbedingungen",
+      "noDueDate": "Kein Fälligkeitsdatum",
+      "dueDate": "Fälligkeitsdatum",
+      "lineItems": "Positionen",
+      "orderLinkedNote": "Die Positionen einer Rechnung aus einem Auftrag sind festgelegt. Stornieren oder löschen Sie diese Rechnung und stellen Sie den Auftrag erneut in Rechnung, um sie zu ändern.",
+      "adjustments": "Rabatt",
+      "discountKind": "Rabatt auf die gesamte Rechnung",
+      "discountNone": "Kein Rabatt",
+      "discountPercent": "Prozent",
+      "discountAmount": "Festbetrag ({currency})",
+      "discountValue": "Rabattwert",
+      "notesAndTerms": "Notizen und Bedingungen",
+      "notes": "Notiz an den Kunden",
+      "notesHint": "Wird auf der Rechnung angezeigt.",
+      "termsText": "Geschäftsbedingungen",
+      "termsHint": "Wird unten auf der Rechnung angezeigt.",
+      "preview": "Vorschau",
+      "saved": "Entwurf gespeichert.",
+      "fixProblems": "Korrigieren Sie zuerst die markierten Felder.",
+      "serverRejected": "Der Server hat einige Werte nicht akzeptiert. Prüfen Sie die Felder und versuchen Sie es erneut.",
+      "problems": {
+        "contactRequired": "Wählen Sie einen Kontakt aus oder geben Sie den Namen des Kunden ein.",
+        "currencyInvalid": "Geben Sie einen dreistelligen Währungscode ein.",
+        "issueDateInvalid": "Geben Sie ein gültiges Rechnungsdatum ein.",
+        "dueBeforeIssue": "Das Fälligkeitsdatum darf nicht vor dem Rechnungsdatum liegen.",
+        "dueInvalid": "Geben Sie ein gültiges Fälligkeitsdatum ein.",
+        "noLines": "Fügen Sie vor dem Ausstellen mindestens eine Position hinzu.",
+        "discountInvalid": "Geben Sie einen gültigen Rabatt ein.",
+        "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
+        "amountZero": "Die Rechnungssumme muss größer als null sein.",
+        "descriptionRequired": "Beschreiben Sie diese Position.",
+        "priceInvalid": "Geben Sie einen gültigen Preis ein.",
+        "qtyInvalid": "Geben Sie eine Menge größer als null ein.",
+        "lineDiscountInvalid": "Geben Sie einen Prozentsatz von 0 bis 100 ein."
+      }
+    },
+    "terms": {
+      "onReceipt": "Bei Erhalt fällig",
+      "net": "Netto {days}",
+      "custom": "Benutzerdefiniertes Datum"
+    },
+    "paper": {
+      "label": "Rechnung {number}",
+      "labelDraft": "Vorschau des Rechnungsentwurfs",
+      "sellerFallback": "Ihr Firmenname",
+      "title": "Rechnung",
+      "draftNumber": "Entwurf",
+      "billedTo": "Rechnungsempfänger",
+      "buyerFallback": "Kunde",
+      "issued": "Ausgestellt",
+      "due": "Fällig",
+      "onReceipt": "Bei Erhalt",
+      "item": "Artikel",
+      "qty": "Menge",
+      "price": "Preis",
+      "tax": "Steuer",
+      "amount": "Betrag",
+      "noLines": "Noch keine Positionen",
+      "noDescription": "Keine Beschreibung",
+      "lineDiscount": "{percent} % Rabatt",
+      "subtotal": "Zwischensumme",
+      "discount": "Rabatt",
+      "discountPercent": "Rabatt ({percent} %)",
+      "total": "Gesamt",
+      "includesTax": "Steuer in den Preisen enthalten",
+      "paid": "Bezahlt",
+      "balanceDue": "Offener Betrag",
+      "notes": "Notizen",
+      "terms": "Bedingungen"
+    },
+    "detail": {
+      "loading": "Rechnung wird geladen",
+      "backToList": "Zurück zu den Rechnungen",
+      "draftTitle": "Rechnungsentwurf",
+      "edit": "Bearbeiten",
+      "issueAndSend": "Ausstellen und senden",
+      "shareAgain": "Erneut teilen",
+      "send": "Teilen und senden",
+      "recordPayment": "Zahlung erfassen",
+      "markPaid": "Als bezahlt markieren",
+      "copyLink": "Link kopieren",
+      "print": "Herunterladen / Drucken",
+      "duplicate": "Duplizieren",
+      "void": "Stornieren",
+      "delete": "Entwurf löschen",
+      "voidedBanner": "Diese Rechnung wurde am {date} storniert. Sie behält ihre Nummer, kann aber nicht mehr bezahlt werden.",
+      "voidNeedsRefund": "Um diese Rechnung zu stornieren, erstatten Sie zuerst ihre Zahlungen.",
+      "overpaid": "Es wurde mehr bezahlt, als diese Rechnung verlangt.",
+      "amountsLabel": "Beträge",
+      "total": "Gesamt",
+      "paid": "Bezahlt",
+      "balance": "Offener Betrag",
+      "issued": "Ausgestellt",
+      "due": "Fällig",
+      "noDue": "Kein Fälligkeitsdatum",
+      "daysLate": "{count, plural, one {# Tag verspätet} other {# Tage verspätet}}",
+      "sentAt": "Versendet",
+      "paidAt": "Vollständig bezahlt",
+      "source": "Erstellt aus",
+      "sourceKind": {
+        "proposal": "Angebot",
+        "estimate": "Kostenvoranschlag"
+      },
+      "deal": "Deal",
+      "dealFallback": "Deal öffnen"
+    },
+    "paymentsSection": {
+      "title": "Zahlungen",
+      "loading": "Zahlungen werden geladen",
+      "none": "Noch keine Zahlungen erfasst.",
+      "refund": "Erstatten"
+    },
+    "activity": {
+      "title": "Aktivität",
+      "loading": "Aktivität wird geladen",
+      "events": {
+        "created": "Entwurf erstellt",
+        "edited": "Entwurf bearbeitet",
+        "issued": "Rechnung ausgestellt",
+        "sent": "Als gesendet markiert",
+        "viewed": "Vom Kunden geöffnet",
+        "payment_recorded": "Zahlung erfasst",
+        "payment_refunded": "Zahlung erstattet",
+        "paid": "Vollständig bezahlt",
+        "reminder_sent": "Zahlungserinnerung gesendet",
+        "voided": "Rechnung storniert"
+      }
+    },
+    "pickInvoice": {
+      "title": "Welche Rechnung wurde bezahlt?",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "search": "Nach Nummer oder Kunde suchen",
+      "loading": "Rechnungen werden geladen",
+      "noMatch": "Keine offene Rechnung entspricht der Suche.",
+      "nothingOwed": "Derzeit ist nichts offen.",
+      "balance": "Saldo",
+      "more": "Mehr anzeigen"
+    },
+    "aging": {
+      "loading": "Fälligkeitsbericht wird geladen",
+      "emptyTitle": "Nichts offen",
+      "emptyMessage": "Alle ausgestellten Rechnungen sind bezahlt. Unbezahlte Rechnungen werden hier nach Überfälligkeit gruppiert angezeigt.",
+      "asOf": "Stand {date}. Die Überfälligkeit wird ab dem Fälligkeitsdatum gerechnet.",
+      "currencyLabel": "Offen in {currency}",
+      "outstanding": "Offen",
+      "invoices": "{count, plural, one {# Rechnung} other {# Rechnungen}}",
+      "barLabel": "Anteil des offenen Betrags in jeder Altersgruppe",
+      "buckets": {
+        "current": "Noch nicht fällig",
+        "d1_30": "1-30 Tage überfällig",
+        "d31_60": "31-60 Tage überfällig",
+        "d61_90": "61-90 Tage überfällig",
+        "d90_plus": "Mehr als 90 Tage überfällig"
+      },
+      "total": "Gesamt",
+      "unnamed": "Kontakt ohne Namen",
+      "noContact": "Kein Kontakt"
+    },
+    "payments": {
+      "title": "Zahlungen",
+      "subtitle": "Eingegangene Zahlungen zu Ihren Rechnungen und noch offene Beträge.",
+      "invoices": "Rechnungen",
+      "record": "Zahlung erfassen",
+      "viewLabel": "Zahlungsansicht",
+      "views": {
+        "ledger": "Journal",
+        "aging": "Fälligkeit"
+      },
+      "tableLabel": "Zahlungsjournal",
+      "loading": "Zahlungen werden geladen",
+      "emptyFilteredTitle": "Keine Zahlungen entsprechen der Suche",
+      "emptyFiltered": "Versuchen Sie eine andere Suche oder setzen Sie die Filter zurück.",
+      "emptyTitle": "Noch keine Zahlungen",
+      "emptyMessage": "Wenn ein Kunde eine Rechnung bezahlt, erfassen Sie die Zahlung hier oder direkt in der Rechnung.",
+      "resetFilters": "Filter zurücksetzen",
+      "showing": "{count, plural, one {# Zahlung geladen} other {# Zahlungen geladen}}",
+      "loadMore": "Mehr laden",
+      "allLoaded": "Das waren alle",
+      "strip": {
+        "loading": "Summen werden geladen",
+        "label": "Zahlungssummen",
+        "window": "{from} bis {to}",
+        "none": "Keine Zahlungen in diesem Zeitraum.",
+        "collected": "Eingenommen ({currency})",
+        "count": "Zahlungen",
+        "refunded": "Erstattet"
+      },
+      "toolbar": {
+        "search": "Nach Referenz, Rechnung oder Kunde suchen",
+        "method": "Zahlungsart",
+        "allMethods": "Alle Zahlungsarten",
+        "from": "Von",
+        "to": "Bis",
+        "paidFrom": "Bezahlt ab",
+        "paidTo": "Bezahlt bis",
+        "reset": "Filter zurücksetzen",
+        "refresh": "Aktualisieren"
+      },
+      "table": {
+        "scrollArea": "Zahlungstabelle",
+        "columns": {
+          "date": "Datum",
+          "invoice": "Rechnung",
+          "contact": "Kunde",
+          "method": "Zahlungsart",
+          "reference": "Referenz",
+          "amount": "Betrag",
+          "refunded": "Erstattet",
+          "recordedBy": "Erfasst von",
+          "actions": "Aktionen"
+        },
+        "moreFor": "Aktionen für die Zahlung vom {date}",
+        "openInvoice": "Rechnung öffnen",
+        "refund": "Erstatten"
+      }
+    },
+    "taxRates": {
+      "title": "Steuersätze",
+      "subtitle": "Die Steuern, die Sie zu Rechnungspositionen hinzufügen. Einer ist der Standard für neue Positionen.",
+      "new": "Neuer Steuersatz",
+      "tableLabel": "Steuersätze",
+      "loading": "Steuersätze werden geladen",
+      "emptyTitle": "Noch keine Steuersätze",
+      "emptyMessage": "Legen Sie die Steuern an, die Sie erheben, z. B. MwSt. oder GST, um sie in Rechnungspositionen auszuwählen.",
+      "scrollArea": "Tabelle der Steuersätze",
+      "columns": {
+        "name": "Name",
+        "rate": "Satz",
+        "type": "Art",
+        "status": "Status",
+        "effective": "Gültig ab",
+        "used": "Positionen",
+        "actions": "Aktionen"
+      },
+      "default": "Standard",
+      "inclusive": "Inklusive",
+      "exclusive": "Exklusive",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "always": "Immer",
+      "moreFor": "Aktionen für {name}",
+      "edit": "Bearbeiten",
+      "makeDefault": "Als Standard festlegen",
+      "madeDefault": "{name} ist jetzt der Standard.",
+      "deactivate": "Deaktivieren",
+      "activate": "Aktivieren",
+      "deactivated": "{name} deaktiviert.",
+      "activated": "{name} aktiviert.",
+      "delete": "Löschen",
+      "deleteTitle": "Diesen Steuersatz löschen?",
+      "keep": "Behalten",
+      "deleted": "{name} gelöscht.",
+      "count": "{count, plural, one {# Steuersatz} other {# Steuersätze}}",
+      "hint": "Eine Änderung des Satzes ändert nie bereits ausgestellte Rechnungen: Jede Rechnung behält den Satz, mit dem sie erstellt wurde.",
+      "errors": {
+        "isDefault": "Dies ist der Standardsatz. Legen Sie zuerst einen anderen Satz als Standard fest."
+      },
+      "form": {
+        "eyebrow": "Steuersatz",
+        "editTitle": "Steuersatz bearbeiten",
+        "newTitle": "Neuer Steuersatz",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "save": "Speichern",
+        "name": "Name",
+        "namePlaceholder": "MwSt., GST, Umsatzsteuer",
+        "rate": "Satz",
+        "type": "So wird er angewendet",
+        "exclusive": "Exklusive: wird aufgeschlagen",
+        "inclusive": "Inklusive: bereits im Preis enthalten",
+        "typeHint": {
+          "exclusive": "Der Kunde zahlt den Preis zuzüglich Steuer.",
+          "inclusive": "Der Preis enthält die Steuer bereits; die Rechnung zeigt, wie viel davon Steuer ist."
+        },
+        "effectiveFrom": "Gültig ab",
+        "effectiveHint": "Optional. Für einen Satz, der sich an einem Datum ändert.",
+        "description": "Beschreibung",
+        "makeDefault": "Standard für neue Positionen",
+        "defaultHint": "Neue Rechnungspositionen beginnen mit diesem Satz.",
+        "active": "Aktiv",
+        "activeHint": "Inaktive Sätze können bei neuen Positionen nicht ausgewählt werden.",
+        "saved": "{name} gespeichert.",
+        "created": "{name} hinzugefügt.",
+        "problems": {
+          "nameRequired": "Geben Sie einen Namen ein.",
+          "nameTaken": "Ein Steuersatz mit diesem Namen existiert bereits.",
+          "rateInvalid": "Geben Sie einen Prozentsatz von 0 bis 100 ein.",
+          "dateInvalid": "Geben Sie ein gültiges Datum ein.",
+          "conflict": "Dieser Satz wurde von einer anderen Person geändert. Schließen Sie ihn und öffnen Sie ihn erneut."
+        }
+      }
+    },
+    "public": {
+      "loading": "Rechnung wird geladen",
+      "errorTitle": "Diese Rechnung konnte nicht geladen werden",
+      "errorMessage": "Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "retry": "Erneut versuchen",
+      "title": "Rechnung von {seller}",
+      "dueOn": "fällig am {date}",
+      "print": "Drucken",
+      "download": "PDF herunterladen",
+      "paidBanner": "Diese Rechnung ist vollständig bezahlt. Vielen Dank.",
+      "voidBanner": "Diese Rechnung wurde storniert und muss nicht bezahlt werden.",
+      "payNow": "So bezahlen Sie",
+      "amountDue": "Fälliger Betrag:",
+      "bankIntro": "Überweisen Sie den Betrag und verwenden Sie {number} als Verwendungszweck.",
+      "copied": "Kopiert",
+      "payButton": "{amount} bezahlen",
+      "gatewayNote": "Sie gelangen zur Zahlungsseite des Zahlungsdienstleisters des Verkäufers.",
+      "questions": "Fragen zu dieser Rechnung?",
+      "metaTitle": "Rechnung"
+    },
+    "linked": {
+      "title": "Rechnungen",
+      "new": "Neue Rechnung",
+      "viewAll": "Alle anzeigen",
+      "loading": "Rechnungen werden geladen",
+      "none": "Noch keine Rechnungen.",
+      "draft": "Entwurf",
+      "owes": "schuldet"
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "flb": {
+    "geta": {
+      "status": {
+        "pending": "正在上线…",
+        "live": "已上线",
+        "liveTitle": "已在 Geta 上线",
+        "push": "推送上线",
+        "pushHint": "已在此发布，现在将其推送到 Geta 上线",
+        "failed": "失败",
+        "failedConfiguration": "配置更新时失败",
+        "failedPublish": "发布时失败",
+        "retry": "重试",
+        "retrying": "正在重试…",
+        "reasonLabel": "原因",
+        "failedNote": "流程在此处仍保持已发布状态。重试将从失败的步骤继续。",
+        "notConfigured": "已在此发布，请在设置中配置 Geta 发布，以将其推送上线。",
+        "openSettings": "打开设置",
+        "dismiss": "忽略"
+      },
+      "settings": {
+        "title": "Geta 发布",
+        "intro": "在流程构建器中点击“发布”时，您的机器人也会被推送到 Geta 控制台上线。请为此工作区一次性输入连接详情。密钥将加密存储，之后不再显示。",
+        "viewOnly": "您可以查看这些设置的状态，但无法更改。",
+        "loading": "加载中…",
+        "loadFailed": "无法加载设置。",
+        "retry": "重试",
+        "fixtureNotice": "此服务器处于模拟数据模式：发布为模拟操作，不会向 Geta 发送任何内容。",
+        "ready": "已就绪",
+        "incomplete": "未完成",
+        "readyNote": "发布流程时也会将您的机器人推送到 Geta 上线。",
+        "incompleteNote": "请填写下方所有字段，以将已发布的流程推送到 Geta 上线。",
+        "baseUrl": {
+          "label": "基础 URL",
+          "hint": "Geta API 地址，例如 https://api-core-sandbox.geta.ai"
+        },
+        "origin": {
+          "label": "控制台来源（可选）",
+          "hint": "作为每个请求的 origin 和 referer 发送。留空则两者都不发送。"
+        },
+        "authorization": {
+          "label": "授权令牌",
+          "hint": "按您输入的内容原样发送，不会添加“Bearer ”。"
+        },
+        "getaHost": {
+          "label": "geta-host 令牌",
+          "hint": "通过 geta-host 请求头发送。"
+        },
+        "secretKept": "已保存。留空则保留原值，或输入新值进行替换。",
+        "secretPlaceholder": "已保存（已隐藏）",
+        "show": "显示",
+        "hide": "隐藏",
+        "remove": "移除",
+        "record": {
+          "label": "Geta 聊天机器人记录",
+          "paste": "粘贴聊天机器人记录（JSON）",
+          "replace": "替换聊天机器人记录（JSON）",
+          "hint": "应为要原样发送给 Geta 的聊天机器人对象，或带有 chatbot 键的完整请求体。至少需要 id 和 bot_id。发送时仅刷新 modified_time。",
+          "keepPlaceholder": "留空则保留已保存的记录",
+          "id": "聊天机器人 ID",
+          "name": "名称",
+          "botId": "机器人 ID",
+          "remove": "移除已保存的记录"
+        },
+        "saved": "已保存",
+        "notSet": "未设置",
+        "save": "保存",
+        "saving": "保存中…",
+        "saveFailed": "无法保存。",
+        "removed": "已移除。",
+        "clear": "全部清除",
+        "cleared": "Geta 发布设置已清除。",
+        "clearConfirm": {
+          "title": "清除 Geta 发布设置？",
+          "message": "这将移除基础 URL、两个令牌和聊天机器人记录。已发布的流程在此处仍保持已发布状态，但不再推送到 Geta。",
+          "confirm": "全部清除",
+          "cancel": "取消"
+        }
+      }
+    }
+  }
+}

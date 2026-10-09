@@ -1,0 +1,112 @@
+{
+  "checkout-orders-merchant-payments": {
+    "gateways": {
+      "eyebrow": "Tienda / Pasarelas de pago",
+      "title": "Pasarelas de pago",
+      "subtitle": "Añade las claves de tu propia pasarela para que los pagos lleguen a tu cuenta. Pega las claves que la pasarela indica en su panel.",
+      "banner": "Una sola configuración de pasarela sirve para el pago de tu tienda y para las facturas de Ventas.",
+      "viewOnly": "Puedes ver la configuración de la pasarela, pero no cambiarla. Pide a un administrador del espacio de trabajo permiso para gestionar pasarelas.",
+      "scope": {
+        "label": "Dónde se aplican estos ajustes",
+        "workspace": "Espacio de trabajo (todas las tiendas)",
+        "workspaceHint": "Lo usan todas las tiendas y las facturas de Ventas, salvo que una tienda tenga su propia configuración.",
+        "store": "Solo esta tienda (personalizada)",
+        "storeHint": "Se usa solo en el pago de {shop}. Tiene prioridad sobre la configuración del espacio de trabajo.",
+        "storeNamed": "Tienda: {shop}",
+        "noShop": "Crea primero una tienda para configurar una personalización.",
+        "shop": "Tienda"
+      },
+      "resolved": {
+        "used": "En uso actualmente: {name} (origen: {source})",
+        "none": "Aún no hay ninguna pasarela configurada",
+        "noneHint": "Configura una pasarela abajo y actívala. Hasta entonces, los compradores no pueden pagar en línea y las facturas no tienen botón de pago.",
+        "source": {
+          "store_override": "personalización de la tienda",
+          "workspace_default": "predeterminada del espacio de trabajo",
+          "legacy_storefront": "claves de la tienda"
+        }
+      },
+      "mode": {
+        "live": "Producción",
+        "test": "Prueba"
+      },
+      "catalogue": {
+        "title": "Pasarelas",
+        "count": "{count, plural, one {# pasarela} other {# pasarelas}}",
+        "search": "Buscar pasarelas",
+        "searchPlaceholder": "Buscar por nombre, país o moneda",
+        "loading": "Cargando pasarelas",
+        "noDriversTitle": "No hay pasarelas disponibles",
+        "noDriversMessage": "Este servidor aún no tiene pasarelas de pago que configurar.",
+        "noMatchTitle": "Ninguna pasarela coincide",
+        "noMatchMessage": "Prueba con otro nombre, país o código de moneda.",
+        "clearSearch": "Borrar búsqueda"
+      },
+      "card": {
+        "available": "Disponible",
+        "unavailable": "Aún no disponible",
+        "paymentLinks": "Enlaces de pago",
+        "unavailableNote": "Esta pasarela aparece en la lista, pero todavía no puede procesar pagos en esta versión.",
+        "active": "Activa",
+        "off": "Desactivada",
+        "incomplete": "Claves incompletas",
+        "default": "Predeterminada",
+        "migrated": "Migrada desde las claves de tu tienda en línea. Guarda una vez aquí para conservarlas en la nueva configuración.",
+        "webhookMissing": "Falta el secreto del webhook: se rechazan las notificaciones de pago de esta pasarela hasta que añadas uno.",
+        "notSetUp": "Aún no está configurada para este ámbito.",
+        "configure": "Configurar",
+        "edit": "Editar",
+        "test": "Probar conexión",
+        "testing": "Probando",
+        "setDefault": "Establecer como predeterminada",
+        "activeSwitch": "{name} está activada",
+        "remove": "Quitar",
+        "removeTitle": "¿Quitar {name}?",
+        "removeMessage": "Se eliminan sus claves guardadas para este ámbito ({scope}). Los compradores ya no podrán pagar con ella y es posible que los pagos en curso no se confirmen.",
+        "removeConfirm": "Quitar pasarela"
+      },
+      "toast": {
+        "saved": "Pasarela guardada",
+        "switchedOn": "{name} activada",
+        "switchedOff": "{name} desactivada",
+        "defaultSet": "{name} ahora es la predeterminada",
+        "removed": "{name} quitada"
+      },
+      "test": {
+        "verified": "El proveedor aceptó las claves.",
+        "fieldsTitle": "Los campos obligatorios están rellenos",
+        "fieldsOnly": "Solo se comprobaron los campos obligatorios: esta pasarela no tiene una llamada de comprobación sencilla, así que la prueba real es un pago.",
+        "missingTitle": "Las claves están incompletas",
+        "missing": "Estos campos obligatorios están vacíos: {fields}.",
+        "rejected": "El proveedor no aceptó las claves.",
+        "providerSaid": "El proveedor respondió: {message}"
+      },
+      "drawer": {
+        "eyebrow": "Configurar pasarela",
+        "save": "Guardar pasarela",
+        "appliesTo": "Se aplica a: {scope}",
+        "credentials": "Credenciales",
+        "noFields": "Esta pasarela no necesita claves.",
+        "secretsNote": "Las claves guardadas no se vuelven a mostrar. Solo se muestra el final de cada una como recordatorio.",
+        "requiredField": "{field} es obligatorio.",
+        "invalidOption": "Elige una de las opciones disponibles para {field}.",
+        "mode": "Modo",
+        "modeHint": "Usa Prueba mientras pruebas la pasarela con sus claves de prueba, y Producción para recibir pagos reales.",
+        "active": "Activa",
+        "activeHint": "Una pasarela desactivada nunca se usa en el pago ni en las facturas.",
+        "webhookTitle": "Dirección del webhook",
+        "webhookHint": "Pega esto en tu panel de {name} para que los pagos se confirmen automáticamente.",
+        "webhookAfterSave": "La dirección del webhook aparece aquí tras el primer guardado.",
+        "willClear": "El valor guardado se eliminará al guardar.",
+        "keepBlank": "Déjalo en blanco para conservar el valor guardado.",
+        "requiredMark": "(obligatorio)",
+        "stored": "Guardado: {mask}",
+        "keepOption": "Conservar el valor guardado",
+        "chooseOption": "Elige una opción",
+        "clear": "Borrar el valor guardado",
+        "show": "Mostrar valor",
+        "hide": "Ocultar valor"
+      }
+    }
+  }
+}

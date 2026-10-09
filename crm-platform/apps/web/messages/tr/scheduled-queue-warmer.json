@@ -1,0 +1,531 @@
+{
+  "scheduled-queue-warmer": {
+    "nav": {
+      "scheduled": "Zamanlanmış",
+      "warmer": "Isınma"
+    },
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "status": {
+      "scheduled": "Sırada",
+      "running": "Çalışıyor",
+      "paused": "Duraklatıldı",
+      "completed": "Tamamlandı",
+      "failed": "Başarısız",
+      "cancelled": "İptal edildi"
+    },
+    "type": {
+      "plain": "Düz metin",
+      "template": "Şablon",
+      "media": "Medya",
+      "location": "Konum"
+    },
+    "errors": {
+      "generic": "Bir sorun oluştu. Yeniden deneyin.",
+      "FORBIDDEN": "Bunu yapmak için yetkiniz yok.",
+      "VALIDATION_FAILED": "Bazı alanlara bakmanız gerekiyor.",
+      "ROW_VERSION_CONFLICT": "Bu zamanlama bu arada değişti. Sayfayı yenileyip yeniden deneyin.",
+      "PLAN_FEATURE_LOCKED": "Planınız bu özelliği içermiyor.",
+      "PLAN_LIMIT_REACHED": "Planınızın sınırına ulaştınız.",
+      "WA_UNOFFICIAL_DISABLED": "Kişisel WhatsApp numaralarıyla (resmi olmayan API) gönderim çalışma alanınız için etkin değil. Resmi bir WhatsApp Business API numarası seçin.",
+      "AUTH_SEND_HALTED": "Bu çalışma alanı için gönderim durduruldu.",
+      "upgrade": "Planları gör ve yükselt",
+      "requestId": "İstek {id}"
+    },
+    "actions": {
+      "done": {
+        "pause": "Zamanlama duraklatıldı.",
+        "resume": "Zamanlama devam ettirildi.",
+        "cancel": "Zamanlama iptal edildi.",
+        "run-now": "Zamanlama şimdi çalışıyor.",
+        "destroy": "Zamanlama silindi.",
+        "retry": "Zamanlama yeni saatle sıraya alındı."
+      }
+    },
+    "confirm": {
+      "yes": "Evet, devam et",
+      "keep": "Vazgeç",
+      "cancel": {
+        "title": "Bu zamanlama iptal edilsin mi?",
+        "body": "“{name}” gönderilmeyecek. Bu işlem geri alınamaz."
+      },
+      "run-now": {
+        "title": "Bu zamanlama şimdi çalıştırılsın mı?",
+        "body": "“{name}” ayarlanan saat yerine hemen göndermeye başlayacak."
+      },
+      "destroy": {
+        "title": "Bu zamanlama silinsin mi?",
+        "body": "“{name}” ve alıcı listesi kaldırılacak."
+      }
+    },
+    "retry": {
+      "title": "Yeni saatle yeniden dene",
+      "body": "“{name}” için yeni bir gönderim saati seçin. Sırada durumuna geri döner.",
+      "date": "Gönderim tarihi",
+      "time": "Saat",
+      "timezone": "Saat dilimi",
+      "keep": "Başarısızları tut",
+      "confirm": "Şimdi yeniden dene"
+    },
+    "list": {
+      "crumb": "Kampanyalar / Zamanlanmış mesajlar",
+      "title": "Zamanlanmış mesajlar",
+      "queued": "{n} sırada",
+      "create": "Mesaj zamanla",
+      "stats": {
+        "total": "Toplam zamanlanmış",
+        "totalHint": "tüm durumlarda",
+        "active": "Etkin kuyruk",
+        "activeHint": "gönderilmeyi bekliyor",
+        "sent": "Toplam gönderilen",
+        "sentHint": "mesaj gönderildi (bu sayfa)",
+        "delivery": "Teslim oranı",
+        "deliveryHint": "tamamlananlarda (bu sayfa)"
+      },
+      "upNext": {
+        "eyebrow": "Sıradaki",
+        "title": "Sonraki gönderim",
+        "pending": "{n} bekliyor",
+        "empty": "Henüz zamanlanmış bir şey yok.",
+        "createOne": "Bir tane oluştur →",
+        "recurring": "tekrarlayan",
+        "queued": "sırada"
+      },
+      "tip": {
+        "eyebrow": "İpucu",
+        "title": "Okuduklarında gönder",
+        "body": "Kişilerinizin yerel saat dilimlerinde açılma oranları sabah 9–11 ve akşam 18–20 arasında zirve yapar. Alıcı grubuna uygun bir gönderim saati seçin; tekrarlayan zamanlamalar bunu bir kez ayarlayıp unutmanızı sağlar.",
+        "cta": "Bir tane zamanla"
+      },
+      "tabs": {
+        "all": "Tümü",
+        "upcoming": "Yaklaşan",
+        "running": "Çalışıyor",
+        "paused": "Duraklatıldı",
+        "completed": "Tamamlandı",
+        "failed": "Başarısız"
+      },
+      "search": "Ada göre ara…",
+      "cols": {
+        "schedule": "Zamanlama",
+        "type": "Tür",
+        "recipients": "Alıcılar",
+        "sendTime": "Gönderim saati",
+        "repeat": "Tekrar",
+        "status": "Durum",
+        "actions": "İşlemler"
+      },
+      "recipients": {
+        "group": "Grup",
+        "tag": "Etiket",
+        "queue": "Kuyruk",
+        "number": "Numaralar"
+      },
+      "when": {
+        "overdue": "gecikmiş",
+        "now": "şimdi",
+        "minutes": "{n} dk sonra",
+        "hours": "{n} sa sonra",
+        "tomorrow": "yarın",
+        "date": "daha sonra"
+      },
+      "completedAt": "{when} tamamlandı",
+      "once": "bir kez",
+      "actions": {
+        "open": "Aç",
+        "pause": "Duraklat",
+        "resume": "Devam ettir",
+        "runNow": "Şimdi çalıştır",
+        "cancel": "İptal",
+        "retry": "Yeni saatle yeniden dene",
+        "delete": "Sil",
+        "deleteHistory": "Geçmişten sil"
+      },
+      "empty": {
+        "title": "Zamanlama yok",
+        "none": "İlk mesajınızı zamanlayın.",
+        "filtered": "Geçerli filtrelerle eşleşen zamanlama yok. Filtreleri temizleyin ya da ilk mesajınızı zamanlayın.",
+        "reset": "Filtreleri sıfırla"
+      },
+      "page": "Sayfa {page} / {pages}",
+      "prev": "Önceki",
+      "next": "Sonraki"
+    },
+    "composer": {
+      "crumb": "Zamanlanmış / Yeni",
+      "title": "Bir mesaj zamanla",
+      "back": "Geri",
+      "forbidden": "Mesaj zamanlamak için yetkiniz yok.",
+      "steps": "Adımlar",
+      "stepNames": {
+        "basics": "Temel bilgiler",
+        "audience": "Alıcılar",
+        "message": "Mesaj",
+        "when": "Ne zaman",
+        "review": "Gözden geçir"
+      },
+      "required": "zorunlu",
+      "previous": "Önceki",
+      "next": "İleri",
+      "submit": "Mesaj zamanla",
+      "stepOf": "Adım {n} / {total}",
+      "engine": {
+        "baileys": "Resmi olmayan API",
+        "waba": "WhatsApp Cloud API",
+        "twilio": "Twilio"
+      },
+      "types": {
+        "plain": {
+          "title": "Düz metin",
+          "hint": "Yalnızca kelimeler ve emojiler.",
+          "pill": "düz metin"
+        },
+        "template": {
+          "title": "Şablon",
+          "hint": "Onaylı WhatsApp şablonu.",
+          "pill": "şablon"
+        },
+        "media": {
+          "title": "Medyalı",
+          "hint": "Resim, video, belge, ses.",
+          "pill": "medya"
+        },
+        "location": {
+          "title": "Konum",
+          "hint": "Enlem/boylam işareti.",
+          "pill": "konum"
+        }
+      },
+      "basics": {
+        "title": "Zamanlama temelleri",
+        "name": "Zamanlama adı",
+        "nameHint": "Yalnızca dahili etiket; alıcılar bunu görmez.",
+        "namePlaceholder": "ör. İlkbahar promosyonu / VIP segmenti",
+        "sender": "Gönderen",
+        "senders": "Gönderenler",
+        "tickAll": "Geçerli olanların tümünü işaretleyin",
+        "noSenders": "Bağlı gönderen yok. Önce bir numara bağlayın.",
+        "warming": "Isınma",
+        "splitHint": "İşaretlenen her gönderen, kitlenin adil bir payıyla kendi zamanlamasını çalıştırır.",
+        "messageType": "Mesaj türü"
+      },
+      "audience": {
+        "title": "Alıcılar",
+        "source": "Alıcı kaynağı",
+        "sources": {
+          "group": {
+            "title": "Grup",
+            "hint": "Kayıtlı bir ya da daha fazla kişi grubu seçin."
+          },
+          "tag": {
+            "title": "Etiketler",
+            "hint": "Bir etiketi taşıyan herkes"
+          },
+          "queue": {
+            "title": "Kitle kuyruğu",
+            "hint": "Geçmiş bir toplu gönderimin alıcılarını yeniden hedefleyin."
+          },
+          "number": {
+            "title": "Numaralar",
+            "hint": "Listeyi elle yapıştırın."
+          }
+        },
+        "chooseGroups": "Grup(lar) seçin",
+        "chooseTags": "Bir ya da daha fazla etiket seçin",
+        "chooseQueues": "Bir ya da daha fazla geçmiş toplu gönderim seçin",
+        "tickAny": "(istediğiniz kadar işaretleyin)",
+        "noGroups": "Henüz grup yok",
+        "noTags": "Henüz etiket yok",
+        "noQueues": "Henüz tamamlanmış toplu gönderim yok",
+        "contacts": "Kişilere git",
+        "broadcast": "Toplu gönderimlere git",
+        "tagsHint": "Alıcılar zamanlama çalıştığında yeniden hesaplanır; bu nedenle yeni etiketlenen kişiler de dahil edilir.",
+        "queuesHint": "İstediğiniz kadar toplu gönderim işaretleyin. Alıcılar gönderimden önce otomatik olarak tekilleştirilir.",
+        "paste": "Numaraları yapıştır",
+        "pasteHint": "Önce ülke kodu, başta + olmadan. Her girdi yeni satır ya da virgülle ayrılır.",
+        "pastePlaceholder": "Satır başına bir numara — ülke kodunu ekleyin, artı işareti olmadan",
+        "total": "Toplam alıcı:",
+        "optedOut": "{n} dışarıda bırakıldı: abonelikten çıkmış ya da arşivlenmiş"
+      },
+      "message": {
+        "title": "Mesaj oluştur",
+        "content": "Mesaj içeriği",
+        "caption": "Açıklama",
+        "placeholder": "Merhaba '{name}', planlanmış güncellemeniz burada…",
+        "personalise": "Kişiselleştirme için '{name}', '{phone}', '{email}' kullanın.",
+        "template": "Onaylı şablon",
+        "chooseTemplate": "Onaylı bir şablon seçin",
+        "browse": "Şablonlarınıza göz atmak için tıklayın",
+        "approved": "ONAYLI",
+        "change": "Değiştir",
+        "mediaLink": "Medya bağlantısı",
+        "mediaHint": "Dosyanın bağlantısı (https://…). Resim, video, ses ya da belge.",
+        "pin": "Konumu işaretle",
+        "latitude": "Enlem",
+        "longitude": "Boylam",
+        "estimate": "Tahmini gönderim süresi",
+        "minutes": "yaklaşık {n} dk",
+        "estimateHint": "dakikada 60 mesaj hızında",
+        "estimateEmpty": "önce alıcıları seçin.",
+        "variables": "Mesajdaki değişkenler",
+        "variablesHint": "yer tutucu algılandı.",
+        "pickerEyebrow": "şablon",
+        "pickerTitle": "Bir şablon seçin",
+        "pickerHint": "Yalnızca onaylı ve etkin şablonlar gösterilir.",
+        "pickerSearch": "Ada ya da dile göre ara…",
+        "pickerEmpty": "Eşleşen şablon yok.",
+        "manageTemplates": "Şablonları yönet →",
+        "cancel": "İptal"
+      },
+      "when": {
+        "title": "Ne zaman gönderilsin",
+        "modes": {
+          "once": {
+            "title": "Bir kez gönder",
+            "hint": "Seçilen tarih ve saatte tek bir gönderim."
+          },
+          "recurring": {
+            "title": "Tekrarlayan",
+            "hint": "Sabit aralıkla günlük, haftalık ya da aylık tekrarlayın."
+          }
+        },
+        "date": "Gönderim tarihi",
+        "time": "Saat",
+        "timezone": "Saat dilimi",
+        "recurrence": "Tekrarlama",
+        "every": "Şu aralıkla tekrarla",
+        "interval": "Aralık",
+        "intervals": {
+          "daily": "gün",
+          "weekly": "hafta",
+          "monthly": "ay"
+        },
+        "end": "Bitiş",
+        "endNever": "Hiçbir zaman",
+        "endDate": "Belirli bir tarihte",
+        "endOn": "Son gün",
+        "days": "Haftanın günleri",
+        "daysHint": "Açıp kapatmak için bir güne tıklayın. Haftalık zamanlamalarda en az bir gün gerekir.",
+        "lead": "Zamanlama en az {n} dakika sonrası olmalı."
+      },
+      "review": {
+        "title": "Gözden geçir ve zamanla",
+        "final": "son",
+        "schedule": "Zamanlama",
+        "name": "Ad",
+        "sender": "Gönderen",
+        "type": "Tür",
+        "mode": "Mod",
+        "at": "İlk gönderim",
+        "once": "Bir kez gönder",
+        "recurring": "Her {n} {interval}",
+        "delivery": "Teslimat",
+        "source": "Alıcı kaynağı",
+        "recipients": "Alıcılar",
+        "estimated": "Tahmini süre",
+        "testTitle": "Önce test gönderin",
+        "testHint": "Toplu gönderimden önce girdiğiniz bir numaraya tek bir önizleme mesajı alın.",
+        "testNumber": "Bu numaraya test gönder",
+        "testNumberHint": "Önce ülke kodu, başta + olmadan."
+      },
+      "preview": {
+        "title": "Canlı önizleme",
+        "channel": "WhatsApp",
+        "empty": "Mesajınız burada görünecek…",
+        "media": "[ medya eklendi ]",
+        "pin": "Konum işareti",
+        "noTemplate": "Şablon seçilmedi"
+      },
+      "errors": {
+        "nameRequired": "Zamanlamaya bir ad verin.",
+        "senderRequired": "En az bir gönderen seçin.",
+        "wabaTemplate": "WhatsApp Cloud API numaraları şablon zamanlamalarını gönderemez. Bunların işaretini kaldırın ya da başka bir mesaj türü seçin.",
+        "audienceRequired": "En az bir tane seçin.",
+        "numbersRequired": "En az bir numara yapıştırın.",
+        "messageRequired": "Mesajı yazın.",
+        "messageTooLong": "Mesaj 1024 karakteri aşıyor.",
+        "templateRequired": "Bir şablon seçin.",
+        "mediaLink": "http:// ya da https:// ile başlayan bir bağlantı girin.",
+        "latitude": "-90 ile 90 arasında bir enlem girin.",
+        "longitude": "-180 ile 180 arasında bir boylam girin.",
+        "dateRequired": "Bir tarih seçin.",
+        "timeRequired": "14:30 gibi bir saat girin.",
+        "timezoneRequired": "Bir saat dilimi seçin.",
+        "tooSoon": "En az birkaç dakika sonrası için bir saat seçin.",
+        "repeatEvery": "1 ile 365 arasında tam bir sayı girin.",
+        "daysRequired": "Haftanın günlerini seçin.",
+        "endDateRequired": "Son günü seçin.",
+        "endBeforeStart": "Bitiş tarihi ilk gönderimden önce.",
+        "testNumber": "Numarayı ülke koduyla birlikte girin."
+      }
+    },
+    "detail": {
+      "crumb": "Zamanlanmış / Analitik",
+      "title": "Zamanlama analitiği",
+      "back": "Zamanlanmış mesajlara dön",
+      "eyebrow": "Zamanlanmış mesaj",
+      "untitled": "Adsız",
+      "recurs": "Tekrarlar · {interval} × {n}",
+      "fires": "Gönderim: {when}",
+      "actions": {
+        "pause": "Duraklat",
+        "resume": "Devam ettir",
+        "runNow": "Şimdi çalıştır",
+        "cancel": "İptal",
+        "retry": "Yeni saatle yeniden dene",
+        "delete": "Sil"
+      },
+      "kpi": {
+        "recipients": "Alıcılar",
+        "delivered": "Teslim edildi",
+        "read": "Okundu",
+        "sent": "Gönderildi",
+        "status": "Durum",
+        "ofSent": "gönderilenin",
+        "failedCount": "{n} başarısız",
+        "pendingCount": "{n} bekliyor",
+        "fires": "gönderim: {when}",
+        "paused": "duraklatıldı",
+        "done": "{when} tamamlandı"
+      },
+      "funnel": {
+        "eyebrow": "Teslimat hunisi",
+        "title": "Gönderimden eyleme",
+        "recipients": "Alıcılar",
+        "sent": "Gönderildi",
+        "delivered": "Teslim edildi",
+        "read": "Okundu",
+        "failed": "Başarısız"
+      },
+      "mix": {
+        "eyebrow": "Durum dağılımı",
+        "title": "Teslimat durumu",
+        "empty": "Henüz gönderim etkinliği yok.",
+        "delivered": "Teslim edildi",
+        "sentOnly": "Gönderildi · teslim edilmedi",
+        "failed": "Başarısız",
+        "pending": "Bekliyor"
+      },
+      "recipients": {
+        "eyebrow": "Alıcılar",
+        "title": "Kim neyi aldı",
+        "none": "Bu zamanlama için kayıtlı alıcı yok.",
+        "emptyTab": "Bu sekmede henüz alıcı yok.",
+        "truncated": "{total} alıcının ilk {n} tanesi gösteriliyor.",
+        "tabs": {
+          "all": "Tümü",
+          "sent": "Gönderildi",
+          "delivered": "Teslim edildi",
+          "read": "Okundu",
+          "failed": "Başarısız",
+          "pending": "Bekliyor"
+        },
+        "cols": {
+          "recipient": "Alıcı",
+          "phone": "Telefon",
+          "status": "Durum",
+          "when": "Ne zaman",
+          "note": "Not"
+        },
+        "status": {
+          "pending": "Bekliyor",
+          "processing": "Bekliyor",
+          "sent": "Gönderildi",
+          "delivered": "Teslim edildi",
+          "read": "Okundu",
+          "failed": "Başarısız"
+        }
+      },
+      "config": {
+        "eyebrow": "Zamanlama ayrıntıları",
+        "title": "Yapılandırma",
+        "scheduleType": "Zamanlama türü",
+        "messageType": "Mesaj türü",
+        "scheduledAt": "Zamanlandığı tarih",
+        "nextRun": "Sonraki çalışma",
+        "lastRun": "Son çalışma",
+        "repeats": "Şu aralıkla tekrarlar",
+        "until": "{date} tarihine kadar",
+        "sender": "Gönderenden",
+        "provider": "Motor",
+        "attempts": "Gönderim denemeleri"
+      },
+      "preview": {
+        "eyebrow": "Mesaj önizlemesi",
+        "title": "Alıcıların gördükleri",
+        "empty": "(boş içerik)"
+      },
+      "another": "Bir tane daha zamanla"
+    },
+    "warmer": {
+      "warming": "{n} ısınıyor",
+      "name": "WhatsApp Isınma",
+      "tagline": "Numara ısındırma",
+      "how": {
+        "title": "Nasıl çalışır",
+        "one": "Bir numara için ısındırmayı açın.",
+        "two": "Her gün bir önceki günden biraz daha fazla gönderebilir.",
+        "three": "Mesajlar yalnızca seçtiğiniz saatlerde yavaşça gönderilir.",
+        "four": "Kampanyalar, toplu gönderimler ve zamanlanmış gönderimler sınırı uygular."
+      },
+      "good": {
+        "title": "Bilmekte fayda var",
+        "body": "Isındırma, resmi olmayan API numaralarında engellenme riskini düşürür; ancak bunu garanti etmez. Yüksek hacim için ısındırma gerektirmeyen resmi bir WhatsApp Business (Cloud API) numarası kullanın."
+      },
+      "crumb": "Kampanyalar / Isınma",
+      "heading": "Numaralarınızı ısındırın",
+      "lead": "Engellenme riskini azaltmak için her resmi olmayan API numarasının günlük gönderim sınırını insan benzeri aralıklar ve etkin saatlerle kademeli olarak artırın. Her numara kendi zamanlamasında ısınır.",
+      "tiles": {
+        "warming": "Isınan numaralar",
+        "warmingHint": "{n} bağlı numaradan",
+        "budget": "Bugünkü bütçe",
+        "budgetHint": "bugün izin verilen mesaj",
+        "sent": "Bugün gönderilen",
+        "sentHint": "ısındırmaya dahil edildi",
+        "health": "Ortalama sağlık",
+        "healthHint": "tüm numaralarda"
+      },
+      "empty": "Henüz bağlı numara yok.",
+      "connect": "Numara bağla",
+      "number": "Numara",
+      "engines": {
+        "baileys": "Resmi olmayan API",
+        "waba": "WABA",
+        "twilio": "Twilio"
+      },
+      "health": "Sağlık {n}",
+      "healthTitle": "Sağlık puanı (yüksek = kademeli artış için daha güvenli)",
+      "switch": "Isınıyor",
+      "budgetToday": "Bugünkü bütçe",
+      "remaining": "Bugün kalan",
+      "sentToday": "Bugün gönderilen",
+      "fields": {
+        "dailyBase": "Başlangıç bütçesi/gün",
+        "stepPct": "Artış +% / adım",
+        "stepDays": "Artış aralığı (gün)",
+        "maxDaily": "Maks. bütçe/gün",
+        "gapMin": "Min. aralık (sn)",
+        "gapMax": "Maks. aralık (sn)",
+        "activeStart": "Etkin başlangıç (saat)",
+        "activeEnd": "Etkin bitiş (saat)"
+      },
+      "hints": {
+        "dailyBase": "Bu numaranın ilk günde gönderebileceği mesaj sayısı.",
+        "stepPct": "Her adımda günlük sınırı bu yüzde kadar artırın.",
+        "stepDays": "Sınırın ne sıklıkla artacağı (her N günde bir).",
+        "maxDaily": "Günlük sınırın ulaşabileceği en yüksek değer.",
+        "gapMin": "İki mesaj arasındaki en kısa bekleme.",
+        "gapMax": "İki mesaj arasındaki en uzun bekleme.",
+        "activeStart": "Yalnızca bu saatten sonra göndermeye başlayın (24 saatlik).",
+        "activeEnd": "Bu saatten sonra göndermeyi durdurun."
+      },
+      "spintax": {
+        "title": "Spintax çeşitliliği",
+        "hint": "Mesajların aynı görünmemesi için her kişiye biraz farklı ifadeler gönderin. Oraya '{Hi|Hello|Hey}' gibi seçenekler yazın."
+      },
+      "save": "Isındırmayı kaydet",
+      "saved": "Isındırma kaydedildi."
+    }
+  }
+}

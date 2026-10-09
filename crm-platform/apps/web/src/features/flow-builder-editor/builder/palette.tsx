@@ -1,42 +1,60 @@
 'use client';
 
 import { useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import { flbPaletteFor, type FlowType, type FlbNodeTypeDef } from '@crm/contracts';
+import { flowTypeLabel, groupLabel, nodeDescription, nodeLabel } from '../lib/contract-text';
+import { useFlb, type Translate } from '../lib/msg';
 import { lookOf } from '../lib/node-ui';
 import { Icon } from './node-card';
 
 function ModeBadge({ mode }: { mode: FlowType }) {
+  const t = useTranslations('flb.builder.shell.palette');
   const base = 'ml-1.5 rounded px-1.5 py-0.5 font-sans text-[10px] normal-case tracking-normal';
+  const tf = useFlb();
   if (mode === 'instagram')
     return (
       <span
         className={`${base} text-white`}
         style={{ background: 'linear-gradient(135deg,#833AB4 0%,#E1306C 55%,#F77737 100%)' }}
       >
-        Instagram
+        {flowTypeLabel(tf, 'instagram')}
       </span>
     );
   if (mode === 'facebook')
-    return <span className={`${base} bg-[#1877F2] text-white`}>Facebook</span>;
+    return (
+      <span className={`${base} bg-[#1877F2] text-white`}>{flowTypeLabel(tf, 'facebook')}</span>
+    );
   if (mode === 'call')
-    return <span className={`${base} bg-[var(--flb-rule)] text-[var(--flb-ink-700)]`}>Call</span>;
-  if (mode === 'email') return <span className={`${base} bg-[#E8F0FE] text-[#1A73E8]`}>Email</span>;
-  return <span className={`${base} bg-[var(--flb-mint)] text-brand`}>WhatsApp</span>;
+    return (
+      <span className={`${base} bg-[var(--flb-rule)] text-[var(--flb-ink-700)]`}>
+        {t('modeCall')}
+      </span>
+    );
+  if (mode === 'email')
+    return <span className={`${base} bg-[#E8F0FE] text-[#1A73E8]`}>{t('modeEmail')}</span>;
+  return (
+    <span className={`${base} bg-[var(--flb-mint)] text-brand`}>{flowTypeLabel(tf, 'chat')}</span>
+  );
 }
 
 /**
  * Search matches label, description and group, case-insensitively (TW-FLB-016 rule 2). QUIRK reproduced: the query is NOT
  * trimmed, so a query with leading or trailing spaces ("  sheet  ") matches nothing, and a blank-but-not-empty one too.
  */
-export function filterPalette(mode: FlowType, query: string): Array<[string, FlbNodeTypeDef[]]> {
+export function filterPalette(
+  mode: FlowType,
+  query: string,
+  t: Translate,
+): Array<[string, FlbNodeTypeDef[]]> {
   const q = query.toLowerCase();
   const groups = new Map<string, FlbNodeTypeDef[]>();
   for (const d of flbPaletteFor(mode)) {
     if (
       q &&
-      !d.label.toLowerCase().includes(q) &&
-      !d.desc.toLowerCase().includes(q) &&
-      !d.group.toLowerCase().includes(q)
+      !nodeLabel(t, d.id).toLowerCase().includes(q) &&
+      !nodeDescription(t, d.id).toLowerCase().includes(q) &&
+      !groupLabel(t, d.group).toLowerCase().includes(q)
     )
       continue;
     groups.set(d.group, [...(groups.get(d.group) ?? []), d]);
@@ -52,7 +70,9 @@ interface Props {
 }
 
 export function Palette({ mode, query, onSearch, onAddCenter }: Props) {
-  const groups = useMemo(() => filterPalette(mode, query), [mode, query]);
+  const t = useTranslations('flb.builder.shell.palette');
+  const tf = useFlb();
+  const groups = useMemo(() => filterPalette(mode, query, tf), [mode, query, tf]);
   const total = groups.reduce((a, [, items]) => a + items.length, 0);
   const coarse = () =>
     typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
@@ -60,12 +80,12 @@ export function Palette({ mode, query, onSearch, onAddCenter }: Props) {
   return (
     <aside
       className="flow-palette relative z-20 flex w-[260px] shrink-0 flex-col border-r border-border bg-background"
-      aria-label="Node palette"
+      aria-label={t('ariaLabel')}
     >
       <div className="border-b border-border px-4 pt-4 pb-3">
         <div className="mb-2 flex items-center justify-between">
           <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-            Add a node
+            {t('addNode')}
             <ModeBadge mode={mode} />
           </div>
           <span className="font-mono text-[9.5px] text-muted-foreground">{total}</span>
@@ -84,8 +104,8 @@ export function Palette({ mode, query, onSearch, onAddCenter }: Props) {
           <input
             value={query}
             onChange={(e) => onSearch(e.target.value)}
-            placeholder="Search nodes…"
-            aria-label="Search nodes"
+            placeholder={t('searchPlaceholder')}
+            aria-label={t('searchLabel')}
             className="w-full rounded-full border border-border bg-background py-2 pr-3 pl-9 text-[12.5px] outline-none focus:border-brand focus:ring-4 focus:ring-brand/10"
           />
         </div>
@@ -94,7 +114,7 @@ export function Palette({ mode, query, onSearch, onAddCenter }: Props) {
         {groups.map(([group, items]) => (
           <div key={group}>
             <div className="mb-1.5 px-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              {group}
+              {groupLabel(tf, group)}
             </div>
             {items.map((v) => {
               const look = lookOf(v.id);
@@ -117,9 +137,11 @@ export function Palette({ mode, query, onSearch, onAddCenter }: Props) {
                     <Icon d={look.icon} />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <div className="text-[12.5px] font-semibold leading-tight">{v.label}</div>
+                    <div className="text-[12.5px] font-semibold leading-tight">
+                      {nodeLabel(tf, v.id)}
+                    </div>
                     <div className="truncate text-[10.5px] leading-snug text-muted-foreground">
-                      {v.desc}
+                      {nodeDescription(tf, v.id)}
                     </div>
                   </div>
                 </div>
@@ -128,12 +150,13 @@ export function Palette({ mode, query, onSearch, onAddCenter }: Props) {
           </div>
         ))}
         {groups.length === 0 ? (
-          <div className="py-6 text-center text-[12px] text-muted-foreground">No nodes match.</div>
+          <div className="py-6 text-center text-[12px] text-muted-foreground">{t('noMatch')}</div>
         ) : null}
       </div>
       <div className="border-t border-border bg-muted/40 px-4 py-2.5 text-[10.5px] leading-snug text-muted-foreground">
-        <span className="font-semibold text-[var(--flb-ink-700)]">Tip ·</span> drag onto canvas, or
-        double-click to add at center.
+        {t.rich('tip', {
+          b: (chunks) => <span className="font-semibold text-[var(--flb-ink-700)]">{chunks}</span>,
+        })}
       </div>
     </aside>
   );

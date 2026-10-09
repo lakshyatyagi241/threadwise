@@ -1,0 +1,924 @@
+{
+  "marketplace": {
+    "operator": {
+      "nav": {
+        "group": "マーケットプレイス",
+        "catalogue": "カタログ",
+        "categories": "カテゴリー",
+        "requests": "リクエスト",
+        "usage": "利用状況"
+      },
+      "common": {
+        "loading": "読み込み中...",
+        "requestId": "リクエストID",
+        "retry": "再試行",
+        "noPermissions": "権限がありません"
+      },
+      "enums": {
+        "kind": {
+          "mini_app": "ミニアプリ",
+          "integration": "連携"
+        },
+        "appStatus": {
+          "draft": "下書き",
+          "in_review": "確認中",
+          "published": "公開済み",
+          "hidden": "非表示",
+          "killed": "停止済み"
+        },
+        "versionStatus": {
+          "draft": "下書き",
+          "in_review": "確認中",
+          "approved": "承認済み",
+          "rejected": "却下",
+          "published": "公開済み",
+          "retired": "提供終了"
+        },
+        "requestStatus": {
+          "open": "受付中",
+          "planned": "予定あり",
+          "building": "開発中",
+          "shipped": "リリース済み",
+          "declined": "見送り"
+        },
+        "connector": {
+          "oauth": "OAuthサインイン",
+          "push": "プッシュ（ポータルから当社へ送信）",
+          "pull": "プル（当社がポータルを定期確認）",
+          "email_parse": "メール解析",
+          "webhook_relay": "Webhookリレー",
+          "client": "クライアント（メンバーがインストール）"
+        },
+        "risk": {
+          "low": "低リスク",
+          "medium": "中リスク",
+          "high": "高リスク"
+        },
+        "subscriptionStatus": {
+          "active": "有料",
+          "trialing": "トライアル中",
+          "comped": "無償提供",
+          "canceling": "終了予定",
+          "ended": "終了"
+        },
+        "subscriptionSource": {
+          "purchase": "購入",
+          "trial": "トライアル",
+          "comp": "無償"
+        }
+      },
+      "errors": {
+        "conflict": "ご覧になっている間に、別のユーザーがこの内容を変更しました。そのバージョンを表示するには再読み込みし、もう一度変更してください。",
+        "noAccess": "この操作には、プラットフォームの権限 {permission} が必要です。",
+        "manifestInvalid": "このマニフェストはマニフェストv1の形式に従っていません。各問題をパスとともに表示しています。",
+        "recipeInvalid": "レシピが、レシピ形式に従っていないか、マニフェストと一致していません。各問題をパスとともに表示しています。",
+        "urlRefused": "レシピ内のアドレスは拒否されました: {detail}。",
+        "urlRefusedPlain": "レシピ内のアドレスは拒否されました。アドレスは https、公開DNS名、既定のポートを使用し、認証情報を含まない必要があります。",
+        "connectorNotAvailable": "コネクタ種別 {type} はまだ実装されていないため、この掲載は公開できません。動作しないものがワークスペースに届くことはありません。",
+        "slugTaken": "別の掲載またはカテゴリーがすでにそのIDを使用しています。別のIDを選んでください。",
+        "categoryGone": "そのカテゴリーはもう存在しません。一覧を再読み込みしてください。",
+        "categoryUnknown": "マニフェストで指定されたカテゴリーは、この種類のアプリには存在しないか、無効になっています。カテゴリーページから選択してください。",
+        "categoryInUse": "このカテゴリーにはアプリが掲載されています。先に別のカテゴリーへ移すか、カテゴリーを無効にしてワークスペースから非表示にしてください。",
+        "versionState": "掲載またはバージョンが {status} の間は、この操作はできません。現在の状態を確認するには再読み込みしてください。",
+        "versionStatePlain": "掲載またはバージョンの現在の状態では、この操作はできません。現在の状態を確認するには再読み込みしてください。",
+        "versionExists": "バージョン番号は、これまでの最も高いバージョンである {newest} より大きい必要があります。",
+        "versionExistsPlain": "そのバージョン番号は既に存在します。より大きい番号を使用してください。",
+        "appUnavailable": "停止された掲載は公開できません。先に復元してから公開してください。",
+        "appNotFound": "この掲載は存在しません。削除された可能性があります。",
+        "notFound": "その項目は見つかりませんでした。削除された可能性があります。",
+        "rateLimited": "リクエストが多すぎます。{seconds} 秒待ってから再度お試しください。",
+        "rateLimitedPlain": "リクエストが多すぎます。しばらく待ってから再度お試しください。",
+        "validationFields": "一部の項目が正しくありません。各問題を項目とともに表示しています。",
+        "validation": "リクエストが正しくありません。",
+        "request": "リクエストを完了できませんでした。",
+        "unexpected": "当方側で問題が発生しました。もう一度お試しください。繰り返し発生する場合は、リクエストIDを添えてお問い合わせください。",
+        "subscriptionState": "購読の現在の状態では、この操作はできません。すでに支払いを行っているワークスペースは無償化できません（先に購読を解約してください）。無料のアプリには無償化する対象がなく、終了した購読を再度解約することはできません。",
+        "subscriptionNotFound": "その購読は見つかりませんでした。削除された可能性があります。一覧を再読み込みしてください。"
+      },
+      "list": {
+        "title": "マーケットプレイスのカタログ",
+        "description": "すべての状態のすべての掲載です。ミニアプリと連携、そのバージョン、およびそれをインストールしているワークスペースの数を含みます。",
+        "new": "新しい掲載",
+        "subscriptionsLink": "購読と収益",
+        "kpi": {
+          "label": "状態別の掲載",
+          "loaded": "読み込み済み",
+          "published": "公開済み",
+          "inReview": "確認中",
+          "hidden": "非表示",
+          "killed": "停止済み",
+          "note": "集計は、これまでに読み込んだ {count} 件の掲載が対象です。カタログ全体ではありません。",
+          "noteMore": "さらにあります。「さらに読み込む」を使用してください。"
+        },
+        "filters": {
+          "label": "フィルター",
+          "search": "検索",
+          "searchPlaceholder": "名前またはID",
+          "kind": "種類",
+          "allKinds": "すべての種類",
+          "status": "ステータス",
+          "allStatuses": "すべてのステータス",
+          "category": "カテゴリー",
+          "allCategories": "すべてのカテゴリー",
+          "categoryNote": "読み込み済みの掲載を絞り込みます。APIにはカテゴリーフィルターがないためです。",
+          "pricing": "料金",
+          "allPricing": "すべての料金",
+          "free": "無料",
+          "paid": "有料"
+        },
+        "cols": {
+          "app": "アプリ",
+          "kind": "種類",
+          "category": "カテゴリー",
+          "status": "ステータス",
+          "versions": "バージョン",
+          "installs": "インストール数",
+          "planFeature": "プランの機能",
+          "pricing": "料金",
+          "subscriptions": "有効な購読"
+        },
+        "badges": {
+          "firstParty": "自社提供",
+          "featured": "おすすめ"
+        },
+        "versionPublished": "公開済み",
+        "versionLatest": "最新",
+        "dash": "-",
+        "everyPlan": "すべてのプラン",
+        "killedReason": "停止: {reason}",
+        "loadMore": "さらに読み込む",
+        "clearFilters": "フィルターをクリア",
+        "emptyTitle": "まだ掲載はありません",
+        "emptyMessage": "カタログを作成するには、最初の掲載を作成してください。",
+        "noMatchTitle": "一致する掲載はありません",
+        "noMatchMessage": "これらのフィルターに一致するものはありません。条件を変えてお試しください。",
+        "noMatchMoreMessage": "これまでに読み込んだ掲載には一致するものがありません。さらにあるため、読み込むか、フィルターを変更してください。",
+        "tableCaption": "マーケットプレイスの掲載",
+        "viewSubscriptions": "{name} の購読"
+      },
+      "new": {
+        "title": "新しい掲載",
+        "description": "最初のバージョンを含む下書きの掲載を作成します。審査担当者が承認して公開するまで、ワークスペースには何も届きません。",
+        "back": "カタログに戻る",
+        "sections": {
+          "docs": "マニフェストとレシピ",
+          "docsHelp": "マニフェストには、アプリの情報、実行できる内容、使用するコネクタを記述します。連携にはレシピも必要です。どちらも入力中にサーバーが適用するルールでチェックされます。",
+          "changelog": "初版のメモ",
+          "changelogHelp": "管理者に、初版の内容として表示されます。"
+        },
+        "changelog": "変更履歴",
+        "changelogHint": "任意です。最大 {max} 文字。空欄の場合は「初版」と表示されます。",
+        "save": "掲載を作成",
+        "saving": "作成中...",
+        "cancel": "キャンセル",
+        "created": "掲載 {name} を下書きとして作成しました。",
+        "draftNote": "掲載は下書きとして開始されます。掲載ページからバージョンを審査に提出してください。"
+      },
+      "editor": {
+        "cancel": "キャンセル",
+        "format": "形式",
+        "problemCount": "{count, plural, other {#件の問題を修正}}",
+        "valid": {
+          "manifest": "有効なマニフェスト v1 です。",
+          "recipe": "有効なレシピです。"
+        },
+        "manifest": {
+          "label": "マニフェスト（JSON）",
+          "hint": "マニフェスト v1: id、name、kind、category、version、description、scopes、pricing、support、connector。"
+        },
+        "recipe": {
+          "label": "レシピ（JSON）",
+          "hint": "連携のコネクタレシピ: connector、authFields、mapping、rateLimits、errorMapping、setupInstructions、testPayloads。",
+          "insertStarter": "開始用レシピを挿入"
+        },
+        "scopes": {
+          "title": "このバージョンが要求する権限",
+          "help": "管理者に求められる同意内容を平易な言葉で記載します。機能するために必要な最小限の権限を要求してください。"
+        },
+        "templates": {
+          "title": "テンプレートから開始",
+          "help": "両方のエディターに有効な開始点を入力します。その後で編集できます。",
+          "mini_app": "ミニアプリ",
+          "webhook_relay": "連携: Webhookリレー",
+          "push": "連携: プッシュ",
+          "replaceTitle": "エディターの内容を置き換えますか？",
+          "replaceBody": "入力済みのマニフェストとレシピは、テンプレートに置き換えられます。",
+          "replaceAction": "置き換え"
+        },
+        "problems": {
+          "listLabel": "問題",
+          "errorLabel": "エラー:",
+          "warningLabel": "警告:",
+          "syntax": "JSONとして無効です。",
+          "syntaxAt": "JSONとして無効です（行 {line}、列 {column} 付近）。",
+          "empty": "このドキュメントは空です。",
+          "recipeNotAllowed": "ミニアプリにはレシピは不要です。このエディターを空にしてください。",
+          "recipeMissing": "連携は、審査に提出する前にレシピが必要です。",
+          "recipeKeyMismatch": "マニフェストのIDと一致する必要があります: {expected}。",
+          "recipeCategoryMismatch": "マニフェストのカテゴリーと一致する必要があります: {expected}。",
+          "recipeConnectorMismatch": "マニフェストのコネクタ種別と一致する必要があります: {expected}。",
+          "idChanged": "既存の掲載のIDは変更できません。{expected} のままにしてください。",
+          "kindChanged": "既存の掲載の種類は変更できません。{expected} のままにしてください。",
+          "versionNotHigher": "バージョンは、これまでの最も高いバージョンである {newest} より大きい必要があります。",
+          "versionTaken": "この掲載の別のバージョンがすでに {version} を使用しています。",
+          "categoryUnknown": "有効な {kind} カテゴリー {category} は存在しません。カテゴリーページを確認してください。",
+          "categoryRefused": "サーバーがこのカテゴリーを受け付けませんでした。この種類には存在しないか、無効になっています。",
+          "recipeRequired": "連携にはそのレシピが必要です。",
+          "slugTaken": "別の掲載がすでにこのIDを使用しています。"
+        }
+      },
+      "fields": {
+        "sections": {
+          "page": "掲載ページ",
+          "pageHelp": "管理者がアプリのページで読む内容です。",
+          "screenshots": "スクリーンショット",
+          "screenshotsHelp": "アプリのページに表示される画像は最大 {max} 枚です。https のリンクのみ使用できます。",
+          "data": "データ処理に関する開示",
+          "dataHelp": "アプリが保存する内容、保存先、削除方法です。アプリのページに表示される文言になります。",
+          "placement": "掲載順位とアクセス",
+          "placementHelp": "掲載の順位付けと、どのプランでインストールできるかです。"
+        },
+        "tagline": "キャッチフレーズ",
+        "taglineHint": "{count} / {max} 文字（5文字以上）。",
+        "logo": "ロゴのアドレス",
+        "logoHint": "https の画像リンクです。設定しない場合、連携はレシピ内のロゴを使用します。",
+        "longDescription": "詳細説明",
+        "longDescriptionHint": "プレーンテキストです。空行で段落を区切ります。最大 {max} 文字。",
+        "highlights": "ハイライト",
+        "highlightsHint": "1行に1つ。最大 {max} 件、各 {length} 文字以内。",
+        "screenshotUrl": "スクリーンショット {n} のアドレス",
+        "screenshotCaption": "スクリーンショット {n} のキャプション",
+        "screenshotRemove": "スクリーンショット {n} を削除",
+        "screenshotAdd": "スクリーンショットを追加",
+        "screenshotsNone": "スクリーンショットはありません。",
+        "dataSummary": "保存する内容",
+        "dataSummaryHint": "最大 {max} 文字。",
+        "dataRegions": "地域",
+        "dataRegionsHint": "カンマ区切り、最大 {max} 件。例: India, EU。",
+        "dataDeletion": "削除方法",
+        "dataDeletionHint": "最大 {max} 文字。",
+        "firstParty": "自社提供",
+        "firstPartyHint": "当社が開発・運営しており、自社提供バッジが表示されます。",
+        "featured": "おすすめ",
+        "featuredHint": "おすすめのショーケースに表示されます。",
+        "planFeature": "プランの機能",
+        "planFeatureHint": "ワークスペースがこのアプリをインストールするには、プランまたはアドオンでこの機能が必要です。ラベルはプランカタログから取得されます。",
+        "planFeatureNone": "すべてのプラン",
+        "sortOrder": "表示順",
+        "sortOrderHint": "0〜{max} の整数。小さい値ほど先に表示されます。",
+        "problems": {
+          "required": "必須です。",
+          "tooShort": "{min} 文字以上で入力してください。",
+          "tooLong": "{max} 文字以内で入力してください。",
+          "https": "完全な https:// アドレスを入力してください。",
+          "tooMany": "{max} 件以内で入力してください。",
+          "number": "0〜{max} の整数を入力してください。",
+          "unknownFeature": "小文字の英字、数字、アンダースコアを使用し、英字で始めてください。",
+          "slug": "小文字の英字、数字、ハイフンを使用し、英字で始まる 2〜48 文字で入力してください。",
+          "icon": "小文字の英字、数字、ハイフンを使用し、1〜32 文字で入力してください。"
+        }
+      },
+      "summary": {
+        "title": "保存する前にこれらを修正してください",
+        "sentTitle": "サーバーでこの内容は保存されませんでした。",
+        "manifest": "{count, plural, other {マニフェストに#件の問題があります}}",
+        "recipe": "{count, plural, other {レシピに#件の問題があります}}",
+        "fields": "{count, plural, other {掲載項目に#件の問題があります}}"
+      },
+      "detail": {
+        "title": "掲載",
+        "back": "カタログに戻る",
+        "firstParty": "自社提供",
+        "featured": "おすすめ",
+        "none": "なし",
+        "everyPlan": "すべてのプラン",
+        "kpi": {
+          "installs": "インストール",
+          "published": "公開済みバージョン",
+          "latest": "最新バージョン",
+          "versions": "バージョン"
+        },
+        "facts": {
+          "kind": "種類",
+          "category": "カテゴリー",
+          "connector": "コネクタ",
+          "planFeature": "プランの機能"
+        },
+        "tabs": {
+          "overview": "掲載",
+          "versions": "バージョン（{count}）"
+        },
+        "operate": {
+          "title": "運用",
+          "description": "掲載の非表示、停止、復元、削除を行います。各操作には確認が必要です。",
+          "lacking": "お使いの役割には {permission} が含まれていないため、一部の操作は表示されません。"
+        },
+        "killed": {
+          "title": "この掲載は停止されています",
+          "reason": "理由",
+          "effect": "すべてのインストールが停止され、すべての配信アドレスは 410 を返します。ワークスペースはアンインストールのみ可能です。"
+        },
+        "notice": {
+          "killedTitle": "{name} は停止されました",
+          "killedBody": "{count, plural, other {#件のインストールを無効にしました。}}",
+          "publishedTitle": "{name} {version} が公開されました",
+          "publishedUpgraded": "{count, plural, other {#件のインストールがすぐに移行しました。}}",
+          "publishedWaiting": "{count, plural, other {#件のインストールは、管理者が新しい権限に同意するまで現在のバージョンを維持します。}}",
+          "dismiss": "閉じる"
+        }
+      },
+      "edit": {
+        "readOnly": "読み取り専用です。掲載の編集にはプラットフォームの権限 {permission} が必要です。",
+        "conflict": "編集中に、別のユーザーがこの掲載を保存しました。そのバージョンを表示するには再読み込みし、もう一度変更してください。",
+        "reload": "再読み込み",
+        "save": "変更を保存",
+        "saving": "保存中...",
+        "discard": "変更を破棄",
+        "nothingToSave": "まだ変更はありません。",
+        "saved": "{name} を保存しました。"
+      },
+      "actions": {
+        "cancel": "キャンセル",
+        "hide": "非表示",
+        "unhide": "再表示",
+        "unkill": "復元",
+        "delete": "削除",
+        "kill": "キルスイッチ",
+        "confirm": {
+          "hide": {
+            "title": "{name} を非表示にしますか？",
+            "body": "{name} は閲覧と検索から外れるため、新しいワークスペースからは見つからなくなります。既存のインストールは引き続き動作します。",
+            "action": "非表示"
+          },
+          "unhide": {
+            "title": "{name} を再表示しますか？",
+            "body": "{name} は公開されているバージョンで、閲覧と検索に再び表示されます。",
+            "action": "再表示"
+          },
+          "unkill": {
+            "title": "{name} を復元しますか？",
+            "body": "{name} は、修正して再公開できるように非表示になります。停止されたインストールは無効のままで、ワークスペースは再度インストールする必要があります。",
+            "action": "復元"
+          },
+          "delete": {
+            "title": "{name} を削除しますか？",
+            "body": "下書きの掲載とそのバージョンを完全に削除します。公開またはインストールされた掲載は削除できません。代わりに非表示にしてください。",
+            "action": "掲載を削除"
+          }
+        },
+        "done": {
+          "hide": "{name} を非表示にしました。",
+          "unhide": "{name} を再び表示するようにしました。",
+          "unkill": "{name} を非表示の状態で復元しました。",
+          "kill": "{name} を停止しました。",
+          "delete": "{name} を削除しました。"
+        }
+      },
+      "killDialog": {
+        "eyebrow": "キルスイッチ",
+        "title": "{name} を停止しますか？",
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "confirm": "{name} を停止",
+        "installs": "{name} は {count, plural, other {#件のワークスペース}} にインストールされています。",
+        "effects": {
+          "stop": "すべてのインストールが直ちに動作を停止します。",
+          "connections": "すべての接続が無効になります。",
+          "address": "次のリクエストから、配信アドレスは 410 Gone を返します。",
+          "uninstall": "ワークスペースはアンインストールのみ可能です。"
+        },
+        "undo": "掲載を後で復元すると、非表示の状態になります。停止されたインストールは無効のままで、ワークスペースは再度インストールする必要があります。",
+        "reason": "理由",
+        "reasonHint": "{min} 〜 {max} 文字で入力してください。監査ログに保存され、各ワークスペースに表示されます。",
+        "count": "{count} / {max} 文字（{min} 文字以上）。",
+        "typeSlug": "確認のため {slug} と入力してください",
+        "typeSlugHint": "掲載のIDを、表示どおりに入力してください。"
+      },
+      "versions": {
+        "title": "バージョン",
+        "description": "この掲載のすべてのバージョンです。1つ選択すると、そのマニフェスト、レシピ、操作を確認できます。",
+        "newVersion": "新しいバージョン",
+        "newVersionHint": "新しいバージョンは、表示中のバージョン（{version}）を基に、番号を上げて開始します。過去のすべてのバージョンより大きい番号にする必要があります。",
+        "tableCaption": "この掲載のバージョン",
+        "cols": {
+          "version": "バージョン",
+          "status": "ステータス",
+          "changelog": "変更履歴",
+          "scopes": "権限",
+          "reviewNote": "審査メモ",
+          "dates": "日付"
+        },
+        "viewing": "閲覧中",
+        "none": "-",
+        "dates": {
+          "created": "作成日",
+          "submitted": "提出日",
+          "reviewed": "審査日",
+          "published": "公開日"
+        },
+        "selectedTitle": "バージョン {version}",
+        "selectedHelp": "保存されている権限、マニフェスト、レシピです。操作は、バージョンの状態とお使いの権限に従います。",
+        "edit": "編集",
+        "newFrom": "このバージョンから新しいバージョンを作成",
+        "submit": "審査に提出",
+        "approve": "承認",
+        "reject": "却下",
+        "publish": "公開",
+        "rejectedNote": "審査担当者の理由（開発者に表示されます）",
+        "recipeMissing": "この連携にはまだレシピがありません。審査に提出する前に追加してください。",
+        "permissions": "権限",
+        "manifest": "マニフェスト",
+        "recipe": "レシピ",
+        "noRecipeIntegration": "このバージョンにはレシピが保存されていません。",
+        "noRecipeMiniApp": "ミニアプリにはレシピがありません。",
+        "done": {
+          "submit": "バージョン {version} を審査に提出しました。",
+          "approve": "バージョン {version} を承認しました。",
+          "reject": "バージョン {version} を却下しました。",
+          "publish": "バージョン {version} を公開しました。",
+          "created": "バージョン {version} を下書きとして保存しました。",
+          "updated": "バージョン {version} を更新しました。"
+        }
+      },
+      "versionEditor": {
+        "newTitle": "新しいバージョン",
+        "newHelp": "表示中のバージョンを基に、番号を上げて開始します。マニフェストとレシピを変更し、変更内容を説明してください。",
+        "editTitle": "バージョンを編集",
+        "editHelp": "このバージョンのマニフェストとレシピを置き換えます。却下されたバージョンは、保存すると下書きに戻ります。",
+        "changelog": "変更履歴",
+        "changelogHint": "このバージョンで変更された内容です。管理者が確認します。最大 {max} 文字。",
+        "saveNew": "新しいバージョンを保存",
+        "saveEdit": "変更を保存",
+        "saving": "保存中...",
+        "cancel": "キャンセル"
+      },
+      "versionDialogs": {
+        "approve": {
+          "title": "{name} {version} を承認しますか？",
+          "close": "閉じる",
+          "cancel": "キャンセル",
+          "confirm": "承認",
+          "body": "承認されたバージョンは公開できるようになります。承認しても、ワークスペースに表示される内容は変わりません。",
+          "note": "メモ（任意）",
+          "noteHint": "バージョンとともに保存されます。最大 {max} 文字。"
+        },
+        "reject": {
+          "title": "{name} {version} を却下しますか？",
+          "close": "閉じる",
+          "cancel": "キャンセル",
+          "confirm": "バージョンを却下",
+          "body": "却下の理由は開発者に表示されます。開発者はバージョンを編集して、再度提出します。",
+          "note": "理由",
+          "noteHint": "{min} 文字以上、{max} 文字以内で入力してください。",
+          "count": "{count} / {max} 文字（{min} 文字以上）。"
+        },
+        "publish": {
+          "title": "{name} {version} を公開しますか？",
+          "cancel": "キャンセル",
+          "confirm": "{version} を公開",
+          "body": "{name} {version} は、すべての新規インストールに適用されるバージョンになります。",
+          "effects": {
+            "retire": "以前に公開されていたバージョンは提供終了になります。",
+            "moveSame": "付与済みの権限がこのバージョンをすでにカバーしているインストールは、直ちに移行します。",
+            "moveMore": "より多くの権限を要求するインストールは、管理者が新しい権限一覧に同意するまで現在のバージョンで動作を続けます。",
+            "killed": "停止されたインストールは変更されません。"
+          },
+          "installs": "{count, plural, other {#件のインストールが影響を受けます。}}",
+          "first": "これは最初の公開バージョンです。",
+          "addedScopes": "{count, plural, other {公開済みバージョンにはない権限を#件要求しています:}}"
+        }
+      },
+      "categories": {
+        "title": "カテゴリー",
+        "description": "両方のマーケットプレイスタブのカテゴリーです。無効にしたカテゴリーはワークスペースから非表示になります。アプリが含まれているカテゴリーは削除できません。",
+        "new": "新しいカテゴリー",
+        "emptyTitle": "カテゴリーはありません",
+        "emptyMessage": "掲載を作成する前にカテゴリーを追加してください。すべての掲載はいずれかのカテゴリーに属します。",
+        "groupCount": "{count, plural, other {#件のカテゴリー}}",
+        "groupEmpty": "この種類のカテゴリーはまだありません。",
+        "tableCaption": "カテゴリー",
+        "cols": {
+          "name": "名前",
+          "slug": "ID",
+          "icon": "アイコン",
+          "order": "順序",
+          "apps": "アプリ",
+          "status": "ステータス",
+          "actions": "操作"
+        },
+        "dash": "-",
+        "active": "有効",
+        "inactive": "ワークスペースから非表示",
+        "edit": "編集",
+        "delete": "削除",
+        "inUse": "アプリあり",
+        "form": {
+          "createTitle": "新しいカテゴリー",
+          "editTitle": "{name} を編集",
+          "close": "閉じる",
+          "cancel": "キャンセル",
+          "create": "カテゴリーを作成",
+          "save": "変更を保存",
+          "kind": "種類",
+          "kinds": {
+            "mini_app": "ミニアプリ",
+            "integration": "連携"
+          },
+          "kindLocked": "種類は変更できません。",
+          "slug": "ID（スラッグ）",
+          "slugHint": "小文字の英字、数字、ハイフンを使用し、英字で始まる 2〜48 文字で入力してください。作成後は変更できません。",
+          "slugLocked": "IDは作成後に変更できません。",
+          "name": "名前",
+          "nameHint": "{min} 〜 {max} 文字で入力してください。",
+          "descriptionField": "説明",
+          "descriptionHint": "任意です。最大 {max} 文字。",
+          "icon": "アイコン",
+          "iconHint": "任意のアイコン名です。小文字の英字、数字、ハイフンを使用してください。",
+          "sortOrder": "表示順",
+          "sortOrderHint": "0〜{max} の整数。小さい値ほど先に表示されます。",
+          "active": "有効",
+          "activeHint": "無効にすると、カテゴリーはワークスペースから非表示になります。アプリはそのカテゴリーに残ります。",
+          "conflict": "別のユーザーがこのカテゴリーを変更しました。そのバージョンを表示するには再読み込みし、もう一度変更してください。",
+          "reload": "再読み込み",
+          "created": "カテゴリー {name} を作成しました。",
+          "saved": "カテゴリー {name} を保存しました。"
+        },
+        "deleteDialog": {
+          "title": "{name} を削除しますか？",
+          "body": "{name} にはアプリがありません。削除すると完全に削除されます。",
+          "action": "カテゴリーを削除",
+          "cancel": "キャンセル",
+          "done": "カテゴリー {name} を削除しました。"
+        }
+      },
+      "requests": {
+        "title": "リクエスト",
+        "description": "ワークスペースからのリクエストを、投票の多い順に表示します。開発順はこの一覧に従います。",
+        "readOnly": "読み取り専用です。振り分けにはプラットフォームの権限 {permission} が必要です。",
+        "filters": {
+          "label": "フィルター",
+          "search": "検索",
+          "searchPlaceholder": "名前",
+          "kind": "種類",
+          "allKinds": "すべての種類",
+          "status": "ステータス",
+          "allStatuses": "すべてのステータス"
+        },
+        "clearFilters": "フィルターをクリア",
+        "emptyTitle": "まだリクエストはありません",
+        "emptyMessage": "ワークスペースが連携をリクエストすると、投票数とともにここに表示されます。",
+        "noMatchTitle": "一致するリクエストはありません",
+        "noMatchMessage": "これらのフィルターに一致するものはありません。",
+        "loadMore": "もっと読み込む",
+        "tableCaption": "票数順のリクエスト",
+        "cols": {
+          "votes": "票数",
+          "request": "リクエスト",
+          "notes": "ワークスペースのメモ",
+          "firstWorkspace": "最初のリクエスト者",
+          "status": "ステータス",
+          "actions": "操作"
+        },
+        "votes": "{count, plural, other {# 票}}",
+        "noNotes": "メモはありません。",
+        "dash": "-",
+        "operatorNote": "あなたのメモ：{note}",
+        "triageAction": "振り分け",
+        "triage": {
+          "title": "{name}を振り分け",
+          "close": "閉じる",
+          "cancel": "キャンセル",
+          "save": "保存",
+          "saved": "{name}を保存しました。",
+          "votes": "{count, plural, other {# 票}}",
+          "status": "ステータス",
+          "note": "運営者メモ",
+          "noteHint": "任意、{max}文字まで。運営者のみ閲覧できます。",
+          "noteTooLong": "{max}文字以内で入力してください。",
+          "conflict": "このリクエストは別のユーザーが更新しました。再読み込みして最新の内容を確認し、変更をやり直してください。",
+          "reload": "再読み込み"
+        }
+      },
+      "usage": {
+        "title": "利用状況と状態",
+        "description": "アプリごとに、インストールの状態と正常性、直近24時間と7日間の配信の受理・再送・拒否・失敗数を表示します。",
+        "kpi": {
+          "apps": "アプリ",
+          "installs": "インストール",
+          "activeHint": "有効 {count}",
+          "needsLook": "要確認",
+          "failed7d": "配信失敗（7日間）"
+        },
+        "sort": {
+          "label": "並び替え",
+          "failed": "配信失敗が多い順",
+          "installs": "インストールが多い順",
+          "name": "名前"
+        },
+        "emptyTitle": "利用実績はありません",
+        "emptyMessage": "カタログに登録されたアプリがここに表示されます。",
+        "tableCaption": "アプリごとの利用状況",
+        "cols": {
+          "app": "アプリ",
+          "installs": "インストール",
+          "health": "正常性",
+          "events24h": "配信（24時間）",
+          "events7d": "配信（7日間）",
+          "attention": "要注意"
+        },
+        "installs": {
+          "active": "有効 {count}",
+          "disabled": "一時停止 {count}",
+          "killed": "停止 {count}"
+        },
+        "health": {
+          "healthy": "正常 {count}",
+          "degraded": "低下 {count}",
+          "error": "エラー {count}",
+          "needsReauth": "再ログインが必要 {count}",
+          "unknown": "不明 {count}"
+        },
+        "events": {
+          "accepted": "受理 {count}",
+          "duplicate": "再送 {count}",
+          "rejected": "拒否 {count}",
+          "failed": "失敗 {count}"
+        },
+        "needsLook": "要確認",
+        "reasons": {
+          "installErrors": "エラーのインストール",
+          "needsReauth": "再ログインが必要なインストール",
+          "failed24h": "直近24時間の配信失敗",
+          "failed7d": "直近7日間の配信失敗"
+        },
+        "recipeHint": "レシピが動作しなくなっている可能性があります。連携先のフォーマットが変わったか、キーの期限が切れています。レシピの新しいバージョンで修正してください。",
+        "fine": "問題は見当たりません",
+        "runbookNote": "エラーまたは再ログインが必要なインストールが多い連携、もしくは配信失敗数が増えている連携は動作しなくなっています。新しいバージョンでレシピを修正してください（運用手順書の8章）。"
+      },
+      "price": {
+        "free": "無料",
+        "perMonth": "/ 月",
+        "trial": "{count, plural, other {# 日間のトライアル}}",
+        "notOnSale": "販売していません"
+      },
+      "pricing": {
+        "title": "料金",
+        "description": "このアプリを無料にするか有料にするか、また料金を決めます。ワークスペースに表示されるのはこちらの料金です。開発者のマニフェストは提案にすぎません。",
+        "billing": "有料アプリは月額の前払い期間として販売されます。通常の決済で購入する課金オプションです。現時点では自動のカード更新はないため、ワークスペースは月の終わりが近づくと再度支払います。料金変更は新規の契約と、各契約者の次回の支払いに適用されます。支払い済みの期間には影響しません。",
+        "readOnly": "閲覧のみ。料金を変更するにはプラットフォームの権限「{permission}」が必要です。",
+        "visibility": {
+          "label": "掲載状態",
+          "note": "掲載の非表示、再表示、停止は上の「運用」で行います。このパネルでは変更されません。"
+        },
+        "subscribers": {
+          "label": "契約",
+          "count": "{count, plural, other {# 件の有効な契約}}",
+          "view": "契約を表示",
+          "hint": "有効な有料・トライアル・無償付与の契約です。終了予定または終了済みの契約は含まれません。"
+        },
+        "changed": "料金の最終変更",
+        "conflict": "料金を編集中に、別のユーザーがこの掲載内容を保存しました。再読み込みして最新の内容を確認し、変更をやり直してください。",
+        "reload": "再読み込み",
+        "model": {
+          "legend": "料金",
+          "free": "無料",
+          "freeHint": "料金はかかりません。すべてのワークスペースがインストールできます。",
+          "paid": "有料（月額）",
+          "paidHint": "ワークスペースは決済から契約し、月ごとに支払います。"
+        },
+        "fields": {
+          "amount": "月額料金",
+          "amountHint": "ワークスペースごと、月額。例：9 または 9.99",
+          "currency": "通貨",
+          "currencyHint": "USDなど3文字のコードです。有効化されていない通貨は使用できません。",
+          "trialDays": "無料トライアル（日数）",
+          "trialDaysHint": "トライアルなしは0。最大{max}日。ワークスペースごと、アプリごとに1回のみ利用できます。",
+          "annualAmount": "年額料金（任意）",
+          "annualAmountHint": "将来のために保存されます。年額請求はまだ実装されていないため、現時点では年払いはできません。",
+          "purchasable": "販売中",
+          "purchasableHint": "オフの場合、新たに契約できるワークスペースはありません。既存の契約は引き続き更新できます。"
+        },
+        "included": {
+          "title": "プランに含める",
+          "help": "任意。いずれかの条件に一致するワークスペースは、このアプリを無料で利用できます。両方を空にすると、すべてのワークスペースに料金が請求されます。",
+          "feature": "プランの機能",
+          "featureHint": "このプラン（課金オプションを含む）にこの機能があるワークスペースです。候補から選ぶか、機能キーを入力してください。",
+          "plan": "最低プラン",
+          "planHint": "このプラン以上のプランを利用しているワークスペースです。プランは低い順に並びます。",
+          "planNone": "プランの条件なし",
+          "planTyped": "プラン一覧を読み込めませんでした。プランIDを入力してください。"
+        },
+        "grants": {
+          "title": "プランの機能を付与",
+          "help": "任意。このアプリの契約で有効になるプラン機能です。現在の制御を維持したまま、機能をアプリとして販売できます。初期状態でオフの機能のみ付与できます。",
+          "thirdParty": "プラン機能を付与できるのは自社アプリのみです。使用するには、掲載タブでこの掲載を自社アプリとしてマークしてください。",
+          "grandfather": "既存ユーザーを引き継ぐ",
+          "grandfatherHint": "付与済みの機能を既に持つワークスペースを無償付与の対象にでき、誰も機能を失わずに済みます。保存したのち、下の「既存ユーザーに無償付与」を使ってください。プランで機能をオフにする前に実施してください。",
+          "compExisting": "既存ユーザーに無償付与",
+          "compExistingHint": "プランを通じて付与済みの機能を持ち、まだ契約がないワークスペースには、このアプリが無料で提供されます。事前に対象者を確認できます。",
+          "compExistingAction": "既存ユーザーに無償付与..."
+        },
+        "proposal": {
+          "title": "開発者の提案",
+          "intro": "バージョン {version} のマニフェストからの提案です。提案にすぎず、何も変更しません。ワークスペースに表示されるのは上記の料金です。",
+          "note": "メモ：{note}",
+          "models": {
+            "free": "無料",
+            "included": "プランに含まれる",
+            "addon": "有料の課金オプション"
+          }
+        },
+        "save": "料金を保存",
+        "saving": "保存中...",
+        "discard": "変更を破棄",
+        "nothingToSave": "まだ変更はありません。",
+        "saved": "{name}の料金を保存しました。",
+        "problems": {
+          "priceRequired": "月額料金を設定してください。",
+          "priceFormat": "9 や 9.99 のような数値を入力してください（小数点以下は2桁まで）。",
+          "pricePositive": "料金は0より大きい値にしてください。",
+          "currencyRequired": "通貨を選択してください。",
+          "currencyFormat": "3文字の通貨コードを入力してください。",
+          "yearlyFormat": "90 や 89.99 のような数値を入力するか、空欄のままにしてください。",
+          "yearlyPositive": "年額料金は0より大きい値にするか、空欄にしてください。",
+          "trialRange": "0から{max}までの整数の日数を入力してください。",
+          "featureFormat": "小文字、数字、アンダースコアを使い、先頭は英字にしてください。",
+          "planFormat": "プランID（小文字、数字、アンダースコア）を入力してください。",
+          "grantsInvalid": "各プラン機能は1回だけ選択し、10個までにしてください。",
+          "grandfatherNeedsGrants": "まず、アプリが付与するプラン機能を1つ以上選択してください。",
+          "includedGranted": "アプリが付与する機能を、同時にプランに含める条件にすることはできません。"
+        },
+        "confirm": {
+          "cancel": "編集を続ける",
+          "priceChange": {
+            "title": "{name}の料金を変更しますか？",
+            "body": "{count, plural, other {現在 # 件のワークスペースが契約中です。}}月額料金は {from} から {to} に変わります。",
+            "next": "新しい料金は、新規の契約と各契約者の次回の支払いに適用されます。",
+            "paid": "ワークスペースが支払い済みの期間は、変更・返金・再計算されることはありません。",
+            "action": "料金を変更"
+          },
+          "toFree": {
+            "title": "{name}を無料にしますか？",
+            "body": "{count, plural, other {現在 # 件のワークスペースが契約中です。}}",
+            "free": "その後、すべてのワークスペースが無料でこのアプリを利用でき、今後は誰にも請求されません。",
+            "paid": "契約者は支払い済みの期間をそのまま利用できます。返金はされません。",
+            "action": "無料にする"
+          }
+        }
+      },
+      "grandfather": {
+        "eyebrow": "既存ユーザー",
+        "title": "{name}の既存ユーザーに無償付与",
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "change": "変更",
+        "run": "{count, plural, other {# 件のワークスペースに無償付与}}",
+        "preview": "対象者を確認",
+        "intro": "{name}が付与するプラン機能を、プランまたは個別設定を通じてすでに持っており、まだこのアプリの契約がないすべてのワークスペースに無償付与します。先に対象者が表示され、確定するまで何も変わりません。",
+        "timing": "機能をプランでオフにする前、または初期値を変更する前に実施してください。各ワークスペースの現在の状態を読み取って判断します。",
+        "note": "メモ",
+        "matched": "{count, plural, =0 {対象のワークスペースはありません} other {# 件のワークスペースが対象です}}",
+        "nobody": "付与された機能を契約なしで持っているユーザーはいないため、無償付与の対象はありません。",
+        "sample": "対象の一部：",
+        "more": "ほか {count} 件",
+        "confirm": "一覧を確認してから、無償付与を確定してください。監査ログに記録され、ワンステップでは取り消せません。無償付与を終了するには、各契約をキャンセルしてください。",
+        "refused": "無償付与できるのは、プラン機能を付与する有料の掲載で、「既存ユーザーを引き継ぐ」が保存されている場合のみです。料金設定を確認してください。",
+        "done": "{count, plural, other {{name}で # 件のワークスペースに無償付与しました。}}"
+      },
+      "compFields": {
+        "duration": "期間は？",
+        "months": "月数で指定",
+        "monthsLabel": "月",
+        "monthsHint": "1から{max}までの整数の月数です。",
+        "monthsInvalid": "1から{max}までの整数の月数を入力してください。",
+        "open": "手動で終了するまで",
+        "noteHint": "{min}文字以上{max}文字以内で入力してください。監査ログに保存されます。",
+        "count": "{count} / {max}文字（{min}文字以上）"
+      },
+      "cancelDialog": {
+        "eyebrow": "契約",
+        "title": "{workspace}の契約をキャンセルしますか？",
+        "close": "閉じる",
+        "back": "そのままにする",
+        "summary": "{workspace}は{app}を契約中です。",
+        "when": "いつ終了しますか？",
+        "periodEnd": {
+          "label": "有料期間の終了時",
+          "detail": "更新を停止します。{workspace}は{date}まで{app}を利用でき、その後インストールは一時停止され、データは保持されます。"
+        },
+        "now": {
+          "label": "今すぐ",
+          "detail": "直ちにアクセスが終了します。インストールは一時停止され、データは保持されます。支払い済みの期間は返金されません。"
+        },
+        "noEnd": "この契約には終了日がないため、今すぐ終了するしかありません。",
+        "ending": "すでに{date}に終了するよう設定されています。今すぐ終了することもできます。",
+        "reason": "理由",
+        "confirmPeriod": "更新を停止",
+        "confirmNow": "今すぐ終了",
+        "done": {
+          "periodEnd": "{workspace}の更新を停止しました。有料期間の終了までアクセスできます。",
+          "now": "{workspace}は{app}を利用できなくなりました。"
+        }
+      },
+      "compDialog": {
+        "eyebrow": "無償付与",
+        "title": "ワークスペースに無償付与",
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "submit": "ワークスペースに無償付与",
+        "intro": "ワークスペースに有料アプリを無料で提供します。あなたのメモとともに監査ログに記録されます。ワークスペースがそのアプリに料金を支払っている間は実行できません。先にその契約をキャンセルしてください。",
+        "app": "アプリ",
+        "appPlaceholder": "有料アプリを選択",
+        "noPaidApps": "無償付与できる有料アプリがまだありません。先に掲載の料金を設定してください。",
+        "workspaceSearch": "ワークスペースを検索",
+        "workspaceSearchPlaceholder": "ワークスペース名",
+        "workspaceHint": "最大 {count} 件の一致を表示しています。入力して絞り込んでください。",
+        "workspaceChosen": "選択中：{name}",
+        "workspaceNone": "一致するワークスペースはありません。",
+        "workspaceResults": "一致するワークスペース",
+        "workspacePlan": "プラン：{plan}",
+        "workspaceLoading": "ワークスペースを読み込み中...",
+        "note": "メモ",
+        "effectMonths": "{count, plural, other {ワークスペースは # か月間、このアプリを無料で利用できます。}}",
+        "effectOpen": "ワークスペースは、契約をキャンセルして終了するまで、このアプリを無料で利用できます。",
+        "done": "{workspace}は{app}を無料で利用できるようになりました。"
+      },
+      "subscriptions": {
+        "title": "契約",
+        "description": "各有料アプリの支払い状況、ワークスペースごとの契約内容、それによる月次売上です。数値は定価ベースで、税金、クーポン、トライアルは含みません。",
+        "readOnly": "閲覧のみ。ワークスペースへの無償付与と契約のキャンセルには、プラットフォームの権限「{permission}」が必要です。",
+        "comp": "ワークスペースに無償付与",
+        "kpi": {
+          "label": "状態別の契約",
+          "active": "支払い中",
+          "trialing": "トライアル中",
+          "comped": "無償付与",
+          "canceling": "終了予定",
+          "ended": "終了",
+          "mrr": "月次売上",
+          "mrrNone": "支払い中の契約者はまだいません",
+          "mrrCurrency": "月次売上（{currency}）"
+        },
+        "summary": {
+          "emptyTitle": "有料アプリはまだありません",
+          "emptyMessage": "販売を始めるには、掲載に料金を設定してください。契約者とともにここに表示されます。",
+          "caption": "アプリごと・状態別の契約",
+          "cols": {
+            "app": "アプリ",
+            "price": "料金",
+            "active": "支払い中",
+            "trialing": "トライアル中",
+            "comped": "無償付与",
+            "canceling": "終了予定",
+            "ended": "終了",
+            "total": "合計",
+            "mrr": "月次売上"
+          },
+          "free": "無料",
+          "totals": "すべてのアプリ",
+          "note": "月次売上は、支払い中のすべての契約の定価を各通貨のまま集計したものです。トライアル、無償付与、終了済みの契約は含まれません。また、通貨が異なる金額を合算することはありません。"
+        },
+        "filters": {
+          "label": "フィルター",
+          "app": "アプリ",
+          "allApps": "すべてのアプリ",
+          "status": "状態",
+          "allStatuses": "すべての状態",
+          "source": "取得元",
+          "allSources": "すべての取得元",
+          "search": "ワークスペース",
+          "searchPlaceholder": "ワークスペース名"
+        },
+        "cols": {
+          "workspace": "ワークスペース",
+          "app": "アプリ",
+          "status": "状態",
+          "source": "取得元",
+          "started": "開始",
+          "period": "期間",
+          "amount": "金額",
+          "actions": "操作"
+        },
+        "period": {
+          "paidUntil": "{date}まで支払い済み",
+          "trialEnds": "トライアル終了 {date}",
+          "endsOn": "終了 {date}",
+          "compUntil": "{date}まで無償",
+          "compOpen": "手動で終了するまで無償",
+          "endedOn": "{date}に終了",
+          "none": "終了日なし"
+        },
+        "noCharge": "請求なし",
+        "compBy": "{operator}が無償付与：{note}",
+        "cancel": "キャンセル...",
+        "tableCaption": "契約",
+        "emptyTitle": "契約はまだありません",
+        "emptyMessage": "ワークスペースが契約、トライアル開始、または無償付与されると、ここに表示されます。",
+        "noMatchTitle": "一致する契約はありません",
+        "noMatchMessage": "指定のフィルターに一致する項目はありません。条件を変えてお試しください。",
+        "clearFilters": "フィルターをクリア",
+        "loadMore": "もっと読み込む"
+      }
+    }
+  }
+}

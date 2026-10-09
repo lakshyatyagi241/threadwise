@@ -1,0 +1,173 @@
+{
+  "invoicing": {
+    "errors": {
+      "codes": {
+        "INV_AMOUNT_INVALID": "Um valor, quantidade ou alíquota da fatura não pode ser usado. Verifique os campos destacados.",
+        "INV_TAX_RATE_INVALID": "Uma das alíquotas de imposto não pode ser usada hoje: está inativa ou fora das datas. Escolha outra alíquota.",
+        "INV_NOT_DRAFT": "Esta fatura já foi emitida e não pode mais ser editada. Duplique-a para começar uma versão corrigida.",
+        "INV_ORDER_LINKED": "Esta fatura pertence a um pedido de venda, então esse pedido é que deve ser alterado.",
+        "SALESDOC_INVALID_TRANSITION": "A proposta ou o orçamento ainda não foi aceito, por isso não pode virar fatura.",
+        "SALESDOC_ALREADY_CONVERTED": "Este documento já foi transformado em fatura.",
+        "SALESDOC_INVOICING_UNAVAILABLE": "A emissão de faturas ainda não está disponível neste servidor.",
+        "INV_LINK_UNAVAILABLE": "Este link da fatura não está mais disponível."
+      }
+    },
+    "builder": {
+      "creatingFromDocument": "Criando um rascunho a partir do documento aceito...",
+      "duplicating": "Copiando a fatura para um novo rascunho...",
+      "openExisting": "Abrir a fatura que já foi criada",
+      "backToInvoices": "Voltar às faturas",
+      "backToInvoice": "Voltar à fatura",
+      "issued": "Fatura emitida.",
+      "savedNotIssued": "O rascunho foi salvo, mas não pôde ser emitido: {reason}",
+      "buyerCountry": "País",
+      "buyerCountryHint": "Duas letras, como IN ou GB. Define o formato do número fiscal e, no modo automático, o imposto.",
+      "buyerTaxId": "Número fiscal",
+      "buyerTaxIdNamed": "Número fiscal ({label})",
+      "taxIdHint": "GSTIN, número de IVA, EIN... Verificado enquanto você digita.",
+      "taxIdExpected": "Esperado: {label}, por exemplo {example}.",
+      "taxIdUnchecked": "Não há formato conhecido para este país, então o número será salvo como foi digitado.",
+      "taxIdValid": "{label} parece correto ({level, select, checksum {formato e dígitos verificadores conferidos} other {apenas o formato conferido}}). Isso não prova que está registrado.",
+      "taxIdInvalid": "Este {label} parece incorreto ({level, select, checksum {formato e dígitos verificadores conferidos} other {apenas o formato conferido}}).",
+      "taxIdStillSave": "Você ainda pode salvar.",
+      "docType": "Documento",
+      "docTypes": {
+        "tax_invoice": "Fatura fiscal",
+        "proforma": "Fatura proforma"
+      },
+      "noDueDate": "Prazo de pagamento padrão",
+      "reference": "Referência",
+      "referenceHint": "O número do pedido de compra do comprador ou qualquer referência a imprimir.",
+      "tax": "Imposto",
+      "taxMode": "Como o imposto é calculado",
+      "taxModes": {
+        "rates": "Alíquotas de imposto",
+        "auto": "Automático"
+      },
+      "taxModeHint": {
+        "rates": "Escolha uma alíquota para cada linha. Uma linha mantida no padrão usa a alíquota padrão do seu espaço de trabalho.",
+        "auto": "O motor de impostos define o imposto de cada linha a partir do seu país, do país e do número fiscal do comprador, do tipo de fornecimento e do local de fornecimento. A resposta do servidor é o que fica salvo."
+      },
+      "sellerCountry": "Seu país (do perfil de faturamento)",
+      "sellerCountryMissing": "O imposto automático precisa do seu país no perfil de faturamento (um país com predefinição de imposto). Defina-o lá primeiro.",
+      "supplyType": "Fornecimento",
+      "supplyTypes": {
+        "goods": "Bens",
+        "services": "Serviços",
+        "digital": "Serviços digitais"
+      },
+      "placeOfSupply": "Local de fornecimento",
+      "placeOfSupplyHint": "Um estado ou província de {country}; deixe na primeira opção para o país inteiro.",
+      "placeSameCountry": "País inteiro",
+      "placeRegionPlaceholder": "Código da região, opcional",
+      "reverseCharge": "Inversão da cobrança",
+      "reverseChargeHint": "O comprador apura o imposto, então nenhum é cobrado nesta fatura.",
+      "shipping": "Frete ({currency})",
+      "shippingHint": "Nunca recebe desconto nem imposto.",
+      "legalNotes": "Observações legais",
+      "legalNotesHint": "Texto obrigatório no documento, como uma declaração de inversão da cobrança. O modo automático o preenche quando a lei exige.",
+      "problems": {
+        "contactRequired": "Escolha um contato ou digite o nome do comprador.",
+        "currencyInvalid": "Informe um código de moeda de três letras.",
+        "issueDateInvalid": "Informe uma data de emissão válida.",
+        "dueBeforeIssue": "A data de vencimento não pode ser anterior à data de emissão.",
+        "dueInvalid": "Informe uma data de vencimento válida.",
+        "noLines": "Adicione pelo menos uma linha antes de emitir.",
+        "discountInvalid": "Informe um desconto válido (um percentual de 0 a 100, ou um valor).",
+        "shippingInvalid": "Informe um valor de frete válido.",
+        "emailInvalid": "Informe um e-mail válido.",
+        "amountZero": "O total da fatura deve ser maior que zero.",
+        "amountInvalid": "Um valor é grande demais ou tem casas decimais demais para esta moeda.",
+        "countryInvalid": "Use um código de país de duas letras.",
+        "regionInvalid": "Use um código de região curto, com até três letras ou números.",
+        "autoNeedsSellerCountry": "Defina seu país no perfil de faturamento para usar o imposto automático.",
+        "descriptionRequired": "Descreva esta linha.",
+        "qtyInvalid": "Informe uma quantidade maior que zero, com no máximo 4 casas decimais.",
+        "priceInvalid": "Informe um preço válido com as casas decimais permitidas por esta moeda.",
+        "lineDiscountInvalid": "Informe um desconto de linha válido.",
+        "hsnRequired": "Informe o código HSN/SAC. Seu país exige em cada linha.",
+        "hsnInvalid": "Um código HSN/SAC tem de 2 a 12 letras ou números.",
+        "taxRateRemoved": "A alíquota desta linha foi removida. Escolha uma atual."
+      }
+    },
+    "lines": {
+      "discount": "Desconto",
+      "discountKind": "Tipo de desconto",
+      "taxAuto": "Automático",
+      "taxDefault": "Padrão ({rate})",
+      "taxDefaultNone": "Padrão (sem imposto)",
+      "removedRateOption": "{rate}, removida",
+      "hsn": "HSN/SAC",
+      "hsnPlaceholder": "Código"
+    },
+    "totals": {
+      "shipping": "Frete",
+      "taxIncluded": "{name}, incluído",
+      "taxOn": "sobre {base}",
+      "reverseCharge": "Inversão da cobrança: nenhum imposto é cobrado.",
+      "includesTotal": "Imposto incluso nos preços"
+    },
+    "taxWhy": {
+      "title": "Por que este imposto?",
+      "preview": "Prévia",
+      "previewNote": "Calculado no seu navegador enquanto você edita. O que o servidor decidir ao salvar é o que vale.",
+      "taxFree": "Nenhum imposto é cobrado neste fornecimento",
+      "warnings": "Confira novamente",
+      "placeOfSupply": "Local de fornecimento",
+      "reverseCharge": "Inversão da cobrança",
+      "reverseChargeNote": "O comprador apura o imposto, então nenhum é cobrado.",
+      "documentNotes": "Impresso no documento",
+      "disclaimer": "As alíquotas e regras são padrões a verificar com seu contador ou a autoridade tributária. Não é aconselhamento jurídico ou tributário."
+    },
+    "paper": {
+      "docTitle": {
+        "tax_invoice": "Fatura fiscal",
+        "proforma": "Fatura proforma",
+        "receipt": "Recibo"
+      },
+      "sellerTaxId": "Número fiscal",
+      "registrationNo": "Nº de registro",
+      "buyerTaxId": "Número fiscal",
+      "reference": "Referência",
+      "placeOfSupply": "Local de fornecimento",
+      "hsn": "HSN/SAC",
+      "lineDiscountAmount": "Desconto de {amount}",
+      "shipping": "Frete",
+      "credited": "Creditado",
+      "taxSummary": "Resumo de impostos",
+      "taxName": "Imposto",
+      "taxBase": "Base tributável",
+      "taxAmount": "Imposto",
+      "taxInclusive": "incluso",
+      "reverseCharge": "Inversão da cobrança: o comprador apura o imposto.",
+      "paymentsReceived": "Pagamentos recebidos",
+      "refund": "reembolso",
+      "bankDetails": "Dados bancários",
+      "voidReason": "Cancelada: {reason}"
+    },
+    "public": {
+      "notFoundTitle": "Link não encontrado",
+      "notFoundMessage": "Este link de fatura não existe. Verifique se copiou tudo ou peça o link novamente ao remetente.",
+      "unavailableTitle": "Este link não está disponível",
+      "unavailableMessage": "O link da fatura foi retirado ou expirou. Peça um novo link ao remetente.",
+      "voidReason": "Motivo: {reason}",
+      "printable": "Abrir a página para impressão",
+      "amountDueFooter": "Valor devido: {amount}",
+      "noPayOptions": "O vendedor não configurou uma forma de pagamento online. Entre em contato com ele para combinar o pagamento.",
+      "payAmount": "Valor a pagar ({currency})",
+      "payAmountHint": "O saldo total já está preenchido. Digite um valor menor para pagar parte dele.",
+      "amountErrors": {
+        "invalid": "Informe um valor maior que zero.",
+        "tooMuch": "O valor não pode ser maior que o devido."
+      },
+      "linkUnavailable": "Este link da fatura não está mais disponível, então não é possível pagar daqui.",
+      "payFailed": "Não foi possível iniciar o pagamento. Tente novamente em instantes.",
+      "payUnavailable": "O pagamento online não está disponível para esta fatura no momento.",
+      "redirecting": "Levando você à página de pagamento...",
+      "payInstructions": "Pague conforme descrito abaixo.",
+      "bankTransfer": "Transferência bancária",
+      "copyInstructions": "Copiar as instruções",
+      "copyValue": "Copiar {label}"
+    }
+  }
+}

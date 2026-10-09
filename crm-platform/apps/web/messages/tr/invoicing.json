@@ -1,0 +1,662 @@
+{
+  "invoicing": {
+    "nav": {
+      "invoices": "Faturalar",
+      "payments": "Ödemeler",
+      "taxRates": "Vergi oranları",
+      "recurring": "Yinelenen faturalar",
+      "salesOrders": "Satış siparişleri"
+    },
+    "common": {
+      "unnamedContact": "İsimsiz kişi",
+      "dismiss": "Kapat"
+    },
+    "status": {
+      "draft": "Taslak",
+      "issued": "Düzenlendi",
+      "partially_paid": "Kısmen ödendi",
+      "overdue": "Gecikmiş",
+      "paid": "Ödendi",
+      "void": "İptal edildi"
+    },
+    "method": {
+      "bank_transfer": "Banka havalesi",
+      "cash": "Nakit",
+      "card": "Kart",
+      "upi": "UPI",
+      "cheque": "Çek",
+      "gateway": "Çevrimiçi",
+      "other": "Diğer"
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
+      "forbidden": "Bunu yapmaya izniniz yok.",
+      "signedOut": "Oturumunuz sona erdi. Yeniden oturum açın.",
+      "conflict": "Bunu az önce başka biri değiştirdi. En son sürümü görmek için yenileyin.",
+      "validation": "Bazı bilgiler geçerli değil. Vurgulanan alanları kontrol edin.",
+      "unavailable": "Faturalama bu sunucuda henüz kullanılamıyor.",
+      "rateLimited": "Çok fazla istek. Bir süre bekleyip yeniden deneyin.",
+      "notFound": "Bu fatura artık mevcut değil.",
+      "planDisabled": "Planınız faturalamayı içermiyor.",
+      "invalidState": "Faturanın mevcut durumunda bu mümkün değil. Yenileyip durumunu kontrol edin.",
+      "unexpected": "Tarafımızda bir sorun oluştu. Yeniden deneyin.",
+      "requestId": "İstek kimliği",
+      "retry": "Yeniden dene"
+    },
+    "picker": {
+      "unlink": "Kişiyi kaldır",
+      "searchContact": "Kişileri ada göre ara",
+      "results": "Eşleşen kişiler",
+      "searching": "Aranıyor...",
+      "unavailable": "Kişiler yüklenemedi.",
+      "none": "Kişi bulunamadı."
+    },
+    "actions": {
+      "failed": "İşlem başarısız oldu.",
+      "issued": "{number} numaralı fatura düzenlendi.",
+      "sent": "Gönderildi olarak işaretlendi.",
+      "voided": "{number} numaralı fatura iptal edildi.",
+      "duplicated": "Kopya taslak olarak oluşturuldu.",
+      "deleted": "Taslak silindi.",
+      "linkCopied": "Bağlantı kopyalandı.",
+      "linkCopyFailed": "Tarayıcınız kopyalamayı engelledi. Bağlantıyı seçip elle kopyalayın."
+    },
+    "payDialog": {
+      "title": "Ödeme kaydet",
+      "forInvoice": "Fatura {number}",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "record": "Ödeme kaydet",
+      "markPaid": "Kaydet ve ödendi olarak işaretle",
+      "recordAnyway": "Yine de kaydet",
+      "balance": "Ödenecek bakiye",
+      "amount": "Tutar ({currency})",
+      "method": "Yöntem",
+      "paidOn": "Ödeme tarihi",
+      "reference": "Referans",
+      "referenceHint": "İşlem kimliği veya çek numarası",
+      "note": "Not",
+      "recorded": "{amount} tutarındaki ödeme kaydedildi.",
+      "partialNote": "Bu kısmi bir ödeme. {left} hâlâ ödenecek.",
+      "overpayNote": "Bu, bakiyeden {extra} fazla. Kaydetmeden önce tutarı kontrol edin.",
+      "problems": {
+        "amountInvalid": "Bir tutar girin, örneğin 125.50.",
+        "amountZero": "Tutar sıfırdan büyük olmalıdır.",
+        "dateInvalid": "Geçerli bir tarih girin.",
+        "dateFuture": "Ödeme tarihi gelecekte olamaz.",
+        "tooMuch": "Bu, iade edilebilecek tutardan fazla.",
+        "referenceTooLong": "Referans çok uzun (en fazla 191 karakter).",
+        "noteTooLong": "Not çok uzun (en fazla 2000 karakter)."
+      }
+    },
+    "refundDialog": {
+      "title": "Ödemeyi iade et",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "refund": "İade et",
+      "available": "En fazla {amount} iade edilebilir.",
+      "amount": "Tutar ({currency})",
+      "date": "İade tarihi",
+      "reason": "Neden",
+      "effect": "Fatura, iade edilen tutar kadar yeniden borç doğuracak.",
+      "refunded": "{amount} iade edildi.",
+      "problems": {
+        "amountInvalid": "Bir tutar girin, örneğin 125.50.",
+        "amountZero": "Tutar sıfırdan büyük olmalıdır.",
+        "tooMuch": "Bu, iade edilebilecek tutardan fazla."
+      }
+    },
+    "voidDialog": {
+      "title": "Faturayı iptal et",
+      "close": "Kapat",
+      "keep": "Vazgeç",
+      "void": "Faturayı iptal et",
+      "warning": "İptal edilen fatura numarasını korur ancak artık ödenemez, düzenlenemez veya yeniden açılamaz. Alıcının bağlantısı faturayı iptal edilmiş olarak gösterir.",
+      "reason": "Neden",
+      "reasonHint": "İsteğe bağlı. Faturanın etkinliğinde saklanır."
+    },
+    "sendDialog": {
+      "title": "Faturayı paylaş",
+      "issueTitle": "Faturayı düzenle",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "issue": "Faturayı düzenle",
+      "done": "Tamam",
+      "issueIntro": "Düzenlemek bu faturayı resmileştirir:",
+      "issueNumber": "Sıradaki fatura numarasını alır.",
+      "issueFrozen": "Kalemleri, fiyatları ve vergileri artık düzenlenemez.",
+      "issueLink": "Müşteriniz için bir bağlantı kullanılabilir hale gelir.",
+      "link": "Müşteriniz için bağlantı",
+      "linkHint": "Bu bağlantıya sahip herkes faturayı ve nasıl ödeneceğini görebilir.",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "copyFailed": "Tarayıcınız kopyalamayı engelledi. Bağlantıyı seçip elle kopyalayın.",
+      "open": "Müşterinin sayfasını aç",
+      "email": "Şuna e-postayla gönder",
+      "emailHint": "İsteğe bağlı. Bağlantıyı kendiniz paylaşmak ve faturayı yalnızca gönderildi olarak işaretlemek için boş bırakın.",
+      "alreadySent": "Bu fatura zaten gönderildi olarak işaretlenmişti."
+    },
+    "deleteDialog": {
+      "title": "Taslak silinsin mi?",
+      "message": "{name} kalıcı olarak silinecek. Yalnızca taslaklar silinebilir.",
+      "delete": "Taslağı sil",
+      "keep": "Vazgeç"
+    },
+    "row": {
+      "moreFor": "{name} için işlemler",
+      "draft": "taslak",
+      "open": "Aç",
+      "edit": "Düzenle",
+      "issue": "Düzenle ve gönder",
+      "send": "Bağlantıyı paylaş / gönderildi olarak işaretle",
+      "copyLink": "Bağlantıyı kopyala",
+      "recordPayment": "Ödeme kaydet",
+      "markPaid": "Ödendi olarak işaretle",
+      "duplicate": "Çoğalt",
+      "print": "İndir / yazdır",
+      "void": "İptal et",
+      "delete": "Taslağı sil"
+    },
+    "table": {
+      "columns": {
+        "number": "Fatura",
+        "contact": "Müşteri",
+        "issued": "Düzenlenme",
+        "due": "Vade",
+        "total": "Toplam",
+        "paid": "Ödenen",
+        "balance": "Bakiye",
+        "status": "Durum"
+      },
+      "draft": "Taslak",
+      "daysLate": "{count, plural, other {# gün gecikmiş}}",
+      "selectAll": "Yüklenen tüm faturaları seç",
+      "selectRow": "{name} seç",
+      "scrollArea": "Fatura tablosu"
+    },
+    "tabs": {
+      "label": "Fatura durumu",
+      "all": "Tümü",
+      "draft": "Taslak",
+      "issued": "Düzenlendi",
+      "partially_paid": "Kısmen ödendi",
+      "overdue": "Gecikmiş",
+      "paid": "Ödendi",
+      "void": "İptal edildi",
+      "count": "{count, plural, other {# fatura}}"
+    },
+    "toolbar": {
+      "search": "Numaraya veya müşteriye göre ara",
+      "contactLoading": "Müşteri",
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "issuedFrom": "Düzenleme başlangıcı",
+      "issuedTo": "Düzenleme bitişi",
+      "sort": "Faturaları sırala",
+      "sorts": {
+        "newest": "En yeni önce",
+        "oldest": "En eski önce",
+        "due": "Vade tarihi",
+        "amount": "En yüksek tutar"
+      },
+      "reset": "Filtreleri temizle",
+      "refresh": "Yenile"
+    },
+    "bulk": {
+      "label": "Toplu işlemler",
+      "selected": "{count, plural, other {# fatura seçildi}}",
+      "working": "Çalışıyor...",
+      "issue": "Taslakları düzenle",
+      "void": "İptal et",
+      "delete": "Taslakları sil",
+      "clear": "Seçimi temizle",
+      "failed": "İşlem başarısız oldu.",
+      "keep": "Vazgeç",
+      "someFailed": "{count, plural, other {# fatura değiştirilemedi.}}",
+      "done": {
+        "issue": "{count, plural, other {# taslak düzenlendi.}}",
+        "void": "{count, plural, other {# fatura iptal edildi.}}",
+        "delete": "{count, plural, other {# taslak silindi.}}"
+      },
+      "confirm": {
+        "void": {
+          "title": "Seçili faturalar iptal edilsin mi?",
+          "message": "{count, plural, other {# seçili fatura iptal edilecek. Ödemesi olan faturalar atlanır.}}",
+          "confirm": "Faturaları iptal et"
+        },
+        "delete": {
+          "title": "Seçili taslaklar silinsin mi?",
+          "message": "{count, plural, other {# seçili fatura değerlendirilecek. Yalnızca taslaklar kalıcı olarak silinir.}}",
+          "confirm": "Taslakları sil"
+        }
+      }
+    },
+    "list": {
+      "title": "Faturalar",
+      "subtitle": "Müşterilerinize fatura kesin, neyin ödendiğini ve neyin geciktiğini takip edin.",
+      "payments": "Ödemeler",
+      "newInvoice": "Yeni fatura",
+      "tableLabel": "Fatura listesi",
+      "empty": {
+        "all": {
+          "title": "Henüz fatura yok",
+          "message": "İlk faturanızı oluşturun veya kabul edilmiş bir teklif ya da tahminden başlatın."
+        },
+        "draft": {
+          "title": "Taslak yok",
+          "message": "Hâlâ yazdığınız faturalar burada görünür."
+        },
+        "issued": {
+          "title": "Ödeme bekleyen yok",
+          "message": "Henüz ödemesi olmayan düzenlenmiş faturalar burada görünür."
+        },
+        "partially_paid": {
+          "title": "Kısmen ödenmiş fatura yok",
+          "message": "Ödemesi olan ancak bakiyesi kalan faturalar burada görünür."
+        },
+        "overdue": {
+          "title": "Gecikmiş fatura yok",
+          "message": "Vade tarihi geçmiş ve bakiyesi kalan faturalar burada görünür."
+        },
+        "paid": {
+          "title": "Henüz ödenmiş fatura yok",
+          "message": "Tamamı ödenmiş faturalar burada görünür."
+        },
+        "void": {
+          "title": "İptal edilmiş fatura yok",
+          "message": "İptal edilen faturalar burada görünür ve numaralarını korur."
+        }
+      },
+      "emptyFilteredTitle": "Eşleşen fatura yok",
+      "emptyFiltered": "Farklı bir arama deneyin veya filtreleri temizleyin.",
+      "resetFilters": "Filtreleri temizle",
+      "loading": "Faturalar yükleniyor",
+      "showing": "{count, plural, other {# fatura yüklendi}}",
+      "loadMore": "Daha fazla yükle",
+      "allLoaded": "Hepsi bu kadar"
+    },
+    "lines": {
+      "lineN": "Kalem {n}",
+      "description": "Açıklama",
+      "descriptionPlaceholder": "Neyin faturasını kesiyorsunuz?",
+      "removeLine": "{n} numaralı kalemi kaldır",
+      "qty": "Adet",
+      "price": "Birim fiyat ({currency})",
+      "discount": "İndirim %",
+      "tax": "Vergi",
+      "noTax": "Vergi yok",
+      "inclusive": "dahil",
+      "removedRate": "Vergi oranı kaldırıldı",
+      "inactive": "pasif",
+      "amount": "Tutar",
+      "addLine": "Kalem ekle",
+      "problems": {
+        "descriptionRequired": "Bu kalemi açıklayın.",
+        "qtyInvalid": "Sıfırdan büyük bir adet girin.",
+        "priceInvalid": "Bir fiyat girin, örneğin 49.90.",
+        "lineDiscountInvalid": "0 ile 100 arasında bir yüzde girin.",
+        "noLines": "Düzenlemeden önce en az bir kalem ekleyin.",
+        "amountZero": "Fatura toplamı sıfırdan büyük olmalıdır."
+      }
+    },
+    "totals": {
+      "label": "Fatura toplamları",
+      "title": "Toplamlar",
+      "subtotal": "Ara toplam",
+      "discount": "İndirim",
+      "total": "Toplam"
+    },
+    "builder": {
+      "creatingFromDocument": "Fatura belgeden oluşturuluyor...",
+      "loading": "Yükleniyor",
+      "notEditable": "Bu fatura düzenlendiği için artık değiştirilemez. Düzeltilmiş bir fatura başlatmak için çoğaltın.",
+      "openInvoice": "Faturayı aç",
+      "newTitle": "Yeni fatura",
+      "editTitle": "Taslağı düzenle",
+      "back": "Geri",
+      "unsaved": "Kaydedilmemiş değişiklikler",
+      "cancel": "İptal",
+      "saveDraft": "Taslağı kaydet",
+      "saveAndIssue": "Kaydet ve düzenle",
+      "conflict": "Siz düzenlerken başka biri bu taslağı değiştirdi. Onların sürümünü görmek için yenileyin; buradaki düzenlemeleriniz kaybolur.",
+      "reload": "Yenile",
+      "viewLabel": "Oluşturucu görünümü",
+      "views": {
+        "edit": "Düzenle",
+        "preview": "Önizleme"
+      },
+      "billTo": "Fatura alıcısı",
+      "contact": "Kişi",
+      "contactHint": "Faturayı bağlamak için bir kişi seçin veya alıcıyı aşağıya yazın.",
+      "buyerName": "Faturadaki ad",
+      "buyerEmail": "E-posta",
+      "buyerPhone": "Telefon",
+      "buyerAddress": "Fatura adresi",
+      "details": "Tarihler ve para birimi",
+      "currency": "Para birimi",
+      "currencyHint": "USD veya KWD gibi üç harf. Ondalıklar para birimine göre belirlenir.",
+      "issueDate": "Düzenleme tarihi",
+      "terms": "Ödeme koşulları",
+      "noDueDate": "Vade tarihi yok",
+      "dueDate": "Vade tarihi",
+      "lineItems": "Fatura kalemleri",
+      "orderLinkedNote": "Satış siparişinden oluşturulan bir faturanın kalemleri sabittir. Bunları değiştirmek için bu faturayı iptal edin veya silin ve siparişi yeniden faturalayın.",
+      "adjustments": "İndirim",
+      "discountKind": "Tüm fatura üzerinde indirim",
+      "discountNone": "İndirim yok",
+      "discountPercent": "Yüzde",
+      "discountAmount": "Sabit tutar ({currency})",
+      "discountValue": "İndirim değeri",
+      "notesAndTerms": "Notlar ve koşullar",
+      "notes": "Müşteriye not",
+      "notesHint": "Faturada gösterilir.",
+      "termsText": "Şartlar ve koşullar",
+      "termsHint": "Faturanın altında gösterilir.",
+      "preview": "Önizleme",
+      "saved": "Taslak kaydedildi.",
+      "fixProblems": "Önce vurgulanan alanları düzeltin.",
+      "serverRejected": "Sunucu bazı değerleri kabul etmedi. Alanları kontrol edip yeniden deneyin.",
+      "problems": {
+        "contactRequired": "Bir kişi seçin veya alıcının adını yazın.",
+        "currencyInvalid": "Üç harfli bir para birimi kodu girin.",
+        "issueDateInvalid": "Geçerli bir düzenleme tarihi girin.",
+        "dueBeforeIssue": "Vade tarihi düzenleme tarihinden önce olamaz.",
+        "dueInvalid": "Geçerli bir vade tarihi girin.",
+        "noLines": "Düzenlemeden önce en az bir kalem ekleyin.",
+        "discountInvalid": "Geçerli bir indirim girin.",
+        "emailInvalid": "Geçerli bir e-posta adresi girin.",
+        "amountZero": "Fatura toplamı sıfırdan büyük olmalıdır.",
+        "descriptionRequired": "Bu kalemi açıklayın.",
+        "priceInvalid": "Geçerli bir fiyat girin.",
+        "qtyInvalid": "Sıfırdan büyük bir adet girin.",
+        "lineDiscountInvalid": "0 ile 100 arasında bir yüzde girin."
+      }
+    },
+    "terms": {
+      "onReceipt": "Tahsilatta",
+      "net": "{days} gün vade",
+      "custom": "Özel tarih"
+    },
+    "paper": {
+      "label": "Fatura {number}",
+      "labelDraft": "Taslak fatura önizlemesi",
+      "sellerFallback": "İşletme adınız",
+      "title": "Fatura",
+      "draftNumber": "Taslak",
+      "billedTo": "Fatura alıcısı",
+      "buyerFallback": "Müşteri",
+      "issued": "Düzenlenme",
+      "due": "Vade",
+      "onReceipt": "Tahsilatta",
+      "item": "Kalem",
+      "qty": "Adet",
+      "price": "Fiyat",
+      "tax": "Vergi",
+      "amount": "Tutar",
+      "noLines": "Henüz kalem yok",
+      "noDescription": "Açıklama yok",
+      "lineDiscount": "{percent}% indirim",
+      "subtotal": "Ara toplam",
+      "discount": "İndirim",
+      "discountPercent": "İndirim ({percent}%)",
+      "total": "Toplam",
+      "includesTax": "Vergi fiyatlara dahil",
+      "paid": "Ödenen",
+      "balanceDue": "Ödenecek bakiye",
+      "notes": "Notlar",
+      "terms": "Koşullar"
+    },
+    "detail": {
+      "loading": "Fatura yükleniyor",
+      "backToList": "Faturalara dön",
+      "draftTitle": "Taslak fatura",
+      "edit": "Düzenle",
+      "issueAndSend": "Düzenle ve gönder",
+      "shareAgain": "Yeniden paylaş",
+      "send": "Paylaş ve gönder",
+      "recordPayment": "Ödeme kaydet",
+      "markPaid": "Ödendi olarak işaretle",
+      "copyLink": "Bağlantıyı kopyala",
+      "print": "İndir / yazdır",
+      "duplicate": "Çoğalt",
+      "void": "İptal et",
+      "delete": "Taslağı sil",
+      "voidedBanner": "Bu fatura {date} tarihinde iptal edildi. Numarasını korur ancak artık ödenemez.",
+      "voidNeedsRefund": "Bu faturayı iptal etmek için önce ödemelerini iade edin.",
+      "overpaid": "Bu faturanın istediğinden fazla ödeme yapıldı.",
+      "amountsLabel": "Tutarlar",
+      "total": "Toplam",
+      "paid": "Ödenen",
+      "balance": "Ödenecek bakiye",
+      "issued": "Düzenlenme",
+      "due": "Vade",
+      "noDue": "Vade tarihi yok",
+      "daysLate": "{count, plural, other {# gün gecikmiş}}",
+      "sentAt": "Gönderildi",
+      "paidAt": "Tamamen ödendi",
+      "source": "Oluşturulma kaynağı",
+      "sourceKind": {
+        "proposal": "Teklif",
+        "estimate": "Tahmin"
+      },
+      "deal": "Fırsat",
+      "dealFallback": "Fırsatı aç"
+    },
+    "paymentsSection": {
+      "title": "Ödemeler",
+      "loading": "Ödemeler yükleniyor",
+      "none": "Henüz kaydedilmiş ödeme yok.",
+      "refund": "İade et"
+    },
+    "activity": {
+      "title": "Etkinlik",
+      "loading": "Etkinlik yükleniyor",
+      "events": {
+        "created": "Taslak oluşturuldu",
+        "edited": "Taslak düzenlendi",
+        "issued": "Fatura kesildi",
+        "sent": "Gönderildi olarak işaretlendi",
+        "viewed": "Müşteri tarafından açıldı",
+        "payment_recorded": "Ödeme kaydedildi",
+        "payment_refunded": "Ödeme iade edildi",
+        "paid": "Tamamen ödendi",
+        "reminder_sent": "Hatırlatma gönderildi",
+        "voided": "Fatura iptal edildi"
+      }
+    },
+    "pickInvoice": {
+      "title": "Hangi fatura ödendi?",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "search": "Numaraya veya müşteriye göre ara",
+      "loading": "Faturalar yükleniyor",
+      "noMatch": "Eşleşen ödenmemiş fatura yok.",
+      "nothingOwed": "Şu anda ödenmesi gereken bir tutar yok.",
+      "balance": "Bakiye",
+      "more": "Daha fazla göster"
+    },
+    "aging": {
+      "loading": "Yaşlandırma raporu yükleniyor",
+      "emptyTitle": "Ödenmesi gereken tutar yok",
+      "emptyMessage": "Kesilen tüm faturalar ödendi. Ödenmemiş faturalar burada, ne kadar gecikmiş olduklarına göre gruplanarak gösterilecek.",
+      "asOf": "{date} itibarıyla. Gecikme, vade tarihinden itibaren hesaplanır.",
+      "currencyLabel": "{currency} cinsinden ödenmemiş tutar",
+      "outstanding": "Ödenmemiş",
+      "invoices": "{count, plural, other {# fatura}}",
+      "barLabel": "Her yaş grubundaki ödenmemiş tutarın payı",
+      "buckets": {
+        "current": "Henüz vadesi gelmedi",
+        "d1_30": "1-30 gün gecikmiş",
+        "d31_60": "31-60 gün gecikmiş",
+        "d61_90": "61-90 gün gecikmiş",
+        "d90_plus": "90 günden fazla gecikmiş"
+      },
+      "total": "Toplam",
+      "unnamed": "İsimsiz kişi",
+      "noContact": "Kişi yok"
+    },
+    "payments": {
+      "title": "Ödemeler",
+      "subtitle": "Faturalarınıza karşılık alınan tutarlar ve hâlâ ödenmesi gereken bakiye.",
+      "invoices": "Faturalar",
+      "record": "Ödeme kaydet",
+      "viewLabel": "Ödemeler görünümü",
+      "views": {
+        "ledger": "Defter",
+        "aging": "Yaşlandırma"
+      },
+      "tableLabel": "Ödeme defteri",
+      "loading": "Ödemeler yükleniyor",
+      "emptyFilteredTitle": "Eşleşen ödeme yok",
+      "emptyFiltered": "Farklı bir arama yapın veya filtreleri temizleyin.",
+      "emptyTitle": "Henüz ödeme yok",
+      "emptyMessage": "Bir müşteri faturayı ödediğinde, ödemeyi buraya veya faturadan kaydedin.",
+      "resetFilters": "Filtreleri temizle",
+      "showing": "{count, plural, other {# ödeme yüklendi}}",
+      "loadMore": "Daha fazla yükle",
+      "allLoaded": "Hepsi bu kadar",
+      "strip": {
+        "loading": "Toplamlar yükleniyor",
+        "label": "Ödeme toplamları",
+        "window": "{from} - {to}",
+        "none": "Bu dönemde ödeme yok.",
+        "collected": "Tahsil edilen ({currency})",
+        "count": "Ödemeler",
+        "refunded": "İade edildi"
+      },
+      "toolbar": {
+        "search": "Referans, fatura veya müşteriye göre ara",
+        "method": "Yöntem",
+        "allMethods": "Tüm yöntemler",
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "paidFrom": "Ödeme başlangıcı",
+        "paidTo": "Ödeme bitişi",
+        "reset": "Filtreleri temizle",
+        "refresh": "Yenile"
+      },
+      "table": {
+        "scrollArea": "Ödemeler tablosu",
+        "columns": {
+          "date": "Tarih",
+          "invoice": "Fatura",
+          "contact": "Müşteri",
+          "method": "Yöntem",
+          "reference": "Referans",
+          "amount": "Tutar",
+          "refunded": "İade edildi",
+          "recordedBy": "Kaydeden",
+          "actions": "İşlemler"
+        },
+        "moreFor": "{date} tarihli ödeme için işlemler",
+        "openInvoice": "Faturayı aç",
+        "refund": "İade et"
+      }
+    },
+    "taxRates": {
+      "title": "Vergi oranları",
+      "subtitle": "Fatura kalemlerine eklediğiniz vergiler. Yeni kalemler için bir tanesi varsayılan olur.",
+      "new": "Yeni vergi oranı",
+      "tableLabel": "Vergi oranları",
+      "loading": "Vergi oranları yükleniyor",
+      "emptyTitle": "Henüz vergi oranı yok",
+      "emptyMessage": "Uyguladığınız KDV veya GST gibi vergileri ekleyin; fatura kalemlerinde bunları seçebilirsiniz.",
+      "scrollArea": "Vergi oranları tablosu",
+      "columns": {
+        "name": "Ad",
+        "rate": "Oran",
+        "type": "Tür",
+        "status": "Durum",
+        "effective": "Geçerlilik başlangıcı",
+        "used": "Kalemler",
+        "actions": "İşlemler"
+      },
+      "default": "Varsayılan",
+      "inclusive": "Dahil",
+      "exclusive": "Hariç",
+      "active": "Etkin",
+      "inactive": "Pasif",
+      "always": "Her zaman",
+      "moreFor": "{name} için işlemler",
+      "edit": "Düzenle",
+      "makeDefault": "Varsayılan yap",
+      "madeDefault": "{name} artık varsayılan.",
+      "deactivate": "Pasifleştir",
+      "activate": "Etkinleştir",
+      "deactivated": "{name} pasifleştirildi.",
+      "activated": "{name} etkinleştirildi.",
+      "delete": "Sil",
+      "deleteTitle": "Bu vergi oranı silinsin mi?",
+      "keep": "Vazgeç",
+      "deleted": "{name} silindi.",
+      "count": "{count, plural, other {# vergi oranı}}",
+      "hint": "Bir oranı değiştirmek, daha önce kesilmiş faturaları asla değiştirmez: her fatura, oluşturulduğu orancı korur.",
+      "errors": {
+        "isDefault": "Bu varsayılan orandır. Önce başka bir oranı varsayılan yapın."
+      },
+      "form": {
+        "eyebrow": "Vergi oranı",
+        "editTitle": "Vergi oranını düzenle",
+        "newTitle": "Yeni vergi oranı",
+        "close": "Kapat",
+        "cancel": "İptal",
+        "save": "Kaydet",
+        "name": "Ad",
+        "namePlaceholder": "KDV, GST, Satış vergisi",
+        "rate": "Oran",
+        "type": "Uygulanma şekli",
+        "exclusive": "Hariç: fiyatın üzerine eklenir",
+        "inclusive": "Dahil: fiyatın içinde",
+        "typeHint": {
+          "exclusive": "Müşteri fiyatı ve vergiyi öder.",
+          "inclusive": "Fiyat zaten vergiyi içerir; fatura bunun ne kadarının vergi olduğunu gösterir."
+        },
+        "effectiveFrom": "Geçerlilik başlangıcı",
+        "effectiveHint": "İsteğe bağlı. Belirli bir tarihte değişen bir oran için kullanın.",
+        "description": "Açıklama",
+        "makeDefault": "Yeni kalemler için varsayılan",
+        "defaultHint": "Yeni fatura kalemleri bu oranla başlar.",
+        "active": "Etkin",
+        "activeHint": "Pasif oranlar yeni kalemlerde seçilemez.",
+        "saved": "{name} kaydedildi.",
+        "created": "{name} eklendi.",
+        "problems": {
+          "nameRequired": "Bir ad girin.",
+          "nameTaken": "Bu adda bir vergi oranı zaten var.",
+          "rateInvalid": "0 ile 100 arasında bir yüzde girin.",
+          "dateInvalid": "Geçerli bir tarih girin.",
+          "conflict": "Bu oranı başka biri değiştirdi. Kapatıp yeniden açın."
+        }
+      }
+    },
+    "public": {
+      "loading": "Fatura yükleniyor",
+      "errorTitle": "Bu fatura yüklenemedi",
+      "errorMessage": "Bağlantınızı kontrol edip yeniden deneyin.",
+      "retry": "Yeniden dene",
+      "title": "{seller} tarafından fatura",
+      "dueOn": "vade {date}",
+      "print": "Yazdır",
+      "download": "PDF indir",
+      "paidBanner": "Bu fatura tamamen ödendi. Teşekkür ederiz.",
+      "voidBanner": "Bu fatura iptal edildi, ödenmesi gerekmiyor.",
+      "payNow": "Nasıl ödenir",
+      "amountDue": "Ödenecek tutar:",
+      "bankIntro": "Banka havalesiyle ödeyin ve ödeme referansı olarak {number} kullanın.",
+      "copied": "Kopyalandı",
+      "payButton": "{amount} öde",
+      "gatewayNote": "Satıcının ödeme sağlayıcısının ödeme sayfasına yönlendirileceksiniz.",
+      "questions": "Bu faturayla ilgili sorularınız mı var?",
+      "metaTitle": "Fatura"
+    },
+    "linked": {
+      "title": "Faturalar",
+      "new": "Yeni fatura",
+      "viewAll": "Tümünü gör",
+      "loading": "Faturalar yükleniyor",
+      "none": "Henüz fatura yok.",
+      "draft": "Taslak",
+      "owes": "borçlu"
+    }
+  }
+}

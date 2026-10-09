@@ -1,0 +1,869 @@
+{
+  "wallet-message-billing": {
+    "tile": {
+      "label": "Wydatki, portfel i zestawienie",
+      "description": "Śledź wydatki: saldo wiadomości, doładowania, wszystkie opłaty i pełne zestawienie.",
+      "keywords": "portfel saldo doładowanie dodaj pieniądze kredyty zestawienie rozliczenia wydatki wydatek wydawanie opłaty koszty użycie transakcje historia księga"
+    },
+    "common": {
+      "loading": "Wczytywanie",
+      "retry": "Spróbuj ponownie",
+      "requestId": "Identyfikator żądania",
+      "cancel": "Anuluj",
+      "back": "Wstecz",
+      "close": "Zamknij",
+      "dismiss": "Odrzuć",
+      "on": "Włączone",
+      "off": "Wyłączone",
+      "previous": "Poprzednia",
+      "next": "Następna",
+      "pagination": "Stronicowanie",
+      "pageN": "Strona {page}",
+      "deniedTitle": "Nie masz dostępu do tego",
+      "deniedBody": "Poproś administratora przestrzeni roboczej o uprawnienie „{permission}”."
+    },
+    "errors": {
+      "noteRequired": "Wymagany jest powód o długości co najmniej 5 znaków.",
+      "amountInvalid": "Ta kwota nie jest akceptowana. Podaj dodatnią kwotę z najwyżej 2 miejscami po przecinku.",
+      "insufficient": "Saldo jest za niskie na tę operację.",
+      "notFound": "Ta przestrzeń robocza nie ma portfela.",
+      "rateInvalid": "Nie udało się zapisać stawki. Sprawdź kraj, kategorię i kwoty.",
+      "importFailed": "Nie udało się odczytać cennika albo nie ma w nim żadnego użytecznego wiersza.",
+      "syncFailed": "Nie udało się odczytać cennika Meta i nie ma dostępnego wbudowanego cennika.",
+      "conflict": "Ktoś inny to zmienił. Odśwież stronę i spróbuj ponownie.",
+      "forbidden": "Tylko super administratorzy mogą to zrobić.",
+      "validation": "Sprawdź zaznaczone pola.",
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+      "currencyUnsupported": "Tej waluty nie można jeszcze użyć: najpierw zaimportuj dla niej cennik Meta (Cennik wiadomości, cenniki Meta)."
+    },
+    "types": {
+      "topup": "Doładowanie",
+      "earn": "Przychód",
+      "refund": "Zwrot",
+      "spend": "Opłata za wiadomość",
+      "admin_adjust": "Korekta"
+    },
+    "categories": {
+      "marketing": "Marketingowe",
+      "utility": "Usługowe",
+      "authentication": "Uwierzytelniające",
+      "service": "Serwisowe"
+    },
+    "modes": {
+      "wallet": "Płatność za wiadomość",
+      "plan": "Plan"
+    },
+    "chip": {
+      "balance": "Saldo",
+      "low": "Twoje saldo jest niskie"
+    },
+    "wallet": {
+      "title": "Portfel",
+      "subtitle": "Saldo wiadomości, wydatki i przychody z ostatnich 30 dni oraz sposób dodawania środków.",
+      "fullStatement": "Pełne zestawienie",
+      "lowBalanceTitle": "Saldo się kończy",
+      "lowBalanceBody": "Saldo wynosi {threshold} lub mniej. Dodaj środki, aby kampanie i odpowiedzi nadal były wysyłane.",
+      "kpi": {
+        "balance": "Saldo",
+        "available": "Dostępne teraz",
+        "approx": "około {count, plural, one {# wiadomość} few {# wiadomości} many {# wiadomości} other {# wiadomości}}",
+        "spent": "Wydano",
+        "earned": "Zarobiono",
+        "last30": "Ostatnie 30 dni"
+      },
+      "add": {
+        "title": "Dodaj środki",
+        "amount": "Kwota",
+        "hint": "Tylko pełne kwoty, co najmniej 1.",
+        "invalid": "Wpisz pełną kwotę, co najmniej 1.",
+        "submit": "Dodaj środki",
+        "quick": "Szybkie kwoty"
+      },
+      "how": {
+        "title": "Jak działają rozliczenia",
+        "wallet": {
+          "body": "Każda dostarczona wiadomość jest obciążana z portfela według ceny dla jej kraju i kategorii. Nieudane wiadomości nie są naliczane.",
+          "funded": "Gdy saldo jest puste, wysyłki masowe są wstrzymane do momentu dodania środków."
+        },
+        "plan": {
+          "allowance": "Twój plan obejmuje {limit} wiadomości miesięcznie.",
+          "used": "W tym miesiącu wykorzystano: {used}.",
+          "ends": "Twój plan kończy się {date}.",
+          "extra": "Wiadomości ponad miesięczny limit są obciążane z portfela.",
+          "ended": "Twój plan się zakończył, więc wysyłanie jest wstrzymane do czasu jego odnowienia."
+        },
+        "generic": "Twoje wiadomości są objęte planem. Portfel pokrywa to, czego plan nie obejmuje."
+      },
+      "activity": {
+        "title": "Ostatnia aktywność",
+        "fullStatement": "Otwórz pełne zestawienie",
+        "emptyTitle": "Brak aktywności",
+        "emptyBody": "Tutaj pojawiają się doładowania, opłaty za wiadomości i zwroty."
+      }
+    },
+    "activity": {
+      "description": "Opis",
+      "type": "Typ",
+      "date": "Data",
+      "amount": "Kwota",
+      "balance": "Saldo",
+      "noDescription": "Ruch w portfelu",
+      "reason": "Powód"
+    },
+    "pricingPanel": {
+      "title": "Cennik wiadomości",
+      "badge": "Za wiadomość",
+      "free": "Bezpłatne",
+      "noCharge": "Bez opłat",
+      "perMessage": "za wiadomość",
+      "footer": "Naliczane po dostarczeniu wiadomości. Cena zależy od kraju odbiorcy i kategorii wiadomości."
+    },
+    "statement": {
+      "title": "Zestawienie portfela",
+      "subtitle": "Każdy ruch na Twoim portfelu. Sumy obejmują wszystko, co pasuje do filtrów, a nie tylko tę stronę.",
+      "back": "Wróć do portfela",
+      "breadcrumbLabel": "Ścieżka nawigacji",
+      "breadcrumbWallet": "Portfel",
+      "breadcrumbStatement": "Wyciąg",
+      "export": "Eksportuj CSV",
+      "exporting": "Przetwarzanie",
+      "exported": "Zapisano {fileName}",
+      "emptyTitle": "Brak transakcji",
+      "emptyFiltered": "Żadna pozycja nie pasuje do tych filtrów. Zmień je lub je wyczyść.",
+      "emptyNone": "Ruchy na Twoim portfelu pojawią się tutaj.",
+      "filters": {
+        "type": "Typ",
+        "from": "Od",
+        "to": "Do",
+        "rangeInverted": "Data końcowa jest wcześniejsza niż data początkowa.",
+        "search": "Szukaj",
+        "searchPlaceholder": "Opis lub powód",
+        "apply": "Zastosuj",
+        "reset": "Resetuj"
+      },
+      "typeFilter": {
+        "all": "Wszystkie",
+        "topup": "Doładowania",
+        "earn": "Zarobki",
+        "spend": "Opłaty za wiadomości",
+        "refund": "Zwroty",
+        "admin_adjust": "Korekty"
+      },
+      "summary": {
+        "balance": "Bieżące saldo",
+        "in": "Wpływy",
+        "out": "Wydatki",
+        "net": "Bilans netto",
+        "count": "{count, plural, one {# transakcja} few {# transakcje} many {# transakcji} other {# transakcji}}"
+      },
+      "columns": {
+        "label": "Wyciąg z portfela",
+        "date": "Data",
+        "description": "Opis",
+        "type": "Typ",
+        "in": "Wpływy",
+        "out": "Wydatki",
+        "balance": "Saldo",
+        "none": "Brak"
+      },
+      "context": {
+        "reason": "Powód",
+        "to": "Do",
+        "template": "Szablon"
+      },
+      "channels": {
+        "campaign": "Kampania",
+        "broadcast": "Wiadomość masowa",
+        "flow": "Przepływ",
+        "scheduled": "Zaplanowane",
+        "auto_reply": "Automatyczna odpowiedź",
+        "chat": "Czat",
+        "api": "API"
+      },
+      "engines": {
+        "waba": "WhatsApp Cloud",
+        "baileys": "WhatsApp QR",
+        "twilio": "Twilio"
+      }
+    },
+    "admin": {
+      "admin": "Administrator",
+      "wallet": "Portfel",
+      "workspacesLabel": "Przestrzenie robocze",
+      "breadcrumb": "Ścieżka nawigacji",
+      "readOnly": "Jesteś zalogowany jako {role}. Tylko superadministratorzy mogą zmieniać ustawienia portfeli, ceny i salda.",
+      "nav": {
+        "overview": "Portfel",
+        "pricing": "Ceny wiadomości",
+        "workspaces": "Portfele przestrzeni roboczych",
+        "logs": "Dzienniki portfela",
+        "margins": "Marże",
+        "packages": "Pakiety kredytowe"
+      },
+      "overview": {
+        "title": "Przegląd portfeli",
+        "subtitle": "Środki zgromadzone w portfelach przestrzeni roboczych oraz ruch z ostatnich 30 dni.",
+        "linkWorkspaces": "Portfele przestrzeni roboczych",
+        "linkPricing": "Ceny wiadomości",
+        "linkLogs": "Dzienniki portfela",
+        "float": "Środki w portfelach",
+        "floatHint": "Zgromadzone we wszystkich przestrzeniach roboczych",
+        "holding": "Przestrzenie robocze z saldem",
+        "low": "Niskie saldo",
+        "last30": "Ostatnie 30 dni",
+        "toppedUp": "Doładowano",
+        "charged": "Obciążono",
+        "refunded": "Zwrócono",
+        "adjustedIn": "Dodane ręcznie",
+        "adjustedOut": "Odjęte ręcznie",
+        "chargedMessages": "Obciążone wiadomości",
+        "freeMessages": "Bezpłatne wiadomości",
+        "reconcile": {
+          "title": "Sprawdź salda względem ksiąg",
+          "body": "Przelicza każdy portfel na podstawie jego księgi i wyświetla salda, które się nie zgadzają.",
+          "button": "Sprawdź salda względem ksiąg",
+          "running": "Sprawdzanie",
+          "ok": "{count, plural, one {# portfel zgadza się z księgą.} few {# portfele zgadzają się z księgą.} many {# portfeli zgadza się z księgą.} other {# portfela zgadza się z księgą.}}",
+          "mismatches": "{count} z {checked} portfeli nie zgadza się z księgą.",
+          "workspace": "Przestrzeń robocza",
+          "balance": "Saldo",
+          "ledger": "Księga",
+          "difference": "Różnica"
+        },
+        "otherCurrencies": "Portfele w innych walutach",
+        "otherCurrenciesNote": "Przestrzenie robocze rozliczane w innej walucie przechowują środki w tej walucie. Podane wyżej kwoty dotyczą wyłącznie {currency}; każda inna waluta jest liczona w osobnym wierszu.",
+        "other": {
+          "currency": "Waluta",
+          "float": "Zgromadzone środki",
+          "holding": "Przestrzenie robocze z saldem",
+          "toppedUp": "Doładowano, 30 dni",
+          "charged": "Obciążono, 30 dni"
+        }
+      },
+      "pricing": {
+        "title": "Ceny wiadomości",
+        "crumb": "Ceny wiadomości",
+        "subtitle": "Ile kosztuje wiadomość dla Twoich klientów, jak chronione są nowe portfele i cennik per kraj.",
+        "kpi": {
+          "signup": "Nagroda za polecenie",
+          "cost": "Koszt za wiadomość",
+          "costHint": "Stała cena, gdy cennik per kraj jest wyłączony",
+          "spending": "Rzeczywiste wydatki",
+          "spendingHint": "Wiadomości, które {amount} kupuje po stałej cenie",
+          "lowBalance": "Alert o niskim saldzie"
+        },
+        "economics": {
+          "title": "Ekonomia",
+          "liveKeys": "Obowiązuje natychmiast",
+          "flatPrice": "Stała cena za wiadomość",
+          "flatPriceHint": "Co najmniej 0,01. Do bezpłatnych wiadomości użyj siatki stawek.",
+          "referralSignup": "Nagroda za polecenie",
+          "referralSignupHint": "Wypłacana polecającemu przy pierwszym płatnym zamówieniu polecanego.",
+          "lowBalance": "Alert o niskim saldzie przy",
+          "lowBalanceHint": "Przestrzenie robocze z saldem równym lub niższym niż ta kwota otrzymają ostrzeżenie.",
+          "coverage": "Pokrycie uruchomienia",
+          "coverageHint": "Masowa wysyłka jest odrzucana, jeśli portfel nie pokrywa tego udziału szacowanego kosztu. 0 odrzuca tylko pusty portfel.",
+          "rewardSentence": "Nagroda w wysokości {reward} pokrywa {count, plural, one {# wiadomość} few {# wiadomości} many {# wiadomości} other {# wiadomości}} po stałej cenie.",
+          "save": "Zapisz ekonomię",
+          "saving": "Przetwarzanie",
+          "saved": "Ekonomia zapisana.",
+          "problems": {
+            "invalid": "Wpisz kwotę z co najwyżej 2 miejscami po przecinku.",
+            "flatZero": "Stała cena nie może wynosić 0.",
+            "percent": "Wpisz liczbę całkowitą od 0 do 100."
+          }
+        },
+        "switches": {
+          "perCountryEnabled": {
+            "label": "Cennik per kraj",
+            "on": "Włączony: każda wiadomość jest rozliczana według kraju odbiorcy i kategorii z siatki stawek.",
+            "off": "Wyłączony: każda wiadomość jest rozliczana stałą ceną.",
+            "save": "Zapisz",
+            "confirmTitle": "Zmienić cennik per kraj?",
+            "confirmOn": "Wiadomości będą rozliczane według kraju i kategorii od następnej wysyłki.",
+            "confirmOff": "Wiadomości będą rozliczane stałą ceną od następnej wysyłki.",
+            "confirm": "Tak, zmień",
+            "savedOn": "Cennik per kraj jest włączony.",
+            "savedOff": "Cennik per kraj jest wyłączony."
+          },
+          "payPerMessage": {
+            "label": "Opłata za wiadomość",
+            "on": "Włączona: przestrzenie robocze bez limitu w planie płacą z portfela za każdą dostarczoną wiadomość.",
+            "off": "Wyłączona: wiadomości nie są obciążane z portfeli.",
+            "save": "Zapisz",
+            "confirmTitle": "Zmienić naliczanie za wiadomości?",
+            "confirmOn": "Od teraz dostarczone wiadomości będą obciążać portfele.",
+            "confirmOff": "Portfele przestaną być obciążane za wiadomości. Dotyczy to każdej przestrzeni roboczej.",
+            "confirm": "Tak, zmień",
+            "savedOn": "Naliczanie za wiadomości jest włączone.",
+            "savedOff": "Naliczanie za wiadomości jest wyłączone."
+          }
+        },
+        "grid": {
+          "title": "Siatka stawek",
+          "modeOn": "Cennik per kraj jest włączony: używane są te ceny.",
+          "modeOff": "Cennik per kraj jest wyłączony: ceny są zapisane, ale naliczana jest stała cena.",
+          "empty": "Brak stawek. Dodaj wiersz, zaimportuj siatkę stawek lub ponownie wczytaj startową siatkę.",
+          "country": "Kraj",
+          "category": "Kategoria",
+          "charge": "Ty płacisz",
+          "metaCost": "Meta pobiera od Ciebie",
+          "margin": "Marża",
+          "marginUnknown": "Nieznane",
+          "actions": "Działania",
+          "anyCountry": "Dowolny kraj",
+          "anyCategory": "Dowolna kategoria",
+          "serviceFree": "Usługa (bezpłatna)",
+          "addRow": "Dodaj wiersz",
+          "remove": "Usuń",
+          "cancel": "Anuluj",
+          "removeTitle": "Usunąć tę stawkę?",
+          "removeBody": "Stawka dla {country} zostanie usunięta. Wiadomości przejdą do następnej pasującej stawki.",
+          "removed": "Stawka usunięta.",
+          "save": "Zapisz stawki",
+          "saving": "Przetwarzanie",
+          "saved": "{count, plural, one {# stawka zapisana.} few {# stawki zapisane.} many {# stawek zapisanych.} other {# stawki zapisane.}}",
+          "savedSome": "Zapisano: {saved}, pominięto: {skipped}. Powód przy każdym pominiętym wierszu.",
+          "unsaved": "{count, plural, one {# niezapisany wiersz} few {# niezapisane wiersze} many {# niezapisanych wierszy} other {# niezapisanego wiersza}}",
+          "tooMany": "Za dużo zmienionych wierszy na jeden zapis. Zapisz mniejszymi partiami.",
+          "problems": {
+            "price": "Wpisz cenę z co najwyżej 2 miejscami po przecinku.",
+            "metaCost": "Wpisz koszt z co najwyżej 6 miejscami po przecinku.",
+            "country": "Użyj dwuliterowego kodu kraju lub zostaw pole puste dla dowolnego kraju.",
+            "empty": "Wpisz cenę lub koszt Meta.",
+            "duplicate": "Dla tego kraju i kategorii istnieje już wiersz."
+          }
+        },
+        "tools": {
+          "sync": {
+            "button": "Synchronizuj koszty Meta",
+            "title": "Synchronizuj koszty Meta",
+            "loading": "Odczytywanie cennika Meta",
+            "source": "Źródło",
+            "version": "Wersja",
+            "noVersion": "Brak",
+            "currency": "Waluta",
+            "added": "Wiersze do dodania",
+            "updated": "Wiersze do zaktualizowania",
+            "untouched": "Twoje ceny nie zmieniają się. Aktualizowany jest tylko koszt, jaki pobiera od Ciebie Meta.",
+            "bundledNote": "Nie jest podłączony żaden aktualny cennik Meta, więc używana jest wbudowana siatka stawek.",
+            "apply": "Zastosuj",
+            "applying": "Przetwarzanie",
+            "done": "Koszty Meta zsynchronizowane: dodano {added}, zaktualizowano {updated}."
+          },
+          "import": {
+            "button": "Importuj siatkę stawek",
+            "title": "Importuj siatkę stawek",
+            "intro": "Prześlij plik CSV z siatką stawek. Zanim cokolwiek zostanie zapisane, zobaczysz, co się zmieni.",
+            "file": "Plik CSV",
+            "limit": "Do 4 MB.",
+            "reading": "Odczytywanie pliku",
+            "shape": "Układ",
+            "shapes": {
+              "wide": "Jedna kolumna na kategorię",
+              "long": "Jeden wiersz na kategorię"
+            },
+            "added": "Do dodania",
+            "updated": "Do zaktualizowania",
+            "skipped": "Pominięte",
+            "currencyNote": "Ceny są odczytywane w walucie {currency}.",
+            "problems": "Wiersze, które zostaną pominięte",
+            "line": "Wiersz {line}:",
+            "fileProblems": {
+              "notCsv": "Wybierz plik .csv.",
+              "tooBig": "Plik jest większy niż 4 MB.",
+              "unreadable": "Nie udało się odczytać pliku."
+            },
+            "apply": "Zastosuj import",
+            "applying": "Przetwarzanie",
+            "done": "Zaimportowano siatkę stawek: dodano {added}, zaktualizowano {updated}, pominięto {skipped}."
+          },
+          "seed": {
+            "button": "Wczytaj ponownie startową siatkę stawek",
+            "title": "Wczytać ponownie startową siatkę stawek?",
+            "warning": "Wbudowane startowe ceny zostaną zapisane nad istniejącymi wierszami dla tego samego kraju i kategorii. Ceny ustawione ręcznie dla tych wierszy zostaną zastąpione.",
+            "confirm": "Wczytaj ponownie",
+            "done": "{count, plural, one {# stawka zapisana z siatki startowej} few {# stawki zapisane z siatki startowej} many {# stawek zapisanych z siatki startowej} other {# stawki zapisane z siatki startowej}}"
+          }
+        },
+        "guides": {
+          "crossBorder": {
+            "title": "Wysyłki transgraniczne",
+            "body": "Cena zależy od kraju odbiorcy, a nie przestrzeni roboczej. Dodaj wiersz dla każdego kraju, do którego wysyłasz."
+          },
+          "how": {
+            "title": "Jak ustalana jest cena",
+            "body": "Portfel wyszukuje kraj odbiorcy i kategorię wiadomości w tej siatce. Pusta kategoria lub kraj pasuje do wszystkiego."
+          },
+          "order": {
+            "title": "Który wiersz wygrywa",
+            "body": "Najpierw używane jest dokładne dopasowanie kraju i kategorii, potem kraj z dowolną kategorią, potem dowolny kraj, a na końcu stała cena."
+          }
+        },
+        "mode": {
+          "title": "Jak wyceniani są klienci",
+          "current": "Aktualnie: {mode}",
+          "intro": "Wybierz, ile kosztuje wiadomość dla Twoich klientów. Dotyczy to każdej przestrzeni roboczej i jest zapisywane osobno.",
+          "fixed": {
+            "label": "Stałe ceny",
+            "body": "Wpisujesz cenę dla każdego kraju i kategorii w siatce stawek poniżej. Marże są zapisane, ale nie są używane."
+          },
+          "margin": {
+            "label": "Koszt Meta + marża",
+            "body": "Klient płaci koszt Meta plus Twoją marżę, ustawioną dla kraju i kategorii. Tam, gdzie koszt Meta nie jest znany, naliczana jest wpisana stała cena."
+          },
+          "save": "Zapisz tryb cen",
+          "manage": "Ustaw marże",
+          "confirmTitle": "Zmienić sposób wyceniania klientów?",
+          "confirmFixed": "Każda przestrzeń robocza będzie od następnej wiadomości płacić stałe ceny z siatki stawek. Marże pozostaną zapisane, ale przestaną obowiązywać.",
+          "confirmMargin": "Każda przestrzeń robocza będzie od następnej wiadomości płacić koszt Meta plus marżę, która ją dotyczy (nadpisanie przestrzeni, potem jej plan, potem domyślna marża platformy). Tam, gdzie koszt Meta jest nieznany, nadal naliczana jest stała cena.",
+          "confirm": "Tak, zmień",
+          "savedFixed": "Klienci są teraz wyceniani stałymi cenami.",
+          "savedMargin": "Klienci są teraz wyceniani według kosztu Meta plus marża."
+        },
+        "metaCards": {
+          "title": "Cenniki Meta",
+          "intro": "Meta publikuje jeden cennik dla każdej waluty i zmienia go tylko 1 stycznia, 1 kwietnia, 1 lipca i 1 października. Przestrzeń robocza rozliczana w INR jest wyceniana według cennika INR Meta i obciążana jej portfelem INR, nigdy nie jest przeliczana z cennika USD. Importuj każdy plik tak, jak Meta go publikuje. Wpisane ceny i stała cena są przechowywane w walucie platformy i przeliczane według kursu zapisanego dla przestrzeni roboczej rozliczanej w innej walucie.",
+          "none": "Nie zapisano jeszcze żadnego cennika Meta. Zaimportuj plik, który Meta publikuje dla Twojej waluty.",
+          "view": "Pokaż",
+          "hide": "Ukryj",
+          "usedPricing": "Ceny, marże i rachunek zysków i strat sprzedawcy oraz przestrzenie robocze rozliczane w walucie platformy",
+          "usedWorkspaces": "Ceny przestrzeni roboczych rozliczanych w {currency}",
+          "columns": {
+            "currency": "Waluta",
+            "effective": "Obowiązuje od",
+            "checked": "Ostatnio zaimportowano",
+            "markets": "Rynki",
+            "usedFor": "Używany do",
+            "status": "Status",
+            "actions": "Działania"
+          },
+          "freshness": {
+            "current": "Aktualne",
+            "upcoming": "Sprawdź wkrótce",
+            "due": "Sprawdź teraz"
+          },
+          "reminder": {
+            "link": "Otwórz stronę cen Meta",
+            "current": "Aktualne. Meta może następnie zmienić ceny {date}.",
+            "dueTitle": "Nowy kwartał rozpoczął się {date}: Meta mogła zmienić ceny.",
+            "dueBody": "Pobierz nowe pliki stawek (po jednym na każdą używaną walutę) i zaimportuj je tutaj. Do tego czasu koszty i marże korzystają z poprzedniej siatki.",
+            "upcomingTitle": "Meta może zmienić ceny {date} (za {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}).",
+            "upcomingBody": "Przygotuj nowe pliki do importu na ten dzień.",
+            "missingTitle": "Brak cennika Meta dla {currencies}.",
+            "missingBody": "Przestrzenie robocze ustawione na tę walutę nie mają cennika Meta do wyświetlenia. Zaimportuj plik, który Meta publikuje dla niej."
+          },
+          "table": {
+            "heading": "Siatka Meta w {currency}",
+            "note": "Cena katalogowa za dostarczoną wiadomość, tak jak publikuje ją Meta. Kraje, których Meta nie wymienia, są wyceniane jako Inne.",
+            "market": "Rynek",
+            "everyOther": "Każdy niewymieniony kraj",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Użytkowe",
+              "authentication": "Uwierzytelnianie",
+              "authentication_international": "Uwierzytelnianie, międzynarodowe",
+              "service": "Usługa"
+            }
+          },
+          "import": {
+            "button": "Importuj cennik Meta",
+            "title": "Importuj cennik Meta",
+            "intro": "Wybierz plik, który Meta publikuje dla jednej waluty (skoroszyt Excel, nawet jeśli link mówi CSV). Walutę i datę obowiązywania odczytujemy z pliku. Zanim cokolwiek zostanie zapisane, zobaczysz, co się zmieni.",
+            "file": "Plik stawek Meta (.xlsx lub .csv)",
+            "hint": "Jedna waluta na plik. Nowy plik zastępuje cały cennik tej waluty. Maksymalnie 2 MB.",
+            "reading": "Odczytywanie pliku…",
+            "applying": "Przetwarzanie",
+            "apply": "Importuj cennik",
+            "done": "Cennik {currency} został zaimportowany.",
+            "fileProblems": {
+              "wrongType": "Wybierz plik .xlsx publikowany przez Meta lub plik CSV zapisany z niego.",
+              "tooBig": "Plik jest większy niż 2 MB, co nie jest cennikiem Meta.",
+              "unreadable": "Nie udało się odczytać pliku."
+            },
+            "summary": {
+              "currency": "Waluta",
+              "effective": "Obowiązuje od",
+              "added": "Nowe wiersze",
+              "changed": "Zmienione",
+              "unchanged": "Bez zmian",
+              "removed": "Usunięte"
+            },
+            "replaces": "Zastępuje cennik obowiązujący od {date}.",
+            "appliesToPricing": "To jest cennik {currency}, czyli waluta Twojej platformy. Import odświeża też koszt Meta, na którym opierają się ceny, marże i rachunek zysków i strat sprzedawcy ({added} nowe, {updated} zaktualizowane). Ceny klientów nie są zmieniane.",
+            "storedOnly": "To nie jest waluta platformy. Jest zapisywana i wyświetlana, a wyceniane są nią wszystkie przestrzenie robocze rozliczane w {currency}. Koszt Meta w poniższej siatce stawek pozostaje w walucie platformy.",
+            "biggest": "Największe zmiany",
+            "categories": {
+              "marketing": "Marketing",
+              "utility": "Użytkowe",
+              "authentication": "Uwierzytelnianie",
+              "authentication_international": "Uwierzytelnianie, międzynarodowe",
+              "service": "Usługa"
+            },
+            "problems": "Wiersze, które zostały pominięte"
+          }
+        }
+      },
+      "workspaces": {
+        "title": "Portfele przestrzeni roboczych",
+        "crumb": "Portfele przestrzeni roboczych",
+        "subtitle": "Każda przestrzeń robocza z saldem. Otwórz ją, aby zobaczyć wpisy lub skorygować saldo.",
+        "search": "Szukaj",
+        "searchPlaceholder": "Nazwa lub identyfikator przestrzeni roboczej",
+        "lowOnly": "Tylko niskie salda",
+        "apply": "Zastosuj",
+        "totalWorkspaces": "Przestrzenie robocze",
+        "totalFloat": "Łącznie zgromadzone",
+        "totalLow": "Niskie saldo",
+        "emptyTitle": "Nie znaleziono przestrzeni roboczych",
+        "emptyBody": "Zmień wyszukiwanie lub wyczyść filtr niskiego salda.",
+        "loadMore": "Wczytaj więcej",
+        "loadingMore": "Wczytywanie kolejnych",
+        "columns": {
+          "label": "Portfele przestrzeni roboczych",
+          "workspace": "Przestrzeń robocza",
+          "mode": "Rozliczenia",
+          "balance": "Saldo",
+          "low": "Niskie",
+          "activity": "Ostatnia aktywność",
+          "never": "Nigdy"
+        },
+        "totalFloatIn": "Zgromadzone środki ({currency})"
+      },
+      "detail": {
+        "crumb": "Przestrzeń robocza",
+        "adjust": "Koryguj saldo",
+        "balance": "Saldo",
+        "lowBalance": "Niskie saldo",
+        "threshold": "Alert przy {amount}",
+        "recent": "Ostatnie wpisy",
+        "emptyTitle": "Brak wpisów",
+        "emptyBody": "Ruchy na tym portfelu pojawią się tutaj.",
+        "columns": {
+          "label": "Ostatnie wpisy portfela",
+          "date": "Data",
+          "type": "Typ",
+          "amount": "Kwota",
+          "balanceAfter": "Saldo po",
+          "who": "Wykonał",
+          "reason": "Powód",
+          "customer": "Klient",
+          "operator": "Operator",
+          "system": "System"
+        },
+        "result": {
+          "appliedAdd": "Dodano {applied}. Saldo wynosi teraz {balance}.",
+          "appliedDeduct": "Odjęto {applied}. Saldo wynosi teraz {balance}.",
+          "partial": "Zastosowano tylko {applied} z {requested}, ponieważ saldo nie może spaść poniżej 0. Saldo wynosi teraz {balance}.",
+          "replayed": "(To żądanie zostało już zastosowane.)"
+        },
+        "pricing": {
+          "title": "Ceny dla tej przestrzeni roboczej",
+          "subtitle": "Nadpisania marż mają pierwszeństwo przed planem przestrzeni roboczej i domyślną marżą platformy, tylko dla tej przestrzeni roboczej.",
+          "plan": "Plan",
+          "planLoading": "Wczytywanie planu",
+          "planUnknown": "Nie udało się odczytać",
+          "noPlan": "Brak planu",
+          "overrides": "Nadpisania marż",
+          "overridesHint": "Nadpisywane są tylko wiersze wymienione tutaj. Reszta podąża za planem i domyślną marżą platformy.",
+          "empty": "Brak nadpisań. Ta przestrzeń robocza korzysta z planu i domyślnej marży platformy.",
+          "reason": {
+            "label": "Powód (zapisywany w dzienniku audytu)",
+            "hint": "Wymagany przy każdej zmianie lub usunięciu, od 5 do 500 znaków.",
+            "counter": "{count}/{max}",
+            "problems": {
+              "short": "Podaj powód, co najmniej 5 znaków.",
+              "long": "Powód może mieć maksymalnie 500 znaków."
+            }
+          },
+          "save": "Zapisz nadpisania",
+          "saving": "Przetwarzanie",
+          "saveHint": "Popraw zaznaczone wiersze i podaj powód, aby zapisać.",
+          "saved": "Zapisano: {saved}, usunięto: {removed}.",
+          "savedSome": "Zapisano: {saved}, pominięto: {skipped}. Powód przy każdym pominiętym wierszu.",
+          "preview": {
+            "title": "Podgląd ceny",
+            "hint": "Zobacz, jak wyceniona byłaby jedna wiadomość do tej przestrzeni roboczej i która warstwa ją ustawiła.",
+            "country": "Kraj",
+            "category": "Kategoria",
+            "run": "Podgląd ceny",
+            "running": "Obliczanie ceny",
+            "result": {
+              "label": "Wynik podglądu ceny",
+              "metaCost": "Koszt Meta",
+              "unknownCost": "Nieznany",
+              "margin": "Marża",
+              "noMargin": "Brak",
+              "layer": "Ustawione przez",
+              "noLayer": "Nie dopasowano marży",
+              "layers": {
+                "workspace": "Nadpisanie przestrzeni roboczej",
+                "plan": "Marża planu",
+                "platform": "Domyślna marża platformy"
+              },
+              "price": "Cena dla klienta",
+              "basis": "Podstawa",
+              "bases": {
+                "margin": "Koszt Meta + marża",
+                "fixed": "Stała cena"
+              }
+            }
+          }
+        },
+        "billingCurrency": {
+          "title": "Waluta rozliczeniowa",
+          "intro": "Wiadomości są wyceniane według cennika Meta dla tej waluty i obciążają portfel przestrzeni roboczej w tej walucie. Doładowania są również wpisywane i zaliczane w tej walucie.",
+          "billedIn": "Rozliczana w",
+          "change": "Zmień walutę",
+          "otherWallets": "Inne portfele tej przestrzeni roboczej",
+          "notUsed": "Nie są używane do rozliczeń; środki pozostają tutaj.",
+          "dialog": {
+            "title": "Zmień walutę rozliczeniową",
+            "currency": "Rozlicz w",
+            "effect": "Od teraz wiadomości będą wyceniane według cennika Meta w {to} i obciążać portfel {to}. Nic nie jest przeliczane: portfel {from} zachowuje swoje saldo.",
+            "left": "{amount} pozostaje w portfelu {from} i nie będzie używane, dopóki przestrzeń robocza nie zostanie przełączona z powrotem.",
+            "reason": "Powód",
+            "reasonHint": "Widoczny w ścieżce audytu i dzienniku portfela przestrzeni roboczej. Co najmniej 5 znaków.",
+            "confirm": "Rozlicz w {currency}",
+            "saving": "Przetwarzanie",
+            "done": "Teraz rozliczana w {to} (była {from})."
+          }
+        }
+      },
+      "adjust": {
+        "title": "Koryguj saldo",
+        "current": "Bieżące saldo",
+        "direction": "Działanie",
+        "add": "Dodaj środki",
+        "deduct": "Odejmij",
+        "amount": "Kwota",
+        "amountHint": "Do 2 miejsc po przecinku.",
+        "reason": "Powód",
+        "reasonHint": "Wymagany, od 5 do 500 znaków. Przestrzeń robocza widzi ten powód w swoim wyciągu.",
+        "counter": "{count} / {max}",
+        "cappedWarning": "To więcej niż saldo wynoszące {balance}. Odjęte zostanie tylko tyle, ile jest dostępne; saldo zatrzyma się na 0.",
+        "review": "Sprawdź",
+        "confirmAdd": "Dodaj środki",
+        "confirmDeduct": "Odejmij",
+        "posting": "Księgowanie",
+        "summaryAdd": "Dodaj {amount} do {workspace}.",
+        "summaryDeduct": "Odejmij {amount} od {workspace}.",
+        "newBalance": "Nowe saldo: {balance}",
+        "summaryReason": "Powód: {reason}",
+        "visibleNote": "Powód jest pokazywany przestrzeni roboczej i zapisywany w dzienniku audytu.",
+        "problems": {
+          "amount": {
+            "required": "Wpisz kwotę.",
+            "invalid": "Wpisz dodatnią kwotę z co najwyżej 2 miejscami po przecinku.",
+            "zero": "Kwota musi być większa niż 0.",
+            "tooLarge": "To przekracza limit jednej korekty."
+          },
+          "note": {
+            "short": "Podaj powód, co najmniej {min} znaków.",
+            "long": "Powód musi mieć mniej niż {max} znaków."
+          }
+        }
+      },
+      "logs": {
+        "title": "Dzienniki portfela",
+        "crumb": "Dzienniki portfela",
+        "subtitle": "Co działo się z portfelami i co zmienili operatorzy.",
+        "scope": "Zakres",
+        "scopes": {
+          "all": "Wszystkie",
+          "workspace": "Zdarzenia przestrzeni roboczych",
+          "platform": "Zmiany na platformie"
+        },
+        "event": "Zdarzenie",
+        "anyEvent": "Dowolne zdarzenie",
+        "severity": "Poziom ważności",
+        "anySeverity": "Dowolny poziom",
+        "severities": {
+          "info": "Informacja",
+          "warning": "Ostrzeżenie",
+          "error": "Błąd"
+        },
+        "workspaceId": "Identyfikator przestrzeni roboczej",
+        "workspaceIdInvalid": "Wpisz identyfikator przestrzeni roboczej (UUID).",
+        "search": "Szukaj",
+        "from": "Od",
+        "to": "Do",
+        "apply": "Zastosuj",
+        "reset": "Resetuj",
+        "emptyTitle": "Brak wpisów dziennika",
+        "emptyBody": "Nic nie pasuje do tych filtrów.",
+        "loadMore": "Wczytaj więcej",
+        "loadingMore": "Wczytywanie kolejnych",
+        "platform": "Platforma",
+        "showDetails": "Pokaż szczegóły",
+        "hideDetails": "Ukryj szczegóły",
+        "requestId": "Identyfikator żądania",
+        "columns": {
+          "time": "Czas",
+          "severity": "Poziom ważności",
+          "event": "Zdarzenie",
+          "workspace": "Przestrzeń robocza",
+          "actor": "Wykonawca",
+          "message": "Wiadomość"
+        },
+        "actors": {
+          "operator": "Operator",
+          "customer": "Klient",
+          "system": "System"
+        }
+      },
+      "margins": {
+        "title": "Marże",
+        "crumb": "Marże",
+        "subtitle": "Ile klienci płacą ponad koszt Meta, według kraju i kategorii wiadomości.",
+        "retry": "Spróbuj ponownie",
+        "ratesFailed": "Nie udało się wczytać kosztów Meta, dlatego nie można pokazać cen dla nowych wierszy.",
+        "mode": {
+          "current": "Klienci są wyceniani według",
+          "inactive": "Tryb cen to Stałe ceny, więc te marże nie obowiązują jeszcze. Są zapisane i zaczną działać po przełączeniu na Koszt Meta + marża.",
+          "switchLink": "Przejdź do przełącznika trybu cen"
+        },
+        "scope": {
+          "label": "Marże dla",
+          "hint": "Domyślna marża platformy obowiązuje każdy plan. Marża planu ma pierwszeństwo przed nią.",
+          "platform": "Domyślna marża platformy (obowiązuje każdy plan)"
+        },
+        "grid": {
+          "country": "Kraj",
+          "searchCountry": "Szukaj krajów",
+          "category": "Kategoria",
+          "margin": "Marża %",
+          "metaCost": "Koszt Meta",
+          "price": "Cena dla klienta",
+          "note": "Powód",
+          "setBy": "Ustawione przez",
+          "actions": "Działania",
+          "anyCountry": "Dowolny kraj",
+          "anyCategory": "Dowolna kategoria",
+          "unknownCost": "Koszt Meta nie jest tutaj znany, więc obowiązuje wpisana stała cena.",
+          "priceInvalid": "Wpisz marżę od -100 do 1000 z co najwyżej 2 miejscami po przecinku.",
+          "removedPending": "Zostanie usunięta po zapisaniu.",
+          "addRow": "Dodaj wiersz",
+          "remove": "Usuń",
+          "undo": "Cofnij",
+          "cancel": "Anuluj",
+          "empty": "Brak marż. Dodaj wiersz, aby ustawić marżę.",
+          "removeTitle": "Usunąć tę marżę?",
+          "removeBody": "Marża dla {country} zostanie usunięta. Ceny przejdą do następnej pasującej marży.",
+          "removed": "Marża usunięta.",
+          "save": "Zapisz marże",
+          "saving": "Przetwarzanie",
+          "saved": "{count, plural, one {# marża zapisana.} few {# marże zapisane.} many {# marż zapisanych.} other {# marży zapisanej.}}",
+          "savedSome": "Zapisano: {saved}, pominięto: {skipped}. Powód przy każdym pominiętym wierszu.",
+          "unsaved": "{count, plural, one {# niezapisany wiersz} few {# niezapisane wiersze} many {# niezapisanych wierszy} other {# niezapisanego wiersza}}",
+          "tooMany": "Za dużo zmienionych wierszy na jeden zapis. Zapisz mniejszymi partiami.",
+          "problems": {
+            "margin": "Wpisz procent od -100 do 1000 z co najwyżej 2 miejscami po przecinku. -100 oznacza bezpłatnie.",
+            "duplicate": "Dla tego kraju i kategorii istnieje już wiersz."
+          }
+        },
+        "help": {
+          "layers": {
+            "title": "Która marża wygrywa",
+            "body": "Nadpisanie przestrzeni roboczej ma pierwszeństwo przed marżą jej planu, która ma pierwszeństwo przed domyślną marżą platformy. Każda warstwa jest czytana w całości, zanim zostanie użyta następna."
+          },
+          "specific": {
+            "title": "Najpierw najbardziej szczegółowe",
+            "body": "W obrębie warstwy najpierw używany jest kraj i kategoria, potem kraj z dowolną kategorią, potem kategoria w dowolnym kraju, a na końcu wiersz domyślny."
+          },
+          "unknown": {
+            "title": "Gdy koszt Meta jest nieznany",
+            "body": "Cena to koszt Meta plus marża, zaokrąglona do 0,01 i co najmniej 0,01, chyba że marża wynosi -100% (bezpłatnie). Tam, gdzie koszt Meta jest nieznany, obowiązuje zamiast niego wpisana stała cena."
+          }
+        }
+      },
+      "packages": {
+        "title": "Pakiety kredytowe",
+        "crumb": "Pakiety kredytowe",
+        "subtitle": "Opcjonalne oferty: zapłać tyle, otrzymaj tyle kredytu w portfelu. Kredyt wyższy niż cena to bonus do doładowania.",
+        "new": "Nowy pakiet",
+        "edit": "Edytuj",
+        "enable": "Włącz",
+        "disable": "Wyłącz",
+        "delete": "Usuń",
+        "cancel": "Anuluj",
+        "enabled": "{name} jest włączony.",
+        "disabled": "{name} jest wyłączony.",
+        "deleted": "Pakiet usunięty.",
+        "deleteTitle": "Usunąć pakiet?",
+        "deleteBody": "Usunąć ten pakiet? Istniejące zakupy zachowają swoje wiersze w księdze.",
+        "bonus": "+{percent}% bonusu",
+        "status": {
+          "active": "Aktywny",
+          "inactive": "Nieaktywny",
+          "featured": "Wyróżniony"
+        },
+        "empty": {
+          "title": "Brak pakietów kredytowych",
+          "body": "Nie utworzono żadnych pakietów.",
+          "bodyWrite": "Utwórz pierwszy pakiet, aby zaoferować doładowanie portfela z bonusem."
+        },
+        "columns": {
+          "label": "Pakiety kredytowe",
+          "name": "Nazwa",
+          "slug": "Identyfikator (slug)",
+          "price": "Cena",
+          "credit": "Kredyt w portfelu",
+          "badge": "Odznaka",
+          "status": "Status",
+          "actions": "Działania"
+        },
+        "form": {
+          "newTitle": "Nowy pakiet kredytowy",
+          "editTitle": "Edytuj pakiet kredytowy",
+          "newCrumb": "Nowy pakiet",
+          "editCrumb": "Edytuj pakiet",
+          "notFound": "Ten pakiet już nie istnieje.",
+          "back": "Wróć do pakietów kredytowych",
+          "sections": {
+            "identity": "Dane",
+            "pricing": "Ceny",
+            "display": "Wyświetlanie"
+          },
+          "name": "Nazwa",
+          "slug": "Identyfikator (opcjonalnie)",
+          "slugHint": "Litery, cyfry, myślniki i podkreślenia. Zostaw puste, aby utworzyć z nazwy.",
+          "description": "Opis",
+          "price": "Cena",
+          "priceHint": "Tyle płaci klient.",
+          "currency": "Waluta",
+          "walletCredit": "Kredyt w portfelu",
+          "walletCreditHint": "Tyle trafia do portfela.",
+          "bonusLine": "Bonus {percent}%: klient płaci {price} i otrzymuje {credit}.",
+          "badge": "Odznaka",
+          "badgeHint": "Krótka etykieta, np. Najlepsza wartość.",
+          "sortOrder": "Kolejność sortowania",
+          "sortOrderHint": "Od najniższej.",
+          "active": "Aktywny",
+          "featured": "Wyróżniony",
+          "create": "Utwórz pakiet",
+          "save": "Zapisz zmiany",
+          "saving": "Przetwarzanie",
+          "created": "{name} utworzono.",
+          "saved": "{name} zapisano.",
+          "stale": {
+            "title": "Ten pakiet został zmieniony przez kogoś innego",
+            "body": "Twoje zmiany nie zostały zapisane, więc nic nie zostało nadpisane. Wczytaj najnowszą wersję i wprowadź zmianę ponownie.",
+            "reload": "Wczytaj najnowszą wersję"
+          },
+          "problems": {
+            "name": "Wpisz nazwę do 96 znaków.",
+            "slug": "Używaj tylko liter, cyfr, myślników i podkreśleń.",
+            "description": "Opis może mieć maksymalnie 500 znaków.",
+            "price": "Wpisz kwotę z co najwyżej 2 miejscami po przecinku.",
+            "currency": "Wybierz jedną z dostępnych walut.",
+            "walletCredit": "Wpisz kwotę większą niż 0 z co najwyżej 2 miejscami po przecinku.",
+            "badge": "Odznaka może mieć maksymalnie 32 znaki.",
+            "sortOrder": "Wpisz liczbę całkowitą od 0 do 9999."
+          }
+        }
+      }
+    }
+  }
+}
