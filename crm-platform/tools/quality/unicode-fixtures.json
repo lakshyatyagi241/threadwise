@@ -1,0 +1,141 @@
+{
+ "valid": [
+  {
+   "id": "emoji-plain",
+   "label": "Emoji",
+   "text": "Great job \ud83d\udc4d"
+  },
+  {
+   "id": "emoji-zwj-family",
+   "label": "Emoji joined with zero-width joiners",
+   "text": "Family \ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\ud83d\udc66 ok"
+  },
+  {
+   "id": "emoji-flag",
+   "label": "Flag (two regional indicators)",
+   "text": "Made in \ud83c\uddee\ud83c\uddf3"
+  },
+  {
+   "id": "emoji-skin-tone",
+   "label": "Emoji with a skin tone modifier",
+   "text": "Thanks \ud83d\udc4d\ud83c\udffd"
+  },
+  {
+   "id": "emoji-keycap",
+   "label": "Keycap sequence",
+   "text": "Press 1\ufe0f\u20e3 now"
+  },
+  {
+   "id": "accent-nfc",
+   "label": "Accented letters, precomposed (NFC)",
+   "text": "Caf\u00e9 r\u00e9sum\u00e9"
+  },
+  {
+   "id": "accent-nfd",
+   "label": "Accented letters, combining marks (NFD)",
+   "text": "Cafe\u0301 re\u0301sume\u0301"
+  },
+  {
+   "id": "arabic",
+   "label": "Arabic",
+   "text": "\u0645\u0631\u062d\u0628\u0627 \u0628\u0627\u0644\u0639\u0627\u0644\u0645"
+  },
+  {
+   "id": "hebrew",
+   "label": "Hebrew",
+   "text": "\u05e9\u05dc\u05d5\u05dd \u05e2\u05d5\u05dc\u05dd"
+  },
+  {
+   "id": "urdu",
+   "label": "Urdu",
+   "text": "\u06c1\u06cc\u0644\u0648 \u062f\u0646\u06cc\u0627"
+  },
+  {
+   "id": "bidi-mixed",
+   "label": "Right-to-left words inside left-to-right text",
+   "text": "Order \u0631\u0642\u0645 123 ready"
+  },
+  {
+   "id": "bidi-marks",
+   "label": "Direction marks (LRM, RLM)",
+   "text": "a\u200eb\u200fc"
+  },
+  {
+   "id": "zero-width-space",
+   "label": "Zero-width space inside a word",
+   "text": "na\u200bme"
+  },
+  {
+   "id": "zero-width-joiner",
+   "label": "Zero-width joiner between letters",
+   "text": "a\u200db"
+  },
+  {
+   "id": "cjk",
+   "label": "Chinese, Japanese names",
+   "text": "\u5c71\u7530\u592a\u90ce \u7530\u4e2d"
+  },
+  {
+   "id": "thai",
+   "label": "Thai (no spaces between words)",
+   "text": "\u0e2a\u0e27\u0e31\u0e2a\u0e14\u0e35\u0e0a\u0e32\u0e27\u0e42\u0e25\u0e01"
+  },
+  {
+   "id": "devanagari",
+   "label": "Hindi",
+   "text": "\u0928\u092e\u0938\u094d\u0924\u0947 \u0926\u0941\u0928\u093f\u092f\u093e"
+  },
+  {
+   "id": "turkish-i",
+   "label": "Turkish dotted and dotless i",
+   "text": "\u0130stanbul \u0131spanak"
+  },
+  {
+   "id": "german-eszett",
+   "label": "German sharp s",
+   "text": "Stra\u00dfe"
+  },
+  {
+   "id": "greek-sigma",
+   "label": "Greek final sigma",
+   "text": "\u03a3\u038a\u03a3\u03a5\u03a6\u039f\u03a3"
+  },
+  {
+   "id": "four-byte-math",
+   "label": "Four-byte letters (mathematical script)",
+   "text": "\ud835\udc9c\ud835\udcc1\ud835\udcbe\ud835\udcb8\u212f"
+  },
+  {
+   "id": "four-byte-cjk",
+   "label": "Four-byte CJK",
+   "text": "\ud842\udfb7\u91ce\u5bb6"
+  },
+  {
+   "id": "quotes-html",
+   "label": "Quotes and angle brackets as typed text",
+   "text": "O'Brien \"Q\" <b>&amp;</b>"
+  },
+  {
+   "id": "sql-chars",
+   "label": "Characters SQL cares about",
+   "text": "x'; DROP TABLE t; --"
+  }
+ ],
+ "hostile": [
+  {
+   "id": "nul",
+   "label": "NUL byte (Postgres cannot store it)",
+   "text": "a\u0000b"
+  },
+  {
+   "id": "lone-surrogate",
+   "label": "Lone surrogate (not valid UTF-8)",
+   "text": "a\ud800b"
+  },
+  {
+   "id": "bidi-override",
+   "label": "Right-to-left override (looks like different text)",
+   "text": "safe\u202eevil\u202c"
+  }
+ ]
+}
