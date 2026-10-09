@@ -46,6 +46,7 @@
       "allFields": "Todos los campos",
       "success": "{count, number} correctas",
       "failure": "{count, number} fallidas",
+      "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
       "pending": "{count, number} pendientes",
       "pendingLabel": "{count, number} entregas fallidas esperando reenvío",
       "neverDelivered": "Todavía no se ha entregado nada",

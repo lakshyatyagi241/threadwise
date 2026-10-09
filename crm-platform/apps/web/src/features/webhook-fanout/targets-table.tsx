@@ -238,9 +238,11 @@ function TargetRow({
       <td className="px-3 py-3">
         <div className="flex flex-col gap-1">
           <Badge tone="success">{t('success', { count: item.successCount })}</Badge>
-          <Badge tone={item.failureCount > 0 ? 'danger' : 'neutral'}>
-            {t('failure', { count: item.failureCount })}
-          </Badge>
+          <span title={t('failureHint')}>
+            <Badge tone={item.failureCount > 0 ? 'danger' : 'neutral'}>
+              {t('failure', { count: item.failureCount })}
+            </Badge>
+          </span>
         </div>
       </td>
       <td className="max-w-[16rem] px-3 py-3 text-xs">

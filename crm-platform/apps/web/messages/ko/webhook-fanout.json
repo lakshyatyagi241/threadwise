@@ -46,6 +46,7 @@
       "allFields": "모든 필드",
       "success": "{count, number}건 성공",
       "failure": "{count, number}건 실패",
+      "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
       "pending": "{count, number}건 대기 중",
       "pendingLabel": "재전송 대기 중인 실패 전달 {count, number}건",
       "neverDelivered": "아직 전달된 항목이 없습니다",
