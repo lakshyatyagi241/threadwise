@@ -41,6 +41,8 @@ x-api-env: &api-env
   # Error reporting. The DSN is public by design (it only lets events in), so it is the default here; set SENTRY_DSN= (empty) in .env to turn reporting off.
   SENTRY_DSN: ${SENTRY_DSN-https://7a686f169d4a7b804e5eb7b6fdd9e806@o4507446172188672.ingest.us.sentry.io/4512202246324224}
   CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
+  # api and worker are separate containers: media must live in the bucket, not on a container's own disk.
+  MEDIA_STORAGE_DRIVER: s3
   S3_ENDPOINT: http://minio:9000
   S3_REGION: us-east-1
   S3_BUCKET_MEDIA: crm-media
