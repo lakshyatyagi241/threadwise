@@ -1,0 +1,27 @@
+# Secret scanning (QA task 28). Extends gitleaks' built-in rules; the allowlist below names only values that are fake on purpose.
+# Every entry says why. Add a new one only with a reason a reviewer can check, never to silence a real finding: rotate the secret
+# first (crm-platform/docs/runbooks/key-rotation.md), then fingerprint it in .gitleaksignore.
+title = "WaDesk port secret scanning"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Fake values: test fixtures, placeholders in docs, the documented development key, and the licensed reference copy."
+paths = [
+  # Specs and fixtures hold made-up keys and tokens to test masking, vaults, signatures and parsers.
+  '''^crm-platform/apps/api/test/''',
+  '''^crm-platform/apps/web/src/.*\.test\.tsx?$''',
+  '''^crm-platform/apps/web/src/.*test-fixtures\.ts$''',
+  '''^crm-platform/apps/web/e2e/''',
+  # Examples in documentation: truncated tokens and sample curl commands.
+  '''^docs/api-testing\.md$''',
+  '''^crm-platform/docs/api/''',
+  # The licensed WaDesk reference copy: third-party code and docs with example keys, not our credentials.
+  '''^wadesk-reference/''',
+]
+regexes = [
+  # The development placeholder for CREDENTIALS_ENCRYPTION_KEY (base64 of "dev-only-32-byte-key-do-not-use!"). The API refuses to
+  # start in production while it is set (apps/api/src/config/env.schema.ts).
+  '''ZGV2LW9ubHktMzItYnl0ZS1rZXktZG8tbm90LXVzZSE=''',
+]
