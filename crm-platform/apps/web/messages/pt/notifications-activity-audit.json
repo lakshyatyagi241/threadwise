@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, one {Nova mensagem de {author}} other {# novas mensagens de {author}}}",
         "titleNoName": "{count, plural, one {Nova mensagem direta} other {# novas mensagens diretas}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {Alguém quer entrar em {name}} other {# pessoas querem entrar em {name}}}",
+        "titleNoName": "{count, plural, one {Alguém quer entrar em um grupo do WhatsApp} other {# pessoas querem entrar em um grupo do WhatsApp}}",
+        "body": "Abra Grupos para aprovar ou rejeitar."
+      },
+      "waba_group_suspended": {
+        "title": "{name} foi suspenso",
+        "titleNoName": "Um grupo do WhatsApp foi suspenso",
+        "body": "O WhatsApp suspendeu este grupo. Você não pode enviar mensagens para ele até que seja restaurado."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} está ativo novamente",
+        "titleNoName": "Um grupo do WhatsApp está ativo novamente",
+        "body": "O WhatsApp restaurou este grupo. Você pode enviar mensagens novamente."
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "Envio agendado enviado",
         "scheduled_failed": "Envio agendado falhou",
         "teamchat_mention": "Mencionou você no Chat da equipe",
-        "teamchat_message": "Nova mensagem direta"
+        "teamchat_message": "Nova mensagem direta",
+        "waba_group_join_request": "Pedido para entrar em um grupo",
+        "waba_group_suspended": "Grupo do WhatsApp suspenso",
+        "waba_group_suspension_cleared": "Grupo do WhatsApp ativo novamente"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "Carteira",
         "devices": "Números do WhatsApp",
         "broadcasts": "Transmissões e campanhas",
-        "team_chat": "Chat da equipe"
+        "team_chat": "Chat da equipe",
+        "whatsapp_groups": "Grupos do WhatsApp"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "Carteira recarregada",
           "hint": "A carteira do espaço de trabalho recebeu um crédito."
+        },
+        "waba_group_join_request": {
+          "label": "Pedido para entrar em um grupo",
+          "hint": "Pessoas pedem para entrar em um grupo do WhatsApp do número da sua empresa. Dez pedidos formam uma linha."
+        },
+        "waba_group_suspended": {
+          "label": "Grupo suspenso",
+          "hint": "O WhatsApp suspendeu um dos seus grupos."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "Grupo ativo novamente",
+          "hint": "O WhatsApp restaurou um grupo que havia suspendido. Apenas se você foi informado sobre a suspensão."
         }
       },
       "loading": "Carregando suas preferências",

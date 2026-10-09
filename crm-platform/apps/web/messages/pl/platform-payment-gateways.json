@@ -15,7 +15,11 @@
         "total": "Bramki",
         "active": "Aktywne",
         "india": "Indie",
-        "crypto": "Krypto"
+        "crypto": "Krypto",
+        "totalHint": "dostępnych sterowników",
+        "activeHint": "przyjmujących płatności",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "rozliczenie on-chain"
       },
       "tabsLabel": "Filtruj według regionu",
       "all": "Wszystkie",
@@ -32,7 +36,8 @@
         "africa": "Afryka",
         "latam": "Ameryka Łacińska",
         "crypto": "Krypto",
-        "offline": "Offline"
+        "offline": "Offline",
+        "other": "Inne"
       },
       "card": {
         "active": "Aktywna",
@@ -57,11 +62,12 @@
         "webhookUrl": "Adres URL webhooka",
         "webhookHint": "Wklej to do panelu dostawcy, aby mógł informować nas o płatnościach.",
         "saving": "Zapisywanie",
-        "save": "Zapisz",
         "readOnly": "Tylko superadministrator może zmieniać bramki.",
         "saved": "Zapisano ustawienia: {name}.",
         "activated": "Aktywowano: {name}.",
-        "deactivated": "Dezaktywowano: {name}."
+        "deactivated": "Dezaktywowano: {name}.",
+        "noCredentials": "Nie są wymagane dane logowania — bramka używa ręcznego potwierdzenia poza systemem.",
+        "save": "Zapisz {name}"
       },
       "errors": {
         "conflict": "Ktoś inny zmienił tę bramkę. Została wczytana ponownie; sprawdź ją i zapisz jeszcze raz.",
@@ -69,7 +75,10 @@
         "noDriver": "Ta bramka nie ma jeszcze sterownika w tej wersji, więc można ją skonfigurować, ale nie aktywować.",
         "forbidden": "Tylko superadministrator może zmieniać bramki.",
         "generic": "Coś poszło nie tak. Spróbuj ponownie."
-      }
+      },
+      "eyebrow": "Admin · Rozliczenia · Bramki",
+      "titleFirst": "Płatność",
+      "titleSecond": "bramki"
     },
     "checkout": {
       "title": "Dokończ zamówienie",
@@ -132,7 +141,28 @@
       "autoRenew": "Odnawia się automatycznie co okres. Możesz anulować w dowolnym momencie.",
       "addonRenews": "Ten dodatek odnawia się automatycznie co okres. Możesz go anulować w dowolnym momencie i zachować do końca opłaconego okresu.",
       "cardTitle": "Zapłać kartą",
-      "payNow": "Zapłać teraz"
+      "payNow": "Zapłać teraz",
+      "titleFirst": "Dokończ swoje",
+      "titleSecond": "zamówienie",
+      "subtitleRefund": "{days}-dniowa gwarancja zwrotu pieniędzy. Anuluj w dowolnym momencie. Akceptujemy karty, UPI, przelewy internetowe i portfele.",
+      "steps": {
+        "plan": "Wybierz plan",
+        "checkout": "Płatność",
+        "confirmation": "Potwierdzenie"
+      },
+      "step": "Krok {n}",
+      "taxIdPlaceholder": "NIP / VAT / EIN",
+      "addressPlaceholder": "Ulica i numer domu",
+      "cityPlaceholder": "Warszawa",
+      "currencyTitle": "Płać w swojej walucie",
+      "currencyHint": "Ceny przeliczają się od razu. Pokazujemy tylko waluty akceptowane przez dostępne metody płatności.",
+      "couponPlaceholder": "Masz kod rabatowy?",
+      "live": "na żywo",
+      "tlsNote": "Płatności są przetwarzane przez połączenie TLS 256-bitowe. Nigdy nie widzimy danych Twojej karty.",
+      "change": "Zmień",
+      "terms": "Płacąc, akceptujesz nasze <terms>Warunki</terms> oraz <privacy>Politykę prywatności</privacy>.",
+      "refundNote": "Nie jesteś zadowolony? Napisz do nas w ciągu {days} dni, a zwrócimy pełną kwotę — bez pytań i formularzy.",
+      "autoRenewTitle": "Automatycznie odnawiaj ten plan"
     },
     "orders": {
       "title": "Historia zamówień",

@@ -1238,7 +1238,15 @@
             "away": "Ketersediaan: saat mode Away aktif",
             "out_of_hours": "Ketersediaan: di luar jam kerja",
             "manual_enroll": "Manual: operator mendaftarkan kontak",
-            "comment_to_dm": "Instagram: seseorang berkomentar di postingan → DM"
+            "comment_to_dm": "Instagram: seseorang berkomentar di postingan → DM",
+            "group_leave": "Audiens: saat kontak keluar dari daftar",
+            "segment_join": "Audiens: saat kontak masuk ke segmen",
+            "contact_updated": "Audiens: saat kontak diperbarui",
+            "field_match": "Audiens: saat kolom kontak cocok dengan nilai",
+            "date_field_match": "Jadwal: relatif terhadap tanggal pada kontak (ulang tahun…)",
+            "schedule": "Jadwal: pada tanggal dan waktu tertentu",
+            "shopify_event": "Komersial: event toko Shopify",
+            "woocommerce_event": "Komersial: event toko WooCommerce"
           },
           "tagsLoading": "Memuat tag…",
           "tagPick": "— pilih tag —",
@@ -1274,7 +1282,66 @@
           "automatic": "Aktif otomatis — tidak perlu konfigurasi tambahan.",
           "away": "Aktif pada pesan masuk apa pun saat <b>mode Away</b> AKTIF. Ubah mode Away dari halaman <link>Balasan Otomatis</link>. Setiap kontak didaftarkan sekali.",
           "outOfHours": "Aktif pada pesan masuk apa pun yang datang <b>di luar Jam Kerja workspace</b> Anda. Atur Jam Kerja di pengaturan workspace. Setiap kontak didaftarkan sekali.",
-          "manualEnroll": "Anda akan mendaftarkan kontak secara manual dari <link>daftar /flows</link> melalui tombol <b>Daftarkan</b> di samping alur ini."
+          "manualEnroll": "Anda akan mendaftarkan kontak secara manual dari <link>daftar /flows</link> melalui tombol <b>Daftarkan</b> di samping alur ini.",
+          "ext": {
+            "segmentsLoading": "Memuat segmen…",
+            "segmentPick": "— pilih segmen —",
+            "segmentFallback": "Segmen",
+            "groupLeaveLabel": "Daftar yang memicu alur",
+            "groupLeaveHint": "Berjalan saat kontak dikeluarkan dari daftar ini oleh seseorang atau impor. Alur yang mengeluarkan kontak sendiri tidak memulainya.",
+            "segmentLabel": "Segmen",
+            "segmentHint": "Berjalan sekali per kontak, saat pertama kali ditemukan di dalam segmen setelah dibuat, diberi tag, didaftarkan, atau diperbarui.",
+            "fieldLabel": "Kolom kontak",
+            "fieldHint": "Kunci kolom: name, email, title, language, address, atau kunci kolom kustom.",
+            "test": "Uji",
+            "value": "Nilai",
+            "valueHint": "Diperiksa setiap kali kontak dibuat atau diubah. Kontak menjalankan alur sekali untuk setiap nilai yang dimilikinya.",
+            "when": "Kapan",
+            "dirOn": "Pada tanggal",
+            "dirBefore": "Hari sebelum tanggal",
+            "dirAfter": "Hari setelah tanggal",
+            "days": "Hari",
+            "timeOfDay": "Waktu",
+            "timeZoneHint": "Dalam zona waktu ruang kerja Anda. Diperiksa sekali sehari.",
+            "repeat": "Ulangi",
+            "yearly": "Setiap tahun (hanya bulan dan tanggal)",
+            "fullDate": "Hanya pada tanggal lengkap",
+            "frequency": {
+              "once": "Sekali, pada tanggal",
+              "daily": "Setiap hari",
+              "weekly": "Setiap minggu",
+              "monthly": "Setiap bulan"
+            },
+            "date": "Tanggal",
+            "dateHint": "YYYY-MM-DD.",
+            "weekdays": "Hari dalam seminggu",
+            "monthDay": "Tanggal dalam bulan",
+            "monthDayHint": "31 berarti hari terakhir pada bulan yang lebih pendek.",
+            "time24Hint": "HH:MM, format 24 jam.",
+            "tz": "Zona waktu (opsional)",
+            "tzHint": "Nama IANA seperti Asia/Kolkata. Kosong berarti zona waktu ruang kerja Anda.",
+            "who": "Siapa",
+            "whoHint": "Maksimal 5.000 orang per proses. Kontak yang berhenti berlangganan, diarsipkan, atau tidak punya nomor tidak disertakan.",
+            "audience": {
+              "all": "Setiap kontak dengan nomor",
+              "group": "Kontak dalam daftar",
+              "segment": "Kontak dalam segmen"
+            },
+            "list": "Daftar",
+            "storeEvent": "Event toko",
+            "storeEvents": {
+              "checkout_started": "Checkout dimulai",
+              "abandoned_cart": "Keranjang ditinggalkan (pengingat pertama sudah jatuh tempo)",
+              "order_fulfilled": "Pesanan dipenuhi",
+              "order_refunded": "Pesanan dikembalikan dananya",
+              "order_cancelled": "Pesanan dibatalkan",
+              "ordered_product": "Sebuah produk dipesan"
+            },
+            "productId": "ID produk (opsional)",
+            "productIdHint": "Kosong = produk apa pun dalam pesanan.",
+            "storeNote": "Pelanggan dicocokkan dengan kontak tersimpan berdasarkan nomor telepon; tidak ada kontak baru yang dibuat untuk pesanan. \"Ditambahkan ke keranjang\" dan \"produk dilihat\" tidak tersedia: toko tidak melaporkannya.",
+            "updatedNote": "Berjalan setiap kali seseorang atau impor mengubah kontak. Perubahan oleh alur lain tidak memulainya."
+          }
         }
       },
       "formsChannels": {
@@ -2001,6 +2068,34 @@
         "tg_payment": {
           "label": "Pembayaran / Invoice",
           "description": "Kirim invoice Telegram atau tautan bayar yang dapat dibagikan"
+        },
+        "update_contact": {
+          "label": "Perbarui kolom kontak",
+          "description": "Atur kolom kontak"
+        },
+        "list_member": {
+          "label": "Tambah / hapus dari daftar",
+          "description": "Masukkan kontak ke daftar atau keluarkan"
+        },
+        "in_list": {
+          "label": "Ada dalam daftar",
+          "description": "Ya / tidak: kontak ada dalam daftar"
+        },
+        "in_segment": {
+          "label": "Ada dalam segmen",
+          "description": "Ya / tidak: kontak ada dalam segmen"
+        },
+        "sheet_check": {
+          "label": "Periksa sel Google Sheet",
+          "description": "Ya / tidak: sel pada baris yang cocok"
+        },
+        "sheet_contact": {
+          "label": "Simpan kontak dari Sheet",
+          "description": "Salin baris sheet ke kontak"
+        },
+        "wa_session": {
+          "label": "Sesi WhatsApp aktif",
+          "description": "Ya / tidak: pelanggan menulis dalam 24 jam terakhir"
         }
       },
       "groups": {
@@ -2073,7 +2168,15 @@
         "deal_stage_changed": "saat tahap deal",
         "away": "saat tidak di tempat",
         "out_of_hours": "di luar jam kerja",
-        "manual_enroll": "saat didaftarkan"
+        "manual_enroll": "saat didaftarkan",
+        "group_leave": "saat keluar dari daftar",
+        "segment_join": "saat bergabung ke segmen",
+        "contact_updated": "saat kontak diperbarui",
+        "field_match": "saat kolom cocok",
+        "date_field_match": "saat tanggal cocok",
+        "schedule": "sesuai jadwal",
+        "shopify_event": "saat event Shopify",
+        "woocommerce_event": "saat event WooCommerce"
       },
       "ports": {
         "manual": "manual",

@@ -11,6 +11,7 @@ import {
 import { condSummary } from '../lib/contract-text';
 import { useFlb } from '../lib/msg';
 import { findTemplate } from '../lib/templates';
+import { FlowImage } from './flow-image';
 
 /** Message text (140) and media caption (80) end in an ellipsis when cut, as in WaDesk; every other preview line is a plain cut. */
 const trunc = (s: unknown, n: number): string => {
@@ -122,9 +123,9 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
         return (
           <Box>
             <div className="bubble wa">
-              <img
+              <FlowImage
                 src={url}
-                alt=""
+                where="media card"
                 style={{
                   display: 'block',
                   maxWidth: '100%',

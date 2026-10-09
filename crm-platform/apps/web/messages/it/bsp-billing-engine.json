@@ -68,7 +68,11 @@
           "autoAttachCurrency": "Meta non accetta questa valuta.",
           "baseCurrency": "Usa un codice valuta di tre lettere.",
           "businessId": "Inserisci al massimo 64 caratteri."
-        }
+        },
+        "kicker": "connessione Meta",
+        "businessIdHint": "Impostazioni aziendali → Informazioni azienda → \"ID portfolio aziendale\". Un numero lungo.",
+        "creditLinePlaceholder": "rilevato automaticamente dalla tua azienda",
+        "tokenNote": "Il token è salvato cifrato e non viene mai mostrato di nuovo."
       },
       "step2": {
         "title": "2. Collega un cliente manualmente",
@@ -90,7 +94,10 @@
         "failed": "Collegamento non riuscito: {error}",
         "finishStep1": "Completa prima il passaggio 1.",
         "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
-        "noPhone": "nessun numero"
+        "noPhone": "nessun numero",
+        "kicker": "allega manualmente, facoltativo",
+        "numberHint": "Scegli il cliente per nome: gestiamo noi gli ID account in background.",
+        "currencyHint": "La valuta in cui Meta ti fattura per questo numero."
       },
       "register": {
         "title": "Linee di credito in uso",
@@ -119,7 +126,8 @@
         "revokeFailed": "Revoca non riuscita: {error}",
         "loadMore": "Carica altri",
         "loadingMore": "Caricamento",
-        "label": "Allocazioni di credito"
+        "label": "Allocazioni di credito",
+        "kicker": "account collegati"
       },
       "guide": {
         "title": "Guida alla configurazione",
@@ -133,13 +141,19 @@
         "good1": "La valuta di una linea di credito viene bloccata una volta collegata.",
         "good2": "Collegare significa che Meta fattura a te, ma i prezzi per i tuoi clienti li imposti tu.",
         "good3": "Puoi revocare in qualsiasi momento e il cliente paga di nuovo Meta direttamente.",
-        "link": "Panoramica Meta Solution Partner"
-      }
+        "link": "Panoramica Meta Solution Partner",
+        "kicker": "Guida alla configurazione",
+        "step2Note": "Il token viene mostrato una sola volta, quindi copialo subito.",
+        "step3Apply": "Richiedi una linea di credito",
+        "step3Note": "Una volta approvata, la piattaforma legge automaticamente il suo ID e il passaggio 2 lo condivide con ogni WABA cliente.",
+        "metaDocs": "Documentazione Meta",
+        "reference": "riferimento"
+      },
+      "eyebrow": "Fatturazione reseller · linea di credito Meta"
     },
     "dashboard": {
       "title": "Conto economico rivenditore",
       "eyebrow": "Questo mese",
-      "intro": "I ricavi sono ciò che è stato addebitato ai clienti per i messaggi consegnati, il costo Meta è ciò che gli stessi messaggi sono costati a te, il margine è la differenza. I messaggi rimborsati e gratuiti non sono conteggiati.",
       "linkRates": "Tariffe e margine",
       "linkConnect": "Collega Meta",
       "revenue": "Ricavi (addebitati)",
@@ -150,7 +164,6 @@
       "billed": "Messaggi fatturati",
       "free": "Messaggi gratuiti",
       "unpriced": "Nessun costo Meta impostato",
-      "unpricedBanner": "{count, plural, one {# messaggio fatturato non ha} other {# messaggi fatturati non hanno}} un costo Meta per il loro paese e la loro categoria, quindi il margine li conta come ricavo puro.",
       "perWorkspace": "Per Workspace (questo mese)",
       "columns": {
         "workspace": "Workspace",
@@ -163,7 +176,10 @@
       "empty": "Ancora nessun messaggio fatturato questo mese.",
       "more": "Sono elencati solo i Workspace con i ricavi maggiori.",
       "loadFailed": "Impossibile caricare il conto economico.",
-      "currency": "Valuta del report"
+      "currency": "Valuta del report",
+      "intro": "Ogni messaggio fatturato è un addebito sul portafoglio. Il ricavo è quanto hanno pagato i clienti; il costo Meta è quanto Meta ti fattura; la differenza è il tuo margine. Prezzi e costi si impostano in <link>Regole portafoglio</link>.",
+      "linkPnl": "P&L",
+      "unpricedBanner": "{count, plural, one {# messaggio fatturato non ha} other {# messaggi fatturati non hanno}} un costo Meta impostato per il loro paese/categoria, quindi il margine viene conteggiato come puro ricavo. Aggiungi queste righe in <link>Regole portafoglio → Sincronizza costi Meta</link>."
     }
   }
 }

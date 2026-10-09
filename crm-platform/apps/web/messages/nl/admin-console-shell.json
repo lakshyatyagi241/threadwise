@@ -60,7 +60,10 @@
       "expand": "Zijbalk uitvouwen",
       "backToApp": "Terug naar app",
       "allAreas": "Alle gebieden",
-      "switchArea": "Gebied wisselen, nu in {area}"
+      "switchArea": "Gebied wisselen, nu in {area}",
+      "railCaption": "Console",
+      "wallet": "Wallet",
+      "topUp": "Opwaarderen →"
     },
     "overview": {
       "title": "Platformconsole",
@@ -337,7 +340,8 @@
       "railLabel": "Instellingensecties",
       "personal": {
         "title": "Je account",
-        "body": "Profiel, wachtwoord en persoonlijke voorkeuren."
+        "body": "Profiel, wachtwoord en persoonlijke voorkeuren.",
+        "eyebrow": "Persoonlijk"
       },
       "api": {
         "restTitle": "Algemene REST API",
@@ -346,7 +350,19 @@
         "rest3": "Verzoeken worden per minuut beperkt volgens je abonnement.",
         "webhooksTitle": "Webhooks",
         "webhooksBody": "Stuur gebeurtenissen naar je eigen endpoints en ontvang gebeurtenissen van andere tools.",
-        "manage": "Integraties beheren"
+        "manage": "Integraties beheren",
+        "sheetsTitle": "Google Sheets API-sleutel",
+        "sheetsBody": "Wordt gebruikt door de Sheets-add-on om contacten en berichtrijen naar een spreadsheet te sturen. Het enige persoonlijke token dat nu zichtbaar is.",
+        "manageInAccount": "Beheren in account",
+        "active": "Actief",
+        "keyTimes": "aangemaakt {created} · laatst gebruikt {used}",
+        "never": "nooit",
+        "noKey": "Geen Sheets API-sleutel aangemaakt. Maak er een aan in",
+        "noKeyLink": "je account → Sheets-add-on",
+        "outboundTitle": "Uitgaande endpoints",
+        "outboundBody": "Je workspace → je server (CRM-hooks, verzend- en antwoordevents).",
+        "inboundTitle": "Inkomende webhooks",
+        "inboundBody": "Je server → je workspace (inkomende WABA- en Unofficial API-leveringen)."
       },
       "appearance": {
         "title": "Weergave",
@@ -363,12 +379,91 @@
         },
         "save": "Opslaan",
         "saved": "Weergave bijgewerkt."
+      },
+      "branding": {
+        "ownerOnly": "Alleen de eigenaar van de workspace kan de huisstijl wijzigen.",
+        "loadFailed": "De huisstijl kon niet worden geladen.",
+        "saved": "Huisstijl bijgewerkt.",
+        "saveFailed": "De huisstijl kon niet worden opgeslagen.",
+        "logoTitle": "Logo & favicon",
+        "logoBody": "Wordt gebruikt in de header, facturen, e-mails en het klantenportaal.",
+        "logo": "Logo",
+        "favicon": "Favicon",
+        "logoHint": "PNG / JPG / WebP · max. 2 MB · aanbevolen 240×80",
+        "faviconHint": "32×32 PNG · max. 512 KB",
+        "click": "Klik om te uploaden",
+        "orDrag": "of sleep en zet neer",
+        "currentTag": "Huidig",
+        "current": {
+          "logo": "Huidig logo",
+          "favicon": "Huidige favicon"
+        },
+        "coloursTitle": "Merkkleuren",
+        "coloursBody": "Toegepast op de dashboardomgeving, knoppen en accentlijnen. Sla op om ze op elke pagina te zien.",
+        "colours": {
+          "primary": "Primair",
+          "accent": "Accent",
+          "background": "Achtergrond"
+        },
+        "colourInvalid": "Gebruik een kleur in #RRGGBB-formaat, bijvoorbeeld #075E54.",
+        "save": "Huisstijl opslaan"
+      },
+      "residency": {
+        "loadFailed": "De instelling voor gegevenslocatie kon niet worden geladen.",
+        "title": "Grensoverschrijdende gegevensoverdracht beperken",
+        "body": "Stel een strengere routeringsmodus in voor deze workspace. Vertaling van automatische antwoorden wordt alleen via providers gerouteerd die bij de gekozen modus passen; de overige worden tijdens runtime stilzwijgend overgeslagen.",
+        "ownerOnly": "Alleen de eigenaar van de workspace kan deze instelling wijzigen.",
+        "saved": "Gegevenslocatie bijgewerkt. De vertaalroutering houdt bij het volgende inkomende bericht rekening met de nieuwe instelling.",
+        "saveFailed": "De instelling voor gegevenslocatie kon niet worden opgeslagen.",
+        "save": "Locatie-instelling opslaan",
+        "modes": {
+          "any": {
+            "name": "Geen beperking",
+            "text": "Gebruik de actieve provider die de fallback-keten kiest. Beste beschikbaarheid, geen compliancebeperkingen."
+          },
+          "eu_only": {
+            "name": "Routering alleen binnen de EU",
+            "text": "Alleen DeepL (Duitsland) en zelf gehoste LibreTranslate zijn toegestaan. Conform de regels voor grensoverschrijdende overdracht in artikel 44 AVG."
+          },
+          "local": {
+            "name": "Alleen on-premise",
+            "text": "Alleen de zelf gehoste LibreTranslate-driver is toegestaan. Berichttekst van klanten verlaat nooit je eigen server. LibreTranslate moet zijn ingesteld."
+          }
+        }
       }
     },
     "topNav": {
       "more": "Meer",
       "search": "Zoeken",
-      "premium": "Premiumfunctie: upgrade je abonnement om te ontgrendelen"
+      "premium": "Premiumfunctie: upgrade je abonnement om te ontgrendelen",
+      "labels": {
+        "dashboard": "Dashboard",
+        "team-inbox": "Unified Inbox",
+        "wa-campaigns": "Campagnes",
+        "flows": "Flows",
+        "templates": "Sjablonen",
+        "devices": "Kanalen",
+        "metaads": "Meta Ads",
+        "broadcasts": "Broadcasts",
+        "contacts": "Contacten",
+        "deals": "Deals",
+        "chat": "Live Chat",
+        "analytics": "Analyses",
+        "auto-reply": "Automatisch antwoord",
+        "scheduled": "Gepland",
+        "message-history": "Geschiedenis",
+        "ai-assistants": "AI-assistenten",
+        "ai-training": "AI-training",
+        "wa-links": "WA-links",
+        "chatbot-widgets": "Chatwidget",
+        "webhooks": "Webhooks",
+        "integrations": "Integraties",
+        "warmer": "Warmer",
+        "call-logs": "Gesprekslogboeken",
+        "support": "Support",
+        "more": "Meer"
+      },
+      "workspaceLogo": "Logo van workspace"
     },
     "palette": {
       "title": "Pagina's zoeken",
@@ -412,7 +507,9 @@
       "wallet": "Wallet",
       "orders": "Bestelgeschiedenis",
       "plans": "Prijzen en abonnementen",
-      "tour": "Rondleiding starten"
+      "tour": "Rondleiding starten",
+      "profile": "Profiel",
+      "help": "Help & ondersteuning"
     },
     "quickAccess": {
       "title": "Snelle toegang",
@@ -599,23 +696,28 @@
         "pager": "Tips",
         "templates": {
           "title": "Gebruik sjablonen",
-          "body": "Goedgekeurde sjablonen bereiken klanten buiten het venster van 24 uur."
+          "body": "Goedgekeurde sjablonen bereiken klanten buiten het venster van 24 uur.",
+          "cta": "Sjablonen beheren →"
         },
         "flows": {
           "title": "Automatiseer antwoorden",
-          "body": "Een flow kan elke keer dezelfde vraag voor je beantwoorden."
+          "body": "Een flow kan elke keer dezelfde vraag voor je beantwoorden.",
+          "cta": "Flow-builder openen →"
         },
         "palette": {
           "title": "Spring overal naartoe",
-          "body": "Druk op Ctrl K om alle pagina's te doorzoeken."
+          "body": "Druk op Ctrl K om alle pagina's te doorzoeken.",
+          "cta": "Probeer het nu"
         },
         "scheduled": {
           "title": "Plan vooruit",
-          "body": "Zet nu een bericht in de wachtrij en laat het op het juiste moment verzenden."
+          "body": "Zet nu een bericht in de wachtrij en laat het op het juiste moment verzenden.",
+          "cta": "Nieuw gepland →"
         },
         "wallet": {
           "title": "Houd je saldo in de gaten",
-          "body": "Waardeer op voordat het laag wordt, zodat verzenden nooit stopt."
+          "body": "Waardeer op voordat het laag wordt, zodat verzenden nooit stopt.",
+          "cta": "Automatisch opwaarderen instellen →"
         }
       },
       "shortcuts": {
@@ -681,6 +783,339 @@
             "subtitle": "Schrijf een berichtsjabloon"
           }
         }
+      },
+      "cards": {
+        "meta-ads": {
+          "title": "Meta Ads",
+          "desc": "Maak en beheer Click-to-WhatsApp-advertentiecampagnes op Facebook & Instagram — elke klik opent een chat op je gekoppelde nummer.",
+          "foot": "click-to-chat",
+          "open": "Meta Ads openen",
+          "badge": "ADS"
+        },
+        "instagram-posts": {
+          "title": "Instagram-posts",
+          "desc": "Stel Instagram-posts op en plan ze in — afbeeldingen, reels, stories en carrousels. Publiceer direct of zet ze in de wachtrij om automatisch te verzenden.",
+          "foot": "opstellen & plannen",
+          "open": "Editor openen",
+          "badge": "IG"
+        },
+        "facebook-posts": {
+          "title": "Facebook-posts",
+          "desc": "Stel Facebook-posts op en plan ze in — tekst, links en foto's. Publiceer direct of zet ze in de wachtrij voor een gekoppelde pagina.",
+          "foot": "opstellen & plannen",
+          "open": "Editor openen",
+          "badge": "FB"
+        },
+        "sms": {
+          "title": "SMS",
+          "desc": "Koppel een sms-nummer (Twilio / MSG91). Sms'jes komen in dezelfde teaminbox als WhatsApp, en campagnes krijgen een sms-afzender.",
+          "foot": "koppelen & beheren",
+          "open": "SMS openen",
+          "badge": "SMS"
+        },
+        "line": {
+          "title": "LINE",
+          "desc": "Koppel een LINE Official Account (Messaging API). Inkomende berichten komen in dezelfde teaminbox, met broadcasts, rich menu's, flows en inzichten.",
+          "foot": "koppelen & beheren",
+          "open": "LINE openen",
+          "badge": "LINE"
+        },
+        "wechat": {
+          "title": "WeChat",
+          "desc": "Koppel een WeChat Official Account (Service Account). Inkomende berichten komen in dezelfde teaminbox, met trefwoordregels, automatische antwoorden en flows.",
+          "foot": "koppelen & beheren",
+          "open": "WeChat openen",
+          "badge": "WeChat"
+        },
+        "viber": {
+          "title": "Viber",
+          "desc": "Koppel een Viber Public Account (Bot). Inkomende berichten komen in dezelfde teaminbox, met trefwoordregels, automatische antwoorden en flows.",
+          "foot": "koppelen & beheren",
+          "open": "Viber openen",
+          "badge": "Viber"
+        },
+        "messenger-setup": {
+          "title": "Messenger-instellingen",
+          "desc": "Configureer het Messenger-profiel — knop Aan de slag, vast menu, ice breakers en welkomstbericht voor een gekoppelde pagina.",
+          "foot": "groeitools",
+          "open": "Instellingen openen",
+          "badge": "FB"
+        },
+        "tiktok": {
+          "title": "TikTok",
+          "desc": "Koppel een TikTok-account, volg profiel- en video-inzichten en stuur video's naar je TikTok-inbox. De DM-inbox is alleen voor partners en beperkt per regio.",
+          "foot": "koppelen & posten",
+          "open": "TikTok openen",
+          "badge": "TT"
+        },
+        "tiktok-posts": {
+          "title": "TikTok-posts",
+          "desc": "Stuur video's naar je TikTok-inbox om ze in de app af te ronden en te publiceren, en volg hier hun status.",
+          "foot": "opstellen & verzenden",
+          "open": "Posts openen",
+          "badge": "TT"
+        },
+        "quick-send": {
+          "title": "Snel verzenden",
+          "desc": "Stel een bericht op, kies een of meer ontvangers en een afzender, en verzend direct of plan het in — een handmatige verzendwachtrij met bezorgstatus per bericht.",
+          "foot": "verzendwachtrij",
+          "open": "Openen"
+        },
+        "account": {
+          "title": "Account",
+          "desc": "Profiel, foto, wachtwoord, bestelgeschiedenis, wallet, affiliate en supporttickets — alles op één plek.",
+          "foot": "{plan} · {balance}",
+          "open": "Openen"
+        },
+        "pricing": {
+          "title": "Prijzen & abonnementen",
+          "desc": "Vergelijk Starter, Growth, Pro en Enterprise. Wisselen kan altijd — we rekenen tot op de dag naar rato.",
+          "foot": "{plan}-abonnement · upgraden om te ontgrendelen",
+          "open": "Abonnementen bekijken"
+        },
+        "analytics": {
+          "title": "Analyses",
+          "desc": "Grafieken voor bezorging, gelezen berichten en conversie per campagne en apparaat.",
+          "foot": "{count} berichten · laatste 7 dagen",
+          "open": "Openen"
+        },
+        "attributes": {
+          "title": "Attributen",
+          "desc": "Variabelen voor WhatsApp-sjablonen. Ingebouwde zoals first_name en je eigen variabelen (order_id, enz.). Typ / in een bericht om in te voegen.",
+          "foot": "{count} opgeslagen",
+          "open": "Openen"
+        },
+        "contacts": {
+          "title": "Contacten",
+          "desc": "Al je contacten en groepen op één plek. Importeer vanuit CSV, tag, segmenteer en zoek.",
+          "foot": "{people} personen / {groups} groepen / {tags} tags",
+          "open": "Openen"
+        },
+        "broadcasts": {
+          "title": "Broadcasts",
+          "desc": "Sjabloon-broadcasts naar geselecteerde contacten, met tracking van verzonden, bezorgd, gelezen, mislukt en in wachtrij.",
+          "foot": "{queued} in wachtrij{pct, select, none {} other { / {pct}% bezorgd}}",
+          "open": "Openen"
+        },
+        "auto-reply": {
+          "title": "Automatisch antwoord",
+          "desc": "Activeer antwoorden op trefwoorden, zakelijke openingstijden of wanneer een medewerker afwezig is.",
+          "foot": "{count} regels{pct, select, none {} other { / {pct}% treffers}}",
+          "open": "Openen"
+        },
+        "warmer": {
+          "title": "WhatsApp Warmer",
+          "desc": "Bouw het dagelijkse verzendbudget per nummer geleidelijk op, met menselijke pauzes en actieve uren om het risico op een blokkade te verkleinen.",
+          "foot": "Unofficial API",
+          "open": "Openen"
+        },
+        "scheduled": {
+          "title": "Geplande berichten",
+          "desc": "Zet verzendingen in de wachtrij voor het juiste moment — op tijdzone, segment of trigger.",
+          "foot": "{queued} in wachtrij / volgende {next}",
+          "open": "Openen"
+        },
+        "message-history": {
+          "title": "Berichtengeschiedenis",
+          "desc": "Doorzoekbaar archief van alle inkomende en uitgaande berichten — exporteerbaar naar CSV.",
+          "foot": "{count} records",
+          "open": "Openen"
+        },
+        "notifications": {
+          "title": "Meldingen",
+          "desc": "Stuur waarschuwingen naar e-mail, Slack of in de app — stel per kanaal stiltetijden in.",
+          "foot": "{count} ongelezen",
+          "open": "Openen"
+        },
+        "integrations": {
+          "title": "Integraties",
+          "desc": "Koppel Shopify, HubSpot, Zapier en meer — synchroniseer contacten en bestellingen.",
+          "foot": "{connected} gekoppeld / {available} beschikbaar",
+          "open": "Openen"
+        },
+        "google-account": {
+          "title": "Google-account",
+          "desc": "Koppel één keer — voedt Agenda, Meet-links in flows en de knop „Meet-link verzenden” in de inbox.",
+          "foot": "Agenda en Meet",
+          "open": "Openen"
+        },
+        "appointments": {
+          "title": "Afspraken",
+          "desc": "Laat klanten je diensten boeken via chat — kies dag en tijd, vragen, aanbetalingen, herinneringen en synchronisatie met Google Agenda.",
+          "foot": "{count, plural, =0 {niet ingesteld} one {# dienst} other {# diensten}}",
+          "open": "Beheren"
+        },
+        "ai-assistants": {
+          "title": "AI-gespreksassistent",
+          "desc": "Voice-AI die telefoontjes beantwoordt — Gemini als brein, ElevenLabs-stem, je eigen tools tijdens het gesprek.",
+          "foot": "{configured} ingesteld / {live} live",
+          "open": "Openen"
+        },
+        "call-logs": {
+          "title": "Gesprekslogboeken",
+          "desc": "Transcripten, opnames en tijdlijnen van toolaanroepen voor elk gesprek dat de AI heeft afgehandeld.",
+          "foot": "{calls} gesprekken / {minutes} min · 24u",
+          "open": "Openen"
+        },
+        "forms": {
+          "title": "Formulieren",
+          "desc": "Native interactieve WhatsApp-formulieren — verzamel leads, enquêtes en boekingen binnen de chat.",
+          "foot": "{drafted} concept / {live} live",
+          "open": "Openen"
+        },
+        "wa-links": {
+          "title": "WhatsApp-linkgenerator",
+          "desc": "Maak traceerbare wa.me-korte links met een eigen slug, vooraf ingevuld bericht, QR-code en klikanalyses. Plaats ze in een bio, op een landingspagina of op een visitekaartje.",
+          "foot": "{links} links / {clicks} klikken",
+          "open": "Openen"
+        },
+        "chatbot-widgets": {
+          "title": "Chatbotwidget",
+          "desc": "Plaats een zwevende chatbubbel op je site. De AI antwoordt in de browser en draagt over aan de Unified Inbox wanneer nodig.",
+          "foot": "{built} gebouwd / {live} actief",
+          "open": "Openen"
+        },
+        "ai-training": {
+          "title": "AI-training",
+          "desc": "Train chatassistenten op je eigen content — URL's, tekstfragmenten, vraag-antwoordparen en tekstbestanden.",
+          "foot": "{count} assistenten",
+          "open": "Openen"
+        },
+        "ai-usage": {
+          "title": "AI-gebruik",
+          "desc": "Zie waar je AI-uitgaven naartoe gaan — tokens per model en provider, abonnementssleutels versus je eigen sleutels, en het maandlimiet.",
+          "foot": "{tokens} tokens deze maand",
+          "open": "Bekijken"
+        },
+        "flow-analytics": {
+          "title": "Flow-analyses",
+          "desc": "Elke automatiseringsrun van begin tot eind — uitvoeringsgeschiedenis, de fouten die een run stopten en de herhaalpogingen van de runs die je opnieuw hebt gestart.",
+          "foot": "{count} mislukte runs",
+          "open": "Openen"
+        },
+        "lead-finder": {
+          "title": "Leadzoeker",
+          "desc": "Zoek bedrijven op categorie en stad, haal hun WhatsApp en e-mail op en zet ze in Contacten of een campagne.",
+          "foot": "kaartprospectie",
+          "open": "Openen"
+        },
+        "webhooks": {
+          "title": "Webhooks",
+          "desc": "Stuur bezorg-, lees- en antwoordevents in realtime naar elk HTTPS-endpoint.",
+          "foot": "{count} endpoints",
+          "open": "Openen"
+        },
+        "support": {
+          "title": "Support",
+          "desc": "Spreek met een medewerker, bekijk bekende problemen of controleer de servicestatus.",
+          "foot": "{total} tickets / {open} open",
+          "open": "Openen"
+        },
+        "activity-log": {
+          "title": "Activiteitenlogboek",
+          "desc": "Elke aanmelding, workspacewisseling, inbox-actie en beheerwijziging — toegeschreven aan gebruiker, IP-adres en tijdstip.",
+          "foot": "{count} gebeurtenissen · 24u",
+          "open": "Openen"
+        },
+        "channels": {
+          "title": "Kanalen",
+          "desc": "Koppel WhatsApp, Instagram, Telegram en meer — één inbox, controleer de status en wissel afzenders af.",
+          "foot": "{active} / {total} live",
+          "open": "Openen"
+        },
+        "team-members": {
+          "title": "Teamleden",
+          "desc": "Nodig teamleden uit, wijs rollen toe (eigenaar / beheerder / lid) en beperk de toegang per workspace.",
+          "foot": "{count, plural, one {# plek} other {# plekken}} actief",
+          "open": "Openen"
+        }
+      },
+      "eyebrow": "workspace",
+      "sortedByUsage": "Gesorteerd op gebruik",
+      "developers": "Ontwikkelaars / API",
+      "movedOffHeader": "verplaatst uit de header",
+      "open": "Openen",
+      "navDesc": {
+        "dashboard": "Home & overzicht",
+        "wa-campaigns": "Bulkverzendingen van campagnes",
+        "flows": "Automatiseringsbouwer",
+        "templates": "Berichtsjablonen"
+      },
+      "strip": {
+        "label": "Workspace in één oogopslag",
+        "rules": "Actieve regels",
+        "thisWeek": "+{count} deze week",
+        "noNew": "geen nieuwe",
+        "rulesCaption": "over alle tools",
+        "queued": "In wachtrij",
+        "noUpcoming": "geen komende runs",
+        "queuedCaption": "geplande verzendingen",
+        "connected": "Verbonden",
+        "connectedCaption": "apparaten live",
+        "health": {
+          "healthy": "gezond",
+          "partial": "gedeeltelijk",
+          "offline": "offline",
+          "none": "geen apparaten"
+        },
+        "notifications": "Meldingen",
+        "unread": "ongelezen",
+        "notificationsCaption": "wacht op aandacht"
+      },
+      "activity": {
+        "title": "Recente activiteit",
+        "viewAll": "Alles bekijken",
+        "empty": "Geen activiteit gevonden. Wijzigingen in je workspace verschijnen hier."
+      },
+      "affiliate": {
+        "badge": "VERDIEN",
+        "title": "Affiliate-geschiedenis",
+        "body": "Volg elke aanmelding die via je code binnenkwam, de verdiende tegoeden en de prestaties van je deellink.",
+        "referrals": "Verwijzingen",
+        "payouts": "Uitbetalingen",
+        "payoutsNote": "bekijk je account",
+        "foot": "verwijzingen · tegoeden · uitbetalingen"
+      },
+      "quick": {
+        "title": "Snelle toegang",
+        "body": "Minder gebruikte tools staan hier, zodat de hoofdheader gefocust blijft op dagelijks werk.",
+        "openChat": "Chat openen",
+        "addRule": "Regel toevoegen"
+      },
+      "planCard": {
+        "title": "Workspace-abonnement",
+        "seats": "{plan} / {count, plural, one {# plek} other {# plekken}}",
+        "messages": "Berichten deze maand",
+        "sent": "{count} verzonden",
+        "manage": "Facturatie beheren"
+      },
+      "whatsNew": {
+        "title": "Wat is er nieuw",
+        "headline": "Unified Inbox + AI-assistentie",
+        "changelog": "Changelog lezen",
+        "items": {
+          "inbox": "Gedeelde inbox met toewijzing en notities",
+          "ai": "ChatGPT / Gemini / Claude in flows",
+          "forecast": "Verkoopprognose in het Shopify-dashboard"
+        }
+      },
+      "smallTips": {
+        "warm": {
+          "title": "Houd nieuwe nummers warm",
+          "body": "Begin met 50 verzendingen per dag en verdubbel wekelijks. Plotselinge pieken worden gemarkeerd."
+        },
+        "tag": {
+          "title": "Tag nu, segmenteer later",
+          "body": "Voeg een tag toe zodra een contact reageert — broadcastfilters worden later eenvoudig."
+        },
+        "templates": {
+          "title": "Sjablonen verslaan vrije tekst",
+          "body": "Goedgekeurde sjablonen openen het 24-uursvenster, ook wanneer een contact stil is geworden."
+        },
+        "signing": {
+          "title": "Verifieer HMAC altijd",
+          "body": "Controleer altijd de handtekeningheader voordat je verwerkt — één regel code, veel veiligheid."
+        }
       }
     },
     "inboxBell": {
@@ -704,6 +1139,19 @@
       "hintMove": "navigeren",
       "hintOpen": "openen",
       "hintToggle": "wisselen"
+    },
+    "flash": {
+      "dismiss": "Sluiten",
+      "roleDenied": "Je rol ({role}) heeft geen toegang tot die pagina"
+    },
+    "hubSearch": {
+      "placeholder": "Projectinstellingen doorzoeken...",
+      "empty": "Geen instellingen gevonden voor je zoekopdracht."
+    },
+    "bell": {
+      "eyebrow": "Inbox",
+      "clearAll": "Alles wissen",
+      "viewAll": "Alles bekijken →"
     }
   }
 }

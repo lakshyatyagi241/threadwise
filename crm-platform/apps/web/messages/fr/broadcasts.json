@@ -95,7 +95,9 @@
         "t3": "Comment améliorer les résultats ?",
         "b3": "Gardez une audience ciblée, choisissez le modèle le plus pertinent et examinez le nombre d’échecs avant de renvoyer."
       },
-      "unofficialDisabled": "Non officiel (désactivé)"
+      "unofficialDisabled": "Non officiel (désactivé)",
+      "noData": "Aucune donnée trouvée",
+      "railLabel": "Filtres de diffusion"
     },
     "detail": {
       "back": "Retour",
@@ -293,7 +295,8 @@
       "later": "Plus tard",
       "media": "Aperçu {kind}",
       "contactsDenied": "Vous n’avez pas accès à la liste de contacts. Choisissez des contacts via des groupes ou des étiquettes.",
-      "unofficialDisabled": "L’envoi via des numéros WhatsApp personnels (l’API non officielle) n’est pas activé pour votre espace de travail. Choisissez un numéro de l’API WhatsApp Business officielle."
+      "unofficialDisabled": "L’envoi via des numéros WhatsApp personnels (l’API non officielle) n’est pas activé pour votre espace de travail. Choisissez un numéro de l’API WhatsApp Business officielle.",
+      "previewLabel": "Aperçu du modèle"
     },
     "overrides": {
       "title": "Renseigner cet envoi",

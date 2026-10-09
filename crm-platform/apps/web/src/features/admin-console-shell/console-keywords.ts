@@ -44,7 +44,6 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'support-playbooks': 'playbooks macros canned replies saved replies helpdesk',
   'support-reports': 'support reports analytics tickets response time helpdesk',
   'cms-announcements': 'announcements banner notice news website updates',
-  'cms-guidebook': 'guidebook help guides docs articles knowledge base website',
   'platform-analytics': 'platform analytics usage workspaces growth signups activity',
   'cms-contact': 'contact form messages inbox enquiries website leads',
   'cms-frontend': 'website landing page homepage cms editor frontend pages site builder',

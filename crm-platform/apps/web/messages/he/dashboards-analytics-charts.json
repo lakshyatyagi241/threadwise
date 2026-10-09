@@ -183,7 +183,9 @@
         "unzoned": "ללא אזור",
         "per24h": "{n}/24 שע׳",
         "deliv": "נמסרו",
-        "free": "{n, plural, one {# מקום פנוי למכשיר} two {# מקומות פנויים למכשיר} other {# מקומות פנויים למכשיר}}"
+        "free": "{n, plural, one {# מקום פנוי למכשיר} two {# מקומות פנויים למכשיר} other {# מקומות פנויים למכשיר}}",
+        "freeHint": "הוספת WABA",
+        "connectDeviceShort": "חיבור מכשיר"
       },
       "templates": {
         "title": "התבניות המובילות",
@@ -297,7 +299,8 @@
         "connect": "חבר",
         "connectedLabel": "מחובר"
       },
-      "sublineOfficial": "{date} - {range}: {sent} הודעות יוצאות, שיעור מסירה של {rate}%."
+      "sublineOfficial": "{date} - {range}: {sent} הודעות יוצאות, שיעור מסירה של {rate}%.",
+      "synced": "חי · סונכרן לפני {s} שניות"
     },
     "analytics": {
       "title": "אנליטיקה",

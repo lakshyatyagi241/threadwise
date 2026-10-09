@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, other {# pesan baru dari {author}}}",
         "titleNoName": "{count, plural, other {# pesan langsung baru}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, other {Ada # orang ingin bergabung ke {name}}}",
+        "titleNoName": "{count, plural, other {Ada # orang ingin bergabung ke grup WhatsApp}}",
+        "body": "Buka Grup untuk menyetujui atau menolak."
+      },
+      "waba_group_suspended": {
+        "title": "{name} ditangguhkan",
+        "titleNoName": "Sebuah grup WhatsApp ditangguhkan",
+        "body": "WhatsApp menangguhkan grup ini. Anda tidak dapat mengirim pesan ke grup sampai dipulihkan."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} aktif kembali",
+        "titleNoName": "Sebuah grup WhatsApp aktif kembali",
+        "body": "WhatsApp memulihkan grup ini. Anda dapat mengirim pesan lagi."
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "Pengiriman terjadwal terkirim",
         "scheduled_failed": "Pengiriman terjadwal gagal",
         "teamchat_mention": "Menyebut Anda di Team chat",
-        "teamchat_message": "Pesan langsung baru"
+        "teamchat_message": "Pesan langsung baru",
+        "waba_group_join_request": "Permintaan bergabung ke grup",
+        "waba_group_suspended": "Grup WhatsApp ditangguhkan",
+        "waba_group_suspension_cleared": "Grup WhatsApp aktif kembali"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "Dompet",
         "devices": "Nomor WhatsApp",
         "broadcasts": "Broadcast dan kampanye",
-        "team_chat": "Team chat"
+        "team_chat": "Team chat",
+        "whatsapp_groups": "Grup WhatsApp"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "Dompet diisi ulang",
           "hint": "Dompet workspace telah dikreditkan."
+        },
+        "waba_group_join_request": {
+          "label": "Permintaan bergabung ke grup",
+          "hint": "Orang meminta bergabung ke grup WhatsApp dari nomor bisnis Anda. Sepuluh permintaan menjadi satu baris."
+        },
+        "waba_group_suspended": {
+          "label": "Grup ditangguhkan",
+          "hint": "WhatsApp menangguhkan salah satu grup Anda."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "Grup aktif kembali",
+          "hint": "WhatsApp memulihkan grup yang sebelumnya ditangguhkan. Hanya jika Anda diberi tahu tentang penangguhan tersebut."
         }
       },
       "loading": "Memuat preferensi Anda",

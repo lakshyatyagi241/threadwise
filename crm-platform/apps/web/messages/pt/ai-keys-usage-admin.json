@@ -68,7 +68,6 @@
         "keySavedLast4": "Chave salva, termina em {last4}",
         "noKey": "Sem chave",
         "unreadable": "Não é possível ler a chave salva, cole-a novamente",
-        "slug": "ID do provedor",
         "apiKey": "Chave de API",
         "apiKeyHint": "Deixe em branco para manter a chave salva.",
         "apiKeyPlaceholder": "Cole a chave aqui",
@@ -89,7 +88,9 @@
         "removeTitle": "Remover a chave de {name}?",
         "removeBody": "Os espaços de trabalho deixarão de usar {name} até você adicionar uma chave novamente. O provedor será desativado.",
         "removeConfirm": "Remover chave",
-        "cancel": "Cancelar"
+        "cancel": "Cancelar",
+        "slug": "provedor: {provider} · modelo padrão: {model}",
+        "maxTokensPlaceholder": "ex.: 4096"
       },
       "toasts": {
         "saved": "{name} salvo.",
@@ -100,7 +101,8 @@
       },
       "help": {
         "title": "Como estas chaves são usadas",
-        "body": "A chave própria de um espaço de trabalho só prevalece quando o plano permite. Caso contrário, é usado o provedor ativo correspondente daqui. Desativar um provedor significa que os espaços de trabalho sem chave própria não podem usá-lo."
+        "body": "A chave própria de um espaço de trabalho só prevalece quando o plano permite. Caso contrário, é usado o provedor ativo correspondente daqui. Desativar um provedor significa que os espaços de trabalho sem chave própria não podem usá-lo.",
+        "eyebrow": "Como essas chaves são usadas"
       }
     },
     "dashboard": {

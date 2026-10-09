@@ -107,12 +107,6 @@ export function GatewayCard({ gateway: g, currencyChoices, canEdit, onChanged }:
           aria-controls={panelId}
           onClick={() => setOpen((o) => !o)}
         >
-          <span
-            aria-hidden
-            className={`inline-block text-muted-foreground transition-transform ${open ? 'rotate-90' : 'rtl:rotate-180'}`}
-          >
-            ›
-          </span>
           <span className="min-w-0">
             <span className="flex flex-wrap items-center gap-2">
               <span className="font-medium">{g.name}</span>
@@ -122,12 +116,12 @@ export function GatewayCard({ gateway: g, currencyChoices, canEdit, onChanged }:
               <Badge tone={g.mode === 'live' ? 'danger' : 'warning'}>{t(`mode.${g.mode}`)}</Badge>
               {g.keysSaved && <Badge tone="success">{t('keysSaved')}</Badge>}
               {!g.driverAvailable && <Badge>{t('noDriverBadge')}</Badge>}
-              {g.regions.slice(0, 3).map((r) => (
+              {(g.regions.length ? g.regions.slice(0, 3) : (['other'] as const)).map((r) => (
                 <Badge key={r}>{tr(r)}</Badge>
               ))}
             </span>
-            <span className="mt-0.5 block truncate text-xs text-muted-foreground">
-              {g.slug} · {g.description}
+            <span className="mt-0.5 block truncate font-mono text-xs text-muted-foreground">
+              slug: {g.slug} · {g.description}
             </span>
           </span>
         </button>
@@ -142,6 +136,15 @@ export function GatewayCard({ gateway: g, currencyChoices, canEdit, onChanged }:
             {t(g.isActive ? 'disable' : 'activate')}
           </Button>
         )}
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-hidden
+          className={`text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`}
+          onClick={() => setOpen((o) => !o)}
+        >
+          ⌄
+        </button>
       </div>
 
       {open && (
@@ -151,6 +154,11 @@ export function GatewayCard({ gateway: g, currencyChoices, canEdit, onChanged }:
           className="space-y-4 border-t border-border bg-muted/30 px-4 py-4"
         >
           {problem && <Alert tone="danger">{problem}</Alert>}
+          {g.fields.length === 0 && (
+            <p className="rounded-lg border border-dashed border-border bg-muted/40 px-4 py-3 text-xs text-muted-foreground">
+              {t('noCredentials')}
+            </p>
+          )}
           <div className="grid gap-4 sm:grid-cols-2">
             {g.fields.map((f) => {
               const id = `${g.slug}-${f.key}`;
@@ -267,7 +275,7 @@ export function GatewayCard({ gateway: g, currencyChoices, canEdit, onChanged }:
           {canEdit ? (
             <div className="flex justify-end">
               <Button type="submit" disabled={!dirty || save.isPending}>
-                {save.isPending ? t('saving') : t('save')}
+                {save.isPending ? t('saving') : t('save', { name: g.name })}
               </Button>
             </div>
           ) : (

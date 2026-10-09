@@ -99,3 +99,10 @@ tier P2: nothing open except the two blocked call sites in Blocked below (034 au
 - The API was run for the visual pass as the migration role (the app role's password in the shared database did not match `.env`), so RLS was not exercised there; RLS is covered by the integration tests as the restricted role.
 - Round 3: the languages, providers and usage screens could not be re-opened side by side: they need a super admin operator and creating one with MFA was refused in this session. They keep the round 1 comparison above.
 - Outbound translation inside the real dispatch path is covered by service unit tests and the unchanged send e2e, not by an e2e with a live provider.
+
+## Round 4 check
+
+- Re-verified on a freshly migrated database (277 migrations): unit 149/149 (11 files), API e2e 30/30, integration 38/38, `arch:check` no errors. Nothing was rebuilt.
+- 039 agent half stays blocked: `ai-agents-training` on main has no prompt builder or reply runtime (assistants, training sources and the responder switch only). The prompts that exist belong to the widget (already hinted through the barrel) and the flow runtime AI nodes (another domain). When an agent runtime lands, its system prompt must append `languageHint(orgId, customerLanguage)`.
+- 034 stays blocked: searched `chat-conversations`, `chatbot-widget`, `flow-runtime-engine`, `team-inbox-*` and all of `modules/`; nothing reads `keyword_replies` (only the table mirror and our shim exist).
+- Help: `help/translation-settings.md` covers the only workspace screen; the three operator console pages are not Help center units (it documents workspace nav entries and Settings tiles).

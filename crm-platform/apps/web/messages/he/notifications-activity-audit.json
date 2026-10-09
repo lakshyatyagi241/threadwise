@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, one {הודעה חדשה מ־{author}} two {# הודעות חדשות מ־{author}} other {# הודעות חדשות מ־{author}}}",
         "titleNoName": "{count, plural, one {הודעה פרטית חדשה} two {# הודעות פרטיות חדשות} other {# הודעות פרטיות חדשות}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {מישהו רוצה להצטרף ל-{name}} two {# אנשים רוצים להצטרף ל-{name}} other {# אנשים רוצים להצטרף ל-{name}}}",
+        "titleNoName": "{count, plural, one {מישהו רוצה להצטרף לקבוצת WhatsApp} two {# אנשים רוצים להצטרף לקבוצות WhatsApp} other {# אנשים רוצים להצטרף לקבוצות WhatsApp}}",
+        "body": "פתחו את הקבוצות כדי לאשר או לדחות."
+      },
+      "waba_group_suspended": {
+        "title": "{name} הושעתה",
+        "titleNoName": "קבוצת WhatsApp הושעתה",
+        "body": "WhatsApp השעתה את הקבוצה הזו. אי אפשר לשלוח לה הודעות עד שתשוחזר."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} פעילה שוב",
+        "titleNoName": "קבוצת WhatsApp פעילה שוב",
+        "body": "WhatsApp שחזרה את הקבוצה הזו. אפשר לשלוח לה הודעות שוב."
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "שליחה מתוזמנת יצאה",
         "scheduled_failed": "שליחה מתוזמנת נכשלה",
         "teamchat_mention": "תייג אותך בצ׳אט הצוות",
-        "teamchat_message": "הודעה פרטית חדשה"
+        "teamchat_message": "הודעה פרטית חדשה",
+        "waba_group_join_request": "בקשה להצטרף לקבוצה",
+        "waba_group_suspended": "קבוצת WhatsApp הושעתה",
+        "waba_group_suspension_cleared": "קבוצת WhatsApp פעילה שוב"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "ארנק",
         "devices": "מספרי WhatsApp",
         "broadcasts": "שידורים וקמפיינים",
-        "team_chat": "צ׳אט צוות"
+        "team_chat": "צ׳אט צוות",
+        "whatsapp_groups": "קבוצות WhatsApp"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "הארנק מולא",
           "hint": "זוכה הארנק של סביבת העבודה."
+        },
+        "waba_group_join_request": {
+          "label": "בקשה להצטרף לקבוצה",
+          "hint": "אנשים מבקשים להצטרף לקבוצת WhatsApp של מספר העסק שלכם. עשר בקשות מופיעות כשורה אחת."
+        },
+        "waba_group_suspended": {
+          "label": "הקבוצה הושעתה",
+          "hint": "WhatsApp השעתה אחת מהקבוצות שלכם."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "הקבוצה פעילה שוב",
+          "hint": "WhatsApp שחזרה קבוצה שהושעתה. מוצג רק אם קיבלתם הודעה על ההשעיה."
         }
       },
       "loading": "טוען את ההעדפות שלך",

@@ -183,7 +183,9 @@
         "unzoned": "জোনবিহীন",
         "per24h": "{n}/২৪ ঘণ্টা",
         "deliv": "পৌঁছানো",
-        "free": "{n, plural, one {# টি ডিভাইস স্লট উপলব্ধ} other {# টি ডিভাইস স্লট উপলব্ধ}}"
+        "free": "{n, plural, one {# টি ডিভাইস স্লট উপলব্ধ} other {# টি ডিভাইস স্লট উপলব্ধ}}",
+        "freeHint": "WABA যুক্ত করুন",
+        "connectDeviceShort": "ডিভাইস সংযুক্ত করুন"
       },
       "templates": {
         "title": "সেরা পারফর্মিং টেমপ্লেট",
@@ -297,7 +299,8 @@
         "connect": "সংযুক্ত করুন",
         "connectedLabel": "সংযুক্ত"
       },
-      "sublineOfficial": "{date} - {range}, {sent}টি আউটবাউন্ড, {rate}% ডেলিভারেবিলিটি।"
+      "sublineOfficial": "{date} - {range}, {sent}টি আউটবাউন্ড, {rate}% ডেলিভারেবিলিটি।",
+      "synced": "লাইভ · {s} সেকেন্ড আগে সিঙ্ক হয়েছে"
     },
     "analytics": {
       "title": "অ্যানালিটিক্স",

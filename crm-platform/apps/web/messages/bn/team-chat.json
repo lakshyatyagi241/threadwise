@@ -25,7 +25,9 @@
       "deleteTitle": "এই চ্যানেলটি মুছবেন?",
       "deleteMessage": "#{name} এবং এর সব মেসেজ সবার জন্য মুছে ফেলা হবে। এটি আর ফেরানো যাবে না।",
       "deleteConfirm": "চ্যানেল মুছুন",
-      "cancel": "বাতিল করুন"
+      "cancel": "বাতিল করুন",
+      "defaultDescription": "অভ্যন্তরীণ ওয়ার্কস্পেস চ্যাট",
+      "customerChats": "গ্রাহক চ্যাট"
     },
     "sidebar": {
       "label": "চ্যানেল ও ব্যক্তি",
@@ -39,7 +41,12 @@
       "invite": "একজন সহকর্মীকে আমন্ত্রণ জানান",
       "pending": "মুলতুবি অনুরোধ",
       "pendingCount": "{count, plural, one {# টি মুলতুবি অনুরোধ} other {# টি মুলতুবি অনুরোধ}}",
-      "unread": "{count, plural, one {# টি অপঠিত মেসেজ} other {# টি অপঠিত মেসেজ}}"
+      "unread": "{count, plural, one {# টি অপঠিত মেসেজ} other {# টি অপঠিত মেসেজ}}",
+      "workspace": "ওয়ার্কস্পেস",
+      "mode": "মোড",
+      "customerChats": "গ্রাহক চ্যাট",
+      "teamChat": "টিম চ্যাট",
+      "membersLink": "সদস্য"
     },
     "members": {
       "label": "সদস্য",
@@ -52,7 +59,8 @@
       "online": "অনলাইন",
       "offline": "অফলাইন",
       "you": "(আপনি)",
-      "message": "{name}-কে মেসেজ"
+      "message": "{name}-কে মেসেজ",
+      "titleAccent": "চ্যাট"
     },
     "panel": {
       "searchTitle": "মেসেজ খুঁজুন",
@@ -104,7 +112,11 @@
       "fileTooLarge": "ফাইলটি ২০ MB-এর বেশি।",
       "mentionList": "উল্লেখ করার সহকর্মী",
       "typingOne": "{name} টাইপ করছেন",
-      "typingMany": "{count} জন টাইপ করছেন"
+      "typingMany": "{count} জন টাইপ করছেন",
+      "hintSend": "পাঠান",
+      "hintNewLine": "নতুন লাইন",
+      "hintMention": "উল্লেখ",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "চ্যানেল তৈরি করুন",
@@ -122,7 +134,9 @@
         "hint": "শুধু আমন্ত্রণে। কেবল এর সদস্যরা দেখতে পারবেন।"
       },
       "cancel": "বাতিল করুন",
-      "create": "চ্যানেল তৈরি করুন"
+      "create": "চ্যানেল তৈরি করুন",
+      "namePlaceholder": "যেমন support",
+      "descriptionPlaceholder": "এই চ্যানেলটি কীসের জন্য?"
     },
     "invite": {
       "title": "একজন সহকর্মীকে আমন্ত্রণ জানান",
@@ -135,7 +149,10 @@
       "approved": "হয়েছে। অনুরোধটি অনুমোদিত হয়েছে।",
       "pending": "আমন্ত্রণ জমা দেওয়া হয়েছে, অ্যাডমিনের অনুমোদনের অপেক্ষায়।",
       "cancel": "বাতিল করুন",
-      "submit": "আমন্ত্রণ জমা দিন"
+      "submit": "আমন্ত্রণ জমা দিন",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "তাদের নাম",
+      "notePlaceholder": "কেন তারা যোগ দেবে?"
     },
     "invitations": {
       "title": "মুলতুবি আমন্ত্রণ",

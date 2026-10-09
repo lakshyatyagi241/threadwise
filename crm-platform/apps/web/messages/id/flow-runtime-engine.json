@@ -55,7 +55,14 @@
       "webhook_lead": "Prospek webhook",
       "handoff": "Pengalihan",
       "inbox": "Kotak masuk tim",
-      "retry": "Coba ulang"
+      "retry": "Coba ulang",
+      "group_leave": "Keluar dari daftar",
+      "segment_join": "Bergabung ke segmen",
+      "contact_updated": "Kontak diperbarui",
+      "field_match": "Kecocokan kolom",
+      "date_field_match": "Kecocokan tanggal",
+      "schedule": "Jadwal",
+      "ecom_event": "Event toko"
     },
     "endReason": {
       "end_node": "Mencapai akhir alur",

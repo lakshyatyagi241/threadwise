@@ -25,7 +25,9 @@
       "deleteTitle": "Dit kanaal verwijderen?",
       "deleteMessage": "#{name} en alle berichten erin worden voor iedereen verwijderd. Dit kan niet ongedaan worden gemaakt.",
       "deleteConfirm": "Kanaal verwijderen",
-      "cancel": "Annuleren"
+      "cancel": "Annuleren",
+      "defaultDescription": "Interne workspacechat",
+      "customerChats": "Klantchats"
     },
     "sidebar": {
       "label": "Kanalen en personen",
@@ -39,7 +41,12 @@
       "invite": "Nodig een teamgenoot uit",
       "pending": "Openstaande verzoeken",
       "pendingCount": "{count, plural, one {# openstaand verzoek} other {# openstaande verzoeken}}",
-      "unread": "{count, plural, one {# ongelezen bericht} other {# ongelezen berichten}}"
+      "unread": "{count, plural, one {# ongelezen bericht} other {# ongelezen berichten}}",
+      "workspace": "Workspace",
+      "mode": "Modus",
+      "customerChats": "Klantchats",
+      "teamChat": "Teamchat",
+      "membersLink": "Leden"
     },
     "members": {
       "label": "Leden",
@@ -52,7 +59,8 @@
       "online": "Online",
       "offline": "Offline",
       "you": "(jij)",
-      "message": "Bericht aan {name}"
+      "message": "Bericht aan {name}",
+      "titleAccent": "chat"
     },
     "panel": {
       "searchTitle": "Berichten zoeken",
@@ -104,7 +112,11 @@
       "fileTooLarge": "Dat bestand is groter dan 20 MB.",
       "mentionList": "Teamgenoten om te noemen",
       "typingOne": "{name} is aan het typen",
-      "typingMany": "{count} personen zijn aan het typen"
+      "typingMany": "{count} personen zijn aan het typen",
+      "hintSend": "verzenden",
+      "hintNewLine": "nieuwe regel",
+      "hintMention": "vermelding",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "Een kanaal maken",
@@ -122,7 +134,9 @@
         "hint": "Alleen op uitnodiging. Alleen de leden zien het."
       },
       "cancel": "Annuleren",
-      "create": "Kanaal maken"
+      "create": "Kanaal maken",
+      "namePlaceholder": "bijv. support",
+      "descriptionPlaceholder": "Waarvoor is dit kanaal?"
     },
     "invite": {
       "title": "Nodig een teamgenoot uit",
@@ -135,7 +149,10 @@
       "approved": "Klaar. Het verzoek is goedgekeurd.",
       "pending": "Uitnodiging verzonden, wacht op goedkeuring door een beheerder.",
       "cancel": "Annuleren",
-      "submit": "Uitnodiging versturen"
+      "submit": "Uitnodiging versturen",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "Hun naam",
+      "notePlaceholder": "Waarom zouden ze zich aansluiten?"
     },
     "invitations": {
       "title": "Openstaande uitnodigingen",

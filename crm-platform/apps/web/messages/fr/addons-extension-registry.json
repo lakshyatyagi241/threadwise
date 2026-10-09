@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "Les modules complémentaires n’ont pas pu être chargés."
+    },
+    "planFields": {
+      "fromModule": "depuis un module installé",
+      "unlimited": "Illimité"
     }
   }
 }

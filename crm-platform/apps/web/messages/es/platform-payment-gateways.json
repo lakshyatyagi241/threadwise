@@ -15,7 +15,11 @@
         "total": "Pasarelas",
         "active": "Activas",
         "india": "India",
-        "crypto": "Cripto"
+        "crypto": "Cripto",
+        "totalHint": "conectores disponibles",
+        "activeHint": "aceptan pagos",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "liquidación en cadena"
       },
       "tabsLabel": "Filtrar por región",
       "all": "Todas",
@@ -32,7 +36,8 @@
         "africa": "África",
         "latam": "Latinoamérica",
         "crypto": "Cripto",
-        "offline": "Sin conexión"
+        "offline": "Sin conexión",
+        "other": "Otros"
       },
       "card": {
         "active": "Activa",
@@ -57,11 +62,12 @@
         "webhookUrl": "URL del webhook",
         "webhookHint": "Pégala en el panel del proveedor para que nos avise de los pagos.",
         "saving": "Guardando",
-        "save": "Guardar",
         "readOnly": "Solo un superadministrador puede cambiar las pasarelas.",
         "saved": "Ajustes de {name} guardados.",
         "activated": "{name} activada.",
-        "deactivated": "{name} desactivada."
+        "deactivated": "{name} desactivada.",
+        "noCredentials": "No se requieren credenciales: la pasarela usa confirmación manual o fuera de banda.",
+        "save": "Guardar {name}"
       },
       "errors": {
         "conflict": "Otra persona cambió esta pasarela. Se ha recargado; revísala y vuelve a guardar.",
@@ -69,7 +75,10 @@
         "noDriver": "Esta pasarela aún no tiene controlador en esta versión, así que se puede configurar pero no activar.",
         "forbidden": "Solo un superadministrador puede cambiar las pasarelas.",
         "generic": "Algo salió mal. Inténtalo de nuevo."
-      }
+      },
+      "eyebrow": "Administración · Facturación · Pasarelas",
+      "titleFirst": "Pago",
+      "titleSecond": "pasarelas"
     },
     "checkout": {
       "title": "Completa tu pedido",
@@ -132,7 +141,28 @@
       "autoRenew": "Se renueva automáticamente en cada periodo. Puedes cancelar en cualquier momento.",
       "addonRenews": "Este complemento se renueva automáticamente en cada periodo. Puedes cancelarlo en cualquier momento y conservarlo hasta el final del periodo pagado.",
       "cardTitle": "Pagar con tarjeta",
-      "payNow": "Pagar ahora"
+      "payNow": "Pagar ahora",
+      "titleFirst": "Completa tu",
+      "titleSecond": "pedido",
+      "subtitleRefund": "Garantía de devolución del dinero de {days} días. Cancela cuando quieras. Se aceptan tarjetas, UPI, banca en línea y monederos.",
+      "steps": {
+        "plan": "Elegir plan",
+        "checkout": "Pago",
+        "confirmation": "Confirmación"
+      },
+      "step": "Paso {n}",
+      "taxIdPlaceholder": "GSTIN / IVA / EIN",
+      "addressPlaceholder": "Calle y número",
+      "cityPlaceholder": "Mumbai",
+      "currencyTitle": "Paga en tu moneda",
+      "currencyHint": "Los precios se convierten al instante. Solo se muestran las monedas que aceptan tus métodos de pago disponibles.",
+      "couponPlaceholder": "¿Tienes un código de cupón?",
+      "live": "activo",
+      "tlsNote": "Los pagos se procesan mediante una conexión TLS de 256 bits. Nunca vemos los datos de tu tarjeta.",
+      "change": "Cambiar",
+      "terms": "Al pagar, aceptas nuestros <terms>Términos</terms> y nuestra <privacy>Política de privacidad</privacy>.",
+      "refundNote": "¿No estás satisfecho? Escríbenos en los primeros {days} días y te devolvemos el importe completo, sin preguntas ni formularios.",
+      "autoRenewTitle": "Renovar automáticamente este plan"
     },
     "orders": {
       "title": "Historial de pedidos",

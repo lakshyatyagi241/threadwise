@@ -183,7 +183,9 @@
         "unzoned": "sans zone",
         "per24h": "{n}/24 h",
         "deliv": "remis",
-        "free": "{n, plural, one {# emplacement d’appareil disponible} other {# emplacements d’appareil disponibles}}"
+        "free": "{n, plural, one {# emplacement d’appareil disponible} other {# emplacements d’appareil disponibles}}",
+        "freeHint": "Ajouter un WABA",
+        "connectDeviceShort": "Connecter un appareil"
       },
       "templates": {
         "title": "Modèles les plus performants",
@@ -297,7 +299,8 @@
         "connect": "Connecter",
         "connectedLabel": "Connecté"
       },
-      "sublineOfficial": "{date} - {range} : {sent} envoyés, {rate} % de délivrabilité."
+      "sublineOfficial": "{date} - {range} : {sent} envoyés, {rate} % de délivrabilité.",
+      "synced": "En direct · synchronisé il y a {s} s"
     },
     "analytics": {
       "title": "Statistiques",

@@ -25,7 +25,9 @@
       "deleteTitle": "删除此频道？",
       "deleteMessage": "#{name} 及其所有消息将为所有人删除，且无法恢复。",
       "deleteConfirm": "删除频道",
-      "cancel": "取消"
+      "cancel": "取消",
+      "defaultDescription": "工作区内部聊天",
+      "customerChats": "客户聊天"
     },
     "sidebar": {
       "label": "频道与成员",
@@ -39,7 +41,12 @@
       "invite": "邀请团队成员",
       "pending": "待处理请求",
       "pendingCount": "{count, plural, other {# 个待处理请求}}",
-      "unread": "{count, plural, other {# 条未读消息}}"
+      "unread": "{count, plural, other {# 条未读消息}}",
+      "workspace": "工作区",
+      "mode": "模式",
+      "customerChats": "客户聊天",
+      "teamChat": "团队聊天",
+      "membersLink": "成员"
     },
     "members": {
       "label": "成员",
@@ -52,7 +59,8 @@
       "online": "在线",
       "offline": "离线",
       "you": "（您）",
-      "message": "发消息给 {name}"
+      "message": "发消息给 {name}",
+      "titleAccent": "聊天"
     },
     "panel": {
       "searchTitle": "搜索消息",
@@ -104,7 +112,11 @@
       "fileTooLarge": "该文件超过 20 MB。",
       "mentionList": "可提及的团队成员",
       "typingOne": "{name} 正在输入",
-      "typingMany": "{count} 人正在输入"
+      "typingMany": "{count} 人正在输入",
+      "hintSend": "发送",
+      "hintNewLine": "换行",
+      "hintMention": "提及",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "创建频道",
@@ -122,7 +134,9 @@
         "hint": "仅限受邀成员。只有成员可以看到。"
       },
       "cancel": "取消",
-      "create": "创建频道"
+      "create": "创建频道",
+      "namePlaceholder": "例如：support",
+      "descriptionPlaceholder": "此频道用于什么？"
     },
     "invite": {
       "title": "邀请团队成员",
@@ -135,7 +149,10 @@
       "approved": "完成。请求已批准。",
       "pending": "邀请已提交，等待管理员批准。",
       "cancel": "取消",
-      "submit": "提交邀请"
+      "submit": "提交邀请",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "他们的姓名",
+      "notePlaceholder": "他们为什么应该加入？"
     },
     "invitations": {
       "title": "待处理邀请",

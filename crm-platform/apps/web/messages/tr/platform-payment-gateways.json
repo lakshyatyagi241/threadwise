@@ -15,7 +15,11 @@
         "total": "Geçitler",
         "active": "Etkin",
         "india": "Hindistan",
-        "crypto": "Kripto"
+        "crypto": "Kripto",
+        "totalHint": "sürücü kullanılabilir",
+        "activeHint": "ödeme kabul ediliyor",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "zincir üstü mutabakat"
       },
       "tabsLabel": "Bölgeye göre filtrele",
       "all": "Tümü",
@@ -32,7 +36,8 @@
         "africa": "Afrika",
         "latam": "Latin Amerika",
         "crypto": "Kripto",
-        "offline": "Çevrimdışı"
+        "offline": "Çevrimdışı",
+        "other": "Diğer"
       },
       "card": {
         "active": "Etkin",
@@ -57,11 +62,12 @@
         "webhookUrl": "Webhook URL",
         "webhookHint": "Ödemeleri bize bildirebilmesi için bunu sağlayıcı panelinize yapıştırın.",
         "saving": "Kaydediliyor",
-        "save": "Kaydet",
         "readOnly": "Geçitleri yalnızca süper yönetici değiştirebilir.",
         "saved": "{name} ayarları kaydedildi.",
         "activated": "{name} etkinleştirildi.",
-        "deactivated": "{name} devre dışı bırakıldı."
+        "deactivated": "{name} devre dışı bırakıldı.",
+        "noCredentials": "Kimlik bilgisi gerekmez — ağ geçidi manuel / bant dışı onay kullanır.",
+        "save": "{name} kaydet"
       },
       "errors": {
         "conflict": "Bu geçit başka biri tarafından değiştirildi. Yeniden yüklendi; gözden geçirip yeniden kaydedin.",
@@ -69,7 +75,10 @@
         "noDriver": "Bu geçidin bu sürümde henüz sürücüsü yok; yapılandırılabilir ama etkinleştirilemez.",
         "forbidden": "Geçitleri yalnızca süper yönetici değiştirebilir.",
         "generic": "Bir hata oluştu. Lütfen yeniden deneyin."
-      }
+      },
+      "eyebrow": "Yönetici · Faturalandırma · Ağ geçitleri",
+      "titleFirst": "Ödeme",
+      "titleSecond": "ağ geçitleri"
     },
     "checkout": {
       "title": "Siparişinizi tamamlayın",
@@ -132,7 +141,28 @@
       "autoRenew": "Her dönemde otomatik yenilenir. İstediğiniz zaman iptal edebilirsiniz.",
       "addonRenews": "Bu eklenti her dönemde otomatik yenilenir. İstediğiniz zaman iptal edip ücretli sürenin sonuna kadar kullanmaya devam edebilirsiniz.",
       "cardTitle": "Kartla öde",
-      "payNow": "Şimdi öde"
+      "payNow": "Şimdi öde",
+      "titleFirst": "Siparişinizi",
+      "titleSecond": "tamamlayın",
+      "subtitleRefund": "{days} gün para iade garantisi. İstediğiniz zaman iptal edin. Kart, UPI, internet bankacılığı ve cüzdanlar kabul edilir.",
+      "steps": {
+        "plan": "Plan seçin",
+        "checkout": "Ödeme",
+        "confirmation": "Onay"
+      },
+      "step": "Adım {n}",
+      "taxIdPlaceholder": "GSTIN / VAT / EIN",
+      "addressPlaceholder": "Cadde + kapı numarası",
+      "cityPlaceholder": "Mumbai",
+      "currencyTitle": "Para biriminizle ödeyin",
+      "currencyHint": "Fiyatlar anında çevrilir. Yalnızca mevcut ödeme yöntemlerinizin kabul ettiği para birimleri gösterilir.",
+      "couponPlaceholder": "Kupon kodunuz mu var?",
+      "live": "canlı",
+      "tlsNote": "Ödemeler 256 bit TLS bağlantısı üzerinden işlenir. Kart bilgilerinizi hiçbir zaman görmeyiz.",
+      "change": "Değiştir",
+      "terms": "Ödeyerek <terms>Kullanım Koşulları</terms> ve <privacy>Gizlilik politikası</privacy>'nı kabul etmiş olursunuz.",
+      "refundNote": "Memnun kalmadıysanız ilk {days} gün içinde bize e-posta gönderin; tutarın tamamını sorgusuz sualsiz, form doldurmadan iade ederiz.",
+      "autoRenewTitle": "Bu planı otomatik yenile"
     },
     "orders": {
       "title": "Sipariş geçmişi",

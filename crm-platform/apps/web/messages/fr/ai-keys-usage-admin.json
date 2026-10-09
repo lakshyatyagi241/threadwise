@@ -68,7 +68,6 @@
         "keySavedLast4": "Clé enregistrée, se termine par {last4}",
         "noKey": "Aucune clé",
         "unreadable": "La clé enregistrée est illisible, collez-la à nouveau",
-        "slug": "ID du fournisseur",
         "apiKey": "Clé API",
         "apiKeyHint": "Laissez vide pour conserver la clé enregistrée.",
         "apiKeyPlaceholder": "Collez la clé ici",
@@ -89,7 +88,9 @@
         "removeTitle": "Retirer la clé {name} ?",
         "removeBody": "Les espaces de travail cesseront d’utiliser {name} tant que vous n’aurez pas ajouté de clé. Le fournisseur est désactivé.",
         "removeConfirm": "Retirer la clé",
-        "cancel": "Annuler"
+        "cancel": "Annuler",
+        "slug": "fournisseur : {provider} · modèle par défaut : {model}",
+        "maxTokensPlaceholder": "ex. 4096"
       },
       "toasts": {
         "saved": "{name} enregistré.",
@@ -100,7 +101,8 @@
       },
       "help": {
         "title": "Comment ces clés sont utilisées",
-        "body": "La clé propre d’un espace de travail ne prime que si son forfait le permet. Sinon, le fournisseur actif correspondant ici est utilisé. Désactiver un fournisseur signifie que les espaces de travail sans clé propre ne peuvent pas l’utiliser."
+        "body": "La clé propre d’un espace de travail ne prime que si son forfait le permet. Sinon, le fournisseur actif correspondant ici est utilisé. Désactiver un fournisseur signifie que les espaces de travail sans clé propre ne peuvent pas l’utiliser.",
+        "eyebrow": "Utilisation de ces clés"
       }
     },
     "dashboard": {

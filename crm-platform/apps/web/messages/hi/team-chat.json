@@ -25,7 +25,9 @@
       "deleteTitle": "यह चैनल हटाएं?",
       "deleteMessage": "#{name} और इसके सभी संदेश सभी के लिए हटा दिए जाएंगे। इसे वापस नहीं लाया जा सकता।",
       "deleteConfirm": "चैनल हटाएं",
-      "cancel": "रद्द करें"
+      "cancel": "रद्द करें",
+      "defaultDescription": "आंतरिक वर्कस्पेस चैट",
+      "customerChats": "ग्राहक चैट"
     },
     "sidebar": {
       "label": "चैनल और लोग",
@@ -39,7 +41,12 @@
       "invite": "किसी साथी को आमंत्रित करें",
       "pending": "लंबित अनुरोध",
       "pendingCount": "{count, plural, one {# लंबित अनुरोध} other {# लंबित अनुरोध}}",
-      "unread": "{count, plural, one {# अपठित संदेश} other {# अपठित संदेश}}"
+      "unread": "{count, plural, one {# अपठित संदेश} other {# अपठित संदेश}}",
+      "workspace": "वर्कस्पेस",
+      "mode": "मोड",
+      "customerChats": "ग्राहक चैट",
+      "teamChat": "टीम चैट",
+      "membersLink": "सदस्य"
     },
     "members": {
       "label": "सदस्य",
@@ -52,7 +59,8 @@
       "online": "ऑनलाइन",
       "offline": "ऑफ़लाइन",
       "you": "(आप)",
-      "message": "{name} को संदेश"
+      "message": "{name} को संदेश",
+      "titleAccent": "चैट"
     },
     "panel": {
       "searchTitle": "संदेश खोजें",
@@ -104,7 +112,11 @@
       "fileTooLarge": "वह फ़ाइल 20 MB से बड़ी है।",
       "mentionList": "उल्लेख करने के लिए साथी",
       "typingOne": "{name} लिख रहे हैं",
-      "typingMany": "{count} लोग लिख रहे हैं"
+      "typingMany": "{count} लोग लिख रहे हैं",
+      "hintSend": "भेजें",
+      "hintNewLine": "नई पंक्ति",
+      "hintMention": "उल्लेख",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "चैनल बनाएं",
@@ -122,7 +134,9 @@
         "hint": "केवल आमंत्रण से। इसे केवल इसके सदस्य देखते हैं।"
       },
       "cancel": "रद्द करें",
-      "create": "चैनल बनाएं"
+      "create": "चैनल बनाएं",
+      "namePlaceholder": "उदा. support",
+      "descriptionPlaceholder": "यह चैनल किसलिए है?"
     },
     "invite": {
       "title": "किसी साथी को आमंत्रित करें",
@@ -135,7 +149,10 @@
       "approved": "हो गया। अनुरोध स्वीकृत हो गया।",
       "pending": "आमंत्रण भेजा गया, एडमिन की स्वीकृति की प्रतीक्षा है।",
       "cancel": "रद्द करें",
-      "submit": "आमंत्रण भेजें"
+      "submit": "आमंत्रण भेजें",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "उनका नाम",
+      "notePlaceholder": "उन्हें क्यों जुड़ना चाहिए?"
     },
     "invitations": {
       "title": "लंबित आमंत्रण",

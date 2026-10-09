@@ -302,6 +302,10 @@
         "add": "{name} +{amount}"
       },
       "error": "アドオンを読み込めませんでした。"
+    },
+    "planFields": {
+      "fromModule": "インストール済みモジュール由来",
+      "unlimited": "無制限"
     }
   }
 }

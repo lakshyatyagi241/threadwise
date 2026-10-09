@@ -68,7 +68,11 @@
           "autoAttachCurrency": "Meta 不接受此货币。",
           "baseCurrency": "请使用三位字母的货币代码。",
           "businessId": "最多输入 64 个字符。"
-        }
+        },
+        "kicker": "Meta 连接",
+        "businessIdHint": "商务设置 → 商务信息 → “商务组合 ID”。一串较长的数字。",
+        "creditLinePlaceholder": "从你的商务账户自动识别",
+        "tokenNote": "令牌以加密方式存储，且不会再次显示。"
       },
       "step2": {
         "title": "2. 手动关联单个客户",
@@ -90,7 +94,10 @@
         "failed": "关联失败：{error}",
         "finishStep1": "请先完成步骤 1。",
         "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
-        "noPhone": "无号码"
+        "noPhone": "无号码",
+        "kicker": "手动关联，可选",
+        "numberHint": "按名称选择客户，账户 ID 由系统在后台处理。",
+        "currencyHint": "Meta 为此号码向你开具账单所用的货币。"
       },
       "register": {
         "title": "使用中的信用额度",
@@ -119,7 +126,8 @@
         "revokeFailed": "撤销失败：{error}",
         "loadMore": "加载更多",
         "loadingMore": "加载中",
-        "label": "信用额度分配"
+        "label": "信用额度分配",
+        "kicker": "已关联账户"
       },
       "guide": {
         "title": "设置指南",
@@ -133,13 +141,19 @@
         "good1": "信用额度的货币一旦关联即被锁定。",
         "good2": "关联意味着由 Meta 向您收费，但您仍需自行设置客户的价格。",
         "good3": "您可以随时撤销，客户将重新直接向 Meta 付款。",
-        "link": "Meta 解决方案合作伙伴概览"
-      }
+        "link": "Meta 解决方案合作伙伴概览",
+        "kicker": "设置指南",
+        "step2Note": "令牌仅显示一次，请立即复制。",
+        "step3Apply": "申请信用额度",
+        "step3Note": "获批后，平台会自动读取其 ID，第 2 步会将其共享给每个客户的 WABA。",
+        "metaDocs": "Meta 文档",
+        "reference": "参考"
+      },
+      "eyebrow": "转售账单 · Meta 信用额度"
     },
     "dashboard": {
       "title": "分销商损益",
       "eyebrow": "本月",
-      "intro": "收入是已送达消息向客户收取的费用，Meta 成本是相同消息给您带来的成本，利润为两者之差。已退款和免费的消息不计入。",
       "linkRates": "费率与利润",
       "linkConnect": "连接 Meta",
       "revenue": "收入（已收费）",
@@ -150,7 +164,6 @@
       "billed": "计费消息",
       "free": "免费消息",
       "unpriced": "未设置 Meta 成本",
-      "unpricedBanner": "{count, plural, other {# 条计费消息}}的国家和类别没有 Meta 成本，因此利润将其全部计为收入。",
       "perWorkspace": "各工作区（本月）",
       "columns": {
         "workspace": "工作区",
@@ -163,7 +176,10 @@
       "empty": "本月暂无计费消息。",
       "more": "仅列出收入最高的工作区。",
       "loadFailed": "无法加载损益数据。",
-      "currency": "报告货币"
+      "currency": "报告货币",
+      "intro": "每条计费消息都会从钱包扣费。收入是客户支付的金额，Meta 成本是 Meta 向你收取的费用，两者之差即为你的利润。价格和成本在 <link>钱包规则</link> 中设置。",
+      "linkPnl": "损益",
+      "unpricedBanner": "{count, plural, other {# 条计费消息}}未设置其所在国家/类别的 Meta 成本，因此这部分利润被全部计为收入。请在 <link>钱包规则 → 同步 Meta 成本</link> 中补充这些行。"
     }
   }
 }

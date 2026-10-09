@@ -13,7 +13,8 @@ import {
 import { useTranslations } from 'next-intl';
 import { useToast } from '@crm/ui';
 import type { PendingCall } from '@crm/contracts';
-import { callApi } from '../api/calling';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { callApi, useIceServers } from '../api/calling';
 import { CallError, digitsOf, elapsedText, isStateConflict, parseIceServers } from '../lib/calls';
 import { isUsableSdp } from '../lib/sdp';
 import { CallPeer, type CallState } from '../lib/webrtc-peer';
@@ -73,7 +74,7 @@ export function CallingProvider({
   iceServers,
 }: {
   children: ReactNode;
-  /** The ICE list from settings (a list or its JSON text; TURN included). The four public STUN servers when absent or unusable. */
+  /** An ICE list to use instead of the operator's (a list or its JSON text; TURN included). By default the provider asks the server for the operator's list; the four public STUN servers when there is none. */
   iceServers?: unknown;
 }) {
   const t = useTranslations('calling-voice');
@@ -83,7 +84,10 @@ export function CallingProvider({
   const peerRef = useRef<CallPeer | null>(null);
   const [active, setActive] = useState<ActiveCall | null>(null);
   const [now, setNow] = useState(0);
-  const ice = useMemo(() => parseIceServers(iceServers), [iceServers]);
+  const canCall = useCan('call.calls.use');
+  const served = useIceServers(canCall && iceServers === undefined);
+  const source = iceServers ?? served.data?.servers;
+  const ice = useMemo(() => parseIceServers(source), [source]);
 
   const connectedAt = active?.connectedAt ?? null;
   useEffect(() => {

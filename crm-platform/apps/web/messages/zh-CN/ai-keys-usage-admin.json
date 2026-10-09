@@ -68,7 +68,6 @@
         "keySavedLast4": "密钥已保存，末位 {last4}",
         "noKey": "无密钥",
         "unreadable": "无法读取已保存的密钥，请重新粘贴",
-        "slug": "服务商 ID",
         "apiKey": "API 密钥",
         "apiKeyHint": "留空则保留已保存的密钥。",
         "apiKeyPlaceholder": "在此粘贴密钥",
@@ -89,7 +88,9 @@
         "removeTitle": "移除 {name} 密钥？",
         "removeBody": "在你重新添加密钥之前，工作区将不再使用 {name}。该服务商将被关闭。",
         "removeConfirm": "移除密钥",
-        "cancel": "取消"
+        "cancel": "取消",
+        "slug": "服务商：{provider} · 默认模型：{model}",
+        "maxTokensPlaceholder": "例如 4096"
       },
       "toasts": {
         "saved": "{name} 已保存。",
@@ -100,7 +101,8 @@
       },
       "help": {
         "title": "这些密钥的使用方式",
-        "body": "仅当工作区的套餐允许时，才优先使用其自有密钥。否则使用此处匹配的已启用服务商。关闭某个服务商后，没有自有密钥的工作区将无法使用它。"
+        "body": "仅当工作区的套餐允许时，才优先使用其自有密钥。否则使用此处匹配的已启用服务商。关闭某个服务商后，没有自有密钥的工作区将无法使用它。",
+        "eyebrow": "这些密钥的用途"
       }
     },
     "dashboard": {

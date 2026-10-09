@@ -22,10 +22,13 @@
         "read": "既読",
         "failed": "失敗",
         "processing": "処理中",
-        "queued": "待機中",
         "campaigns": "{count}件のキャンペーン",
         "inFlight": "送信中",
-        "awaiting": "待機中"
+        "awaiting": "待機中",
+        "queued": "{count}件待機中",
+        "deliveredRate": "配信率 {rate}%",
+        "readRate": "既読率 {rate}%",
+        "failedCampaigns": "失敗したキャンペーン {count}件"
       },
       "range": {
         "all": "全期間",
@@ -87,7 +90,13 @@
         "devices": "準備完了のデバイス",
         "retry": "再試行の滞留",
         "createTitle": "キャンペーンを作成",
-        "createBody": "送信者を選び、メッセージを作成または選択し、送信先を選びます。"
+        "createBody": "送信者を選び、メッセージを作成または選択し、送信先を選びます。",
+        "tipTitle": "ヒント",
+        "tip": "お客様がアクティブな時間帯にキャンペーンを予約してください。各一斉配信には承認済みテンプレートを組み合わせると、送信前に失敗のおそれがあるものを事前に検知できます。",
+        "healthyTitle": "すべてのシステムは正常です",
+        "attentionTitle": "配信に注意が必要です",
+        "healthLine": "平均配信率 {rate}% · {count}件のキャンペーンの確認が必要です。",
+        "label": "キャンペーンのフィルター"
       },
       "card": {
         "select": "{name}を選択",
@@ -130,7 +139,27 @@
         "instant": "送信: 即時",
         "template": "テンプレート {name}"
       },
-      "createBroadcast": "一斉配信を作成"
+      "createBroadcast": "一斉配信を作成",
+      "noData": "データが見つかりません",
+      "noDataHint": "現在のフィルターに一致するWhatsAppキャンペーンはありません。フィルターをクリアするか、最初の一斉配信を開始してください。",
+      "createCampaign": "キャンペーンを作成",
+      "help": {
+        "label": "ヘルプ - {n}",
+        "items": {
+          "0": {
+            "title": "WhatsAppキャンペーンとは？",
+            "body": "連携済みデバイスを通じて、選択した連絡先にカスタムメッセージ、承認済みテンプレート、フローを送信する一斉配信キューです。"
+          },
+          "1": {
+            "title": "配信率を改善するには？",
+            "body": "リストを整理し、送信には承認済みテンプレートを使い、一度にすべての連絡先に送るのではなく、大規模な一斉配信は時間を分けて予約してください。"
+          },
+          "2": {
+            "title": "最初にどのキャンペーンを開始すればよいですか？",
+            "body": "テンプレートの更新または再エンゲージメントの一斉配信から始め、規模を拡大する前に配信済み、既読、失敗の件数を比較してください。"
+          }
+        }
+      }
     },
     "builder": {
       "loadError": "このキャンペーンを読み込めませんでした。",
@@ -142,7 +171,28 @@
       "titleEdit": "編集",
       "titleAccent": "キャンペーン",
       "failed": "キャンペーンを保存できませんでした。もう一度お試しください。",
-      "preview": "ライブプレビュー",
+      "preview": {
+        "title": "ライブプレビュー",
+        "typeText": "テキスト",
+        "type": {
+          "template": "テンプレート",
+          "flow": "フロー"
+        },
+        "now": "今すぐ",
+        "scheduled": "後で",
+        "recurring": "定期",
+        "flow": "各宛先でこのフローが開始されます。",
+        "emptyTitle": "プレビューはありません",
+        "emptyHint": "デバイスを選び、メッセージ本文を入力するか、テンプレートを選択してください。プレビューがここに表示されます。",
+        "from": "送信元: {sender}",
+        "note": "各宛先のチャットでキャンペーンがこのように表示されます。",
+        "recipients": "宛先",
+        "schedule": "スケジュール",
+        "typeLabel": "種類",
+        "ab": "A/B",
+        "off": "オフ",
+        "step": "ステップ {n} / {total}"
+      },
       "previewEmpty": "メッセージのプレビュー…",
       "previewTemplate": "テンプレート",
       "previewFlow": "各受信者がこのフローを開始します。",
@@ -159,7 +209,8 @@
         "window": "送信時間帯の開始と終了は、両方設定するか、どちらも設定しないでください。",
         "throttle": "最長の間隔は最短の間隔以上にしてください。",
         "expiry": "終了日は送信日より後にしてください。そうしないと、キャンペーンが送信される前に期限切れになります。",
-        "media": "http://またはhttps://で始まる完全なアドレスを入力してください。"
+        "media": "http://またはhttps://で始まる完全なアドレスを入力してください。",
+        "sender": "送信元を選択してください。"
       },
       "submit": {
         "save": "変更を保存",
@@ -174,7 +225,30 @@
         "namePlaceholder": "例: ディワリのオファー",
         "sender": "送信元",
         "senderHint": "既定のままにすると、キャンペーンはワークスペースのメインエンジンから送信されます。",
-        "defaultSender": "既定の送信者"
+        "defaultSender": "既定の送信者",
+        "nameHint": "レポートと送信キューの履歴で使う内部ラベルです。",
+        "noSenders": "連携済みの送信元はありません。",
+        "connectOne": "連携する →",
+        "type": "キャンペーンの種類",
+        "types": {
+          "custom": {
+            "title": "カスタムメッセージ",
+            "hint": "1回限りの一斉配信用に、テキストを入力し、メディアやボタンを添付します。"
+          },
+          "template": {
+            "title": "テンプレートを使用",
+            "hint": "マーケティングまたはユーティリティメッセージ用に、承認済みのMetaテンプレートを選択します。"
+          },
+          "flow": {
+            "title": "フロービルダー",
+            "hint": "このキュー内のすべての宛先に、保存済みのフローを開始します。"
+          }
+        },
+        "ab": "A/Bテストを有効化",
+        "abHint": "宛先を2つのメッセージパターンに振り分けます。",
+        "split": "パターンA 配分 {a}%",
+        "splitHint": "パターンBには残りの宛先が割り当てられます。パターンBの内容は作成ステップで設定してください。",
+        "pickSender": "— 送信元を選択 —"
       },
       "audience": {
         "title": "対象",
@@ -184,7 +258,25 @@
         "sample": "サンプルをダウンロード",
         "csvTooBig": "ファイルが5 MBを超えています。",
         "csvHint": "列: name、country_code、phone。その他の列は、メッセージで使用できる変数になります。",
-        "selected": "{count}件の連絡先を選択中"
+        "selected": "{count}件の連絡先を選択中",
+        "tag": "オーディエンス",
+        "modes": {
+          "audience": {
+            "title": "連絡先グループ",
+            "hint": "保存済みのセグメントとタグを使用します。"
+          },
+          "csv": {
+            "title": "CSVをアップロード",
+            "hint": "このキュー用の番号をインポートします。"
+          },
+          "manual": {
+            "title": "番号を手入力",
+            "hint": "1行に1つの番号を貼り付けてください。"
+          }
+        },
+        "csvRows": "ファイル内の番号 {count}件",
+        "numbersPlaceholder": "1行に1つの番号を入力してください。国番号を含め、先頭の+は不要です",
+        "numbersCount": "{count}件の番号"
       },
       "message": {
         "title": "メッセージ",
@@ -285,10 +377,235 @@
         "dailyHint": "この件数でその日の送信を停止し、残りは翌日に送信します。",
         "windowStart": "送信開始",
         "windowEnd": "送信終了",
-        "windowHint": "上記のタイムゾーンで、この時間帯のみ送信します。",
-        "tracking": "リンクのクリックを追跡"
+        "tracking": "リンクのクリックを追跡",
+        "windowHint": "送信は{zone}（上で設定したキャンペーンのタイムゾーン）のこの時間帯内に限定します。時間帯外の実行は次の開始時刻まで待機します。両方とも空欄にすると、いつでも送信します。",
+        "title": "スケジュールと制限",
+        "queue": "キュー",
+        "repeatHint": "定期キャンペーンを再送信する頻度です。",
+        "smartTag": "アカウント停止対策 · 任意",
+        "smartIntro": "空欄にするとワークスペースの既定のペースを使用します。これらのルールは送信間隔を空けることで、大量のリストでも人間らしく見え、WhatsAppのアカウント停止の監視対象になりにくくします。",
+        "smartZone": "時刻は{zone}基準です。",
+        "throttleMaxHint": "メッセージ送信前の最長待機時間です。",
+        "batchPauseHint": "各バッチの後に休止する分数です。"
       },
-      "unofficialDisabled": "個人のWhatsApp番号(非公式API)での送信は、お使いのワークスペースでは有効になっていません。公式のWhatsApp Business API番号を選択してください。"
+      "unofficialDisabled": "個人のWhatsApp番号(非公式API)での送信は、お使いのワークスペースでは有効になっていません。公式のWhatsApp Business API番号を選択してください。",
+      "draftChip": "下書き / 未保存",
+      "steps": {
+        "label": "キャンペーンの手順",
+        "required": "必須",
+        "previous": "前へ",
+        "next": "次へ",
+        "of": "ステップ {n} / {total}",
+        "setup": {
+          "name": "設定"
+        },
+        "compose": {
+          "name": "作成"
+        },
+        "recipients": {
+          "name": "宛先"
+        },
+        "schedule": {
+          "name": "スケジュール"
+        },
+        "review": {
+          "name": "確認"
+        }
+      },
+      "compose": {
+        "title": "作成",
+        "kind": {
+          "custom": "カスタムメッセージ",
+          "template": "テンプレート",
+          "flow": "フロービルダー"
+        },
+        "header": "ヘッダー",
+        "headerNote": "任意",
+        "headerText": "ヘッダーテキスト",
+        "headerPlaceholder": "例: 5月のオファーを開始",
+        "required": "必須",
+        "body": "本文",
+        "bodyPlaceholder": "こんにちは '{{name}}'！…",
+        "bodyHint": "パーソナライズするには '{{name}}' または '{{first_name}}' を使用します。任意の属性を挿入するには / を入力してください。",
+        "variantB": "パターンBのメッセージ",
+        "variantBNote": "A/Bテスト — パターンAは上のメッセージです",
+        "variantBPlaceholder": "パターンBの宛先向けの代替メッセージ…",
+        "variantBHint": "パターンBの宛先には、上のパターンAのメッセージではなく、こちらのメッセージが送信されます。メディア、ボタン、ヘッダー、フッターは両方のパターンで共通です。",
+        "attachment": "添付ファイル",
+        "attachmentNote": "任意 / 画像、動画、ドキュメント",
+        "attachmentType": "添付ファイルの種類",
+        "attachments": {
+          "none": {
+            "name": "なし"
+          },
+          "image": {
+            "name": "画像",
+            "title": "画像を選択",
+            "hint": "JPGまたはPNG、最大2MB。"
+          },
+          "video": {
+            "name": "動画",
+            "title": "動画を選択",
+            "hint": "MP4、最大16MB。"
+          },
+          "document": {
+            "name": "ドキュメント",
+            "title": "ドキュメントを選択",
+            "hint": "PDFまたはDOC、最大16MB。"
+          }
+        },
+        "noAttachment": "添付なし — プレーンテキストのメッセージです。",
+        "footer": "フッター",
+        "footerNote": "任意 / 最大60文字",
+        "footerPlaceholder": "例: 配信停止は STOP と返信",
+        "footerHint": "本文の下に表示されるプレーンテキストです。変数は使用できません。",
+        "buttons": "ボタン",
+        "buttonsNote": "任意 / 最大3つ",
+        "modes": {
+          "cta": "行動喚起",
+          "reply": "クイック返信",
+          "mix": "混合"
+        },
+        "buttonType": "ボタンの種類",
+        "buttonTypes": {
+          "url": "ウェブサイトを開く",
+          "phone_number": "電話をかける",
+          "quick_reply": "クイック返信",
+          "copy_code": "コードをコピー"
+        },
+        "buttonText": "ボタンのテキスト",
+        "buttonValue": "値",
+        "buttonPhone": "国番号付きの番号",
+        "removeButton": "削除",
+        "addCta": "CTAボタンを追加",
+        "addReply": "クイック返信を追加",
+        "templateIntro": "テンプレートを選択してください。非公式APIが有効なため、どのテンプレートでも使用できます（Meta承認は不要）。変数は送信時に連絡先の属性から入力されます。",
+        "template": "テンプレート",
+        "approvedOnly": "WABAでは承認済みのテンプレートのみ開始できます。",
+        "anyTemplate": "すべてのテンプレートを非公式APIで使用できます。",
+        "pickTemplate": "テンプレートを選択",
+        "noTemplates": "テンプレートはまだありません。",
+        "createTemplate": "テンプレートを作成",
+        "variantBTemplate": "パターンBのテンプレート",
+        "variantBTemplateHint": "A/Bテスト — パターンAは上で選択されています。変数の値は、このテンプレートごとに個別に入力されます。",
+        "sameTemplate": "— パターンAと同じテンプレート —",
+        "flowIntro": "すべての宛先に対して保存済みのフローを実行します。フローの最初のメッセージがキャンペーンのトリガーとなり、以降のノードは各連絡先の返信に従って進みます。",
+        "flow": "フロー",
+        "pickFlow": "フローを選択",
+        "noFlows": "フローはまだありません。",
+        "createFlow": "フローを作成",
+        "variantBFlow": "パターンBのフロー",
+        "variantBFlowHint": "パターンBの宛先には、上のパターンAのフローではなく、このフローが実行されます。",
+        "sameFlow": "— パターンAと同じフロー —",
+        "engineNotes": {
+          "twilio": "Twilioのカスタムメッセージはテキストとメディアのみ送信できます。ボタンを使う場合は、テンプレートキャンペーン（Twilio Content SID）を作成してください。",
+          "waba": "WABAのカスタムメッセージは、過去24時間以内にメッセージを送ってきた連絡先にのみ届きます。コールドな送信や大量送信、またボタンを使う場合は、テンプレートキャンペーンを使用してください。"
+        },
+        "templateEmpty": {
+          "twilio": "Twilioのテンプレートはまだありません。テンプレートページでContent SIDを使って作成してください。",
+          "waba": "この番号には承認済みのMeta（WABA）テンプレートがまだありません。テンプレートページで作成するか、承認を取得してください。",
+          "baileys": "非公式APIのテンプレートはまだありません。テンプレートページで作成してください。"
+        },
+        "templateIntroApproved": "承認済みのMetaテンプレートを選択してください。連絡先ごとの変数の値は、送信時に連絡先の属性から入力されます。",
+        "templateApproved": "承認済みテンプレート"
+      },
+      "review": {
+        "title": "確認",
+        "tag": "確認",
+        "device": "デバイス",
+        "type": "種類",
+        "recipients": "宛先",
+        "schedule": "スケジュール",
+        "types": {
+          "custom": "カスタムメッセージ",
+          "template": "テンプレート",
+          "flow": "フロービルダー"
+        },
+        "now": "即時送信",
+        "recurring": "定期 · {every}",
+        "checklist": "入力チェックリスト",
+        "summary": "宛先の概要",
+        "groups": "連絡先グループとタグ",
+        "contacts": "個別の連絡先",
+        "numbers": "手入力・CSVの番号",
+        "total": "宛先の合計",
+        "estimate": "目安の数です。2つのグループに属する連絡先は2回カウントされます。キューの作成時に重複は削除されます。",
+        "checks": {
+          "name": "キャンペーン名を設定済み",
+          "content": "メッセージの準備完了",
+          "audience": "宛先を選択済み",
+          "schedule": "スケジュールは有効です",
+          "sender": "送信元を選択済み"
+        },
+        "problems": {
+          "name": "キャンペーン名を入力してください。",
+          "message": "メッセージを入力してください。",
+          "template": "テンプレートを選択してください。",
+          "flow": "フローを選択してください。",
+          "audience": "送信先を選択してください：連絡先、グループ、タグ、番号、またはCSV。",
+          "date": "送信日を選択してください。",
+          "time": "送信時刻を選択してください。",
+          "window": "送信時間帯は開始と終了の両方を設定するか、どちらも設定しないでください。",
+          "throttle": "最長の間隔は最短の間隔以上である必要があります。",
+          "expiry": "終了日は送信日より後の日付にしてください。そうしないと、キャンペーンが一度も送信されないまま期限切れになります。",
+          "media": "http://またはhttps://で始まる完全なアドレスを入力してください。",
+          "sender": "送信元を選択してください。"
+        }
+      },
+      "ai": {
+        "open": "AIで作成",
+        "eyebrow": "WAキャンペーン / AI",
+        "title": "作成に使用",
+        "titleAccent": "AI",
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "generate": "キャンペーンを生成",
+        "intro": "キャンペーンのメッセージ、フッター、CTA、クイック返信の下書きを数秒で作成します。",
+        "model": "AIモデル",
+        "modelsError": "モデルを読み込めませんでした。",
+        "noModels": "このワークスペースで有効なAIプロバイダーはありません。",
+        "loadingModels": "モデルを読み込み中…",
+        "pickModel": "モデルを選択",
+        "yourKey": "お客様のキー",
+        "business": "事業者名",
+        "businessPlaceholder": "Bloomly Florals",
+        "product": "商品またはサービス",
+        "productPlaceholder": "季節の花束 · 当日配送",
+        "goal": "キャンペーンの目的",
+        "pickGoal": "目的を選択",
+        "goals": {
+          "purchase": "購入を促す",
+          "booking": "予約を促す",
+          "sale": "セールを告知",
+          "reengage": "反応の薄い連絡先を再エンゲージ",
+          "feedback": "フィードバックを収集",
+          "launch": "ローンチを告知",
+          "reminder": "リマインダーを送信",
+          "festival": "祝祭の挨拶"
+        },
+        "tone": "トーン",
+        "pickTone": "トーンを選択",
+        "tones": {
+          "friendly": "親しみやすい",
+          "professional": "プロフェッショナル",
+          "urgent": "緊急",
+          "playful": "遊び心のある",
+          "premium": "プレミアム",
+          "empathetic": "共感的"
+        },
+        "ctaLabel": "CTAボタンのラベル",
+        "ctaLabelPlaceholder": "今すぐ購入",
+        "ctaUrl": "CTAの遷移先URL",
+        "audience": "ターゲット層",
+        "audiencePlaceholder": "過去90日以内に花束を購入したリピーター",
+        "offer": "オファー / 訴求ポイント",
+        "offerPlaceholder": "今週末、春の花束が15%オフ、40ドル以上で送料無料",
+        "notes": "補足メモ",
+        "notesNote": "任意 / 最大2000文字",
+        "notesPlaceholder": "具体的な要望（必ず入れたい表現、避けたい内容、ブランドの話し方など）…",
+        "failed": "キャンペーンを生成できませんでした。もう一度お試しください。",
+        "applied": "キャンペーンの文面が入力されました。次に進む前に内容を確認してください。"
+      }
     },
     "detail": {
       "notFound": "そのキャンペーンが見つかりませんでした。",

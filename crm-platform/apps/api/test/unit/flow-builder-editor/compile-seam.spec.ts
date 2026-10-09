@@ -18,9 +18,11 @@ import {
  */
 
 /**
- * Types the editor saves that the runtime compiler has no executor name for yet. They are the channel-specific families that run
- * on other engines in WaDesk (Instagram and Facebook automations, Call flows) plus the Telegram payment node: FLR keeps their
- * raw data and the runtime warns and moves on (WD-FLR-016 rule 4). Pinned here so a NEW unmapped type fails this test.
+ * Types the editor saves that the runtime compiler has no executor name for yet: the Call flow family, the Telegram payment node and
+ * the Instagram / Messenger nodes that need a channel feature this stack does not have (a card carousel, a public comment reply, a lead
+ * capture). FLR keeps their raw data and the runtime warns and moves on (WD-FLR-016 rule 4). Instagram's send, ask, quick replies,
+ * link buttons and AI reply run on the shared executors and the two WhatsApp hand-offs have their own. Pinned here so a NEW unmapped
+ * type fails this test.
  */
 const UNMAPPED = [
   'cf_ai',
@@ -35,16 +37,9 @@ const UNMAPPED = [
   'fb_lead',
   'fb_products',
   'fb_reply_comment',
-  'fb_to_whatsapp',
-  'ig_ai',
-  'ig_ask',
-  'ig_buttons',
   'ig_lead',
   'ig_products',
-  'ig_quick',
   'ig_reply_comment',
-  'ig_send_dm',
-  'ig_to_whatsapp',
   'tg_payment',
 ];
 
@@ -80,8 +75,8 @@ const graphWith = (type: string) => {
 };
 
 describe('every node type of the catalogue through the runtime compiler (editor/runtime seam)', () => {
-  it('the catalogue holds 60 distinct types (every palette entry and the hidden legacy ones)', () => {
-    expect(FLB_NODE_TYPE_LIST).toHaveLength(60);
+  it('the catalogue holds 67 distinct types (every palette entry and the hidden legacy ones)', () => {
+    expect(FLB_NODE_TYPE_LIST).toHaveLength(67);
     expect(new Set(FLB_NODE_TYPE_LIST.map((d) => d.id)).size).toBe(FLB_NODE_TYPE_LIST.length);
   });
 

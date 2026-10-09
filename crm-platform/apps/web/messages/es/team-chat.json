@@ -25,7 +25,9 @@
       "deleteTitle": "¿Eliminar este canal?",
       "deleteMessage": "#{name} y todos sus mensajes se eliminarán para todos. Esta acción no se puede deshacer.",
       "deleteConfirm": "Eliminar canal",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "defaultDescription": "Chat interno del espacio de trabajo",
+      "customerChats": "Chats de clientes"
     },
     "sidebar": {
       "label": "Canales y personas",
@@ -39,7 +41,12 @@
       "invite": "Invitar a un compañero",
       "pending": "Solicitudes pendientes",
       "pendingCount": "{count, plural, one {# solicitud pendiente} other {# solicitudes pendientes}}",
-      "unread": "{count, plural, one {# mensaje no leído} other {# mensajes no leídos}}"
+      "unread": "{count, plural, one {# mensaje no leído} other {# mensajes no leídos}}",
+      "workspace": "Espacio de trabajo",
+      "mode": "Modo",
+      "customerChats": "Chats de clientes",
+      "teamChat": "Chat del equipo",
+      "membersLink": "Miembros"
     },
     "members": {
       "label": "Miembros",
@@ -52,7 +59,8 @@
       "online": "En línea",
       "offline": "Sin conexión",
       "you": "(tú)",
-      "message": "Escribir a {name}"
+      "message": "Escribir a {name}",
+      "titleAccent": "chat"
     },
     "panel": {
       "searchTitle": "Buscar mensajes",
@@ -104,7 +112,11 @@
       "fileTooLarge": "Ese archivo supera los 20 MB.",
       "mentionList": "Compañeros para mencionar",
       "typingOne": "{name} está escribiendo",
-      "typingMany": "{count} personas están escribiendo"
+      "typingMany": "{count} personas están escribiendo",
+      "hintSend": "enviar",
+      "hintNewLine": "nueva línea",
+      "hintMention": "mencionar",
+      "hintShift": "Mayús+↵"
     },
     "createChannel": {
       "title": "Crear un canal",
@@ -122,7 +134,9 @@
         "hint": "Solo por invitación. Solo lo ven sus miembros."
       },
       "cancel": "Cancelar",
-      "create": "Crear canal"
+      "create": "Crear canal",
+      "namePlaceholder": "p. ej., soporte",
+      "descriptionPlaceholder": "¿Para qué sirve este canal?"
     },
     "invite": {
       "title": "Invitar a un compañero",
@@ -135,7 +149,10 @@
       "approved": "Listo. La solicitud se ha aprobado.",
       "pending": "Invitación enviada, pendiente de aprobación por el administrador.",
       "cancel": "Cancelar",
-      "submit": "Enviar invitación"
+      "submit": "Enviar invitación",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "Su nombre",
+      "notePlaceholder": "¿Por qué deberían unirse?"
     },
     "invitations": {
       "title": "Invitaciones pendientes",

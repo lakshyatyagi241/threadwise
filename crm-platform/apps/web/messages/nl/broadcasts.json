@@ -95,7 +95,9 @@
         "t3": "Hoe verbeter ik de resultaten?",
         "b3": "Houd de doelgroep gefocust, kies het meest relevante sjabloon en bekijk het aantal mislukte berichten voordat je opnieuw verstuurt."
       },
-      "unofficialDisabled": "Onofficieel (uitgeschakeld)"
+      "unofficialDisabled": "Onofficieel (uitgeschakeld)",
+      "noData": "Geen gegevens gevonden",
+      "railLabel": "Broadcastfilters"
     },
     "detail": {
       "back": "Terug",
@@ -293,7 +295,8 @@
       "later": "Later",
       "media": "Voorbeeld van {kind}",
       "contactsDenied": "Je hebt geen toegang tot de contactenlijst. Kies contacten via groepen of tags.",
-      "unofficialDisabled": "Verzenden via persoonlijke WhatsApp-nummers (de onofficiële API) is niet ingeschakeld voor je workspace. Kies een officieel WhatsApp Business API-nummer."
+      "unofficialDisabled": "Verzenden via persoonlijke WhatsApp-nummers (de onofficiële API) is niet ingeschakeld voor je workspace. Kies een officieel WhatsApp Business API-nummer.",
+      "previewLabel": "Sjabloonvoorbeeld"
     },
     "overrides": {
       "title": "Deze verzending invullen",

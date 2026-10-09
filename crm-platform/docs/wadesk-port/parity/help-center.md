@@ -10,14 +10,14 @@ pending sign-off by the domain owner and reviewer**. Design: [../../specs/help-c
 
 WaDesk's menu has no Help entry (it has Support and Guidebook in the user menu). Ours adds a Help icon in the pinned block under the
 scrolling menu, directly above Settings, in the slim rail and in the mobile drawer. The landmark around that block is labelled
-"Help and settings" instead of "Settings" because it now holds both. The user menu's Support and Guidebook entries are untouched.
+"Help and settings" instead of "Settings" because it now holds both. The user menu keeps Support; its Guidebook entry is gone with the guidebook (HC-5).
 
 Owner's words: "we can place this document page as a icon in main menu just above setting icon as may be help".
 
 ## HC-2. In-app guides, one per feature, that follow the plan
 
-WaDesk's Guidebook is a set of operator-written articles shown to everyone (`GuidebookArticle`, `/guidebook`); it is a separate
-feature and stays on the port list as it is. The Help center is different: guides are checked-in markdown, one per screen, Settings
+WaDesk's Guidebook is a set of operator-written articles shown to everyone (`GuidebookArticle`, `/guidebook`); it was retired in
+favour of this centre (HC-5). The Help center works differently: guides are checked-in markdown, one per screen, Settings
 tile or plan feature, and a guide is shown only to a workspace whose plan and role include the feature. When a plan feature or a
 module is switched off, its guides, search hits and tips disappear on the next page load, and a direct address returns a 404.
 
@@ -50,4 +50,6 @@ the four template topics, campaign A/B, stop and resume, read rate, scheduled an
 flow run log, stuck messages, receipts, missing incoming messages, two-step lock-out, message billing). Skipped because the build has no
 such feature: outbound webhook signature, timeouts and replay, auto-reply rules (cooldown, fuzzy match, hours), a stored payment method.
 
-Not decided yet: what happens to `/guidebook` and its operator editor (`/admin/guidebook`, with helpful/not-helpful votes).
+Decided 2026-10-06 (owner): the guidebook is retired completely. `/guidebook` redirects to `/help`; the operator editor, the
+helpful/not-helpful votes, the API, the two tables and the 32 sample articles are removed (see parity/marketing-site-cms.md).
+There is no article editing in the browser any more: a guide changes through a pull request, like the feature it explains.

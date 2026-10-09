@@ -25,7 +25,9 @@
       "deleteTitle": "یہ چینل حذف کریں؟",
       "deleteMessage": "#{name} اور اس کے تمام پیغامات سب کے لیے حذف ہو جائیں گے۔ اسے واپس نہیں لایا جا سکتا۔",
       "deleteConfirm": "چینل حذف کریں",
-      "cancel": "منسوخ کریں"
+      "cancel": "منسوخ کریں",
+      "defaultDescription": "ورک اسپیس کی اندرونی چیٹ",
+      "customerChats": "گاہک کی چیٹس"
     },
     "sidebar": {
       "label": "چینلز اور لوگ",
@@ -39,7 +41,12 @@
       "invite": "ساتھی کو مدعو کریں",
       "pending": "زیر التوا درخواستیں",
       "pendingCount": "{count, plural, one {# زیر التوا درخواست} other {# زیر التوا درخواستیں}}",
-      "unread": "{count, plural, one {# غیر پڑھا پیغام} other {# غیر پڑھے پیغامات}}"
+      "unread": "{count, plural, one {# غیر پڑھا پیغام} other {# غیر پڑھے پیغامات}}",
+      "workspace": "ورک اسپیس",
+      "mode": "موڈ",
+      "customerChats": "گاہک کی چیٹس",
+      "teamChat": "ٹیم چیٹ",
+      "membersLink": "ارکان"
     },
     "members": {
       "label": "ارکان",
@@ -52,7 +59,8 @@
       "online": "آن لائن",
       "offline": "آف لائن",
       "you": "(آپ)",
-      "message": "{name} کو پیغام بھیجیں"
+      "message": "{name} کو پیغام بھیجیں",
+      "titleAccent": "چیٹ"
     },
     "panel": {
       "searchTitle": "پیغامات تلاش کریں",
@@ -104,7 +112,11 @@
       "fileTooLarge": "وہ فائل 20 MB سے بڑی ہے۔",
       "mentionList": "ذکر کے لیے ساتھی",
       "typingOne": "{name} لکھ رہے ہیں",
-      "typingMany": "{count} افراد لکھ رہے ہیں"
+      "typingMany": "{count} افراد لکھ رہے ہیں",
+      "hintSend": "بھیجیں",
+      "hintNewLine": "نئی لائن",
+      "hintMention": "ذکر کریں",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "چینل بنائیں",
@@ -122,7 +134,9 @@
         "hint": "صرف دعوت پر۔ صرف اس کے ارکان اسے دیکھ سکتے ہیں۔"
       },
       "cancel": "منسوخ کریں",
-      "create": "چینل بنائیں"
+      "create": "چینل بنائیں",
+      "namePlaceholder": "مثلاً سپورٹ",
+      "descriptionPlaceholder": "یہ چینل کس کام کے لیے ہے؟"
     },
     "invite": {
       "title": "ساتھی کو مدعو کریں",
@@ -135,7 +149,10 @@
       "approved": "ہو گیا۔ درخواست منظور ہو گئی۔",
       "pending": "دعوت جمع ہو گئی، ایڈمن کی منظوری کا انتظار ہے۔",
       "cancel": "منسوخ کریں",
-      "submit": "دعوت جمع کریں"
+      "submit": "دعوت جمع کریں",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "ان کا نام",
+      "notePlaceholder": "انہیں کیوں شامل ہونا چاہیے؟"
     },
     "invitations": {
       "title": "زیر التوا دعوتیں",

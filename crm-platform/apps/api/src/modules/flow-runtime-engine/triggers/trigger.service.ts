@@ -3,6 +3,8 @@ import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { FlowRunSource } from '@crm/contracts';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { ContactsService, SegmentsService } from '../../crm';
+import { evalRule } from '../runtime/condition';
 import { FlowLaunchService, KINDS_OF_PROVIDER } from '../runtime/launch.service';
 import { isOutsideBusinessHours } from './business-hours';
 import { matchKeywordFlow, type KeywordFlow } from './keyword-match';
@@ -39,6 +41,8 @@ export class FlowTriggerService {
   constructor(
     private readonly db: DatabaseService,
     private readonly launch: FlowLaunchService,
+    private readonly contacts: ContactsService,
+    private readonly segments: SegmentsService,
   ) {}
 
   // --- audience triggers -----------------------------------------------------------------------------------------------------
@@ -48,6 +52,9 @@ export class FlowTriggerService {
   }
   onGroupJoin(orgId: number, contactId: number, groupId: number) {
     return this.enrolLive(orgId, 'group_join', groupId, contactId, 'group_join', null, {});
+  }
+  onGroupLeave(orgId: number, contactId: number, groupId: number) {
+    return this.enrolLive(orgId, 'group_leave', groupId, contactId, 'group_leave', null, {});
   }
   onContactCreated(orgId: number, contactId: number) {
     return this.enrolLive(orgId, 'contact_created', 0, contactId, 'contact_created', null, {});
@@ -105,6 +112,134 @@ export class FlowTriggerService {
       'order_placed',
       `order:${o.orderId}`,
       variables,
+    );
+  }
+
+  // --- contact-change triggers -----------------------------------------------------------------------------------------------
+
+  /**
+   * A contact was created or changed. Four kinds look at it:
+   *  - `contact_updated`: any change a person or an import made (not one a flow made itself: a flow that updates its own contact must
+   *    not start flows in a loop). Each change is its own reason, so the flow can run again once its last run has ended.
+   *  - `field_match`: the flow's field now satisfies its operator and value. The reason carries the value, so a contact runs once per
+   *    value it takes and a repeat of the same value starts nothing.
+   *  - `segment_join`: the contact is in the flow's segment now; a contact runs once per flow, so being in it for good starts nothing more.
+   * Each flow is checked on its own and best effort, as every trigger is.
+   */
+  async onContactChanged(
+    orgId: number,
+    contactId: number,
+    ev: { eventId: string; updated: boolean; viaFlow: boolean },
+  ): Promise<number> {
+    let started = 0;
+    if (ev.updated && !ev.viaFlow) {
+      started += await this.enrolLive(
+        orgId,
+        'contact_updated',
+        0,
+        contactId,
+        'contact_updated',
+        `update:${ev.eventId}`,
+        {},
+      );
+    }
+    for (const f of await this.liveConfigured(orgId, 'field_match')) {
+      const field = typeof f.config.field === 'string' ? f.config.field : '';
+      if (field === '') continue;
+      const value = await this.contacts.readFieldForFlow(orgId, contactId, field);
+      const hit = evalRule(
+        { [field]: value ?? '' },
+        { variable: field, operator: f.config.operator, value: f.config.value },
+      );
+      if (hit) {
+        started += await this.startFlows(
+          orgId,
+          [f.id],
+          contactId,
+          'field_match',
+          `field:${f.id}:${value ?? ''}`,
+          {},
+        );
+      }
+    }
+    for (const f of await this.liveConfigured(orgId, 'segment_join')) {
+      const segmentId = typeof f.config.segmentId === 'string' ? f.config.segmentId : '';
+      if (segmentId === '') continue;
+      let inside = false;
+      try {
+        inside = await this.segments.containsContactFromFlow(orgId, segmentId, contactId);
+      } catch (err) {
+        this.logger.warn(
+          { orgId, flowId: f.id, err: (err as Error).message },
+          '[FLR] segment check failed',
+        );
+      }
+      if (inside) {
+        started += await this.startFlows(
+          orgId,
+          [f.id],
+          contactId,
+          'segment_join',
+          `segment:${f.id}`,
+          {},
+        );
+      }
+    }
+    return started;
+  }
+
+  /**
+   * People a schedule or a date check picked. One launch per person, each its own reason (`ref`), so a recurring flow runs again on
+   * the next occurrence for the same person.
+   */
+  enrolContacts(
+    orgId: number,
+    flowId: number,
+    contactIds: readonly number[],
+    source: FlowRunSource,
+    ref: string,
+    variables: Record<string, unknown> = {},
+  ): Promise<number> {
+    return this.startFlows(orgId, [flowId], [...contactIds], source, ref, variables);
+  }
+
+  /**
+   * A store event (a checkout, an abandoned cart, a fulfilment, a refund, a cancellation, a product ordered) for a customer found by
+   * phone. Flows for that store kind and event start, an `ordered_product` flow only when the order holds its product (or it names
+   * none). Each store event of a customer is its own reason; no contact for the number starts nothing (none is invented).
+   */
+  async onStoreEvent(
+    orgId: number,
+    kind: 'shopify' | 'woocommerce',
+    ev: {
+      event: string;
+      ref: string;
+      phone: string | null;
+      productIds?: readonly string[];
+      variables?: Record<string, unknown>;
+    },
+  ): Promise<number> {
+    const contactId = await this.contactByPhone(orgId, ev.phone);
+    if (contactId === null) return 0;
+    const ids: number[] = [];
+    for (const f of await this.liveConfigured(orgId, `${kind}_event`)) {
+      if (f.config.event !== ev.event) continue;
+      const wanted = typeof f.config.productId === 'string' ? f.config.productId.trim() : '';
+      if (
+        ev.event === 'ordered_product' &&
+        wanted !== '' &&
+        !(ev.productIds ?? []).includes(wanted)
+      )
+        continue;
+      ids.push(f.id);
+    }
+    return this.startFlows(
+      orgId,
+      ids,
+      contactId,
+      'ecom_event',
+      `${kind}:${ev.event}:${ev.ref}`,
+      ev.variables ?? {},
     );
   }
 
@@ -229,25 +364,61 @@ export class FlowTriggerService {
           AND coalesce(trigger_value, 0) = ${value} ORDER BY id`)) as unknown as Rows;
       return res.rows.map((r) => Number(r.id));
     });
+    return this.startFlows(orgId, flowIds, contactId, source, triggerRef, variables, on);
+  }
+
+  /** The live flows of a kind with their saved settings; a flow with none (or a broken value) reads as an empty object. */
+  private async liveConfigured(
+    orgId: number,
+    kind: string,
+  ): Promise<Array<{ id: number; config: Record<string, unknown> }>> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const res = (await tx.execute(sql`
+        SELECT id, trigger_config FROM flows
+        WHERE org_id = ${orgId} AND is_published AND is_active AND trigger_kind = ${kind} ORDER BY id`)) as unknown as Rows;
+      return res.rows.map((r) => ({
+        id: Number(r.id),
+        config:
+          r.trigger_config !== null && typeof r.trigger_config === 'object'
+            ? (r.trigger_config as Record<string, unknown>)
+            : {},
+      }));
+    });
+  }
+
+  /** Starts each flow for each contact (or for the one channel peer). One failing never stops another. */
+  private async startFlows(
+    orgId: number,
+    flowIds: readonly number[],
+    contacts: number | readonly number[] | null,
+    source: FlowRunSource,
+    triggerRef: string | null,
+    variables: Record<string, unknown>,
+    on?: { channelId: number; peerKey: string },
+  ): Promise<number> {
+    const people: Array<number | null> =
+      contacts === null ? [null] : typeof contacts === 'number' ? [contacts] : [...contacts];
     let started = 0;
     for (const flowId of flowIds) {
-      try {
-        const out = await this.launch.start(orgId, {
-          flowId,
-          contactId,
-          ...(on ? { channelId: on.channelId, peerKey: on.peerKey } : {}),
-          source,
-          triggerRef,
-          variables,
-          requirePublished: true,
-          withSubscriber: contactId !== null,
-        });
-        if (out.outcome === 'started') started++;
-      } catch (err) {
-        this.logger.warn(
-          { orgId, flowId, kind, err: (err as Error).message },
-          '[FLR] enrolment from a trigger failed',
-        );
+      for (const contactId of people) {
+        try {
+          const out = await this.launch.start(orgId, {
+            flowId,
+            contactId,
+            ...(on ? { channelId: on.channelId, peerKey: on.peerKey } : {}),
+            source,
+            triggerRef,
+            variables,
+            requirePublished: true,
+            withSubscriber: contactId !== null,
+          });
+          if (out.outcome === 'started') started++;
+        } catch (err) {
+          this.logger.warn(
+            { orgId, flowId, source, err: (err as Error).message },
+            '[FLR] enrolment from a trigger failed',
+          );
+        }
       }
     }
     return started;

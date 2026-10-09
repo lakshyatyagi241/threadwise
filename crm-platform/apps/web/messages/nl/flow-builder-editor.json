@@ -1583,7 +1583,15 @@
             "away": "Beschikbaarheid: terwijl de Afwezigmodus aan staat",
             "out_of_hours": "Beschikbaarheid: buiten openingstijden",
             "manual_enroll": "Handmatig: operator schrijft contacten in",
-            "comment_to_dm": "Instagram: iemand reageert op een bericht → DM"
+            "comment_to_dm": "Instagram: iemand reageert op een bericht → DM",
+            "group_leave": "Doelgroep: wanneer een contact een lijst verlaat",
+            "segment_join": "Doelgroep: wanneer een contact een segment binnenkomt",
+            "contact_updated": "Doelgroep: wanneer een contact wordt bijgewerkt",
+            "field_match": "Doelgroep: wanneer een contactveld overeenkomt met een waarde",
+            "date_field_match": "Planning: ten opzichte van een datum bij het contact (verjaardag…)",
+            "schedule": "Planning: op een datum en tijd",
+            "shopify_event": "Commerce: een Shopify-winkelevent",
+            "woocommerce_event": "Commerce: een WooCommerce-winkelevent"
           },
           "tagsLoading": "Tags laden…",
           "tagPick": "— kies tag —",
@@ -1619,7 +1627,66 @@
           "automatic": "Wordt automatisch geactiveerd — geen extra instelling nodig.",
           "away": "Wordt geactiveerd bij elk binnenkomend bericht terwijl de <b>Afwezigmodus</b> AAN staat. Schakel de Afwezigmodus in via de pagina <link>Automatisch antwoord</link>. Elk contact wordt één keer ingeschreven.",
           "outOfHours": "Wordt geactiveerd bij elk binnenkomend bericht dat binnenkomt <b>buiten de openingstijden van je workspace</b>. Stel de openingstijden in via je workspace-instellingen. Elk contact wordt één keer ingeschreven.",
-          "manualEnroll": "Je schrijft contacten handmatig in via de <link>/flows-lijst</link> met de knop <b>Inschrijven</b> naast deze flow."
+          "manualEnroll": "Je schrijft contacten handmatig in via de <link>/flows-lijst</link> met de knop <b>Inschrijven</b> naast deze flow.",
+          "ext": {
+            "segmentsLoading": "Segmenten laden…",
+            "segmentPick": "— kies segment —",
+            "segmentFallback": "Segment",
+            "groupLeaveLabel": "Lijst die de flow activeert",
+            "groupLeaveHint": "Wordt uitgevoerd wanneer een contact door een persoon of een import uit deze lijst wordt gehaald. Een flow die het contact zelf verwijdert, start deze niet.",
+            "segmentLabel": "Segment",
+            "segmentHint": "Wordt één keer per contact uitgevoerd, de eerste keer dat het contact in het segment wordt gevonden nadat het is aangemaakt, getagd, aan een lijst toegevoegd of bijgewerkt.",
+            "fieldLabel": "Contactveld",
+            "fieldHint": "De veldsleutel: naam, e-mail, titel, taal, adres of de sleutel van een eigen veld.",
+            "test": "Testen",
+            "value": "Waarde",
+            "valueHint": "Wordt gecontroleerd telkens wanneer het contact wordt aangemaakt of gewijzigd. Een contact wordt één keer uitgevoerd voor elke waarde die het aanneemt.",
+            "when": "Wanneer",
+            "dirOn": "Op de datum",
+            "dirBefore": "Dagen voor de datum",
+            "dirAfter": "Dagen na de datum",
+            "days": "Dagen",
+            "timeOfDay": "Tijdstip",
+            "timeZoneHint": "In de tijdzone van je workspace. Eén keer per dag gecontroleerd.",
+            "repeat": "Herhalen",
+            "yearly": "Elk jaar (alleen maand en dag)",
+            "fullDate": "Alleen op de volledige datum",
+            "frequency": {
+              "once": "Eenmaal, op een datum",
+              "daily": "Elke dag",
+              "weekly": "Elke week",
+              "monthly": "Elke maand"
+            },
+            "date": "Datum",
+            "dateHint": "JJJJ-MM-DD.",
+            "weekdays": "Dagen van de week",
+            "monthDay": "Dag van de maand",
+            "monthDayHint": "31 betekent de laatste dag van een kortere maand.",
+            "time24Hint": "UU:MM, 24-uurs.",
+            "tz": "Tijdzone (optioneel)",
+            "tzHint": "Een IANA-naam zoals Asia/Kolkata. Leeg laten gebruikt de tijdzone van je workspace.",
+            "who": "Wie",
+            "whoHint": "Maximaal 5.000 personen per run. Contacten die zich hebben afgemeld, gearchiveerd zijn of geen nummer hebben, worden overgeslagen.",
+            "audience": {
+              "all": "Elk contact met een nummer",
+              "group": "Contacten in een lijst",
+              "segment": "Contacten in een segment"
+            },
+            "list": "Lijst",
+            "storeEvent": "Winkelevent",
+            "storeEvents": {
+              "checkout_started": "Afrekening gestart",
+              "abandoned_cart": "Verlaten winkelwagen (eerste herinnering is aan de beurt)",
+              "order_fulfilled": "Bestelling afgehandeld",
+              "order_refunded": "Bestelling terugbetaald",
+              "order_cancelled": "Bestelling geannuleerd",
+              "ordered_product": "Een product is besteld"
+            },
+            "productId": "Product-ID (optioneel)",
+            "productIdHint": "Leeg = elk product in de bestelling.",
+            "storeNote": "De klant wordt via het telefoonnummer gekoppeld aan een opgeslagen contact; voor een bestelling wordt niemand aangemaakt. „Toegevoegd aan winkelwagen” en „product bekeken” worden niet aangeboden: de winkel meldt deze niet.",
+            "updatedNote": "Wordt elke keer geactiveerd wanneer een persoon of import een contact wijzigt. Een wijziging door een andere flow start deze niet."
+          }
         }
       }
     },
@@ -1864,6 +1931,34 @@
         "tg_payment": {
           "label": "Betaling / factuur",
           "description": "Een Telegram-factuur of een deelbare betaallink verzenden"
+        },
+        "update_contact": {
+          "label": "Contactveld bijwerken",
+          "description": "Een contactveld instellen"
+        },
+        "list_member": {
+          "label": "Lijst toevoegen / verwijderen",
+          "description": "Contact in een lijst zetten of eruit halen"
+        },
+        "in_list": {
+          "label": "Staat in lijst",
+          "description": "Ja / nee: het contact staat in een lijst"
+        },
+        "in_segment": {
+          "label": "Staat in segment",
+          "description": "Ja / nee: het contact staat in een segment"
+        },
+        "sheet_check": {
+          "label": "Google Sheets-cel controleren",
+          "description": "Ja / nee: een cel van de overeenkomende rij"
+        },
+        "sheet_contact": {
+          "label": "Contact opslaan vanuit Sheet",
+          "description": "Een Sheet-rij naar het contact kopiëren"
+        },
+        "wa_session": {
+          "label": "WhatsApp-sessie actief",
+          "description": "Ja / nee: de klant heeft in de laatste 24 uur geschreven"
         }
       },
       "groups": {
@@ -1936,7 +2031,15 @@
         "deal_stage_changed": "bij dealfase",
         "away": "tijdens afwezigheid",
         "out_of_hours": "buiten kantooruren",
-        "manual_enroll": "bij inschrijving"
+        "manual_enroll": "bij inschrijving",
+        "group_leave": "bij verlaten van lijst",
+        "segment_join": "bij toevoegen aan segment",
+        "contact_updated": "bij contactupdate",
+        "field_match": "bij veldovereenkomst",
+        "date_field_match": "bij datumovereenkomst",
+        "schedule": "op schema",
+        "shopify_event": "bij Shopify-gebeurtenis",
+        "woocommerce_event": "bij WooCommerce-gebeurtenis"
       },
       "ports": {
         "manual": "handmatig",

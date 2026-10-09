@@ -68,7 +68,11 @@
           "autoAttachCurrency": "Meta n’accepte pas cette devise.",
           "baseCurrency": "Utilisez un code de devise à trois lettres.",
           "businessId": "Saisissez 64 caractères au maximum."
-        }
+        },
+        "kicker": "connexion Meta",
+        "businessIdHint": "Paramètres de l'entreprise → Informations sur l'entreprise → « ID du portefeuille d'entreprise ». Un long nombre.",
+        "creditLinePlaceholder": "détecté automatiquement à partir de votre entreprise",
+        "tokenNote": "Le jeton est stocké chiffré et n'est jamais réaffiché."
       },
       "step2": {
         "title": "2. Associer un client manuellement",
@@ -90,7 +94,10 @@
         "failed": "Échec de l’association : {error}",
         "finishStep1": "Terminez d’abord l’étape 1.",
         "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
-        "noPhone": "aucun numéro"
+        "noPhone": "aucun numéro",
+        "kicker": "à associer manuellement, facultatif",
+        "numberHint": "Choisissez le client par son nom : nous gérons les ID de compte en arrière-plan.",
+        "currencyHint": "La devise dans laquelle Meta vous facture pour ce numéro."
       },
       "register": {
         "title": "Lignes de crédit utilisées",
@@ -119,7 +126,8 @@
         "revokeFailed": "Échec de la révocation : {error}",
         "loadMore": "Charger plus",
         "loadingMore": "Chargement",
-        "label": "Allocations de crédit"
+        "label": "Allocations de crédit",
+        "kicker": "comptes associés"
       },
       "guide": {
         "title": "Guide de configuration",
@@ -133,13 +141,19 @@
         "good1": "La devise d’une ligne de crédit est verrouillée une fois associée.",
         "good2": "L’association signifie que Meta vous facture, mais vous fixez toujours les prix de vos clients.",
         "good3": "Vous pouvez révoquer à tout moment et le client paie de nouveau Meta directement.",
-        "link": "Présentation de Meta Solution Partner"
-      }
+        "link": "Présentation de Meta Solution Partner",
+        "kicker": "Guide de configuration",
+        "step2Note": "Le jeton ne s'affiche qu'une fois : copiez-le immédiatement.",
+        "step3Apply": "Demander une ligne de crédit",
+        "step3Note": "Une fois approuvée, la plateforme lit son ID automatiquement et l'étape 2 le partage avec le WABA de chaque client.",
+        "metaDocs": "Documentation Meta",
+        "reference": "référence"
+      },
+      "eyebrow": "Facturation revendeur · ligne de crédit Meta"
     },
     "dashboard": {
       "title": "Pertes et profits revendeur",
       "eyebrow": "Ce mois-ci",
-      "intro": "Le chiffre d’affaires correspond à ce qui a été facturé aux clients pour les messages distribués, le coût Meta à ce que ces mêmes messages vous ont coûté, la marge à la différence. Les messages remboursés et gratuits ne sont pas comptés.",
       "linkRates": "Tarifs et marge",
       "linkConnect": "Connecter Meta",
       "revenue": "Chiffre d’affaires (facturé)",
@@ -150,7 +164,6 @@
       "billed": "Messages facturés",
       "free": "Messages gratuits",
       "unpriced": "Aucun coût Meta défini",
-      "unpricedBanner": "{count, plural, one {# message facturé n’a} other {# messages facturés n’ont}} aucun coût Meta pour leur pays et leur catégorie ; la marge les compte donc comme du pur chiffre d’affaires.",
       "perWorkspace": "Par espace de travail (ce mois-ci)",
       "columns": {
         "workspace": "Espace de travail",
@@ -163,7 +176,10 @@
       "empty": "Aucun message facturé ce mois-ci pour le moment.",
       "more": "Seuls les principaux espaces de travail par chiffre d’affaires sont listés.",
       "loadFailed": "Impossible de charger les pertes et profits.",
-      "currency": "Devise du rapport"
+      "currency": "Devise du rapport",
+      "intro": "Chaque message facturé est débité du portefeuille. Le chiffre d'affaires correspond à ce que vos clients ont payé ; le coût Meta correspond à ce que Meta vous facture ; l'écart est votre marge. Les prix et coûts se définissent dans <link>Règles du portefeuille</link>.",
+      "linkPnl": "Compte de résultat",
+      "unpricedBanner": "{count, plural, one {# message facturé n'a} other {# messages facturés n'ont}} pas de coût Meta défini pour leur pays/catégorie : leur marge est donc comptée comme chiffre d'affaires pur. Ajoutez ces lignes dans <link>Règles du portefeuille → Synchroniser les coûts Meta</link>."
     }
   }
 }

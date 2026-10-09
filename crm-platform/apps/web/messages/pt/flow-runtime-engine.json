@@ -55,7 +55,14 @@
       "webhook_lead": "Lead via webhook",
       "handoff": "Transferência",
       "inbox": "Caixa de entrada da equipe",
-      "retry": "Nova tentativa"
+      "retry": "Nova tentativa",
+      "group_leave": "Saída de lista",
+      "segment_join": "Entrada em segmento",
+      "contact_updated": "Contato atualizado",
+      "field_match": "Correspondência de campo",
+      "date_field_match": "Correspondência de data",
+      "schedule": "Agendamento",
+      "ecom_event": "Evento da loja"
     },
     "endReason": {
       "end_node": "Chegou ao fim do fluxo",

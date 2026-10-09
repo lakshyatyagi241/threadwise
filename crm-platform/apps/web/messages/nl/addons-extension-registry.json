@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "De add-ons konden niet worden geladen."
+    },
+    "planFields": {
+      "fromModule": "vanuit een geïnstalleerde module",
+      "unlimited": "Onbeperkt"
     }
   }
 }

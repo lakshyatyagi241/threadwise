@@ -258,7 +258,7 @@ describe('the menu after the Settings move', () => {
 
   it('keeps Help links out of the rail and in the user menu', () => {
     expect(menuItems(resolved).some((i) => i.group === 'help')).toBe(false);
-    expect(helpItems(resolved).map((i) => i.id)).toEqual(['support', 'guidebook']);
+    expect(helpItems(resolved).map((i) => i.id)).toEqual(['support']);
   });
 
   it('highlights Settings on a Settings page and on a screen a tile points at', () => {

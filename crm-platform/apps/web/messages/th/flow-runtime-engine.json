@@ -55,7 +55,14 @@
       "webhook_lead": "ลีดจาก Webhook",
       "handoff": "ส่งต่อ",
       "inbox": "กล่องข้อความทีม",
-      "retry": "ลองใหม่"
+      "retry": "ลองใหม่",
+      "group_leave": "ออกจากรายการ",
+      "segment_join": "เข้าสู่กลุ่มย่อย",
+      "contact_updated": "อัปเดตผู้ติดต่อ",
+      "field_match": "ฟิลด์ตรงกัน",
+      "date_field_match": "วันที่ตรงกัน",
+      "schedule": "ตั้งเวลา",
+      "ecom_event": "เหตุการณ์ของร้านค้า"
     },
     "endReason": {
       "end_node": "ถึงจุดสิ้นสุดของโฟลว์แล้ว",

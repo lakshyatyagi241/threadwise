@@ -1238,7 +1238,15 @@
             "away": "稼働状況: 不在モードがオンの間",
             "out_of_hours": "稼働状況: 営業時間外",
             "manual_enroll": "手動: オペレーターが連絡先を登録",
-            "comment_to_dm": "Instagram: 誰かが投稿にコメント → DM"
+            "comment_to_dm": "Instagram: 誰かが投稿にコメント → DM",
+            "group_leave": "オーディエンス: 連絡先がリストから外れたとき",
+            "segment_join": "オーディエンス: 連絡先がセグメントに入ったとき",
+            "contact_updated": "オーディエンス: 連絡先が更新されたとき",
+            "field_match": "オーディエンス: 連絡先の項目が値に一致したとき",
+            "date_field_match": "スケジュール: 連絡先の日付を基準（誕生日など）",
+            "schedule": "スケジュール: 指定の日時",
+            "shopify_event": "コマース: Shopifyストアのイベント",
+            "woocommerce_event": "コマース: WooCommerceストアのイベント"
           },
           "tagsLoading": "タグを読み込み中…",
           "tagPick": "— タグを選択 —",
@@ -1274,7 +1282,66 @@
           "automatic": "自動で実行されます。追加の設定は不要です。",
           "away": "<b>不在モード</b>がオンの間、受信したすべてのメッセージで実行されます。不在モードは<link>自動返信</link>ページで切り替えます。各連絡先は1回だけ登録されます。",
           "outOfHours": "<b>ワークスペースの営業時間外</b>に受信したすべてのメッセージで実行されます。営業時間はワークスペースの設定で指定します。各連絡先は1回だけ登録されます。",
-          "manualEnroll": "<link>/flowsリスト</link>で、このフローの隣にある<b>登録</b>ボタンから手動で連絡先を登録します。"
+          "manualEnroll": "<link>/flowsリスト</link>で、このフローの隣にある<b>登録</b>ボタンから手動で連絡先を登録します。",
+          "ext": {
+            "segmentsLoading": "セグメントを読み込み中…",
+            "segmentPick": "— セグメントを選択 —",
+            "segmentFallback": "セグメント",
+            "groupLeaveLabel": "フローを開始するリスト",
+            "groupLeaveHint": "担当者またはインポートによって連絡先がこのリストから外れたときに実行されます。フローが自ら連絡先を削除した場合は開始されません。",
+            "segmentLabel": "セグメント",
+            "segmentHint": "作成、タグ付け、リスト追加、更新の後、連絡先がセグメント内で初めて見つかった時点で、連絡先ごとに1回実行されます。",
+            "fieldLabel": "連絡先の項目",
+            "fieldHint": "項目のキー: 名前、メール、役職、言語、住所、またはカスタム項目のキー。",
+            "test": "テスト",
+            "value": "値",
+            "valueHint": "連絡先が作成または変更されるたびに確認されます。連絡先が取る値ごとに1回実行されます。",
+            "when": "タイミング",
+            "dirOn": "日付当日",
+            "dirBefore": "日付の何日前",
+            "dirAfter": "日付の何日後",
+            "days": "日数",
+            "timeOfDay": "時刻",
+            "timeZoneHint": "ワークスペースのタイムゾーン基準。1日1回確認されます。",
+            "repeat": "繰り返し",
+            "yearly": "毎年（月と日のみ）",
+            "fullDate": "指定の日付のみ",
+            "frequency": {
+              "once": "日付指定で1回",
+              "daily": "毎日",
+              "weekly": "毎週",
+              "monthly": "毎月"
+            },
+            "date": "日付",
+            "dateHint": "YYYY-MM-DD。",
+            "weekdays": "曜日",
+            "monthDay": "日付（日）",
+            "monthDayHint": "31は、日数の少ない月では月末日を意味します。",
+            "time24Hint": "HH:MM、24時間表記。",
+            "tz": "タイムゾーン（任意）",
+            "tzHint": "Asia/Kolkataなど、IANAのタイムゾーン名。空欄の場合はワークスペースのタイムゾーンを使用します。",
+            "who": "対象",
+            "whoHint": "1回の実行につき最大5,000人です。配信停止、アーカイブ済み、番号なしの連絡先は除外されます。",
+            "audience": {
+              "all": "番号を持つすべての連絡先",
+              "group": "リスト内の連絡先",
+              "segment": "セグメント内の連絡先"
+            },
+            "list": "リスト",
+            "storeEvent": "ストアのイベント",
+            "storeEvents": {
+              "checkout_started": "チェックアウト開始",
+              "abandoned_cart": "カゴ落ち（最初のリマインダーの時期）",
+              "order_fulfilled": "注文の発送完了",
+              "order_refunded": "注文の返金",
+              "order_cancelled": "注文のキャンセル",
+              "ordered_product": "商品が注文された"
+            },
+            "productId": "商品ID（任意）",
+            "productIdHint": "空欄の場合は注文内の任意の商品。",
+            "storeNote": "お客様は電話番号で保存済みの連絡先と照合されます。注文によって新しい連絡先が作成されることはありません。「カートに追加」と「商品閲覧」は提供していません。ストア側からこれらの情報が送られないためです。",
+            "updatedNote": "担当者またはインポートによって連絡先が変更されるたびに実行されます。別のフローによる変更では開始されません。"
+          }
         }
       },
       "formsChannels": {
@@ -2001,6 +2068,34 @@
         "tg_payment": {
           "label": "支払い／請求書",
           "description": "Telegramの請求書または共有可能な支払いリンクを送信"
+        },
+        "update_contact": {
+          "label": "コンタクト項目を更新",
+          "description": "コンタクト項目を設定"
+        },
+        "list_member": {
+          "label": "リストに追加 / 削除",
+          "description": "コンタクトをリストに追加するか、リストから外す"
+        },
+        "in_list": {
+          "label": "リストに含まれている",
+          "description": "はい / いいえ: コンタクトがリストに含まれている"
+        },
+        "in_segment": {
+          "label": "セグメントに含まれている",
+          "description": "はい / いいえ: コンタクトがセグメントに含まれている"
+        },
+        "sheet_check": {
+          "label": "Googleスプレッドシートのセルを確認",
+          "description": "はい / いいえ: 一致する行のセルの値"
+        },
+        "sheet_contact": {
+          "label": "シートからコンタクトを保存",
+          "description": "シートの行をコンタクトにコピー"
+        },
+        "wa_session": {
+          "label": "WhatsAppセッションが有効",
+          "description": "はい / いいえ: 顧客が過去24時間以内にメッセージを送信した"
         }
       },
       "groups": {
@@ -2073,7 +2168,15 @@
         "deal_stage_changed": "案件ステージ変更時",
         "away": "不在時",
         "out_of_hours": "営業時間外",
-        "manual_enroll": "登録時"
+        "manual_enroll": "登録時",
+        "group_leave": "リストから外れたとき",
+        "segment_join": "セグメントに参加したとき",
+        "contact_updated": "コンタクト更新時",
+        "field_match": "項目一致時",
+        "date_field_match": "日付一致時",
+        "schedule": "スケジュール時",
+        "shopify_event": "Shopifyイベント発生時",
+        "woocommerce_event": "WooCommerceイベント発生時"
       },
       "ports": {
         "manual": "手動",

@@ -25,7 +25,9 @@
       "deleteTitle": "Diesen Kanal löschen?",
       "deleteMessage": "#{name} und alle zugehörigen Nachrichten werden für alle gelöscht. Dies kann nicht rückgängig gemacht werden.",
       "deleteConfirm": "Kanal löschen",
-      "cancel": "Abbrechen"
+      "cancel": "Abbrechen",
+      "defaultDescription": "Interner Workspace-Chat",
+      "customerChats": "Kundenchats"
     },
     "sidebar": {
       "label": "Kanäle und Personen",
@@ -39,7 +41,12 @@
       "invite": "Teammitglied einladen",
       "pending": "Ausstehende Anfragen",
       "pendingCount": "{count, plural, one {# ausstehende Anfrage} other {# ausstehende Anfragen}}",
-      "unread": "{count, plural, one {# ungelesene Nachricht} other {# ungelesene Nachrichten}}"
+      "unread": "{count, plural, one {# ungelesene Nachricht} other {# ungelesene Nachrichten}}",
+      "workspace": "Workspace",
+      "mode": "Modus",
+      "customerChats": "Kundenchats",
+      "teamChat": "Team-Chat",
+      "membersLink": "Mitglieder"
     },
     "members": {
       "label": "Mitglieder",
@@ -52,7 +59,8 @@
       "online": "Online",
       "offline": "Offline",
       "you": "(Sie)",
-      "message": "Nachricht an {name}"
+      "message": "Nachricht an {name}",
+      "titleAccent": "Chat"
     },
     "panel": {
       "searchTitle": "Nachrichten durchsuchen",
@@ -104,7 +112,11 @@
       "fileTooLarge": "Diese Datei ist größer als 20 MB.",
       "mentionList": "Zu erwähnende Teammitglieder",
       "typingOne": "{name} schreibt",
-      "typingMany": "{count} Personen schreiben"
+      "typingMany": "{count} Personen schreiben",
+      "hintSend": "Senden",
+      "hintNewLine": "neue Zeile",
+      "hintMention": "Erwähnen",
+      "hintShift": "Umschalt+↵"
     },
     "createChannel": {
       "title": "Kanal erstellen",
@@ -122,7 +134,9 @@
         "hint": "Nur auf Einladung. Nur die Mitglieder sehen ihn."
       },
       "cancel": "Abbrechen",
-      "create": "Kanal erstellen"
+      "create": "Kanal erstellen",
+      "namePlaceholder": "z. B. Support",
+      "descriptionPlaceholder": "Wofür ist dieser Kanal gedacht?"
     },
     "invite": {
       "title": "Teammitglied einladen",
@@ -135,7 +149,10 @@
       "approved": "Erledigt. Die Anfrage wurde genehmigt.",
       "pending": "Einladung gesendet, wartet auf Genehmigung durch einen Administrator.",
       "cancel": "Abbrechen",
-      "submit": "Einladung senden"
+      "submit": "Einladung senden",
+      "emailPlaceholder": "teammitglied@firma.de",
+      "namePlaceholder": "Ihr Name",
+      "notePlaceholder": "Warum sollten sie beitreten?"
     },
     "invitations": {
       "title": "Ausstehende Einladungen",

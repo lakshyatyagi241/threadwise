@@ -1238,7 +1238,15 @@
             "away": "Disponibilité : tant que le mode Absent est activé",
             "out_of_hours": "Disponibilité : en dehors des heures d’ouverture",
             "manual_enroll": "Manuel : l’opérateur inscrit des contacts",
-            "comment_to_dm": "Instagram : quelqu’un commente une publication → DM"
+            "comment_to_dm": "Instagram : quelqu’un commente une publication → DM",
+            "group_leave": "Audience : lorsqu'un contact quitte une liste",
+            "segment_join": "Audience : lorsqu'un contact entre dans un segment",
+            "contact_updated": "Audience : lorsqu'un contact est mis à jour",
+            "field_match": "Audience : lorsqu'un champ du contact correspond à une valeur",
+            "date_field_match": "Programmation : par rapport à une date du contact (anniversaire…)",
+            "schedule": "Programmation : à une date et une heure",
+            "shopify_event": "Commerce : un événement de boutique Shopify",
+            "woocommerce_event": "Commerce : un événement de boutique WooCommerce"
           },
           "tagsLoading": "Chargement des étiquettes…",
           "tagPick": "— choisir une étiquette —",
@@ -1274,7 +1282,66 @@
           "automatic": "Se déclenche automatiquement : aucune configuration supplémentaire nécessaire.",
           "away": "Se déclenche sur tout message entrant tant que le <b>mode Absent</b> est activé. Basculez le mode Absent depuis la page <link>Réponse automatique</link>. Chaque contact n’est inscrit qu’une fois.",
           "outOfHours": "Se déclenche sur tout message entrant reçu <b>en dehors des heures d’ouverture de votre espace de travail</b>. Définissez les heures d’ouverture dans les réglages de l’espace de travail. Chaque contact n’est inscrit qu’une fois.",
-          "manualEnroll": "Vous inscrirez les contacts manuellement depuis la <link>liste /flows</link> avec le bouton <b>Inscrire</b> à côté de ce flux."
+          "manualEnroll": "Vous inscrirez les contacts manuellement depuis la <link>liste /flows</link> avec le bouton <b>Inscrire</b> à côté de ce flux.",
+          "ext": {
+            "segmentsLoading": "Chargement des segments…",
+            "segmentPick": "— choisir un segment —",
+            "segmentFallback": "Segment",
+            "groupLeaveLabel": "Liste qui déclenche le flux",
+            "groupLeaveHint": "S'exécute lorsqu'un contact est retiré de cette liste par une personne ou un import. Un flux qui le retire lui-même ne le démarre pas.",
+            "segmentLabel": "Segment",
+            "segmentHint": "S'exécute une fois par contact, la première fois qu'il est trouvé dans le segment après avoir été créé, étiqueté, ajouté à une liste ou mis à jour.",
+            "fieldLabel": "Champ du contact",
+            "fieldHint": "La clé du champ : name, email, title, language, address, ou la clé d'un champ personnalisé.",
+            "test": "Test",
+            "value": "Valeur",
+            "valueHint": "Vérifié à chaque création ou modification du contact. Un contact s'exécute une fois pour chaque valeur qu'il prend.",
+            "when": "Quand",
+            "dirOn": "À la date",
+            "dirBefore": "Jours avant la date",
+            "dirAfter": "Jours après la date",
+            "days": "Jours",
+            "timeOfDay": "Heure de la journée",
+            "timeZoneHint": "Dans le fuseau horaire de votre espace de travail. Vérifié une fois par jour.",
+            "repeat": "Répétition",
+            "yearly": "Chaque année (mois et jour uniquement)",
+            "fullDate": "Uniquement à la date exacte",
+            "frequency": {
+              "once": "Une fois, à une date",
+              "daily": "Tous les jours",
+              "weekly": "Chaque semaine",
+              "monthly": "Chaque mois"
+            },
+            "date": "Date",
+            "dateHint": "AAAA-MM-JJ.",
+            "weekdays": "Jours de la semaine",
+            "monthDay": "Jour du mois",
+            "monthDayHint": "31 désigne le dernier jour des mois plus courts.",
+            "time24Hint": "HH:MM, format 24 h.",
+            "tz": "Fuseau horaire (facultatif)",
+            "tzHint": "Un nom IANA, par exemple Asia/Kolkata. Vide : le fuseau horaire de l'espace de travail est utilisé.",
+            "who": "Qui",
+            "whoHint": "5 000 personnes au maximum par exécution. Les contacts désabonnés, archivés ou sans numéro sont exclus.",
+            "audience": {
+              "all": "Chaque contact avec un numéro",
+              "group": "Contacts d'une liste",
+              "segment": "Contacts d'un segment"
+            },
+            "list": "Liste",
+            "storeEvent": "Événement de boutique",
+            "storeEvents": {
+              "checkout_started": "Paiement commencé",
+              "abandoned_cart": "Panier abandonné (premier rappel à envoyer)",
+              "order_fulfilled": "Commande expédiée",
+              "order_refunded": "Commande remboursée",
+              "order_cancelled": "Commande annulée",
+              "ordered_product": "Un produit a été commandé"
+            },
+            "productId": "ID du produit (facultatif)",
+            "productIdHint": "Vide = n'importe quel produit de la commande.",
+            "storeNote": "Le client est associé à un contact enregistré par son numéro de téléphone ; aucun contact n'est créé pour une commande. « Ajouté au panier » et « produit consulté » ne sont pas proposés : la boutique ne les transmet pas.",
+            "updatedNote": "Se déclenche à chaque modification d'un contact par une personne ou un import. Une modification faite par un autre flux ne le démarre pas."
+          }
         }
       },
       "formsChannels": {
@@ -2001,6 +2068,34 @@
         "tg_payment": {
           "label": "Paiement / Facture",
           "description": "Envoyer une facture Telegram ou un lien de paiement partageable"
+        },
+        "update_contact": {
+          "label": "Mettre à jour le champ du contact",
+          "description": "Définir un champ de contact"
+        },
+        "list_member": {
+          "label": "Ajouter / retirer de la liste",
+          "description": "Ajouter le contact à une liste ou l'en retirer"
+        },
+        "in_list": {
+          "label": "Est dans la liste",
+          "description": "Oui / non : le contact fait partie de la liste"
+        },
+        "in_segment": {
+          "label": "Est dans le segment",
+          "description": "Oui / non : le contact fait partie du segment"
+        },
+        "sheet_check": {
+          "label": "Vérifier une cellule Google Sheets",
+          "description": "Oui / non : une cellule de la ligne correspondante"
+        },
+        "sheet_contact": {
+          "label": "Enregistrer le contact depuis la feuille",
+          "description": "Copier une ligne de la feuille dans le contact"
+        },
+        "wa_session": {
+          "label": "Session WhatsApp active",
+          "description": "Oui / non : le client a écrit dans les dernières 24 heures"
         }
       },
       "groups": {
@@ -2073,7 +2168,15 @@
         "deal_stage_changed": "à l’étape d’une opportunité",
         "away": "pendant une absence",
         "out_of_hours": "hors des heures d’ouverture",
-        "manual_enroll": "à l’inscription"
+        "manual_enroll": "à l’inscription",
+        "group_leave": "à la sortie d'une liste",
+        "segment_join": "à l'entrée dans un segment",
+        "contact_updated": "à la mise à jour d'un contact",
+        "field_match": "à la correspondance d'un champ",
+        "date_field_match": "à la correspondance d'une date",
+        "schedule": "selon le planning",
+        "shopify_event": "à un événement Shopify",
+        "woocommerce_event": "à un événement WooCommerce"
       },
       "ports": {
         "manual": "manuel",

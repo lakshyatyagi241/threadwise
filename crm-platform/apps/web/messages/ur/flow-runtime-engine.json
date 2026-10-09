@@ -342,7 +342,14 @@
       "webhook_lead": "ویب ہک لیڈ",
       "handoff": "منتقلی",
       "inbox": "ٹیم ان باکس",
-      "retry": "دوبارہ کوشش"
+      "retry": "دوبارہ کوشش",
+      "group_leave": "فہرست سے نکلنا",
+      "segment_join": "سیگمنٹ میں شامل ہونا",
+      "contact_updated": "رابطہ اپ ڈیٹ ہوا",
+      "field_match": "فیلڈ مماثلت",
+      "date_field_match": "تاریخ مماثلت",
+      "schedule": "شیڈول",
+      "ecom_event": "اسٹور کا واقعہ"
     },
     "endReason": {
       "end_node": "فلو کے آخر تک پہنچ گیا",

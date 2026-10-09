@@ -11,6 +11,39 @@ export interface ToolCard {
   icon?: string;
   locked: boolean;
   category: ToolCategory;
+  /** Set for WaDesk's curated cards (see more-catalogue.ts); a registry screen without one is drawn as a plain card. */
+  catalogueId?: string;
+  tone?: Tone;
+  badge?: boolean;
+}
+
+/** The tint of a card's icon tile (WaDesk drew each tool in its own colour). */
+export type Tone =
+  | 'mint'
+  | 'blue'
+  | 'insta'
+  | 'line'
+  | 'wechat'
+  | 'viber'
+  | 'dark'
+  | 'teal'
+  | 'amber'
+  | 'amber2'
+  | 'violet'
+  | 'sky'
+  | 'bubble'
+  | 'neutral'
+  | 'green'
+  | 'google';
+
+export interface CatalogueCard {
+  id: string;
+  /** This app's screens for the tool, tried in order. */
+  hrefs: readonly string[];
+  cat: ToolCategory;
+  tone: Tone;
+  icon: string;
+  badge: boolean;
 }
 
 export const TOOL_CATEGORIES = ['all', 'automation', 'data', 'help'] as const;
@@ -63,6 +96,52 @@ export function toolCards(
     });
   }
   return cards;
+}
+
+const sameScreen = (href: string, screen: string) =>
+  href === screen || href.startsWith(`${screen}/`);
+
+/**
+ * WaDesk's curated grid (WD-ASHELL-020): each catalogue card whose screen exists here and is not already in the top bar, in
+ * WaDesk's order, then a plain card for every other menu screen so nothing is lost. A card takes the crown of the menu
+ * entry or Settings tile it points at.
+ */
+export function allToolCards(
+  catalogue: readonly CatalogueCard[],
+  nav: readonly ResolvedNavItem[],
+  tiles: readonly ResolvedSettingsTile[],
+  barHrefs: ReadonlySet<string>,
+): ToolCard[] {
+  const screens = [
+    ...nav.filter((n) => !n.comingSoon && n.group !== 'settings'),
+    ...tiles.filter((t) => !t.comingSoon),
+  ];
+  const claimed = new Set<string>();
+  const curated: ToolCard[] = [];
+  for (const c of catalogue) {
+    for (const want of c.hrefs) {
+      const hit = screens.find((x) => sameScreen(x.href, want));
+      if (!hit) continue;
+      if (barHrefs.has(hit.href)) break;
+      for (const x of screens) if (c.hrefs.some((w) => sameScreen(x.href, w))) claimed.add(x.href);
+      curated.push({
+        id: `cat:${c.id}`,
+        labelKey: `admin-console-shell.more.cards.${c.id}.title`,
+        descriptionKey: `admin-console-shell.more.cards.${c.id}.desc`,
+        href: hit.href,
+        icon: c.icon,
+        locked: hit.locked,
+        category: c.cat,
+        catalogueId: c.id,
+        tone: c.tone,
+        badge: c.badge,
+      });
+      break;
+    }
+  }
+  // Settings tiles are not repeated here: WaDesk's grid holds tools, and the Settings hub lists every tile.
+  const rest = toolCards(nav, [], barHrefs).filter((c) => !claimed.has(c.href));
+  return [...curated, ...rest];
 }
 
 /** "All" shows everything; a tab shows only its category (unmapped screens appear under All only, like WaDesk). */
@@ -179,4 +258,29 @@ export function moveShortcut(list: readonly Shortcut[], id: string, dir: -1 | 1)
   const next = [...list];
   [next[i], next[j]] = [next[j]!, next[i]!];
   return next;
+}
+
+// --- Recent activity (WD-ASHELL-020 rule 1) ---------------------------------------------------------------------------
+
+/** WaDesk's two-letter category badges and their colours; anything else gets dots. */
+const BADGES: Record<string, { code: string; tone: Tone }> = {
+  auth: { code: 'AU', tone: 'violet' },
+  inbox: { code: 'IN', tone: 'sky' },
+  conversations: { code: 'IN', tone: 'sky' },
+  notes: { code: 'NT', tone: 'amber' },
+  teams: { code: 'TM', tone: 'violet' },
+  broadcasts: { code: 'BC', tone: 'mint' },
+  webhooks: { code: 'WH', tone: 'green' },
+  workspaces: { code: 'WS', tone: 'sky' },
+};
+
+export const activityBadge = (module: string) =>
+  BADGES[module.toLowerCase()] ?? { code: '\u2022\u2022\u2022', tone: 'neutral' as Tone };
+
+const title = (w: string) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+
+/** "<Category> <rest>" in title case (WaDesk): `contacts` + `insert` reads "Contacts insert". */
+export function activityLabel(module: string, action: string): string {
+  const words = `${module} ${action}`.replace(/[._]+/g, ' ').split(/\s+/).filter(Boolean);
+  return words.map((w, i) => (i === 0 ? title(w) : w.toLowerCase())).join(' ');
 }

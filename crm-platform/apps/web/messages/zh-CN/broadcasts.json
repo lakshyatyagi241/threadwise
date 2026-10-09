@@ -95,7 +95,9 @@
         "t3": "如何提升效果？",
         "b3": "保持受众精准，选择最相关的模板，并在再次发送前查看失败数量。"
       },
-      "unofficialDisabled": "非官方（已禁用）"
+      "unofficialDisabled": "非官方（已禁用）",
+      "noData": "未找到数据",
+      "railLabel": "群发筛选"
     },
     "detail": {
       "back": "返回",
@@ -293,7 +295,8 @@
       "later": "稍后",
       "media": "{kind}预览",
       "contactsDenied": "您没有联系人列表的访问权限。请通过分组或标签选择联系人。",
-      "unofficialDisabled": "您的工作区未启用通过个人 WhatsApp 号码（非官方 API）发送。请选择官方 WhatsApp Business API 号码。"
+      "unofficialDisabled": "您的工作区未启用通过个人 WhatsApp 号码（非官方 API）发送。请选择官方 WhatsApp Business API 号码。",
+      "previewLabel": "模板预览"
     },
     "overrides": {
       "title": "填写本次发送内容",

@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, one {# новое сообщение от {author}} few {# новых сообщения от {author}} many {# новых сообщений от {author}} other {# нового сообщения от {author}}}",
         "titleNoName": "{count, plural, one {# новое личное сообщение} few {# новых личных сообщения} many {# новых личных сообщений} other {# нового личного сообщения}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {Кто-то хочет вступить в {name}} few {# человека хотят вступить в {name}} many {# человек хотят вступить в {name}} other {# человека хотят вступить в {name}}}",
+        "titleNoName": "{count, plural, one {Кто-то хочет вступить в группу WhatsApp} few {# человека хотят вступить в группу WhatsApp} many {# человек хотят вступить в группу WhatsApp} other {# человека хотят вступить в группу WhatsApp}}",
+        "body": "Откройте «Группы», чтобы одобрить или отклонить."
+      },
+      "waba_group_suspended": {
+        "title": "{name} приостановлена",
+        "titleNoName": "Группа WhatsApp приостановлена",
+        "body": "WhatsApp приостановил эту группу. Писать в неё нельзя, пока её не восстановят."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} снова активна",
+        "titleNoName": "Группа WhatsApp снова активна",
+        "body": "WhatsApp восстановил эту группу. Теперь в неё можно писать."
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "Отложенная отправка выполнена",
         "scheduled_failed": "Отложенная отправка не удалась",
         "teamchat_mention": "Упомянул вас в командном чате",
-        "teamchat_message": "Новое личное сообщение"
+        "teamchat_message": "Новое личное сообщение",
+        "waba_group_join_request": "Запрос на вступление в группу",
+        "waba_group_suspended": "Группа WhatsApp приостановлена",
+        "waba_group_suspension_cleared": "Группа WhatsApp снова активна"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "Кошелёк",
         "devices": "Номера WhatsApp",
         "broadcasts": "Рассылки и кампании",
-        "team_chat": "Командный чат"
+        "team_chat": "Командный чат",
+        "whatsapp_groups": "Группы WhatsApp"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "Кошелёк пополнен",
           "hint": "Кошелёк рабочего пространства пополнен."
+        },
+        "waba_group_join_request": {
+          "label": "Запрос на вступление в группу",
+          "hint": "Люди просят вступить в группу WhatsApp вашего бизнес-номера. Десять запросов образуют одну строку."
+        },
+        "waba_group_suspended": {
+          "label": "Группа приостановлена",
+          "hint": "WhatsApp приостановил одну из ваших групп."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "Группа снова активна",
+          "hint": "WhatsApp восстановил группу, которую приостановил. Только если вы были уведомлены о приостановке."
         }
       },
       "loading": "Загрузка ваших настроек",

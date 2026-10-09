@@ -183,7 +183,9 @@
         "unzoned": "未分区",
         "per24h": "{n}/24h",
         "deliv": "送达",
-        "free": "{n, plural, other {还有 # 个设备名额可用}}"
+        "free": "{n, plural, other {还有 # 个设备名额可用}}",
+        "freeHint": "添加 WABA",
+        "connectDeviceShort": "连接设备"
       },
       "templates": {
         "title": "表现最佳的模板",
@@ -297,7 +299,8 @@
         "connect": "连接",
         "connectedLabel": "已连接"
       },
-      "sublineOfficial": "{date} - {range}：共发送 {sent} 条，送达率 {rate}%。"
+      "sublineOfficial": "{date} - {range}：共发送 {sent} 条，送达率 {rate}%。",
+      "synced": "实时 · {s} 秒前同步"
     },
     "analytics": {
       "title": "分析",

@@ -68,7 +68,6 @@
         "keySavedLast4": "Anahtar kaydedildi, son hane: {last4}",
         "noKey": "Anahtar yok",
         "unreadable": "Kaydedilen anahtar okunamıyor, tekrar yapıştırın",
-        "slug": "Sağlayıcı kimliği",
         "apiKey": "API anahtarı",
         "apiKeyHint": "Kayıtlı anahtarı korumak için boş bırakın.",
         "apiKeyPlaceholder": "Anahtarı buraya yapıştırın",
@@ -89,7 +88,9 @@
         "removeTitle": "{name} anahtarı kaldırılsın mı?",
         "removeBody": "Siz tekrar bir anahtar ekleyene kadar çalışma alanları {name} kullanmayı bırakır. Sağlayıcı kapatılır.",
         "removeConfirm": "Anahtarı kaldır",
-        "cancel": "İptal"
+        "cancel": "İptal",
+        "slug": "sağlayıcı: {provider} · varsayılan model: {model}",
+        "maxTokensPlaceholder": "örn. 4096"
       },
       "toasts": {
         "saved": "{name} kaydedildi.",
@@ -100,7 +101,8 @@
       },
       "help": {
         "title": "Bu anahtarlar nasıl kullanılır",
-        "body": "Bir çalışma alanının kendi anahtarı yalnızca planı izin verdiğinde geçerli olur. Aksi halde buradaki eşleşen etkin sağlayıcı kullanılır. Bir sağlayıcıyı kapatmak, kendi anahtarı olmayan çalışma alanlarının onu kullanamayacağı anlamına gelir."
+        "body": "Bir çalışma alanının kendi anahtarı yalnızca planı izin verdiğinde geçerli olur. Aksi halde buradaki eşleşen etkin sağlayıcı kullanılır. Bir sağlayıcıyı kapatmak, kendi anahtarı olmayan çalışma alanlarının onu kullanamayacağı anlamına gelir.",
+        "eyebrow": "Bu anahtarların nasıl kullanıldığı"
       }
     },
     "dashboard": {

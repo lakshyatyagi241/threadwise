@@ -7,7 +7,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 /**
  * The only door through which this module writes the platform content tables.
  *
- * `frontend_content`, `blog_*`, `legal_pages`, `pricing_faqs`, `announcements`, `guidebook_articles` and
+ * `frontend_content`, `blog_*`, `legal_pages`, `pricing_faqs`, `announcements` and
  * `contact_messages` accept reads from every connection (the public site needs no privilege) but accept writes only
  * when the privileged flag is on: the content belongs to the platform operator, not to a tenant. So every operator
  * mutation, and the contact inbox read, goes through here, and a grep for `.privileged(` in this module must find this

@@ -1238,7 +1238,15 @@
             "away": "Availability: while Away mode is on",
             "out_of_hours": "Availability: outside business hours",
             "manual_enroll": "Manual: operator enrolls contacts",
-            "comment_to_dm": "Instagram: someone comments on a post → DM"
+            "comment_to_dm": "Instagram: someone comments on a post → DM",
+            "group_leave": "Audience: when contact leaves a list",
+            "segment_join": "Audience: when contact enters a segment",
+            "contact_updated": "Audience: when a contact is updated",
+            "field_match": "Audience: when a contact field matches a value",
+            "date_field_match": "Schedule: relative to a date on the contact (birthday…)",
+            "schedule": "Schedule: at a date and time",
+            "shopify_event": "Commerce: a Shopify store event",
+            "woocommerce_event": "Commerce: a WooCommerce store event"
           },
           "tagsLoading": "Loading tags…",
           "tagPick": "— pick tag —",
@@ -1274,7 +1282,66 @@
           "automatic": "Fires automatically — no extra config needed.",
           "away": "Fires on any incoming message while <b>Away mode</b> is ON. Toggle Away mode from the <link>Auto Reply</link> page. Each contact is enrolled once.",
           "outOfHours": "Fires on any incoming message that arrives <b>outside your workspace Business Hours</b>. Set Business Hours in your workspace settings. Each contact is enrolled once.",
-          "manualEnroll": "You'll enroll contacts manually from the <link>/flows list</link> via the <b>Enroll</b> button next to this flow."
+          "manualEnroll": "You'll enroll contacts manually from the <link>/flows list</link> via the <b>Enroll</b> button next to this flow.",
+          "ext": {
+            "segmentsLoading": "Loading segments…",
+            "segmentPick": "— pick segment —",
+            "segmentFallback": "Segment",
+            "groupLeaveLabel": "List that triggers the flow",
+            "groupLeaveHint": "Runs when a contact is taken out of this list by a person or an import. A flow that removes them itself does not start it.",
+            "segmentLabel": "Segment",
+            "segmentHint": "Runs once per contact, the first time they are found inside the segment after being created, tagged, listed or updated.",
+            "fieldLabel": "Contact field",
+            "fieldHint": "The field key: name, email, title, language, address, or a custom field's key.",
+            "test": "Test",
+            "value": "Value",
+            "valueHint": "Checked each time the contact is created or changed. A contact runs once for each value it takes.",
+            "when": "When",
+            "dirOn": "On the date",
+            "dirBefore": "Days before the date",
+            "dirAfter": "Days after the date",
+            "days": "Days",
+            "timeOfDay": "Time of day",
+            "timeZoneHint": "In your workspace's time zone. Checked once a day.",
+            "repeat": "Repeat",
+            "yearly": "Every year (month and day only)",
+            "fullDate": "Only on the full date",
+            "frequency": {
+              "once": "Once, on a date",
+              "daily": "Every day",
+              "weekly": "Every week",
+              "monthly": "Every month"
+            },
+            "date": "Date",
+            "dateHint": "YYYY-MM-DD.",
+            "weekdays": "Days of the week",
+            "monthDay": "Day of the month",
+            "monthDayHint": "31 means the last day of a shorter month.",
+            "time24Hint": "HH:MM, 24-hour.",
+            "tz": "Time zone (optional)",
+            "tzHint": "An IANA name such as Asia/Kolkata. Blank uses your workspace's time zone.",
+            "who": "Who",
+            "whoHint": "At most 5,000 people per run. Contacts who opted out, are archived or have no number are left out.",
+            "audience": {
+              "all": "Every contact with a number",
+              "group": "Contacts in a list",
+              "segment": "Contacts in a segment"
+            },
+            "list": "List",
+            "storeEvent": "Store event",
+            "storeEvents": {
+              "checkout_started": "Checkout started",
+              "abandoned_cart": "Abandoned cart (first reminder is due)",
+              "order_fulfilled": "Order fulfilled",
+              "order_refunded": "Order refunded",
+              "order_cancelled": "Order cancelled",
+              "ordered_product": "A product was ordered"
+            },
+            "productId": "Product id (optional)",
+            "productIdHint": "Blank = any product in the order.",
+            "storeNote": "The customer is matched to a saved contact by phone number; nobody is created for an order. “Added to cart” and “product viewed” are not offered: the store does not report them.",
+            "updatedNote": "Fires when a person or an import changes a contact, each time. A change made by another flow does not start it."
+          }
         }
       },
       "formsChannels": {
@@ -2001,6 +2068,34 @@
         "tg_payment": {
           "label": "Payment / Invoice",
           "description": "Send a Telegram invoice or a shareable pay link"
+        },
+        "update_contact": {
+          "label": "Update contact field",
+          "description": "Set a contact field"
+        },
+        "list_member": {
+          "label": "Add / remove list",
+          "description": "Put the contact in a list or take them out"
+        },
+        "in_list": {
+          "label": "Is in list",
+          "description": "Yes / no: the contact is in a list"
+        },
+        "in_segment": {
+          "label": "Is in segment",
+          "description": "Yes / no: the contact is in a segment"
+        },
+        "sheet_check": {
+          "label": "Check Google Sheet cell",
+          "description": "Yes / no: a cell of the matching row"
+        },
+        "sheet_contact": {
+          "label": "Save contact from Sheet",
+          "description": "Copy a sheet row into the contact"
+        },
+        "wa_session": {
+          "label": "WhatsApp session active",
+          "description": "Yes / no: the customer wrote in the last 24 hours"
         }
       },
       "groups": {
@@ -2073,7 +2168,15 @@
         "deal_stage_changed": "on deal stage",
         "away": "while away",
         "out_of_hours": "after hours",
-        "manual_enroll": "on enroll"
+        "manual_enroll": "on enroll",
+        "group_leave": "on list leave",
+        "segment_join": "on segment join",
+        "contact_updated": "on contact update",
+        "field_match": "on field match",
+        "date_field_match": "on date match",
+        "schedule": "on schedule",
+        "shopify_event": "on Shopify event",
+        "woocommerce_event": "on WooCommerce event"
       },
       "ports": {
         "manual": "manual",

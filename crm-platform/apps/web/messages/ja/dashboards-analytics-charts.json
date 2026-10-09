@@ -183,7 +183,9 @@
         "unzoned": "ゾーン未設定",
         "per24h": "{n}/24時間",
         "deliv": "配信",
-        "free": "{n, plural, other {空きデバイススロット#件}}"
+        "free": "{n, plural, other {空きデバイススロット#件}}",
+        "freeHint": "WABAを追加",
+        "connectDeviceShort": "デバイスを連携"
       },
       "templates": {
         "title": "パフォーマンス上位のテンプレート",
@@ -297,7 +299,8 @@
         "connect": "接続",
         "connectedLabel": "接続済み"
       },
-      "sublineOfficial": "{date} - {range}：送信{sent}件、到達率{rate}%。"
+      "sublineOfficial": "{date} - {range}：送信{sent}件、到達率{rate}%。",
+      "synced": "稼働中 · {s}秒前に同期"
     },
     "analytics": {
       "title": "分析",

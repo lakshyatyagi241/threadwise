@@ -95,7 +95,9 @@
         "t3": "Come migliorare i risultati?",
         "b3": "Mantieni il pubblico mirato, scegli il template più pertinente e controlla i conteggi dei non riusciti prima di inviare di nuovo."
       },
-      "unofficialDisabled": "Non ufficiale (disattivato)"
+      "unofficialDisabled": "Non ufficiale (disattivato)",
+      "noData": "Nessun dato trovato",
+      "railLabel": "Filtri broadcast"
     },
     "detail": {
       "back": "Indietro",
@@ -293,7 +295,8 @@
       "later": "Più tardi",
       "media": "Anteprima {kind}",
       "contactsDenied": "Non hai accesso all'elenco contatti. Scegli i contatti tramite gruppi o tag.",
-      "unofficialDisabled": "L'invio tramite numeri WhatsApp personali (l'API non ufficiale) non è abilitato per il tuo Workspace. Scegli un numero ufficiale dell'API WhatsApp Business."
+      "unofficialDisabled": "L'invio tramite numeri WhatsApp personali (l'API non ufficiale) non è abilitato per il tuo Workspace. Scegli un numero ufficiale dell'API WhatsApp Business.",
+      "previewLabel": "Anteprima template"
     },
     "overrides": {
       "title": "Compila questo invio",

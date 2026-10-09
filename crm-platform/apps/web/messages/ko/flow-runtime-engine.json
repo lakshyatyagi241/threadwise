@@ -55,7 +55,14 @@
       "webhook_lead": "웹훅 리드",
       "handoff": "전환",
       "inbox": "팀 수신함",
-      "retry": "재시도"
+      "retry": "재시도",
+      "group_leave": "목록 이탈",
+      "segment_join": "세그먼트 진입",
+      "contact_updated": "연락처 업데이트",
+      "field_match": "필드 일치",
+      "date_field_match": "날짜 일치",
+      "schedule": "예약",
+      "ecom_event": "스토어 이벤트"
     },
     "endReason": {
       "end_node": "플로우 끝에 도달",

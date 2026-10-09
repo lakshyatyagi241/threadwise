@@ -25,6 +25,7 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 | GET          | `/v2/campaigns/:id/live`                                                     | `camp.campaigns.read`                               |
 | GET          | `/v2/campaigns/:id/recipients`                                               | `camp.campaigns.read`                               |
 | POST         | `/v2/campaigns`                                                              | `camp.campaigns.create`                             |
+| POST         | `/v2/campaigns/ai-generate`                                                  | `camp.campaigns.create` ("Build with AI")           |
 | POST         | `/v2/campaigns/bulk-delete`                                                  | `camp.campaigns.delete`                             |
 | PUT          | `/v2/campaigns/:id`                                                          | `camp.campaigns.update`                             |
 | GET          | `/v2/broadcast-wizard/templates`, `/audience-sources`                        | `camp.campaigns.create` (ADDITION, WD-CAMP-029/030) |

@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, other {来自 {author} 的 # 条新消息}}",
         "titleNoName": "{count, plural, other {# 条新私信}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, =1 {有人想加入 {name}} other {# 人想加入 {name}}}",
+        "titleNoName": "{count, plural, =1 {有人想加入 WhatsApp 群组} other {# 人想加入 WhatsApp 群组}}",
+        "body": "打开群组以批准或拒绝。"
+      },
+      "waba_group_suspended": {
+        "title": "{name} 已被暂停",
+        "titleNoName": "一个 WhatsApp 群组已被暂停",
+        "body": "WhatsApp 已暂停此群组。在其恢复之前，你无法向该群组发送消息。"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} 已恢复正常",
+        "titleNoName": "一个 WhatsApp 群组已恢复正常",
+        "body": "WhatsApp 已恢复此群组。你可以再次向其发送消息。"
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "定时发送已发出",
         "scheduled_failed": "定时发送失败",
         "teamchat_mention": "在团队聊天中提到了你",
-        "teamchat_message": "新私信"
+        "teamchat_message": "新私信",
+        "waba_group_join_request": "加入群组请求",
+        "waba_group_suspended": "WhatsApp 群组已暂停",
+        "waba_group_suspension_cleared": "WhatsApp 群组已恢复正常"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "钱包",
         "devices": "WhatsApp 号码",
         "broadcasts": "群发与营销活动",
-        "team_chat": "团队聊天"
+        "team_chat": "团队聊天",
+        "whatsapp_groups": "WhatsApp 群组"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "钱包已充值",
           "hint": "工作区钱包已入账时。"
+        },
+        "waba_group_join_request": {
+          "label": "加入群组请求",
+          "hint": "有人申请加入你商务号码下的 WhatsApp 群组。每十条请求合并为一行。"
+        },
+        "waba_group_suspended": {
+          "label": "群组已暂停",
+          "hint": "WhatsApp 已暂停你的一个群组。"
+        },
+        "waba_group_suspension_cleared": {
+          "label": "群组已恢复正常",
+          "hint": "WhatsApp 已恢复一个此前被暂停的群组。仅当你曾收到暂停通知时才会显示。"
         }
       },
       "loading": "正在加载你的偏好设置",

@@ -1,5 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { CallEligibility, CallingNumberList, ToggleCallingResult } from '@crm/contracts';
+import { ConfigService } from '@nestjs/config';
+import type {
+  CallEligibility,
+  CallingNumberList,
+  IceServersResponse,
+  ToggleCallingResult,
+} from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { CALLING_GRAPH, type CallingGraph } from '../../infra/providers/calling-voice';
 import { AuditService } from '../../kernel/audit/audit.service';
@@ -16,7 +22,13 @@ import {
   toggleRefusal,
 } from './calling.rules';
 import { CallsRepository } from './calls.repository';
-import { caller, notFound, unprocessable, usableNumber } from './calling-support';
+import {
+  caller,
+  notFound,
+  parseIceServersEnv,
+  unprocessable,
+  usableNumber,
+} from './calling-support';
 
 const MODULE = 'wa_provider_configs';
 
@@ -32,8 +44,16 @@ export class CallingNumbersService {
     private readonly waba: WabaConnectService,
     private readonly plans: PlanEntitlementService,
     private readonly audit: AuditService,
+    private readonly config: ConfigService,
     @Inject(CALLING_GRAPH) private readonly graph: CallingGraph,
   ) {}
+
+  /** The operator's ICE list for the browser's peer (TURN included); empty means the four public STUN servers (WD-CALL-009). */
+  async iceServers(): Promise<IceServersResponse> {
+    const { orgId } = caller();
+    await this.plans.assertFeature(orgId, 'waba_calling');
+    return { servers: parseIceServersEnv(this.config.get<string>('CALLING_ICE_SERVERS')) };
+  }
 
   async list(): Promise<CallingNumberList> {
     const { orgId } = caller();

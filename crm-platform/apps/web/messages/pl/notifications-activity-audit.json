@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, one {Nowa wiadomość od {author}} few {# nowe wiadomości od {author}} many {# nowych wiadomości od {author}} other {# nowej wiadomości od {author}}}",
         "titleNoName": "{count, plural, one {Nowa wiadomość prywatna} few {# nowe wiadomości prywatne} many {# nowych wiadomości prywatnych} other {# nowej wiadomości prywatnej}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {Ktoś chce dołączyć do {name}} few {# osoby chcą dołączyć do {name}} many {# osób chce dołączyć do {name}} other {# osób chce dołączyć do {name}}}",
+        "titleNoName": "{count, plural, one {Ktoś chce dołączyć do grupy WhatsApp} few {# osoby chcą dołączyć do grupy WhatsApp} many {# osób chce dołączyć do grupy WhatsApp} other {# osób chce dołączyć do grupy WhatsApp}}",
+        "body": "Otwórz Grupy, aby zatwierdzić lub odrzucić."
+      },
+      "waba_group_suspended": {
+        "title": "{name} został zawieszony",
+        "titleNoName": "Grupa WhatsApp została zawieszona",
+        "body": "WhatsApp zawiesił tę grupę. Do czasu jej przywrócenia nie możesz do niej pisać."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} jest znów aktywny",
+        "titleNoName": "Grupa WhatsApp jest znów aktywna",
+        "body": "WhatsApp przywrócił tę grupę. Możesz znów do niej pisać."
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "Zaplanowana wysyłka wysłana",
         "scheduled_failed": "Zaplanowana wysyłka nieudana",
         "teamchat_mention": "Wspomniano o Tobie w czacie zespołu",
-        "teamchat_message": "Nowa wiadomość prywatna"
+        "teamchat_message": "Nowa wiadomość prywatna",
+        "waba_group_join_request": "Prośba o dołączenie do grupy",
+        "waba_group_suspended": "Grupa WhatsApp zawieszona",
+        "waba_group_suspension_cleared": "Grupa WhatsApp znów aktywna"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "Portfel",
         "devices": "Numery WhatsApp",
         "broadcasts": "Wiadomości masowe i kampanie",
-        "team_chat": "Czat zespołu"
+        "team_chat": "Czat zespołu",
+        "whatsapp_groups": "Grupy WhatsApp"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "Portfel doładowany",
           "hint": "Portfel przestrzeni roboczej został zasilony."
+        },
+        "waba_group_join_request": {
+          "label": "Prośba o dołączenie do grupy",
+          "hint": "Osoby proszą o dołączenie do grupy WhatsApp z numeru Twojej firmy. Dziesięć próśb tworzy jeden wiersz."
+        },
+        "waba_group_suspended": {
+          "label": "Grupa zawieszona",
+          "hint": "WhatsApp zawiesił jedną z Twoich grup."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "Grupa znów aktywna",
+          "hint": "WhatsApp przywrócił grupę, którą wcześniej zawiesił. Tylko jeśli zostałeś o zawieszeniu poinformowany."
         }
       },
       "loading": "Wczytywanie Twoich preferencji",

@@ -55,7 +55,14 @@
       "webhook_lead": "Khách tiềm năng từ webhook",
       "handoff": "Chuyển giao",
       "inbox": "Hộp thư nhóm",
-      "retry": "Thử lại"
+      "retry": "Thử lại",
+      "group_leave": "Rời danh sách",
+      "segment_join": "Vào phân đoạn",
+      "contact_updated": "Liên hệ được cập nhật",
+      "field_match": "Khớp trường",
+      "date_field_match": "Khớp ngày",
+      "schedule": "Lịch gửi",
+      "ecom_event": "Sự kiện cửa hàng"
     },
     "endReason": {
       "end_node": "Đã đến cuối luồng",

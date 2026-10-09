@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "ऐड-ऑन लोड नहीं हो सके।"
+    },
+    "planFields": {
+      "fromModule": "इंस्टॉल किए गए मॉड्यूल से",
+      "unlimited": "असीमित"
     }
   }
 }

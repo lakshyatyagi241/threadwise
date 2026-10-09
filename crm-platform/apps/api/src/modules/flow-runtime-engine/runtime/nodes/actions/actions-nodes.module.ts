@@ -7,7 +7,9 @@ import { TeamInboxRoutingSlaModule } from '../../../../team-inbox-routing-sla';
 import { ActionNodes } from './actions-nodes';
 import { AskInputNode } from './ask-input-node';
 import { AskMediaNodes } from './ask-media-nodes';
+import { CrmNodes } from '../crm/crm-nodes';
 import { NumberSender } from './number-sender.service';
+import { SocialHandoffNode } from './social-handoff-node';
 
 /** Imports the domains this node group calls (their public modules only); never the flow runtime module (it imports this one). */
 @Module({
@@ -17,7 +19,15 @@ import { NumberSender } from './number-sender.service';
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,
   ],
-  providers: [ActionNodes, AskMediaNodes, AskInputNode, NumberSender, SafeFetch],
-  exports: [ActionNodes, AskMediaNodes, AskInputNode],
+  providers: [
+    ActionNodes,
+    AskMediaNodes,
+    AskInputNode,
+    SocialHandoffNode,
+    CrmNodes,
+    NumberSender,
+    SafeFetch,
+  ],
+  exports: [ActionNodes, AskMediaNodes, AskInputNode, SocialHandoffNode, CrmNodes],
 })
 export class ActionNodesModule {}

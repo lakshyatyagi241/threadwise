@@ -1238,7 +1238,15 @@
             "away": "Disponibilidade: enquanto o modo Ausente está ativo",
             "out_of_hours": "Disponibilidade: fora do horário comercial",
             "manual_enroll": "Manual: o operador inscreve contatos",
-            "comment_to_dm": "Instagram: alguém comenta em uma publicação → DM"
+            "comment_to_dm": "Instagram: alguém comenta em uma publicação → DM",
+            "group_leave": "Público: quando o contato sai de uma lista",
+            "segment_join": "Público: quando o contato entra em um segmento",
+            "contact_updated": "Público: quando um contato é atualizado",
+            "field_match": "Público: quando um campo do contato corresponde a um valor",
+            "date_field_match": "Agendamento: em relação a uma data do contato (aniversário…)",
+            "schedule": "Agendamento: em uma data e hora",
+            "shopify_event": "Comércio: um evento da loja Shopify",
+            "woocommerce_event": "Comércio: um evento da loja WooCommerce"
           },
           "tagsLoading": "Carregando tags…",
           "tagPick": "— escolha a tag —",
@@ -1274,7 +1282,66 @@
           "automatic": "Dispara automaticamente — nenhuma configuração extra necessária.",
           "away": "Dispara em qualquer mensagem recebida enquanto o <b>modo Ausente</b> está ATIVO. Alterne o modo Ausente na página <link>Resposta automática</link>. Cada contato é inscrito uma vez.",
           "outOfHours": "Dispara em qualquer mensagem recebida <b>fora do horário comercial do seu espaço de trabalho</b>. Defina o horário comercial nas configurações do espaço de trabalho. Cada contato é inscrito uma vez.",
-          "manualEnroll": "Você inscreverá contatos manualmente na <link>lista /flows</link> pelo botão <b>Inscrever</b> ao lado deste fluxo."
+          "manualEnroll": "Você inscreverá contatos manualmente na <link>lista /flows</link> pelo botão <b>Inscrever</b> ao lado deste fluxo.",
+          "ext": {
+            "segmentsLoading": "Carregando segmentos…",
+            "segmentPick": "— escolha um segmento —",
+            "segmentFallback": "Segmento",
+            "groupLeaveLabel": "Lista que dispara o fluxo",
+            "groupLeaveHint": "Executa quando um contato é removido desta lista por uma pessoa ou importação. Um fluxo que o remove por conta própria não o inicia.",
+            "segmentLabel": "Segmento",
+            "segmentHint": "Executa uma vez por contato, na primeira vez em que ele é encontrado dentro do segmento após ser criado, marcado, incluído em lista ou atualizado.",
+            "fieldLabel": "Campo do contato",
+            "fieldHint": "A chave do campo: name, email, title, language, address, ou a chave de um campo personalizado.",
+            "test": "Testar",
+            "value": "Valor",
+            "valueHint": "Verificado sempre que o contato é criado ou alterado. Um contato executa uma vez para cada valor que assume.",
+            "when": "Quando",
+            "dirOn": "Na data",
+            "dirBefore": "Dias antes da data",
+            "dirAfter": "Dias depois da data",
+            "days": "Dias",
+            "timeOfDay": "Hora do dia",
+            "timeZoneHint": "No fuso horário do seu workspace. Verificado uma vez por dia.",
+            "repeat": "Repetir",
+            "yearly": "Todo ano (somente mês e dia)",
+            "fullDate": "Somente na data completa",
+            "frequency": {
+              "once": "Uma vez, em uma data",
+              "daily": "Todos os dias",
+              "weekly": "Toda semana",
+              "monthly": "Todo mês"
+            },
+            "date": "Data",
+            "dateHint": "AAAA-MM-DD.",
+            "weekdays": "Dias da semana",
+            "monthDay": "Dia do mês",
+            "monthDayHint": "31 significa o último dia de meses mais curtos.",
+            "time24Hint": "HH:MM, formato de 24 horas.",
+            "tz": "Fuso horário (opcional)",
+            "tzHint": "Um nome IANA, como Asia/Kolkata. Em branco usa o fuso horário do seu workspace.",
+            "who": "Quem",
+            "whoHint": "No máximo 5.000 pessoas por execução. Contatos que cancelaram a inscrição, arquivados ou sem número ficam de fora.",
+            "audience": {
+              "all": "Todos os contatos com número",
+              "group": "Contatos em uma lista",
+              "segment": "Contatos em um segmento"
+            },
+            "list": "Lista",
+            "storeEvent": "Evento da loja",
+            "storeEvents": {
+              "checkout_started": "Checkout iniciado",
+              "abandoned_cart": "Carrinho abandonado (o primeiro lembrete está previsto)",
+              "order_fulfilled": "Pedido enviado",
+              "order_refunded": "Pedido reembolsado",
+              "order_cancelled": "Pedido cancelado",
+              "ordered_product": "Um produto foi pedido"
+            },
+            "productId": "ID do produto (opcional)",
+            "productIdHint": "Em branco = qualquer produto do pedido.",
+            "storeNote": "O cliente é associado a um contato salvo pelo número de telefone; ninguém é criado por causa de um pedido. “Adicionado ao carrinho” e “produto visualizado” não são oferecidos: a loja não informa esses eventos.",
+            "updatedNote": "Dispara sempre que uma pessoa ou importação altera um contato. Uma alteração feita por outro fluxo não o inicia."
+          }
         }
       },
       "formsChannels": {
@@ -2001,6 +2068,34 @@
         "tg_payment": {
           "label": "Pagamento / Fatura",
           "description": "Enviar uma fatura do Telegram ou um link de pagamento compartilhável"
+        },
+        "update_contact": {
+          "label": "Atualizar campo do contato",
+          "description": "Definir um campo do contato"
+        },
+        "list_member": {
+          "label": "Adicionar / remover da lista",
+          "description": "Adicionar o contato a uma lista ou removê-lo dela"
+        },
+        "in_list": {
+          "label": "Está na lista",
+          "description": "Sim / não: o contato está em uma lista"
+        },
+        "in_segment": {
+          "label": "Está no segmento",
+          "description": "Sim / não: o contato está em um segmento"
+        },
+        "sheet_check": {
+          "label": "Verificar célula do Google Sheets",
+          "description": "Sim / não: uma célula da linha correspondente"
+        },
+        "sheet_contact": {
+          "label": "Salvar contato da planilha",
+          "description": "Copiar uma linha da planilha para o contato"
+        },
+        "wa_session": {
+          "label": "Sessão do WhatsApp ativa",
+          "description": "Sim / não: o cliente escreveu nas últimas 24 horas"
         }
       },
       "groups": {
@@ -2073,7 +2168,15 @@
         "deal_stage_changed": "em etapa do negócio",
         "away": "enquanto ausente",
         "out_of_hours": "fora do expediente",
-        "manual_enroll": "ao inscrever"
+        "manual_enroll": "ao inscrever",
+        "group_leave": "ao sair da lista",
+        "segment_join": "ao entrar no segmento",
+        "contact_updated": "ao atualizar o contato",
+        "field_match": "ao coincidir o campo",
+        "date_field_match": "ao coincidir a data",
+        "schedule": "no agendamento",
+        "shopify_event": "no evento do Shopify",
+        "woocommerce_event": "no evento do WooCommerce"
       },
       "ports": {
         "manual": "manual",

@@ -183,7 +183,9 @@
         "unzoned": "chưa phân vùng",
         "per24h": "{n}/24h",
         "deliv": "đã gửi đến",
-        "free": "{n, plural, other {# vị trí thiết bị còn trống}}"
+        "free": "{n, plural, other {# vị trí thiết bị còn trống}}",
+        "freeHint": "Thêm WABA",
+        "connectDeviceShort": "Kết nối thiết bị"
       },
       "templates": {
         "title": "Mẫu hiệu quả nhất",
@@ -297,7 +299,8 @@
         "connect": "Kết nối",
         "connectedLabel": "Đã kết nối"
       },
-      "sublineOfficial": "{date} - {range} cho thấy {sent} tin gửi đi, tỷ lệ gửi thành công {rate}%."
+      "sublineOfficial": "{date} - {range} cho thấy {sent} tin gửi đi, tỷ lệ gửi thành công {rate}%.",
+      "synced": "Trực tiếp · đồng bộ {s} giây trước"
     },
     "analytics": {
       "title": "Phân tích",

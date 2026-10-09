@@ -1,5 +1,6 @@
 import { UnrecoverableError, type Job } from 'bullmq';
 import { describe, expect, it, vi } from 'vitest';
+import { readWabaEnv } from '../../../src/config/domains/whatsapp-cloud-api-waba.env';
 import { PinnacleError } from '../../../src/infra/providers/whatsapp-cloud-api-waba/pinnacle-partner.client';
 import type { WabaRegistryProvider } from '../../../src/infra/providers/whatsapp-cloud-api-waba/waba-registry-routes';
 import { PinnacleCreditLineProcessor } from '../../../src/modules/whatsapp-cloud-api-waba/pinnacle-credit-line.processor';
@@ -35,6 +36,7 @@ function setup(registry: WabaRegistryProvider | undefined = provider) {
     repo as never,
     routes as never,
     pinnacle as never,
+    readWabaEnv({}),
   );
   return { proc, pinnacle, updates };
 }
@@ -44,7 +46,7 @@ describe('PinnacleCreditLineProcessor', () => {
     const { proc, pinnacle, updates } = setup();
     await expect(proc.process(jobOf())).resolves.toEqual({ shared: true });
     expect(pinnacle.shareCreditLine).toHaveBeenCalledWith(
-      { baseUrl: 'https://partners.example-bsp.com', partnerKey: 'partner-key' },
+      { baseUrl: 'https://partnersv1.pinbot.ai', partnerKey: 'partner-key' },
       { businessId: '300', wabaId: '100' },
     );
     expect(updates[0]).toMatchObject({ credit_line_assigned: true, credit_line_error: null });

@@ -95,7 +95,9 @@
         "t3": "Bagaimana cara meningkatkan hasil?",
         "b3": "Fokuskan audiens, pilih template yang paling relevan, dan periksa jumlah yang gagal sebelum mengirim lagi."
       },
-      "unofficialDisabled": "Tidak resmi (dinonaktifkan)"
+      "unofficialDisabled": "Tidak resmi (dinonaktifkan)",
+      "noData": "Data tidak ditemukan",
+      "railLabel": "Filter siaran"
     },
     "detail": {
       "back": "Kembali",
@@ -293,7 +295,8 @@
       "later": "Nanti",
       "media": "Pratinjau {kind}",
       "contactsDenied": "Anda tidak memiliki akses ke daftar kontak. Pilih kontak melalui grup atau tag.",
-      "unofficialDisabled": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi."
+      "unofficialDisabled": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi.",
+      "previewLabel": "Pratinjau templat"
     },
     "overrides": {
       "title": "Isi pengiriman ini",

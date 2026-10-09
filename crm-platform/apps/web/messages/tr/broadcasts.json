@@ -95,7 +95,9 @@
         "t3": "Sonuçları nasıl iyileştirebilirim?",
         "b3": "Kitleyi odaklı tutun, en alakalı şablonu seçin ve yeniden göndermeden önce başarısız sayılarını inceleyin."
       },
-      "unofficialDisabled": "Resmî olmayan (devre dışı)"
+      "unofficialDisabled": "Resmî olmayan (devre dışı)",
+      "noData": "Veri bulunamadı",
+      "railLabel": "Toplu gönderim filtreleri"
     },
     "detail": {
       "back": "Geri",
@@ -293,7 +295,8 @@
       "later": "Sonra",
       "media": "{kind} önizlemesi",
       "contactsDenied": "Kişi listesine erişiminiz yok. Kişileri gruplar veya etiketler üzerinden seçin.",
-      "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin."
+      "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin.",
+      "previewLabel": "Şablon önizleme"
     },
     "overrides": {
       "title": "Bu gönderimi doldurun",

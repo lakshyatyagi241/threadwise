@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "Không thể tải tiện ích bổ sung."
+    },
+    "planFields": {
+      "fromModule": "từ một module đã cài đặt",
+      "unlimited": "Không giới hạn"
     }
   }
 }

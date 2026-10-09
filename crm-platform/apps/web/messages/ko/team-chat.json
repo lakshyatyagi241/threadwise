@@ -25,7 +25,9 @@
       "deleteTitle": "이 채널을 삭제하시겠습니까?",
       "deleteMessage": "#{name} 채널과 모든 메시지가 모든 사용자에게서 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
       "deleteConfirm": "채널 삭제",
-      "cancel": "취소"
+      "cancel": "취소",
+      "defaultDescription": "내부 워크스페이스 채팅",
+      "customerChats": "고객 채팅"
     },
     "sidebar": {
       "label": "채널 및 사용자",
@@ -39,7 +41,12 @@
       "invite": "팀원 초대",
       "pending": "대기 중인 요청",
       "pendingCount": "{count, plural, other {대기 중인 요청 #개}}",
-      "unread": "{count, plural, other {읽지 않은 메시지 #개}}"
+      "unread": "{count, plural, other {읽지 않은 메시지 #개}}",
+      "workspace": "워크스페이스",
+      "mode": "모드",
+      "customerChats": "고객 채팅",
+      "teamChat": "팀 채팅",
+      "membersLink": "멤버"
     },
     "members": {
       "label": "멤버",
@@ -52,7 +59,8 @@
       "online": "온라인",
       "offline": "오프라인",
       "you": "(나)",
-      "message": "{name} 님에게 메시지 보내기"
+      "message": "{name} 님에게 메시지 보내기",
+      "titleAccent": "채팅"
     },
     "panel": {
       "searchTitle": "메시지 검색",
@@ -104,7 +112,11 @@
       "fileTooLarge": "파일 크기가 20MB를 초과합니다.",
       "mentionList": "언급할 팀원",
       "typingOne": "{name} 님이 입력 중입니다",
-      "typingMany": "{count}명이 입력 중입니다"
+      "typingMany": "{count}명이 입력 중입니다",
+      "hintSend": "전송",
+      "hintNewLine": "줄바꿈",
+      "hintMention": "멘션",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "채널 만들기",
@@ -122,7 +134,9 @@
         "hint": "초대된 사용자만 참여할 수 있습니다. 멤버에게만 표시됩니다."
       },
       "cancel": "취소",
-      "create": "채널 만들기"
+      "create": "채널 만들기",
+      "namePlaceholder": "예: 지원",
+      "descriptionPlaceholder": "이 채널의 용도는 무엇인가요?"
     },
     "invite": {
       "title": "팀원 초대",
@@ -135,7 +149,10 @@
       "approved": "완료되었습니다. 요청이 승인되었습니다.",
       "pending": "초대가 제출되었으며 관리자 승인을 기다리는 중입니다.",
       "cancel": "취소",
-      "submit": "초대 제출"
+      "submit": "초대 제출",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "이름",
+      "notePlaceholder": "가입하려는 이유는 무엇인가요?"
     },
     "invitations": {
       "title": "대기 중인 초대",

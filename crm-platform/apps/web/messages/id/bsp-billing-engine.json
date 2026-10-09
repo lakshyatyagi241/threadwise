@@ -68,7 +68,11 @@
           "autoAttachCurrency": "Meta tidak menerima mata uang ini.",
           "baseCurrency": "Gunakan kode mata uang tiga huruf.",
           "businessId": "Masukkan maksimal 64 karakter."
-        }
+        },
+        "kicker": "koneksi meta",
+        "businessIdHint": "Pengaturan bisnis → Info bisnis → \"ID portofolio bisnis\". Angka panjang.",
+        "creditLinePlaceholder": "terdeteksi otomatis dari bisnis Anda",
+        "tokenNote": "Token disimpan terenkripsi dan tidak pernah ditampilkan kembali."
       },
       "step2": {
         "title": "2. Pasang satu pelanggan secara manual",
@@ -90,7 +94,10 @@
         "failed": "Pemasangan gagal: {error}",
         "finishStep1": "Selesaikan langkah 1 terlebih dahulu.",
         "workspaceOption": "{workspace} · {phone} · WABA …{tail}",
-        "noPhone": "tanpa nomor"
+        "noPhone": "tanpa nomor",
+        "kicker": "lampirkan manual, opsional",
+        "numberHint": "Pilih pelanggan berdasarkan nama: kami yang mengelola ID akun di baliknya.",
+        "currencyHint": "Mata uang yang digunakan Meta untuk menagih nomor ini."
       },
       "register": {
         "title": "Jalur kredit yang digunakan",
@@ -119,7 +126,8 @@
         "revokeFailed": "Pencabutan gagal: {error}",
         "loadMore": "Muat lebih banyak",
         "loadingMore": "Memuat",
-        "label": "Alokasi kredit"
+        "label": "Alokasi kredit",
+        "kicker": "akun terlampir"
       },
       "guide": {
         "title": "Panduan penyiapan",
@@ -133,13 +141,19 @@
         "good1": "Mata uang jalur kredit terkunci setelah dipasang.",
         "good2": "Pemasangan berarti Meta menagih Anda, tetapi Anda tetap menentukan harga untuk pelanggan Anda.",
         "good3": "Anda dapat mencabutnya kapan saja dan pelanggan kembali membayar langsung ke Meta.",
-        "link": "Ikhtisar Meta Solution Partner"
-      }
+        "link": "Ikhtisar Meta Solution Partner",
+        "kicker": "Panduan pengaturan",
+        "step2Note": "Token hanya ditampilkan sekali, jadi salin segera.",
+        "step3Apply": "Ajukan jalur kredit",
+        "step3Note": "Setelah disetujui, platform membaca ID-nya secara otomatis dan langkah 2 membagikannya ke setiap WABA pelanggan.",
+        "metaDocs": "Dokumentasi Meta",
+        "reference": "referensi"
+      },
+      "eyebrow": "Penagihan reseller · jalur kredit Meta"
     },
     "dashboard": {
       "title": "Laba rugi reseller",
       "eyebrow": "Bulan ini",
-      "intro": "Pendapatan adalah jumlah yang ditagihkan ke pelanggan untuk pesan yang tersampaikan, biaya Meta adalah biaya pesan yang sama bagi Anda, margin adalah selisihnya. Pesan yang dikembalikan dananya dan pesan gratis tidak dihitung.",
       "linkRates": "Tarif & margin",
       "linkConnect": "Hubungkan Meta",
       "revenue": "Pendapatan (ditagihkan)",
@@ -150,7 +164,6 @@
       "billed": "Pesan berbayar",
       "free": "Pesan gratis",
       "unpriced": "Biaya Meta belum diatur",
-      "unpricedBanner": "{count, plural, other {# pesan berbayar tidak memiliki}} biaya Meta untuk negara dan kategorinya, sehingga margin menghitungnya sebagai pendapatan murni.",
       "perWorkspace": "Per workspace (bulan ini)",
       "columns": {
         "workspace": "Workspace",
@@ -163,7 +176,10 @@
       "empty": "Belum ada pesan berbayar bulan ini.",
       "more": "Hanya workspace dengan pendapatan teratas yang ditampilkan.",
       "loadFailed": "Laba rugi tidak dapat dimuat.",
-      "currency": "Mata uang laporan"
+      "currency": "Mata uang laporan",
+      "intro": "Setiap pesan yang ditagih adalah biaya dompet. Pendapatan adalah yang dibayar pelanggan Anda; biaya Meta adalah yang ditagihkan Meta kepada Anda; selisihnya adalah margin Anda. Harga & biaya diatur di <link>Aturan dompet</link>.",
+      "linkPnl": "L/R",
+      "unpricedBanner": "{count, plural, other {# pesan tertagih tidak memiliki biaya Meta}} untuk negara/kategori mereka, sehingga margin mereka dihitung sebagai pendapatan murni. Tambahkan baris tersebut di <link>Aturan dompet → Sinkronkan biaya Meta</link>."
     }
   }
 }

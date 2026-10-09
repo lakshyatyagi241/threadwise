@@ -55,7 +55,14 @@
       "webhook_lead": "Webhook 线索",
       "handoff": "转交",
       "inbox": "团队收件箱",
-      "retry": "重试"
+      "retry": "重试",
+      "group_leave": "退出列表",
+      "segment_join": "加入分组",
+      "contact_updated": "联系人已更新",
+      "field_match": "字段匹配",
+      "date_field_match": "日期匹配",
+      "schedule": "定时",
+      "ecom_event": "店铺事件"
     },
     "endReason": {
       "end_node": "已到达流程末尾",

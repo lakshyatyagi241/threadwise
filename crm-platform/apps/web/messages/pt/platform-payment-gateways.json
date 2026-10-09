@@ -15,7 +15,11 @@
         "total": "Gateways",
         "active": "Ativo",
         "india": "Índia",
-        "crypto": "Cripto"
+        "crypto": "Cripto",
+        "totalHint": "drivers disponíveis",
+        "activeHint": "aceitando pagamentos",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "liquidação on-chain"
       },
       "tabsLabel": "Filtrar por região",
       "all": "Todos",
@@ -32,7 +36,8 @@
         "africa": "África",
         "latam": "América Latina",
         "crypto": "Cripto",
-        "offline": "Offline"
+        "offline": "Offline",
+        "other": "Outros"
       },
       "card": {
         "active": "Ativo",
@@ -57,11 +62,12 @@
         "webhookUrl": "URL do webhook",
         "webhookHint": "Cole isto no painel do provedor para que ele nos avise sobre os pagamentos.",
         "saving": "Salvando",
-        "save": "Salvar",
         "readOnly": "Somente um super administrador pode alterar os gateways.",
         "saved": "Configurações de {name} salvas.",
         "activated": "{name} ativado.",
-        "deactivated": "{name} desativado."
+        "deactivated": "{name} desativado.",
+        "noCredentials": "Nenhuma credencial necessária — o gateway usa confirmação manual / fora de banda.",
+        "save": "Salvar {name}"
       },
       "errors": {
         "conflict": "Outra pessoa alterou este gateway. Ele foi recarregado; revise e salve novamente.",
@@ -69,7 +75,10 @@
         "noDriver": "Este gateway ainda não tem driver nesta versão, por isso pode ser configurado, mas não ativado.",
         "forbidden": "Somente um super administrador pode alterar os gateways.",
         "generic": "Algo deu errado. Tente novamente."
-      }
+      },
+      "eyebrow": "Admin · Cobrança · Gateways",
+      "titleFirst": "Pagamento",
+      "titleSecond": "gateways"
     },
     "checkout": {
       "title": "Conclua seu pedido",
@@ -132,7 +141,28 @@
       "autoRenew": "Renovação automática a cada período. Você pode cancelar quando quiser.",
       "addonRenews": "Este complemento é renovado automaticamente a cada período. Você pode cancelá-lo a qualquer momento e mantê-lo até o fim do período pago.",
       "cardTitle": "Pagar com cartão",
-      "payNow": "Pagar agora"
+      "payNow": "Pagar agora",
+      "titleFirst": "Conclua seu",
+      "titleSecond": "pedido",
+      "subtitleRefund": "Garantia de devolução do dinheiro em {days} dias. Cancele quando quiser. Aceitamos cartões, UPI, netbanking e carteiras digitais.",
+      "steps": {
+        "plan": "Escolher plano",
+        "checkout": "Checkout",
+        "confirmation": "Confirmação"
+      },
+      "step": "Etapa {n}",
+      "taxIdPlaceholder": "CNPJ / CPF / NIF",
+      "addressPlaceholder": "Rua + número",
+      "cityPlaceholder": "São Paulo",
+      "currencyTitle": "Pague na sua moeda",
+      "currencyHint": "Os preços são convertidos na hora. Só são exibidas as moedas aceitas pelos seus meios de pagamento disponíveis.",
+      "couponPlaceholder": "Tem um código de cupom?",
+      "live": "ao vivo",
+      "tlsNote": "Os pagamentos são processados por uma conexão TLS de 256 bits. Nunca vemos os dados do seu cartão.",
+      "change": "Alterar",
+      "terms": "Ao pagar, você concorda com nossos <terms>Termos</terms> e nossa <privacy>Política de privacidade</privacy>.",
+      "refundNote": "Não está satisfeito? Escreva para nós nos primeiros {days} dias e devolvemos o valor integral — sem perguntas, sem formulários.",
+      "autoRenewTitle": "Renovar automaticamente este plano"
     },
     "orders": {
       "title": "Histórico de pedidos",

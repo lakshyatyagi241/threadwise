@@ -60,7 +60,10 @@
       "expand": "サイドバーを展開",
       "backToApp": "アプリに戻る",
       "allAreas": "すべてのエリア",
-      "switchArea": "エリアを切り替え(現在: {area})"
+      "switchArea": "エリアを切り替え(現在: {area})",
+      "railCaption": "コンソール",
+      "wallet": "ウォレット",
+      "topUp": "チャージ →"
     },
     "overview": {
       "title": "プラットフォームコンソール",
@@ -337,7 +340,8 @@
       "railLabel": "設定セクション",
       "personal": {
         "title": "あなたのアカウント",
-        "body": "プロフィール、パスワード、個人設定。"
+        "body": "プロフィール、パスワード、個人設定。",
+        "eyebrow": "個人"
       },
       "api": {
         "restTitle": "汎用REST API",
@@ -346,7 +350,19 @@
         "rest3": "リクエストはプランに応じて1分あたりの回数が制限されます。",
         "webhooksTitle": "Webhook",
         "webhooksBody": "イベントを自社のエンドポイントに送信し、他のツールからイベントを受信します。",
-        "manage": "連携を管理"
+        "manage": "連携を管理",
+        "sheetsTitle": "Google Sheets APIキー",
+        "sheetsBody": "Sheetsアドオンが連絡先とメッセージの行をシートに書き出す際に使用します。現在公開されている唯一の個人用トークンです。",
+        "manageInAccount": "アカウントで管理",
+        "active": "有効",
+        "keyTimes": "作成 {created} · 最終使用 {used}",
+        "never": "未使用",
+        "noKey": "Sheets APIキーは生成されていません。次の場所で作成してください:",
+        "noKeyLink": "アカウント → Sheetsアドオン",
+        "outboundTitle": "送信エンドポイント",
+        "outboundBody": "ワークスペース → お客様のサーバー（CRMフック、送信／返信イベント）。",
+        "inboundTitle": "受信Webhook",
+        "inboundBody": "お客様のサーバー → ワークスペース（受信WABA／非公式API配信）。"
       },
       "appearance": {
         "title": "外観",
@@ -363,12 +379,91 @@
         },
         "save": "保存",
         "saved": "外観を更新しました。"
+      },
+      "branding": {
+        "ownerOnly": "ブランディングを変更できるのはワークスペースのオーナーのみです。",
+        "loadFailed": "ブランディングを読み込めませんでした。",
+        "saved": "ブランディングを更新しました。",
+        "saveFailed": "ブランディングを保存できませんでした。",
+        "logoTitle": "ロゴとファビコン",
+        "logoBody": "ヘッダー、請求書、メール、お客様向けポータルで使用されます。",
+        "logo": "ロゴ",
+        "favicon": "ファビコン",
+        "logoHint": "PNG / JPG / WebP · 最大2MB · 推奨 240×80",
+        "faviconHint": "32×32 PNG · 最大512KB",
+        "click": "クリックしてアップロード",
+        "orDrag": "またはドラッグ＆ドロップ",
+        "currentTag": "現在",
+        "current": {
+          "logo": "現在のロゴ",
+          "favicon": "現在のファビコン"
+        },
+        "coloursTitle": "ブランドカラー",
+        "coloursBody": "ダッシュボードのクローム、ボタン、アクセント線に適用されます。保存すると全ページに反映されます。",
+        "colours": {
+          "primary": "メイン",
+          "accent": "アクセント",
+          "background": "背景"
+        },
+        "colourInvalid": "#RRGGBB形式の色を入力してください（例: #075E54）。",
+        "save": "ブランディングを保存"
+      },
+      "residency": {
+        "loadFailed": "データ保管場所の設定を読み込めませんでした。",
+        "title": "越境データ転送を制限",
+        "body": "このワークスペースでより厳格なルーティングモードを設定します。自動返信の翻訳は、選択したモードに対応するプロバイダーのみを経由します。それ以外のプロバイダーは実行時に自動的にスキップされます。",
+        "ownerOnly": "この設定を変更できるのはワークスペースのオーナーのみです。",
+        "saved": "データ保管場所を更新しました。翻訳ルーティングは次回の受信から新しい設定に従います。",
+        "saveFailed": "データ保管場所の設定を保存できませんでした。",
+        "save": "保管場所の設定を保存",
+        "modes": {
+          "any": {
+            "name": "制限なし",
+            "text": "フォールバックチェーンが選択した有効なプロバイダーを使用します。稼働率が最も高く、コンプライアンス上の制限はありません。"
+          },
+          "eu_only": {
+            "name": "EU限定ルーティング",
+            "text": "DeepL（ドイツ）とセルフホスト型LibreTranslateのみ許可されます。GDPR第44条の越境データ移転規則に準拠しています。"
+          },
+          "local": {
+            "name": "オンプレミスのみ",
+            "text": "セルフホスト型LibreTranslateドライバーのみ許可されます。お客様のメッセージ本文が自社サーバー外に出ることはありません。LibreTranslateの設定が必要です。"
+          }
+        }
       }
     },
     "topNav": {
       "more": "その他",
       "search": "検索",
-      "premium": "プレミアム機能: プランをアップグレードして解放"
+      "premium": "プレミアム機能: プランをアップグレードして解放",
+      "labels": {
+        "dashboard": "ダッシュボード",
+        "team-inbox": "統合受信トレイ",
+        "wa-campaigns": "キャンペーン",
+        "flows": "フロー",
+        "templates": "テンプレート",
+        "devices": "チャネル",
+        "metaads": "Meta広告",
+        "broadcasts": "一斉配信",
+        "contacts": "連絡先",
+        "deals": "商談",
+        "chat": "ライブチャット",
+        "analytics": "分析",
+        "auto-reply": "自動返信",
+        "scheduled": "予約済み",
+        "message-history": "履歴",
+        "ai-assistants": "AIアシスタント",
+        "ai-training": "AIトレーニング",
+        "wa-links": "WAリンク",
+        "chatbot-widgets": "チャットウィジェット",
+        "webhooks": "Webhook",
+        "integrations": "連携",
+        "warmer": "ウォーマー",
+        "call-logs": "通話ログ",
+        "support": "サポート",
+        "more": "その他"
+      },
+      "workspaceLogo": "ワークスペースのロゴ"
     },
     "palette": {
       "title": "ページを検索",
@@ -412,7 +507,9 @@
       "wallet": "ウォレット",
       "orders": "注文履歴",
       "plans": "料金とプラン",
-      "tour": "ツアーを開始"
+      "tour": "ツアーを開始",
+      "profile": "プロフィール",
+      "help": "ヘルプとサポート"
     },
     "quickAccess": {
       "title": "クイックアクセス",
@@ -599,23 +696,28 @@
         "pager": "ヒント",
         "templates": {
           "title": "テンプレートを使う",
-          "body": "承認済みのテンプレートは、24時間のウィンドウ外のお客様にも届きます。"
+          "body": "承認済みのテンプレートは、24時間のウィンドウ外のお客様にも届きます。",
+          "cta": "テンプレートを管理 →"
         },
         "flows": {
           "title": "返信を自動化",
-          "body": "フローなら、同じ質問に毎回代わりに答えられます。"
+          "body": "フローなら、同じ質問に毎回代わりに答えられます。",
+          "cta": "フロービルダーを開く →"
         },
         "palette": {
           "title": "どこへでも移動",
-          "body": "Ctrl K を押すとすべてのページを検索できます。"
+          "body": "Ctrl K を押すとすべてのページを検索できます。",
+          "cta": "今すぐ試す"
         },
         "scheduled": {
           "title": "先に予約",
-          "body": "今メッセージをキューに入れておけば、最適なタイミングで送信されます。"
+          "body": "今メッセージをキューに入れておけば、最適なタイミングで送信されます。",
+          "cta": "新規予約 →"
         },
         "wallet": {
           "title": "残高を確認",
-          "body": "送信が止まらないよう、残高が少なくなる前にチャージしましょう。"
+          "body": "送信が止まらないよう、残高が少なくなる前にチャージしましょう。",
+          "cta": "自動チャージを設定 →"
         }
       },
       "shortcuts": {
@@ -681,6 +783,339 @@
             "subtitle": "メッセージテンプレートを作成"
           }
         }
+      },
+      "cards": {
+        "meta-ads": {
+          "title": "Meta広告",
+          "desc": "FacebookとInstagramでClick-to-WhatsApp広告キャンペーンを作成・管理します。クリックするたびに、連携済み番号でチャットが開きます。",
+          "foot": "click-to-chat",
+          "open": "Meta広告を開く",
+          "badge": "広告"
+        },
+        "instagram-posts": {
+          "title": "Instagram投稿",
+          "desc": "Instagram投稿（画像、リール、ストーリー、カルーセル）を作成して予約します。今すぐ公開することも、自動で配信されるよう待機させることもできます。",
+          "foot": "作成・予約",
+          "open": "作成画面を開く",
+          "badge": "IG"
+        },
+        "facebook-posts": {
+          "title": "Facebook投稿",
+          "desc": "Facebook投稿（テキスト、リンク、写真）を作成して予約します。今すぐ公開することも、連携済みのページに配信待ちとして登録することもできます。",
+          "foot": "作成・予約",
+          "open": "作成画面を開く",
+          "badge": "FB"
+        },
+        "sms": {
+          "title": "SMS",
+          "desc": "SMS番号（Twilio／MSG91）を連携します。SMSはWhatsAppと同じチームの受信トレイに届き、キャンペーンにSMS送信元を追加できます。",
+          "foot": "連携・管理",
+          "open": "SMSを開く",
+          "badge": "SMS"
+        },
+        "line": {
+          "title": "LINE",
+          "desc": "LINE公式アカウント（Messaging API）を連携します。受信メッセージは同じチームの受信トレイに届き、一斉配信、リッチメニュー、フロー、インサイトを利用できます。",
+          "foot": "連携・管理",
+          "open": "LINEを開く",
+          "badge": "LINE"
+        },
+        "wechat": {
+          "title": "WeChat",
+          "desc": "WeChat公式アカウント（サービスアカウント）を連携します。受信メッセージは同じチームの受信トレイに届き、キーワードルール、自動返信、フローを利用できます。",
+          "foot": "連携・管理",
+          "open": "WeChatを開く",
+          "badge": "WeChat"
+        },
+        "viber": {
+          "title": "Viber",
+          "desc": "Viberパブリックアカウント（ボット）を連携します。受信メッセージは同じチームの受信トレイに届き、キーワードルール、自動返信、フローを利用できます。",
+          "foot": "連携・管理",
+          "open": "Viberを開く",
+          "badge": "Viber"
+        },
+        "messenger-setup": {
+          "title": "Messengerの設定",
+          "desc": "連携済みページのMessengerプロフィールを設定します。はじめるボタン、固定メニュー、アイスブレイカー、ウェルカムメッセージを含みます。",
+          "foot": "成長ツール",
+          "open": "設定を開く",
+          "badge": "FB"
+        },
+        "tiktok": {
+          "title": "TikTok",
+          "desc": "TikTokアカウントを連携し、プロフィールと動画のインサイトを追跡して、動画をTikTokの受信トレイに送信します。DM受信トレイはパートナー限定・地域限定です。",
+          "foot": "連携・投稿",
+          "open": "TikTokを開く",
+          "badge": "TT"
+        },
+        "tiktok-posts": {
+          "title": "TikTok投稿",
+          "desc": "動画をTikTokの受信トレイに送信し、アプリから仕上げて公開できます。ステータスはここで追跡できます。",
+          "foot": "作成・送信",
+          "open": "投稿を開く",
+          "badge": "TT"
+        },
+        "quick-send": {
+          "title": "クイック送信",
+          "desc": "メッセージを作成し、1人または複数の宛先と送信元を選んで、今すぐ送信するか予約します。メッセージごとの配信ステータスを持つ手動送信キューです。",
+          "foot": "送信キュー",
+          "open": "開く"
+        },
+        "account": {
+          "title": "アカウント",
+          "desc": "プロフィール、写真、パスワード、注文履歴、ウォレット、アフィリエイト、サポートチケットをひとつにまとめています。",
+          "foot": "{plan} · {balance}",
+          "open": "開く"
+        },
+        "pricing": {
+          "title": "料金とプラン",
+          "desc": "Starter、Growth、Pro、Enterpriseを比較できます。いつでも切り替え可能で、日割りで精算されます。",
+          "foot": "{plan}プラン · アップグレードで利用可能",
+          "open": "プランを見る"
+        },
+        "analytics": {
+          "title": "分析",
+          "desc": "キャンペーンとデバイスごとの配信、既読、コンバージョンのグラフ。",
+          "foot": "{count}件 · 直近7日",
+          "open": "開く"
+        },
+        "attributes": {
+          "title": "属性",
+          "desc": "WhatsAppテンプレート用の変数です。first_nameなどの組み込み変数と、独自の変数（order_idなど）を利用できます。メッセージ内で / を入力すると挿入できます。",
+          "foot": "{count}件保存済み",
+          "open": "開く"
+        },
+        "contacts": {
+          "title": "連絡先",
+          "desc": "連絡先とグループをひとつにまとめて管理します。CSVからのインポート、タグ付け、セグメント化、検索ができます。",
+          "foot": "{people}人 / {groups}グループ / {tags}タグ",
+          "open": "開く"
+        },
+        "broadcasts": {
+          "title": "一斉配信",
+          "desc": "選択した連絡先にテンプレートで一斉配信します。送信、配信、既読、失敗、キュー待ちを追跡できます。",
+          "foot": "{queued}件待機中{pct, select, none {} other { / 配信済み {pct}%}}",
+          "open": "開く"
+        },
+        "auto-reply": {
+          "title": "自動返信",
+          "desc": "キーワード、営業時間、担当者不在時に応じて自動返信を送信します。",
+          "foot": "{count}件のルール{pct, select, none {} other { / 一致 {pct}%}}",
+          "open": "開く"
+        },
+        "warmer": {
+          "title": "WhatsAppウォーマー",
+          "desc": "人間らしい間隔と稼働時間を設けて、番号ごとの1日の送信上限を段階的に引き上げ、アカウント停止のリスクを抑えます。",
+          "foot": "非公式API",
+          "open": "開く"
+        },
+        "scheduled": {
+          "title": "予約メッセージ",
+          "desc": "タイムゾーン、セグメント、トリガーに合わせて、最適なタイミングで送信を予約します。",
+          "foot": "{queued}件待機中 / 次回 {next}",
+          "open": "開く"
+        },
+        "message-history": {
+          "title": "メッセージ履歴",
+          "desc": "送受信したすべてのメッセージを検索できるアーカイブ。CSVで書き出せます。",
+          "foot": "{count}件の記録",
+          "open": "開く"
+        },
+        "notifications": {
+          "title": "通知",
+          "desc": "アラートをメール、Slack、アプリ内通知に振り分けます。チャネルごとに通知停止時間を設定できます。",
+          "foot": "未読 {count}件",
+          "open": "開く"
+        },
+        "integrations": {
+          "title": "連携",
+          "desc": "Shopify、HubSpot、Zapierなどを連携し、連絡先と注文を同期します。",
+          "foot": "{connected}件連携済み / {available}件利用可能",
+          "open": "開く"
+        },
+        "google-account": {
+          "title": "Googleアカウント",
+          "desc": "一度連携するだけで、カレンダー、フロー内のMeetリンク、受信トレイの「Meetリンクを送信」ボタンが利用できます。",
+          "foot": "カレンダーとMeet",
+          "open": "開く"
+        },
+        "appointments": {
+          "title": "予約",
+          "desc": "チャットからお客様がサービスを予約できます。日時選択、質問項目、手付金、リマインダー、Googleカレンダーとの同期に対応しています。",
+          "foot": "{count, plural, =0 {未設定} one {# 件のサービス} other {# 件のサービス}}",
+          "open": "管理"
+        },
+        "ai-assistants": {
+          "title": "AI通話アシスタント",
+          "desc": "電話に応答する音声AI。頭脳にGemini、音声にElevenLabsを使用し、通話中に独自のツールも利用できます。",
+          "foot": "{configured}件設定済み / {live}件稼働中",
+          "open": "開く"
+        },
+        "call-logs": {
+          "title": "通話ログ",
+          "desc": "AIが対応したすべての音声通話の文字起こし、録音、ツール呼び出しのタイムライン。",
+          "foot": "{calls}件 / {minutes}分 · 24時間",
+          "open": "開く"
+        },
+        "forms": {
+          "title": "フォーム",
+          "desc": "WhatsAppのネイティブ対話型フォーム。チャット内でリード、アンケート、予約を収集します。",
+          "foot": "{drafted}件下書き / {live}件稼働中",
+          "open": "開く"
+        },
+        "wa-links": {
+          "title": "WhatsAppリンク作成",
+          "desc": "カスタムスラッグ、入力済みメッセージ、QRコード、クリック分析付きの、追跡可能なwa.me短縮リンクを作成します。プロフィール、ランディングページ、名刺に掲載できます。",
+          "foot": "{links}件のリンク / {clicks}回のクリック",
+          "open": "開く"
+        },
+        "chatbot-widgets": {
+          "title": "チャットボットウィジェット",
+          "desc": "サイトにフローティングのチャットバブルを埋め込みます。AIがブラウザ内で返信し、必要に応じて統合受信トレイに引き継ぎます。",
+          "foot": "{built}件作成済み / {live}件有効",
+          "open": "開く"
+        },
+        "ai-training": {
+          "title": "AIトレーニング",
+          "desc": "URL、テキストスニペット、Q&A、プレーンテキストファイルなど、独自のコンテンツでチャットアシスタントを学習させます。",
+          "foot": "{count}件のアシスタント",
+          "open": "開く"
+        },
+        "ai-usage": {
+          "title": "AI利用状況",
+          "desc": "AIの利用料金の内訳を確認できます。モデルとプロバイダーごとのトークン数、プランのキーと独自キーの比較、月間上限を表示します。",
+          "foot": "今月 {tokens} トークン",
+          "open": "表示"
+        },
+        "flow-analytics": {
+          "title": "フロー分析",
+          "desc": "自動化の実行をすべて追跡します。実行履歴、実行を停止させたエラー、再実行したものの再試行記録を確認できます。",
+          "foot": "失敗した実行 {count}件",
+          "open": "開く"
+        },
+        "lead-finder": {
+          "title": "リード検索",
+          "desc": "カテゴリと都市で事業者を検索し、WhatsAppとメールアドレスを取得して、連絡先やキャンペーンに追加します。",
+          "foot": "マップでの見込み客開拓",
+          "open": "開く"
+        },
+        "webhooks": {
+          "title": "Webhook",
+          "desc": "配信、既読、返信のイベントを、任意のHTTPSエンドポイントへリアルタイムに送信します。",
+          "foot": "{count}件のエンドポイント",
+          "open": "開く"
+        },
+        "support": {
+          "title": "サポート",
+          "desc": "担当者への相談、既知の問題の確認、サービス稼働状況の確認ができます。",
+          "foot": "{total}件のチケット / 未解決 {open}件",
+          "open": "開く"
+        },
+        "activity-log": {
+          "title": "アクティビティログ",
+          "desc": "ログイン、ワークスペースの切り替え、受信トレイでの操作、管理者による変更をすべて記録します。ユーザー、IPアドレス、日時を紐付けて表示します。",
+          "foot": "{count}件のイベント · 24時間",
+          "open": "開く"
+        },
+        "channels": {
+          "title": "チャネル",
+          "desc": "WhatsApp、Instagram、Telegramなどを連携し、受信トレイをひとつにまとめて、稼働状況を監視し、送信元を切り替えます。",
+          "foot": "{active} / {total} 稼働中",
+          "open": "開く"
+        },
+        "team-members": {
+          "title": "チームメンバー",
+          "desc": "チームメンバーを招待し、役割（オーナー／管理者／メンバー）を割り当て、ワークスペースごとにアクセス範囲を設定します。",
+          "foot": "{count, plural, one {# 席} other {# 席}} 有効",
+          "open": "開く"
+        }
+      },
+      "eyebrow": "ワークスペース",
+      "sortedByUsage": "利用状況順",
+      "developers": "開発者／API",
+      "movedOffHeader": "ヘッダーから移動しました",
+      "open": "開く",
+      "navDesc": {
+        "dashboard": "ホームと概要",
+        "wa-campaigns": "キャンペーンの一括送信",
+        "flows": "自動化ビルダー",
+        "templates": "メッセージテンプレート"
+      },
+      "strip": {
+        "label": "ワークスペースの概要",
+        "rules": "有効なルール",
+        "thisWeek": "今週 +{count}",
+        "noNew": "新規なし",
+        "rulesCaption": "全ツール合計",
+        "queued": "待機中",
+        "noUpcoming": "予定された実行はありません",
+        "queuedCaption": "予約送信",
+        "connected": "接続済み",
+        "connectedCaption": "デバイス稼働中",
+        "health": {
+          "healthy": "正常",
+          "partial": "一部",
+          "offline": "オフライン",
+          "none": "デバイスなし"
+        },
+        "notifications": "通知",
+        "unread": "未読",
+        "notificationsCaption": "対応待ち"
+      },
+      "activity": {
+        "title": "最近のアクティビティ",
+        "viewAll": "すべて表示",
+        "empty": "アクティビティはありません。ワークスペースでの変更がここに表示されます。"
+      },
+      "affiliate": {
+        "badge": "獲得",
+        "title": "アフィリエイト履歴",
+        "body": "お客様のコードから登録されたすべてのサインアップ、獲得したクレジット、共有リンクの成果を追跡します。",
+        "referrals": "紹介",
+        "payouts": "支払い",
+        "payoutsNote": "アカウントを確認",
+        "foot": "紹介 · クレジット · 支払い"
+      },
+      "quick": {
+        "title": "クイックアクセス",
+        "body": "あまり使わないツールをここにまとめ、メインヘッダーは日常業務に集中できるようにしています。",
+        "openChat": "チャットを開く",
+        "addRule": "ルールを追加"
+      },
+      "planCard": {
+        "title": "ワークスペースのプラン",
+        "seats": "{plan} / {count, plural, one {# 席} other {# 席}}",
+        "messages": "今月のメッセージ",
+        "sent": "{count}件送信済み",
+        "manage": "請求を管理"
+      },
+      "whatsNew": {
+        "title": "新着情報",
+        "headline": "統合受信トレイ + AIアシスト",
+        "changelog": "変更履歴を見る",
+        "items": {
+          "inbox": "担当割り当てとメモ付きの共有受信トレイ",
+          "ai": "フロー内でのChatGPT／Gemini／Claude",
+          "forecast": "Shopifyダッシュボードでの売上予測"
+        }
+      },
+      "smallTips": {
+        "warm": {
+          "title": "新しい番号をウォームアップする",
+          "body": "1日50通から始めて、週ごとに2倍にします。急激な送信量の増加はフラグが立てられます。"
+        },
+        "tag": {
+          "title": "今タグ付けして、後でセグメント化",
+          "body": "連絡先から返信があった時点でタグを追加しておくと、後の一斉配信の絞り込みが簡単になります。"
+        },
+        "templates": {
+          "title": "テンプレートは自由入力に勝る",
+          "body": "承認済みテンプレートは、連絡先から返信がない場合でも24時間のウィンドウを開きます。"
+        },
+        "signing": {
+          "title": "毎回HMACを検証する",
+          "body": "処理前に必ず署名ヘッダーを確認してください。コードは1行ですが、安全性が大きく高まります。"
+        }
       }
     },
     "inboxBell": {
@@ -704,6 +1139,19 @@
       "hintMove": "移動",
       "hintOpen": "開く",
       "hintToggle": "切り替え"
+    },
+    "flash": {
+      "dismiss": "閉じる",
+      "roleDenied": "お客様の役割（{role}）ではそのページにアクセスできません"
+    },
+    "hubSearch": {
+      "placeholder": "プロジェクト設定を検索...",
+      "empty": "検索に一致する設定はありません。"
+    },
+    "bell": {
+      "eyebrow": "受信トレイ",
+      "clearAll": "すべてクリア",
+      "viewAll": "すべて表示 →"
     }
   }
 }

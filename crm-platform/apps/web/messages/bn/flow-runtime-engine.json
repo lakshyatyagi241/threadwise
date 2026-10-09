@@ -55,7 +55,14 @@
       "webhook_lead": "Webhook লিড",
       "handoff": "হস্তান্তর",
       "inbox": "টিম ইনবক্স",
-      "retry": "পুনরায় চেষ্টা"
+      "retry": "পুনরায় চেষ্টা",
+      "group_leave": "তালিকা ছাড়া",
+      "segment_join": "সেগমেন্টে যোগ",
+      "contact_updated": "কন্টাক্ট আপডেট হয়েছে",
+      "field_match": "ফিল্ড মিলেছে",
+      "date_field_match": "তারিখ মিলেছে",
+      "schedule": "শিডিউল",
+      "ecom_event": "স্টোর ইভেন্ট"
     },
     "endReason": {
       "end_node": "ফ্লোর শেষ পর্যন্ত পৌঁছেছে",

@@ -25,7 +25,9 @@
       "deleteTitle": "هل تريد حذف هذه القناة؟",
       "deleteMessage": "سيتم حذف #{name} وجميع رسائلها لدى الجميع. لا يمكن التراجع عن هذا الإجراء.",
       "deleteConfirm": "حذف القناة",
-      "cancel": "إلغاء"
+      "cancel": "إلغاء",
+      "defaultDescription": "دردشة داخلية لمساحة العمل",
+      "customerChats": "دردشات العملاء"
     },
     "sidebar": {
       "label": "القنوات والأشخاص",
@@ -39,7 +41,12 @@
       "invite": "دعوة زميل",
       "pending": "الطلبات المعلّقة",
       "pendingCount": "{count, plural, one {طلب واحد معلّق} two {طلبان معلّقان} few {# طلبات معلّقة} many {# طلباً معلّقاً} other {# طلب معلّق}}",
-      "unread": "{count, plural, one {رسالة واحدة غير مقروءة} two {رسالتان غير مقروءتين} few {# رسائل غير مقروءة} many {# رسالة غير مقروءة} other {# رسالة غير مقروءة}}"
+      "unread": "{count, plural, one {رسالة واحدة غير مقروءة} two {رسالتان غير مقروءتين} few {# رسائل غير مقروءة} many {# رسالة غير مقروءة} other {# رسالة غير مقروءة}}",
+      "workspace": "مساحة العمل",
+      "mode": "الوضع",
+      "customerChats": "دردشات العملاء",
+      "teamChat": "دردشة الفريق",
+      "membersLink": "الأعضاء"
     },
     "members": {
       "label": "الأعضاء",
@@ -52,7 +59,8 @@
       "online": "متصل",
       "offline": "غير متصل",
       "you": "(أنت)",
-      "message": "مراسلة {name}"
+      "message": "مراسلة {name}",
+      "titleAccent": "دردشة"
     },
     "panel": {
       "searchTitle": "ابحث في الرسائل",
@@ -104,7 +112,11 @@
       "fileTooLarge": "هذا الملف أكبر من 20 ميغابايت.",
       "mentionList": "زملاء للإشارة إليهم",
       "typingOne": "{name} يكتب الآن",
-      "typingMany": "{count} أشخاص يكتبون الآن"
+      "typingMany": "{count} أشخاص يكتبون الآن",
+      "hintSend": "إرسال",
+      "hintNewLine": "سطر جديد",
+      "hintMention": "إشارة",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "إنشاء قناة",
@@ -122,7 +134,9 @@
         "hint": "بالدعوة فقط. لا يراها إلا أعضاؤها."
       },
       "cancel": "إلغاء",
-      "create": "إنشاء القناة"
+      "create": "إنشاء القناة",
+      "namePlaceholder": "مثال: الدعم",
+      "descriptionPlaceholder": "ما الغرض من هذه القناة؟"
     },
     "invite": {
       "title": "دعوة زميل",
@@ -135,7 +149,10 @@
       "approved": "تم. وافق المسؤول على الطلب.",
       "pending": "تم إرسال الدعوة، وهي بانتظار موافقة المسؤول.",
       "cancel": "إلغاء",
-      "submit": "إرسال الدعوة"
+      "submit": "إرسال الدعوة",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "اسمهم",
+      "notePlaceholder": "لماذا ينبغي أن ينضموا؟"
     },
     "invitations": {
       "title": "الدعوات المعلّقة",

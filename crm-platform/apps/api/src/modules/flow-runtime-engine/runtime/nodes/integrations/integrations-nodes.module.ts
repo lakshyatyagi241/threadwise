@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { CrmModule } from '../../../../crm';
 import {
   AI_CALL,
   AiCallUnavailable,
@@ -26,6 +27,7 @@ import { IntegrationNodes } from './integrations-nodes';
  * calling domain is not wired to flows: those two defaults fail with a stated reason. Rebind the tokens to go live.
  */
 @Module({
+  imports: [CrmModule],
   providers: [
     SafeFetch,
     FlowRefResolver,

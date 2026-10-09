@@ -32,6 +32,15 @@ import {
   IgToWhatsappForm,
 } from './instagram';
 import { TgPaymentForm } from './telegram';
+import {
+  InListForm,
+  InSegmentForm,
+  ListMemberForm,
+  SheetCheckForm,
+  SheetContactForm,
+  UpdateContactForm,
+  WaSessionForm,
+} from './workflow';
 
 /**
  * Forms for commerce, Google, CRM, call, Instagram, Facebook and Telegram nodes. `ig_send_dm`, `ig_quick`, `ig_ai` and
@@ -75,4 +84,11 @@ export const CHANNEL_FORMS: Record<string, FormComponent> = {
   fb_reply_comment: FbReplyCommentForm,
   fb_to_whatsapp: FbToWhatsappForm,
   tg_payment: TgPaymentForm,
+  update_contact: UpdateContactForm,
+  list_member: ListMemberForm,
+  in_list: InListForm,
+  in_segment: InSegmentForm,
+  wa_session: WaSessionForm,
+  sheet_check: SheetCheckForm,
+  sheet_contact: SheetContactForm,
 };

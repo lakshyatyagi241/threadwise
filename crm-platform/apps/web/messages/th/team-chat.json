@@ -25,7 +25,9 @@
       "deleteTitle": "ลบช่องนี้ใช่หรือไม่",
       "deleteMessage": "#{name} และข้อความทั้งหมดในช่องจะถูกลบสำหรับทุกคน และไม่สามารถยกเลิกได้",
       "deleteConfirm": "ลบช่อง",
-      "cancel": "ยกเลิก"
+      "cancel": "ยกเลิก",
+      "defaultDescription": "แชตภายในพื้นที่ทำงาน",
+      "customerChats": "แชตกับลูกค้า"
     },
     "sidebar": {
       "label": "ช่องและบุคคล",
@@ -39,7 +41,12 @@
       "invite": "เชิญเพื่อนร่วมทีม",
       "pending": "คำขอที่รอดำเนินการ",
       "pendingCount": "{count, plural, other {# คำขอที่รอดำเนินการ}}",
-      "unread": "{count, plural, other {# ข้อความที่ยังไม่ได้อ่าน}}"
+      "unread": "{count, plural, other {# ข้อความที่ยังไม่ได้อ่าน}}",
+      "workspace": "พื้นที่ทำงาน",
+      "mode": "โหมด",
+      "customerChats": "แชตกับลูกค้า",
+      "teamChat": "แชตทีม",
+      "membersLink": "สมาชิก"
     },
     "members": {
       "label": "สมาชิก",
@@ -52,7 +59,8 @@
       "online": "ออนไลน์",
       "offline": "ออฟไลน์",
       "you": "(คุณ)",
-      "message": "ส่งข้อความถึง {name}"
+      "message": "ส่งข้อความถึง {name}",
+      "titleAccent": "แชต"
     },
     "panel": {
       "searchTitle": "ค้นหาข้อความ",
@@ -104,7 +112,11 @@
       "fileTooLarge": "ไฟล์นี้มีขนาดใหญ่กว่า 20 MB",
       "mentionList": "เพื่อนร่วมทีมที่แท็กได้",
       "typingOne": "{name} กำลังพิมพ์",
-      "typingMany": "มี {count} คนกำลังพิมพ์"
+      "typingMany": "มี {count} คนกำลังพิมพ์",
+      "hintSend": "ส่ง",
+      "hintNewLine": "ขึ้นบรรทัดใหม่",
+      "hintMention": "กล่าวถึง",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "สร้างช่อง",
@@ -122,7 +134,9 @@
         "hint": "เฉพาะผู้ที่ได้รับเชิญ และเห็นได้เฉพาะสมาชิกของช่องเท่านั้น"
       },
       "cancel": "ยกเลิก",
-      "create": "สร้างช่อง"
+      "create": "สร้างช่อง",
+      "namePlaceholder": "เช่น ฝ่ายสนับสนุน",
+      "descriptionPlaceholder": "ช่องทางนี้ใช้สำหรับอะไร"
     },
     "invite": {
       "title": "เชิญเพื่อนร่วมทีม",
@@ -135,7 +149,10 @@
       "approved": "เสร็จสิ้น คำขอได้รับการอนุมัติแล้ว",
       "pending": "ส่งคำเชิญแล้ว รอผู้ดูแลระบบอนุมัติ",
       "cancel": "ยกเลิก",
-      "submit": "ส่งคำเชิญ"
+      "submit": "ส่งคำเชิญ",
+      "emailPlaceholder": "teammate@company.com",
+      "namePlaceholder": "ชื่อของพวกเขา",
+      "notePlaceholder": "ทำไมพวกเขาควรเข้าร่วม"
     },
     "invitations": {
       "title": "คำเชิญที่รอดำเนินการ",

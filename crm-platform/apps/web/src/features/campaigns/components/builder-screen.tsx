@@ -1,11 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { Alert, Button, Field, Input, Select, Spinner, Textarea, useToast } from '@crm/ui';
+import { Alert, Button, Spinner, useToast } from '@crm/ui';
 import type { CampaignConfig } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
@@ -15,7 +14,6 @@ import {
   submittableSenderKey,
 } from '@/lib/unofficial-whatsapp';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
-import { AudiencePicker } from '@/features/broadcasts/components/audience-picker';
 import {
   useAttributeCatalog,
   useAudienceContacts,
@@ -35,20 +33,38 @@ import {
 import {
   EMPTY_FORM,
   defaultSchedule,
-  editorType,
   fromConfig,
   problems,
-  readFileText,
   submitKey,
   toInput,
   type BuilderForm,
   type Problem,
 } from '../lib/builder-model';
-import { DeliverySection } from './delivery-section';
-import { ChevronLeftIcon, DownloadIcon } from './icons';
-import { MessageSection, Section } from './message-section';
+import {
+  WIZARD_STEPS,
+  applyAiCopy,
+  initialRecipientMode,
+  recipientTotals,
+  stepProblems,
+  withRecipientMode,
+  type RecipientMode,
+  type WizardStep,
+} from '../lib/wizard-model';
+import { coerceForEngine, engineOf, senderOf, templatesFor } from '../lib/engine-gate';
+import { AiModal } from './builder/ai-modal';
+import { BuilderHeader } from './builder/header';
+import { LivePreview } from './builder/live-preview';
+import { StepCompose } from './builder/step-compose';
+import { StepRecipients } from './builder/step-recipients';
+import { StepReview } from './builder/step-review';
+import { StepSchedule } from './builder/step-schedule';
+import { StepSetup } from './builder/step-setup';
+import { Stepper } from './builder/stepper';
 
-/** `/campaigns/create` and `/campaigns/:id/edit` (WD-CAMP-002 to 010): the builder. */
+/**
+ * `/campaigns/create` and `/campaigns/:id/edit` (WD-CAMP-002 to 010): the builder, as WaDesk's five steps (Setup, Compose, Recipients,
+ * Schedule, Review) with a live preview beside them.
+ */
 export function BuilderScreen({ id }: { id?: string }) {
   const t = useTranslations('campaigns.builder');
   const config = useCampaignConfig(id);
@@ -65,9 +81,9 @@ export function BuilderScreen({ id }: { id?: string }) {
   }
   if (id && (config.isError || !config.data)) {
     return (
-      <main className="mx-auto max-w-3xl px-4 py-10">
+      <div className="mx-auto max-w-3xl px-4 py-10">
         <Alert tone="danger">{t('loadError')}</Alert>
-      </main>
+      </div>
     );
   }
   return <Builder key={id ?? 'new'} id={id} config={config.data} builder={builder} zone={zone} />;
@@ -101,22 +117,43 @@ function Builder({
   const tags = useAudienceTags(canTags);
   const catalog = useAttributeCatalog();
 
-  const [form, setForm] = useState<BuilderForm>(() =>
+  const [stored, setForm] = useState<BuilderForm>(() =>
     config
       ? fromConfig(config, zone)
-      : { ...EMPTY_FORM, timezone: zone, ...defaultSchedule(new Date(), zone) },
+      : { ...EMPTY_FORM, type: 'custom', timezone: zone, ...defaultSchedule(new Date(), zone) },
   );
+  const [step, setStep] = useState<WizardStep>('setup');
+  const [mode, setMode] = useState<RecipientMode>(() => initialRecipientMode(stored));
+  const [aiOpen, setAiOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const patch = (p: Partial<BuilderForm>) => setForm((f) => ({ ...f, ...p }));
+  const [blocked, setBlocked] = useState<Problem[]>([]);
+  const patch = (p: Partial<BuilderForm>) => {
+    setBlocked([]);
+    setForm((f) => ({ ...f, ...p }));
+  };
   const editing = Boolean(id);
-  const fix = problems(form);
   const minDate = useMemo(
-    () => defaultSchedule(new Date(), form.timezone).sendDate,
-    [form.timezone],
+    () => defaultSchedule(new Date(), stored.timezone).sendDate,
+    [stored.timezone],
   );
   const data = builder.data;
-  const kind = editorType(form.type);
+  // What the picked number allows (see lib/engine-gate): its engine, its templates, and the form as that number can send it.
+  const senders = useMemo(
+    () => offerSenders(data?.senders ?? [], unofficial),
+    [data?.senders, unofficial],
+  );
+  const sender = senderOf(stored.senderKey, senders);
+  const engine = engineOf(stored.senderKey);
+  const usable = useMemo(
+    () => templatesFor(data?.templates ?? [], engine, sender),
+    [data?.templates, engine, sender],
+  );
+  const form = useMemo(
+    () => (data ? { ...stored, ...coerceForEngine(stored, engine, usable) } : stored),
+    [data, stored, engine, usable],
+  );
+  const at = WIZARD_STEPS.indexOf(step);
 
   const submit = async (draft: boolean) => {
     setBusy(true);
@@ -160,246 +197,184 @@ function Builder({
     }
   };
 
-  const message = (p: Problem) => t(`problems.${p}`);
-  const senders = useMemo(
-    () => offerSenders(data?.senders ?? [], unofficial),
-    [data?.senders, unofficial],
+  const senderLabel = sender
+    ? `${sender.label}${sender.phone ? ` · ${sender.phone}` : ''}`
+    : t('setup.defaultSender');
+  const sizes = useMemo(
+    () => ({
+      groups: Object.fromEntries((data?.groups ?? []).map((g) => [g.id, g.members])),
+      tags: Object.fromEntries((data?.tags ?? []).map((x) => [x.id, x.members])),
+    }),
+    [data?.groups, data?.tags],
   );
-  const sender = senders.find((s) => s.key === form.senderKey);
-  const bubble = form.customMessage.trim() || t('previewEmpty');
+  const totals = recipientTotals(form, sizes);
+  const scheduleLabel =
+    form.scheduleType === 'now'
+      ? t('review.now')
+      : form.scheduleType === 'scheduled'
+        ? `${form.sendDate} ${form.sendTime} · ${form.timezone}`
+        : t('review.recurring', { every: t(`delivery.repeats.${form.repeatInterval}`) });
+
+  // A step can be opened when nothing before it is missing.
+  const reachable = (s: WizardStep) =>
+    WIZARD_STEPS.slice(0, WIZARD_STEPS.indexOf(s)).every((x) => stepProblems(form, x).length === 0);
+  const go = (s: WizardStep) => {
+    setBlocked([]);
+    setStep(s);
+  };
+  const next = () => {
+    const fix = stepProblems(form, step);
+    if (fix.length > 0) return setBlocked(fix);
+    const to = WIZARD_STEPS[at + 1];
+    if (to) go(to);
+  };
+  const fixAll = problems(form);
 
   return (
-    <main className="mx-auto max-w-none space-y-6 px-4 py-7 sm:px-6 lg:px-7">
-      <div className="flex items-center gap-3">
-        <Link
-          href={id ? `/campaigns/${id}` : '/campaigns'}
-          aria-label={t('back')}
-          title={t('back')}
-          className="grid size-9 place-items-center rounded-full border border-border bg-background text-muted-foreground hover:bg-muted"
-        >
-          <ChevronLeftIcon className="size-4" />
-        </Link>
-        <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-            {editing ? t('kickerEdit') : t('kicker')}
+    <div className="min-h-full">
+      <BuilderHeader
+        editing={editing}
+        backHref={id ? `/campaigns/${id}` : '/campaigns'}
+        busy={busy}
+        canDraft={problems(form, { draft: true }).length === 0}
+        onAi={() => setAiOpen(true)}
+        onDraft={() => void submit(true)}
+      />
+      <div className="mx-auto max-w-none px-4 py-6 sm:px-6 lg:px-7">
+        {error && (
+          <Alert tone="danger" className="mb-4">
+            {error}
+          </Alert>
+        )}
+        {builder.isError && (
+          <Alert tone="danger" className="mb-4">
+            {t('builderError')}
+          </Alert>
+        )}
+        <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[1fr_342px]">
+          <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
+            <Stepper current={step} reachable={reachable} onGo={go} />
+            <form
+              className="p-5"
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (step === 'review') {
+                  if (fixAll.length === 0) void submit(false);
+                } else next();
+              }}
+            >
+              {step === 'setup' && (
+                <StepSetup form={form} patch={patch} senders={senders} engine={engine} />
+              )}
+              {step === 'compose' && (
+                <StepCompose
+                  form={form}
+                  patch={patch}
+                  builder={data}
+                  catalog={catalog.data}
+                  engine={engine}
+                  templates={usable}
+                />
+              )}
+              {step === 'recipients' && (
+                <StepRecipients
+                  form={form}
+                  patch={patch}
+                  mode={mode}
+                  onMode={(m) => {
+                    setMode(m);
+                    patch(withRecipientMode(form, m));
+                  }}
+                  lists={{
+                    tags: tags.data?.data ?? [],
+                    groups: groups.data?.data ?? [],
+                    segments: segments.data?.data ?? [],
+                    contacts: contacts.data?.data ?? [],
+                    contactsDenied: !canContacts,
+                    filter: audienceFilter,
+                    onFilter: setAudienceFilter,
+                  }}
+                  onSample={() => void sampleCsv()}
+                  onCsvTooBig={() => toast(t('audience.csvTooBig'), 'danger')}
+                />
+              )}
+              {step === 'schedule' && <StepSchedule form={form} patch={patch} minDate={minDate} />}
+              {step === 'review' && (
+                <StepReview
+                  form={form}
+                  senderLabel={senderLabel}
+                  scheduleLabel={scheduleLabel}
+                  totals={totals}
+                  onGo={go}
+                />
+              )}
+
+              {blocked.length > 0 && (
+                <ul
+                  role="alert"
+                  className="mt-5 list-inside list-disc rounded-xl border border-warning/40 bg-warning/10 p-3 text-xs"
+                >
+                  {blocked.map((p) => (
+                    <li key={p}>{t(`problems.${p}`)}</li>
+                  ))}
+                </ul>
+              )}
+
+              <div className="mt-6 flex items-center justify-between gap-3 border-t border-border pt-4">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="rounded-full"
+                  disabled={at === 0}
+                  onClick={() => {
+                    const to = WIZARD_STEPS[at - 1];
+                    if (to) go(to);
+                  }}
+                >
+                  {t('steps.previous')}
+                </Button>
+                <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                  {t('steps.of', { n: at + 1, total: WIZARD_STEPS.length })}
+                </span>
+                {step === 'review' ? (
+                  <Button
+                    type="submit"
+                    className="rounded-full"
+                    disabled={busy || fixAll.length > 0}
+                  >
+                    {busy ? <Spinner /> : t(`submit.${submitKey(form, editing)}`)}
+                  </Button>
+                ) : (
+                  <Button type="submit" className="rounded-full">
+                    {t('steps.next')}
+                  </Button>
+                )}
+              </div>
+            </form>
           </div>
-          <h1 className="mt-1 text-[26px] leading-none sm:text-[32px]">
-            {editing ? t('titleEdit') : t('title')}{' '}
-            <span className="italic text-brand">{t('titleAccent')}</span>
-          </h1>
+
+          <LivePreview
+            form={form}
+            builder={data}
+            engine={engine}
+            senderLabel={sender ? senderLabel : null}
+            recipients={totals.total}
+            step={at + 1}
+            stepCount={WIZARD_STEPS.length}
+          />
         </div>
       </div>
 
-      {error && <Alert tone="danger">{error}</Alert>}
-      {builder.isError && <Alert tone="danger">{t('builderError')}</Alert>}
-
-      <form
-        className="grid grid-cols-1 items-start gap-6 xl:grid-cols-[1fr_360px]"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (fix.length === 0) void submit(false);
+      <AiModal
+        open={aiOpen}
+        onClose={() => setAiOpen(false)}
+        onApply={(copy) => {
+          patch({});
+          setForm((f) => applyAiCopy(f, copy));
+          setStep('compose');
+          toast(t('ai.applied'), 'success');
         }}
-      >
-        <div className="space-y-5">
-          <Section index="01" title={t('setup.title')}>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <Field label={`${t('setup.name')} *`} htmlFor="camp-name">
-                <Input
-                  id="camp-name"
-                  value={form.name}
-                  maxLength={191}
-                  required
-                  onChange={(e) => patch({ name: e.target.value })}
-                  placeholder={t('setup.namePlaceholder')}
-                />
-              </Field>
-              <Field label={t('setup.sender')} htmlFor="camp-sender" hint={t('setup.senderHint')}>
-                <Select
-                  id="camp-sender"
-                  value={form.senderKey}
-                  onChange={(e) => patch({ senderKey: e.target.value })}
-                >
-                  <option value="">{t('setup.defaultSender')}</option>
-                  {senders.map((s) => (
-                    <option key={s.key} value={s.key}>
-                      {s.label} {s.phone ? `· ${s.phone}` : ''} ({s.engineLabel})
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-            </div>
-          </Section>
-
-          <MessageSection form={form} patch={patch} builder={data} catalog={catalog.data} />
-
-          <Section index="03" title={t('audience.title')}>
-            <AudiencePicker
-              tags={tags.data?.data ?? []}
-              groups={groups.data?.data ?? []}
-              segments={segments.data?.data ?? []}
-              filter={audienceFilter}
-              onFilter={setAudienceFilter}
-              contacts={contacts.data?.data ?? []}
-              contactsDenied={!canContacts}
-              selectedTags={form.tagIds}
-              selectedGroups={form.groupIds}
-              selectedSegments={form.segmentIds}
-              selectedContacts={form.contactIds}
-              onTags={(tagIds) => patch({ tagIds })}
-              onGroups={(groupIds) => patch({ groupIds })}
-              onSegments={(segmentIds) => patch({ segmentIds })}
-              onContacts={(contactIds) => patch({ contactIds })}
-            />
-            <Field
-              label={t('audience.numbers')}
-              htmlFor="camp-numbers"
-              hint={t('audience.numbersHint')}
-            >
-              <Textarea
-                id="camp-numbers"
-                rows={3}
-                value={form.manualNumbers}
-                onChange={(e) => patch({ manualNumbers: e.target.value })}
-                placeholder="919812345678, 919898765432"
-                className="font-mono text-xs"
-              />
-            </Field>
-            <div>
-              <div className="mb-1.5 flex items-center justify-between gap-2">
-                <label htmlFor="camp-csv" className="text-sm font-medium">
-                  {t('audience.csv')}
-                </label>
-                <button
-                  type="button"
-                  onClick={() => void sampleCsv()}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
-                >
-                  <DownloadIcon className="size-3" />
-                  {t('audience.sample')}
-                </button>
-              </div>
-              <input
-                id="camp-csv"
-                type="file"
-                accept=".csv,.txt,text/csv,text/plain"
-                className="w-full text-xs file:mr-3 file:rounded-lg file:border-0 file:bg-muted file:px-3 file:py-1.5 file:text-xs file:font-semibold"
-                onChange={async (e) => {
-                  const f = e.target.files?.[0];
-                  if (!f) return patch({ csvText: '' });
-                  if (f.size > 5 * 1024 * 1024) {
-                    toast(t('audience.csvTooBig'), 'danger');
-                    e.target.value = '';
-                    return patch({ csvText: '' });
-                  }
-                  patch({ csvText: await readFileText(f) });
-                }}
-              />
-              <p className="mt-1 text-[11px] text-muted-foreground">{t('audience.csvHint')}</p>
-            </div>
-            <div className="text-xs text-muted-foreground">
-              {t('audience.selected', { count: form.contactIds.length })}
-            </div>
-          </Section>
-
-          <DeliverySection form={form} patch={patch} minDate={minDate} />
-        </div>
-
-        <aside className="space-y-4 xl:sticky xl:top-6">
-          <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
-            <div className="flex items-center justify-between border-b border-border px-5 py-3">
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-                {t('preview')}
-              </span>
-              <span className="font-mono text-[10.5px] text-brand">
-                {sender?.engineLabel ?? t('defaultSender')}
-              </span>
-            </div>
-            <div className="p-4" style={{ background: '#e5ddd5' }}>
-              <div
-                className="max-w-[300px] rounded-2xl rounded-tl-md px-3.5 py-2.5 shadow-sm"
-                style={{ background: '#fff', color: '#111' }}
-              >
-                {kind === 'template' ? (
-                  <div className="text-[13px]">
-                    <div className="font-semibold">
-                      {data?.templates.find((x) => x.id === form.templateId)?.name ??
-                        t('previewTemplate')}
-                    </div>
-                    <div className="mt-1 whitespace-pre-wrap opacity-80">
-                      {data?.templates.find((x) => x.id === form.templateId)?.body ?? ''}
-                    </div>
-                  </div>
-                ) : kind === 'flow' ? (
-                  <div className="text-[13px] opacity-70">{t('previewFlow')}</div>
-                ) : (
-                  <>
-                    {form.customHeader.trim() && (
-                      <div className="mb-1 text-[13px] font-semibold">{form.customHeader}</div>
-                    )}
-                    {form.mediaUrl.trim() && (
-                      <div className="mb-1.5 break-all font-mono text-[11px] opacity-70">
-                        📎 {form.mediaUrl.trim().split('/').pop()}
-                      </div>
-                    )}
-                    <div
-                      className={`whitespace-pre-wrap break-words text-[13px] leading-snug ${form.customMessage.trim() ? '' : 'opacity-40'}`}
-                    >
-                      {bubble}
-                    </div>
-                    {form.customFooter.trim() && (
-                      <div className="mt-1 text-[11px] opacity-60">{form.customFooter}</div>
-                    )}
-                    {form.buttons.filter((b) => b.text.trim()).length > 0 && (
-                      <div className="mt-2 space-y-1">
-                        {form.buttons
-                          .filter((b) => b.text.trim())
-                          .map((b, i) => (
-                            <div
-                              key={i}
-                              className="rounded-lg border border-black/10 px-2.5 py-1 text-center text-[12px]"
-                              style={{ color: '#027eb5' }}
-                            >
-                              {b.text}
-                            </div>
-                          ))}
-                      </div>
-                    )}
-                  </>
-                )}
-                <div className="mt-1 text-end font-mono text-[9.5px] opacity-50">12:00</div>
-              </div>
-            </div>
-            <div className="border-t border-border px-5 py-3 text-[11px] text-muted-foreground">
-              {t('previewNote')}
-            </div>
-          </div>
-
-          {fix.length > 0 && (
-            <ul className="list-inside list-disc rounded-xl border border-warning/40 bg-warning/10 p-3 text-xs">
-              {fix.map((p) => (
-                <li key={p}>{message(p)}</li>
-              ))}
-            </ul>
-          )}
-
-          <div className="flex flex-wrap items-center gap-2">
-            <Button type="submit" className="flex-1 rounded-full" disabled={busy || fix.length > 0}>
-              {t(`submit.${submitKey(form, editing)}`)}
-            </Button>
-            {!editing && (
-              <Button
-                type="button"
-                variant="secondary"
-                className="rounded-full"
-                disabled={busy || problems(form, { draft: true }).length > 0}
-                onClick={() => void submit(true)}
-              >
-                {t('submit.draft')}
-              </Button>
-            )}
-          </div>
-        </aside>
-      </form>
-    </main>
+      />
+    </div>
   );
 }

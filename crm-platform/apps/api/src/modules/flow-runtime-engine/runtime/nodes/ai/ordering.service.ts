@@ -270,7 +270,17 @@ export class OrderingFlowService {
         ((prof.address as string | null)?.trim() || (prof.name as string | null)?.trim())
       ) {
         const name = String(prof.name ?? '');
-        const company = String(prof.company ?? '');
+        // A profile the store saved at checkout has no company (only this flow's order keeps it in its meta): the latest order's wins.
+        let company = String(prof.company ?? '');
+        if (company.trim() === '') {
+          const lastCompany = (
+            await tx.execute(sql`
+              SELECT meta_json->>'ship_company' AS company FROM wa_orders
+              WHERE org_id = ${orgId} AND customer_phone = ${digits} AND coalesce(meta_json->>'ship_company', '') <> ''
+              ORDER BY id DESC LIMIT 1`)
+          ).rows[0] as Row | undefined;
+          company = String(lastCompany?.company ?? '');
+        }
         const address = String(prof.address ?? '');
         return { name, company, address, text: shippingText(name, company, address) };
       }

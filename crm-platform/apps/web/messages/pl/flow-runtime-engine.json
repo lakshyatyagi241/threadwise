@@ -55,7 +55,14 @@
       "webhook_lead": "Lead z webhooka",
       "handoff": "Przekazanie",
       "inbox": "Skrzynka zespołu",
-      "retry": "Ponowienie"
+      "retry": "Ponowienie",
+      "group_leave": "Opuszczenie listy",
+      "segment_join": "Dołączenie do segmentu",
+      "contact_updated": "Aktualizacja kontaktu",
+      "field_match": "Dopasowanie pola",
+      "date_field_match": "Dopasowanie daty",
+      "schedule": "Harmonogram",
+      "ecom_event": "Zdarzenie sklepu"
     },
     "endReason": {
       "end_node": "Osiągnięto koniec przepływu",

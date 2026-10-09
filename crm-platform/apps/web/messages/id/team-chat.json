@@ -25,7 +25,9 @@
       "deleteTitle": "Hapus channel ini?",
       "deleteMessage": "#{name} dan semua pesannya akan dihapus untuk semua orang. Tindakan ini tidak dapat dibatalkan.",
       "deleteConfirm": "Hapus channel",
-      "cancel": "Batal"
+      "cancel": "Batal",
+      "defaultDescription": "Chat tim internal ruang kerja",
+      "customerChats": "Chat pelanggan"
     },
     "sidebar": {
       "label": "Channel dan orang",
@@ -39,7 +41,12 @@
       "invite": "Undang anggota tim",
       "pending": "Permintaan tertunda",
       "pendingCount": "{count, plural, other {# permintaan tertunda}}",
-      "unread": "{count, plural, other {# pesan belum dibaca}}"
+      "unread": "{count, plural, other {# pesan belum dibaca}}",
+      "workspace": "Ruang kerja",
+      "mode": "Mode",
+      "customerChats": "Chat pelanggan",
+      "teamChat": "Chat tim",
+      "membersLink": "Anggota"
     },
     "members": {
       "label": "Anggota",
@@ -52,7 +59,8 @@
       "online": "Daring",
       "offline": "Luring",
       "you": "(Anda)",
-      "message": "Pesan {name}"
+      "message": "Pesan {name}",
+      "titleAccent": "chat"
     },
     "panel": {
       "searchTitle": "Cari pesan",
@@ -104,7 +112,11 @@
       "fileTooLarge": "File tersebut lebih besar dari 20 MB.",
       "mentionList": "Anggota tim untuk disebut",
       "typingOne": "{name} sedang mengetik",
-      "typingMany": "{count} orang sedang mengetik"
+      "typingMany": "{count} orang sedang mengetik",
+      "hintSend": "kirim",
+      "hintNewLine": "baris baru",
+      "hintMention": "sebut",
+      "hintShift": "Shift+↵"
     },
     "createChannel": {
       "title": "Buat channel",
@@ -122,7 +134,9 @@
         "hint": "Hanya dengan undangan. Hanya anggotanya yang dapat melihatnya."
       },
       "cancel": "Batal",
-      "create": "Buat channel"
+      "create": "Buat channel",
+      "namePlaceholder": "misalnya support",
+      "descriptionPlaceholder": "Untuk apa saluran ini?"
     },
     "invite": {
       "title": "Undang anggota tim",
@@ -135,7 +149,10 @@
       "approved": "Selesai. Permintaan disetujui.",
       "pending": "Undangan dikirim, menunggu persetujuan admin.",
       "cancel": "Batal",
-      "submit": "Kirim undangan"
+      "submit": "Kirim undangan",
+      "emailPlaceholder": "rekan@perusahaan.com",
+      "namePlaceholder": "Nama mereka",
+      "notePlaceholder": "Mengapa mereka harus bergabung?"
     },
     "invitations": {
       "title": "Undangan tertunda",

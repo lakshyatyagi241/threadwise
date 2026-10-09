@@ -74,6 +74,16 @@ export class CallingController {
     return this.numbers.list();
   }
 
+  @Get('ice-servers')
+  @RequirePermission('call.calls.use')
+  @ApiOperation({
+    summary: "The operator's ICE servers (STUN and TURN) for the browser's call",
+    description: 'From CALLING_ICE_SERVERS; an empty list means the four public STUN servers.',
+  })
+  iceServers() {
+    return this.numbers.iceServers();
+  }
+
   @Post('numbers/:id/toggle')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('call.calling.manage')

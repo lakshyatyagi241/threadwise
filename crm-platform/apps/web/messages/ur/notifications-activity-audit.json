@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, one {{author} کا نیا پیغام} other {{author} کے # نئے پیغامات}}",
         "titleNoName": "{count, plural, one {نیا براہِ راست پیغام} other {# نئے براہِ راست پیغامات}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {کوئی {name} میں شامل ہونا چاہتا ہے} other {# افراد {name} میں شامل ہونا چاہتے ہیں}}",
+        "titleNoName": "{count, plural, one {کوئی WhatsApp گروپ میں شامل ہونا چاہتا ہے} other {# افراد WhatsApp گروپ میں شامل ہونا چاہتے ہیں}}",
+        "body": "منظور یا مسترد کرنے کے لیے گروپس کھولیں۔"
+      },
+      "waba_group_suspended": {
+        "title": "{name} معطل کر دیا گیا",
+        "titleNoName": "ایک WhatsApp گروپ معطل کر دیا گیا",
+        "body": "WhatsApp نے اس گروپ کو معطل کیا ہے۔ بحالی تک آپ اسے پیغام نہیں بھیج سکتے۔"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} دوبارہ فعال ہے",
+        "titleNoName": "ایک WhatsApp گروپ دوبارہ فعال ہے",
+        "body": "WhatsApp نے یہ گروپ بحال کر دیا ہے۔ اب آپ اسے دوبارہ پیغام بھیج سکتے ہیں۔"
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "شیڈول شدہ ارسال بھیج دیا گیا",
         "scheduled_failed": "شیڈول شدہ ارسال ناکام",
         "teamchat_mention": "ٹیم چیٹ میں آپ کا ذکر",
-        "teamchat_message": "نیا براہِ راست پیغام"
+        "teamchat_message": "نیا براہِ راست پیغام",
+        "waba_group_join_request": "گروپ میں شامل ہونے کی درخواست",
+        "waba_group_suspended": "WhatsApp گروپ معطل",
+        "waba_group_suspension_cleared": "WhatsApp گروپ دوبارہ فعال"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "والٹ",
         "devices": "WhatsApp نمبرز",
         "broadcasts": "براڈکاسٹس اور مہمات",
-        "team_chat": "ٹیم چیٹ"
+        "team_chat": "ٹیم چیٹ",
+        "whatsapp_groups": "WhatsApp گروپس"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "والٹ میں رقم ڈالی گئی",
           "hint": "ورک اسپیس کے والٹ میں رقم جمع ہوئی۔"
+        },
+        "waba_group_join_request": {
+          "label": "گروپ میں شامل ہونے کی درخواست",
+          "hint": "لوگ آپ کے کاروباری نمبر کے WhatsApp گروپ میں شامل ہونے کی درخواست کرتے ہیں۔ دس درخواستیں ایک قطار بناتی ہیں۔"
+        },
+        "waba_group_suspended": {
+          "label": "گروپ معطل",
+          "hint": "WhatsApp نے آپ کا ایک گروپ معطل کیا ہے۔"
+        },
+        "waba_group_suspension_cleared": {
+          "label": "گروپ دوبارہ فعال",
+          "hint": "WhatsApp نے ایک معطل گروپ بحال کیا۔ صرف اس صورت میں جب آپ کو معطلی کی اطلاع دی گئی ہو۔"
         }
       },
       "loading": "آپ کی ترجیحات لوڈ ہو رہی ہیں",

@@ -302,6 +302,10 @@
         "add": "+{amount} {name}"
       },
       "error": "Impossibile caricare gli add-on."
+    },
+    "planFields": {
+      "fromModule": "da un modulo installato",
+      "unlimited": "Illimitato"
     }
   }
 }

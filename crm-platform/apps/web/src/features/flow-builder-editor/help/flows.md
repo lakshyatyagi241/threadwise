@@ -5,7 +5,7 @@ summary: Build automated WhatsApp conversations, in the Simple step-by-step buil
 area: automation
 order: 10
 documents: [nav:flows]
-keywords: [flows, automation, chatbot, builder, simple, advanced, keyword, trigger, validate]
+keywords: [flows, automation, chatbot, builder, simple, advanced, keyword, trigger, validate, schedule, segment, list, workflow]
 ---
 
 ## What it is for
@@ -38,6 +38,8 @@ A flow is an automated conversation. It starts when a customer sends a word you 
 
 - **Simple and Advanced share one flow.** A flow made in the Simple builder opens on the canvas, and a canvas flow that is a plain list of steps opens in Simple. A flow that uses canvas-only steps (a webhook, a condition and so on) shows what does not fit and offers **Open in Advanced**.
 - **Condition groups (Advanced).** A Condition step can hold groups of rules inside groups, for example `plan = pro AND (age > 18 OR city = Pune)`. Each group has an AND / OR switch (AND means every rule and sub-group must match, OR means any one), and **Add rule** / **Add group** build the tree: up to 3 levels deep and 20 rules in all. A rule with no variable, or a group with no rules, is marked in red (an empty group is always false). A Condition made before this existed keeps working exactly as it did; the first time you edit it, it opens as the equal groups. The step on the canvas shows the whole condition on one line with brackets.
+- **Other ways to start a flow (Advanced).** Besides a keyword, the Trigger step can start a flow when a contact is added to a tag or a list, **leaves a list**, **enters a segment**, is **created or updated**, or when a **field matches a value** (a flow runs once for each value a contact takes). It can start at a **date and time** (once, every day, every week or every month, for everyone, a list or a segment, up to 5,000 people each time, using your workspace's time zone unless you set one), or **days before, on or after a date** stored on the contact, such as a birthday. For a Shopify or WooCommerce store it can start on **checkout started**, **abandoned cart**, **order fulfilled, refunded or cancelled**, or **a product ordered**; the customer is found by phone number and nobody is created. A list or field change made by another flow does not start these, so flows cannot trigger each other in a loop.
+- **Steps that change or check the contact (Advanced).** **Update contact field** sets one field (a name, email, title, language, address or a custom field). **Add / remove list** puts the contact in a list or takes them out. **Is in list**, **Is in segment** and **WhatsApp session active** branch to yes or no. **Check Google Sheet cell** and **Save contact from Sheet** look up a row by a column and need a connected Google account.
 - **Builder** (top of the Flows page, for people who can edit flows) sets which builder this workspace uses: Simple, Advanced, or the platform default your administrator chose. Changing it never changes a flow.
 - **Publish** needs a trigger word (or any message), a WhatsApp number when you have one connected, and every step filled in. The list of what is missing opens above the steps.
 

@@ -68,7 +68,6 @@
         "keySavedLast4": "Sleutel opgeslagen, eindigt op {last4}",
         "noKey": "Geen sleutel",
         "unreadable": "Opgeslagen sleutel kan niet worden gelezen, plak hem opnieuw",
-        "slug": "Provider-ID",
         "apiKey": "API-sleutel",
         "apiKeyHint": "Laat leeg om de opgeslagen sleutel te behouden.",
         "apiKeyPlaceholder": "Plak de sleutel hier",
@@ -89,7 +88,9 @@
         "removeTitle": "De sleutel van {name} verwijderen?",
         "removeBody": "Workspaces stoppen met het gebruik van {name} totdat je opnieuw een sleutel toevoegt. De provider wordt uitgeschakeld.",
         "removeConfirm": "Sleutel verwijderen",
-        "cancel": "Annuleren"
+        "cancel": "Annuleren",
+        "slug": "provider: {provider} · standaardmodel: {model}",
+        "maxTokensPlaceholder": "bijv. 4096"
       },
       "toasts": {
         "saved": "{name} opgeslagen.",
@@ -100,7 +101,8 @@
       },
       "help": {
         "title": "Hoe deze sleutels worden gebruikt",
-        "body": "De eigen sleutel van een workspace gaat alleen voor als het abonnement dat toestaat. Anders wordt de bijbehorende actieve provider hier gebruikt. Als je een provider uitschakelt, kunnen workspaces zonder eigen sleutel hem niet gebruiken."
+        "body": "De eigen sleutel van een workspace gaat alleen voor als het abonnement dat toestaat. Anders wordt de bijbehorende actieve provider hier gebruikt. Als je een provider uitschakelt, kunnen workspaces zonder eigen sleutel hem niet gebruiken.",
+        "eyebrow": "Hoe deze sleutels worden gebruikt"
       }
     },
     "dashboard": {

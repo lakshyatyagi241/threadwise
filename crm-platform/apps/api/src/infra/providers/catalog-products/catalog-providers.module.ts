@@ -2,6 +2,7 @@ import { Module, type DynamicModule, type ModuleMetadata } from '@nestjs/common'
 import { readCatalogEnv } from '../../../config/domains/catalog-products.env';
 import {
   BAILEYS_CATALOG_BRIDGE,
+  BAILEYS_CATALOG_BRIDGE_OVERRIDE,
   CATALOG_PROVIDER,
   CATALOG_RUNTIME_SETTINGS,
   type BaileysCatalogBridge,
@@ -46,14 +47,20 @@ export class CatalogProvidersModule {
         },
         {
           provide: BAILEYS_CATALOG_BRIDGE,
-          inject: [FixtureBaileysBridge, CATALOG_RUNTIME_SETTINGS],
+          inject: [
+            FixtureBaileysBridge,
+            CATALOG_RUNTIME_SETTINGS,
+            { token: BAILEYS_CATALOG_BRIDGE_OVERRIDE, optional: true },
+          ],
           useFactory: (
             fixture: FixtureBaileysBridge,
             settings: CatalogRuntimeSettings,
+            override?: BaileysCatalogBridge,
           ): BaileysCatalogBridge =>
             readCatalogEnv().CAT_PROVIDER_MODE === 'fixture'
               ? fixture
-              : new HttpBaileysCatalogBridge({ target: () => settings.bridgeTarget() }),
+              : (override ??
+                new HttpBaileysCatalogBridge({ target: () => settings.bridgeTarget() })),
         },
       ],
       exports: [CATALOG_PROVIDER, BAILEYS_CATALOG_BRIDGE, FixtureCatalogState],

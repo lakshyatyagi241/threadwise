@@ -15,7 +15,11 @@
         "total": "Cổng thanh toán",
         "active": "Đang hoạt động",
         "india": "Ấn Độ",
-        "crypto": "Tiền mã hóa"
+        "crypto": "Tiền mã hóa",
+        "totalHint": "trình điều khiển khả dụng",
+        "activeHint": "đang nhận thanh toán",
+        "indiaHint": "Razorpay, Paytm, Cashfree…",
+        "cryptoHint": "thanh toán trên chuỗi"
       },
       "tabsLabel": "Lọc theo khu vực",
       "all": "Tất cả",
@@ -32,7 +36,8 @@
         "africa": "Châu Phi",
         "latam": "Mỹ Latinh",
         "crypto": "Tiền mã hóa",
-        "offline": "Ngoại tuyến"
+        "offline": "Ngoại tuyến",
+        "other": "Khác"
       },
       "card": {
         "active": "Đang hoạt động",
@@ -57,11 +62,12 @@
         "webhookUrl": "URL webhook",
         "webhookHint": "Dán URL này vào bảng điều khiển của nhà cung cấp để họ thông báo cho chúng tôi về các khoản thanh toán.",
         "saving": "Đang lưu",
-        "save": "Lưu",
         "readOnly": "Chỉ quản trị viên cấp cao mới có thể thay đổi cổng thanh toán.",
         "saved": "Đã lưu cài đặt {name}.",
         "activated": "Đã kích hoạt {name}.",
-        "deactivated": "Đã tắt {name}."
+        "deactivated": "Đã tắt {name}.",
+        "noCredentials": "Không cần thông tin xác thực — cổng thanh toán dùng xác nhận thủ công / ngoài luồng.",
+        "save": "Lưu {name}"
       },
       "errors": {
         "conflict": "Có người khác vừa thay đổi cổng thanh toán này. Trang đã được tải lại; hãy xem lại và lưu lần nữa.",
@@ -69,7 +75,10 @@
         "noDriver": "Cổng thanh toán này chưa có trình điều khiển trong bản phát hành này, nên có thể cấu hình nhưng chưa thể kích hoạt.",
         "forbidden": "Chỉ quản trị viên cấp cao mới có thể thay đổi cổng thanh toán.",
         "generic": "Đã xảy ra lỗi. Vui lòng thử lại."
-      }
+      },
+      "eyebrow": "Quản trị · Thanh toán · Cổng thanh toán",
+      "titleFirst": "Thanh toán",
+      "titleSecond": "cổng thanh toán"
     },
     "checkout": {
       "title": "Hoàn tất đơn hàng",
@@ -132,7 +141,28 @@
       "autoRenew": "Tự động gia hạn mỗi kỳ. Bạn có thể hủy bất cứ lúc nào.",
       "addonRenews": "Tiện ích này tự động gia hạn mỗi kỳ. Bạn có thể hủy bất cứ lúc nào và vẫn giữ đến hết kỳ trả phí.",
       "cardTitle": "Thanh toán bằng thẻ",
-      "payNow": "Thanh toán ngay"
+      "payNow": "Thanh toán ngay",
+      "titleFirst": "Hoàn tất",
+      "titleSecond": "đơn hàng",
+      "subtitleRefund": "Đảm bảo hoàn tiền trong {days} ngày. Hủy bất cứ lúc nào. Chấp nhận thẻ, UPI, internet banking và ví.",
+      "steps": {
+        "plan": "Chọn gói",
+        "checkout": "Thanh toán",
+        "confirmation": "Xác nhận"
+      },
+      "step": "Bước {n}",
+      "taxIdPlaceholder": "GSTIN / VAT / EIN",
+      "addressPlaceholder": "Đường + số nhà",
+      "cityPlaceholder": "Mumbai",
+      "currencyTitle": "Thanh toán bằng đơn vị tiền tệ của bạn",
+      "currencyHint": "Giá được quy đổi ngay. Chỉ hiển thị các đơn vị tiền tệ mà phương thức thanh toán khả dụng chấp nhận.",
+      "couponPlaceholder": "Có mã giảm giá?",
+      "live": "trực tiếp",
+      "tlsNote": "Thanh toán được xử lý qua kết nối TLS 256-bit. Chúng tôi không bao giờ thấy thông tin thẻ của bạn.",
+      "change": "Đổi",
+      "terms": "Khi thanh toán, bạn đồng ý với <terms>Điều khoản</terms> và <privacy>Chính sách quyền riêng tư</privacy> của chúng tôi.",
+      "refundNote": "Không hài lòng? Hãy gửi email cho chúng tôi trong {days} ngày đầu và chúng tôi sẽ hoàn lại toàn bộ số tiền — không hỏi han, không biểu mẫu.",
+      "autoRenewTitle": "Tự động gia hạn gói này"
     },
     "orders": {
       "title": "Lịch sử đơn hàng",

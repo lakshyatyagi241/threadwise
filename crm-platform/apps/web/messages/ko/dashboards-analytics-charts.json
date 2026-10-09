@@ -183,7 +183,9 @@
         "unzoned": "구역 미지정",
         "per24h": "{n}/24시간",
         "deliv": "전달",
-        "free": "{n, plural, other {사용 가능한 기기 슬롯 #개}}"
+        "free": "{n, plural, other {사용 가능한 기기 슬롯 #개}}",
+        "freeHint": "WABA 추가",
+        "connectDeviceShort": "기기 연결"
       },
       "templates": {
         "title": "성과 상위 템플릿",
@@ -297,7 +299,8 @@
         "connect": "연결",
         "connectedLabel": "연결됨"
       },
-      "sublineOfficial": "{date} - {range} 기준 발신 {sent}건, 전달률 {rate}%."
+      "sublineOfficial": "{date} - {range} 기준 발신 {sent}건, 전달률 {rate}%.",
+      "synced": "실시간 · {s}초 전 동기화됨"
     },
     "analytics": {
       "title": "분석",

@@ -1,17 +1,21 @@
 'use client';
 
 import { useState } from 'react';
+import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import { REALTIME_EVENT } from '@crm/contracts';
 import { Button } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { usePendingCalls } from '../api/calling';
+import { useRealtimeClient, useRealtimeStatus } from '@/lib/realtime';
+import { KEYS, usePendingCalls } from '../api/calling';
 import { digitsOf, freshestRinging } from '../lib/calls';
 import { useCalling } from './calling-provider';
 import { PhoneIcon } from './icons';
 
 /**
- * The incoming WhatsApp call popup (WD-CALL-012, 013, 015). Asks for ringing calls every 4 s while the tab is visible, not
- * while this tab is already in a call. Shows the freshest one with Accept / Decline, or "AI is handling this call..." when an
+ * The incoming WhatsApp call popup (WD-CALL-012, 013, 015). Learns of a ringing call from a push (`call.changed`), with a poll as the fallback (every 4 s without the socket, every 30 s
+ * with it), while the tab is visible and not already in a call. Shows the freshest one with Accept / Decline, or "AI is handling this call..." when an
  * assistant answers it (no buttons, so the operator does not race it). Gone as soon as the poll returns no ringing call.
  */
 export function IncomingCallToast() {
@@ -20,7 +24,17 @@ export function IncomingCallToast() {
   const { busy, acceptIncoming, rejectIncoming } = useCalling();
   // Calls this tab already answered or declined: hidden at once, without waiting for the next poll.
   const [handled, setHandled] = useState<ReadonlySet<string>>(() => new Set());
-  const pending = usePendingCalls(canUse && !busy);
+  const qc = useQueryClient();
+  const realtime = useRealtimeClient();
+  const pushed = useRealtimeStatus() === 'connected';
+  // The server says when a call rang, was answered or ended: refetch then, and poll slowly in between only as a fallback.
+  useEffect(() => {
+    if (!canUse || !realtime) return;
+    return realtime.subscribe(REALTIME_EVENT.callChanged, () => {
+      void qc.invalidateQueries({ queryKey: KEYS.pending });
+    });
+  }, [canUse, realtime, qc]);
+  const pending = usePendingCalls(canUse && !busy, pushed);
 
   const call = busy ? null : freshestRinging(pending.data?.calls ?? [], handled);
   if (!call) return null;

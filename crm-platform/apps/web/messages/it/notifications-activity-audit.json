@@ -134,6 +134,21 @@
       "teamchat_message": {
         "title": "{count, plural, one {Nuovo messaggio da {author}} other {# nuovi messaggi da {author}}}",
         "titleNoName": "{count, plural, one {Nuovo messaggio diretto} other {# nuovi messaggi diretti}}"
+      },
+      "waba_group_join_request": {
+        "title": "{count, plural, one {Una persona vuole entrare in {name}} other {# persone vogliono entrare in {name}}}",
+        "titleNoName": "{count, plural, one {Una persona vuole entrare in un gruppo WhatsApp} other {# persone vogliono entrare in un gruppo WhatsApp}}",
+        "body": "Apri Gruppi per approvare o rifiutare."
+      },
+      "waba_group_suspended": {
+        "title": "{name} è stato sospeso",
+        "titleNoName": "Un gruppo WhatsApp è stato sospeso",
+        "body": "WhatsApp ha sospeso questo gruppo. Non puoi inviare messaggi finché non viene ripristinato."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{name} è di nuovo attivo",
+        "titleNoName": "Un gruppo WhatsApp è di nuovo attivo",
+        "body": "WhatsApp ha ripristinato questo gruppo. Puoi di nuovo inviarvi messaggi."
       }
     },
     "live": {
@@ -159,7 +174,10 @@
         "scheduled_completed": "Invio programmato inviato",
         "scheduled_failed": "Invio programmato non riuscito",
         "teamchat_mention": "Ti ha menzionato in Team chat",
-        "teamchat_message": "Nuovo messaggio diretto"
+        "teamchat_message": "Nuovo messaggio diretto",
+        "waba_group_join_request": "Richiesta di accesso a un gruppo",
+        "waba_group_suspended": "Gruppo WhatsApp sospeso",
+        "waba_group_suspension_cleared": "Gruppo WhatsApp di nuovo attivo"
       }
     },
     "prefs": {
@@ -180,7 +198,8 @@
         "wallet": "Wallet",
         "devices": "Numeri WhatsApp",
         "broadcasts": "Broadcast e campagne",
-        "team_chat": "Team chat"
+        "team_chat": "Team chat",
+        "whatsapp_groups": "Gruppi WhatsApp"
       },
       "types": {
         "new_chat": {
@@ -282,6 +301,18 @@
         "wallet_credited": {
           "label": "Wallet ricaricato",
           "hint": "Il wallet del workspace è stato accreditato."
+        },
+        "waba_group_join_request": {
+          "label": "Richiesta di accesso a un gruppo",
+          "hint": "Persone chiedono di entrare in un gruppo WhatsApp del tuo numero aziendale. Dieci richieste formano una riga."
+        },
+        "waba_group_suspended": {
+          "label": "Gruppo sospeso",
+          "hint": "WhatsApp ha sospeso uno dei tuoi gruppi."
+        },
+        "waba_group_suspension_cleared": {
+          "label": "Gruppo di nuovo attivo",
+          "hint": "WhatsApp ha ripristinato un gruppo sospeso. Solo se eri stato informato della sospensione."
         }
       },
       "loading": "Caricamento delle tue preferenze",

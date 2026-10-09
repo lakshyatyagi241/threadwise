@@ -11,8 +11,10 @@ import {
   pending,
   str,
   urlForm,
+  withDnsFallback,
   type DriverContext,
   type DriverOrder,
+  type HttpFetch,
   type DriverUrls,
   type PaymentDriver,
   type PaymentResult,
@@ -41,14 +43,18 @@ export class CinetpayDriver implements PaymentDriver {
   readonly slug = 'cinetpay';
   private readonly verified = new Map<string, WebhookPayment>();
 
-  constructor(private readonly ctx: DriverContext) {}
+  private readonly http: HttpFetch;
+
+  constructor(private readonly ctx: DriverContext) {
+    this.http = withDnsFallback(ctx.http, ctx.dohHttp, ctx.pinnedHttp);
+  }
 
   private get c(): { key: string; site: string } {
     return { key: this.ctx.credentials.api_key ?? '', site: this.ctx.credentials.site_id ?? '' };
   }
 
   private post(path: string, body: Record<string, unknown>) {
-    return this.ctx.http(`${CINET}${path}`, {
+    return this.http(`${CINET}${path}`, {
       method: 'POST',
       headers: JSON_HEADERS,
       body: JSON.stringify(body),

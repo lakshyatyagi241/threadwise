@@ -305,6 +305,18 @@ describe('saving a provider card (WD-AIADM-002, 003, 006)', () => {
     expect((await savePlatform('openai', { maxTokens: 0 })).status).toBe(422);
   });
 
+  it('keeps the card text field only where WaDesk has one, with the key hint, and lists Anthropic Claude', async () => {
+    const org = await savePlatform('openai', { textExtra: 'org-abc' });
+    expect(org.body.textExtra).toMatchObject({ key: 'organization', value: 'org-abc' });
+    expect(org.body.keyHint).toBe('Find at platform.openai.com/api-keys');
+    const none = await savePlatform('deepseek', { textExtra: 'org-abc' });
+    expect(none.body.textExtra).toBeNull();
+    const cleared = await savePlatform('openai', { textExtra: '' });
+    expect(cleared.body.textExtra).toMatchObject({ value: '' });
+    const list = await platformKeys();
+    expect(list.data.find((k) => k.provider === 'anthropic')!.name).toBe('Anthropic Claude');
+  });
+
   it('keeps extra model ids for the pickers, trimmed and unique', async () => {
     const res = await savePlatform('openai', { extraModels: [' gpt-4o ', 'gpt-4o', 'gpt-4.1'] });
     expect(res.body.extraModels).toEqual(['gpt-4o', 'gpt-4.1']);

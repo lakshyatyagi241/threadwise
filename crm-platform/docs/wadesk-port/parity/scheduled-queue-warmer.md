@@ -31,7 +31,7 @@ WhatsApp number**, and the Playwright twin run against the running WaDesk (`wade
 - Cloud API (waba) sender with a template schedule (006): the Cloud API needs the template pipeline from the message-templates domain; a template
   schedule sends the template's text on the unofficial engine and Twilio only.
 - Re-resolving group and tag audiences when the schedule fires (004 rule 7): recipients are fixed when it is saved, as WaDesk's were in practice.
-- 028 REST API v1: needs the customer API domain (`public-api` is a lead-intake skeleton); `ScheduleCreateService` is the use case to call.
+- 028 REST API v1: built on main by the customer-API work (`/v1/scheduled` over `ScheduleCreateService`); nothing left here.
 - 029, 031 to 035 mobile app and message queues: the mobile domain.
 - 045 read surfaces in other pages (dashboards, contact timeline): those pages' domains.
 - 044 UI-only controls: not ported (they did nothing in WaDesk).
