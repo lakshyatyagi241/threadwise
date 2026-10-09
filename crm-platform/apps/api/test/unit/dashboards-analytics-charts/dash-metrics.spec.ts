@@ -114,10 +114,15 @@ describe('contact-based funnel (Engagement funnel card)', () => {
     expect(f.comparison).toBeNull();
   });
 
-  it('replied above messaged caps the rate at 100', () => {
+  it('replied above messaged caps the rate at 100 (defensive; the repository never produces it)', () => {
     const cur = t({ contactsMessaged: 1, contactsReplied: 2, replies: 5, repliers: 2 });
     expect(contactReplyRate(cur)).toBe(100);
-    expect(funnelOf(cur).contacts.replied).toBe(2); // the count itself stays true
+  });
+
+  it('activity counts every responding conversation, the funnel stage only the messaged ones', () => {
+    const f = funnelOf(t({ contactsMessaged: 1, contactsReplied: 0, replies: 5, repliers: 2 }));
+    expect(f.contacts.replied).toBe(0);
+    expect(f.activity).toEqual({ inbound: 5, respondingContacts: 2, repliesPerContact: 2.5 });
   });
 
   it('replies per contact is one decimal and null for none', () => {

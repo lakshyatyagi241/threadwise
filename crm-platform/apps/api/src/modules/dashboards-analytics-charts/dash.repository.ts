@@ -34,9 +34,13 @@ export class DashRepository {
     return ((res.rows[0] as Raw | undefined)?.tz as string | null | undefined) ?? null;
   }
 
-  /** Headline counts of one window. */
+  /**
+   * Headline counts of one window. `contactsReplied` is a funnel stage, so it only counts conversations messaged in this window
+   * (never above `contactsMessaged`); `repliers` is every conversation that wrote in, messaged or not.
+   */
   async counts(tx: Tx, orgId: number, from: Date, to: Date): Promise<RawCounts> {
     const res = await tx.execute(sql`
+      WITH s AS (SELECT * FROM ${stream(orgId, from, to)})
       SELECT
         count(*) FILTER (WHERE direction = 'out')::int AS sent,
         count(*) FILTER (WHERE direction = 'out' AND ${DELIVERED})::int AS delivered,
@@ -45,8 +49,12 @@ export class DashRepository {
         count(*) FILTER (WHERE direction = 'in')::int AS replies,
         count(DISTINCT conversation_id) FILTER (WHERE direction = 'in')::int AS repliers,
         count(DISTINCT conversation_id) FILTER (WHERE direction = 'out')::int AS contacts_messaged,
-        count(DISTINCT conversation_id) FILTER (WHERE direction = 'out' AND ${DELIVERED})::int AS contacts_delivered
-      FROM ${stream(orgId, from, to)}`);
+        count(DISTINCT conversation_id) FILTER (WHERE direction = 'out' AND ${DELIVERED})::int AS contacts_delivered,
+        count(DISTINCT conversation_id) FILTER (
+          WHERE direction = 'in'
+            AND conversation_id IN (SELECT conversation_id FROM s WHERE direction = 'out')
+        )::int AS contacts_replied
+      FROM s`);
     const r = (res.rows[0] ?? {}) as Raw;
     return {
       contactsGoalCompleted: await this.goalCompleted(tx, orgId, from, to),
@@ -58,7 +66,7 @@ export class DashRepository {
       repliers: n(r.repliers),
       contactsMessaged: n(r.contacts_messaged),
       contactsDelivered: n(r.contacts_delivered),
-      contactsReplied: n(r.repliers),
+      contactsReplied: n(r.contacts_replied),
     };
   }
 
