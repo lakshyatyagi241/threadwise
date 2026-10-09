@@ -76,7 +76,13 @@ export class ChannelIngestProcessor extends WorkerHost {
         }
 
         const outcome = await this.receipts.apply(data);
-        if (outcome === 'unknown' && Date.now() - job.timestamp < UNKNOWN_RECEIPT_GRACE_MS) {
+        // The last attempt drops the receipt instead of failing: a receipt for a message that is not ours is not a queue failure.
+        const finalAttempt = job.attemptsMade + 1 >= (job.opts.attempts ?? 1);
+        if (
+          outcome === 'unknown' &&
+          !finalAttempt &&
+          Date.now() - job.timestamp < UNKNOWN_RECEIPT_GRACE_MS
+        ) {
           throw new ReceiptNotRoutable('receipt for a message that is not stored yet');
         }
         return outcome;
